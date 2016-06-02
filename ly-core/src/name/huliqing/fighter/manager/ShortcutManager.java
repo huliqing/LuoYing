@@ -38,7 +38,7 @@ import name.huliqing.fighter.ui.state.UIState;
 public class ShortcutManager {
 //    private final UserCommandNetwork userCommandNetwork = Factory.get(UserCommandNetwork.class);
     
-    private static ShortcutRoot shortcutRoot;
+    private final static ShortcutRoot shortcutRoot = new ShortcutRoot();
     
     // “删除”图标
     private static UI delete = UIUtils.createMultView(
@@ -51,25 +51,20 @@ public class ShortcutManager {
     private static float space = 40;
     
     public static void init() {
-        shortcutRoot = new ShortcutRoot();
-        shortcutRoot.attachChild(delete.getDisplay());
-        shortcutRoot.attachChild(recycle.getDisplay());
-        
-        // 设置z值会有BUG，导致shortcut点不了
-//        shortcutRoot.setLocalTranslation(0, 0, -0.1f);
-        // 把shortcut放在最前面，不要挡在后续弹出的窗口前。,后续要把shortcutRoot
-        // 添加到UIState中进行统一处理。
-        UIState.getInstance().addUI(shortcutRoot);
-        
+
         float marginTop = Common.getSettings().getHeight() * 0.1f;
         
-        delete.setToCorner(Corner.CT);
+        // setMargin后再setToCorner,因为setToCorner会立即计算位置
         delete.setMargin(0, marginTop, (delete.getWidth() + space) * 0.5f, 0);
+        delete.setToCorner(Corner.CT);
         delete.setVisible(false);
         
-        recycle.setToCorner(Corner.CT);
         recycle.setMargin((recycle.getWidth() + space) * 0.5f, marginTop, 0, 0);
+        recycle.setToCorner(Corner.CT);
         recycle.setVisible(false);
+        
+        UIState.getInstance().addUI(delete.getDisplay());
+        UIState.getInstance().addUI(recycle.getDisplay());
     }
     
     /**
@@ -140,8 +135,6 @@ public class ShortcutManager {
      * @param size 
      */
     public static void setShortcutSize(float size) {
-        if(shortcutRoot == null) 
-            return;
         List<ShortcutView> shortcuts = shortcutRoot.getShortcuts();
         for (ShortcutView s : shortcuts) {
             s.setLocalScale(size);
@@ -164,7 +157,8 @@ public class ShortcutManager {
      * 清理掉界面所有快捷方式
      */
     public static void clearShortcuts() {
-        shortcutRoot.clearShortcuts();
+//        shortcutRoot.clearShortcuts();
+        cleanup();
     }
     
     /**
@@ -198,8 +192,7 @@ public class ShortcutManager {
     
     public static void cleanup() {
         if (shortcutRoot != null) {
-            shortcutRoot.removeFromParent();
-            shortcutRoot = null;
+            shortcutRoot.clearShortcuts();
         }
     }
     
@@ -287,7 +280,7 @@ public class ShortcutManager {
         return lg;
     }
     
-    private static class ShortcutRoot extends Node {
+    private static class ShortcutRoot  {
         
         private final SafeArrayList<ShortcutView> shortcuts = 
                 new SafeArrayList<ShortcutView>(ShortcutView.class);
@@ -295,18 +288,10 @@ public class ShortcutManager {
         public void addShortcut(ShortcutView shortcut) {
             if (!shortcuts.contains(shortcut)) {
                 shortcuts.add(shortcut);
-//                attachChild(shortcut); // 以后都要统一通过UIState来添加UI
                 UIState.getInstance().addUI(shortcut);
             }
         }
 
-        @Override
-        public void updateLogicalState(float tpf) {
-            super.updateLogicalState(tpf);
-            for (ShortcutView s : shortcuts.getArray()) {
-                s.updateShortcut(tpf);
-            }
-        }
         
         /**
          * 获取界面所有shortcut
