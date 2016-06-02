@@ -295,7 +295,8 @@ public class ShortcutManager {
         public void addShortcut(ShortcutView shortcut) {
             if (!shortcuts.contains(shortcut)) {
                 shortcuts.add(shortcut);
-                attachChild(shortcut);
+//                attachChild(shortcut); // 以后都要统一通过UIState来添加UI
+                UIState.getInstance().addUI(shortcut);
             }
         }
 

@@ -18,9 +18,6 @@ import com.jme3.scene.Spatial.CullHint;
 import com.jme3.scene.shape.Quad;
 import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import name.huliqing.fighter.Config;
 
 /**
  * UI基类
