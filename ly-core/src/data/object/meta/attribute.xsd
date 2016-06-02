@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<!--
+xs:string
+xs:decimal
+xs:integer
+xs:boolean
+xs:date
+xs:time
+-->
+
+<xs:schema version="1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://fighter.huliqing.name"
+           xmlns="http://fighter.huliqing.name"
+           elementFormDefault="qualified">
+    
+    <xs:include schemaLocation="base.xsd" />
+    
+    <xs:element name="root">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="attribute" />
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="attribute" >
+        <xs:annotation>
+            <xs:documentation>定义一个等级</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="attributeBase">
+                    <xs:attribute name="el" type="xs:string" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                指定一个默认的等级设置,如果设置了该值，则该属性会随着等级的提升而改变。
+                                该参绑必须绑定到一个elLevel类型的表达式设置。参考el.xml
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:complexType name="attributeBase">
+        <xs:complexContent>
+            <xs:extension base="base">
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:schema>

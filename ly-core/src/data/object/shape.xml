@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://fighter.huliqing.name'
+    xsi:schemaLocation='http://fighter.huliqing.name meta/shape.xsd'>
+    
+    <!-- =================================================================== -->
+    <!--子弹专用Shape-->
+    <!-- =================================================================== -->
+
+    <shapeBox id="shapeBulletBoxMin" extents="0.5,0.5,0.5" /> 
+    
+    <shapeBox id="shapeBulletBox" extents="1,1,2" />
+   
+    <shapeBox id="shapeBulletBoxMax" extents="1.5,1.5,3" />
+    
+</root>
+
+
+

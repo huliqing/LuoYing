@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!--
+xs:string
+xs:decimal
+xs:integer
+xs:boolean
+xs:date
+xs:time
+-->
+
+<xs:schema version="1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://fighter.huliqing.name"
+           xmlns="http://fighter.huliqing.name"
+           elementFormDefault="qualified">
+    
+    <xs:include schemaLocation="base.xsd" />
+    
+    <xs:element name="root">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="sound" />
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="sound" type="sound" />
+    
+    <xs:complexType name="sound">
+        <xs:complexContent>
+            <xs:extension base="base">
+                <xs:attribute name="file" type="xs:string" use="required" >
+                    <xs:annotation>
+                        <xs:documentation>指定声音文件路径</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="volume" type="xs:decimal" use="optional" />
+                <xs:attribute name="offset" type="xs:decimal" use="optional" />
+                <xs:attribute name="loop" type="bool" use="optional" />
+                <xs:attribute name="des" type="xs:string" use="optional" />
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    
+</xs:schema>

@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<!--
+xs:string
+xs:decimal
+xs:integer
+xs:boolean
+xs:date
+xs:time
+-->
+
+<xs:schema version="1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://fighter.huliqing.name"
+           xmlns="http://fighter.huliqing.name"
+           elementFormDefault="qualified">
+    
+    <xs:include schemaLocation="base.xsd" />
+    
+    <xs:element name="root">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="resistSimple" />
+                <xs:element ref="resistAll" />
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="resistAll">
+        <xs:annotation>
+            <xs:documentation>
+                这个设置允许让角色对所有状态产生抗性，不过可以设置一个例外列表．
+                这个设置适合于所有无生命的角色，如建筑、机械等
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="resistBase">
+                    <xs:attribute name="excepts" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                设置一个例外列表，格式："state|factor,state|factor,state|factor"
+                                state关联状态id; factor是抵抗力，取值[0.0~1.0], 0表示毫无抵抗力，1.0表示完全免疫．
+                                factor参数如果不设置，默认为0.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="resistSimple">
+        <xs:annotation>
+            <xs:documentation>
+                简单的抗性设置，可分别设置对不同状态的抗性能力，抗性值范围：
+                [0.0~1.0], 注：0和1.0为绝对值，即：如果抗性设为0，则表示完全没有
+                抗性，如果为1,则表示完全免疫．只有0~1之间的值会通过机率进行计算．
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="resistBase">
+                    <xs:attribute name="resists" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>
+                                格式："state|factor,state|factor,state|factor"
+                                state关联状态id; 
+                                factor是抵抗力，取值[0.0~1.0], 0表示毫无抵抗力，1.0表示完全免疫．
+                                factor参数如果省略则默认0.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:complexType name="resistBase">
+        <xs:complexContent>
+            <xs:extension base="base">
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+</xs:schema>

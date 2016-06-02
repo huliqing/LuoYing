@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://fighter.huliqing.name'
+    xsi:schemaLocation='http://fighter.huliqing.name meta/task.xsd'>
+    <!--=====================================================================-->
+    <!-- 任务配置 -->
+    <!--=====================================================================-->
+    
+    <!--任务：收集10个蜘蛛脚-->
+    <taskCollect id="taskCollectSpiderClaw" rewardExp="200" rewardItems="itemGold|200,itemTonicRed|10,itemTonicBlue|5" 
+                 items="itemSpiderClaw|2" targets="actorSpider" dropFactor="1"  />
+    
+</root>
+
+
+

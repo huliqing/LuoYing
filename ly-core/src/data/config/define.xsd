@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<!--
+xs:string
+xs:decimal
+xs:integer
+xs:boolean
+xs:date
+xs:time
+-->
+
+<xs:schema version="1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://fighter.huliqing.name"
+           xmlns="http://fighter.huliqing.name"
+           elementFormDefault="qualified">
+    
+    <xs:element name="root">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="weaponState" />
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+    
+    
+    <xs:element name="weaponType" >
+        <xs:annotation>
+            <xs:documentation>
+                武器状态定义配置
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:attribute name="weaponType" type="xs:integer" use="required" >
+                <xs:annotation>
+                    <xs:documentation>武器类型</xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="weaponState" >
+        <xs:annotation>
+            <xs:documentation>
+                武器状态定义配置
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:attribute name="weaponState" type="xs:integer" use="required" >
+                <xs:annotation>
+                    <xs:documentation>武器状态ID,整数，应该为不同的武器状态定义不同的ID</xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+            <xs:attribute name="weapons" type="xs:string" use="required" >
+                <xs:annotation>
+                    <xs:documentation>武器匹配，格式:"leftHandWeaponType,rightHandWeaponType,otherWeaponType,..."</xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<!--
+xs:string
+xs:decimal
+xs:integer
+xs:boolean
+xs:date
+xs:time
+-->
+
+<xs:schema version="1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://fighter.huliqing.name"
+           xmlns="http://fighter.huliqing.name"
+           elementFormDefault="qualified">
+    
+    <xs:include schemaLocation="base.xsd" />
+    
+    <xs:element name="root">
+        <xs:complexType>
+            <xs:all>
+                <xs:element name="item" type="item" />
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:complexType name="item">
+        <xs:complexContent>
+            <xs:extension base="base">
+                <xs:attribute name="icon" ref="icon" use="required" />
+                <xs:attribute name="handler" ref="handler" use="required"/>
+
+                <!--remove20160310,不再使用这些配置-->
+                <!--<xs:attribute name="file" ref="file" use="optional" />--> 
+<!--                <xs:attribute name="mass" ref="mass" use="optional" />
+                <xs:attribute name="mat" ref="mat" use="optional" />-->
+<!--                <xs:attribute name="physics" type="bool" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            是否支持物理检测，默认0(false)
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>-->
+<!--                <xs:attribute name="scale" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            模型的缩放, 以半角逗号分隔:x,y,z 如： 1,1,1
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>-->
+                
+                <xs:attribute name="raceLimit" ref="raceLimit" use="optional" />
+                <xs:attribute name="sexLimit" ref="sexLimit" use="optional" />
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    
+</xs:schema>

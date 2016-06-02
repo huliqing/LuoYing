@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://fighter.huliqing.name'
+    xsi:schemaLocation='http://fighter.huliqing.name meta/attribute.xsd'>
+    
+    <!--健康值:定义角色的生命值-->
+    <attribute id="attributeHealth" el="elLevelAttrHealth" />
+
+    <!--魔法值:定义角色最多可拥有多少魔法量-->
+    <attribute id="attributeMana" el="elLevelAttrMana" />
+
+    <!--物理攻击力-->
+    <attribute id="attributeAttack" el="elLevelAttrAttack" />
+
+    <!--魔法攻击力-->
+    <attribute id="attributeMagicAttack" el="elLevelAttrMagicAttack" />
+
+    <!--物理防御力-->
+    <attribute id="attributeDefence" el="elLevelAttrDefence" />
+
+    <!--魔法防御力-->
+    <attribute id="attributeMagicDefence" el="elLevelAttrMagicDefence" />
+
+    <!--视力:影响角色的侦察范围-->
+    <attribute id="attributeVision" el="elLevelAttrVision" />
+
+    <!--健康值恢复速度:1.0为每秒恢复一点生命值，2.0为每秒恢复2点生命值-->
+    <attribute id="attributeHealthRestore" el="elLevelAttrHealthRestore" />
+
+    <!--魔法值恢复速度:1.0为每秒恢复一点魔法值，2.0为每秒恢复2点魔法值-->
+    <attribute id="attributeManaRestore" el="elLevelAttrManaRestore" />
+    
+    <!--攻击速度:1.0为原始速度，2.0为双倍速度-->
+    <attribute id="attributeAttackSpeed" el="elLevelAttrAttackSpeed" />
+
+    <!--施法速度:1.0为原始速度，2.0为双倍速度-->
+    <attribute id="attributeMagicSpeed" el="elLevelAttrMagicSpeed" />
+    
+    <!--移动速度：1.0为原始速度,2.0为两倍速度-->
+    <attribute id="attributeMoveSpeed" el="elLevelAttrMoveSpeed" />
+    
+    <!--防御概率:[0.0~1.0], 1.0为百分百防御-->
+    <attribute id="attributeDefenceRate" el="elLevelAttrDefenceRate" />
+
+    <!--躲闪概率:[0.0~1.0]，1.0为百分百躲闪-->
+    <attribute id="attributeDuckRate" el="elLevelAttrDuckRate" />
+    
+    <!--鬼魅能力:[0.0~1.0] -->
+    <attribute id="attributeGhostRate" el="elLevelAttrGhostRate" />
+    
+</root>
+
+
+

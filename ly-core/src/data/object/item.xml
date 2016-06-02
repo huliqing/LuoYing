@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://fighter.huliqing.name'
+    xsi:schemaLocation='http://fighter.huliqing.name meta/item.xsd'>
+    
+    <!--for test-->
+    <item id="item000" icon="Interface/item/book.png" handler="handlerTest" /> 
+
+    <!--Gold-->
+    <item id="itemGold" icon="Interface/item/gold.png" cost="1" />
+
+    <!--书籍-->
+    <item id="itemBook001" icon="Interface/item/book.png" cost="250" /> 
+    <item id="itemBook002" icon="Interface/item/book.png" cost="250" /> 
+    <item id="itemBook003" icon="Interface/item/book.png" cost="250" /> 
+    <item id="itemBook004" icon="Interface/item/book.png" cost="250" /> 
+    <!--书：野兽召唤术:不再使用--> 
+    <item id="itemBook005" icon="Interface/item/book_blue.png" handler="handlerSkillBookSummon" cost="250" /> 
+    <!--书：闪电箭-->
+    <item id="itemBook006" icon="Interface/item/book_green.png" handler="handlerSkillBookLightningShot" raceLimit="1" cost="0" /> 
+    <!--书：星光传送术-->
+    <item id="itemBook007" icon="Interface/item/book_green.png" handler="handlerSkillBookBack" cost="250" /> 
+    <!--书：落樱飞舞-->
+    <item id="itemBook008" icon="Interface/item/book_green.png" handler="handlerSkillBookDanceSakura" raceLimit="1" cost="500" /> 
+    <!--书: 寒冰箭-->
+    <item id="itemBook009" icon="Interface/item/book_green.png" handler="handlerSkillBookIceShot" raceLimit="1" cost="800" /> 
+    <!--书: 二刀流冲击波-->
+    <item id="itemBook010" icon="Interface/item/book_green.png" handler="handlerSkillBookDualSwordWave" raceLimit="1" cost="800" /> 
+    
+    <!--召唤卷轴：狼\熊\蝎子-->
+    <item id="itemScrollWolf"     icon="Interface/item/scroll_wolf.png" handler="handlerSummonWolf" cost="200" />
+    <item id="itemScrollBear"     icon="Interface/item/scroll_bear.png" handler="handlerSummonBear" cost="200" />
+    <item id="itemScrollScorpion" icon="Interface/item/scroll_scorpion.png" handler="handlerSummonScorpion" cost="200" />
+    <item id="itemScrollRaptor" icon="" handler="handlerSummonRaptor" cost="400"  />
+    <item id="itemScrollTrex" icon="" handler="handlerSummonTrex" cost="600"  />
+    
+    <!--蜘蛛卵-->
+    <item id="itemSpiderSpawn" icon="Interface/item/spawn.png" handler="handlerSummonSpider" cost="200" />
+    
+    <!--蜘蛛爪:任务物品-->
+    <item id="itemSpiderClaw" icon="Interface/item/claw.png" handler="" cost="0" />
+    
+    <!--防御塔-->
+    <item id="itemTower" icon="Interface/item/tower_fire.png" handler="handlerSummonTower" cost="300" />
+    <item id="itemTowerStone" icon="Interface/item/tower_stone.png" handler="handlerSummonTowerStone" cost="300" />
+    <item id="itemTowerSnow" icon="Interface/item/tower_snow.png" handler="handlerSummonTowerSnow" cost="300" />
+    
+    <!--红瓶和蓝瓶-->
+    <item id="itemTonicRed"  icon="Interface/item/tonic_red.png" handler="handlerTonicHealth" cost="50" />
+    <item id="itemTonicBlue" icon="Interface/item/tonic_blue.png" handler="handlerTonicMagic" cost="50" />
+    <!--攻击、施法速度药水(attack speed)-->
+    <item id="itemASTonic" icon="Interface/item/tonic_yellow.png" handler="handlerStateGainAS" cost="300" />
+
+    <!--树根-->
+    <item id="itemTreeStump" icon="Interface/item/treeStump.png" handler="handlerSummonGb" cost="200" />
+    <!--药草-->
+    <item id="itemHerb" icon="Interface/item/grass.png" handler="handlerStateGainWindWalk" cost="100" />
+    <!--复活卷轴-->
+    <item id="itemScrollLife" icon="Interface/item/scroll_life.png" handler="handlerItemReborn" cost="100" />
+    <!--解毒药草-->
+    <item id="itemDetoxifyGrass" icon="Interface/item/leaf.png" handler="handlerStateRemoveScorpionVenom" cost="20" />
+</root>
+
+
+

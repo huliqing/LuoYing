@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root 
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://fighter.huliqing.name'
+    xsi:schemaLocation='http://fighter.huliqing.name meta/effect.xsd' >
+    
+    
+    <!-- =================================================================== -->
+    <!-- 一些注意：
+    1.start、display、end各阶段一般不要设置太长时间时间（除非一些特殊的或是永远“不退出”场景的效果）.
+    2.特殊效果：子弹类效果(被bullet所引用的效果)的display阶段可设置一个比较长的时间，因子弹类效果
+的实际存在时间依赖于子弹在场景中的存在时间，所以这些效果的“display阶段”的时间可以比实际需要的设置得长一些
+或者设置一个非常大的数字，display阶段的退出最终由子弹动态来确定（jumpToEnd）。一般子弹类的效果根据子弹的速度
+及射击距离大概display阶段设置10秒已经足够，因为子弹一般不会在10秒内还击不中敌人。
+    3.effectGroup的各个阶段不要设置时间，effectGroup的存在时间只依赖于子效果的存在时间（子效果中最后一个完成执行的效果决定了该时间）
+    4.尽量不要设置太长的时间，以确保效果最终能退出场景，因为效果要缓存起来。
+    -->
+    <!-- =================================================================== -->
+    
+    <!-- =================================================================== -->
+    <!--刀剑碰撞效果:火花-->
+    <!-- =================================================================== -->
+    <effectGroup id="effectCollisionMM" des="metal-metal" timeStart="" timeDisplay="" timeEnd="" 
+                   effects="effectCollisionMM1,effectCollisionMM2" tracePosition="once" traceRotation="once" />
+    <effectParticle id="effectCollisionMM1" des="spark" timeStart="" timeDisplay="1" timeEnd="" emitter="emitterCollisionMM1" emitAll="1" inWorldSpace="0" />
+    <effectParticle id="effectCollisionMM2" des="flash" timeStart="" timeDisplay="1" timeEnd="" emitter="emitterCollisionMM2" emitAll="1" inWorldSpace="0" />
+    
+    <!--=====================================================================-->
+    <!--通用刀光剑影特效:刀剑匕首等冷兵器攻击时的光影特效-->
+    <!--=====================================================================-->
+    
+    <!--从上往下砍-->
+    <effectGroup id="effectSwordShadow1" timeStart="" timeDisplay="" timeEnd="" 
+                 tracePosition="once" traceRotation="once" tracePositionOffset="0,2,0"
+                 effects="effectSwordShadow1A,effectSwordShadow1B" />
+    <effectSlideColorIOSpline id="effectSwordShadow1A" timeStart="" timeDisplay="" timeEnd="0.4" 
+        mask="Textures/effect/sword_shadow_mask.jpg" tex="Textures/effect/sword_shadow_tex.jpg" width="1" 
+        up="-1,0,0" fixedPoints="0|0|-2,0|2|0,0|0|2,0|-2|0" segments="30" tension="0.83" cycle="1" 
+        dimension="1" animEnds="animSwordShadow1Rot,animSwordShadow1Move,animCommonColorO2" 
+        rotation="1.57,0,0" scale="0.75" texChangeDir="1" repeatTimes="1" /> 
+    <effectSlideColorIOSpline id="effectSwordShadow1B" extends="effectSwordShadow1A" width="0.25" up="0,0,1" /> 
+    
+    <!--从左下到右上斜挑约45度的剑光效果-->
+    <effectGroup id="effectSwordShadow2" timeStart="" timeDisplay="" timeEnd="" 
+                 tracePosition="once" traceRotation="once"  
+                 tracePositionOffset="0,2,0" traceRotationOffset="0,0,-0.5"
+                 effects="effectSwordShadow2A,effectSwordShadow2B" />
+    <effectSlideColorIOSpline id="effectSwordShadow2A" timeStart="" timeDisplay="" timeEnd="0.4" 
+        mask="Textures/effect/sword_shadow_mask.jpg" tex="Textures/effect/sword_shadow_tex.jpg" width="1" 
+        up="0,1,0" fixedPoints="0|0|-2,2|0|0,0|0|2,-2|0|0" segments="30" tension="0.83" cycle="1"
+        dimension="1" animEnds="animSwordShadow2Rot,animSwordShadow2Move,animCommonColorO2" 
+        texChangeDir="1" repeatTimes="1" /> 
+    <effectSlideColorIOSpline id="effectSwordShadow2B" extends="effectSwordShadow2A" width="0.25" up="0,0,1" /> 
+    
+    <!--从右下到左上斜挑约45度的剑光效果-->
+    <effectGroup id="effectSwordShadow3" timeStart="" timeDisplay="" timeEnd="" 
+                 tracePosition="once" traceRotation="once"  
+                 tracePositionOffset="0,2,0" traceRotationOffset="0,0,0.5"
+                 effects="effectSwordShadow3A,effectSwordShadow3B" />
+    <effectSlideColorIOSpline id="effectSwordShadow3A" timeStart="" timeDisplay="" timeEnd="0.4" 
+        mask="Textures/effect/sword_shadow_mask.jpg" tex="Textures/effect/sword_shadow_tex.jpg" width="1" 
+        up="0,1,0" fixedPoints="0|0|-2,-2|0|0,0|0|2,2|0|0" segments="30" tension="0.83" cycle="1"
+        dimension="1" animEnds="animSwordShadow3Rot,animSwordShadow3Move,animCommonColorO2" 
+        texChangeDir="1" repeatTimes="1" /> 
+    <effectSlideColorIOSpline id="effectSwordShadow3B" extends="effectSwordShadow3A" width="0.25" up="0,0,1" /> 
+    
+    <!--=====================================================================-->
+    <!--通用爆炸: 火、炸弹、炮击,其它爆炸效果可继承这个配置-->
+    <!--=====================================================================-->
+    <effectGroup id="effectExplosion" timeStart="" timeDisplay="" timeEnd="" sound="soundExplosion" effects="effectFlame,effectFlash,effectSpark" />
+    <effectParticle id="effectFlame" timeStart="" timeDisplay="3" timeEnd="" emitter="emitterFlame" emitAll="1" />
+    <effectParticle id="effectFlash" timeStart="" timeDisplay="3" timeEnd="" emitter="emitterFlash" emitAll="1" />
+    <effectParticle id="effectSpark" timeStart="" timeDisplay="3" timeEnd="" emitter="emitterSpark" emitAll="1" />
+    
+    <!--=====================================================================-->
+    <!--通用爆炸：雪花爆炸-->
+    <!--=====================================================================-->
+    <effectGroup id="effectSnowExplosion" timeStart="" timeDisplay="1" timeEnd="" sound="" effects="effectSnowFlame,effectSnowFlash" />
+    <effectParticle id="effectSnowFlame" timeStart="" timeDisplay="3" timeEnd="" emitter="emitterSnowFlame" emitAll="1" />
+    <effectParticle id="effectSnowFlash" timeStart="" timeDisplay="3" timeEnd="" emitter="emitterSnowSpark" emitAll="1" />
+    
+    <!--通用“补血”效果-->
+    <effectParticle id="effectRandomFire" timeStart="" timeDisplay="1.5" timeEnd="" emitter="emitterRandomFire" sound="soundRecover" 
+              tracePosition="always" tracePositionOffset="0,1,0" />
+    
+    <!--通用“吃补药”效果-->
+    <effectGroup id="effectTonic" timeStart="" timeDisplay="" timeEnd="" tracePosition="always" traceRotation="no" tracePositionType="origin_bound_center"
+                   sound="soundRestore" effects="effectTonic1,effectTonic2,effectTonic3,effectRandomFire" />
+    <effectParticle id="effectTonic1" timeStart="" timeDisplay="3" emitAll="1" timeEnd="" tracePosition="once" emitter="emitterBuff1" />
+    <effectParticle id="effectTonic2" timeStart="" timeDisplay="3" emitAll="1" timeEnd="" tracePosition="once" emitter="emitterBuff2" />
+    <effectParticle id="effectTonic3" timeStart="" timeDisplay="3" emitAll="1" timeEnd="" tracePosition="once" emitter="emitterBuff3" />
+
+    <!-- =================================================================== -->
+    <!--升级效果-->
+    <!-- =================================================================== -->
+    <effectParticle id="effectLevelUp" timeStart="" timeDisplay="2" timeEnd="" 
+              emitter="emitterLevelUp" sound="soundLevelup" tracePosition="always" tracePositionOffset="0,1,0" />
+    
+    <!-- =================================================================== -->
+    <!--学习技能时的特效-->
+    <!-- =================================================================== -->
+    <effectHalo id="effectLearnSkill" timeStart="0.5" timeDisplay="1.5" timeEnd="0.3" radius="0.7" texture=""
+        rotateInvert="0" rotate="1" rotateSpeed="0.3" haloSize="1.5,3.5,1" incline="0" haloScaleShow="1" sound="soundLevelup"
+        tracePosition="always"
+        />
+    
+    <!--=====================================================================-->
+    <!--塔的死亡爆炸-->
+    <!--=====================================================================-->
+    <effectGroup id="effectTowerExplosion" extends="effectExplosion"  tracePosition="once" traceRotation="once" tracePositionOffset="0, 0.5, 0.5"  />
+    <effectGroup id="effectTowerExplosion2" extends="effectTowerExplosion" traceRotationOffset="0.5, 2, -0.5" />
+    <effectGroup id="effectTowerExplosion3" extends="effectTowerExplosion" tracePositionOffset="-0.5, 3.5, 0.5" />
+    
+    <!-- =================================================================== -->
+    <!--普通箭的子弹效果-->
+    <!-- =================================================================== -->
+    <effectModel id="effectBulletArrow" timeStart="" timeDisplay="6" timeEnd="" 
+           file="Models/objects/arrow/woodArrow.j3o" 
+           scale="0.2,0.2,0.2" tracePosition="always" traceRotation="always" />
+    
+    <!-- =================================================================== -->
+    <!--火塔子弹效果-->
+    <!-- =================================================================== -->
+    <effectParticle id="effectSmokeFire" timeStart="0" timeDisplay="6" timeEnd="0" emitter="emitterSmoketrail" 
+                    tracePosition="always" traceRotation="always" />
+    
+    <!-- =================================================================== -->
+    <!--石塔子弹效果-->
+    <!-- =================================================================== -->
+    <effectGroup id="effectTowerStone" timeStart="" timeDisplay="" timeEnd="" effects="effectTowerRock,effectTowerSmoke" tracePosition="always" traceRotation="always" />
+    <effectParticle id="effectTowerRock" timeStart="" timeDisplay="15" timeEnd="" emitter="emitterTowerRock" inWorldSpace="0" blendMode="Alpha" />
+    <effectParticle id="effectTowerSmoke" timeStart="" timeDisplay="15" timeEnd="" emitter="emitterTowerSmoke" blendMode="Alpha" />
+    
+    <!-- =================================================================== -->
+    <!--冰雪子弹效果-->
+    <!-- =================================================================== -->
+    <effectGroup id="effectSnowBullet" timeStart="" timeDisplay="" timeEnd="" effects="effectSnowTrail,effectSnowFlake" 
+                 tracePosition="always" traceRotation="always" />
+    <effectParticle id="effectSnowTrail" timeStart="0" timeDisplay="6" timeEnd="0" emitter="emitterSnowTrail" />
+    <effectParticle id="effectSnowFlake" timeStart="0" timeDisplay="6" timeEnd="0" emitter="emitterSnowFlake" />
+    
+    <!-- =================================================================== -->
+    <!--野兽召唤术--> 
+    <!-- =================================================================== -->
+    <effectGroup id="effectSummon" timeStart="" timeDisplay="" timeEnd="" 
+                   effects="effectMagicCircle,effectHalo,effectHaloParticle" sound="soundSummon" 
+                   tracePosition="once" traceRotation="once" tracePositionOffset="0,0,4.5" />
+    <effectProjection id="effectMagicCircle" timeStart="0.5" timeDisplay="4" timeEnd="0.3" scale="10,10,10"
+                      texture="Textures/tex/magic/magic18.jpg" animAll="animMagicCircleColor"
+                      animStarts="animMagicCircleScaleS" animDisplays="animMagicCircleRotY" animEnds="animMagicCircleScaleH" />
+    <effectHalo id="effectHalo" timeStart="0.5" timeDisplay="4" timeEnd="0.3" location="0,-0.2,0"
+                haloSize="2,3,1" incline="1.5" haloScaleShow="1" haloScaleSpeed="3"  />
+    <effectParticle id="effectHaloParticle" timeStart="0.5" timeDisplay="4" timeEnd="0.3" emitter="emitterHalo" />
+    
+    <!-- =================================================================== -->
+    <!--星光传送特效-->
+    <!-- =================================================================== -->
+    <effectGroup id="effectBackTown" timeStart="" timeDisplay="" timeEnd="" 
+                   effects="effectBackTownCircle,effectEncircleHalo|0.18,effectHaloExp|2.2" tracePosition="once" traceRotation="no" />
+    
+    <effectProjection id="effectBackTownCircle" timeStart="0.5" timeDisplay="1.8" timeEnd="0"
+             texture="Textures/tex/magic/magic13.jpg" scale="10,10,10" animAll="animBackTownColor"
+             animStarts="animCommonScaleS" animDisplays="animBackTownCircle" animEnds="" />
+    
+    <effectEncircleHalo id="effectEncircleHalo" timeStart="0.5" timeDisplay="1.62" timeEnd="0.12" texture="Textures/effect/halo_s.jpg" 
+                  size="7" radius="3" offset="0,2,0" sound="soundElectricity" />
+    <effectParticle id="effectHaloExp" timeStart="0" timeDisplay="2" timeEnd="0" emitter="emitterHaloExp" emitAll="1" randomColor="1" sound="soundHaloExplosion" />
+    
+    <!-- =================================================================== -->
+    <!--黑暗祭坛的特效-->
+    <!-- =================================================================== -->
+    <effectParticle id="effectAltar" timeStart="0" timeDisplay="999999999" timeEnd="0" location="0, 1.5, 0" emitter="emitterAltar" /> 
+    <effectParticle id="effectAltar2" timeStart="0" timeDisplay="999999999" timeEnd="0" location="0, 2.5, 0" emitter="emitterAltarSkull" />
+    
+    <!-- =================================================================== -->
+    <!--闪电箭-->
+    <!-- =================================================================== -->
+    <!-- 主效果 -->
+    <effectGroup id="effectLightningShot" timeStart="" timeDisplay="" timeEnd="" tracePosition="always" traceRotation="always" tracePositionOffset="0, 2, 1.6" 
+                   effects="effectLightningShotVortex,effectLightningShotFlare|0.65,effectLightningShotBolt|0.75" />
+    <!-- 风旋涡 -->
+    <effectTexture id="effectLightningShotVortex" timeStart="0" timeDisplay="0" timeEnd="1" 
+             animStarts="" animDisplays="" animEnds="animCommonRotZi,animCommonScaleH" 
+             texture="Textures/effect/vortex32.jpg" size="4,4,1" sound="soundWind2" />
+    <!-- 闪光 -->
+    <effectTexture id="effectLightningShotFlare" timeStart="0.3" timeDisplay="0.64" timeEnd="0" 
+             animStarts="animLightningShotFlareScaleShow,animCommonColorI3" animDisplays="animCommonRotZi" animEnds="" 
+             texture="Textures/effect/flare.jpg" size="6,6,1" />
+    <!-- 闪电 -->
+    <effectParticle id="effectLightningShotBolt" timeStart="" timeDisplay="1" timeEnd="" emitter="emitterLightningShotBolt" sound="soundElectricity2" />
+    <!-- 子弹Main -->
+    <effectGroup id="effectLightningShotBullet" timeStart="" timeDisplay="" timeEnd="" tracePosition="always" traceRotation="always" 
+                   effects="effectLightningShotBullet1,effectLightningShotBullet2" />
+    <!--子弹-->
+    <effectSlideColor id="effectLightningShotBullet1" timeStart="" timeDisplay="6" timeEnd="" scale="1,5,1"
+                      rotation="-1.57,0,0" texAnimY="1" texChangeDir="1" />
+    
+    <!--向后退散的粒子环-->
+    <effectParticle id="effectLightningShotBullet2" timeStart="0" timeDisplay="3" timeEnd="0" emitter="emitterLightningShotBullet2" emitAll="1" inWorldSpace="0" />
+    <!-- 击中效果:闪电緾绕在身上 -->
+    <effectParticle id="effectLightningShotHit" timeStart="0" timeDisplay="3" timeEnd="0" emitter="emitterLightningShotHit" sound="soundElectricity2" />
+    
+    <!-- =================================================================== -->
+    <!--寒冰箭-->
+    <!-- =================================================================== -->
+    
+    <!--子弹-->
+    <effectSlideColor id="effectIceBullet" timeStart="" timeDisplay="6" timeEnd="" scale="1,3,1"
+                      startColor="1,1,1,1" endColor="0,0,4,1"
+                      tracePosition="always" traceRotation="always"
+                      traceRotationOffset="-1.57,0,0" texAnimY="1" texChangeDir="1" />
+    <!--蓄势-->
+    <effectGroup id="effectIceSmoke" timeStart="" timeDisplay="" timeEnd="" sound="soundWind3"
+                 tracePosition="always" traceRotation="always" tracePositionOffset="0,0,0.2"
+                 effects="effectIceSmoke1,effectIceSmoke2,effectIceSmoke3,effectIceSmoke4" />
+    <effectSlideColorSpline id="effectIceSmoke1" timeStart="" timeDisplay="1.5" timeEnd=""
+                            startColor="1,1,1,1" endColor="0.2,0.2,2,1" texAnimY="1" texChangeDir="1"
+                            scale="1" dimension="3" segments="10" width="3"
+                            fixedPoints="0|2.01|1.6,  0.5|2.5|0, 0.7|2.2|-2.8" />
+    <effectSlideColorSpline id="effectIceSmoke2" extends="effectIceSmoke1"
+                            fixedPoints="0|2.01|1.6, -0.5|1.7|0, -0.7|2.0|-3" />
+    <effectSlideColorSpline id="effectIceSmoke3" extends="effectIceSmoke1"
+                            fixedPoints="0|2.01|1.6,  0.5|1.2|0, 0.7|2.0|-2.5" />
+    <!--蓄势：冰花-->
+    <effectParticle id="effectIceSmoke4" timeStart="" timeDisplay="1.5" timeEnd="" 
+                    emitter="emitterIceShot" inWorldSpace="0" location="0,2.01,1.3" />
+    
+    <!--=====================================================================-->
+    <!--冰冻-->
+    <!--=====================================================================-->
+    <effectGroup id="effectFrozen" timeStart="" timeDisplay="" timeEnd="" tracePosition="once" traceRotation="once" 
+                sound="soundIceFrozen"
+                 effects="effectFrozenIce|0.15
+                 ,effectFrozenDebris|0,effectFrozenSmoke|0
+                 ,effectFrozenDebris|6,effectFrozenSmoke|6" />
+    <!--冰柱-->
+    <effectModel id="effectFrozenIce" timeStart="0.3" timeDisplay="6" timeEnd="" animStarts="animCommonScaleS,animFrozenIceRot"
+                 file="Models/objects/ices.j3o" scale="0.75" location="0,-0.5,0" bucket="Translucent" />
+    
+    <!--碎冰块:冻结后碎裂-->
+    <effectParticle id="effectFrozenDebris" timeStart="" timeDisplay="" timeEnd="3" 
+                    emitter="emitterIceDebris" emitAll="1" />
+    <!--冰雾:化水-->
+    <effectParticle id="effectFrozenSmoke" timeStart="" timeDisplay="" timeEnd="3" 
+                    emitter="emitterIceSmoke" emitAll="1" sound="soundWater" />
+    
+    <!-- =================================================================== -->
+    <!--状态：疾风步效果-->
+    <!-- =================================================================== -->
+    <effectGroup id="effectStateWindWalkStart" timeStart="" timeDisplay="" timeEnd="" 
+                   effects="effectStateWindWalkStartParticle,effectStateWindWalkStartFlash|0.75,effectStateWindWalkStartSmoke|0.75" 
+                   tracePosition="always" traceRotation="always" tracePositionOffset="0,1,0" />
+    <!--开始效果--> 
+    <effectParticle id="effectStateWindWalkStartParticle" timeStart="" timeDisplay="" timeEnd="1" emitter="emitterStateWindWalkStartParticle"
+        animEnds="animStateWindWalkStartScale,animStateWindWalkStartRot" inWorldSpace="0" emitAll="1" location="0,0.75,0" sound="soundGasGathering" />
+    <!--音障效果-->
+    <effectParticle id="effectStateWindWalkStartFlash" timeStart="" timeDisplay="" timeEnd="" emitter="emitterStateWindWalkStartFlash" 
+              emitAll="1" inWorldSpace="0" location="0,0,0.5" sound="soundGasExplosion" />
+    <!--向后退散的粒子效果-->
+    <effectParticle id="effectStateWindWalkStartSmoke" timeStart="" timeDisplay="1" timeEnd="" emitter="emitterStateWindWalkStartSmoke" 
+              emitAll="1" inWorldSpace="0" location="0,0,0.5" />
+    <!--状态运行时效果-->
+    <effectParticle id="effectStateWindWalk" timeStart="" timeDisplay="9999" timeEnd="" emitter="emitterStateWindWalkMoveSmoke" 
+              tracePosition="always" tracePositionOffset="0,0.15,-0.5" />
+    
+    <!-- =================================================================== -->
+    <!--落樱飞舞-->
+    <!-- =================================================================== -->
+    <!--主效果-->
+    <effectGroup id="effectDanceSakura" timeStart="" timeDisplay="" timeEnd="" 
+                 tracePosition="once" tracePositionOffset="0,4.1,-2.7" traceRotation="once"
+        effects="effectDanceSakuraFlare,effectDanceSakuraMagic|0.3,effectDanceSakuraHalo|0.6" />
+    
+    <!--闪光收缩效果-->
+    <effectTexture id="effectDanceSakuraFlare" timeStart="" timeDisplay="" timeEnd="0.3" 
+         texture="Textures/effect/flare.jpg" size="6,6,1" plane="xy"  
+         animEnds="animDanceSakuraScaleHide,animCommonColorI3" sound="soundMagicFlareReduce" />
+    
+    <!--旋转的魔法阵-->
+    <effectTexture id="effectDanceSakuraMagic" timeStart="0.3" timeDisplay="1.7" timeEnd="0.3" 
+             texture="Textures/tex/magic/magic.jpg" size="4,4,1" plane="xy" 
+             animStarts="animDanceSakuraMagicStartScale,animDanceSakuraMagicStartColor" 
+             animDisplays="animDanceSakuraMagicDisplayColor"
+             animEnds="animDanceSakuraMagicEndScale"
+             animAll="animCommonRotZ"
+             sound="soundMagicExpand2" />
+    
+    <!--樱花效果(附带子弹发射声)-->
+    <effectParticle id="effectDanceSakuraHalo" timeStart="" timeDisplay="1.7" timeEnd="" 
+              emitter="emitterDanceSakuraHalo" inWorldSpace="0" sound="soundMagicShot" />
+
+    <!--子弹效果-->
+    <effectSlideColor id="effectDanceSakuraBullet" timeStart="" timeDisplay="6" timeEnd="" scale="1,2,1"
+                texAnimY="1" texChangeDir="1"
+                tracePosition="always" traceRotation="always" traceRotationOffset="-1.57,0,0" />
+    
+    <!--击中效果-->
+    <effectParticle id="effectDanceSakuraHit" timeStart="" timeDisplay="3" timeEnd="" 
+              emitter="emitterDanceSakuraHit" emitAll="1" sound="soundMagicShotHit" soundInstance="1" />
+    
+    <!--跃起/落下时的扬尘-->
+    <effectParticle id="effectDanceSakuraJump" timeStart="0" timeDisplay="1" timeEnd="0" 
+              emitter="emitterDanceSakuraJump" emitAll="1" inWorldSpace="0" tracePosition="once" tracePositionOffset="0,0.2,0"
+              animAll="animDanceSakuraDirtShow" />
+
+    <!--=====================================================================-->
+    <!--状态:晕眩,金星旋转-->
+    <!--=====================================================================-->
+    <effectParticle id="effectStateStun" timeStart="" timeDisplay="6" timeEnd="" emitter="emitterStun" 
+        animDisplays="animStateStunRot" tracePosition="always" 
+              tracePositionType="origin_bound_top" tracePositionOffset="0,0.2,0" 
+              inWorldSpace="0" sound="soundStun" />
+    
+    <!--=====================================================================-->
+    <!--魔法特效:电光火石-->
+    <!--=====================================================================-->
+    <!--蓄势:手中的闪电-->
+    <effectParticle id="effectFlowLightning" timeStart="" timeDisplay="0.62" timeEnd="" 
+              tracePosition="always" traceRotation="always" tracePositionOffset="0.5,2.2,0.5"
+              emitter="emitterFlowLightning" />
+    <!--子弹-->
+    <effectParticle id="effectFlowLight" timeStart="0" timeDisplay="10" timeEnd="" emitter="emitterFlowLight" 
+                    tracePosition="always" traceRotation="always" />
+    <!--击中-->
+    <effectParticle id="effectFlowLightHit" timeStart="" timeDisplay="3" timeEnd="" 
+              emitter="emitterFlowLightHit" emitAll="1" sound="soundMagicShotHit" />
+    
+    <!--=====================================================================-->
+    <!--魔法特效:加BUFF-->
+    <!--=====================================================================-->
+    <effectParticle id="effectBuffBullet" timeStart="0" timeDisplay="6" timeEnd="0" 
+              emitter="emitterBuffBullet" tracePosition="always" traceRotation="always" />
+    <!--BUFF的击中效果-->
+    <effectGroup id="effectBuffHit" timeStart="" timeDisplay="" timeEnd="" tracePosition="always" traceRotation="no"  
+                   sound="soundRestore" effects="effectBuff1,effectBuff2,effectBuff3,effectRandomFire" />
+    <effectParticle id="effectBuff1" timeStart="" timeDisplay="3" emitAll="1" timeEnd="" tracePosition="once" emitter="emitterBuff1" />
+    <effectParticle id="effectBuff2" timeStart="" timeDisplay="3" emitAll="1" timeEnd="" tracePosition="once" emitter="emitterBuff2" />
+    <effectParticle id="effectBuff3" timeStart="" timeDisplay="3" emitAll="1" timeEnd="" tracePosition="once" emitter="emitterBuff3" />
+
+    <!--=====================================================================-->
+    <!--魔法特效:复活术-->
+    <!--=====================================================================-->
+    <effectGroup id="effectReborn" tracePosition="once" tracePositionOffset="0,1,0"
+                   effects="effectRebornMagic,effectRebornParticle1|0.4,effectRebornParticle2|0.4,effectRebornParticle3|5" />
+    <effectTexture id="effectRebornMagic" timeStart="0.5" timeDisplay="4" timeEnd="0.3"
+             animStarts="animCommonScaleS" animDisplays="animCommonRotY" animEnds="animCommonScaleH" 
+             location="0,3.5,0" texture="Textures/tex/magic/magic9.jpg" size="10,10,10" plane="xz" />
+    <effectParticle id="effectRebornParticle1" timeDisplay="5" emitter="emitterRebornParticle1" />
+    <effectParticle id="effectRebornParticle2" timeDisplay="5" emitter="emitterRebornParticle2" />
+    <effectParticle id="effectRebornParticle3" timeDisplay="5" emitter="emitterRebornParticle3" emitAll="1" location="0,2.5,0" sound="soundHaloExplosion" />
+    
+    <!--=====================================================================-->
+    <!--二刀流冲击波-->
+    <!--=====================================================================-->
+    <!--缠绕的光波-->
+    <effectGroup id="effectWaveSpline" timeStart="" timeDisplay="" timeEnd="" 
+                 tracePosition="once" traceRotation="once" sound="soundWindSurround"
+                 effects="effectWaveSmoke,effectWaveSpline1,effectWaveSpline2|0.3,effectWaveSpline3|0.6" 
+                 tracePositionOffset="0,1.5,0" />
+    <effectSlideColorIOSpline id="effectWaveSpline1" timeStart="" timeDisplay="1" timeEnd="" 
+            mask="Textures/effect/spline_mask.jpg" tex="Textures/effect/spline_tex.jpg" width="0.5" 
+            up="1,0,0" segments="30" tension="0.83" repeatTimes="2"
+            fixedPoints="0|0|-2,-2|0|0,0|0|2,2|0|0" dimension="2" texChangeDir="1" cycle="1"
+            startColor="2,0.75,0.75,1" endColor="1,1,1,1" rotation="0,0,-0.8" scale="1,1,1.5"
+            animAll="animCommonColorO3,animCommonRotRandom" />
+    <effectSlideColorIOSpline id="effectWaveSpline2" extends="effectWaveSpline1" rotation="0,0.1,0.4" />
+    <effectSlideColorIOSpline id="effectWaveSpline3" extends="effectWaveSpline1" rotation="0.1,0,2.4" />
+    <!--卷起的烟雾--> 
+    <effectParticle id="effectWaveSmoke" timeStart="" timeDisplay="4.5" timeEnd="" emitAll="1" location="0,-1.5,0"
+                    emitter="emitterWaveSmoke" animAll="animWaveSmokeRot,animWaveSmokeScale" inWorldSpace="0" />
+    
+    <!--冲击波发出时的闪光-->
+    <effectParticle id="effectWaveFlash" timeStart="" timeDisplay="2" timeEnd="" 
+            tracePosition="once" traceRotation="once" tracePositionOffset="0,1.5,3" 
+            emitter="emitterStateWindWalkStartFlash" 
+            emitAll="1" inWorldSpace="0" sound="soundGasExplosion" />
+    
+    <!--==子弹效果==-->
+    <effectGroup id="effectWave" timeStart="" timeDisplay="" timeEnd="" tracePosition="always" traceRotation="always" 
+                   effects="effectWave1,effectWave2" />
+    <effectTexture id="effectWave1" timeStart="" timeDisplay="6" timeEnd="" animDisplays="animWave"
+                   texture="Textures/effect/wave.jpg" size="2,3.5,0" plane="yz" rotation="0,0.12,0" location="-0.12,0,0" />
+    <effectTexture id="effectWave2" extends="effectWave1" rotation="0,-0.12,0" location="0.12,0,0" />
+    
+    <!--=====================================================================-->
+    <!--蜘蛛丝的缠绕效果-->
+    <!--=====================================================================-->
+    <effectModel id="effectSpiderWeb" timeStart="" timeDisplay="6" timeEnd="" tracePosition="once" traceRotation="once" 
+                 file="Textures/objects/spiderWeb/spiderWeb.j3o" bucket="Translucent" />
+    
+    <!--=====================================================================-->
+    <!--状态：毒素缠身-->
+    <!--=====================================================================-->
+    <effectParticle id="effectScorpionVenom" timeStart="" timeDisplay="60" timeEnd="" tracePosition="always" traceRotation="no" 
+                    emitter="emitterScorpionVenomSmoke" tracePositionType="origin_bound_center" />
+    
+</root>
+
+
+

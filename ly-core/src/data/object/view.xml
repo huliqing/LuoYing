@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://fighter.huliqing.name'
+    xsi:schemaLocation='http://fighter.huliqing.name meta/view.xsd'>
+    
+    <!--=====================================================================-->
+    <!--通用View-->
+    <!--=====================================================================-->
+    
+    <!--Warn:由运行时动态设置message-->
+    <viewText id="viewWarn" useTime="5" widthWeight="1" heightWeight="1"
+              fontColor="1,1,0,1" fontSize="64" animations="animViewMove"
+              align="Center" valign="Center" />
+    
+    <!--任务成功-->
+    <viewText id="viewTaskSuccess" extends="viewWarn" textKey="task.success" fontColor="0,1,0,1" />
+    
+    <!--任务失败-->
+    <viewText id="viewTaskFailure" extends="viewWarn" textKey="task.failure" fontColor="1,0,0,1" />
+    
+    <!--=====================================================================-->
+    <!--"黄金宝箱"关卡的计时器-->
+    <!--=====================================================================-->
+    <viewTimer id="viewTimer" useTime="-1" widthWeight="0.15" heightWeight="0.15" 
+               startTime="60" up="0" format="mm:ss" syncEnabled="1" syncAuto="1" dragEnabled="1"
+               marginWeight="" animations="animTreasureTimer" />
+    
+    <!--=====================================================================-->
+    <!--"古柏任务"（二关）树根计数-->
+    <!--=====================================================================-->
+    <viewTextPanel id="viewTPGb" useTime="-1" widthWeight="0.15" heightWeight="0.15" dragEnabled="1"
+                   syncEnabled="1" animations="animTreasureTimer" />
+    
+</root>
+
+
+

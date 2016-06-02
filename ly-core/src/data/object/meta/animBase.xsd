@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!--
+xs:string
+xs:decimal
+xs:integer
+xs:boolean
+xs:date
+xs:time
+-->
+
+<xs:schema version="1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://fighter.huliqing.name"
+           xmlns="http://fighter.huliqing.name"
+           elementFormDefault="qualified" >
+    
+    <xs:include schemaLocation="base.xsd" />
+    
+    <xs:complexType name="animBase">
+        <xs:complexContent>
+            <xs:extension base="base">
+                <xs:attribute name="useTime" type="xs:decimal" use="required">
+                    <xs:annotation>
+                        <xs:documentation>动画运行时间，单位秒</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="speed" type="xs:decimal" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>动画速度倍率,大于1提高速度，小于1则降低速度</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="loop" type="loop" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>动画的循环模式</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="debug" type="bool" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>显示调试信息，但是显不显示由各个实现决定</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+   
+</xs:schema>

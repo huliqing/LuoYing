@@ -1,0 +1,285 @@
+<?xml version="1.0"?>
+<!--
+xs:string
+xs:decimal
+xs:integer
+xs:boolean
+xs:date
+xs:time
+-->
+
+<xs:schema version="1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://fighter.huliqing.name"
+           xmlns="http://fighter.huliqing.name"
+           elementFormDefault="qualified"
+        >
+    
+    <xs:include schemaLocation="base.xsd" />
+    
+    <xs:element name="root">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="actor" />
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="actor">
+        <xs:annotation>
+            <xs:documentation>定义一个角色</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="base">
+                    <xs:attribute name="file" ref="file" use="required"/>
+                    <xs:attribute name="icon" type="xs:string" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>为角色指定一个图标(64x64), 如：Interface/item/face/female.jpg</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="logic" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>关联逻辑,多个逻辑使用半角逗号分开，如：logic1,logic2,logic3</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="group" type="xs:integer" use="required">
+                        <xs:annotation>
+                            <xs:documentation>派系,整数</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="sex" ref="sex" use="required" />
+                    <xs:attribute name="race" ref="race" use="required" />
+                    <xs:attribute name="level" type="xs:integer" use="required">
+                        <xs:annotation>
+                            <xs:documentation>设置角色的等级值，等级值将影响角色的：
+                                生命、魔法、防御、攻击力等值
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="mass" ref="mass" use="required"/>
+                    <xs:attribute name="skills" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>
+                                技能列表,半角色逗号分隔
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="skinBase" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                角色的基本皮肤，基本皮肤是用来在切换装备后“修补皮肤”缺失的问题。比如当
+                                穿上一套上下连身的法袍（同时包含lowerBody和upperBody）后，再使用一件只
+                                包含upperBody的装备来换上时，由于法袍被替换，这时角色身上将丢失lowerBody
+                                的装备，这时就需要从skinBase中查看是否有lowerBody的基本皮肤来补上，否则角
+                                色会缺少下半身的装备模型。
+                                注意：基本皮肤中不要指定哪些包含两个或两个以上type部位的皮肤。比如：
+                                同时包含lowerBody和upperBody的skin,如上下连身的套装之类的皮肤，这类皮肤
+                                会造成在换装备后进行修补的时候又替换掉已经穿上的装备。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="skinOutfit" type="xs:string" use="optional"/>
+                    <xs:attribute name="scale" type="xs:decimal" use="optional"/>
+                    <xs:attribute name="weapon" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>关联到一件武器，作为角色默认使用</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="items" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>角色包裹物品列表，半角逗号分隔,格式如: 
+                                objId1|total,objId2|total,objId3</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="mat" ref="mat" use="required" />
+                    <xs:attribute name="localForward" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>指定角色原始视角方向,默认情况下为(0,0,1),如果模型默认不是该方向,
+                                则需要使用该方向指定模型的正视角方向。</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="essential" type="bool" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                设置角色是否为“必要的”，“必要”是指角色可以死亡，但不能移除出场景。
+                                非必要的角色在死亡之后可能被场景的清理器移除出场景,部分比如任务
+                                需要的角色不能被移除出场景。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="effects" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                效果列表，格式："effect1,effect2,effect3..."
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="collisionShape" ref="collisionShape" use="optional" ></xs:attribute>
+                    <xs:attribute name="collisionRadius" type="xs:decimal" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>碰撞盒半径,只对capsule类型的collisionShape有效，默认0.4</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="collisionHeight" type="xs:decimal" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>碰撞盒高度，只对capsule类型的collisionShape有效，默认3.2</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="collisionBoxScale" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>碰撞盒高度的缩放，只对box类型的collisionShape有效，默认"1,1,1",当box类型的
+                            碰撞盒太大或者太小时，可使用该参数进行适当缩放</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="drop" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                角色物品的掉落设置，连接一个drop设置
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="hardwareSkinning" type="bool" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                硬件加速，使用GPU提升skining性能，只有角色拥有skeletonControl时才有意义。
+                                默认情况下，该设置会跟随系统的全局设置，但是某些模型可能在使用该功能时
+                                存在蒙皮错误，这时候可以使用该选项来关闭该功能。注：只有全局系统打开了
+                                hardwareSkinning功能时，该设置才有效。如果全局设置关闭了hardwareSkinning，
+                                则即使当前模型打开了该功能也没有用。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="extAnim" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                扩展的骨骼动画包，这个参数指向一个asset中的目录,如：Models/actor/anim
+                                当角色使用的技能中找不到相应的动画时将会从这个目录中查找动画文件,注意：
+                                动画名称要与文件名一致，比如：动画名称duck_left_roll,则动画文件名为：duck_left_roll.j3o
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="resist" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                关联一个抗性设置．
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="channels" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                角色的channel定义,关联一些channel，格式："channel1,channel2,...".
+                                如果不设置则默认使用一个包含所有骨骼的channel
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="slots" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                定义优先的武器插槽，当角色配备的武器适合这些插槽时，
+                                武器将优先绑定在这些插槽上。格式: "slot1,slot2,...".
+                                如果没有定义，则以武器自身定义的插槽配置优先。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="attributes" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>
+                                定义角色的所有属性值,格式如："attribute1,attribute2,attribute3,..."
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="lifeAttribute" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>
+                                指定一个用于定义生命值的属性，格式，如"attributeHealth",该属性可以是已经包含在
+                                attributes中的属性也可以不是。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="viewAttribute" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>
+                                指定一个哪一个属性为视力属性,如："attributeView"
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="levelUpEl" type="xs:string" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                角色的等级升级公式,,必须关联到一条elLevel类型的公式。如果没有设置则角色不会升级。
+                                比如一些静态炮塔之类可能就需要配置升级公式。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="xpDropEl" type="xs:string" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                角色死亡后的经验掉落公式,必须关联到一条elXpDrop类型的公式，如果没有设置则打死该角色后
+                                无法获取经验值奖励。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="talents" type="xs:string" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                角色的天赋，格式: "talent1,talent2,talent3"
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="talentPoints" type="xs:integer" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                当前角色已有的天赋点数。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="talentPointsLevelEl" type="xs:integer" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                天赋点数的奖励公式，当达到指定等级时可获得的天赋数奖励。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="team" type="xs:integer" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                角色队伍分组.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="living" type="bool" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                是否为生物,即有生命活动的角色,例如人类,野兽等为生命.
+                                非生物如:防御塔,宝箱,祭坛等
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="batch" type="bool" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                batch优化模型，默认false.不可动态设置。只能在xml中初始化配置.
+                                打开了batch功能之后角色的装备不可穿和脱.
+                                对于一些不需要动态更换装备和武器的角色可以打开该选项进行优化。
+                                如：固定装备的NPC。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="chat" type="xs:string" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                关联到一个Chat
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+        
+        
+    
+    
+</xs:schema>

@@ -1,0 +1,226 @@
+<?xml version="1.0"?>
+<!--
+xs:string
+xs:decimal
+xs:integer
+xs:boolean
+xs:date
+xs:time
+-->
+
+<xs:schema version="1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://fighter.huliqing.name"
+           xmlns="http://fighter.huliqing.name"
+           elementFormDefault="qualified">
+    
+    <xs:include schemaLocation="base.xsd" />
+    
+    <xs:element name="root">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="handlerTest" />
+                <xs:element ref="handlerAttribute" />
+                <xs:element ref="handlerSummon" />
+                <!--remove20160406,use handlerItemSkill instead-->
+                <!--<xs:element ref="handlerSummonSkill" />-->
+                <xs:element ref="handlerOutfit" />
+                <xs:element ref="handlerWeapon" />
+                <xs:element ref="handlerSkill" />
+                <xs:element ref="handlerSkillBook" />
+                <xs:element ref="handlerStateGain" />
+                <xs:element ref="handlerStateRemove" />
+                <xs:element ref="handlerItemSkill" />
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="handlerItemSkill">
+        <xs:annotation><xs:documentation>使用物品，这个物品会使用一个技能。</xs:documentation></xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="handlerBase">
+                    <xs:attribute name="skill" type="xs:string" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>默认要使用的技能</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="special" type="xs:string" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                格式："race|sex|skill,race|sex|skill,...", 指定根据“种族”、“性别”来确定要使用哪一个技能.
+                                比如在某些情况下，不同的种族及角色性别可能要使用不同的动作技能。
+                                当找不到可匹配的技能时，将使用默认的技能。sex使用 "f","m"代替，如：
+                                "1|f|attack1" 即表示当人族女性使用物品时将执行技能attack1
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="handlerStateRemove">
+        <xs:annotation><xs:documentation>获取状态</xs:documentation></xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="handlerBase">
+                    <xs:attribute name="states" type="xs:string" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>要移除的状态列表，格式如："stateId,stateId,..."</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="handlerStateGain">
+        <xs:annotation><xs:documentation>获取状态</xs:documentation></xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="handlerBase">
+                    <xs:attribute name="states" type="xs:string" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>指定要获得的状态列表，格式如："stateId,stateId,..."</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="handlerSkillBook">
+        <xs:annotation><xs:documentation>技能书,用于学习指定的技能</xs:documentation></xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="handlerBase">
+                    <xs:attribute name="skill" type="xs:string" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>指定要学习的技能ID</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+<!--    <xs:element name="handlerSummonSkill">
+        <xs:annotation><xs:documentation>召唤角色,但是要求角色需要有召唤技能</xs:documentation></xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="handlerBase">
+                    <xs:attribute name="actorId" type="xs:string" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>指定要召唤的角色ID</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="skillId" type="xs:string" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>需要依赖的召唤技能，该参数绑定一个召唤技能</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>-->
+
+    <xs:element name="handlerSummon">
+        <xs:annotation><xs:documentation>召唤角色</xs:documentation></xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="handlerBase">
+                    <xs:attribute name="actorId" type="xs:string" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                指定要召唤的角色ID
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="total" type="xs:integer" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                指定要召唤多少个角色
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="handlerSkill">
+        <xs:annotation><xs:documentation>技能执行</xs:documentation></xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="handlerBase"></xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="handlerWeapon">
+        <xs:annotation><xs:documentation>切换武器</xs:documentation></xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="handlerBase" />
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="handlerOutfit">
+        <xs:annotation><xs:documentation>切换装备</xs:documentation></xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="handlerBase" />
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="handlerAttribute" >
+        <xs:annotation>
+            <xs:documentation>操作属性值</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="handlerBase">
+                    <xs:attribute name="attribute" type="xs:integer" use="required" >
+                        <xs:annotation><xs:documentation>指定要操作的是哪一个属性ID</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="amount" type="xs:decimal" use="required" >
+                        <xs:annotation><xs:documentation>指定补多少量,可正可负，正表示增加，负表示减少</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="handlerTest" >
+        <xs:annotation><xs:documentation>测试用</xs:documentation></xs:annotation>
+        <xs:complexType>
+            <xs:complexContent><xs:extension base="handlerBase" /></xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:complexType name="handlerBase">
+        <xs:complexContent>
+            <xs:extension base="base">
+                <xs:attribute name="effects" type="xs:string" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>
+                        效果,格式: "effect1,effect2,...",
+                        这些效果会在handler执行时立即应用在角色身上。
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="sounds" type="xs:string" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>
+                        声效,格式: "sound1,sound2,...",
+                        这些声音会在handler执行时立即播放,在角色的目标位置。
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:schema>

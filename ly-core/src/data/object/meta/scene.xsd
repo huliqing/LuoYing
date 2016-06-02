@@ -1,0 +1,158 @@
+<?xml version="1.0"?>
+<!--
+xs:string
+xs:decimal
+xs:integer
+xs:boolean
+xs:date
+xs:time
+-->
+
+<xs:schema version="1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://fighter.huliqing.name"
+           xmlns="http://fighter.huliqing.name"
+           elementFormDefault="qualified">
+    
+    <xs:include schemaLocation="base.xsd" />
+    
+    <xs:element name="root">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="sceneRandom" />
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="sceneRandom">
+        <xs:annotation>
+            <xs:documentation>该场景会随机生成树木和草皮</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="sceneBase">
+                    <xs:attribute name="trees" use="optional" type="xs:decimal">
+                        <xs:annotation>
+                            <xs:documentation>
+                                关联到树木id，格式如：tree1,tree2,tree3,
+                                注：树木是有碰撞检测的。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="treeSize" use="optional" type="xs:integer">
+                        <xs:annotation>
+                            <xs:documentation>
+                                树的数量
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="grasses" use="optional" type="xs:decimal">
+                        <xs:annotation>
+                            <xs:documentation>除了树木之外的其它植被，格式如：grass1,grass2,flower,...
+                            注：plants是没有碰撞检测的。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="grassSize" use="optional" type="xs:integer">
+                        <xs:annotation>
+                            <xs:documentation>
+                                花草的数量
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="emptyZones" use="optional" type="xs:integer">
+                        <xs:annotation>
+                            <xs:documentation>
+                                定义一些空白区域，这些区域不能存在树木或其它障碍，这些区域可以
+                                用来生成NPC或其它动态添加的角色。格式：x|z|radius,x|z|radius
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:complexType name="sceneBase">
+        <xs:annotation>
+            <xs:documentation></xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="base">
+                <xs:attribute name="sky" use="optional" type="xs:string">
+                    <xs:annotation>
+                        <xs:documentation>关联一个天空盒</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="terrain" use="optional" type="xs:string">
+                    <xs:annotation>
+                        <xs:documentation>关联一个地形文件</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="boundary" use="optional" type="xs:string">
+                    <xs:annotation>
+                        <xs:documentation>
+                            场景边界,让角色不能走出这个范围。格式："xExt,yExt,zExt"
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="directionalLightColor" use="optional" type="xs:string">
+                    <xs:annotation>
+                        <xs:documentation>
+                            场景直射光源颜色，格式："r,g,b,a"
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="directionalLightDir" use="optional" type="xs:string">
+                    <xs:annotation>
+                        <xs:documentation>
+                            场景直射光源方向，格式："x,y,z", 只有设置了directionalLightColor才有效,
+                            该方向会在程序内部自动归一化
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="ambientLightColor" use="optional" type="xs:string">
+                    <xs:annotation>
+                        <xs:documentation>
+                            场景环境光源，格式："r,g,b,a"
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="useShadow" use="optional" type="bool">
+                    <xs:annotation>
+                        <xs:documentation>
+                            是否打开物体阴影,要看到物体阴影效果只有同时满足以下几个条件：
+                            1.在全局配置中打开了阴影功能(Config.xml)
+                            2.设置当前场景的阴影功能（即useShadow=true)
+                            3.设置当前场景的directionalLightColor参数.
+                            4.场景中有物体支持投影及接受投影。
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="usePhysics" use="optional" type="bool">
+                    <xs:annotation>
+                        <xs:documentation>
+                            是否使用物理系统,默认false,打开后，有质量的角色或物体会
+                            往下掉。
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="gravity" use="optional" type="xs:string">
+                    <xs:annotation>
+                        <xs:documentation>
+                            重力方向及大小，格式:"x,y,z",默认 "0,-10,0",只有打开usePhysics时才有效。
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="debugPhysics" use="optional" type="bool">
+                    <xs:annotation>
+                        <xs:documentation>
+                            是否调试显示bullet网格。
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+</xs:schema>

@@ -1,0 +1,235 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package name.huliqing.fighter.manager;
+
+import com.jme3.math.ColorRGBA;
+import com.jme3.math.FastMath;
+import com.jme3.math.Vector3f;
+import com.jme3.renderer.Camera;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import name.huliqing.fighter.Common;
+import name.huliqing.fighter.Config;
+import name.huliqing.fighter.data.EffectData;
+import name.huliqing.fighter.object.actor.Actor;
+import name.huliqing.fighter.object.effect.AbstractEffect;
+import name.huliqing.fighter.utils.GeometryUtils;
+import name.huliqing.fighter.ui.Text;
+
+/**
+ * 在目标角色上展示伤害数字或其它信息。
+ * @author huliqing
+ */
+public class DamageManager {
+    
+    /**
+     * 定义一个最远距离，当目标距离镜头多远时将不展示动态信息,这个目的是为了避
+     * 免资源浪费。
+     */
+    private final static float MAX_DISTANCE_SQUARED = 40 * 40;
+    
+    /**
+     * 缓存达到该数时进行提示
+     */
+    private final static int MAX_CACHE_SIZE = 50;
+    
+    /**
+     * 缓存动态信息
+     */
+    private final static List<DynamicText> caches = new ArrayList<DynamicText>();
+    
+    public enum ResistType {
+        /** 抵抗:这表示抗性是机会性的 */
+        resisted,
+        
+        /** 免疫:这表示抗性是绝对的 */
+        immunized,
+    }
+ 
+    /**
+     * 动态显示状态抵抗结果
+     * @param target
+     * @param type 
+     */
+    public static void showResist(Actor target, ResistType type) {
+        if (!checkDisplay(target)) {
+            return;
+        }
+        ColorRGBA color;
+        String mess;
+        switch (type) {
+            case resisted:
+                color = ColorRGBA.Yellow;
+                mess = ResourceManager.get("resist.resisted");
+                break;
+            case immunized:
+                color = ColorRGBA.Gray;
+                mess = ResourceManager.get("resist.immunized");
+                break;
+            default :
+                color = ColorRGBA.White;
+                mess = "Unknow Resist";
+        }
+        display(target, mess, color, 1);
+    }
+    
+    /**
+     * 动态效果显示数字在屏幕
+     * @param victim 目标角色
+     * @param value 目标值
+     */
+    public static void show(Actor victim, float value) {
+        int intValue = (int) value;
+        if (intValue == 0 || !checkDisplay(victim)) {
+            return;
+        }
+        
+        display(victim, String.valueOf(intValue), intValue < 0 ? ColorRGBA.Red : ColorRGBA.Green, 0);
+        
+    }
+    
+    /**
+     * 在目标角色头顶上展示信息
+     * @param target
+     * @param text 
+     */
+    private static void display(Actor target, String text, ColorRGBA color, int level) {
+        DynamicText dt = getFromCache();
+        Common.getApp().getGuiNode().attachChild(dt);
+        Vector3f pos = dt.getLocalTranslation();
+        pos.set(target.getModel().getWorldTranslation()).addLocal(0, 2.5f, 0);
+        Common.getApp().getCamera().getScreenCoordinates(pos, pos);
+//        dt.setLocation(pos);
+        dt.getData().setLocation(pos);
+        dt.setText(text, color);
+        dt.totalAnimDistance = 50 + getFontSize()  * 0.55f * level;
+        dt.start();
+    }
+    
+    /**
+     * 检查是否需要显示伤害或输出信息，距离太远或在镜头之外的信息应该剔除掉,
+     * 避免资源浪费
+     * @param target
+     * @return 
+     */
+    private static boolean checkDisplay(Actor target) {
+        // 在距离太远也不显示
+        Camera cam = Common.getApp().getCamera();
+        if (cam.getLocation().distanceSquared(target.getModel().getWorldTranslation()) > MAX_DISTANCE_SQUARED) {
+            if (Config.debug) {
+                Logger.getLogger(DamageManager.class.getName()).log(Level.INFO
+                        , "The distance is too far, do not need to show damageText, target={0}", target.getModel().getName());
+            }
+            return false;
+        }
+        
+        // 不在镜头内也不显示
+        if (!GeometryUtils.intersectCamera(target.getModel())) {
+            if (Config.debug) {
+                Logger.getLogger(DamageManager.class.getName()).log(Level.INFO
+                        , "Target not in camera, do not need to show damageText, target={0}", target.getModel().getName());
+            }
+            return false;
+        }
+        return true;
+    }
+    
+    private static float getFontSize() {
+        return Common.getSettings().getHeight() * 0.15f;
+    }
+    
+    public static void showDebugInfo() {
+        if (Config.debug) {
+            Logger.getLogger(DamageManager.class.getName())
+                    .log(Level.INFO, "DamageManager cache DamageText size={0}", caches.size());
+        }
+    }
+    
+    public static void cleanup() {
+        caches.clear();
+    }
+    
+    private static DynamicText getFromCache() {
+        if (caches.size() > MAX_CACHE_SIZE) {
+            // 如果出错，防止部分资源意外没有释放，则提出警告
+            Logger.getLogger(DamageManager.class.getName())
+                    .log(Level.WARNING, "DamageText cache to more >>>>>>>> size={0}"
+                    , caches.size());
+        }
+        
+        // 从缓存获取
+        for (DynamicText dt : caches) {
+            if (dt.isEnd()) {
+                return dt;
+            }
+        }
+        
+        // new one
+        DynamicText dt =  new DynamicText("", getFontSize());
+        caches.add(dt);
+        
+        return dt;
+    }
+    
+    // ==== private class
+    
+    private static class DynamicText extends AbstractEffect {
+        private Text text;
+
+        // 总的移动距离
+        private float totalAnimDistance = 50;
+        // 总的移动时间
+        private static final float animTime = 0.3f;
+        // 使用正弦计算减速效果，移动减速和缩放减速
+        private static final float maxAngle = 140;
+        // 动画结速后经过多久才清理掉该效果
+        private static final float delayEnd = 0.5f;
+
+        public DynamicText(String text, float fontSize) {
+            super();
+            this.data = new EffectData();
+            this.text = new Text(text);
+            this.text.setFontSize(fontSize);
+            this.data.setPhaseTimeDisplay(animTime + delayEnd);
+//            this.attachChild(this.text);
+            this.localRoot.attachChild(this.text);
+        }
+        
+        /**
+         * 重新设置伤害数字，同时需要重置scale和translation
+         * @param text 
+         */
+        public void setText(String text, ColorRGBA color) {
+            this.text.setText(text);
+            this.text.setFontColor(color);
+        }
+        
+        private static float TEMP_VALUE = animTime / maxAngle / FastMath.DEG_TO_RAD;
+
+        @Override
+        protected void updatePhaseAll(float tpf) {
+
+            if (data.getTimeUsed() <= animTime) {
+                
+                Vector3f pos = text.getLocalTranslation();
+                
+//                float factor = FastMath.sin(data.getTimeUsed() / animTime * maxAngle * FastMath.DEG_TO_RAD); // remove
+                float factor = FastMath.sin(data.getTimeUsed() / TEMP_VALUE);
+                
+                text.setLocalScale(factor * factor);
+
+                // scale;
+                pos.x = text.getWidth() * text.getLocalScale().x * -0.5f;
+                pos.y = factor * totalAnimDistance;
+                
+                text.setLocalTranslation(pos);
+            }
+        }
+
+    } // end damage text class
+    
+}

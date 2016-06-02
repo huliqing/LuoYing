@@ -1,0 +1,38 @@
+MaterialDef Project {
+ 
+    MaterialParameters {
+        Texture2D Texture
+        Color Color
+
+        Float ProjLeftX
+        Float ProjLeftY
+        Float ProjWidth
+        Float ProjHeight
+        Matrix4 CastViewProjectionMatrix
+    }
+ 
+    Technique {
+        VertexShader GLSL100:   MatDefs/Projection/Projection.vert
+        FragmentShader GLSL100: MatDefs/Projection/Projection.frag
+ 
+        WorldParameters {
+            WorldViewProjectionMatrix
+            WorldMatrix
+        }
+ 
+        Defines {
+            TEXTURE : Texture
+            COLOR : Color
+        }
+
+        RenderState {
+            //Blend Modulate
+            //DepthWrite Off   
+            //PolyOffset -0.1 0      
+
+            Blend Additive
+            DepthWrite Off   
+         
+        }
+    }
+}

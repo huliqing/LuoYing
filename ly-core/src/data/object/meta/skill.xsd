@@ -1,0 +1,892 @@
+<?xml version="1.0"?>
+<!--
+xs:string
+xs:decimal
+xs:integer
+xs:boolean
+xs:date
+xs:time
+-->
+
+<xs:schema version="1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://fighter.huliqing.name"
+           xmlns="http://fighter.huliqing.name"
+           elementFormDefault="qualified" >
+    
+    <xs:include schemaLocation="base.xsd" />
+    
+    <xs:element name="root">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="skillWait" />
+                <xs:element ref="skillWalk" />
+                <xs:element ref="skillRun"  />
+                <xs:element ref="skillIdle" />
+                <xs:element ref="skillHurt" />
+                <xs:element ref="skillReset" />
+                
+                <xs:element ref="skillDefend" />
+                <xs:element ref="skillDuck" />
+                <xs:element ref="skillDeadRagdoll" />
+                <xs:element ref="skillDead" />
+                
+                <!--attack common-->
+                <xs:element ref="skillAttack" />
+                
+                <!--远程技能-->
+                <xs:element ref="skillShot"/>
+                <xs:element ref="skillShotBow"/>
+                
+                <xs:element ref="skillBack" /> 
+                <xs:element ref="skillSummon" />
+                <xs:element ref="skillSkin" />
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="skillSkin">
+        <xs:annotation>
+            <xs:documentation>
+                换装技能,主要用于绑定到Skin.xml用于切换装备或武器时的技能使用。
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="skillBase">
+                    <xs:attribute name="hangTimePoint" type="xs:string" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                武器挂起或取出时的动画时间点，这个时间点取值[0.0~1.0],
+                                也即武器出现在手上或在挂靠点上（如背上，腿侧）的时间点。
+                                这个时间点是相对于useTime而定的
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="skillReset">
+        <xs:annotation>
+            <xs:documentation>
+                让角色处于reset状态，与wait技能不同，这个技能可以让角色停留于动画
+                中的某一个特殊侦．比如当角色被击晕后的状态。
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="skillBase">
+                    <xs:attribute name="timePoint" type="xs:decimal" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                指定要作为reset状态的animation动画的时间插值点，
+                                取值[0.0~1.0], 0表示动画的开始帧，1.0表示动画的结束帧。
+                                注：如果没有指技能指定动画名称，则忽略这个参数，并把
+                                角色定格在角色的正在执行的动画帧上。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="skillDuck">
+        <xs:annotation>
+            <xs:documentation>闪避技能</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="skillBase">
+                    <xs:attribute name="duckDir" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>闪避方向，即指明向哪个方向闪避。默认left</xs:documentation>
+                        </xs:annotation>
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:enumeration value="front"/>
+                                <xs:enumeration value="back"/>
+                                <xs:enumeration value="left"/>
+                                <xs:enumeration value="right"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:attribute>
+                    <xs:attribute name="force" type="xs:string" >
+                        <xs:annotation>
+                            <xs:documentation>闪避推力:这个参数可以换成actorAnim</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="skillDefend">
+        <xs:annotation>
+            <xs:documentation>防守技能</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="skillBase">
+                    <xs:attribute name="defendDir" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                防守哪一个方向,默认front
+                            </xs:documentation>
+                        </xs:annotation>
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:enumeration value="front"/>
+                                <xs:enumeration value="back"/>
+                                <xs:enumeration value="left"/>
+                                <xs:enumeration value="right"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="skillWait">
+        <xs:annotation>
+            <xs:documentation>技能“等待”</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="skillBase"></xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="skillDeadRagdoll">
+        <xs:annotation>
+            <xs:documentation>死亡,使用布娃娃系统</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="skillBase">
+                    <xs:attribute name="useRagdoll" type="bool" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                是否使用"布娃娃"的死亡方式,默认会开启该功能.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="forceOnly" type="bool" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                只有在受力时才使用ragdoll功能,该参数必须开启useRagdoll.默认情况下如果已经开启了useRagdoll,则角色列亡时会自动使用ragdoll方式.
+                                如果forceOnly设置为true,则只有在受到外力情况下才使用ragdoll方式.比如只有一些带有force作用力的攻击技能才对该技能产生ragdoll效果
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="bones" type="xs:string" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                指定哪些骨头作为ragdoll骨骼使用,如果没有指定任何骨头则使用全部. 
+                                一般指定身躯,四肢,和头部等骨骼,像手指脚指嘴巴眼睛等细节部分可不需要,以减少性能开销.
+                                使用半角逗号分隔每个骨头的名称,如:"bone1,bone2,bone3...".
+                                注意:
+                                1.当骨骼包含IK骨头时,应该尽量指定该参数,并排除IK骨头,否则会造成一些奇怪的现象...
+                                2.使用bones参数时，必须包含骨骼的根节点，否则在嵌接死亡动画时位置会被还原到ragdoll之前的位置
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="bonesHit" type="xs:string" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                指定哪些ragdoll骨头要接受攻击时的作用力,如:  "bone1,bone2,bone3".
+                                注意:指定多个骨头时,ragdoll的整体受力也会增大.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="deadAnimPoint" type="xs:decimal" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                死亡动画的执行时间点,如果角色自身有死亡动画,则可混合ragdoll和角色自身的死亡动画.
+                                该参数取值为0.0~1.0 , 是技能执行时间的插值点,默认0.5.
+                                注意:deadRagdoll的死亡方式是先执行ragdoll动画,然后再执行骨骼自身的animation动画.
+                                而这个时间点指定了执行死亡动画的时间点.
+                                注:在下面几种情况下会造成死亡动画立即执行的情况,即ragdoll不执行.
+                                1.useRagdoll=false;
+                                2.deadAnimPoint = 0;
+                                3.useRagdoll=true, forceOnly=true, 但角色死亡时未受力.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="lastWords" type="xs:string" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                角色死亡时的吐槽,格式 "resourceKey1,resourceKey2,resourceKey3",
+                                resourceKey指向resource文件中的键名,在角色死亡时会随机从这个列表中随机
+                                选择一个作为遗言吐槽.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="skillHurt">
+        <xs:annotation>
+            <xs:documentation>受伤</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="skillBase">
+                    <xs:attribute name="hurtFace" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>指定受攻击的方向,默认front,这表示角色正面受到攻击而受伤</xs:documentation>
+                        </xs:annotation>
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:enumeration value="front"/>
+                                <xs:enumeration value="back"/>
+                                <xs:enumeration value="left"/>
+                                <xs:enumeration value="right"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="skillBack">
+        <xs:annotation>
+            <xs:documentation>魔法：回城技能</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="skillBase">
+                    <xs:attribute name="backPoint" type="xs:decimal" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                人物消失的时间插值点，取值为[0.0, 1.0], 即是在技能执行后
+                                多久人物消失。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="skillSummon">
+        <xs:annotation>
+            <xs:documentation>魔法：召唤技</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="skillBase">
+                    <xs:attribute name="summonActorId" type="xs:string" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                要召唤的是哪一个角色的id.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="summonOffset" type="xs:string" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                召唤的位置偏移,如:"0,0.5,4.5" 该位置是以角色本地坐标为依据.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="summonPoint" type="xs:decimal" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                召唤的时间插值点，取值为[0.0, 1.0],即开始出现角色的时间点.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="summonTime" type="xs:decimal" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                召唤角色的总用时,单位秒,默认4秒,从被召唤的角色开始出现时算起.
+                                不是技能的总用时.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="skillShotBow">
+        <xs:annotation>
+            <xs:documentation>弓箭射击</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="skillShotBase">
+                    <xs:attribute name="weaponAnim" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>
+                                射击时的武器动画的名称，如弓箭的拉弓过程动画，指定的武器
+                                必须有该动画名称才能正常播放
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="timeBulletTake" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>
+                                开始取箭的时间点，也就是箭开始出现时的时间点. 取值0.0~1.0,
+                                这时箭出现在手上。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="timeBulletPull" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>
+                                开始拉弓的时间点，取值0.0~1.0,这时箭在弦上。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="arrow" type="xs:string" use="required"  >
+                        <xs:annotation>
+                            <xs:documentation>
+                                箭的模型,如："Models/weapon/bow/arrow000.j3o"
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="animationShotDown" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                向下45度射击的动画
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="animationShotUp" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                向上45度射击的动画
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="arrowBindBone" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                取箭的时候，用于绑定“箭”模型的角色骨架上的某一块骨头,如果没有指定，
+                                则默认以角色的右手武器的骨头作为该骨头.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="shotDownOffset" type="xs:string" use="optional"/>
+                    <xs:attribute name="shotUpOffset" type="xs:string" use="optional"/>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="skillShot">
+        <xs:annotation>
+            <xs:documentation>射击</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="skillShotBase"></xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="skillShotBase" >
+        <xs:complexContent>
+            <xs:extension base="skillHitBase">
+                <xs:attribute name="bullets" type="xs:string" use="required">
+                    <xs:annotation>
+                        <xs:documentation>
+                            指定一些可用的子弹 (bullet.xml),
+                            格式："bullet1,bullet2,..." 在射击过程中将在这些子
+                            弹中轮循。
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="shotTimes" type="xs:string" use="required" >
+                    <xs:annotation>
+                        <xs:documentation>
+                            指定发射的时间插值点，取值0.0~1.0。表示技能执行过程中的某个时间点。
+                            0.0表示一开始发射，1.0表示技能执行完后发射。多重射击可以使用半角逗
+                            号分隔，如："0.1,0.2,0.3,..."
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="shotOffsets" type="xs:string" use="required"  >
+                    <xs:annotation>
+                        <xs:documentation>
+                            发射位置的偏移，以发射源的局部坐标系为基准，多个位置
+                            可以用半角逗号分隔，如:"x|y|z,x|y|z,x|y|z,...",发射过
+                            程将在这些位置之间进行轮循。
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="shotSpeed" type="xs:decimal" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>发射速度倍率，1表示原始速度，1.5表示提升50%速度,0.5表示一半速度</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="multHit" type="bool" use="optional"  >
+                    <xs:annotation>
+                        <xs:documentation>
+                            是否允许子弹同时攻击多个目标角色，即允许一个子弹击中
+                            多个目标。
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="multTarget" type="bool" use="optional"  >
+                    <xs:annotation>
+                        <xs:documentation>
+                            多重射击时是否允许同时攻击多个目标角色。打开该选项，
+                            当进行多重射击时允许不同子弹射击在范围内的不同目标。
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="shotTargetType" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>
+                            射击的目标靶点类型=>
+                            origin:原点;
+                            center：model bound的中心点;
+                            bound：整个model bound
+                        </xs:documentation>
+                    </xs:annotation>
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="origin"/>
+                            <xs:enumeration value="center"/>
+                            <xs:enumeration value="bound"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="skillHitBase" >
+        <xs:complexContent>
+            <xs:extension base="skillBase">
+                 <xs:attribute name="skillType" use="required">
+                    <xs:annotation>
+                        <xs:documentation>attack普通射击; trick特殊射击; magic魔法射击;</xs:documentation>
+                    </xs:annotation>
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="attack" />
+                            <xs:enumeration value="trick"  />
+                            <xs:enumeration value="magic"  />
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="hitChecker" type="xs:string" use="required">
+                    <xs:annotation>
+                        <xs:documentation>技能作用检查器</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="hitAttribute" type="xs:string" use="required">
+                    <xs:annotation>
+                        <xs:documentation>目标属性</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="hitValue" type="xs:decimal" use="required">
+                    <xs:annotation>
+                        <xs:documentation>目标属性值,可正可负</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="hitDistance" type="xs:decimal" use="required">
+                    <xs:annotation>
+                        <xs:documentation>
+                            hit距离
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="hitAngle" type="xs:decimal" use="required">
+                    <xs:annotation>
+                        <xs:documentation>
+                            hit技能的作用角度限制。取值[0.0~360],默认30，如果hitAngle设置为0则将不会有任何角色被攻击到。
+                            如果设置为180，这表示只有在当前角色前面的角色才可能作用到。
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="hitEl" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            hitEl公式，关联到一个Hit类型的el.该公式用于为技能对目标产生的各种影响计算出
+                            最终值。如技能对目标的伤害值，BUFF加成等。
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="hitStates" type="xs:string" use="required">
+                    <xs:annotation>
+                        <xs:documentation>
+                            击中后给目标添加一个状态效果,格式："stateId1|factor,stateId2|factor,..."
+                            factor为添加状态的机率，取值[0.0~1.0], 1.0表示100%添加。
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="hitMagics" type="xs:string" use="required">
+                    <xs:annotation>
+                        <xs:documentation>
+                            设置结束魔法,在发射后给目标附着一些魔法.格式："magic1,magic2,..."
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:element name="skillAttack">
+        <xs:annotation>
+            <xs:documentation>普通攻击技能</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="skillHitBase">
+                    
+                    <!--remove20160504后续使用HitSkill的hitAngle代替-->
+<!--                    <xs:attribute name="damageAngle" type="xs:integer" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                技能的攻击视角范围（角度），取值[0 ~ 180]，默认值5，
+                                当敌人与当前角色的视线夹角小于该值时，则被视为在当前
+                                技能的攻击角度之内，敌人被当前技能击中的判定至少必须
+                                满足两个条件：1.在技能攻击范围内(distance)；2.在攻击角度内(damageAngle).
+                                当damageAngle = "180"时即全方位攻击。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>-->
+                    
+                    <xs:attribute name="multHit" type="bool" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                是否允许攻击到多个敌人，默认情况下只能攻击到当前的目标敌人。
+                                如果打开该功能，则在攻击范围内的敌人都可能被攻击到。比如挥剑
+                                的时候可能同时击中多个敌人。默认值false
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="checkPoint" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>
+                                技能检测时间点，取值[0.0~1.0],
+                                0 表示技能刚执行时，1表示技能执行完毕时，0.5即表示技能
+                                执行到一半时进行检测,具体的检测时间点由useTime确定。
+                                设置多个检测点时使用半角逗号分隔，如 checkPoint="0.4, 0.6, 0.9".表示
+                                技能在执行到40%, 60%, 90%时间段时都进行检测.检测点的作用由各个技能
+                                视情况而用。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="defendable" type="bool" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                技能是否是可防御的, 这里主要指短兵器的防御。默认都是可防御的。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="collisionOffset" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                碰撞的偏移位置，格式："x,y,z", 相对于当前攻击角色的本地坐标偏移，这个位置主要作为
+                                碰撞声音，碰撞特效的产生位置,如果不指明则默认:(0, 2, 2.5)
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="skillIdle">
+        <xs:annotation>
+            <xs:documentation>基本的idle行为</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="skillBase"></xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="skillRun">
+        <xs:annotation>
+            <xs:documentation>跑步</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="baseWalk"></xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="skillWalk">
+        <xs:annotation>
+            <xs:documentation>步行</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="baseWalk"></xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:complexType name="baseWalk">
+        <xs:complexContent>
+            <xs:extension base="skillBase">
+                <xs:attribute name="animSpeed" type="xs:decimal" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>该参数主要用于协调步行及跑步循环动画的播放速度，大于1的值会提高播放速度，小于1的值则降低。</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="baseSpeed" type="xs:decimal" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>设置行动的基本速度，步行默认:1.5， 跑步默认：6</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:element name="skillDead">
+        <xs:annotation>
+            <xs:documentation>普通死亡技能</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="skillBase">
+                    <xs:attribute name="remove" type="bool" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>是否死亡后立即移出场景</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:complexType name="skillBase">
+        <xs:complexContent>
+            <xs:extension base="base">
+                <xs:attribute name="icon" type="xs:string" use="required" >
+                    <xs:annotation>
+                        <xs:documentation>定一个图标(64x64), 如：Interface/icon/gold.png.
+                            图标一般用于在物品栏中显示,如果没有图标，则显示为"MISS"
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="useTime" type="xs:decimal" use="required" >
+                    <xs:annotation>
+                        <xs:documentation>技能的执行时间，单位秒</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                
+                <!--暂不开放这个功能-->
+<!--                <xs:attribute name="processor" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>给技能指定一个自定义处理类,默认情况下
+                            系统会根据技能的类型为自动选择一个处理类。
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>-->
+                
+                <xs:attribute name="animation" type="xs:string" use="required" >
+                    <xs:annotation>
+                        <xs:documentation>技能的model动画名称，角色必须有该动画，否则报错。</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="channels" type="xs:string" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>
+                            执行动画的通道名称，格式："animChannel1,animChannel2,..."
+                            注：拥有该技能的角色必须配置有这些动画通道名称才可以执行，否则可能报错。
+                            如果不设置该参数，则技能执行时将使用默认动画通道。
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="channelLocked" type="bool" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>
+                            执行动画时是否锁定动画通道，这可以避免当多个可交互重
+                            叠的技能同时执行时动画通道被覆盖的问题,在动画通道执行完之后
+                            再重新解锁，这个参数只有在
+                            技能及目标角色同时配置有channels时才有意义。默认false.
+                            示例如：换武器技能和走路技能是互相兼容和可重叠的。
+                            当在走路的情况下换武器时（先走路后换武器），“走路”技能
+                            的部分动画通道会被“换武器”技能的部分通道覆盖，这很自然并且没有问题。
+                            但是当在“换武器”的情况下“走路”时（先换武器再走路，换武器动作未结束的情况）。
+                            “走路”技能的手部动画通道可能覆盖掉“换武器”技能的动画通道，这会出现换
+                            武器技能的动画未完整执行完的问题。这个时候可以把“换武器”技能的动画通道锁定。
+                            换句话说即提高了“换武器”技能动画通道的优先级一样。
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="cooldown" type="xs:decimal" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>技能的冷却时间单位秒,默认0</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="weaponStateLimit" type="xs:string" use="required">
+                    <xs:annotation>
+                        <xs:documentation>
+                            武器状态限制，该参数限制什么样的武器可以使用该技能，如果不设置则
+                            表示任何武器都可以使用该技能。
+                            参数的格式为："左武器类型|右武器类型|其它部位武器类型1|其它部位武器类型2|...", 右边如果无武器时可省略
+                            伪示例1："0|剑" => 表示只有右武器为剑时可执行该技能，其它部分不能装备武器（0表示空，无武器）
+                            伪示例2："匕首|剑" => 表示只有左武器为匕首，右武器为剑时可执行该技能
+                            伪示例3："剑" => 表示只有左武器为剑时才可使用该技能。
+                            伪示例4："剑|剑,剑|剑|剑" => 表示二刀流或三刀流可以使用该技能。
+                            这里的左武器，右武器通常为左手的武器和右手拿的武器。
+                            武器类型代码参考：剑(1),匕首（2），弓箭（3) 具体参考SkinConstants.java定义
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="useAttributes" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>指定使用该技能时需要消耗的属性值,格式, 
+                            "属性id|消耗量",多个属性消耗可以使用半角逗号分开,
+                            如：attribute1|50,attribute2|100
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="speedAttribute" type="xs:string" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>
+                            影响技能执行速度的角色属性，指向一个attribute id,默认技能的执行速度为1，当设置了
+                            这个值之后，目标角色的指定属性的值将会影响到技能的执行速度。
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="cutTimeEndAttribute" type="xs:string" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>
+                            角色技能剪裁时间的角色属性,指向一个attribute id,取值范围为[0.0~1.0]，超出范围将会被截取。
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="loopMode" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>技能是否循环执行: 0: dontLoop;  l => loop; 2 => cycle</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="sounds" type="xs:string" use="required" >
+                    <xs:annotation>
+                        <xs:documentation>
+                            技能执行时的声效,格式: soundId1|timePoint,soundId2|timePoint,soundId3|timePoint...
+                            timePoint为技能trueUseTime的时间插值点,可忽略,默认为0.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="effects" type="xs:string" use="required" >
+                    <xs:annotation>
+                        <xs:documentation>
+                            绑定特效,格式: effectId1|timePoint,effectId2|timePoint,effectId3|timePoint...
+                            timePoint为技能useTime的时间插值点,可忽略,默认为0.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="magics" type="xs:magics" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>
+                            关联一些魔法物体，这些魔法物体会在角色施放技能的时候放置在角色所在的位置上,根据
+                            魔法物体的设置，这些魔法物体也可能跟随着角色。
+                            格式："magic|timePoint,magic|timePoint,..."
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="actorAnims" type="xs:string" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>
+                            角色运动动画，格式：actorAnimId|timeStart|timeEnd,actorAnimId|timeStart|timeEnd...
+                            timeStart,timeEnd为useTime的时间插值点。取值[0.0~1.0],可省略timeEnd,也可同时省略
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="cutTimeStartMax" type="xs:decimal" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            时间、动画最高剪裁比率"开始",取值必须在[0.0~1.0)之间，
+                            注：cutTimeStartMax和cutTimeEndMax的值之和也必须在 [0.0~1.0)之间
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="cutTimeEndMax" type="xs:decimal" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            时间、动画最高剪裁比率"结束",取值必须在[0.0~1.0)之间，这个值是从后往前算起的
+                            注：cutTimeStartMax和cutTimeEndMax的值之和也必须在 [0.0~1.0)之间
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="extOverlaps" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            扩展的技能覆盖设置。
+                            指定当前技能额外的可以与其它技能类型重叠播放的技能类型，格式："skillType1,skillType2,...".
+                            覆盖的意思是：在不停止其它正在执行的技能的情况下同时执行当前技能，优先级高于interrupts,
+                            即技能可覆盖其它技能的时候就不使用打断的情况。
+                            注：overlaps是单向的,当设置技能A可以覆盖技能B时，技能B却不一定可以覆盖A,除非设置B也可以覆盖A
+                            示例，假如当前技能为一个攻击技能，为了使当前技能在角色跑动(run(4))、跳跃(jump(5))的时候可以执行这个攻击技能，
+                            则可以为当前设置extOverlaps="4,5".
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="extInterrupts" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            扩展的技能打断设置。
+                            指定当前技能在遇到另一个技能时是否可以打断它，格式："skillType1,skillType2,...".
+                            interrupts的优先级低于overlaps，即当技能可以相互覆盖时，就不进行打断。
+                            interrupts是单向的，当设置了一个技能A可以打断技能B时，并不表示B也可以打断A.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="level" type="xs:integer" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            技能等级，默认1.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="maxLevel" type="xs:integer" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            技能允许的最高等级,默认1
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="levelEl" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            技能等级公式，关联到一个level类型的el.这个公式会与
+                            技能等级计算出一个技能的等级值。
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="skillPoints" type="xs:integer" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>技能点数,技能熟练度，用于升级技能</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="levelUpEl" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            技能升级公式,当技能点数达到技能升级公式的要求时将对技能进行升级。这个升级公式中的每个等级值定义了技能提升到
+                            指定等级时需要的sp(skillPoints)数。
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="handler" ref="handler" use="optional" />
+                <xs:attribute name="needLevel" type="xs:integer" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>设置一个等级,这个等级指定只有角色达到这个等级时才能使用该技能.</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    
+</xs:schema>

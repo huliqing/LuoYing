@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+标准射程：
+普通箭和塔的射程:25
+技能箭的射程：30
+
+普通技能时间控制：
+普通攻击技能：不要超过1秒
+普通射击技能：不要超过2秒
+
+特殊技能时间：
+1.特殊技能控制在3~4秒之内。
+2.冷却时间15~30秒
+-->
+
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://fighter.huliqing.name'
+    xsi:schemaLocation='http://fighter.huliqing.name meta/skill.xsd'>
+    
+    <!-- =================================================================== -->
+    <!--切换武器用的技能-->
+    <!-- =================================================================== -->
+    
+    <skillSkin id="skillSkinHangWeaponBase" useTime="0.75" channelLocked="1" hangTimePoint="0.5" />
+    <skillSkin id="skillSkin_LH_LS" extends="skillSkinHangWeaponBase" animation="hang_LH_LS" channels="channelLeftHand" sounds="soundDrawSword|0.5" />
+    <skillSkin id="skillSkin_LH_LW" extends="skillSkinHangWeaponBase" animation="hang_LH_LW" channels="channelLeftHand" sounds="soundDrawSword|0.5" />
+    <skillSkin id="skillSkin_LH_RS" extends="skillSkinHangWeaponBase" animation="hang_LH_RS" channels="channelLeftHand" sounds="soundDrawSword|0.5" />
+    
+    <skillSkin id="skillSkin_RH_LS" extends="skillSkinHangWeaponBase" animation="hang_RH_LS" channels="channelRightHand" sounds="soundDrawSword|0.5" />
+    <skillSkin id="skillSkin_RH_LW" extends="skillSkinHangWeaponBase" animation="hang_RH_LW" channels="channelRightHand" sounds="soundDrawSword|0.5" />
+    <skillSkin id="skillSkin_RH_RS" extends="skillSkinHangWeaponBase" animation="hang_RH_RS" channels="channelRightHand" sounds="soundDrawSword|0.5" />
+    
+    <skillSkin id="skillSkinBow_LH_LS" extends="skillSkinHangWeaponBase" animation="hang_LH_LS" channels="channelLeftHand" sounds="soundDrawBow|0.5" />
+    
+    <skillSkin id="skillSkinWand_LH_RS" extends="skillSkinHangWeaponBase" animation="hang_wand_LH_RS" channels="channelLeftHand" sounds="soundDressOutfit2|0.5" />
+    <skillSkin id="skillSkinWand_RH_LS" extends="skillSkinHangWeaponBase" animation="hang_wand_RH_LS" channels="channelRightHand" sounds="soundDressOutfit2|0.5" />
+    
+    
+</root>

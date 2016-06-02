@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://fighter.huliqing.name'
+    xsi:schemaLocation='http://fighter.huliqing.name meta/game.xsd'>
+    
+    <!-- 黄金宝箱 -->
+    <gameStoryTreasure id="gameStoryTreasure" scene="sceneTreasure" 
+                       availableActors="actorWarrior,actorPastor,actorHunter,actorSinbad,actorNinja,actorSpider,actorBear,actorWolf,actorScorpion" />
+
+    <!--千年古柏-->
+    <gameStoryGb id="gameStoryGb" scene="sceneGb" availableActors="actorWarrior,actorPastor,actorHunter,actorSinbad,actorNinja,actorSpider,actorBear,actorWolf,actorScorpion" 
+                 gbPosition="44,0,-61" enemyPosition="-14,0,65" enemyActors="actorGbSmall,actorSpider,actorBear,actorWolf,actorScorpion" />
+
+    <!--守护之战-->
+    <gameStoryGuard id="gameStoryGuard" scene="sceneGuard" availableActors="actorWarrior,actorPastor,actorHunter,actorSinbad,actorNinja,actorSpider,actorBear,actorWolf,actorScorpion" 
+                    selfPosition="42,0,-61" enemyPosition="-14,0,65" fairyPosition="-84,0,-15" fairyLevel="25" servantLevel="20" />
+
+    <!-- 生存挑战 -->
+    <gameSurvival id="gameSurvival" scene="sceneTreasure" icon="Interface/game/survival.jpg"
+                  availableActors="actorWarrior,actorPastor,actorHunter,actorSinbad,actorNinja,actorSpider,actorBear,actorWolf,actorScorpion" />
+</root>
+
+
+

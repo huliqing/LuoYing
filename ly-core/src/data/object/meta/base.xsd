@@ -1,0 +1,259 @@
+<?xml version="1.0"?>
+<!--
+xs:string
+xs:decimal
+xs:integer
+xs:boolean
+xs:date
+xs:time
+-->
+
+<xs:schema version="1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://fighter.huliqing.name"
+           xmlns="http://fighter.huliqing.name"
+           elementFormDefault="qualified">
+    
+    <xs:complexType name="base" >
+        <xs:attribute name="id" type="xs:string" use="required" >
+            <xs:annotation>
+                <xs:documentation>给物品类型指定一个唯一标识</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        
+        <xs:attribute name="extends" type="xs:string" use="optional" >
+            <xs:annotation>
+                <xs:documentation>
+                    继承，这个参数可以让当前的配置继承自另一个配置,这可以让定义
+                    物体的时候更方便，很多相似物体可以继承自一个基物体，然后各自
+                    保留一些特别参数。
+                    继承的优先原则是：
+                    1.先从被继承的定义中去查到所有参数配置。
+                    2.再将自身中配置的参数覆盖继承过来的参数。
+                    注：
+                    1.当前不支持不同类型的继承，比如角色类型不能去继承技能类型的参数,但是不同的技能可以相继承
+                    2.不允许无尽继承，比如 C -> B -> A -> C; 这会造成死继承，就像死循环，程序会报错。 
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        
+        <xs:attribute name="cost" type="xs:integer" use="optional" >
+            <xs:annotation>
+                <xs:documentation>物品的价值，当在商品中出售时值多少钱。</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+    
+    <!-- 布尔类型 -->
+    <xs:simpleType name="bool" >
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="0"/>
+            <xs:enumeration value="1"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <!--技能类型：以 SkillType.java的为准-->
+    <xs:simpleType name="skillType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="wait"/>
+            <xs:enumeration value="sit"/>
+            <xs:enumeration value="walk"/>
+            <xs:enumeration value="run"/>
+            <xs:enumeration value="jump"/>
+            <xs:enumeration value="dance"/>
+            <xs:enumeration value="idle"/>
+            <xs:enumeration value="hurt"/>
+            <xs:enumeration value="dead"/>
+            <xs:enumeration value="reset"/>
+            <xs:enumeration value="duck"/>
+            <xs:enumeration value="defend"/>
+            <xs:enumeration value="skin"/>
+            <xs:enumeration value="attack"/>
+            <xs:enumeration value="trick"/>
+            <xs:enumeration value="magic"/>
+            <xs:enumeration value="common"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <!-- 定义平面：xy,xz,yz -->
+    <xs:simpleType name="plane" >
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="xy"/>
+            <xs:enumeration value="xz"/>
+            <xs:enumeration value="yz"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <!-- Animation的循环模式 -->
+    <xs:simpleType name="loop" >
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="loop"/>
+            <xs:enumeration value="dontLoop"/>
+            <xs:enumeration value="cycle"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:attribute name="sex">
+        <xs:annotation>
+            <xs:documentation>0:female; 1:male;</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:enumeration value="0">
+                    <xs:annotation>
+                        <xs:documentation>female</xs:documentation>
+                    </xs:annotation>
+                </xs:enumeration>
+                <xs:enumeration value="1">
+                    <xs:annotation>
+                        <xs:documentation>male</xs:documentation>
+                    </xs:annotation>
+                </xs:enumeration>
+                <xs:enumeration value="2">
+                    <xs:annotation>
+                        <xs:documentation>unknow</xs:documentation>
+                    </xs:annotation>
+                </xs:enumeration>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:attribute>
+    
+    <xs:attribute name="weaponType">
+        <xs:annotation>
+            <xs:documentation>
+                武器类型：1:刀、剑; 2:匕首; 3:弓; 4:爪子; 5.魔法书; 6.魔法杖
+                以SkinConstants.java定义的为准
+            </xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+            <xs:restriction base="xs:integer">
+                <xs:enumeration value="1"/>
+                <xs:enumeration value="2"/>
+                <xs:enumeration value="3"/>
+                <xs:enumeration value="4"/>
+                <xs:enumeration value="5"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:attribute>
+    
+    <xs:attribute name="race">
+        <xs:annotation>
+            <xs:documentation>种族 => 0:未分类； 1：人种;  2:兽族; 如果没有设置种族，则默认为0</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:enumeration value="0"/>
+                <xs:enumeration value="1"/>
+                <xs:enumeration value="2"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:attribute>
+    
+    <xs:attribute name="mat">
+        <xs:annotation>
+            <xs:documentation>
+                给物品指定一个材质，当物品在互相碰撞时会根据不同的材质发出不同的声音。可选：
+                0 => none(默认不需要材质,如：ai,sound,skill之类); 
+                1 => metal(金属，如金银铜铁之类); 
+                2 => wood (木质); 
+                3 => stone(石头、宝石、矿石之类);
+                4 => body(生物体,皮肤、肌肤); 
+                5 => calcium (钙质，如牙齿，爪子之类）
+            see alse Mat.java
+            </xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:enumeration value="0"/>
+                <xs:enumeration value="1"/>
+                <xs:enumeration value="2"/>
+                <xs:enumeration value="3"/>
+                <xs:enumeration value="4"/>
+                <xs:enumeration value="5"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:attribute>
+    
+    <xs:attribute name="mass" type="xs:decimal">
+        <xs:annotation>
+            <xs:documentation>角色质量，默认0，对于能够行动的角色，如人物，怪物等应该设置大于0。
+                对于静止的角色，如防御塔等不能移动的角色应该设置为0。
+            </xs:documentation>
+        </xs:annotation>
+    </xs:attribute>
+    
+    <xs:attribute name="file" type="xs:string">
+        <xs:annotation>
+            <xs:documentation>指定物品的模型文件路径，如：Models/trees/flower/flower1.j3o</xs:documentation>
+        </xs:annotation>
+    </xs:attribute>
+    
+    <xs:attribute name="icon" type="xs:string">
+        <xs:annotation>
+            <xs:documentation>给物品指定一个图标(64x64), 如：Interface/icon/gold.png.
+                图标一般用于在物品栏中显示,如果没有图标，则显示为"MISS"
+            </xs:documentation>
+        </xs:annotation>
+    </xs:attribute>
+    
+    <xs:attribute name="handler" type="xs:string">
+        <xs:annotation>
+            <xs:documentation>指定一个handler来处理该物品的使用</xs:documentation>
+        </xs:annotation>
+    </xs:attribute>
+    
+    <xs:attribute name="collisionShape">
+        <xs:annotation>
+            <xs:documentation>
+                碰撞盒类型 =>
+                box:较优，性能最好，主要针对不需要太精确碰撞检测的模型;
+                mesh:较准确，性能差，主要针对静态，不能移动的物体,如：地形，房屋等;
+                dynamicMesh：较准确，性能最差，主要针对移动的物体;
+                capsule: 默认，主要针对移动角色，如：NPC、怪兽、野兽等;
+            </xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:enumeration value="box"/>
+                <xs:enumeration value="mesh"/>
+                <xs:enumeration value="dynamicMesh"/>
+                <xs:enumeration value="capsule"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:attribute>
+    
+    <xs:attribute name="careerLimit">
+        <xs:annotation>
+            <xs:documentation>
+                职业限制，格式:"career1,career2,career3",如:"1,2,3"
+            </xs:documentation>
+        </xs:annotation>
+    </xs:attribute>
+    
+    <xs:attribute name="raceLimit">
+        <xs:annotation>
+            <xs:documentation>
+                限制物品只能在指定的种族使用，格式："race1,race2,race3,...",
+                如果值为空或null,则表示无限制，所有种族都可以使用.
+                种族定义参考=》
+                0:未分类； 1：人种;  2:兽族; 如果没有设置种族，则默认为0
+            </xs:documentation>
+        </xs:annotation>
+    </xs:attribute>
+    
+    <xs:attribute name="sexLimit">
+        <xs:annotation>
+            <xs:documentation>
+                限制物品只能由指定性别的角色使用,如果为空或null则表示无任何限制。
+                0:female; 1:male;
+            </xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:enumeration value="0" />
+                <xs:enumeration value="1" />
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:attribute>
+        
+</xs:schema>

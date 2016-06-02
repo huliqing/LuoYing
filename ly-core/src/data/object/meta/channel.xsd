@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<!--
+xs:string
+xs:decimal
+xs:integer
+xs:boolean
+xs:date
+xs:time
+-->
+
+<xs:schema version="1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://fighter.huliqing.name"
+           xmlns="http://fighter.huliqing.name"
+           elementFormDefault="qualified"
+        >
+    
+    <xs:include schemaLocation="base.xsd" />
+    
+    <xs:element name="root">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="channel" />
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="channel">
+        <xs:annotation>
+            <xs:documentation>定义一个角色动画通道</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="base">
+                    <xs:attribute name="fromRootBones" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                示例1："bone1" => 则所有bone1的骨头都将被加入通道中（包含bone1) 。
+                                示例2："bone1,bone2,bone3,..." => 则bone1,bone2和bone3的所有子骨头都将被加入通道中（包含bone1,bone2,bone3)
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="toRootBones" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                示例1 "bone1" => 则从bone1到根节点的所有骨头都将被加入通道中。
+                                示例2 "bone1,bone2,..." => 则从bone1,bone2到根节点的所有骨头都将被加入通道中。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="bones" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                指定特别的骨头，示例："bone1,bone2,bone3,..." => 则只有bone1,bone2,bone3被加入到通道中
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+        
+    
+</xs:schema>

@@ -1,0 +1,226 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package name.huliqing.fighter.game.state.lan;
+
+import name.huliqing.fighter.game.state.lan.mess.MessSCGameData;
+import name.huliqing.fighter.game.state.lan.mess.MessSCClientList;
+import name.huliqing.fighter.game.state.lan.mess.MessPlayClientId;
+import name.huliqing.fighter.game.state.lan.mess.MessPlayGetServerState;
+import name.huliqing.fighter.game.state.lan.mess.MessPlayClientData;
+import name.huliqing.fighter.game.state.lan.mess.MessSCServerState;
+import com.jme3.app.Application;
+import com.jme3.network.Client;
+import com.jme3.network.ClientStateListener.DisconnectInfo;
+import com.jme3.network.Message;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
+import name.huliqing.fighter.Factory;
+import name.huliqing.fighter.data.GameData;
+import name.huliqing.fighter.game.service.EnvService;
+import name.huliqing.fighter.game.state.lan.GameClient.ClientListener;
+import name.huliqing.fighter.game.state.lan.GameServer.ServerState;
+import name.huliqing.fighter.game.state.lan.mess.MessPing;
+
+/**
+ * 默认的客户端帧听器
+ * @author huliqing
+ */
+public abstract class DefaultClientListener implements ClientListener {
+    
+    private final EnvService envService = Factory.get(EnvService.class);
+    private Application app; 
+    // 从服务端获得的所有客户端列表
+    protected final List<MessPlayClientData> clients = new ArrayList<MessPlayClientData>();
+    
+    // ----- Ping测试
+    // Ping测试的时间间隔,单位秒，这个数值不能太小，因为每次发送Ping测试时Ping的
+    // 发起时间都会重置，因此如果Ping值大于这个值时将不会测到。一般不要小于2秒.
+    private float pingTimeInterval = 3;
+    private float pingTimeUsed;
+    // Ping更新侦听器
+    public interface PingListener {
+        /**
+         * 当Ping值更新时调用该方法
+         * @param ping 
+         */
+        void onPingUpdate(long ping);
+    }
+    private final List<PingListener> pingListerners = new ArrayList<PingListener>(1);
+    // 用于向服务端发送的Ping消息
+    private MessPing messPing = new MessPing();
+    
+    public DefaultClientListener(Application app) {
+        this.app = app;
+    }
+
+    /**
+     * 获取所有客户端,注：该列表只能用于只读操作,不要手动修改该列表
+     * @return 
+     */
+    public List<MessPlayClientData> getClients() {
+        return clients;
+    }
+    
+    /**
+     * 添加一个Ping值侦听器
+     * @param pingListener 
+     */
+    public void addPingListener(PingListener pingListener) {
+        if (!pingListerners.contains(pingListener)) {
+            pingListerners.add(pingListener);
+        }
+    }
+    
+    /**
+     * 移除一个Ping值侦听器
+     * @param pingListener 
+     */
+    public void removePingListener(PingListener pingListener) {
+        pingListerners.remove(pingListener);
+    }
+    
+    /**
+     * 设置Ping值测试的时间间隔,单位秒，一般不要小于3秒。否则影响性能。
+     * @param pingTimeInterval 
+     */
+    public void setPingTimeInterval(float pingTimeInterval) {
+        this.pingTimeInterval = pingTimeInterval;
+    }
+    
+    @Override
+    public void clientConnected(final GameClient gameClient, final Client client) {
+        // 当连接到服务端以后，如果服端器这时已经在玩游戏，则客户端直接开始游戏。
+        app.enqueue(new Callable() {
+            @Override
+            public Object call() throws Exception {
+                processClientConnected(gameClient, client);
+                return null;
+            }
+        });
+    }
+
+    @Override
+    public void clientDisconnected(final GameClient gameClient,  final Client client, final DisconnectInfo info) {
+        app.enqueue(new Callable() {
+            @Override
+            public Object call() throws Exception {
+                processClientDisconnected(gameClient, client, info);
+                return null;
+            }
+        });
+    }
+    
+    @Override
+    public void update(float tpf, GameClient gameClient) {
+        // 每隔一段时间向服务端发送Ping消息
+        if (pingListerners.size() > 0) {
+            pingTimeUsed += tpf;
+            if (pingTimeUsed > pingTimeInterval) {
+                pingTimeUsed = 0;
+                messPing.time = System.nanoTime();
+                gameClient.send(messPing);
+            }
+        }
+    }
+
+    @Override
+    public void clientMessage(final GameClient gameClient, final Client client, final Message m) {
+        app.enqueue(new Callable() {
+            @Override
+            public Object call() throws Exception {
+                if (m instanceof MessSCGameData) {
+                    MessSCGameData mess = (MessSCGameData) m;
+                    onGameDataLoaded(gameClient, mess.getGameData());
+                    
+                } else if (m instanceof MessSCServerState) {
+                    MessSCServerState mess = (MessSCServerState) m;
+                    onServerStateChange(gameClient, mess.getServerState());
+                    
+                } else if (m instanceof MessSCClientList) {
+                    MessSCClientList mess = (MessSCClientList) m;
+                    onClientsUpdated(gameClient, mess.getClients());
+                    
+                } else if (m instanceof MessPing) {
+                    // 测试Ping值
+                    MessPing mess = (MessPing) m;
+                    onUpdatePing(gameClient, mess);
+                }else {
+                    processClientMessage(gameClient, client, m);
+                }
+                return null;
+            }
+        });
+    }
+    
+    // Ping值测试
+    protected void onUpdatePing(GameClient gameClient, MessPing mess) {
+        if (pingListerners.size() > 0) {
+            for (PingListener pl : pingListerners) {
+                // 注意要把纳秒转换为毫秒
+                long ping = (long) ((System.nanoTime() - (long) mess.time) * (1.0f / 1000000L));
+                pl.onPingUpdate(ping);
+            }
+        }
+    }
+    
+    /**
+     * 从服务端获得游戏数据，在当客户端连接到服务端之后立即发生，这保证在执
+     * 行其它命令之前就已经获得了来自服务端的游戏数据。
+     * @param gameClient
+     * @param gameData 
+     */
+    protected void onGameDataLoaded(GameClient gameClient, GameData gameData) {
+        gameClient.setGameData(gameData);
+    }
+    
+    /**
+     * 当服务端游戏状态发生变化时
+     * @param gameClient
+     * @param newState 
+     */
+    protected void onServerStateChange(GameClient gameClient, ServerState newState) {
+        gameClient.setServerState(newState);
+    }
+    
+    /**
+     * 当客户端列表发生变更时,这包含新客户端连接，断开，客户端信息更新,如机器
+     * 标识等。
+     * @param gameClient
+     * @param clients 
+     */
+    protected void onClientsUpdated(GameClient gameClient, List<MessPlayClientData> clients) {
+        this.clients.clear();
+        this.clients.addAll(clients);
+    }
+    
+    /**
+     * 处理当客户端连接到服务端时
+     * @param client 
+     */
+    protected void processClientConnected(GameClient gameClient, Client client) {
+        // 1.连接上服务端后立即发送客户端标识
+        client.send(new MessPlayClientId(envService.getMachineName()));
+
+        // 2.从服务端获得当前游戏状态
+        client.send(new MessPlayGetServerState());
+    }
+    
+    /**
+     * 处理客户端断开时
+     * @param gameClient
+     * @param client
+     * @param info 
+     */
+    protected abstract void processClientDisconnected(GameClient gameClient, Client client, DisconnectInfo info);
+    
+    /**
+     * 处理服务端传来的消息
+     * @param gameClient
+     * @param source
+     * @param m 
+     */
+    protected abstract void processClientMessage(GameClient gameClient, Client source, Message m);
+}

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--定义角色的可掉落物-->
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://fighter.huliqing.name'
+    xsi:schemaLocation='http://fighter.huliqing.name meta/drop.xsd'>
+
+    <!--=====================================================================-->
+    <!-- 基本配置 -->
+    <!--=====================================================================-->
+    
+    <!--什么也不掉: 用于游戏中动态设置-->
+    <drop id="dropEmpty" />
+    
+    <!--=====================================================================-->
+    <!-- 特殊配置 -->
+    <!--=====================================================================-->
+    
+    <!--丛林蜘蛛掉落设置-->
+    <drop id="dropSpider" random="itemGold|20,itemTonicRed|2|0.2,itemTonicBlue|2|0.2,itemSpiderSpawn|1|0.15,itemHerb|1|0.2" />
+    
+    <!--丛林盗贼-->
+    <drop id="dropNinja" random="itemGold|20,itemTonicRed|2|0.2,itemTonicBlue|2|0.2,itemTower|1|0.15,itemTowerStone|1|0.15,itemTowerSnow|1|0.15" />
+    
+    <!--狼-->
+    <drop id="dropWolf" random="itemGold|10,itemTonicRed|2|0.2,itemTonicBlue|2|0.2,itemScrollWolf|1|0.3" />
+    
+    <!--熊-->
+    <drop id="dropBear" random="itemGold|10,itemTonicRed|2|0.2,itemTonicBlue|2|0.2,itemScrollBear|1|0.3" />
+    
+    <!--蝎子-->
+    <drop id="dropScorpion" random="itemGold|10,itemTonicRed|2|0.2,itemTonicBlue|2|0.2,itemScrollScorpion|1|0.3,itemDetoxifyGrass|1|0.2" />
+    
+    <!--古柏幼仔-->
+    <drop id="dropGb" random="itemGold|20,itemTonicRed|1|0.2,itemTonicBlue|1|0.2,itemHerb|1|0.1" />
+
+    <!--山老大－辛巴达-->
+    <drop id="dropSinbad" random="itemGold|20,itemTonicRed|2|0.3,itemTonicBlue|2|0.3,itemTower|1|0.3,itemTowerStone|1|0.3,itemTowerSnow|1|0.2,itemHerb|1|0.3,itemASTonic|1|0.05" />
+    
+    <!--森林妖精-->
+    <drop id="dropFairy" base="itemBook008" random="itemGold|20,skinFoot004|1|0.5,skinHand004|1|0.5,skinLowerBody004|1|0.5,skinUpperBody004|1|0.5,itemHerb|1|1,itemASTonic|1|0.05" />
+
+    <!--trex-->
+    <drop id="dropTrex" random="itemGold|100,itemTonicRed|5|0.3,itemTonicBlue|5|0.3,itemHerb|1|0.2,itemASTonic|1|0.1" />
+
+    <!--raptor-->
+    <drop id="dropRaptor" random="itemGold|40,itemTonicRed|2|0.3,itemTonicBlue|2|0.3,itemHerb|1|0.2,itemASTonic|1|0.05" />
+
+
+</root>
+
+
+

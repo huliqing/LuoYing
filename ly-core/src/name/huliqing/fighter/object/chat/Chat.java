@@ -1,0 +1,200 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package name.huliqing.fighter.object.chat;
+
+import com.jme3.scene.Node;
+import name.huliqing.fighter.Factory;
+import name.huliqing.fighter.constants.ResConstants;
+import name.huliqing.fighter.data.ChatData;
+import name.huliqing.fighter.game.service.ActorService;
+import name.huliqing.fighter.game.service.PlayService;
+import name.huliqing.fighter.loader.Loader;
+import name.huliqing.fighter.manager.ResourceManager;
+import name.huliqing.fighter.object.AbstractPlayObject;
+import name.huliqing.fighter.object.actor.Actor;
+import name.huliqing.fighter.object.anim.Anim;
+import name.huliqing.fighter.object.hitchecker.HitChecker;
+import name.huliqing.fighter.ui.state.UIState;
+
+/**
+ *
+ * @author huliqing
+ */
+public abstract class Chat extends AbstractPlayObject {
+    private final PlayService playService = Factory.get(PlayService.class);
+    private final ActorService actorService = Factory.get(ActorService.class);
+    
+    // Chat的宽度和高度限制
+    protected float width;
+    protected float height;
+    // 最远距离限制，当玩家与目标actor的距离达到这个限制时将不显示这个Chat
+    protected float maxDistance = 10;
+    private float maxDistanceSquared;
+    // 是否在当前Chat打开时关闭父Chat.以避免杂乱重叠的窗口影响视角效果
+    protected boolean closeParent = true;
+    // 是否在当前Chat关闭时重新打开父Chat(即“返回上一步”的功能相同)
+    protected boolean reopenParent;
+    // Chat动画
+    protected Anim[] animations;
+    // 用于判断当前Chat是否对目标角色可见
+    protected HitChecker hitChecker;
+    
+    // ---- inner
+    protected ChatData data;
+    protected Actor actor;
+    // 父Chat，如果当前为root chat则parent为null.
+    protected Chat parent;
+    
+    protected Node root;
+    /** 显示在对话框上的名称 */
+    protected String chatName;
+    
+    public Chat(ChatData data) {
+        this.data = data;
+        this.root = new Node();
+        this.width = data.getAsFloat("widthWeight", 0.3f) * playService.getScreenWidth();
+        this.height = data.getAsFloat("heightWeight", 0.5f) * playService.getScreenHeight();
+        this.maxDistance = data.getAsFloat("maxDistance", maxDistance);
+        this.maxDistanceSquared = maxDistance * maxDistance;
+        this.closeParent = data.getAsBoolean("closeParent", closeParent);
+        this.reopenParent = data.getAsBoolean("reopenParent", reopenParent);
+        String[] tempAnims = data.getAsArray("animations");
+        if (tempAnims != null) {
+            this.animations = new Anim[tempAnims.length];
+            for (int i = 0; i < tempAnims.length; i++) {
+                this.animations[i] = Loader.loadAnimation(tempAnims[i]);
+                this.animations[i].setTarget(root);
+            }
+        }
+        String tempHitChecker = data.getAttribute("hitChecker");
+        if (tempHitChecker != null) {
+            hitChecker = Loader.loadHitChecker(tempHitChecker);
+        }
+    }
+
+    public ChatData getChatData() {
+        return data;
+    }
+    
+    @Override
+    public void initialize() {
+        super.initialize();
+        // 检查是否可见
+        if (!isVisibleForPlayer()) {
+            playService.removeObject(this);
+            return;
+        }
+        
+        // 1.载入界面
+        UIState.getInstance().addUI(root);
+        
+        // 2.起动动画
+        if (animations != null) {
+            for (Anim anim : animations) {
+                anim.start();
+            }
+        }
+        
+        // 3.检查是否关闭父窗口
+        if (closeParent && parent != null) {
+            playService.removeObject(parent);
+        }
+    }
+
+    @Override
+    public void update(float tpf) {
+        // 检查是否可见
+        if (!isVisibleForPlayer()) {
+            playService.removeObject(this);
+            return;
+        }
+        
+        // 更新动画
+        if (animations != null) {
+            for (Anim anim : animations) {
+                anim.update(tpf);
+            }
+        }
+    }
+    
+    @Override
+    public void cleanup() {
+        if (reopenParent && parent != null) {
+            playService.addObject(parent);
+        }
+        
+        if (animations != null) {
+            for (Anim anim : animations) {
+                anim.cleanup();
+            }
+        }
+        
+        root.removeFromParent();
+        super.cleanup();
+    }
+    
+    /**
+     * 检查Chat是否对当前场景中的玩家可见。
+     * @return 
+     */
+    public boolean isVisibleForPlayer() {
+        return isVisible(playService.getPlayer());
+    }
+    
+    /**
+     * 判断当前Chat对目标target是否可见。
+     * @param target
+     * @return 
+     */
+    public boolean isVisible(Actor target) {
+        if (target == null || target == actor || target.isDead())
+            return false;
+        
+        if (actor == null || actor.getDistanceSquared(target) > maxDistanceSquared || !playService.isInScene(actor)) 
+            return false;
+        
+        if (hitChecker != null && !hitChecker.canHit(actor, target))
+            return false;
+        
+        return true;
+    }
+
+    public Actor getActor() {
+        return actor;
+    }
+
+    public void setActor(Actor actor) {
+        this.actor = actor;
+    }
+    
+    public float getMaxDistance() {
+        return maxDistance;
+    }
+
+    public float getMaxDistanceSquared() {
+        return maxDistanceSquared;
+    }
+    
+    /**
+     * 获取Chat的名称或title
+     * @return 
+     */
+    public String getChatName() {
+        if (chatName == null) {
+            chatName = ResourceManager.getObjectName(data);
+            if (chatName.startsWith("<")) {
+                chatName = ResourceManager.get(ResConstants.COMMON_CHAT);
+            }
+        }
+        return chatName;
+    }
+    
+    /**
+     * 结束对话，该方法将把当前Chat从场景中移除
+     */
+    protected void endChat() {
+        playService.removeObject(this);
+    }
+}

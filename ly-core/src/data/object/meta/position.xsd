@@ -1,0 +1,204 @@
+<?xml version="1.0"?>
+<!--
+xs:string
+xs:decimal
+xs:integer
+xs:boolean
+xs:date
+xs:time
+-->
+
+<xs:schema version="1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://fighter.huliqing.name"
+           xmlns="http://fighter.huliqing.name"
+           elementFormDefault="qualified" >
+    
+    <xs:include schemaLocation="base.xsd" />
+    
+    <xs:element name="root">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="point" />
+                <xs:element ref="box" />
+                <xs:element ref="sphere" />
+                <xs:element ref="circle" />
+                <xs:element ref="positionView" />
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="positionView">
+        <xs:annotation>
+            <xs:documentation>视图界面上的位置点</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="base">
+                    <xs:attribute name="corner" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>角落位置，支持: LB,LC,LT,CB,CC,CT,RB,RC,RT</xs:documentation>
+                        </xs:annotation>
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:enumeration value="LB" />
+                                <xs:enumeration value="LC" />
+                                <xs:enumeration value="LT" />
+                                <xs:enumeration value="CB" />
+                                <xs:enumeration value="CC" />
+                                <xs:enumeration value="CT" />
+                                <xs:enumeration value="RB" />
+                                <xs:enumeration value="RC" />
+                                <xs:enumeration value="RT" />
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:attribute>
+                    <xs:attribute name="marginWeight" type="xs:string" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                marginWeight, 格式："left,top,right,bottom", 如: "0.1,0.1,0,0" 
+                                表示距离左边"0.1 * ScreenWidth"和上边"0.1 * ScreenHeight"像素的位置.
+                                注意:这里表示的是屏幕宽高度的权重，各个分值取值范围: 0.0~`1.0
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="circle">
+        <xs:annotation>
+            <xs:documentation>圆形shape,通过设置不同参数可以形成:圆环\圆面\圆筒\圆柱等形式的shape</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="base">
+                    <xs:attribute name="plane" type="plane" use="required">
+                        <xs:annotation>
+                            <xs:documentation>shape所在的原始面</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="minRadius" type="xs:decimal" use="required">
+                        <xs:annotation>
+                            <xs:documentation>shape的内半径</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="maxRadius" type="xs:decimal" use="required">
+                        <xs:annotation>
+                            <xs:documentation>shape的外半径,如果设置和minRadius一致,则可以形成一个圆环</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="minOffset" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>产生的粒子位置的偏移最小值,格式："x,y,z"</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="maxOffset" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>产生的粒子位置的偏移最大值,通过设置
+                                和minOffset不同的值可形成圆筒或圆柱,格式："x,y,z".
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="order" type="bool" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                是否按顺序产生粒子位置，按顺序是指绕着圆周顺序产生粒子,
+                                默认情况下粒子位置是在模型内随机产生的,只有order设为true时才按顺序。
+                                圆周的半径由minRadius和maxRadius控制。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="orderSize" type="xs:integer" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                当order=true时，粒子按圆周顺序产生，orderSize指定了在圆周上多少个位置作为
+    一个圆周周期，比如orderSize=6,则在圆周上产生6个粒子位置之后，系统会重新
+    计算一个随机圆周半径（由minRadius和maxRadius决定），然后重新按顺序产生6个粒子
+    位置,这些粒子位置是在圆周上平均分布的，如orderSize=6,则在圆周上的每60度会
+    产生一个粒子位置(该值必须大于0)
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="orderInvert" type="bool" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                当order=true时，默认为逆时针顺序产生粒子位置，使用orderInvert来反转顺序
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="orderStartDegree" type="bool" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                当order=true时，可指定一个开始角度(默认0),注:是角度,非弧度
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="point">
+        <xs:annotation>
+            <xs:documentation>点shape</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="base">
+                    <xs:attribute name="point" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>e.g. "0,0,0"</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="box">
+        <xs:annotation>
+            <xs:documentation>Box shape</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="base">
+                    <xs:attribute name="min" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>e.g. "-1,-1,-1"</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="max" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>e.g. "1,1,1"</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="sphere">
+        <xs:annotation>
+            <xs:documentation>Sphere shape</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="base">
+                    <xs:attribute name="center" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>e.g. "0,0,0"</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="radius" type="xs:decimal" use="required">
+                        <xs:annotation>
+                            <xs:documentation>e.g. "2.0"</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+</xs:schema>

@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<!--
+xs:string
+xs:decimal
+xs:integer
+xs:boolean
+xs:date
+xs:time
+-->
+
+<xs:schema version="1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://fighter.huliqing.name"
+           xmlns="http://fighter.huliqing.name"
+           elementFormDefault="qualified">
+    
+    <xs:include schemaLocation="base.xsd" />
+    
+    <xs:element name="root">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="hitChecker" />
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="hitChecker">
+        <xs:annotation>
+            <xs:documentation>技能、魔法作用检查器</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="base">
+                    <xs:attribute name="group" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>i:不管分组; s:必须是相同分组; d:必须是不同分组</xs:documentation>
+                        </xs:annotation>
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:enumeration value="i"/>
+                                <xs:enumeration value="s"/>
+                                <xs:enumeration value="d"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:attribute>
+                    <xs:attribute name="living" type="hitCheckerChecker" use="required">
+                        <xs:annotation>
+                            <xs:documentation>
+                                生物状态, i:不检查; y:生命体; n:非生命体; 
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="life" type="hitCheckerChecker" use="required">
+                        <xs:annotation>
+                            <xs:documentation>
+                                目标角色的死亡状态, i：不检查; y:有生命值; n:无生命值(已死亡)
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:simpleType name="hitCheckerChecker" >
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="i" />
+            <xs:enumeration value="y" />
+            <xs:enumeration value="n" />
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

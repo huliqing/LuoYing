@@ -1,0 +1,24 @@
+Material MyMaterial : Common/MatDefs/Terrain/TerrainLighting.j3md {
+    MaterialParameters {
+        AlphaMap : "Textures/terrain-alpha/treasure-terrain-treasure-alphablend0.png"
+        DiffuseMap_0_scale : 16.0625
+        DiffuseMap_1_scale : 16.0625
+        DiffuseMap_1 : Flip WrapRepeat_S WrapRepeat_T "Textures/tex/grass/default/grass2.jpg"
+        DiffuseMap : Flip WrapRepeat_S WrapRepeat_T "Textures/dirt.jpg"
+        AlphaMap_1 : "Textures/terrain-alpha/treasure-terrain-treasure-alphablend1.png"
+        Shininess : 0.01
+        AlphaMap_2 : "Textures/terrain-alpha/treasure-terrain-treasure-alphablend2.png"
+        WardIso : true
+    }
+    AdditionalRenderState {
+        FaceCull Back
+        Wireframe Off
+        DepthWrite On
+        PolyOffset 0.0 0.0
+        AlphaTestFalloff 0.0
+        Blend Off
+        PointSprite On
+        ColorWrite On
+        DepthTest On
+    }
+}

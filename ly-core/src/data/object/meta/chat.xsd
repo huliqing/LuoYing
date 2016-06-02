@@ -1,0 +1,190 @@
+<?xml version="1.0"?>
+<!--
+xs:string
+xs:decimal
+xs:integer
+xs:boolean
+xs:date
+xs:time
+-->
+
+<xs:schema version="1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://fighter.huliqing.name"
+           xmlns="http://fighter.huliqing.name"
+           elementFormDefault="qualified">
+    
+    <xs:include schemaLocation="base.xsd" />
+    
+    <xs:element name="root">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="chat" />
+                <xs:element ref="chatGroup" />
+                <xs:element ref="chatShop" />
+                <xs:element ref="chatSell" />
+                <xs:element ref="chatSend" />
+                <xs:element ref="chatTask" />
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="chatTask" >
+        <xs:annotation>
+            <xs:documentation>
+                任务类的对话
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="chatBase">
+                    <xs:attribute name="task" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>关联一个任务ID</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="role" use="required">
+                        <xs:annotation>
+                            <xs:documentation>
+                                任务角色类型，
+                                start => 表示任务发起起者，接任务时从这个角色接。
+                                end => 表示任务结束者、提交者，完成任务后向这个角色提交任务。
+                                both => 表示既是任务发起者也是任务结束者，即接任务时从这个角色接，任务完成后也是向这个角色提交。
+                            </xs:documentation>
+                        </xs:annotation>
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:enumeration value="both" />
+                                <xs:enumeration value="start" />
+                                <xs:enumeration value="end" />
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="chatSend" >
+        <xs:annotation>
+            <xs:documentation>
+                发送东西给目标，给目标配置这个Chat之后就可以给它发送东西。
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="chatBase">
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="chatSell" >
+        <xs:annotation>
+            <xs:documentation>
+                卖东西面板，给指定角色配置这个Chat后，就可以卖东西给他。
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="chatBase">
+                    <xs:attribute name="discount" type="xs:decimal" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                商品折扣，比如指定0.5，则当一件原价100的商品卖出时只能得到50.默认1.0
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="chatShop" >
+        <xs:annotation>
+            <xs:documentation>
+                商店面板,用于出售物品,注：给指定角色配置chatShop时，应该同时给
+                角色配置一个shopLogic，用于为角色定时进货,否则角色货物卖完就没有了。
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="chatBase">
+                    <xs:attribute name="discount" type="xs:decimal" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                商品折扣，比如指定0.5，则从该角色买商品时只需要原始的一半。默认1.0
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="chatGroup" >
+        <xs:annotation>
+            <xs:documentation>
+                对话组
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="chatBase">
+                    <xs:attribute name="chats" type="xs:string" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>格式，"chat1,chat2,chat3,..."</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="chat" >
+        <xs:annotation>
+            <xs:documentation>
+                对话组
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="chatBase"></xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:complexType name="chatBase">
+        <xs:complexContent>
+            <xs:extension base="base">
+                <xs:attribute name="widthWeight" type="xs:decimal" use="required" />
+                <xs:attribute name="heightWeight" type="xs:decimal" use="required" />
+                <xs:attribute name="maxDistance" type="xs:decimal" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>限制距离，当角色与玩家距离多远时就不显示Chat面板</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="closeParent" type="bool" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>是否在打开窗口的时候关闭父窗口（当有父Chat时）</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="reopenParent" type="bool" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>是否在窗口关闭的时候重新找开父窗口（当有父Chat时）</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="animations" type="xs:string" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>绑定动画，格式: "animation1,animation2,..." </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="hitChecker" type="xs:string" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>关联到一个hitChecker,用于判断当前Chat是否对目标角色可见。</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:schema>

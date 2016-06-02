@@ -1,0 +1,179 @@
+<?xml version="1.0"?>
+<!--
+xs:string
+xs:decimal
+xs:integer
+xs:boolean
+xs:date
+xs:time
+-->
+
+<xs:schema version="1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://fighter.huliqing.name"
+           xmlns="http://fighter.huliqing.name"
+           elementFormDefault="qualified">
+    
+    <xs:include schemaLocation="base.xsd" />
+    
+    <xs:element name="root">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="magicState" />
+                <xs:element ref="magicAttributeHit" />
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="magicAttributeHit">
+        <xs:annotation>
+            <xs:documentation>可以"持续"影响角色属性"动态值"的魔法，这个影响值可能是“增加”或“减少”</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="magicBase" >
+                    <xs:attribute name="attributes" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>指定要影响的属性值列表,格式："attribute|value,attribute|value,..."</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="interval" type="xs:decimal" use="required">
+                        <xs:annotation>
+                            <xs:documentation>
+                                改变的时间间隔，单位秒,默认1.0秒，这表示每隔1秒就增加或减少某个属性的值。改变哪些属性和改变数值由
+                                属性attributes指定。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="distance" type="xs:decimal" use="required">
+                        <xs:annotation>
+                            <xs:documentation>
+                                魔法的影响距离，默认: 1.0,
+                                只有在这个范围内的目标才会受影响。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="magicState">
+        <xs:annotation>
+            <xs:documentation>
+                (注：remove20160517,以后不要再使用这类魔法,可能会重构掉。)
+                状态类魔法，这类魔法可以给指定角色添加一些状态，
+                只在目标角色在魔法的作用范围内.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="magicBase" >
+                    <xs:attribute name="states" type="xs:string" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                绑定状态,格式: stateId1|timePoint,stateId2|timePoint,stateId3|timePoint...
+                                timePoint为技能useTime的时间插值点,可忽略,默认为0.
+                                这些状态将会在魔法运行到时间点timePoint时添加到魔法的当前目标（target)角色中。如果当前没有
+                                目标角色，则什么也不做。
+                                注意：如果魔法是无时间限制的(useTime<=0的情况)，则timePoint必须设置为0,否则不会触发。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="actorAnims" type="xs:string" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                绑定角色动画,格式: actorAnimId1|timePoint,actorAnimId2|timePoint,actorAnimId3|timePoint...
+                                timePoint为技能useTime的时间插值点,可忽略,默认为0.
+                                这些角色动画将会在魔法运行到时间点timePoint时作用到当前目标（target)角色中。如果当前没有
+                                目标角色，则什么也不做。
+                                注意：如果魔法是无时间限制的(useTime<=0的情况)，则timePoint必须设置为0,否则不会触发。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:complexType name="magicBase">
+        <xs:complexContent>
+            <xs:extension base="base"> 
+                <xs:attribute name="location" type="xs:string" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>魔法的位置,格式："x,y,z"</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="rotation" type="xs:string" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>魔法的旋转，格式："xAngle,yAngle,zAngle", 都是弧度</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="debug" type="bool" use="optional" />
+                <xs:attribute name="useTime" type="xs:decimal" use="required" >
+                    <xs:annotation>
+                        <xs:documentation>魔法的存在时间,单位秒,默认1.0秒</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="tracePosition" use="required" >
+                    <xs:annotation>
+                        <xs:documentation>是否跟随目标位置</xs:documentation>
+                    </xs:annotation>
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string" >
+                            <xs:enumeration value="no" />
+                            <xs:enumeration value="once" />
+                            <xs:enumeration value="always" />
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="tracePositionOffset" type="xs:string" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>跟随目标的位置初始偏移,格式: "x,y,z"</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="traceRotation" use="required" >
+                    <xs:annotation>
+                        <xs:documentation>是否跟随目标的旋转</xs:documentation>
+                    </xs:annotation>
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string" >
+                            <xs:enumeration value="no" />
+                            <xs:enumeration value="once" />
+                            <xs:enumeration value="always" />
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="traceRotationOffset" type="xs:decimal" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>跟随目标旋转的初始旋转偏移，格式: "x,y,z"</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="hitChecker" type="xs:string" use="required">
+                    <xs:annotation>
+                        <xs:documentation>指定一个hitChecker,如果没有指定，则表示魔法可对任何目标产生作用。</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="effects" type="xs:string" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>
+                            绑定特效,格式: effectId1|timePoint,effectId2|timePoint,effectId3|timePoint...
+                            timePoint为技能useTime的时间插值点,可忽略,默认为0.
+                            注意：如果魔法是无时间限制的(useTime<=0的情况)，则timePoint必须设置为0,否则效果不会触发。
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="sounds" type="xs:string" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>
+                            技能执行时的声效,格式: soundId1|timePoint,soundId2|timePoint,soundId3|timePoint...
+                            timePoint为技能trueUseTime的时间插值点,可忽略,默认为0.
+                            注意：如果魔法是无时间限制的(useTime<=0的情况)，则timePoint必须设置为0,否则声效不会触发。
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+</xs:schema>

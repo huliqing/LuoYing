@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://fighter.huliqing.name'
+    xsi:schemaLocation='http://fighter.huliqing.name meta/scene.xsd'>
+    
+    <!--<debug />-->
+    
+    <!--黄金宝箱场景-->
+    <sceneRandom id="sceneTreasure" sky="envSkyDef" terrain="envTerrain1" boundary="105,30,105"
+        trees="envTree1,envTree2,envTree3,envTree4,envFir1,envFir2,envFir3" treeSize="25"
+        grasses="envFlower0,envFlower1,envGrass1,envGrass2,envGrass3,envGrass4" grassSize="20"
+        emptyZones="0|0|10" directionalLightColor="0.8,0.8,0.8,0.8" directionalLightDir="-1,-2,-1"  
+        ambientLightColor="0.7,0.7,0.7,0.7" usePhysics="1" useShadow="1" />
+    <!--<random id="sceneTreasure" sky="" terrain="envTerrainDebug" boundary="105,30,105" />-->
+    
+    <!--千年古柏场景-->
+    <sceneRandom id="sceneGb" extends="sceneTreasure" emptyZones="0|0|5,44|-61|12,-14|65|12" />
+    
+    <!--守护之战场景-->
+    <sceneRandom id="sceneGuard" extends="sceneTreasure" emptyZones="0|0|5,42|-61|15,-14|65|15,-84|-15|10" />
+    
+</root>
+
+
+

@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ======================================================================= -->
+<!--技能，通用骨骼下的技能配置-->
+<!-- ======================================================================= -->
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://fighter.huliqing.name'
+    xsi:schemaLocation='http://fighter.huliqing.name meta/skill.xsd'>
+    
+    <!-- =================================================================== -->
+    <!--基本配置: TODO,attack,magic归为普通技能、trick归为特殊技能-->
+    <!-- =================================================================== -->
+    
+    <!--行走，跑步-->
+    <skillWalk id="skillWalkBase" useTime="1" loopMode="1" speedAttribute="attributeMoveSpeed" />
+    <!--通用Reset技能:可用于所有没有设置Reset技能的角色,不需要指定animation,执行时角色定格在当前动画侦上-->
+    <skillReset id="skillResetDefault" useTime="0" />
+    <!--野兽召唤术-->
+    <skillSummon id="skillSummon" icon="Interface/skill/ysh_91.jpg" useTime="2" animation="summon" 
+             cooldown="1" useAttributes="attributeMana|30" summonOffset="0,0.1,4.5" summonPoint="0.95" summonTime="4" effects="effectSummon|0.5" />
+    
+    
+    <!--普通物理攻击:所有普通短兵器的基本配置-->
+    <skillAttack id="skillAttackBase" skillType="attack" hitAttribute="attributeHealth" levelEl="elLevelSkill" hitEl="elSkillAttack" speedAttribute="attributeAttackSpeed" cutTimeEndAttribute="attributeGhostRate" />
+    <!--普通魔法攻击:是普通技能-->
+    <skillAttack id="skillAttackMagicBase" extends="skillAttackBase" speedAttribute="attributeMagicSpeed" hitEl="elSkillMagicAttack" />
+    <!--普通远程技能-->
+    <skillShot id="skillAttackShotBase" extends="skillAttackBase" hitDistance="35" cooldown="2.5" shotSpeed="1" shotTimes="0" useTime="0" />
+    
+    <!--技能：物理攻击-->
+    <skillAttack id="skillTrickBase"       extends="skillAttackBase" skillType="trick" maxLevel="5" levelUpEl="elLevelUpSkill" />
+    <!--技能：魔法攻击-->
+    <skillAttack id="skillTrickMagicBase"  extends="skillAttackBase" skillType="trick" maxLevel="5" levelUpEl="elLevelUpSkill" speedAttribute="attributeMagicSpeed" hitEl="elSkillMagicAttack" />
+    
+    <!--魔法技能-->
+    <skillShot id="skillMagicBase"      skillType="magic" hitDistance="35" maxLevel="5" levelUpEl="elLevelUpSkill" speedAttribute="attributeMagicSpeed" levelEl="elLevelSkill" hitEl="" />
+    <skillShot id="skillMagicBuffBase"  skillType="magic" hitDistance="35" maxLevel="5" levelUpEl="elLevelUpSkill" speedAttribute="attributeMagicSpeed" levelEl="elLevelSkill" hitEl="elSkillBuff" hitChecker="hitCheckerBuff" bullets="bulletBuff" />
+    
+    <!--远程普通技能-->
+    <skillShot id="skillShotBase" extends="skillAttackBase" hitDistance="35" cooldown="2.5" shotSpeed="1" shotTimes="0" useTime="0" />
+    <!--远程特殊技能-->
+    <skillShot id="skillShotTrickBase" extends="skillAttackShotBase" skillType="trick" maxLevel="5" levelUpEl="elLevelUpSkill" hitDistance="35"  shotSpeed="3" />
+    
+    <!--弓箭普通技能-->
+    <skillShotBow id="skillBowShotBase" extends="skillAttackShotBase" icon="Interface/skill/shot.png" 
+                  useTime="2" weaponStateLimit="3" hitValue="50" bullets="bulletArrow" hitAngle="90"
+             shotSpeed="1.5" shotTimes="0.83" shotOffsets="0|2.1|2" shotDownOffset="0,1.5,2" shotUpOffset="0,2.7,2"
+             timeBulletTake="0.16" timeBulletPull="0.33"  
+             sounds="soundBowPull|0.33,soundBowShot|0.83" 
+             arrow="Models/weapon/bow/arrow000.j3o" 
+             animation="bow_shot" animationShotDown="bow_shotDown" animationShotUp="bow_shotUp" weaponAnim="shot" />
+    
+    <!--弓箭特殊技能-->
+    <skillShotBow id="skillBowShotTrickBase" extends="skillShotTrickBase" hitAngle="135"
+                  useTime="3" cooldown="30" weaponStateLimit="3" hitValue="50" bullets="bulletArrow" 
+             shotTimes="0.83" shotOffsets="0|2.1|2" shotDownOffset="0, 1.5, 2" shotUpOffset="0, 2.7, 2"
+             timeBulletPull="0.23" timeBulletTake="0.0" 
+             sounds="soundBowPull|0.33,soundBowShot|0.83" 
+             arrow="Models/weapon/bow/arrow000.j3o" 
+             animation="bow_shotHeavy" animationShotDown="bow_shotDown" animationShotUp="bow_shotUp" weaponAnim="shot_heavy" />
+    
+    
+    <!--防守及躲闪-->
+    <skillDefend id="skillDefendBase" weaponStateLimit="0|1,1|1" speedAttribute="attributeAttackSpeed" cutTimeEndAttribute="attributeGhostRate" />
+    <skillDuck   id="skillDuckBase"   weaponStateLimit="0|1,1|1" speedAttribute="attributeAttackSpeed" cutTimeEndAttribute="attributeGhostRate" />
+    
+    <!-- ===================================================================== -->
+        
+    <skillWait id="skillWait" useTime="0.5" name="skill.wait" animation="idle_wait"  />
+    <skillWalk id="skillWalk" extends="skillWalkBase" animation="idle_walk" />
+    <skillRun id="skillRun" extends="skillWalkBase" animation="idle_run" baseSpeed="6.5" animSpeed="1.5" />
+    <skillHurt id="skillHurtFront"  useTime="0.3" animation="hurt_front"  hurtFace="front" />
+    <skillHurt id="skillHurtBack"  useTime="0.3" animation="hurt_back"  hurtFace="back" />
+    <skillDeadRagdoll id="skillDead" useTime="1" animation="hurt_dead" useRagdoll="0" deadAnimPoint="0" />
+    <skillReset id="skillReset" useTime="0" animation="hurt_front" timePoint="1.0" />
+ 
+    <!--闪避-->
+    <skillDuck id="skillDuckLeft" extends="skillDuckBase" duckDir="left" animation="duck_left" useTime="0.6" 
+          cutTimeStartMax="0.25" cutTimeEndMax="0.41" 
+          actorAnims="actorAnimDuckLeft|0.16|0.58" />
+    <skillDuck id="skillDuckRight" extends="skillDuckBase" duckDir="right" animation="duck_right" useTime="0.6" 
+          cutTimeStartMax="0.25" cutTimeEndMax="0.41" 
+          actorAnims="actorAnimDuckRight|0.16|0.58" />
+    <skillDuck id="skillDuckBack" extends="skillDuckBase" duckDir="back" animation="duck_back" useTime="0.75" 
+          cutTimeStartMax="0.20" cutTimeEndMax="0.16" 
+          actorAnims="actorAnimDuckBack|0.20|0.8" />
+    <skillDuck id="skillDuckLeftRoll" extends="skillDuckBase" duckDir="left" animation="duck_left_roll" useTime="0.65" 
+          cutTimeStartMax="0.16" cutTimeEndMax="0.29" actorAnims="actorAnimDuckRollLeft|0.16|0.75" />
+    <skillDuck id="skillDuckRightRoll" extends="skillDuckBase" duckDir="right" animation="duck_right_roll" useTime="0.65" 
+          cutTimeStartMax="0.16" cutTimeEndMax="0.29" actorAnims="actorAnimDuckRollRight|0.16|0.75" />
+
+    <!-- =================================================================== -->
+    <!--普通魔法技能-->
+    <!-- =================================================================== -->
+
+    <!-- 召唤各种野兽 -->
+    <skillSummon id="skillSummonSpider" extends="skillSummon" summonActorId="actorSpiderMin" />
+    <skillSummon id="skillSummonWolf" extends="skillSummon" summonActorId="actorWolf" />
+    <skillSummon id="skillSummonBear" extends="skillSummon" summonActorId="actorBear" />
+    <skillSummon id="skillSummonScorpion" extends="skillSummon" summonActorId="actorScorpion" />
+    <skillSummon id="skillSummonGb" extends="skillSummon" summonActorId="actorGbSmall" />
+    <skillSummon id="skillSummonRaptor" extends="skillSummon" summonActorId="actorRaptor" />
+    <skillSummon id="skillSummonTrex" extends="skillSummon" summonActorId="actorTrex" />
+    
+    <!-- 星光传送术 -->
+    <skillBack id="skillBack" icon="Interface/skill/transfer.jpg" cooldown="15" useTime="3" animation="spell" backPoint="0.87" useAttributes="attributeMana|30"
+          effects="effectBackTown|0.06" />
+    
+    <!-- =================================================================== -->
+    <!--刀剑技能：单手-->
+    <!-- =================================================================== -->
+    
+    <skillDefend id="skillDefend1" extends="skillDefendBase" animation="sword_defend"  weaponStateLimit="0|1"  useTime="0.75" cutTimeEndMax="0.45" />
+    <skillDefend id="skillDefend2" extends="skillDefendBase" animation="sword_defend2"  weaponStateLimit="0|1"  useTime="0.75" cutTimeEndMax="0.33" />
+    
+    <skillAttack id="skillAttack" extends="skillAttackBase" useTime="0.75" hitDistance="3.5" animation="sword_attack"  
+            cooldown="0.75" sounds="soundSwordAttack3"  weaponStateLimit="0|1" effects="effectSwordShadow1|0.5"
+            hitValue="20" checkPoint="0.48" defendable="1" cutTimeStartMax="0.36" cutTimeEndMax="0.44" />
+    
+    <skillAttack id="skillAttack2" effects="effectSwordShadow2|0.5" extends="skillAttack" animation="sword_attack2" sounds="soundSwordAttack2"  
+            hitValue="30" checkPoint="0.56" defendable="0" cutTimeStartMax="0.36" cutTimeEndMax="0.4" />
+    
+    <skillAttack id="skillAttack3" effects="" extends="skillAttack" animation="sword_attack3" sounds="soundSwordAttack1" 
+            hitValue="40" checkPoint="0.32" defendable="1" cutTimeStartMax="0.24" cutTimeEndMax="0.52" />
+    
+    <!--落樱飞舞：绝对攻击-->
+    <skillShot id="skillDanceSakura" extends="skillShotTrickBase" icon="Interface/skill/ysh_09.jpg"  
+                            useTime="4" animation="sword_jumpUp" weaponStateLimit="0|1,1|1" 
+                            sounds="soundJump|0.04,soundJumpFallDown|0.84" effects="effectDanceSakuraJump|0.08,effectDanceSakura|0.23,effectDanceSakuraJump|0.9"   
+                            actorAnims="actorAnimDanceSakura|0.08|0.23" cooldown="30" 
+                            useAttributes="attributeMana|80" 
+                            hitValue="40" hitEl="elSkillAbsoluteAttack" hitAngle="360"
+                            shotTimes="0.39,0.41,0.43,0.45,0.48,0.50,0.52,0.54,0.56,0.58,0.61,0.63,0.65,0.67,0.69,0.72,0.74,0.76,0.78,0.80"
+                            bullets="bulletCurve" shotOffsets="0|4.1|-2.7" multTarget="1"
+                            cutTimeStartMax="0.07" cutTimeEndMax="0.07" needLevel="5" />
+    
+    <!-- =================================================================== -->
+    <!--二刀流:左右手-->
+    <!-- =================================================================== -->
+    
+    <!--普通攻击-->
+    <skillAttack id="skillDualSwordAttack" extends="skillAttackBase" 
+            icon="" useTime="1.15" cooldown="1.2" hitDistance="3.5" animation="dualSword_attack" 
+            weaponStateLimit="1|1" sounds="soundSwordAttack1|0.3,soundSwordAttack2|0.6" 
+            effects="" hitValue="25" checkPoint="0.37,0.7" cutTimeStartMax="0.2" cutTimeEndMax="0.29" />
+    
+    <!--冲击波-->
+    <skillShot id="skillDualSwordWave" extends="skillTrickBase" icon="Interface/skill/ysh_81.jpg"
+               useTime="2" animation="dualSword_wave" magics="magicWaveHit" hitDistance="35"
+               weaponStateLimit="1|1" sounds="" effects="effectWaveSpline,effectWaveFlash|0.6"
+               hitValue="250" hitStates="" hitMagics="" useAttributes="attributeMana|100" 
+               cutTimeStartMax="0.4" cutTimeEndMax="0.34" needLevel="7"
+               bullets="bulletWave" shotTimes="0.61" shotSpeed="3" shotOffsets="0|2.1|2" />
+    
+    
+    <!-- =================================================================== -->
+    <!--弓箭类技能-->
+    <!-- =================================================================== -->
+    
+    <!--普通弓箭-->
+    <skillShotBow id="skillBowShot" extends="skillBowShotBase" hitValue="50"  />
+    
+    <!--技能箭:闪电箭-->
+    <skillShotBow id="skillLightningShot" extends="skillBowShotTrickBase" 
+             icon="Interface/skill/ysh_89.jpg"
+             hitValue="250" useAttributes="attributeMana|50"
+             shotSpeed="4" sounds="soundBowPull|0.23,soundShot|0.83" 
+             effects="effectLightningShot|0.3" needLevel="5" bullets="bulletArrowQuick" />
+    
+    <!--技能箭：寒冰箭-->
+    <skillShotBow id="skillIceShot" extends="skillBowShotTrickBase" 
+             icon="Interface/skill/ysh_33.jpg"
+             hitValue="80" hitAngle="30" useAttributes="attributeMana|100"
+             effects="effectIceSmoke|0.3" 
+             sounds="soundBowPull|0.23,soundShot|0.83" 
+             bullets="bulletIceTrailUp,bulletIceTrailLeft,bulletIceTrailRight" 
+             needLevel="7" multTarget="1" 
+             shotTimes="0.83,0.88,0.93"
+             hitStates="stateIceFrozen" />
+    
+    <!-- =================================================================== -->
+    <!--牧师技能-->
+    <!-- =================================================================== -->
+    
+    <!--电光火石-->
+    <skillShot id="skillShotLight" extends="skillAttackMagicBase" icon="" useTime="1.5" hitDistance="25" animation="wand_spell" 
+               weaponStateLimit="0|6" sounds="soundShot2|0.58" effects="effectFlowLightning|0.11" useAttributes="attributeMana|20" cooldown="1.5"
+               hitValue="30" shotSpeed="1" shotTimes="0.58" shotOffsets="0.5|2.2|0.5" bullets="bulletFlowLight" />
+    
+    <!--Pastor buff Base-->
+    <skillShot id="skillPastorBuffBase" extends="skillMagicBuffBase" icon="" useTime="1.5" 
+               animation="wand_spell_buff" weaponStateLimit="" 
+               sounds="soundShot3|0.58" shotTimes="0.58" shotOffsets="0.5|2.2|0.5"  />
+    
+    <!--生命恢复-->
+    <skillShot id="skillShotAddLife" extends="skillPastorBuffBase" icon="Interface/skill/ysh_69.jpg" 
+               useTime="1.5" cooldown="2" useAttributes="attributeMana|30" hitAttribute="attributeHealth" hitValue="100" />
+   
+    <!--疾风步-->
+    <skillShot id="skillShotWindWalk" extends="skillPastorBuffBase" icon="Interface/skill/rapidWind.jpg" 
+               useTime="1" cooldown="2" useAttributes="attributeMana|40" hitMagics="magicStateWindWalk" needLevel="3" />
+    
+    <!--复活术-->
+    <skillShot id="skillShotReborn" extends="skillPastorBuffBase" icon="Interface/skill/ysh_05.jpg" 
+               useTime="1" cooldown="30" useAttributes="attributeMana|50" hitChecker="hitCheckerReborn" hitMagics="magicReborn" needLevel="5" />
+    
+     <!--净化术-->
+    <skillShot id="skillShotCleanBuff" extends="skillPastorBuffBase" icon="Interface/skill/clean.jpg" 
+               useTime="1" cooldown="2" hitStates="stateClean|1.0" />
+</root>
