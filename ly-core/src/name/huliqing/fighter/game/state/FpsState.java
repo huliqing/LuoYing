@@ -12,6 +12,7 @@ import com.jme3.scene.Node;
 import name.huliqing.fighter.ui.Text;
 import name.huliqing.fighter.ui.UI.Corner;
 import name.huliqing.fighter.ui.UIFactory;
+import name.huliqing.fighter.ui.state.UIState;
 
 /**
  * 显示侦率
@@ -40,8 +41,6 @@ public class FpsState extends AbstractAppState {
             simpleApp.getGuiNode().attachChild(fpsLabel);
         }
         
-        // remove20160313,不能放在UIState中，这会在切换AppState的时候被清理掉
-//        UIState.getInstance().addUI(fpsLabel);
     }
 
     @Override

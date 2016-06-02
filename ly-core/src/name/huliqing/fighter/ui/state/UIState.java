@@ -13,8 +13,11 @@ import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.InputListener;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.input.controls.Trigger;
+import com.jme3.renderer.Camera;
+import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.Spatial.CullHint;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import name.huliqing.fighter.ui.UIEventListener;
@@ -29,10 +32,7 @@ public class UIState extends AbstractAppState {
     
     // 全局引用
     private Application app;
-//    private Node guiRoot;
-//    private final Node localGuiRoot = new Node("UIState_localUIRoot");
-    
-    private final UIRoot localGuiRoot = new UIRoot("UIState_localUIRoot");
+    private final UIRoot uiRoot = new UIRoot();
     
     private final static String MAPPING_LEFT_CLICK = "view_left_click";
     private final static String MAPPING_LEFT_RELEASE = "view_left_release";
@@ -65,14 +65,10 @@ public class UIState extends AbstractAppState {
     /**
      * 注册app和guiRoot节点
      * @param app
-     * @param guiRoot 
      */
-    public void register(Application app, Node guiRoot) {
+    public void register(Application app) {
         this.app = app;
-//        this.guiRoot = guiRoot;
-//        this.guiRoot.attachChild(localGuiRoot);
-//        
-        app.getGuiViewPort().attachScene(localGuiRoot);
+        app.getGuiViewPort().attachScene(uiRoot);
     }
     
     /**
@@ -86,37 +82,20 @@ public class UIState extends AbstractAppState {
     
     /**
      * 移除UI的全局监听器
+     * @param listener
      */
     public void removeEventListener(UIEventListener listener) {
         clickManager.removeEventListener(listener);
         dragManager.removeEventListener(listener);
     }
  
-    // remove20160420
-//    /**
-//     * 获取GUI root
-//     * @return 
-//     */
-//    private Node getGuiRoot() {
-//        if (guiRoot != null)
-//            return guiRoot;
-//            
-//        if (app instanceof SimpleApplication) {
-//            guiRoot = ((SimpleApplication) app).getGuiNode();
-//            return guiRoot;
-//        }
-//        
-//        throw new UnsupportedOperationException("Could not found guiNode, only supported "
-//                + " SimpleApplication, app=" + app);
-//    }
-    
     /**
      * 获取UIState的本地uiRoot(不是SimpleApplication中的guiRoot);
      * UIState中所有通过addUI添加的UI都放在这个节点下面。
      * @return 
      */
     public Node getUIRoot() {
-        return localGuiRoot;
+        return uiRoot;
     }
     
     /**
@@ -126,10 +105,8 @@ public class UIState extends AbstractAppState {
      */
     public void addUI(Spatial ui) {
         // add20160420每次添加时把UI放在最前面
-        if (ui.getParent() == localGuiRoot) {
-            localGuiRoot.detachChild(ui);
-        }
-        localGuiRoot.attachChild(ui);
+        uiRoot.detachChild(ui);
+        uiRoot.attachChild(ui);
     }
     
     /**
@@ -189,8 +166,7 @@ public class UIState extends AbstractAppState {
         // 默认的事件监听
         // ---------------------------------------------------------------------
         // 1.UI点击
-//        putPickListener(LISTENER_PICK_VIEW, new UIPickListener(app, guiRoot));
-        putPickListener(LISTENER_PICK_VIEW, new UIPickListener(app, localGuiRoot));
+        putPickListener(LISTENER_PICK_VIEW, new UIPickListener(app, uiRoot));
         
         // 2.镜头转动
         putPickListener(LISTENER_PICK_CAMERA, new CameraRotPickListener());
@@ -222,8 +198,9 @@ public class UIState extends AbstractAppState {
     public void update(float tpf) {
 //        super.update(tpf); // ignore
 
-        localGuiRoot.updateLogicalState(tpf);
-        localGuiRoot.updateGeometricState();
+        // 注：不需要在这里更新GeometriesState,只要更新updateLogicalState就可以
+        uiRoot.updateLogicalState(tpf);
+//        uiRoot.updateGeometricState();
 
         clickManager.update(tpf);
         dragManager.update(tpf);
@@ -233,8 +210,9 @@ public class UIState extends AbstractAppState {
     public void cleanup() {
         clickManager.cleanup();
         dragManager.cleanup();
+        
         // 清理所有子UI
-        localGuiRoot.detachAllChildren();
+        uiRoot.detachAllChildren();
         
         clearListener();
         super.cleanup();
@@ -244,7 +222,7 @@ public class UIState extends AbstractAppState {
      * 清理界面上的所有UI
      */
     public void clearUI() {
-        localGuiRoot.detachAllChildren();
+        uiRoot.detachAllChildren();
     }
     
     // =========================================================================
@@ -289,17 +267,33 @@ public class UIState extends AbstractAppState {
         }
     }
     
+    // add20160603,这是一个定制的节点，由于jme3.1后对于updateLogiclState逻辑的改变
     private class UIRoot extends Node {
 
-        public UIRoot(String name) {
-            super(name);
+        public UIRoot() {
+            setQueueBucket(Bucket.Gui);
+            setCullHint(CullHint.Never);
         }
-
+        
         @Override
         public void updateLogicalState(float tpf) {
+            // 不需要去调用父类的updateLogicalState,这会导致去调用所有子类的control更新，而目前UI是不支持control的。
+            // 这可以减少很多方法调用,节省性能
+//            super.updateLogicalState(tpf);
+
             for(Spatial s : children) {
                 s.updateLogicalState(tpf);
             }
+        }
+
+        @Override
+        public boolean checkCulling(Camera cam) {
+            // 因为UIRoot作为一个定制的UI根节点，生命周期与默认SimpleApplication中的guiRoot不一样。
+            // UIRoot需要自己更新状态。
+            // 这里做了一个特殊的处理，由于jme在渲染之前会检查是否有geometry的变换还没有更新，否则报错（IllegalStateException）
+            // 因此这里必须主动更新，以防止报异常
+            updateGeometricState();
+            return super.checkCulling(cam); 
         }
         
     }

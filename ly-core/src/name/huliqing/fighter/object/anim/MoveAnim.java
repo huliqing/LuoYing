@@ -102,6 +102,14 @@ public final class MoveAnim extends SpatialAnim {
     public void setBoundFactor(float boundFactor) {
         this.boundFactor = boundFactor;
     }
+
+    public boolean isUseSine() {
+        return useSine;
+    }
+
+    public void setUseSine(boolean useSine) {
+        this.useSine = useSine;
+    }
     
     
 }

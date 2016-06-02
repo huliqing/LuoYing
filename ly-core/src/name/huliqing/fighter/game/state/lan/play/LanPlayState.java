@@ -39,6 +39,7 @@ import name.huliqing.fighter.loader.Loader;
 import name.huliqing.fighter.manager.HUDManager;
 import name.huliqing.fighter.manager.PickManager;
 import name.huliqing.fighter.manager.ResourceManager;
+import name.huliqing.fighter.manager.ShortcutManager;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.object.actor.ActorControl;
 import name.huliqing.fighter.object.anim.Anim;
@@ -46,6 +47,7 @@ import name.huliqing.fighter.object.bullet.BulletCache;
 import name.huliqing.fighter.object.effect.EffectCache;
 import name.huliqing.fighter.object.scene.Scene;
 import name.huliqing.fighter.object.view.View;
+import name.huliqing.fighter.ui.AbstractUI;
 import name.huliqing.fighter.utils.MyChaseCamera;
 import name.huliqing.fighter.utils.SceneUtils;
 import name.huliqing.fighter.utils.Temp;
@@ -125,6 +127,13 @@ public abstract class LanPlayState extends PlayState implements UIEventListener 
         
         // UI全局事件监听器，主要处理当UI被点击或拖动时不要让镜头跟着转动。
         UIState.getInstance().addEventListener(this);
+        
+         // 快捷方式管理，初始化
+         ShortcutManager.init();
+        
+//        BasicProfilerState profiler = new BasicProfilerState(true);
+//        profiler.setGraphScale(100f);
+//        app.getStateManager().attach(profiler);
     }
     
     @Override
@@ -288,6 +297,7 @@ public abstract class LanPlayState extends PlayState implements UIEventListener 
             chaseCamera.cleanup();
             chaseCamera = null;
         }
+        ShortcutManager.cleanup();
         super.cleanup();
     }
 
@@ -435,7 +445,8 @@ public abstract class LanPlayState extends PlayState implements UIEventListener 
     
     private void addUI(UI ui, boolean gui) {
         if (gui) {
-            UIState.getInstance().addUI(ui.getDisplay());
+//            UIState.getInstance().addUI(ui.getDisplay());
+            UIState.getInstance().addUI((AbstractUI)ui);
         } else {
             this.localRoot.attachChild(ui.getDisplay());
         }

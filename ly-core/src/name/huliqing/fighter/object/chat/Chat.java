@@ -16,6 +16,7 @@ import name.huliqing.fighter.object.AbstractPlayObject;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.object.anim.Anim;
 import name.huliqing.fighter.object.hitchecker.HitChecker;
+import name.huliqing.fighter.ui.LinearLayout;
 import name.huliqing.fighter.ui.state.UIState;
 
 /**
@@ -47,13 +48,13 @@ public abstract class Chat extends AbstractPlayObject {
     // 父Chat，如果当前为root chat则parent为null.
     protected Chat parent;
     
-    protected Node root;
+    protected LinearLayout root;
     /** 显示在对话框上的名称 */
     protected String chatName;
     
     public Chat(ChatData data) {
         this.data = data;
-        this.root = new Node();
+        this.root = new LinearLayout();
         this.width = data.getAsFloat("widthWeight", 0.3f) * playService.getScreenWidth();
         this.height = data.getAsFloat("heightWeight", 0.5f) * playService.getScreenHeight();
         this.maxDistance = data.getAsFloat("maxDistance", maxDistance);
@@ -197,4 +198,5 @@ public abstract class Chat extends AbstractPlayObject {
     protected void endChat() {
         playService.removeObject(this);
     }
+    
 }

@@ -21,7 +21,7 @@ import name.huliqing.fighter.game.state.PlayState;
 import name.huliqing.fighter.game.state.lan.LanState;
 import name.huliqing.fighter.game.state.start.StartState;
 import name.huliqing.fighter.manager.DamageManager;
-import name.huliqing.fighter.manager.ShortcutManager;
+//import name.huliqing.fighter.manager.ShortcutManager;
 import name.huliqing.fighter.manager.AnimationManager;
 import name.huliqing.fighter.manager.talk.SpeakManager;
 import name.huliqing.fighter.manager.talk.TalkManager;
@@ -135,7 +135,7 @@ public class Fighter extends SimpleApplication {
         // ======== start init
         // 4.UI事件,
         UIState viewState = UIState.getInstance();
-        viewState.register(this, this.getGuiNode()); // 注册APP及GUI Root
+        viewState.register(this); // 注册APP及GUI Root
         stateManager.attach(viewState);
         
         // 5.FPS信息
@@ -244,9 +244,6 @@ public class Fighter extends SimpleApplication {
         // 伤害动态效果
         DamageManager.cleanup();
         
-        // 快捷方式清理
-        ShortcutManager.cleanup();
-        
         // 重要：清除所有按键侦听，部分state在detach时可能会忘记一些按键绑定的清理。
         // 这些没有或忘记释放的绑定会严重影响性能。特别是如：ChaseCamera这些内定的
         // 按键绑定了多个listener,如果不知道或忘记清理，则每次创建ChaseCamera时
@@ -262,8 +259,6 @@ public class Fighter extends SimpleApplication {
         
         // 2.清理界面信息提示元素。
         HUDManager.init(getGuiNode());
-        // 3.快捷方式管理，初始化
-        ShortcutManager.init(getGuiNode());
         
         // ==== show debug info 
         DamageManager.showDebugInfo();

@@ -243,6 +243,7 @@ public abstract class ListView<T> extends AbstractUI implements ScrollListener {
     
     /**
      * 获取数据
+     * @return 
      */
     public abstract List<T> getDatas();
 }

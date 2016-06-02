@@ -5,12 +5,13 @@
 package name.huliqing.fighter.game.state;
 
 import com.jme3.math.Vector3f;
-import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.util.TempVars;
+import java.util.ArrayList;
+import java.util.List;
 import name.huliqing.fighter.ui.UIUtils;
 import name.huliqing.fighter.Common;
 import name.huliqing.fighter.Factory;
-import name.huliqing.fighter.constants.IdConstants;
 import name.huliqing.fighter.game.service.PlayService;
 import name.huliqing.fighter.game.state.lan.play.LanPlayState;
 import name.huliqing.fighter.game.view.ClientsWin;
@@ -18,12 +19,12 @@ import name.huliqing.fighter.game.view.TeamView;
 import name.huliqing.fighter.game.view.actor.ActorMainPanel;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.game.view.FaceView;
-import name.huliqing.fighter.loader.Loader;
-import name.huliqing.fighter.object.anim.Anim;
+import name.huliqing.fighter.object.anim.MoveAnim;
 import name.huliqing.fighter.object.anim.ScaleAnim;
 import name.huliqing.fighter.ui.Icon;
 import name.huliqing.fighter.ui.UI;
 import name.huliqing.fighter.ui.UI.Corner;
+import name.huliqing.fighter.ui.state.UIState;
 
 /**
  * 场景控制,包含设置,人物控制,UI等
@@ -39,8 +40,7 @@ public class LanPlayStateUI extends PlayStateUI {
     
     // 角色面板
     private ActorMainPanel userPanel;
-    private Node userPanelControl;
-    private Anim userPanelAnim;
+    private MoveAnim userPanelAnim;
     
     // 客户端列表界面
     private ClientsWin clientsWin;
@@ -77,7 +77,6 @@ public class LanPlayStateUI extends PlayStateUI {
         
         targetFace = new FaceView(faceWidth, faceHeight);
         targetFace.setToCorner(name.huliqing.fighter.ui.AbstractUI.Corner.CT);
-//        targetFace.setDragEnabled(true);// remove20160420
         targetFace.setVisible(false);
         
         // ---- 角色面板及动画控制
@@ -85,10 +84,11 @@ public class LanPlayStateUI extends PlayStateUI {
         userPanel.setToCorner(Corner.CC);
         userPanel.setCloseable(true);
         userPanel.setDragEnabled(true);
-        userPanelControl = new Node();
-        userPanelAnim = Loader.loadAnimation(IdConstants.ANIM_VIEW_MOVE);
-        userPanelAnim.setTarget(userPanelControl);
-        // UIState.getInstance().addUI(userPanelControl); // remove20160420
+        userPanelAnim = new MoveAnim();
+        userPanelAnim.setBoundFactor(0.3f);
+        userPanelAnim.setUseSine(true);
+        userPanelAnim.setUseTime(0.4f);
+        userPanelAnim.setTarget(userPanel);
         
         // ---- 人物属性开关铵钮
         // 按钮：人物面板,包含装甲、武器、技能、属性、任务等等
@@ -180,16 +180,17 @@ public class LanPlayStateUI extends PlayStateUI {
     
     private void displayUserPanel(Actor actor) {
         if (userPanel.getParent() == null) {
-            // userPanel在close的时候会自动detach掉，所以这里需要重新attach上去.
-            userPanelControl.attachChild(userPanel);
-            playState.addObject(userPanelControl, true);
             userPanel.setActor(actor != null ? actor : playState.getPlayer());
+            UIState.getInstance().addUI(userPanel);
+            
+            Vector3f pos = userPanel.getWorldTranslation();
+            TempVars tv = TempVars.get();
+            userPanelAnim.setStartPos(tv.vect1.set(pos).addLocal(0, -50, 0));
+            userPanelAnim.setEndPos(tv.vect2.set(pos).addLocal(0, 5, 0));
+            tv.release();
             playService.addAnimation(userPanelAnim);
         } else {
-            userPanel.close();
-            // 这里要把userPanelControl从场景移除，以便下次attach的时候可以覆盖在其它UI上面。
-            // 不然会导致该面板的层叠顺序不变。
-            userPanelControl.removeFromParent();
+            playState.removeObject(userPanel);
         }
     }
     
@@ -208,7 +209,6 @@ public class LanPlayStateUI extends PlayStateUI {
         remove(teamView);
         remove(targetFace);
         remove(attack.getDisplay());
-        remove(userPanelControl);
         remove(clientsWin);
         super.cleanup();
     }

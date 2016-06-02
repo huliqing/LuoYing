@@ -86,7 +86,7 @@ public class GroupChat extends Chat {
         // 添加一个空的事件阻止事件穿透
         group.addClickListener(AbstractUI.EMPTY_LISTENER);
         group.setEffectEnabled(false);
-        root.attachChild(group);
+        root.attachChild(group); 
     }
 
     @Override

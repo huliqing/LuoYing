@@ -69,6 +69,7 @@ public class ShortcutView extends FrameLayout implements ItemListener, SkinListe
         // 注册侦听器
         actor.addItemListener(this);
         actor.addSkinListener(this);
+        
     }
 
     @Override

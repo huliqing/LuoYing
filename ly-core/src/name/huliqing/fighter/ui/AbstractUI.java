@@ -146,17 +146,6 @@ public abstract class AbstractUI extends Node implements UI {
         setLocalTranslation(loc);
     }
 
-    // remove20160309
-//    @Override
-//    public void setPosition(float x, float y, float z) {
-//        setLocalTranslation(x, y, z);
-//    }
-//
-//    @Override
-//    public void setPosition(Vector3f position) {
-//        setLocalTranslation(position);
-//    }
-
     @Override
     public void setMargin(float left, float top, float right, float bottom) {
         marginLeft = left;

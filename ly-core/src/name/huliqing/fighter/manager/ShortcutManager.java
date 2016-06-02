@@ -50,15 +50,16 @@ public class ShortcutManager {
     
     private static float space = 40;
     
-    public static void init(Node guiNode) {
+    public static void init() {
         shortcutRoot = new ShortcutRoot();
         shortcutRoot.attachChild(delete.getDisplay());
         shortcutRoot.attachChild(recycle.getDisplay());
+        
         // 设置z值会有BUG，导致shortcut点不了
 //        shortcutRoot.setLocalTranslation(0, 0, -0.1f);
         // 把shortcut放在最前面，不要挡在后续弹出的窗口前。,后续要把shortcutRoot
         // 添加到UIState中进行统一处理。
-        guiNode.attachChildAt(shortcutRoot, 0);
+        UIState.getInstance().addUI(shortcutRoot);
         
         float marginTop = Common.getSettings().getHeight() * 0.1f;
         
@@ -139,6 +140,8 @@ public class ShortcutManager {
      * @param size 
      */
     public static void setShortcutSize(float size) {
+        if(shortcutRoot == null) 
+            return;
         List<ShortcutView> shortcuts = shortcutRoot.getShortcuts();
         for (ShortcutView s : shortcuts) {
             s.setLocalScale(size);
