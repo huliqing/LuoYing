@@ -58,7 +58,8 @@ public class SendChat extends Chat {
         // 不要在这里初始化UI。在initialize()中按需初始化
     }
     
-    private void init() {
+    @Override
+    protected UI createChatUI(float width, float height) {
         float titleHeight = UIFactory.getUIConfig().getTitleHeight();
         float footerHeight = height * 0.15f;
         float bodyHeight = height - titleHeight - footerHeight;
@@ -95,17 +96,12 @@ public class SendChat extends Chat {
         win.addView(bodyPanel);
         win.addView(footerPanel);
         win.setToCorner(UI.Corner.CC);
+        return win;
     }
 
     @Override
     public void initialize() {
         super.initialize();
-        
-        if (!init) {
-            init();
-            init = true;
-        }
-        
         
         // 记住卖者
         sender = playService.getPlayer();
@@ -128,7 +124,6 @@ public class SendChat extends Chat {
         distPanel.setDatas(Collections.EMPTY_LIST);
         
         win.setTitle(getChatName() + "-" + actorService.getName(actor));
-        root.attachChild(win);
     }
     
     // 给目标发送物品

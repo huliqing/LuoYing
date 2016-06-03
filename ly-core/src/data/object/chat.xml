@@ -9,7 +9,7 @@
    <!--基类，主要定义对话框大小、距离、动画等基本标准-->
    <!-- ==================================================================== -->
    <!--对话距离maxDistance不要设置太短，以避免在对话的时候由于角色移动而导致对话框自动关闭。-->
-   <chat id="chatBase" maxDistance="15" widthWeight="0.2" heightWeight="0.5" animations="animViewMove" /> 
+   <chat id="chatBase" maxDistance="1500" widthWeight="0.2" heightWeight="0.5" animations="animViewMove" /> 
    <chat id="chatShopBase" extends="chatBase" widthWeight="0.75" heightWeight="0.75" /> 
    <chat id="chatSellBase" extends="chatBase" widthWeight="0.75" heightWeight="0.75" /> 
    <chat id="chatSendBase" extends="chatBase" widthWeight="0.75" heightWeight="0.75" /> 

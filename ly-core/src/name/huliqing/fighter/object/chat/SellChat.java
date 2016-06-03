@@ -65,49 +65,11 @@ public class SellChat extends Chat {
         super(data);
         discount = data.getAsFloat("discount", discount);
         
-        // 不要在这里初始化UI。在initialize()中按需初始化
-        
         // remove20160323,不要在这里初始化UI，只要在initialize()时再初始化即可。
-//        // ----
-//        float titleHeight = UIFactory.getUIConfig().getTitleHeight();
-//        float footerHeight = height * 0.15f;
-//        float bodyHeight = height - titleHeight - footerHeight;
-//        float ppWidth = width * 0.49f;
-//        float cpWidth = width * 0.02f;
-//        float spWidth = width * 0.49f;
-//        
-//        bodyPanel = new LinearLayout(width, bodyHeight);
-//        sourcePanel = new TabTransferPanel(ppWidth, bodyHeight);
-//        centerPanel = new CenterPanel(cpWidth, bodyHeight);
-//        distPanel = new SimpleTransferPanel(spWidth, bodyHeight);
-//        
-//        // 双向传输
-//        sourcePanel.setTransfer(distPanel);
-//        distPanel.setTransfer(sourcePanel);
-//        
-//        bodyPanel.setLayout(LinearLayout.Layout.horizontal);
-//        bodyPanel.addView(sourcePanel);
-//        bodyPanel.addView(centerPanel);
-//        bodyPanel.addView(distPanel);
-//        
-//        footerPanel = new FooterPanel(width, footerHeight);
-//        
-//        win = new Window("", width, height);
-//        win.setCloseable(true);
-//        win.setDragEnabled(true);
-//        win.addCloseListener(new Window.CloseListener() {
-//            @Override
-//            public void onClosed(Window win) {
-//                playService.removeObject(SellChat.this);
-//            }
-//        });
-//        
-//        win.addView(bodyPanel);
-//        win.addView(footerPanel);
-//        win.setToCorner(UI.Corner.CC);
     }
-    
-    private void init() {
+
+    @Override
+    protected UI createChatUI(float width, float height) {
         float titleHeight = UIFactory.getUIConfig().getTitleHeight();
         float footerHeight = height * 0.15f;
         float bodyHeight = height - titleHeight - footerHeight;
@@ -144,17 +106,13 @@ public class SellChat extends Chat {
         win.addView(bodyPanel);
         win.addView(footerPanel);
         win.setToCorner(UI.Corner.CC);
+        return win;
     }
+    
 
     @Override
     public void initialize() {
         super.initialize();
-        
-        // 按需初始化
-        if (!init) {
-            init();
-            init = true;
-        }
         
         // 记住卖者
         seller = playService.getPlayer();
@@ -177,7 +135,6 @@ public class SellChat extends Chat {
         distPanel.setDatas(Collections.EMPTY_LIST);
         
         win.setTitle(getChatName() + "-" + actorService.getName(actor));
-        root.attachChild(win);
     }
     
     // 结算出售的金额

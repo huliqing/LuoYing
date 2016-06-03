@@ -57,8 +57,9 @@ public class GroupChat extends Chat {
         
         // 不要在这里初始化UI。在initialize()中按需初始化
     }
-    
-    private void init() {
+
+    @Override
+    protected UI createChatUI(float width, float height) {
         group = new LinearLayout(width, height);
         group.setBackground("Interface/ui/bg_chat.png", true);
         group.setBackgroundColor(new ColorRGBA(0.2f, 0.2f, 0.2f, 0.25f), true);
@@ -86,18 +87,14 @@ public class GroupChat extends Chat {
         // 添加一个空的事件阻止事件穿透
         group.addClickListener(AbstractUI.EMPTY_LISTENER);
         group.setEffectEnabled(false);
-        root.attachChild(group); 
+
+        return group;
     }
+   
 
     @Override
     public void initialize() {
         super.initialize();
-        
-        // 按需初始化
-        if (!init) {
-            init();
-            init = true;
-        }
         
         // 更新title
         title.setTitle(getChatName() + "-" + actorService.getName(actor));

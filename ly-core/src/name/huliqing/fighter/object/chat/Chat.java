@@ -4,7 +4,6 @@
  */
 package name.huliqing.fighter.object.chat;
 
-import com.jme3.scene.Node;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.constants.ResConstants;
 import name.huliqing.fighter.data.ChatData;
@@ -16,11 +15,10 @@ import name.huliqing.fighter.object.AbstractPlayObject;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.object.anim.Anim;
 import name.huliqing.fighter.object.hitchecker.HitChecker;
-import name.huliqing.fighter.ui.LinearLayout;
+import name.huliqing.fighter.ui.UI;
 import name.huliqing.fighter.ui.state.UIState;
 
 /**
- *
  * @author huliqing
  */
 public abstract class Chat extends AbstractPlayObject {
@@ -48,13 +46,13 @@ public abstract class Chat extends AbstractPlayObject {
     // 父Chat，如果当前为root chat则parent为null.
     protected Chat parent;
     
-    protected LinearLayout root;
     /** 显示在对话框上的名称 */
     protected String chatName;
     
+    protected UI chatUI;
+    
     public Chat(ChatData data) {
         this.data = data;
-        this.root = new LinearLayout();
         this.width = data.getAsFloat("widthWeight", 0.3f) * playService.getScreenWidth();
         this.height = data.getAsFloat("heightWeight", 0.5f) * playService.getScreenHeight();
         this.maxDistance = data.getAsFloat("maxDistance", maxDistance);
@@ -66,7 +64,6 @@ public abstract class Chat extends AbstractPlayObject {
             this.animations = new Anim[tempAnims.length];
             for (int i = 0; i < tempAnims.length; i++) {
                 this.animations[i] = Loader.loadAnimation(tempAnims[i]);
-                this.animations[i].setTarget(root);
             }
         }
         String tempHitChecker = data.getAttribute("hitChecker");
@@ -88,19 +85,37 @@ public abstract class Chat extends AbstractPlayObject {
             return;
         }
         
-        // 1.载入界面
-        UIState.getInstance().addUI(root);
+        // 1.创建并Chat界面并设置动画效果
+        if (chatUI == null) {
+            chatUI = createChatUI(width, height);
+        }
         
-        // 2.起动动画
-        if (animations != null) {
-            for (Anim anim : animations) {
-                anim.start();
-            }
+        // 2.将界面加入主场景,并启动动画
+        if (chatUI != null) {
+            displayChatUI(chatUI);
         }
         
         // 3.检查是否关闭父窗口
         if (closeParent && parent != null) {
             playService.removeObject(parent);
+        }
+    }
+    
+    /**
+     * 创建Chat主UI界面
+     * @param width
+     * @param height
+     * @return 
+     */
+    protected abstract UI  createChatUI(float width, float height);
+    
+    protected void displayChatUI(UI ui) {
+        UIState.getInstance().addUI(ui.getDisplay());
+        if (animations != null) {
+            for (Anim anim : animations) {
+                anim.setTarget(ui);
+                anim.start();
+            }
         }
     }
 
@@ -132,7 +147,9 @@ public abstract class Chat extends AbstractPlayObject {
             }
         }
         
-        root.removeFromParent();
+        if (chatUI != null) {
+            chatUI.getDisplay().removeFromParent();
+        }
         super.cleanup();
     }
     

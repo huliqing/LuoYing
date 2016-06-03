@@ -69,6 +69,21 @@ public class TaskChat extends Chat {
     }
 
     @Override
+    protected UI createChatUI(float width, float height) {
+        requestPanel = new TaskRequestPanel(width, height);
+        requestPanel.setTitle(getChatName());
+        requestPanel.setTaskDetails(ResourceManager.getObjectDes(taskId));
+        requestPanel.resize();
+        requestPanel.setToCorner(UI.Corner.CC);
+        return requestPanel;
+    }
+
+//    @Override
+//    protected void displayChatUI(UI ui) {
+//        super.displayChatUI(ui); 
+//    }
+
+    @Override
     public void initialize() {
         super.initialize();
         // fix bug:如果requestPanel已经存在，即可能已经接过任务，则先移除，
@@ -92,8 +107,7 @@ public class TaskChat extends Chat {
                 talk.addListener(new TalkListener() {
                     @Override
                     public void onTalkEnd() {
-                        createRequestPanel(task);
-                        root.attachChild(requestPanel);
+                        displayChatUI(requestPanel);
                     }
                 });
                 actorService.talk(talk);
@@ -138,16 +152,6 @@ public class TaskChat extends Chat {
                 actorService.talk(talk);
                 endChat();
             }
-        }
-    }
-    
-    private void createRequestPanel(Task task) {
-        if (requestPanel == null) {
-            requestPanel = new TaskRequestPanel(width, height);
-            requestPanel.setTitle(getChatName());
-            requestPanel.setTaskDetails(ResourceManager.getObjectDes(taskId));
-            requestPanel.resize();
-            requestPanel.setToCorner(UI.Corner.CC);
         }
     }
     

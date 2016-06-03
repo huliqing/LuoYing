@@ -65,8 +65,9 @@ public class ShopChat extends Chat implements ItemListener {
         discount = data.getAsFloat("discount", discount);
         // 不要在这里初始化UI。在initialize()中按需初始化
     }
-    
-    private void init() {
+
+    @Override
+    protected UI createChatUI(float width, float height) {
         win = new Window("", width, height);
         float titleHeight = UIFactory.getUIConfig().getListTitleHeight();
         float footerHeight = UIFactory.getUIConfig().getFooterHeight();
@@ -86,6 +87,7 @@ public class ShopChat extends Chat implements ItemListener {
         win.addView(titlePanel);
         win.addView(productPanel);
         win.addView(footerPanel);
+        return win;
     }
 
     @Override
@@ -146,13 +148,7 @@ public class ShopChat extends Chat implements ItemListener {
     @Override
     public void initialize() {
         super.initialize();
-        
-        if (!init) {
-            init();
-            init = true;
-        }
-        
-        root.attachChild(win);
+
         win.setTitle(getChatName() + "-" + actorService.getName(actor));
         win.setToCorner(UI.Corner.CC);
         
