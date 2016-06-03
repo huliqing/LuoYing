@@ -97,7 +97,7 @@ public class MainActivity extends Activity {
                 (AndroidHarnessFragment) fm.findFragmentById(R.id.jmeFragment);
  
         // uncomment the next line to add the default android profiler to the project
-        jmeFragment.getJmeApplication().setAppProfiler(new DefaultAndroidProfiler());
+//        jmeFragment.getJmeApplication().setAppProfiler(new DefaultAndroidProfiler());
         
         afterStart();
     }
@@ -154,6 +154,7 @@ public class MainActivity extends Activity {
                 // ignore: 不处理"返回键"的响应,退出时使用游戏中的“退出”
                 return;
             }
+            
             super.onTouch(name, evt, tpf);
         }
         

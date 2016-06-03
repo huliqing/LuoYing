@@ -198,6 +198,7 @@ public class DataFactory {
             dp.initData(data);
             return (T) dp;
         } catch (Exception ex) {
+            ex.printStackTrace();
             throw new RuntimeException("Could not create processor! tagName=" + tagName 
                     + ", dataId=" + data.getId()
                     + ", dataProcessor=" + dpClass.getName()

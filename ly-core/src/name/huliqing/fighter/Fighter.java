@@ -56,12 +56,12 @@ public class Fighter extends SimpleApplication {
         settings.setIcons(createIcons());
         settings.setSettingsDialogImage("/data/SDImage.jpg");
         
-//        // 载入上次的设置来覆盖
-//        try {
-//            settings.load(SETTINGS_KEY);
-//        } catch (BackingStoreException ex) {
-//            Logger.getLogger(Fighter.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+        // 载入上次的设置来覆盖
+        try {
+            settings.load(SETTINGS_KEY);
+        } catch (BackingStoreException ex) {
+            Logger.getLogger(Fighter.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         Fighter app = new Fighter();
         app.setSettings(settings);

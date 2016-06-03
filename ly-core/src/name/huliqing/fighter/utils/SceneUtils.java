@@ -70,7 +70,7 @@ public class SceneUtils {
         
         chaseCam.setInvertVerticalAxis(true);
         chaseCam.setLookAtOffset(Vector3f.UNIT_Y.mult(2f));
-        chaseCam.setZoomSensitivity(0.2f);
+        chaseCam.setZoomSensitivity(0.05f);
         chaseCam.setRotationSpeed(5f);
         chaseCam.setRotationSensitivity(5);
         chaseCam.setMaxDistance(15);

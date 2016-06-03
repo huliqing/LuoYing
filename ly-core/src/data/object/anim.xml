@@ -21,7 +21,7 @@
     <animRotation id="animCommonRotZi"  speed="1" loop="loop"   axis="0,0,1"        degree="360" invert="1" />
     <animRandomRotation id="animCommonRotRandom" minDegree="0" maxDegree="360" />
     
-    <animScale id="animCommonScaleS"    speed="1" loop=""       startScale="0.01,0.01,0.01" endScale="1,1,1" />
+    <animScale id="animCommonScaleS"    speed="1" loop=""       startScale="0.01,0.01,0.01" endScale="1,1,1"  motionType="Bezier" bezierFactor="0,0,1.5,1" />
     <animScale id="animCommonScaleH"    speed="1" loop=""       startScale="1,1,1"      endScale="0.01,0.01,0.01" />
     
     <animColor id="animCommonColorI"    speed="1" loop=""       startColor="0,0,0,0"    endColor="1,1,1,1" />
@@ -53,7 +53,7 @@
     <!--野兽召唤-->
     <!--=====================================================================-->
     <animRotation id="animMagicCircleRotY" speed="0.2" loop="loop" axis="0,1,0" degree="360" invert="0" />
-    <animScale id="animMagicCircleScaleS" speed="1" loop="" startScale="0.01,0.01,0.01" endScale="1,1,1" boundFactor="0.4" />
+    <animScale id="animMagicCircleScaleS" speed="1" loop="" startScale="0.01,0.01,0.01" endScale="1,1,1" motionType="Bezier" bezierFactor="0,0,1.5,1" />
     <animScale id="animMagicCircleScaleH" speed="1" loop="" startScale="0.9,0.9,0.9" endScale="0.01,0.01,0.01" />
     <animColor id="animMagicCircleColor"  speed="3" loop="cycle"  startColor="3,3,3,1" endColor="0.75,0.75,0.75,0.75" />
     
@@ -83,7 +83,7 @@
     <!--落樱舞-->
     <!--=====================================================================-->
     <animScale id="animDanceSakuraScaleHide" speed="1" loop="" startScale="10,10,10" endScale="0.02,0.02,1" />
-    <animScale id="animDanceSakuraMagicStartScale" speed="1" loop="dontLoop" startScale="0.1,0.1,0.1" endScale="1.2,1.2,1.2" boundFactor="0.4" />
+    <animScale id="animDanceSakuraMagicStartScale" speed="1" loop="dontLoop" startScale="0.1,0.1,0.1" endScale="1.2,1.2,1.2" motionType="Bezier" bezierFactor="0,0,1.5,1" />
     <animScale id="animDanceSakuraMagicEndScale" speed="1" loop="dontLoop" startScale="1.2,1.2,1.2" endScale="0.1,0.1,0.1" />
     <animColor id="animDanceSakuraMagicStartColor" speed="1" loop="dontLoop" startColor="0.5,0.5,0.5,0.5" endColor="3,3,3,1" />
     <animColor id="animDanceSakuraMagicDisplayColor" speed="3" loop="cycle" startColor="3,3,3,1" endColor="0.75,0.75,0.75,0.75" />

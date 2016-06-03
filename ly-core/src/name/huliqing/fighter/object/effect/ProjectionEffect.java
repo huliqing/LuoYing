@@ -243,11 +243,11 @@ public class ProjectionEffect extends AbstractEffect {
                 }
                 return;
             }
-            if (Config.debug) {
-                Logger.getLogger(name.huliqing.fighter.object.effect.ProjectionEffect.class.getName()).log(Level.INFO
-                        , "ProjectionEffect: availableReceivers={0}, all={1}"
-                        , new Object[]{availableReceivers.size(), receivers.size()});
-            }
+//            if (Config.debug) {
+//                Logger.getLogger(name.huliqing.fighter.object.effect.ProjectionEffect.class.getName()).log(Level.INFO
+//                        , "ProjectionEffect: availableReceivers={0}, all={1}"
+//                        , new Object[]{availableReceivers.size(), receivers.size()});
+//            }
 
             projGeo.setLocalTranslation(projPos);
             projGeo.getLocalRotation().lookAt(projDir, projUp);
@@ -269,10 +269,13 @@ public class ProjectionEffect extends AbstractEffect {
             projMat.setFloat("ProjHeight", th);
             projMat.setMatrix4("CastViewProjectionMatrix", castCam.getViewProjectionMatrix());
 
-            // 强制指定材质进行渲染,Technique设置为Default,不要省略，以避免其它处理器忘记清除
-            // ForcedTechnique的时候用错Technique.
+            // 强制指定材质进行渲染
             rm.setForcedMaterial(projMat);
-            rm.setForcedTechnique("Default");
+            
+            // remove20160603,JME3.1后不能再设置Default,会导致无法正确渲染，这里直接清除掉就可以,让它自动选择Technique
+//            rm.setForcedTechnique("Default"); 
+            rm.setForcedTechnique(null);
+
             for (Geometry geo : availableReceivers) {
                 rm.renderGeometry(geo);
             }

@@ -162,7 +162,6 @@
     <effectProjection id="effectBackTownCircle" timeStart="0.5" timeDisplay="1.8" timeEnd="0"
              texture="Textures/tex/magic/magic13.jpg" scale="10,10,10" animAll="animBackTownColor"
              animStarts="animCommonScaleS" animDisplays="animBackTownCircle" animEnds="" />
-    
     <effectEncircleHalo id="effectEncircleHalo" timeStart="0.5" timeDisplay="1.62" timeEnd="0.12" texture="Textures/effect/halo_s.jpg" 
                   size="7" radius="3" offset="0,2,0" sound="soundElectricity" />
     <effectParticle id="effectHaloExp" timeStart="0" timeDisplay="2" timeEnd="0" emitter="emitterHaloExp" emitAll="1" randomColor="1" sound="soundHaloExplosion" />

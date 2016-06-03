@@ -4,7 +4,6 @@
  */
 package name.huliqing.fighter.utils;
 
-import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.collision.PhysicsCollisionEvent;
 import com.jme3.bullet.collision.PhysicsCollisionListener;
@@ -16,13 +15,17 @@ import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.input.ChaseCamera;
 import com.jme3.input.InputManager;
+import com.jme3.input.TouchInput;
+import com.jme3.input.event.TouchEvent;
+import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 import com.jme3.util.TempVars;
-import name.huliqing.fighter.Common;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.ProtoData;
 import name.huliqing.fighter.enums.DataType;
@@ -33,8 +36,8 @@ import name.huliqing.fighter.game.state.PlayState;
  * 可防止相机穿墙的相机。
  * @author huliqing
  */
-public class MyChaseCamera extends ChaseCamera implements PhysicsCollisionListener{
-//    private final static Logger logger = Logger.getLogger(MyChaseCamera.class.getName());
+public class MyChaseCamera extends ChaseCamera implements PhysicsCollisionListener, com.jme3.input.controls.TouchListener{
+    private final static Logger logger = Logger.getLogger(MyChaseCamera.class.getName());
     
     private final PlayService playService = Factory.get(PlayService.class);
     
@@ -88,6 +91,9 @@ public class MyChaseCamera extends ChaseCamera implements PhysicsCollisionListen
         
         // add collision object
         resetCollision(physicsSpace, playService.getTerrain());
+        
+        // 测试touch
+        registerTouchListener(inputManager);
     }
     
     /**
@@ -159,7 +165,6 @@ public class MyChaseCamera extends ChaseCamera implements PhysicsCollisionListen
     }
     
     protected void fixCameraDistance() {
-        PlayState playState = Common.getPlayState();
         TempVars tv = TempVars.get();
         Vector3f tempRayOrigin = tv.vect1;
         Vector3f tempRayDirection = tv.vect2;
@@ -272,5 +277,39 @@ public class MyChaseCamera extends ChaseCamera implements PhysicsCollisionListen
         physicsSpace = null;
         camCollisionChecker = null;
         collisionObject = null;
+    }
+    
+    private void registerTouchListener(InputManager im) {
+        inputManager.addMapping("TouchSE", new com.jme3.input.controls.TouchTrigger(TouchInput.ALL));
+        inputManager.addListener(this, "TouchSE"); // TouchSE => TouchScaleEvent
+    }
+
+    @Override
+    public void onTouch(String name, TouchEvent event, float tpf) {
+        if ("TouchSE".equals(name)) {
+            if (event.getType() == TouchEvent.Type.SCALE_MOVE) {
+                logger.log(Level.SEVERE, "event={0}", new Object[] {event.toString()});
+                float dss = event.getDeltaScaleSpan();
+                // 缩放太小就不处理了，否则有可能两个手指放上去时画面一直在抖动。
+                if (FastMath.abs(dss) < 0.01f) {
+                    return;
+                }
+                
+                zoomCamera(-dss);
+                if (dss > 0) {
+                    // 拉近，放大 (参考：ChaseCamera中onAnalog方法)
+                    if (zoomin == false) {
+                        distanceLerpFactor = 0;
+                    }
+                    zoomin = true;
+                } else {
+                    // 拉远，缩小
+                    if (zoomin == true) {
+                        distanceLerpFactor = 0;
+                    }
+                    zoomin = false;
+                }
+            }
+        }
     }
 }
