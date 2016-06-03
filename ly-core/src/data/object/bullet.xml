@@ -18,7 +18,7 @@
     
     <!--曲线拖尾:不跟随（暂时对跟随效果不友好），但是加大shape -->
     <bulletCurveTrail id="bulletTrailBase" extends="bulletBase" shape="shapeBulletBoxMax" shapeOffset="0,0,-2.9" trace="0"
-                      texScale="0.3" width="0.15" tex="Textures/effect/light.jpg" mask="Textures/effect/lightMask.jpg" tension="0.6" />
+                      texScale="0.3" width="0.15" tex="Textures/effect/light.jpg" mask="Textures/effect/lightMask.jpg" tension="0.5" />
     
     <!--=====================================================================-->
     <!--通用形子弹-->
