@@ -217,19 +217,6 @@ public interface UI {
      */
     void onRelease();
     
-    // remove20160218
-//    /**
-//     * 判断UI组件是否是懒惰模式的.
-//     * @return 
-//     */
-//    boolean isLazy();
-//    
-//    /**
-//     * 设置UI组件是否使用懒惰模式
-//     * @param lazy 
-//     */
-//    void setLazy(boolean lazy);
-    
     /**
      * 让当前UI在最上层显示
      */

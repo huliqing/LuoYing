@@ -112,7 +112,6 @@ public class EncircleHaloEffect extends AbstractEffect {
             scaleAnim = new ScaleAnim();
             scaleAnim.setStartScale(scaleStart);
             scaleAnim.setEndScale(scaleEnd);
-            scaleAnim.setBoundFactor(0.3f);
             scaleAnim.setTarget(root);
         }
     }

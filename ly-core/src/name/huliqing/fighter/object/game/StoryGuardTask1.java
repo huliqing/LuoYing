@@ -277,7 +277,6 @@ public class StoryGuardTask1 extends GameTaskBase {
         CurveMoveAnim cma = new CurveMoveAnim();
         cma.setControlPoints(points);
         cma.setSpeed(speed);
-        cma.setUseSine(true);
         cma.setTarget(target);
         
         ScaleAnim sa = new ScaleAnim();

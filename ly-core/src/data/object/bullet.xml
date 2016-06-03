@@ -10,15 +10,15 @@
     <!--=====================================================================-->
     
     <!--子弹基本配置-->
-    <bulletStraight id="bulletBase" shape="shapeBulletBox" shapeOffset="0,0,-2" trace="0"
+    <bulletStraight id="bulletBase" shape="shapeBulletBox" shapeOffset="0,0,-1.9" trace="0"
                     baseSpeed="20" timeout="6" facing="1" debug="0" />
     
     <!--快速直线型子弹:不跟随-->
-    <bulletStraight id="bulletQuickBase" extends="bulletBase" shape="shapeBulletBoxMax" shapeOffset="0,0,-3" trace="0" />
+    <bulletStraight id="bulletQuickBase" extends="bulletBase" shape="shapeBulletBoxMax" shapeOffset="0,0,-2.9" trace="0" />
     
     <!--曲线拖尾:不跟随（暂时对跟随效果不友好），但是加大shape -->
-    <bulletCurveTrail id="bulletTrailBase" extends="bulletBase" shape="shapeBulletBoxMax" shapeOffset="0,0,-3" trace="0"
-                      texScale="0.3" width="0.15" tex="Textures/effect/light.jpg" mask="Textures/effect/lightMask.jpg" />
+    <bulletCurveTrail id="bulletTrailBase" extends="bulletBase" shape="shapeBulletBoxMax" shapeOffset="0,0,-2.9" trace="0"
+                      texScale="0.3" width="0.15" tex="Textures/effect/light.jpg" mask="Textures/effect/lightMask.jpg" tension="0.6" />
     
     <!--=====================================================================-->
     <!--通用形子弹-->
@@ -56,7 +56,7 @@
                     hitEffects="effectLightningShotHit" hitSounds="soundBowHit" />
     
      <!--落樱飞舞：曲线拖尾--> 
-     <bulletCurveTrail id="bulletCurve" extends="bulletTrailBase" shapeOffset="0,0,-4" effects="effectDanceSakuraBullet" 
+     <bulletCurveTrail id="bulletCurve" extends="bulletTrailBase"  effects="effectDanceSakuraBullet"
                        hitEffects="effectDanceSakuraHit" positions="esDanceSakuraWaypoint,esDanceSakuraWaypoint2" />
     
      <!--电光火石-->

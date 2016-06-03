@@ -4,8 +4,12 @@
  */
 package name.huliqing.fighter.object.anim;
 
+import com.jme3.math.FastMath;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.AnimData;
 import name.huliqing.fighter.game.service.PlayService;
@@ -13,10 +17,34 @@ import name.huliqing.fighter.game.service.PlayService;
 /**
  * 动画控制，V2
  * @author huliqing
+ * @param <T>
  */
 public abstract class AbstractAnim<T> implements Anim<T> {
-//    private final static Logger logger = Logger.getLogger(AbstractAnim.class.getName());
-    private final static PlayService playService = Factory.get(PlayService.class);
+    private final static Logger LOG = Logger.getLogger(AbstractAnim.class.getName());
+    private final PlayService playService = Factory.get(PlayService.class);
+    
+    // 默认的bezier参数: {p0,p1,p2,p3}
+    private final static float[] DEFAULT_BEZIER_FACTOR = new float[] {0, 0, 0, 1};
+    // 默认的catmullRom参数: {T, p0,p1,p2,p3}
+    private final static float[] DEFAULT_CATMULLROM_FACTOR = new float[] {0.5f, 0, 0, 1, 0};
+    
+    public enum MotionType {
+        Linear,
+        Bezier,
+        CatmullRom;
+        
+        public static MotionType identify(String name) {
+            if (name == null)
+                return null;
+            
+            for (MotionType mt : values()) {
+                if (mt.name().equals(name)) {
+                    return mt;
+                }
+            }
+            return null;
+        }
+    }
     
     // 提示显示调试信息，但是具体由各个子类去实现。
     protected boolean debug;
@@ -28,11 +56,19 @@ public abstract class AbstractAnim<T> implements Anim<T> {
     protected float speed = 1;
     protected Loop loop = Loop.dontLoop;
     
+    protected MotionType motionType;
+    
+    protected float[] bezierFactor;
+    protected float[] catmullRomFactor;
+    
     // ---- 内部参数 ----
     protected List<Listener> listeners;
     protected T target;
-    // 当前的动画时间插值。[0.0~1.0]
-    protected float interpolation;
+    
+    // 当前的动画"时间"插值。[0.0~1.0]
+    protected float timeInterpolation;
+    // 当前的实际动画插值，这个插值受运动方式的影响。
+    protected float trueInterpolation;
     
     protected boolean started;
     protected boolean paused;
@@ -48,12 +84,36 @@ public abstract class AbstractAnim<T> implements Anim<T> {
         this.useTime = data.getAsFloat("useTime", useTime);
         // 不能让useTime小于0,至少取一个非常小的值。
         if (useTime <= 0) {
-            useTime = 0.001f;
+            useTime = 0.0001f;
         }
         this.speed = data.getAsFloat("speed", speed);
         String tempLoop = data.getAttribute("loop");
         if (tempLoop != null) {
             loop = Loop.identify(tempLoop);
+        }
+        this.motionType = MotionType.identify(data.getAttribute("motionType"));
+        if (this.motionType == null) {
+            motionType = MotionType.Linear;
+        }
+        
+        if (motionType == MotionType.Bezier) {
+            this.bezierFactor = data.getAsFloatArray("bezierFactor");
+            if (bezierFactor.length < 4) {
+                LOG.log(Level.WARNING
+                        , "bezierFactor length could not less than 4. animId={0}, bezierFactor={1}"
+                        , new Object[] {data.getId(), Arrays.toString(bezierFactor)});
+                bezierFactor = null;
+            }
+        }
+        
+        if (motionType == MotionType.CatmullRom) {
+            this.catmullRomFactor = data.getAsFloatArray("catmullRomFactor");
+            if (catmullRomFactor.length < 5) {
+                LOG.log(Level.WARNING
+                        , "catmullRomFactor length could not less than 5. animId={0}, catmullRomFactor={1}"
+                        , new Object[] {data.getId(), Arrays.toString(catmullRomFactor)});
+                catmullRomFactor = null;
+            }
         }
     }
     
@@ -89,13 +149,7 @@ public abstract class AbstractAnim<T> implements Anim<T> {
     
     @Override
     public float getInterpolation() {
-        return this.interpolation;
-    }
-
-    @Override
-    public void setInterpolation(float interpolation) {
-        checkValid(interpolation);
-        this.interpolation = interpolation;
+        return this.trueInterpolation;
     }
     
     @Override
@@ -135,21 +189,21 @@ public abstract class AbstractAnim<T> implements Anim<T> {
             return;
         } 
         
-        interpolation += tpf * speed * dir / useTime;
+        timeInterpolation += tpf * speed * dir / useTime;
         
 //        logger.log(Level.INFO, "AbstractAnim update, class={0}, interpolation={1}"
 //                , new Object[] {getClass(), interpolation});
         
         boolean stepEnd = false;
-        if (interpolation > 1) {
-            interpolation = 1;
+        if (timeInterpolation > 1) {
+            timeInterpolation = 1;
             stepEnd = true;
-        } else if (interpolation < 0) {
-            interpolation = 0;
+        } else if (timeInterpolation < 0) {
+            timeInterpolation = 0;
             stepEnd = true;
         }
         
-        display(interpolation);
+        display(timeInterpolation);
         
         // remove20160214,没有什么意义
 //        // listener
@@ -158,11 +212,10 @@ public abstract class AbstractAnim<T> implements Anim<T> {
         if (stepEnd) {
             if (loop == Loop.dontLoop) {
                 doListenerDone();
-//                cleanup();
                 doEnd();
             } else if (loop == Loop.loop) {
                 doListenerDone();
-                interpolation = 0;
+                timeInterpolation = 0;
             } else if (loop == Loop.cycle) {
                 if (isInverse()) {
                     doListenerDone();
@@ -220,7 +273,7 @@ public abstract class AbstractAnim<T> implements Anim<T> {
         started = false;
         paused = false;
         init = false;
-        interpolation = 0;
+        timeInterpolation = 0;
         
         // remove20160217
 //        // 从场景中移除动画控制器
@@ -262,12 +315,48 @@ public abstract class AbstractAnim<T> implements Anim<T> {
     }
     
     @Override
-    public void display(float interpolation) {
+    public void display(float timeInterpolation) {
         if (!init) {
             doInit();
             init = true;
         }
-        doAnimation(interpolation);
+        
+        if (motionType == MotionType.Bezier) {
+            if (bezierFactor != null) {
+                trueInterpolation = FastMath.interpolateBezier(timeInterpolation
+                        , bezierFactor[0]
+                        , bezierFactor[1]
+                        , bezierFactor[2]
+                        , bezierFactor[3]);
+            } else {
+                trueInterpolation = FastMath.interpolateBezier(timeInterpolation
+                        , DEFAULT_BEZIER_FACTOR[0]
+                        , DEFAULT_BEZIER_FACTOR[1]
+                        , DEFAULT_BEZIER_FACTOR[2]
+                        , DEFAULT_BEZIER_FACTOR[3]);
+            }
+        } else if (motionType == MotionType.CatmullRom) {
+            if (catmullRomFactor != null) {
+                trueInterpolation = FastMath.interpolateCatmullRom(timeInterpolation
+                        , catmullRomFactor[0]
+                        , catmullRomFactor[1]
+                        , catmullRomFactor[2]
+                        , catmullRomFactor[3]
+                        , catmullRomFactor[4]);
+            } else {
+                trueInterpolation = FastMath.interpolateCatmullRom(timeInterpolation
+                        , DEFAULT_CATMULLROM_FACTOR[0]
+                        , DEFAULT_CATMULLROM_FACTOR[1]
+                        , DEFAULT_CATMULLROM_FACTOR[2]
+                        , DEFAULT_CATMULLROM_FACTOR[3]
+                        , DEFAULT_CATMULLROM_FACTOR[4]);
+            }
+        } else {
+            // 默认MotionType=Linear
+            trueInterpolation = timeInterpolation;
+        }
+        
+        doAnimation(trueInterpolation);
     }
     
     /**

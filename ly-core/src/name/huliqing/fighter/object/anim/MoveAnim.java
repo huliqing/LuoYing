@@ -7,7 +7,6 @@ package name.huliqing.fighter.object.anim;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.util.TempVars;
-import java.util.logging.Logger;
 import name.huliqing.fighter.data.AnimData;
 
 /**
@@ -15,17 +14,19 @@ import name.huliqing.fighter.data.AnimData;
  * @author huliqing
  */
 public final class MoveAnim extends SpatialAnim {
-//    private final static Logger logger = Logger.getLogger(MoveAnim.class.getName());
+//    private final static Logger LOG = Logger.getLogger(MoveAnim.class.getName());
 
     // 开始位置及结束位置
-    private Vector3f startPos = new Vector3f();
-    private Vector3f endPos = new Vector3f();
+    private Vector3f startPos;
+    private Vector3f endPos;
+    private Vector3f startPosOffset;
+    private Vector3f endPosOffset;
     // 是否朝向目标
     private boolean facing;
-    // 增加一定的反弹（反向移动）
-    private float boundFactor;
-    // 使用正弦曲线来增强运动效果,匀速的运动很难看
-    private boolean useSine;
+    
+    // ---- inner
+    private final Vector3f trueStartPos = new Vector3f();
+    private final Vector3f trueEndPos = new Vector3f();
     
     public MoveAnim() {
         super();
@@ -33,38 +34,43 @@ public final class MoveAnim extends SpatialAnim {
     
     public MoveAnim(AnimData data) {
         super(data);
-        this.startPos = data.getAsVector3f("startPos", startPos);
-        this.endPos = data.getAsVector3f("endPos", endPos);
+        this.startPos = data.getAsVector3f("startPos");
+        this.endPos = data.getAsVector3f("endPos");
+        this.startPosOffset = data.getAsVector3f("startPosOffset");
+        this.endPosOffset = data.getAsVector3f("endPosOffset");
         this.facing = data.getAsBoolean("facing", facing);
-        this.boundFactor = data.getAsFloat("boundFactor", boundFactor);
-        this.useSine = data.getAsBoolean("useSine", useSine);
     }
     
     @Override
-    protected void doInit() {}
+    protected void doInit() {
+        trueStartPos.set(startPos != null ? startPos : target.getWorldTranslation());
+        if (startPosOffset != null) {
+            trueStartPos.addLocal(startPosOffset);
+        }
+        
+        trueEndPos.set(endPos != null ? endPos : target.getWorldTranslation());
+        if (endPosOffset != null) {
+            trueEndPos.addLocal(endPosOffset);
+        }
+        
+        target.setLocalTranslation(trueStartPos);
+        
+        if (facing) {
+            target.lookAt(trueEndPos, Vector3f.UNIT_Y);
+        }
+    }
 
     @Override
     protected void doAnimation(float interpolation) {
-        if (facing) {
-            target.lookAt(startPos, endPos);
-        }
-        if (useSine) {
-            interpolation = FastMath.sin(interpolation * FastMath.HALF_PI);
-        }
-        
-        interpolation += interpolation * boundFactor;
-        float sineFactor = FastMath.sin(interpolation * FastMath.HALF_PI);
-        
         TempVars tv = TempVars.get();
-        FastMath.interpolateLinear(sineFactor, startPos, endPos, tv.vect1);
-//        logger.log(Level.INFO, "move to location, start={0}, end={1}, now={2}", new Object[] {startPos, endPos, tv.vect1});
+        FastMath.extrapolateLinear(interpolation, trueStartPos, trueEndPos, tv.vect1);
         target.setLocalTranslation(tv.vect1);
         tv.release();
     }
 
     @Override
     public void cleanup() {
-        // remove20160225
+        // remove20160225,不需要再这样做
 //        if (target != null) {
 //            target.setLocalTranslation(endPos);
 //        }
@@ -76,6 +82,9 @@ public final class MoveAnim extends SpatialAnim {
     }
 
     public void setStartPos(Vector3f startPos) {
+        if (this.startPos == null) {
+            this.startPos = new Vector3f();
+        }
         this.startPos.set(startPos);
     }
 
@@ -84,6 +93,9 @@ public final class MoveAnim extends SpatialAnim {
     }
 
     public void setEndPos(Vector3f endPos) {
+        if (this.endPos == null) {
+            this.endPos = new Vector3f();
+        }
         this.endPos.set(endPos);
     }
 
@@ -95,21 +107,5 @@ public final class MoveAnim extends SpatialAnim {
         this.facing = facing;
     }
 
-    public float getBoundFactor() {
-        return boundFactor;
-    }
-
-    public void setBoundFactor(float boundFactor) {
-        this.boundFactor = boundFactor;
-    }
-
-    public boolean isUseSine() {
-        return useSine;
-    }
-
-    public void setUseSine(boolean useSine) {
-        this.useSine = useSine;
-    }
-    
     
 }

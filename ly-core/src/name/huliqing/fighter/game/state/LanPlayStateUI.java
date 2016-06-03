@@ -6,12 +6,10 @@ package name.huliqing.fighter.game.state;
 
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
-import com.jme3.util.TempVars;
-import java.util.ArrayList;
-import java.util.List;
 import name.huliqing.fighter.ui.UIUtils;
 import name.huliqing.fighter.Common;
 import name.huliqing.fighter.Factory;
+import name.huliqing.fighter.constants.IdConstants;
 import name.huliqing.fighter.game.service.PlayService;
 import name.huliqing.fighter.game.state.lan.play.LanPlayState;
 import name.huliqing.fighter.game.view.ClientsWin;
@@ -19,7 +17,8 @@ import name.huliqing.fighter.game.view.TeamView;
 import name.huliqing.fighter.game.view.actor.ActorMainPanel;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.game.view.FaceView;
-import name.huliqing.fighter.object.anim.MoveAnim;
+import name.huliqing.fighter.loader.Loader;
+import name.huliqing.fighter.object.anim.Anim;
 import name.huliqing.fighter.object.anim.ScaleAnim;
 import name.huliqing.fighter.ui.Icon;
 import name.huliqing.fighter.ui.UI;
@@ -40,7 +39,7 @@ public class LanPlayStateUI extends PlayStateUI {
     
     // 角色面板
     private ActorMainPanel userPanel;
-    private MoveAnim userPanelAnim;
+    private Anim userPanelAnim;
     
     // 客户端列表界面
     private ClientsWin clientsWin;
@@ -84,10 +83,7 @@ public class LanPlayStateUI extends PlayStateUI {
         userPanel.setToCorner(Corner.CC);
         userPanel.setCloseable(true);
         userPanel.setDragEnabled(true);
-        userPanelAnim = new MoveAnim();
-        userPanelAnim.setBoundFactor(0.3f);
-        userPanelAnim.setUseSine(true);
-        userPanelAnim.setUseTime(0.4f);
+        userPanelAnim = Loader.loadAnimation(IdConstants.ANIM_VIEW_MOVE);
         userPanelAnim.setTarget(userPanel);
         
         // ---- 人物属性开关铵钮
@@ -110,7 +106,6 @@ public class LanPlayStateUI extends PlayStateUI {
         clientsWinAnim = new ScaleAnim();
         clientsWinAnim.setStartScale(0.5f);
         clientsWinAnim.setEndScale(1f);
-        clientsWinAnim.setBoundFactor(0.2f);
         clientsWinAnim.setRestore(true);
         clientsWinAnim.setUseTime(0.4f);
         clientsWinAnim.setLocalScaleOffset(new Vector3f(clientsWin.getWidth() * 0.5f
@@ -182,16 +177,10 @@ public class LanPlayStateUI extends PlayStateUI {
         if (userPanel.getParent() == null) {
             userPanel.setActor(actor != null ? actor : playState.getPlayer());
             UIState.getInstance().addUI(userPanel);
-            
-            Vector3f pos = userPanel.getWorldTranslation();
-            TempVars tv = TempVars.get();
-            userPanelAnim.setStartPos(tv.vect1.set(pos).addLocal(0, -50, 0));
-            userPanelAnim.setEndPos(tv.vect2.set(pos).addLocal(0, 5, 0));
-            tv.release();
             playService.addAnimation(userPanelAnim);
         } else {
             playState.removeObject(userPanel);
-        }
+        } 
     }
     
     private void displayLanPanel() {

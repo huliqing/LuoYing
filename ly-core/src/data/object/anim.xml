@@ -46,8 +46,8 @@
     <!--=====================================================================-->
     <!--默认的UI动画-->
     <!--=====================================================================-->
-    <animMove id="animViewMove" useTime="0.5" startPos="0,-50,0" endPos="0,20,0" 
-              facing="0" boundFactor="0.3" useSine="1" />
+    <animMove id="animViewMove" useTime="0.3" startPosOffset="0,-70,0" endPosOffset="0,0,0" motionType="Bezier" bezierFactor="0,0,1.5,1"
+              facing="0" />
     
     <!--=====================================================================-->
     <!--野兽召唤-->

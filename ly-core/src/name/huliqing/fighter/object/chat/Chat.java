@@ -23,7 +23,7 @@ import name.huliqing.fighter.ui.state.UIState;
  */
 public abstract class Chat extends AbstractPlayObject {
     private final PlayService playService = Factory.get(PlayService.class);
-    private final ActorService actorService = Factory.get(ActorService.class);
+//    private final ActorService actorService = Factory.get(ActorService.class);
     
     // Chat的宽度和高度限制
     protected float width;

@@ -26,16 +26,12 @@ public final class CurveMoveAnim extends SpatialAnim {
     // 初始旋转,只有打开facePath时才有用,该旋转会与运行时目标方向进行相乘,作为最
     // 终方向。
     private Quaternion rotationOffset;
-    // 使用正弦曲线来增强运动效果,匀速的运动很难看
-    private boolean useSine;
     
     // ---- 内部
     private final Spline spline = new Spline();
     // 当前移动到的路径点索引
     private int currentPointIndex;
     private boolean debugInGui;
-    // 实始的插值，因为可能使用了useSine来改变了原始插值
-    private float localInterpolation;
     
     public CurveMoveAnim() {
         super();
@@ -55,7 +51,7 @@ public final class CurveMoveAnim extends SpatialAnim {
         spline.setCurveTension(curveTension);
         
         this.facePath = data.getAsBoolean("facePath", facePath);
-        this.useSine = data.getAsBoolean("useSine", useSine);
+        
         Vector3f tempRotationOffset = data.getAsVector3f("rotationOffset");
         if (tempRotationOffset != null) {
             rotationOffset = new Quaternion();
@@ -105,13 +101,13 @@ public final class CurveMoveAnim extends SpatialAnim {
         this.facePath = facePath;
     }
 
-    public boolean isUseSine() {
-        return useSine;
-    }
-
-    public void setUseSine(boolean useSine) {
-        this.useSine = useSine;
-    }
+//    public boolean isUseSine() {
+//        return useSine;
+//    }
+//
+//    public void setUseSine(boolean useSine) {
+//        this.useSine = useSine;
+//    }
     
     /**
      * 设置曲线的张力
@@ -139,36 +135,23 @@ public final class CurveMoveAnim extends SpatialAnim {
 
     @Override
     protected void doInit() {
+        currentPointIndex = 0;
         target.setLocalTranslation(spline.getControlPoints().get(0));
-        localInterpolation = 0;
         if (debug) {
             debugPath();
         }
     }
-
-    @Override
-    public float getInterpolation() {
-        return localInterpolation;
-    }
     
     @Override
     protected void doAnimation(float interpolation) {
-//        Logger.getLogger(CurveMoveAnim.class.getName())
-//                .log(Level.INFO, "interpolation={0}", new Object[] {interpolation});
-    
-        // 使用正弦曲线来改变移动速度
-        if (useSine) {
-            localInterpolation = FastMath.sin(interpolation * FastMath.HALF_PI);
-        } else {
-            localInterpolation = interpolation;
-        }
         
         TempVars tv = TempVars.get();
-        float distance = localInterpolation * spline.getTotalLength();
+        float distance = interpolation * spline.getTotalLength();
         
+        // 1.获取spline上指定距离处的位置
         getSplinePoint(spline, distance, tv.vect1);
         
-        if (localInterpolation >= 1) {
+        if (interpolation >= 1) {
             // end
             target.setLocalTranslation(spline.getControlPoints().get(spline.getControlPoints().size() - 1));
         } else {
@@ -186,12 +169,6 @@ public final class CurveMoveAnim extends SpatialAnim {
         }
         tv.release();
     }
-
-    @Override
-    public void cleanup() {
-        currentPointIndex = 0;
-        super.cleanup();
-    }
     
     // 获取spline上的点
     private Vector3f getSplinePoint(Spline spline, float distance, Vector3f store) {
@@ -206,37 +183,13 @@ public final class CurveMoveAnim extends SpatialAnim {
             sum += len;
             i++;
         }
+        
+        // 到达最后一个点。
         List<Vector3f> cps = spline.getControlPoints();
         currentPointIndex = cps.size() - 1;
         store.set(cps.get(currentPointIndex));
         return store;
     }
-    
-    // remove20160130有bug,不再使用
-//    /**
-//     * compute the index of the waypoint and the interpolation value according to a distance
-//     * returns a vector 2 containing the index in the x field and the interpolation value in the y field
-//     * @param distance the distance traveled on this path
-//     * @return the waypoint index and the interpolation value in a vector2
-//     */
-//    private Vector2f getWayPointIndexForDistance(float distance, Vector2f store) {
-//        
-//        // remove20160130,有bug
-////        distance = distance % spline.getTotalLength();
-//        
-//        float sum = 0;
-//        int i = 0;
-//        for (Float len : spline.getSegmentsLength()) {
-//            if (sum + len >= distance) {
-//                store.set((float) i, (distance - sum) / len);
-//                return store;
-//            }
-//            sum += len;
-//            i++;
-//        }
-//        store.set((float) spline.getControlPoints().size() - 1, 1.0f);
-//        return store;
-//    }
 
     public void setDebug(boolean debug, boolean inGui) {
         this.debug = debug;

@@ -70,7 +70,6 @@ public class CurveBullet extends StraightBullet {
             cma.setFacePath(facing);
             cma.setCurveTension(tension);
             cma.setTarget(this);
-            cma.setUseSine(true);
             if (debug) {
                 cma.debugPath();
             }

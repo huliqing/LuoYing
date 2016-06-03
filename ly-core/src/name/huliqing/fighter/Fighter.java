@@ -52,7 +52,7 @@ public class Fighter extends SimpleApplication {
         settings.setTitle("落樱之剑");
         // 使用frameRate限制会多出一个线程
         settings.setSamples(4);
-//        settings.setFrameRate(60);
+        settings.setFrameRate(60);
         settings.setIcons(createIcons());
         settings.setSettingsDialogImage("/data/SDImage.jpg");
         

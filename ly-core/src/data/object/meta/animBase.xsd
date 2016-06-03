@@ -19,6 +19,11 @@ xs:time
     <xs:complexType name="animBase">
         <xs:complexContent>
             <xs:extension base="base">
+                <xs:attribute name="debug" type="bool" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>显示调试信息，但是显不显示由各个实现决定</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
                 <xs:attribute name="useTime" type="xs:decimal" use="required">
                     <xs:annotation>
                         <xs:documentation>动画运行时间，单位秒</xs:documentation>
@@ -34,9 +39,32 @@ xs:time
                         <xs:documentation>动画的循环模式</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-                <xs:attribute name="debug" type="bool" use="optional">
+                <xs:attribute name="motionType" use="optional">
                     <xs:annotation>
-                        <xs:documentation>显示调试信息，但是显不显示由各个实现决定</xs:documentation>
+                        <xs:documentation>运动类型,默认Linear</xs:documentation>
+                    </xs:annotation>
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="Linear" />
+                            <xs:enumeration value="Bezier" />
+                            <xs:enumeration value="CatmullRom" />
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="bezierFactor" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            当motionType=Bezier时该参数才有效, 格式: "p0,p1,p2,p3", 必须带完整的4个参数，默认："0.0,  0.0,  0.0, 1.0"
+                            (the result is a value between p1 and p3, t=0 for p1, t=1 for p3)
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="catmullRomFactor" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            当motionType=CatmullRom时该参数才有效, 格式: "T, p0, p1, p2, p3", 必须带完整的5个参数，默认："0.5, 0.0,  0.0,  1.0, 0.0".
+                            (where T is the curve tension the result is a value between p1 and p2, t=0 for p1, t=1 for p2)
+                        </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
             </xs:extension>

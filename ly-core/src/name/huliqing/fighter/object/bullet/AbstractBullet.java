@@ -145,7 +145,9 @@ public abstract class AbstractBullet extends Node implements Bullet {
     @Override
     public void updateLogicalState(float tpf) {
         update(tpf);
-        super.updateLogicalState(tpf);
+        
+        // remove20160603,jme3.1后不再需要
+//        super.updateLogicalState(tpf);
     }
 
     @Override
@@ -234,10 +236,10 @@ public abstract class AbstractBullet extends Node implements Bullet {
                 if (bl.hitCheck(this)) {
                     playHitEffects();
                     playHitSounds();
-                    if (Config.debug) {
-                        LOG.log(Level.INFO, "Bullet hitCheck,  bullet={0}, playHitEffects={1}, playHitSounds={2}", 
-                                new Object[] {data.getId(), hitEffects, hitSounds});
-                    }
+//                    if (Config.debug) {
+//                        LOG.log(Level.INFO, "Bullet hitCheck,  bullet={0}, playHitEffects={1}, playHitSounds={2}", 
+//                                new Object[] {data.getId(), hitEffects, hitSounds});
+//                    }
                 }
             }
         }

@@ -41,6 +41,7 @@ public interface Anim<T>  {
     /**
      * 获取动画的执行时间，注：该时间是在动画标准速度为1的情况下的时间。如果速度
      * 不等于1，则动画的实际运行时间与该时间会不一样。realTime = useTime / speed
+     * @return 
      */
     float getUseTime();
     
@@ -52,17 +53,18 @@ public interface Anim<T>  {
     void setUseTime(float useTime);
     
     /**
-     * @see #setInterpolate(float) 
+     * 获取当前的动画最终插值，注意：这个插值不是“时间”插值，而是根据动画的实际情况计算出的最终插值，这个插值可能
+     * 受各种因素影响，比如动画运动类型。
      * @return 
      */
     float getInterpolation();
     
-    /**
-     * 设置动画播放的插值位置，取值[0.0, 1.0], 任何超过该范围的值都应该截取。
-     * 0表示执行动画的开始位置，1表示执行动画的结束位置。
-     * @param interpolate 
-     */
-    void setInterpolation(float interpolation);
+//    /**
+//     * 设置动画播放的插值位置，取值[0.0, 1.0], 任何超过该范围的值都应该截取。
+//     * 0表示执行动画的开始位置，1表示执行动画的结束位置。
+//     * @param interpolate 
+//     */
+//    void setInterpolation(float interpolation);
     
     /**
      * @see #setLoop(name.huliqing.fighter.object.animation.Loop) 

@@ -48,7 +48,7 @@ public class CurveTrailBullet extends CurveBullet {
     // ---- inner
     private Material mat;
     private final Node surface = new Node();
-
+    
     public CurveTrailBullet(BulletData data) {
         super(data);
         this.mask = data.getAttribute("mask", null);
@@ -126,9 +126,7 @@ public class CurveTrailBullet extends CurveBullet {
     protected void doUpdatePosition(float tpf, Vector3f endPos) {
 //        Logger.getLogger(getClass().getName()).log(Level.INFO, "=Interpolation={0}", inter);
         super.doUpdatePosition(tpf, endPos);
-        
-        // -0.05，fix: 材质的滑动速度与子弹速度有一些不协调，所以这里作一点小修正
-        //，但是未找到原因
+
         float inter = getInterpolation(endPos) - 0.1f;
         if (inter >= 0.9f) {
             // 结束
