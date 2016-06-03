@@ -67,6 +67,9 @@ public class MyChaseCamera extends ChaseCamera implements PhysicsCollisionListen
     // 如果距离太近的话，角色会出现“空洞”的现象
     private float nearDistanceLimit = 2;
     
+    // ---- 用于处理在JME3.1后不能在Android环境下自动缩放镜头的问题 
+    private final static String TOUCH_SCALE_EVENT = "TouchSE";
+    
     public MyChaseCamera(Camera cam
             , InputManager inputManager
             , PlayState playState
@@ -280,35 +283,34 @@ public class MyChaseCamera extends ChaseCamera implements PhysicsCollisionListen
     }
     
     private void registerTouchListener(InputManager im) {
-        inputManager.addMapping("TouchSE", new com.jme3.input.controls.TouchTrigger(TouchInput.ALL));
-        inputManager.addListener(this, "TouchSE"); // TouchSE => TouchScaleEvent
+        inputManager.addMapping(TOUCH_SCALE_EVENT, new com.jme3.input.controls.TouchTrigger(TouchInput.ALL));
+        inputManager.addListener(this, TOUCH_SCALE_EVENT); // TouchSE => TouchScaleEvent
     }
 
     @Override
     public void onTouch(String name, TouchEvent event, float tpf) {
-        if ("TouchSE".equals(name)) {
-            if (event.getType() == TouchEvent.Type.SCALE_MOVE) {
-                logger.log(Level.SEVERE, "event={0}", new Object[] {event.toString()});
-                float dss = event.getDeltaScaleSpan();
-                // 缩放太小就不处理了，否则有可能两个手指放上去时画面一直在抖动。
-                if (FastMath.abs(dss) < 0.01f) {
-                    return;
+        if (event.getType() == TouchEvent.Type.SCALE_MOVE && TOUCH_SCALE_EVENT.equals(name)) {
+            
+            float dss = event.getDeltaScaleSpan();
+            // 缩放太小就不处理了，否则有可能两个手指放上去时画面一直在抖动。
+            if (FastMath.abs(dss) < 0.01f) {
+                return;
+            }
+
+            // 缩放镜头
+            zoomCamera(-dss);
+            if (dss > 0) {
+                // 拉近，放大 (参考：ChaseCamera中onAnalog方法)
+                if (zoomin == false) {
+                    distanceLerpFactor = 0;
                 }
-                
-                zoomCamera(-dss);
-                if (dss > 0) {
-                    // 拉近，放大 (参考：ChaseCamera中onAnalog方法)
-                    if (zoomin == false) {
-                        distanceLerpFactor = 0;
-                    }
-                    zoomin = true;
-                } else {
-                    // 拉远，缩小
-                    if (zoomin == true) {
-                        distanceLerpFactor = 0;
-                    }
-                    zoomin = false;
+                zoomin = true;
+            } else {
+                // 拉远，缩小
+                if (zoomin == true) {
+                    distanceLerpFactor = 0;
                 }
+                zoomin = false;
             }
         }
     }
