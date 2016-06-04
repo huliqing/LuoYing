@@ -1,0 +1,425 @@
+// https://docs.gradle.org/
+
+// // Proguard
+// http://proguard.sourceforge.net/manual/gradle.html
+// http://proguard.sourceforge.net/manual/usage.html
+
+// Launch4j
+// https://github.com/TheBoegl/gradle-launch4j
+// http://launch4j.sourceforge.net/docs.html
+
+// MacAppBundle
+// https://github.com/crotwell/gradle-macappbundle
+// https://github.com/crotwell/gradle-macappbundle/wiki/Intro
+
+import groovy.util.XmlSlurper;
+import groovy.xml.XmlUtil
+
+apply plugin:"java"
+
+buildscript{
+    repositories{
+        mavenCentral()
+        jcenter()
+    }
+    dependencies{
+        classpath "net.sf.proguard:proguard-gradle:5.2.1"
+    }
+}
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+// 必须指定编码，否则可能会编译不过
+compileJava.options.encoding = 'UTF-8'
+sourceCompatibility = 1.6
+targetCompatibility = 1.6
+
+// build目录
+buildDir = 'build-target'
+archivesBaseName = appArchivesBaseName
+version = appVersionName
+
+// 主方法名称，不能改
+def mainClass = "name.huliqing.fighter.Fighter"
+def fullArchivesName                = archivesBaseName + "-" + version;
+// 最终输出的：未经过混淆的原始核心jar包名称 
+def fullArchivesNameJar             = fullArchivesName + ".jar"
+// 最终输出的：经过混淆后的核心jar包名称
+def fullArchivesNameProJar          = fullArchivesName + "-PRO.jar"
+// 构建后的最终输出目录路径
+def archievsDistDir = "$project.buildDir/dist"
+
+// 生成可执行版本时需要用到classPath,这里主要把所有jar包路径拼成字符串放到manifest中。
+def getLibsClassPath() {
+    def path = ''
+    file('libs').eachFile { file -> 
+        path += 'lib/' + file.name + ' '
+    }
+    path += 'lib/assets.jar'
+    return path;
+}
+
+// 这里指定编译Core时需要用到的所有jar包，但没有包含asset.jar,因asset.jar需要动
+// 态打包。
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+}
+
+// Java项目的目录结构与默认的gradle定义不同，需要特别指定src、test等文件夹的路径
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+        }
+        resources {
+            srcDir 'src'
+        }
+    }
+}
+
+// 编译core时需要更新版本信息
+compileJava {
+    doFirst {
+        println 'Process config.xml with versionName and versionCode'
+        // 这个任务主要是修改config.xml中的版本名称和版本号
+        def configPath = "$project.projectDir/src/data/object/config.xml"
+
+        def configXml = new String(file(configPath).bytes, 'UTF-8')
+        // new XmlSlurper(false, false) 参数false用于关闭xml加入namespace
+        // 否则输出后的xml会在节点前缀加上多余的"tag0", 如: <tag0root: ...
+        def root = new XmlSlurper(false, false).parseText(configXml)
+        def config = root.'*'.find { config ->
+            config.@id == 'configGlobal'
+        }
+
+        // 不要在这里修改名称，保持名称在Config.xml的配置不改
+        // config.@gameName = "XXX"
+        config.@versionName = appVersionName
+        config.@versionCode = appVersionCode
+        config["@extends"] = appDebug == '1' ? 'configGlobalDebug' : 'configGlobalRelease'
+
+        // 保存config.xml配置
+        XmlUtil.serialize(root, new FileOutputStream(configPath))
+        
+        println 'config.xml saved.' 
+    }
+}
+
+jar {
+    manifest {
+        attributes  'VersionName' : appVersionName,
+                    'VersionCode' : appVersionCode,
+                    'Class-Path' : getLibsClassPath(),
+                    'Main-Class' : mainClass
+    }
+    exclude('**/*.xsd') 
+    exclude('**/meta') 
+}
+
+task proguard(type: proguard.gradle.ProGuardTask, dependsOn:jar) {
+
+    libraryjars  "${System.getProperty('java.home')}/lib/rt.jar"  
+    libraryjars file("$project.projectDir/libs")
+
+    injars jar.archivePath
+    outjars ("$project.buildDir/libs/$fullArchivesNameProJar")
+
+    configuration "$project.projectDir/proguard-project.txt"
+
+    // Save the obfuscation mapping to a file, so we can de-obfuscate any stack  
+    // traces later on. Keep a fixed source file attribute and all line number  
+    // tables to get line numbers in the stack traces.  
+    // You can comment this out if you're not interested in stack traces.  
+    //obfuscationdictionary 'proguard/keywords.txt'
+    //classobfuscationdictionary 'proguard/keywords.txt'
+    //packageobfuscationdictionary 'proguard/keywords.txt'
+	
+    printmapping "$project.projectDir/proguard/out.map"
+    applymapping "$project.projectDir/proguard/out.map"
+}
+
+// 把依赖的jar复制到lib下
+task copyLibs(type: Copy, dependsOn: proguard) {
+    copy {
+        from ("$project.projectDir/libs") {
+            include('**/*.jar')
+            //exclude('**/*-javadoc.zip') 
+            //exclude('**/*-sources.zip')
+            //exclude('**/*-doc.zip') 
+            //exclude('**/*-src.zip') 
+        }
+        into ("$project.buildDir/libs/lib/")
+    }
+}
+
+// 将assets打包成jar并放到lib下。
+task buildAssets(type: Jar, dependsOn: copyLibs) {
+    from 'assets'
+    destinationDir = file("$project.buildDir/libs/lib/");
+    baseName 'assets'
+    version ''
+    includeEmptyDirs true
+    exclude '**/_*.*'
+    exclude '**/*_bak'
+    exclude '**/*.j3odata'
+    exclude '**/*.material'
+    exclude '**/*.mesh.xml'
+    exclude '**/*.skeleton.xml'
+    exclude '**/*.scene'
+    exclude '**/*.obj'
+    exclude '**/*.mtl'
+    exclude '**/*.3ds'
+    exclude '**/*.dae'
+    exclude '**/*.blend'
+    exclude '**/*.blend1'
+    exclude '**/*.blend2'
+    exclude '**/*.psd'
+    exclude '**/[Originals]'
+}
+
+// 把assets.jar解压到build/android目录下，后续为Android-build所用。
+task buildAssetsForAndroid(type: Copy, dependsOn: buildAssets) {
+    def assetsDir = "$project.buildDir/for-android-build/assets"
+    // 这里必须先删除掉旧的asset目录中的文件，以便重建,特别是当assets目录中存在多
+    // 余的一些文件时,以便确保assets目录与assets.jar中的一致
+    doFirst {
+        println "Delete assets dir before buildAssetsForAndroid:$assetsDir"
+        new File(assetsDir).deleteDir()
+    }
+    
+    def zipFile = file("$project.buildDir/libs/lib/assets.jar")
+    def outputDir = new File(assetsDir)
+    
+    from zipTree(zipFile)
+    into outputDir
+}
+
+// 把创建后的xxx-PRO.jar包放到android目录下，为android build时所用。
+task buildLibsForAndroid(type: Copy, dependsOn: buildAssetsForAndroid) {
+    from file("$project.buildDir/libs/$fullArchivesNameProJar")
+    into file("$project.buildDir/for-android-build/libs/")
+    
+    // 生成一些启动文件
+    // start.bat是用来在windows下启动测试原始核心包的
+    // startPRO.bat是用来在windows下启动测试经过混淆后的核心包的
+    // startPRO.sh是用来在linux下启动测试经过混淆后的核心包的
+    doLast {
+        task(startFiles) {
+            println "----Create start files:start.bat,startPRO.bat,startPRO.sh"
+            new File("$project.buildDir/libs/start.bat").bytes = "java -jar $fullArchivesNameJar".bytes
+            new File("$project.buildDir/libs/startPRO.bat").bytes = "java -jar $fullArchivesNameProJar".bytes
+            
+            // 注意：不能使用writeLine,这会把当前平台（如windows)的换行符写入文件，但是在linux下换行符必须
+            // 是“\n”，如果在windows运行构建就可能把换行符"\r\n"写入sh文件，这会导致这个脚本无法在linux下
+            // 运行。
+//            new File("$project.buildDir/libs", "startPRO.sh").withWriter('utf-8') { writer ->
+//                writer.writeLine "#!/bin/sh"
+//                writer.writeLine "java -jar $fullArchivesNameProJar"
+//            }
+
+            new File("$project.buildDir/libs/startPRO.sh").bytes = "#!/bin/sh\njava -jar $fullArchivesNameProJar"
+        }.execute()
+    }
+}
+
+// 替换packageCfg文件中的内容
+//app.mainjar=${jar.name}
+//app.version=1.0
+//app.id=${application.title}
+//app.preferences.id=${application.title}
+//app.mainclass=${main.class}
+//app.classpath=
+//${launcher.jvmargs}
+def packageCfgReplace = { line ->
+    def result = line
+    if (line.indexOf('app.mainjar') != -1) {
+        result = "app.mainjar=$fullArchivesNameProJar"
+    }
+    else if (line.indexOf("app.version") != -1) {
+        result = "app.version=$appVersionName"
+    } 
+    else if (line.indexOf("app.id") != -1) {
+        result = "app.id=$appArchivesBaseName"
+    }
+    else if (line.indexOf("app.preferences.id") != -1) {
+        result = "app.preferences.id=$appArchivesBaseName"
+    }
+    else if (line.indexOf("app.mainclass") != -1) {
+        result = "app.mainclass=$mainclass"
+    }
+    else if (line.indexOf("app.classpath") != -1) {
+        result = "app.classpath="
+    }
+    else if (line.indexOf("launcher.jvmargs") != -1) {
+        result = "jvmarg.1="
+    }
+    println "$result"
+    return result
+}
+
+def untarJre(tarJreFile, outputDirName) {
+    // 检查JRE是否有解压过，如果没有则解压jre
+    def tarJreOutputDir = "$project.buildDir/tmp/jre/$outputDirName"
+    if (!file(tarJreOutputDir).exists()) {
+        println "----Untar jre: $tarJreFile"
+        task(outputDirName, type: Copy) {
+            from tarTree(tarJreFile)
+            into tarJreOutputDir
+        }.execute()
+    }
+    
+    // 找出解压后的jre的跟目录路径
+    def jreRoot
+    file(tarJreOutputDir).eachFile { file ->
+        if (file.isDirectory() && file.name.indexOf("jre") != -1) {
+            jreRoot = "$tarJreOutputDir/$file.name"
+            println "----Found jre root=" + jreRoot
+        }
+    }
+    return jreRoot
+}
+
+// -------- buildWindows-x86 --------
+task buildWindowsx86  << {
+    println "--------buildWindowsx86"
+    
+    if (buildWindows_x86 != "1") {
+        println "----Skip buildWindowsx86";
+        return;
+    }
+    
+    // 解压JRE，并获得JRE的根目录路径
+    def jreRoot = untarJre("$rootProject.projectDir$buildWindows_x86_jre", buildWindows_x86_archivesBaseName)
+    
+    task(zipWindowsx86, type: Zip) {
+        destinationDir new File(archievsDistDir)
+        archiveName "${appArchivesBaseName}-${buildWindows_x86_archivesBaseName}.zip"
+        
+        // ---- launcher and icon
+        from ("$rootProject.projectDir$buildWindows_x86_launcher") {
+            into("$appArchivesBaseName")
+            rename {
+                filename -> "${appArchivesBaseName}.exe"
+            }
+        }
+        from ("$rootProject.projectDir$buildWindows_x86_icon") {
+            into("$appArchivesBaseName")
+            rename {filename -> "${appArchivesBaseName}.ico"}
+        }
+        // ---- add native libs
+        from ("$rootProject.projectDir$buildWindows_x86_nativeDir") {
+            include "*.*"
+            into("$appArchivesBaseName/app")
+        }
+        // ---- add package cfg
+        from ("$rootProject.projectDir$buildWindows_x86_packageCfg") {
+            into("$appArchivesBaseName/app")
+            filter packageCfgReplace
+        }
+        // ---- add main jar
+        from ("$project.buildDir/libs/") {
+            include "$fullArchivesNameProJar"
+            into("$appArchivesBaseName/app")
+        }
+        // ---- add jar libs
+        from ("$project.buildDir/libs/lib") {
+            include "*.jar"
+            into("$appArchivesBaseName/app/lib")
+        }
+        // ---- pack jre
+        from (jreRoot) {
+            into("$appArchivesBaseName/runtime/jre")
+        }
+    }.execute()
+}
+buildWindowsx86.dependsOn "buildLibsForAndroid"
+
+
+// -------- buildWindows-x64 --------
+task buildWindowsx64  << {
+    println "--------buildWindowsx64"
+    if (buildWindows_x64 != "1") {
+        println "----Skip buildWindowsx64";
+        return;
+    }
+    
+     // 解压JRE，并获得JRE的根目录路径
+    def jreRoot = untarJre("$rootProject.projectDir$buildWindows_x64_jre", buildWindows_x64_archivesBaseName)
+    
+    task(zipWindowsx64, type: Zip) {
+        destinationDir new File(archievsDistDir)
+        archiveName "${appArchivesBaseName}-${buildWindows_x64_archivesBaseName}.zip"
+        
+        // ---- launcher and icon
+        from ("$rootProject.projectDir$buildWindows_x64_launcher") {
+            into("$appArchivesBaseName")
+            rename {
+                filename -> "${appArchivesBaseName}.exe"
+            }
+        }
+        from ("$rootProject.projectDir$buildWindows_x64_icon") {
+            into("$appArchivesBaseName")
+            rename {filename -> "${appArchivesBaseName}.ico"}
+        }
+        // ---- add native libs
+        from ("$rootProject.projectDir$buildWindows_x64_nativeDir") {
+            include "*.*"
+            into("$appArchivesBaseName/app")
+        }
+        // ---- add package cfg
+        from ("$rootProject.projectDir$buildWindows_x64_packageCfg") {
+            into("$appArchivesBaseName/app")
+            filter packageCfgReplace
+        }
+        // ---- add main jar
+        from ("$project.buildDir/libs/") {
+            include "$fullArchivesNameProJar"
+            into("$appArchivesBaseName/app")
+        }
+        // ---- add jar libs
+        from ("$project.buildDir/libs/lib") {
+            include "*.jar"
+            into("$appArchivesBaseName/app/lib")
+        }
+        // ---- pack jre
+        from (jreRoot) {
+            into("$appArchivesBaseName/runtime/jre")
+        }
+    }.execute()
+}
+buildWindowsx64.dependsOn "buildLibsForAndroid"
+
+
+build.dependsOn 'buildWindowsx86', 'buildWindowsx64'
+build {
+    doLast {
+        println "----Build core and Zip OK!!!"
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
