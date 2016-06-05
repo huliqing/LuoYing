@@ -1,0 +1,138 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:1.1.0'
+    }
+}
+repositories {
+    mavenCentral()
+}
+
+apply plugin: 'com.android.application'
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(dir: 'libs-core', include: ['*.jar'])
+    compile fileTree(dir: "$rootProject.projectDir$androidExtResourceDir/libs", include: ['*.jar'])
+    compile 'com.android.support:support-v4:19.0.0'
+}
+
+android {
+    
+    // 禁止lint异常阻止构建,否则构建会不通过
+    lintOptions{
+        checkReleaseBuilds false
+        abortOnError false
+    }
+    
+    compileSdkVersion 19
+    buildToolsVersion '19.1.0'
+	
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion 19
+        versionCode appVersionCode.toInteger()
+        versionName "$appVersionName"
+        applicationId "name.huliqing.fighter"
+        setProperty("archivesBaseName", "$appArchivesBaseName-$appVersionName")
+    }
+	
+    sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = ['src']
+            resources.srcDirs = ['src']
+            aidl.srcDirs = ['src']
+            renderscript.srcDirs = ['src']
+            res.srcDirs = ['res']
+
+            // assets资源路径，依赖于ly-core的构建
+            assets.srcDirs = ["$rootProject.projectDir$androidExtResourceDir/assets"]
+        }
+
+        // Move the tests to tests/java, tests/res, etc...
+        //instrumentTest.setRoot('tests')
+		
+        // Move the build types to build-types/<type>
+        // For instance, build-types/debug/java, build-types/debug/AndroidManifest.xml, ...
+        // This moves them out of them default location under src/<type>/... which would
+        // conflict with src/ being used by the main source set.
+        // Adding new build types or product flavors should be accompanied
+        // by a similar customization.
+        //debug.setRoot('build-types/debug')
+        //release.setRoot('build-types/release')
+		
+        // 通用包:name.huliqing.fighter
+        general {
+            manifest.srcFile 'AndroidManifest_general.xml'
+        }
+		
+        // PlayStore: name.huliqing.luoying
+        play {
+            manifest.srcFile 'AndroidManifest_play.xml'
+        }
+		
+    }
+	
+    signingConfigs {
+        release {			
+            storeFile file("$rootProject.projectDir$androidStoreFile")
+            storePassword androidStorePassword
+            keyAlias androidKeyAlias
+            keyPassword androidKeyPassword
+        }
+    }
+
+    productFlavors {
+        general {
+            applicationId = 'name.huliqing.fighter'
+        }
+        play {
+            applicationId = 'name.huliqing.luoying'
+        }
+    }
+	
+    buildTypes {
+        
+        release {
+            // 签名配置
+            signingConfig signingConfigs.release
+			
+            // 是否打开混淆,这里要关闭，因为已经在核心包中ly-core中进行了混淆。
+            minifyEnabled false
+			
+            // 混淆配置文件,因为ly-core已经进行了混淆，所以这里不要，也不能再打开该功能。
+            // core中已经配置了哪些可以混淆哪些不可以,这里不能再混淆了。
+            //proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-project.txt'
+
+            debuggable false
+        }
+		
+        debug {
+            debuggable false
+        }
+    }
+	
+
+}
+
+// 删除不必要的APK
+// ly-android\build\outputs\apk
+build {
+    doLast {
+        println 'Delete debug and unaligned apk files: '
+        file("$project.buildDir/outputs/apk").eachFile { file -> 
+            if (file.name.endsWith(".apk")) {
+                if (file.name.indexOf('-debug.apk') != -1
+                    || file.name.indexOf('-debug-unaligned.apk') != -1
+                    || file.name.indexOf('-unaligned.apk') != -1) {
+                    file.delete()
+                    println 'delete file:' + file.name
+                }
+            }
+        }
+    }
+}
+
+

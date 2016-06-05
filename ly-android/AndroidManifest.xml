@@ -4,7 +4,6 @@
           android:versionName="1.0" 
           package="name.huliqing.fighter">
     
-    
     <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="19"  />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -16,6 +15,7 @@
     <!-- 防止休眠 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" /> 
     
+    <supports-screens android:anyDensity="true" android:largeScreens="true" android:normalScreens="true" android:smallScreens="true"/>
     
     <application android:icon="@drawable/logo100" 
                  android:label="@string/app_name" 
@@ -28,6 +28,5 @@
             </intent-filter>
         </activity>
     </application>
-    <uses-sdk android:minSdkVersion="9"/>
-    <supports-screens android:anyDensity="true" android:largeScreens="true" android:normalScreens="true" android:smallScreens="true"/>
+    
 </manifest>

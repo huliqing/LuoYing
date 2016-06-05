@@ -50,3 +50,5 @@
 /ly-core/dist_example/
 /ly-core/resources_gradle/
 /ly-android/libs/
+/ly-core/mobile/bin/
+/ly-core/mobile/gen/
