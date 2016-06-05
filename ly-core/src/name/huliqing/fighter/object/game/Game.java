@@ -5,7 +5,6 @@
 package name.huliqing.fighter.object.game;
 
 import com.jme3.util.SafeArrayList;
-import com.sun.jmx.snmp.tasks.Task;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.fighter.data.GameData;

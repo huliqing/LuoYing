@@ -1,0 +1,23 @@
+// Proguard
+// http://proguard.sourceforge.net/manual/gradle.html
+// http://proguard.sourceforge.net/manual/usage.html
+
+// Android Plugin DSL Reference
+// https://google.github.io/android-gradle-dsl/current/index.html
+
+buildscript{
+    repositories{
+        mavenCentral()
+    }
+}
+
+// 创建Gradle Wrapper
+task wrapper(type: Wrapper, description: 'Creates and deploys the Gradle wrapper to the current directory.') {
+    gradleVersion = '2.2.1'
+}
+
+// The task dependencies declared via task path are supported and cause relevant projects to be configured. 
+// 使用buildCore和buildAndroid处理依赖关系。
+// 这里必须使用“字面量”来表示依赖，因为在子项目未载入配置之前是拿不到build任务实例的。
+
+

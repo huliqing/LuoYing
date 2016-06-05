@@ -1,0 +1,496 @@
+// Proguard
+// http://proguard.sourceforge.net/manual/gradle.html
+// http://proguard.sourceforge.net/manual/usage.html
+
+// Launch4j
+// https://github.com/TheBoegl/gradle-launch4j
+// http://launch4j.sourceforge.net/docs.html
+
+// MacAppBundle
+// https://github.com/crotwell/gradle-macappbundle
+// https://github.com/crotwell/gradle-macappbundle/wiki/Intro
+
+import groovy.util.XmlSlurper;
+import groovy.xml.XmlUtil
+
+apply plugin:"java"
+apply plugin: "edu.sc.seis.launch4j"
+apply plugin: "edu.sc.seis.macAppBundle"
+
+buildscript{
+    repositories{
+        mavenCentral()
+        jcenter()
+        flatDir {
+            dirs 'libs-build'
+        }
+    }
+    dependencies{
+        classpath "net.sf.proguard:proguard-gradle:5.2.1"
+        classpath 'gradle.plugin.edu.sc.seis.gradle:launch4j:1.6.1'
+        classpath "gradle.plugin.edu.sc.seis:macAppBundle:2.1.6"
+    }
+}
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+// 必须指定编码，否则可能会编译不过
+compileJava.options.encoding = 'UTF-8'
+sourceCompatibility = 1.6
+targetCompatibility = 1.6
+
+// build目录
+buildDir = 'build-target'
+archivesBaseName = appArchivesBaseName
+version = appVersionName
+
+// 主方法名称，不能改
+def mainClass = "name.huliqing.fighter.Fighter"
+def fullArchivesName                = archivesBaseName + "-" + version;
+// 最终输出的：未经过混淆的原始核心jar包名称 
+def fullArchivesNameJar             = fullArchivesName + ".jar"
+// 最终输出的：经过混淆后的核心jar包名称
+def fullArchivesNameProJar          = fullArchivesName + "-PRO.jar"
+def zipOutputDir = "output"
+def macAppOutput = "outputMacAppTmp"
+
+// 生成可执行版本时需要用到classPath,这里主要把所有jar包路径拼成字符串放到manifest中。
+def getLibsClassPath() {
+    def path = ''
+    file('libs').eachFile { file -> 
+        path += 'lib/' + file.name + ' '
+    }
+    path += 'lib/assets.jar'
+    return path;
+}
+
+// 这里指定编译Core时需要用到的所有jar包，但没有包含asset.jar,因asset.jar需要动
+// 态打包。
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+}
+
+// Java项目的目录结构与默认的gradle定义不同，需要特别指定src、test等文件夹的路径
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+        }
+        resources {
+            srcDir 'src'
+        }
+    }
+}
+
+// 编译core时需要更新版本信息
+compileJava {
+    doFirst {
+        println 'Process config.xml with versionName and versionCode'
+        // 这个任务主要是修改config.xml中的版本名称和版本号
+        def configPath = "$project.projectDir/src/data/object/config.xml"
+
+        def configXml = new String(file(configPath).bytes, 'UTF-8')
+        // new XmlSlurper(false, false) 参数false用于关闭xml加入namespace
+        // 否则输出后的xml会在节点前缀加上多余的"tag0", 如: <tag0root: ...
+        def root = new XmlSlurper(false, false).parseText(configXml)
+        def config = root.'*'.find { config ->
+            config.@id == 'configGlobal'
+        }
+
+        // 不要在这里修改名称，保持名称在Config.xml的配置不改
+        // config.@gameName = "XXX"
+        config.@versionName = appVersionName
+        config.@versionCode = appVersionCode
+        config["@extends"] = appDebug == '1' ? 'configGlobalDebug' : 'configGlobalRelease'
+
+        // 保存config.xml配置
+        XmlUtil.serialize(root, new FileOutputStream(configPath))
+        
+        println 'config.xml saved.' 
+    }
+}
+
+jar {
+    manifest {
+        attributes  'VersionName' : appVersionName,
+                    'VersionCode' : appVersionCode,
+                    'Class-Path' : getLibsClassPath(),
+                    'Main-Class' : mainClass
+    }
+    exclude('**/*.xsd') 
+    exclude('**/meta') 
+}
+
+task proguard(type: proguard.gradle.ProGuardTask, dependsOn:jar) {
+
+    libraryjars  "${System.getProperty('java.home')}/lib/rt.jar"  
+    libraryjars file("$project.projectDir/libs")
+
+    injars jar.archivePath
+    outjars ("$project.buildDir/libs/$fullArchivesNameProJar")
+
+    configuration "$project.projectDir/proguard-project.txt"
+
+    // Save the obfuscation mapping to a file, so we can de-obfuscate any stack  
+    // traces later on. Keep a fixed source file attribute and all line number  
+    // tables to get line numbers in the stack traces.  
+    // You can comment this out if you're not interested in stack traces.  
+    //obfuscationdictionary 'proguard/keywords.txt'
+    //classobfuscationdictionary 'proguard/keywords.txt'
+    //packageobfuscationdictionary 'proguard/keywords.txt'
+	
+    printmapping "$project.projectDir/proguard/out.map"
+    applymapping "$project.projectDir/proguard/out.map"
+}
+
+// 把依赖的jar复制到lib下
+task copyLibs(type: Copy, dependsOn: proguard) {
+    copy {
+        from ("$project.projectDir/libs") {
+            include('**/*.jar')
+            //exclude('**/*-javadoc.zip') 
+            //exclude('**/*-sources.zip')
+            //exclude('**/*-doc.zip') 
+            //exclude('**/*-src.zip') 
+        }
+        into ("$project.buildDir/libs/lib/")
+    }
+}
+
+// 将assets打包成jar并放到lib下。
+task buildAssets(type: Jar, dependsOn: copyLibs) {
+    from 'assets'
+    destinationDir = file("$project.buildDir/libs/lib/");
+    baseName 'assets'
+    version ''
+    includeEmptyDirs true
+    exclude '**/_*.*'
+    exclude '**/*_bak'
+    exclude '**/*.j3odata'
+    exclude '**/*.material'
+    exclude '**/*.mesh.xml'
+    exclude '**/*.skeleton.xml'
+    exclude '**/*.scene'
+    exclude '**/*.obj'
+    exclude '**/*.mtl'
+    exclude '**/*.3ds'
+    exclude '**/*.dae'
+    exclude '**/*.blend'
+    exclude '**/*.blend1'
+    exclude '**/*.blend2'
+    exclude '**/*.psd'
+    exclude '**/[Originals]'
+}
+
+// 把assets.jar解压到build/android目录下，后续为Android-build所用。
+task buildAssetsForAndroid(type: Copy, dependsOn: buildAssets) {
+    def assetsDir = "$project.buildDir/for-android-build/assets"
+    // 这里必须先删除掉旧的asset目录中的文件，以便重建,特别是当assets目录中存在多
+    // 余的一些文件时,以便确保assets目录与assets.jar中的一致
+    doFirst {
+        println "Delete assets dir before buildAssetsForAndroid:$assetsDir"
+        new File(assetsDir).deleteDir()
+    }
+    
+    def zipFile = file("$project.buildDir/libs/lib/assets.jar")
+    def outputDir = new File(assetsDir)
+    
+    from zipTree(zipFile)
+    into outputDir
+}
+
+// 把创建后的xxx-PRO.jar包放到android目录下，为android build时所用。
+task buildLibsForAndroid(type: Copy, dependsOn: buildAssetsForAndroid) {
+    from file("$project.buildDir/libs/$fullArchivesNameProJar")
+    into file("$project.buildDir/for-android-build/libs/")
+    
+    // 生成一些启动文件
+    // start.bat是用来在windows下启动测试原始核心包的
+    // startPRO.bat是用来在windows下启动测试经过混淆后的核心包的
+    // startPRO.sh是用来在linux下启动测试经过混淆后的核心包的
+    doLast {
+        task(startFiles) {
+            println "----Create start files:start.bat,startPRO.bat,startPRO.sh"
+            new File("$project.buildDir/libs/start.bat").bytes = "java -jar $fullArchivesNameJar".bytes
+            new File("$project.buildDir/libs/startPRO.bat").bytes = "java -jar $fullArchivesNameProJar".bytes
+            
+            // 注意：不能使用writeLine,这会把当前平台（如windows)的换行符写入文件，但是在linux下换行符必须
+            // 是“\n”，如果在windows运行构建就可能把换行符"\r\n"写入sh文件，这会导致这个脚本无法在linux下
+            // 运行。
+//            new File("$project.buildDir/libs", "startPRO.sh").withWriter('utf-8') { writer ->
+//                writer.writeLine "#!/bin/sh"
+//                writer.writeLine "java -jar $fullArchivesNameProJar"
+//            }
+
+            new File("$project.buildDir/libs/startPRO.sh").bytes = "#!/bin/sh\njava -jar $fullArchivesNameProJar"
+        }.execute()
+    }
+}
+
+
+// ======== Launch4j 
+// 截断launch4j的copyL4jLib任务的依赖，因为copyL4jLib不能只简单的依赖jar任务，否
+// 则就没有proguard和相关android任务的执行了。
+// 另注意：launch4j的依赖比较特殊，必须放在afterEvaluate. 其它方式的依赖设置会无效.
+afterEvaluate {
+    copyL4jLib.dependsOn buildLibsForAndroid
+}
+
+launch4j {
+    // 注:这里要特别指定经过代码混淆的核心jar包，如果没有指定则默认会使用未经过混淆的核心包。
+    jar = "$project.buildDir/libs/$fullArchivesNameProJar"
+    // 指定主类文件
+    mainClassName = mainClass
+    dontWrapJar = false
+    outfile = fullArchivesName + ".exe"
+    // 这里是在core的根目录下，即相对于 Launch4j的生成目录build-target/launch4j向上两级
+    //icon = "../../luoying.ico"
+    icon = "$project.projectDir/luoying.ico"
+    
+    copyright = "huliqing.name"
+    // 这个jre路径是最终输出exe时，exe与jre的相对路径，与编译的时候的路径不同。
+    bundledJrePath = "./jre"
+    bundledJreAsFallback = false
+    windowTitle = "落樱之剑"
+    mutexName = "LuoYing"
+    
+    messagesStartupError = "Could not startup!!!"
+    messagesBundledJreError = "BoundleJreError: Need to download a compatibility jre"
+    messagesJreVersionError = "JreVersionError: Need to download a compatibility jre"
+    messagesLauncherError = "LauncherError"
+    
+    // The values configurable within the launch4j extension along with their defaults are:
+//    String launch4jCmd = "launch4j"
+//    String outputDir = "launch4j"
+//    String libraryDir = "lib"
+//    boolean externalLaunch4j = false
+//    Object copyConfigurable
+//
+//    String xmlFileName = "launch4j.xml"
+//    String mainClassName
+//    boolean dontWrapJar = false
+//    String headerType = "gui"
+//    String jar = "lib/"+project.tasks[JavaPlugin.JAR_TASK_NAME].archiveName or "", if the JavaPlugin is not loaded
+//    String outfile = project.name+'.exe'
+//    String errTitle = ""
+//    String cmdLine = ""
+//    String chdir = '.'
+//    String priority = 'normal'
+//    String downloadUrl = "http://java.com/download"
+//    String supportUrl = ""
+//    boolean stayAlive = false
+//    boolean restartOnCrash = false
+//    String manifest = ""
+//    String icon = ""
+//    String version = project.version
+//    String textVersion = project.version
+//    String copyright = "unknown"
+//    String companyName = ""
+//    String description = project.name
+//    String productName = project.name
+//    String internalName = project.name
+//    String opt = ""
+//    String bundledJrePath
+//    boolean bundledJre64Bit = false
+//    boolean bundledJreAsFallback = false
+//    String jreMinVersion = project.targetCompatibility or the current java version, if the property is not set
+//    String jreMaxVersion
+//    String jdkPreference = "preferJre"
+//    String jreRuntimeBits = "64/32"
+//    String mutexName
+//    String windowTitle
+//    String messagesStartupError
+//    String messagesBundledJreError
+//    String messagesJreVersionError
+//    String messagesLauncherError
+//    Integer initialHeapSize
+//    Integer initialHeapPercent
+//    Integer maxHeapSize
+//    Integer maxHeapPercent
+//    String splashFileName
+//    boolean splashWaitForWindows = true
+//    Integer splashTimeout = 60
+//    boolean splashTimeoutError = true
+}
+
+
+// ======== macAppBundle 
+//:ly-core:bundleJRE SKIPPED
+//:ly-core:copyIcon
+//:ly-core:copyStub
+//----:ly-core:compileJava
+//----:ly-core:processResources
+//----:ly-core:classes
+//----:ly-core:jar
+//:ly-core:copyToResourcesJava
+//:ly-core:generatePkgInfo
+//:ly-core:generatePlist
+//:ly-core:createApp
+macAppBundle {
+    appName = fullArchivesName
+    mainClassName = mainClass
+    appOutputDir = macAppOutput
+    bundleJRE = false
+    icon = "$project.projectDir/luoying.icns"
+    javaProperties.put("apple.laf.useScreenMenuBar", "true")
+    
+    // 参考
+//        task.inputs.property("MacAppBundlePlugin appStyle", {project.macAppBundle.appStyle})
+//        task.inputs.property("MacAppBundlePlugin setFileCmd", {project.macAppBundle.setFileCmd})
+//        task.inputs.property("MacAppBundlePlugin appOutputDir", {project.macAppBundle.appOutputDir})
+//        task.inputs.property("MacAppBundlePlugin dmgOutputDir", {project.macAppBundle.dmgOutputDir})
+//        task.inputs.property("MacAppBundlePlugin mainClassName", {project.macAppBundle.mainClassName})
+//        task.inputs.property("MacAppBundlePlugin bundleIdentifier", {project.macAppBundle.bundleIdentifier})
+//        task.inputs.property("MacAppBundlePlugin creatorCode", {project.macAppBundle.creatorCode})
+//        task.inputs.property("MacAppBundlePlugin icon", {project.macAppBundle.icon})
+//        task.inputs.property("MacAppBundlePlugin jvmVersion", {project.macAppBundle.jvmVersion})
+//        task.inputs.property("MacAppBundlePlugin backgroundImage", {project.macAppBundle.backgroundImage})
+//        task.inputs.property("MacAppBundlePlugin appName", {project.macAppBundle.appName})
+//        task.inputs.property("MacAppBundlePlugin volumeName", {project.macAppBundle.volumeName})
+//        task.inputs.property("MacAppBundlePlugin dmgName", {project.macAppBundle.dmgName})
+//        task.inputs.property("MacAppBundlePlugin javaProperties", {project.macAppBundle.javaProperties})
+//        task.inputs.property("MacAppBundlePlugin javaExtras", {project.macAppBundle.javaExtras})
+//        task.inputs.property("MacAppBundlePlugin bundleExtras", {project.macAppBundle.bundleExtras})
+//        task.inputs.property("MacAppBundlePlugin arguments", {project.macAppBundle.arguments})
+//        task.inputs.property("MacAppBundlePlugin bundleExecutable", {project.macAppBundle.bundleExecutable})
+//        task.inputs.property("MacAppBundlePlugin bundleAllowMixedLocalizations", {project.macAppBundle.bundleAllowMixedLocalizations})
+//        task.inputs.property("MacAppBundlePlugin highResolutionCapable", {project.macAppBundle.highResolutionCapable})
+//        task.inputs.property("MacAppBundlePlugin bundlePackageType", {project.macAppBundle.bundlePackageType})
+//        task.inputs.property("MacAppBundlePlugin bundleInfoDictionaryVersion", {project.macAppBundle.bundleInfoDictionaryVersion})
+//        task.inputs.property("MacAppBundlePlugin bundleDevelopmentRegion", {project.macAppBundle.bundleDevelopmentRegion})
+//        task.inputs.property("MacAppBundlePlugin bundleJRE", {project.macAppBundle.bundleJRE})
+//        task.inputs.property("MacAppBundlePlugin jreHome", {project.macAppBundle.jreHome})
+//        task.inputs.property("MacAppBundlePlugin certIdentity", {project.macAppBundle.certIdentity})
+//        task.inputs.property("MacAppBundlePlugin codeSignCmd", {project.macAppBundle.codeSignCmd})
+//        task.inputs.property("MacAppBundlePlugin codeSignDeep", {project.macAppBundle.codeSignDeep})
+//        task.inputs.property("MacAppBundlePlugin keyChain", {project.macAppBundle.keyChain})
+//        task.inputs.property("MacAppBundlePlugin backgroundScript", {project.macAppBundle.backgroundScript})
+//        task.inputs.property("MacAppBundlePlugin appIconX", {project.macAppBundle.appIconX})
+//        task.inputs.property("MacAppBundlePlugin appIconY", {project.macAppBundle.appIconY})
+//        task.inputs.property("MacAppBundlePlugin appFolderX", {project.macAppBundle.appFolderX})
+//        task.inputs.property("MacAppBundlePlugin appFolderY", {project.macAppBundle.appFolderY})
+//        task.inputs.property("MacAppBundlePlugin backgroundImageWidth", {project.macAppBundle.backgroundImageWidth})
+//        task.inputs.property("MacAppBundlePlugin backgroundImageHeight", {project.macAppBundle.backgroundImageHeight})
+}
+
+// 注：dependsOn launch4j时必须是字符串方式,不能使用对象实例。
+bundleJRE.dependsOn "launch4j"
+
+createApp {
+    // 由于macAppBundle在创建app的时候使用的是原始jar包，并且没有把assets也打包进去
+    // 所以在创建app之后需要处理两个简单的任务:
+    // 1.替换默认的核心包jar为经过混淆后的jar
+    // 2.所libs/lib/assets.jar复制到app
+    doLast {
+        // 1.删除掉macApp中的原始jar,并替换上经过混淆的jar包
+        // 参考路径: \outputMacApp\luoying-2.4-a1.app\Contents\Java
+        def appJavaDir = "$project.buildDir/$macAppOutput/$fullArchivesName" + ".app/Contents/Java"
+        file(appJavaDir).eachFile { file -> 
+            if (file.name.indexOf(fullArchivesName) != -1) {
+                file.delete();
+                println "----Delete original jar file:$appJavaDir/" + file.name
+            }
+        }
+        // 2.复制$fullArchivesNameProJar到$appJavaDir中
+        def fromFile = "$project.buildDir/libs/$fullArchivesNameProJar"
+        def toFile = "$appJavaDir/$fullArchivesNameProJar"
+        println "----Copy proguard file from $fromFile to $toFile"
+        file(toFile).bytes = file(fromFile).bytes
+        
+        // 3.复制asset.jar到$appJavaDir中
+        def fromAssetsFile = "$project.buildDir/libs/lib/assets.jar"
+        def toAssetsFile = "$appJavaDir/assets.jar"
+        println "----Copy assets.jar from $fromAssetsFile to $toAssetsFile"
+        file(toAssetsFile).bytes = file(fromAssetsFile).bytes
+    }
+}
+
+task packageAllZip << {
+    // 1.打包Window zip
+    def windowsZipFileName = fullArchivesName + "-Windows.zip"
+    def macZipFileName     = fullArchivesName + "-MacOSX.zip"
+    def linuxZipFileName   = fullArchivesName + "-Linux.zip"
+    
+    println "----Package Windows zip to $project.buildDir/$zipOutputDir/$windowsZipFileName"
+    task(zipWindows, type: Zip) {
+        destinationDir new File(project.buildDir, zipOutputDir)
+        archiveName windowsZipFileName
+//            // 注：这里不需要添加核心包，因为已经编译在exe中了
+//            from ("$project.buildDir/libs/") {
+//                include fullArchivesNameProJar
+//                into("lib")
+//            }
+        // 添加所有jar包
+        from ("$project.buildDir/libs/lib") {
+            include "*.jar"
+            into("lib")
+        }
+        // 添加Launch4j生成的exe
+        from ("$project.buildDir/launch4j/") {
+            include "*.exe"
+        }
+        // 拷贝捆绑的jre到目录下
+        from ("$project.projectDir/jre") {
+            into("jre")
+        }
+    }.execute()
+    
+    // 2.打包MaxOSX zip
+    println "----Package MaxOSX zip to $project.buildDir/$zipOutputDir/$macZipFileName"
+    task(zipMac, type: Zip) {
+        from fileTree("$project.buildDir/$macAppOutput")
+        destinationDir new File(project.buildDir, zipOutputDir)
+        archiveName macZipFileName
+        includeEmptyDirs true
+    }.execute()
+    
+    // 3.打包Linux zip
+    println "----Package Linux zip to $project.buildDir/$zipOutputDir/$linuxZipFileName"
+    task(zipLinux, type: Zip) {
+        destinationDir new File(project.buildDir, zipOutputDir)
+        archiveName linuxZipFileName
+        from("$project.buildDir/libs") {
+            include "$fullArchivesNameProJar"
+            include "*.sh"
+        }
+        from("$project.buildDir/libs/lib") {
+            include "*.jar"
+            into ("lib")
+        }
+    }.execute()
+}
+packageAllZip.dependsOn "createApp"
+
+build.dependsOn "packageAllZip"
+build {
+    doLast {
+        println "----Build core and Zip OK!!!"
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

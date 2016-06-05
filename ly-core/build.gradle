@@ -264,7 +264,7 @@ def untarJre(tarJreFile, outputDirName) {
     // 检查JRE是否有解压过，如果没有则解压jre
     def tarJreOutputDir = "$project.buildDir/tmp/jre/$outputDirName"
     if (!file(tarJreOutputDir).exists()) {
-        println "----Untar jre: $tarJreFile"
+        println "Untar jre: $tarJreFile"
         task(outputDirName, type: Copy) {
             from tarTree(tarJreFile)
             into tarJreOutputDir
@@ -276,52 +276,50 @@ def untarJre(tarJreFile, outputDirName) {
     file(tarJreOutputDir).eachFile { file ->
         if (file.isDirectory() && file.name.indexOf("jre") != -1) {
             jreRoot = "$tarJreOutputDir/$file.name"
-            println "----Found jre root=" + jreRoot
+            println "Found jre root=" + jreRoot
         }
     }
     return jreRoot
 }
 
-// -------- buildWindows-x86 --------
-task buildWindowsx86  << {
-    println "--------buildWindowsx86"
+// Build for Windows86/64, Linux86/64
+def buildArchives(distDir, appArchivesBaseName, mainJarName, packageCfgProcessor
+    , archivesBaseName, nativeDir, packageCfg, launcher,  jre, icon) {
     
-    if (buildWindows_x86 != "1") {
-        println "----Skip buildWindowsx86";
-        return;
-    }
-    
+    println "----build: $archivesBaseName"
     // 解压JRE，并获得JRE的根目录路径
-    def jreRoot = untarJre("$rootProject.projectDir$buildWindows_x86_jre", buildWindows_x86_archivesBaseName)
+    def jreRoot = untarJre("$rootProject.projectDir$jre",  archivesBaseName)
     
-    task(zipWindowsx86, type: Zip) {
-        destinationDir new File(archievsDistDir)
-        archiveName "${appArchivesBaseName}-${buildWindows_x86_archivesBaseName}.zip"
+    task(System.currentTimeMillis().toString(), type: Zip) {
+        destinationDir new File(distDir)
+        archiveName "${appArchivesBaseName}-${archivesBaseName}.zip"
         
-        // ---- launcher and icon
-        from ("$rootProject.projectDir$buildWindows_x86_launcher") {
+        // ---- launcher
+        from ("$rootProject.projectDir$launcher") {
             into("$appArchivesBaseName")
-            rename {
-                filename -> "${appArchivesBaseName}.exe"
+            rename {filename -> 
+                if (filename.indexOf(".") != -1) {
+                    appArchivesBaseName + filename.substring(filename.lastIndexOf("."))
+                } else {
+                    appArchivesBaseName
+                }
             }
-        }
-        from ("$rootProject.projectDir$buildWindows_x86_icon") {
-            into("$appArchivesBaseName")
-            rename {filename -> "${appArchivesBaseName}.ico"}
+            // "0755" not "755"
+            fileMode 0755
         }
         // ---- add native libs
-        from ("$rootProject.projectDir$buildWindows_x86_nativeDir") {
+        from ("$rootProject.projectDir$nativeDir") {
             include "*.*"
             into("$appArchivesBaseName/app")
         }
         // ---- add package cfg
-        from ("$rootProject.projectDir$buildWindows_x86_packageCfg") {
+        from ("$rootProject.projectDir$packageCfg") {
             into("$appArchivesBaseName/app")
-            filter packageCfgReplace
+            filter packageCfgProcessor
         }
         // ---- add main jar
         from ("$project.buildDir/libs/") {
-            include "$fullArchivesNameProJar"
+            include "$mainJarName"
             into("$appArchivesBaseName/app")
         }
         // ---- add jar libs
@@ -332,71 +330,175 @@ task buildWindowsx86  << {
         // ---- pack jre
         from (jreRoot) {
             into("$appArchivesBaseName/runtime/jre")
+            exclude "bin/**"
+        }
+        from (jreRoot) {
+            into("$appArchivesBaseName/runtime/jre")
+            include "bin/**"
+            // "0755" not "755"
+            fileMode 0755
+        }
+        // ---- build icon
+        if (icon != null) {
+            from ("$rootProject.projectDir$icon") {
+                into("$appArchivesBaseName")
+                rename {filename -> "${appArchivesBaseName}.ico"}
+            }
         }
     }.execute()
 }
-buildWindowsx86.dependsOn "buildLibsForAndroid"
 
-
-// -------- buildWindows-x64 --------
-task buildWindowsx64  << {
-    println "--------buildWindowsx64"
-    if (buildWindows_x64 != "1") {
-        println "----Skip buildWindowsx64";
-        return;
-    }
+// Build for MacOSX
+def buildMacOSX(distDir, appArchivesBaseName, mainJarName
+    , archivesBaseName, nativeDir, info, launcher,  jre, icon, jvmargs) {
     
-     // 解压JRE，并获得JRE的根目录路径
-    def jreRoot = untarJre("$rootProject.projectDir$buildWindows_x64_jre", buildWindows_x64_archivesBaseName)
+    println "----build: $archivesBaseName"
+    // 解压JRE，并获得JRE的根目录路径
+    def jreRoot = untarJre("$rootProject.projectDir$jre",  archivesBaseName)
     
-    task(zipWindowsx64, type: Zip) {
-        destinationDir new File(archievsDistDir)
-        archiveName "${appArchivesBaseName}-${buildWindows_x64_archivesBaseName}.zip"
+//      <zip destfile="${dist.dir}/${application.title}-MacOSX.zip">
+//            <zipfileset file="resources/desktop-deployment/macosx-x64/stub" filemode="755" fullpath="${application.title}.app/Contents/MacOS/JavaAppLauncher"/>
+//            <zipfileset file="resources/desktop-deployment/macosx-x64/_Info.plist" fullpath="${application.title}.app/Contents/Info.plist"/>
+//            <zipfileset file="resources/desktop-deployment/macosx-x64/icon.icns" fullpath="${application.title}.app/Contents/Resources/GenericApp.icns"/>
+//            <zipfileset file="${dist.jar}" prefix="${application.title}.app/Contents/Java"/>
+//            <zipfileset dir="${dist.dir}/lib" excludes="${deployment.jarexcludes}" prefix="${application.title}.app/Contents/Java/lib"/>
+//            <zipfileset dir="${build.dir}/natives/macosx-x64" prefix="${application.title}.app/Contents/Java" erroronmissingdir="false"/>
+//        </zip>
+    
+    task(System.currentTimeMillis().toString(), type: Zip) {
+        destinationDir new File(distDir)
+        archiveName "${appArchivesBaseName}-${archivesBaseName}.zip"
         
         // ---- launcher and icon
-        from ("$rootProject.projectDir$buildWindows_x64_launcher") {
-            into("$appArchivesBaseName")
-            rename {
-                filename -> "${appArchivesBaseName}.exe"
+        from ("$rootProject.projectDir$launcher") {
+            into("${appArchivesBaseName}.app/Contents/MacOS")
+            rename {filename -> "JavaAppLauncher"}
+            // "0755" not "755"
+            fileMode 0755
+        }
+        from ("$rootProject.projectDir$info") {
+            into("${appArchivesBaseName}.app/Contents")
+            rename {filename -> "Info.plist"}
+            filter { line ->
+                line.replace('${main.class}', mainclass.replace('/', '.'))
+                .replace('${run.jvmargs}', "$jvmargs")
+                .replace('${application.title}', "$appArchivesBaseName")
+                .replace('${jfxdeploy.jvmargs}', "-Xnoagent")
+                .replace('${jar.name}', "$mainJarName")
+                .replace('<!--jvmruntime-->', "<key>JVMRuntime</key>\r  <string>jre.jre</string>")
             }
         }
-        from ("$rootProject.projectDir$buildWindows_x64_icon") {
-            into("$appArchivesBaseName")
-            rename {filename -> "${appArchivesBaseName}.ico"}
-        }
-        // ---- add native libs
-        from ("$rootProject.projectDir$buildWindows_x64_nativeDir") {
-            include "*.*"
-            into("$appArchivesBaseName/app")
-        }
-        // ---- add package cfg
-        from ("$rootProject.projectDir$buildWindows_x64_packageCfg") {
-            into("$appArchivesBaseName/app")
-            filter packageCfgReplace
+        from ("$rootProject.projectDir$icon") {
+            into("${appArchivesBaseName}.app/Contents/Resources")
+            rename {filename -> "GenericApp.icns"}
         }
         // ---- add main jar
         from ("$project.buildDir/libs/") {
-            include "$fullArchivesNameProJar"
-            into("$appArchivesBaseName/app")
+            into("${appArchivesBaseName}.app/Contents/Java")
+            include "$mainJarName"
         }
         // ---- add jar libs
         from ("$project.buildDir/libs/lib") {
+            into("${appArchivesBaseName}.app/Contents/Java/lib")
             include "*.jar"
-            into("$appArchivesBaseName/app/lib")
+        }
+        // ---- add native libs
+        from ("$rootProject.projectDir$nativeDir") {
+            into("${appArchivesBaseName}.app/Contents/Java")
+            include "*.*"
         }
         // ---- pack jre
-        from (jreRoot) {
-            into("$appArchivesBaseName/runtime/jre")
+//        <zip destfile="${dist.dir}/${application.title}-MacOSX.zip" update="true">
+//            <zipfileset dir="build/jre/${dirName-macosx-x64}/Contents/Home" excludes ="bin/*" prefix="${application.title}.app/Contents/PlugIns/jre.jre/Contents/Home/jre"/>
+//            <zipfileset dir="build/jre/${dirName-macosx-x64}/Contents/Home" includes ="bin/*" filemode="755" prefix="${application.title}.app/Contents/PlugIns/jre.jre/Contents/Home/jre"/>
+//            <zipfileset file="build/jre/${dirName-macosx-x64}/Contents/Info.plist" fullpath="${application.title}.app/Contents/PlugIns/jre.jre/Contents/Info.plist"/>
+//            <zipfileset dir="build/jre/${dirName-macosx-x64}/Contents/MacOS" prefix="${application.title}.app/Contents/PlugIns/jre.jre/Contents/MacOS"/>
+//        </zip>
+        from ("$jreRoot/Contents/Home") {
+            into ("${appArchivesBaseName}.app/Contents/PlugIns/jre.jre/Contents/Home/jre")
+            exclude "bin/**"
+        }
+        from ("$jreRoot/Contents/Home") {
+            into ("${appArchivesBaseName}.app/Contents/PlugIns/jre.jre/Contents/Home/jre")
+            include "bin/**"
+            // "0755" not "755"
+            fileMode 0755
+        }
+        from ("$jreRoot/Contents/Info.plist") {
+            into ("${appArchivesBaseName}.app/Contents/PlugIns/jre.jre/Contents")
+        }
+        from ("$jreRoot/Contents/MacOS") {
+            into ("${appArchivesBaseName}.app/Contents/PlugIns/jre.jre/Contents/MacOS")
         }
     }.execute()
 }
-buildWindowsx64.dependsOn "buildLibsForAndroid"
 
-
-build.dependsOn 'buildWindowsx86', 'buildWindowsx64'
+build.dependsOn 'buildLibsForAndroid'
 build {
     doLast {
-        println "----Build core and Zip OK!!!"
+        
+        // build windows 86
+        if (buildWindows_x86 == "1") {
+            buildArchives(archievsDistDir, appArchivesBaseName, fullArchivesNameProJar, packageCfgReplace
+                , buildWindows_x86_archivesBaseName
+                , buildWindows_x86_nativeDir
+                , buildWindows_x86_packageCfg
+                , buildWindows_x86_launcher
+                , buildWindows_x86_jre
+                , buildWindows_x86_icon
+            )   
+        }
+        
+        // build windows 64
+        if (buildWindows_x64 == "1") {
+            buildArchives(archievsDistDir, appArchivesBaseName, fullArchivesNameProJar, packageCfgReplace
+                , buildWindows_x64_archivesBaseName
+                , buildWindows_x64_nativeDir
+                , buildWindows_x64_packageCfg
+                , buildWindows_x64_launcher
+                , buildWindows_x64_jre
+                , buildWindows_x64_icon
+            )   
+        }
+        
+        // build linux 86
+        if (buildLinux_x86 == "1") {
+            buildArchives(archievsDistDir, appArchivesBaseName, fullArchivesNameProJar, packageCfgReplace
+                , buildLinux_x86_archivesBaseName
+                , buildLinux_x86_nativeDir
+                , buildLinux_x86_packageCfg
+                , buildLinux_x86_launcher
+                , buildLinux_x86_jre
+                , null
+            )   
+        }
+        
+        // build linux 64
+        if (buildLinux_x64 == "1") {
+            buildArchives(archievsDistDir, appArchivesBaseName, fullArchivesNameProJar, packageCfgReplace
+                , buildLinux_x64_archivesBaseName
+                , buildLinux_x64_nativeDir
+                , buildLinux_x64_packageCfg
+                , buildLinux_x64_launcher
+                , buildLinux_x64_jre
+                , null
+            ) 
+        }
+        
+        // build MacOSX
+        if (buildMacOSX == "1") {
+            buildMacOSX(archievsDistDir, appArchivesBaseName, fullArchivesNameProJar
+                , buildMacOSX_archivesBaseName
+                , buildMacOSX_nativeDir
+                , buildMacOSX_info
+                , buildMacOSX_launcher
+                , buildMacOSX_jre
+                , buildMacOSX_icon
+                , buildMacOSX_jvmargs
+            );
+        }
+        
+        println "----Build  OK!!!"
     }
 }
 
