@@ -87,6 +87,7 @@ public class ShopChat extends Chat implements ItemListener {
         win.addView(titlePanel);
         win.addView(productPanel);
         win.addView(footerPanel);
+        win.setToCorner(UI.Corner.CC);
         return win;
     }
 

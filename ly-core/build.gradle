@@ -162,22 +162,25 @@ task buildAssets(type: Jar, dependsOn: copyLibs) {
     baseName 'assets'
     version ''
     includeEmptyDirs true
-    exclude '**/_*.*'
-    exclude '**/*_bak'
-    exclude '**/*.j3odata'
-    exclude '**/*.material'
-    exclude '**/*.mesh.xml'
-    exclude '**/*.skeleton.xml'
-    exclude '**/*.scene'
-    exclude '**/*.obj'
-    exclude '**/*.mtl'
-    exclude '**/*.3ds'
-    exclude '**/*.dae'
-    exclude '**/*.blend'
-    exclude '**/*.blend1'
-    exclude '**/*.blend2'
-    exclude '**/*.psd'
-    exclude '**/[Originals]'
+    assets_excludes.split(",").each { t ->
+        exclude "$t"
+    }
+//    exclude '**/_*.*'
+//    exclude '**/*_bak'
+//    exclude '**/*.j3odata'
+//    exclude '**/*.material'
+//    exclude '**/*.mesh.xml'
+//    exclude '**/*.skeleton.xml'
+//    exclude '**/*.scene'
+//    exclude '**/*.obj'
+//    exclude '**/*.mtl'
+//    exclude '**/*.3ds'
+//    exclude '**/*.dae'
+//    exclude '**/*.blend'
+//    exclude '**/*.blend1'
+//    exclude '**/*.blend2'
+//    exclude '**/*.psd'
+//    exclude '**/[Originals]'
 }
 
 // 把assets.jar解压到build/android目录下，后续为Android-build所用。
@@ -201,63 +204,6 @@ task buildAssetsForAndroid(type: Copy, dependsOn: buildAssets) {
 task buildLibsForAndroid(type: Copy, dependsOn: buildAssetsForAndroid) {
     from file("$project.buildDir/libs/$fullArchivesNameProJar")
     into file("$project.buildDir/for-android-build/libs/")
-    
-    // 生成一些启动文件
-    // start.bat是用来在windows下启动测试原始核心包的
-    // startPRO.bat是用来在windows下启动测试经过混淆后的核心包的
-    // startPRO.sh是用来在linux下启动测试经过混淆后的核心包的
-    doLast {
-        task(startFiles) {
-            println "----Create start files:start.bat,startPRO.bat,startPRO.sh"
-            new File("$project.buildDir/libs/start.bat").bytes = "java -jar $fullArchivesNameJar".bytes
-            new File("$project.buildDir/libs/startPRO.bat").bytes = "java -jar $fullArchivesNameProJar".bytes
-            
-            // 注意：不能使用writeLine,这会把当前平台（如windows)的换行符写入文件，但是在linux下换行符必须
-            // 是“\n”，如果在windows运行构建就可能把换行符"\r\n"写入sh文件，这会导致这个脚本无法在linux下
-            // 运行。
-//            new File("$project.buildDir/libs", "startPRO.sh").withWriter('utf-8') { writer ->
-//                writer.writeLine "#!/bin/sh"
-//                writer.writeLine "java -jar $fullArchivesNameProJar"
-//            }
-
-            new File("$project.buildDir/libs/startPRO.sh").bytes = "#!/bin/sh\njava -jar $fullArchivesNameProJar"
-        }.execute()
-    }
-}
-
-// 替换packageCfg文件中的内容
-//app.mainjar=${jar.name}
-//app.version=1.0
-//app.id=${application.title}
-//app.preferences.id=${application.title}
-//app.mainclass=${main.class}
-//app.classpath=
-//${launcher.jvmargs}
-def packageCfgReplace = { line ->
-    def result = line
-    if (line.indexOf('app.mainjar') != -1) {
-        result = "app.mainjar=$fullArchivesNameProJar"
-    }
-    else if (line.indexOf("app.version") != -1) {
-        result = "app.version=$appVersionName"
-    } 
-    else if (line.indexOf("app.id") != -1) {
-        result = "app.id=$appArchivesBaseName"
-    }
-    else if (line.indexOf("app.preferences.id") != -1) {
-        result = "app.preferences.id=$appArchivesBaseName"
-    }
-    else if (line.indexOf("app.mainclass") != -1) {
-        result = "app.mainclass=$mainclass"
-    }
-    else if (line.indexOf("app.classpath") != -1) {
-        result = "app.classpath="
-    }
-    else if (line.indexOf("launcher.jvmargs") != -1) {
-        result = "jvmarg.1="
-    }
-    println "$result"
-    return result
 }
 
 def untarJre(tarJreFile, outputDirName) {
@@ -282,17 +228,40 @@ def untarJre(tarJreFile, outputDirName) {
     return jreRoot
 }
 
+// --替换packageCfg文件中的内容
+//app.mainjar=${jar.name}
+//app.version=1.0
+//app.id=${application.title}
+//app.preferences.id=${application.title}
+//app.mainclass=${main.class}
+//app.classpath=
+//${launcher.jvmargs}
+
+// -- e.g.
+//app.mainjar=LuoYing.jar
+//app.version=1.0
+//app.id=LuoYing
+//app.preferences.id=LuoYing
+//app.mainclass=name/huliqing/fighter/Fighter
+//app.classpath=
+//jvmarg.1=-Xms10m
+//jvmarg.2=-Darg1=1
+//jvmarg.3=-Darg2=2
+//jvmarg.4=
+//jvmarg.5=
+//jvmarg.6=-Darg3=3
+
 // Build for Windows86/64, Linux86/64
-def buildArchives(distDir, appArchivesBaseName, mainJarName, packageCfgProcessor
-    , archivesBaseName, nativeDir, packageCfg, launcher,  jre, icon) {
+def buildArchives(distDir, appArchivesBaseName, appVersionName, mainJarName
+    , platformName, nativeDir, packageCfg, launcher,  jre, icon, jvmargs) {
     
-    println "----build: $archivesBaseName"
+    println "----build: $platformName"
     // 解压JRE，并获得JRE的根目录路径
-    def jreRoot = untarJre("$rootProject.projectDir$jre",  archivesBaseName)
+    def jreRoot = untarJre("$rootProject.projectDir$jre",  platformName)
     
     task(System.currentTimeMillis().toString(), type: Zip) {
         destinationDir new File(distDir)
-        archiveName "${appArchivesBaseName}-${archivesBaseName}.zip"
+        archiveName "${appArchivesBaseName}-${appVersionName}-${platformName}.zip"
         
         // ---- launcher
         from ("$rootProject.projectDir$launcher") {
@@ -315,7 +284,37 @@ def buildArchives(distDir, appArchivesBaseName, mainJarName, packageCfgProcessor
         // ---- add package cfg
         from ("$rootProject.projectDir$packageCfg") {
             into("$appArchivesBaseName/app")
-            filter packageCfgProcessor
+            filter { line ->
+                def result = ''
+                if (line.indexOf('app.mainjar') != -1) {
+                    result = "app.mainjar=$mainJarName"
+                }
+                else if (line.indexOf("app.version") != -1) {
+                    result = "app.version=$appVersionName"
+                } 
+                else if (line.indexOf("app.id") != -1) {
+                    result = "app.id=$appArchivesBaseName"
+                }
+                else if (line.indexOf("app.preferences.id") != -1) {
+                    result = "app.preferences.id=$appArchivesBaseName"
+                }
+                else if (line.indexOf("app.mainclass") != -1) {
+                    result = "app.mainclass=$mainclass"
+                }
+                else if (line.indexOf("app.classpath") != -1) {
+                    result = "app.classpath="
+                }
+                else if (line.indexOf("launcher.jvmargs") != -1) {
+                    def args = jvmargs.split(' ')
+                    for (int i = 0; i < args.length; i++) {
+                        result += "jvmarg.${i+1}=" + args[i] + '\r\n'
+                    }         
+                } else {
+                    result = line
+                }
+                println "$result"
+                return result
+            }
         }
         // ---- add main jar
         from ("$project.buildDir/libs/") {
@@ -349,12 +348,12 @@ def buildArchives(distDir, appArchivesBaseName, mainJarName, packageCfgProcessor
 }
 
 // Build for MacOSX
-def buildMacOSX(distDir, appArchivesBaseName, mainJarName
-    , archivesBaseName, nativeDir, info, launcher,  jre, icon, jvmargs) {
+def buildMacOSX(distDir, appArchivesBaseName, appVersionName, mainJarName
+    , platformName, nativeDir, info, launcher,  jre, icon, jvmargs) {
     
-    println "----build: $archivesBaseName"
+    println "----build: $platformName"
     // 解压JRE，并获得JRE的根目录路径
-    def jreRoot = untarJre("$rootProject.projectDir$jre",  archivesBaseName)
+    def jreRoot = untarJre("$rootProject.projectDir$jre",  platformName)
     
 //      <zip destfile="${dist.dir}/${application.title}-MacOSX.zip">
 //            <zipfileset file="resources/desktop-deployment/macosx-x64/stub" filemode="755" fullpath="${application.title}.app/Contents/MacOS/JavaAppLauncher"/>
@@ -367,7 +366,7 @@ def buildMacOSX(distDir, appArchivesBaseName, mainJarName
     
     task(System.currentTimeMillis().toString(), type: Zip) {
         destinationDir new File(distDir)
-        archiveName "${appArchivesBaseName}-${archivesBaseName}.zip"
+        archiveName "${appArchivesBaseName}-${appVersionName}-${platformName}.zip"
         
         // ---- launcher and icon
         from ("$rootProject.projectDir$launcher") {
@@ -439,56 +438,60 @@ build {
         
         // build windows 86
         if (buildWindows_x86 == "1") {
-            buildArchives(archievsDistDir, appArchivesBaseName, fullArchivesNameProJar, packageCfgReplace
-                , buildWindows_x86_archivesBaseName
+            buildArchives(archievsDistDir, appArchivesBaseName, appVersionName, fullArchivesNameProJar
+                , buildWindows_x86_name
                 , buildWindows_x86_nativeDir
                 , buildWindows_x86_packageCfg
                 , buildWindows_x86_launcher
                 , buildWindows_x86_jre
                 , buildWindows_x86_icon
+                , buildWindows_x86_jvmargs
             )   
         }
         
         // build windows 64
         if (buildWindows_x64 == "1") {
-            buildArchives(archievsDistDir, appArchivesBaseName, fullArchivesNameProJar, packageCfgReplace
-                , buildWindows_x64_archivesBaseName
+            buildArchives(archievsDistDir, appArchivesBaseName, appVersionName, fullArchivesNameProJar
+                , buildWindows_x64_name
                 , buildWindows_x64_nativeDir
                 , buildWindows_x64_packageCfg
                 , buildWindows_x64_launcher
                 , buildWindows_x64_jre
                 , buildWindows_x64_icon
+                , buildWindows_x64_jvmargs
             )   
         }
         
         // build linux 86
         if (buildLinux_x86 == "1") {
-            buildArchives(archievsDistDir, appArchivesBaseName, fullArchivesNameProJar, packageCfgReplace
-                , buildLinux_x86_archivesBaseName
+            buildArchives(archievsDistDir, appArchivesBaseName, appVersionName, fullArchivesNameProJar
+                , buildLinux_x86_name
                 , buildLinux_x86_nativeDir
                 , buildLinux_x86_packageCfg
                 , buildLinux_x86_launcher
                 , buildLinux_x86_jre
                 , null
+                , buildLinux_x86_jvmargs
             )   
         }
         
         // build linux 64
         if (buildLinux_x64 == "1") {
-            buildArchives(archievsDistDir, appArchivesBaseName, fullArchivesNameProJar, packageCfgReplace
-                , buildLinux_x64_archivesBaseName
+            buildArchives(archievsDistDir, appArchivesBaseName, appVersionName, fullArchivesNameProJar
+                , buildLinux_x64_name
                 , buildLinux_x64_nativeDir
                 , buildLinux_x64_packageCfg
                 , buildLinux_x64_launcher
                 , buildLinux_x64_jre
                 , null
+                , buildLinux_x64_jvmargs
             ) 
         }
         
         // build MacOSX
         if (buildMacOSX == "1") {
-            buildMacOSX(archievsDistDir, appArchivesBaseName, fullArchivesNameProJar
-                , buildMacOSX_archivesBaseName
+            buildMacOSX(archievsDistDir, appArchivesBaseName, appVersionName, fullArchivesNameProJar
+                , buildMacOSX_name
                 , buildMacOSX_nativeDir
                 , buildMacOSX_info
                 , buildMacOSX_launcher

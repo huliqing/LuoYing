@@ -52,8 +52,9 @@ public class SceneUtils {
     /**
      * 创建照机跟随，这个相机可以处理穿墙
      * @param camera
-     * @param target
      * @param inputManager
+     * @param playState
+     * @param physicsSpace
      * @return 
      */
     public static MyChaseCamera createChaseCam(Camera camera
@@ -70,7 +71,7 @@ public class SceneUtils {
         
         chaseCam.setInvertVerticalAxis(true);
         chaseCam.setLookAtOffset(Vector3f.UNIT_Y.mult(2f));
-        chaseCam.setZoomSensitivity(0.05f);
+        chaseCam.setZoomSensitivity(0.5f);
         chaseCam.setRotationSpeed(5f);
         chaseCam.setRotationSensitivity(5);
         chaseCam.setMaxDistance(15);

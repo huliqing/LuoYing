@@ -3944,10 +3944,13 @@ name.huliqing.fighter.game.view.ShortcutSkillView -> name.huliqing.fighter.game.
     com.jme3.scene.Geometry maskObj -> d
     float maskScale -> e
     float interval -> f
+    float intervalUsed -> g
     boolean needCheckAndUpdateMask -> C
     void <init>(float,float,name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.data.ProtoData) -> <init>
+    void updateShortcut(float) -> b
     void onShortcutClick(boolean) -> c
     void updateViewChildren() -> a
+    float getPTimeOfLapse() -> b
     void createMask(com.jme3.scene.Geometry,com.jme3.material.Material) -> a
 name.huliqing.fighter.game.view.ShortcutView -> name.huliqing.fighter.game.d.aj:
     name.huliqing.fighter.game.network.UserCommandNetwork userCommandNetwork -> a
@@ -3965,6 +3968,7 @@ name.huliqing.fighter.game.view.ShortcutView -> name.huliqing.fighter.game.d.aj:
     void resetNumCount(int) -> a
     void onDragStart() -> e_
     void onDragMove(float,float) -> a
+    void updateShortcut(float) -> b
     void onRelease() -> b_
     void cleanup() -> g
     name.huliqing.fighter.object.actor.Actor getActor() -> h
@@ -5168,7 +5172,6 @@ name.huliqing.fighter.manager.ShortcutManager -> name.huliqing.fighter.f.j:
     void setBucketVisible(boolean) -> a
     void setShortcutSize(float) -> a
     void setShortcutLocked(boolean) -> b
-    void clearShortcuts() -> a
     java.util.ArrayList getShortcutSaves() -> b
     name.huliqing.fighter.game.view.ShortcutView createShortcut(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.data.ProtoData) -> a
     void cleanup() -> c
@@ -5181,6 +5184,7 @@ name.huliqing.fighter.manager.ShortcutManager$ShortcutRoot -> name.huliqing.figh
     com.jme3.util.SafeArrayList shortcuts -> a
     void <init>() -> <init>
     void addShortcut(name.huliqing.fighter.game.view.ShortcutView) -> a
+    void updateLogicalState(float) -> updateLogicalState
     java.util.List getShortcuts() -> a
     void removeShortcut(name.huliqing.fighter.game.view.ShortcutView) -> b
     void clearShortcuts() -> b

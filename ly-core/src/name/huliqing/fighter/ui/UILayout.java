@@ -163,6 +163,7 @@ public abstract class UILayout extends AbstractUI {
         updateViewLayout();
     }
     
+    // remove20160606不再使用
 //    /**
 //     * 开始更新自身UI
 //     */

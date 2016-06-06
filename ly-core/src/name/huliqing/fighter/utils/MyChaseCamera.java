@@ -297,8 +297,8 @@ public class MyChaseCamera extends ChaseCamera implements PhysicsCollisionListen
                 return;
             }
 
-            // 缩放镜头
-            zoomCamera(-dss);
+            // 缩放镜头: * 0.25 降低一点缩放强度
+            zoomCamera(-dss * 0.1f);
             if (dss > 0) {
                 // 拉近，放大 (参考：ChaseCamera中onAnalog方法)
                 if (zoomin == false) {
