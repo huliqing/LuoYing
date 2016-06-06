@@ -65,6 +65,10 @@ public class ShortcutManager {
         
         UIState.getInstance().addUI(delete.getDisplay());
         UIState.getInstance().addUI(recycle.getDisplay());
+        
+        // 把shortcutRoot添加到场景是为了调用updateLogicalState.以便
+        // 更新快捷方式中的逻辑，比如一些技能冷却效果需要持续更新
+        Common.getApp().getRootNode().attachChild(shortcutRoot);
     }
     
     /**
@@ -154,14 +158,6 @@ public class ShortcutManager {
     }
     
     /**
-     * 清理掉界面所有快捷方式
-     */
-    public static void clearShortcuts() {
-//        shortcutRoot.clearShortcuts();
-        cleanup();
-    }
-    
-    /**
      * 获取当前界面上所有快捷方式，用于保存到存档
      * @return 
      */
@@ -189,6 +185,13 @@ public class ShortcutManager {
         }
         return shortcut;
     }
+    
+//    /**
+//     * 清理掉界面所有快捷方式
+//     */
+//    public static void clearShortcuts() {
+//        cleanup();
+//    }
     
     public static void cleanup() {
         if (shortcutRoot != null) {
@@ -280,7 +283,15 @@ public class ShortcutManager {
         return lg;
     }
     
-    private static class ShortcutRoot  {
+    /**
+     * 快捷方式的根节点，
+     * 注：
+     * 1.这个节点并不直接保持快捷方式等子节点。只保留对其引用。
+     * 2.快捷方式节点是直接保存在UIState中的.
+     * 3.这个根节点会保存在场景中，调用updateLogicState来更新快捷方式中的逻辑(由于UI是屏蔽了updateLogicState的原因)。
+     * 
+     */
+    private static class ShortcutRoot  extends Node {
         
         private final SafeArrayList<ShortcutView> shortcuts = 
                 new SafeArrayList<ShortcutView>(ShortcutView.class);
@@ -292,6 +303,14 @@ public class ShortcutManager {
             }
         }
 
+        @Override
+        public void updateLogicalState(float tpf) {
+            if (shortcuts.isEmpty())
+                return;
+            for (ShortcutView sv : shortcuts) {
+                sv.updateShortcut(tpf);
+            }
+        }
         
         /**
          * 获取界面所有shortcut

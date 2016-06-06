@@ -43,12 +43,14 @@ public class Image extends Geometry {
     
     public void setWidth(float width) {
         this.width = width;
-        setLocalScale(new Vector3f(width, height, 1f));
+//        setLocalScale(new Vector3f(width, height, 1f));
+        setLocalScale(width, height, 1);
     }
     
     public void setHeight(float height) {
         this.height = height;
-        setLocalScale(new Vector3f(width, height, 1f));
+//        setLocalScale(new Vector3f(width, height, 1f));
+        setLocalScale(width, height, 1);
     }
     
     /**

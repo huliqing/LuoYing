@@ -163,12 +163,12 @@ public abstract class UILayout extends AbstractUI {
         updateViewLayout();
     }
     
-    /**
-     * 开始更新自身UI
-     */
-    protected void updateViewStart() {
-        super.updateView();
-    }
+//    /**
+//     * 开始更新自身UI
+//     */
+//    protected void updateViewStart() {
+//        super.updateView();
+//    }
     
     /**
      * 更新子组件,主要更新子组件的宽度，高度等

@@ -17,6 +17,44 @@ dependencies {
     compile 'com.android.support:support-v4:19.0.0'
 }
 
+class BuildConfig {
+    // eg. "general", "play", ...
+    String name
+    // eg. "name.huliqing.fighter"
+    String applicationId
+    // eg. "AndroidManifest_play.xml", "AndroidManifest_general.xml"
+    String manifest
+    BuildConfig (name, applicationId, manifest) {
+        this.name = name
+        this.applicationId = applicationId
+        this.manifest = manifest
+    }
+}
+
+def androidBuilds = []
+
+def loadBuildConfig(resultStore) {
+    println "==== Load BuildConfigs ===="
+    for (i in 0..100) {
+        def name = "buildAndroid${i}_name"
+        def applicationId = "buildAndroid${i}_applicationId"
+        def manifest = "buildAndroid${i}_manifest"
+        if (project.hasProperty(name) && project.hasProperty(applicationId) && project.hasProperty(manifest)) {
+            resultStore << new BuildConfig(project.getProperty(name)
+                , project.getProperty(applicationId)
+                , project.getProperty(manifest))
+        }
+    }
+    for (b in resultStore) {
+        println "--------\n\
+${b.name}\n\
+${b.applicationId}\n\
+${b.manifest}\n"
+    }
+}
+// 载入配置信息
+loadBuildConfig(androidBuilds)
+
 android {
     
     // 禁止lint异常阻止构建,否则构建会不通过
@@ -25,19 +63,20 @@ android {
         abortOnError false
     }
     
-    compileSdkVersion 19
-    buildToolsVersion '19.1.0'
+    compileSdkVersion androidCompileSdkVersion.toInteger()
+    buildToolsVersion androidBuildToolsVersion
 	
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 19
+        minSdkVersion androidMinSdkVersion.toInteger()
+        targetSdkVersion androidTargetSdkVersion.toInteger()
         versionCode appVersionCode.toInteger()
-        versionName "$appVersionName"
+        versionName appVersionName
         applicationId "name.huliqing.fighter"
         setProperty("archivesBaseName", "$appArchivesBaseName-$appVersionName")
     }
 	
     sourceSets {
+        // 参考格式
         main {
             manifest.srcFile 'AndroidManifest.xml'
             java.srcDirs = ['src']
@@ -45,8 +84,6 @@ android {
             aidl.srcDirs = ['src']
             renderscript.srcDirs = ['src']
             res.srcDirs = ['res']
-
-            // assets资源路径，依赖于ly-core的构建
             assets.srcDirs = ["$rootProject.projectDir$androidExtResourceDir/assets"]
         }
 
@@ -62,18 +99,20 @@ android {
         //debug.setRoot('build-types/debug')
         //release.setRoot('build-types/release')
 		
-        // 通用包:name.huliqing.fighter
-        general {
-            manifest.srcFile 'AndroidManifest_general.xml'
+        // 参考格式:
+//        general {
+//            manifest.srcFile 'AndroidManifest_general.xml'
+//        }
+//        play {
+//            manifest.srcFile 'AndroidManifest_play.xml'
+//        }
+        androidBuilds.each { ab -> 
+            "${ab.name}" {
+                    manifest.srcFile "${ab.manifest}"
+            }
         }
-		
-        // PlayStore: name.huliqing.luoying
-        play {
-            manifest.srcFile 'AndroidManifest_play.xml'
-        }
-		
     }
-	
+
     signingConfigs {
         release {			
             storeFile file("$rootProject.projectDir$androidStoreFile")
@@ -84,11 +123,16 @@ android {
     }
 
     productFlavors {
-        general {
-            applicationId = 'name.huliqing.fighter'
-        }
-        play {
-            applicationId = 'name.huliqing.luoying'
+//        general {
+//            applicationId = 'name.huliqing.fighter'
+//        }
+//        play {
+//            applicationId = 'name.huliqing.luoying'
+//        }
+        androidBuilds.each { ab -> 
+            "${ab.name}" {
+                applicationId = "${ab.applicationId}"
+            }
         }
     }
 	
@@ -133,5 +177,3 @@ build {
         }
     }
 }
-
-

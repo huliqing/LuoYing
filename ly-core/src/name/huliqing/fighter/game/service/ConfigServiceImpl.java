@@ -111,7 +111,8 @@ public class ConfigServiceImpl implements ConfigService {
 
     @Override
     public void clearShortcuts() {
-        ShortcutManager.clearShortcuts();
+//        ShortcutManager.clearShortcuts();
+        ShortcutManager.cleanup();
     }
 
     @Override
