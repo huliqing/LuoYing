@@ -120,13 +120,22 @@ public class GroupEffect extends AbstractEffect {
         }
         
         public void checkToStart(float timeUsed) {
-            if (state == State.running || state == State.stop) {
-                return;
-            }
-            if (timeUsed >= (delay / delaySpeed)) {
-                localRoot.attachChild(effect.getDisplay());
-                effect.start();
-                state = State.running;
+            // remove20160606
+//            if (state == State.running || state == State.stop) {
+//                return;
+//            }
+//            if (timeUsed >= (delay / delaySpeed)) {
+//                localRoot.attachChild(effect.getDisplay());
+//                effect.start();
+//                state = State.running;
+//            }
+
+            if (state == State.wait) {
+                if (timeUsed >= (delay / delaySpeed)) {
+                    localRoot.attachChild(effect.getDisplay());
+                    effect.start();
+                    state = State.running;
+                }
             }
         }
         

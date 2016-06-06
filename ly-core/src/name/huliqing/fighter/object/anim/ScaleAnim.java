@@ -81,23 +81,6 @@ public final class ScaleAnim extends SpatialAnim {
         this.endScale.set(scale, scale, scale);
     }
     
-//    /**
-//     * @see #setBoundFactor(float) 
-//     * @return 
-//     */
-//    public float getBoundFactor() {
-//        return boundFactor;
-//    }
-//
-//    /**
-//     * 设置缩放的弹性效果比例，默认0.5， 值越大，弹性效果越明显，
-//     * 设置为0则按默认标准的startScale和endScale进行缩放。
-//     * @param boundFactor 
-//     */
-//    public void setBoundFactor(float boundFactor) {
-//        this.boundFactor = boundFactor;
-//    }
-    
     @Override
     protected void doInit() {
         originScale.set(target.getLocalScale());
