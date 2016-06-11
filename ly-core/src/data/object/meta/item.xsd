@@ -19,41 +19,36 @@ xs:time
     <xs:element name="root">
         <xs:complexType>
             <xs:all>
-                <xs:element name="item" type="item" />
+                <xs:element ref="item" />
             </xs:all>
         </xs:complexType>
     </xs:element>
     
-    <xs:complexType name="item">
+    <xs:element name="item">
+        <xs:annotation>
+            <xs:documentation>普通物品</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="itemBase"></xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="itemBase">
         <xs:complexContent>
             <xs:extension base="base">
                 <xs:attribute name="icon" ref="icon" use="required" />
-                <xs:attribute name="handler" ref="handler" use="required"/>
-
-                <!--remove20160310,不再使用这些配置-->
-                <!--<xs:attribute name="file" ref="file" use="optional" />--> 
-<!--                <xs:attribute name="mass" ref="mass" use="optional" />
-                <xs:attribute name="mat" ref="mat" use="optional" />-->
-<!--                <xs:attribute name="physics" type="bool" use="optional">
-                    <xs:annotation>
-                        <xs:documentation>
-                            是否支持物理检测，默认0(false)
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>-->
-<!--                <xs:attribute name="scale" type="xs:string" use="optional">
-                    <xs:annotation>
-                        <xs:documentation>
-                            模型的缩放, 以半角逗号分隔:x,y,z 如： 1,1,1
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>-->
-                
+                <xs:attribute name="handler" ref="handler" use="optional" />
                 <xs:attribute name="raceLimit" ref="raceLimit" use="optional" />
                 <xs:attribute name="sexLimit" ref="sexLimit" use="optional" />
+                <xs:attribute name="deletable" type="bool" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>物品是否可删除</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
-    
     
 </xs:schema>

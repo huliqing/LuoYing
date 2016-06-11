@@ -54,8 +54,7 @@ public class OutfitHandler extends AbstractHandler {
     }
 
     @Override
-    public boolean remove(Actor actor, String id, int count) throws GameException {
-        ProtoData data = itemService.getItem(actor, id);
+    public boolean remove(Actor actor,  ProtoData data, int count) throws GameException {
         if (data.getDataType() != DataType.skin) {
 //            logger.log(Level.WARNING, "OutfitHandler only supported Skin type objects");
             return false;
@@ -64,7 +63,7 @@ public class OutfitHandler extends AbstractHandler {
         if (skinData.isUsing()) {
             return false;
         }
-        return super.remove(actor, data.getId(), data.getTotal());
+        return super.remove(actor, data, data.getTotal());
     }
     
     

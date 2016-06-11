@@ -128,8 +128,9 @@ public abstract class LanPlayState extends PlayState implements UIEventListener 
         // UI全局事件监听器，主要处理当UI被点击或拖动时不要让镜头跟着转动。
         UIState.getInstance().addEventListener(this);
         
-         // 快捷方式管理，初始化
+         // 快捷方式和HUD初始化
          ShortcutManager.init();
+         HUDManager.init(this.app.getGuiNode());
         
 //        BasicProfilerState profiler = new BasicProfilerState(true);
 //        profiler.setGraphScale(100f);
@@ -298,6 +299,7 @@ public abstract class LanPlayState extends PlayState implements UIEventListener 
             chaseCamera = null;
         }
         ShortcutManager.cleanup();
+        HUDManager.cleanup();
         super.cleanup();
     }
 

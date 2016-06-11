@@ -31,7 +31,34 @@ xs:time
                 <xs:element ref="handlerStateGain" />
                 <xs:element ref="handlerStateRemove" />
                 <xs:element ref="handlerItemSkill" />
+                <xs:element ref="handlerMap" />
             </xs:all>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="handlerMap">
+        <xs:annotation><xs:documentation>地图</xs:documentation></xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="handlerBase">
+                    <xs:attribute name="image" use="optional" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation>指定一个地图图片，格式: "Interface/map/xxx.jpg"</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="locations" use="optional" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation>格式： "id|x|y|gameId|icon", 
+                                id为地图点名称;
+                                x,y为地图上的坐标位置,取值[0.0~1.0]; 
+                                gameId为连接到一个游戏场景(game.xml), 可不设置;
+                                icon可为位置点指定一个特别的图标，可不设置。
+                                示例: "place1|0.2|0.5|treasureGame|Interface/map/place.jpg"
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
         </xs:complexType>
     </xs:element>
     

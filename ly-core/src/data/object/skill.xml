@@ -208,5 +208,5 @@
     
      <!--净化术-->
     <skillShot id="skillShotCleanBuff" extends="skillPastorBuffBase" icon="Interface/skill/clean.jpg" 
-               useTime="1" cooldown="2" hitStates="stateClean|1.0" />
+               useTime="1" cooldown="2" useAttributes="attributeMana|20" hitStates="stateClean|1.0" />
 </root>

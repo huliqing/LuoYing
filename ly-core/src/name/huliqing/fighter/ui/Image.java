@@ -96,7 +96,6 @@ public class Image extends Geometry {
 //                        , file);
 //            }
         }
-        
     }
     
     public void setColor(ColorRGBA color) {

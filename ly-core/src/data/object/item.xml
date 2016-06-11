@@ -52,7 +52,7 @@
     <item id="itemTonicBlue" icon="Interface/item/tonic_blue.png" handler="handlerTonicMagic" cost="50" />
     <!--攻击、施法速度药水(attack speed)-->
     <item id="itemASTonic" icon="Interface/item/tonic_yellow.png" handler="handlerStateGainAS" cost="300" />
-
+    
     <!--树根-->
     <item id="itemTreeStump" icon="Interface/item/treeStump.png" handler="handlerSummonGb" cost="200" />
     <!--药草-->
@@ -61,6 +61,9 @@
     <item id="itemScrollLife" icon="Interface/item/scroll_life.png" handler="handlerItemReborn" cost="100" />
     <!--解毒药草-->
     <item id="itemDetoxifyGrass" icon="Interface/item/leaf.png" handler="handlerStateRemoveScorpionVenom" cost="20" />
+    
+    <!--世界地图-->
+    <item id="itemWorldMap" icon="Interface/map/map_icon.jpg" handler="handlerWorldMap" deletable="0" />
 </root>
 
 

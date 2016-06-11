@@ -5,6 +5,7 @@
 package name.huliqing.fighter.ui;
 
 import com.jme3.material.MatParamTexture;
+import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 
 /**
@@ -55,5 +56,7 @@ public class Icon extends AbstractUI {
         }
     }
 
-    
+    public Material getMaterial() {
+        return background.getMaterial();
+    }
 }

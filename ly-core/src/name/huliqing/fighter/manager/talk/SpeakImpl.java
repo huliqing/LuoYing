@@ -135,7 +135,7 @@ public class SpeakImpl extends Speak {
         GeometryUtils.getBoundTopPosition(actor.getModel(), tv.vect1);
         GeometryUtils.convertWorldToScreen(tv.vect1, tv.vect2);
         speakPanel.setVisible(true);
-        speakPanel.setLocalTranslation(tv.vect2.addLocal(speakPanel.getWidth() * -0.5f + fixXScalePos, 10, 0));
+        speakPanel.setLocalTranslation(tv.vect2.addLocal(speakPanel.getWidth() * -0.5f + fixXScalePos, 10, -1));
         tv.release();
     }
     

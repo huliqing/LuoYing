@@ -234,10 +234,7 @@ public class Fighter extends SimpleApplication {
             manager.init(this);
         }
         
-        // ==== 清理和GC
-        // HUD信息message
-        HUDManager.cleanup();
-        
+        // ==== 清理和GC        
         // UI动画控制
         AnimationManager.cleanup();
 
@@ -256,9 +253,6 @@ public class Fighter extends SimpleApplication {
         
         // 由于进行了clearMappings,所以viewState必须重新绑定事件
         UIState.getInstance().registerDefaultListener();
-        
-        // 2.清理界面信息提示元素。
-        HUDManager.init(getGuiNode());
         
         // ==== show debug info 
         DamageManager.showDebugInfo();

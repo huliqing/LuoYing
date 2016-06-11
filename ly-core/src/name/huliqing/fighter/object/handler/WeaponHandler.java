@@ -89,8 +89,8 @@ public class WeaponHandler extends AbstractHandler {
     }
 
     @Override
-    public boolean remove(Actor actor, String objectId, int count) throws GameException {
-        ProtoData data = actorDao.getItemExceptSkill(actor, objectId);
+    public boolean remove(Actor actor, ProtoData data, int count) throws GameException {
+//        ProtoData data = actorDao.getItemExceptSkill(actor, objectId);
         if (data.getDataType() != DataType.skin) {
             return false;
         }
@@ -101,7 +101,7 @@ public class WeaponHandler extends AbstractHandler {
         if (weaponData.isUsing()) {
             return false;
         }
-        return super.remove(actor, objectId, count);
+        return super.remove(actor, data, count);
     }
     
 }

@@ -26,6 +26,7 @@ import name.huliqing.fighter.object.effect.Effect;
 /**
  * 基本Handler类
  * @author huliqing
+ * @param <T>
  */
 public abstract class AbstractHandler<T extends HandlerData> implements Handler<T> {
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
@@ -74,6 +75,7 @@ public abstract class AbstractHandler<T extends HandlerData> implements Handler<
     
     /**
      * 检查物品的种族限制和性别限制是否允许使用该物品。
+     * @param actor
      * @param data
      * @return 
      */
@@ -139,13 +141,20 @@ public abstract class AbstractHandler<T extends HandlerData> implements Handler<
     }
     
     @Override
-    public boolean remove(Actor actor, String objectId, int count) {
-        int trueRemoved = itemService.removeItem(actor, objectId, count);
+    public boolean remove(Actor actor, ProtoData data, int count) {
+        // 一些物品是不能删除的,如地图
+        if (data instanceof PkgItemData) {
+            PkgItemData pkgData = (PkgItemData) data;
+            if (!pkgData.isDeletable()) {
+                return false;
+            }
+        }
         
-        // 提示,只提示当前场景中的主玩家
+        // 删除并提示,只提示当前场景中的主玩家
+        int trueRemoved = itemService.removeItem(actor, data.getId(), count);
         if (actor == playService.getPlayer()) {
             playService.addMessage(ResourceManager.get("common.remove"
-                            , new Object[] {ResourceManager.getObjectName(objectId)
+                            , new Object[] {ResourceManager.getObjectName(data.getId())
                                     , trueRemoved > 1 ? "(" + trueRemoved + ")" : ""})
                             , MessageType.notice);
         }
@@ -155,8 +164,7 @@ public abstract class AbstractHandler<T extends HandlerData> implements Handler<
     /**
      * 立即使用物品
      * @param actor
-     * @param objectId
-     * @return 
+     * @param data 
      */
     protected abstract void useObject(Actor actor, ProtoData data);
 

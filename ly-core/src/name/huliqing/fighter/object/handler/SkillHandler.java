@@ -159,7 +159,7 @@ public class SkillHandler extends AbstractHandler {
     }
 
     @Override
-    public boolean remove(Actor actor, String objectId, int count) throws GameException {
+    public boolean remove(Actor actor, ProtoData data, int count) throws GameException {
         // 技能不允许删除
 //        showWarn("Skill could not delete, skill=" + od);
         return false;

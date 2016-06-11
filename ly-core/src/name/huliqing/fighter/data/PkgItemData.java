@@ -29,6 +29,9 @@ public class PkgItemData extends ProtoData {
     
     // 性别限制
     private Sex sexLimit;
+    
+    // 是否可删除的
+    private boolean deletable = true;
 
     @Override
     public void write(JmeExporter ex) throws IOException {
@@ -37,6 +40,7 @@ public class PkgItemData extends ProtoData {
         if (raceLimit != null) 
             oc.write(raceLimit.toArray(new String[]{}), "raceLimit", null);
         oc.write(sexLimit, "sexLimit", null);
+        oc.write(deletable, "deletable", true);
     }
 
     @Override
@@ -45,6 +49,7 @@ public class PkgItemData extends ProtoData {
         InputCapsule ic = im.getCapsule(this);
         raceLimit = ConvertUtils.toList(ic.readStringArray("raceLimit", null));
         sexLimit = ic.readEnum("sexLimit", Sex.class, null);
+        deletable = ic.readBoolean("deletable", true);
     }
     
     public PkgItemData() {}
@@ -88,6 +93,22 @@ public class PkgItemData extends ProtoData {
      */
     public void setSexLimit(Sex sexLimit) {
         this.sexLimit = sexLimit;
+    }
+
+    /**
+     * 判断物品是否是可删除的 
+     * @return 
+     */
+    public boolean isDeletable() {
+        return deletable;
+    }
+
+    /**
+     * 设置物品是否是可删除的
+     * @param deletable 
+     */
+    public void setDeletable(boolean deletable) {
+        this.deletable = deletable;
     }
     
 }

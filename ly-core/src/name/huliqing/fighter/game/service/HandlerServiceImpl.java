@@ -88,7 +88,7 @@ public class HandlerServiceImpl implements HandlerService {
         }
         Handler handler = Loader.loadHandler(data.getHandler());
         if (handler != null) {
-            if (handler.remove(actor, objectId, count)) {
+            if (handler.remove(actor, data, count)) {
                 
                 // remove 0221现在全部交由 itemService处理提示
 //                if (actor == playService.getPlayer()) {

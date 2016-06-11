@@ -4,6 +4,7 @@
  */
 package name.huliqing.fighter.manager;
 
+import com.jme3.font.BitmapFont;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
@@ -19,6 +20,7 @@ import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.object.effect.AbstractEffect;
 import name.huliqing.fighter.utils.GeometryUtils;
 import name.huliqing.fighter.ui.Text;
+import name.huliqing.fighter.ui.state.UIState;
 
 /**
  * 在目标角色上展示伤害数字或其它信息。
@@ -40,7 +42,7 @@ public class DamageManager {
     /**
      * 缓存动态信息
      */
-    private final static List<DynamicText> caches = new ArrayList<DynamicText>();
+    private final static List<DynamicText> CACHES = new ArrayList<DynamicText>();
     
     public enum ResistType {
         /** 抵抗:这表示抗性是机会性的 */
@@ -100,12 +102,12 @@ public class DamageManager {
     private static void display(Actor target, String text, ColorRGBA color, int level) {
         DynamicText dt = getFromCache();
         Common.getApp().getGuiNode().attachChild(dt);
-        Vector3f pos = dt.getLocalTranslation();
+        Vector3f pos = dt.text.getLocalTranslation();
         pos.set(target.getModel().getWorldTranslation()).addLocal(0, 2.5f, 0);
         Common.getApp().getCamera().getScreenCoordinates(pos, pos);
-//        dt.setLocation(pos);
-        dt.getData().setLocation(pos);
-        dt.setText(text, color);
+        dt.startPos.set(pos);
+        dt.text.setText(text);
+        dt.text.setFontColor(color);
         dt.totalAnimDistance = 50 + getFontSize()  * 0.55f * level;
         dt.start();
     }
@@ -145,24 +147,24 @@ public class DamageManager {
     public static void showDebugInfo() {
         if (Config.debug) {
             Logger.getLogger(DamageManager.class.getName())
-                    .log(Level.INFO, "DamageManager cache DamageText size={0}", caches.size());
+                    .log(Level.INFO, "DamageManager cache DamageText size={0}", CACHES.size());
         }
     }
     
     public static void cleanup() {
-        caches.clear();
+        CACHES.clear();
     }
     
     private static DynamicText getFromCache() {
-        if (caches.size() > MAX_CACHE_SIZE) {
+        if (CACHES.size() > MAX_CACHE_SIZE) {
             // 如果出错，防止部分资源意外没有释放，则提出警告
             Logger.getLogger(DamageManager.class.getName())
                     .log(Level.WARNING, "DamageText cache to more >>>>>>>> size={0}"
-                    , caches.size());
+                    , CACHES.size());
         }
         
         // 从缓存获取
-        for (DynamicText dt : caches) {
+        for (DynamicText dt : CACHES) {
             if (dt.isEnd()) {
                 return dt;
             }
@@ -170,7 +172,7 @@ public class DamageManager {
         
         // new one
         DynamicText dt =  new DynamicText("", getFontSize());
-        caches.add(dt);
+        CACHES.add(dt);
         
         return dt;
     }
@@ -183,51 +185,49 @@ public class DamageManager {
         // 总的移动距离
         private float totalAnimDistance = 50;
         // 总的移动时间
-        private static final float animTime = 0.3f;
+        private static final float ANIM_TIME = 0.3f;
         // 使用正弦计算减速效果，移动减速和缩放减速
-        private static final float maxAngle = 140;
+        private static final float MAX_ANGLE = 140;
         // 动画结速后经过多久才清理掉该效果
-        private static final float delayEnd = 0.5f;
+        private static final float DELAY_END = 0.5f;
+        private final static float TEMP_VALUE = ANIM_TIME / MAX_ANGLE / FastMath.DEG_TO_RAD;
+        
+        private Vector3f startPos = new Vector3f();
 
         public DynamicText(String text, float fontSize) {
             super();
             this.data = new EffectData();
             this.text = new Text(text);
+            this.text.setAlignment(BitmapFont.Align.Center);
+            this.text.setWidth(300);
             this.text.setFontSize(fontSize);
-            this.data.setPhaseTimeDisplay(animTime + delayEnd);
-//            this.attachChild(this.text);
-            this.localRoot.attachChild(this.text);
+            this.data.setPhaseTimeDisplay(ANIM_TIME + DELAY_END);
         }
-        
-        /**
-         * 重新设置伤害数字，同时需要重置scale和translation
-         * @param text 
-         */
-        public void setText(String text, ColorRGBA color) {
-            this.text.setText(text);
-            this.text.setFontColor(color);
+
+        @Override
+        protected void doInit() {
+            super.doInit(); 
+            UIState.getInstance().addUI(this.text);
         }
-        
-        private static float TEMP_VALUE = animTime / maxAngle / FastMath.DEG_TO_RAD;
 
         @Override
         protected void updatePhaseAll(float tpf) {
-
-            if (data.getTimeUsed() <= animTime) {
-                
-                Vector3f pos = text.getLocalTranslation();
-                
-//                float factor = FastMath.sin(data.getTimeUsed() / animTime * maxAngle * FastMath.DEG_TO_RAD); // remove
+            if (data.getTimeUsed() <= ANIM_TIME) {
                 float factor = FastMath.sin(data.getTimeUsed() / TEMP_VALUE);
-                
                 text.setLocalScale(factor * factor);
-
-                // scale;
-                pos.x = text.getWidth() * text.getLocalScale().x * -0.5f;
-                pos.y = factor * totalAnimDistance;
-                
+                Vector3f pos = text.getLocalTranslation();
+                pos.set(startPos);
+                pos.addLocal(-0.5f * text.getWidth() * text.getLocalScale().x
+                        , factor * totalAnimDistance
+                        , -1f); // -1可以不让弹出的数字盖在其它UI上，比如当打开包裹或地图时
                 text.setLocalTranslation(pos);
             }
+        }
+
+        @Override
+        public void cleanup() {
+            this.text.removeFromParent();
+            super.cleanup(); 
         }
 
     } // end damage text class

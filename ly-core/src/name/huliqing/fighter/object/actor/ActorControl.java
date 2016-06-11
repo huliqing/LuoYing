@@ -300,7 +300,7 @@ public class ActorControl extends BetterCharacterControl implements Actor, Physi
         } else if (dot < 0) {
             angle = -dot * 90 + 90;
         } else {
-            dot = 90;
+//            angle = 90;
         }
         tv.release();
         return angle;

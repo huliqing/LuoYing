@@ -32,19 +32,21 @@ public class FrameLayout extends UILayout {
             childViews.get(i).updateView();
         }
         
+        // remove20160611,不应该再去setPosition,由外部设置子组件的位置即可。
         // 2.再更新子组件位置
-        UI child;
-        float x;
-        float y;
-        for (int i = 0; i < childViews.size(); i++) {
-            child = childViews.get(i);
-            if (!child.isVisible()) 
-                continue;
+//        UI child;
+//        float x;
+//        float y;
+//        for (int i = 0; i < childViews.size(); i++) {
+//            child = childViews.get(i);
+//            if (!child.isVisible()) 
+//                continue;
+//
+//            x = paddingLeft + child.getMarginLeft();
+//            y = height - paddingTop - child.getMarginTop() - child.getHeight();
+//            child.setPosition(x, y);
+//        }
 
-            x = paddingLeft + child.getMarginLeft();
-            y = height - paddingTop - child.getMarginTop() - child.getHeight();
-            child.setPosition(x, y);
-        }
     }
 
     @Override

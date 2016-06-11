@@ -58,7 +58,7 @@ import name.huliqing.fighter.loader.data.HandlerDataLoader;
 import name.huliqing.fighter.loader.data.HitCheckerDataLoader;
 import name.huliqing.fighter.loader.data.ElDataLoader;
 import name.huliqing.fighter.loader.data.LogicDataLoader;
-import name.huliqing.fighter.loader.data.ObjDataLoader;
+import name.huliqing.fighter.loader.data.ItemDataLoader;
 import name.huliqing.fighter.loader.data.ObjectLoader;
 import name.huliqing.fighter.loader.data.ResistDataLoader;
 import name.huliqing.fighter.loader.data.ShapeDataLoader;
@@ -100,7 +100,7 @@ public class DataLoaderFactory {
         loaders.put(DataType.game, new GameDataLoader());
         loaders.put(DataType.hitChecker, new HitCheckerDataLoader());
         loaders.put(DataType.logic, new LogicDataLoader());
-        loaders.put(DataType.item, new ObjDataLoader());
+        loaders.put(DataType.item, new ItemDataLoader());
         loaders.put(DataType.resist, new ResistDataLoader());
         loaders.put(DataType.shape, new ShapeDataLoader());
         loaders.put(DataType.skill, new SkillDataLoader());

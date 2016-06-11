@@ -8,7 +8,7 @@
     <!--test-->
     <!-- player test -->    
     <actor id="actorPlayerTest" extends="actorPlayer" level="7" 
-           items="item000|100,itemGold|10000,itemTowerSnow|100,itemScrollLife|10
+           items="itemWorldMap,item000|100,itemGold|10000,itemTowerSnow|100,itemScrollLife|10
 ,weaponSword000,weaponSword000L,weaponSword001,weaponSword001L,weaponSword002,weaponSword002L,weaponSword003,weaponSword003L
 ,weaponBow000,weaponBow001
 ,weaponWand000

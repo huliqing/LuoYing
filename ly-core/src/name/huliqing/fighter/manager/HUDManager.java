@@ -12,29 +12,28 @@ import name.huliqing.fighter.ui.LinearLayout;
 import name.huliqing.fighter.ui.Text;
 import name.huliqing.fighter.ui.UI;
 import name.huliqing.fighter.ui.UI.Corner;
+import name.huliqing.fighter.ui.state.UIState;
 
 /**
  * 处理所有界面上的一切信息，UI,Message等,弹窗等。
  * @author huliqing
  */
 public class HUDManager {
-    private static Node localRoot;
     private static Messager messager;
     private static boolean enabled = true;
     
     // 初始化UI
     public static void init(Node appGuiRoot) {
-        localRoot = new Node("HUDLocalRoot");
-        appGuiRoot.attachChild(localRoot);
-        
         messager = new Messager(Common.getSettings().getWidth(), Common.getSettings().getHeight() * 0.25f);
-        localRoot.attachChild(messager);
+        messager.initialize();
+        // 把message放到gui中主要为了在updateLogicalState
+        appGuiRoot.attachChild(messager); 
     }
     
     public static void cleanup() {
-        if (localRoot != null) {
-            localRoot.removeFromParent();
-            localRoot = null;
+        if (messager != null) {
+            messager.cleanup();
+            messager = null;
         }
     }
     
@@ -84,7 +83,6 @@ public class HUDManager {
             messPanel.setToCorner(Corner.LB);
             messPanel.setMargin(5, 0, 0, 5);
 //            messPanel.setDebug(true);
-            attachChild(messPanel);
             
             for (int i = 0; i < limit; i++) {
                 Text text = new Text(""); // height/limit 确保字体大小不会超过行高
@@ -96,16 +94,20 @@ public class HUDManager {
                 messPanel.addView(text);
             }
         }
+        
+        public void initialize() {
+            UIState.getInstance().addUI(messPanel);
+        }
 
         @Override
         public void updateLogicalState(float tpf) {
-            super.updateLogicalState(tpf);
+//            super.updateLogicalState(tpf);
             update(tpf);
         }
 
         private void update(float tpf) {
             if (time > useTime) {
-                cleanup();
+                clear();
                 time = 0;
             }
             time += tpf;
@@ -147,12 +149,17 @@ public class HUDManager {
             }
         }
 
-        public void cleanup() {
+        private void clear() {
             List<UI> cui = messPanel.getViews();
             for (UI ui : cui) {
                 ui.setVisible(false);
             }
             visible = 0;
+        }
+        
+        public void cleanup() {
+            this.removeFromParent();
+            messPanel.removeFromParent();
         }
 
         public void setUseTime(float useTime) {

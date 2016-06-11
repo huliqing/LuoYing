@@ -39,6 +39,7 @@ import name.huliqing.fighter.object.env.TreeEnv;
 import name.huliqing.fighter.object.handler.AttributeHandler;
 import name.huliqing.fighter.object.handler.HandlerLoader;
 import name.huliqing.fighter.object.handler.ItemSkillHandler;
+import name.huliqing.fighter.object.handler.MapHandler;
 import name.huliqing.fighter.object.handler.OutfitHandler;
 import name.huliqing.fighter.object.handler.SkillBookHandler;
 import name.huliqing.fighter.object.handler.SkillHandler;
@@ -224,6 +225,7 @@ public class DataFactory {
         register("handlerStateGain", HandlerData.class, HandlerLoader.class, StateGainHandler.class);
         register("handlerStateRemove", HandlerData.class, HandlerLoader.class, StateRemoveHandler.class);
         register("handlerItemSkill", HandlerData.class, HandlerLoader.class, ItemSkillHandler.class);
+        register("handlerMap", HandlerData.class, HandlerLoader.class, MapHandler.class);
         
         // Scene
         register("sceneRandom", RandomSceneData.class, RandomSceneLoader.class, RandomScene.class);
