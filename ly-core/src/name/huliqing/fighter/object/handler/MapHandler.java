@@ -5,6 +5,7 @@
  */
 package name.huliqing.fighter.object.handler;
 
+import com.jme3.font.BitmapFont;
 import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
@@ -16,13 +17,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import name.huliqing.fighter.Factory;
+import name.huliqing.fighter.constants.InterfaceConstants;
 import name.huliqing.fighter.data.HandlerData;
 import name.huliqing.fighter.data.ProtoData;
 import name.huliqing.fighter.game.service.PlayService;
 import name.huliqing.fighter.object.actor.Actor;
+import name.huliqing.fighter.ui.Button;
 import name.huliqing.fighter.ui.FrameLayout;
 import name.huliqing.fighter.ui.Icon;
+import name.huliqing.fighter.ui.LinearLayout;
+import name.huliqing.fighter.ui.Text;
 import name.huliqing.fighter.ui.UI;
+import name.huliqing.fighter.ui.UIFactory;
+import name.huliqing.fighter.ui.UIUtils;
 import name.huliqing.fighter.utils.ConvertUtils;
 
 /**
@@ -60,8 +67,17 @@ public class MapHandler extends AbstractHandler {
     @Override
     protected void useObject(Actor actor, ProtoData data) {
         // test
-//        locations.get(0).x = FastMath.nextRandomFloat();
-//        locations.get(0).y = FastMath.nextRandomFloat();
+//        locations.clear();
+        for (int i = 0; i < 100; i++) {
+            Location loc = new Location();
+                loc.id = i + "";
+                loc.x = FastMath.nextRandomFloat();
+                loc.y = FastMath.nextRandomFloat();
+                loc.gameId = null;
+                loc.icon = null;
+                locations.add(loc);
+        }
+
 
         // 创建一个map view用于显示地图
         if (mapView == null) {
@@ -146,12 +162,17 @@ public class MapHandler extends AbstractHandler {
     }
     
     private class Location {
+        // 当前地图上的位置唯一标识
         public String id;
+        // 在地图上的坐标比例，取值[0.0~1.0]
         public float x;
         public float y;
+        // 游戏ID，当location被点击后可以传送到这个游戏中
         public String gameId;
         // 可以为地图上的点定义一个图标
         public String icon;
+        // 是否打开，只有打开才允许传送
+        public boolean enabled = false;
     }
     
     /**
@@ -203,6 +224,7 @@ public class MapHandler extends AbstractHandler {
         
         private List<Location> locations;
         private Map<Long, Flag> flags;
+        private Command command;
 
         public MapContainer(String baseMapImage, List<Location> locations) {
             this.locations = locations;
@@ -214,13 +236,12 @@ public class MapHandler extends AbstractHandler {
             addView(map);
             
             // 添加各种地图坐标点
-            Location loc;
             float iconw = 16;
             float iconh = 16;
             float btnw = 32;
             float btnh = 32;
             for (int i = 0; i < locations.size(); i++) {
-                loc = locations.get(i);
+                final Location loc = locations.get(i);
                 float posX = width * loc.x;
                 float posY = height * loc.y;
                 
@@ -240,14 +261,49 @@ public class MapHandler extends AbstractHandler {
                 locBtn.setImage("Interface/map/location.jpg");
                 locBtn.setWidth(btnw);
                 locBtn.setHeight(btnh);
+                
+                // ----remove20160612不再需要使用这个方法来fix问题 
+//                // 注：这里让locBtn的z值大一些是必要的，以避免被Flag盖住的时候无法进行点击，即使Flag无事件。因为当Flag盖
+//                // 住LocBtn的时候先点击到的是Flag,这个时候即使Flag无事件，但是Flag的父UI MapContainer存在事件（拖动），
+//                // 这时Flag会把事件检测传递到父MapContainer中去，这会造成不合理。所以要确保locBtn比Flag优先点击到,
+//                // 即locBtn的z值要大于flag
+//                locBtn.setLocalTranslation(posX - btnw * 0.5f,  posY - btnh * 0.5f, 1);
+                // ----
+
                 locBtn.setPosition(posX - btnw * 0.5f,  posY - btnh * 0.5f);
+
                 // 让按钮颜色变透明以隐藏,不能使用cullHint，否则无法触发事件
-                locBtn.getMaterial().getParam("Color").setValue(new ColorRGBA(1,1,1,0.0f));
+                locBtn.getMaterial().getParam("Color").setValue(new ColorRGBA(1,1,1,0.3f));
                 locBtn.getMaterial().getAdditionalRenderState().setBlendMode(RenderState.BlendMode.AlphaAdditive);
+                locBtn.setEffectEnabled(false);
+                locBtn.addClickListener(new Listener() {
+                    @Override
+                    public void onClick(UI view, boolean isPressed) {
+                        if (isPressed) return;
+                        showCommand(loc);
+                    }
+                });
                 addView(locBtn);
             }
         }
         
+        public void showCommand(Location loc) {
+            if (command == null) {
+                command = new Command();
+                addView(command);
+            }
+//            command.setDebug(true);
+            command.updateLocation(loc);
+            command.setLocalTranslation(width * loc.x, height * loc.y, 0);
+            command.setVisible(true);
+            // 防止面板溢出屏幕外
+            UIUtils.fixOverflowScreen(command, playService.getScreenWidth(), playService.getScreenHeight());
+        }
+        
+        /**
+         * 添加一个标记到场景中,比如主角的位置标记
+         * @param flag 
+         */
         public void addFlag(Flag flag) {
             if (flags == null) {
                 flags = new HashMap<Long, Flag>();
@@ -272,8 +328,8 @@ public class MapHandler extends AbstractHandler {
             fixPosition();
         }
         
+        // 修正位置，不要让地图拖动的时候出边界
         private void fixPosition() {
-            // 修正位置，不要让地图拖动的时候出边界
             float sw = playService.getScreenWidth();
             float sh = playService.getScreenHeight();
             
@@ -309,7 +365,9 @@ public class MapHandler extends AbstractHandler {
         
     }
     
-    // 用于标记地图上的特殊位置点,如玩家位置
+    /**
+     * 用于标记地图上的特殊位置点,如玩家位置,保藏、物品、。。。等等特殊的物品都可以作为一个flag添加进去。
+     */
     private class Flag extends FrameLayout {
         private long id;
         public Flag(long id, String image) {
@@ -320,6 +378,61 @@ public class MapHandler extends AbstractHandler {
             icon.setHeight(32);
             icon.setLocalTranslation(-0.5f * icon.getWidth(), -0.5f * icon.getHeight(), 0);
             addView(icon);
+        }
+    }
+    
+    /**
+     * 定义一个命令界面，当点击地图上的某个点之后会在地图上弹出这个界面，用来显示对于这个位置点的所有命令操作，包含：
+     * "传送"之类.
+     */
+    private class Command extends LinearLayout {
+        private Location loc;
+        private Text title;
+        private Button transfer;
+        private Button cancel;
+        public Command() {
+            super(playService.getScreenWidth() * 0.2f, 0);
+            title = new Text("");
+            title.setVerticalAlignment(BitmapFont.VAlign.Center);
+            title.setWidth(width);
+            title.setHeight(UIFactory.getUIConfig().getTitleHeight());
+            title.setBackground(UIFactory.getUIConfig().getBackground(), true);
+            title.setBackgroundColor(UIFactory.getUIConfig().getTitleBgColor(), true);
+            transfer = new Button("传送");
+            transfer.setWidth(width);
+            transfer.addClickListener(new Listener() {
+                @Override
+                public void onClick(UI view, boolean isPressed) {
+                    if (isPressed) return;
+                    System.out.println("Goto game=" + loc.gameId);
+                }
+            });
+            
+            cancel = new Button("取消");
+            cancel.setWidth(width);
+            cancel.addClickListener(new Listener() {
+                @Override
+                public void onClick(UI view, boolean isPressed) {
+                    if (isPressed) return;
+                    Command.this.setVisible(false);
+                }
+            });
+            addView(title);
+            addView(transfer);
+            addView(cancel);
+            this.resize();
+        }
+        
+        public void updateLocation(Location loc) {
+            this.loc = loc;
+            title.setText("  Location:" + loc.id);
+            if (!loc.enabled) {
+                transfer.setDisabled(true);
+                transfer.setFontColor(ColorRGBA.Gray);
+            } else {
+                transfer.setDisabled(false);
+                transfer.setFontColor(ColorRGBA.White);
+            }
         }
     }
 }

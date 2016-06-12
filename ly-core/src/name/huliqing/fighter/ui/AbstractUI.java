@@ -393,7 +393,7 @@ public abstract class AbstractUI extends Node implements UI {
         return fireClickInner(isPressed, false);
     }
     
-    boolean fireClickInner(boolean isPressed, boolean fired) {
+    final boolean fireClickInner(boolean isPressed, boolean fired) {
         if (clickListeners != null && !clickListeners.isEmpty()) {
             fired = true;
             for (Listener click : clickListeners) {
@@ -410,10 +410,21 @@ public abstract class AbstractUI extends Node implements UI {
             }
         }
         
-        // 2.do parent click
-        if (parentView != null) {
-            return parentView.fireClickInner(isPressed, fired);
-        }
+        // ----remove20160612,
+        // 这是一个比较严重的BUG，花了很长时间才发现，在以下情形会造成一些问题:
+        // 假设：
+        // 1.a->b->c 三个UI层次顺序是 a,b,c;  
+        // 2.a是b和c的父UI，b和c的关系是兄弟UI节点。
+        // 3.a在最下面,b在中间，c在最上面.三个UI刚好完全重叠.
+        // 4.a和b存在事件，c没有事件。
+        // 结果，这个时候想要点击b，以触发b事件的时候就会存在问题，因为c在b上面，所以c会受到点击，由于c没有事件，
+        // 这时c会把事件传递到父UI"a", 即造成b的事件被跳过的BUG。所以这里不能直接传递事件到父UI中去,即不再传递事件向
+        // 父UI。
+        // ----
+//        // do parent click
+//        if (parentView != null) {
+//            return parentView.fireClickInner(isPressed, fired);
+//        }
         return fired;
     }
     
@@ -432,7 +443,7 @@ public abstract class AbstractUI extends Node implements UI {
         return fireDBClickInner(isPressed, false);
     }
     
-    boolean fireDBClickInner(boolean isPressed, boolean fired) {
+    final boolean fireDBClickInner(boolean isPressed, boolean fired) {
         // 1.优先处理双击事件, 双击事件不向父UI扩展事件，减少复杂度
         if (dbclickListeners != null && !dbclickListeners.isEmpty()) {
             fired = true;
@@ -443,10 +454,22 @@ public abstract class AbstractUI extends Node implements UI {
                 return fired;
             }
         }
-        // 2.do parent
-        if (parentView != null) {
-            return parentView.fireDBClickInner(isPressed, fired);
-        }
+        
+        // ----remove20160612,
+        // 这是一个比较严重的BUG，花了很长时间才发现，在以下情形会造成一些问题:
+        // 假设：
+        // 1.a->b->c 三个UI层次顺序是 a,b,c;  
+        // 2.a是b和c的父UI，b和c的关系是兄弟UI节点。
+        // 3.a在最下面,b在中间，c在最上面.三个UI刚好完全重叠.
+        // 4.a和b存在事件，c没有事件。
+        // 结果，这个时候想要点击b，以触发b事件的时候就会存在问题，因为c在b上面，所以c会受到点击，由于c没有事件，
+        // 这时c会把事件传递到父UI"a", 即造成b的事件被跳过的BUG。所以这里不能直接传递事件到父UI中去,即不再传递事件向
+        // 父UI。
+        // ----
+        // do parent 
+//        if (parentView != null) {
+//            return parentView.fireDBClickInner(isPressed, fired);
+//        }
         return fired;
     }
     

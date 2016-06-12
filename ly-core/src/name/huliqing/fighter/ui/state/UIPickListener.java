@@ -79,9 +79,9 @@ public class UIPickListener implements PickListener{
         if (s == null) {
             return null;
         }
+        
         // View为可点击的对象
         if (s instanceof UI) {
-//            logger.log(Level.INFO, "Check pickView, spatial={0}", s);
             UI ui = (UI) s;
             
             // 可见和有事件才需要响应，通过是“否有事件响应”的判断可避免一些
@@ -89,9 +89,18 @@ public class UIPickListener implements PickListener{
             // (目前的View层叠和ray的碰撞检测顺序还存在着一些问题)
             if (ui.isVisible() && ui.hasEvent()) {
                 return ui;
+            } 
+            // ---- add20160612
+            // 重要：使用PreventEvent以避免事件一直向父UI传递而导致同级的兄弟UI的事件被跳过。这发生在：若当前UI覆盖了另
+            // 一个兄弟UI时，如果当前UI无事件，则会把事件传递到父UI事件中，这是错误的，因为可能兄弟UI存在事件。所以如果
+            // 当前UI无事件，并打开了preventEvent时，则直接返回null,阻止事件继承向父UI传递,以避免被当前UI覆盖的兄弟UI的事件
+            // 被跳过。
+            else if (ui.isPreventEvent()) {
+                return null;
             }
             
-        }
+        } 
+        
         return pickView(s.getParent());
     }
 }

@@ -5,6 +5,7 @@
 package name.huliqing.fighter.ui;
 
 import com.jme3.font.BitmapFont;
+import com.jme3.math.ColorRGBA;
 
 /**
  * 按钮
@@ -13,6 +14,7 @@ import com.jme3.font.BitmapFont;
 public class Button extends AbstractUI {
 
     private Text text;
+    private boolean disabled;
     
     public Button(String text) {
         super(UIFactory.getUIConfig().getButtonWidth(), UIFactory.getUIConfig().getButtonHeight());
@@ -39,14 +41,18 @@ public class Button extends AbstractUI {
         if (this.text.getHeight() > height) {
             this.height = this.text.getHeight();
         }
-        
     }
     
     public void setFontSize(float fontSize) {
         this.text.setFontSize(fontSize);
         setNeedUpdate();
     }
-
+    
+    public void setFontColor(ColorRGBA color) {
+        this.text.setFontColor(color);
+        setNeedUpdate();
+    }
+    
     @Override
     public void updateView() {
         super.updateView();
@@ -58,6 +64,26 @@ public class Button extends AbstractUI {
         
         text.updateView();
         
+    }
+    
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
+    }
+
+    @Override
+    public boolean fireClick(boolean isPressed) {
+        if (disabled) {
+            return false;
+        }
+        return super.fireClick(isPressed); 
+    }
+
+    @Override
+    public boolean fireDBClick(boolean isPressed) {
+        if (disabled) {
+            return false;
+        }
+        return super.fireDBClick(isPressed); 
     }
 
     @Override

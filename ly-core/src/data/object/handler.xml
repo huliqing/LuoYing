@@ -98,7 +98,7 @@
     <!-- ========================================================================= -->
     <!--地图数据-->
     <!-- ========================================================================= -->
-    <handlerMap id="handlerWorldMap" image="Interface/map/map.jpg" locations="place1|0.7|0.75" />
+    <handlerMap id="handlerWorldMap" image="Interface/map/map.jpg" locations="place1|0.7|0.75, place2|0.2|0.3, place3|0.3|0.45" />
     
 </root>
 
