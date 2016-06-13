@@ -7,99 +7,165 @@ package name.huliqing.fighter.object.game;
 import com.jme3.util.SafeArrayList;
 import java.util.ArrayList;
 import java.util.List;
+import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.GameData;
-import name.huliqing.fighter.object.IntervalLogic;
+import name.huliqing.fighter.game.service.PlayService;
+import name.huliqing.fighter.game.service.SceneService;
+import name.huliqing.fighter.object.AbstractPlayObject;
+import name.huliqing.fighter.object.DataProcessor;
+import name.huliqing.fighter.object.PlayManager;
 import name.huliqing.fighter.object.PlayObject;
+import name.huliqing.fighter.object.scene.Scene;
+import name.huliqing.fighter.object.task.Task;
 
 /**
  * 任务控制器，主要用于控制任务的执行。通过 {@link #addTask(Task) }
  * 来添加任务，多个任务形成一个任务链。每个任务执行完毕后会继续下一个任务的
  * 执行。
  * @author huliqing
+ * @param <T>
  */
-public abstract class Game extends IntervalLogic {
+public  class Game<T extends GameData> extends AbstractPlayObject implements DataProcessor<T>{
+    private final PlayService playService = Factory.get(PlayService.class);
+    private final SceneService sceneService = Factory.get(SceneService.class);
 
-    // 其它任何逻辑
-    protected final SafeArrayList<PlayObject> logics = new SafeArrayList<PlayObject>(PlayObject.class);
-    // 任务列表
-    protected final List<GameTask> tasks = new ArrayList<GameTask>();
-    
-    // 当前正在执行的任务
-    private GameTask current;
-    
-    private int finishCount;
-    
-    protected GameData data;
-    protected boolean started;
-    
-    public Game() {
-        super(0);
+    public interface GameListener {
+        /**
+         * 当场景载入完毕后调用该方法
+         */
+        void onSceneLoaded();
     }
     
-    public Game(GameData data) {
-        super(0);
+    protected T data;
+    
+    // ---- inner
+    // 游戏侦听器
+    protected List<GameListener> listeners; 
+    
+    // 是否打开逻辑：当作为客户端运行时，game中应该关闭游戏逻辑，因为游戏逻辑主要在服务端运行。
+    protected boolean enabled = true;
+    
+    // 场景逻辑
+    protected Scene scene;
+    // 扩展逻辑
+    protected final PlayManager playManager = new PlayManager(PlayObject.class);
+
+    @Override
+    public void initData(T data) {
         this.data = data;
-    }
-    
-    public void start() {
-        finishCount = 0;
-        current = null;
-        started = true;
-        doInit();
-        doNext();
-    }
-    
-    public void addTask(GameTask task) {
-        tasks.add(task);
-    }
-    
-    protected void doEnd() {
-        started = false;
-    }
-    
-    /**
-     * 是否有下一个任务
-     * @return 
-     */
-    public boolean hasNext() {
-        return finishCount < tasks.size();
-    }
-    
-    /**
-     * 执行下一个任务
-     */
-    public void doNext() {
-        GameTask previous = current;
-        if (current == null) {
-            current = tasks.get(0);
-        } else {
-            int i = tasks.indexOf(current) + 1; // 由外部判断是否有hasNext
-            current = tasks.get(i);
-        }
-//        Log.get(getClass()).log(Level.INFO, "Do next task:{0}", current.getTaskName());
-        current.start(previous);
     }
 
     @Override
-    protected void doLogic(float tpf) {
-        if (!started) return;
-        
-        // update tasks
-        if (current.isFinished()) {
-            finishCount++;
-            if (hasNext()) {
-                doNext();
-            } else {
-                doEnd();
+    public T getData() {
+        return data;
+    }
+
+    public Scene getScene() {
+        return scene;
+    }
+
+    /**
+     * 设置或切换场景，如果存在旧的场景，则旧的场景会被立即清理掉，然后载入新的场景，新的场景会立即进行初始化。
+     * @param scene 
+     */
+    public void setScene(Scene scene) {
+        // 移除旧的场景
+        if (this.scene != null) {
+            removeLogic(this.scene);
+        }
+        // 切换新场景
+        this.scene = scene;
+        // 提前载入场景,必须的
+        addLogic(this.scene);
+        this.scene.initialize();
+    }
+    
+    /**
+     * 添加一个子游戏逻辑
+     * @param logic 
+     */
+    public void addLogic(PlayObject logic) {
+        playManager.attach(logic);
+    }
+    
+    /**
+     * 移除一个子游戏逻辑
+     * @param logic 
+     * @return  
+     */
+    public boolean removeLogic(PlayObject logic) {
+        return playManager.detach(logic);
+    }
+    
+    /**
+     * 添加游戏侦听器
+     * @param listener 
+     */
+    public void addListener(GameListener listener) {
+        if (listeners == null) {
+            listeners = new ArrayList<GameListener>(2);
+        }
+        if (!listeners.contains(listener)) {
+            listeners.add(listener);
+        }
+    }
+    
+    /**
+     * 移除指定的游戏侦听器，如果不存在则返回false.
+     * @param listener
+     * @return 
+     */
+    public boolean removeListener(GameListener listener) {
+        return listeners != null && listeners.remove(listener);
+    }
+
+    /**
+     * 判断游戏逻辑是否打开
+     * @return 
+     */
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    /**
+     * 设置是否打开游戏逻辑。注：场景逻辑不会受影响。
+     * @param enabled 
+     */
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    @Override
+    public void initialize() {
+        super.initialize();
+        // 场景需要优先载入。然后再载入扩展逻辑，因为部分扩展逻辑可能需要依赖于场景中的物体。比如一些扩展逻辑可能需要
+        // 确定场景地面已经载入之后才可以载入角色，否则角色可能直接就掉到下面去了.
+        if (scene == null && data.getSceneData() != null) {
+            scene = sceneService.loadScene(data.getSceneData());
+            addLogic(scene);
+            scene.initialize();
+            if (listeners != null) {
+                for (GameListener gl : listeners) {
+                    gl.onSceneLoaded();
+                }
             }
-        } else {
-            current.update(tpf);
         }
-        
-        // other logic
-        for (PlayObject logic : logics.getArray()) {
-            logic.update(tpf);
+    }
+
+    @Override
+    public final void update(float tpf) {
+        if (enabled) {
+            playManager.update(tpf);
+            updateLogics(tpf);
         }
+    }
+    
+    /**
+     * 更新游戏逻辑
+     * @param tpf 
+     */
+    protected  void updateLogics(float tpf) {
+        // 由子类实现
     }
     
     /**
@@ -107,22 +173,8 @@ public abstract class Game extends IntervalLogic {
      */
     @Override
     public void cleanup() {
-        // Clear task
-        for (GameTask task : tasks) {
-            if (!task.isFinished()) {
-                task.cleanup();
-            }
-        }
-        tasks.clear();
-        
-        // Clear logics
-        for (PlayObject l : logics.getArray()) {
-            l.cleanup();
-        }
-        logics.clear();
-        started = false;
+        playManager.cleanup();
+        super.cleanup();
     }
-    
-    protected abstract void doInit();
     
 }

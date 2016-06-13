@@ -6,16 +6,14 @@ package name.huliqing.fighter.object.game;
 
 import com.jme3.math.Vector3f;
 import name.huliqing.fighter.Factory;
-import name.huliqing.fighter.data.GameData;
 import name.huliqing.fighter.game.service.PlayService;
-import name.huliqing.fighter.logic.scene.ActorCleanLogic;
 import name.huliqing.fighter.object.scene.Scene;
 import name.huliqing.fighter.utils.MathUtils;
 
 /**
  * @author huliqing
  */
-public class SurvivalGame extends Game {
+public class SurvivalGame extends StoryGame {
     private final PlayService playService = Factory.get(PlayService.class);
     
     public Vector3f treasurePos = new Vector3f(0,0,-2f);
@@ -33,12 +31,6 @@ public class SurvivalGame extends Game {
     // 最高20级
     public int maxLevel = 15;
 
-    public SurvivalGame() {}
-
-    public SurvivalGame(GameData data) {
-        super(data);
-    }
-    
     @Override
     protected void doInit() {
         // 生成敌人的刷新地点
@@ -53,10 +45,6 @@ public class SurvivalGame extends Game {
         
         // task
         addTask(new SurvivalTask(this)); 
-        
-        // 角色清理器和恢复器
-        ActorCleanLogic cleaner = new ActorCleanLogic();
-        logics.add(cleaner);
     }
     
 }

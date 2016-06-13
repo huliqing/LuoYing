@@ -18,14 +18,12 @@ import name.huliqing.fighter.object.actor.Actor;
  *
  * @author huliqing
  */
-public class StoryGbGame extends Game {
+public class StoryGbGame extends StoryGame {
     private final PlayService playService = Factory.get(PlayService.class);
     private final ActionService actionService = Factory.get(ActionService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     
-    // 检查主角是否死亡
-    private PlayerDeadChecker playerChecker;
     
     // 古柏的位置
     private Vector3f gbPosition;
@@ -35,48 +33,24 @@ public class StoryGbGame extends Game {
     // 敌人角色列表
     public String[] enemyActors;
     
-    public int groupPlayer = 1;
+    // ---- inner
     public int groupEnemy = 2;
-    
-    public StoryGbGame() {
-        super();
-    }
 
-    public StoryGbGame(GameData data) {
-        super(data);
+
+    @Override
+    public void initData(GameData data) {
+        super.initData(data); //To change body of generated methods, choose Tools | Templates.
         gbPosition = data.getAsVector3f("gbPosition");
         enemyPosition = data.getAsVector3f("enemyPosition");
         if (gbPosition == null || enemyPosition == null) 
             throw new NullPointerException();
         enemyActors = data.getAsArray("enemyActors");
     }
-
+    
     @Override
     protected void doInit() {
-        
         addTask(new StoryGbTask1(this));
         addTask(new StoryGbTask2(this));
-        
-        // 设置player分组
-        Actor player = playService.getPlayer();
-        actorNetwork.setGroup(player, groupPlayer);
-        
-        // 角色清理器和恢复器
-        ActorCleanLogic cleaner = new ActorCleanLogic();
-        logics.add(cleaner);
-        
-        playerChecker = new PlayerDeadChecker(player);
-        playService.addObject(playerChecker, false);
-    }
-
-    @Override
-    protected void doLogic(float tpf) {
-        // 如果主角已经死亡，则不再处理逻辑
-        if (playerChecker.isDead()) {
-            return;
-        }
-        
-        super.doLogic(tpf); 
     }
     
     public Vector3f getGbPosition() {

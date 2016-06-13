@@ -22,11 +22,11 @@ import name.huliqing.fighter.Common;
 import name.huliqing.fighter.Config;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.GameData;
-import name.huliqing.fighter.data.SceneData;
 import name.huliqing.fighter.enums.MessageType;
 import name.huliqing.fighter.game.network.ActorNetwork;
 import name.huliqing.fighter.game.network.UserCommandNetwork;
 import name.huliqing.fighter.game.service.ActorService;
+import name.huliqing.fighter.game.service.GameService;
 import name.huliqing.fighter.game.service.PlayService;
 import name.huliqing.fighter.game.service.SkillService;
 import name.huliqing.fighter.game.service.StateService;
@@ -35,9 +35,9 @@ import name.huliqing.fighter.game.state.PlayState;
 import name.huliqing.fighter.game.state.lan.mess.MessPlayClientData;
 import name.huliqing.fighter.game.view.ActorSelectView.SelectedListener;
 import name.huliqing.fighter.game.view.TeamView;
-import name.huliqing.fighter.loader.Loader;
 import name.huliqing.fighter.manager.HUDManager;
 import name.huliqing.fighter.manager.PickManager;
+import name.huliqing.fighter.manager.PickManager.PickResult;
 import name.huliqing.fighter.manager.ResourceManager;
 import name.huliqing.fighter.manager.ShortcutManager;
 import name.huliqing.fighter.object.actor.Actor;
@@ -45,16 +45,17 @@ import name.huliqing.fighter.object.actor.ActorControl;
 import name.huliqing.fighter.object.anim.Anim;
 import name.huliqing.fighter.object.bullet.BulletCache;
 import name.huliqing.fighter.object.effect.EffectCache;
-import name.huliqing.fighter.object.scene.Scene;
+import name.huliqing.fighter.object.game.Game;
+import name.huliqing.fighter.object.game.Game.GameListener;
 import name.huliqing.fighter.object.view.View;
 import name.huliqing.fighter.ui.AbstractUI;
 import name.huliqing.fighter.utils.MyChaseCamera;
-import name.huliqing.fighter.utils.SceneUtils;
 import name.huliqing.fighter.utils.Temp;
 import name.huliqing.fighter.ui.UI;
 import name.huliqing.fighter.ui.UIEventListener;
 import name.huliqing.fighter.ui.state.PickListener;
 import name.huliqing.fighter.ui.state.UIState;
+import name.huliqing.fighter.utils.SceneUtils;
 
 /**
  *
@@ -68,10 +69,11 @@ public abstract class LanPlayState extends PlayState implements UIEventListener 
     private final StateService stateService = Factory.get(StateService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
     private final PlayService playService = Factory.get(PlayService.class);
+    private final GameService gameService = Factory.get(GameService.class);
     
     protected Node localRoot;
     
-    protected Scene scene;
+    protected Game game;
     
     // ----场景动态对象
     // 当前场景中的所有角色,包含所有玩家,需要同步到客户端
@@ -101,7 +103,7 @@ public abstract class LanPlayState extends PlayState implements UIEventListener 
     }
     
     @Override
-    public void initialize(AppStateManager stateManager, Application app) {
+    public void initialize(AppStateManager stateManager, final Application app) {
         super.initialize(stateManager, app); 
         
         // initialize all node;
@@ -116,47 +118,42 @@ public abstract class LanPlayState extends PlayState implements UIEventListener 
         // ==== 3.初始化事件绑定
         bindPickListener();
         
-        // ==== 4.其它
-        
-        // ==== 子弹、特效缓存器
+        // ==== 4.子弹、特效缓存器
         addListener(BulletCache.getInstance());
         addObject(BulletCache.getInstance(), false);
         
         addListener(EffectCache.getInstance());
         addObject(EffectCache.getInstance(), false);
         
-        // UI全局事件监听器，主要处理当UI被点击或拖动时不要让镜头跟着转动。
+        // ==== 5.UI全局事件监听器，主要处理当UI被点击或拖动时不要让镜头跟着转动。
         UIState.getInstance().addEventListener(this);
         
-         // 快捷方式和HUD初始化
+         // ==== 6.快捷方式和HUD初始化
          ShortcutManager.init();
          HUDManager.init(this.app.getGuiNode());
+         
+         // ==== 7.载入游戏
+        game = gameService.loadGame(gameData);
+        game.addListener(new GameListener() {
+            @Override
+            public void onSceneLoaded() {
+                // remove,resetCollision在手机上莫明奇妙的无效。 所以统一为重新创建chaseCamera
+                //chaseCamera.resetCollision(bulletAppState.getPhysicsSpace(), scene.getTerrain());
+                
+                if (chaseCamera != null) {
+                    chaseCamera.cleanup();
+                    chaseCamera = null;
+                }
+                chaseCamera = SceneUtils.createChaseCam(app.getCamera()
+                        , app.getInputManager()
+                        , game.getScene().getPhysicsSpace());
+            }
+        });
+        addObject(game, false);
         
 //        BasicProfilerState profiler = new BasicProfilerState(true);
 //        profiler.setGraphScale(100f);
 //        app.getStateManager().attach(profiler);
-    }
-    
-    @Override
-    public final void initScene(SceneData sceneData) {
-        if (scene != null) 
-            return; // 已经载入,不需要再次载入
-        scene = Loader.loadScene(sceneData);
-        addObject(scene, false);
-        // 这里要手动提前载入
-        scene.initialize();
-        
-        // remove,resetCollision在手机上莫明奇妙的无效。 所以统一为重新创建chaseCamera
-//        chaseCamera.resetCollision(bulletAppState.getPhysicsSpace(), scene.getTerrain());
-        
-        if (chaseCamera != null) {
-            chaseCamera.cleanup();
-            chaseCamera = null;
-        }
-        chaseCamera = SceneUtils.createChaseCam(app.getCamera()
-                , app.getInputManager()
-                , this
-                , scene.getPhysicsSpace());
     }
     
     /**
@@ -184,10 +181,15 @@ public abstract class LanPlayState extends PlayState implements UIEventListener 
         UIState.getInstance().addUI(actorPanel);
         
         localRoot.attachChild(actorPanel.getActorView());
+        
         if (chaseCamera != null) {
             chaseCamera.setChase(actorPanel.getActorView());
             chaseCamera.setDefaultDistance(5f);
         }
+//        else {
+//            app.getCamera().setLocation(actorPanel.getActorView().getWorldTranslation().add(0, 5, 5));
+//            app.getCamera().lookAt(actorPanel.getActorView().getWorldTranslation(), Vector3f.UNIT_Y);
+//        }
     }
     
     protected void onSelectPlayer(String actorId, String actorName) {  
@@ -212,13 +214,13 @@ public abstract class LanPlayState extends PlayState implements UIEventListener 
                     }
                     
                     // 场景可能还未载入
-                    if (scene == null || !scene.isInitialized()) {
+                    if (game.getScene() == null || !game.getScene().isInitialized()) {
                         return false;
                     }
                     
                     // 不使用localRoot节为根节点进行ray检测, localRoot里面包含了所有actor,而actors已经在onPickedActor中处理
                     PickManager.PickResult pr = PickManager.pick(
-                            app.getInputManager(), app.getCamera(), scene.getRoot());
+                            app.getInputManager(), app.getCamera(), game.getScene().getRoot());
                     if (pr != null && onPicked(pr)) {
                         return true;
                     }
@@ -303,10 +305,10 @@ public abstract class LanPlayState extends PlayState implements UIEventListener 
         super.cleanup();
     }
 
-    @Override
-    public Scene getScene() {
-        return scene;
-    }
+//    @Override
+//    public Scene getScene() {
+//        return scene;
+//    }
     
     /**
      * 注：该方法不判断目标spatial是否存在于GUI中, 也就是说：对GUI无效。
@@ -403,8 +405,8 @@ public abstract class LanPlayState extends PlayState implements UIEventListener 
         
         // 移出bulletAppState
         if (physicsControl != null) {
-            if (scene.getPhysicsSpace() != null) {
-                scene.getPhysicsSpace().remove(object);
+            if (game.getScene().getPhysicsSpace() != null) {
+                game.getScene().getPhysicsSpace().remove(object);
             }
         }
         
@@ -478,8 +480,8 @@ public abstract class LanPlayState extends PlayState implements UIEventListener 
         }
         
         // 把model添加到physics中
-        if (scene.getPhysicsSpace() != null) {
-            scene.getPhysicsSpace().add(actor.getModel());
+        if (game.getScene().getPhysicsSpace() != null) {
+            game.getScene().getPhysicsSpace().add(actor.getModel());
         }
         
         // 如果角色有指定队伍，则应该处理是否在当前队伍列表中。
@@ -492,14 +494,13 @@ public abstract class LanPlayState extends PlayState implements UIEventListener 
 
     private void addSimpleObj(Spatial spatial, boolean gui) {
         if (spatial.getControl(PhysicsControl.class) != null) {
-            if (scene.getPhysicsSpace() != null) {
-                scene.getPhysicsSpace().add(spatial);
+            if (game.getScene().getPhysicsSpace() != null) {
+                game.getScene().getPhysicsSpace().add(spatial);
             }
         }
         // 不要将角色或object添加到scene中，因为scene会进行缓存，以免忘记清理的时候
         // 在再次进入state时还残留角色。
         if (gui) {
-//            localUIRoot.attachChild(spatial);
             UIState.getInstance().addUI(spatial);
         } else {
             localRoot.attachChild(spatial);
@@ -601,14 +602,18 @@ public abstract class LanPlayState extends PlayState implements UIEventListener 
     /**
      * 覆盖方法来监听当场景中某些物品被选中时的操作。
      * 如果当前已经处理了“选择”操作，可返回true来阻止后续其它“选择”监听的操
-     * 作，如果当前不做任何处理，则直接返回false来超过该监听。<br />
+     * 作，如果当前不做任何处理，则直接返回false来超过该监听。
      * 注: 只有pickable的物体才可能被选择。
-     * @param pickResult
+     * @param pr
      * @return 
      */
-    protected boolean onPicked(PickManager.PickResult pr) {
+    protected boolean onPicked(PickResult pr) {
         // 选择地面进行行走
-        if (pr.spatial == playService.getTerrain() && player != null) {
+//        if (pr.spatial == playService.getTerrain() && player != null) {
+//            userCommandNetwork.playRunToPos(player, pr.result.getContactPoint());
+//            return true;
+//        }
+        if (pr.spatial == game.getScene().getTerrain() && player != null) {
             userCommandNetwork.playRunToPos(player, pr.result.getContactPoint());
             return true;
         }
@@ -706,6 +711,11 @@ public abstract class LanPlayState extends PlayState implements UIEventListener 
         if (chaseCamera != null) {
             chaseCamera.setEnabledRotation(enabled);
         }
+    }
+
+    @Override
+    public Game getGame() {
+        return game;
     }
     
     /**

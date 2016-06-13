@@ -28,7 +28,7 @@ import name.huliqing.fighter.object.DataFactory;
  * 测试
  * @author huliqing
  */
-public class LabState extends LanPlayState {
+public class LabPlayState extends LanPlayState {
     
     private final ActorService actorService = Factory.get(ActorService.class);
     private final StateService stateService = Factory.get(StateService.class);
@@ -45,7 +45,7 @@ public class LabState extends LanPlayState {
         ,IdConstants.ACTOR_SINBAD
     };
 
-    public LabState(GameData gameData) {
+    public LabPlayState(GameData gameData) {
         super(gameData);
     }
     
@@ -55,8 +55,8 @@ public class LabState extends LanPlayState {
         
         // 载入场景
 //        SceneData sceneData = DataLoaderFactory.createSceneData(IdConstants.SCENE_TREASURE);
-        SceneData sceneData = DataFactory.createData(IdConstants.SCENE_TREASURE);
-        initScene(sceneData);
+//        SceneData sceneData = DataFactory.createData(IdConstants.SCENE_TREASURE);
+//        initScene(sceneData);
         
         // 载入NPC
         npc1 = loadActor(FastMath.nextRandomInt(0, actorIds.length - 1));
@@ -73,6 +73,8 @@ public class LabState extends LanPlayState {
         ui.getTeamView().setMainActor(npc1);
         ui.setTargetFace(npc2);
         setChase(npc1.getModel());
+        
+        throw new UnsupportedOperationException("Need refactor");
     }
     
     private Actor loadActor(int idIndex) {

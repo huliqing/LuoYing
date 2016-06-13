@@ -82,10 +82,18 @@ public final class PlayManager<T extends PlayObject> {
             state.cleanup();
         }
         states.clear();
+        
         for (T state : terminating.getArray()){
             state.cleanup();
         }
         terminating.clear();
+        
+        // initializing队列也需要清理，有可能存在一些在外部进行了初始化之后又没有打开PlayManager的更新逻辑，那么这些
+        // 已经初始化的对象会一直停留在initializing队列中（由于PlayManager没有更新,这发生在一些特殊的逻辑中），则在退出
+        // 清理时也需要playManager来负责清理
+        for (T state : initializing.getArray()) {
+            state.cleanup();
+        }
         initializing.clear();
     }
 

@@ -63,8 +63,8 @@ public class StoryGbTask1 extends GameTaskBase {
     private ActorMultLoadHelper loader;
     // 古柏及幼仔，敌人
     private Actor gb;
-    private List<Actor> gbSmalls = new ArrayList<Actor>(2);
-    private List<Actor> enemies =  new ArrayList<Actor>(3);
+    private final List<Actor> gbSmalls = new ArrayList<Actor>(2);
+    private final List<Actor> enemies =  new ArrayList<Actor>(3);
     // 谈话
     private Talk talk1; // 1~4 enemy
     private Talk talk2;
@@ -138,12 +138,12 @@ public class StoryGbTask1 extends GameTaskBase {
                 if (loadIndex == 3) {
                     gb = actor;
                     actorService.setLevel(gb, 15);
-                    actorService.setGroup(gb, game.groupPlayer);
+                    actorService.setGroup(gb, StoryGame.GROUP_PLAYER);
                 }
                 // gbsmall
                 if (loadIndex >= 4 && loadIndex <= 5) {
                     actorService.setLevel(actor, 2);
-                    actorService.setGroup(actor, game.groupPlayer);
+                    actorService.setGroup(actor, StoryGame.GROUP_PLAYER);
                     gbSmalls.add(actor);
                 }
                 actor.setLocation(game.getGbPosition());

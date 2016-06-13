@@ -21,17 +21,15 @@ import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.object.actor.ActorControl;
 import name.huliqing.fighter.data.ProtoData;
-import name.huliqing.fighter.data.SceneData;
 import name.huliqing.fighter.enums.MessageType;
 import name.huliqing.fighter.game.state.PlayState;
-import name.huliqing.fighter.game.state.lan.play.StoryState;
+import name.huliqing.fighter.game.state.lan.play.StoryPlayState;
 import name.huliqing.fighter.manager.ShortcutManager;
 import name.huliqing.fighter.object.NetworkObject;
 import name.huliqing.fighter.object.PlayObject;
 import name.huliqing.fighter.object.anim.Anim;
 import name.huliqing.fighter.object.bullet.Bullet;
 import name.huliqing.fighter.object.effect.Effect;
-import name.huliqing.fighter.object.magic.Magic;
 import name.huliqing.fighter.object.scene.Scene;
 import name.huliqing.fighter.object.view.View;
 import name.huliqing.fighter.save.SaveHelper;
@@ -252,10 +250,10 @@ public class PlayServiceImpl implements PlayService {
     @Override
     public Spatial getTerrain() {
         PlayState playState = Common.getPlayState();
-        if (playState == null) 
+        if (playState == null || playState.getGame() == null) 
             return null;
         
-        Scene scene = playState.getScene();
+        Scene scene = playState.getGame().getScene();
         if (scene != null) {
             return scene.getTerrain();
         }
@@ -350,7 +348,11 @@ public class PlayServiceImpl implements PlayService {
 
     @Override
     public Scene getScene() {
-        return Common.getPlayState().getScene();
+        PlayState ps = Common.getPlayState();
+        if (ps == null || ps.getGame() == null) 
+            return null;
+        
+        return ps.getGame().getScene();
     }
 
     @Override
@@ -401,10 +403,10 @@ public class PlayServiceImpl implements PlayService {
     @Override
     public void saveCompleteStage(int stage) {
         PlayState ps = Common.getPlayState();
-        if (!(ps instanceof StoryState)) {
+        if (!(ps instanceof StoryPlayState)) {
             return;
         }
-        StoryState ss = (StoryState) ps;
+        StoryPlayState ss = (StoryPlayState) ps;
         SaveStory saveStory = ss.getSaveStory();
         if (saveStory == null) {
             saveStory = new SaveStory();
@@ -414,10 +416,11 @@ public class PlayServiceImpl implements PlayService {
         SaveHelper.saveStoryLast(saveStory);
     }
 
-    @Override
-    public void initScene(SceneData sceneData) {
-        Common.getPlayState().initScene(sceneData);
-    }
+    // remove20160613
+//    @Override
+//    public void initScene(SceneData sceneData) {
+//        Common.getPlayState().initScene(sceneData);
+//    }
 
     @Override
     public void showSelectPanel(List<String> selectableActors) {

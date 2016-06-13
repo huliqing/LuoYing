@@ -173,29 +173,24 @@ public class Loader {
     }
     
     public static Env loadEnv(String envId) {
-//        EnvData data = DataLoaderFactory.createEnvData(envId);
         EnvData data = DataFactory.createData(envId);
         return loadEnv(data);
     }
     
     public static Env loadEnv(EnvData data) {
-//        Env env = EnvLoader.load(data);
-//        env.getModel().setUserData(ProtoData.USER_DATA, data);
-//        return env;
-        
         return DataFactory.createProcessor(data);
     }
         
     public static Game loadGame(String id) {
-        GameData data = DataLoaderFactory.createGameData(id);
+        GameData data = DataFactory.createData(id);
         return loadGame(data);
     }
     
     public static Game loadGame(GameData data) {
-        Game game = GameLoader.load(data);
+        Game game = DataFactory.createProcessor(data);
         return game;
     }
-        
+    
     public static Handler loadHandler(HandlerData data) {
         return DataFactory.createProcessor(data);
     }

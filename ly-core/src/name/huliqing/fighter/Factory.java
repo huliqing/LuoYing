@@ -62,6 +62,8 @@ import name.huliqing.fighter.game.service.HandlerService;
 import name.huliqing.fighter.game.service.HandlerServiceImpl;
 import name.huliqing.fighter.game.service.ElService;
 import name.huliqing.fighter.game.service.ElServiceImpl;
+import name.huliqing.fighter.game.service.GameService;
+import name.huliqing.fighter.game.service.GameServiceImpl;
 import name.huliqing.fighter.game.service.HitCheckerService;
 import name.huliqing.fighter.game.service.HitCheckerServiceImpl;
 import name.huliqing.fighter.game.service.ItemService;
@@ -128,6 +130,7 @@ public class Factory {
         claMaps.put(EffectService.class, EffectServiceImpl.class);
         claMaps.put(ElService.class, ElServiceImpl.class);
         claMaps.put(EnvService.class, EnvServiceImpl.class);
+        claMaps.put(GameService.class, GameServiceImpl.class);
         claMaps.put(HandlerService.class, HandlerServiceImpl.class);
         claMaps.put(HitCheckerService.class, HitCheckerServiceImpl.class);
         claMaps.put(ItemService.class, ItemServiceImpl.class);

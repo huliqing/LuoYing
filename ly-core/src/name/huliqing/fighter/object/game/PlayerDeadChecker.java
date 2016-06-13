@@ -24,7 +24,7 @@ public class PlayerDeadChecker extends IntervalLogic {
     private final ViewService viewService = Factory.get(ViewService.class);
     private final PlayService playService = Factory.get(PlayService.class);
 
-    private Actor player;
+    private final Actor player;
     private boolean dead = false;
     
     public PlayerDeadChecker(Actor player) {

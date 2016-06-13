@@ -14,14 +14,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 import name.huliqing.fighter.Fighter;
-import name.huliqing.fighter.data.SceneData;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.enums.MessageType;
 import name.huliqing.fighter.game.view.TeamView;
 import name.huliqing.fighter.object.PlayManager;
 import name.huliqing.fighter.object.PlayObject;
 import name.huliqing.fighter.object.NetworkObject;
-import name.huliqing.fighter.object.scene.Scene;
+import name.huliqing.fighter.object.game.Game;
 import name.huliqing.fighter.object.view.View;
 import name.huliqing.fighter.ui.state.UIState;
 
@@ -169,14 +168,18 @@ public abstract class PlayState extends AbstractAppState {
         super.cleanup();
     }
     
-    /**
-     * 获取场景信息
-     * @return 
-     */
-    public abstract Scene getScene();
+    // remove20160613
+//    /**
+//     * 获取场景信息
+//     * @return 
+//     */
+//    public abstract Scene getScene();
+    
+    public abstract Game getGame();
     
     /**
      * 判断节点是否存在于场景中。
+     * @param spatial
      * @return 
      */
     public abstract boolean isInScene(Spatial spatial);
@@ -225,11 +228,12 @@ public abstract class PlayState extends AbstractAppState {
      */
     public abstract void setPlayer(Actor actor);
     
-    /**
-     * 载入场景数据
-     * @param sceneData 
-     */
-    public abstract void initScene(SceneData sceneData);
+    // remove20160613,不再使用这个方法
+//    /**
+//     * 载入场景数据
+//     * @param sceneData 
+//     */
+//    public abstract void initScene(SceneData sceneData);
     
     /**
      * 显示角色选择面板

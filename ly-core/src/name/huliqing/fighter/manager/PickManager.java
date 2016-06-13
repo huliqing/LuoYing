@@ -30,7 +30,7 @@ public class PickManager {
      * @param inputManager (not null)
      * @param camera (not null)
      * @param root (not null)
-     * @param results 存放结果
+     * @return 
      */
     public static PickResult pick(InputManager inputManager, Camera camera, Spatial root) {
         Vector2f v2d = inputManager.getCursorPosition();

@@ -383,11 +383,12 @@ public class PlayNetworkImpl implements PlayNetwork {
     public void saveCompleteStage(int storyNum) {
         playService.saveCompleteStage(storyNum);
     }
-    
-    @Override
-    public void initScene(SceneData sceneData) {
-        playService.initScene(sceneData);
-    }
+   
+    // remove20160613
+//    @Override
+//    public void initScene(SceneData sceneData) {
+//        playService.initScene(sceneData);
+//    }
     
     @Override
     public void showSelectPanel(List<String> selectableActors) {

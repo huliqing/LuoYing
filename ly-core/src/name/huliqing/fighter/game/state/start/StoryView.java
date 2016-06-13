@@ -12,7 +12,7 @@ import java.util.List;
 import name.huliqing.fighter.Config;
 import name.huliqing.fighter.constants.IdConstants;
 import name.huliqing.fighter.data.GameData;
-import name.huliqing.fighter.game.state.lan.play.StoryState;
+import name.huliqing.fighter.game.state.lan.play.StoryPlayState;
 import name.huliqing.fighter.object.DataLoaderFactory;
 import name.huliqing.fighter.game.state.start.StoryView.StoryData;
 import name.huliqing.fighter.manager.ResourceManager;
@@ -120,7 +120,7 @@ public class StoryView extends ListView<StoryData> {
                 public void onClick(UI ui, boolean isPress) {
                     if (isPress || storyData.gameId == null) return;
                     GameData gameData = DataLoaderFactory.createGameData(storyData.gameId);
-                    StoryState story = new StoryState(gameData);
+                    StoryPlayState story = new StoryPlayState(gameData);
                     story.setSaveStory(saveStory);
                     startState.startState(story);
                 }

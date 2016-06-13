@@ -19,6 +19,7 @@ public interface GameTask {
     
     /**
      * 更新任务逻辑
+     * @param tpf
      */
     void update(float tpf);
     

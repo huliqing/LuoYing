@@ -13,6 +13,7 @@ import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
+import com.jme3.input.CameraInput;
 import com.jme3.input.ChaseCamera;
 import com.jme3.input.InputManager;
 import com.jme3.input.TouchInput;
@@ -72,11 +73,10 @@ public class MyChaseCamera extends ChaseCamera implements PhysicsCollisionListen
     
     public MyChaseCamera(Camera cam
             , InputManager inputManager
-            , PlayState playState
             , PhysicsSpace physicsSpace
             ) {
         super(cam, inputManager);
-        
+            
         // 使用一个扁平的box来优化相机的碰撞检测,加大xz上的值可以避免相机在快速旋转的时候仍能看到地表背面的可能。
         // y向的值不能太大，以避免与地面的无限碰撞
         camCollisionChecker = new Geometry("camCollisionChecker", new Box(2.5f, 0.5f, 2.5f));
@@ -84,24 +84,25 @@ public class MyChaseCamera extends ChaseCamera implements PhysicsCollisionListen
         camCollisionChecker.setCullHint(Spatial.CullHint.Always);
         GhostControl gc = new GhostControl(CollisionShapeFactory.createBoxShape(camCollisionChecker));
         camCollisionChecker.addControl(gc);
-        playState.addObject(camCollisionChecker, false);
-        
+
+        playService.addObject(camCollisionChecker, false);
+
         // 给摄像机碰撞检测器和地面设置一个不同的碰撞组,这会优化碰撞检测性能.
         // 因为摄像机只需要检测是否与地面发生碰撞就可以,不需要与其它角色或物体进行
         // 碰撞检测,以提高性能.
         gc.setCollisionGroup(CAM_COLLISION_GROUP);
         gc.setCollideWithGroups(CAM_COLLISION_GROUP);
-        
-        // add collision object
+
         resetCollision(physicsSpace, playService.getTerrain());
         
-        // 测试touch
+        // 用于提供在移动平台下双手指缩放调整镜头远近的事件监听
         registerTouchListener(inputManager);
     }
     
     /**
      * 设置一个让相机不会和它相碰撞的目标对象，一般可设置为地面或墙壁，这可
      * 避免相机穿墙。
+     * @param physicsSpace
      * @param collisionTarget 
      */
     public final void resetCollision(PhysicsSpace physicsSpace, Spatial collisionTarget) {
@@ -270,9 +271,11 @@ public class MyChaseCamera extends ChaseCamera implements PhysicsCollisionListen
      * 清理相机数据，清理后相机将不再可用。
      */
     public void cleanup() {
-        GhostControl gc = camCollisionChecker.getControl(GhostControl.class);
-        if (gc != null) {
-            camCollisionChecker.removeControl(gc);
+        if (camCollisionChecker != null) {
+            GhostControl gc = camCollisionChecker.getControl(GhostControl.class);
+            if (gc != null) {
+                camCollisionChecker.removeControl(gc);
+            }
         }
         if (physicsSpace != null) {
             physicsSpace.removeCollisionListener(this);
@@ -280,6 +283,22 @@ public class MyChaseCamera extends ChaseCamera implements PhysicsCollisionListen
         physicsSpace = null;
         camCollisionChecker = null;
         collisionObject = null;
+        
+        // ChaseCamera中添加的监听
+        String[] inputs = {CameraInput.CHASECAM_TOGGLEROTATE,
+            CameraInput.CHASECAM_DOWN,
+            CameraInput.CHASECAM_UP,
+            CameraInput.CHASECAM_MOVELEFT,
+            CameraInput.CHASECAM_MOVERIGHT,
+            CameraInput.CHASECAM_ZOOMIN,
+            CameraInput.CHASECAM_ZOOMOUT};
+        for (String s : inputs) {
+            inputManager.deleteMapping(s);
+        }
+        
+        // MyChaseCamera中自定义的监听
+        inputManager.deleteMapping(TOUCH_SCALE_EVENT);
+        inputManager.deleteMapping(TOUCH_SCALE_EVENT);
     }
     
     private void registerTouchListener(InputManager im) {

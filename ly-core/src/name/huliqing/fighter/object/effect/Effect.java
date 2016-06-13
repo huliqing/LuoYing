@@ -12,6 +12,7 @@ import name.huliqing.fighter.object.DataProcessor;
 /**
  * 特效接口
  * @author huliqing
+ * @param <T>
  * @since v1.2 20150421
  */
 public interface Effect<T extends EffectData> extends DataProcessor<T>{
@@ -45,20 +46,6 @@ public interface Effect<T extends EffectData> extends DataProcessor<T>{
      * 因为效果是设计为允许复用的。
      */
     void cleanup();
-
-//    /**
-//     * 获取特效的执行速度.
-//     * @return 
-//     */
-//    float getSpeed();
-//    
-//    /**
-//     * 设置特效的执行速度,大于1为提高速度,小于1为降低速度,默认1.注:改变特效
-//     * 的执行速度将影响特效的各个阶段的执行时间.注:速度每次cleanup都会重置为1.0
-//     * 包括子效果,所以如果要改变效果的执行速度,必须在效果每次运行之前进行设置.
-//     * @param speed
-//     */
-//    void setSpeed(float speed);
     
     /**
      * 获取当前效果所处的阶段。
@@ -83,28 +70,6 @@ public interface Effect<T extends EffectData> extends DataProcessor<T>{
      */
     void setTraceObject(Spatial target);
     
-//    void setTracePositionOffset(Vector3f positionOffset);
-//    
-//    Vector3f getTracePositionOffset();
-    
-//    /**
-//     * 设置效果所在的坐标位置
-//     * @param position 
-//     */
-//    void setLocation(Vector3f position);
-//    
-//    /**
-//     * 设置效果的旋转
-//     * @param rotation 
-//     */
-//    void setRotation(Quaternion rotation);
-//    
-//    /**
-//     * 缩放
-//     * @param scale 
-//     */
-//    void setScale(Vector3f scale);
-    
     /**
      * 给效果的运行添加侦听器，注：所有侦听器在效果执行结束之后会被移除。
      * 每次重新开始前需要重新添加。(因为效果是允许重复利用的，前一次效果运行
@@ -127,15 +92,4 @@ public interface Effect<T extends EffectData> extends DataProcessor<T>{
      */
     Spatial getDisplay();
     
-//    /**
-//     * 获取effectData
-//     * @return 
-//     */
-//    EffectData getData();
-    
-//    /**
-//     * 判断特效是否是一直循环的，即不会自动退出的特效。
-//     * @return 
-//     */
-//    boolean isLoop();
 }

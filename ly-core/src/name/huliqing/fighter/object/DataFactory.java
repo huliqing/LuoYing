@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import name.huliqing.fighter.Config;
 import name.huliqing.fighter.data.EffectData;
 import name.huliqing.fighter.data.EnvData;
+import name.huliqing.fighter.data.GameData;
 import name.huliqing.fighter.data.HandlerData;
 import name.huliqing.fighter.data.MagicData;
 import name.huliqing.fighter.data.Proto;
@@ -36,6 +37,12 @@ import name.huliqing.fighter.object.env.PlantEnvLoader;
 import name.huliqing.fighter.object.env.SkyEnv;
 import name.huliqing.fighter.object.env.TerrainEnv;
 import name.huliqing.fighter.object.env.TreeEnv;
+import name.huliqing.fighter.object.game.Game;
+import name.huliqing.fighter.object.game.GameLoader;
+import name.huliqing.fighter.object.game.StoryGbGame;
+import name.huliqing.fighter.object.game.StoryGuardGame;
+import name.huliqing.fighter.object.game.StoryTreasureGame;
+import name.huliqing.fighter.object.game.SurvivalGame;
 import name.huliqing.fighter.object.handler.AttributeHandler;
 import name.huliqing.fighter.object.handler.HandlerLoader;
 import name.huliqing.fighter.object.handler.ItemSkillHandler;
@@ -73,23 +80,23 @@ public class DataFactory {
     
     // TagName -> ProtoData, 每一个TagName对应一个ProtoData类型
     private final static Map<String, Class<? extends ProtoData>>
-            dataTypeMap = new HashMap<String, Class<? extends ProtoData>>();
+            DATA_TYPE_MAP = new HashMap<String, Class<? extends ProtoData>>();
     
     // TagName -> DataLoader, 每一个TagName对应一个DataLoader类型。
     private final static Map<String, DataLoader>
-            dataLoaderMap = new HashMap<String, DataLoader>();
+            DATA_LOADER_MAP = new HashMap<String, DataLoader>();
     
     // TagName -> DataProcessor, 每一个TagName对应一个DataProcessor类型
     private final static Map<String, Class<? extends DataProcessor>> 
-            dataProcessorMap = new HashMap<String, Class<? extends DataProcessor>>();
+            DATA_PROCESSOR_MAP = new HashMap<String, Class<? extends DataProcessor>>();
     
     /**
      * 注册一个数据类型
-     * @param tagName
-     * @param cp 
+     * @param tagName 
+     * @param dataTypeClass 
      */
     public static void registerDataType(String tagName, Class<? extends ProtoData> dataTypeClass) {
-        dataTypeMap.put(tagName, dataTypeClass);
+        DATA_TYPE_MAP.put(tagName, dataTypeClass);
         // 注：Serializer.registerClass不能放在静态代码块(static{})中执行,否则注册无效。
         // 这个方法只能在运行时，即起动应用后执行。
         Serializer.registerClass(dataTypeClass);
@@ -105,19 +112,21 @@ public class DataFactory {
      */
     public static void registerDataLoader(String tagName, Class<? extends DataLoader> dataLoaderClass) {
         try {
-            dataLoaderMap.put(tagName, dataLoaderClass.newInstance());
-        } catch (Exception ex) {
+            DATA_LOADER_MAP.put(tagName, dataLoaderClass.newInstance());
+        } catch (InstantiationException ex) {
+            Logger.getLogger(DataFactory.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
             Logger.getLogger(DataFactory.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
     /** 
      * 注册一个数据处理器
-     * @param tagName
-     * @param dataLoaderClass 
+     * @param tagName 
+     * @param dataProcessorClass 
      */
     public static void registerDataProcessor(String tagName, Class<? extends DataProcessor> dataProcessorClass) {
-        dataProcessorMap.put(tagName, dataProcessorClass);
+        DATA_PROCESSOR_MAP.put(tagName, dataProcessorClass);
     }
     
     /**
@@ -149,7 +158,7 @@ public class DataFactory {
             throw new NullPointerException("Could not find object, id=" + id);
         }
         
-        Class<? extends ProtoData> dataClass = dataTypeMap.get(proto.getTagName());
+        Class<? extends ProtoData> dataClass = DATA_TYPE_MAP.get(proto.getTagName());
         if (dataClass == null) {
             throw new NullPointerException("Could not find DataType for tagName! "
                     + "id=" + id 
@@ -158,7 +167,7 @@ public class DataFactory {
                     );
         }
         
-        DataLoader loader = dataLoaderMap.get(proto.getTagName());
+        DataLoader loader = DATA_LOADER_MAP.get(proto.getTagName());
         if (loader == null) {
             throw new NullPointerException("Could not find DataLoader!"
                     + " id=" + id 
@@ -188,7 +197,7 @@ public class DataFactory {
      */
     public static <T extends DataProcessor> T createProcessor(ProtoData data) {
         String tagName = data.getTagName();
-        Class<? extends DataProcessor> dpClass = dataProcessorMap.get(tagName);
+        Class<? extends DataProcessor> dpClass = DATA_PROCESSOR_MAP.get(tagName);
         if (dpClass == null) {
             throw new NullPointerException("Could not find DataProcess for tagName!"
                     + " tagName=" + tagName 
@@ -212,7 +221,6 @@ public class DataFactory {
      * 初始化注册一些内置的数据处理器和装载器。
      */
     public static void initRegister() {
-        
         
         register("handlerTest", HandlerData.class, HandlerLoader.class, TestHandler.class);
         register("handlerSummon", HandlerData.class, HandlerLoader.class, SummonHandler.class);
@@ -261,6 +269,11 @@ public class DataFactory {
         register("effectSlideColorIOSpline", EffectData.class, EffectLoader.class, SlideColorIOSplineEffect.class);
         register("effectProjection", EffectData.class, EffectLoader.class, ProjectionEffect.class);
         
+        register("game", GameData.class, GameLoader.class, Game.class);
+        register("gameStoryTreasure", GameData.class, GameLoader.class, StoryTreasureGame.class);
+        register("gameStoryGb", GameData.class, GameLoader.class, StoryGbGame.class);
+        register("gameStoryGuard", GameData.class, GameLoader.class, StoryGuardGame.class);
+        register("gameSurvival", GameData.class, GameLoader.class, SurvivalGame.class);
     }
     
 }

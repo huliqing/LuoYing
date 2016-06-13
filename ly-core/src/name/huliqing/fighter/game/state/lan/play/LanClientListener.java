@@ -48,31 +48,32 @@ public class LanClientListener extends DefaultClientListener {
         super(app);
     }
     
-    /**
-     * 开始向服务端发起初始化游戏数据的请求。注：该方法会检查客户端和服务端
-     * 的状态，只有在确认客户端处于ClientState.ready和服务端处于ServerState.running
-     * 时才发起请求，在发起请求后，客户端将转入waiting_init_game状态，以避免重复发送请
-     * 求。
-     * @param gameClient 
-     */
-    public void checkToStartClientInit(GameClient gameClient) {
-        if (gameClient.getClientState() == ClientState.ready && gameClient.getServerState() == ServerState.running) {
-            // 获取初始场景信息,注：确保这个命令只发送一次。
-            gameClient.setClientState(ClientState.waitting_init_game);
-            gameClient.send(new MessPlayInitGame());
-            
-            // 从服务端重新获取所有客户端联接信息，因为gameClient重新设置了listener,
-            // 并且clientsWin需要初始化这部分信息，否则客户端进入后打开看不到列表，除非有新客户端连接。
-            // 所以这里应该主动获取一次，进行初始化
-            gameClient.send(new MessPlayGetClients());
-            
-            // 显示角色选择面板
-            playService.showSelectPanel(gameClient.getGameData().getAvailableActors());
-        } else {
-            // 请求服务端状态
-            gameClient.send(new MessPlayGetServerState());
-        }
-    }
+    // remove20160613
+//    /**
+//     * 开始向服务端发起初始化游戏数据的请求。注：该方法会检查客户端和服务端
+//     * 的状态，只有在确认客户端处于ClientState.ready和服务端处于ServerState.running
+//     * 时才发起请求，在发起请求后，客户端将转入waiting_init_game状态，以避免重复发送请
+//     * 求。
+//     * @param gameClient 
+//     */
+//    public void checkToStartClientInit(GameClient gameClient) {
+//        if (gameClient.getClientState() == ClientState.ready && gameClient.getServerState() == ServerState.running) {
+//            // 获取初始场景信息,注：确保这个命令只发送一次。
+//            gameClient.setClientState(ClientState.waitting_init_game);
+//            gameClient.send(new MessPlayInitGame());
+//            
+//            // 从服务端重新获取所有客户端联接信息，因为gameClient重新设置了listener,
+//            // 并且clientsWin需要初始化这部分信息，否则客户端进入后打开看不到列表，除非有新客户端连接。
+//            // 所以这里应该主动获取一次，进行初始化
+//            gameClient.send(new MessPlayGetClients());
+//            
+//            // 显示角色选择面板
+//            playService.showSelectPanel(gameClient.getGameData().getAvailableActors());
+//        } else {
+//            // 请求服务端状态
+//            gameClient.send(new MessPlayGetServerState());
+//        }
+//    }
 
     @Override
     protected void processClientDisconnected(GameClient gameClient, Client client, ClientStateListener.DisconnectInfo info) {

@@ -59,11 +59,10 @@ public class SceneUtils {
      */
     public static MyChaseCamera createChaseCam(Camera camera
             , InputManager inputManager
-            , PlayState playState
             , PhysicsSpace physicsSpace
             ) {
         MyChaseCamera chaseCam = new MyChaseCamera(
-                camera, inputManager, playState, physicsSpace);
+                camera, inputManager, physicsSpace);
         
         // 开启镜头跟随可能让部分人容易犯头晕
 //        chaseCam.setSmoothMotion(true);

@@ -20,7 +20,6 @@ import name.huliqing.fighter.object.PlayObject;
 import name.huliqing.fighter.object.anim.Anim;
 import name.huliqing.fighter.object.bullet.Bullet;
 import name.huliqing.fighter.object.effect.Effect;
-import name.huliqing.fighter.object.magic.Magic;
 import name.huliqing.fighter.object.scene.Scene;
 import name.huliqing.fighter.object.view.View;
 
@@ -44,9 +43,8 @@ public interface PlayService extends Inject {
     
     /**
      * 添加一个角色到战场
-     * @deprecated 后续要重构并使用 addPlayObject代替 
-     * @param actorId 
-     * @return actor
+     * //TODO 后续要重构并使用 addPlayObject代替 
+     * @param actor
      */
     void addActor(Actor actor);
     
@@ -111,10 +109,10 @@ public interface PlayService extends Inject {
      * @param object 
      */
     void addObjectGui(Object object);
-
+    
     /**
      * 从场景中移除物体
-     * @param spatial 
+     * @param object
      */
     void removeObject(Object object);
     
@@ -306,11 +304,12 @@ public interface PlayService extends Inject {
      */
     void saveCompleteStage(int storyNum);
     
-    /**
-     * 载入场景数据
-     * @param sceneData 
-     */
-    void initScene(SceneData sceneData);
+    // remove20160613
+//    /**
+//     * 载入场景数据
+//     * @param sceneData 
+//     */
+//    void initScene(SceneData sceneData);
     
     /**
      * 显示角色选择面板

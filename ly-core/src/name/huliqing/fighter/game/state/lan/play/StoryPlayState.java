@@ -8,7 +8,6 @@ import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.network.HostedConnection;
 import com.jme3.network.Message;
-import com.jme3.renderer.queue.RenderQueue;
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
@@ -17,7 +16,6 @@ import name.huliqing.fighter.Config;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.constants.IdConstants;
 import name.huliqing.fighter.object.DataLoaderFactory;
-import name.huliqing.fighter.loader.Loader;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.data.GameData;
 import name.huliqing.fighter.data.ProtoData;
@@ -37,8 +35,8 @@ import name.huliqing.fighter.game.state.lan.Network;
 import name.huliqing.fighter.game.state.lan.mess.MessPlayActorSelect;
 import name.huliqing.fighter.game.state.lan.mess.MessPlayClientData;
 import name.huliqing.fighter.manager.ShortcutManager;
-import name.huliqing.fighter.object.game.Game;
 import name.huliqing.fighter.game.view.ShortcutView;
+import name.huliqing.fighter.object.game.Game.GameListener;
 import name.huliqing.fighter.save.SaveConfig;
 import name.huliqing.fighter.save.SaveHelper;
 import name.huliqing.fighter.save.SaveStory;
@@ -51,8 +49,8 @@ import name.huliqing.fighter.save.ShortcutSave;
  * 的关卡1,2,3都会被打开（即使1,2可能未完成），同时激活下一关卡4.
  * @author huliqing
  */
-public class StoryState extends LanPlayState {
-    private final static Logger logger = Logger.getLogger(StoryState.class.getName());
+public class StoryPlayState extends LanPlayState {
+    private final static Logger logger = Logger.getLogger(StoryPlayState.class.getName());
     private final ActorService actorService = Factory.get(ActorService.class);
     private final PlayService playService = Factory.get(PlayService.class);
     private final ConfigService configService = Factory.get(ConfigService.class);
@@ -66,7 +64,7 @@ public class StoryState extends LanPlayState {
     // 存档数据
     private SaveStory saveStory;
     
-    public StoryState(GameData gameData) {
+    public StoryPlayState(GameData gameData) {
         super(gameData);
     }
 
@@ -83,26 +81,23 @@ public class StoryState extends LanPlayState {
         long start = System.currentTimeMillis();
         super.initialize(stateManager, app); 
         
-        // 载入场景
-        initScene(gameData.getSceneData());
-        Game game = Loader.loadGame(gameData);
-        addObject(game, false);
-        
         // ==== 载入player
-        loadPlayer();
+        game.addListener(new GameListener() {
+            @Override
+            public void onSceneLoaded() {
+                // 1.场景载入后再载入角色
+                loadPlayer();
+                // 2.打开局域网服务,这允许故事模式进行联机
+                openGameServer();
+            }
+        });
         
-        // 必须在载入player后才可以开始逻辑,因为部分游戏逻辑init需要获得玩家引用
-        game.start();
         addMessage("Load time used: " + ((System.currentTimeMillis() - start) / 1000), MessageType.info);
-        
-        // 打开局域网服务,这允许故事模式进行联机
-        openGameServer();
     }
     
     // 开启主机模式，这允许故事模式下其它玩家连接到该游戏
     private void openGameServer() {
         // 添加network的逻辑
-//        addLogic(Network.getInstance());
         addObject(Network.getInstance(), false);
         
         // 创建server
@@ -111,7 +106,7 @@ public class StoryState extends LanPlayState {
                 gameServer = Network.getInstance().createGameServer(gameData);
                 gameServer.setServerListener(new StoryServerListener());
             } catch (IOException ex) {
-                Logger.getLogger(StoryState.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(StoryPlayState.class.getName()).log(Level.SEVERE, null, ex);
                 return;
             }
         }
@@ -122,8 +117,7 @@ public class StoryState extends LanPlayState {
     }
     
     /**
-     * 载入玩家角色
-     * @return 
+     * 载入玩家角色 
      */
     protected void loadPlayer() {
         // 载入玩家角色
@@ -139,8 +133,6 @@ public class StoryState extends LanPlayState {
         // 故事模式玩家始终队伍分组为1
         actorService.setTeam(actor, 1);
         skillService.playSkill(actor, skillService.getSkill(actor, SkillType.wait).getId(), false);
-        
-//        actor.getModel().setShadowMode(RenderQueue.ShadowMode.Cast);
         
         addObject(actor.getModel(), false);
         setPlayer(actor);
@@ -163,7 +155,6 @@ public class StoryState extends LanPlayState {
     
     @Override
     public void exit() {
-        
         // 保存玩家资料
         if (player != null) {
             logger.log(Level.INFO, "Save player info.");
@@ -246,7 +237,7 @@ public class StoryState extends LanPlayState {
                 continue;
             }
             // 包裹中只允许存放限定的物品
-            DataType type = data.getProto().getDataType();
+            DataType type = data.getDataType();
             if (type != DataType.item && type != DataType.skin && type != DataType.skill) {
                 continue;
             }
@@ -254,12 +245,9 @@ public class StoryState extends LanPlayState {
             // 由于skill的创建过程比较特殊，SkillData只有在创建了AnimSkill之后
             // 才能获得skillType,所以不能直接使用createProtoData方式获得的SkillData
             // 这会找不到SkillData中的skillType,所以需要从角色身上重新找回SkillData
-            if (data.getProto().getDataType() == DataType.skill) {
+            if (data.getDataType() == DataType.skill) {
                 data = player.getData().getSkillStore().getSkillById(data.getId());
             }
-            
-            // remove20160131
-//            Shortcut shortcut = new Shortcut(player, data);
             
             ShortcutView shortcut = ShortcutManager.createShortcut(player, data);
             shortcut.setLocalScale(shortcutSize);

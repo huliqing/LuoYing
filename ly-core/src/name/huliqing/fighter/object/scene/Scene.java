@@ -27,6 +27,7 @@ import name.huliqing.fighter.object.env.Env;
 
 /**
  * @author huliqing
+ * @param <T>
  */
 public abstract class Scene<T extends SceneData> extends AbstractPlayObject implements DataProcessor<T>{
     private final PlayService playService = Factory.get(PlayService.class);
@@ -133,8 +134,10 @@ public abstract class Scene<T extends SceneData> extends AbstractPlayObject impl
             shadowSceneProcessor = null;
         }
         // LocalRoot是直接attach到ViewPort上去的，所以要这样移除。
-        playService.getApplication().getViewPort().detachScene(localRoot);
-        localRoot = null;
+        if (localRoot != null) {
+            playService.getApplication().getViewPort().detachScene(localRoot);
+            localRoot = null;
+        }
         super.cleanup(); 
     }
 
@@ -162,7 +165,6 @@ public abstract class Scene<T extends SceneData> extends AbstractPlayObject impl
     
     /**
      * 添加节点到物理空间
-     * @param bulletAppState
      * @param s 
      */
     protected void addPhysicsObject(Spatial s) {
