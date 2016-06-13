@@ -77,7 +77,7 @@ public abstract class LanPlayState extends PlayState implements UIEventListener 
     
     // ----场景动态对象
     // 当前场景中的所有角色,包含所有玩家,需要同步到客户端
-    protected final List<Actor> actors = new ArrayList<Actor>();
+    protected final SafeArrayList<Actor> actors = new SafeArrayList<Actor>(Actor.class);
     // 当前场景中的所有视图组件,与UI不同，这些组件需要同步到客户端
     protected final SafeArrayList<View> views = new SafeArrayList<View>(View.class);
     // 动画对象，update逻辑中不负责清理，需要由Animation2内部结束后自行清理
@@ -133,24 +133,27 @@ public abstract class LanPlayState extends PlayState implements UIEventListener 
          HUDManager.init(this.app.getGuiNode());
          
          // ==== 7.载入游戏
-        game = gameService.loadGame(gameData);
-        game.addListener(new GameListener() {
-            @Override
-            public void onSceneLoaded() {
-                // remove,resetCollision在手机上莫明奇妙的无效。 所以统一为重新创建chaseCamera
-                //chaseCamera.resetCollision(bulletAppState.getPhysicsSpace(), scene.getTerrain());
-                
-                if (chaseCamera != null) {
-                    chaseCamera.cleanup();
-                    chaseCamera = null;
-                }
-                chaseCamera = SceneUtils.createChaseCam(app.getCamera()
-                        , app.getInputManager()
-                        , game.getScene().getPhysicsSpace());
-            }
-        });
-        addObject(game, false);
+//        game = gameService.loadGame(gameData);
+//        game.addListener(new GameListener() {
+//            @Override
+//            public void onSceneLoaded() {
+//                // remove,resetCollision在手机上莫明奇妙的无效。 所以统一为重新创建chaseCamera
+//                //chaseCamera.resetCollision(bulletAppState.getPhysicsSpace(), scene.getTerrain());
+//                
+//                if (chaseCamera != null) {
+//                    chaseCamera.cleanup();
+//                    chaseCamera = null;
+//                }
+//                chaseCamera = SceneUtils.createChaseCam(app.getCamera()
+//                        , app.getInputManager()
+//                        , game.getScene().getPhysicsSpace());
+//            }
+//        });
+//        addObject(game, false);
+
+           changeGame(gameData);
         
+           // for test
 //        BasicProfilerState profiler = new BasicProfilerState(true);
 //        profiler.setGraphScale(100f);
 //        app.getStateManager().attach(profiler);
@@ -186,10 +189,6 @@ public abstract class LanPlayState extends PlayState implements UIEventListener 
             chaseCamera.setChase(actorPanel.getActorView());
             chaseCamera.setDefaultDistance(5f);
         }
-//        else {
-//            app.getCamera().setLocation(actorPanel.getActorView().getWorldTranslation().add(0, 5, 5));
-//            app.getCamera().lookAt(actorPanel.getActorView().getWorldTranslation(), Vector3f.UNIT_Y);
-//        }
     }
     
     protected void onSelectPlayer(String actorId, String actorName) {  
@@ -609,10 +608,6 @@ public abstract class LanPlayState extends PlayState implements UIEventListener 
      */
     protected boolean onPicked(PickResult pr) {
         // 选择地面进行行走
-//        if (pr.spatial == playService.getTerrain() && player != null) {
-//            userCommandNetwork.playRunToPos(player, pr.result.getContactPoint());
-//            return true;
-//        }
         if (pr.spatial == game.getScene().getTerrain() && player != null) {
             userCommandNetwork.playRunToPos(player, pr.result.getContactPoint());
             return true;
@@ -716,6 +711,56 @@ public abstract class LanPlayState extends PlayState implements UIEventListener 
     @Override
     public Game getGame() {
         return game;
+    }
+
+    @Override
+    public void changeGame(GameData gameData) {
+        // 如果已有游戏在运行则要清理
+        // 1.清理旧场景信息
+        // 2.清理场景角色
+        // 3.重新给玩家类角色初始化物理特性
+        final List<Actor> players = new ArrayList<Actor>();
+        if (game != null) {
+            // 清理场景
+            removeObject(game);
+            // 清理角色
+            for (Actor actor : actors.getArray()) {
+                removeObject(actor);
+                if (actor.isPlayer()) {
+                    players.add(actor);
+                }
+            }
+        }
+        
+        game = gameService.loadGame(gameData);
+        game.addListener(new GameListener() {
+            @Override
+            public void onSceneLoaded() {
+                // remove,resetCollision在手机上莫明奇妙的无效。 所以统一为重新创建chaseCamera
+                //chaseCamera.resetCollision(bulletAppState.getPhysicsSpace(), scene.getTerrain());
+                
+                // 1.重新加入玩家角色
+                for (Actor actor : players) {
+                    addActor(actor, false);
+                }
+                
+                // 2.重新生成镜头跟随
+                if (chaseCamera != null) {
+                    chaseCamera.cleanup();
+                    chaseCamera = null;
+                }
+                chaseCamera = SceneUtils.createChaseCam(app.getCamera()
+                        , app.getInputManager()
+                        , game.getScene().getPhysicsSpace());
+                
+                // 3.因为chaseCamera进行了重建，所以必须使它重新跟随玩家
+                Actor player = getPlayer();
+                if (player != null) {
+                    chaseCamera.setChase(player.getModel());
+                }
+            }
+        });
+        addObject(game, false);
     }
     
     /**

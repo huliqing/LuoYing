@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 import name.huliqing.fighter.Fighter;
+import name.huliqing.fighter.data.GameData;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.enums.MessageType;
 import name.huliqing.fighter.game.view.TeamView;
@@ -97,6 +98,7 @@ public abstract class PlayState extends AbstractAppState {
     /**
      * 给场景中添加物体
      * @param object 
+     * @param gui 
      */
     public void addObject(Object object, boolean gui) {
         if (object instanceof PlayObject) {
@@ -168,14 +170,17 @@ public abstract class PlayState extends AbstractAppState {
         super.cleanup();
     }
     
-    // remove20160613
-//    /**
-//     * 获取场景信息
-//     * @return 
-//     */
-//    public abstract Scene getScene();
-    
+    /**
+     * 获取当前正在运行中的游戏
+     * @return 
+     */
     public abstract Game getGame();
+    
+    /**
+     * 切换到另一个游戏 
+     * @param gameData
+     */
+    public abstract void changeGame(GameData gameData);
     
     /**
      * 判断节点是否存在于场景中。
@@ -227,13 +232,6 @@ public abstract class PlayState extends AbstractAppState {
      * @param actor 
      */
     public abstract void setPlayer(Actor actor);
-    
-    // remove20160613,不再使用这个方法
-//    /**
-//     * 载入场景数据
-//     * @param sceneData 
-//     */
-//    public abstract void initScene(SceneData sceneData);
     
     /**
      * 显示角色选择面板

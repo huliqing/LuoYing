@@ -8,7 +8,6 @@ package name.huliqing.fighter.object.handler;
 import com.jme3.font.BitmapFont;
 import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.util.TempVars;
@@ -17,7 +16,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import name.huliqing.fighter.Factory;
-import name.huliqing.fighter.constants.InterfaceConstants;
 import name.huliqing.fighter.data.HandlerData;
 import name.huliqing.fighter.data.ProtoData;
 import name.huliqing.fighter.game.service.PlayService;
@@ -170,7 +168,7 @@ public class MapHandler extends AbstractHandler {
         // 可以为地图上的点定义一个图标
         public String icon;
         // 是否打开，只有打开才允许传送
-        public boolean enabled = false;
+        public boolean enabled = true;
     }
     
     /**
@@ -271,7 +269,7 @@ public class MapHandler extends AbstractHandler {
                 locBtn.setPosition(posX - btnw * 0.5f,  posY - btnh * 0.5f);
 
                 // 让按钮颜色变透明以隐藏,不能使用cullHint，否则无法触发事件
-                locBtn.getMaterial().getParam("Color").setValue(new ColorRGBA(1,1,1,0.3f));
+                locBtn.getMaterial().getParam("Color").setValue(new ColorRGBA(1,1,1,0.5f));
                 locBtn.getMaterial().getAdditionalRenderState().setBlendMode(RenderState.BlendMode.AlphaAdditive);
                 locBtn.setEffectEnabled(false);
                 locBtn.addClickListener(new Listener() {
@@ -402,7 +400,9 @@ public class MapHandler extends AbstractHandler {
                 @Override
                 public void onClick(UI view, boolean isPressed) {
                     if (isPressed) return;
-                    System.out.println("Goto game=" + loc.gameId);
+                    playService.changeGame(loc.gameId);
+                    Command.this.setVisible(false);
+                    mapView.removeFromParent();
                 }
             });
             

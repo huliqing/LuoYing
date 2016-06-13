@@ -271,6 +271,12 @@ public class MyChaseCamera extends ChaseCamera implements PhysicsCollisionListen
      * 清理相机数据，清理后相机将不再可用。
      */
     public void cleanup() {
+        // 1.移除控制器
+        if (target != null) {
+            target.removeControl(this);
+        }
+        
+        // 2.移除用于防穿墙的碰撞检测特性
         if (camCollisionChecker != null) {
             GhostControl gc = camCollisionChecker.getControl(GhostControl.class);
             if (gc != null) {
@@ -284,7 +290,7 @@ public class MyChaseCamera extends ChaseCamera implements PhysicsCollisionListen
         camCollisionChecker = null;
         collisionObject = null;
         
-        // ChaseCamera中添加的监听
+        // 3.移除父类ChaseCamera中添加的监听
         String[] inputs = {CameraInput.CHASECAM_TOGGLEROTATE,
             CameraInput.CHASECAM_DOWN,
             CameraInput.CHASECAM_UP,
@@ -296,7 +302,7 @@ public class MyChaseCamera extends ChaseCamera implements PhysicsCollisionListen
             inputManager.deleteMapping(s);
         }
         
-        // MyChaseCamera中自定义的监听
+        // 4.MyChaseCamera中自定义的监听
         inputManager.deleteMapping(TOUCH_SCALE_EVENT);
         inputManager.deleteMapping(TOUCH_SCALE_EVENT);
     }

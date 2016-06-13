@@ -515,5 +515,10 @@ public class PlayNetworkImpl implements PlayNetwork {
     public Application getApplication() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+    @Override
+    public void changeGame(String gameId) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

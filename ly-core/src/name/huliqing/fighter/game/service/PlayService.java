@@ -140,9 +140,9 @@ public interface PlayService extends Inject {
     
     /**
      * 查找当前场景中指定分组的“有生命现象”的角色，这些角色必须是：
-     * 1.属于指定分组<br />
+     * 1.属于指定分组
      * 2.必须是有机生命体（但不论是否已死亡）.有机生命是指角色必须拥有生命
-     * 现象，如动物、植物、人类、恶魔等。<br />
+     * 现象，如动物、植物、人类、恶魔等。<br>
      * 无机生命体是指如：防御塔、祭坛等不能移动，无生命迹象的角色。
      * 如：防御塔、祭坛之类不能移动的建筑属于"非"活物。
      * @param group
@@ -251,6 +251,7 @@ public interface PlayService extends Inject {
     
     /**
      * 判断角色是否还在场景中
+     * @param actor
      * @return 
      */
     boolean isInScene(Actor actor);
@@ -271,6 +272,7 @@ public interface PlayService extends Inject {
      * 将一个坐标点移动到当前游戏场景的地面上，如果该点已经在地面上，则不作
      * 任何处理。也就是该方法可能修改position的Y值
      * @param position 必须是世界坐标点 
+     * @return  
      */
     Vector3f moveUpToTerrain(Vector3f position);
     
@@ -301,15 +303,9 @@ public interface PlayService extends Inject {
     
     /**
      * 保存该关卡为完成状态,调用该方法则保存并标记当前关卡为“完成”
+     * @param storyNum
      */
     void saveCompleteStage(int storyNum);
-    
-    // remove20160613
-//    /**
-//     * 载入场景数据
-//     * @param sceneData 
-//     */
-//    void initScene(SceneData sceneData);
     
     /**
      * 显示角色选择面板
@@ -322,5 +318,11 @@ public interface PlayService extends Inject {
      * @return 
      */
     Application getApplication();
+    
+    /**
+     * 切换游戏
+     * @param gameId 
+     */
+    void changeGame(String gameId);
 
 }

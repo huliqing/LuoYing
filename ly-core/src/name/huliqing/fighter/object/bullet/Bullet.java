@@ -4,7 +4,6 @@
  */
 package name.huliqing.fighter.object.bullet;
 
-import com.jme3.bounding.BoundingVolume;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import name.huliqing.fighter.data.BulletData;
@@ -21,7 +20,7 @@ public interface Bullet {
      * 设置开始点和精确的结束点,结束点可以是一个静态点或者是一个动态引用，
      * 对于跟踪类型的子弹来说，end点必须是一个动态引用，否则跟踪就无意义。
      * 当子弹的碰撞shape到达end点时即视为击中，即碰撞shape与end点交叉即视为击中。
-     * @param start
+     * @param startPoint
      * @param endPoint 
      */
     void setPath(Vector3f startPoint, Vector3f endPoint);

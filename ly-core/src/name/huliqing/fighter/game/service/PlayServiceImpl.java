@@ -18,6 +18,7 @@ import java.util.Collections;
 import java.util.List;
 import name.huliqing.fighter.Common;
 import name.huliqing.fighter.Factory;
+import name.huliqing.fighter.data.GameData;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.object.actor.ActorControl;
 import name.huliqing.fighter.data.ProtoData;
@@ -25,6 +26,7 @@ import name.huliqing.fighter.enums.MessageType;
 import name.huliqing.fighter.game.state.PlayState;
 import name.huliqing.fighter.game.state.lan.play.StoryPlayState;
 import name.huliqing.fighter.manager.ShortcutManager;
+import name.huliqing.fighter.object.DataFactory;
 import name.huliqing.fighter.object.NetworkObject;
 import name.huliqing.fighter.object.PlayObject;
 import name.huliqing.fighter.object.anim.Anim;
@@ -45,12 +47,14 @@ public class PlayServiceImpl implements PlayService {
     private StateService stateService;
     private ActorService actorService;
     private ItemService itemService;
+    private GameService gameService;
     
     @Override
     public void inject() {
         stateService = Factory.get(StateService.class);
         actorService = Factory.get(ActorService.class);
         itemService = Factory.get(ItemService.class);
+        gameService = Factory.get(GameService.class);
     }
     
     @Override
@@ -69,21 +73,17 @@ public class PlayServiceImpl implements PlayService {
             addActor((Actor) object);
             return;
         }
+        
         if (object instanceof Effect) {
             addEffect((Effect) object);
             return;
         }
         
-        // remove
-//        if (object instanceof Magic) {
-//            addMagic((Magic) object);
-//            return;
-//        }
-        
         if (object instanceof Bullet) {
             addBullet((Bullet) object);
             return;
         }
+        
         if (object instanceof View) {
             addView((View) object);
             return;
@@ -430,6 +430,12 @@ public class PlayServiceImpl implements PlayService {
     @Override
     public Application getApplication() {
         return Common.getApp();
+    }
+
+    @Override
+    public void changeGame(String gameId) {
+        GameData gameData = DataFactory.createData(gameId);
+        Common.getPlayState().changeGame(gameData);
     }
 
 }
