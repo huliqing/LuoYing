@@ -66,18 +66,16 @@ public class MapHandler extends AbstractHandler {
     
     @Override
     protected void useObject(Actor actor, ProtoData data) {
-        // test
-//        locations.clear();
-        for (int i = 0; i < 100; i++) {
-            Location loc = new Location();
-                loc.id = i + "";
-                loc.x = FastMath.nextRandomFloat();
-                loc.y = FastMath.nextRandomFloat();
-                loc.gameId = null;
-                loc.icon = null;
-                locations.add(loc);
-        }
-
+//        // test
+//        for (int i = 0; i < 100; i++) {
+//            Location loc = new Location();
+//                loc.id = i + "";
+//                loc.x = FastMath.nextRandomFloat();
+//                loc.y = FastMath.nextRandomFloat();
+//                loc.gameId = null;
+//                loc.icon = null;
+//                locations.add(loc);
+//        }
 
         // 创建一个map view用于显示地图
         if (mapView == null) {
