@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.fighter.game.state.lan.play;
+package name.huliqing.fighter.game.state.game;
 
 import com.jme3.app.Application;
 import name.huliqing.fighter.game.state.lan.GameClient;

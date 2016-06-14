@@ -8,6 +8,7 @@ import java.util.List;
  * 代码参考自：com.jme3.app.state.AppStateManager.
  * 精简单了一些方法
  * 主要用来管理自定义的Logic,
+ * @param <T>
  */
 public final class PlayManager<T extends PlayObject> {
     

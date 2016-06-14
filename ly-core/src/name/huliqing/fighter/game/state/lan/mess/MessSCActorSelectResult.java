@@ -8,7 +8,7 @@ import com.jme3.network.serializing.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.fighter.Config;
-import name.huliqing.fighter.game.state.lan.play.LanClientListener;
+import name.huliqing.fighter.game.state.game.LanClientListener;
 
 /**
  * 服务端响应客户端的角色选择结果

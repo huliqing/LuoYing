@@ -22,7 +22,6 @@ import name.huliqing.fighter.Fighter;
 import name.huliqing.fighter.constants.IdConstants;
 import name.huliqing.fighter.constants.InterfaceConstants;
 import name.huliqing.fighter.game.state.lan.LanState;
-import name.huliqing.fighter.game.state.lan.play.LabPlayState;
 import name.huliqing.fighter.loader.Loader;
 import name.huliqing.fighter.save.SaveHelper;
 import name.huliqing.fighter.save.SaveStory;
@@ -125,7 +124,8 @@ public class StartState extends AbstractAppState {
             @Override
             public void onClick(UI ui, boolean isPress) {
                 if (!isPress) {
-                    startState(new LabPlayState(null));
+//                    startState(new LabPlayState(null));
+                    throw new UnsupportedOperationException();
                 }
             }
         });

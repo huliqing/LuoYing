@@ -11,6 +11,7 @@ import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.GameData;
 import name.huliqing.fighter.object.DataLoaderFactory;
 import name.huliqing.fighter.game.service.ConfigService;
+import name.huliqing.fighter.game.service.GameService;
 import name.huliqing.fighter.manager.ResourceManager;
 import name.huliqing.fighter.utils.MathUtils;
 import name.huliqing.fighter.ui.ListView;
@@ -26,11 +27,13 @@ import name.huliqing.fighter.ui.Window;
  */
 public class CreateRoomStateGameListPanel extends Window {
     private final ConfigService configService = Factory.get(ConfigService.class);
+    private final GameService gameService = Factory.get(GameService.class);
+    
     // 左边的游戏列表
-    private GameList gameList;
+    private final GameList gameList;
     
     // 右边的游戏说明
-    private LanGameInfoView overview;
+    private final LanGameInfoView overview;
     
     public CreateRoomStateGameListPanel(float width, float height) {
         super(ResourceManager.get("lan.gameList"), width, height);
@@ -109,7 +112,7 @@ public class CreateRoomStateGameListPanel extends Window {
             }
             this.selected = row;
             this.selected.setActive(true);
-            GameData gameData = DataLoaderFactory.createGameData(row.gameId);
+            GameData gameData = gameService.loadGameData(row.gameId);
             overview.setGameData(gameData);
         }
         

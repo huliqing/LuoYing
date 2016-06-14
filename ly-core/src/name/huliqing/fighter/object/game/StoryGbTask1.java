@@ -256,7 +256,11 @@ public class StoryGbTask1 extends GameTaskBase {
     // 任务显示面板
     private void displayTaskPanel() {
         storyGbTaskLogic = new StoryGbTaskLogic(saveTotal, player);
-        playService.addObject(storyGbTaskLogic);
+        
+        // remove20160613
+//        playService.addObject(storyGbTaskLogic);
+
+        game.addLogic(storyGbTaskLogic);
     }
     
     // 古柏赚书对话

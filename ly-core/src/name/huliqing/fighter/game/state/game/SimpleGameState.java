@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.fighter.game.state.lan.play;
+package name.huliqing.fighter.game.state.game;
 
 import name.huliqing.fighter.game.view.ActorSelectView;
 import com.jme3.app.Application;
@@ -16,7 +16,6 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
 import com.jme3.util.SafeArrayList;
 import com.jme3.util.TempVars;
-import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.fighter.Common;
 import name.huliqing.fighter.Config;
@@ -31,8 +30,6 @@ import name.huliqing.fighter.game.service.PlayService;
 import name.huliqing.fighter.game.service.SkillService;
 import name.huliqing.fighter.game.service.StateService;
 import name.huliqing.fighter.game.state.LanPlayStateUI;
-import name.huliqing.fighter.game.state.PlayState;
-import name.huliqing.fighter.game.state.lan.mess.MessPlayClientData;
 import name.huliqing.fighter.game.view.ActorSelectView.SelectedListener;
 import name.huliqing.fighter.game.view.TeamView;
 import name.huliqing.fighter.manager.HUDManager;
@@ -45,7 +42,6 @@ import name.huliqing.fighter.object.actor.ActorControl;
 import name.huliqing.fighter.object.anim.Anim;
 import name.huliqing.fighter.object.bullet.BulletCache;
 import name.huliqing.fighter.object.effect.EffectCache;
-import name.huliqing.fighter.object.game.Game;
 import name.huliqing.fighter.object.game.Game.GameListener;
 import name.huliqing.fighter.object.view.View;
 import name.huliqing.fighter.ui.AbstractUI;
@@ -61,7 +57,7 @@ import name.huliqing.fighter.utils.SceneUtils;
  *
  * @author huliqing
  */
-public abstract class LanPlayState extends PlayState implements UIEventListener {
+public  class SimpleGameState extends GameState implements UIEventListener {
 //    private final static Logger logger = Logger.getLogger(StoryState.class.getName());
     private final UserCommandNetwork userCommandNetwork = Factory.get(UserCommandNetwork.class);
     private final ActorService actorService = Factory.get(ActorService.class);
@@ -72,8 +68,6 @@ public abstract class LanPlayState extends PlayState implements UIEventListener 
     private final GameService gameService = Factory.get(GameService.class);
     
     protected Node localRoot;
-    
-    protected Game game;
     
     // ----场景动态对象
     // 当前场景中的所有角色,包含所有玩家,需要同步到客户端
@@ -87,8 +81,7 @@ public abstract class LanPlayState extends PlayState implements UIEventListener 
     protected LanPlayStateUI ui;
     // 场景跟随相机
     protected MyChaseCamera chaseCamera;
-    // 当前玩的游戏
-    protected GameData gameData;
+
     // 角色选择面板
     protected ActorSelectView actorPanel;
     // 玩家当前玩家
@@ -97,9 +90,13 @@ public abstract class LanPlayState extends PlayState implements UIEventListener 
     // 最近一个选中的角色和最近一次选择的时间，主要用于处理双击选择攻击目标。
     private Actor lastPicked;
     private long lastPickTime;
+
+    public SimpleGameState(GameData gameData) {
+        super(gameData);
+    }
     
-    public LanPlayState(GameData gameData) {
-        this.gameData = gameData;
+    public SimpleGameState(String gameId) {
+        super(gameId);
     }
     
     @Override
@@ -133,30 +130,31 @@ public abstract class LanPlayState extends PlayState implements UIEventListener 
          HUDManager.init(this.app.getGuiNode());
          
          // ==== 7.载入游戏
-//        game = gameService.loadGame(gameData);
-//        game.addListener(new GameListener() {
-//            @Override
-//            public void onSceneLoaded() {
-//                // remove,resetCollision在手机上莫明奇妙的无效。 所以统一为重新创建chaseCamera
-//                //chaseCamera.resetCollision(bulletAppState.getPhysicsSpace(), scene.getTerrain());
-//                
-//                if (chaseCamera != null) {
-//                    chaseCamera.cleanup();
-//                    chaseCamera = null;
-//                }
-//                chaseCamera = SceneUtils.createChaseCam(app.getCamera()
-//                        , app.getInputManager()
-//                        , game.getScene().getPhysicsSpace());
-//            }
-//        });
-//        addObject(game, false);
-
-           changeGame(gameData);
-        
-           // for test
-//        BasicProfilerState profiler = new BasicProfilerState(true);
-//        profiler.setGraphScale(100f);
-//        app.getStateManager().attach(profiler);
+        game.addListener(new GameListener() {
+            @Override
+            public void onSceneLoaded() {
+                // remove,resetCollision在手机上莫明奇妙的无效。 所以统一为重新创建chaseCamera
+                //chaseCamera.resetCollision(bulletAppState.getPhysicsSpace(), scene.getTerrain());
+                
+                if (chaseCamera != null) {
+                    chaseCamera.cleanup();
+                    chaseCamera = null;
+                }
+                
+                chaseCamera = SceneUtils.createChaseCam(app.getCamera()
+                        , app.getInputManager()
+                        , game.getScene().getPhysicsSpace());
+                
+                // 如果玩家角色已经提前载入则跟随主角
+                Actor player = getPlayer();
+                if (player != null) {
+                    chaseCamera.setChase(player.getModel());
+                } else if (actorPanel != null) {
+                    chaseCamera.setChase(actorPanel.getActorView());
+                    chaseCamera.setDefaultDistance(5f);
+                }
+            }
+        });
     }
     
     /**
@@ -303,11 +301,6 @@ public abstract class LanPlayState extends PlayState implements UIEventListener 
         HUDManager.cleanup();
         super.cleanup();
     }
-
-//    @Override
-//    public Scene getScene() {
-//        return scene;
-//    }
     
     /**
      * 注：该方法不判断目标spatial是否存在于GUI中, 也就是说：对GUI无效。
@@ -615,6 +608,7 @@ public abstract class LanPlayState extends PlayState implements UIEventListener 
         return false;
     }
     
+    @Override
     public void attack() {
         if (player == null) 
             return;
@@ -708,70 +702,70 @@ public abstract class LanPlayState extends PlayState implements UIEventListener 
         }
     }
 
-    @Override
-    public Game getGame() {
-        return game;
-    }
+//    @Override
+//    public void changeGame() {
+//        // 如果已有游戏在运行则要清理
+//        // 1.清理旧场景信息
+//        // 2.清理场景角色
+//        // 3.重新给玩家类角色初始化物理特性
+//        final List<Actor> players = new ArrayList<Actor>();
+//        if (game != null) {
+//            // 清理场景
+//            removeObject(game);
+//            // 清理角色
+//            for (Actor actor : actors.getArray()) {
+//                removeObject(actor);
+//                if (actor.isPlayer()) {
+//                    players.add(actor);
+//                }
+//            }
+//        }
+//        
+//        game = gameService.loadGame(gameData);
+//        game.addListener(new GameListener() {
+//            @Override
+//            public void onSceneLoaded() {
+//                // remove,resetCollision在手机上莫明奇妙的无效。 所以统一为重新创建chaseCamera
+//                //chaseCamera.resetCollision(bulletAppState.getPhysicsSpace(), scene.getTerrain());
+//                
+//                // 1.重新加入玩家角色
+//                for (Actor actor : players) {
+//                    addActor(actor, false);
+//                }
+//                
+//                // 2.重新生成镜头跟随
+//                if (chaseCamera != null) {
+//                    chaseCamera.cleanup();
+//                    chaseCamera = null;
+//                }
+//                chaseCamera = SceneUtils.createChaseCam(app.getCamera()
+//                        , app.getInputManager()
+//                        , game.getScene().getPhysicsSpace());
+//                
+//                // 3.因为chaseCamera进行了重建，所以必须使它重新跟随玩家
+//                Actor player = getPlayer();
+//                if (player != null) {
+//                    chaseCamera.setChase(player.getModel());
+//                }
+//            }
+//        });
+//        addObject(game, false);
+//    }
+    
+//    /**
+//     * 获取当前连接的所有客户端(该列表中包含主机)，如果没有则返回null.
+//     * @return 
+//     */
+//    public abstract List<MessPlayClientData> getClients();
+//    
+//    /**
+//     * 把一个客户端踢出游戏。
+//     * @param connId 
+//     */
+//    public abstract void kickClient(int connId);
 
     @Override
-    public void changeGame(GameData gameData) {
-        // 如果已有游戏在运行则要清理
-        // 1.清理旧场景信息
-        // 2.清理场景角色
-        // 3.重新给玩家类角色初始化物理特性
-        final List<Actor> players = new ArrayList<Actor>();
-        if (game != null) {
-            // 清理场景
-            removeObject(game);
-            // 清理角色
-            for (Actor actor : actors.getArray()) {
-                removeObject(actor);
-                if (actor.isPlayer()) {
-                    players.add(actor);
-                }
-            }
-        }
-        
-        game = gameService.loadGame(gameData);
-        game.addListener(new GameListener() {
-            @Override
-            public void onSceneLoaded() {
-                // remove,resetCollision在手机上莫明奇妙的无效。 所以统一为重新创建chaseCamera
-                //chaseCamera.resetCollision(bulletAppState.getPhysicsSpace(), scene.getTerrain());
-                
-                // 1.重新加入玩家角色
-                for (Actor actor : players) {
-                    addActor(actor, false);
-                }
-                
-                // 2.重新生成镜头跟随
-                if (chaseCamera != null) {
-                    chaseCamera.cleanup();
-                    chaseCamera = null;
-                }
-                chaseCamera = SceneUtils.createChaseCam(app.getCamera()
-                        , app.getInputManager()
-                        , game.getScene().getPhysicsSpace());
-                
-                // 3.因为chaseCamera进行了重建，所以必须使它重新跟随玩家
-                Actor player = getPlayer();
-                if (player != null) {
-                    chaseCamera.setChase(player.getModel());
-                }
-            }
-        });
-        addObject(game, false);
+    public MenuTool getMenuTool() {
+        return ui.getMenuTool();
     }
-    
-    /**
-     * 获取当前连接的所有客户端(该列表中包含主机)，如果没有则返回null.
-     * @return 
-     */
-    public abstract List<MessPlayClientData> getClients();
-    
-    /**
-     * 把一个客户端踢出游戏。
-     * @param connId 
-     */
-    public abstract void kickClient(int connId);
 }

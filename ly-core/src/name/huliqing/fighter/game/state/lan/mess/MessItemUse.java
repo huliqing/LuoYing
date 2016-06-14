@@ -37,26 +37,6 @@ public class MessItemUse extends MessBase {
         this.actorId = actorId;
     }
 
-//    /**
-//     * 获取界面主目标角色id,这个目标不一定是当前角色的目标，而是客户端或服务端
-//     * 主界面上的目标角色的id,即界面上FaceView(target)上的目标角色的唯一id.
-//     * 如果这个值不存在，则设置为-1 
-//     * @return 
-//     */
-//    public long getMainTargetId() {
-//        return mainTargetId;
-//    }
-//
-//    /**
-//     * 设置界面主目标角色id,这个目标不一定是当前角色的目标，而是客户端或服务端
-//     * 主界面上的目标角色的id,即界面上FaceView(target)上的目标角色的唯一id.
-//     * 如果这个值不存在，则设置为-1 
-//     * @param mainTargetId 
-//     */
-//    public void setMainTargetId(long mainTargetId) {
-//        this.mainTargetId = mainTargetId;
-//    }
-
     /**
      * 获取被使用的物品
      * @return 
@@ -84,8 +64,8 @@ public class MessItemUse extends MessBase {
             return; // 找不到指定的角色或者角色不是客户端所控制的。
         }
         // 使用物品的必须是客户端角色自身或者客户端角色的宠物
-        if (actor.getData().getUniqueId() == clientActorId.longValue()
-                || actor.getData().getOwnerId() == clientActorId.longValue()) {
+        if (actor.getData().getUniqueId() == clientActorId
+                || actor.getData().getOwnerId() == clientActorId) {
             handlerNetwork.useObject(actor, itemId); 
         }
     }

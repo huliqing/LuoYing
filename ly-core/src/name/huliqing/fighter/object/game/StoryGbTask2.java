@@ -36,7 +36,7 @@ import name.huliqing.fighter.utils.MathUtils;
  * @author huliqing
  */
 public class StoryGbTask2 extends GameTaskBase{
-    private final Logger logger = Logger.getLogger(StoryGbTask2.class.getName());
+    private final static Logger LOG = Logger.getLogger(StoryGbTask2.class.getName());
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final PlayService playService = Factory.get(PlayService.class);
@@ -45,7 +45,7 @@ public class StoryGbTask2 extends GameTaskBase{
     private final DropService dropService = Factory.get(DropService.class);
     private final ViewService viewService = Factory.get(ViewService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
-    private StoryGbGame game;
+    private final StoryGbGame game;
     private Actor player;
     private boolean finished;
     
@@ -54,32 +54,32 @@ public class StoryGbTask2 extends GameTaskBase{
     // 祭坛
     private Actor altar;
     // 防御塔2个
-    private String[] towerIds = new String[] {
+    private final String[] towerIds = new String[] {
         IdConstants.ACTOR_TOWER, 
         IdConstants.ACTOR_TOWER_STONE};
-    private int maxTower = 2;
+    private final int maxTower = 2;
     private List<Actor> towers;
     
     // 用于检测所有防御塔是否已死
-    private TowerChecker towerChecker = new TowerChecker();
+    private final TowerChecker towerChecker = new TowerChecker();
     // 检测任务是否已经完成
-    private TaskOkChecker taskChecker = new TaskOkChecker();
+    private final TaskOkChecker taskChecker = new TaskOkChecker();
     // 用于移除古柏
-    private GbRemoveChecker gbRemoveChecker = new GbRemoveChecker();
+    private final GbRemoveChecker gbRemoveChecker = new GbRemoveChecker();
     
     // 级别限制，祭坛和防御塔的级别固定
-    private int altarLevel = 18;
-    private int towerLevel = 15;
+    private final int altarLevel = 18;
+    private final int towerLevel = 15;
     // 普通角色的起始级别
-    private int enemyBaseLevel = 10;
-    private ColorRGBA enemyColor = new ColorRGBA(1.2f, 1f, 1.2f,1);
+    private final int enemyBaseLevel = 10;
+    private final ColorRGBA enemyColor = new ColorRGBA(1.2f, 1f, 1.2f,1);
     
     // 祭坛载入器
     private ActorMultLoadHelper altarLoader;
     // 敌方角色载入器
     private ActorBuildSimpleLogic actorBuilder;
     // 敌方角色刷新间隔,单位秒
-    private float refreshInterval = 5;
+    private final float refreshInterval = 5;
     
     // 任务完成后的“向古柏交任务”阶段
     private StoryGbTask2End taskEndLogic;

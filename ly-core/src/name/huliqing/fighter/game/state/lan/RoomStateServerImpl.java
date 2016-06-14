@@ -16,8 +16,8 @@ import java.util.logging.Logger;
 import name.huliqing.fighter.Common;
 import name.huliqing.fighter.Fighter;
 import name.huliqing.fighter.data.GameData;
+import name.huliqing.fighter.game.state.game.ServerPlayState;
 import name.huliqing.fighter.game.state.lan.GameServer.ServerState;
-import name.huliqing.fighter.game.state.lan.play.LanServerPlayState;
 import name.huliqing.fighter.manager.ResourceManager;
 import name.huliqing.fighter.game.view.HelpView;
 import name.huliqing.fighter.ui.LinearLayout;
@@ -29,7 +29,7 @@ import name.huliqing.fighter.ui.state.UIState;
  * @author huliqing
  */
 public class RoomStateServerImpl extends AbstractAppState implements RoomState {
-    private final static Logger logger = Logger.getLogger(RoomStateClientImpl.class.getName());
+    private final static Logger LOG = Logger.getLogger(RoomStateClientImpl.class.getName());
     // 客户端连接的机器名称属性名
     public final static String ATTR_MACHINE_NAME = "machineName";
     private Fighter app;
@@ -104,10 +104,10 @@ public class RoomStateServerImpl extends AbstractAppState implements RoomState {
     public void update(float tpf) {
         super.update(tpf);
         if (startGame) {
-            logger.log(Level.INFO, "RoomStateServerImpl.startGame");
+            LOG.log(Level.INFO, "RoomStateServerImpl.startGame");
             gameServer.setServerListener(null);
             gameServer.setServerState(ServerState.loading);
-            app.changeState(new LanServerPlayState(gameServer));
+            app.changeState(new ServerPlayState(gameServer));
         }
     }
     

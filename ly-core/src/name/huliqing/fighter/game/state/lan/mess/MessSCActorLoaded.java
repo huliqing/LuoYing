@@ -13,7 +13,7 @@ import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.ActorData;
 import name.huliqing.fighter.game.service.ActorService;
 import name.huliqing.fighter.game.service.PlayService;
-import name.huliqing.fighter.game.state.lan.play.LanClientListener;
+import name.huliqing.fighter.game.state.game.LanClientListener;
 import name.huliqing.fighter.object.actor.Actor;
 
 /**

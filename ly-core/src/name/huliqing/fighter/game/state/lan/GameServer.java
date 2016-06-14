@@ -60,12 +60,14 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
         /**
          * 客户端添加时
          * @param gameServer 
+         * @param conn 
          */
         void clientAdded(GameServer gameServer, HostedConnection conn);
         
         /**
          * 客户端离开时
          * @param gameServer 
+         * @param conn 
          */
         void clientRemoved(GameServer gameServer, HostedConnection conn);
         
@@ -125,10 +127,10 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
     public final static int GAME_STATE_WAIT = 0;
     public final static int GAME_STATE_RUN = 1;
     
-    private Server server;
+    private final Server server;
     // 这个discover允许服务端在开始游戏之后仍然能让客户端知道服务器在运行，
     // 这允许游戏运行以后仍能让客户端连接进来
-    private UDPDiscover serverDiscover;
+    private final UDPDiscover serverDiscover;
     // 当前游戏状态
     private ServerState serverState = ServerState.waiting;
     // 游戏数据
@@ -336,7 +338,7 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
             String actorName = null;
             Long actorId = hc.getAttribute(ATTR_ACTOR_UNIQUE_ID);
             if (actorId != null && gameInPlay) {
-                Actor actor = playService.findActor(actorId.longValue());
+                Actor actor = playService.findActor(actorId);
                 if (actor != null) {
                     actorName = actor.getData().getName();
                 }
@@ -397,25 +399,6 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
                 , des
                 , serverState);
     }
-
-    //    @Override
-    //    public AbstractMess receive(String code, String content) throws Exception {
-    //        int c = Integer.parseInt(code);
-    //        // 客户端在查找服务端,如果主机在运行，则响应该信息，告诉客户端，当前服务器
-    //        // 正在运行。
-    //        if (c == Code.CODE_CS_FIND_SERVER) {
-    //            //Logger.getLogger(GameServer.class.getName()).log(Level.INFO, "Receive message from client, code={0}", c);
-    //            if (server.isRunning()) {
-    //                MessSCStarted mess = createServerRunMess();
-    //                mess.setState(serverState);
-    //                return mess;
-    //            }
-    //        } else if (c == Code.CODE_CS_PING) {
-    //            MessCSPing ping = new MessCSPing();
-    //            ping.decodeContent(content);
-    //        }
-    //        return null;
-    //    }
     
     @Override
     public void receive(Object object, UDPDiscover discover, DatagramPacket packet) throws Exception {

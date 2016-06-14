@@ -31,7 +31,7 @@ import name.huliqing.fighter.game.state.lan.mess.MessPing;
 public abstract class DefaultClientListener implements ClientListener {
     
     private final EnvService envService = Factory.get(EnvService.class);
-    private Application app; 
+    private final Application app; 
     // 从服务端获得的所有客户端列表
     protected final List<MessPlayClientData> clients = new ArrayList<MessPlayClientData>();
     
@@ -50,7 +50,7 @@ public abstract class DefaultClientListener implements ClientListener {
     }
     private final List<PingListener> pingListerners = new ArrayList<PingListener>(1);
     // 用于向服务端发送的Ping消息
-    private MessPing messPing = new MessPing();
+    private final MessPing messPing = new MessPing();
     
     public DefaultClientListener(Application app) {
         this.app = app;

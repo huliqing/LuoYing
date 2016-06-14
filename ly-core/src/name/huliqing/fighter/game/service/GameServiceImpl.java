@@ -7,6 +7,7 @@ package name.huliqing.fighter.game.service;
 
 import name.huliqing.fighter.data.GameData;
 import name.huliqing.fighter.loader.Loader;
+import name.huliqing.fighter.object.DataFactory;
 import name.huliqing.fighter.object.game.Game;
 
 /**
@@ -28,6 +29,11 @@ public class GameServiceImpl implements GameService {
     @Override
     public Game loadGame(GameData data) {
         return Loader.loadGame(data);
+    }
+
+    @Override
+    public GameData loadGameData(String gameId) {
+        return DataFactory.createData(gameId);
     }
     
 }

@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.fighter.game.state.lan.play;
+package name.huliqing.fighter.game.state.game;
 
 import com.jme3.app.Application;
 import name.huliqing.fighter.game.state.lan.GameServer;
@@ -33,7 +33,7 @@ public class LanServerListener extends DefaultServerListener<Actor> {
     private final PlayService playService = Factory.get(PlayService.class);
     private final List<Actor> syncObjects = new LinkedList<Actor>();
     private float syncTimer = 0;
-    private float syncFrequency = 1f/5f;
+    private final float syncFrequency = 1f/5f;
     
     private final MessActorTransform syncTempCache = new MessActorTransform();
     

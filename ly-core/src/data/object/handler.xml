@@ -99,7 +99,11 @@
     <!--地图数据-->
     <!-- ========================================================================= -->
     <handlerMap id="handlerWorldMap" image="Interface/map/map.jpg" 
-                locations="Treasure|0.3|0.3|gameSurvival, StoryGb|0.4|0.4|gameStoryGb, Survival|0.5|0.5|gameSurvival" />
+                locations="
+  StoryTreasure|0.2|0.2|gameStoryTreasure
+, StoryGb|0.3|0.3|gameStoryGb
+, StoryGuard|0.4|0.4|gameStoryGuard
+, Survival|0.5|0.5|gameSurvival" />
     
 </root>
 

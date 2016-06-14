@@ -14,17 +14,17 @@ import com.jme3.network.HostedConnection;
 import com.jme3.network.Message;
 import java.util.concurrent.Callable;
 import name.huliqing.fighter.game.state.lan.GameServer.ServerListener;
-import name.huliqing.fighter.game.state.lan.mess.MessPing;
 import name.huliqing.fighter.game.state.lan.mess.MessPlayGetClients;
 import name.huliqing.fighter.game.state.lan.mess.MessPlayGetGameData;
 
 /**
  *
  * @author huliqing
+ * @param <T>
  */
 public abstract class DefaultServerListener<T> implements ServerListener<T> {
 
-    private Application app;
+    private final Application app;
     
     public DefaultServerListener(Application app) {
         this.app = app;

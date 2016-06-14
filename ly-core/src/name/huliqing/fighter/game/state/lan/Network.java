@@ -15,30 +15,29 @@ import name.huliqing.fighter.data.GameData;
 import name.huliqing.fighter.game.service.ConfigService;
 import name.huliqing.fighter.game.state.lan.GameServer.ServerListener;
 import name.huliqing.fighter.game.state.lan.mess.MessActorTransformDirect;
-import name.huliqing.fighter.object.IntervalLogic;
+import name.huliqing.fighter.object.AbstractPlayObject;
 import name.huliqing.fighter.object.actor.Actor;
 
 /**
  *
  * @author huliqing
  */
-public class Network extends IntervalLogic {
+public class Network extends AbstractPlayObject {
     private final static Logger LOG = Logger.getLogger(Network.class.getName());
-    private final static Network ins = new Network();
     private final ConfigService configService = Factory.get(ConfigService.class);
+    
+    private final static Network INSTANCE = new Network();
     private GameServer gameServer;
     private GameClient gameClient;
     
-    private Network() {
-        super(0);
-    }
+    private Network() {}
     
     public static Network getInstance() {
-        return ins;
+        return INSTANCE;
     }
     
     @Override
-    protected void doLogic(float tpf) {
+    public void update(float tpf) {
         if (gameClient != null) {
             gameClient.update(tpf);
         } else if (gameServer != null) {
@@ -79,7 +78,6 @@ public class Network extends IntervalLogic {
      * 创建客户端程序，注意：如果当前已经创建过客户端或服务端，则它们会被
      * 关闭和清理.游戏中只能存在一个服务端或者是客户端，否则可能引起端口冲突
      * 或资源浪费问题。
-     * @param gameData
      * @param serverHost
      * @param serverPort
      * @return
@@ -92,6 +90,10 @@ public class Network extends IntervalLogic {
                 , serverHost
                 , serverPort);
         return gameClient;
+    }
+    
+    public boolean isServer() {
+        return gameServer != null;
     }
     
     /**
@@ -162,10 +164,8 @@ public class Network extends IntervalLogic {
     }
     
     /**
-     * 直接同步指定角色的变换消息到当前所有连接的客户端,该消息只处理一次。
-     * @param actorId
-     * @param location
-     * @param viewDirection 
+     * 直接同步指定角色的变换消息到当前所有连接的客户端,该消息只处理一次。 
+     * @param actor
      * @deprecated 不要使用这样直接同步位置,很导致客户端严重抖动
      */
     public void syncTransformDirect(Actor actor) {
@@ -206,4 +206,5 @@ public class Network extends IntervalLogic {
             }
         }
     }
+
 }

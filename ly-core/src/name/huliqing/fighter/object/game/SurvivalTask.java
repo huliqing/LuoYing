@@ -114,12 +114,18 @@ public class SurvivalTask extends GameTaskBase {
         levelLogic = new SurvivalLevelLogic(game.levelUpBySec, game.maxLevel);
         bossLogic = new SurvivalBoss(game, builderLogic, levelLogic);
         
-        // 刷新普通角色
-        playService.addObject(builderLogic, false);
-        // 等级更新器
-        playService.addObject(levelLogic, false);
-        // BOSS逻辑
-        playService.addObject(bossLogic, false);
+        // remove20160613
+//        // 刷新普通角色
+//        playService.addObject(builderLogic, false);
+//        // 等级更新器
+//        playService.addObject(levelLogic, false);
+//        // BOSS逻辑
+//        playService.addObject(bossLogic, false);
+
+        // 刷新普通角色,等级更新器,BOSS逻辑
+        game.addLogic(builderLogic);
+        game.addLogic(levelLogic);
+        game.addLogic(bossLogic);
         
         stage = 1;
     }

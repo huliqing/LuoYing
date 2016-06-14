@@ -5,8 +5,8 @@
 package name.huliqing.fighter.game.view;
 
 import java.util.List;
+import name.huliqing.fighter.game.state.game.LanGame;
 import name.huliqing.fighter.game.state.lan.mess.MessPlayClientData;
-import name.huliqing.fighter.game.state.lan.play.LanPlayState;
 import name.huliqing.fighter.manager.ResourceManager;
 import name.huliqing.fighter.ui.Button;
 import name.huliqing.fighter.ui.LinearLayout;
@@ -20,8 +20,6 @@ import name.huliqing.fighter.ui.Window;
  */
 public class ClientsWin extends Window {
     
-    private LanPlayState lanPlayState;
-    
     // ----客户端列表
     private ClientsView clientsView;
     
@@ -31,13 +29,16 @@ public class ClientsWin extends Window {
     private HelpView help;
     
     // ---- 按钮面板
-    private LinearLayout btnPanel;
+    private final LinearLayout btnPanel;
+    // 踢出玩家
     private Button btnKick;
+    
+    private LanGame lanGame;
 
-    public ClientsWin(LanPlayState playState, float width, float height) {
+    public ClientsWin(final LanGame lanGame, float width, float height) {
         super(width, height);
+        this.lanGame = lanGame;
         setTitle(ResourceManager.get("lan.clients"));
-        this.lanPlayState = playState;
         
         clientsView = new ClientsView();
         
@@ -60,7 +61,7 @@ public class ClientsWin extends Window {
                     return;
                 }
                 if (selected.getConnId() != -1) { // －1为主机
-                    lanPlayState.kickClient(selected.getConnId());
+                    lanGame.kickClient(selected.getConnId());
                 }
             }
         });
@@ -73,6 +74,8 @@ public class ClientsWin extends Window {
         addView(clientsView);
         addView(helpPanel);
         addView(btnPanel);
+        
+        
     }
     
     @Override
@@ -106,6 +109,8 @@ public class ClientsWin extends Window {
      */
     public void setClients(List<MessPlayClientData> clients) {
         clientsView.setClients(clients);
+        // 如果不是服务端则要隐藏“踢出玩家”按钮
+        btnKick.setVisible(lanGame.isServer());
         setNeedUpdate();
     }
     

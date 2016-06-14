@@ -4,22 +4,19 @@
  */
 package name.huliqing.fighter.game.state;
 
-import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import name.huliqing.fighter.ui.UIUtils;
 import name.huliqing.fighter.Common;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.constants.IdConstants;
 import name.huliqing.fighter.game.service.PlayService;
-import name.huliqing.fighter.game.state.lan.play.LanPlayState;
-import name.huliqing.fighter.game.view.ClientsWin;
+import name.huliqing.fighter.game.state.game.GameState;
 import name.huliqing.fighter.game.view.TeamView;
 import name.huliqing.fighter.game.view.actor.ActorMainPanel;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.game.view.FaceView;
 import name.huliqing.fighter.loader.Loader;
 import name.huliqing.fighter.object.anim.Anim;
-import name.huliqing.fighter.object.anim.ScaleAnim;
 import name.huliqing.fighter.ui.Icon;
 import name.huliqing.fighter.ui.UI;
 import name.huliqing.fighter.ui.UI.Corner;
@@ -31,7 +28,6 @@ import name.huliqing.fighter.ui.state.UIState;
  */
 public class LanPlayStateUI extends PlayStateUI {
     private final PlayService playService = Factory.get(PlayService.class);
-    private LanPlayState playState;
     
     // 队伍视图及目标视图
     protected TeamView teamView;
@@ -41,16 +37,14 @@ public class LanPlayStateUI extends PlayStateUI {
     private ActorMainPanel userPanel;
     private Anim userPanelAnim;
     
-    // 客户端列表界面
-    private ClientsWin clientsWin;
-    private ScaleAnim clientsWinAnim;
-    
     // UI:技能按钮
     private UI attack;
     
-    public LanPlayStateUI(LanPlayState playState) {
-        super(playState);
-        this.playState = playState;
+    private final GameState gameState;
+    
+    public LanPlayStateUI(GameState gameState) {
+        super();
+        this.gameState = gameState;
     }
 
     @Override
@@ -60,8 +54,8 @@ public class LanPlayStateUI extends PlayStateUI {
         if (isInitialized()) {
             return;
         }
-        
         super.initialize();
+        
         // UI size
         float fullWidth = Common.getSettings().getWidth();
         float fullHeight = Common.getSettings().getHeight();
@@ -98,31 +92,6 @@ public class LanPlayStateUI extends PlayStateUI {
             }
         });
         
-        // ---- 联网状态按钮,用于打开局域网客户端列表面板
-        clientsWin = new ClientsWin(playState, fullWidth * 0.75f, fullHeight * 0.8f);
-        clientsWin.setToCorner(Corner.CC);
-        clientsWin.setCloseable(true);
-        clientsWin.setDragEnabled(true);
-        clientsWinAnim = new ScaleAnim();
-        clientsWinAnim.setStartScale(0.5f);
-        clientsWinAnim.setEndScale(1f);
-        clientsWinAnim.setRestore(true);
-        clientsWinAnim.setUseTime(0.4f);
-        clientsWinAnim.setLocalScaleOffset(new Vector3f(clientsWin.getWidth() * 0.5f
-                    , clientsWin.getHeight() * 0.5f
-                    , 0));
-        clientsWinAnim.setTarget(clientsWin);
-        
-        Icon lanBtn = new Icon("Interface/icon/link.png");
-        lanBtn.setUseAlpha(true);
-        lanBtn.addClickListener(new name.huliqing.fighter.ui.UI.Listener() {
-            @Override
-            public void onClick(UI ui, boolean isPress) {
-                if (isPress) return;
-                displayLanPanel();
-            }
-        });
-        
         // ---- 攻击按钮
         float iconWidth = fullHeight * 0.25f;
         attack = UIUtils.createMultView(iconWidth, iconWidth, "Interface/icon/weapon.png", "Interface/ui/circleButton/circleButton.png");
@@ -133,7 +102,7 @@ public class LanPlayStateUI extends PlayStateUI {
             @Override
             public void onClick(UI ui, boolean isPressed) {
                 if (isPressed) return;
-                playState.attack();
+                gameState.attack();
             }
         });
         
@@ -141,8 +110,6 @@ public class LanPlayStateUI extends PlayStateUI {
         playState.addObject(teamView, true);
         playState.addObject(targetFace, true);
         playState.addObject(attack.getDisplay(), true);
-//        playState.addObject(userPanelControl, true);
-        toolsView.addView(lanBtn, 0);
         toolsView.addView(userBtn, 0);
     }
 
@@ -165,10 +132,6 @@ public class LanPlayStateUI extends PlayStateUI {
         return targetFace;
     }
     
-    public ClientsWin getClientsWin() {
-        return clientsWin;
-    }
-    
     public ActorMainPanel getUserPanel() {
         return userPanel;
     }
@@ -183,22 +146,11 @@ public class LanPlayStateUI extends PlayStateUI {
         } 
     }
     
-    private void displayLanPanel() {
-        if (clientsWin.getParent() == null) {
-            playState.addObject(clientsWin, true);
-            clientsWin.setClients(playState.getClients());
-            playService.addAnimation(clientsWinAnim);
-        } else {
-            playState.removeObject(clientsWin);
-        }
-    } 
-    
     @Override
     public void cleanup() {
         remove(teamView);
         remove(targetFace);
         remove(attack.getDisplay());
-        remove(clientsWin);
         super.cleanup();
     }
     

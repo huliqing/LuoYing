@@ -5,14 +5,13 @@
 package name.huliqing.fighter.object.effect;
 
 import name.huliqing.fighter.object.bullet.*;
-import com.jme3.scene.Spatial;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.fighter.Config;
-import name.huliqing.fighter.game.state.PlayState.PlayListener;
+import name.huliqing.fighter.game.state.game.GameState.PlayListener;
 import name.huliqing.fighter.loader.Loader;
 import name.huliqing.fighter.object.IntervalLogic;
 

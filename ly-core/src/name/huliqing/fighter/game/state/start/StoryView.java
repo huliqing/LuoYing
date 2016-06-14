@@ -10,10 +10,11 @@ import com.jme3.math.ColorRGBA;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.fighter.Config;
+import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.constants.IdConstants;
 import name.huliqing.fighter.data.GameData;
-import name.huliqing.fighter.game.state.lan.play.StoryPlayState;
-import name.huliqing.fighter.object.DataLoaderFactory;
+import name.huliqing.fighter.game.service.GameService;
+import name.huliqing.fighter.game.state.game.StoryPlayState;
 import name.huliqing.fighter.game.state.start.StoryView.StoryData;
 import name.huliqing.fighter.manager.ResourceManager;
 import name.huliqing.fighter.save.SaveStory;
@@ -27,6 +28,7 @@ import name.huliqing.fighter.ui.UI;
  * @author huliqing
  */
 public class StoryView extends ListView<StoryData> {
+    private final GameService gameService = Factory.get(GameService.class);
     private final List<StoryData> datas = new ArrayList<StoryData>(4);
 
     private StartState startState;
@@ -118,11 +120,12 @@ public class StoryView extends ListView<StoryData> {
             addClickListener(new Listener() {
                 @Override
                 public void onClick(UI ui, boolean isPress) {
-                    if (isPress || storyData.gameId == null) return;
-                    GameData gameData = DataLoaderFactory.createGameData(storyData.gameId);
-                    StoryPlayState story = new StoryPlayState(gameData);
-                    story.setSaveStory(saveStory);
-                    startState.startState(story);
+                    if (isPress || storyData.gameId == null) 
+                        return;
+                    GameData gameData = gameService.loadGameData(storyData.gameId);
+                    StoryPlayState sps = new StoryPlayState(gameData);
+                    sps.setSaveStory(saveStory);
+                    startState.startState(sps);
                 }
             });
         }

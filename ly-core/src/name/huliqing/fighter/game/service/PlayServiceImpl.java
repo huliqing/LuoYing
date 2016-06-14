@@ -18,15 +18,13 @@ import java.util.Collections;
 import java.util.List;
 import name.huliqing.fighter.Common;
 import name.huliqing.fighter.Factory;
-import name.huliqing.fighter.data.GameData;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.object.actor.ActorControl;
 import name.huliqing.fighter.data.ProtoData;
 import name.huliqing.fighter.enums.MessageType;
 import name.huliqing.fighter.game.state.PlayState;
-import name.huliqing.fighter.game.state.lan.play.StoryPlayState;
+import name.huliqing.fighter.game.state.game.StoryPlayState;
 import name.huliqing.fighter.manager.ShortcutManager;
-import name.huliqing.fighter.object.DataFactory;
 import name.huliqing.fighter.object.NetworkObject;
 import name.huliqing.fighter.object.PlayObject;
 import name.huliqing.fighter.object.anim.Anim;
@@ -250,10 +248,10 @@ public class PlayServiceImpl implements PlayService {
     @Override
     public Spatial getTerrain() {
         PlayState playState = Common.getPlayState();
-        if (playState == null || playState.getGame() == null) 
+        if (playState == null || playState.getGameState().getGame() == null) 
             return null;
         
-        Scene scene = playState.getGame().getScene();
+        Scene scene = playState.getGameState().getGame().getScene();
         if (scene != null) {
             return scene.getTerrain();
         }
@@ -349,10 +347,10 @@ public class PlayServiceImpl implements PlayService {
     @Override
     public Scene getScene() {
         PlayState ps = Common.getPlayState();
-        if (ps == null || ps.getGame() == null) 
+        if (ps == null || ps.getGameState().getGame() == null) 
             return null;
         
-        return ps.getGame().getScene();
+        return ps.getGameState().getGame().getScene();
     }
 
     @Override
@@ -434,8 +432,7 @@ public class PlayServiceImpl implements PlayService {
 
     @Override
     public void changeGame(String gameId) {
-        GameData gameData = DataFactory.createData(gameId);
-        Common.getPlayState().changeGame(gameData);
+        Common.getPlayState().changeGameState(gameId);
     }
 
 }

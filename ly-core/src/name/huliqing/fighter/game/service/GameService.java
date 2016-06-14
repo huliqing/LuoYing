@@ -18,4 +18,6 @@ public interface GameService extends Inject{
     Game loadGame(String gameId);
     
     Game loadGame(GameData data);
+    
+    GameData loadGameData(String gameId);
 }

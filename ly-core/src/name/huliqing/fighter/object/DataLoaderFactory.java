@@ -164,9 +164,10 @@ public class DataLoaderFactory {
     public static PositionData createPositionData(String objectId) {
         return createData(objectId, PositionData.class);
     }
-    public static GameData createGameData(String objectId) {
-        return createData(objectId, GameData.class);
-    }
+    // remove20160614
+//    public static GameData createGameData(String objectId) {
+//        return createData(objectId, GameData.class);
+//    }
     public static HitCheckerData createHitCheckerData(String objectId) {
         return createData(objectId, HitCheckerData.class);
     }

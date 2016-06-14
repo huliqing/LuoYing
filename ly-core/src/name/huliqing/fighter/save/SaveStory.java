@@ -31,6 +31,9 @@ public class SaveStory implements Savable{
     private ActorData player;
     
     private ArrayList<ShortcutSave> shortcuts = new ArrayList<ShortcutSave>();
+    
+    // TODO:....
+//    private List<ActorData> clientPlayers;
 
     public String getSaveName() {
         return saveName;

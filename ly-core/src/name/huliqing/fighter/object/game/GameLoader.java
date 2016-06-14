@@ -21,6 +21,7 @@ public class GameLoader<T extends GameData> implements DataLoader<T>{
     public void load(Proto proto, T store) {
         SceneData sceneData = DataFactory.createData(store.getAttribute("scene"));
         store.setSceneData(sceneData);
+        store.setAvailableActors(store.getAsList("availableActors"));
     }
     
 }

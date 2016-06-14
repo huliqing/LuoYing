@@ -5,6 +5,7 @@
 package name.huliqing.fighter.game.state;
 
 import name.huliqing.fighter.Common;
+import name.huliqing.fighter.game.state.game.MenuTool;
 import name.huliqing.fighter.game.view.SettingView;
 import name.huliqing.fighter.game.view.ToolsView;
 import name.huliqing.fighter.object.IntervalLogic;
@@ -20,7 +21,7 @@ import name.huliqing.fighter.ui.UI.Listener;
  */
 public abstract class PlayStateUI extends IntervalLogic {
     
-    private PlayState playState;
+    protected PlayState playState;
     
     // 工具栏
     protected ToolsView toolsView;
@@ -28,9 +29,9 @@ public abstract class PlayStateUI extends IntervalLogic {
     // 设置面板
     private SettingView settingPanel;
     
-    public PlayStateUI (PlayState playState) {
+    public PlayStateUI () {
         super(0);
-        this.playState = playState;
+        playState = Common.getPlayState();
     }
     
     @Override
@@ -56,7 +57,6 @@ public abstract class PlayStateUI extends IntervalLogic {
                 if (isPressed) return;
                 if (settingPanel.getParent() == null) {
                     playState.addObject(settingPanel, true);
-                    settingPanel.setOnTop();
                 } else {
                     playState.removeObject(settingPanel);
                 }
@@ -72,6 +72,10 @@ public abstract class PlayStateUI extends IntervalLogic {
         
         // add to localRoot
         playState.addObject(toolsView, true);
+    }
+    
+    public MenuTool getMenuTool() {
+        return toolsView;
     }
     
     @Override

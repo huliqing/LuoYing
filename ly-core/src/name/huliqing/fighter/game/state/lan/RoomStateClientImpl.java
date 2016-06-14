@@ -17,10 +17,9 @@ import java.util.logging.Logger;
 import name.huliqing.fighter.Common;
 import name.huliqing.fighter.Fighter;
 import name.huliqing.fighter.data.GameData;
+import name.huliqing.fighter.game.state.game.ClientPlayState;
 import name.huliqing.fighter.game.state.lan.GameServer.ServerState;
 import name.huliqing.fighter.game.state.lan.mess.MessPlayGetGameData;
-import name.huliqing.fighter.game.state.lan.play.LanClientPlayState;
-import name.huliqing.fighter.game.state.lan.play.LanPlayState;
 import name.huliqing.fighter.manager.ResourceManager;
 import name.huliqing.fighter.game.view.HelpView;
 import name.huliqing.fighter.ui.LinearLayout;
@@ -32,7 +31,7 @@ import name.huliqing.fighter.ui.state.UIState;
  * @author huliqing
  */
 public class RoomStateClientImpl extends AbstractAppState implements RoomState {
-    private final static Logger logger = Logger.getLogger(RoomStateClientImpl.class.getName());
+    private final static Logger LOG = Logger.getLogger(RoomStateClientImpl.class.getName());
     private Fighter app; 
     
     // Client list
@@ -114,9 +113,9 @@ public class RoomStateClientImpl extends AbstractAppState implements RoomState {
     public void update(float tpf) {
         super.update(tpf);
         if (startGame) {
-            logger.log(Level.INFO, "RoomStateClientImpl.startGame");
-            LanPlayState lanPlayState = new LanClientPlayState(gameClient);
-            app.changeState(lanPlayState);
+            LOG.log(Level.INFO, "RoomStateClientImpl.startGame");
+            ClientPlayState clientPlayState = new ClientPlayState(gameClient);
+            app.changeState(clientPlayState);
         }
     }
 

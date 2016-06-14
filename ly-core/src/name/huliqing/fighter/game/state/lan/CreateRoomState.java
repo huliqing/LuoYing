@@ -10,9 +10,10 @@ import com.jme3.app.state.AppStateManager;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.fighter.Common;
+import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.Fighter;
 import name.huliqing.fighter.data.GameData;
-import name.huliqing.fighter.object.DataLoaderFactory;
+import name.huliqing.fighter.game.service.GameService;
 import name.huliqing.fighter.manager.ResourceManager;
 import name.huliqing.fighter.game.view.HelpView;
 import name.huliqing.fighter.ui.LinearLayout;
@@ -24,9 +25,9 @@ import name.huliqing.fighter.ui.state.UIState;
  * @author huliqing
  */
 public class CreateRoomState extends AbstractAppState {
+    private final GameService gameService = Factory.get(GameService.class);
 
     private Fighter app;
-//    private LinearLayout localUIRoot;
     
     // 可见的游戏列表
     private CreateRoomStateGameListPanel gameList;
@@ -71,7 +72,7 @@ public class CreateRoomState extends AbstractAppState {
             Logger.getLogger(CreateRoomState.class.getName()).log(Level.WARNING, "Need to select a game!");
             return;
         }
-        GameData gameData = DataLoaderFactory.createGameData(gameId);
+        GameData gameData = gameService.loadGameData(gameId);
         RoomStateServerImpl roomState = new RoomStateServerImpl(gameData);
         app.changeState(roomState);
     }

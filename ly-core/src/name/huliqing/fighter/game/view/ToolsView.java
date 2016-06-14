@@ -4,6 +4,7 @@
  */
 package name.huliqing.fighter.game.view;
 
+import name.huliqing.fighter.game.state.game.MenuTool;
 import name.huliqing.fighter.ui.LinearLayout;
 import name.huliqing.fighter.ui.UI;
 
@@ -11,7 +12,7 @@ import name.huliqing.fighter.ui.UI;
  * 顶点按钮栏
  * @author huliqing
  */
-public class ToolsView extends LinearLayout {
+public class ToolsView extends LinearLayout implements MenuTool {
 
     // 按钮之间的间隔距离
     private float btnSpace;
@@ -57,11 +58,26 @@ public class ToolsView extends LinearLayout {
     }
 
     @Override
-    public void addView(UI view, int index) {
+    public final void addView(UI view, int index) {
         super.addView(view, index);
         updateView();
         resize();
         setToCorner(Corner.RT);
+    }
+
+    @Override
+    public void addMenu(UI menu) {
+        addView(menu, childViews.size());
+    }
+
+    @Override
+    public void addMenu(UI menu, int index) {
+        addView(menu, index);
+    }
+
+    @Override
+    public boolean removeMenu(UI menu) {
+        return removeView(menu);
     }
     
     

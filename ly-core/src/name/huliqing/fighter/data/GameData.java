@@ -41,8 +41,8 @@ public class GameData extends ProtoData {
         return availableActors;
     }
 
-//    public void setAvailableActors(List<String> availableActors) {
-//        this.availableActors = availableActors;
-//    }
+    public void setAvailableActors(List<String> availableActors) {
+        this.availableActors = availableActors;
+    }
     
 }
