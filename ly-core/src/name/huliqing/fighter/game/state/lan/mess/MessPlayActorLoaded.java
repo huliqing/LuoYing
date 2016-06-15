@@ -6,22 +6,18 @@ package name.huliqing.fighter.game.state.lan.mess;
 
 import com.jme3.math.Vector3f;
 import com.jme3.network.serializing.Serializable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import name.huliqing.fighter.Config;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.ActorData;
 import name.huliqing.fighter.game.service.ActorService;
 import name.huliqing.fighter.game.service.PlayService;
-import name.huliqing.fighter.game.state.game.LanClientListener;
 import name.huliqing.fighter.object.actor.Actor;
 
 /**
- * 告诉客户端载入一个新的角色
+ * 服务端发消息给客户端，告诉客户端载入一个新的角色
  * @author huliqing
  */
 @Serializable
-public class MessSCActorLoaded extends MessBase {
+public class MessPlayActorLoaded extends MessBase {
 
     private ActorData actorData;
     private Vector3f location;
@@ -34,9 +30,9 @@ public class MessSCActorLoaded extends MessBase {
     private float[] speeds;
     private float[] times;
     
-    public MessSCActorLoaded() {}
+    public MessPlayActorLoaded() {}
     
-    public MessSCActorLoaded(ActorData actorData) {
+    public MessPlayActorLoaded(ActorData actorData) {
         this.actorData = actorData;
     }
 
@@ -115,15 +111,7 @@ public class MessSCActorLoaded extends MessBase {
         actorService.syncTransform(actor, location, viewDirection);
         actorService.syncAnimation(actor, channels, anims, loopModes, speeds, times);
         playService.addObject(actor.getModel(), false);
-        // 如果唯一ID配置，则说明刚好是客户端选择的角色ID
-        if (actor.getData().getUniqueId() == LanClientListener.playerActorUniqueId) {
-            playService.setAsPlayer(actor);
-        }
-        if (Config.debug) {
-            Logger.getLogger(MessSCActorLoaded.class.getName())
-                    .log(Level.INFO, "客户端载入角色,actorId={0}, uniqueId={1}, playerActorUniqueId={2}"
-                    , new Object[] {actor.getData().getId(), actor.getData().getUniqueId(), LanClientListener.playerActorUniqueId});
-        }
+        
     }
     
 }

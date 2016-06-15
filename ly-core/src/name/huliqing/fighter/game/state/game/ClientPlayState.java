@@ -10,16 +10,22 @@ import com.jme3.app.state.AppStateManager;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import name.huliqing.fighter.Factory;
+import name.huliqing.fighter.game.service.PlayService;
 import name.huliqing.fighter.game.state.lan.DefaultClientListener;
 import name.huliqing.fighter.game.state.lan.GameClient.ClientState;
 import name.huliqing.fighter.game.state.lan.GameServer;
-import name.huliqing.fighter.game.state.lan.Network;
+import name.huliqing.fighter.game.state.lan.mess.MessBase;
+import name.huliqing.fighter.game.state.lan.mess.MessPlayActorSelectResult;
 import name.huliqing.fighter.game.state.lan.mess.MessPlayClientData;
 import name.huliqing.fighter.game.state.lan.mess.MessPlayGetClients;
 import name.huliqing.fighter.game.state.lan.mess.MessPlayGetServerState;
 import name.huliqing.fighter.game.state.lan.mess.MessPlayInitGame;
+import name.huliqing.fighter.game.state.lan.mess.MessPlayLoadSavedActor;
+import name.huliqing.fighter.game.state.lan.mess.MessPlayLoadSavedActorResult;
 import name.huliqing.fighter.object.IntervalLogic;
 import name.huliqing.fighter.object.PlayObject;
+import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.ui.Text;
 import name.huliqing.fighter.ui.UI.Corner;
 import name.huliqing.fighter.ui.UIFactory;
@@ -29,6 +35,9 @@ import name.huliqing.fighter.ui.UIFactory;
  * @author huliqing
  */
 public class ClientPlayState extends LanPlayState implements DefaultClientListener.PingListener{
+    private static final Logger LOG = Logger.getLogger(ClientPlayState.class.getName());
+    
+    private final PlayService playService = Factory.get(PlayService.class);
     
     // 客户端
     private final GameClient gameClient;
@@ -50,7 +59,7 @@ public class ClientPlayState extends LanPlayState implements DefaultClientListen
         gameState.getGame().setEnabled(false);
         
         // 1.设置listener后立即标记为ready，因为接收到的message最终是放在同步队列中处理的。
-        clientListener = new LanClientListener(app);
+        clientListener = new ClientListener(app);
         clientListener.addPingListener(this);
         gameClient.setGameClientListener(clientListener);
         gameClient.setClientState(ClientState.ready);
@@ -106,8 +115,14 @@ public class ClientPlayState extends LanPlayState implements DefaultClientListen
             // 所以这里应该主动获取一次，进行初始化
             gameClient.send(new MessPlayGetClients());
             
-            // 显示角色选择面板
-            showSelectPanel(gameClient.getGameData().getAvailableActors());
+            // remove20160616不再直接弹出角色选择面板
+//            // 显示角色选择面板
+//            showSelectPanel(gameClient.getGameData().getAvailableActors());
+
+            // 偿试发送消息给服务端，看看有没有客户端的存档资料，如果存在资料就不需要选择新角色进行游戏了。
+            // （在故事模式下即可能存在客户端的存档资料）
+            gameClient.send(new MessPlayLoadSavedActor());
+            
         } else {
             // 请求服务端状态
             gameClient.send(new MessPlayGetServerState());
@@ -133,4 +148,40 @@ public class ClientPlayState extends LanPlayState implements DefaultClientListen
         pingLabel.setText("PING:" + ping);
     }
     
+    private class ClientListener extends LanClientListener {
+        
+        public ClientListener(Application app) {
+            super(app);
+        }
+        
+        @Override
+        protected void applyMessage(GameClient gameClient, MessBase m) {
+            // 服务端成功载入客户端的存档资料
+            if (m instanceof MessPlayLoadSavedActorResult) {
+                MessPlayLoadSavedActorResult mess = (MessPlayLoadSavedActorResult) m;
+                if (mess.isSuccess()) {
+                    playService.setAsPlayer(playService.findActor(mess.getActorId()));
+                } else {
+                    // 这是在服务端没有客户端的存档的情况下，客户端需要弹出角色选择面板，来选择一个角色进行游戏
+                    showSelectPanel(gameClient.getGameData().getAvailableActors());
+                }
+                return;
+            }
+            
+            // 服务端成功载入客户端所选择的角色
+            if (m instanceof MessPlayActorSelectResult) {
+                MessPlayActorSelectResult mess = (MessPlayActorSelectResult) m;
+                if (mess.isSuccess()) {
+                    playService.setAsPlayer(playService.findActor(mess.getActorId()));
+                } else {
+                    LOG.log(Level.SEVERE, "Could not load selected Actor, error={0}", mess.getError());
+                }
+                return;
+            }
+            
+            super.applyMessage(gameClient, m);
+        }
+        
+        
+    }
 }

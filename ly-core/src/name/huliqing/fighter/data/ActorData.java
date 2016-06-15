@@ -64,11 +64,6 @@ public class ActorData extends ProtoData {
     
     // 角色技能信息
     private SkillStore skillStore;
-  
-    // remove20160408
-//    // 标记是否锁住了所有技能,只要锁住，则任何技能都不能再执行．
-//    // 即使使用了force强制也不能执行技能．
-//    private boolean skillLocked;
     
     // 角色物品的掉落设置
     private DropData drop;
@@ -168,7 +163,6 @@ public class ActorData extends ProtoData {
             oc.writeSavableArrayList(new ArrayList<SkinData>(skinBase), "skinBase", null);
         oc.write(itemStore, "itemStore", null);
         oc.write(skillStore, "skillStore", null);
-//        oc.write(skillLocked, "skillLocked", false);// remove20160408
         oc.write(drop, "drop", null);
         if (logics != null)
             oc.writeSavableArrayList(new ArrayList<LogicData>(logics), "logics", null);
@@ -199,7 +193,7 @@ public class ActorData extends ProtoData {
         oc.write(talentPoints, "talentPoints", 0);
         oc.writeSavableArrayList(talents, "talents", null);
         oc.write(talentPointsLevelEl, "talentPointsLevelEl", null);
-//        oc.write(team, "team", 0);
+        oc.write(team, "team", 0);
         oc.write(living, "living", false);
         oc.write(followTarget, "followTarget", -1);
         if (bornPlace != null) {
@@ -225,7 +219,6 @@ public class ActorData extends ProtoData {
         skinBase = ic.readSavableArrayList("skinBase", null);
         itemStore = (ItemStore) ic.readSavable("itemStore", null);
         skillStore = (SkillStore) ic.readSavable("skillStore", null);
-//        skillLocked = ic.readBoolean("skillLocked", false);// remove20160408
         drop = (DropData) ic.readSavable("drop", null);
         logics = ic.readSavableArrayList("logics", null);
         states = ic.readSavableArrayList("states", null);
@@ -256,7 +249,7 @@ public class ActorData extends ProtoData {
         talentPoints = ic.readInt("talentPoints", 0);
         talents = ic.readSavableArrayList("talents", null);
         talentPointsLevelEl = ic.readString("talentPointsLevelEl", null);
-//        team = ic.readInt("team", 0);
+        team = ic.readInt("team", 0);
         living = ic.readBoolean("living", false);
         followTarget = ic.readLong("followTarget", -1);
         bornPlace = (Vector3f)ic.readSavable("bornPlace", null);

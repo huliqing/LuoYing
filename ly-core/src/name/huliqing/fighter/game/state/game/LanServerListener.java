@@ -10,6 +10,8 @@ import com.jme3.network.HostedConnection;
 import com.jme3.network.Message;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import name.huliqing.fighter.Common;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.enums.MessageType;
@@ -27,7 +29,7 @@ import name.huliqing.fighter.object.actor.Actor;
  * @author huliqing
  */
 public class LanServerListener extends DefaultServerListener<Actor> {
-//    private static final Logger LOG = Logger.getLogger(LanServerListener.class.getName());
+    private static final Logger LOG = Logger.getLogger(LanServerListener.class.getName());
     
     private final PlayService playService = Factory.get(PlayService.class);
     private final List<Actor> syncObjects = new LinkedList<Actor>();
@@ -109,6 +111,12 @@ public class LanServerListener extends DefaultServerListener<Actor> {
 
     @Override
     protected void processServerMessage(GameServer gameServer, HostedConnection source, Message m) {
-        ((MessBase)m).applyOnServer(gameServer, source);
+        if (m instanceof MessBase) {
+            ((MessBase)m).applyOnServer(gameServer, source);
+        } else {
+            ConnData cd = source.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
+            LOG.log(Level.WARNING, "Unknow message type from client, clientId={0}, clientName={1}, message={2}"
+                    , new Object[] {cd.getClientId(), cd.getClientName(), m.getClass().getName()});
+        }
     }
 }

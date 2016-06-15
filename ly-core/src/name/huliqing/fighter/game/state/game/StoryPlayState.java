@@ -25,6 +25,7 @@ import name.huliqing.fighter.data.ProtoData;
 import name.huliqing.fighter.enums.DataType;
 import name.huliqing.fighter.enums.SkillType;
 import name.huliqing.fighter.game.network.ActorNetwork;
+import name.huliqing.fighter.game.network.PlayNetwork;
 import name.huliqing.fighter.game.network.StateNetwork;
 import name.huliqing.fighter.game.service.ActorService;
 import name.huliqing.fighter.game.service.ConfigService;
@@ -35,6 +36,8 @@ import name.huliqing.fighter.game.service.StateService;
 import name.huliqing.fighter.game.state.lan.GameServer;
 import name.huliqing.fighter.game.state.lan.mess.MessPlayActorSelect;
 import name.huliqing.fighter.game.state.lan.mess.MessPlayClientData;
+import name.huliqing.fighter.game.state.lan.mess.MessPlayLoadSavedActor;
+import name.huliqing.fighter.game.state.lan.mess.MessPlayLoadSavedActorResult;
 import name.huliqing.fighter.game.view.ShortcutView;
 import name.huliqing.fighter.manager.ShortcutManager;
 import name.huliqing.fighter.object.DataLoaderFactory;
@@ -88,7 +91,7 @@ public class StoryPlayState extends LanPlayState {
             @Override
             public void onSceneLoaded() {
                 // 1.场景载入后再载入角色
-                loadStory();
+                loadPlayer();
             }
         });
     }
@@ -120,7 +123,7 @@ public class StoryPlayState extends LanPlayState {
         gameState.getGame().addListener(new GameListener() {
             @Override
             public void onSceneLoaded() {
-                loadStory();
+                loadPlayer();
             }
         });
         // 需要更新到gameServer，否则客户端登入的时候会获取到旧的游戏。
@@ -223,9 +226,9 @@ public class StoryPlayState extends LanPlayState {
     }
     
      /**
-     * 载入存档，如果没有存档则新开游戏
+     * 载入当前主角玩家存档，如果没有存档则新开游戏
      */
-    private void loadStory() {
+    private void loadPlayer() {
         Actor player;
         if (saveStory != null) {
             // 载入玩家主角
@@ -249,8 +252,38 @@ public class StoryPlayState extends LanPlayState {
         actorService.setTeam(player, 1);
         skillService.playSkill(player, skillService.getSkill(player, SkillType.wait).getId(), false);
         
-        addObject(player.getModel(), false);
+        addObject(player, false);
         setPlayer(player);
+    }
+    
+    // 从saveStory中载入指定clientId的角色
+    private boolean loadClient(SaveStory saveStory, ClientData clientData) {
+        List<ActorData> actors =  saveStory.getActors();
+        ActorData clientPlayerData = null;
+        for (ActorData data : actors) {
+            if (data.getUniqueId() == clientData.getActorId()) {
+                clientPlayerData = data;
+                break;
+            }
+        }
+        if (clientPlayerData == null) {
+            return false;
+        }
+        
+        // 载入客户端玩家及其宠物，注：这里要用Network,因为服务端和客户端已经为running状态.
+        PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
+        Actor  clientPlayer= actorService.loadActor(clientPlayerData);
+        clientPlayer.setPlayer(true);
+        skillService.playSkill(clientPlayer, skillService.getSkill(clientPlayer, SkillType.wait).getId(), false);
+        playNetwork.addActor(clientPlayer);
+        for (ActorData data : actors) {
+            if  (data.getOwnerId() == clientPlayerData.getUniqueId()) {
+                Actor actor = actorService.loadActor(data);
+                skillService.playSkill(actor, skillService.getSkill(actor, SkillType.wait).getId(), false);
+                playNetwork.addActor(actor);
+            }
+        }
+        return true;
     }
     
     /**
@@ -334,25 +367,38 @@ public class StoryPlayState extends LanPlayState {
 
         @Override
         protected void processServerMessage(GameServer gameServer, HostedConnection source, Message m) {
+            // 如果客户端偿试要求载入存档，则从存档中载入，如果不存在存档（新游戏）或存档中没有指定客户端的资料则返回false
+            // 以通知客户端自己去选择一个角色来进行游戏
+            if (m instanceof MessPlayLoadSavedActor) {
+                // 找出客户端的存档资料，注意saveStory可能为null（在“新游戏"情况下）
+                if (saveStory != null) {
+                    List<ClientData> clientDatas = saveStory.getClientDatas();
+                    ConnData connData = source.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
+                    for (ClientData cd : clientDatas) {
+                        if (cd.getClientId().equals(connData.getClientId())) {
+                            // 载入角色
+                            boolean result = loadClient(saveStory, cd);
+                            if (result) {
+                                connData.setActorId(cd.getActorId());
+                            }
+                            // 通知客户端
+                            MessPlayLoadSavedActorResult messResult = new MessPlayLoadSavedActorResult(result);
+                            messResult.setActorId(cd.getActorId());
+                            gameServer.send(source, messResult);
+                            return;
+                        }
+                    }
+                }
+                gameServer.send(source, new MessPlayLoadSavedActorResult(false));
+                return;
+            }
+            
+            // 客户端告诉服务端，要选择哪一个角色进行游戏
             if (m instanceof MessPlayActorSelect) {
                 // 响应客户端角色选择
                 ((MessPlayActorSelect)m).applyOnServer(gameServer, source);
                 
-                // remove20160615,不再改变等级
-                // 重新设置玩家角色的等级和派别。故事模式下客户端玩家角色进入时
-                // 的等级要比主玩家的低一些.
-//                Long actorUniqueId = source.getAttribute(GameServer.ATTR_ACTOR_UNIQUE_ID);
-//                if (actorUniqueId != null) {
-//                    int playerLevel = actorService.getLevel(gameState.getPlayer());
-//                    playerLevel *= 0.75f;
-//                    if (playerLevel < 1) {
-//                        playerLevel = 1;
-//                    }
-//                    Actor actor = playService.findActor(actorUniqueId);
-//                    actorNetwork.setGroup(actor, actorService.getGroup(gameState.getPlayer()));
-//                    actorNetwork.setLevel(actor, playerLevel);
-//                }
-                
+                // 让客户端角色的组合与当前主角玩家一致
                 ConnData cd = source.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
                 long actorUniqueId = cd.getActorId();
                 if (actorUniqueId > 0) {
@@ -361,6 +407,7 @@ public class StoryPlayState extends LanPlayState {
                 }
                 return;
             } 
+            
             super.processServerMessage(gameServer, source, m); 
         }
     }

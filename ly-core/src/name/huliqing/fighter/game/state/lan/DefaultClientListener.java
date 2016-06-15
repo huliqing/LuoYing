@@ -94,7 +94,7 @@ public abstract class DefaultClientListener implements ClientListener {
     }
     
     @Override
-    public void clientConnected(final GameClient gameClient, final Client client) {
+    public final  void clientConnected(final GameClient gameClient, final Client client) {
         // 当连接到服务端以后，如果服端器这时已经在玩游戏，则客户端直接开始游戏。
         app.enqueue(new Callable() {
             @Override
@@ -106,7 +106,7 @@ public abstract class DefaultClientListener implements ClientListener {
     }
 
     @Override
-    public void clientDisconnected(final GameClient gameClient,  final Client client, final DisconnectInfo info) {
+    public final void clientDisconnected(final GameClient gameClient,  final Client client, final DisconnectInfo info) {
         app.enqueue(new Callable() {
             @Override
             public Object call() throws Exception {
@@ -130,7 +130,7 @@ public abstract class DefaultClientListener implements ClientListener {
     }
 
     @Override
-    public void clientMessage(final GameClient gameClient, final Client client, final Message m) {
+    public final void clientMessage(final GameClient gameClient, final Client client, final Message m) {
         app.enqueue(new Callable() {
             @Override
             public Object call() throws Exception {
@@ -200,7 +200,7 @@ public abstract class DefaultClientListener implements ClientListener {
     }
     
     /**
-     * 处理当客户端连接到服务端时
+     * 当有一个新的客户端连接到服务端调用该方法。
      * @param gameClient
      * @param client 
      */
@@ -214,7 +214,7 @@ public abstract class DefaultClientListener implements ClientListener {
     }
     
     /**
-     * 处理客户端断开时
+     * 当有一个客户端断开连接时，这个方法发生在客户端断开后调用。
      * @param gameClient
      * @param client
      * @param info 

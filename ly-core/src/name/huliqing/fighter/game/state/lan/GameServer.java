@@ -4,7 +4,6 @@
  */
 package name.huliqing.fighter.game.state.lan;
 
-import name.huliqing.fighter.game.state.lan.mess.MessClient;
 import name.huliqing.fighter.game.state.lan.mess.MessPlayClientData;
 import name.huliqing.fighter.game.state.lan.mess.MessSCServerState;
 import com.jme3.network.ConnectionListener;
@@ -19,13 +18,13 @@ import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.fighter.Common;
 import name.huliqing.fighter.Config;
 import name.huliqing.fighter.Factory;
-import name.huliqing.fighter.constants.ActorConstants;
 import name.huliqing.fighter.data.GameData;
 import name.huliqing.fighter.game.service.ConfigService;
 import name.huliqing.fighter.game.service.EnvService;
@@ -307,12 +306,41 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
      * @param message 
      */
     public void send(Actor actor, Message message) {
-        Integer connId = actor.getModel().getUserData(ActorConstants.USER_DATA_CLIENT_CONNECTION_ID);
-        if (connId == null || !server.isRunning())
+        // remove20160616
+//        Integer connId = actor.getModel().getUserData(ActorConstants.USER_DATA_CLIENT_CONNECTION_ID);
+//        if (connId == null || !server.isRunning())
+//            return;
+//        HostedConnection conn = server.getConnection(connId);
+//        if (conn == null)
+//            return;
+//        if (message instanceof MessBase) {
+//            ((MessBase) message).time = time;
+//        }
+//        conn.send(message);
+//        if (Config.debug) {
+//            Logger.getLogger(GameServer.class.getName()).log(Level.INFO
+//                    , "send custom message to client,actor={0}, message={1}"
+//                    , new Object[] {actor.getData().getId(), message});
+//        }
+
+
+        if (!server.isRunning())
             return;
-        HostedConnection conn = server.getConnection(connId);
+        
+        Collection<HostedConnection> conns = server.getConnections();
+        HostedConnection conn = null;
+        ConnData cd;
+        for (HostedConnection hc : conns) {
+            cd = hc.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
+            if (cd != null && cd.getActorId() == actor.getData().getUniqueId()) {
+                conn = hc;
+                break;
+            }
+        }
+        
         if (conn == null)
             return;
+        
         if (message instanceof MessBase) {
             ((MessBase) message).time = time;
         }

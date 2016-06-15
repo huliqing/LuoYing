@@ -153,7 +153,7 @@ public abstract class DefaultServerListener<T> implements ServerListener<T> {
     protected abstract void onClientRemoved(GameServer gameServer, HostedConnection conn);
     
     /**
-     * 处理接收到的来自客户端的消息
+     * 在服务端处理接收到的来自客户端的消息
      * @param gameServer
      * @param source
      * @param m 

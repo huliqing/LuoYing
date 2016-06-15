@@ -28,7 +28,10 @@ import name.huliqing.fighter.utils.MathUtils;
 public class ConfigServiceImpl implements ConfigService {
     private SaveService saveService;
     // 用于标识游戏客户端唯一标识的ID的键。
-    private final static String CLIENT_ID_KEY = "_client_id_";
+    private final static String CLIENT_ID_KEY = "Client_ID";
+    
+    // 用于在本地多客户端测试,这个ID在每次启动时都重新生成，方便在桌面上测试时区别不同的客户端。
+    private String clientIdForDebug;
     
     private ConfigData cd;
 
@@ -324,6 +327,13 @@ public class ConfigServiceImpl implements ConfigService {
 
     @Override
     public String getClientId() {
+        if (Config.debug) {
+            if (clientIdForDebug == null) {
+                clientIdForDebug = UUID.randomUUID().toString();
+            }
+            return clientIdForDebug;
+        }
+        
         byte[] bytes = saveService.load(CLIENT_ID_KEY);
         // 首次获取不存在则自动生成一个唯一ID
         if (bytes == null) {

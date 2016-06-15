@@ -5,7 +5,6 @@
 package name.huliqing.fighter;
 
 import com.jme3.network.serializing.Serializer;
-import static com.jme3.network.serializing.Serializer.registerClass;
 import com.jme3.network.serializing.serializers.MapSerializer;
 import java.util.LinkedHashMap;
 import name.huliqing.fighter.data.ActionData;
@@ -52,8 +51,8 @@ import name.huliqing.fighter.game.state.lan.mess.MessSCGameData;
 import name.huliqing.fighter.game.state.lan.mess.MessSCServerState;
 import name.huliqing.fighter.game.state.lan.mess.MessSCInitGameOK;
 import name.huliqing.fighter.game.state.lan.mess.MessPlayActorSelect;
-import name.huliqing.fighter.game.state.lan.mess.MessSCActorLoaded;
-import name.huliqing.fighter.game.state.lan.mess.MessSCActorSelectResult;
+import name.huliqing.fighter.game.state.lan.mess.MessPlayActorLoaded;
+import name.huliqing.fighter.game.state.lan.mess.MessPlayActorSelectResult;
 import name.huliqing.fighter.game.state.lan.mess.MessActionRun;
 import name.huliqing.fighter.game.state.lan.mess.MessActorAddSkill;
 import name.huliqing.fighter.game.state.lan.mess.MessActorApplyXp;
@@ -100,6 +99,8 @@ import name.huliqing.fighter.game.state.lan.mess.MessViewRemove;
 import name.huliqing.fighter.object.SyncData;
 import name.huliqing.fighter.object.actor.ItemStore;
 import name.huliqing.fighter.object.actor.SkillStore;
+import name.huliqing.fighter.game.state.lan.mess.MessPlayLoadSavedActor;
+import name.huliqing.fighter.game.state.lan.mess.MessPlayLoadSavedActorResult;
 import static com.jme3.network.serializing.Serializer.registerClass;
 
 /**
@@ -125,6 +126,8 @@ public class MessRegister {
         Serializer.registerClass(MessPlayGetGameData.class);
         Serializer.registerClass(MessPlayGetServerState.class);
         Serializer.registerClass(MessPlayInitGame.class);
+        Serializer.registerClass(MessPlayLoadSavedActor.class);
+        Serializer.registerClass(MessPlayLoadSavedActorResult.class);
         Serializer.registerClass(MessPlayClientData.class);
         Serializer.registerClass(MessSCClientList.class);
         Serializer.registerClass(MessSCGameData.class);
@@ -181,9 +184,9 @@ public class MessRegister {
         Serializer.registerClass(MessItemSync.class);
         Serializer.registerClass(MessItemUse.class);
         Serializer.registerClass(MessMessage.class);
-        Serializer.registerClass(MessSCActorLoaded.class);
+        Serializer.registerClass(MessPlayActorLoaded.class);
         Serializer.registerClass(MessSCActorRemove.class);
-        Serializer.registerClass(MessSCActorSelectResult.class);
+        Serializer.registerClass(MessPlayActorSelectResult.class);
         
         // ---- Game play
         Serializer.registerClass(MessAutoAttack.class);

@@ -25,7 +25,7 @@ import name.huliqing.fighter.game.service.ActorService;
 import name.huliqing.fighter.game.service.PlayService;
 import name.huliqing.fighter.game.service.SkinService;
 import name.huliqing.fighter.game.state.lan.mess.MessMessage;
-import name.huliqing.fighter.game.state.lan.mess.MessSCActorLoaded;
+import name.huliqing.fighter.game.state.lan.mess.MessPlayActorLoaded;
 import name.huliqing.fighter.game.state.lan.mess.MessSCActorRemove;
 import name.huliqing.fighter.game.state.lan.mess.MessSyncObject;
 import name.huliqing.fighter.game.state.lan.mess.MessViewAdd;
@@ -83,7 +83,7 @@ public class PlayNetworkImpl implements PlayNetwork {
     public void addActor(Actor actor) {
         if (!network.isClient()) {
             if (network.hasConnections()) {
-                MessSCActorLoaded mess = createActorLoadedMess(actor);
+                MessPlayActorLoaded mess = createActorLoadedMess(actor);
                 network.broadcast(mess);
             }
             
@@ -101,18 +101,6 @@ public class PlayNetworkImpl implements PlayNetwork {
     public void addBullet(Bullet bullet) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
-//    @Override
-//    public void addLogic(Logic logic) {
-//        // ignore客户端不需要添加逻辑
-//        throw new UnsupportedOperationException("Not supported yet.");
-//    }
-//    
-//    @Override
-//    public void removeLogic(Logic logic) {
-//        // ignore客户端不需要
-//        throw new UnsupportedOperationException("Not supported yet.");
-//    }
     
     @Override
     public void addShortcut(Actor actor, ProtoData data) {
@@ -445,7 +433,7 @@ public class PlayNetworkImpl implements PlayNetwork {
         // 同步所有角色
         List<Actor> actors = playService.findAllActor();
         for (Actor actor : actors) {
-            MessSCActorLoaded mess = createActorLoadedMess(actor);
+            MessPlayActorLoaded mess = createActorLoadedMess(actor);
             network.sendToClient(client, mess);
         }
         
@@ -459,9 +447,9 @@ public class PlayNetworkImpl implements PlayNetwork {
     }
     
     // 创建一个需要通知客户端载入的角色数据
-    private MessSCActorLoaded createActorLoadedMess(Actor actor) {
+    private MessPlayActorLoaded createActorLoadedMess(Actor actor) {
         // 同步角色数据及位置和视角
-        MessSCActorLoaded mess = new MessSCActorLoaded();
+        MessPlayActorLoaded mess = new MessPlayActorLoaded();
         mess.setActorData(actor.getData());
         mess.setLocation(actor.getLocation());
         mess.setViewDirection(actor.getViewDirection());
