@@ -66,12 +66,12 @@ public class StoryTreasureTask2 extends GameTaskBase {
     private final StateNetwork stateNetwork = Factory.get(StateNetwork.class);
     
     // ==== 任务位置
-    private StoryTreasureGame game;
+    private final StoryTreasureGame game;
     
     // ==== 怪物刷新器及刷新位置
     private ActorBuildLogic sceneBuilder;
-    private float buildRadius = 5;
-    private int buildTotal = 8;
+    private final float buildRadius = 5;
+    private final int buildTotal = 8;
     
     // ==== 任务面板
     private TextPanel startPanel;
@@ -84,7 +84,7 @@ public class StoryTreasureTask2 extends GameTaskBase {
     private Actor player;
     private Actor companion;
     private CompanionLoader companionLoader;
-    private float nearestDistance = 5;
+    private final float nearestDistance = 5;
     
     // ==== 角色分组
     
@@ -99,13 +99,12 @@ public class StoryTreasureTask2 extends GameTaskBase {
     // 怪物刷新点
     private Vector3f[] enemyPositions;
     // 同伴的随机生成位置
-    private Vector3f[] companionPosition = new Vector3f[] {new Vector3f(0, 0, 0)};
+    private final Vector3f[] companionPosition = new Vector3f[] {new Vector3f(0, 0, 0)};
     
     private boolean enabled = true;
     
     /**
-     * @param playState
-     * @param targetPos 怪物的集合地点
+     * @param game
      */
     public StoryTreasureTask2(StoryTreasureGame game) {
         this.game = game;
@@ -249,7 +248,8 @@ public class StoryTreasureTask2 extends GameTaskBase {
         }
         
         if (stage == 1) {
-            playService.addObject(sceneBuilder, false);
+//            playService.addObject(sceneBuilder, false);
+            game.addLogic(sceneBuilder);
             stage = 2;
             return;
         }
@@ -259,8 +259,11 @@ public class StoryTreasureTask2 extends GameTaskBase {
             
             if (timerView != null && timerView.getTime() <= 0) {
                 companionLoader = new CompanionLoader();
-                playService.addObject(companionLoader, false);
-                playNetwork.removeObject(timerView);;
+                
+//                playService.addObject(companionLoader, false);
+                game.addLogic(companionLoader);
+                
+                playNetwork.removeObject(timerView);
                 timerView = null;
             }
             

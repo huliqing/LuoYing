@@ -6,7 +6,7 @@ package name.huliqing.fighter.game.state.lan;
 
 import name.huliqing.fighter.game.state.lan.mess.MessSCGameData;
 import name.huliqing.fighter.game.state.lan.mess.MessSCClientList;
-import name.huliqing.fighter.game.state.lan.mess.MessPlayClientId;
+import name.huliqing.fighter.game.state.lan.mess.MessClient;
 import name.huliqing.fighter.game.state.lan.mess.MessPlayGetServerState;
 import name.huliqing.fighter.game.state.lan.mess.MessSCServerState;
 import com.jme3.app.Application;
@@ -58,8 +58,8 @@ public abstract class DefaultServerListener<T> implements ServerListener<T> {
         app.enqueue(new Callable() {
             @Override
             public Object call() throws Exception {
-                if (m instanceof MessPlayClientId) {
-                   onReceiveClientId(gameServer, source, (MessPlayClientId) m);
+                if (m instanceof MessClient) {
+                   onReceiveClientId(gameServer, source, (MessClient) m);
                    onClientsUpdated(gameServer);
                 } else if (m instanceof MessPlayGetServerState) {
                     onReceiveGetServerState(gameServer, source, (MessPlayGetServerState) m);
@@ -94,9 +94,9 @@ public abstract class DefaultServerListener<T> implements ServerListener<T> {
      * @param conn
      * @param m 
      */
-    protected void onReceiveClientId(GameServer gameServer, HostedConnection conn, MessPlayClientId m) {
+    protected void onReceiveClientId(GameServer gameServer, HostedConnection conn, MessClient m) {
          // 1.设置客户端的机器名称标识
-        conn.setAttribute(GameServer.ATTR_CLIENT_ID, m);
+        conn.setAttribute(GameServer.ATTR_CLIENT, m);
     }
     
     /**

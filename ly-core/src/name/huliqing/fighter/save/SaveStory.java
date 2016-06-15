@@ -12,7 +12,6 @@ import com.jme3.export.Savable;
 import java.io.IOException;
 import java.util.ArrayList;
 import name.huliqing.fighter.data.ActorData;
-import name.huliqing.fighter.data.ConfigData;
 
 /**
  * 关卡存档器
@@ -32,8 +31,8 @@ public class SaveStory implements Savable{
     
     private ArrayList<ShortcutSave> shortcuts = new ArrayList<ShortcutSave>();
     
-    // TODO:....
-//    private List<ActorData> clientPlayers;
+    // 其它角色,这些角色可能包含其它玩家，宠物等
+    private ArrayList<ActorData> actors = new ArrayList<ActorData>();
 
     public String getSaveName() {
         return saveName;
@@ -74,6 +73,14 @@ public class SaveStory implements Savable{
     public void setShortcuts(ArrayList<ShortcutSave> shortcuts) {
         this.shortcuts = shortcuts;
     }
+
+    public ArrayList<ActorData> getActors() {
+        return actors;
+    }
+
+    public void setActors(ArrayList<ActorData> actors) {
+        this.actors = actors;
+    }
     
     @Override
     public void write(JmeExporter ex) throws IOException {
@@ -83,6 +90,7 @@ public class SaveStory implements Savable{
         oc.write(storyCount, "storyCount", 0);
         oc.write(player, "player", null);
         oc.writeSavableArrayList(shortcuts, "shortcuts", null);
+        oc.writeSavableArrayList(actors, "actors", null);
     }
 
     @Override
@@ -96,6 +104,11 @@ public class SaveStory implements Savable{
         shortcuts.clear();
         if (tempShortcuts != null) {
             shortcuts.addAll(tempShortcuts);
+        }
+        ArrayList<ActorData> tempActors = ic.readSavableArrayList("actors", null);
+        actors.clear();
+        if (tempActors != null) {
+            actors.addAll(tempActors);
         }
     }
     

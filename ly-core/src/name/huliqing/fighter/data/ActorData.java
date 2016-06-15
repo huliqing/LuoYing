@@ -11,7 +11,6 @@ import com.jme3.export.OutputCapsule;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.network.serializing.Serializable;
-import com.jme3.util.SafeArrayList;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

@@ -43,7 +43,7 @@ import name.huliqing.fighter.data.MagicData;
 import name.huliqing.fighter.data.ShapeData;
 import name.huliqing.fighter.data.TaskData;
 import name.huliqing.fighter.data.ViewData;
-import name.huliqing.fighter.game.state.lan.mess.MessPlayClientId;
+import name.huliqing.fighter.game.state.lan.mess.MessClient;
 import name.huliqing.fighter.game.state.lan.mess.MessPlayGetServerState;
 import name.huliqing.fighter.game.state.lan.mess.MessPlayInitGame;
 import name.huliqing.fighter.game.state.lan.mess.MessPlayClientData;
@@ -100,6 +100,7 @@ import name.huliqing.fighter.game.state.lan.mess.MessViewRemove;
 import name.huliqing.fighter.object.SyncData;
 import name.huliqing.fighter.object.actor.ItemStore;
 import name.huliqing.fighter.object.actor.SkillStore;
+import static com.jme3.network.serializing.Serializer.registerClass;
 
 /**
  *
@@ -119,7 +120,7 @@ public class MessRegister {
         
         
         // Lan 
-        Serializer.registerClass(MessPlayClientId.class);
+        Serializer.registerClass(MessClient.class);
         Serializer.registerClass(MessPlayGetClients.class);
         Serializer.registerClass(MessPlayGetGameData.class);
         Serializer.registerClass(MessPlayGetServerState.class);

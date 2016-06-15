@@ -42,8 +42,8 @@ public abstract class PlayState extends AbstractAppState {
 
     @Override
     public void stateDetached(AppStateManager stateManager) {
-        stateManager.detach(gameState);
         super.stateDetached(stateManager);
+        stateManager.detach(gameState);
     }
 
     @Override

@@ -24,11 +24,14 @@ public class PlayerDeadChecker extends IntervalLogic {
     private final ViewService viewService = Factory.get(ViewService.class);
     private final PlayService playService = Factory.get(PlayService.class);
 
+    private final Game game;
     private final Actor player;
-    private boolean dead = false;
+    private boolean dead;
+    private boolean displayed;
     
-    public PlayerDeadChecker(Actor player) {
+    public PlayerDeadChecker(Game game, Actor player) {
         super(1);
+        this.game = game;
         this.player = player;
     }
     
@@ -38,14 +41,22 @@ public class PlayerDeadChecker extends IntervalLogic {
 
     @Override
     protected void doLogic(float tpf) {
-        if (player.isDead()) {
+        if (!displayed && player.isDead()) {
             dead = true;
+            displayed = true;
             playNetwork.addMessage(ResourceManager.get(ResConstants.TASK_FAILURE), MessageType.notice);
             playNetwork.addMessage(ResourceManager.get(ResConstants.COMMON_BACK_TO_TRY_AGAIN), MessageType.notice);
             playNetwork.addView(viewService.loadView(IdConstants.VIEW_TEXT_FAILURE));
             // 显示提示后直接退出
-            playService.removeObject(this);
+            game.removeLogic(this);
         }
+    }
+
+    @Override
+    public void cleanup() {
+        dead = false;
+        displayed = false;
+        super.cleanup(); 
     }
     
 }

@@ -4,7 +4,7 @@
  */
 package name.huliqing.fighter.game.state.lan;
 
-import name.huliqing.fighter.game.state.lan.mess.MessPlayClientId;
+import name.huliqing.fighter.game.state.lan.mess.MessClient;
 import name.huliqing.fighter.game.state.lan.mess.MessPlayClientData;
 import name.huliqing.fighter.game.state.lan.mess.MessSCServerState;
 import com.jme3.network.ConnectionListener;
@@ -51,7 +51,8 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
     private final ConfigService configService = Factory.get(ConfigService.class);
     
     // 客户端连接的机器名称属性名
-    public final static String ATTR_CLIENT_ID = "ATTR_CLIENT_ID";
+    public final static String ATTR_CLIENT = "ATTR_CLIENT_ID";
+    
     // 客户端所控制的角色的唯一ID
     public final static String ATTR_ACTOR_UNIQUE_ID = "ATTR_ACTOR_UNIQUE_ID";
     
@@ -331,7 +332,7 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
         List<MessPlayClientData> clients = new ArrayList<MessPlayClientData>();
         for (HostedConnection hc : hcs) {
             // 客户端名称
-            MessPlayClientId clientId = hc.getAttribute(ATTR_CLIENT_ID);
+            MessClient clientId = hc.getAttribute(ATTR_CLIENT);
             String clientName = clientId != null ? clientId.getClientName() : "unknow";
             
             // 客户端所选的角色名称,这里需要判断服务端游戏是否正在运行

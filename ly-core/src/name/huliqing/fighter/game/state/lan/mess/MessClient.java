@@ -4,7 +4,6 @@
  */
 package name.huliqing.fighter.game.state.lan.mess;
 
-import com.jme3.network.AbstractMessage;
 import com.jme3.network.serializing.Serializable;
 
 /**
@@ -13,17 +12,33 @@ import com.jme3.network.serializing.Serializable;
  * @author huliqing
  */
 @Serializable
-public class MessPlayClientId extends MessBase {
+public class MessClient extends MessBase {
+    
+    // 客户端唯一标识，这个标识对于所有客户端或主机来说是唯一的。
+    private String clientId;
     
     // 客户端名称标识,如PC名称，手机名称
     private String clientName;
     
-    public MessPlayClientId() {}
+    public MessClient() {}
     
-    public MessPlayClientId(String clientName) {
+    public MessClient(String clientId, String clientName) {
+        this.clientId = clientId;
         this.clientName = clientName;
     }
 
+    /**
+     * 获取客户端的ID标识。
+     * @return 
+     */
+    public String getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
+    }
+    
     public String getClientName() {
         return clientName;
     }

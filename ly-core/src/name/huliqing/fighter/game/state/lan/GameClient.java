@@ -22,19 +22,21 @@ import name.huliqing.fighter.game.state.lan.GameServer.ServerState;
  * @author huliqing
  */
 public class GameClient implements ClientStateListener, MessageListener<Client>{
-    private final static Logger logger = Logger.getLogger(GameClient.class.getName());
+    private final static Logger LOG = Logger.getLogger(GameClient.class.getName());
     
     public interface ClientListener {
     
         /**
          * 客户端连接时
-         * @param source 
+         * @param gameClient
+         * @param client 
          */
         void clientConnected(GameClient gameClient, Client client);
 
         /**
          * 客户端断开
          * @param gameClient
+         * @param client
          * @param info 
          */
         void clientDisconnected(GameClient gameClient, Client client, DisconnectInfo info);
@@ -42,7 +44,7 @@ public class GameClient implements ClientStateListener, MessageListener<Client>{
         /**
          * 客户端处理从服务端传递过来的消息
          * @param gameClient
-         * @param source
+         * @param client
          * @param m 
          */
         void clientMessage(GameClient gameClient, Client client, Message m);
@@ -87,10 +89,10 @@ public class GameClient implements ClientStateListener, MessageListener<Client>{
     // 客户端的已经运行时间，单位秒.
     public double time;
     
-    private String gameName;
-    private int version;
-    private String host;
-    private int hostPort;
+    private final String gameName;
+    private final int version;
+    private final String host;
+    private final int hostPort;
     
     GameClient(String gameName, int version, String host, int hostPort)
         throws Exception {
@@ -167,7 +169,7 @@ public class GameClient implements ClientStateListener, MessageListener<Client>{
     public void setClientState(ClientState clientState) {
         this.clientState = clientState;
         if (Config.debug) {
-            logger.log(Level.INFO, "客户端状态发生变化,clientState={0}", this.clientState);
+            LOG.log(Level.INFO, "客户端状态发生变化,clientState={0}", this.clientState);
         }
     }
 

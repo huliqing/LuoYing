@@ -188,4 +188,14 @@ public interface ConfigService extends Inject {
      * @param useShadow 
      */
     void setUseShadow(boolean useShadow);
+    
+    /**
+     * 获取客户端唯一ID，这个ID用来识别不同的客户端，每台安装了游戏的机器都会自动生成一个唯一的全局ID来识别这台机器。
+     * 这个ID对于不同的客户端必须保证不相同。该ID允许清除，在重新获取的时候可以重新生成，但不保证多次生成的ID会相同<br >
+     * 注：<br >
+     * 1.但不保证同一台机器安装多个游戏的时候该ID仍然唯一。<br >
+     * 2.不保证当游戏重装的时候该ID仍然与前一次安装时生成的ID相同。
+     * @return 
+     */
+    String getClientId();
 }

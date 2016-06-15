@@ -6,7 +6,7 @@ package name.huliqing.fighter.game.state.lan;
 
 import name.huliqing.fighter.game.state.lan.mess.MessSCGameData;
 import name.huliqing.fighter.game.state.lan.mess.MessSCClientList;
-import name.huliqing.fighter.game.state.lan.mess.MessPlayClientId;
+import name.huliqing.fighter.game.state.lan.mess.MessClient;
 import name.huliqing.fighter.game.state.lan.mess.MessPlayGetServerState;
 import name.huliqing.fighter.game.state.lan.mess.MessPlayClientData;
 import name.huliqing.fighter.game.state.lan.mess.MessSCServerState;
@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.GameData;
+import name.huliqing.fighter.game.service.ConfigService;
 import name.huliqing.fighter.game.service.EnvService;
 import name.huliqing.fighter.game.state.lan.GameClient.ClientListener;
 import name.huliqing.fighter.game.state.lan.GameServer.ServerState;
@@ -30,7 +31,9 @@ import name.huliqing.fighter.game.state.lan.mess.MessPing;
  */
 public abstract class DefaultClientListener implements ClientListener {
     
+    private final ConfigService configService = Factory.get(ConfigService.class);
     private final EnvService envService = Factory.get(EnvService.class);
+    
     private final Application app; 
     // 从服务端获得的所有客户端列表
     protected final List<MessPlayClientData> clients = new ArrayList<MessPlayClientData>();
@@ -198,11 +201,13 @@ public abstract class DefaultClientListener implements ClientListener {
     
     /**
      * 处理当客户端连接到服务端时
+     * @param gameClient
      * @param client 
      */
     protected void processClientConnected(GameClient gameClient, Client client) {
         // 1.连接上服务端后立即发送客户端标识
-        client.send(new MessPlayClientId(envService.getMachineName()));
+        MessClient mess = new MessClient(configService.getClientId(), envService.getMachineName());
+        client.send(mess);
 
         // 2.从服务端获得当前游戏状态
         client.send(new MessPlayGetServerState());

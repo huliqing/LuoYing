@@ -4,7 +4,6 @@
  */
 package name.huliqing.fighter.game.state.lan.mess;
 
-import com.jme3.network.AbstractMessage;
 import com.jme3.network.serializing.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +15,7 @@ import java.util.List;
 @Serializable
 public class MessSCClientList extends MessBase {
     
-    private List<MessPlayClientData> clients = new ArrayList<MessPlayClientData>();
+    private final List<MessPlayClientData> clients = new ArrayList<MessPlayClientData>();
     
     public MessSCClientList() {}
     

@@ -22,6 +22,7 @@ import name.huliqing.fighter.game.service.SkillService;
 import name.huliqing.fighter.game.service.StateService;
 import name.huliqing.fighter.object.IntervalLogic;
 import name.huliqing.fighter.logic.scene.ActorLoadHelper;
+import name.huliqing.fighter.ui.Button;
 import name.huliqing.fighter.ui.TextPanel;
 import name.huliqing.fighter.ui.UI;
 import name.huliqing.fighter.ui.UI.Corner;
@@ -110,7 +111,6 @@ public class StoryTreasureTask1 extends GameTaskBase {
         };
         
         spiderLoader = new ActorLoadHelper(IdConstants.ACTOR_SPIDER) {
-
             @Override
             public void callback(Actor actor) {
                 // 邪恶蜘蛛
@@ -122,6 +122,7 @@ public class StoryTreasureTask1 extends GameTaskBase {
             }
         };
         
+        game.addLogic(helper);
     }
 
     @Override
@@ -138,9 +139,9 @@ public class StoryTreasureTask1 extends GameTaskBase {
         
         if (stage == 1) {
             // 载入“艾琳”、“蜘蛛”
-            playService.addObject(treasureLoader, false);
-            playService.addObject(victimLoader, false);
-            playService.addObject(spiderLoader, false);
+            game.addLogic(treasureLoader);
+            game.addLogic(victimLoader);
+            game.addLogic(spiderLoader);
             stage = 2;
             return;
         } 
@@ -166,12 +167,13 @@ public class StoryTreasureTask1 extends GameTaskBase {
             // 与艾琳的对话 talk
             doTalkVictim();
             stage = 5;
-        } 
-        
-        // help 
-        if (stage <= 4) {
-            helper.update(tpf);
         }
+        
+        // remove20160615
+//        // help 
+//        if (stage <= 4) {
+//            helper.update(tpf);
+//        }
     }
 
     @Override
@@ -196,7 +198,7 @@ public class StoryTreasureTask1 extends GameTaskBase {
         task1Start = new TextPanel(get("task1.title")
             , playService.getScreenWidth() * 0.5f
                 , playService.getScreenHeight() * 0f);
-        name.huliqing.fighter.ui.Button startBtn = new name.huliqing.fighter.ui.Button(get("task1.confirm"));
+        Button startBtn = new Button(get("task1.confirm"));
         startBtn.addClickListener(new Listener() {
             @Override
             public void onClick(UI ui, boolean isPress) {

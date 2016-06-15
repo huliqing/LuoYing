@@ -4,6 +4,7 @@
  */
 package name.huliqing.fighter.game.service;
 
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.fighter.Common;
@@ -25,12 +26,15 @@ import name.huliqing.fighter.utils.MathUtils;
  * @author huliqing
  */
 public class ConfigServiceImpl implements ConfigService {
+    private SaveService saveService;
+    // 用于标识游戏客户端唯一标识的ID的键。
+    private final static String CLIENT_ID_KEY = "_client_id_";
     
     private ConfigData cd;
 
     @Override
     public void inject() {
-        // ignore
+        saveService = Factory.get(SaveService.class);
     }
 
     @Override
@@ -316,6 +320,17 @@ public class ConfigServiceImpl implements ConfigService {
     @Override
     public void setUseShadow(boolean useShadow) {
         cd.setUseShadow(useShadow);
+    }
+
+    @Override
+    public String getClientId() {
+        byte[] bytes = saveService.load(CLIENT_ID_KEY);
+        // 首次获取不存在则自动生成一个唯一ID
+        if (bytes == null) {
+            bytes = UUID.randomUUID().toString().getBytes();
+            saveService.save(CLIENT_ID_KEY, bytes);
+        }
+        return  new String(bytes);
     }
 
     

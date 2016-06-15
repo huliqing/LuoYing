@@ -27,7 +27,7 @@ public interface SaveService extends Inject {
     void delete(String key);
     
     /**
-     * 载入key所指定的数据
+     * 载入key所指定的数据,如果不存在指定key的数据则返回null.
      * @param key
      * @return 
      */

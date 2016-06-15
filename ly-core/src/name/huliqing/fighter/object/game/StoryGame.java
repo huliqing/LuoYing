@@ -90,7 +90,7 @@ public abstract class StoryGame extends Game {
                 // 给玩家指定分组
                 actorNetwork.setGroup(player, GROUP_PLAYER);
                 // 检查角色是否存活
-                playerChecker = new PlayerDeadChecker(player);
+                playerChecker = new PlayerDeadChecker(this, player);
                 addLogic(playerChecker);
                 
                 // 子类初始化

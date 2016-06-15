@@ -10,12 +10,15 @@ import com.jme3.app.state.AppStateManager;
 import com.jme3.network.HostedConnection;
 import com.jme3.network.Message;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.fighter.Config;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.constants.IdConstants;
+import name.huliqing.fighter.data.ActorData;
 import name.huliqing.fighter.data.GameData;
 import name.huliqing.fighter.data.ProtoData;
 import name.huliqing.fighter.enums.DataType;
@@ -83,24 +86,31 @@ public class StoryPlayState extends LanPlayState {
             @Override
             public void onSceneLoaded() {
                 // 1.场景载入后再载入角色
-                loadPlayer();
+                loadStory();
             }
         });
     }
 
     @Override
     public void cleanup() {
-        // 在退出之前保存玩家资料
-        savePlayer();
         super.cleanup(); 
+    }
+
+    @Override
+    public void exit() {
+        // 在退出之前保存玩家资料
+        saveStory();
+        super.exit(); 
     }
     
     @Override
     public void changeGameState(String gameId) {
         // 先把玩家资料存档
-        savePlayer();
-        // 需要重新载入存档
-        saveStory = SaveHelper.loadStoryLast();
+        saveStory();
+        
+        // remove20160615
+//        // 需要重新载入存档
+//        saveStory = SaveHelper.loadStoryLast();
         
         app.getStateManager().detach(gameState);
         // 切换到另一个游戏
@@ -108,7 +118,7 @@ public class StoryPlayState extends LanPlayState {
         gameState.getGame().addListener(new GameListener() {
             @Override
             public void onSceneLoaded() {
-                loadPlayer();
+                loadStory();
             }
         });
         // 需要更新到gameServer，否则客户端登入的时候会获取到旧的游戏。
@@ -116,17 +126,51 @@ public class StoryPlayState extends LanPlayState {
         app.getStateManager().attach(gameState);
     }
     
-    private void savePlayer() {
+    private void saveStory() {
         // 保存玩家资料
         Actor player = gameState.getPlayer();
         if (player != null) {
-            SaveStory lastSave = SaveHelper.loadStoryLast();
-            if (lastSave == null) {
-                lastSave = new SaveStory();
+            // 只在”新游戏“这里才会为null,则需要创建一个新的存档
+            if (saveStory == null) {
+                saveStory = new SaveStory();
             }
-            lastSave.setPlayer(player.getData());
-            lastSave.setShortcuts(ShortcutManager.getShortcutSaves());
-            SaveHelper.saveStoryLast(lastSave);
+            
+            // 保存玩家资料及快捷方式
+            saveStory.setPlayer(player.getData());
+            saveStory.setShortcuts(ShortcutManager.getShortcutSaves());
+            
+            // 找出所有需要保存的角色，这里面包含当前场景中所有玩家和玩家的宠物
+            List<Actor> actors = gameState.getActors();
+            List<Actor> needSaved = new ArrayList<Actor>();
+            List<Long> playerIds = new ArrayList<Long>();
+            for (Actor a : actors) {
+                if (a.isPlayer()) {
+                    playerIds.add(a.getData().getUniqueId());
+                }
+            }
+            for (Actor a : actors) {
+                // 玩家角色
+                if (a.isPlayer()) {
+                    needSaved.add(a);
+                    continue;
+                }
+                // 不是玩家并且已经死亡的角色不能保存，即使是宠物，如果已经死亡
+                if (a.isDead()) {
+                    continue;
+                }
+                // 玩家的宠物
+                if (a.getData().getOwnerId() > 0 && playerIds.contains(a.getData().getOwnerId())) {
+                    needSaved.add(a);
+                }
+            }
+            
+            // 这里面可能存在上一次其它玩家或宠物的存档，不能随便移除,只能替换
+            ArrayList<ActorData> savedActors = saveStory.getActors();
+            for (Actor actor : needSaved) {
+                replaceSaveActor(savedActors, actor.getData());
+            }
+            
+            SaveHelper.saveStoryLast(saveStory);
         }
         
         // 保存全局配置
@@ -135,26 +179,47 @@ public class StoryPlayState extends LanPlayState {
         SaveHelper.saveConfig(saveConfig);
     }
     
+    // 用新data代替掉存档中的data.
+    private void replaceSaveActor(ArrayList<ActorData> savedActors, ActorData replacer) {
+        Iterator<ActorData> it = savedActors.iterator();
+        while (it.hasNext()) {
+            ActorData ad = it.next();
+            if (ad.getUniqueId() == replacer.getUniqueId()) {
+                it.remove();
+                break;
+            }
+        }
+        savedActors.add(replacer);
+    }
+    
      /**
-     * 载入玩家角色 
+     * 载入存档，如果没有存档则新开游戏
      */
-    private void loadPlayer() {
-        // 载入玩家角色
-        Actor actor;
+    private void loadStory() {
+        Actor player;
         if (saveStory != null) {
-            actor = actorService.loadActor(saveStory.getPlayer());
+            player = actorService.loadActor(saveStory.getPlayer());
             List<ShortcutSave> ss = saveStory.getShortcuts();
-            loadShortcut(ss, actor);
+            loadShortcut(ss, player);
+            
+            ArrayList<ActorData> actors = saveStory.getActors();
+            for (ActorData data : actors) {
+                if (data.getUniqueId() == player.getData().getUniqueId()) {
+                    continue; // 主角已经在上面载入
+                }
+                Actor actor = actorService.loadActor(data);
+                addObject(actor.getModel(), false);
+            }
         } else {
-            actor = actorService.loadActor(Config.debug ? IdConstants.ACTOR_PLAYER_TEST : IdConstants.ACTOR_PLAYER);
-            logicService.resetPlayerLogic(actor);
+            player = actorService.loadActor(Config.debug ? IdConstants.ACTOR_PLAYER_TEST : IdConstants.ACTOR_PLAYER);
+            logicService.resetPlayerLogic(player);
         }
         // 故事模式玩家始终队伍分组为1
-        actorService.setTeam(actor, 1);
-        skillService.playSkill(actor, skillService.getSkill(actor, SkillType.wait).getId(), false);
+        actorService.setTeam(player, 1);
+        skillService.playSkill(player, skillService.getSkill(player, SkillType.wait).getId(), false);
         
-        addObject(actor.getModel(), false);
-        setPlayer(actor);
+        addObject(player.getModel(), false);
+        setPlayer(player);
     }
     
     /**
