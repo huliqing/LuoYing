@@ -10,6 +10,7 @@ import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.game.network.HandlerNetwork;
 import name.huliqing.fighter.game.service.HandlerService;
 import name.huliqing.fighter.game.service.PlayService;
+import name.huliqing.fighter.game.state.game.ConnData;
 import name.huliqing.fighter.game.state.lan.GameServer;
 import name.huliqing.fighter.object.actor.Actor;
 
@@ -58,7 +59,12 @@ public class MessItemUse extends MessBase {
         PlayService playService = Factory.get(PlayService.class);
         HandlerNetwork handlerNetwork = Factory.get(HandlerNetwork.class);
         
-        Long clientActorId = source.getAttribute(GameServer.ATTR_ACTOR_UNIQUE_ID);
+       // remove20160615
+//        Long clientActorId = source.getAttribute(GameServer.ATTR_ACTOR_UNIQUE_ID);
+        
+        ConnData cd = source.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
+        Long clientActorId = cd != null ? cd.getActorId() : null;
+        
         Actor actor = playService.findActor(actorId);
         if (actor == null) {
             return; // 找不到指定的角色或者角色不是客户端所控制的。

@@ -78,7 +78,7 @@ public class ClientPlayState extends LanPlayState implements DefaultClientListen
         pingLabel.setToCorner(Corner.RB);
         addObject(pingLabel, true);
     }
-        
+    
     @Override
     public void cleanup() {
         super.cleanup();

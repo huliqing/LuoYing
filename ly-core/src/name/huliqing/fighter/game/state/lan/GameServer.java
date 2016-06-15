@@ -30,6 +30,7 @@ import name.huliqing.fighter.data.GameData;
 import name.huliqing.fighter.game.service.ConfigService;
 import name.huliqing.fighter.game.service.EnvService;
 import name.huliqing.fighter.game.service.PlayService;
+import name.huliqing.fighter.game.state.game.ConnData;
 import name.huliqing.fighter.game.state.lan.discover.MessCSFindServer;
 import name.huliqing.fighter.game.state.lan.discover.MessCSPing;
 import name.huliqing.fighter.game.state.lan.discover.UDPDiscover;
@@ -50,11 +51,12 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
     private final PlayService playService = Factory.get(PlayService.class);
     private final ConfigService configService = Factory.get(ConfigService.class);
     
-    // 客户端连接的机器名称属性名
-    public final static String ATTR_CLIENT = "ATTR_CLIENT_ID";
-    
-    // 客户端所控制的角色的唯一ID
-    public final static String ATTR_ACTOR_UNIQUE_ID = "ATTR_ACTOR_UNIQUE_ID";
+    // remove20160615,已经移动到ConnData中
+//    // 客户端连接的机器名称属性名
+//    public final static String ATTR_CLIENT = "ATTR_CLIENT_ID";
+//    
+//    // 客户端所控制的角色的唯一ID
+//    public final static String ATTR_ACTOR_UNIQUE_ID = "ATTR_ACTOR_UNIQUE_ID";
     
     public interface ServerListener<T> {
         
@@ -223,6 +225,10 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
         serverDiscover.close();
     }
 
+    public Server getServer() {
+        return server;
+    }
+    
     /**
      * 设置服务器端状态，该状态会同时立即广播到所有客户端
      * @param state 
@@ -318,7 +324,56 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
         }
     }
     
-    /**
+    // remove20160615,使用下面的方法代替
+//    /**
+//     * 获取当前已经连接的所有客户端,其中包含主机
+//     * @return 
+//     */
+//    public List<MessPlayClientData> getClients() {
+//        // 需要判断游戏是否在运行,在游戏运行时可以获取到玩家角色名字
+//        boolean gameInPlay = Common.getPlayState() != null;
+//        
+//        // 向客户端广播，告诉所有客户端有新的客户端连接进来，并把客户端列表
+//        // 发送给所有已经连接的客户端
+//        Collection<HostedConnection> hcs = server.getConnections();
+//        List<MessPlayClientData> clients = new ArrayList<MessPlayClientData>();
+//        for (HostedConnection hc : hcs) {
+//            // 客户端名称
+//            MessClient clientId = hc.getAttribute(ATTR_CLIENT);
+//            String clientName = clientId != null ? clientId.getClientName() : "unknow";
+//            
+//            // 客户端所选的角色名称,这里需要判断服务端游戏是否正在运行
+//            String actorName = null;
+//            Long actorId = hc.getAttribute(ATTR_ACTOR_UNIQUE_ID);
+//            if (actorId != null && gameInPlay) {
+//                Actor actor = playService.findActor(actorId);
+//                if (actor != null) {
+//                    actorName = actor.getData().getName();
+//                }
+//            }
+//            MessPlayClientData mcd = new MessPlayClientData();
+//            mcd.setConnId(hc.getId());
+//            mcd.setAddress(hc.getAddress());
+//            mcd.setName(clientName);
+//            mcd.setActorName(actorName);
+//            clients.add(mcd);
+//        }
+//        // 添加主机信息到客户端列表中,注：在没有网络的情况下getLocalHostIPv4可能会返回null,这时需要判断处理
+//        InetAddress inetAddress = envService.getLocalHostIPv4();
+//        String serverAddress = inetAddress != null ? inetAddress.getHostAddress() : "0.0.0.0";
+//        String serverMachineName = envService.getMachineName();
+//        MessPlayClientData serverMcd = new MessPlayClientData(-1, serverAddress, serverMachineName);
+//        if (gameInPlay) {
+//            Actor serverPlayer = playService.getPlayer();
+//            if (serverPlayer != null) {
+//                serverMcd.setActorName(serverPlayer.getData().getName());
+//            }
+//        }
+//        clients.add(0, serverMcd);
+//        return clients;
+//    }
+    
+     /**
      * 获取当前已经连接的所有客户端,其中包含主机
      * @return 
      */
@@ -331,14 +386,20 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
         Collection<HostedConnection> hcs = server.getConnections();
         List<MessPlayClientData> clients = new ArrayList<MessPlayClientData>();
         for (HostedConnection hc : hcs) {
-            // 客户端名称
-            MessClient clientId = hc.getAttribute(ATTR_CLIENT);
-            String clientName = clientId != null ? clientId.getClientName() : "unknow";
+            
+            // 客户端名称和控制的角色唯一ID
+            String clientName = "unknow";
+            long actorId = -1;
+            
+            ConnData cd = hc.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
+            if (cd != null) {
+                clientName = cd.getClientName();
+                actorId = cd.getActorId();
+            }
             
             // 客户端所选的角色名称,这里需要判断服务端游戏是否正在运行
             String actorName = null;
-            Long actorId = hc.getAttribute(ATTR_ACTOR_UNIQUE_ID);
-            if (actorId != null && gameInPlay) {
+            if (actorId > 0 && gameInPlay) {
                 Actor actor = playService.findActor(actorId);
                 if (actor != null) {
                     actorName = actor.getData().getName();

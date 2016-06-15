@@ -7,7 +7,6 @@ package name.huliqing.fighter.game.state.game;
 
 import com.jme3.network.AbstractMessage;
 import com.jme3.network.serializing.Serializable;
-import name.huliqing.fighter.game.state.lan.mess.MessClient;
 
 /**
  *
@@ -19,7 +18,7 @@ public class ConnData extends AbstractMessage {
     /**
      * HostedConnection的attribute的key
      */
-    public final static String CONN_ATTRIBUTE_KEY = "_CONN_ATTRIBUTE_";
+    public transient final static String CONN_ATTRIBUTE_KEY = "_CONN_ATTRIBUTE_";
     
     // 客户端唯一标识，这个标识对于所有客户端或主机来说是唯一的。
     private String clientId;

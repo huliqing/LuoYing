@@ -11,6 +11,7 @@ import name.huliqing.fighter.data.ProtoData;
 import name.huliqing.fighter.game.network.HandlerNetwork;
 import name.huliqing.fighter.game.service.ActorService;
 import name.huliqing.fighter.game.service.PlayService;
+import name.huliqing.fighter.game.state.game.ConnData;
 import name.huliqing.fighter.game.state.lan.GameServer;
 import name.huliqing.fighter.object.actor.Actor;
 
@@ -58,10 +59,12 @@ public class MessItemRemove extends MessBase {
         ActorService actorService = Factory.get(ActorService.class);
         HandlerNetwork handlerNetwork = Factory.get(HandlerNetwork.class);
         
-        Long clientActorId = source.getAttribute(GameServer.ATTR_ACTOR_UNIQUE_ID);
+        ConnData cd = source.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
+        Long clientActorId = cd != null ? cd.getActorId() : null;
+
         Actor actor = playService.findActor(actorId);
         if (actor != null) {
-            if (actor.getData().getUniqueId() != clientActorId.longValue()) {
+            if (actor.getData().getUniqueId() != clientActorId) {
                 // 角色不是客户端所控制的,则不应该删除，这时需要同步物品数量回客户端。
                 // 因为物品的删除是客户端优先原则的。
                 ProtoData data = actorService.getItem(actor, itemId);

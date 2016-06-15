@@ -13,6 +13,7 @@ import com.jme3.app.Application;
 import com.jme3.network.HostedConnection;
 import com.jme3.network.Message;
 import java.util.concurrent.Callable;
+import name.huliqing.fighter.game.state.game.ConnData;
 import name.huliqing.fighter.game.state.lan.GameServer.ServerListener;
 import name.huliqing.fighter.game.state.lan.mess.MessPlayGetClients;
 import name.huliqing.fighter.game.state.lan.mess.MessPlayGetGameData;
@@ -82,8 +83,13 @@ public abstract class DefaultServerListener<T> implements ServerListener<T> {
      * @param conn 
      */
     protected void onClientAdded(GameServer gameServer, HostedConnection conn) {
+        // 初始化一个用于存放数据的容器,选择在这里初始化以便后续使用的时候不再需要判断null
+        ConnData cd = conn.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
+        if (cd == null) {
+            cd = new ConnData();
+            conn.setAttribute(ConnData.CONN_ATTRIBUTE_KEY, cd);
+        }
         // 告诉客户端当前玩的游戏信息,gameData必须立即发送
-//        conn.send(new MessSCGameData(gameServer.getGameData())); // remove
         gameServer.send(conn, new MessSCGameData(gameServer.getGameData()));
     }
     
@@ -95,8 +101,14 @@ public abstract class DefaultServerListener<T> implements ServerListener<T> {
      * @param m 
      */
     protected void onReceiveClientId(GameServer gameServer, HostedConnection conn, MessClient m) {
+        // remove20160615
          // 1.设置客户端的机器名称标识
-        conn.setAttribute(GameServer.ATTR_CLIENT, m);
+//        conn.setAttribute(GameServer.ATTR_CLIENT, m);
+
+        // 1.设置客户端的机器名称标识
+        ConnData cd = conn.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
+        cd.setClientId(m.getClientId());
+        cd.setClientName(m.getClientName());
     }
     
     /**

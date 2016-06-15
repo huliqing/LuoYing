@@ -15,12 +15,6 @@ public class ActorConstants {
      */
     public final static String USER_DATA_DEAD_TIME_FLAG = "DEAD_TIME_FLAG";
     
-    // remove20160420
-//    /**
-//     * 角色的原始出生地坐标.
-//     */
-//    public final static String USER_DATA_AUTO_BORN_PLACE = "auto_born_place";
-    
     /**
      * 对于客户端玩家所控制的角色都应该包含有这个属性，这个conn_id关联玩家的客
      * 户端连接ID。通过这个ID可以使用server.getConnection(connId);来获得玩家的

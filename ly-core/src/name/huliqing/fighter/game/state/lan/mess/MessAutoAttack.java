@@ -9,6 +9,7 @@ import com.jme3.network.serializing.Serializable;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.game.network.PlayNetwork;
 import name.huliqing.fighter.game.service.PlayService;
+import name.huliqing.fighter.game.state.game.ConnData;
 import name.huliqing.fighter.game.state.lan.GameServer;
 import name.huliqing.fighter.object.actor.Actor;
 
@@ -42,25 +43,15 @@ public class MessAutoAttack extends MessBase {
 
     @Override
     public void applyOnServer(GameServer gameServer, HostedConnection source) {
-        // remove20151216
-//        PlayService playService = Factory.get(PlayService.class);
-//        ActorService actorService = Factory.get(ActorService.class);
-//        ActionNetwork actionNetwork = Factory.get(ActionNetwork.class);
-//        
-//        Long actorId = source.getAttribute(GameServer.ATTR_ACTOR_UNIQUE_ID);
-//        Actor actor = playService.findActor(actorId);
-//        
-//        // TODO：暂不做验证处理
-//        actorService.setAutoAi(actor, true);
-//        Actor enemy = playService.findActor(targetId);
-//        if (enemy != null) {
-//            actionNetwork.playFight(actor, enemy, null);
-//        }
-        
-        
         PlayService playService = Factory.get(PlayService.class);
         PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
-        Long actorId = source.getAttribute(GameServer.ATTR_ACTOR_UNIQUE_ID);
+        
+        // remove20160615
+//        Long actorId = source.getAttribute(GameServer.ATTR_ACTOR_UNIQUE_ID);
+
+        ConnData cd = source.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
+        Long actorId = cd != null ? cd.getActorId() : null;
+        
         Actor actor = playService.findActor(actorId);
         Actor target = playService.findActor(targetId);
         playNetwork.attack(actor, target);

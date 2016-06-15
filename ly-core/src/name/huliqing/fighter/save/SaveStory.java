@@ -23,16 +23,19 @@ public class SaveStory implements Savable{
     
     private long saveTime;
     
-    // 已经完成的故事关卡ID
+    // 已经完成的故事关卡数
     private int storyCount;
     
     // 玩家数据
     private ActorData player;
-    
+    // 主角玩家的快捷方式
     private ArrayList<ShortcutSave> shortcuts = new ArrayList<ShortcutSave>();
     
     // 其它角色,这些角色可能包含其它玩家，宠物等
     private ArrayList<ActorData> actors = new ArrayList<ActorData>();
+    
+    // 这个列表中包含了所有客户端（含主机）与角色及场景的关系
+    private ArrayList<ClientData> clientDatas = new ArrayList<ClientData>();
 
     public String getSaveName() {
         return saveName;
@@ -74,12 +77,24 @@ public class SaveStory implements Savable{
         this.shortcuts = shortcuts;
     }
 
+    /**
+     * 获取所有进行存档的角色
+     * @return 
+     */
     public ArrayList<ActorData> getActors() {
         return actors;
     }
 
     public void setActors(ArrayList<ActorData> actors) {
         this.actors = actors;
+    }
+
+    public ArrayList<ClientData> getClientDatas() {
+        return clientDatas;
+    }
+
+    public void setClientDatas(ArrayList<ClientData> clientDatas) {
+        this.clientDatas = clientDatas;
     }
     
     @Override
@@ -91,6 +106,7 @@ public class SaveStory implements Savable{
         oc.write(player, "player", null);
         oc.writeSavableArrayList(shortcuts, "shortcuts", null);
         oc.writeSavableArrayList(actors, "actors", null);
+        oc.writeSavableArrayList(clientDatas, "clientDatas", null);
     }
 
     @Override
@@ -109,6 +125,11 @@ public class SaveStory implements Savable{
         actors.clear();
         if (tempActors != null) {
             actors.addAll(tempActors);
+        }
+        ArrayList<ClientData> tempClientDatas = ic.readSavableArrayList("clientDatas", null);
+        clientDatas.clear();
+        if (tempClientDatas != null) {
+            clientDatas.addAll(tempClientDatas);
         }
     }
     

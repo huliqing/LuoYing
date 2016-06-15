@@ -11,6 +11,7 @@ import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.game.network.ActorNetwork;
 import name.huliqing.fighter.game.service.ActionService;
 import name.huliqing.fighter.game.service.PlayService;
+import name.huliqing.fighter.game.state.game.ConnData;
 import name.huliqing.fighter.game.state.lan.GameServer;
 import name.huliqing.fighter.object.actor.Actor;
 
@@ -53,8 +54,13 @@ public class MessActionRun extends MessBase {
         Actor actor = playService.findActor(actorId);
         if (actor == null) 
             return;
+
+// remove20160615        
+//        Long uniqueActorId = source.getAttribute(GameServer.ATTR_ACTOR_UNIQUE_ID);
+
+        ConnData cd = source.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
+        Long uniqueActorId = cd != null ? cd.getActorId() : null;
         
-        Long uniqueActorId = source.getAttribute(GameServer.ATTR_ACTOR_UNIQUE_ID);
         if (uniqueActorId != actor.getData().getUniqueId()) {
             return; // 不允许控制别人的角色
         }

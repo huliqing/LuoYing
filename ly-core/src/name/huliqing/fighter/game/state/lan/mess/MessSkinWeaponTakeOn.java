@@ -10,8 +10,10 @@ import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.game.network.SkinNetwork;
 import name.huliqing.fighter.game.service.PlayService;
 import name.huliqing.fighter.game.service.SkinService;
+import name.huliqing.fighter.game.state.game.ConnData;
 import name.huliqing.fighter.game.state.lan.GameServer;
 import name.huliqing.fighter.object.actor.Actor;
+import name.huliqing.fighter.save.ClientData;
 
 /**
  * 使用物品的指令
@@ -55,10 +57,12 @@ public class MessSkinWeaponTakeOn extends MessBase {
         if (actor == null) {
             return; // 找不到指定的角色
         }
-        Long clientActorId = source.getAttribute(GameServer.ATTR_ACTOR_UNIQUE_ID);
+        ClientData cd = source.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
+        long clientActorId = cd != null ? cd.getActorId() : -1;
+        
         // 使用物品的必须是客户端角色自身或者客户端角色的宠物
-        if (actor.getData().getUniqueId() == clientActorId.longValue()
-                || actor.getData().getOwnerId() == clientActorId.longValue()) {
+        if (actor.getData().getUniqueId() == clientActorId
+                || actor.getData().getOwnerId() == clientActorId) {
             if (takeOn) {
                 skinNetwork.takeOnWeapon(actor, false);
             } else {

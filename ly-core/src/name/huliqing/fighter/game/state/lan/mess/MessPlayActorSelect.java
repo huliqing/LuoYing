@@ -8,7 +8,6 @@ import com.jme3.network.HostedConnection;
 import com.jme3.network.serializing.Serializable;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.constants.ActorConstants;
-import name.huliqing.fighter.constants.IdConstants;
 import name.huliqing.fighter.enums.MessageType;
 import name.huliqing.fighter.enums.SkillType;
 import name.huliqing.fighter.game.network.PlayNetwork;
@@ -16,7 +15,7 @@ import name.huliqing.fighter.game.service.ActorService;
 import name.huliqing.fighter.game.service.LogicService;
 import name.huliqing.fighter.game.service.PlayService;
 import name.huliqing.fighter.game.service.SkillService;
-import name.huliqing.fighter.game.service.StateService;
+import name.huliqing.fighter.game.state.game.ConnData;
 import name.huliqing.fighter.game.state.lan.GameServer;
 import name.huliqing.fighter.manager.ResourceManager;
 import name.huliqing.fighter.object.actor.Actor;
@@ -83,7 +82,13 @@ public class MessPlayActorSelect extends MessBase {
         
         // 2.角色要绑定客户端ID，同时客户端也要绑定记住角色ID。
         playerActor.getModel().setUserData(ActorConstants.USER_DATA_CLIENT_CONNECTION_ID, source.getId());
-        source.setAttribute(GameServer.ATTR_ACTOR_UNIQUE_ID, playerActor.getData().getUniqueId());
+        ConnData cd = source.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
+        if (cd == null) {
+            cd = new ConnData();
+            source.setAttribute(ConnData.CONN_ATTRIBUTE_KEY, cd);
+        }
+        cd.setActorId(playerActor.getData().getUniqueId());
+        
         result.setActorUniqueId(playerActor.getData().getUniqueId());
         result.setSuccess(true);
         gameServer.send(source, result);

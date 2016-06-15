@@ -11,6 +11,7 @@ import com.jme3.network.HostedConnection;
 import com.jme3.network.Message;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
@@ -39,6 +40,7 @@ import name.huliqing.fighter.manager.ShortcutManager;
 import name.huliqing.fighter.object.DataLoaderFactory;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.object.game.Game.GameListener;
+import name.huliqing.fighter.save.ClientData;
 import name.huliqing.fighter.save.SaveConfig;
 import name.huliqing.fighter.save.SaveHelper;
 import name.huliqing.fighter.save.SaveStory;
@@ -135,11 +137,11 @@ public class StoryPlayState extends LanPlayState {
                 saveStory = new SaveStory();
             }
             
-            // 保存玩家资料及快捷方式
+            // 1.保存玩家资料及快捷方式
             saveStory.setPlayer(player.getData());
             saveStory.setShortcuts(ShortcutManager.getShortcutSaves());
             
-            // 找出所有需要保存的角色，这里面包含当前场景中所有玩家和玩家的宠物
+            // 2.保存所有需要保存的角色，这里面包含当前场景中所有玩家和玩家的宠物
             List<Actor> actors = gameState.getActors();
             List<Actor> needSaved = new ArrayList<Actor>();
             List<Long> playerIds = new ArrayList<Long>();
@@ -170,6 +172,23 @@ public class StoryPlayState extends LanPlayState {
                 replaceSaveActor(savedActors, actor.getData());
             }
             
+            // 3.保存所有客户端与角色及游戏ID的关系
+            String gameId = gameState.getGame().getData().getId();
+            Collection<HostedConnection> conns = gameServer.getServer().getConnections();
+            List<ClientData> savedClients = saveStory.getClientDatas();
+            if (!conns.isEmpty()) {
+                for (HostedConnection hc : conns) {
+                    ConnData cd = hc.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
+                    if (cd == null)
+                        continue;
+                    ClientData clientData = new ClientData();
+                    clientData.setClientId(cd.getClientId());
+                    clientData.setActorId(cd.getActorId());
+                    clientData.setGameId(gameId);
+                    replaceClientData(savedClients, clientData);
+                }
+            }
+            
             SaveHelper.saveStoryLast(saveStory);
         }
         
@@ -179,6 +198,18 @@ public class StoryPlayState extends LanPlayState {
         SaveHelper.saveConfig(saveConfig);
     }
     
+    // 移除并替换ClientData
+    private void replaceClientData(List<ClientData> savedClients, ClientData replacer) {
+        Iterator<ClientData> it = savedClients.iterator();
+        while (it.hasNext()) {
+            ClientData cd = it.next();
+            if (cd.getClientId().equals(replacer.getClientId())) {
+                it.remove();
+            }
+        }
+        savedClients.add(replacer);
+    }
+    
     // 用新data代替掉存档中的data.
     private void replaceSaveActor(ArrayList<ActorData> savedActors, ActorData replacer) {
         Iterator<ActorData> it = savedActors.iterator();
@@ -186,7 +217,6 @@ public class StoryPlayState extends LanPlayState {
             ActorData ad = it.next();
             if (ad.getUniqueId() == replacer.getUniqueId()) {
                 it.remove();
-                break;
             }
         }
         savedActors.add(replacer);
@@ -198,17 +228,18 @@ public class StoryPlayState extends LanPlayState {
     private void loadStory() {
         Actor player;
         if (saveStory != null) {
+            // 载入玩家主角
             player = actorService.loadActor(saveStory.getPlayer());
             List<ShortcutSave> ss = saveStory.getShortcuts();
             loadShortcut(ss, player);
             
+            // 载入玩家主角的宠物(这里还不需要载入其他玩家的角色及宠物,由其他玩家重新连接的时候再载入)
             ArrayList<ActorData> actors = saveStory.getActors();
             for (ActorData data : actors) {
-                if (data.getUniqueId() == player.getData().getUniqueId()) {
-                    continue; // 主角已经在上面载入
+                if  (data.getOwnerId() == player.getData().getUniqueId()) {
+                    Actor actor = actorService.loadActor(data);
+                    addObject(actor.getModel(), false);
                 }
-                Actor actor = actorService.loadActor(data);
-                addObject(actor.getModel(), false);
             }
         } else {
             player = actorService.loadActor(Config.debug ? IdConstants.ACTOR_PLAYER_TEST : IdConstants.ACTOR_PLAYER);
@@ -307,18 +338,26 @@ public class StoryPlayState extends LanPlayState {
                 // 响应客户端角色选择
                 ((MessPlayActorSelect)m).applyOnServer(gameServer, source);
                 
+                // remove20160615,不再改变等级
                 // 重新设置玩家角色的等级和派别。故事模式下客户端玩家角色进入时
                 // 的等级要比主玩家的低一些.
-                Long actorUniqueId = source.getAttribute(GameServer.ATTR_ACTOR_UNIQUE_ID);
-                if (actorUniqueId != null) {
-                    int playerLevel = actorService.getLevel(gameState.getPlayer());
-                    playerLevel *= 0.75f;
-                    if (playerLevel < 1) {
-                        playerLevel = 1;
-                    }
+//                Long actorUniqueId = source.getAttribute(GameServer.ATTR_ACTOR_UNIQUE_ID);
+//                if (actorUniqueId != null) {
+//                    int playerLevel = actorService.getLevel(gameState.getPlayer());
+//                    playerLevel *= 0.75f;
+//                    if (playerLevel < 1) {
+//                        playerLevel = 1;
+//                    }
+//                    Actor actor = playService.findActor(actorUniqueId);
+//                    actorNetwork.setGroup(actor, actorService.getGroup(gameState.getPlayer()));
+//                    actorNetwork.setLevel(actor, playerLevel);
+//                }
+                
+                ConnData cd = source.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
+                long actorUniqueId = cd.getActorId();
+                if (actorUniqueId > 0) {
                     Actor actor = playService.findActor(actorUniqueId);
                     actorNetwork.setGroup(actor, actorService.getGroup(gameState.getPlayer()));
-                    actorNetwork.setLevel(actor, playerLevel);
                 }
                 return;
             } 

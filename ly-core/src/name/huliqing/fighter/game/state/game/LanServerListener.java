@@ -10,7 +10,6 @@ import com.jme3.network.HostedConnection;
 import com.jme3.network.Message;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Logger;
 import name.huliqing.fighter.Common;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.enums.MessageType;
@@ -75,8 +74,14 @@ public class LanServerListener extends DefaultServerListener<Actor> {
 
     @Override
     protected void onClientRemoved(GameServer gameServer, HostedConnection conn) {
-        Long actorUniqueId = conn.getAttribute(GameServer.ATTR_ACTOR_UNIQUE_ID);
-        if (actorUniqueId != null) {
+        
+        // remove20160615
+//        Long actorUniqueId = conn.getAttribute(GameServer.ATTR_ACTOR_UNIQUE_ID);
+
+        ConnData cd = conn.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
+        long actorUniqueId = cd.getActorId();
+
+        if (actorUniqueId > 0) {
             Actor clientActor = playService.findActor(actorUniqueId);
             if (clientActor != null) {
                 // 将客户端角色移出场景
