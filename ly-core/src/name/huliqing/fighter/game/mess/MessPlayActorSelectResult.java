@@ -62,18 +62,4 @@ public class MessPlayActorSelectResult extends MessBase {
         this.error = error;
     }
 
-    // remove20160616
-//    @Override
-//    public void applyOnClient() {
-//        if (success) {
-//            if (Config.debug) {
-//                Logger.getLogger(MessPlayActorSelectResult.class.getName())
-//                        .log(Level.INFO, "客户端选择角色成功,记住角色唯一ID -> playerActorUniqueId={0}", actorUniqueId);
-//            }
-//            // 记住这个ID，以便当前客户端知道应该控制哪一个角色
-//            LanClientListener.playerActorUniqueId = actorUniqueId;
-//        }
-//    }
-    
-    
 }

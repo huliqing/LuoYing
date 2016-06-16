@@ -20,7 +20,6 @@ import name.huliqing.fighter.game.service.PlayService;
 import name.huliqing.fighter.game.state.lan.DefaultServerListener;
 import name.huliqing.fighter.game.mess.MessBase;
 import name.huliqing.fighter.game.mess.MessMessage;
-import name.huliqing.fighter.game.mess.MessSCActorRemove;
 import name.huliqing.fighter.game.mess.MessActorTransform;
 import name.huliqing.fighter.game.network.PlayNetwork;
 import name.huliqing.fighter.manager.ResourceManager;
@@ -97,20 +96,16 @@ public class LanServerListener extends DefaultServerListener<Actor> {
         }
 
         // 2.将客户端角色移除出场景
-//                playService.removeObject(clientPlayer.getModel());
-//                MessSCActorRemove mess = new MessSCActorRemove();
-//                mess.setActorId(clientPlayerId);
-//                gameServer.broadcast(mess);
         playNetwork.removeObject(clientPlayer);
 
-        // 广播，告诉所有客户端
+        // 3.通知所有客户端（不含主机）
         String message = ResourceManager.get(ResConstants.LAN_CLIENT_EXISTS, new Object[] {clientPlayer.getData().getName()});
         MessMessage notice = new MessMessage();
         notice.setMessage(message);
         notice.setType(MessageType.notice);
         gameServer.broadcast(notice);
 
-        // 主机获得通知
+        // 4.通知主机
         if (Common.getPlayState() != null) {
             playService.addMessage(message, MessageType.notice);
         }
