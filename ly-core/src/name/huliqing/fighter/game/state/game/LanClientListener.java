@@ -36,10 +36,6 @@ public class LanClientListener extends DefaultClientListener {
     private final List<MessBase> messageQueue = new LinkedList<MessBase>();
     private double offset = Double.MIN_VALUE;
     private final double maxDelay = 0.50;
-
-    // remove20160616
-//    // 客户端所控制的角色的唯一ID
-//    public static long playerActorUniqueId = -1;
     
     public LanClientListener(Application app) {
         super(app);

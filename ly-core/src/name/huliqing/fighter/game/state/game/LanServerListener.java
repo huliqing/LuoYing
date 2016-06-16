@@ -14,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.fighter.Common;
 import name.huliqing.fighter.Factory;
+import name.huliqing.fighter.constants.ResConstants;
 import name.huliqing.fighter.enums.MessageType;
 import name.huliqing.fighter.game.service.PlayService;
 import name.huliqing.fighter.game.state.lan.DefaultServerListener;
@@ -21,6 +22,7 @@ import name.huliqing.fighter.game.mess.MessBase;
 import name.huliqing.fighter.game.mess.MessMessage;
 import name.huliqing.fighter.game.mess.MessSCActorRemove;
 import name.huliqing.fighter.game.mess.MessActorTransform;
+import name.huliqing.fighter.game.network.PlayNetwork;
 import name.huliqing.fighter.manager.ResourceManager;
 import name.huliqing.fighter.object.actor.Actor;
 
@@ -30,8 +32,8 @@ import name.huliqing.fighter.object.actor.Actor;
  */
 public class LanServerListener extends DefaultServerListener<Actor> {
     private static final Logger LOG = Logger.getLogger(LanServerListener.class.getName());
-    
     private final PlayService playService = Factory.get(PlayService.class);
+    private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final List<Actor> syncObjects = new LinkedList<Actor>();
     private float syncTimer = 0;
     private final float syncFrequency = 1f/5f;
@@ -76,36 +78,41 @@ public class LanServerListener extends DefaultServerListener<Actor> {
 
     @Override
     protected void onClientRemoved(GameServer gameServer, HostedConnection conn) {
-        
-        // remove20160615
-//        Long actorUniqueId = conn.getAttribute(GameServer.ATTR_ACTOR_UNIQUE_ID);
-
         ConnData cd = conn.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
-        long actorUniqueId = cd.getActorId();
+        if (cd == null)
+            return;
+        
+        Actor clientPlayer = playService.findActor(cd.getActorId());
+        if (clientPlayer == null)
+            return;
 
-        if (actorUniqueId > 0) {
-            Actor clientActor = playService.findActor(actorUniqueId);
-            if (clientActor != null) {
-                // 将客户端角色移出场景
-                playService.removeObject(clientActor.getModel());
-                MessSCActorRemove mess = new MessSCActorRemove();
-                mess.setActorId(actorUniqueId);
-                gameServer.broadcast(mess);
-                
-                // 广播，告诉所有客户端
-                String message = ResourceManager.get("lan.leaveGame"
-                        , new Object[] {clientActor.getData().getName()});
-                MessageType type = MessageType.notice;
-                MessMessage notice = new MessMessage();
-                notice.setMessage(message);
-                notice.setType(type);
-                gameServer.broadcast(notice);
-                
-                // 主机获得通知
-                if (Common.getPlayState() != null) {
-                    playService.addMessage(message, type);
+        // 1.将客户端角色的所有宠物移除出场景
+        List<Actor> actors = playService.findAllActor();
+        if (actors != null && !actors.isEmpty()) {
+            for (Actor actor : actors) {
+                if (actor.getData().getOwnerId() == clientPlayer.getData().getUniqueId()) {
+                    playNetwork.removeObject(actor);
                 }
             }
+        }
+
+        // 2.将客户端角色移除出场景
+//                playService.removeObject(clientPlayer.getModel());
+//                MessSCActorRemove mess = new MessSCActorRemove();
+//                mess.setActorId(clientPlayerId);
+//                gameServer.broadcast(mess);
+        playNetwork.removeObject(clientPlayer);
+
+        // 广播，告诉所有客户端
+        String message = ResourceManager.get(ResConstants.LAN_CLIENT_EXISTS, new Object[] {clientPlayer.getData().getName()});
+        MessMessage notice = new MessMessage();
+        notice.setMessage(message);
+        notice.setType(MessageType.notice);
+        gameServer.broadcast(notice);
+
+        // 主机获得通知
+        if (Common.getPlayState() != null) {
+            playService.addMessage(message, MessageType.notice);
         }
     }
 

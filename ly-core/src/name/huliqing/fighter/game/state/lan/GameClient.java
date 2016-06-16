@@ -142,7 +142,6 @@ public class GameClient implements ClientStateListener, MessageListener<Client>{
         // 发送消息之前必须判断是否还连接着，否则可能发生异常 
         if (!client.isConnected()) 
             return;
-        
         client.send(message);
     }
 

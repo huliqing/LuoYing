@@ -61,24 +61,24 @@ public class FollowPathAction extends AbstractAction implements FollowAction {
     // 角色当前正在走向的路径点
     private Waypoint current;
     // 寻路时间间隔,单位秒
-    private float pathFindInterval = 2f;
+    private final float pathFindInterval = 2f;
     private float pathFindTimeUsed;
     // 路径DEBUG信息。
     private boolean debug = false;
     
     // 避障
-    private Detour rayDetour = new RayDetour(this);
-    private Detour timeDetour = new TimeDetour(this);
+    private final Detour rayDetour = new RayDetour(this);
+    private final Detour timeDetour = new TimeDetour(this);
     
     // 路径方向修正的时间间隔，单位秒,每经过一定时间修正一下路径。
     // 因为角色可能在行走过程中被打断或影响了方向。
-    private float fixInterval = 2f;
+    private final float fixInterval = 2f;
     private float fixTimeUsed;
     // 是否应该立即重设方式，有时候重置了跟随目标，则应该马上重设方式
     private boolean needResetDir;
     
     // 最近一次跟随的目标的位置，如果位置不变，则不需要重置
-    private Vector3f tempLastTargetPos = new Vector3f(-999, -999, -999);
+    private final Vector3f tempLastTargetPos = new Vector3f(-999, -999, -999);
     
     // 缓存技能id
     private String runSkillId;
@@ -125,6 +125,7 @@ public class FollowPathAction extends AbstractAction implements FollowAction {
      * 跟随目标
      * 否则返回false;
      * @param target 
+     * @param tpf 
      */
     protected void doFollow(Spatial target, float tpf) {
         // 如果角色是不可移动的，则直接返回不处理逻辑

@@ -50,13 +50,6 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
     private final PlayService playService = Factory.get(PlayService.class);
     private final ConfigService configService = Factory.get(ConfigService.class);
     
-    // remove20160615,已经移动到ConnData中
-//    // 客户端连接的机器名称属性名
-//    public final static String ATTR_CLIENT = "ATTR_CLIENT_ID";
-//    
-//    // 客户端所控制的角色的唯一ID
-//    public final static String ATTR_ACTOR_UNIQUE_ID = "ATTR_ACTOR_UNIQUE_ID";
-    
     public interface ServerListener<T> {
         
         /**

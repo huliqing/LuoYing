@@ -64,6 +64,9 @@ public class ResConstants {
     /** 无法连接到主机 */
     public final static String LAN_SERVER_UNKNOW="lan.serverUnknow";
     
+    /** 客户端退出 */
+    public final static String LAN_CLIENT_EXISTS="lan.leaveGame";
+    
     // -------------------------------------------------------------------------
     // Talent
     // -------------------------------------------------------------------------

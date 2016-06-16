@@ -123,8 +123,8 @@ public class StoryView extends ListView<StoryData> {
                     if (isPress || storyData.gameId == null) 
                         return;
                     GameData gameData = gameService.loadGameData(storyData.gameId);
-                    StoryPlayState sps = new StoryPlayState(gameData);
-                    sps.setSaveStory(saveStory);
+                    StoryPlayState sps = new StoryPlayState(gameData, saveStory);
+//                    sps.setSaveStory(saveStory);
                     startState.startState(sps);
                 }
             });

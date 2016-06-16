@@ -23,6 +23,7 @@ import name.huliqing.fighter.game.mess.MessPlayGetServerState;
 import name.huliqing.fighter.game.mess.MessPlayInitGame;
 import name.huliqing.fighter.game.mess.MessPlayLoadSavedActor;
 import name.huliqing.fighter.game.mess.MessPlayLoadSavedActorResult;
+import name.huliqing.fighter.game.mess.MessPlayClientExit;
 import name.huliqing.fighter.object.IntervalLogic;
 import name.huliqing.fighter.object.PlayObject;
 import name.huliqing.fighter.object.actor.Actor;
@@ -95,7 +96,8 @@ public class ClientPlayState extends LanPlayState implements DefaultClientListen
 
     @Override
     public void exit() {
-        
+        // 在退出前告诉服务端.
+        gameClient.send(new MessPlayClientExit());
         super.exit(); 
     }
 
