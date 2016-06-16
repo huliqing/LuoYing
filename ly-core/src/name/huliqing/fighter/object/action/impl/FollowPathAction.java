@@ -270,8 +270,7 @@ public class FollowPathAction extends AbstractAction implements FollowAction {
     }
     
     /**
-     * 没有路径点的时候直线走路
-     * @param target 
+     * 没有路径点的时候直线走路 
      */
     protected void runByStraight() {
         // 执行技能的过程很耗时，所以必须先作判断，以优化性能

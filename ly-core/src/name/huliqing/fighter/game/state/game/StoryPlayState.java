@@ -394,12 +394,12 @@ public class StoryPlayState extends LanPlayState {
                     ConnData connData = source.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
                     for (ClientData cd : clientDatas) {
                         if (cd.getClientId().equals(connData.getClientId())) {
-                            // 载入角色
+                            // 载入角色客户端角色的资料
                             boolean result = loadClient(saveStory, cd);
                             if (result) {
                                 connData.setActorId(cd.getActorId());
                             }
-                            // 通知客户端
+                            // 通知客户端,这样客户端可以确定是否需要弹出“角色选择面板”来重新选择一个角色进行游戏
                             MessPlayLoadSavedActorResult messResult = new MessPlayLoadSavedActorResult(result);
                             messResult.setActorId(cd.getActorId());
                             gameServer.send(source, messResult);
@@ -426,6 +426,7 @@ public class StoryPlayState extends LanPlayState {
                 return;
             } 
             
+            // 当服务端（故事模式）接收到客户端退出游戏的消息时，服务端要保存客户端的资料,以便下次客户端连接时能够继续
             if (m instanceof MessPlayClientExit) {
                 ConnData cd = source.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
                 if (cd.getClientId() != null && cd.getActorId() > 0) {
