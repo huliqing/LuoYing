@@ -4,19 +4,19 @@
  */
 package name.huliqing.fighter.game.state.lan;
 
-import name.huliqing.fighter.game.state.lan.mess.MessSCGameData;
-import name.huliqing.fighter.game.state.lan.mess.MessSCClientList;
-import name.huliqing.fighter.game.state.lan.mess.MessClient;
-import name.huliqing.fighter.game.state.lan.mess.MessPlayGetServerState;
-import name.huliqing.fighter.game.state.lan.mess.MessSCServerState;
+import name.huliqing.fighter.game.mess.MessSCGameData;
+import name.huliqing.fighter.game.mess.MessSCClientList;
+import name.huliqing.fighter.game.mess.MessClient;
+import name.huliqing.fighter.game.mess.MessPlayGetServerState;
+import name.huliqing.fighter.game.mess.MessSCServerState;
 import com.jme3.app.Application;
 import com.jme3.network.HostedConnection;
 import com.jme3.network.Message;
 import java.util.concurrent.Callable;
 import name.huliqing.fighter.game.state.game.ConnData;
 import name.huliqing.fighter.game.state.lan.GameServer.ServerListener;
-import name.huliqing.fighter.game.state.lan.mess.MessPlayGetClients;
-import name.huliqing.fighter.game.state.lan.mess.MessPlayGetGameData;
+import name.huliqing.fighter.game.mess.MessPlayGetClients;
+import name.huliqing.fighter.game.mess.MessPlayGetGameData;
 
 /**
  *

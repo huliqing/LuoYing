@@ -4,7 +4,7 @@
  */
 package name.huliqing.fighter.game.state.lan;
 
-import name.huliqing.fighter.game.state.lan.mess.MessPlayClientData;
+import name.huliqing.fighter.game.mess.MessPlayClientData;
 import java.util.List;
 import name.huliqing.fighter.data.GameData;
 import name.huliqing.fighter.manager.ResourceManager;

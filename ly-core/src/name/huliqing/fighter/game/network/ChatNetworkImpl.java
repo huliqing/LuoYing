@@ -7,9 +7,9 @@ package name.huliqing.fighter.game.network;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.game.service.ChatService;
 import name.huliqing.fighter.game.state.lan.Network;
-import name.huliqing.fighter.game.state.lan.mess.MessChatSell;
-import name.huliqing.fighter.game.state.lan.mess.MessChatSend;
-import name.huliqing.fighter.game.state.lan.mess.MessChatShop;
+import name.huliqing.fighter.game.mess.MessChatSell;
+import name.huliqing.fighter.game.mess.MessChatSend;
+import name.huliqing.fighter.game.mess.MessChatShop;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.object.chat.Chat;
 

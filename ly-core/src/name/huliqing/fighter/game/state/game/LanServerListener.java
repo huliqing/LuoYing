@@ -17,10 +17,10 @@ import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.enums.MessageType;
 import name.huliqing.fighter.game.service.PlayService;
 import name.huliqing.fighter.game.state.lan.DefaultServerListener;
-import name.huliqing.fighter.game.state.lan.mess.MessBase;
-import name.huliqing.fighter.game.state.lan.mess.MessMessage;
-import name.huliqing.fighter.game.state.lan.mess.MessSCActorRemove;
-import name.huliqing.fighter.game.state.lan.mess.MessActorTransform;
+import name.huliqing.fighter.game.mess.MessBase;
+import name.huliqing.fighter.game.mess.MessMessage;
+import name.huliqing.fighter.game.mess.MessSCActorRemove;
+import name.huliqing.fighter.game.mess.MessActorTransform;
 import name.huliqing.fighter.manager.ResourceManager;
 import name.huliqing.fighter.object.actor.Actor;
 

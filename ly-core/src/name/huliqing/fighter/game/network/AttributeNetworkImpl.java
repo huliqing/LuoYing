@@ -8,7 +8,7 @@ import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.AttributeData;
 import name.huliqing.fighter.game.service.AttributeService;
 import name.huliqing.fighter.game.state.lan.Network;
-import name.huliqing.fighter.game.state.lan.mess.MessAttributeSync;
+import name.huliqing.fighter.game.mess.MessAttributeSync;
 import name.huliqing.fighter.object.actor.Actor;
 
 /**

@@ -6,7 +6,7 @@ package name.huliqing.fighter.game.view;
 
 import java.util.List;
 import name.huliqing.fighter.game.state.game.LanGame;
-import name.huliqing.fighter.game.state.lan.mess.MessPlayClientData;
+import name.huliqing.fighter.game.mess.MessPlayClientData;
 import name.huliqing.fighter.manager.ResourceManager;
 import name.huliqing.fighter.ui.Button;
 import name.huliqing.fighter.ui.LinearLayout;

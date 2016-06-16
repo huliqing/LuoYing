@@ -21,8 +21,8 @@ import name.huliqing.fighter.enums.MessageType;
 import name.huliqing.fighter.game.service.PlayService;
 import name.huliqing.fighter.game.state.lan.DefaultClientListener;
 import name.huliqing.fighter.game.state.lan.GameClient.ClientState;
-import name.huliqing.fighter.game.state.lan.mess.MessSCInitGameOK;
-import name.huliqing.fighter.game.state.lan.mess.MessBase;
+import name.huliqing.fighter.game.mess.MessSCInitGameOK;
+import name.huliqing.fighter.game.mess.MessBase;
 import name.huliqing.fighter.manager.ResourceManager;
 
 /**

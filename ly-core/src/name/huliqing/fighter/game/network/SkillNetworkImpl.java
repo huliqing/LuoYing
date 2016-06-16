@@ -11,10 +11,10 @@ import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.SkillData;
 import name.huliqing.fighter.enums.SkillType;
 import name.huliqing.fighter.game.service.SkillService;
-import name.huliqing.fighter.game.state.lan.mess.MessActorAddSkill;
-import name.huliqing.fighter.game.state.lan.mess.MessSkill;
-import name.huliqing.fighter.game.state.lan.mess.MessSkillFaceTo;
-import name.huliqing.fighter.game.state.lan.mess.MessSkillWalk;
+import name.huliqing.fighter.game.mess.MessActorAddSkill;
+import name.huliqing.fighter.game.mess.MessSkill;
+import name.huliqing.fighter.game.mess.MessSkillFaceTo;
+import name.huliqing.fighter.game.mess.MessSkillWalk;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.object.skill.Skill;
 

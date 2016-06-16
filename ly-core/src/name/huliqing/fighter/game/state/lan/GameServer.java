@@ -4,8 +4,8 @@
  */
 package name.huliqing.fighter.game.state.lan;
 
-import name.huliqing.fighter.game.state.lan.mess.MessPlayClientData;
-import name.huliqing.fighter.game.state.lan.mess.MessSCServerState;
+import name.huliqing.fighter.game.mess.MessPlayClientData;
+import name.huliqing.fighter.game.mess.MessSCServerState;
 import com.jme3.network.ConnectionListener;
 import com.jme3.network.HostedConnection;
 import com.jme3.network.Message;
@@ -36,7 +36,7 @@ import name.huliqing.fighter.game.state.lan.discover.UDPDiscover;
 import name.huliqing.fighter.game.state.lan.discover.MessSCStarted;
 import name.huliqing.fighter.game.state.lan.discover.MessSCClosed;
 import name.huliqing.fighter.game.state.lan.discover.UDPListener;
-import name.huliqing.fighter.game.state.lan.mess.MessBase;
+import name.huliqing.fighter.game.mess.MessBase;
 import name.huliqing.fighter.manager.ResourceManager;
 import name.huliqing.fighter.object.actor.Actor;
 

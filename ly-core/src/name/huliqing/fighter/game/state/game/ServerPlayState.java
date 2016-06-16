@@ -9,7 +9,7 @@ import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
 import name.huliqing.fighter.game.state.lan.GameServer;
 import name.huliqing.fighter.game.state.lan.GameServer.ServerState;
-import name.huliqing.fighter.game.state.lan.mess.MessPlayClientData;
+import name.huliqing.fighter.game.mess.MessPlayClientData;
 import name.huliqing.fighter.object.game.Game.GameListener;
 
 /**

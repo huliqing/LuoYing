@@ -9,8 +9,8 @@ import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.ProtoData;
 import name.huliqing.fighter.game.dao.ItemDao;
 import name.huliqing.fighter.game.service.HandlerService;
-import name.huliqing.fighter.game.state.lan.mess.MessItemSync;
-import name.huliqing.fighter.game.state.lan.mess.MessItemUse;
+import name.huliqing.fighter.game.mess.MessItemSync;
+import name.huliqing.fighter.game.mess.MessItemUse;
 import name.huliqing.fighter.object.actor.Actor;
 
 /**

@@ -13,7 +13,7 @@ import name.huliqing.fighter.game.dao.ItemDao;
 import name.huliqing.fighter.game.service.ItemService;
 import name.huliqing.fighter.game.service.PlayService;
 import name.huliqing.fighter.game.state.lan.Network;
-import name.huliqing.fighter.game.state.lan.mess.MessItemAdd;
+import name.huliqing.fighter.game.mess.MessItemAdd;
 import name.huliqing.fighter.manager.ResourceManager;
 import name.huliqing.fighter.manager.SoundManager;
 import name.huliqing.fighter.object.actor.Actor;

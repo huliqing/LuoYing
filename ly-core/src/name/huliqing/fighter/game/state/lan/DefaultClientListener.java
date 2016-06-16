@@ -4,12 +4,12 @@
  */
 package name.huliqing.fighter.game.state.lan;
 
-import name.huliqing.fighter.game.state.lan.mess.MessSCGameData;
-import name.huliqing.fighter.game.state.lan.mess.MessSCClientList;
-import name.huliqing.fighter.game.state.lan.mess.MessClient;
-import name.huliqing.fighter.game.state.lan.mess.MessPlayGetServerState;
-import name.huliqing.fighter.game.state.lan.mess.MessPlayClientData;
-import name.huliqing.fighter.game.state.lan.mess.MessSCServerState;
+import name.huliqing.fighter.game.mess.MessSCGameData;
+import name.huliqing.fighter.game.mess.MessSCClientList;
+import name.huliqing.fighter.game.mess.MessClient;
+import name.huliqing.fighter.game.mess.MessPlayGetServerState;
+import name.huliqing.fighter.game.mess.MessPlayClientData;
+import name.huliqing.fighter.game.mess.MessSCServerState;
 import com.jme3.app.Application;
 import com.jme3.network.Client;
 import com.jme3.network.ClientStateListener.DisconnectInfo;
@@ -23,7 +23,7 @@ import name.huliqing.fighter.game.service.ConfigService;
 import name.huliqing.fighter.game.service.EnvService;
 import name.huliqing.fighter.game.state.lan.GameClient.ClientListener;
 import name.huliqing.fighter.game.state.lan.GameServer.ServerState;
-import name.huliqing.fighter.game.state.lan.mess.MessPing;
+import name.huliqing.fighter.game.mess.MessPing;
 
 /**
  * 默认的客户端帧听器

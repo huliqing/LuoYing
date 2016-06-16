@@ -9,8 +9,8 @@ import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.TalentData;
 import name.huliqing.fighter.game.service.TalentService;
 import name.huliqing.fighter.game.state.lan.Network;
-import name.huliqing.fighter.game.state.lan.mess.MessTalentAdd;
-import name.huliqing.fighter.game.state.lan.mess.MessTalentAddPoint;
+import name.huliqing.fighter.game.mess.MessTalentAdd;
+import name.huliqing.fighter.game.mess.MessTalentAddPoint;
 import name.huliqing.fighter.object.actor.Actor;
 
 /**

@@ -11,7 +11,7 @@ import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.SkinData;
 import name.huliqing.fighter.game.service.SkinService;
 import name.huliqing.fighter.game.state.lan.Network;
-import name.huliqing.fighter.game.state.lan.mess.MessSkinWeaponTakeOn;
+import name.huliqing.fighter.game.mess.MessSkinWeaponTakeOn;
 import name.huliqing.fighter.object.actor.Actor;
 
 /**

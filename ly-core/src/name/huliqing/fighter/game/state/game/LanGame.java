@@ -6,7 +6,7 @@
 package name.huliqing.fighter.game.state.game;
 
 import java.util.List;
-import name.huliqing.fighter.game.state.lan.mess.MessPlayClientData;
+import name.huliqing.fighter.game.mess.MessPlayClientData;
 
 /**
  * 局域网游戏接口

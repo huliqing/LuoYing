@@ -4,7 +4,7 @@
  */
 package name.huliqing.fighter.game.state.lan;
 
-import name.huliqing.fighter.game.state.lan.mess.MessPlayClientData;
+import name.huliqing.fighter.game.mess.MessPlayClientData;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;

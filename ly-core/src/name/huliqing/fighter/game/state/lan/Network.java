@@ -14,7 +14,7 @@ import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.GameData;
 import name.huliqing.fighter.game.service.ConfigService;
 import name.huliqing.fighter.game.state.lan.GameServer.ServerListener;
-import name.huliqing.fighter.game.state.lan.mess.MessActorTransformDirect;
+import name.huliqing.fighter.game.mess.MessActorTransformDirect;
 import name.huliqing.fighter.object.AbstractPlayObject;
 import name.huliqing.fighter.object.actor.Actor;
 

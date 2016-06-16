@@ -9,9 +9,9 @@ import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.TaskData;
 import name.huliqing.fighter.game.service.TaskService;
 import name.huliqing.fighter.game.state.lan.Network;
-import name.huliqing.fighter.game.state.lan.mess.MessTaskAdd;
-import name.huliqing.fighter.game.state.lan.mess.MessTaskApplyItem;
-import name.huliqing.fighter.game.state.lan.mess.MessTaskComplete;
+import name.huliqing.fighter.game.mess.MessTaskAdd;
+import name.huliqing.fighter.game.mess.MessTaskApplyItem;
+import name.huliqing.fighter.game.mess.MessTaskComplete;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.object.task.Task;
 
