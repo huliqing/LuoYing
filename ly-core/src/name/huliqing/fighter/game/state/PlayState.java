@@ -50,7 +50,7 @@ public abstract class PlayState extends AbstractAppState {
     public void update(float tpf) {}
     
     /**
-     * 退出当前PlayState,并返回到开始界面。
+     * 退出当前PlayState,并返回到开始界面。该方法的调用在cleanup之前进行
      */
     public void exit() {
         // 退出到"开始面板"

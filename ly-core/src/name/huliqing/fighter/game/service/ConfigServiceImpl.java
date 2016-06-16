@@ -327,6 +327,7 @@ public class ConfigServiceImpl implements ConfigService {
 
     @Override
     public String getClientId() {
+        // 用于在本地单机多客户端测试,方便在桌面上测试时区别不同的客户端。
         if (Config.debug) {
             if (clientIdForDebug == null) {
                 clientIdForDebug = UUID.randomUUID().toString();

@@ -131,69 +131,106 @@ public class StoryPlayState extends LanPlayState {
         app.getStateManager().attach(gameState);
     }
     
+    /**
+     * 保存整个存档，当故事模式在退出时要保存整个存档，包含主角，其它客户端玩家资料，及所有玩家的宠物等。
+     */
     private void saveStory() {
         // 保存玩家资料
-        Actor player = gameState.getPlayer();
-        if (player != null) {
-            // 只在”新游戏“这里才会为null,则需要创建一个新的存档
-            if (saveStory == null) {
-                saveStory = new SaveStory();
-            }
-            
-            // 1.保存玩家资料及快捷方式
-            saveStory.setPlayer(player.getData());
-            saveStory.setShortcuts(ShortcutManager.getShortcutSaves());
-            
-            // 2.保存所有需要保存的角色，这里面包含当前场景中所有玩家和玩家的宠物
-            List<Actor> actors = gameState.getActors();
-            List<Actor> needSaved = new ArrayList<Actor>();
-            List<Long> playerIds = new ArrayList<Long>();
-            for (Actor a : actors) {
-                if (a.isPlayer()) {
-                    playerIds.add(a.getData().getUniqueId());
-                }
-            }
-            for (Actor a : actors) {
-                // 玩家角色
-                if (a.isPlayer()) {
-                    needSaved.add(a);
-                    continue;
-                }
-                // 不是玩家并且已经死亡的角色不能保存，即使是宠物，如果已经死亡
-                if (a.isDead()) {
-                    continue;
-                }
-                // 玩家的宠物
-                if (a.getData().getOwnerId() > 0 && playerIds.contains(a.getData().getOwnerId())) {
-                    needSaved.add(a);
-                }
-            }
-            
-            // 这里面可能存在上一次其它玩家或宠物的存档，不能随便移除,只能替换
-            ArrayList<ActorData> savedActors = saveStory.getActors();
-            for (Actor actor : needSaved) {
-                replaceSaveActor(savedActors, actor.getData());
-            }
-            
-            // 3.保存所有客户端与角色及游戏ID的关系
-            String gameId = gameState.getGame().getData().getId();
-            Collection<HostedConnection> conns = gameServer.getServer().getConnections();
-            List<ClientData> savedClients = saveStory.getClientDatas();
-            if (!conns.isEmpty()) {
-                for (HostedConnection hc : conns) {
-                    ConnData cd = hc.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
-                    if (cd == null)
-                        continue;
-                    ClientData clientData = new ClientData();
-                    clientData.setClientId(cd.getClientId());
-                    clientData.setActorId(cd.getActorId());
-                    clientData.setGameId(gameId);
-                    replaceClientData(savedClients, clientData);
-                }
-            }
-            
-            SaveHelper.saveStoryLast(saveStory);
+//        Actor player = gameState.getPlayer();
+//        if (player != null) {
+//            // 只在”新游戏“这里才会为null,则需要创建一个新的存档
+//            if (saveStory == null) {
+//                saveStory = new SaveStory();
+//            }
+//            
+//            // 1.保存玩家资料及快捷方式。
+//            // 注意：单独把Story模式中的主玩家角色保存有一些好处,不要把主玩家与角色的关系保存在saveStory.getClientDatas中，
+//            // 这在单机测试（开多个窗口）的时候会造成多个客户端无法识别使用哪一个客户端存档资料，因为单机上生成的客户端
+//            // 标识是一样的。即使这样目前在单机上开多窗口也会读取到同一标识的客户端资料。
+//            saveStory.setPlayer(player.getData());
+//            saveStory.setShortcuts(ShortcutManager.getShortcutSaves());
+//            
+//            // 2.保存所有需要保存的角色，这里面包含当前场景中所有玩家和玩家的宠物
+//            List<Actor> actors = gameState.getActors();
+//            List<Actor> needSaved = new ArrayList<Actor>();
+//            List<Long> playerIds = new ArrayList<Long>();
+//            for (Actor a : actors) {
+//                if (a.isPlayer()) {
+//                    playerIds.add(a.getData().getUniqueId());
+//                }
+//            }
+//            for (Actor a : actors) {
+//                // 玩家角色
+//                if (a.isPlayer()) {
+//                    needSaved.add(a);
+//                    continue;
+//                }
+//                // 不是玩家并且已经死亡的角色不能保存，即使是宠物，如果已经死亡
+//                if (a.isDead()) {
+//                    continue;
+//                }
+//                // 玩家的宠物
+//                if (a.getData().getOwnerId() > 0 && playerIds.contains(a.getData().getOwnerId())) {
+//                    needSaved.add(a);
+//                }
+//            }
+//            
+//            // 这里面可能存在上一次其它玩家或宠物的存档，不能随便移除,只能替换
+//            ArrayList<ActorData> savedActors = saveStory.getActors();
+//            for (Actor actor : needSaved) {
+//                replaceSaveActor(savedActors, actor.getData());
+//            }
+//            
+//            // 3.保存所有客户端与角色及游戏ID的关系
+//            String gameId = gameState.getGame().getData().getId();
+//            Collection<HostedConnection> conns = gameServer.getServer().getConnections();
+//            List<ClientData> savedClients = saveStory.getClientDatas();
+//            if (!conns.isEmpty()) {
+//                for (HostedConnection hc : conns) {
+//                    ConnData cd = hc.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
+//                    if (cd == null)
+//                        continue;
+//                    ClientData clientData = new ClientData();
+//                    clientData.setClientId(cd.getClientId());
+//                    clientData.setActorId(cd.getActorId());
+//                    clientData.setGameId(gameId);
+//                    replaceClientData(savedClients, clientData);
+//                }
+//            }
+//            
+//            SaveHelper.saveStoryLast(saveStory);
+//        }
+
+        if (saveStory == null) {
+            saveStory = new SaveStory();
         }
+        String gameId = gameState.getGame().getData().getId();
+        List<Actor> actors = gameState.getActors();
+        
+        // 保存所有故事模式下的主角
+        Actor player = gameState.getPlayer();
+        storeClient(saveStory, actors, configService.getClientId(), player.getData().getUniqueId(), gameId);
+        
+        // 保存当前所有客户端的资料
+        Collection<HostedConnection> conns = gameServer.getServer().getConnections();
+        if (conns != null && conns.size() > 0) {
+            for (HostedConnection hc : conns) {
+                ConnData cd = hc.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
+                // 如果客户端刚刚连接或还没有选角色
+                if (cd.getClientId() == null || cd.getActorId() <= 0)
+                    continue;
+                storeClient(saveStory, actors, cd.getClientId(), cd.getActorId(), gameId);
+            }
+        }
+        
+        // 单独保存主角，这是为了兼容v2.4及之前的版本,后续可能会取消这个特殊的保存方式.
+        saveStory.setPlayer(player.getData());
+        
+        // 保存快捷方式
+        saveStory.setShortcuts(ShortcutManager.getShortcutSaves());
+        
+        // 存档到系统文件 
+        SaveHelper.saveStoryLast(saveStory);
         
         // 保存全局配置
         SaveConfig saveConfig = new SaveConfig();
@@ -201,36 +238,97 @@ public class StoryPlayState extends LanPlayState {
         SaveHelper.saveConfig(saveConfig);
     }
     
-    // 移除并替换ClientData
-    private void replaceClientData(List<ClientData> savedClients, ClientData replacer) {
-        Iterator<ClientData> it = savedClients.iterator();
-        while (it.hasNext()) {
-            ClientData cd = it.next();
-            if (cd.getClientId().equals(replacer.getClientId())) {
-                it.remove();
+    /**
+     * 单独保存一个客户端资料到存档中，但是并不立即保存到系统文件。
+     * @param saveStory 存档资料，如果没有则应该生成一个空的存档
+     * @param actors 场景中的所有角色
+     * @param clientId 客户端标识
+     * @param clientPlayerId 客户端玩家所控制的角色的唯一ID，必须包含在actors中
+     * @param gameId 当前游戏id.
+     */
+    private void storeClient(SaveStory saveStory, List<Actor> actors, String clientId, long clientPlayerId, String gameId) {
+        // 只在”新游戏“这里才会为null,则需要创建一个新的存档
+        if (saveStory == null) {
+            saveStory = new SaveStory();
+        }
+        ArrayList<ActorData> savedActors = saveStory.getActors();
+        List<ClientData> savedClients = saveStory.getClientDatas();
+        
+        // ---- 先移除客户端角色及宠物及对应关系
+        // 移除客户端角色及其宠物从存档资料中移除
+        Iterator<ActorData> sait = savedActors.iterator();
+        while (sait.hasNext()) {
+            ActorData actorData = sait.next();
+            if (actorData.getUniqueId() == clientPlayerId || actorData.getOwnerId() == clientPlayerId) {
+                sait.remove();
             }
         }
-        savedClients.add(replacer);
+        
+        // 移除对应关系
+        Iterator<ClientData> scit = savedClients.iterator();
+        while (scit.hasNext()) {
+            ClientData clientData = scit.next();
+            if (clientData.getClientId().equals(clientId)) {
+                scit.remove();
+            }
+        }
+        
+        // ---- 重新保存客户端资料及宠物及对应关系
+        // 重新添加客户端玩家及其宠物资料到存档中
+        savedActors.add(findActor(actors, clientPlayerId).getData());
+        for (Actor a : actors) {
+            if (a.getData().getOwnerId() == clientPlayerId && !a.isDead()) {
+                savedActors.add(a.getData());
+            }
+        }
+        // 添加客户端与角色及场景的对应关系
+        ClientData clientData = new ClientData();
+        clientData.setClientId(clientId);
+        clientData.setActorId(clientPlayerId);
+        clientData.setGameId(gameId);
+        savedClients.add(clientData);
     }
     
-    // 用新data代替掉存档中的data.
-    private void replaceSaveActor(ArrayList<ActorData> savedActors, ActorData replacer) {
-        Iterator<ActorData> it = savedActors.iterator();
-        while (it.hasNext()) {
-            ActorData ad = it.next();
-            if (ad.getUniqueId() == replacer.getUniqueId()) {
-                it.remove();
+    private Actor findActor(List<Actor> actors, long actorId) {
+        for (Actor actor : actors) {
+            if (actor.getData().getUniqueId() == actorId) {
+                return actor;
             }
         }
-        savedActors.add(replacer);
+        return null;
     }
+    
+    // remove20160616不再使用这个方法
+//    // 移除并替换ClientData
+//    private void replaceClientData(List<ClientData> savedClients, ClientData replacer) {
+//        Iterator<ClientData> it = savedClients.iterator();
+//        while (it.hasNext()) {
+//            ClientData cd = it.next();
+//            if (cd.getClientId().equals(replacer.getClientId())) {
+//                it.remove();
+//            }
+//        }
+//        savedClients.add(replacer);
+//    }
+//    
+//    // 用新data代替掉存档中的data.
+//    private void replaceSaveActor(ArrayList<ActorData> savedActors, ActorData replacer) {
+//        Iterator<ActorData> it = savedActors.iterator();
+//        while (it.hasNext()) {
+//            ActorData ad = it.next();
+//            if (ad.getUniqueId() == replacer.getUniqueId()) {
+//                it.remove();
+//            }
+//        }
+//        savedActors.add(replacer);
+//    }
     
      /**
      * 载入当前主角玩家存档，如果没有存档则新开游戏
      */
     private void loadPlayer() {
         Actor player;
-        if (saveStory != null) {
+        if (saveStory != null && saveStory.getPlayer() != null) {
             // 载入玩家主角
             player = actorService.loadActor(saveStory.getPlayer());
             List<ShortcutSave> ss = saveStory.getShortcuts();

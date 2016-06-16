@@ -94,6 +94,12 @@ public class ClientPlayState extends LanPlayState implements DefaultClientListen
     }
 
     @Override
+    public void exit() {
+        
+        super.exit(); 
+    }
+
+    @Override
     public void changeGameState(String gameId) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
