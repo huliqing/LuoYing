@@ -114,7 +114,7 @@ public class RoomStateClientImpl extends AbstractAppState implements RoomState {
         super.update(tpf);
         if (startGame) {
             LOG.log(Level.INFO, "RoomStateClientImpl.startGame");
-            ClientPlayState clientPlayState = new ClientPlayState(gameClient);
+            ClientPlayState clientPlayState = new ClientPlayState(app, gameClient);
             app.changeState(clientPlayState);
         }
     }

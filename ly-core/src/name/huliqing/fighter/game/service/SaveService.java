@@ -47,6 +47,6 @@ public interface SaveService extends Inject {
      */
     void saveSavable(String key, Savable data);
     
-    Savable loadSavable(String key);
+    <T extends Savable> T loadSavable(String key);
     
 }

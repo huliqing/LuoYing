@@ -18,6 +18,7 @@ import java.util.Map;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.HandlerData;
 import name.huliqing.fighter.data.ProtoData;
+import name.huliqing.fighter.game.network.UserCommandNetwork;
 import name.huliqing.fighter.game.service.PlayService;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.ui.Button;
@@ -35,6 +36,7 @@ import name.huliqing.fighter.utils.ConvertUtils;
  */
 public class MapHandler extends AbstractHandler {
     private final PlayService playService = Factory.get(PlayService.class);
+    private final UserCommandNetwork userCommandNetwork = Factory.get(UserCommandNetwork.class);
     
     private String image;
     private List<Location> locations;
@@ -400,7 +402,7 @@ public class MapHandler extends AbstractHandler {
                 @Override
                 public void onClick(UI view, boolean isPressed) {
                     if (isPressed) return;
-                    playService.changeGame(loc.gameId);
+                    userCommandNetwork.changeGameState(loc.gameId);
                     Command.this.setVisible(false);
                     mapView.removeFromParent();
                 }

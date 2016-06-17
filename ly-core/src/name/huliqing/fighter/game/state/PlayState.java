@@ -12,42 +12,51 @@ import com.jme3.scene.Spatial;
 import java.util.List;
 import java.util.logging.Logger;
 import name.huliqing.fighter.Fighter;
+import name.huliqing.fighter.data.GameData;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.enums.MessageType;
 import name.huliqing.fighter.game.state.game.GameState.PlayListener;
+import name.huliqing.fighter.game.state.game.SimpleGameState;
 import name.huliqing.fighter.game.view.TeamView;
 import name.huliqing.fighter.object.NetworkObject;
 import name.huliqing.fighter.object.view.View;
 
 /**
- *
  * @author huliqing
  */
 public abstract class PlayState extends AbstractAppState {
     private static final Logger LOG = Logger.getLogger(PlayState.class.getName());
     
-    protected Fighter app;
+    protected final Fighter app;
+    protected GameData gameData;
     protected GameState gameState;
     
-    public PlayState(GameState gameState) {
-        this.gameState = gameState;
+    public PlayState(Application app, GameData gameData) {
+        this.app = (Fighter) app;
+        this.gameData = gameData;
     }
     
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
-        this.app = (Fighter) app;
-        stateManager.attach(gameState);
+        changeGameState(gameData);
     }
 
     @Override
     public void stateDetached(AppStateManager stateManager) {
         super.stateDetached(stateManager);
-        stateManager.detach(gameState);
+        if (gameState != null) {
+            stateManager.detach(gameState);
+        }
     }
 
     @Override
     public void update(float tpf) {}
+    
+    @Override
+    public void cleanup() {
+        super.cleanup();
+    }
     
     /**
      * 退出当前PlayState,并返回到开始界面。该方法的调用在cleanup之前进行
@@ -57,20 +66,31 @@ public abstract class PlayState extends AbstractAppState {
         ((Fighter) getApp()).changeStartState();
     }
     
-    @Override
-    public void cleanup() {
-        super.cleanup();
-    }
-    
     public Application getApp() {
         return this.app;
     }
     
     /**
      * 切换游戏
-     * @param gameId 游戏ID
+     * @param gameData 游戏
      */
-    public abstract void changeGameState(String gameId);
+    public void changeGameState(GameData gameData) {
+        if (gameState != null) {
+            app.getStateManager().detach(gameState);
+        }
+        this.gameData = gameData;
+        gameState = createGameState(gameData);
+        app.getStateManager().attach(gameState);
+    }
+    
+        /**
+     * 使用gameData创建一个新的GameState.
+     * @param gameData
+     * @return 
+     */
+    protected GameState createGameState(GameData gameData) {
+        return new SimpleGameState(gameData);
+    }
     
     /**
      * 添加一个侦听器

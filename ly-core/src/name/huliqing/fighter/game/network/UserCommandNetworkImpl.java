@@ -7,6 +7,7 @@ package name.huliqing.fighter.game.network;
 import name.huliqing.fighter.game.state.lan.Network;
 import com.jme3.math.Vector3f;
 import name.huliqing.fighter.Factory;
+import name.huliqing.fighter.data.GameData;
 import name.huliqing.fighter.data.ProtoData;
 import name.huliqing.fighter.enums.MessageType;
 import name.huliqing.fighter.enums.SkillType;
@@ -30,9 +31,11 @@ import name.huliqing.fighter.game.mess.MessChatShop;
 import name.huliqing.fighter.game.mess.MessItemRemove;
 import name.huliqing.fighter.game.mess.MessItemUse;
 import name.huliqing.fighter.game.mess.MessMessage;
+import name.huliqing.fighter.game.mess.MessPlayChangeGameState;
 import name.huliqing.fighter.game.mess.MessTalentAddPoint;
 import name.huliqing.fighter.game.mess.MessTaskAdd;
 import name.huliqing.fighter.game.mess.MessTaskComplete;
+import name.huliqing.fighter.game.service.GameService;
 import name.huliqing.fighter.manager.ResourceManager;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.object.task.Task;
@@ -65,6 +68,7 @@ public class UserCommandNetworkImpl implements UserCommandNetwork {
     private ActionService actionService;
     private SkinService skinService;
     private TaskService taskService;
+    private GameService gameService;
     
     private PlayNetwork playNetwork;
     private ActionNetwork actionNetwork;
@@ -87,6 +91,7 @@ public class UserCommandNetworkImpl implements UserCommandNetwork {
         actionService = Factory.get(ActionService.class);
         skinService = Factory.get(SkinService.class);
         taskService = Factory.get(TaskService.class);
+        gameService = Factory.get(GameService.class);
         
         skillNetwork = Factory.get(SkillNetwork.class);
         playNetwork = Factory.get(PlayNetwork.class);
@@ -352,6 +357,19 @@ public class UserCommandNetworkImpl implements UserCommandNetwork {
         
         // 服务端直接执行“完成任务”的请求，并分派到客户端
         taskNetwork.completeTask(actor, task);
+    }
+
+    @Override
+    public void changeGameState(String gameId) {
+        GameData gameData = gameService.loadGameData(gameId);
+        if (network.isClient()) {
+            MessPlayChangeGameState mess = new MessPlayChangeGameState();
+            mess.setGameData(gameData);
+            network.sendToServer(mess);
+        } else {
+            playNetwork.changeGame(gameData);
+        }
+        
     }
     
     

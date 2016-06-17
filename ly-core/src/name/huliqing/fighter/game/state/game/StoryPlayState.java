@@ -21,8 +21,7 @@ import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.constants.IdConstants;
 import name.huliqing.fighter.data.ActorData;
 import name.huliqing.fighter.data.GameData;
-import name.huliqing.fighter.data.ProtoData;
-import name.huliqing.fighter.enums.DataType;
+import name.huliqing.fighter.data.SkillData;
 import name.huliqing.fighter.enums.SkillType;
 import name.huliqing.fighter.game.network.ActorNetwork;
 import name.huliqing.fighter.game.network.PlayNetwork;
@@ -39,9 +38,8 @@ import name.huliqing.fighter.game.mess.MessPlayClientData;
 import name.huliqing.fighter.game.mess.MessPlayLoadSavedActor;
 import name.huliqing.fighter.game.mess.MessPlayLoadSavedActorResult;
 import name.huliqing.fighter.game.mess.MessPlayClientExit;
-import name.huliqing.fighter.game.view.ShortcutView;
+import name.huliqing.fighter.game.state.lan.GameServer.ServerState;
 import name.huliqing.fighter.manager.ShortcutManager;
-import name.huliqing.fighter.object.DataLoaderFactory;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.object.game.Game.GameListener;
 import name.huliqing.fighter.save.ClientData;
@@ -65,46 +63,30 @@ public class StoryPlayState extends LanPlayState {
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     
     // 服务端是否准备好
-    private GameServer gameServer;    
+    private GameServer gameServer;
 
     // 存档数据
-    private SaveStory saveStory;
+    private final SaveStory saveStory;
     
     /**
      * 故事模式，剧情模式
+     * @param app
      * @param gameData 游戏设置
      * @param saveStory 存档，如果是新游戏则该参数设置为null.
      */
-    public StoryPlayState(GameData gameData, SaveStory saveStory) {
-        super(new SimpleGameState(gameData));
-        this.saveStory = saveStory;
-        if (this.saveStory == null) {
-            this.saveStory = new SaveStory();
-        }
+    public StoryPlayState(Application app, GameData gameData, SaveStory saveStory) {
+        super(app, gameData);
+        this.saveStory = saveStory != null ? saveStory : new SaveStory();
     }
     
     public SaveStory getSaveStory() {
         return saveStory;
     }
-
-    // remove20160616
-//    public void setSaveStory(SaveStory saveStory) {
-//        this.saveStory = saveStory;
-//    }
     
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
-        super.initialize(stateManager, app);
         openGameServer();
-        
-        // ==== 在场景打开后载入玩家及打开服务端
-        gameState.getGame().addListener(new GameListener() {
-            @Override
-            public void onSceneLoaded() {
-                // 1.场景载入后再载入角色
-                loadPlayer();
-            }
-        });
+        super.initialize(stateManager, app);
     }
 
     @Override
@@ -120,35 +102,29 @@ public class StoryPlayState extends LanPlayState {
     }
     
     @Override
-    public void changeGameState(String gameId) {
-        // 先把玩家资料存档
-        saveStory();
-        
-        // remove20160615
-//        // 需要重新载入存档
-//        saveStory = SaveHelper.loadStoryLast();
-        
-        app.getStateManager().detach(gameState);
-        // 切换到另一个游戏
-        gameState = new SimpleGameState(gameId);
+    public void changeGameState(GameData gameData) {
+        gameServer.setServerState(ServerState.loading);
+        // 故事模式在切换游戏之前先保存一次存档.
+        if (gameState != null) {
+            saveStory();
+        }
+        // 切换游戏
+        super.changeGameState(gameData);
+        gameServer.setGameData(gameData);
+        gameServer.setServerState(ServerState.loading);
         gameState.getGame().addListener(new GameListener() {
             @Override
             public void onSceneLoaded() {
+                gameServer.setServerState(ServerState.running);
                 loadPlayer();
             }
         });
-        // 需要更新到gameServer，否则客户端登入的时候会获取到旧的游戏。
-        gameServer.setGameData(gameState.getGame().getData());
-        app.getStateManager().attach(gameState);
     }
     
     /**
      * 保存整个存档，当故事模式在退出时要保存整个存档，包含主角，其它客户端玩家资料，及所有玩家的宠物等。
      */
     private void saveStory() {
-//        if (saveStory == null) {
-//            saveStory = new SaveStory();
-//        }
         String gameId = gameState.getGame().getData().getId();
         List<Actor> actors = gameState.getActors();
         
@@ -184,7 +160,7 @@ public class StoryPlayState extends LanPlayState {
     }
     
     /**
-     * 单独保存一个客户端资料到存档中，但是并不立即保存到系统文件。
+     * 单独保存一个客户端资料到存档中，但是并不立即保存到系统文件,其中包含客户端的宠物资料.
      * @param saveStory 存档资料，如果没有则应该生成一个空的存档
      * @param actors 场景中的所有角色
      * @param clientId 客户端标识
@@ -192,10 +168,6 @@ public class StoryPlayState extends LanPlayState {
      * @param gameId 当前游戏id.
      */
     private void storeClient(SaveStory saveStory, List<Actor> actors, String clientId, long clientPlayerId, String gameId) {
-        // 只在”新游戏“这里才会为null,则需要创建一个新的存档
-//        if (saveStory == null) {
-//            saveStory = new SaveStory();
-//        }
         ArrayList<ActorData> savedActors = saveStory.getActors();
         List<ClientData> savedClients = saveStory.getClientDatas();
         
@@ -219,10 +191,15 @@ public class StoryPlayState extends LanPlayState {
         }
         
         // ---- 重新保存客户端资料及宠物及对应关系
-        // 重新添加客户端玩家及其宠物资料到存档中
+        // 重新添加客户端玩家及其宠物资料到存档中，注意宠物必须满足以下条件才可以:
+        // 1.属于当前玩家
+        // 2.必须是活着的（生命值大于0）
+        // 3.必须是生物类角色，不要保存防御塔或其它建筑之类
         savedActors.add(findActor(actors, clientPlayerId).getData());
         for (Actor a : actors) {
-            if (a.getData().getOwnerId() == clientPlayerId && !a.isDead()) {
+            if (a.getData().getOwnerId() == clientPlayerId 
+                    && !a.isDead() 
+                    && a.getData().isLiving()) {
                 savedActors.add(a.getData());
             }
         }
@@ -252,7 +229,7 @@ public class StoryPlayState extends LanPlayState {
             // 载入玩家主角
             player = actorService.loadActor(saveStory.getPlayer());
             List<ShortcutSave> ss = saveStory.getShortcuts();
-            loadShortcut(ss, player);
+            ShortcutManager.loadShortcut(ss, player);
             
             // 载入玩家主角的宠物(这里还不需要载入其他玩家的角色及宠物,由其他玩家重新连接的时候再载入)
             ArrayList<ActorData> actors = saveStory.getActors();
@@ -297,64 +274,68 @@ public class StoryPlayState extends LanPlayState {
         for (ActorData data : actors) {
             if  (data.getOwnerId() == clientPlayerData.getUniqueId()) {
                 Actor actor = actorService.loadActor(data);
-                skillService.playSkill(actor, skillService.getSkill(actor, SkillType.wait).getId(), false);
+                SkillData waitSkill = skillService.getSkill(actor, SkillType.wait);
+                if (waitSkill != null) {
+                    skillService.playSkill(actor, waitSkill.getId(), false);
+                }
                 playNetwork.addActor(actor);
             }
         }
         return true;
     }
     
-    /**
-     * 载入快捷方式
-     * @param ss
-     * @param player 
-     */
-    private void loadShortcut(List<ShortcutSave> ss, Actor player) {
-        if (ss == null)
-            return;
-        float shortcutSize = configService.getShortcutSize();
-        for (ShortcutSave s : ss) {
-            String itemId = s.getItemId();
-            ProtoData data = actorService.getItem(player, itemId);
-            if (data == null) {
-                data = DataLoaderFactory.createData(itemId);
-            }
-            // 防止物品被删除
-            if (data == null) {
-                continue;
-            }
-            // 包裹中只允许存放限定的物品
-            DataType type = data.getDataType();
-            if (type != DataType.item && type != DataType.skin && type != DataType.skill) {
-                continue;
-            }
-            
-            // 由于skill的创建过程比较特殊，SkillData只有在创建了AnimSkill之后
-            // 才能获得skillType,所以不能直接使用createProtoData方式获得的SkillData
-            // 这会找不到SkillData中的skillType,所以需要从角色身上重新找回SkillData
-            if (data.getDataType() == DataType.skill) {
-                data = player.getData().getSkillStore().getSkillById(data.getId());
-            }
-            
-            ShortcutView shortcut = ShortcutManager.createShortcut(player, data);
-            shortcut.setLocalScale(shortcutSize);
-            shortcut.setLocalTranslation(s.getX(), s.getY(), 0);
-            ShortcutManager.addShortcutNoAnim(shortcut);
-        }
-        
-        // 如果系统设置锁定快捷方式，则锁定它
-        if (configService.isShortcutLocked()) {
-            ShortcutManager.setShortcutLocked(true);
-        }
-    }
+    // remove20160617已经移动到ShortcutManager
+//    /**
+//     * 载入快捷方式
+//     * @param ss
+//     * @param player 
+//     */
+//    private void loadShortcut(List<ShortcutSave> ss, Actor player) {
+//        if (ss == null)
+//            return;
+//        float shortcutSize = configService.getShortcutSize();
+//        for (ShortcutSave s : ss) {
+//            String itemId = s.getItemId();
+//            ProtoData data = actorService.getItem(player, itemId);
+//            if (data == null) {
+//                data = DataLoaderFactory.createData(itemId);
+//            }
+//            // 防止物品被删除
+//            if (data == null) {
+//                continue;
+//            }
+//            // 包裹中只允许存放限定的物品
+//            DataType type = data.getDataType();
+//            if (type != DataType.item && type != DataType.skin && type != DataType.skill) {
+//                continue;
+//            }
+//            
+//            // 由于skill的创建过程比较特殊，SkillData只有在创建了AnimSkill之后
+//            // 才能获得skillType,所以不能直接使用createProtoData方式获得的SkillData
+//            // 这会找不到SkillData中的skillType,所以需要从角色身上重新找回SkillData
+//            if (data.getDataType() == DataType.skill) {
+//                data = player.getData().getSkillStore().getSkillById(data.getId());
+//            }
+//            
+//            ShortcutView shortcut = ShortcutManager.createShortcut(player, data);
+//            shortcut.setLocalScale(shortcutSize);
+//            shortcut.setLocalTranslation(s.getX(), s.getY(), 0);
+//            ShortcutManager.addShortcutNoAnim(shortcut);
+//        }
+//        
+//        // 如果系统设置锁定快捷方式，则锁定它
+//        if (configService.isShortcutLocked()) {
+//            ShortcutManager.setShortcutLocked(true);
+//        }
+//    }
     
     // 开启主机模式，这允许故事模式下其它玩家连接到该游戏
     private void openGameServer() {
         // 创建server
         if (gameServer == null) {
             try {
-                gameServer = network.createGameServer(gameState.getGame().getData());
-                gameServer.setServerListener(new StoryServerListener());
+                gameServer = network.createGameServer(gameData);
+                gameServer.setServerListener(new StoryServerListener(app));
             } catch (IOException ex) {
                 Logger.getLogger(StoryPlayState.class.getName()).log(Level.SEVERE, null, ex);
                 return;
@@ -362,7 +343,6 @@ public class StoryPlayState extends LanPlayState {
         }
         if (!gameServer.isRunning()) {
             gameServer.start();
-            gameServer.setServerState(GameServer.ServerState.running);
         }
     }
 
@@ -379,7 +359,7 @@ public class StoryPlayState extends LanPlayState {
     // ----------------------------------
      private class StoryServerListener extends LanServerListener {
         
-        public StoryServerListener() {
+        public StoryServerListener(Application app) {
             super(app);
         }
 

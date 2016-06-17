@@ -18,6 +18,7 @@ import java.util.Collections;
 import java.util.List;
 import name.huliqing.fighter.Common;
 import name.huliqing.fighter.Factory;
+import name.huliqing.fighter.data.GameData;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.object.actor.ActorControl;
 import name.huliqing.fighter.data.ProtoData;
@@ -432,7 +433,13 @@ public class PlayServiceImpl implements PlayService {
 
     @Override
     public void changeGame(String gameId) {
-        Common.getPlayState().changeGameState(gameId);
+        changeGame(gameService.loadGameData(gameId));
     }
 
+    @Override
+    public void changeGame(GameData gameData) {
+        Common.getPlayState().changeGameState(gameData);
+    }
+
+    
 }

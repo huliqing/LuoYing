@@ -17,6 +17,7 @@ import com.jme3.network.Message;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.logging.Logger;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.GameData;
 import name.huliqing.fighter.game.service.ConfigService;
@@ -30,6 +31,7 @@ import name.huliqing.fighter.game.mess.MessPing;
  * @author huliqing
  */
 public abstract class DefaultClientListener implements ClientListener {
+    private static final Logger LOG = Logger.getLogger(DefaultClientListener.class.getName());
     
     private final ConfigService configService = Factory.get(ConfigService.class);
     private final EnvService envService = Factory.get(EnvService.class);

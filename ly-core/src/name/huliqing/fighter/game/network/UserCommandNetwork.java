@@ -36,7 +36,7 @@ public interface UserCommandNetwork extends Inject {
     
     /**
      * 让角色走到目标位置
-     * @param actorId
+     * @param actor
      * @param worldPos 
      */
     void playRunToPos(Actor actor, Vector3f worldPos);
@@ -44,15 +44,14 @@ public interface UserCommandNetwork extends Inject {
     /**
      * 攻击命令
      * @param actor 攻击者
-     * @param target 被攻击目标，如果为null,则让角色转入自动攻击状态
-     * @return 
+     * @param target 被攻击目标，如果为null,则让角色转入自动攻击状态 
      */
     void attack(Actor actor, Actor target);
     
     /**
      * 使用物品
      * @param actor
-     * @param objectId
+     * @param data
      * @return 
      */
     boolean useObject(Actor actor, ProtoData data);
@@ -113,15 +112,21 @@ public interface UserCommandNetwork extends Inject {
     
     /**
      * 接受任务
-     * @param actor
-     * @param taskId 
+     * @param actor 
+     * @param task 
      */
     void chatTaskAdd(Actor actor, Task task);
     
     /**
      * 提交已经完成的任务
      * @param actor
-     * @param taskId 
+     * @param task 
      */
     void chatTaskComplete(Actor actor, Task task);
+    
+    /**
+     * 切换游戏
+     * @param gameId 
+     */
+    void changeGameState(String gameId);
 }

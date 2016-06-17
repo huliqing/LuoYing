@@ -10,9 +10,9 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import java.util.List;
 import name.huliqing.fighter.Inject;
+import name.huliqing.fighter.data.GameData;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.data.ProtoData;
-import name.huliqing.fighter.data.SceneData;
 import name.huliqing.fighter.enums.MessageType;
 import name.huliqing.fighter.game.state.PlayState;
 import name.huliqing.fighter.object.NetworkObject;
@@ -324,5 +324,11 @@ public interface PlayService extends Inject {
      * @param gameId 
      */
     void changeGame(String gameId);
+    
+    /**
+     * 切换游戏
+     * @param gameData 
+     */
+    void changeGame(GameData gameData);
 
 }

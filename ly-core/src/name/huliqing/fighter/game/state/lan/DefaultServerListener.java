@@ -13,6 +13,8 @@ import com.jme3.app.Application;
 import com.jme3.network.HostedConnection;
 import com.jme3.network.Message;
 import java.util.concurrent.Callable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import name.huliqing.fighter.game.state.game.ConnData;
 import name.huliqing.fighter.game.state.lan.GameServer.ServerListener;
 import name.huliqing.fighter.game.mess.MessPlayGetClients;
@@ -24,6 +26,8 @@ import name.huliqing.fighter.game.mess.MessPlayGetGameData;
  * @param <T>
  */
 public abstract class DefaultServerListener<T> implements ServerListener<T> {
+
+    private static final Logger LOG = Logger.getLogger(DefaultServerListener.class.getName());
 
     private final Application app;
     
@@ -56,6 +60,8 @@ public abstract class DefaultServerListener<T> implements ServerListener<T> {
 
     @Override
     public void serverMessage(final GameServer gameServer, final HostedConnection source, final Message m) {
+        LOG.log(Level.INFO, "Receive from client, class={0}, message={1}", new Object[] {m.getClass().getName(), m.toString()});
+        
         app.enqueue(new Callable() {
             @Override
             public Object call() throws Exception {
@@ -101,11 +107,6 @@ public abstract class DefaultServerListener<T> implements ServerListener<T> {
      * @param m 
      */
     protected void onReceiveClientId(GameServer gameServer, HostedConnection conn, MessClient m) {
-        // remove20160615
-         // 1.设置客户端的机器名称标识
-//        conn.setAttribute(GameServer.ATTR_CLIENT, m);
-
-        // 1.设置客户端的机器名称标识
         ConnData cd = conn.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
         cd.setClientId(m.getClientId());
         cd.setClientName(m.getClientName());

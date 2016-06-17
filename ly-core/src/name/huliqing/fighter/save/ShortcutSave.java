@@ -12,7 +12,7 @@ import com.jme3.export.Savable;
 import java.io.IOException;
 
 /**
- * 用于保存快捷方式的位置信息
+ * 用于保存单个的快捷方式的位置信息
  * @author huliqing
  */
 public class ShortcutSave implements Savable {

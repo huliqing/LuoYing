@@ -9,6 +9,7 @@ import com.jme3.font.BitmapFont.Align;
 import com.jme3.math.ColorRGBA;
 import java.util.ArrayList;
 import java.util.List;
+import name.huliqing.fighter.Common;
 import name.huliqing.fighter.Config;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.constants.IdConstants;
@@ -31,7 +32,7 @@ public class StoryView extends ListView<StoryData> {
     private final GameService gameService = Factory.get(GameService.class);
     private final List<StoryData> datas = new ArrayList<StoryData>(4);
 
-    private StartState startState;
+    private final StartState startState;
     private SaveStory saveStory;
     
     /**
@@ -123,8 +124,7 @@ public class StoryView extends ListView<StoryData> {
                     if (isPress || storyData.gameId == null) 
                         return;
                     GameData gameData = gameService.loadGameData(storyData.gameId);
-                    StoryPlayState sps = new StoryPlayState(gameData, saveStory);
-//                    sps.setSaveStory(saveStory);
+                    StoryPlayState sps = new StoryPlayState(Common.getApp(), gameData, saveStory);
                     startState.startState(sps);
                 }
             });

@@ -101,9 +101,9 @@ import name.huliqing.fighter.object.actor.ItemStore;
 import name.huliqing.fighter.object.actor.SkillStore;
 import name.huliqing.fighter.game.mess.MessPlayLoadSavedActor;
 import name.huliqing.fighter.game.mess.MessPlayLoadSavedActorResult;
-import static com.jme3.network.serializing.Serializer.registerClass;
 import name.huliqing.fighter.game.mess.MessPlayClientExit;
 import static com.jme3.network.serializing.Serializer.registerClass;
+import name.huliqing.fighter.game.mess.MessPlayChangeGameState;
 
 /**
  *
@@ -190,6 +190,7 @@ public class MessRegister {
         Serializer.registerClass(MessPlayActorLoaded.class);
         Serializer.registerClass(MessSCActorRemove.class);
         Serializer.registerClass(MessPlayActorSelectResult.class);
+        Serializer.registerClass(MessPlayChangeGameState.class);
         
         // ---- Game play
         Serializer.registerClass(MessAutoAttack.class);

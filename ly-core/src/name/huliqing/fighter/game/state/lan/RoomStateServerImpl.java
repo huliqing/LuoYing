@@ -107,7 +107,7 @@ public class RoomStateServerImpl extends AbstractAppState implements RoomState {
             LOG.log(Level.INFO, "RoomStateServerImpl.startGame");
             gameServer.setServerListener(null);
             gameServer.setServerState(ServerState.loading);
-            app.changeState(new ServerPlayState(gameServer));
+            app.changeState(new ServerPlayState(app, gameServer));
         }
     }
     

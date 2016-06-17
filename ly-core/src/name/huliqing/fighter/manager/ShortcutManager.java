@@ -16,15 +16,24 @@ import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.data.ProtoData;
 import name.huliqing.fighter.data.SkillData;
+import name.huliqing.fighter.enums.DataType;
 import name.huliqing.fighter.enums.MessageType;
+import name.huliqing.fighter.game.network.ActorNetwork;
+import name.huliqing.fighter.game.network.StateNetwork;
 import name.huliqing.fighter.game.network.UserCommandNetwork;
+import name.huliqing.fighter.game.service.ActorService;
 import name.huliqing.fighter.game.service.ConfigService;
+import name.huliqing.fighter.game.service.LogicService;
+import name.huliqing.fighter.game.service.PlayService;
+import name.huliqing.fighter.game.service.SkillService;
+import name.huliqing.fighter.game.service.StateService;
 import name.huliqing.fighter.object.animation.Animation;
 import name.huliqing.fighter.object.animation.BounceMotion;
 import name.huliqing.fighter.object.animation.CurveMove;
 import name.huliqing.fighter.object.animation.LinearGroup;
 import name.huliqing.fighter.game.view.ShortcutSkillView;
 import name.huliqing.fighter.game.view.ShortcutView;
+import name.huliqing.fighter.object.DataLoaderFactory;
 import name.huliqing.fighter.save.ShortcutSave;
 import name.huliqing.fighter.ui.UIUtils;
 import name.huliqing.fighter.ui.UI;
@@ -38,7 +47,7 @@ import name.huliqing.fighter.ui.state.UIState;
 public class ShortcutManager {
 //    private final UserCommandNetwork userCommandNetwork = Factory.get(UserCommandNetwork.class);
     
-    private final static ShortcutRoot shortcutRoot = new ShortcutRoot();
+    private final static ShortcutRoot SHORTCUT_ROOT = new ShortcutRoot();
     
     // “删除”图标
     private static UI delete = UIUtils.createMultView(
@@ -68,7 +77,7 @@ public class ShortcutManager {
         
         // 把shortcutRoot添加到场景是为了调用updateLogicalState.以便
         // 更新快捷方式中的逻辑，比如一些技能冷却效果需要持续更新
-        Common.getApp().getRootNode().attachChild(shortcutRoot);
+        Common.getApp().getRootNode().attachChild(SHORTCUT_ROOT);
     }
     
     /**
@@ -76,7 +85,7 @@ public class ShortcutManager {
      * @param shortcut 
      */
     public static void addShortcutNoAnim(ShortcutView shortcut) {
-        shortcutRoot.addShortcut(shortcut);
+        SHORTCUT_ROOT.addShortcut(shortcut);
     }
     
     /**
@@ -96,7 +105,7 @@ public class ShortcutManager {
      */
     public static void checkProcess(ShortcutView shortcut) {
         if (recycle.isVisible() && isRecycle(shortcut)) {
-            shortcutRoot.removeShortcut(shortcut);
+            SHORTCUT_ROOT.removeShortcut(shortcut);
             String objectName = ResourceManager.getObjectName(shortcut.getData());
             Common.getPlayState().addMessage(ResourceManager.get("common.shortcutRecycle", new String[] {objectName})
                     , MessageType.info);
@@ -111,7 +120,7 @@ public class ShortcutManager {
             
             if (delSuccess) {
                 // delete shortcut
-                shortcutRoot.removeShortcut(shortcut);
+                SHORTCUT_ROOT.removeShortcut(shortcut);
                 Common.getPlayState().addMessage(ResourceManager.get("common.deleteSuccess", new String[] {objectName})
                     , MessageType.info);
             } else {
@@ -139,7 +148,7 @@ public class ShortcutManager {
      * @param size 
      */
     public static void setShortcutSize(float size) {
-        List<ShortcutView> shortcuts = shortcutRoot.getShortcuts();
+        List<ShortcutView> shortcuts = SHORTCUT_ROOT.getShortcuts();
         for (ShortcutView s : shortcuts) {
             s.setLocalScale(size);
         }
@@ -151,7 +160,7 @@ public class ShortcutManager {
      * @param locked 
      */
     public static void setShortcutLocked(boolean locked) {
-        List<ShortcutView> shortcuts = shortcutRoot.getShortcuts();
+        List<ShortcutView> shortcuts = SHORTCUT_ROOT.getShortcuts();
         for (ShortcutView s : shortcuts) {
             s.setDragEnabled(!locked);
         }
@@ -163,7 +172,7 @@ public class ShortcutManager {
      */
     public static ArrayList<ShortcutSave> getShortcutSaves() {
         ArrayList<ShortcutSave> result = new ArrayList<ShortcutSave>();
-        List<ShortcutView> scs = shortcutRoot.getShortcuts();
+        List<ShortcutView> scs = SHORTCUT_ROOT.getShortcuts();
         if (!scs.isEmpty()) {
             for (ShortcutView sc : scs) {
                 ShortcutSave ss = new ShortcutSave();
@@ -193,9 +202,59 @@ public class ShortcutManager {
 //        cleanup();
 //    }
     
+    /**
+     * 清理界面上的所有快捷方式
+     */
     public static void cleanup() {
-        if (shortcutRoot != null) {
-            shortcutRoot.clearShortcuts();
+        if (SHORTCUT_ROOT != null) {
+            SHORTCUT_ROOT.clearShortcuts();
+        }
+    }
+    
+    /**
+     * 载入快捷方式给指定的角色。
+     * @param ss
+     * @param player 
+     */
+    public static void loadShortcut(List<ShortcutSave> ss, Actor player) {
+        if (ss == null || ss.isEmpty())
+            return;
+        ActorService actorService = Factory.get(ActorService.class);
+        ConfigService configService = Factory.get(ConfigService.class);
+        
+        float shortcutSize = configService.getShortcutSize();
+        for (ShortcutSave s : ss) {
+            String itemId = s.getItemId();
+            ProtoData data = actorService.getItem(player, itemId);
+            if (data == null) {
+                data = DataLoaderFactory.createData(itemId);
+            }
+            // 防止物品被删除
+            if (data == null) {
+                continue;
+            }
+            // 包裹中只允许存放限定的物品
+            DataType type = data.getDataType();
+            if (type != DataType.item && type != DataType.skin && type != DataType.skill) {
+                continue;
+            }
+            
+            // 由于skill的创建过程比较特殊，SkillData只有在创建了AnimSkill之后
+            // 才能获得skillType,所以不能直接使用createProtoData方式获得的SkillData
+            // 这会找不到SkillData中的skillType,所以需要从角色身上重新找回SkillData
+            if (data.getDataType() == DataType.skill) {
+                data = player.getData().getSkillStore().getSkillById(data.getId());
+            }
+            
+            ShortcutView shortcut = ShortcutManager.createShortcut(player, data);
+            shortcut.setLocalScale(shortcutSize);
+            shortcut.setLocalTranslation(s.getX(), s.getY(), 0);
+            ShortcutManager.addShortcutNoAnim(shortcut);
+        }
+        
+        // 如果系统设置锁定快捷方式，则锁定它
+        if (configService.isShortcutLocked()) {
+            ShortcutManager.setShortcutLocked(true);
         }
     }
     

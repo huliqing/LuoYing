@@ -85,11 +85,11 @@ public class LanServerListener extends DefaultServerListener<Actor> {
         if (clientPlayer == null)
             return;
 
-        // 1.将客户端角色的所有宠物移除出场景
+        // 1.将客户端角色的所有宠物移除出场景,注意是宠物，不要把非生命的（如防御塔）也一起移除
         List<Actor> actors = playService.findAllActor();
         if (actors != null && !actors.isEmpty()) {
             for (Actor actor : actors) {
-                if (actor.getData().getOwnerId() == clientPlayer.getData().getUniqueId()) {
+                if (actor.getData().getOwnerId() == clientPlayer.getData().getUniqueId() &&  actor.getData().isLiving()) {
                     playNetwork.removeObject(actor);
                 }
             }

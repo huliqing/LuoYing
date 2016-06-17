@@ -54,27 +54,32 @@ public class GameClient implements ClientStateListener, MessageListener<Client>{
     
     public enum ClientState {
         /**
-         * 客户端处于等待状态
+         * 客户端处于等待状态,比如在房间中等待服务端开始游戏，这个状态表示还未开始游戏，未初始化数据等，基本上只表明客户端
+         * 连接到了服务端。
          */
         waitting,
         
         /**
-         * 客户端正在载入初始场景
+         * 客户端处于载入初始化数据状态，如初始化一些设定，载入本地基本数据，静态场景等，该状态表明客户端还未就绪 ，
+         * 还不能正常处理来自服务端的游戏数据。
          */
         loading,
         
         /**
-         * 客户端已经装备好
+         * 客户端处于准备就绪状态，这个状态表示客户端已经完成loading阶段的基本资源的初始化，如基本场景已经载入完毕，
+         * 开始等待服务端就绪。注：这个状态只能表明客户端已经就绪，但服务端状态还未确定是否就绪，
+         * 这个时候向服务端发送游戏指令可能无法处理。
          */
         ready,
         
         /**
-         * 正在等待初始化场景
+         * 等待初始化游戏状态，这个状态表明客户端和服务端已经同时处于就绪状态。客户端向服务端发送初始化场景的指令，正在
+         * 向服务端请求初始化游戏场景的状态，如：初始化场景角色等。
          */
         waitting_init_game,
         
         /**
-         * 客户端正在运行游戏
+         * 客户端处于正常的运行游戏状态，这个状态表明客户端和服务端已经完成了所有的初始化，处于正常互动的游戏状态。
          */
         running;
     }
@@ -100,11 +105,6 @@ public class GameClient implements ClientStateListener, MessageListener<Client>{
         this.version = version;
         this.host = host;
         this.hostPort = hostPort;
-        
-        // remove20160206
-//        client = Network.connectToServer(gameName, version, host, hostPort);
-//        client.addClientStateListener(this);
-//        client.addMessageListener(this);
     }
     
     public void start() throws IOException {
@@ -213,6 +213,14 @@ public class GameClient implements ClientStateListener, MessageListener<Client>{
 
     @Override
     public void messageReceived(Client source, Message m) {
+//        if (Config.debug) {
+//            LOG.log(Level.INFO, "Receive From Server, class={0}, message={1}"
+//                    , new Object[] {m.getClass().getName(), m.toString()});
+//            if (listener == null) {
+//                LOG.log(Level.WARNING, "No ClientListener for GameClient, gameClient={0}, messageClass={1}, message={2}"
+//                , new Object[]{toString(), m.getClass().getName(), m.toString()});
+//            }
+//        }
         if (listener != null) {
             listener.clientMessage(this, source, m);
         }

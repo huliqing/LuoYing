@@ -7,6 +7,7 @@ package name.huliqing.fighter.game.state.game;
 import java.util.List;
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
+import name.huliqing.fighter.data.GameData;
 import name.huliqing.fighter.game.state.lan.GameServer;
 import name.huliqing.fighter.game.state.lan.GameServer.ServerState;
 import name.huliqing.fighter.game.mess.MessPlayClientData;
@@ -22,8 +23,8 @@ public class ServerPlayState extends LanPlayState  {
     // 服务端是否准备好
     private final GameServer gameServer;
     
-    public ServerPlayState(GameServer gameServer) {
-        super(new SimpleGameState(gameServer.getGameData()));
+    public ServerPlayState(Application app, GameServer gameServer) {
+        super(app, gameServer.getGameData());
         this.gameServer = gameServer;
     }
 
@@ -54,7 +55,7 @@ public class ServerPlayState extends LanPlayState  {
     }
 
     @Override
-    public void changeGameState(String gameId) {
+    public void changeGameState(GameData gameData) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

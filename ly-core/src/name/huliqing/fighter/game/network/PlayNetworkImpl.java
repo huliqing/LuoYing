@@ -17,8 +17,8 @@ import java.util.logging.Logger;
 import name.huliqing.fighter.Common;
 import name.huliqing.fighter.Config;
 import name.huliqing.fighter.Factory;
+import name.huliqing.fighter.data.GameData;
 import name.huliqing.fighter.data.ProtoData;
-import name.huliqing.fighter.data.SceneData;
 import name.huliqing.fighter.enums.MessageType;
 import name.huliqing.fighter.game.service.ActionService;
 import name.huliqing.fighter.game.service.ActorService;
@@ -26,10 +26,12 @@ import name.huliqing.fighter.game.service.PlayService;
 import name.huliqing.fighter.game.service.SkinService;
 import name.huliqing.fighter.game.mess.MessMessage;
 import name.huliqing.fighter.game.mess.MessPlayActorLoaded;
+import name.huliqing.fighter.game.mess.MessPlayChangeGameState;
 import name.huliqing.fighter.game.mess.MessSCActorRemove;
 import name.huliqing.fighter.game.mess.MessSyncObject;
 import name.huliqing.fighter.game.mess.MessViewAdd;
 import name.huliqing.fighter.game.mess.MessViewRemove;
+import name.huliqing.fighter.game.service.GameService;
 import name.huliqing.fighter.object.SyncData;
 import name.huliqing.fighter.object.NetworkObject;
 import name.huliqing.fighter.object.PlayObject;
@@ -54,6 +56,8 @@ public class PlayNetworkImpl implements PlayNetwork {
     private ActorService actorService;
     private ActionService actionService;
     private SkinService skinService;
+    private GameService gameService;
+    
     private ActionNetwork actionNetwork;
     private SkinNetwork skinNetwork;
     private SkillNetwork skillNetwork;
@@ -64,6 +68,7 @@ public class PlayNetworkImpl implements PlayNetwork {
         actorService = Factory.get(ActorService.class);
         actionService = Factory.get(ActionService.class);
         skinService = Factory.get(SkinService.class);
+        gameService = Factory.get(GameService.class);
         actionNetwork = Factory.get(ActionNetwork.class);
         skinNetwork = Factory.get(SkinNetwork.class);
         skillNetwork = Factory.get(SkillNetwork.class);
@@ -506,7 +511,19 @@ public class PlayNetworkImpl implements PlayNetwork {
 
     @Override
     public void changeGame(String gameId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        changeGame(gameService.loadGameData(gameId));
+    }
+
+    @Override
+    public void changeGame(GameData gameData) {
+        if (network.isClient())
+            return;
+        
+        MessPlayChangeGameState mess = new MessPlayChangeGameState();
+        mess.setGameData(gameData);
+        network.broadcast(mess);
+
+        playService.changeGame(gameData);
     }
     
 }

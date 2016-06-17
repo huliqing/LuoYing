@@ -29,4 +29,11 @@ public class MessSCServerState extends MessBase {
     public void setServerState(ServerState serverState) {
         this.serverState = serverState;
     }
+
+    @Override
+    public String toString() {
+        return "MessSCServerState{" + "serverState=" + serverState + '}';
+    }
+    
+    
 }

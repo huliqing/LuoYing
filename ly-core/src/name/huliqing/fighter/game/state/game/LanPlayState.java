@@ -10,6 +10,7 @@ import com.jme3.app.state.AppStateManager;
 import com.jme3.math.Vector3f;
 import name.huliqing.fighter.Common;
 import name.huliqing.fighter.Factory;
+import name.huliqing.fighter.data.GameData;
 import name.huliqing.fighter.game.service.PlayService;
 import name.huliqing.fighter.game.state.PlayState;
 import name.huliqing.fighter.game.state.lan.Network;
@@ -32,11 +33,10 @@ public abstract class LanPlayState extends PlayState implements LanGame {
     private ClientsWin clientsWin;
     private ScaleAnim clientsWinAnim;
     private Icon lanBtn;
-    
     protected final Network network = Network.getInstance();
     
-    public LanPlayState(GameState gameState) {
-        super(gameState);
+    public LanPlayState(Application app, GameData gameData) {
+        super(app, gameData);
     }
 
     @Override
@@ -44,15 +44,6 @@ public abstract class LanPlayState extends PlayState implements LanGame {
         super.initialize(stateManager, app); 
         // 初始化Network
         network.initialize();
-        
-        // 在场景载入后添加局域网UI
-        gameState.getGame().addListener(new GameListener() {
-            @Override
-            public void onSceneLoaded() {
-                createLanUI();
-            }
-        });
-        
     }
 
     @Override
@@ -65,6 +56,17 @@ public abstract class LanPlayState extends PlayState implements LanGame {
     public void cleanup() {
         network.cleanup();
         super.cleanup(); 
+    }
+
+    @Override
+    public void changeGameState(GameData gameData) {
+        super.changeGameState(gameData);
+        gameState.getGame().addListener(new GameListener() {
+            @Override
+            public void onSceneLoaded() {
+                createLanUI();
+            }
+        });
     }
 
     @Override

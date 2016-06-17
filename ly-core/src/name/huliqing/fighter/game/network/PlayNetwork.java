@@ -34,7 +34,7 @@ public interface PlayNetwork extends PlayService {
     /**
      * 将当前服务端状态初始化到客户端。 一般在客户端连接到服务端后调用初始化
      * 状态。
-     * @param 指定的客户端
+     * @param client
      */
     void syncGameInitToClient(HostedConnection client);
     
