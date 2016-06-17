@@ -117,13 +117,19 @@ public class ChatServiceImpl implements ChatService {
             id = items[i];
             data = itemService.getItem(seller, id);
             
+            // 这里可能为null,因为“出售”或“发送”物品并不是与物品的使用动作同步的，有可能在点击“出售”或“发送”的时候
+            // 包裹中的物品已经被使用掉。
+            if (data == null) {
+                continue;
+            }
+            
             // 非卖品
             if (!itemService.isSellable(data)) {
                 continue;
             }
             
             // 注意：一件商品一件商品的卖,避免items中ID重复而出现重复卖的问题。
-            if (data != null && data.getTotal() > 0) {
+            if (data.getTotal() > 0) {
                 // 如果角色身上指定ID物品的数量不够卖，则卖出尽可能多。否则按指定数量卖出。
                 trueCount = data.getTotal() > counts[i] ? counts[i] : data.getTotal();
                 amount = data.getCost() * trueCount * discount;

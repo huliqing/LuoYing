@@ -85,7 +85,8 @@ public abstract class TransferPanel extends LinearLayout implements TransferList
             transferInner(data, 1);
         } else {
             // 使用数据面板进行确认数量后再传输
-            transferByNumPanel(data, data.getTotal());
+//            transferByNumPanel(data, data.getTotal());
+            transferByNumPanel(data, 0);
         }
     }
     

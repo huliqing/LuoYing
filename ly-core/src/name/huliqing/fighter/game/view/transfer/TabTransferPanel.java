@@ -29,14 +29,14 @@ public class TabTransferPanel extends TransferPanel implements RowClickListener 
     private final List<ProtoData> armorDatas = new ArrayList<ProtoData>();
     private final List<ProtoData> weaponDatas = new ArrayList<ProtoData>();
     
-    private Tab tab;
-    private IconPanel btnItem;      // 物品列表
-    private IconPanel btnArmor;     // 装备面板
-    private IconPanel btnWeapon;    // 武器
+    private final Tab tab;
+    private final IconPanel btnItem;      // 物品列表
+    private final IconPanel btnArmor;     // 装备面板
+    private final IconPanel btnWeapon;    // 武器
     
-    private ItemPanel itemPanel;
-    private ItemPanel armorPanel;
-    private ItemPanel weaponPanel;
+    private final ItemPanel itemPanel;
+    private final ItemPanel armorPanel;
+    private final ItemPanel weaponPanel;
 
     public TabTransferPanel(float width, float height) {
         super(width, height);
