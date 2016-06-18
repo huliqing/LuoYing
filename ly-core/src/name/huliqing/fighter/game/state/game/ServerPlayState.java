@@ -75,13 +75,14 @@ public class ServerPlayState extends NetworkPlayState  {
                 // 设置状态并向所有客户端广播,这通知所有客户端
                 // 可以开始向服务端发送游戏初始化命令的消息
                 gameServer.setServerState(ServerState.running);
+                // 隐藏其它UI界面
+                setUIVisiable(false);
+                // 显示角色选择面板
                 showSelectPanel(gameState.getGame().getData().getAvailableActors());
             }
         });
         // 服务端需要游戏逻辑，客户端就不需要
         gameState.getGame().setEnabled(true);
-        // 显示可选角色面板
-        setUIVisiable(false);
     }
 
     @Override

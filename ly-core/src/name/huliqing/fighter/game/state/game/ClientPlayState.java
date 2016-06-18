@@ -100,11 +100,10 @@ public class ClientPlayState extends NetworkPlayState implements AbstractClientL
             @Override
             public void onSceneLoaded() {
                 gameClient.setClientState(ClientState.ready);
+                // 先隐藏所有UI,这样不会妨碍角色选择界面
+                setUIVisiable(false);
             }
         });
-        
-        // 先隐藏所有UI,这样不会妨碍角色选择界面
-        setUIVisiable(false);
         
         // 循环检查服务端状态，确保服务端已经准备好连接
         PlayObject checkState = new IntervalLogic(0.2f) {
@@ -216,6 +215,7 @@ public class ClientPlayState extends NetworkPlayState implements AbstractClientL
                 MessPlayLoadSavedActorResult mess = (MessPlayLoadSavedActorResult) m;
                 if (mess.isSuccess()) {
                     playService.setAsPlayer(playService.findActor(mess.getActorId()));
+                    setUIVisiable(true);
                 } else {
                     // 这是在服务端没有客户端的存档的情况下，客户端需要弹出角色选择面板，来选择一个角色进行游戏
                     showSelectPanel(gameClient.getGameData().getAvailableActors());
@@ -228,6 +228,7 @@ public class ClientPlayState extends NetworkPlayState implements AbstractClientL
                 MessPlayActorSelectResult mess = (MessPlayActorSelectResult) m;
                 if (mess.isSuccess()) {
                     playService.setAsPlayer(playService.findActor(mess.getActorId()));
+                    setUIVisiable(true);
                 } else {
                     LOG.log(Level.SEVERE, "Could not load selected Actor, error={0}", mess.getError());
                 }
