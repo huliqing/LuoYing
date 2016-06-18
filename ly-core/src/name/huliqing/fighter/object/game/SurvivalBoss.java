@@ -73,6 +73,10 @@ public class SurvivalBoss extends IntervalLogic {
         trexLevel = bossLevelUp * 3;
         bossLevel = bossLevelUp * 4;
     }
+    
+    public boolean isBoosDead() {
+        return bossDead;
+    }
 
     @Override
     protected void doLogic(float tpf) {
@@ -133,9 +137,9 @@ public class SurvivalBoss extends IntervalLogic {
     }
     
     private void killAllLogic() {
-        playService.removeObject(levelLogic);
-        playService.removeObject(actorBuilder);
-        playService.removeObject(this);
+        game.removeLogic(levelLogic);
+        game.removeLogic(actorBuilder);
+        game.removeLogic(this);
     }
     
     private Actor loadBoss() {

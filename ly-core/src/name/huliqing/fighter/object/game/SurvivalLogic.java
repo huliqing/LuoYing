@@ -34,7 +34,7 @@ import name.huliqing.fighter.object.view.TextView;
  * @author huliqing
  */
 public class SurvivalLogic extends AbstractPlayObject {
-    private boolean debug = false;
+    private boolean debug = true;
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
     private final StateNetwork stateNetwork = Factory.get(StateNetwork.class);
