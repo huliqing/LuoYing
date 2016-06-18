@@ -13,7 +13,7 @@ import name.huliqing.fighter.logic.scene.ActorCleanLogic;
 import name.huliqing.fighter.object.actor.Actor;
 
 /**
- * 故事模式的游戏方式，有一些特殊的游戏逻辑行为。
+ * 故事模式的游戏方式，有一些特殊的游戏逻辑行为。并且一旦主角死亡也就是任务失败
  * @author huliqing
  */
 public abstract class StoryGame extends Game {

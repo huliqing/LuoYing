@@ -13,7 +13,6 @@ import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.GameData;
 import name.huliqing.fighter.game.mess.MessPlayActorSelect;
 import name.huliqing.fighter.game.state.lan.GameServer;
-import name.huliqing.fighter.game.mess.MessPlayClientData;
 import name.huliqing.fighter.game.mess.MessPlayClientExit;
 import name.huliqing.fighter.game.mess.MessPlayLoadSavedActor;
 import name.huliqing.fighter.game.mess.MessPlayLoadSavedActorResult;
@@ -27,6 +26,7 @@ import name.huliqing.fighter.game.service.PlayService;
 import name.huliqing.fighter.game.service.SkillService;
 import name.huliqing.fighter.game.service.StateService;
 import name.huliqing.fighter.game.state.lan.GameServer.ServerState;
+import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.object.game.Game.GameListener;
 
 /**
@@ -78,12 +78,14 @@ public class ServerPlayState extends NetworkPlayState  {
                 showSelectPanel(gameState.getGame().getData().getAvailableActors());
             }
         });
+        // 服务端需要游戏逻辑，客户端就不需要
+        gameState.getGame().setEnabled(true);
         // 显示可选角色面板
         setUIVisiable(false);
     }
 
     @Override
-    public List<MessPlayClientData> getClients() {
+    public List<ConnData> getClients() {
         return gameServer.getClients();
     }
 
@@ -107,7 +109,7 @@ public class ServerPlayState extends NetworkPlayState  {
 
         @Override
         protected void processServerMessage(GameServer gameServer, HostedConnection source, Message m) {
-            // Lan模式下的服务端不保存客户端资料，所以这里直接返回false，以便让客户端去弹出角色选择窗口，选择一个角色进行游戏
+            // 局域网模式下的服务端不保存客户端资料，所以这里直接返回false，以便让客户端去弹出角色选择窗口，选择一个角色进行游戏
             if (m instanceof MessPlayLoadSavedActor) {
                 gameServer.send(source, new MessPlayLoadSavedActorResult(false));
                 return;
@@ -118,19 +120,17 @@ public class ServerPlayState extends NetworkPlayState  {
                 // 响应客户端角色选择
                 ((MessPlayActorSelect)m).applyOnServer(gameServer, source);
                 
-                // remove20160618,不要在这里给玩家角色指定特殊的分组，应该由不同的游戏GameData处理器内部去实现。
-//                ConnData cd = source.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
-//                long actorUniqueId = cd.getActorId();
-//                if (actorUniqueId > 0) {
-//                    // 让客户端角色的用户分组与当前主角玩家一致
-//                    Actor actor = playService.findActor(actorUniqueId);
-//                    actorNetwork.setGroup(actor, actorService.getGroup(gameState.getPlayer()));
-//                }
+                // 当玩家选择完一个角色后交由特定的Game的处理器去拦截处理一些特定的初始化，如角色分组，队伍分组等
+                ConnData cd = source.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
+                Actor actor = playService.findActor(cd.getActorId());
+                gameState.getGame().onActorSelected(actor);
 
-                // 通知所有客户更新“客户端列表”
-                gameServer.broadcast(new MessSCClientList(gameServer.getClients()));
+                // 通知角色选择
+                onActorSelected(cd, playService.findActor(cd.getActorId()));
                 // 更新本地（服务端）客户端列表
                 onClientListUpdated();
+                // 通知所有客户更新“客户端列表”
+                gameServer.broadcast(new MessSCClientList(gameServer.getClients()));
                 return;
             } 
             

@@ -8,7 +8,7 @@ import com.jme3.font.BitmapFont.VAlign;
 import com.jme3.math.ColorRGBA;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.fighter.game.mess.MessPlayClientData;
+import name.huliqing.fighter.game.state.game.ConnData;
 import name.huliqing.fighter.manager.ResourceManager;
 import name.huliqing.fighter.ui.LinearLayout;
 import name.huliqing.fighter.ui.ListView;
@@ -88,9 +88,9 @@ public class ClientsView extends LinearLayout {
     
     /**
      * 设置新的客户端列表,如果给定的列表为null，则将清空列表
-     * @param clientData 
+     * @param clients
      */
-    public void setClients(List<MessPlayClientData> clients) {
+    public void setClients(List<ConnData> clients) {
         // 这个方法必须保证线程同步，也不要在这个方法中去操作界面中的东西，如增
         // 加或减少Spatial之类，即不要去影响render线程的渲染。因为这个方法可能
         // 在其它线程中进行调用。
@@ -116,7 +116,7 @@ public class ClientsView extends LinearLayout {
      * 客户端。
      * @return 
      */
-    public MessPlayClientData getSelected() {
+    public ConnData getSelected() {
         if (clientList.selected != null) {
             return clientList.selected.clientData;
         }
@@ -124,9 +124,9 @@ public class ClientsView extends LinearLayout {
     }
     
     // ----------------- inner class -------------------------------------------
-    private class ClientList extends ListView<MessPlayClientData> {
+    private class ClientList extends ListView<ConnData> {
         
-        private final List<MessPlayClientData> clients = new ArrayList<MessPlayClientData>();
+        private final List<ConnData> clients = new ArrayList<ConnData>();
         // 当前选中的行
         private ClientRow selected;
         
@@ -135,12 +135,12 @@ public class ClientsView extends LinearLayout {
         }
         
         @Override
-        protected Row<MessPlayClientData> createEmptyRow() {
+        protected Row<ConnData> createEmptyRow() {
             return new ClientRow(this);
         }
         
         @Override
-        public List<MessPlayClientData> getDatas() {
+        public List<ConnData> getDatas() {
             return clients;
         }
 
@@ -168,8 +168,8 @@ public class ClientsView extends LinearLayout {
         }
     }
     
-    private class ClientRow extends Row<MessPlayClientData> {
-        private MessPlayClientData clientData;
+    private class ClientRow extends Row<ConnData> {
+        private ConnData clientData;
         private Text nameLabel;     // 客户端标识：手机名称/PC名称
         private Text addressLabel;  // 客户端IP地址
         private Text actorNameLabel;
@@ -200,9 +200,9 @@ public class ClientsView extends LinearLayout {
         }
         
         @Override
-        public void displayRow(MessPlayClientData data) {
+        public void displayRow(ConnData data) {
             clientData = data;
-            nameLabel.setText(clientData.getName());
+            nameLabel.setText(clientData.getClientName());
             String address = clientData.getAddress();
             // 去掉“/”和“:port”
             if (address.startsWith("/")) {

@@ -31,22 +31,21 @@ import name.huliqing.fighter.ui.state.UIState;
  * @author huliqing
  */
 public abstract class GameState extends AbstractAppState {
-//    private static final Logger LOG = Logger.getLogger(PlayState.class.getName());
     private final GameService gameService = Factory.get(GameService.class);
     
     public interface PlayListener {
         
         /**
-         * 当场景中添加了物体时触发
-         * @param spatial 
+         * 当向游戏中添加了物体时触发，注:这个object并不一定是Spatial,也可能是其它类型，如：Actor,View,UI等
+         * @param object
          */
-        void onObjectAdded(Object spatial);
+        void onObjectAdded(Object object);
         
         /**
-         * 当场景中移除了物体时触发
-         * @param spatial 
+         * 当从游戏中移除物体时触发该方法,注:这个object并不一定是Spatial,也可能是其它类型，如：Actor,View,UI等
+         * @param object
          */
-        void onObjectRemoved(Object spatial);
+        void onObjectRemoved(Object object);
         
         /**
          * 当退出PlayState时
@@ -176,8 +175,6 @@ public abstract class GameState extends AbstractAppState {
         for (PlayListener lis : listeners) {
             lis.onExit();
         }
-        // 退出到"开始面板"
-        ((Fighter) getApp()).changeStartState();
     }
     
     @Override

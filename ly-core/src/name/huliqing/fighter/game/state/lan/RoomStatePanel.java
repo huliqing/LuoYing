@@ -4,9 +4,9 @@
  */
 package name.huliqing.fighter.game.state.lan;
 
-import name.huliqing.fighter.game.mess.MessPlayClientData;
 import java.util.List;
 import name.huliqing.fighter.data.GameData;
+import name.huliqing.fighter.game.state.game.ConnData;
 import name.huliqing.fighter.manager.ResourceManager;
 import name.huliqing.fighter.game.view.ClientsView;
 import name.huliqing.fighter.utils.MathUtils;
@@ -58,9 +58,9 @@ public class RoomStatePanel extends Window {
     
     /**
      * 设置新的客户端列表
-     * @param clientData 
+     * @param clients
      */
-    public void setClients(List<MessPlayClientData> clients) {
+    public void setClients(List<ConnData> clients) {
         clientsView.setClients(clients);
     }
     
@@ -69,7 +69,7 @@ public class RoomStatePanel extends Window {
      * 客户端。
      * @return 
      */
-    public MessPlayClientData getSelected() {
+    public ConnData getSelected() {
         return clientsView.getSelected();
     }
 

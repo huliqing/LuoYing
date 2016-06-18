@@ -4,7 +4,6 @@
  */
 package name.huliqing.fighter.game.state.lan;
 
-import name.huliqing.fighter.game.mess.MessPlayClientData;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
@@ -20,6 +19,7 @@ import name.huliqing.fighter.data.GameData;
 import name.huliqing.fighter.game.state.game.ClientPlayState;
 import name.huliqing.fighter.game.state.lan.GameServer.ServerState;
 import name.huliqing.fighter.game.mess.MessPlayGetGameData;
+import name.huliqing.fighter.game.state.game.ConnData;
 import name.huliqing.fighter.manager.ResourceManager;
 import name.huliqing.fighter.game.view.HelpView;
 import name.huliqing.fighter.ui.LinearLayout;
@@ -214,7 +214,7 @@ public class RoomStateClientImpl extends AbstractAppState implements RoomState {
         }
 
         @Override
-        protected void onClientsUpdated(GameClient gameClient, List<MessPlayClientData> clients) {
+        protected void onClientsUpdated(GameClient gameClient, List<ConnData> clients) {
             super.onClientsUpdated(gameClient, clients); 
             clientPanel.setClients(clients);
         }

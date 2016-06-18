@@ -34,7 +34,6 @@ import name.huliqing.fighter.game.service.SkillService;
 import name.huliqing.fighter.game.service.StateService;
 import name.huliqing.fighter.game.state.lan.GameServer;
 import name.huliqing.fighter.game.mess.MessPlayActorSelect;
-import name.huliqing.fighter.game.mess.MessPlayClientData;
 import name.huliqing.fighter.game.mess.MessPlayLoadSavedActor;
 import name.huliqing.fighter.game.mess.MessPlayLoadSavedActorResult;
 import name.huliqing.fighter.game.mess.MessPlayClientExit;
@@ -303,7 +302,7 @@ public class StoryPlayState extends NetworkPlayState {
     }
 
     @Override
-    public List<MessPlayClientData> getClients() {
+    public List<ConnData> getClients() {
         return gameServer.getClients();
     }
 
@@ -344,24 +343,27 @@ public class StoryPlayState extends NetworkPlayState {
                 // 找出客户端的存档资料，注意saveStory可能为null（在“新游戏"情况下）
                 if (saveStory != null) {
                     List<ClientData> clientDatas = saveStory.getClientDatas();
-                    ConnData connData = source.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
-                    for (ClientData cd : clientDatas) {
-                        if (cd.getClientId().equals(connData.getClientId())) {
+                    ConnData cd = source.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
+                    for (ClientData clientData : clientDatas) {
+                        if (clientData.getClientId().equals(cd.getClientId())) {
                             // 载入角色客户端角色的资料
-                            boolean result = loadClient(saveStory, cd);
+                            boolean result = loadClient(saveStory, clientData);
                             if (result) {
-                                connData.setActorId(cd.getActorId());
+                                cd.setActorId(clientData.getActorId());
                             }
+                            
                             // 通知客户端,这样客户端可以确定是否需要弹出“角色选择面板”来重新选择一个角色进行游戏
                             MessPlayLoadSavedActorResult messResult = new MessPlayLoadSavedActorResult(result);
-                            messResult.setActorId(cd.getActorId());
+                            messResult.setActorId(clientData.getActorId());
                             gameServer.send(source, messResult);
                             
                             if (result) {
-                                // 通知所有客户更新“客户端列表”
-                                gameServer.broadcast(new MessSCClientList(gameServer.getClients()));
+                                // 通知角色选择
+                                onActorSelected(cd, playService.findActor(clientData.getActorId()));
                                 // 更新本地（服务端）客户端列表
                                 onClientListUpdated();
+                                // 通知所有客户更新“客户端列表”
+                                gameServer.broadcast(new MessSCClientList(gameServer.getClients()));
                             }
                             return;
                         }
@@ -383,10 +385,12 @@ public class StoryPlayState extends NetworkPlayState {
                     Actor actor = playService.findActor(actorUniqueId);
                     actorNetwork.setGroup(actor, actorService.getGroup(gameState.getPlayer()));
                     
-                    // 通知所有客户更新“客户端列表”
-                    gameServer.broadcast(new MessSCClientList(gameServer.getClients()));
+                    // 通知角色选择
+                    onActorSelected(cd, playService.findActor(cd.getActorId()));
                     // 更新本地（服务端）客户端列表
                     onClientListUpdated();
+                    // 通知所有客户更新“客户端列表”
+                    gameServer.broadcast(new MessSCClientList(gameServer.getClients()));
                 }
                 return;
             } 

@@ -11,8 +11,6 @@ import name.huliqing.fighter.game.network.ActorNetwork;
 import name.huliqing.fighter.game.service.ActionService;
 import name.huliqing.fighter.game.service.ActorService;
 import name.huliqing.fighter.game.service.PlayService;
-import name.huliqing.fighter.logic.scene.ActorCleanLogic;
-import name.huliqing.fighter.object.actor.Actor;
 
 /**
  *
@@ -23,7 +21,6 @@ public class StoryGbGame extends StoryGame {
     private final ActionService actionService = Factory.get(ActionService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
-    
     
     // 古柏的位置
     private Vector3f gbPosition;

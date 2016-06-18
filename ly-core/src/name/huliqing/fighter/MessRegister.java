@@ -45,7 +45,7 @@ import name.huliqing.fighter.data.ViewData;
 import name.huliqing.fighter.game.mess.MessClient;
 import name.huliqing.fighter.game.mess.MessPlayGetServerState;
 import name.huliqing.fighter.game.mess.MessPlayInitGame;
-import name.huliqing.fighter.game.mess.MessPlayClientData;
+//import name.huliqing.fighter.game.mess.MessPlayClientData;
 import name.huliqing.fighter.game.mess.MessSCClientList;
 import name.huliqing.fighter.game.mess.MessSCGameData;
 import name.huliqing.fighter.game.mess.MessSCServerState;
@@ -104,6 +104,7 @@ import name.huliqing.fighter.game.mess.MessPlayLoadSavedActorResult;
 import name.huliqing.fighter.game.mess.MessPlayClientExit;
 import static com.jme3.network.serializing.Serializer.registerClass;
 import name.huliqing.fighter.game.mess.MessPlayChangeGameState;
+import name.huliqing.fighter.game.state.game.ConnData;
 
 /**
  *
@@ -131,7 +132,7 @@ public class MessRegister {
         Serializer.registerClass(MessPlayLoadSavedActor.class);
         Serializer.registerClass(MessPlayLoadSavedActorResult.class);
         Serializer.registerClass(MessPlayClientExit.class);
-        Serializer.registerClass(MessPlayClientData.class);
+//        Serializer.registerClass(MessPlayClientData.class);
         Serializer.registerClass(MessSCClientList.class);
         Serializer.registerClass(MessSCGameData.class);
         Serializer.registerClass(MessSCInitGameOK.class);
@@ -179,6 +180,7 @@ public class MessRegister {
         Serializer.registerClass(ViewData.class);
         
         // ---- Lan play
+        Serializer.registerClass(ConnData.class);
         Serializer.registerClass(MessPing.class);
         Serializer.registerClass(MessPlayActorSelect.class);
         

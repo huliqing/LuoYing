@@ -4,7 +4,6 @@
  */
 package name.huliqing.fighter.game.state.lan;
 
-import name.huliqing.fighter.game.mess.MessPlayClientData;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
@@ -16,6 +15,7 @@ import java.util.logging.Logger;
 import name.huliqing.fighter.Common;
 import name.huliqing.fighter.Fighter;
 import name.huliqing.fighter.data.GameData;
+import name.huliqing.fighter.game.state.game.ConnData;
 import name.huliqing.fighter.game.state.game.ServerPlayState;
 import name.huliqing.fighter.game.state.lan.GameServer.ServerState;
 import name.huliqing.fighter.manager.ResourceManager;
@@ -123,7 +123,7 @@ public class RoomStateServerImpl extends AbstractAppState implements RoomState {
 
     @Override
     public void kickClient() {
-        MessPlayClientData clientData = clientPanel.getSelected();
+        ConnData clientData = clientPanel.getSelected();
         if (clientData == null) {
             return;
         }
@@ -155,7 +155,7 @@ public class RoomStateServerImpl extends AbstractAppState implements RoomState {
      */
     private void refreshClients() {
         // 2.刷新服务端本地列表
-        List<MessPlayClientData> clients = gameServer.getClients();
+        List<ConnData> clients = gameServer.getClients();
         clientPanel.setClients(clients);
     }
     

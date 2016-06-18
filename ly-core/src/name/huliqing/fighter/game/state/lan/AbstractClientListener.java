@@ -8,7 +8,6 @@ import name.huliqing.fighter.game.mess.MessSCGameData;
 import name.huliqing.fighter.game.mess.MessSCClientList;
 import name.huliqing.fighter.game.mess.MessClient;
 import name.huliqing.fighter.game.mess.MessPlayGetServerState;
-import name.huliqing.fighter.game.mess.MessPlayClientData;
 import name.huliqing.fighter.game.mess.MessSCServerState;
 import com.jme3.app.Application;
 import com.jme3.network.Client;
@@ -25,6 +24,7 @@ import name.huliqing.fighter.game.service.EnvService;
 import name.huliqing.fighter.game.state.lan.GameClient.ClientListener;
 import name.huliqing.fighter.game.state.lan.GameServer.ServerState;
 import name.huliqing.fighter.game.mess.MessPing;
+import name.huliqing.fighter.game.state.game.ConnData;
 
 /**
  * 客户端帧听器,用于监听来自服务端的消息。
@@ -38,7 +38,7 @@ public abstract class AbstractClientListener implements ClientListener {
     
     private final Application app; 
     // 从服务端获得的所有客户端列表
-    protected final List<MessPlayClientData> clients = new ArrayList<MessPlayClientData>();
+    protected final List<ConnData> clients = new ArrayList<ConnData>();
     
     // ----- Ping测试
     // Ping测试的时间间隔,单位秒，这个数值不能太小，因为每次发送Ping测试时Ping的
@@ -65,7 +65,7 @@ public abstract class AbstractClientListener implements ClientListener {
      * 获取所有客户端,注：该列表只能用于只读操作,不要手动修改该列表
      * @return 
      */
-    public List<MessPlayClientData> getClients() {
+    public List<ConnData> getClients() {
         return clients;
     }
     
@@ -197,7 +197,7 @@ public abstract class AbstractClientListener implements ClientListener {
      * @param gameClient
      * @param clients 
      */
-    protected void onClientsUpdated(GameClient gameClient, List<MessPlayClientData> clients) {
+    protected void onClientsUpdated(GameClient gameClient, List<ConnData> clients) {
         this.clients.clear();
         this.clients.addAll(clients);
     }

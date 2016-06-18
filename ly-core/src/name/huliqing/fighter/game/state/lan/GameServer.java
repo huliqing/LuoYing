@@ -4,7 +4,6 @@
  */
 package name.huliqing.fighter.game.state.lan;
 
-import name.huliqing.fighter.game.mess.MessPlayClientData;
 import name.huliqing.fighter.game.mess.MessSCServerState;
 import com.jme3.network.ConnectionListener;
 import com.jme3.network.HostedConnection;
@@ -326,57 +325,99 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
         }
     }
     
-     /**
+    // remove20160618
+//     /**
+//     * 获取当前已经连接的所有客户端,其中包含主机
+//     * @return 
+//     */
+//    public List<ConnData> getClients() {
+//        // 需要判断游戏是否在运行,在游戏运行时可以获取到玩家角色名字
+//        boolean gameInPlay = Common.getPlayState() != null;
+//        
+//        // 向客户端广播，告诉所有客户端有新的客户端连接进来，并把客户端列表
+//        // 发送给所有已经连接的客户端
+//        Collection<HostedConnection> hcs = server.getConnections();
+//        List<ConnData> clients = new ArrayList<ConnData>();
+//        for (HostedConnection hc : hcs) {
+//            
+//            // 客户端名称和控制的角色唯一ID
+//            String clientName = "unknow";
+//            long actorId = -1;
+//            
+//            ConnData cd = hc.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
+//            if (cd != null) {
+//                clientName = cd.getClientName();
+//                actorId = cd.getActorId();
+//            }
+//            
+//            // 客户端所选的角色名称,这里需要判断服务端游戏是否正在运行
+//            String actorName = null;
+//            if (actorId > 0 && gameInPlay) {
+//                Actor actor = playService.findActor(actorId);
+//                if (actor != null) {
+//                    actorName = actor.getData().getName();
+//                }
+//            }
+//            ConnData mcd = new ConnData();
+//            mcd.setConnId(hc.getId());
+//            mcd.setAddress(hc.getAddress());
+//            mcd.setClientName(clientName);
+//            mcd.setActorName(actorName);
+//            clients.add(mcd);
+//        }
+//        // 添加主机信息到客户端列表中,注：在没有网络的情况下getLocalHostIPv4可能会返回null,这时需要判断处理
+//        InetAddress inetAddress = envService.getLocalHostIPv4();
+//        String serverAddress = inetAddress != null ? inetAddress.getHostAddress() : "0.0.0.0";
+//        String serverMachineName = envService.getMachineName();
+//        ConnData serverMcd = new ConnData();
+//        serverMcd.setConnId(-1);
+//        serverMcd.setAddress(serverAddress);
+//        serverMcd.setClientName(serverMachineName);
+//        if (gameInPlay) {
+//            Actor serverPlayer = playService.getPlayer();
+//            if (serverPlayer != null) {
+//                serverMcd.setActorName(serverPlayer.getData().getName());
+//            }
+//        }
+//        clients.add(0, serverMcd);
+//        return clients;
+//    }
+    
+    /**
      * 获取当前已经连接的所有客户端,其中包含主机
      * @return 
      */
-    public List<MessPlayClientData> getClients() {
+    public List<ConnData> getClients() {
         // 需要判断游戏是否在运行,在游戏运行时可以获取到玩家角色名字
         boolean gameInPlay = Common.getPlayState() != null;
         
         // 向客户端广播，告诉所有客户端有新的客户端连接进来，并把客户端列表
         // 发送给所有已经连接的客户端
         Collection<HostedConnection> hcs = server.getConnections();
-        List<MessPlayClientData> clients = new ArrayList<MessPlayClientData>();
+        List<ConnData> clients = new ArrayList<ConnData>();
+        
         for (HostedConnection hc : hcs) {
-            
-            // 客户端名称和控制的角色唯一ID
-            String clientName = "unknow";
-            long actorId = -1;
-            
             ConnData cd = hc.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
-            if (cd != null) {
-                clientName = cd.getClientName();
-                actorId = cd.getActorId();
-            }
-            
-            // 客户端所选的角色名称,这里需要判断服务端游戏是否正在运行
-            String actorName = null;
-            if (actorId > 0 && gameInPlay) {
-                Actor actor = playService.findActor(actorId);
-                if (actor != null) {
-                    actorName = actor.getData().getName();
-                }
-            }
-            MessPlayClientData mcd = new MessPlayClientData();
-            mcd.setConnId(hc.getId());
-            mcd.setAddress(hc.getAddress());
-            mcd.setName(clientName);
-            mcd.setActorName(actorName);
-            clients.add(mcd);
+            clients.add(cd);
         }
+        
         // 添加主机信息到客户端列表中,注：在没有网络的情况下getLocalHostIPv4可能会返回null,这时需要判断处理
         InetAddress inetAddress = envService.getLocalHostIPv4();
         String serverAddress = inetAddress != null ? inetAddress.getHostAddress() : "0.0.0.0";
         String serverMachineName = envService.getMachineName();
-        MessPlayClientData serverMcd = new MessPlayClientData(-1, serverAddress, serverMachineName);
+        ConnData serverConnData = new ConnData();
+        serverConnData.setClientId(configService.getClientId());
+        serverConnData.setClientName(serverMachineName);
+        serverConnData.setConnId(-1);
+        serverConnData.setAddress(serverAddress);
         if (gameInPlay) {
             Actor serverPlayer = playService.getPlayer();
             if (serverPlayer != null) {
-                serverMcd.setActorName(serverPlayer.getData().getName());
+                serverConnData.setActorId(serverPlayer.getData().getUniqueId());
+                serverConnData.setActorName(serverPlayer.getData().getName());
             }
         }
-        clients.add(0, serverMcd);
+        clients.add(0, serverConnData);
         return clients;
     }
     
@@ -431,6 +472,14 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
 
     @Override
     public void connectionAdded(Server server, HostedConnection conn) {
+        // 初始化一个用于存放数据的容器,选择在这里初始化以便后续使用的时候不再需要判断null
+        ConnData cd = conn.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
+        if (cd == null) {
+            cd = new ConnData();
+            cd.setConnId(conn.getId());
+            cd.setAddress(conn.getAddress());
+            conn.setAttribute(ConnData.CONN_ATTRIBUTE_KEY, cd);
+        }
         if (listener != null) {
             listener.clientAdded(this, conn);
         }

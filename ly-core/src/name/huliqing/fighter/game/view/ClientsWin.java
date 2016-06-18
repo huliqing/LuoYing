@@ -6,7 +6,7 @@ package name.huliqing.fighter.game.view;
 
 import java.util.List;
 import name.huliqing.fighter.game.state.game.LanGame;
-import name.huliqing.fighter.game.mess.MessPlayClientData;
+import name.huliqing.fighter.game.state.game.ConnData;
 import name.huliqing.fighter.manager.ResourceManager;
 import name.huliqing.fighter.ui.Button;
 import name.huliqing.fighter.ui.LinearLayout;
@@ -56,7 +56,7 @@ public class ClientsWin extends Window {
             @Override
             public void onClick(UI ui, boolean isPress) {
                 if (isPress) return;
-                MessPlayClientData selected = clientsView.getSelected();
+                ConnData selected = clientsView.getSelected();
                 if (selected == null) {
                     return;
                 }
@@ -107,7 +107,7 @@ public class ClientsWin extends Window {
      * 设置客户端列表,如果给定的列表为null则清空列表
      * @param clients 
      */
-    public void setClients(List<MessPlayClientData> clients) {
+    public void setClients(List<ConnData> clients) {
         clientsView.setClients(clients);
         // 如果不是服务端则要隐藏“踢出玩家”按钮
         btnKick.setVisible(lanGame.isServer());

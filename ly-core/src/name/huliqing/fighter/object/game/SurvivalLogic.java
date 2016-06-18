@@ -26,13 +26,14 @@ import name.huliqing.fighter.object.logic.PositionLogic;
 import name.huliqing.fighter.logic.scene.ActorBuildLogic;
 import name.huliqing.fighter.logic.scene.ActorBuildLogic.Callback;
 import name.huliqing.fighter.manager.ResourceManager;
+import name.huliqing.fighter.object.AbstractPlayObject;
 import name.huliqing.fighter.object.view.TextView;
 
 /**
  * 宝箱任务第二阶段：守护宝箱
  * @author huliqing
  */
-public class SurvivalTask extends GameTaskBase {
+public class SurvivalLogic extends AbstractPlayObject {
     private boolean debug = false;
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
@@ -46,7 +47,7 @@ public class SurvivalTask extends GameTaskBase {
     private final ViewService viewService = Factory.get(ViewService.class);
     
     // 任务位置
-    private SurvivalGame game;
+    private final SurvivalGame game;
     
     // 怪物刷新器及刷新位置
     private ActorBuildLogic builderLogic;
@@ -60,15 +61,43 @@ public class SurvivalTask extends GameTaskBase {
     private int stage;
     
     /**
-     * @param playState
-     * @param targetPos 怪物的集合地点
+     * @param game
      */
-    public SurvivalTask(SurvivalGame game) {
+    public SurvivalLogic(SurvivalGame game) {
         this.game = game;
     }
-    
+
     @Override
-    protected void doInit(GameTask previous) {
+    public void update(float tpf) {
+        if (stage == 0) {
+            Actor player = playService.getPlayer();
+            if (player != null) {
+                doInit();
+                stage = 1;
+            }
+        }
+        
+        // 任务逻辑
+        if (stage == 1) {
+            if (treasure != null && treasure.isDead()) {
+                playNetwork.addMessage(get(ResConstants.TASK_FAILURE), MessageType.notice);
+                TextView textView = (TextView) viewService.loadView(IdConstants.VIEW_TEXT_FAILURE);
+                textView.setUseTime(-1);
+                playNetwork.addView(textView);
+                game.removeLogic(builderLogic);
+                game.removeLogic(levelLogic);
+                game.removeLogic(bossLogic);
+                stage = 999;
+            }
+            return;
+        } 
+        
+        if (stage == 999) {
+            // end
+        }
+    }
+    
+    private void doInit() {
         treasure = actorService.loadActor(IdConstants.ACTOR_TREASURE);
         treasure.setLocation(game.treasurePos);
         actorService.setGroup(treasure, game.SELF_GROUP);
@@ -113,51 +142,13 @@ public class SurvivalTask extends GameTaskBase {
         
         levelLogic = new SurvivalLevelLogic(game.levelUpBySec, game.maxLevel);
         bossLogic = new SurvivalBoss(game, builderLogic, levelLogic);
-        
-        // remove20160613
-//        // 刷新普通角色
-//        playService.addObject(builderLogic, false);
-//        // 等级更新器
-//        playService.addObject(levelLogic, false);
-//        // BOSS逻辑
-//        playService.addObject(bossLogic, false);
 
         // 刷新普通角色,等级更新器,BOSS逻辑
         game.addLogic(builderLogic);
         game.addLogic(levelLogic);
         game.addLogic(bossLogic);
-        
-        stage = 1;
     }
-
-    @Override
-    protected void doLogic(float tpf) {
         
-        // 任务逻辑
-        if (stage == 1) {
-            if (treasure != null && treasure.isDead()) {
-                playNetwork.addMessage(get(ResConstants.TASK_FAILURE), MessageType.notice);
-                TextView textView = (TextView) viewService.loadView(IdConstants.VIEW_TEXT_FAILURE);
-                textView.setUseTime(-1);
-                playNetwork.addView(textView);
-                playService.removeObject(builderLogic);
-                playService.removeObject(levelLogic);
-                playService.removeObject(bossLogic);
-                stage = 999;
-            }
-            return;
-        } 
-        
-        if (stage == 999) {
-            // end
-        }
-    }
-
-    @Override
-    public boolean isFinished() {
-        return false;
-    }
-    
     private String get(String rid, Object... params) {
         if (params == null) {
             return ResourceManager.get(rid);
@@ -165,5 +156,4 @@ public class SurvivalTask extends GameTaskBase {
             return ResourceManager.get(rid, params);
         }
     }
-    
 }

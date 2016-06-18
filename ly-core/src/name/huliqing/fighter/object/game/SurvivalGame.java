@@ -6,17 +6,21 @@ package name.huliqing.fighter.object.game;
 
 import com.jme3.math.Vector3f;
 import name.huliqing.fighter.Factory;
+import name.huliqing.fighter.game.network.ActorNetwork;
 import name.huliqing.fighter.game.service.PlayService;
-import name.huliqing.fighter.object.scene.Scene;
+import name.huliqing.fighter.logic.scene.ActorCleanLogic;
+import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.utils.MathUtils;
 
 /**
  * @author huliqing
  */
-public class SurvivalGame extends StoryGame {
+public class SurvivalGame extends Game {
     private final PlayService playService = Factory.get(PlayService.class);
+    private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     
     public Vector3f treasurePos = new Vector3f(0,0,-2f);
+    // 友军单位的分组
     public int SELF_GROUP = 1;
     // 角色分组
     public int GROUP_ENEMY = 2;
@@ -32,9 +36,9 @@ public class SurvivalGame extends StoryGame {
     public int maxLevel = 15;
 
     @Override
-    protected void doInit() {
+    public void initialize() {
+        super.initialize(); 
         // 生成敌人的刷新地点
-        Scene scene = playService.getScene();
         enemyPositions = new Vector3f[buildTotal];
         for (int i = 0; i < buildTotal; i++) {
             do {
@@ -43,8 +47,20 @@ public class SurvivalGame extends StoryGame {
             } while (!scene.checkIsEmptyZone(enemyPositions[i].x, enemyPositions[i].z, nearestDistance));
         }
         
-        // task
-        addTask(new SurvivalTask(this)); 
+        // 角色清理器
+        addLogic(new ActorCleanLogic());
+        // 主逻辑
+        addLogic(new SurvivalLogic(this));
     }
+
+    @Override
+    public void onActorSelected(Actor actor) {
+        super.onActorSelected(actor);
+        // 设置角色分组
+        actorNetwork.setGroup(actor, SELF_GROUP);
+    }
+
+    
+    
     
 }

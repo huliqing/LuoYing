@@ -4,7 +4,6 @@
  */
 package name.huliqing.fighter.object.game;
 
-import com.jme3.util.SafeArrayList;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.fighter.Factory;
@@ -15,6 +14,7 @@ import name.huliqing.fighter.object.AbstractPlayObject;
 import name.huliqing.fighter.object.DataProcessor;
 import name.huliqing.fighter.object.PlayManager;
 import name.huliqing.fighter.object.PlayObject;
+import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.object.scene.Scene;
 import name.huliqing.fighter.object.task.Task;
 
@@ -25,7 +25,7 @@ import name.huliqing.fighter.object.task.Task;
  * @author huliqing
  * @param <T>
  */
-public  class Game<T extends GameData> extends AbstractPlayObject implements DataProcessor<T>{
+public  class Game<T extends GameData> extends AbstractPlayObject implements DataProcessor<T> {
     private final PlayService playService = Factory.get(PlayService.class);
     private final SceneService sceneService = Factory.get(SceneService.class);
 
@@ -60,6 +60,41 @@ public  class Game<T extends GameData> extends AbstractPlayObject implements Dat
         return data;
     }
 
+    @Override
+    public void initialize() {
+        super.initialize();
+        // 场景需要优先载入。然后再载入扩展逻辑，因为部分扩展逻辑可能需要依赖于场景中的物体。比如一些扩展逻辑可能需要
+        // 确定场景地面已经载入之后才可以载入角色，否则角色可能直接就掉到下面去了.
+        if (scene == null && data.getSceneData() != null) {
+            scene = sceneService.loadScene(data.getSceneData());
+            addLogic(scene);
+            scene.initialize();
+            if (listeners != null) {
+                for (GameListener gl : listeners) {
+                    gl.onSceneLoaded();
+                }
+            }
+        }
+    }
+
+    @Override
+    public final void update(float tpf) {
+        if (enabled) {
+            playManager.update(tpf);
+            updateLogics(tpf);
+        }
+    }
+        
+    /**
+     * 清理并结束当前游戏
+     */
+    @Override
+    public void cleanup() {
+        playManager.cleanup();
+        super.cleanup();
+    }
+    
+    
     public Scene getScene() {
         return scene;
     }
@@ -134,31 +169,6 @@ public  class Game<T extends GameData> extends AbstractPlayObject implements Dat
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
-
-    @Override
-    public void initialize() {
-        super.initialize();
-        // 场景需要优先载入。然后再载入扩展逻辑，因为部分扩展逻辑可能需要依赖于场景中的物体。比如一些扩展逻辑可能需要
-        // 确定场景地面已经载入之后才可以载入角色，否则角色可能直接就掉到下面去了.
-        if (scene == null && data.getSceneData() != null) {
-            scene = sceneService.loadScene(data.getSceneData());
-            addLogic(scene);
-            scene.initialize();
-            if (listeners != null) {
-                for (GameListener gl : listeners) {
-                    gl.onSceneLoaded();
-                }
-            }
-        }
-    }
-
-    @Override
-    public final void update(float tpf) {
-        if (enabled) {
-            playManager.update(tpf);
-            updateLogics(tpf);
-        }
-    }
     
     /**
      * 更新游戏逻辑
@@ -167,14 +177,14 @@ public  class Game<T extends GameData> extends AbstractPlayObject implements Dat
     protected  void updateLogics(float tpf) {
         // 由子类实现
     }
-    
+
     /**
-     * 清理并结束当前游戏
+     * 当玩家选择一个角色时触发该方法。
+     * @param actor 
      */
-    @Override
-    public void cleanup() {
-        playManager.cleanup();
-        super.cleanup();
+    public void onActorSelected(Actor actor) {
+        // 由子类按需要覆盖
     }
+    
     
 }

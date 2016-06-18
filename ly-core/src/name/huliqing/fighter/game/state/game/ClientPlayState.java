@@ -18,7 +18,6 @@ import name.huliqing.fighter.game.state.lan.GameClient.ClientState;
 import name.huliqing.fighter.game.state.lan.GameServer;
 import name.huliqing.fighter.game.mess.MessBase;
 import name.huliqing.fighter.game.mess.MessPlayActorSelectResult;
-import name.huliqing.fighter.game.mess.MessPlayClientData;
 import name.huliqing.fighter.game.mess.MessPlayGetClients;
 import name.huliqing.fighter.game.mess.MessPlayGetServerState;
 import name.huliqing.fighter.game.mess.MessPlayInitGame;
@@ -167,7 +166,7 @@ public class ClientPlayState extends NetworkPlayState implements AbstractClientL
     }
 
     @Override
-    public List<MessPlayClientData> getClients() {
+    public List<ConnData> getClients() {
         if (clientListener != null) {
             return clientListener.getClients();
         }
@@ -204,7 +203,7 @@ public class ClientPlayState extends NetworkPlayState implements AbstractClientL
         }
 
         @Override
-        protected void onClientsUpdated(GameClient gameClient, List<MessPlayClientData> clients) {
+        protected void onClientsUpdated(GameClient gameClient, List<ConnData> clients) {
             super.onClientsUpdated(gameClient, clients);
             // 通知客户端列表更新，注：这里只响应新连接或断开连接。不包含客户端资料的更新。
             onClientListUpdated();

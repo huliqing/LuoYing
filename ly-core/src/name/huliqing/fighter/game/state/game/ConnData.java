@@ -26,9 +26,18 @@ public class ConnData extends AbstractMessage {
     // 客户端名称标识,如PC名称，手机名称
     private String clientName;
     
+    // 客户端的连接ID，该ID对于每个客户端连接都是唯一的
+    private int connId; 
+    
+    // 连接地址，即客户端的IP信息
+    private String address;
+    
     // 客户端所控制的角色的唯一ID
     private long actorId;
 
+     // 角色名称
+    private String actorName;
+    
     /**
      * 获取客户端唯一标识，这个标识对于所有客户端或主机来说是唯一的。
      * @return 
@@ -75,6 +84,30 @@ public class ConnData extends AbstractMessage {
      */
     public void setActorId(long actorId) {
         this.actorId = actorId;
+    }
+
+    public int getConnId() {
+        return connId;
+    }
+
+    public void setConnId(int connId) {
+        this.connId = connId;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getActorName() {
+        return actorName;
+    }
+
+    public void setActorName(String actorName) {
+        this.actorName = actorName;
     }
     
     

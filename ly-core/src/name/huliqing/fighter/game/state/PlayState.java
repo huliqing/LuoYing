@@ -43,14 +43,6 @@ public abstract class PlayState extends AbstractAppState {
     }
 
     @Override
-    public void stateDetached(AppStateManager stateManager) {
-        super.stateDetached(stateManager);
-        if (gameState != null) {
-            stateManager.detach(gameState);
-        }
-    }
-
-    @Override
     public void update(float tpf) {}
     
     @Override
@@ -63,7 +55,18 @@ public abstract class PlayState extends AbstractAppState {
      */
     public void exit() {
         // 退出到"开始面板"
-        ((Fighter) getApp()).changeStartState();
+         if (gameState != null) {
+             gameState.exit();
+        }
+        app.changeStartState();
+    }
+    
+    @Override
+    public void stateDetached(AppStateManager stateManager) {
+        super.stateDetached(stateManager);
+        if (gameState != null) {
+            stateManager.detach(gameState);
+        }
     }
     
     public Application getApp() {

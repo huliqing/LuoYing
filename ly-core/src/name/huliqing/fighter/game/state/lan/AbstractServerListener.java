@@ -89,12 +89,6 @@ public abstract class AbstractServerListener<T> implements ServerListener<T> {
      * @param conn 
      */
     protected void onClientAdded(GameServer gameServer, HostedConnection conn) {
-        // 初始化一个用于存放数据的容器,选择在这里初始化以便后续使用的时候不再需要判断null
-        ConnData cd = conn.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
-        if (cd == null) {
-            cd = new ConnData();
-            conn.setAttribute(ConnData.CONN_ATTRIBUTE_KEY, cd);
-        }
         // 告诉客户端当前玩的游戏信息,gameData必须立即发送
         gameServer.send(conn, new MessSCGameData(gameServer.getGameData()));
     }

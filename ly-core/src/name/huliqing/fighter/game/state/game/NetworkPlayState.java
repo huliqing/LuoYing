@@ -15,6 +15,7 @@ import name.huliqing.fighter.game.service.PlayService;
 import name.huliqing.fighter.game.state.PlayState;
 import name.huliqing.fighter.game.state.lan.Network;
 import name.huliqing.fighter.game.view.ClientsWin;
+import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.object.anim.Anim;
 import name.huliqing.fighter.object.anim.Listener;
 import name.huliqing.fighter.object.anim.ScaleAnim;
@@ -82,6 +83,15 @@ public abstract class NetworkPlayState extends PlayState implements LanGame {
         if (clientsWin.isVisible()) {
             clientsWin.setClients(getClients());
         }
+    }
+
+    @Override
+    public void onActorSelected(ConnData connData, Actor actor) {
+        if (gameState != null) {
+            gameState.getGame().onActorSelected(actor);
+        }
+        connData.setActorId(actor.getData().getUniqueId());
+        connData.setActorName(actor.getData().getName());
     }
 
     private void createLanUI() {
