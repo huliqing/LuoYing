@@ -72,10 +72,10 @@ import name.huliqing.fighter.game.mess.MessChatSend;
 import name.huliqing.fighter.game.mess.MessPlayGetClients;
 import name.huliqing.fighter.game.mess.MessPlayGetGameData;
 import name.huliqing.fighter.game.mess.MessChatShop;
-import name.huliqing.fighter.game.mess.MessItemAdd;
-import name.huliqing.fighter.game.mess.MessItemRemove;
-import name.huliqing.fighter.game.mess.MessItemSync;
-import name.huliqing.fighter.game.mess.MessItemUse;
+import name.huliqing.fighter.game.mess.MessProtoAdd;
+import name.huliqing.fighter.game.mess.MessProtoRemove;
+import name.huliqing.fighter.game.mess.MessProtoSync;
+import name.huliqing.fighter.game.mess.MessProtoUse;
 import name.huliqing.fighter.game.mess.MessMessage;
 import name.huliqing.fighter.game.mess.MessSCActorRemove;
 import name.huliqing.fighter.game.mess.MessSkill;
@@ -105,6 +105,21 @@ import name.huliqing.fighter.game.mess.MessPlayClientExit;
 import static com.jme3.network.serializing.Serializer.registerClass;
 import name.huliqing.fighter.game.mess.MessPlayChangeGameState;
 import name.huliqing.fighter.game.state.game.ConnData;
+import static com.jme3.network.serializing.Serializer.registerClass;
+import static com.jme3.network.serializing.Serializer.registerClass;
+import static com.jme3.network.serializing.Serializer.registerClass;
+import static com.jme3.network.serializing.Serializer.registerClass;
+import static com.jme3.network.serializing.Serializer.registerClass;
+import static com.jme3.network.serializing.Serializer.registerClass;
+import static com.jme3.network.serializing.Serializer.registerClass;
+import static com.jme3.network.serializing.Serializer.registerClass;
+import static com.jme3.network.serializing.Serializer.registerClass;
+import static com.jme3.network.serializing.Serializer.registerClass;
+import static com.jme3.network.serializing.Serializer.registerClass;
+import static com.jme3.network.serializing.Serializer.registerClass;
+import static com.jme3.network.serializing.Serializer.registerClass;
+import static com.jme3.network.serializing.Serializer.registerClass;
+import static com.jme3.network.serializing.Serializer.registerClass;
 
 /**
  *
@@ -184,10 +199,10 @@ public class MessRegister {
         Serializer.registerClass(MessPing.class);
         Serializer.registerClass(MessPlayActorSelect.class);
         
-        Serializer.registerClass(MessItemAdd.class);
-        Serializer.registerClass(MessItemRemove.class);
-        Serializer.registerClass(MessItemSync.class);
-        Serializer.registerClass(MessItemUse.class);
+        Serializer.registerClass(MessProtoAdd.class);
+        Serializer.registerClass(MessProtoRemove.class);
+        Serializer.registerClass(MessProtoSync.class);
+        Serializer.registerClass(MessProtoUse.class);
         Serializer.registerClass(MessMessage.class);
         Serializer.registerClass(MessPlayActorLoaded.class);
         Serializer.registerClass(MessSCActorRemove.class);

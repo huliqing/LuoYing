@@ -26,11 +26,13 @@ public class ItemServiceImpl implements ItemService {
 
     private PlayService playService;
     private ItemDao itemDao;
+    private HandlerService handlerService;
     
     @Override
     public void inject() {
         playService = Factory.get(PlayService.class);
         itemDao = Factory.get(ItemDao.class);
+        handlerService = Factory.get(HandlerService.class);
     }
     
     @Override
@@ -110,5 +112,19 @@ public class ItemServiceImpl implements ItemService {
         }
     }
 
+    @Override
+    public void useItem(Actor actor, String itemId) {
+        ProtoData data = getItem(actor, itemId);
+        if (data == null)
+            return;
+        
+        boolean canUse = handlerService.canUse(actor, data);
+        if (!canUse)
+            return;
+        
+        handlerService.useForce(actor, data);
+        
+    }
+    
     
 }

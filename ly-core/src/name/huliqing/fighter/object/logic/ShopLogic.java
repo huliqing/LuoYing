@@ -7,8 +7,8 @@ package name.huliqing.fighter.object.logic;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.LogicData;
 import name.huliqing.fighter.data.ProtoData;
-import name.huliqing.fighter.game.network.ItemNetwork;
-import name.huliqing.fighter.game.service.ItemService;
+import name.huliqing.fighter.game.network.ProtoNetwork;
+import name.huliqing.fighter.game.service.ProtoService;
 import name.huliqing.fighter.utils.ConvertUtils;
 
 /**
@@ -16,8 +16,10 @@ import name.huliqing.fighter.utils.ConvertUtils;
  * @author huliqing
  */
 public class ShopLogic extends ActorLogic {
-    private final ItemService itemService = Factory.get(ItemService.class);
-    private final ItemNetwork itemNetwork = Factory.get(ItemNetwork.class);
+//    private final ItemService itemService = Factory.get(ItemService.class);
+//    private final ItemNetwork itemNetwork = Factory.get(ItemNetwork.class);
+    private final ProtoNetwork protoNetwork = Factory.get(ProtoNetwork.class);
+    private final ProtoService protoService = Factory.get(ProtoService.class);
     
     private Product[] products;
     // 进货速度，如：1.0 表示每秒进货一件（每件未达到maxCount的商品各进货一件）
@@ -73,11 +75,13 @@ public class ShopLogic extends ActorLogic {
             if (p.maxCount <= 0) 
                 continue;
             
-            temp = itemService.getItem(self, p.itemId);
+//            temp = itemService.getItem(self, p.itemId);
+            temp = protoService.getData(self, p.itemId);
             currentCount = temp != null ? temp.getTotal() : 0;
             actualStock = p.maxCount - currentCount;
             if (actualStock > 0) {
-                itemNetwork.addItem(self, p.itemId, actualStock);
+//                itemNetwork.addItem(self, p.itemId, actualStock);
+                protoNetwork.addData(self, protoService.createData(p.itemId), actualStock);
             }
         }
     }
@@ -101,14 +105,16 @@ public class ShopLogic extends ActorLogic {
                 continue;
             
             actualStock = stockCount;
-            temp = itemService.getItem(self, p.itemId);
+//            temp = itemService.getItem(self, p.itemId);
+            temp = protoService.getData(self, p.itemId);
             currentCount = temp != null ? temp.getTotal() : 0;
             
             if (currentCount + actualStock > p.maxCount) {
                 actualStock = p.maxCount - currentCount;
             }
             if (actualStock > 0) {
-                itemNetwork.addItem(self, p.itemId, actualStock);
+//                itemNetwork.addItem(self, p.itemId, actualStock);
+                protoNetwork.addData(self, protoService.createData(p.itemId), actualStock);
             }
         }
     }

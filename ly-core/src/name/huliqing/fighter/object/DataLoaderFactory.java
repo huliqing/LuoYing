@@ -97,7 +97,6 @@ public class DataLoaderFactory {
         loaders.put(DataType.el, new ElDataLoader());
         loaders.put(DataType.emitter, new EmitterDataLoader());
         loaders.put(DataType.position, new PositionDataLoader());
-        loaders.put(DataType.game, new GameDataLoader());
         loaders.put(DataType.hitChecker, new HitCheckerDataLoader());
         loaders.put(DataType.logic, new LogicDataLoader());
         loaders.put(DataType.item, new ItemDataLoader());
@@ -112,6 +111,7 @@ public class DataLoaderFactory {
         loaders.put(DataType.view, new ViewDataLoader());
         
         // remove
+//        loaders.put(DataType.game, new GameDataLoader());
 //        loaders.put(DataType.effect, new EffectDataLoader());
 //        loaders.put(DataType.env, new EnvDataLoader());
 //        loaders.put(DataType.magic, new MagicDataLoader());

@@ -16,13 +16,15 @@ import name.huliqing.fighter.manager.talk.Talk;
 import name.huliqing.fighter.manager.talk.TalkImpl;
 import name.huliqing.fighter.manager.talk.TalkListener;
 import name.huliqing.fighter.game.network.ActorNetwork;
-import name.huliqing.fighter.game.network.ItemNetwork;
+//import name.huliqing.fighter.game.network.ItemNetwork;
 import name.huliqing.fighter.game.network.PlayNetwork;
+import name.huliqing.fighter.game.network.ProtoNetwork;
 import name.huliqing.fighter.game.network.SkillNetwork;
 import name.huliqing.fighter.game.network.StateNetwork;
 import name.huliqing.fighter.game.service.ActionService;
 import name.huliqing.fighter.game.service.ActorService;
 import name.huliqing.fighter.game.service.PlayService;
+import name.huliqing.fighter.game.service.ProtoService;
 import name.huliqing.fighter.game.service.SkillService;
 import name.huliqing.fighter.game.service.StateService;
 import name.huliqing.fighter.logic.scene.ActorMultLoadHelper;
@@ -47,7 +49,9 @@ public class StoryGbTask1 extends GameTaskBase {
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
     private final StateNetwork stateNetwork = Factory.get(StateNetwork.class);
-    private final ItemNetwork itemNetwork = Factory.get(ItemNetwork.class);
+//    private final ItemNetwork itemNetwork = Factory.get(ItemNetwork.class);
+    private final ProtoNetwork protoNetwork = Factory.get(ProtoNetwork.class);
+    private final ProtoService protoService = Factory.get(ProtoService.class);
     
     // 开始任务面板:说明任务信息
     private TextPanel taskFind;
@@ -273,10 +277,9 @@ public class StoryGbTask1 extends GameTaskBase {
             @Override
             public void onTalkEnd() {
                 
-                // remove 0221
-//                actorNetwork.rewardItem(player, IdConstants.ITEM_BOOK_006, 1);
+//                itemNetwork.addItem(player, IdConstants.ITEM_BOOK_006, 1);
                 
-                itemNetwork.addItem(player, IdConstants.ITEM_BOOK_006, 1);
+                protoNetwork.addData(player, protoService.createData(IdConstants.ITEM_BOOK_006), 1);
                 
                 gotBook = true;
             }

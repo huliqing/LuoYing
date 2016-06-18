@@ -18,7 +18,7 @@ public interface ItemService extends Inject {
     /**
      * 给角色添加物品
      * @param actor
-     * @param objectId
+     * @param itemId
      * @param count 
      */
     void addItem(Actor actor, String itemId, int count);
@@ -63,4 +63,11 @@ public interface ItemService extends Inject {
      * @param total 
      */
     void syncItemTotal(Actor actor, String itemId, int total);
+    
+    /**
+     * 让角色使用物品
+     * @param actor
+     * @param itemId  
+     */
+    void useItem(Actor actor, String itemId);
 }

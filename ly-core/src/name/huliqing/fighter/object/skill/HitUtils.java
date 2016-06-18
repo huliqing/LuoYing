@@ -12,20 +12,14 @@ import name.huliqing.fighter.data.SkillData;
 import name.huliqing.fighter.enums.MessageType;
 import name.huliqing.fighter.enums.SkillType;
 import name.huliqing.fighter.game.network.ActorNetwork;
-import name.huliqing.fighter.game.network.ItemNetwork;
 import name.huliqing.fighter.game.network.PlayNetwork;
+import name.huliqing.fighter.game.network.ProtoNetwork;
 import name.huliqing.fighter.game.network.SkillNetwork;
-import name.huliqing.fighter.game.network.StateNetwork;
 import name.huliqing.fighter.game.service.ActorService;
 import name.huliqing.fighter.game.service.AttributeService;
-import name.huliqing.fighter.game.service.BulletService;
 import name.huliqing.fighter.game.service.DropService;
-import name.huliqing.fighter.game.service.ElService;
-import name.huliqing.fighter.game.service.HitCheckerService;
-import name.huliqing.fighter.game.service.MagicService;
-import name.huliqing.fighter.game.service.PlayService;
+import name.huliqing.fighter.game.service.ProtoService;
 import name.huliqing.fighter.game.service.SkillService;
-import name.huliqing.fighter.game.service.StateService;
 import name.huliqing.fighter.manager.DamageManager;
 import name.huliqing.fighter.manager.ResourceManager;
 import name.huliqing.fighter.object.actor.Actor;
@@ -42,7 +36,9 @@ public class HitUtils {
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
-    private final ItemNetwork itemNetwork = Factory.get(ItemNetwork.class);
+//    private final ItemNetwork itemNetwork = Factory.get(ItemNetwork.class);
+    private final ProtoNetwork protoNetwork = Factory.get(ProtoNetwork.class);
+    private final ProtoService protoService = Factory.get(ProtoService.class);
     
     private final static HitUtils ins = new HitUtils();
     
@@ -106,7 +102,8 @@ public class HitUtils {
                 // 奖励物品
                 List<ProtoData> dropItems = dropService.getRandomDropFull(target, null);
                 for (ProtoData item : dropItems) {
-                    itemNetwork.addItem(attacker, item.getId(), item.getTotal());
+//                    itemNetwork.addItem(attacker, item.getId(), item.getTotal());
+                    protoNetwork.addData(attacker, protoService.createData(item.getId()), item.getTotal());
                 }
             }
             

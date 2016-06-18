@@ -11,19 +11,21 @@ import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.constants.IdConstants;
 import name.huliqing.fighter.constants.ResConstants;
 import name.huliqing.fighter.constants.StoryConstants;
+import name.huliqing.fighter.data.ProtoData;
 import name.huliqing.fighter.enums.MessageType;
 import name.huliqing.fighter.enums.SkillType;
 import name.huliqing.fighter.manager.talk.Talk;
 import name.huliqing.fighter.manager.talk.TalkImpl;
 import name.huliqing.fighter.manager.talk.TalkListener;
 import name.huliqing.fighter.game.network.ActorNetwork;
-import name.huliqing.fighter.game.network.HandlerNetwork;
 import name.huliqing.fighter.game.network.PlayNetwork;
+import name.huliqing.fighter.game.network.ProtoNetwork;
 import name.huliqing.fighter.game.network.SkillNetwork;
 import name.huliqing.fighter.game.network.StateNetwork;
 import name.huliqing.fighter.game.service.ActionService;
 import name.huliqing.fighter.game.service.ActorService;
 import name.huliqing.fighter.game.service.PlayService;
+import name.huliqing.fighter.game.service.ProtoService;
 import name.huliqing.fighter.game.service.SkillService;
 import name.huliqing.fighter.game.service.StateService;
 import name.huliqing.fighter.game.service.ViewService;
@@ -42,11 +44,13 @@ public class StoryGbTask2End extends IntervalLogic {
     private final ActionService actionService = Factory.get(ActionService.class);
     private final ViewService viewService = Factory.get(ViewService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
+    private final ProtoService protoService = Factory.get(ProtoService.class);
+    
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final StateNetwork stateNetwork = Factory.get(StateNetwork.class);
-    private final HandlerNetwork handlerNetwork = Factory.get(HandlerNetwork.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
+    private final ProtoNetwork protoNetwork = Factory.get(ProtoNetwork.class);
     private StoryGbGame game;
     private Actor player;
     // 任务面板
@@ -134,7 +138,9 @@ public class StoryGbTask2End extends IntervalLogic {
             @Override
             public void onTalkEnd() {
                 // 移除主角身上的树根
-                handlerNetwork.removeObject(player, IdConstants.ITEM_GB_STUMP, taskPanel.getTotal());
+                ProtoData stumpData = protoService.getData(player, IdConstants.ITEM_GB_STUMP);
+                protoNetwork.removeData(player, stumpData, taskPanel.getTotal());
+                
                 // 移除古柏
                 playNetwork.removeObject(gb.getModel());
                 // 停止任务面板的更新及移除提示面板

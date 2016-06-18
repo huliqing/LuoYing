@@ -6,8 +6,8 @@ package name.huliqing.fighter.game.mess;
 
 import com.jme3.network.serializing.Serializable;
 import name.huliqing.fighter.Factory;
-import name.huliqing.fighter.game.service.ItemService;
 import name.huliqing.fighter.game.service.PlayService;
+import name.huliqing.fighter.game.service.ProtoService;
 import name.huliqing.fighter.object.actor.Actor;
 
 /**
@@ -15,10 +15,10 @@ import name.huliqing.fighter.object.actor.Actor;
  * @author huliqing
  */
 @Serializable
-public class MessItemSync extends MessBase {
+public class MessProtoSync extends MessBase {
     private long actorId;
     // 获得的物品ID
-    private String itemId;
+    private String objectId;
     // 同步物品总数
     private int total;
 
@@ -30,12 +30,12 @@ public class MessItemSync extends MessBase {
         this.actorId = actorId;
     }
     
-    public String getItemId() {
-        return itemId;
+    public String getObjectId() {
+        return objectId;
     }
 
-    public void setItemId(String itemId) {
-        this.itemId = itemId;
+    public void setObjectId(String objectId) {
+        this.objectId = objectId;
     }
 
     public int getTotal() {
@@ -49,11 +49,11 @@ public class MessItemSync extends MessBase {
     @Override
     public void applyOnClient() {
         PlayService playService = Factory.get(PlayService.class);
-        ItemService itemService = Factory.get(ItemService.class);
+        ProtoService protoService = Factory.get(ProtoService.class);
         Actor actor = playService.findActor(actorId);
         if (actor == null) {
             return;
         }
-        itemService.syncItemTotal(actor, itemId, total);
+        protoService.syncDataTotal(actor, objectId, total);
     }
 }

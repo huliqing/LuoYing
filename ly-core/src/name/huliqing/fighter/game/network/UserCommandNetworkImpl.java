@@ -28,14 +28,15 @@ import name.huliqing.fighter.game.mess.MessChatSell;
 import name.huliqing.fighter.game.mess.MessChatSend;
 import name.huliqing.fighter.game.mess.MessPlayActorSelect;
 import name.huliqing.fighter.game.mess.MessChatShop;
-import name.huliqing.fighter.game.mess.MessItemRemove;
-import name.huliqing.fighter.game.mess.MessItemUse;
+import name.huliqing.fighter.game.mess.MessProtoRemove;
+import name.huliqing.fighter.game.mess.MessProtoUse;
 import name.huliqing.fighter.game.mess.MessMessage;
 import name.huliqing.fighter.game.mess.MessPlayChangeGameState;
 import name.huliqing.fighter.game.mess.MessTalentAddPoint;
 import name.huliqing.fighter.game.mess.MessTaskAdd;
 import name.huliqing.fighter.game.mess.MessTaskComplete;
 import name.huliqing.fighter.game.service.GameService;
+import name.huliqing.fighter.game.service.ProtoService;
 import name.huliqing.fighter.manager.ResourceManager;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.object.task.Task;
@@ -69,16 +70,17 @@ public class UserCommandNetworkImpl implements UserCommandNetwork {
     private SkinService skinService;
     private TaskService taskService;
     private GameService gameService;
+    private ProtoService protoService;
     
     private PlayNetwork playNetwork;
     private ActionNetwork actionNetwork;
-    private HandlerNetwork handlerNetwork;
     private ActorNetwork actorNetwork;
     private SkinNetwork skinNetwork;
     private SkillNetwork skillNetwork;
     private TalentNetwork talentNetwork;
     private ChatNetwork chatNetwork;
     private TaskNetwork taskNetwork;
+    private ProtoNetwork protoNetwork;
     
     @Override
     public void inject() {
@@ -92,16 +94,17 @@ public class UserCommandNetworkImpl implements UserCommandNetwork {
         skinService = Factory.get(SkinService.class);
         taskService = Factory.get(TaskService.class);
         gameService = Factory.get(GameService.class);
+        protoService = Factory.get(ProtoService.class);
         
         skillNetwork = Factory.get(SkillNetwork.class);
         playNetwork = Factory.get(PlayNetwork.class);
-        handlerNetwork = Factory.get(HandlerNetwork.class);
         actionNetwork = Factory.get(ActionNetwork.class);
         actorNetwork = Factory.get(ActorNetwork.class);
         skinNetwork = Factory.get(SkinNetwork.class);
         talentNetwork = Factory.get(TalentNetwork.class);
         chatNetwork = Factory.get(ChatNetwork.class);
         taskNetwork = Factory.get(TaskNetwork.class);
+        protoNetwork = Factory.get(ProtoNetwork.class);
     }
 
     @Override
@@ -170,23 +173,7 @@ public class UserCommandNetworkImpl implements UserCommandNetwork {
     }
     
     @Override
-    public boolean useObject(Actor actor, ProtoData data) {
-        // remove20160406
-//        // 如果客户玩家点击的是技能类型的快捷方式，则需要把当前
-//        // 界面上的主目标设置为角色的当前目标。因为部分技能需要目标才能执行
-//        if (data.getDataType() == DataType.skill) {
-//            Actor target = playService.getTarget();
-//            if (target != null) {
-//                if (network.isClient()) {
-//                    MessActorSetTarget mess = new MessActorSetTarget();
-//                    mess.setActorId(actor.getData().getUniqueId());
-//                    mess.setTargetId(target.getData().getUniqueId());
-//                    network.sendToServer(mess);
-//                } else {
-//                    actorNetwork.setTarget(actor, target);
-//                }
-//            }
-//        }
+    public void useObject(Actor actor, ProtoData data) {
         
         // add20160406，只要是使用物品（玩家点家物品），则角色目标将重定向到当前
         // 界面的主目标,因为有很多物品在使用的时候都需要当前界面的主目标。
@@ -204,34 +191,34 @@ public class UserCommandNetworkImpl implements UserCommandNetwork {
         
         // 使用物品
         if (network.isClient()) {
-            MessItemUse mess = new MessItemUse();
+            MessProtoUse mess = new MessProtoUse();
             mess.setActorId(actor.getData().getUniqueId());
-            mess.setItemId(data.getId());
+            mess.setObjectId(data.getId());
             network.sendToServer(mess);
-            return true;
         } else {
-            // 直接调用handlerNetwork进行逻辑处理及广播就可以。
-            return handlerNetwork.useObject(actor, data.getId());
+            protoNetwork.useData(actor, data);
         }
     }
 
     @Override
-    public boolean removeObject(Actor actor, String objectId, int amount) {
-        boolean result;
+    public void removeObject(Actor actor, String objectId, int amount) {
+        ProtoData data = protoService.getData(actor, objectId);
+        if (data == null)
+            return;
+        
         if (network.isClient()) {
             // 客户端本地先删除 
-            result = handlerService.removeObject(actor, objectId, amount);
+            protoService.removeData(actor, data, amount);
             
             // 通知服务端
-            MessItemRemove mess = new MessItemRemove();
+            MessProtoRemove mess = new MessProtoRemove();
             mess.setActorId(actor.getData().getUniqueId());
-            mess.setItemId(objectId);
+            mess.setObjectId(objectId);
             mess.setAmount(amount);
             network.sendToServer(mess);
         } else {
-            result = handlerNetwork.removeObject(actor, objectId, amount);
+            protoNetwork.removeData(actor, data, amount);
         }
-        return result;
     }
 
     @Override
@@ -275,25 +262,6 @@ public class UserCommandNetworkImpl implements UserCommandNetwork {
         
         chatNetwork.chatShop(seller, buyer, itemId, count, discount);
         
-        // remove20160329
-        // On server
-//        int result = chatNetwork.chatShop(seller, buyer, itemId, count, discount);
-//        switch (result) {
-//            case ChatConstants.SHOP_RESULT_GOLD_NOT_ENOUGH:
-//                playNetwork.addMessage(buyer
-//                        , ResourceManager.get(ResConstants.CHAT_SHOP_WARN_GOLD_NOT_ENOUGH)
-//                        , MessageType.notice);
-//                break;
-//            case ChatConstants.SHOP_RESULT_PRODUCT_NOT_ENOUGH:
-//                playNetwork.addMessage(buyer
-//                        , ResourceManager.get(ResConstants.CHAT_SHOP_WARN_PRODUCT_NOT_ENOUGH)
-//                        , MessageType.notice);
-//                break;
-//            case ChatConstants.SHOP_RESULT_SUCCESS:
-//            case ChatConstants.SHOP_RESULT_UNDEFINED:
-//            default:
-//                break;
-//        }
     }
 
     @Override

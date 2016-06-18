@@ -18,15 +18,10 @@ import name.huliqing.fighter.data.ProtoData;
 import name.huliqing.fighter.data.SkillData;
 import name.huliqing.fighter.enums.DataType;
 import name.huliqing.fighter.enums.MessageType;
-import name.huliqing.fighter.game.network.ActorNetwork;
-import name.huliqing.fighter.game.network.StateNetwork;
 import name.huliqing.fighter.game.network.UserCommandNetwork;
 import name.huliqing.fighter.game.service.ActorService;
 import name.huliqing.fighter.game.service.ConfigService;
-import name.huliqing.fighter.game.service.LogicService;
-import name.huliqing.fighter.game.service.PlayService;
-import name.huliqing.fighter.game.service.SkillService;
-import name.huliqing.fighter.game.service.StateService;
+import name.huliqing.fighter.game.service.ProtoService;
 import name.huliqing.fighter.object.animation.Animation;
 import name.huliqing.fighter.object.animation.BounceMotion;
 import name.huliqing.fighter.object.animation.CurveMove;
@@ -115,10 +110,23 @@ public class ShortcutManager {
             Actor actor = shortcut.getActor();
             ProtoData data = shortcut.getData();
             
-            boolean delSuccess = Factory.get(UserCommandNetwork.class).removeObject(actor, data.getId(), data.getTotal());
-            String objectName = ResourceManager.getObjectName(shortcut.getData());
-            
-            if (delSuccess) {
+            // remove20160619
+//            boolean delSuccess = Factory.get(UserCommandNetwork.class).removeObject(actor, data.getId(), data.getTotal());
+//            String objectName = ResourceManager.getObjectName(shortcut.getData());
+//            if (delSuccess) {
+//                // delete shortcut
+//                SHORTCUT_ROOT.removeShortcut(shortcut);
+//                Common.getPlayState().addMessage(ResourceManager.get("common.deleteSuccess", new String[] {objectName})
+//                    , MessageType.info);
+//            } else {
+//                Common.getPlayState().addMessage(ResourceManager.get("common.deleteFail", new String[] {objectName})
+//                    , MessageType.notice);
+//            }
+
+            String objectName = ResourceManager.getObjectName(data);
+            Factory.get(UserCommandNetwork.class).removeObject(actor, data.getId(), data.getTotal());
+            ProtoData resultData = Factory.get(ProtoService.class).getData(actor, data.getId());
+            if (resultData == null || resultData.getTotal() <= 0) {
                 // delete shortcut
                 SHORTCUT_ROOT.removeShortcut(shortcut);
                 Common.getPlayState().addMessage(ResourceManager.get("common.deleteSuccess", new String[] {objectName})

@@ -51,19 +51,17 @@ public interface UserCommandNetwork extends Inject {
     /**
      * 使用物品
      * @param actor
-     * @param data
-     * @return 
+     * @param data 
      */
-    boolean useObject(Actor actor, ProtoData data);
+    void useObject(Actor actor, ProtoData data);
     
     /**
      * 移除物品
      * @param actor
      * @param objectId
-     * @param amount
-     * @return 
+     * @param amount 
      */
-    boolean removeObject(Actor actor, String objectId, int amount);
+    void removeObject(Actor actor, String objectId, int amount);
     
     /**
      * 让actor跟随目标target角色

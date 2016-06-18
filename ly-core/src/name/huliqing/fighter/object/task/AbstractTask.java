@@ -12,8 +12,9 @@ import name.huliqing.fighter.constants.ResConstants;
 import name.huliqing.fighter.object.DataLoaderFactory;
 import name.huliqing.fighter.data.TaskData;
 import name.huliqing.fighter.game.network.ActorNetwork;
-import name.huliqing.fighter.game.network.ItemNetwork;
+import name.huliqing.fighter.game.network.ProtoNetwork;
 import name.huliqing.fighter.game.service.PlayService;
+import name.huliqing.fighter.game.service.ProtoService;
 import name.huliqing.fighter.game.view.tiles.IconLabel;
 import name.huliqing.fighter.manager.ResourceManager;
 import name.huliqing.fighter.object.actor.Actor;
@@ -30,9 +31,10 @@ import name.huliqing.fighter.utils.ConvertUtils;
  */
 public abstract class AbstractTask implements Task {
     private final static PlayService playService = Factory.get(PlayService.class);
-//    private final static ActorService actorService = Factory.get(ActorService.class);
     private final static ActorNetwork atorNetwork = Factory.get(ActorNetwork.class);
-    private final static ItemNetwork itemNetwork = Factory.get(ItemNetwork.class);
+//    private final static ItemNetwork itemNetwork = Factory.get(ItemNetwork.class);
+    private final ProtoNetwork protoNetwork = Factory.get(ProtoNetwork.class);
+    private final ProtoService protoService = Factory.get(ProtoService.class);
 
     protected TaskData data;
     protected Actor actor;
@@ -89,7 +91,8 @@ public abstract class AbstractTask implements Task {
         // 奖励物品
         if (rewardItems != null) {
             for (RewardItem ri : rewardItems) {
-                itemNetwork.addItem(actor, ri.itemId, ri.count);
+//                itemNetwork.addItem(actor, ri.itemId, ri.count);
+                protoNetwork.addData(actor, protoService.createData(ri.itemId), ri.count);
             }
         }
     }
