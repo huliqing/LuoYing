@@ -159,7 +159,7 @@ public class RoomStateServerImpl extends AbstractAppState implements RoomState {
         clientPanel.setClients(clients);
     }
     
-    private class LanRoomServerListener extends DefaultServerListener {
+    private class LanRoomServerListener extends AbstractServerListener {
 
         public LanRoomServerListener(Application app) {
             super(app);

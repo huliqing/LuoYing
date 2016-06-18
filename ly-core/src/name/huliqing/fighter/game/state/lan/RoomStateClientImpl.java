@@ -157,7 +157,7 @@ public class RoomStateClientImpl extends AbstractAppState implements RoomState {
         }
     }
 
-    private class RoomClientListener extends DefaultClientListener {
+    private class RoomClientListener extends AbstractClientListener {
 
         public RoomClientListener(Application app) {
             super(app);

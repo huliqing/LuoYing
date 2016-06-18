@@ -26,16 +26,16 @@ import name.huliqing.fighter.ui.UI;
  * 联网游戏的基类
  * @author huliqing
  */
-public abstract class LanPlayState extends PlayState implements LanGame {
+public abstract class NetworkPlayState extends PlayState implements LanGame {
     private final PlayService playService = Factory.get(PlayService.class);
+    protected final Network network = Network.getInstance();
 
     // 客户端列表界面
     private ClientsWin clientsWin;
     private ScaleAnim clientsWinAnim;
     private Icon lanBtn;
-    protected final Network network = Network.getInstance();
     
-    public LanPlayState(Application app, GameData gameData) {
+    public NetworkPlayState(Application app, GameData gameData) {
         super(app, gameData);
     }
 
@@ -72,6 +72,16 @@ public abstract class LanPlayState extends PlayState implements LanGame {
     @Override
     public boolean isServer() {
         return network.isServer();
+    }
+    
+    /**
+     * 刷新客户端界面列表
+     */
+    @Override
+    public void onClientListUpdated() {
+        if (clientsWin.isVisible()) {
+            clientsWin.setClients(getClients());
+        }
     }
 
     private void createLanUI() {

@@ -7,20 +7,43 @@ package name.huliqing.fighter.game.state.game;
 import java.util.List;
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
+import com.jme3.network.HostedConnection;
+import com.jme3.network.Message;
+import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.GameData;
+import name.huliqing.fighter.game.mess.MessPlayActorSelect;
 import name.huliqing.fighter.game.state.lan.GameServer;
-import name.huliqing.fighter.game.state.lan.GameServer.ServerState;
 import name.huliqing.fighter.game.mess.MessPlayClientData;
+import name.huliqing.fighter.game.mess.MessPlayClientExit;
+import name.huliqing.fighter.game.mess.MessPlayLoadSavedActor;
+import name.huliqing.fighter.game.mess.MessPlayLoadSavedActorResult;
+import name.huliqing.fighter.game.mess.MessSCClientList;
+import name.huliqing.fighter.game.network.ActorNetwork;
+import name.huliqing.fighter.game.network.StateNetwork;
+import name.huliqing.fighter.game.service.ActorService;
+import name.huliqing.fighter.game.service.ConfigService;
+import name.huliqing.fighter.game.service.LogicService;
+import name.huliqing.fighter.game.service.PlayService;
+import name.huliqing.fighter.game.service.SkillService;
+import name.huliqing.fighter.game.service.StateService;
+import name.huliqing.fighter.game.state.lan.GameServer.ServerState;
 import name.huliqing.fighter.object.game.Game.GameListener;
 
 /**
- * 局域网模式下的游戏服务端。
+ * 局域网模式下的游戏服务端。不保存服务端和客户端的资料，每都都需要选择角色进行游戏。
  * @author huliqing
  */
-public class ServerPlayState extends LanPlayState  {
-//    private static final Logger LOG = Logger.getLogger(LanServerPlayState.class.getName());
+public class ServerPlayState extends NetworkPlayState  {
+    private final ActorService actorService = Factory.get(ActorService.class);
+    private final PlayService playService = Factory.get(PlayService.class);
+    private final ConfigService configService = Factory.get(ConfigService.class);
+    private final StateService stateService = Factory.get(StateService.class);
+    private final LogicService logicService = Factory.get(LogicService.class);
+    private final SkillService skillService = Factory.get(SkillService.class);
+    private final StateNetwork stateNetwork = Factory.get(StateNetwork.class);
+    private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     
-    // 服务端是否准备好
+    // 服务端
     private final GameServer gameServer;
     
     public ServerPlayState(Application app, GameServer gameServer) {
@@ -32,21 +55,8 @@ public class ServerPlayState extends LanPlayState  {
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
         
-        // 设置listener后立即转为running状态,
+        // 设置listener
         gameServer.setServerListener(new LanServerListener(app));
-        
-        // 显示可选角色面板
-        setUIVisiable(false);
-        gameState.getGame().addListener(new GameListener() {
-            @Override
-            public void onSceneLoaded() {
-                showSelectPanel(gameState.getGame().getData().getAvailableActors());
-            }
-        });
-        
-        // 设置状态并向所有客户端广播,这通知所有客户端
-        // 可以开始向服务端发送游戏初始化命令的消息
-        gameServer.setServerState(ServerState.running);
     }
     
     @Override
@@ -56,7 +66,20 @@ public class ServerPlayState extends LanPlayState  {
 
     @Override
     public void changeGameState(GameData gameData) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        super.changeGameState(gameData);
+        
+        gameServer.setServerState(ServerState.loading);
+        gameState.getGame().addListener(new GameListener() {
+            @Override
+            public void onSceneLoaded() {
+                // 设置状态并向所有客户端广播,这通知所有客户端
+                // 可以开始向服务端发送游戏初始化命令的消息
+                gameServer.setServerState(ServerState.running);
+                showSelectPanel(gameState.getGame().getData().getAvailableActors());
+            }
+        });
+        // 显示可选角色面板
+        setUIVisiable(false);
     }
 
     @Override
@@ -69,4 +92,54 @@ public class ServerPlayState extends LanPlayState  {
         gameServer.kickClient(connId, "kick!");
     }
     
+    private class LanServerListener extends DefaultServerListener {
+        
+        public LanServerListener(Application app) {
+            super(app);
+        }
+
+        @Override
+        protected void onClientsUpdated(GameServer gameServer) {
+            super.onClientsUpdated(gameServer);
+            // 通知客户端列表更新，注：这里只响应新连接或断开连接。不包含客户端资料的更新。
+            onClientListUpdated();
+        }
+
+        @Override
+        protected void processServerMessage(GameServer gameServer, HostedConnection source, Message m) {
+            // Lan模式下的服务端不保存客户端资料，所以这里直接返回false，以便让客户端去弹出角色选择窗口，选择一个角色进行游戏
+            if (m instanceof MessPlayLoadSavedActor) {
+                gameServer.send(source, new MessPlayLoadSavedActorResult(false));
+                return;
+            }
+            
+            // 客户端告诉服务端，要选择哪一个角色进行游戏
+            if (m instanceof MessPlayActorSelect) {
+                // 响应客户端角色选择
+                ((MessPlayActorSelect)m).applyOnServer(gameServer, source);
+                
+                // remove20160618,不要在这里给玩家角色指定特殊的分组，应该由不同的游戏GameData处理器内部去实现。
+//                ConnData cd = source.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
+//                long actorUniqueId = cd.getActorId();
+//                if (actorUniqueId > 0) {
+//                    // 让客户端角色的用户分组与当前主角玩家一致
+//                    Actor actor = playService.findActor(actorUniqueId);
+//                    actorNetwork.setGroup(actor, actorService.getGroup(gameState.getPlayer()));
+//                }
+
+                // 通知所有客户更新“客户端列表”
+                gameServer.broadcast(new MessSCClientList(gameServer.getClients()));
+                // 更新本地（服务端）客户端列表
+                onClientListUpdated();
+                return;
+            } 
+            
+            // 当服务端接收到客户端退出游戏的消息时，这里什么也不处理。与故事模式不同。故事模式要保存客户端资料
+            if (m instanceof MessPlayClientExit) {
+                return;
+            }
+            
+            super.processServerMessage(gameServer, source, m); 
+        }
+    }
 }

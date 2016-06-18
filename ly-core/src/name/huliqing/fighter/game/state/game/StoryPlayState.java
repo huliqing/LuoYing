@@ -38,6 +38,7 @@ import name.huliqing.fighter.game.mess.MessPlayClientData;
 import name.huliqing.fighter.game.mess.MessPlayLoadSavedActor;
 import name.huliqing.fighter.game.mess.MessPlayLoadSavedActorResult;
 import name.huliqing.fighter.game.mess.MessPlayClientExit;
+import name.huliqing.fighter.game.mess.MessSCClientList;
 import name.huliqing.fighter.game.state.lan.GameServer.ServerState;
 import name.huliqing.fighter.manager.ShortcutManager;
 import name.huliqing.fighter.object.actor.Actor;
@@ -49,10 +50,10 @@ import name.huliqing.fighter.save.SaveStory;
 import name.huliqing.fighter.save.ShortcutSave;
 
 /**
- *
+ * 故事模式下的服务端，允许客户端连接，并且允许保存客户端的资料。
  * @author huliqing
  */
-public class StoryPlayState extends LanPlayState {
+public class StoryPlayState extends NetworkPlayState {
     private final ActorService actorService = Factory.get(ActorService.class);
     private final PlayService playService = Factory.get(PlayService.class);
     private final ConfigService configService = Factory.get(ConfigService.class);
@@ -284,51 +285,6 @@ public class StoryPlayState extends LanPlayState {
         return true;
     }
     
-    // remove20160617已经移动到ShortcutManager
-//    /**
-//     * 载入快捷方式
-//     * @param ss
-//     * @param player 
-//     */
-//    private void loadShortcut(List<ShortcutSave> ss, Actor player) {
-//        if (ss == null)
-//            return;
-//        float shortcutSize = configService.getShortcutSize();
-//        for (ShortcutSave s : ss) {
-//            String itemId = s.getItemId();
-//            ProtoData data = actorService.getItem(player, itemId);
-//            if (data == null) {
-//                data = DataLoaderFactory.createData(itemId);
-//            }
-//            // 防止物品被删除
-//            if (data == null) {
-//                continue;
-//            }
-//            // 包裹中只允许存放限定的物品
-//            DataType type = data.getDataType();
-//            if (type != DataType.item && type != DataType.skin && type != DataType.skill) {
-//                continue;
-//            }
-//            
-//            // 由于skill的创建过程比较特殊，SkillData只有在创建了AnimSkill之后
-//            // 才能获得skillType,所以不能直接使用createProtoData方式获得的SkillData
-//            // 这会找不到SkillData中的skillType,所以需要从角色身上重新找回SkillData
-//            if (data.getDataType() == DataType.skill) {
-//                data = player.getData().getSkillStore().getSkillById(data.getId());
-//            }
-//            
-//            ShortcutView shortcut = ShortcutManager.createShortcut(player, data);
-//            shortcut.setLocalScale(shortcutSize);
-//            shortcut.setLocalTranslation(s.getX(), s.getY(), 0);
-//            ShortcutManager.addShortcutNoAnim(shortcut);
-//        }
-//        
-//        // 如果系统设置锁定快捷方式，则锁定它
-//        if (configService.isShortcutLocked()) {
-//            ShortcutManager.setShortcutLocked(true);
-//        }
-//    }
-    
     // 开启主机模式，这允许故事模式下其它玩家连接到该游戏
     private void openGameServer() {
         // 创建server
@@ -353,14 +309,31 @@ public class StoryPlayState extends LanPlayState {
 
     @Override
     public void kickClient(int connId) {
-        gameServer.kickClient(connId, "kick!");
+        // 踢出之前先把玩家的资料保存起来
+        HostedConnection conn = gameServer.getServer().getConnection(connId);
+        if (conn != null) {
+            ConnData cd = conn.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
+            if (cd != null && cd.getClientId() != null && cd.getActorId() > 0) {
+                storeClient(saveStory, gameState.getActors(), cd.getClientId(), cd.getActorId(), gameState.getGame().getData().getId());
+                SaveHelper.saveStoryLast(saveStory);
+            }
+            gameServer.kickClient(connId, "kick!");
+        }
     }
     
     // ----------------------------------
-     private class StoryServerListener extends LanServerListener {
+    
+    private class StoryServerListener extends DefaultServerListener {
         
         public StoryServerListener(Application app) {
             super(app);
+        }
+
+        @Override
+        protected void onClientsUpdated(GameServer gameServer) {
+            super.onClientsUpdated(gameServer);
+            // 通知客户端列表更新，注：这里只响应新连接或断开连接。不包含客户端资料的更新。
+            onClientListUpdated();
         }
 
         @Override
@@ -383,6 +356,13 @@ public class StoryPlayState extends LanPlayState {
                             MessPlayLoadSavedActorResult messResult = new MessPlayLoadSavedActorResult(result);
                             messResult.setActorId(cd.getActorId());
                             gameServer.send(source, messResult);
+                            
+                            if (result) {
+                                // 通知所有客户更新“客户端列表”
+                                gameServer.broadcast(new MessSCClientList(gameServer.getClients()));
+                                // 更新本地（服务端）客户端列表
+                                onClientListUpdated();
+                            }
                             return;
                         }
                     }
@@ -396,12 +376,17 @@ public class StoryPlayState extends LanPlayState {
                 // 响应客户端角色选择
                 ((MessPlayActorSelect)m).applyOnServer(gameServer, source);
                 
-                // 让客户端角色的组合与当前主角玩家一致
                 ConnData cd = source.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
                 long actorUniqueId = cd.getActorId();
                 if (actorUniqueId > 0) {
+                    // 让客户端角色的用户分组与当前主角玩家一致
                     Actor actor = playService.findActor(actorUniqueId);
                     actorNetwork.setGroup(actor, actorService.getGroup(gameState.getPlayer()));
+                    
+                    // 通知所有客户更新“客户端列表”
+                    gameServer.broadcast(new MessSCClientList(gameServer.getClients()));
+                    // 更新本地（服务端）客户端列表
+                    onClientListUpdated();
                 }
                 return;
             } 

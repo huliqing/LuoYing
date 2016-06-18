@@ -137,7 +137,7 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
     // 会造成一些问题,比如客户端在计算offset值的时候会出现一些问题,导致客户端无法
     // 正常初始化场景角色.所以这里预设一个初始值,以确保服务端的运行时间始终大于
     // 客户端(GameClient.time)的运行时间.
-    public double time = 60 * 60 * 24 * 7; // 这里是一周的时间
+    private double time = 60 * 60 * 24 * 7; // 这里是一周的时间
     
     GameServer(GameData gameData) throws IOException {
         this.gameData = gameData;
@@ -325,55 +325,6 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
                     , new Object[] {actor.getData().getId(), message});
         }
     }
-    
-    // remove20160615,使用下面的方法代替
-//    /**
-//     * 获取当前已经连接的所有客户端,其中包含主机
-//     * @return 
-//     */
-//    public List<MessPlayClientData> getClients() {
-//        // 需要判断游戏是否在运行,在游戏运行时可以获取到玩家角色名字
-//        boolean gameInPlay = Common.getPlayState() != null;
-//        
-//        // 向客户端广播，告诉所有客户端有新的客户端连接进来，并把客户端列表
-//        // 发送给所有已经连接的客户端
-//        Collection<HostedConnection> hcs = server.getConnections();
-//        List<MessPlayClientData> clients = new ArrayList<MessPlayClientData>();
-//        for (HostedConnection hc : hcs) {
-//            // 客户端名称
-//            MessClient clientId = hc.getAttribute(ATTR_CLIENT);
-//            String clientName = clientId != null ? clientId.getClientName() : "unknow";
-//            
-//            // 客户端所选的角色名称,这里需要判断服务端游戏是否正在运行
-//            String actorName = null;
-//            Long actorId = hc.getAttribute(ATTR_ACTOR_UNIQUE_ID);
-//            if (actorId != null && gameInPlay) {
-//                Actor actor = playService.findActor(actorId);
-//                if (actor != null) {
-//                    actorName = actor.getData().getName();
-//                }
-//            }
-//            MessPlayClientData mcd = new MessPlayClientData();
-//            mcd.setConnId(hc.getId());
-//            mcd.setAddress(hc.getAddress());
-//            mcd.setName(clientName);
-//            mcd.setActorName(actorName);
-//            clients.add(mcd);
-//        }
-//        // 添加主机信息到客户端列表中,注：在没有网络的情况下getLocalHostIPv4可能会返回null,这时需要判断处理
-//        InetAddress inetAddress = envService.getLocalHostIPv4();
-//        String serverAddress = inetAddress != null ? inetAddress.getHostAddress() : "0.0.0.0";
-//        String serverMachineName = envService.getMachineName();
-//        MessPlayClientData serverMcd = new MessPlayClientData(-1, serverAddress, serverMachineName);
-//        if (gameInPlay) {
-//            Actor serverPlayer = playService.getPlayer();
-//            if (serverPlayer != null) {
-//                serverMcd.setActorName(serverPlayer.getData().getName());
-//            }
-//        }
-//        clients.add(0, serverMcd);
-//        return clients;
-//    }
     
      /**
      * 获取当前已经连接的所有客户端,其中包含主机

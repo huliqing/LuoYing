@@ -19,6 +19,14 @@ public interface  LanGame  {
      * @return 
      */
     List<MessPlayClientData> getClients();
+    
+    /**
+     * 当客户端列表更新时该方法将被调用，客户端列表更新包含以下几个可能的情况：
+     * 1.有新客户端连接<br >
+     * 2.有客户端断开连接等。<br >
+     * 3.客户端角色有资料更新，如角色名称或其它。<br >
+     */
+    void onClientListUpdated();
 
     /**
      * 踢出一个客户端

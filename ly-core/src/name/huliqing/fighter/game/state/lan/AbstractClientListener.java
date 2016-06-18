@@ -27,11 +27,11 @@ import name.huliqing.fighter.game.state.lan.GameServer.ServerState;
 import name.huliqing.fighter.game.mess.MessPing;
 
 /**
- * 默认的客户端帧听器
+ * 客户端帧听器,用于监听来自服务端的消息。
  * @author huliqing
  */
-public abstract class DefaultClientListener implements ClientListener {
-    private static final Logger LOG = Logger.getLogger(DefaultClientListener.class.getName());
+public abstract class AbstractClientListener implements ClientListener {
+    private static final Logger LOG = Logger.getLogger(AbstractClientListener.class.getName());
     
     private final ConfigService configService = Factory.get(ConfigService.class);
     private final EnvService envService = Factory.get(EnvService.class);
@@ -57,7 +57,7 @@ public abstract class DefaultClientListener implements ClientListener {
     // 用于向服务端发送的Ping消息
     private final MessPing messPing = new MessPing();
     
-    public DefaultClientListener(Application app) {
+    public AbstractClientListener(Application app) {
         this.app = app;
     }
 
@@ -120,14 +120,15 @@ public abstract class DefaultClientListener implements ClientListener {
     
     @Override
     public void update(float tpf, GameClient gameClient) {
+        if (pingListerners.size() <= 0) {
+            return;
+        }
         // 每隔一段时间向服务端发送Ping消息
-        if (pingListerners.size() > 0) {
-            pingTimeUsed += tpf;
-            if (pingTimeUsed > pingTimeInterval) {
-                pingTimeUsed = 0;
-                messPing.time = System.nanoTime();
-                gameClient.send(messPing);
-            }
+        pingTimeUsed += tpf;
+        if (pingTimeUsed > pingTimeInterval) {
+            pingTimeUsed = 0;
+            messPing.time = System.nanoTime();
+            gameClient.send(messPing);
         }
     }
 

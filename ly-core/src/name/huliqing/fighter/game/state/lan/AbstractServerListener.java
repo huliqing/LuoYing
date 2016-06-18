@@ -21,17 +21,17 @@ import name.huliqing.fighter.game.mess.MessPlayGetClients;
 import name.huliqing.fighter.game.mess.MessPlayGetGameData;
 
 /**
- *
+ * 服务端监听器,用于监听来自客户端连接的消息。
  * @author huliqing
  * @param <T>
  */
-public abstract class DefaultServerListener<T> implements ServerListener<T> {
+public abstract class AbstractServerListener<T> implements ServerListener<T> {
 
-    private static final Logger LOG = Logger.getLogger(DefaultServerListener.class.getName());
+    private static final Logger LOG = Logger.getLogger(AbstractServerListener.class.getName());
 
     private final Application app;
     
-    public DefaultServerListener(Application app) {
+    public AbstractServerListener(Application app) {
         this.app = app;
     }
     
@@ -132,7 +132,6 @@ public abstract class DefaultServerListener<T> implements ServerListener<T> {
     protected void onReceiveGetServerState(GameServer gameServer, HostedConnection conn, MessPlayGetServerState m) {
         MessSCServerState mess = new MessSCServerState();
         mess.setServerState(gameServer.getServerState());
-//        conn.send(mess); // remove
         gameServer.send(conn, mess);
     }
     

@@ -17,7 +17,7 @@ import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.constants.ResConstants;
 import name.huliqing.fighter.enums.MessageType;
 import name.huliqing.fighter.game.service.PlayService;
-import name.huliqing.fighter.game.state.lan.DefaultServerListener;
+import name.huliqing.fighter.game.state.lan.AbstractServerListener;
 import name.huliqing.fighter.game.mess.MessBase;
 import name.huliqing.fighter.game.mess.MessMessage;
 import name.huliqing.fighter.game.mess.MessActorTransform;
@@ -26,11 +26,11 @@ import name.huliqing.fighter.manager.ResourceManager;
 import name.huliqing.fighter.object.actor.Actor;
 
 /**
- *
+ * 默认的服务端监听器,用于监听来自客户端连接的消息。
  * @author huliqing
  */
-public class LanServerListener extends DefaultServerListener<Actor> {
-    private static final Logger LOG = Logger.getLogger(LanServerListener.class.getName());
+public class DefaultServerListener extends AbstractServerListener<Actor> {
+    private static final Logger LOG = Logger.getLogger(DefaultServerListener.class.getName());
     private final PlayService playService = Factory.get(PlayService.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final List<Actor> syncObjects = new LinkedList<Actor>();
@@ -39,7 +39,7 @@ public class LanServerListener extends DefaultServerListener<Actor> {
     
     private final MessActorTransform syncTempCache = new MessActorTransform();
     
-    public LanServerListener(Application app) {
+    public DefaultServerListener(Application app) {
         super(app);
     }
 

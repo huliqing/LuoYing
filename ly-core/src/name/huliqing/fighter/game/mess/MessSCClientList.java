@@ -9,13 +9,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * server to client,告诉客户端：当前已经连接到服务器的客户端列表
+ * 服务端发客户端发送客户端列表信息：当前已经连接到服务器的客户端列表
  * @author huliqing
  */
 @Serializable
 public class MessSCClientList extends MessBase {
     
-    private final List<MessPlayClientData> clients = new ArrayList<MessPlayClientData>();
+    // remove注意：在Serializable对象中不要使用final字段，这会造成无法序列化，除非该对象始终不变（特别是LIST,MAP）
+    // 。这在JME中没有报错，但是在重新生成对象的时候该列表会空值。
+//    private final List<MessPlayClientData> clients = new ArrayList<MessPlayClientData>();
+    
+    private List<MessPlayClientData> clients = new ArrayList<MessPlayClientData>();
     
     public MessSCClientList() {}
     

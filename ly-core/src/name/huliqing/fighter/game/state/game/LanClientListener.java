@@ -19,7 +19,7 @@ import name.huliqing.fighter.Config;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.enums.MessageType;
 import name.huliqing.fighter.game.service.PlayService;
-import name.huliqing.fighter.game.state.lan.DefaultClientListener;
+import name.huliqing.fighter.game.state.lan.AbstractClientListener;
 import name.huliqing.fighter.game.state.lan.GameClient.ClientState;
 import name.huliqing.fighter.game.mess.MessSCInitGameOK;
 import name.huliqing.fighter.game.mess.MessBase;
@@ -29,7 +29,7 @@ import name.huliqing.fighter.manager.ResourceManager;
  * 默认的局域网客户端监听来自服务端的消息的侦听器
  * @author huliqing 
  */
-public class LanClientListener extends DefaultClientListener {
+public class LanClientListener extends AbstractClientListener {
     private static final Logger LOG = Logger.getLogger(LanClientListener.class.getName());
     private final PlayService playService = Factory.get(PlayService.class);
     

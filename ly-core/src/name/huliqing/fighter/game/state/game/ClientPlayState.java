@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.GameData;
 import name.huliqing.fighter.game.service.PlayService;
-import name.huliqing.fighter.game.state.lan.DefaultClientListener;
+import name.huliqing.fighter.game.state.lan.AbstractClientListener;
 import name.huliqing.fighter.game.state.lan.GameClient.ClientState;
 import name.huliqing.fighter.game.state.lan.GameServer;
 import name.huliqing.fighter.game.mess.MessBase;
@@ -40,12 +40,12 @@ import name.huliqing.fighter.ui.UIFactory;
  *
  * @author huliqing
  */
-public class ClientPlayState extends LanPlayState implements DefaultClientListener.PingListener{
+public class ClientPlayState extends NetworkPlayState implements AbstractClientListener.PingListener{
     private static final Logger LOG = Logger.getLogger(ClientPlayState.class.getName());
     private final PlayService playService = Factory.get(PlayService.class);
     private final SaveService saveService = Factory.get(SaveService.class);
-    // 客户端需要保存角色的快捷方式,格式是这样的： CLIENT_SHORTCUT_SAVE_KEY + "_" + actorUniqueId;
-    // 如: "Shortcuts_12203030",即针对不同的角色将使用不同的存档。
+    // 客户端快捷方式,保存键，格式: SHORTCUTS_KEY_PREFIX + actorId
+    // 如： "Shortcuts_actorWolf", 注意，使用的是角色类型ID，不是唯一ID。
     private final static String SHORTCUTS_KEY_PREFIX = "Shortcuts_";
     
     // 客户端
@@ -136,7 +136,7 @@ public class ClientPlayState extends LanPlayState implements DefaultClientListen
          // 保存快捷方式
         ShortcutsSave ss = new ShortcutsSave();
         ss.setShortcuts(ShortcutManager.getShortcutSaves());
-        saveService.saveSavable(SHORTCUTS_KEY_PREFIX + player.getData().getUniqueId(), ss);
+        saveService.saveSavable(SHORTCUTS_KEY_PREFIX + player.getData().getId(), ss);
     }
     
     /**
@@ -180,7 +180,7 @@ public class ClientPlayState extends LanPlayState implements DefaultClientListen
         // 先清除，然后再重新生成快捷方式
         ShortcutManager.cleanup();
         // 载入客户端玩家的快捷方式
-        ShortcutsSave ss = saveService.loadSavable(SHORTCUTS_KEY_PREFIX + actor.getData().getUniqueId());
+        ShortcutsSave ss = saveService.loadSavable(SHORTCUTS_KEY_PREFIX + actor.getData().getId());
         if (ss != null) {
             ShortcutManager.loadShortcut(ss.getShortcuts(), actor);
         }
@@ -201,6 +201,13 @@ public class ClientPlayState extends LanPlayState implements DefaultClientListen
         
         public ClientListener(Application app) {
             super(app);
+        }
+
+        @Override
+        protected void onClientsUpdated(GameClient gameClient, List<MessPlayClientData> clients) {
+            super.onClientsUpdated(gameClient, clients);
+            // 通知客户端列表更新，注：这里只响应新连接或断开连接。不包含客户端资料的更新。
+            onClientListUpdated();
         }
         
         @Override
