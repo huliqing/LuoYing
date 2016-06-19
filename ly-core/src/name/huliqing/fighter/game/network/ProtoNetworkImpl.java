@@ -63,6 +63,14 @@ public class ProtoNetworkImpl implements ProtoNetwork {
         if (data == null)
             return;
         
+        // 对于本地物体不需要传递到服务端或客户端，比如“地图”的使用，当打开地图的时候是不需要广播到其它客户端。
+        // localObject这是一种特殊的物品，只通过本地handler执行，所以使用后物品数量不会实时同步到其它客户端。需要注意
+        // 这一点。
+        if (data.isLocalObject()) {
+            protoService.useData(actor, data);
+            return;
+        }
+        
         // 广播到客户端
         if (network.hasConnections()) {
             MessProtoUse mess = new MessProtoUse();

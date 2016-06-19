@@ -20,7 +20,6 @@ xs:time
                 <xs:documentation>给物品类型指定一个唯一标识</xs:documentation>
             </xs:annotation>
         </xs:attribute>
-        
         <xs:attribute name="extends" type="xs:string" use="optional" >
             <xs:annotation>
                 <xs:documentation>
@@ -36,10 +35,18 @@ xs:time
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
-        
         <xs:attribute name="cost" type="xs:integer" use="optional" >
             <xs:annotation>
                 <xs:documentation>物品的价值，当在商品中出售时值多少钱。</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="localObject" type="bool" use="optional" >
+            <xs:annotation>
+                <xs:documentation>
+                    是否为本地物体,对于本地物体在使用的时候不需要把事件传递到服务端或客户端。比如：客户端或服务端在打开地图
+                    的时候是不需要把事件传递到其它客户端或服务端的。localObject这是一种特殊的物品，只通过本地handler执行，
+                    所以使用后物品数量不会实时同步到其它客户端。需要注意这一点。
+                </xs:documentation>
             </xs:annotation>
         </xs:attribute>
     </xs:complexType>

@@ -124,6 +124,14 @@ public class ProtoData extends DataAttribute {
     }
     
     /**
+     * 判断是否为本地物体，对于本地物体在使用的时候不需要把事件广播到客户端或服务端。
+     * @return 
+     */
+    public boolean isLocalObject() {
+        return getProto().getAsBoolean("localObject", false);
+    }
+    
+    /**
      * 获取单件物品的价值（单件，非total）,如果没有定义商品的价值，则默认0
      * @return 
      */
@@ -146,6 +154,7 @@ public class ProtoData extends DataAttribute {
     /**
      * 增加物品数量(amount<0为减少).
      * @param amount 
+     * @return  
      */
     public int increaseTotal(int amount) {
         total += amount;

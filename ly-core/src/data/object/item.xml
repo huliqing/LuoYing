@@ -63,7 +63,7 @@
     <item id="itemDetoxifyGrass" icon="Interface/item/leaf.png" handler="handlerStateRemoveScorpionVenom" cost="20" />
     
     <!--世界地图-->
-    <item id="itemWorldMap" icon="Interface/map/map_icon.jpg" handler="handlerWorldMap" deletable="0" />
+    <item id="itemWorldMap" icon="Interface/map/map_icon.jpg" handler="handlerWorldMap" deletable="0" localObject="1" />
 </root>
 
 
