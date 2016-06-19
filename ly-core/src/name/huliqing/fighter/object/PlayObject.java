@@ -21,18 +21,6 @@ public interface PlayObject {
      */
     public boolean isInitialized();
 
-//    /**
-//     * 设置是否打开逻辑行为
-//     * @param enabled 
-//     */
-//    void setEnabled(boolean enabled);
-//    
-//    /**
-//     * 判断是否打开逻辑行为
-//     * @return 
-//     */
-//    boolean isEnabled();
-
     /**
      * 更新Object的logic
      * @param tpf 

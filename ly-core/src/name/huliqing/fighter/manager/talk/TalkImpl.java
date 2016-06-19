@@ -15,7 +15,7 @@ import name.huliqing.fighter.object.actor.Actor;
  */
 public class TalkImpl implements Talk {
     private List<TalkListener> listeners;
-    private List<TalkLogic> logics = new ArrayList<TalkLogic>();
+    private final List<TalkLogic> logics = new ArrayList<TalkLogic>();
 
     private boolean started = false;
     private boolean end = true;

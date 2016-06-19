@@ -7,7 +7,7 @@ package name.huliqing.fighter.manager.talk;
 import com.jme3.app.Application;
 import com.jme3.util.SafeArrayList;
 import java.util.List;
-import name.huliqing.fighter.manager.Manager;
+import name.huliqing.fighter.object.AbstractPlayObject;
 
 /**
  * 说话，谈话管理,该类主要管理谈话逻辑，每个逻辑都包装成Talk，每个Talk在执
@@ -16,19 +16,21 @@ import name.huliqing.fighter.manager.Manager;
  * ,Talk不增加循环设置主要是为了避免无意的操作，在添加循环talk之后即忘记移除的情况发生，造成资源浪费。
  * @author huliqing
  */
-public class TalkManager implements Manager {
+public class TalkManager extends AbstractPlayObject {
     
-    private final static TalkManager instance = new TalkManager();
+    private final static TalkManager INSTANCE = new TalkManager();
     private final List<Talk> talks = new SafeArrayList<Talk>(Talk.class);
     
     private TalkManager() {}
 
     public static TalkManager getInstance() {
-        return instance;
+        return INSTANCE;
     }
-    
+
     @Override
-    public void init(Application app) {}
+    public void initialize() {
+        super.initialize(); 
+    }
 
     @Override
     public void update(float tpf) {
@@ -52,6 +54,7 @@ public class TalkManager implements Manager {
             }
         }
         talks.clear();
+        super.cleanup();
     }
 
     /**
@@ -60,6 +63,9 @@ public class TalkManager implements Manager {
      * @param talk 
      */
     public void startTalk(Talk talk) {
+        if (!isInitialized()) {
+            return;
+        }
         talk.start();
         talks.add(talk);
     }

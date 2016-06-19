@@ -5,43 +5,57 @@
 package name.huliqing.fighter.manager;
 
 import com.jme3.util.SafeArrayList;
-import java.util.logging.Logger;
+import name.huliqing.fighter.object.AbstractPlayObject;
 import name.huliqing.fighter.object.animation.Animation;
 
 /**
  *
  * @author huliqing
  */
-public class AnimationManager {
+public class AnimationManager extends AbstractPlayObject {
 //    private final static Logger logger = Logger.getLogger(AnimationManager.class.getName());
-    private final static SafeArrayList<Animation> animations = new SafeArrayList<Animation>(Animation.class);
     
-    public static void init() {
-        // ignore
+    private final static AnimationManager INSTANCE = new AnimationManager();
+    private final static SafeArrayList<Animation> ANIMATIONS = new SafeArrayList<Animation>(Animation.class);
+    
+    private AnimationManager() {}
+    
+    public static AnimationManager getInstance() {
+        return INSTANCE;
     }
     
-    public static void startAnimation(Animation animation) {
-        if (!animations.contains(animation)) {
-            animations.add(animation);
+    @Override
+    public void initialize() {
+        super.initialize();
+    }
+    
+    public void startAnimation(Animation animation) {
+        if (!isInitialized()) 
+            return;
+        
+        if (!ANIMATIONS.contains(animation)) {
+            ANIMATIONS.add(animation);
         }
         animation.start();
     }
     
-    public static void update(float tpf) {
-        if (animations.isEmpty()) {
+    @Override
+    public void update(float tpf) {
+        if (ANIMATIONS.isEmpty()) {
             return;
         }
         
-        for (Animation anim : animations) {
+        for (Animation anim : ANIMATIONS) {
             if (anim.isEnd()) {
-                animations.remove(anim);
+                ANIMATIONS.remove(anim);
             } else {
                 anim.update(tpf);
             }
         }
     }
     
-    public static void cleanup() {
+    @Override
+    public void cleanup() {
         // 不要直接清理，要清理的话，先让列表中所有animation都cleanup（）后再
         // 进行clear(), 否则未执行完的animation都不会isEnd,不能重用，会造成
         // 资源浪费
@@ -49,5 +63,7 @@ public class AnimationManager {
 //            a.cleanup();
 //        }
 //        animations.clear();
+
+        super.cleanup();
     }
 }

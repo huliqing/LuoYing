@@ -127,7 +127,7 @@ public class HitUtils {
         
         // TODO: 重构，因为hit不一定是伤害值。
         // 播放攻击伤害数字效果
-        DamageManager.show(target, hitFinalValue);
+        DamageManager.getInstance().show(target, hitFinalValue);
     }
     
 }

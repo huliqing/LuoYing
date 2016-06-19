@@ -16,6 +16,7 @@ import java.util.logging.Logger;
 import name.huliqing.fighter.Common;
 import name.huliqing.fighter.Config;
 import name.huliqing.fighter.data.EffectData;
+import name.huliqing.fighter.object.AbstractPlayObject;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.object.effect.AbstractEffect;
 import name.huliqing.fighter.utils.GeometryUtils;
@@ -26,7 +27,9 @@ import name.huliqing.fighter.ui.state.UIState;
  * 在目标角色上展示伤害数字或其它信息。
  * @author huliqing
  */
-public class DamageManager {
+public class DamageManager extends AbstractPlayObject {
+    
+    private final static DamageManager INSTANCE = new DamageManager();
     
     /**
      * 定义一个最远距离，当目标距离镜头多远时将不展示动态信息,这个目的是为了避
@@ -51,13 +54,35 @@ public class DamageManager {
         /** 免疫:这表示抗性是绝对的 */
         immunized,
     }
+    
+    private DamageManager() {}
+    
+    public static DamageManager getInstance() {
+        return INSTANCE;
+    }
+
+    @Override
+    public void initialize() {
+        super.initialize();
+    }
+
+    @Override
+    public void update(float tpf) {
+        // ignore
+    }
+    
+    @Override
+    public void cleanup() {
+        CACHES.clear();
+        super.cleanup();
+    }
  
     /**
      * 动态显示状态抵抗结果
      * @param target
      * @param type 
      */
-    public static void showResist(Actor target, ResistType type) {
+    public void showResist(Actor target, ResistType type) {
         if (!checkDisplay(target)) {
             return;
         }
@@ -84,14 +109,13 @@ public class DamageManager {
      * @param victim 目标角色
      * @param value 目标值
      */
-    public static void show(Actor victim, float value) {
+    public void show(Actor victim, float value) {
         int intValue = (int) value;
         if (intValue == 0 || !checkDisplay(victim)) {
             return;
         }
         
         display(victim, String.valueOf(intValue), intValue < 0 ? ColorRGBA.Red : ColorRGBA.Green, 0);
-        
     }
     
     /**
@@ -99,7 +123,7 @@ public class DamageManager {
      * @param target
      * @param text 
      */
-    private static void display(Actor target, String text, ColorRGBA color, int level) {
+    private void display(Actor target, String text, ColorRGBA color, int level) {
         DynamicText dt = getFromCache();
         Common.getApp().getGuiNode().attachChild(dt);
         Vector3f pos = dt.text.getLocalTranslation();
@@ -118,7 +142,7 @@ public class DamageManager {
      * @param target
      * @return 
      */
-    private static boolean checkDisplay(Actor target) {
+    private boolean checkDisplay(Actor target) {
         // 在距离太远也不显示
         Camera cam = Common.getApp().getCamera();
         if (cam.getLocation().distanceSquared(target.getModel().getWorldTranslation()) > MAX_DISTANCE_SQUARED) {
@@ -140,22 +164,18 @@ public class DamageManager {
         return true;
     }
     
-    private static float getFontSize() {
+    private float getFontSize() {
         return Common.getSettings().getHeight() * 0.15f;
     }
     
-    public static void showDebugInfo() {
+    public void showDebugInfo() {
         if (Config.debug) {
             Logger.getLogger(DamageManager.class.getName())
                     .log(Level.INFO, "DamageManager cache DamageText size={0}", CACHES.size());
         }
     }
     
-    public static void cleanup() {
-        CACHES.clear();
-    }
-    
-    private static DynamicText getFromCache() {
+    private DynamicText getFromCache() {
         if (CACHES.size() > MAX_CACHE_SIZE) {
             // 如果出错，防止部分资源意外没有释放，则提出警告
             Logger.getLogger(DamageManager.class.getName())
@@ -179,7 +199,7 @@ public class DamageManager {
     
     // ==== private class
     
-    private static class DynamicText extends AbstractEffect {
+    private class DynamicText extends AbstractEffect {
         private Text text;
 
         // 总的移动距离

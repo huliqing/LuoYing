@@ -58,6 +58,7 @@ public class SurvivalGame extends Game {
         super.onActorSelected(actor);
         // 设置角色分组
         actorNetwork.setGroup(actor, SELF_GROUP);
+        actorNetwork.setLevel(actor, 1);
     }
 
     

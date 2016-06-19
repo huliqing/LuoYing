@@ -19,6 +19,10 @@ import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.enums.MessageType;
 import name.huliqing.fighter.game.service.GameService;
 import name.huliqing.fighter.game.view.TeamView;
+import name.huliqing.fighter.manager.AnimationManager;
+import name.huliqing.fighter.manager.DamageManager;
+import name.huliqing.fighter.manager.talk.SpeakManager;
+import name.huliqing.fighter.manager.talk.TalkManager;
 import name.huliqing.fighter.object.PlayManager;
 import name.huliqing.fighter.object.PlayObject;
 import name.huliqing.fighter.object.NetworkObject;
@@ -81,7 +85,17 @@ public abstract class GameState extends AbstractAppState {
         this.app = (Fighter) app;
         this.listeners.clear();
         this.networkObjects.clear();
+        
+        // 添加游戏逻辑
         addObject(game, false);
+        
+        // 添加Speak和Talk逻辑
+        addObject(SpeakManager.getInstance(), false);
+        addObject(TalkManager.getInstance(), false);
+        // 用于显示伤害数字
+        addObject(DamageManager.getInstance(), false);
+        // 用于显示动画，这种方式可能在后续移除。
+        addObject(AnimationManager.getInstance(), false);
     }
 
     @Override

@@ -14,8 +14,8 @@ public interface Animation {
     
     /**
      * 设置动画的总用时限制,单位秒。该时间之后动画将停止更新逻辑。
-     * 所以实现类的动画逻辑必须在该时间之内完成整个动画的效果
-     * @param time 
+     * 所以实现类的动画逻辑必须在该时间之内完成整个动画的效果 
+     * @param useTime
      */
     public void setAnimateTime(float useTime);
     
@@ -42,6 +42,7 @@ public interface Animation {
     
     /**
      * 是否动画已经执行完
+     * @return 
      */
     public boolean isEnd();
     

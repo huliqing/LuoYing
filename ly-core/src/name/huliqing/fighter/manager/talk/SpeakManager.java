@@ -4,9 +4,8 @@
  */
 package name.huliqing.fighter.manager.talk;
 
-import name.huliqing.fighter.manager.Manager;
-import com.jme3.app.Application;
 import com.jme3.util.SafeArrayList;
+import name.huliqing.fighter.object.AbstractPlayObject;
 import name.huliqing.fighter.object.actor.Actor;
 
 /**
@@ -16,20 +15,22 @@ import name.huliqing.fighter.object.actor.Actor;
  * ,Talk不增加循环设置主要是为了避免无意的操作，在添加循环talk之后即忘记移除的情况发生，造成资源浪费。
  * @author huliqing
  */
-public class SpeakManager implements Manager {
+public class SpeakManager extends AbstractPlayObject {
     
-    private final static SpeakManager ins = new SpeakManager();
+    private final static SpeakManager INSTANCE = new SpeakManager();
     
     private final SafeArrayList<Speak> speaks = new SafeArrayList<Speak>(Speak.class);
     
     private SpeakManager() {}
     
     public static SpeakManager getInstance() {
-        return ins;
+        return INSTANCE;
     }
 
     @Override
-    public void init(Application app) {}
+    public void initialize() {
+        super.initialize(); 
+    }
 
     @Override
     public void update(float tpf) {
@@ -53,14 +54,20 @@ public class SpeakManager implements Manager {
             }
         }
         speaks.clear();
+        super.cleanup();
     }
 
     /**
      * 立即让角色说话
      * @param actor
      * @param mess 
+     * @param useTime 
      */
     public void doSpeak(Actor actor, String mess, float useTime) {
+        if (!isInitialized()) {
+            return;
+        }
+        
         // 首先清除指定的角色旧的说话内容，否则内容可能重叠在一起
         for (Speak s : speaks) {
             if (s.getActor() == actor) {

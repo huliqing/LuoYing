@@ -45,30 +45,30 @@ public class ShortcutManager {
     private final static ShortcutRoot SHORTCUT_ROOT = new ShortcutRoot();
     
     // “删除”图标
-    private static UI delete = UIUtils.createMultView(
+    private final static UI DELETE = UIUtils.createMultView(
             128, 128, "Interface/icon/skull.png", "Interface/icon/shortcut.png");
 
     // “回收”图标
-    private static UI recycle = UIUtils.createMultView(
+    private final static UI RECYCLE = UIUtils.createMultView(
             128, 128, "Interface/icon/recycle.png", "Interface/icon/shortcut.png");
     
-    private static float space = 40;
+    private final static float SPACE = 40;
     
-    public static void init() {
+    public final static void init() {
 
         float marginTop = Common.getSettings().getHeight() * 0.1f;
         
         // setMargin后再setToCorner,因为setToCorner会立即计算位置
-        delete.setMargin(0, marginTop, (delete.getWidth() + space) * 0.5f, 0);
-        delete.setToCorner(Corner.CT);
-        delete.setVisible(false);
+        DELETE.setMargin(0, marginTop, (DELETE.getWidth() + SPACE) * 0.5f, 0);
+        DELETE.setToCorner(Corner.CT);
+        DELETE.setVisible(false);
         
-        recycle.setMargin((recycle.getWidth() + space) * 0.5f, marginTop, 0, 0);
-        recycle.setToCorner(Corner.CT);
-        recycle.setVisible(false);
+        RECYCLE.setMargin((RECYCLE.getWidth() + SPACE) * 0.5f, marginTop, 0, 0);
+        RECYCLE.setToCorner(Corner.CT);
+        RECYCLE.setVisible(false);
         
-        UIState.getInstance().addUI(delete.getDisplay());
-        UIState.getInstance().addUI(recycle.getDisplay());
+        UIState.getInstance().addUI(DELETE.getDisplay());
+        UIState.getInstance().addUI(RECYCLE.getDisplay());
         
         // 把shortcutRoot添加到场景是为了调用updateLogicalState.以便
         // 更新快捷方式中的逻辑，比如一些技能冷却效果需要持续更新
@@ -91,7 +91,8 @@ public class ShortcutManager {
         addShortcutNoAnim(shortcut);
         
         Animation anim = createShortcutAddAnimation(shortcut);
-        AnimationManager.startAnimation(anim);
+        
+        AnimationManager.getInstance().startAnimation(anim);
     }
     
     /**
@@ -99,13 +100,13 @@ public class ShortcutManager {
      * @param shortcut 
      */
     public static void checkProcess(ShortcutView shortcut) {
-        if (recycle.isVisible() && isRecycle(shortcut)) {
+        if (RECYCLE.isVisible() && isRecycle(shortcut)) {
             SHORTCUT_ROOT.removeShortcut(shortcut);
             String objectName = ResourceManager.getObjectName(shortcut.getData());
             Common.getPlayState().addMessage(ResourceManager.get("common.shortcutRecycle", new String[] {objectName})
                     , MessageType.info);
             
-        } else if (delete.isVisible() && isDelete(shortcut)) {
+        } else if (DELETE.isVisible() && isDelete(shortcut)) {
             // delete object
             Actor actor = shortcut.getActor();
             ProtoData data = shortcut.getData();
@@ -143,11 +144,11 @@ public class ShortcutManager {
      * @param visible 
      */
     public static void setBucketVisible(boolean visible) {
-        recycle.setVisible(visible);
-        delete.setVisible(visible);
+        RECYCLE.setVisible(visible);
+        DELETE.setVisible(visible);
         if (visible) {
-            recycle.setOnTop();
-            delete.setOnTop();
+            RECYCLE.setOnTop();
+            DELETE.setOnTop();
         }
     }
     
@@ -271,9 +272,9 @@ public class ShortcutManager {
      */
     private static boolean isRecycle(ShortcutView shortcut) {
         TempVars tv = TempVars.get();
-        Vector3f bucketCenter = tv.vect1.set(recycle.getDisplay().getWorldTranslation());
-        bucketCenter.setX(bucketCenter.x + recycle.getWidth() * 0.5f);
-        bucketCenter.setY(bucketCenter.y + recycle.getHeight() * 0.5f);
+        Vector3f bucketCenter = tv.vect1.set(RECYCLE.getDisplay().getWorldTranslation());
+        bucketCenter.setX(bucketCenter.x + RECYCLE.getWidth() * 0.5f);
+        bucketCenter.setY(bucketCenter.y + RECYCLE.getHeight() * 0.5f);
         bucketCenter.setZ(0);
 
         Vector3f shortcutCenter = tv.vect2.set(shortcut.getWorldTranslation());
@@ -281,7 +282,7 @@ public class ShortcutManager {
         shortcutCenter.setY(shortcutCenter.y + shortcut.getHeight() * 0.5f);
         shortcutCenter.setZ(0);
         
-        boolean result = bucketCenter.distance(shortcutCenter) < recycle.getWidth() * 0.5f;
+        boolean result = bucketCenter.distance(shortcutCenter) < RECYCLE.getWidth() * 0.5f;
         tv.release();
         return result;
     }
@@ -293,9 +294,9 @@ public class ShortcutManager {
      */
     private static boolean isDelete(ShortcutView shortcut) {
         TempVars tv = TempVars.get();
-        Vector3f bucketCenter = tv.vect1.set(delete.getDisplay().getWorldTranslation());
-        bucketCenter.setX(bucketCenter.x + delete.getWidth() * 0.5f);
-        bucketCenter.setY(bucketCenter.y + delete.getHeight() * 0.5f);
+        Vector3f bucketCenter = tv.vect1.set(DELETE.getDisplay().getWorldTranslation());
+        bucketCenter.setX(bucketCenter.x + DELETE.getWidth() * 0.5f);
+        bucketCenter.setY(bucketCenter.y + DELETE.getHeight() * 0.5f);
         bucketCenter.setZ(0);
 
         Vector3f shortcutCenter = tv.vect2.set(shortcut.getWorldTranslation());
@@ -303,7 +304,7 @@ public class ShortcutManager {
         shortcutCenter.setY(shortcutCenter.y + shortcut.getHeight() * 0.5f);
         shortcutCenter.setZ(0);
         
-        boolean result = bucketCenter.distance(shortcutCenter) < delete.getWidth() * 0.5f;
+        boolean result = bucketCenter.distance(shortcutCenter) < DELETE.getWidth() * 0.5f;
         tv.release();
         return result;
     }

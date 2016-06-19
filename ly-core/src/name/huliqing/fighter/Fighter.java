@@ -1,30 +1,22 @@
 package name.huliqing.fighter;
 
-import name.huliqing.fighter.manager.HUDManager;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.StatsAppState;
 import com.jme3.app.state.AppState;
 import com.jme3.renderer.RenderManager;
 import com.jme3.system.AppSettings;
-import com.jme3.util.SafeArrayList;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.BackingStoreException;
 import javax.imageio.ImageIO;
-import name.huliqing.fighter.manager.Manager;
 import name.huliqing.fighter.game.service.ConfigService;
 import name.huliqing.fighter.loader.data.ObjectLoader;
 import name.huliqing.fighter.game.state.FpsState;
 import name.huliqing.fighter.game.state.PlayState;
 import name.huliqing.fighter.game.state.lan.LanState;
 import name.huliqing.fighter.game.state.start.StartState;
-import name.huliqing.fighter.manager.DamageManager;
-//import name.huliqing.fighter.manager.ShortcutManager;
-import name.huliqing.fighter.manager.AnimationManager;
-import name.huliqing.fighter.manager.talk.SpeakManager;
-import name.huliqing.fighter.manager.talk.TalkManager;
 import name.huliqing.fighter.object.DataFactory;
 import name.huliqing.fighter.ui.UIConfig;
 import name.huliqing.fighter.ui.UIFactory;
@@ -99,8 +91,6 @@ public class Fighter extends SimpleApplication {
     // 当前的state
     private AppState currentState;
     
-    private final SafeArrayList<Manager> managers = new SafeArrayList<Manager>(Manager.class);
-
     @Override
     public void start() {
         super.start(); 
@@ -127,10 +117,6 @@ public class Fighter extends SimpleApplication {
         // 2.UI配置
         UIConfig uiconfig = new UIConfigImpl(getAssetManager());
         UIFactory.registerUIConfig(uiconfig);
-        
-        // 3.载入Manager
-        managers.add(SpeakManager.getInstance());
-        managers.add(TalkManager.getInstance());
         
         // ======== start init
         // 4.UI事件,
@@ -220,27 +206,15 @@ public class Fighter extends SimpleApplication {
      * 在state剥离之前先清理manager.
      */
     private void preDetach() {
-        for (Manager manager : managers) {
-            manager.cleanup();
-        }
+        // ignore
     }
     
     /**
      * 在重新开始一个state时执行一些清理和重置。
      */
     private void preStartState() {
-        // 初始化ManagerI
-        for (Manager manager : managers) {
-            manager.init(this);
-        }
-        
         // ==== 清理和GC        
-        // UI动画控制
-        AnimationManager.cleanup();
 
-        // 伤害动态效果
-        DamageManager.cleanup();
-        
         // 重要：清除所有按键侦听，部分state在detach时可能会忘记一些按键绑定的清理。
         // 这些没有或忘记释放的绑定会严重影响性能。特别是如：ChaseCamera这些内定的
         // 按键绑定了多个listener,如果不知道或忘记清理，则每次创建ChaseCamera时
@@ -253,21 +227,11 @@ public class Fighter extends SimpleApplication {
         
         // 由于进行了clearMappings,所以viewState必须重新绑定事件
         UIState.getInstance().registerDefaultListener();
-        
-        // ==== show debug info 
-        DamageManager.showDebugInfo();
     }
     
     @Override
     public void simpleUpdate(float tpf) {
         super.simpleUpdate(tpf);
-        // 新的Manager行为方式 
-        for (Manager manager : managers.getArray()) {
-            manager.update(tpf);
-        }
-        
-        // UI动画更新
-        AnimationManager.update(tpf);
     }
     
     @Override
