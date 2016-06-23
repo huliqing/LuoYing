@@ -24,7 +24,7 @@ import name.huliqing.fighter.object.actor.ActorControl;
 import name.huliqing.fighter.data.ProtoData;
 import name.huliqing.fighter.enums.MessageType;
 import name.huliqing.fighter.game.state.PlayState;
-import name.huliqing.fighter.game.state.game.StoryPlayState;
+import name.huliqing.fighter.game.state.StoryPlayState;
 import name.huliqing.fighter.manager.ShortcutManager;
 import name.huliqing.fighter.object.NetworkObject;
 import name.huliqing.fighter.object.PlayObject;

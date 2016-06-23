@@ -9,7 +9,7 @@ import com.jme3.network.serializing.Serializable;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.game.network.PlayNetwork;
 import name.huliqing.fighter.game.service.PlayService;
-import name.huliqing.fighter.game.state.game.ConnData;
+import name.huliqing.fighter.game.state.ConnData;
 import name.huliqing.fighter.game.state.lan.GameServer;
 import name.huliqing.fighter.object.actor.Actor;
 

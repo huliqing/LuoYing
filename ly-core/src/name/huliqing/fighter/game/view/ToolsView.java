@@ -4,7 +4,7 @@
  */
 package name.huliqing.fighter.game.view;
 
-import name.huliqing.fighter.game.state.game.MenuTool;
+import name.huliqing.fighter.game.state.MenuTool;
 import name.huliqing.fighter.ui.LinearLayout;
 import name.huliqing.fighter.ui.UI;
 

@@ -15,7 +15,7 @@ import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.constants.IdConstants;
 import name.huliqing.fighter.data.GameData;
 import name.huliqing.fighter.game.service.GameService;
-import name.huliqing.fighter.game.state.game.StoryPlayState;
+import name.huliqing.fighter.game.state.StoryPlayState;
 import name.huliqing.fighter.game.state.start.StoryView.StoryData;
 import name.huliqing.fighter.manager.ResourceManager;
 import name.huliqing.fighter.save.SaveStory;

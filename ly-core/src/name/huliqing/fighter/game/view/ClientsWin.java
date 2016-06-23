@@ -5,8 +5,8 @@
 package name.huliqing.fighter.game.view;
 
 import java.util.List;
-import name.huliqing.fighter.game.state.game.LanGame;
-import name.huliqing.fighter.game.state.game.ConnData;
+import name.huliqing.fighter.game.state.LanGame;
+import name.huliqing.fighter.game.state.ConnData;
 import name.huliqing.fighter.manager.ResourceManager;
 import name.huliqing.fighter.ui.Button;
 import name.huliqing.fighter.ui.LinearLayout;

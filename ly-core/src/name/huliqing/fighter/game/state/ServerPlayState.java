@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.fighter.game.state.game;
+package name.huliqing.fighter.game.state;
 
 import java.util.List;
 import com.jme3.app.Application;

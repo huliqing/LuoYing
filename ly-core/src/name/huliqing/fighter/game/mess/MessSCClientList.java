@@ -7,7 +7,7 @@ package name.huliqing.fighter.game.mess;
 import com.jme3.network.serializing.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.fighter.game.state.game.ConnData;
+import name.huliqing.fighter.game.state.ConnData;
 
 /**
  * 服务端发客户端发送客户端列表信息：当前已经连接到服务器的客户端列表

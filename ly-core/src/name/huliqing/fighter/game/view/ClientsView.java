@@ -8,7 +8,7 @@ import com.jme3.font.BitmapFont.VAlign;
 import com.jme3.math.ColorRGBA;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.fighter.game.state.game.ConnData;
+import name.huliqing.fighter.game.state.ConnData;
 import name.huliqing.fighter.manager.ResourceManager;
 import name.huliqing.fighter.ui.LinearLayout;
 import name.huliqing.fighter.ui.ListView;

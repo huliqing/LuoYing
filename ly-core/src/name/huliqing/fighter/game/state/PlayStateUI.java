@@ -5,7 +5,6 @@
 package name.huliqing.fighter.game.state;
 
 import name.huliqing.fighter.Common;
-import name.huliqing.fighter.game.state.game.MenuTool;
 import name.huliqing.fighter.game.view.SettingView;
 import name.huliqing.fighter.game.view.ToolsView;
 import name.huliqing.fighter.object.IntervalLogic;

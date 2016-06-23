@@ -15,7 +15,7 @@ import com.jme3.network.Message;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import name.huliqing.fighter.game.state.game.ConnData;
+import name.huliqing.fighter.game.state.ConnData;
 import name.huliqing.fighter.game.state.lan.GameServer.ServerListener;
 import name.huliqing.fighter.game.mess.MessPlayGetClients;
 import name.huliqing.fighter.game.mess.MessPlayGetGameData;

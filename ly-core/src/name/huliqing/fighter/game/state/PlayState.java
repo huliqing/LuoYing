@@ -4,7 +4,6 @@
  */
 package name.huliqing.fighter.game.state;
 
-import name.huliqing.fighter.game.state.game.GameState;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
@@ -15,8 +14,7 @@ import name.huliqing.fighter.Fighter;
 import name.huliqing.fighter.data.GameData;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.enums.MessageType;
-import name.huliqing.fighter.game.state.game.GameState.PlayListener;
-import name.huliqing.fighter.game.state.game.SimpleGameState;
+import name.huliqing.fighter.game.state.GameState.PlayListener;
 import name.huliqing.fighter.game.view.TeamView;
 import name.huliqing.fighter.object.NetworkObject;
 import name.huliqing.fighter.object.view.View;

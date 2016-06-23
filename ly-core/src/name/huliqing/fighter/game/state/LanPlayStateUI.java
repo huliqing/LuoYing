@@ -10,7 +10,6 @@ import name.huliqing.fighter.Common;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.constants.IdConstants;
 import name.huliqing.fighter.game.service.PlayService;
-import name.huliqing.fighter.game.state.game.GameState;
 import name.huliqing.fighter.game.view.TeamView;
 import name.huliqing.fighter.game.view.actor.ActorMainPanel;
 import name.huliqing.fighter.object.actor.Actor;

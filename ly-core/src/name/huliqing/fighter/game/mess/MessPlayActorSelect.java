@@ -14,7 +14,7 @@ import name.huliqing.fighter.game.service.ActorService;
 import name.huliqing.fighter.game.service.LogicService;
 import name.huliqing.fighter.game.service.PlayService;
 import name.huliqing.fighter.game.service.SkillService;
-import name.huliqing.fighter.game.state.game.ConnData;
+import name.huliqing.fighter.game.state.ConnData;
 import name.huliqing.fighter.game.state.lan.GameServer;
 import name.huliqing.fighter.manager.ResourceManager;
 import name.huliqing.fighter.object.actor.Actor;

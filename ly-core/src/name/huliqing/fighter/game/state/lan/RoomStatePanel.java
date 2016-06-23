@@ -6,7 +6,7 @@ package name.huliqing.fighter.game.state.lan;
 
 import java.util.List;
 import name.huliqing.fighter.data.GameData;
-import name.huliqing.fighter.game.state.game.ConnData;
+import name.huliqing.fighter.game.state.ConnData;
 import name.huliqing.fighter.manager.ResourceManager;
 import name.huliqing.fighter.game.view.ClientsView;
 import name.huliqing.fighter.utils.MathUtils;

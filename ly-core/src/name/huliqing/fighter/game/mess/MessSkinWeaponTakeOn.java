@@ -10,7 +10,7 @@ import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.game.network.SkinNetwork;
 import name.huliqing.fighter.game.service.PlayService;
 import name.huliqing.fighter.game.service.SkinService;
-import name.huliqing.fighter.game.state.game.ConnData;
+import name.huliqing.fighter.game.state.ConnData;
 import name.huliqing.fighter.game.state.lan.GameServer;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.save.ClientData;

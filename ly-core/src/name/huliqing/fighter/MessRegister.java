@@ -104,7 +104,7 @@ import name.huliqing.fighter.game.mess.MessPlayLoadSavedActorResult;
 import name.huliqing.fighter.game.mess.MessPlayClientExit;
 import static com.jme3.network.serializing.Serializer.registerClass;
 import name.huliqing.fighter.game.mess.MessPlayChangeGameState;
-import name.huliqing.fighter.game.state.game.ConnData;
+import name.huliqing.fighter.game.state.ConnData;
 import static com.jme3.network.serializing.Serializer.registerClass;
 import static com.jme3.network.serializing.Serializer.registerClass;
 import static com.jme3.network.serializing.Serializer.registerClass;

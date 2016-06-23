@@ -24,7 +24,7 @@ import name.huliqing.fighter.game.service.EnvService;
 import name.huliqing.fighter.game.state.lan.GameClient.ClientListener;
 import name.huliqing.fighter.game.state.lan.GameServer.ServerState;
 import name.huliqing.fighter.game.mess.MessPing;
-import name.huliqing.fighter.game.state.game.ConnData;
+import name.huliqing.fighter.game.state.ConnData;
 
 /**
  * 客户端帧听器,用于监听来自服务端的消息。

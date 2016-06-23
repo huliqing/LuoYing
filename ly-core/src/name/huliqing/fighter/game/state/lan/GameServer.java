@@ -27,7 +27,7 @@ import name.huliqing.fighter.data.GameData;
 import name.huliqing.fighter.game.service.ConfigService;
 import name.huliqing.fighter.game.service.EnvService;
 import name.huliqing.fighter.game.service.PlayService;
-import name.huliqing.fighter.game.state.game.ConnData;
+import name.huliqing.fighter.game.state.ConnData;
 import name.huliqing.fighter.game.state.lan.discover.MessCSFindServer;
 import name.huliqing.fighter.game.state.lan.discover.MessCSPing;
 import name.huliqing.fighter.game.state.lan.discover.UDPDiscover;

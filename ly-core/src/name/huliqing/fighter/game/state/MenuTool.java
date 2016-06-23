@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.fighter.game.state.game;
+package name.huliqing.fighter.game.state;
 
 import name.huliqing.fighter.ui.UI;
 

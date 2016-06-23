@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.fighter.Config;
-import name.huliqing.fighter.game.state.game.GameState.PlayListener;
+import name.huliqing.fighter.game.state.GameState.PlayListener;
 import name.huliqing.fighter.loader.Loader;
 import name.huliqing.fighter.object.IntervalLogic;
 
