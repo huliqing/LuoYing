@@ -32,6 +32,8 @@ common.total=数量
 common.send=发送
 common.items=包裹物品
 common.chat=对话
+common.map.transfer=移动
+common.map.cancel=取消
 
 #start panel
 start.new=新游戏

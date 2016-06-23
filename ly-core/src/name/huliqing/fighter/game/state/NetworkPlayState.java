@@ -60,8 +60,8 @@ public abstract class NetworkPlayState extends PlayState implements LanGame {
     }
 
     @Override
-    public void changeGameState(GameData gameData) {
-        super.changeGameState(gameData);
+    public void changeGameState(GameState newGameState) {
+        super.changeGameState(newGameState);
         gameState.getGame().addListener(new GameListener() {
             @Override
             public void onSceneLoaded() {

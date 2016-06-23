@@ -16,10 +16,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import name.huliqing.fighter.Factory;
+import name.huliqing.fighter.constants.InterfaceConstants;
+import name.huliqing.fighter.constants.ResConstants;
 import name.huliqing.fighter.data.HandlerData;
 import name.huliqing.fighter.data.ProtoData;
 import name.huliqing.fighter.game.network.UserCommandNetwork;
 import name.huliqing.fighter.game.service.PlayService;
+import name.huliqing.fighter.manager.ResourceManager;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.ui.Button;
 import name.huliqing.fighter.ui.FrameLayout;
@@ -39,6 +42,7 @@ public class MapHandler extends AbstractHandler {
     private final UserCommandNetwork userCommandNetwork = Factory.get(UserCommandNetwork.class);
     
     private String image;
+    private float iconSize = 0.3f;
     private List<Location> locations;
     
     //----inner
@@ -48,6 +52,7 @@ public class MapHandler extends AbstractHandler {
     public void initData(HandlerData data) {
         super.initData(data); 
         this.image = data.getAttribute("image");
+        this.iconSize = data.getAsFloat("iconSize", iconSize);
         String[] tempLocations = data.getAsArray("locations");
         if (tempLocations != null) {
             locations = new ArrayList<Location>(tempLocations.length);
@@ -58,7 +63,7 @@ public class MapHandler extends AbstractHandler {
                 loc.x = ConvertUtils.toFloat(tmp[1], 0);
                 loc.y = ConvertUtils.toFloat(tmp[2], 0);
                 loc.gameId = tmp.length > 3 ?  tmp[3] : null;
-                loc.icon = tmp.length > 4 ? tmp[4] : null;
+                loc.icon = tmp.length > 4 ? tmp[4] : InterfaceConstants.MAP_FLAG_LOCATION;
                 locations.add(loc);
             }
         }
@@ -90,7 +95,7 @@ public class MapHandler extends AbstractHandler {
     }
     
     private Flag createFlag(Actor actor, String locationId, boolean showDirection, boolean focus) {
-        Flag flag = new Flag(actor.getData().getUniqueId(), "Interface/map/flag.png");
+        Flag flag = new Flag(actor.getData().getUniqueId(), InterfaceConstants.MAP_FLAG_PLAYER);
         
         // 计算位置
         float mw = mapView.mapContainer.getWidth();
@@ -194,7 +199,7 @@ public class MapHandler extends AbstractHandler {
             
             // close button
             close = new Icon();
-            close.setImage("Interface/map/close.png");
+            close.setImage(InterfaceConstants.UI_CLOSE);
             close.setWidth(32);
             close.setHeight(32);
             close.addClickListener(new Listener() {
@@ -234,54 +239,27 @@ public class MapHandler extends AbstractHandler {
             addView(map);
             
             // 添加各种地图坐标点
-            float iconw = 16;
-            float iconh = 16;
-            float btnw = 32;
-            float btnh = 32;
             for (int i = 0; i < locations.size(); i++) {
                 final Location loc = locations.get(i);
                 float posX = width * loc.x;
                 float posY = height * loc.y;
                 
-                // 添加特殊的地图点图标。
-                if (loc.icon != null) {
-                    Icon icon = new Icon();
-                    icon.setImage(loc.icon);
-                    icon.setWidth(iconw);
-                    icon.setHeight(iconh);
-                    icon.setPosition(posX - iconw * 0.5f, posY - iconh * 0.5f);
-                }
-                
-                // 添加一个按钮，点击后可显示对于当前的各种命令，如："传送"之类
-                // 这个按钮正常情况下是隐藏的，只是作为触发事件用，不用于显示。
-                // 显示交由loc.icon配置
-                Icon locBtn = new Icon();
-                locBtn.setImage("Interface/map/location.jpg");
-                locBtn.setWidth(btnw);
-                locBtn.setHeight(btnh);
-                
-                // ----remove20160612不再需要使用这个方法来fix问题 
-//                // 注：这里让locBtn的z值大一些是必要的，以避免被Flag盖住的时候无法进行点击，即使Flag无事件。因为当Flag盖
-//                // 住LocBtn的时候先点击到的是Flag,这个时候即使Flag无事件，但是Flag的父UI MapContainer存在事件（拖动），
-//                // 这时Flag会把事件检测传递到父MapContainer中去，这会造成不合理。所以要确保locBtn比Flag优先点击到,
-//                // 即locBtn的z值要大于flag
-//                locBtn.setLocalTranslation(posX - btnw * 0.5f,  posY - btnh * 0.5f, 1);
-                // ----
-
-                locBtn.setPosition(posX - btnw * 0.5f,  posY - btnh * 0.5f);
-
-                // 让按钮颜色变透明以隐藏,不能使用cullHint，否则无法触发事件
-                locBtn.getMaterial().getParam("Color").setValue(new ColorRGBA(1,1,1,0.5f));
-                locBtn.getMaterial().getAdditionalRenderState().setBlendMode(RenderState.BlendMode.AlphaAdditive);
-                locBtn.setEffectEnabled(false);
-                locBtn.addClickListener(new Listener() {
+                // 添加一个地点图标，点击后可显示对于当前的各种命令，如："传送"之类
+                Icon icon = new Icon();
+                icon.setImage(loc.icon);
+                icon.setWidth(icon.getWidth() * iconSize);
+                icon.setHeight(icon.getHeight() * iconSize);
+                icon.setPosition(posX - icon.getWidth() * 0.5f, posY - icon.getHeight() * 0.5f);
+                icon.getMaterial().getAdditionalRenderState().setBlendMode(RenderState.BlendMode.AlphaAdditive);
+                icon.setEffectEnabled(false);
+                icon.addClickListener(new Listener() {
                     @Override
                     public void onClick(UI view, boolean isPressed) {
                         if (isPressed) return;
                         showCommand(loc);
                     }
                 });
-                addView(locBtn);
+                addView(icon);
             }
         }
         
@@ -396,7 +374,8 @@ public class MapHandler extends AbstractHandler {
             title.setHeight(UIFactory.getUIConfig().getTitleHeight());
             title.setBackground(UIFactory.getUIConfig().getBackground(), true);
             title.setBackgroundColor(UIFactory.getUIConfig().getTitleBgColor(), true);
-            transfer = new Button("传送");
+            title.setVerticalAlignment(BitmapFont.VAlign.Center);
+            transfer = new Button(ResourceManager.get(ResConstants.COMMON_MAP_TRANSFER));
             transfer.setWidth(width);
             transfer.addClickListener(new Listener() {
                 @Override
@@ -408,7 +387,7 @@ public class MapHandler extends AbstractHandler {
                 }
             });
             
-            cancel = new Button("取消");
+            cancel = new Button(ResourceManager.get(ResConstants.COMMON_MAP_CANCEL));
             cancel.setWidth(width);
             cancel.addClickListener(new Listener() {
                 @Override
@@ -425,7 +404,7 @@ public class MapHandler extends AbstractHandler {
         
         public void updateLocation(Location loc) {
             this.loc = loc;
-            title.setText("  Location:" + loc.id);
+            title.setText(" " + loc.id);
             if (!loc.enabled) {
                 transfer.setDisabled(true);
                 transfer.setFontColor(ColorRGBA.Gray);

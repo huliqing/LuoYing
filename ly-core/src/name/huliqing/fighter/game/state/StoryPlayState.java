@@ -102,14 +102,15 @@ public class StoryPlayState extends NetworkPlayState {
     }
     
     @Override
-    public void changeGameState(GameData gameData) {
-        gameServer.setServerState(ServerState.loading);
+    public void changeGameState(GameState newGameState) {
         // 故事模式在切换游戏之前先保存一次存档.
+        // 注：这里先把服务端状态设置为loading，以阻止在切换状态过程中处理来自客户端的消息。
+        gameServer.setServerState(ServerState.loading);
         if (gameState != null) {
             saveStory();
         }
         // 切换游戏
-        super.changeGameState(gameData);
+        super.changeGameState(newGameState);
         gameServer.setGameData(gameData);
         gameServer.setServerState(ServerState.loading);
         gameState.getGame().addListener(new GameListener() {

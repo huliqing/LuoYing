@@ -65,6 +65,7 @@ public class ClientPlayState extends NetworkPlayState implements AbstractClientL
         this.clientListener = new ClientListener(app);
         this.clientListener.addPingListener(this);
         this.gameClient.setGameClientListener(clientListener);
+        this.gameClient.setClientState(ClientState.loading);
     }
     
     @Override
@@ -82,17 +83,16 @@ public class ClientPlayState extends NetworkPlayState implements AbstractClientL
     }
 
     @Override
-    public void changeGameState(GameData gameData) {
+    public void changeGameState(GameState newGameState) {
         // 在切换gameState之前先保存快捷方式
+        gameClient.setClientState(ClientState.loading);
         if (gameState != null) {
             saveClientShortcuts();
         }
         
         // 切换游戏
-        super.changeGameState(gameData);
-        gameClient.setGameData(gameData);
-        gameClient.setClientState(ClientState.ready);
-        
+        super.changeGameState(newGameState);
+        gameClient.setGameData(gameData);        
         // 重要，客户端是不需要执行游戏逻辑的，只需要载入场景及执行场景逻辑就可以。
         gameState.getGame().setEnabled(false);
         // 在载入场景后才把状态设置为ready,这个状态表示客户端准备就绪 

@@ -37,7 +37,9 @@ public abstract class PlayState extends AbstractAppState {
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
-        changeGameState(gameData);
+
+        LoadingState ls = new LoadingState(this, new SimpleGameState(gameData));
+        app.getStateManager().attach(ls);
     }
 
     @Override
@@ -71,27 +73,44 @@ public abstract class PlayState extends AbstractAppState {
         return this.app;
     }
     
-    /**
+     /**
      * 切换游戏
-     * @param gameData 游戏
+     * @param newGameState
      */
-    public void changeGameState(GameData gameData) {
+    public void changeGameState(GameState newGameState) {
+        // 移除旧的gameState
         if (gameState != null) {
             app.getStateManager().detach(gameState);
         }
-        this.gameData = gameData;
-        gameState = createGameState(gameData);
+        // Attach新的gameState
+        this.gameState = newGameState;
+        this.gameData = newGameState.getGame().getData();
         app.getStateManager().attach(gameState);
     }
     
-        /**
-     * 使用gameData创建一个新的GameState.
-     * @param gameData
-     * @return 
-     */
-    protected GameState createGameState(GameData gameData) {
-        return new SimpleGameState(gameData);
-    }
+//    /**
+//     * 切换游戏
+//     * @param gameData 游戏
+//     */
+//    public void changeGameState(GameData gameData) {
+//        if (gameState != null) {
+//            app.getStateManager().detach(gameState);
+//        }
+//        this.gameData = gameData;
+//        gameState = createGameState(gameData);
+//
+//
+//        app.getStateManager().attach(gameState);
+//    }
+//    
+//        /**
+//     * 使用gameData创建一个新的GameState.
+//     * @param gameData
+//     * @return 
+//     */
+//    protected GameState createGameState(GameData gameData) {
+//        return new SimpleGameState(gameData);
+//    }
     
     /**
      * 添加一个侦听器

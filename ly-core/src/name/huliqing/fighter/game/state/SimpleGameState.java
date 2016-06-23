@@ -277,8 +277,10 @@ public  class SimpleGameState extends GameState implements UIEventListener {
     @Override
     public void cleanup() {
         // 清理Spatial
-        localRoot.removeFromParent();
-        localRoot = null;
+        if (localRoot != null) {
+            localRoot.removeFromParent();
+            localRoot = null;
+        }
         
         // 清理actors
         for (Actor a : actors) {

@@ -65,8 +65,8 @@ public class ServerPlayState extends NetworkPlayState  {
     }
 
     @Override
-    public void changeGameState(GameData gameData) {
-        super.changeGameState(gameData);
+    public void changeGameState(GameState newGameStata) {
+        super.changeGameState(newGameStata);
         
         gameServer.setServerState(ServerState.loading);
         gameState.getGame().addListener(new GameListener() {

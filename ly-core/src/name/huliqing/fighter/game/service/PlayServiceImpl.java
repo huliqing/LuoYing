@@ -23,7 +23,10 @@ import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.object.actor.ActorControl;
 import name.huliqing.fighter.data.ProtoData;
 import name.huliqing.fighter.enums.MessageType;
+import name.huliqing.fighter.game.state.GameState;
+import name.huliqing.fighter.game.state.LoadingState;
 import name.huliqing.fighter.game.state.PlayState;
+import name.huliqing.fighter.game.state.SimpleGameState;
 import name.huliqing.fighter.game.state.StoryPlayState;
 import name.huliqing.fighter.manager.ShortcutManager;
 import name.huliqing.fighter.object.NetworkObject;
@@ -438,7 +441,9 @@ public class PlayServiceImpl implements PlayService {
 
     @Override
     public void changeGame(GameData gameData) {
-        Common.getPlayState().changeGameState(gameData);
+        GameState gameState = new SimpleGameState(gameData);
+        LoadingState loadingState = new LoadingState(Common.getPlayState(), gameState);
+        Common.getApp().getStateManager().attach(loadingState);
     }
 
     

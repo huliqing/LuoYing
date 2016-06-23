@@ -57,6 +57,11 @@ public class ResConstants {
     /** common.dead */
     public final static String COMMON_DEAD = "common.dead";
     
+    /** common.map.transfer */
+    public final static String COMMON_MAP_TRANSFER = "common.map.transfer";
+    /** common.map.cancel */
+    public final static String COMMON_MAP_CANCEL = "common.map.cancel";
+    
     // -------------------------------------------------------------------------
     // Lan
     // -------------------------------------------------------------------------

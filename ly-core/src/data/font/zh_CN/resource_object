@@ -63,6 +63,8 @@ itemScrollBear.des=召唤野熊
 itemScrollScorpion.name=野兽卷轴 - 蝎子
 itemScrollScorpion.des=召唤蝎子
 
+itemWorldMap.name=落樱大陆
+itemWorldMap.des=落樱大陆地图
 
 # ========== Actor 
 actorPlayerTest.name=Test

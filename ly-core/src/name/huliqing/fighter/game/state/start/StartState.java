@@ -48,7 +48,7 @@ public class StartState extends AbstractAppState {
         menu_settings,
     }
     
-    private Fighter app;
+    private final Fighter app;
     private Node localRoot;
     
     private StartView startPanel;
@@ -59,10 +59,6 @@ public class StartState extends AbstractAppState {
     
     // UI 
     private Icon viewBtn;
-    
-    private boolean toPlay = false;
-    private AppState appStateToRun;
-    private Text loading;
     
     private ParticleEmitter emitter;
     
@@ -138,10 +134,6 @@ public class StartState extends AbstractAppState {
         startPanel.setVisible(true);
         
         //----
-        loading = new Text("Loading...");
-        loading.setToCorner(Corner.CC);
-        loading.setVisible(false);
-        UIState.getInstance().addUI(loading);
         
         // ---- 分割线
         Material mat = MatUtils.createTransparent(InterfaceConstants.UI_LINE_V);
@@ -206,17 +198,6 @@ public class StartState extends AbstractAppState {
     @Override
     public void update(float tpf) {
         super.update(tpf);
-        if (toPlay) {
-            startPanel.setVisible(false);
-            savePanel.setVisible(false);
-            storyPanel.setVisible(false);
-            settingsPanel.setVisible(false);
-            viewBtn.setVisible(false);
-            loading.setVisible(true);
-            app.changeState(appStateToRun);
-            appStateToRun = null;
-            toPlay = false;
-        }
     }
     
     public Fighter getApp() {
@@ -253,11 +234,12 @@ public class StartState extends AbstractAppState {
      * @param appState 
      */
     public void startState(AppState appState) {
-        if (appState == appStateToRun) {
-            return;
-        }
-        appStateToRun = appState;
-        toPlay = true;
+        startPanel.setVisible(false);
+        savePanel.setVisible(false);
+        storyPanel.setVisible(false);
+        settingsPanel.setVisible(false);
+        viewBtn.setVisible(false);
+        app.changeState(appState);
     }
     
     /**

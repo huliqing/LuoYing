@@ -71,8 +71,17 @@ public class InterfaceConstants {
     /** CheckBox off */
     public final static String UI_CHECKBOX_OFF = "Interface/ui/checkbox/checkbox_off.jpg";
     
+    /** Close图标 */
+    public final static String UI_CLOSE = "Interface/map/close.png";
+    
+    
     /** 金币图标 */
     public final static String ITEM_GOLD = "Interface/item/gold.png";
     /** 经验值图标 */
     public final static String ITEM_EXP = "Interface/item/exp.png";
+    
+    /** 地图上位置点的默认图标 */
+    public final static String MAP_FLAG_LOCATION = "Interface/map/location.jpg";
+    /** 地图上玩家（当前）的图标 */
+    public final static String MAP_FLAG_PLAYER = "Interface/map/player.jpg";
 }
