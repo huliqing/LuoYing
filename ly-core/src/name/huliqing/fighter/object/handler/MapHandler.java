@@ -6,10 +6,12 @@
 package name.huliqing.fighter.object.handler;
 
 import com.jme3.font.BitmapFont;
+import com.jme3.material.MatParamOverride;
 import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
+import com.jme3.shader.VarType;
 import com.jme3.util.TempVars;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,8 +44,21 @@ public class MapHandler extends AbstractHandler {
     private final UserCommandNetwork userCommandNetwork = Factory.get(UserCommandNetwork.class);
     
     private String image;
-    private float iconSize = 0.3f;
+    // 地图倍率大小
+    private float mapSize = 1.0f;
+    // 地图透明度
+    private float mapAlpha = 1.0f;
+    // 默认地点图标
+    private String locationIcon = InterfaceConstants.MAP_FLAG_LOCATION;
+    // 地图上位置图标的倍率
+    private float locationSize = 1.0f;
+    // 位置点数据
     private List<Location> locations;
+    // 位置点图标的基本路径，如果指定了这个基本路径，则locations中的图标不需要再配置上完整的
+    // 图标路径。示例："Interface/map/loc/"
+    private String baseIconPath;
+    // 是否反转位置点上的垂直位置。
+    private boolean flipVertical;
     
     //----inner
     private MapView mapView;
@@ -52,7 +67,12 @@ public class MapHandler extends AbstractHandler {
     public void initData(HandlerData data) {
         super.initData(data); 
         this.image = data.getAttribute("image");
-        this.iconSize = data.getAsFloat("iconSize", iconSize);
+        this.mapSize = data.getAsFloat("mapSize", mapSize);
+        this.mapAlpha = data.getAsFloat("mapAlpha", mapAlpha);
+        this.locationSize = data.getAsFloat("locationSize", locationSize);
+        this.locationIcon = data.getAttribute("locationIcon", locationIcon);
+        this.baseIconPath = data.getAttribute("baseIconPath");
+        this.flipVertical = data.getAsBoolean("flipVertical", flipVertical);
         String[] tempLocations = data.getAsArray("locations");
         if (tempLocations != null) {
             locations = new ArrayList<Location>(tempLocations.length);
@@ -62,8 +82,12 @@ public class MapHandler extends AbstractHandler {
                 loc.id = tmp[0];
                 loc.x = ConvertUtils.toFloat(tmp[1], 0);
                 loc.y = ConvertUtils.toFloat(tmp[2], 0);
-                loc.gameId = tmp.length > 3 ?  tmp[3] : null;
-                loc.icon = tmp.length > 4 ? tmp[4] : InterfaceConstants.MAP_FLAG_LOCATION;
+                if (flipVertical) {
+                    loc.y = 1.0f - loc.y;
+                }
+                loc.enabled = "1".equals(tmp[3].trim());
+                loc.gameId = (tmp.length > 4 && !"".equals(tmp[4].trim())) ?  tmp[4].trim() : null;
+                loc.icon = tmp.length > 5 ? (baseIconPath != null ? baseIconPath + tmp[5] : tmp[5]) : locationIcon;
                 locations.add(loc);
             }
         }
@@ -89,12 +113,12 @@ public class MapHandler extends AbstractHandler {
         }
         
         // 显示当前玩家位置及方向
-        Flag playerFlag = createFlag(playService.getPlayer(), "place1", true, true);
+        Flag playerFlag = createFlag(playService.getPlayer(), playService.getGameId(), true, true);
         mapView.mapContainer.addFlag(playerFlag);
         playService.addObjectGui(mapView);
     }
     
-    private Flag createFlag(Actor actor, String locationId, boolean showDirection, boolean focus) {
+    private Flag createFlag(Actor actor, String gameId, boolean showDirection, boolean focus) {
         Flag flag = new Flag(actor.getData().getUniqueId(), InterfaceConstants.MAP_FLAG_PLAYER);
         
         // 计算位置
@@ -104,10 +128,10 @@ public class MapHandler extends AbstractHandler {
         float y = 0;
         // 如果提供了locationId，则直接定位到locationId在地图上的位置.
         // 否则将角色的当前世界世界位置转化到地图上的位置
-        if (locationId != null) {
+        if (gameId != null) {
             if (mapView.mapContainer.locations != null) {
                 for (Location loc : mapView.mapContainer.locations) {
-                    if (locationId.equals(loc.id)) {
+                    if (gameId.equals(loc.gameId)) {
                         x = mw * loc.x;
                         y = mh * loc.y;
                         break;
@@ -115,7 +139,8 @@ public class MapHandler extends AbstractHandler {
                 }
             }
         } else {
-            throw new UnsupportedOperationException("需要根据地图的实际大小来计算比例,然后计算实际位置");
+            // 20160626,暂不支持这个功能（本地地图）
+            //throw new UnsupportedOperationException("需要根据地图的实际大小来计算比例,然后计算实际位置");
             // 需要根据地图的实际大小来计算比例,可用WorldBound来计算
 //            Vector3f worldPos = actor.getLocation();
 //            x = mw * 0.5f + worldPos.x;
@@ -170,12 +195,12 @@ public class MapHandler extends AbstractHandler {
         // 在地图上的坐标比例，取值[0.0~1.0]
         public float x;
         public float y;
+        // 是否打开，只有打开才允许传送
+        public boolean enabled;
         // 游戏ID，当location被点击后可以传送到这个游戏中
         public String gameId;
         // 可以为地图上的点定义一个图标
         public String icon;
-        // 是否打开，只有打开才允许传送
-        public boolean enabled = true;
     }
     
     /**
@@ -234,41 +259,55 @@ public class MapHandler extends AbstractHandler {
             // 基本地图,地图的宽度、高度和图片一致
             Icon map = new Icon();
             map.setImage(image);
+            map.setWidth(map.getWidth() * mapSize);
+            map.setHeight(map.getHeight() * mapSize);
+            map.getMaterial().setColor("Color", new ColorRGBA(1,1,1, mapAlpha));
+            map.getMaterial().getAdditionalRenderState().setBlendMode(RenderState.BlendMode.Alpha);
+            
             setWidth(map.getWidth());
             setHeight(map.getHeight());
             addView(map);
             
             // 添加各种地图坐标点
-            for (int i = 0; i < locations.size(); i++) {
-                final Location loc = locations.get(i);
-                float posX = width * loc.x;
-                float posY = height * loc.y;
-                
-                // 添加一个地点图标，点击后可显示对于当前的各种命令，如："传送"之类
-                Icon icon = new Icon();
-                icon.setImage(loc.icon);
-                icon.setWidth(icon.getWidth() * iconSize);
-                icon.setHeight(icon.getHeight() * iconSize);
-                icon.setPosition(posX - icon.getWidth() * 0.5f, posY - icon.getHeight() * 0.5f);
-                icon.getMaterial().getAdditionalRenderState().setBlendMode(RenderState.BlendMode.AlphaAdditive);
-                icon.setEffectEnabled(false);
-                icon.addClickListener(new Listener() {
-                    @Override
-                    public void onClick(UI view, boolean isPressed) {
-                        if (isPressed) return;
-                        showCommand(loc);
+            if (locations != null) {
+                for (int i = 0; i < locations.size(); i++) {
+                    final Location loc = locations.get(i);
+                    float posX = width * loc.x;
+                    float posY = height * loc.y;
+
+                    // 添加一个地点图标，点击后可显示对于当前的各种命令，如："传送"之类
+                    Icon icon = new Icon();
+                    icon.setImage(loc.icon);
+                    icon.setWidth(icon.getWidth() * locationSize);
+                    icon.setHeight(icon.getHeight() * locationSize);
+                    icon.setPosition(posX - icon.getWidth() * 0.5f, posY - icon.getHeight() * 0.5f);
+                    icon.addClickListener(new Listener() {
+                        @Override
+                        public void onClick(UI view, boolean isPressed) {
+                            if (isPressed) return;
+                            if (!loc.enabled) return;
+                            showCommand(loc);
+                        }
+                    });
+                    icon.getMaterial().getAdditionalRenderState().setBlendMode(RenderState.BlendMode.Alpha);
+                    if (!loc.enabled) {
+                        MatParamOverride mpo = new MatParamOverride(VarType.Vector4, "Color", new ColorRGBA(1,1,1,0.5f));
+                        icon.addMatParamOverride(mpo);
                     }
-                });
-                addView(icon);
+                    addView(icon);
+                }
             }
         }
         
         public void showCommand(Location loc) {
+            if (loc.gameId == null || "".equals(loc.gameId))
+                        return;
+            
             if (command == null) {
                 command = new Command();
                 addView(command);
             }
-//            command.setDebug(true);
+            
             command.updateLocation(loc);
             command.setLocalTranslation(width * loc.x, height * loc.y, 0);
             command.setVisible(true);
@@ -380,7 +419,10 @@ public class MapHandler extends AbstractHandler {
             transfer.addClickListener(new Listener() {
                 @Override
                 public void onClick(UI view, boolean isPressed) {
-                    if (isPressed) return;
+                    if (isPressed) 
+                        return;
+                    if (loc.gameId == null || "".equals(loc.gameId))
+                        return;
                     userCommandNetwork.changeGameState(loc.gameId);
                     Command.this.setVisible(false);
                     mapView.removeFromParent();

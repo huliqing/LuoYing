@@ -81,7 +81,7 @@ public class InterfaceConstants {
     public final static String ITEM_EXP = "Interface/item/exp.png";
     
     /** 地图上位置点的默认图标 */
-    public final static String MAP_FLAG_LOCATION = "Interface/map/location.jpg";
+    public final static String MAP_FLAG_LOCATION = "Interface/map/location.png";
     /** 地图上玩家（当前）的图标 */
-    public final static String MAP_FLAG_PLAYER = "Interface/map/player.jpg";
+    public final static String MAP_FLAG_PLAYER = "Interface/map/player.png";
 }

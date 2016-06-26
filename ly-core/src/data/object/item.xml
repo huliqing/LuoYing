@@ -62,8 +62,15 @@
     <!--解毒药草-->
     <item id="itemDetoxifyGrass" icon="Interface/item/leaf.png" handler="handlerStateRemoveScorpionVenom" cost="20" />
     
+    <!--==========================================================================-->
+    <!-- 地图 -->
+    <!--==========================================================================-->
+    
     <!--落樱大陆地图-->
-    <item id="itemWorldMap" icon="Interface/map/map_icon.jpg" handler="handlerWorldMap" deletable="0" localObject="1" />
+    <item id="itemMapWorld" icon="Interface/map/map_world_icon.jpg" handler="handlerMapWorld" deletable="0" localObject="1" />
+    
+<!--    落樱小岛
+    <item id="itemMapIsland" icon="Interface/map/map_island_icon.jpg" handler="handlerMapIsland" deletable="0" localObject="1" />-->
 </root>
 
 

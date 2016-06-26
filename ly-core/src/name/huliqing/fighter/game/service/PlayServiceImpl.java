@@ -446,5 +446,18 @@ public class PlayServiceImpl implements PlayService {
         Common.getApp().getStateManager().attach(loadingState);
     }
 
+    @Override
+    public String getGameId() {
+        PlayState ps = Common.getPlayState();
+        if (ps == null)
+            return null;
+        
+        GameState gameState = ps.getGameState();
+        if (gameState == null)
+            return null;
+        
+        return gameState.getGame().getData().getId();
+    }
+
     
 }

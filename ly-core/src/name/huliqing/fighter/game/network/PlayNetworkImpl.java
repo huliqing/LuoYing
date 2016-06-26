@@ -321,25 +321,21 @@ public class PlayNetworkImpl implements PlayNetwork {
 
     @Override
     public Scene getScene() {
-//        return playService.getScene();
         throw new UnsupportedOperationException();
     }
 
     @Override
     public boolean isInScene(Actor actor) {
-//        return playService.isInScene(actor);
         throw new UnsupportedOperationException();
     }
 
     @Override
     public Actor getTarget() {
-//        return playService.getTarget();
         throw new UnsupportedOperationException();
     }
 
     @Override
     public void setTarget(Actor target) {
-//        playService.setTarget(target);
         throw new UnsupportedOperationException();
     }
 
@@ -350,20 +346,17 @@ public class PlayNetworkImpl implements PlayNetwork {
 
     @Override
     public float getScreenWidth() {
-//        return playService.getScreenWidth();
         throw new UnsupportedOperationException();
     }
 
     @Override
     public float getScreenHeight() {
-//        return playService.getScreenHeight();
         throw new UnsupportedOperationException();
     }
 
     @Override
     public void setAsPlayer(Actor actor) {
         // 这个命令不需要广播到客户端
-//        playService.setAsPlayer(actor);
         throw new UnsupportedOperationException();
     }
 
@@ -376,12 +369,6 @@ public class PlayNetworkImpl implements PlayNetwork {
     public void saveCompleteStage(int storyNum) {
         playService.saveCompleteStage(storyNum);
     }
-   
-    // remove20160613
-//    @Override
-//    public void initScene(SceneData sceneData) {
-//        playService.initScene(sceneData);
-//    }
     
     @Override
     public void showSelectPanel(List<String> selectableActors) {
@@ -525,5 +512,11 @@ public class PlayNetworkImpl implements PlayNetwork {
 
         playService.changeGame(gameData);
     }
+
+    @Override
+    public String getGameId() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
     
 }

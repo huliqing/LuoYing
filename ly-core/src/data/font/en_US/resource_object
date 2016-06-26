@@ -63,8 +63,8 @@ itemScrollBear.des=Use to summon a bear
 itemScrollScorpion.name=Summon scroll - Scorpion
 itemScrollScorpion.des=Use to summon a scorpion
 
-itemWorldMap.name=Sakura Mainland
-itemWorldMap.des=The whole map of the mainland
+itemMapWorld.name=Sakura Mainland
+itemMapWorld.des=The whole map of the mainland
 
 # ========== Actor 
 actorPlayerTest.name=Test

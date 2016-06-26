@@ -48,12 +48,50 @@ xs:time
                     </xs:attribute>
                     <xs:attribute name="locations" use="optional" type="xs:string">
                         <xs:annotation>
-                            <xs:documentation>格式： "id|x|y|gameId|icon", 
+                            <xs:documentation>格式： "id|x|y|enabled|gameId|icon", 
                                 id为地图点名称;
                                 x,y为地图上的坐标位置,取值[0.0~1.0]; 
+                                enabled是否激活这个位置点,取值: 0/1, 0或其它值表示未开启，1表示开启
                                 gameId为连接到一个游戏场景(game.xml), 可不设置;
                                 icon可为位置点指定一个特别的图标，可不设置。
-                                示例: "place1|0.2|0.5|treasureGame|Interface/map/place.jpg"
+                                示例: "place1|0.2|0.5|1|treasureGame|Interface/map/place.jpg"
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="mapSize" type="xs:decimal" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>地图大小倍率，默认1.0</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="mapAlpha" type="xs:decimal" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>地图透明度，默认1.0</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="locationIcon" type="xs:string" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                默认的位置点图标,如: "Interface/map/location.png", 必须是完整路径，所有在locations中未指定图标的
+                                位置点将使用这个图标作为默认图标。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="locationSize" type="xs:decimal" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>地图位置点图标大小倍率，默认1.0</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="baseIconPath" type="xs:string" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>位置点图标的基本路径，如果指定了这个基本路径，则locations中的图标不需要再配置上完整的
+                            图标路径。示例："Interface/map/"
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="flipVertical" type="bool" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                是否反转位置点上的垂直位置。
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>

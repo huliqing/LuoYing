@@ -331,4 +331,9 @@ public interface PlayService extends Inject {
      */
     void changeGame(GameData gameData);
 
+    /**
+     * 获取当前游戏的gameId,如果不是正在游戏，则返回null.
+     * @return 
+     */
+    String getGameId();
 }

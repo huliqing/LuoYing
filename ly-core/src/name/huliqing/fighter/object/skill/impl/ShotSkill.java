@@ -152,7 +152,6 @@ public class ShotSkill extends HitSkill {
             float shotTime = MathUtils.clamp(fixTimePointByCutTime(shotTimes[i]), 0f, 1f);
             trueShotTimes[i] = shotTime;
         }
-//        shotChecker.setMaxTime(data.getTrueUseTime());
         shotChecker.setMaxTime(trueUseTime);
         shotChecker.setCheckPoint(trueShotTimes);
         shotChecker.rewind();
