@@ -446,7 +446,7 @@ public class MapHandler extends AbstractHandler {
         
         public void updateLocation(Location loc) {
             this.loc = loc;
-            title.setText(" " + loc.id);
+            title.setText("  " + ResourceManager.getObjectExt(data.getId(), "loc." + loc.id));
             if (!loc.enabled) {
                 transfer.setDisabled(true);
                 transfer.setFontColor(ColorRGBA.Gray);

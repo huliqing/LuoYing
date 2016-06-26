@@ -46,6 +46,7 @@ public abstract class AbstractHandler<T extends HandlerData> implements Handler<
 
     @Override
     public void initData(T data) {
+        this.data = data;
         effects = data.getAsArray("effects");
         sounds = data.getAsArray("sounds");
     }

@@ -146,9 +146,14 @@ public class ResourceManager {
         return temp;
     }
     
-    
-    public static String getObjectExt(String objectId, String type) {
-        return get(objectId + "." + type);
+    /**
+     * 获得物体信息（扩展）
+     * @param objectId 物品ID名称
+     * @param ext
+     * @return 
+     */
+    public static String getObjectExt(String objectId, String ext) {
+        return get(objectId + "." + ext);
     }
     
     /**
