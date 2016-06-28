@@ -184,6 +184,9 @@ public class ChannelProcessorImpl implements ChannelProcessor {
         
         for (String id : ids) {
             Channel tempChannel = getChannel(id);
+            if (tempChannel == null) {
+                continue;
+            }
             if (animName.equals(tempChannel.getAnimationName())) {
                 sampleChannel = tempChannel.getAnimChannel();
             } else {

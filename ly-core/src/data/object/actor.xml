@@ -7,7 +7,7 @@
     
     <!--test-->
     <!-- player test -->    
-    <actor id="actorPlayerTest" extends="actorPlayer" level="7" 
+    <actor id="actorPlayerTest0" extends="actorPlayer" level="7" 
            items="itemMapWorld,item000|100,itemGold|10000,itemTowerSnow|100,itemScrollLife|10
 ,weaponSword000,weaponSword000L,weaponSword001,weaponSword001L,weaponSword002,weaponSword002L,weaponSword003,weaponSword003L
 ,weaponBow000,weaponBow001
@@ -35,6 +35,34 @@
     />
     
     <actor id="actorSinbadTest" extends="actorSinbad" />
+    <actor id="actorPlayerTest" extends="actorPlayerTest0" 
+           file="Textures/monster/skeleton/skeleton.mesh.j3o" 
+           skinBase=""
+           skinOutfit=""
+           icon="Interface/face/skeleton.jpg" sex="0" race="1" level="10" 
+           items="itemMapWorld,item000|100,itemGold|10000,itemTowerSnow|100,itemScrollLife|10
+,weaponSword000,weaponSword000L,weaponSword001,weaponSword001L,weaponSword002,weaponSword002L,weaponSword003,weaponSword003L
+,weaponBow000,weaponBow001
+,weaponWand000
+,skinFoot006,skinHand006,skinUpperBody006
+,skinHair001,skinHair006,skinHair010,skinHair011,skinBlinder001|12,skinMouthmask001|13,skinHorn001|14
+,itemDetoxifyGrass|100,itemTonicRed|5,itemTonicBlue|5,itemHerb|100,itemASTonic|100
+,itemTowerStone|100,itemTower|100,itemSpiderSpawn|100
+,itemScrollBear|100,itemScrollWolf|100,itemScrollScorpion|100,itemScrollRaptor|100,itemScrollTrex|100
+,itemBook005,itemBook006,itemBook007,itemBook008,itemBook010
+,skinFoot005,skinLowerBody005,skinUpperBody005,skinHand005
+,skinFoot001,skinLowerBody001,skinUpperBody001,skinHand001
+,skinFoot002,skinLowerBody002,skinUpperBody002,skinHand002
+,skinFoot004,skinLowerBody004,skinUpperBody004,skinHand004" 
+           weapon="weaponSword000,weaponSword000L"
+           skills="skillDualSwordWave,skillBowShot,skillIceShot
+,skillShotLight,skillShotAddLife,skillShotReborn,skillShotWindWalk,skillShotCleanBuff
+,skillDualSwordAttack
+,skillWait,skillWalk,skillRun,skillReset,skillDead,skillHurtFront,skillHurtBack
+,skillDefend1,skillDefend2
+,skillDuckLeft,skillDuckRight,skillDuckBack,skillDuckLeftRoll,skillDuckRightRoll
+,skillAttack,skillAttack2,skillAttack3" 
+    />
     
     <!--=====================================================================-->
     <!--角色基类-->
@@ -52,7 +80,7 @@
            xpDropEl="elXpDrop" />
     
     <!--生物基类：所有生物类角色都继承自这里,如人物、动物、野兽、怪物等 -->
-    <actor id="actorLiveBase" extends="actorBase" 
+    <actor id="actorLiveBase" extends="actorBase" mass="60" 
            living="1" levelUpEl="elLevelUp" talentPointsLevelEl="elLevelTalentPoints" chat="chatSimple" 
            logic="logicSearchEnemy,logicDynamicFight,logicPatrol,logicFollow,logicUpdateLife,logicUpdateMana,logicDefend"
            />
@@ -285,10 +313,24 @@
            mat="4" resist="resistCreature" drop="dropRaptor" collisionShape="capsule" 
            collisionRadius="1.4" collisionHeight="4.2" />
     
+    <!--Jaime-->
     <actor id="actorJaime" extends="actorLiveBase" file="Models/monster/Jaime.mesh.j3o" 
            items="" icon="Interface/face/jaime.jpg" logic="logicPatrol,logicFollow,logicUpdateLife,logicShopJaime"
            talents=""
            group="1" sex="1" race="0" level="20" mass="240" scale="1.5"
            skills="skillJaimeWait,skillJaimeIdle,skillJaimeRun" 
            mat="4" resist="resistCreature" drop="" chat="chatJaime" />
+
+    <!--Skeleton-->
+    <actor id="actorSkeleton" extends="actorLiveBase" file="Textures/monster/skeleton/skeleton.mesh.j3o" 
+           items="" icon="Interface/face/skeleton.jpg" extAnim="Models/actor/ext_anim" 
+           talents="" mat="5" resist="resistNonLife" drop="" 
+           weapon="weaponSword000"
+           group="1" sex="2" race="0" level="20" scale="0.2"
+           skills="skillBowShot,skillDualSwordAttack
+,skillWait,skillWalk,skillRun,skillReset,skillHurtFront,skillHurtBack
+,skillAttack,skillAttack2,skillAttack3
+,skillSkeletonDead" 
+/>
+
 </root>

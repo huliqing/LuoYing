@@ -46,13 +46,18 @@ public class TestHandler extends AbstractHandler {
     
     @Override
     protected void useObject(Actor actor, ProtoData data) {
+        
+        Actor aa = actorService.loadActor("actorSkeleton");
+        actorService.setGroup(aa, 3);
+        actorService.setLevel(aa, 1);
+        playService.addActor(aa);
 
-        Actor target = actorService.getTarget(actor);
-        if (target != null) {
-//            stateService.addState(target, "stateSpiderWeb");
-//            stateService.addState(target, "stateIceFrozen");
-            stateService.addState(target, "stateScorpionVenom", actor);
-        }
+//        Actor target = actorService.getTarget(actor);
+//        if (target != null) {
+////            stateService.addState(target, "stateSpiderWeb");
+////            stateService.addState(target, "stateIceFrozen");
+//            stateService.addState(target, "stateScorpionVenom", actor);
+//        }
 
     }
 

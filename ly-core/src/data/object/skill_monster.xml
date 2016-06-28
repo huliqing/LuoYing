@@ -174,4 +174,7 @@
     <skillWait id="skillJaimeWait" useTime="4" animation="Idle" loopMode="1" />
     <skillIdle id="skillJaimeIdle" useTime="3" animation="Idle" />
     <skillRun id="skillJaimeRun" extends="skillWalkBase" animation="Run" animSpeed="2" />
+    
+    <!--skeleton-->
+    <skillDead id="skillSkeletonDead" icon="" remove="1" useTime="0.0001" effects="effectSkeletonDead" />
 </root>

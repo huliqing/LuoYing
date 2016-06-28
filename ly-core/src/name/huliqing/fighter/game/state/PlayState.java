@@ -88,30 +88,6 @@ public abstract class PlayState extends AbstractAppState {
         app.getStateManager().attach(gameState);
     }
     
-//    /**
-//     * 切换游戏
-//     * @param gameData 游戏
-//     */
-//    public void changeGameState(GameData gameData) {
-//        if (gameState != null) {
-//            app.getStateManager().detach(gameState);
-//        }
-//        this.gameData = gameData;
-//        gameState = createGameState(gameData);
-//
-//
-//        app.getStateManager().attach(gameState);
-//    }
-//    
-//        /**
-//     * 使用gameData创建一个新的GameState.
-//     * @param gameData
-//     * @return 
-//     */
-//    protected GameState createGameState(GameData gameData) {
-//        return new SimpleGameState(gameData);
-//    }
-    
     /**
      * 添加一个侦听器
      * @param listener 

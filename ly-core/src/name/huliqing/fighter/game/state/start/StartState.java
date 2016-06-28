@@ -18,9 +18,12 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import name.huliqing.fighter.Common;
+import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.Fighter;
 import name.huliqing.fighter.constants.IdConstants;
 import name.huliqing.fighter.constants.InterfaceConstants;
+import name.huliqing.fighter.game.service.GameService;
+import name.huliqing.fighter.game.state.LabPlayState;
 import name.huliqing.fighter.game.state.lan.LanState;
 import name.huliqing.fighter.loader.Loader;
 import name.huliqing.fighter.save.SaveHelper;
@@ -28,7 +31,6 @@ import name.huliqing.fighter.save.SaveStory;
 import name.huliqing.fighter.shape.QuadXY;
 import name.huliqing.fighter.utils.MatUtils;
 import name.huliqing.fighter.ui.Icon;
-import name.huliqing.fighter.ui.Text;
 import name.huliqing.fighter.ui.UI;
 import name.huliqing.fighter.ui.UI.Corner;
 import name.huliqing.fighter.ui.UI.Listener;
@@ -39,6 +41,7 @@ import name.huliqing.fighter.ui.state.UIState;
  * @author huliqing
  */
 public class StartState extends AbstractAppState {
+    private final GameService gameService = Factory.get(GameService.class);
     
     // 用于支持默认显示哪一个面板
     public enum Menu {
@@ -120,8 +123,7 @@ public class StartState extends AbstractAppState {
             @Override
             public void onClick(UI ui, boolean isPress) {
                 if (!isPress) {
-//                    startState(new LabPlayState(null));
-                    throw new UnsupportedOperationException();
+                    startState(new LabPlayState(Common.getApp(), gameService.loadGameData(IdConstants.GAME_STORY_TREASURE)));
                 }
             }
         });

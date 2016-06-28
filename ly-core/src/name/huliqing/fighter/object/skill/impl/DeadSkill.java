@@ -5,7 +5,6 @@
 package name.huliqing.fighter.object.skill.impl;
 
 import name.huliqing.fighter.Factory;
-import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.data.SkillData;
 import name.huliqing.fighter.game.service.PlayService;
 import name.huliqing.fighter.game.service.StateService;

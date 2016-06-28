@@ -394,6 +394,13 @@
     <effectParticle id="effectScorpionVenom" timeStart="" timeDisplay="60" timeEnd="" tracePosition="always" traceRotation="no" 
                     emitter="emitterScorpionVenomSmoke" tracePositionType="origin_bound_center" />
     
+    <!--=====================================================================-->
+    <!--骷髅死亡效果-->
+    <!--=====================================================================-->
+    <effectGroup id="effectSkeletonDead" timeStart="" timeDisplay="" timeEnd="" tracePosition="once" traceRotation="no"  tracePositionType="origin_bound_center" 
+                 effects="effectSkeletonExplosion,effectSkeletonSmoke" />
+    <effectParticle id="effectSkeletonExplosion" timeStart="" timeDisplay="3" timeEnd=""  emitter="emitterSkeletonExplosion" emitAll="1" blendMode="Alpha" />
+    <effectParticle id="effectSkeletonSmoke" timeStart="" timeDisplay="3" timeEnd="" emitter="emitterSkeletonSmoke" emitAll="1" />
 </root>
 
 

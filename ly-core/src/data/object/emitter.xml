@@ -347,14 +347,26 @@
              texture="Textures/effect/flame.jpg" imagesX="2" imagesY="2" 
              initialVelocity="0,1,0" velocityVariation="0" shape="positionWaveShape" />
     
-    <!--=====================================================================-->
+    <!--==========================================================================-->
     <!--蝎子毒状态效果粒子-->
-    <!--=====================================================================-->
+    <!--==========================================================================-->
     <emitter id="emitterScorpionVenomSmoke" numParticles="15" particlesPerSec="15"
              startColor="0.3,1,0.3,0.2" endColor="0.3,1,0.3,0" 
              startSize="0.5" endSize="1.2" highLife="1" lowLife="0.5" 
              texture="Textures/effect/flame.jpg" imagesX="2" imagesY="2" 
              initialVelocity="0,1,0" velocityVariation="0.5" shape="positionCommonSp0_7" />
+    
+    <!--==========================================================================-->
+    <!--骷髅散架，死亡-->
+    <!--==========================================================================-->
+    <emitter id="emitterSkeletonExplosion" numParticles="12" particlesPerSec="0" startColor="1,1,1,1" endColor="1,1,1,0.1" 
+             startSize="0.2" endSize="0.1" highLife="2" lowLife="2" texture="Textures/effect/skeleton.png" imagesX="3" imagesY="3" 
+             initialVelocity="0,6,0" velocityVariation="0.5" randomAngle="1" selectRandomImage="1" gravity="0,10,0"
+        />
+    <emitter id="emitterSkeletonSmoke" numParticles="10" particlesPerSec="0" startColor="1,1,1,0.1" endColor="1,1,1,0" 
+             startSize="1.2" endSize="1.5" highLife="3" lowLife="3" 
+             texture="Textures/effect/flame.jpg" imagesX="2" imagesY="2" 
+             initialVelocity="0,5,0" velocityVariation="1"  />
 </root>
 
 

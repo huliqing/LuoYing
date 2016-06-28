@@ -26,7 +26,6 @@ name.huliqing.fighter.Fighter -> name.huliqing.fighter.Fighter:
     name.huliqing.fighter.game.state.start.StartState startState -> startState
     com.jme3.app.StatsAppState stateView -> stateView
     com.jme3.app.state.AppState currentState -> currentState
-    com.jme3.util.SafeArrayList managers -> managers
     void <init>() -> <init>
     void main(java.lang.String[]) -> main
     java.lang.Object[] createIcons() -> createIcons
@@ -545,10 +544,10 @@ name.huliqing.fighter.data.GameData -> name.huliqing.fighter.b.t:
     name.huliqing.fighter.data.SceneData sceneData -> b
     java.util.List availableActors -> c
     void <init>() -> <init>
-    void <init>(java.lang.String) -> <init>
     name.huliqing.fighter.data.SceneData getSceneData() -> a
     void setSceneData(name.huliqing.fighter.data.SceneData) -> a
     java.util.List getAvailableActors() -> b
+    void setAvailableActors(java.util.List) -> a
 name.huliqing.fighter.data.HandlerData -> name.huliqing.fighter.b.u:
     void <init>() -> <init>
 name.huliqing.fighter.data.HitCheckerData -> name.huliqing.fighter.b.v:
@@ -609,6 +608,7 @@ name.huliqing.fighter.data.MagicData -> name.huliqing.fighter.b.y:
 name.huliqing.fighter.data.PkgItemData -> name.huliqing.fighter.b.z:
     java.util.List raceLimit -> b
     name.huliqing.fighter.enums.Sex sexLimit -> c
+    boolean deletable -> d
     void write(com.jme3.export.JmeExporter) -> write
     void read(com.jme3.export.JmeImporter) -> read
     void <init>() -> <init>
@@ -617,6 +617,8 @@ name.huliqing.fighter.data.PkgItemData -> name.huliqing.fighter.b.z:
     void setRaceLimit(java.util.List) -> a
     name.huliqing.fighter.enums.Sex getSexLimit() -> b
     void setSexLimit(name.huliqing.fighter.enums.Sex) -> a
+    boolean isDeletable() -> n
+    void setDeletable(boolean) -> b
 name.huliqing.fighter.data.PositionData -> name.huliqing.fighter.b.aa:
     void <init>() -> <init>
     void <init>(java.lang.String) -> <init>
@@ -656,6 +658,7 @@ name.huliqing.fighter.data.ProtoData -> name.huliqing.fighter.b.ac:
     java.lang.String getIcon() -> U
     boolean isPickable() -> e
     java.lang.String getHandler() -> V
+    boolean isLocalObject() -> Z
     int getCost() -> W
     int getTotal() -> X
     void setTotal(int) -> f
@@ -1105,6 +1108,445 @@ name.huliqing.fighter.game.dao.SkinDaoImpl -> name.huliqing.fighter.game.a.f:
     java.util.List getWeaponSkinsAll(name.huliqing.fighter.data.ActorData,java.util.List) -> d
     java.util.List getWeaponSkinsAllInUsed(name.huliqing.fighter.data.ActorData,java.util.List) -> c
     boolean isWeapon(name.huliqing.fighter.data.ProtoData) -> a
+name.huliqing.fighter.game.mess.MessActionRun -> name.huliqing.fighter.game.e.a:
+    long actorId -> b
+    com.jme3.math.Vector3f pos -> c
+    void <init>() -> <init>
+    void setActorId(long) -> a
+    void setPos(com.jme3.math.Vector3f) -> a
+    void applyOnServer(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> a
+name.huliqing.fighter.game.mess.MessActorAddSkill -> name.huliqing.fighter.game.e.b:
+    long actorId -> b
+    java.lang.String skillId -> c
+    void <init>() -> <init>
+    void setActorId(long) -> a
+    void setSkillId(java.lang.String) -> a
+    void applyOnClient() -> a
+name.huliqing.fighter.game.mess.MessActorApplyXp -> name.huliqing.fighter.game.e.c:
+    long actorId -> b
+    int xp -> c
+    void <init>() -> <init>
+    void setActorId(long) -> a
+    void setXp(int) -> a
+    void applyOnClient() -> a
+name.huliqing.fighter.game.mess.MessActorFollow -> name.huliqing.fighter.game.e.d:
+    long actorId -> b
+    long targetId -> c
+    void <init>() -> <init>
+    void setActorId(long) -> a
+    void setTargetId(long) -> b
+    void applyOnClient() -> a
+    void applyOnServer(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> a
+name.huliqing.fighter.game.mess.MessActorKill -> name.huliqing.fighter.game.e.e:
+    long killActorId -> b
+    void <init>() -> <init>
+    void setKillActorId(long) -> a
+    void applyOnClient() -> a
+name.huliqing.fighter.game.mess.MessActorPhysics -> name.huliqing.fighter.game.e.f:
+    long actorId -> b
+    boolean enabled -> c
+    void <init>() -> <init>
+    void setActorId(long) -> a
+    void setEnabled(boolean) -> a
+    void applyOnClient() -> a
+name.huliqing.fighter.game.mess.MessActorSetGroup -> name.huliqing.fighter.game.e.g:
+    long actorId -> b
+    int group -> c
+    void <init>() -> <init>
+    void setActorId(long) -> a
+    void setGroup(int) -> a
+    void applyOnClient() -> a
+name.huliqing.fighter.game.mess.MessActorSetLevel -> name.huliqing.fighter.game.e.h:
+    long actorId -> b
+    int level -> c
+    void <init>() -> <init>
+    void setActorId(long) -> a
+    void setLevel(int) -> a
+    void applyOnClient() -> a
+name.huliqing.fighter.game.mess.MessActorSetTarget -> name.huliqing.fighter.game.e.i:
+    long actorId -> b
+    long targetId -> c
+    void <init>() -> <init>
+    void setActorId(long) -> a
+    void setTargetId(long) -> b
+    void applyOnServer(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> a
+    void applyOnClient() -> a
+name.huliqing.fighter.game.mess.MessActorSpeak -> name.huliqing.fighter.game.e.j:
+    long actorId -> b
+    java.lang.String mess -> c
+    float useTime -> d
+    void <init>() -> <init>
+    void setActorId(long) -> a
+    void setMess(java.lang.String) -> a
+    void applyOnClient() -> a
+name.huliqing.fighter.game.mess.MessActorTeam -> name.huliqing.fighter.game.e.k:
+    long actorId -> b
+    int teamId -> c
+    void <init>() -> <init>
+    void setActorId(long) -> a
+    void setTeamId(int) -> a
+    void applyOnClient() -> a
+name.huliqing.fighter.game.mess.MessActorTransform -> name.huliqing.fighter.game.e.l:
+    java.util.logging.Logger LOG -> b
+    long actorId -> c
+    com.jme3.math.Vector3f location -> d
+    com.jme3.math.Vector3f walkDirection -> e
+    com.jme3.math.Vector3f viewDirection -> f
+    void <init>() -> <init>
+    void setActorId(long) -> a
+    void setLocation(com.jme3.math.Vector3f) -> a
+    void setWalkDirection(com.jme3.math.Vector3f) -> b
+    void setViewDirection(com.jme3.math.Vector3f) -> c
+    void applyOnClient() -> a
+    void <clinit>() -> <clinit>
+name.huliqing.fighter.game.mess.MessActorTransformDirect -> name.huliqing.fighter.game.e.m:
+    long actorId -> b
+    com.jme3.math.Vector3f location -> c
+    com.jme3.math.Vector3f walkDirection -> d
+    com.jme3.math.Vector3f viewDirection -> e
+    void <init>() -> <init>
+    void setActorId(long) -> a
+    void setLocation(com.jme3.math.Vector3f) -> a
+    void setWalkDirection(com.jme3.math.Vector3f) -> b
+    void setViewDirection(com.jme3.math.Vector3f) -> c
+    void applyOnClient() -> a
+name.huliqing.fighter.game.mess.MessActorViewDir -> name.huliqing.fighter.game.e.n:
+    long actorId -> b
+    com.jme3.math.Vector3f viewDir -> c
+    void <init>() -> <init>
+    void setActorId(long) -> a
+    void setViewDir(com.jme3.math.Vector3f) -> a
+    void applyOnClient() -> a
+name.huliqing.fighter.game.mess.MessAttributeSync -> name.huliqing.fighter.game.e.o:
+    long actorId -> b
+    java.lang.String attribute -> c
+    float levelValue -> d
+    float staticValue -> e
+    float dynamicValue -> f
+    void <init>() -> <init>
+    void setActorId(long) -> a
+    void setAttribute(java.lang.String) -> a
+    void setLevelValue(float) -> a
+    void setStaticValue(float) -> b
+    void setDynamicValue(float) -> c
+    void applyOnClient() -> a
+name.huliqing.fighter.game.mess.MessAutoAttack -> name.huliqing.fighter.game.e.p:
+    long targetId -> b
+    void <init>() -> <init>
+    void setTargetId(long) -> a
+    void applyOnServer(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> a
+name.huliqing.fighter.game.mess.MessBase -> name.huliqing.fighter.game.e.q:
+    double time -> a
+    void <init>() -> <init>
+    void <init>(boolean) -> <init>
+    void applyOnClient() -> a
+    void applyOnServer(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> a
+name.huliqing.fighter.game.mess.MessChatSell -> name.huliqing.fighter.game.e.r:
+    name.huliqing.fighter.game.service.PlayService playService -> b
+    name.huliqing.fighter.game.network.ChatNetwork chatNetwork -> c
+    name.huliqing.fighter.game.service.ChatService chatService -> d
+    long seller -> e
+    long buyer -> f
+    java.lang.String[] items -> g
+    int[] counts -> h
+    float discount -> i
+    void <init>() -> <init>
+    void setSeller(long) -> a
+    void setBuyer(long) -> b
+    void setItems(java.lang.String[]) -> a
+    void setCounts(int[]) -> a
+    void setDiscount(float) -> a
+    void applyOnServer(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> a
+    void applyOnClient() -> a
+name.huliqing.fighter.game.mess.MessChatSend -> name.huliqing.fighter.game.e.s:
+    name.huliqing.fighter.game.service.PlayService playService -> b
+    name.huliqing.fighter.game.network.ChatNetwork chatNetwork -> c
+    name.huliqing.fighter.game.service.ChatService chatService -> d
+    long sender -> e
+    long receiver -> f
+    java.lang.String[] items -> g
+    int[] counts -> h
+    void <init>() -> <init>
+    void setSender(long) -> a
+    void setReceiver(long) -> b
+    void setItems(java.lang.String[]) -> a
+    void setCounts(int[]) -> a
+    void applyOnServer(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> a
+    void applyOnClient() -> a
+name.huliqing.fighter.game.mess.MessChatShop -> name.huliqing.fighter.game.e.t:
+    name.huliqing.fighter.game.service.PlayService playService -> b
+    name.huliqing.fighter.game.network.ChatNetwork chatNetwork -> c
+    name.huliqing.fighter.game.service.ChatService chatService -> d
+    long seller -> e
+    long buyer -> f
+    java.lang.String itemId -> g
+    int count -> h
+    float discount -> i
+    void <init>() -> <init>
+    void setSeller(long) -> a
+    void setBuyer(long) -> b
+    void setItemId(java.lang.String) -> a
+    void setCount(int) -> a
+    void setDiscount(float) -> a
+    void applyOnServer(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> a
+    void applyOnClient() -> a
+name.huliqing.fighter.game.mess.MessClient -> name.huliqing.fighter.game.e.u:
+    java.lang.String clientId -> b
+    java.lang.String clientName -> c
+    void <init>() -> <init>
+    void <init>(java.lang.String,java.lang.String) -> <init>
+    java.lang.String getClientId() -> b
+    java.lang.String getClientName() -> c
+name.huliqing.fighter.game.mess.MessMessage -> name.huliqing.fighter.game.e.v:
+    java.lang.String message -> b
+    name.huliqing.fighter.enums.MessageType type -> c
+    void <init>() -> <init>
+    void setMessage(java.lang.String) -> a
+    void setType(name.huliqing.fighter.enums.MessageType) -> a
+    void applyOnClient() -> a
+name.huliqing.fighter.game.mess.MessPing -> name.huliqing.fighter.game.e.w:
+    void <init>() -> <init>
+    void applyOnServer(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> a
+    void applyOnClient() -> a
+name.huliqing.fighter.game.mess.MessPlayActorLoaded -> name.huliqing.fighter.game.e.x:
+    name.huliqing.fighter.data.ActorData actorData -> b
+    com.jme3.math.Vector3f location -> c
+    com.jme3.math.Vector3f viewDirection -> d
+    java.lang.String[] channels -> e
+    java.lang.String[] anims -> f
+    byte[] loopModes -> g
+    float[] speeds -> h
+    float[] times -> i
+    void <init>() -> <init>
+    void setActorData(name.huliqing.fighter.data.ActorData) -> a
+    void setLocation(com.jme3.math.Vector3f) -> a
+    void setViewDirection(com.jme3.math.Vector3f) -> b
+    void setChannels(java.lang.String[]) -> a
+    void setAnims(java.lang.String[]) -> b
+    void setLoopModes(byte[]) -> a
+    void setSpeeds(float[]) -> a
+    void setTimes(float[]) -> b
+    void applyOnClient() -> a
+name.huliqing.fighter.game.mess.MessPlayActorSelect -> name.huliqing.fighter.game.e.y:
+    java.lang.String actorId -> b
+    java.lang.String actorName -> c
+    void <init>() -> <init>
+    void <init>(java.lang.String,java.lang.String) -> <init>
+    void applyOnServer(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> a
+name.huliqing.fighter.game.mess.MessPlayActorSelectResult -> name.huliqing.fighter.game.e.z:
+    long actorId -> b
+    boolean success -> c
+    java.lang.String error -> d
+    void <init>() -> <init>
+    long getActorId() -> b
+    void setActorId(long) -> a
+    boolean isSuccess() -> c
+    void setSuccess(boolean) -> a
+    java.lang.String getError() -> d
+name.huliqing.fighter.game.mess.MessPlayChangeGameState -> name.huliqing.fighter.game.e.aa:
+    name.huliqing.fighter.data.GameData gameData -> b
+    void <init>() -> <init>
+    void setGameData(name.huliqing.fighter.data.GameData) -> a
+    void applyOnServer(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> a
+    void applyOnClient() -> a
+name.huliqing.fighter.game.mess.MessPlayClientExit -> name.huliqing.fighter.game.e.ab:
+    void <init>() -> <init>
+name.huliqing.fighter.game.mess.MessPlayGetClients -> name.huliqing.fighter.game.e.ac:
+    void <init>() -> <init>
+name.huliqing.fighter.game.mess.MessPlayGetGameData -> name.huliqing.fighter.game.e.ad:
+    void <init>() -> <init>
+name.huliqing.fighter.game.mess.MessPlayGetServerState -> name.huliqing.fighter.game.e.ae:
+    void <init>() -> <init>
+    void applyOnServer(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> a
+name.huliqing.fighter.game.mess.MessPlayInitGame -> name.huliqing.fighter.game.e.af:
+    void <init>() -> <init>
+    void applyOnServer(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> a
+name.huliqing.fighter.game.mess.MessPlayLoadSavedActor -> name.huliqing.fighter.game.e.ag:
+    void <init>() -> <init>
+name.huliqing.fighter.game.mess.MessPlayLoadSavedActorResult -> name.huliqing.fighter.game.e.ah:
+    boolean success -> b
+    long actorId -> c
+    void <init>() -> <init>
+    void <init>(boolean) -> <init>
+    boolean isSuccess() -> b
+    long getActorId() -> c
+    void setActorId(long) -> a
+name.huliqing.fighter.game.mess.MessProtoAdd -> name.huliqing.fighter.game.e.ai:
+    long actorId -> b
+    java.lang.String objectId -> c
+    int addCount -> d
+    int syncTotal -> e
+    void <init>() -> <init>
+    void setActorId(long) -> a
+    void setObjectId(java.lang.String) -> a
+    void setAddCount(int) -> a
+    void setSyncTotal(int) -> b
+    void applyOnClient() -> a
+name.huliqing.fighter.game.mess.MessProtoRemove -> name.huliqing.fighter.game.e.aj:
+    long actorId -> b
+    java.lang.String objectId -> c
+    int amount -> d
+    void <init>() -> <init>
+    void setActorId(long) -> a
+    void setObjectId(java.lang.String) -> a
+    void setAmount(int) -> a
+    void applyOnServer(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> a
+name.huliqing.fighter.game.mess.MessProtoSync -> name.huliqing.fighter.game.e.ak:
+    long actorId -> b
+    java.lang.String objectId -> c
+    int total -> d
+    void <init>() -> <init>
+    void setActorId(long) -> a
+    void setObjectId(java.lang.String) -> a
+    void setTotal(int) -> a
+    void applyOnClient() -> a
+name.huliqing.fighter.game.mess.MessProtoUse -> name.huliqing.fighter.game.e.al:
+    long actorId -> b
+    java.lang.String objectId -> c
+    void <init>() -> <init>
+    void setActorId(long) -> a
+    void setObjectId(java.lang.String) -> a
+    void applyOnServer(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> a
+    void applyOnClient() -> a
+name.huliqing.fighter.game.mess.MessSCActorRemove -> name.huliqing.fighter.game.e.am:
+    long actorId -> b
+    void <init>() -> <init>
+    void setActorId(long) -> a
+    void applyOnClient() -> a
+name.huliqing.fighter.game.mess.MessSCClientList -> name.huliqing.fighter.game.e.an:
+    java.util.List clients -> b
+    void <init>() -> <init>
+    void <init>(java.util.List) -> <init>
+    java.util.List getClients() -> b
+name.huliqing.fighter.game.mess.MessSCGameData -> name.huliqing.fighter.game.e.ao:
+    name.huliqing.fighter.data.GameData gameData -> b
+    void <init>() -> <init>
+    void <init>(name.huliqing.fighter.data.GameData) -> <init>
+    name.huliqing.fighter.data.GameData getGameData() -> b
+name.huliqing.fighter.game.mess.MessSCInitGameOK -> name.huliqing.fighter.game.e.ap:
+    void <init>() -> <init>
+name.huliqing.fighter.game.mess.MessSCServerState -> name.huliqing.fighter.game.e.aq:
+    name.huliqing.fighter.game.state.lan.GameServer$ServerState serverState -> b
+    void <init>() -> <init>
+    void <init>(name.huliqing.fighter.game.state.lan.GameServer$ServerState) -> <init>
+    name.huliqing.fighter.game.state.lan.GameServer$ServerState getServerState() -> b
+    void setServerState(name.huliqing.fighter.game.state.lan.GameServer$ServerState) -> a
+    java.lang.String toString() -> toString
+name.huliqing.fighter.game.mess.MessSkill -> name.huliqing.fighter.game.e.ar:
+    void <init>() -> <init>
+    void applyOnClient() -> a
+name.huliqing.fighter.game.mess.MessSkillAbstract -> name.huliqing.fighter.game.e.as:
+    long actorId -> b
+    java.lang.String skillId -> c
+    boolean force -> d
+    void <init>() -> <init>
+    void setSkillId(java.lang.String) -> a
+    void setActorId(long) -> a
+    void setForce(boolean) -> a
+name.huliqing.fighter.game.mess.MessSkillFaceTo -> name.huliqing.fighter.game.e.at:
+    long actorId -> b
+    com.jme3.math.Vector3f pos -> c
+    void <init>() -> <init>
+    void setActorId(long) -> a
+    void setPos(com.jme3.math.Vector3f) -> a
+    void applyOnClient() -> a
+name.huliqing.fighter.game.mess.MessSkillWalk -> name.huliqing.fighter.game.e.au:
+    com.jme3.math.Vector3f dir -> e
+    boolean face -> f
+    void <init>() -> <init>
+    void setDir(com.jme3.math.Vector3f) -> a
+    void setFace(boolean) -> b
+    void applyOnClient() -> a
+name.huliqing.fighter.game.mess.MessSkinWeaponTakeOn -> name.huliqing.fighter.game.e.av:
+    long actorId -> b
+    boolean takeOn -> c
+    void <init>() -> <init>
+    void setActorId(long) -> a
+    void setTakeOn(boolean) -> a
+    void applyOnServer(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> a
+    void applyOnClient() -> a
+name.huliqing.fighter.game.mess.MessStateAdd -> name.huliqing.fighter.game.e.aw:
+    long actorId -> b
+    java.lang.String stateId -> c
+    float resist -> d
+    long sourceActorId -> e
+    void <init>() -> <init>
+    void setActorId(long) -> a
+    void setStateId(java.lang.String) -> a
+    void setResist(float) -> a
+    void setSourceActorId(long) -> b
+    void applyOnClient() -> a
+name.huliqing.fighter.game.mess.MessStateRemove -> name.huliqing.fighter.game.e.ax:
+    long actorId -> b
+    java.lang.String stateId -> c
+    void <init>() -> <init>
+    void setActorId(long) -> a
+    void setStateId(java.lang.String) -> a
+    void applyOnClient() -> a
+name.huliqing.fighter.game.mess.MessSyncObject -> name.huliqing.fighter.game.e.ay:
+    long objectId -> b
+    name.huliqing.fighter.object.SyncData syncData -> c
+    void <init>() -> <init>
+    void setObjectId(long) -> a
+    void setSyncData(name.huliqing.fighter.object.SyncData) -> a
+    void applyOnClient() -> a
+name.huliqing.fighter.game.mess.MessTalentAdd -> name.huliqing.fighter.game.e.az:
+    long actorId -> b
+    java.lang.String talentId -> c
+    void <init>() -> <init>
+    void setActorId(long) -> a
+    void setTalentId(java.lang.String) -> a
+    void applyOnServer(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> a
+    void applyOnClient() -> a
+name.huliqing.fighter.game.mess.MessTalentAddPoint -> name.huliqing.fighter.game.e.ba:
+    long actorId -> b
+    java.lang.String talentId -> c
+    int points -> d
+    void <init>() -> <init>
+    void setActorId(long) -> a
+    void setTalentId(java.lang.String) -> a
+    void setPoints(int) -> a
+    void applyOnServer(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> a
+    void applyOnClient() -> a
+name.huliqing.fighter.game.mess.MessTaskAdd -> name.huliqing.fighter.game.e.bb:
+    long actorId -> b
+    name.huliqing.fighter.data.TaskData taskData -> c
+    void <init>() -> <init>
+    void setActorId(long) -> a
+    void setTaskData(name.huliqing.fighter.data.TaskData) -> a
+    void applyOnClient() -> a
+    void applyOnServer(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> a
+name.huliqing.fighter.game.mess.MessTaskApplyItem -> name.huliqing.fighter.game.e.bc:
+    name.huliqing.fighter.game.service.TaskService taskService -> b
+    name.huliqing.fighter.game.service.PlayService playService -> c
+    long actorId -> d
+    java.lang.String taskId -> e
+    java.lang.String itemId -> f
+    int amount -> g
+    void <init>() -> <init>
+    void setActorId(long) -> a
+    void setTaskId(java.lang.String) -> a
+    void setItemId(java.lang.String) -> b
+    void setAmount(int) -> a
+    void applyOnClient() -> a
+name.huliqing.fighter.game.mess.MessTaskComplete -> name.huliqing.fighter.game.e.bd:
+    long actorId -> b
+    java.lang.String taskId -> c
+    void <init>() -> <init>
+    void setActorId(long) -> a
+    void setTaskId(java.lang.String) -> a
+    void applyOnClient() -> a
+    void applyOnServer(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> a
+name.huliqing.fighter.game.mess.MessViewAdd -> name.huliqing.fighter.game.e.be:
+    name.huliqing.fighter.data.ViewData viewData -> b
+    void <init>() -> <init>
+    void setViewData(name.huliqing.fighter.data.ViewData) -> a
+    void applyOnClient() -> a
+name.huliqing.fighter.game.mess.MessViewRemove -> name.huliqing.fighter.game.e.bf:
+    long viewId -> b
+    void <init>() -> <init>
+    void setViewId(long) -> a
+    void applyOnClient() -> a
 name.huliqing.fighter.game.network.ActionNetwork -> name.huliqing.fighter.game.b.a:
 name.huliqing.fighter.game.network.ActionNetworkImpl -> name.huliqing.fighter.game.b.b:
     name.huliqing.fighter.game.state.lan.Network network -> a
@@ -1131,7 +1573,6 @@ name.huliqing.fighter.game.network.ActorNetworkImpl -> name.huliqing.fighter.gam
     void inject() -> inject
     name.huliqing.fighter.object.actor.Actor loadActor(java.lang.String) -> a
     name.huliqing.fighter.object.actor.Actor loadActor(name.huliqing.fighter.data.ActorData) -> a
-    java.lang.String createRandomName(name.huliqing.fighter.enums.Sex) -> a
     boolean hasObstacleActor(name.huliqing.fighter.object.actor.Actor,java.util.List) -> a
     name.huliqing.fighter.data.ProtoData getItem(name.huliqing.fighter.object.actor.Actor,java.lang.String) -> a
     name.huliqing.fighter.object.actor.Actor findNearestEnemyExcept(name.huliqing.fighter.object.actor.Actor,float,name.huliqing.fighter.object.actor.Actor) -> a
@@ -1210,33 +1651,6 @@ name.huliqing.fighter.game.network.ChatNetworkImpl -> name.huliqing.fighter.game
     void chatSell(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.object.actor.Actor,java.lang.String[],int[],float) -> a
     void chatSend(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.object.actor.Actor,java.lang.String[],int[]) -> a
     void <clinit>() -> <clinit>
-name.huliqing.fighter.game.network.HandlerNetwork -> name.huliqing.fighter.game.b.i:
-name.huliqing.fighter.game.network.HandlerNetworkImpl -> name.huliqing.fighter.game.b.j:
-    name.huliqing.fighter.game.state.lan.Network network -> a
-    name.huliqing.fighter.game.service.HandlerService handlerService -> b
-    name.huliqing.fighter.game.dao.ItemDao actorDao -> c
-    void <init>() -> <init>
-    void inject() -> inject
-    boolean canUse(name.huliqing.fighter.object.actor.Actor,java.lang.String) -> a
-    void useForce(name.huliqing.fighter.object.actor.Actor,java.lang.String) -> b
-    boolean useObject(name.huliqing.fighter.object.actor.Actor,java.lang.String) -> c
-    boolean removeObject(name.huliqing.fighter.object.actor.Actor,java.lang.String,int) -> a
-    void <clinit>() -> <clinit>
-name.huliqing.fighter.game.network.ItemNetwork -> name.huliqing.fighter.game.b.k:
-name.huliqing.fighter.game.network.ItemNetworkImpl -> name.huliqing.fighter.game.b.l:
-    name.huliqing.fighter.game.state.lan.Network network -> a
-    name.huliqing.fighter.game.service.ItemService itemService -> b
-    name.huliqing.fighter.game.service.PlayService playService -> c
-    name.huliqing.fighter.game.dao.ItemDao itemDao -> d
-    void <init>() -> <init>
-    void inject() -> inject
-    void addItem(name.huliqing.fighter.object.actor.Actor,java.lang.String,int) -> a
-    int removeItem(name.huliqing.fighter.object.actor.Actor,java.lang.String,int) -> b
-    name.huliqing.fighter.data.ProtoData getItem(name.huliqing.fighter.object.actor.Actor,java.lang.String) -> a
-    java.util.List getItems(name.huliqing.fighter.object.actor.Actor,java.util.List) -> a
-    boolean isSellable(name.huliqing.fighter.data.ProtoData) -> a
-    void syncItemTotal(name.huliqing.fighter.object.actor.Actor,java.lang.String,int) -> c
-    void <clinit>() -> <clinit>
 name.huliqing.fighter.game.network.PlayNetwork -> name.huliqing.fighter.game.b.m:
     void attack(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.object.actor.Actor) -> a
     void syncGameInitToClient(com.jme3.network.HostedConnection) -> a
@@ -1248,6 +1662,7 @@ name.huliqing.fighter.game.network.PlayNetworkImpl -> name.huliqing.fighter.game
     name.huliqing.fighter.game.service.ActorService actorService -> d
     name.huliqing.fighter.game.service.ActionService actionService -> e
     name.huliqing.fighter.game.service.SkinService skinService -> f
+    name.huliqing.fighter.game.service.GameService gameService -> j
     name.huliqing.fighter.game.network.ActionNetwork actionNetwork -> g
     name.huliqing.fighter.game.network.SkinNetwork skinNetwork -> h
     name.huliqing.fighter.game.network.SkillNetwork skillNetwork -> i
@@ -1264,6 +1679,7 @@ name.huliqing.fighter.game.network.PlayNetworkImpl -> name.huliqing.fighter.game
     void removeAnimation(name.huliqing.fighter.object.anim.Anim) -> b
     void addObject(java.lang.Object,boolean) -> a
     void addObject(java.lang.Object) -> a
+    void addObjectGui(java.lang.Object) -> c
     void removeObject(java.lang.Object) -> b
     void addMessage(java.lang.String,name.huliqing.fighter.enums.MessageType) -> a
     void addMessage(name.huliqing.fighter.object.actor.Actor,java.lang.String,name.huliqing.fighter.enums.MessageType) -> a
@@ -1280,7 +1696,6 @@ name.huliqing.fighter.game.network.PlayNetworkImpl -> name.huliqing.fighter.game
     name.huliqing.fighter.object.actor.Actor getPlayer() -> e
     com.jme3.math.Vector3f getRandomTerrainPoint(com.jme3.math.Vector3f) -> a
     void moveObject(com.jme3.scene.Spatial,com.jme3.math.Vector3f) -> a
-    name.huliqing.fighter.object.scene.Scene getScene() -> f
     boolean isInScene(name.huliqing.fighter.object.actor.Actor) -> b
     name.huliqing.fighter.object.actor.Actor getTarget() -> g
     void setTarget(name.huliqing.fighter.object.actor.Actor) -> c
@@ -1290,13 +1705,26 @@ name.huliqing.fighter.game.network.PlayNetworkImpl -> name.huliqing.fighter.game
     void setAsPlayer(name.huliqing.fighter.object.actor.Actor) -> d
     boolean isInScene(com.jme3.scene.Spatial) -> a
     void saveCompleteStage(int) -> a
-    void showSelectPanel(java.util.List) -> a
     void attack(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.object.actor.Actor) -> a
     void syncGameInitToClient(com.jme3.network.HostedConnection) -> a
-    name.huliqing.fighter.game.state.lan.mess.MessSCActorLoaded createActorLoadedMess(name.huliqing.fighter.object.actor.Actor) -> e
+    name.huliqing.fighter.game.mess.MessPlayActorLoaded createActorLoadedMess(name.huliqing.fighter.object.actor.Actor) -> e
     void syncObject(name.huliqing.fighter.object.NetworkObject,name.huliqing.fighter.object.SyncData,boolean) -> a
     com.jme3.app.Application getApplication() -> j
+    void changeGame(name.huliqing.fighter.data.GameData) -> a
+    java.lang.String getGameId() -> f
     void <clinit>() -> <clinit>
+name.huliqing.fighter.game.network.ProtoNetwork -> name.huliqing.fighter.game.b.i:
+name.huliqing.fighter.game.network.ProtoNetworkImpl -> name.huliqing.fighter.game.b.j:
+    name.huliqing.fighter.game.state.lan.Network network -> a
+    name.huliqing.fighter.game.service.ProtoService protoService -> b
+    void <init>() -> <init>
+    void inject() -> inject
+    name.huliqing.fighter.data.ProtoData createData(java.lang.String) -> a
+    name.huliqing.fighter.data.ProtoData getData(name.huliqing.fighter.object.actor.Actor,java.lang.String) -> a
+    void addData(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.data.ProtoData,int) -> a
+    void useData(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.data.ProtoData) -> a
+    void removeData(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.data.ProtoData,int) -> b
+    void syncDataTotal(name.huliqing.fighter.object.actor.Actor,java.lang.String,int) -> a
 name.huliqing.fighter.game.network.SkillNetwork -> name.huliqing.fighter.game.b.o:
 name.huliqing.fighter.game.network.SkillNetworkImpl -> name.huliqing.fighter.game.b.p:
     name.huliqing.fighter.game.state.lan.Network network -> a
@@ -1399,8 +1827,8 @@ name.huliqing.fighter.game.network.UserCommandNetwork -> name.huliqing.fighter.g
     void selectPlayer(java.lang.String,java.lang.String) -> a
     void playRunToPos(name.huliqing.fighter.object.actor.Actor,com.jme3.math.Vector3f) -> a
     void attack(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.object.actor.Actor) -> a
-    boolean useObject(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.data.ProtoData) -> a
-    boolean removeObject(name.huliqing.fighter.object.actor.Actor,java.lang.String,int) -> a
+    void useObject(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.data.ProtoData) -> a
+    void removeObject(name.huliqing.fighter.object.actor.Actor,java.lang.String,int) -> a
     void follow(name.huliqing.fighter.object.actor.Actor,long) -> a
     void addTalentPoints(name.huliqing.fighter.object.actor.Actor,java.lang.String,int) -> b
     void chatShop(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.object.actor.Actor,java.lang.String,int,float) -> a
@@ -1408,6 +1836,7 @@ name.huliqing.fighter.game.network.UserCommandNetwork -> name.huliqing.fighter.g
     void chatSend(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.object.actor.Actor,java.lang.String[],int[]) -> a
     void chatTaskAdd(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.object.task.Task) -> a
     void chatTaskComplete(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.object.task.Task) -> b
+    void changeGameState(java.lang.String) -> a
 name.huliqing.fighter.game.network.UserCommandNetworkImpl -> name.huliqing.fighter.game.b.z:
     name.huliqing.fighter.game.state.lan.Network network -> a
     name.huliqing.fighter.game.service.HandlerService handlerService -> b
@@ -1419,22 +1848,24 @@ name.huliqing.fighter.game.network.UserCommandNetworkImpl -> name.huliqing.fight
     name.huliqing.fighter.game.service.ActionService actionService -> h
     name.huliqing.fighter.game.service.SkinService skinService -> i
     name.huliqing.fighter.game.service.TaskService taskService -> j
+    name.huliqing.fighter.game.service.GameService gameService -> m
+    name.huliqing.fighter.game.service.ProtoService protoService -> t
     name.huliqing.fighter.game.network.PlayNetwork playNetwork -> k
     name.huliqing.fighter.game.network.ActionNetwork actionNetwork -> l
-    name.huliqing.fighter.game.network.HandlerNetwork handlerNetwork -> m
     name.huliqing.fighter.game.network.ActorNetwork actorNetwork -> n
     name.huliqing.fighter.game.network.SkinNetwork skinNetwork -> o
     name.huliqing.fighter.game.network.SkillNetwork skillNetwork -> p
     name.huliqing.fighter.game.network.TalentNetwork talentNetwork -> q
     name.huliqing.fighter.game.network.ChatNetwork chatNetwork -> r
     name.huliqing.fighter.game.network.TaskNetwork taskNetwork -> s
+    name.huliqing.fighter.game.network.ProtoNetwork protoNetwork -> u
     void <init>() -> <init>
     void inject() -> inject
     void selectPlayer(java.lang.String,java.lang.String) -> a
     void playRunToPos(name.huliqing.fighter.object.actor.Actor,com.jme3.math.Vector3f) -> a
     void attack(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.object.actor.Actor) -> a
-    boolean useObject(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.data.ProtoData) -> a
-    boolean removeObject(name.huliqing.fighter.object.actor.Actor,java.lang.String,int) -> a
+    void useObject(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.data.ProtoData) -> a
+    void removeObject(name.huliqing.fighter.object.actor.Actor,java.lang.String,int) -> a
     void follow(name.huliqing.fighter.object.actor.Actor,long) -> a
     void addTalentPoints(name.huliqing.fighter.object.actor.Actor,java.lang.String,int) -> b
     void chatShop(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.object.actor.Actor,java.lang.String,int,float) -> a
@@ -1442,6 +1873,7 @@ name.huliqing.fighter.game.network.UserCommandNetworkImpl -> name.huliqing.fight
     void chatSend(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.object.actor.Actor,java.lang.String[],int[]) -> a
     void chatTaskAdd(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.object.task.Task) -> a
     void chatTaskComplete(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.object.task.Task) -> b
+    void changeGameState(java.lang.String) -> a
     void <clinit>() -> <clinit>
 name.huliqing.fighter.game.service.ActionService -> name.huliqing.fighter.game.service.a:
     name.huliqing.fighter.object.action.Action loadAction(java.lang.String) -> a
@@ -1475,7 +1907,6 @@ name.huliqing.fighter.game.service.ActorAnimServiceImpl -> name.huliqing.fighter
 name.huliqing.fighter.game.service.ActorService -> name.huliqing.fighter.game.service.e:
     name.huliqing.fighter.object.actor.Actor loadActor(java.lang.String) -> a
     name.huliqing.fighter.object.actor.Actor loadActor(name.huliqing.fighter.data.ActorData) -> a
-    java.lang.String createRandomName(name.huliqing.fighter.enums.Sex) -> a
     boolean hasObstacleActor(name.huliqing.fighter.object.actor.Actor,java.util.List) -> a
     name.huliqing.fighter.data.ProtoData getItem(name.huliqing.fighter.object.actor.Actor,java.lang.String) -> a
     boolean isSkillUpdated(name.huliqing.fighter.object.actor.Actor,long) -> a
@@ -1542,7 +1973,6 @@ name.huliqing.fighter.game.service.ActorServiceImpl -> name.huliqing.fighter.gam
     void inject() -> inject
     name.huliqing.fighter.object.actor.Actor loadActor(java.lang.String) -> a
     name.huliqing.fighter.object.actor.Actor loadActor(name.huliqing.fighter.data.ActorData) -> a
-    java.lang.String createRandomName(name.huliqing.fighter.enums.Sex) -> a
     boolean hasObstacleActor(name.huliqing.fighter.object.actor.Actor,java.util.List) -> a
     name.huliqing.fighter.data.ProtoData getItem(name.huliqing.fighter.object.actor.Actor,java.lang.String) -> a
     name.huliqing.fighter.object.actor.Actor findNearestEnemyExcept(name.huliqing.fighter.object.actor.Actor,float,name.huliqing.fighter.object.actor.Actor) -> a
@@ -1677,7 +2107,10 @@ name.huliqing.fighter.game.service.ConfigService -> name.huliqing.fighter.game.s
     int getMaxLevel() -> getMaxLevel
     boolean isUseShadow() -> isUseShadow
     void setUseShadow(boolean) -> setUseShadow
+    java.lang.String getClientId() -> getClientId
 name.huliqing.fighter.game.service.ConfigServiceImpl -> name.huliqing.fighter.game.service.m:
+    name.huliqing.fighter.game.service.SaveService saveService -> b
+    java.lang.String clientIdForDebug -> c
     name.huliqing.fighter.data.ConfigData cd -> a
     void <init>() -> <init>
     void inject() -> inject
@@ -1721,6 +2154,7 @@ name.huliqing.fighter.game.service.ConfigServiceImpl -> name.huliqing.fighter.ga
     int getMaxLevel() -> getMaxLevel
     boolean isUseShadow() -> isUseShadow
     void setUseShadow(boolean) -> setUseShadow
+    java.lang.String getClientId() -> getClientId
 name.huliqing.fighter.game.service.DropService -> name.huliqing.fighter.game.service.n:
     name.huliqing.fighter.data.DropData createDrop(java.lang.String) -> a
     java.util.List getRandomDropFull(name.huliqing.fighter.object.actor.Actor,java.util.List) -> a
@@ -1763,11 +2197,17 @@ name.huliqing.fighter.game.service.EnvServiceImpl -> name.huliqing.fighter.game.
     java.lang.String getMachineName() -> getMachineName
     java.net.InetAddress getLocalHostIPv4() -> getLocalHostIPv4
     java.net.InetAddress getBroadcastAddress() -> getBroadcastAddress
+name.huliqing.fighter.game.service.GameService -> name.huliqing.fighter.game.service.ay:
+    name.huliqing.fighter.object.game.Game loadGame(name.huliqing.fighter.data.GameData) -> a
+    name.huliqing.fighter.data.GameData loadGameData(java.lang.String) -> a
+name.huliqing.fighter.game.service.GameServiceImpl -> name.huliqing.fighter.game.service.az:
+    void <init>() -> <init>
+    void inject() -> inject
+    name.huliqing.fighter.object.game.Game loadGame(name.huliqing.fighter.data.GameData) -> a
+    name.huliqing.fighter.data.GameData loadGameData(java.lang.String) -> a
 name.huliqing.fighter.game.service.HandlerService -> name.huliqing.fighter.game.service.t:
-    boolean canUse(name.huliqing.fighter.object.actor.Actor,java.lang.String) -> a
-    void useForce(name.huliqing.fighter.object.actor.Actor,java.lang.String) -> b
-    boolean useObject(name.huliqing.fighter.object.actor.Actor,java.lang.String) -> c
-    boolean removeObject(name.huliqing.fighter.object.actor.Actor,java.lang.String,int) -> a
+    boolean useObject(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.data.ProtoData) -> a
+    void removeObject(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.data.ProtoData,int) -> a
 name.huliqing.fighter.game.service.HandlerServiceImpl -> name.huliqing.fighter.game.service.u:
     name.huliqing.fighter.game.service.SkillService skillService -> a
     name.huliqing.fighter.game.service.PlayService playService -> b
@@ -1775,10 +2215,10 @@ name.huliqing.fighter.game.service.HandlerServiceImpl -> name.huliqing.fighter.g
     name.huliqing.fighter.game.dao.SkillDao skillDao -> d
     void <init>() -> <init>
     void inject() -> inject
-    boolean canUse(name.huliqing.fighter.object.actor.Actor,java.lang.String) -> a
-    void useForce(name.huliqing.fighter.object.actor.Actor,java.lang.String) -> b
-    boolean useObject(name.huliqing.fighter.object.actor.Actor,java.lang.String) -> c
-    boolean removeObject(name.huliqing.fighter.object.actor.Actor,java.lang.String,int) -> a
+    boolean canUse(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.data.ProtoData) -> b
+    void useForce(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.data.ProtoData) -> c
+    boolean useObject(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.data.ProtoData) -> a
+    void removeObject(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.data.ProtoData,int) -> a
 name.huliqing.fighter.game.service.HitCheckerService -> name.huliqing.fighter.game.service.v:
     name.huliqing.fighter.object.hitchecker.HitChecker loadHitChecker(java.lang.String) -> a
 name.huliqing.fighter.game.service.HitCheckerServiceImpl -> name.huliqing.fighter.game.service.w:
@@ -1795,6 +2235,7 @@ name.huliqing.fighter.game.service.ItemService -> name.huliqing.fighter.game.ser
 name.huliqing.fighter.game.service.ItemServiceImpl -> name.huliqing.fighter.game.service.y:
     name.huliqing.fighter.game.service.PlayService playService -> a
     name.huliqing.fighter.game.dao.ItemDao itemDao -> b
+    name.huliqing.fighter.game.service.HandlerService handlerService -> c
     void <init>() -> <init>
     void inject() -> inject
     void addItem(name.huliqing.fighter.object.actor.Actor,java.lang.String,int) -> a
@@ -1837,6 +2278,7 @@ name.huliqing.fighter.game.service.PlayService -> name.huliqing.fighter.game.ser
     void removeAnimation(name.huliqing.fighter.object.anim.Anim) -> b
     void addObject(java.lang.Object,boolean) -> a
     void addObject(java.lang.Object) -> a
+    void addObjectGui(java.lang.Object) -> c
     void removeObject(java.lang.Object) -> b
     void addMessage(java.lang.String,name.huliqing.fighter.enums.MessageType) -> a
     void addMessage(name.huliqing.fighter.object.actor.Actor,java.lang.String,name.huliqing.fighter.enums.MessageType) -> a
@@ -1853,7 +2295,6 @@ name.huliqing.fighter.game.service.PlayService -> name.huliqing.fighter.game.ser
     name.huliqing.fighter.object.actor.Actor getPlayer() -> e
     com.jme3.math.Vector3f getRandomTerrainPoint(com.jme3.math.Vector3f) -> a
     void moveObject(com.jme3.scene.Spatial,com.jme3.math.Vector3f) -> a
-    name.huliqing.fighter.object.scene.Scene getScene() -> f
     boolean isInScene(name.huliqing.fighter.object.actor.Actor) -> b
     name.huliqing.fighter.object.actor.Actor getTarget() -> g
     void setTarget(name.huliqing.fighter.object.actor.Actor) -> c
@@ -1863,18 +2304,21 @@ name.huliqing.fighter.game.service.PlayService -> name.huliqing.fighter.game.ser
     void setAsPlayer(name.huliqing.fighter.object.actor.Actor) -> d
     boolean isInScene(com.jme3.scene.Spatial) -> a
     void saveCompleteStage(int) -> a
-    void showSelectPanel(java.util.List) -> a
     com.jme3.app.Application getApplication() -> j
+    void changeGame(name.huliqing.fighter.data.GameData) -> a
+    java.lang.String getGameId() -> f
 name.huliqing.fighter.game.service.PlayServiceImpl -> name.huliqing.fighter.game.service.ae:
     name.huliqing.fighter.game.service.StateService stateService -> a
     name.huliqing.fighter.game.service.ActorService actorService -> b
     name.huliqing.fighter.game.service.ItemService itemService -> c
+    name.huliqing.fighter.game.service.GameService gameService -> d
     void <init>() -> <init>
     void inject() -> inject
     void addPlayObject(name.huliqing.fighter.object.PlayObject) -> a
     void removePlayObject(name.huliqing.fighter.object.PlayObject) -> b
     void addObject(java.lang.Object,boolean) -> a
     void addObject(java.lang.Object) -> a
+    void addObjectGui(java.lang.Object) -> c
     void removeObject(java.lang.Object) -> b
     void addActor(name.huliqing.fighter.object.actor.Actor) -> a
     void addEffect(name.huliqing.fighter.object.effect.Effect) -> a
@@ -1898,7 +2342,6 @@ name.huliqing.fighter.game.service.PlayServiceImpl -> name.huliqing.fighter.game
     name.huliqing.fighter.object.actor.Actor getPlayer() -> e
     com.jme3.math.Vector3f getRandomTerrainPoint(com.jme3.math.Vector3f) -> a
     void moveObject(com.jme3.scene.Spatial,com.jme3.math.Vector3f) -> a
-    name.huliqing.fighter.object.scene.Scene getScene() -> f
     boolean isInScene(name.huliqing.fighter.object.actor.Actor) -> b
     name.huliqing.fighter.object.actor.Actor getTarget() -> g
     void setTarget(name.huliqing.fighter.object.actor.Actor) -> c
@@ -1908,8 +2351,34 @@ name.huliqing.fighter.game.service.PlayServiceImpl -> name.huliqing.fighter.game
     void setAsPlayer(name.huliqing.fighter.object.actor.Actor) -> d
     boolean isInScene(com.jme3.scene.Spatial) -> a
     void saveCompleteStage(int) -> a
-    void showSelectPanel(java.util.List) -> a
     com.jme3.app.Application getApplication() -> j
+    void changeGame(name.huliqing.fighter.data.GameData) -> a
+    java.lang.String getGameId() -> f
+name.huliqing.fighter.game.service.ProtoService -> name.huliqing.fighter.game.service.ba:
+    name.huliqing.fighter.data.ProtoData createData(java.lang.String) -> a
+    name.huliqing.fighter.data.ProtoData getData(name.huliqing.fighter.object.actor.Actor,java.lang.String) -> a
+    void addData(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.data.ProtoData,int) -> a
+    void useData(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.data.ProtoData) -> a
+    void removeData(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.data.ProtoData,int) -> b
+    void syncDataTotal(name.huliqing.fighter.object.actor.Actor,java.lang.String,int) -> a
+name.huliqing.fighter.game.service.ProtoServiceImpl -> name.huliqing.fighter.game.service.bb:
+    java.util.logging.Logger LOG -> a
+    name.huliqing.fighter.game.service.ItemService itemService -> b
+    name.huliqing.fighter.game.service.SkinService skinService -> c
+    name.huliqing.fighter.game.service.SkillService skillService -> d
+    name.huliqing.fighter.game.service.HandlerService handlerService -> e
+    void <init>() -> <init>
+    void inject() -> inject
+    name.huliqing.fighter.data.ProtoData createData(java.lang.String) -> a
+    name.huliqing.fighter.data.ProtoData getData(name.huliqing.fighter.object.actor.Actor,java.lang.String) -> a
+    void addData(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.data.ProtoData,int) -> a
+    void useData(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.data.ProtoData) -> a
+    void removeData(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.data.ProtoData,int) -> b
+    void syncDataTotal(name.huliqing.fighter.object.actor.Actor,java.lang.String,int) -> a
+    void <clinit>() -> <clinit>
+name.huliqing.fighter.game.service.ProtoServiceImpl$1 -> name.huliqing.fighter.game.service.bc:
+    int[] $SwitchMap$name$huliqing$fighter$enums$DataType -> a
+    void <clinit>() -> <clinit>
 name.huliqing.fighter.game.service.ResistService -> name.huliqing.fighter.game.service.af:
     float getResist(name.huliqing.fighter.object.actor.Actor,java.lang.String) -> a
 name.huliqing.fighter.game.service.ResistServiceImpl -> name.huliqing.fighter.game.service.ag:
@@ -1937,9 +2406,11 @@ name.huliqing.fighter.game.service.SaveServiceImpl -> name.huliqing.fighter.game
     byte[] encode(com.jme3.export.Savable) -> encode
     com.jme3.export.Savable decode(byte[]) -> decode
 name.huliqing.fighter.game.service.SceneService -> name.huliqing.fighter.game.service.ah:
+    name.huliqing.fighter.object.scene.Scene loadScene(name.huliqing.fighter.data.SceneData) -> a
 name.huliqing.fighter.game.service.SceneServiceImpl -> name.huliqing.fighter.game.service.ai:
     void <init>() -> <init>
     void inject() -> inject
+    name.huliqing.fighter.object.scene.Scene loadScene(name.huliqing.fighter.data.SceneData) -> a
 name.huliqing.fighter.game.service.SkillService -> name.huliqing.fighter.game.service.aj:
     name.huliqing.fighter.object.skill.Skill loadSkill(java.lang.String) -> a
     void addSkill(name.huliqing.fighter.object.actor.Actor,java.lang.String) -> a
@@ -2145,6 +2616,80 @@ name.huliqing.fighter.game.service.ViewServiceImpl -> name.huliqing.fighter.game
     void inject() -> inject
     name.huliqing.fighter.object.view.View loadView(java.lang.String) -> a
     name.huliqing.fighter.object.view.View loadView(name.huliqing.fighter.data.ViewData) -> a
+name.huliqing.fighter.game.state.ClientPlayState -> name.huliqing.fighter.game.c.e:
+    java.util.logging.Logger LOG -> c
+    name.huliqing.fighter.game.service.PlayService playService -> f
+    name.huliqing.fighter.game.service.SaveService saveService -> g
+    name.huliqing.fighter.game.state.lan.GameClient gameClient -> h
+    name.huliqing.fighter.game.state.LanClientListener clientListener -> i
+    name.huliqing.fighter.ui.Text pingLabel -> j
+    void <init>(com.jme3.app.Application,name.huliqing.fighter.game.state.lan.GameClient) -> <init>
+    void initialize(com.jme3.app.state.AppStateManager,com.jme3.app.Application) -> initialize
+    void cleanup() -> cleanup
+    void exit() -> b
+    void changeGameState(name.huliqing.fighter.game.state.GameState) -> a
+    void saveClientShortcuts() -> k
+    void checkToStartClientInit() -> l
+    java.util.List getClients() -> a
+    void setPlayer(name.huliqing.fighter.object.actor.Actor) -> b
+    void kickClient(int) -> a
+    void onPingUpdate(long) -> b
+    name.huliqing.fighter.game.state.lan.GameClient access$000(name.huliqing.fighter.game.state.ClientPlayState) -> a
+    void access$100(name.huliqing.fighter.game.state.ClientPlayState) -> b
+    name.huliqing.fighter.game.service.PlayService access$200(name.huliqing.fighter.game.state.ClientPlayState) -> c
+    java.util.logging.Logger access$300() -> c
+    void <clinit>() -> <clinit>
+name.huliqing.fighter.game.state.ClientPlayState$1 -> name.huliqing.fighter.game.c.g:
+    name.huliqing.fighter.game.state.ClientPlayState this$0 -> a
+    void <init>(name.huliqing.fighter.game.state.ClientPlayState) -> <init>
+    void onSceneLoaded() -> a
+name.huliqing.fighter.game.state.ClientPlayState$2 -> name.huliqing.fighter.game.c.j:
+    name.huliqing.fighter.game.state.ClientPlayState this$0 -> a
+    void <init>(name.huliqing.fighter.game.state.ClientPlayState,float) -> <init>
+    void doLogic(float) -> a
+name.huliqing.fighter.game.state.ClientPlayState$ClientListener -> name.huliqing.fighter.game.c.k:
+    name.huliqing.fighter.game.state.ClientPlayState this$0 -> a
+    void <init>(name.huliqing.fighter.game.state.ClientPlayState,com.jme3.app.Application) -> <init>
+    void onClientsUpdated(name.huliqing.fighter.game.state.lan.GameClient,java.util.List) -> a
+    void applyMessage(name.huliqing.fighter.game.state.lan.GameClient,name.huliqing.fighter.game.mess.MessBase) -> a
+name.huliqing.fighter.game.state.ConnData -> name.huliqing.fighter.game.c.l:
+    java.lang.String clientId -> a
+    java.lang.String clientName -> b
+    int connId -> c
+    java.lang.String address -> d
+    long actorId -> e
+    java.lang.String actorName -> f
+    void <init>() -> <init>
+    java.lang.String getClientId() -> a
+    void setClientId(java.lang.String) -> a
+    java.lang.String getClientName() -> b
+    void setClientName(java.lang.String) -> b
+    long getActorId() -> c
+    void setActorId(long) -> a
+    int getConnId() -> d
+    void setConnId(int) -> a
+    java.lang.String getAddress() -> e
+    void setAddress(java.lang.String) -> c
+    java.lang.String getActorName() -> f
+    void setActorName(java.lang.String) -> d
+name.huliqing.fighter.game.state.DefaultServerListener -> name.huliqing.fighter.game.c.m:
+    java.util.logging.Logger LOG -> a
+    name.huliqing.fighter.game.service.PlayService playService -> b
+    name.huliqing.fighter.game.network.PlayNetwork playNetwork -> c
+    java.util.List syncObjects -> d
+    float syncTimer -> e
+    float syncFrequency -> f
+    name.huliqing.fighter.game.mess.MessActorTransform syncTempCache -> g
+    void <init>(com.jme3.app.Application) -> <init>
+    void update(float,name.huliqing.fighter.game.state.lan.GameServer) -> a
+    void addSyncObject(name.huliqing.fighter.object.actor.Actor) -> a
+    boolean removeSyncObject(name.huliqing.fighter.object.actor.Actor) -> b
+    void cleanup() -> a
+    void onClientRemoved(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> d
+    void processServerMessage(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection,com.jme3.network.Message) -> b
+    boolean removeSyncObject(java.lang.Object) -> b
+    void addSyncObject(java.lang.Object) -> a
+    void <clinit>() -> <clinit>
 name.huliqing.fighter.game.state.FpsState -> name.huliqing.fighter.game.c.a:
     com.jme3.app.Application app -> a
     float secondCounter -> b
@@ -2155,31 +2700,77 @@ name.huliqing.fighter.game.state.FpsState -> name.huliqing.fighter.game.c.a:
     void initialize(com.jme3.app.state.AppStateManager,com.jme3.app.Application) -> initialize
     void update(float) -> update
     void cleanup() -> cleanup
+name.huliqing.fighter.game.state.GameState -> name.huliqing.fighter.game.c.n:
+    name.huliqing.fighter.game.service.GameService gameService -> f
+    name.huliqing.fighter.Fighter app -> a
+    name.huliqing.fighter.object.PlayManager playManager -> b
+    java.util.List listeners -> c
+    java.util.Map networkObjects -> d
+    name.huliqing.fighter.object.game.Game game -> e
+    void <init>(name.huliqing.fighter.data.GameData) -> <init>
+    void initialize(com.jme3.app.state.AppStateManager,com.jme3.app.Application) -> initialize
+    void update(float) -> update
+    name.huliqing.fighter.object.game.Game getGame() -> a
+    void addListener(name.huliqing.fighter.game.state.GameState$PlayListener) -> a
+    void addObject(java.lang.Object,boolean) -> a
+    void removeObject(java.lang.Object) -> a
+    name.huliqing.fighter.object.NetworkObject getSyncObjects(long) -> a
+    com.jme3.app.Application getApp() -> b
+    void exit() -> c
+    void cleanup() -> cleanup
+    void addMessage(java.lang.String,name.huliqing.fighter.enums.MessageType) -> a
+    boolean isInScene(com.jme3.scene.Spatial) -> a
+    java.util.List getActors() -> d
+    name.huliqing.fighter.object.actor.Actor getPlayer() -> e
+    void setPlayer(name.huliqing.fighter.object.actor.Actor) -> a
+    name.huliqing.fighter.object.actor.Actor getTarget() -> f
+    void setTarget(name.huliqing.fighter.object.actor.Actor) -> b
+    java.util.List getViews() -> g
+    void showSelectPanel(java.util.List) -> a
+    void setUIVisiable(boolean) -> a
+    name.huliqing.fighter.game.view.TeamView getTeamView() -> h
+    name.huliqing.fighter.game.state.MenuTool getMenuTool() -> i
+    void attack() -> j
+name.huliqing.fighter.game.state.GameState$PlayListener -> name.huliqing.fighter.game.c.o:
+    void onObjectAdded(java.lang.Object) -> a
+    void onObjectRemoved(java.lang.Object) -> b
+    void onExit() -> h_
+name.huliqing.fighter.game.state.LanClientListener -> name.huliqing.fighter.game.c.p:
+    java.util.logging.Logger LOG -> a
+    name.huliqing.fighter.game.service.PlayService playService -> b
+    java.util.List messageQueue -> d
+    double offset -> e
+    double maxDelay -> f
+    void <init>(com.jme3.app.Application) -> <init>
+    void processClientDisconnected(name.huliqing.fighter.game.state.lan.GameClient,com.jme3.network.Client,com.jme3.network.ClientStateListener$DisconnectInfo) -> b
+    void processClientMessage(name.huliqing.fighter.game.state.lan.GameClient,com.jme3.network.Client,com.jme3.network.Message) -> b
+    void update(float,name.huliqing.fighter.game.state.lan.GameClient) -> a
+    void applyMessage(name.huliqing.fighter.game.state.lan.GameClient,name.huliqing.fighter.game.mess.MessBase) -> a
+    void <clinit>() -> <clinit>
+name.huliqing.fighter.game.state.LanGame -> name.huliqing.fighter.game.c.q:
+    java.util.List getClients() -> a
+    void kickClient(int) -> a
+    boolean isServer() -> j_
 name.huliqing.fighter.game.state.LanPlayStateUI -> name.huliqing.fighter.game.c.b:
     name.huliqing.fighter.game.service.PlayService playService -> g
-    name.huliqing.fighter.game.state.lan.play.LanPlayState playState -> h
-    name.huliqing.fighter.game.view.TeamView teamView -> a
+    name.huliqing.fighter.game.view.TeamView teamView -> b_
     name.huliqing.fighter.game.view.FaceView targetFace -> b
     name.huliqing.fighter.game.view.actor.ActorMainPanel userPanel -> i
     name.huliqing.fighter.object.anim.Anim userPanelAnim -> k
-    name.huliqing.fighter.game.view.ClientsWin clientsWin -> l
-    name.huliqing.fighter.object.anim.ScaleAnim clientsWinAnim -> m
     name.huliqing.fighter.ui.UI attack -> n
-    void <init>(name.huliqing.fighter.game.state.lan.play.LanPlayState) -> <init>
+    name.huliqing.fighter.game.state.GameState gameState -> e
+    void <init>(name.huliqing.fighter.game.state.GameState) -> <init>
     void initialize() -> a
     void doLogic(float) -> a
     name.huliqing.fighter.game.view.TeamView getTeamView() -> b
     void setTargetFace(name.huliqing.fighter.object.actor.Actor) -> a
     name.huliqing.fighter.game.view.FaceView getTargetFace() -> c
-    name.huliqing.fighter.game.view.ClientsWin getClientsWin() -> d
     name.huliqing.fighter.game.view.actor.ActorMainPanel getUserPanel() -> e
     void displayUserPanel(name.huliqing.fighter.object.actor.Actor) -> b
-    void displayLanPanel() -> i
     void cleanup() -> f
     void remove(com.jme3.scene.Spatial) -> a
     void access$000(name.huliqing.fighter.game.state.LanPlayStateUI,name.huliqing.fighter.object.actor.Actor) -> a
-    void access$100(name.huliqing.fighter.game.state.LanPlayStateUI) -> a
-    name.huliqing.fighter.game.state.lan.play.LanPlayState access$200(name.huliqing.fighter.game.state.LanPlayStateUI) -> b
+    name.huliqing.fighter.game.state.GameState access$100(name.huliqing.fighter.game.state.LanPlayStateUI) -> a
 name.huliqing.fighter.game.state.LanPlayStateUI$1 -> name.huliqing.fighter.game.c.c:
     name.huliqing.fighter.game.state.LanPlayStateUI this$0 -> a
     void <init>(name.huliqing.fighter.game.state.LanPlayStateUI) -> <init>
@@ -2188,27 +2779,65 @@ name.huliqing.fighter.game.state.LanPlayStateUI$2 -> name.huliqing.fighter.game.
     name.huliqing.fighter.game.state.LanPlayStateUI this$0 -> a
     void <init>(name.huliqing.fighter.game.state.LanPlayStateUI) -> <init>
     void onClick(name.huliqing.fighter.ui.UI,boolean) -> a
-name.huliqing.fighter.game.state.LanPlayStateUI$3 -> name.huliqing.fighter.game.c.e:
-    name.huliqing.fighter.game.state.LanPlayStateUI this$0 -> a
-    void <init>(name.huliqing.fighter.game.state.LanPlayStateUI) -> <init>
+name.huliqing.fighter.game.state.LoadingState -> name.huliqing.fighter.game.c.r:
+    com.jme3.app.SimpleApplication app -> a
+    name.huliqing.fighter.game.state.PlayState playState -> b
+    name.huliqing.fighter.game.state.GameState gameState -> c
+    int frameCount -> d
+    name.huliqing.fighter.ui.Text text -> e
+    void <init>(name.huliqing.fighter.game.state.PlayState,name.huliqing.fighter.game.state.GameState) -> <init>
+    void initialize(com.jme3.app.state.AppStateManager,com.jme3.app.Application) -> initialize
+    void update(float) -> update
+    void cleanup() -> cleanup
+name.huliqing.fighter.game.state.MenuTool -> name.huliqing.fighter.game.c.s:
+    void addMenu(name.huliqing.fighter.ui.UI,int) -> b
+name.huliqing.fighter.game.state.NetworkPlayState -> name.huliqing.fighter.game.c.t:
+    name.huliqing.fighter.game.service.PlayService playService -> c
+    name.huliqing.fighter.game.state.lan.Network network -> b
+    name.huliqing.fighter.game.view.ClientsWin clientsWin -> f
+    name.huliqing.fighter.object.anim.ScaleAnim clientsWinAnim -> g
+    name.huliqing.fighter.ui.Icon lanBtn -> h
+    void <init>(com.jme3.app.Application,name.huliqing.fighter.data.GameData) -> <init>
+    void initialize(com.jme3.app.state.AppStateManager,com.jme3.app.Application) -> initialize
+    void update(float) -> update
+    void cleanup() -> cleanup
+    void changeGameState(name.huliqing.fighter.game.state.GameState) -> a
+    boolean isServer() -> j_
+    void onClientListUpdated() -> i
+    void onActorSelected(name.huliqing.fighter.game.state.ConnData,name.huliqing.fighter.object.actor.Actor) -> a
+    void createLanUI() -> c
+    void displayLanPanel() -> k
+    void access$000(name.huliqing.fighter.game.state.NetworkPlayState) -> a
+    name.huliqing.fighter.game.service.PlayService access$100(name.huliqing.fighter.game.state.NetworkPlayState) -> b
+    void access$200(name.huliqing.fighter.game.state.NetworkPlayState) -> c
+name.huliqing.fighter.game.state.NetworkPlayState$1 -> name.huliqing.fighter.game.c.u:
+    name.huliqing.fighter.game.state.NetworkPlayState this$0 -> a
+    void <init>(name.huliqing.fighter.game.state.NetworkPlayState) -> <init>
+    void onSceneLoaded() -> a
+name.huliqing.fighter.game.state.NetworkPlayState$2 -> name.huliqing.fighter.game.c.v:
+    name.huliqing.fighter.game.state.NetworkPlayState this$0 -> a
+    void <init>(name.huliqing.fighter.game.state.NetworkPlayState) -> <init>
+    void onDone(name.huliqing.fighter.object.anim.Anim) -> a
+name.huliqing.fighter.game.state.NetworkPlayState$3 -> name.huliqing.fighter.game.c.w:
+    name.huliqing.fighter.game.state.NetworkPlayState this$0 -> a
+    void <init>(name.huliqing.fighter.game.state.NetworkPlayState) -> <init>
     void onClick(name.huliqing.fighter.ui.UI,boolean) -> a
 name.huliqing.fighter.game.state.PlayState -> name.huliqing.fighter.game.c.f:
     java.util.logging.Logger LOG -> c
     name.huliqing.fighter.Fighter app -> a
-    name.huliqing.fighter.object.PlayManager playManager -> b
-    java.util.List listeners -> d
-    java.util.Map networkObjects -> e
-    void <init>() -> <init>
+    name.huliqing.fighter.data.GameData gameData -> d
+    name.huliqing.fighter.game.state.GameState gameState -> e
+    void <init>(com.jme3.app.Application,name.huliqing.fighter.data.GameData) -> <init>
     void initialize(com.jme3.app.state.AppStateManager,com.jme3.app.Application) -> initialize
     void update(float) -> update
-    void addListener(name.huliqing.fighter.game.state.PlayState$PlayListener) -> a
+    void cleanup() -> cleanup
+    void exit() -> b
+    void stateDetached(com.jme3.app.state.AppStateManager) -> stateDetached
+    void changeGameState(name.huliqing.fighter.game.state.GameState) -> a
     void addObject(java.lang.Object,boolean) -> a
     void removeObject(java.lang.Object) -> a
     name.huliqing.fighter.object.NetworkObject getSyncObjects(long) -> a
-    com.jme3.app.Application getApp() -> a
-    void exit() -> b
-    void cleanup() -> cleanup
-    name.huliqing.fighter.object.scene.Scene getScene() -> c
+    name.huliqing.fighter.game.state.GameState getGameState() -> j
     boolean isInScene(com.jme3.scene.Spatial) -> a
     java.util.List getActors() -> d
     java.util.List getViews() -> e
@@ -2218,26 +2847,240 @@ name.huliqing.fighter.game.state.PlayState -> name.huliqing.fighter.game.c.f:
     void setTarget(name.huliqing.fighter.object.actor.Actor) -> a
     void setPlayer(name.huliqing.fighter.object.actor.Actor) -> b
     void showSelectPanel(java.util.List) -> a
+    void setUIVisiable(boolean) -> a
     name.huliqing.fighter.game.view.TeamView getTeamView() -> h
     void <clinit>() -> <clinit>
-name.huliqing.fighter.game.state.PlayState$PlayListener -> name.huliqing.fighter.game.c.g:
-    void onObjectAdded(java.lang.Object) -> a
-    void onObjectRemoved(java.lang.Object) -> b
-    void onExit() -> h_
 name.huliqing.fighter.game.state.PlayStateUI -> name.huliqing.fighter.game.c.h:
     name.huliqing.fighter.game.state.PlayState playState -> a
     name.huliqing.fighter.game.view.ToolsView toolsView -> c
     name.huliqing.fighter.game.view.SettingView settingPanel -> b
-    void <init>(name.huliqing.fighter.game.state.PlayState) -> <init>
+    void <init>() -> <init>
     void initialize() -> a
+    name.huliqing.fighter.game.state.MenuTool getMenuTool() -> d
     void cleanup() -> f
     name.huliqing.fighter.game.view.SettingView access$000(name.huliqing.fighter.game.state.PlayStateUI) -> a
-    name.huliqing.fighter.game.state.PlayState access$100(name.huliqing.fighter.game.state.PlayStateUI) -> b
 name.huliqing.fighter.game.state.PlayStateUI$1 -> name.huliqing.fighter.game.c.i:
     name.huliqing.fighter.game.state.PlayStateUI this$0 -> a
     void <init>(name.huliqing.fighter.game.state.PlayStateUI) -> <init>
     void onClick(name.huliqing.fighter.ui.UI,boolean) -> a
+name.huliqing.fighter.game.state.ServerPlayState -> name.huliqing.fighter.game.c.x:
+    name.huliqing.fighter.game.service.ActorService actorService -> c
+    name.huliqing.fighter.game.service.PlayService playService -> f
+    name.huliqing.fighter.game.service.ConfigService configService -> g
+    name.huliqing.fighter.game.service.StateService stateService -> h
+    name.huliqing.fighter.game.service.LogicService logicService -> i
+    name.huliqing.fighter.game.service.SkillService skillService -> j
+    name.huliqing.fighter.game.network.StateNetwork stateNetwork -> k
+    name.huliqing.fighter.game.network.ActorNetwork actorNetwork -> l
+    name.huliqing.fighter.game.state.lan.GameServer gameServer -> m
+    void <init>(com.jme3.app.Application,name.huliqing.fighter.game.state.lan.GameServer) -> <init>
+    void initialize(com.jme3.app.state.AppStateManager,com.jme3.app.Application) -> initialize
+    void cleanup() -> cleanup
+    void changeGameState(name.huliqing.fighter.game.state.GameState) -> a
+    java.util.List getClients() -> a
+    void kickClient(int) -> a
+    name.huliqing.fighter.game.state.lan.GameServer access$000(name.huliqing.fighter.game.state.ServerPlayState) -> a
+    name.huliqing.fighter.game.service.PlayService access$100(name.huliqing.fighter.game.state.ServerPlayState) -> b
+name.huliqing.fighter.game.state.ServerPlayState$1 -> name.huliqing.fighter.game.c.y:
+    name.huliqing.fighter.game.state.ServerPlayState this$0 -> a
+    void <init>(name.huliqing.fighter.game.state.ServerPlayState) -> <init>
+    void onSceneLoaded() -> a
+name.huliqing.fighter.game.state.ServerPlayState$LanServerListener -> name.huliqing.fighter.game.c.z:
+    name.huliqing.fighter.game.state.ServerPlayState this$0 -> a
+    void <init>(name.huliqing.fighter.game.state.ServerPlayState,com.jme3.app.Application) -> <init>
+    void onClientsUpdated(name.huliqing.fighter.game.state.lan.GameServer) -> a
+    void processServerMessage(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection,com.jme3.network.Message) -> b
+name.huliqing.fighter.game.state.SimpleGameState -> name.huliqing.fighter.game.c.aa:
+    name.huliqing.fighter.game.network.UserCommandNetwork userCommandNetwork -> n
+    name.huliqing.fighter.game.service.ActorService actorService -> o
+    name.huliqing.fighter.game.network.ActorNetwork actorNetwork -> p
+    name.huliqing.fighter.game.service.StateService stateService -> q
+    name.huliqing.fighter.game.service.SkillService skillService -> r
+    name.huliqing.fighter.game.service.PlayService playService -> s
+    name.huliqing.fighter.game.service.GameService gameService -> t
+    com.jme3.scene.Node localRoot -> f
+    com.jme3.util.SafeArrayList actors -> g
+    com.jme3.util.SafeArrayList views -> h
+    com.jme3.util.SafeArrayList animations -> i
+    name.huliqing.fighter.game.state.LanPlayStateUI ui -> j
+    name.huliqing.fighter.utils.MyChaseCamera chaseCamera -> k
+    name.huliqing.fighter.game.view.ActorSelectView actorPanel -> l
+    name.huliqing.fighter.object.actor.Actor player -> m
+    name.huliqing.fighter.object.actor.Actor lastPicked -> u
+    long lastPickTime -> v
+    void <init>(name.huliqing.fighter.data.GameData) -> <init>
+    void initialize(com.jme3.app.state.AppStateManager,com.jme3.app.Application) -> initialize
+    void showSelectPanel(java.util.List) -> a
+    void onSelectPlayer(java.lang.String,java.lang.String) -> a
+    void bindPickListener() -> k
+    name.huliqing.fighter.object.actor.Actor pickActor() -> m
+    void cleanup() -> cleanup
+    boolean isInScene(com.jme3.scene.Spatial) -> a
+    java.util.List getActors() -> d
+    java.util.List getViews() -> g
+    void addObject(java.lang.Object,boolean) -> a
+    void removeObject(java.lang.Object) -> a
+    void addUI(name.huliqing.fighter.ui.UI,boolean) -> a
+    boolean addActor(name.huliqing.fighter.object.actor.Actor,boolean) -> a
+    void addSimpleObj(com.jme3.scene.Spatial,boolean) -> a
+    void addMessage(java.lang.String,name.huliqing.fighter.enums.MessageType) -> a
+    name.huliqing.fighter.object.actor.Actor getTarget() -> f
+    void setTarget(name.huliqing.fighter.object.actor.Actor) -> b
+    void setPlayer(name.huliqing.fighter.object.actor.Actor) -> a
+    name.huliqing.fighter.object.actor.Actor getPlayer() -> e
+    void setChase(com.jme3.scene.Spatial) -> b
+    boolean canPickedPlayer() -> l
+    boolean onPickedActor(name.huliqing.fighter.object.actor.Actor) -> c
+    boolean onPicked(name.huliqing.fighter.manager.PickManager$PickResult) -> a
+    void attack() -> j
+    void setUIVisiable(boolean) -> a
+    name.huliqing.fighter.game.view.TeamView getTeamView() -> h
+    void update(float) -> update
+    void UIClick(name.huliqing.fighter.ui.UI,boolean,boolean) -> a
+    void UIDragStart(name.huliqing.fighter.ui.UI) -> a
+    void UIDragEnd(name.huliqing.fighter.ui.UI) -> b
+    void UIRelease(name.huliqing.fighter.ui.UI) -> c
+    void setChaseEnabled(boolean) -> b
+    name.huliqing.fighter.game.state.MenuTool getMenuTool() -> i
+    name.huliqing.fighter.object.actor.Actor access$000(name.huliqing.fighter.game.state.SimpleGameState) -> a
+name.huliqing.fighter.game.state.SimpleGameState$1 -> name.huliqing.fighter.game.c.ab:
+    com.jme3.app.Application val$app -> a
+    name.huliqing.fighter.game.state.SimpleGameState this$0 -> b
+    void <init>(name.huliqing.fighter.game.state.SimpleGameState,com.jme3.app.Application) -> <init>
+    void onSceneLoaded() -> a
+name.huliqing.fighter.game.state.SimpleGameState$2 -> name.huliqing.fighter.game.c.ac:
+    name.huliqing.fighter.game.state.SimpleGameState this$0 -> a
+    void <init>(name.huliqing.fighter.game.state.SimpleGameState) -> <init>
+    void onSelected(java.lang.String,java.lang.String) -> a
+name.huliqing.fighter.game.state.SimpleGameState$3 -> name.huliqing.fighter.game.c.ad:
+    name.huliqing.fighter.game.state.SimpleGameState this$0 -> a
+    void <init>(name.huliqing.fighter.game.state.SimpleGameState) -> <init>
+    boolean pick(boolean,float) -> a
+name.huliqing.fighter.game.state.StoryPlayState -> name.huliqing.fighter.game.c.ae:
+    name.huliqing.fighter.game.service.ActorService actorService -> c
+    name.huliqing.fighter.game.service.PlayService playService -> f
+    name.huliqing.fighter.game.service.ConfigService configService -> g
+    name.huliqing.fighter.game.service.StateService stateService -> h
+    name.huliqing.fighter.game.service.LogicService logicService -> i
+    name.huliqing.fighter.game.service.SkillService skillService -> j
+    name.huliqing.fighter.game.network.StateNetwork stateNetwork -> k
+    name.huliqing.fighter.game.network.ActorNetwork actorNetwork -> l
+    name.huliqing.fighter.game.state.lan.GameServer gameServer -> m
+    name.huliqing.fighter.save.SaveStory saveStory -> n
+    void <init>(com.jme3.app.Application,name.huliqing.fighter.data.GameData,name.huliqing.fighter.save.SaveStory) -> <init>
+    name.huliqing.fighter.save.SaveStory getSaveStory() -> c
+    void initialize(com.jme3.app.state.AppStateManager,com.jme3.app.Application) -> initialize
+    void cleanup() -> cleanup
+    void exit() -> b
+    void changeGameState(name.huliqing.fighter.game.state.GameState) -> a
+    void saveStory() -> k
+    void storeClient(name.huliqing.fighter.save.SaveStory,java.util.List,java.lang.String,long,java.lang.String) -> a
+    name.huliqing.fighter.object.actor.Actor findActor(java.util.List,long) -> a
+    void loadPlayer() -> l
+    boolean loadClient(name.huliqing.fighter.save.SaveStory,name.huliqing.fighter.save.ClientData) -> a
+    void openGameServer() -> m
+    java.util.List getClients() -> a
+    void kickClient(int) -> a
+    name.huliqing.fighter.game.state.lan.GameServer access$000(name.huliqing.fighter.game.state.StoryPlayState) -> a
+    void access$100(name.huliqing.fighter.game.state.StoryPlayState) -> b
+    name.huliqing.fighter.save.SaveStory access$200(name.huliqing.fighter.game.state.StoryPlayState) -> c
+    boolean access$300(name.huliqing.fighter.game.state.StoryPlayState,name.huliqing.fighter.save.SaveStory,name.huliqing.fighter.save.ClientData) -> a
+    name.huliqing.fighter.game.service.PlayService access$400(name.huliqing.fighter.game.state.StoryPlayState) -> d
+    name.huliqing.fighter.game.service.ActorService access$500(name.huliqing.fighter.game.state.StoryPlayState) -> e
+    name.huliqing.fighter.game.network.ActorNetwork access$600(name.huliqing.fighter.game.state.StoryPlayState) -> f
+    void access$700(name.huliqing.fighter.game.state.StoryPlayState,name.huliqing.fighter.save.SaveStory,java.util.List,java.lang.String,long,java.lang.String) -> a
+name.huliqing.fighter.game.state.StoryPlayState$1 -> name.huliqing.fighter.game.c.af:
+    name.huliqing.fighter.game.state.StoryPlayState this$0 -> a
+    void <init>(name.huliqing.fighter.game.state.StoryPlayState) -> <init>
+    void onSceneLoaded() -> a
+name.huliqing.fighter.game.state.StoryPlayState$StoryServerListener -> name.huliqing.fighter.game.c.ag:
+    name.huliqing.fighter.game.state.StoryPlayState this$0 -> a
+    void <init>(name.huliqing.fighter.game.state.StoryPlayState,com.jme3.app.Application) -> <init>
+    void onClientsUpdated(name.huliqing.fighter.game.state.lan.GameServer) -> a
+    void processServerMessage(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection,com.jme3.network.Message) -> b
+name.huliqing.fighter.game.state.lan.AbstractClientListener -> name.huliqing.fighter.game.c.a.i:
+    java.util.logging.Logger LOG -> a
+    name.huliqing.fighter.game.service.ConfigService configService -> b
+    name.huliqing.fighter.game.service.EnvService envService -> d
+    com.jme3.app.Application app -> e
+    java.util.List clients -> c
+    float pingTimeInterval -> f
+    float pingTimeUsed -> g
+    java.util.List pingListerners -> h
+    name.huliqing.fighter.game.mess.MessPing messPing -> i
+    void <init>(com.jme3.app.Application) -> <init>
+    java.util.List getClients() -> a
+    void addPingListener(name.huliqing.fighter.game.state.lan.AbstractClientListener$PingListener) -> a
+    void clientConnected(name.huliqing.fighter.game.state.lan.GameClient,com.jme3.network.Client) -> a
+    void clientDisconnected(name.huliqing.fighter.game.state.lan.GameClient,com.jme3.network.Client,com.jme3.network.ClientStateListener$DisconnectInfo) -> a
+    void update(float,name.huliqing.fighter.game.state.lan.GameClient) -> a
+    void clientMessage(name.huliqing.fighter.game.state.lan.GameClient,com.jme3.network.Client,com.jme3.network.Message) -> a
+    void onUpdatePing(name.huliqing.fighter.game.state.lan.GameClient,name.huliqing.fighter.game.mess.MessPing) -> a
+    void onGameDataLoaded(name.huliqing.fighter.game.state.lan.GameClient,name.huliqing.fighter.data.GameData) -> a
+    void onServerStateChange(name.huliqing.fighter.game.state.lan.GameClient,name.huliqing.fighter.game.state.lan.GameServer$ServerState) -> a
+    void onClientsUpdated(name.huliqing.fighter.game.state.lan.GameClient,java.util.List) -> a
+    void processClientConnected(name.huliqing.fighter.game.state.lan.GameClient,com.jme3.network.Client) -> b
+    void processClientDisconnected(name.huliqing.fighter.game.state.lan.GameClient,com.jme3.network.Client,com.jme3.network.ClientStateListener$DisconnectInfo) -> b
+    void processClientMessage(name.huliqing.fighter.game.state.lan.GameClient,com.jme3.network.Client,com.jme3.network.Message) -> b
+    void <clinit>() -> <clinit>
+name.huliqing.fighter.game.state.lan.AbstractClientListener$1 -> name.huliqing.fighter.game.c.a.j:
+    name.huliqing.fighter.game.state.lan.GameClient val$gameClient -> a
+    com.jme3.network.Client val$client -> b
+    name.huliqing.fighter.game.state.lan.AbstractClientListener this$0 -> c
+    void <init>(name.huliqing.fighter.game.state.lan.AbstractClientListener,name.huliqing.fighter.game.state.lan.GameClient,com.jme3.network.Client) -> <init>
+    java.lang.Object call() -> call
+name.huliqing.fighter.game.state.lan.AbstractClientListener$2 -> name.huliqing.fighter.game.c.a.k:
+    name.huliqing.fighter.game.state.lan.GameClient val$gameClient -> a
+    com.jme3.network.Client val$client -> b
+    com.jme3.network.ClientStateListener$DisconnectInfo val$info -> c
+    name.huliqing.fighter.game.state.lan.AbstractClientListener this$0 -> d
+    void <init>(name.huliqing.fighter.game.state.lan.AbstractClientListener,name.huliqing.fighter.game.state.lan.GameClient,com.jme3.network.Client,com.jme3.network.ClientStateListener$DisconnectInfo) -> <init>
+    java.lang.Object call() -> call
+name.huliqing.fighter.game.state.lan.AbstractClientListener$3 -> name.huliqing.fighter.game.c.a.l:
+    com.jme3.network.Message val$m -> a
+    name.huliqing.fighter.game.state.lan.GameClient val$gameClient -> b
+    com.jme3.network.Client val$client -> c
+    name.huliqing.fighter.game.state.lan.AbstractClientListener this$0 -> d
+    void <init>(name.huliqing.fighter.game.state.lan.AbstractClientListener,com.jme3.network.Message,name.huliqing.fighter.game.state.lan.GameClient,com.jme3.network.Client) -> <init>
+    java.lang.Object call() -> call
+name.huliqing.fighter.game.state.lan.AbstractClientListener$PingListener -> name.huliqing.fighter.game.c.a.m:
+    void onPingUpdate(long) -> b
+name.huliqing.fighter.game.state.lan.AbstractServerListener -> name.huliqing.fighter.game.c.a.n:
+    java.util.logging.Logger LOG -> a
+    com.jme3.app.Application app -> b
+    void <init>(com.jme3.app.Application) -> <init>
+    void clientAdded(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> a
+    void clientRemoved(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> b
+    void serverMessage(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection,com.jme3.network.Message) -> a
+    void onClientAdded(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> c
+    void onReceiveClientId(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection,name.huliqing.fighter.game.mess.MessClient) -> a
+    void onClientsUpdated(name.huliqing.fighter.game.state.lan.GameServer) -> a
+    void onReceiveGetServerState(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection,name.huliqing.fighter.game.mess.MessPlayGetServerState) -> a
+    void onReceiveGetGameData(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection,name.huliqing.fighter.game.mess.MessPlayGetGameData) -> a
+    void onClientRemoved(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> d
+    void processServerMessage(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection,com.jme3.network.Message) -> b
+    void <clinit>() -> <clinit>
+name.huliqing.fighter.game.state.lan.AbstractServerListener$1 -> name.huliqing.fighter.game.c.a.o:
+    name.huliqing.fighter.game.state.lan.GameServer val$gameServer -> a
+    com.jme3.network.HostedConnection val$conn -> b
+    name.huliqing.fighter.game.state.lan.AbstractServerListener this$0 -> c
+    void <init>(name.huliqing.fighter.game.state.lan.AbstractServerListener,name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> <init>
+    java.lang.Object call() -> call
+name.huliqing.fighter.game.state.lan.AbstractServerListener$2 -> name.huliqing.fighter.game.c.a.p:
+    name.huliqing.fighter.game.state.lan.GameServer val$gameServer -> a
+    com.jme3.network.HostedConnection val$conn -> b
+    name.huliqing.fighter.game.state.lan.AbstractServerListener this$0 -> c
+    void <init>(name.huliqing.fighter.game.state.lan.AbstractServerListener,name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> <init>
+    java.lang.Object call() -> call
+name.huliqing.fighter.game.state.lan.AbstractServerListener$3 -> name.huliqing.fighter.game.c.a.q:
+    com.jme3.network.Message val$m -> a
+    name.huliqing.fighter.game.state.lan.GameServer val$gameServer -> b
+    com.jme3.network.HostedConnection val$source -> c
+    name.huliqing.fighter.game.state.lan.AbstractServerListener this$0 -> d
+    void <init>(name.huliqing.fighter.game.state.lan.AbstractServerListener,com.jme3.network.Message,name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> <init>
+    java.lang.Object call() -> call
 name.huliqing.fighter.game.state.lan.CreateRoomState -> name.huliqing.fighter.game.c.a.a:
+    name.huliqing.fighter.game.service.GameService gameService -> e
     name.huliqing.fighter.Fighter app -> a
     name.huliqing.fighter.game.state.lan.CreateRoomStateGameListPanel gameList -> b
     name.huliqing.fighter.game.view.HelpView helpCreate -> c
@@ -2264,14 +3107,16 @@ name.huliqing.fighter.game.state.lan.CreateRoomStateBtnPanel$2 -> name.huliqing.
     void onClick(name.huliqing.fighter.ui.UI,boolean) -> a
 name.huliqing.fighter.game.state.lan.CreateRoomStateGameListPanel -> name.huliqing.fighter.game.c.a.e:
     name.huliqing.fighter.game.service.ConfigService configService -> a
+    name.huliqing.fighter.game.service.GameService gameService -> K
     name.huliqing.fighter.game.state.lan.CreateRoomStateGameListPanel$GameList gameList -> D
     name.huliqing.fighter.game.state.lan.LanGameInfoView overview -> J
     void <init>(float,float) -> <init>
     void updateViewChildren() -> a
     java.lang.String getSelected() -> b
     name.huliqing.fighter.game.service.ConfigService access$200(name.huliqing.fighter.game.state.lan.CreateRoomStateGameListPanel) -> a
-    name.huliqing.fighter.game.state.lan.LanGameInfoView access$300(name.huliqing.fighter.game.state.lan.CreateRoomStateGameListPanel) -> b
-    name.huliqing.fighter.game.state.lan.CreateRoomStateGameListPanel$GameList access$400(name.huliqing.fighter.game.state.lan.CreateRoomStateGameListPanel) -> c
+    name.huliqing.fighter.game.service.GameService access$300(name.huliqing.fighter.game.state.lan.CreateRoomStateGameListPanel) -> b
+    name.huliqing.fighter.game.state.lan.LanGameInfoView access$400(name.huliqing.fighter.game.state.lan.CreateRoomStateGameListPanel) -> c
+    name.huliqing.fighter.game.state.lan.CreateRoomStateGameListPanel$GameList access$500(name.huliqing.fighter.game.state.lan.CreateRoomStateGameListPanel) -> d
 name.huliqing.fighter.game.state.lan.CreateRoomStateGameListPanel$GameList -> name.huliqing.fighter.game.c.a.f:
     java.util.List games -> b
     name.huliqing.fighter.game.state.lan.CreateRoomStateGameListPanel$GameRow selected -> e
@@ -2297,84 +3142,8 @@ name.huliqing.fighter.game.state.lan.CreateRoomStateGameListPanel$GameRow$1 -> n
     name.huliqing.fighter.game.state.lan.CreateRoomStateGameListPanel$GameRow this$1 -> b
     void <init>(name.huliqing.fighter.game.state.lan.CreateRoomStateGameListPanel$GameRow,name.huliqing.fighter.game.state.lan.CreateRoomStateGameListPanel) -> <init>
     void onClick(name.huliqing.fighter.ui.UI,boolean) -> a
-name.huliqing.fighter.game.state.lan.DefaultClientListener -> name.huliqing.fighter.game.c.a.i:
-    name.huliqing.fighter.game.service.EnvService envService -> b
-    com.jme3.app.Application app -> c
-    java.util.List clients -> a
-    float pingTimeInterval -> d
-    float pingTimeUsed -> e
-    java.util.List pingListerners -> f
-    name.huliqing.fighter.game.state.lan.mess.MessPing messPing -> g
-    void <init>(com.jme3.app.Application) -> <init>
-    java.util.List getClients() -> a
-    void addPingListener(name.huliqing.fighter.game.state.lan.DefaultClientListener$PingListener) -> a
-    void clientConnected(name.huliqing.fighter.game.state.lan.GameClient,com.jme3.network.Client) -> a
-    void clientDisconnected(name.huliqing.fighter.game.state.lan.GameClient,com.jme3.network.Client,com.jme3.network.ClientStateListener$DisconnectInfo) -> a
-    void update(float,name.huliqing.fighter.game.state.lan.GameClient) -> a
-    void clientMessage(name.huliqing.fighter.game.state.lan.GameClient,com.jme3.network.Client,com.jme3.network.Message) -> a
-    void onUpdatePing(name.huliqing.fighter.game.state.lan.GameClient,name.huliqing.fighter.game.state.lan.mess.MessPing) -> a
-    void onGameDataLoaded(name.huliqing.fighter.game.state.lan.GameClient,name.huliqing.fighter.data.GameData) -> a
-    void onServerStateChange(name.huliqing.fighter.game.state.lan.GameClient,name.huliqing.fighter.game.state.lan.GameServer$ServerState) -> a
-    void onClientsUpdated(name.huliqing.fighter.game.state.lan.GameClient,java.util.List) -> a
-    void processClientConnected(name.huliqing.fighter.game.state.lan.GameClient,com.jme3.network.Client) -> b
-    void processClientDisconnected(name.huliqing.fighter.game.state.lan.GameClient,com.jme3.network.Client,com.jme3.network.ClientStateListener$DisconnectInfo) -> b
-    void processClientMessage(name.huliqing.fighter.game.state.lan.GameClient,com.jme3.network.Client,com.jme3.network.Message) -> b
-name.huliqing.fighter.game.state.lan.DefaultClientListener$1 -> name.huliqing.fighter.game.c.a.j:
-    name.huliqing.fighter.game.state.lan.GameClient val$gameClient -> a
-    com.jme3.network.Client val$client -> b
-    name.huliqing.fighter.game.state.lan.DefaultClientListener this$0 -> c
-    void <init>(name.huliqing.fighter.game.state.lan.DefaultClientListener,name.huliqing.fighter.game.state.lan.GameClient,com.jme3.network.Client) -> <init>
-    java.lang.Object call() -> call
-name.huliqing.fighter.game.state.lan.DefaultClientListener$2 -> name.huliqing.fighter.game.c.a.k:
-    name.huliqing.fighter.game.state.lan.GameClient val$gameClient -> a
-    com.jme3.network.Client val$client -> b
-    com.jme3.network.ClientStateListener$DisconnectInfo val$info -> c
-    name.huliqing.fighter.game.state.lan.DefaultClientListener this$0 -> d
-    void <init>(name.huliqing.fighter.game.state.lan.DefaultClientListener,name.huliqing.fighter.game.state.lan.GameClient,com.jme3.network.Client,com.jme3.network.ClientStateListener$DisconnectInfo) -> <init>
-    java.lang.Object call() -> call
-name.huliqing.fighter.game.state.lan.DefaultClientListener$3 -> name.huliqing.fighter.game.c.a.l:
-    com.jme3.network.Message val$m -> a
-    name.huliqing.fighter.game.state.lan.GameClient val$gameClient -> b
-    com.jme3.network.Client val$client -> c
-    name.huliqing.fighter.game.state.lan.DefaultClientListener this$0 -> d
-    void <init>(name.huliqing.fighter.game.state.lan.DefaultClientListener,com.jme3.network.Message,name.huliqing.fighter.game.state.lan.GameClient,com.jme3.network.Client) -> <init>
-    java.lang.Object call() -> call
-name.huliqing.fighter.game.state.lan.DefaultClientListener$PingListener -> name.huliqing.fighter.game.c.a.m:
-    void onPingUpdate(long) -> a_
-name.huliqing.fighter.game.state.lan.DefaultServerListener -> name.huliqing.fighter.game.c.a.n:
-    com.jme3.app.Application app -> a
-    void <init>(com.jme3.app.Application) -> <init>
-    void clientAdded(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> a
-    void clientRemoved(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> b
-    void serverMessage(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection,com.jme3.network.Message) -> a
-    void onClientAdded(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> c
-    void onReceiveClientId(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection,name.huliqing.fighter.game.state.lan.mess.MessPlayClientId) -> a
-    void onClientsUpdated(name.huliqing.fighter.game.state.lan.GameServer) -> a
-    void onReceiveGetServerState(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection,name.huliqing.fighter.game.state.lan.mess.MessPlayGetServerState) -> a
-    void onReceiveGetGameData(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection,name.huliqing.fighter.game.state.lan.mess.MessPlayGetGameData) -> a
-    void onClientRemoved(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> d
-    void processServerMessage(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection,com.jme3.network.Message) -> b
-name.huliqing.fighter.game.state.lan.DefaultServerListener$1 -> name.huliqing.fighter.game.c.a.o:
-    name.huliqing.fighter.game.state.lan.GameServer val$gameServer -> a
-    com.jme3.network.HostedConnection val$conn -> b
-    name.huliqing.fighter.game.state.lan.DefaultServerListener this$0 -> c
-    void <init>(name.huliqing.fighter.game.state.lan.DefaultServerListener,name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> <init>
-    java.lang.Object call() -> call
-name.huliqing.fighter.game.state.lan.DefaultServerListener$2 -> name.huliqing.fighter.game.c.a.p:
-    name.huliqing.fighter.game.state.lan.GameServer val$gameServer -> a
-    com.jme3.network.HostedConnection val$conn -> b
-    name.huliqing.fighter.game.state.lan.DefaultServerListener this$0 -> c
-    void <init>(name.huliqing.fighter.game.state.lan.DefaultServerListener,name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> <init>
-    java.lang.Object call() -> call
-name.huliqing.fighter.game.state.lan.DefaultServerListener$3 -> name.huliqing.fighter.game.c.a.q:
-    com.jme3.network.Message val$m -> a
-    name.huliqing.fighter.game.state.lan.GameServer val$gameServer -> b
-    com.jme3.network.HostedConnection val$source -> c
-    name.huliqing.fighter.game.state.lan.DefaultServerListener this$0 -> d
-    void <init>(name.huliqing.fighter.game.state.lan.DefaultServerListener,com.jme3.network.Message,name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> <init>
-    java.lang.Object call() -> call
 name.huliqing.fighter.game.state.lan.GameClient -> name.huliqing.fighter.game.c.a.r:
-    java.util.logging.Logger logger -> b
+    java.util.logging.Logger LOG -> b
     com.jme3.network.Client client -> c
     name.huliqing.fighter.game.state.lan.GameClient$ClientListener listener -> d
     name.huliqing.fighter.game.state.lan.GameServer$ServerState serverState -> e
@@ -2433,9 +3202,11 @@ name.huliqing.fighter.game.state.lan.GameServer -> name.huliqing.fighter.game.c.
     boolean hasConnections() -> a
     void start() -> b
     void cleanup() -> c
+    com.jme3.network.Server getServer() -> k
     void setServerState(name.huliqing.fighter.game.state.lan.GameServer$ServerState) -> a
     name.huliqing.fighter.game.state.lan.GameServer$ServerState getServerState() -> d
     name.huliqing.fighter.data.GameData getGameData() -> e
+    void setGameData(name.huliqing.fighter.data.GameData) -> a
     void setServerListener(name.huliqing.fighter.game.state.lan.GameServer$ServerListener) -> a
     name.huliqing.fighter.game.state.lan.GameServer$ServerListener getListener() -> f
     void kickClient(int,java.lang.String) -> a
@@ -2636,16 +3407,17 @@ name.huliqing.fighter.game.state.lan.LanStateRoomListPanel$RoomRow$1 -> name.hul
     void onClick(name.huliqing.fighter.ui.UI,boolean) -> a
 name.huliqing.fighter.game.state.lan.Network -> name.huliqing.fighter.game.c.a.ao:
     java.util.logging.Logger LOG -> a
-    name.huliqing.fighter.game.state.lan.Network ins -> b
     name.huliqing.fighter.game.service.ConfigService configService -> c
+    name.huliqing.fighter.game.state.lan.Network INSTANCE -> b
     name.huliqing.fighter.game.state.lan.GameServer gameServer -> g
     name.huliqing.fighter.game.state.lan.GameClient gameClient -> h
     void <init>() -> <init>
     name.huliqing.fighter.game.state.lan.Network getInstance() -> b
-    void doLogic(float) -> a
+    void update(float) -> d
     void cleanup() -> f
     name.huliqing.fighter.game.state.lan.GameServer createGameServer(name.huliqing.fighter.data.GameData) -> a
     name.huliqing.fighter.game.state.lan.GameClient createGameClient(java.lang.String,int) -> a
+    boolean isServer() -> e
     boolean isClient() -> c
     boolean hasConnections() -> d
     void broadcast(com.jme3.network.Message) -> a
@@ -2702,7 +3474,7 @@ name.huliqing.fighter.game.state.lan.RoomStateBtnPanel$3 -> name.huliqing.fighte
     void <init>(name.huliqing.fighter.game.state.lan.RoomStateBtnPanel) -> <init>
     void onClick(name.huliqing.fighter.ui.UI,boolean) -> a
 name.huliqing.fighter.game.state.lan.RoomStateClientImpl -> name.huliqing.fighter.game.c.a.av:
-    java.util.logging.Logger logger -> a
+    java.util.logging.Logger LOG -> a
     name.huliqing.fighter.Fighter app -> b
     name.huliqing.fighter.game.state.lan.RoomStatePanel clientPanel -> c
     name.huliqing.fighter.ui.LinearLayout helpPanel -> d
@@ -2743,9 +3515,9 @@ name.huliqing.fighter.game.state.lan.RoomStatePanel -> name.huliqing.fighter.gam
     void setGameData(name.huliqing.fighter.data.GameData) -> a
     void updateViewChildren() -> a
     void setClients(java.util.List) -> a
-    name.huliqing.fighter.game.state.lan.mess.MessPlayClientData getSelected() -> b
+    name.huliqing.fighter.game.state.ConnData getSelected() -> b
 name.huliqing.fighter.game.state.lan.RoomStateServerImpl -> name.huliqing.fighter.game.c.a.ay:
-    java.util.logging.Logger logger -> a
+    java.util.logging.Logger LOG -> a
     name.huliqing.fighter.Fighter app -> b
     name.huliqing.fighter.game.state.lan.RoomStatePanel clientPanel -> c
     name.huliqing.fighter.ui.LinearLayout helpPanel -> d
@@ -2836,609 +3608,6 @@ name.huliqing.fighter.game.state.lan.discover.UDPDiscover$Receive -> name.huliqi
     void <init>(name.huliqing.fighter.game.state.lan.discover.UDPDiscover,name.huliqing.fighter.game.state.lan.discover.UDPDiscover$1) -> <init>
 name.huliqing.fighter.game.state.lan.discover.UDPListener -> name.huliqing.fighter.game.c.a.a.j:
     void receive(java.lang.Object,name.huliqing.fighter.game.state.lan.discover.UDPDiscover,java.net.DatagramPacket) -> a
-name.huliqing.fighter.game.state.lan.mess.MessActionRun -> name.huliqing.fighter.game.c.a.b.a:
-    long actorId -> b
-    com.jme3.math.Vector3f pos -> c
-    void <init>() -> <init>
-    void setActorId(long) -> a
-    void setPos(com.jme3.math.Vector3f) -> a
-    void applyOnServer(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> a
-name.huliqing.fighter.game.state.lan.mess.MessActorAddSkill -> name.huliqing.fighter.game.c.a.b.b:
-    long actorId -> b
-    java.lang.String skillId -> c
-    void <init>() -> <init>
-    void setActorId(long) -> a
-    void setSkillId(java.lang.String) -> a
-    void applyOnClient() -> a
-name.huliqing.fighter.game.state.lan.mess.MessActorApplyXp -> name.huliqing.fighter.game.c.a.b.c:
-    long actorId -> b
-    int xp -> c
-    void <init>() -> <init>
-    void setActorId(long) -> a
-    void setXp(int) -> a
-    void applyOnClient() -> a
-name.huliqing.fighter.game.state.lan.mess.MessActorFollow -> name.huliqing.fighter.game.c.a.b.d:
-    long actorId -> b
-    long targetId -> c
-    void <init>() -> <init>
-    void setActorId(long) -> a
-    void setTargetId(long) -> b
-    void applyOnClient() -> a
-    void applyOnServer(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> a
-name.huliqing.fighter.game.state.lan.mess.MessActorKill -> name.huliqing.fighter.game.c.a.b.e:
-    long killActorId -> b
-    void <init>() -> <init>
-    void setKillActorId(long) -> a
-    void applyOnClient() -> a
-name.huliqing.fighter.game.state.lan.mess.MessActorPhysics -> name.huliqing.fighter.game.c.a.b.f:
-    long actorId -> b
-    boolean enabled -> c
-    void <init>() -> <init>
-    void setActorId(long) -> a
-    void setEnabled(boolean) -> a
-    void applyOnClient() -> a
-name.huliqing.fighter.game.state.lan.mess.MessActorSetGroup -> name.huliqing.fighter.game.c.a.b.g:
-    long actorId -> b
-    int group -> c
-    void <init>() -> <init>
-    void setActorId(long) -> a
-    void setGroup(int) -> a
-    void applyOnClient() -> a
-name.huliqing.fighter.game.state.lan.mess.MessActorSetLevel -> name.huliqing.fighter.game.c.a.b.h:
-    long actorId -> b
-    int level -> c
-    void <init>() -> <init>
-    void setActorId(long) -> a
-    void setLevel(int) -> a
-    void applyOnClient() -> a
-name.huliqing.fighter.game.state.lan.mess.MessActorSetTarget -> name.huliqing.fighter.game.c.a.b.i:
-    long actorId -> b
-    long targetId -> c
-    void <init>() -> <init>
-    void setActorId(long) -> a
-    void setTargetId(long) -> b
-    void applyOnServer(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> a
-    void applyOnClient() -> a
-name.huliqing.fighter.game.state.lan.mess.MessActorSpeak -> name.huliqing.fighter.game.c.a.b.j:
-    long actorId -> b
-    java.lang.String mess -> c
-    float useTime -> d
-    void <init>() -> <init>
-    void setActorId(long) -> a
-    void setMess(java.lang.String) -> a
-    void applyOnClient() -> a
-name.huliqing.fighter.game.state.lan.mess.MessActorTeam -> name.huliqing.fighter.game.c.a.b.k:
-    long actorId -> b
-    int teamId -> c
-    void <init>() -> <init>
-    void setActorId(long) -> a
-    void setTeamId(int) -> a
-    void applyOnClient() -> a
-name.huliqing.fighter.game.state.lan.mess.MessActorTransform -> name.huliqing.fighter.game.c.a.b.l:
-    java.util.logging.Logger LOG -> b
-    long actorId -> c
-    com.jme3.math.Vector3f location -> d
-    com.jme3.math.Vector3f walkDirection -> e
-    com.jme3.math.Vector3f viewDirection -> f
-    void <init>() -> <init>
-    void setActorId(long) -> a
-    void setLocation(com.jme3.math.Vector3f) -> a
-    void setWalkDirection(com.jme3.math.Vector3f) -> b
-    void setViewDirection(com.jme3.math.Vector3f) -> c
-    void applyOnClient() -> a
-    void <clinit>() -> <clinit>
-name.huliqing.fighter.game.state.lan.mess.MessActorTransformDirect -> name.huliqing.fighter.game.c.a.b.m:
-    long actorId -> b
-    com.jme3.math.Vector3f location -> c
-    com.jme3.math.Vector3f walkDirection -> d
-    com.jme3.math.Vector3f viewDirection -> e
-    void <init>() -> <init>
-    void setActorId(long) -> a
-    void setLocation(com.jme3.math.Vector3f) -> a
-    void setWalkDirection(com.jme3.math.Vector3f) -> b
-    void setViewDirection(com.jme3.math.Vector3f) -> c
-    void applyOnClient() -> a
-name.huliqing.fighter.game.state.lan.mess.MessActorViewDir -> name.huliqing.fighter.game.c.a.b.n:
-    long actorId -> b
-    com.jme3.math.Vector3f viewDir -> c
-    void <init>() -> <init>
-    void setActorId(long) -> a
-    void setViewDir(com.jme3.math.Vector3f) -> a
-    void applyOnClient() -> a
-name.huliqing.fighter.game.state.lan.mess.MessAttributeSync -> name.huliqing.fighter.game.c.a.b.o:
-    long actorId -> b
-    java.lang.String attribute -> c
-    float levelValue -> d
-    float staticValue -> e
-    float dynamicValue -> f
-    void <init>() -> <init>
-    void setActorId(long) -> a
-    void setAttribute(java.lang.String) -> a
-    void setLevelValue(float) -> a
-    void setStaticValue(float) -> b
-    void setDynamicValue(float) -> c
-    void applyOnClient() -> a
-name.huliqing.fighter.game.state.lan.mess.MessAutoAttack -> name.huliqing.fighter.game.c.a.b.p:
-    long targetId -> b
-    void <init>() -> <init>
-    void setTargetId(long) -> a
-    void applyOnServer(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> a
-name.huliqing.fighter.game.state.lan.mess.MessBase -> name.huliqing.fighter.game.c.a.b.q:
-    double time -> a
-    void <init>() -> <init>
-    void <init>(boolean) -> <init>
-    void applyOnClient() -> a
-    void applyOnServer(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> a
-name.huliqing.fighter.game.state.lan.mess.MessChatSell -> name.huliqing.fighter.game.c.a.b.r:
-    name.huliqing.fighter.game.service.PlayService playService -> b
-    name.huliqing.fighter.game.network.ChatNetwork chatNetwork -> c
-    name.huliqing.fighter.game.service.ChatService chatService -> d
-    long seller -> e
-    long buyer -> f
-    java.lang.String[] items -> g
-    int[] counts -> h
-    float discount -> i
-    void <init>() -> <init>
-    void setSeller(long) -> a
-    void setBuyer(long) -> b
-    void setItems(java.lang.String[]) -> a
-    void setCounts(int[]) -> a
-    void setDiscount(float) -> a
-    void applyOnServer(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> a
-    void applyOnClient() -> a
-name.huliqing.fighter.game.state.lan.mess.MessChatSend -> name.huliqing.fighter.game.c.a.b.s:
-    name.huliqing.fighter.game.service.PlayService playService -> b
-    name.huliqing.fighter.game.network.ChatNetwork chatNetwork -> c
-    name.huliqing.fighter.game.service.ChatService chatService -> d
-    long sender -> e
-    long receiver -> f
-    java.lang.String[] items -> g
-    int[] counts -> h
-    void <init>() -> <init>
-    void setSender(long) -> a
-    void setReceiver(long) -> b
-    void setItems(java.lang.String[]) -> a
-    void setCounts(int[]) -> a
-    void applyOnServer(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> a
-    void applyOnClient() -> a
-name.huliqing.fighter.game.state.lan.mess.MessChatShop -> name.huliqing.fighter.game.c.a.b.t:
-    name.huliqing.fighter.game.service.PlayService playService -> b
-    name.huliqing.fighter.game.network.ChatNetwork chatNetwork -> c
-    name.huliqing.fighter.game.service.ChatService chatService -> d
-    long seller -> e
-    long buyer -> f
-    java.lang.String itemId -> g
-    int count -> h
-    float discount -> i
-    void <init>() -> <init>
-    void setSeller(long) -> a
-    void setBuyer(long) -> b
-    void setItemId(java.lang.String) -> a
-    void setCount(int) -> a
-    void setDiscount(float) -> a
-    void applyOnServer(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> a
-    void applyOnClient() -> a
-name.huliqing.fighter.game.state.lan.mess.MessItemAdd -> name.huliqing.fighter.game.c.a.b.u:
-    long actorId -> b
-    java.lang.String itemId -> c
-    int addCount -> d
-    int syncTotal -> e
-    void <init>() -> <init>
-    void setActorId(long) -> a
-    void setItemId(java.lang.String) -> a
-    void setAddCount(int) -> a
-    void setSyncTotal(int) -> b
-    void applyOnClient() -> a
-name.huliqing.fighter.game.state.lan.mess.MessItemRemove -> name.huliqing.fighter.game.c.a.b.v:
-    long actorId -> b
-    java.lang.String itemId -> c
-    int amount -> d
-    void <init>() -> <init>
-    void setActorId(long) -> a
-    void setItemId(java.lang.String) -> a
-    void setAmount(int) -> a
-    void applyOnServer(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> a
-name.huliqing.fighter.game.state.lan.mess.MessItemSync -> name.huliqing.fighter.game.c.a.b.w:
-    long actorId -> b
-    java.lang.String itemId -> c
-    int total -> d
-    void <init>() -> <init>
-    void setActorId(long) -> a
-    void setItemId(java.lang.String) -> a
-    void setTotal(int) -> a
-    void applyOnClient() -> a
-name.huliqing.fighter.game.state.lan.mess.MessItemUse -> name.huliqing.fighter.game.c.a.b.x:
-    long actorId -> b
-    java.lang.String itemId -> c
-    void <init>() -> <init>
-    void setActorId(long) -> a
-    void setItemId(java.lang.String) -> a
-    void applyOnServer(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> a
-    void applyOnClient() -> a
-name.huliqing.fighter.game.state.lan.mess.MessMessage -> name.huliqing.fighter.game.c.a.b.y:
-    java.lang.String message -> b
-    name.huliqing.fighter.enums.MessageType type -> c
-    void <init>() -> <init>
-    void setMessage(java.lang.String) -> a
-    void setType(name.huliqing.fighter.enums.MessageType) -> a
-    void applyOnClient() -> a
-name.huliqing.fighter.game.state.lan.mess.MessPing -> name.huliqing.fighter.game.c.a.b.z:
-    void <init>() -> <init>
-    void applyOnServer(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> a
-    void applyOnClient() -> a
-name.huliqing.fighter.game.state.lan.mess.MessPlayActorSelect -> name.huliqing.fighter.game.c.a.b.aa:
-    java.lang.String actorId -> b
-    java.lang.String actorName -> c
-    void <init>() -> <init>
-    void <init>(java.lang.String,java.lang.String) -> <init>
-    void applyOnServer(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> a
-name.huliqing.fighter.game.state.lan.mess.MessPlayClientData -> name.huliqing.fighter.game.c.a.b.ab:
-    int connId -> a
-    java.lang.String address -> b
-    java.lang.String name -> c
-    java.lang.String actorName -> d
-    void <init>() -> <init>
-    void <init>(int,java.lang.String,java.lang.String) -> <init>
-    int getConnId() -> a
-    void setConnId(int) -> a
-    java.lang.String getAddress() -> b
-    void setAddress(java.lang.String) -> a
-    java.lang.String getName() -> c
-    void setName(java.lang.String) -> b
-    java.lang.String getActorName() -> d
-    void setActorName(java.lang.String) -> c
-name.huliqing.fighter.game.state.lan.mess.MessPlayClientId -> name.huliqing.fighter.game.c.a.b.ac:
-    java.lang.String clientName -> b
-    void <init>() -> <init>
-    void <init>(java.lang.String) -> <init>
-    java.lang.String getClientName() -> b
-name.huliqing.fighter.game.state.lan.mess.MessPlayGetClients -> name.huliqing.fighter.game.c.a.b.ad:
-    void <init>() -> <init>
-name.huliqing.fighter.game.state.lan.mess.MessPlayGetGameData -> name.huliqing.fighter.game.c.a.b.ae:
-    void <init>() -> <init>
-name.huliqing.fighter.game.state.lan.mess.MessPlayGetServerState -> name.huliqing.fighter.game.c.a.b.af:
-    void <init>() -> <init>
-    void applyOnServer(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> a
-name.huliqing.fighter.game.state.lan.mess.MessPlayInitGame -> name.huliqing.fighter.game.c.a.b.ag:
-    void <init>() -> <init>
-    void applyOnServer(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> a
-name.huliqing.fighter.game.state.lan.mess.MessSCActorLoaded -> name.huliqing.fighter.game.c.a.b.ah:
-    name.huliqing.fighter.data.ActorData actorData -> b
-    com.jme3.math.Vector3f location -> c
-    com.jme3.math.Vector3f viewDirection -> d
-    java.lang.String[] channels -> e
-    java.lang.String[] anims -> f
-    byte[] loopModes -> g
-    float[] speeds -> h
-    float[] times -> i
-    void <init>() -> <init>
-    void setActorData(name.huliqing.fighter.data.ActorData) -> a
-    void setLocation(com.jme3.math.Vector3f) -> a
-    void setViewDirection(com.jme3.math.Vector3f) -> b
-    void setChannels(java.lang.String[]) -> a
-    void setAnims(java.lang.String[]) -> b
-    void setLoopModes(byte[]) -> a
-    void setSpeeds(float[]) -> a
-    void setTimes(float[]) -> b
-    void applyOnClient() -> a
-name.huliqing.fighter.game.state.lan.mess.MessSCActorRemove -> name.huliqing.fighter.game.c.a.b.ai:
-    long actorId -> b
-    void <init>() -> <init>
-    void setActorId(long) -> a
-    void applyOnClient() -> a
-name.huliqing.fighter.game.state.lan.mess.MessSCActorSelectResult -> name.huliqing.fighter.game.c.a.b.aj:
-    long actorUniqueId -> b
-    boolean success -> c
-    java.lang.String error -> d
-    void <init>() -> <init>
-    void setActorUniqueId(long) -> a
-    void setSuccess(boolean) -> a
-    void setError(java.lang.String) -> a
-    void applyOnClient() -> a
-name.huliqing.fighter.game.state.lan.mess.MessSCClientList -> name.huliqing.fighter.game.c.a.b.ak:
-    java.util.List clients -> b
-    void <init>() -> <init>
-    void <init>(java.util.List) -> <init>
-    java.util.List getClients() -> b
-name.huliqing.fighter.game.state.lan.mess.MessSCGameData -> name.huliqing.fighter.game.c.a.b.al:
-    name.huliqing.fighter.data.GameData gameData -> b
-    void <init>() -> <init>
-    void <init>(name.huliqing.fighter.data.GameData) -> <init>
-    name.huliqing.fighter.data.GameData getGameData() -> b
-name.huliqing.fighter.game.state.lan.mess.MessSCInitGameOK -> name.huliqing.fighter.game.c.a.b.am:
-    void <init>() -> <init>
-name.huliqing.fighter.game.state.lan.mess.MessSCServerState -> name.huliqing.fighter.game.c.a.b.an:
-    name.huliqing.fighter.game.state.lan.GameServer$ServerState serverState -> b
-    void <init>() -> <init>
-    void <init>(name.huliqing.fighter.game.state.lan.GameServer$ServerState) -> <init>
-    name.huliqing.fighter.game.state.lan.GameServer$ServerState getServerState() -> b
-    void setServerState(name.huliqing.fighter.game.state.lan.GameServer$ServerState) -> a
-name.huliqing.fighter.game.state.lan.mess.MessSkill -> name.huliqing.fighter.game.c.a.b.ao:
-    void <init>() -> <init>
-    void applyOnClient() -> a
-name.huliqing.fighter.game.state.lan.mess.MessSkillAbstract -> name.huliqing.fighter.game.c.a.b.ap:
-    long actorId -> b
-    java.lang.String skillId -> c
-    boolean force -> d
-    void <init>() -> <init>
-    void setSkillId(java.lang.String) -> a
-    void setActorId(long) -> a
-    void setForce(boolean) -> a
-name.huliqing.fighter.game.state.lan.mess.MessSkillFaceTo -> name.huliqing.fighter.game.c.a.b.aq:
-    long actorId -> b
-    com.jme3.math.Vector3f pos -> c
-    void <init>() -> <init>
-    void setActorId(long) -> a
-    void setPos(com.jme3.math.Vector3f) -> a
-    void applyOnClient() -> a
-name.huliqing.fighter.game.state.lan.mess.MessSkillWalk -> name.huliqing.fighter.game.c.a.b.ar:
-    com.jme3.math.Vector3f dir -> e
-    boolean face -> f
-    void <init>() -> <init>
-    void setDir(com.jme3.math.Vector3f) -> a
-    void setFace(boolean) -> b
-    void applyOnClient() -> a
-name.huliqing.fighter.game.state.lan.mess.MessSkinWeaponTakeOn -> name.huliqing.fighter.game.c.a.b.as:
-    long actorId -> b
-    boolean takeOn -> c
-    void <init>() -> <init>
-    void setActorId(long) -> a
-    void setTakeOn(boolean) -> a
-    void applyOnServer(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> a
-    void applyOnClient() -> a
-name.huliqing.fighter.game.state.lan.mess.MessStateAdd -> name.huliqing.fighter.game.c.a.b.at:
-    long actorId -> b
-    java.lang.String stateId -> c
-    float resist -> d
-    long sourceActorId -> e
-    void <init>() -> <init>
-    void setActorId(long) -> a
-    void setStateId(java.lang.String) -> a
-    void setResist(float) -> a
-    void setSourceActorId(long) -> b
-    void applyOnClient() -> a
-name.huliqing.fighter.game.state.lan.mess.MessStateRemove -> name.huliqing.fighter.game.c.a.b.au:
-    long actorId -> b
-    java.lang.String stateId -> c
-    void <init>() -> <init>
-    void setActorId(long) -> a
-    void setStateId(java.lang.String) -> a
-    void applyOnClient() -> a
-name.huliqing.fighter.game.state.lan.mess.MessSyncObject -> name.huliqing.fighter.game.c.a.b.av:
-    long objectId -> b
-    name.huliqing.fighter.object.SyncData syncData -> c
-    void <init>() -> <init>
-    void setObjectId(long) -> a
-    void setSyncData(name.huliqing.fighter.object.SyncData) -> a
-    void applyOnClient() -> a
-name.huliqing.fighter.game.state.lan.mess.MessTalentAdd -> name.huliqing.fighter.game.c.a.b.aw:
-    long actorId -> b
-    java.lang.String talentId -> c
-    void <init>() -> <init>
-    void setActorId(long) -> a
-    void setTalentId(java.lang.String) -> a
-    void applyOnServer(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> a
-    void applyOnClient() -> a
-name.huliqing.fighter.game.state.lan.mess.MessTalentAddPoint -> name.huliqing.fighter.game.c.a.b.ax:
-    long actorId -> b
-    java.lang.String talentId -> c
-    int points -> d
-    void <init>() -> <init>
-    void setActorId(long) -> a
-    void setTalentId(java.lang.String) -> a
-    void setPoints(int) -> a
-    void applyOnServer(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> a
-    void applyOnClient() -> a
-name.huliqing.fighter.game.state.lan.mess.MessTaskAdd -> name.huliqing.fighter.game.c.a.b.ay:
-    long actorId -> b
-    name.huliqing.fighter.data.TaskData taskData -> c
-    void <init>() -> <init>
-    void setActorId(long) -> a
-    void setTaskData(name.huliqing.fighter.data.TaskData) -> a
-    void applyOnClient() -> a
-    void applyOnServer(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> a
-name.huliqing.fighter.game.state.lan.mess.MessTaskApplyItem -> name.huliqing.fighter.game.c.a.b.az:
-    name.huliqing.fighter.game.service.TaskService taskService -> b
-    name.huliqing.fighter.game.service.PlayService playService -> c
-    long actorId -> d
-    java.lang.String taskId -> e
-    java.lang.String itemId -> f
-    int amount -> g
-    void <init>() -> <init>
-    void setActorId(long) -> a
-    void setTaskId(java.lang.String) -> a
-    void setItemId(java.lang.String) -> b
-    void setAmount(int) -> a
-    void applyOnClient() -> a
-name.huliqing.fighter.game.state.lan.mess.MessTaskComplete -> name.huliqing.fighter.game.c.a.b.ba:
-    long actorId -> b
-    java.lang.String taskId -> c
-    void <init>() -> <init>
-    void setActorId(long) -> a
-    void setTaskId(java.lang.String) -> a
-    void applyOnClient() -> a
-    void applyOnServer(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> a
-name.huliqing.fighter.game.state.lan.mess.MessViewAdd -> name.huliqing.fighter.game.c.a.b.bb:
-    name.huliqing.fighter.data.ViewData viewData -> b
-    void <init>() -> <init>
-    void setViewData(name.huliqing.fighter.data.ViewData) -> a
-    void applyOnClient() -> a
-name.huliqing.fighter.game.state.lan.mess.MessViewRemove -> name.huliqing.fighter.game.c.a.b.bc:
-    long viewId -> b
-    void <init>() -> <init>
-    void setViewId(long) -> a
-    void applyOnClient() -> a
-name.huliqing.fighter.game.state.lan.play.LabState -> name.huliqing.fighter.game.c.a.c.a:
-    name.huliqing.fighter.game.service.ActorService actorService -> m
-    name.huliqing.fighter.game.service.StateService stateService -> n
-    name.huliqing.fighter.game.service.SkillService skillService -> o
-    name.huliqing.fighter.game.service.SceneService sceneService -> p
-    name.huliqing.fighter.object.actor.Actor npc1 -> q
-    name.huliqing.fighter.object.actor.Actor npc2 -> r
-    int level -> s
-    java.lang.String[] actorIds -> t
-    void <init>(name.huliqing.fighter.data.GameData) -> <init>
-    void initialize(com.jme3.app.state.AppStateManager,com.jme3.app.Application) -> initialize
-    name.huliqing.fighter.object.actor.Actor loadActor(int) -> b
-    void update(float) -> update
-    boolean onPicked(name.huliqing.fighter.manager.PickManager$PickResult) -> a
-    boolean onPickedActor(name.huliqing.fighter.object.actor.Actor) -> c
-    java.util.List getClients() -> i
-    void kickClient(int) -> a
-name.huliqing.fighter.game.state.lan.play.LanClientListener -> name.huliqing.fighter.game.c.a.c.b:
-    java.util.logging.Logger LOG -> c
-    name.huliqing.fighter.game.service.PlayService playService -> d
-    java.util.List messageQueue -> e
-    double offset -> f
-    double maxDelay -> g
-    long playerActorUniqueId -> b
-    void <init>(com.jme3.app.Application) -> <init>
-    void checkToStartClientInit(name.huliqing.fighter.game.state.lan.GameClient) -> a
-    void processClientDisconnected(name.huliqing.fighter.game.state.lan.GameClient,com.jme3.network.Client,com.jme3.network.ClientStateListener$DisconnectInfo) -> b
-    void onServerStateChange(name.huliqing.fighter.game.state.lan.GameClient,name.huliqing.fighter.game.state.lan.GameServer$ServerState) -> a
-    void processClientMessage(name.huliqing.fighter.game.state.lan.GameClient,com.jme3.network.Client,com.jme3.network.Message) -> b
-    void update(float,name.huliqing.fighter.game.state.lan.GameClient) -> a
-    void doMessage(float,name.huliqing.fighter.game.state.lan.GameClient,name.huliqing.fighter.game.state.lan.mess.MessBase) -> a
-    void <clinit>() -> <clinit>
-name.huliqing.fighter.game.state.lan.play.LanClientPlayState -> name.huliqing.fighter.game.c.a.c.c:
-    name.huliqing.fighter.game.state.lan.GameClient gameClient -> m
-    name.huliqing.fighter.game.state.lan.play.LanClientListener clientListener -> n
-    name.huliqing.fighter.ui.Text pingLabel -> o
-    void <init>(name.huliqing.fighter.game.state.lan.GameClient) -> <init>
-    void initialize(com.jme3.app.state.AppStateManager,com.jme3.app.Application) -> initialize
-    java.util.List getClients() -> i
-    void kickClient(int) -> a
-    void cleanup() -> cleanup
-    void onPingUpdate(long) -> a_
-    name.huliqing.fighter.game.state.lan.GameClient access$000(name.huliqing.fighter.game.state.lan.play.LanClientPlayState) -> a
-    name.huliqing.fighter.game.state.lan.play.LanClientListener access$100(name.huliqing.fighter.game.state.lan.play.LanClientPlayState) -> b
-name.huliqing.fighter.game.state.lan.play.LanClientPlayState$1 -> name.huliqing.fighter.game.c.a.c.d:
-    name.huliqing.fighter.game.state.lan.play.LanClientPlayState this$0 -> a
-    void <init>(name.huliqing.fighter.game.state.lan.play.LanClientPlayState,float) -> <init>
-    void doLogic(float) -> a
-name.huliqing.fighter.game.state.lan.play.LanPlayState -> name.huliqing.fighter.game.c.a.c.e:
-    name.huliqing.fighter.game.network.UserCommandNetwork userCommandNetwork -> m
-    name.huliqing.fighter.game.service.ActorService actorService -> n
-    name.huliqing.fighter.game.network.ActorNetwork actorNetwork -> o
-    name.huliqing.fighter.game.service.StateService stateService -> p
-    name.huliqing.fighter.game.service.SkillService skillService -> q
-    name.huliqing.fighter.game.service.PlayService playService -> r
-    com.jme3.scene.Node localRoot -> c
-    name.huliqing.fighter.object.scene.Scene scene -> d
-    java.util.List actors -> e
-    com.jme3.util.SafeArrayList views -> f
-    com.jme3.util.SafeArrayList animations -> g
-    name.huliqing.fighter.game.state.LanPlayStateUI ui -> h
-    name.huliqing.fighter.utils.MyChaseCamera chaseCamera -> i
-    name.huliqing.fighter.data.GameData gameData -> j
-    name.huliqing.fighter.game.view.ActorSelectView actorPanel -> k
-    name.huliqing.fighter.object.actor.Actor player -> l
-    name.huliqing.fighter.object.actor.Actor lastPicked -> s
-    long lastPickTime -> t
-    void <init>(name.huliqing.fighter.data.GameData) -> <init>
-    void initialize(com.jme3.app.state.AppStateManager,com.jme3.app.Application) -> initialize
-    void initScene(name.huliqing.fighter.data.SceneData) -> a
-    void showSelectPanel(java.util.List) -> a
-    void onSelectPlayer(java.lang.String,java.lang.String) -> a
-    void bindPickListener() -> j
-    name.huliqing.fighter.object.actor.Actor pickActor() -> m
-    void cleanup() -> cleanup
-    name.huliqing.fighter.object.scene.Scene getScene() -> c
-    boolean isInScene(com.jme3.scene.Spatial) -> a
-    java.util.List getActors() -> d
-    java.util.List getViews() -> e
-    void addObject(java.lang.Object,boolean) -> a
-    void removeObject(java.lang.Object) -> a
-    void addUI(name.huliqing.fighter.ui.UI,boolean) -> a
-    boolean addActor(name.huliqing.fighter.object.actor.Actor,boolean) -> a
-    void addSimpleObj(com.jme3.scene.Spatial,boolean) -> a
-    void addMessage(java.lang.String,name.huliqing.fighter.enums.MessageType) -> a
-    name.huliqing.fighter.object.actor.Actor getTarget() -> g
-    void setTarget(name.huliqing.fighter.object.actor.Actor) -> a
-    void setPlayer(name.huliqing.fighter.object.actor.Actor) -> b
-    name.huliqing.fighter.object.actor.Actor getPlayer() -> f
-    void setChase(com.jme3.scene.Spatial) -> b
-    boolean canPickedPlayer() -> k
-    boolean onPickedActor(name.huliqing.fighter.object.actor.Actor) -> c
-    boolean onPicked(name.huliqing.fighter.manager.PickManager$PickResult) -> a
-    void attack() -> l
-    void setUIVisiable(boolean) -> a
-    name.huliqing.fighter.game.view.TeamView getTeamView() -> h
-    void update(float) -> update
-    void UIClick(name.huliqing.fighter.ui.UI,boolean,boolean) -> a
-    void UIDragStart(name.huliqing.fighter.ui.UI) -> a
-    void UIDragEnd(name.huliqing.fighter.ui.UI) -> b
-    void UIRelease(name.huliqing.fighter.ui.UI) -> c
-    void setChaseEnabled(boolean) -> b
-    java.util.List getClients() -> i
-    void kickClient(int) -> a
-    name.huliqing.fighter.object.actor.Actor access$000(name.huliqing.fighter.game.state.lan.play.LanPlayState) -> a
-    name.huliqing.fighter.Fighter access$100(name.huliqing.fighter.game.state.lan.play.LanPlayState) -> b
-    name.huliqing.fighter.Fighter access$200(name.huliqing.fighter.game.state.lan.play.LanPlayState) -> c
-name.huliqing.fighter.game.state.lan.play.LanPlayState$1 -> name.huliqing.fighter.game.c.a.c.f:
-    name.huliqing.fighter.game.state.lan.play.LanPlayState this$0 -> a
-    void <init>(name.huliqing.fighter.game.state.lan.play.LanPlayState) -> <init>
-    void onSelected(java.lang.String,java.lang.String) -> a
-name.huliqing.fighter.game.state.lan.play.LanPlayState$2 -> name.huliqing.fighter.game.c.a.c.g:
-    name.huliqing.fighter.game.state.lan.play.LanPlayState this$0 -> a
-    void <init>(name.huliqing.fighter.game.state.lan.play.LanPlayState) -> <init>
-    boolean pick(boolean,float) -> a
-name.huliqing.fighter.game.state.lan.play.LanServerListener -> name.huliqing.fighter.game.c.a.c.h:
-    name.huliqing.fighter.game.service.PlayService playService -> a
-    java.util.List syncObjects -> b
-    float syncTimer -> c
-    float syncFrequency -> d
-    name.huliqing.fighter.game.state.lan.mess.MessActorTransform syncTempCache -> e
-    void <init>(com.jme3.app.Application) -> <init>
-    void update(float,name.huliqing.fighter.game.state.lan.GameServer) -> a
-    void addSyncObject(name.huliqing.fighter.object.actor.Actor) -> a
-    boolean removeSyncObject(name.huliqing.fighter.object.actor.Actor) -> b
-    void cleanup() -> a
-    void onClientRemoved(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection) -> d
-    void processServerMessage(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection,com.jme3.network.Message) -> b
-    boolean removeSyncObject(java.lang.Object) -> b
-    void addSyncObject(java.lang.Object) -> a
-name.huliqing.fighter.game.state.lan.play.LanServerPlayState -> name.huliqing.fighter.game.c.a.c.i:
-    name.huliqing.fighter.game.state.lan.GameServer gameServer -> m
-    name.huliqing.fighter.object.game.Game game -> n
-    void <init>(name.huliqing.fighter.game.state.lan.GameServer) -> <init>
-    void initialize(com.jme3.app.state.AppStateManager,com.jme3.app.Application) -> initialize
-    void onSelectPlayer(java.lang.String,java.lang.String) -> a
-    java.util.List getClients() -> i
-    void kickClient(int) -> a
-    void cleanup() -> cleanup
-name.huliqing.fighter.game.state.lan.play.StoryState -> name.huliqing.fighter.game.c.a.c.j:
-    java.util.logging.Logger logger -> m
-    name.huliqing.fighter.game.service.ActorService actorService -> n
-    name.huliqing.fighter.game.service.PlayService playService -> o
-    name.huliqing.fighter.game.service.ConfigService configService -> p
-    name.huliqing.fighter.game.service.StateService stateService -> q
-    name.huliqing.fighter.game.service.LogicService logicService -> r
-    name.huliqing.fighter.game.service.SkillService skillService -> s
-    name.huliqing.fighter.game.network.StateNetwork stateNetwork -> t
-    name.huliqing.fighter.game.network.ActorNetwork actorNetwork -> u
-    name.huliqing.fighter.game.state.lan.GameServer gameServer -> v
-    name.huliqing.fighter.save.SaveStory saveStory -> w
-    void <init>(name.huliqing.fighter.data.GameData) -> <init>
-    name.huliqing.fighter.save.SaveStory getSaveStory() -> m
-    void setSaveStory(name.huliqing.fighter.save.SaveStory) -> a
-    void initialize(com.jme3.app.state.AppStateManager,com.jme3.app.Application) -> initialize
-    void openGameServer() -> o
-    void loadPlayer() -> n
-    java.util.List getClients() -> i
-    void kickClient(int) -> a
-    void exit() -> b
-    void cleanup() -> cleanup
-    void loadShortcut(java.util.List,name.huliqing.fighter.object.actor.Actor) -> a
-    name.huliqing.fighter.Fighter access$000(name.huliqing.fighter.game.state.lan.play.StoryState) -> a
-    name.huliqing.fighter.game.service.ActorService access$100(name.huliqing.fighter.game.state.lan.play.StoryState) -> b
-    name.huliqing.fighter.game.service.PlayService access$200(name.huliqing.fighter.game.state.lan.play.StoryState) -> c
-    name.huliqing.fighter.game.network.ActorNetwork access$300(name.huliqing.fighter.game.state.lan.play.StoryState) -> d
-    void <clinit>() -> <clinit>
-name.huliqing.fighter.game.state.lan.play.StoryState$StoryServerListener -> name.huliqing.fighter.game.c.a.c.k:
-    name.huliqing.fighter.game.state.lan.play.StoryState this$0 -> a
-    void <init>(name.huliqing.fighter.game.state.lan.play.StoryState) -> <init>
-    void processServerMessage(name.huliqing.fighter.game.state.lan.GameServer,com.jme3.network.HostedConnection,com.jme3.network.Message) -> b
 name.huliqing.fighter.game.state.start.LocaleView -> name.huliqing.fighter.game.c.b.a:
     name.huliqing.fighter.game.service.ConfigService configService -> a
     name.huliqing.fighter.game.state.start.StartState startState -> b
@@ -3535,9 +3704,6 @@ name.huliqing.fighter.game.state.start.StartState -> name.huliqing.fighter.game.
     name.huliqing.fighter.game.state.start.LocaleView settingsPanel -> f
     name.huliqing.fighter.game.state.start.StartState$Menu defMenu -> g
     name.huliqing.fighter.ui.Icon viewBtn -> h
-    boolean toPlay -> i
-    com.jme3.app.state.AppState appStateToRun -> j
-    name.huliqing.fighter.ui.Text loading -> k
     com.jme3.effect.ParticleEmitter emitter -> l
     void <init>(com.jme3.app.SimpleApplication) -> <init>
     void initialize(com.jme3.app.state.AppStateManager,com.jme3.app.Application) -> initialize
@@ -3611,6 +3777,7 @@ name.huliqing.fighter.game.state.start.StartView$6 -> name.huliqing.fighter.game
     void <init>(name.huliqing.fighter.game.state.start.StartView) -> <init>
     void onClick(name.huliqing.fighter.ui.UI,boolean) -> a
 name.huliqing.fighter.game.state.start.StoryView -> name.huliqing.fighter.game.c.b.x:
+    name.huliqing.fighter.game.service.GameService gameService -> f
     java.util.List datas -> a
     name.huliqing.fighter.game.state.start.StartState startState -> b
     name.huliqing.fighter.save.SaveStory saveStory -> e
@@ -3621,8 +3788,9 @@ name.huliqing.fighter.game.state.start.StoryView -> name.huliqing.fighter.game.c
     void setSaveStory(name.huliqing.fighter.save.SaveStory) -> a
     void updateStoryList() -> e
     java.lang.String get(java.lang.String) -> a
-    name.huliqing.fighter.save.SaveStory access$100(name.huliqing.fighter.game.state.start.StoryView) -> a
-    name.huliqing.fighter.game.state.start.StartState access$200(name.huliqing.fighter.game.state.start.StoryView) -> b
+    name.huliqing.fighter.game.service.GameService access$100(name.huliqing.fighter.game.state.start.StoryView) -> a
+    name.huliqing.fighter.save.SaveStory access$200(name.huliqing.fighter.game.state.start.StoryView) -> b
+    name.huliqing.fighter.game.state.start.StartState access$300(name.huliqing.fighter.game.state.start.StoryView) -> c
 name.huliqing.fighter.game.state.start.StoryView$StoryData -> name.huliqing.fighter.game.c.b.y:
     java.lang.String gameName -> a
     java.lang.String gameId -> b
@@ -3719,7 +3887,7 @@ name.huliqing.fighter.game.view.ClientsView -> name.huliqing.fighter.game.d.i:
     void <init>() -> <init>
     void updateViewChildren() -> a
     void setClients(java.util.List) -> a
-    name.huliqing.fighter.game.state.lan.mess.MessPlayClientData getSelected() -> d
+    name.huliqing.fighter.game.state.ConnData getSelected() -> b
     name.huliqing.fighter.game.view.ClientsView$ClientList access$300(name.huliqing.fighter.game.view.ClientsView) -> a
     name.huliqing.fighter.ui.Text access$400(name.huliqing.fighter.game.view.ClientsView) -> b
     name.huliqing.fighter.ui.Text access$500(name.huliqing.fighter.game.view.ClientsView) -> c
@@ -3737,39 +3905,38 @@ name.huliqing.fighter.game.view.ClientsView$ClientList -> name.huliqing.fighter.
     java.util.List access$000(name.huliqing.fighter.game.view.ClientsView$ClientList) -> a
     name.huliqing.fighter.game.view.ClientsView$ClientRow access$100(name.huliqing.fighter.game.view.ClientsView$ClientList) -> b
 name.huliqing.fighter.game.view.ClientsView$ClientRow -> name.huliqing.fighter.game.d.k:
-    name.huliqing.fighter.game.state.lan.mess.MessPlayClientData clientData -> b
+    name.huliqing.fighter.game.state.ConnData clientData -> b
     name.huliqing.fighter.ui.Text nameLabel -> c
     name.huliqing.fighter.ui.Text addressLabel -> d
     name.huliqing.fighter.ui.Text actorNameLabel -> e
     name.huliqing.fighter.game.view.ClientsView this$0 -> a
     void <init>(name.huliqing.fighter.game.view.ClientsView,name.huliqing.fighter.ui.ListView) -> <init>
-    void displayRow(name.huliqing.fighter.game.state.lan.mess.MessPlayClientData) -> a
+    void displayRow(name.huliqing.fighter.game.state.ConnData) -> a
     void updateViewChildren() -> a
     void setActive(boolean) -> c
     void clickEffect(boolean) -> b
     void displayRow(java.lang.Object) -> a
-    name.huliqing.fighter.game.state.lan.mess.MessPlayClientData access$200(name.huliqing.fighter.game.view.ClientsView$ClientRow) -> a
+    name.huliqing.fighter.game.state.ConnData access$200(name.huliqing.fighter.game.view.ClientsView$ClientRow) -> a
 name.huliqing.fighter.game.view.ClientsView$ClientRow$1 -> name.huliqing.fighter.game.d.l:
     name.huliqing.fighter.game.view.ClientsView val$this$0 -> a
     name.huliqing.fighter.game.view.ClientsView$ClientRow this$1 -> b
     void <init>(name.huliqing.fighter.game.view.ClientsView$ClientRow,name.huliqing.fighter.game.view.ClientsView) -> <init>
     void onClick(name.huliqing.fighter.ui.UI,boolean) -> a
 name.huliqing.fighter.game.view.ClientsWin -> name.huliqing.fighter.game.d.m:
-    name.huliqing.fighter.game.state.lan.play.LanPlayState lanPlayState -> a
     name.huliqing.fighter.game.view.ClientsView clientsView -> D
     name.huliqing.fighter.ui.LinearLayout helpPanel -> J
     name.huliqing.fighter.game.view.HelpView help -> K
     name.huliqing.fighter.ui.LinearLayout btnPanel -> L
     name.huliqing.fighter.ui.Button btnKick -> M
-    void <init>(name.huliqing.fighter.game.state.lan.play.LanPlayState,float,float) -> <init>
+    name.huliqing.fighter.game.state.LanGame lanGame -> a
+    void <init>(name.huliqing.fighter.game.state.LanGame,float,float) -> <init>
     void updateViewChildren() -> a
     void setClients(java.util.List) -> a
-    void setBtnPanelVisiable(boolean) -> c
     name.huliqing.fighter.game.view.ClientsView access$000(name.huliqing.fighter.game.view.ClientsWin) -> a
-    name.huliqing.fighter.game.state.lan.play.LanPlayState access$100(name.huliqing.fighter.game.view.ClientsWin) -> b
 name.huliqing.fighter.game.view.ClientsWin$1 -> name.huliqing.fighter.game.d.n:
+    name.huliqing.fighter.game.state.LanGame val$lanGame -> b
     name.huliqing.fighter.game.view.ClientsWin this$0 -> a
-    void <init>(name.huliqing.fighter.game.view.ClientsWin) -> <init>
+    void <init>(name.huliqing.fighter.game.view.ClientsWin,name.huliqing.fighter.game.state.LanGame) -> <init>
     void onClick(name.huliqing.fighter.ui.UI,boolean) -> a
 name.huliqing.fighter.game.view.FaceView -> name.huliqing.fighter.game.d.o:
     name.huliqing.fighter.game.service.PlayService playService -> a
@@ -4052,6 +4219,7 @@ name.huliqing.fighter.game.view.ToolsView -> name.huliqing.fighter.game.d.as:
     void setToolSize(float,float) -> b
     void updateViewChildren() -> a
     void addView(name.huliqing.fighter.ui.UI,int) -> a
+    void addMenu(name.huliqing.fighter.ui.UI,int) -> b
 name.huliqing.fighter.game.view.actor.ActorMainPanel -> name.huliqing.fighter.game.d.a.a:
     name.huliqing.fighter.object.actor.Actor actor -> a
     name.huliqing.fighter.ui.LinearLayout tabPanel -> D
@@ -4785,8 +4953,6 @@ name.huliqing.fighter.loader.ElLoader -> name.huliqing.fighter.d.i:
     void <clinit>() -> <clinit>
 name.huliqing.fighter.loader.EmitterLoader -> name.huliqing.fighter.d.j:
     com.jme3.effect.ParticleEmitter loadEmitter(name.huliqing.fighter.data.EmitterData,com.jme3.effect.ParticleEmitter) -> a
-name.huliqing.fighter.loader.GameLoader -> name.huliqing.fighter.d.k:
-    name.huliqing.fighter.object.game.Game load(name.huliqing.fighter.data.GameData) -> a
 name.huliqing.fighter.loader.HitCheckerLoader -> name.huliqing.fighter.d.m:
     name.huliqing.fighter.object.hitchecker.HitChecker load(name.huliqing.fighter.data.HitCheckerData) -> a
 name.huliqing.fighter.loader.Loader -> name.huliqing.fighter.d.n:
@@ -4900,21 +5066,17 @@ name.huliqing.fighter.loader.data.EmitterDataLoader -> name.huliqing.fighter.d.a
     void <init>() -> <init>
     name.huliqing.fighter.data.EmitterData loadData(name.huliqing.fighter.data.Proto) -> a
     name.huliqing.fighter.data.ProtoData loadData(name.huliqing.fighter.data.Proto) -> b
-name.huliqing.fighter.loader.data.GameDataLoader -> name.huliqing.fighter.d.a.n:
-    void <init>() -> <init>
-    name.huliqing.fighter.data.GameData loadData(name.huliqing.fighter.data.Proto) -> a
-    name.huliqing.fighter.data.ProtoData loadData(name.huliqing.fighter.data.Proto) -> b
 name.huliqing.fighter.loader.data.HitCheckerDataLoader -> name.huliqing.fighter.d.a.p:
     void <init>() -> <init>
     name.huliqing.fighter.data.HitCheckerData loadData(name.huliqing.fighter.data.Proto) -> a
     name.huliqing.fighter.data.ProtoData loadData(name.huliqing.fighter.data.Proto) -> b
+name.huliqing.fighter.loader.data.ItemDataLoader -> name.huliqing.fighter.d.a.n:
+    void <init>() -> <init>
+    name.huliqing.fighter.data.ItemData loadData(name.huliqing.fighter.data.Proto) -> a
+    name.huliqing.fighter.data.ProtoData loadData(name.huliqing.fighter.data.Proto) -> b
 name.huliqing.fighter.loader.data.LogicDataLoader -> name.huliqing.fighter.d.a.q:
     void <init>() -> <init>
     name.huliqing.fighter.data.LogicData loadData(name.huliqing.fighter.data.Proto) -> a
-    name.huliqing.fighter.data.ProtoData loadData(name.huliqing.fighter.data.Proto) -> b
-name.huliqing.fighter.loader.data.ObjDataLoader -> name.huliqing.fighter.d.a.r:
-    void <init>() -> <init>
-    name.huliqing.fighter.data.ItemData loadData(name.huliqing.fighter.data.Proto) -> a
     name.huliqing.fighter.data.ProtoData loadData(name.huliqing.fighter.data.Proto) -> b
 name.huliqing.fighter.loader.data.ObjectLoader -> name.huliqing.fighter.d.a.s:
     java.util.logging.Logger logger -> b
@@ -5079,33 +5241,42 @@ name.huliqing.fighter.logic.scene.ActorMultLoadHelper$1 -> name.huliqing.fighter
     name.huliqing.fighter.object.actor.Actor call() -> a
     java.lang.Object call() -> call
 name.huliqing.fighter.manager.AnimationManager -> name.huliqing.fighter.f.a:
-    com.jme3.util.SafeArrayList animations -> a
+    name.huliqing.fighter.manager.AnimationManager INSTANCE -> a
+    com.jme3.util.SafeArrayList ANIMATIONS -> b
+    void <init>() -> <init>
+    name.huliqing.fighter.manager.AnimationManager getInstance() -> b
+    void initialize() -> a
     void startAnimation(name.huliqing.fighter.object.animation.Animation) -> a
-    void update(float) -> a
-    void cleanup() -> a
+    void update(float) -> d
+    void cleanup() -> f
     void <clinit>() -> <clinit>
 name.huliqing.fighter.manager.DamageManager -> name.huliqing.fighter.f.b:
-    java.util.List caches -> a
+    name.huliqing.fighter.manager.DamageManager INSTANCE -> a
+    java.util.List CACHES -> b
     void <init>() -> <init>
+    name.huliqing.fighter.manager.DamageManager getInstance() -> b
+    void initialize() -> a
+    void update(float) -> d
+    void cleanup() -> f
     void show(name.huliqing.fighter.object.actor.Actor,float) -> a
     void display(name.huliqing.fighter.object.actor.Actor,java.lang.String,com.jme3.math.ColorRGBA,int) -> a
     boolean checkDisplay(name.huliqing.fighter.object.actor.Actor) -> a
     float getFontSize() -> c
-    void showDebugInfo() -> a
-    void cleanup() -> b
     name.huliqing.fighter.manager.DamageManager$DynamicText getFromCache() -> d
     void <clinit>() -> <clinit>
 name.huliqing.fighter.manager.DamageManager$DynamicText -> name.huliqing.fighter.f.c:
     name.huliqing.fighter.ui.Text text -> l
     float totalAnimDistance -> m
-    float TEMP_VALUE -> n
-    void <init>(java.lang.String,float) -> <init>
-    void setText(java.lang.String,com.jme3.math.ColorRGBA) -> a
+    com.jme3.math.Vector3f startPos -> o
+    name.huliqing.fighter.manager.DamageManager this$0 -> n
+    void <init>(name.huliqing.fighter.manager.DamageManager,java.lang.String,float) -> <init>
+    void doInit() -> h
     void updatePhaseAll(float) -> a
-    float access$002(name.huliqing.fighter.manager.DamageManager$DynamicText,float) -> a
-    void <clinit>() -> <clinit>
+    void cleanup() -> c
+    name.huliqing.fighter.ui.Text access$000(name.huliqing.fighter.manager.DamageManager$DynamicText) -> a
+    com.jme3.math.Vector3f access$100(name.huliqing.fighter.manager.DamageManager$DynamicText) -> b
+    float access$202(name.huliqing.fighter.manager.DamageManager$DynamicText,float) -> a
 name.huliqing.fighter.manager.HUDManager -> name.huliqing.fighter.f.d:
-    com.jme3.scene.Node localRoot -> a
     name.huliqing.fighter.manager.HUDManager$Messager messager -> b
     boolean enabled -> c
     void init(com.jme3.scene.Node) -> a
@@ -5122,16 +5293,14 @@ name.huliqing.fighter.manager.HUDManager$Messager -> name.huliqing.fighter.f.e:
     float fixedHeight -> f
     float avgHeight -> g
     void <init>(float,float) -> <init>
+    void initialize() -> c
     void updateLogicalState(float) -> updateLogicalState
     void update(float) -> a
     void addMessage(java.lang.String,com.jme3.math.ColorRGBA) -> a
     void checkAndResizePanel() -> b
+    void clear() -> d
     void cleanup() -> a
     void setDragEnabled(boolean) -> a
-name.huliqing.fighter.manager.Manager -> name.huliqing.fighter.f.f:
-    void init(com.jme3.app.Application) -> a
-    void update(float) -> a
-    void cleanup() -> a
 name.huliqing.fighter.manager.PickManager -> name.huliqing.fighter.f.g:
     name.huliqing.fighter.manager.PickManager$PickResult pick(com.jme3.input.InputManager,com.jme3.renderer.Camera,com.jme3.scene.Spatial) -> a
     com.jme3.scene.Spatial findPickable(com.jme3.scene.Spatial) -> a
@@ -5161,10 +5330,9 @@ name.huliqing.fighter.manager.ResourceManager -> name.huliqing.fighter.f.i:
     int getWorldLength(java.lang.String) -> g
     void <clinit>() -> <clinit>
 name.huliqing.fighter.manager.ShortcutManager -> name.huliqing.fighter.f.j:
-    name.huliqing.fighter.manager.ShortcutManager$ShortcutRoot shortcutRoot -> a
-    name.huliqing.fighter.ui.UI delete -> b
-    name.huliqing.fighter.ui.UI recycle -> c
-    float space -> d
+    name.huliqing.fighter.manager.ShortcutManager$ShortcutRoot SHORTCUT_ROOT -> a
+    name.huliqing.fighter.ui.UI DELETE -> b
+    name.huliqing.fighter.ui.UI RECYCLE -> c
     void init() -> d
     void addShortcutNoAnim(name.huliqing.fighter.game.view.ShortcutView) -> a
     void addShortcut(name.huliqing.fighter.game.view.ShortcutView) -> b
@@ -5175,6 +5343,7 @@ name.huliqing.fighter.manager.ShortcutManager -> name.huliqing.fighter.f.j:
     java.util.ArrayList getShortcutSaves() -> b
     name.huliqing.fighter.game.view.ShortcutView createShortcut(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.data.ProtoData) -> a
     void cleanup() -> c
+    void loadShortcut(java.util.List,name.huliqing.fighter.object.actor.Actor) -> a
     boolean isRecycle(name.huliqing.fighter.game.view.ShortcutView) -> d
     boolean isDelete(name.huliqing.fighter.game.view.ShortcutView) -> e
     name.huliqing.fighter.object.animation.Animation createShortcutAddAnimation(name.huliqing.fighter.game.view.ShortcutView) -> f
@@ -5254,13 +5423,13 @@ name.huliqing.fighter.manager.talk.SpeakImpl$SpeakPanel -> name.huliqing.fighter
     name.huliqing.fighter.manager.talk.SpeakImpl this$0 -> a
     void <init>(name.huliqing.fighter.manager.talk.SpeakImpl,java.lang.String) -> <init>
 name.huliqing.fighter.manager.talk.SpeakManager -> name.huliqing.fighter.f.a.e:
-    name.huliqing.fighter.manager.talk.SpeakManager ins -> a
+    name.huliqing.fighter.manager.talk.SpeakManager INSTANCE -> a
     com.jme3.util.SafeArrayList speaks -> b
     void <init>() -> <init>
     name.huliqing.fighter.manager.talk.SpeakManager getInstance() -> b
-    void init(com.jme3.app.Application) -> a
-    void update(float) -> a
-    void cleanup() -> a
+    void initialize() -> a
+    void update(float) -> d
+    void cleanup() -> f
     void doSpeak(name.huliqing.fighter.object.actor.Actor,java.lang.String,float) -> a
     void <clinit>() -> <clinit>
 name.huliqing.fighter.manager.talk.Talk -> name.huliqing.fighter.f.a.f:
@@ -5328,13 +5497,13 @@ name.huliqing.fighter.manager.talk.TalkLogicSpeak -> name.huliqing.fighter.f.a.l
     void doInit() -> d
     void doTalkLogic(float) -> c
 name.huliqing.fighter.manager.talk.TalkManager -> name.huliqing.fighter.f.a.m:
-    name.huliqing.fighter.manager.talk.TalkManager instance -> a
+    name.huliqing.fighter.manager.talk.TalkManager INSTANCE -> a
     java.util.List talks -> b
     void <init>() -> <init>
     name.huliqing.fighter.manager.talk.TalkManager getInstance() -> b
-    void init(com.jme3.app.Application) -> a
-    void update(float) -> a
-    void cleanup() -> a
+    void initialize() -> a
+    void update(float) -> d
+    void cleanup() -> f
     void startTalk(name.huliqing.fighter.manager.talk.Talk) -> a
     void <clinit>() -> <clinit>
 name.huliqing.fighter.object.AbstractPlayObject -> name.huliqing.fighter.g.a:
@@ -5345,9 +5514,9 @@ name.huliqing.fighter.object.AbstractPlayObject -> name.huliqing.fighter.g.a:
     void cleanup() -> f
 name.huliqing.fighter.object.DataFactory -> name.huliqing.fighter.g.b:
     java.util.logging.Logger LOG -> a
-    java.util.Map dataTypeMap -> b
-    java.util.Map dataLoaderMap -> c
-    java.util.Map dataProcessorMap -> d
+    java.util.Map DATA_TYPE_MAP -> b
+    java.util.Map DATA_LOADER_MAP -> c
+    java.util.Map DATA_PROCESSOR_MAP -> d
     void <init>() -> <init>
     void registerDataType(java.lang.String,java.lang.Class) -> a
     void registerDataLoader(java.lang.String,java.lang.Class) -> b
@@ -5376,7 +5545,6 @@ name.huliqing.fighter.object.DataLoaderFactory -> name.huliqing.fighter.g.d:
     name.huliqing.fighter.data.DropData createDropData(java.lang.String) -> j
     name.huliqing.fighter.data.EmitterData createEmitterData(java.lang.String) -> k
     name.huliqing.fighter.data.PositionData createPositionData(java.lang.String) -> l
-    name.huliqing.fighter.data.GameData createGameData(java.lang.String) -> m
     name.huliqing.fighter.data.HitCheckerData createHitCheckerData(java.lang.String) -> o
     name.huliqing.fighter.data.ElData createElData(java.lang.String) -> p
     name.huliqing.fighter.data.LogicData createLogicData(java.lang.String) -> q
@@ -7175,22 +7343,33 @@ name.huliqing.fighter.object.env.TreeEnv -> name.huliqing.fighter.g.k.f:
     void <init>() -> <init>
     void addPhysicsControl(com.jme3.scene.Spatial,com.jme3.bullet.control.RigidBodyControl,name.huliqing.fighter.data.EnvData) -> a
 name.huliqing.fighter.object.game.Game -> name.huliqing.fighter.g.l.a:
-    com.jme3.util.SafeArrayList logics -> a
-    java.util.List tasks -> b
-    name.huliqing.fighter.object.game.GameTask current -> h
-    int finishCount -> i
+    name.huliqing.fighter.game.service.PlayService playService -> g
+    name.huliqing.fighter.game.service.SceneService sceneService -> h
     name.huliqing.fighter.data.GameData data -> c
-    boolean started -> g
+    java.util.List listeners -> a
+    boolean enabled -> b
+    name.huliqing.fighter.object.scene.Scene scene -> e
+    name.huliqing.fighter.object.PlayManager playManager -> f
     void <init>() -> <init>
-    void <init>(name.huliqing.fighter.data.GameData) -> <init>
-    void start() -> b
-    void addTask(name.huliqing.fighter.object.game.GameTask) -> a
-    void doEnd() -> c
-    boolean hasNext() -> d
-    void doNext() -> e
-    void doLogic(float) -> a
+    void initData(name.huliqing.fighter.data.GameData) -> a
+    name.huliqing.fighter.data.GameData getData() -> b
+    void initialize() -> a
+    void update(float) -> d
     void cleanup() -> f
-    void doInit() -> i
+    name.huliqing.fighter.object.scene.Scene getScene() -> c
+    void addLogic(name.huliqing.fighter.object.PlayObject) -> a
+    boolean removeLogic(name.huliqing.fighter.object.PlayObject) -> b
+    void addListener(name.huliqing.fighter.object.game.Game$GameListener) -> a
+    void setEnabled(boolean) -> a
+    void updateLogics(float) -> a
+    void onActorSelected(name.huliqing.fighter.object.actor.Actor) -> a
+    void initData(name.huliqing.fighter.data.ProtoData) -> a
+name.huliqing.fighter.object.game.Game$GameListener -> name.huliqing.fighter.g.l.bn:
+    void onSceneLoaded() -> a
+name.huliqing.fighter.object.game.GameLoader -> name.huliqing.fighter.g.l.bo:
+    void <init>() -> <init>
+    void load(name.huliqing.fighter.data.Proto,name.huliqing.fighter.data.GameData) -> a
+    void load(name.huliqing.fighter.data.Proto,name.huliqing.fighter.data.ProtoData) -> a
 name.huliqing.fighter.object.game.GameTask -> name.huliqing.fighter.g.l.b:
     void start(name.huliqing.fighter.object.game.GameTask) -> a
     void update(float) -> a
@@ -7208,26 +7387,42 @@ name.huliqing.fighter.object.game.PlayerDeadChecker -> name.huliqing.fighter.g.l
     name.huliqing.fighter.game.network.PlayNetwork playNetwork -> a
     name.huliqing.fighter.game.service.ViewService viewService -> b
     name.huliqing.fighter.game.service.PlayService playService -> c
+    name.huliqing.fighter.object.game.Game game -> e
     name.huliqing.fighter.object.actor.Actor player -> g
     boolean dead -> h
-    void <init>(name.huliqing.fighter.object.actor.Actor) -> <init>
+    boolean displayed -> i
+    void <init>(name.huliqing.fighter.object.game.Game,name.huliqing.fighter.object.actor.Actor) -> <init>
     boolean isDead() -> b
     void doLogic(float) -> a
+    void cleanup() -> f
+name.huliqing.fighter.object.game.StoryGame -> name.huliqing.fighter.g.l.bp:
+    name.huliqing.fighter.game.service.PlayService playService -> h
+    name.huliqing.fighter.game.network.ActorNetwork actorNetwork -> i
+    java.util.List tasks -> g
+    name.huliqing.fighter.object.game.GameTask current -> j
+    int finishCount -> k
+    name.huliqing.fighter.object.game.PlayerDeadChecker playerChecker -> l
+    boolean started -> r
+    void <init>() -> <init>
+    void addTask(name.huliqing.fighter.object.game.GameTask) -> a
+    void initialize() -> a
+    boolean hasNext() -> d
+    void doInit() -> i
+    void doNext() -> e
+    void updateLogics(float) -> a
+    void cleanup() -> f
 name.huliqing.fighter.object.game.StoryGbGame -> name.huliqing.fighter.g.l.e:
     name.huliqing.fighter.game.service.PlayService playService -> k
     name.huliqing.fighter.game.service.ActionService actionService -> l
     name.huliqing.fighter.game.service.ActorService actorService -> m
     name.huliqing.fighter.game.network.ActorNetwork actorNetwork -> n
-    name.huliqing.fighter.object.game.PlayerDeadChecker playerChecker -> o
     com.jme3.math.Vector3f gbPosition -> p
     com.jme3.math.Vector3f enemyPosition -> q
     java.lang.String[] enemyActors -> h
-    int groupPlayer -> i
     int groupEnemy -> j
     void <init>() -> <init>
-    void <init>(name.huliqing.fighter.data.GameData) -> <init>
+    void initData(name.huliqing.fighter.data.GameData) -> a
     void doInit() -> i
-    void doLogic(float) -> a
     com.jme3.math.Vector3f getGbPosition() -> j
     com.jme3.math.Vector3f getEnemyPosition() -> k
     java.lang.String[] getEnemyActors() -> l
@@ -7241,7 +7436,8 @@ name.huliqing.fighter.object.game.StoryGbTask1 -> name.huliqing.fighter.g.l.f:
     name.huliqing.fighter.game.network.ActorNetwork actorNetwork -> h
     name.huliqing.fighter.game.network.SkillNetwork skillNetwork -> i
     name.huliqing.fighter.game.network.StateNetwork stateNetwork -> j
-    name.huliqing.fighter.game.network.ItemNetwork itemNetwork -> k
+    name.huliqing.fighter.game.network.ProtoNetwork protoNetwork -> k
+    name.huliqing.fighter.game.service.ProtoService protoService -> F
     name.huliqing.fighter.ui.TextPanel taskFind -> l
     name.huliqing.fighter.ui.TextPanel taskSave -> m
     name.huliqing.fighter.object.game.StoryGbTaskLogic storyGbTaskLogic -> n
@@ -7291,12 +7487,13 @@ name.huliqing.fighter.object.game.StoryGbTask1 -> name.huliqing.fighter.g.l.f:
     void access$800(name.huliqing.fighter.object.game.StoryGbTask1,name.huliqing.fighter.object.actor.Actor,boolean) -> a
     name.huliqing.fighter.game.network.PlayNetwork access$900(name.huliqing.fighter.object.game.StoryGbTask1) -> h
     name.huliqing.fighter.object.actor.Actor access$1000(name.huliqing.fighter.object.game.StoryGbTask1) -> i
-    name.huliqing.fighter.game.network.ItemNetwork access$1100(name.huliqing.fighter.object.game.StoryGbTask1) -> j
-    boolean access$1202(name.huliqing.fighter.object.game.StoryGbTask1,boolean) -> a
-    int access$1302(name.huliqing.fighter.object.game.StoryGbTask1,int) -> b
-    int[] access$1400(name.huliqing.fighter.object.game.StoryGbTask1) -> k
-    boolean access$1502(name.huliqing.fighter.object.game.StoryGbTask1,boolean) -> b
-    name.huliqing.fighter.ui.TextPanel access$1600(name.huliqing.fighter.object.game.StoryGbTask1) -> l
+    name.huliqing.fighter.game.service.ProtoService access$1100(name.huliqing.fighter.object.game.StoryGbTask1) -> j
+    name.huliqing.fighter.game.network.ProtoNetwork access$1200(name.huliqing.fighter.object.game.StoryGbTask1) -> k
+    boolean access$1302(name.huliqing.fighter.object.game.StoryGbTask1,boolean) -> a
+    int access$1402(name.huliqing.fighter.object.game.StoryGbTask1,int) -> b
+    int[] access$1500(name.huliqing.fighter.object.game.StoryGbTask1) -> l
+    boolean access$1602(name.huliqing.fighter.object.game.StoryGbTask1,boolean) -> b
+    name.huliqing.fighter.ui.TextPanel access$1700(name.huliqing.fighter.object.game.StoryGbTask1) -> m
 name.huliqing.fighter.object.game.StoryGbTask1$1 -> name.huliqing.fighter.g.l.g:
     name.huliqing.fighter.object.game.StoryGbTask1 this$0 -> a
     void <init>(name.huliqing.fighter.object.game.StoryGbTask1) -> <init>
@@ -7322,7 +7519,7 @@ name.huliqing.fighter.object.game.StoryGbTask1$6 -> name.huliqing.fighter.g.l.l:
     void <init>(name.huliqing.fighter.object.game.StoryGbTask1) -> <init>
     void onClick(name.huliqing.fighter.ui.UI,boolean) -> a
 name.huliqing.fighter.object.game.StoryGbTask2 -> name.huliqing.fighter.g.l.m:
-    java.util.logging.Logger logger -> b
+    java.util.logging.Logger LOG -> b
     name.huliqing.fighter.game.network.PlayNetwork playNetwork -> c
     name.huliqing.fighter.game.network.ActorNetwork actorNetwork -> d
     name.huliqing.fighter.game.service.PlayService playService -> e
@@ -7362,22 +7559,20 @@ name.huliqing.fighter.object.game.StoryGbTask2 -> name.huliqing.fighter.g.l.m:
     com.jme3.math.Vector3f findGbPosition() -> d
     name.huliqing.fighter.object.actor.Actor access$202(name.huliqing.fighter.object.game.StoryGbTask2,name.huliqing.fighter.object.actor.Actor) -> a
     name.huliqing.fighter.object.actor.Actor access$200(name.huliqing.fighter.object.game.StoryGbTask2) -> a
-    int access$300(name.huliqing.fighter.object.game.StoryGbTask2) -> b
-    name.huliqing.fighter.game.service.ActorService access$400(name.huliqing.fighter.object.game.StoryGbTask2) -> c
-    name.huliqing.fighter.object.game.StoryGbGame access$500(name.huliqing.fighter.object.game.StoryGbTask2) -> d
-    name.huliqing.fighter.game.service.StateService access$600(name.huliqing.fighter.object.game.StoryGbTask2) -> e
-    name.huliqing.fighter.game.service.DropService access$700(name.huliqing.fighter.object.game.StoryGbTask2) -> f
-    int access$800(name.huliqing.fighter.object.game.StoryGbTask2) -> g
-    com.jme3.math.Vector3f access$900(name.huliqing.fighter.object.game.StoryGbTask2) -> h
-    com.jme3.math.ColorRGBA access$1000(name.huliqing.fighter.object.game.StoryGbTask2) -> i
-    java.util.List access$1100(name.huliqing.fighter.object.game.StoryGbTask2) -> j
-    name.huliqing.fighter.game.network.PlayNetwork access$1200(name.huliqing.fighter.object.game.StoryGbTask2) -> k
-    int access$1300(name.huliqing.fighter.object.game.StoryGbTask2) -> l
-    name.huliqing.fighter.game.service.SkillService access$1400(name.huliqing.fighter.object.game.StoryGbTask2) -> m
-    name.huliqing.fighter.game.service.PlayService access$1700(name.huliqing.fighter.object.game.StoryGbTask2) -> n
-    name.huliqing.fighter.object.actor.Actor access$1800(name.huliqing.fighter.object.game.StoryGbTask2) -> o
-    name.huliqing.fighter.object.game.StoryGbTaskLogic access$1900(name.huliqing.fighter.object.game.StoryGbTask2) -> p
-    java.lang.String access$2000(name.huliqing.fighter.object.game.StoryGbTask2,java.lang.String,java.lang.Object[]) -> a
+    name.huliqing.fighter.game.service.ActorService access$300(name.huliqing.fighter.object.game.StoryGbTask2) -> b
+    name.huliqing.fighter.object.game.StoryGbGame access$400(name.huliqing.fighter.object.game.StoryGbTask2) -> c
+    name.huliqing.fighter.game.service.StateService access$500(name.huliqing.fighter.object.game.StoryGbTask2) -> d
+    name.huliqing.fighter.game.service.DropService access$600(name.huliqing.fighter.object.game.StoryGbTask2) -> e
+    com.jme3.math.Vector3f access$700(name.huliqing.fighter.object.game.StoryGbTask2) -> f
+    com.jme3.math.ColorRGBA access$800(name.huliqing.fighter.object.game.StoryGbTask2) -> g
+    java.util.List access$900(name.huliqing.fighter.object.game.StoryGbTask2) -> h
+    name.huliqing.fighter.game.network.PlayNetwork access$1000(name.huliqing.fighter.object.game.StoryGbTask2) -> i
+    name.huliqing.fighter.game.service.SkillService access$1100(name.huliqing.fighter.object.game.StoryGbTask2) -> j
+    name.huliqing.fighter.game.service.PlayService access$1400(name.huliqing.fighter.object.game.StoryGbTask2) -> k
+    name.huliqing.fighter.object.actor.Actor access$1500(name.huliqing.fighter.object.game.StoryGbTask2) -> l
+    name.huliqing.fighter.object.game.StoryGbTaskLogic access$1600(name.huliqing.fighter.object.game.StoryGbTask2) -> m
+    java.lang.String access$1700(name.huliqing.fighter.object.game.StoryGbTask2,java.lang.String,java.lang.Object[]) -> a
+    void <clinit>() -> <clinit>
 name.huliqing.fighter.object.game.StoryGbTask2$1 -> name.huliqing.fighter.g.l.n:
     name.huliqing.fighter.object.game.StoryGbTask2 this$0 -> b
     void <init>(name.huliqing.fighter.object.game.StoryGbTask2,java.lang.String[]) -> <init>
@@ -7403,14 +7598,14 @@ name.huliqing.fighter.object.game.StoryGbTask2$TaskOkChecker -> name.huliqing.fi
     name.huliqing.fighter.object.game.StoryGbTask2 this$0 -> a
     void <init>(name.huliqing.fighter.object.game.StoryGbTask2) -> <init>
     void doLogic(float) -> a
-    boolean access$1500(name.huliqing.fighter.object.game.StoryGbTask2$TaskOkChecker) -> a
+    boolean access$1200(name.huliqing.fighter.object.game.StoryGbTask2$TaskOkChecker) -> a
 name.huliqing.fighter.object.game.StoryGbTask2$TowerChecker -> name.huliqing.fighter.g.l.s:
     boolean allTowerDead -> b
     name.huliqing.fighter.object.game.StoryGbTask2 this$0 -> a
     void <init>(name.huliqing.fighter.object.game.StoryGbTask2) -> <init>
     void doLogic(float) -> a
     void <init>(name.huliqing.fighter.object.game.StoryGbTask2,name.huliqing.fighter.object.game.StoryGbTask2$1) -> <init>
-    boolean access$1600(name.huliqing.fighter.object.game.StoryGbTask2$TowerChecker) -> a
+    boolean access$1300(name.huliqing.fighter.object.game.StoryGbTask2$TowerChecker) -> a
 name.huliqing.fighter.object.game.StoryGbTask2End -> name.huliqing.fighter.g.l.t:
     name.huliqing.fighter.game.service.PlayService playService -> a
     name.huliqing.fighter.game.service.StateService stateService -> b
@@ -7418,11 +7613,12 @@ name.huliqing.fighter.object.game.StoryGbTask2End -> name.huliqing.fighter.g.l.t
     name.huliqing.fighter.game.service.ActionService actionService -> g
     name.huliqing.fighter.game.service.ViewService viewService -> h
     name.huliqing.fighter.game.service.SkillService skillService -> i
+    name.huliqing.fighter.game.service.ProtoService protoService -> e
     name.huliqing.fighter.game.network.PlayNetwork playNetwork -> j
     name.huliqing.fighter.game.network.ActorNetwork actorNetwork -> k
     name.huliqing.fighter.game.network.StateNetwork stateNetwork -> l
-    name.huliqing.fighter.game.network.HandlerNetwork handlerNetwork -> m
     name.huliqing.fighter.game.network.SkillNetwork skillNetwork -> n
+    name.huliqing.fighter.game.network.ProtoNetwork protoNetwork -> m
     name.huliqing.fighter.object.game.StoryGbGame game -> o
     name.huliqing.fighter.object.actor.Actor player -> p
     name.huliqing.fighter.object.game.StoryGbTaskLogic taskPanel -> q
@@ -7446,9 +7642,10 @@ name.huliqing.fighter.object.game.StoryGbTask2End -> name.huliqing.fighter.g.l.t
     void access$400(name.huliqing.fighter.object.game.StoryGbTask2End,name.huliqing.fighter.object.actor.Actor,boolean) -> a
     name.huliqing.fighter.game.network.PlayNetwork access$500(name.huliqing.fighter.object.game.StoryGbTask2End) -> e
     name.huliqing.fighter.object.actor.Actor access$600(name.huliqing.fighter.object.game.StoryGbTask2End) -> f
-    name.huliqing.fighter.object.game.StoryGbTaskLogic access$700(name.huliqing.fighter.object.game.StoryGbTask2End) -> g
-    name.huliqing.fighter.game.network.HandlerNetwork access$800(name.huliqing.fighter.object.game.StoryGbTask2End) -> h
-    name.huliqing.fighter.game.service.ViewService access$900(name.huliqing.fighter.object.game.StoryGbTask2End) -> i
+    name.huliqing.fighter.game.service.ProtoService access$700(name.huliqing.fighter.object.game.StoryGbTask2End) -> g
+    name.huliqing.fighter.object.game.StoryGbTaskLogic access$800(name.huliqing.fighter.object.game.StoryGbTask2End) -> h
+    name.huliqing.fighter.game.network.ProtoNetwork access$900(name.huliqing.fighter.object.game.StoryGbTask2End) -> i
+    name.huliqing.fighter.game.service.ViewService access$1000(name.huliqing.fighter.object.game.StoryGbTask2End) -> j
 name.huliqing.fighter.object.game.StoryGbTask2End$1 -> name.huliqing.fighter.g.l.u:
     name.huliqing.fighter.object.actor.Actor val$player -> b
     name.huliqing.fighter.object.game.StoryGbTask2End this$0 -> c
@@ -7506,16 +7703,14 @@ name.huliqing.fighter.object.game.StoryGuardFairyTask$1 -> name.huliqing.fighter
 name.huliqing.fighter.object.game.StoryGuardGame -> name.huliqing.fighter.g.l.z:
     name.huliqing.fighter.game.service.PlayService playService -> j
     name.huliqing.fighter.game.network.ActorNetwork actorNetwork -> k
-    name.huliqing.fighter.object.game.PlayerDeadChecker playerChecker -> l
     com.jme3.math.Vector3f selfPosition -> m
     com.jme3.math.Vector3f enemyPosition -> n
     com.jme3.math.Vector3f fairyPosition -> o
     int fairyLevel -> h
     int servantLevel -> i
     void <init>() -> <init>
-    void <init>(name.huliqing.fighter.data.GameData) -> <init>
+    void initData(name.huliqing.fighter.data.GameData) -> a
     void doInit() -> i
-    void doLogic(float) -> a
     com.jme3.math.Vector3f getSelfPosition() -> j
     com.jme3.math.Vector3f getEnemyPosition() -> k
     com.jme3.math.Vector3f getFairyPosition() -> l
@@ -7732,16 +7927,12 @@ name.huliqing.fighter.object.game.StoryGuardTask2$PlayerChecker -> name.huliqing
     void <init>(name.huliqing.fighter.object.game.StoryGuardTask2,name.huliqing.fighter.object.game.StoryGuardTask2$1) -> <init>
     boolean access$900(name.huliqing.fighter.object.game.StoryGuardTask2$PlayerChecker) -> a
 name.huliqing.fighter.object.game.StoryTreasureGame -> name.huliqing.fighter.g.l.as:
-    name.huliqing.fighter.game.service.PlayService playService -> l
-    name.huliqing.fighter.object.game.PlayerDeadChecker playerChecker -> m
     com.jme3.math.Vector3f treasurePos -> h
     int treasureLevel -> i
     int groupPlayer -> j
     int groupEnemy -> k
     void <init>() -> <init>
-    void <init>(name.huliqing.fighter.data.GameData) -> <init>
     void doInit() -> i
-    void doLogic(float) -> a
 name.huliqing.fighter.object.game.StoryTreasureTask1 -> name.huliqing.fighter.g.l.at:
     name.huliqing.fighter.game.service.PlayService playService -> b
     name.huliqing.fighter.game.service.StateService stateService -> c
@@ -7868,16 +8059,15 @@ name.huliqing.fighter.object.game.StoryTreasureTask2 -> name.huliqing.fighter.g.
     int access$902(name.huliqing.fighter.object.game.StoryTreasureTask2,int) -> a
     name.huliqing.fighter.object.game.StoryTreasureGame access$1000(name.huliqing.fighter.object.game.StoryTreasureTask2) -> j
     name.huliqing.fighter.game.service.SkillService access$1100(name.huliqing.fighter.object.game.StoryTreasureTask2) -> k
-    float access$1200(name.huliqing.fighter.object.game.StoryTreasureTask2) -> l
-    name.huliqing.fighter.game.service.LogicService access$1300(name.huliqing.fighter.object.game.StoryTreasureTask2) -> m
-    name.huliqing.fighter.object.actor.Actor access$1500(name.huliqing.fighter.object.game.StoryTreasureTask2) -> n
-    name.huliqing.fighter.game.network.SkinNetwork access$1600(name.huliqing.fighter.object.game.StoryTreasureTask2) -> o
-    void access$1700(name.huliqing.fighter.object.game.StoryTreasureTask2) -> p
-    name.huliqing.fighter.game.network.SkillNetwork access$1800(name.huliqing.fighter.object.game.StoryTreasureTask2) -> q
-    name.huliqing.fighter.object.actor.Actor access$1502(name.huliqing.fighter.object.game.StoryTreasureTask2,name.huliqing.fighter.object.actor.Actor) -> a
-    com.jme3.math.Vector3f[] access$1900(name.huliqing.fighter.object.game.StoryTreasureTask2) -> r
-    name.huliqing.fighter.logic.scene.ActorBuildLogic access$2000(name.huliqing.fighter.object.game.StoryTreasureTask2) -> s
-    name.huliqing.fighter.game.network.StateNetwork access$2100(name.huliqing.fighter.object.game.StoryTreasureTask2) -> t
+    name.huliqing.fighter.game.service.LogicService access$1200(name.huliqing.fighter.object.game.StoryTreasureTask2) -> l
+    name.huliqing.fighter.object.actor.Actor access$1400(name.huliqing.fighter.object.game.StoryTreasureTask2) -> m
+    name.huliqing.fighter.game.network.SkinNetwork access$1500(name.huliqing.fighter.object.game.StoryTreasureTask2) -> n
+    void access$1600(name.huliqing.fighter.object.game.StoryTreasureTask2) -> o
+    name.huliqing.fighter.game.network.SkillNetwork access$1700(name.huliqing.fighter.object.game.StoryTreasureTask2) -> p
+    name.huliqing.fighter.object.actor.Actor access$1402(name.huliqing.fighter.object.game.StoryTreasureTask2,name.huliqing.fighter.object.actor.Actor) -> a
+    com.jme3.math.Vector3f[] access$1800(name.huliqing.fighter.object.game.StoryTreasureTask2) -> q
+    name.huliqing.fighter.logic.scene.ActorBuildLogic access$1900(name.huliqing.fighter.object.game.StoryTreasureTask2) -> r
+    name.huliqing.fighter.game.network.StateNetwork access$2000(name.huliqing.fighter.object.game.StoryTreasureTask2) -> s
 name.huliqing.fighter.object.game.StoryTreasureTask2$1 -> name.huliqing.fighter.g.l.bb:
     name.huliqing.fighter.object.game.StoryTreasureTask2 this$0 -> a
     void <init>(name.huliqing.fighter.object.game.StoryTreasureTask2) -> <init>
@@ -7948,6 +8138,7 @@ name.huliqing.fighter.object.game.SurvivalBoss -> name.huliqing.fighter.g.l.bk:
     void addPositionLogic(name.huliqing.fighter.object.actor.Actor) -> a
 name.huliqing.fighter.object.game.SurvivalGame -> name.huliqing.fighter.g.l.bl:
     name.huliqing.fighter.game.service.PlayService playService -> p
+    name.huliqing.fighter.game.network.ActorNetwork actorNetwork -> g
     com.jme3.math.Vector3f treasurePos -> h
     int SELF_GROUP -> i
     int GROUP_ENEMY -> j
@@ -7957,8 +8148,8 @@ name.huliqing.fighter.object.game.SurvivalGame -> name.huliqing.fighter.g.l.bl:
     float levelUpBySec -> n
     int maxLevel -> o
     void <init>() -> <init>
-    void <init>(name.huliqing.fighter.data.GameData) -> <init>
-    void doInit() -> i
+    void initialize() -> a
+    void onActorSelected(name.huliqing.fighter.object.actor.Actor) -> a
 name.huliqing.fighter.object.game.SurvivalLevelLogic -> name.huliqing.fighter.g.l.bm:
     name.huliqing.fighter.game.network.PlayNetwork playNetwork -> a
     name.huliqing.fighter.game.service.ViewService viewService -> b
@@ -7971,10 +8162,10 @@ name.huliqing.fighter.object.game.SurvivalLevelLogic -> name.huliqing.fighter.g.
     int getMaxLevel() -> c
     void doLogic(float) -> a
     void cleanup() -> f
-name.huliqing.fighter.object.game.SurvivalTask -> name.huliqing.fighter.g.l.bn:
-    boolean debug -> b
-    name.huliqing.fighter.game.network.ActorNetwork actorNetwork -> c
-    name.huliqing.fighter.game.network.SkillNetwork skillNetwork -> d
+name.huliqing.fighter.object.game.SurvivalLogic -> name.huliqing.fighter.g.l.bq:
+    boolean debug -> a
+    name.huliqing.fighter.game.network.ActorNetwork actorNetwork -> b
+    name.huliqing.fighter.game.network.SkillNetwork skillNetwork -> c
     name.huliqing.fighter.game.network.StateNetwork stateNetwork -> e
     name.huliqing.fighter.game.network.PlayNetwork playNetwork -> f
     name.huliqing.fighter.game.service.PlayService playService -> g
@@ -7990,19 +8181,18 @@ name.huliqing.fighter.object.game.SurvivalTask -> name.huliqing.fighter.g.l.bn:
     name.huliqing.fighter.object.actor.Actor treasure -> q
     int stage -> r
     void <init>(name.huliqing.fighter.object.game.SurvivalGame) -> <init>
-    void doInit(name.huliqing.fighter.object.game.GameTask) -> b
-    void doLogic(float) -> b
-    boolean isFinished() -> a
+    void update(float) -> d
+    void doInit() -> b
     java.lang.String get(java.lang.String,java.lang.Object[]) -> a
-    name.huliqing.fighter.object.game.SurvivalGame access$000(name.huliqing.fighter.object.game.SurvivalTask) -> a
-    name.huliqing.fighter.game.service.ActorService access$100(name.huliqing.fighter.object.game.SurvivalTask) -> b
-    name.huliqing.fighter.game.service.SkillService access$200(name.huliqing.fighter.object.game.SurvivalTask) -> c
-    name.huliqing.fighter.game.service.PlayService access$300(name.huliqing.fighter.object.game.SurvivalTask) -> d
-    name.huliqing.fighter.game.service.LogicService access$400(name.huliqing.fighter.object.game.SurvivalTask) -> e
-    name.huliqing.fighter.object.game.SurvivalLevelLogic access$500(name.huliqing.fighter.object.game.SurvivalTask) -> f
-name.huliqing.fighter.object.game.SurvivalTask$1 -> name.huliqing.fighter.g.l.bo:
-    name.huliqing.fighter.object.game.SurvivalTask this$0 -> a
-    void <init>(name.huliqing.fighter.object.game.SurvivalTask) -> <init>
+    name.huliqing.fighter.object.game.SurvivalGame access$000(name.huliqing.fighter.object.game.SurvivalLogic) -> a
+    name.huliqing.fighter.game.service.ActorService access$100(name.huliqing.fighter.object.game.SurvivalLogic) -> b
+    name.huliqing.fighter.game.service.SkillService access$200(name.huliqing.fighter.object.game.SurvivalLogic) -> c
+    name.huliqing.fighter.game.service.PlayService access$300(name.huliqing.fighter.object.game.SurvivalLogic) -> d
+    name.huliqing.fighter.game.service.LogicService access$400(name.huliqing.fighter.object.game.SurvivalLogic) -> e
+    name.huliqing.fighter.object.game.SurvivalLevelLogic access$500(name.huliqing.fighter.object.game.SurvivalLogic) -> f
+name.huliqing.fighter.object.game.SurvivalLogic$1 -> name.huliqing.fighter.g.l.br:
+    name.huliqing.fighter.object.game.SurvivalLogic this$0 -> a
+    void <init>(name.huliqing.fighter.object.game.SurvivalLogic) -> <init>
     name.huliqing.fighter.object.actor.Actor onAddBefore(name.huliqing.fighter.object.actor.Actor) -> a
 name.huliqing.fighter.object.handler.AbstractHandler -> name.huliqing.fighter.g.m.a:
     name.huliqing.fighter.game.network.PlayNetwork playNetwork -> c
@@ -8010,6 +8200,7 @@ name.huliqing.fighter.object.handler.AbstractHandler -> name.huliqing.fighter.g.
     name.huliqing.fighter.game.service.ActorService actorService -> e
     name.huliqing.fighter.game.service.EffectService effectService -> f
     name.huliqing.fighter.game.service.ItemService itemService -> g
+    name.huliqing.fighter.data.HandlerData data -> k
     java.lang.String[] effects -> a
     java.lang.String[] sounds -> b
     void <init>() -> <init>
@@ -8019,7 +8210,7 @@ name.huliqing.fighter.object.handler.AbstractHandler -> name.huliqing.fighter.g.
     void useForce(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.data.ProtoData) -> c
     void playEffects(name.huliqing.fighter.object.actor.Actor,java.lang.String[]) -> a
     void playSounds(name.huliqing.fighter.object.actor.Actor,java.lang.String[]) -> b
-    boolean remove(name.huliqing.fighter.object.actor.Actor,java.lang.String,int) -> a
+    boolean remove(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.data.ProtoData,int) -> a
     void useObject(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.data.ProtoData) -> d
     void initData(name.huliqing.fighter.data.ProtoData) -> a
 name.huliqing.fighter.object.handler.AttributeHandler -> name.huliqing.fighter.g.m.b:
@@ -8031,7 +8222,7 @@ name.huliqing.fighter.object.handler.AttributeHandler -> name.huliqing.fighter.g
     void initData(name.huliqing.fighter.data.HandlerData) -> a
     void useObject(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.data.ProtoData) -> d
 name.huliqing.fighter.object.handler.Handler -> name.huliqing.fighter.g.m.c:
-    boolean remove(name.huliqing.fighter.object.actor.Actor,java.lang.String,int) -> a
+    boolean remove(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.data.ProtoData,int) -> a
     boolean canUse(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.data.ProtoData) -> a
     void useForce(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.data.ProtoData) -> c
 name.huliqing.fighter.object.handler.HandlerLoader -> name.huliqing.fighter.g.m.j:
@@ -8059,13 +8250,101 @@ name.huliqing.fighter.object.handler.ItemSkillHandler$RaceSexSkill -> name.huliq
     name.huliqing.fighter.object.handler.ItemSkillHandler this$0 -> d
     void <init>(name.huliqing.fighter.object.handler.ItemSkillHandler) -> <init>
     void <init>(name.huliqing.fighter.object.handler.ItemSkillHandler,name.huliqing.fighter.object.handler.ItemSkillHandler$1) -> <init>
+name.huliqing.fighter.object.handler.MapHandler -> name.huliqing.fighter.g.m.q:
+    name.huliqing.fighter.game.service.PlayService playService -> c
+    name.huliqing.fighter.game.network.UserCommandNetwork userCommandNetwork -> d
+    java.lang.String image -> e
+    float mapSize -> f
+    float mapAlpha -> g
+    java.lang.String locationIcon -> h
+    float locationSize -> i
+    java.util.List locations -> j
+    java.lang.String baseIconPath -> l
+    boolean flipVertical -> m
+    name.huliqing.fighter.object.handler.MapHandler$MapView mapView -> n
+    void <init>() -> <init>
+    void initData(name.huliqing.fighter.data.HandlerData) -> a
+    void useObject(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.data.ProtoData) -> d
+    name.huliqing.fighter.object.handler.MapHandler$Flag createFlag(name.huliqing.fighter.object.actor.Actor,java.lang.String,boolean,boolean) -> a
+    name.huliqing.fighter.game.service.PlayService access$400(name.huliqing.fighter.object.handler.MapHandler) -> a
+    java.lang.String access$500(name.huliqing.fighter.object.handler.MapHandler) -> b
+    float access$600(name.huliqing.fighter.object.handler.MapHandler) -> c
+    float access$700(name.huliqing.fighter.object.handler.MapHandler) -> d
+    float access$800(name.huliqing.fighter.object.handler.MapHandler) -> e
+    name.huliqing.fighter.game.network.UserCommandNetwork access$1100(name.huliqing.fighter.object.handler.MapHandler) -> f
+    name.huliqing.fighter.object.handler.MapHandler$MapView access$1200(name.huliqing.fighter.object.handler.MapHandler) -> g
+name.huliqing.fighter.object.handler.MapHandler$1 -> name.huliqing.fighter.g.m.r:
+name.huliqing.fighter.object.handler.MapHandler$Command -> name.huliqing.fighter.g.m.s:
+    name.huliqing.fighter.object.handler.MapHandler$Location loc -> b
+    name.huliqing.fighter.ui.Text title -> c
+    name.huliqing.fighter.ui.Button transfer -> d
+    name.huliqing.fighter.ui.Button cancel -> e
+    name.huliqing.fighter.object.handler.MapHandler this$0 -> a
+    void <init>(name.huliqing.fighter.object.handler.MapHandler) -> <init>
+    void updateLocation(name.huliqing.fighter.object.handler.MapHandler$Location) -> a
+    name.huliqing.fighter.object.handler.MapHandler$Location access$1000(name.huliqing.fighter.object.handler.MapHandler$Command) -> a
+name.huliqing.fighter.object.handler.MapHandler$Command$1 -> name.huliqing.fighter.g.m.t:
+    name.huliqing.fighter.object.handler.MapHandler val$this$0 -> a
+    name.huliqing.fighter.object.handler.MapHandler$Command this$1 -> b
+    void <init>(name.huliqing.fighter.object.handler.MapHandler$Command,name.huliqing.fighter.object.handler.MapHandler) -> <init>
+    void onClick(name.huliqing.fighter.ui.UI,boolean) -> a
+name.huliqing.fighter.object.handler.MapHandler$Command$2 -> name.huliqing.fighter.g.m.u:
+    name.huliqing.fighter.object.handler.MapHandler val$this$0 -> a
+    name.huliqing.fighter.object.handler.MapHandler$Command this$1 -> b
+    void <init>(name.huliqing.fighter.object.handler.MapHandler$Command,name.huliqing.fighter.object.handler.MapHandler) -> <init>
+    void onClick(name.huliqing.fighter.ui.UI,boolean) -> a
+name.huliqing.fighter.object.handler.MapHandler$Flag -> name.huliqing.fighter.g.m.v:
+    long id -> b
+    name.huliqing.fighter.object.handler.MapHandler this$0 -> a
+    void <init>(name.huliqing.fighter.object.handler.MapHandler,long,java.lang.String) -> <init>
+    long access$900(name.huliqing.fighter.object.handler.MapHandler$Flag) -> a
+name.huliqing.fighter.object.handler.MapHandler$Location -> name.huliqing.fighter.g.m.w:
+    java.lang.String id -> a
+    float x -> b
+    float y -> c
+    boolean enabled -> d
+    java.lang.String gameId -> e
+    java.lang.String icon -> f
+    name.huliqing.fighter.object.handler.MapHandler this$0 -> g
+    void <init>(name.huliqing.fighter.object.handler.MapHandler) -> <init>
+    void <init>(name.huliqing.fighter.object.handler.MapHandler,name.huliqing.fighter.object.handler.MapHandler$1) -> <init>
+name.huliqing.fighter.object.handler.MapHandler$MapContainer -> name.huliqing.fighter.g.m.x:
+    java.util.List locations -> b
+    java.util.Map flags -> c
+    name.huliqing.fighter.object.handler.MapHandler$Command command -> d
+    name.huliqing.fighter.object.handler.MapHandler this$0 -> a
+    void <init>(name.huliqing.fighter.object.handler.MapHandler,java.lang.String,java.util.List) -> <init>
+    void showCommand(name.huliqing.fighter.object.handler.MapHandler$Location) -> a
+    void addFlag(name.huliqing.fighter.object.handler.MapHandler$Flag) -> a
+    void onDragMove(float,float) -> a
+    void fixPosition() -> b
+    java.util.List access$200(name.huliqing.fighter.object.handler.MapHandler$MapContainer) -> a
+    void access$300(name.huliqing.fighter.object.handler.MapHandler$MapContainer) -> b
+name.huliqing.fighter.object.handler.MapHandler$MapContainer$1 -> name.huliqing.fighter.g.m.y:
+    name.huliqing.fighter.object.handler.MapHandler val$this$0 -> a
+    name.huliqing.fighter.object.handler.MapHandler$Location val$loc -> b
+    name.huliqing.fighter.object.handler.MapHandler$MapContainer this$1 -> c
+    void <init>(name.huliqing.fighter.object.handler.MapHandler$MapContainer,name.huliqing.fighter.object.handler.MapHandler,name.huliqing.fighter.object.handler.MapHandler$Location) -> <init>
+    void onClick(name.huliqing.fighter.ui.UI,boolean) -> a
+name.huliqing.fighter.object.handler.MapHandler$MapView -> name.huliqing.fighter.g.m.z:
+    name.huliqing.fighter.object.handler.MapHandler$MapContainer mapContainer -> b
+    name.huliqing.fighter.ui.Icon close -> c
+    name.huliqing.fighter.object.handler.MapHandler this$0 -> a
+    void <init>(name.huliqing.fighter.object.handler.MapHandler,java.lang.String,java.util.List) -> <init>
+    void updateViewLayout() -> a_
+    name.huliqing.fighter.object.handler.MapHandler$MapContainer access$100(name.huliqing.fighter.object.handler.MapHandler$MapView) -> a
+name.huliqing.fighter.object.handler.MapHandler$MapView$1 -> name.huliqing.fighter.g.m.aa:
+    name.huliqing.fighter.object.handler.MapHandler val$this$0 -> a
+    name.huliqing.fighter.object.handler.MapHandler$MapView this$1 -> b
+    void <init>(name.huliqing.fighter.object.handler.MapHandler$MapView,name.huliqing.fighter.object.handler.MapHandler) -> <init>
+    void onClick(name.huliqing.fighter.ui.UI,boolean) -> a
 name.huliqing.fighter.object.handler.OutfitHandler -> name.huliqing.fighter.g.m.g:
     name.huliqing.fighter.game.service.SkinService skinService -> c
     name.huliqing.fighter.game.service.ItemService itemService -> d
     void <init>() -> <init>
     boolean canUse(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.data.ProtoData) -> a
     void useObject(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.data.ProtoData) -> d
-    boolean remove(name.huliqing.fighter.object.actor.Actor,java.lang.String,int) -> a
+    boolean remove(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.data.ProtoData,int) -> a
 name.huliqing.fighter.object.handler.SkillBookHandler -> name.huliqing.fighter.g.m.h:
     name.huliqing.fighter.game.network.PlayNetwork playNetwork -> c
     name.huliqing.fighter.game.network.SkillNetwork skillNetwork -> d
@@ -8090,7 +8369,7 @@ name.huliqing.fighter.object.handler.SkillHandler -> name.huliqing.fighter.g.m.i
     void initData(name.huliqing.fighter.data.HandlerData) -> a
     boolean canUse(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.data.ProtoData) -> a
     void useObject(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.data.ProtoData) -> d
-    boolean remove(name.huliqing.fighter.object.actor.Actor,java.lang.String,int) -> a
+    boolean remove(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.data.ProtoData,int) -> a
 name.huliqing.fighter.object.handler.StateGainHandler -> name.huliqing.fighter.g.m.o:
     name.huliqing.fighter.game.service.StateService stateService -> c
     name.huliqing.fighter.game.network.StateNetwork stateNetwork -> d
@@ -8156,7 +8435,7 @@ name.huliqing.fighter.object.handler.WeaponHandler -> name.huliqing.fighter.g.m.
     void initData(name.huliqing.fighter.data.HandlerData) -> a
     boolean canUse(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.data.ProtoData) -> a
     void useObject(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.data.ProtoData) -> d
-    boolean remove(name.huliqing.fighter.object.actor.Actor,java.lang.String,int) -> a
+    boolean remove(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.data.ProtoData,int) -> a
     void <clinit>() -> <clinit>
 name.huliqing.fighter.object.hitchecker.AbstractHitChecker -> name.huliqing.fighter.g.n.a:
     void <init>(name.huliqing.fighter.data.HitCheckerData) -> <init>
@@ -8311,8 +8590,8 @@ name.huliqing.fighter.object.logic.SearchEnemyLogic -> name.huliqing.fighter.g.o
     void <init>(name.huliqing.fighter.data.LogicData) -> <init>
     void doLogic(float) -> a
 name.huliqing.fighter.object.logic.ShopLogic -> name.huliqing.fighter.g.o.m:
-    name.huliqing.fighter.game.service.ItemService itemService -> b
-    name.huliqing.fighter.game.network.ItemNetwork itemNetwork -> c
+    name.huliqing.fighter.game.network.ProtoNetwork protoNetwork -> b
+    name.huliqing.fighter.game.service.ProtoService protoService -> c
     name.huliqing.fighter.object.logic.ShopLogic$Product[] products -> g
     float stockSpeed -> h
     boolean initStock -> i
@@ -8714,7 +8993,8 @@ name.huliqing.fighter.object.skill.HitUtils -> name.huliqing.fighter.g.u.j:
     name.huliqing.fighter.game.network.SkillNetwork skillNetwork -> e
     name.huliqing.fighter.game.network.PlayNetwork playNetwork -> f
     name.huliqing.fighter.game.network.ActorNetwork actorNetwork -> g
-    name.huliqing.fighter.game.network.ItemNetwork itemNetwork -> h
+    name.huliqing.fighter.game.network.ProtoNetwork protoNetwork -> h
+    name.huliqing.fighter.game.service.ProtoService protoService -> j
     name.huliqing.fighter.object.skill.HitUtils ins -> i
     void <init>() -> <init>
     name.huliqing.fighter.object.skill.HitUtils getInstance() -> a
@@ -9334,7 +9614,8 @@ name.huliqing.fighter.object.talent.TalentProcessorImpl -> name.huliqing.fighter
 name.huliqing.fighter.object.task.AbstractTask -> name.huliqing.fighter.g.z.a:
     name.huliqing.fighter.game.service.PlayService playService -> f
     name.huliqing.fighter.game.network.ActorNetwork atorNetwork -> g
-    name.huliqing.fighter.game.network.ItemNetwork itemNetwork -> h
+    name.huliqing.fighter.game.network.ProtoNetwork protoNetwork -> h
+    name.huliqing.fighter.game.service.ProtoService protoService -> i
     name.huliqing.fighter.data.TaskData data -> a
     name.huliqing.fighter.object.actor.Actor actor -> b
     int rewardExp -> c
@@ -9500,6 +9781,18 @@ name.huliqing.fighter.object.view.TimerView -> name.huliqing.fighter.g.aa.f:
     name.huliqing.fighter.data.ProtoData getUpdateData() -> c
 name.huliqing.fighter.object.view.View -> name.huliqing.fighter.g.aa.g:
     void setUseTime(float) -> a
+name.huliqing.fighter.save.ClientData -> name.huliqing.fighter.h.f:
+    java.lang.String clientId -> a
+    java.lang.String gameId -> b
+    long actorId -> c
+    void <init>() -> <init>
+    java.lang.String getClientId() -> a
+    void setClientId(java.lang.String) -> a
+    void setGameId(java.lang.String) -> b
+    long getActorId() -> b
+    void setActorId(long) -> a
+    void write(com.jme3.export.JmeExporter) -> write
+    void read(com.jme3.export.JmeImporter) -> read
 name.huliqing.fighter.save.SaveConfig -> name.huliqing.fighter.h.a:
     name.huliqing.fighter.data.ConfigData config -> a
     void <init>() -> <init>
@@ -9529,6 +9822,8 @@ name.huliqing.fighter.save.SaveStory -> name.huliqing.fighter.h.c:
     int storyCount -> c
     name.huliqing.fighter.data.ActorData player -> d
     java.util.ArrayList shortcuts -> e
+    java.util.ArrayList actors -> f
+    java.util.ArrayList clientDatas -> g
     void <init>() -> <init>
     java.lang.String getSaveName() -> a
     void setSaveName(java.lang.String) -> a
@@ -9538,6 +9833,8 @@ name.huliqing.fighter.save.SaveStory -> name.huliqing.fighter.h.c:
     void setPlayer(name.huliqing.fighter.data.ActorData) -> a
     java.util.ArrayList getShortcuts() -> d
     void setShortcuts(java.util.ArrayList) -> a
+    java.util.ArrayList getActors() -> e
+    java.util.ArrayList getClientDatas() -> f
     void write(com.jme3.export.JmeExporter) -> write
     void read(com.jme3.export.JmeImporter) -> read
 name.huliqing.fighter.save.SaveStoryList -> name.huliqing.fighter.h.d:
@@ -9559,6 +9856,13 @@ name.huliqing.fighter.save.ShortcutSave -> name.huliqing.fighter.h.e:
     void setX(float) -> a
     float getY() -> c
     void setY(float) -> b
+    void write(com.jme3.export.JmeExporter) -> write
+    void read(com.jme3.export.JmeImporter) -> read
+name.huliqing.fighter.save.ShortcutsSave -> name.huliqing.fighter.h.g:
+    java.util.ArrayList shortcuts -> a
+    void <init>() -> <init>
+    java.util.ArrayList getShortcuts() -> a
+    void setShortcuts(java.util.ArrayList) -> a
     void write(com.jme3.export.JmeExporter) -> write
     void read(com.jme3.export.JmeImporter) -> read
 name.huliqing.fighter.shape.MySpline -> name.huliqing.fighter.i.a:
@@ -9638,6 +9942,7 @@ name.huliqing.fighter.ui.AbstractUI -> name.huliqing.fighter.j.a:
     boolean hasEvent() -> u
     boolean hasClickEvent() -> v
     boolean hasDBClickEvent() -> w
+    boolean isPreventEvent() -> M
     void setPreventEvent(boolean) -> g
     boolean isPreventCross() -> x
     void setPreventCross(boolean) -> h
@@ -9679,10 +9984,15 @@ name.huliqing.fighter.ui.AbstractUI$2 -> name.huliqing.fighter.j.c:
     void onClick(name.huliqing.fighter.ui.UI,boolean) -> a
 name.huliqing.fighter.ui.Button -> name.huliqing.fighter.j.d:
     name.huliqing.fighter.ui.Text text -> a
+    boolean disabled -> b
     void <init>(java.lang.String) -> <init>
     void createText(java.lang.String) -> a
     void setFontSize(float) -> b
+    void setFontColor(com.jme3.math.ColorRGBA) -> a
     void updateView() -> d_
+    void setDisabled(boolean) -> c
+    boolean fireClick(boolean) -> a
+    boolean fireDBClick(boolean) -> i
     void clickEffect(boolean) -> b
 name.huliqing.fighter.ui.Checkbox -> name.huliqing.fighter.j.e:
     boolean checked -> a
@@ -9716,6 +10026,7 @@ name.huliqing.fighter.ui.Icon -> name.huliqing.fighter.j.i:
     void setColor(com.jme3.math.ColorRGBA) -> a
     void setUseAlpha(boolean) -> c
     void clickEffect(boolean) -> b
+    com.jme3.material.Material getMaterial() -> a
 name.huliqing.fighter.ui.Image -> name.huliqing.fighter.j.j:
     float width -> a
     float height -> b
@@ -9829,6 +10140,7 @@ name.huliqing.fighter.ui.UI -> name.huliqing.fighter.j.t:
     boolean hasEvent() -> u
     boolean hasClickEvent() -> v
     boolean hasDBClickEvent() -> w
+    boolean isPreventEvent() -> M
     boolean isPreventCross() -> x
     void updateView() -> d_
     name.huliqing.fighter.ui.UILayout getParentView() -> y
@@ -9971,6 +10283,7 @@ name.huliqing.fighter.ui.UISound -> name.huliqing.fighter.j.ac:
 name.huliqing.fighter.ui.UIUtils -> name.huliqing.fighter.j.ad:
     name.huliqing.fighter.ui.UI createMultView(float,float,java.lang.String,java.lang.String) -> a
     void showAlert(java.lang.String,java.lang.String,java.lang.String) -> a
+    void fixOverflowScreen(name.huliqing.fighter.ui.UI,float,float) -> a
 name.huliqing.fighter.ui.UIUtils$1 -> name.huliqing.fighter.j.ae:
     name.huliqing.fighter.ui.TextPanel val$tp -> a
     void <init>(name.huliqing.fighter.ui.TextPanel) -> <init>
@@ -10304,7 +10617,7 @@ name.huliqing.fighter.utils.MyChaseCamera -> name.huliqing.fighter.utils.o:
     com.jme3.collision.CollisionResults collisionResults -> g
     com.jme3.math.Vector3f rayOriginOffset -> h
     float nearDistanceLimit -> i
-    void <init>(com.jme3.renderer.Camera,com.jme3.input.InputManager,name.huliqing.fighter.game.state.PlayState,com.jme3.bullet.PhysicsSpace) -> <init>
+    void <init>(com.jme3.renderer.Camera,com.jme3.input.InputManager,com.jme3.bullet.PhysicsSpace) -> <init>
     void resetCollision(com.jme3.bullet.PhysicsSpace,com.jme3.scene.Spatial) -> a
     void setRotationSpeed(float) -> setRotationSpeed
     void setEnabledRotation(boolean) -> a
@@ -10318,17 +10631,10 @@ name.huliqing.fighter.utils.MyChaseCamera -> name.huliqing.fighter.utils.o:
     void registerTouchListener(com.jme3.input.InputManager) -> a
     void onTouch(java.lang.String,com.jme3.input.event.TouchEvent,float) -> onTouch
     void <clinit>() -> <clinit>
-name.huliqing.fighter.utils.NpcNameUtils -> name.huliqing.fighter.utils.p:
-    java.lang.String[] prefixes -> a
-    java.lang.String[] suffixes -> b
-    boolean init -> c
-    java.lang.String createRandomName(name.huliqing.fighter.enums.Sex) -> a
-    java.lang.String createFemale() -> a
-    java.lang.String createInner(java.lang.String,int) -> a
 name.huliqing.fighter.utils.RayUtils -> name.huliqing.fighter.utils.q:
     com.jme3.collision.CollisionResults collideWith(com.jme3.math.Vector3f,com.jme3.math.Vector3f,com.jme3.scene.Spatial,com.jme3.collision.CollisionResults) -> a
 name.huliqing.fighter.utils.SceneUtils -> name.huliqing.fighter.utils.r:
-    name.huliqing.fighter.utils.MyChaseCamera createChaseCam(com.jme3.renderer.Camera,com.jme3.input.InputManager,name.huliqing.fighter.game.state.PlayState,com.jme3.bullet.PhysicsSpace) -> a
+    name.huliqing.fighter.utils.MyChaseCamera createChaseCam(com.jme3.renderer.Camera,com.jme3.input.InputManager,com.jme3.bullet.PhysicsSpace) -> a
 name.huliqing.fighter.utils.Temp -> name.huliqing.fighter.utils.s:
     java.lang.ThreadLocal varsLocal -> g
     boolean isUsed -> h
