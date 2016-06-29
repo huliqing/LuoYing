@@ -179,10 +179,10 @@ public  class Game<T extends GameData> extends AbstractPlayObject implements Dat
     }
 
     /**
-     * 当玩家选择一个角色时触发该方法。
-     * @param actor 
+     * 当玩家选择一个角色时触发该方法,注意：这个player可能是来自客户端，也可能是来自服务端的。
+     * @param player 
      */
-    public void onActorSelected(Actor actor) {
+    public void onPlayerSelected(Actor player) {
         // 由子类按需要覆盖
     }
     

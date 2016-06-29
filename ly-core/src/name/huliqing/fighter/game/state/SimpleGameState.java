@@ -8,6 +8,7 @@ import name.huliqing.fighter.game.view.ActorSelectView;
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.bullet.control.PhysicsControl;
+import com.jme3.input.ChaseCamera;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
@@ -82,8 +83,6 @@ public  class SimpleGameState extends GameState implements UIEventListener {
     // 场景跟随相机
     protected MyChaseCamera chaseCamera;
 
-    // 角色选择面板
-    protected ActorSelectView actorPanel;
     // 玩家当前玩家
     protected Actor player;
     
@@ -133,66 +132,9 @@ public  class SimpleGameState extends GameState implements UIEventListener {
         game.addListener(new GameListener() {
             @Override
             public void onSceneLoaded() {
-                // remove,resetCollision在手机上莫明奇妙的无效。 所以统一为重新创建chaseCamera
-                //chaseCamera.resetCollision(bulletAppState.getPhysicsSpace(), scene.getTerrain());
-                
-                if (chaseCamera != null) {
-                    chaseCamera.cleanup();
-                    chaseCamera = null;
-                }
-                
-                chaseCamera = SceneUtils.createChaseCam(app.getCamera()
-                        , app.getInputManager()
-                        , game.getScene().getPhysicsSpace());
-                
-                // 如果玩家角色已经提前载入则跟随主角
-                Actor player = getPlayer();
-                if (player != null) {
-                    chaseCamera.setChase(player.getModel());
-                } else if (actorPanel != null) {
-                    chaseCamera.setChase(actorPanel.getActorView());
-                    chaseCamera.setDefaultDistance(5f);
-                }
+                // do somthing
             }
         });
-    }
-    
-    /**
-     * 显示角色选择面板
-     * @param selectableActors 
-     */
-    @Override
-    public void showSelectPanel(List<String> selectableActors) {
-        if (actorPanel == null) {
-            actorPanel = new ActorSelectView(Common.getSettings().getWidth()
-                    , Common.getSettings().getHeight()
-                    , app.getGuiNode()
-                    );
-            actorPanel.setSelectedListener(new SelectedListener() {
-                @Override
-                public void onSelected(String actorId, String actorName) {
-                    onSelectPlayer(actorId, actorName);
-                    actorPanel.removeFromParent();
-                    actorPanel.getActorView().removeFromParent();
-                }
-            });
-        }
-        actorPanel.setModels(selectableActors);
-        
-        UIState.getInstance().addUI(actorPanel);
-        
-        localRoot.attachChild(actorPanel.getActorView());
-        
-        if (chaseCamera != null) {
-            chaseCamera.setChase(actorPanel.getActorView());
-            chaseCamera.setDefaultDistance(5f);
-        }
-    }
-    
-    protected void onSelectPlayer(String actorId, String actorName) {  
-        userCommandNetwork.selectPlayer(actorId, actorName);
-        // 在选择完角色之后要重新显示所有UI
-        setUIVisiable(true);
     }
     
     /**
@@ -321,6 +263,16 @@ public  class SimpleGameState extends GameState implements UIEventListener {
                 return isInScene(p);
             }
         }
+    }
+
+    @Override
+    public MyChaseCamera getChaseCamera() {
+        if (chaseCamera == null) {
+            chaseCamera = SceneUtils.createChaseCam(app.getCamera()
+                    , app.getInputManager()
+                    , game.getScene().getPhysicsSpace());
+        }
+        return chaseCamera;
     }
 
     @Override
@@ -549,9 +501,7 @@ public  class SimpleGameState extends GameState implements UIEventListener {
      * @param spatial 
      */
     protected void setChase(Spatial spatial) {
-        if (chaseCamera != null) {
-            chaseCamera.setChase(spatial);
-        }
+        getChaseCamera().setChase(spatial);
     }
     
     /**

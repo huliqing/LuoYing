@@ -7,6 +7,7 @@ package name.huliqing.fighter.game.network;
 import name.huliqing.fighter.game.state.lan.Network;
 import com.jme3.math.Vector3f;
 import name.huliqing.fighter.Factory;
+import name.huliqing.fighter.data.ActorData;
 import name.huliqing.fighter.data.GameData;
 import name.huliqing.fighter.data.ProtoData;
 import name.huliqing.fighter.enums.MessageType;
@@ -124,7 +125,7 @@ public class UserCommandNetworkImpl implements UserCommandNetwork {
             skillService.playSkill(actor, skillService.getSkill(actor, SkillType.wait).getId(), false);
             // 这是主机,所以要设置为当前主场景玩家,与actor.setPlayer(true)不同
             // 注:在设置名字之后再setAsPlayer,否则FacePanel中的player名字不会更新
-            playService.setAsPlayer(actor);
+            playService.setMainPlayer(actor);
             playNetwork.addActor(actor);
             
             // 通知
@@ -139,6 +140,30 @@ public class UserCommandNetworkImpl implements UserCommandNetwork {
             }
             
             // TODO:需要通知客户端,刷新角色名
+        }
+    }
+
+    @Override
+    public void addSimplePlayer(Actor actor) {
+        ActorData data = actor.getData();
+         if (network.isClient()) {
+             
+            network.sendToServer(new MessPlayActorSelect(data.getId(), data.getName()));
+            
+        } else {
+            playNetwork.addSimplePlayer(actor);
+            
+            // 通知
+            if (network.hasConnections()) {
+                String message = ResourceManager.get("lan.enterGame", new Object[] {actor.getData().getName()});
+                MessageType type = MessageType.item;
+                MessMessage notice = new MessMessage();
+                notice.setMessage(message);
+                notice.setType(type);
+                network.broadcast(notice);                          // 通知所有客户端
+                playService.addMessage(message, type);   // 通知主机
+            }
+            
         }
     }
 

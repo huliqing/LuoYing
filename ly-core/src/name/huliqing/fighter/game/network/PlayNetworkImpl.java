@@ -96,6 +96,21 @@ public class PlayNetworkImpl implements PlayNetwork {
             playService.addActor(actor);
         }
     }
+
+    @Override
+    public void addSimplePlayer(Actor actor) {
+        if (network.isClient())
+            return;
+        
+        // 服务端添加角色
+        playService.addSimplePlayer(actor);
+        
+        // 广播到客户端进行载入角色
+        if (network.hasConnections()) {
+            MessPlayActorLoaded mess = createActorLoadedMess(actor);
+            network.broadcast(mess);
+        }
+    }
  
     @Override
     public void addEffect(Effect effect) {
@@ -355,7 +370,7 @@ public class PlayNetworkImpl implements PlayNetwork {
     }
 
     @Override
-    public void setAsPlayer(Actor actor) {
+    public void setMainPlayer(Actor actor) {
         // 这个命令不需要广播到客户端
         throw new UnsupportedOperationException();
     }
@@ -368,11 +383,6 @@ public class PlayNetworkImpl implements PlayNetwork {
     @Override
     public void saveCompleteStage(int storyNum) {
         playService.saveCompleteStage(storyNum);
-    }
-    
-    @Override
-    public void showSelectPanel(List<String> selectableActors) {
-        playService.showSelectPanel(selectableActors);
     }
     
     @Override

@@ -138,4 +138,9 @@ public class LabPlayState extends NetworkPlayState {
 //        // ignore
 //        return null;
 //    }
+
+    @Override
+    protected void onSelectPlayer(String actorId, String actorName) {
+        // ignore
+    }
 }

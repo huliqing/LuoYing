@@ -16,7 +16,7 @@ import name.huliqing.fighter.Common;
 import name.huliqing.fighter.Fighter;
 import name.huliqing.fighter.data.GameData;
 import name.huliqing.fighter.game.state.ConnData;
-import name.huliqing.fighter.game.state.ServerPlayState;
+import name.huliqing.fighter.game.state.LanServerPlayState;
 import name.huliqing.fighter.game.state.lan.GameServer.ServerState;
 import name.huliqing.fighter.manager.ResourceManager;
 import name.huliqing.fighter.game.view.HelpView;
@@ -107,7 +107,7 @@ public class RoomStateServerImpl extends AbstractAppState implements RoomState {
             LOG.log(Level.INFO, "RoomStateServerImpl.startGame");
             gameServer.setServerListener(null);
             gameServer.setServerState(ServerState.loading);
-            app.changeState(new ServerPlayState(app, gameServer));
+            app.changeState(new LanServerPlayState(app, gameServer));
         }
     }
     

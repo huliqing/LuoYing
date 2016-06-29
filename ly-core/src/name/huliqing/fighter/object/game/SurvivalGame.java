@@ -54,8 +54,8 @@ public class SurvivalGame extends Game {
     }
 
     @Override
-    public void onActorSelected(Actor actor) {
-        super.onActorSelected(actor);
+    public void onPlayerSelected(Actor actor) {
+        super.onPlayerSelected(actor);
         // 设置角色分组
         actorNetwork.setGroup(actor, SELF_GROUP);
         actorNetwork.setLevel(actor, 1);

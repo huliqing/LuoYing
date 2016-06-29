@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.fighter.Factory;
-import name.huliqing.fighter.data.GameData;
 import name.huliqing.fighter.game.service.PlayService;
 import name.huliqing.fighter.game.state.lan.AbstractClientListener;
 import name.huliqing.fighter.game.state.lan.GameClient.ClientState;
@@ -24,6 +23,8 @@ import name.huliqing.fighter.game.mess.MessPlayInitGame;
 import name.huliqing.fighter.game.mess.MessPlayLoadSavedActor;
 import name.huliqing.fighter.game.mess.MessPlayLoadSavedActorResult;
 import name.huliqing.fighter.game.mess.MessPlayClientExit;
+import name.huliqing.fighter.game.network.UserCommandNetwork;
+import name.huliqing.fighter.game.service.ActorService;
 import name.huliqing.fighter.game.service.SaveService;
 import name.huliqing.fighter.manager.ShortcutManager;
 import name.huliqing.fighter.object.IntervalLogic;
@@ -41,8 +42,10 @@ import name.huliqing.fighter.ui.UIFactory;
  */
 public class ClientPlayState extends NetworkPlayState implements AbstractClientListener.PingListener{
     private static final Logger LOG = Logger.getLogger(ClientPlayState.class.getName());
+    private final UserCommandNetwork userCommandNetwork = Factory.get(UserCommandNetwork.class);
     private final PlayService playService = Factory.get(PlayService.class);
     private final SaveService saveService = Factory.get(SaveService.class);
+    private final ActorService actorService = Factory.get(ActorService.class);
     // 客户端快捷方式,保存键，格式: SHORTCUTS_KEY_PREFIX + actorId
     // 如： "Shortcuts_actorWolf", 注意，使用的是角色类型ID，不是唯一ID。
     private final static String SHORTCUTS_KEY_PREFIX = "Shortcuts_";
@@ -171,6 +174,13 @@ public class ClientPlayState extends NetworkPlayState implements AbstractClientL
         }
         return null;
     }
+    
+    @Override
+    protected void onSelectPlayer(String actorId, String actorName) {
+        Actor actor = actorService.loadActor(actorId);
+        actorService.setName(actor, actorName);
+        userCommandNetwork.addSimplePlayer(actor);
+    }
 
     @Override
     public void setPlayer(Actor actor) {
@@ -195,6 +205,8 @@ public class ClientPlayState extends NetworkPlayState implements AbstractClientL
         pingLabel.setText("PING:" + ping);
     }
     
+    
+    
     private class ClientListener extends LanClientListener {
         
         public ClientListener(Application app) {
@@ -214,7 +226,7 @@ public class ClientPlayState extends NetworkPlayState implements AbstractClientL
             if (m instanceof MessPlayLoadSavedActorResult) {
                 MessPlayLoadSavedActorResult mess = (MessPlayLoadSavedActorResult) m;
                 if (mess.isSuccess()) {
-                    playService.setAsPlayer(playService.findActor(mess.getActorId()));
+                    playService.setMainPlayer(playService.findActor(mess.getActorId()));
                     setUIVisiable(true);
                 } else {
                     // 这是在服务端没有客户端的存档的情况下，客户端需要弹出角色选择面板，来选择一个角色进行游戏
@@ -227,7 +239,7 @@ public class ClientPlayState extends NetworkPlayState implements AbstractClientL
             if (m instanceof MessPlayActorSelectResult) {
                 MessPlayActorSelectResult mess = (MessPlayActorSelectResult) m;
                 if (mess.isSuccess()) {
-                    playService.setAsPlayer(playService.findActor(mess.getActorId()));
+                    playService.setMainPlayer(playService.findActor(mess.getActorId()));
                     setUIVisiable(true);
                 } else {
                     LOG.log(Level.SEVERE, "Could not load selected Actor, error={0}", mess.getError());

@@ -49,6 +49,12 @@ public interface PlayService extends Inject {
     void addActor(Actor actor);
     
     /**
+     * 把角色作为普通玩家角色类型载入（非Main player,即不一定是当前主场景中的角色。)
+     * @param actor 
+     */
+    void addSimplePlayer(Actor actor);
+    
+    /**
      * 添加一个效果到场景
      * @deprecated 后续要重构并使用 addPlayObject代替 
      * @param effect 
@@ -289,10 +295,10 @@ public interface PlayService extends Inject {
     float getScreenHeight();
     
     /**
-     * 把目标角色设置为玩家角色,即当前场景中的主玩家角色。
+     * 把目标角色设置为当前场景的主玩家角色。
      * @param actor 
      */
-    void setAsPlayer(Actor actor);
+    void setMainPlayer(Actor actor);
     
     /**
      * 判断目标物体是否在场景中。
@@ -306,12 +312,6 @@ public interface PlayService extends Inject {
      * @param storyNum
      */
     void saveCompleteStage(int storyNum);
-    
-    /**
-     * 显示角色选择面板
-     * @param selectableActors 
-     */
-    void showSelectPanel(List<String> selectableActors);
     
     /**
      * 获取Application

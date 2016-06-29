@@ -23,11 +23,12 @@ import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.object.actor.ActorControl;
 import name.huliqing.fighter.data.ProtoData;
 import name.huliqing.fighter.enums.MessageType;
+import name.huliqing.fighter.enums.SkillType;
 import name.huliqing.fighter.game.state.GameState;
 import name.huliqing.fighter.game.state.LoadingState;
 import name.huliqing.fighter.game.state.PlayState;
 import name.huliqing.fighter.game.state.SimpleGameState;
-import name.huliqing.fighter.game.state.StoryPlayState;
+import name.huliqing.fighter.game.state.StoryServerPlayState;
 import name.huliqing.fighter.manager.ShortcutManager;
 import name.huliqing.fighter.object.NetworkObject;
 import name.huliqing.fighter.object.PlayObject;
@@ -49,7 +50,9 @@ public class PlayServiceImpl implements PlayService {
     private StateService stateService;
     private ActorService actorService;
     private ItemService itemService;
+    private SkillService skillService;
     private GameService gameService;
+    private LogicService logicService;
     
     @Override
     public void inject() {
@@ -57,6 +60,8 @@ public class PlayServiceImpl implements PlayService {
         actorService = Factory.get(ActorService.class);
         itemService = Factory.get(ItemService.class);
         gameService = Factory.get(GameService.class);
+        skillService = Factory.get(SkillService.class);
+        logicService = Factory.get(LogicService.class);
     }
     
     @Override
@@ -124,6 +129,16 @@ public class PlayServiceImpl implements PlayService {
     @Override
     public void addActor(Actor actor) {
         Common.getPlayState().addObject(actor, false);
+    }
+
+    @Override
+    public void addSimplePlayer(Actor actor) {
+        logicService.resetPlayerLogic(actor);
+        // 暂时以1作为默认分组
+        actorService.setTeam(actor, 1);
+        skillService.playSkill(actor, skillService.getSkill(actor, SkillType.wait).getId(), false);
+        actor.setPlayer(true);
+        addActor(actor);
     }
 
     @Override
@@ -393,7 +408,7 @@ public class PlayServiceImpl implements PlayService {
     }
 
     @Override
-    public void setAsPlayer(Actor actor) {
+    public void setMainPlayer(Actor actor) {
         Common.getPlayState().setPlayer(actor);
     }
 
@@ -405,10 +420,10 @@ public class PlayServiceImpl implements PlayService {
     @Override
     public void saveCompleteStage(int stage) {
         PlayState ps = Common.getPlayState();
-        if (!(ps instanceof StoryPlayState)) {
+        if (!(ps instanceof StoryServerPlayState)) {
             return;
         }
-        StoryPlayState ss = (StoryPlayState) ps;
+        StoryServerPlayState ss = (StoryServerPlayState) ps;
         SaveStory saveStory = ss.getSaveStory();
         if (saveStory == null) {
             saveStory = new SaveStory();
@@ -416,17 +431,6 @@ public class PlayServiceImpl implements PlayService {
         saveStory.setStoryCount(stage);
         saveStory.setPlayer(ps.getPlayer().getData());
         SaveHelper.saveStoryLast(saveStory);
-    }
-
-    // remove20160613
-//    @Override
-//    public void initScene(SceneData sceneData) {
-//        Common.getPlayState().initScene(sceneData);
-//    }
-
-    @Override
-    public void showSelectPanel(List<String> selectableActors) {
-        Common.getPlayState().showSelectPanel(selectableActors);
     }
 
     @Override

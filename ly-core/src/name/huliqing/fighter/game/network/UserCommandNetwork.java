@@ -31,8 +31,15 @@ public interface UserCommandNetwork extends Inject {
      * 选择一个角色作为玩家角色
      * @param actorId 
      * @param actorName 玩家角色名称
+     * @deprecated 不再使用
      */
     void selectPlayer(String actorId, String actorName);
+    
+    /**
+     * 添加普通的玩家类角色。
+     * @param actor 
+     */
+    void addSimplePlayer(Actor actor);
     
     /**
      * 让角色走到目标位置

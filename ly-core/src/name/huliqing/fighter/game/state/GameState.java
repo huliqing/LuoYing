@@ -18,7 +18,6 @@ import name.huliqing.fighter.data.GameData;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.enums.MessageType;
 import name.huliqing.fighter.game.service.GameService;
-import name.huliqing.fighter.game.view.ActorSelectView.SelectedListener;
 import name.huliqing.fighter.game.view.TeamView;
 import name.huliqing.fighter.manager.AnimationManager;
 import name.huliqing.fighter.manager.DamageManager;
@@ -30,6 +29,7 @@ import name.huliqing.fighter.object.NetworkObject;
 import name.huliqing.fighter.object.game.Game;
 import name.huliqing.fighter.object.view.View;
 import name.huliqing.fighter.ui.state.UIState;
+import name.huliqing.fighter.utils.MyChaseCamera;
 
 /**
  *
@@ -214,6 +214,12 @@ public abstract class GameState extends AbstractAppState {
      * @return 
      */
     public abstract boolean isInScene(Spatial spatial);
+    
+    /**
+     * 获取跟随的相机，如果没有则返回null.
+     * @return 
+     */
+    public abstract MyChaseCamera getChaseCamera();
 
     /**
      * 获取当前场景所有活动对象，包括player,如果没有，则返回empty.
@@ -251,12 +257,6 @@ public abstract class GameState extends AbstractAppState {
      * @return 
      */
     public abstract List<View> getViews();
-    
-    /**
-     * 显示角色选择面板
-     * @param selectableActors 
-     */
-    public abstract void showSelectPanel(List<String> selectableActors);
     
     /**
      * 切换显示当前界面的所有UI.注意:该方法将只影响当前已经存在的UI,对后续

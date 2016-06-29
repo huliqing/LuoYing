@@ -9,13 +9,11 @@ import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.scene.Spatial;
 import java.util.List;
-import java.util.logging.Logger;
 import name.huliqing.fighter.Fighter;
 import name.huliqing.fighter.data.GameData;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.enums.MessageType;
 import name.huliqing.fighter.game.state.GameState.PlayListener;
-import name.huliqing.fighter.game.view.ActorSelectView;
 import name.huliqing.fighter.game.view.TeamView;
 import name.huliqing.fighter.object.NetworkObject;
 import name.huliqing.fighter.object.view.View;
@@ -24,7 +22,7 @@ import name.huliqing.fighter.object.view.View;
  * @author huliqing
  */
 public abstract class PlayState extends AbstractAppState {
-    private static final Logger LOG = Logger.getLogger(PlayState.class.getName());
+//    private static final Logger LOG = Logger.getLogger(PlayState.class.getName());
     
     protected final Fighter app;
     protected GameData gameData;
@@ -207,14 +205,6 @@ public abstract class PlayState extends AbstractAppState {
         gameState.setPlayer(actor);
     }
     
-    /**
-     * 显示角色选择面板
-     * @param selectableActors 
-     * @param listener 
-     */
-    public void showSelectPanel(List<String> selectableActors) {
-        gameState.showSelectPanel(selectableActors);
-    }
     
     /**
      * 切换显示当前界面的所有UI.注意:该方法将只影响当前已经存在的UI,对后续

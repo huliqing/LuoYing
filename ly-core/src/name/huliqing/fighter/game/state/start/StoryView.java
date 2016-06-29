@@ -15,7 +15,7 @@ import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.constants.IdConstants;
 import name.huliqing.fighter.data.GameData;
 import name.huliqing.fighter.game.service.GameService;
-import name.huliqing.fighter.game.state.StoryPlayState;
+import name.huliqing.fighter.game.state.StoryServerPlayState;
 import name.huliqing.fighter.game.state.start.StoryView.StoryData;
 import name.huliqing.fighter.manager.ResourceManager;
 import name.huliqing.fighter.save.SaveStory;
@@ -124,7 +124,7 @@ public class StoryView extends ListView<StoryData> {
                     if (isPress || storyData.gameId == null) 
                         return;
                     GameData gameData = gameService.loadGameData(storyData.gameId);
-                    StoryPlayState sps = new StoryPlayState(Common.getApp(), gameData, saveStory);
+                    StoryServerPlayState sps = new StoryServerPlayState(Common.getApp(), gameData, saveStory);
                     startState.startState(sps);
                 }
             });

@@ -7,13 +7,16 @@ package name.huliqing.fighter.game.state;
 
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
+import com.jme3.input.ChaseCamera;
 import com.jme3.math.Vector3f;
+import java.util.List;
 import name.huliqing.fighter.Common;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.GameData;
+import name.huliqing.fighter.game.service.ActorService;
 import name.huliqing.fighter.game.service.PlayService;
-import name.huliqing.fighter.game.state.PlayState;
 import name.huliqing.fighter.game.state.lan.Network;
+import name.huliqing.fighter.game.view.ActorSelectView;
 import name.huliqing.fighter.game.view.ClientsWin;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.object.anim.Anim;
@@ -22,6 +25,9 @@ import name.huliqing.fighter.object.anim.ScaleAnim;
 import name.huliqing.fighter.object.game.Game.GameListener;
 import name.huliqing.fighter.ui.Icon;
 import name.huliqing.fighter.ui.UI;
+import name.huliqing.fighter.ui.state.UIState;
+import name.huliqing.fighter.utils.MyChaseCamera;
+import name.huliqing.fighter.utils.SceneUtils;
 
 /**
  * 联网游戏的基类
@@ -29,12 +35,16 @@ import name.huliqing.fighter.ui.UI;
  */
 public abstract class NetworkPlayState extends PlayState implements LanGame {
     private final PlayService playService = Factory.get(PlayService.class);
+    private final ActorService actorService = Factory.get(ActorService.class);
     protected final Network network = Network.getInstance();
 
     // 客户端列表界面
     private ClientsWin clientsWin;
     private ScaleAnim clientsWinAnim;
     private Icon lanBtn;
+    
+    protected ActorSelectView actorPanel;
+    protected MyChaseCamera chaseCamera;
     
     public NetworkPlayState(Application app, GameData gameData) {
         super(app, gameData);
@@ -70,6 +80,42 @@ public abstract class NetworkPlayState extends PlayState implements LanGame {
         });
     }
 
+     /**
+     * 显示角色选择面板
+     * @param selectableActors 
+     */
+    public final void showSelectPanel(List<String> selectableActors) {
+        if (actorPanel == null) {
+            actorPanel = new ActorSelectView(Common.getSettings().getWidth(), Common.getSettings().getHeight(), app.getGuiNode());
+            actorPanel.setSelectedListener(new ActorSelectView.SelectedListener() {
+                @Override
+                public void onSelected(String actorId, String actorName) {
+                    actorPanel.removeFromParent();
+                    actorPanel.getActorView().removeFromParent();
+                    chaseCamera = null;
+                    onSelectPlayer(actorId, actorName);
+                }
+            });
+        }
+        actorPanel.setModels(selectableActors);
+        
+        UIState.getInstance().addUI(actorPanel);
+        gameState.addObject(actorPanel.getActorView(), false);
+        
+        if (chaseCamera == null) {
+            chaseCamera = SceneUtils.createChaseCam(app.getCamera(), app.getInputManager(), null);
+            chaseCamera.setDefaultDistance(5f);
+        }
+        actorPanel.getActorView().addControl(chaseCamera);
+    }
+    
+    /**
+     * 当玩家在本地选择了一个角色进行游戏后进。
+     * @param actorId
+     * @param actorName
+     */
+    protected abstract void onSelectPlayer(String actorId, String actorName);
+    
     @Override
     public boolean isServer() {
         return network.isServer();
@@ -82,17 +128,6 @@ public abstract class NetworkPlayState extends PlayState implements LanGame {
     public void onClientListUpdated() {
         if (clientsWin.isVisible()) {
             clientsWin.setClients(getClients());
-        }
-    }
-
-    @Override
-    public void onActorSelected(ConnData connData, Actor actor) {
-        if (gameState != null) {
-            gameState.getGame().onActorSelected(actor);
-        }
-        if (connData != null) {
-            connData.setActorId(actor.getData().getUniqueId());
-            connData.setActorName(actor.getData().getName());
         }
     }
 

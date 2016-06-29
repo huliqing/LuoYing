@@ -25,13 +25,11 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 import com.jme3.util.TempVars;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.ProtoData;
 import name.huliqing.fighter.enums.DataType;
 import name.huliqing.fighter.game.service.PlayService;
-import name.huliqing.fighter.game.state.PlayState;
 
 /**
  * 可防止相机穿墙的相机。
@@ -63,10 +61,10 @@ public class MyChaseCamera extends ChaseCamera implements PhysicsCollisionListen
     private CollisionResults collisionResults = new CollisionResults();
     // 射线的起始位置的偏移,在Y轴上加大一点可防立光线一开始就与地面发生碰撞交叉。
     // 避免误差
-    private Vector3f rayOriginOffset = new Vector3f(0, 0.5f, 0);
+    private final Vector3f rayOriginOffset = new Vector3f(0, 0.5f, 0);
     // 允许自动调整相机与目标的最近距离
     // 如果距离太近的话，角色会出现“空洞”的现象
-    private float nearDistanceLimit = 2;
+    private final float nearDistanceLimit = 2;
     
     // ---- 用于处理在JME3.1后不能在Android环境下自动缩放镜头的问题 
     private final static String TOUCH_SCALE_EVENT = "TouchSE";
