@@ -15,6 +15,7 @@ import name.huliqing.fighter.data.GameData;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.enums.MessageType;
 import name.huliqing.fighter.game.state.GameState.PlayListener;
+import name.huliqing.fighter.game.view.ActorSelectView;
 import name.huliqing.fighter.game.view.TeamView;
 import name.huliqing.fighter.object.NetworkObject;
 import name.huliqing.fighter.object.view.View;
@@ -209,6 +210,7 @@ public abstract class PlayState extends AbstractAppState {
     /**
      * 显示角色选择面板
      * @param selectableActors 
+     * @param listener 
      */
     public void showSelectPanel(List<String> selectableActors) {
         gameState.showSelectPanel(selectableActors);

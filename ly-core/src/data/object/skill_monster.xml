@@ -176,5 +176,8 @@
     <skillRun id="skillJaimeRun" extends="skillWalkBase" animation="Run" animSpeed="2" />
     
     <!--skeleton-->
+    <skillAttack id="skillSkeletonAttack" extends="skillAttackBase" icon="" useTime="0.75" animation="attack" cooldown="1"
+                 weaponStateLimit="0|1" hitValue="50" checkPoint="0.68" cutTimeStartMax="0.4" cutTimeEndMax="0.24"  />
+    <skillWait id="skillSkeletonWait" icon="" useTime="4" animation="idle_wait" loopMode="1" />
     <skillDead id="skillSkeletonDead" icon="" remove="1" useTime="0.0001" effects="effectSkeletonDead" />
 </root>

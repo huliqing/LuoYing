@@ -90,8 +90,10 @@ public abstract class NetworkPlayState extends PlayState implements LanGame {
         if (gameState != null) {
             gameState.getGame().onActorSelected(actor);
         }
-        connData.setActorId(actor.getData().getUniqueId());
-        connData.setActorName(actor.getData().getName());
+        if (connData != null) {
+            connData.setActorId(actor.getData().getUniqueId());
+            connData.setActorName(actor.getData().getName());
+        }
     }
 
     private void createLanUI() {

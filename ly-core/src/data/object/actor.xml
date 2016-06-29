@@ -36,7 +36,7 @@
     
     <actor id="actorSinbadTest" extends="actorSinbad" />
     <actor id="actorPlayerTest" extends="actorPlayerTest0" 
-           file="Textures/monster/skeleton/skeleton.mesh.j3o" 
+           file="Models/monster/skeleton/skeleton.mesh.j3o" 
            skinBase=""
            skinOutfit=""
            icon="Interface/face/skeleton.jpg" sex="0" race="1" level="10" 
@@ -322,15 +322,12 @@
            mat="4" resist="resistCreature" drop="" chat="chatJaime" />
 
     <!--Skeleton-->
-    <actor id="actorSkeleton" extends="actorLiveBase" file="Textures/monster/skeleton/skeleton.mesh.j3o" 
+    <actor id="actorSkeleton" extends="actorLiveBase" file="Models/monster/skeleton/skeleton.mesh.j3o" 
            items="" icon="Interface/face/skeleton.jpg" extAnim="Models/actor/ext_anim" 
            talents="" mat="5" resist="resistNonLife" drop="" 
-           weapon="weaponSword000"
+           weapon="weaponSword000" slots=""
            group="1" sex="2" race="0" level="20" scale="0.2"
-           skills="skillBowShot,skillDualSwordAttack
-,skillWait,skillWalk,skillRun,skillReset,skillHurtFront,skillHurtBack
-,skillAttack,skillAttack2,skillAttack3
-,skillSkeletonDead" 
-/>
+           skills="skillSkeletonWait,skillSkeletonAttack,skillSkeletonDead
+,skillWalk,skillRun,skillReset,skillHurtFront,skillHurtBack,skillBowShot,skillDualSwordAttack," />
 
 </root>

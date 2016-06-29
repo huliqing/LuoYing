@@ -4,6 +4,7 @@
  */
 package name.huliqing.fighter.object.handler;
 
+import com.jme3.math.FastMath;
 import java.util.logging.Logger;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.object.actor.Actor;
@@ -16,7 +17,6 @@ import name.huliqing.fighter.game.service.MagicService;
 import name.huliqing.fighter.game.service.PlayService;
 import name.huliqing.fighter.game.service.StateService;
 import name.huliqing.fighter.game.service.ViewService;
-import name.huliqing.fighter.object.effect.Effect;
 
 /**
  *
@@ -48,7 +48,7 @@ public class TestHandler extends AbstractHandler {
     protected void useObject(Actor actor, ProtoData data) {
         
         Actor aa = actorService.loadActor("actorSkeleton");
-        actorService.setGroup(aa, 3);
+        actorService.setGroup(aa, FastMath.nextRandomInt(1, 100));
         actorService.setLevel(aa, 1);
         playService.addActor(aa);
 

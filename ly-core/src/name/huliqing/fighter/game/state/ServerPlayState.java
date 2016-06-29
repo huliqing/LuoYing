@@ -26,6 +26,7 @@ import name.huliqing.fighter.game.service.PlayService;
 import name.huliqing.fighter.game.service.SkillService;
 import name.huliqing.fighter.game.service.StateService;
 import name.huliqing.fighter.game.state.lan.GameServer.ServerState;
+import name.huliqing.fighter.game.view.ActorSelectView;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.object.game.Game.GameListener;
 

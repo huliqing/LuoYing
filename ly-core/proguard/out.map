@@ -1573,6 +1573,7 @@ name.huliqing.fighter.game.network.ActorNetworkImpl -> name.huliqing.fighter.gam
     void inject() -> inject
     name.huliqing.fighter.object.actor.Actor loadActor(java.lang.String) -> a
     name.huliqing.fighter.object.actor.Actor loadActor(name.huliqing.fighter.data.ActorData) -> a
+    java.lang.String createRandomName(name.huliqing.fighter.enums.Sex) -> a
     boolean hasObstacleActor(name.huliqing.fighter.object.actor.Actor,java.util.List) -> a
     name.huliqing.fighter.data.ProtoData getItem(name.huliqing.fighter.object.actor.Actor,java.lang.String) -> a
     name.huliqing.fighter.object.actor.Actor findNearestEnemyExcept(name.huliqing.fighter.object.actor.Actor,float,name.huliqing.fighter.object.actor.Actor) -> a
@@ -1907,6 +1908,7 @@ name.huliqing.fighter.game.service.ActorAnimServiceImpl -> name.huliqing.fighter
 name.huliqing.fighter.game.service.ActorService -> name.huliqing.fighter.game.service.e:
     name.huliqing.fighter.object.actor.Actor loadActor(java.lang.String) -> a
     name.huliqing.fighter.object.actor.Actor loadActor(name.huliqing.fighter.data.ActorData) -> a
+    java.lang.String createRandomName(name.huliqing.fighter.enums.Sex) -> a
     boolean hasObstacleActor(name.huliqing.fighter.object.actor.Actor,java.util.List) -> a
     name.huliqing.fighter.data.ProtoData getItem(name.huliqing.fighter.object.actor.Actor,java.lang.String) -> a
     boolean isSkillUpdated(name.huliqing.fighter.object.actor.Actor,long) -> a
@@ -1973,6 +1975,7 @@ name.huliqing.fighter.game.service.ActorServiceImpl -> name.huliqing.fighter.gam
     void inject() -> inject
     name.huliqing.fighter.object.actor.Actor loadActor(java.lang.String) -> a
     name.huliqing.fighter.object.actor.Actor loadActor(name.huliqing.fighter.data.ActorData) -> a
+    java.lang.String createRandomName(name.huliqing.fighter.enums.Sex) -> a
     boolean hasObstacleActor(name.huliqing.fighter.object.actor.Actor,java.util.List) -> a
     name.huliqing.fighter.data.ProtoData getItem(name.huliqing.fighter.object.actor.Actor,java.lang.String) -> a
     name.huliqing.fighter.object.actor.Actor findNearestEnemyExcept(name.huliqing.fighter.object.actor.Actor,float,name.huliqing.fighter.object.actor.Actor) -> a
@@ -2735,6 +2738,34 @@ name.huliqing.fighter.game.state.GameState$PlayListener -> name.huliqing.fighter
     void onObjectAdded(java.lang.Object) -> a
     void onObjectRemoved(java.lang.Object) -> b
     void onExit() -> h_
+name.huliqing.fighter.game.state.LabPlayState -> name.huliqing.fighter.game.c.ah:
+    name.huliqing.fighter.game.service.ActorService actorService -> f
+    name.huliqing.fighter.game.service.StateService stateService -> g
+    name.huliqing.fighter.game.service.SkillService skillService -> h
+    name.huliqing.fighter.game.service.SceneService sceneService -> i
+    name.huliqing.fighter.object.actor.Actor npc1 -> j
+    name.huliqing.fighter.object.actor.Actor npc2 -> k
+    int level -> l
+    name.huliqing.fighter.utils.MyChaseCamera chaseCamera -> c
+    java.lang.String[] actorIds -> m
+    void <init>(com.jme3.app.Application,name.huliqing.fighter.data.GameData) -> <init>
+    void initialize(com.jme3.app.state.AppStateManager,com.jme3.app.Application) -> initialize
+    void changeGameState(name.huliqing.fighter.game.state.GameState) -> a
+    name.huliqing.fighter.object.actor.Actor loadActor(int) -> b
+    void update(float) -> update
+    java.util.List getClients() -> a
+    void kickClient(int) -> a
+    name.huliqing.fighter.object.actor.Actor access$002(name.huliqing.fighter.game.state.LabPlayState,name.huliqing.fighter.object.actor.Actor) -> a
+    java.lang.String[] access$100(name.huliqing.fighter.game.state.LabPlayState) -> a
+    name.huliqing.fighter.object.actor.Actor access$200(name.huliqing.fighter.game.state.LabPlayState,int) -> a
+    name.huliqing.fighter.object.actor.Actor access$000(name.huliqing.fighter.game.state.LabPlayState) -> b
+    name.huliqing.fighter.game.service.ActorService access$300(name.huliqing.fighter.game.state.LabPlayState) -> c
+    name.huliqing.fighter.object.actor.Actor access$402(name.huliqing.fighter.game.state.LabPlayState,name.huliqing.fighter.object.actor.Actor) -> b
+    name.huliqing.fighter.object.actor.Actor access$400(name.huliqing.fighter.game.state.LabPlayState) -> d
+name.huliqing.fighter.game.state.LabPlayState$1 -> name.huliqing.fighter.game.c.ai:
+    name.huliqing.fighter.game.state.LabPlayState this$0 -> a
+    void <init>(name.huliqing.fighter.game.state.LabPlayState) -> <init>
+    void onSceneLoaded() -> a
 name.huliqing.fighter.game.state.LanClientListener -> name.huliqing.fighter.game.c.p:
     java.util.logging.Logger LOG -> a
     name.huliqing.fighter.game.service.PlayService playService -> b
@@ -3696,6 +3727,7 @@ name.huliqing.fighter.game.state.start.SaveView$SaveRow$1 -> name.huliqing.fight
     void <init>(name.huliqing.fighter.game.state.start.SaveView$SaveRow,name.huliqing.fighter.game.state.start.SaveView) -> <init>
     void onClick(name.huliqing.fighter.ui.UI,boolean) -> a
 name.huliqing.fighter.game.state.start.StartState -> name.huliqing.fighter.game.c.b.m:
+    name.huliqing.fighter.game.service.GameService gameService -> i
     name.huliqing.fighter.Fighter app -> a
     com.jme3.scene.Node localRoot -> b
     name.huliqing.fighter.game.state.start.StartView startPanel -> c
@@ -3716,6 +3748,7 @@ name.huliqing.fighter.game.state.start.StartState -> name.huliqing.fighter.game.
     void startLanState() -> c
     void refreshState(name.huliqing.fighter.game.state.start.StartState$Menu) -> a
     void cleanup() -> cleanup
+    name.huliqing.fighter.game.service.GameService access$000(name.huliqing.fighter.game.state.start.StartState) -> a
 name.huliqing.fighter.game.state.start.StartState$1 -> name.huliqing.fighter.game.c.b.n:
     name.huliqing.fighter.game.state.start.StartState this$0 -> a
     void <init>(name.huliqing.fighter.game.state.start.StartState) -> <init>
@@ -10631,6 +10664,13 @@ name.huliqing.fighter.utils.MyChaseCamera -> name.huliqing.fighter.utils.o:
     void registerTouchListener(com.jme3.input.InputManager) -> a
     void onTouch(java.lang.String,com.jme3.input.event.TouchEvent,float) -> onTouch
     void <clinit>() -> <clinit>
+name.huliqing.fighter.utils.NpcNameUtils -> name.huliqing.fighter.utils.p:
+    java.lang.String[] prefixes -> a
+    java.lang.String[] suffixes -> b
+    boolean init -> c
+    java.lang.String createRandomName(name.huliqing.fighter.enums.Sex) -> a
+    java.lang.String createFemale() -> a
+    java.lang.String createInner(java.lang.String,int) -> a
 name.huliqing.fighter.utils.RayUtils -> name.huliqing.fighter.utils.q:
     com.jme3.collision.CollisionResults collideWith(com.jme3.math.Vector3f,com.jme3.math.Vector3f,com.jme3.scene.Spatial,com.jme3.collision.CollisionResults) -> a
 name.huliqing.fighter.utils.SceneUtils -> name.huliqing.fighter.utils.r:

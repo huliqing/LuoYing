@@ -18,6 +18,7 @@ import name.huliqing.fighter.data.GameData;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.enums.MessageType;
 import name.huliqing.fighter.game.service.GameService;
+import name.huliqing.fighter.game.view.ActorSelectView.SelectedListener;
 import name.huliqing.fighter.game.view.TeamView;
 import name.huliqing.fighter.manager.AnimationManager;
 import name.huliqing.fighter.manager.DamageManager;
