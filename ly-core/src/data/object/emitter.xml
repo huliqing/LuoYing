@@ -364,9 +364,9 @@
              initialVelocity="0,6,0" velocityVariation="0.5" randomAngle="1" selectRandomImage="1" gravity="0,10,0"
         />
     <emitter id="emitterSkeletonSmoke" numParticles="10" particlesPerSec="0" startColor="1,1,1,0.1" endColor="1,1,1,0" 
-             startSize="1.2" endSize="1.5" highLife="3" lowLife="3" 
+             startSize="1.2" endSize="6" highLife="3" lowLife="3" 
              texture="Textures/effect/flame.jpg" imagesX="2" imagesY="2" 
-             initialVelocity="0,5,0" velocityVariation="1"  />
+             initialVelocity="0,4,0" velocityVariation="1"  />
 </root>
 
 

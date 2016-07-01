@@ -5,7 +5,6 @@
 package name.huliqing.fighter.object.skill.impl;
 
 import name.huliqing.fighter.data.SkillData;
-import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.object.skill.AbstractSkill;
 
 /**
@@ -22,11 +21,5 @@ public class SimpleSkill extends AbstractSkill {
 
     @Override
     protected void doUpdateLogic(float tpf) {}
-
-//    @Override
-//    public boolean isInRange(Actor target) {
-//        float distance = actor.getDistance(target);
-//        return distance <= data.getRadius();
-//    }
     
 }

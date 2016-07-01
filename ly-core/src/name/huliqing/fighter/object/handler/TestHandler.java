@@ -10,11 +10,13 @@ import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.data.HandlerData;
 import name.huliqing.fighter.data.ProtoData;
+import name.huliqing.fighter.enums.SkillType;
 import name.huliqing.fighter.game.network.PlayNetwork;
 import name.huliqing.fighter.game.service.ActorService;
 import name.huliqing.fighter.game.service.EffectService;
 import name.huliqing.fighter.game.service.MagicService;
 import name.huliqing.fighter.game.service.PlayService;
+import name.huliqing.fighter.game.service.SkillService;
 import name.huliqing.fighter.game.service.StateService;
 import name.huliqing.fighter.game.service.ViewService;
 
@@ -33,6 +35,7 @@ public class TestHandler extends AbstractHandler {
     private final MagicService magicService = Factory.get(MagicService.class);
     private final EffectService effectService = Factory.get(EffectService.class);
     private final ViewService viewService = Factory.get(ViewService.class);
+    private final SkillService skillService = Factory.get(SkillService.class);
 
     @Override
     public void initData(HandlerData data) {
@@ -50,6 +53,7 @@ public class TestHandler extends AbstractHandler {
         Actor aa = actorService.loadActor("actorSkeleton");
         actorService.setGroup(aa, FastMath.nextRandomInt(1, 100));
         actorService.setLevel(aa, 1);
+        skillService.playSkill(aa, skillService.getSkill(aa, SkillType.wait).getId(), false);
         playService.addActor(aa);
 
 //        Actor target = actorService.getTarget(actor);

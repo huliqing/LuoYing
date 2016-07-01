@@ -244,7 +244,7 @@ public class SkinServiceImpl implements SkinService {
             cacheWeaponsAndState(actor);
         }
         state = actor.getModel().getUserData(ActorConstants.USER_DATA_TEMP_WEAPON_STATE);
-        return state.intValue();
+        return state;
     }
     
     @Override
@@ -295,15 +295,17 @@ public class SkinServiceImpl implements SkinService {
      * @param skinData 
      */
     private void selectWeaponSlot(Actor actor, SkinData skinData) {
+        // 如果不是武器类型，则不需要判断是否有可用槽位
         if (!isWeapon(skinData)) {
             return;
         }
-        // 可用的要优先选择的槽位
+        
+        // 找出角色当前可用的用于存放武器的槽位
+        // 逻辑：从角色配置中的所有可用槽位中进行选择，需要移除当前正在使用中的武器的槽位.
         SafeArrayList<String> slotCandidate = null;
         if (actor.getData().getSlots() != null) {
             slotCandidate = new SafeArrayList<String>(String.class, actor.getData().getSlots());
-            
-            // 移除掉已经被占用的槽位
+            // 获取正在使用中的武器，以便移除这些槽位
             List<SkinData> weaponSkins = skinDao.getWeaponSkinsAllInUsed(actor.getData(), null);
             if (weaponSkins != null) {
                 for (SkinData sd : weaponSkins) {
@@ -325,11 +327,18 @@ public class SkinServiceImpl implements SkinService {
             return;
         }
         
-        // 如果候选列表不存在则直接使用武器配置中的第一个
-        if (slotCandidate == null) {
-            sd.setSlot(sd.getSlots().get(0));
+        // 如果没有任何可用槽位
+        if (slotCandidate == null || slotCandidate.isEmpty()) {
+            sd.setSlot(null);
             return;
         }
+        
+        // remove20160701以后不要随便给配置
+//        // 如果候选列表不存在则直接使用武器配置中的第一个
+//        if (slotCandidate == null) {
+//            sd.setSlot(sd.getSlots().get(0));
+//            return;
+//        }
         
         // 从优先的候选列表中查找一个该武器可支持的槽位使用
         for (String slotC : slotCandidate.getArray()) {
@@ -340,8 +349,11 @@ public class SkinServiceImpl implements SkinService {
             }
         }
         
-        // 如果候选列表没有合适的，则使用配置中的第一个
-        sd.setSlot(sd.getSlots().get(0));
+        // remove20160701以后不要随便给配置
+//        // 如果候选列表没有合适的，则使用配置中的第一个
+//        sd.setSlot(sd.getSlots().get(0));
+
+        sd.setSlot(null);
     }
     
     /**

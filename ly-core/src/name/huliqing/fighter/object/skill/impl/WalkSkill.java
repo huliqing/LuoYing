@@ -122,10 +122,5 @@ public class WalkSkill extends SimpleSkill implements Walk{
         
         super.cleanup();
     }
-
-//    @Override
-//    public boolean isInRange(Actor actor) {
-//        return false;
-//    }
     
 }

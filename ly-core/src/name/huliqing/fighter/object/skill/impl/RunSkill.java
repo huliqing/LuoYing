@@ -4,7 +4,6 @@
  */
 package name.huliqing.fighter.object.skill.impl;
 
-import name.huliqing.fighter.Config;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.SkillData;
 import name.huliqing.fighter.game.service.ConfigService;

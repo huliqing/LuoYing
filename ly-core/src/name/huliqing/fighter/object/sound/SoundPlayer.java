@@ -26,8 +26,8 @@ public class SoundPlayer {
     // 允许播放声音的最远距离，在该距离之外则不播放声音。
     // 该距离指与摄像机的距离,注意距离是平方表示，比较的时候用平方进行比较
     // 减少一次开方操作
-    private float maxDistance = 80 * 80;
-    private Map<String, AudioNode> audioMap = new HashMap<String, AudioNode>();
+    private final float MAX_DISTANCE_SQUARED = 80 * 80;
+    private final Map<String, AudioNode> audioMap = new HashMap<String, AudioNode>();
     
     public void playSound(SoundData sound, Vector3f position) {
         playSound(sound, position, false);
@@ -37,11 +37,11 @@ public class SoundPlayer {
         AudioNode audio = getSound(sound.getProto().getId());
         Vector3f camLoc = Common.getApp().getCamera().getLocation();
         // 注意：比较的是平方，可减少一次开方运算
-        float distance = camLoc.distanceSquared(position);
-        if (distance >= maxDistance) {
+        float distanceSquared = camLoc.distanceSquared(position);
+        if (distanceSquared >= MAX_DISTANCE_SQUARED) {
             return;
         }
-        float distanceFactor = (maxDistance - distance) / maxDistance;
+        float distanceFactor = (MAX_DISTANCE_SQUARED - distanceSquared) / MAX_DISTANCE_SQUARED;
         audio.setVolume(sound.getVolume() * distanceFactor * configService.getSoundVolume());
         if (instance) {
             audio.playInstance();

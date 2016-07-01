@@ -20,19 +20,19 @@ import name.huliqing.fighter.object.sound.SoundPlayer;
  * @author huliqing
  */
 public class SoundManager {
-    private ConfigService configService = Factory.get(ConfigService.class);
-    private static SoundManager sm = new SoundManager();
+    private final ConfigService configService = Factory.get(ConfigService.class);
+    private static final SoundManager SM = new SoundManager();
     
     // 声效播放
-    private SoundPlayer player = new SoundPlayer();
+    private final SoundPlayer player = new SoundPlayer();
     
     // 碰撞声效
-    private SoundCollision soundCollision = new SoundCollision();
+    private final SoundCollision soundCollision = new SoundCollision();
     
     private SoundManager() {}
     
     public static SoundManager getInstance() {
-        return sm;
+        return SM;
     }
     
     /**

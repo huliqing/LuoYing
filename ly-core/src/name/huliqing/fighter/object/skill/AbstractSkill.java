@@ -53,7 +53,7 @@ public abstract class AbstractSkill implements Skill {
     private final PlayService playService = Factory.get(PlayService.class);
     private final EffectService effectService = Factory.get(EffectService.class);
     private final AttributeService attributeService = Factory.get(AttributeService.class);
-    private final SkillService skillService = Factory.get(SkillService.class);
+//    private final SkillService skillService = Factory.get(SkillService.class);
     private final MagicService magicService = Factory.get(MagicService.class);
     
     // 格式: soundId|timePoint,soundId|timePoint...
@@ -175,7 +175,6 @@ public abstract class AbstractSkill implements Skill {
     
     /**
      * 初始化技能,该方法只在技能start后执行一次,循环过程不会再执行。
-     * @param trueUseTime 技能的实际执行时间
      */
     protected  void init() {
         
@@ -225,9 +224,6 @@ public abstract class AbstractSkill implements Skill {
         }
         
     }
-    
-    // remove20160503不再要
-//    protected void loopStart() {}
 
     @Override
     public final void update(float tpf) {
@@ -237,7 +233,6 @@ public abstract class AbstractSkill implements Skill {
         // 检查是否结束
         time += tpf;
         
-//        float interpolation = getInterpolation(); // remove
         float interpolation = time / trueUseTime;
         if (interpolation > 1) {
             interpolation = 1;
@@ -262,6 +257,7 @@ public abstract class AbstractSkill implements Skill {
         
         if (time >= trueUseTime) {
             if (data.getLoopMode() == LoopMode.Loop || data.getLoopMode() == LoopMode.Cycle) {
+                // remove20160701暂不使用这种方式，当前只loop角色动画就可以。
 //                loopStart();
             } else {
                 end();
@@ -287,8 +283,8 @@ public abstract class AbstractSkill implements Skill {
     }
     
     /**
-     * 播放声音事件
-     * @param tpf 
+     * 播放声音事件 
+     * @param interpolation
      */
     protected void doUpdateSound(float interpolation) {
         if (sounds != null) {
@@ -300,8 +296,8 @@ public abstract class AbstractSkill implements Skill {
     }
     
     /**
-     * 更新效果逻辑
-     * @param tpf 
+     * 更新效果逻辑 
+     * @param interpolation
      */
     protected void doUpdateEffect(float interpolation) {
         if (effects != null) {
@@ -313,8 +309,8 @@ public abstract class AbstractSkill implements Skill {
     }
     
     /**
-     * 更新魔法
-     * @param tpf 
+     * 更新魔法 
+     * @param interpolation
      */
     protected void doUpdateMagic(float interpolation) {
         if (magics != null) {
@@ -338,8 +334,8 @@ public abstract class AbstractSkill implements Skill {
     }
     
     /**
-     * 覆盖该方法来handler特效的执行
-     * @param effect 
+     * 覆盖该方法来handler特效的执行 
+     * @param effectId
      */
     protected void playEffect(String effectId) {
         Effect effect = effectService.loadEffect(effectId);

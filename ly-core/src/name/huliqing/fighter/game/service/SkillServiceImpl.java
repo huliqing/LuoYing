@@ -268,14 +268,6 @@ public class SkillServiceImpl implements SkillService {
                 < skillData.getCooldown() * 1000;
     }
 
-    // remove20160504不再使用这个方法
-//    @Override
-//    public boolean isInSkillRange(SkillData skillData, Actor source, Actor target) {
-//        Skill skill = source.getSkillProcessor().findSkill(skillData);
-//        skill.setActor(source);
-//        return skill.isInRange(target);
-//    }
-
     @Override
     public boolean isSkillLearned(Actor actor, String skillId) {
         List<SkillData> skills = actor.getData().getSkillStore().getSkills();

@@ -184,6 +184,11 @@
     <sound id="soundBowShot" file="Sounds/bow/shot.ogg"   offset="0" />
     <sound id="soundBowShotHeavy" file="Sounds/bow/shot_heavy.ogg"   offset="0.5" />
     <sound id="soundBowHit" file="Sounds/bow/hit.ogg"   offset="0.6" />
+    
+    <!--skeleton-->
+    <sound id="soundSkeletonDead" file="Sounds/creature/skeleton/dead.ogg" />
+    <sound id="soundSkeletonStep1" file="Sounds/creature/skeleton/ske_step1.ogg" />
+    <sound id="soundSkeletonStep2" file="Sounds/creature/skeleton/ske_step2.ogg" />
 </root>
 
 

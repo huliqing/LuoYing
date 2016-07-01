@@ -70,7 +70,7 @@
         
     <skillWait id="skillWait" useTime="0.5" name="skill.wait" animation="idle_wait"  />
     <skillWalk id="skillWalk" extends="skillWalkBase" animation="idle_walk" />
-    <skillRun id="skillRun" extends="skillWalkBase" animation="idle_run" baseSpeed="6.5" animSpeed="1.5" />
+    <skillRun id="skillRun" extends="skillWalkBase" animation="idle_run" animSpeed="1.5" sounds="" />
     <skillHurt id="skillHurtFront"  useTime="0.3" animation="hurt_front"  hurtFace="front" />
     <skillHurt id="skillHurtBack"  useTime="0.3" animation="hurt_back"  hurtFace="back" />
     <skillDeadRagdoll id="skillDead" useTime="1" animation="hurt_dead" useRagdoll="0" deadAnimPoint="0" />
