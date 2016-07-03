@@ -29,7 +29,7 @@ import name.huliqing.fighter.object.NetworkObject;
 import name.huliqing.fighter.object.game.Game;
 import name.huliqing.fighter.object.view.View;
 import name.huliqing.fighter.ui.state.UIState;
-import name.huliqing.fighter.utils.MyChaseCamera;
+import name.huliqing.fighter.utils.CollisionChaseCamera;
 
 /**
  *
@@ -219,7 +219,7 @@ public abstract class GameState extends AbstractAppState {
      * 获取跟随的相机，如果没有则返回null.
      * @return 
      */
-    public abstract MyChaseCamera getChaseCamera();
+    public abstract CollisionChaseCamera getChaseCamera();
 
     /**
      * 获取当前场景所有活动对象，包括player,如果没有，则返回empty.

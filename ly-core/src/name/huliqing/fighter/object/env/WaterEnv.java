@@ -5,18 +5,19 @@
  */
 package name.huliqing.fighter.object.env;
 
-import com.jme3.scene.Spatial;
 import name.huliqing.fighter.data.EnvData;
+import name.huliqing.fighter.object.scene.Scene;
 
 /**
  *
  * @author huliqing
+ * @param <T>
  */
-public class WaterEnv  extends Env<EnvData> {
+public class WaterEnv<T extends EnvData>  extends Env<T> {
 
     @Override
-    protected Spatial load() {
-        Spatial spatial = super.load();
-        return spatial;
+    public void initialize(Scene scene) {
     }
+
+    
 }

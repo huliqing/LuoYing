@@ -7,6 +7,7 @@ package name.huliqing.fighter.object.handler;
 import com.jme3.bullet.control.PhysicsControl;
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
+import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import com.jme3.util.TempVars;
@@ -15,7 +16,6 @@ import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.data.HandlerData;
 import name.huliqing.fighter.data.ProtoData;
 import name.huliqing.fighter.enums.MessageType;
-import name.huliqing.fighter.game.network.ActorNetwork;
 import name.huliqing.fighter.game.network.PlayNetwork;
 import name.huliqing.fighter.game.service.ActorService;
 import name.huliqing.fighter.game.service.ConfigService;
@@ -43,6 +43,8 @@ public class SummonHandler extends AbstractHandler {
     private String actorId;
     // 召换多少
     private int total = 1;
+    
+    private final Ray ray = new Ray();
 
     @Override
     public void initData(HandlerData data) {
@@ -136,7 +138,7 @@ public class SummonHandler extends AbstractHandler {
         Temp tp = Temp.get();
         CollisionResults results = tp.results;
         results.clear();
-        RayUtils.collideWith(origin, direction, root, results);
+        collideWith(origin, direction, root, results);
         boolean result = false;
         for (CollisionResult r : results) {
             if (r.getDistance() > limit) {
@@ -153,6 +155,13 @@ public class SummonHandler extends AbstractHandler {
         }
         tp.release();
         return result;
+    }
+    
+    private CollisionResults collideWith(Vector3f origin, Vector3f direction, Spatial root, CollisionResults store) {
+        ray.setOrigin(origin);
+        ray.setDirection(direction);
+        root.collideWith(ray, store);
+        return store;
     }
     
     // 查找前方是否存在障碍物

@@ -16,26 +16,17 @@ import name.huliqing.fighter.data.SceneData;
 @Serializable
 public class RandomSceneData extends SceneData {
     
-    private List<EnvData> trees;
-    private List<EnvData> grasses;
+    private List<EnvData> randomEnvs;
     
     public RandomSceneData() {}
-    
-    public List<EnvData> getTrees() {
-        return trees;
+
+    public List<EnvData> getRandomEnvs() {
+        return randomEnvs;
     }
 
-    public void setTrees(List<EnvData> trees) {
-        this.trees = trees;
+    public void setRandomEnvs(List<EnvData> randomEnvs) {
+        this.randomEnvs = randomEnvs;
     }
 
-    public List<EnvData> getGrasses() {
-        return grasses;
-    }
 
-    public void setGrasses(List<EnvData> grasses) {
-        this.grasses = grasses;
-    }
-    
-    
 }

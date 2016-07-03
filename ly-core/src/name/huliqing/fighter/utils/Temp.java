@@ -75,7 +75,12 @@ public class Temp {
     
     public final Vector3f vec1 = new Vector3f();
     public final CollisionResults results = new CollisionResults();
+    
+    /**
+     * @deprecated 不再在这里使用
+     */
     public final Ray ray = new Ray(Vector3f.ZERO.clone(), Vector3f.UNIT_Z.clone());
+    
     public final int[] array2 = new int[2];
     public final int[] array3 = new int[3];
     public final List list1 = new ArrayList();

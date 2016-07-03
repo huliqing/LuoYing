@@ -5,17 +5,17 @@
 package name.huliqing.fighter.object.env;
 
 import com.jme3.scene.Spatial;
-import name.huliqing.fighter.data.EnvData;
 import name.huliqing.fighter.loader.SkyLoader;
 
 /**
  * 天空盒模型
  * @author huliqing
+ * @param <T>
  */
-public class SkyEnv extends Env<EnvData> {
+public class SkyEnv <T extends ModelEnvData> extends ModelEnv<T> {
     
     @Override
-    public Spatial load() {
+    public Spatial loadModel() {
         Spatial sky = SkyLoader.loadDefaultMin();
         return sky;
     }

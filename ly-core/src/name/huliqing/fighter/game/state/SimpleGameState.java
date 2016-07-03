@@ -4,11 +4,9 @@
  */
 package name.huliqing.fighter.game.state;
 
-import name.huliqing.fighter.game.view.ActorSelectView;
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.bullet.control.PhysicsControl;
-import com.jme3.input.ChaseCamera;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
@@ -30,8 +28,6 @@ import name.huliqing.fighter.game.service.GameService;
 import name.huliqing.fighter.game.service.PlayService;
 import name.huliqing.fighter.game.service.SkillService;
 import name.huliqing.fighter.game.service.StateService;
-import name.huliqing.fighter.game.state.LanPlayStateUI;
-import name.huliqing.fighter.game.view.ActorSelectView.SelectedListener;
 import name.huliqing.fighter.game.view.TeamView;
 import name.huliqing.fighter.manager.HUDManager;
 import name.huliqing.fighter.manager.PickManager;
@@ -46,12 +42,13 @@ import name.huliqing.fighter.object.effect.EffectCache;
 import name.huliqing.fighter.object.game.Game.GameListener;
 import name.huliqing.fighter.object.view.View;
 import name.huliqing.fighter.ui.AbstractUI;
-import name.huliqing.fighter.utils.MyChaseCamera;
+import name.huliqing.fighter.utils.CollisionChaseCamera;
 import name.huliqing.fighter.utils.Temp;
 import name.huliqing.fighter.ui.UI;
 import name.huliqing.fighter.ui.UIEventListener;
 import name.huliqing.fighter.ui.state.PickListener;
 import name.huliqing.fighter.ui.state.UIState;
+import name.huliqing.fighter.utils.GeometryUtils;
 import name.huliqing.fighter.utils.SceneUtils;
 
 /**
@@ -81,7 +78,7 @@ public  class SimpleGameState extends GameState implements UIEventListener {
     // 基本界面
     protected LanPlayStateUI ui;
     // 场景跟随相机
-    protected MyChaseCamera chaseCamera;
+    protected CollisionChaseCamera chaseCamera;
 
     // 玩家当前玩家
     protected Actor player;
@@ -158,8 +155,11 @@ public  class SimpleGameState extends GameState implements UIEventListener {
                     }
                     
                     // 不使用localRoot节为根节点进行ray检测, localRoot里面包含了所有actor,而actors已经在onPickedActor中处理
+//                    PickManager.PickResult pr = PickManager.pick(
+//                            app.getInputManager(), app.getCamera(), game.getScene().getSceneRoot());
+
                     PickManager.PickResult pr = PickManager.pick(
-                            app.getInputManager(), app.getCamera(), game.getScene().getRoot());
+                            app.getInputManager(), app.getCamera(), game.getScene().getTerrain());
                     if (pr != null && onPicked(pr)) {
                         return true;
                     }
@@ -266,11 +266,12 @@ public  class SimpleGameState extends GameState implements UIEventListener {
     }
 
     @Override
-    public MyChaseCamera getChaseCamera() {
+    public CollisionChaseCamera getChaseCamera() {
         if (chaseCamera == null) {
-            chaseCamera = SceneUtils.createChaseCam(app.getCamera()
-                    , app.getInputManager()
-                    , game.getScene().getPhysicsSpace());
+            chaseCamera = SceneUtils.createChaseCam(app.getCamera(), app.getInputManager());
+            chaseCamera.setPhysicsSpace(game.getScene().getPhysicsSpace());
+//            chaseCamera.addCollisionObject(game.getScene().getTerrain());
+            chaseCamera.addCollisionObject(game.getScene().getSceneRoot());
         }
         return chaseCamera;
     }
@@ -552,10 +553,21 @@ public  class SimpleGameState extends GameState implements UIEventListener {
      * @return 
      */
     protected boolean onPicked(PickResult pr) {
+        // remove20160703
         // 选择地面进行行走
-        if (pr.spatial == game.getScene().getTerrain() && player != null) {
-            userCommandNetwork.playRunToPos(player, pr.result.getContactPoint());
-            return true;
+//        if (pr.spatial == game.getScene().getTerrain()) {
+//            if (player != null) {
+//                userCommandNetwork.playRunToPos(player, pr.result.getContactPoint());
+//                return true;
+//            }
+//        }
+
+        // 选择地面进行行走
+        if (GeometryUtils.isSelfOrChild(pr.spatial,game.getScene().getTerrain())) {
+            if (player != null) {
+                userCommandNetwork.playRunToPos(player, pr.result.getContactPoint());
+                return true;
+            }
         }
         return false;
     }

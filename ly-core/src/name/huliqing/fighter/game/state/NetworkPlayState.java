@@ -26,7 +26,7 @@ import name.huliqing.fighter.object.game.Game.GameListener;
 import name.huliqing.fighter.ui.Icon;
 import name.huliqing.fighter.ui.UI;
 import name.huliqing.fighter.ui.state.UIState;
-import name.huliqing.fighter.utils.MyChaseCamera;
+import name.huliqing.fighter.utils.CollisionChaseCamera;
 import name.huliqing.fighter.utils.SceneUtils;
 
 /**
@@ -44,7 +44,7 @@ public abstract class NetworkPlayState extends PlayState implements LanGame {
     private Icon lanBtn;
     
     protected ActorSelectView actorPanel;
-    protected MyChaseCamera chaseCamera;
+    protected CollisionChaseCamera chaseCamera;
     
     public NetworkPlayState(Application app, GameData gameData) {
         super(app, gameData);
@@ -103,7 +103,7 @@ public abstract class NetworkPlayState extends PlayState implements LanGame {
         gameState.addObject(actorPanel.getActorView(), false);
         
         if (chaseCamera == null) {
-            chaseCamera = SceneUtils.createChaseCam(app.getCamera(), app.getInputManager(), null);
+            chaseCamera = SceneUtils.createChaseCam(app.getCamera(), app.getInputManager());
             chaseCamera.setDefaultDistance(5f);
         }
         actorPanel.getActorView().addControl(chaseCamera);

@@ -1,25 +1,27 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package name.huliqing.fighter.object.env;
-
-import name.huliqing.fighter.data.EnvData;
-import name.huliqing.fighter.object.DataProcessor;
-import name.huliqing.fighter.object.scene.Scene;
-
-/**
- * @author huliqing
- * @param <T>
- */
-public abstract class Env<T extends EnvData> implements DataProcessor<T>{
-    
-    protected T data;
-    
+///*
+// * To change this template, choose Tools | Templates
+// * and open the template in the editor.
+// */
+//package name.huliqing.fighter.object.env;
+//
+//import com.jme3.bullet.control.RigidBodyControl;
+//import com.jme3.scene.Spatial;
+//import name.huliqing.fighter.data.EnvData;
+//import name.huliqing.fighter.data.ProtoData;
+//import name.huliqing.fighter.loader.AssetLoader;
+//import name.huliqing.fighter.object.DataProcessor;
+//
+///**
+// * @author huliqing
+// * @param <T>
+// */
+//public class Env<T extends EnvData> implements DataProcessor<T>{
+//    
+//    protected T data;
 //    // 模型
 //    protected Spatial model;
 //    private boolean loaded;
-    
+//    
 //    /**
 //     * 获取模型
 //     * @return 
@@ -31,26 +33,23 @@ public abstract class Env<T extends EnvData> implements DataProcessor<T>{
 //        }
 //        return model;
 //    }
-
-    @Override
-    public void initData(T data) {
-        this.data = data;
-    }
-
-    @Override
-    public T getData() {
+//
+//    @Override
+//    public T getData() {
+//        if (!loaded) {
+//            return data;
+//        }
 //        data.setLocation(model.getLocalTranslation());
 //        data.setRotation(model.getLocalRotation());
 //        data.setScale(model.getLocalScale());
-        return data;
-    }
-    
-    public abstract void initialize(Scene scene);
-    
-    public void cleanup() {
-        // ignore
-    }
-    
+//        return data;
+//    }
+//
+//    @Override
+//    public void initData(T data) {
+//        this.data = data;
+//    }
+//    
 //    /**
 //     * 载入模型
 //     * @return 
@@ -85,7 +84,7 @@ public abstract class Env<T extends EnvData> implements DataProcessor<T>{
 //        
 //        return spatial;
 //    }
-    
+//    
 //    /**
 //     * 为Spatial设置physics, 子类可以覆盖这个方法，来为模型添加特殊定制的
 //     * 物理控制器。
@@ -102,4 +101,4 @@ public abstract class Env<T extends EnvData> implements DataProcessor<T>{
 //        // 为简单和优化性能，一些参数暂不开放出来。
 //        rbc.setRestitution(0);
 //    }
-}
+//}

@@ -7,15 +7,15 @@ package name.huliqing.fighter.object.env;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
-import name.huliqing.fighter.data.EnvData;
 import name.huliqing.fighter.data.Proto;
 import name.huliqing.fighter.object.DataLoader;
 
 /**
  * 环境物体数据载入器
  * @author huliqing
+ * @param <T>
  */
-public class EnvLoader<T extends EnvData> implements DataLoader<T> {
+public class ModelEnvLoader<T extends ModelEnvData> implements DataLoader<T> {
 
     @Override
     public void load(Proto proto, T store) {
@@ -56,6 +56,7 @@ public class EnvLoader<T extends EnvData> implements DataLoader<T> {
         }
         
         store.setUseUnshaded(proto.getAsBoolean("useUnshaded", false));
+        store.setTerrain(proto.getAsBoolean("terrain", false));
     }
     
 }

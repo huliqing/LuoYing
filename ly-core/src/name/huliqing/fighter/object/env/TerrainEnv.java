@@ -5,18 +5,24 @@
 package name.huliqing.fighter.object.env;
 
 import com.jme3.scene.Spatial;
-import name.huliqing.fighter.data.EnvData;
+import name.huliqing.fighter.object.scene.Scene;
 
 /**
  * 地面模型。
  * @author huliqing
+ * @param <T>
  */
-public class TerrainEnv extends Env<EnvData> {
+public class TerrainEnv<T extends ModelEnvData> extends ModelEnv<T> {
 
     @Override
-    public Spatial load() {
-        Spatial spatial = super.load();
-   
+    public void initialize(Scene scene) {
+        super.initialize(scene);
+    }
+    
+    @Override
+    public Spatial loadModel() {
+        Spatial spatial = super.loadModel();
+        
         // remove20160602,JME3.1之后这个BUG已经修复
 //        // TerrainLodControl的性能问题很严重，会在内存中常驻一个守护线程。
 //        // 每次载入带有该Control的model时都会产生一个新的线程，该问题在桌面电脑

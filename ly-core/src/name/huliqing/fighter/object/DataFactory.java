@@ -31,8 +31,10 @@ import name.huliqing.fighter.object.effect.SlideColorIOSplineEffect;
 import name.huliqing.fighter.object.effect.SlideColorSplineEffect;
 import name.huliqing.fighter.object.effect.TextureCylinderEffect;
 import name.huliqing.fighter.object.effect.TextureEffect;
-import name.huliqing.fighter.object.env.Env;
-import name.huliqing.fighter.object.env.EnvLoader;
+import name.huliqing.fighter.object.env.ModelEnv;
+import name.huliqing.fighter.object.env.ModelEnvData;
+import name.huliqing.fighter.object.env.ModelEnvLoader;
+import name.huliqing.fighter.object.env.PlantEnv;
 import name.huliqing.fighter.object.env.PlantEnvLoader;
 import name.huliqing.fighter.object.env.SkyEnv;
 import name.huliqing.fighter.object.env.TerrainEnv;
@@ -240,11 +242,12 @@ public class DataFactory {
         register("sceneRandom", RandomSceneData.class, RandomSceneLoader.class, RandomScene.class);
         
         // Env
-        register("envSky", EnvData.class, EnvLoader.class, SkyEnv.class);
-        register("envTerrain", EnvData.class, EnvLoader.class, TerrainEnv.class);
-        register("envTree", EnvData.class, PlantEnvLoader.class, TreeEnv.class);
-        register("envGrass", EnvData.class, PlantEnvLoader.class, Env.class);
-        register("envWater", EnvData.class, EnvLoader.class, WaterEnv.class);
+        register("envModel", ModelEnvData.class, ModelEnvLoader.class, ModelEnv.class);
+        register("envTerrain", ModelEnvData.class, ModelEnvLoader.class, TerrainEnv.class);
+        register("envSky", ModelEnvData.class, ModelEnvLoader.class, SkyEnv.class);
+        register("envTree", ModelEnvData.class, PlantEnvLoader.class, TreeEnv.class);
+        register("envGrass", ModelEnvData.class, PlantEnvLoader.class, PlantEnv.class);
+        register("envWater", EnvData.class, ModelEnvLoader.class, WaterEnv.class);
         
         // States
         register("stateAttribute", StateData.class, StateLoader.class, AttributeState.class);

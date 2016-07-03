@@ -15,13 +15,17 @@ import com.jme3.scene.Spatial;
 import com.jme3.shadow.CompareMode;
 import com.jme3.shadow.DirectionalLightShadowRenderer;
 import com.jme3.shadow.EdgeFilteringMode;
+import java.util.ArrayList;
+import java.util.List;
 import name.huliqing.fighter.Common;
 import name.huliqing.fighter.Factory;
+import name.huliqing.fighter.data.EnvData;
 import name.huliqing.fighter.data.SceneData;
 import name.huliqing.fighter.game.service.ConfigService;
 import name.huliqing.fighter.game.service.PlayService;
 import name.huliqing.fighter.loader.Loader;
 import name.huliqing.fighter.object.AbstractPlayObject;
+import name.huliqing.fighter.object.DataFactory;
 import name.huliqing.fighter.object.DataProcessor;
 import name.huliqing.fighter.object.env.Env;
 
@@ -35,11 +39,6 @@ public abstract class Scene<T extends SceneData> extends AbstractPlayObject impl
     
     // ---- inner
     protected T data;
-    protected Env sky;
-    protected Env terrain;
-    protected Node localRoot;
-    protected Spatial boundaryGeo;
-    protected BulletAppState bulletAppState;
     // 直射光源
     protected DirectionalLight directionalLight;
     // 环境光源,格式"r,g,b,a"
@@ -47,12 +46,27 @@ public abstract class Scene<T extends SceneData> extends AbstractPlayObject impl
     // 阴影处理器
     protected SceneProcessor shadowSceneProcessor;
     
+    // 所有的环境物体列表，包含天空盒和地形
+    protected List<Env> envs;
+    
+    // 场景根节点
+    protected Node sceneRoot;
+    // 地型，允许多个地形
+    private Node terrainRoot;
+    // 边界盒
+    protected Spatial boundaryGeo;
+    // 物理空间
+    protected BulletAppState bulletAppState;
+    
     public Scene() {}
     
     @Override
     public void initialize() {
         super.initialize(); 
-        localRoot = new Node("SceneRoot");
+        sceneRoot = new Node("SceneRoot");
+        terrainRoot = new Node("terrainRoot");
+        sceneRoot.attachChild(terrainRoot);
+        playService.addObject(sceneRoot);
         
         // use physics
         if (data.isUsePhysics()) {
@@ -75,21 +89,8 @@ public abstract class Scene<T extends SceneData> extends AbstractPlayObject impl
             boundaryGeo.setLocalScale(data.getBoundary().mult(2));
             boundaryGeo.setCullHint(Spatial.CullHint.Always);
             boundaryGeo.addControl(new RigidBodyControl(0));
-            localRoot.attachChild(boundaryGeo);
+            sceneRoot.attachChild(boundaryGeo);
             addPhysicsObject(boundaryGeo);
-        }
-        
-        // sky 天空盒
-        if (data.getSky() != null) {
-            sky = Loader.loadEnv(data.getSky());
-            localRoot.attachChild(sky.getModel());
-        }
-        
-        // terrain 地形
-        if (data.getTerrain() != null) {
-            terrain = Loader.loadEnv(data.getTerrain());
-            localRoot.attachChild(terrain.getModel());
-            addPhysicsObject(terrain.getModel());
         }
         
         // Lights
@@ -99,12 +100,12 @@ public abstract class Scene<T extends SceneData> extends AbstractPlayObject impl
             if (data.getDirectionalLightDir() != null) {
                 directionalLight.setDirection(data.getDirectionalLightDir());
             }
-            localRoot.addLight(directionalLight);
+            sceneRoot.addLight(directionalLight);
         }
         if (data.getAmbientLightColor() != null) {
             ambientLight = new AmbientLight();
             ambientLight.setColor(data.getAmbientLightColor());
-            localRoot.addLight(ambientLight);
+            sceneRoot.addLight(ambientLight);
         }
         
         // 影阴处理器
@@ -118,9 +119,16 @@ public abstract class Scene<T extends SceneData> extends AbstractPlayObject impl
             }
         }
         
-        // 直接添加到viewPort下
-        playService.getApplication().getViewPort().attachScene(localRoot);
-        localRoot.updateGeometricState();
+        // env列表
+        List<EnvData> edList = data.getEnvs();
+        if (edList != null && !edList.isEmpty()) {
+            envs = new ArrayList<Env>(edList.size());
+            for (EnvData ed : edList) {
+                Env env = DataFactory.createProcessor(ed);
+                envs.add(env);
+                env.initialize(this);
+            }
+        }
     }
 
     @Override
@@ -133,10 +141,19 @@ public abstract class Scene<T extends SceneData> extends AbstractPlayObject impl
             playService.getApplication().getViewPort().removeProcessor(shadowSceneProcessor);
             shadowSceneProcessor = null;
         }
-        // LocalRoot是直接attach到ViewPort上去的，所以要这样移除。
-        if (localRoot != null) {
-            playService.getApplication().getViewPort().detachScene(localRoot);
-            localRoot = null;
+        
+//        // LocalRoot是直接attach到ViewPort上去的，所以要这样移除。
+//        if (sceneRoot != null) {
+//            playService.getApplication().getViewPort().detachScene(sceneRoot);
+//            sceneRoot = null;
+//        }
+
+        sceneRoot.removeFromParent();
+
+        if (envs != null) {
+            for (Env env : envs) {
+                env.cleanup();
+            }
         }
         super.cleanup(); 
     }
@@ -151,30 +168,18 @@ public abstract class Scene<T extends SceneData> extends AbstractPlayObject impl
         this.data = data;
     }
     
-    public Spatial getRoot() {
-        return localRoot;
+    public Spatial getSceneRoot() {
+        return sceneRoot;
     }
 
     public Spatial getTerrain() {
-        return terrain != null ? terrain.getModel() : null;
+        return terrainRoot;
     }
 
     public PhysicsSpace getPhysicsSpace() {
         return data.isUsePhysics() ? bulletAppState.getPhysicsSpace() : null;
     }
-    
-    /**
-     * 添加节点到物理空间
-     * @param s 
-     */
-    protected void addPhysicsObject(Spatial s) {
-        if (!data.isUsePhysics() ||  bulletAppState == null || s == null)
-            return;
-        RigidBodyControl rbc = s.getControl(RigidBodyControl.class);
-        if (rbc != null) {
-            bulletAppState.getPhysicsSpace().add(rbc);
-        }
-    }
+
     
     private SceneProcessor createShadowProcessor() {
         DirectionalLightShadowRenderer ssp = new DirectionalLightShadowRenderer(
@@ -187,11 +192,65 @@ public abstract class Scene<T extends SceneData> extends AbstractPlayObject impl
     }
     
     /**
+     * 添加物体到场景中
+     * @param spatial 
+     */
+    public void addSceneObject(Spatial spatial) {
+        if (spatial == null)
+            return;
+        
+        sceneRoot.attachChild(spatial);
+        addPhysicsObject(spatial);
+    }
+    
+    /**
+     * 把物体作为地型添加到场景中
+     * @param spatial 
+     */
+    public void addTerrainObject(Spatial spatial) {
+        terrainRoot.attachChild(spatial);
+        addPhysicsObject(spatial);
+    }
+    
+    /**
+     * 添加节点到物理空间
+     * @param s 
+     */
+    private void addPhysicsObject(Spatial s) {
+        if (!data.isUsePhysics() ||  bulletAppState == null || s == null)
+            return;
+        RigidBodyControl rbc = s.getControl(RigidBodyControl.class);
+        if (rbc != null) {
+            bulletAppState.getPhysicsSpace().add(rbc);
+        }
+    }
+    
+    /**
      * 判断一个位置是否为空白区域，即无树木等障碍物之类。
      * @param x
      * @param z
      * @param radius
      * @return 
      */
-    public abstract boolean checkIsEmptyZone(float x, float z, float radius);
+    public boolean checkIsEmptyZone(float x, float z, float radius) {
+        List<Spatial> children = sceneRoot.getChildren();
+        RigidBodyControl rbc;
+        float radiusSquare = radius * radius;
+        for (Spatial s : children) {
+            rbc = s.getControl(RigidBodyControl.class);
+            if (rbc == null) {
+                continue;
+            }
+            if (distanceSquare(x, z, rbc.getPhysicsLocation().x, rbc.getPhysicsLocation().z) < radiusSquare) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    protected double distanceSquare(float x, float z, float otherX, float otherZ) {
+        double dx = x - otherX;
+        double dz = z - otherZ;
+        return dx * dx + dz * dz;
+    }
 }

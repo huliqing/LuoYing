@@ -23,25 +23,18 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.Camera.FrustumIntersect;
 import com.jme3.scene.Geometry;
-import com.jme3.scene.Mesh;
-import com.jme3.scene.Node;
 import com.jme3.scene.SceneGraphVisitor;
 import com.jme3.scene.SceneGraphVisitorAdapter;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.UserData;
-import com.jme3.scene.VertexBuffer;
 import com.jme3.shader.VarType;
 import com.jme3.texture.Texture;
 import com.jme3.util.TempVars;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.fighter.Common;
-import name.huliqing.fighter.object.actor.Actor;
 
 /**
  *
@@ -69,6 +62,11 @@ public class GeometryUtils {
         }
     }
     
+    /**
+     * 查找spatial的根父节点
+     * @param spatial
+     * @return 
+     */
     public static Spatial findRootNode(Spatial spatial) {
         if (spatial.getParent() == null) {
             return spatial;

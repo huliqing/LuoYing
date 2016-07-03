@@ -18,10 +18,9 @@ import name.huliqing.fighter.game.service.ActorService;
 import name.huliqing.fighter.game.service.SkillService;
 import name.huliqing.fighter.game.service.StateService;
 import name.huliqing.fighter.enums.SkillType;
-import name.huliqing.fighter.game.service.GameService;
 import name.huliqing.fighter.game.service.SceneService;
 import name.huliqing.fighter.object.game.Game;
-import name.huliqing.fighter.utils.MyChaseCamera;
+import name.huliqing.fighter.utils.CollisionChaseCamera;
 import name.huliqing.fighter.utils.SceneUtils;
 
 /**
@@ -40,7 +39,7 @@ public class LabPlayState extends NetworkPlayState {
     private final int level = 60;
     
     // 场景跟随相机
-    protected MyChaseCamera chaseCamera;
+    protected CollisionChaseCamera chaseCamera;
     
     private final String[] actorIds = new String[] {
         IdConstants.ACTOR_HARD
@@ -69,8 +68,9 @@ public class LabPlayState extends NetworkPlayState {
         //        initScene(sceneData);
 
                 chaseCamera = SceneUtils.createChaseCam(app.getCamera()
-                        , app.getInputManager()
-                        , gameState.getGame().getScene().getPhysicsSpace());
+                        , app.getInputManager());
+                chaseCamera.setPhysicsSpace(gameState.getGame().getScene().getPhysicsSpace());
+                chaseCamera.addCollisionObject(gameState.getGame().getScene().getTerrain());
         
                 // 载入NPC
                 npc1 = loadActor(FastMath.nextRandomInt(0, actorIds.length - 1));

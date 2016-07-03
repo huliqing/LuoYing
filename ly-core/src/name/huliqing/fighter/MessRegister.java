@@ -102,24 +102,10 @@ import name.huliqing.fighter.object.actor.SkillStore;
 import name.huliqing.fighter.game.mess.MessPlayLoadSavedActor;
 import name.huliqing.fighter.game.mess.MessPlayLoadSavedActorResult;
 import name.huliqing.fighter.game.mess.MessPlayClientExit;
-import static com.jme3.network.serializing.Serializer.registerClass;
 import name.huliqing.fighter.game.mess.MessPlayChangeGameState;
 import name.huliqing.fighter.game.state.ConnData;
 import static com.jme3.network.serializing.Serializer.registerClass;
-import static com.jme3.network.serializing.Serializer.registerClass;
-import static com.jme3.network.serializing.Serializer.registerClass;
-import static com.jme3.network.serializing.Serializer.registerClass;
-import static com.jme3.network.serializing.Serializer.registerClass;
-import static com.jme3.network.serializing.Serializer.registerClass;
-import static com.jme3.network.serializing.Serializer.registerClass;
-import static com.jme3.network.serializing.Serializer.registerClass;
-import static com.jme3.network.serializing.Serializer.registerClass;
-import static com.jme3.network.serializing.Serializer.registerClass;
-import static com.jme3.network.serializing.Serializer.registerClass;
-import static com.jme3.network.serializing.Serializer.registerClass;
-import static com.jme3.network.serializing.Serializer.registerClass;
-import static com.jme3.network.serializing.Serializer.registerClass;
-import static com.jme3.network.serializing.Serializer.registerClass;
+import name.huliqing.fighter.object.env.ModelEnvData;
 
 /**
  *
@@ -170,7 +156,10 @@ public class MessRegister {
         Serializer.registerClass(EffectData.class);
         Serializer.registerClass(EmitterData.class);
         Serializer.registerClass(PositionData.class);
+        
         Serializer.registerClass(EnvData.class);
+        Serializer.registerClass(ModelEnvData.class);
+        
         Serializer.registerClass(GameData.class);
         Serializer.registerClass(HandlerData.class);
         Serializer.registerClass(HitCheckerData.class);

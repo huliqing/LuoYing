@@ -31,32 +31,11 @@ xs:time
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="sceneBase">
-                    <xs:attribute name="trees" use="optional" type="xs:decimal">
+                    <xs:attribute name="randomEnvs" use="optional" type="xs:string">
                         <xs:annotation>
                             <xs:documentation>
-                                关联到树木id，格式如：tree1,tree2,tree3,
-                                注：树木是有碰撞检测的。
-                            </xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
-                    <xs:attribute name="treeSize" use="optional" type="xs:integer">
-                        <xs:annotation>
-                            <xs:documentation>
-                                树的数量
-                            </xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
-                    <xs:attribute name="grasses" use="optional" type="xs:decimal">
-                        <xs:annotation>
-                            <xs:documentation>除了树木之外的其它植被，格式如：grass1,grass2,flower,...
-                            注：plants是没有碰撞检测的。
-                            </xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
-                    <xs:attribute name="grassSize" use="optional" type="xs:integer">
-                        <xs:annotation>
-                            <xs:documentation>
-                                花草的数量
+                                随机环境物体ID，格式："envId|size, envId2|size, ..."
+                                envId关联到环境物体(env.xml), size指定该随机物体的数量。
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
@@ -148,6 +127,13 @@ xs:time
                     <xs:annotation>
                         <xs:documentation>
                             是否调试显示bullet网格。
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="envs" type="xs:string" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>
+                            场景物体，格式："env1,env2,env3,..."
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>

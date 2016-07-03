@@ -4,73 +4,39 @@
  */
 package name.huliqing.fighter.object.scene;
 
-import com.jme3.math.Vector3f;
-import com.jme3.renderer.queue.RenderQueue;
-import com.jme3.scene.Node;
+import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.scene.Spatial;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.EnvData;
-import name.huliqing.fighter.game.service.PlayService;
-import name.huliqing.fighter.loader.Loader;
+import name.huliqing.fighter.object.DataFactory;
 import name.huliqing.fighter.object.env.Env;
-import name.huliqing.fighter.utils.GeometryUtils;
+import name.huliqing.fighter.object.env.ModelEnv;
 
 /**
  * 一个可随机生成树木或草地的场景
  * @author huliqing
  */
 public class RandomScene extends Scene<RandomSceneData> {
-    private final PlayService playService = Factory.get(PlayService.class);
 
-    private Node treeRoot;
-    private Node grassRoot;
-    
-    private List<Env> trees;
+    private List<Env> randomEnv;
     
     public RandomScene() {}
 
     @Override
     public void initialize() {
         super.initialize();
-        treeRoot = new Node("TreeRoot");
-        grassRoot = new Node("GlassRoot");
-        
-        // trees
-        List<EnvData> treesData = data.getTrees();
-        if (treesData != null && !treesData.isEmpty()) {
-            trees = new ArrayList<Env>(treesData.size());
-            for (EnvData treeData : treesData) {
-                // 修正树的高度，不要让树沉在地下之下
-                if (terrain != null) {
-                    GeometryUtils.getTerrainHeight(terrain.getModel(), treeData.getLocation());
-                }
-                treeData.getLocation().subtractLocal(0, 0.5f, 0);
-                Env tree = Loader.loadEnv(treeData);
-                trees.add(tree);
-                treeRoot.attachChild(tree.getModel());
-                addPhysicsObject(tree.getModel());
+
+        // env列表
+        List<EnvData> randomEnvData = data.getRandomEnvs();
+        if (randomEnvData != null && !randomEnvData.isEmpty()) {
+            randomEnv = new ArrayList<Env>();
+            for (EnvData ed : randomEnvData) {
+                Env env = DataFactory.createProcessor(ed);
+                randomEnv.add(env);
+                env.initialize(this);
             }
         }
-        
-        // grass 
-        List<EnvData> grassesData = data.getGrasses();
-        if (grassesData != null && !grassesData.isEmpty()) {
-            for (EnvData grassData : grassesData) {
-                // 修正高度，否则花草可能在地面下
-                if (terrain != null) {
-                    GeometryUtils.getTerrainHeight(terrain.getModel(), grassData.getLocation());
-                }
-                Env grass = Loader.loadEnv(grassData);
-                grassRoot.attachChild(grass.getModel());
-            }
-        }
-        
-        treeRoot.setShadowMode(RenderQueue.ShadowMode.Cast);
-        localRoot.attachChild(treeRoot);
-        localRoot.attachChild(grassRoot);
-        // 需要手动update一次，因为localRoot是直接添加在ViewPort下的
-        localRoot.updateGeometricState();
     }
     
     @Override
@@ -80,6 +46,11 @@ public class RandomScene extends Scene<RandomSceneData> {
 
     @Override
     public void cleanup() {
+         if (randomEnv != null) {
+            for (Env env : randomEnv) {
+                env.cleanup();
+            }
+        }
         super.cleanup(); 
     }
     
@@ -92,22 +63,28 @@ public class RandomScene extends Scene<RandomSceneData> {
      */
     @Override
     public boolean checkIsEmptyZone(float x, float z, float radius) {
-        if (trees == null || trees.isEmpty())
-            return true;
-        float radiusSquare = radius * radius;
-        for (Env tree : trees) {
-            Vector3f loc = tree.getModel().getLocalTranslation();
-            if (distanceSquare(x, z, loc.x, loc.z) < radiusSquare) {
-                return false;
+        if (super.checkIsEmptyZone(x, z, radius)) {
+            RigidBodyControl rbc;
+            float radiusSquare = radius * radius;
+            Spatial model;
+            for (Env s : randomEnv) {
+                if (!(s instanceof ModelEnv)) {
+                    continue;
+                }
+                model = ((ModelEnv) s).getModel();
+                if (model == null) {
+                    continue;
+                }
+                rbc = model.getControl(RigidBodyControl.class);
+                if (rbc == null) {
+                    continue;
+                }
+                if (distanceSquare(x, z, rbc.getPhysicsLocation().x, rbc.getPhysicsLocation().z) < radiusSquare) {
+                    return false;
+                }
             }
         }
         return true;
-    }
-    
-    private double distanceSquare(float x, float z, float otherX, float otherZ) {
-        double dx = x - otherX;
-        double dz = z - otherZ;
-        return dx * dx + dz * dz;
     }
 
 

@@ -18,9 +18,9 @@ public class RayUtils {
      * 检测碰撞物
      * @param origin 射线原点
      * @param direction 射线方向
-     * @param limit
      * @param root 用于检测碰撞的根节点
      * @param store 存放结果
+     * @deprecated 不再使用，可能存在BUG。
      * @return 
      */
     public static CollisionResults collideWith(Vector3f origin, Vector3f direction

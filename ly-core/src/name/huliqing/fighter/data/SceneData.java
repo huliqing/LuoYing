@@ -7,6 +7,7 @@ package name.huliqing.fighter.data;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.network.serializing.Serializable;
+import java.util.List;
 
 /**
  * @author huliqing
@@ -14,9 +15,7 @@ import com.jme3.network.serializing.Serializable;
 @Serializable
 public class SceneData extends ProtoData {
     
-    private EnvData sky;
-    private EnvData terrain;
-    private Vector3f boundary;
+
     
     // 直射光和方向
     private ColorRGBA directionalLightColor;
@@ -36,6 +35,10 @@ public class SceneData extends ProtoData {
     private Vector3f gravity;
     // 是否打开physics调试
     private boolean debugPhysics;
+    // 边界盒
+    private Vector3f boundary;
+    // 环境物体
+    private List<EnvData> envs;
     
     public SceneData() {}
     
@@ -51,21 +54,21 @@ public class SceneData extends ProtoData {
         this.boundary = boundary;
     }
 
-    public EnvData getSky() {
-        return sky;
-    }
-
-    public void setSky(EnvData sky) {
-        this.sky = sky;
-    }
-
-    public EnvData getTerrain() {
-        return terrain;
-    }
-
-    public void setTerrain(EnvData terrain) {
-        this.terrain = terrain;
-    }
+//    public EnvData getSky() {
+//        return sky;
+//    }
+//
+//    public void setSky(EnvData sky) {
+//        this.sky = sky;
+//    }
+//
+//    public EnvData getTerrain() {
+//        return terrain;
+//    }
+//
+//    public void setTerrain(EnvData terrain) {
+//        this.terrain = terrain;
+//    }
 
     public ColorRGBA getDirectionalLightColor() {
         return directionalLightColor;
@@ -121,6 +124,14 @@ public class SceneData extends ProtoData {
 
     public void setDebugPhysics(boolean debugPhysics) {
         this.debugPhysics = debugPhysics;
+    }
+
+    public List<EnvData> getEnvs() {
+        return envs;
+    }
+
+    public void setEnvs(List<EnvData> envs) {
+        this.envs = envs;
     }
     
 }
