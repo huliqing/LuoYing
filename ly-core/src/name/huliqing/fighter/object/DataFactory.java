@@ -37,6 +37,7 @@ import name.huliqing.fighter.object.env.PlantEnvLoader;
 import name.huliqing.fighter.object.env.SkyEnv;
 import name.huliqing.fighter.object.env.TerrainEnv;
 import name.huliqing.fighter.object.env.TreeEnv;
+import name.huliqing.fighter.object.env.WaterEnv;
 import name.huliqing.fighter.object.game.Game;
 import name.huliqing.fighter.object.game.GameLoader;
 import name.huliqing.fighter.object.game.StoryGbGame;
@@ -243,6 +244,7 @@ public class DataFactory {
         register("envTerrain", EnvData.class, EnvLoader.class, TerrainEnv.class);
         register("envTree", EnvData.class, PlantEnvLoader.class, TreeEnv.class);
         register("envGrass", EnvData.class, PlantEnvLoader.class, Env.class);
+        register("envWater", EnvData.class, EnvLoader.class, WaterEnv.class);
         
         // States
         register("stateAttribute", StateData.class, StateLoader.class, AttributeState.class);

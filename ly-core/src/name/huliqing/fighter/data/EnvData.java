@@ -17,6 +17,7 @@ import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 public class EnvData extends ProtoData {
 
     private String file;
+    // 注意不要在这里使用final关键字，否则Serializable无法重建参数
     private Vector3f location = new Vector3f();
     private Quaternion rotation = new Quaternion();
     private Vector3f scale = new Vector3f(1,1,1);

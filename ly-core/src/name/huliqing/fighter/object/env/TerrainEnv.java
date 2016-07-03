@@ -4,14 +4,8 @@
  */
 package name.huliqing.fighter.object.env;
 
-import com.jme3.material.MatParam;
-import com.jme3.material.Material;
 import com.jme3.scene.Spatial;
-import com.jme3.terrain.geomipmap.TerrainLodControl;
-import com.jme3.util.ListMap;
-import java.util.List;
 import name.huliqing.fighter.data.EnvData;
-import name.huliqing.fighter.utils.GeometryUtils;
 
 /**
  * 地面模型。

@@ -13,13 +13,14 @@ import name.huliqing.fighter.object.DataProcessor;
 
 /**
  * @author huliqing
+ * @param <T>
  */
 public class Env<T extends EnvData> implements DataProcessor<T>{
     
     protected T data;
     // 模型
     protected Spatial model;
-    protected boolean loaded;
+    private boolean loaded;
     
     /**
      * 获取模型
