@@ -4,6 +4,7 @@
  */
 package name.huliqing.fighter.object.game;
 
+import com.jme3.app.Application;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.constants.IdConstants;
@@ -27,11 +28,11 @@ public class StoryGbTaskLogic extends IntervalLogic {
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
 
     // 需要获得树根的数量
-    private int total;
+    private final int total;
     // 当前已经获得的数量
     private int count;
     // player
-    private Actor player;
+    private final Actor player;
     
     private TextPanelView tpv;
     
@@ -42,8 +43,8 @@ public class StoryGbTaskLogic extends IntervalLogic {
     }
 
     @Override
-    public void initialize() {
-        super.initialize();
+    public void initialize(Application app) {
+        super.initialize(app);
         tpv = (TextPanelView) viewService.loadView(IdConstants.VIEW_TEXT_PANEL_VIEW_GB);
         tpv.setTitle(ResourceManager.getObjectName(IdConstants.GAME_STORY_GB));
         playNetwork.addView(tpv);

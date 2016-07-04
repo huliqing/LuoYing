@@ -4,6 +4,8 @@
  */
 package name.huliqing.fighter.object;
 
+import com.jme3.app.Application;
+
 /**
  * 带有逻辑行为的物体（不要去继承PlayObject,保持与PlayObject的平行关系。）
  * @author huliqing
@@ -12,8 +14,9 @@ public interface PlayObject {
 
     /**
      * 初始化物体
+     * @param app
      */
-    public void initialize();
+    public void initialize(Application app);
 
     /**
      * 判断是否已经初始化

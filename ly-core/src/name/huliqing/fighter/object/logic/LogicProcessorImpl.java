@@ -4,6 +4,7 @@
  */
 package name.huliqing.fighter.object.logic;
 
+import com.jme3.app.Application;
 import com.jme3.util.SafeArrayList;
 import name.huliqing.fighter.object.actor.Actor;
 
@@ -13,10 +14,12 @@ import name.huliqing.fighter.object.actor.Actor;
  */
 public class LogicProcessorImpl implements LogicProcessor {
     
-    private Actor actor;
+    private final Application app;
+    private final Actor actor;
     private final SafeArrayList<ActorLogic> logics = new SafeArrayList<ActorLogic>(ActorLogic.class);
 
-    public LogicProcessorImpl(Actor actor) {
+    public LogicProcessorImpl(Application app, Actor actor) {
+        this.app = app;
         this.actor = actor;
     }
     
@@ -31,7 +34,7 @@ public class LogicProcessorImpl implements LogicProcessor {
     public void addLogic(ActorLogic logic) {
         if (!logics.contains(logic)) {
             logic.setSelf(actor);
-            logic.initialize();
+            logic.initialize(app);
             logics.add(logic);
         }
     }

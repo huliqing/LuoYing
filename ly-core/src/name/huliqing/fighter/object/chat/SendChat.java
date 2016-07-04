@@ -4,6 +4,7 @@
  */
 package name.huliqing.fighter.object.chat;
 
+import com.jme3.app.Application;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -100,8 +101,8 @@ public class SendChat extends Chat {
     }
 
     @Override
-    public void initialize() {
-        super.initialize();
+    public void initialize(Application app) {
+        super.initialize(app);
         
         // 记住卖者
         sender = playService.getPlayer();

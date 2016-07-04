@@ -4,6 +4,7 @@
  */
 package name.huliqing.fighter.game.state;
 
+import com.jme3.app.Application;
 import com.jme3.scene.Spatial;
 import name.huliqing.fighter.ui.UIUtils;
 import name.huliqing.fighter.Common;
@@ -47,13 +48,13 @@ public class LanPlayStateUI extends PlayStateUI {
     }
 
     @Override
-    public void initialize() {
+    public void initialize(Application app) {
         // UI在LanPlayState中的initialize中进行了手动ui.initialize()，所以这里
         // 要避免重复载入
         if (isInitialized()) {
             return;
         }
-        super.initialize();
+        super.initialize(app);
         
         // UI size
         float fullWidth = Common.getSettings().getWidth();

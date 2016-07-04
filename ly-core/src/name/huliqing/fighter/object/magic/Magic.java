@@ -4,6 +4,7 @@
  */
 package name.huliqing.fighter.object.magic;
 
+import com.jme3.app.Application;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
@@ -30,6 +31,7 @@ import name.huliqing.fighter.utils.MathUtils;
 /**
  *
  * @author huliqing
+ * @param <T>
  */
 public class Magic<T extends MagicData> extends AbstractPlayObject implements DataProcessor<T>{
     private final PlayService playService = Factory.get(PlayService.class);
@@ -98,8 +100,8 @@ public class Magic<T extends MagicData> extends AbstractPlayObject implements Da
     }
     
     @Override
-    public void initialize() {
-        super.initialize();
+    public void initialize(Application app) {
+        super.initialize(app);
         
         if (data.getLocation() != null) {
             localRoot.setLocalTranslation(data.getLocation());

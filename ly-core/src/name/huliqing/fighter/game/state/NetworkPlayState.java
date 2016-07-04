@@ -7,7 +7,6 @@ package name.huliqing.fighter.game.state;
 
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
-import com.jme3.input.ChaseCamera;
 import com.jme3.math.Vector3f;
 import java.util.List;
 import name.huliqing.fighter.Common;
@@ -18,7 +17,6 @@ import name.huliqing.fighter.game.service.PlayService;
 import name.huliqing.fighter.game.state.lan.Network;
 import name.huliqing.fighter.game.view.ActorSelectView;
 import name.huliqing.fighter.game.view.ClientsWin;
-import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.object.anim.Anim;
 import name.huliqing.fighter.object.anim.Listener;
 import name.huliqing.fighter.object.anim.ScaleAnim;
@@ -54,7 +52,7 @@ public abstract class NetworkPlayState extends PlayState implements LanGame {
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app); 
         // 初始化Network
-        network.initialize();
+        network.initialize(app);
     }
 
     @Override

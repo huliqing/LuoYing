@@ -28,11 +28,6 @@ public class TalkManager extends AbstractPlayObject {
     }
 
     @Override
-    public void initialize() {
-        super.initialize(); 
-    }
-
-    @Override
     public void update(float tpf) {
         if (talks.isEmpty())
             return;

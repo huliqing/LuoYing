@@ -4,6 +4,7 @@
  */
 package name.huliqing.fighter.object.state;
 
+import com.jme3.app.Application;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.fighter.Factory;
@@ -20,6 +21,7 @@ import name.huliqing.fighter.object.effect.Effect;
 /**
  * 注意状态有一个更新频率
  * @author huliqing
+ * @param <T>
  */
 public class State<T extends StateData> extends AbstractPlayObject implements DataProcessor<T>{
     private final PlayService playService = Factory.get(PlayService.class);
@@ -71,8 +73,8 @@ public class State<T extends StateData> extends AbstractPlayObject implements Da
     }
     
     @Override
-    public void initialize() {
-        super.initialize();
+    public void initialize(Application app) {
+        super.initialize(app);
         if (data.getEffects() != null) {
             if (tempEffects == null) {
                 tempEffects = new ArrayList<Effect>(data.getEffects().length);

@@ -4,6 +4,7 @@
  */
 package name.huliqing.fighter.object.game;
 
+import com.jme3.app.Application;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.fighter.Factory;
@@ -45,8 +46,8 @@ public abstract class StoryGame extends Game {
     }
 
     @Override
-    public final void initialize() {
-        super.initialize();
+    public final void initialize(Application app) {
+        super.initialize(app);
         finishCount = 0;
         current = null;
         

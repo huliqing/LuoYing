@@ -4,6 +4,7 @@
  */
 package name.huliqing.fighter.game.state;
 
+import com.jme3.app.Application;
 import name.huliqing.fighter.Common;
 import name.huliqing.fighter.game.view.SettingView;
 import name.huliqing.fighter.game.view.ToolsView;
@@ -34,8 +35,8 @@ public abstract class PlayStateUI extends IntervalLogic {
     }
     
     @Override
-    public void initialize() {
-        super.initialize();
+    public void initialize(Application app) {
+        super.initialize(app);
         
         // 设置面板是公共必须有的
         float sw = Common.getSettings().getWidth();

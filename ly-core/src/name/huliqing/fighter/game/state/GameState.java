@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import name.huliqing.fighter.Common;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.Fighter;
 import name.huliqing.fighter.data.GameData;
@@ -62,7 +63,7 @@ public abstract class GameState extends AbstractAppState {
     protected Fighter app;
     
     // 管理所有的PlayObject的运行
-    protected final PlayManager playManager = new PlayManager(PlayObject.class);
+    protected final PlayManager playManager = new PlayManager(Common.getApp(), PlayObject.class);
     
     // 侦听器
     protected final List<PlayListener> listeners = new ArrayList<PlayListener>();

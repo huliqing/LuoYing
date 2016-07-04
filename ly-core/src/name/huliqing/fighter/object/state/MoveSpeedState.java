@@ -4,6 +4,7 @@
  */
 package name.huliqing.fighter.object.state;
 
+import com.jme3.app.Application;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.StateData;
 import name.huliqing.fighter.enums.SkillType;
@@ -36,8 +37,8 @@ public class MoveSpeedState extends AttributeState {
     }
 
     @Override
-    public void initialize() {
-        super.initialize();
+    public void initialize(Application app) {
+        super.initialize(app);
         
         // 如果角色当前正在执行“跑路”技能，则强制重新执行，以适应速度的变化。
         Skill running = skillService.getPlayingSkill(actor, SkillType.run);

@@ -4,6 +4,7 @@
  */
 package name.huliqing.fighter.object.state;
 
+import com.jme3.app.Application;
 import name.huliqing.fighter.object.PlayManager;
 import name.huliqing.fighter.object.actor.Actor;
 
@@ -13,11 +14,12 @@ import name.huliqing.fighter.object.actor.Actor;
  */
 public class StateProcessorImpl implements StateProcessor {
     
-    private final PlayManager<State> pm = new PlayManager<State>(State.class);
-    private Actor actor;
+    private final PlayManager<State> pm;
+    private final Actor actor;
     
-    public StateProcessorImpl(Actor actor) {
+    public StateProcessorImpl(Application app, Actor actor) {
         this.actor = actor;
+        pm = new PlayManager<State>(app, State.class);
     }
     
     @Override

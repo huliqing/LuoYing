@@ -4,6 +4,7 @@
  */
 package name.huliqing.fighter.object.logic;
 
+import com.jme3.app.Application;
 import com.jme3.math.FastMath;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -63,8 +64,8 @@ public class DefendLogic extends ActorLogic implements SkillListener, ActorListe
     }
     
     @Override
-    public void initialize() {
-        super.initialize();
+    public void initialize(Application app) {
+        super.initialize(app);
         actorService.addActorListener(self, this);
     }
 

@@ -4,6 +4,7 @@
  */
 package name.huliqing.fighter.object.chat;
 
+import com.jme3.app.Application;
 import com.jme3.font.BitmapFont;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -111,8 +112,8 @@ public class SellChat extends Chat {
     
 
     @Override
-    public void initialize() {
-        super.initialize();
+    public void initialize(Application app) {
+        super.initialize(app);
         
         // 记住卖者
         seller = playService.getPlayer();

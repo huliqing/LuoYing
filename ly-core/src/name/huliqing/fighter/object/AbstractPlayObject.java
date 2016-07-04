@@ -4,6 +4,8 @@
  */
 package name.huliqing.fighter.object;
 
+import com.jme3.app.Application;
+
 /**
  *
  * @author huliqing
@@ -13,7 +15,7 @@ public abstract class AbstractPlayObject implements PlayObject {
     protected boolean initialized = false;
 
     @Override
-    public void initialize() {
+    public void initialize(Application app) {
         initialized = true;
     }
 

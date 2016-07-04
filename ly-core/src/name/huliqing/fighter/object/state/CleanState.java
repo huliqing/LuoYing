@@ -4,6 +4,7 @@
  */
 package name.huliqing.fighter.object.state;
 
+import com.jme3.app.Application;
 import java.util.List;
 import java.util.logging.Logger;
 import name.huliqing.fighter.Factory;
@@ -18,7 +19,7 @@ import name.huliqing.fighter.object.actor.StateListener;
  * @author huliqing
  */
 public class CleanState extends State implements StateListener {
-    private static final Logger LOG = Logger.getLogger(CleanState.class.getName());
+//    private static final Logger LOG = Logger.getLogger(CleanState.class.getName());
     
     private final StateService stateService = Factory.get(StateService.class);
 
@@ -31,8 +32,8 @@ public class CleanState extends State implements StateListener {
     }
 
     @Override
-    public void initialize() {
-        super.initialize();
+    public void initialize(Application app) {
+        super.initialize(app);
         // 添加侦听器，以便侦听角色状态的变更。
         stateService.addListener(actor, this);
         

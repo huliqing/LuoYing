@@ -4,8 +4,10 @@
  */
 package name.huliqing.fighter.object.game;
 
+import com.jme3.app.Application;
 import java.util.ArrayList;
 import java.util.List;
+import name.huliqing.fighter.Common;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.GameData;
 import name.huliqing.fighter.game.service.PlayService;
@@ -39,6 +41,8 @@ public  class Game<T extends GameData> extends AbstractPlayObject implements Dat
     protected T data;
     
     // ---- inner
+    private Application app;
+    
     // 游戏侦听器
     protected List<GameListener> listeners; 
     
@@ -48,7 +52,7 @@ public  class Game<T extends GameData> extends AbstractPlayObject implements Dat
     // 场景逻辑
     protected Scene scene;
     // 扩展逻辑
-    protected final PlayManager playManager = new PlayManager(PlayObject.class);
+    protected final PlayManager playManager = new PlayManager(Common.getApp(), PlayObject.class);
 
     @Override
     public void initData(T data) {
@@ -61,14 +65,15 @@ public  class Game<T extends GameData> extends AbstractPlayObject implements Dat
     }
 
     @Override
-    public void initialize() {
-        super.initialize();
+    public void initialize(Application app) {
+        super.initialize(app);
+        this.app = app;
         // 场景需要优先载入。然后再载入扩展逻辑，因为部分扩展逻辑可能需要依赖于场景中的物体。比如一些扩展逻辑可能需要
         // 确定场景地面已经载入之后才可以载入角色，否则角色可能直接就掉到下面去了.
         if (scene == null && data.getSceneData() != null) {
             scene = sceneService.loadScene(data.getSceneData());
             addLogic(scene);
-            scene.initialize();
+            scene.initialize(app);
             if (listeners != null) {
                 for (GameListener gl : listeners) {
                     gl.onSceneLoaded();
@@ -112,7 +117,7 @@ public  class Game<T extends GameData> extends AbstractPlayObject implements Dat
         this.scene = scene;
         // 提前载入场景,必须的
         addLogic(this.scene);
-        this.scene.initialize();
+        this.scene.initialize(app);
     }
     
     /**

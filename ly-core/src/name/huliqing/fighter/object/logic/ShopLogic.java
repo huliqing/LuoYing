@@ -4,6 +4,7 @@
  */
 package name.huliqing.fighter.object.logic;
 
+import com.jme3.app.Application;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.LogicData;
 import name.huliqing.fighter.data.ProtoData;
@@ -21,12 +22,12 @@ public class ShopLogic extends ActorLogic {
     private final ProtoNetwork protoNetwork = Factory.get(ProtoNetwork.class);
     private final ProtoService protoService = Factory.get(ProtoService.class);
     
-    private Product[] products;
+    private final Product[] products;
     // 进货速度，如：1.0 表示每秒进货一件（每件未达到maxCount的商品各进货一件）
     // 如:0.1 则表示10秒进货一件，依此类推
-    private float stockSpeed;
+    private final float stockSpeed;
     // 是否初始化时把货物进满
-    private boolean initStock;
+    private final boolean initStock;
 
     // ---- inner
     // remainCount为进货是不足1件的进货量，将累计到下一次足以达到1件以上的进货量
@@ -57,8 +58,8 @@ public class ShopLogic extends ActorLogic {
     }
     
     @Override
-    public void initialize() {
-        super.initialize();
+    public void initialize(Application app) {
+        super.initialize(app);
         
         if (initStock) {
             initStockProduct();

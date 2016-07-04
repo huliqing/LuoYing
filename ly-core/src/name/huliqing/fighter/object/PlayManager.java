@@ -1,5 +1,6 @@
 package name.huliqing.fighter.object;
  
+import com.jme3.app.Application;
 import com.jme3.util.SafeArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -20,8 +21,11 @@ public final class PlayManager<T extends PlayObject> {
     
     // 待清理的列表。
     private final SafeArrayList<T> terminating;
+    
+    private final Application app;
  
-    public PlayManager(Class<T> type){
+    public PlayManager(Application app, Class<T> type){
+        this.app = app;
         initializing = new SafeArrayList<T>(type);
         states = new SafeArrayList<T>(type);
         terminating = new SafeArrayList<T>(type);
@@ -149,7 +153,7 @@ public final class PlayManager<T extends PlayObject> {
                 continue;
             }
             
-            state.initialize();
+            state.initialize(app);
         }
     }
     

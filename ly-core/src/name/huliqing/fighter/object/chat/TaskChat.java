@@ -4,7 +4,7 @@
  */
 package name.huliqing.fighter.object.chat;
 
-import com.jme3.math.ColorRGBA;
+import com.jme3.app.Application;
 import com.jme3.math.FastMath;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.constants.ResConstants;
@@ -31,10 +31,10 @@ import name.huliqing.fighter.ui.Window;
  * @author huliqing
  */
 public class TaskChat extends Chat {
-    private final static PlayService playService = Factory.get(PlayService.class);
-    private final static TaskService taskService = Factory.get(TaskService.class);
-    private final static ActorService actorService = Factory.get(ActorService.class);
-    private final static UserCommandNetwork userCommandNetwork = Factory.get(UserCommandNetwork.class);
+    private final PlayService playService = Factory.get(PlayService.class);
+    private final TaskService taskService = Factory.get(TaskService.class);
+    private final ActorService actorService = Factory.get(ActorService.class);
+    private final UserCommandNetwork userCommandNetwork = Factory.get(UserCommandNetwork.class);
 
     // 任务角色的类型
     private enum Role {
@@ -54,8 +54,8 @@ public class TaskChat extends Chat {
         }
     }
     
-    private String taskId;
-    private Role role;
+    private final String taskId;
+    private final Role role;
     
     // ---- inner
     private TaskRequestPanel requestPanel;
@@ -78,14 +78,9 @@ public class TaskChat extends Chat {
         return requestPanel;
     }
 
-//    @Override
-//    protected void displayChatUI(UI ui) {
-//        super.displayChatUI(ui); 
-//    }
-
     @Override
-    public void initialize() {
-        super.initialize();
+    public void initialize(Application app) {
+        super.initialize(app);
         // fix bug:如果requestPanel已经存在，即可能已经接过任务，则先移除，
         // 避免在接过任务后，在再次对话的时候仍然看到requestPanel
         if (requestPanel != null) {

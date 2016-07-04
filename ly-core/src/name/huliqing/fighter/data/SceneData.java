@@ -15,8 +15,6 @@ import java.util.List;
 @Serializable
 public class SceneData extends ProtoData {
     
-
-    
     // 直射光和方向
     private ColorRGBA directionalLightColor;
     private Vector3f directionalLightDir;

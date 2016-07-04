@@ -4,6 +4,7 @@
  */
 package name.huliqing.fighter.object.scene;
 
+import com.jme3.app.Application;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.control.RigidBodyControl;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.fighter.Common;
 import name.huliqing.fighter.Factory;
+import name.huliqing.fighter.constants.ModelConstants;
 import name.huliqing.fighter.data.EnvData;
 import name.huliqing.fighter.data.SceneData;
 import name.huliqing.fighter.game.service.ConfigService;
@@ -61,8 +63,8 @@ public abstract class Scene<T extends SceneData> extends AbstractPlayObject impl
     public Scene() {}
     
     @Override
-    public void initialize() {
-        super.initialize(); 
+    public void initialize(Application app) {
+        super.initialize(app); 
         sceneRoot = new Node("SceneRoot");
         terrainRoot = new Node("terrainRoot");
         sceneRoot.attachChild(terrainRoot);
@@ -85,7 +87,7 @@ public abstract class Scene<T extends SceneData> extends AbstractPlayObject impl
         
         // boundary边界盒
         if (data.getBoundary() != null) {
-            boundaryGeo = Loader.loadModel("Scenes/boundary/boundaryBox.j3o");
+            boundaryGeo = Loader.loadModel(ModelConstants.MODEL_BOUNDARY);
             boundaryGeo.setLocalScale(data.getBoundary().mult(2));
             boundaryGeo.setCullHint(Spatial.CullHint.Always);
             boundaryGeo.addControl(new RigidBodyControl(0));
@@ -126,7 +128,7 @@ public abstract class Scene<T extends SceneData> extends AbstractPlayObject impl
             for (EnvData ed : edList) {
                 Env env = DataFactory.createProcessor(ed);
                 envs.add(env);
-                env.initialize(this);
+                env.initialize(app, this);
             }
         }
     }

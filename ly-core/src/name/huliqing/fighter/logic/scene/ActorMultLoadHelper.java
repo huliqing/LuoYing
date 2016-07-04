@@ -4,6 +4,7 @@
  */
 package name.huliqing.fighter.logic.scene;
 
+import com.jme3.app.Application;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
@@ -35,8 +36,8 @@ public abstract class ActorMultLoadHelper extends IntervalLogic {
     private boolean end;
     
     /**
-     * 指定要载入的角色ID
-     * @param actorId 
+     * 指定要载入的角色ID 
+     * @param actorIds
      */
     public ActorMultLoadHelper(String... actorIds) {
         super(0);
@@ -44,8 +45,8 @@ public abstract class ActorMultLoadHelper extends IntervalLogic {
     }
 
     @Override
-    public void initialize() {
-        super.initialize();
+    public void initialize(Application app) {
+        super.initialize(app);
         end = false;
     }
     

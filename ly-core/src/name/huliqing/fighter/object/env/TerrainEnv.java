@@ -4,6 +4,7 @@
  */
 package name.huliqing.fighter.object.env;
 
+import com.jme3.app.Application;
 import com.jme3.scene.Spatial;
 import name.huliqing.fighter.object.scene.Scene;
 
@@ -15,8 +16,8 @@ import name.huliqing.fighter.object.scene.Scene;
 public class TerrainEnv<T extends ModelEnvData> extends ModelEnv<T> {
 
     @Override
-    public void initialize(Scene scene) {
-        super.initialize(scene);
+    public void initialize(Application app, Scene scene) {
+        super.initialize(app, scene);
     }
     
     @Override

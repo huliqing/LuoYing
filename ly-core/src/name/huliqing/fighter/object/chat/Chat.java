@@ -4,10 +4,10 @@
  */
 package name.huliqing.fighter.object.chat;
 
+import com.jme3.app.Application;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.constants.ResConstants;
 import name.huliqing.fighter.data.ChatData;
-import name.huliqing.fighter.game.service.ActorService;
 import name.huliqing.fighter.game.service.PlayService;
 import name.huliqing.fighter.loader.Loader;
 import name.huliqing.fighter.manager.ResourceManager;
@@ -77,8 +77,8 @@ public abstract class Chat extends AbstractPlayObject {
     }
     
     @Override
-    public void initialize() {
-        super.initialize();
+    public void initialize(Application app) {
+        super.initialize(app);
         // 检查是否可见
         if (!isVisibleForPlayer()) {
             playService.removeObject(this);

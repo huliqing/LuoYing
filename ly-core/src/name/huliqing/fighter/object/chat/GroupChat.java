@@ -4,6 +4,7 @@
  */
 package name.huliqing.fighter.object.chat;
 
+import com.jme3.app.Application;
 import com.jme3.font.BitmapFont;
 import com.jme3.math.ColorRGBA;
 import java.util.ArrayList;
@@ -93,8 +94,8 @@ public class GroupChat extends Chat {
    
 
     @Override
-    public void initialize() {
-        super.initialize();
+    public void initialize(Application app) {
+        super.initialize(app);
         
         // 更新title
         title.setTitle(getChatName() + "-" + actorService.getName(actor));

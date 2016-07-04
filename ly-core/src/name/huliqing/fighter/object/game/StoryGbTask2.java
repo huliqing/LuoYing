@@ -4,6 +4,7 @@
  */
 package name.huliqing.fighter.object.game;
 
+import com.jme3.app.Application;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
@@ -267,8 +268,8 @@ public class StoryGbTask2 extends GameTaskBase{
         private boolean end;
 
         @Override
-        public void initialize() {
-            super.initialize(); 
+        public void initialize(Application app) {
+            super.initialize(app); 
             end = false;
         }
         

@@ -105,7 +105,7 @@ public  class SimpleGameState extends GameState implements UIEventListener {
         
         // TODO: UI在这里进行了手动初始化，有些不合理，后续考虑重构
         ui = new LanPlayStateUI(this);
-        ui.initialize();
+        ui.initialize(app);
         addObject(ui, false);
         
         // ==== 3.初始化事件绑定

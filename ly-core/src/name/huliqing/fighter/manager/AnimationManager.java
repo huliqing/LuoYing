@@ -4,6 +4,7 @@
  */
 package name.huliqing.fighter.manager;
 
+import com.jme3.app.Application;
 import com.jme3.util.SafeArrayList;
 import name.huliqing.fighter.object.AbstractPlayObject;
 import name.huliqing.fighter.object.animation.Animation;
@@ -25,8 +26,8 @@ public class AnimationManager extends AbstractPlayObject {
     }
     
     @Override
-    public void initialize() {
-        super.initialize();
+    public void initialize(Application app) {
+        super.initialize(app);
     }
     
     public void startAnimation(Animation animation) {

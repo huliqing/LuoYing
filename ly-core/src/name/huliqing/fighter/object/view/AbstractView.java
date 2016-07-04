@@ -4,6 +4,7 @@
  */
 package name.huliqing.fighter.object.view;
 
+import com.jme3.app.Application;
 import com.jme3.math.Vector3f;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.ViewData;
@@ -166,7 +167,8 @@ public abstract class AbstractView extends AbstractPlayObject implements View, N
 
     /**
      * 添加同步数据,等待同步
-     * @param syncData
+     * @param key
+     * @param value
      */
     protected final void putSyncData(String key, Object value) {
         if (!isSyncEnabled()) 
@@ -175,8 +177,8 @@ public abstract class AbstractView extends AbstractPlayObject implements View, N
     }
 
     @Override
-    public final void initialize() {
-        super.initialize(); 
+    public final void initialize(Application app) {
+        super.initialize(app); 
         
         // 1.初始化View
         doViewInit();

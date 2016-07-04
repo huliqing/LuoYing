@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jme3tools.optimize.GeometryBatchFactory;
+import name.huliqing.fighter.Common;
 import name.huliqing.fighter.Config;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.constants.IdConstants;
@@ -60,7 +61,7 @@ import name.huliqing.fighter.utils.GeometryUtils;
  * @author huliqing
  */
 public class ActorLoader {
-    private final static Logger logger = Logger.getLogger(ActorLoader.class.getName());
+    private final static Logger LOG = Logger.getLogger(ActorLoader.class.getName());
     
     /**
      * character
@@ -85,7 +86,7 @@ public class ActorLoader {
         String actorFile = data.getProto().getFile();
         
         if (Config.debug) {
-            logger.log(Level.INFO, "Load actor file={0}", actorFile);
+            LOG.log(Level.INFO, "Load actor file={0}", actorFile);
         }
         
         // 需要确保最外层是Node类
@@ -173,10 +174,10 @@ public class ActorLoader {
         }
         
         // =====.行为,技能,和逻辑
-        LogicProcessor logicProcessor = new LogicProcessorImpl(actor);
+        LogicProcessor logicProcessor = new LogicProcessorImpl(Common.getApp(), actor);
         ActionProcessor actionProcessor = new ActionProcessor();
         SkillProcessor skillProcessor = new SkillProcessorImpl(actor);
-        StateProcessor stateProcessor = new StateProcessorImpl(actor);
+        StateProcessor stateProcessor = new StateProcessorImpl(Common.getApp(), actor);
         ResistProcessor resistProcessor = new ResistProcessor();
         TalentProcessor talentProcessor = new TalentProcessorImpl(actor);
         actor.setLogicProcessor(logicProcessor);
@@ -262,7 +263,7 @@ public class ActorLoader {
     public static boolean loadExtAnim(Actor actor, String animName) {
         String animDir = actor.getData().getAttribute("extAnim");
         if (animDir == null) {
-            logger.log(Level.WARNING, "Actor {0} no have a extAnim defined"
+            LOG.log(Level.WARNING, "Actor {0} no have a extAnim defined"
                     + ", could not load anim {1}", new Object[] {actor.getData().getId(), animName});
             return false;
         }
@@ -272,7 +273,7 @@ public class ActorLoader {
             GeometryUtils.addSkeletonAnim(animExtModel, actor.getModel());
             return true;
         } catch (Exception e) {
-            logger.log(Level.WARNING, "Could not load extAnim, actor={0}, animName={1}, exception={2}"
+            LOG.log(Level.WARNING, "Could not load extAnim, actor={0}, animName={1}, exception={2}"
                     , new Object[] {actor.getData().getId(), animName, e.getMessage()});
         }
         return false;

@@ -194,22 +194,24 @@ public class CollisionChaseCamera extends ChaseCamera implements PhysicsCollisio
         // 1.让collisionChecker与相机位置保持一致.
         Vector3f loc = collisionChecker.getLocalTranslation();
         Vector3f camLoc = cam.getLocation();
-        if (FastMath.abs(loc.x - camLoc.x) > 0.0001f || FastMath.abs(loc.y - camLoc.y) > 0.0001f || FastMath.abs(loc.z - camLoc.z) > 0.0001f) {
+        if (FastMath.abs(loc.x - camLoc.x) > 0.0001f 
+                || FastMath.abs(loc.y - camLoc.y) > 0.0001f 
+                || FastMath.abs(loc.z - camLoc.z) > 0.0001f) {
             collisionChecker.setLocalTranslation(cam.getLocation());
         }
         
         // 2.防止相机穿墙，当collisionTarget不为null时说明相机已经与某些物体发生碰撞，这时需要偿试调整相机的位置。
         if (collisionTarget != null) {
 //            logger.log(Level.INFO, "Need to fix collision with={0}", new Object[] {collisionTarget});
+
             // fixingCameraDistance方法用于拉近相机，以避免穿墙，这是一个持续的过程，如果该方法返回true,则说明正在持续
             // 修正（拉近）相机距离，这时不能释放collisionTarget, 因为该方法的修正会在下一帧被ChaseCamera的默认行为重置，
             // 所以这个方法必须持续进行，直到相机不产生碰撞才能释放。
-            
-            // 当该方法返回false时，说明相机已经不会碰撞到其它物体，则可
-            // 释放collisionTarget,即不再需要修正距离。
             if (fixingCameraDistance(collisionTarget)) {
                 collisionChecker.setLocalTranslation(cam.getLocation());
             } else {
+                // 当该方法返回false时，说明相机已经不会碰撞到其它物体，则可
+                // 释放collisionTarget,即不再需要修正距离。
                 collisionTarget = null;
             }
         }

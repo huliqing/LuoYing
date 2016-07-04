@@ -4,6 +4,7 @@
  */
 package name.huliqing.fighter.object.magic;
 
+import com.jme3.app.Application;
 import java.util.List;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.MagicData;
@@ -56,8 +57,8 @@ public class AttributeHitMagic extends Magic {
     }
 
     @Override
-    public void initialize() {
-        super.initialize();
+    public void initialize(Application app) {
+        super.initialize(app);
         distanceSquared = distance * distance;
     }
 

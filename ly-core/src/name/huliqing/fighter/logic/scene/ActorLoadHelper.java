@@ -4,6 +4,7 @@
  */
 package name.huliqing.fighter.logic.scene;
 
+import com.jme3.app.Application;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
@@ -42,8 +43,8 @@ public abstract class ActorLoadHelper extends IntervalLogic {
     }
 
     @Override
-    public void initialize() {
-        super.initialize(); 
+    public void initialize(Application app) {
+        super.initialize(app); 
         end = false;
     }
     

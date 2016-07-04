@@ -5,6 +5,7 @@
  */
 package name.huliqing.fighter.object.env;
 
+import com.jme3.app.Application;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.scene.Spatial;
 import name.huliqing.fighter.data.ProtoData;
@@ -21,17 +22,14 @@ public class ModelEnv<T extends ModelEnvData> extends Env<T> {
     // 模型
     protected Spatial model;
     protected boolean loaded;
-    
-    /**
-     * 获取模型
-     * @return 
-     */
-    public Spatial getModel() {
-        return model;
+
+    @Override
+    public void initData(T data) {
+        super.initData(data); 
     }
 
     @Override
-    public void initialize(Scene scene) {
+    public void initialize(Application app, Scene scene) {
         if (!loaded) {
             model = loadModel();
             loaded = true;
@@ -41,6 +39,14 @@ public class ModelEnv<T extends ModelEnvData> extends Env<T> {
         } else {
             scene.addSceneObject(model);
         }
+    }
+
+    /**
+     * 获取模型
+     * @return 
+     */
+    public Spatial getModel() {
+        return model;
     }
 
     /**

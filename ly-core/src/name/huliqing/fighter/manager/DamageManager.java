@@ -4,6 +4,7 @@
  */
 package name.huliqing.fighter.manager;
 
+import com.jme3.app.Application;
 import com.jme3.font.BitmapFont;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
@@ -59,11 +60,6 @@ public class DamageManager extends AbstractPlayObject {
     
     public static DamageManager getInstance() {
         return INSTANCE;
-    }
-
-    @Override
-    public void initialize() {
-        super.initialize();
     }
 
     @Override
