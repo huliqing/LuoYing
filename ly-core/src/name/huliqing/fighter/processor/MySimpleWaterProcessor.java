@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2009-2012 jMonkeyEngine
  * All rights reserved.
@@ -35,11 +34,17 @@ package name.huliqing.fighter.processor;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
-import com.jme3.math.*;
+import com.jme3.math.ColorRGBA;
+import com.jme3.math.FastMath;
+import com.jme3.math.Plane;
+import com.jme3.math.Quaternion;
+import com.jme3.math.Ray;
+import com.jme3.math.Vector2f;
+import com.jme3.math.Vector3f;
 import com.jme3.post.SceneProcessor;
 import com.jme3.renderer.Camera;
+import com.jme3.renderer.Camera.FrustumIntersect;
 import com.jme3.renderer.RenderManager;
-import com.jme3.renderer.Renderer;
 import com.jme3.renderer.ViewPort;
 import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Geometry;
@@ -47,12 +52,13 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Quad;
 import com.jme3.texture.FrameBuffer;
 import com.jme3.texture.Image.Format;
-import com.jme3.texture.Texture;
 import com.jme3.texture.Texture.WrapMode;
 import com.jme3.texture.Texture2D;
-import com.jme3.ui.Picture;
 import com.jme3.water.ReflectionProcessor;
 import com.jme3.water.WaterUtils;
+import java.util.logging.Logger;
+import name.huliqing.fighter.constants.MaterialConstants;
+import name.huliqing.fighter.constants.TextureConstants;
 
 /**
  *
@@ -93,20 +99,17 @@ import com.jme3.water.WaterUtils;
  * 
  * 这个类修改自com.jme3.water.SimpleWaterProcessor, 主要处理在Android下发生的异常。
  */
-public class SimpleWaterProcessor implements SceneProcessor {
+public class MySimpleWaterProcessor implements SceneProcessor {
+
+    private static final Logger LOG = Logger.getLogger(MySimpleWaterProcessor.class.getName());
 
     protected RenderManager rm;
     protected ViewPort vp;
     protected Spatial reflectionScene;
     protected ViewPort reflectionView;
-    protected ViewPort refractionView;
     protected FrameBuffer reflectionBuffer;
-    protected FrameBuffer refractionBuffer;
     protected Camera reflectionCam;
-    protected Camera refractionCam;
     protected Texture2D reflectionTexture;
-    protected Texture2D refractionTexture;
-    protected Texture2D depthTexture;
     protected Texture2D normalTexture;
     protected Texture2D dudvTexture;
     protected int renderWidth = 512;
@@ -120,35 +123,34 @@ public class SimpleWaterProcessor implements SceneProcessor {
     protected float waterDepth = 1;
     protected float waterTransparency = 0.4f;
     protected boolean debug = false;
-    private Picture dispRefraction;
-    private Picture dispReflection;
-    private Picture dispDepth;
+    
     private Plane reflectionClipPlane;
-    private Plane refractionClipPlane;
-    private float refractionClippingOffset = 0.3f;
+
     private float reflectionClippingOffset = -5f;        
     private float distortionScale = 0.2f;
     private float distortionMix = 0.5f;
     private float texScale = 1f;
+    private ColorRGBA waterColor;
     
+    private final Spatial waterPlane;
        
     /**
      * Creates a SimpleWaterProcessor
      * @param manager the asset manager
+     * @param waterPlane
      */
-    public SimpleWaterProcessor(AssetManager manager) {
+    public MySimpleWaterProcessor(AssetManager manager, Spatial waterPlane) {
         this.manager = manager;
-        material = new Material(manager, "Common/MatDefs/Water/SimpleWater.j3md");
-        material.setFloat("waterDepth", waterDepth);
-        material.setFloat("waterTransparency", waterTransparency / 10);
-        material.setColor("waterColor", ColorRGBA.White);
-        material.setVector3("lightPos", new Vector3f(1, -1, 1));
+        this.waterPlane = waterPlane;
         
+        material = new Material(manager, MaterialConstants.MAT_SIMPLE_WATER);
         material.setFloat("distortionScale", distortionScale);
         material.setFloat("distortionMix", distortionMix);
         material.setFloat("texScale", texScale);
+        
         updateClipPlanes();
 
+        waterPlane.setMaterial(material);
     }
 
     @Override
@@ -161,17 +163,7 @@ public class SimpleWaterProcessor implements SceneProcessor {
         applyTextures(material);
 
         createPreViews();
-
-        material.setVector2("FrustumNearFar", new Vector2f(vp.getCamera().getFrustumNear(), vp.getCamera().getFrustumFar()));
-
-        if (debug) {
-            dispRefraction = new Picture("dispRefraction");
-            dispRefraction.setTexture(manager, refractionTexture, false);
-            dispReflection = new Picture("dispRefraction");
-            dispReflection.setTexture(manager, reflectionTexture, false);
-            dispDepth = new Picture("depthTexture");
-            dispDepth.setTexture(manager, depthTexture, false);
-        }
+//        material.setVector2("FrustumNearFar", new Vector2f(vp.getCamera().getFrustumNear(), vp.getCamera().getFrustumFar()));
     }
 
     @Override
@@ -199,92 +191,56 @@ public class SimpleWaterProcessor implements SceneProcessor {
     public void postQueue(RenderQueue rq) {
         Camera sceneCam = rm.getCurrentCamera();
 
-        //update refraction cam
-        refractionCam.setLocation(sceneCam.getLocation());
-        refractionCam.setRotation(sceneCam.getRotation());
-        refractionCam.setFrustum(sceneCam.getFrustumNear(),
-                sceneCam.getFrustumFar(),
-                sceneCam.getFrustumLeft(),
-                sceneCam.getFrustumRight(),
-                sceneCam.getFrustumTop(),
-                sceneCam.getFrustumBottom());
-        refractionCam.setParallelProjection(sceneCam.isParallelProjection());
-
-        //update reflection cam
-        WaterUtils.updateReflectionCam(reflectionCam, plane, sceneCam);
-        
-        //Rendering reflection and refraction
-        rm.renderViewPort(reflectionView, savedTpf);
-        
-        
-        // ---- remove20160703,不使用refractionView，因为这会在Android下导致异常。
-//        rm.renderViewPort(refractionView, savedTpf);
-
-
-        rm.getRenderer().setFrameBuffer(vp.getOutputFrameBuffer());
-        rm.setCamera(sceneCam, false);
+        // 如果水体在镜头外就不要渲染，浪费性能。
+        FrustumIntersect fi = sceneCam.contains(waterPlane.getWorldBound());
+        if (fi != FrustumIntersect.Outside) {
+//            LOG.log(Level.INFO, "Need render simple water. FrustumIntersect={0}", fi);
+            WaterUtils.updateReflectionCam(reflectionCam, plane, sceneCam);
+            rm.renderViewPort(reflectionView, savedTpf);
+            rm.getRenderer().setFrameBuffer(vp.getOutputFrameBuffer());
+            rm.setCamera(sceneCam, false);
+        } 
+//        else {
+//            LOG.log(Level.INFO, "Don't need render simple water.");
+//        }
 
     }
 
     @Override
-    public void postFrame(FrameBuffer out) {
-        if (debug) {
-            displayMap(rm.getRenderer(), dispRefraction, 64);
-            displayMap(rm.getRenderer(), dispReflection, 256);
-            displayMap(rm.getRenderer(), dispDepth, 448);
-        }
-    }
+    public void postFrame(FrameBuffer out) {}
 
     @Override
-    public void cleanup() {
-    }
-
-    //debug only : displays maps
-    protected void displayMap(Renderer r, Picture pic, int left) {
-        Camera cam = vp.getCamera();
-        rm.setCamera(cam, true);
-        int h = cam.getHeight();
-
-        pic.setPosition(left, h / 20f);
-
-        pic.setWidth(128);
-        pic.setHeight(128);
-        pic.updateGeometricState();
-        rm.renderGeometry(pic);
-        rm.setCamera(cam, false);
-    }
+    public void cleanup() {}
 
     protected void loadTextures(AssetManager manager) {
-        normalTexture = (Texture2D) manager.loadTexture("Common/MatDefs/Water/Textures/water_normalmap.png");
-        dudvTexture = (Texture2D) manager.loadTexture("Common/MatDefs/Water/Textures/dudv_map.jpg");
+        normalTexture = (Texture2D) manager.loadTexture(TextureConstants.TEX_SIMPLE_WATER_NORMAL);
+        dudvTexture = (Texture2D) manager.loadTexture(TextureConstants.TEX_SIMPLE_WATER_DUDV);
         normalTexture.setWrap(WrapMode.Repeat);
         dudvTexture.setWrap(WrapMode.Repeat);
     }
 
     protected void createTextures() {
         reflectionTexture = new Texture2D(renderWidth, renderHeight, Format.RGBA8);
-        refractionTexture = new Texture2D(renderWidth, renderHeight, Format.RGBA8);
         
-        reflectionTexture.setMinFilter(Texture.MinFilter.Trilinear);
-        reflectionTexture.setMagFilter(Texture.MagFilter.Bilinear);
-        
-        refractionTexture.setMinFilter(Texture.MinFilter.Trilinear);
-        refractionTexture.setMagFilter(Texture.MagFilter.Bilinear);
-        
-        depthTexture = new Texture2D(renderWidth, renderHeight, Format.Depth);
+        // MinFilter.Trilinear这个过滤设置可能是导致在三星平板下(Android5.0.2, Galaxy Note 10.1 - GT N8010)水体效果性能极其缓慢的问题。
+        // 该问题导致在Galaxy Note 10.1 - GT N8010下画面几乎降低20~30帧（50降低至20帧左右）
+        // (这个问题在华为HUWEI G6-U00(Android4.3)下却没有问题)
+//        reflectionTexture.setMinFilter(Texture.MinFilter.Trilinear);
+//        reflectionTexture.setMagFilter(Texture.MagFilter.Bilinear);
     }
 
     protected void applyTextures(Material mat) {
         mat.setTexture("water_reflection", reflectionTexture);
-        mat.setTexture("water_refraction", refractionTexture);
-        mat.setTexture("water_depthmap", depthTexture);
+//        mat.setTexture("water_refraction", refractionTexture);
+//        mat.setTexture("water_depthmap", depthTexture);
         mat.setTexture("water_normalmap", normalTexture);
         mat.setTexture("water_dudvmap", dudvTexture);
+        
     }
 
     protected void createPreViews() {
         reflectionCam = new Camera(renderWidth, renderHeight);
-        refractionCam = new Camera(renderWidth, renderHeight);
+//        refractionCam = new Camera(renderWidth, renderHeight);
 
         // create a pre-view. a view that is rendered before the main view
         reflectionView = new ViewPort("Reflection View", reflectionCam);
@@ -293,35 +249,19 @@ public class SimpleWaterProcessor implements SceneProcessor {
         // create offscreen framebuffer
         reflectionBuffer = new FrameBuffer(renderWidth, renderHeight, 1);
         //setup framebuffer to use texture
-        reflectionBuffer.setDepthBuffer(Format.Depth);
         reflectionBuffer.setColorTexture(reflectionTexture);
-
+        
+        // remove20160704，不要使用DepthBuffer，这在Android下无法支持
+//        reflectionBuffer.setDepthBuffer(Format.Depth);
+        
         //set viewport to render to offscreen framebuffer
         reflectionView.setOutputFrameBuffer(reflectionBuffer);
         reflectionView.addProcessor(new ReflectionProcessor(reflectionCam, reflectionBuffer, reflectionClipPlane));
         // attach the scene to the viewport to be rendered
         reflectionView.attachScene(reflectionScene);
 
-        // create a pre-view. a view that is rendered before the main view
-        refractionView = new ViewPort("Refraction View", refractionCam);
-        refractionView.setClearFlags(true, true, true);
-        refractionView.setBackgroundColor(ColorRGBA.Black);
-        // create offscreen framebuffer
-        refractionBuffer = new FrameBuffer(renderWidth, renderHeight, 1);
-        //setup framebuffer to use texture
-        refractionBuffer.setDepthBuffer(Format.Depth);
-        refractionBuffer.setColorTexture(refractionTexture);
-        refractionBuffer.setDepthTexture(depthTexture);
-        //set viewport to render to offscreen framebuffer
-        refractionView.setOutputFrameBuffer(refractionBuffer);
-        refractionView.addProcessor(new RefractionProcessor());
-        // attach the scene to the viewport to be rendered
-        refractionView.attachScene(reflectionScene);
-    }
-
-    protected void destroyViews() {
-        //  rm.removePreView(reflectionView);
-        rm.removePreView(refractionView);
+        // 特殊更新一下reflectionScene，当reflectionScene是在特殊节点下（非JME的rootNode）时必须手动更新一下。
+        reflectionScene.updateGeometricState();
     }
 
     /**
@@ -399,61 +339,6 @@ public class SimpleWaterProcessor implements SceneProcessor {
     private void updateClipPlanes() {
         reflectionClipPlane = plane.clone();
         reflectionClipPlane.setConstant(reflectionClipPlane.getConstant() + reflectionClippingOffset);
-        refractionClipPlane = plane.clone();
-        refractionClipPlane.setConstant(refractionClipPlane.getConstant() + refractionClippingOffset);
-
-    }
-
-    /**
-     * Set the light Position for the processor
-     * @param position
-     */
-    //TODO maybe we should provide a convenient method to compute position from direction
-    public void setLightPosition(Vector3f position) {
-        material.setVector3("lightPos", position);
-    }
-
-    /**
-     * Set the color that will be added to the refraction texture.
-     * @param color
-     */
-    public void setWaterColor(ColorRGBA color) {
-        material.setColor("waterColor", color);
-    }
-
-    /**
-     * Higher values make the refraction texture shine through earlier.
-     * Default is 4
-     * @param depth
-     */
-    public void setWaterDepth(float depth) {
-        waterDepth = depth;
-        material.setFloat("waterDepth", depth);
-    }
-
-    /**
-     * return the water depth
-     * @return
-     */
-    public float getWaterDepth() {
-        return waterDepth;
-    }
-
-    /**
-     * returns water transparency
-     * @return
-     */
-    public float getWaterTransparency() {
-        return waterTransparency;
-    }
-
-    /**
-     * sets the water transparency default os 0.1f
-     * @param waterTransparency
-     */
-    public void setWaterTransparency(float waterTransparency) {
-        this.waterTransparency = Math.max(0, waterTransparency);
-        material.setFloat("waterTransparency", waterTransparency / 10);
     }
 
     /**
@@ -479,6 +364,15 @@ public class SimpleWaterProcessor implements SceneProcessor {
     public void setDistortionScale(float value) {
         distortionScale  = value;
         material.setFloat("distortionScale", distortionScale);
+    }
+
+    public ColorRGBA getWaterColor() {
+        return waterColor;
+    }
+    
+    public void setWaterColor(ColorRGBA color) {
+        this.waterColor = color;
+        material.setColor("waterColor", color);
     }
 
     /**
@@ -579,65 +473,20 @@ public class SimpleWaterProcessor implements SceneProcessor {
         updateClipPlanes();
     }
 
-    /**
-     * returns the refraction clipping plane offset
-     * @return
-     */
-    public float getRefractionClippingOffset() {
-        return refractionClippingOffset;
+    public void setFoamMap(String foamTexture) {
+        Texture2D foam = (Texture2D) manager.loadTexture(foamTexture);
+        foam.setWrap(WrapMode.MirroredRepeat);
+        material.setTexture("foamMap", foam);
+    }
+    
+    public void setFoamMaskMap(String foamMaskTexture) {
+        Texture2D foamMask = (Texture2D) manager.loadTexture(foamMaskTexture);
+        material.setTexture("foamMaskMap", foamMask);
+    }
+    
+    public void setFoamMaskScale(float xScale, float yScale) {
+        material.setVector2("foamMaskScale", new Vector2f(xScale,  yScale));
     }
 
-    /**
-     * Sets the refraction clipping plane offset
-     * set a positive value to raise the clipping plane for refraction texture rendering
-     * @param refractionClippingOffset
-     */
-    public void setRefractionClippingOffset(float refractionClippingOffset) {
-        this.refractionClippingOffset = refractionClippingOffset;
-        updateClipPlanes();
-    }
-
-    /**
-     * Refraction Processor
-     */
-    public class RefractionProcessor implements SceneProcessor {
-
-        RenderManager rm;
-        ViewPort vp;
-
-        @Override
-        public void initialize(RenderManager rm, ViewPort vp) {
-            this.rm = rm;
-            this.vp = vp;
-        }
-
-        @Override
-        public void reshape(ViewPort vp, int w, int h) {
-        }
-
-        @Override
-        public boolean isInitialized() {
-            return rm != null;
-        }
-
-        @Override
-        public void preFrame(float tpf) {
-            refractionCam.setClipPlane(refractionClipPlane, Plane.Side.Negative);//,-1
-
-        }
-
-        @Override
-        public void postQueue(RenderQueue rq) {
-        }
-
-        @Override
-        public void postFrame(FrameBuffer out) {
-        }
-
-        @Override
-        public void cleanup() {
-        }
-    }
 }
-
 

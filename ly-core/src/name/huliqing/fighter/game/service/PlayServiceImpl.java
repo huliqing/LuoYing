@@ -10,6 +10,7 @@ import com.jme3.bounding.BoundingBox;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.collision.CollisionResults;
 import com.jme3.math.FastMath;
+import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import com.jme3.util.TempVars;
@@ -284,21 +285,35 @@ public class PlayServiceImpl implements PlayService {
         if (terrain == null) {
             return height;
         }
-        TempVars tv = TempVars.get();
-        Temp tp = Temp.get();
-        Vector3f start = tv.vect1.set(x, 0, z);
-        Vector3f dir = tv.vect2.set(x, 1, z).subtractLocal(start).normalizeLocal();
-        tp.ray.setOrigin(start);
-        tp.ray.setDirection(dir);
         
-        CollisionResults results = tp.results;
-        results.clear();
-        terrain.collideWith(tp.ray, results);
+        // remove20160705
+//        TempVars tv = TempVars.get();
+//        Temp tp = Temp.get();
+//        Vector3f start = tv.vect1.set(x, 0, z);
+//        Vector3f dir = tv.vect2.set(x, 1, z).subtractLocal(start).normalizeLocal();
+//        tp.ray.setOrigin(start);
+//        tp.ray.setDirection(dir);
+//        
+//        CollisionResults results = tp.results;
+//        results.clear();
+//        terrain.collideWith(tp.ray, results);
+//        if (results.size() > 0) {
+//            height = results.getFarthestCollision().getContactPoint().getY();
+//        }
+//        tv.release();
+//        tp.release();
+//        return height;
+
+        TempVars tv = TempVars.get();
+        Vector3f origin = tv.vect1.set(x, Float.MIN_VALUE, z);
+        Vector3f dir = tv.vect2.set(0,1,0);
+        Ray ray = new Ray(origin, dir);
+        CollisionResults results = new CollisionResults();
+        terrain.collideWith(ray, results);
         if (results.size() > 0) {
             height = results.getFarthestCollision().getContactPoint().getY();
         }
         tv.release();
-        tp.release();
         return height;
     }
 

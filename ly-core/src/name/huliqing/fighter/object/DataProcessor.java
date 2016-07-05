@@ -9,6 +9,7 @@ import name.huliqing.fighter.data.ProtoData;
 /**
  *
  * @author huliqing
+ * @param <T>
  */
 public interface DataProcessor<T extends ProtoData> {
 

@@ -5,10 +5,24 @@
     xmlns='http://fighter.huliqing.name'
     xsi:schemaLocation='http://fighter.huliqing.name meta/scene.xsd'>
     
-    <!--<debug />-->
+    <!-- ========================================================================= -->
+    <!-- DEBUG -->
+    <!-- ========================================================================= -->
+    <sceneRandom id="sceneDebug" boundary="" envs="envSkyDef,envTerrainDebug2,envWaterSimple" 
+                 emptyZones="0|0|10" directionalLightColor="0.8,0.8,0.8,0.8" directionalLightDir="-1,-2,-1"  ambientLightColor="0.7,0.7,0.7,0.7" 
+                 usePhysics="1" useShadow="1" 
+                 randomEnvs="envTree1|4,envTree2|4,envTree3|4,envTree4|4
+,envFir1|4,envFir2|4,envFir3|4
+,envFlower0|10,envFlower1|10
+,envGrass1|4,envGrass2|4,envGrass3|4,envGrass4|4"
+/>
+    
+    <!-- ========================================================================= -->
+    <!-- Scene -->
+    <!-- ========================================================================= -->
     
     <!--黄金宝箱场景-->
-    <sceneRandom id="sceneTreasure" boundary="105,30,105" envs="envSkyDef,envTerrain1" 
+    <sceneRandom id="sceneTreasure" boundary="105,30,105" envs="envSkyDef,envTerrain1,envWaterSimple" 
                  emptyZones="0|0|10" directionalLightColor="0.8,0.8,0.8,0.8" directionalLightDir="-1,-2,-1"  
                  ambientLightColor="0.7,0.7,0.7,0.7" usePhysics="1" useShadow="1" 
                  randomEnvs="envTree1|4,envTree2|4,envTree3|4,envTree4|4
@@ -20,7 +34,7 @@
     <!--<random id="sceneTreasure" sky="" terrain="envTerrainDebug" boundary="105,30,105" />-->
     
     <!--千年古柏场景-->
-    <sceneRandom id="sceneGb" extends="sceneTreasure" emptyZones="0|0|5,44|-61|12,-14|65|12" />
+    <sceneRandom id="sceneGb" extends="sceneTreasure" envs="envSkyDef,envTerrain1"  emptyZones="0|0|5,44|-61|12,-14|65|12" />
     
     <!--守护之战场景-->
     <sceneRandom id="sceneGuard" extends="sceneTreasure" emptyZones="0|0|5,42|-61|15,-14|65|15,-84|-15|10" />

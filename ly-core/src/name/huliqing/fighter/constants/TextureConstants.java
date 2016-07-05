@@ -18,4 +18,11 @@ public class TextureConstants {
     
     /** Textures/tex/magic/magic.jpg */
     public final static String TEX_MAGIC = "Textures/tex/magic/magic.jpg";
+    
+    /** MatDefs/SimpleWater/water_normalmap.jpg */
+    public final static String TEX_SIMPLE_WATER_NORMAL = "MatDefs/SimpleWater/water_normalmap.jpg";
+    
+    /** MatDefs/SimpleWater/dudv_map.jpg */
+    public final static String TEX_SIMPLE_WATER_DUDV = "MatDefs/SimpleWater/dudv_map.jpg";
+    
 }

@@ -131,7 +131,7 @@ public class HeightmapUtils {
      */
     public static void j3oToHeightmap(Spatial spatial, String distFile) throws IOException {
         J3oToHeightMap jt = new J3oToHeightMap();
-        jt.setMinValue(90);
+        jt.setMinValue(0);
         jt.setMaxValue(255);
         jt.setDefaultValue(0);
         jt.convert(spatial, distFile);
@@ -143,7 +143,7 @@ public class HeightmapUtils {
         Spatial spatial = am.loadModel("Models/env/terrain/scene.j3o");
 //        Spatial spatial = am.loadModel("Models/env/rock/rock.j3o");
 //        Spatial spatial = am.loadModel("Models/monster/raptor/raptor.mesh.j3o");
-        spatial.setLocalScale(10);
+        spatial.setLocalScale(5);
         
         
         try {

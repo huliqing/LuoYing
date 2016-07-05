@@ -24,16 +24,19 @@ public abstract class Env<T extends EnvData> implements DataProcessor<T>{
 
     @Override
     public T getData() {
-//        data.setLocation(model.getLocalTranslation());
-//        data.setRotation(model.getLocalRotation());
-//        data.setScale(model.getLocalScale());
         return data;
     }
     
+    /**
+     * 初始化
+     * @param app
+     * @param scene 
+     */
     public abstract void initialize(Application app, Scene scene);
     
-    public void cleanup() {
-        // ignore
-    }
+    /**
+     * 当Env退出时清理资源。
+     */
+    public void cleanup() {}
     
 }

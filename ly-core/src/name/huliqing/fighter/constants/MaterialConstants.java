@@ -31,4 +31,7 @@ public class MaterialConstants {
     /** Projection.j3md */
     public final static String MAT_PROJECTION = "MatDefs/Projection/Projection.j3md";
     
+    /** MatDefs/SimpleWater/SimpleWater.j3md */
+    public final static String MAT_SIMPLE_WATER = "MatDefs/SimpleWater/SimpleWater.j3md";
+    
 }

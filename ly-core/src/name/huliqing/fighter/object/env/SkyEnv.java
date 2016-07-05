@@ -4,8 +4,10 @@
  */
 package name.huliqing.fighter.object.env;
 
+import com.jme3.app.Application;
 import com.jme3.scene.Spatial;
 import name.huliqing.fighter.loader.SkyLoader;
+import name.huliqing.fighter.object.scene.Scene;
 
 /**
  * 天空盒模型
@@ -13,6 +15,15 @@ import name.huliqing.fighter.loader.SkyLoader;
  * @param <T>
  */
 public class SkyEnv <T extends ModelEnvData> extends ModelEnv<T> {
+
+    @Override
+    public void initialize(Application app, Scene scene) {
+        if (!loaded) {
+            model = loadModel();
+            loaded = true;
+        }
+        scene.setSky(model);
+    }
     
     @Override
     public Spatial loadModel() {

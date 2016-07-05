@@ -263,4 +263,19 @@ xs:time
         </xs:simpleType>
     </xs:attribute>
         
+    <xs:attribute name="location" type="xs:string">
+        <xs:annotation>
+            <xs:documentation>位置点，格式："x,y,z"</xs:documentation>
+        </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="rotation" type="xs:string">
+        <xs:annotation>
+            <xs:documentation>旋转，格式："x,y,z", xyz分别表示以各个轴向上旋转的弧度数。</xs:documentation>
+        </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="scale" type="xs:string">
+        <xs:annotation>
+            <xs:documentation>缩放，格式: "x,y,z"</xs:documentation>
+        </xs:annotation>
+    </xs:attribute>
 </xs:schema>

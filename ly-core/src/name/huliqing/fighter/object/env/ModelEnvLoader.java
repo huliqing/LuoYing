@@ -8,14 +8,13 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import name.huliqing.fighter.data.Proto;
-import name.huliqing.fighter.object.DataLoader;
 
 /**
  * 环境物体数据载入器
  * @author huliqing
  * @param <T>
  */
-public class ModelEnvLoader<T extends ModelEnvData> implements DataLoader<T> {
+public class ModelEnvLoader<T extends ModelEnvData> extends EnvLoader<T> {
 
     @Override
     public void load(Proto proto, T store) {

@@ -18,10 +18,11 @@ import name.huliqing.fighter.Common;
 public class SkyLoader {
     
     // 不能使用"default"的sky(1024*1024)，这可能会导致部分小内存的手机内存溢出。
-    private final static String folder = "default_min";
+    private final static String FOLDER = "default_min";
     
     // 必须缓存的sky
-    private static Spatial cacheSky;
+    private static Spatial cacheSkyDefaut;
+    private static Spatial cacheSkyTiny;
     
     public static Spatial loadDefaultMin() {
         // 注意： sky必须进行缓存，并进行通用。SkyFactory在创建sky后即使从父节点中detach
@@ -29,18 +30,34 @@ public class SkyLoader {
         // 直到内存溢出，该问题在性能比较低的手机系统上会很明显。
         // 如：每次从start界面进入play界面时，初始会scene并创建sky,如果sky不进行缓存，
         // 则Texture(M)会一直增加，直到OOM.
-        if (cacheSky == null) {
+        if (cacheSkyDefaut == null) {
             AssetManager am = Common.getAssetManager();
-            Texture east = am.loadTexture("Textures/tex/sky/" + folder + "/east.jpg");
-            Texture west = am.loadTexture("Textures/tex/sky/" + folder + "/west.jpg");
-            Texture south = am.loadTexture("Textures/tex/sky/" + folder + "/south.jpg");
-            Texture north = am.loadTexture("Textures/tex/sky/" + folder + "/north.jpg");
-            Texture up = am.loadTexture("Textures/tex/sky/" + folder + "/up.jpg");
-            Texture down = am.loadTexture("Textures/tex/sky/" + folder + "/down.jpg");
-            cacheSky = SkyFactory.createSky(am, west, east, north, south, up, down);
-            cacheSky.setCullHint(Spatial.CullHint.Never);
-            cacheSky.setQueueBucket(RenderQueue.Bucket.Sky);
+            Texture east = am.loadTexture("Textures/tex/sky/" + FOLDER + "/east.jpg");
+            Texture west = am.loadTexture("Textures/tex/sky/" + FOLDER + "/west.jpg");
+            Texture south = am.loadTexture("Textures/tex/sky/" + FOLDER + "/south.jpg");
+            Texture north = am.loadTexture("Textures/tex/sky/" + FOLDER + "/north.jpg");
+            Texture up = am.loadTexture("Textures/tex/sky/" + FOLDER + "/up.jpg");
+            Texture down = am.loadTexture("Textures/tex/sky/" + FOLDER + "/down.jpg");
+            cacheSkyDefaut = SkyFactory.createSky(am, west, east, north, south, up, down);
+            cacheSkyDefaut.setCullHint(Spatial.CullHint.Never);
+            cacheSkyDefaut.setQueueBucket(RenderQueue.Bucket.Sky);
         }
-        return cacheSky;
+        return cacheSkyDefaut;
+    }
+    
+    public static Spatial loadTinySky() {
+        if (cacheSkyTiny == null) {
+            AssetManager am = Common.getAssetManager();
+            Texture east = am.loadTexture("Textures/tex/sky/default_tiny/east.jpg");
+            Texture west = am.loadTexture("Textures/tex/sky/default_tiny/west.jpg");
+            Texture south = am.loadTexture("Textures/tex/sky/default_tiny/south.jpg");
+            Texture north = am.loadTexture("Textures/tex/sky/default_tiny/north.jpg");
+            Texture up = am.loadTexture("Textures/tex/sky/default_tiny/up.jpg");
+            Texture down = am.loadTexture("Textures/tex/sky/default_tiny/down.jpg");
+            cacheSkyTiny = SkyFactory.createSky(am, west, east, north, south, up, down);
+            cacheSkyTiny.setCullHint(Spatial.CullHint.Never);
+            cacheSkyTiny.setQueueBucket(RenderQueue.Bucket.Sky);
+        }
+        return cacheSkyTiny;
     }
 }

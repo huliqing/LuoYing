@@ -5,7 +5,17 @@
     xmlns='http://fighter.huliqing.name'
     xsi:schemaLocation='http://fighter.huliqing.name meta/game.xsd'>
     
-    <!-- 黄金宝箱 -->
+    <!-- ========================================================================= -->
+    <!-- DEBUG -->
+    <!-- ========================================================================= -->
+<!--    <gameStoryTreasure id="gameStoryTreasure" scene="sceneDebug" 
+                       availableActors="actorWarrior,actorPastor,actorHunter,actorSinbad,actorNinja,actorSpider,actorBear,actorWolf,actorScorpion" />-->
+    
+    <!-- ========================================================================= -->
+    <!-- Games -->
+    <!-- ========================================================================= -->
+    
+    <!--     黄金宝箱 -->
     <gameStoryTreasure id="gameStoryTreasure" scene="sceneTreasure" 
                        availableActors="actorWarrior,actorPastor,actorHunter,actorSinbad,actorNinja,actorSpider,actorBear,actorWolf,actorScorpion" />
 

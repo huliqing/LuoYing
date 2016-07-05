@@ -31,6 +31,7 @@ import name.huliqing.fighter.object.effect.SlideColorIOSplineEffect;
 import name.huliqing.fighter.object.effect.SlideColorSplineEffect;
 import name.huliqing.fighter.object.effect.TextureCylinderEffect;
 import name.huliqing.fighter.object.effect.TextureEffect;
+import name.huliqing.fighter.object.env.EnvLoader;
 import name.huliqing.fighter.object.env.ModelEnv;
 import name.huliqing.fighter.object.env.ModelEnvData;
 import name.huliqing.fighter.object.env.ModelEnvLoader;
@@ -185,9 +186,9 @@ public class DataFactory {
             loader.load(proto, data);
             return (T) data;
         } catch (Exception ex) {
+            ex.printStackTrace();
             LOG.log(Level.SEVERE, "Could not createData, id={0}, tagName={1}, dataType={2}, dataLoader={3}, error={4}"
                     , new Object[] {id, proto.getTagName(), dataClass.getName(), loader.getClass().getName(), ex.getMessage()});
-//            ex.printStackTrace();
         }
         return null;
     }
@@ -199,6 +200,10 @@ public class DataFactory {
      * @return 
      */
     public static <T extends DataProcessor> T createProcessor(ProtoData data) {
+        if (data == null) {
+            LOG.log(Level.WARNING, "Data could not be null");
+            return null;
+        }
         String tagName = data.getTagName();
         Class<? extends DataProcessor> dpClass = DATA_PROCESSOR_MAP.get(tagName);
         if (dpClass == null) {
@@ -247,7 +252,7 @@ public class DataFactory {
         register("envSky", ModelEnvData.class, ModelEnvLoader.class, SkyEnv.class);
         register("envTree", ModelEnvData.class, PlantEnvLoader.class, TreeEnv.class);
         register("envGrass", ModelEnvData.class, PlantEnvLoader.class, PlantEnv.class);
-        register("envWater", EnvData.class, ModelEnvLoader.class, WaterEnv.class);
+        register("envWater", EnvData.class, EnvLoader.class, WaterEnv.class);
         
         // States
         register("stateAttribute", StateData.class, StateLoader.class, AttributeState.class);
