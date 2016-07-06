@@ -68,20 +68,22 @@ public class RandomScene extends Scene<RandomSceneData> {
             RigidBodyControl rbc;
             float radiusSquare = radius * radius;
             Spatial model;
-            for (Env s : randomEnv) {
-                if (!(s instanceof ModelEnv)) {
-                    continue;
-                }
-                model = ((ModelEnv) s).getModel();
-                if (model == null) {
-                    continue;
-                }
-                rbc = model.getControl(RigidBodyControl.class);
-                if (rbc == null) {
-                    continue;
-                }
-                if (distanceSquare(x, z, rbc.getPhysicsLocation().x, rbc.getPhysicsLocation().z) < radiusSquare) {
-                    return false;
+            if (randomEnv != null) {
+                for (Env s : randomEnv) {
+                    if (!(s instanceof ModelEnv)) {
+                        continue;
+                    }
+                    model = ((ModelEnv) s).getModel();
+                    if (model == null) {
+                        continue;
+                    }
+                    rbc = model.getControl(RigidBodyControl.class);
+                    if (rbc == null) {
+                        continue;
+                    }
+                    if (distanceSquare(x, z, rbc.getPhysicsLocation().x, rbc.getPhysicsLocation().z) < radiusSquare) {
+                        return false;
+                    }
                 }
             }
         }

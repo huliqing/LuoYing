@@ -107,7 +107,6 @@ public class MySimpleWaterProcessor implements SceneProcessor {
 
     protected RenderManager rm;
     protected ViewPort vp;
-//    protected Spatial reflectionScene;
     protected ViewPort reflectionView;
     protected FrameBuffer reflectionBuffer;
     protected Camera reflectionCam;
@@ -217,7 +216,15 @@ public class MySimpleWaterProcessor implements SceneProcessor {
     public void postFrame(FrameBuffer out) {}
 
     @Override
-    public void cleanup() {}
+    public void cleanup() {
+        // 注意：这里必须释放framebuffer,否则该framebuffer会一直常驻内存无法释放。
+        rm.removePreView(reflectionView);
+        reflectionView.setOutputFrameBuffer(null);
+        reflectionView.clearScenes();
+        reflectionView.clearProcessors();
+        reflectionView = null;
+        reflectionBuffer = null;
+    }
 
     protected void loadTextures(AssetManager manager) {
         normalTexture = (Texture2D) manager.loadTexture(TextureConstants.TEX_SIMPLE_WATER_NORMAL);
