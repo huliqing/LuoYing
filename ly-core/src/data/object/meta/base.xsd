@@ -278,4 +278,15 @@ xs:time
             <xs:documentation>缩放，格式: "x,y,z"</xs:documentation>
         </xs:annotation>
     </xs:attribute>
+    <xs:attribute name="debug">
+        <xs:annotation>
+            <xs:documentation>是否打开调试，0：关闭; 1：打开</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:enumeration value="0"/>
+                <xs:enumeration value="1"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:attribute>
 </xs:schema>

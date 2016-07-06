@@ -11,11 +11,17 @@ uniform sampler2D m_water_dudvmap;
 uniform float m_distortionScale;
 uniform float m_distortionMix;
 uniform float m_texScale;
+
 #ifdef WATER_COLOR
     uniform vec4 m_waterColor;
 #endif
+
 #ifdef FOAM_MAP
     uniform sampler2D m_foamMap;
+    uniform vec2 m_foamScale;
+#endif
+
+#ifdef FOAM_MASK_MAP
     uniform sampler2D m_foamMaskMap;
     uniform vec2 m_foamMaskScale;
 #endif
@@ -53,17 +59,19 @@ void main(void)
      #endif
 
      #ifdef FOAM_MAP
-        vec2 maskCoord = vec2(texCoord.x, texCoord.y) * m_foamMaskScale;
-        // make the coord to the center.
-        maskCoord.x -= (m_foamMaskScale.x - 1.0) * 0.5;
-        maskCoord.y -= (m_foamMaskScale.y - 1.0) * 0.5;
-        vec4 foamMask = texture2D(m_foamMaskMap, maskCoord);
         
-        //vec4 foam = texture2D(m_foamMap, vec2(projCoord.x,  1.0 - projCoord.y));
+        vec4 foam = texture2D(m_foamMap, waterTex2 * m_foamScale);
 
-        vec2 foamMapScale = vec2(200.0, 200.0);
-        vec4 foam = texture2D(m_foamMap, waterTex2 * foamMapScale);
-        refl += foam * foamMask;
+        #ifdef FOAM_MASK_MAP
+            vec2 maskCoord = vec2(texCoord.x, texCoord.y) * m_foamMaskScale;
+            // make the coord to the center.
+            maskCoord.x -= (m_foamMaskScale.x - 1.0) * 0.5;
+            maskCoord.y -= (m_foamMaskScale.y - 1.0) * 0.5;
+            vec4 foamMask = texture2D(m_foamMaskMap, maskCoord);
+            foam *= foamMask;
+        #endif
+
+        refl += foam;
 
      #endif
 

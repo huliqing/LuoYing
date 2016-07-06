@@ -4,11 +4,9 @@
  */
 package name.huliqing.fighter.object.env;
 
-import com.jme3.app.Application;
 import com.jme3.bullet.collision.shapes.MeshCollisionShape;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.scene.Spatial;
-import name.huliqing.fighter.object.scene.Scene;
 import name.huliqing.fighter.shape.TreeCollisionMesh;
 import name.huliqing.fighter.utils.GeometryUtils;
 
@@ -19,14 +17,6 @@ import name.huliqing.fighter.utils.GeometryUtils;
  * @param <T>
  */
 public class TreeEnv<T extends ModelEnvData> extends ModelEnv<T> {
-
-    private Scene scene;
-    
-    @Override
-    public void initialize(Application app, Scene scene) {
-        this.scene = scene;
-        super.initialize(app, scene); 
-    }
 
     @Override
     protected Spatial loadModel() {

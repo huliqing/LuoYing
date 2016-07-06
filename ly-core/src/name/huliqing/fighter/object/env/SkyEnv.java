@@ -18,6 +18,7 @@ public class SkyEnv <T extends ModelEnvData> extends ModelEnv<T> {
 
     @Override
     public void initialize(Application app, Scene scene) {
+        super.initialize(app, scene);
         if (!loaded) {
             model = loadModel();
             loaded = true;

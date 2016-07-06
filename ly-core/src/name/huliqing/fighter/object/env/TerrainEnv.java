@@ -14,11 +14,6 @@ import name.huliqing.fighter.object.scene.Scene;
  * @param <T>
  */
 public class TerrainEnv<T extends ModelEnvData> extends ModelEnv<T> {
-
-    @Override
-    public void initialize(Application app, Scene scene) {
-        super.initialize(app, scene);
-    }
     
     @Override
     public Spatial loadModel() {

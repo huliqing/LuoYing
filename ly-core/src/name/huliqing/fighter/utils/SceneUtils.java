@@ -69,9 +69,9 @@ public class SceneUtils {
         
         if (Config.debug) {
             chaseCam.setMinDistance(1f);
-            chaseCam.setMaxDistance(30);
+            chaseCam.setMaxDistance(999999999);
             chaseCam.setLookAtOffset(Vector3f.UNIT_Y.mult(2f));
-//            chaseCam.setDefaultDistance(30);
+            chaseCam.setZoomSensitivity(5);
         }
         
         return chaseCam;

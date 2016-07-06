@@ -84,6 +84,8 @@ import name.huliqing.fighter.game.service.SkillService;
 import name.huliqing.fighter.game.service.SkillServiceImpl;
 import name.huliqing.fighter.game.service.SkinService;
 import name.huliqing.fighter.game.service.SkinServiceImpl;
+import name.huliqing.fighter.game.service.SoundService;
+import name.huliqing.fighter.game.service.SoundServiceImpl;
 import name.huliqing.fighter.game.service.StateService;
 import name.huliqing.fighter.game.service.StateServiceImpl;
 import name.huliqing.fighter.game.service.TalentService;
@@ -142,6 +144,7 @@ public class Factory {
         claMaps.put(SceneService.class, SceneServiceImpl.class);
         claMaps.put(SkillService.class, SkillServiceImpl.class);
         claMaps.put(SkinService.class, SkinServiceImpl.class);
+        claMaps.put(SoundService.class, SoundServiceImpl.class);
         claMaps.put(StateService.class, StateServiceImpl.class);
         claMaps.put(TalentService.class, TalentServiceImpl.class);
         claMaps.put(TaskService.class, TaskServiceImpl.class);

@@ -5,6 +5,7 @@ MaterialDef Simple Water {
         Texture2D water_normalmap
         Texture2D water_dudvmap
         Texture2D foamMap
+        Vector2 foamScale
         Texture2D foamMaskMap
         Vector2 foamMaskScale
         Vector4 waterColor
@@ -28,6 +29,7 @@ MaterialDef Simple Water {
         Defines {
             WATER_COLOR : waterColor
             FOAM_MAP : foamMap
+            FOAM_MASK_MAP : foamMaskMap
         }
     }
 }

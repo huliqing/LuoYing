@@ -31,6 +31,8 @@ import name.huliqing.fighter.object.effect.SlideColorIOSplineEffect;
 import name.huliqing.fighter.object.effect.SlideColorSplineEffect;
 import name.huliqing.fighter.object.effect.TextureCylinderEffect;
 import name.huliqing.fighter.object.effect.TextureEffect;
+import name.huliqing.fighter.object.env.AudioEnv;
+import name.huliqing.fighter.object.env.BoundaryBoxEnv;
 import name.huliqing.fighter.object.env.EnvLoader;
 import name.huliqing.fighter.object.env.ModelEnv;
 import name.huliqing.fighter.object.env.ModelEnvData;
@@ -130,6 +132,10 @@ public class DataFactory {
      * @param dataProcessorClass 
      */
     public static void registerDataProcessor(String tagName, Class<? extends DataProcessor> dataProcessorClass) {
+        if (dataProcessorClass == null) {
+            DATA_PROCESSOR_MAP.remove(tagName);
+            return;
+        }
         DATA_PROCESSOR_MAP.put(tagName, dataProcessorClass);
     }
     
@@ -253,6 +259,8 @@ public class DataFactory {
         register("envTree", ModelEnvData.class, PlantEnvLoader.class, TreeEnv.class);
         register("envGrass", ModelEnvData.class, PlantEnvLoader.class, PlantEnv.class);
         register("envWater", EnvData.class, EnvLoader.class, WaterEnv.class);
+        register("envBoundaryBox", EnvData.class, EnvLoader.class, BoundaryBoxEnv.class);
+        register("envAudio", EnvData.class, EnvLoader.class, AudioEnv.class);
         
         // States
         register("stateAttribute", StateData.class, StateLoader.class, AttributeState.class);

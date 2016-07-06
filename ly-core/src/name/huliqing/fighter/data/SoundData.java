@@ -47,5 +47,11 @@ public class SoundData extends ProtoData {
         this.loop = loop;
     }
     
-    
+    /**
+     * 获取声音文件，如："Sounds/xx.ogg"
+     * @return 
+     */
+    public String getSoundFile() {
+        return getAttribute("file");
+    }
 }

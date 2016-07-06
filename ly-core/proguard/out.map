@@ -344,6 +344,7 @@ name.huliqing.fighter.data.DataAttribute -> name.huliqing.fighter.b.m:
     com.jme3.math.Vector3f getAsVector3f(java.lang.String) -> p
     com.jme3.math.Vector3f getAsVector3f(java.lang.String,com.jme3.math.Vector3f) -> a
     com.jme3.math.Vector3f[] getAsVector3fArray(java.lang.String) -> q
+    com.jme3.math.Vector2f getAsVector2f(java.lang.String) -> u
     com.jme3.math.Quaternion getAsQuaternion(java.lang.String) -> r
     com.jme3.math.ColorRGBA getAsColor(java.lang.String) -> s
     com.jme3.math.ColorRGBA getAsColor(java.lang.String,com.jme3.math.ColorRGBA) -> a
@@ -820,6 +821,7 @@ name.huliqing.fighter.data.SoundData -> name.huliqing.fighter.b.aj:
     void setOffset(float) -> b
     boolean isLoop() -> c
     void setLoop(boolean) -> a
+    java.lang.String getSoundFile() -> d
 name.huliqing.fighter.data.StateData -> name.huliqing.fighter.b.ak:
     float useTime -> b
     float interval -> c
@@ -2522,6 +2524,12 @@ name.huliqing.fighter.game.service.SkinServiceImpl$SkinFinder -> name.huliqing.f
     void <init>(name.huliqing.fighter.game.service.SkinServiceImpl,name.huliqing.fighter.data.SkinData) -> <init>
     void visit(com.jme3.scene.Spatial) -> visit
     com.jme3.scene.Spatial getResult() -> a
+name.huliqing.fighter.game.service.SoundService -> name.huliqing.fighter.game.service.bd:
+    name.huliqing.fighter.data.SoundData loadSoundData(java.lang.String) -> a
+name.huliqing.fighter.game.service.SoundServiceImpl -> name.huliqing.fighter.game.service.be:
+    void <init>() -> <init>
+    void inject() -> inject
+    name.huliqing.fighter.data.SoundData loadSoundData(java.lang.String) -> a
 name.huliqing.fighter.game.service.StateService -> name.huliqing.fighter.game.service.aq:
     float checkAddState(name.huliqing.fighter.object.actor.Actor,java.lang.String) -> a
     boolean addState(name.huliqing.fighter.object.actor.Actor,java.lang.String,name.huliqing.fighter.object.actor.Actor) -> a
@@ -7329,8 +7337,36 @@ name.huliqing.fighter.object.el.XpDropEl -> name.huliqing.fighter.g.j.e:
     java.util.Map valueMap -> d
     void <init>(name.huliqing.fighter.data.ElData) -> <init>
     int getValue(int,int) -> a
+name.huliqing.fighter.object.env.AudioEnv -> name.huliqing.fighter.g.k.l:
+    name.huliqing.fighter.game.service.SoundService soundService -> b
+    boolean debug -> c
+    java.lang.String sound -> d
+    com.jme3.math.Vector3f location -> e
+    com.jme3.audio.AudioNode audio -> f
+    com.jme3.scene.Spatial debugNode -> g
+    com.jme3.scene.Spatial debugInnerNode -> h
+    void <init>() -> <init>
+    void initData(name.huliqing.fighter.data.EnvData) -> a
+    void initialize(com.jme3.app.Application,name.huliqing.fighter.object.scene.Scene) -> a
+    com.jme3.material.Material createDebugMaterial(com.jme3.math.ColorRGBA) -> a
+    void cleanup() -> a
+    void initData(name.huliqing.fighter.data.ProtoData) -> a
+name.huliqing.fighter.object.env.BoundaryBoxEnv -> name.huliqing.fighter.g.k.m:
+    com.jme3.math.Vector3f xyzExtends -> b
+    com.jme3.math.Vector3f location -> c
+    com.jme3.math.Vector3f rotation -> d
+    com.jme3.math.Vector3f scale -> e
+    boolean debug -> f
+    com.jme3.scene.Spatial boundary -> g
+    void <init>() -> <init>
+    void initData(name.huliqing.fighter.data.EnvData) -> a
+    void initialize(com.jme3.app.Application,name.huliqing.fighter.object.scene.Scene) -> a
+    void cleanup() -> a
+    void initData(name.huliqing.fighter.data.ProtoData) -> a
 name.huliqing.fighter.object.env.Env -> name.huliqing.fighter.g.k.a:
     name.huliqing.fighter.data.EnvData data -> a
+    name.huliqing.fighter.object.scene.Scene scene -> q
+    boolean initialized -> r
     void <init>() -> <init>
     void initData(name.huliqing.fighter.data.EnvData) -> a
     void initialize(com.jme3.app.Application,name.huliqing.fighter.object.scene.Scene) -> a
@@ -7346,6 +7382,7 @@ name.huliqing.fighter.object.env.ModelEnv -> name.huliqing.fighter.g.k.g:
     void <init>() -> <init>
     void initData(name.huliqing.fighter.object.env.ModelEnvData) -> a
     void initialize(com.jme3.app.Application,name.huliqing.fighter.object.scene.Scene) -> a
+    void cleanup() -> a
     com.jme3.scene.Spatial getModel() -> b
     com.jme3.scene.Spatial loadModel() -> c
     void addPhysicsControl(com.jme3.scene.Spatial,com.jme3.bullet.control.RigidBodyControl,name.huliqing.fighter.object.env.ModelEnvData) -> a
@@ -7389,9 +7426,7 @@ name.huliqing.fighter.object.env.ModelEnvLoader -> name.huliqing.fighter.g.k.i:
     void load(name.huliqing.fighter.data.Proto,name.huliqing.fighter.data.EnvData) -> a
     void load(name.huliqing.fighter.data.Proto,name.huliqing.fighter.data.ProtoData) -> a
 name.huliqing.fighter.object.env.PlantEnv -> name.huliqing.fighter.g.k.j:
-    name.huliqing.fighter.object.scene.Scene scene -> d
     void <init>() -> <init>
-    void initialize(com.jme3.app.Application,name.huliqing.fighter.object.scene.Scene) -> a
     com.jme3.scene.Spatial loadModel() -> c
 name.huliqing.fighter.object.env.PlantEnvLoader -> name.huliqing.fighter.g.k.c:
     void <init>() -> <init>
@@ -7404,12 +7439,9 @@ name.huliqing.fighter.object.env.SkyEnv -> name.huliqing.fighter.g.k.d:
     com.jme3.scene.Spatial loadModel() -> c
 name.huliqing.fighter.object.env.TerrainEnv -> name.huliqing.fighter.g.k.e:
     void <init>() -> <init>
-    void initialize(com.jme3.app.Application,name.huliqing.fighter.object.scene.Scene) -> a
     com.jme3.scene.Spatial loadModel() -> c
 name.huliqing.fighter.object.env.TreeEnv -> name.huliqing.fighter.g.k.f:
-    name.huliqing.fighter.object.scene.Scene scene -> d
     void <init>() -> <init>
-    void initialize(com.jme3.app.Application,name.huliqing.fighter.object.scene.Scene) -> a
     com.jme3.scene.Spatial loadModel() -> c
     void addPhysicsControl(com.jme3.scene.Spatial,com.jme3.bullet.control.RigidBodyControl,name.huliqing.fighter.object.env.ModelEnvData) -> a
 name.huliqing.fighter.object.env.WaterEnv -> name.huliqing.fighter.g.k.k:
@@ -7422,6 +7454,10 @@ name.huliqing.fighter.object.env.WaterEnv -> name.huliqing.fighter.g.k.k:
     float waveSpeed -> h
     float distortionMix -> k
     float distortionScale -> l
+    java.lang.String foamMap -> i
+    com.jme3.math.Vector2f foamScale -> s
+    java.lang.String foamMaskMap -> j
+    com.jme3.math.Vector2f foamMaskScale -> m
     com.jme3.app.Application app -> n
     com.jme3.scene.Spatial waterModel -> o
     name.huliqing.fighter.processor.MySimpleWaterProcessor swp -> p
@@ -8919,7 +8955,6 @@ name.huliqing.fighter.object.scene.Scene -> name.huliqing.fighter.g.s.e:
     com.jme3.scene.Node sceneRoot -> c
     com.jme3.scene.Node skyRoot -> f
     com.jme3.scene.Node terrainRoot -> e
-    com.jme3.scene.Spatial boundaryGeo -> g
     com.jme3.bullet.BulletAppState bulletAppState -> h
     void <init>() -> <init>
     void initialize(com.jme3.app.Application) -> a
@@ -8931,6 +8966,7 @@ name.huliqing.fighter.object.scene.Scene -> name.huliqing.fighter.g.s.e:
     com.jme3.bullet.PhysicsSpace getPhysicsSpace() -> d
     com.jme3.post.SceneProcessor createShadowProcessor() -> e
     void addSceneObject(com.jme3.scene.Spatial) -> b
+    void removeSceneObject(com.jme3.scene.Spatial) -> e
     void addTerrainObject(com.jme3.scene.Spatial) -> c
     void addPhysicsObject(com.jme3.scene.Spatial) -> a
     boolean checkIsEmptyZone(float,float,float) -> a
@@ -9873,7 +9909,6 @@ name.huliqing.fighter.processor.MySimpleWaterProcessor -> name.huliqing.fighter.
     java.util.logging.Logger LOG -> B
     com.jme3.renderer.RenderManager rm -> a
     com.jme3.renderer.ViewPort vp -> b
-    com.jme3.scene.Spatial reflectionScene -> c
     com.jme3.renderer.ViewPort reflectionView -> d
     com.jme3.texture.FrameBuffer reflectionBuffer -> e
     com.jme3.renderer.Camera reflectionCam -> f
@@ -9898,6 +9933,7 @@ name.huliqing.fighter.processor.MySimpleWaterProcessor -> name.huliqing.fighter.
     float texScale -> A
     com.jme3.math.ColorRGBA waterColor -> D
     com.jme3.scene.Spatial waterPlane -> C
+    java.util.List tempReflectionScenes -> c
     float time -> u
     float savedTpf -> v
     void <init>(com.jme3.asset.AssetManager,com.jme3.scene.Spatial) -> <init>
@@ -9912,13 +9948,17 @@ name.huliqing.fighter.processor.MySimpleWaterProcessor -> name.huliqing.fighter.
     void createTextures() -> a
     void applyTextures(com.jme3.material.Material) -> a
     void createPreViews() -> b
-    void setReflectionScene(com.jme3.scene.Spatial) -> a
+    void addReflectionScene(com.jme3.scene.Spatial) -> a
     void updateClipPlanes() -> d
     void setWaveSpeed(float) -> c
     void setDistortionScale(float) -> d
     void setWaterColor(com.jme3.math.ColorRGBA) -> a
     void setDistortionMix(float) -> e
     void setTexScale(float) -> f
+    void setFoamMap(java.lang.String) -> a
+    void setFoamMaskMap(java.lang.String) -> b
+    void setFoamScale(float,float) -> b
+    void setFoamMaskScale(float,float) -> a
     void <clinit>() -> <clinit>
 name.huliqing.fighter.save.ClientData -> name.huliqing.fighter.h.f:
     java.lang.String clientId -> a

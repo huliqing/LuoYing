@@ -30,6 +30,7 @@ public class ModelEnv<T extends ModelEnvData> extends Env<T> {
 
     @Override
     public void initialize(Application app, Scene scene) {
+        super.initialize(app, scene);
         if (!loaded) {
             model = loadModel();
             loaded = true;
@@ -39,6 +40,14 @@ public class ModelEnv<T extends ModelEnvData> extends Env<T> {
         } else {
             scene.addSceneObject(model);
         }
+    }
+
+    @Override
+    public void cleanup() {
+        if (model != null) {
+            scene.removeSceneObject(model);
+        }
+        super.cleanup(); 
     }
 
     /**

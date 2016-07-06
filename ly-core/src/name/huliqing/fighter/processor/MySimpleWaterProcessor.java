@@ -56,6 +56,8 @@ import com.jme3.texture.Texture.WrapMode;
 import com.jme3.texture.Texture2D;
 import com.jme3.water.ReflectionProcessor;
 import com.jme3.water.WaterUtils;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 import name.huliqing.fighter.constants.MaterialConstants;
 import name.huliqing.fighter.constants.TextureConstants;
@@ -105,7 +107,7 @@ public class MySimpleWaterProcessor implements SceneProcessor {
 
     protected RenderManager rm;
     protected ViewPort vp;
-    protected Spatial reflectionScene;
+//    protected Spatial reflectionScene;
     protected ViewPort reflectionView;
     protected FrameBuffer reflectionBuffer;
     protected Camera reflectionCam;
@@ -133,6 +135,8 @@ public class MySimpleWaterProcessor implements SceneProcessor {
     private ColorRGBA waterColor;
     
     private final Spatial waterPlane;
+    
+    private final List<Spatial> tempReflectionScenes = new ArrayList<Spatial>();
        
     /**
      * Creates a SimpleWaterProcessor
@@ -147,6 +151,9 @@ public class MySimpleWaterProcessor implements SceneProcessor {
         material.setFloat("distortionScale", distortionScale);
         material.setFloat("distortionMix", distortionMix);
         material.setFloat("texScale", texScale);
+        
+        setFoamScale(1.0f, 1.0f);
+        setFoamMaskScale(1.0f, 1.0f);
         
         updateClipPlanes();
 
@@ -257,11 +264,26 @@ public class MySimpleWaterProcessor implements SceneProcessor {
         //set viewport to render to offscreen framebuffer
         reflectionView.setOutputFrameBuffer(reflectionBuffer);
         reflectionView.addProcessor(new ReflectionProcessor(reflectionCam, reflectionBuffer, reflectionClipPlane));
+        
         // attach the scene to the viewport to be rendered
-        reflectionView.attachScene(reflectionScene);
-
-        // 特殊更新一下reflectionScene，当reflectionScene是在特殊节点下（非JME的rootNode）时必须手动更新一下。
-        reflectionScene.updateGeometricState();
+        if (!tempReflectionScenes.isEmpty()) {
+            for (Spatial scene : tempReflectionScenes) {
+                addReflectionScene(scene);
+            }
+            tempReflectionScenes.clear();
+        }
+    }
+    
+    public void addReflectionScene(Spatial scene) {
+        if (reflectionView == null) {
+            tempReflectionScenes.add(scene);
+            return;
+        }
+        if (!reflectionView.getScenes().contains(scene)) {
+            reflectionView.attachScene(scene);
+            // 特殊更新一下reflectionScene，当reflectionScene是在特殊节点下（非JME的rootNode）时必须手动更新一下。
+            scene.updateGeometricState();
+        }
     }
 
     /**
@@ -272,14 +294,15 @@ public class MySimpleWaterProcessor implements SceneProcessor {
         return material;
     }
 
-    /**
-     * Sets the reflected scene, should not include the water quad!
-     * Set before adding processor.
-     * @param spat
-     */
-    public void setReflectionScene(Spatial spat) {
-        reflectionScene = spat;
-    }
+    // remove20160706,use addReflectionScene instead
+//    /**
+//     * Sets the reflected scene, should not include the water quad!
+//     * Set before adding processor.
+//     * @param spat
+//     */
+//    public void setReflectionScene(Spatial spat) {
+//        reflectionScene = spat;
+//    }
 
     /**
      * returns the width of the reflection and refraction textures
@@ -484,7 +507,11 @@ public class MySimpleWaterProcessor implements SceneProcessor {
         material.setTexture("foamMaskMap", foamMask);
     }
     
-    public void setFoamMaskScale(float xScale, float yScale) {
+    public final void setFoamScale(float xScale, float yScale) {
+        material.setVector2("foamScale", new Vector2f(xScale,  yScale));
+    }
+    
+    public final void setFoamMaskScale(float xScale, float yScale) {
         material.setVector2("foamMaskScale", new Vector2f(xScale,  yScale));
     }
 

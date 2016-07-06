@@ -11,7 +11,9 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
+import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.EnvData;
+import name.huliqing.fighter.game.service.PlayService;
 import name.huliqing.fighter.object.scene.Scene;
 import name.huliqing.fighter.processor.MySimpleWaterProcessor;
 
@@ -21,6 +23,7 @@ import name.huliqing.fighter.processor.MySimpleWaterProcessor;
  * @param <T>
  */
 public class WaterEnv<T extends EnvData>  extends Env<T> {
+//    private final PlayService playService = Factory.get(PlayService.class);
     
     private String waterModelFile;
     private Vector3f location;
@@ -34,6 +37,7 @@ public class WaterEnv<T extends EnvData>  extends Env<T> {
     private float distortionScale = 0.2f;
     
     private String foamMap;
+    private Vector2f foamScale;
     private String foamMaskMap;
     private Vector2f foamMaskScale;
     
@@ -56,14 +60,16 @@ public class WaterEnv<T extends EnvData>  extends Env<T> {
         distortionScale = data.getAsFloat("distortionScale", distortionScale);
         
         foamMap = data.getAttribute("foamMap");
+        foamScale = data.getAsVector2f("foamScale");
         foamMaskMap = data.getAttribute("foamMaskMap");
         foamMaskScale = data.getAsVector2f("foamMaskScale");
     }
     
     @Override
     public void initialize(Application app, Scene scene) {
+        super.initialize(app, scene);
         this.app = app;
-                
+        
         waterModel = app.getAssetManager().loadModel(waterModelFile);
         if (location != null) {
             waterModel.setLocalTranslation(location);
@@ -78,7 +84,7 @@ public class WaterEnv<T extends EnvData>  extends Env<T> {
         }
         
         swp = new MySimpleWaterProcessor(app.getAssetManager(), waterModel);
-        swp.setReflectionScene(scene.getSceneRoot());
+        swp.addReflectionScene(scene.getSceneRoot());
         swp.setTexScale(texScale);
         swp.setWaveSpeed(waveSpeed);
         swp.setDistortionMix(distortionMix);
@@ -88,6 +94,9 @@ public class WaterEnv<T extends EnvData>  extends Env<T> {
         }
         if (foamMap != null) {
             swp.setFoamMap(foamMap);
+        }
+        if (foamScale != null) {
+            swp.setFoamScale(foamScale.x, foamScale.y);
         }
         if (foamMaskMap != null) {
             swp.setFoamMaskMap(foamMaskMap);
@@ -105,8 +114,7 @@ public class WaterEnv<T extends EnvData>  extends Env<T> {
     @Override
     public void cleanup() {
         if (waterModel != null) {
-            waterModel.removeFromParent();
-            waterModel = null;
+            scene.removeSceneObject(waterModel);
         }
         if (swp != null && app != null) {
             if (app.getViewPort().getProcessors().contains(swp)) {

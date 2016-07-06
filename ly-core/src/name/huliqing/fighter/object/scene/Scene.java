@@ -20,12 +20,10 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.fighter.Common;
 import name.huliqing.fighter.Factory;
-import name.huliqing.fighter.constants.ModelConstants;
 import name.huliqing.fighter.data.EnvData;
 import name.huliqing.fighter.data.SceneData;
 import name.huliqing.fighter.game.service.ConfigService;
 import name.huliqing.fighter.game.service.PlayService;
-import name.huliqing.fighter.loader.Loader;
 import name.huliqing.fighter.object.AbstractPlayObject;
 import name.huliqing.fighter.object.DataFactory;
 import name.huliqing.fighter.object.DataProcessor;
@@ -57,8 +55,7 @@ public abstract class Scene<T extends SceneData> extends AbstractPlayObject impl
     private final Node skyRoot = new Node("SkyRoot");
     // 地型，允许多个地形
     private final Node terrainRoot = new Node("terrainRoot");
-    // 边界盒
-    protected Spatial boundaryGeo;
+    
     // 物理空间
     protected BulletAppState bulletAppState;
     
@@ -71,10 +68,8 @@ public abstract class Scene<T extends SceneData> extends AbstractPlayObject impl
         sceneRoot.attachChild(skyRoot);
         sceneRoot.attachChild(terrainRoot);
         
-        // 直接放在viewPort中性能比较高
-//        playService.addObject(sceneRoot);
-        app.getViewPort().attachScene(sceneRoot);
-        
+        playService.addObject(sceneRoot);
+//        app.getViewPort().attachScene(sceneRoot);
         
         // use physics
         if (data.isUsePhysics()) {
@@ -89,16 +84,6 @@ public abstract class Scene<T extends SceneData> extends AbstractPlayObject impl
             // 注：setGravity必须放在attach(bulletAppState)之后
             bulletAppState.getPhysicsSpace().setGravity(data.getGravity());
             bulletAppState.setDebugEnabled(data.isDebugPhysics());
-        }
-        
-        // boundary边界盒
-        if (data.getBoundary() != null) {
-            boundaryGeo = Loader.loadModel(ModelConstants.MODEL_BOUNDARY);
-            boundaryGeo.setLocalScale(data.getBoundary().mult(2));
-            boundaryGeo.setCullHint(Spatial.CullHint.Always);
-            boundaryGeo.addControl(new RigidBodyControl(0));
-            sceneRoot.attachChild(boundaryGeo);
-            addPhysicsObject(boundaryGeo);
         }
         
         // Lights
@@ -143,10 +128,7 @@ public abstract class Scene<T extends SceneData> extends AbstractPlayObject impl
 
     @Override
     public void cleanup() {
-        if (bulletAppState != null) {
-            playService.getApplication().getStateManager().detach(bulletAppState);
-            bulletAppState = null;
-        }
+       
         if (shadowSceneProcessor != null) {
             playService.getApplication().getViewPort().removeProcessor(shadowSceneProcessor);
             shadowSceneProcessor = null;
@@ -154,7 +136,7 @@ public abstract class Scene<T extends SceneData> extends AbstractPlayObject impl
         
         // LocalRoot是直接attach到ViewPort上去的，所以要这样移除。
         if (sceneRoot != null) {
-            playService.getApplication().getViewPort().detachScene(sceneRoot);
+//            playService.getApplication().getViewPort().detachScene(sceneRoot);
             sceneRoot.removeFromParent();
             sceneRoot = null;
         }
@@ -167,7 +149,10 @@ public abstract class Scene<T extends SceneData> extends AbstractPlayObject impl
                 env.cleanup();
             }
         }
-        
+        if (bulletAppState != null) {
+            playService.getApplication().getStateManager().detach(bulletAppState);
+            bulletAppState = null;
+        }
         super.cleanup(); 
     }
 
@@ -231,6 +216,20 @@ public abstract class Scene<T extends SceneData> extends AbstractPlayObject impl
         sceneRoot.attachChild(spatial);
         sceneRoot.updateGeometricState();
         addPhysicsObject(spatial);
+    }
+    
+    /**
+     * 从场景中移除节点，除了将节点从场景移除之外，该方法还会偿试把节点中的RigidBodyControl也从物理空间中移除。
+     * @param spatial 
+     */
+    public void removeSceneObject(Spatial spatial) {
+        if (bulletAppState != null) {
+            RigidBodyControl rbc = spatial.getControl(RigidBodyControl.class);
+            if (rbc != null) {
+                bulletAppState.getPhysicsSpace().remove(rbc);
+            }
+        }
+        spatial.removeFromParent();
     }
     
     /**
