@@ -11,9 +11,7 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
-import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.EnvData;
-import name.huliqing.fighter.game.service.PlayService;
 import name.huliqing.fighter.object.scene.Scene;
 import name.huliqing.fighter.processor.MySimpleWaterProcessor;
 

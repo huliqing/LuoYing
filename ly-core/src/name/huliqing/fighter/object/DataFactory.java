@@ -33,6 +33,7 @@ import name.huliqing.fighter.object.effect.TextureCylinderEffect;
 import name.huliqing.fighter.object.effect.TextureEffect;
 import name.huliqing.fighter.object.env.AudioEnv;
 import name.huliqing.fighter.object.env.BoundaryBoxEnv;
+import name.huliqing.fighter.object.env.LightDirectionalEnv;
 import name.huliqing.fighter.object.env.EnvLoader;
 import name.huliqing.fighter.object.env.ModelEnv;
 import name.huliqing.fighter.object.env.ModelEnvData;
@@ -261,6 +262,7 @@ public class DataFactory {
         register("envWater", EnvData.class, EnvLoader.class, WaterEnv.class);
         register("envBoundaryBox", EnvData.class, EnvLoader.class, BoundaryBoxEnv.class);
         register("envAudio", EnvData.class, EnvLoader.class, AudioEnv.class);
+        register("envLightDirectional", EnvData.class, EnvLoader.class, LightDirectionalEnv.class);
         
         // States
         register("stateAttribute", StateData.class, StateLoader.class, AttributeState.class);

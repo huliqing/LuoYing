@@ -37,6 +37,11 @@ public abstract class Scene<T extends SceneData> extends AbstractPlayObject impl
     private final PlayService playService = Factory.get(PlayService.class);
     private final ConfigService configService = Factory.get(ConfigService.class);
     
+    public interface Listener {
+        void onObjectAdded(Spatial object);
+        void onObjectRemoved(Spatial object);
+    }
+    
     // ---- inner
     protected T data;
     // 直射光源
@@ -51,10 +56,9 @@ public abstract class Scene<T extends SceneData> extends AbstractPlayObject impl
     
     // 场景根节点
     protected Node sceneRoot;
-    // 天空盒
-    private final Node skyRoot = new Node("SkyRoot");
+    
     // 地型，允许多个地形
-    private final Node terrainRoot = new Node("terrainRoot");
+    protected  Node terrainRoot;
     
     // 物理空间
     protected BulletAppState bulletAppState;
@@ -64,12 +68,10 @@ public abstract class Scene<T extends SceneData> extends AbstractPlayObject impl
     @Override
     public void initialize(Application app) {
         super.initialize(app); 
-        sceneRoot = new Node("SceneRoot");
-        sceneRoot.attachChild(skyRoot);
+        sceneRoot = new Node("sceneRoot");
+        terrainRoot = new Node("terrainRoot");
         sceneRoot.attachChild(terrainRoot);
-        
         playService.addObject(sceneRoot);
-//        app.getViewPort().attachScene(sceneRoot);
         
         // use physics
         if (data.isUsePhysics()) {
@@ -95,6 +97,7 @@ public abstract class Scene<T extends SceneData> extends AbstractPlayObject impl
             }
             sceneRoot.addLight(directionalLight);
         }
+        
         if (data.getAmbientLightColor() != null) {
             ambientLight = new AmbientLight();
             ambientLight.setColor(data.getAmbientLightColor());
@@ -103,12 +106,9 @@ public abstract class Scene<T extends SceneData> extends AbstractPlayObject impl
         
         // 影阴处理器
         if (data.isUseShadow() && configService.isUseShadow()) {
-            shadowSceneProcessor = shadowSceneProcessor != null 
-                    ? shadowSceneProcessor : createShadowProcessor();
-            if (!playService.getApplication().getViewPort().getProcessors()
-                    .contains(shadowSceneProcessor)) {
-                playService.getApplication().getViewPort()
-                        .addProcessor(shadowSceneProcessor);
+            shadowSceneProcessor = shadowSceneProcessor != null ? shadowSceneProcessor : createShadowProcessor();
+            if (!playService.getApplication().getViewPort().getProcessors().contains(shadowSceneProcessor)) {
+                playService.getApplication().getViewPort().addProcessor(shadowSceneProcessor);
             }
         }
         
@@ -123,27 +123,10 @@ public abstract class Scene<T extends SceneData> extends AbstractPlayObject impl
             }
         }
         
-        sceneRoot.updateGeometricState();
     }
 
     @Override
     public void cleanup() {
-       
-        if (shadowSceneProcessor != null) {
-            playService.getApplication().getViewPort().removeProcessor(shadowSceneProcessor);
-            shadowSceneProcessor = null;
-        }
-        
-        // LocalRoot是直接attach到ViewPort上去的，所以要这样移除。
-        if (sceneRoot != null) {
-//            playService.getApplication().getViewPort().detachScene(sceneRoot);
-            sceneRoot.removeFromParent();
-            sceneRoot = null;
-        }
-
-        skyRoot.detachAllChildren();
-        terrainRoot.detachAllChildren();
-
         if (envs != null) {
             for (Env env : envs) {
                 env.cleanup();
@@ -153,7 +136,15 @@ public abstract class Scene<T extends SceneData> extends AbstractPlayObject impl
             playService.getApplication().getStateManager().detach(bulletAppState);
             bulletAppState = null;
         }
-        super.cleanup(); 
+        if (shadowSceneProcessor != null) {
+            playService.getApplication().getViewPort().removeProcessor(shadowSceneProcessor);
+            shadowSceneProcessor = null;
+        }
+        if (sceneRoot != null) {
+            sceneRoot.removeFromParent();
+            sceneRoot = null;
+        }
+        super.cleanup();
     }
 
     @Override
@@ -172,19 +163,6 @@ public abstract class Scene<T extends SceneData> extends AbstractPlayObject impl
     
     public Spatial getSceneRoot() {
         return sceneRoot;
-    }
-    
-    public Node getSkyRoot() {
-        return skyRoot;
-    }
-    
-    /**
-     * 把目标设置为sky,同时只能存在一个sky,如果已经存在其它SKY，则其它sky会被清除掉。
-     * @param spatial 
-     */
-    public void setSky(Spatial spatial) {
-        this.skyRoot.detachAllChildren();
-        this.skyRoot.attachChild(spatial);
     }
 
     public Spatial getTerrain() {
@@ -214,7 +192,6 @@ public abstract class Scene<T extends SceneData> extends AbstractPlayObject impl
             return;
         
         sceneRoot.attachChild(spatial);
-        sceneRoot.updateGeometricState();
         addPhysicsObject(spatial);
     }
     
@@ -223,6 +200,9 @@ public abstract class Scene<T extends SceneData> extends AbstractPlayObject impl
      * @param spatial 
      */
     public void removeSceneObject(Spatial spatial) {
+        if (spatial == null)
+            return;
+        
         if (bulletAppState != null) {
             RigidBodyControl rbc = spatial.getControl(RigidBodyControl.class);
             if (rbc != null) {

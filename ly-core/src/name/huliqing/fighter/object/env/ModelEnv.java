@@ -21,7 +21,6 @@ public class ModelEnv<T extends ModelEnvData> extends Env<T> {
     
     // 模型
     protected Spatial model;
-    protected boolean loaded;
 
     @Override
     public void initData(T data) {
@@ -31,14 +30,14 @@ public class ModelEnv<T extends ModelEnvData> extends Env<T> {
     @Override
     public void initialize(Application app, Scene scene) {
         super.initialize(app, scene);
-        if (!loaded) {
-            model = loadModel();
-            loaded = true;
-        }
-        if (data.isTerrain()) {
-            scene.addTerrainObject(model);
-        } else {
-            scene.addSceneObject(model);
+        model = loadModel();
+        if (model != null) {
+            // 添加到地形节点中，这样玩家可以点击这个模型，并让角色在这个模型上走动。
+            if (data.isTerrain()) {
+                scene.addTerrainObject(model);
+            } else {
+                scene.addSceneObject(model);
+            }            
         }
     }
 
@@ -46,6 +45,7 @@ public class ModelEnv<T extends ModelEnvData> extends Env<T> {
     public void cleanup() {
         if (model != null) {
             scene.removeSceneObject(model);
+            model = null;
         }
         super.cleanup(); 
     }

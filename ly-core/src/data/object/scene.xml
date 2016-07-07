@@ -8,7 +8,7 @@
     <!-- ========================================================================= -->
     <!-- DEBUG -->
     <!-- ========================================================================= -->
-    <sceneRandom id="sceneDebug" boundary="" envs="envSkyDef,envTerrainDebug2,envWaterSimple" 
+    <sceneRandom id="sceneDebug" boundary="" envs="envSkyDef,envTerrainDebug2,envWaterSimple,envDirectionalLight1" 
                  emptyZones="0|0|10" directionalLightColor="0.8,0.8,0.8,0.8" directionalLightDir="-1,-2,-1"  ambientLightColor="0.7,0.7,0.7,0.7" 
                  usePhysics="1" useShadow="1" 
                  randomEnvs="envTree1|4,envTree2|4,envTree3|4,envTree4|4
@@ -22,8 +22,8 @@
     <!-- ========================================================================= -->
     
     <!--黄金宝箱场景-->
-    <sceneRandom id="sceneTreasure" boundary="105,30,105" envs="envSkyDef,envTerrain1,envWaterSimple,envBoundaryScene1,envAudioSea" 
-                 emptyZones="0|0|10" directionalLightColor="0.8,0.8,0.8,0.8" directionalLightDir="-1,-2,-1"  
+    <sceneRandom id="sceneTreasure" boundary="105,30,105" envs="envSkyDef,envTerrain1,envWaterSimple,envBoundaryScene1,envAudioSea,envDirectionalLight1" 
+                 emptyZones="0|0|10" 
                  ambientLightColor="0.7,0.7,0.7,0.7" usePhysics="1" useShadow="1" 
                  randomEnvs="envTree1|4,envTree2|4,envTree3|4,envTree4|4
 ,envFir1|4,envFir2|4,envFir3|4
