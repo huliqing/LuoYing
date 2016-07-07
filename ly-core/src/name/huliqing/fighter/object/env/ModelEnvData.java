@@ -9,6 +9,7 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.network.serializing.Serializable;
 import com.jme3.renderer.queue.RenderQueue;
+import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import name.huliqing.fighter.data.EnvData;
 
 /**
@@ -29,7 +30,7 @@ public class ModelEnvData extends EnvData{
     private float mass;
     // 摩擦力
     private float friction;
-    private RenderQueue.ShadowMode shadowMode;
+    private ShadowMode shadowMode;
     private boolean useUnshaded;
     // 是否作为地形的一部分，当作为地型的一部分时可进行点击，并让角色在上面行走。
     private boolean terrain;

@@ -45,13 +45,8 @@ public class RandomSceneLoader<T extends RandomSceneData> extends SceneLoader<T>
         // 载入随机的树木和花草
         TempVars tv = TempVars.get();
         Vector3f tempPos = tv.vect1;
-        float xExt = 80;
-        float zExt = 80;
-        Vector3f boundary = store.getBoundary();
-        if (boundary != null) {
-            xExt = boundary.getX();
-            zExt = boundary.getZ();
-        }
+        float xExt = proto.getAsFloat("randomXExtent", 100);
+        float zExt = proto.getAsFloat("randomZExtent", 100);
 
         // 随机环境物体ID，格式："envId|size, envId2|size, ..."
         // envId关联到环境物体(env.xml), size指定该随机物体的数量。

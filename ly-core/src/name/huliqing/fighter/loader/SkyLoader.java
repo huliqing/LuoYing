@@ -12,7 +12,6 @@ import com.jme3.util.SkyFactory;
 import name.huliqing.fighter.Common;
 
 /**
- *
  * @author huliqing
  */
 public class SkyLoader {
@@ -24,6 +23,10 @@ public class SkyLoader {
     private static Spatial cacheSkyDefaut;
     private static Spatial cacheSkyTiny;
     
+    /**
+     * @deprecated 不再使用
+     * @return 
+     */
     public static Spatial loadDefaultMin() {
         // 注意： sky必须进行缓存，并进行通用。SkyFactory在创建sky后即使从父节点中detach
         // 仍然无法释放内存，该问题会导致每一次创建Sky后内存中的Textures(M)数会一直累加
@@ -45,6 +48,11 @@ public class SkyLoader {
         return cacheSkyDefaut;
     }
     
+    /**
+     * 不再使用
+     * @deprecated 
+     * @return 
+     */
     public static Spatial loadTinySky() {
         if (cacheSkyTiny == null) {
             AssetManager am = Common.getAssetManager();

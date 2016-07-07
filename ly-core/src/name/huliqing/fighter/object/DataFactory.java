@@ -35,15 +35,18 @@ import name.huliqing.fighter.object.env.AudioEnv;
 import name.huliqing.fighter.object.env.BoundaryBoxEnv;
 import name.huliqing.fighter.object.env.LightDirectionalEnv;
 import name.huliqing.fighter.object.env.EnvLoader;
+import name.huliqing.fighter.object.env.LightAmbientEnv;
 import name.huliqing.fighter.object.env.ModelEnv;
 import name.huliqing.fighter.object.env.ModelEnvData;
 import name.huliqing.fighter.object.env.ModelEnvLoader;
 import name.huliqing.fighter.object.env.PlantEnv;
 import name.huliqing.fighter.object.env.PlantEnvLoader;
+import name.huliqing.fighter.object.env.ShadowEnv;
 import name.huliqing.fighter.object.env.SkyEnv;
 import name.huliqing.fighter.object.env.TerrainEnv;
 import name.huliqing.fighter.object.env.TreeEnv;
-import name.huliqing.fighter.object.env.WaterEnv;
+import name.huliqing.fighter.object.env.WaterAdvanceEnv;
+import name.huliqing.fighter.object.env.WaterSimpleEnv;
 import name.huliqing.fighter.object.game.Game;
 import name.huliqing.fighter.object.game.GameLoader;
 import name.huliqing.fighter.object.game.StoryGbGame;
@@ -254,15 +257,18 @@ public class DataFactory {
         register("sceneRandom", RandomSceneData.class, RandomSceneLoader.class, RandomScene.class);
         
         // Env
+        register("envSky", EnvData.class, EnvLoader.class, SkyEnv.class);
         register("envModel", ModelEnvData.class, ModelEnvLoader.class, ModelEnv.class);
         register("envTerrain", ModelEnvData.class, ModelEnvLoader.class, TerrainEnv.class);
-        register("envSky", ModelEnvData.class, ModelEnvLoader.class, SkyEnv.class);
         register("envTree", ModelEnvData.class, PlantEnvLoader.class, TreeEnv.class);
         register("envGrass", ModelEnvData.class, PlantEnvLoader.class, PlantEnv.class);
-        register("envWater", EnvData.class, EnvLoader.class, WaterEnv.class);
+        register("envWaterSimple", EnvData.class, EnvLoader.class, WaterSimpleEnv.class);
+        register("envWaterAdvance", EnvData.class, EnvLoader.class, WaterAdvanceEnv.class);
         register("envBoundaryBox", EnvData.class, EnvLoader.class, BoundaryBoxEnv.class);
         register("envAudio", EnvData.class, EnvLoader.class, AudioEnv.class);
         register("envLightDirectional", EnvData.class, EnvLoader.class, LightDirectionalEnv.class);
+        register("envLightAmbient", EnvData.class, EnvLoader.class, LightAmbientEnv.class);
+        register("envShadow", EnvData.class, EnvLoader.class, ShadowEnv.class);
         
         // States
         register("stateAttribute", StateData.class, StateLoader.class, AttributeState.class);

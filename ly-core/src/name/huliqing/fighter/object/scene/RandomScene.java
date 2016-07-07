@@ -90,5 +90,9 @@ public class RandomScene extends Scene<RandomSceneData> {
         return true;
     }
 
-
+    private double distanceSquare(float x, float z, float otherX, float otherZ) {
+        double dx = x - otherX;
+        double dz = z - otherZ;
+        return dx * dx + dz * dz;
+    }
 }

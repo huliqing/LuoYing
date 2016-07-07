@@ -13,7 +13,7 @@ import name.huliqing.fighter.loader.AssetLoader;
 import name.huliqing.fighter.object.scene.Scene;
 
 /**
- *
+ * 模型类的环境物体
  * @author huliqing
  * @param <T>
  */

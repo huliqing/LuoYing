@@ -8,7 +8,7 @@
     <!-- ========================================================================= -->
     <!-- DEBUG -->
     <!-- ========================================================================= -->
-    <sceneRandom id="sceneDebug" boundary="" envs="envSkyDef,envTerrainDebug2,envWaterSimple,envDirectionalLight1" 
+    <sceneRandom id="sceneDebug" boundary="" envs="envSky,envTerrainDebug2,envWaterSimple,envDirectional" 
                  emptyZones="0|0|10" directionalLightColor="0.8,0.8,0.8,0.8" directionalLightDir="-1,-2,-1"  ambientLightColor="0.7,0.7,0.7,0.7" 
                  usePhysics="1" useShadow="1" 
                  randomEnvs="envTree1|4,envTree2|4,envTree3|4,envTree4|4
@@ -22,19 +22,17 @@
     <!-- ========================================================================= -->
     
     <!--黄金宝箱场景-->
-    <sceneRandom id="sceneTreasure" boundary="105,30,105" envs="envSkyDef,envTerrain1,envWaterSimple,envBoundaryScene1,envAudioSea,envDirectionalLight1" 
-                 emptyZones="0|0|10" 
-                 ambientLightColor="0.7,0.7,0.7,0.7" usePhysics="1" useShadow="1" 
+    <sceneRandom id="sceneTreasure" boundary="105,30,105" 
+                 envs="envSky,envTerrain1,envWaterAdvance,envBoundaryScene1,envAudioSea,envDirectional,envAmbient,envShadow" 
+                 emptyZones="0|0|10" usePhysics="1" useShadow="1" 
                  randomEnvs="envTree1|4,envTree2|4,envTree3|4,envTree4|4
 ,envFir1|4,envFir2|4,envFir3|4
 ,envFlower0|4,envFlower1|4
 ,envGrass1|4,envGrass2|4,envGrass3|4,envGrass4|4"
 />
     
-    <!--<random id="sceneTreasure" sky="" terrain="envTerrainDebug" boundary="105,30,105" />-->
-    
     <!--千年古柏场景-->
-    <sceneRandom id="sceneGb" extends="sceneTreasure" envs="envSkyDef,envTerrain1"  emptyZones="0|0|5,44|-61|12,-14|65|12" />
+    <sceneRandom id="sceneGb" extends="sceneTreasure"  emptyZones="0|0|5,44|-61|12,-14|65|12" />
     
     <!--守护之战场景-->
     <sceneRandom id="sceneGuard" extends="sceneTreasure" emptyZones="0|0|5,42|-61|15,-14|65|15,-84|-15|10" />

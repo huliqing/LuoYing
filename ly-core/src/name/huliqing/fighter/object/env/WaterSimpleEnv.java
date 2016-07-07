@@ -16,11 +16,11 @@ import name.huliqing.fighter.object.scene.Scene;
 import name.huliqing.fighter.processor.MySimpleWaterProcessor;
 
 /**
- *
+ * 轻量级的水体效果，可支持移动设置、手机等。特别针对Opengl es应用。
  * @author huliqing
  * @param <T>
  */
-public class WaterEnv<T extends EnvData>  extends Env<T> {
+public class WaterSimpleEnv<T extends EnvData>  extends Env<T> {
 //    private final PlayService playService = Factory.get(PlayService.class);
     
     private String waterModelFile;

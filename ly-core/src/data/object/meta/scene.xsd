@@ -31,7 +31,7 @@ xs:time
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="sceneBase">
-                    <xs:attribute name="randomEnvs" use="optional" type="xs:string">
+                    <xs:attribute name="randomEnvs" type="xs:string" use="optional" >
                         <xs:annotation>
                             <xs:documentation>
                                 随机环境物体ID，格式："envId|size, envId2|size, ..."
@@ -39,7 +39,13 @@ xs:time
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="emptyZones" use="optional" type="xs:integer">
+                    <xs:attribute name="randomXExtent" type="xs:decimal" use="optional" >
+                        <xs:annotation><xs:documentation>环境物体允许的随机范围</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="randomZExtent" type="xs:decimal" use="optional" >
+                        <xs:annotation><xs:documentation>环境物体允许的随机范围</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="emptyZones" type="xs:string" use="optional" >
                         <xs:annotation>
                             <xs:documentation>
                                 定义一些空白区域，这些区域不能存在树木或其它障碍，这些区域可以
@@ -58,42 +64,10 @@ xs:time
         </xs:annotation>
         <xs:complexContent>
             <xs:extension base="base">
-                <xs:attribute name="sky" use="optional" type="xs:string">
-                    <xs:annotation>
-                        <xs:documentation>关联一个天空盒</xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="terrain" use="optional" type="xs:string">
-                    <xs:annotation>
-                        <xs:documentation>关联一个地形文件</xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="boundary" use="optional" type="xs:string">
+                <xs:attribute name="envs" type="xs:string" use="optional" >
                     <xs:annotation>
                         <xs:documentation>
-                            场景边界,让角色不能走出这个范围。格式："xExt,yExt,zExt"
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="directionalLightColor" use="optional" type="xs:string">
-                    <xs:annotation>
-                        <xs:documentation>
-                            场景直射光源颜色，格式："r,g,b,a"
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="directionalLightDir" use="optional" type="xs:string">
-                    <xs:annotation>
-                        <xs:documentation>
-                            场景直射光源方向，格式："x,y,z", 只有设置了directionalLightColor才有效,
-                            该方向会在程序内部自动归一化
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="ambientLightColor" use="optional" type="xs:string">
-                    <xs:annotation>
-                        <xs:documentation>
-                            场景环境光源，格式："r,g,b,a"
+                            场景物体，格式："env1,env2,env3,..."
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
@@ -103,8 +77,8 @@ xs:time
                             是否打开物体阴影,要看到物体阴影效果只有同时满足以下几个条件：
                             1.在全局配置中打开了阴影功能(Config.xml)
                             2.设置当前场景的阴影功能（即useShadow=true)
-                            3.设置当前场景的directionalLightColor参数.
-                            4.场景中有物体支持投影及接受投影。
+                            3.设置当前场景有光源物体。
+                            4.场景有阴影处理器.
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
@@ -127,13 +101,6 @@ xs:time
                     <xs:annotation>
                         <xs:documentation>
                             是否调试显示bullet网格。
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="envs" type="xs:string" use="optional" >
-                    <xs:annotation>
-                        <xs:documentation>
-                            场景物体，格式："env1,env2,env3,..."
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>

@@ -276,8 +276,8 @@ public class DataAttribute implements Savable {
     }
     
     /**
-     * 获取参数值，并以Vector4f形式返回，原始格式必须如： "x,y,z,w"，
-     * 如果参数不对，将返回null.
+     * 获取参数值，并以Quaternion形式返回，原始格式必须如： "x,y,z"<br>
+     * x,y,z分别表示在各个轴上的旋转<STRONG>弧度</STRONG>数.如果参数长度不对，将返回null.
      * @param key
      * @return 
      */
@@ -286,17 +286,21 @@ public class DataAttribute implements Savable {
         if (temp == null) 
             return null;
         String[] arr = temp.split(",");
-        if (arr.length < 4) {
+        if (arr.length < 3) 
             return null;
-        }
+        
         Quaternion qua = new Quaternion();
-        qua.set(Float.parseFloat(arr[0])
-                , Float.parseFloat(arr[1])
-                , Float.parseFloat(arr[2])
-                , Float.parseFloat(arr[3]));
+        qua.fromAngles(Float.parseFloat(arr[0]), Float.parseFloat(arr[1]), Float.parseFloat(arr[2]));
         return qua;
     }
     
+    /**
+     * 获取参数值，并以Quaternion形式返回，原始格式必须如： "x,y,z"<br>
+     * x,y,z分别表示在各个轴上的旋转<STRONG>弧度</STRONG>数.如果参数长度不对，将返回null.
+     * @param key
+     * @param defValue 如果没有指定的参数值，则返回这个默认值。
+     * @return 
+     */
     public final Quaternion getAsQuaternion(String key, Quaternion defValue) {
         Quaternion temp = getAsQuaternion(key);
         return temp != null ? temp : defValue;

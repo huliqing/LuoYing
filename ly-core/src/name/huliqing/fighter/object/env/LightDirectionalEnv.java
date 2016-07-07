@@ -38,7 +38,7 @@ public class LightDirectionalEnv <T extends EnvData> extends Env<T> {
     @Override
     public void initialize(Application app, Scene scene) {
         super.initialize(app, scene);
-        scene.getSceneRoot().addLight(light);
+        scene.addSceneLight(light);
         if (debug) {
             debugNode = createDebugArrow(light);
             scene.addSceneObject(debugNode);
@@ -48,9 +48,7 @@ public class LightDirectionalEnv <T extends EnvData> extends Env<T> {
     @Override
     public void cleanup() {
         if (scene != null) {
-            if (light != null) {
-                scene.getSceneRoot().removeLight(light);
-            }
+            scene.removeSceneLight(light);
             scene.removeSceneObject(debugNode);
         }
         super.cleanup();
