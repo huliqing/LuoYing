@@ -6,24 +6,23 @@
     xsi:schemaLocation='http://fighter.huliqing.name meta/scene.xsd'>
     
     <!-- ========================================================================= -->
-    <!-- DEBUG -->
+    <!-- 场景基本配置 -->
     <!-- ========================================================================= -->
-    <sceneRandom id="sceneDebug" boundary="" envs="envSky,envTerrainDebug2,envWaterSimple,envDirectional" 
-                 emptyZones="0|0|10" directionalLightColor="0.8,0.8,0.8,0.8" directionalLightDir="-1,-2,-1"  ambientLightColor="0.7,0.7,0.7,0.7" 
-                 usePhysics="1" useShadow="1" 
-                 randomEnvs="envTree1|4,envTree2|4,envTree3|4,envTree4|4
-,envFir1|4,envFir2|4,envFir3|4
-,envFlower0|10,envFlower1|10
-,envGrass1|4,envGrass2|4,envGrass3|4,envGrass4|4"
-/>
+    
+    <!--暂无-->
     
     <!-- ========================================================================= -->
-    <!-- Scene -->
+    <!-- DEBUG -->
+    <!-- ========================================================================= -->
+    <sceneRandom id="sceneDebug" envs="envSky,envTerrainDebug2" emptyZones="0|0|10" usePhysics="1" />
+    
+    <!-- ========================================================================= -->
+    <!-- 特殊场景 -->
     <!-- ========================================================================= -->
     
     <!--黄金宝箱场景-->
-    <sceneRandom id="sceneTreasure" boundary="105,30,105" 
-                 envs="envSky,envTerrain1,envWaterAdvance,envBoundaryScene1,envAudioSea,envDirectional,envAmbient,envShadow" 
+    <sceneRandom id="sceneTreasure" 
+                 envs="envSky,envTerrain1,envWaterAdvance,envAudioSea,envLightDirectional,envLightAmbient,envShadow" 
                  emptyZones="0|0|10" usePhysics="1" useShadow="1" 
                  randomEnvs="envTree1|4,envTree2|4,envTree3|4,envTree4|4
 ,envFir1|4,envFir2|4,envFir3|4
