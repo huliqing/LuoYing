@@ -6,6 +6,7 @@
 package name.huliqing.fighter.object.env;
 
 import com.jme3.app.Application;
+import com.jme3.bounding.BoundingBox;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
@@ -20,7 +21,7 @@ import name.huliqing.fighter.processor.MySimpleWaterProcessor;
  * @author huliqing
  * @param <T>
  */
-public class WaterSimpleEnv<T extends EnvData>  extends Env<T> {
+public class WaterSimpleEnv<T extends EnvData> extends AbstractEnv<T> implements WaterEnv<T> {
 //    private final PlayService playService = Factory.get(PlayService.class);
     
     private String waterModelFile;
@@ -42,7 +43,7 @@ public class WaterSimpleEnv<T extends EnvData>  extends Env<T> {
     // ----
     private Application app;
     private Spatial waterModel;
-    private MySimpleWaterProcessor swp;
+    private MySimpleWaterProcessor water;
     
     @Override
     public void initData(T data) {
@@ -81,30 +82,28 @@ public class WaterSimpleEnv<T extends EnvData>  extends Env<T> {
             waterModel.setLocalScale(scale);
         }
         
-        swp = new MySimpleWaterProcessor(app.getAssetManager(), waterModel);
-        swp.addReflectionScene(scene.getSceneRoot());
-        swp.setTexScale(texScale);
-        swp.setWaveSpeed(waveSpeed);
-        swp.setDistortionMix(distortionMix);
-        swp.setDistortionScale(distortionScale);
+        water = new MySimpleWaterProcessor(app.getAssetManager(), waterModel);
+        water.addReflectionScene(scene.getSceneRoot());
+        water.setTexScale(texScale);
+        water.setWaveSpeed(waveSpeed);
+        water.setDistortionMix(distortionMix);
+        water.setDistortionScale(distortionScale);
         if (waterColor != null) {
-            swp.setWaterColor(waterColor);
+            water.setWaterColor(waterColor);
         }
         if (foamMap != null) {
-            swp.setFoamMap(foamMap);
+            water.setFoamMap(foamMap);
         }
         if (foamScale != null) {
-            swp.setFoamScale(foamScale.x, foamScale.y);
+            water.setFoamScale(foamScale.x, foamScale.y);
         }
         if (foamMaskMap != null) {
-            swp.setFoamMaskMap(foamMaskMap);
+            water.setFoamMaskMap(foamMaskMap);
         }
         if (foamMaskScale != null) {
-            swp.setFoamMaskScale(foamMaskScale.x, foamMaskScale.y);
+            water.setFoamMaskScale(foamMaskScale.x, foamMaskScale.y);
         }
-        // remove20160704，这会造成死循环，需要想其它办法来支持多个ViewPort
-//        waterModel.addControl(new WaterControl(app.getViewPort(), swp)); 
-        app.getViewPort().addProcessor(swp);
+        app.getViewPort().addProcessor(water);
         
         scene.addSceneObject(waterModel);
     }
@@ -114,43 +113,26 @@ public class WaterSimpleEnv<T extends EnvData>  extends Env<T> {
         if (waterModel != null) {
             scene.removeSceneObject(waterModel);
         }
-        if (swp != null && app != null) {
-            if (app.getViewPort().getProcessors().contains(swp)) {
-                app.getViewPort().removeProcessor(swp);
+        if (water != null && app != null) {
+            if (app.getViewPort().getProcessors().contains(water)) {
+                app.getViewPort().removeProcessor(water);
             }
         }
         super.cleanup(); 
     }
     
-
-    // remove20160704，这会造成死循环，因为vp可能是simpleWaterProcessor中的特殊viewPort.
-    // 必须排除这种情况。
-//    private class WaterControl extends AbstractControl {
-//        
-//        private final SimpleWaterProcessor swp;
-//        private final ViewPort defViewPort;
-//
-//        public WaterControl(ViewPort defViewPort, SimpleWaterProcessor swp) {
-//            this.defViewPort = defViewPort;
-//            this.swp = swp;
-//            this.defViewPort.addProcessor(this.swp);
-//        }
-//        
-//        @Override
-//        protected void controlUpdate(float tpf) {}
-//
-//        @Override
-//        protected void controlRender(RenderManager rm, ViewPort vp) {
-////            // 这里用于支持多个viewPort的情况
-////            if (vp != defViewPort) {
-////                if (!vp.getProcessors().contains(swp)) {
-////                    vp.addProcessor(swp);
-////                }
-////            }
-//        }
-//    }
-
-
+    @Override
+    public boolean isUnderWater(Vector3f point) {
+        if (!isInitialized()) {
+            return false;
+        }
+        if (point.y < waterModel.getWorldTranslation().y) {
+            BoundingBox bb = (BoundingBox) waterModel.getWorldBound();
+            bb.setYExtent(Float.MAX_VALUE);
+            return bb.contains(point);
+        }
+        return false;
+    }
     
     
 }

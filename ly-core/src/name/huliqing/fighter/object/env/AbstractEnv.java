@@ -6,7 +6,6 @@
 package name.huliqing.fighter.object.env;
 
 import com.jme3.app.Application;
-import com.jme3.light.AmbientLight;
 import name.huliqing.fighter.data.EnvData;
 import name.huliqing.fighter.object.scene.Scene;
 
@@ -15,28 +14,43 @@ import name.huliqing.fighter.object.scene.Scene;
  * @author huliqing
  * @param <T>
  */
-public class LightAmbientEnv <T extends EnvData> extends AbstractEnv<T> {
-
-    private final AmbientLight light = new AmbientLight();
+public class AbstractEnv<T extends EnvData> implements Env<T> {
     
+    protected T data;
+    protected Scene scene;
+    protected boolean initialized;
+
     @Override
     public void initData(T data) {
-        super.initData(data);
-        light.setColor(data.getAsColor("color", light.getColor()));
+        this.data = data;
     }
 
     @Override
-    public void initialize(Application app, Scene scene) {
-        super.initialize(app, scene);
-        scene.addSceneLight(light);
+    public T getData() {
+        return data;
     }
     
+    /**
+     * 初始化
+     * @param app
+     * @param scene 
+     */
+    @Override
+    public void initialize(Application app, Scene scene) {
+        this.scene = scene;
+        this.initialized = true;
+    }
+
+    @Override
+    public boolean isInitialized() {
+        return initialized;
+    }
+    
+    /**
+     * 当Env退出时清理资源。
+     */
     @Override
     public void cleanup() {
-        if (scene != null) {
-            scene.removeSceneLight(light);
-        }
-        super.cleanup(); 
+        initialized = false;
     }
-    
 }

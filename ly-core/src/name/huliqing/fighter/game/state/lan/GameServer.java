@@ -25,7 +25,6 @@ import name.huliqing.fighter.Config;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.GameData;
 import name.huliqing.fighter.game.service.ConfigService;
-import name.huliqing.fighter.game.service.EnvService;
 import name.huliqing.fighter.game.service.PlayService;
 import name.huliqing.fighter.game.state.ConnData;
 import name.huliqing.fighter.game.state.lan.discover.MessCSFindServer;
@@ -37,6 +36,7 @@ import name.huliqing.fighter.game.state.lan.discover.UDPListener;
 import name.huliqing.fighter.game.mess.MessBase;
 import name.huliqing.fighter.manager.ResourceManager;
 import name.huliqing.fighter.object.actor.Actor;
+import name.huliqing.fighter.game.service.SystemService;
 
 /**
  * 服务端程序，注：不要直接通过new GameServer创建服务端，而是通过 {@link Network#createGameServer(name.huliqing.fighter.data.GameData) }
@@ -44,7 +44,7 @@ import name.huliqing.fighter.object.actor.Actor;
  * @author huliqing
  */
 public class GameServer implements UDPListener, ConnectionListener, MessageListener<HostedConnection> {
-    private final EnvService envService = Factory.get(EnvService.class);
+    private final SystemService envService = Factory.get(SystemService.class);
     private final PlayService playService = Factory.get(PlayService.class);
     private final ConfigService configService = Factory.get(ConfigService.class);
     

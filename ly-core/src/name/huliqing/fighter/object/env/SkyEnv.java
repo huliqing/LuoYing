@@ -18,7 +18,7 @@ import name.huliqing.fighter.object.scene.Scene;
  * @author huliqing
  * @param <T>
  */
-public class SkyEnv <T extends EnvData> extends Env<T> {
+public class SkyEnv <T extends EnvData> extends AbstractEnv<T> {
 
     // 基本文件夹路径，如：“Textures/tex/sky/default_min/"
     // 如果指定了这个路径，则把它加在west,east,north,south,up,down前面

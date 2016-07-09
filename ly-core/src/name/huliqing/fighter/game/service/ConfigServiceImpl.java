@@ -282,7 +282,7 @@ public class ConfigServiceImpl implements ConfigService {
         
         // 1.从配置和本地环境中查找，如果没有则使用默认配置
         if (value == null || value.equals("")) {
-            value = Factory.get(EnvService.class).getLocale();
+            value = Factory.get(SystemService.class).getLocale();
             if (value == null || value.equals("")) {
                 return defLocale;
             }

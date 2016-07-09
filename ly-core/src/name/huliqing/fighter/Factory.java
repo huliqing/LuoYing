@@ -54,12 +54,13 @@ import name.huliqing.fighter.game.service.DropService;
 import name.huliqing.fighter.game.service.DropServiceImpl;
 import name.huliqing.fighter.game.service.EffectService;
 import name.huliqing.fighter.game.service.EffectServiceImpl;
-import name.huliqing.fighter.game.service.EnvService;
-import name.huliqing.fighter.game.service.EnvServiceImpl;
+import name.huliqing.fighter.game.service.SystemServiceImpl;
 import name.huliqing.fighter.game.service.HandlerService;
 import name.huliqing.fighter.game.service.HandlerServiceImpl;
 import name.huliqing.fighter.game.service.ElService;
 import name.huliqing.fighter.game.service.ElServiceImpl;
+import name.huliqing.fighter.game.service.EnvService;
+import name.huliqing.fighter.game.service.EnvServiceImpl;
 import name.huliqing.fighter.game.service.GameService;
 import name.huliqing.fighter.game.service.GameServiceImpl;
 import name.huliqing.fighter.game.service.HitCheckerService;
@@ -94,6 +95,7 @@ import name.huliqing.fighter.game.service.TaskService;
 import name.huliqing.fighter.game.service.TaskServiceImpl;
 import name.huliqing.fighter.game.service.ViewService;
 import name.huliqing.fighter.game.service.ViewServiceImpl;
+import name.huliqing.fighter.game.service.SystemService;
 
 /**
  *
@@ -145,7 +147,8 @@ public class Factory {
         claMaps.put(SkillService.class, SkillServiceImpl.class);
         claMaps.put(SkinService.class, SkinServiceImpl.class);
         claMaps.put(SoundService.class, SoundServiceImpl.class);
-        claMaps.put(StateService.class, StateServiceImpl.class);
+        claMaps.put(StateService.class, StateServiceImpl.class);      
+        claMaps.put(SystemService.class, SystemServiceImpl.class);
         claMaps.put(TalentService.class, TalentServiceImpl.class);
         claMaps.put(TaskService.class, TaskServiceImpl.class);
         claMaps.put(ViewService.class, ViewServiceImpl.class);

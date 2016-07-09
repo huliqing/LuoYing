@@ -17,7 +17,7 @@ import name.huliqing.fighter.object.scene.Scene;
  * @author huliqing
  * @param <T>
  */
-public class ModelEnv<T extends ModelEnvData> extends Env<T> {
+public class ModelEnv<T extends ModelEnvData> extends AbstractEnv<T> {
     
     // 模型
     protected Spatial model;

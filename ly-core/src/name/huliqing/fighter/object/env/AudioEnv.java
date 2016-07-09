@@ -30,7 +30,7 @@ import name.huliqing.fighter.object.scene.Scene;
  * @author huliqing
  * @param <T>
  */
-public class AudioEnv <T extends EnvData> extends Env<T> {
+public class AudioEnv <T extends EnvData> extends AbstractEnv<T> {
     private final SoundService soundService = Factory.get(SoundService.class);
 
     private boolean debug;

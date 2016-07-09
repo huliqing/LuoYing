@@ -41,6 +41,7 @@ import name.huliqing.fighter.object.env.ModelEnvData;
 import name.huliqing.fighter.object.env.ModelEnvLoader;
 import name.huliqing.fighter.object.env.PlantEnv;
 import name.huliqing.fighter.object.env.PlantEnvLoader;
+import name.huliqing.fighter.object.env.ProxyPlatformEnv;
 import name.huliqing.fighter.object.env.ShadowEnv;
 import name.huliqing.fighter.object.env.SkyEnv;
 import name.huliqing.fighter.object.env.TerrainEnv;
@@ -269,6 +270,7 @@ public class DataFactory {
         register("envLightDirectional", EnvData.class, EnvLoader.class, LightDirectionalEnv.class);
         register("envLightAmbient", EnvData.class, EnvLoader.class, LightAmbientEnv.class);
         register("envShadow", EnvData.class, EnvLoader.class, ShadowEnv.class);
+        register("envProxyPlatform", EnvData.class, EnvLoader.class, ProxyPlatformEnv.class);
         
         // States
         register("stateAttribute", StateData.class, StateLoader.class, AttributeState.class);

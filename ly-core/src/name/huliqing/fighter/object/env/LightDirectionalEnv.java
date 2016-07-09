@@ -19,7 +19,7 @@ import name.huliqing.fighter.utils.DebugUtils;
  * @author huliqing
  * @param <T>
  */
-public class LightDirectionalEnv <T extends EnvData> extends Env<T> {
+public class LightDirectionalEnv <T extends EnvData> extends AbstractEnv<T> {
 
     private boolean debug;
     private final DirectionalLight light = new DirectionalLight();

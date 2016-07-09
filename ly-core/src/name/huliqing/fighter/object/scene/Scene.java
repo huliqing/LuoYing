@@ -11,7 +11,6 @@ import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.light.Light;
 import com.jme3.post.Filter;
 import com.jme3.post.FilterPostProcessor;
-import com.jme3.post.SceneProcessor;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import java.util.ArrayList;
@@ -169,6 +168,10 @@ public abstract class Scene<T extends SceneData> extends AbstractPlayObject impl
         this.data = data;
     }
 
+    /**
+     * 获取当前场景的Env
+     * @return 
+     */
     public List<Env> getEnvs() {
         return envs;
     }

@@ -20,11 +20,11 @@ import java.util.logging.Logger;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.GameData;
 import name.huliqing.fighter.game.service.ConfigService;
-import name.huliqing.fighter.game.service.EnvService;
 import name.huliqing.fighter.game.state.lan.GameClient.ClientListener;
 import name.huliqing.fighter.game.state.lan.GameServer.ServerState;
 import name.huliqing.fighter.game.mess.MessPing;
 import name.huliqing.fighter.game.state.ConnData;
+import name.huliqing.fighter.game.service.SystemService;
 
 /**
  * 客户端帧听器,用于监听来自服务端的消息。
@@ -34,7 +34,7 @@ public abstract class AbstractClientListener implements ClientListener {
     private static final Logger LOG = Logger.getLogger(AbstractClientListener.class.getName());
     
     private final ConfigService configService = Factory.get(ConfigService.class);
-    private final EnvService envService = Factory.get(EnvService.class);
+    private final SystemService envService = Factory.get(SystemService.class);
     
     private final Application app; 
     // 从服务端获得的所有客户端列表

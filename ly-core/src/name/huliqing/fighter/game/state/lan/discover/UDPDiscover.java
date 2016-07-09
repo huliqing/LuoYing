@@ -17,7 +17,7 @@ import java.net.SocketException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.fighter.Factory;
-import name.huliqing.fighter.game.service.EnvService;
+import name.huliqing.fighter.game.service.SystemService;
 
 /**
  * 用于查找主机，或者通知客户端。这个类可以在客户端运行也可以在服务端运行。
@@ -114,7 +114,7 @@ public class UDPDiscover {
      * @return 
      */
     protected InetAddress getBroadcastAddress() {
-        return Factory.get(EnvService.class).getBroadcastAddress();
+        return Factory.get(SystemService.class).getBroadcastAddress();
     }
     
     private boolean isRunning() {

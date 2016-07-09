@@ -23,7 +23,7 @@ import name.huliqing.fighter.object.scene.Scene;
  * @author huliqing
  * @param <T>
  */
-public class ShadowEnv <T extends EnvData> extends Env <T> implements Scene.Listener{
+public class ShadowEnv <T extends EnvData> extends AbstractEnv <T> implements Scene.Listener{
     private final ConfigService configService = Factory.get(ConfigService.class);
 
     private float shadowIntensity = 0.7f;
@@ -51,10 +51,12 @@ public class ShadowEnv <T extends EnvData> extends Env <T> implements Scene.List
 
     @Override
     public void cleanup() {
-        if (scene != null) {
-            scene.removeFilter(filter);
-            scene.removeListener(this);
-        }
+        scene.removeFilter(filter);
+        scene.removeListener(this);
+        // 注意：这里要把filter设置为null以让系统释放内存，否则即使cleanup后，该filter内部使用中的frameBuffer仍然会
+        // 占用内存(从stateAppState的debug中可以看到FrameBuffers(M)一下在增加)。
+        // 这是一个特殊的情况，在其它Filter还没有发现这个问题。
+        filter = null;
         super.cleanup();
     }
 

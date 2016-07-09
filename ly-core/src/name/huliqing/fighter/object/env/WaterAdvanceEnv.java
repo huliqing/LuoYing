@@ -9,6 +9,7 @@ import com.jme3.app.Application;
 import com.jme3.light.DirectionalLight;
 import com.jme3.light.Light;
 import com.jme3.light.LightList;
+import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import com.jme3.texture.Texture2D;
@@ -22,7 +23,7 @@ import name.huliqing.fighter.object.scene.Scene;
  * @author huliqing
  * @param <T>
  */
-public class WaterAdvanceEnv <T extends EnvData> extends Env<T> implements Scene.Listener {
+public class WaterAdvanceEnv <T extends EnvData> extends AbstractEnv<T> implements WaterEnv<T>, Scene.Listener {
 
     private String causticsTexture;
     private String foamTexture;
@@ -35,6 +36,9 @@ public class WaterAdvanceEnv <T extends EnvData> extends Env<T> implements Scene
     
     // ---- inner
     private final WaterFilter water = new WaterFilter();
+    // 水体的半径平方,用于优化检测isUnderWater。
+    private float radiusSquared;
+    private final Vector3f tempCenter = new Vector3f();
     
     @Override
     public void initData(T data) {
@@ -87,6 +91,8 @@ public class WaterAdvanceEnv <T extends EnvData> extends Env<T> implements Scene
         water.setWaterTransparency(data.getAsFloat("waterTransparency", water.getWaterTransparency()));
         water.setWaveScale(data.getAsFloat("waveScale", water.getWaveScale()));
         water.setWindDirection(data.getAsVector2f("windDirection", water.getWindDirection()));
+        radiusSquared = water.getRadius() * water.getRadius();
+        
         
         // ---- custom 
         useSceneLight = data.getAsBoolean("useSceneLight", useSceneLight);
@@ -120,6 +126,38 @@ public class WaterAdvanceEnv <T extends EnvData> extends Env<T> implements Scene
         scene.removeListener(this);
         scene.removeFilter(water);
         super.cleanup();
+    }
+    
+    @Override
+    public boolean isUnderWater(Vector3f point) {
+        if (!isInitialized())
+            return false;
+        
+        // 在水面上,则后面不需要再检测
+        float wh = water.getCenter().y + water.getWaterHeight();
+        if (point.y > wh) 
+            return false;
+        
+        // 无界限的水面(在水面下),则一定是在水里。注：center为null是无界限水体
+        if (water.getCenter() == null) {
+            return true;
+        } 
+        
+        // 有界限水体
+        if (water.getShapeType() == AreaShape.Circular) {
+            tempCenter.set(water.getCenter()).setY(point.y);
+            return point.distanceSquared(tempCenter) < radiusSquared;
+            
+        } else if (water.getShapeType() == AreaShape.Square) {
+            
+            float minX = water.getCenter().x - water.getRadius();
+            float maxX = water.getCenter().x + water.getRadius();
+            float minZ = water.getCenter().z - water.getRadius();
+            float maxZ = water.getCenter().z + water.getRadius();
+            return point.x > minX && point.x < maxX && point.z > minZ && point.z < maxZ;
+        }
+        
+        return false;
     }
     
     @Override
@@ -176,6 +214,7 @@ public class WaterAdvanceEnv <T extends EnvData> extends Env<T> implements Scene
 //        protected void controlRender(RenderManager rm, ViewPort vp) {}
 //        
 //    }
+
     
     
 }

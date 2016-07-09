@@ -21,7 +21,7 @@ import name.huliqing.fighter.object.scene.Scene;
  * @author huliqing
  * @param <T>
  */
-public class BoundaryBoxEnv<T extends EnvData>  extends Env<T>{
+public class BoundaryBoxEnv<T extends EnvData>  extends AbstractEnv<T>{
 
     private Vector3f xyzExtends;
     private Vector3f location;
