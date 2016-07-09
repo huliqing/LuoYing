@@ -5,6 +5,7 @@
 package name.huliqing.fighter.object.game;
 
 import com.jme3.app.Application;
+import com.jme3.app.state.AppStateManager;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.fighter.Factory;
@@ -12,6 +13,7 @@ import name.huliqing.fighter.game.network.ActorNetwork;
 import name.huliqing.fighter.game.service.PlayService;
 import name.huliqing.fighter.logic.scene.ActorCleanLogic;
 import name.huliqing.fighter.object.actor.Actor;
+import name.huliqing.fighter.object.scene.Scene;
 
 /**
  * 故事模式的游戏方式，有一些特殊的游戏逻辑行为。并且一旦主角死亡也就是任务失败
@@ -38,7 +40,7 @@ public abstract class StoryGame extends Game {
      */
     public final static int GROUP_PLAYER = 1;
     
-    // 判断是否处于开始状态
+    // 默认false,需要等待载入player
     protected boolean started;
     
     public void addTask(GameTask task) {
@@ -46,16 +48,20 @@ public abstract class StoryGame extends Game {
     }
 
     @Override
-    public final void initialize(Application app) {
-        super.initialize(app);
+    public final void initialize(AppStateManager stateManager, Application app) {
+        super.initialize(stateManager, app); 
+        // 默认false,需要等待载入player
+        started = false;
+    }
+
+    @Override
+    public void onSceneInitialized(Scene scene) {
+        super.onSceneInitialized(scene); 
         finishCount = 0;
         current = null;
         
         // 角色清理器
         addLogic(new ActorCleanLogic());
-        
-        // 默认false,需要等待载入player
-        started = false;
     }
     
     /**
@@ -83,7 +89,8 @@ public abstract class StoryGame extends Game {
     }
 
     @Override
-    protected void updateLogics(float tpf) {
+    public void update(float tpf) {
+        super.update(tpf);
         if (!started) {
             // 设置player分组
             Actor player = playService.getPlayer();
@@ -113,7 +120,8 @@ public abstract class StoryGame extends Game {
             if (hasNext()) {
                 doNext();
             } else {
-                playService.removePlayObject(this);
+//                playService.removePlayObject(this);
+                app.getStateManager().detach(this);
             }
         } else {
             current.update(tpf);

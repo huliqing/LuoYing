@@ -24,6 +24,9 @@ import name.huliqing.fighter.data.EnvData;
 import name.huliqing.fighter.data.SoundData;
 import name.huliqing.fighter.game.service.SoundService;
 import name.huliqing.fighter.object.scene.Scene;
+import static java.util.Arrays.stream;
+import static java.util.Arrays.stream;
+import static java.util.Arrays.stream;
 
 /**
  *

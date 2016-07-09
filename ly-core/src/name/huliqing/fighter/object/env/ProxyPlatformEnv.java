@@ -21,7 +21,7 @@ import name.huliqing.fighter.object.scene.Scene;
  * @author huliqing
  * @param <T>
  */
-public class ProxyPlatformEnv <T extends EnvData> extends AbstractEnv<T> implements ProxyEnv<T> {
+public class ProxyPlatformEnv <T extends EnvData> extends AbstractEnv<T> {
     private final SystemService systemService = Factory.get(SystemService.class);
     private final EnvService envService = Factory.get(EnvService.class);
 
@@ -30,8 +30,6 @@ public class ProxyPlatformEnv <T extends EnvData> extends AbstractEnv<T> impleme
     
     // ---- inner
     private List<EnvMatcher> matchers;
-    // 被代理的实际ENV，这个Env是根据matcher后最终确定的Env.
-    private Env proxyEnv;
     
     @Override
     public void initData(T data) {
@@ -60,15 +58,13 @@ public class ProxyPlatformEnv <T extends EnvData> extends AbstractEnv<T> impleme
     public void initialize(Application app, Scene scene) {
         super.initialize(app, scene);
         EnvMatcher matcher = findMatcher(systemService.getPlatformName());
-        proxyEnv = envService.loadEnv(matcher != null ? matcher.envId : defaultEnv);
-        proxyEnv.initialize(app, scene);
+        
+        String proxyEnvId = matcher != null ? matcher.envId : defaultEnv;
+        scene.addEnv(envService.loadEnvData(proxyEnvId));
     }
 
     @Override
     public void cleanup() {
-        if (proxyEnv != null) {
-            proxyEnv.cleanup();
-        }
         super.cleanup(); 
     }
     
@@ -81,17 +77,6 @@ public class ProxyPlatformEnv <T extends EnvData> extends AbstractEnv<T> impleme
             }
         }
         return null;
-    }
-
-    @Override
-    public List<Env> getProxyEnvs(List<Env> store) {
-        if (store == null) {
-            store = new ArrayList<Env>(1);
-        }
-        if (proxyEnv != null) {
-            store.add(proxyEnv);
-        }
-        return store;
     }
     
     private class EnvMatcher {

@@ -19,9 +19,10 @@ import name.huliqing.fighter.game.service.SkillService;
 import name.huliqing.fighter.game.service.StateService;
 import name.huliqing.fighter.enums.SkillType;
 import name.huliqing.fighter.game.service.SceneService;
+import name.huliqing.fighter.object.env.CameraChaseEnv;
 import name.huliqing.fighter.object.game.Game;
+import name.huliqing.fighter.object.scene.SceneUtils;
 import name.huliqing.fighter.utils.CollisionChaseCamera;
-import name.huliqing.fighter.utils.SceneUtils;
 
 /**
  * 测试
@@ -61,16 +62,13 @@ public class LabPlayState extends NetworkPlayState {
         super.changeGameState(newGameState);
         gameState.getGame().addListener(new Game.GameListener() {
             @Override
-            public void onSceneLoaded() {
-                // 载入场景
-        //        SceneData sceneData = DataLoaderFactory.createSceneData(IdConstants.SCENE_TREASURE);
-        //        SceneData sceneData = DataFactory.createData(IdConstants.SCENE_TREASURE);
-        //        initScene(sceneData);
+            public void onGameStarted(Game game) {
 
-                chaseCamera = SceneUtils.createChaseCam(app.getCamera()
-                        , app.getInputManager());
-                chaseCamera.setPhysicsSpace(gameState.getGame().getScene().getPhysicsSpace());
-                chaseCamera.addCollisionObject(gameState.getGame().getScene().getTerrain());
+                // remove20160710
+//                chaseCamera = SceneUtils.createChaseCam(app.getCamera()
+//                        , app.getInputManager());
+//                chaseCamera.setPhysicsSpace(gameState.getGame().getScene().getPhysicsSpace());
+//                chaseCamera.addCollisionObjectAll(gameState.getGame().getScene().getTerrain());
         
                 // 载入NPC
                 npc1 = loadActor(FastMath.nextRandomInt(0, actorIds.length - 1));
@@ -86,7 +84,11 @@ public class LabPlayState extends NetworkPlayState {
 
                 gameState.getTeamView().setMainActor(npc1);
                 gameState.setTarget(npc2);
-                chaseCamera.setChase(npc1.getModel());
+                
+                CameraChaseEnv cce = SceneUtils.findEnv(game.getScene(), CameraChaseEnv.class);
+                if (cce != null) {
+                    cce.setChase(npc1.getModel());
+                }
             }
         });
         
@@ -120,24 +122,6 @@ public class LabPlayState extends NetworkPlayState {
     public void kickClient(int connId) {
         // ignore
     }
-
-    // remove20160628
-//    @Override
-//    protected boolean onPicked(PickManager.PickResult pr) {
-//        return false;
-//    }
-    
-//    @Override
-//    protected boolean onPickedActor(Actor actor) {
-//        setChase(actor.getModel());
-//        return true;
-//    }
-
-//    @Override
-//    public List<MessPlayClientData> getClients() {
-//        // ignore
-//        return null;
-//    }
 
     @Override
     protected void onSelectPlayer(String actorId, String actorName) {

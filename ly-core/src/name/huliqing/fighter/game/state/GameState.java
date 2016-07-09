@@ -89,7 +89,7 @@ public abstract class GameState extends AbstractAppState {
         this.networkObjects.clear();
         
         // 添加游戏逻辑
-        addObject(game, false);
+        stateManager.attach(game);
         
         // 添加Speak和Talk逻辑
         addObject(SpeakManager.getInstance(), false);
@@ -103,6 +103,32 @@ public abstract class GameState extends AbstractAppState {
     @Override
     public void update(float tpf) {
         playManager.update(tpf);
+    }
+
+    @Override
+    public void stateDetached(AppStateManager stateManager) {
+        if (game != null) {
+            stateManager.detach(game);
+        }
+        super.stateDetached(stateManager);
+    }
+    
+    @Override
+    public void cleanup() {
+        listeners.clear();
+        networkObjects.clear();
+        playManager.cleanup();
+        UIState.getInstance().clearUI();
+        super.cleanup();
+    }
+    
+     /**
+     * 退出当前PlayState,并返回到开始界面。
+     */
+    public void exit() {
+        for (PlayListener lis : listeners) {
+            lis.onExit();
+        }
     }
 
     public Game getGame() {
@@ -185,24 +211,6 @@ public abstract class GameState extends AbstractAppState {
     }
     
     /**
-     * 退出当前PlayState,并返回到开始界面。
-     */
-    public void exit() {
-        for (PlayListener lis : listeners) {
-            lis.onExit();
-        }
-    }
-    
-    @Override
-    public void cleanup() {
-        listeners.clear();
-        networkObjects.clear();
-        playManager.cleanup();
-        UIState.getInstance().clearUI();
-        super.cleanup();
-    }
-    
-    /**
      * 添加HUD提示信息
      * @param message 
      * @param messageType
@@ -216,11 +224,12 @@ public abstract class GameState extends AbstractAppState {
      */
     public abstract boolean isInScene(Spatial spatial);
     
-    /**
-     * 获取跟随的相机，如果没有则返回null.
-     * @return 
-     */
-    public abstract CollisionChaseCamera getChaseCamera();
+    // remove20160710
+//    /**
+//     * 获取跟随的相机，如果没有则返回null.
+//     * @return 
+//     */
+//    public abstract CollisionChaseCamera getChaseCamera();
 
     /**
      * 获取当前场景所有活动对象，包括player,如果没有，则返回empty.

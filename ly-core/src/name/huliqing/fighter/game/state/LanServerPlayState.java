@@ -21,6 +21,7 @@ import name.huliqing.fighter.game.service.PlayService;
 import name.huliqing.fighter.game.service.SkillService;
 import name.huliqing.fighter.game.service.StateService;
 import name.huliqing.fighter.object.actor.Actor;
+import name.huliqing.fighter.object.game.Game;
 import name.huliqing.fighter.object.game.Game.GameListener;
 
 /**
@@ -47,7 +48,7 @@ public class LanServerPlayState extends NetworkServerPlayState  {
         super.changeGameState(newGameState);
         newGameState.getGame().addListener(new GameListener() {
             @Override
-            public void onSceneLoaded() {
+            public void onGameStarted(Game game) {
                 // 隐藏其它UI界面
                 setUIVisiable(false);
                 // 显示角色选择面板

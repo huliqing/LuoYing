@@ -16,6 +16,21 @@ import name.huliqing.fighter.object.scene.Scene;
 public interface Env<T extends EnvData> extends DataProcessor<T>{
     
     /**
+     * 获取Data
+     * @return 
+     */
+    @Override
+    T getData();
+    
+    /**
+     * 初始化Data.该方法只允许DataFactory调用,而且一般应该只设置一次，运行
+     * 时不应该再调用。
+     * @param data 
+     */
+    @Override
+    void initData(T data);
+    
+    /**
      * 初始化Env
      * @param app
      * @param scene 
@@ -32,41 +47,5 @@ public interface Env<T extends EnvData> extends DataProcessor<T>{
      * 清理并释放Env资源
      */
     void cleanup();
-    
-
-//    protected T data;
-//    protected Scene scene;
-//    protected boolean initialized;
-//
-//    @Override
-//    public void initData(T data) {
-//        this.data = data;
-//    }
-//
-//    @Override
-//    public T getData() {
-//        return data;
-//    }
-//    
-//    /**
-//     * 初始化
-//     * @param app
-//     * @param scene 
-//     */
-//    public void initialize(Application app, Scene scene) {
-//        this.scene = scene;
-//        this.initialized = true;
-//    }
-//
-//    public boolean isInitialized() {
-//        return initialized;
-//    }
-//    
-//    /**
-//     * 当Env退出时清理资源。
-//     */
-//    public void cleanup() {
-//        initialized = false;
-//    }
     
 }

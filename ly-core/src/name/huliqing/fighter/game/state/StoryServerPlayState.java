@@ -42,6 +42,7 @@ import name.huliqing.fighter.game.network.UserCommandNetwork;
 import name.huliqing.fighter.game.state.lan.GameServer.ServerState;
 import name.huliqing.fighter.manager.ShortcutManager;
 import name.huliqing.fighter.object.actor.Actor;
+import name.huliqing.fighter.object.game.Game;
 import name.huliqing.fighter.object.game.Game.GameListener;
 import name.huliqing.fighter.save.ClientData;
 import name.huliqing.fighter.save.SaveConfig;
@@ -107,7 +108,7 @@ public class StoryServerPlayState extends NetworkServerPlayState {
         gameServer.setGameData(gameData);
         newGameState.getGame().addListener(new GameListener() {
             @Override
-            public void onSceneLoaded() {
+            public void onGameStarted(Game game) {
                 gameServer.setServerState(ServerState.running);
                 loadPlayer();
             }

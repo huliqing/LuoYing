@@ -19,6 +19,7 @@ import java.util.List;
 import name.huliqing.fighter.Common;
 import name.huliqing.fighter.Config;
 import name.huliqing.fighter.Factory;
+import name.huliqing.fighter.constants.ResConstants;
 import name.huliqing.fighter.data.GameData;
 import name.huliqing.fighter.enums.MessageType;
 import name.huliqing.fighter.game.network.ActorNetwork;
@@ -39,7 +40,10 @@ import name.huliqing.fighter.object.actor.ActorControl;
 import name.huliqing.fighter.object.anim.Anim;
 import name.huliqing.fighter.object.bullet.BulletCache;
 import name.huliqing.fighter.object.effect.EffectCache;
+import name.huliqing.fighter.object.env.CameraChaseEnv;
+import name.huliqing.fighter.object.game.Game;
 import name.huliqing.fighter.object.game.Game.GameListener;
+import name.huliqing.fighter.object.scene.SceneUtils;
 import name.huliqing.fighter.object.view.View;
 import name.huliqing.fighter.ui.AbstractUI;
 import name.huliqing.fighter.utils.CollisionChaseCamera;
@@ -49,7 +53,6 @@ import name.huliqing.fighter.ui.UIEventListener;
 import name.huliqing.fighter.ui.state.PickListener;
 import name.huliqing.fighter.ui.state.UIState;
 import name.huliqing.fighter.utils.GeometryUtils;
-import name.huliqing.fighter.utils.SceneUtils;
 
 /**
  *
@@ -77,8 +80,9 @@ public  class SimpleGameState extends GameState implements UIEventListener {
     
     // 基本界面
     protected LanPlayStateUI ui;
-    // 场景跟随相机
-    protected CollisionChaseCamera chaseCamera;
+    
+//    // 场景跟随相机
+//    protected CollisionChaseCamera chaseCamera;
 
     // 玩家当前玩家
     protected Actor player;
@@ -86,6 +90,8 @@ public  class SimpleGameState extends GameState implements UIEventListener {
     // 最近一个选中的角色和最近一次选择的时间，主要用于处理双击选择攻击目标。
     private Actor lastPicked;
     private long lastPickTime;
+    
+    protected CameraChaseEnv cameraChaseEnv;
 
     public SimpleGameState(GameData gameData) {
         super(gameData);
@@ -128,7 +134,7 @@ public  class SimpleGameState extends GameState implements UIEventListener {
          // ==== 7.载入游戏
         game.addListener(new GameListener() {
             @Override
-            public void onSceneLoaded() {
+            public void onGameStarted(Game game) {
                 // do somthing
             }
         });
@@ -236,11 +242,6 @@ public  class SimpleGameState extends GameState implements UIEventListener {
         // 清理animations
         animations.clear();
         
-        // 重要：清理相机数据
-        if (chaseCamera != null) {
-            chaseCamera.cleanup();
-            chaseCamera = null;
-        }
         ShortcutManager.cleanup();
         HUDManager.cleanup();
         super.cleanup();
@@ -265,16 +266,17 @@ public  class SimpleGameState extends GameState implements UIEventListener {
         }
     }
 
-    @Override
-    public CollisionChaseCamera getChaseCamera() {
-        if (chaseCamera == null) {
-            chaseCamera = SceneUtils.createChaseCam(app.getCamera(), app.getInputManager());
-            chaseCamera.setPhysicsSpace(game.getScene().getPhysicsSpace());
-//            chaseCamera.addCollisionObject(game.getScene().getTerrain());
-            chaseCamera.addCollisionObject(game.getScene().getSceneRoot());
-        }
-        return chaseCamera;
-    }
+    // remove20160710
+//    @Override
+//    public CollisionChaseCamera getChaseCamera() {
+//        if (chaseCamera == null) {
+//            chaseCamera = SceneTools.createChaseCam(app.getCamera(), app.getInputManager());
+//            chaseCamera.setPhysicsSpace(game.getScene().getPhysicsSpace());
+////            chaseCamera.addCollisionObject(game.getScene().getTerrain());
+//            chaseCamera.addCollisionObjectAll(game.getScene().getSceneRoot());
+//        }
+//        return chaseCamera;
+//    }
 
     @Override
     public List<Actor> getActors() {
@@ -350,12 +352,13 @@ public  class SimpleGameState extends GameState implements UIEventListener {
             physicsControl = spatial.getControl(PhysicsControl.class);
         } 
         
+        // remove20160710,不再在这里依赖bulletAppState.
         // 移出bulletAppState
-        if (physicsControl != null) {
-            if (game.getScene().getPhysicsSpace() != null) {
-                game.getScene().getPhysicsSpace().remove(object);
-            }
-        }
+//        if (physicsControl != null) {
+//            if (game.getScene().getPhysicsSpace() != null) {
+//                game.getScene().getPhysicsSpace().remove(object);
+//            }
+//        }
         
         // 根据类型移出场景
         if (actor != null) {
@@ -396,7 +399,6 @@ public  class SimpleGameState extends GameState implements UIEventListener {
     
     private void addUI(UI ui, boolean gui) {
         if (gui) {
-//            UIState.getInstance().addUI(ui.getDisplay());
             UIState.getInstance().addUI((AbstractUI)ui);
         } else {
             this.localRoot.attachChild(ui.getDisplay());
@@ -422,14 +424,19 @@ public  class SimpleGameState extends GameState implements UIEventListener {
         // 在再次进入state时还残留角色。
         if (gui) {
             UIState.getInstance().addUI(actor.getModel());
-        } else {
-            localRoot.attachChild(actor.getModel());
-        }
+        } 
         
-        // 把model添加到physics中
-        if (game.getScene().getPhysicsSpace() != null) {
-            game.getScene().getPhysicsSpace().add(actor.getModel());
-        }
+        // remove20160710,以后要把角色节点添加到scene中去。
+//        else {
+//            localRoot.attachChild(actor.getModel());
+//        }
+//         remove20160710
+//        // 把model添加到physics中
+//        if (game.getScene().getPhysicsSpace() != null) {
+//            game.getScene().getPhysicsSpace().add(actor.getModel());
+//        }
+        
+        game.getScene().addSceneObject(actor.getModel());
         
         // 如果角色有指定队伍，则应该处理是否在当前队伍列表中。
         if (actor.getData().getTeam() > 0) {
@@ -440,11 +447,15 @@ public  class SimpleGameState extends GameState implements UIEventListener {
     }
 
     private void addSimpleObj(Spatial spatial, boolean gui) {
-        if (spatial.getControl(PhysicsControl.class) != null) {
-            if (game.getScene().getPhysicsSpace() != null) {
-                game.getScene().getPhysicsSpace().add(spatial);
-            }
-        }
+        
+        // remove20160710
+//        if (spatial.getControl(PhysicsControl.class) != null) {
+//            if (game.getScene().getPhysicsSpace() != null) {
+//                game.getScene().getPhysicsSpace().add(spatial);
+//            }
+//        }
+
+
         // 不要将角色或object添加到scene中，因为scene会进行缓存，以免忘记清理的时候
         // 在再次进入state时还残留角色。
         if (gui) {
@@ -502,7 +513,12 @@ public  class SimpleGameState extends GameState implements UIEventListener {
      * @param spatial 
      */
     protected void setChase(Spatial spatial) {
-        getChaseCamera().setChase(spatial);
+        if (cameraChaseEnv == null) {
+            cameraChaseEnv = SceneUtils.findEnv(game.getScene(), CameraChaseEnv.class);
+        }
+        if (cameraChaseEnv != null) {
+            cameraChaseEnv.setChase(spatial);
+        }
     }
     
     /**
@@ -553,15 +569,6 @@ public  class SimpleGameState extends GameState implements UIEventListener {
      * @return 
      */
     protected boolean onPicked(PickResult pr) {
-        // remove20160703
-        // 选择地面进行行走
-//        if (pr.spatial == game.getScene().getTerrain()) {
-//            if (player != null) {
-//                userCommandNetwork.playRunToPos(player, pr.result.getContactPoint());
-//                return true;
-//            }
-//        }
-
         // 选择地面进行行走
         if (GeometryUtils.isSelfOrChild(pr.spatial,game.getScene().getTerrain())) {
             if (player != null) {
@@ -595,7 +602,7 @@ public  class SimpleGameState extends GameState implements UIEventListener {
         
         // 即使temp为null也可以攻击，这允许角色转入自动攻击（等待）状态
         if (temp == null) {
-            addMessage(ResourceManager.get("common.noTarget"), MessageType.notice);
+            addMessage(ResourceManager.get(ResConstants.COMMON_NO_TARGET), MessageType.notice);
         }
         
         userCommandNetwork.attack(player, temp);
@@ -659,8 +666,8 @@ public  class SimpleGameState extends GameState implements UIEventListener {
         // 一直远去(向前走动)，当相机重新跟随的时候，会突然移到角色旁边，过渡太过不自然．
         // 如果只关闭旋转，而保持跟随，就不会出现该现象，也就是该功能只是为了避免
         // 在按下鼠标拖动(UI)的时候同时出现3D镜头在旋转的问题．
-        if (chaseCamera != null) {
-            chaseCamera.setEnabledRotation(enabled);
+        if (cameraChaseEnv != null) {
+            cameraChaseEnv.setEnabledRotation(enabled);
         }
     }
 

@@ -33,12 +33,14 @@ import name.huliqing.fighter.object.effect.TextureCylinderEffect;
 import name.huliqing.fighter.object.effect.TextureEffect;
 import name.huliqing.fighter.object.env.AudioEnv;
 import name.huliqing.fighter.object.env.BoundaryBoxEnv;
+import name.huliqing.fighter.object.env.CameraChaseEnv;
 import name.huliqing.fighter.object.env.LightDirectionalEnv;
 import name.huliqing.fighter.object.env.EnvLoader;
 import name.huliqing.fighter.object.env.LightAmbientEnv;
 import name.huliqing.fighter.object.env.ModelEnv;
 import name.huliqing.fighter.object.env.ModelEnvData;
 import name.huliqing.fighter.object.env.ModelEnvLoader;
+import name.huliqing.fighter.object.env.PhysicsEnv;
 import name.huliqing.fighter.object.env.PlantEnv;
 import name.huliqing.fighter.object.env.PlantEnvLoader;
 import name.huliqing.fighter.object.env.ProxyPlatformEnv;
@@ -271,6 +273,8 @@ public class DataFactory {
         register("envLightAmbient", EnvData.class, EnvLoader.class, LightAmbientEnv.class);
         register("envShadow", EnvData.class, EnvLoader.class, ShadowEnv.class);
         register("envProxyPlatform", EnvData.class, EnvLoader.class, ProxyPlatformEnv.class);
+        register("envPhysics", EnvData.class, EnvLoader.class, PhysicsEnv.class);
+        register("envCameraChase", EnvData.class, EnvLoader.class, CameraChaseEnv.class);
         
         // States
         register("stateAttribute", StateData.class, StateLoader.class, AttributeState.class);

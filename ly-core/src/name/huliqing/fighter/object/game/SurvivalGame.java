@@ -5,12 +5,14 @@
 package name.huliqing.fighter.object.game;
 
 import com.jme3.app.Application;
+import com.jme3.app.state.AppStateManager;
 import com.jme3.math.Vector3f;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.game.network.ActorNetwork;
 import name.huliqing.fighter.game.service.PlayService;
 import name.huliqing.fighter.logic.scene.ActorCleanLogic;
 import name.huliqing.fighter.object.actor.Actor;
+import name.huliqing.fighter.object.scene.Scene;
 import name.huliqing.fighter.utils.MathUtils;
 
 /**
@@ -37,8 +39,13 @@ public class SurvivalGame extends Game {
     public int maxLevel = 15;
 
     @Override
-    public void initialize(Application app) {
-        super.initialize(app); 
+    public void initialize(AppStateManager stateManager, Application app) {
+        super.initialize(stateManager, app);
+        
+    }
+
+    @Override
+    public void onSceneInitialized(Scene scene) {
         // 生成敌人的刷新地点
         enemyPositions = new Vector3f[buildTotal];
         for (int i = 0; i < buildTotal; i++) {
@@ -52,6 +59,7 @@ public class SurvivalGame extends Game {
         addLogic(new ActorCleanLogic());
         // 主逻辑
         addLogic(new SurvivalLogic(this));
+        super.onSceneInitialized(scene);
     }
 
     @Override

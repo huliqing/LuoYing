@@ -20,12 +20,13 @@ import name.huliqing.fighter.game.view.ClientsWin;
 import name.huliqing.fighter.object.anim.Anim;
 import name.huliqing.fighter.object.anim.Listener;
 import name.huliqing.fighter.object.anim.ScaleAnim;
+import name.huliqing.fighter.object.env.CameraChaseEnv;
+import name.huliqing.fighter.object.game.Game;
 import name.huliqing.fighter.object.game.Game.GameListener;
+import name.huliqing.fighter.object.scene.SceneUtils;
 import name.huliqing.fighter.ui.Icon;
 import name.huliqing.fighter.ui.UI;
 import name.huliqing.fighter.ui.state.UIState;
-import name.huliqing.fighter.utils.CollisionChaseCamera;
-import name.huliqing.fighter.utils.SceneUtils;
 
 /**
  * 联网游戏的基类
@@ -42,7 +43,6 @@ public abstract class NetworkPlayState extends PlayState implements LanGame {
     private Icon lanBtn;
     
     protected ActorSelectView actorPanel;
-    protected CollisionChaseCamera chaseCamera;
     
     public NetworkPlayState(Application app, GameData gameData) {
         super(app, gameData);
@@ -72,7 +72,7 @@ public abstract class NetworkPlayState extends PlayState implements LanGame {
         super.changeGameState(newGameState);
         gameState.getGame().addListener(new GameListener() {
             @Override
-            public void onSceneLoaded() {
+            public void onGameStarted(Game game) {
                 createLanUI();
             }
         });
@@ -90,7 +90,7 @@ public abstract class NetworkPlayState extends PlayState implements LanGame {
                 public void onSelected(String actorId, String actorName) {
                     actorPanel.removeFromParent();
                     actorPanel.getActorView().removeFromParent();
-                    chaseCamera = null;
+ 
                     onSelectPlayer(actorId, actorName);
                 }
             });
@@ -100,11 +100,17 @@ public abstract class NetworkPlayState extends PlayState implements LanGame {
         UIState.getInstance().addUI(actorPanel);
         gameState.addObject(actorPanel.getActorView(), false);
         
-        if (chaseCamera == null) {
-            chaseCamera = SceneUtils.createChaseCam(app.getCamera(), app.getInputManager());
-            chaseCamera.setDefaultDistance(5f);
+        // remove20160710
+//        if (chaseCamera == null) {
+//            chaseCamera = SceneTools.createChaseCam(app.getCamera(), app.getInputManager());
+//            chaseCamera.setDefaultDistance(5f);
+//        }
+//        actorPanel.getActorView().addControl(chaseCamera);
+        
+        CameraChaseEnv cce = SceneUtils.findEnv(gameState.getGame().getScene(), CameraChaseEnv.class);
+        if (cce != null) {
+            cce.setChase(actorPanel.getActorView());
         }
-        actorPanel.getActorView().addControl(chaseCamera);
     }
     
     /**

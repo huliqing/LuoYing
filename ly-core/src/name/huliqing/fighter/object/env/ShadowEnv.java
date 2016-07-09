@@ -23,7 +23,7 @@ import name.huliqing.fighter.object.scene.Scene;
  * @author huliqing
  * @param <T>
  */
-public class ShadowEnv <T extends EnvData> extends AbstractEnv <T> implements Scene.Listener{
+public class ShadowEnv <T extends EnvData> extends AbstractEnv <T> implements Scene.SceneListener{
     private final ConfigService configService = Factory.get(ConfigService.class);
 
     private float shadowIntensity = 0.7f;
@@ -46,13 +46,13 @@ public class ShadowEnv <T extends EnvData> extends AbstractEnv <T> implements Sc
     public void initialize(Application app, Scene scene) {
         super.initialize(app, scene);
         this.app = app;
-        scene.addListener(this);
+        scene.addSceneListener(this);
     }
 
     @Override
     public void cleanup() {
         scene.removeFilter(filter);
-        scene.removeListener(this);
+        scene.removeSceneListener(this);
         // 注意：这里要把filter设置为null以让系统释放内存，否则即使cleanup后，该filter内部使用中的frameBuffer仍然会
         // 占用内存(从stateAppState的debug中可以看到FrameBuffers(M)一下在增加)。
         // 这是一个特殊的情况，在其它Filter还没有发现这个问题。
@@ -61,9 +61,9 @@ public class ShadowEnv <T extends EnvData> extends AbstractEnv <T> implements Sc
     }
 
     @Override
-    public void onInitialized(Scene scene) {
+    public void onSceneInitialized(Scene scene) {
         // 影阴处理器
-        if (scene.getData().isUseShadow() && configService.isUseShadow()) {
+        if (configService.isUseShadow()) {
             filter = new DirectionalLightShadowFilter(app.getAssetManager(), shadowMapSize, shadowMaps);
             filter.setLight(findLight());
             filter.setLambda(0.55f);
@@ -91,12 +91,12 @@ public class ShadowEnv <T extends EnvData> extends AbstractEnv <T> implements Sc
     }
     
     @Override
-    public void onAdded(Scene scene, Spatial objectAdded) {
+    public void onSceneObjectAdded(Scene scene, Spatial objectAdded) {
         // ignore
     }
 
     @Override
-    public void onRemoved(Scene scene, Spatial objectRemoved) {
+    public void onSceneObjectRemoved(Scene scene, Spatial objectRemoved) {
         // ignore
     }
     

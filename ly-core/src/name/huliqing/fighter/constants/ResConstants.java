@@ -62,6 +62,9 @@ public class ResConstants {
     /** common.map.cancel */
     public final static String COMMON_MAP_CANCEL = "common.map.cancel";
     
+    /** common.noTarget */
+    public final static String COMMON_NO_TARGET = "common.noTarget";
+    
     // -------------------------------------------------------------------------
     // Lan
     // -------------------------------------------------------------------------

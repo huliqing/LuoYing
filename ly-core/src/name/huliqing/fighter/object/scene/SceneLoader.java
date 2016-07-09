@@ -22,12 +22,6 @@ public class SceneLoader<T extends SceneData> implements DataLoader<T> {
 
     @Override
     public void load(Proto proto, T store) {        
-        
-        store.setUseShadow(proto.getAsBoolean("useShadow", false));
-        store.setUsePhysics(proto.getAsBoolean("usePhysics", false));
-        store.setGravity(proto.getAsVector3f("gravity", new Vector3f(0, -10f, 0)));
-        store.setDebugPhysics(proto.getAsBoolean("debugPhysics", false));
-        
         // 环境物体
         String[] envIds = proto.getAsArray("envs");
         if (envIds != null && envIds.length > 0) {

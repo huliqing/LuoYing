@@ -14,7 +14,7 @@ import name.huliqing.fighter.Config;
  *
  * @author huliqing
  */
-public class SceneUtils {
+public class SceneTools {
     
     public static ChaseCamera createSimpleChaseCamera(Camera camera
             , InputManager inputManager) {

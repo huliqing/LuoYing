@@ -27,6 +27,11 @@ public class EnvServiceImpl implements EnvService {
     }
 
     @Override
+    public EnvData loadEnvData(String envId) {
+        return DataFactory.createData(envId);
+    }
+
+    @Override
     public Env loadEnv(EnvData envData) {
         return DataFactory.createProcessor(envData);
     }

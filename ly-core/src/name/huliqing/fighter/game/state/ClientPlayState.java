@@ -30,6 +30,7 @@ import name.huliqing.fighter.manager.ShortcutManager;
 import name.huliqing.fighter.object.IntervalLogic;
 import name.huliqing.fighter.object.PlayObject;
 import name.huliqing.fighter.object.actor.Actor;
+import name.huliqing.fighter.object.game.Game;
 import name.huliqing.fighter.object.game.Game.GameListener;
 import name.huliqing.fighter.save.ShortcutsSave;
 import name.huliqing.fighter.ui.Text;
@@ -101,7 +102,7 @@ public class ClientPlayState extends NetworkPlayState implements AbstractClientL
         // 在载入场景后才把状态设置为ready,这个状态表示客户端准备就绪 
         gameState.getGame().addListener(new GameListener() {
             @Override
-            public void onSceneLoaded() {
+            public void onGameStarted(Game game) {
                 gameClient.setClientState(ClientState.ready);
                 // 先隐藏所有UI,这样不会妨碍角色选择界面
                 setUIVisiable(false);

@@ -5,14 +5,14 @@
 package name.huliqing.fighter.object.game;
 
 import com.jme3.app.Application;
+import com.jme3.app.state.AbstractAppState;
+import com.jme3.app.state.AppStateManager;
+import com.jme3.scene.Spatial;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.fighter.Common;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.GameData;
-import name.huliqing.fighter.game.service.PlayService;
 import name.huliqing.fighter.game.service.SceneService;
-import name.huliqing.fighter.object.AbstractPlayObject;
 import name.huliqing.fighter.object.DataProcessor;
 import name.huliqing.fighter.object.PlayManager;
 import name.huliqing.fighter.object.PlayObject;
@@ -27,32 +27,29 @@ import name.huliqing.fighter.object.task.Task;
  * @author huliqing
  * @param <T>
  */
-public  class Game<T extends GameData> extends AbstractPlayObject implements DataProcessor<T> {
-    private final PlayService playService = Factory.get(PlayService.class);
+public  class Game<T extends GameData> extends AbstractAppState implements DataProcessor<T>, Scene.SceneListener {
     private final SceneService sceneService = Factory.get(SceneService.class);
 
     public interface GameListener {
         /**
-         * 当场景载入完毕后调用该方法
+         * 当游戏开始后
+         * @param game
          */
-        void onSceneLoaded();
+        void onGameStarted(Game game);
     }
     
     protected T data;
     
     // ---- inner
-    private Application app;
+    protected Application app;
     
     // 游戏侦听器
     protected List<GameListener> listeners; 
     
-    // 是否打开逻辑：当作为客户端运行时，game中应该关闭游戏逻辑，因为游戏逻辑主要在服务端运行。
-    protected boolean enabled = true;
-    
     // 场景逻辑
     protected Scene scene;
     // 扩展逻辑
-    protected final PlayManager playManager = new PlayManager(Common.getApp(), PlayObject.class);
+    protected PlayManager playManager;
 
     @Override
     public void initData(T data) {
@@ -65,29 +62,44 @@ public  class Game<T extends GameData> extends AbstractPlayObject implements Dat
     }
 
     @Override
-    public void initialize(Application app) {
-        super.initialize(app);
+    public void initialize(AppStateManager stateManager, Application app) {
+        super.initialize(stateManager, app); 
         this.app = app;
-        // 场景需要优先载入。然后再载入扩展逻辑，因为部分扩展逻辑可能需要依赖于场景中的物体。比如一些扩展逻辑可能需要
-        // 确定场景地面已经载入之后才可以载入角色，否则角色可能直接就掉到下面去了.
-        if (scene == null && data.getSceneData() != null) {
-            scene = sceneService.loadScene(data.getSceneData());
-            addLogic(scene);
-            scene.initialize(app);
-            if (listeners != null) {
-                for (GameListener gl : listeners) {
-                    gl.onSceneLoaded();
-                }
-            }
-        }
+        playManager = new PlayManager(app, PlayObject.class);
+        scene = sceneService.loadScene(data.getSceneData());
+        scene.addSceneListener(this);
+        app.getStateManager().attach(scene);
     }
 
     @Override
-    public final void update(float tpf) {
-        if (enabled) {
-            playManager.update(tpf);
-            updateLogics(tpf);
+    public void onSceneInitialized(Scene scene) {
+        if (listeners != null) {
+            for (GameListener gl : listeners) {
+                gl.onGameStarted(this);
+            }
         }
+    }
+    
+    @Override
+    public void onSceneObjectAdded(Scene scene, Spatial objectAdded) {
+    }
+
+    @Override
+    public void onSceneObjectRemoved(Scene scene, Spatial objectRemoved) {
+    }
+
+    @Override
+    public void update(float tpf) {
+        super.update(tpf);
+        playManager.update(tpf);
+    }
+
+    @Override
+    public void stateDetached(AppStateManager stateManager) {
+        if (scene != null) {
+            stateManager.detach(scene);
+        }
+        super.stateDetached(stateManager); 
     }
         
     /**
@@ -99,26 +111,10 @@ public  class Game<T extends GameData> extends AbstractPlayObject implements Dat
         super.cleanup();
     }
     
-    
     public Scene getScene() {
         return scene;
     }
 
-    /**
-     * 设置或切换场景，如果存在旧的场景，则旧的场景会被立即清理掉，然后载入新的场景，新的场景会立即进行初始化。
-     * @param scene 
-     */
-    public void setScene(Scene scene) {
-        // 移除旧的场景
-        if (this.scene != null) {
-            removeLogic(this.scene);
-        }
-        // 切换新场景
-        this.scene = scene;
-        // 提前载入场景,必须的
-        addLogic(this.scene);
-        this.scene.initialize(app);
-    }
     
     /**
      * 添加一个子游戏逻辑
@@ -157,30 +153,6 @@ public  class Game<T extends GameData> extends AbstractPlayObject implements Dat
      */
     public boolean removeListener(GameListener listener) {
         return listeners != null && listeners.remove(listener);
-    }
-
-    /**
-     * 判断游戏逻辑是否打开
-     * @return 
-     */
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    /**
-     * 设置是否打开游戏逻辑。注：场景逻辑不会受影响。
-     * @param enabled 
-     */
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-    
-    /**
-     * 更新游戏逻辑
-     * @param tpf 
-     */
-    protected  void updateLogics(float tpf) {
-        // 由子类实现
     }
 
     /**

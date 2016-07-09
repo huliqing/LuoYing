@@ -23,9 +23,17 @@ public interface EnvService extends Inject {
     Env loadEnv(String envId);
     
     /**
+     * 载入EnvData数据
+     * @param envId
+     * @return 
+     */
+    EnvData loadEnvData(String envId);
+    
+    /**
      * 载入Env
      * @param envData
      * @return 
      */
     Env loadEnv(EnvData envData);
+    
 }

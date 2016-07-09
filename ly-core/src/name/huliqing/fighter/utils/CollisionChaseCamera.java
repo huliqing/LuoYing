@@ -37,32 +37,29 @@ import java.util.logging.Logger;
  * @author huliqing
  */
 public class CollisionChaseCamera extends ChaseCamera implements PhysicsCollisionListener, com.jme3.input.controls.TouchListener{
-//    private final static Logger logger = Logger.getLogger(CollisionChaseCamera.class.getName());
+//    private final static Logger LOG = Logger.getLogger(CollisionChaseCamera.class.getName());
     
     // 相机旋转;
     private float tempRotationSpeed = rotationSpeed;
 
-    // 相机与目标的特别碰撞组，默认情况下相机不会与场景中任何物体进行碰撞检测，
-    // 只有设置PhysicsSpace和添加PhysicsCollisionObject后才有效。
-    private final static int CAM_COLLISION_GROUP = PhysicsCollisionObject.COLLISION_GROUP_02;
-    
     // 为提高性能,特殊使用collisionChecker来跟踪相机的位置，当检测到该
     // 物体与碰撞组所在的物体列表（collisionObjects）发生碰撞时，才启动相机防穿墙检测。避免相机频繁使用光线
     // 检测碰撞的大量性能开销。
     private Spatial collisionChecker;
-    // 防止相机与目标相碰撞的目标object列表
-    private final List<PhysicsCollisionObject> collisionObjects = new ArrayList<PhysicsCollisionObject>();
+    
     // 物理空间
     private PhysicsSpace physicsSpace;
     
     // 以下为相机穿墙问题处理，使用光线检测
-    private CollisionResults collisionResults = new CollisionResults();
+    private final CollisionResults collisionResults = new CollisionResults();
     // 射线的起始位置的偏移,在Y轴上加大一点可防立光线一开始就与地面发生碰撞交叉。
     // 避免误差
-    private final Vector3f rayOriginOffset = new Vector3f(0, 0.5f, 0);
+    private final Vector3f collisionRayOriginOffset = new Vector3f(0, 1f, 0);
+    
     // 允许自动调整相机与目标的最近距离
     // 如果距离太近的话，角色会出现“空洞”的现象
-    private final float nearDistanceLimit = 2;
+    private float collisionNearDistanceLimit = 2;
+    private float collisionNearDistanceLimitSquared = 4;
     
     // ---- 用于处理在JME3.1后不能在Android环境下自动缩放镜头的问题 
     private final static String TOUCH_SCALE_EVENT = "TouchSE";
@@ -80,17 +77,29 @@ public class CollisionChaseCamera extends ChaseCamera implements PhysicsCollisio
         registerTouchListener(inputManager);
     }
     
+    public void setCollisionRayOriginOffset(Vector3f collisionRayOriginOffset) {
+        this.collisionRayOriginOffset.set(collisionRayOriginOffset);
+    }
+
+    public void setCollisionNearDistanceLimit(float collisionNearDistanceLimit) {
+        this.collisionNearDistanceLimit = collisionNearDistanceLimit;
+        this.collisionNearDistanceLimitSquared = collisionNearDistanceLimit * collisionNearDistanceLimit;
+    }
+
     /**
-     * 设置物理空间
+     * 设置物理空间,如果space为null则清理物理空间。
      * @param space 
      */
     public void setPhysicsSpace(PhysicsSpace space) {
+        // 移除旧的
         if (this.physicsSpace != null) {
             this.physicsSpace.removeCollisionListener(this);
         }
         this.physicsSpace = space;
-        this.physicsSpace.add(collisionChecker);
-        this.physicsSpace.addCollisionListener(this);
+        if (this.physicsSpace != null) {
+            this.physicsSpace.add(collisionChecker);
+            this.physicsSpace.addCollisionListener(this);
+        }
     }
     
     /**
@@ -114,50 +123,7 @@ public class CollisionChaseCamera extends ChaseCamera implements PhysicsCollisio
         // GhostControl
         // 给物理体设置一个不同的碰撞组,这会优化碰撞检测性能.
         GhostControl gc = new GhostControl(CollisionShapeFactory.createBoxShape(collisionChecker));
-        gc.setCollisionGroup(CAM_COLLISION_GROUP);
-        gc.setCollideWithGroups(CAM_COLLISION_GROUP);
         collisionChecker.addControl(gc);
-    }
-    
-    /**
-     * 添加碰撞对象。
-     * @param pco 
-     */
-    public final void addCollisionObject(PhysicsCollisionObject pco) {
-        if (!collisionObjects.contains(pco)) {
-            pco.addCollideWithGroup(CAM_COLLISION_GROUP);
-            collisionObjects.add(pco);
-        }
-    }
-
-    /**
-     * 添加碰撞对象，spatial对象或者spatial的子对象(含深层级对象)必须有RigidBodyControl才有意义。
-     * @param spatial 
-     */
-    public final void addCollisionObject(Spatial spatial) {
-        PhysicsCollisionObject pco = spatial.getControl(RigidBodyControl.class);
-        if (pco != null) {
-            addCollisionObject(pco);
-        }
-        if (spatial instanceof Node) {
-            List<Spatial> children = ((Node)spatial).getChildren();
-            for (Spatial s : children) {
-                addCollisionObject(s);
-            }
-        }
-    }
-    
-    /**
-     * 移除一个指定的碰撞对象
-     * @param pco
-     * @return 
-     */
-    public final boolean removeCollisionObject(PhysicsCollisionObject pco) {
-        if (collisionObjects.remove(pco)) {
-            pco.removeCollideWithGroup(CAM_COLLISION_GROUP);
-            return true;
-        }
-        return false;
     }
 
     @Override
@@ -202,7 +168,7 @@ public class CollisionChaseCamera extends ChaseCamera implements PhysicsCollisio
         
         // 2.防止相机穿墙，当collisionTarget不为null时说明相机已经与某些物体发生碰撞，这时需要偿试调整相机的位置。
         if (collisionTarget != null) {
-//            logger.log(Level.INFO, "Need to fix collision with={0}", new Object[] {collisionTarget});
+//            LOG.log(Level.INFO, "CollisionChaseCamera, Need to fix collision with={0}", new Object[] {collisionTarget});
 
             // fixingCameraDistance方法用于拉近相机，以避免穿墙，这是一个持续的过程，如果该方法返回true,则说明正在持续
             // 修正（拉近）相机距离，这时不能释放collisionTarget, 因为该方法的修正会在下一帧被ChaseCamera的默认行为重置，
@@ -217,28 +183,45 @@ public class CollisionChaseCamera extends ChaseCamera implements PhysicsCollisio
         }
     }
     
+    private boolean isChaseTarget(Spatial collisionObject) {
+        if (collisionObject == target) {
+            return true;
+        }
+        return collisionObject != null && isChaseTarget(collisionObject.getParent());
+    }
+    
+    // fixingCameraDistance方法用于拉近相机，以避免穿墙，这是一个持续的过程，如果该方法返回true,则说明正在持续
+    // 修正（拉近）相机距离，这时不能释放collisionTarget, 因为该方法的修正会在下一帧被ChaseCamera的默认行为重置，
+    // 所以这个方法必须持续进行，直到相机不产生碰撞才能释放。
     private boolean fixingCameraDistance(Spatial collisionObject) {
+        // 如果相机碰撞的是被跟随的对象本身，则不要做任何处理。因为当相机拉近目标时可能会产生持续的碰撞，这个时候可能
+        // 相机与被跟随目标的距离比nearDistanceLimit还近，如果把相机反向往远处（nearDistanceLimit）拉，则可能返而导致
+        // 相机穿过其它障碍物，比如当被跟随目标离墙壁很近时，如果相机与被跟随目标这时产生碰撞，当相机往回拉到nearDistanceLimit
+        // 时可能会穿墙。
+        if (isChaseTarget(collisionObject)) {
+            return false;
+        }
+        
         TempVars tv = TempVars.get();
         Vector3f origin = tv.vect1;
         Vector3f dir = tv.vect2;
-        origin.set(target.getWorldTranslation()).addLocal(rayOriginOffset);
+        origin.set(target.getWorldTranslation()).addLocal(collisionRayOriginOffset);
         dir.set(cam.getDirection()).negateLocal().normalizeLocal();
         boolean fixing = false;
         collisionResults.clear();
-        collisionResults = collideWith(origin, dir, collisionObject, collisionResults);
+        collideWith(origin, dir, collisionObject, collisionResults);
         if (collisionResults.size() > 0) {
+            Vector3f closest = collisionResults.getClosestCollision().getContactPoint();
             //目标与相机距离
-            float camDistance = cam.getLocation().subtract(origin, tv.vect3).length();
-            CollisionResult result = collisionResults.getClosestCollision();
+            float distanceToCamera = origin.distanceSquared(cam.getLocation());
+            float distanceToCollisionObject = origin.distanceSquared(closest);
             // 挡在相机中间的物体
-            if (result.getDistance() <= camDistance) {
-                Vector3f cp = result.getContactPoint();
-
-                if (cp.distance(origin) < nearDistanceLimit) {
-                    cp.set(origin).addLocal(dir.mult(nearDistanceLimit, tv.vect6));
+            if (distanceToCollisionObject <= distanceToCamera) {
+                if (distanceToCollisionObject < collisionNearDistanceLimitSquared) {
+                    closest.set(origin).addLocal(dir.mult(collisionNearDistanceLimit, tv.vect6));
                 }
-                cp.addLocal(lookAtOffset).subtractLocal(rayOriginOffset);
-                cam.setLocation(cp);
+                closest.addLocal(lookAtOffset).subtractLocal(collisionRayOriginOffset);
+                cam.setLocation(closest);
                 fixing = true;
             }
         }
@@ -259,8 +242,10 @@ public class CollisionChaseCamera extends ChaseCamera implements PhysicsCollisio
         // 这里只要负责检测到needFixDistance=true就可以，解除needFixDistance将由fixCameraDistance来完成
         if (event.getNodeA()  == collisionChecker) {
             collisionTarget = event.getNodeB();
+//            LOG.log(Level.INFO, "CollisionChaseCamera,Collision target(nodeB)={0}", event.getNodeB());
         } else if (event.getNodeB() == collisionChecker) {
             collisionTarget = event.getNodeA();
+//            LOG.log(Level.INFO, "CollisionChaseCamera,Collision target(nodeA)={0}", event.getNodeB());
         }
         
 //        // test:测试碰撞组是否有效果
@@ -320,10 +305,6 @@ public class CollisionChaseCamera extends ChaseCamera implements PhysicsCollisio
             physicsSpace.removeCollisionListener(this);
             physicsSpace = null;
         }
-        for (PhysicsCollisionObject pco : collisionObjects) {
-            pco.removeCollideWithGroup(CAM_COLLISION_GROUP);
-        }
-        collisionObjects.clear();
         
         // 3.移除父类ChaseCamera中添加的监听
         String[] inputs = {CameraInput.CHASECAM_TOGGLEROTATE,
@@ -374,4 +355,5 @@ public class CollisionChaseCamera extends ChaseCamera implements PhysicsCollisio
             }
         }
     }
+
 }

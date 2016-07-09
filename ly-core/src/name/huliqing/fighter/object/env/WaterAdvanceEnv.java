@@ -23,7 +23,7 @@ import name.huliqing.fighter.object.scene.Scene;
  * @author huliqing
  * @param <T>
  */
-public class WaterAdvanceEnv <T extends EnvData> extends AbstractEnv<T> implements WaterEnv<T>, Scene.Listener {
+public class WaterAdvanceEnv <T extends EnvData> extends AbstractEnv<T> implements WaterEnv<T>, Scene.SceneListener {
 
     private String causticsTexture;
     private String foamTexture;
@@ -101,7 +101,7 @@ public class WaterAdvanceEnv <T extends EnvData> extends AbstractEnv<T> implemen
     @Override
     public void initialize(Application app, Scene scene) {
         super.initialize(app, scene); 
-        scene.addListener(this);
+        scene.addSceneListener(this);
         
         if (causticsTexture != null) {
             water.setCausticsTexture((Texture2D) app.getAssetManager().loadTexture(causticsTexture));
@@ -123,7 +123,7 @@ public class WaterAdvanceEnv <T extends EnvData> extends AbstractEnv<T> implemen
 
     @Override
     public void cleanup() {
-        scene.removeListener(this);
+        scene.removeSceneListener(this);
         scene.removeFilter(water);
         super.cleanup();
     }
@@ -161,13 +161,13 @@ public class WaterAdvanceEnv <T extends EnvData> extends AbstractEnv<T> implemen
     }
     
     @Override
-    public void onAdded(Scene scene, Spatial objectAdded) {}
+    public void onSceneObjectAdded(Scene scene, Spatial objectAdded) {}
 
     @Override
-    public void onRemoved(Scene scene, Spatial objectRemoved) {}
+    public void onSceneObjectRemoved(Scene scene, Spatial objectRemoved) {}
 
     @Override
-    public void onInitialized(Scene scene) {
+    public void onSceneInitialized(Scene scene) {
         // 从场景中找到第一个直射光源作为水体渲染光源用。
         if (useSceneLight) {
             LightList lights = scene.getSceneRoot().getLocalLightList();

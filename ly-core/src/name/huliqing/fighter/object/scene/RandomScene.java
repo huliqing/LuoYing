@@ -5,6 +5,7 @@
 package name.huliqing.fighter.object.scene;
 
 import com.jme3.app.Application;
+import com.jme3.app.state.AppStateManager;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.scene.Spatial;
 import java.util.ArrayList;
@@ -25,9 +26,8 @@ public class RandomScene extends Scene<RandomSceneData> {
     public RandomScene() {}
 
     @Override
-    public void initialize(Application app) {
-        super.initialize(app);
-
+    public void initialize(AppStateManager stateManager, Application app) {
+        super.initialize(stateManager, app);
         // env列表
         List<EnvData> randomEnvData = data.getRandomEnvs();
         if (randomEnvData != null && !randomEnvData.isEmpty()) {

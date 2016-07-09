@@ -81,7 +81,7 @@ public class NetworkServerPlayState extends NetworkPlayState {
         gameServer.setServerState(GameServer.ServerState.loading);
         newGameState.getGame().addListener(new Game.GameListener() {
             @Override
-            public void onSceneLoaded() {
+            public void onGameStarted(Game game) {
                 // 设置状态并向所有客户端广播,这通知所有客户端
                 // 可以开始向服务端发送游戏初始化命令的消息
                 gameServer.setServerState(GameServer.ServerState.running);

@@ -5,8 +5,8 @@
 package name.huliqing.fighter.object.scene;
 
 import com.jme3.app.Application;
-import com.jme3.bullet.BulletAppState;
-import com.jme3.bullet.PhysicsSpace;
+import com.jme3.app.state.AbstractAppState;
+import com.jme3.app.state.AppStateManager;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.light.Light;
 import com.jme3.post.Filter;
@@ -18,9 +18,8 @@ import java.util.List;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.EnvData;
 import name.huliqing.fighter.data.SceneData;
+import name.huliqing.fighter.game.service.EnvService;
 import name.huliqing.fighter.game.service.PlayService;
-import name.huliqing.fighter.object.AbstractPlayObject;
-import name.huliqing.fighter.object.DataFactory;
 import name.huliqing.fighter.object.DataProcessor;
 import name.huliqing.fighter.object.env.Env;
 
@@ -28,48 +27,75 @@ import name.huliqing.fighter.object.env.Env;
  * @author huliqing
  * @param <T>
  */
-public abstract class Scene<T extends SceneData> extends AbstractPlayObject implements DataProcessor<T>{
+public abstract class Scene<T extends SceneData> extends AbstractAppState implements DataProcessor<T>{
     private final PlayService playService = Factory.get(PlayService.class);
+    private final EnvService envService = Factory.get(EnvService.class);
     
-    public interface Listener {
+    /**
+     * 场景侦听器，用于侦听场景的初始化，场景中新增加物体、移除物体等。
+     */
+    public interface SceneListener {
+        
+        /**
+         * 当场景刚初始化完毕后执行该方法, 这个方法会在场景中所有的Env都执行完initialize后被调用。
+         * @param scene 
+         */
+        void onSceneInitialized(Scene scene);
         
         /**
          * 当场景新添加了物体后触发该方法。
          * @param scene 
          * @param objectAdded 
          */
-        void onAdded(Scene scene, Spatial objectAdded);
+        void onSceneObjectAdded(Scene scene, Spatial objectAdded);
         
         /**
          * 当场景移除了物体之后触发该方法。
          * @param scene 
          * @param objectRemoved
          */
-        void onRemoved(Scene scene, Spatial objectRemoved);
+        void onSceneObjectRemoved(Scene scene, Spatial objectRemoved);
+        
+    }
+    
+    public interface SceneEnvListener {
         
         /**
-         * 当场景刚初始化完毕后执行该方法, 这个方法会在场景中所有的Env都执行完initialize后被调用。
-         * @param scene 
+         * 当场景中初始化完一个env后触发该方法。
+         * @param scene
+         * @param envInitialized 
          */
-        void onInitialized(Scene scene);
+        void onSceneEnvInitialized(Scene scene, Env envInitialized);
+        
+        /**
+         * 当场景中新增加了Env时触发该方法。
+         * @param scene
+         * @param envAdded 
+         */
+        void onSceneEnvAdded(Scene scene, Env envAdded);
+        
+        /**
+         * 当场景移除了一个Env后触发该方法.
+         * @param scene 当前场景
+         * @param envRemoved 已经被移除的Env, 并且已经被清理(cleanup)
+         */
+        void onSceneEnvRemoved(Scene scene, Env envRemoved);
     }
     
     // ---- inner
     protected T data;
     
-    protected List<Listener> listeners;
+    protected List<SceneListener> sceneListeners;
+    protected List<SceneEnvListener> sceneEnvListeners;
     
     // 所有的环境物体列表，包含天空盒和地形
-    protected List<Env> envs;
+    protected final List<Env> envs = new ArrayList<Env>();
     
     // 场景根节点
     protected Node sceneRoot;
     
     // 地型，允许多个地形
     protected  Node terrainRoot;
-    
-    // 物理空间
-    protected BulletAppState bulletAppState;
     
     protected Application app;
     // 场景默认的FilterPostProcessor，在某些情况下，不能同时存在多个FilterPostProcessor,比如当WaterFilter和ShadowFilter同时
@@ -78,10 +104,10 @@ public abstract class Scene<T extends SceneData> extends AbstractPlayObject impl
     protected FilterPostProcessor fppDefault;
     
     public Scene() {}
-    
+
     @Override
-    public void initialize(Application app) {
-        super.initialize(app);
+    public void initialize(AppStateManager stateManager, Application app) {
+        super.initialize(stateManager, app);
         this.app = app;
         
         // 添加默认的FilterPostProcessor.
@@ -96,36 +122,25 @@ public abstract class Scene<T extends SceneData> extends AbstractPlayObject impl
         sceneRoot.attachChild(terrainRoot);
         playService.addObject(sceneRoot);
         
-        // use physics
-        if (data.isUsePhysics()) {
-            if (bulletAppState == null) {
-                bulletAppState = new BulletAppState();
-            }
-            // ThreadingType.PARALLEL可能只有在多个PhysicsSpace时才有意义
-            // 注：setThreadingType必须放在attach(bulletAppState)之前
-    //        bulletAppState.setThreadingType(BulletAppState.ThreadingType.PARALLEL);
-            app.getStateManager().attach(bulletAppState);
-            // 如果重力太大会发生画面抖动现象，不要高于40.
-            // 注：setGravity必须放在attach(bulletAppState)之后
-            bulletAppState.getPhysicsSpace().setGravity(data.getGravity());
-            bulletAppState.setDebugEnabled(data.isDebugPhysics());
-        }
-        
-        // env列表
-        List<EnvData> edList = data.getEnvs();
-        if (edList != null && !edList.isEmpty()) {
-            envs = new ArrayList<Env>(edList.size());
-            for (EnvData ed : edList) {
-                Env env = DataFactory.createProcessor(ed);
-                envs.add(env);
+        // 初始化Env列表
+        // 把数据复制到temp中进行处理，以避免在列表初始化的过程影响到原始列表，这种情况可能发生在：当一个Env在初始化的
+        // 时候在initialize方法又向场景动态添加Env.这会造成在循环data.getEnvs()列表的时候同时又修改（增、删）列表数据。
+        List<EnvData> initEnvDatas = data.getEnvs();
+        if (initEnvDatas != null && !initEnvDatas.isEmpty()) {
+            List<EnvData> temp = new ArrayList<EnvData>(initEnvDatas);
+            for (EnvData ed : temp) {
+                Env env = envService.loadEnv(ed);
                 env.initialize(app, this);
+                envs.add(env);
+                notifySceneEnvListenerAdded(env);
+                notifySceneEnvListenerInitialized(env);
             }
         }
         
         // 触发侦听器
-        if (listeners != null) {
-            for (Listener l : listeners) {
-                l.onInitialized(this);
+        if (sceneListeners != null) {
+            for (SceneListener l : sceneListeners) {
+                l.onSceneInitialized(this);
             }
         }
     }
@@ -133,19 +148,16 @@ public abstract class Scene<T extends SceneData> extends AbstractPlayObject impl
     @Override
     public void cleanup() {
         // 先清理listeners,避免在envs清理的时候又调用到listeners.
-        if (listeners != null) {
-            listeners.clear();
+        if (sceneListeners != null) {
+            sceneListeners.clear();
         }
-        if (envs != null) {
-            for (Env env : envs) {
-                env.cleanup();
-            }
+        if (sceneEnvListeners != null) {
+            sceneEnvListeners.clear();
         }
-        
-        if (bulletAppState != null && app != null) {
-            app.getStateManager().detach(bulletAppState);
-            bulletAppState = null;
+        for (Env env : envs) {
+            env.cleanup();
         }
+        envs.clear();
 
         if (sceneRoot != null) {
             sceneRoot.removeFromParent();
@@ -157,7 +169,7 @@ public abstract class Scene<T extends SceneData> extends AbstractPlayObject impl
         }
         super.cleanup();
     }
-
+    
     @Override
     public T getData() {
         return data;
@@ -169,23 +181,95 @@ public abstract class Scene<T extends SceneData> extends AbstractPlayObject impl
     }
 
     /**
-     * 获取当前场景的Env
+     * 获取当前场景的所有Env。
+     * 注：不要修改该返回列表，只允许只读。
      * @return 
      */
     public List<Env> getEnvs() {
         return envs;
     }
     
+    public Env getEnv(String envId) {
+        Env result = null;
+        for (Env env : envs) {
+            if (env.getData().getId().equals(envId)) {
+                return env;
+            }
+        }
+        return result;
+    }
+    
+    /**
+     * 动态添加env
+     * @param envData
+     */
+    public void addEnv(EnvData envData) {
+        List<EnvData> envList = data.getEnvs();
+        if (envList == null) {
+            envList = new ArrayList<EnvData>();
+            data.setEnvs(envList);
+        }
+        // 不能多次重复添加同一个Env
+        if (envList.contains(envData)) {
+            return;
+        }
+        envList.add(envData);
+        // 如果当前场景已经初始化，则需要立即初始化envData.
+        // 否则交由场景的initialize方法去初始化
+        if (isInitialized()) {
+            Env env = envService.loadEnv(envData);
+            env.initialize(app, this);
+            envs.add(env);
+            notifySceneEnvListenerAdded(env);
+            notifySceneEnvListenerInitialized(env);
+        }
+    }
+    
+    // 暂不增加这个方法,这会在调用initialize的时候造成混乱,未确定是否由内部还是外部调用。
+//    public void addEnv(Env env) {
+//        if (env == null)
+//            throw new NullPointerException("Env could not be null!");
+//        List<EnvData> envList = data.getEnvs();
+//        if (envList == null) {
+//            envList = new ArrayList<EnvData>();
+//            data.setEnvs(envList);
+//        }
+//        envList.add(env.getData());
+//        envs.add(env);
+//        notifySceneEnvListenerAdded(env);
+//        
+//        // todo initialize env
+//    }
+    
+    /**
+     * 从场景中移除Env对象。
+     * @param env
+     * @return 
+     */
+    public boolean removeEnv(Env env) {
+        boolean result = envs.remove(env);
+        if (result) {
+            data.getEnvs().remove(env.getData());
+            env.cleanup();
+            notifySceneEnvListenerRemoved(env);
+        }
+        return result;
+    }
+    
+    /**
+     * 获取场景根节点
+     * @return 
+     */
     public Spatial getSceneRoot() {
         return sceneRoot;
     }
 
+    /**
+     * 获取场景的地形根节点
+     * @return 
+     */
     public Spatial getTerrain() {
         return terrainRoot;
-    }
-    
-    public PhysicsSpace getPhysicsSpace() {
-        return data.isUsePhysics() ? bulletAppState.getPhysicsSpace() : null;
     }
     
     /**
@@ -197,12 +281,10 @@ public abstract class Scene<T extends SceneData> extends AbstractPlayObject impl
             return;
         
         sceneRoot.attachChild(spatial);
-        addPhysicsObject(spatial);
-        
         // 触发侦听器
-        if (listeners != null) {
-            for (Listener l : listeners) {
-                l.onAdded(this, spatial);
+        if (sceneListeners != null) {
+            for (SceneListener l : sceneListeners) {
+                l.onSceneObjectAdded(this, spatial);
             }
         }
     }
@@ -215,18 +297,11 @@ public abstract class Scene<T extends SceneData> extends AbstractPlayObject impl
         if (spatial == null)
             return;
         
-        if (bulletAppState != null) {
-            RigidBodyControl rbc = spatial.getControl(RigidBodyControl.class);
-            if (rbc != null) {
-                bulletAppState.getPhysicsSpace().remove(rbc);
-            }
-        }
         spatial.removeFromParent();
-        
         // 触发侦听器
-        if (listeners != null) {
-            for (Listener l : listeners) {
-                l.onRemoved(this, spatial);
+        if (sceneListeners != null) {
+            for (SceneListener l : sceneListeners) {
+                l.onSceneObjectRemoved(this, spatial);
             }
         }
     }
@@ -237,7 +312,12 @@ public abstract class Scene<T extends SceneData> extends AbstractPlayObject impl
      */
     public void addTerrainObject(Spatial spatial) {
         terrainRoot.attachChild(spatial);
-        addPhysicsObject(spatial);
+        // 触发侦听器
+        if (sceneListeners != null) {
+            for (SceneListener l : sceneListeners) {
+                l.onSceneObjectAdded(this, spatial);
+            }
+        }
     }
     
     /**
@@ -258,19 +338,6 @@ public abstract class Scene<T extends SceneData> extends AbstractPlayObject impl
         if (light == null) 
             return;
         sceneRoot.removeLight(light);
-    }
-    
-    /**
-     * 添加节点到物理空间
-     * @param s 
-     */
-    private void addPhysicsObject(Spatial s) {
-        if (!data.isUsePhysics() ||  bulletAppState == null || s == null)
-            return;
-        RigidBodyControl rbc = s.getControl(RigidBodyControl.class);
-        if (rbc != null) {
-            bulletAppState.getPhysicsSpace().add(rbc);
-        }
     }
     
     /**
@@ -333,12 +400,12 @@ public abstract class Scene<T extends SceneData> extends AbstractPlayObject impl
      * 添加一个侦听器
      * @param listener 
      */
-    public void addListener(Listener listener) {
-        if (listeners == null) 
-            listeners = new ArrayList<Listener>();
+    public void addSceneListener(SceneListener listener) {
+        if (sceneListeners == null) 
+            sceneListeners = new ArrayList<SceneListener>();
         
-        if (!listeners.contains(listener)) {
-            listeners.add(listener);
+        if (!sceneListeners.contains(listener)) {
+            sceneListeners.add(listener);
         }
     }
     
@@ -347,7 +414,44 @@ public abstract class Scene<T extends SceneData> extends AbstractPlayObject impl
      * @param listener
      * @return 
      */
-    public boolean removeListener(Listener listener) {
-        return listeners != null && listeners.remove(listener);
+    public boolean removeSceneListener(SceneListener listener) {
+        return sceneListeners != null && sceneListeners.remove(listener);
+    }
+    
+    public void addSceneEnvListener(SceneEnvListener sceneEnvListener) {
+        if (sceneEnvListeners == null) 
+            sceneEnvListeners = new ArrayList<SceneEnvListener>();
+        
+        if (!sceneEnvListeners.contains(sceneEnvListener)) {
+            sceneEnvListeners.add(sceneEnvListener);
+        }
+    }
+    
+    public boolean removeSceneEnvListener(SceneEnvListener sceneEnvListener) {
+        return sceneEnvListeners != null && sceneEnvListeners.remove(sceneEnvListener);
+    }
+    
+    private void notifySceneEnvListenerInitialized(Env env) {
+        if (sceneEnvListeners != null) {
+            for (SceneEnvListener l : sceneEnvListeners) {
+                l.onSceneEnvInitialized(this, env);
+            }
+        }
+    }
+    
+    private void notifySceneEnvListenerAdded(Env env) {
+        if (sceneEnvListeners != null) {
+            for (SceneEnvListener l : sceneEnvListeners) {
+                l.onSceneEnvAdded(this, env);
+            }
+        }
+    }
+    
+    private void notifySceneEnvListenerRemoved(Env env) {
+        if (sceneEnvListeners != null) {
+            for (SceneEnvListener l : sceneEnvListeners) {
+                l.onSceneEnvRemoved(this, env);
+            }
+        }
     }
 }
