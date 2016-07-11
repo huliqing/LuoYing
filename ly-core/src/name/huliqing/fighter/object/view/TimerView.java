@@ -138,9 +138,9 @@ public class TimerView extends AbstractView {
     @Override
     public ViewData getUpdateData() {
         ViewData vd = super.getUpdateData(); //To change body of generated methods, choose Tools | Templates.
-        vd.putAttribute("title", title);
-        vd.putAttribute("startTime", startTime);
-        vd.putAttribute("up", up);
+        vd.setAttribute("title", title);
+        vd.setAttribute("startTime", startTime);
+        vd.setAttribute("up", up);
         return vd;
     }
     

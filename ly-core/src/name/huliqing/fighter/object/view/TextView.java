@@ -100,7 +100,7 @@ public class TextView extends AbstractView {
     @Override
     public ViewData getUpdateData() {
         ViewData vd = super.getUpdateData();
-        vd.putAttribute("text", textUI.getText());
+        vd.setAttribute("text", textUI.getText());
         return vd;
     }
 

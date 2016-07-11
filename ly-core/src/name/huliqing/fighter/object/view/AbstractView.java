@@ -111,9 +111,9 @@ public abstract class AbstractView extends AbstractPlayObject implements View, N
 
     @Override
     public ViewData getUpdateData() {
-        data.putAttribute("enabled", enabled);
-        data.putAttribute("timeUsed", timeUsed);
-        data.putAttribute("useTime", useTime);
+        data.setAttribute("enabled", enabled);
+        data.setAttribute("timeUsed", timeUsed);
+        data.setAttribute("useTime", useTime);
         return data;
     }
 
@@ -173,7 +173,7 @@ public abstract class AbstractView extends AbstractPlayObject implements View, N
     protected final void putSyncData(String key, Object value) {
         if (!isSyncEnabled()) 
             return;
-        syncData.putAttribute(key, value);
+        syncData.setAttribute(key, value);
     }
 
     @Override

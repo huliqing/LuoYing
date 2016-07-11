@@ -108,7 +108,7 @@ public class Proto extends DataAttribute{
      * 获取所有原始参数，该方法只允许DataFactory内部调用.
      * @return 
      */
-    public Map<String, String> getOriginAttributes() {
+    public Map<String, Object> getOriginAttributes() {
         return data;
     }
 

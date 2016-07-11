@@ -62,7 +62,7 @@ public class TextPanelView extends TextView {
     @Override
     public ViewData getUpdateData() {
         ViewData vd = super.getUpdateData();
-        vd.putAttribute("title", title);
+        vd.setAttribute("title", title);
         return vd;
     }
 

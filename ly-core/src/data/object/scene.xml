@@ -29,6 +29,7 @@
 ,envFir1|4,envFir2|4,envFir3|4
 ,envFlower0|4,envFlower1|4
 ,envGrass1|4,envGrass2|4,envGrass3|4,envGrass4|4"
+randomXExtent="100" randomZExtent="100"
 />
     
     <!--千年古柏场景-->

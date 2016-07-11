@@ -84,9 +84,9 @@ public class ProtoUtils {
                 }
                 pp = extendsProto(pp, extProto, checker);
             }
-            Map<String, String> pMap = p.getOriginAttributes();
-            Map<String, String> ppMap = pp.getOriginAttributes();
-            Map<String, String> merger = new HashMap<String, String>(ppMap.size());
+            Map<String, Object> pMap = p.getOriginAttributes();
+            Map<String, Object> ppMap = pp.getOriginAttributes();
+            Map<String, Object> merger = new HashMap<String, Object>(ppMap.size());
             merger.putAll(ppMap);
             merger.putAll(pMap);
             pMap.clear();

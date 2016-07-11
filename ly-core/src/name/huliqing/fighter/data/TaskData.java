@@ -61,23 +61,6 @@ public class TaskData extends ProtoData {
         
         completion = ic.readBoolean("completion", false);
     }
-
-    // remove20160322
-//    public String getStartActorId() {
-//        return startActorId;
-//    }
-//
-//    public void setStartActorId(String startActorId) {
-//        this.startActorId = startActorId;
-//    }
-//
-//    public String getEndActorId() {
-//        return endActorId;
-//    }
-//
-//    public void setEndActorId(String endActorId) {
-//        this.endActorId = endActorId;
-//    }
     
     /**
      * 判断任务是否执行完成,完成即表示任务达成目标，中断或放弃不算完成。
@@ -104,7 +87,7 @@ public class TaskData extends ProtoData {
         String tid = makeId(itemId);
         int total = getAsInteger(tid, 0);
         total += amount;
-        putAttribute(tid, total);
+        setAttribute(tid, total);
     }
     
     /**

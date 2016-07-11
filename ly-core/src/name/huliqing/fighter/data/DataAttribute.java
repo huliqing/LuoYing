@@ -14,13 +14,13 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.network.serializing.Serializable;
+import com.jme3.scene.UserData;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import name.huliqing.fighter.utils.ConvertUtils;
 
 /**
@@ -31,24 +31,42 @@ import name.huliqing.fighter.utils.ConvertUtils;
 public class DataAttribute implements Savable {
 
     // 扩展参数
-    protected Map<String, String> data;
+    protected Map<String, Object> data;
     
-    public DataAttribute() {}
+    public DataAttribute() {
+        this.data = new HashMap<String, Object>();
+    }
     
     public DataAttribute(Map data) {
+        if (data == null) {
+            throw new NullPointerException("Data could not be null!");
+        }
         this.data = data;
     }
     
+//    /**
+//     * 添加一个参数到本地data中，如果参数已经存在则覆盖该参数。注意：value将会被转换为字符串.
+//     * @param key
+//     * @param value 
+//     */
+//    public final void putAttribute(String key, String value) {
+//        if (data == null) {
+//            data = new HashMap<String, Object>();
+//        }
+//        data.put(key, String.valueOf(value));
+//    }
+    
     /**
-     * 添加一个参数到本地data中，如果参数已经存在则覆盖该参数。注意：value将会被转换为字符串.
+     * 设置一个参数值，如果value为null则清除该值。
      * @param key
      * @param value 
      */
-    public final void putAttribute(String key, Object value) {
-        if (data == null) {
-            data = new HashMap<String, String>();
+    public final void setAttribute(String key, Object value) {
+        if (value == null) {
+            data.remove(key);
+            return;
         }
-        data.put(key, String.valueOf(value));
+        data.put(key, value);
     }
     
     /**
@@ -57,14 +75,22 @@ public class DataAttribute implements Savable {
      * @return 
      */
     public String getAttribute(String key) {
-        if (data == null || !data.containsKey(key)) {
+        if (!data.containsKey(key)) {
             return null;
         }
-        String value = data.get(key);
+        String value = data.get(key).toString();
         if ("".equals(value)) {
             return null;
         }
         return value;
+    }
+
+    public final <T extends Savable> T getAsSavable(String key, Class<T> type) {
+        if (!data.containsKey(key)) {
+            return null;
+        }
+        Object object = data.get(key);
+        return (T) object;
     }
     
     public final String getAttribute(String key, String defValue) {
@@ -169,7 +195,7 @@ public class DataAttribute implements Savable {
         if (value == null) {
             return null;
         }
-        return (value.equals("true") || value.equals("1"));
+        return (value.equalsIgnoreCase("true") || value.equals("1"));
     }
     
     public final boolean getAsBoolean(String key, boolean defValue) {
@@ -177,7 +203,7 @@ public class DataAttribute implements Savable {
         if (value == null) {
             return defValue;
         }
-        return (value.equals("true") || value.equals("1"));
+        return (value.equalsIgnoreCase("true") || value.equals("1"));
     }
     
     /**
@@ -344,49 +370,24 @@ public class DataAttribute implements Savable {
     }
     
     public final void clear() {
-        if (data != null) {
-            data.clear();
-        }
+        data.clear();
     }
     
     public final boolean isEmpty() {
-        return data == null || data.isEmpty();
+        return data.isEmpty();
     }
     
     @Override
     public void write(JmeExporter ex) throws IOException {
-        if (data == null || data.isEmpty())
-            return;
         OutputCapsule oc = ex.getCapsule(this);
-        Set<String> keys = data.keySet();
-        StringBuilder keySb = new StringBuilder();
-        
-        // 保存键值
-        for (String key : keys) {
-            oc.write(data.get(key), key, null);
-            keySb.append(key).append(",");
-        }
-        // 保存键名
-        String dataMapKeys = keySb.substring(0, keySb.length() - 1);
-        oc.write(dataMapKeys, "_dataMapKeys_", null);
+        UserData dataObject = new UserData(UserData.getObjectType(data), data);
+        oc.write(dataObject, "_dataObject_", null);
     }
 
     @Override
     public void read(JmeImporter im) throws IOException {
         InputCapsule ic = im.getCapsule(this);
-        String dataMapKeys = ic.readString("_dataMapKeys_", null);
-        if (dataMapKeys == null)
-            return;
-        String[] keys = dataMapKeys.split(",");
-        if (data == null) {
-            data = new HashMap<String, String>(keys.length);
-        }
-        for (String key : keys) {
-            String value = ic.readString(key, null);
-            if (value == null) {
-                continue;
-            }
-            data.put(key, value);
-        }
+        UserData dataObject = (UserData) ic.readSavable("_dataObject_", new UserData(UserData.getObjectType(data), data));
+        data = (Map) dataObject.getValue();
     }
 }
