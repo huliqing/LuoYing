@@ -9,15 +9,14 @@ import android.os.Environment;
 import android.view.Window;
 import android.view.WindowManager;
 import com.jme3.app.AndroidHarnessFragment;
-import com.jme3.app.DefaultAndroidProfiler;
 import com.jme3.input.event.TouchEvent;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
-import name.huliqing.fighter.android.AndroidEnvServiceImpl;
 import name.huliqing.fighter.android.AndroidSaveServiceImpl;
+import name.huliqing.fighter.android.AndroidSystemServiceImpl;
 import name.huliqing.fighter.game.service.ConfigService;
-import name.huliqing.fighter.game.service.EnvService;
 import name.huliqing.fighter.game.service.SaveService;
+import name.huliqing.fighter.game.service.SystemService;
 import name.huliqing.vc.VersionChecker;
  
 public class MainActivity extends Activity {
@@ -49,7 +48,7 @@ public class MainActivity extends Activity {
         // 注册，因为在layoutDisplay在调用的时候已经太迟，core核心代码已经调用了SaveService
         // 的一些方法，这就导致core调用的不是AndroidSaveServiceImpl，而是默认的SaveServiceImpl.java
         // 而默认的SaveServiceImpl.java是不能支持Android的.
-        Factory.register(EnvService.class, AndroidEnvServiceImpl.class);
+        Factory.register(SystemService.class, AndroidSystemServiceImpl.class);
         Factory.register(SaveService.class, AndroidSaveServiceImpl.class);
         
         // ==== 允许android进行udp广播和接收广播

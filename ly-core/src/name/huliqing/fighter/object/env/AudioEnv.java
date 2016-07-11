@@ -17,16 +17,12 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Sphere;
-import static java.util.Arrays.stream;
 import name.huliqing.fighter.Common;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.EnvData;
 import name.huliqing.fighter.data.SoundData;
 import name.huliqing.fighter.game.service.SoundService;
 import name.huliqing.fighter.object.scene.Scene;
-import static java.util.Arrays.stream;
-import static java.util.Arrays.stream;
-import static java.util.Arrays.stream;
 
 /**
  *

@@ -46,7 +46,6 @@ import name.huliqing.fighter.object.game.Game.GameListener;
 import name.huliqing.fighter.object.scene.SceneUtils;
 import name.huliqing.fighter.object.view.View;
 import name.huliqing.fighter.ui.AbstractUI;
-import name.huliqing.fighter.utils.CollisionChaseCamera;
 import name.huliqing.fighter.utils.Temp;
 import name.huliqing.fighter.ui.UI;
 import name.huliqing.fighter.ui.UIEventListener;
@@ -81,9 +80,6 @@ public  class SimpleGameState extends GameState implements UIEventListener {
     // 基本界面
     protected LanPlayStateUI ui;
     
-//    // 场景跟随相机
-//    protected CollisionChaseCamera chaseCamera;
-
     // 玩家当前玩家
     protected Actor player;
     
@@ -258,25 +254,21 @@ public  class SimpleGameState extends GameState implements UIEventListener {
         if (p == null) {
             return false;
         } else {
-            if (p == localRoot || p == UIState.getInstance().getUIRoot()) {
+            
+            // remove20160711
+//            if (p == localRoot || p == UIState.getInstance().getUIRoot()) {
+//                return true;
+//            } else {
+//                return isInScene(p);
+//            }
+
+            if (p == game.getScene().getSceneRoot() || p == UIState.getInstance().getUIRoot()) {
                 return true;
             } else {
                 return isInScene(p);
             }
         }
     }
-
-    // remove20160710
-//    @Override
-//    public CollisionChaseCamera getChaseCamera() {
-//        if (chaseCamera == null) {
-//            chaseCamera = SceneTools.createChaseCam(app.getCamera(), app.getInputManager());
-//            chaseCamera.setPhysicsSpace(game.getScene().getPhysicsSpace());
-////            chaseCamera.addCollisionObject(game.getScene().getTerrain());
-//            chaseCamera.addCollisionObjectAll(game.getScene().getSceneRoot());
-//        }
-//        return chaseCamera;
-//    }
 
     @Override
     public List<Actor> getActors() {

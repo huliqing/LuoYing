@@ -59,7 +59,6 @@ import name.huliqing.fighter.game.service.HandlerService;
 import name.huliqing.fighter.game.service.HandlerServiceImpl;
 import name.huliqing.fighter.game.service.ElService;
 import name.huliqing.fighter.game.service.ElServiceImpl;
-import name.huliqing.fighter.game.service.EnvService;
 import name.huliqing.fighter.game.service.EnvServiceImpl;
 import name.huliqing.fighter.game.service.GameService;
 import name.huliqing.fighter.game.service.GameServiceImpl;
@@ -96,6 +95,7 @@ import name.huliqing.fighter.game.service.TaskServiceImpl;
 import name.huliqing.fighter.game.service.ViewService;
 import name.huliqing.fighter.game.service.ViewServiceImpl;
 import name.huliqing.fighter.game.service.SystemService;
+import name.huliqing.fighter.game.service.EnvService;
 
 /**
  *

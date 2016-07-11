@@ -33,11 +33,13 @@ public enum DataType {
     /** 音效 */
     sound(16),
     
-    /** 地面 */
-    terrain(17),
+    // remove20160711
+//    /** 地面 */
+//    terrain(17),
     
-    /** 天空 */
-    sky(18),
+    // remove20160711
+//    /** 天空 */
+//    sky(18),
   
     // remove20160101
 //    /** AI配置 */

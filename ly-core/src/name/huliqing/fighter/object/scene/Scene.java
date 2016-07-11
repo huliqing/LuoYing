@@ -18,16 +18,16 @@ import java.util.List;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.EnvData;
 import name.huliqing.fighter.data.SceneData;
-import name.huliqing.fighter.game.service.EnvService;
 import name.huliqing.fighter.game.service.PlayService;
 import name.huliqing.fighter.object.DataProcessor;
 import name.huliqing.fighter.object.env.Env;
+import name.huliqing.fighter.game.service.EnvService;
 
 /**
  * @author huliqing
  * @param <T>
  */
-public abstract class Scene<T extends SceneData> extends AbstractAppState implements DataProcessor<T>{
+public class Scene<T extends SceneData> extends AbstractAppState implements DataProcessor<T>{
     private final PlayService playService = Factory.get(PlayService.class);
     private final EnvService envService = Factory.get(EnvService.class);
     

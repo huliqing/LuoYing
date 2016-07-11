@@ -329,7 +329,7 @@ name.huliqing.fighter.data.DataAttribute -> name.huliqing.fighter.b.m:
     java.util.Map data -> a
     void <init>() -> <init>
     void <init>(java.util.Map) -> <init>
-    void putAttribute(java.lang.String,java.lang.Object) -> a
+    void setAttribute(java.lang.String,java.lang.Object) -> a
     java.lang.String getAttribute(java.lang.String) -> i
     java.lang.String getAttribute(java.lang.String,java.lang.String) -> a
     java.lang.Integer getAsInteger(java.lang.String) -> j
@@ -345,6 +345,7 @@ name.huliqing.fighter.data.DataAttribute -> name.huliqing.fighter.b.m:
     com.jme3.math.Vector3f getAsVector3f(java.lang.String,com.jme3.math.Vector3f) -> a
     com.jme3.math.Vector3f[] getAsVector3fArray(java.lang.String) -> q
     com.jme3.math.Vector2f getAsVector2f(java.lang.String) -> u
+    com.jme3.math.Vector2f getAsVector2f(java.lang.String,com.jme3.math.Vector2f) -> a
     com.jme3.math.Quaternion getAsQuaternion(java.lang.String) -> r
     com.jme3.math.ColorRGBA getAsColor(java.lang.String) -> s
     com.jme3.math.ColorRGBA getAsColor(java.lang.String,com.jme3.math.ColorRGBA) -> a
@@ -599,11 +600,17 @@ name.huliqing.fighter.data.PositionData -> name.huliqing.fighter.b.aa:
 name.huliqing.fighter.data.Proto -> name.huliqing.fighter.b.ab:
     java.lang.String tagName -> b
     java.lang.String id -> c
-    name.huliqing.fighter.enums.DataType type -> d
+    name.huliqing.fighter.enums.DataType dataType -> d
     void <init>() -> <init>
     void <init>(name.huliqing.fighter.enums.DataType,java.util.Map,java.lang.String) -> <init>
-    int checkAttributeLength(java.lang.String) -> a
     name.huliqing.fighter.enums.DataType getDataType() -> a
+    java.lang.String getDataClass() -> i
+    void setDataClass(java.lang.String) -> b
+    java.lang.String getDataLoader() -> j
+    void setDataLoader(java.lang.String) -> c
+    java.lang.String getDataProcessor() -> k
+    void setDataProcessor(java.lang.String) -> d
+    int checkAttributeLength(java.lang.String) -> a
     java.lang.String getId() -> b
     java.lang.String getName() -> c
     java.lang.String getIcon() -> d
@@ -649,32 +656,8 @@ name.huliqing.fighter.data.ResistData -> name.huliqing.fighter.b.ad:
     void <init>(java.lang.String) -> <init>
     void setFactor(float) -> a
 name.huliqing.fighter.data.SceneData -> name.huliqing.fighter.b.ae:
-    com.jme3.math.ColorRGBA directionalLightColor -> e
-    com.jme3.math.Vector3f directionalLightDir -> f
-    com.jme3.math.ColorRGBA ambientLightColor -> g
-    boolean useShadow -> h
-    boolean usePhysics -> i
-    com.jme3.math.Vector3f gravity -> j
-    boolean debugPhysics -> k
-    com.jme3.math.Vector3f boundary -> d
     java.util.List envs -> b
     void <init>() -> <init>
-    com.jme3.math.Vector3f getBoundary() -> a
-    void setBoundary(com.jme3.math.Vector3f) -> a
-    com.jme3.math.ColorRGBA getDirectionalLightColor() -> d
-    void setDirectionalLightColor(com.jme3.math.ColorRGBA) -> a
-    com.jme3.math.Vector3f getDirectionalLightDir() -> f
-    void setDirectionalLightDir(com.jme3.math.Vector3f) -> b
-    com.jme3.math.ColorRGBA getAmbientLightColor() -> g
-    void setAmbientLightColor(com.jme3.math.ColorRGBA) -> b
-    boolean isUseShadow() -> h
-    void setUseShadow(boolean) -> a
-    boolean isUsePhysics() -> i
-    void setUsePhysics(boolean) -> b
-    com.jme3.math.Vector3f getGravity() -> j
-    void setGravity(com.jme3.math.Vector3f) -> c
-    boolean isDebugPhysics() -> k
-    void setDebugPhysics(boolean) -> c
     java.util.List getEnvs() -> b
     void setEnvs(java.util.List) -> a
 name.huliqing.fighter.data.ShapeData -> name.huliqing.fighter.b.af:
@@ -879,8 +862,6 @@ name.huliqing.fighter.enums.DataType -> name.huliqing.fighter.c.a:
     name.huliqing.fighter.enums.DataType skill -> d
     name.huliqing.fighter.enums.DataType skin -> e
     name.huliqing.fighter.enums.DataType sound -> f
-    name.huliqing.fighter.enums.DataType terrain -> g
-    name.huliqing.fighter.enums.DataType sky -> h
     name.huliqing.fighter.enums.DataType effect -> i
     name.huliqing.fighter.enums.DataType emitter -> j
     name.huliqing.fighter.enums.DataType position -> k
@@ -2161,19 +2142,14 @@ name.huliqing.fighter.game.service.ElServiceImpl -> name.huliqing.fighter.game.s
     float getLevelEl(java.lang.String,int) -> a
     name.huliqing.fighter.object.el.XpDropEl getXpDropEl(java.lang.String) -> a
     name.huliqing.fighter.object.el.HitEl getHitEl(java.lang.String) -> b
-name.huliqing.fighter.game.service.EnvService -> name.huliqing.fighter.game.service.EnvService:
-    java.lang.String getLocale() -> getLocale
-    java.lang.String getMachineName() -> getMachineName
-    java.net.InetAddress getLocalHostIPv4() -> getLocalHostIPv4
-    java.net.InetAddress getBroadcastAddress() -> getBroadcastAddress
-name.huliqing.fighter.game.service.EnvServiceImpl -> name.huliqing.fighter.game.service.EnvServiceImpl:
+name.huliqing.fighter.game.service.EnvService -> name.huliqing.fighter.game.service.bf:
+    name.huliqing.fighter.data.EnvData loadEnvData(java.lang.String) -> a
+    name.huliqing.fighter.object.env.Env loadEnv(name.huliqing.fighter.data.EnvData) -> a
+name.huliqing.fighter.game.service.EnvServiceImpl -> name.huliqing.fighter.game.service.bg:
     void <init>() -> <init>
     void inject() -> inject
-    void main(java.lang.String[]) -> main
-    java.lang.String getLocale() -> getLocale
-    java.lang.String getMachineName() -> getMachineName
-    java.net.InetAddress getLocalHostIPv4() -> getLocalHostIPv4
-    java.net.InetAddress getBroadcastAddress() -> getBroadcastAddress
+    name.huliqing.fighter.data.EnvData loadEnvData(java.lang.String) -> a
+    name.huliqing.fighter.object.env.Env loadEnv(name.huliqing.fighter.data.EnvData) -> a
 name.huliqing.fighter.game.service.GameService -> name.huliqing.fighter.game.service.ay:
     name.huliqing.fighter.object.game.Game loadGame(name.huliqing.fighter.data.GameData) -> a
     name.huliqing.fighter.data.GameData loadGameData(java.lang.String) -> a
@@ -2560,6 +2536,22 @@ name.huliqing.fighter.game.service.StateServiceImpl -> name.huliqing.fighter.gam
     void addListener(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.object.actor.StateListener) -> a
     boolean removeListener(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.object.actor.StateListener) -> b
     void <clinit>() -> <clinit>
+name.huliqing.fighter.game.service.SystemService -> name.huliqing.fighter.game.service.SystemService:
+    java.lang.String getLocale() -> getLocale
+    java.lang.String getMachineName() -> getMachineName
+    java.net.InetAddress getLocalHostIPv4() -> getLocalHostIPv4
+    java.net.InetAddress getBroadcastAddress() -> getBroadcastAddress
+    java.lang.String getPlatformName() -> getPlatformName
+name.huliqing.fighter.game.service.SystemServiceImpl -> name.huliqing.fighter.game.service.SystemServiceImpl:
+    java.lang.String platformName -> platformName
+    void <init>() -> <init>
+    void inject() -> inject
+    void main(java.lang.String[]) -> main
+    java.lang.String getLocale() -> getLocale
+    java.lang.String getMachineName() -> getMachineName
+    java.net.InetAddress getLocalHostIPv4() -> getLocalHostIPv4
+    java.net.InetAddress getBroadcastAddress() -> getBroadcastAddress
+    java.lang.String getPlatformName() -> getPlatformName
 name.huliqing.fighter.game.service.TalentService -> name.huliqing.fighter.game.service.as:
     void addTalent(name.huliqing.fighter.object.actor.Actor,java.lang.String) -> a
     void addTalent(name.huliqing.fighter.object.actor.Actor,name.huliqing.fighter.data.TalentData) -> a
@@ -2632,7 +2624,7 @@ name.huliqing.fighter.game.state.ClientPlayState -> name.huliqing.fighter.game.c
 name.huliqing.fighter.game.state.ClientPlayState$1 -> name.huliqing.fighter.game.c.g:
     name.huliqing.fighter.game.state.ClientPlayState this$0 -> a
     void <init>(name.huliqing.fighter.game.state.ClientPlayState) -> <init>
-    void onSceneLoaded() -> a
+    void onGameStarted(name.huliqing.fighter.object.game.Game) -> a
 name.huliqing.fighter.game.state.ClientPlayState$2 -> name.huliqing.fighter.game.c.j:
     name.huliqing.fighter.game.state.ClientPlayState this$0 -> a
     void <init>(name.huliqing.fighter.game.state.ClientPlayState,float) -> <init>
@@ -2700,14 +2692,15 @@ name.huliqing.fighter.game.state.GameState -> name.huliqing.fighter.game.c.n:
     void <init>(name.huliqing.fighter.data.GameData) -> <init>
     void initialize(com.jme3.app.state.AppStateManager,com.jme3.app.Application) -> initialize
     void update(float) -> update
+    void stateDetached(com.jme3.app.state.AppStateManager) -> stateDetached
+    void cleanup() -> cleanup
+    void exit() -> c
     name.huliqing.fighter.object.game.Game getGame() -> a
     void addListener(name.huliqing.fighter.game.state.GameState$PlayListener) -> a
     void addObject(java.lang.Object,boolean) -> a
     void removeObject(java.lang.Object) -> a
     name.huliqing.fighter.object.NetworkObject getSyncObjects(long) -> a
     com.jme3.app.Application getApp() -> b
-    void exit() -> c
-    void cleanup() -> cleanup
     void addMessage(java.lang.String,name.huliqing.fighter.enums.MessageType) -> a
     boolean isInScene(com.jme3.scene.Spatial) -> a
     java.util.List getActors() -> d
@@ -2732,7 +2725,6 @@ name.huliqing.fighter.game.state.LabPlayState -> name.huliqing.fighter.game.c.ah
     name.huliqing.fighter.object.actor.Actor npc1 -> j
     name.huliqing.fighter.object.actor.Actor npc2 -> k
     int level -> l
-    name.huliqing.fighter.utils.CollisionChaseCamera chaseCamera -> c
     java.lang.String[] actorIds -> m
     void <init>(com.jme3.app.Application,name.huliqing.fighter.data.GameData) -> <init>
     void initialize(com.jme3.app.state.AppStateManager,com.jme3.app.Application) -> initialize
@@ -2752,7 +2744,7 @@ name.huliqing.fighter.game.state.LabPlayState -> name.huliqing.fighter.game.c.ah
 name.huliqing.fighter.game.state.LabPlayState$1 -> name.huliqing.fighter.game.c.ai:
     name.huliqing.fighter.game.state.LabPlayState this$0 -> a
     void <init>(name.huliqing.fighter.game.state.LabPlayState) -> <init>
-    void onSceneLoaded() -> a
+    void onGameStarted(name.huliqing.fighter.object.game.Game) -> a
 name.huliqing.fighter.game.state.LanClientListener -> name.huliqing.fighter.game.c.p:
     java.util.logging.Logger LOG -> a
     name.huliqing.fighter.game.service.PlayService playService -> b
@@ -2815,7 +2807,7 @@ name.huliqing.fighter.game.state.LanServerPlayState$1 -> name.huliqing.fighter.g
     name.huliqing.fighter.game.state.GameState val$newGameState -> a
     name.huliqing.fighter.game.state.LanServerPlayState this$0 -> b
     void <init>(name.huliqing.fighter.game.state.LanServerPlayState,name.huliqing.fighter.game.state.GameState) -> <init>
-    void onSceneLoaded() -> a
+    void onGameStarted(name.huliqing.fighter.object.game.Game) -> a
 name.huliqing.fighter.game.state.LoadingState -> name.huliqing.fighter.game.c.r:
     com.jme3.app.SimpleApplication app -> a
     name.huliqing.fighter.game.state.PlayState playState -> b
@@ -2836,7 +2828,6 @@ name.huliqing.fighter.game.state.NetworkPlayState -> name.huliqing.fighter.game.
     name.huliqing.fighter.object.anim.ScaleAnim clientsWinAnim -> g
     name.huliqing.fighter.ui.Icon lanBtn -> h
     name.huliqing.fighter.game.view.ActorSelectView actorPanel -> n
-    name.huliqing.fighter.utils.CollisionChaseCamera chaseCamera -> o
     void <init>(com.jme3.app.Application,name.huliqing.fighter.data.GameData) -> <init>
     void initialize(com.jme3.app.state.AppStateManager,com.jme3.app.Application) -> initialize
     void update(float) -> update
@@ -2854,7 +2845,7 @@ name.huliqing.fighter.game.state.NetworkPlayState -> name.huliqing.fighter.game.
 name.huliqing.fighter.game.state.NetworkPlayState$1 -> name.huliqing.fighter.game.c.u:
     name.huliqing.fighter.game.state.NetworkPlayState this$0 -> a
     void <init>(name.huliqing.fighter.game.state.NetworkPlayState) -> <init>
-    void onSceneLoaded() -> a
+    void onGameStarted(name.huliqing.fighter.object.game.Game) -> a
 name.huliqing.fighter.game.state.NetworkPlayState$2 -> name.huliqing.fighter.game.c.v:
     name.huliqing.fighter.game.state.NetworkPlayState this$0 -> a
     void <init>(name.huliqing.fighter.game.state.NetworkPlayState) -> <init>
@@ -2890,7 +2881,7 @@ name.huliqing.fighter.game.state.NetworkServerPlayState -> name.huliqing.fighter
 name.huliqing.fighter.game.state.NetworkServerPlayState$1 -> name.huliqing.fighter.game.c.ae:
     name.huliqing.fighter.game.state.NetworkServerPlayState this$0 -> a
     void <init>(name.huliqing.fighter.game.state.NetworkServerPlayState) -> <init>
-    void onSceneLoaded() -> a
+    void onGameStarted(name.huliqing.fighter.object.game.Game) -> a
 name.huliqing.fighter.game.state.NetworkServerPlayState$NetworkServerListener -> name.huliqing.fighter.game.c.af:
     name.huliqing.fighter.game.state.NetworkServerPlayState this$0 -> a
     void <init>(name.huliqing.fighter.game.state.NetworkServerPlayState,com.jme3.app.Application) -> <init>
@@ -2947,17 +2938,16 @@ name.huliqing.fighter.game.state.SimpleGameState -> name.huliqing.fighter.game.c
     com.jme3.util.SafeArrayList views -> h
     com.jme3.util.SafeArrayList animations -> i
     name.huliqing.fighter.game.state.LanPlayStateUI ui -> j
-    name.huliqing.fighter.utils.CollisionChaseCamera chaseCamera -> k
     name.huliqing.fighter.object.actor.Actor player -> m
     name.huliqing.fighter.object.actor.Actor lastPicked -> u
     long lastPickTime -> v
+    name.huliqing.fighter.object.env.CameraChaseEnv cameraChaseEnv -> k
     void <init>(name.huliqing.fighter.data.GameData) -> <init>
     void initialize(com.jme3.app.state.AppStateManager,com.jme3.app.Application) -> initialize
     void bindPickListener() -> k
     name.huliqing.fighter.object.actor.Actor pickActor() -> m
     void cleanup() -> cleanup
     boolean isInScene(com.jme3.scene.Spatial) -> a
-    name.huliqing.fighter.utils.CollisionChaseCamera getChaseCamera() -> n
     java.util.List getActors() -> d
     java.util.List getViews() -> g
     void addObject(java.lang.Object,boolean) -> a
@@ -2988,7 +2978,7 @@ name.huliqing.fighter.game.state.SimpleGameState -> name.huliqing.fighter.game.c
 name.huliqing.fighter.game.state.SimpleGameState$1 -> name.huliqing.fighter.game.c.ab:
     name.huliqing.fighter.game.state.SimpleGameState this$0 -> b
     void <init>(name.huliqing.fighter.game.state.SimpleGameState) -> <init>
-    void onSceneLoaded() -> a
+    void onGameStarted(name.huliqing.fighter.object.game.Game) -> a
 name.huliqing.fighter.game.state.SimpleGameState$2 -> name.huliqing.fighter.game.c.ac:
     name.huliqing.fighter.game.state.SimpleGameState this$0 -> a
     void <init>(name.huliqing.fighter.game.state.SimpleGameState) -> <init>
@@ -3021,11 +3011,11 @@ name.huliqing.fighter.game.state.StoryServerPlayState -> name.huliqing.fighter.g
 name.huliqing.fighter.game.state.StoryServerPlayState$1 -> name.huliqing.fighter.game.c.aj:
     name.huliqing.fighter.game.state.StoryServerPlayState this$0 -> a
     void <init>(name.huliqing.fighter.game.state.StoryServerPlayState) -> <init>
-    void onSceneLoaded() -> a
+    void onGameStarted(name.huliqing.fighter.object.game.Game) -> a
 name.huliqing.fighter.game.state.lan.AbstractClientListener -> name.huliqing.fighter.game.c.a.i:
     java.util.logging.Logger LOG -> a
     name.huliqing.fighter.game.service.ConfigService configService -> b
-    name.huliqing.fighter.game.service.EnvService envService -> d
+    name.huliqing.fighter.game.service.SystemService envService -> d
     com.jme3.app.Application app -> e
     java.util.List clients -> c
     float pingTimeInterval -> f
@@ -3213,7 +3203,7 @@ name.huliqing.fighter.game.state.lan.GameClient$ClientState -> name.huliqing.fig
     void <init>(java.lang.String,int) -> <init>
     void <clinit>() -> <clinit>
 name.huliqing.fighter.game.state.lan.GameServer -> name.huliqing.fighter.game.c.a.u:
-    name.huliqing.fighter.game.service.EnvService envService -> b
+    name.huliqing.fighter.game.service.SystemService envService -> b
     name.huliqing.fighter.game.service.PlayService playService -> c
     name.huliqing.fighter.game.service.ConfigService configService -> d
     com.jme3.network.Server server -> e
@@ -5032,9 +5022,6 @@ name.huliqing.fighter.loader.SkillLoader -> name.huliqing.fighter.d.s:
     name.huliqing.fighter.object.skill.Skill loadSkill(name.huliqing.fighter.data.SkillData) -> a
 name.huliqing.fighter.loader.SkinLoader -> name.huliqing.fighter.d.t:
     name.huliqing.fighter.object.skin.Skin load(name.huliqing.fighter.data.SkinData) -> a
-name.huliqing.fighter.loader.SkyLoader -> name.huliqing.fighter.d.u:
-    com.jme3.scene.Spatial cacheSkyDefaut -> a
-    com.jme3.scene.Spatial loadDefaultMin() -> a
 name.huliqing.fighter.loader.TalentLoader -> name.huliqing.fighter.d.v:
     name.huliqing.fighter.object.talent.Talent load(name.huliqing.fighter.data.TalentData) -> a
 name.huliqing.fighter.loader.TaskLoader -> name.huliqing.fighter.d.w:
@@ -5536,17 +5523,23 @@ name.huliqing.fighter.object.AbstractPlayObject -> name.huliqing.fighter.g.a:
     void cleanup() -> f
 name.huliqing.fighter.object.DataFactory -> name.huliqing.fighter.g.b:
     java.util.logging.Logger LOG -> a
-    java.util.Map DATA_TYPE_MAP -> b
-    java.util.Map DATA_LOADER_MAP -> c
-    java.util.Map DATA_PROCESSOR_MAP -> d
+    java.util.Map DEFAULT_DATAS -> b
+    java.util.Map DEFAULT_LOADERS -> c
+    java.util.Map DEFAULT_PROCESSORS -> d
+    java.util.Map TAG_DATAS -> e
+    java.util.Map TAG_LOADERS -> f
+    java.util.Map TAG_PROCESSORS -> g
     void <init>() -> <init>
     void registerDataType(java.lang.String,java.lang.Class) -> a
-    void registerDataLoader(java.lang.String,java.lang.Class) -> b
-    void registerDataProcessor(java.lang.String,java.lang.Class) -> c
+    void registerTagLoader(java.lang.String,java.lang.Class) -> b
+    void registerTagProcessor(java.lang.String,java.lang.Class) -> c
     void register(java.lang.String,java.lang.Class,java.lang.Class,java.lang.Class) -> a
     name.huliqing.fighter.data.ProtoData createData(java.lang.String) -> a
     name.huliqing.fighter.object.DataProcessor createProcessor(name.huliqing.fighter.data.ProtoData) -> a
     void initRegister() -> a
+    java.lang.Class findProtoData(java.lang.String,name.huliqing.fighter.enums.DataType) -> a
+    java.lang.Class findDataLoader(java.lang.String,name.huliqing.fighter.enums.DataType) -> b
+    java.lang.Class findDataProcessor(java.lang.String,name.huliqing.fighter.enums.DataType) -> c
     void <clinit>() -> <clinit>
 name.huliqing.fighter.object.DataLoader -> name.huliqing.fighter.g.c:
     void load(name.huliqing.fighter.data.Proto,name.huliqing.fighter.data.ProtoData) -> a
@@ -5622,6 +5615,7 @@ name.huliqing.fighter.object.ProtoUtils -> name.huliqing.fighter.g.k:
     void <init>() -> <init>
     name.huliqing.fighter.data.Proto getProto(java.lang.String) -> a
     name.huliqing.fighter.data.Proto extendsProto(name.huliqing.fighter.data.Proto,name.huliqing.fighter.data.Proto,java.util.List) -> a
+    void checkLoaderAndProcessor(name.huliqing.fighter.data.Proto) -> a
     void <clinit>() -> <clinit>
 name.huliqing.fighter.object.SyncData -> name.huliqing.fighter.g.l:
     void <init>() -> <init>
@@ -7337,10 +7331,21 @@ name.huliqing.fighter.object.el.XpDropEl -> name.huliqing.fighter.g.j.e:
     java.util.Map valueMap -> d
     void <init>(name.huliqing.fighter.data.ElData) -> <init>
     int getValue(int,int) -> a
+name.huliqing.fighter.object.env.AbstractEnv -> name.huliqing.fighter.g.k.n:
+    name.huliqing.fighter.data.EnvData data -> a
+    name.huliqing.fighter.object.scene.Scene scene -> i
+    boolean initialized -> j
+    void <init>() -> <init>
+    void initData(name.huliqing.fighter.data.EnvData) -> a
+    void initialize(com.jme3.app.Application,name.huliqing.fighter.object.scene.Scene) -> a
+    boolean isInitialized() -> b
+    void cleanup() -> a
+    void initData(name.huliqing.fighter.data.ProtoData) -> a
 name.huliqing.fighter.object.env.AudioEnv -> name.huliqing.fighter.g.k.l:
     name.huliqing.fighter.game.service.SoundService soundService -> b
     boolean debug -> c
     java.lang.String sound -> d
+    java.lang.String type -> k
     com.jme3.math.Vector3f location -> e
     com.jme3.audio.AudioNode audio -> f
     com.jme3.scene.Spatial debugNode -> g
@@ -7363,27 +7368,51 @@ name.huliqing.fighter.object.env.BoundaryBoxEnv -> name.huliqing.fighter.g.k.m:
     void initialize(com.jme3.app.Application,name.huliqing.fighter.object.scene.Scene) -> a
     void cleanup() -> a
     void initData(name.huliqing.fighter.data.ProtoData) -> a
+name.huliqing.fighter.object.env.CameraChaseEnv -> name.huliqing.fighter.g.k.o:
+    name.huliqing.fighter.utils.CollisionChaseCamera ccc -> b
+    name.huliqing.fighter.object.env.PhysicsEnv physicsEnv -> c
+    void <init>() -> <init>
+    void initData(name.huliqing.fighter.data.EnvData) -> a
+    void updateData() -> c
+    void initialize(com.jme3.app.Application,name.huliqing.fighter.object.scene.Scene) -> a
+    void cleanup() -> a
+    void updatePhysics(name.huliqing.fighter.object.env.PhysicsEnv) -> a
+    void onSceneEnvInitialized(name.huliqing.fighter.object.scene.Scene,name.huliqing.fighter.object.env.Env) -> a
+    void onSceneEnvAdded(name.huliqing.fighter.object.scene.Scene,name.huliqing.fighter.object.env.Env) -> b
+    void setChase(com.jme3.scene.Spatial) -> a
+    void setEnabledRotation(boolean) -> a
+    void initData(name.huliqing.fighter.data.ProtoData) -> a
 name.huliqing.fighter.object.env.Env -> name.huliqing.fighter.g.k.a:
-    name.huliqing.fighter.data.EnvData data -> a
-    name.huliqing.fighter.object.scene.Scene scene -> q
-    boolean initialized -> r
+    void initialize(com.jme3.app.Application,name.huliqing.fighter.object.scene.Scene) -> a
+    boolean isInitialized() -> b
+    void cleanup() -> a
+name.huliqing.fighter.object.env.EnvLoader -> name.huliqing.fighter.g.k.b:
+    void <init>() -> <init>
+    void load(name.huliqing.fighter.data.Proto,name.huliqing.fighter.data.EnvData) -> a
+    void load(name.huliqing.fighter.data.Proto,name.huliqing.fighter.data.ProtoData) -> a
+name.huliqing.fighter.object.env.LightAmbientEnv -> name.huliqing.fighter.g.k.p:
+    com.jme3.light.AmbientLight light -> b
     void <init>() -> <init>
     void initData(name.huliqing.fighter.data.EnvData) -> a
     void initialize(com.jme3.app.Application,name.huliqing.fighter.object.scene.Scene) -> a
     void cleanup() -> a
     void initData(name.huliqing.fighter.data.ProtoData) -> a
-name.huliqing.fighter.object.env.EnvLoader -> name.huliqing.fighter.g.k.b:
+name.huliqing.fighter.object.env.LightDirectionalEnv -> name.huliqing.fighter.g.k.q:
+    boolean debug -> b
+    com.jme3.light.DirectionalLight light -> c
+    com.jme3.scene.Spatial debugNode -> d
     void <init>() -> <init>
-    void load(name.huliqing.fighter.data.Proto,name.huliqing.fighter.data.EnvData) -> a
-    void load(name.huliqing.fighter.data.Proto,name.huliqing.fighter.data.ProtoData) -> a
+    void initData(name.huliqing.fighter.data.EnvData) -> a
+    void initialize(com.jme3.app.Application,name.huliqing.fighter.object.scene.Scene) -> a
+    void cleanup() -> a
+    com.jme3.scene.Spatial createDebugArrow(com.jme3.light.DirectionalLight) -> a
+    void initData(name.huliqing.fighter.data.ProtoData) -> a
 name.huliqing.fighter.object.env.ModelEnv -> name.huliqing.fighter.g.k.g:
     com.jme3.scene.Spatial model -> b
-    boolean loaded -> c
     void <init>() -> <init>
     void initData(name.huliqing.fighter.object.env.ModelEnvData) -> a
     void initialize(com.jme3.app.Application,name.huliqing.fighter.object.scene.Scene) -> a
     void cleanup() -> a
-    com.jme3.scene.Spatial getModel() -> b
     com.jme3.scene.Spatial loadModel() -> c
     void addPhysicsControl(com.jme3.scene.Spatial,com.jme3.bullet.control.RigidBodyControl,name.huliqing.fighter.object.env.ModelEnvData) -> a
     void initData(name.huliqing.fighter.data.EnvData) -> a
@@ -7425,6 +7454,30 @@ name.huliqing.fighter.object.env.ModelEnvLoader -> name.huliqing.fighter.g.k.i:
     void load(name.huliqing.fighter.data.Proto,name.huliqing.fighter.object.env.ModelEnvData) -> a
     void load(name.huliqing.fighter.data.Proto,name.huliqing.fighter.data.EnvData) -> a
     void load(name.huliqing.fighter.data.Proto,name.huliqing.fighter.data.ProtoData) -> a
+name.huliqing.fighter.object.env.PhysicsEnv -> name.huliqing.fighter.g.k.r:
+    boolean debug -> b
+    com.jme3.math.Vector3f gravity -> c
+    java.lang.String broadphaseType -> d
+    java.lang.String threadingType -> e
+    float speed -> f
+    com.jme3.math.Vector3f worldMax -> g
+    com.jme3.math.Vector3f worldMin -> h
+    float accuracy -> k
+    int maxSubSteps -> l
+    int solverNumIterations -> m
+    com.jme3.app.Application app -> n
+    com.jme3.bullet.BulletAppState bulletAppState -> o
+    void <init>() -> <init>
+    void initData(name.huliqing.fighter.data.EnvData) -> a
+    void initialize(com.jme3.app.Application,name.huliqing.fighter.object.scene.Scene) -> a
+    void cleanup() -> a
+    com.jme3.bullet.BulletAppState getBulletAppState() -> c
+    void onSceneInitialized(name.huliqing.fighter.object.scene.Scene) -> a
+    void onSceneObjectAdded(name.huliqing.fighter.object.scene.Scene,com.jme3.scene.Spatial) -> a
+    void onSceneObjectRemoved(name.huliqing.fighter.object.scene.Scene,com.jme3.scene.Spatial) -> b
+    com.jme3.bullet.PhysicsSpace$BroadphaseType getBroadphaseType(java.lang.String) -> a
+    com.jme3.bullet.BulletAppState$ThreadingType getThreadingType(java.lang.String) -> b
+    void initData(name.huliqing.fighter.data.ProtoData) -> a
 name.huliqing.fighter.object.env.PlantEnv -> name.huliqing.fighter.g.k.j:
     void <init>() -> <init>
     com.jme3.scene.Spatial loadModel() -> c
@@ -7433,10 +7486,54 @@ name.huliqing.fighter.object.env.PlantEnvLoader -> name.huliqing.fighter.g.k.c:
     void load(name.huliqing.fighter.data.Proto,name.huliqing.fighter.object.env.ModelEnvData) -> a
     void load(name.huliqing.fighter.data.Proto,name.huliqing.fighter.data.EnvData) -> a
     void load(name.huliqing.fighter.data.Proto,name.huliqing.fighter.data.ProtoData) -> a
-name.huliqing.fighter.object.env.SkyEnv -> name.huliqing.fighter.g.k.d:
+name.huliqing.fighter.object.env.ProxyPlatformEnv -> name.huliqing.fighter.g.k.s:
+    name.huliqing.fighter.game.service.SystemService systemService -> b
+    name.huliqing.fighter.game.service.EnvService envService -> c
+    java.lang.String defaultEnv -> d
+    java.util.List matchers -> e
     void <init>() -> <init>
+    void initData(name.huliqing.fighter.data.EnvData) -> a
     void initialize(com.jme3.app.Application,name.huliqing.fighter.object.scene.Scene) -> a
-    com.jme3.scene.Spatial loadModel() -> c
+    void cleanup() -> a
+    name.huliqing.fighter.object.env.ProxyPlatformEnv$EnvMatcher findMatcher(java.lang.String) -> a
+    void initData(name.huliqing.fighter.data.ProtoData) -> a
+name.huliqing.fighter.object.env.ProxyPlatformEnv$EnvMatcher -> name.huliqing.fighter.g.k.t:
+    java.lang.String envId -> b
+    java.util.Set platforms -> c
+    name.huliqing.fighter.object.env.ProxyPlatformEnv this$0 -> a
+    void <init>(name.huliqing.fighter.object.env.ProxyPlatformEnv,java.lang.String,java.util.Set) -> <init>
+    boolean isMatch(java.lang.String) -> a
+    java.lang.String access$000(name.huliqing.fighter.object.env.ProxyPlatformEnv$EnvMatcher) -> a
+name.huliqing.fighter.object.env.ShadowEnv -> name.huliqing.fighter.g.k.u:
+    name.huliqing.fighter.game.service.ConfigService configService -> b
+    float shadowIntensity -> c
+    int shadowMapSize -> d
+    int shadowMaps -> e
+    com.jme3.app.Application app -> f
+    com.jme3.shadow.DirectionalLightShadowFilter filter -> g
+    void <init>() -> <init>
+    void initData(name.huliqing.fighter.data.EnvData) -> a
+    void initialize(com.jme3.app.Application,name.huliqing.fighter.object.scene.Scene) -> a
+    void cleanup() -> a
+    void onSceneInitialized(name.huliqing.fighter.object.scene.Scene) -> a
+    com.jme3.light.DirectionalLight findLight() -> c
+    void onSceneObjectAdded(name.huliqing.fighter.object.scene.Scene,com.jme3.scene.Spatial) -> a
+    void onSceneObjectRemoved(name.huliqing.fighter.object.scene.Scene,com.jme3.scene.Spatial) -> b
+    void initData(name.huliqing.fighter.data.ProtoData) -> a
+name.huliqing.fighter.object.env.SkyEnv -> name.huliqing.fighter.g.k.d:
+    java.lang.String baseDir -> b
+    java.lang.String west -> c
+    java.lang.String east -> d
+    java.lang.String north -> e
+    java.lang.String south -> f
+    java.lang.String up -> g
+    java.lang.String down -> h
+    com.jme3.scene.Spatial sky -> k
+    void <init>() -> <init>
+    void initData(name.huliqing.fighter.data.EnvData) -> a
+    void initialize(com.jme3.app.Application,name.huliqing.fighter.object.scene.Scene) -> a
+    void cleanup() -> a
+    void initData(name.huliqing.fighter.data.ProtoData) -> a
 name.huliqing.fighter.object.env.TerrainEnv -> name.huliqing.fighter.g.k.e:
     void <init>() -> <init>
     com.jme3.scene.Spatial loadModel() -> c
@@ -7444,7 +7541,25 @@ name.huliqing.fighter.object.env.TreeEnv -> name.huliqing.fighter.g.k.f:
     void <init>() -> <init>
     com.jme3.scene.Spatial loadModel() -> c
     void addPhysicsControl(com.jme3.scene.Spatial,com.jme3.bullet.control.RigidBodyControl,name.huliqing.fighter.object.env.ModelEnvData) -> a
+name.huliqing.fighter.object.env.WaterAdvanceEnv -> name.huliqing.fighter.g.k.v:
+    java.lang.String causticsTexture -> b
+    java.lang.String foamTexture -> c
+    java.lang.String heightTexture -> d
+    java.lang.String normalTexture -> e
+    boolean useSceneLight -> f
+    com.jme3.water.WaterFilter water -> g
+    float radiusSquared -> h
+    com.jme3.math.Vector3f tempCenter -> k
+    void <init>() -> <init>
+    void initData(name.huliqing.fighter.data.EnvData) -> a
+    void initialize(com.jme3.app.Application,name.huliqing.fighter.object.scene.Scene) -> a
+    void cleanup() -> a
+    void onSceneObjectAdded(name.huliqing.fighter.object.scene.Scene,com.jme3.scene.Spatial) -> a
+    void onSceneObjectRemoved(name.huliqing.fighter.object.scene.Scene,com.jme3.scene.Spatial) -> b
+    void onSceneInitialized(name.huliqing.fighter.object.scene.Scene) -> a
+    void initData(name.huliqing.fighter.data.ProtoData) -> a
 name.huliqing.fighter.object.env.WaterEnv -> name.huliqing.fighter.g.k.k:
+name.huliqing.fighter.object.env.WaterSimpleEnv -> name.huliqing.fighter.g.k.w:
     java.lang.String waterModelFile -> b
     com.jme3.math.Vector3f location -> c
     com.jme3.math.Vector3f rotation -> d
@@ -7454,43 +7569,43 @@ name.huliqing.fighter.object.env.WaterEnv -> name.huliqing.fighter.g.k.k:
     float waveSpeed -> h
     float distortionMix -> k
     float distortionScale -> l
-    java.lang.String foamMap -> i
-    com.jme3.math.Vector2f foamScale -> s
-    java.lang.String foamMaskMap -> j
-    com.jme3.math.Vector2f foamMaskScale -> m
-    com.jme3.app.Application app -> n
-    com.jme3.scene.Spatial waterModel -> o
-    name.huliqing.fighter.processor.MySimpleWaterProcessor swp -> p
+    java.lang.String foamMap -> m
+    com.jme3.math.Vector2f foamScale -> n
+    java.lang.String foamMaskMap -> o
+    com.jme3.math.Vector2f foamMaskScale -> p
+    com.jme3.app.Application app -> q
+    com.jme3.scene.Spatial waterModel -> r
+    name.huliqing.fighter.processor.MySimpleWaterProcessor water -> s
     void <init>() -> <init>
     void initData(name.huliqing.fighter.data.EnvData) -> a
     void initialize(com.jme3.app.Application,name.huliqing.fighter.object.scene.Scene) -> a
     void cleanup() -> a
     void initData(name.huliqing.fighter.data.ProtoData) -> a
 name.huliqing.fighter.object.game.Game -> name.huliqing.fighter.g.l.a:
-    name.huliqing.fighter.game.service.PlayService playService -> g
     name.huliqing.fighter.game.service.SceneService sceneService -> h
     name.huliqing.fighter.data.GameData data -> c
     com.jme3.app.Application app -> i
     java.util.List listeners -> a
-    boolean enabled -> b
     name.huliqing.fighter.object.scene.Scene scene -> e
     name.huliqing.fighter.object.PlayManager playManager -> f
     void <init>() -> <init>
     void initData(name.huliqing.fighter.data.GameData) -> a
     name.huliqing.fighter.data.GameData getData() -> b
-    void initialize(com.jme3.app.Application) -> a
-    void update(float) -> d
-    void cleanup() -> f
+    void initialize(com.jme3.app.state.AppStateManager,com.jme3.app.Application) -> initialize
+    void onSceneInitialized(name.huliqing.fighter.object.scene.Scene) -> a
+    void onSceneObjectAdded(name.huliqing.fighter.object.scene.Scene,com.jme3.scene.Spatial) -> a
+    void onSceneObjectRemoved(name.huliqing.fighter.object.scene.Scene,com.jme3.scene.Spatial) -> b
+    void update(float) -> update
+    void stateDetached(com.jme3.app.state.AppStateManager) -> stateDetached
+    void cleanup() -> cleanup
     name.huliqing.fighter.object.scene.Scene getScene() -> c
     void addLogic(name.huliqing.fighter.object.PlayObject) -> a
     boolean removeLogic(name.huliqing.fighter.object.PlayObject) -> b
     void addListener(name.huliqing.fighter.object.game.Game$GameListener) -> a
-    void setEnabled(boolean) -> a
-    void updateLogics(float) -> a
     void onPlayerSelected(name.huliqing.fighter.object.actor.Actor) -> a
     void initData(name.huliqing.fighter.data.ProtoData) -> a
 name.huliqing.fighter.object.game.Game$GameListener -> name.huliqing.fighter.g.l.bn:
-    void onSceneLoaded() -> a
+    void onGameStarted(name.huliqing.fighter.object.game.Game) -> a
 name.huliqing.fighter.object.game.GameLoader -> name.huliqing.fighter.g.l.bo:
     void <init>() -> <init>
     void load(name.huliqing.fighter.data.Proto,name.huliqing.fighter.data.GameData) -> a
@@ -7522,7 +7637,7 @@ name.huliqing.fighter.object.game.PlayerDeadChecker -> name.huliqing.fighter.g.l
     void cleanup() -> f
 name.huliqing.fighter.object.game.StoryGame -> name.huliqing.fighter.g.l.bp:
     name.huliqing.fighter.game.service.PlayService playService -> h
-    name.huliqing.fighter.game.network.ActorNetwork actorNetwork -> i
+    name.huliqing.fighter.game.network.ActorNetwork actorNetwork -> f_
     java.util.List tasks -> g
     name.huliqing.fighter.object.game.GameTask current -> j
     int finishCount -> k
@@ -7530,12 +7645,13 @@ name.huliqing.fighter.object.game.StoryGame -> name.huliqing.fighter.g.l.bp:
     boolean started -> r
     void <init>() -> <init>
     void addTask(name.huliqing.fighter.object.game.GameTask) -> a
-    void initialize(com.jme3.app.Application) -> a
+    void initialize(com.jme3.app.state.AppStateManager,com.jme3.app.Application) -> initialize
+    void onSceneInitialized(name.huliqing.fighter.object.scene.Scene) -> a
     boolean hasNext() -> d
     void doInit() -> i
     void doNext() -> e
-    void updateLogics(float) -> a
-    void cleanup() -> f
+    void update(float) -> update
+    void cleanup() -> cleanup
 name.huliqing.fighter.object.game.StoryGbGame -> name.huliqing.fighter.g.l.e:
     name.huliqing.fighter.game.service.PlayService playService -> k
     name.huliqing.fighter.game.service.ActionService actionService -> l
@@ -7832,7 +7948,7 @@ name.huliqing.fighter.object.game.StoryGuardGame -> name.huliqing.fighter.g.l.z:
     com.jme3.math.Vector3f enemyPosition -> n
     com.jme3.math.Vector3f fairyPosition -> o
     int fairyLevel -> h
-    int servantLevel -> i
+    int servantLevel -> c_
     void <init>() -> <init>
     void initData(name.huliqing.fighter.data.GameData) -> a
     void doInit() -> i
@@ -8053,7 +8169,7 @@ name.huliqing.fighter.object.game.StoryGuardTask2$PlayerChecker -> name.huliqing
     boolean access$900(name.huliqing.fighter.object.game.StoryGuardTask2$PlayerChecker) -> a
 name.huliqing.fighter.object.game.StoryTreasureGame -> name.huliqing.fighter.g.l.as:
     com.jme3.math.Vector3f treasurePos -> h
-    int treasureLevel -> i
+    int treasureLevel -> d_
     int groupPlayer -> j
     int groupEnemy -> k
     void <init>() -> <init>
@@ -8265,7 +8381,7 @@ name.huliqing.fighter.object.game.SurvivalGame -> name.huliqing.fighter.g.l.bl:
     name.huliqing.fighter.game.service.PlayService playService -> p
     name.huliqing.fighter.game.network.ActorNetwork actorNetwork -> g
     com.jme3.math.Vector3f treasurePos -> h
-    int SELF_GROUP -> i
+    int SELF_GROUP -> e_
     int GROUP_ENEMY -> j
     int buildTotal -> k
     float nearestDistance -> l
@@ -8273,7 +8389,8 @@ name.huliqing.fighter.object.game.SurvivalGame -> name.huliqing.fighter.g.l.bl:
     float levelUpBySec -> n
     int maxLevel -> o
     void <init>() -> <init>
-    void initialize(com.jme3.app.Application) -> a
+    void initialize(com.jme3.app.state.AppStateManager,com.jme3.app.Application) -> initialize
+    void onSceneInitialized(name.huliqing.fighter.object.scene.Scene) -> a
     void onPlayerSelected(name.huliqing.fighter.object.actor.Actor) -> a
 name.huliqing.fighter.object.game.SurvivalLevelLogic -> name.huliqing.fighter.g.l.bm:
     name.huliqing.fighter.game.network.PlayNetwork playNetwork -> a
@@ -8919,23 +9036,10 @@ name.huliqing.fighter.object.resist.StateResist -> name.huliqing.fighter.g.r.f:
     void setFactor(float) -> a
     name.huliqing.fighter.object.resist.StateResist clone() -> c
     java.lang.Object clone() -> clone
-name.huliqing.fighter.object.scene.RandomScene -> name.huliqing.fighter.g.s.a:
-    java.util.List randomEnv -> e
-    void <init>() -> <init>
-    void initialize(com.jme3.app.Application) -> a
-    void update(float) -> d
-    void cleanup() -> f
-    boolean checkIsEmptyZone(float,float,float) -> a
-name.huliqing.fighter.object.scene.RandomSceneData -> name.huliqing.fighter.g.s.b:
-    java.util.List randomEnvs -> b
-    void <init>() -> <init>
-    java.util.List getRandomEnvs() -> c
-    void setRandomEnvs(java.util.List) -> b
 name.huliqing.fighter.object.scene.RandomSceneLoader -> name.huliqing.fighter.g.s.c:
     void <init>() -> <init>
-    void load(name.huliqing.fighter.data.Proto,name.huliqing.fighter.object.scene.RandomSceneData) -> a
-    boolean checkInEmptyZone(float,float,java.util.List) -> a
     void load(name.huliqing.fighter.data.Proto,name.huliqing.fighter.data.SceneData) -> a
+    boolean checkInEmptyZone(float,float,java.util.List) -> a
     void load(name.huliqing.fighter.data.Proto,name.huliqing.fighter.data.ProtoData) -> a
 name.huliqing.fighter.object.scene.RandomSceneLoader$EmptyZone -> name.huliqing.fighter.g.s.d:
     float x -> b
@@ -8946,36 +9050,52 @@ name.huliqing.fighter.object.scene.RandomSceneLoader$EmptyZone -> name.huliqing.
     boolean checkInZone(float,float) -> a
 name.huliqing.fighter.object.scene.Scene -> name.huliqing.fighter.g.s.e:
     name.huliqing.fighter.game.service.PlayService playService -> l
-    name.huliqing.fighter.game.service.ConfigService configService -> m
+    name.huliqing.fighter.game.service.EnvService envService -> i
     name.huliqing.fighter.data.SceneData data -> a
-    com.jme3.light.DirectionalLight directionalLight -> i
-    com.jme3.light.AmbientLight ambientLight -> j
-    com.jme3.post.SceneProcessor shadowSceneProcessor -> k
+    java.util.List sceneListeners -> d
+    java.util.List sceneEnvListeners -> f
     java.util.List envs -> b
     com.jme3.scene.Node sceneRoot -> c
-    com.jme3.scene.Node skyRoot -> f
     com.jme3.scene.Node terrainRoot -> e
-    com.jme3.bullet.BulletAppState bulletAppState -> h
+    com.jme3.app.Application app -> g
+    com.jme3.post.FilterPostProcessor fppDefault -> h
     void <init>() -> <init>
-    void initialize(com.jme3.app.Application) -> a
-    void cleanup() -> f
+    void initialize(com.jme3.app.state.AppStateManager,com.jme3.app.Application) -> initialize
+    void cleanup() -> cleanup
     void initData(name.huliqing.fighter.data.SceneData) -> a
+    java.util.List getEnvs() -> b
+    void addEnv(name.huliqing.fighter.data.EnvData) -> a
     com.jme3.scene.Spatial getSceneRoot() -> a
-    void setSky(com.jme3.scene.Spatial) -> d
     com.jme3.scene.Spatial getTerrain() -> c
-    com.jme3.bullet.PhysicsSpace getPhysicsSpace() -> d
-    com.jme3.post.SceneProcessor createShadowProcessor() -> e
     void addSceneObject(com.jme3.scene.Spatial) -> b
     void removeSceneObject(com.jme3.scene.Spatial) -> e
     void addTerrainObject(com.jme3.scene.Spatial) -> c
-    void addPhysicsObject(com.jme3.scene.Spatial) -> a
+    void addSceneLight(com.jme3.light.Light) -> a
+    void removeSceneLight(com.jme3.light.Light) -> b
+    void addFilter(com.jme3.post.Filter) -> a
+    void removeFilter(com.jme3.post.Filter) -> b
     boolean checkIsEmptyZone(float,float,float) -> a
     double distanceSquare(float,float,float,float) -> a
+    void addSceneListener(name.huliqing.fighter.object.scene.Scene$SceneListener) -> a
+    boolean removeSceneListener(name.huliqing.fighter.object.scene.Scene$SceneListener) -> b
+    void addSceneEnvListener(name.huliqing.fighter.object.scene.Scene$SceneEnvListener) -> a
+    boolean removeSceneEnvListener(name.huliqing.fighter.object.scene.Scene$SceneEnvListener) -> b
+    void notifySceneEnvListenerInitialized(name.huliqing.fighter.object.env.Env) -> a
+    void notifySceneEnvListenerAdded(name.huliqing.fighter.object.env.Env) -> b
     void initData(name.huliqing.fighter.data.ProtoData) -> a
+name.huliqing.fighter.object.scene.Scene$SceneEnvListener -> name.huliqing.fighter.g.s.a:
+    void onSceneEnvInitialized(name.huliqing.fighter.object.scene.Scene,name.huliqing.fighter.object.env.Env) -> a
+    void onSceneEnvAdded(name.huliqing.fighter.object.scene.Scene,name.huliqing.fighter.object.env.Env) -> b
+name.huliqing.fighter.object.scene.Scene$SceneListener -> name.huliqing.fighter.g.s.b:
+    void onSceneInitialized(name.huliqing.fighter.object.scene.Scene) -> a
+    void onSceneObjectAdded(name.huliqing.fighter.object.scene.Scene,com.jme3.scene.Spatial) -> a
+    void onSceneObjectRemoved(name.huliqing.fighter.object.scene.Scene,com.jme3.scene.Spatial) -> b
 name.huliqing.fighter.object.scene.SceneLoader -> name.huliqing.fighter.g.s.f:
     void <init>() -> <init>
     void load(name.huliqing.fighter.data.Proto,name.huliqing.fighter.data.SceneData) -> a
     void load(name.huliqing.fighter.data.Proto,name.huliqing.fighter.data.ProtoData) -> a
+name.huliqing.fighter.object.scene.SceneUtils -> name.huliqing.fighter.g.s.g:
+    name.huliqing.fighter.object.env.Env findEnv(name.huliqing.fighter.object.scene.Scene,java.lang.Class) -> a
 name.huliqing.fighter.object.shape.AbstractShape -> name.huliqing.fighter.g.t.a:
     name.huliqing.fighter.data.ShapeData data -> a
     com.jme3.scene.Geometry geometry -> b
@@ -10702,21 +10822,20 @@ name.huliqing.fighter.utils.AdUtils$AdType -> name.huliqing.fighter.utils.b:
 name.huliqing.fighter.utils.CollisionChaseCamera -> name.huliqing.fighter.utils.o:
     float tempRotationSpeed -> a
     com.jme3.scene.Spatial collisionChecker -> b
-    java.util.List collisionObjects -> c
     com.jme3.bullet.PhysicsSpace physicsSpace -> d
     com.jme3.collision.CollisionResults collisionResults -> e
-    com.jme3.math.Vector3f rayOriginOffset -> f
-    float nearDistanceLimit -> g
+    com.jme3.math.Vector3f collisionRayOriginOffset -> c
+    float collisionNearDistanceLimit -> f
+    float collisionNearDistanceLimitSquared -> g
     com.jme3.scene.Spatial collisionTarget -> h
     com.jme3.math.Ray ray -> i
     void <init>(com.jme3.renderer.Camera,com.jme3.input.InputManager) -> <init>
     void setPhysicsSpace(com.jme3.bullet.PhysicsSpace) -> a
     void setCollisionBox(com.jme3.scene.shape.Box) -> a
-    void addCollisionObject(com.jme3.bullet.collision.PhysicsCollisionObject) -> a
-    void addCollisionObject(com.jme3.scene.Spatial) -> a
     void setRotationSpeed(float) -> setRotationSpeed
     void setEnabledRotation(boolean) -> a
     void update(float) -> update
+    boolean isChaseTarget(com.jme3.scene.Spatial) -> a
     boolean fixingCameraDistance(com.jme3.scene.Spatial) -> c
     com.jme3.collision.CollisionResults collideWith(com.jme3.math.Vector3f,com.jme3.math.Vector3f,com.jme3.scene.Spatial,com.jme3.collision.CollisionResults) -> a
     void collision(com.jme3.bullet.collision.PhysicsCollisionEvent) -> collision
@@ -10821,8 +10940,6 @@ name.huliqing.fighter.utils.NpcNameUtils -> name.huliqing.fighter.utils.p:
     java.lang.String createInner(java.lang.String,int) -> a
 name.huliqing.fighter.utils.RayUtils -> name.huliqing.fighter.utils.q:
     com.jme3.collision.CollisionResults collideWith(com.jme3.math.Vector3f,com.jme3.math.Vector3f,com.jme3.scene.Spatial,com.jme3.collision.CollisionResults) -> a
-name.huliqing.fighter.utils.SceneUtils -> name.huliqing.fighter.utils.r:
-    name.huliqing.fighter.utils.CollisionChaseCamera createChaseCam(com.jme3.renderer.Camera,com.jme3.input.InputManager) -> a
 name.huliqing.fighter.utils.Temp -> name.huliqing.fighter.utils.s:
     java.lang.ThreadLocal varsLocal -> g
     boolean isUsed -> h

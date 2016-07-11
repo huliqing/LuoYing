@@ -12,13 +12,13 @@ import android.util.Log;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import name.huliqing.fighter.Global;
-import name.huliqing.fighter.game.service.EnvServiceImpl;
+import name.huliqing.fighter.game.service.SystemServiceImpl;
 
 /**
  * Android下一些与环境相关的信息。
  * @author huliqing
  */
-public class AndroidEnvServiceImpl extends EnvServiceImpl {
+public class AndroidSystemServiceImpl extends SystemServiceImpl {
 
     @Override
     public String getMachineName() {
@@ -42,7 +42,7 @@ public class AndroidEnvServiceImpl extends EnvServiceImpl {
             address[3] = (byte) ((ip >> 24) & 0xFF);
             return InetAddress.getByAddress(address);
         } catch (UnknownHostException ex) {
-            Log.e(AndroidEnvServiceImpl.class.getName(), "Could not getLocalHostIPv4!", ex);
+            Log.e(AndroidSystemServiceImpl.class.getName(), "Could not getLocalHostIPv4!", ex);
         }
         return null;
     }
@@ -59,7 +59,7 @@ public class AndroidEnvServiceImpl extends EnvServiceImpl {
             }
             return InetAddress.getByAddress(quads);
         } catch (UnknownHostException ex) {
-            Log.e(AndroidEnvServiceImpl.class.getName(), "Could not getBroadcastAddress!", ex);
+            Log.e(AndroidSystemServiceImpl.class.getName(), "Could not getBroadcastAddress!", ex);
         }
         return null;
     }

@@ -5,6 +5,10 @@
     xmlns='http://fighter.huliqing.name'
     xsi:schemaLocation='http://fighter.huliqing.name meta/actor.xsd'>
     
+    <!--==========================================================================-->
+    <!--Debug test-->
+    <!--==========================================================================-->
+    
     <!--test-->
     <!-- player test -->    
     <actor id="actorPlayerTest" extends="actorPlayer" level="7" 
@@ -37,9 +41,9 @@
     <actor id="actorSinbadTest" extends="actorSinbad" />
     <actor id="actorSkeletonTest" extends="actorPlayer" />
     
-    <!--=====================================================================-->
+    <!--==========================================================================-->
     <!--角色基类-->
-    <!--=====================================================================-->
+    <!--==========================================================================-->
     
     <!--所有角色基类-->
     <actor id="actorBase" attributes="attributeHealth,attributeMana
@@ -65,9 +69,9 @@
            levelUpEl="" talentPointsLevelEl="" chat="" 
            />
     
-    <!--=====================================================================-->
+    <!--==========================================================================-->
     <!--种族类角色配置: 人类-女性-->
-    <!--=====================================================================-->
+    <!--==========================================================================-->
     
     <!--人类种族、女性基本配置-->
     <actor id="actorHumanFemaleBase" extends="actorLiveBase" file="Models/actor/ske.mesh.j3o" sex="0" race="1"
@@ -169,9 +173,9 @@
 ,skillAttack,skillAttack2,skillAttack3,skillBowShot,skillDanceSakura
 ,skillDuckLeft,skillDuckRight,skillDuckBack,skillDuckLeftRoll,skillDuckRightRoll" />
 
-    <!--=====================================================================-->
+    <!--==========================================================================-->
     <!-- 未分类种族 -->
-    <!--=====================================================================-->
+    <!--==========================================================================-->
     
     <!-- 宝箱 -->
     <actor id="actorTreasure" extends="actorNonLiveBase" icon="Interface/face/treasure.jpg"

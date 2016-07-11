@@ -11,6 +11,7 @@ import name.huliqing.fighter.object.DataLoader;
 /**
  *
  * @author huliqing
+ * @param <T>
  */
 public class HandlerLoader<T extends HandlerData> implements DataLoader<T>{
 

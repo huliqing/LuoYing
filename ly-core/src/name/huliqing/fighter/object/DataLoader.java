@@ -10,6 +10,7 @@ import name.huliqing.fighter.data.ProtoData;
 /**
  * 载入数据接口
  * @author huliqing
+ * @param <T>
  */
 public interface DataLoader<T extends ProtoData> {
     

@@ -6,7 +6,6 @@ package name.huliqing.fighter.object.effect;
 
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
-import com.jme3.renderer.queue.RenderQueue.Bucket;
 import name.huliqing.fighter.data.AnimData;
 import name.huliqing.fighter.data.EffectData;
 import name.huliqing.fighter.data.Proto;
@@ -18,6 +17,7 @@ import name.huliqing.fighter.object.DataLoaderFactory;
 /**
  *
  * @author huliqing
+ * @param <T>
  */
 public class EffectLoader<T extends EffectData> implements DataLoader<T>{
 

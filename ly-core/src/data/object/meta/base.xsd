@@ -35,6 +35,12 @@ xs:time
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
+        <xs:attribute name="dataLoader" type="xs:string" use="optional" >
+            <xs:annotation><xs:documentation>e.g. "name.huliqing.fighter.scene.SceneLoader"</xs:documentation></xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="dataProcessor" type="xs:string" use="optional" >
+            <xs:annotation><xs:documentation>e.g. "name.huliqing.fighter.scene.Scene"</xs:documentation></xs:annotation>
+        </xs:attribute>
         <xs:attribute name="cost" type="xs:integer" use="optional" >
             <xs:annotation>
                 <xs:documentation>物品的价值，当在商品中出售时值多少钱。</xs:documentation>
