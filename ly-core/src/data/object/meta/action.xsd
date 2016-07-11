@@ -19,91 +19,20 @@ xs:time
     <xs:element name="root">
         <xs:complexType>
             <xs:all>
-                <xs:element ref="idleStaticAction" />
-                <xs:element ref="idleDynamicAction" />
-                <xs:element ref="idlePatrolAction" />
-                <xs:element ref="runAction" />
-                <xs:element ref="fightAction" />
-                <xs:element ref="followAction" />
+                <xs:element ref="actionIdleStatic" />
+                <xs:element ref="actionIdleDynamic" />
+                <xs:element ref="actionIdlePatrol" />
+                <xs:element ref="actionRun" />
+                <xs:element ref="actionRunSimple" />
+                <xs:element ref="actionFollow" />
+                <xs:element ref="actionFight" />
             </xs:all>
         </xs:complexType>
     </xs:element>
     
-    <xs:element name="idleDynamicAction">
-        <xs:annotation>
-            <xs:documentation>动态的idle行为</xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="actionBase">
-                    <xs:attribute name="intervalMax" use="optional" type="xs:decimal">
-                        <xs:annotation>
-                            <xs:documentation>行为的执行时间间隔最大值，默认7.0秒</xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
-                </xs:extension>
-            </xs:complexContent>
-        </xs:complexType>
-    </xs:element>
-    
-    <xs:element name="idleStaticAction">
-        <xs:annotation>
-            <xs:documentation></xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="actionBase">
-                </xs:extension>
-            </xs:complexContent>
-        </xs:complexType>
-    </xs:element>
-    
-    <xs:element name="idlePatrolAction">
-        <xs:annotation>
-            <xs:documentation>巡逻行为</xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="actionBase">
-                    <xs:attribute name="walkPosTotal" use="optional" type="xs:integer">
-                        <xs:annotation>
-                            <xs:documentation>设置IDLE坐标点数量</xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
-                    <xs:attribute name="walkRadius" use="optional" type="xs:decimal">
-                        <xs:annotation>
-                            <xs:documentation>设置IDLE半径</xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
-                    <xs:attribute name="waitingTimeMax" use="optional" type="xs:decimal">
-                        <xs:annotation>
-                            <xs:documentation>设置IDLE等待的允许最长时间,单位秒</xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
-                </xs:extension>
-            </xs:complexContent>
-        </xs:complexType>
-    </xs:element>
     
     
-    <xs:element name="runAction">
-        <xs:annotation>
-            <xs:documentation></xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="actionBase">
-                    <xs:attribute name="debug" use="optional" >
-                        <xs:annotation>
-                            <xs:documentation>显示寻路信息，如果存在寻路</xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
-                </xs:extension>
-            </xs:complexContent>
-        </xs:complexType>
-    </xs:element>
-    
-    <xs:element name="fightAction">
+    <xs:element name="actionFight">
         <xs:annotation>
             <xs:documentation></xs:documentation>
         </xs:annotation>
@@ -175,7 +104,7 @@ xs:time
         </xs:complexType>
     </xs:element>
     
-    <xs:element name="followAction">
+    <xs:element name="actionFollow">
         <xs:annotation>
             <xs:documentation>跟随行为</xs:documentation>
         </xs:annotation>
@@ -197,17 +126,97 @@ xs:time
         </xs:complexType>
     </xs:element>
     
+    <xs:element name="actionRunSimple">
+        <xs:annotation>
+            <xs:documentation></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="actionBase">
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="actionRun">
+        <xs:annotation>
+            <xs:documentation></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="actionBase">
+                    <xs:attribute name="debug" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>显示寻路信息，如果存在寻路</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="actionIdlePatrol">
+        <xs:annotation>
+            <xs:documentation>巡逻行为</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="actionBase">
+                    <xs:attribute name="walkPosTotal" use="optional" type="xs:integer">
+                        <xs:annotation>
+                            <xs:documentation>设置IDLE坐标点数量</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="walkRadius" use="optional" type="xs:decimal">
+                        <xs:annotation>
+                            <xs:documentation>设置IDLE半径</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="waitingTimeMax" use="optional" type="xs:decimal">
+                        <xs:annotation>
+                            <xs:documentation>设置IDLE等待的允许最长时间,单位秒</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="actionIdleDynamic">
+        <xs:annotation>
+            <xs:documentation>动态的idle行为</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="actionBase">
+                    <xs:attribute name="intervalMax" use="optional" type="xs:decimal">
+                        <xs:annotation>
+                            <xs:documentation>行为的执行时间间隔最大值，默认7.0秒</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="actionIdleStatic">
+        <xs:annotation>
+            <xs:documentation></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="actionBase">
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
     <xs:complexType name="actionBase">
         <xs:annotation>
             <xs:documentation></xs:documentation>
         </xs:annotation>
         <xs:complexContent>
             <xs:extension base="base">
-<!--                <xs:attribute name="class" use="optional" type="xs:string">
-                    <xs:annotation>
-                        <xs:documentation>指定一个处理类</xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>-->
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>

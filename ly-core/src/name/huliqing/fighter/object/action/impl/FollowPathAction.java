@@ -89,8 +89,9 @@ public class FollowPathAction extends AbstractAction implements FollowAction {
         finder = playService.createPathfinder();
     }
     
-    public FollowPathAction(ActionData ad) {
-        super(ad);
+    @Override
+    public void initData(ActionData ad) {
+        super.initData(ad);
         this.autoFacing = ad.getAsBoolean("autoFacing", autoFacing);
         this.debug = ad.getAsBoolean("debug", debug);
         finder = playService.createPathfinder();

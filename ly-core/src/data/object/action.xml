@@ -9,28 +9,28 @@
     <!--==========================================================================-->
     
     <!--战斗行为基本配置-->
-    <fightAction id="actionFightBase" allowFollow="1" autoFacing="1" attackIntervalAttribute="attributeGhostRate" />
+    <actionFight id="actionFightBase" allowFollow="1" autoFacing="1" attackIntervalAttribute="attributeGhostRate" />
     
     <!--主角类型的战斗行为,限制在AI战斗行为中只能使用普通近战和远程射击 -->
-    <fightAction id="actionPlayerFight" extends="actionFightBase" attackSkillTypes="attack" autoTakeOffWeapon="0" />
+    <actionFight id="actionPlayerFight" extends="actionFightBase" attackSkillTypes="attack" autoTakeOffWeapon="0" />
     <!--普通动态角色的战斗行为，会跟随，会转向，如：人物，怪物，能移动的武器-->
-    <fightAction id="actionFightDynamic" extends="actionFightBase" autoTakeOffWeapon="1" />
+    <actionFight id="actionFightDynamic" extends="actionFightBase" autoTakeOffWeapon="1" />
     <!--静止角色的战斗行为，不会动，不会转向，如静止炮塔-->
-    <fightAction id="actionFightStatic" extends="actionFightBase" allowFollow="0" autoFacing="0" />
+    <actionFight id="actionFightStatic" extends="actionFightBase" allowFollow="0" autoFacing="0" />
     
     <!--静止角色的空闲行为,不能移动-->
-    <idleStaticAction id="actionIdleStatic" />
-    <idleDynamicAction id="actionIdleDynamic" />
+    <actionIdleStatic id="actionIdleStatic" />
+    <actionIdleDynamic id="actionIdleDynamic" />
     <!--巡逻行为，会在一个地点来回走动。-->
-    <idlePatrolAction id="actionIdlePatrol" />
+    <actionIdlePatrol id="actionIdlePatrol" />
     
     <!--移动行为,包含有寻路,避障功能-->
-    <runAction id="actionRun" />
+    <actionRun id="actionRun" />
     <!--简单的移动行为，走直线，无寻路，只有简单的避障功能-->
-    <runAction id="actionRunSimple" class="RunSimpleAction" />
+    <actionRunSimple id="actionRunSimple" />
     
     <!--简单的跟随行为-->
-    <followAction id="actionFollow" autoFacing="1" />
+    <actionFollow id="actionFollow" autoFacing="1" />
     
    
 </root>

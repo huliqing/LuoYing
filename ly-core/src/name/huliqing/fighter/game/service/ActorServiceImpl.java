@@ -7,8 +7,6 @@ package name.huliqing.fighter.game.service;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.LoopMode;
 import com.jme3.bounding.BoundingBox;
-import com.jme3.bullet.control.PhysicsControl;
-import com.jme3.collision.CollisionResult;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Ray;
@@ -18,10 +16,7 @@ import com.jme3.util.TempVars;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import name.huliqing.fighter.Common;
-import name.huliqing.fighter.Config;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.utils.NpcNameUtils;
 import name.huliqing.fighter.object.actor.Actor;
@@ -38,13 +33,13 @@ import name.huliqing.fighter.enums.DataType;
 import name.huliqing.fighter.enums.Sex;
 import name.huliqing.fighter.game.dao.ItemDao;
 import name.huliqing.fighter.manager.talk.Talk;
-import name.huliqing.fighter.loader.ActorLoader;
+import name.huliqing.fighter.loader.ActorModelLoader;
 import name.huliqing.fighter.loader.Loader;
-import name.huliqing.fighter.object.DataLoaderFactory;
 import name.huliqing.fighter.enums.SkillType;
 import name.huliqing.fighter.manager.ResourceManager;
 import name.huliqing.fighter.manager.talk.SpeakManager;
 import name.huliqing.fighter.manager.talk.TalkManager;
+import name.huliqing.fighter.object.DataFactory;
 import name.huliqing.fighter.object.actor.ActorListener;
 import name.huliqing.fighter.object.actor.SkillListener;
 import name.huliqing.fighter.object.channel.Channel;
@@ -53,7 +48,6 @@ import name.huliqing.fighter.object.effect.Effect;
 import name.huliqing.fighter.object.el.LevelEl;
 import name.huliqing.fighter.object.el.XpDropEl;
 import name.huliqing.fighter.utils.GeometryUtils;
-import name.huliqing.fighter.utils.RayUtils;
 import name.huliqing.fighter.utils.Temp;
 
 /**
@@ -91,8 +85,8 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public Actor loadActor(String actorId) {
-        ActorData actorData = DataLoaderFactory.createActorData(actorId);
-        return loadActor(actorData);
+        ActorData data = DataFactory.createData(actorId);
+        return loadActor(data);
     }
 
     @Override
@@ -138,120 +132,12 @@ public class ActorServiceImpl implements ActorService {
         return actor;
     }
     
-    // remove 0221
-//    @Override
-//    public boolean rewardItem(Actor actor, String objectId, int count) {
-//        boolean result = itemDao.addItem(actor, objectId, count);
-//        if (result) {
-//            ListenerManager.broadcastItemUpdate(actor);
-//            
-//            // 如果角色是当前场景中的玩家，则提示信息
-//            if (actor == playService.getPlayer()) {
-//                // 提示获得物品
-//                playService.addMessage(ResourceManager.get(ResConstants.COMMON_REWARD_ITEM
-//                        , new Object[] {ResourceManager.getObjectName(objectId), count > 1 ? "(" + count + ")" : ""})
-//                        , MessageType.item);
-//
-//                // 播放获得物品时的声效
-//                SoundManager.getInstance().playGetItemSound(objectId, actor.getModel().getWorldTranslation());
-//            }
-//        }
-//        return result;
-//    }
+   
     
     @Override
     public String createRandomName(Sex sex) {
         return NpcNameUtils.createRandomName(sex);
     }
-    
-    // remove20160504
-//    /**
-//     * use {@link #hasObstacleActor(name.huliqing.fighter.actor.Actor, java.util.List) }
-//     * 代替
-//     * @param actor
-//     * @return 
-//     */
-//    @Override
-//    public boolean hasObstacle(Actor actor) {
-//        TempVars tv = TempVars.get();
-//        Vector3f rayOrigin = GeometryUtils.getModelBoundCenter(actor.getModel(), tv.vect3);
-//        Vector3f rayDirection = tv.vect2.set(actor.getViewDirection()).normalizeLocal();
-//        float checkDistance = GeometryUtils.getBoundingVolumeZExtent(actor.getModel()) * 2f;
-//        tv.release();
-//        
-//        // debug
-////        DebugDynamicUtils.debugArrow(actor.getModel().getName() + actor.toString(), rayOrigin, rayDirection, checkDistance);
-//        
-//        // 2.查找障碍
-//        Spatial root = GeometryUtils.findRootNode(actor.getModel());
-//        Temp temp = Temp.get();
-//        temp.results.clear();
-//        RayUtils.collideWith(rayOrigin, rayDirection, root, temp.results);
-//        boolean obstacle = false;
-//        for (CollisionResult r : temp.results) {
-//            // 只查找在指定距离内的障碍物,大于该距离的都不视为障碍物。
-//            if (r.getDistance() > checkDistance) {
-//                break;
-//            }
-//            
-//            // 排除自身
-//            if (!isObstacle(r.getGeometry(), actor.getModel())) {
-//                continue;
-//            }
-//
-////            Logger.get(GeometryUtils.class).log(Level.INFO, "Found obstacle infront! distance={0}, name={1}"
-////                    , new Object[] {r.getDistance(), r.getGeometry().getName()});
-//            // 障碍物找到
-//            obstacle = true;
-//            break;
-//        }
-//        temp.release();
-//        return obstacle;
-//    }
-    
-    // remove20160504
-//    // TODO 该方法后续需要优化
-//    // 基本上只查找含有physicsControl的对象就可以，但要排除terrain及sky
-//    private boolean isObstacle(Spatial spatial, Spatial except) {
-//        // except为需要排除的对象
-//        if (spatial == except) {
-//            return false;
-//        }
-//        ProtoData pd = spatial.getUserData(ProtoData.USER_DATA);
-//        if (pd != null) {
-//            DataType pt = pd.getProto().getDataType();
-//            if (pt == DataType.sky || pt == DataType.terrain) {
-//                return false;
-//            }
-//            if (spatial.getControl(PhysicsControl.class) != null) {
-//                return true;
-//            }
-//        } 
-//        if (spatial.getParent() != null) {
-//            return isObstacle(spatial.getParent(), except);
-//        }
-//        return false;
-//    }
-    
-    // remove20160204,这个方法有bug,在客户端可能发生角色碰撞弹跳到空中的现象，可能是因为WorldBound距离
-    // 太近的原因。
-//    @Override
-//    public boolean hasObstacleActor(Actor self, List<Actor> actors) {
-//        boolean obstacle = false;
-//        for (Actor a : actors) {
-//            if (a == self) {
-//                continue;
-//            }
-//            
-//            // 使用ray也可以，但是使用WorldBound可能性能更好一些。
-//            if (a.getModel().getWorldBound().intersects(self.getModel().getWorldBound())) {
-//                obstacle = true;
-//                break;
-//            }
-//        }
-//        return obstacle;
-//    }
-    
     
     @Override
     public boolean hasObstacleActor(Actor self, List<Actor> actors) {
@@ -506,7 +392,7 @@ public class ActorServiceImpl implements ActorService {
         if (ac.getAnim(animName) != null) {
             return true;
         } else {
-            return ActorLoader.loadExtAnim(actor, animName);
+            return ActorModelLoader.loadExtAnim(actor, animName);
         }
     }
 

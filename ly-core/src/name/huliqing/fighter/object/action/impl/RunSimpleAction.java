@@ -49,10 +49,6 @@ public class RunSimpleAction extends AbstractAction implements RunAction{
         super();
     }
     
-    public RunSimpleAction(ActionData ad) {
-        super(ad);
-    }
-
     @Override
     protected void doInit() {
         resetDir = true;

@@ -11,6 +11,7 @@ import name.huliqing.fighter.object.state.StateProcessor;
 import name.huliqing.fighter.object.action.ActionProcessor;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.control.BetterCharacterControl;
+import com.jme3.bullet.objects.PhysicsRigidBody;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
@@ -31,6 +32,7 @@ import name.huliqing.fighter.game.service.ActorService;
 import name.huliqing.fighter.game.service.PlayService;
 import name.huliqing.fighter.game.service.SkillService;
 import name.huliqing.fighter.game.service.StateService;
+import name.huliqing.fighter.loader.ActorModelLoader;
 import name.huliqing.fighter.object.channel.ChannelProcessor;
 import name.huliqing.fighter.object.chat.Chat;
 import name.huliqing.fighter.object.logic.LogicProcessor;
@@ -114,22 +116,54 @@ public class ActorControl extends BetterCharacterControl implements Actor, Physi
      */
     public ActorControl() {}
     
-    public ActorControl(Spatial spatial, float radius, float height, float mass) {
-        this(spatial, radius, height, mass, null);
+//    public ActorControl(Spatial spatial, float radius, float height, float mass) {
+//        this(spatial, radius, height, mass, null);
+//    }
+//    
+//    public ActorControl(Spatial spatial, float radius, float height, float mass, CollisionShape shape) {
+//        super(radius, height, mass);
+//        if (shape != null) {
+//            rigidBody.setCollisionShape(shape);
+//        }
+//        
+//        // 1.添加control,并检测是否忘记设置USER_DATA
+//        spatial.addControl(this);
+//        data = spatial.getUserData(ProtoData.USER_DATA);
+//        if (data == null) {
+//            throw new NullPointerException("CharacterData not found! Set CharacterData to spatial's UserData first!");
+//        }
+//    }
+    
+    public void setModel(Spatial spatial, float radius, float height, float mass) {
+        setModel(spatial, radius, height, mass, null);
     }
     
-    public ActorControl(Spatial spatial, float radius, float height, float mass, CollisionShape shape) {
-        super(radius, height, mass);
+    public void setModel(Spatial spatial, float radius, float height, float mass, CollisionShape shape) {
+        this.radius = radius;
+        this.height = height;
+        this.mass = mass;
+        rigidBody = new PhysicsRigidBody(getShape(), mass);
+        jumpForce.set(0, mass * 5, 0);
+        rigidBody.setAngularFactor(0);
+        
         if (shape != null) {
             rigidBody.setCollisionShape(shape);
         }
         
         // 1.添加control,并检测是否忘记设置USER_DATA
         spatial.addControl(this);
-        data = spatial.getUserData(ProtoData.USER_DATA);
-        if (data == null) {
-            throw new NullPointerException("CharacterData not found! Set CharacterData to spatial's UserData first!");
-        }
+        spatial.setUserData(ProtoData.USER_DATA, data);
+    }
+    
+    @Override
+    public ActorData getData() {
+        return data;
+    }
+
+    @Override
+    public void initData(ActorData data) {
+        this.data = data;
+        ActorModelLoader.loadActorModel(this.data, this);
     }
     
     @Override
@@ -250,11 +284,6 @@ public class ActorControl extends BetterCharacterControl implements Actor, Physi
     @Override
     public Spatial getModel() {
         return spatial;
-    }
-
-    @Override
-    public ActorData getData() {
-        return data;
     }
 
     @Override

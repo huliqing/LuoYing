@@ -13,7 +13,9 @@ import com.jme3.network.serializing.Serializable;
 @Serializable
 public class ActionData extends ProtoData {
     
-    public ActionData(){super();}
+    public ActionData(){
+        super();
+    }
     
     public ActionData(String id) {
         super(id);

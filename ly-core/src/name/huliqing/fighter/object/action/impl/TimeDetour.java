@@ -7,8 +7,6 @@ package name.huliqing.fighter.object.action.impl;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.util.TempVars;
-import name.huliqing.fighter.Factory;
-import name.huliqing.fighter.game.network.SkillNetwork;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.object.action.Action;
 import name.huliqing.fighter.utils.MathUtils;
@@ -18,9 +16,6 @@ import name.huliqing.fighter.utils.MathUtils;
  * @author huliqing
  */
 public class TimeDetour extends Detour{
-//    private final StateService stateService = Factory.get(StateService.class);
-//    private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
-    
     // 遇到障碍物时的调转方向 =》　1:left; -1:right; 0: none;
     private int direction;
     

@@ -81,15 +81,16 @@ public class IdlePatrolAction extends AbstractAction implements IdleAction {
         super();
     }
 
-    public IdlePatrolAction(ActionData ad) {
-        super(ad);
-        walkPosTotal = ad.getAsInteger("walkPosTotal", walkPosTotal);
+    @Override
+    public void initData(ActionData data) {
+        super.initData(data);
+        walkPosTotal = data.getAsInteger("walkPosTotal", walkPosTotal);
         
-        walkRadius = ad.getAsFloat("walkRadius", walkRadius);
+        walkRadius = data.getAsFloat("walkRadius", walkRadius);
         walkRadiusSquared = FastMath.pow(walkRadius, 2);
         walkDiameterSquared = FastMath.pow(walkRadius * 2, 2);
         
-        waitingTimeMax = ad.getAsFloat("waitingTimeMax", waitingTimeMax);
+        waitingTimeMax = data.getAsFloat("waitingTimeMax", waitingTimeMax);
     }
     
     /**

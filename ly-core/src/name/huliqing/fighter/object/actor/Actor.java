@@ -10,6 +10,7 @@ import name.huliqing.fighter.data.ActorData;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import java.util.List;
+import name.huliqing.fighter.object.DataProcessor;
 import name.huliqing.fighter.object.action.ActionProcessor;
 import name.huliqing.fighter.object.channel.ChannelProcessor;
 import name.huliqing.fighter.object.chat.Chat;
@@ -24,7 +25,7 @@ import name.huliqing.fighter.object.task.Task;
  * 定义角色的行为
  * @author huliqing
  */
-public interface Actor {
+public interface Actor extends DataProcessor<ActorData> {
     
     /**
      * 设置角色质量
@@ -43,12 +44,6 @@ public interface Actor {
      * @return 
      */
     Spatial getModel();
-    
-    /**
-     * 获取角色的UserData.
-     * @return 
-     */
-    ActorData getData();
     
     /**
      * 获取逻辑管理器，该方法只允许service层调用
@@ -358,13 +353,6 @@ public interface Actor {
      * @param position 目标位置
      */
     void faceTo(Vector3f position);
-
-    // remove20160324,不再使用这个方法
-//    /**
-//     * 角色说话
-//     * @param mess 
-//     */
-//    void say(String mess);
     
     /**
      * 获取角色当前所在的物理空间,如果没有或不支持则返回null.
@@ -387,12 +375,6 @@ public interface Actor {
      * @param chat 
      */
     void setChat(Chat chat);
- 
-//    /**
-//     * 销毁角色，销毁后角色将不再可用。当角色从场景中移除并不再使用时该方法应该
-//     * 被调用，以释放系统资源。
-//     */
-//    void destory();
     
     /**
      * 清理并释放资源

@@ -60,8 +60,8 @@ import name.huliqing.fighter.utils.GeometryUtils;
  *
  * @author huliqing
  */
-public class ActorLoader {
-    private final static Logger LOG = Logger.getLogger(ActorLoader.class.getName());
+public class ActorModelLoader {
+    private final static Logger LOG = Logger.getLogger(ActorModelLoader.class.getName());
     
     /**
      * character
@@ -77,11 +77,11 @@ public class ActorLoader {
      *      |- hair
      *      |- weaponLeft
      *      |- weaponRight
-     * @param am
+     * @param actor
      * @param data
      * @return 
      */
-    static Spatial loadActorModel(ActorData data) {
+    public static Spatial loadActorModel(ActorData data, ActorControl actor) {
         // 0.==== Load base model : character
         String actorFile = data.getProto().getFile();
         
@@ -129,24 +129,32 @@ public class ActorLoader {
         float collisionRadius = data.getAsFloat("collisionRadius", 0.4f);
         float collisionHeight = data.getAsFloat("collisionHeight", 2.8f);
         float mass = data.getAsFloat("mass", 0);
-        ActorControl actor = null;
+        
         TempVars tv = TempVars.get();
         if (collisionShape.equals("capsule")) {
-            actor = new ActorControl(actorModel, collisionRadius, collisionHeight, mass);
+            
+            actor.setModel(actorModel, collisionRadius, collisionHeight, mass);
+            
         } else if (collisionShape.equals("box")) {
+            
             Vector3f boxScale = data.getAsVector3f("collisionBoxScale", new Vector3f(1, 1, 1)); // box碰撞盒的缩放
             BoundingBox bb = (BoundingBox)actorModel.getWorldBound();
             bb.getExtent(tv.vect1);
             tv.vect1.multLocal(boxScale);
             CompoundCollisionShape ccs = new CompoundCollisionShape();
             ccs.addChildShape(new BoxCollisionShape(tv.vect1), new Vector3f(0, tv.vect1.y, 0));
-            actor = new ActorControl(actorModel, collisionRadius, collisionHeight, mass, ccs);
+            actor.setModel(actorModel, collisionRadius, collisionHeight, mass, ccs);
+            
         } else if (collisionShape.equals("mesh")) {
+            
             CollisionShape cShape = CollisionShapeFactory.createMeshShape(actorModel);
-            actor = new ActorControl(actorModel, collisionRadius, collisionHeight, mass, cShape);
+            actor.setModel(actorModel, collisionRadius, collisionHeight, mass, cShape);
+            
         } else if (collisionShape.equals("dynamicMesh")) {
+            
             CollisionShape cShape = CollisionShapeFactory.createDynamicMeshShape(actorModel);
-            actor = new ActorControl(actorModel, collisionRadius, collisionHeight, mass, cShape);
+            actor.setModel(actorModel, collisionRadius, collisionHeight, mass, cShape);
+            
         } else {
             throw new UnsupportedOperationException("Unsupported collisionShape=" + collisionShape);
         }

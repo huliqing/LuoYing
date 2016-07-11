@@ -46,6 +46,16 @@ import name.huliqing.fighter.data.TalentData;
 import name.huliqing.fighter.data.TaskData;
 import name.huliqing.fighter.data.ViewData;
 import name.huliqing.fighter.enums.DataType;
+import name.huliqing.fighter.object.action.impl.ActionLoader;
+import name.huliqing.fighter.object.action.impl.FightDynamicAction;
+import name.huliqing.fighter.object.action.impl.FollowPathAction;
+import name.huliqing.fighter.object.action.impl.IdleDynamicAction;
+import name.huliqing.fighter.object.action.impl.IdlePatrolAction;
+import name.huliqing.fighter.object.action.impl.IdleStaticAction;
+import name.huliqing.fighter.object.action.impl.RunPathAction;
+import name.huliqing.fighter.object.action.impl.RunSimpleAction;
+import name.huliqing.fighter.object.actor.ActorControl;
+import name.huliqing.fighter.object.actor.ActorLoader;
 import name.huliqing.fighter.object.effect.EffectLoader;
 import name.huliqing.fighter.object.effect.EncircleHaloEffect;
 import name.huliqing.fighter.object.effect.GroupEffect;
@@ -288,7 +298,7 @@ public class DataFactory {
         Serializer.registerClass(ViewData.class);
         
         // ---- Register Default data
-        // 默认的数据容器
+        // 默认的数据容器所有新增的DataType都要注册
         DEFAULT_DATAS.put(DataType.action, ActionData.class);
         DEFAULT_DATAS.put(DataType.actor, ActorData.class);
         DEFAULT_DATAS.put(DataType.actorAnim, ActorAnimData.class);
@@ -323,6 +333,10 @@ public class DataFactory {
         DEFAULT_DATAS.put(DataType.view, ViewData.class);
         
         // 初始化默认的数据载入器
+        DEFAULT_LOADERS.put(DataType.action, ActionLoader.class);
+        DEFAULT_LOADERS.put(DataType.actor, ActorLoader.class);
+        
+        
         DEFAULT_LOADERS.put(DataType.effect, EffectLoader.class);
         DEFAULT_LOADERS.put(DataType.env, EnvLoader.class);
         DEFAULT_LOADERS.put(DataType.game, GameLoader.class);
@@ -335,6 +349,18 @@ public class DataFactory {
         DEFAULT_PROCESSORS.put(DataType.scene, Scene.class);
         
         // ---- Register Tag
+        registerTagProcessor("actionIdleStatic",  IdleStaticAction.class);
+        registerTagProcessor("actionIdleDynamic",  IdleDynamicAction.class);
+        registerTagProcessor("actionIdlePatrol",  IdlePatrolAction.class);
+        registerTagProcessor("actionRun",  RunPathAction.class);
+        registerTagProcessor("actionRunSimple",  RunSimpleAction.class);
+        registerTagProcessor("actionFollow",  FollowPathAction.class);
+        registerTagProcessor("actionFight",  FightDynamicAction.class);
+        
+        registerTagProcessor("actor",  ActorControl.class);
+        
+        
+        
         
         // 注册Tag载入器及处理器。
         registerTagProcessor("effectHalo",  HaloEffect.class);

@@ -28,8 +28,9 @@ public class IdleStaticAction extends AbstractAction implements IdleAction {
         super();
     }
 
-    public IdleStaticAction(ActionData ad) {
-        super(ad);
+    @Override
+    public void initData(ActionData data) {
+        super.initData(data);
     }
     
     @Override

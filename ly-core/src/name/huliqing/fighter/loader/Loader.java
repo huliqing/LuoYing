@@ -40,6 +40,7 @@ import name.huliqing.fighter.data.TalentData;
 import name.huliqing.fighter.data.TaskData;
 import name.huliqing.fighter.data.ViewData;
 import name.huliqing.fighter.object.DataFactory;
+import name.huliqing.fighter.object.action.Action;
 import name.huliqing.fighter.object.actoranim.ActorAnim;
 import name.huliqing.fighter.object.logic.ActorLogic;
 import name.huliqing.fighter.object.anim.Anim;
@@ -74,16 +75,16 @@ public class Loader {
     public static Material loadMaterial(String j3mFile) {
         return MatLoader.loadMaterial(j3mFile);
     }
-        
-    public static AbstractAction loadAction(ActionData ad) {
-        return ActionLoader.load(ad);
-    }
     
-    public static AbstractAction loadAction(String actionId) {
-        ActionData ad = DataLoaderFactory.createActionData(actionId);
+    public static Action loadAction(String actionId) {
+        ActionData ad = DataFactory.createData(actionId);
         return loadAction(ad);
     }
       
+    public static Action loadAction(ActionData data) {
+        return DataFactory.createProcessor(data);
+    }
+    
     public static ActorAnim loadActorAnim(String id) {
         ActorAnimData data = DataLoaderFactory.createActorAnimData(id);
         return loadActorAnim(data);
@@ -92,18 +93,11 @@ public class Loader {
     public static ActorAnim loadActorAnim(ActorAnimData data) {
         return ActorAnimLoader.load(data);
     }
-        
-    public static Actor loadActor(ActorData cd) {
-        Spatial model = ActorLoader.loadActorModel(cd);
-        model.setUserData(ProtoData.USER_DATA, cd);
-        Actor actor = model.getControl(ActorControl.class);
+    
+    public static Actor loadActor(ActorData data) {
+        Actor actor = DataFactory.createProcessor(data);
         return actor;
     }
-    
-    public static Actor loadActor(String actorId) {
-        Actor actor = loadActor(DataLoaderFactory.createActorData(actorId));
-        return actor;
-    } 
         
     public static Anim loadAnimation(String animationId) {
         AnimData data = DataLoaderFactory.createAnimData(animationId);

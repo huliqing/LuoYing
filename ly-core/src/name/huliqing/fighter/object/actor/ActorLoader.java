@@ -1,10 +1,10 @@
 /*
- * To change this template, choose Tools | Templates
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.fighter.loader.data;
+package name.huliqing.fighter.object.actor;
 
-import name.huliqing.fighter.object.DataLoaderFactory;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -23,17 +23,17 @@ import name.huliqing.fighter.data.SkinData;
 import name.huliqing.fighter.data.TalentData;
 import name.huliqing.fighter.enums.Sex;
 import name.huliqing.fighter.manager.ResourceManager;
-import name.huliqing.fighter.object.actor.ItemStore;
-import name.huliqing.fighter.object.actor.SkillStore;
+import name.huliqing.fighter.object.DataLoader;
+import name.huliqing.fighter.object.DataLoaderFactory;
 
 /**
  *
  * @author huliqing
  */
-public class ActorDataLoader implements DataLoader<ActorData> {
-    
+public class ActorLoader implements DataLoader<ActorData> {
+
     @Override
-    public ActorData loadData(Proto proto) {
+    public void load(Proto proto, ActorData data) {
         // ==== 2.items 
         ItemStore itemStore = new ItemStore();
         String[] itemsTemp = proto.getAsArray("items");
@@ -103,7 +103,7 @@ public class ActorDataLoader implements DataLoader<ActorData> {
                 if (skillData != null) {
                     skillStore.add(skillData);
                 } else {
-                    Logger.getLogger(ActorDataLoader.class.getName())
+                    Logger.getLogger(ActorLoader.class.getName())
                             .log(Level.WARNING
                             , "Skill not found, actorId={0}, skillId={1}"
                             , new Object[]{proto.getId(), skillId});
@@ -121,7 +121,6 @@ public class ActorDataLoader implements DataLoader<ActorData> {
             }
         }
         
-        ActorData data = new ActorData(proto.getId());
         data.setLevel(proto.getAsInteger("level", 1));
         
         // remove201602xx
@@ -197,7 +196,6 @@ public class ActorDataLoader implements DataLoader<ActorData> {
         data.setLiving(proto.getAsBoolean("living", false));
         data.setFollowTarget(proto.getAsInteger("followTarget", -1));
         data.setChat(proto.getAttribute("chat"));
-        return data;
     }
     
 }

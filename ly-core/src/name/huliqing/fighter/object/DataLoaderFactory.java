@@ -8,9 +8,7 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import name.huliqing.fighter.data.ActionData;
 import name.huliqing.fighter.data.ActorAnimData;
-import name.huliqing.fighter.data.ActorData;
 import name.huliqing.fighter.data.AnimData;
 import name.huliqing.fighter.data.AttributeData;
 import name.huliqing.fighter.data.BulletData;
@@ -18,11 +16,8 @@ import name.huliqing.fighter.data.ChannelData;
 import name.huliqing.fighter.data.ChatData;
 import name.huliqing.fighter.data.ConfigData;
 import name.huliqing.fighter.data.DropData;
-import name.huliqing.fighter.data.EffectData;
 import name.huliqing.fighter.data.ElData;
 import name.huliqing.fighter.data.EmitterData;
-import name.huliqing.fighter.data.GameData;
-import name.huliqing.fighter.data.HandlerData;
 import name.huliqing.fighter.data.HitCheckerData;
 import name.huliqing.fighter.data.ItemData;
 import name.huliqing.fighter.data.LogicData;
@@ -40,9 +35,7 @@ import name.huliqing.fighter.data.TalentData;
 import name.huliqing.fighter.data.TaskData;
 import name.huliqing.fighter.data.ViewData;
 import name.huliqing.fighter.enums.DataType;
-import name.huliqing.fighter.loader.data.ActionDataLoader;
 import name.huliqing.fighter.loader.data.ActorAnimDataLoader;
-import name.huliqing.fighter.loader.data.ActorDataLoader;
 import name.huliqing.fighter.loader.data.AnimDataLoader;
 import name.huliqing.fighter.loader.data.AttributeDataLoader;
 import name.huliqing.fighter.loader.data.BulletDataLoader;
@@ -53,8 +46,6 @@ import name.huliqing.fighter.loader.data.DataLoader;
 import name.huliqing.fighter.loader.data.DropDataLoader;
 import name.huliqing.fighter.loader.data.EmitterDataLoader;
 import name.huliqing.fighter.loader.data.PositionDataLoader;
-import name.huliqing.fighter.loader.data.GameDataLoader;
-import name.huliqing.fighter.loader.data.HandlerDataLoader;
 import name.huliqing.fighter.loader.data.HitCheckerDataLoader;
 import name.huliqing.fighter.loader.data.ElDataLoader;
 import name.huliqing.fighter.loader.data.LogicDataLoader;
@@ -84,9 +75,9 @@ public class DataLoaderFactory {
 //    private final static String ATTRIBUTE_EXTENDS = "extends";
     
     static {
-        loaders.put(DataType.action, new ActionDataLoader());
+//        loaders.put(DataType.actor, new ActorDataLoader());
+        
         loaders.put(DataType.actorAnim, new ActorAnimDataLoader());
-        loaders.put(DataType.actor, new ActorDataLoader());
         loaders.put(DataType.anim, new AnimDataLoader());
         loaders.put(DataType.attribute, new AttributeDataLoader());
         loaders.put(DataType.bullet, new BulletDataLoader());
@@ -111,6 +102,7 @@ public class DataLoaderFactory {
         loaders.put(DataType.view, new ViewDataLoader());
         
         // remove
+//        loaders.put(DataType.action, new ActionDataLoader());
 //        loaders.put(DataType.game, new GameDataLoader());
 //        loaders.put(DataType.effect, new EffectDataLoader());
 //        loaders.put(DataType.env, new EnvDataLoader());
@@ -128,15 +120,17 @@ public class DataLoaderFactory {
         return data;
     }
     
-    public static ActionData createActionData(String objectId) {
-        return createData(objectId, ActionData.class);
-    }
+//    public static ActionData createActionData(String objectId) {
+//        return createData(objectId, ActionData.class);
+//    }
+    
     public static ActorAnimData createActorAnimData(String objectId) {
         return createData(objectId, ActorAnimData.class);
     }
-    public static ActorData createActorData(String objectId) {
-        return createData(objectId, ActorData.class);
-    }    
+//    public static ActorData createActorData(String objectId) {
+//        return createData(objectId, ActorData.class);
+//    }    
+    
     public static ChannelData createChannelData(String objectId) {
         return createData(objectId, ChannelData.class);
     }

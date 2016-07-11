@@ -72,9 +72,10 @@ public class RunPathAction extends AbstractAction implements RunAction{
         finder = playService.createPathfinder();
     }
     
-    public RunPathAction(ActionData ad) {
-        super(ad);
-        debug = ad.getAsBoolean("debug", debug);
+    @Override
+    public void initData(ActionData data) {
+        super.initData(data);
+        debug = data.getAsBoolean("debug", debug);
         finder = playService.createPathfinder();
     }
 

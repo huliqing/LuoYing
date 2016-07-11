@@ -4,13 +4,15 @@
  */
 package name.huliqing.fighter.object.action;
 
+import name.huliqing.fighter.data.ActionData;
+import name.huliqing.fighter.object.DataProcessor;
 import name.huliqing.fighter.object.actor.Actor;
 
 /**
  *
  * @author huliqing
  */
-public interface Action {
+public interface Action extends DataProcessor<ActionData>{
     
     /**
      * 开始行为

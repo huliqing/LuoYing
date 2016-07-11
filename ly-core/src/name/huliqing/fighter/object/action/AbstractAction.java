@@ -24,8 +24,14 @@ public abstract class AbstractAction implements Action {
     
     public AbstractAction() {}
 
-    public AbstractAction(ActionData data) {
+    @Override
+    public void initData(ActionData data) {
         this.data = data;
+    }
+
+    @Override
+    public ActionData getData() {
+        return data;
     }
     
     /**
@@ -111,6 +117,7 @@ public abstract class AbstractAction implements Action {
     
     /**
      * 执行行为逻辑
+     * @param tpf
      */
     protected abstract void doLogic(float tpf);
 
