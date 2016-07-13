@@ -102,6 +102,11 @@ public class Fighter extends SimpleApplication {
         // 1.初始化数据
         ObjectLoader.initData();
         
+        // 注册SerializerObject
+        MessRegister.register();
+        // 注册内置的数据装载器和处理器（含注册SerializerObject）。
+        DataFactory.initRegister();
+        
         // 2.载入语言环境及系统配置
         Factory.get(ConfigService.class).loadGlobalConfig();
         Factory.get(ConfigService.class).loadLocale();
@@ -135,10 +140,7 @@ public class Fighter extends SimpleApplication {
         getInputManager().setCursorVisible(true);
         getFlyByCamera().setEnabled(false);
         
-        // 注册SerializerObject
-        MessRegister.register();
-        // 注册内置的数据装载器和处理器。
-        DataFactory.initRegister();
+       
         
         if (Config.debug) {
             TestFactory.preTest();

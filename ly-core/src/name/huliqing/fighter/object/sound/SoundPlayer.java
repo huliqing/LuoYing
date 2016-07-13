@@ -13,8 +13,8 @@ import java.util.logging.Logger;
 import name.huliqing.fighter.Common;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.SoundData;
-import name.huliqing.fighter.object.DataLoaderFactory;
 import name.huliqing.fighter.game.service.ConfigService;
+import name.huliqing.fighter.object.DataFactory;
 
 /**
  *
@@ -57,7 +57,7 @@ public class SoundPlayer {
     private AudioNode getSound(String soundId) {
         AudioNode audio = audioMap.get(soundId);
         if (audio == null) {
-            audio = createSound(DataLoaderFactory.createSoundData(soundId));
+            audio = createSound((SoundData) DataFactory.createData(soundId));
             audioMap.put(soundId, audio);
         }
         // 声效缓存数

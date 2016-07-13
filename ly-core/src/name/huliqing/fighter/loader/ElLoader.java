@@ -5,8 +5,8 @@
 package name.huliqing.fighter.loader;
 
 import java.util.HashMap;
-import name.huliqing.fighter.object.DataLoaderFactory;
 import name.huliqing.fighter.data.ElData;
+import name.huliqing.fighter.object.DataFactory;
 import name.huliqing.fighter.object.el.HitEl;
 import name.huliqing.fighter.object.el.El;
 import name.huliqing.fighter.object.el.LevelEl;
@@ -25,7 +25,7 @@ class ElLoader {
         
         El el = elCacheMap.get(elId);
         if (el == null) {
-            el = createEl(DataLoaderFactory.createElData(elId));
+            el = createEl((ElData)DataFactory.createData(elId));
             
             if (el == null) {
                 throw new NullPointerException("Could not find el, elId=" + elId);

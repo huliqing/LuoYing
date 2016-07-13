@@ -12,7 +12,6 @@ import name.huliqing.fighter.data.Proto;
 import name.huliqing.fighter.data.ProtoData;
 import name.huliqing.fighter.enums.DataType;
 import name.huliqing.fighter.object.DataFactory;
-import name.huliqing.fighter.object.DataLoaderFactory;
 import name.huliqing.fighter.object.ProtoUtils;
 import name.huliqing.fighter.object.actor.Actor;
 
@@ -38,44 +37,44 @@ public class ProtoServiceImpl implements ProtoService {
 
     @Override
     public ProtoData createData(String id) {
-        Proto proto = ProtoUtils.getProto(id);
-        DataType dt = proto.getDataType();
-        ProtoData data;
-        switch (dt) {
-            case action:
-            case actorAnim:
-            case actor:
-            case anim:
-            case attribute:
-            case bullet:
-            case channel:
-            case chat:
-            case config:
-            case drop:
-            case el:
-            case emitter:
-            case position:
-            case hitChecker:
-            case logic:
-            case item:
-            case resist:
-            case shape:
-            case skill:
-            case skin:
-            case slot:
-            case sound:
-            case talent:
-            case task:
-            case view:
-                // TODO:这种方式以后要重构
-                data = DataLoaderFactory.createData(id);
-                break;
-                
-            default:
-                data = DataFactory.createData(id);
-                break;
-        }
+        ProtoData data = DataFactory.createData(id);
         return data;
+        
+        // remove20160712
+//        switch (dt) {
+//            case action:
+//            case actorAnim:
+//            case actor:
+//            case anim:
+//            case attribute:
+//            case bullet:
+//            case channel:
+//            case chat:
+//            case config:
+//            case drop:
+//            case el:
+//            case emitter:
+//            case position:
+//            case hitChecker:
+//            case logic:
+//            case item:
+//            case resist:
+//            case shape:
+//            case skill:
+//            case skin:
+//            case slot:
+//            case sound:
+//            case talent:
+//            case task:
+//            case view:
+//                data = DataFactory.createData(id);
+//                break;
+//                
+//            default:
+//                data = DataFactory.createData(id);
+//                break;
+//        }
+//        return data;
     }
 
     @Override

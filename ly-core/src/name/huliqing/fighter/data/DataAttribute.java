@@ -44,18 +44,6 @@ public class DataAttribute implements Savable {
         this.data = data;
     }
     
-//    /**
-//     * 添加一个参数到本地data中，如果参数已经存在则覆盖该参数。注意：value将会被转换为字符串.
-//     * @param key
-//     * @param value 
-//     */
-//    public final void putAttribute(String key, String value) {
-//        if (data == null) {
-//            data = new HashMap<String, Object>();
-//        }
-//        data.put(key, String.valueOf(value));
-//    }
-    
     /**
      * 设置一个参数值，如果value为null则清除该值。
      * @param key

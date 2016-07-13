@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.GameData;
-import name.huliqing.fighter.object.DataLoaderFactory;
 import name.huliqing.fighter.game.service.ConfigService;
 import name.huliqing.fighter.game.service.GameService;
 import name.huliqing.fighter.manager.ResourceManager;

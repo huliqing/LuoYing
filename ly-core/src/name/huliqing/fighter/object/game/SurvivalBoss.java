@@ -9,7 +9,6 @@ import java.util.List;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.constants.IdConstants;
 import name.huliqing.fighter.constants.ResConstants;
-import name.huliqing.fighter.object.DataLoaderFactory;
 import name.huliqing.fighter.data.TalentData;
 import name.huliqing.fighter.enums.MessageType;
 import name.huliqing.fighter.enums.SkillType;
@@ -23,6 +22,7 @@ import name.huliqing.fighter.game.service.TalentService;
 import name.huliqing.fighter.game.service.ViewService;
 import name.huliqing.fighter.loader.Loader;
 import name.huliqing.fighter.logic.scene.ActorBuildLogic;
+import name.huliqing.fighter.object.DataFactory;
 import name.huliqing.fighter.object.IntervalLogic;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.object.logic.PositionLogic;
@@ -153,11 +153,11 @@ public class SurvivalBoss extends IntervalLogic {
         addPositionLogic(locBoss);
                 
         // 为BOSS添加特殊天赋
-        TalentData attack = DataLoaderFactory.createTalentData(IdConstants.TALENT_ATTACK);
-        TalentData defence = DataLoaderFactory.createTalentData(IdConstants.TALENT_DEFENCE);
-        TalentData defenceMagic = DataLoaderFactory.createTalentData(IdConstants.TALENT_DEFENCE_MAGIC);
-        TalentData lifeRestore = DataLoaderFactory.createTalentData(IdConstants.TALENT_LIFE_RESTORE);
-        TalentData moveSpeed = DataLoaderFactory.createTalentData(IdConstants.TALENT_MOVE_SPEED);
+        TalentData attack = DataFactory.createData(IdConstants.TALENT_ATTACK);
+        TalentData defence = DataFactory.createData(IdConstants.TALENT_DEFENCE);
+        TalentData defenceMagic = DataFactory.createData(IdConstants.TALENT_DEFENCE_MAGIC);
+        TalentData lifeRestore = DataFactory.createData(IdConstants.TALENT_LIFE_RESTORE);
+        TalentData moveSpeed = DataFactory.createData(IdConstants.TALENT_MOVE_SPEED);
         attack.setLevel(attack.getMaxLevel());
         defence.setLevel(defence.getMaxLevel());
         defenceMagic.setLevel(defenceMagic.getMaxLevel());

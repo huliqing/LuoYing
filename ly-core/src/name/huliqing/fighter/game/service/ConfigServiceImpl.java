@@ -13,10 +13,10 @@ import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.Fighter;
 import name.huliqing.fighter.constants.IdConstants;
 import name.huliqing.fighter.data.ConfigData;
-import name.huliqing.fighter.object.DataLoaderFactory;
 import name.huliqing.fighter.manager.HUDManager;
 import name.huliqing.fighter.manager.ResourceManager;
 import name.huliqing.fighter.manager.ShortcutManager;
+import name.huliqing.fighter.object.DataFactory;
 import name.huliqing.fighter.save.SaveConfig;
 import name.huliqing.fighter.save.SaveHelper;
 import name.huliqing.fighter.utils.MathUtils;
@@ -48,7 +48,7 @@ public class ConfigServiceImpl implements ConfigService {
     @Override
     public void loadGlobalConfig() {
         // 载入系统配置
-        cd = DataLoaderFactory.createConfigData(IdConstants.CONFIG_GLOBAL);
+        cd = DataFactory.createData(IdConstants.CONFIG_GLOBAL);
         Config.debug = cd.isDebug();
         
         // 载入用户保存的配置并整合到全局配置中，注：只处理部分保存的参数。

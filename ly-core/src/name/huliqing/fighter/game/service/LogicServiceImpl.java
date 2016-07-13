@@ -8,7 +8,7 @@ import java.util.List;
 import name.huliqing.fighter.constants.IdConstants;
 import name.huliqing.fighter.data.LogicData;
 import name.huliqing.fighter.loader.Loader;
-import name.huliqing.fighter.object.DataLoaderFactory;
+import name.huliqing.fighter.object.DataFactory;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.object.logic.ActorLogic;
 
@@ -30,7 +30,7 @@ public class LogicServiceImpl implements LogicService {
 
     @Override
     public boolean addLogic(Actor actor, String logicId) {
-        LogicData newLogic = DataLoaderFactory.createLogicData(logicId);
+        LogicData newLogic = DataFactory.createData(logicId);
         return addLogic(actor, newLogic);
     }
 

@@ -4,9 +4,9 @@
  */
 package name.huliqing.fighter.game.service;
 
-import name.huliqing.fighter.object.DataLoaderFactory;
 import name.huliqing.fighter.data.ViewData;
 import name.huliqing.fighter.loader.Loader;
+import name.huliqing.fighter.object.DataFactory;
 import name.huliqing.fighter.object.view.View;
 
 /**
@@ -22,7 +22,7 @@ public class ViewServiceImpl implements ViewService {
 
     @Override
     public View loadView(String viewId) {
-        return loadView(DataLoaderFactory.createViewData(viewId));
+        return loadView((ViewData) DataFactory.createData(viewId));
     }
 
     @Override

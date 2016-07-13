@@ -10,8 +10,8 @@ import java.util.List;
 import name.huliqing.fighter.data.ProtoData;
 import name.huliqing.fighter.data.SoundData;
 import name.huliqing.fighter.enums.Mat;
-import name.huliqing.fighter.object.DataLoaderFactory;
 import name.huliqing.fighter.manager.SoundManager;
+import name.huliqing.fighter.object.DataFactory;
 
 /**
  *
@@ -24,20 +24,20 @@ public class SoundCollision {
         soundCollisions = new ArrayList<Collision>();
         
         // v2 wood hit stone
-        soundCollisions.add(new Collision(Mat.wood, Mat.stone, DataLoaderFactory.createSoundData("soundCollisionWS")));
+        soundCollisions.add(new Collision(Mat.wood, Mat.stone, (SoundData) DataFactory.createData("soundCollisionWS")));
         // v2 wood hit body
-        soundCollisions.add(new Collision(Mat.wood, Mat.body, DataLoaderFactory.createSoundData("soundCollisionWB")));
+        soundCollisions.add(new Collision(Mat.wood, Mat.body,  (SoundData) DataFactory.createData("soundCollisionWB")));
         // v2 wood hit wood
-        soundCollisions.add(new Collision(Mat.wood, Mat.wood, DataLoaderFactory.createSoundData("soundCollisionWW")));
+        soundCollisions.add(new Collision(Mat.wood, Mat.wood, (SoundData) DataFactory.createData("soundCollisionWW")));
         // v2 wood hit metal
-        soundCollisions.add(new Collision(Mat.wood, Mat.metal, DataLoaderFactory.createSoundData("soundCollisionWM")));
+        soundCollisions.add(new Collision(Mat.wood, Mat.metal, (SoundData) DataFactory.createData("soundCollisionWM")));
         
         // old
-        soundCollisions.add(new Collision(Mat.metal, Mat.metal, DataLoaderFactory.createSoundData("soundCollisionMM")));
-        soundCollisions.add(new Collision(Mat.metal, Mat.stone, DataLoaderFactory.createSoundData("soundCollisionMS")));
-        soundCollisions.add(new Collision(Mat.metal, Mat.body, DataLoaderFactory.createSoundData("soundCollisionMB")));
-        soundCollisions.add(new Collision(Mat.stone, Mat.body, DataLoaderFactory.createSoundData("soundCollisionMB")));
-        soundCollisions.add(new Collision(Mat.body, Mat.body, DataLoaderFactory.createSoundData("soundCollisionMB")));
+        soundCollisions.add(new Collision(Mat.metal, Mat.metal, (SoundData) DataFactory.createData("soundCollisionMM")));
+        soundCollisions.add(new Collision(Mat.metal, Mat.stone, (SoundData) DataFactory.createData("soundCollisionMS")));
+        soundCollisions.add(new Collision(Mat.metal, Mat.body,  (SoundData) DataFactory.createData("soundCollisionMB")));
+        soundCollisions.add(new Collision(Mat.stone, Mat.body,  (SoundData) DataFactory.createData("soundCollisionMB")));
+        soundCollisions.add(new Collision(Mat.body, Mat.body,   (SoundData) DataFactory.createData("soundCollisionMB")));
         
     }
     
@@ -45,6 +45,7 @@ public class SoundCollision {
      * 处理物体碰撞声音。
      * @param obj1
      * @param obj2 
+     * @param position 
      */
     public void playCollision(ProtoData obj1, ProtoData obj2, Vector3f position) {
         playCollision(obj1.getProto().getMat(), obj2.getProto().getMat(), position);
@@ -63,8 +64,8 @@ public class SoundCollision {
     }
     
     private class Collision {
-        private Mat mat1;
-        private Mat mat2;
+        private final Mat mat1;
+        private final Mat mat2;
         private final SoundData sound;
         public Collision(Mat mat1, Mat mat2, SoundData sound) {
             this.mat1 = mat1;

@@ -16,11 +16,11 @@ import name.huliqing.fighter.constants.SkillConstants;
 import name.huliqing.fighter.data.SkillData;
 import name.huliqing.fighter.enums.SkillType;
 import name.huliqing.fighter.game.dao.SkillDao;
-import name.huliqing.fighter.object.DataLoaderFactory;
 import name.huliqing.fighter.data.AttributeUse;
 import name.huliqing.fighter.enums.MessageType;
 import name.huliqing.fighter.loader.Loader;
 import name.huliqing.fighter.manager.ResourceManager;
+import name.huliqing.fighter.object.DataFactory;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.object.actor.SkillListener;
 import name.huliqing.fighter.object.skill.Skill;
@@ -61,7 +61,7 @@ public class SkillServiceImpl implements SkillService {
     
     @Override
     public void addSkill(Actor actor, String skillId) {
-        SkillData sd = DataLoaderFactory.createSkillData(skillId);
+        SkillData sd = DataFactory.createData(skillId);
         actor.getData().getSkillStore().add(sd);
     }
     

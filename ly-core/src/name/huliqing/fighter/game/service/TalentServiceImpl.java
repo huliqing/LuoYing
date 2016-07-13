@@ -7,9 +7,9 @@ package name.huliqing.fighter.game.service;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import name.huliqing.fighter.object.DataLoaderFactory;
 import name.huliqing.fighter.data.TalentData;
 import name.huliqing.fighter.loader.Loader;
+import name.huliqing.fighter.object.DataFactory;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.object.actor.TalentListener;
 import name.huliqing.fighter.object.talent.Talent;
@@ -28,7 +28,7 @@ public class TalentServiceImpl implements TalentService {
     
     @Override
     public void addTalent(Actor actor, String talentId) {
-        TalentData data = DataLoaderFactory.createTalentData(talentId);
+        TalentData data = DataFactory.createData(talentId);
         addTalent(actor, data);
     }
 

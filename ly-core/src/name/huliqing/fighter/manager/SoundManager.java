@@ -11,7 +11,7 @@ import name.huliqing.fighter.data.ProtoData;
 import name.huliqing.fighter.data.SoundData;
 import name.huliqing.fighter.enums.Mat;
 import name.huliqing.fighter.game.service.ConfigService;
-import name.huliqing.fighter.object.DataLoaderFactory;
+import name.huliqing.fighter.object.DataFactory;
 import name.huliqing.fighter.object.sound.SoundCollision;
 import name.huliqing.fighter.object.sound.SoundPlayer;
 
@@ -44,7 +44,8 @@ public class SoundManager {
         if (!configService.isSoundEnabled()) {
             return;
         }
-        player.playSound(DataLoaderFactory.createSoundData(soundId), position);
+        SoundData sd = DataFactory.createData(soundId);
+        player.playSound(sd, position);
     }
     
     /**
@@ -68,7 +69,8 @@ public class SoundManager {
         if (!configService.isSoundEnabled()) {
             return;
         }
-        player.playSound(DataLoaderFactory.createSoundData(soundId), position, true);
+        SoundData sd = DataFactory.createData(soundId);
+        player.playSound(sd, position, true);
     }
     
     public void stopSound(SoundData sound) {
@@ -79,6 +81,7 @@ public class SoundManager {
      * 播放物体碰撞声音。
      * @param obj1
      * @param obj2 
+     * @param position 
      */
     public void playCollision(ProtoData obj1, ProtoData obj2, Vector3f position) {
         if (!configService.isSoundEnabled()) {
@@ -96,7 +99,8 @@ public class SoundManager {
 
     /**
      * 播放获得物品时的声效
-     * @param item 获得的物品
+     * @param objectId
+     * @param position
      */
     public void playGetItemSound(String objectId, Vector3f position) {
         if (!configService.isSoundEnabled()) {

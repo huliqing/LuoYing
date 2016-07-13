@@ -11,7 +11,6 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import name.huliqing.fighter.Factory;
-import name.huliqing.fighter.object.DataLoaderFactory;
 import name.huliqing.fighter.data.ProtoData;
 import name.huliqing.fighter.data.SkinData;
 import name.huliqing.fighter.data.SlotData;
@@ -20,6 +19,7 @@ import name.huliqing.fighter.game.service.PlayService;
 import name.huliqing.fighter.game.service.SkillService;
 import name.huliqing.fighter.loader.AssetLoader;
 import name.huliqing.fighter.loader.Loader;
+import name.huliqing.fighter.object.DataFactory;
 import name.huliqing.fighter.object.IntervalLogic;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.object.skill.impl.SkinSkill;
@@ -54,6 +54,8 @@ public class WeaponSkin extends AbstractSkin {
     
     /**
      * 把武器取出放到手上使用。
+     * @param actor
+     * @param force
      */
     public void takeOn(Actor actor, boolean force) {
         String weaponSlot = data.getSlot();
@@ -62,7 +64,7 @@ public class WeaponSkin extends AbstractSkin {
             return;
         }
         // 根据武器的左右手属性确定要用哪一个手拿武器的技能。
-        SlotData sd = DataLoaderFactory.createSlotData(weaponSlot);
+        SlotData sd = DataFactory.createData(weaponSlot);
         String hangSkill = null;
         if (data.isLeftHandWeapon()) {
             hangSkill = sd.getLeftHandSkinSkill();
@@ -102,7 +104,7 @@ public class WeaponSkin extends AbstractSkin {
             return;
         }
         // 根据武器的左右手属性确定要用哪一个手拿武器的技能。
-        SlotData sd = DataLoaderFactory.createSlotData(weaponSlot);
+        SlotData sd = DataFactory.createData(weaponSlot);
         String hangSkill = null;
         if (data.isLeftHandWeapon()) {
             hangSkill = sd.getLeftHandSkinSkill();
@@ -150,7 +152,7 @@ public class WeaponSkin extends AbstractSkin {
             return;
         }
         
-        SlotData sd = DataLoaderFactory.createSlotData(weaponSlot);
+        SlotData sd = DataFactory.createData(weaponSlot);
         String toBindBone = sd.getBindBone();
         Vector3f toLocalTranslation = sd.getLocalTranslation();
         float[] toLocalRotation = sd.getLocalRotation();
@@ -203,10 +205,10 @@ public class WeaponSkin extends AbstractSkin {
     
     private class TOAnimProcessLogic extends IntervalLogic {
 
-        private Actor actor;
-        private int type; // 0:takeOff; 1 : takeOn
-        private float fullUseTime;
-        private float hangTimePoint;
+        private final Actor actor;
+        private final int type; // 0:takeOff; 1 : takeOn
+        private final float fullUseTime;
+        private final float hangTimePoint;
         private float timeUsed;
         private boolean isOk;
         

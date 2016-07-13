@@ -9,7 +9,6 @@ import java.util.List;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.constants.InterfaceConstants;
 import name.huliqing.fighter.constants.ResConstants;
-import name.huliqing.fighter.object.DataLoaderFactory;
 import name.huliqing.fighter.data.TaskData;
 import name.huliqing.fighter.game.network.ActorNetwork;
 import name.huliqing.fighter.game.network.ProtoNetwork;
@@ -17,6 +16,7 @@ import name.huliqing.fighter.game.service.PlayService;
 import name.huliqing.fighter.game.service.ProtoService;
 import name.huliqing.fighter.game.view.tiles.IconLabel;
 import name.huliqing.fighter.manager.ResourceManager;
+import name.huliqing.fighter.object.DataFactory;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.ui.LinearLayout;
 import name.huliqing.fighter.ui.Text;
@@ -30,8 +30,8 @@ import name.huliqing.fighter.utils.ConvertUtils;
  * @author huliqing
  */
 public abstract class AbstractTask implements Task {
-    private final static PlayService playService = Factory.get(PlayService.class);
-    private final static ActorNetwork atorNetwork = Factory.get(ActorNetwork.class);
+    private final PlayService playService = Factory.get(PlayService.class);
+    private final ActorNetwork atorNetwork = Factory.get(ActorNetwork.class);
 //    private final static ItemNetwork itemNetwork = Factory.get(ItemNetwork.class);
     private final ProtoNetwork protoNetwork = Factory.get(ProtoNetwork.class);
     private final ProtoService protoService = Factory.get(ProtoService.class);
@@ -117,10 +117,10 @@ public abstract class AbstractTask implements Task {
     
     private class DetailWindow extends Window {
         // 任务说明
-        private Text taskDetail;
+        private final Text taskDetail;
         // 任务奖励：列出任务完成后的奖励物品列表
-        private LinearLayout taskRewardPanel;
-        private Text rewardHead;
+        private final LinearLayout taskRewardPanel;
+        private final Text rewardHead;
         
         public DetailWindow(float width, float height) {
             super(width, height);
@@ -153,7 +153,7 @@ public abstract class AbstractTask implements Task {
             if (rewardItems != null) {
                 for (RewardItem ri : rewardItems) {
                     IconLabel il = new IconLabel(ri.itemId
-                            , DataLoaderFactory.createData(ri.itemId).getIcon()
+                            , DataFactory.createData(ri.itemId).getIcon()
                             , ri.count + "");
                     taskRewardPanel.addView(il);
                 }

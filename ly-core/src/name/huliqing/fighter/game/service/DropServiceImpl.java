@@ -13,7 +13,7 @@ import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.DropData;
 import name.huliqing.fighter.data.DropItem;
 import name.huliqing.fighter.data.ProtoData;
-import name.huliqing.fighter.object.DataLoaderFactory;
+import name.huliqing.fighter.object.DataFactory;
 import name.huliqing.fighter.object.actor.Actor;
 
 /**
@@ -33,7 +33,7 @@ public class DropServiceImpl implements DropService {
 
     @Override
     public DropData createDrop(String objectId) {
-        return DataLoaderFactory.createDropData(objectId);
+        return DataFactory.createData(objectId);
     }
 
     @Override
@@ -53,7 +53,7 @@ public class DropServiceImpl implements DropService {
             if (di.getCount() <= 0) {
                 continue;
             }
-            ProtoData dropItem = DataLoaderFactory.createData(di.getItemId());
+            ProtoData dropItem = DataFactory.createData(di.getItemId());
             dropItem.setTotal(di.getCount());
             store.add(dropItem);
         }
@@ -83,7 +83,7 @@ public class DropServiceImpl implements DropService {
             if (factor >= randomFactor) {
                 // 注：DropItem中掉落的各种物品的id可能不存在，应该允许兼容这种
                 // 问题，给予一个警告就可以不要暴异常，因为
-                ProtoData dropItem = DataLoaderFactory.createData(di.getItemId());
+                ProtoData dropItem = DataFactory.createData(di.getItemId());
                 if (dropItem != null) {
                     dropItem.setTotal(di.getCount());
                     store.add(dropItem);

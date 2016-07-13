@@ -15,12 +15,16 @@ import name.huliqing.fighter.data.ActionData;
 import name.huliqing.fighter.data.ActorAnimData;
 import name.huliqing.fighter.data.ActorData;
 import name.huliqing.fighter.data.AnimData;
+import name.huliqing.fighter.data.AttributeApply;
 import name.huliqing.fighter.data.AttributeData;
+import name.huliqing.fighter.data.AttributeUse;
 import name.huliqing.fighter.data.BulletData;
 import name.huliqing.fighter.data.ChannelData;
 import name.huliqing.fighter.data.ChatData;
 import name.huliqing.fighter.data.ConfigData;
+import name.huliqing.fighter.data.DataAttribute;
 import name.huliqing.fighter.data.DropData;
+import name.huliqing.fighter.data.DropItem;
 import name.huliqing.fighter.data.EffectData;
 import name.huliqing.fighter.data.ElData;
 import name.huliqing.fighter.data.EmitterData;
@@ -31,6 +35,7 @@ import name.huliqing.fighter.data.HitCheckerData;
 import name.huliqing.fighter.data.ItemData;
 import name.huliqing.fighter.data.LogicData;
 import name.huliqing.fighter.data.MagicData;
+import name.huliqing.fighter.data.PkgItemData;
 import name.huliqing.fighter.data.PositionData;
 import name.huliqing.fighter.data.Proto;
 import name.huliqing.fighter.data.ProtoData;
@@ -46,7 +51,7 @@ import name.huliqing.fighter.data.TalentData;
 import name.huliqing.fighter.data.TaskData;
 import name.huliqing.fighter.data.ViewData;
 import name.huliqing.fighter.enums.DataType;
-import name.huliqing.fighter.object.action.impl.ActionLoader;
+import name.huliqing.fighter.object.action.impl.ActionDataLoader;
 import name.huliqing.fighter.object.action.impl.FightDynamicAction;
 import name.huliqing.fighter.object.action.impl.FollowPathAction;
 import name.huliqing.fighter.object.action.impl.IdleDynamicAction;
@@ -55,8 +60,18 @@ import name.huliqing.fighter.object.action.impl.IdleStaticAction;
 import name.huliqing.fighter.object.action.impl.RunPathAction;
 import name.huliqing.fighter.object.action.impl.RunSimpleAction;
 import name.huliqing.fighter.object.actor.ActorControl;
-import name.huliqing.fighter.object.actor.ActorLoader;
-import name.huliqing.fighter.object.effect.EffectLoader;
+import name.huliqing.fighter.object.actor.ActorDataLoader;
+import name.huliqing.fighter.object.actor.ItemStore;
+import name.huliqing.fighter.object.actor.SkillStore;
+import name.huliqing.fighter.object.actoranim.ActorAnimDataLoader;
+import name.huliqing.fighter.object.anim.AnimDataLoader;
+import name.huliqing.fighter.object.attribute.AttributeDataLoader;
+import name.huliqing.fighter.object.bullet.BulletDataLoader;
+import name.huliqing.fighter.object.channel.ChannelDataLoader;
+import name.huliqing.fighter.object.chat.ChatDataLoader;
+import name.huliqing.fighter.object.config.ConfigDataLoader;
+import name.huliqing.fighter.object.drop.DropDataLoader;
+import name.huliqing.fighter.object.effect.EffectDataLoader;
 import name.huliqing.fighter.object.effect.EncircleHaloEffect;
 import name.huliqing.fighter.object.effect.GroupEffect;
 import name.huliqing.fighter.object.effect.HaloEffect;
@@ -69,11 +84,13 @@ import name.huliqing.fighter.object.effect.SlideColorIOSplineEffect;
 import name.huliqing.fighter.object.effect.SlideColorSplineEffect;
 import name.huliqing.fighter.object.effect.TextureCylinderEffect;
 import name.huliqing.fighter.object.effect.TextureEffect;
+import name.huliqing.fighter.object.el.ElDataLoader;
+import name.huliqing.fighter.object.emitter.EmitterDataLoader;
 import name.huliqing.fighter.object.env.AudioEnv;
 import name.huliqing.fighter.object.env.BoundaryBoxEnv;
 import name.huliqing.fighter.object.env.CameraChaseEnv;
 import name.huliqing.fighter.object.env.LightDirectionalEnv;
-import name.huliqing.fighter.object.env.EnvLoader;
+import name.huliqing.fighter.object.env.EnvDataLoader;
 import name.huliqing.fighter.object.env.LightAmbientEnv;
 import name.huliqing.fighter.object.env.ModelEnv;
 import name.huliqing.fighter.object.env.ModelEnvData;
@@ -89,13 +106,13 @@ import name.huliqing.fighter.object.env.TreeEnv;
 import name.huliqing.fighter.object.env.WaterAdvanceEnv;
 import name.huliqing.fighter.object.env.WaterSimpleEnv;
 import name.huliqing.fighter.object.game.Game;
-import name.huliqing.fighter.object.game.GameLoader;
+import name.huliqing.fighter.object.game.GameDataLoader;
 import name.huliqing.fighter.object.game.StoryGbGame;
 import name.huliqing.fighter.object.game.StoryGuardGame;
 import name.huliqing.fighter.object.game.StoryTreasureGame;
 import name.huliqing.fighter.object.game.SurvivalGame;
 import name.huliqing.fighter.object.handler.AttributeHandler;
-import name.huliqing.fighter.object.handler.HandlerLoader;
+import name.huliqing.fighter.object.handler.HandlerDataLoader;
 import name.huliqing.fighter.object.handler.ItemSkillHandler;
 import name.huliqing.fighter.object.handler.MapHandler;
 import name.huliqing.fighter.object.handler.OutfitHandler;
@@ -107,12 +124,22 @@ import name.huliqing.fighter.object.handler.SummonHandler;
 import name.huliqing.fighter.object.handler.SummonSkillHandler;
 import name.huliqing.fighter.object.handler.TestHandler;
 import name.huliqing.fighter.object.handler.WeaponHandler;
+import name.huliqing.fighter.object.hitchecker.HitCheckerDataLoader;
+import name.huliqing.fighter.object.item.ItemDataLoader;
+import name.huliqing.fighter.object.logic.LogicDataLoader;
 import name.huliqing.fighter.object.magic.AttributeHitMagic;
-import name.huliqing.fighter.object.magic.MagicLoader;
+import name.huliqing.fighter.object.magic.MagicDataLoader;
 import name.huliqing.fighter.object.magic.StateMagic;
+import name.huliqing.fighter.object.position.PositionDataLoader;
+import name.huliqing.fighter.object.resist.ResistDataLoader;
 import name.huliqing.fighter.object.scene.RandomSceneLoader;
 import name.huliqing.fighter.object.scene.Scene;
-import name.huliqing.fighter.object.scene.SceneLoader;
+import name.huliqing.fighter.object.scene.SceneDataLoader;
+import name.huliqing.fighter.object.shape.ShapeDataLoader;
+import name.huliqing.fighter.object.skill.SkillDataLoader;
+import name.huliqing.fighter.object.skin.SkinDataLoader;
+import name.huliqing.fighter.object.slot.SlotDataLoader;
+import name.huliqing.fighter.object.sound.SoundDataLoader;
 import name.huliqing.fighter.object.state.AttributeDynamicState;
 import name.huliqing.fighter.object.state.AttributeState;
 import name.huliqing.fighter.object.state.CleanState;
@@ -120,7 +147,10 @@ import name.huliqing.fighter.object.state.EssentialState;
 import name.huliqing.fighter.object.state.MoveSpeedState;
 import name.huliqing.fighter.object.state.SkillLockedState;
 import name.huliqing.fighter.object.state.SkillState;
-import name.huliqing.fighter.object.state.StateLoader;
+import name.huliqing.fighter.object.state.StateDataLoader;
+import name.huliqing.fighter.object.talent.TalentDataLoader;
+import name.huliqing.fighter.object.task.TaskDataLoader;
+import name.huliqing.fighter.object.view.ViewDataLoader;
 
 /**
  * 管理数据的各种加载和处理的工厂类
@@ -216,10 +246,19 @@ public class DataFactory {
         }
         
         try {
-            ProtoData protoData = (ProtoData) Class.forName(proto.getDataClass()).newInstance();
-            DataLoader dataLoader = (DataLoader) Class.forName(proto.getDataLoader()).newInstance();
+            String dataClass = proto.getDataClass();
+            if (dataClass == null) {
+                throw new NullPointerException("No \"dataClass\"  set for proto, id=" + id + ", proto=" + proto);
+            }
+            ProtoData protoData = (ProtoData) Class.forName(dataClass).newInstance();
+            
+            String dataLoader = proto.getDataLoader();
+            if (dataLoader == null) {
+                throw new NullPointerException("No \"dataLoader\" set for proto, id=" + id + ", proto=" + proto);
+            }
+            DataLoader dl = (DataLoader) Class.forName(dataLoader).newInstance();
             protoData.setId(id);
-            dataLoader.load(proto, protoData);
+            dl.load(proto, protoData);
             return (T) protoData;
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -238,11 +277,10 @@ public class DataFactory {
             LOG.log(Level.WARNING, "Data could not be null");
             return null;
         }
-        String tagName = data.getTagName();
-        Class<? extends DataProcessor> dpClass = TAG_PROCESSORS.get(tagName);
+        Class<? extends DataProcessor> dpClass = TAG_PROCESSORS.get(data.getTagName());
         if (dpClass == null) {
-            throw new NullPointerException("Could not find DataProcess for tagName!"
-                    + " tagName=" + tagName 
+            throw new NullPointerException("Could not find data processor to createProcessor"
+                    + ", tagName=" + data.getTagName() 
                     + ", dataId=" + data.getId());
         }
         try {
@@ -250,8 +288,7 @@ public class DataFactory {
             dp.initData(data);
             return (T) dp;
         } catch (Exception ex) {
-            ex.printStackTrace();
-            throw new RuntimeException("Could not create processor! tagName=" + tagName 
+            throw new RuntimeException("Could not create processor! tagName=" + data.getTagName() 
                     + ", dataId=" + data.getId()
                     + ", dataProcessor=" + dpClass.getName()
                     + ", error=" + ex.getMessage()
@@ -264,6 +301,16 @@ public class DataFactory {
      */
     public static void initRegister() {
         // ---- Register Class
+        
+        Serializer.registerClass(Proto.class);
+        Serializer.registerClass(ItemStore.class);
+        Serializer.registerClass(SkillStore.class);
+        Serializer.registerClass(AttributeApply.class);
+        Serializer.registerClass(AttributeUse.class);
+        Serializer.registerClass(DataAttribute.class);
+        Serializer.registerClass(DropItem.class);
+        Serializer.registerClass(PkgItemData.class);
+        
         Serializer.registerClass(ActionData.class);
         Serializer.registerClass(ActorData.class);
         Serializer.registerClass(ActorAnimData.class);
@@ -296,6 +343,7 @@ public class DataFactory {
         Serializer.registerClass(TalentData.class);
         Serializer.registerClass(TaskData.class);
         Serializer.registerClass(ViewData.class);
+
         
         // ---- Register Default data
         // 默认的数据容器所有新增的DataType都要注册
@@ -333,17 +381,38 @@ public class DataFactory {
         DEFAULT_DATAS.put(DataType.view, ViewData.class);
         
         // 初始化默认的数据载入器
-        DEFAULT_LOADERS.put(DataType.action, ActionLoader.class);
-        DEFAULT_LOADERS.put(DataType.actor, ActorLoader.class);
-        
-        
-        DEFAULT_LOADERS.put(DataType.effect, EffectLoader.class);
-        DEFAULT_LOADERS.put(DataType.env, EnvLoader.class);
-        DEFAULT_LOADERS.put(DataType.game, GameLoader.class);
-        DEFAULT_LOADERS.put(DataType.handler, HandlerLoader.class);
-        DEFAULT_LOADERS.put(DataType.magic, MagicLoader.class);
-        DEFAULT_LOADERS.put(DataType.scene, SceneLoader.class);
-        DEFAULT_LOADERS.put(DataType.state, StateLoader.class);
+        DEFAULT_LOADERS.put(DataType.action, ActionDataLoader.class);
+        DEFAULT_LOADERS.put(DataType.actor, ActorDataLoader.class);
+        DEFAULT_LOADERS.put(DataType.actorAnim, ActorAnimDataLoader.class);
+        DEFAULT_LOADERS.put(DataType.anim, AnimDataLoader.class);
+        DEFAULT_LOADERS.put(DataType.attribute, AttributeDataLoader.class);
+        DEFAULT_LOADERS.put(DataType.bullet, BulletDataLoader.class);
+        DEFAULT_LOADERS.put(DataType.channel, ChannelDataLoader.class);
+        DEFAULT_LOADERS.put(DataType.chat, ChatDataLoader.class);
+        DEFAULT_LOADERS.put(DataType.config, ConfigDataLoader.class);
+        DEFAULT_LOADERS.put(DataType.drop, DropDataLoader.class);
+        DEFAULT_LOADERS.put(DataType.effect, EffectDataLoader.class);
+        DEFAULT_LOADERS.put(DataType.el, ElDataLoader.class);
+        DEFAULT_LOADERS.put(DataType.emitter, EmitterDataLoader.class);
+        DEFAULT_LOADERS.put(DataType.env, EnvDataLoader.class);
+        DEFAULT_LOADERS.put(DataType.game, GameDataLoader.class);
+        DEFAULT_LOADERS.put(DataType.handler, HandlerDataLoader.class);
+        DEFAULT_LOADERS.put(DataType.hitChecker, HitCheckerDataLoader.class);
+        DEFAULT_LOADERS.put(DataType.item, ItemDataLoader.class);
+        DEFAULT_LOADERS.put(DataType.logic, LogicDataLoader.class);
+        DEFAULT_LOADERS.put(DataType.magic, MagicDataLoader.class);
+        DEFAULT_LOADERS.put(DataType.position, PositionDataLoader.class);
+        DEFAULT_LOADERS.put(DataType.resist, ResistDataLoader.class);
+        DEFAULT_LOADERS.put(DataType.scene, SceneDataLoader.class);
+        DEFAULT_LOADERS.put(DataType.shape, ShapeDataLoader.class);
+        DEFAULT_LOADERS.put(DataType.skill, SkillDataLoader.class);
+        DEFAULT_LOADERS.put(DataType.skin, SkinDataLoader.class);
+        DEFAULT_LOADERS.put(DataType.slot, SlotDataLoader.class);
+        DEFAULT_LOADERS.put(DataType.sound, SoundDataLoader.class);
+        DEFAULT_LOADERS.put(DataType.state, StateDataLoader.class);
+        DEFAULT_LOADERS.put(DataType.talent, TalentDataLoader.class);
+        DEFAULT_LOADERS.put(DataType.task, TaskDataLoader.class);
+        DEFAULT_LOADERS.put(DataType.view, ViewDataLoader.class);
 
         // 初始化默认的数据处理器
         DEFAULT_PROCESSORS.put(DataType.scene, Scene.class);
@@ -446,8 +515,8 @@ public class DataFactory {
         if (clz != null) {
             return clz;
         }
+        LOG.log(Level.WARNING, "Not data class for tagName={0}, dataType={1}", new Object[] {tagName, dataType});
         return null;
-//        throw new NullPointerException("Can't find ProtoData type class. tagName=" + tagName + ", dataType=" + dataType);
     }
     
     /**
@@ -467,8 +536,8 @@ public class DataFactory {
         if (clz != null) {
             return clz;
         }
+        LOG.log(Level.WARNING, "Not data loader for tagName={0}, dataType={1}", new Object[] {tagName, dataType});
         return null;
-//        throw new NullPointerException("Can't find dataLoader, tagName=" + tagName + ",dataType=" + dataType);
     }
     
     /**
@@ -488,7 +557,7 @@ public class DataFactory {
         if (clz != null) {
             return clz;
         }
+        LOG.log(Level.WARNING, "Not data processor for tagName={0}, dataType={1}", new Object[] {tagName, dataType});
         return null;
-//        throw new NullPointerException("Can't find dataLoader, tagName=" + tagName + ",dataType=" + dataType);
     }
 }

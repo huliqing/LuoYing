@@ -11,8 +11,6 @@ import com.jme3.material.Material;
 import com.jme3.scene.Spatial;
 import name.huliqing.fighter.Common;
 import name.huliqing.fighter.object.actor.Actor;
-import name.huliqing.fighter.object.action.AbstractAction;
-import name.huliqing.fighter.object.actor.ActorControl;
 import name.huliqing.fighter.data.ActionData;
 import name.huliqing.fighter.data.ActorAnimData;
 import name.huliqing.fighter.data.ActorData;
@@ -33,7 +31,6 @@ import name.huliqing.fighter.data.SkillData;
 import name.huliqing.fighter.data.ResistData;
 import name.huliqing.fighter.data.SceneData;
 import name.huliqing.fighter.data.StateData;
-import name.huliqing.fighter.object.DataLoaderFactory;
 import name.huliqing.fighter.data.MagicData;
 import name.huliqing.fighter.data.ShapeData;
 import name.huliqing.fighter.data.TalentData;
@@ -86,7 +83,7 @@ public class Loader {
     }
     
     public static ActorAnim loadActorAnim(String id) {
-        ActorAnimData data = DataLoaderFactory.createActorAnimData(id);
+        ActorAnimData data = DataFactory.createData(id);
         return loadActorAnim(data);
     }
     
@@ -100,7 +97,7 @@ public class Loader {
     }
         
     public static Anim loadAnimation(String animationId) {
-        AnimData data = DataLoaderFactory.createAnimData(animationId);
+        AnimData data = DataFactory.createData(animationId);
         return loadAnimation(data);
     }
     
@@ -109,7 +106,7 @@ public class Loader {
     }
         
     public static Bullet loadBullet(String id) {
-        BulletData data = DataLoaderFactory.createBulletData(id);
+        BulletData data = DataFactory.createData(id);
         return loadBullet(data);
     }
     
@@ -122,7 +119,7 @@ public class Loader {
     }
     
     public static Chat loadChat(String chatId) {
-        ChatData data = DataLoaderFactory.createChatData(chatId);
+        ChatData data = DataFactory.createData(chatId);
         return ChatLoader.load(data);
     }
     
@@ -148,12 +145,12 @@ public class Loader {
     }
     
     public static ParticleEmitter loadEmitter(String id) {
-        EmitterData data = DataLoaderFactory.createEmitterData(id);
+        EmitterData data = DataFactory.createData(id);
         return loadEmitter(data, null);
     }
     
     public static ParticleEmitter loadEmitter(String id, ParticleEmitter store) {
-        EmitterData data = DataLoaderFactory.createEmitterData(id);
+        EmitterData data = DataFactory.createData(id);
         return loadEmitter(data, store);
     }
         
@@ -162,7 +159,7 @@ public class Loader {
     }
     
     public static Position loadPosition(String id) {
-        PositionData esd = DataLoaderFactory.createPositionData(id);
+        PositionData esd = DataFactory.createData(id);
         return loadPosition(esd);
     }
     
@@ -198,7 +195,7 @@ public class Loader {
     }
     
     public static HitChecker loadHitChecker(String id) {
-        HitCheckerData data = DataLoaderFactory.createHitCheckerData(id);
+        HitCheckerData data = DataFactory.createData(id);
         return loadHitChecker(data);
     }
     
@@ -211,7 +208,7 @@ public class Loader {
     }
     
     public static ActorLogic loadLogic(String logicId) {
-        return loadLogic(DataLoaderFactory.createLogicData(logicId));
+        return loadLogic((LogicData) DataFactory.createData(logicId));
     }
     
     public static Magic loadMagic(MagicData data) {
@@ -224,7 +221,7 @@ public class Loader {
     }
     
     public static Resist loadResist(String id) {
-        ResistData data = DataLoaderFactory.createResistData(id);
+        ResistData data = DataFactory.createData(id);
         return loadResist(data);
     }
     
@@ -242,7 +239,7 @@ public class Loader {
     }
     
     public static Shape loadShape(String shapeId) {
-        ShapeData data = DataLoaderFactory.createShapeData(shapeId);
+        ShapeData data = DataFactory.createData(shapeId);
         return loadShape(data);
     }
     
@@ -255,12 +252,12 @@ public class Loader {
     }
     
     public static Skill loadSkill(String id) {
-        SkillData sd = DataLoaderFactory.createSkillData(id);
+        SkillData sd = DataFactory.createData(id);
         return loadSkill(sd);
     }
         
     public static Skin loadSkin(String skinId) {
-        SkinData skinData = DataLoaderFactory.createSkinData(skinId);
+        SkinData skinData = DataFactory.createData(skinId);
         return loadSkin(skinData);
     }
     
@@ -270,7 +267,6 @@ public class Loader {
     }
     
     public static State loadState(String id) {
-//        StateData data = DataLoaderFactory.createStateData(id);
         StateData data = DataFactory.createData(id);
         return loadState(data);
     }
@@ -280,7 +276,7 @@ public class Loader {
     }
         
     public static Talent loadTalent(String talentId) {
-        return loadTalent(DataLoaderFactory.createTalentData(talentId));
+        return loadTalent((TalentData) DataFactory.createData(talentId));
     }
     
     public static Talent loadTalent(TalentData talentData) {
@@ -288,7 +284,7 @@ public class Loader {
     }
     
     public static Task loadTask(String taskId) {
-        return loadTask(DataLoaderFactory.createTaskData(taskId));
+        return loadTask((TaskData) DataFactory.createData(taskId));
     }
     
     public static Task loadTask(TaskData data) {
@@ -296,7 +292,7 @@ public class Loader {
     }
      
     public static View loadView(String viewId) {
-        return loadView(DataLoaderFactory.createViewData(viewId));
+        return loadView((ViewData)DataFactory.createData(viewId));
     }
     
     public static View loadView(ViewData viewData) {

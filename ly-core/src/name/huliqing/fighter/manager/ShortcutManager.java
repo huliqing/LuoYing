@@ -28,7 +28,7 @@ import name.huliqing.fighter.object.animation.CurveMove;
 import name.huliqing.fighter.object.animation.LinearGroup;
 import name.huliqing.fighter.game.view.ShortcutSkillView;
 import name.huliqing.fighter.game.view.ShortcutView;
-import name.huliqing.fighter.object.DataLoaderFactory;
+import name.huliqing.fighter.object.DataFactory;
 import name.huliqing.fighter.save.ShortcutSave;
 import name.huliqing.fighter.ui.UIUtils;
 import name.huliqing.fighter.ui.UI;
@@ -236,7 +236,7 @@ public class ShortcutManager {
             String itemId = s.getItemId();
             ProtoData data = actorService.getItem(player, itemId);
             if (data == null) {
-                data = DataLoaderFactory.createData(itemId);
+                data = DataFactory.createData(itemId);
             }
             // 防止物品被删除
             if (data == null) {

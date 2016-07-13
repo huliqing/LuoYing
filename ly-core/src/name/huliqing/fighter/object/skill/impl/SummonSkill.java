@@ -28,14 +28,12 @@ import name.huliqing.fighter.game.service.ActorService;
 import name.huliqing.fighter.game.service.PlayService;
 import name.huliqing.fighter.game.service.StateService;
 import name.huliqing.fighter.game.state.lan.Network;
-import name.huliqing.fighter.object.DataLoaderFactory;
 import name.huliqing.fighter.game.service.ConfigService;
 import name.huliqing.fighter.game.service.EffectService;
+import name.huliqing.fighter.object.DataFactory;
 import name.huliqing.fighter.object.anim.Anim;
 import name.huliqing.fighter.object.anim.Listener;
 import name.huliqing.fighter.object.anim.MoveAnim;
-import name.huliqing.fighter.object.effect.AbstractEffect;
-import name.huliqing.fighter.object.effect.Effect;
 import name.huliqing.fighter.utils.GeometryUtils;
 import name.huliqing.fighter.utils.ThreadHelper;
 
@@ -44,7 +42,7 @@ import name.huliqing.fighter.utils.ThreadHelper;
  * @author huliqing
  */
 public class SummonSkill extends SimpleSkill {
-    private final static Logger logger = Logger.getLogger(SummonSkill.class.getName());
+//    private final static Logger logger = Logger.getLogger(SummonSkill.class.getName());
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final PlayService playService = Factory.get(PlayService.class);
@@ -233,7 +231,7 @@ public class SummonSkill extends SimpleSkill {
          */
         void preload() {
             if (!loadStarted && summonObjectId != null) {
-                ProtoData data = DataLoaderFactory.createData(summonObjectId);
+                ProtoData data = DataFactory.createData(summonObjectId);
                 loader.loadId = summonObjectId;
                 loader.type = data.getDataType();
                 future = ThreadHelper.submit(loader);
@@ -299,9 +297,9 @@ public class SummonSkill extends SimpleSkill {
                 showAnim.setEndPos(end);
                 showAnim.start();
                 
-                if (Config.debug) {
-                    logger.log(Level.INFO, "summon start to showing!");
-                }
+//                if (Config.debug) {
+//                    logger.log(Level.INFO, "summon start to showing!");
+//                }
                 
                 showing = true;
                 tv.release();

@@ -6,7 +6,7 @@ package name.huliqing.fighter.loader;
 
 import com.jme3.animation.AnimControl;
 import name.huliqing.fighter.data.ChannelData;
-import name.huliqing.fighter.object.DataLoaderFactory;
+import name.huliqing.fighter.object.DataFactory;
 import name.huliqing.fighter.object.channel.Channel;
 import name.huliqing.fighter.object.channel.SimpleChannel;
 
@@ -22,6 +22,6 @@ class ChannelLoader {
     }
     
     public static Channel load(String channelId, AnimControl ac) {
-        return load(DataLoaderFactory.createChannelData(channelId), ac);
+        return load((ChannelData) DataFactory.createData(channelId), ac);
     }
 }

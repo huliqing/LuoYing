@@ -13,7 +13,6 @@ import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.constants.InterfaceConstants;
 import name.huliqing.fighter.constants.ResConstants;
 import name.huliqing.fighter.data.ChatData;
-import name.huliqing.fighter.object.DataLoaderFactory;
 import name.huliqing.fighter.data.ProtoData;
 import name.huliqing.fighter.game.network.UserCommandNetwork;
 import name.huliqing.fighter.game.service.ActorService;
@@ -25,6 +24,7 @@ import name.huliqing.fighter.game.view.transfer.SimpleTransferPanel;
 import name.huliqing.fighter.game.view.transfer.TabTransferPanel;
 import name.huliqing.fighter.game.view.transfer.TransferPanel;
 import name.huliqing.fighter.manager.ResourceManager;
+import name.huliqing.fighter.object.DataFactory;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.ui.Button;
 import name.huliqing.fighter.ui.FrameLayout;
@@ -126,7 +126,7 @@ public class SellChat extends Chat {
             if (!itemService.isSellable(item)) {
                 continue;
             }
-            ProtoData dataCopy = DataLoaderFactory.createData(item.getId());
+            ProtoData dataCopy = DataFactory.createData(item.getId());
             dataCopy.setTotal(item.getTotal());
             transferDatas.add(dataCopy);
         }

@@ -9,7 +9,7 @@ import java.util.List;
 import name.huliqing.fighter.Common;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.data.ProtoData;
-import name.huliqing.fighter.object.DataLoaderFactory;
+import name.huliqing.fighter.object.DataFactory;
 
 /**
  * @author huliqing
@@ -28,7 +28,7 @@ public class ItemDaoImpl implements ItemDao {
                     + "could not less than 0. actor=" + actor.getData().getId() 
                     + ", itemId=" + itemId + ", amount=" + amount);
         }
-        ProtoData item = DataLoaderFactory.createData(itemId);
+        ProtoData item = DataFactory.createData(itemId);
         if (item == null) {
             return false;
         }

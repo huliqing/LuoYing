@@ -7,41 +7,8 @@ package name.huliqing.fighter;
 import com.jme3.network.serializing.Serializer;
 import com.jme3.network.serializing.serializers.MapSerializer;
 import java.util.LinkedHashMap;
-import name.huliqing.fighter.data.ActionData;
-import name.huliqing.fighter.data.ActorAnimData;
-import name.huliqing.fighter.data.ActorData;
-import name.huliqing.fighter.data.AnimData;
-import name.huliqing.fighter.data.AttributeApply;
-import name.huliqing.fighter.data.AttributeData;
-import name.huliqing.fighter.data.BulletData;
-import name.huliqing.fighter.data.DropData;
-import name.huliqing.fighter.data.DropItem;
-import name.huliqing.fighter.data.EffectData;
-import name.huliqing.fighter.data.EmitterData;
-import name.huliqing.fighter.data.PositionData;
-import name.huliqing.fighter.data.EnvData;
-import name.huliqing.fighter.data.GameData;
-import name.huliqing.fighter.data.HandlerData;
-import name.huliqing.fighter.data.HitCheckerData;
-import name.huliqing.fighter.data.ElData;
-import name.huliqing.fighter.data.LogicData;
-import name.huliqing.fighter.data.ItemData;
 import name.huliqing.fighter.data.PkgItemData;
 import name.huliqing.fighter.data.Proto;
-import name.huliqing.fighter.data.ProtoData;
-import name.huliqing.fighter.data.ResistData;
-import name.huliqing.fighter.data.SceneData;
-import name.huliqing.fighter.data.SkillData;
-import name.huliqing.fighter.data.SkinData;
-import name.huliqing.fighter.data.SoundData;
-import name.huliqing.fighter.data.StateData;
-import name.huliqing.fighter.data.TalentData;
-import name.huliqing.fighter.data.AttributeUse;
-import name.huliqing.fighter.data.DataAttribute;
-import name.huliqing.fighter.data.MagicData;
-import name.huliqing.fighter.data.ShapeData;
-import name.huliqing.fighter.data.TaskData;
-import name.huliqing.fighter.data.ViewData;
 import name.huliqing.fighter.game.mess.MessClient;
 import name.huliqing.fighter.game.mess.MessPlayGetServerState;
 import name.huliqing.fighter.game.mess.MessPlayInitGame;
@@ -97,15 +64,12 @@ import name.huliqing.fighter.game.mess.MessTaskComplete;
 import name.huliqing.fighter.game.mess.MessViewAdd;
 import name.huliqing.fighter.game.mess.MessViewRemove;
 import name.huliqing.fighter.object.SyncData;
-import name.huliqing.fighter.object.actor.ItemStore;
-import name.huliqing.fighter.object.actor.SkillStore;
 import name.huliqing.fighter.game.mess.MessPlayLoadSavedActor;
 import name.huliqing.fighter.game.mess.MessPlayLoadSavedActorResult;
 import name.huliqing.fighter.game.mess.MessPlayClientExit;
 import name.huliqing.fighter.game.mess.MessPlayChangeGameState;
 import name.huliqing.fighter.game.state.ConnData;
 import static com.jme3.network.serializing.Serializer.registerClass;
-import name.huliqing.fighter.object.env.ModelEnvData;
 
 /**
  *
@@ -133,55 +97,10 @@ public class MessRegister {
         Serializer.registerClass(MessPlayLoadSavedActor.class);
         Serializer.registerClass(MessPlayLoadSavedActorResult.class);
         Serializer.registerClass(MessPlayClientExit.class);
-//        Serializer.registerClass(MessPlayClientData.class);
         Serializer.registerClass(MessSCClientList.class);
         Serializer.registerClass(MessSCGameData.class);
         Serializer.registerClass(MessSCInitGameOK.class);
         Serializer.registerClass(MessSCServerState.class);
-        
-        // ---- Proto Data
-        Serializer.registerClass(ItemStore.class);
-        Serializer.registerClass(SkillStore.class);
-        Serializer.registerClass(ActionData.class);
-        Serializer.registerClass(ActorAnimData.class);
-        Serializer.registerClass(ActorData.class);
-        Serializer.registerClass(AnimData.class);
-        Serializer.registerClass(AttributeApply.class);
-        Serializer.registerClass(AttributeData.class);
-        Serializer.registerClass(AttributeUse.class);
-        Serializer.registerClass(BulletData.class);
-        Serializer.registerClass(DataAttribute.class);
-        Serializer.registerClass(DropData.class);
-        Serializer.registerClass(DropItem.class);
-        Serializer.registerClass(EffectData.class);
-        Serializer.registerClass(EmitterData.class);
-        Serializer.registerClass(PositionData.class);
-        
-        Serializer.registerClass(EnvData.class);
-        Serializer.registerClass(ModelEnvData.class);
-        
-        Serializer.registerClass(GameData.class);
-        Serializer.registerClass(HandlerData.class);
-        Serializer.registerClass(HitCheckerData.class);
-        Serializer.registerClass(ElData.class);
-        Serializer.registerClass(LogicData.class);
-        Serializer.registerClass(MagicData.class);
-        Serializer.registerClass(ItemData.class);
-        Serializer.registerClass(PkgItemData.class);
-        Serializer.registerClass(Proto.class);
-        Serializer.registerClass(ProtoData.class);
-        Serializer.registerClass(ResistData.class);
-        
-        Serializer.registerClass(SceneData.class);
-        
-        Serializer.registerClass(ShapeData.class);
-        Serializer.registerClass(SkillData.class);
-        Serializer.registerClass(SkinData.class);
-        Serializer.registerClass(SoundData.class);
-        Serializer.registerClass(StateData.class);
-        Serializer.registerClass(TalentData.class);
-        Serializer.registerClass(TaskData.class);
-        Serializer.registerClass(ViewData.class);
         
         // ---- Lan play
         Serializer.registerClass(ConnData.class);

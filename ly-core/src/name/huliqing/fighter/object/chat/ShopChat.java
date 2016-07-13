@@ -14,13 +14,13 @@ import name.huliqing.fighter.constants.IdConstants;
 import name.huliqing.fighter.constants.InterfaceConstants;
 import name.huliqing.fighter.constants.ResConstants;
 import name.huliqing.fighter.data.ChatData;
-import name.huliqing.fighter.object.DataLoaderFactory;
 import name.huliqing.fighter.data.ProtoData;
 import name.huliqing.fighter.game.network.UserCommandNetwork;
 import name.huliqing.fighter.game.service.ActorService;
 import name.huliqing.fighter.game.service.ItemService;
 import name.huliqing.fighter.game.service.PlayService;
 import name.huliqing.fighter.manager.ResourceManager;
+import name.huliqing.fighter.object.DataFactory;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.object.actor.ItemListener;
 import name.huliqing.fighter.ui.Button;
@@ -222,7 +222,7 @@ public class ShopChat extends Chat implements ItemListener {
                 }
             }
             // 如果列表中不存在，则把data添加进来
-            ProtoData newData = DataLoaderFactory.createData(itemId);
+            ProtoData newData = DataFactory.createData(itemId);
             newData.setTotal(total);
             datas.add(newData);
         }
@@ -381,8 +381,8 @@ public class ShopChat extends Chat implements ItemListener {
     
     private class Footer extends LinearLayout {
         // 显示角色的剩余金币数
-        private Icon goldsIcon;
-        private Text goldsRemain;
+        private final Icon goldsIcon;
+        private final Text goldsRemain;
         
         public Footer(float width, float height) {
             super(width, height);
@@ -413,7 +413,7 @@ public class ShopChat extends Chat implements ItemListener {
                 golds = goldData.getTotal();
                 goldsIcon.setImage(goldData.getProto().getIcon());
             } else {
-                goldData = DataLoaderFactory.createData(IdConstants.ITEM_GOLD);
+                goldData = DataFactory.createData(IdConstants.ITEM_GOLD);
                 goldsIcon.setImage(goldData.getProto().getIcon());
             }
             goldsRemain.setText(ResourceManager.get(ResConstants.CHAT_SHOP_GOLDS_REMAIN) + ":" + golds);

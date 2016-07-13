@@ -9,7 +9,6 @@ import com.jme3.math.FastMath;
 import java.util.List;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.constants.ResConstants;
-import name.huliqing.fighter.object.DataLoaderFactory;
 import name.huliqing.fighter.data.TaskData;
 import name.huliqing.fighter.enums.MessageType;
 import name.huliqing.fighter.game.network.PlayNetwork;
@@ -20,6 +19,7 @@ import name.huliqing.fighter.game.service.PlayService;
 import name.huliqing.fighter.game.service.TaskService;
 import name.huliqing.fighter.game.view.tiles.IconLabel;
 import name.huliqing.fighter.manager.ResourceManager;
+import name.huliqing.fighter.object.DataFactory;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.object.actor.ActorListener;
 import name.huliqing.fighter.ui.LinearLayout;
@@ -37,12 +37,12 @@ import name.huliqing.fighter.utils.MathUtils;
  * @author huliqing
  */
 public class CollectTask extends AbstractTask implements ActorListener {
-    private final static PlayService playService = Factory.get(PlayService.class);
-    private final static ActorService actorService = Factory.get(ActorService.class);
-    private final static ItemService itemService = Factory.get(ItemService.class);
-    private final static TaskService taskService = Factory.get(TaskService.class);
-    private final static TaskNetwork taskNetwork = Factory.get(TaskNetwork.class);
-    private final static PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
+    private final PlayService playService = Factory.get(PlayService.class);
+    private final ActorService actorService = Factory.get(ActorService.class);
+    private final ItemService itemService = Factory.get(ItemService.class);
+    private final TaskService taskService = Factory.get(TaskService.class);
+    private final TaskNetwork taskNetwork = Factory.get(TaskNetwork.class);
+    private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
 
     // 需要收集的物品
     private ItemWrap[] items;
@@ -234,7 +234,7 @@ public class CollectTask extends AbstractTask implements ActorListener {
             float ilWidth = (width - label.getWidth()) / items.length;
             for (ItemWrap iw : items) {
                 IconLabel<ItemWrap> il = new IconLabel<ItemWrap>(iw
-                        , DataLoaderFactory.createData(iw.itemId).getIcon()
+                        , DataFactory.createData(iw.itemId).getIcon()
                         , "0/" + iw.total);
                 il.setWidth(ilWidth);
                 il.setHeight(height);

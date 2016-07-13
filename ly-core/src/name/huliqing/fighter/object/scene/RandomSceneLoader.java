@@ -25,7 +25,7 @@ import name.huliqing.fighter.utils.MathUtils;
  * @author huliqing
  * @param <T>
  */
-public class RandomSceneLoader<T extends SceneData> extends SceneLoader<T> {
+public class RandomSceneLoader<T extends SceneData> extends SceneDataLoader<T> {
 
     
     @Override

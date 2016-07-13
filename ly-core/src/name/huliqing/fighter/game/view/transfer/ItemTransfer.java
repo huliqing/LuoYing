@@ -6,8 +6,8 @@ package name.huliqing.fighter.game.view.transfer;
 
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.fighter.object.DataLoaderFactory;
 import name.huliqing.fighter.data.ProtoData;
+import name.huliqing.fighter.object.DataFactory;
 
 /**
  * 数据传输基类
@@ -45,7 +45,7 @@ public class ItemTransfer implements Transfer {
     public void addData(ProtoData pd, int count) {
         ProtoData data = findData(pd.getId());
         if (data == null) {
-            data = DataLoaderFactory.createData(pd.getId());
+            data = DataFactory.createData(pd.getId());
             data.setTotal(count);
             datas.add(data);
         } else {

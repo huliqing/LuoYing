@@ -14,7 +14,7 @@ import name.huliqing.fighter.data.Proto;
  * @author huliqing
  * @param <T>
  */
-public class ModelEnvLoader<T extends ModelEnvData> extends EnvLoader<T> {
+public class ModelEnvLoader<T extends ModelEnvData> extends EnvDataLoader<T> {
 
     @Override
     public void load(Proto proto, T store) {

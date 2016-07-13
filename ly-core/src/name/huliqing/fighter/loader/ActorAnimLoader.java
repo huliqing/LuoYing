@@ -5,7 +5,7 @@
 package name.huliqing.fighter.loader;
 
 import name.huliqing.fighter.data.ActorAnimData;
-import name.huliqing.fighter.object.DataLoaderFactory;
+import name.huliqing.fighter.object.DataFactory;
 import name.huliqing.fighter.object.actoranim.ActorAnim;
 import name.huliqing.fighter.object.actoranim.ActorCurveMove;
 
@@ -25,6 +25,6 @@ class ActorAnimLoader {
     }    
     
     public static ActorAnim load(String id) {
-        return load(DataLoaderFactory.createActorAnimData(id));
+        return load((ActorAnimData) DataFactory.createData(id));
     }
 }

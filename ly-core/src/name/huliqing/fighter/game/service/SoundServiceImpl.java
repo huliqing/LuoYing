@@ -6,7 +6,7 @@
 package name.huliqing.fighter.game.service;
 
 import name.huliqing.fighter.data.SoundData;
-import name.huliqing.fighter.object.DataLoaderFactory;
+import name.huliqing.fighter.object.DataFactory;
 
 /**
  *
@@ -20,7 +20,7 @@ public class SoundServiceImpl implements SoundService {
     
     @Override
     public SoundData loadSoundData(String soundId) {
-        SoundData sd = DataLoaderFactory.createSoundData(soundId);
+        SoundData sd = DataFactory.createData(soundId);
         return sd;
     }
 
