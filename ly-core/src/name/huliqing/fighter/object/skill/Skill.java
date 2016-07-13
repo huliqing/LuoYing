@@ -8,13 +8,15 @@ import name.huliqing.fighter.constants.SkillConstants;
 import name.huliqing.fighter.data.SkillData;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.enums.SkillType;
+import name.huliqing.fighter.object.DataProcessor;
 import name.huliqing.fighter.object.channel.ChannelProcessor;
 
 /**
  * 接能接口
  * @author huliqing
+ * @param <T>
  */
-public interface Skill {
+public interface Skill<T extends SkillData> extends DataProcessor<T>{
     
     /**
      * 开始执行技能
@@ -39,21 +41,6 @@ public interface Skill {
      */
     void cleanup();
     
-    // remove20160504,不再需要这个方法，因为除了HitSkill之外，大部分技能都不需要
-    // 这个方法
-//    /**
-//     * 判断目标角色是否在当前技能的作用范围内,注意：该方法不能作为是否被击中
-//     * 的判断依据。该方法只要判断target是否在该技能的影响范围内.比如对于普
-//     * 通攻击技能，如果该方法返回true,则说明该技能可以立即执行，并且target可
-//     * 能会被击中；对于shot射击技能，如果返回true，则说明target正处于射程范
-//     * 围内。<br />
-//     * 另外需要注意的，部分模型的bound可能比较大，仅根据距离判断是否在
-//     * 作用范围内可能还不够，这可能要结合ModelBound是否交叉来判断。
-//     * @param actor
-//     * @return 
-//     */
-//    boolean isInRange(Actor target);
-    
     /**
      * 获取技能类型
      * @return 
@@ -72,6 +59,10 @@ public interface Skill {
      */
     void setActor(Actor character);
     
+    /**
+     * @deprecated use getData instead
+     * @return 
+     */
     SkillData getSkillData();
     
     /**

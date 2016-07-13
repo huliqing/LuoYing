@@ -6,15 +6,15 @@ package name.huliqing.fighter.object.resist;
 
 import java.util.List;
 import name.huliqing.fighter.data.ResistData;
+import name.huliqing.fighter.object.DataProcessor;
 
 /**
  * 角色的抗性控制，抗性决定了角色是否会接受各种各样的状态的影响．
  * 抗性可分为：抵抗和免疫，抵抗表示机会性的；而免疫表示绝对的。
  * @author huliqing
+ * @param <T>
  */
-public interface Resist {
-    
-    ResistData getResistData();
+public interface Resist<T extends ResistData> extends DataProcessor<T>{
     
     /**
      * 获取指定状态的抗性值,如果不存在指定状态的抗性设置，则返回0.

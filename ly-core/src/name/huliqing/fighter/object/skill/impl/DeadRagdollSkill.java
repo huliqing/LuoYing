@@ -12,20 +12,21 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import name.huliqing.fighter.Factory;
-import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.data.SkillData;
 import name.huliqing.fighter.game.network.ActorNetwork;
 import name.huliqing.fighter.game.service.ActorService;
 import name.huliqing.fighter.game.service.PlayService;
 import name.huliqing.fighter.game.service.StateService;
 import name.huliqing.fighter.manager.ResourceManager;
+import name.huliqing.fighter.object.skill.AbstractSkill;
 import name.huliqing.fighter.object.skill.Dead;
 
 /**
  * 执行死亡技能,该技能支持使用ragdoll模式.
  * @author huliqing
+ * @param <T>
  */
-public class DeadRagdollSkill extends SimpleSkill implements Dead{
+public class DeadRagdollSkill<T extends SkillData> extends AbstractSkill<T> implements Dead{
     private final StateService stateService = Factory.get(StateService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final PlayService playService = Factory.get(PlayService.class);
@@ -59,21 +60,20 @@ public class DeadRagdollSkill extends SimpleSkill implements Dead{
     // 角色的原始物理特性开关状态
     private boolean oldEnableState;
     
-    public DeadRagdollSkill() {}
-    
-    public DeadRagdollSkill(SkillData data) {
-       super(data);
-       this.useRagdoll = data.getProto().getAsBoolean("useRagdoll", useRagdoll);
-       this.forceOnly = data.getProto().getAsBoolean("forceOnly", forceOnly);
-       this.bones = data.getProto().getAsArray("bones");
-       this.bonesHit = data.getProto().getAsArray("bonesHit");
-       this.deadAnimPoint = data.getProto().getAsFloat("deadAnimPoint", deadAnimPoint);
-       // 如果技能没有指定useTime,则默认3秒，2秒太少，可能在开启ragdoll时，角色还没有倒下就停止了
-       Float tempUseTime = data.getProto().getAsFloat("useTime");
-       if (tempUseTime == null) {
-           this.data.setUseTime(3.0f);
-       }
-       this.lastWords = data.getProto().getAsArray("lastWords");
+    @Override
+    public void initData(T data) {
+        super.initData(data); 
+        this.useRagdoll = data.getAsBoolean("useRagdoll", useRagdoll);
+        this.forceOnly = data.getAsBoolean("forceOnly", forceOnly);
+        this.bones = data.getAsArray("bones");
+        this.bonesHit = data.getAsArray("bonesHit");
+        this.deadAnimPoint = data.getAsFloat("deadAnimPoint", deadAnimPoint);
+        // 如果技能没有指定useTime,则默认3秒，2秒太少，可能在开启ragdoll时，角色还没有倒下就停止了
+        Float tempUseTime = data.getAsFloat("useTime");
+        if (tempUseTime == null) {
+            this.data.setUseTime(3.0f);
+        }
+        this.lastWords = data.getAsArray("lastWords");
     }
 
     @Override
@@ -134,7 +134,6 @@ public class DeadRagdollSkill extends SimpleSkill implements Dead{
     
     @Override
     protected void doUpdateLogic(float tpf) {
-        super.doUpdateLogic(tpf);
         if (!deadAnimPlayed && time >= trueUseTime * deadAnimPoint) {
             playDeadAnim();
             deadAnimPlayed = true;
@@ -218,10 +217,5 @@ public class DeadRagdollSkill extends SimpleSkill implements Dead{
         actor.setEnabled(oldEnableState);
         super.cleanup();
     }
-
-//    @Override
-//    public boolean isInRange(Actor character) {
-//        return false;
-//    }
     
 }

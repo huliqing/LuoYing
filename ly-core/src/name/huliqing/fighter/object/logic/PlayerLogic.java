@@ -16,18 +16,18 @@ import name.huliqing.fighter.loader.Loader;
  * 只用于player角色的逻辑,不会有idle行为，因为不让玩角角色在停下来的时候或
  * 没有目标的时候做idle行为
  * @author huliqing
+ * @param <T>
  */
-public class PlayerLogic extends ActorLogic {
+public class PlayerLogic<T extends LogicData> extends ActorLogic<T> {
     private final ActionService actionService = Factory.get(ActionService.class);;
     private final ActorService actorService = Factory.get(ActorService.class);;
     
     protected FightAction fightAction;
     
-    public PlayerLogic() {}
-    
-    public PlayerLogic(LogicData logicData) {
-        super(logicData);
-        fightAction = (FightAction) Loader.loadAction(logicData.getProto().getAttribute("fightAction"));
+    @Override
+    public void initData(T data) {
+        super.initData(data); 
+        fightAction = (FightAction) Loader.loadAction(data.getAttribute("fightAction"));
     }
 
     public FightAction getFightAction() {

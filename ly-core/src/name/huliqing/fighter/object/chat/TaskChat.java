@@ -29,8 +29,9 @@ import name.huliqing.fighter.ui.Window;
 /**
  * 任务对话，用于玩家向NPC接任务或提交任务时的对话
  * @author huliqing
+ * @param <T>
  */
-public class TaskChat extends Chat {
+public class TaskChat<T extends ChatData> extends Chat<T> {
     private final PlayService playService = Factory.get(PlayService.class);
     private final TaskService taskService = Factory.get(TaskService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
@@ -54,16 +55,17 @@ public class TaskChat extends Chat {
         }
     }
     
-    private final String taskId;
-    private final Role role;
+    private String taskId;
+    private Role role;
     
     // ---- inner
     private TaskRequestPanel requestPanel;
     private Actor player;
     private Task task;
-    
-    public TaskChat(ChatData data) {
-        super(data);
+
+    @Override
+    public void initData(T data) {
+        super.initData(data); 
         this.taskId = data.getAttribute("task");
         this.role = Role.identify(data.getAttribute("role", Role.both.name()));
     }

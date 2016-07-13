@@ -13,8 +13,9 @@ import name.huliqing.fighter.ui.Window;
 
 /**
  * @author huliqing
+ * @param <T>
  */
-public class TimerView extends AbstractView {
+public class TimerView<T extends ViewData> extends AbstractView<T> {
 
     private String title;
     private float startTime;
@@ -31,9 +32,10 @@ public class TimerView extends AbstractView {
     private SimpleDateFormat sdf;
     private Date date;
     protected float syncTimeUsed;
-    
-    public TimerView(ViewData data) {
-        super(data);
+
+    @Override
+    public void initData(T data) {
+        super.initData(data);
         title = data.getAttribute("title", "");
         startTime = data.getAsFloat("startTime", 0);
         up = data.getAsBoolean("up", true);
@@ -52,7 +54,6 @@ public class TimerView extends AbstractView {
         win.addView(timeText);
         
         viewRoot.addView(win);
-        
     }
 
     @Override
@@ -136,8 +137,8 @@ public class TimerView extends AbstractView {
     }
 
     @Override
-    public ViewData getUpdateData() {
-        ViewData vd = super.getUpdateData(); //To change body of generated methods, choose Tools | Templates.
+    public T getUpdateData() {
+        T vd = super.getUpdateData(); //To change body of generated methods, choose Tools | Templates.
         vd.setAttribute("title", title);
         vd.setAttribute("startTime", startTime);
         vd.setAttribute("up", up);

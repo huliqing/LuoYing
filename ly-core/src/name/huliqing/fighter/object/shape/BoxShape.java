@@ -11,17 +11,19 @@ import name.huliqing.fighter.data.ShapeData;
 
 /**
  * @author huliqing
+ * @param <T>
  */
-public class BoxShape extends AbstractShape {
+public class BoxShape<T extends ShapeData> extends AbstractShape<T> {
 
     private Vector3f extents;
     
     // ---- inner
     private Box box;
-    
-    public BoxShape(ShapeData data) {
-        super(data);
-        extents = data.getProto().getAsVector3f("extents");
+
+    @Override
+    public void initData(T data) {
+        super.initData(data);
+        extents = data.getAsVector3f("extents");
     }
     
     @Override
@@ -31,5 +33,6 @@ public class BoxShape extends AbstractShape {
         }
         return box;
     }
+
     
 }

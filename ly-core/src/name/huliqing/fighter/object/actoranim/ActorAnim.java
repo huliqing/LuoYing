@@ -25,22 +25,20 @@ import name.huliqing.fighter.object.anim.AbstractAnim;
  * 1.ActorAnim anim = new ActorAnimXXX(data);
  * 2.anim.setActor(actor);
  * 3.anim.update(tpf) or actor.getModel().addControl(anim);
+ * @param <T>
  * @author huliqing
  */
-public abstract class ActorAnim extends AbstractAnim<Actor> implements Control {
-    private final static Logger logger = Logger.getLogger(ActorAnim.class.getName());
+public abstract class ActorAnim<T extends ActorAnimData> extends AbstractAnim<T, Actor> implements Control{
+    private final static Logger LOG = Logger.getLogger(ActorAnim.class.getName());
+    
     // 这个spatial最多只负责执行control,不开放给子类。
     // 当ActorAnim被添加到control列表时，这个refSpatial即为依附的对象。一般为
     // actor所在的model，在动画结束后可以将当前actorAnim从该model中释放出来,避免资源浪费
     private Spatial refSpatial;
     
-    public ActorAnim(ActorAnimData data) {
-        super(data);
-    }
-
     @Override
     public Control cloneForSpatial(Spatial spatial) {
-        logger.log(Level.WARNING, "Unsupported yet");
+        LOG.log(Level.WARNING, "Unsupported yet");
         return null;
     }
 
@@ -67,12 +65,12 @@ public abstract class ActorAnim extends AbstractAnim<Actor> implements Control {
 
     @Override
     public void write(JmeExporter ex) throws IOException {
-        logger.log(Level.WARNING, "Unsupported yet!");
+        LOG.log(Level.WARNING, "Unsupported yet!");
     }
 
     @Override
     public void read(JmeImporter im) throws IOException {
-        logger.log(Level.WARNING, "Unsupported yet!");
+        LOG.log(Level.WARNING, "Unsupported yet!");
     }
 
     @Override

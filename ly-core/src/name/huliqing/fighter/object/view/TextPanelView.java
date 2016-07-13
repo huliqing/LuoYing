@@ -12,14 +12,16 @@ import name.huliqing.fighter.ui.Window;
 /**
  * 用于显示文字信息的界面组件
  * @author huliqing
+ * @param <T>
  */
-public class TextPanelView extends TextView {
+public class TextPanelView<T extends ViewData> extends TextView<T> {
     
     private String title;
     private Window win;
-    
-    public TextPanelView(ViewData data) {
-        super(data);
+
+    @Override
+    public void initData(T data) {
+        super.initData(data); 
         title = data.getAttribute("title");
         if (title == null) {
             title = ResourceManager.getObjectName(data);
@@ -60,8 +62,8 @@ public class TextPanelView extends TextView {
     }
     
     @Override
-    public ViewData getUpdateData() {
-        ViewData vd = super.getUpdateData();
+    public T getUpdateData() {
+        T vd = super.getUpdateData();
         vd.setAttribute("title", title);
         return vd;
     }

@@ -5,24 +5,28 @@
 package name.huliqing.fighter.object.anim;
 
 import java.util.List;
+import name.huliqing.fighter.data.AnimData;
+import name.huliqing.fighter.object.DataProcessor;
 
 /**
  *
  * @author huliqing
+ * @param <T>
+ * @param <E>
  */
-public interface Anim<T>  {
+public interface Anim<T extends AnimData, E> extends DataProcessor<T>{
     
     /**
      * @see #setTarget(java.lang.Object) 
      * @return 
      */
-    T getTarget();
+    E getTarget();
     
     /**
      * 设置动画所执行的目标对象.
      * @param target 
      */
-    void setTarget(T target);
+    void setTarget(E target);
     
     /**
      * @see #setSpeed(float) 

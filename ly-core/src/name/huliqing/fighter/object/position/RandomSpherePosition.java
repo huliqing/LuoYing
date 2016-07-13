@@ -12,13 +12,15 @@ import name.huliqing.fighter.data.PositionData;
 /**
  * 圆球内的随机点
  * @author huliqing
+ * @param <T>
  */
-public final class RandomSpherePosition extends AbstractPosition {
+public final class RandomSpherePosition<T extends PositionData> extends AbstractPosition<T> {
 
     private EmitterShape shape;
     
-    public RandomSpherePosition(PositionData data) {
-        super(data);
+    @Override
+    public void initData(T data) {
+        super.initData(data);
         shape = new EmitterSphereShape(
                   data.getAsVector3f("center")
                 , data.getAsFloat("radius", 1));

@@ -23,8 +23,9 @@ import name.huliqing.fighter.game.service.ActorService;
  * 这个逻辑的频率可以不用太高.一般应该高于或等于1秒.如果需要在某一方使用多个当前逻辑,则建议最多只让其中一个逻辑的force属性
  * 设置为true就可以,避免ActorNotifyLogic之间的冲突.
  * @author huliqing
+ * @param <T>
  */
-public class NotifyLogic extends ActorLogic {
+public class NotifyLogic<T extends LogicData> extends ActorLogic<T> {
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     
@@ -35,17 +36,14 @@ public class NotifyLogic extends ActorLogic {
     // 会被重置为与当前角色目标一致的目标.
     private boolean force;
     // 临时缓存
-    private List<Actor> tempStore = new ArrayList<Actor>();
-
-    public NotifyLogic() {
-        this.interval = 1;
-    }
+    private final List<Actor> tempStore = new ArrayList<Actor>();
     
-    public NotifyLogic(LogicData data) {
-        super(data);
+    @Override
+    public void initData(T data) {
+        super.initData(data); 
         this.interval = 1;
-        this.distance = data.getProto().getAsFloat("distance", distance);
-        this.force = data.getProto().getAsBoolean("force", force);
+        this.distance = data.getAsFloat("distance", distance);
+        this.force = data.getAsBoolean("force", force);
     }
     
     @Override

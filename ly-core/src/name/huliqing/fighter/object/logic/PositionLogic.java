@@ -6,13 +6,10 @@ package name.huliqing.fighter.object.logic;
 
 import com.jme3.math.Vector3f;
 import name.huliqing.fighter.Factory;
-import name.huliqing.fighter.object.actor.Actor;
-import name.huliqing.fighter.object.action.FightAction;
 import name.huliqing.fighter.object.action.RunAction;
 import name.huliqing.fighter.data.LogicData;
 import name.huliqing.fighter.game.service.ActionService;
 import name.huliqing.fighter.game.service.ActorService;
-import name.huliqing.fighter.loader.Loader;
 
 /**
  * 必须两个行为：FightAction, RunAction
@@ -20,8 +17,9 @@ import name.huliqing.fighter.loader.Loader;
  * 1.受到敌人攻击时会和敌人战斗(不会主动查找敌人)
  * 2.没有敌人时就朝着目标前进,需要为逻辑指定一个目标地点，默认为Vector3f.ZERO
  * @author huliqing
+ * @param <T>
  */
-public class PositionLogic extends ActorLogic {
+public class PositionLogic<T extends LogicData> extends ActorLogic<T> {
     private final ActorService actorService = Factory.get(ActorService.class);;
     private final ActionService actionService = Factory.get(ActionService.class);;
     
@@ -32,9 +30,10 @@ public class PositionLogic extends ActorLogic {
     // 允许走到的最近距离
     private float nearest = 5;
     
-    public PositionLogic(LogicData data) {
-        super(data);
-        runAction = (RunAction) actionService.loadAction(data.getProto().getAttribute("runAction"));
+    @Override
+    public void initData(T data) {
+        super.initData(data); 
+        runAction = (RunAction) actionService.loadAction(data.getAttribute("runAction"));
         position.set(data.getAsVector3f("position", position));
         nearest = data.getAsFloat("nearest", nearest);
     }

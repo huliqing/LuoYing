@@ -6,6 +6,7 @@ package name.huliqing.fighter.object.task;
 
 import com.jme3.font.BitmapFont;
 import com.jme3.math.FastMath;
+import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.constants.ResConstants;
@@ -35,8 +36,9 @@ import name.huliqing.fighter.utils.MathUtils;
  * 1.打死指定的任务目标角色; 2.从任务目标身上掉落任务物品; 3.物品收集完毕后
  * 回去向指定NPC角色交任务。
  * @author huliqing
+ * @param <T>
  */
-public class CollectTask extends AbstractTask implements ActorListener {
+public class CollectTask<T extends TaskData> extends AbstractTask<T> implements ActorListener {
     private final PlayService playService = Factory.get(PlayService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final ItemService itemService = Factory.get(ItemService.class);
@@ -45,7 +47,7 @@ public class CollectTask extends AbstractTask implements ActorListener {
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
 
     // 需要收集的物品
-    private ItemWrap[] items;
+    private List<ItemWrap> items;
     // 任务目标角色id，只有打死这些角色才可能收集到物品
     private List<String> targets;
     // 物品的掉落率
@@ -56,18 +58,19 @@ public class CollectTask extends AbstractTask implements ActorListener {
     private GoldPanel goldPanel;
     // 标记是否已经收集完毕
     private boolean collected;
-    
-    public CollectTask(TaskData data) {
-        super(data);
+
+    @Override
+    public void initData(T data) {
+        super.initData(data);
         // 格式，"item1|count1,item2|count2,...",
         String[] itemsArr = data.getAsArray("items");
-        items = new ItemWrap[itemsArr.length];
+        items = new ArrayList<ItemWrap>(itemsArr.length);
         for (int i = 0; i < itemsArr.length; i++) {
             String[] itemArr  = itemsArr[i].split("\\|");
             ItemWrap iw = new ItemWrap();
             iw.itemId = itemArr[0];
             iw.total = itemArr.length > 1 ? ConvertUtils.toInteger(itemArr[1], 1) : 1;
-            items[i] = iw;
+            items.add(iw);
         }
         targets = data.getAsList("targets");
         dropFactor = MathUtils.clamp(data.getAsFloat("dropFactor", dropFactor), 0f, 1f);
@@ -231,7 +234,7 @@ public class CollectTask extends AbstractTask implements ActorListener {
             addView(label);
             
             // 目标：列出需要收集的物品及数量
-            float ilWidth = (width - label.getWidth()) / items.length;
+            float ilWidth = (width - label.getWidth()) / items.size();
             for (ItemWrap iw : items) {
                 IconLabel<ItemWrap> il = new IconLabel<ItemWrap>(iw
                         , DataFactory.createData(iw.itemId).getIcon()

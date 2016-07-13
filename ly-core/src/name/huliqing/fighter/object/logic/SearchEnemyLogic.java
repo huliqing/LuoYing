@@ -10,15 +10,15 @@ import name.huliqing.fighter.data.LogicData;
 import name.huliqing.fighter.game.network.ActorNetwork;
 import name.huliqing.fighter.game.service.ActorService;
 import name.huliqing.fighter.game.service.PlayService;
-import name.huliqing.fighter.game.service.StateService;
 
 /**
  * 逻辑：
  * 1.每隔一定时间自动搜寻可视范围内的敌人
  * 该逻辑不会有战斗行为或IDLE行为，需要和其它逻辑配合才有意义。
  * @author huliqing
+ * @param <T>
  */
-public class SearchEnemyLogic extends ActorLogic {
+public class SearchEnemyLogic<T extends LogicData> extends ActorLogic<T> {
 //    private final StateService stateService = Factory.get(StateService.class);
     private final PlayService playService = Factory.get(PlayService.class);
     private final ActorService actorService = Factory.get(ActorService.class);;
@@ -29,10 +29,9 @@ public class SearchEnemyLogic extends ActorLogic {
     private float maxInterval = 3;
     private float minInterval = 1;
 
-    public SearchEnemyLogic() {}
-    
-    public SearchEnemyLogic(LogicData data) {
-        super(data);
+    @Override
+    public void initData(T data) {
+        super.initData(data); 
         this.autoInterval = data.getProto().getAsBoolean("autoInterval", autoInterval);
         this.maxInterval = data.getProto().getAsFloat("maxInterval", maxInterval);
         this.minInterval = data.getProto().getAsFloat("minInterval", minInterval);

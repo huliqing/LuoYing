@@ -6,6 +6,8 @@ package name.huliqing.fighter.object.view;
 
 import com.jme3.app.Application;
 import com.jme3.math.Vector3f;
+import java.util.ArrayList;
+import java.util.List;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.ViewData;
 import name.huliqing.fighter.game.network.PlayNetwork;
@@ -23,13 +25,14 @@ import name.huliqing.fighter.utils.ConvertUtils;
 /**
  * View的基类
  * @author huliqing
+ * @param <T>
  */
-public abstract class AbstractView extends AbstractPlayObject implements View, NetworkObject {
+public abstract class AbstractView<T extends ViewData> extends AbstractPlayObject implements View<T>, NetworkObject {
 
     private final PlayService playService = Factory.get(PlayService.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     
-    protected ViewData data;
+    protected T data;
     
     // View的展示时间,如果为小于或等于0的值则永不停止。
     protected float useTime;
@@ -44,7 +47,7 @@ public abstract class AbstractView extends AbstractPlayObject implements View, N
     // 角落位置,与fixPosition只能取一个
     protected Corner cornerPosition;
     // View的动画id
-    private AnimWrap[] animations;
+    private List<AnimWrap> animations;
     
     // ---- inner
     protected LinearLayout viewRoot;
@@ -52,7 +55,8 @@ public abstract class AbstractView extends AbstractPlayObject implements View, N
     protected final SyncData syncData = new SyncData();
     protected boolean enabled = true;
     
-    public AbstractView(ViewData data) {
+    @Override
+    public void initData(T data) {
         this.data = data;
         float sw = playService.getScreenWidth();
         float sh = playService.getScreenHeight();
@@ -91,7 +95,7 @@ public abstract class AbstractView extends AbstractPlayObject implements View, N
         // Format: "animation|timePoint,animation|timePoint,..."
         String[] tempAnims = data.getAsArray("animations");
         if (tempAnims != null) {
-            this.animations = new AnimWrap[tempAnims.length];
+            this.animations = new ArrayList<AnimWrap>(tempAnims.length);
             for (int i = 0; i < tempAnims.length; i++) {
                 String[] taArr = tempAnims[i].split("\\|");
                 AnimWrap aw = new AnimWrap();
@@ -99,18 +103,18 @@ public abstract class AbstractView extends AbstractPlayObject implements View, N
                 if (taArr.length > 1) {
                     aw.timeStart = ConvertUtils.toFloat(taArr[1], 0);
                 }
-                this.animations[i] = aw;
+                this.animations.add(aw);
             }
         }
     }
-        
+    
     @Override
-    public ViewData getData() {
+    public T getData() {
         return data;
     }
-
+    
     @Override
-    public ViewData getUpdateData() {
+    public T getUpdateData() {
         data.setAttribute("enabled", enabled);
         data.setAttribute("timeUsed", timeUsed);
         data.setAttribute("useTime", useTime);

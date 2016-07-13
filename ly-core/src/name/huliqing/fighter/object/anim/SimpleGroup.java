@@ -13,9 +13,10 @@ import name.huliqing.fighter.data.AnimData;
 /**
  * 简单的动画组,该组允许指定子动画在什么插值点开始执行，在子动画启动后，当
  * 前插值点即不再影响子动画的插值。当子动画全部结束后，当前动画才算完全结束。
+ * @param <T>
  * @author huliqing
  */
-public final class SimpleGroup extends AbstractAnim {
+public final class SimpleGroup<T extends AnimData, E> extends AbstractAnim<T, E> {
     private final static Logger logger = Logger.getLogger(SimpleGroup.class.getName());
     private List<AnimWrap> anims = new ArrayList<AnimWrap>();
     
@@ -24,11 +25,6 @@ public final class SimpleGroup extends AbstractAnim {
     
     public SimpleGroup() {
         super();
-        this.loop = Loop.loop;
-    }
-    
-    public SimpleGroup(AnimData data) {
-        super(data);
         this.loop = Loop.loop;
     }
 
@@ -42,8 +38,8 @@ public final class SimpleGroup extends AbstractAnim {
     /**
      * 添加一个子动画，并指定子动画在哪一个插值点开始执行。如果一开始就执行，
      * 则设置startAtInterpolation=0
-     * @param anim
-     * @param startAtInterpolation 
+     * @param anim 
+     * @param startInterpolation 
      */
     public void addAnimation(Anim anim, float startInterpolation) {
         anims.add(new AnimWrap(anim, startInterpolation));

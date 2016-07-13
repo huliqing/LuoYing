@@ -7,18 +7,19 @@ package name.huliqing.fighter.object.skill.impl;
 import com.jme3.animation.LoopMode;
 import com.jme3.math.Vector3f;
 import name.huliqing.fighter.Factory;
-import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.data.SkillData;
 import name.huliqing.fighter.game.service.ConfigService;
 import name.huliqing.fighter.game.state.lan.Network;
+import name.huliqing.fighter.object.skill.AbstractSkill;
 import name.huliqing.fighter.object.skill.Walk;
 
 /**
  * 行路的技能
  * @see RunSkill
  * @author huliqing
+ * @param <T>
  */
-public class WalkSkill extends SimpleSkill implements Walk{
+public class WalkSkill<T extends SkillData> extends AbstractSkill<T> implements Walk{
     private final ConfigService configService = Factory.get(ConfigService.class);
     
     // 步行或跑步循环动画的播放速度。
@@ -28,11 +29,10 @@ public class WalkSkill extends SimpleSkill implements Walk{
     
     protected final Vector3f walkDirection = new Vector3f();
     protected final Vector3f viewDirection = new Vector3f();
-    
-    public WalkSkill() {}
 
-    public WalkSkill(SkillData data) {
-        super(data);
+    @Override
+    public void initData(T data) {
+        super.initData(data);
         animSpeed = data.getAsFloat("animSpeed", animSpeed);
         baseSpeed = data.getAsFloat("baseSpeed", configService.getBaseWalkSpeed());
     }

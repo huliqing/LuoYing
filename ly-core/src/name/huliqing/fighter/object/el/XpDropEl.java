@@ -12,15 +12,12 @@ import name.huliqing.fighter.utils.ConvertUtils;
 /**
  * XP奖励公式。
  * @author huliqing
+ * @param <T>
  */
-public class XpDropEl extends AbstractEl {
+public class XpDropEl<T extends ElData> extends AbstractEl<T> {
     
     // key = param
     private final Map<String, Object> valueMap = new HashMap<String, Object>(2);
-
-    public XpDropEl(ElData data) {
-        super(data);
-    }
 
     /**
      * 获取经验奖励

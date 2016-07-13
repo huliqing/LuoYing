@@ -25,13 +25,14 @@ import name.huliqing.fighter.object.shape.Shape;
 /**
  * 子弹基类
  * @author huliqing
+ * @param <T>
  */
-public abstract class AbstractBullet extends Node implements Bullet {
+public abstract class AbstractBullet<T extends BulletData> extends Node implements Bullet<T> {
     private static final Logger LOG = Logger.getLogger(AbstractBullet.class.getName());
     private final PlayService playService = Factory.get(PlayService.class);
     private final EffectService effectService = Factory.get(EffectService.class);
     
-    protected BulletData data;
+    protected T data;
     
     // 调试
     protected boolean debug;
@@ -72,8 +73,9 @@ public abstract class AbstractBullet extends Node implements Bullet {
     
     // ---- inner
     private List<Effect> tempEffects;
-    
-    public AbstractBullet(BulletData data) {
+
+    @Override
+    public void initData(T data) {
         this.data = data;
         this.debug = data.getAsBoolean("debug", debug);
         this.shape = Loader.loadShape(data.getAttribute("shape"));
@@ -104,7 +106,7 @@ public abstract class AbstractBullet extends Node implements Bullet {
     }
     
     @Override
-    public BulletData getData() {
+    public T getData() {
         return data;
     }
 

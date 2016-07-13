@@ -31,8 +31,9 @@ import name.huliqing.fighter.object.skill.impl.ShotSkill;
 /**
  * 防守逻辑
  * @author huliqing
+ * @param <T>
  */
-public class DefendLogic extends ActorLogic implements SkillListener, ActorListener {
+public class DefendLogic<T extends LogicData> extends ActorLogic<T> implements SkillListener, ActorListener {
     private static final Logger LOG = Logger.getLogger(DefendLogic.class.getName());
     
     private final PlayService playService = Factory.get(PlayService.class);
@@ -55,9 +56,10 @@ public class DefendLogic extends ActorLogic implements SkillListener, ActorListe
     // 判断是否有可用的技能进行防守
     private boolean hasUsableSkill = true;
     
-    public DefendLogic(LogicData data) {
-        super(data);
-        interval = 10; // 逻辑不需要频繁
+    @Override
+    public void initData(T data) {
+        super.initData(data); 
+        interval = 10; 
         defendRateAttribute = data.getAttribute("defendRateAttribute");
         duckRateAttribute = data.getAttribute("duckRateAttribute");
         listenAttributes = Arrays.asList(data.getAsArray("listenAttributes"));

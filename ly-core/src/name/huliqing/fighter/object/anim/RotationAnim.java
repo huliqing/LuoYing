@@ -11,9 +11,10 @@ import com.jme3.util.TempVars;
 import name.huliqing.fighter.data.AnimData;
 
 /**
+ * @param <T>
  * @author huliqing
  */
-public final class RotationAnim extends SpatialAnim {
+public final class RotationAnim<T extends AnimData> extends SpatialAnim<T> {
 //    private final static Logger logger = Logger.getLogger(RotationAnim.class.getName());
     
     // 旋转
@@ -25,21 +26,22 @@ public final class RotationAnim extends SpatialAnim {
     
     // 当动画结束后是否复原旋转位置
     private boolean restore;
-    private Quaternion origin = new Quaternion();
+    private final Quaternion origin = new Quaternion();
     
     public RotationAnim() {
         super();
     }
     
-    public RotationAnim(AnimData data) {
-        super(data);
-        this.axis = data.getProto().getAsVector3f("axis", axis);
-        Float degree = data.getProto().getAsFloat("degree");
+    @Override
+    public void initData(T data) {
+        super.initData(data);
+        this.axis = data.getAsVector3f("axis", axis);
+        Float degree = data.getAsFloat("degree");
         if (degree != null) {
             angle = degree * FastMath.DEG_TO_RAD;
         }
-        this.invert = data.getProto().getAsBoolean("invert", invert);
-        this.restore = data.getProto().getAsBoolean("restore", restore);
+        this.invert = data.getAsBoolean("invert", invert);
+        this.restore = data.getAsBoolean("restore", restore);
     }
 
     /**

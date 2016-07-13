@@ -33,7 +33,7 @@ import name.huliqing.fighter.enums.DataType;
 import name.huliqing.fighter.enums.Sex;
 import name.huliqing.fighter.game.dao.ItemDao;
 import name.huliqing.fighter.manager.talk.Talk;
-import name.huliqing.fighter.loader.ActorModelLoader;
+import name.huliqing.fighter.object.actor.ActorModelLoader;
 import name.huliqing.fighter.loader.Loader;
 import name.huliqing.fighter.enums.SkillType;
 import name.huliqing.fighter.manager.ResourceManager;
@@ -580,7 +580,7 @@ public class ActorServiceImpl implements ActorService {
         if (attributeMap != null) {
             LevelEl levelEl;
             for (AttributeData attrData : attributeMap.values()) {
-                levelEl = (LevelEl) Loader.loadEl(attrData.getEl());
+                levelEl = (LevelEl) elService.getEl(attrData.getEl());
                 attrData.setLevelValue((float)levelEl.getValue(actorData.getLevel()));
                 attrData.setDynamicValue(attrData.getMaxValue());
 //                if (Config.debug) {
@@ -625,7 +625,7 @@ public class ActorServiceImpl implements ActorService {
         tv.array2[0] = 0;   // upCount 可以升多少级
         tv.array2[1] = 0;   // needXp 需要多少XP
         ActorData actorData = actor.getData();
-        LevelEl levelEl = (LevelEl) Loader.loadEl(actorData.getLevelUpEl());
+        LevelEl levelEl = (LevelEl) elService.getEl(actorData.getLevelUpEl());
         checkLevelUp(levelEl, actorData.getLevel(), actorData.getXp(), tv.array2, configService.getMaxLevel());
         int upCount = tv.array2[0];
         int needXp = tv.array2[1];
@@ -677,7 +677,7 @@ public class ActorServiceImpl implements ActorService {
     public int getNextLevelXp(Actor actor) {
         String levelUpEl = actor.getData().getLevelUpEl();
         if (levelUpEl != null) {
-            LevelEl el = (LevelEl) Loader.loadEl(actor.getData().getLevelUpEl());
+            LevelEl el = (LevelEl) elService.getEl(actor.getData().getLevelUpEl());
             return (int) el.getValue(actor.getData().getLevel() + 1);
         }
         return 0;

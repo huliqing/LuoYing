@@ -4,7 +4,6 @@
  */
 package name.huliqing.fighter.object.skill.impl;
 
-import com.jme3.animation.LoopMode;
 import com.jme3.math.Vector3f;
 import com.jme3.util.TempVars;
 import java.util.List;
@@ -26,8 +25,9 @@ import name.huliqing.fighter.object.skill.PointChecker;
  * 普通攻击技能,会根据damagePoint计算任害值等.主要用于近战类攻击
  *
  * @author huliqing
+ * @param <T>
  */
-public class AttackSkill extends HitSkill {
+public class AttackSkill<T extends SkillData> extends HitSkill<T> {
     private final PlayService playService = Factory.get(PlayService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final StateService stateService = Factory.get(StateService.class);
@@ -50,11 +50,11 @@ public class AttackSkill extends HitSkill {
     // 实际的攻击技能检测点，这个会受cutTime的影响，如果cutTime都为0,则该参数
     // 应该完全与checkPoint一致。
     protected float[] trueCheckPoint;
-    
-    public AttackSkill(SkillData data) {
-        super(data);
+
+    @Override
+    public void initData(T data) {
+        super.initData(data); 
         multHit = data.getAsBoolean("multHit", multHit);
-        
         checkPoint = data.getAsFloatArray("checkPoint");
         defendable = data.getAsBoolean("defendable", defendable);
         collisionOffset = data.getAsVector3f("collisionOffset", collisionOffset);
@@ -90,7 +90,7 @@ public class AttackSkill extends HitSkill {
     
     /**
      * 伤害检测
-     * @param damagePoint 时间点,值为(0~1)之间
+     * @param checkPointIndex
      */
     protected void processCheckPoint(int checkPointIndex) {
         boolean skillDefendable = isDefendable();

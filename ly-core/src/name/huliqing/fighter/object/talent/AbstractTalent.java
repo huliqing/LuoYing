@@ -4,35 +4,34 @@
  */
 package name.huliqing.fighter.object.talent;
 
-import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.TalentData;
-import name.huliqing.fighter.game.service.ElService;
 import name.huliqing.fighter.object.actor.Actor;
 
 /**
  *
  * @author huliqing
+ * @param <T>
  */
-public abstract class AbstractTalent implements Talent {
+public abstract class AbstractTalent<T extends TalentData> implements Talent<T> {
 //    private final static ElService elService = Factory.get(ElService.class);
     
-    protected TalentData data;
+    protected T data;
     protected Actor actor;
-    
     private float timeUsed;
-    
-    public AbstractTalent(TalentData data) {
+
+    @Override
+    public void initData(T data) {
         this.data = data;
+    }
+    
+    @Override
+    public T getData() {
+        return data;
     }
 
     @Override
     public void setActor(Actor actor) {
         this.actor = actor;
-    }
-    
-    @Override
-    public TalentData getData() {
-        return data;
     }
 
     @Override

@@ -13,12 +13,13 @@ import name.huliqing.fighter.utils.MathUtils;
 
 /**
  * 随机旋转动画.
+ * @param <T>
  * @author huliqing
  */
-public final class RandomRotationAnim extends SpatialAnim {
+public final class RandomRotationAnim<T extends AnimData> extends SpatialAnim<T> {
     
     // 开始旋转
-    private Quaternion startRotation = new Quaternion();
+    private final Quaternion startRotation = new Quaternion();
     // 结束旋转，每次旋转完成后都会进行随机改变
     private Quaternion endRotation = new Quaternion();
     // 随机旋转的最小和最大弧度度
@@ -26,23 +27,10 @@ public final class RandomRotationAnim extends SpatialAnim {
     private float maxAngle = FastMath.TWO_PI;
     // 旋转轴，如果没有指定这个旋转轴，则使用随机旋转轴
     private Vector3f axis;
-    
-    public RandomRotationAnim() {
-        super();
-    }
 
-    public RandomRotationAnim(AnimData data) {
-        super(data);
-        
-        // remove20160408
-//        Float tempMinDegree = data.getAsFloat("minDegree");
-//        Float tempMaxDegree = data.getAsFloat("maxDegree");
-//        if (tempMinDegree != null) {
-//            this.minAngle = tempMinDegree * FastMath.DEG_TO_RAD;
-//        }
-//        if (tempMaxDegree != null) {
-//            this.maxAngle = tempMaxDegree * FastMath.DEG_TO_RAD;
-//        }
+    @Override
+    public void initData(T data) {
+        super.initData(data);
         
         // 在xml的配置上是角度，需要转为弧度
         minAngle = data.getAsFloat("minDegree", 0) * FastMath.DEG_TO_RAD;

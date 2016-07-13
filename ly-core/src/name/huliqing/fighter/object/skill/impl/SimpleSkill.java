@@ -10,14 +10,9 @@ import name.huliqing.fighter.object.skill.AbstractSkill;
 /**
  *
  * @author huliqing
+ * @param <T>
  */
-public class SimpleSkill extends AbstractSkill {
-
-    public SimpleSkill() {}
-    
-    public SimpleSkill(SkillData data) {
-       super(data);
-    }
+public class SimpleSkill<T extends SkillData> extends AbstractSkill<T> {
 
     @Override
     protected void doUpdateLogic(float tpf) {}

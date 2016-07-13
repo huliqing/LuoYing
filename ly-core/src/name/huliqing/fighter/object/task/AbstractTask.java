@@ -5,6 +5,7 @@
 package name.huliqing.fighter.object.task;
 
 import com.jme3.font.BitmapFont;
+import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.constants.InterfaceConstants;
@@ -28,42 +29,43 @@ import name.huliqing.fighter.utils.ConvertUtils;
 /**
  *
  * @author huliqing
+ * @param <T>
  */
-public abstract class AbstractTask implements Task {
+public abstract class AbstractTask<T extends TaskData> implements Task<T> {
     private final PlayService playService = Factory.get(PlayService.class);
-    private final ActorNetwork atorNetwork = Factory.get(ActorNetwork.class);
-//    private final static ItemNetwork itemNetwork = Factory.get(ItemNetwork.class);
-    private final ProtoNetwork protoNetwork = Factory.get(ProtoNetwork.class);
     private final ProtoService protoService = Factory.get(ProtoService.class);
+    private final ActorNetwork atorNetwork = Factory.get(ActorNetwork.class);
+    private final ProtoNetwork protoNetwork = Factory.get(ProtoNetwork.class);
 
-    protected TaskData data;
+    protected T data;
     protected Actor actor;
     
     protected int rewardExp;
-    protected RewardItem[] rewardItems;
+    protected List<RewardItem> rewardItems;
     
     // ---- inner
     protected Window detailWin;
-    
-    public AbstractTask(TaskData data) {
+
+    @Override
+    public void initData(T data) {
         this.data = data;
         this.rewardExp = data.getAsInteger("rewardExp", 0);
         // "item1|count1,item2|count2,..."
         String[] rewardItemsArr = data.getAsArray("rewardItems");
         if (rewardItemsArr != null) {
-            rewardItems = new RewardItem[rewardItemsArr.length];
+            rewardItems = new ArrayList<RewardItem>(rewardItemsArr.length);
             for (int i = 0; i < rewardItemsArr.length; i++) {
                 String[] tempArr = rewardItemsArr[i].split("\\|");
                 RewardItem ri = new RewardItem();
                 ri.itemId = tempArr[0];
                 ri.count = tempArr.length > 1 ? ConvertUtils.toInteger(tempArr[1], 1) : 1;
-                rewardItems[i] = ri;
+                rewardItems.add(ri);
             }
         }
     }
 
     @Override
-    public TaskData getData() {
+    public T getData() {
         return data;
     }
 
@@ -91,7 +93,6 @@ public abstract class AbstractTask implements Task {
         // 奖励物品
         if (rewardItems != null) {
             for (RewardItem ri : rewardItems) {
-//                itemNetwork.addItem(actor, ri.itemId, ri.count);
                 protoNetwork.addData(actor, protoService.createData(ri.itemId), ri.count);
             }
         }
@@ -110,7 +111,7 @@ public abstract class AbstractTask implements Task {
     }
 
     // 奖励的物品及数量
-    private class RewardItem {
+    protected class RewardItem {
         String itemId;
         int count;
     }

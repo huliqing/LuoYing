@@ -7,15 +7,15 @@ package name.huliqing.fighter.object.skill.impl;
 import com.jme3.animation.LoopMode;
 import com.jme3.math.FastMath;
 import name.huliqing.fighter.data.SkillData;
-import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.object.skill.AbstractSkill;
 
 /**
  * 这个技能可以允许使用角色动画中的任何一侦作为角色的reset状态．当某些角色
  * 没有可用的reset动画时可以使用这个技能来代替．
  * @author huliqing
+ * @param <T>
  */
-public class ResetSkill extends AbstractSkill {
+public class ResetSkill<T extends SkillData> extends AbstractSkill<T> {
     
     /**
      * 指定要把角色动画定格在animation动画的哪一帧上，
@@ -23,10 +23,9 @@ public class ResetSkill extends AbstractSkill {
      */
     private float timePoint;
 
-    public ResetSkill() {}
-
-    public ResetSkill(SkillData data) {
-        super(data);
+    @Override
+    public void initData(T data) {
+        super.initData(data); 
         timePoint = FastMath.clamp(data.getAsFloat("timePoint", timePoint), 0, 1.0f);
     }
 
@@ -50,10 +49,5 @@ public class ResetSkill extends AbstractSkill {
     @Override
     protected void doUpdateLogic(float tpf) {
     }
-
-//    @Override
-//    public boolean isInRange(Actor target) {
-//        return false;
-//    }
     
 }

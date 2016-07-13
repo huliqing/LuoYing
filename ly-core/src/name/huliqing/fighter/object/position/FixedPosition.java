@@ -10,13 +10,15 @@ import name.huliqing.fighter.data.PositionData;
 /**
  * 固定点
  * @author huliqing
+ * @param <T>
  */
-public class FixedPosition extends AbstractPosition {
+public class FixedPosition<T extends PositionData> extends AbstractPosition<T> {
 
     private Vector3f pos;
-    
-    public FixedPosition(PositionData data) {
-        super(data);
+
+    @Override
+    public void initData(T data) {
+        super.initData(data); 
         this.pos = data.getAsVector3f("point");
     }
 

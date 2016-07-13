@@ -13,8 +13,9 @@ import name.huliqing.fighter.object.action.Action;
 /**
  *
  * @author huliqing
+ * @param <T>
  */
-public class IdleLogic extends ActorLogic {
+public class IdleLogic<T extends LogicData> extends ActorLogic<T> {
     
     private final ActionService actionService = Factory.get(ActionService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
@@ -24,8 +25,9 @@ public class IdleLogic extends ActorLogic {
     // 巡逻行为，在一个地方走来走去
     private Action idlePatrolAction;
 
-    public IdleLogic(LogicData data) {
-        super(data);
+    @Override
+    public void initData(T data) {
+        super.initData(data); 
         this.idleSimpleAction = actionService.loadAction(data.getAttribute("idleSimpleAction"));
         this.idlePatrolAction = actionService.loadAction(data.getAttribute("idlePatrolAction"));
     }

@@ -4,18 +4,13 @@
  */
 package name.huliqing.fighter.object.channel;
 
-import com.jme3.animation.AnimControl;
 import name.huliqing.fighter.data.ChannelData;
 
 /**
  *
  * @author huliqing
+ * @param <T>
  */
-public class SimpleChannel extends AbstractChannel {
-    
-    public SimpleChannel(ChannelData data, AnimControl ac) {
-        super(data, ac);
-    }
-
-    
+public class SimpleChannel<T extends ChannelData> extends AbstractChannel<T> {
+  
 }

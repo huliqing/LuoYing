@@ -9,13 +9,20 @@ import name.huliqing.fighter.data.PositionData;
 /**
  *
  * @author huliqing
+ * @param <T>
  */
-public abstract class AbstractPosition implements Position {
+public abstract class AbstractPosition<T extends PositionData> implements Position<T> {
 
-    protected PositionData data;
+    protected T data;
 
-    public AbstractPosition(PositionData data) {
+    @Override
+    public void initData(T data) {
         this.data = data;
+    }
+
+    @Override
+    public T getData() {
+        return data;
     }
     
 }

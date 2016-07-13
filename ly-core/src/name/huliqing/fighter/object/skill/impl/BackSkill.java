@@ -9,16 +9,17 @@ import com.jme3.scene.Spatial;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.fighter.Factory;
-import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.data.SkillData;
 import name.huliqing.fighter.game.network.PlayNetwork;
 import name.huliqing.fighter.game.state.lan.Network;
+import name.huliqing.fighter.object.skill.AbstractSkill;
 
 /**
  * 回城、瞬移技能
  * @author huliqing
+ * @param <T>
  */
-public class BackSkill extends SimpleSkill {
+public class BackSkill<T extends SkillData> extends AbstractSkill<T> {
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     
     // 人物消失的时间插值点
@@ -31,10 +32,9 @@ public class BackSkill extends SimpleSkill {
     // 标记是否已经完成回传
     private boolean backed;
     
-    public BackSkill() {}
-    
-    public BackSkill(SkillData data) {
-        super(data);
+    @Override
+    public void initData(T data) {
+        super.initData(data); 
         this.backPoint = data.getAsFloat("backPoint", backPoint);
     }
 
@@ -53,7 +53,6 @@ public class BackSkill extends SimpleSkill {
 
     @Override
     protected void doUpdateLogic(float tpf) {
-        super.doUpdateLogic(tpf);
         if (!backed && time >= trueUseTime * backPoint) {
             // 注意：因为涉及到随机传送，所以必须统一由服务端处理。use Network
             Vector3f loc = actor.getModel().getLocalTranslation();
@@ -86,10 +85,5 @@ public class BackSkill extends SimpleSkill {
         
         super.cleanup();
     }
-
-//    @Override
-//    public boolean isInRange(Actor actor) {
-//        return false;
-//    }
     
 }

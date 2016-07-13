@@ -7,27 +7,44 @@ package name.huliqing.fighter.object.channel;
 import com.jme3.animation.AnimChannel;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.LoopMode;
-import com.jme3.math.FastMath;
 import name.huliqing.fighter.data.ChannelData;
 
 /**
  * 用于封装JME3的动画通道
  * @author huliqing
+ * @param <T>
  */
-public abstract class AbstractChannel implements Channel{
+public abstract class AbstractChannel <T extends ChannelData> implements Channel <T> {
     
-    protected ChannelData data;
+    protected T data;
     // 动画通道是否被锁定
     protected boolean locked;
     // 动画控制器
     protected AnimControl animControl;
     // JME的原始动画通道
     protected AnimChannel animChannel;
+        
+    // remove20160713
+//    public AbstractChannel(AnimControl animControl) {
+//        this.data = data;
+//        this.animControl = animControl;
+//        this.animChannel = createAnimChannel(data, animControl);
+//    }
     
-    public AbstractChannel(ChannelData data, AnimControl animControl) {
+    @Override
+    public void initData(T data) {
         this.data = data;
+    }
+
+    @Override
+    public T getData() {
+        return data;
+    }
+    
+    @Override
+    public void setAnimControl(AnimControl animControl) {
         this.animControl = animControl;
-        this.animChannel = createAnimChannel(data, animControl);
+        this.animChannel = createAnimChannel(this.data, this.animControl);
     }
 
     @Override
@@ -109,6 +126,8 @@ public abstract class AbstractChannel implements Channel{
 
     /**
      * 创建一个AnimChannel
+     * @param channelData
+     * @param ac
      * @return 
      */
     protected final AnimChannel createAnimChannel(ChannelData channelData, AnimControl ac) {

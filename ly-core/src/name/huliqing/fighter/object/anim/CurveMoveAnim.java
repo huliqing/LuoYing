@@ -8,6 +8,7 @@ import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Spline;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Spatial;
 import com.jme3.util.TempVars;
 import java.util.Arrays;
 import java.util.List;
@@ -18,8 +19,9 @@ import name.huliqing.fighter.utils.DebugDynamicUtils;
 /**
  *
  * @author huliqing
+ * @param <T>
  */
-public final class CurveMoveAnim extends SpatialAnim {
+public final class CurveMoveAnim<T extends AnimData> extends SpatialAnim<T> {
     
     // 是否自动跟随路径朝向
     private boolean facePath;
@@ -37,8 +39,9 @@ public final class CurveMoveAnim extends SpatialAnim {
         super();
     }
 
-    public CurveMoveAnim(AnimData data) {
-        super(data);
+    @Override
+    public void initData(T data) {
+        super.initData(data);
         // 路径点
         String[] positions = data.getAsArray("waypoints");
         Vector3f[] waypoints = new Vector3f[positions.length];

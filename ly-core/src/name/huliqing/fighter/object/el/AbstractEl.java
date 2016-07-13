@@ -12,7 +12,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import name.huliqing.fighter.Config;
 import name.huliqing.fighter.data.ElData;
 import name.huliqing.fighter.loader.data.ObjectLoader;
 import org.mozilla.javascript.Context;
@@ -23,27 +22,29 @@ import org.mozilla.javascript.Scriptable;
  * 关于Rhino的相关资料参考：
  * https://developer.mozilla.org/en-US/docs/Mozilla/Projects/Rhino/Scopes_and_Contexts
  * @author huliqing
+ * @param <T>
  */
-public class AbstractEl implements El{
+public class AbstractEl<T extends ElData> implements El<T> {
     private static final Logger LOG = Logger.getLogger(AbstractEl.class.getName());
     // scriptable性能开销太大，需要在多线程中共享
     private static Scriptable jsShareScope;
     
     protected final static String PARAM_PATTERN = "\\{.+?\\}";
-    protected ElData data;
+    protected T data;
     // 去除了参数符号和参数中的空格后的紧凑的表达式。
     // 注：表达式中的其它部分仍保留空格,因为其它部分有可能包含字符串常量，其中可能包含正常的空白间隔
     protected String expResult;
     // 在表达式中提取出来的所有参数，不重复，不包含"[]"符号和空格
     protected Set<String> params = new LinkedHashSet<String>();
 
-    public AbstractEl(ElData data) {
+    @Override
+    public void initData(T data) {
         this.data = data;
         decode();
     }
-
+    
     @Override
-    public ElData getData() {
+    public T getData() {
         return data;
     }
     
@@ -120,20 +121,11 @@ public class AbstractEl implements El{
                 }
                 scope.put(param, scope, value);
             }
-            
-//            if (Config.debug) {
-//                for (String param : params) {
-//                    LOG.log(Level.INFO, "scope, {0}={1}", new Object[] {param, scope.get(param, scope)});
-//                }
-//            }
             String strResult = cx.evaluateString(scope, evalStr, "evalValue", 0, null).toString();
             return strResult;
         } catch (Exception e) {
             LOG.log(Level.SEVERE, "Could not evalValue, evalStr={0}, error={1}"
                     , new Object[] {evalStr, e.getMessage()});
-            if (Config.debug) {
-                e.printStackTrace();
-            }
             return null;
         }
     }
@@ -141,7 +133,8 @@ public class AbstractEl implements El{
     public static void main(String[] args) {
         ElData data = new ElData();
         data.setExpression("[s_attributeHealth] + 5 + [t_attributeDefence]");
-        AbstractEl ae = new AbstractEl(data);
+        AbstractEl ae = new AbstractEl();
+        ae.initData(data);
         
         Map<String, Object> vmap = new HashMap<String, Object>();
         vmap.put("s_attributeHealth", 4);

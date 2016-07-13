@@ -4,20 +4,16 @@
  */
 package name.huliqing.fighter.object.skill.impl;
 
-import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.data.SkillData;
+import name.huliqing.fighter.object.skill.AbstractSkill;
 
 /**
  * 执行角色受伤技能.
  * @author huliqing
+ * @param <T>
  */
-public class HurtSkill extends SimpleSkill {
+public class HurtSkill<T extends SkillData> extends AbstractSkill<T> {
 
-    public HurtSkill() {}
-    
-    public HurtSkill(SkillData skillData) {
-       super(skillData);
-    }
     
     @Override
     public void init() {
@@ -30,9 +26,9 @@ public class HurtSkill extends SimpleSkill {
         }
     }
 
-//    @Override
-//    public boolean isInRange(Actor actor) {
-//        return false;
-//    }
+    @Override
+    protected void doUpdateLogic(float tpf) {
+        // ignore
+    }
     
 }

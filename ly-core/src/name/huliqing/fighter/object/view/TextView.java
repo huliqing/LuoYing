@@ -16,14 +16,15 @@ import name.huliqing.fighter.ui.UIFactory;
 /**
  * 用于显示文字信息的界面组件
  * @author huliqing
+ * @param <T>
  */
-public class TextView extends AbstractView {
-//    private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
+public class TextView<T extends ViewData> extends AbstractView<T> {
     
     protected Text textUI;
-    
-    public TextView(ViewData data) {
-        super(data);
+
+    @Override
+    public void initData(T data) {
+        super.initData(data); 
         String text = data.getAttribute("text");
         String textKey = data.getAttribute("textKey");
         ColorRGBA color = data.getAsColor("fontColor");
@@ -98,8 +99,8 @@ public class TextView extends AbstractView {
     }
 
     @Override
-    public ViewData getUpdateData() {
-        ViewData vd = super.getUpdateData();
+    public T getUpdateData() {
+        T vd = super.getUpdateData();
         vd.setAttribute("text", textUI.getText());
         return vd;
     }

@@ -39,8 +39,9 @@ import name.huliqing.fighter.utils.MathUtils;
 /**
  * 出售物品到商店类角色
  * @author huliqing
+ * @param <T>
  */
-public class SellChat extends Chat {
+public class SellChat<T extends ChatData> extends Chat<T> {
     private final ItemService itemService = Factory.get(ItemService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final SkinService skinService = Factory.get(SkinService.class);
@@ -51,7 +52,6 @@ public class SellChat extends Chat {
     private float discount = 1f;
     
     // ---- inner
-    private boolean init;
     private Window win;
     private LinearLayout bodyPanel;
     private TransferPanel sourcePanel;  // 玩家物品面板,显示角色已经有的物品
@@ -61,12 +61,11 @@ public class SellChat extends Chat {
     
     // 出售者角色，一般为Player.
     private Actor seller;
-    
-    public SellChat(ChatData data) {
-        super(data);
+
+    @Override
+    public void initData(T data) {
+        super.initData(data); 
         discount = data.getAsFloat("discount", discount);
-        
-        // remove20160323,不要在这里初始化UI，只要在initialize()时再初始化即可。
     }
 
     @Override

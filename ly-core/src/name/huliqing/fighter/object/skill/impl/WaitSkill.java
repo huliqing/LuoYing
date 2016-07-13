@@ -4,21 +4,16 @@
  */
 package name.huliqing.fighter.object.skill.impl;
 
-import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.data.SkillData;
 import name.huliqing.fighter.object.skill.AbstractSkill;
 
 /**
  * 让角色“等待”的技能
  * @author huliqing
+ * @param <T>
  */
-public class WaitSkill extends AbstractSkill {
+public class WaitSkill<T extends SkillData> extends AbstractSkill<T> {
     
-    public WaitSkill() {}
-
-    public WaitSkill(SkillData data) {
-        super(data);
-    }
 
     @Override
     protected void init() {
@@ -34,11 +29,6 @@ public class WaitSkill extends AbstractSkill {
     @Override
     protected void doUpdateLogic(float tpf) {
     }
-
-//    @Override
-//    public boolean isInRange(Actor actor) {
-//        return false;
-//    }
 
     
 }

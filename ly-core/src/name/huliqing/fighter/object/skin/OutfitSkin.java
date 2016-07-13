@@ -9,11 +9,8 @@ import name.huliqing.fighter.data.SkinData;
 /**
  * 简单的皮肤，装备处理器
  * @author huliqing
+ * @param <T>
  */
-public class OutfitSkin extends AbstractSkin {
+public class OutfitSkin<T extends SkinData> extends AbstractSkin<T> {
 
-    public OutfitSkin(SkinData data) {
-        super(data);
-    }
-    
 }

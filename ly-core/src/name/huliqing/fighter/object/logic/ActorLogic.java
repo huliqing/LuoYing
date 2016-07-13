@@ -9,32 +9,31 @@ import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.object.action.Action;
 import name.huliqing.fighter.data.LogicData;
 import name.huliqing.fighter.game.service.ActionService;
+import name.huliqing.fighter.object.DataProcessor;
 import name.huliqing.fighter.object.IntervalLogic;
 
 /**
  * 角色逻辑
  * @author huliqing
+ * @param <T>
  */
-public abstract class ActorLogic extends IntervalLogic {
+public abstract class ActorLogic<T extends LogicData> extends IntervalLogic implements DataProcessor<T>{
     private final ActionService actionService = Factory.get(ActionService.class);
     
-    private LogicData data;
+    private T data;
     /**
      * 运行当前逻辑的角色.
      */
     protected Actor self;
-    
-    public ActorLogic() {
-        super();
-    }
-    
-    public ActorLogic(LogicData data) {
-        super();
+
+    @Override
+    public void initData(T data) {
         this.data = data;
         interval = data.getAsFloat("interval", interval);
     }
 
-    public LogicData getData() {
+    @Override
+    public T getData() {
         return data;
     }
     

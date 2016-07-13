@@ -11,9 +11,10 @@ import name.huliqing.fighter.data.AnimData;
 
 /**
  * 缩放动画
+ * @param <T>
  * @author huliqing
  */
-public final class ScaleAnim extends SpatialAnim {
+public final class ScaleAnim<T extends AnimData> extends SpatialAnim<T> {
     // 记住原始缩放值
     private final Vector3f originScale = new Vector3f();
     // 缩放值
@@ -33,8 +34,9 @@ public final class ScaleAnim extends SpatialAnim {
         super();
     }
     
-    public ScaleAnim(AnimData data) {
-        super(data);
+    @Override
+    public void initData(T data) {
+        super.initData(data);
         this.startScale = data.getAsVector3f("startScale", startScale);
         this.endScale = data.getAsVector3f("endScale", endScale);
         this.restore = data.getAsBoolean("restore", restore);

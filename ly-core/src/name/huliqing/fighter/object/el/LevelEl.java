@@ -13,8 +13,9 @@ import name.huliqing.fighter.data.ElData;
 /**
  * 为等级生成相应的数值
  * @author huliqing
+ * @param <T>
  */
-public class LevelEl extends AbstractEl {
+public class LevelEl<T extends ElData> extends AbstractEl<T> {
     
     // key = 参数名
     private final Map<String, Object> valueMap = new HashMap<String, Object>(1);
@@ -23,15 +24,11 @@ public class LevelEl extends AbstractEl {
     // 缓存的最高数量不会超过系统定义的最高等级数
     private final Map<Integer, Double> cacheMap = new HashMap<Integer, Double>();
     
-    public LevelEl(ElData data) {
-        super(data);
-    }
-    
     public synchronized double getValue(int level) {
         // 先从缓存中获取。
         Double result = cacheMap.get(level);
         if (result != null) {
-            return result.doubleValue();
+            return result;
         }
         
         valueMap.put("level", level);

@@ -9,6 +9,7 @@ import name.huliqing.fighter.data.ProtoData;
 /**
  * 基本物体
  * @author huliqing
+ * @deprecated 
  */
 public interface ProtoObject<T extends ProtoData> {
     

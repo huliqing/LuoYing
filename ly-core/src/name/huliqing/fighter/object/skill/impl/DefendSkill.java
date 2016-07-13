@@ -5,26 +5,17 @@
 package name.huliqing.fighter.object.skill.impl;
 
 import name.huliqing.fighter.data.SkillData;
-import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.object.skill.AbstractSkill;
 
 /**
  * 防守技能
  * @author huliqing
+ * @param <T>
  */
-public class DefendSkill extends AbstractSkill {
-
-    public DefendSkill(SkillData data) {
-       super(data);
-    }
+public class DefendSkill<T extends SkillData> extends AbstractSkill<T> {
     
     @Override
     protected void doUpdateLogic(float tpf) {
     }
-
-//    @Override
-//    public boolean isInRange(Actor actor) {
-//        return false;
-//    }
     
 }

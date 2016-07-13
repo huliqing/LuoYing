@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.fighter.loader;
+package name.huliqing.fighter.object.actor;
 
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.SkeletonControl;
@@ -17,7 +17,6 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.util.TempVars;
-import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,6 +33,8 @@ import name.huliqing.fighter.data.StateData;
 import name.huliqing.fighter.data.TalentData;
 import name.huliqing.fighter.data.TaskData;
 import name.huliqing.fighter.game.service.ConfigService;
+import name.huliqing.fighter.loader.AssetLoader;
+import name.huliqing.fighter.loader.Loader;
 import name.huliqing.fighter.object.action.ActionProcessor;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.object.actor.CustomSkeletonControl;

@@ -29,8 +29,9 @@ import name.huliqing.fighter.loader.Loader;
 /**
  * 弓箭的射击技能
  * @author huliqing
+ * @param <T>
  */
-public class ShotBowSkill extends ShotSkill {
+public class ShotBowSkill<T extends SkillData> extends ShotSkill<T> {
     private final ActorService actorService = Factory.get(ActorService.class);
     private final SkinService skinService = Factory.get(SkinService.class);
     
@@ -54,8 +55,9 @@ public class ShotBowSkill extends ShotSkill {
     // ---- inner
     private int shotDir; // 0 : down; 1: horizontal; 2:up
     
-    public ShotBowSkill(SkillData data) {
-        super(data);
+    @Override
+    public void initData(T data) {
+        super.initData(data); 
         this.weaponAnim = data.getAttribute("weaponAnim");
         this.timeBulletTake = data.getAsFloat("timeBulletTake", timeBulletTake);
         this.timeBulletPull = data.getAsFloat("timeBulletPull", timeBulletPull);

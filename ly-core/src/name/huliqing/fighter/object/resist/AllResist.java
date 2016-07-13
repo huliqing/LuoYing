@@ -14,22 +14,19 @@ import name.huliqing.fighter.utils.ConvertUtils;
 /**
  * 全部状态都抵抗,可指定一部分例外．
  * @author huliqing
+ * @param <T>
  */
-public class AllResist extends AbstractResist{
+public class AllResist<T extends ResistData> extends AbstractResist<T> {
     
     /**
      * 例外列表，除了这个列表中的其它都全抵抗．这个列表也可以为空，为null.
      * 或者单独设置．
      */
     private List<StateResist> excepts;
-    
-    public AllResist() {
-        super();
-    }
-    
-    public AllResist(ResistData data) {
-        super(data);
-        
+
+    @Override
+    public void initData(T data) {
+        super.initData(data); 
         // format "state|factor,state|factor,state|factor"
         String[] tempExcepts = data.getProto().getAsArray("excepts");
         if (tempExcepts != null && tempExcepts.length > 0) {

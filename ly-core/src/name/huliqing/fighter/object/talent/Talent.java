@@ -5,16 +5,16 @@
 package name.huliqing.fighter.object.talent;
 
 import name.huliqing.fighter.data.TalentData;
+import name.huliqing.fighter.object.DataProcessor;
 import name.huliqing.fighter.object.actor.Actor;
 
 /**
  * 天赋，注：天赋是不会结束的，一旦获得就一直存在，除非手动移除。
  * 所以没有isEnd()方法。
  * @author huliqing
+ * @param <T>
  */
-public interface Talent {
-    
-    TalentData getData();
+public interface Talent<T extends TalentData> extends DataProcessor<T> {
     
     /**
      * 初始化天赋,当给指定角色添加天赋时该方法应该被调用一次，以进行初始化。

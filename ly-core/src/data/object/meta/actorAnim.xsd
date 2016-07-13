@@ -19,12 +19,12 @@ xs:time
     <xs:element name="root">
         <xs:complexType>
             <xs:all>
-                <xs:element ref="curveMove" />
+                <xs:element ref="actorAnimCurveMove" />
             </xs:all>
         </xs:complexType>
     </xs:element>
     
-    <xs:element name="curveMove">
+    <xs:element name="actorAnimCurveMove">
         <xs:annotation>
             <xs:documentation>
                 角色曲线移动动画

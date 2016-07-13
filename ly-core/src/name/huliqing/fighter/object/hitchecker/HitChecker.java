@@ -4,6 +4,8 @@
  */
 package name.huliqing.fighter.object.hitchecker;
 
+import name.huliqing.fighter.data.HitCheckerData;
+import name.huliqing.fighter.object.DataProcessor;
 import name.huliqing.fighter.object.actor.Actor;
 
 /**
@@ -13,8 +15,9 @@ import name.huliqing.fighter.object.actor.Actor;
  * 2.当作用于对话(Chat)时可用来判断source的某些对话(Chat)是否对目标(target)可见。
  * ...
  * @author huliqing
+ * @param <T>
  */
-public interface HitChecker {
+public interface HitChecker<T extends HitCheckerData> extends DataProcessor<T> {
     
     /**
      * 

@@ -5,8 +5,7 @@
 package name.huliqing.fighter.loader;
 
 import com.jme3.animation.AnimControl;
-import com.jme3.effect.ParticleEmitter;
-import com.jme3.effect.ParticleMesh;
+import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.scene.Spatial;
 import name.huliqing.fighter.Common;
@@ -16,8 +15,10 @@ import name.huliqing.fighter.data.ActorAnimData;
 import name.huliqing.fighter.data.ActorData;
 import name.huliqing.fighter.data.AnimData;
 import name.huliqing.fighter.data.BulletData;
+import name.huliqing.fighter.data.ChannelData;
 import name.huliqing.fighter.data.ChatData;
 import name.huliqing.fighter.data.EffectData;
+import name.huliqing.fighter.data.ElData;
 import name.huliqing.fighter.data.EmitterData;
 import name.huliqing.fighter.data.PositionData;
 import name.huliqing.fighter.data.EnvData;
@@ -25,7 +26,6 @@ import name.huliqing.fighter.data.GameData;
 import name.huliqing.fighter.data.HandlerData;
 import name.huliqing.fighter.data.HitCheckerData;
 import name.huliqing.fighter.data.LogicData;
-import name.huliqing.fighter.data.ProtoData;
 import name.huliqing.fighter.data.SkinData;
 import name.huliqing.fighter.data.SkillData;
 import name.huliqing.fighter.data.ResistData;
@@ -50,6 +50,7 @@ import name.huliqing.fighter.object.game.Game;
 import name.huliqing.fighter.object.handler.Handler;
 import name.huliqing.fighter.object.hitchecker.HitChecker;
 import name.huliqing.fighter.object.el.El;
+import name.huliqing.fighter.object.emitter.Emitter;
 import name.huliqing.fighter.object.magic.Magic;
 import name.huliqing.fighter.object.position.Position;
 import name.huliqing.fighter.object.resist.Resist;
@@ -70,7 +71,9 @@ public class Loader {
     }
     
     public static Material loadMaterial(String j3mFile) {
-        return MatLoader.loadMaterial(j3mFile);
+//        return MatLoader.loadMaterial(j3mFile);
+        AssetManager am = Common.getAssetManager();
+        return am.loadMaterial(j3mFile);
     }
     
     public static Action loadAction(String actionId) {
@@ -88,7 +91,7 @@ public class Loader {
     }
     
     public static ActorAnim loadActorAnim(ActorAnimData data) {
-        return ActorAnimLoader.load(data);
+        return DataFactory.createProcessor(data);
     }
     
     public static Actor loadActor(ActorData data) {
@@ -102,7 +105,7 @@ public class Loader {
     }
     
     public static Anim loadAnimation(AnimData data) {
-        return AnimLoader.load(data);
+        return DataFactory.createProcessor(data);
     }
         
     public static Bullet loadBullet(String id) {
@@ -111,16 +114,19 @@ public class Loader {
     }
     
     public static Bullet loadBullet(BulletData data) {
-        return BulletLoader.load(data); 
+        return DataFactory.createProcessor(data);
     }
         
     public static Channel loadChannel(String channelId, AnimControl ac) {
-        return ChannelLoader.load(channelId, ac);
+        ChannelData data = DataFactory.createData(channelId);
+        Channel channel = DataFactory.createProcessor(data);
+        channel.setAnimControl(ac);
+        return channel;
     }
     
     public static Chat loadChat(String chatId) {
         ChatData data = DataFactory.createData(chatId);
-        return ChatLoader.load(data);
+        return DataFactory.createProcessor(data);
     }
     
     public static Effect loadEffect(String id) {
@@ -131,31 +137,22 @@ public class Loader {
     }
 
     public static El loadEl(String levelId) {
-        return ElLoader.load(levelId); 
+        ElData data = DataFactory.createData(levelId);
+        return DataFactory.createProcessor(data);
     }
 
-    public static ParticleEmitter loadEmitter(EmitterData data, ParticleEmitter store) {
-        if (store == null) {
-            store = new ParticleEmitter(data.getProto().getName(), ParticleMesh.Type.Triangle, 0);
-        }
-        // 设置userData
-        EmitterLoader.loadEmitter(data, store);
-        store.setUserData(ProtoData.USER_DATA, data);
-        return store;
+    public static Emitter loadEmitter(EmitterData data) {
+        Emitter emitter = DataFactory.createProcessor(data);
+        return emitter;
     }
     
-    public static ParticleEmitter loadEmitter(String id) {
+    public static Emitter loadEmitter(String id) {
         EmitterData data = DataFactory.createData(id);
-        return loadEmitter(data, null);
+        return loadEmitter(data);
     }
     
-    public static ParticleEmitter loadEmitter(String id, ParticleEmitter store) {
-        EmitterData data = DataFactory.createData(id);
-        return loadEmitter(data, store);
-    }
-        
     public static Position loadPosition(PositionData esd) {
-        return PositionLoader.load(esd);
+        return DataFactory.createProcessor(esd);
     }
     
     public static Position loadPosition(String id) {
@@ -200,11 +197,11 @@ public class Loader {
     }
     
     public static HitChecker loadHitChecker(HitCheckerData data) {
-        return HitCheckerLoader.load(data); 
+        return DataFactory.createProcessor(data);
     }
        
-    public static ActorLogic loadLogic(LogicData logicData) {
-        return LogicLoader.load(logicData);
+    public static ActorLogic loadLogic(LogicData data) {
+        return DataFactory.createProcessor(data);
     }
     
     public static ActorLogic loadLogic(String logicId) {
@@ -226,7 +223,7 @@ public class Loader {
     }
     
     public static Resist loadResist(ResistData data) {
-        return ResistLoader.load(data);
+        return DataFactory.createProcessor(data);
     }
         
     public static Scene loadScene(String sceneId) {
@@ -244,11 +241,11 @@ public class Loader {
     }
     
     public static Shape loadShape(ShapeData data) {
-        return ShapeLoader.load(data);
+        return DataFactory.createProcessor(data);
     }
     
     public static Skill loadSkill(SkillData data) {
-        return SkillLoader.loadSkill(data);
+        return DataFactory.createProcessor(data);
     }
     
     public static Skill loadSkill(String id) {
@@ -261,8 +258,8 @@ public class Loader {
         return loadSkin(skinData);
     }
     
-    public static Skin loadSkin(SkinData skinData) {
-        Skin skin = SkinLoader.load(skinData);
+    public static Skin loadSkin(SkinData data) {
+        Skin skin = DataFactory.createProcessor(data);
         return skin;
     }
     
@@ -279,8 +276,8 @@ public class Loader {
         return loadTalent((TalentData) DataFactory.createData(talentId));
     }
     
-    public static Talent loadTalent(TalentData talentData) {
-        return TalentLoader.load(talentData);
+    public static Talent loadTalent(TalentData data) {
+        return DataFactory.createProcessor(data);
     }
     
     public static Task loadTask(String taskId) {
@@ -288,14 +285,14 @@ public class Loader {
     }
     
     public static Task loadTask(TaskData data) {
-        return TaskLoader.load(data);
+        return DataFactory.createProcessor(data);
     }
      
     public static View loadView(String viewId) {
         return loadView((ViewData)DataFactory.createData(viewId));
     }
     
-    public static View loadView(ViewData viewData) {
-        return ViewLoader.load(viewData);
+    public static View loadView(ViewData data) {
+        return DataFactory.createProcessor(data);
     }
 }

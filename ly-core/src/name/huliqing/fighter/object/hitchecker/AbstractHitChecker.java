@@ -9,10 +9,20 @@ import name.huliqing.fighter.data.HitCheckerData;
 /**
  *
  * @author huliqing
+ * @param <T>
  */
-public abstract class AbstractHitChecker implements HitChecker {
-    
-    public AbstractHitChecker(HitCheckerData data) {
+public abstract class AbstractHitChecker<T extends HitCheckerData> implements HitChecker<T> {
+        
+    private T data;
+
+    @Override
+    public void initData(T data) {
+        this.data = data;
+    }
+
+    @Override
+    public T getData() {
+        return data;
     }
     
 }

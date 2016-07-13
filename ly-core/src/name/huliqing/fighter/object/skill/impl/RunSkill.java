@@ -12,15 +12,15 @@ import name.huliqing.fighter.object.skill.Walk;
 /**
  *
  * @author huliqing
+ * @param <T>
  */
-public class RunSkill extends WalkSkill implements Walk{
+public class RunSkill<T extends SkillData> extends WalkSkill<T> implements Walk{
     private final ConfigService configService = Factory.get(ConfigService.class);
 
-    public RunSkill() {}
-
-    public RunSkill(SkillData skillData) {
-        super(skillData);
-        baseSpeed = skillData.getAsFloat("baseSpeed", configService.getBaseRunSpeed());
+    @Override
+    public void initData(T data) {
+        super.initData(data); 
+        baseSpeed = data.getAsFloat("baseSpeed", configService.getBaseRunSpeed());
     }
     
 }

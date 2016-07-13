@@ -5,13 +5,14 @@
 package name.huliqing.fighter.object.view;
 
 import name.huliqing.fighter.data.ViewData;
-import name.huliqing.fighter.object.ProtoObject;
+import name.huliqing.fighter.object.DataProcessor;
 
 /**
  *
  * @author huliqing
+ * @param <T>
  */
-public interface View extends ProtoObject<ViewData> {
+public interface View<T extends ViewData> extends DataProcessor<T> {
 
     /**
      * 设置View的运行时间
@@ -19,4 +20,9 @@ public interface View extends ProtoObject<ViewData> {
      */
     void setUseTime(float useTime);
     
+    /**
+     * 获得实时更新的数据
+     * @return 
+     */
+    T getUpdateData();
 }

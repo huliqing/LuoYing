@@ -4,25 +4,24 @@
  */
 package name.huliqing.fighter.object.resist;
 
-import java.util.List;
 import name.huliqing.fighter.data.ResistData;
 
 /**
  *
  * @author huliqing
+ * @param <T>
  */
-public abstract class AbstractResist implements Resist {
+public abstract class AbstractResist<T extends ResistData> implements Resist<T> {
 
-    private ResistData data;
-    
-    public AbstractResist() {}
-    
-    public AbstractResist(ResistData data) {
+    private T data;
+
+    @Override
+    public void initData(T data) {
         this.data = data;
     }
     
     @Override
-    public ResistData getResistData() {
+    public T getData() {
         return data;
     }
 

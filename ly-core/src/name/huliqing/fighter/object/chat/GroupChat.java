@@ -31,8 +31,9 @@ import name.huliqing.fighter.ui.UIFactory;
 /**
  * Chat群组
  * @author huliqing
+ * @param <T>
  */
-public class GroupChat extends Chat {
+public class GroupChat<T extends ChatData> extends Chat<T> {
     private final PlayService playService = Factory.get(PlayService.class);
     private final ChatService chatService = Factory.get(ChatService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
@@ -40,14 +41,14 @@ public class GroupChat extends Chat {
     private List<Chat> chats; 
     
     // ---- inner
-    private boolean init;
     private LinearLayout group;
     private TitlePanel title;
     private Icon separate;
     private ChatList chatList;
-    
-    public GroupChat(ChatData data) {
-        super(data);
+
+    @Override
+    public void initData(T data) {
+        super.initData(data);
         String[] tempChats = data.getAsArray("chats");
         chats = new ArrayList<Chat>(tempChats.length);
         for (int i = 0; i < tempChats.length; i++) {
@@ -55,8 +56,6 @@ public class GroupChat extends Chat {
             chat.parent = this;
             chats.add(chat);
         }
-        
-        // 不要在这里初始化UI。在initialize()中按需初始化
     }
 
     @Override

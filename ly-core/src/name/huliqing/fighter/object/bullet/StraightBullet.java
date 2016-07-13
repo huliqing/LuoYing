@@ -10,16 +10,13 @@ import name.huliqing.fighter.data.BulletData;
 /**
  * 直线型子弹
  * @author huliqing
+ * @param <T>
  */
-public class StraightBullet extends AbstractBullet {
+public class StraightBullet<T extends BulletData> extends AbstractBullet<T> {
 
     private final Vector3f dir = new Vector3f();
     private final Vector3f temp = new Vector3f();
     
-    public StraightBullet(BulletData data) {
-        super(data);
-    }
-
     @Override
     protected void doInit() {
         super.doInit();

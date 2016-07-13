@@ -15,22 +15,19 @@ import name.huliqing.fighter.utils.ConvertUtils;
  * 简单的抗性设置,注意不要同时设置多个对于同一状态的抗性，只有第一个被找到的
  * 有效．
  * @author huliqing
+ * @param <T>
  */
-public class SimpleResist extends AbstractResist {
+public class SimpleResist<T extends ResistData> extends AbstractResist<T> {
 
     // 重要：该类用到clone,添加字段时注意克隆．
     
     // ---- 内部
     // 抗性列表
     private List<StateResist> resists;
-    
-    public SimpleResist() {
-        super();
-    }
 
-    public SimpleResist(ResistData data) {
-        super(data);
-        
+    @Override
+    public void initData(T data) {
+        super.initData(data); 
         // format "state|factor,state|factor,state|factor"
         String[] resistsArr = data.getAsArray("resists");
         if (resistsArr != null && resistsArr.length > 0) {
@@ -65,8 +62,10 @@ public class SimpleResist extends AbstractResist {
     }
 
     /**
+     * @param stateId
+     * @param amount
      * @return 返回的数值表示了实际添加或减少的数量．
-     * 如factor=0.9, amount=0.3 则返回的值为0.1;<br />
+     * 如factor=0.9, amount=0.3 则返回的值为0.1;<br>
      * 如factor=0.2, amount=-0.3 则返回的值为-0.2;
      * @see StateResist#applyFactor(float) 
      */

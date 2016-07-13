@@ -26,23 +26,15 @@ import name.huliqing.fighter.object.skill.impl.SkinSkill;
 
 /**
  * @author huliqing
+ * @param <T>
  */
-public class WeaponSkin extends AbstractSkin {
+public class WeaponSkin<T extends SkinData> extends AbstractSkin<T> {
     private final PlayService playService = Factory.get(PlayService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
     
-    // ==== 武器的挂靠设置 ====
-
-    public WeaponSkin(SkinData data) {
-        super(data);
-    }
-
     @Override
     public void attach(Actor actor) {
-//        if (actor.getData().getAttributeStore().getName().equals("樱")) {
-//            System.out.println("测试WeaponSkin");
-//        }
         // 对于武器的attach不能用动画,直接attach就可以
         boolean takeOn = actor.getData().isWeaponTakeOn();
         if (takeOn) {
@@ -96,6 +88,8 @@ public class WeaponSkin extends AbstractSkin {
     
     /**
      * 把武器挂起，如挂在后背
+     * @param actor
+     * @param force
      */
     public void takeOff(Actor actor, boolean force) {
         String weaponSlot = data.getSlot();
@@ -166,10 +160,10 @@ public class WeaponSkin extends AbstractSkin {
             // 如果没有指定本地变换，则直接从bone中获取
             Bone bone = sc.getSkeleton().getBone(toBindBone);
             if (toLocalRotation == null) {
-                toLocalRotation = bone.getWorldBindInverseRotation().toAngles(toLocalRotation);
+                toLocalRotation = bone.getModelBindInverseRotation().toAngles(toLocalRotation);
             }
             if (toLocalScale == null) {
-                toLocalScale = bone.getWorldBindInverseScale();
+                toLocalScale = bone.getModelBindInverseScale();
             }
             // 因为大部分情况下Skin并不是以原点（0,0,0)作为模型的中心点，而是以模型
             // 的其中某一个位置，通常这个位置刚好是被绑定的骨头的位置，当模型attach到骨头
@@ -178,11 +172,11 @@ public class WeaponSkin extends AbstractSkin {
             // 进行处理。
             if (toLocalTranslation == null) {
                 // 骨骼点的位置
-                toLocalTranslation = bone.getWorldBindInversePosition().negate();
+                toLocalTranslation = bone.getModelBindInversePosition().negate();
                 // 被缩放后的位置
-                bone.getWorldBindInverseScale().mult(toLocalTranslation, toLocalTranslation);
+                bone.getModelBindInverseScale().mult(toLocalTranslation, toLocalTranslation);
                 // 被旋转后的位置
-                bone.getWorldBindInverseRotation().mult(toLocalTranslation, toLocalTranslation);
+                bone.getModelBindInverseRotation().mult(toLocalTranslation, toLocalTranslation);
                 // 移动回骷髅点的位置
                 toLocalTranslation.negateLocal();
             } 
@@ -235,7 +229,6 @@ public class WeaponSkin extends AbstractSkin {
             
             // 执行完要从全局移除动画逻辑
             if (timeUsed > fullUseTime) {
-//                playService.removeLogic(this);
                 playService.removeObject(this);
             }
         }

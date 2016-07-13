@@ -5,13 +5,22 @@
 package name.huliqing.fighter.object.channel;
 
 import com.jme3.animation.AnimChannel;
+import com.jme3.animation.AnimControl;
 import com.jme3.animation.LoopMode;
+import name.huliqing.fighter.data.ChannelData;
+import name.huliqing.fighter.object.DataProcessor;
 
 /**
- *
  * @author huliqing
+ * @param <T>
  */
-public interface Channel {
+public interface Channel<T extends ChannelData> extends DataProcessor<T>{
+    
+    /**
+     * 设置AnimControl控制器
+     * @param animControl 
+     */
+    void setAnimControl(AnimControl animControl);
     
     /**
      * 执行动画。
@@ -59,8 +68,8 @@ public interface Channel {
     
     /**
      * 把骨骼动画定位在某一个动画中的某一个时间点(帧)．
-     * @param anim 动画名称
-     * @param timeInterpolation 定位的时间插值点，取值[0.0~1.0] 
+     * @param anim 动画名称 
+     * @param timeInter 
      */
     void resetToAnimationTime(String anim, float timeInter);
 

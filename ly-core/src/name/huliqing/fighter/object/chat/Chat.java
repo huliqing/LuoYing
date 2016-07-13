@@ -12,6 +12,7 @@ import name.huliqing.fighter.game.service.PlayService;
 import name.huliqing.fighter.loader.Loader;
 import name.huliqing.fighter.manager.ResourceManager;
 import name.huliqing.fighter.object.AbstractPlayObject;
+import name.huliqing.fighter.object.DataProcessor;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.object.anim.Anim;
 import name.huliqing.fighter.object.hitchecker.HitChecker;
@@ -20,8 +21,9 @@ import name.huliqing.fighter.ui.state.UIState;
 
 /**
  * @author huliqing
+ * @param <T>
  */
-public abstract class Chat extends AbstractPlayObject {
+public abstract class Chat<T extends ChatData> extends AbstractPlayObject implements DataProcessor<T> {
     private final PlayService playService = Factory.get(PlayService.class);
 //    private final ActorService actorService = Factory.get(ActorService.class);
     
@@ -41,7 +43,7 @@ public abstract class Chat extends AbstractPlayObject {
     protected HitChecker hitChecker;
     
     // ---- inner
-    protected ChatData data;
+    protected T data;
     protected Actor actor;
     // 父Chat，如果当前为root chat则parent为null.
     protected Chat parent;
@@ -50,8 +52,9 @@ public abstract class Chat extends AbstractPlayObject {
     protected String chatName;
     
     protected UI chatUI;
-    
-    public Chat(ChatData data) {
+
+    @Override
+    public void initData(T data) {
         this.data = data;
         this.width = data.getAsFloat("widthWeight", 0.3f) * playService.getScreenWidth();
         this.height = data.getAsFloat("heightWeight", 0.5f) * playService.getScreenHeight();
@@ -72,7 +75,8 @@ public abstract class Chat extends AbstractPlayObject {
         }
     }
 
-    public ChatData getChatData() {
+    @Override
+    public T getData() {
         return data;
     }
     

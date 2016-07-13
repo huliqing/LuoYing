@@ -5,6 +5,8 @@
 package name.huliqing.fighter.object.logic;
 
 import com.jme3.app.Application;
+import java.util.ArrayList;
+import java.util.List;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.LogicData;
 import name.huliqing.fighter.data.ProtoData;
@@ -15,32 +17,34 @@ import name.huliqing.fighter.utils.ConvertUtils;
 /**
  * 商店逻辑，该逻辑会每隔一段时间给角色进货。以补充商店类角色的货源。
  * @author huliqing
+ * @param <T>
  */
-public class ShopLogic extends ActorLogic {
+public class ShopLogic<T extends LogicData> extends ActorLogic<T> {
 //    private final ItemService itemService = Factory.get(ItemService.class);
 //    private final ItemNetwork itemNetwork = Factory.get(ItemNetwork.class);
     private final ProtoNetwork protoNetwork = Factory.get(ProtoNetwork.class);
     private final ProtoService protoService = Factory.get(ProtoService.class);
     
-    private final Product[] products;
+    private List<Product> products;
     // 进货速度，如：1.0 表示每秒进货一件（每件未达到maxCount的商品各进货一件）
     // 如:0.1 则表示10秒进货一件，依此类推
-    private final float stockSpeed;
+    private float stockSpeed;
     // 是否初始化时把货物进满
-    private final boolean initStock;
+    private boolean initStock;
 
     // ---- inner
     // remainCount为进货是不足1件的进货量，将累计到下一次足以达到1件以上的进货量
     private float remainCount;
     
-    public ShopLogic(LogicData data) {
-        super(data);
+    @Override
+    public void initData(T data) {
+        super.initData(data); 
         // 这类逻辑不需要太频繁
         interval = data.getAsFloat("interval", 20);
         
         // format: "item|maxCount,item|maxCount,item|maxCount,..."
         String[] items = data.getAsArray("items");
-        products = new Product[items.length];
+        products = new ArrayList<Product>(items.length);
         String[] temp;
         for (int i = 0; i < items.length; i++) {
             temp = items[i].split("\\|");
@@ -51,7 +55,7 @@ public class ShopLogic extends ActorLogic {
             } else {
                 pro.maxCount = 1;
             }
-            products[i] = pro;
+            products.add(pro);
         }
         stockSpeed = data.getAsFloat("stockSpeed", 10);
         initStock = data.getAsBoolean("initStock", true);
@@ -76,12 +80,10 @@ public class ShopLogic extends ActorLogic {
             if (p.maxCount <= 0) 
                 continue;
             
-//            temp = itemService.getItem(self, p.itemId);
             temp = protoService.getData(self, p.itemId);
             currentCount = temp != null ? temp.getTotal() : 0;
             actualStock = p.maxCount - currentCount;
             if (actualStock > 0) {
-//                itemNetwork.addItem(self, p.itemId, actualStock);
                 protoNetwork.addData(self, protoService.createData(p.itemId), actualStock);
             }
         }
@@ -106,7 +108,6 @@ public class ShopLogic extends ActorLogic {
                 continue;
             
             actualStock = stockCount;
-//            temp = itemService.getItem(self, p.itemId);
             temp = protoService.getData(self, p.itemId);
             currentCount = temp != null ? temp.getTotal() : 0;
             
@@ -114,7 +115,6 @@ public class ShopLogic extends ActorLogic {
                 actualStock = p.maxCount - currentCount;
             }
             if (actualStock > 0) {
-//                itemNetwork.addItem(self, p.itemId, actualStock);
                 protoNetwork.addData(self, protoService.createData(p.itemId), actualStock);
             }
         }

@@ -13,8 +13,9 @@ import name.huliqing.fighter.ui.UI.Corner;
 /**
  * GUI界面上的位置点
  * @author huliqing
+ * @param <T>
  */
-public class ViewPosition extends AbstractPosition {
+public class ViewPosition<T extends PositionData> extends AbstractPosition<T> {
     private final PlayService playService = Factory.get(PlayService.class);
     
     // 在视图界面上的角落位置
@@ -22,8 +23,9 @@ public class ViewPosition extends AbstractPosition {
     // left,top,right,bottom. 权重取值0.0~1.0
     private float[] marginWeight;
 
-    public ViewPosition(PositionData data) {
-        super(data);
+    @Override
+    public void initData(T data) {
+        super.initData(data);
         corner = Corner.identify(data.getAttribute("corner"));
         marginWeight = data.getAsFloatArray("marginWeight");
     }

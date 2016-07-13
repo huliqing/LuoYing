@@ -27,8 +27,9 @@ import name.huliqing.fighter.utils.MathUtils;
 /**
  * 射击技能的基本类
  * @author huliqing
+ * @param <T>
  */
-public class ShotSkill extends HitSkill {
+public class ShotSkill<T extends SkillData> extends HitSkill<T> {
 
     private final ActorService actorService = Factory.get(ActorService.class);
     private final PlayService playService = Factory.get(PlayService.class);
@@ -87,8 +88,9 @@ public class ShotSkill extends HitSkill {
     private int indexTarget;
     private final List<Actor> tempTargets = new ArrayList<Actor>();
     
-    public ShotSkill(SkillData data) {
-        super(data);
+    @Override
+    public void initData(T data) {
+        super.initData(data); 
         bullets = data.getAsArray("bullets");
         shotTimes = data.getAsFloatArray("shotTimes");
         trueShotTimes = new float[shotTimes.length];

@@ -17,8 +17,9 @@ import name.huliqing.fighter.utils.MathUtils;
 /**
  * 跟随逻辑
  * @author huliqing
+ * @param <T>
  */
-public class FollowLogic extends ActorLogic {
+public class FollowLogic<T extends LogicData> extends ActorLogic<T> {
 //    private final static Logger logger = Logger.getLogger(FollowLogic.class.getName());
     private final PlayService playService = Factory.get(PlayService.class);
     private final ActionService actionService = Factory.get(ActionService.class);
@@ -39,11 +40,9 @@ public class FollowLogic extends ActorLogic {
     // 最近一次跟随到最近的距离
     private float lastFollowUsed;
     
-    
-    public FollowLogic() {}
-    
-    public FollowLogic(LogicData data) {
-        super(data);
+    @Override
+    public void initData(T data) {
+        super.initData(data); 
         followAction = (FollowAction) actionService.loadAction(data.getAttribute("followAction"));
         maxFollow = data.getAsFloat("maxFollow", maxFollow);
         minFollow = data.getAsFloat("minFollow", minFollow);

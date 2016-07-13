@@ -5,18 +5,14 @@
 package name.huliqing.fighter.object.el;
 
 import name.huliqing.fighter.data.ElData;
+import name.huliqing.fighter.object.DataProcessor;
 
 /**
  *
  * @author huliqing
+ * @param <T>
  */
-public interface El {
+public interface El<T extends ElData> extends DataProcessor<T> {
 
-    /**
-     * 获得level的定义
-     * @return 
-     */
-    ElData getData();
-    
     
 }

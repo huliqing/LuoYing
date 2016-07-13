@@ -16,16 +16,13 @@ import name.huliqing.fighter.utils.ConvertUtils;
  * 用于计算技能影响值的公式，比如技能对目标角色产生的各种伤害输出，各种BUFF
  * 加成等。
  * @author huliqing
+ * @param <T>
  */
-public class HitEl extends AbstractEl {
+public class HitEl<T extends ElData> extends AbstractEl<T> {
     private final AttributeService attributeService = Factory.get(AttributeService.class);
     
     // key = param
     private Map<String, Object> valueMap;
-
-    public HitEl(ElData data) {
-        super(data);
-    }
 
     /**
      * 计算技能所产生的作用值

@@ -12,8 +12,9 @@ import name.huliqing.fighter.game.service.ElService;
 /**
  *
  * @author huliqing
+ * @param <T>
  */
-public class AttributeTalent extends AbstractTalent {
+public class AttributeTalent<T extends TalentData> extends AbstractTalent<T> {
     private final ElService elService = Factory.get(ElService.class);
     private final AttributeService attributeService = Factory.get(AttributeService.class);
     
@@ -24,11 +25,12 @@ public class AttributeTalent extends AbstractTalent {
     private int level;
     private float applyValue;
     private boolean init;
-    
-    public AttributeTalent(TalentData data) {
-        super(data);
-        this.applyAttribute = data.getProto().getAttribute("applyAttribute");
-        this.levelEl = data.getProto().getAttribute("levelEl");
+
+    @Override
+    public void initData(T data) {
+        super.initData(data); 
+        this.applyAttribute = data.getAttribute("applyAttribute");
+        this.levelEl = data.getAttribute("levelEl");
         this.level = data.getLevel();
     }
 

@@ -15,16 +15,18 @@ import name.huliqing.fighter.game.service.PlayService;
 /**
  * 战斗逻辑
  * @author huliqing
+ * @param <T>
  */
-public class FightLogic extends ActorLogic {
+public class FightLogic<T extends LogicData> extends ActorLogic<T> {
     private final PlayService playService = Factory.get(PlayService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final ActionService actionService = Factory.get(ActionService.class);
-    private final FightAction fightAction;
+    private  FightAction fightAction;
     
-    public FightLogic(LogicData logicData) {
-        super(logicData);
-        fightAction = (FightAction) actionService.loadAction(logicData.getAttribute("fightAction"));
+    @Override
+    public void initData(T data) {
+        super.initData(data); 
+        fightAction = (FightAction) actionService.loadAction(data.getAttribute("fightAction"));
     }
     
     @Override

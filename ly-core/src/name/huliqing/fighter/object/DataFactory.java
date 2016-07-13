@@ -64,11 +64,28 @@ import name.huliqing.fighter.object.actor.ActorDataLoader;
 import name.huliqing.fighter.object.actor.ItemStore;
 import name.huliqing.fighter.object.actor.SkillStore;
 import name.huliqing.fighter.object.actoranim.ActorAnimDataLoader;
+import name.huliqing.fighter.object.actoranim.ActorCurveMove;
 import name.huliqing.fighter.object.anim.AnimDataLoader;
+import name.huliqing.fighter.object.anim.ColorAnim;
+import name.huliqing.fighter.object.anim.CurveMoveAnim;
+import name.huliqing.fighter.object.anim.MoveAnim;
+import name.huliqing.fighter.object.anim.RandomRotationAnim;
+import name.huliqing.fighter.object.anim.RotationAnim;
+import name.huliqing.fighter.object.anim.ScaleAnim;
 import name.huliqing.fighter.object.attribute.AttributeDataLoader;
 import name.huliqing.fighter.object.bullet.BulletDataLoader;
+import name.huliqing.fighter.object.bullet.CurveBullet;
+import name.huliqing.fighter.object.bullet.CurveTrailBullet;
+import name.huliqing.fighter.object.bullet.SimpleBullet;
+import name.huliqing.fighter.object.bullet.StraightBullet;
 import name.huliqing.fighter.object.channel.ChannelDataLoader;
+import name.huliqing.fighter.object.channel.SimpleChannel;
 import name.huliqing.fighter.object.chat.ChatDataLoader;
+import name.huliqing.fighter.object.chat.GroupChat;
+import name.huliqing.fighter.object.chat.SellChat;
+import name.huliqing.fighter.object.chat.SendChat;
+import name.huliqing.fighter.object.chat.ShopChat;
+import name.huliqing.fighter.object.chat.TaskChat;
 import name.huliqing.fighter.object.config.ConfigDataLoader;
 import name.huliqing.fighter.object.drop.DropDataLoader;
 import name.huliqing.fighter.object.effect.EffectDataLoader;
@@ -85,6 +102,10 @@ import name.huliqing.fighter.object.effect.SlideColorSplineEffect;
 import name.huliqing.fighter.object.effect.TextureCylinderEffect;
 import name.huliqing.fighter.object.effect.TextureEffect;
 import name.huliqing.fighter.object.el.ElDataLoader;
+import name.huliqing.fighter.object.el.HitEl;
+import name.huliqing.fighter.object.el.LevelEl;
+import name.huliqing.fighter.object.el.XpDropEl;
+import name.huliqing.fighter.object.emitter.Emitter;
 import name.huliqing.fighter.object.emitter.EmitterDataLoader;
 import name.huliqing.fighter.object.env.AudioEnv;
 import name.huliqing.fighter.object.env.BoundaryBoxEnv;
@@ -125,19 +146,57 @@ import name.huliqing.fighter.object.handler.SummonSkillHandler;
 import name.huliqing.fighter.object.handler.TestHandler;
 import name.huliqing.fighter.object.handler.WeaponHandler;
 import name.huliqing.fighter.object.hitchecker.HitCheckerDataLoader;
+import name.huliqing.fighter.object.hitchecker.SimpleHitChecker;
 import name.huliqing.fighter.object.item.ItemDataLoader;
+import name.huliqing.fighter.object.logic.AttributeChangeLogic;
+import name.huliqing.fighter.object.logic.DefendLogic;
+import name.huliqing.fighter.object.logic.FightLogic;
+import name.huliqing.fighter.object.logic.FollowLogic;
+import name.huliqing.fighter.object.logic.IdleLogic;
 import name.huliqing.fighter.object.logic.LogicDataLoader;
+import name.huliqing.fighter.object.logic.NotifyLogic;
+import name.huliqing.fighter.object.logic.PlayerLogic;
+import name.huliqing.fighter.object.logic.PositionLogic;
+import name.huliqing.fighter.object.logic.SearchEnemyLogic;
+import name.huliqing.fighter.object.logic.ShopLogic;
 import name.huliqing.fighter.object.magic.AttributeHitMagic;
 import name.huliqing.fighter.object.magic.MagicDataLoader;
 import name.huliqing.fighter.object.magic.StateMagic;
+import name.huliqing.fighter.object.position.FixedPosition;
 import name.huliqing.fighter.object.position.PositionDataLoader;
+import name.huliqing.fighter.object.position.RandomBoxPosition;
+import name.huliqing.fighter.object.position.RandomCirclePosition;
+import name.huliqing.fighter.object.position.RandomSpherePosition;
+import name.huliqing.fighter.object.position.ViewPosition;
+import name.huliqing.fighter.object.resist.AllResist;
 import name.huliqing.fighter.object.resist.ResistDataLoader;
+import name.huliqing.fighter.object.resist.SimpleResist;
 import name.huliqing.fighter.object.scene.RandomSceneLoader;
 import name.huliqing.fighter.object.scene.Scene;
 import name.huliqing.fighter.object.scene.SceneDataLoader;
+import name.huliqing.fighter.object.shape.BoxShape;
 import name.huliqing.fighter.object.shape.ShapeDataLoader;
 import name.huliqing.fighter.object.skill.SkillDataLoader;
+import name.huliqing.fighter.object.skill.impl.AttackSkill;
+import name.huliqing.fighter.object.skill.impl.BackSkill;
+import name.huliqing.fighter.object.skill.impl.DeadRagdollSkill;
+import name.huliqing.fighter.object.skill.impl.DeadSkill;
+import name.huliqing.fighter.object.skill.impl.DefendSkill;
+import name.huliqing.fighter.object.skill.impl.DuckSkill;
+import name.huliqing.fighter.object.skill.impl.HurtSkill;
+import name.huliqing.fighter.object.skill.impl.IdleSkill;
+import name.huliqing.fighter.object.skill.impl.ReadySkill;
+import name.huliqing.fighter.object.skill.impl.ResetSkill;
+import name.huliqing.fighter.object.skill.impl.RunSkill;
+import name.huliqing.fighter.object.skill.impl.ShotBowSkill;
+import name.huliqing.fighter.object.skill.impl.ShotSkill;
+import name.huliqing.fighter.object.skill.impl.SkinSkill;
+import name.huliqing.fighter.object.skill.impl.SummonSkill;
+import name.huliqing.fighter.object.skill.impl.WaitSkill;
+import name.huliqing.fighter.object.skill.impl.WalkSkill;
+import name.huliqing.fighter.object.skin.OutfitSkin;
 import name.huliqing.fighter.object.skin.SkinDataLoader;
+import name.huliqing.fighter.object.skin.WeaponSkin;
 import name.huliqing.fighter.object.slot.SlotDataLoader;
 import name.huliqing.fighter.object.sound.SoundDataLoader;
 import name.huliqing.fighter.object.state.AttributeDynamicState;
@@ -148,8 +207,13 @@ import name.huliqing.fighter.object.state.MoveSpeedState;
 import name.huliqing.fighter.object.state.SkillLockedState;
 import name.huliqing.fighter.object.state.SkillState;
 import name.huliqing.fighter.object.state.StateDataLoader;
+import name.huliqing.fighter.object.talent.AttributeTalent;
 import name.huliqing.fighter.object.talent.TalentDataLoader;
+import name.huliqing.fighter.object.task.CollectTask;
 import name.huliqing.fighter.object.task.TaskDataLoader;
+import name.huliqing.fighter.object.view.TextPanelView;
+import name.huliqing.fighter.object.view.TextView;
+import name.huliqing.fighter.object.view.TimerView;
 import name.huliqing.fighter.object.view.ViewDataLoader;
 
 /**
@@ -428,8 +492,96 @@ public class DataFactory {
         
         registerTagProcessor("actor",  ActorControl.class);
         
+        // ssssssssssssssssssss------------------------------------------------------------------- 20160713
+        registerTagProcessor("actorAnimCurveMove",  ActorCurveMove.class);
+        
+        registerTagProcessor("animMove",  MoveAnim.class); 
+        registerTagProcessor("animCurveMove",  CurveMoveAnim.class);
+        registerTagProcessor("animRotation",  RotationAnim.class);
+        registerTagProcessor("animRandomRotation",  RandomRotationAnim.class);
+        registerTagProcessor("animScale",  ScaleAnim.class);
+        registerTagProcessor("animColor",  ColorAnim.class);
+        
+        registerTagProcessor("bulletSimple",  SimpleBullet.class);
+        registerTagProcessor("bulletStraight",  StraightBullet.class);
+        registerTagProcessor("bulletCurve",  CurveBullet.class);
+        registerTagProcessor("bulletCurveTrail",  CurveTrailBullet.class);
+        
+        registerTagProcessor("channel",  SimpleChannel.class);
+        
+        registerTagProcessor("chatGroup",  GroupChat.class);
+        registerTagProcessor("chatSend",  SendChat.class);
+        registerTagProcessor("chatShop",  ShopChat.class);
+        registerTagProcessor("chatSell",  SellChat.class);
+        registerTagProcessor("chatTask",  TaskChat.class);
+        
+        registerTagProcessor("elLevel",  LevelEl.class);
+        registerTagProcessor("elHit",  HitEl.class);
+        registerTagProcessor("elXpDrop",  XpDropEl.class);
+        
+        registerTagProcessor("emitter",  Emitter.class);
+        
+        registerTagProcessor("hitChecker",  SimpleHitChecker.class);
+
+//        registerTagProcessor("item",  11111111.class);
+        
+        registerTagProcessor("logicFight",  FightLogic.class);
+        registerTagProcessor("logicFollow",  FollowLogic.class);
+        registerTagProcessor("logicNotify",  NotifyLogic.class);
+        registerTagProcessor("logicPlayer",  PlayerLogic.class);
+        registerTagProcessor("logicPosition",  PositionLogic.class);
+        registerTagProcessor("logicSearchEnemy",  SearchEnemyLogic.class);
+        registerTagProcessor("logicAttributeChange",  AttributeChangeLogic.class);
+        registerTagProcessor("logicDefend",  DefendLogic.class);
+        registerTagProcessor("logicIdle",  IdleLogic.class);
+        registerTagProcessor("logicShop",  ShopLogic.class);
+
+        registerTagProcessor("point",  FixedPosition.class);
+        registerTagProcessor("box",  RandomBoxPosition.class);
+        registerTagProcessor("sphere",  RandomSpherePosition.class);
+        registerTagProcessor("circle",  RandomCirclePosition.class);
+        registerTagProcessor("positionView",  ViewPosition.class);
+        
+        registerTagProcessor("resistSimple",  SimpleResist.class);
+        registerTagProcessor("resistAll",  AllResist.class);
+
+        registerTagProcessor("shapeBox",  BoxShape.class);
+
+        registerTagProcessor("skillWalk",  WalkSkill.class);
+        registerTagProcessor("skillRun",  RunSkill.class);
+        registerTagProcessor("skillWait",  WaitSkill.class);
+        registerTagProcessor("skillIdle",  IdleSkill.class);
+        registerTagProcessor("skillHurt",  HurtSkill.class);
+        registerTagProcessor("skillDead",  DeadSkill.class);
+        registerTagProcessor("skillDeadRagdoll",  DeadRagdollSkill.class);
+        registerTagProcessor("skillAttack",  AttackSkill.class);
+        registerTagProcessor("skillShot",  ShotSkill.class);
+        registerTagProcessor("skillShotBow",  ShotBowSkill.class);
+        registerTagProcessor("skillSummon",  SummonSkill.class);
+        registerTagProcessor("skillBack",  BackSkill.class);
+        registerTagProcessor("skillReady",  ReadySkill.class);
+        registerTagProcessor("skillDefend",  DefendSkill.class);
+        registerTagProcessor("skillDuck",  DuckSkill.class);
+        registerTagProcessor("skillReset",  ResetSkill.class);
+        registerTagProcessor("skillSkin",  SkinSkill.class);
+
+        registerTagProcessor("skinOutfit",  OutfitSkin.class);
+        registerTagProcessor("skinWeapon",  WeaponSkin.class);
+        
+//        registerTagProcessor("slot",  1111.class);
+//        registerTagProcessor("sound",  1111.class);
+
+        registerTagProcessor("talentAttribute",  AttributeTalent.class);
+   
+        registerTagProcessor("taskCollect",  CollectTask.class);
+        
+                
+        registerTagProcessor("viewText",  TextView.class);
+        registerTagProcessor("viewTextPanel",  TextPanelView.class);
+        registerTagProcessor("viewTimer",  TimerView.class);
         
         
+        // eeeeeeeeeeeeee------------------------------------------------------------------- 20160713
         
         // 注册Tag载入器及处理器。
         registerTagProcessor("effectHalo",  HaloEffect.class);

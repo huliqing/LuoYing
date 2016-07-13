@@ -12,9 +12,10 @@ import name.huliqing.fighter.object.actor.Actor;
 /**
  *
  * @author huliqing
+ * @param <T>
  */
-public class SimpleHitChecker extends AbstractHitChecker {
-    private final static ActorService actorService = Factory.get(ActorService.class);
+public class SimpleHitChecker<T extends HitCheckerData> extends AbstractHitChecker<T> {
+    private final ActorService actorService = Factory.get(ActorService.class);
     
     private enum Group {
         /** ignore不管分组 */
@@ -59,14 +60,15 @@ public class SimpleHitChecker extends AbstractHitChecker {
     private Checker living;
     // 生命值状态
     private Checker life;
-    
-    public SimpleHitChecker(HitCheckerData data) {
-        super(data);
+
+    @Override
+    public void initData(T data) {
+        super.initData(data);
         group = Group.identify(data.getAttribute("group"));
         living = Checker.identify(data.getAttribute("living"));
         life = Checker.identify(data.getAttribute("life"));
     }
-
+    
     @Override
     public boolean canHit(Actor source, Actor target) {
         // 注意：因为source有可能为null,举例来说，比如：magic有可能是没有施放者的

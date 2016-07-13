@@ -34,8 +34,9 @@ import name.huliqing.fighter.ui.Window;
 /**
  * 出售物品到商店类角色
  * @author huliqing
+ * @param <T>
  */
-public class SendChat extends Chat {
+public class SendChat<T extends ChatData> extends Chat<T> {
     private final ItemService itemService = Factory.get(ItemService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final SkinService skinService = Factory.get(SkinService.class);
@@ -43,7 +44,6 @@ public class SendChat extends Chat {
     private final UserCommandNetwork userCommandNetwork = Factory.get(UserCommandNetwork.class);
 
     // ---- inner
-    private boolean init;
     private Window win;
     private LinearLayout bodyPanel;
     private TransferPanel sourcePanel;  // 玩家物品面板,显示角色已经有的物品
@@ -53,11 +53,6 @@ public class SendChat extends Chat {
     
     // 发送者角色，一般为Player.
     private Actor sender;
-    
-    public SendChat(ChatData data) {
-        super(data);
-        // 不要在这里初始化UI。在initialize()中按需初始化
-    }
     
     @Override
     protected UI createChatUI(float width, float height) {

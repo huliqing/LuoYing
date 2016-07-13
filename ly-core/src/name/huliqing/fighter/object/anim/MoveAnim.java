@@ -12,8 +12,9 @@ import name.huliqing.fighter.data.AnimData;
 /**
  * 直线移动的动画
  * @author huliqing
+ * @param <T>
  */
-public final class MoveAnim extends SpatialAnim {
+public final class MoveAnim<T extends AnimData> extends SpatialAnim<T> {
 //    private final static Logger LOG = Logger.getLogger(MoveAnim.class.getName());
 
     // 开始位置及结束位置
@@ -28,12 +29,9 @@ public final class MoveAnim extends SpatialAnim {
     private final Vector3f trueStartPos = new Vector3f();
     private final Vector3f trueEndPos = new Vector3f();
     
-    public MoveAnim() {
-        super();
-    }
-    
-    public MoveAnim(AnimData data) {
-        super(data);
+    @Override
+    public void initData(T data) {
+        super.initData(data);
         this.startPos = data.getAsVector3f("startPos");
         this.endPos = data.getAsVector3f("endPos");
         this.startPosOffset = data.getAsVector3f("startPosOffset");

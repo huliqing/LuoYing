@@ -23,8 +23,9 @@ import name.huliqing.fighter.utils.DebugDynamicUtils;
 /**
  * 让角色进行曲线运动
  * @author huliqing
+ * @param <T>
  */
-public class ActorCurveMove extends ActorAnim {
+public class ActorCurveMove<T extends ActorAnimData> extends ActorAnim<T> {
     private final PlayService playService = Factory.get(PlayService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     
@@ -48,7 +49,7 @@ public class ActorCurveMove extends ActorAnim {
     private float tension = 0.5f;
     
     // ---- 内部参数 ----
-    private Spline spline = new Spline();
+    private final Spline spline = new Spline();
     // 曲线总长度
     private float totalLength;
     // 是否自动跟随路径朝向
@@ -57,17 +58,13 @@ public class ActorCurveMove extends ActorAnim {
     private boolean useSine;
     // 记住原始kinematic状态,以便结束时还原
     private boolean oldKinematicState;
-    
-    public ActorCurveMove() {
-        super(null);
-    }
 
-    public ActorCurveMove(ActorAnimData data) {
-        super(data);
+    @Override
+    public void initData(T data) {
+        super.initData(data);
         if (data != null) {
-            
             // 1.points
-            String[] tempPoints = data.getProto().getAsArray("points");
+            String[] tempPoints = data.getAsArray("points");
             if (tempPoints != null) {
                 points = new ArrayList<Vector3f>(tempPoints.length);
                 for (String tp : tempPoints) {
@@ -82,16 +79,16 @@ public class ActorCurveMove extends ActorAnim {
                 }
             }
             
-            String tempFacing = data.getProto().getAttribute("facing", facing.name());
+            String tempFacing = data.getAttribute("facing", facing.name());
             if (tempFacing.equals(Facing.path.name())) {
                 facing = Facing.path;
             } else if (tempFacing.equals(Facing.target.name())) {
                 facing = Facing.target;
             }
             
-            upperGround = data.getProto().getAsBoolean("upperGround", upperGround);
-            tension = data.getProto().getAsFloat("tension", tension);
-            useSine = data.getProto().getAsBoolean("useSine", useSine);
+            upperGround = data.getAsBoolean("upperGround", upperGround);
+            tension = data.getAsFloat("tension", tension);
+            useSine = data.getAsBoolean("useSine", useSine);
         }
     }
     

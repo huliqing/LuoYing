@@ -15,8 +15,9 @@ import name.huliqing.fighter.utils.MathUtils;
 /**
  * 环形内的随机点，通过设置不同参数可以形成:圆环\圆面\圆筒\圆柱等形式的shape
  * @author huliqing
+ * @param <T>
  */
-public final class RandomCirclePosition extends AbstractPosition {
+public final class RandomCirclePosition<T extends PositionData> extends AbstractPosition<T> {
     // 默认在xy平面上产生粒子,可指定为xz/yz
     private Plane plane = Plane.xy;
 
@@ -53,8 +54,10 @@ public final class RandomCirclePosition extends AbstractPosition {
     // 就不需要去计算随机偏移位置
     private boolean hasOffset;
     
-    public RandomCirclePosition(PositionData data) {
-        super(data);
+    @Override
+    public void initData(T data) {
+        super.initData(data);
+        
         String tempPlane = data.getAttribute("plane");
         if (tempPlane != null) {
             plane = Plane.identify(tempPlane);

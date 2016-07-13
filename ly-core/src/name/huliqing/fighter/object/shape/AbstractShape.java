@@ -11,18 +11,20 @@ import name.huliqing.fighter.utils.MatUtils;
 /**
  *
  * @author huliqing
+ * @param <T>
  */
-public abstract class AbstractShape implements Shape {
+public abstract class AbstractShape<T extends ShapeData> implements Shape<T> {
 
-    protected ShapeData data;
+    protected T data;
     protected Geometry geometry;
-    
-    public AbstractShape(ShapeData data) {
+
+    @Override
+    public void initData(T data) {
         this.data = data;
     }
 
     @Override
-    public ShapeData getData() {
+    public T getData() {
         return data;
     }
 

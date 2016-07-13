@@ -15,7 +15,6 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import name.huliqing.fighter.Config;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.object.actor.ActorControl;
@@ -34,14 +33,16 @@ import name.huliqing.fighter.object.DataFactory;
 import name.huliqing.fighter.object.anim.Anim;
 import name.huliqing.fighter.object.anim.Listener;
 import name.huliqing.fighter.object.anim.MoveAnim;
+import name.huliqing.fighter.object.skill.AbstractSkill;
 import name.huliqing.fighter.utils.GeometryUtils;
 import name.huliqing.fighter.utils.ThreadHelper;
 
 /**
  * 召唤技
  * @author huliqing
+ * @param <T>
  */
-public class SummonSkill extends SimpleSkill {
+public class SummonSkill<T extends SkillData> extends AbstractSkill<T> {
 //    private final static Logger logger = Logger.getLogger(SummonSkill.class.getName());
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
@@ -66,10 +67,9 @@ public class SummonSkill extends SimpleSkill {
     private List<SummonOper> cache = new ArrayList<SummonOper>(1);
     private SummonOper currentSummon;
     
-    public SummonSkill() {}
-    
-    public SummonSkill(SkillData data) {
-        super(data);
+    @Override
+    public void initData(T data) {
+        super.initData(data); 
         this.summonId = data.getAttribute("summonActorId", summonId);
         this.summonPoint = data.getAsFloat("summonPoint", summonPoint);
         this.summonOffset = data.getAsVector3f("summonOffset", summonOffset);

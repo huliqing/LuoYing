@@ -12,16 +12,16 @@ import name.huliqing.fighter.data.PositionData;
 /**
  * BOX内的随机点
  * @author huliqing
+ * @param <T>
  */
-public final class RandomBoxPosition extends AbstractPosition {
+public final class RandomBoxPosition<T extends PositionData> extends AbstractPosition<T> {
 
     private EmitterShape shape;
     
-    public RandomBoxPosition(PositionData data) {
-        super(data);
-        shape = new EmitterBoxShape(
-                  data.getAsVector3f("min")
-                , data.getAsVector3f("max"));
+    @Override
+    public void initData(T data) {
+        super.initData(data);
+        shape = new EmitterBoxShape(data.getAsVector3f("min"), data.getAsVector3f("max"));
     }
 
     @Override

@@ -18,8 +18,9 @@ import name.huliqing.fighter.game.service.PlayService;
  * 动画控制，V2
  * @author huliqing
  * @param <T>
+ * @param <E>
  */
-public abstract class AbstractAnim<T> implements Anim<T> {
+public abstract class AbstractAnim<T extends AnimData, E> implements Anim<T, E> {
     private final static Logger LOG = Logger.getLogger(AbstractAnim.class.getName());
     private final PlayService playService = Factory.get(PlayService.class);
     
@@ -46,6 +47,8 @@ public abstract class AbstractAnim<T> implements Anim<T> {
         }
     }
     
+    protected T data;
+    
     // 提示显示调试信息，但是具体由各个子类去实现。
     protected boolean debug;
     
@@ -63,7 +66,7 @@ public abstract class AbstractAnim<T> implements Anim<T> {
     
     // ---- 内部参数 ----
     protected List<Listener> listeners;
-    protected T target;
+    protected E target;
     
     // 当前的动画"时间"插值。[0.0~1.0]
     protected float timeInterpolation;
@@ -77,9 +80,9 @@ public abstract class AbstractAnim<T> implements Anim<T> {
     // 正向1, 反向 -1
     private int dir = 1;
     
-    public AbstractAnim() {}
-    
-    public AbstractAnim(AnimData data) {
+    @Override
+    public void initData(T data) {
+        this.data = data;
         this.debug = data.getAsBoolean("debug", debug);
         this.useTime = data.getAsFloat("useTime", useTime);
         // 不能让useTime小于0,至少取一个非常小的值。
@@ -116,14 +119,19 @@ public abstract class AbstractAnim<T> implements Anim<T> {
             }
         }
     }
+
+    @Override
+    public T getData() {
+        return data;
+    }
     
     @Override
-    public T getTarget() {
+    public E getTarget() {
         return target;
     }
 
     @Override
-    public void setTarget(T target) {
+    public void setTarget(E target) {
         this.target = target;
     }
 

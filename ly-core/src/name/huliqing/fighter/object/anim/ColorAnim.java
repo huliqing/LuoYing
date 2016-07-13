@@ -20,8 +20,9 @@ import name.huliqing.fighter.data.AnimData;
 /**
  *
  * @author huliqing
+ * @param <T>
  */
-public class ColorAnim extends SpatialAnim {
+public class ColorAnim<T extends AnimData> extends SpatialAnim<T> {
 //    private final static Logger logger = Logger.getLogger(ColorAnim.class.getName());
     
     private final ColorRGBA startColor = ColorRGBA.DarkGray.clone();
@@ -47,14 +48,10 @@ public class ColorAnim extends SpatialAnim {
                 
         }
     };
-    
-    
-    public ColorAnim() {
-        super();
-    }
-    
-    public ColorAnim(AnimData data) {
-        super(data);
+
+    @Override
+    public void initData(T data) {
+        super.initData(data);
         this.startColor.set(data.getAsColor("startColor", startColor));
         this.endColor.set(data.getAsColor("endColor", endColor));
         this.useSine = data.getAsBoolean("useSine", useSine);

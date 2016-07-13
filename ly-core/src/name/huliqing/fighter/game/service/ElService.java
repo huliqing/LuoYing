@@ -5,6 +5,7 @@
 package name.huliqing.fighter.game.service;
 
 import name.huliqing.fighter.Inject;
+import name.huliqing.fighter.object.el.El;
 import name.huliqing.fighter.object.el.HitEl;
 import name.huliqing.fighter.object.el.XpDropEl;
 
@@ -13,6 +14,13 @@ import name.huliqing.fighter.object.el.XpDropEl;
  * @author huliqing
  */
 public interface ElService extends Inject{
+    
+    /**
+     * 获取指定ID的EL
+     * @param elId
+     * @return 
+     */
+    El getEl(String elId);
     
     /**
      * 给定一个levelEl的id及等级来获取等级值。注：levelElId就跟名字一样，必

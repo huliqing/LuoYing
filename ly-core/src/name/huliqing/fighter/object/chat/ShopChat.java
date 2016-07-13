@@ -42,8 +42,9 @@ import name.huliqing.fighter.ui.Window.CloseListener;
 /**
  * 商店购物,用于玩家向商店角色购买物品
  * @author huliqing
+ * @param <T>
  */
-public class ShopChat extends Chat implements ItemListener {
+public class ShopChat<T extends ChatData> extends Chat<T> implements ItemListener {
     private final ItemService itemService = Factory.get(ItemService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final PlayService playService = Factory.get(PlayService.class);
@@ -53,18 +54,17 @@ public class ShopChat extends Chat implements ItemListener {
     private float discount = 1.0f;
     
     // ---- inner
-    private boolean init;
     private Window win;
     // 物品列表的标题
     private TitlePanel titlePanel;
     private ItemList productPanel;
     // 页脚
     private Footer footerPanel;
-    
-    public ShopChat(ChatData data) {
-        super(data);
+
+    @Override
+    public void initData(T data) {
+        super.initData(data); 
         discount = data.getAsFloat("discount", discount);
-        // 不要在这里初始化UI。在initialize()中按需初始化
     }
 
     @Override

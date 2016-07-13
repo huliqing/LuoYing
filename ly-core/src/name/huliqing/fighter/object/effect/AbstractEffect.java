@@ -12,7 +12,6 @@ import com.jme3.scene.Spatial;
 import com.jme3.util.TempVars;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.fighter.Common;
 import name.huliqing.fighter.data.AnimData;
 import name.huliqing.fighter.data.EffectData;
 import name.huliqing.fighter.enums.EffectPhase;

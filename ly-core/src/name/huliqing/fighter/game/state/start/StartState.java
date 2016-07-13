@@ -26,6 +26,7 @@ import name.huliqing.fighter.game.service.GameService;
 import name.huliqing.fighter.game.state.LabPlayState;
 import name.huliqing.fighter.game.state.lan.LanState;
 import name.huliqing.fighter.loader.Loader;
+import name.huliqing.fighter.object.emitter.Emitter;
 import name.huliqing.fighter.save.SaveHelper;
 import name.huliqing.fighter.save.SaveStory;
 import name.huliqing.fighter.shape.QuadXY;
@@ -155,7 +156,7 @@ public class StartState extends AbstractAppState {
 //        app.getCamera().setLocation(new Vector3f(0,0,10));
 //        app.getCamera().lookAt(new Vector3f(0,0,-1), Vector3f.UNIT_Y);
         
-        emitter = Loader.loadEmitter(IdConstants.EMITTER_SAKURA);
+        emitter = Loader.loadEmitter(IdConstants.EMITTER_SAKURA).getParticleEmitter();
         emitter.setLocalTranslation(sw * 0.5f, sh, 1);
         emitter.setLocalScale(50);
         // 必须正确设置inWorldSpace,FaceNormal,QueueBucket否则在GUI上无法显示emitter

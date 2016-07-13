@@ -5,19 +5,15 @@
 package name.huliqing.fighter.object.skin;
 
 import name.huliqing.fighter.data.SkinData;
+import name.huliqing.fighter.object.DataProcessor;
 import name.huliqing.fighter.object.actor.Actor;
 
 /**
  *
  * @author huliqing
+ * @param <T>
  */
-public interface Skin {
-    
-    /**
-     * 获取绑定的数据
-     * @return 
-     */
-    SkinData getData();
+public interface Skin<T extends SkinData> extends DataProcessor<T>{
     
     /**
      * 把skin添加到角色身上

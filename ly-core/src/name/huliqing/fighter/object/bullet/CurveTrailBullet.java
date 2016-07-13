@@ -28,9 +28,10 @@ import name.huliqing.fighter.utils.MathUtils;
 /**
  *
  * @author huliqing
+ * @param <T>
  */
-public class CurveTrailBullet extends CurveBullet {
-    private final static PlayService playService = Factory.get(PlayService.class);
+public class CurveTrailBullet<T extends BulletData> extends CurveBullet<T> {
+    private final PlayService playService = Factory.get(PlayService.class);
     
     // 拖尾的宽度
     private float width = 0.3f;
@@ -48,9 +49,10 @@ public class CurveTrailBullet extends CurveBullet {
     // ---- inner
     private Material mat;
     private final Node surface = new Node();
-    
-    public CurveTrailBullet(BulletData data) {
-        super(data);
+
+    @Override
+    public void initData(T data) {
+        super.initData(data);
         this.mask = data.getAttribute("mask", null);
         this.tex = data.getAttribute("tex", null);
         this.texScale = data.getAsFloat("texScale", texScale);

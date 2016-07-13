@@ -20,42 +20,38 @@ import name.huliqing.fighter.data.AnimData;
  * 画控制器直接添加到Sptial的Control列表中直接执行。只需要调用start即可。
  * 不需要手动调用update方式更新。
  * @author huliqing
+ * @param <T>
  */
-public abstract class SpatialAnim extends AbstractAnim<Spatial> implements Control {
-    private final static Logger logger = Logger.getLogger(SpatialAnim.class.getName());
-
-    public SpatialAnim() {
-        super();
-    }
+public abstract class SpatialAnim<T extends AnimData> extends AbstractAnim<T, Spatial> implements Control {
+    private final static Logger LOG = Logger.getLogger(SpatialAnim.class.getName());
     
-    public SpatialAnim(AnimData data) {
-        super(data);
-    }
-    
-    // ---- Supported from control
-
     @Override
     public void setSpatial(Spatial spatial) {
         this.setTarget(spatial);
     }
 
     @Override
+    public Spatial getTarget() {
+        return target;
+    }
+    
+    @Override
     public void render(RenderManager rm, ViewPort vp) {}
     
     @Override
     public Control cloneForSpatial(Spatial spatial) {
-        logger.log(Level.WARNING, "Unsupported yet");
+        LOG.log(Level.WARNING, "Unsupported yet");
         return null;
     }
 
     @Override
     public void write(JmeExporter ex) throws IOException {
-        logger.log(Level.WARNING, "Unsupported yet!");
+        LOG.log(Level.WARNING, "Unsupported yet!");
     }
 
     @Override
     public void read(JmeImporter im) throws IOException {
-        logger.log(Level.WARNING, "Unsupported yet!");
+        LOG.log(Level.WARNING, "Unsupported yet!");
     }
     
 }

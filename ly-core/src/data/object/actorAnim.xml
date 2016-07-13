@@ -6,17 +6,17 @@
     xsi:schemaLocation='http://fighter.huliqing.name meta/actorAnim.xsd' >
     
     <!-- 落樱飞舞:角色动画 -->
-    <curveMove id="actorAnimDanceSakura" points="0|4|-3, 0|0|-6" useSine="1" />
+    <actorAnimCurveMove id="actorAnimDanceSakura" points="0|4|-3, 0|0|-6" useSine="1" />
     
     <!--左闪避和右闪避-->
-    <curveMove id="actorAnimDuckLeft" points="5|0|2" facing="target" useSine="1" />
-    <curveMove id="actorAnimDuckRight" points="-5|0|2" facing="target" useSine="1" />
-    <curveMove id="actorAnimDuckBack" points="0|2|-2.5,0|0|-5" facing="none" useSine="1" />
-    <curveMove id="actorAnimDuckRollLeft" points="3|0|3" facing="target" useSine="1" />
-    <curveMove id="actorAnimDuckRollRight" points="-3|0|3" facing="target" useSine="1" />
+    <actorAnimCurveMove id="actorAnimDuckLeft" points="5|0|2" facing="target" useSine="1" />
+    <actorAnimCurveMove id="actorAnimDuckRight" points="-5|0|2" facing="target" useSine="1" />
+    <actorAnimCurveMove id="actorAnimDuckBack" points="0|2|-2.5,0|0|-5" facing="none" useSine="1" />
+    <actorAnimCurveMove id="actorAnimDuckRollLeft" points="3|0|3" facing="target" useSine="1" />
+    <actorAnimCurveMove id="actorAnimDuckRollRight" points="-3|0|3" facing="target" useSine="1" />
     
     <!--复活术：让死亡角色轻飘飘向上浮动-->
-    <curveMove id="actorAnimMoveUp" speed="0.25" loop="" points="0|3|0" tension="0" />
+    <actorAnimCurveMove id="actorAnimMoveUp" speed="0.25" loop="" points="0|3|0" tension="0" />
 </root>
 
 

@@ -33,18 +33,21 @@ import name.huliqing.fighter.object.actor.Actor;
 /**
  * 
  * @author huliqing
+ * @param <T>
  */
-public abstract class AbstractSkin implements Skin{
+public abstract class AbstractSkin<T extends SkinData> implements Skin<T> {
     private final ConfigService configService = Factory.get(ConfigService.class);
+    
+    protected T data;
     
     private String bindBone;
     // skin的本地模型初始变换，注：localRotation需要使用Quaternion.fromAngle转换成Quaternion.
     private Vector3f localTranslation;
     private float[] localRotation;
     private Vector3f localScale;
-    protected SkinData data;
-    
-    public AbstractSkin(SkinData data) {
+
+    @Override
+    public void initData(T data) {
         this.data = data;
         bindBone = data.getAttribute("bindBone");
         localTranslation = data.getAsVector3f("localTranslation");
@@ -53,7 +56,7 @@ public abstract class AbstractSkin implements Skin{
     }
 
     @Override
-    public SkinData getData() {
+    public T getData() {
         return data;
     }
 

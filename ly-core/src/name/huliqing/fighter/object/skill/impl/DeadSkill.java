@@ -8,22 +8,23 @@ import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.SkillData;
 import name.huliqing.fighter.game.service.PlayService;
 import name.huliqing.fighter.game.service.StateService;
+import name.huliqing.fighter.object.skill.AbstractSkill;
 
 /**
  * 执行死亡技能,简单的死亡效果
  * @author huliqing
+ * @param <T>
  */
-public class DeadSkill extends SimpleSkill {
+public class DeadSkill<T extends SkillData> extends AbstractSkill<T> {
     private final PlayService playService = Factory.get(PlayService.class);
     private final StateService stateService = Factory.get(StateService.class);;
     
     // 是否死亡后立即移出场景
     private boolean remove;
     
-    public DeadSkill() {}
-    
-    public DeadSkill(SkillData data) {
-       super(data);
+    @Override
+    public void initData(T data) {
+        super.initData(data); 
        remove = data.getAsBoolean("remove", remove);
     }
 
@@ -55,11 +56,6 @@ public class DeadSkill extends SimpleSkill {
     public void cleanup() {
         super.cleanup();
     }
-
-//    @Override
-//    public boolean isInRange(Actor character) {
-//        return false;
-//    }
 
     
 }

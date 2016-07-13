@@ -7,14 +7,14 @@ package name.huliqing.fighter.object.bullet;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import name.huliqing.fighter.data.BulletData;
+import name.huliqing.fighter.object.DataProcessor;
 
 /**
  *
  * @author huliqing
+ * @param <T>
  */
-public interface Bullet {
-    
-    BulletData getData();
+public interface Bullet<T extends BulletData> extends DataProcessor<T> {
     
     /**
      * 设置开始点和精确的结束点,结束点可以是一个静态点或者是一个动态引用，

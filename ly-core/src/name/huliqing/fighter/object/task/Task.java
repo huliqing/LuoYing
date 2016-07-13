@@ -5,16 +5,19 @@
 package name.huliqing.fighter.object.task;
 
 import name.huliqing.fighter.data.TaskData;
+import name.huliqing.fighter.object.DataProcessor;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.ui.UI;
 
 /**
  * 任务
  * @author huliqing
+ * @param <T>
  */
-public interface Task {
-    
-    TaskData getData();
+public interface Task<T extends TaskData> extends DataProcessor<T> {
+
+    @Override
+    public T getData();
     
     /**
      * 初始化任务

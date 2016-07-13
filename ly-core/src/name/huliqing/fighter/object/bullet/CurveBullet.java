@@ -18,8 +18,9 @@ import name.huliqing.fighter.object.position.Position;
 /**
  * 曲线类型的子弹。
  * @author huliqing
+ * @param <T>
  */
-public class CurveBullet extends StraightBullet {
+public class CurveBullet<T extends BulletData> extends StraightBullet<T> {
     
     // 曲线张力
     private float tension = 0.5f;
@@ -37,9 +38,10 @@ public class CurveBullet extends StraightBullet {
     private List<Vector3f> waypoints;
     // 临时的用于缓存中间路径点,中间路径点是动态生成的。
     private List<Vector3f> tempCenterPositions;
-    
-    public CurveBullet(BulletData data) {
-        super(data);
+
+    @Override
+    public void initData(T data) {
+        super.initData(data);
         tension = data.getAsFloat("tension", tension);
         
         // format: "position1,position1,position1"

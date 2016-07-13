@@ -12,6 +12,7 @@ import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.FastMath;
 import name.huliqing.fighter.data.EffectData;
 import name.huliqing.fighter.loader.Loader;
+import name.huliqing.fighter.object.emitter.Emitter;
 
 /**
  *
@@ -51,10 +52,11 @@ public class ParticleEffect extends AbstractEffect {
         super.doInit();
         
         if (pe == null) {
+            Emitter em = Loader.loadEmitter(emitter);
             if (randomColor) {
-                pe = Loader.loadEmitter(emitter, new RandomColorEmitter());
+                pe = em.getParticleEmitter(new RandomColorEmitter());
             } else {
-                pe = Loader.loadEmitter(emitter);
+                pe = em.getParticleEmitter();
             }
             pe.setInWorldSpace(inWorldSpace);
             pe.getMaterial().getAdditionalRenderState().setBlendMode(blendMode);

@@ -6,6 +6,8 @@ package name.huliqing.fighter.object.skill;
 
 import com.jme3.animation.LoopMode;
 import com.jme3.math.FastMath;
+import java.util.ArrayList;
+import java.util.List;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.constants.SkillConstants;
 import name.huliqing.fighter.data.MagicData;
@@ -17,7 +19,6 @@ import name.huliqing.fighter.game.service.EffectService;
 import name.huliqing.fighter.game.service.ElService;
 import name.huliqing.fighter.game.service.MagicService;
 import name.huliqing.fighter.game.service.PlayService;
-import name.huliqing.fighter.game.service.SkillService;
 import name.huliqing.fighter.loader.Loader;
 import name.huliqing.fighter.manager.SoundManager;
 import name.huliqing.fighter.object.actoranim.ActorAnim;
@@ -45,8 +46,9 @@ import name.huliqing.fighter.utils.MathUtils;
  * 关于cutTime: 影响技能时间、动画时间,但不影响技能速度和动画速度
  * 
  * @author huliqing
+ * @param <T>
  */
-public abstract class AbstractSkill implements Skill {
+public abstract class AbstractSkill<T extends SkillData> implements Skill<T> {
 //    private static final Logger logger = Logger.getLogger(AbstractSkill.class.getName());
 //    private final AttributeService attributeService = Factory.get(AttributeService.class);
     private final ElService elService = Factory.get(ElService.class);
@@ -57,21 +59,21 @@ public abstract class AbstractSkill implements Skill {
     private final MagicService magicService = Factory.get(MagicService.class);
     
     // 格式: soundId|timePoint,soundId|timePoint...
-    protected SoundWrap[] sounds;
+    protected List<SoundWrap> sounds;
     
     // 格式:effectId|timePoint,effect|timePoint,effectId|timePoint...
-    protected EffectWrap[] effects;
+    protected List<EffectWrap> effects;
     
     // 关联一些魔法物体，这些魔法物体会在角色施放技能的时候放置在角色所在的位置上,根据
     // 魔法物体的设置，这些魔法物体也可能跟随着角色。
     // 格式："magic|timePoint,magic|timePoint,..."
-    protected MagicWrap[] magics;
+    protected List<MagicWrap> magics;
     
     // 格式：motionId|timeStart|timeEnd,motionId|timeStart|timeEnd
-    protected ActorAnimWrap[] actorAnims;
+    protected List<ActorAnimWrap> actorAnims;
     
     // ---- 内部参数 ----
-    protected SkillData data;
+    protected T data;
     
     // 当前执行技能的角色
     protected Actor actor;
@@ -90,46 +92,45 @@ public abstract class AbstractSkill implements Skill {
     // 同步设置速度,这个trueSpeed用于缓存技能的实际速度，在每次init的时候计算一次
     // 在执行过程中就不再需要计算。
     protected float trueSpeed;
-    
-    public AbstractSkill() {}
-    
-    public AbstractSkill(SkillData data) {
+
+    @Override
+    public void initData(T data) {
         this.data = data;
         
         // Sounds
         String[] tempSounds = data.getAsArray("sounds");
         if (tempSounds != null) {
-            sounds = new SoundWrap[tempSounds.length];
-            for (int i = 0; i < sounds.length; i++) {
+            sounds = new ArrayList<SoundWrap>(tempSounds.length);
+            for (int i = 0; i < tempSounds.length; i++) {
                 String[] soundArr = tempSounds[i].split("\\|");
                 SoundWrap sw = new SoundWrap();
                 sw.soundId = soundArr[0];
                 if (soundArr.length >= 2) {
                     sw.timePoint = ConvertUtils.toFloat(soundArr[1], 0f);
                 }
-                sounds[i] = sw;
+                sounds.add(sw);
             }
         }
         
         // Effects, 格式:effectId|timePoint,effect|timePoint,effectId|timePoint...
         String[] tempEffects = data.getAsArray("effects");
         if (tempEffects != null) {
-            effects = new EffectWrap[tempEffects.length];
-            for (int i = 0; i < effects.length; i++) {
+            effects = new ArrayList<EffectWrap>(tempEffects.length);
+            for (int i = 0; i < tempEffects.length; i++) {
                 String[] effectArr = tempEffects[i].split("\\|");
                 EffectWrap ew = new EffectWrap();
                 ew.effectId = effectArr[0];
                 if (effectArr.length >= 2) {
                     ew.timePoint = ConvertUtils.toFloat(effectArr[1], 0f);
                 }
-                effects[i] = ew;
+                effects.add(ew);
             }
         }
         
         // Magics, 格式:magicId|timePoint,magic|timePoint,magicId|timePoint...
         String[] tempMagics = data.getAsArray("magics");
         if (tempMagics != null) {
-            magics = new MagicWrap[tempMagics.length];
+            magics = new ArrayList<MagicWrap>(tempMagics.length);
             for (int i = 0; i < tempMagics.length; i++) {
                 String[] magicArr = tempMagics[i].split("\\|");
                 MagicWrap mw = new MagicWrap();
@@ -137,14 +138,14 @@ public abstract class AbstractSkill implements Skill {
                 if (magicArr.length >= 2) {
                     mw.timePoint = ConvertUtils.toFloat(magicArr[1], 0f);
                 }
-                magics[i] = mw;
+                magics.add(mw);
             }
         }
         
         // Motions, 格式: actorAnimId|timeStart|timeEnd,actorAnimId|timeStart|timeEnd
         String[] tempActorAnims = data.getAsArray("actorAnims");
         if (tempActorAnims != null) {
-            actorAnims = new ActorAnimWrap[tempActorAnims.length];
+            actorAnims = new ArrayList<ActorAnimWrap>(tempActorAnims.length);
             for (int i = 0; i < tempActorAnims.length; i++) {
                 String[] actorAnimArr = tempActorAnims[i].split("\\|");
                 ActorAnimWrap aaw = new ActorAnimWrap();
@@ -155,9 +156,14 @@ public abstract class AbstractSkill implements Skill {
                 if (actorAnimArr.length >= 3) {
                     aaw.timePointEnd = ConvertUtils.toFloat(actorAnimArr[2], 1);
                 }
-                actorAnims[i] = aaw;
+                actorAnims.add(aaw);
             }
         }
+    }
+
+    @Override
+    public T getData() {
+        return data;
     }
     
     @Override

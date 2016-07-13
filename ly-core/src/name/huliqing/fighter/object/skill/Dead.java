@@ -5,13 +5,12 @@
 package name.huliqing.fighter.object.skill;
 
 import com.jme3.math.Vector3f;
-import name.huliqing.fighter.object.skill.Skill;
 
 /**
  * 定义死亡技能
  * @author huliqing
  */
-public interface Dead extends Skill {
+public interface Dead {
     
     /**
      * 指定一个力的方向和大小,当某些使用物理特性的死亡技能时比较有用,比如布娃娃系
