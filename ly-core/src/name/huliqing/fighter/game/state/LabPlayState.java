@@ -85,7 +85,7 @@ public class LabPlayState extends NetworkPlayState {
                 gameState.getTeamView().setMainActor(npc1);
                 gameState.setTarget(npc2);
                 
-                CameraChaseEnv cce = SceneUtils.findEnv(game.getScene(), CameraChaseEnv.class);
+                CameraChaseEnv cce = SceneUtils.findEnv(gameState.getScene(), CameraChaseEnv.class);
                 if (cce != null) {
                     cce.setChase(npc1.getModel());
                 }

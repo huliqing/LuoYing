@@ -97,7 +97,7 @@ public class ActorModelLoader {
             actorModel = new Node();
             ((Node) actorModel).attachChild(temp);
             // 当actor附带有effect时，必须把角色原始model设置为不透明的
-            // 否则添加的效果可能会被角色model挡住在后面。
+            // 否则添加的效果可能会被角色model挡住在后面。(JME3.0存在该问题)
             temp.setQueueBucket(RenderQueue.Bucket.Opaque);
         }
         actorModel.setName(data.getName());

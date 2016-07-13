@@ -19,6 +19,7 @@ import name.huliqing.fighter.data.GameData;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.enums.MessageType;
 import name.huliqing.fighter.game.service.GameService;
+import name.huliqing.fighter.game.service.SceneService;
 import name.huliqing.fighter.game.view.TeamView;
 import name.huliqing.fighter.manager.AnimationManager;
 import name.huliqing.fighter.manager.DamageManager;
@@ -28,6 +29,8 @@ import name.huliqing.fighter.object.PlayManager;
 import name.huliqing.fighter.object.PlayObject;
 import name.huliqing.fighter.object.NetworkObject;
 import name.huliqing.fighter.object.game.Game;
+import name.huliqing.fighter.object.scene.Scene;
+import name.huliqing.fighter.object.scene.Scene.SceneListener;
 import name.huliqing.fighter.object.view.View;
 import name.huliqing.fighter.ui.state.UIState;
 
@@ -37,6 +40,7 @@ import name.huliqing.fighter.ui.state.UIState;
  */
 public abstract class GameState extends AbstractAppState {
     private final GameService gameService = Factory.get(GameService.class);
+    private final SceneService sceneService = Factory.get(SceneService.class);
     
     public interface PlayListener {
         
@@ -71,6 +75,7 @@ public abstract class GameState extends AbstractAppState {
     protected final Map<Long, NetworkObject> networkObjects = new HashMap<Long, NetworkObject>();
     
     protected Game game;
+    protected Scene scene;
     
     public GameState(GameData gameData) {
         game = gameService.loadGame(gameData);
@@ -87,8 +92,23 @@ public abstract class GameState extends AbstractAppState {
         this.listeners.clear();
         this.networkObjects.clear();
         
-        // 添加游戏逻辑
+        // 添加场景及游戏逻辑
+        scene = sceneService.loadScene(game.getData().getSceneData());
         stateManager.attach(game);
+        stateManager.attach(scene);
+        scene.addSceneListener(new SceneListener() {
+            @Override
+            public void onSceneInitialized(Scene scene) {
+                // 载入场景之后开始游戏。
+                game.setScene(scene);
+                game.start();
+            }
+            @Override
+            public void onSceneObjectAdded(Scene scene, Spatial objectAdded) {}
+            
+            @Override
+            public void onSceneObjectRemoved(Scene scene, Spatial objectRemoved) {}
+        });
         
         // 添加Speak和Talk逻辑
         addObject(SpeakManager.getInstance(), false);
@@ -108,6 +128,9 @@ public abstract class GameState extends AbstractAppState {
     public void stateDetached(AppStateManager stateManager) {
         if (game != null) {
             stateManager.detach(game);
+        }
+        if (scene != null) {
+            stateManager.detach(scene);
         }
         super.stateDetached(stateManager);
     }
@@ -132,6 +155,10 @@ public abstract class GameState extends AbstractAppState {
 
     public Game getGame() {
         return game;
+    }
+    
+    public Scene getScene() {
+        return scene;
     }
     
     /**

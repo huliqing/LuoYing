@@ -92,7 +92,7 @@ public class Scene<T extends SceneData> extends AbstractAppState implements Data
     protected final List<Env> envs = new ArrayList<Env>();
     
     // 场景根节点
-    protected Node sceneRoot;
+    protected Node sceneRoot = new Node("SceneRoot");
     
     // 地型，允许多个地形
     protected  Node terrainRoot;
@@ -103,8 +103,32 @@ public class Scene<T extends SceneData> extends AbstractAppState implements Data
     // 这个fppDefault就是作为默认的FilterPostProcessor存在的。
     protected FilterPostProcessor fppDefault;
     
-    public Scene() {}
+    @Override
+    public T getData() {
+        return data;
+    }
 
+    @Override
+    public void setData(T data) {
+        this.data = data;
+    }
+    
+    /**
+     * 获取场景根节点
+     * @return 
+     */
+    public Spatial getSceneRoot() {
+        return sceneRoot;
+    }
+    
+    /**
+     * 设置场景根节点
+     * @param sceneRoot 
+     */
+    public void setSceneRoot(Node sceneRoot) {
+        this.sceneRoot = sceneRoot;
+    }
+    
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
@@ -117,10 +141,8 @@ public class Scene<T extends SceneData> extends AbstractAppState implements Data
         }
         
         // 建立场景节点。
-        sceneRoot = new Node("sceneRoot");
         terrainRoot = new Node("terrainRoot");
         sceneRoot.attachChild(terrainRoot);
-        playService.addObject(sceneRoot);
         
         // 初始化Env列表
         // 把数据复制到temp中进行处理，以避免在列表初始化的过程影响到原始列表，这种情况可能发生在：当一个Env在初始化的
@@ -151,6 +173,10 @@ public class Scene<T extends SceneData> extends AbstractAppState implements Data
         if (sceneListeners != null) {
             sceneListeners.clear();
         }
+        if (fppDefault != null) {
+            app.getViewPort().removeProcessor(fppDefault);
+            fppDefault = null;
+        }
         if (sceneEnvListeners != null) {
             sceneEnvListeners.clear();
         }
@@ -158,28 +184,13 @@ public class Scene<T extends SceneData> extends AbstractAppState implements Data
             env.cleanup();
         }
         envs.clear();
-
         if (sceneRoot != null) {
+            sceneRoot.detachAllChildren();
             sceneRoot.removeFromParent();
-            sceneRoot = null;
-        }
-        if (fppDefault != null) {
-            app.getViewPort().removeProcessor(fppDefault);
-            fppDefault = null;
         }
         super.cleanup();
     }
     
-    @Override
-    public T getData() {
-        return data;
-    }
-
-    @Override
-    public void setData(T data) {
-        this.data = data;
-    }
-
     /**
      * 获取当前场景的所有Env。
      * 注：不要修改该返回列表，只允许只读。
@@ -254,14 +265,6 @@ public class Scene<T extends SceneData> extends AbstractAppState implements Data
             notifySceneEnvListenerRemoved(env);
         }
         return result;
-    }
-    
-    /**
-     * 获取场景根节点
-     * @return 
-     */
-    public Spatial getSceneRoot() {
-        return sceneRoot;
     }
 
     /**

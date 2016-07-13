@@ -709,7 +709,7 @@ public class DataFactory {
         if (clz != null) {
             return clz;
         }
-        LOG.log(Level.WARNING, "Not data processor for tagName={0}, dataType={1}", new Object[] {tagName, dataType});
+//        LOG.log(Level.WARNING, "Not data processor for tagName={0}, dataType={1}", new Object[] {tagName, dataType});
         return null;
     }
 }

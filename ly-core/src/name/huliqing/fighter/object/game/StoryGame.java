@@ -55,8 +55,8 @@ public abstract class StoryGame extends Game {
     }
 
     @Override
-    public void onSceneInitialized(Scene scene) {
-        super.onSceneInitialized(scene); 
+    public void start() {
+        super.start(); 
         finishCount = 0;
         current = null;
         

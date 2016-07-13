@@ -45,7 +45,8 @@ public class SurvivalGame extends Game {
     }
 
     @Override
-    public void onSceneInitialized(Scene scene) {
+    public void start() {
+        super.start();
         // 生成敌人的刷新地点
         enemyPositions = new Vector3f[buildTotal];
         for (int i = 0; i < buildTotal; i++) {
@@ -59,7 +60,6 @@ public class SurvivalGame extends Game {
         addLogic(new ActorCleanLogic());
         // 主逻辑
         addLogic(new SurvivalLogic(this));
-        super.onSceneInitialized(scene);
     }
 
     @Override

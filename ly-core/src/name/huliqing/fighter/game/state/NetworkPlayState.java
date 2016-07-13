@@ -107,7 +107,7 @@ public abstract class NetworkPlayState extends PlayState implements LanGame {
 //        }
 //        actorPanel.getActorView().addControl(chaseCamera);
         
-        CameraChaseEnv cce = SceneUtils.findEnv(gameState.getGame().getScene(), CameraChaseEnv.class);
+        CameraChaseEnv cce = SceneUtils.findEnv(gameState.getScene(), CameraChaseEnv.class);
         if (cce != null) {
             cce.setChase(actorPanel.getActorView());
         }

@@ -7,12 +7,9 @@ package name.huliqing.fighter.object.game;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
-import com.jme3.scene.Spatial;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.GameData;
-import name.huliqing.fighter.game.service.SceneService;
 import name.huliqing.fighter.object.DataProcessor;
 import name.huliqing.fighter.object.PlayManager;
 import name.huliqing.fighter.object.PlayObject;
@@ -27,8 +24,7 @@ import name.huliqing.fighter.object.task.Task;
  * @author huliqing
  * @param <T>
  */
-public  class Game<T extends GameData> extends AbstractAppState implements DataProcessor<T>, Scene.SceneListener {
-    private final SceneService sceneService = Factory.get(SceneService.class);
+public  class Game<T extends GameData> extends AbstractAppState implements DataProcessor<T> {
 
     public interface GameListener {
         /**
@@ -39,17 +35,13 @@ public  class Game<T extends GameData> extends AbstractAppState implements DataP
     }
     
     protected T data;
-    
-    // ---- inner
     protected Application app;
-    
     // 游戏侦听器
     protected List<GameListener> listeners; 
-    
-    // 场景逻辑
-    protected Scene scene;
     // 扩展逻辑
     protected PlayManager playManager;
+    // 场景
+    protected Scene scene;
 
     @Override
     public void setData(T data) {
@@ -61,31 +53,30 @@ public  class Game<T extends GameData> extends AbstractAppState implements DataP
         return data;
     }
 
+    /**
+     * 设置场景
+     * @param scene 
+     */
+    public void setScene(Scene scene) {
+        this.scene = scene;
+    }
+    
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app); 
         this.app = app;
-        playManager = new PlayManager(app, PlayObject.class);
-        scene = sceneService.loadScene(data.getSceneData());
-        scene.addSceneListener(this);
-        app.getStateManager().attach(scene);
     }
-
-    @Override
-    public void onSceneInitialized(Scene scene) {
+    
+    /**
+     * 开始执行游戏逻辑
+     */
+    public void start() {
         if (listeners != null) {
             for (GameListener gl : listeners) {
                 gl.onGameStarted(this);
             }
         }
-    }
-    
-    @Override
-    public void onSceneObjectAdded(Scene scene, Spatial objectAdded) {
-    }
-
-    @Override
-    public void onSceneObjectRemoved(Scene scene, Spatial objectRemoved) {
+        playManager = new PlayManager(app, PlayObject.class);
     }
 
     @Override
@@ -93,28 +84,18 @@ public  class Game<T extends GameData> extends AbstractAppState implements DataP
         super.update(tpf);
         playManager.update(tpf);
     }
-
-    @Override
-    public void stateDetached(AppStateManager stateManager) {
-        if (scene != null) {
-            stateManager.detach(scene);
-        }
-        super.stateDetached(stateManager); 
-    }
         
     /**
      * 清理并结束当前游戏
      */
     @Override
     public void cleanup() {
+        if (listeners != null) {
+            listeners.clear();
+        }
         playManager.cleanup();
         super.cleanup();
     }
-    
-    public Scene getScene() {
-        return scene;
-    }
-
     
     /**
      * 添加一个子游戏逻辑

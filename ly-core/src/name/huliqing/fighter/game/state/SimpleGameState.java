@@ -41,8 +41,6 @@ import name.huliqing.fighter.object.anim.Anim;
 import name.huliqing.fighter.object.bullet.BulletCache;
 import name.huliqing.fighter.object.effect.EffectCache;
 import name.huliqing.fighter.object.env.CameraChaseEnv;
-import name.huliqing.fighter.object.game.Game;
-import name.huliqing.fighter.object.game.Game.GameListener;
 import name.huliqing.fighter.object.scene.SceneUtils;
 import name.huliqing.fighter.object.view.View;
 import name.huliqing.fighter.ui.AbstractUI;
@@ -102,7 +100,7 @@ public  class SimpleGameState extends GameState implements UIEventListener {
         super.initialize(stateManager, app); 
         
         // initialize all node;
-        localRoot = new Node("LPS_localRoot");
+        localRoot = new Node("SimpleGameState_localRoot");
         this.app.getRootNode().attachChild(localRoot);
         
         // TODO: UI在这里进行了手动初始化，有些不合理，后续考虑重构
@@ -127,13 +125,9 @@ public  class SimpleGameState extends GameState implements UIEventListener {
          ShortcutManager.init();
          HUDManager.init(this.app.getGuiNode());
          
-         // ==== 7.载入游戏
-        game.addListener(new GameListener() {
-            @Override
-            public void onGameStarted(Game game) {
-                // do somthing
-            }
-        });
+         // ==== 
+         // 指定场景的根节点
+         scene.setSceneRoot(localRoot);
     }
     
     /**
@@ -152,7 +146,7 @@ public  class SimpleGameState extends GameState implements UIEventListener {
                     }
                     
                     // 场景可能还未载入
-                    if (game.getScene() == null || !game.getScene().isInitialized()) {
+                    if (scene == null || !scene.isInitialized()) {
                         return false;
                     }
                     
@@ -161,7 +155,7 @@ public  class SimpleGameState extends GameState implements UIEventListener {
 //                            app.getInputManager(), app.getCamera(), game.getScene().getSceneRoot());
 
                     PickManager.PickResult pr = PickManager.pick(
-                            app.getInputManager(), app.getCamera(), game.getScene().getTerrain());
+                            app.getInputManager(), app.getCamera(), scene.getTerrain());
                     if (pr != null && onPicked(pr)) {
                         return true;
                     }
@@ -262,7 +256,7 @@ public  class SimpleGameState extends GameState implements UIEventListener {
 //                return isInScene(p);
 //            }
 
-            if (p == game.getScene().getSceneRoot() || p == UIState.getInstance().getUIRoot()) {
+            if ((scene != null && p == scene.getSceneRoot()) || p == UIState.getInstance().getUIRoot()) {
                 return true;
             } else {
                 return isInScene(p);
@@ -332,32 +326,24 @@ public  class SimpleGameState extends GameState implements UIEventListener {
     public final void removeObject(Object object) {
         super.removeObject(object);
         
-        PhysicsControl physicsControl = null;
         Actor actor = null;
         Spatial spatial = null;
         if (object instanceof Actor) {
             actor = (Actor) object;
-            physicsControl = actor.getModel().getControl(PhysicsControl.class);
         } else if (object instanceof Spatial) {
             spatial = (Spatial) object;
             actor = spatial.getControl(ActorControl.class);
-            physicsControl = spatial.getControl(PhysicsControl.class);
         } 
-        
-        // remove20160710,不再在这里依赖bulletAppState.
-        // 移出bulletAppState
-//        if (physicsControl != null) {
-//            if (game.getScene().getPhysicsSpace() != null) {
-//                game.getScene().getPhysicsSpace().remove(object);
-//            }
-//        }
         
         // 根据类型移出场景
         if (actor != null) {
             // 把角色从队伍移除（如果存在队伍中）
             ui.getTeamView().removeActor(actor);
+            
             // 移出场景
-            actor.getModel().removeFromParent();
+//            actor.getModel().removeFromParent();
+            scene.removeSceneObject(actor.getModel());
+
             // 销毁角色，释放资源
             actor.cleanup();
             // 移出列表
@@ -382,9 +368,10 @@ public  class SimpleGameState extends GameState implements UIEventListener {
             return;
         }
         
-        if (spatial != null) {
+        if (spatial != null && scene != null) {
             // 其它类型，如UI,effect,bullet,magic等,不需要处理其它额外逻辑。
-            spatial.removeFromParent();
+//            spatial.removeFromParent();
+            scene.removeSceneObject(spatial);
         }
         
     }
@@ -393,7 +380,8 @@ public  class SimpleGameState extends GameState implements UIEventListener {
         if (gui) {
             UIState.getInstance().addUI((AbstractUI)ui);
         } else {
-            this.localRoot.attachChild(ui.getDisplay());
+//            this.localRoot.attachChild(ui.getDisplay());
+            scene.addSceneObject(ui.getDisplay());
         }
     }
     
@@ -417,18 +405,7 @@ public  class SimpleGameState extends GameState implements UIEventListener {
         if (gui) {
             UIState.getInstance().addUI(actor.getModel());
         } 
-        
-        // remove20160710,以后要把角色节点添加到scene中去。
-//        else {
-//            localRoot.attachChild(actor.getModel());
-//        }
-//         remove20160710
-//        // 把model添加到physics中
-//        if (game.getScene().getPhysicsSpace() != null) {
-//            game.getScene().getPhysicsSpace().add(actor.getModel());
-//        }
-        
-        game.getScene().addSceneObject(actor.getModel());
+        scene.addSceneObject(actor.getModel());
         
         // 如果角色有指定队伍，则应该处理是否在当前队伍列表中。
         if (actor.getData().getTeam() > 0) {
@@ -439,21 +416,13 @@ public  class SimpleGameState extends GameState implements UIEventListener {
     }
 
     private void addSimpleObj(Spatial spatial, boolean gui) {
-        
-        // remove20160710
-//        if (spatial.getControl(PhysicsControl.class) != null) {
-//            if (game.getScene().getPhysicsSpace() != null) {
-//                game.getScene().getPhysicsSpace().add(spatial);
-//            }
-//        }
-
-
         // 不要将角色或object添加到scene中，因为scene会进行缓存，以免忘记清理的时候
         // 在再次进入state时还残留角色。
         if (gui) {
             UIState.getInstance().addUI(spatial);
         } else {
-            localRoot.attachChild(spatial);
+//            localRoot.attachChild(spatial);
+            scene.addSceneObject(spatial);
         }
     }
     
@@ -506,7 +475,7 @@ public  class SimpleGameState extends GameState implements UIEventListener {
      */
     protected void setChase(Spatial spatial) {
         if (cameraChaseEnv == null) {
-            cameraChaseEnv = SceneUtils.findEnv(game.getScene(), CameraChaseEnv.class);
+            cameraChaseEnv = SceneUtils.findEnv(scene, CameraChaseEnv.class);
         }
         if (cameraChaseEnv != null) {
             cameraChaseEnv.setChase(spatial);
@@ -562,7 +531,7 @@ public  class SimpleGameState extends GameState implements UIEventListener {
      */
     protected boolean onPicked(PickResult pr) {
         // 选择地面进行行走
-        if (GeometryUtils.isSelfOrChild(pr.spatial,game.getScene().getTerrain())) {
+        if (GeometryUtils.isSelfOrChild(pr.spatial, scene.getTerrain())) {
             if (player != null) {
                 userCommandNetwork.playRunToPos(player, pr.result.getContactPoint());
                 return true;

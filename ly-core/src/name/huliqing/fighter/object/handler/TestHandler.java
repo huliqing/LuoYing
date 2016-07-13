@@ -4,13 +4,11 @@
  */
 package name.huliqing.fighter.object.handler;
 
-import com.jme3.math.FastMath;
 import java.util.logging.Logger;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.data.HandlerData;
 import name.huliqing.fighter.data.ProtoData;
-import name.huliqing.fighter.enums.SkillType;
 import name.huliqing.fighter.game.network.PlayNetwork;
 import name.huliqing.fighter.game.service.ActorService;
 import name.huliqing.fighter.game.service.EffectService;
@@ -50,11 +48,11 @@ public class TestHandler extends AbstractHandler {
     @Override
     protected void useObject(Actor actor, ProtoData data) {
         
-        Actor aa = actorService.loadActor("actorSkeleton");
-        actorService.setGroup(aa, FastMath.nextRandomInt(1, 100));
-        actorService.setLevel(aa, 1);
-        skillService.playSkill(aa, skillService.getSkill(aa, SkillType.wait).getId(), false);
-        playService.addActor(aa);
+//        Actor aa = actorService.loadActor("actorSkeleton");
+//        actorService.setGroup(aa, FastMath.nextRandomInt(1, 100));
+//        actorService.setLevel(aa, 1);
+//        skillService.playSkill(aa, skillService.getSkill(aa, SkillType.wait).getId(), false);
+//        playService.addActor(aa);
 
 //        Actor target = actorService.getTarget(actor);
 //        if (target != null) {
@@ -62,6 +60,9 @@ public class TestHandler extends AbstractHandler {
 ////            stateService.addState(target, "stateIceFrozen");
 //            stateService.addState(target, "stateScorpionVenom", actor);
 //        }
+
+        Actor aa = actorService.loadActor("actorAltar");
+        playService.addActor(aa);
 
     }
 

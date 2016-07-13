@@ -40,7 +40,6 @@ import name.huliqing.fighter.object.scene.Scene;
 import name.huliqing.fighter.object.view.View;
 import name.huliqing.fighter.save.SaveHelper;
 import name.huliqing.fighter.save.SaveStory;
-import name.huliqing.fighter.utils.Temp;
 
 /**
  *
@@ -271,7 +270,7 @@ public class PlayServiceImpl implements PlayService {
         if (playState == null || playState.getGameState().getGame() == null) 
             return null;
         
-        Scene scene = playState.getGameState().getGame().getScene();
+        Scene scene = playState.getGameState().getScene();
         if (scene != null) {
             return scene.getTerrain();
         }
@@ -384,7 +383,7 @@ public class PlayServiceImpl implements PlayService {
         if (ps == null || ps.getGameState().getGame() == null) 
             return null;
         
-        return ps.getGameState().getGame().getScene();
+        return ps.getGameState().getScene();
     }
 
     @Override
