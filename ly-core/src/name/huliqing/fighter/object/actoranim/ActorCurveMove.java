@@ -60,8 +60,8 @@ public class ActorCurveMove<T extends ActorAnimData> extends ActorAnim<T> {
     private boolean oldKinematicState;
 
     @Override
-    public void initData(T data) {
-        super.initData(data);
+    public void setData(T data) {
+        super.setData(data);
         if (data != null) {
             // 1.points
             String[] tempPoints = data.getAsArray("points");

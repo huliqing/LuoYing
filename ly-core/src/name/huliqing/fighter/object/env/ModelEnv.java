@@ -23,8 +23,8 @@ public class ModelEnv<T extends ModelEnvData> extends AbstractEnv<T> {
     protected Spatial model;
 
     @Override
-    public void initData(T data) {
-        super.initData(data); 
+    public void setData(T data) {
+        super.setData(data); 
     }
 
     @Override

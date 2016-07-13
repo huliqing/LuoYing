@@ -38,8 +38,8 @@ public class TestHandler extends AbstractHandler {
     private final SkillService skillService = Factory.get(SkillService.class);
 
     @Override
-    public void initData(HandlerData data) {
-        super.initData(data);
+    public void setData(HandlerData data) {
+        super.setData(data);
     }
 
     @Override

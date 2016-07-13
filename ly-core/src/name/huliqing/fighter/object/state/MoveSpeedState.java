@@ -31,8 +31,8 @@ public class MoveSpeedState extends AttributeState {
     private Effect tempMoveEffect;
 
     @Override
-    public void initData(StateData data) {
-        super.initData(data);
+    public void setData(StateData data) {
+        super.setData(data);
         moveEffect = data.getAttribute("moveEffect");
     }
 

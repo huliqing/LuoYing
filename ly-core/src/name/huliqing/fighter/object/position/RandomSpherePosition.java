@@ -19,8 +19,8 @@ public final class RandomSpherePosition<T extends PositionData> extends Abstract
     private EmitterShape shape;
     
     @Override
-    public void initData(T data) {
-        super.initData(data);
+    public void setData(T data) {
+        super.setData(data);
         shape = new EmitterSphereShape(
                   data.getAsVector3f("center")
                 , data.getAsFloat("radius", 1));

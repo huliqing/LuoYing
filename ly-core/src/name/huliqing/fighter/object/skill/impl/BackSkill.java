@@ -33,8 +33,8 @@ public class BackSkill<T extends SkillData> extends AbstractSkill<T> {
     private boolean backed;
     
     @Override
-    public void initData(T data) {
-        super.initData(data); 
+    public void setData(T data) {
+        super.setData(data); 
         this.backPoint = data.getAsFloat("backPoint", backPoint);
     }
 

@@ -23,8 +23,8 @@ public class TextView<T extends ViewData> extends AbstractView<T> {
     protected Text textUI;
 
     @Override
-    public void initData(T data) {
-        super.initData(data); 
+    public void setData(T data) {
+        super.setData(data); 
         String text = data.getAttribute("text");
         String textKey = data.getAttribute("textKey");
         ColorRGBA color = data.getAsColor("fontColor");

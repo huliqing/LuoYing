@@ -35,8 +35,8 @@ public class TextureEffect extends AbstractEffect {
     private Spatial root;
 
     @Override
-    public void initData(EffectData data) {
-        super.initData(data); 
+    public void setData(EffectData data) {
+        super.setData(data); 
         this.texture = data.getAttribute("texture", texture);
         this.size = data.getAsVector3f("size", size);
         this.plane = data.getAttribute("plane", plane);

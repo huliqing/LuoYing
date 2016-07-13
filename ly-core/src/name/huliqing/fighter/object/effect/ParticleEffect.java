@@ -35,8 +35,8 @@ public class ParticleEffect extends AbstractEffect {
     private ParticleEmitter pe;
 
     @Override
-    public void initData(EffectData data) {
-        super.initData(data); 
+    public void setData(EffectData data) {
+        super.setData(data); 
         emitter = data.getAttribute("emitter", emitter);
         emitAll = data.getAsBoolean("emitAll", emitAll);
         randomColor = data.getAsBoolean("randomColor", randomColor);

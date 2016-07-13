@@ -55,8 +55,8 @@ public final class RandomCirclePosition<T extends PositionData> extends Abstract
     private boolean hasOffset;
     
     @Override
-    public void initData(T data) {
-        super.initData(data);
+    public void setData(T data) {
+        super.setData(data);
         
         String tempPlane = data.getAttribute("plane");
         if (tempPlane != null) {

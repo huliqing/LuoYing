@@ -35,8 +35,8 @@ public class StoryGuardGame extends StoryGame {
     public int servantLevel = 20;
     
      @Override
-    public void initData(GameData data) {
-        super.initData(data);
+    public void setData(GameData data) {
+        super.setData(data);
         selfPosition = data.getAsVector3f("selfPosition");
         enemyPosition = data.getAsVector3f("enemyPosition");
         fairyPosition = data.getAsVector3f("fairyPosition");

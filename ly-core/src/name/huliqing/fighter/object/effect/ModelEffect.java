@@ -18,8 +18,8 @@ public class ModelEffect extends AbstractEffect {
     private boolean loaded;
 
     @Override
-    public void initData(EffectData data) {
-        super.initData(data);
+    public void setData(EffectData data) {
+        super.setData(data);
         if (!loaded) {
             Spatial model = Loader.loadModel(data.getAttribute("file"));
             Bucket bucket = identifyBucket(data.getAttribute("bucket"));

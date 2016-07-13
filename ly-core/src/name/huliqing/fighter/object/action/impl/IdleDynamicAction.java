@@ -46,8 +46,8 @@ public class IdleDynamicAction extends AbstractAction implements IdleAction {
     }
 
     @Override
-    public void initData(ActionData data) {
-        super.initData(data);
+    public void setData(ActionData data) {
+        super.setData(data);
         intervalMax = data.getAsFloat("intervalMax", intervalMax);
         intervalMin = data.getAsFloat("intervalMin", intervalMin);
     }

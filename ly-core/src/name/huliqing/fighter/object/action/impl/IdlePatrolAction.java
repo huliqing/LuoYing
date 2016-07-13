@@ -82,8 +82,8 @@ public class IdlePatrolAction extends AbstractAction implements IdleAction {
     }
 
     @Override
-    public void initData(ActionData data) {
-        super.initData(data);
+    public void setData(ActionData data) {
+        super.setData(data);
         walkPosTotal = data.getAsInteger("walkPosTotal", walkPosTotal);
         
         walkRadius = data.getAsFloat("walkRadius", walkRadius);

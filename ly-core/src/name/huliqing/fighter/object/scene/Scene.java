@@ -176,7 +176,7 @@ public class Scene<T extends SceneData> extends AbstractAppState implements Data
     }
 
     @Override
-    public void initData(T data) {
+    public void setData(T data) {
         this.data = data;
     }
 

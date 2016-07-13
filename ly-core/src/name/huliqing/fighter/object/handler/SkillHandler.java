@@ -41,8 +41,8 @@ public class SkillHandler extends AbstractHandler {
     private final StateService stateService = Factory.get(StateService.class);
 
     @Override
-    public void initData(HandlerData data) {
-        super.initData(data);
+    public void setData(HandlerData data) {
+        super.setData(data);
     }
     
     @Override

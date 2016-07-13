@@ -18,8 +18,8 @@ public class RunSkill<T extends SkillData> extends WalkSkill<T> implements Walk{
     private final ConfigService configService = Factory.get(ConfigService.class);
 
     @Override
-    public void initData(T data) {
-        super.initData(data); 
+    public void setData(T data) {
+        super.setData(data); 
         baseSpeed = data.getAsFloat("baseSpeed", configService.getBaseRunSpeed());
     }
     

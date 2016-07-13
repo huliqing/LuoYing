@@ -62,8 +62,8 @@ public class ShopChat<T extends ChatData> extends Chat<T> implements ItemListene
     private Footer footerPanel;
 
     @Override
-    public void initData(T data) {
-        super.initData(data); 
+    public void setData(T data) {
+        super.setData(data); 
         discount = data.getAsFloat("discount", discount);
     }
 

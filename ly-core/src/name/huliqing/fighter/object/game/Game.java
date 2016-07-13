@@ -52,7 +52,7 @@ public  class Game<T extends GameData> extends AbstractAppState implements DataP
     protected PlayManager playManager;
 
     @Override
-    public void initData(T data) {
+    public void setData(T data) {
         this.data = data;
     }
 

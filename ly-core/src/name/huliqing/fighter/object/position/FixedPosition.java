@@ -17,8 +17,8 @@ public class FixedPosition<T extends PositionData> extends AbstractPosition<T> {
     private Vector3f pos;
 
     @Override
-    public void initData(T data) {
-        super.initData(data); 
+    public void setData(T data) {
+        super.setData(data); 
         this.pos = data.getAsVector3f("point");
     }
 

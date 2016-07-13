@@ -16,7 +16,7 @@ public abstract class AbstractResist<T extends ResistData> implements Resist<T> 
     private T data;
 
     @Override
-    public void initData(T data) {
+    public void setData(T data) {
         this.data = data;
     }
     

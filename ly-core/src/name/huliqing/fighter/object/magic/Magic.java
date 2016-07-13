@@ -66,7 +66,7 @@ public class Magic<T extends MagicData> extends AbstractPlayObject implements Da
     }
 
     @Override
-    public void initData(T data) {
+    public void setData(T data) {
         this.data = data;
         // Sounds
         String[] tempSounds = data.getAsArray("sounds");

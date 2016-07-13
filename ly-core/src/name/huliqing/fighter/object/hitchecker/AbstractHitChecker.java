@@ -16,7 +16,7 @@ public abstract class AbstractHitChecker<T extends HitCheckerData> implements Hi
     private T data;
 
     @Override
-    public void initData(T data) {
+    public void setData(T data) {
         this.data = data;
     }
 

@@ -26,8 +26,8 @@ public class SimpleResist<T extends ResistData> extends AbstractResist<T> {
     private List<StateResist> resists;
 
     @Override
-    public void initData(T data) {
-        super.initData(data); 
+    public void setData(T data) {
+        super.setData(data); 
         // format "state|factor,state|factor,state|factor"
         String[] resistsArr = data.getAsArray("resists");
         if (resistsArr != null && resistsArr.length > 0) {

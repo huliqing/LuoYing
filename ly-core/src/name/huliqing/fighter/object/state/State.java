@@ -60,7 +60,7 @@ public class State<T extends StateData> extends AbstractPlayObject implements Da
     }
 
     @Override
-    public void initData(T data) {
+    public void setData(T data) {
         this.data = data;
     }
 

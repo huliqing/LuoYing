@@ -47,8 +47,8 @@ public class SummonHandler extends AbstractHandler {
     private final Ray ray = new Ray();
 
     @Override
-    public void initData(HandlerData data) {
-        super.initData(data);
+    public void setData(HandlerData data) {
+        super.setData(data);
         this.actorId = data.getAttribute("actorId");
         this.total = data.getAsInteger("total", total);
     }

@@ -23,8 +23,8 @@ public class EssentialState extends State {
     private boolean oldEssential;
 
     @Override
-    public void initData(StateData data) {
-        super.initData(data);
+    public void setData(StateData data) {
+        super.setData(data);
         this.essential = data.getAsBoolean("essential", essential);
         this.restore = data.getAsBoolean("restore", restore);
     }

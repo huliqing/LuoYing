@@ -27,8 +27,8 @@ public class AttributeTalent<T extends TalentData> extends AbstractTalent<T> {
     private boolean init;
 
     @Override
-    public void initData(T data) {
-        super.initData(data); 
+    public void setData(T data) {
+        super.setData(data); 
         this.applyAttribute = data.getAttribute("applyAttribute");
         this.levelEl = data.getAttribute("levelEl");
         this.level = data.getLevel();

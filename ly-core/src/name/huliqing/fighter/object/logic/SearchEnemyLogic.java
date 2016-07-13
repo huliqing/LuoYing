@@ -30,8 +30,8 @@ public class SearchEnemyLogic<T extends LogicData> extends ActorLogic<T> {
     private float minInterval = 1;
 
     @Override
-    public void initData(T data) {
-        super.initData(data); 
+    public void setData(T data) {
+        super.setData(data); 
         this.autoInterval = data.getProto().getAsBoolean("autoInterval", autoInterval);
         this.maxInterval = data.getProto().getAsFloat("maxInterval", maxInterval);
         this.minInterval = data.getProto().getAsFloat("minInterval", minInterval);

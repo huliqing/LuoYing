@@ -33,8 +33,8 @@ public class SkillBookHandler extends AbstractHandler {
     private String skill;
 
     @Override
-    public void initData(HandlerData data) {
-        super.initData(data);
+    public void setData(HandlerData data) {
+        super.setData(data);
         this.skill = data.getAttribute("skill");
     }
 

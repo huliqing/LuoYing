@@ -51,8 +51,8 @@ public class CurveTrailBullet<T extends BulletData> extends CurveBullet<T> {
     private final Node surface = new Node();
 
     @Override
-    public void initData(T data) {
-        super.initData(data);
+    public void setData(T data) {
+        super.setData(data);
         this.mask = data.getAttribute("mask", null);
         this.tex = data.getAttribute("tex", null);
         this.texScale = data.getAsFloat("texScale", texScale);

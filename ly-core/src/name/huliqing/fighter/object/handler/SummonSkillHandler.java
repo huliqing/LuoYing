@@ -38,8 +38,8 @@ public class SummonSkillHandler extends AbstractHandler {
     private String skillId;
 
     @Override
-    public void initData(HandlerData data) {
-        super.initData(data);
+    public void setData(HandlerData data) {
+        super.setData(data);
         this.actorId = data.getAttribute("actorId");
         this.skillId = data.getAttribute("skillId");
     }

@@ -25,7 +25,7 @@ public abstract class AbstractAction implements Action {
     public AbstractAction() {}
 
     @Override
-    public void initData(ActionData data) {
+    public void setData(ActionData data) {
         this.data = data;
     }
 

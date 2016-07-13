@@ -24,8 +24,8 @@ public class ResetSkill<T extends SkillData> extends AbstractSkill<T> {
     private float timePoint;
 
     @Override
-    public void initData(T data) {
-        super.initData(data); 
+    public void setData(T data) {
+        super.setData(data); 
         timePoint = FastMath.clamp(data.getAsFloat("timePoint", timePoint), 0, 1.0f);
     }
 

@@ -35,8 +35,8 @@ public final class ScaleAnim<T extends AnimData> extends SpatialAnim<T> {
     }
     
     @Override
-    public void initData(T data) {
-        super.initData(data);
+    public void setData(T data) {
+        super.setData(data);
         this.startScale = data.getAsVector3f("startScale", startScale);
         this.endScale = data.getAsVector3f("endScale", endScale);
         this.restore = data.getAsBoolean("restore", restore);

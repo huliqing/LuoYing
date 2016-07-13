@@ -29,8 +29,8 @@ public final class RandomRotationAnim<T extends AnimData> extends SpatialAnim<T>
     private Vector3f axis;
 
     @Override
-    public void initData(T data) {
-        super.initData(data);
+    public void setData(T data) {
+        super.setData(data);
         
         // 在xml的配置上是角度，需要转为弧度
         minAngle = data.getAsFloat("minDegree", 0) * FastMath.DEG_TO_RAD;

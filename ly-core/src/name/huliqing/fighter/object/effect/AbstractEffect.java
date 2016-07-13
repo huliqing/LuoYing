@@ -84,7 +84,7 @@ public abstract class AbstractEffect<T extends EffectData> extends Node implemen
     }
 
     @Override
-    public void initData(T data) {
+    public void setData(T data) {
         this.data = data;
     }
     

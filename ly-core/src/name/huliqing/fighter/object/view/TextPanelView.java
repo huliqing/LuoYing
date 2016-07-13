@@ -20,8 +20,8 @@ public class TextPanelView<T extends ViewData> extends TextView<T> {
     private Window win;
 
     @Override
-    public void initData(T data) {
-        super.initData(data); 
+    public void setData(T data) {
+        super.setData(data); 
         title = data.getAttribute("title");
         if (title == null) {
             title = ResourceManager.getObjectName(data);

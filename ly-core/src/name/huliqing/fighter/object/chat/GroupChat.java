@@ -47,8 +47,8 @@ public class GroupChat<T extends ChatData> extends Chat<T> {
     private ChatList chatList;
 
     @Override
-    public void initData(T data) {
-        super.initData(data);
+    public void setData(T data) {
+        super.setData(data);
         String[] tempChats = data.getAsArray("chats");
         chats = new ArrayList<Chat>(tempChats.length);
         for (int i = 0; i < tempChats.length; i++) {

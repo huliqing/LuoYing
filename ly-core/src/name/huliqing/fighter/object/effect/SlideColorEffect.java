@@ -51,8 +51,8 @@ public class SlideColorEffect extends AbstractEffect {
     private Material mat;
 
     @Override
-    public void initData(EffectData data) {
-        super.initData(data); 
+    public void setData(EffectData data) {
+        super.setData(data); 
         startColor = data.getAsColor("startColor", startColor);
         endColor = data.getAsColor("endColor", endColor);
         

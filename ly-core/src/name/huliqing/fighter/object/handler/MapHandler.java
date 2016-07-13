@@ -64,8 +64,8 @@ public class MapHandler extends AbstractHandler {
     private MapView mapView;
     
     @Override
-    public void initData(HandlerData data) {
-        super.initData(data); 
+    public void setData(HandlerData data) {
+        super.setData(data); 
         this.image = data.getAttribute("image");
         this.mapSize = data.getAsFloat("mapSize", mapSize);
         this.mapAlpha = data.getAsFloat("mapAlpha", mapAlpha);

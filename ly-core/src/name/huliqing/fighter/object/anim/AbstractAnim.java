@@ -81,7 +81,7 @@ public abstract class AbstractAnim<T extends AnimData, E> implements Anim<T, E> 
     private int dir = 1;
     
     @Override
-    public void initData(T data) {
+    public void setData(T data) {
         this.data = data;
         this.debug = data.getAsBoolean("debug", debug);
         this.useTime = data.getAsFloat("useTime", useTime);

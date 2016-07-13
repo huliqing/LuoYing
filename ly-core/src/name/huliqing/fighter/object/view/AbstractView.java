@@ -56,7 +56,7 @@ public abstract class AbstractView<T extends ViewData> extends AbstractPlayObjec
     protected boolean enabled = true;
     
     @Override
-    public void initData(T data) {
+    public void setData(T data) {
         this.data = data;
         float sw = playService.getScreenWidth();
         float sh = playService.getScreenHeight();

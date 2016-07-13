@@ -35,8 +35,8 @@ public class ShadowEnv <T extends EnvData> extends AbstractEnv <T> implements Sc
     private DirectionalLightShadowFilter filter;
     
     @Override
-    public void initData(T data) {
-        super.initData(data);
+    public void setData(T data) {
+        super.setData(data);
         shadowIntensity = data.getAsFloat("shadowIntensity", shadowIntensity);
         shadowMapSize = data.getAsInteger("shadowMapSize", shadowMapSize);
         shadowMaps = data.getAsInteger("shadowMaps", shadowMaps);

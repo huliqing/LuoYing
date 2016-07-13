@@ -41,8 +41,8 @@ public class FollowLogic<T extends LogicData> extends ActorLogic<T> {
     private float lastFollowUsed;
     
     @Override
-    public void initData(T data) {
-        super.initData(data); 
+    public void setData(T data) {
+        super.setData(data); 
         followAction = (FollowAction) actionService.loadAction(data.getAttribute("followAction"));
         maxFollow = data.getAsFloat("maxFollow", maxFollow);
         minFollow = data.getAsFloat("minFollow", minFollow);

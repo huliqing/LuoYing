@@ -40,8 +40,8 @@ public class AttributeHitMagic extends Magic {
     private float distanceSquared;
     
     @Override
-    public void initData(MagicData data) {
-        super.initData(data); 
+    public void setData(MagicData data) {
+        super.setData(data); 
         // attributes 格式："attribute|value,attribute|value,..."
         String[] attributesArr = data.getAsArray("attributes");
         attributes = new AttributeWrap[attributesArr.length];

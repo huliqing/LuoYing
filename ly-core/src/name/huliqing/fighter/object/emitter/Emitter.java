@@ -26,7 +26,7 @@ public class Emitter<T extends EmitterData> implements DataProcessor<T> {
     private ParticleEmitter emitter;
 
     @Override
-    public void initData(T data) {
+    public void setData(T data) {
         this.data = data;
         
     }

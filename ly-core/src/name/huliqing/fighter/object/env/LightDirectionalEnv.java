@@ -28,8 +28,8 @@ public class LightDirectionalEnv <T extends EnvData> extends AbstractEnv<T> {
     private Spatial debugNode;
     
     @Override
-    public void initData(T data) {
-        super.initData(data);
+    public void setData(T data) {
+        super.setData(data);
         debug = data.getAsBoolean("debug", debug);
         light.setDirection(data.getAsVector3f("direction", light.getDirection()));
         light.setColor(data.getAsColor("color", light.getColor()));

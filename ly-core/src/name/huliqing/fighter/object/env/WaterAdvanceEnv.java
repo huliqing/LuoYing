@@ -41,8 +41,8 @@ public class WaterAdvanceEnv <T extends EnvData> extends AbstractEnv<T> implemen
     private final Vector3f tempCenter = new Vector3f();
     
     @Override
-    public void initData(T data) {
-        super.initData(data); 
+    public void setData(T data) {
+        super.setData(data); 
         this.causticsTexture = data.getAttribute("causticsTexture");
         this.foamTexture = data.getAttribute("foamTexture");
         this.heightTexture = data.getAttribute("heightTexture");

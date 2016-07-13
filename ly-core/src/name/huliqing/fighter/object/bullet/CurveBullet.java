@@ -40,8 +40,8 @@ public class CurveBullet<T extends BulletData> extends StraightBullet<T> {
     private List<Vector3f> tempCenterPositions;
 
     @Override
-    public void initData(T data) {
-        super.initData(data);
+    public void setData(T data) {
+        super.setData(data);
         tension = data.getAsFloat("tension", tension);
         
         // format: "position1,position1,position1"

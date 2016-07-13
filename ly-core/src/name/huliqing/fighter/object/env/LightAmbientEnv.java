@@ -20,8 +20,8 @@ public class LightAmbientEnv <T extends EnvData> extends AbstractEnv<T> {
     private final AmbientLight light = new AmbientLight();
     
     @Override
-    public void initData(T data) {
-        super.initData(data);
+    public void setData(T data) {
+        super.setData(data);
         light.setColor(data.getAsColor("color", light.getColor()));
     }
 

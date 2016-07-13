@@ -160,7 +160,7 @@ public class ActorControl extends BetterCharacterControl implements Actor, Physi
     }
 
     @Override
-    public void initData(ActorData data) {
+    public void setData(ActorData data) {
         this.data = data;
         ActorModelLoader.loadActorModel(this.data, this);
     }

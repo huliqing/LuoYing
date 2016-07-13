@@ -57,8 +57,8 @@ public class DefendLogic<T extends LogicData> extends ActorLogic<T> implements S
     private boolean hasUsableSkill = true;
     
     @Override
-    public void initData(T data) {
-        super.initData(data); 
+    public void setData(T data) {
+        super.setData(data); 
         interval = 10; 
         defendRateAttribute = data.getAttribute("defendRateAttribute");
         duckRateAttribute = data.getAttribute("duckRateAttribute");

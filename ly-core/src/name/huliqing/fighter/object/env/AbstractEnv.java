@@ -21,7 +21,7 @@ public class AbstractEnv<T extends EnvData> implements Env<T> {
     protected boolean initialized;
 
     @Override
-    public void initData(T data) {
+    public void setData(T data) {
         this.data = data;
     }
 

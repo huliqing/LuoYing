@@ -40,8 +40,8 @@ public final class CurveMoveAnim<T extends AnimData> extends SpatialAnim<T> {
     }
 
     @Override
-    public void initData(T data) {
-        super.initData(data);
+    public void setData(T data) {
+        super.setData(data);
         // 路径点
         String[] positions = data.getAsArray("waypoints");
         Vector3f[] waypoints = new Vector3f[positions.length];

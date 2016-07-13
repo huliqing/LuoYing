@@ -34,8 +34,8 @@ public class SimpleGroupEffect extends AbstractEffect {
     private boolean end;
 
     @Override
-    public void initData(EffectData data) {
-        super.initData(data); 
+    public void setData(EffectData data) {
+        super.setData(data); 
         String[] effects = data.getProto().getAsArray("effects");
         for (String id : effects) {
             Effect effect = Loader.loadEffect(id);

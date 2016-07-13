@@ -16,7 +16,7 @@ public abstract class AbstractPosition<T extends PositionData> implements Positi
     protected T data;
 
     @Override
-    public void initData(T data) {
+    public void setData(T data) {
         this.data = data;
     }
 

@@ -23,8 +23,8 @@ public class DeadSkill<T extends SkillData> extends AbstractSkill<T> {
     private boolean remove;
     
     @Override
-    public void initData(T data) {
-        super.initData(data); 
+    public void setData(T data) {
+        super.setData(data); 
        remove = data.getAsBoolean("remove", remove);
     }
 

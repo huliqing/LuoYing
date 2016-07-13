@@ -61,8 +61,8 @@ public class DeadRagdollSkill<T extends SkillData> extends AbstractSkill<T> impl
     private boolean oldEnableState;
     
     @Override
-    public void initData(T data) {
-        super.initData(data); 
+    public void setData(T data) {
+        super.setData(data); 
         this.useRagdoll = data.getAsBoolean("useRagdoll", useRagdoll);
         this.forceOnly = data.getAsBoolean("forceOnly", forceOnly);
         this.bones = data.getAsArray("bones");

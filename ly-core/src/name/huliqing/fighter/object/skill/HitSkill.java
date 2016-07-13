@@ -64,8 +64,8 @@ public abstract class HitSkill<T extends SkillData> extends AbstractSkill<T> {
     private float hitDistanceSquared;
     
     @Override
-    public void initData(T data) {
-        super.initData(data); 
+    public void setData(T data) {
+        super.setData(data); 
         
         this.hitChecker = hitCheckerService.loadHitChecker(data.getAttribute("hitChecker", IdConstants.HIT_CHECKER_FIGHT_DEFAULT));
         this.hitAttribute = data.getAttribute("hitAttribute");

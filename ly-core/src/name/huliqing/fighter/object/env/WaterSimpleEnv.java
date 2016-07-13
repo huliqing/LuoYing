@@ -46,8 +46,8 @@ public class WaterSimpleEnv<T extends EnvData> extends AbstractEnv<T> implements
     private MySimpleWaterProcessor water;
     
     @Override
-    public void initData(T data) {
-        super.initData(data);
+    public void setData(T data) {
+        super.setData(data);
         waterModelFile = data.getAttribute("waterModel");
         location = data.getAsVector3f("location");
         rotation = data.getAsVector3f("rotation");

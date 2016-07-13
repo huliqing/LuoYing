@@ -24,8 +24,8 @@ public class ViewPosition<T extends PositionData> extends AbstractPosition<T> {
     private float[] marginWeight;
 
     @Override
-    public void initData(T data) {
-        super.initData(data);
+    public void setData(T data) {
+        super.setData(data);
         corner = Corner.identify(data.getAttribute("corner"));
         marginWeight = data.getAsFloatArray("marginWeight");
     }

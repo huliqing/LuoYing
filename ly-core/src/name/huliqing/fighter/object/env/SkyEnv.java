@@ -35,8 +35,8 @@ public class SkyEnv <T extends EnvData> extends AbstractEnv<T> {
     private Spatial sky;
 
     @Override
-    public void initData(T data) {
-        super.initData(data);
+    public void setData(T data) {
+        super.setData(data);
         baseDir = data.getAttribute("baseDir");
         west = data.getAttribute("west");
         east = data.getAttribute("east");

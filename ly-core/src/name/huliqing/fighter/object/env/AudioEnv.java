@@ -46,8 +46,8 @@ public class AudioEnv <T extends EnvData> extends AbstractEnv<T> {
     private Spatial debugInnerNode;
     
     @Override
-    public void initData(T data) {
-        super.initData(data);
+    public void setData(T data) {
+        super.setData(data);
         audio.setDirection(data.getAsVector3f("direction", audio.getDirection()));
         audio.setDirectional(data.getAsBoolean("directional", audio.isDirectional()));
 //        audio.setDryFilter(); // 使用反射，由class创建dryFilter，暂不支持。

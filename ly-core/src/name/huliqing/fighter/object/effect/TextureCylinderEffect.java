@@ -40,8 +40,8 @@ public class TextureCylinderEffect extends AbstractEffect {
     private Spatial root;
     
     @Override
-    public void initData(EffectData data) {
-        super.initData(data); 
+    public void setData(EffectData data) {
+        super.setData(data); 
         this.texture = data.getAttribute("texture", texture);
         this.axis = data.getAttribute("axis", axis);
         this.radius = data.getAsFloat("radius", radius);

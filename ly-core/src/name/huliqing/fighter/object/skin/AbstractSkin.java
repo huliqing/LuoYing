@@ -47,7 +47,7 @@ public abstract class AbstractSkin<T extends SkinData> implements Skin<T> {
     private Vector3f localScale;
 
     @Override
-    public void initData(T data) {
+    public void setData(T data) {
         this.data = data;
         bindBone = data.getAttribute("bindBone");
         localTranslation = data.getAsVector3f("localTranslation");

@@ -63,8 +63,8 @@ public class SellChat<T extends ChatData> extends Chat<T> {
     private Actor seller;
 
     @Override
-    public void initData(T data) {
-        super.initData(data); 
+    public void setData(T data) {
+        super.setData(data); 
         discount = data.getAsFloat("discount", discount);
     }
 

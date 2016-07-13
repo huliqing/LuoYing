@@ -31,8 +31,8 @@ public class WalkSkill<T extends SkillData> extends AbstractSkill<T> implements 
     protected final Vector3f viewDirection = new Vector3f();
 
     @Override
-    public void initData(T data) {
-        super.initData(data);
+    public void setData(T data) {
+        super.setData(data);
         animSpeed = data.getAsFloat("animSpeed", animSpeed);
         baseSpeed = data.getAsFloat("baseSpeed", configService.getBaseWalkSpeed());
     }

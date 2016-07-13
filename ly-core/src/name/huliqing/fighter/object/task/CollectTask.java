@@ -60,8 +60,8 @@ public class CollectTask<T extends TaskData> extends AbstractTask<T> implements 
     private boolean collected;
 
     @Override
-    public void initData(T data) {
-        super.initData(data);
+    public void setData(T data) {
+        super.setData(data);
         // 格式，"item1|count1,item2|count2,...",
         String[] itemsArr = data.getAsArray("items");
         items = new ArrayList<ItemWrap>(itemsArr.length);

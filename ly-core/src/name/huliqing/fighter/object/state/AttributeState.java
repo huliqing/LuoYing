@@ -37,8 +37,8 @@ public class AttributeState extends State {
     protected boolean needClean;
 
     @Override
-    public void initData(StateData data) {
-        super.initData(data); 
+    public void setData(StateData data) {
+        super.setData(data); 
         // attributes
         String[] attributesArr = data.getAsArray("attributes");
         attributes = new AttributeWrap[attributesArr.length];

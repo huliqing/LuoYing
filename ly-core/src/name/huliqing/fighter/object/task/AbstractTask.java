@@ -47,7 +47,7 @@ public abstract class AbstractTask<T extends TaskData> implements Task<T> {
     protected Window detailWin;
 
     @Override
-    public void initData(T data) {
+    public void setData(T data) {
         this.data = data;
         this.rewardExp = data.getAsInteger("rewardExp", 0);
         // "item1|count1,item2|count2,..."

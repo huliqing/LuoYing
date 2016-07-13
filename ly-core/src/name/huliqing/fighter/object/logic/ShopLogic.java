@@ -37,8 +37,8 @@ public class ShopLogic<T extends LogicData> extends ActorLogic<T> {
     private float remainCount;
     
     @Override
-    public void initData(T data) {
-        super.initData(data); 
+    public void setData(T data) {
+        super.setData(data); 
         // 这类逻辑不需要太频繁
         interval = data.getAsFloat("interval", 20);
         

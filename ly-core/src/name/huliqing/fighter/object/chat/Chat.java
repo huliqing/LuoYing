@@ -54,7 +54,7 @@ public abstract class Chat<T extends ChatData> extends AbstractPlayObject implem
     protected UI chatUI;
 
     @Override
-    public void initData(T data) {
+    public void setData(T data) {
         this.data = data;
         this.width = data.getAsFloat("widthWeight", 0.3f) * playService.getScreenWidth();
         this.height = data.getAsFloat("heightWeight", 0.5f) * playService.getScreenHeight();

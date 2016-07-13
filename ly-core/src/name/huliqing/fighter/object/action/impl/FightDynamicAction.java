@@ -106,8 +106,8 @@ public class FightDynamicAction extends FollowPathAction implements FightAction 
     }
     
     @Override
-    public void initData(ActionData data) {
-        super.initData(data);
+    public void setData(ActionData data) {
+        super.setData(data);
         followTimeMax = data.getAsFloat("followTimeMax", followTimeMax);
         allowFollow = data.getAsBoolean("allowFollow", allowFollow);
         autoTakeOffWeapon = data.getAsBoolean("autoTakeOffWeapon", autoTakeOffWeapon);

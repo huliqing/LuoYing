@@ -25,8 +25,8 @@ public class AttributeChangeLogic<T extends LogicData> extends ActorLogic<T> {
     private String useAttribute;
 
     @Override
-    public void initData(T data) {
-        super.initData(data); 
+    public void setData(T data) {
+        super.setData(data); 
         this.value = data.getAsFloat("value");
         this.targetAttribute = data.getAttribute("targetAttribute");
         this.useAttribute = data.getAttribute("useAttribute");

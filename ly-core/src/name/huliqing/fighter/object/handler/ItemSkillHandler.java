@@ -36,8 +36,8 @@ public class ItemSkillHandler extends AbstractHandler {
     // ---- inner
     
     @Override
-    public void initData(HandlerData data) {
-        super.initData(data); 
+    public void setData(HandlerData data) {
+        super.setData(data); 
         skillId = data.getAttribute("skill");
         // 格式：race|sex|skill,race|sex|skill,...
         // sex=f/m

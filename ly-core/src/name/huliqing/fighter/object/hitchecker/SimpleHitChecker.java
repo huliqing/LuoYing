@@ -62,8 +62,8 @@ public class SimpleHitChecker<T extends HitCheckerData> extends AbstractHitCheck
     private Checker life;
 
     @Override
-    public void initData(T data) {
-        super.initData(data);
+    public void setData(T data) {
+        super.setData(data);
         group = Group.identify(data.getAttribute("group"));
         living = Checker.identify(data.getAttribute("living"));
         life = Checker.identify(data.getAttribute("life"));

@@ -349,7 +349,7 @@ public class DataFactory {
         }
         try {
             DataProcessor dp = dpClass.newInstance();
-            dp.initData(data);
+            dp.setData(data);
             return (T) dp;
         } catch (Exception ex) {
             throw new RuntimeException("Could not create processor! tagName=" + data.getTagName() 

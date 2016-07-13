@@ -21,8 +21,8 @@ public class SkillState extends State {
     private boolean force;
 
     @Override
-    public void initData(StateData data) {
-        super.initData(data); 
+    public void setData(StateData data) {
+        super.setData(data); 
         skillType = SkillType.identifyByName(data.getAttribute("skillType"));
         force = data.getAsBoolean("force", force);
     }

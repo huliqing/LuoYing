@@ -26,8 +26,8 @@ public class IdleLogic<T extends LogicData> extends ActorLogic<T> {
     private Action idlePatrolAction;
 
     @Override
-    public void initData(T data) {
-        super.initData(data); 
+    public void setData(T data) {
+        super.setData(data); 
         this.idleSimpleAction = actionService.loadAction(data.getAttribute("idleSimpleAction"));
         this.idlePatrolAction = actionService.loadAction(data.getAttribute("idlePatrolAction"));
     }

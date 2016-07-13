@@ -28,7 +28,7 @@ public interface Env<T extends EnvData> extends DataProcessor<T>{
      * @param data 
      */
     @Override
-    void initData(T data);
+    void setData(T data);
     
     /**
      * 初始化Env

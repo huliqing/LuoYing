@@ -39,8 +39,8 @@ public class NotifyLogic<T extends LogicData> extends ActorLogic<T> {
     private final List<Actor> tempStore = new ArrayList<Actor>();
     
     @Override
-    public void initData(T data) {
-        super.initData(data); 
+    public void setData(T data) {
+        super.setData(data); 
         this.interval = 1;
         this.distance = data.getAsFloat("distance", distance);
         this.force = data.getAsBoolean("force", force);

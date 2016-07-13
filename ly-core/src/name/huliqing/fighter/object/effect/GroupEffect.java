@@ -31,8 +31,8 @@ public class GroupEffect extends AbstractEffect {
     }
     
     @Override
-    public void initData(EffectData data) {
-        super.initData(data);
+    public void setData(EffectData data) {
+        super.setData(data);
         // effects的格式： "effect1,effect2|0.3, effect3..."
         String[] effects = data.getAsArray("effects");
         for (String effectStr : effects) {

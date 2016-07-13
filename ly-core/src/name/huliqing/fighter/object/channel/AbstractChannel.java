@@ -32,7 +32,7 @@ public abstract class AbstractChannel <T extends ChannelData> implements Channel
 //    }
     
     @Override
-    public void initData(T data) {
+    public void setData(T data) {
         this.data = data;
     }
 

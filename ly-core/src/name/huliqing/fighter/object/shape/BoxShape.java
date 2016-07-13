@@ -21,8 +21,8 @@ public class BoxShape<T extends ShapeData> extends AbstractShape<T> {
     private Box box;
 
     @Override
-    public void initData(T data) {
-        super.initData(data);
+    public void setData(T data) {
+        super.setData(data);
         extents = data.getAsVector3f("extents");
     }
     

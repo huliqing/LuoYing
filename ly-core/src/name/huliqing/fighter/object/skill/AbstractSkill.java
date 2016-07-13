@@ -94,7 +94,7 @@ public abstract class AbstractSkill<T extends SkillData> implements Skill<T> {
     protected float trueSpeed;
 
     @Override
-    public void initData(T data) {
+    public void setData(T data) {
         this.data = data;
         
         // Sounds

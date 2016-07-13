@@ -26,8 +26,8 @@ public class CleanState extends State implements StateListener {
     private List<String> states;
     
     @Override
-    public void initData(StateData data) {
-        super.initData(data); 
+    public void setData(StateData data) {
+        super.setData(data); 
         states = data.getAsList("states");
     }
 

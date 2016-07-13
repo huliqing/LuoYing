@@ -27,7 +27,7 @@ public abstract class ActorLogic<T extends LogicData> extends IntervalLogic impl
     protected Actor self;
 
     @Override
-    public void initData(T data) {
+    public void setData(T data) {
         this.data = data;
         interval = data.getAsFloat("interval", interval);
     }

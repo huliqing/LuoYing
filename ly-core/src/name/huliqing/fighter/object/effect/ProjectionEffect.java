@@ -80,8 +80,8 @@ public class ProjectionEffect extends AbstractEffect {
     private final ProjectionSceneProcessor processor = new ProjectionSceneProcessor();
 
     @Override
-    public void initData(EffectData data) {
-        super.initData(data); 
+    public void setData(EffectData data) {
+        super.setData(data); 
         // TextureConstants.TEX_MAGIC default value for test.
         texture = Common.getAssetManager().loadTexture(data.getAttribute("texture", TextureConstants.TEX_MAGIC));
         color = data.getAsColor("color");

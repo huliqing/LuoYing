@@ -33,8 +33,8 @@ public final class RotationAnim<T extends AnimData> extends SpatialAnim<T> {
     }
     
     @Override
-    public void initData(T data) {
-        super.initData(data);
+    public void setData(T data) {
+        super.setData(data);
         this.axis = data.getAsVector3f("axis", axis);
         Float degree = data.getAsFloat("degree");
         if (degree != null) {

@@ -62,8 +62,8 @@ public class SkillLockedState extends State implements SkillListener {
     // ---- inner
 
     @Override
-    public void initData(StateData data) {
-        super.initData(data); 
+    public void setData(StateData data) {
+        super.setData(data); 
         lockType = LockType.identify(data.getAttribute("lockType"));
         lockAll = data.getAsBoolean("lockAll", lockAll);
         // 如果lockAll(锁定全部技能），则不需要理lockSkills。

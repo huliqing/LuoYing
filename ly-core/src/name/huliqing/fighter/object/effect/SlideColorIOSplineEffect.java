@@ -62,8 +62,8 @@ public class SlideColorIOSplineEffect extends AbstractEffect {
     private float fullUseTime;
 
     @Override
-    public void initData(EffectData data) {
-        super.initData(data); 
+    public void setData(EffectData data) {
+        super.setData(data); 
         startColor = data.getAsColor("startColor", startColor);
         endColor = data.getAsColor("endColor", endColor);
         

@@ -30,8 +30,8 @@ public class StateMagic extends Magic {
     private List<ActorAnimWrap> actorAnims;
 
     @Override
-    public void initData(MagicData data) {
-        super.initData(data);
+    public void setData(MagicData data) {
+        super.setData(data);
         // 状态格式:stateId|timePoint,stateId|timePoint,stateId|timePoint...
         String[] tempStates = data.getAsArray("states");
         if (tempStates != null) {

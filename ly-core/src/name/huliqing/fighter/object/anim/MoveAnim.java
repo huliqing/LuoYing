@@ -30,8 +30,8 @@ public final class MoveAnim<T extends AnimData> extends SpatialAnim<T> {
     private final Vector3f trueEndPos = new Vector3f();
     
     @Override
-    public void initData(T data) {
-        super.initData(data);
+    public void setData(T data) {
+        super.setData(data);
         this.startPos = data.getAsVector3f("startPos");
         this.endPos = data.getAsVector3f("endPos");
         this.startPosOffset = data.getAsVector3f("startPosOffset");

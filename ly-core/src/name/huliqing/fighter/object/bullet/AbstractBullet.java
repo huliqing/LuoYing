@@ -75,7 +75,7 @@ public abstract class AbstractBullet<T extends BulletData> extends Node implemen
     private List<Effect> tempEffects;
 
     @Override
-    public void initData(T data) {
+    public void setData(T data) {
         this.data = data;
         this.debug = data.getAsBoolean("debug", debug);
         this.shape = Loader.loadShape(data.getAttribute("shape"));

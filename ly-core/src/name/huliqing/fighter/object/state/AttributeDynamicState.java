@@ -33,8 +33,8 @@ public class AttributeDynamicState extends State {
     private Actor sourceActor;
     
     @Override
-    public void initData(StateData data) {
-        super.initData(data);
+    public void setData(StateData data) {
+        super.setData(data);
         // attributes 格式："attribute|value,attribute|value,..."
         String[] attributesArr = data.getAsArray("attributes");
         attributes = new AttributeWrap[attributesArr.length];

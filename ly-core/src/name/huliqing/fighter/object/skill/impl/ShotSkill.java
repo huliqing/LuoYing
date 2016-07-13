@@ -89,8 +89,8 @@ public class ShotSkill<T extends SkillData> extends HitSkill<T> {
     private final List<Actor> tempTargets = new ArrayList<Actor>();
     
     @Override
-    public void initData(T data) {
-        super.initData(data); 
+    public void setData(T data) {
+        super.setData(data); 
         bullets = data.getAsArray("bullets");
         shotTimes = data.getAsFloatArray("shotTimes");
         trueShotTimes = new float[shotTimes.length];

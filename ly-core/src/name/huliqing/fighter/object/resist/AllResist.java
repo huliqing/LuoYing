@@ -25,8 +25,8 @@ public class AllResist<T extends ResistData> extends AbstractResist<T> {
     private List<StateResist> excepts;
 
     @Override
-    public void initData(T data) {
-        super.initData(data); 
+    public void setData(T data) {
+        super.setData(data); 
         // format "state|factor,state|factor,state|factor"
         String[] tempExcepts = data.getProto().getAsArray("excepts");
         if (tempExcepts != null && tempExcepts.length > 0) {

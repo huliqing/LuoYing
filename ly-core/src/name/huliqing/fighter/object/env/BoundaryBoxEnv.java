@@ -33,8 +33,8 @@ public class BoundaryBoxEnv<T extends EnvData>  extends AbstractEnv<T>{
     private Spatial boundary;
     
     @Override
-    public void initData(T data) {
-        super.initData(data);
+    public void setData(T data) {
+        super.setData(data);
         xyzExtends = data.getAsVector3f("xyzExtends");
         location = data.getAsVector3f("location");
         rotation = data.getAsVector3f("rotation");

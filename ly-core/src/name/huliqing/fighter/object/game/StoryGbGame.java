@@ -35,8 +35,8 @@ public class StoryGbGame extends StoryGame {
 
 
     @Override
-    public void initData(GameData data) {
-        super.initData(data); //To change body of generated methods, choose Tools | Templates.
+    public void setData(GameData data) {
+        super.setData(data); //To change body of generated methods, choose Tools | Templates.
         gbPosition = data.getAsVector3f("gbPosition");
         enemyPosition = data.getAsVector3f("enemyPosition");
         if (gbPosition == null || enemyPosition == null) 

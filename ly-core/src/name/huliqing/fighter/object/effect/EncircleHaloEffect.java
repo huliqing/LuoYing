@@ -52,8 +52,8 @@ public class EncircleHaloEffect extends AbstractEffect {
     private ScaleAnim scaleAnim;
 
     @Override
-    public void initData(EffectData data) {
-        super.initData(data);
+    public void setData(EffectData data) {
+        super.setData(data);
         texture = data.getProto().getAttribute("texture", texture);
         size = data.getProto().getAsInteger("size", size);
         radius = data.getProto().getAsFloat("radius", radius);

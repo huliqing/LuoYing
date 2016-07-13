@@ -105,8 +105,8 @@ public class HaloEffect extends AbstractEffect {
     private boolean needRecreate = true;
 
     @Override
-    public void initData(EffectData data) {
-        super.initData(data); 
+    public void setData(EffectData data) {
+        super.setData(data); 
         this.texture = data.getProto().getAttribute("texture", texture);
         this.radius = data.getProto().getAsFloat("radius", radius);
         this.haloTotal = data.getProto().getAsInteger("haloTotal", haloTotal);

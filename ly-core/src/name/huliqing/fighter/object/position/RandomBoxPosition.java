@@ -19,8 +19,8 @@ public final class RandomBoxPosition<T extends PositionData> extends AbstractPos
     private EmitterShape shape;
     
     @Override
-    public void initData(T data) {
-        super.initData(data);
+    public void setData(T data) {
+        super.setData(data);
         shape = new EmitterBoxShape(data.getAsVector3f("min"), data.getAsVector3f("max"));
     }
 

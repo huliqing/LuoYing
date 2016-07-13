@@ -19,7 +19,7 @@ public abstract class AbstractShape<T extends ShapeData> implements Shape<T> {
     protected Geometry geometry;
 
     @Override
-    public void initData(T data) {
+    public void setData(T data) {
         this.data = data;
     }
 

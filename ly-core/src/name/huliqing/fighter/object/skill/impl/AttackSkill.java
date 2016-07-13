@@ -52,8 +52,8 @@ public class AttackSkill<T extends SkillData> extends HitSkill<T> {
     protected float[] trueCheckPoint;
 
     @Override
-    public void initData(T data) {
-        super.initData(data); 
+    public void setData(T data) {
+        super.setData(data); 
         multHit = data.getAsBoolean("multHit", multHit);
         checkPoint = data.getAsFloatArray("checkPoint");
         defendable = data.getAsBoolean("defendable", defendable);

@@ -26,8 +26,8 @@ public class AttributeHandler extends AbstractHandler {
     private float amount; 
 
     @Override
-    public void initData(HandlerData data) {
-        super.initData(data); 
+    public void setData(HandlerData data) {
+        super.setData(data); 
         this.attribute = data.getAttribute("attribute");
         this.amount = data.getAsFloat("amount", 0);
     }

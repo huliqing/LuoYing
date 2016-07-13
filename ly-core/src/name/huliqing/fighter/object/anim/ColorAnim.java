@@ -50,8 +50,8 @@ public class ColorAnim<T extends AnimData> extends SpatialAnim<T> {
     };
 
     @Override
-    public void initData(T data) {
-        super.initData(data);
+    public void setData(T data) {
+        super.setData(data);
         this.startColor.set(data.getAsColor("startColor", startColor));
         this.endColor.set(data.getAsColor("endColor", endColor));
         this.useSine = data.getAsBoolean("useSine", useSine);

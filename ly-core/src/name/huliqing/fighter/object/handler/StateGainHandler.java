@@ -24,8 +24,8 @@ public class StateGainHandler extends AbstractHandler {
     private String[] states;
 
     @Override
-    public void initData(HandlerData data) {
-        super.initData(data);
+    public void setData(HandlerData data) {
+        super.setData(data);
         states = data.getAsArray("states");
     }
 

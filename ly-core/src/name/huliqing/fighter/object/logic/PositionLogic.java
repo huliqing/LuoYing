@@ -31,8 +31,8 @@ public class PositionLogic<T extends LogicData> extends ActorLogic<T> {
     private float nearest = 5;
     
     @Override
-    public void initData(T data) {
-        super.initData(data); 
+    public void setData(T data) {
+        super.setData(data); 
         runAction = (RunAction) actionService.loadAction(data.getAttribute("runAction"));
         position.set(data.getAsVector3f("position", position));
         nearest = data.getAsFloat("nearest", nearest);

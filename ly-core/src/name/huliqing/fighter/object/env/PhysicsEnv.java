@@ -40,8 +40,8 @@ public class PhysicsEnv <T extends EnvData> extends AbstractEnv <T> implements S
     private BulletAppState bulletAppState;
     
     @Override
-    public void initData(T data) {
-        super.initData(data);
+    public void setData(T data) {
+        super.setData(data);
         debug = data.getAsBoolean("debug", debug);
         gravity = data.getAsVector3f("gravity", gravity);
         broadphaseType = data.getAttribute("broadphaseType");

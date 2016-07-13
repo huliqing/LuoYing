@@ -38,7 +38,7 @@ public class AbstractEl<T extends ElData> implements El<T> {
     protected Set<String> params = new LinkedHashSet<String>();
 
     @Override
-    public void initData(T data) {
+    public void setData(T data) {
         this.data = data;
         decode();
     }
@@ -134,7 +134,7 @@ public class AbstractEl<T extends ElData> implements El<T> {
         ElData data = new ElData();
         data.setExpression("[s_attributeHealth] + 5 + [t_attributeDefence]");
         AbstractEl ae = new AbstractEl();
-        ae.initData(data);
+        ae.setData(data);
         
         Map<String, Object> vmap = new HashMap<String, Object>();
         vmap.put("s_attributeHealth", 4);

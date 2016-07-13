@@ -33,8 +33,8 @@ public class WeaponHandler extends AbstractHandler {
     private final ActionService actionService = Factory.get(ActionService.class);
 
     @Override
-    public void initData(HandlerData data) {
-        super.initData(data);
+    public void setData(HandlerData data) {
+        super.setData(data);
     }
 
     @Override

@@ -14,14 +14,13 @@ import name.huliqing.fighter.data.ProtoData;
 public interface DataProcessor<T extends ProtoData> {
 
     /**
-     * 初始化Data.该方法只允许DataFactory调用,而且一般应该只设置一次，运行
-     * 时不应该再调用。
+     * 设置data
      * @param data 
      */
-    void initData(T data);
+    void setData(T data);
     
     /**
-     * 获取Data
+     * 获取data
      * @return 
      */
     T getData();

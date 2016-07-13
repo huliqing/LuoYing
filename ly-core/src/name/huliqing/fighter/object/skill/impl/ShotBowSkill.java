@@ -56,8 +56,8 @@ public class ShotBowSkill<T extends SkillData> extends ShotSkill<T> {
     private int shotDir; // 0 : down; 1: horizontal; 2:up
     
     @Override
-    public void initData(T data) {
-        super.initData(data); 
+    public void setData(T data) {
+        super.setData(data); 
         this.weaponAnim = data.getAttribute("weaponAnim");
         this.timeBulletTake = data.getAsFloat("timeBulletTake", timeBulletTake);
         this.timeBulletPull = data.getAsFloat("timeBulletPull", timeBulletPull);

@@ -26,8 +26,8 @@ public class CameraChaseEnv <T extends EnvData> extends AbstractEnv <T> implemen
     private PhysicsEnv physicsEnv;
     
     @Override
-    public void initData(T data) {
-        super.initData(data);
+    public void setData(T data) {
+        super.setData(data);
     }
 
     private void updateData() {

@@ -34,8 +34,8 @@ public class TimerView<T extends ViewData> extends AbstractView<T> {
     protected float syncTimeUsed;
 
     @Override
-    public void initData(T data) {
-        super.initData(data);
+    public void setData(T data) {
+        super.setData(data);
         title = data.getAttribute("title", "");
         startTime = data.getAsFloat("startTime", 0);
         up = data.getAsBoolean("up", true);
