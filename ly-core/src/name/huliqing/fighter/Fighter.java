@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 import java.util.prefs.BackingStoreException;
 import javax.imageio.ImageIO;
 import name.huliqing.fighter.game.service.ConfigService;
-import name.huliqing.fighter.loader.data.ObjectLoader;
+import name.huliqing.fighter.loader.ObjectLoader;
 import name.huliqing.fighter.game.state.FpsState;
 import name.huliqing.fighter.game.state.PlayState;
 import name.huliqing.fighter.game.state.lan.LanState;

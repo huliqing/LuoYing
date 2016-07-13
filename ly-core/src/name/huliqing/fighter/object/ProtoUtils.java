@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 import name.huliqing.fighter.Config;
 import name.huliqing.fighter.data.Proto;
 import name.huliqing.fighter.enums.DataType;
-import name.huliqing.fighter.loader.data.ObjectLoader;
+import name.huliqing.fighter.loader.ObjectLoader;
 
 /**
  *

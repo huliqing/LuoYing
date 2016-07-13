@@ -5,7 +5,7 @@
 package name.huliqing.fighter;
 
 import name.huliqing.fighter.data.Proto;
-import name.huliqing.fighter.loader.data.ObjectLoader;
+import name.huliqing.fighter.loader.ObjectLoader;
 
 /**
  *

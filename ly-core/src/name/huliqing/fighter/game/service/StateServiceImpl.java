@@ -19,7 +19,7 @@ import name.huliqing.fighter.data.StateData;
 import name.huliqing.fighter.enums.DataType;
 import name.huliqing.fighter.game.dao.ItemDao;
 import name.huliqing.fighter.game.network.PlayNetwork;
-import name.huliqing.fighter.loader.data.ObjectLoader;
+import name.huliqing.fighter.loader.ObjectLoader;
 import name.huliqing.fighter.loader.Loader;
 import name.huliqing.fighter.object.DataFactory;
 import name.huliqing.fighter.object.actor.StateListener;

@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import name.huliqing.fighter.data.ElData;
-import name.huliqing.fighter.loader.data.ObjectLoader;
+import name.huliqing.fighter.loader.ObjectLoader;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Script;
 import org.mozilla.javascript.Scriptable;
