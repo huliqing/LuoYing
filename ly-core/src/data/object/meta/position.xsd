@@ -19,10 +19,10 @@ xs:time
     <xs:element name="root">
         <xs:complexType>
             <xs:all>
-                <xs:element ref="point" />
-                <xs:element ref="box" />
-                <xs:element ref="sphere" />
-                <xs:element ref="circle" />
+                <xs:element ref="positionRandomSphere" />
+                <xs:element ref="positionRandomBox" />
+                <xs:element ref="positionRandomCircle" />
+                <xs:element ref="positionFixedPoint" />
                 <xs:element ref="positionView" />
             </xs:all>
         </xs:complexType>
@@ -67,7 +67,24 @@ xs:time
         </xs:complexType>
     </xs:element>
     
-    <xs:element name="circle">
+    <xs:element name="positionFixedPoint">
+        <xs:annotation>
+            <xs:documentation>点shape</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="base">
+                    <xs:attribute name="point" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>e.g. "0,0,0"</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="positionRandomCircle">
         <xs:annotation>
             <xs:documentation>圆形shape,通过设置不同参数可以形成:圆环\圆面\圆筒\圆柱等形式的shape</xs:documentation>
         </xs:annotation>
@@ -140,24 +157,7 @@ xs:time
         </xs:complexType>
     </xs:element>
     
-    <xs:element name="point">
-        <xs:annotation>
-            <xs:documentation>点shape</xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="base">
-                    <xs:attribute name="point" type="xs:string" use="required">
-                        <xs:annotation>
-                            <xs:documentation>e.g. "0,0,0"</xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
-                </xs:extension>
-            </xs:complexContent>
-        </xs:complexType>
-    </xs:element>
-    
-    <xs:element name="box">
+    <xs:element name="positionRandomBox">
         <xs:annotation>
             <xs:documentation>Box shape</xs:documentation>
         </xs:annotation>
@@ -179,7 +179,7 @@ xs:time
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="sphere">
+    <xs:element name="positionRandomSphere">
         <xs:annotation>
             <xs:documentation>Sphere shape</xs:documentation>
         </xs:annotation>

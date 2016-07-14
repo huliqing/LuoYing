@@ -499,16 +499,16 @@ public class DataFactory {
         registerTagProcessor("actorAnimCurveMove",  ActorCurveMove.class);
         
         // ActorLogic
-        registerTagProcessor("logicFight",  FightActorLogic.class);
-        registerTagProcessor("logicFollow",  FollowActorLogic.class);
-        registerTagProcessor("logicNotify",  NotifyActorLogic.class);
-        registerTagProcessor("logicPlayer",  PlayerActorLogic.class);
-        registerTagProcessor("logicPosition",  PositionActorLogic.class);
-        registerTagProcessor("logicSearchEnemy",  SearchEnemyActorLogic.class);
-        registerTagProcessor("logicAttributeChange",  AttributeChangeActorLogic.class);
-        registerTagProcessor("logicDefend",  DefendActorLogic.class);
-        registerTagProcessor("logicIdle",  IdleActorLogic.class);
-        registerTagProcessor("logicShop",  ShopActorLogic.class);
+        registerTagProcessor("actorLogicFight",  FightActorLogic.class);
+        registerTagProcessor("actorLogicFollow",  FollowActorLogic.class);
+        registerTagProcessor("actorLogicNotify",  NotifyActorLogic.class);
+        registerTagProcessor("actorLogicPlayer",  PlayerActorLogic.class);
+        registerTagProcessor("actorLogicPosition",  PositionActorLogic.class);
+        registerTagProcessor("actorLogicSearchEnemy",  SearchEnemyActorLogic.class);
+        registerTagProcessor("actorLogicAttributeChange",  AttributeChangeActorLogic.class);
+        registerTagProcessor("actorLogicDefend",  DefendActorLogic.class);
+        registerTagProcessor("actorLogicIdle",  IdleActorLogic.class);
+        registerTagProcessor("actorLogicShop",  ShopActorLogic.class);
         
         // Anim
         registerTagProcessor("animMove",  MoveAnim.class); 
@@ -584,10 +584,10 @@ public class DataFactory {
         registerTagProcessor("hitChecker",  SimpleHitChecker.class);
 
         // Position
-        registerTagProcessor("point",  FixedPosition.class);
-        registerTagProcessor("box",  RandomBoxPosition.class);
-        registerTagProcessor("sphere",  RandomSpherePosition.class);
-        registerTagProcessor("circle",  RandomCirclePosition.class);
+        registerTagProcessor("positionRandomSphere",  RandomSpherePosition.class);
+        registerTagProcessor("positionRandomBox",  RandomBoxPosition.class);
+        registerTagProcessor("positionRandomCircle",  RandomCirclePosition.class);
+        registerTagProcessor("positionFixedPoint",  FixedPosition.class);
         registerTagProcessor("positionView",  ViewPosition.class);
         
         // Resist

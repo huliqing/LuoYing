@@ -51,8 +51,9 @@ public class ObjectLoader {
     public static void initData() {
         try {
             loadDataFile(DataType.action, "/data/object/action.xml");
-            loadDataFile(DataType.actorAnim, "/data/object/actorAnim.xml"); // 角色运动动画
             loadDataFile(DataType.actor, "/data/object/actor.xml");
+            loadDataFile(DataType.actorAnim, "/data/object/actorAnim.xml"); // 角色运动动画
+            loadDataFile(DataType.actorLogic, "/data/object/actorLogic.xml");
             loadDataFile(DataType.anim, "/data/object/anim.xml");
             loadDataFile(DataType.attribute, "/data/object/attribute.xml");
             loadDataFile(DataType.bullet, "/data/object/bullet.xml");
@@ -68,7 +69,6 @@ public class ObjectLoader {
             loadDataFile(DataType.game, "/data/object/game.xml");
             loadDataFile(DataType.handler, "/data/object/handler.xml");
             loadDataFile(DataType.hitChecker, "/data/object/hitChecker.xml");
-            loadDataFile(DataType.actorLogic, "/data/object/logic.xml");
             loadDataFile(DataType.magic, "/data/object/magic.xml");
             loadDataFile(DataType.item, "/data/object/item.xml");
             loadDataFile(DataType.resist, "/data/object/resist.xml");

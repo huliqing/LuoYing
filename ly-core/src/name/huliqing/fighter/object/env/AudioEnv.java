@@ -79,6 +79,7 @@ public class AudioEnv <T extends EnvData> extends AbstractEnv<T> implements Conf
     @Override
     public void initialize(Application app, Scene scene) {
         super.initialize(app, scene);
+        // 添加侦听器，以便当系统声音关闭或打开时要确定是否打开或关闭audio
         configService.addConfigListener(this);
         
         SoundData sd = soundService.loadSoundData(sound);
@@ -119,6 +120,8 @@ public class AudioEnv <T extends EnvData> extends AbstractEnv<T> implements Conf
 
     @Override
     public void cleanup() {
+        // 移除侦听器
+        configService.removeConfigListener(this);
         audio.stop();
         scene.removeSceneObject(audio);
         if (debugNode != null) {
