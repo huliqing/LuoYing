@@ -19,7 +19,7 @@ import name.huliqing.fighter.utils.MathUtils;
  * @author huliqing
  * @param <T>
  */
-public class FollowLogic<T extends LogicData> extends ActorLogic<T> {
+public class FollowActorLogic<T extends LogicData> extends ActorLogic<T> {
 //    private final static Logger logger = Logger.getLogger(FollowLogic.class.getName());
     private final PlayService playService = Factory.get(PlayService.class);
     private final ActionService actionService = Factory.get(ActionService.class);

@@ -19,9 +19,7 @@ import name.huliqing.fighter.utils.ConvertUtils;
  * @author huliqing
  * @param <T>
  */
-public class ShopLogic<T extends LogicData> extends ActorLogic<T> {
-//    private final ItemService itemService = Factory.get(ItemService.class);
-//    private final ItemNetwork itemNetwork = Factory.get(ItemNetwork.class);
+public class ShopActorLogic<T extends LogicData> extends ActorLogic<T> {
     private final ProtoNetwork protoNetwork = Factory.get(ProtoNetwork.class);
     private final ProtoService protoService = Factory.get(ProtoService.class);
     

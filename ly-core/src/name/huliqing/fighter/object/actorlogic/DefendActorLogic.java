@@ -33,10 +33,9 @@ import name.huliqing.fighter.object.skill.impl.ShotSkill;
  * @author huliqing
  * @param <T>
  */
-public class DefendLogic<T extends LogicData> extends ActorLogic<T> implements SkillListener, ActorListener {
-    private static final Logger LOG = Logger.getLogger(DefendLogic.class.getName());
+public class DefendActorLogic<T extends LogicData> extends ActorLogic<T> implements SkillListener, ActorListener {
+    private static final Logger LOG = Logger.getLogger(DefendActorLogic.class.getName());
     
-    private final PlayService playService = Factory.get(PlayService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final AttributeService attributeService = Factory.get(AttributeService.class);
     private final SkillService skillService = Factory.get(SkillService.class);

@@ -17,7 +17,7 @@ import name.huliqing.fighter.game.service.PlayService;
  * @author huliqing
  * @param <T>
  */
-public class FightLogic<T extends LogicData> extends ActorLogic<T> {
+public class FightActorLogic<T extends LogicData> extends ActorLogic<T> {
     private final PlayService playService = Factory.get(PlayService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final ActionService actionService = Factory.get(ActionService.class);

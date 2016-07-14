@@ -15,10 +15,8 @@ import name.huliqing.fighter.object.action.Action;
  * @author huliqing
  * @param <T>
  */
-public class IdleLogic<T extends LogicData> extends ActorLogic<T> {
-    
+public class IdleActorLogic<T extends LogicData> extends ActorLogic<T> {
     private final ActionService actionService = Factory.get(ActionService.class);
-    private final ActorService actorService = Factory.get(ActorService.class);
     
     // 普通的idle行为，在原地不动执行idle动作。
     private Action idleSimpleAction;

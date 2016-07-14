@@ -18,8 +18,7 @@ import name.huliqing.fighter.game.service.PlayService;
  * @author huliqing
  * @param <T>
  */
-public class SearchEnemyLogic<T extends LogicData> extends ActorLogic<T> {
-//    private final StateService stateService = Factory.get(StateService.class);
+public class SearchEnemyActorLogic<T extends LogicData> extends ActorLogic<T> {
     private final PlayService playService = Factory.get(PlayService.class);
     private final ActorService actorService = Factory.get(ActorService.class);;
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);;

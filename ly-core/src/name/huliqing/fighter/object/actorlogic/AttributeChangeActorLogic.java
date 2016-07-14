@@ -15,7 +15,7 @@ import name.huliqing.fighter.game.service.AttributeService;
  * @author huliqing
  * @param <T>
  */
-public class AttributeChangeLogic<T extends LogicData> extends ActorLogic<T> {
+public class AttributeChangeActorLogic<T extends LogicData> extends ActorLogic<T> {
     private final AttributeService attributeService = Factory.get(AttributeService.class);
     private final AttributeNetwork attributeNetwork = Factory.get(AttributeNetwork.class);
     private float value = 1f;

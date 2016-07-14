@@ -25,7 +25,7 @@ import name.huliqing.fighter.game.service.ActorService;
  * @author huliqing
  * @param <T>
  */
-public class NotifyLogic<T extends LogicData> extends ActorLogic<T> {
+public class NotifyActorLogic<T extends LogicData> extends ActorLogic<T> {
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     

@@ -25,7 +25,7 @@ import name.huliqing.fighter.logic.scene.ActorBuildLogic;
 import name.huliqing.fighter.object.DataFactory;
 import name.huliqing.fighter.object.IntervalLogic;
 import name.huliqing.fighter.object.actor.Actor;
-import name.huliqing.fighter.object.actorlogic.PositionLogic;
+import name.huliqing.fighter.object.actorlogic.PositionActorLogic;
 import name.huliqing.fighter.object.view.TextView;
 import name.huliqing.fighter.object.view.View;
 
@@ -190,7 +190,7 @@ public class SurvivalBoss extends IntervalLogic {
         TempVars tv = TempVars.get();
         tv.vect1.set(game.treasurePos);
         tv.vect1.setY(playService.getTerrainHeight(tv.vect1.x, tv.vect1.z));
-        PositionLogic runLogic = (PositionLogic) Loader.loadLogic(IdConstants.LOGIC_POSITION);
+        PositionActorLogic runLogic = (PositionActorLogic) Loader.loadLogic(IdConstants.LOGIC_POSITION);
         runLogic.setInterval(3);
         runLogic.setPosition(tv.vect1);
         runLogic.setNearestDistance(game.nearestDistance);
