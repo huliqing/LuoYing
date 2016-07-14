@@ -19,7 +19,7 @@ import name.huliqing.fighter.game.service.ItemService;
 import name.huliqing.fighter.game.service.SkillService;
 import name.huliqing.fighter.manager.ResourceManager;
 import name.huliqing.fighter.object.skill.Skill;
-import name.huliqing.fighter.object.skill.impl.SummonSkill;
+import name.huliqing.fighter.object.skill.SummonSkill;
 
 /**
  * 召唤角色，但是需要学会召唤技能先，成功召唤后目标角色的物品会减少

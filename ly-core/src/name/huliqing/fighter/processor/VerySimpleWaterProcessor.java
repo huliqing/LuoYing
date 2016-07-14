@@ -101,9 +101,9 @@ import name.huliqing.fighter.constants.TextureConstants;
  * 
  * 这个类修改自com.jme3.water.SimpleWaterProcessor, 主要处理在Android下发生的异常。
  */
-public class MySimpleWaterProcessor implements SceneProcessor {
+public class VerySimpleWaterProcessor implements SceneProcessor {
 
-    private static final Logger LOG = Logger.getLogger(MySimpleWaterProcessor.class.getName());
+//    private static final Logger LOG = Logger.getLogger(VerySimpleWaterProcessor.class.getName());
 
     protected RenderManager rm;
     protected ViewPort vp;
@@ -142,7 +142,7 @@ public class MySimpleWaterProcessor implements SceneProcessor {
      * @param manager the asset manager
      * @param waterPlane
      */
-    public MySimpleWaterProcessor(AssetManager manager, Spatial waterPlane) {
+    public VerySimpleWaterProcessor(AssetManager manager, Spatial waterPlane) {
         this.manager = manager;
         this.waterPlane = waterPlane;
         

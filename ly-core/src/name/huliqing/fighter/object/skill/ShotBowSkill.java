@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.fighter.object.skill.impl;
+package name.huliqing.fighter.object.skill;
 
 import com.jme3.animation.AnimChannel;
 import com.jme3.animation.AnimControl;

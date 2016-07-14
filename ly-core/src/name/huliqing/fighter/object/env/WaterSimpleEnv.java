@@ -14,7 +14,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import name.huliqing.fighter.data.EnvData;
 import name.huliqing.fighter.object.scene.Scene;
-import name.huliqing.fighter.processor.MySimpleWaterProcessor;
+import name.huliqing.fighter.processor.VerySimpleWaterProcessor;
 
 /**
  * 轻量级的水体效果，可支持移动设置、手机等。特别针对Opengl es应用。
@@ -43,7 +43,7 @@ public class WaterSimpleEnv<T extends EnvData> extends AbstractEnv<T> implements
     // ----
     private Application app;
     private Spatial waterModel;
-    private MySimpleWaterProcessor water;
+    private VerySimpleWaterProcessor water;
     
     @Override
     public void setData(T data) {
@@ -82,7 +82,7 @@ public class WaterSimpleEnv<T extends EnvData> extends AbstractEnv<T> implements
             waterModel.setLocalScale(scale);
         }
         
-        water = new MySimpleWaterProcessor(app.getAssetManager(), waterModel);
+        water = new VerySimpleWaterProcessor(app.getAssetManager(), waterModel);
         water.addReflectionScene(scene.getSceneRoot());
         water.setTexScale(texScale);
         water.setWaveSpeed(waveSpeed);

@@ -22,7 +22,7 @@ import name.huliqing.fighter.loader.Loader;
 import name.huliqing.fighter.object.DataFactory;
 import name.huliqing.fighter.object.IntervalLogic;
 import name.huliqing.fighter.object.actor.Actor;
-import name.huliqing.fighter.object.skill.impl.SkinSkill;
+import name.huliqing.fighter.object.skill.SkinSkill;
 
 /**
  * @author huliqing

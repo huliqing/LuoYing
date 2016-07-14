@@ -40,7 +40,7 @@ import name.huliqing.fighter.manager.ResourceManager;
 import name.huliqing.fighter.manager.talk.AbstractTalkLogic;
 import name.huliqing.fighter.object.actor.SkillListenerAdapter;
 import name.huliqing.fighter.object.skill.Skill;
-import name.huliqing.fighter.object.skill.impl.BackSkill;
+import name.huliqing.fighter.object.skill.BackSkill;
 import name.huliqing.fighter.object.view.TimerView;
 import name.huliqing.fighter.ui.TextPanel;
 import name.huliqing.fighter.utils.MathUtils;

@@ -25,8 +25,8 @@ import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.object.actor.ActorListener;
 import name.huliqing.fighter.object.actor.SkillListener;
 import name.huliqing.fighter.object.skill.Skill;
-import name.huliqing.fighter.object.skill.impl.AttackSkill;
-import name.huliqing.fighter.object.skill.impl.ShotSkill;
+import name.huliqing.fighter.object.skill.AttackSkill;
+import name.huliqing.fighter.object.skill.ShotSkill;
 
 /**
  * 防守逻辑

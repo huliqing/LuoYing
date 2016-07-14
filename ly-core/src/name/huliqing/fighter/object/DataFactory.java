@@ -177,23 +177,23 @@ import name.huliqing.fighter.object.scene.SceneDataLoader;
 import name.huliqing.fighter.object.shape.BoxShape;
 import name.huliqing.fighter.object.shape.ShapeDataLoader;
 import name.huliqing.fighter.object.skill.SkillDataLoader;
-import name.huliqing.fighter.object.skill.impl.AttackSkill;
-import name.huliqing.fighter.object.skill.impl.BackSkill;
-import name.huliqing.fighter.object.skill.impl.DeadRagdollSkill;
-import name.huliqing.fighter.object.skill.impl.DeadSkill;
-import name.huliqing.fighter.object.skill.impl.DefendSkill;
-import name.huliqing.fighter.object.skill.impl.DuckSkill;
-import name.huliqing.fighter.object.skill.impl.HurtSkill;
-import name.huliqing.fighter.object.skill.impl.IdleSkill;
-import name.huliqing.fighter.object.skill.impl.ReadySkill;
-import name.huliqing.fighter.object.skill.impl.ResetSkill;
-import name.huliqing.fighter.object.skill.impl.RunSkill;
-import name.huliqing.fighter.object.skill.impl.ShotBowSkill;
-import name.huliqing.fighter.object.skill.impl.ShotSkill;
-import name.huliqing.fighter.object.skill.impl.SkinSkill;
-import name.huliqing.fighter.object.skill.impl.SummonSkill;
-import name.huliqing.fighter.object.skill.impl.WaitSkill;
-import name.huliqing.fighter.object.skill.impl.WalkSkill;
+import name.huliqing.fighter.object.skill.AttackSkill;
+import name.huliqing.fighter.object.skill.BackSkill;
+import name.huliqing.fighter.object.skill.DeadRagdollSkill;
+import name.huliqing.fighter.object.skill.DeadSkill;
+import name.huliqing.fighter.object.skill.DefendSkill;
+import name.huliqing.fighter.object.skill.DuckSkill;
+import name.huliqing.fighter.object.skill.HurtSkill;
+import name.huliqing.fighter.object.skill.IdleSkill;
+import name.huliqing.fighter.object.skill.ReadySkill;
+import name.huliqing.fighter.object.skill.ResetSkill;
+import name.huliqing.fighter.object.skill.RunSkill;
+import name.huliqing.fighter.object.skill.ShotBowSkill;
+import name.huliqing.fighter.object.skill.ShotSkill;
+import name.huliqing.fighter.object.skill.SkinSkill;
+import name.huliqing.fighter.object.skill.SummonSkill;
+import name.huliqing.fighter.object.skill.WaitSkill;
+import name.huliqing.fighter.object.skill.WalkSkill;
 import name.huliqing.fighter.object.skin.OutfitSkin;
 import name.huliqing.fighter.object.skin.SkinDataLoader;
 import name.huliqing.fighter.object.skin.WeaponSkin;
@@ -448,6 +448,7 @@ public class DataFactory {
         DEFAULT_LOADERS.put(DataType.action, ActionDataLoader.class);
         DEFAULT_LOADERS.put(DataType.actor, ActorDataLoader.class);
         DEFAULT_LOADERS.put(DataType.actorAnim, ActorAnimDataLoader.class);
+        DEFAULT_LOADERS.put(DataType.actorLogic, ActorLogicDataLoader.class);
         DEFAULT_LOADERS.put(DataType.anim, AnimDataLoader.class);
         DEFAULT_LOADERS.put(DataType.attribute, AttributeDataLoader.class);
         DEFAULT_LOADERS.put(DataType.bullet, BulletDataLoader.class);
@@ -463,7 +464,6 @@ public class DataFactory {
         DEFAULT_LOADERS.put(DataType.handler, HandlerDataLoader.class);
         DEFAULT_LOADERS.put(DataType.hitChecker, HitCheckerDataLoader.class);
         DEFAULT_LOADERS.put(DataType.item, ItemDataLoader.class);
-        DEFAULT_LOADERS.put(DataType.actorLogic, ActorLogicDataLoader.class);
         DEFAULT_LOADERS.put(DataType.magic, MagicDataLoader.class);
         DEFAULT_LOADERS.put(DataType.position, PositionDataLoader.class);
         DEFAULT_LOADERS.put(DataType.resist, ResistDataLoader.class);
@@ -482,6 +482,8 @@ public class DataFactory {
         DEFAULT_PROCESSORS.put(DataType.scene, Scene.class);
         
         // ---- Register Tag
+        
+        // Action
         registerTagProcessor("actionIdleStatic",  IdleStaticAction.class);
         registerTagProcessor("actionIdleDynamic",  IdleDynamicAction.class);
         registerTagProcessor("actionIdlePatrol",  IdlePatrolAction.class);
@@ -490,41 +492,13 @@ public class DataFactory {
         registerTagProcessor("actionFollow",  FollowPathAction.class);
         registerTagProcessor("actionFight",  FightDynamicAction.class);
         
+        // Actor
         registerTagProcessor("actor",  ActorControl.class);
-        
-        // ssssssssssssssssssss------------------------------------------------------------------- 20160713
+
+        // ActorAnim
         registerTagProcessor("actorAnimCurveMove",  ActorCurveMove.class);
         
-        registerTagProcessor("animMove",  MoveAnim.class); 
-        registerTagProcessor("animCurveMove",  CurveMoveAnim.class);
-        registerTagProcessor("animRotation",  RotationAnim.class);
-        registerTagProcessor("animRandomRotation",  RandomRotationAnim.class);
-        registerTagProcessor("animScale",  ScaleAnim.class);
-        registerTagProcessor("animColor",  ColorAnim.class);
-        
-        registerTagProcessor("bulletSimple",  SimpleBullet.class);
-        registerTagProcessor("bulletStraight",  StraightBullet.class);
-        registerTagProcessor("bulletCurve",  CurveBullet.class);
-        registerTagProcessor("bulletCurveTrail",  CurveTrailBullet.class);
-        
-        registerTagProcessor("channel",  SimpleChannel.class);
-        
-        registerTagProcessor("chatGroup",  GroupChat.class);
-        registerTagProcessor("chatSend",  SendChat.class);
-        registerTagProcessor("chatShop",  ShopChat.class);
-        registerTagProcessor("chatSell",  SellChat.class);
-        registerTagProcessor("chatTask",  TaskChat.class);
-        
-        registerTagProcessor("elLevel",  LevelEl.class);
-        registerTagProcessor("elHit",  HitEl.class);
-        registerTagProcessor("elXpDrop",  XpDropEl.class);
-        
-        registerTagProcessor("emitter",  Emitter.class);
-        
-        registerTagProcessor("hitChecker",  SimpleHitChecker.class);
-
-//        registerTagProcessor("item",  11111111.class);
-        
+        // ActorLogic
         registerTagProcessor("logicFight",  FightActorLogic.class);
         registerTagProcessor("logicFollow",  FollowActorLogic.class);
         registerTagProcessor("logicNotify",  NotifyActorLogic.class);
@@ -535,55 +509,32 @@ public class DataFactory {
         registerTagProcessor("logicDefend",  DefendActorLogic.class);
         registerTagProcessor("logicIdle",  IdleActorLogic.class);
         registerTagProcessor("logicShop",  ShopActorLogic.class);
-
-        registerTagProcessor("point",  FixedPosition.class);
-        registerTagProcessor("box",  RandomBoxPosition.class);
-        registerTagProcessor("sphere",  RandomSpherePosition.class);
-        registerTagProcessor("circle",  RandomCirclePosition.class);
-        registerTagProcessor("positionView",  ViewPosition.class);
         
-        registerTagProcessor("resistSimple",  SimpleResist.class);
-        registerTagProcessor("resistAll",  AllResist.class);
-
-        registerTagProcessor("shapeBox",  BoxShape.class);
-
-        registerTagProcessor("skillWalk",  WalkSkill.class);
-        registerTagProcessor("skillRun",  RunSkill.class);
-        registerTagProcessor("skillWait",  WaitSkill.class);
-        registerTagProcessor("skillIdle",  IdleSkill.class);
-        registerTagProcessor("skillHurt",  HurtSkill.class);
-        registerTagProcessor("skillDead",  DeadSkill.class);
-        registerTagProcessor("skillDeadRagdoll",  DeadRagdollSkill.class);
-        registerTagProcessor("skillAttack",  AttackSkill.class);
-        registerTagProcessor("skillShot",  ShotSkill.class);
-        registerTagProcessor("skillShotBow",  ShotBowSkill.class);
-        registerTagProcessor("skillSummon",  SummonSkill.class);
-        registerTagProcessor("skillBack",  BackSkill.class);
-        registerTagProcessor("skillReady",  ReadySkill.class);
-        registerTagProcessor("skillDefend",  DefendSkill.class);
-        registerTagProcessor("skillDuck",  DuckSkill.class);
-        registerTagProcessor("skillReset",  ResetSkill.class);
-        registerTagProcessor("skillSkin",  SkinSkill.class);
-
-        registerTagProcessor("skinOutfit",  OutfitSkin.class);
-        registerTagProcessor("skinWeapon",  WeaponSkin.class);
+        // Anim
+        registerTagProcessor("animMove",  MoveAnim.class); 
+        registerTagProcessor("animCurveMove",  CurveMoveAnim.class);
+        registerTagProcessor("animRotation",  RotationAnim.class);
+        registerTagProcessor("animRandomRotation",  RandomRotationAnim.class);
+        registerTagProcessor("animScale",  ScaleAnim.class);
+        registerTagProcessor("animColor",  ColorAnim.class);
         
-//        registerTagProcessor("slot",  1111.class);
-//        registerTagProcessor("sound",  1111.class);
-
-        registerTagProcessor("talentAttribute",  AttributeTalent.class);
-   
-        registerTagProcessor("taskCollect",  CollectTask.class);
+        // Bullet
+        registerTagProcessor("bulletSimple",  SimpleBullet.class);
+        registerTagProcessor("bulletStraight",  StraightBullet.class);
+        registerTagProcessor("bulletCurve",  CurveBullet.class);
+        registerTagProcessor("bulletCurveTrail",  CurveTrailBullet.class);
         
-                
-        registerTagProcessor("viewText",  TextView.class);
-        registerTagProcessor("viewTextPanel",  TextPanelView.class);
-        registerTagProcessor("viewTimer",  TimerView.class);
+        // Channel
+        registerTagProcessor("channel",  SimpleChannel.class);
         
+        // Chat
+        registerTagProcessor("chatGroup",  GroupChat.class);
+        registerTagProcessor("chatSend",  SendChat.class);
+        registerTagProcessor("chatShop",  ShopChat.class);
+        registerTagProcessor("chatSell",  SellChat.class);
+        registerTagProcessor("chatTask",  TaskChat.class);
         
-        // eeeeeeeeeeeeee------------------------------------------------------------------- 20160713
-        
-        // 注册Tag载入器及处理器。
+        // Effect
         registerTagProcessor("effectHalo",  HaloEffect.class);
         registerTagProcessor("effectParticle", ParticleEffect.class);
         registerTagProcessor("effectSimpleGroup", SimpleGroupEffect.class);
@@ -597,18 +548,13 @@ public class DataFactory {
         registerTagProcessor("effectSlideColorIOSpline", SlideColorIOSplineEffect.class);
         registerTagProcessor("effectProjection", ProjectionEffect.class);
         
-        registerTagProcessor("handlerTest", TestHandler.class);
-        registerTagProcessor("handlerSummon", SummonHandler.class);
-        registerTagProcessor("handlerAttribute", AttributeHandler.class);
-        registerTagProcessor("handlerOutfit", OutfitHandler.class);
-        registerTagProcessor("handlerWeapon", WeaponHandler.class);
-        registerTagProcessor("handlerSkill", SkillHandler.class);
-        registerTagProcessor("handlerSummonSkill", SummonSkillHandler.class);
-        registerTagProcessor("handlerSkillBook", SkillBookHandler.class);
-        registerTagProcessor("handlerStateGain", StateGainHandler.class);
-        registerTagProcessor("handlerStateRemove", StateRemoveHandler.class);
-        registerTagProcessor("handlerItemSkill", ItemSkillHandler.class);
-        registerTagProcessor("handlerMap", MapHandler.class);
+        // El
+        registerTagProcessor("elLevel",  LevelEl.class);
+        registerTagProcessor("elHit",  HitEl.class);
+        registerTagProcessor("elXpDrop",  XpDropEl.class);
+        
+        // Emitter
+        registerTagProcessor("emitter",  Emitter.class);
         
         // Env
         registerTagProcessor("envSky", SkyEnv.class);
@@ -627,11 +573,76 @@ public class DataFactory {
         register("envTree", ModelEnvData.class, PlantEnvLoader.class, TreeEnv.class);
         register("envGrass", ModelEnvData.class, PlantEnvLoader.class, PlantEnv.class);
         
+        // Game
+        registerTagProcessor("game", Game.class);
+        registerTagProcessor("gameStoryTreasure", StoryTreasureGame.class);
+        registerTagProcessor("gameStoryGb", StoryGbGame.class);
+        registerTagProcessor("gameStoryGuard", StoryGuardGame.class);
+        registerTagProcessor("gameSurvival", SurvivalGame.class);
+        
+        // HitChecker
+        registerTagProcessor("hitChecker",  SimpleHitChecker.class);
+
+        // Position
+        registerTagProcessor("point",  FixedPosition.class);
+        registerTagProcessor("box",  RandomBoxPosition.class);
+        registerTagProcessor("sphere",  RandomSpherePosition.class);
+        registerTagProcessor("circle",  RandomCirclePosition.class);
+        registerTagProcessor("positionView",  ViewPosition.class);
+        
+        // Resist
+        registerTagProcessor("resistSimple",  SimpleResist.class);
+        registerTagProcessor("resistAll",  AllResist.class);
+
+        // Shape
+        registerTagProcessor("shapeBox",  BoxShape.class);
+        
+        // Handler
+        registerTagProcessor("handlerTest", TestHandler.class);
+        registerTagProcessor("handlerSummon", SummonHandler.class);
+        registerTagProcessor("handlerAttribute", AttributeHandler.class);
+        registerTagProcessor("handlerOutfit", OutfitHandler.class);
+        registerTagProcessor("handlerWeapon", WeaponHandler.class);
+        registerTagProcessor("handlerSkill", SkillHandler.class);
+        registerTagProcessor("handlerSummonSkill", SummonSkillHandler.class);
+        registerTagProcessor("handlerSkillBook", SkillBookHandler.class);
+        registerTagProcessor("handlerStateGain", StateGainHandler.class);
+        registerTagProcessor("handlerStateRemove", StateRemoveHandler.class);
+        registerTagProcessor("handlerItemSkill", ItemSkillHandler.class);
+        registerTagProcessor("handlerMap", MapHandler.class);
+        
         // Scene
         registerTagProcessor("scene", Scene.class);
         register("sceneRandom", SceneData.class, RandomSceneLoader.class, Scene.class);
         
-        // States
+        // Magic
+        registerTagProcessor("magicState", StateMagic.class);
+        registerTagProcessor("magicAttributeHit", AttributeHitMagic.class);
+
+        // Skill
+        registerTagProcessor("skillWalk",  WalkSkill.class);
+        registerTagProcessor("skillRun",  RunSkill.class);
+        registerTagProcessor("skillWait",  WaitSkill.class);
+        registerTagProcessor("skillIdle",  IdleSkill.class);
+        registerTagProcessor("skillHurt",  HurtSkill.class);
+        registerTagProcessor("skillDead",  DeadSkill.class);
+        registerTagProcessor("skillDeadRagdoll",  DeadRagdollSkill.class);
+        registerTagProcessor("skillAttack",  AttackSkill.class);
+        registerTagProcessor("skillShot",  ShotSkill.class);
+        registerTagProcessor("skillShotBow",  ShotBowSkill.class);
+        registerTagProcessor("skillSummon",  SummonSkill.class);
+        registerTagProcessor("skillBack",  BackSkill.class);
+        registerTagProcessor("skillReady",  ReadySkill.class);
+        registerTagProcessor("skillDefend",  DefendSkill.class);
+        registerTagProcessor("skillDuck",  DuckSkill.class);
+        registerTagProcessor("skillReset",  ResetSkill.class);
+        registerTagProcessor("skillSkin",  SkinSkill.class);
+
+        // Skin
+        registerTagProcessor("skinOutfit",  OutfitSkin.class);
+        registerTagProcessor("skinWeapon",  WeaponSkin.class);
+        
+        // State
         registerTagProcessor("stateAttribute", AttributeState.class);
         registerTagProcessor("stateAttributeMove", MoveSpeedState.class);
         registerTagProcessor("stateAttributeDynamic", AttributeDynamicState.class);
@@ -640,14 +651,16 @@ public class DataFactory {
         registerTagProcessor("stateSkill", SkillState.class);
         registerTagProcessor("stateClean", CleanState.class);
         
-        registerTagProcessor("magicState", StateMagic.class);
-        registerTagProcessor("magicAttributeHit", AttributeHitMagic.class);
-
-        registerTagProcessor("game", Game.class);
-        registerTagProcessor("gameStoryTreasure", StoryTreasureGame.class);
-        registerTagProcessor("gameStoryGb", StoryGbGame.class);
-        registerTagProcessor("gameStoryGuard", StoryGuardGame.class);
-        registerTagProcessor("gameSurvival", SurvivalGame.class);
+        // Talent
+        registerTagProcessor("talentAttribute",  AttributeTalent.class);
+        
+        // Task
+        registerTagProcessor("taskCollect",  CollectTask.class);
+                
+        // View
+        registerTagProcessor("viewText",  TextView.class);
+        registerTagProcessor("viewTextPanel",  TextPanelView.class);
+        registerTagProcessor("viewTimer",  TimerView.class);
 
     }
     
