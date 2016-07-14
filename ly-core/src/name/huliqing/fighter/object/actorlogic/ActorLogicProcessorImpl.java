@@ -12,13 +12,13 @@ import name.huliqing.fighter.object.actor.Actor;
  *
  * @author huliqing
  */
-public class LogicProcessorImpl implements LogicProcessor {
+public class ActorLogicProcessorImpl implements ActorLogicProcessor {
     
     private final Application app;
     private final Actor actor;
     private final SafeArrayList<ActorLogic> logics = new SafeArrayList<ActorLogic>(ActorLogic.class);
 
-    public LogicProcessorImpl(Application app, Actor actor) {
+    public ActorLogicProcessorImpl(Application app, Actor actor) {
         this.app = app;
         this.actor = actor;
     }

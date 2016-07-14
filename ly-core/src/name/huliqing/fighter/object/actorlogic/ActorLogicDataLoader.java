@@ -13,7 +13,7 @@ import name.huliqing.fighter.object.DataLoader;
  *
  * @author huliqing
  */
-public class LogicDataLoader implements DataLoader<LogicData> {
+public class ActorLogicDataLoader implements DataLoader<LogicData> {
 
     @Override
     public void load(Proto proto, LogicData data) {

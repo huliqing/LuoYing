@@ -42,8 +42,7 @@ import name.huliqing.fighter.object.channel.ChannelProcessor;
 import name.huliqing.fighter.object.channel.ChannelProcessorImpl;
 import name.huliqing.fighter.object.effect.Effect;
 import name.huliqing.fighter.object.actorlogic.ActorLogic;
-import name.huliqing.fighter.object.actorlogic.LogicProcessor;
-import name.huliqing.fighter.object.actorlogic.LogicProcessorImpl;
+import name.huliqing.fighter.object.actorlogic.ActorLogicProcessorImpl;
 import name.huliqing.fighter.object.resist.ResistProcessor;
 import name.huliqing.fighter.object.skill.SkillProcessor;
 import name.huliqing.fighter.object.skill.SkillProcessorImpl;
@@ -56,6 +55,7 @@ import name.huliqing.fighter.object.talent.TalentProcessorImpl;
 import name.huliqing.fighter.object.task.Task;
 import name.huliqing.fighter.utils.ConvertUtils;
 import name.huliqing.fighter.utils.GeometryUtils;
+import name.huliqing.fighter.object.actorlogic.ActorLogicProcessor;
 
 /**
  *
@@ -179,7 +179,7 @@ public class ActorModelLoader {
         }
         
         // =====.行为,技能,和逻辑
-        LogicProcessor logicProcessor = new LogicProcessorImpl(Common.getApp(), actor);
+        ActorLogicProcessor logicProcessor = new ActorLogicProcessorImpl(Common.getApp(), actor);
         ActionProcessor actionProcessor = new ActionProcessor();
         SkillProcessor skillProcessor = new SkillProcessorImpl(actor);
         StateProcessor stateProcessor = new StateProcessorImpl(Common.getApp(), actor);

@@ -34,11 +34,11 @@ import name.huliqing.fighter.game.service.SkillService;
 import name.huliqing.fighter.game.service.StateService;
 import name.huliqing.fighter.object.channel.ChannelProcessor;
 import name.huliqing.fighter.object.chat.Chat;
-import name.huliqing.fighter.object.actorlogic.LogicProcessor;
 import name.huliqing.fighter.object.resist.ResistProcessor;
 import name.huliqing.fighter.object.skill.SkillProcessor;
 import name.huliqing.fighter.object.talent.TalentProcessor;
 import name.huliqing.fighter.object.task.Task;
+import name.huliqing.fighter.object.actorlogic.ActorLogicProcessor;
 
 /**
  * 基本的角色控制器，所有各种活动角色都继承自这里.所有的角色的Control都必须在
@@ -58,7 +58,7 @@ public class ActorControl extends BetterCharacterControl implements Actor, Physi
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
     
     // 角色逻辑控制
-    private LogicProcessor logicProcessor;
+    private ActorLogicProcessor logicProcessor;
     
     // 行为控制器
     private ActionProcessor actionProcessor;
@@ -186,12 +186,12 @@ public class ActorControl extends BetterCharacterControl implements Actor, Physi
     }
     
     @Override
-    public LogicProcessor getLogicProcessor() {
+    public ActorLogicProcessor getLogicProcessor() {
         return logicProcessor;
     }
 
     @Override
-    public void setLogicProcessor(LogicProcessor logicProcessor) {
+    public void setLogicProcessor(ActorLogicProcessor logicProcessor) {
         this.logicProcessor = logicProcessor;
     }
 

@@ -153,7 +153,7 @@ import name.huliqing.fighter.object.actorlogic.DefendActorLogic;
 import name.huliqing.fighter.object.actorlogic.FightActorLogic;
 import name.huliqing.fighter.object.actorlogic.FollowActorLogic;
 import name.huliqing.fighter.object.actorlogic.IdleActorLogic;
-import name.huliqing.fighter.object.actorlogic.LogicDataLoader;
+import name.huliqing.fighter.object.actorlogic.ActorLogicDataLoader;
 import name.huliqing.fighter.object.actorlogic.NotifyActorLogic;
 import name.huliqing.fighter.object.actorlogic.PlayerActorLogic;
 import name.huliqing.fighter.object.actorlogic.PositionActorLogic;
@@ -463,7 +463,7 @@ public class DataFactory {
         DEFAULT_LOADERS.put(DataType.handler, HandlerDataLoader.class);
         DEFAULT_LOADERS.put(DataType.hitChecker, HitCheckerDataLoader.class);
         DEFAULT_LOADERS.put(DataType.item, ItemDataLoader.class);
-        DEFAULT_LOADERS.put(DataType.actorLogic, LogicDataLoader.class);
+        DEFAULT_LOADERS.put(DataType.actorLogic, ActorLogicDataLoader.class);
         DEFAULT_LOADERS.put(DataType.magic, MagicDataLoader.class);
         DEFAULT_LOADERS.put(DataType.position, PositionDataLoader.class);
         DEFAULT_LOADERS.put(DataType.resist, ResistDataLoader.class);

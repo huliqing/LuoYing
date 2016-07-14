@@ -7,7 +7,7 @@ package name.huliqing.fighter.object.actorlogic;
 /**
  * @author huliqing
  */
-public interface LogicProcessor {
+public interface ActorLogicProcessor {
     
     /**
      * 更新逻辑
@@ -16,14 +16,15 @@ public interface LogicProcessor {
     void update(float tpf);
     
     /**
-     * 添加一个逻辑
-     * @param logicData 
+     * 添加一个逻辑 
+     * @param logic
      */
     void addLogic(ActorLogic logic);
     
     /**
      * 移除指定的逻辑
      * @param logic 
+     * @return  
      */
     boolean removeLogic(ActorLogic logic);
     

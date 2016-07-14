@@ -14,12 +14,12 @@ import name.huliqing.fighter.object.DataProcessor;
 import name.huliqing.fighter.object.action.ActionProcessor;
 import name.huliqing.fighter.object.channel.ChannelProcessor;
 import name.huliqing.fighter.object.chat.Chat;
-import name.huliqing.fighter.object.actorlogic.LogicProcessor;
 import name.huliqing.fighter.object.resist.ResistProcessor;
 import name.huliqing.fighter.object.state.StateProcessor;
 import name.huliqing.fighter.object.skill.SkillProcessor;
 import name.huliqing.fighter.object.talent.TalentProcessor;
 import name.huliqing.fighter.object.task.Task;
+import name.huliqing.fighter.object.actorlogic.ActorLogicProcessor;
 
 /**
  * 定义角色的行为
@@ -49,9 +49,9 @@ public interface Actor extends DataProcessor<ActorData> {
      * 获取逻辑管理器，该方法只允许service层调用
      * @return 
      */
-    LogicProcessor getLogicProcessor();
+    ActorLogicProcessor getLogicProcessor();
     
-    void setLogicProcessor(LogicProcessor logicProcessor);
+    void setLogicProcessor(ActorLogicProcessor logicProcessor);
     
     /**
      * 角色行为控制器
