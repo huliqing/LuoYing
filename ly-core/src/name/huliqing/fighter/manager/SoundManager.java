@@ -4,6 +4,8 @@
  */
 package name.huliqing.fighter.manager;
 
+import com.jme3.audio.AudioNode;
+import com.jme3.audio.AudioSource.Status;
 import com.jme3.math.Vector3f;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.constants.IdConstants;
@@ -71,6 +73,25 @@ public class SoundManager {
         }
         SoundData sd = DataFactory.createData(soundId);
         player.playSound(sd, position, true);
+    }
+    
+    /**
+     * 这个方法会根据系统的配置来确定是否要播放声音文件或是停止播放。当configService.isSoundEnabled()时会偿试播放
+     * 声音文件，当configService.isSoundEnabled()关闭时会偿试停止声音播放。
+     * @param audio 
+     */
+    public void checkToPlayAudio(AudioNode audio) {
+        if (audio == null)
+            return;
+        if (configService.isSoundEnabled()) {
+            if (audio.getStatus() == Status.Stopped) {
+                audio.play();
+            }
+        } else {
+            if (audio.getStatus() == Status.Playing) {
+                audio.stop();
+            }
+        }
     }
     
     public void stopSound(SoundData sound) {

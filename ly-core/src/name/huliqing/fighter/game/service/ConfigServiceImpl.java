@@ -4,6 +4,8 @@
  */
 package name.huliqing.fighter.game.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,6 +29,7 @@ import name.huliqing.fighter.utils.MathUtils;
  */
 public class ConfigServiceImpl implements ConfigService {
     private SaveService saveService;
+    
     // 用于标识游戏客户端唯一标识的ID的键。
     private final static String CLIENT_ID_KEY = "Client_ID";
     
@@ -34,6 +37,8 @@ public class ConfigServiceImpl implements ConfigService {
     private String clientIdForDebug;
     
     private ConfigData cd;
+    
+    private List<ConfigListener> listeners = new ArrayList<ConfigListener>();
 
     @Override
     public void inject() {
@@ -79,6 +84,7 @@ public class ConfigServiceImpl implements ConfigService {
     @Override
     public void setSoundEnabled(boolean enabled) {
         cd.setSoundEnabled(enabled);
+        notifyListtener();
     }
 
     @Override
@@ -89,6 +95,7 @@ public class ConfigServiceImpl implements ConfigService {
     @Override
     public void setSoundVolume(float volume) {
         cd.setSoundVolume(MathUtils.clamp(volume, 0f, 1.0f));
+        notifyListtener();
     }
 
     @Override
@@ -100,6 +107,7 @@ public class ConfigServiceImpl implements ConfigService {
     public void setShortcutLocked(boolean locked) {
         cd.setShortcutLocked(locked);
         ShortcutManager.setShortcutLocked(locked);
+        notifyListtener();
     }
 
     @Override
@@ -114,11 +122,11 @@ public class ConfigServiceImpl implements ConfigService {
         }
         cd.setShortcutSize(size);
         ShortcutManager.setShortcutSize(size);
+        notifyListtener();
     }
 
     @Override
     public void clearShortcuts() {
-//        ShortcutManager.clearShortcuts();
         ShortcutManager.cleanup();
     }
 
@@ -134,6 +142,7 @@ public class ConfigServiceImpl implements ConfigService {
         Fighter fighter = (Fighter) Common.getApp();
         fighter.setDebugView(enabled);
         HUDManager.setDragEnabled(enabled);
+        notifyListtener();
     }
 
     @Override
@@ -144,6 +153,7 @@ public class ConfigServiceImpl implements ConfigService {
     @Override
     public void setSpeakTimeWorld(float time) {
         cd.setSpeakTimeWorld(time);
+        notifyListtener();
     }
 
     @Override
@@ -169,6 +179,7 @@ public class ConfigServiceImpl implements ConfigService {
     @Override
     public void setUseHardwareSkining(boolean enabled) {
         cd.setUseHardwareSkinning(enabled);
+        notifyListtener();
         
         // remove20160209不要去动态开启角色的HardWareSkinning,目前有BUG
 //        // 如果改变了该设置，则需要重新检测激活或关闭当前已经载入场景中模型
@@ -198,6 +209,8 @@ public class ConfigServiceImpl implements ConfigService {
         SaveConfig saveConfig = new SaveConfig();
         saveConfig.setConfig(cd);
         SaveHelper.saveConfig(saveConfig);
+        
+        notifyListtener();
     }
     
     @Override
@@ -323,6 +336,7 @@ public class ConfigServiceImpl implements ConfigService {
     @Override
     public void setUseShadow(boolean useShadow) {
         cd.setUseShadow(useShadow);
+        notifyListtener();
     }
 
     @Override
@@ -344,5 +358,24 @@ public class ConfigServiceImpl implements ConfigService {
         return  new String(bytes);
     }
 
+    @Override
+    public void addConfigListener(ConfigListener listener) {
+        if (listener != null && !listeners.contains(listener)) {
+            listeners.add(listener);
+        }
+    }
+
+    @Override
+    public boolean removeConfigListener(ConfigListener listener) {
+        return listeners.remove(listener);
+    }
     
+    private void notifyListtener() {
+        if (listeners.isEmpty())
+            return;
+        for (ConfigListener cl : listeners) {
+            cl.onConfigChanged();
+        }
+    }
+
 }

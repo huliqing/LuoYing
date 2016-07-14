@@ -14,6 +14,18 @@ import name.huliqing.fighter.data.ConfigData;
 public interface ConfigService extends Inject {
     
     /**
+     * 用于监听配置变更.
+     */
+    public interface ConfigListener {
+        
+        /**
+         * 当配置发生变化时调用该方法。
+         */
+        void onConfigChanged();
+        
+    }
+    
+    /**
      * 返回系统配置
      * @return 
      */
@@ -198,4 +210,17 @@ public interface ConfigService extends Inject {
      * @return 
      */
     String getClientId();
+    
+    /**
+     * 添加配置侦听器
+     * @param listener 
+     */
+    void addConfigListener(ConfigListener listener);
+    
+    /**
+     * 移除配置侦听器
+     * @param listener 
+     * @return  
+     */
+    boolean removeConfigListener(ConfigListener listener);
 }

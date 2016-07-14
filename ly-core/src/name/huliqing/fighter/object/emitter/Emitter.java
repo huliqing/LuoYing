@@ -9,6 +9,7 @@ import com.jme3.asset.AssetManager;
 import com.jme3.effect.ParticleEmitter;
 import com.jme3.effect.ParticleMesh;
 import com.jme3.material.Material;
+import com.jme3.renderer.queue.RenderQueue;
 import name.huliqing.fighter.Common;
 import name.huliqing.fighter.data.EmitterData;
 import name.huliqing.fighter.loader.Loader;

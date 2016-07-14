@@ -71,12 +71,12 @@ public  class Game<T extends GameData> extends AbstractAppState implements DataP
      * 开始执行游戏逻辑
      */
     public void start() {
+        playManager = new PlayManager(app, PlayObject.class);
         if (listeners != null) {
             for (GameListener gl : listeners) {
                 gl.onGameStarted(this);
             }
         }
-        playManager = new PlayManager(app, PlayObject.class);
     }
 
     @Override

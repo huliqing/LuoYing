@@ -10,6 +10,7 @@ import com.jme3.audio.AudioData;
 import com.jme3.audio.AudioData.DataType;
 import com.jme3.audio.AudioKey;
 import com.jme3.audio.AudioNode;
+import com.jme3.audio.AudioSource.Status;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
@@ -21,7 +22,10 @@ import name.huliqing.fighter.Common;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.EnvData;
 import name.huliqing.fighter.data.SoundData;
+import name.huliqing.fighter.game.service.ConfigService;
+import name.huliqing.fighter.game.service.ConfigService.ConfigListener;
 import name.huliqing.fighter.game.service.SoundService;
+import name.huliqing.fighter.manager.SoundManager;
 import name.huliqing.fighter.object.scene.Scene;
 
 /**
@@ -29,8 +33,9 @@ import name.huliqing.fighter.object.scene.Scene;
  * @author huliqing
  * @param <T>
  */
-public class AudioEnv <T extends EnvData> extends AbstractEnv<T> {
+public class AudioEnv <T extends EnvData> extends AbstractEnv<T> implements ConfigListener {
     private final SoundService soundService = Factory.get(SoundService.class);
+    private final ConfigService configService = Factory.get(ConfigService.class);
 
     private boolean debug;
     private String sound;
@@ -74,6 +79,8 @@ public class AudioEnv <T extends EnvData> extends AbstractEnv<T> {
     @Override
     public void initialize(Application app, Scene scene) {
         super.initialize(app, scene);
+        configService.addConfigListener(this);
+        
         SoundData sd = soundService.loadSoundData(sound);
         AudioKey audioKey = new AudioKey(sd.getSoundFile(), DataType.Stream.name().equals(type), true);
         AudioData audioData = (AudioData) app.getAssetManager().loadAsset(audioKey);
@@ -93,7 +100,8 @@ public class AudioEnv <T extends EnvData> extends AbstractEnv<T> {
         }
         
         scene.addSceneObject(audio);
-        audio.play();
+        
+        SoundManager.getInstance().checkToPlayAudio(audio);
     }
     
     private Material createDebugMaterial(ColorRGBA color) {
@@ -102,6 +110,11 @@ public class AudioEnv <T extends EnvData> extends AbstractEnv<T> {
         mat.getAdditionalRenderState().setFaceCullMode(RenderState.FaceCullMode.Off);
         mat.setColor("Color",  color);
         return mat;
+    }
+
+    @Override
+    public void onConfigChanged() {
+        SoundManager.getInstance().checkToPlayAudio(audio);
     }
 
     @Override

@@ -104,10 +104,6 @@ public class ActorModelLoader {
         actorModel.setUserData(ProtoData.USER_DATA, data);
         actorModel.setShadowMode(RenderQueue.ShadowMode.Cast);
         
-        // remove 0222,放在service中处理
-//        // 1.==== 是否使用硬件加速
-//        checkEnableHardwareSkining(actorModel);
-        
         // 4.====create character control
         
         // 4.1 注缩放必须放在碰撞盒加入之前，因为碰撞盒不能跟着缩放
