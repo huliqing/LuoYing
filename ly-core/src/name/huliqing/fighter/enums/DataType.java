@@ -9,7 +9,7 @@ package name.huliqing.fighter.enums;
  * @author huliqing
  */
 public enum DataType {
-    /** 基本物体 */
+    /** 基本物体 *//** 基本物体 */
     item(10),
     
     /** 人物角色 */
@@ -55,9 +55,9 @@ public enum DataType {
     position(22),
     
     /** 角色逻辑 */
-    logic(23),
+    actorLogic(23),
     
-    /** Logic相关的行为逻辑。 */
+    /** 角色的行为逻辑 */
     action(24),
     
     /** 物品的使用处理 */

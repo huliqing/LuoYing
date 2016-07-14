@@ -64,8 +64,8 @@ public class PositionLogic<T extends LogicData> extends ActorLogic<T> {
 
     @Override
     protected void doLogic(float tpf) {
-        if (actionService.isPlayingFight(self) 
-                || actionService.isPlayingFollow(self)) {
+        if (actionService.isPlayingFight(actor) 
+                || actionService.isPlayingFollow(actor)) {
             return;
         }
         

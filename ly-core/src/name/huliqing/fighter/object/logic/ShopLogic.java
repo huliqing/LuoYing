@@ -80,11 +80,11 @@ public class ShopLogic<T extends LogicData> extends ActorLogic<T> {
             if (p.maxCount <= 0) 
                 continue;
             
-            temp = protoService.getData(self, p.itemId);
+            temp = protoService.getData(actor, p.itemId);
             currentCount = temp != null ? temp.getTotal() : 0;
             actualStock = p.maxCount - currentCount;
             if (actualStock > 0) {
-                protoNetwork.addData(self, protoService.createData(p.itemId), actualStock);
+                protoNetwork.addData(actor, protoService.createData(p.itemId), actualStock);
             }
         }
     }
@@ -108,14 +108,14 @@ public class ShopLogic<T extends LogicData> extends ActorLogic<T> {
                 continue;
             
             actualStock = stockCount;
-            temp = protoService.getData(self, p.itemId);
+            temp = protoService.getData(actor, p.itemId);
             currentCount = temp != null ? temp.getTotal() : 0;
             
             if (currentCount + actualStock > p.maxCount) {
                 actualStock = p.maxCount - currentCount;
             }
             if (actualStock > 0) {
-                protoNetwork.addData(self, protoService.createData(p.itemId), actualStock);
+                protoNetwork.addData(actor, protoService.createData(p.itemId), actualStock);
             }
         }
     }

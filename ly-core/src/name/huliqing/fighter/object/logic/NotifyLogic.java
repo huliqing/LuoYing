@@ -48,9 +48,9 @@ public class NotifyLogic<T extends LogicData> extends ActorLogic<T> {
     
     @Override
     protected void doLogic(float tpf) {
-        Actor target = actorService.getTarget(self);
-        if (target != null && target.isEnemy(self) && !target.isDead()) {
-            actorService.findNearestFriendly(self, distance, tempStore);
+        Actor target = actorService.getTarget(actor);
+        if (target != null && target.isEnemy(actor) && !target.isDead()) {
+            actorService.findNearestFriendly(actor, distance, tempStore);
             if (!tempStore.isEmpty()) {
                 Actor fTarget;
                 for (Actor friend : tempStore) {
@@ -63,7 +63,7 @@ public class NotifyLogic<T extends LogicData> extends ActorLogic<T> {
                 }
             }
             // 通知后释放当前目标,避免一直通知
-            actorNetwork.setTarget(self, null);
+            actorNetwork.setTarget(actor, null);
             
             // 不要去维持这个列表
             tempStore.clear();

@@ -68,7 +68,7 @@ public class ObjectLoader {
             loadDataFile(DataType.game, "/data/object/game.xml");
             loadDataFile(DataType.handler, "/data/object/handler.xml");
             loadDataFile(DataType.hitChecker, "/data/object/hitChecker.xml");
-            loadDataFile(DataType.logic, "/data/object/logic.xml");
+            loadDataFile(DataType.actorLogic, "/data/object/logic.xml");
             loadDataFile(DataType.magic, "/data/object/magic.xml");
             loadDataFile(DataType.item, "/data/object/item.xml");
             loadDataFile(DataType.resist, "/data/object/resist.xml");

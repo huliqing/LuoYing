@@ -37,9 +37,9 @@ public class IdleLogic<T extends LogicData> extends ActorLogic<T> {
         // 只有空闲时才执行IDLE：
         // 1. 在没有跟随目标时执行巡逻行为，可走来走去
         // 2. 在有跟随目标时则只执行普通idle行为，不可走来走去。
-        Action current = actionService.getPlayingAction(self);
+        Action current = actionService.getPlayingAction(actor);
         if (current == null) {
-            if (self.getData().getFollowTarget() > 0) {
+            if (actor.getData().getFollowTarget() > 0) {
                 playAction(idleSimpleAction);
             } else {
                 playAction(idlePatrolAction);

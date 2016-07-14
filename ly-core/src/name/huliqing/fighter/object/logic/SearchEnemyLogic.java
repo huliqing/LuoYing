@@ -65,19 +65,19 @@ public class SearchEnemyLogic<T extends LogicData> extends ActorLogic<T> {
     protected void doLogic(float tpf) {
         
         // 只有打开了自动侦察功能才执行逻辑
-        if (!actorService.isAutoDetect(self)) {
+        if (!actorService.isAutoDetect(actor)) {
             return;
         }
         
         // 增加自动频率的逻辑
-        Actor target = actorService.getTarget(self);
+        Actor target = actorService.getTarget(actor);
         
-        if (target == null || target.isDead() || !target.isEnemy(self) 
+        if (target == null || target.isDead() || !target.isEnemy(actor) 
                 || !playService.isInScene(target)) {
             
-            Actor enemy = actorService.findNearestEnemyExcept(self, actorService.getViewDistance(self), null);
+            Actor enemy = actorService.findNearestEnemyExcept(actor, actorService.getViewDistance(actor), null);
             if (enemy != null) {
-                actorNetwork.setTarget(self, enemy);
+                actorNetwork.setTarget(actor, enemy);
             }
             // 如果是自动间隔，则在有敌人时频率降低，在没有敌人时频率加大 
             if (autoInterval) {

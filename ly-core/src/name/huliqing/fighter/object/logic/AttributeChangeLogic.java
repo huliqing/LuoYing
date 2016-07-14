@@ -34,16 +34,16 @@ public class AttributeChangeLogic<T extends LogicData> extends ActorLogic<T> {
 
     @Override
     protected void doLogic(float tpf) {
-        AttributeData data = attributeService.getAttributeData(self, targetAttribute);
+        AttributeData data = attributeService.getAttributeData(actor, targetAttribute);
         if (data == null) {
             return;
         }
         
-        float useFactor = attributeService.getDynamicValue(self, useAttribute);
+        float useFactor = attributeService.getDynamicValue(actor, useAttribute);
         float applyValue = value * useFactor * interval;
         data.setDynamicValue(data.getDynamicValue() + applyValue);
-        attributeService.clampDynamicValue(self, data.getId());
-        attributeNetwork.syncAttribute(self, data.getId()
+        attributeService.clampDynamicValue(actor, data.getId());
+        attributeNetwork.syncAttribute(actor, data.getId()
                 , data.getLevelValue(), data.getStaticValue(), data.getDynamicValue());
     }
 }

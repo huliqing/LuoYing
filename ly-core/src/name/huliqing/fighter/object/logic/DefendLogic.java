@@ -68,7 +68,7 @@ public class DefendLogic<T extends LogicData> extends ActorLogic<T> implements S
     @Override
     public void initialize(Application app) {
         super.initialize(app);
-        actorService.addActorListener(self, this);
+        actorService.addActorListener(actor, this);
     }
 
     @Override
@@ -114,7 +114,7 @@ public class DefendLogic<T extends LogicData> extends ActorLogic<T> implements S
             return;
         
         // 如果已经死亡就不需要处理防守了
-        if (self.isDead()) 
+        if (actor.isDead()) 
             return;
         
         // 暂不支持shot类技能的防守
@@ -139,7 +139,7 @@ public class DefendLogic<T extends LogicData> extends ActorLogic<T> implements S
         }
         
         // 3.闪避防守
-        if (self.isDucking()) {
+        if (actor.isDucking()) {
             return;
         }
         doDuck();
@@ -164,7 +164,7 @@ public class DefendLogic<T extends LogicData> extends ActorLogic<T> implements S
     @Override
     public void onActorHit(Actor source, Actor attacker, String hitAttribute, float hitValue) {
         // hitValue>0为增益效果，不处理
-        if (source.isDead() || self.isPlayer() || hitValue > 0)
+        if (source.isDead() || actor.isPlayer() || hitValue > 0)
             return;
         
         // 被击中的属性不在监听范围内则不处理。
@@ -179,11 +179,11 @@ public class DefendLogic<T extends LogicData> extends ActorLogic<T> implements S
     
     private boolean doDefend() {
         if (defendRateAttribute != null) {
-            float defendRate = attributeService.getDynamicValue(self, defendRateAttribute);
+            float defendRate = attributeService.getDynamicValue(actor, defendRateAttribute);
             if(defendRate >= FastMath.nextRandomFloat()) {
-                SkillData defendSkill = skillService.getSkillRandomDefend(self);
+                SkillData defendSkill = skillService.getSkillRandomDefend(actor);
                 if (defendSkill != null) {
-                    skillNetwork.playSkill(self, defendSkill.getId(), false);
+                    skillNetwork.playSkill(actor, defendSkill.getId(), false);
                     return true;
                 }
             }
@@ -193,11 +193,11 @@ public class DefendLogic<T extends LogicData> extends ActorLogic<T> implements S
     
     private boolean doDuck() {
         if (duckRateAttribute != null) {
-            float duckRate = attributeService.getDynamicValue(self, defendRateAttribute);
+            float duckRate = attributeService.getDynamicValue(actor, defendRateAttribute);
             if (duckRate >= FastMath.nextRandomFloat()) {
-                SkillData duckSkill = skillService.getSkillRandomDuck(self);
+                SkillData duckSkill = skillService.getSkillRandomDuck(actor);
                 if (duckSkill != null) {
-                    skillNetwork.playSkill(self, duckSkill.getId(), false);
+                    skillNetwork.playSkill(actor, duckSkill.getId(), false);
                     return true;
                 }
             }
@@ -209,7 +209,7 @@ public class DefendLogic<T extends LogicData> extends ActorLogic<T> implements S
     @Override
     public void cleanup() {
         // 清理当前角色的侦听器
-        actorService.removeActorListener(self, this);
+        actorService.removeActorListener(actor, this);
         
         // 清理其它被当前逻辑侦听的角色
         if (listenersActors != null) {
@@ -223,21 +223,21 @@ public class DefendLogic<T extends LogicData> extends ActorLogic<T> implements S
     @Override
     protected void doLogic(float tpf) {
         // 技能无更新则不处理
-        if (!actorService.isSkillUpdated(self, lastCheckTime)) {
+        if (!actorService.isSkillUpdated(actor, lastCheckTime)) {
             return;
         }
         // 判断是否有可用技能
-        List<SkillData> skills = skillService.getSkill(self);
+        List<SkillData> skills = skillService.getSkill(actor);
         if (skills == null) {
             hasUsableSkill = false;
-            lastCheckTime = self.getData().getSkillStore().getLastModifyTime();
+            lastCheckTime = actor.getData().getSkillStore().getLastModifyTime();
             return;
         }
         // 如果存在defend或duck技能则认为可用
         for (SkillData sd : skills) {
             if (sd.getSkillType() == SkillType.defend || sd.getSkillType() == SkillType.duck) {
                 hasUsableSkill = true;
-                lastCheckTime = self.getData().getSkillStore().getLastModifyTime();
+                lastCheckTime = actor.getData().getSkillStore().getLastModifyTime();
                 return;
             }
         }

@@ -429,7 +429,7 @@ public class DataFactory {
         DEFAULT_DATAS.put(DataType.handler, HandlerData.class);
         DEFAULT_DATAS.put(DataType.hitChecker, HitCheckerData.class);
         DEFAULT_DATAS.put(DataType.item, ItemData.class);
-        DEFAULT_DATAS.put(DataType.logic, LogicData.class);
+        DEFAULT_DATAS.put(DataType.actorLogic, LogicData.class);
         DEFAULT_DATAS.put(DataType.magic, MagicData.class);
         DEFAULT_DATAS.put(DataType.position, PositionData.class);
         DEFAULT_DATAS.put(DataType.resist, ResistData.class);
@@ -463,7 +463,7 @@ public class DataFactory {
         DEFAULT_LOADERS.put(DataType.handler, HandlerDataLoader.class);
         DEFAULT_LOADERS.put(DataType.hitChecker, HitCheckerDataLoader.class);
         DEFAULT_LOADERS.put(DataType.item, ItemDataLoader.class);
-        DEFAULT_LOADERS.put(DataType.logic, LogicDataLoader.class);
+        DEFAULT_LOADERS.put(DataType.actorLogic, LogicDataLoader.class);
         DEFAULT_LOADERS.put(DataType.magic, MagicDataLoader.class);
         DEFAULT_LOADERS.put(DataType.position, PositionDataLoader.class);
         DEFAULT_LOADERS.put(DataType.resist, ResistDataLoader.class);

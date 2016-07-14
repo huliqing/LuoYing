@@ -20,11 +20,12 @@ import name.huliqing.fighter.object.IntervalLogic;
 public abstract class ActorLogic<T extends LogicData> extends IntervalLogic implements DataProcessor<T>{
     private final ActionService actionService = Factory.get(ActionService.class);
     
-    private T data;
+    protected T data;
+    
     /**
      * 运行当前逻辑的角色.
      */
-    protected Actor self;
+    protected Actor actor;
 
     @Override
     public void setData(T data) {
@@ -37,12 +38,20 @@ public abstract class ActorLogic<T extends LogicData> extends IntervalLogic impl
         return data;
     }
     
-    public Actor getSelf() {
-        return self;
+    /**
+     * 获取执行逻辑的角色.
+     * @return 
+     */
+    public Actor getActor() {
+        return actor;
     }
-        
-    public void setSelf(Actor self) {
-        this.self = self;
+    
+    /**
+     * 设置执行逻辑的角色。
+     * @param self 
+     */
+    public void setActor(Actor self) {
+        this.actor = self;
     }
     
     /**
@@ -50,7 +59,7 @@ public abstract class ActorLogic<T extends LogicData> extends IntervalLogic impl
      * @param action 
      */
     protected void playAction(Action action) {
-        actionService.playAction(self, action);
+        actionService.playAction(actor, action);
     }
     
 }

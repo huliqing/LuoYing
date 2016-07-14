@@ -33,7 +33,7 @@ public class LogicProcessorImpl implements LogicProcessor {
     @Override
     public void addLogic(ActorLogic logic) {
         if (!logics.contains(logic)) {
-            logic.setSelf(actor);
+            logic.setActor(actor);
             logic.initialize(app);
             logics.add(logic);
         }

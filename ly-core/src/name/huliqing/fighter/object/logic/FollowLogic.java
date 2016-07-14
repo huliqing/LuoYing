@@ -57,14 +57,14 @@ public class FollowLogic<T extends LogicData> extends ActorLogic<T> {
     
     @Override
     protected void doLogic(float tpf) {
-        long ft = self.getData().getFollowTarget(); 
+        long ft = actor.getData().getFollowTarget(); 
         
         // 如果角色没有设置跟随的目标,则停止当前的跟随行为(注:只停止当前逻辑启动的followAction).
         if (ft <= 0) {
             target = null;
-            Action current = actionService.getPlayingAction(self);
+            Action current = actionService.getPlayingAction(actor);
             if (current == followAction) {
-                actionService.playAction(self, null);
+                actionService.playAction(actor, null);
             }
             return;
         }
@@ -72,13 +72,13 @@ public class FollowLogic<T extends LogicData> extends ActorLogic<T> {
         // 如果跟随的目标发生变化则重新查找目标进行跟随.找不到指定目标则不处理
         if (target == null || target.getData().getUniqueId() != ft) {
             target = playService.findActor(ft);
-            if (target == null || target == self) {
+            if (target == null || target == actor) {
                 return;
             }
         }
         
         // 如果距离超过MaxFollowDistance则直接转到跟随,不管是否在战斗
-        if (actionService.isPlayingFight(self) 
+        if (actionService.isPlayingFight(actor) 
                 
                  // remove20160310,不要这个参数,这会导致角色在跟随和拔刀之间不停来回切换，很难看。
 //                && target.getDistanceSquared(self) < distanceLimitSquared
@@ -92,7 +92,7 @@ public class FollowLogic<T extends LogicData> extends ActorLogic<T> {
     }
     
     private void doFollow() {
-        if (followAction.isEnd() && self.getDistance(target.getModel().getWorldTranslation()) > maxFollow) {
+        if (followAction.isEnd() && actor.getDistance(target.getModel().getWorldTranslation()) > maxFollow) {
             lastFollowUsed = FastMath.nextRandomFloat() * (maxFollow - minFollow) + minFollow;
             followAction.setFollow(target.getModel());
             followAction.setNearest(lastFollowUsed);

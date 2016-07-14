@@ -41,18 +41,18 @@ public class PlayerLogic<T extends LogicData> extends ActorLogic<T> {
     @Override
     protected void doLogic(float tpf) {
         // 如果玩家正在控制走路，则不执行逻辑
-        if (actionService.isPlayingRun(self)) {
+        if (actionService.isPlayingRun(actor)) {
             return;
         }
         
-        Actor t = actorService.getTarget(self);
+        Actor t = actorService.getTarget(actor);
         
         if (t != null && !t.isDead() 
-                && t.getDistance(self) < actorService.getViewDistance(self)
+                && t.getDistance(actor) < actorService.getViewDistance(actor)
                 
                 // remove20160328 -> remove20160217,不再判断是否为敌人，是否可攻击目标以后交由hitChecker判断
                 // 放开这个判断可允许玩家控制角色攻击同伴，只要技能的hitChecker设置即可。
-                && t.isEnemy(self)
+                && t.isEnemy(actor)
                 
                 ) {
             fightAction.setEnemy(t);
