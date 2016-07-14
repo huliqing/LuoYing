@@ -25,7 +25,7 @@ import name.huliqing.fighter.logic.scene.ActorBuildLogic;
 import name.huliqing.fighter.object.DataFactory;
 import name.huliqing.fighter.object.IntervalLogic;
 import name.huliqing.fighter.object.actor.Actor;
-import name.huliqing.fighter.object.logic.PositionLogic;
+import name.huliqing.fighter.object.actorlogic.PositionLogic;
 import name.huliqing.fighter.object.view.TextView;
 import name.huliqing.fighter.object.view.View;
 

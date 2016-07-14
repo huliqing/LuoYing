@@ -34,7 +34,7 @@ import name.huliqing.fighter.game.service.SkillService;
 import name.huliqing.fighter.game.service.StateService;
 import name.huliqing.fighter.object.channel.ChannelProcessor;
 import name.huliqing.fighter.object.chat.Chat;
-import name.huliqing.fighter.object.logic.LogicProcessor;
+import name.huliqing.fighter.object.actorlogic.LogicProcessor;
 import name.huliqing.fighter.object.resist.ResistProcessor;
 import name.huliqing.fighter.object.skill.SkillProcessor;
 import name.huliqing.fighter.object.talent.TalentProcessor;

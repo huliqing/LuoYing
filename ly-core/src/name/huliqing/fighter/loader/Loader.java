@@ -39,7 +39,7 @@ import name.huliqing.fighter.data.ViewData;
 import name.huliqing.fighter.object.DataFactory;
 import name.huliqing.fighter.object.action.Action;
 import name.huliqing.fighter.object.actoranim.ActorAnim;
-import name.huliqing.fighter.object.logic.ActorLogic;
+import name.huliqing.fighter.object.actorlogic.ActorLogic;
 import name.huliqing.fighter.object.anim.Anim;
 import name.huliqing.fighter.object.bullet.Bullet;
 import name.huliqing.fighter.object.channel.Channel;

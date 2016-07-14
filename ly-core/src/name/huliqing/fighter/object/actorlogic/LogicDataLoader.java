@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.fighter.object.logic;
+package name.huliqing.fighter.object.actorlogic;
 
 import name.huliqing.fighter.data.LogicData;
 import name.huliqing.fighter.data.Proto;

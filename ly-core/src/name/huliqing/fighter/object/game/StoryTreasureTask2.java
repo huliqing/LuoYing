@@ -31,7 +31,7 @@ import name.huliqing.fighter.game.service.SkillService;
 import name.huliqing.fighter.game.service.StateService;
 import name.huliqing.fighter.game.service.ViewService;
 import name.huliqing.fighter.loader.Loader;
-import name.huliqing.fighter.object.logic.PositionLogic;
+import name.huliqing.fighter.object.actorlogic.PositionLogic;
 import name.huliqing.fighter.logic.scene.ActorLoadHelper;
 import name.huliqing.fighter.logic.scene.ActorBuildLogic;
 import name.huliqing.fighter.logic.scene.ActorBuildLogic.Callback;

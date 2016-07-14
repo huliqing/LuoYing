@@ -10,7 +10,7 @@ import name.huliqing.fighter.data.LogicData;
 import name.huliqing.fighter.loader.Loader;
 import name.huliqing.fighter.object.DataFactory;
 import name.huliqing.fighter.object.actor.Actor;
-import name.huliqing.fighter.object.logic.ActorLogic;
+import name.huliqing.fighter.object.actorlogic.ActorLogic;
 
 /**
  *

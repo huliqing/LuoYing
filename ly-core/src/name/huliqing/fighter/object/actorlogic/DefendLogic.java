@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.fighter.object.logic;
+package name.huliqing.fighter.object.actorlogic;
 
 import com.jme3.app.Application;
 import com.jme3.math.FastMath;
