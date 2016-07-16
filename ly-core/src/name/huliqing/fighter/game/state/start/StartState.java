@@ -124,7 +124,7 @@ public class StartState extends AbstractAppState {
             @Override
             public void onClick(UI ui, boolean isPress) {
                 if (!isPress) {
-                    startState(new LabPlayState(Common.getApp(), gameService.loadGameData(IdConstants.GAME_STORY_TREASURE)));
+                    startState(new LabPlayState(Common.getApp(), gameService.loadGameData(IdConstants.GAME_LAB)));
                 }
             }
         });

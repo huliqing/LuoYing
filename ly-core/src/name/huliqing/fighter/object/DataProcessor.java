@@ -25,5 +25,4 @@ public interface DataProcessor<T extends ProtoData> {
      */
     T getData();
 
-
 }

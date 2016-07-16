@@ -15,9 +15,4 @@ public class EnvData extends ProtoData {
 
     public EnvData() {}
     
-    public EnvData(String id) {
-        super(id);
-    }
-
-    
 }

@@ -27,7 +27,7 @@ import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.constants.IdConstants;
 import name.huliqing.fighter.object.actor.ActorControl;
 import name.huliqing.fighter.data.ActorData;
-import name.huliqing.fighter.data.LogicData;
+import name.huliqing.fighter.data.ActorLogicData;
 import name.huliqing.fighter.data.ProtoData;
 import name.huliqing.fighter.data.StateData;
 import name.huliqing.fighter.data.TalentData;
@@ -212,9 +212,9 @@ public class ActorModelLoader {
         }
         
         // 8.==== 载入角色的逻辑
-        List<LogicData> logics = data.getLogics();
+        List<ActorLogicData> logics = data.getLogics();
         if (logics != null) {
-            for (LogicData logicData : logics) {
+            for (ActorLogicData logicData : logics) {
                 ActorLogic logic = Loader.loadLogic(logicData);
                 logicProcessor.addLogic(logic);
             }

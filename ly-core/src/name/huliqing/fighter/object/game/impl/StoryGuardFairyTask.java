@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.fighter.object.game;
+package name.huliqing.fighter.object.game.impl;
 
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.constants.IdConstants;

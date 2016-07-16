@@ -17,11 +17,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.GameException;
+import name.huliqing.fighter.data.GameLogicData;
 import name.huliqing.fighter.game.network.PlayNetwork;
 import name.huliqing.fighter.game.service.ActorService;
 import name.huliqing.fighter.game.service.PlayService;
-import name.huliqing.fighter.object.IntervalLogic;
 import name.huliqing.fighter.object.actor.Actor;
+import name.huliqing.fighter.object.gamelogic.AbstractGameLogic;
 import name.huliqing.fighter.utils.MathUtils;
 import name.huliqing.fighter.utils.ThreadHelper;
 
@@ -32,8 +33,9 @@ import name.huliqing.fighter.utils.ThreadHelper;
  * 2.刷新的角色坐标位置随机，通过坐标列表指定。
  * 3.可指定最多刷新多少个角色,当角色达到指定数量时，刷新器将暂停刷新
  * @author huliqing
+ * @param <T>
  */
-public class ActorBuildLogic extends IntervalLogic {
+public class ActorBuildLogic<T extends GameLogicData> extends AbstractGameLogic<T> {
     
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final PlayService playService = Factory.get(PlayService.class);
@@ -89,11 +91,10 @@ public class ActorBuildLogic extends IntervalLogic {
     // 用于从其它线程载入角色
     private Future<Actor> future;
     
-    private boolean enabled = true;
-    
     public ActorBuildLogic() {
-        super(3);
+        this.interval = 3;
     }
+    
 
     /**
      * 设置一个自定义的模型载入器，用于拦截处理模型的载入
@@ -150,14 +151,6 @@ public class ActorBuildLogic extends IntervalLogic {
      */
     public void setTotal(int total) {
         this.total = total;
-    }
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
     }
     
     @Override

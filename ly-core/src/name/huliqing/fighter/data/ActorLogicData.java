@@ -16,7 +16,7 @@ import java.io.IOException;
  * @author huliqing
  */
 @Serializable
-public class LogicData extends ProtoData {
+public class ActorLogicData extends ProtoData {
     
     private float interval;
 
@@ -34,9 +34,9 @@ public class LogicData extends ProtoData {
         interval = ic.readFloat("interval", 1);
     }
     
-    public LogicData(){}
+    public ActorLogicData(){}
     
-    public LogicData(String id) {
+    public ActorLogicData(String id) {
         super(id);
     }
 

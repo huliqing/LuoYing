@@ -2,13 +2,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.fighter.object.game;
+package name.huliqing.fighter.object.game.impl;
 
 import com.jme3.util.TempVars;
 import java.util.List;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.constants.IdConstants;
 import name.huliqing.fighter.constants.ResConstants;
+import name.huliqing.fighter.data.GameLogicData;
 import name.huliqing.fighter.data.TalentData;
 import name.huliqing.fighter.enums.MessageType;
 import name.huliqing.fighter.enums.SkillType;
@@ -23,17 +24,18 @@ import name.huliqing.fighter.game.service.ViewService;
 import name.huliqing.fighter.loader.Loader;
 import name.huliqing.fighter.logic.scene.ActorBuildLogic;
 import name.huliqing.fighter.object.DataFactory;
-import name.huliqing.fighter.object.IntervalLogic;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.object.actorlogic.PositionActorLogic;
+import name.huliqing.fighter.object.gamelogic.AbstractGameLogic;
 import name.huliqing.fighter.object.view.TextView;
 import name.huliqing.fighter.object.view.View;
 
 /**
  *
  * @author huliqing
+ * @param <T>
  */
-public class SurvivalBoss extends IntervalLogic {
+public class SurvivalBoss<T extends GameLogicData> extends AbstractGameLogic<T> {
     private final ActorService actorService = Factory.get(ActorService.class);
     private final TalentService talentService = Factory.get(TalentService.class);
     private final ViewService viewService = Factory.get(ViewService.class);
@@ -43,27 +45,27 @@ public class SurvivalBoss extends IntervalLogic {
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     
-    private SurvivalGame game;
-    private SurvivalLevelLogic levelLogic;
-    private ActorBuildLogic actorBuilder;
+    private final SurvivalGame game;
+    private final SurvivalLevelLogic levelLogic;
+    private final ActorBuildLogic actorBuilder;
     
-    private int raptorLevel;
+    private final int raptorLevel;
     private boolean raptorAdded;
     
-    private int sinbadLevel;
+    private final int sinbadLevel;
     private boolean sinbadAdded;
     
-    private int trexLevel;
+    private final int trexLevel;
     private boolean trexAdded;
     
-    private int bossLevel;
+    private final int bossLevel;
     private boolean bossAdded;
     
     private Actor boss;
     private boolean bossDead;
     
     public SurvivalBoss(SurvivalGame game, ActorBuildLogic actorBuilder, SurvivalLevelLogic levelLogic) {
-        super(5);
+        this.interval = 5;
         this.game = game;
         this.actorBuilder = actorBuilder;
         this.levelLogic = levelLogic;

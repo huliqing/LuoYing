@@ -63,13 +63,6 @@ public class LabPlayState extends NetworkPlayState {
         gameState.getGame().addListener(new Game.GameListener() {
             @Override
             public void onGameStarted(Game game) {
-
-                // remove20160710
-//                chaseCamera = SceneUtils.createChaseCam(app.getCamera()
-//                        , app.getInputManager());
-//                chaseCamera.setPhysicsSpace(gameState.getGame().getScene().getPhysicsSpace());
-//                chaseCamera.addCollisionObjectAll(gameState.getGame().getScene().getTerrain());
-        
                 // 载入NPC
                 npc1 = loadActor(FastMath.nextRandomInt(0, actorIds.length - 1));
                 npc1.setLocation(new Vector3f(10, 1, 0));

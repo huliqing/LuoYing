@@ -7,7 +7,7 @@ package name.huliqing.fighter.object.actorlogic;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.object.action.FightAction;
-import name.huliqing.fighter.data.LogicData;
+import name.huliqing.fighter.data.ActorLogicData;
 import name.huliqing.fighter.game.service.ActionService;
 import name.huliqing.fighter.game.service.ActorService;
 import name.huliqing.fighter.loader.Loader;
@@ -18,7 +18,7 @@ import name.huliqing.fighter.loader.Loader;
  * @author huliqing
  * @param <T>
  */
-public class PlayerActorLogic<T extends LogicData> extends ActorLogic<T> {
+public class PlayerActorLogic<T extends ActorLogicData> extends ActorLogic<T> {
     private final ActionService actionService = Factory.get(ActionService.class);;
     private final ActorService actorService = Factory.get(ActorService.class);;
     

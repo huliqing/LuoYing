@@ -19,10 +19,11 @@ xs:time
     <xs:element name="root">
         <xs:complexType>
             <xs:all>
+                <xs:element ref="gameRpg" />
+                
                 <xs:element ref="gameStoryTreasure" />
                 <xs:element ref="gameStoryGb" />
                 <xs:element ref="gameStoryGuard" />
-                
                 <xs:element ref="gameSurvival" />
             </xs:all>
         </xs:complexType>
@@ -115,23 +116,40 @@ xs:time
         </xs:complexType>
     </xs:element>
     
+    <xs:element name="gameRpg">
+        <xs:annotation>
+            <xs:documentation>角色扮演游戏</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="gameBase">
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
     <xs:complexType name="gameBase">
         <xs:annotation>
             <xs:documentation></xs:documentation>
         </xs:annotation>
         <xs:complexContent>
             <xs:extension base="base">
-                <xs:attribute name="scene" use="required" type="xs:string">
+                <xs:attribute ref="icon" />
+                <xs:attribute name="scene" type="xs:string" use="required">
                     <xs:annotation>
                         <xs:documentation>连接到一个场景id</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-                <xs:attribute name="availableActors" use="required" type="xs:string">
+                <xs:attribute name="gameLogics" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>游戏逻辑列表，关联gameLogic.xml,格式："gameLogic1,gameLogic2,gameLogic3"</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="availableActors" type="xs:string" use="required">
                     <xs:annotation>
                         <xs:documentation>可选择的角色列表，格式："actorId1,actorId2,actorId3"</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-                <xs:attribute ref="icon" />
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>

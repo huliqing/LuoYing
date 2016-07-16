@@ -2,26 +2,16 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.fighter.object.game;
+package name.huliqing.fighter.object.game.impl;
 
 import com.jme3.math.Vector3f;
-import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.GameData;
-import name.huliqing.fighter.game.network.ActorNetwork;
-import name.huliqing.fighter.game.service.ActionService;
-import name.huliqing.fighter.game.service.ActorService;
-import name.huliqing.fighter.game.service.PlayService;
 
 /**
  *
  * @author huliqing
  */
 public class StoryGbGame extends StoryGame {
-    private final PlayService playService = Factory.get(PlayService.class);
-    private final ActionService actionService = Factory.get(ActionService.class);
-    private final ActorService actorService = Factory.get(ActorService.class);
-    private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
-    
     // 古柏的位置
     private Vector3f gbPosition;
     // 盗贼据点
@@ -45,7 +35,7 @@ public class StoryGbGame extends StoryGame {
     }
     
     @Override
-    protected void doInit() {
+    protected void doStoryInitialize() {
         addTask(new StoryGbTask1(this));
         addTask(new StoryGbTask2(this));
     }

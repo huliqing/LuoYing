@@ -17,14 +17,12 @@ public class GameData extends ProtoData {
     
     // 场景ID
     private SceneData sceneData;
+    // 游戏的逻辑列表
+    private List<GameLogicData> gameLogics;
     // 游戏可选的角色列表
     private List<String> availableActors;
     
     public GameData(){}
-    
-    public GameData(String id) {
-        super(id);
-    }
 
     public SceneData getSceneData() {
         return sceneData;
@@ -32,6 +30,14 @@ public class GameData extends ProtoData {
 
     public void setSceneData(SceneData sceneData) {
         this.sceneData = sceneData;
+    }
+
+    public List<GameLogicData> getGameLogics() {
+        return gameLogics;
+    }
+
+    public void setGameLogics(List<GameLogicData> gameLogics) {
+        this.gameLogics = gameLogics;
     }
 
     public List<String> getAvailableActors() {

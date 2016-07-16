@@ -2,24 +2,23 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.fighter.object.game;
+package name.huliqing.fighter.object.game.impl;
 
-import com.jme3.app.Application;
-import com.jme3.app.state.AppStateManager;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.fighter.Factory;
+import name.huliqing.fighter.data.GameData;
 import name.huliqing.fighter.game.network.ActorNetwork;
 import name.huliqing.fighter.game.service.PlayService;
-import name.huliqing.fighter.logic.scene.ActorCleanLogic;
 import name.huliqing.fighter.object.actor.Actor;
-import name.huliqing.fighter.object.scene.Scene;
+import name.huliqing.fighter.object.game.Game;
 
 /**
  * 故事模式的游戏方式，有一些特殊的游戏逻辑行为。并且一旦主角死亡也就是任务失败
  * @author huliqing
+ * @param <T>
  */
-public abstract class StoryGame extends Game {
+public abstract class StoryGame<T extends GameData> extends Game<T> {
     private final PlayService playService = Factory.get(PlayService.class);
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     
@@ -31,37 +30,22 @@ public abstract class StoryGame extends Game {
     
     // 已经执行完的task数
     private int finishCount;
-
-    // 检查主角是否死亡
-    private PlayerDeadChecker playerChecker;
     
     /**
      * 主角的用户组id
      */
     public final static int GROUP_PLAYER = 1;
     
-    // 默认false,需要等待载入player
-    protected boolean started;
+    protected Actor player;
     
     public void addTask(GameTask task) {
         tasks.add(task);
     }
 
     @Override
-    public final void initialize(AppStateManager stateManager, Application app) {
-        super.initialize(stateManager, app); 
-        // 默认false,需要等待载入player
-        started = false;
-    }
-
-    @Override
-    public void start() {
-        super.start(); 
+    protected final void gameInitialize() {
         finishCount = 0;
         current = null;
-        
-        // 角色清理器
-        addLogic(new ActorCleanLogic());
     }
     
     /**
@@ -71,8 +55,6 @@ public abstract class StoryGame extends Game {
     public boolean hasNext() {
         return finishCount < tasks.size();
     }
-    
-    protected abstract void doInit();
     
     /**
      * 执行下一个任务
@@ -91,26 +73,17 @@ public abstract class StoryGame extends Game {
     @Override
     public void update(float tpf) {
         super.update(tpf);
-        if (!started) {
+        if (player == null) {
             // 设置player分组
-            Actor player = playService.getPlayer();
+            player = playService.getPlayer();
             if (player != null) {
                 // 给玩家指定分组
                 actorNetwork.setGroup(player, GROUP_PLAYER);
-                // 检查角色是否存活
-                playerChecker = new PlayerDeadChecker(this, player);
-                addLogic(playerChecker);
                 
                 // 子类初始化
-                doInit();
+                doStoryInitialize();
                 doNext();
-                
-                started = true;
             }
-            return;
-        }
-        
-        if (playerChecker.isDead()) {
             return;
         }
         
@@ -120,8 +93,10 @@ public abstract class StoryGame extends Game {
             if (hasNext()) {
                 doNext();
             } else {
-//                playService.removePlayObject(this);
-                app.getStateManager().detach(this);
+                
+                // remove20160716
+//                app.getStateManager().detach(this);
+
             }
         } else {
             current.update(tpf);
@@ -139,7 +114,12 @@ public abstract class StoryGame extends Game {
             }
         }
         tasks.clear();
+        player = null;
         super.cleanup();
     }
     
+    /**
+     * 故事模式的初始化，该方法的调用在gameInitialize之后。并且是在主玩家(player)载入之后才会被调用。
+     */
+    protected abstract void doStoryInitialize();
 }

@@ -8,7 +8,7 @@ import com.jme3.math.FastMath;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.object.action.FollowAction;
-import name.huliqing.fighter.data.LogicData;
+import name.huliqing.fighter.data.ActorLogicData;
 import name.huliqing.fighter.game.service.ActionService;
 import name.huliqing.fighter.game.service.PlayService;
 import name.huliqing.fighter.object.action.Action;
@@ -19,7 +19,7 @@ import name.huliqing.fighter.utils.MathUtils;
  * @author huliqing
  * @param <T>
  */
-public class FollowActorLogic<T extends LogicData> extends ActorLogic<T> {
+public class FollowActorLogic<T extends ActorLogicData> extends ActorLogic<T> {
 //    private final static Logger logger = Logger.getLogger(FollowLogic.class.getName());
     private final PlayService playService = Factory.get(PlayService.class);
     private final ActionService actionService = Factory.get(ActionService.class);

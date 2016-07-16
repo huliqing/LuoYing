@@ -29,12 +29,11 @@ import name.huliqing.fighter.ui.UI;
 import name.huliqing.fighter.ui.state.UIState;
 
 /**
- * 联网游戏的基类
+ * 联网游戏的基类,可用于服务端也可用于客户端。
  * @author huliqing
  */
 public abstract class NetworkPlayState extends PlayState implements LanGame {
     private final PlayService playService = Factory.get(PlayService.class);
-    private final ActorService actorService = Factory.get(ActorService.class);
     protected final Network network = Network.getInstance();
 
     // 客户端列表界面
@@ -99,13 +98,6 @@ public abstract class NetworkPlayState extends PlayState implements LanGame {
         
         UIState.getInstance().addUI(actorPanel);
         gameState.addObject(actorPanel.getActorView(), false);
-        
-        // remove20160710
-//        if (chaseCamera == null) {
-//            chaseCamera = SceneTools.createChaseCam(app.getCamera(), app.getInputManager());
-//            chaseCamera.setDefaultDistance(5f);
-//        }
-//        actorPanel.getActorView().addControl(chaseCamera);
         
         CameraChaseEnv cce = SceneUtils.findEnv(gameState.getScene(), CameraChaseEnv.class);
         if (cce != null) {

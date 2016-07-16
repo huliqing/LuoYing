@@ -6,7 +6,7 @@ package name.huliqing.fighter.object.actorlogic;
 
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.AttributeData;
-import name.huliqing.fighter.data.LogicData;
+import name.huliqing.fighter.data.ActorLogicData;
 import name.huliqing.fighter.game.network.AttributeNetwork;
 import name.huliqing.fighter.game.service.AttributeService;
 
@@ -15,7 +15,7 @@ import name.huliqing.fighter.game.service.AttributeService;
  * @author huliqing
  * @param <T>
  */
-public class AttributeChangeActorLogic<T extends LogicData> extends ActorLogic<T> {
+public class AttributeChangeActorLogic<T extends ActorLogicData> extends ActorLogic<T> {
     private final AttributeService attributeService = Factory.get(AttributeService.class);
     private final AttributeNetwork attributeNetwork = Factory.get(AttributeNetwork.class);
     private float value = 1f;
@@ -41,6 +41,7 @@ public class AttributeChangeActorLogic<T extends LogicData> extends ActorLogic<T
         
         float useFactor = attributeService.getDynamicValue(actor, useAttribute);
         float applyValue = value * useFactor * interval;
+        
         data.setDynamicValue(data.getDynamicValue() + applyValue);
         attributeService.clampDynamicValue(actor, data.getId());
         attributeNetwork.syncAttribute(actor, data.getId()

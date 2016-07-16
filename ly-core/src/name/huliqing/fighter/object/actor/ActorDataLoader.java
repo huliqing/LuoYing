@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 import name.huliqing.fighter.data.ActorData;
 import name.huliqing.fighter.data.AttributeData;
 import name.huliqing.fighter.data.DropData;
-import name.huliqing.fighter.data.LogicData;
+import name.huliqing.fighter.data.ActorLogicData;
 import name.huliqing.fighter.data.Proto;
 import name.huliqing.fighter.data.ProtoData;
 import name.huliqing.fighter.data.ResistData;
@@ -113,11 +113,11 @@ public class ActorDataLoader implements DataLoader<ActorData> {
         
         // ==== 载入逻辑
         String[] logicIds = proto.getAsArray("logic");
-        List<LogicData> logics = null;
+        List<ActorLogicData> logics = null;
         if (logicIds != null && logicIds.length > 0) {
-            logics = new ArrayList<LogicData>(logicIds.length);
+            logics = new ArrayList<ActorLogicData>(logicIds.length);
             for (String logicId : logicIds) {
-                LogicData logicData = DataFactory.createData(logicId);
+                ActorLogicData logicData = DataFactory.createData(logicId);
                 logics.add(logicData);
             }
         }

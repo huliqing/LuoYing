@@ -123,6 +123,9 @@ public enum DataType {
     /** 任务 */
     task(45),
     
+    /** 游戏逻辑 */
+    gameLogic(46),
+    
     ;
     private int value;
     

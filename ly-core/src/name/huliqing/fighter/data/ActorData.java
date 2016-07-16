@@ -69,7 +69,7 @@ public class ActorData extends ProtoData {
     private DropData drop;
     
     // 角色的逻辑列表
-    private List<LogicData> logics;
+    private List<ActorLogicData> logics;
     
     // 角色的状态列表，注：类型为SafeArrayList,部分Service中使用到循环删除的情况
     private List<StateData> states;
@@ -165,7 +165,7 @@ public class ActorData extends ProtoData {
         oc.write(skillStore, "skillStore", null);
         oc.write(drop, "drop", null);
         if (logics != null)
-            oc.writeSavableArrayList(new ArrayList<LogicData>(logics), "logics", null);
+            oc.writeSavableArrayList(new ArrayList<ActorLogicData>(logics), "logics", null);
         if (states != null)
             oc.writeSavableArrayList(new ArrayList<StateData>(states), "states", null);
         oc.write(resist, "resistData", null);
@@ -340,14 +340,14 @@ public class ActorData extends ProtoData {
      * 获取逻辑列表，如果没有设置过，则返回一个空列表
      * @return 
      */
-    public List<LogicData> getLogics() {
+    public List<ActorLogicData> getLogics() {
         if (logics == null) {
-            logics = new ArrayList<LogicData>();
+            logics = new ArrayList<ActorLogicData>();
         }
         return logics;
     }
 
-    public void setLogics(List<LogicData> logics) {
+    public void setLogics(List<ActorLogicData> logics) {
         this.logics = logics;
     }
 

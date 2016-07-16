@@ -5,7 +5,7 @@
 package name.huliqing.fighter.game.service;
 
 import name.huliqing.fighter.Inject;
-import name.huliqing.fighter.data.LogicData;
+import name.huliqing.fighter.data.ActorLogicData;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.object.actorlogic.ActorLogic;
 
@@ -36,7 +36,7 @@ public interface LogicService extends Inject {
      * @param logicData
      * @return 
      */
-    boolean addLogic(Actor actor, LogicData logicData);
+    boolean addLogic(Actor actor, ActorLogicData logicData);
         
     /**
      * 给角色添加逻辑

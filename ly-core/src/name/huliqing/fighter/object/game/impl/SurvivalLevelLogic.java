@@ -2,36 +2,37 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.fighter.object.game;
+package name.huliqing.fighter.object.game.impl;
 
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.constants.IdConstants;
 import name.huliqing.fighter.constants.ResConstants;
+import name.huliqing.fighter.data.GameLogicData;
 import name.huliqing.fighter.enums.MessageType;
 import name.huliqing.fighter.game.network.PlayNetwork;
 import name.huliqing.fighter.game.service.ViewService;
 import name.huliqing.fighter.manager.ResourceManager;
-import name.huliqing.fighter.object.IntervalLogic;
+import name.huliqing.fighter.object.gamelogic.AbstractGameLogic;
 import name.huliqing.fighter.object.view.TextView;
 
 /**
  * 用于按时间计算等级
  * @author huliqing
+ * @param <T>
  */
-public class SurvivalLevelLogic extends IntervalLogic {
+public class SurvivalLevelLogic<T extends GameLogicData> extends AbstractGameLogic<T> {
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final ViewService viewService = Factory.get(ViewService.class);
 
     // 当前等级
     private int level = 1;
-    private int maxLevel;
+    private final int maxLevel;
     // 当前的运行时间,单位秒
     private float timeIntervalUsed;
     // 每隔多长时间提升敌军等级,单位秒
-    private float levelUpBySec;
+    private final float levelUpBySec;
     
     public SurvivalLevelLogic(float levelUpBySec, int maxLevel) {
-        super(0);
         this.levelUpBySec = levelUpBySec;
         this.maxLevel = maxLevel;
     }

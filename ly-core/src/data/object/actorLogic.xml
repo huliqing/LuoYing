@@ -8,9 +8,11 @@
     <!--默认的搜寻敌人的逻辑-->
     <actorLogicSearchEnemy id="logicSearchEnemy" autoInterval="1" maxInterval="5" minInterval="2" />
     <actorLogicSearchEnemy id="logicSearchEnemyForPlayer" autoInterval="0" interval="0.25" />
-    <!--默认的更新生命值和魔法值的逻辑-->
+
+    <!--默认的更新生命值和魔法值的逻辑: remove20160716-->
     <actorLogicAttributeChange id="logicUpdateLife" value="1" targetAttribute="attributeHealth" useAttribute="attributeHealthRestore" interval="3" />
     <actorLogicAttributeChange id="logicUpdateMana" value="1" targetAttribute="attributeMana" useAttribute="attributeManaRestore" interval="3" />
+    
     <!--默认的防守及躲闪逻辑-->
     <actorLogicDefend id="logicDefend" interval="5" defendRateAttribute="attributeDefenceRate" duckRateAttribute="attributeDuckRate" listenAttributes="attributeHealth" />
     <!--空闲行为-->

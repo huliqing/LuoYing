@@ -86,7 +86,7 @@ public abstract class GameState extends AbstractAppState {
     }
     
     @Override
-    public void initialize(AppStateManager stateManager, Application app) {
+    public void initialize(final AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
         this.app = (Fighter) app;
         this.listeners.clear();
@@ -94,14 +94,12 @@ public abstract class GameState extends AbstractAppState {
         
         // 添加场景及游戏逻辑
         scene = sceneService.loadScene(game.getData().getSceneData());
-        stateManager.attach(game);
-        stateManager.attach(scene);
         scene.addSceneListener(new SceneListener() {
             @Override
             public void onSceneInitialized(Scene scene) {
                 // 载入场景之后开始游戏。
                 game.setScene(scene);
-                game.start();
+                stateManager.attach(game);
             }
             @Override
             public void onSceneObjectAdded(Scene scene, Spatial objectAdded) {}
@@ -109,6 +107,9 @@ public abstract class GameState extends AbstractAppState {
             @Override
             public void onSceneObjectRemoved(Scene scene, Spatial objectRemoved) {}
         });
+        
+        stateManager.attach(scene);
+        
         
         // 添加Speak和Talk逻辑
         addObject(SpeakManager.getInstance(), false);

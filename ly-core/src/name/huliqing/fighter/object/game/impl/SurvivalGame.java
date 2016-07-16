@@ -2,24 +2,19 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.fighter.object.game;
+package name.huliqing.fighter.object.game.impl;
 
-import com.jme3.app.Application;
-import com.jme3.app.state.AppStateManager;
 import com.jme3.math.Vector3f;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.game.network.ActorNetwork;
-import name.huliqing.fighter.game.service.PlayService;
-import name.huliqing.fighter.logic.scene.ActorCleanLogic;
 import name.huliqing.fighter.object.actor.Actor;
-import name.huliqing.fighter.object.scene.Scene;
+import name.huliqing.fighter.object.game.Game;
 import name.huliqing.fighter.utils.MathUtils;
 
 /**
  * @author huliqing
  */
 public class SurvivalGame extends Game {
-    private final PlayService playService = Factory.get(PlayService.class);
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     
     public Vector3f treasurePos = new Vector3f(0,0,-2f);
@@ -39,14 +34,7 @@ public class SurvivalGame extends Game {
     public int maxLevel = 15;
 
     @Override
-    public void initialize(AppStateManager stateManager, Application app) {
-        super.initialize(stateManager, app);
-        
-    }
-
-    @Override
-    public void start() {
-        super.start();
+    protected void gameInitialize() {
         // 生成敌人的刷新地点
         enemyPositions = new Vector3f[buildTotal];
         for (int i = 0; i < buildTotal; i++) {
@@ -56,8 +44,6 @@ public class SurvivalGame extends Game {
             } while (!scene.checkIsEmptyZone(enemyPositions[i].x, enemyPositions[i].z, nearestDistance));
         }
         
-        // 角色清理器
-        addLogic(new ActorCleanLogic());
         // 主逻辑
         addLogic(new SurvivalLogic(this));
     }

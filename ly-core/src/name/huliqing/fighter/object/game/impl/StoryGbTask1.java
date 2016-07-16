@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.fighter.object.game;
+package name.huliqing.fighter.object.game.impl;
 
 import com.jme3.math.ColorRGBA;
 import java.util.ArrayList;
@@ -260,9 +260,6 @@ public class StoryGbTask1 extends GameTaskBase {
     // 任务显示面板
     private void displayTaskPanel() {
         storyGbTaskLogic = new StoryGbTaskLogic(saveTotal, player);
-        
-        // remove20160613
-//        playService.addObject(storyGbTaskLogic);
 
         game.addLogic(storyGbTaskLogic);
     }

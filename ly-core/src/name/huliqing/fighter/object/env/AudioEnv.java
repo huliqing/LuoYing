@@ -86,7 +86,7 @@ public class AudioEnv <T extends EnvData> extends AbstractEnv<T> implements Conf
         AudioKey audioKey = new AudioKey(sd.getSoundFile(), DataType.Stream.name().equals(type), true);
         AudioData audioData = (AudioData) app.getAssetManager().loadAsset(audioKey);
         audio.setAudioData(audioData, audioKey);
-
+        
         if (location != null) {
             audio.setLocalTranslation(location);
         }

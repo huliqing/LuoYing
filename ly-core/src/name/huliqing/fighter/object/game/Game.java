@@ -9,11 +9,14 @@ import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import java.util.ArrayList;
 import java.util.List;
+import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.GameData;
+import name.huliqing.fighter.data.GameLogicData;
+import name.huliqing.fighter.game.service.GameLogicService;
 import name.huliqing.fighter.object.DataProcessor;
-import name.huliqing.fighter.object.PlayManager;
-import name.huliqing.fighter.object.PlayObject;
 import name.huliqing.fighter.object.actor.Actor;
+import name.huliqing.fighter.object.gamelogic.GameLogic;
+import name.huliqing.fighter.object.gamelogic.GameLogicManager;
 import name.huliqing.fighter.object.scene.Scene;
 import name.huliqing.fighter.object.task.Task;
 
@@ -24,8 +27,9 @@ import name.huliqing.fighter.object.task.Task;
  * @author huliqing
  * @param <T>
  */
-public  class Game<T extends GameData> extends AbstractAppState implements DataProcessor<T> {
-
+public abstract class Game<T extends GameData> extends AbstractAppState implements DataProcessor<T> {
+    private final GameLogicService gameLogicService = Factory.get(GameLogicService.class);
+    
     public interface GameListener {
         /**
          * 当游戏开始后
@@ -39,7 +43,7 @@ public  class Game<T extends GameData> extends AbstractAppState implements DataP
     // 游戏侦听器
     protected List<GameListener> listeners; 
     // 扩展逻辑
-    protected PlayManager playManager;
+    protected GameLogicManager gameLogicManager;
     // 场景
     protected Scene scene;
 
@@ -53,6 +57,14 @@ public  class Game<T extends GameData> extends AbstractAppState implements DataP
         return data;
     }
 
+    public Application getApp() {
+        return app;
+    }
+
+    public void setApp(Application app) {
+        this.app = app;
+    }
+
     /**
      * 设置场景
      * @param scene 
@@ -60,18 +72,34 @@ public  class Game<T extends GameData> extends AbstractAppState implements DataP
     public void setScene(Scene scene) {
         this.scene = scene;
     }
-    
-    @Override
-    public void initialize(AppStateManager stateManager, Application app) {
-        super.initialize(stateManager, app); 
-        this.app = app;
+
+    /**
+     * 获取当前游戏场景
+     * @return 
+     */
+    public Scene getScene() {
+        return scene;
     }
     
-    /**
-     * 开始执行游戏逻辑
-     */
-    public void start() {
-        playManager = new PlayManager(app, PlayObject.class);
+    @Override
+    public final void initialize(AppStateManager stateManager, Application app) {
+        super.initialize(stateManager, app); 
+        this.app = app;
+        
+        // 初始化游戏逻辑数据
+        gameLogicManager = new GameLogicManager(this, GameLogic.class);
+        List<GameLogicData> logics = data.getGameLogics();
+        if (logics != null) {
+            for (GameLogicData gld : logics) {
+                GameLogic gl = gameLogicService.loadGameLogic(gld);
+                gameLogicManager.attach(gl);
+            }
+        }
+        
+        // 初始化游戏，由子类实现决定。
+        gameInitialize();
+        
+        // 执行侦听器。
         if (listeners != null) {
             for (GameListener gl : listeners) {
                 gl.onGameStarted(this);
@@ -82,7 +110,7 @@ public  class Game<T extends GameData> extends AbstractAppState implements DataP
     @Override
     public void update(float tpf) {
         super.update(tpf);
-        playManager.update(tpf);
+        gameLogicManager.update(tpf);
     }
         
     /**
@@ -93,7 +121,7 @@ public  class Game<T extends GameData> extends AbstractAppState implements DataP
         if (listeners != null) {
             listeners.clear();
         }
-        playManager.cleanup();
+        gameLogicManager.cleanup();
         super.cleanup();
     }
     
@@ -101,8 +129,8 @@ public  class Game<T extends GameData> extends AbstractAppState implements DataP
      * 添加一个子游戏逻辑
      * @param logic 
      */
-    public void addLogic(PlayObject logic) {
-        playManager.attach(logic);
+    public void addLogic(GameLogic logic) {
+        gameLogicManager.attach(logic);
     }
     
     /**
@@ -110,8 +138,8 @@ public  class Game<T extends GameData> extends AbstractAppState implements DataP
      * @param logic 
      * @return  
      */
-    public boolean removeLogic(PlayObject logic) {
-        return playManager.detach(logic);
+    public boolean removeLogic(GameLogic logic) {
+        return gameLogicManager.detach(logic);
     }
     
     /**
@@ -143,6 +171,9 @@ public  class Game<T extends GameData> extends AbstractAppState implements DataP
     public void onPlayerSelected(Actor player) {
         // 由子类按需要覆盖
     }
-    
-    
+        
+    /**
+     * 初始化游戏数据
+     */
+    protected abstract void gameInitialize();
 }

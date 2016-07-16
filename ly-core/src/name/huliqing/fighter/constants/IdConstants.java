@@ -146,8 +146,6 @@ public class IdConstants {
               "logicPlayer"
             , "logicSearchEnemyForPlayer"
             , "logicFollow"
-            , "logicUpdateLife"
-            , "logicUpdateMana"
             , "logicDefend"};
     
     // =========================================================================
@@ -174,6 +172,8 @@ public class IdConstants {
     public final static String GAME_STORY_GB = "gameStoryGb";
     /** 游戏：守护之战 */
     public final static String GAME_STORY_GUARD = "gameStoryGuard";
+    /** 游戏: 测试游戏 */
+    public final static String GAME_LAB = "gameLab";
     
     // =========================================================================
     // Channel

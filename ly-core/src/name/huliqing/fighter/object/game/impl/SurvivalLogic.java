@@ -2,13 +2,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.fighter.object.game;
+package name.huliqing.fighter.object.game.impl;
 
 import com.jme3.util.TempVars;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.constants.IdConstants;
 import name.huliqing.fighter.constants.ResConstants;
+import name.huliqing.fighter.data.GameLogicData;
 import name.huliqing.fighter.enums.MessageType;
 import name.huliqing.fighter.enums.SkillType;
 import name.huliqing.fighter.game.network.ActorNetwork;
@@ -26,15 +27,16 @@ import name.huliqing.fighter.object.actorlogic.PositionActorLogic;
 import name.huliqing.fighter.logic.scene.ActorBuildLogic;
 import name.huliqing.fighter.logic.scene.ActorBuildLogic.Callback;
 import name.huliqing.fighter.manager.ResourceManager;
-import name.huliqing.fighter.object.AbstractPlayObject;
+import name.huliqing.fighter.object.gamelogic.AbstractGameLogic;
 import name.huliqing.fighter.object.view.TextView;
 
 /**
  * 宝箱任务第二阶段：守护宝箱
  * @author huliqing
+ * @param <T>
  */
-public class SurvivalLogic extends AbstractPlayObject {
-    private boolean debug = true;
+public class SurvivalLogic<T extends GameLogicData> extends AbstractGameLogic<T> {
+    private final boolean debug = true;
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
     private final StateNetwork stateNetwork = Factory.get(StateNetwork.class);
@@ -68,7 +70,7 @@ public class SurvivalLogic extends AbstractPlayObject {
     }
 
     @Override
-    public void update(float tpf) {
+    protected void doLogic(float tpf) {
         if (stage == 0) {
             Actor player = playService.getPlayer();
             if (player != null) {
@@ -131,7 +133,6 @@ public class SurvivalLogic extends AbstractPlayObject {
         builderLogic.setRadius(game.nearestDistance);
         builderLogic.setTotal(game.buildTotal);
         builderLogic.addPosition(game.enemyPositions);
-        builderLogic.setInterval(3f);
         builderLogic.addId(
                   IdConstants.ACTOR_NINJA,IdConstants.ACTOR_NINJA
                 , IdConstants.ACTOR_SPIDER, IdConstants.ACTOR_SPIDER
@@ -156,4 +157,5 @@ public class SurvivalLogic extends AbstractPlayObject {
             return ResourceManager.get(rid, params);
         }
     }
+
 }

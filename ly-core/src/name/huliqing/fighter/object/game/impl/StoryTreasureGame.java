@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.fighter.object.game;
+package name.huliqing.fighter.object.game.impl;
 
 import com.jme3.math.Vector3f;
 import name.huliqing.fighter.Config;
@@ -20,7 +20,7 @@ public class StoryTreasureGame extends StoryGame {
     public int groupEnemy = 2;
     
     @Override
-    protected void doInit() {
+    protected void doStoryInitialize() {
 
         do {
             MathUtils.getRandomPosition(75, 75, new Vector3f(), 50, treasurePos);

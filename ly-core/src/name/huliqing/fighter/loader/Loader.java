@@ -25,7 +25,7 @@ import name.huliqing.fighter.data.EnvData;
 import name.huliqing.fighter.data.GameData;
 import name.huliqing.fighter.data.HandlerData;
 import name.huliqing.fighter.data.HitCheckerData;
-import name.huliqing.fighter.data.LogicData;
+import name.huliqing.fighter.data.ActorLogicData;
 import name.huliqing.fighter.data.SkinData;
 import name.huliqing.fighter.data.SkillData;
 import name.huliqing.fighter.data.ResistData;
@@ -200,12 +200,12 @@ public class Loader {
         return DataFactory.createProcessor(data);
     }
        
-    public static ActorLogic loadLogic(LogicData data) {
+    public static ActorLogic loadLogic(ActorLogicData data) {
         return DataFactory.createProcessor(data);
     }
     
     public static ActorLogic loadLogic(String logicId) {
-        return loadLogic((LogicData) DataFactory.createData(logicId));
+        return loadLogic((ActorLogicData) DataFactory.createData(logicId));
     }
     
     public static Magic loadMagic(MagicData data) {

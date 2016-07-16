@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.fighter.object.game;
+package name.huliqing.fighter.object.game.impl;
 
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
@@ -90,7 +90,7 @@ public class StoryTreasureTask2 extends GameTaskBase {
     
     // ====任务阶段
     private int stage;
-    // 结束时的谈话
+    // 结束时的谈话o
     private Talk endTalk;
     
     // ==== 
@@ -227,7 +227,6 @@ public class StoryTreasureTask2 extends GameTaskBase {
         sceneBuilder.setRadius(buildRadius);
         sceneBuilder.setTotal(buildTotal);
         sceneBuilder.addPosition(enemyPositions);
-        sceneBuilder.setInterval(3f);
         sceneBuilder.addId(
                 IdConstants.ACTOR_NINJA, IdConstants.ACTOR_NINJA
                 , IdConstants.ACTOR_SPIDER, IdConstants.ACTOR_SPIDER
@@ -248,7 +247,6 @@ public class StoryTreasureTask2 extends GameTaskBase {
         }
         
         if (stage == 1) {
-//            playService.addObject(sceneBuilder, false);
             game.addLogic(sceneBuilder);
             stage = 2;
             return;
@@ -260,7 +258,6 @@ public class StoryTreasureTask2 extends GameTaskBase {
             if (timerView != null && timerView.getTime() <= 0) {
                 companionLoader = new CompanionLoader();
                 
-//                playService.addObject(companionLoader, false);
                 game.addLogic(companionLoader);
                 
                 playNetwork.removeObject(timerView);

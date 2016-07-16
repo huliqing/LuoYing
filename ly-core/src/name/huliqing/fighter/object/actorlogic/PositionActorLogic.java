@@ -7,7 +7,7 @@ package name.huliqing.fighter.object.actorlogic;
 import com.jme3.math.Vector3f;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.object.action.RunAction;
-import name.huliqing.fighter.data.LogicData;
+import name.huliqing.fighter.data.ActorLogicData;
 import name.huliqing.fighter.game.service.ActionService;
 import name.huliqing.fighter.game.service.ActorService;
 
@@ -19,7 +19,7 @@ import name.huliqing.fighter.game.service.ActorService;
  * @author huliqing
  * @param <T>
  */
-public class PositionActorLogic<T extends LogicData> extends ActorLogic<T> {
+public class PositionActorLogic<T extends ActorLogicData> extends ActorLogic<T> {
     private final ActionService actionService = Factory.get(ActionService.class);;
     
     protected RunAction runAction;

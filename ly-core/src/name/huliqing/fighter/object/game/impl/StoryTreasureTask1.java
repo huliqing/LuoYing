@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.fighter.object.game;
+package name.huliqing.fighter.object.game.impl;
 
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.manager.ResourceManager;
@@ -20,8 +20,8 @@ import name.huliqing.fighter.game.service.ActorService;
 import name.huliqing.fighter.game.service.PlayService;
 import name.huliqing.fighter.game.service.SkillService;
 import name.huliqing.fighter.game.service.StateService;
-import name.huliqing.fighter.object.IntervalLogic;
 import name.huliqing.fighter.logic.scene.ActorLoadHelper;
+import name.huliqing.fighter.object.gamelogic.AbstractGameLogic;
 import name.huliqing.fighter.ui.Button;
 import name.huliqing.fighter.ui.TextPanel;
 import name.huliqing.fighter.ui.UI;
@@ -42,7 +42,7 @@ public class StoryTreasureTask1 extends GameTaskBase {
     private final StateNetwork stateNetwork = Factory.get(StateNetwork.class);
     
     // 宝箱
-    private StoryTreasureGame game;
+    private final StoryTreasureGame game;
     private Actor player;
     private Actor spider;
     private Actor victim;
@@ -280,11 +280,11 @@ public class StoryTreasureTask1 extends GameTaskBase {
     }
     
     // 用于提供帮助信息
-    private class Helper extends IntervalLogic {
+    private class Helper extends AbstractGameLogic {
         private int index;
         
         public Helper() {
-            super(3);
+            this.interval = 3;
         }
 
         @Override
@@ -301,12 +301,10 @@ public class StoryTreasureTask1 extends GameTaskBase {
             } else if (index == 3) {
                 playService.addMessage(get("help.userPanel"), MessageType.info);
                 index++;
-            } else if (index == 4) {
-//                playService.addMessage(get("help.performance"), MessageType.info);
-//                index++;
+            } else {
+                // 退出
+                game.removeLogic(this);
             }
-            // end
-            // nothing.
         }
         
     }

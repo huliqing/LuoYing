@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 import name.huliqing.fighter.Factory;
-import name.huliqing.fighter.data.LogicData;
+import name.huliqing.fighter.data.ActorLogicData;
 import name.huliqing.fighter.data.SkillData;
 import name.huliqing.fighter.enums.SkillType;
 import name.huliqing.fighter.game.network.ActorNetwork;
@@ -33,7 +33,7 @@ import name.huliqing.fighter.object.skill.ShotSkill;
  * @author huliqing
  * @param <T>
  */
-public class DefendActorLogic<T extends LogicData> extends ActorLogic<T> implements SkillListener, ActorListener {
+public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> implements SkillListener, ActorListener {
     private static final Logger LOG = Logger.getLogger(DefendActorLogic.class.getName());
     
     private final ActorService actorService = Factory.get(ActorService.class);

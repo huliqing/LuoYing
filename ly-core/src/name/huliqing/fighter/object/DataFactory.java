@@ -30,10 +30,11 @@ import name.huliqing.fighter.data.ElData;
 import name.huliqing.fighter.data.EmitterData;
 import name.huliqing.fighter.data.EnvData;
 import name.huliqing.fighter.data.GameData;
+import name.huliqing.fighter.data.GameLogicData;
 import name.huliqing.fighter.data.HandlerData;
 import name.huliqing.fighter.data.HitCheckerData;
 import name.huliqing.fighter.data.ItemData;
-import name.huliqing.fighter.data.LogicData;
+import name.huliqing.fighter.data.ActorLogicData;
 import name.huliqing.fighter.data.MagicData;
 import name.huliqing.fighter.data.PkgItemData;
 import name.huliqing.fighter.data.PositionData;
@@ -128,10 +129,10 @@ import name.huliqing.fighter.object.env.WaterAdvanceEnv;
 import name.huliqing.fighter.object.env.WaterSimpleEnv;
 import name.huliqing.fighter.object.game.Game;
 import name.huliqing.fighter.object.game.GameDataLoader;
-import name.huliqing.fighter.object.game.StoryGbGame;
-import name.huliqing.fighter.object.game.StoryGuardGame;
-import name.huliqing.fighter.object.game.StoryTreasureGame;
-import name.huliqing.fighter.object.game.SurvivalGame;
+import name.huliqing.fighter.object.game.impl.StoryGbGame;
+import name.huliqing.fighter.object.game.impl.StoryGuardGame;
+import name.huliqing.fighter.object.game.impl.StoryTreasureGame;
+import name.huliqing.fighter.object.game.impl.SurvivalGame;
 import name.huliqing.fighter.object.handler.AttributeHandler;
 import name.huliqing.fighter.object.handler.HandlerDataLoader;
 import name.huliqing.fighter.object.handler.ItemSkillHandler;
@@ -159,6 +160,11 @@ import name.huliqing.fighter.object.actorlogic.PlayerActorLogic;
 import name.huliqing.fighter.object.actorlogic.PositionActorLogic;
 import name.huliqing.fighter.object.actorlogic.SearchEnemyActorLogic;
 import name.huliqing.fighter.object.actorlogic.ShopActorLogic;
+import name.huliqing.fighter.object.game.RpgGame;
+import name.huliqing.fighter.object.gamelogic.PlayerDeadCheckerGameLogic;
+import name.huliqing.fighter.object.gamelogic.ActorCleanGameLogic;
+import name.huliqing.fighter.object.gamelogic.AttributeChangeGameLogic;
+import name.huliqing.fighter.object.gamelogic.GameLogicDataLoader;
 import name.huliqing.fighter.object.magic.AttributeHitMagic;
 import name.huliqing.fighter.object.magic.MagicDataLoader;
 import name.huliqing.fighter.object.magic.StateMagic;
@@ -390,10 +396,11 @@ public class DataFactory {
         Serializer.registerClass(EmitterData.class);
         Serializer.registerClass(EnvData.class);
         Serializer.registerClass(GameData.class);
+        Serializer.registerClass(GameLogicData.class);
         Serializer.registerClass(HandlerData.class);
         Serializer.registerClass(HitCheckerData.class);
         Serializer.registerClass(ItemData.class);
-        Serializer.registerClass(LogicData.class);
+        Serializer.registerClass(ActorLogicData.class);
         Serializer.registerClass(MagicData.class);
         Serializer.registerClass(PositionData.class);
         Serializer.registerClass(ResistData.class);
@@ -407,7 +414,6 @@ public class DataFactory {
         Serializer.registerClass(TalentData.class);
         Serializer.registerClass(TaskData.class);
         Serializer.registerClass(ViewData.class);
-
         
         // ---- Register Default data
         // 默认的数据容器所有新增的DataType都要注册
@@ -426,10 +432,11 @@ public class DataFactory {
         DEFAULT_DATAS.put(DataType.emitter, EmitterData.class);
         DEFAULT_DATAS.put(DataType.env, EnvData.class);
         DEFAULT_DATAS.put(DataType.game, GameData.class);
+        DEFAULT_DATAS.put(DataType.gameLogic, GameLogicData.class);
         DEFAULT_DATAS.put(DataType.handler, HandlerData.class);
         DEFAULT_DATAS.put(DataType.hitChecker, HitCheckerData.class);
         DEFAULT_DATAS.put(DataType.item, ItemData.class);
-        DEFAULT_DATAS.put(DataType.actorLogic, LogicData.class);
+        DEFAULT_DATAS.put(DataType.actorLogic, ActorLogicData.class);
         DEFAULT_DATAS.put(DataType.magic, MagicData.class);
         DEFAULT_DATAS.put(DataType.position, PositionData.class);
         DEFAULT_DATAS.put(DataType.resist, ResistData.class);
@@ -444,7 +451,7 @@ public class DataFactory {
         DEFAULT_DATAS.put(DataType.task, TaskData.class);
         DEFAULT_DATAS.put(DataType.view, ViewData.class);
         
-        // 初始化默认的数据载入器
+        // 初始化默认的数据载入器,当一个标签找不到合适的载入器时，系统将根据标签的数据类型来选择一个数据载入器
         DEFAULT_LOADERS.put(DataType.action, ActionDataLoader.class);
         DEFAULT_LOADERS.put(DataType.actor, ActorDataLoader.class);
         DEFAULT_LOADERS.put(DataType.actorAnim, ActorAnimDataLoader.class);
@@ -461,6 +468,7 @@ public class DataFactory {
         DEFAULT_LOADERS.put(DataType.emitter, EmitterDataLoader.class);
         DEFAULT_LOADERS.put(DataType.env, EnvDataLoader.class);
         DEFAULT_LOADERS.put(DataType.game, GameDataLoader.class);
+        DEFAULT_LOADERS.put(DataType.gameLogic, GameLogicDataLoader.class);
         DEFAULT_LOADERS.put(DataType.handler, HandlerDataLoader.class);
         DEFAULT_LOADERS.put(DataType.hitChecker, HitCheckerDataLoader.class);
         DEFAULT_LOADERS.put(DataType.item, ItemDataLoader.class);
@@ -574,11 +582,16 @@ public class DataFactory {
         register("envGrass", ModelEnvData.class, PlantEnvLoader.class, PlantEnv.class);
         
         // Game
-        registerTagProcessor("game", Game.class);
+        registerTagProcessor("gameRpg", RpgGame.class);
         registerTagProcessor("gameStoryTreasure", StoryTreasureGame.class);
         registerTagProcessor("gameStoryGb", StoryGbGame.class);
         registerTagProcessor("gameStoryGuard", StoryGuardGame.class);
         registerTagProcessor("gameSurvival", SurvivalGame.class);
+        
+        // GameLogic
+        registerTagProcessor("gameLogicPlayerDeadChecker", PlayerDeadCheckerGameLogic.class);
+        registerTagProcessor("gameLogicActorClean", ActorCleanGameLogic.class);
+        registerTagProcessor("gameLogicAttributeChange", AttributeChangeGameLogic.class);
         
         // HitChecker
         registerTagProcessor("hitChecker",  SimpleHitChecker.class);

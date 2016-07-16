@@ -3,21 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.fighter.object.actorlogic;
+package name.huliqing.fighter.object.gamelogic;
 
-import name.huliqing.fighter.data.ActorLogicData;
+import name.huliqing.fighter.data.GameLogicData;
 import name.huliqing.fighter.data.Proto;
 import name.huliqing.fighter.object.DataLoader;
 
 /**
  *
  * @author huliqing
+ * @param <T>
  */
-public class ActorLogicDataLoader implements DataLoader<ActorLogicData> {
+public class GameLogicDataLoader<T extends GameLogicData> implements DataLoader<T> {
 
     @Override
-    public void load(Proto proto, ActorLogicData data) {
-        data.setInterval(proto.getAsFloat("interval", 1.0f));
+    public void load(Proto proto, T store) {
     }
     
 }

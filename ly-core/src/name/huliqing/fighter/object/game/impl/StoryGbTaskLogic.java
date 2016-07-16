@@ -2,26 +2,29 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.fighter.object.game;
+package name.huliqing.fighter.object.game.impl;
 
 import com.jme3.app.Application;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.constants.IdConstants;
+import name.huliqing.fighter.data.GameLogicData;
 import name.huliqing.fighter.data.ProtoData;
 import name.huliqing.fighter.game.network.ActorNetwork;
 import name.huliqing.fighter.game.network.PlayNetwork;
 import name.huliqing.fighter.game.service.PlayService;
 import name.huliqing.fighter.game.service.ViewService;
-import name.huliqing.fighter.object.IntervalLogic;
 import name.huliqing.fighter.manager.ResourceManager;
+import name.huliqing.fighter.object.game.Game;
+import name.huliqing.fighter.object.gamelogic.AbstractGameLogic;
 import name.huliqing.fighter.object.view.TextPanelView;
 
 /** 
  * 任务面板，显示已经获得的树根的数目
  * @author huliqing
+ * @param <T>
  */
-public class StoryGbTaskLogic extends IntervalLogic {
+public class StoryGbTaskLogic<T extends GameLogicData> extends AbstractGameLogic<T> {
     private final ViewService viewService = Factory.get(ViewService.class);
     private final PlayService playService = Factory.get(PlayService.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
@@ -37,14 +40,14 @@ public class StoryGbTaskLogic extends IntervalLogic {
     private TextPanelView tpv;
     
     public StoryGbTaskLogic(int total, Actor player) {
-        super(1.0f); // 频率：每秒计算一次
         this.total = total;
         this.player = player;
+        this.interval = 1.0f;  // 频率：每秒计算一次
     }
 
     @Override
-    public void initialize(Application app) {
-        super.initialize(app);
+    public void initialize(Game game) {
+        super.initialize(game);
         tpv = (TextPanelView) viewService.loadView(IdConstants.VIEW_TEXT_PANEL_VIEW_GB);
         tpv.setTitle(ResourceManager.getObjectName(IdConstants.GAME_STORY_GB));
         playNetwork.addView(tpv);
@@ -52,8 +55,8 @@ public class StoryGbTaskLogic extends IntervalLogic {
     
     @Override
     protected void doLogic(float tpf) {
-        ProtoData data = actorNetwork.getItem(player, IdConstants.ITEM_GB_STUMP);
-        count = data != null ? data.getTotal() : 0;
+        ProtoData pd = actorNetwork.getItem(player, IdConstants.ITEM_GB_STUMP);
+        count = pd != null ? pd.getTotal() : 0;
         tpv.setText(get("taskSave.saveCount", count, total));
     }
     

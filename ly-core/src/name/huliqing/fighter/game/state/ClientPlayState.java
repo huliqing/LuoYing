@@ -206,8 +206,6 @@ public class ClientPlayState extends NetworkPlayState implements AbstractClientL
         pingLabel.setText("PING:" + ping);
     }
     
-    
-    
     private class ClientListener extends LanClientListener {
         
         public ClientListener(Application app) {

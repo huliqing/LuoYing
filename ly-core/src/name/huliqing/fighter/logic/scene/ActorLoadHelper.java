@@ -4,55 +4,50 @@
  */
 package name.huliqing.fighter.logic.scene;
 
-import com.jme3.app.Application;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.fighter.Factory;
+import name.huliqing.fighter.data.GameLogicData;
 import name.huliqing.fighter.game.service.ActorService;
 import name.huliqing.fighter.object.actor.Actor;
-import name.huliqing.fighter.object.IntervalLogic;
+import name.huliqing.fighter.object.game.Game;
+import name.huliqing.fighter.object.gamelogic.AbstractGameLogic;
 import name.huliqing.fighter.utils.ThreadHelper;
 
 /**
  * 用于多线程载入一个角色,当角色载入完成之后，当前逻辑将停止更新。
  * 即isEnabled为false.
  * @author huliqing
+ * @param <T>
  */
-public abstract class ActorLoadHelper extends IntervalLogic {
+public abstract class ActorLoadHelper<T extends GameLogicData> extends AbstractGameLogic<T> {
     private final ActorService actorService = Factory.get(ActorService.class);
     
     // 要载入的角色的id
     protected String actorId;
     private Future<Actor> future;
-    // 是否已经处理结束
-    private boolean end;
-
-    public ActorLoadHelper() {
-        super(0);
-    }
+    private Game game;
+    
+    public ActorLoadHelper() {}
     
     /**
      * 指定要载入的角色ID
      * @param actorId 
      */
     public ActorLoadHelper(String actorId) {
-        super(0);
         this.actorId = actorId;
     }
 
     @Override
-    public void initialize(Application app) {
-        super.initialize(app); 
-        end = false;
+    public void initialize(Game game) {
+        super.initialize(game); 
+        this.game = game;
     }
     
     @Override
     protected void doLogic(float tpf) {
-        if (end) {
-            return;
-        }
         if (future == null) {
             future = ThreadHelper.submit(new Callable<Actor>() {
                 @Override
@@ -66,12 +61,18 @@ public abstract class ActorLoadHelper extends IntervalLogic {
                 Actor actor = future.get();
                 callback(actor);
                 // 处理载入成功之后即停止运行，即只载入一次。
-                this.future = null;
-                this.end = true;
+                future = null;
+                game.removeLogic(this);
             } catch (Exception ex) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
             }
         }
+    }
+
+    @Override
+    public void cleanup() {
+        future = null;
+        super.cleanup(); 
     }
     
     /**
@@ -85,7 +86,6 @@ public abstract class ActorLoadHelper extends IntervalLogic {
     /**
      * 实现角色的载入，注：该方法在多线程中运行，不建议在该方法在处理该场景
      * 信息.处理场景物体添加需要使用 {@link #callback(name.huliqing.fighter.actor.Actor) }
-     * @param actorId 需要载入的角色id
      * @return 
      */
     protected Actor load() {

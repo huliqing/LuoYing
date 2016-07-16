@@ -8,7 +8,7 @@ import com.jme3.app.Application;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.fighter.Factory;
-import name.huliqing.fighter.data.LogicData;
+import name.huliqing.fighter.data.ActorLogicData;
 import name.huliqing.fighter.data.ProtoData;
 import name.huliqing.fighter.game.network.ProtoNetwork;
 import name.huliqing.fighter.game.service.ProtoService;
@@ -19,7 +19,7 @@ import name.huliqing.fighter.utils.ConvertUtils;
  * @author huliqing
  * @param <T>
  */
-public class ShopActorLogic<T extends LogicData> extends ActorLogic<T> {
+public class ShopActorLogic<T extends ActorLogicData> extends ActorLogic<T> {
     private final ProtoNetwork protoNetwork = Factory.get(ProtoNetwork.class);
     private final ProtoService protoService = Factory.get(ProtoService.class);
     

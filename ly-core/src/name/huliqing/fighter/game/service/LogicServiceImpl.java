@@ -6,7 +6,7 @@ package name.huliqing.fighter.game.service;
 
 import java.util.List;
 import name.huliqing.fighter.constants.IdConstants;
-import name.huliqing.fighter.data.LogicData;
+import name.huliqing.fighter.data.ActorLogicData;
 import name.huliqing.fighter.loader.Loader;
 import name.huliqing.fighter.object.DataFactory;
 import name.huliqing.fighter.object.actor.Actor;
@@ -30,20 +30,20 @@ public class LogicServiceImpl implements LogicService {
 
     @Override
     public boolean addLogic(Actor actor, String logicId) {
-        LogicData newLogic = DataFactory.createData(logicId);
+        ActorLogicData newLogic = DataFactory.createData(logicId);
         return addLogic(actor, newLogic);
     }
 
     @Override
-    public boolean addLogic(Actor actor, LogicData logicData) {
+    public boolean addLogic(Actor actor, ActorLogicData logicData) {
         ActorLogic logic = Loader.loadLogic(logicData);
         return addLogic(actor, logic);
     }
 
     @Override
     public boolean addLogic(Actor actor, ActorLogic logic) {
-        LogicData data = logic.getData();
-        List<LogicData> logics = actor.getData().getLogics();
+        ActorLogicData data = logic.getData();
+        List<ActorLogicData> logics = actor.getData().getLogics();
         if (logics.contains(data)) {
             return false; // 已经存在
         }
@@ -54,8 +54,8 @@ public class LogicServiceImpl implements LogicService {
 
     @Override
     public boolean removeLogic(Actor actor, ActorLogic logic) {
-        LogicData data = logic.getData();
-        List<LogicData> datas = actor.getData().getLogics();
+        ActorLogicData data = logic.getData();
+        List<ActorLogicData> datas = actor.getData().getLogics();
         if (!datas.contains(data)) { // 角色身上没有指定逻辑
             return false;
         }

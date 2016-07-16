@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.fighter.logic.scene;
+package name.huliqing.fighter.object.gamelogic;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,29 +10,31 @@ import name.huliqing.fighter.Common;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.object.actor.Actor;
 import name.huliqing.fighter.constants.ActorConstants;
+import name.huliqing.fighter.data.GameLogicData;
 import name.huliqing.fighter.game.network.PlayNetwork;
 import name.huliqing.fighter.game.service.ActorService;
 import name.huliqing.fighter.game.service.PlayService;
-import name.huliqing.fighter.game.service.StateService;
-import name.huliqing.fighter.object.IntervalLogic;
 
 /**
- * 场景清洁器,用于清理场景中已经不需要的，或者已经死亡的角色之类的功能
+ * 场景清洁器,用于清理场景中已经死亡的角色之类的功能
  * @author huliqing
+ * @param <T>
  */
-public class ActorCleanLogic extends IntervalLogic {
-    private final StateService stateService = Factory.get(StateService.class);
+public class ActorCleanGameLogic<T extends GameLogicData> extends AbstractGameLogic<T> {
     private final ActorService actorService = Factory.get(ActorService.class);
     private final PlayService playService = Factory.get(PlayService.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     
     // 默认角色死亡后被清理出战场的时间
-    private float clearTime = 5;
+    private float cleanInterval = 5;
     
-    private List<Actor> temps = new ArrayList<Actor>();
+    // ---- inner
+    private final List<Actor> temps = new ArrayList<Actor>();
 
-    public ActorCleanLogic() {
-        super(5);
+    @Override
+    public void setData(T data) {
+        super.setData(data);
+        cleanInterval = data.getAsFloat("cleanInterval", cleanInterval);
     }
     
     @Override
@@ -53,7 +55,7 @@ public class ActorCleanLogic extends IntervalLogic {
             if (deadTime == null) {
                 a.getModel().setUserData(ActorConstants.USER_DATA_DEAD_TIME_FLAG, Common.getGameTime());
             } else {
-                if (Common.getGameTime() - deadTime > clearTime * 1000) {
+                if (Common.getGameTime() - deadTime > cleanInterval * 1000) {
                     a.getModel().getUserDataKeys().remove(ActorConstants.USER_DATA_DEAD_TIME_FLAG);
                     temps.add(a);
                 }
@@ -68,16 +70,24 @@ public class ActorCleanLogic extends IntervalLogic {
             temps.clear();
         }
     }
+    
+    @Override
+    public void cleanup() {
+        temps.clear();
+        super.cleanup();
+    }
 
-    public float getClearTime() {
-        return clearTime;
-    }
-        
-    /**
-     * 设置角色死亡后经多少时间会被清理出场景，单位秒
-     * @param clearTime 
-     */
-    public void setClearTime(float clearTime) {
-        this.clearTime = clearTime;
-    }
+    // remove20160716
+//    public float getClearTime() {
+//        return cleanInterval;
+//    }
+//        
+//    /**
+//     * 设置角色死亡后经多少时间会被清理出场景，单位秒
+//     * @param clearTime 
+//     */
+//    public void setClearTime(float clearTime) {
+//        this.cleanInterval = clearTime;
+//    }
+
 }

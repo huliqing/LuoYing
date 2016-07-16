@@ -4,7 +4,7 @@
  */
 package name.huliqing.fighter.object.item;
 
-import name.huliqing.fighter.data.LogicData;
+import name.huliqing.fighter.data.ActorLogicData;
 import name.huliqing.fighter.object.IntervalLogic;
 
 /**
@@ -18,7 +18,7 @@ public abstract class ItemLogic extends IntervalLogic {
     
     public ItemLogic() {}
     
-    public ItemLogic(LogicData logicData) {}
+    public ItemLogic(ActorLogicData logicData) {}
 
     public Item getSelf() {
         return self;
