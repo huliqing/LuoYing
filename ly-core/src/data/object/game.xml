@@ -9,36 +9,34 @@
     <!-- Common -->
     <!-- ========================================================================= -->
     
-    <gameRPG id="gameRPGBase" availableActors="actorWarrior,actorPastor,actorHunter,actorSinbad,actorNinja,actorSpider,actorBear,actorWolf,actorScorpion"
+    <gameRPG id="gameRpgBase" availableActors="actorWarrior,actorPastor,actorHunter,actorSinbad,actorNinja,actorSpider,actorBear,actorWolf,actorScorpion"
         gameLogics="gameLogicActorClean,gameLogicPlayerDeadChecker,gameLogicHealthRecover,gameLogicManaRecover"
     />
     
     <!-- ========================================================================= -->
     <!-- DEBUG -->
     <!-- ========================================================================= -->
-<!--    <gameStoryTreasure id="gameStoryTreasure" scene="sceneDebug" 
-                       availableActors="actorWarrior,actorPastor,actorHunter,actorSinbad,actorNinja,actorSpider,actorBear,actorWolf,actorScorpion" />-->
+
+    <!--用于测试-->
+    <gameRpg id="gameLab" extends="gameRpgBase" scene="sceneTreasure" gameLogics="gameLogicHealthRecover,gameLogicManaRecover" />
     
     <!-- ========================================================================= -->
     <!-- Games -->
     <!-- ========================================================================= -->
     
-    <!--用于测试-->
-    <gameRpg id="gameLab" extends="gameRPGBase" scene="sceneTreasure" gameLogics="gameLogicHealthRecover,gameLogicManaRecover" />
-    
     <!-- 黄金宝箱 -->
-    <gameStoryTreasure id="gameStoryTreasure" extends="gameRPGBase" scene="sceneTreasure" />
+    <gameStoryTreasure id="gameStoryTreasure" extends="gameRpgBase" scene="sceneTreasure" />
 
     <!--千年古柏-->
-    <gameStoryGb id="gameStoryGb" extends="gameRPGBase" scene="sceneGb" gbPosition="44,0,-61" enemyPosition="-14,0,65" 
+    <gameStoryGb id="gameStoryGb" extends="gameRpgBase" scene="sceneGb" gbPosition="44,0,-61" enemyPosition="-14,0,65" 
                  enemyActors="actorGbSmall,actorSpider,actorBear,actorWolf,actorScorpion" />
 
     <!--守护之战-->
-    <gameStoryGuard id="gameStoryGuard" extends="gameRPGBase" scene="sceneGuard"  selfPosition="42,0,-61" enemyPosition="-14,0,65" 
+    <gameStoryGuard id="gameStoryGuard" extends="gameRpgBase" scene="sceneGuard"  selfPosition="42,0,-61" enemyPosition="-14,0,65" 
                     fairyPosition="-84,0,-15" fairyLevel="25" servantLevel="20"  />
 
     <!-- 生存挑战 -->
-    <gameSurvival id="gameSurvival" extends="gameRPGBase" scene="sceneTreasure" icon="Interface/game/survival.jpg" />
+    <gameSurvival id="gameSurvival" extends="gameRpgBase" scene="sceneTreasure" icon="Interface/game/survival.jpg" />
 </root>
 
 
