@@ -21,7 +21,7 @@ import name.huliqing.fighter.game.service.EnvService;
  * @author huliqing
  * @param <T>
  */
-public class ProxyPlatformEnv <T extends EnvData> extends AbstractEnv<T> {
+public class ProxyPlatformEnv <T extends EnvData> extends AbstractEnv<T> implements ProxyEnv {
     private final SystemService systemService = Factory.get(SystemService.class);
     private final EnvService envService = Factory.get(EnvService.class);
 
@@ -30,6 +30,7 @@ public class ProxyPlatformEnv <T extends EnvData> extends AbstractEnv<T> {
     
     // ---- inner
     private List<EnvMatcher> matchers;
+    private Env proxyEnv;
     
     @Override
     public void setData(T data) {
@@ -58,14 +59,24 @@ public class ProxyPlatformEnv <T extends EnvData> extends AbstractEnv<T> {
     public void initialize(Application app, Scene scene) {
         super.initialize(app, scene);
         EnvMatcher matcher = findMatcher(systemService.getPlatformName());
-        
         String proxyEnvId = matcher != null ? matcher.envId : defaultEnv;
-        scene.addEnv(envService.loadEnvData(proxyEnvId));
+        EnvData envData = envService.loadEnvData(proxyEnvId);
+        proxyEnv = envService.loadEnv(envData);
+        proxyEnv.initialize(app, scene);
     }
 
     @Override
     public void cleanup() {
+        if (proxyEnv != null) {
+            proxyEnv.cleanup();
+            proxyEnv = null;
+        }
         super.cleanup(); 
+    }
+
+    @Override
+    public Env getProxyEnv() {
+        return proxyEnv;
     }
     
     private EnvMatcher findMatcher(String platform) {

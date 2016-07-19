@@ -16,31 +16,6 @@ public class AdUtils {
      */ 
     public static long begin_show_openAD_time;
     
-    public enum AdType {
-        /** 横幅广告 */
-        banner,
-        
-        /** 开屏广告 */
-        open,
-        
-        /** 插屏广告 */
-        insert,
-    }
-    
-    public interface AdController {
-        /**
-         * 显示指定类型的广告
-         * @param type 
-         */
-        public void showAd(AdType... type);
-        
-        /**
-         * 隐藏或销毁指定类型的广告，部分类型如banner可能在隐藏的时候需要销毁
-         * @param types 
-         */
-        public void hideAd(AdType... types);
-    }
-    
     private static AdController adController;
     
     /**
@@ -53,6 +28,7 @@ public class AdUtils {
     
     /**
      * 显示广告
+     * @param type
      */
     public static void showAd(AdType type) {
         if (adController != null) {
@@ -62,6 +38,7 @@ public class AdUtils {
     
     /**
      * 隐藏广告
+     * @param types
      */
     public static void hideAd(AdType... types) {
         if (adController != null) {

@@ -23,7 +23,6 @@ public class StoryGbGame extends StoryGame {
     // ---- inner
     public int groupEnemy = 2;
 
-
     @Override
     public void setData(GameData data) {
         super.setData(data); //To change body of generated methods, choose Tools | Templates.

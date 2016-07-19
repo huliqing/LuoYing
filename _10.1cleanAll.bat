@@ -1,0 +1,1 @@
+cmd /k gradlew :ly-core:clean :ly-android-ad:clean :ly-android:clean

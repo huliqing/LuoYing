@@ -4,7 +4,6 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:1.1.0'
-        classpath 'com.google.gms:google-services:3.0.0'
     }
 }
 repositories {
@@ -12,19 +11,11 @@ repositories {
 }
 
 apply plugin: 'com.android.application'
-
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile fileTree(dir: "$rootProject.projectDir$androidExtResourceDir/libs", include: ['*.jar'])
-    
-    // see version => C:\home\lib\android-2.1_r01-windows\extras\android\m2repository\com\android\support\appcompat-v7\22.0.0
-    compile 'com.android.support:appcompat-v7:23.4.0'
-    
-    // see version => C:\home\lib\android-2.1_r01-windows\extras\google\m2repository\com\google\firebase\firebase-ads\9.0.1
-    compile 'com.google.firebase:firebase-ads:9.0.0'
+    compile 'com.android.support:support-v4:19.0.0'
 }
-apply plugin: 'com.google.gms.google-services'
-
 
 class BuildConfig {
     // eg. "general", "play", ...
@@ -80,7 +71,7 @@ android {
         targetSdkVersion androidTargetSdkVersion.toInteger()
         versionCode appVersionCode.toInteger()
         versionName appVersionName
-        applicationId "name.huliqing.luoying"
+        applicationId "name.huliqing.fighter"
         setProperty("archivesBaseName", "$appArchivesBaseName-$appVersionName")
     }
 	
@@ -115,7 +106,6 @@ android {
 //        play {
 //            manifest.srcFile 'AndroidManifest_play.xml'
 //        }
-
         androidBuilds.each { ab -> 
             "${ab.name}" {
                     manifest.srcFile "${ab.manifest}"
@@ -133,15 +123,12 @@ android {
     }
 
     productFlavors {
-        
-        // 参考格式:
 //        general {
 //            applicationId = 'name.huliqing.fighter'
 //        }
 //        play {
 //            applicationId = 'name.huliqing.luoying'
 //        }
-
         androidBuilds.each { ab -> 
             "${ab.name}" {
                 applicationId = "${ab.applicationId}"
@@ -154,14 +141,19 @@ android {
         release {
             // 签名配置
             signingConfig signingConfigs.release
-            
+			
             // 是否打开混淆,这里要关闭，因为已经在核心包中ly-core中进行了混淆。
             minifyEnabled false
-            
+			
             // 混淆配置文件,因为ly-core已经进行了混淆，所以这里不要，也不能再打开该功能。
             // core中已经配置了哪些可以混淆哪些不可以,这里不能再混淆了。
             //proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-project.txt'
 
+            debuggable false
+        }
+		
+        debug {
+            debuggable false
         }
     }
 	

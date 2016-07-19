@@ -1,0 +1,73 @@
+{
+  "project_info": {
+    "project_number": "45803725627",
+    "firebase_url": "https://luoying-6de0c.firebaseio.com",
+    "project_id": "luoying-6de0c",
+    "storage_bucket": "luoying-6de0c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:45803725627:android:fde0c0a8b4c851ab",
+        "android_client_info": {
+          "package_name": "name.huliqing.luoying"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "45803725627-90n909l43km6kve49gojf6ci06koiitd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDF_02F4uPYe9_NRp8ciuiBAXBFOwB9R1g"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:45803725627:android:3a045b8cdf3fbb70",
+        "android_client_info": {
+          "package_name": "name.huliqing.fighter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "45803725627-90n909l43km6kve49gojf6ci06koiitd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDF_02F4uPYe9_NRp8ciuiBAXBFOwB9R1g"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

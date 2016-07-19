@@ -104,4 +104,5 @@
 -keep class name.huliqing.fighter.game.service.ConfigService {*;}
 -keep class name.huliqing.fighter.Factory {*;}
 -keep class name.huliqing.fighter.utils.AdUtils {*;}
-
+-keep class name.huliqing.fighter.utils.AdType {*;}
+-keep class name.huliqing.fighter.utils.AdController {*;}

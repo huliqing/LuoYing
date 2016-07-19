@@ -20,19 +20,13 @@ task wrapper(type: Wrapper, description: 'Creates and deploys the Gradle wrapper
 // 使用buildCore和buildAndroid处理依赖关系。
 // 这里必须使用“字面量”来表示依赖，因为在子项目未载入配置之前是拿不到build任务实例的。
 
-task cleanAll << {}
-cleanAll.dependsOn([":ly-core:clean",":ly-android:clean"])
-
 task buildCore << {println "Build luoying core ok!"}
 buildCore.dependsOn(":ly-core:build")
 
 task buildAndroid << {println "Build luoying android ok!"}
 buildAndroid.dependsOn(":ly-android:build")
-
 buildAndroid {
     mustRunAfter buildCore
 }
 
-task buildAll << {println "!!!!Build all ok!"}
-buildAll.dependsOn([buildCore, buildAndroid])
 

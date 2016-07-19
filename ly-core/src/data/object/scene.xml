@@ -26,7 +26,7 @@
     
     <!--黄金宝箱场景-->
     <sceneRandom id="sceneTreasure" 
-                 envs="envSky,envLightDirectional,envLightAmbient,envShadow,envPhysics,envCameraThirdViewDebug
+                 envs="envSky,envLightDirectional,envLightAmbient,envShadow,envPhysics,envCameraThirdView
 ,envSakuraIslandTerrain,envSakuraIslandBoundary,envSakuraIslandWater,envSakuraIslandAudioSea" 
                  emptyZones="0|0|10" 
                  randomEnvs="envTree1|4,envTree2|4,envTree3|4,envTree4|4
@@ -35,16 +35,6 @@
 ,envGrass1|4,envGrass2|4,envGrass3|4,envGrass4|4"
 randomXExtent="100" randomZExtent="100"
 />
-<!--    <sceneRandom id="sceneTreasure" 
-                 envs="envSky,envLightDirectional,envLightAmbient,envShadow,envPhysics,envCameraThirdViewDebug
-,envSakuraIslandTerrain,envSakuraIslandBoundary,envSakuraIslandWater,envSakuraIslandAudioSea" 
-                 emptyZones="0|0|10" 
-                 randomEnvs="envTree1|4,envTree2|4,envTree3|4,envTree4|4
-,envFir1|4,envFir2|4,envFir3|4
-,envFlower0|4,envFlower1|4
-,envGrass1|4,envGrass2|4,envGrass3|4,envGrass4|4"
-randomXExtent="100" randomZExtent="100"
-/>-->
     
     <!--千年古柏场景-->
     <sceneRandom id="sceneGb" extends="sceneTreasure"  emptyZones="0|0|5,44|-61|12,-14|65|12" />

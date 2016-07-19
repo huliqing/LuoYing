@@ -22,7 +22,7 @@ import name.huliqing.fighter.ui.UIConfig;
 import name.huliqing.fighter.ui.UIFactory;
 import name.huliqing.fighter.ui.UIConfigImpl;
 import name.huliqing.fighter.utils.AdUtils;
-import name.huliqing.fighter.utils.AdUtils.AdType;
+import name.huliqing.fighter.utils.AdType;
 import name.huliqing.fighter.utils.ThreadHelper;
 import name.huliqing.fighter.ui.state.UIState;
 import name.huliqing.fighter.utils.FileUtils;
@@ -48,12 +48,12 @@ public class Fighter extends SimpleApplication {
         settings.setIcons(createIcons());
         settings.setSettingsDialogImage("/data/SDImage.jpg");
         
-//        // 载入上次的设置来覆盖
-//        try {
-//            settings.load(SETTINGS_KEY);
-//        } catch (BackingStoreException ex) {
-//            Logger.getLogger(Fighter.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+        // 载入上次的设置来覆盖
+        try {
+            settings.load(SETTINGS_KEY);
+        } catch (BackingStoreException ex) {
+            Logger.getLogger(Fighter.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         Fighter app = new Fighter();
         app.setSettings(settings);
@@ -84,7 +84,7 @@ public class Fighter extends SimpleApplication {
     }
     
     // Debug state
-    private final StartState startState = new StartState(this);
+    private StartState startState;
     // Debug view
     private StatsAppState stateView;
     
@@ -140,8 +140,6 @@ public class Fighter extends SimpleApplication {
         getInputManager().setCursorVisible(true);
         getFlyByCamera().setEnabled(false);
         
-       
-        
         if (Config.debug) {
             TestFactory.preTest();
         }
@@ -157,6 +155,9 @@ public class Fighter extends SimpleApplication {
      * 进入开始界面
      */
     public void changeStartState() {
+        if (startState == null) {
+            startState = new StartState(this);
+        }
         changeState(startState);
     }
     

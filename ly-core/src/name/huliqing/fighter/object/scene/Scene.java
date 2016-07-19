@@ -18,7 +18,6 @@ import java.util.List;
 import name.huliqing.fighter.Factory;
 import name.huliqing.fighter.data.EnvData;
 import name.huliqing.fighter.data.SceneData;
-import name.huliqing.fighter.game.service.PlayService;
 import name.huliqing.fighter.object.DataProcessor;
 import name.huliqing.fighter.object.env.Env;
 import name.huliqing.fighter.game.service.EnvService;
@@ -28,7 +27,6 @@ import name.huliqing.fighter.game.service.EnvService;
  * @param <T>
  */
 public class Scene<T extends SceneData> extends AbstractAppState implements DataProcessor<T>{
-    private final PlayService playService = Factory.get(PlayService.class);
     private final EnvService envService = Factory.get(EnvService.class);
     
     /**
@@ -210,62 +208,35 @@ public class Scene<T extends SceneData> extends AbstractAppState implements Data
         return result;
     }
     
+    // remove20160718,动态添加、删除Env目前容易导致一些BUG,暂不支持
     /**
-     * 动态添加env
-     * @param envData
-     */
-    public void addEnv(EnvData envData) {
-        List<EnvData> envList = data.getEnvs();
-        if (envList == null) {
-            envList = new ArrayList<EnvData>();
-            data.setEnvs(envList);
-        }
-        // 不能多次重复添加同一个Env
-        if (envList.contains(envData)) {
-            return;
-        }
-        envList.add(envData);
-        // 如果当前场景已经初始化，则需要立即初始化envData.
-        // 否则交由场景的initialize方法去初始化
-        if (isInitialized()) {
-            Env env = envService.loadEnv(envData);
-            env.initialize(app, this);
-            envs.add(env);
-            notifySceneEnvListenerAdded(env);
-            notifySceneEnvListenerInitialized(env);
-        }
-    }
-    
-    // 暂不增加这个方法,这会在调用initialize的时候造成混乱,未确定是否由内部还是外部调用。
+//     * 动态添加env到场景列表中，env的初始化需要外部去处理。该方法只负责把env添加到列表中。
+//     * @param env
+//     */
 //    public void addEnv(Env env) {
-//        if (env == null)
-//            throw new NullPointerException("Env could not be null!");
-//        List<EnvData> envList = data.getEnvs();
-//        if (envList == null) {
-//            envList = new ArrayList<EnvData>();
-//            data.setEnvs(envList);
-//        }
-//        envList.add(env.getData());
 //        envs.add(env);
 //        notifySceneEnvListenerAdded(env);
-//        
-//        // todo initialize env
+//        notifySceneEnvListenerInitialized(env);
 //    }
     
-    /**
-     * 从场景中移除Env对象。
-     * @param env
-     * @return 
-     */
-    public boolean removeEnv(Env env) {
-        boolean result = envs.remove(env);
-        if (result) {
-            data.getEnvs().remove(env.getData());
-            env.cleanup();
-            notifySceneEnvListenerRemoved(env);
-        }
-        return result;
-    }
+    // remove20160718,动态添加、删除Env目前容易导致一些BUG,暂不支持
+//    /**
+//     * 从场景中移除Env对象,该Env对象同时会被清理(cleanup)
+//     * @param env
+//     * @return 
+//     */
+//    public boolean removeEnv(Env env) {
+//        if (env == null) {
+//            return false;
+//        }
+//        boolean result = envs.remove(env);
+//        if (result) {
+//            data.getEnvs().remove(env.getData());
+//            env.cleanup();
+//            notifySceneEnvListenerRemoved(env);
+//        }
+//        return result;
+//    }
 
     /**
      * 获取场景的地形根节点

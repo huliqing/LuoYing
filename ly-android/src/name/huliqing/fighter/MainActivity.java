@@ -6,17 +6,25 @@ import android.content.Context;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import com.jme3.app.AndroidHarnessFragment;
 import com.jme3.input.event.TouchEvent;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
+import name.huliqing.fighter.ad.AdManager;
+import name.huliqing.fighter.ad.AdManager.Ad;
+import name.huliqing.fighter.ad.AndroidAbstractAdController;
 import name.huliqing.fighter.android.AndroidSaveServiceImpl;
 import name.huliqing.fighter.android.AndroidSystemServiceImpl;
 import name.huliqing.fighter.game.service.ConfigService;
 import name.huliqing.fighter.game.service.SaveService;
 import name.huliqing.fighter.game.service.SystemService;
+import name.huliqing.fighter.utils.AdController;
+import name.huliqing.fighter.utils.AdType;
+import name.huliqing.fighter.utils.AdUtils;
 import name.huliqing.vc.VersionChecker;
  
 public class MainActivity extends Activity {
@@ -34,10 +42,6 @@ public class MainActivity extends Activity {
     
     private void preStart() {
         // 重要配置Start =======================================================
-        
-        // remove20160602可能在jme3.1后无效
-//        // 在android下必须设置为false,否则启动速度非常慢
-//        TextureUtil.ENABLE_COMPRESSION = false;
         
         // ==== 设置全局对于Context的引用
         Global.setContext(MainActivity.this);
@@ -67,14 +71,35 @@ public class MainActivity extends Activity {
         vc.checkVersion("ly3d", dowloadDir, this, false);
     }
     
-    private static void afterStart() {
+    private void afterStart() {
          // ==== 配置信息更改
         ConfigService cs = (ConfigService) Factory.get(ConfigService.class);
         // 当前版本Android下不能支持Shadow
         cs.setUseShadow(false);
         
         // ==== 检查并载入广告
-//        loadAd();
+        loadAd();
+    }
+    
+    private void loadAd() {
+        try {
+            AdManager.getInstance().setContext(MainActivity.this);
+            
+            ViewGroup bannerContainer = (ViewGroup) findViewById(R.id.ad_container);
+            AndroidAbstractAdController adc = AdManager.getInstance().createAdController(MainActivity.this, Ad.AdMob, bannerContainer);
+            if (adc != null) {
+                // 提前加载插屏
+                adc.preloadBannerAd();
+                adc.preloadViewInsertAd();
+                adc.setDebug(true);
+                // 注册广告控制器
+                AdUtils.setAdController((AdController) adc);
+                
+                adc.showAd(AdType.banner);
+            }
+        } catch (Throwable e) {
+            Log.d(MainActivity.class.getSimpleName(), "!!!error!!!", e);
+        }
     }
  
     @Override
