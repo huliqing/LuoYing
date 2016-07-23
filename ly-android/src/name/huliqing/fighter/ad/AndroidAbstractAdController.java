@@ -44,7 +44,7 @@ public abstract class AndroidAbstractAdController implements AdController,AdInse
         this.debug = bool;
     }
     
-    private void debug(final String message) {
+    protected void debug(final String message) {
         if (debug) {
             Toast.makeText(AdManager.getInstance().getContext(), getClass().getSimpleName() + ":" + message, Toast.LENGTH_SHORT).show();
         }

@@ -3,5 +3,5 @@
   <config extends="configGlobalRelease" id="configGlobal" versionName="2.5.0" versionCode="250"/>
   <config extends="configGlobalBase" id="configGlobalRelease"/>
   <config speakTimeWorld="0.1" soundVolume="0.5" debug="1" extends="configGlobalBase" id="configGlobalDebug"/>
-  <config shortcutLocked="0" speakTimeWorld="0.22" maxLevel="60" summonLevelFactor="1" useHardwareSkinning="1" portDiscoverServer="32992" useShadow="1" versionName="2.4-a1" locale="" portDiscoverClient="32993" baseWalkSpeed="1.5" soundVolume="0.5" gameName="落樱之剑" enableRecord="0" localeAll="en_US,zh_CN" baseRunSpeed="6" id="configGlobalBase" speakTimeMin="0.25" soundEnabled="1" dropFactor="0.3" speakTimeMax="8.0" shortcutSize="0.8" lanGames="gameSurvival" versionCode="240" speakMaxDistance="80" expFactor="1.0" port="32991"/>
+  <config maxLevel="60" speakTimeWorld="0.22" shortcutLocked="0" summonLevelFactor="1" useHardwareSkinning="1" portDiscoverServer="32992" useShadow="1" locale="" versionName="2.4-a1" portDiscoverClient="32993" soundVolume="0.5" baseWalkSpeed="1.5" gameName="落樱之剑" enableRecord="0" baseRunSpeed="6" localeAll="en_US,zh_CN" speakTimeMin="0.25" id="configGlobalBase" soundEnabled="1" dropFactor="0.3" speakTimeMax="8.0" versionCode="240" lanGames="gameSurvival" shortcutSize="0.8" speakMaxDistance="80" expFactor="1.0" port="32991"/>
 </root>

@@ -21,13 +21,24 @@ import name.huliqing.fighter.ad.AndroidAbstractAdController;
  */
 public class AdMob extends AndroidAbstractAdController{
     
-    private final static String AD_UNIT_ID = "ca-app-pub-0155192758955646/5778923038";
+    // 广告应用ID
+    // see => https://apps.admob.com/#account/appmgmt:
+    private final static String APP_ID = "ca-app-pub-0155192758955646~3482679833";
+    
+    // 广告：横幅广告ID
+    // see => https://apps.admob.com/#monetize/app:view/id=3482679833
+    private final static String AD_UNIT_ID_BANNER = "ca-app-pub-0155192758955646/5778923038";
+    
+    // 广告：插屏广告ID
+    // see => https://apps.admob.com/#monetize/app:view/id=3482679833
+    private final static String AD_UNIT_ID_INSERT = "ca-app-pub-0155192758955646/8592788634";
+    
     private AdView adView;
 
     @Override
     public void init() {
 //        // Initialize the Mobile Ads SDK.
-        MobileAds.initialize(AdManager.getInstance().getContext(), AD_UNIT_ID);
+        MobileAds.initialize(AdManager.getInstance().getContext(), APP_ID);
     }
 
     @Override
@@ -42,7 +53,7 @@ public class AdMob extends AndroidAbstractAdController{
         adView = new AdView(AdManager.getInstance().getContext());
         // see => https://developers.google.com/android/reference/com/google/android/gms/ads/AdSize
         adView.setAdSize(AdSize.BANNER);
-        adView.setAdUnitId(AD_UNIT_ID);
+        adView.setAdUnitId(AD_UNIT_ID_BANNER);
 
         // Create an ad request. Check your logcat output for the hashed device ID to
         // get test ads on a physical device. e.g.
@@ -65,15 +76,16 @@ public class AdMob extends AndroidAbstractAdController{
 //            adView.destroy();
 //            adView = null;
 //        }
-
     }
 
     @Override
     protected void loadAdInsert(AdInsertListener al) {
+        debug("暂不支持插屏");
     }
 
     @Override
     protected void showAdInsert() {
+        debug("暂不支持插屏");
     }
     
 }

@@ -35,7 +35,7 @@ public class Fighter extends SimpleApplication {
     public static void main(String[] args) {
         final String SETTINGS_KEY = "luoying-settings";
         AppSettings settings = new AppSettings(true);
-        
+
 //        settings.setResolution(960, 540);     // HUAWEI G6-U00
 //        settings.setResolution(1280, 800);    // GT N8010
 //        settings.setResolution(1280, 720);    // 高清
@@ -196,12 +196,17 @@ public class Fighter extends SimpleApplication {
             return;
         }
         
+        // 退回到startState时
         if ((current instanceof PlayState) && (next instanceof StartState)) {
-            // 退回到startState时只显示insert
-            AdUtils.hideAd(AdType.banner);
-            AdUtils.showAd(AdType.insert);
+            
+            AdUtils.showAd(AdType.banner);
+            // remove20160720,暂不使用insert
+//            AdUtils.showAd(AdType.insert);
+
         } else {
+            
             AdUtils.hideAd(AdType.banner, AdType.insert);
+            
         }
     }
     

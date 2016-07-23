@@ -62,13 +62,8 @@ public class MainActivity extends Activity {
         WifiManager.MulticastLock lock= manager.createMulticastLock("ly3d-wifi");
         lock.acquire(); 
         
-        // ==== Check new Version 
-        // 注意：version.xml要以utf-8无BOM格式编码进行保存，否则xml解析会报错。
-        // 可使用notepad进行转换格式。
-        String dowloadDir = Environment.getExternalStorageDirectory()  + "/ly3d";
-        VersionChecker vc = new VersionChecker();
-        vc.setVersionFile("http://app.huliqing.name/ly3d/version.xml"); // 从1.6.0开始，version.xml文件移到ly3d目录下和adconfig一起
-        vc.checkVersion("ly3d", dowloadDir, this, false);
+        // 检查查新版本
+        checkNewVersion();
     }
     
     private void afterStart() {
@@ -81,21 +76,29 @@ public class MainActivity extends Activity {
         loadAd();
     }
     
+    private void checkNewVersion() {
+        // ==== Check new Version 
+        // 注意：version.xml要以utf-8无BOM格式编码进行保存，否则xml解析会报错。可使用notepad进行转换格式。
+        String dowloadDir = Environment.getExternalStorageDirectory()  + "/ly3d";
+        VersionChecker vc = new VersionChecker();
+        // 从1.6.0开始，version.xml文件移到ly3d目录下和adconfig一起
+        vc.setVersionFile("http://app.huliqing.name/ly3d/version.xml");
+        vc.checkVersion("ly3d", dowloadDir, this, false);
+    }
+    
     private void loadAd() {
         try {
-            AdManager.getInstance().setContext(MainActivity.this);
+            AdManager.getInstance().setContext(this);
             
             ViewGroup bannerContainer = (ViewGroup) findViewById(R.id.ad_container);
-            AndroidAbstractAdController adc = AdManager.getInstance().createAdController(MainActivity.this, Ad.AdMob, bannerContainer);
+            AndroidAbstractAdController adc = AdManager.getInstance().createAdController(this, Ad.AdMob, bannerContainer);
             if (adc != null) {
                 // 提前加载插屏
                 adc.preloadBannerAd();
                 adc.preloadViewInsertAd();
-                adc.setDebug(true);
+//                adc.setDebug(true);
                 // 注册广告控制器
                 AdUtils.setAdController((AdController) adc);
-                
-                adc.showAd(AdType.banner);
             }
         } catch (Throwable e) {
             Log.d(MainActivity.class.getSimpleName(), "!!!error!!!", e);
