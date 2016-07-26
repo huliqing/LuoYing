@@ -5,11 +5,12 @@
  */
 package name.huliqing.editor.fxjme;
 
-import com.jme3.util.BufferUtils;
 import java.nio.ByteBuffer;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.animation.AnimationTimer;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelFormat;
 import javafx.scene.image.PixelWriter;
@@ -21,9 +22,9 @@ import javafx.scene.image.WritableImage;
  *
  * @author huliqing
  */
-public class JmeView extends ImageView {
+public class JfxView extends ImageView {
 
-    private static final Logger LOG = Logger.getLogger(JmeView.class.getName());
+//    private static final Logger LOG = Logger.getLogger(JfxView.class.getName());
 
     private WritableImage renderImage;
     private long frame;
@@ -33,7 +34,10 @@ public class JmeView extends ImageView {
     private int height;
     private int scanlineStride;
     
-    public JmeView() {
+    private EventHandler<Event> eventHandler;
+    
+    
+    public JfxView() {
         new AnimationTimer() {
             @Override
             public void handle(final long now) {

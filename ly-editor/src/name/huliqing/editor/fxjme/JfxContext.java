@@ -3,53 +3,27 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor;
+package name.huliqing.editor.fxjme;
 
-import name.huliqing.editor.fxjme.JfxAppState;
-import name.huliqing.editor.fxjme.JfxView;
-import com.jme3.system.AppSettings;
-import com.jme3.system.JmeContext;
-import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
+import com.jme3.input.MouseInput;
+import com.jme3.input.event.MouseButtonEvent;
+import com.jme3.system.lwjgl.LwjglOffscreenBuffer;
 
 /**
  *
  * @author huliqing
  */
-public class LyEditor extends Application {
-    
-    private EditorApp app;
+public class JfxContext extends LwjglOffscreenBuffer {
+
+    private final JfxMouseInput jfxMouseInput = new JfxMouseInput();
     
     @Override
-    public void start(Stage stage) throws Exception {
-        
-        Button btn = new Button();
-        btn.setText("Say 'Hello World'");
-        btn.setOnAction(e -> {
-            System.out.println("Hello World!");
-        });
-
-        JfxView jmeView = new JfxView();
-        
-        VBox root = new VBox();
-        root.getChildren().add(btn);
-        root.getChildren().add(jmeView);
-        Scene scene = new Scene(root, 640, 480);
-        
-        stage.setTitle("Hello World!");
-        stage.setScene(scene);
-        stage.show();
-        
-        startApp(new JfxAppState(jmeView));
-
+    public MouseInput getMouseInput() {
+        return jfxMouseInput;
     }
-    
-    public void startApp(JfxAppState appState) throws Exception {
-        AppSettings settings = new AppSettings(true);
 
+    @Override
+    public void run() {
         // ==== Notice1
         // 使用定制的JfxContext的目的只是为了勾住事件响应,为了将事件从Jfx转化到Jme内部必须这样做，因为无法直接从外部
         // 去替换inputManager中事件的处理，即无法直接替换keys,mouse,joystick,touch等事件处理.
@@ -80,21 +54,8 @@ public class LyEditor extends Application {
 //	at java.lang.Thread.run(Thread.java:745)
         
         // 因为JfxContext已经启动，所以设置回去没有关系 
-        String originRenderer = settings.getRenderer();
-        settings.put("originRenderer", originRenderer);
-        settings.setRenderer("CUSTOMname.huliqing.editor.fxjme.JfxContext");
-        
-        // other settings.
-        settings.setResolution(300, 300);
-        settings.setFrameRate(60);
-        app = new EditorApp();
-        app.setSettings(settings);
-        app.setPauseOnLostFocus(false);
-        app.setShowSettings(false);
-        app.start(JmeContext.Type.OffscreenSurface);
-        
-        app.getStateManager().attach(appState);
-
+        settings.setRenderer(settings.getString("originRenderer"));
+        super.run(); 
     }
     
 }
