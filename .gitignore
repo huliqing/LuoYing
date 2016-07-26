@@ -52,3 +52,6 @@
 /ly-android/libs/
 /ly-core/mobile/bin/
 /ly-core/mobile/gen/
+/ly-editor/nbproject/private/
+/ly-editor/build/
+/ly-editor/dist/
