@@ -14,6 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import name.huliqing.editor.fxjme.JfxContext;
 
 /**
  *
@@ -82,15 +83,17 @@ public class LyEditor extends Application {
         // 因为JfxContext已经启动，所以设置回去没有关系 
         String originRenderer = settings.getRenderer();
         settings.put("originRenderer", originRenderer);
-        settings.setRenderer("CUSTOMname.huliqing.editor.fxjme.JfxContext");
+        settings.setRenderer("CUSTOM" + JfxContext.class.getName());
         
         // other settings.
         settings.setResolution(300, 300);
-        settings.setFrameRate(60);
+//        settings.setFrameRate(60);
         app = new EditorApp();
         app.setSettings(settings);
         app.setPauseOnLostFocus(false);
         app.setShowSettings(false);
+        // 因为我们的目的是把frameBuffer渲染到JfxView组件上，所以这里不要使用Display\Canvas\Headless, 只要获得frameBuffer
+        // 就可以。
         app.start(JmeContext.Type.OffscreenSurface);
         
         app.getStateManager().attach(appState);
