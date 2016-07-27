@@ -5,8 +5,8 @@
  */
 package name.huliqing.editor.fxjme;
 
+import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
-import com.jme3.input.event.MouseButtonEvent;
 import com.jme3.system.lwjgl.LwjglOffscreenBuffer;
 
 /**
@@ -16,10 +16,16 @@ import com.jme3.system.lwjgl.LwjglOffscreenBuffer;
 public class JfxContext extends LwjglOffscreenBuffer {
 
     private final JfxMouseInput jfxMouseInput = new JfxMouseInput();
+    private final JfxKeyInput jfxKeyInput = new JfxKeyInput();
     
     @Override
     public MouseInput getMouseInput() {
         return jfxMouseInput;
+    }
+
+    @Override
+    public KeyInput getKeyInput() {
+        return jfxKeyInput;
     }
 
     @Override

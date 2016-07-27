@@ -5,30 +5,31 @@
  */
 package name.huliqing.editor.fxjme;
 
-import com.jme3.app.Application;
 import com.jme3.cursors.plugins.JmeCursor;
 import com.jme3.input.MouseInput;
 import com.jme3.input.RawInputListener;
 import com.jme3.input.event.MouseButtonEvent;
 import com.jme3.input.event.MouseMotionEvent;
-import java.awt.Point;
 import java.util.ArrayList;
-import java.util.concurrent.Callable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 
 /**
  *
  * @author huliqing
  */
-public class JfxMouseInput implements MouseInput, EventHandler<MouseEvent>{
+public class JfxMouseInput implements MouseInput, EventHandler<Event>{
+//    private static final Logger LOG = Logger.getLogger(JfxMouseInput.class.getName());
 
     private final static String MOUSE_ENTERED = "MOUSE_ENTERED";
     private final static String MOUSE_PRESSED = "MOUSE_PRESSED";
     private final static String MOUSE_RELEASED = "MOUSE_RELEASED";
     private final static String MOUSE_CLICKED = "MOUSE_CLICKED";
     private final static String MOUSE_EXITED = "MOUSE_EXITED";
-    
     private final static String MOUSE_MOVED = "MOUSE_MOVED";
     private final static String MOUSE_DRAGGED = "MOUSE_DRAGGED";
     
@@ -55,31 +56,9 @@ public class JfxMouseInput implements MouseInput, EventHandler<MouseEvent>{
 //me=MouseEvent [source = JfxView@1a1102ae[styleClass=image-view], target = JfxView@1a1102ae[styleClass=image-view], eventType = MOUSE_DRAGGED, consumed = false, x = 281.0, y = 242.0, z = 0.0, button = PRIMARY, primaryButtonDown, pickResult = PickResult [node = JfxView@1a1102ae[styleClass=image-view], point = Point3D [x = 281.0, y = 242.0, z = 0.0], distance = 895.6921938165307]
 
     
-    @Override
-    public void handle(MouseEvent me) {
-        String et = me.getEventType().getName();
-//        System.out.println("me=" + me); 
-         
-        if (MOUSE_PRESSED.equals(et)) {
-            convertMouseButtonEvent(me, true);
-        } else if (MOUSE_RELEASED.equals(et)) {
-            convertMouseButtonEvent(me, false);
-        } else if (MOUSE_MOVED.equals(et)) {
-            convertMouseMotion(me);
-        } else if (MOUSE_DRAGGED.equals(et)) {
-            convertMouseMotion(me);
-        } else if (MOUSE_ENTERED.equals(et)) {
-            // ignore
-        } else if (MOUSE_EXITED.equals(et)) {
-            // ignore
-        } else if (MOUSE_CLICKED.equals(et)) {
-            // ignore
-        } 
-    }
-    
-    private double wheelPos;
     private double locationX;
     private double locationY;
+    private double wheelPos;
     
     // 最近一次从jfx上获得的鼠标位置
     private double lastJfxX;
@@ -92,6 +71,44 @@ public class JfxMouseInput implements MouseInput, EventHandler<MouseEvent>{
     
     private boolean cursorMoved;
     
+    @Override
+    public void handle(Event e) {
+        
+//        LOG.log(Level.INFO, "event={e}", e);
+        
+        String et = e.getEventType().getName();
+        if (e instanceof MouseEvent) {
+            MouseEvent me = (MouseEvent) e;
+            if (MOUSE_PRESSED.equals(et)) {
+                convertMouseButtonEvent(me, true);
+            } else if (MOUSE_RELEASED.equals(et)) {
+                convertMouseButtonEvent(me, false);
+            } else if (MOUSE_MOVED.equals(et)) {
+                convertMouseMotion(me);
+            } else if (MOUSE_DRAGGED.equals(et)) {
+                convertMouseMotion(me);
+            } else if (MOUSE_ENTERED.equals(et)) {
+                // ignore
+            } else if (MOUSE_EXITED.equals(et)) {
+                // ignore
+            } else if (MOUSE_CLICKED.equals(et)) {
+                // ignore
+            } 
+            
+        } else if (e instanceof ScrollEvent) {
+            convertMouseWheel((ScrollEvent) e);
+        } else {
+            // other ignore
+        }
+        
+        
+    }
+    
+    private void convertMouseWheel(ScrollEvent se) {
+        wheelPos += se.getDeltaY();
+        cursorMoved = true;
+    }
+    
     private void convertMouseMotion(MouseEvent me) {
         double dx = me.getX() - lastJfxX;
         double dy = me.getY() - lastJfxY;
@@ -102,29 +119,7 @@ public class JfxMouseInput implements MouseInput, EventHandler<MouseEvent>{
         cursorMoved = true;
     }
     
-    private void updateMouseMotion() {
-        if (cursorMoved) {
-            double newX = locationX;
-            double newY = locationY;
-            double newWheel = wheelPos;
-
-            // invert actual Y and DY for motion events
-            double actualX = lastJfxX;
-            double actualY = lastJfxY;
-            MouseMotionEvent evt = new MouseMotionEvent((int)actualX, (int)actualY,
-                                                        (int)(newX - lastEventX),
-                                                        (int)(newY - lastEventY),
-                                                        (int) wheelPos, (int)(lastEventWheel - wheelPos));
-//            System.out.println("mouse motion=" + evt);
-            listener.onMouseMotionEvent(evt);
-
-            lastEventX = newX;
-            lastEventY = newY;
-            lastEventWheel = newWheel;
-
-            cursorMoved = false;
-        }
-    }
+    
     
     private void convertMouseButtonEvent(MouseEvent me, boolean isPressed) {
         int button = MouseInput.BUTTON_LEFT;
@@ -169,6 +164,29 @@ public class JfxMouseInput implements MouseInput, EventHandler<MouseEvent>{
         // ignore
     }
 
+    private void updateMouseMotion() {
+        if (cursorMoved) {
+            double newX = locationX;
+            double newY = locationY;
+            double newWheel = wheelPos;
+
+            MouseMotionEvent mme = new MouseMotionEvent((int)lastJfxX, (int)lastJfxY,
+                                                        (int)(newX - lastEventX),
+                                                        (int)(newY - lastEventY),
+                                                        (int) newWheel, (int)(newWheel - lastEventWheel));
+            
+//            LOG.log(Level.INFO, "jme updateMouseMotion MouseMotionEvent={e}", mme);
+            
+            listener.onMouseMotionEvent(mme);
+
+            lastEventX = newX;
+            lastEventY = newY;
+            lastEventWheel = newWheel;
+
+            cursorMoved = false;
+        }
+    }
+    
     @Override
     public void update() {
         

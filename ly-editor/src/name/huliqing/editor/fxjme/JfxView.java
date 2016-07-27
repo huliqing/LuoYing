@@ -6,7 +6,6 @@
 package name.huliqing.editor.fxjme;
 
 import java.nio.ByteBuffer;
-import java.util.logging.Logger;
 import javafx.animation.AnimationTimer;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -15,6 +14,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelFormat;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
+import javafx.scene.input.MouseEvent;
 
 
 
@@ -22,7 +22,7 @@ import javafx.scene.image.WritableImage;
  *
  * @author huliqing
  */
-public class JfxView extends ImageView {
+public class JfxView extends ImageView implements EventHandler<MouseEvent>{
 
 //    private static final Logger LOG = Logger.getLogger(JfxView.class.getName());
 
@@ -34,9 +34,6 @@ public class JfxView extends ImageView {
     private int height;
     private int scanlineStride;
     
-    private EventHandler<Event> eventHandler;
-    
-    
     public JfxView() {
         new AnimationTimer() {
             @Override
@@ -45,6 +42,20 @@ public class JfxView extends ImageView {
             }
         }.start();
         this.setScaleY(-1);
+        
+        addEventHandler(MouseEvent.ANY, this);
+    }
+
+    @Override
+    public void handle(MouseEvent event) {
+        // 让Jfx View允许响应KeyEvent则必须让它可以获得焦点。
+        switch (event.getButton()) {
+            case PRIMARY:
+                this.requestFocus();
+                break;
+            default :
+                break;
+        }
     }
     
     private synchronized void checkSize(int width, int height) {

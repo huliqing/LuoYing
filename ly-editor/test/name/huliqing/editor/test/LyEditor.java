@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor;
+package name.huliqing.editor.test;
 
 import name.huliqing.editor.fxjme.JfxAppState;
 import name.huliqing.editor.fxjme.JfxView;
@@ -91,7 +91,7 @@ public class LyEditor extends Application {
         
         // other settings.
         settings.setResolution(300, 300);
-//        settings.setFrameRate(60);
+        settings.setFrameRate(60);
         app = new EditorApp();
         app.setSettings(settings);
         app.setPauseOnLostFocus(false);

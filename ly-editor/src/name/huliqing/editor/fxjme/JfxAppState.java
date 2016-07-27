@@ -20,6 +20,8 @@ import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.event.Event;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
 /**
@@ -37,6 +39,7 @@ public class JfxAppState extends AbstractAppState {
     private final JfxView jfxView;
     private JfxContext jfxContext;
     private JfxMouseInput mouseInput;
+    private JfxKeyInput keyInput;
     
     public JfxAppState(JfxView jfxView) {
         this.jfxView = jfxView;
@@ -62,9 +65,12 @@ public class JfxAppState extends AbstractAppState {
         }
         lastViewPort.addProcessor(processor);
         
+        // Add Mouse and key event.
         jfxContext = (JfxContext) app.getContext();
         mouseInput = (JfxMouseInput) jfxContext.getMouseInput();
-        jfxView.addEventHandler(MouseEvent.ANY, mouseInput);
+        keyInput = (JfxKeyInput) jfxContext.getKeyInput();
+        jfxView.addEventHandler(Event.ANY, mouseInput); // 这里要使用Event.ANY,因为需要用到MouseEvent和ScrollEvent
+        jfxView.addEventHandler(KeyEvent.ANY, keyInput);
     }
     
     @Override
@@ -74,6 +80,9 @@ public class JfxAppState extends AbstractAppState {
         }
         if (mouseInput != null) {
             jfxView.removeEventHandler(MouseEvent.ANY, mouseInput);
+        }
+        if (keyInput != null) {
+            jfxView.removeEventHandler(KeyEvent.ANY, keyInput);
         }
         super.cleanup(); 
     }
