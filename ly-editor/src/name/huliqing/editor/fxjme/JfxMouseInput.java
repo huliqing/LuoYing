@@ -34,25 +34,10 @@ public class JfxMouseInput implements MouseInput, EventHandler<Event>{
     
     private RawInputListener listener;
     private final ArrayList<MouseButtonEvent> eventQueue = new ArrayList<>();
-    private final ArrayList<MouseButtonEvent> eventQueueCopy = new ArrayList<>();
     
     public JfxMouseInput() {}
     
     // ---- Run on jfx
-//=>MouseEvent [source = JfxView@4cc24a15[styleClass=image-view], target = JfxView@4cc24a15[styleClass=image-view], eventType = MOUSE_ENTERED, consumed = false, x = 261.0, y = 186.0, z = 0.0, button = NONE, pickResult = PickResult [node = JfxView@4cc24a15[styleClass=image-view], point = Point3D [x = 261.0, y = 186.0, z = 0.0], distance = 895.6921938165307]
-//=>MouseEvent [source = JfxView@4cc24a15[styleClass=image-view], target = JfxView@4cc24a15[styleClass=image-view], eventType = MOUSE_PRESSED, consumed = false, x = 261.0, y = 186.0, z = 0.0, button = PRIMARY, primaryButtonDown, pickResult = PickResult [node = JfxView@4cc24a15[styleClass=image-view], point = Point3D [x = 261.0, y = 186.0, z = 0.0], distance = 895.6921938165307]
-//=>MouseEvent [source = JfxView@4cc24a15[styleClass=image-view], target = JfxView@4cc24a15[styleClass=image-view], eventType = MOUSE_RELEASED, consumed = false, x = 261.0, y = 186.0, z = 0.0, button = PRIMARY, pickResult = PickResult [node = JfxView@4cc24a15[styleClass=image-view], point = Point3D [x = 261.0, y = 186.0, z = 0.0], distance = 895.6921938165307]
-//=>MouseEvent [source = JfxView@4cc24a15[styleClass=image-view], target = JfxView@4cc24a15[styleClass=image-view], eventType = MOUSE_CLICKED, consumed = false, x = 261.0, y = 186.0, z = 0.0, button = PRIMARY, pickResult = PickResult [node = JfxView@4cc24a15[styleClass=image-view], point = Point3D [x = 261.0, y = 186.0, z = 0.0], distance = 895.6921938165307]
-//=>MouseEvent [source = JfxView@4cc24a15[styleClass=image-view], target = JfxView@4cc24a15[styleClass=image-view], eventType = MOUSE_EXITED, consumed = false, x = 261.0, y = 186.0, z = 0.0, button = NONE, pickResult = PickResult [node = JfxView@4cc24a15[styleClass=image-view], point = Point3D [x = 261.0, y = 186.0, z = 0.0], distance = 895.6921938165307]
-    
-//me=MouseEvent [source = JfxView@1a1102ae[styleClass=image-view], target = JfxView@1a1102ae[styleClass=image-view], eventType = MOUSE_MOVED, consumed = false, x = 282.0, y = 240.0, z = 0.0, button = NONE, pickResult = PickResult [node = JfxView@1a1102ae[styleClass=image-view], point = Point3D [x = 282.0, y = 240.0, z = 0.0], distance = 895.6921938165307]
-//me=MouseEvent [source = JfxView@1a1102ae[styleClass=image-view], target = JfxView@1a1102ae[styleClass=image-view], eventType = MOUSE_MOVED, consumed = false, x = 282.0, y = 241.0, z = 0.0, button = NONE, pickResult = PickResult [node = JfxView@1a1102ae[styleClass=image-view], point = Point3D [x = 282.0, y = 241.0, z = 0.0], distance = 895.6921938165307]
-//me=MouseEvent [source = JfxView@1a1102ae[styleClass=image-view], target = JfxView@1a1102ae[styleClass=image-view], eventType = MOUSE_MOVED, consumed = false, x = 283.0, y = 242.0, z = 0.0, button = NONE, pickResult = PickResult [node = JfxView@1a1102ae[styleClass=image-view], point = Point3D [x = 283.0, y = 242.0, z = 0.0], distance = 895.6921938165307]
-    
-//me=MouseEvent [source = JfxView@1a1102ae[styleClass=image-view], target = JfxView@1a1102ae[styleClass=image-view], eventType = MOUSE_DRAGGED, consumed = false, x = 282.0, y = 244.0, z = 0.0, button = PRIMARY, primaryButtonDown, pickResult = PickResult [node = JfxView@1a1102ae[styleClass=image-view], point = Point3D [x = 282.0, y = 244.0, z = 0.0], distance = 895.6921938165307]
-//me=MouseEvent [source = JfxView@1a1102ae[styleClass=image-view], target = JfxView@1a1102ae[styleClass=image-view], eventType = MOUSE_DRAGGED, consumed = false, x = 281.0, y = 243.0, z = 0.0, button = PRIMARY, primaryButtonDown, pickResult = PickResult [node = JfxView@1a1102ae[styleClass=image-view], point = Point3D [x = 281.0, y = 243.0, z = 0.0], distance = 895.6921938165307]
-//me=MouseEvent [source = JfxView@1a1102ae[styleClass=image-view], target = JfxView@1a1102ae[styleClass=image-view], eventType = MOUSE_DRAGGED, consumed = false, x = 281.0, y = 242.0, z = 0.0, button = PRIMARY, primaryButtonDown, pickResult = PickResult [node = JfxView@1a1102ae[styleClass=image-view], point = Point3D [x = 281.0, y = 242.0, z = 0.0], distance = 895.6921938165307]
-
     
     private double locationX;
     private double locationY;
@@ -187,15 +172,12 @@ public class JfxMouseInput implements MouseInput, EventHandler<Event>{
         
         // 处理鼠标点击事件
         synchronized (eventQueue) {
-            eventQueueCopy.clear();
-            eventQueueCopy.addAll(eventQueue);
+            for (int i = 0; i < eventQueue.size(); i++) {
+                listener.onMouseButtonEvent(eventQueue.get(i));
+            }
             eventQueue.clear();
         }
 
-        int size = eventQueueCopy.size();
-        for (int i = 0; i < size; i++) {
-            listener.onMouseButtonEvent(eventQueueCopy.get(i));
-        }
     }
 
     @Override

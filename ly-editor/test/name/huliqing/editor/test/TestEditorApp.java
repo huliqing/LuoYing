@@ -19,9 +19,9 @@ import java.util.logging.Logger;
  *
  * @author huliqing
  */
-public class EditorApp extends SimpleApplication {
+public class TestEditorApp extends SimpleApplication {
 
-    private static final Logger LOG = Logger.getLogger(EditorApp.class.getName());
+    private static final Logger LOG = Logger.getLogger(TestEditorApp.class.getName());
 
     @Override
     public void simpleInitApp() {
@@ -69,7 +69,7 @@ public class EditorApp extends SimpleApplication {
         settings.setResolution(300, 300);
         settings.setFrameRate(60);
         
-        EditorApp app = new EditorApp();
+        TestEditorApp app = new TestEditorApp();
         app.setSettings(settings);
         app.setShowSettings(false);
         app.start();
