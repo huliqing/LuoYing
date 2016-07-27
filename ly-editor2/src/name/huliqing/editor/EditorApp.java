@@ -19,31 +19,29 @@ import com.jme3.system.AppSettings;
  */
 public class EditorApp extends SimpleApplication {
 
-    private Geometry geo;
-    
     @Override
     public void simpleInitApp() {
         getInputManager().setCursorVisible(true);
         getFlyByCamera().setDragToRotate(true);
         getFlyByCamera().setMoveSpeed(10);
         
-        Box box = new Box(new Vector3f(-0.1f,-0.1f,-0.1f), new Vector3f(0.1f,0.1f,0.1f));
-        geo = new Geometry("Test box", box);
-        geo.setMaterial(new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md"));
+        for (int i = 0; i < 1000; i++) {
+            Box box = new Box(new Vector3f(-0.01f,-0.01f,-0.01f), new Vector3f(0.01f,0.01f,0.01f));
+            Geometry geo = new Geometry("Test box", box);
+            geo.setMaterial(new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md"));
+            
+            geo.setLocalTranslation(5 * FastMath.nextRandomFloat() - 2.5f
+                    , 5 * FastMath.nextRandomFloat() - 2.5f
+                    , 5 * FastMath.nextRandomFloat() - 2.5f);
+            
+            this.rootNode.attachChild(geo);
+            
+        }
 
-        geo.setLocalTranslation(0,0,0);
-
-        geo.setLocalScale(10);
-        this.rootNode.attachChild(geo);
 
         System.out.println("EditorApp started......");
     }
 
-    @Override
-    public void update() {
-        super.update(); 
-        geo.rotate(0.01f, 0.01f, 0.01f);
-    }
     
     public static void main(String[] args) {
         
