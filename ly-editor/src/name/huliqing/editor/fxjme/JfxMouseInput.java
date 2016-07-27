@@ -11,7 +11,6 @@ import com.jme3.input.RawInputListener;
 import com.jme3.input.event.MouseButtonEvent;
 import com.jme3.input.event.MouseMotionEvent;
 import java.util.ArrayList;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -19,11 +18,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 
 /**
- *
+ * Convert JFX mouse and scroll event to JME mouse event.
  * @author huliqing
  */
 public class JfxMouseInput implements MouseInput, EventHandler<Event>{
-//    private static final Logger LOG = Logger.getLogger(JfxMouseInput.class.getName());
+    private static final Logger LOG = Logger.getLogger(JfxMouseInput.class.getName());
 
     private final static String MOUSE_ENTERED = "MOUSE_ENTERED";
     private final static String MOUSE_PRESSED = "MOUSE_PRESSED";
@@ -38,7 +37,6 @@ public class JfxMouseInput implements MouseInput, EventHandler<Event>{
     private final ArrayList<MouseButtonEvent> eventQueueCopy = new ArrayList<>();
     
     public JfxMouseInput() {}
-    
     
     // ---- Run on jfx
 //=>MouseEvent [source = JfxView@4cc24a15[styleClass=image-view], target = JfxView@4cc24a15[styleClass=image-view], eventType = MOUSE_ENTERED, consumed = false, x = 261.0, y = 186.0, z = 0.0, button = NONE, pickResult = PickResult [node = JfxView@4cc24a15[styleClass=image-view], point = Point3D [x = 261.0, y = 186.0, z = 0.0], distance = 895.6921938165307]
@@ -101,7 +99,6 @@ public class JfxMouseInput implements MouseInput, EventHandler<Event>{
             // other ignore
         }
         
-        
     }
     
     private void convertMouseWheel(ScrollEvent se) {
@@ -118,8 +115,6 @@ public class JfxMouseInput implements MouseInput, EventHandler<Event>{
         lastJfxY = me.getY();
         cursorMoved = true;
     }
-    
-    
     
     private void convertMouseButtonEvent(MouseEvent me, boolean isPressed) {
         int button = MouseInput.BUTTON_LEFT;
@@ -163,21 +158,25 @@ public class JfxMouseInput implements MouseInput, EventHandler<Event>{
     public void initialize() {
         // ignore
     }
-
-    private void updateMouseMotion() {
-        if (cursorMoved) {
+    
+    @Override
+    public void update() {
+        
+        // 鼠标移动、滚轮事件
+         if (cursorMoved) {
             double newX = locationX;
             double newY = locationY;
             double newWheel = wheelPos;
 
-            MouseMotionEvent mme = new MouseMotionEvent((int)lastJfxX, (int)lastJfxY,
-                                                        (int)(newX - lastEventX),
-                                                        (int)(newY - lastEventY),
-                                                        (int) newWheel, (int)(newWheel - lastEventWheel));
-            
-//            LOG.log(Level.INFO, "jme updateMouseMotion MouseMotionEvent={e}", mme);
+            MouseMotionEvent mme = new MouseMotionEvent((int)lastJfxX, (int)lastJfxY
+                    , (int) (newX - lastEventX)
+                    , (int) (newY - lastEventY)
+                    , (int) newWheel
+                    , (int)(newWheel - lastEventWheel));
             
             listener.onMouseMotionEvent(mme);
+            
+//            LOG.log(Level.INFO, "jme updateMouseMotion MouseMotionEvent={e}", mme);
 
             lastEventX = newX;
             lastEventY = newY;
@@ -185,14 +184,8 @@ public class JfxMouseInput implements MouseInput, EventHandler<Event>{
 
             cursorMoved = false;
         }
-    }
-    
-    @Override
-    public void update() {
         
-        // 鼠标移动、拖动事件
-        updateMouseMotion();
-        
+        // 处理鼠标点击事件
         synchronized (eventQueue) {
             eventQueueCopy.clear();
             eventQueueCopy.addAll(eventQueue);

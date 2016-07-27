@@ -15,7 +15,7 @@ import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 
 /**
- *
+ * Convert JFX key event to JME key event.
  * @author huliqing
  */
 public class JfxKeyInput implements KeyInput, EventHandler<javafx.scene.input.KeyEvent>{

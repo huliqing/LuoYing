@@ -5,18 +5,17 @@
  */
 package name.huliqing.editor.fxjme;
 
+import com.jme3.app.Application;
 import java.nio.ByteBuffer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.animation.AnimationTimer;
-import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelFormat;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
-
-
 
 /**
  *
@@ -24,11 +23,13 @@ import javafx.scene.input.MouseEvent;
  */
 public class JfxView extends ImageView implements EventHandler<MouseEvent>{
 
-//    private static final Logger LOG = Logger.getLogger(JfxView.class.getName());
+    private static final Logger LOG = Logger.getLogger(JfxView.class.getName());
 
+    private Application application;
+    
     private WritableImage renderImage;
-    private long frame;
-    private long lastUpload;
+    private long currentFrame;
+    private long lastFrameUsed;
     
     private int width;
     private int height;
@@ -38,7 +39,7 @@ public class JfxView extends ImageView implements EventHandler<MouseEvent>{
         new AnimationTimer() {
             @Override
             public void handle(final long now) {
-                frame++;
+                currentFrame++;
             }
         }.start();
         this.setScaleY(-1);
@@ -46,6 +47,22 @@ public class JfxView extends ImageView implements EventHandler<MouseEvent>{
         addEventHandler(MouseEvent.ANY, this);
     }
 
+    /**
+     * Set the JME application
+     * @param application 
+     */
+    void setApplication(Application application) {
+        this.application = application;
+    }
+
+    /**
+     * Get the JME application.
+     * @return 
+     */
+    public Application getApplication() {
+        return application;
+    }
+    
     @Override
     public void handle(MouseEvent event) {
         // 让Jfx View允许响应KeyEvent则必须让它可以获得焦点。
@@ -58,31 +75,39 @@ public class JfxView extends ImageView implements EventHandler<MouseEvent>{
         }
     }
     
-    private synchronized void checkSize(int width, int height) {
+    /**
+     * 检查是否需要重设图片的大小
+     * @param width
+     * @param height 
+     */
+    private synchronized void checkResize(int width, int height) {
         if (this.width != width || this.height != height) {
             scanlineStride = width * 3;
             renderImage = new WritableImage(width, height);
             setImage(renderImage);
             this.width = width;
             this.height = height;
+            LOG.log(Level.INFO, "resize jfxView={0}, {1}", new int[] {width, height});
         }
     }
     
-    public void drawImage(ByteBuffer buffer, float w, float h) {
+    public void drawImage(ByteBuffer buffer, int w, int h) {
         if (!isVisible()) {
             return;
         }
-        
-        // Throttling, only update the JavaFX view once per frame.
-        // *NOTE*: The +1 is weird here, but apparently setPixels triggers a new pulse within the current frame.
-        // If we ignore that, we'd get a) worse performance from uploading double the frames and b) exceptions
-        // on certain configurations (e.g. Nvidia GPU with the D3D pipeline).
-        if (frame <= lastUpload + 1) {
+
+        // 渲染涉率要尽量保持与JFX的频率一致，避免性能浪费。因为当JME端无限制FPS时，drawImage这个方法的调用频率与JME是
+        // 一致的，可能达到成百上千，如果每次都重新渲染图片的话就会导致性能浪费，因为JFX的帧频率没有这么高.
+        if (currentFrame <= lastFrameUsed) {
+//            LOG.log(Level.INFO, "----donot render");
             return;
         }
-        lastUpload = frame;
+//        LOG.log(Level.INFO, "++++render");
+        lastFrameUsed = currentFrame;
         
-        checkSize((int) w, (int) h);
+        // 确定是否需要重置图片大小
+        checkResize(w, h);
+        
         if (!buffer.hasRemaining()) {
             return;
         }

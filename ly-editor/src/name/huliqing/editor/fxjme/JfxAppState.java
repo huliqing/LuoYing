@@ -71,6 +71,7 @@ public class JfxAppState extends AbstractAppState {
         keyInput = (JfxKeyInput) jfxContext.getKeyInput();
         jfxView.addEventHandler(Event.ANY, mouseInput); // 这里要使用Event.ANY,因为需要用到MouseEvent和ScrollEvent
         jfxView.addEventHandler(KeyEvent.ANY, keyInput);
+        
     }
     
     @Override
@@ -92,19 +93,20 @@ public class JfxAppState extends AbstractAppState {
 
         private boolean initilized = false;
         private RenderManager renderManager;
+        private ByteBuffer buffer;
+        private final DrawRunnable drawOnFx = new DrawRunnable();
+        private Camera camera;
         private int width;
         private int height;
-        private ByteBuffer buffer;
-        private final DrawThread runOnFx = new DrawThread();
         
         @Override
         public void initialize(RenderManager rm, ViewPort vp) {
             initilized = true;
             renderManager = rm;
-            Camera camera = vp.getCamera();
+            camera = vp.getCamera();
             width = camera.getWidth();
             height = camera.getHeight();
-            buffer = BufferUtils.createByteBuffer(width * height * 3);
+            buffer = BufferUtils.createByteBuffer(width * height * 3); // for rgb
         }
 
         @Override
@@ -127,8 +129,10 @@ public class JfxAppState extends AbstractAppState {
             // 格式必须和view中的图片格式匹配
             buffer.clear();
             renderManager.getRenderer().readFrameBufferWithFormat(out, buffer, Image.Format.RGB8);
-            runOnFx.buff = buffer;
-            Platform.runLater(runOnFx);
+            drawOnFx.buff = buffer;
+            drawOnFx.width = width;
+            drawOnFx.height = height;
+            Platform.runLater(drawOnFx);
         }
 
         @Override
@@ -136,9 +140,10 @@ public class JfxAppState extends AbstractAppState {
             initilized = false;
         }
         
-        private class DrawThread implements Runnable {
-            
+        private class DrawRunnable implements Runnable {
             private ByteBuffer buff;
+            private int width;
+            private int height;
             
             @Override
             public void run() {
