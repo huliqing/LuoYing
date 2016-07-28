@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.fxjme;
+package name.huliqing.fxjme;
 
 import com.jme3.app.Application;
 import java.util.logging.Level;
@@ -19,6 +19,7 @@ import javafx.scene.image.PixelFormat;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
+import name.huliqing.fxjme.JfxAppState.RenderStore;
 
 /**
  * 这个View用于支持将Jme的渲染结果显示到当前ImageView内。由于部分JmeContext(如：LwjglOffscreenBuffer)不能支持
@@ -31,7 +32,7 @@ public class JfxView extends ImageView implements EventHandler<MouseEvent>, Chan
 
     private Application app;
     private JfxAppState jfxAppState;
-    private JfxAppState.RenderStore renderResult;
+    private RenderStore renderResult;
     
     private WritableImage renderImage;
     

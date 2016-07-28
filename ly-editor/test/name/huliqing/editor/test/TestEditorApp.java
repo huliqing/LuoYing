@@ -14,7 +14,7 @@ import com.jme3.math.FastMath;
 import com.jme3.scene.Spatial;
 import com.jme3.system.AppSettings;
 import java.util.logging.Logger;
-import name.huliqing.editor.fxjme.JfxAppState;
+import name.huliqing.fxjme.JfxAppState;
 
 /**
  *
@@ -33,9 +33,9 @@ public class TestEditorApp extends SimpleApplication {
         rootNode.addLight(new DirectionalLight());
         rootNode.addLight(new AmbientLight());
         
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 200; i++) {
             Spatial sinbad = this.assetManager.loadModel("Models/Sinbad.mesh.j3o");
-            sinbad.setLocalScale(0.01f);
+            sinbad.setLocalScale(0.05f);
             sinbad.setLocalTranslation(5 * FastMath.nextRandomFloat() - 2.5f, 5 * FastMath.nextRandomFloat() - 2.5f, 5 * FastMath.nextRandomFloat() - 2.5f);
             this.rootNode.attachChild(sinbad);
             
@@ -52,7 +52,7 @@ public class TestEditorApp extends SimpleApplication {
     public static void main(String[] args) {
         
         AppSettings settings = new AppSettings(true);
-        settings.setResolution(300, 300);
+        settings.setResolution(1024, 768);
         settings.setFrameRate(60);
         
         TestEditorApp app = new TestEditorApp();
@@ -60,6 +60,6 @@ public class TestEditorApp extends SimpleApplication {
         app.setShowSettings(false);
         app.start();
         
-        app.getStateManager().attach(new JfxAppState());
+//        app.getStateManager().attach(new JfxAppState());
     }
 }

@@ -8,7 +8,7 @@ package name.huliqing.editor.test;
 import com.jme3.math.FastMath;
 import com.jme3.system.AppSettings;
 import javafx.animation.AnimationTimer;
-import name.huliqing.editor.fxjme.JfxView;
+import name.huliqing.fxjme.JfxView;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
@@ -18,7 +18,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import name.huliqing.editor.fxjme.JfxSystem;
+import name.huliqing.fxjme.JfxSystem;
 
 /**
  *
