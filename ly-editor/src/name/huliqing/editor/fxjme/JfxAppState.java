@@ -6,8 +6,10 @@
 package name.huliqing.editor.fxjme;
 
 import com.jme3.app.Application;
+import com.jme3.app.LegacyApplication;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
+import com.jme3.math.FastMath;
 import com.jme3.post.SceneProcessor;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
@@ -18,14 +20,11 @@ import com.jme3.texture.Image;
 import com.jme3.util.BufferUtils;
 import java.nio.ByteBuffer;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.application.Platform;
-import javafx.event.Event;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 
 /**
- *
+ * 这个AppState的作用是负责把frameBuffer渲染到renderResult中.由其它应用去调用这个渲染结果。
  * @author huliqing
  */
 public class JfxAppState extends AbstractAppState {
@@ -35,25 +34,18 @@ public class JfxAppState extends AbstractAppState {
     private Application app;
     private Processor processor;
     private ViewPort lastViewPort;
-    
-    private final JfxView jfxView;
-    private JfxContext jfxContext;
-    private JfxMouseInput mouseInput;
-    private JfxKeyInput keyInput;
-    
-    public JfxAppState(JfxView jfxView) {
-        this.jfxView = jfxView;
-    }
-    
-    public JfxView getJmeView() {
-        return jfxView;
-    }
+
+    RenderStore renderResult;
 
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app); 
         this.app = app;
         
+        addProcessor();
+    }
+    
+    private void addProcessor() {
         // Processor frame buffer
         processor = new Processor();
         List<ViewPort> vps = app.getRenderManager().getPostViews();
@@ -64,14 +56,6 @@ public class JfxAppState extends AbstractAppState {
             }
         }
         lastViewPort.addProcessor(processor);
-        
-        // Add Mouse and key event.
-        jfxContext = (JfxContext) app.getContext();
-        mouseInput = (JfxMouseInput) jfxContext.getMouseInput();
-        keyInput = (JfxKeyInput) jfxContext.getKeyInput();
-        jfxView.addEventHandler(Event.ANY, mouseInput); // 这里要使用Event.ANY,因为需要用到MouseEvent和ScrollEvent
-        jfxView.addEventHandler(KeyEvent.ANY, keyInput);
-        
     }
     
     @Override
@@ -79,38 +63,64 @@ public class JfxAppState extends AbstractAppState {
         if (lastViewPort != null && processor != null) {
             lastViewPort.removeProcessor(processor);
         }
-        if (mouseInput != null) {
-            jfxView.removeEventHandler(MouseEvent.ANY, mouseInput);
-        }
-        if (keyInput != null) {
-            jfxView.removeEventHandler(KeyEvent.ANY, keyInput);
-        }
         super.cleanup(); 
     }
     
+    public void setResolution(int width, int height) {
+        if (width <= 0 || height <= 0) {
+            LOG.log(Level.WARNING, "width and height could not less than zero, width={0}, height={1}", new Object[] {width, height});
+            return;
+        }
+        
+        if (app instanceof LegacyApplication) {
+            LegacyApplication lapp = (LegacyApplication) app;
+            lapp.getContext().getSettings().setResolution(width, height);
+            LOG.log(Level.INFO, "========SetResolution: width={0}, height={1}", new Object[] {width, height});
+            lapp.restart();
+        }
+    }
+    
     // ---- SceneProcessor to draw the framebuffer to jfxView
+    
+    public class RenderStore {
+        ByteBuffer buffer ;
+        int width;
+        int height;
+        
+        public RenderStore(int width, int height) {
+            this.width = width;
+            this.height = height;
+            this.buffer = BufferUtils.createByteBuffer(width * height * 3); // Format RGB
+        }
+    }
+    
     private class Processor implements SceneProcessor {
 
         private boolean initilized = false;
         private RenderManager renderManager;
-        private ByteBuffer buffer;
-        private final DrawRunnable drawOnFx = new DrawRunnable();
-        private Camera camera;
-        private int width;
-        private int height;
+            
+        private RenderStore renderer1;
+        private RenderStore renderer2;
+        private RenderStore temp;
         
         @Override
         public void initialize(RenderManager rm, ViewPort vp) {
             initilized = true;
             renderManager = rm;
-            camera = vp.getCamera();
-            width = camera.getWidth();
-            height = camera.getHeight();
-            buffer = BufferUtils.createByteBuffer(width * height * 3); // for rgb
+            resize(vp, vp.getCamera().getWidth(), vp.getCamera().getHeight());
         }
 
         @Override
-        public void reshape(ViewPort vp, int w, int h) {}
+        public void reshape(ViewPort vp, int w, int h) {
+            resize(vp, vp.getCamera().getWidth(), vp.getCamera().getHeight());
+        }
+        
+        private void resize(ViewPort vp, int w, int h) {
+            renderer1 = new RenderStore(w, h);
+            renderer2 = new RenderStore(w, h);
+            LOG.log(Level.INFO, "Processor reshape: w={0}, h={1}, camera size={2}, {3}"
+                    , new Object[] {w, h, vp.getCamera().getWidth(), vp.getCamera().getHeight()});
+        }
 
         @Override
         public boolean isInitialized() {
@@ -125,30 +135,20 @@ public class JfxAppState extends AbstractAppState {
 
         @Override
         public void postFrame(FrameBuffer out) {
+            temp = temp !=  renderer1 ? renderer1 : renderer2;
             
-            // 格式必须和view中的图片格式匹配
-            buffer.clear();
-            renderManager.getRenderer().readFrameBufferWithFormat(out, buffer, Image.Format.RGB8);
-            drawOnFx.buff = buffer;
-            drawOnFx.width = width;
-            drawOnFx.height = height;
-            Platform.runLater(drawOnFx);
+//            LOG.log(Level.INFO, "Processor temp buffer, width={0}, height={1}, limit={2}, capacity={3}"
+//                    , new Object[] {temp.width, temp.height, temp.buffer.limit(), temp.buffer.capacity()});
+            
+            temp.buffer.clear();
+            renderManager.getRenderer().readFrameBufferWithFormat(out, temp.buffer, Image.Format.RGB8);
+            renderResult = temp;
         }
-
+        
         @Override
         public void cleanup() {
             initilized = false;
         }
         
-        private class DrawRunnable implements Runnable {
-            private ByteBuffer buff;
-            private int width;
-            private int height;
-            
-            @Override
-            public void run() {
-                jfxView.drawImage(buff, width, height);
-            }
-        }
     }
 }

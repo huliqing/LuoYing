@@ -14,6 +14,7 @@ import com.jme3.math.FastMath;
 import com.jme3.scene.Spatial;
 import com.jme3.system.AppSettings;
 import java.util.logging.Logger;
+import name.huliqing.editor.fxjme.JfxAppState;
 
 /**
  *
@@ -22,7 +23,7 @@ import java.util.logging.Logger;
 public class TestEditorApp extends SimpleApplication {
 
     private static final Logger LOG = Logger.getLogger(TestEditorApp.class.getName());
-
+    
     @Override
     public void simpleInitApp() {
         getInputManager().setCursorVisible(true);
@@ -40,28 +41,13 @@ public class TestEditorApp extends SimpleApplication {
             
         }
         
-        
         System.out.println("EditorApp started......");
     }
-
-    
-//    private int frameCount;
     
     @Override
     public void update() {
         super.update(); 
-        
-//        frameCount++;
-//        if (frameCount % 60 == 7) {
-//            this.settings.setWidth(FastMath.nextRandomInt(300, 400));
-//            this.settings.setHeight(FastMath.nextRandomInt(300, 400));
-//            
-//            this.restart();
-//            LOG.info("restart: width=" + settings.getWidth() + ", height=" + settings.getHeight());
-//        }
     }
-
-    
     
     public static void main(String[] args) {
         
@@ -73,5 +59,7 @@ public class TestEditorApp extends SimpleApplication {
         app.setSettings(settings);
         app.setShowSettings(false);
         app.start();
+        
+        app.getStateManager().attach(new JfxAppState());
     }
 }

@@ -6,10 +6,13 @@
 package name.huliqing.editor.fxjme;
 
 import com.jme3.app.Application;
-import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.animation.AnimationTimer;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelFormat;
@@ -18,41 +21,91 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 
 /**
- *
+ * 这个View用于支持将Jme的渲染结果显示到当前ImageView内。由于部分JmeContext(如：LwjglOffscreenBuffer)不能支持
+ * restart,使用这些JmeContext进行渲染时不能动态改变JME窗口的大小，只能改变当前VIEW的大小。
  * @author huliqing
  */
-public class JfxView extends ImageView implements EventHandler<MouseEvent>{
+public class JfxView extends ImageView implements EventHandler<MouseEvent>, ChangeListener<Number>{
 
     private static final Logger LOG = Logger.getLogger(JfxView.class.getName());
 
-    private Application application;
+    private Application app;
+    private JfxAppState jfxAppState;
+    private JfxAppState.RenderStore renderResult;
     
     private WritableImage renderImage;
-    private long currentFrame;
-    private long lastFrameUsed;
     
     private int width;
     private int height;
     private int scanlineStride;
     
+    private final IntegerProperty widthProperty = new SimpleIntegerProperty();
+    private final IntegerProperty heightProperty = new SimpleIntegerProperty();
+    
+    private final AnimationTimer timer;
+    
     public JfxView() {
-        new AnimationTimer() {
-            @Override
-            public void handle(final long now) {
-                currentFrame++;
-            }
-        }.start();
         this.setScaleY(-1);
         
+        // 添加一个鼠标事件监听，当鼠标点击到当前view时，将焦点定位到当前View,因为
+        // 默认情况下ImageView是不会获得焦点的,需要特殊处理一下。
         addEventHandler(MouseEvent.ANY, this);
+        
+        // 使用与JFX动画线程同步的帧率就可以，不要浪费资源
+        timer = new AnimationTimer() {
+            @Override
+            public void handle(final long now) {                
+                render();
+            }
+        };
+        
+        widthProperty.addListener(this);
+        heightProperty.addListener(this);
     }
-
+    
     /**
-     * Set the JME application
-     * @param application 
+     * Start jfxView renderer
      */
-    void setApplication(Application application) {
-        this.application = application;
+    public void start() {
+        timer.start();
+    }
+    
+    /**
+     * Stop the jfxView renderer, this will also stop the jme application.
+     */
+    public void stop() {
+        timer.stop();
+        if (app != null) {
+            app.stop();
+        }
+    }
+    
+    protected void render() {
+        if (!isVisible()) {
+            return;
+        }
+        
+        if (jfxAppState == null) {
+            if (app != null) {
+                jfxAppState = app.getStateManager().getState(JfxAppState.class);
+            }
+            return;
+        }
+
+        // 确定是否需要重置图片大小
+        renderResult = jfxAppState.renderResult;
+        if (renderResult == null) {
+            return;
+        }
+        if (!renderResult.buffer.hasRemaining()) {
+            return;
+        }
+        
+        // 检查并重置大小
+        checkResize(renderResult.width, renderResult.height);
+        
+        PixelWriter pw = renderImage.getPixelWriter();
+        pw.setPixels(0, 0, width, height, PixelFormat.getByteRgbInstance(), renderResult.buffer, scanlineStride);
     }
 
     /**
@@ -60,7 +113,15 @@ public class JfxView extends ImageView implements EventHandler<MouseEvent>{
      * @return 
      */
     public Application getApplication() {
-        return application;
+        return app;
+    }
+
+    /**
+     * Set the JME application
+     * @param app 
+     */
+    public void setApplication(Application app) {
+        this.app = app;
     }
     
     @Override
@@ -80,41 +141,39 @@ public class JfxView extends ImageView implements EventHandler<MouseEvent>{
      * @param width
      * @param height 
      */
-    private synchronized void checkResize(int width, int height) {
+    private void checkResize(int width, int height) {
         if (this.width != width || this.height != height) {
             scanlineStride = width * 3;
             renderImage = new WritableImage(width, height);
             setImage(renderImage);
             this.width = width;
             this.height = height;
+            setFitWidth(width);
+            setFitHeight(height);
             LOG.log(Level.INFO, "resize jfxView={0}, {1}", new int[] {width, height});
         }
     }
-    
-    public void drawImage(ByteBuffer buffer, int w, int h) {
-        if (!isVisible()) {
-            return;
-        }
 
-        // 渲染涉率要尽量保持与JFX的频率一致，避免性能浪费。因为当JME端无限制FPS时，drawImage这个方法的调用频率与JME是
-        // 一致的，可能达到成百上千，如果每次都重新渲染图片的话就会导致性能浪费，因为JFX的帧频率没有这么高.
-        if (currentFrame <= lastFrameUsed) {
-//            LOG.log(Level.INFO, "----donot render");
-            return;
-        }
-//        LOG.log(Level.INFO, "++++render");
-        lastFrameUsed = currentFrame;
-        
-        // 确定是否需要重置图片大小
-        checkResize(w, h);
-        
-        if (!buffer.hasRemaining()) {
-            return;
-        }
-        
-        PixelWriter pw = renderImage.getPixelWriter();
-        pw.setPixels(0, 0, width, height, PixelFormat.getByteRgbInstance(), buffer, scanlineStride);
+    public final IntegerProperty widthProperty() {
+        return widthProperty;
+    }
+    
+    public final IntegerProperty heightProperty() {
+        return heightProperty;
+    }
+
+    @Override
+    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+        LOG.log(Level.INFO, "value change: observable={0}, oldValue={1}, newValue={2}", new Object[] {observable, oldValue, newValue});
+        final int w = widthProperty.getValue();
+        final int h = heightProperty.getValue();
+        app.enqueue(() -> {
+            if (jfxAppState != null) {
+                jfxAppState.setResolution(w, h);
+            }
+        });
         
     }
+
 
 }

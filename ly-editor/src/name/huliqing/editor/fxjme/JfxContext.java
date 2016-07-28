@@ -42,7 +42,7 @@ public class JfxContext implements JmeContext {
 
     @Override
     public void setSettings(AppSettings settings) {
-        this.settings.copyFrom(settings);
+        this.settings = settings;
         
         // 实际的渲染引擎，如果进行了特别指定,否则使用LWJGL_OPENGL2作为实际的内部包装用擎
         String jfxRenderer = (String) this.settings.get(JFX_WRAP_RENDERER);
@@ -60,6 +60,9 @@ public class JfxContext implements JmeContext {
     @Override
     public void setSystemListener(SystemListener listener) {
         this.listener = listener;
+        if (innerContext != null) {
+            innerContext.setSystemListener(listener);
+        }
     }
 
     @Override

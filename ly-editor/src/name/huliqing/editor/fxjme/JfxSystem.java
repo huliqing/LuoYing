@@ -10,6 +10,8 @@ import com.jme3.system.AppSettings;
 import com.jme3.system.JmeContext;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.event.Event;
+import javafx.scene.input.KeyEvent;
 
 /**
  * 
@@ -51,10 +53,6 @@ public class JfxSystem {
         // Specify a true renderer to render game, default is: LWJGL_OPENGL2
 //        settings.put(JfxContext.JFX_WRAP_RENDERER, AppSettings.LWJGL_OPENGL3);
         
-        // ---- Create JfxView and JfxAppState
-        JfxView jfxView = new JfxView();
-        JfxAppState jfxAppState = new JfxAppState(jfxView);
-        
         // ---- Create Application
         LegacyApplication app;
         try{
@@ -68,9 +66,22 @@ public class JfxSystem {
         
         app.setSettings(settings);
         app.setPauseOnLostFocus(false);
-        app.getStateManager().attach(jfxAppState);
+        app.getStateManager().attach(new JfxAppState());
         app.start(JmeContext.Type.OffscreenSurface);
+        
+        // ---- Create JfxView and set event converter
+        JfxContext jfxContext = (JfxContext) app.getContext();
+        JfxMouseInput mouseInput = (JfxMouseInput) jfxContext.getMouseInput();
+        JfxKeyInput keyInput = (JfxKeyInput) jfxContext.getKeyInput();
+        
+        JfxView jfxView = new JfxView();
         jfxView.setApplication(app);
+        jfxView.addEventHandler(Event.ANY, mouseInput); // 这里要使用Event.ANY,因为需要用到MouseEvent和ScrollEvent
+        jfxView.addEventHandler(KeyEvent.ANY, keyInput);
+        jfxView.setSmooth(true);
+        jfxView.setCache(true);
+        jfxView.start();
+        
         return jfxView;
         
     }

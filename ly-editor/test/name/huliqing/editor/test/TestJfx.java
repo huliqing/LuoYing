@@ -5,11 +5,17 @@
  */
 package name.huliqing.editor.test;
 
+import com.jme3.math.FastMath;
+import com.jme3.system.AppSettings;
+import javafx.animation.AnimationTimer;
 import name.huliqing.editor.fxjme.JfxView;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import name.huliqing.editor.fxjme.JfxSystem;
@@ -22,6 +28,9 @@ public class TestJfx extends Application {
     
     private JfxView jfxView;
     
+    private final int width = 1024;
+    private final int height = 768;
+    
     public static void main(String[] args) {
         launch(args);
     }
@@ -29,7 +38,11 @@ public class TestJfx extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         
-        jfxView = JfxSystem.startApp(TestEditorApp.class.getName(), 400, 400);
+        AppSettings settings = new AppSettings(true);
+        settings.setResolution(width, height);
+        settings.setFrameRate(60);
+        
+        jfxView = JfxSystem.startApp(TestEditorApp.class.getName(), settings);
         
         Button btn = new Button();
         btn.setText("Stop JFX Application");
@@ -37,15 +50,17 @@ public class TestJfx extends Application {
             Platform.exit();
         });
         
-        VBox root = new VBox();
-        root.getChildren().add(btn);
+        StackPane root = new StackPane();
         root.getChildren().add(jfxView);
-        Scene scene = new Scene(root, 640, 480);
+        root.getChildren().add(btn);
+        
+        Scene scene = new Scene(root, width, height);
         
         stage.setTitle("Hello World!");
         stage.setScene(scene);
         stage.show();
 
+        
     }
 
     @Override
