@@ -80,6 +80,10 @@ public class JfxAppState extends AbstractAppState {
         }
     }
     
+    public RenderStore getRenderResult() {
+        return renderResult;
+    }
+    
     // ---- SceneProcessor to draw the framebuffer to jfxView
     
     public class RenderStore {
@@ -143,6 +147,8 @@ public class JfxAppState extends AbstractAppState {
             temp.buffer.clear();
             renderManager.getRenderer().readFrameBufferWithFormat(out, temp.buffer, Image.Format.RGB8);
             renderResult = temp;
+
+            
         }
         
         @Override

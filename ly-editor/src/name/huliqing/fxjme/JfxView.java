@@ -93,7 +93,8 @@ public class JfxView extends ImageView implements EventHandler<MouseEvent>, Chan
             return;
         }
 
-        // 确定是否需要重置图片大小
+        // TODO: synchronized
+        
         renderResult = jfxAppState.renderResult;
         if (renderResult == null) {
             return;
@@ -101,12 +102,13 @@ public class JfxView extends ImageView implements EventHandler<MouseEvent>, Chan
         if (!renderResult.buffer.hasRemaining()) {
             return;
         }
-        
+
         // 检查并重置大小
         checkResize(renderResult.width, renderResult.height);
-        
+
         PixelWriter pw = renderImage.getPixelWriter();
         pw.setPixels(0, 0, width, height, PixelFormat.getByteRgbInstance(), renderResult.buffer, scanlineStride);
+        
     }
 
     /**

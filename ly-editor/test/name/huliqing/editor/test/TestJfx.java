@@ -28,8 +28,8 @@ public class TestJfx extends Application {
     
     private JfxView jfxView;
     
-    private final int width = 1024;
-    private final int height = 768;
+    private final int width = 640;
+    private final int height = 480;
     
     public static void main(String[] args) {
         launch(args);
@@ -40,7 +40,7 @@ public class TestJfx extends Application {
         
         AppSettings settings = new AppSettings(true);
         settings.setResolution(width, height);
-        settings.setFrameRate(60);
+//        settings.setFrameRate(60);
         
         jfxView = JfxSystem.startApp(TestEditorApp.class.getName(), settings);
         

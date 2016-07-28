@@ -33,13 +33,12 @@ public class TestEditorApp extends SimpleApplication {
         rootNode.addLight(new DirectionalLight());
         rootNode.addLight(new AmbientLight());
         
-        for (int i = 0; i < 200; i++) {
-            Spatial sinbad = this.assetManager.loadModel("Models/Sinbad.mesh.j3o");
-            sinbad.setLocalScale(0.05f);
-            sinbad.setLocalTranslation(5 * FastMath.nextRandomFloat() - 2.5f, 5 * FastMath.nextRandomFloat() - 2.5f, 5 * FastMath.nextRandomFloat() - 2.5f);
-            this.rootNode.attachChild(sinbad);
-            
-        }
+//        for (int i = 0; i < 200; i++) {
+//            Spatial sinbad = this.assetManager.loadModel("Models/Sinbad.mesh.j3o");
+//            sinbad.setLocalScale(0.05f);
+//            sinbad.setLocalTranslation(5 * FastMath.nextRandomFloat() - 2.5f, 5 * FastMath.nextRandomFloat() - 2.5f, 5 * FastMath.nextRandomFloat() - 2.5f);
+//            this.rootNode.attachChild(sinbad);
+//        }
         
         System.out.println("EditorApp started......");
     }
@@ -53,7 +52,7 @@ public class TestEditorApp extends SimpleApplication {
         
         AppSettings settings = new AppSettings(true);
         settings.setResolution(1024, 768);
-        settings.setFrameRate(60);
+//        settings.setFrameRate(60);
         
         TestEditorApp app = new TestEditorApp();
         app.setSettings(settings);
