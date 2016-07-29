@@ -89,6 +89,9 @@ public class JfxRenderer implements TransferRenderer{
 
     @Override
     public void cleanup() {
+        if (frameBuffer != null) {
+            frameBuffer.dispose();
+        }
         initialized = false;
     }
     
