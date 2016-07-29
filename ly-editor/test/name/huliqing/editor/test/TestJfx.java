@@ -40,6 +40,7 @@ public class TestJfx extends Application {
         settings.setFrameRate(60);
         
         jfxView = JfxSystem.startApp(TestEditorApp.class.getName(), settings);
+        jfxView.setUseDepthBuffer(true);
         
         Button btn = new Button();
         btn.setText("Stop JFX Application");

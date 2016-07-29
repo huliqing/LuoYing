@@ -25,6 +25,10 @@ public class JfxView extends ImageView implements EventHandler<MouseEvent>, Chan
 
     private Application app;
     private final JfxAppState jfxAppState;
+    private boolean useDepthBuffer;
+    
+    private int width;
+    private int height;
     
     public JfxView(JfxAppState jfxAppState, int width, int height) {
         this.jfxAppState = jfxAppState;
@@ -37,6 +41,11 @@ public class JfxView extends ImageView implements EventHandler<MouseEvent>, Chan
         addEventHandler(MouseEvent.ANY, this);
         
         setResolution(width, height);
+    }
+    
+    public void setUseDepthBuffer(boolean useDepthBuffer) {
+        this.useDepthBuffer = useDepthBuffer;
+        setResolution(this.width, this.height);
     }
     
     /**
@@ -53,7 +62,9 @@ public class JfxView extends ImageView implements EventHandler<MouseEvent>, Chan
             return;
         }
         LOG.log(Level.INFO, "setResolution, width={0}, height={1}", new Object[] {width, height});
-        jfxAppState.setTransferRenderer(new JfxRenderer(this, width, height));
+        this.width = width;
+        this.height = height;
+        jfxAppState.setTransferRenderer(new JfxRenderer(this, width, height, useDepthBuffer));
     }
     
     /**

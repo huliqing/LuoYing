@@ -40,7 +40,7 @@ public class JfxRenderer implements TransferRenderer{
     
     private final FrameBuffer frameBuffer;
 
-    public JfxRenderer(ImageView imageView, int width, int height) {
+    public JfxRenderer(ImageView imageView, int width, int height, boolean depthBuffer) {
         this.imageView = imageView;
         this.width = width;
         this.height = height;
@@ -48,14 +48,20 @@ public class JfxRenderer implements TransferRenderer{
         this.scanlineStride = width * 4;
         this.renderImage = new WritableImage(width, height);
         this.imageView.setImage(renderImage);
-        frameBuffer = new FrameBuffer(width, height, 1);
-        frameBuffer.setDepthBuffer(Format.Depth);
-        frameBuffer.setColorBuffer(Format.BGRA8);
+        if (depthBuffer) {
+            frameBuffer = new FrameBuffer(width, height, 1);
+            frameBuffer.setDepthBuffer(Format.Depth);
+            frameBuffer.setColorBuffer(Format.BGRA8);
+        } else {
+            frameBuffer = null;
+        }
     }
     
     @Override
     public void initialize(RenderManager rm) {
-        rm.getRenderer().setMainFrameBufferOverride(frameBuffer);
+        if (frameBuffer != null) {
+            rm.getRenderer().setMainFrameBufferOverride(frameBuffer);
+        }
         rm.notifyReshape(width, height);
         initialized = true;
     }
@@ -69,7 +75,7 @@ public class JfxRenderer implements TransferRenderer{
     public void render(RenderManager rm, FrameBuffer out) {
         
         synchronized (byteBuffer) {
-            rm.getRenderer().readFrameBufferWithFormat(frameBuffer, byteBuffer, Format.BGRA8);
+            rm.getRenderer().readFrameBufferWithFormat(out, byteBuffer, Format.BGRA8);
         }
         
         Platform.runLater(() -> {
