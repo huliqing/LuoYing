@@ -76,14 +76,13 @@ public class JfxSystem {
         JfxMouseInput mouseInput = (JfxMouseInput) jfxContext.getMouseInput();
         JfxKeyInput keyInput = (JfxKeyInput) jfxContext.getKeyInput();
         
-        JfxView jfxView = new JfxView(jfxAppState, settings.getWidth(), settings.getHeight());
-        jfxView.setApplication(app);
+        JfxView jfxView = new JfxView(app, jfxAppState, settings.getWidth(), settings.getHeight());
         jfxView.addEventHandler(Event.ANY, mouseInput); // 这里要使用Event.ANY,因为需要用到MouseEvent和ScrollEvent
         jfxView.addEventHandler(KeyEvent.ANY, keyInput);
         jfxView.setSmooth(true);
         jfxView.setCache(true);
         jfxView.setScaleY(-1);
-        
+        jfxView.setPreserveRatio(true);
         return jfxView;
         
     }

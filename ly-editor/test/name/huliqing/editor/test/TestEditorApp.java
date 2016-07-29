@@ -7,6 +7,7 @@ package name.huliqing.editor.test;
  */
 
 
+import com.jme3.animation.AnimControl;
 import com.jme3.app.SimpleApplication;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
@@ -32,10 +33,12 @@ public class TestEditorApp extends SimpleApplication {
         rootNode.addLight(new DirectionalLight());
         rootNode.addLight(new AmbientLight());
         
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 100; i++) {
             Spatial sinbad = this.assetManager.loadModel("Models/Sinbad.mesh.j3o");
+            
             sinbad.setLocalScale(0.05f);
             sinbad.setLocalTranslation(5 * FastMath.nextRandomFloat() - 2.5f, 5 * FastMath.nextRandomFloat() - 2.5f, 5 * FastMath.nextRandomFloat() - 2.5f);
+            sinbad.getControl(AnimControl.class).createChannel().setAnim("run");
             this.rootNode.attachChild(sinbad);
         }
         

@@ -127,7 +127,9 @@ public class JfxContext implements JmeContext {
         if (innerContext != null){
             throw new IllegalStateException("Already created");
         }
+        
         innerContext = JmeSystem.newContext(settings, getType());
+        innerContext.setSettings(settings);
         innerContext.setSystemListener(listener);
         innerContext.create(waitFor);
     }
@@ -146,5 +148,4 @@ public class JfxContext implements JmeContext {
         }
     }
 
-    
 }

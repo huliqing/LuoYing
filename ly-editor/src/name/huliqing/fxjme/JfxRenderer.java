@@ -5,13 +5,13 @@
  */
 package name.huliqing.fxjme;
 
+import com.jme3.app.Application;
 import com.jme3.renderer.RenderManager;
+import com.jme3.system.JmeContext;
 import com.jme3.texture.FrameBuffer;
 import com.jme3.texture.Image.Format;
 import com.jme3.util.BufferUtils;
 import java.nio.ByteBuffer;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.scene.image.ImageView;

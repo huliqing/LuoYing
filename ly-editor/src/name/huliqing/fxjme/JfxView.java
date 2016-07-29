@@ -21,31 +21,43 @@ import javafx.scene.input.MouseEvent;
  */
 public class JfxView extends ImageView implements EventHandler<MouseEvent>, ChangeListener<Number>{
 
-    private static final Logger LOG = Logger.getLogger(JfxView.class.getName());
+//    private static final Logger LOG = Logger.getLogger(JfxView.class.getName());
 
-    private Application app;
+    private final Application app;
     private final JfxAppState jfxAppState;
     private boolean useDepthBuffer;
     
-    private int width;
-    private int height;
+    private int keepResolutionMaxWidth;
+    private int keepResolutionMaxHeight;
     
-    public JfxView(JfxAppState jfxAppState, int width, int height) {
+    public JfxView(Application app, JfxAppState jfxAppState, int width, int height) {
+        this.app = app;
         this.jfxAppState = jfxAppState;
-        
-        this.fitWidthProperty().addListener(this);
-        this.fitHeightProperty().addListener(this);
         
         // 添加一个鼠标事件监听，当鼠标点击到当前view时，将焦点定位到当前View,因为
         // 默认情况下ImageView是不会获得焦点的,需要特殊处理一下。
         addEventHandler(MouseEvent.ANY, this);
         
-        setResolution(width, height);
+        this.fitWidthProperty().addListener(this);
+        this.fitHeightProperty().addListener(this);
+        this.fitWidthProperty().setValue(width);
+        this.fitHeightProperty().setValue(height);
+    }
+    
+    /**
+     * 保持分辨率的比较在一定范围内，这可以使分辨率不会随着窗口的放大而放大，这可以提高一些性能。该方法会把3D场景的
+     * 最高分辨率限制在maxWidth和maxHeight之间。
+     * @param maxWidth
+     * @param maxHeight 
+     */
+    public void setResolutionLimit(int maxWidth, int maxHeight) {
+        this.keepResolutionMaxWidth = maxWidth;
+        this.keepResolutionMaxHeight = maxHeight;
     }
     
     public void setUseDepthBuffer(boolean useDepthBuffer) {
         this.useDepthBuffer = useDepthBuffer;
-        setResolution(this.width, this.height);
+        resetRenderer();
     }
     
     /**
@@ -57,13 +69,30 @@ public class JfxView extends ImageView implements EventHandler<MouseEvent>, Chan
         }
     }
     
-    public final void setResolution(int width, int height) {
-        if (width <= 0 || height <= 0) {
+    private void resetRenderer() {
+        if (fitWidthProperty().intValue() <= 0 || fitHeightProperty().intValue()<= 0) {
             return;
         }
-        LOG.log(Level.INFO, "setResolution, width={0}, height={1}", new Object[] {width, height});
-        this.width = width;
-        this.height = height;
+        int width = fitWidthProperty().intValue();
+        int height = fitHeightProperty().intValue();
+        
+        if (keepResolutionMaxWidth > 0 || keepResolutionMaxHeight > 0) {
+            float rate = (float) width / height;
+            
+            if (keepResolutionMaxWidth > 0 && width > keepResolutionMaxWidth) {
+                width = keepResolutionMaxWidth;
+                height = (int) (width / rate);
+                rate = (float) width / height;
+            }
+            
+            if (keepResolutionMaxHeight > 0 && height > keepResolutionMaxHeight) {
+                height = keepResolutionMaxHeight;
+                width = (int) (rate * height);
+            }
+            
+        }
+        
+//        LOG.log(Level.INFO, "resetRenderer, width={0}, height={1}", new Object[] {width, height});
         jfxAppState.setTransferRenderer(new JfxRenderer(this, width, height, useDepthBuffer));
     }
     
@@ -73,14 +102,6 @@ public class JfxView extends ImageView implements EventHandler<MouseEvent>, Chan
      */
     public Application getApplication() {
         return app;
-    }
-
-    /**
-     * Set the JME application
-     * @param app 
-     */
-    public void setApplication(Application app) {
-        this.app = app;
     }
     
     @Override
@@ -97,9 +118,7 @@ public class JfxView extends ImageView implements EventHandler<MouseEvent>, Chan
 
     @Override
     public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-        final int w = this.fitWidthProperty().getValue().intValue();
-        final int h = this.fitHeightProperty().getValue().intValue();
-        setResolution(w, h);
+        resetRenderer();
     }
 
 
