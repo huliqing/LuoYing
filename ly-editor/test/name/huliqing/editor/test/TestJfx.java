@@ -8,17 +8,14 @@ package name.huliqing.editor.test;
 import com.jme3.math.FastMath;
 import com.jme3.system.AppSettings;
 import javafx.animation.AnimationTimer;
-import name.huliqing.fxjme.JfxView;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import name.huliqing.fxjme.JfxSystem;
+import name.huliqing.fxjme.JfxView;
 
 /**
  *
@@ -39,8 +36,8 @@ public class TestJfx extends Application {
     public void start(Stage stage) throws Exception {
         
         AppSettings settings = new AppSettings(true);
-        settings.setResolution(width, height);
-//        settings.setFrameRate(60);
+        settings.setResolution(500, 400);
+        settings.setFrameRate(60);
         
         jfxView = JfxSystem.startApp(TestEditorApp.class.getName(), settings);
         
@@ -50,9 +47,26 @@ public class TestJfx extends Application {
             Platform.exit();
         });
         
+//        new AnimationTimer() {
+//            @Override
+//            public void handle(long now) {
+//                if (now % 120 == 0) {
+//                    int w = FastMath.nextRandomInt(200, 500);
+//                    int h = FastMath.nextRandomInt(300, 400);
+//                    jfxView.setResolution(w, h);
+//                    
+//                }
+//                
+//            }
+//        }.start();
+        
+        
+        
         StackPane root = new StackPane();
-        root.getChildren().add(jfxView);
+//        VBox root = new VBox();
+        
         root.getChildren().add(btn);
+        root.getChildren().add(jfxView);
         
         Scene scene = new Scene(root, width, height);
         

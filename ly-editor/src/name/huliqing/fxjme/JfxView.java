@@ -8,18 +8,11 @@ package name.huliqing.fxjme;
 import com.jme3.app.Application;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.animation.AnimationTimer;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.PixelFormat;
-import javafx.scene.image.PixelWriter;
-import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
-import name.huliqing.fxjme.JfxAppState.RenderStore;
 
 /**
  * 这个View用于支持将Jme的渲染结果显示到当前ImageView内。由于部分JmeContext(如：LwjglOffscreenBuffer)不能支持
@@ -31,86 +24,38 @@ public class JfxView extends ImageView implements EventHandler<MouseEvent>, Chan
     private static final Logger LOG = Logger.getLogger(JfxView.class.getName());
 
     private Application app;
-    private JfxAppState jfxAppState;
-    private RenderStore renderResult;
+    private final JfxAppState jfxAppState;
     
-    private WritableImage renderImage;
-    
-    private int width;
-    private int height;
-    private int scanlineStride;
-    
-    private final IntegerProperty widthProperty = new SimpleIntegerProperty();
-    private final IntegerProperty heightProperty = new SimpleIntegerProperty();
-    
-    private final AnimationTimer timer;
-    
-    public JfxView() {
-        this.setScaleY(-1);
+    public JfxView(JfxAppState jfxAppState, int width, int height) {
+        this.jfxAppState = jfxAppState;
+        
+        this.fitWidthProperty().addListener(this);
+        this.fitHeightProperty().addListener(this);
         
         // 添加一个鼠标事件监听，当鼠标点击到当前view时，将焦点定位到当前View,因为
         // 默认情况下ImageView是不会获得焦点的,需要特殊处理一下。
         addEventHandler(MouseEvent.ANY, this);
         
-        // 使用与JFX动画线程同步的帧率就可以，不要浪费资源
-        timer = new AnimationTimer() {
-            @Override
-            public void handle(final long now) {                
-                render();
-            }
-        };
-        
-        widthProperty.addListener(this);
-        heightProperty.addListener(this);
-    }
-    
-    /**
-     * Start jfxView renderer
-     */
-    public void start() {
-        timer.start();
+        setResolution(width, height);
     }
     
     /**
      * Stop the jfxView renderer, this will also stop the jme application.
      */
     public void stop() {
-        timer.stop();
         if (app != null) {
             app.stop();
         }
     }
     
-    protected void render() {
-        if (!isVisible()) {
+    public final void setResolution(int width, int height) {
+        if (width <= 0 || height <= 0) {
             return;
         }
-        
-        if (jfxAppState == null) {
-            if (app != null) {
-                jfxAppState = app.getStateManager().getState(JfxAppState.class);
-            }
-            return;
-        }
-
-        // TODO: synchronized
-        
-        renderResult = jfxAppState.renderResult;
-        if (renderResult == null) {
-            return;
-        }
-        if (!renderResult.buffer.hasRemaining()) {
-            return;
-        }
-
-        // 检查并重置大小
-        checkResize(renderResult.width, renderResult.height);
-
-        PixelWriter pw = renderImage.getPixelWriter();
-        pw.setPixels(0, 0, width, height, PixelFormat.getByteRgbInstance(), renderResult.buffer, scanlineStride);
-        
+        LOG.log(Level.INFO, "setResolution, width={0}, height={1}", new Object[] {width, height});
+        jfxAppState.setTransferRenderer(new JfxRenderer(this, width, height));
     }
-
+    
     /**
      * Get the JME application.
      * @return 
@@ -138,44 +83,12 @@ public class JfxView extends ImageView implements EventHandler<MouseEvent>, Chan
                 break;
         }
     }
-    
-    /**
-     * 检查是否需要重设图片的大小
-     * @param width
-     * @param height 
-     */
-    private void checkResize(int width, int height) {
-        if (this.width != width || this.height != height) {
-            scanlineStride = width * 3;
-            renderImage = new WritableImage(width, height);
-            setImage(renderImage);
-            this.width = width;
-            this.height = height;
-            setFitWidth(width);
-            setFitHeight(height);
-            LOG.log(Level.INFO, "resize jfxView={0}, {1}", new int[] {width, height});
-        }
-    }
-
-    public final IntegerProperty widthProperty() {
-        return widthProperty;
-    }
-    
-    public final IntegerProperty heightProperty() {
-        return heightProperty;
-    }
 
     @Override
     public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-        LOG.log(Level.INFO, "value change: observable={0}, oldValue={1}, newValue={2}", new Object[] {observable, oldValue, newValue});
-        final int w = widthProperty.getValue();
-        final int h = heightProperty.getValue();
-        app.enqueue(() -> {
-            if (jfxAppState != null) {
-                jfxAppState.setResolution(w, h);
-            }
-        });
-        
+        final int w = this.fitWidthProperty().getValue().intValue();
+        final int h = this.fitHeightProperty().getValue().intValue();
+        setResolution(w, h);
     }
 
 

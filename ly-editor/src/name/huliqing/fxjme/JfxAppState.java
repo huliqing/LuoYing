@@ -9,17 +9,15 @@ import com.jme3.app.Application;
 import com.jme3.app.LegacyApplication;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
-import com.jme3.math.FastMath;
 import com.jme3.post.SceneProcessor;
-import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.texture.FrameBuffer;
-import com.jme3.texture.Image;
 import com.jme3.util.BufferUtils;
 import java.nio.ByteBuffer;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -31,18 +29,33 @@ public class JfxAppState extends AbstractAppState {
 
     private static final Logger LOG = Logger.getLogger(JfxAppState.class.getName());
     
+    public interface TransferRenderer {
+
+        void initialize(RenderManager rm);
+        boolean isInitialized();
+        void render(RenderManager rm, FrameBuffer out);
+        void cleanup();
+    }
+    
     private Application app;
     private Processor processor;
     private ViewPort lastViewPort;
 
-    RenderStore renderResult;
-
+    private TransferRenderer transferRenderer;
+    private TransferRenderer transferRendererReset;
+    private final AtomicBoolean needResetRenderer  = new AtomicBoolean(false);
+    
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app); 
         this.app = app;
         
         addProcessor();
+    }
+
+    public void setTransferRenderer(TransferRenderer newTransferRenderer) {
+        this.transferRendererReset = newTransferRenderer;
+        needResetRenderer.set(true);
     }
     
     private void addProcessor() {
@@ -66,24 +79,6 @@ public class JfxAppState extends AbstractAppState {
         super.cleanup(); 
     }
     
-    public void setResolution(int width, int height) {
-        if (width <= 0 || height <= 0) {
-            LOG.log(Level.WARNING, "width and height could not less than zero, width={0}, height={1}", new Object[] {width, height});
-            return;
-        }
-        
-        if (app instanceof LegacyApplication) {
-            LegacyApplication lapp = (LegacyApplication) app;
-            lapp.getContext().getSettings().setResolution(width, height);
-            LOG.log(Level.INFO, "========SetResolution: width={0}, height={1}", new Object[] {width, height});
-            lapp.restart();
-        }
-    }
-    
-    public RenderStore getRenderResult() {
-        return renderResult;
-    }
-    
     // ---- SceneProcessor to draw the framebuffer to jfxView
     
     public class RenderStore {
@@ -102,29 +97,17 @@ public class JfxAppState extends AbstractAppState {
 
         private boolean initilized = false;
         private RenderManager renderManager;
-            
-        private RenderStore renderer1;
-        private RenderStore renderer2;
-        private RenderStore temp;
         
         @Override
         public void initialize(RenderManager rm, ViewPort vp) {
             initilized = true;
             renderManager = rm;
-            resize(vp, vp.getCamera().getWidth(), vp.getCamera().getHeight());
         }
 
         @Override
         public void reshape(ViewPort vp, int w, int h) {
-            resize(vp, vp.getCamera().getWidth(), vp.getCamera().getHeight());
         }
         
-        private void resize(ViewPort vp, int w, int h) {
-            renderer1 = new RenderStore(w, h);
-            renderer2 = new RenderStore(w, h);
-            LOG.log(Level.INFO, "Processor reshape: w={0}, h={1}, camera size={2}, {3}"
-                    , new Object[] {w, h, vp.getCamera().getWidth(), vp.getCamera().getHeight()});
-        }
 
         @Override
         public boolean isInitialized() {
@@ -139,16 +122,21 @@ public class JfxAppState extends AbstractAppState {
 
         @Override
         public void postFrame(FrameBuffer out) {
-            temp = temp !=  renderer1 ? renderer1 : renderer2;
-            
-//            LOG.log(Level.INFO, "Processor temp buffer, width={0}, height={1}, limit={2}, capacity={3}"
-//                    , new Object[] {temp.width, temp.height, temp.buffer.limit(), temp.buffer.capacity()});
-            
-            temp.buffer.clear();
-            renderManager.getRenderer().readFrameBufferWithFormat(out, temp.buffer, Image.Format.RGB8);
-            renderResult = temp;
 
+            // replace transferRenderer
+            if (needResetRenderer.getAndSet(false)) {
+                if (transferRenderer != null) {
+                    transferRenderer.cleanup();
+                }
+                transferRenderer = transferRendererReset;
+                transferRenderer.initialize(renderManager);
+                return; // 等待下一帧再进行渲染
+            }
             
+            if (transferRenderer == null)
+                return;
+            
+            transferRenderer.render(renderManager, out);
         }
         
         @Override

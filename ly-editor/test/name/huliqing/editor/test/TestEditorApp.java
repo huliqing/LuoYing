@@ -14,7 +14,6 @@ import com.jme3.math.FastMath;
 import com.jme3.scene.Spatial;
 import com.jme3.system.AppSettings;
 import java.util.logging.Logger;
-import name.huliqing.fxjme.JfxAppState;
 
 /**
  *
@@ -33,12 +32,12 @@ public class TestEditorApp extends SimpleApplication {
         rootNode.addLight(new DirectionalLight());
         rootNode.addLight(new AmbientLight());
         
-//        for (int i = 0; i < 200; i++) {
-//            Spatial sinbad = this.assetManager.loadModel("Models/Sinbad.mesh.j3o");
-//            sinbad.setLocalScale(0.05f);
-//            sinbad.setLocalTranslation(5 * FastMath.nextRandomFloat() - 2.5f, 5 * FastMath.nextRandomFloat() - 2.5f, 5 * FastMath.nextRandomFloat() - 2.5f);
-//            this.rootNode.attachChild(sinbad);
-//        }
+        for (int i = 0; i < 20; i++) {
+            Spatial sinbad = this.assetManager.loadModel("Models/Sinbad.mesh.j3o");
+            sinbad.setLocalScale(0.05f);
+            sinbad.setLocalTranslation(5 * FastMath.nextRandomFloat() - 2.5f, 5 * FastMath.nextRandomFloat() - 2.5f, 5 * FastMath.nextRandomFloat() - 2.5f);
+            this.rootNode.attachChild(sinbad);
+        }
         
         System.out.println("EditorApp started......");
     }

@@ -48,11 +48,12 @@ public class JfxSystem {
      */
     public static JfxView startApp(String appClass,  AppSettings settings) {
         // ---- Custom JmeContext for render.
-        settings.setRenderer("CUSTOM" + JfxContext.class.getName());
+        settings.setCustomRenderer(JfxContext.class);
         
         // Specify a true renderer to render game, default is: LWJGL_OPENGL2
 //        settings.put(JfxContext.JFX_WRAP_RENDERER, AppSettings.LWJGL_OPENGL3);
         
+
         // ---- Create Application
         LegacyApplication app;
         try{
@@ -64,9 +65,10 @@ public class JfxSystem {
             return null;
         }
         
+        JfxAppState jfxAppState = new JfxAppState();
         app.setSettings(settings);
         app.setPauseOnLostFocus(false);
-        app.getStateManager().attach(new JfxAppState());
+        app.getStateManager().attach(jfxAppState);
         app.start(JmeContext.Type.OffscreenSurface);
         
         // ---- Create JfxView and set event converter
@@ -74,13 +76,13 @@ public class JfxSystem {
         JfxMouseInput mouseInput = (JfxMouseInput) jfxContext.getMouseInput();
         JfxKeyInput keyInput = (JfxKeyInput) jfxContext.getKeyInput();
         
-        JfxView jfxView = new JfxView();
+        JfxView jfxView = new JfxView(jfxAppState, settings.getWidth(), settings.getHeight());
         jfxView.setApplication(app);
         jfxView.addEventHandler(Event.ANY, mouseInput); // 这里要使用Event.ANY,因为需要用到MouseEvent和ScrollEvent
         jfxView.addEventHandler(KeyEvent.ANY, keyInput);
         jfxView.setSmooth(true);
         jfxView.setCache(true);
-        jfxView.start();
+        jfxView.setScaleY(-1);
         
         return jfxView;
         
