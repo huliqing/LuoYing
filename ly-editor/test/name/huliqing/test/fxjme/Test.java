@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.test;
+package name.huliqing.test.fxjme;
 
 import com.jme3.math.Vector3f;
 

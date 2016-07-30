@@ -1,4 +1,4 @@
-package name.huliqing.editor.test;
+package name.huliqing.test.fxjme;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
