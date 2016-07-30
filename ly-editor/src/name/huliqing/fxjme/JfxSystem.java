@@ -52,7 +52,6 @@ public class JfxSystem {
         
         // Specify a true renderer to render game, default is: LWJGL_OPENGL2
 //        settings.put(JfxContext.JFX_WRAP_RENDERER, AppSettings.LWJGL_OPENGL3);
-        
 
         // ---- Create Application
         LegacyApplication app;
@@ -80,13 +79,6 @@ public class JfxSystem {
         jfxView.setPreserveRatio(true);
         jfxView.setMouseEventEnabled(true);
         jfxView.setKeyEventEnabled(true);
-        
-//        JfxContext jfxContext = (JfxContext) app.getContext();
-//        JfxMouseInput mouseInput = (JfxMouseInput) jfxContext.getMouseInput();
-//        JfxKeyInput keyInput = (JfxKeyInput) jfxContext.getKeyInput();
-//        jfxView.addEventHandler(Event.ANY, mouseInput); // 这里要使用Event.ANY,因为需要用到MouseEvent和ScrollEvent
-//        jfxView.addEventHandler(KeyEvent.ANY, keyInput);
-
         return jfxView;
         
     }
