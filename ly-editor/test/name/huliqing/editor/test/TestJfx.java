@@ -40,13 +40,13 @@ public class TestJfx extends Application {
         // 这里必须把初始化时的分辨率调高一些，最好刚好或大于整个屏幕，因为一些jmeContext（如LwjglOffscreenBuffer)会
         // 使用分辨率来初始化Pbuffer,但是Pbuffer在运行过程无法重建，即大小无法调整，这会导致如果一开始太小则当窗口调整
         // 时，渲染窗口生成的图片无法覆盖整个窗口。
-        settings.setResolution(1920, 1280);
+        settings.setResolution(1024, 768);
         settings.setFrameRate(60);
         
         // setKeepResolution保持分辨率不要太大，以节省性能。
         jfxView = JfxSystem.startApp(TestEditorApp.class.getName(), settings);
         jfxView.setResolutionLimit(1024, 768);
-        jfxView.setUseDepthBuffer(true);
+//        jfxView.setUseDepthBuffer(true);
         
         Button btn = new Button();
         btn.setText("Stop JFX Application");

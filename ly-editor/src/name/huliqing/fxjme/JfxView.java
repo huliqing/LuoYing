@@ -6,12 +6,12 @@
 package name.huliqing.fxjme;
 
 import com.jme3.app.Application;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
 /**
@@ -29,6 +29,9 @@ public class JfxView extends ImageView implements EventHandler<MouseEvent>, Chan
     
     private int keepResolutionMaxWidth;
     private int keepResolutionMaxHeight;
+    
+    private JfxMouseInput mouseInput;
+    private JfxKeyInput keyInput;
     
     public JfxView(Application app, JfxAppState jfxAppState, int width, int height) {
         this.app = app;
@@ -58,6 +61,42 @@ public class JfxView extends ImageView implements EventHandler<MouseEvent>, Chan
     public void setUseDepthBuffer(boolean useDepthBuffer) {
         this.useDepthBuffer = useDepthBuffer;
         resetRenderer();
+    }
+    
+    /**
+     * Set enable or disable mouse event convert from Jfx to Jme
+     * @param enabled 
+     */
+    public void setMouseEventEnabled(boolean enabled) {
+        if (enabled) {
+            if (mouseInput == null) {
+                JfxContext jfxContext = (JfxContext) app.getContext();
+                mouseInput = (JfxMouseInput) jfxContext.getMouseInput();
+                addEventHandler(Event.ANY, mouseInput);
+            }
+        } else {
+            if (mouseInput != null) {
+                removeEventHandler(Event.ANY, mouseInput);
+            }
+        }
+    }
+    
+    /**
+     * Set enable or disable key event convert from Jfx to Jme
+     * @param enabled 
+     */
+    public void setKeyEventEnabled(boolean enabled) {
+        if (enabled) {
+            if (keyInput == null) {
+                JfxContext jfxContext = (JfxContext) app.getContext();
+                keyInput = (JfxKeyInput) jfxContext.getKeyInput();
+                addEventHandler(KeyEvent.ANY, keyInput);
+            }
+        } else {
+            if (keyInput != null) {
+                removeEventHandler(KeyEvent.ANY, keyInput);
+            }
+        }
     }
     
     /**
@@ -94,6 +133,7 @@ public class JfxView extends ImageView implements EventHandler<MouseEvent>, Chan
         
 //        LOG.log(Level.INFO, "resetRenderer, width={0}, height={1}", new Object[] {width, height});
         jfxAppState.setTransferRenderer(new JfxRenderer(this, width, height, useDepthBuffer));
+        app.getContext().getSettings().setResolution(width, height);
     }
     
     /**

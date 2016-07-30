@@ -72,17 +72,21 @@ public class JfxSystem {
         app.start(JmeContext.Type.OffscreenSurface);
         
         // ---- Create JfxView and set event converter
-        JfxContext jfxContext = (JfxContext) app.getContext();
-        JfxMouseInput mouseInput = (JfxMouseInput) jfxContext.getMouseInput();
-        JfxKeyInput keyInput = (JfxKeyInput) jfxContext.getKeyInput();
         
         JfxView jfxView = new JfxView(app, jfxAppState, settings.getWidth(), settings.getHeight());
-        jfxView.addEventHandler(Event.ANY, mouseInput); // 这里要使用Event.ANY,因为需要用到MouseEvent和ScrollEvent
-        jfxView.addEventHandler(KeyEvent.ANY, keyInput);
         jfxView.setSmooth(true);
         jfxView.setCache(true);
         jfxView.setScaleY(-1);
         jfxView.setPreserveRatio(true);
+        jfxView.setMouseEventEnabled(true);
+        jfxView.setKeyEventEnabled(true);
+        
+//        JfxContext jfxContext = (JfxContext) app.getContext();
+//        JfxMouseInput mouseInput = (JfxMouseInput) jfxContext.getMouseInput();
+//        JfxKeyInput keyInput = (JfxKeyInput) jfxContext.getKeyInput();
+//        jfxView.addEventHandler(Event.ANY, mouseInput); // 这里要使用Event.ANY,因为需要用到MouseEvent和ScrollEvent
+//        jfxView.addEventHandler(KeyEvent.ANY, keyInput);
+
         return jfxView;
         
     }
