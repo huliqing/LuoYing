@@ -9,6 +9,7 @@ package name.huliqing.test.fxjme;
 
 import com.jme3.animation.AnimControl;
 import com.jme3.app.SimpleApplication;
+import com.jme3.app.StatsAppState;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.math.FastMath;
@@ -37,21 +38,32 @@ public class TestEditorApp extends SimpleApplication {
             Spatial sinbad = this.assetManager.loadModel("Models/Sinbad.mesh.j3o");
             
             sinbad.setLocalScale(0.5f);
-//            sinbad.setLocalTranslation(5 * FastMath.nextRandomFloat() - 2.5f, 5 * FastMath.nextRandomFloat() - 2.5f, 5 * FastMath.nextRandomFloat() - 2.5f);
-            sinbad.setLocalTranslation(0, -3, 0);
+            sinbad.setLocalTranslation(5 * FastMath.nextRandomFloat() - 2.5f, 5 * FastMath.nextRandomFloat() - 2.5f, 5 * FastMath.nextRandomFloat() - 2.5f);
+//            sinbad.setLocalTranslation(0, -3, 0);
             sinbad.getControl(AnimControl.class).createChannel().setAnim("run");
             this.rootNode.attachChild(sinbad);
         }
         
-        this.setDisplayStatView(false);
-        this.setDisplayFps(false);
+//        this.setDisplayStatView(false);
+//        this.setDisplayFps(false);
         System.out.println("EditorApp started......");
         
+        
+        
     }
+    
+    private float count;
     
     @Override
     public void update() {
         super.update(); 
+        
+//        count++;
+//        if (count == 200) {
+//            StatsAppState fss = getStateManager().getState(StatsAppState.class);
+//            System.out.println("fps=" + fss.getFpsText().getText());
+//            count = 0;
+//        }
     }
     
     public static void main(String[] args) {

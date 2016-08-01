@@ -40,9 +40,10 @@ public class App extends SimpleApplication{
     }
     
     private void doTest() {
-        getInputManager().setCursorVisible(true);
-        getFlyByCamera().setDragToRotate(true);
-        getFlyByCamera().setMoveSpeed(10);
+
+        inputManager.setCursorVisible(true);
+        flyCam.setDragToRotate(true);
+        flyCam.setMoveSpeed(10);
         
         rootNode.addLight(new DirectionalLight());
         rootNode.addLight(new AmbientLight());
