@@ -9,14 +9,8 @@ import com.jme3.app.LegacyApplication;
 import com.jme3.system.AppSettings;
 import com.jme3.system.JmeCanvasContext;
 import java.awt.Canvas;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowFocusListener;
-import java.awt.event.WindowListener;
-import java.awt.event.WindowStateListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
@@ -27,7 +21,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javax.swing.JFrame;
 import javax.swing.JWindow;
-import javax.swing.SwingUtilities;
 
 /**
  *
@@ -81,6 +74,7 @@ public class JfxSwingUtils {
             }
         });
         
+        mainFrame.setVisible(true);
         return js;
     }
 

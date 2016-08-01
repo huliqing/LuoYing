@@ -20,7 +20,7 @@ public class JfxSwingTest {
         js.getMainFrame().setLocationRelativeTo(null);
         js.getMainFrame().setVisible(true);
         
-        JfxSwing.runOnJfx(()-> {
+        js.runOnJfx(()-> {
             Button btn = new Button("Close app!");
             btn.setOnAction((e) -> {
                 System.exit(0);
@@ -29,7 +29,7 @@ public class JfxSwingTest {
             js.getJfxRoot().getChildren().addAll(btn, text);
         });
         
-        JfxSwing.runOnJfx(() -> {
+        js.runOnJfx(() -> {
             Button btn = new Button("Click点击，生成新的按钮");
             btn.setOnAction((e) -> {
                 Button newButton = new Button("I'm new button");

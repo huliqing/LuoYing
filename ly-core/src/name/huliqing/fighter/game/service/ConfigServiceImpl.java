@@ -215,6 +215,10 @@ public class ConfigServiceImpl implements ConfigService {
     
     @Override
     public String getLocale() {
+        if (cd == null) {
+            loadGlobalConfig();
+        }
+        
         return cd.getLocale();
     }
 

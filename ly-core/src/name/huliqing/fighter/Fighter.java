@@ -5,6 +5,7 @@ import com.jme3.app.StatsAppState;
 import com.jme3.app.state.AppState;
 import com.jme3.renderer.RenderManager;
 import com.jme3.system.AppSettings;
+import com.jme3.system.JmeContext;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -90,10 +91,20 @@ public class Fighter extends SimpleApplication {
     
     // 当前的state
     private AppState currentState;
-    
+
     @Override
-    public void start() {
-        super.start(); 
+    public void start(JmeContext.Type contextType, boolean waitFor) {
+        super.start(contextType, waitFor); 
+        startInit();
+    }
+
+    @Override
+    public void startCanvas(boolean waitFor) {
+        super.startCanvas(waitFor);
+        startInit();
+    }
+    
+    private void startInit() {
         // ---------- 
         // 这里必须优先载入,因为在Android下，需要在start之后和simpleInitApp之前做
         // 一些特殊设置,所以ConfigService必须在这里优先载入。

@@ -6,6 +6,7 @@
 package name.huliqing.fxswing;
 
 import com.jme3.app.Application;
+import com.jme3.system.AppSettings;
 import javafx.application.Platform;
 import javafx.scene.layout.Pane;
 import javax.swing.JFrame;
@@ -100,7 +101,7 @@ public class JfxSwing {
      * Run task on swing thread.
      * @param runnable 
      */
-    public static void runOnSwing(Runnable runnable) {
+    public void runOnSwing(Runnable runnable) {
         SwingUtilities.invokeLater(runnable);
     }
     
@@ -108,7 +109,29 @@ public class JfxSwing {
      * Run task on jfx thread.
      * @param runnable 
      */
-    public static void runOnJfx(Runnable runnable) {
+    public void runOnJfx(Runnable runnable) {
         Platform.runLater(runnable);
+    }
+    
+    /**
+     * 创建游戏,默认帧率60.
+     * @param appClass
+     * @param width
+     * @param height
+     * @return 
+     */
+    public static JfxSwing create(String appClass, int width, int height) {
+        return JfxSwingUtils.create(appClass, width, height);
+    }
+    
+    /**
+     * 使用指定的settings及指定的jfxRoot根节点来创建游戏。
+     * @param appClass
+     * @param settings
+     * @param jfxRoot
+     * @return 
+     */
+    public static JfxSwing create(String appClass, AppSettings settings, Pane jfxRoot) {
+        return JfxSwingUtils.create(appClass, settings, jfxRoot);
     }
 }

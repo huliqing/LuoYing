@@ -7,6 +7,7 @@ package name.huliqing.fxswing;
 
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
@@ -132,6 +133,11 @@ public final class JfxBindingController implements WindowListener, WindowStateLi
     private void updateSize(JWindow win, Container parent) {
         Insets insets =parent.getInsets();
         win.setSize(parent.getSize().width - insets.left - insets.right, parent.getSize().height - insets.top - insets.bottom);
+        
+//        Dimension wSize = win.getSize();
+//        Dimension pSize = parent.getSize();
+//        wSize.setSize(pSize.getWidth() - insets.left - insets.right, pSize.getHeight() - insets.top - insets.bottom);
+//        win.setSize(wSize);
 //        System.out.println("winSize=" + win.getSize() + ", parent.size=" + parent.getSize());
     }
     

@@ -5,70 +5,56 @@
  */
 package name.huliqing.editor;
 
-import com.jme3.system.AppSettings;
-import com.jme3x.jfx.JmeFxContainer;
-import javafx.application.Application;
 import javafx.beans.binding.DoubleBinding;
 import javafx.collections.ObservableList;
 import javafx.geometry.Orientation;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextArea;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.Background;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.stage.Stage;
-import name.huliqing.editor.App.AppListener;
 import name.huliqing.editor.ui.MenuView;
+import name.huliqing.fxswing.JfxSwing;
+import name.huliqing.fxswing.JmeAppTest;
 
 /**
  *
  * @author huliqing
  */
-public class Editor extends Application implements AppListener {
+public class Editor {
     
-    private JmeFxContainer jfxContainer;
     private Scene scene;
-
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        AppSettings settings = new AppSettings(true);
-        settings.setResolution(1024, 768);
-        settings.setResizable(true);
-        settings.setFrameRate(60);
-        
-        App app = new App(this);
-        app.setSettings(settings);
-        app.setPauseOnLostFocus(false);
-        app.setShowSettings(false);
-        app.start();
-    }
     
     public static void main(String[] args) {
-        launch(args);
-    }
-
-    @Override
-    public void onInitialized(App app) {
-        app.getGuiNode().detachAllChildren();
-        jfxContainer = JmeFxContainer.install(app, app.getGuiNode(), false, null);
-        createScene(app);
+        new Editor().start();
     }
     
-    private Scene createScene(App app) {
+    private void start() {
+        JfxSwing js = JfxSwing.create(JmeAppTest.class.getName(), 640, 480);
+        js.getMainFrame().setLocationRelativeTo(null);
+        js.getMainFrame().setVisible(true);
+        js.runOnJfx(() -> {
+            js.getJfxRoot().getChildren().add(createScene(js));
+        });
+    }
+
+    private Node createScene(JfxSwing jfxSwing) {
         VBox root = new VBox();
         root.setBackground(Background.EMPTY);
-        scene = new Scene(root, 1024, 768, Color.TRANSPARENT);
+        root.setEffect(new DropShadow());
         
         ObservableList<Node>  rootNode = root.getChildren();
         MenuView menuView = new MenuView();
-        menuView.setOnQuick(e -> {app.stop();});
+        menuView.setOnQuick((e) -> {
+            jfxSwing.getMainFrame().dispose();
+        });
         rootNode.add(menuView);
         
-        DoubleBinding db = scene.heightProperty().subtract(menuView.heightProperty()).subtract(-0.1);
+        DoubleBinding db = jfxSwing.getJfxRoot().heightProperty().subtract(menuView.heightProperty().subtract(3f));
         SplitPane sp = new SplitPane();
         sp.setBackground(Background.EMPTY);
         sp.minHeightProperty().bind(db);
@@ -92,7 +78,6 @@ public class Editor extends Application implements AppListener {
         consolePane.setPrefRowCount(10);
         rightPane.getItems().addAll(editPane, consolePane);
         
-        jfxContainer.setScene(scene);
-        return scene;
+        return root;
     }
 }
