@@ -7,6 +7,8 @@ package name.huliqing.fxswing;
 
 import com.jme3.app.Application;
 import com.jme3.system.AppSettings;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
 import javafx.application.Platform;
 import javafx.scene.layout.Pane;
 import javax.swing.JFrame;
@@ -98,7 +100,10 @@ public class JfxSwing {
     }
     
     /**
-     * Run task on swing thread.
+     * Run task on swing thread.this method just call:
+     * <pre>
+     * <code>SwingUtilities.invokeLater(runnable);</code>
+     * </pre>
      * @param runnable 
      */
     public void runOnSwing(Runnable runnable) {
@@ -106,11 +111,38 @@ public class JfxSwing {
     }
     
     /**
-     * Run task on jfx thread.
+     * Run task on jfx thread. this method just call:
+     * <pre>
+     * <code>Platform.runLater(runnable);</code>
+     * </pre>
      * @param runnable 
      */
     public void runOnJfx(Runnable runnable) {
         Platform.runLater(runnable);
+    }
+    
+    /**
+     * Run task on jme thread, this method just call:
+     * <pre>
+     * <code>jmeApp.enqueue(runnable);</code>
+     * </pre>
+     * @param runnable 
+     */
+    public void runOnJme(Runnable runnable) {
+        jmeApp.enqueue(runnable);
+    }
+    
+    /**
+     * Run task on jme thread, this method just call:
+     * <pre>
+     * <code>jmeApp.enqueue(callable);</code>
+     * </pre>
+     * @param <V>
+     * @param callable 
+     * @return  
+     */
+    public <V> Future<V> runOnJme(Callable<V> callable) {
+        return jmeApp.enqueue(callable);
     }
     
     /**

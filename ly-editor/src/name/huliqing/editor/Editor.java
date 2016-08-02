@@ -34,7 +34,7 @@ public class Editor {
     }
     
     private void start() {
-        JfxSwing js = JfxSwing.create(JmeAppTest.class.getName(), 640, 480);
+        JfxSwing js = JfxSwing.create(App.class.getName(), 1280, 720);
         js.getMainFrame().setLocationRelativeTo(null);
         js.getMainFrame().setVisible(true);
         js.runOnJfx(() -> {
@@ -42,40 +42,44 @@ public class Editor {
         });
     }
 
-    private Node createScene(JfxSwing jfxSwing) {
+    private Node createScene(JfxSwing js) {
         VBox root = new VBox();
         root.setBackground(Background.EMPTY);
-        root.setEffect(new DropShadow());
         
+        // menu
         ObservableList<Node>  rootNode = root.getChildren();
         MenuView menuView = new MenuView();
         menuView.setOnQuick((e) -> {
-            jfxSwing.getMainFrame().dispose();
+            js.getMainFrame().dispose();
         });
-        rootNode.add(menuView);
         
-        DoubleBinding db = jfxSwing.getJfxRoot().heightProperty().subtract(menuView.heightProperty().subtract(3f));
+        DoubleBinding db = js.getJfxRoot().heightProperty().subtract(menuView.heightProperty());
         SplitPane sp = new SplitPane();
         sp.setBackground(Background.EMPTY);
         sp.minHeightProperty().bind(db);
         sp.maxHeightProperty().bind(db);
-//        sp.setDividerPositions(0, 0.3);
-        rootNode.add(sp);
+        // 必须延迟一帧进行设置dividerPosition,否则无效
+//        sp.setDividerPosition(0, 0.3);
+        js.runOnJfx(() -> {sp.setDividerPositions(0.25);});
 
-        VBox left = new VBox();
-        left.setStyle("-fx-background-color:#c0c0c0;");
-        left.getChildren().add(new Label("this is Left"));
+        VBox propertyPanel = new VBox();
+        propertyPanel.setStyle("-fx-background-color:#c0c0c0;");
+        propertyPanel.getChildren().add(new Label("this is Left"));
         
         SplitPane rightPane = new SplitPane();
         rightPane.setBackground(Background.EMPTY);
         rightPane.setOrientation(Orientation.VERTICAL);
-        sp.getItems().addAll(left, rightPane);
+        js.runOnJfx(() -> {rightPane.setDividerPositions(0.8, 0.2);});
         
         VBox editPane = new VBox();
         editPane.setBackground(Background.EMPTY);
         
         TextArea consolePane = new TextArea();
         consolePane.setPrefRowCount(10);
+        
+        rootNode.add(menuView);
+        rootNode.add(sp);
+        sp.getItems().addAll(propertyPanel, rightPane);
         rightPane.getItems().addAll(editPane, consolePane);
         
         return root;

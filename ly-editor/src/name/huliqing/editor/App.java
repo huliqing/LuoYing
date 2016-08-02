@@ -18,25 +18,13 @@ import com.jme3.scene.Spatial;
  */
 public class App extends SimpleApplication{
     
-    public interface AppListener {
-        void onInitialized(App app);
-    }
-    
-    private AppListener listener;
-    
     public App() {}
-    public App(AppListener listener) {
-        this.listener = listener;
-    }
 
     @Override
     public void simpleInitApp() {
         
         doTest();
-        
-        if (listener != null) {
-            listener.onInitialized(this);
-        }
+
     }
     
     private void doTest() {
