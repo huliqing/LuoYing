@@ -8,9 +8,9 @@ import com.jme3.math.Vector3f;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.enums.SkillType;
-import name.huliqing.core.game.service.SkillService;
+import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.game.network.SkillNetwork;
+import name.huliqing.core.mvc.network.SkillNetwork;
 
 /**
  * 实现障碍功能

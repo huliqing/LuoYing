@@ -20,7 +20,7 @@ import name.huliqing.core.data.EnvData;
 import name.huliqing.core.data.SceneData;
 import name.huliqing.core.object.DataProcessor;
 import name.huliqing.core.object.env.Env;
-import name.huliqing.core.game.service.EnvService;
+import name.huliqing.core.mvc.service.EnvService;
 
 /**
  * @author huliqing

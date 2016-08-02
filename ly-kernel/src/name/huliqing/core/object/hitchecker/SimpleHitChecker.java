@@ -6,7 +6,7 @@ package name.huliqing.core.object.hitchecker;
 
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.HitCheckerData;
-import name.huliqing.core.game.service.ActorService;
+import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.object.actor.Actor;
 
 /**

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.logging.Logger;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.StateData;
-import name.huliqing.core.game.service.StateService;
+import name.huliqing.core.mvc.service.StateService;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actor.StateListener;
 

@@ -22,8 +22,8 @@ import name.huliqing.core.constants.SkinConstants;
 import name.huliqing.core.data.ProtoData;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.data.SkinData;
-import name.huliqing.core.game.service.ActorService;
-import name.huliqing.core.game.service.SkinService;
+import name.huliqing.core.mvc.service.ActorService;
+import name.huliqing.core.mvc.service.SkinService;
 import name.huliqing.core.loader.Loader;
 
 /**

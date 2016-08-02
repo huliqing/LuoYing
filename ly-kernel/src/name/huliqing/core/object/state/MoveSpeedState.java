@@ -8,10 +8,10 @@ import com.jme3.app.Application;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.StateData;
 import name.huliqing.core.enums.SkillType;
-import name.huliqing.core.game.service.AttributeService;
-import name.huliqing.core.game.service.EffectService;
-import name.huliqing.core.game.service.PlayService;
-import name.huliqing.core.game.service.SkillService;
+import name.huliqing.core.mvc.service.AttributeService;
+import name.huliqing.core.mvc.service.EffectService;
+import name.huliqing.core.mvc.service.PlayService;
+import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.object.effect.Effect;
 import name.huliqing.core.object.skill.Skill;
 

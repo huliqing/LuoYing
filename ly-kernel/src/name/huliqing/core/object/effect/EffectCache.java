@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.core.Config;
-import name.huliqing.ly.game.state.GameState.PlayListener;
+import name.huliqing.core.state.GameState.PlayListener;
 import name.huliqing.core.loader.Loader;
 import name.huliqing.core.object.IntervalLogic;
 

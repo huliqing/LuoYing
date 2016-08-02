@@ -11,9 +11,9 @@ import name.huliqing.core.Factory;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.constants.ActorConstants;
 import name.huliqing.core.data.GameLogicData;
-import name.huliqing.core.game.network.PlayNetwork;
-import name.huliqing.core.game.service.ActorService;
-import name.huliqing.core.game.service.PlayService;
+import name.huliqing.core.mvc.network.PlayNetwork;
+import name.huliqing.core.mvc.service.ActorService;
+import name.huliqing.core.mvc.service.PlayService;
 
 /**
  * 场景清洁器,用于清理场景中已经死亡的角色之类的功能

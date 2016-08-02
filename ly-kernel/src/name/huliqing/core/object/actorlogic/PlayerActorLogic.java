@@ -8,8 +8,8 @@ import name.huliqing.core.Factory;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.action.FightAction;
 import name.huliqing.core.data.ActorLogicData;
-import name.huliqing.core.game.service.ActionService;
-import name.huliqing.core.game.service.ActorService;
+import name.huliqing.core.mvc.service.ActionService;
+import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.loader.Loader;
 
 /**

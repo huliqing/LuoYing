@@ -14,7 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.ProtoData;
-import name.huliqing.core.game.service.ConfigService;
+import name.huliqing.core.mvc.service.ConfigService;
 
 /**
  * 资源文件读取类

@@ -9,8 +9,8 @@ import name.huliqing.core.Factory;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.action.FollowAction;
 import name.huliqing.core.data.ActorLogicData;
-import name.huliqing.core.game.service.ActionService;
-import name.huliqing.core.game.service.PlayService;
+import name.huliqing.core.mvc.service.ActionService;
+import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.object.action.Action;
 import name.huliqing.core.utils.MathUtils;
 

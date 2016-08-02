@@ -12,10 +12,9 @@ import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.constants.InterfaceConstants;
 import name.huliqing.core.data.ChatData;
-import name.huliqing.core.game.service.ActorService;
-import name.huliqing.core.game.service.ChatService;
-import name.huliqing.core.game.service.PlayService;
-import name.huliqing.ly.game.view.tiles.SimpleRow;
+import name.huliqing.core.mvc.service.ActorService;
+import name.huliqing.core.mvc.service.ChatService;
+import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.ui.AbstractUI;
@@ -27,6 +26,7 @@ import name.huliqing.core.ui.Text;
 import name.huliqing.core.ui.UI;
 import name.huliqing.core.ui.UI.Listener;
 import name.huliqing.core.ui.UIFactory;
+import name.huliqing.core.view.SimpleRow;
 
 /**
  * Chat群组

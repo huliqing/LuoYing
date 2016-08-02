@@ -10,8 +10,8 @@ import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.data.ProtoData;
 import name.huliqing.core.data.SkinData;
 import name.huliqing.core.enums.DataType;
-import name.huliqing.core.game.service.ItemService;
-import name.huliqing.core.game.service.SkinService;
+import name.huliqing.core.mvc.service.ItemService;
+import name.huliqing.core.mvc.service.SkinService;
 
 /**
  * 处理装备的使用,用于切换装备

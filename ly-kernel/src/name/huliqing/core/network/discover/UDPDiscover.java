@@ -17,7 +17,7 @@ import java.net.SocketException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.core.Factory;
-import name.huliqing.core.game.service.SystemService;
+import name.huliqing.core.mvc.service.SystemService;
 
 /**
  * 用于查找主机，或者通知客户端。这个类可以在客户端运行也可以在服务端运行。

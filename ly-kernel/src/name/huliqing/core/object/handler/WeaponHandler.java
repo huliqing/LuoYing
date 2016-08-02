@@ -14,10 +14,10 @@ import name.huliqing.core.data.HandlerData;
 import name.huliqing.core.data.ProtoData;
 import name.huliqing.core.data.SkinData;
 import name.huliqing.core.enums.DataType;
-import name.huliqing.core.game.dao.ItemDao;
-import name.huliqing.core.game.service.ActionService;
-import name.huliqing.core.game.service.ActorService;
-import name.huliqing.core.game.service.SkinService;
+import name.huliqing.core.mvc.dao.ItemDao;
+import name.huliqing.core.mvc.service.ActionService;
+import name.huliqing.core.mvc.service.ActorService;
+import name.huliqing.core.mvc.service.SkinService;
 import name.huliqing.core.object.action.Action;
 import name.huliqing.core.object.action.FightAction;
 

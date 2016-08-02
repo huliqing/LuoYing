@@ -21,7 +21,7 @@ import name.huliqing.core.LY;
 import name.huliqing.core.Factory;
 import name.huliqing.core.constants.MaterialConstants;
 import name.huliqing.core.data.BulletData;
-import name.huliqing.core.game.service.PlayService;
+import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.shape.SplineSurface;
 import name.huliqing.core.utils.MathUtils;
 

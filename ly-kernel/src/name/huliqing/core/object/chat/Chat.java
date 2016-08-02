@@ -8,7 +8,7 @@ import com.jme3.app.Application;
 import name.huliqing.core.Factory;
 import name.huliqing.core.constants.ResConstants;
 import name.huliqing.core.data.ChatData;
-import name.huliqing.core.game.service.PlayService;
+import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.loader.Loader;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.object.AbstractPlayObject;

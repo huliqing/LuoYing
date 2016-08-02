@@ -15,7 +15,7 @@ import com.jme3.shadow.DirectionalLightShadowFilter;
 import com.jme3.shadow.EdgeFilteringMode;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.EnvData;
-import name.huliqing.core.game.service.ConfigService;
+import name.huliqing.core.mvc.service.ConfigService;
 import name.huliqing.core.object.scene.Scene;
 
 /**

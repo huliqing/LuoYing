@@ -13,8 +13,8 @@ import java.util.Set;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.EnvData;
 import name.huliqing.core.object.scene.Scene;
-import name.huliqing.core.game.service.SystemService;
-import name.huliqing.core.game.service.EnvService;
+import name.huliqing.core.mvc.service.SystemService;
+import name.huliqing.core.mvc.service.EnvService;
 
 /**
  * 依赖于平台的Env环境,根据平台的匹配关系来确定要使用哪一个环境。

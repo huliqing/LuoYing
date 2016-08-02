@@ -7,8 +7,8 @@ package name.huliqing.core.object.actorlogic;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.AttributeData;
 import name.huliqing.core.data.ActorLogicData;
-import name.huliqing.core.game.network.AttributeNetwork;
-import name.huliqing.core.game.service.AttributeService;
+import name.huliqing.core.mvc.network.AttributeNetwork;
+import name.huliqing.core.mvc.service.AttributeService;
 
 /**
  * 改变角色属性的逻辑,一般可用来恢复角色的生命，魔法，能量之类的

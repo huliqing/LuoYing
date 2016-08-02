@@ -6,8 +6,8 @@ package name.huliqing.core.object.talent;
 
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.TalentData;
-import name.huliqing.core.game.service.AttributeService;
-import name.huliqing.core.game.service.ElService;
+import name.huliqing.core.mvc.service.AttributeService;
+import name.huliqing.core.mvc.service.ElService;
 
 /**
  *

@@ -13,9 +13,9 @@ import java.util.logging.Logger;
 import name.huliqing.core.Config;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.GameData;
-import name.huliqing.core.game.service.ConfigService;
+import name.huliqing.core.mvc.service.ConfigService;
 import name.huliqing.core.network.GameServer.ServerListener;
-import name.huliqing.core.game.mess.MessActorTransformDirect;
+import name.huliqing.core.mess.MessActorTransformDirect;
 import name.huliqing.core.object.AbstractPlayObject;
 import name.huliqing.core.object.actor.Actor;
 

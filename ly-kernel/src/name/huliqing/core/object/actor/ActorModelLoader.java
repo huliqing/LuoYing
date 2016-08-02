@@ -32,7 +32,7 @@ import name.huliqing.core.data.ProtoData;
 import name.huliqing.core.data.StateData;
 import name.huliqing.core.data.TalentData;
 import name.huliqing.core.data.TaskData;
-import name.huliqing.core.game.service.ConfigService;
+import name.huliqing.core.mvc.service.ConfigService;
 import name.huliqing.core.loader.AssetLoader;
 import name.huliqing.core.loader.Loader;
 import name.huliqing.core.object.action.ActionProcessor;

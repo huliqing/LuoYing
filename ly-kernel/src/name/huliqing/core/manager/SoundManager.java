@@ -12,7 +12,7 @@ import name.huliqing.core.constants.IdConstants;
 import name.huliqing.core.data.ProtoData;
 import name.huliqing.core.data.SoundData;
 import name.huliqing.core.enums.Mat;
-import name.huliqing.core.game.service.ConfigService;
+import name.huliqing.core.mvc.service.ConfigService;
 import name.huliqing.core.object.DataFactory;
 import name.huliqing.core.object.sound.SoundCollision;
 import name.huliqing.core.object.sound.SoundPlayer;

@@ -8,8 +8,8 @@ import name.huliqing.core.Factory;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.data.HandlerData;
 import name.huliqing.core.data.ProtoData;
-import name.huliqing.core.game.service.AttributeService;
-import name.huliqing.core.game.service.ItemService;
+import name.huliqing.core.mvc.service.AttributeService;
+import name.huliqing.core.mvc.service.ItemService;
 
 /**
  * 补血，补蓝

@@ -9,7 +9,7 @@ import name.huliqing.core.Factory;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.data.StateData;
 import name.huliqing.core.enums.SkillType;
-import name.huliqing.core.game.service.SkillService;
+import name.huliqing.core.mvc.service.SkillService;
 
 /**
  * 让目标角色执行一个技能

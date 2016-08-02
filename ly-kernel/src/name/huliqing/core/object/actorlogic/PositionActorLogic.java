@@ -8,8 +8,8 @@ import com.jme3.math.Vector3f;
 import name.huliqing.core.Factory;
 import name.huliqing.core.object.action.RunAction;
 import name.huliqing.core.data.ActorLogicData;
-import name.huliqing.core.game.service.ActionService;
-import name.huliqing.core.game.service.ActorService;
+import name.huliqing.core.mvc.service.ActionService;
+import name.huliqing.core.mvc.service.ActorService;
 
 /**
  * 必须两个行为：FightAction, RunAction

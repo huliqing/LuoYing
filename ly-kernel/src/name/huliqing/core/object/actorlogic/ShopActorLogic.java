@@ -10,8 +10,8 @@ import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.ActorLogicData;
 import name.huliqing.core.data.ProtoData;
-import name.huliqing.core.game.network.ProtoNetwork;
-import name.huliqing.core.game.service.ProtoService;
+import name.huliqing.core.mvc.network.ProtoNetwork;
+import name.huliqing.core.mvc.service.ProtoService;
 import name.huliqing.core.utils.ConvertUtils;
 
 /**

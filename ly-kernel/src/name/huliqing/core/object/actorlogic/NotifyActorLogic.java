@@ -9,8 +9,8 @@ import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.data.ActorLogicData;
-import name.huliqing.core.game.network.ActorNetwork;
-import name.huliqing.core.game.service.ActorService;
+import name.huliqing.core.mvc.network.ActorNetwork;
+import name.huliqing.core.mvc.service.ActorService;
 
 /**
  * 这是一个通知逻辑，若当角色存在目标敌人时，会通知周围一定范围内的友军单位进

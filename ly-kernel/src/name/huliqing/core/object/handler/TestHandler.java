@@ -9,14 +9,14 @@ import name.huliqing.core.Factory;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.data.HandlerData;
 import name.huliqing.core.data.ProtoData;
-import name.huliqing.core.game.network.PlayNetwork;
-import name.huliqing.core.game.service.ActorService;
-import name.huliqing.core.game.service.EffectService;
-import name.huliqing.core.game.service.MagicService;
-import name.huliqing.core.game.service.PlayService;
-import name.huliqing.core.game.service.SkillService;
-import name.huliqing.core.game.service.StateService;
-import name.huliqing.core.game.service.ViewService;
+import name.huliqing.core.mvc.network.PlayNetwork;
+import name.huliqing.core.mvc.service.ActorService;
+import name.huliqing.core.mvc.service.EffectService;
+import name.huliqing.core.mvc.service.MagicService;
+import name.huliqing.core.mvc.service.PlayService;
+import name.huliqing.core.mvc.service.SkillService;
+import name.huliqing.core.mvc.service.StateService;
+import name.huliqing.core.mvc.service.ViewService;
 
 /**
  *

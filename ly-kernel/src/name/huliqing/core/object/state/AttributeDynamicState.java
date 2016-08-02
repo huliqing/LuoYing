@@ -7,7 +7,7 @@ package name.huliqing.core.object.state;
 import com.jme3.app.Application;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.StateData;
-import name.huliqing.core.game.service.PlayService;
+import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.skill.HitUtils;
 import name.huliqing.core.utils.ConvertUtils;

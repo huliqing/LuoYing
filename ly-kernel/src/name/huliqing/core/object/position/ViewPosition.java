@@ -7,7 +7,7 @@ package name.huliqing.core.object.position;
 import com.jme3.math.Vector3f;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.PositionData;
-import name.huliqing.core.game.service.PlayService;
+import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.ui.UI.Corner;
 
 /**

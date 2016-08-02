@@ -22,9 +22,9 @@ import name.huliqing.core.LY;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.EnvData;
 import name.huliqing.core.data.SoundData;
-import name.huliqing.core.game.service.ConfigService;
-import name.huliqing.core.game.service.ConfigService.ConfigListener;
-import name.huliqing.core.game.service.SoundService;
+import name.huliqing.core.mvc.service.ConfigService;
+import name.huliqing.core.mvc.service.ConfigService.ConfigListener;
+import name.huliqing.core.mvc.service.SoundService;
 import name.huliqing.core.manager.SoundManager;
 import name.huliqing.core.object.scene.Scene;
 

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.SkillData;
-import name.huliqing.core.game.network.PlayNetwork;
+import name.huliqing.core.mvc.network.PlayNetwork;
 import name.huliqing.core.network.Network;
 import name.huliqing.core.object.skill.AbstractSkill;
 

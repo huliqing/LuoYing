@@ -7,9 +7,9 @@ package name.huliqing.core.object.action;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import name.huliqing.core.Factory;
-import name.huliqing.core.game.service.ActorService;
+import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.object.action.Action;
-import name.huliqing.core.game.service.PlayService;
+import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.utils.MathUtils;
 
 /**

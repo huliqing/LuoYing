@@ -13,11 +13,11 @@ import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.data.ProtoData;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.data.SkinData;
-import name.huliqing.core.game.network.SkillNetwork;
-import name.huliqing.core.game.service.ActorService;
-import name.huliqing.core.game.service.PlayService;
-import name.huliqing.core.game.service.SkinService;
-import name.huliqing.core.game.service.StateService;
+import name.huliqing.core.mvc.network.SkillNetwork;
+import name.huliqing.core.mvc.service.ActorService;
+import name.huliqing.core.mvc.service.PlayService;
+import name.huliqing.core.mvc.service.SkinService;
+import name.huliqing.core.mvc.service.StateService;
 import name.huliqing.core.object.skill.HitSkill;
 import name.huliqing.core.object.skill.PointChecker;
 

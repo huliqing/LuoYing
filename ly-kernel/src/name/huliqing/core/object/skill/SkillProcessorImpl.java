@@ -13,7 +13,7 @@ import name.huliqing.core.Factory;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.enums.SkillType;
-import name.huliqing.core.game.service.ActorService;
+import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.loader.Loader;
 import name.huliqing.core.object.actor.SkillListener;
 

@@ -14,7 +14,7 @@ import com.jme3.math.Vector2f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Spatial;
 import com.jme3.system.AppSettings;
-import name.huliqing.ly.game.state.PlayState;
+import name.huliqing.core.state.PlayState;
 
 /**
  *

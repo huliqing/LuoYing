@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.ElData;
-import name.huliqing.core.game.service.AttributeService;
+import name.huliqing.core.mvc.service.AttributeService;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.utils.ConvertUtils;
 

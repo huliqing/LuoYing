@@ -6,7 +6,7 @@ package name.huliqing.core.object.game.impl;
 
 import com.jme3.math.Vector3f;
 import name.huliqing.core.Factory;
-import name.huliqing.core.game.network.ActorNetwork;
+import name.huliqing.core.mvc.network.ActorNetwork;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.game.Game;
 import name.huliqing.core.utils.MathUtils;

@@ -17,9 +17,9 @@ import name.huliqing.core.object.action.IdleAction;
 import name.huliqing.core.data.ActionData;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.enums.SkillType;
-import name.huliqing.core.game.network.SkillNetwork;
-import name.huliqing.core.game.service.ActorService;
-import name.huliqing.core.game.service.SkillService;
+import name.huliqing.core.mvc.network.SkillNetwork;
+import name.huliqing.core.mvc.service.ActorService;
+import name.huliqing.core.mvc.service.SkillService;
 
 /**
  * 简单的IDLE行为，巡逻，会在一个地点来回走动

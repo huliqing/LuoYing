@@ -4,7 +4,7 @@
  */
 package name.huliqing.core.network;
 
-import name.huliqing.core.game.mess.MessSCServerState;
+import name.huliqing.core.mess.MessSCServerState;
 import com.jme3.network.ConnectionListener;
 import com.jme3.network.HostedConnection;
 import com.jme3.network.Message;
@@ -24,8 +24,8 @@ import name.huliqing.core.LY;
 import name.huliqing.core.Config;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.GameData;
-import name.huliqing.core.game.service.ConfigService;
-import name.huliqing.core.game.service.PlayService;
+import name.huliqing.core.mvc.service.ConfigService;
+import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.data.ConnData;
 import name.huliqing.core.network.discover.MessCSFindServer;
 import name.huliqing.core.network.discover.MessCSPing;
@@ -33,10 +33,10 @@ import name.huliqing.core.network.discover.UDPDiscover;
 import name.huliqing.core.network.discover.MessSCStarted;
 import name.huliqing.core.network.discover.MessSCClosed;
 import name.huliqing.core.network.discover.UDPListener;
-import name.huliqing.core.game.mess.MessBase;
+import name.huliqing.core.mess.MessBase;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.game.service.SystemService;
+import name.huliqing.core.mvc.service.SystemService;
 
 /**
  * 服务端程序，注：不要直接通过new GameServer创建服务端，而是通过 {@link Network#createGameServer(name.huliqing.fighter.data.GameData) }
