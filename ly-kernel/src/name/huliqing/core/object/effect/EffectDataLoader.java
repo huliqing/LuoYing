@@ -8,11 +8,11 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import name.huliqing.core.data.AnimData;
 import name.huliqing.core.data.EffectData;
-import name.huliqing.core.data.Proto;
+import name.huliqing.core.xml.Proto;
 import name.huliqing.core.enums.TracePositionType;
 import name.huliqing.core.enums.TraceType;
 import name.huliqing.core.object.DataFactory;
-import name.huliqing.core.object.DataLoader;
+import name.huliqing.core.xml.DataLoader;
 
 /**
  *

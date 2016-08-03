@@ -6,7 +6,7 @@ package name.huliqing.core.object.position;
 
 import com.jme3.math.Vector3f;
 import name.huliqing.core.data.PositionData;
-import name.huliqing.core.object.DataProcessor;
+import name.huliqing.core.xml.DataProcessor;
 
 /**
  *

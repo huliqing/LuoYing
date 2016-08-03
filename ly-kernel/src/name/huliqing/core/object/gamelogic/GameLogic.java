@@ -6,7 +6,7 @@
 package name.huliqing.core.object.gamelogic;
 
 import name.huliqing.core.data.GameLogicData;
-import name.huliqing.core.object.DataProcessor;
+import name.huliqing.core.xml.DataProcessor;
 import name.huliqing.core.object.game.Game;
 
 /**

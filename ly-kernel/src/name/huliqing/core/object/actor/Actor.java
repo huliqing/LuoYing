@@ -10,7 +10,7 @@ import name.huliqing.core.data.ActorData;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import java.util.List;
-import name.huliqing.core.object.DataProcessor;
+import name.huliqing.core.xml.DataProcessor;
 import name.huliqing.core.object.action.ActionProcessor;
 import name.huliqing.core.object.channel.ChannelProcessor;
 import name.huliqing.core.object.chat.Chat;

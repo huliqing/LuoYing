@@ -9,7 +9,7 @@ import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.action.Action;
 import name.huliqing.core.data.ActorLogicData;
 import name.huliqing.core.mvc.service.ActionService;
-import name.huliqing.core.object.DataProcessor;
+import name.huliqing.core.xml.DataProcessor;
 import name.huliqing.core.object.IntervalLogic;
 
 /**

@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import name.huliqing.core.LY;
 import name.huliqing.core.Factory;
+import name.huliqing.core.constants.DataTypeConstants;
 import name.huliqing.core.utils.NpcNameUtils;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actor.ActorControl;
@@ -106,7 +107,7 @@ public class ActorServiceImpl implements ActorService {
         List<ProtoData> items = itemDao.getItems(actor, null);
         boolean hasOutfit = false;
         for (ProtoData item : items) {
-            if (item.getDataType() == DataType.skin) {
+            if (item.getDataType() == DataTypeConstants.SKIN) {
                 SkinData sd = (SkinData) item;
                 if (sd.isUsing()) {
                     hasOutfit = true;
@@ -221,7 +222,7 @@ public class ActorServiceImpl implements ActorService {
     @Override
     public Actor getActor(Spatial spatial) {
         ProtoData pd = spatial.getUserData(ProtoData.USER_DATA);
-        if (pd.getDataType() == DataType.actor) {
+        if (pd.getDataType() == DataTypeConstants.ACTOR) {
             return spatial.getControl(ActorControl.class);
         }
         return null;

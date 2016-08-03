@@ -5,7 +5,7 @@
 package name.huliqing.core.object.task;
 
 import name.huliqing.core.data.TaskData;
-import name.huliqing.core.object.DataProcessor;
+import name.huliqing.core.xml.DataProcessor;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.ui.UI;
 

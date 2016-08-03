@@ -205,7 +205,6 @@ public class SkinData extends PkgItemData {
      * 获取描述说明
      * @return 
      */
-    @Override
     public String getDes() {
         List<AttributeApply> aas = getApplyAttributes();
         if (aas != null) {

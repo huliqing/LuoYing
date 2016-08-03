@@ -7,10 +7,10 @@ package name.huliqing.core.object.skin;
 
 import java.util.ArrayList;
 import name.huliqing.core.data.AttributeApply;
-import name.huliqing.core.data.Proto;
+import name.huliqing.core.xml.Proto;
 import name.huliqing.core.data.SkinData;
 import name.huliqing.core.enums.Sex;
-import name.huliqing.core.object.DataLoader;
+import name.huliqing.core.xml.DataLoader;
 import name.huliqing.core.utils.ConvertUtils;
 
 /**

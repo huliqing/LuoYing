@@ -6,6 +6,7 @@ package name.huliqing.core.enums;
 
 /**
  * 定义游戏中所有物品类型
+ * @deprecated 不再使用enum类型
  * @author huliqing
  */
 public enum DataType {
@@ -14,10 +15,6 @@ public enum DataType {
     
     /** 人物角色 */
     actor(11),
-    
-    // remove20151205,后续合并到Skin中
-//    /** 武器类型 */
-//    weapon(12),
     
     /** 
      * 动画动作
@@ -32,18 +29,6 @@ public enum DataType {
     
     /** 音效 */
     sound(16),
-    
-    // remove20160711
-//    /** 地面 */
-//    terrain(17),
-    
-    // remove20160711
-//    /** 天空 */
-//    sky(18),
-  
-    // remove20160101
-//    /** AI配置 */
-//    ai(19),
     
     /** 特效 */
     effect(20),

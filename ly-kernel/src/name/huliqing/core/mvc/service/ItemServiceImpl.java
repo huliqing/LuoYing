@@ -6,11 +6,11 @@ package name.huliqing.core.mvc.service;
 
 import java.util.List;
 import name.huliqing.core.Factory;
+import name.huliqing.core.constants.DataTypeConstants;
 import name.huliqing.core.constants.IdConstants;
 import name.huliqing.core.constants.ResConstants;
 import name.huliqing.core.data.ProtoData;
 import name.huliqing.core.data.SkinData;
-import name.huliqing.core.enums.DataType;
 import name.huliqing.core.enums.MessageType;
 import name.huliqing.core.mvc.dao.ItemDao;
 import name.huliqing.core.manager.ResourceManager;
@@ -88,7 +88,7 @@ public class ItemServiceImpl implements ItemService {
         if (data.getId().equals(IdConstants.ITEM_GOLD))
             return false;
         
-        if (data.getDataType() == DataType.skin) {
+        if (data.getDataType() == DataTypeConstants.SKIN) {
             return (!((SkinData) data).isUsing());
         }
         

@@ -317,7 +317,8 @@ public class ShopChat<T extends ChatData> extends Chat<T> implements ItemListene
             this.data = dd;
             icon.setIcon(data.getIcon());
             body.setNameText(ResourceManager.getObjectName(data));
-            body.setDesText(data.getDes());
+            body.setDesText(ResourceManager.getObjectDes(data.getId()));
+            
             cost.setText(data.getCost() + "");
             num.setText(data.getTotal() + "");
             setNeedUpdate();

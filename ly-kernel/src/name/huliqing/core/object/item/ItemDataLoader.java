@@ -6,9 +6,9 @@
 package name.huliqing.core.object.item;
 
 import name.huliqing.core.data.ItemData;
-import name.huliqing.core.data.Proto;
+import name.huliqing.core.xml.Proto;
 import name.huliqing.core.enums.Sex;
-import name.huliqing.core.object.DataLoader;
+import name.huliqing.core.xml.DataLoader;
 
 /**
  *

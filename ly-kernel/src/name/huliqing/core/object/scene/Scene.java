@@ -18,7 +18,7 @@ import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.EnvData;
 import name.huliqing.core.data.SceneData;
-import name.huliqing.core.object.DataProcessor;
+import name.huliqing.core.xml.DataProcessor;
 import name.huliqing.core.object.env.Env;
 import name.huliqing.core.mvc.service.EnvService;
 

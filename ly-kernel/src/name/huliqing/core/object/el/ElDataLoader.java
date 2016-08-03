@@ -6,8 +6,8 @@
 package name.huliqing.core.object.el;
 
 import name.huliqing.core.data.ElData;
-import name.huliqing.core.data.Proto;
-import name.huliqing.core.object.DataLoader;
+import name.huliqing.core.xml.Proto;
+import name.huliqing.core.xml.DataLoader;
 
 /**
  *

@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.LY;
 import name.huliqing.core.Factory;
+import name.huliqing.core.constants.DataTypeConstants;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.data.ProtoData;
 import name.huliqing.core.data.SkillData;
@@ -241,20 +242,22 @@ public class ShortcutManager {
             if (data == null) {
                 data = DataFactory.createData(itemId);
             }
+            
             // 防止物品被删除
             if (data == null) {
                 continue;
             }
+            
             // 包裹中只允许存放限定的物品
-            DataType type = data.getDataType();
-            if (type != DataType.item && type != DataType.skin && type != DataType.skill) {
+            int type = data.getDataType();
+            if (type != DataTypeConstants.ITEM && type != DataTypeConstants.SKIN && type != DataTypeConstants.SKILL) {
                 continue;
             }
             
             // 由于skill的创建过程比较特殊，SkillData只有在创建了AnimSkill之后
             // 才能获得skillType,所以不能直接使用createProtoData方式获得的SkillData
             // 这会找不到SkillData中的skillType,所以需要从角色身上重新找回SkillData
-            if (data.getDataType() == DataType.skill) {
+            if (data.getDataType() == DataTypeConstants.SKILL) {
                 data = player.getData().getSkillStore().getSkillById(data.getId());
             }
             

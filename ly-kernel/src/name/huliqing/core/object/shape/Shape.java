@@ -7,7 +7,7 @@ package name.huliqing.core.object.shape;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import name.huliqing.core.data.ShapeData;
-import name.huliqing.core.object.DataProcessor;
+import name.huliqing.core.xml.DataProcessor;
 
 /**
  *

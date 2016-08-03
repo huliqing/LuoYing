@@ -6,8 +6,8 @@
 package name.huliqing.core.object.attribute;
 
 import name.huliqing.core.data.AttributeData;
-import name.huliqing.core.data.Proto;
-import name.huliqing.core.object.DataLoader;
+import name.huliqing.core.xml.Proto;
+import name.huliqing.core.xml.DataLoader;
 
 /**
  *

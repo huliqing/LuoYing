@@ -6,8 +6,8 @@
 package name.huliqing.core.object.actoranim;
 
 import name.huliqing.core.data.ActorAnimData;
-import name.huliqing.core.data.Proto;
-import name.huliqing.core.object.DataLoader;
+import name.huliqing.core.xml.Proto;
+import name.huliqing.core.xml.DataLoader;
 
 /**
  *

@@ -7,6 +7,7 @@ package name.huliqing.core.view.transfer;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.Factory;
+import name.huliqing.core.constants.DataTypeConstants;
 import name.huliqing.core.constants.InterfaceConstants;
 import name.huliqing.core.data.ProtoData;
 import name.huliqing.core.data.SkinData;
@@ -70,9 +71,9 @@ public class TabTransferPanel extends TransferPanel implements RowClickListener 
         
         // 载入角色的数据，注意：不要直接使用获取到的data，因为这会影响原始数据
         for (ProtoData data : datas) {
-            if (data.getDataType() == DataType.item) {
+            if (data.getDataType() == DataTypeConstants.ITEM) {
                 itemDatas.add(data);
-            } else if (data.getDataType() == DataType.skin) {
+            } else if (data.getDataType() == DataTypeConstants.SKIN) {
                 if (skinService.isWeapon((SkinData) data)) {
                     weaponDatas.add(data);
                 } else {
@@ -101,9 +102,9 @@ public class TabTransferPanel extends TransferPanel implements RowClickListener 
         
         // temp=null说明是新增加的数据，则需要把它分类到指定列表中。
         if (temp == null) {
-            if (data.getDataType() == DataType.item) {
+            if (data.getDataType() == DataTypeConstants.ITEM) {
                 itemDatas.add(data);
-            } else if (data.getDataType() == DataType.skin) {
+            } else if (data.getDataType() == DataTypeConstants.SKIN) {
                 if (skinService.isWeapon((SkinData) data)) {
                     weaponDatas.add(data);
                 } else {

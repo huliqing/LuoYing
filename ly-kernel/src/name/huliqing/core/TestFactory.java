@@ -4,7 +4,7 @@
  */
 package name.huliqing.core;
 
-import name.huliqing.core.data.Proto;
+import name.huliqing.core.xml.Proto;
 import name.huliqing.core.loader.ObjectLoader;
 
 /**

@@ -8,12 +8,12 @@ package name.huliqing.core.object.skill;
 import com.jme3.animation.LoopMode;
 import java.util.ArrayList;
 import name.huliqing.core.GameException;
+import name.huliqing.core.constants.DataTypeConstants;
 import name.huliqing.core.data.AttributeUse;
-import name.huliqing.core.data.Proto;
+import name.huliqing.core.xml.Proto;
 import name.huliqing.core.data.SkillData;
-import name.huliqing.core.enums.DataType;
 import name.huliqing.core.enums.SkillType;
-import name.huliqing.core.object.DataLoader;
+import name.huliqing.core.xml.DataLoader;
 import name.huliqing.core.utils.ConvertUtils;
 
 /**
@@ -24,7 +24,7 @@ public class SkillDataLoader implements DataLoader<SkillData> {
 
     @Override
     public void load(Proto proto, SkillData data) {
-        if (proto.getDataType() != DataType.skill) {
+        if (proto.getDataType() != DataTypeConstants.SKILL) {
             throw new GameException("Not a skill data. proto=" + proto);
         }
         

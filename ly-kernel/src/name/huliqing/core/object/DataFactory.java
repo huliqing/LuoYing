@@ -4,13 +4,15 @@
  */
 package name.huliqing.core.object;
 
+import name.huliqing.core.xml.DataProcessor;
+import name.huliqing.core.xml.DataLoader;
 import com.jme3.network.serializing.Serializer;
-import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.core.Config;
+import name.huliqing.core.constants.DataTypeConstants;
 import name.huliqing.core.data.ActionData;
 import name.huliqing.core.data.ActorAnimData;
 import name.huliqing.core.data.ActorData;
@@ -22,7 +24,7 @@ import name.huliqing.core.data.BulletData;
 import name.huliqing.core.data.ChannelData;
 import name.huliqing.core.data.ChatData;
 import name.huliqing.core.data.ConfigData;
-import name.huliqing.core.data.DataAttribute;
+import name.huliqing.core.xml.DataAttribute;
 import name.huliqing.core.data.DropData;
 import name.huliqing.core.data.DropItem;
 import name.huliqing.core.data.EffectData;
@@ -38,7 +40,7 @@ import name.huliqing.core.data.ActorLogicData;
 import name.huliqing.core.data.MagicData;
 import name.huliqing.core.data.PkgItemData;
 import name.huliqing.core.data.PositionData;
-import name.huliqing.core.data.Proto;
+import name.huliqing.core.xml.Proto;
 import name.huliqing.core.data.ProtoData;
 import name.huliqing.core.data.ResistData;
 import name.huliqing.core.data.SceneData;
@@ -51,7 +53,6 @@ import name.huliqing.core.data.StateData;
 import name.huliqing.core.data.TalentData;
 import name.huliqing.core.data.TaskData;
 import name.huliqing.core.data.ViewData;
-import name.huliqing.core.enums.DataType;
 import name.huliqing.core.object.action.ActionDataLoader;
 import name.huliqing.core.object.action.FightDynamicAction;
 import name.huliqing.core.object.action.FollowPathAction;
@@ -127,7 +128,6 @@ import name.huliqing.core.object.env.TerrainEnv;
 import name.huliqing.core.object.env.TreeEnv;
 import name.huliqing.core.object.env.WaterAdvanceEnv;
 import name.huliqing.core.object.env.WaterSimpleEnv;
-import name.huliqing.core.object.game.Game;
 import name.huliqing.core.object.game.GameDataLoader;
 import name.huliqing.core.object.game.impl.StoryGbGame;
 import name.huliqing.core.object.game.impl.StoryGuardGame;
@@ -230,13 +230,15 @@ public class DataFactory {
     private static final Logger LOG = Logger.getLogger(DataFactory.class.getName());
     
     // DataType -> ProtoData，默认的数据容器，如果没有自定义的数据容器，则使用DEFAULT_DATA中匹配的数据类型作为数据容器
-    private final static Map<DataType, Class<? extends ProtoData>> DEFAULT_DATAS = new EnumMap<DataType, Class<? extends ProtoData>>(DataType.class);
+    private final static Map<Integer, Class<? extends ProtoData>> DEFAULT_DATAS = new HashMap<Integer, Class<? extends ProtoData>>();
+    
     // DataType -> DataLoader,默认的用于载入数据的“载入器”，当找不到匹配的数据载入器时将根据proto的dataType来确
     // 定要使用哪一个数据载入器
-    private final static Map<DataType, Class<? extends DataLoader>> DEFAULT_LOADERS = new EnumMap<DataType, Class<? extends DataLoader>>(DataType.class);
+    private final static Map<Integer, Class<? extends DataLoader>> DEFAULT_LOADERS = new HashMap<Integer, Class<? extends DataLoader>>();
+    
     // DataType -> DataProcessor,默认的用于处理数据的“处理器”当找不到匹配的数据处理器时将根据proto的dataType来确
     // 定要使用哪一个数据处理器
-    private final static Map<DataType, Class<? extends DataProcessor>> DEFAULT_PROCESSORS = new EnumMap<DataType, Class<? extends DataProcessor>>(DataType.class);
+    private final static Map<Integer, Class<? extends DataProcessor>> DEFAULT_PROCESSORS = new HashMap<Integer, Class<? extends DataProcessor>>();
     
     // TagName -> ProtoData,用于注册自定义的数据容器
     private final static Map<String, Class<? extends ProtoData>> TAG_DATAS = new HashMap<String, Class<? extends ProtoData>>();
@@ -330,8 +332,14 @@ public class DataFactory {
             protoData.setId(id);
             dl.load(proto, protoData);
             return (T) protoData;
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (NullPointerException ex) {
+            LOG.log(Level.SEVERE, ex.getMessage());
+        } catch (ClassNotFoundException ex) {
+            LOG.log(Level.SEVERE, ex.getMessage());
+        } catch (InstantiationException ex) {
+            LOG.log(Level.SEVERE, ex.getMessage());
+        } catch (IllegalAccessException ex) {
+            LOG.log(Level.SEVERE, ex.getMessage());
         }
         return null;
     }
@@ -417,77 +425,77 @@ public class DataFactory {
         
         // ---- Register Default data
         // 默认的数据容器所有新增的DataType都要注册
-        DEFAULT_DATAS.put(DataType.action, ActionData.class);
-        DEFAULT_DATAS.put(DataType.actor, ActorData.class);
-        DEFAULT_DATAS.put(DataType.actorAnim, ActorAnimData.class);
-        DEFAULT_DATAS.put(DataType.anim, AnimData.class);
-        DEFAULT_DATAS.put(DataType.attribute, AttributeData.class);
-        DEFAULT_DATAS.put(DataType.bullet, BulletData.class);
-        DEFAULT_DATAS.put(DataType.channel, ChannelData.class);
-        DEFAULT_DATAS.put(DataType.chat, ChatData.class);
-        DEFAULT_DATAS.put(DataType.config, ConfigData.class);
-        DEFAULT_DATAS.put(DataType.drop, DropData.class);
-        DEFAULT_DATAS.put(DataType.effect, EffectData.class);
-        DEFAULT_DATAS.put(DataType.el, ElData.class);
-        DEFAULT_DATAS.put(DataType.emitter, EmitterData.class);
-        DEFAULT_DATAS.put(DataType.env, EnvData.class);
-        DEFAULT_DATAS.put(DataType.game, GameData.class);
-        DEFAULT_DATAS.put(DataType.gameLogic, GameLogicData.class);
-        DEFAULT_DATAS.put(DataType.handler, HandlerData.class);
-        DEFAULT_DATAS.put(DataType.hitChecker, HitCheckerData.class);
-        DEFAULT_DATAS.put(DataType.item, ItemData.class);
-        DEFAULT_DATAS.put(DataType.actorLogic, ActorLogicData.class);
-        DEFAULT_DATAS.put(DataType.magic, MagicData.class);
-        DEFAULT_DATAS.put(DataType.position, PositionData.class);
-        DEFAULT_DATAS.put(DataType.resist, ResistData.class);
-        DEFAULT_DATAS.put(DataType.scene, SceneData.class);
-        DEFAULT_DATAS.put(DataType.shape, ShapeData.class);
-        DEFAULT_DATAS.put(DataType.skill, SkillData.class);
-        DEFAULT_DATAS.put(DataType.skin, SkinData.class);
-        DEFAULT_DATAS.put(DataType.slot, SlotData.class);
-        DEFAULT_DATAS.put(DataType.sound, SoundData.class);
-        DEFAULT_DATAS.put(DataType.state, StateData.class);
-        DEFAULT_DATAS.put(DataType.talent, TalentData.class);
-        DEFAULT_DATAS.put(DataType.task, TaskData.class);
-        DEFAULT_DATAS.put(DataType.view, ViewData.class);
+        DEFAULT_DATAS.put(DataTypeConstants.ACTION, ActionData.class);
+        DEFAULT_DATAS.put(DataTypeConstants.ACTOR, ActorData.class);
+        DEFAULT_DATAS.put(DataTypeConstants.ACTOR_ANIM, ActorAnimData.class);
+        DEFAULT_DATAS.put(DataTypeConstants.ANIM, AnimData.class);
+        DEFAULT_DATAS.put(DataTypeConstants.ATTRIBUTE, AttributeData.class);
+        DEFAULT_DATAS.put(DataTypeConstants.BULLET, BulletData.class);
+        DEFAULT_DATAS.put(DataTypeConstants.CHANNEL, ChannelData.class);
+        DEFAULT_DATAS.put(DataTypeConstants.CHAT, ChatData.class);
+        DEFAULT_DATAS.put(DataTypeConstants.CONFIG, ConfigData.class);
+        DEFAULT_DATAS.put(DataTypeConstants.DROP, DropData.class);
+        DEFAULT_DATAS.put(DataTypeConstants.EFFECT, EffectData.class);
+        DEFAULT_DATAS.put(DataTypeConstants.EL, ElData.class);
+        DEFAULT_DATAS.put(DataTypeConstants.EMITTER, EmitterData.class);
+        DEFAULT_DATAS.put(DataTypeConstants.ENV, EnvData.class);
+        DEFAULT_DATAS.put(DataTypeConstants.GAME, GameData.class);
+        DEFAULT_DATAS.put(DataTypeConstants.GAME_LOGIC, GameLogicData.class);
+        DEFAULT_DATAS.put(DataTypeConstants.HANDLER, HandlerData.class);
+        DEFAULT_DATAS.put(DataTypeConstants.HIT_CHECKER, HitCheckerData.class);
+        DEFAULT_DATAS.put(DataTypeConstants.ITEM, ItemData.class);
+        DEFAULT_DATAS.put(DataTypeConstants.ACTOR_LOGIC, ActorLogicData.class);
+        DEFAULT_DATAS.put(DataTypeConstants.MAGIC, MagicData.class);
+        DEFAULT_DATAS.put(DataTypeConstants.POSITION, PositionData.class);
+        DEFAULT_DATAS.put(DataTypeConstants.RESIST, ResistData.class);
+        DEFAULT_DATAS.put(DataTypeConstants.SCENE, SceneData.class);
+        DEFAULT_DATAS.put(DataTypeConstants.SHAPE, ShapeData.class);
+        DEFAULT_DATAS.put(DataTypeConstants.SKILL, SkillData.class);
+        DEFAULT_DATAS.put(DataTypeConstants.SKIN, SkinData.class);
+        DEFAULT_DATAS.put(DataTypeConstants.SLOT, SlotData.class);
+        DEFAULT_DATAS.put(DataTypeConstants.SOUND, SoundData.class);
+        DEFAULT_DATAS.put(DataTypeConstants.STATE, StateData.class);
+        DEFAULT_DATAS.put(DataTypeConstants.TALENT, TalentData.class);
+        DEFAULT_DATAS.put(DataTypeConstants.TASK, TaskData.class);
+        DEFAULT_DATAS.put(DataTypeConstants.VIEW, ViewData.class);
         
         // 初始化默认的数据载入器,当一个标签找不到合适的载入器时，系统将根据标签的数据类型来选择一个数据载入器
-        DEFAULT_LOADERS.put(DataType.action, ActionDataLoader.class);
-        DEFAULT_LOADERS.put(DataType.actor, ActorDataLoader.class);
-        DEFAULT_LOADERS.put(DataType.actorAnim, ActorAnimDataLoader.class);
-        DEFAULT_LOADERS.put(DataType.actorLogic, ActorLogicDataLoader.class);
-        DEFAULT_LOADERS.put(DataType.anim, AnimDataLoader.class);
-        DEFAULT_LOADERS.put(DataType.attribute, AttributeDataLoader.class);
-        DEFAULT_LOADERS.put(DataType.bullet, BulletDataLoader.class);
-        DEFAULT_LOADERS.put(DataType.channel, ChannelDataLoader.class);
-        DEFAULT_LOADERS.put(DataType.chat, ChatDataLoader.class);
-        DEFAULT_LOADERS.put(DataType.config, ConfigDataLoader.class);
-        DEFAULT_LOADERS.put(DataType.drop, DropDataLoader.class);
-        DEFAULT_LOADERS.put(DataType.effect, EffectDataLoader.class);
-        DEFAULT_LOADERS.put(DataType.el, ElDataLoader.class);
-        DEFAULT_LOADERS.put(DataType.emitter, EmitterDataLoader.class);
-        DEFAULT_LOADERS.put(DataType.env, EnvDataLoader.class);
-        DEFAULT_LOADERS.put(DataType.game, GameDataLoader.class);
-        DEFAULT_LOADERS.put(DataType.gameLogic, GameLogicDataLoader.class);
-        DEFAULT_LOADERS.put(DataType.handler, HandlerDataLoader.class);
-        DEFAULT_LOADERS.put(DataType.hitChecker, HitCheckerDataLoader.class);
-        DEFAULT_LOADERS.put(DataType.item, ItemDataLoader.class);
-        DEFAULT_LOADERS.put(DataType.magic, MagicDataLoader.class);
-        DEFAULT_LOADERS.put(DataType.position, PositionDataLoader.class);
-        DEFAULT_LOADERS.put(DataType.resist, ResistDataLoader.class);
-        DEFAULT_LOADERS.put(DataType.scene, SceneDataLoader.class);
-        DEFAULT_LOADERS.put(DataType.shape, ShapeDataLoader.class);
-        DEFAULT_LOADERS.put(DataType.skill, SkillDataLoader.class);
-        DEFAULT_LOADERS.put(DataType.skin, SkinDataLoader.class);
-        DEFAULT_LOADERS.put(DataType.slot, SlotDataLoader.class);
-        DEFAULT_LOADERS.put(DataType.sound, SoundDataLoader.class);
-        DEFAULT_LOADERS.put(DataType.state, StateDataLoader.class);
-        DEFAULT_LOADERS.put(DataType.talent, TalentDataLoader.class);
-        DEFAULT_LOADERS.put(DataType.task, TaskDataLoader.class);
-        DEFAULT_LOADERS.put(DataType.view, ViewDataLoader.class);
+        DEFAULT_LOADERS.put(DataTypeConstants.ACTION, ActionDataLoader.class);
+        DEFAULT_LOADERS.put(DataTypeConstants.ACTOR, ActorDataLoader.class);
+        DEFAULT_LOADERS.put(DataTypeConstants.ACTOR_ANIM, ActorAnimDataLoader.class);
+        DEFAULT_LOADERS.put(DataTypeConstants.ACTOR_LOGIC, ActorLogicDataLoader.class);
+        DEFAULT_LOADERS.put(DataTypeConstants.ANIM, AnimDataLoader.class);
+        DEFAULT_LOADERS.put(DataTypeConstants.ATTRIBUTE, AttributeDataLoader.class);
+        DEFAULT_LOADERS.put(DataTypeConstants.BULLET, BulletDataLoader.class);
+        DEFAULT_LOADERS.put(DataTypeConstants.CHANNEL, ChannelDataLoader.class);
+        DEFAULT_LOADERS.put(DataTypeConstants.CHAT, ChatDataLoader.class);
+        DEFAULT_LOADERS.put(DataTypeConstants.CONFIG, ConfigDataLoader.class);
+        DEFAULT_LOADERS.put(DataTypeConstants.DROP, DropDataLoader.class);
+        DEFAULT_LOADERS.put(DataTypeConstants.EFFECT, EffectDataLoader.class);
+        DEFAULT_LOADERS.put(DataTypeConstants.EL, ElDataLoader.class);
+        DEFAULT_LOADERS.put(DataTypeConstants.EMITTER, EmitterDataLoader.class);
+        DEFAULT_LOADERS.put(DataTypeConstants.ENV, EnvDataLoader.class);
+        DEFAULT_LOADERS.put(DataTypeConstants.GAME, GameDataLoader.class);
+        DEFAULT_LOADERS.put(DataTypeConstants.GAME_LOGIC, GameLogicDataLoader.class);
+        DEFAULT_LOADERS.put(DataTypeConstants.HANDLER, HandlerDataLoader.class);
+        DEFAULT_LOADERS.put(DataTypeConstants.HIT_CHECKER, HitCheckerDataLoader.class);
+        DEFAULT_LOADERS.put(DataTypeConstants.ITEM, ItemDataLoader.class);
+        DEFAULT_LOADERS.put(DataTypeConstants.MAGIC, MagicDataLoader.class);
+        DEFAULT_LOADERS.put(DataTypeConstants.POSITION, PositionDataLoader.class);
+        DEFAULT_LOADERS.put(DataTypeConstants.RESIST, ResistDataLoader.class);
+        DEFAULT_LOADERS.put(DataTypeConstants.SCENE, SceneDataLoader.class);
+        DEFAULT_LOADERS.put(DataTypeConstants.SHAPE, ShapeDataLoader.class);
+        DEFAULT_LOADERS.put(DataTypeConstants.SKILL, SkillDataLoader.class);
+        DEFAULT_LOADERS.put(DataTypeConstants.SKIN, SkinDataLoader.class);
+        DEFAULT_LOADERS.put(DataTypeConstants.SLOT, SlotDataLoader.class);
+        DEFAULT_LOADERS.put(DataTypeConstants.SOUND, SoundDataLoader.class);
+        DEFAULT_LOADERS.put(DataTypeConstants.STATE, StateDataLoader.class);
+        DEFAULT_LOADERS.put(DataTypeConstants.TALENT, TalentDataLoader.class);
+        DEFAULT_LOADERS.put(DataTypeConstants.TASK, TaskDataLoader.class);
+        DEFAULT_LOADERS.put(DataTypeConstants.VIEW, ViewDataLoader.class);
 
         // 初始化默认的数据处理器
-        DEFAULT_PROCESSORS.put(DataType.scene, Scene.class);
+        DEFAULT_PROCESSORS.put(DataTypeConstants.SCENE, Scene.class);
         
         // ---- Register Tag
         
@@ -684,7 +692,7 @@ public class DataFactory {
      * @param dataType
      * @return 
      */
-    public static Class<? extends ProtoData> findProtoData(String tagName, DataType dataType) {
+    public static Class<? extends ProtoData> findProtoData(String tagName, int dataType) {
         Class<? extends ProtoData> clz = TAG_DATAS.get(tagName);
         if (clz != null) {
             return clz;
@@ -705,7 +713,7 @@ public class DataFactory {
      * @return 
      * @throws NullPointerException
      */
-    public static Class<? extends DataLoader> findDataLoader(String tagName, DataType dataType) {
+    public static Class<? extends DataLoader> findDataLoader(String tagName, int dataType) {
         Class<? extends DataLoader> clz = TAG_LOADERS.get(tagName);
         if (clz != null) {
             return clz;
@@ -726,7 +734,7 @@ public class DataFactory {
      * @return 
      * @throws NullPointerException
      */
-    public static Class<? extends DataProcessor> findDataProcessor(String tagName, DataType dataType) {
+    public static Class<? extends DataProcessor> findDataProcessor(String tagName, int dataType) {
          Class<? extends DataProcessor> clz = TAG_PROCESSORS.get(tagName);
         if (clz != null) {
             return clz;

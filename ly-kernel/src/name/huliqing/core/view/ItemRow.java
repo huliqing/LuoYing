@@ -6,7 +6,10 @@ package name.huliqing.core.view;
 
 import java.util.List;
 import name.huliqing.core.constants.InterfaceConstants;
+import name.huliqing.core.constants.ResConstants;
+import name.huliqing.core.data.AttributeApply;
 import name.huliqing.core.data.ProtoData;
+import name.huliqing.core.data.SkinData;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.ui.ListView;
 import name.huliqing.core.ui.Row;
@@ -77,11 +80,16 @@ public class ItemRow extends Row<ProtoData> {
         data = dd;
         icon.setIcon(data.getIcon());
         body.setNameText(ResourceManager.get(data.getId() + ".name"));
-//        body.setDesText(ResourceManager.get(data.getId() + ".des"));
-        body.setDesText(data.getDes());
+        
+        if (data instanceof SkinData) {
+            body.setDesText(data.getDes());
+        } else {
+            body.setDesText(ResourceManager.getObjectDes(data.getId()));
+        }
+        
         num.setText(data.getTotal() + "");
     }
-
+    
     /**
      * 获取当前行所显示的ProtoData
      * @return 

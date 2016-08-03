@@ -7,7 +7,7 @@ package name.huliqing.core.object.effect;
 import com.jme3.scene.Spatial;
 import name.huliqing.core.data.EffectData;
 import name.huliqing.core.enums.EffectPhase;
-import name.huliqing.core.object.DataProcessor;
+import name.huliqing.core.xml.DataProcessor;
 
 /**
  * 特效接口

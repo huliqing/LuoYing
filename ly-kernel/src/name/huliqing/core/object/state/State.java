@@ -15,7 +15,7 @@ import name.huliqing.core.mvc.service.EffectService;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.StateService;
 import name.huliqing.core.object.AbstractPlayObject;
-import name.huliqing.core.object.DataProcessor;
+import name.huliqing.core.xml.DataProcessor;
 import name.huliqing.core.object.effect.Effect;
 
 /**

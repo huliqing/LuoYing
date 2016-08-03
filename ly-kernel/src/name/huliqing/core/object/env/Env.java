@@ -6,7 +6,7 @@ package name.huliqing.core.object.env;
 
 import com.jme3.app.Application;
 import name.huliqing.core.data.EnvData;
-import name.huliqing.core.object.DataProcessor;
+import name.huliqing.core.xml.DataProcessor;
 import name.huliqing.core.object.scene.Scene;
 
 /**

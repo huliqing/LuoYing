@@ -7,10 +7,10 @@ package name.huliqing.core.object.magic;
 import com.jme3.math.Quaternion;
 import name.huliqing.core.data.HitCheckerData;
 import name.huliqing.core.data.MagicData;
-import name.huliqing.core.data.Proto;
+import name.huliqing.core.xml.Proto;
 import name.huliqing.core.enums.TraceType;
 import name.huliqing.core.object.DataFactory;
-import name.huliqing.core.object.DataLoader;
+import name.huliqing.core.xml.DataLoader;
 
 /**
  *

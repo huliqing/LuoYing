@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.data.DropData;
 import name.huliqing.core.data.DropItem;
-import name.huliqing.core.data.Proto;
-import name.huliqing.core.object.DataLoader;
+import name.huliqing.core.xml.Proto;
+import name.huliqing.core.xml.DataLoader;
 import name.huliqing.core.utils.ConvertUtils;
 
 /**

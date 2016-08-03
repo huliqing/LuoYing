@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.core.Config;
-import name.huliqing.core.data.Proto;
+import name.huliqing.core.xml.Proto;
 import name.huliqing.core.enums.DataType;
 import name.huliqing.core.loader.ObjectLoader;
 
@@ -117,7 +117,7 @@ public class ProtoUtils {
     
     private static void checkLoaderAndProcessor(Proto proto) {
         String tagName = proto.getTagName();
-        DataType dataType = proto.getDataType();
+        int dataType = proto.getDataType();
         if (proto.getDataClass() == null) {
             Class dataClass = DataFactory.findProtoData(tagName, dataType);
             proto.setDataClass(dataClass != null ? dataClass.getName() : null);

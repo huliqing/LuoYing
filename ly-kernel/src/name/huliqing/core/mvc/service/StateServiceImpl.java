@@ -6,14 +6,14 @@ package name.huliqing.core.mvc.service;
 
 import com.jme3.math.FastMath;
 import com.jme3.util.SafeArrayList;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.core.Config;
 import name.huliqing.core.Factory;
-import name.huliqing.core.data.Proto;
+import name.huliqing.core.constants.DataTypeConstants;
+import name.huliqing.core.xml.Proto;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.data.StateData;
 import name.huliqing.core.enums.DataType;
@@ -32,19 +32,19 @@ import name.huliqing.core.object.state.State;
 public class StateServiceImpl implements StateService{
     private static final Logger LOG = Logger.getLogger(StateServiceImpl.class.getName());
 
-    private ItemDao actorDao;
-    private SkinService skinService;
+//    private ItemDao actorDao;
+//    private SkinService skinService;
     private ResistService resistService;
-    private ElService elService;
-    private PlayNetwork playNetwork;
+//    private ElService elService;
+//    private PlayNetwork playNetwork;
     
     @Override
     public void inject() {
-        actorDao = Factory.get(ItemDao.class);
-        skinService = Factory.get(SkinService.class);
-        elService = Factory.get(ElService.class);
+//        actorDao = Factory.get(ItemDao.class);
+//        skinService = Factory.get(SkinService.class);
+//        elService = Factory.get(ElService.class);
         resistService = Factory.get(ResistService.class);
-        playNetwork = Factory.get(PlayNetwork.class);
+//        playNetwork = Factory.get(PlayNetwork.class);
     }
     
     @Override
@@ -170,7 +170,7 @@ public class StateServiceImpl implements StateService{
     @Override
     public boolean existsState(String stateId) {
         Proto proto = ObjectLoader.findObjectDef(stateId);
-        if (proto != null && proto.getDataType() == DataType.state) {
+        if (proto != null && proto.getDataType() == DataTypeConstants.STATE) {
             return true;
         }
         return false;

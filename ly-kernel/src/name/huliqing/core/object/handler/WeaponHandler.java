@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import name.huliqing.core.Config;
 import name.huliqing.core.Factory;
 import name.huliqing.core.GameException;
+import name.huliqing.core.constants.DataTypeConstants;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.data.HandlerData;
 import name.huliqing.core.data.ProtoData;
@@ -42,7 +43,7 @@ public class WeaponHandler extends AbstractHandler {
         if (!super.canUse(actor, data)) {
             return false;
         }
-        if (data.getProto().getDataType() != DataType.skin) {
+        if (data.getDataType() != DataTypeConstants.SKIN) {
             if (Config.debug) {
                 logger.log(Level.WARNING, "Not a Skin object! data={0}", data.getId());
             }
@@ -91,7 +92,7 @@ public class WeaponHandler extends AbstractHandler {
     @Override
     public boolean remove(Actor actor, ProtoData data, int count) throws GameException {
 //        ProtoData data = actorDao.getItemExceptSkill(actor, objectId);
-        if (data.getDataType() != DataType.skin) {
+        if (data.getDataType() != DataTypeConstants.SKIN) {
             return false;
         }
         SkinData weaponData = (SkinData) data;

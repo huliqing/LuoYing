@@ -8,9 +8,9 @@ package name.huliqing.core.mvc.service;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.core.Factory;
-import name.huliqing.core.data.Proto;
+import name.huliqing.core.constants.DataTypeConstants;
+import name.huliqing.core.xml.Proto;
 import name.huliqing.core.data.ProtoData;
-import name.huliqing.core.enums.DataType;
 import name.huliqing.core.object.DataFactory;
 import name.huliqing.core.object.ProtoUtils;
 import name.huliqing.core.object.actor.Actor;
@@ -39,42 +39,6 @@ public class ProtoServiceImpl implements ProtoService {
     public ProtoData createData(String id) {
         ProtoData data = DataFactory.createData(id);
         return data;
-        
-        // remove20160712
-//        switch (dt) {
-//            case action:
-//            case actorAnim:
-//            case actor:
-//            case anim:
-//            case attribute:
-//            case bullet:
-//            case channel:
-//            case chat:
-//            case config:
-//            case drop:
-//            case el:
-//            case emitter:
-//            case position:
-//            case hitChecker:
-//            case logic:
-//            case item:
-//            case resist:
-//            case shape:
-//            case skill:
-//            case skin:
-//            case slot:
-//            case sound:
-//            case talent:
-//            case task:
-//            case view:
-//                data = DataFactory.createData(id);
-//                break;
-//                
-//            default:
-//                data = DataFactory.createData(id);
-//                break;
-//        }
-//        return data;
     }
 
     @Override
@@ -83,15 +47,15 @@ public class ProtoServiceImpl implements ProtoService {
         if (proto == null)
             return null;
         
-        DataType dt = proto.getDataType();
+        int dt = proto.getDataType();
         ProtoData data = null;
         switch (dt) {
-            case item:
-            case skin:
+            case DataTypeConstants.ITEM:
+            case DataTypeConstants.SKIN:
                 data = itemService.getItem(actor, id);
                 break;
                 
-            case skill:
+            case DataTypeConstants.SKILL:
                 data = skillService.getSkill(actor, id);
                 break;
                 
@@ -107,14 +71,14 @@ public class ProtoServiceImpl implements ProtoService {
         if (data == null)
             return;
         
-        DataType dt = data.getDataType();
+        int dt = data.getDataType();
         switch (dt) {
-            case item:
-            case skin:
+            case DataTypeConstants.ITEM:
+            case DataTypeConstants.SKIN:
                 itemService.addItem(actor, data.getId(), count);
                 break;
             
-            case skill:
+            case DataTypeConstants.SKILL:
                 skillService.addSkill(actor, data.getId());
                 break;
                 
@@ -142,10 +106,10 @@ public class ProtoServiceImpl implements ProtoService {
     @Override
     public void syncDataTotal(Actor actor, String objectId, int total) {
         Proto proto = ProtoUtils.getProto(objectId);
-        DataType dt = proto.getDataType();
+        int dt = proto.getDataType();
         switch (dt) {
-            case item:
-            case skin:
+            case DataTypeConstants.ITEM:
+            case DataTypeConstants.SKIN:
                 itemService.syncItemTotal(actor, objectId, total);
                 break;
                 

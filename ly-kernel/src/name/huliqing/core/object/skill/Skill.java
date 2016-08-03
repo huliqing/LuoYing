@@ -8,7 +8,7 @@ import name.huliqing.core.constants.SkillConstants;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.enums.SkillType;
-import name.huliqing.core.object.DataProcessor;
+import name.huliqing.core.xml.DataProcessor;
 import name.huliqing.core.object.channel.ChannelProcessor;
 
 /**

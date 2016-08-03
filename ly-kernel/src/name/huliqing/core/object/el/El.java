@@ -5,7 +5,7 @@
 package name.huliqing.core.object.el;
 
 import name.huliqing.core.data.ElData;
-import name.huliqing.core.object.DataProcessor;
+import name.huliqing.core.xml.DataProcessor;
 
 /**
  *

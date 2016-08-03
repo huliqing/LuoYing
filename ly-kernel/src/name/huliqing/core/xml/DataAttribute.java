@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.core.data;
+package name.huliqing.core.xml;
 
 import com.jme3.export.InputCapsule;
 import com.jme3.export.JmeExporter;
@@ -21,10 +21,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import name.huliqing.core.utils.ConvertUtils;
 
 /**
- *
  * @author huliqing
  */
 @Serializable
@@ -131,10 +129,11 @@ public class DataAttribute implements Savable {
     public final int[] getAsIntegerArray(String key) {
         String[] strArr = getAsArray(key);
         if (strArr != null) {
-            return ConvertUtils.toIntegerArray(strArr);
+            return toIntegerArray(strArr);
         }
         return null;
     }
+
     
     /**
      * 把参数获取为整形集合，如果没有设置该参数则返回null.
@@ -144,7 +143,7 @@ public class DataAttribute implements Savable {
     public final List<Integer> getAsIntegerList(String key) {
         String[] strArr = getAsArray(key);
         if (strArr != null) {
-            return ConvertUtils.toIntegerList(strArr);
+            return toIntegerList(strArr);
         }
         return null;
     }
@@ -214,9 +213,9 @@ public class DataAttribute implements Savable {
     
     /**
      * 获取参数值，并以Vector3f形式返回，原始格式必须如："x"或 "x,y" 或 "x,y,z"，
-     * 如果参数不对，将返回null.<br />
-     * 当只有x值时，则y = z =x; <br />
-     * 当只有x,y值时，z = 1; <br />
+     * 如果参数不对，将返回null.<br>
+     * 当只有x值时，则y = z =x; <br>
+     * 当只有x,y值时，z = 1; <br>
      * @param key
      * @return 
      */
@@ -365,6 +364,40 @@ public class DataAttribute implements Savable {
         return data.isEmpty();
     }
     
+    /**
+     * 将字符串数组转换为整形数组，注：strArr不能为null,并且必须都是数字类型。
+     * 否则会报错。
+     * @param strArr
+     * @return 
+     */
+    private int[] toIntegerArray(String[] strArr) {
+        int[] result = new int[strArr.length];
+        for (int i = 0; i < strArr.length; i++) {
+            result[i] = Integer.parseInt(strArr[i]);
+        }
+        return result;
+    }
+    
+    /**
+     * 将字符串数组转换为List数组，注：strArr不能为null,并且必须都是数字类型。
+     * 否则会报错。
+     * @param strArr
+     * @return 
+     */
+    private List<Integer> toIntegerList(String[] strArr) {
+        List<Integer> list = new ArrayList<Integer>();
+        
+        // remove20160803
+//        for (int i = 0; i < strArr.length; i++) {
+//            list.add(Integer.parseInt(strArr[i]));
+//        }
+
+        for (String strArr1 : strArr) {
+            list.add(Integer.parseInt(strArr1));
+        }
+        return list;
+    }
+    
     @Override
     public void write(JmeExporter ex) throws IOException {
         OutputCapsule oc = ex.getCapsule(this);
@@ -378,4 +411,5 @@ public class DataAttribute implements Savable {
         UserData dataObject = (UserData) ic.readSavable("_dataObject_", new UserData(UserData.getObjectType(data), data));
         data = (Map) dataObject.getValue();
     }
+    
 }

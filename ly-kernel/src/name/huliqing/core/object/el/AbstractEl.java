@@ -99,7 +99,7 @@ public class AbstractEl<T extends ElData> implements El<T> {
             jsShareScope = jsContext.initStandardObjects();
             // 首次初始化时需要把脚本都载入上下文
             Script script;
-            for (String str : ObjectLoader.scripts) {
+            for (String str : ObjectLoader.SCRIPTS) {
                 script = jsContext.compileString(str, "script", 0, null);
                 script.exec(jsContext, jsShareScope);
 //                if (Config.debug) {

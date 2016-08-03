@@ -6,8 +6,8 @@
 package name.huliqing.core.object.position;
 
 import name.huliqing.core.data.PositionData;
-import name.huliqing.core.data.Proto;
-import name.huliqing.core.object.DataLoader;
+import name.huliqing.core.xml.Proto;
+import name.huliqing.core.xml.DataLoader;
 
 /**
  *

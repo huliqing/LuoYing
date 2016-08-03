@@ -350,7 +350,7 @@ public class SummonSkill<T extends SkillData> extends AbstractSkill<T> {
     // help to call
     private class HelpLoader implements Callable<Actor> {
 
-        DataType type;
+        int type;
         String loadId;
         /**
          * 是否正在载入中...

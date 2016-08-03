@@ -5,9 +5,9 @@
  */
 package name.huliqing.core.object.task;
 
-import name.huliqing.core.data.Proto;
+import name.huliqing.core.xml.Proto;
 import name.huliqing.core.data.TaskData;
-import name.huliqing.core.object.DataLoader;
+import name.huliqing.core.xml.DataLoader;
 
 /**
  *

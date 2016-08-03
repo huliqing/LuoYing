@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package name.huliqing.core.utils;
+package name.huliqing.core.xml;
 
 import java.io.File;
 import java.io.IOException;

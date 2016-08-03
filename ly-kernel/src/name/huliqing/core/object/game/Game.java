@@ -13,7 +13,7 @@ import name.huliqing.core.Factory;
 import name.huliqing.core.data.GameData;
 import name.huliqing.core.data.GameLogicData;
 import name.huliqing.core.mvc.service.GameLogicService;
-import name.huliqing.core.object.DataProcessor;
+import name.huliqing.core.xml.DataProcessor;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.gamelogic.GameLogic;
 import name.huliqing.core.object.gamelogic.GameLogicManager;

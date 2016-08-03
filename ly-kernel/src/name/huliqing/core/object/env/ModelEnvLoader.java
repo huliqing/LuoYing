@@ -7,7 +7,7 @@ package name.huliqing.core.object.env;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
-import name.huliqing.core.data.Proto;
+import name.huliqing.core.xml.Proto;
 
 /**
  * 环境物体数据载入器

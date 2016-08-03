@@ -5,7 +5,7 @@
 package name.huliqing.core.object.talent;
 
 import name.huliqing.core.data.TalentData;
-import name.huliqing.core.object.DataProcessor;
+import name.huliqing.core.xml.DataProcessor;
 import name.huliqing.core.object.actor.Actor;
 
 /**

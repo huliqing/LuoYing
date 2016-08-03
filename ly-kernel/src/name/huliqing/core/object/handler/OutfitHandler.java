@@ -6,6 +6,7 @@ package name.huliqing.core.object.handler;
 
 import name.huliqing.core.Factory;
 import name.huliqing.core.GameException;
+import name.huliqing.core.constants.DataTypeConstants;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.data.ProtoData;
 import name.huliqing.core.data.SkinData;
@@ -27,7 +28,7 @@ public class OutfitHandler extends AbstractHandler {
             return false;
         }
         // not a skin
-        if (data.getDataType() != DataType.skin) {
+        if (data.getDataType() != DataTypeConstants.SKIN) {
             return false;
         }
 
@@ -55,7 +56,7 @@ public class OutfitHandler extends AbstractHandler {
 
     @Override
     public boolean remove(Actor actor,  ProtoData data, int count) throws GameException {
-        if (data.getDataType() != DataType.skin) {
+        if (data.getDataType() != DataTypeConstants.SKIN) {
 //            logger.log(Level.WARNING, "OutfitHandler only supported Skin type objects");
             return false;
         }

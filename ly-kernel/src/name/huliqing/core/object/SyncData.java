@@ -5,7 +5,7 @@
 package name.huliqing.core.object;
 
 import com.jme3.network.serializing.Serializable;
-import name.huliqing.core.data.DataAttribute;
+import name.huliqing.core.xml.DataAttribute;
 
 /**
  * 同步数据

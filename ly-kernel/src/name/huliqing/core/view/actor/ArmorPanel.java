@@ -96,7 +96,13 @@ public class ArmorPanel extends ListView<SkinData> implements ActorPanel{
             
             icon.setIcon(sd.getIcon());
             body.setNameText(ResourceManager.getObjectName(sd));
-            body.setDesText(sd.getDes());
+            
+            
+            if (data instanceof SkinData) {
+                body.setDesText(data.getDes());
+            } else {
+                body.setDesText(ResourceManager.getObjectDes(data.getId()));
+            }
             
             num.setText(String.valueOf(sd.getTotal()));
             

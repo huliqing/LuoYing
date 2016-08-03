@@ -6,7 +6,7 @@ package name.huliqing.core.object.resist;
 
 import java.util.List;
 import name.huliqing.core.data.ResistData;
-import name.huliqing.core.object.DataProcessor;
+import name.huliqing.core.xml.DataProcessor;
 
 /**
  * 角色的抗性控制，抗性决定了角色是否会接受各种各样的状态的影响．

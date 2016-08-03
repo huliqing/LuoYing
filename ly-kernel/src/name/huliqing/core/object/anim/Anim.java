@@ -6,7 +6,7 @@ package name.huliqing.core.object.anim;
 
 import java.util.List;
 import name.huliqing.core.data.AnimData;
-import name.huliqing.core.object.DataProcessor;
+import name.huliqing.core.xml.DataProcessor;
 
 /**
  *

@@ -6,7 +6,7 @@ package name.huliqing.core.object.handler;
 
 import name.huliqing.core.data.HandlerData;
 import name.huliqing.core.data.ProtoData;
-import name.huliqing.core.object.DataProcessor;
+import name.huliqing.core.xml.DataProcessor;
 import name.huliqing.core.object.actor.Actor;
 
 /**

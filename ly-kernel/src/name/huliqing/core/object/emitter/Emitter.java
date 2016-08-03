@@ -13,7 +13,7 @@ import com.jme3.renderer.queue.RenderQueue;
 import name.huliqing.core.LY;
 import name.huliqing.core.data.EmitterData;
 import name.huliqing.core.loader.Loader;
-import name.huliqing.core.object.DataProcessor;
+import name.huliqing.core.xml.DataProcessor;
 import name.huliqing.core.object.position.EmitterShapeWrap;
 
 /**

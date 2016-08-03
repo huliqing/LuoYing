@@ -7,7 +7,7 @@ package name.huliqing.core.object.bullet;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import name.huliqing.core.data.BulletData;
-import name.huliqing.core.object.DataProcessor;
+import name.huliqing.core.xml.DataProcessor;
 
 /**
  *

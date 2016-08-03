@@ -2,9 +2,8 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.core.object;
+package name.huliqing.core.xml;
 
-import name.huliqing.core.data.Proto;
 import name.huliqing.core.data.ProtoData;
 
 /**

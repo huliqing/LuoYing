@@ -8,10 +8,10 @@ import com.jme3.math.Vector3f;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.data.EnvData;
-import name.huliqing.core.data.Proto;
+import name.huliqing.core.xml.Proto;
 import name.huliqing.core.data.SceneData;
 import name.huliqing.core.object.DataFactory;
-import name.huliqing.core.object.DataLoader;
+import name.huliqing.core.xml.DataLoader;
 
 /**
  * 用于载入场景数据

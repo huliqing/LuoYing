@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.core.LY;
+import name.huliqing.core.constants.DataTypeConstants;
 import name.huliqing.core.constants.IdConstants;
 import name.huliqing.core.enums.DataType;
 
@@ -70,7 +71,7 @@ public class ItemStore implements Savable {
             store = new ArrayList<ProtoData>();
         }
         for (ProtoData od : items) {
-            if (od.getProto().getDataType() == DataType.skin) {
+            if (od.getDataType() == DataTypeConstants.SKIN) {
                 continue;
             }
             store.add(od);

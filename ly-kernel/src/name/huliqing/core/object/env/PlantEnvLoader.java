@@ -5,7 +5,7 @@
 package name.huliqing.core.object.env;
 
 import com.jme3.math.Vector3f;
-import name.huliqing.core.data.Proto;
+import name.huliqing.core.xml.Proto;
 import name.huliqing.core.utils.MathUtils;
 
 /**

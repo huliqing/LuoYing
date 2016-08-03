@@ -2,12 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.core.data;
+package name.huliqing.core.xml;
 
 import com.jme3.network.serializing.Serializable;
 import java.util.Map;
 import name.huliqing.core.enums.Mat;
-import name.huliqing.core.enums.DataType;
 
 /**
  * 物品的原型数据定义,所有ID相同的物品都引用同一个原形proto.
@@ -18,25 +17,26 @@ public class Proto extends DataAttribute{
     
     private String tagName;
     private String id;
-    private DataType dataType;
+//    private DataType dataType;
+    private int dataType;
     
     /**
      * Only for Serializable
      */
     public Proto() {}
     
-    public Proto(DataType type, Map<String, String> attributes, String tagName) {
+    public Proto(int dataType, Map<String, String> attributes, String tagName) {
         super(attributes);
-        this.dataType = type;
+        this.dataType = dataType;
         this.tagName = tagName;
     }
 
-    public DataType getDataType() {
+    public int getDataType() {
         return dataType;
     }
 
-    public void setDataType(DataType type) {
-        this.dataType = type;
+    public void setDataType(int dataType) {
+        this.dataType = dataType;
     }
     
     /**

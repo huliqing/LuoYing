@@ -10,8 +10,8 @@ import com.jme3.export.JmeImporter;
 import com.jme3.export.OutputCapsule;
 import com.jme3.network.serializing.Serializable;
 import java.io.IOException;
-import name.huliqing.core.enums.DataType;
-import name.huliqing.core.manager.ResourceManager;
+import name.huliqing.core.xml.DataAttribute;
+import name.huliqing.core.xml.Proto;
 import name.huliqing.core.object.ProtoUtils;
 
 /**
@@ -87,7 +87,7 @@ public class ProtoData extends DataAttribute {
         return getProto().getTagName();
     }
         
-    public final DataType getDataType() {
+    public final int getDataType() {
         return getProto().getDataType();
     }
 
@@ -169,7 +169,7 @@ public class ProtoData extends DataAttribute {
      * @return 
      */
     public String getDes() {
-        return ResourceManager.getObjectDes(id);
+        return getProto().getAttribute("des");
     }
     
     /**
