@@ -334,8 +334,9 @@ public class LY {
         Serializer.registerClass(PkgItemData.class);
         
         Serializer.registerClass(ActionData.class);
-        Serializer.registerClass(ActorData.class);
         Serializer.registerClass(ActorAnimData.class);
+        Serializer.registerClass(ActorData.class);
+        Serializer.registerClass(ActorLogicData.class);
         Serializer.registerClass(AnimData.class);
         Serializer.registerClass(AttributeData.class);
         Serializer.registerClass(BulletData.class);
@@ -352,7 +353,6 @@ public class LY {
         Serializer.registerClass(HandlerData.class);
         Serializer.registerClass(HitCheckerData.class);
         Serializer.registerClass(ItemData.class);
-        Serializer.registerClass(ActorLogicData.class);
         Serializer.registerClass(MagicData.class);
         Serializer.registerClass(PositionData.class);
         Serializer.registerClass(ResistData.class);
@@ -366,6 +366,8 @@ public class LY {
         Serializer.registerClass(TalentData.class);
         Serializer.registerClass(TaskData.class);
         Serializer.registerClass(ViewData.class);
+        
+        Serializer.registerClass(ModelEnvData.class);
     }
     
         
