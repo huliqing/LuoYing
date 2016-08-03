@@ -4,7 +4,7 @@
  */
 package name.huliqing.core.view.transfer;
 
-import name.huliqing.core.data.ProtoData;
+import name.huliqing.core.xml.ProtoData;
 
 /**
  * 

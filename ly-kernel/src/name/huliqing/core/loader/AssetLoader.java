@@ -5,10 +5,8 @@
 package name.huliqing.core.loader;
 
 import com.jme3.scene.Spatial;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.core.LY;
-import name.huliqing.core.Config;
 import name.huliqing.core.Factory;
 import name.huliqing.core.mvc.service.ConfigService;
 import name.huliqing.core.utils.GeometryUtils;

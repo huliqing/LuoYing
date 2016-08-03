@@ -7,7 +7,7 @@ package name.huliqing.core.mvc.dao;
 import java.util.List;
 import name.huliqing.core.Inject;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.data.ProtoData;
+import name.huliqing.core.xml.ProtoData;
 
 /**
  *

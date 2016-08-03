@@ -11,7 +11,7 @@ import java.util.List;
 import name.huliqing.core.Inject;
 import name.huliqing.core.data.ActorData;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.data.ProtoData;
+import name.huliqing.core.xml.ProtoData;
 import name.huliqing.core.enums.HurtFace;
 import name.huliqing.core.enums.Sex;
 import name.huliqing.core.view.talk.Talk;

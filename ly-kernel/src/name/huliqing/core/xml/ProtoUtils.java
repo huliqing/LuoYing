@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.core.object;
+package name.huliqing.core.xml;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,34 +10,31 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import name.huliqing.core.Config;
-import name.huliqing.core.xml.Proto;
-import name.huliqing.core.enums.DataType;
-import name.huliqing.core.loader.ObjectLoader;
 
 /**
- *
+ * 用于获取拥有继承关系的物体原形。
  * @author huliqing
  */
-public class ProtoUtils {
+class ProtoUtils {
     private static final Logger LOG = Logger.getLogger(ProtoUtils.class.getName());
     
     private final static String ATTRIBUTE_EXTENDS = "extends";
     
     /**
      * 获取object原形
+     * @param dataStore
      * @param objectId
      * @return 
      */
-    public synchronized static Proto getProto(String objectId) {
-        Proto proto = ObjectLoader.findObjectDef(objectId);
+    public synchronized static Proto getProto(DataStore dataStore, String objectId) {
+        Proto proto = dataStore.getProto(objectId);
         if (proto == null) {
             LOG.log(Level.WARNING, "Could not find object={0}", objectId);
             return null;
         }
         
-        String extId = proto.getAttribute(ATTRIBUTE_EXTENDS);
-        if (extId == null) {
+        String extendId = proto.getAttribute(ATTRIBUTE_EXTENDS);
+        if (extendId == null) {
             // 如果extId不存在，则说明该Proto没有继承关系，或者说继承关系已经处理过了。
             // 这个时候dataLoader和dataProcessor必须已经存在（通过自身tag配置或是继承自父tag），如果这个时候不存在，则
             // 需要则需要确定一个 
@@ -47,7 +44,7 @@ public class ProtoUtils {
             // checker用于记录“继承链”
             List<String> checker = new ArrayList<String>(3);
             checker.add(proto.getId());
-            proto = extendsProto(proto, ObjectLoader.findObjectDef(extId), checker);
+            proto = extendsProto(dataStore, proto, dataStore.getProto(extendId), checker);
             return proto;
         }
     }
@@ -61,36 +58,34 @@ public class ProtoUtils {
      * @param parent
      * @return 
      */
-    private static Proto extendsProto(Proto proto, Proto parent, List<String> checker) {
-        if (Config.debug) {
-            LOG.log(Level.INFO, "====processor extends: {0} extends {1}", new Object[] {proto, parent});
-        }
+    private static Proto extendsProto(DataStore dataStore, Proto proto, Proto parent, List<String> checker) {
+        LOG.log(Level.INFO, "====processor extends: {0} extends {1}", new Object[] {proto, parent});
         
         // 防止自继承
         if (proto == parent) {
             throw new IllegalStateException("Proto could not extends self! proto=" + proto + ", extends parent=" + parent);
         }
             
-        // 限制不同DataType类型的继承，以避免复杂性,以防止死继承
-        if (proto.getDataType() != parent.getDataType()) {
-            throw new UnsupportedOperationException("Unsupported difference DataType extends! proto={0}" + proto + ", parentProto=" + parent);
-        }
+//        // 限制不同DataType类型的继承，以避免复杂性,以防止死继承
+//        if (proto.getDataType() != parent.getDataType()) {
+//            throw new UnsupportedOperationException("Unsupported difference DataType extends! proto={0}" + proto + ", parentProto=" + parent);
+//        }
 
         // 继承方式是这样的：从父类向下逐层继承
-        String extId = parent.getAttribute(ATTRIBUTE_EXTENDS);
-        if (extId != null) {
+        String extendId=  parent.getAttribute(ATTRIBUTE_EXTENDS);
+        if (extendId != null) {
             // 检查是否存在无尽继承
             checker.add(parent.getId());
-            if (checker.contains(extId)) {
-                throw new UnsupportedOperationException("Unsupported endless loop extends => " + checker + ", extId=" + extId);
+            if (checker.contains(extendId)) {
+                throw new UnsupportedOperationException("Unsupported endless loop extends => " + checker + ", extId=" + extendId);
             }
 
             // 检查被继承的对象是否存在
-            Proto extProto = ObjectLoader.findObjectDef(extId);
+            Proto extProto = dataStore.getProto(extendId);
             if (extProto == null) {
-                throw new RuntimeException("Could not find extends object=" + extId + ", extends=" + checker);
+                throw new RuntimeException("Could not find extends object=" + extendId + ", extends=" + checker);
             }
-            parent = extendsProto(parent, extProto, checker);
+            parent = extendsProto(dataStore, parent, extProto, checker);
         }
         
         // 继承父类参数
@@ -108,35 +103,26 @@ public class ProtoUtils {
         // 检查dataLoader和dataProcessor,如果没有的话则应该动态确定一个。
         checkLoaderAndProcessor(proto);
         
-        if (Config.debug) {
-            LOG.log(Level.INFO, "processor extends result => {0}", proto);
-        }
+        LOG.log(Level.INFO, "processor extends result => {0}", proto);
         return proto;
         
     }
     
     private static void checkLoaderAndProcessor(Proto proto) {
         String tagName = proto.getTagName();
-        int dataType = proto.getDataType();
         if (proto.getDataClass() == null) {
-            Class dataClass = DataFactory.findProtoData(tagName, dataType);
+            Class dataClass = DataFactory.getDataClass(tagName);
             proto.setDataClass(dataClass != null ? dataClass.getName() : null);
         }
-        if (proto.getDataLoader() == null) {
-            Class dataLoaderClass = DataFactory.findDataLoader(tagName, dataType);
-            proto.setDataLoader(dataLoaderClass != null ? dataLoaderClass.getName() : null);
+        if (proto.getLoaderClass() == null) {
+            Class dataLoaderClass = DataFactory.getDataLoaderClass(tagName);
+            proto.setLoaderClass(dataLoaderClass != null ? dataLoaderClass.getName() : null);
         }
-        if (proto.getDataProcessor() == null) {
-            Class dataProcessorClass = DataFactory.findDataProcessor(tagName, dataType);
-            proto.setDataProcessor(dataProcessorClass != null ? dataProcessorClass.getName() : null);
+        if (proto.getProcessorClass() == null) {
+            Class dataProcessorClass = DataFactory.getDataProcessorClass(tagName);
+            proto.setProcessorClass(dataProcessorClass != null ? dataProcessorClass.getName() : null);
         }
     }
     
-    public static void main(String[] args) {
-        ObjectLoader.initData();
-        DataFactory.initRegister();
-        System.out.println("==" + getProto("sceneExtendsA"));
-        System.out.println("==" + getProto("sceneExtendsB"));
-        System.out.println("==" + getProto("sceneExtendsC"));
-    }
+   
 }

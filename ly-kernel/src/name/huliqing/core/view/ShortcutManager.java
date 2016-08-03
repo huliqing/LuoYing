@@ -4,11 +4,7 @@
  */
 package name.huliqing.core.view;
 
-import name.huliqing.core.view.ShortcutSkillView;
-import name.huliqing.core.view.ShortcutView;
-import name.huliqing.core.manager.AnimationManager;
 import com.jme3.app.SimpleApplication;
-import name.huliqing.core.manager.ResourceManager;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
@@ -16,13 +12,16 @@ import com.jme3.util.SafeArrayList;
 import com.jme3.util.TempVars;
 import java.util.ArrayList;
 import java.util.List;
+import name.huliqing.core.manager.ResourceManager;
+import name.huliqing.core.manager.AnimationManager;
 import name.huliqing.core.LY;
 import name.huliqing.core.Factory;
 import name.huliqing.core.constants.DataTypeConstants;
+import name.huliqing.core.data.ItemData;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.data.ProtoData;
+import name.huliqing.core.xml.ProtoData;
 import name.huliqing.core.data.SkillData;
-import name.huliqing.core.enums.DataType;
+import name.huliqing.core.data.SkinData;
 import name.huliqing.core.enums.MessageType;
 import name.huliqing.core.mvc.network.UserCommandNetwork;
 import name.huliqing.core.mvc.service.ActorService;
@@ -32,7 +31,7 @@ import name.huliqing.core.object.animation.Animation;
 import name.huliqing.core.object.animation.BounceMotion;
 import name.huliqing.core.object.animation.CurveMove;
 import name.huliqing.core.object.animation.LinearGroup;
-import name.huliqing.core.object.DataFactory;
+import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.save.ShortcutSave;
 import name.huliqing.core.ui.UIUtils;
 import name.huliqing.core.ui.UI;
@@ -249,15 +248,17 @@ public class ShortcutManager {
             }
             
             // 包裹中只允许存放限定的物品
-            int type = data.getDataType();
-            if (type != DataTypeConstants.ITEM && type != DataTypeConstants.SKIN && type != DataTypeConstants.SKILL) {
+            if ((!(data instanceof ItemData)) 
+                    && (!(data instanceof SkinData)) 
+                    && (!(data instanceof SkillData))
+                    ) {
                 continue;
             }
             
             // 由于skill的创建过程比较特殊，SkillData只有在创建了AnimSkill之后
             // 才能获得skillType,所以不能直接使用createProtoData方式获得的SkillData
             // 这会找不到SkillData中的skillType,所以需要从角色身上重新找回SkillData
-            if (data.getDataType() == DataTypeConstants.SKILL) {
+            if (data instanceof SkillData) {
                 data = player.getData().getSkillStore().getSkillById(data.getId());
             }
             

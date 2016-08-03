@@ -4,8 +4,6 @@
  */
 package name.huliqing.core.xml;
 
-import name.huliqing.core.data.ProtoData;
-
 /**
  *
  * @author huliqing

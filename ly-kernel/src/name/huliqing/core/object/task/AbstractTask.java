@@ -17,7 +17,7 @@ import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.ProtoService;
 import name.huliqing.core.view.IconLabel;
 import name.huliqing.core.manager.ResourceManager;
-import name.huliqing.core.object.DataFactory;
+import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.ui.LinearLayout;
 import name.huliqing.core.ui.Text;

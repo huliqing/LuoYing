@@ -6,7 +6,7 @@
 package name.huliqing.core.mvc.network;
 
 import name.huliqing.core.Factory;
-import name.huliqing.core.data.ProtoData;
+import name.huliqing.core.xml.ProtoData;
 import name.huliqing.core.mess.MessProtoAdd;
 import name.huliqing.core.mess.MessProtoRemove;
 import name.huliqing.core.mess.MessProtoSync;

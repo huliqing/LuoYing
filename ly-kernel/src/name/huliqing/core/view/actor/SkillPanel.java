@@ -9,7 +9,7 @@ import java.util.List;
 import name.huliqing.core.LY;
 import name.huliqing.core.Factory;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.data.ProtoData;
+import name.huliqing.core.xml.ProtoData;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.mvc.network.UserCommandNetwork;

@@ -6,7 +6,7 @@ package name.huliqing.core.view.transfer;
 
 import java.util.List;
 import name.huliqing.core.constants.ResConstants;
-import name.huliqing.core.data.ProtoData;
+import name.huliqing.core.xml.ProtoData;
 import name.huliqing.core.view.NumPanel;
 import name.huliqing.core.view.NumPanel.NumConfirmListener;
 import name.huliqing.core.manager.ResourceManager;

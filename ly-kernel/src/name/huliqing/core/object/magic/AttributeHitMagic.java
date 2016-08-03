@@ -8,8 +8,6 @@ import com.jme3.app.Application;
 import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.MagicData;
-import name.huliqing.core.mvc.service.ActorService;
-import name.huliqing.core.mvc.service.AttributeService;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.skill.HitUtils;
@@ -20,8 +18,8 @@ import name.huliqing.core.utils.ConvertUtils;
  * @author huliqing
  */
 public class AttributeHitMagic extends Magic {
-    private final AttributeService attributeService = Factory.get(AttributeService.class);
-    private final ActorService actorService = Factory.get(ActorService.class);
+//    private final AttributeService attributeService = Factory.get(AttributeService.class);
+//    private final ActorService actorService = Factory.get(ActorService.class);
     private final PlayService playService = Factory.get(PlayService.class);
     
     // 影响的属性ID

@@ -12,8 +12,8 @@ import java.util.logging.Logger;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.DropData;
 import name.huliqing.core.data.DropItem;
-import name.huliqing.core.data.ProtoData;
-import name.huliqing.core.object.DataFactory;
+import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.object.actor.Actor;
 
 /**

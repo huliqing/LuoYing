@@ -6,8 +6,8 @@ package name.huliqing.core.view.transfer;
 
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.core.data.ProtoData;
-import name.huliqing.core.object.DataFactory;
+import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.xml.DataFactory;
 
 /**
  * 数据传输基类

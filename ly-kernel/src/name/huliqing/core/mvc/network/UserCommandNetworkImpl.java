@@ -9,7 +9,7 @@ import com.jme3.math.Vector3f;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.ActorData;
 import name.huliqing.core.data.GameData;
-import name.huliqing.core.data.ProtoData;
+import name.huliqing.core.xml.ProtoData;
 import name.huliqing.core.enums.MessageType;
 import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.mvc.service.ActionService;

@@ -8,7 +8,7 @@ import java.util.List;
 import name.huliqing.core.constants.IdConstants;
 import name.huliqing.core.data.ActorLogicData;
 import name.huliqing.core.loader.Loader;
-import name.huliqing.core.object.DataFactory;
+import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actorlogic.ActorLogic;
 

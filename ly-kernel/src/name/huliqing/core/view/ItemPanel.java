@@ -5,7 +5,7 @@
 package name.huliqing.core.view;
 
 import java.util.List;
-import name.huliqing.core.data.ProtoData;
+import name.huliqing.core.xml.ProtoData;
 import name.huliqing.core.ui.LinearLayout;
 import name.huliqing.core.ui.UIFactory;
 

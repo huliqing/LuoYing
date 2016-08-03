@@ -28,7 +28,7 @@ import name.huliqing.core.constants.IdConstants;
 import name.huliqing.core.object.actor.ActorControl;
 import name.huliqing.core.data.ActorData;
 import name.huliqing.core.data.ActorLogicData;
-import name.huliqing.core.data.ProtoData;
+import name.huliqing.core.xml.ProtoData;
 import name.huliqing.core.data.StateData;
 import name.huliqing.core.data.TalentData;
 import name.huliqing.core.data.TaskData;

@@ -15,13 +15,10 @@ import javax.imageio.ImageIO;
 import name.huliqing.core.LY;
 import name.huliqing.core.Config;
 import name.huliqing.core.Factory;
-import name.huliqing.core.MessRegister;
 import name.huliqing.core.TestFactory;
 import name.huliqing.core.mvc.service.ConfigService;
-import name.huliqing.core.loader.ObjectLoader;
 import name.huliqing.core.state.FpsState;
 import name.huliqing.core.state.PlayState;
-import name.huliqing.core.object.DataFactory;
 import name.huliqing.core.ui.UIConfig;
 import name.huliqing.core.ui.UIFactory;
 import name.huliqing.core.ui.UIConfigImpl;
@@ -116,12 +113,12 @@ public class Fighter extends SimpleApplication {
         // ----------
         
         // 1.初始化数据
-        ObjectLoader.initData();
+        LY.initialize(this, settings);
         
         // 注册SerializerObject
-        MessRegister.register();
-        // 注册内置的数据装载器和处理器（含注册SerializerObject）。
-        DataFactory.initRegister();
+//        MessRegister.register();
+//        // 注册内置的数据装载器和处理器（含注册SerializerObject）。
+//        DataFactory.initRegister();
         
         // 2.载入语言环境及系统配置
         Factory.get(ConfigService.class).loadGlobalConfig();
@@ -130,10 +127,6 @@ public class Fighter extends SimpleApplication {
     
     @Override
     public void simpleInitApp() {
-//        speed = 0.5f;
-        
-        // 1.公共引用,必须优先载入
-        LY.initialize(this, settings);
         
         // 2.UI配置
         UIConfig uiconfig = new UIConfigImpl(getAssetManager());

@@ -7,11 +7,8 @@ package name.huliqing.core.utils;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.collision.PhysicsCollisionEvent;
 import com.jme3.bullet.collision.PhysicsCollisionListener;
-import com.jme3.bullet.collision.PhysicsCollisionObject;
 import com.jme3.bullet.control.GhostControl;
-import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
-import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.input.CameraInput;
 import com.jme3.input.ChaseCamera;
@@ -27,13 +24,17 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 import com.jme3.util.TempVars;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
- * 可防止穿墙的相机。
+ * 可防止穿墙的相机,当该相机与场景中带”物理特性“的物体产生碰撞时，相机会拉近与被跟随物体的距离，来防止穿过被碰撞物体。
+ * 使用时需要给相机设置物理空间，使用示例：
+ * <pre>
+ * <code>
+ * CollisionChaseCamera ccc = new CollisionChaseCamera(app.getCamera(), app.getInputManager());
+ * ccc.setPhysicsSpace(xxx.getPhysicsSpace());
+ * ccc.setChase(spatial);
+ * </code>
+ * </pre>
  * @author huliqing
  */
 public class CollisionChaseCamera extends ChaseCamera implements PhysicsCollisionListener, com.jme3.input.controls.TouchListener{
@@ -77,10 +78,18 @@ public class CollisionChaseCamera extends ChaseCamera implements PhysicsCollisio
         registerTouchListener(inputManager);
     }
     
+    /**
+     * 射线的起始位置的偏移,在Y轴上加大一点可防立光线一开始就与地面发生碰撞交叉。避免误差
+     * @param collisionRayOriginOffset 
+     */
     public void setCollisionRayOriginOffset(Vector3f collisionRayOriginOffset) {
         this.collisionRayOriginOffset.set(collisionRayOriginOffset);
     }
 
+    /**
+     * 设置相机与目标的允许的最近距离
+     * @param collisionNearDistanceLimit 
+     */
     public void setCollisionNearDistanceLimit(float collisionNearDistanceLimit) {
         this.collisionNearDistanceLimit = collisionNearDistanceLimit;
         this.collisionNearDistanceLimitSquared = collisionNearDistanceLimit * collisionNearDistanceLimit;

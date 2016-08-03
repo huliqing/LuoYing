@@ -4,6 +4,7 @@
  */
 package name.huliqing.core.data;
 
+import name.huliqing.core.xml.ProtoData;
 import com.jme3.network.serializing.Serializable;
 import java.util.ArrayList;
 import java.util.List;

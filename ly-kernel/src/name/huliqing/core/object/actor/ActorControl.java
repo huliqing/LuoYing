@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 import name.huliqing.core.LY;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.ActorData;
-import name.huliqing.core.data.ProtoData;
+import name.huliqing.core.xml.ProtoData;
 import name.huliqing.core.mvc.network.ActorNetwork;
 import name.huliqing.core.mvc.network.SkillNetwork;
 import name.huliqing.core.mvc.service.ActionService;

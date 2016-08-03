@@ -9,10 +9,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.core.Factory;
 import name.huliqing.core.constants.DataTypeConstants;
+import name.huliqing.core.data.ItemData;
+import name.huliqing.core.data.SkillData;
+import name.huliqing.core.data.SkinData;
 import name.huliqing.core.xml.Proto;
-import name.huliqing.core.data.ProtoData;
-import name.huliqing.core.object.DataFactory;
-import name.huliqing.core.object.ProtoUtils;
+import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.object.actor.Actor;
 
 /**
@@ -43,48 +45,33 @@ public class ProtoServiceImpl implements ProtoService {
 
     @Override
     public ProtoData getData(Actor actor, String id) {
-        Proto proto = ProtoUtils.getProto(id);
-        if (proto == null)
+        Class<?> cc = DataFactory.getDataClassById(id);
+        if (cc == null)
             return null;
         
-        int dt = proto.getDataType();
-        ProtoData data = null;
-        switch (dt) {
-            case DataTypeConstants.ITEM:
-            case DataTypeConstants.SKIN:
-                data = itemService.getItem(actor, id);
-                break;
-                
-            case DataTypeConstants.SKILL:
-                data = skillService.getSkill(actor, id);
-                break;
-                
-            default :
-                LOG.log(Level.WARNING, "Unsupported getData type dataType={0}, dataId={1}", new Object[] {dt, id});
-                break;
+        if (cc == ItemData.class || cc == SkinData.class) {
+            return itemService.getItem(actor, id);
         }
-        return data;
+        if (cc == SkillData.class) {
+            return skillService.getSkill(actor, id);
+        }
+        LOG.log(Level.WARNING, "Unsupported getData, id={0}, dataClass={1} ", new Object[] {id, cc});
+        return null;
     }
 
     @Override
     public void addData(Actor actor, ProtoData data, int count) {
         if (data == null)
             return;
-        
-        int dt = data.getDataType();
-        switch (dt) {
-            case DataTypeConstants.ITEM:
-            case DataTypeConstants.SKIN:
-                itemService.addItem(actor, data.getId(), count);
-                break;
-            
-            case DataTypeConstants.SKILL:
-                skillService.addSkill(actor, data.getId());
-                break;
-                
-            default:
-                throw new UnsupportedOperationException();
+
+        if ((data instanceof ItemData) || (data instanceof SkinData)) {
+            itemService.addItem(actor, data.getId(), count);
+        } else if (data instanceof SkillData) {
+            skillService.addSkill(actor, data.getId());
+        } else {
+            throw new UnsupportedOperationException("Could not addData, actor=" + actor + ", data" + data);
         }
+
     }
 
     @Override
@@ -104,19 +91,17 @@ public class ProtoServiceImpl implements ProtoService {
     }
 
     @Override
-    public void syncDataTotal(Actor actor, String objectId, int total) {
-        Proto proto = ProtoUtils.getProto(objectId);
-        int dt = proto.getDataType();
-        switch (dt) {
-            case DataTypeConstants.ITEM:
-            case DataTypeConstants.SKIN:
-                itemService.syncItemTotal(actor, objectId, total);
-                break;
-                
-            default:
-                LOG.log(Level.WARNING, "Unsupported syncDataTotal for, objectId={0}, dataType={1}", new Object[] {objectId, dt});
-                break;
-        }
+    public void syncDataTotal(Actor actor, String id, int total) {
+        Class<?> cc = DataFactory.getDataClassById(id);
+        if (cc == null)
+            return;
+        
+        if (cc == ItemData.class || cc == SkinData.class) {
+            itemService.syncItemTotal(actor, id, total);
+            return;
+        } 
+        LOG.log(Level.WARNING, "Unsupported syncDataTotal, actor={0}, object id={1}, total={2}"
+                , new Object[] {actor, id, total});
     }
     
 }

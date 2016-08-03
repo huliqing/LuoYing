@@ -5,7 +5,7 @@
 package name.huliqing.core.mvc.service;
 
 import name.huliqing.core.Inject;
-import name.huliqing.core.data.ProtoData;
+import name.huliqing.core.xml.ProtoData;
 import name.huliqing.core.object.actor.Actor;
 
 /**

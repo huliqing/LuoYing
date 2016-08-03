@@ -11,7 +11,7 @@ import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Quad;
 import name.huliqing.core.LY;
-import name.huliqing.core.data.ProtoData;
+import name.huliqing.core.xml.ProtoData;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.utils.MatUtils;

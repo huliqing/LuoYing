@@ -9,11 +9,11 @@ import com.jme3.audio.AudioSource.Status;
 import com.jme3.math.Vector3f;
 import name.huliqing.core.Factory;
 import name.huliqing.core.constants.IdConstants;
-import name.huliqing.core.data.ProtoData;
+import name.huliqing.core.xml.ProtoData;
 import name.huliqing.core.data.SoundData;
 import name.huliqing.core.enums.Mat;
 import name.huliqing.core.mvc.service.ConfigService;
-import name.huliqing.core.object.DataFactory;
+import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.object.sound.SoundCollision;
 import name.huliqing.core.object.sound.SoundPlayer;
 

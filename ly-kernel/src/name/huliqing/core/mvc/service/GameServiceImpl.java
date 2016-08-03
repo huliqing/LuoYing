@@ -7,7 +7,7 @@ package name.huliqing.core.mvc.service;
 
 import name.huliqing.core.data.GameData;
 import name.huliqing.core.loader.Loader;
-import name.huliqing.core.object.DataFactory;
+import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.object.game.Game;
 
 /**

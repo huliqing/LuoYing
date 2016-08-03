@@ -12,7 +12,7 @@ import java.util.List;
 import name.huliqing.core.Inject;
 import name.huliqing.core.data.GameData;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.data.ProtoData;
+import name.huliqing.core.xml.ProtoData;
 import name.huliqing.core.enums.MessageType;
 import name.huliqing.core.state.PlayState;
 import name.huliqing.core.object.NetworkObject;

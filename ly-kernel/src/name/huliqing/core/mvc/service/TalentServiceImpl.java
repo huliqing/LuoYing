@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import name.huliqing.core.data.TalentData;
 import name.huliqing.core.loader.Loader;
-import name.huliqing.core.object.DataFactory;
+import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actor.TalentListener;
 import name.huliqing.core.object.talent.Talent;

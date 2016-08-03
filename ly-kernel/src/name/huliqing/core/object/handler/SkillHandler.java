@@ -12,7 +12,7 @@ import name.huliqing.core.constants.ResConstants;
 import name.huliqing.core.constants.SkillConstants;
 import name.huliqing.core.data.HandlerData;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.data.ProtoData;
+import name.huliqing.core.xml.ProtoData;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.enums.MessageType;
 import name.huliqing.core.mvc.network.ActionNetwork;

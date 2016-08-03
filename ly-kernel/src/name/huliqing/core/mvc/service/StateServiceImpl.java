@@ -8,20 +8,12 @@ import com.jme3.math.FastMath;
 import com.jme3.util.SafeArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-import name.huliqing.core.Config;
 import name.huliqing.core.Factory;
-import name.huliqing.core.constants.DataTypeConstants;
-import name.huliqing.core.xml.Proto;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.data.StateData;
-import name.huliqing.core.enums.DataType;
-import name.huliqing.core.mvc.dao.ItemDao;
-import name.huliqing.core.mvc.network.PlayNetwork;
-import name.huliqing.core.loader.ObjectLoader;
 import name.huliqing.core.loader.Loader;
-import name.huliqing.core.object.DataFactory;
+import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.object.actor.StateListener;
 import name.huliqing.core.object.state.State;
 
@@ -32,19 +24,11 @@ import name.huliqing.core.object.state.State;
 public class StateServiceImpl implements StateService{
     private static final Logger LOG = Logger.getLogger(StateServiceImpl.class.getName());
 
-//    private ItemDao actorDao;
-//    private SkinService skinService;
     private ResistService resistService;
-//    private ElService elService;
-//    private PlayNetwork playNetwork;
     
     @Override
     public void inject() {
-//        actorDao = Factory.get(ItemDao.class);
-//        skinService = Factory.get(SkinService.class);
-//        elService = Factory.get(ElService.class);
         resistService = Factory.get(ResistService.class);
-//        playNetwork = Factory.get(PlayNetwork.class);
     }
     
     @Override
@@ -58,15 +42,16 @@ public class StateServiceImpl implements StateService{
 //        if (actor.isDead()) {
 //            return 1;
 //        }
-        
-        // 如果状态不存在，则返回一个绝对抵抗值，以阻止继续添加状态
-        if (!existsState(stateId)) {
-            if (Config.debug) {
-                Logger.getLogger(StateServiceImpl.class.getName()).log(Level.WARNING
-                        , "State not found!!! stateId={0}", stateId);
-            }
-            return 1.0f;
-        }
+   
+        // remove20160803
+//        // 如果状态不存在，则返回一个绝对抵抗值，以阻止继续添加状态
+//        if (!existsState(stateId)) {
+//            if (Config.debug) {
+//                Logger.getLogger(StateServiceImpl.class.getName()).log(Level.WARNING
+//                        , "State not found!!! stateId={0}", stateId);
+//            }
+//            return 1.0f;
+//        }
         
         // 获得角色抗性值
         float resist = resistService.getResist(actor, stateId);
@@ -167,14 +152,16 @@ public class StateServiceImpl implements StateService{
         }
     }
 
-    @Override
-    public boolean existsState(String stateId) {
-        Proto proto = ObjectLoader.findObjectDef(stateId);
-        if (proto != null && proto.getDataType() == DataTypeConstants.STATE) {
-            return true;
-        }
-        return false;
-    }
+    // remove20160803
+//    @Override
+//    public boolean existsState(String stateId) {
+//        Proto proto = ObjectLoader.findObjectDef(stateId);
+//        
+//        if (proto != null && proto.getDataType() == DataTypeConstants.STATE) {
+//            return true;
+//        }
+//        return false;
+//    }
 
     @Override
     public boolean existsState(Actor actor, String stateId) {

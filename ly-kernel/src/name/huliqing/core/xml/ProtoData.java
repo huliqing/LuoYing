@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.core.data;
+package name.huliqing.core.xml;
 
 import com.jme3.export.InputCapsule;
 import com.jme3.export.JmeExporter;
@@ -10,9 +10,6 @@ import com.jme3.export.JmeImporter;
 import com.jme3.export.OutputCapsule;
 import com.jme3.network.serializing.Serializable;
 import java.io.IOException;
-import name.huliqing.core.xml.DataAttribute;
-import name.huliqing.core.xml.Proto;
-import name.huliqing.core.object.ProtoUtils;
 
 /**
  * 物品基类,对于运行时，所有可动态改变的参数都需要封装在Data内。
@@ -23,35 +20,17 @@ import name.huliqing.core.object.ProtoUtils;
 public class ProtoData extends DataAttribute {
     public final static String USER_DATA = "PROTO_USER_DATA";
     private static long idIndex = System.currentTimeMillis();
-    // 物品的唯一ID,当前游戏的全局唯一ID
-    private long uniqueId = generateUniqueId();
-    
     // 原形
     private transient Proto proto;
+    
+    // 物品的唯一ID,当前游戏的全局唯一ID
+    private long uniqueId = generateUniqueId();
     
     // 物品ID，与proto中的id一致
     private String id;
     
     // 物品数量
     private int total;
-    
-    @Override
-    public void write(JmeExporter ex) throws IOException {
-        super.write(ex);
-        OutputCapsule oc = ex.getCapsule(this);
-        oc.write(uniqueId, "uniqueId", -1);
-        oc.write(id, "id", null);
-        oc.write(total, "total", 0);
-    }
-
-    @Override
-    public void read(JmeImporter im) throws IOException {
-        super.read(im);
-        InputCapsule ic = im.getCapsule(this);
-        uniqueId = ic.readLong("uniqueId", generateUniqueId());
-        id = ic.readString("id", null);
-        total = ic.readInt("total", 0);
-    }
     
     public ProtoData() {}
     
@@ -78,17 +57,13 @@ public class ProtoData extends DataAttribute {
      */
     public final Proto getProto() {
         if (proto == null) {
-            proto = ProtoUtils.getProto(id);
+            proto = DataFactory.getProto(id);
         }
         return proto;
     }
     
     public final String getTagName() {
         return getProto().getTagName();
-    }
-        
-    public final int getDataType() {
-        return getProto().getDataType();
     }
 
     public final void setId(String id) {
@@ -179,11 +154,28 @@ public class ProtoData extends DataAttribute {
     private synchronized static long generateUniqueId() {
         return idIndex++;
     }
-
+    
     @Override
     public String toString() {
         return "ProtoData{" + "uniqueId=" + uniqueId + ", id=" + id + ", total=" + total + '}';
     }
     
+    @Override
+    public void write(JmeExporter ex) throws IOException {
+        super.write(ex);
+        OutputCapsule oc = ex.getCapsule(this);
+        oc.write(uniqueId, "uniqueId", -1);
+        oc.write(id, "id", null);
+        oc.write(total, "total", 0);
+    }
+    
+    @Override
+    public void read(JmeImporter im) throws IOException {
+        super.read(im);
+        InputCapsule ic = im.getCapsule(this);
+        uniqueId = ic.readLong("uniqueId", generateUniqueId());
+        id = ic.readString("id", null);
+        total = ic.readInt("total", 0);
+    }
     
 }

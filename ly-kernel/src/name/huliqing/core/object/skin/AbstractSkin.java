@@ -24,7 +24,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.core.Config;
 import name.huliqing.core.Factory;
-import name.huliqing.core.data.ProtoData;
+import name.huliqing.core.xml.ProtoData;
 import name.huliqing.core.data.SkinData;
 import name.huliqing.core.mvc.service.ConfigService;
 import name.huliqing.core.loader.AssetLoader;

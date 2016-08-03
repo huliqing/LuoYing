@@ -17,26 +17,15 @@ public class Proto extends DataAttribute{
     
     private String tagName;
     private String id;
-//    private DataType dataType;
-    private int dataType;
     
     /**
      * Only for Serializable
      */
     public Proto() {}
     
-    public Proto(int dataType, Map<String, String> attributes, String tagName) {
+    public Proto(Map<String, String> attributes, String tagName) {
         super(attributes);
-        this.dataType = dataType;
         this.tagName = tagName;
-    }
-
-    public int getDataType() {
-        return dataType;
-    }
-
-    public void setDataType(int dataType) {
-        this.dataType = dataType;
     }
     
     /**
@@ -61,17 +50,17 @@ public class Proto extends DataAttribute{
      * 数据类必须是“DataLoader”,如果没有指定，则该方法返回null.
      * @return 
      */
-    public String getDataLoader() {
-        return getAttribute("dataLoader");
+    public String getLoaderClass() {
+        return getAttribute("loaderClass");
     }
     
     /**
      * 设置用于载入数据的“载入器”的class全限定类名，如“name.huliqing.fighter.object.scene.SceneLoader”,
      * 数据类必须是“DataLoader”
-     * @param dataLoader 
+     * @param loaderClass 
      */
-    public void setDataLoader(String dataLoader) {
-        setAttribute("dataLoader", dataLoader);
+    public void setLoaderClass(String loaderClass) {
+        setAttribute("loaderClass", loaderClass);
     }
     
     /**
@@ -79,17 +68,17 @@ public class Proto extends DataAttribute{
      * DataProcessor,如果没有指定，则该方法将返回null.
      * @return 
      */
-    public String getDataProcessor() {
-        return getAttribute("dataProcessor");
+    public String getProcessorClass() {
+        return getAttribute("processorClass");
     }
     
     /**
      * 设置用于处理数据的“处理器”的class全限定类名，如“name.huliqing.fighter.object.scene.Scene", 数据类型必须是
      * DataProcessor。
-     * @param dataProcessor
+     * @param processorClass
      */
-    public void setDataProcessor(String dataProcessor) {
-        setAttribute("dataProcessor", dataProcessor);
+    public void setProcessorClass(String processorClass) {
+        setAttribute("processorClass", processorClass);
     }
     
     /**
@@ -171,7 +160,8 @@ public class Proto extends DataAttribute{
 
     @Override
     public String toString() {
-        return "Proto{tagName=" + tagName + ", type=" + dataType + ", attributes=" + data  + '}';
+        return "Proto{" + "tagName=" + tagName + ", id=" + id + '}';
     }
+
 
 }

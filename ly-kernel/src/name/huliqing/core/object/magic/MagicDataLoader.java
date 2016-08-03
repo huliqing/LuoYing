@@ -9,7 +9,7 @@ import name.huliqing.core.data.HitCheckerData;
 import name.huliqing.core.data.MagicData;
 import name.huliqing.core.xml.Proto;
 import name.huliqing.core.enums.TraceType;
-import name.huliqing.core.object.DataFactory;
+import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.xml.DataLoader;
 
 /**

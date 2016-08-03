@@ -104,10 +104,11 @@ public class StateNetworkImpl implements StateNetwork {
         throw new UnsupportedOperationException();
     }
 
-    @Override
-    public boolean existsState(String stateId) {
-        throw new UnsupportedOperationException();
-    }
+    // remove20160803
+//    @Override
+//    public boolean existsState(String stateId) {
+//        throw new UnsupportedOperationException();
+//    }
 
     @Override
     public boolean existsState(Actor actor, String stateId) {

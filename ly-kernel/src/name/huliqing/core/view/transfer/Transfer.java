@@ -5,7 +5,7 @@
 package name.huliqing.core.view.transfer;
 
 import java.util.List;
-import name.huliqing.core.data.ProtoData;
+import name.huliqing.core.xml.ProtoData;
 
 /**
  * 数据传输交换接口

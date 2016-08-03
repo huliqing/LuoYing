@@ -4,6 +4,7 @@
  */
 package name.huliqing.core.data;
 
+import name.huliqing.core.xml.ProtoData;
 import com.jme3.animation.LoopMode;
 import com.jme3.export.InputCapsule;
 import com.jme3.export.JmeExporter;

@@ -36,7 +36,7 @@ import name.huliqing.core.data.ShapeData;
 import name.huliqing.core.data.TalentData;
 import name.huliqing.core.data.TaskData;
 import name.huliqing.core.data.ViewData;
-import name.huliqing.core.object.DataFactory;
+import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.object.action.Action;
 import name.huliqing.core.object.actoranim.ActorAnim;
 import name.huliqing.core.object.actorlogic.ActorLogic;

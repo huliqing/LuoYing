@@ -26,11 +26,10 @@ import name.huliqing.core.constants.IdConstants;
 import name.huliqing.core.constants.ResConstants;
 import name.huliqing.core.data.ActorData;
 import name.huliqing.core.data.AttributeData;
-import name.huliqing.core.data.ProtoData;
+import name.huliqing.core.xml.ProtoData;
 import name.huliqing.core.data.SkinData;
 import name.huliqing.core.enums.HurtFace;
 import name.huliqing.core.enums.MessageType;
-import name.huliqing.core.enums.DataType;
 import name.huliqing.core.enums.Sex;
 import name.huliqing.core.mvc.dao.ItemDao;
 import name.huliqing.core.view.talk.Talk;
@@ -40,7 +39,7 @@ import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.view.talk.SpeakManager;
 import name.huliqing.core.view.talk.TalkManager;
-import name.huliqing.core.object.DataFactory;
+import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.object.actor.ActorListener;
 import name.huliqing.core.object.actor.SkillListener;
 import name.huliqing.core.object.channel.Channel;
@@ -107,7 +106,7 @@ public class ActorServiceImpl implements ActorService {
         List<ProtoData> items = itemDao.getItems(actor, null);
         boolean hasOutfit = false;
         for (ProtoData item : items) {
-            if (item.getDataType() == DataTypeConstants.SKIN) {
+            if (item instanceof SkinData) {
                 SkinData sd = (SkinData) item;
                 if (sd.isUsing()) {
                     hasOutfit = true;
@@ -219,10 +218,15 @@ public class ActorServiceImpl implements ActorService {
         }
     }
 
+    /**
+     * @deprecated 
+     * @param spatial
+     * @return 
+     */
     @Override
     public Actor getActor(Spatial spatial) {
         ProtoData pd = spatial.getUserData(ProtoData.USER_DATA);
-        if (pd.getDataType() == DataTypeConstants.ACTOR) {
+        if (pd instanceof ActorData) {
             return spatial.getControl(ActorControl.class);
         }
         return null;

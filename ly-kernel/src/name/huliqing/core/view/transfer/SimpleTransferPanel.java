@@ -5,7 +5,7 @@
 package name.huliqing.core.view.transfer;
 
 import java.util.List;
-import name.huliqing.core.data.ProtoData;
+import name.huliqing.core.xml.ProtoData;
 import name.huliqing.core.view.ItemList;
 import name.huliqing.core.view.ItemPanel;
 import name.huliqing.core.ui.Row;

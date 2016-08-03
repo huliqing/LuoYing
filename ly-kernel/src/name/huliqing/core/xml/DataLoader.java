@@ -4,8 +4,6 @@
  */
 package name.huliqing.core.xml;
 
-import name.huliqing.core.data.ProtoData;
-
 /**
  * 载入数据接口
  * @author huliqing

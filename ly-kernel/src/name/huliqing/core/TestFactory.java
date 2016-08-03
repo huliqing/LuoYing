@@ -4,8 +4,8 @@
  */
 package name.huliqing.core;
 
+import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.xml.Proto;
-import name.huliqing.core.loader.ObjectLoader;
 
 /**
  *
@@ -25,7 +25,7 @@ public class TestFactory {
     }
     
     private static void testSkill(String skillId) {
-        Proto proto = ObjectLoader.findObjectDef(skillId);
+        Proto proto = DataFactory.getProto(skillId);
         proto.setAttribute("cooldown", 1);
         proto.setAttribute("useAttributes", null);
         proto.setAttribute("hitDistance", 3000);

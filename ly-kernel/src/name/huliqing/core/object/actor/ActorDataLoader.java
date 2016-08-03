@@ -16,14 +16,14 @@ import name.huliqing.core.data.AttributeData;
 import name.huliqing.core.data.DropData;
 import name.huliqing.core.data.ActorLogicData;
 import name.huliqing.core.xml.Proto;
-import name.huliqing.core.data.ProtoData;
+import name.huliqing.core.xml.ProtoData;
 import name.huliqing.core.data.ResistData;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.data.SkinData;
 import name.huliqing.core.data.TalentData;
 import name.huliqing.core.enums.Sex;
 import name.huliqing.core.manager.ResourceManager;
-import name.huliqing.core.object.DataFactory;
+import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.xml.DataLoader;
 
 /**

@@ -7,11 +7,11 @@ package name.huliqing.core.object.sound;
 import com.jme3.math.Vector3f;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.core.data.ProtoData;
+import name.huliqing.core.xml.ProtoData;
 import name.huliqing.core.data.SoundData;
 import name.huliqing.core.enums.Mat;
 import name.huliqing.core.manager.SoundManager;
-import name.huliqing.core.object.DataFactory;
+import name.huliqing.core.xml.DataFactory;
 
 /**
  *

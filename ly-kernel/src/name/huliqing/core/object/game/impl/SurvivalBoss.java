@@ -23,7 +23,7 @@ import name.huliqing.core.mvc.service.TalentService;
 import name.huliqing.core.mvc.service.ViewService;
 import name.huliqing.core.loader.Loader;
 import name.huliqing.core.logic.scene.ActorBuildLogic;
-import name.huliqing.core.object.DataFactory;
+import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actorlogic.PositionActorLogic;
 import name.huliqing.core.object.gamelogic.AbstractGameLogic;

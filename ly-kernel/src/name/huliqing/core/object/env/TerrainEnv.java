@@ -4,9 +4,7 @@
  */
 package name.huliqing.core.object.env;
 
-import com.jme3.app.Application;
 import com.jme3.scene.Spatial;
-import name.huliqing.core.object.scene.Scene;
 
 /**
  * 地面模型。

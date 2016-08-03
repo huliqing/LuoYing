@@ -8,7 +8,7 @@ import java.util.List;
 import name.huliqing.core.constants.InterfaceConstants;
 import name.huliqing.core.constants.ResConstants;
 import name.huliqing.core.data.AttributeApply;
-import name.huliqing.core.data.ProtoData;
+import name.huliqing.core.xml.ProtoData;
 import name.huliqing.core.data.SkinData;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.ui.ListView;

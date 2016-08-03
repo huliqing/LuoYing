@@ -11,7 +11,7 @@ import com.jme3.export.OutputCapsule;
 import com.jme3.export.Savable;
 import com.jme3.network.serializing.Serializable;
 import java.io.IOException;
-import name.huliqing.core.data.ProtoData;
+import name.huliqing.core.xml.ProtoData;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 import name.huliqing.core.LY;
 import name.huliqing.core.constants.DataTypeConstants;
 import name.huliqing.core.constants.IdConstants;
-import name.huliqing.core.enums.DataType;
+import name.huliqing.core.data.SkinData;
 
 /**
  * 保存角色的各种杂物信息等等。
@@ -54,7 +54,6 @@ public class ItemStore implements Savable {
     /**
      * 获取所有物品列表,注意: 不要手动移除列表中的物品.移除物品应该使用：
      * {@link #removeItem(name.huliqing.fighter.data.ProtoData) }方法
-     * @param store
      * @return 
      */
     public List<ProtoData> getAll() {
@@ -71,7 +70,7 @@ public class ItemStore implements Savable {
             store = new ArrayList<ProtoData>();
         }
         for (ProtoData od : items) {
-            if (od.getDataType() == DataTypeConstants.SKIN) {
+            if (od instanceof SkinData) {
                 continue;
             }
             store.add(od);

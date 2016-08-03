@@ -10,8 +10,6 @@ import name.huliqing.core.Factory;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.mvc.service.ConfigService;
 import name.huliqing.core.network.Network;
-import name.huliqing.core.object.skill.AbstractSkill;
-import name.huliqing.core.object.skill.Walk;
 
 /**
  * 行路的技能

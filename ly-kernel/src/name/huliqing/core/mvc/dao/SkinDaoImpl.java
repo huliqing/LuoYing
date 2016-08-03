@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.constants.DataTypeConstants;
 import name.huliqing.core.data.ActorData;
-import name.huliqing.core.data.ProtoData;
+import name.huliqing.core.xml.ProtoData;
 import name.huliqing.core.data.SkinData;
 
 /**
@@ -29,7 +29,7 @@ public class SkinDaoImpl implements SkinDao {
         }
         List<ProtoData> items = actorData.getItemStore().getAll();
         for (ProtoData od : items) {
-            if (od.getDataType() == DataTypeConstants.SKIN) {
+            if (od instanceof SkinData) {
                 store.add((SkinData) od);
             }
         }
@@ -43,7 +43,7 @@ public class SkinDaoImpl implements SkinDao {
         }
         List<ProtoData> items = actorData.getItemStore().getAll();
         for (ProtoData od : items) {
-            if (od.getDataType() == DataTypeConstants.SKIN) {
+            if (od instanceof SkinData) {
                 SkinData sd = (SkinData) od;
                 if (sd.getWeaponType() == 0) {
                     store.add(sd);
@@ -99,13 +99,8 @@ public class SkinDaoImpl implements SkinDao {
     }
     
     private boolean isWeapon(ProtoData protoData) {
-        if (protoData.getDataType() == DataTypeConstants.SKIN) {
+        if (protoData instanceof SkinData) {
             SkinData sd = (SkinData) protoData;
-            
-//            if (sd.getWeaponType() > 0) {
-//                return true;
-//            }
-            
             return sd.isWeapon();
         }
         return false;

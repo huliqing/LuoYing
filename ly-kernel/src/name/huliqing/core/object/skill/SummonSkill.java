@@ -18,9 +18,8 @@ import java.util.logging.Logger;
 import name.huliqing.core.Factory;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actor.ActorControl;
-import name.huliqing.core.data.ProtoData;
+import name.huliqing.core.xml.ProtoData;
 import name.huliqing.core.data.SkillData;
-import name.huliqing.core.enums.DataType;
 import name.huliqing.core.mvc.network.ActorNetwork;
 import name.huliqing.core.mvc.network.PlayNetwork;
 import name.huliqing.core.mvc.service.ActorService;
@@ -29,11 +28,10 @@ import name.huliqing.core.mvc.service.StateService;
 import name.huliqing.core.network.Network;
 import name.huliqing.core.mvc.service.ConfigService;
 import name.huliqing.core.mvc.service.EffectService;
-import name.huliqing.core.object.DataFactory;
+import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.object.anim.Anim;
 import name.huliqing.core.object.anim.Listener;
 import name.huliqing.core.object.anim.MoveAnim;
-import name.huliqing.core.object.skill.AbstractSkill;
 import name.huliqing.core.utils.GeometryUtils;
 import name.huliqing.core.utils.ThreadHelper;
 
@@ -135,19 +133,6 @@ public class SummonSkill<T extends SkillData> extends AbstractSkill<T> {
         currentSummon.summonPos.setY(currentSummon.summonPos.y + summonOffset.y);
         currentSummon.setLocalTranslation(currentSummon.summonPos);
         
-        // remove20160516,不再需要这样执行效果
-//        // 执行效果
-//        Effect effect = effectService.loadEffect(effectId);
-//        effect.setTraceObject(actor.getModel());
-//        AbstractEffect ae = (AbstractEffect) effect;
-//        Vector3f loc = ae.getLocalTranslation();
-//        loc.setY(playService.getTerrainHeight(loc.x, loc.z));
-//        if (ae.getTracePositionOffset() != null) {
-//            loc.addLocal(0, ae.getTracePositionOffset().y, 0);
-//        }
-//        ae.setLocalTranslation(loc);
-//        playService.addEffect(effect);
-        
         super.playEffect(effectId);
     }
     
@@ -233,7 +218,6 @@ public class SummonSkill<T extends SkillData> extends AbstractSkill<T> {
             if (!loadStarted && summonObjectId != null) {
                 ProtoData data = DataFactory.createData(summonObjectId);
                 loader.loadId = summonObjectId;
-                loader.type = data.getDataType();
                 future = ThreadHelper.submit(loader);
                 loadStarted = true;
             }
@@ -350,7 +334,6 @@ public class SummonSkill<T extends SkillData> extends AbstractSkill<T> {
     // help to call
     private class HelpLoader implements Callable<Actor> {
 
-        int type;
         String loadId;
         /**
          * 是否正在载入中...

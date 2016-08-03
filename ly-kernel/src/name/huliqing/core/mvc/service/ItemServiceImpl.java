@@ -9,7 +9,7 @@ import name.huliqing.core.Factory;
 import name.huliqing.core.constants.DataTypeConstants;
 import name.huliqing.core.constants.IdConstants;
 import name.huliqing.core.constants.ResConstants;
-import name.huliqing.core.data.ProtoData;
+import name.huliqing.core.xml.ProtoData;
 import name.huliqing.core.data.SkinData;
 import name.huliqing.core.enums.MessageType;
 import name.huliqing.core.mvc.dao.ItemDao;
@@ -88,7 +88,7 @@ public class ItemServiceImpl implements ItemService {
         if (data.getId().equals(IdConstants.ITEM_GOLD))
             return false;
         
-        if (data.getDataType() == DataTypeConstants.SKIN) {
+        if (data instanceof SkinData) {
             return (!((SkinData) data).isUsing());
         }
         

@@ -74,13 +74,14 @@ public interface StateService extends Inject{
      */
     void clearStates(Actor actor);
     
-    /**
-     * 判断系统是否存在指定ID的状态,在给角色添加状态之前最好判断是否存在这样
-     * 一个状态，否则添加状态时可能会报错。
-     * @param stateId
-     * @return 
-     */
-    boolean existsState(String stateId);
+    // remove20160803
+//    /**
+//     * 判断系统是否存在指定ID的状态,在给角色添加状态之前最好判断是否存在这样
+//     * 一个状态，否则添加状态时可能会报错。
+//     * @param stateId
+//     * @return 
+//     */
+//    boolean existsState(String stateId);
     
     /**
      * 判断角色当前是否存在指定的状态。

@@ -12,9 +12,8 @@ import name.huliqing.core.GameException;
 import name.huliqing.core.constants.DataTypeConstants;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.data.HandlerData;
-import name.huliqing.core.data.ProtoData;
+import name.huliqing.core.xml.ProtoData;
 import name.huliqing.core.data.SkinData;
-import name.huliqing.core.enums.DataType;
 import name.huliqing.core.mvc.dao.ItemDao;
 import name.huliqing.core.mvc.service.ActionService;
 import name.huliqing.core.mvc.service.ActorService;
@@ -43,7 +42,7 @@ public class WeaponHandler extends AbstractHandler {
         if (!super.canUse(actor, data)) {
             return false;
         }
-        if (data.getDataType() != DataTypeConstants.SKIN) {
+        if (!(data instanceof SkinData)) {
             if (Config.debug) {
                 logger.log(Level.WARNING, "Not a Skin object! data={0}", data.getId());
             }
@@ -92,7 +91,7 @@ public class WeaponHandler extends AbstractHandler {
     @Override
     public boolean remove(Actor actor, ProtoData data, int count) throws GameException {
 //        ProtoData data = actorDao.getItemExceptSkill(actor, objectId);
-        if (data.getDataType() != DataTypeConstants.SKIN) {
+        if (!(data instanceof SkinData)) {
             return false;
         }
         SkinData weaponData = (SkinData) data;

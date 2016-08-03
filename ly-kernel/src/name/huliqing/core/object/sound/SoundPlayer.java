@@ -14,7 +14,7 @@ import name.huliqing.core.LY;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.SoundData;
 import name.huliqing.core.mvc.service.ConfigService;
-import name.huliqing.core.object.DataFactory;
+import name.huliqing.core.xml.DataFactory;
 
 /**
  *

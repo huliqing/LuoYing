@@ -9,9 +9,9 @@ import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.constants.DataTypeConstants;
 import name.huliqing.core.constants.InterfaceConstants;
-import name.huliqing.core.data.ProtoData;
+import name.huliqing.core.data.ItemData;
+import name.huliqing.core.xml.ProtoData;
 import name.huliqing.core.data.SkinData;
-import name.huliqing.core.enums.DataType;
 import name.huliqing.core.mvc.service.SkinService;
 import name.huliqing.core.view.IconPanel;
 import name.huliqing.core.view.ItemList.RowClickListener;
@@ -71,16 +71,16 @@ public class TabTransferPanel extends TransferPanel implements RowClickListener 
         
         // 载入角色的数据，注意：不要直接使用获取到的data，因为这会影响原始数据
         for (ProtoData data : datas) {
-            if (data.getDataType() == DataTypeConstants.ITEM) {
+            if (data instanceof ItemData) {
                 itemDatas.add(data);
-            } else if (data.getDataType() == DataTypeConstants.SKIN) {
+            } else if (data instanceof SkinData) {
                 if (skinService.isWeapon((SkinData) data)) {
                     weaponDatas.add(data);
                 } else {
                     armorDatas.add(data);
                 }
             } else {
-                throw new UnsupportedOperationException("Unsupported dataType=" + data.getDataType());
+                throw new UnsupportedOperationException("Unsupported data=" + data);
             }
         }
         refresh();
@@ -102,16 +102,16 @@ public class TabTransferPanel extends TransferPanel implements RowClickListener 
         
         // temp=null说明是新增加的数据，则需要把它分类到指定列表中。
         if (temp == null) {
-            if (data.getDataType() == DataTypeConstants.ITEM) {
+            if (data instanceof ItemData) {
                 itemDatas.add(data);
-            } else if (data.getDataType() == DataTypeConstants.SKIN) {
+            } else if (data instanceof SkinData) {
                 if (skinService.isWeapon((SkinData) data)) {
                     weaponDatas.add(data);
                 } else {
                     armorDatas.add(data);
                 }
             } else {
-                throw new IllegalArgumentException("Unsupported dataType, dataType=" + data.getDataType());
+                throw new IllegalArgumentException("Unsupported dataType, data=" + data);
             }
         }
 

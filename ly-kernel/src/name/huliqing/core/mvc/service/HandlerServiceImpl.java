@@ -5,7 +5,7 @@
 package name.huliqing.core.mvc.service;
 
 import name.huliqing.core.Factory;
-import name.huliqing.core.data.ProtoData;
+import name.huliqing.core.xml.ProtoData;
 import name.huliqing.core.mvc.dao.ItemDao;
 import name.huliqing.core.mvc.dao.SkillDao;
 import name.huliqing.core.loader.Loader;

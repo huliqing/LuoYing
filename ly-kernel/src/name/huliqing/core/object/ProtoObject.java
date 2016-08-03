@@ -4,7 +4,7 @@
  */
 package name.huliqing.core.object;
 
-import name.huliqing.core.data.ProtoData;
+import name.huliqing.core.xml.ProtoData;
 
 /**
  * 基本物体

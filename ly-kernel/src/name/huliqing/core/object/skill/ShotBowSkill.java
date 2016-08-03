@@ -19,7 +19,7 @@ import com.jme3.util.TempVars;
 import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.constants.SkinConstants;
-import name.huliqing.core.data.ProtoData;
+import name.huliqing.core.xml.ProtoData;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.data.SkinData;
 import name.huliqing.core.mvc.service.ActorService;

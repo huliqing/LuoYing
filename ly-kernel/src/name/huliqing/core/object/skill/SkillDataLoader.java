@@ -24,7 +24,7 @@ public class SkillDataLoader implements DataLoader<SkillData> {
 
     @Override
     public void load(Proto proto, SkillData data) {
-        if (proto.getDataType() != DataTypeConstants.SKILL) {
+        if (!(data instanceof SkillData)) {
             throw new GameException("Not a skill data. proto=" + proto);
         }
         

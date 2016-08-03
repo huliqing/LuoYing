@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import name.huliqing.core.data.ElData;
-import name.huliqing.core.loader.ObjectLoader;
+import name.huliqing.core.xml.DataFactory;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Script;
 import org.mozilla.javascript.Scriptable;
@@ -99,7 +99,7 @@ public class AbstractEl<T extends ElData> implements El<T> {
             jsShareScope = jsContext.initStandardObjects();
             // 首次初始化时需要把脚本都载入上下文
             Script script;
-            for (String str : ObjectLoader.SCRIPTS) {
+            for (String str : DataFactory.getJavaScripts()) {
                 script = jsContext.compileString(str, "script", 0, null);
                 script.exec(jsContext, jsShareScope);
 //                if (Config.debug) {

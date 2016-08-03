@@ -8,7 +8,7 @@ package name.huliqing.core.object.env;
 import com.jme3.app.Application;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.scene.Spatial;
-import name.huliqing.core.data.ProtoData;
+import name.huliqing.core.xml.ProtoData;
 import name.huliqing.core.loader.AssetLoader;
 import name.huliqing.core.object.scene.Scene;
 

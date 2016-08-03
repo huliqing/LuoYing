@@ -7,7 +7,7 @@ package name.huliqing.core.mvc.service;
 import name.huliqing.core.Factory;
 import name.huliqing.core.constants.IdConstants;
 import name.huliqing.core.constants.ResConstants;
-import name.huliqing.core.data.ProtoData;
+import name.huliqing.core.xml.ProtoData;
 import name.huliqing.core.enums.MessageType;
 import name.huliqing.core.loader.Loader;
 import name.huliqing.core.manager.ResourceManager;

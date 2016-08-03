@@ -10,7 +10,7 @@ import java.util.List;
 import name.huliqing.core.data.EnvData;
 import name.huliqing.core.xml.Proto;
 import name.huliqing.core.data.SceneData;
-import name.huliqing.core.object.DataFactory;
+import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.xml.DataLoader;
 
 /**
