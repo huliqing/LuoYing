@@ -34,11 +34,11 @@ public class DataFactory {
     /**
      * 注册一个数据类型
      * @param tagName 
-     * @param dataTypeClass 
+     * @param dataClass 
      */
-    public static void registerData(String tagName, Class<? extends ProtoData> dataTypeClass) {
-        TAG_DATAS.put(tagName, dataTypeClass);
-        LOG.log(Level.INFO, "Serializer registerClass={0}", dataTypeClass);
+    public static void registerData(String tagName, Class<? extends ProtoData> dataClass) {
+        TAG_DATAS.put(tagName, dataClass);
+        LOG.log(Level.INFO, "registerData, {0} => {1}", new Object[] {tagName, dataClass});
     }
     
     /**
@@ -46,12 +46,13 @@ public class DataFactory {
      * @param tagName
      * @param dataLoaderClass 
      */
-    public static void registerLoader(String tagName, Class<? extends DataLoader> dataLoaderClass) {
+    public static void registerDataLoader(String tagName, Class<? extends DataLoader> dataLoaderClass) {
         if (dataLoaderClass == null) {
             TAG_LOADERS.remove(tagName);
             return;
         }
         TAG_LOADERS.put(tagName, dataLoaderClass);
+        LOG.log(Level.INFO, "registerDataLoader, {0} => {1}", new Object[] {tagName, dataLoaderClass});
     }
     
     /** 
@@ -59,12 +60,13 @@ public class DataFactory {
      * @param tagName 
      * @param dataProcessorClass 
      */
-    public static void registerProcessor(String tagName, Class<? extends DataProcessor> dataProcessorClass) {
+    public static void registerDataProcessor(String tagName, Class<? extends DataProcessor> dataProcessorClass) {
         if (dataProcessorClass == null) {
             TAG_PROCESSORS.remove(tagName);
             return;
         }
         TAG_PROCESSORS.put(tagName, dataProcessorClass);
+        LOG.log(Level.INFO, "registerDataProcessor, {0} => {1}", new Object[] {tagName, dataProcessorClass});
     }
     
     /**
@@ -80,8 +82,8 @@ public class DataFactory {
             , Class<? extends DataProcessor> dataProcessorClass
             ) {
         registerData(tagName, dataClass);
-        registerLoader(tagName, dataLoaderClass);
-        registerProcessor(tagName, dataProcessorClass);
+        registerDataLoader(tagName, dataLoaderClass);
+        registerDataProcessor(tagName, dataProcessorClass);
     }
     
     /**
@@ -103,7 +105,7 @@ public class DataFactory {
             }
             ProtoData protoData = (ProtoData) Class.forName(dataClass).newInstance();
             
-            String dataLoader = proto.getLoaderClass();
+            String dataLoader = proto.getDataLoaderClass();
             if (dataLoader == null) {
                 throw new NullPointerException("No \"dataLoader\" set for proto, id=" + id + ", proto=" + proto);
             }

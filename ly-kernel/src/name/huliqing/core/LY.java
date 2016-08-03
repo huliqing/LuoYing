@@ -149,6 +149,7 @@ import name.huliqing.core.object.anim.MoveAnim;
 import name.huliqing.core.object.anim.RandomRotationAnim;
 import name.huliqing.core.object.anim.RotationAnim;
 import name.huliqing.core.object.anim.ScaleAnim;
+import name.huliqing.core.object.attribute.AttributeDataLoader;
 import name.huliqing.core.object.bullet.BulletDataLoader;
 import name.huliqing.core.object.bullet.CurveBullet;
 import name.huliqing.core.object.bullet.CurveTrailBullet;
@@ -162,6 +163,8 @@ import name.huliqing.core.object.chat.SellChat;
 import name.huliqing.core.object.chat.SendChat;
 import name.huliqing.core.object.chat.ShopChat;
 import name.huliqing.core.object.chat.TaskChat;
+import name.huliqing.core.object.config.ConfigDataLoader;
+import name.huliqing.core.object.drop.DropDataLoader;
 import name.huliqing.core.object.effect.EffectDataLoader;
 import name.huliqing.core.object.effect.EncircleHaloEffect;
 import name.huliqing.core.object.effect.GroupEffect;
@@ -225,6 +228,7 @@ import name.huliqing.core.object.handler.TestHandler;
 import name.huliqing.core.object.handler.WeaponHandler;
 import name.huliqing.core.object.hitchecker.HitCheckerDataLoader;
 import name.huliqing.core.object.hitchecker.SimpleHitChecker;
+import name.huliqing.core.object.item.ItemDataLoader;
 import name.huliqing.core.object.magic.AttributeHitMagic;
 import name.huliqing.core.object.magic.MagicDataLoader;
 import name.huliqing.core.object.magic.StateMagic;
@@ -263,6 +267,8 @@ import name.huliqing.core.object.skill.WalkSkill;
 import name.huliqing.core.object.skin.OutfitSkin;
 import name.huliqing.core.object.skin.SkinDataLoader;
 import name.huliqing.core.object.skin.WeaponSkin;
+import name.huliqing.core.object.slot.SlotDataLoader;
+import name.huliqing.core.object.sound.SoundDataLoader;
 import name.huliqing.core.object.state.AttributeDynamicState;
 import name.huliqing.core.object.state.AttributeState;
 import name.huliqing.core.object.state.CleanState;
@@ -373,11 +379,11 @@ public class LY {
         DataFactory.register("actionFollow", ActionData.class, ActionDataLoader.class,  FollowPathAction.class);
         DataFactory.register("actionFight", ActionData.class, ActionDataLoader.class,  FightDynamicAction.class);
         
-        // Actor
-        DataFactory.register("actor",  ActorData.class, ActorDataLoader.class, ActorControl.class);
-        
          //ActorAnim
         DataFactory.register("actorAnimCurveMove",  ActorAnimData.class, ActorAnimDataLoader.class, ActorCurveMove.class);
+        
+        // Actor
+        DataFactory.register("actor",  ActorData.class, ActorDataLoader.class, ActorControl.class);
         
         // ActorLogic
         DataFactory.register("actorLogicFight",  ActorLogicData.class, ActorLogicDataLoader.class, FightActorLogic.class);
@@ -399,6 +405,9 @@ public class LY {
         DataFactory.register("animScale", AnimData.class, AnimDataLoader.class,  ScaleAnim.class);
         DataFactory.register("animColor",  AnimData.class, AnimDataLoader.class, ColorAnim.class);
         
+        // Attribute
+        DataFactory.register("attribute",  AttributeData.class, AttributeDataLoader.class, null);
+        
         // Bullet
         DataFactory.register("bulletSimple",  BulletData.class, BulletDataLoader.class, SimpleBullet.class);
         DataFactory.register("bulletStraight",  BulletData.class, BulletDataLoader.class, StraightBullet.class);
@@ -414,6 +423,12 @@ public class LY {
         DataFactory.register("chatShop",  ChatData.class, ChatDataLoader.class, ShopChat.class);
         DataFactory.register("chatSell",  ChatData.class, ChatDataLoader.class, SellChat.class);
         DataFactory.register("chatTask",  ChatData.class, ChatDataLoader.class, TaskChat.class);
+        
+        // Config
+        DataFactory.register("config",  ConfigData.class, ConfigDataLoader.class, null);
+        
+        // Drop
+        DataFactory.register("drop",  DropData.class, DropDataLoader.class, null);
         
         // Effect
         DataFactory.register("effectHalo",  EffectData.class, EffectDataLoader.class, HaloEffect.class);
@@ -466,23 +481,6 @@ public class LY {
         DataFactory.register("gameLogicActorClean", GameLogicData.class, GameLogicDataLoader.class, ActorCleanGameLogic.class);
         DataFactory.register("gameLogicAttributeChange", GameLogicData.class, GameLogicDataLoader.class, AttributeChangeGameLogic.class);
         
-        // HitChecker
-        DataFactory.register("hitChecker",  HitCheckerData.class, HitCheckerDataLoader.class, SimpleHitChecker.class);
-
-        // Position
-        DataFactory.register("positionRandomSphere",  PositionData.class, PositionDataLoader.class, RandomSpherePosition.class);
-        DataFactory.register("positionRandomBox",  PositionData.class, PositionDataLoader.class, RandomBoxPosition.class);
-        DataFactory.register("positionRandomCircle",  PositionData.class, PositionDataLoader.class, RandomCirclePosition.class);
-        DataFactory.register("positionFixedPoint",  PositionData.class, PositionDataLoader.class, FixedPosition.class);
-        DataFactory.register("positionView",  PositionData.class, PositionDataLoader.class, ViewPosition.class);
-        
-        // Resist
-        DataFactory.register("resistSimple",  ResistData.class, ResistDataLoader.class, SimpleResist.class);
-        DataFactory.register("resistAll",  ResistData.class, ResistDataLoader.class, AllResist.class);
-
-        // Shape
-        DataFactory.register("shapeBox",  ShapeData.class, ShapeDataLoader.class, BoxShape.class);
-        
         // Handler
         DataFactory.register("handlerTest", HandlerData.class, HandlerDataLoader.class, TestHandler.class);
         DataFactory.register("handlerSummon", HandlerData.class, HandlerDataLoader.class, SummonHandler.class);
@@ -497,14 +495,34 @@ public class LY {
         DataFactory.register("handlerItemSkill", HandlerData.class, HandlerDataLoader.class, ItemSkillHandler.class);
         DataFactory.register("handlerMap", HandlerData.class, HandlerDataLoader.class, MapHandler.class);
         
-        // Scene
-        DataFactory.register("scene", SceneData.class, SceneDataLoader.class, Scene.class);
-        DataFactory.register("sceneRandom", SceneData.class, RandomSceneLoader.class, Scene.class);
+        // HitChecker
+        DataFactory.register("hitChecker",  HitCheckerData.class, HitCheckerDataLoader.class, SimpleHitChecker.class);
         
+        // Item
+        DataFactory.register("item",  ItemData.class, ItemDataLoader.class, null);
+
         // Magic
         DataFactory.register("magicState", MagicData.class, MagicDataLoader.class, StateMagic.class);
         DataFactory.register("magicAttributeHit", MagicData.class, MagicDataLoader.class, AttributeHitMagic.class);
 
+        // Position
+        DataFactory.register("positionRandomSphere",  PositionData.class, PositionDataLoader.class, RandomSpherePosition.class);
+        DataFactory.register("positionRandomBox",  PositionData.class, PositionDataLoader.class, RandomBoxPosition.class);
+        DataFactory.register("positionRandomCircle",  PositionData.class, PositionDataLoader.class, RandomCirclePosition.class);
+        DataFactory.register("positionFixedPoint",  PositionData.class, PositionDataLoader.class, FixedPosition.class);
+        DataFactory.register("positionView",  PositionData.class, PositionDataLoader.class, ViewPosition.class);
+        
+        // Resist
+        DataFactory.register("resistSimple",  ResistData.class, ResistDataLoader.class, SimpleResist.class);
+        DataFactory.register("resistAll",  ResistData.class, ResistDataLoader.class, AllResist.class);
+        
+        // Scene
+        DataFactory.register("scene", SceneData.class, SceneDataLoader.class, Scene.class);
+        DataFactory.register("sceneRandom", SceneData.class, RandomSceneLoader.class, Scene.class);
+
+        // Shape
+        DataFactory.register("shapeBox",  ShapeData.class, ShapeDataLoader.class, BoxShape.class);
+        
         // Skill
         DataFactory.register("skillWalk",  SkillData.class, SkillDataLoader.class, WalkSkill.class);
         DataFactory.register("skillRun",  SkillData.class, SkillDataLoader.class, RunSkill.class);
@@ -527,6 +545,12 @@ public class LY {
         // Skin
         DataFactory.register("skinOutfit",  SkinData.class, SkinDataLoader.class, OutfitSkin.class);
         DataFactory.register("skinWeapon",  SkinData.class, SkinDataLoader.class, WeaponSkin.class);
+        
+        // Slot
+        DataFactory.register("slot",  SlotData.class, SlotDataLoader.class, null);
+        
+        // Sound
+        DataFactory.register("sound",  SoundData.class, SoundDataLoader.class, null);
         
         // State
         DataFactory.register("stateAttribute", StateData.class, StateDataLoader.class, AttributeState.class);

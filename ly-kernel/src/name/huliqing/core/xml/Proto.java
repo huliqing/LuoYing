@@ -50,17 +50,17 @@ public class Proto extends DataAttribute{
      * 数据类必须是“DataLoader”,如果没有指定，则该方法返回null.
      * @return 
      */
-    public String getLoaderClass() {
-        return getAttribute("loaderClass");
+    public String getDataLoaderClass() {
+        return getAttribute("dataLoaderClass");
     }
     
     /**
      * 设置用于载入数据的“载入器”的class全限定类名，如“name.huliqing.fighter.object.scene.SceneLoader”,
      * 数据类必须是“DataLoader”
-     * @param loaderClass 
+     * @param dataLoaderClass 
      */
-    public void setLoaderClass(String loaderClass) {
-        setAttribute("loaderClass", loaderClass);
+    public void setDataLoaderClass(String dataLoaderClass) {
+        setAttribute("dataLoaderClass", dataLoaderClass);
     }
     
     /**
@@ -68,17 +68,17 @@ public class Proto extends DataAttribute{
      * DataProcessor,如果没有指定，则该方法将返回null.
      * @return 
      */
-    public String getProcessorClass() {
-        return getAttribute("processorClass");
+    public String getDataProcessorClass() {
+        return getAttribute("dataProcessorClass");
     }
     
     /**
      * 设置用于处理数据的“处理器”的class全限定类名，如“name.huliqing.fighter.object.scene.Scene", 数据类型必须是
      * DataProcessor。
-     * @param processorClass
+     * @param dataProcessorClass
      */
-    public void setProcessorClass(String processorClass) {
-        setAttribute("processorClass", processorClass);
+    public void setDataProcessorClass(String dataProcessorClass) {
+        setAttribute("dataProcessorClass", dataProcessorClass);
     }
     
     /**

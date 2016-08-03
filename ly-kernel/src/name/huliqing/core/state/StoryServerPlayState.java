@@ -79,11 +79,6 @@ public abstract class StoryServerPlayState extends NetworkServerPlayState {
     public SaveStory getSaveStory() {
         return saveStory;
     }
-    
-    @Override
-    public void initialize(AppStateManager stateManager, Application app) {
-        super.initialize(stateManager, app);
-    }
 
     @Override
     public void exit() {

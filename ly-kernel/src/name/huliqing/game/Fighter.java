@@ -115,11 +115,6 @@ public class Fighter extends SimpleApplication {
         // 1.初始化数据
         LY.initialize(this, settings);
         
-        // 注册SerializerObject
-//        MessRegister.register();
-//        // 注册内置的数据装载器和处理器（含注册SerializerObject）。
-//        DataFactory.initRegister();
-        
         // 2.载入语言环境及系统配置
         Factory.get(ConfigService.class).loadGlobalConfig();
         Factory.get(ConfigService.class).loadLocale();

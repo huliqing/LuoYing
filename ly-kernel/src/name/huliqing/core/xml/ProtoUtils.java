@@ -114,13 +114,13 @@ class ProtoUtils {
             Class dataClass = DataFactory.getDataClass(tagName);
             proto.setDataClass(dataClass != null ? dataClass.getName() : null);
         }
-        if (proto.getLoaderClass() == null) {
+        if (proto.getDataLoaderClass() == null) {
             Class dataLoaderClass = DataFactory.getDataLoaderClass(tagName);
-            proto.setLoaderClass(dataLoaderClass != null ? dataLoaderClass.getName() : null);
+            proto.setDataLoaderClass(dataLoaderClass != null ? dataLoaderClass.getName() : null);
         }
-        if (proto.getProcessorClass() == null) {
+        if (proto.getDataProcessorClass() == null) {
             Class dataProcessorClass = DataFactory.getDataProcessorClass(tagName);
-            proto.setProcessorClass(dataProcessorClass != null ? dataProcessorClass.getName() : null);
+            proto.setDataProcessorClass(dataProcessorClass != null ? dataProcessorClass.getName() : null);
         }
     }
     

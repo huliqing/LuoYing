@@ -35,11 +35,14 @@ xs:time
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
-        <xs:attribute name="dataLoader" type="xs:string" use="optional" >
-            <xs:annotation><xs:documentation>e.g. "name.huliqing.fighter.scene.SceneLoader"</xs:documentation></xs:annotation>
+        <xs:attribute name="dataClass" type="xs:string" use="optional" >
+            <xs:annotation><xs:documentation></xs:documentation></xs:annotation>
         </xs:attribute>
-        <xs:attribute name="dataProcessor" type="xs:string" use="optional" >
-            <xs:annotation><xs:documentation>e.g. "name.huliqing.fighter.scene.Scene"</xs:documentation></xs:annotation>
+        <xs:attribute name="dataLoaderClass" type="xs:string" use="optional" >
+            <xs:annotation><xs:documentation></xs:documentation></xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="dataProcessorClass" type="xs:string" use="optional" >
+            <xs:annotation><xs:documentation></xs:documentation></xs:annotation>
         </xs:attribute>
         <xs:attribute name="cost" type="xs:integer" use="optional" >
             <xs:annotation>
