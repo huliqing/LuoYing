@@ -44,11 +44,6 @@ xs:time
         <xs:attribute name="dataProcessorClass" type="xs:string" use="optional" >
             <xs:annotation><xs:documentation></xs:documentation></xs:annotation>
         </xs:attribute>
-        <xs:attribute name="cost" type="xs:integer" use="optional" >
-            <xs:annotation>
-                <xs:documentation>物品的价值，当在商品中出售时值多少钱。</xs:documentation>
-            </xs:annotation>
-        </xs:attribute>
         <xs:attribute name="localObject" type="bool" use="optional" >
             <xs:annotation>
                 <xs:documentation>
@@ -91,7 +86,7 @@ xs:time
         </xs:restriction>
     </xs:simpleType>
     
-    <!-- 定义平面：xy,xz,yz -->
+    <!-- 定义平面：xy,xz,yz: remove20160805 -->
     <xs:simpleType name="plane" >
         <xs:restriction base="xs:string">
             <xs:enumeration value="xy"/>
@@ -116,19 +111,13 @@ xs:time
         <xs:simpleType>
             <xs:restriction base="xs:string">
                 <xs:enumeration value="0">
-                    <xs:annotation>
-                        <xs:documentation>female</xs:documentation>
-                    </xs:annotation>
+                    <xs:annotation><xs:documentation>female</xs:documentation></xs:annotation>
                 </xs:enumeration>
                 <xs:enumeration value="1">
-                    <xs:annotation>
-                        <xs:documentation>male</xs:documentation>
-                    </xs:annotation>
+                    <xs:annotation><xs:documentation>male</xs:documentation></xs:annotation>
                 </xs:enumeration>
                 <xs:enumeration value="2">
-                    <xs:annotation>
-                        <xs:documentation>unknow</xs:documentation>
-                    </xs:annotation>
+                    <xs:annotation><xs:documentation>unknow</xs:documentation></xs:annotation>
                 </xs:enumeration>
             </xs:restriction>
         </xs:simpleType>
@@ -190,6 +179,12 @@ xs:time
         </xs:simpleType>
     </xs:attribute>
     
+    <xs:attribute name="cost" type="xs:integer" use="optional" >
+        <xs:annotation>
+            <xs:documentation>物品的价值，当在商品中出售时值多少钱。</xs:documentation>
+        </xs:annotation>
+    </xs:attribute>
+    
     <xs:attribute name="mass" type="xs:decimal">
         <xs:annotation>
             <xs:documentation>角色质量，默认0，对于能够行动的角色，如人物，怪物等应该设置大于0。
@@ -215,6 +210,16 @@ xs:time
     <xs:attribute name="handler" type="xs:string">
         <xs:annotation>
             <xs:documentation>指定一个handler来处理该物品的使用</xs:documentation>
+        </xs:annotation>
+    </xs:attribute>
+    
+    <xs:attribute name="pickable" type="bool" >
+        <xs:annotation>
+            <xs:documentation>
+                物体是否是可选择的，即可用鼠标在游戏中选中。默认为false(0),
+                一般地面应该设置为true,否则玩家将无法控制角色在地面上行走，因为
+                玩家需要选择地面上的某个点来让角色走动。
+            </xs:documentation>
         </xs:annotation>
     </xs:attribute>
     
@@ -277,16 +282,19 @@ xs:time
             <xs:documentation>位置点，格式："x,y,z"</xs:documentation>
         </xs:annotation>
     </xs:attribute>
+    
     <xs:attribute name="rotation" type="xs:string">
         <xs:annotation>
             <xs:documentation>旋转，格式："x,y,z", xyz分别表示以各个轴向上旋转的弧度数。</xs:documentation>
         </xs:annotation>
     </xs:attribute>
+    
     <xs:attribute name="scale" type="xs:string">
         <xs:annotation>
             <xs:documentation>缩放，格式: "x,y,z"</xs:documentation>
         </xs:annotation>
     </xs:attribute>
+    
     <xs:attribute name="debug">
         <xs:annotation>
             <xs:documentation>是否打开调试，0：关闭; 1：打开</xs:documentation>
@@ -298,4 +306,5 @@ xs:time
             </xs:restriction>
         </xs:simpleType>
     </xs:attribute>
+    
 </xs:schema>

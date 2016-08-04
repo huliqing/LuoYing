@@ -11,13 +11,14 @@ import com.jme3.network.serializing.Serializable;
 import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import name.huliqing.core.data.EnvData;
+import name.huliqing.core.data.define.PickObject;
 
 /**
  *
  * @author huliqing
  */
 @Serializable
-public class ModelEnvData extends EnvData{
+public class ModelEnvData extends EnvData implements PickObject{
     
     private String file;
     // 注意不要在这里使用final关键字，否则Serializable无法重建参数
@@ -34,6 +35,7 @@ public class ModelEnvData extends EnvData{
     private boolean useUnshaded;
     // 是否作为地形的一部分，当作为地型的一部分时可进行点击，并让角色在上面行走。
     private boolean terrain;
+    private boolean pickable;
     
     public String getFile() {
         return file;
@@ -125,6 +127,15 @@ public class ModelEnvData extends EnvData{
      */
     public void setTerrain(boolean terrain) {
         this.terrain = terrain;
+    }
+
+    @Override
+    public boolean isPickable() {
+        return pickable;
+    }
+
+    public void setPickable(boolean pickable) {
+        this.pickable = pickable;
     }
     
 }

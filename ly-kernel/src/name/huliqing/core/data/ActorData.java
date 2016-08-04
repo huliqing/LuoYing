@@ -320,10 +320,11 @@ public class ActorData extends ObjectData implements MatObject{
         this.drop = drop;
     }
 
-    @Override
-    public boolean isPickable() {
-        return true;
-    }
+    // remove20160805
+//    @Override
+//    public boolean isPickable() {
+//        return true;
+//    }
 
     /**
      * 获取逻辑列表，如果没有设置过，则返回一个空列表

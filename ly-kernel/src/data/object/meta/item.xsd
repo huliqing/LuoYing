@@ -47,6 +47,7 @@ xs:time
                         <xs:documentation>物品是否可删除</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
+                <xs:attribute name="cost" ref="cost" use="optional" />
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>

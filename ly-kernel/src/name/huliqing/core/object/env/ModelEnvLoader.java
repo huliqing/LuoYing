@@ -57,6 +57,7 @@ public class ModelEnvLoader<T extends ModelEnvData> extends EnvDataLoader<T> {
         
         store.setUseUnshaded(proto.getAsBoolean("useUnshaded", false));
         store.setTerrain(proto.getAsBoolean("terrain", false));
+        store.setPickable(proto.getAsBoolean("pickable", false));
     }
     
 }

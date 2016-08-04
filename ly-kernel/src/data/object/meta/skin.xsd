@@ -76,14 +76,6 @@ xs:time
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="baseSkin">
-                    
-                    <!--remove20151226,交由applyAttributes代替-->
-<!--                    <xs:attribute name="defence" type="xs:integer" use="optional">
-                        <xs:annotation>
-                            <xs:documentation>物理防御力,默认0</xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>-->
-                    
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
@@ -167,6 +159,7 @@ xs:time
                 <xs:attribute name="raceLimit" ref="raceLimit" use="optional" />
                 <xs:attribute name="sexLimit" ref="sexLimit" use="optional" />
                 <xs:attribute name="careerLimit" ref="careerLimit" use="optional" />
+                <xs:attribute name="cost" ref="cost" use="optional" />
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>

@@ -13,6 +13,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Spatial;
 import name.huliqing.core.data.ObjectData;
+import name.huliqing.core.data.define.PickObject;
 
 /**
  * 鼠标选择工具类
@@ -61,14 +62,29 @@ public class PickManager {
         if (s == null) {
             return null;
         }
-            
+        
         // 可被选择的对象.
         ObjectData od = s.getUserData(ObjectData.USER_DATA);
-        if (od != null && od.isPickable()) {
+        if ((od instanceof PickObject) && ((PickObject)od).isPickable()) {
             return s;
         } else {
             return findPickable(s.getParent());
         }
     }
+    
+    // remove20160805
+//    private static Spatial findPickable(Spatial s) {
+//        if (s == null) {
+//            return null;
+//        }
+//            
+//        // 可被选择的对象.
+//        ObjectData od = s.getUserData(ObjectData.USER_DATA);
+//        if (od != null && od.isPickable()) {
+//            return s;
+//        } else {
+//            return findPickable(s.getParent());
+//        }
+//    }
    
 }
