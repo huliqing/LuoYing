@@ -6,7 +6,7 @@ package name.huliqing.core.mess;
 
 import com.jme3.network.serializing.Serializable;
 import name.huliqing.core.Factory;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.ProtoService;
 import name.huliqing.core.object.actor.Actor;
@@ -67,7 +67,7 @@ public class MessProtoAdd extends MessBase {
         }
         
         if (addCount > 0) {
-            ProtoData data = protoService.createData(objectId);
+            ObjectData data = protoService.createData(objectId);
             protoService.addData(actor, data, addCount);
         }
         protoService.syncDataTotal(actor, objectId, syncTotal);

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.ActorLogicData;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.mvc.network.ProtoNetwork;
 import name.huliqing.core.mvc.service.ProtoService;
 import name.huliqing.core.utils.ConvertUtils;
@@ -71,7 +71,7 @@ public class ShopActorLogic<T extends ActorLogicData> extends ActorLogic<T> {
     // 初始时进满货
     private void initStockProduct() {
         // 进货
-        ProtoData temp;
+        ObjectData temp;
         int currentCount;
         int actualStock;
         for (Product p : products) {
@@ -98,7 +98,7 @@ public class ShopActorLogic<T extends ActorLogicData> extends ActorLogic<T> {
         remainCount = fullCount - stockCount;
         
         // 进货
-        ProtoData temp;
+        ObjectData temp;
         int currentCount;
         int actualStock;
         for (Product p : products) {

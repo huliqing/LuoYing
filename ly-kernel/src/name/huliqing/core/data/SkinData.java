@@ -14,6 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.constants.ResConstants;
 import name.huliqing.core.constants.SkinConstants;
+import name.huliqing.core.data.define.CostObject;
+import name.huliqing.core.data.define.HandlerObject;
+import name.huliqing.core.data.define.MatObject;
+import name.huliqing.core.enums.Mat;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.utils.ConvertUtils;
 
@@ -22,7 +26,7 @@ import name.huliqing.core.utils.ConvertUtils;
  * @author huliqing
  */
 @Serializable
-public class SkinData extends PkgItemData {
+public class SkinData extends PkgItemData implements MatObject, CostObject, HandlerObject {
     
     // 注：一件skin可属于多个type,如上下连身的套装，如法袍可属于 "7,8".
     // 同时一件skin也可与多个其它skin进行排斥。这里的type和conflictType使用二
@@ -73,10 +77,6 @@ public class SkinData extends PkgItemData {
     }
     
     public SkinData() {}
-    
-    public SkinData(String id) {
-        super(id);
-    }
 
     /**
      * 获取skin的类型，注：这里返回的整数使用的是二进制位来表示skin的类型，
@@ -146,8 +146,8 @@ public class SkinData extends PkgItemData {
     }
 
     /**
-     * 设置武器所有可支持的槽位
-     * @param weaponSlots 
+     * 设置武器所有可支持的槽位 
+     * @param slots
      */
     public void setSlots(List<String> slots) {
         this.slots = slots;
@@ -162,8 +162,8 @@ public class SkinData extends PkgItemData {
     }
 
     /**
-     * 设置武器所在的槽位
-     * @param weaponSlot 
+     * 设置武器所在的槽位 
+     * @param slot
      */
     public void setSlot(String slot) {
         this.slot = slot;
@@ -202,9 +202,40 @@ public class SkinData extends PkgItemData {
     }
     
     /**
-     * 获取描述说明
+     * 获取模型文件路径如："Models/xxx.j3o";
      * @return 
      */
+    public String getFile() {
+        return getAttribute("file");
+    }
+    
+    /**
+     * 获取物品的材质（mat)，如果没有设置则返回Mat.none.该材质信息目前主要
+     * 用于计算物体碰撞声音。
+     * @return 
+     */
+    @Override
+    public Mat getMat() {
+        int matInt = getAsInteger("mat", Mat.none.getValue());
+        return Mat.identify(matInt);
+    }
+
+    @Override
+    public float getCost() {
+        return getAsFloat("cost", 0);
+    }
+
+    @Override
+    public String getHandler() {
+        return getAttribute("handler");
+    }
+    
+    /**
+     * 获取描述说明
+     * @return 
+     * @deprecated 以后不要再使用.
+     */
+    @Override
     public String getDes() {
         List<AttributeApply> aas = getApplyAttributes();
         if (aas != null) {
@@ -219,4 +250,5 @@ public class SkinData extends PkgItemData {
         }
         return ResourceManager.get(ResConstants.COMMON_UNKNOW);
     }
+
 }

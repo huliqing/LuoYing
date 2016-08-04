@@ -11,7 +11,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import name.huliqing.core.Factory;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.SkinData;
 import name.huliqing.core.data.SlotData;
 import name.huliqing.core.mvc.service.ActorService;
@@ -131,12 +131,12 @@ public class WeaponSkin<T extends SkinData> extends AbstractSkin<T> {
     private void takeOffDirect(Actor actor) {
         Spatial skinNode = findSkinNodes(actor.getModel(), data);
         if (skinNode == null) {
-            String modelFile = data.getProto().getFile();
+            String modelFile = data.getFile();
             if (modelFile == null) {
                 return;
             }
             skinNode = AssetLoader.loadModel(modelFile);
-            skinNode.setUserData(ProtoData.USER_DATA, data);
+            skinNode.setUserData(ObjectData.USER_DATA, data);
         }
         String weaponSlot = data.getSlot();
         // 如果找不到合适的槽位或者武器根据不支持槽位，则直接attach到角色身上。

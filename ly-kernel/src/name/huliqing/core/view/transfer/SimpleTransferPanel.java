@@ -5,7 +5,7 @@
 package name.huliqing.core.view.transfer;
 
 import java.util.List;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.view.ItemList;
 import name.huliqing.core.view.ItemPanel;
 import name.huliqing.core.ui.Row;
@@ -23,7 +23,7 @@ public class SimpleTransferPanel extends TransferPanel {
         itemPanel = new ItemPanel(width, height, getDatas());
         itemPanel.setRowClickListener(new ItemList.RowClickListener() {
             @Override
-            public void onClick(Row row, boolean isPressed, ProtoData data) {
+            public void onClick(Row row, boolean isPressed, ObjectData data) {
                 if (isPressed) return;
                 transfer(data);
             }
@@ -32,18 +32,18 @@ public class SimpleTransferPanel extends TransferPanel {
     }
 
     @Override
-    public void setDatas(List<ProtoData> datas) {
+    public void setDatas(List<ObjectData> datas) {
         super.setDatas(datas); 
         itemPanel.refresh();
     }
     
     @Override
-    public void onAdded(Transfer transfer, ProtoData data, int count) {
+    public void onAdded(Transfer transfer, ObjectData data, int count) {
         itemPanel.refresh();
     }
 
     @Override
-    public void onRemoved(Transfer transfer, ProtoData data, int count) {
+    public void onRemoved(Transfer transfer, ObjectData data, int count) {
         itemPanel.refresh();
     }
     

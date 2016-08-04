@@ -26,16 +26,16 @@ import java.util.Map;
  * @author huliqing
  */
 @Serializable
-public class DataAttribute implements Savable {
+public class Data implements Savable {
 
     // 扩展参数
     protected Map<String, Object> data;
     
-    public DataAttribute() {
+    public Data() {
         this.data = new HashMap<String, Object>();
     }
     
-    public DataAttribute(Map data) {
+    public Data(Map data) {
         if (data == null) {
             throw new NullPointerException("Data could not be null!");
         }
@@ -50,9 +50,9 @@ public class DataAttribute implements Savable {
     public final void setAttribute(String key, Object value) {
         if (value == null) {
             data.remove(key);
-            return;
+        } else {
+            data.put(key, value);
         }
-        data.put(key, value);
     }
     
     /**
@@ -356,12 +356,33 @@ public class DataAttribute implements Savable {
         return temp != null ? temp : defValue;
     }
     
+    /**
+     * 清理所有数据
+     */
     public final void clear() {
         data.clear();
     }
     
+    /**
+     * 检查data是否为空
+     * @return 
+     */
     public final boolean isEmpty() {
         return data.isEmpty();
+    }
+    
+    /**
+     * 检查某个参数中有多少个项，每个项以半角逗号分隔,如果参数不存在或没有值
+     * ，则返回0
+     * @param key
+     * @return 
+     */
+    public int checkAttributeLength(String key) {
+        String value = getAttribute(key);
+        if (value == null || value.trim().isEmpty()) {
+            return 0;
+        }
+        return value.split(",").length;
     }
     
     /**
@@ -386,12 +407,6 @@ public class DataAttribute implements Savable {
      */
     private List<Integer> toIntegerList(String[] strArr) {
         List<Integer> list = new ArrayList<Integer>();
-        
-        // remove20160803
-//        for (int i = 0; i < strArr.length; i++) {
-//            list.add(Integer.parseInt(strArr[i]));
-//        }
-
         for (String strArr1 : strArr) {
             list.add(Integer.parseInt(strArr1));
         }
@@ -410,6 +425,11 @@ public class DataAttribute implements Savable {
         InputCapsule ic = im.getCapsule(this);
         UserData dataObject = (UserData) ic.readSavable("_dataObject_", new UserData(UserData.getObjectType(data), data));
         data = (Map) dataObject.getValue();
+    }
+
+    @Override
+    public String toString() {
+        return "Data{" + "data=" + data + '}';
     }
     
 }

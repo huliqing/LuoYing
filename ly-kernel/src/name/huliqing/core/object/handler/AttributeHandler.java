@@ -7,7 +7,7 @@ package name.huliqing.core.object.handler;
 import name.huliqing.core.Factory;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.data.HandlerData;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.mvc.service.AttributeService;
 import name.huliqing.core.mvc.service.ItemService;
 
@@ -33,7 +33,7 @@ public class AttributeHandler extends AbstractHandler {
     }
 
     @Override
-    protected void useObject(Actor actor, ProtoData data) {
+    protected void useObject(Actor actor, ObjectData data) {
         // 补充属性值
         attributeService.applyDynamicValue(actor, attribute, amount);
         attributeService.clampDynamicValue(actor, attribute);

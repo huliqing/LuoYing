@@ -12,7 +12,7 @@ import name.huliqing.core.Factory;
 import name.huliqing.core.data.HandlerData;
 import name.huliqing.core.data.PkgItemData;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.enums.MessageType;
 import name.huliqing.core.mvc.network.PlayNetwork;
 import name.huliqing.core.mvc.service.ActorService;
@@ -52,7 +52,7 @@ public abstract class AbstractHandler<T extends HandlerData> implements Handler<
     }
 
     @Override
-    public boolean canUse(Actor actor, ProtoData data) {
+    public boolean canUse(Actor actor, ObjectData data) {
         if (actor == null || data == null) {
             throw new NullPointerException("could not use data, actor=" + actor + ", data=" + data);
         }
@@ -80,7 +80,7 @@ public abstract class AbstractHandler<T extends HandlerData> implements Handler<
      * @param data
      * @return 
      */
-    protected final boolean checkRaceAndSex(Actor actor, ProtoData data) {
+    protected final boolean checkRaceAndSex(Actor actor, ObjectData data) {
         // 只检查PkgItemData类型的物品，其它物品默认为无限制
         if (!(data instanceof PkgItemData)) {
             return true;
@@ -106,7 +106,7 @@ public abstract class AbstractHandler<T extends HandlerData> implements Handler<
     }
 
     @Override
-    public final void useForce(Actor actor, ProtoData data) {
+    public final void useForce(Actor actor, ObjectData data) {
         useObject(actor, data);
         playEffects(actor, effects);
         playSounds(actor, sounds);
@@ -142,7 +142,7 @@ public abstract class AbstractHandler<T extends HandlerData> implements Handler<
     }
     
     @Override
-    public boolean remove(Actor actor, ProtoData data, int count) {
+    public boolean remove(Actor actor, ObjectData data, int count) {
         // 一些物品是不能删除的,如地图
         if (data instanceof PkgItemData) {
             PkgItemData pkgData = (PkgItemData) data;
@@ -167,6 +167,6 @@ public abstract class AbstractHandler<T extends HandlerData> implements Handler<
      * @param actor
      * @param data 
      */
-    protected abstract void useObject(Actor actor, ProtoData data);
+    protected abstract void useObject(Actor actor, ObjectData data);
 
 }

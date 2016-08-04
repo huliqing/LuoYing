@@ -4,6 +4,7 @@
  */
 package name.huliqing.core.object.sound;
 
+import com.jme3.audio.AudioData.DataType;
 import com.jme3.audio.AudioNode;
 import com.jme3.math.Vector3f;
 import java.util.HashMap;
@@ -34,7 +35,7 @@ public class SoundPlayer {
     }
     
     public void playSound(SoundData sound, Vector3f position, boolean instance) {
-        AudioNode audio = getSound(sound.getProto().getId());
+        AudioNode audio = getSound(sound.getId());
         Vector3f camLoc = LY.getApp().getCamera().getLocation();
         // 注意：比较的是平方，可减少一次开方运算
         float distanceSquared = camLoc.distanceSquared(position);
@@ -51,7 +52,7 @@ public class SoundPlayer {
     }
     
     public void stopSound(SoundData sound) {
-        getSound(sound.getProto().getId()).stop();
+        getSound(sound.getId()).stop();
     }
     
     private AudioNode getSound(String soundId) {
@@ -68,12 +69,12 @@ public class SoundPlayer {
     }
     
     public AudioNode createSound(SoundData sound) {
-        String soundFile = sound.getProto().getFile();
+        String soundFile = sound.getSoundFile();
         if (soundFile == null) {
-            throw new NullPointerException("sound file not found, soundData id=" + sound.getProto().getFile());
+            throw new NullPointerException("sound file not found, soundData id=" + sound.getSoundFile());
         }
-        AudioNode audio = new AudioNode(LY.getAssetManager(), soundFile);
-        audio.setName(sound.getProto().getFile());
+        AudioNode audio = new AudioNode(LY.getAssetManager(), soundFile, DataType.Buffer);
+        audio.setName(sound.getSoundFile());
         // 不使用位置，直接根据距离来判断声音大小，see => public void playSound(SoundData sound, Vector3f position)
         // positional的设置目前似乎有bug.
         audio.setPositional(false); 

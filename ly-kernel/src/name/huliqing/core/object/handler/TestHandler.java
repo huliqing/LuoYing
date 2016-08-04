@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 import name.huliqing.core.Factory;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.data.HandlerData;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.mvc.network.PlayNetwork;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.EffectService;
@@ -41,12 +41,12 @@ public class TestHandler extends AbstractHandler {
     }
 
     @Override
-    public boolean canUse(Actor actor, ProtoData data) {
+    public boolean canUse(Actor actor, ObjectData data) {
         return true;
     }
     
     @Override
-    protected void useObject(Actor actor, ProtoData data) {
+    protected void useObject(Actor actor, ObjectData data) {
         
 //        Actor aa = actorService.loadActor("actorSkeleton");
 //        actorService.setGroup(aa, FastMath.nextRandomInt(1, 100));

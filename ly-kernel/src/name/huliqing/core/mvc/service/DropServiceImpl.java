@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.DropData;
 import name.huliqing.core.data.DropItem;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.object.actor.Actor;
 
@@ -37,7 +37,7 @@ public class DropServiceImpl implements DropService {
     }
 
     @Override
-    public List<ProtoData> getBaseDrop(Actor actor, List<ProtoData> store) {
+    public List<ObjectData> getBaseDrop(Actor actor, List<ObjectData> store) {
         DropData data = actor.getData().getDrop();
         if (data == null) 
             return null;
@@ -47,13 +47,13 @@ public class DropServiceImpl implements DropService {
             return store;
         
         if (store == null) {
-            store = new ArrayList<ProtoData>(baseItems.size());
+            store = new ArrayList<ObjectData>(baseItems.size());
         }
         for (DropItem di : baseItems) {
             if (di.getCount() <= 0) {
                 continue;
             }
-            ProtoData dropItem = DataFactory.createData(di.getItemId());
+            ObjectData dropItem = DataFactory.createData(di.getItemId());
             dropItem.setTotal(di.getCount());
             store.add(dropItem);
         }
@@ -61,7 +61,7 @@ public class DropServiceImpl implements DropService {
     }
 
     @Override
-    public List<ProtoData> getRandomDrop(Actor actor, float dropFactor, List<ProtoData> store) {
+    public List<ObjectData> getRandomDrop(Actor actor, float dropFactor, List<ObjectData> store) {
         DropData data = actor.getData().getDrop();
         if (data == null) 
             return null;
@@ -71,7 +71,7 @@ public class DropServiceImpl implements DropService {
             return store;
         
         if (store == null) {
-            store = new ArrayList<ProtoData>(randomItems.size());
+            store = new ArrayList<ObjectData>(randomItems.size());
         }
         float factor; 
         float randomFactor;
@@ -83,7 +83,7 @@ public class DropServiceImpl implements DropService {
             if (factor >= randomFactor) {
                 // 注：DropItem中掉落的各种物品的id可能不存在，应该允许兼容这种
                 // 问题，给予一个警告就可以不要暴异常，因为
-                ProtoData dropItem = DataFactory.createData(di.getItemId());
+                ObjectData dropItem = DataFactory.createData(di.getItemId());
                 if (dropItem != null) {
                     dropItem.setTotal(di.getCount());
                     store.add(dropItem);
@@ -98,9 +98,9 @@ public class DropServiceImpl implements DropService {
     }
 
     @Override
-    public List<ProtoData> getRandomDropFull(Actor actor, List<ProtoData> store) {
+    public List<ObjectData> getRandomDropFull(Actor actor, List<ObjectData> store) {
         if (store == null) {
-            store = new ArrayList<ProtoData>();
+            store = new ArrayList<ObjectData>();
         }
         getBaseDrop(actor, store); // 必掉
         getRandomDrop(actor, configService.getDropFactor(), store); // 随机掉

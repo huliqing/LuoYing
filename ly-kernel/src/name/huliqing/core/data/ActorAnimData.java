@@ -15,8 +15,4 @@ public class ActorAnimData extends AnimData {
     
     public ActorAnimData() {}
     
-    public ActorAnimData(String id) {
-        super(id);
-    }
-    
 }

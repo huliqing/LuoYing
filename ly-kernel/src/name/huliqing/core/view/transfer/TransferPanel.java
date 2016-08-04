@@ -6,7 +6,7 @@ package name.huliqing.core.view.transfer;
 
 import java.util.List;
 import name.huliqing.core.constants.ResConstants;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.view.NumPanel;
 import name.huliqing.core.view.NumPanel.NumConfirmListener;
 import name.huliqing.core.manager.ResourceManager;
@@ -21,7 +21,7 @@ import name.huliqing.core.ui.state.UIState;
 public abstract class TransferPanel extends LinearLayout implements TransferListener, NumConfirmListener {
     private final ItemTransfer transfer = new ItemTransfer();
     private static NumPanel numPanel; // 一个实例就行
-    private ProtoData tempData;
+    private ObjectData tempData;
 
     public TransferPanel(float width, float height) {
         super(width, height);
@@ -40,7 +40,7 @@ public abstract class TransferPanel extends LinearLayout implements TransferList
      * 设置初始化数据
      * @param datas 
      */
-    public void setDatas(List<ProtoData> datas) {
+    public void setDatas(List<ObjectData> datas) {
         transfer.setDatas(datas);
         setNeedUpdate();
     }
@@ -49,7 +49,7 @@ public abstract class TransferPanel extends LinearLayout implements TransferList
      * 获取传输数据
      * @return 
      */
-    public List<ProtoData> getDatas() {
+    public List<ObjectData> getDatas() {
         return transfer.getDatas();
     }
     
@@ -57,7 +57,7 @@ public abstract class TransferPanel extends LinearLayout implements TransferList
      * 传输数据
      * @param data 
      */
-    public final void transfer(ProtoData data) {
+    public final void transfer(ObjectData data) {
         if (data.getTotal() == 1) {
             // 如果数量只有一个，则直接传输
             transferInner(data, 1);
@@ -68,7 +68,7 @@ public abstract class TransferPanel extends LinearLayout implements TransferList
         }
     }
     
-    private void transferByNumPanel(ProtoData data, int count) {
+    private void transferByNumPanel(ObjectData data, int count) {
         if (numPanel == null) {
             numPanel = new NumPanel(UIFactory.getUIConfig().getScreenWidth() * 0.5f
                     , UIFactory.getUIConfig().getScreenHeight() * 0.33f);
@@ -108,7 +108,7 @@ public abstract class TransferPanel extends LinearLayout implements TransferList
      * @param data
      * @param count 
      */
-    private void transferInner(ProtoData data, int count) {
+    private void transferInner(ObjectData data, int count) {
         transfer.transfer(data, count);
     }
     

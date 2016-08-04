@@ -4,7 +4,6 @@
  */
 package name.huliqing.core.data;
 
-import name.huliqing.core.xml.ProtoData;
 import com.jme3.network.serializing.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +13,7 @@ import java.util.List;
  * @author huliqing
  */
 @Serializable
-public class GameData extends ProtoData {
+public class GameData extends ObjectData {
     
     // 场景ID
     private SceneData sceneData;

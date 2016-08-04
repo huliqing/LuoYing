@@ -14,12 +14,13 @@ import name.huliqing.core.constants.IdConstants;
 import name.huliqing.core.constants.InterfaceConstants;
 import name.huliqing.core.constants.ResConstants;
 import name.huliqing.core.data.ChatData;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.mvc.network.UserCommandNetwork;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.ItemService;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.manager.ResourceManager;
+import name.huliqing.core.mvc.service.ProtoService;
 import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actor.ItemListener;
@@ -45,6 +46,7 @@ import name.huliqing.core.ui.Window.CloseListener;
  * @param <T>
  */
 public class ShopChat<T extends ChatData> extends Chat<T> implements ItemListener {
+    private final ProtoService protoService = Factory.get(ProtoService.class);
     private final ItemService itemService = Factory.get(ItemService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final PlayService playService = Factory.get(PlayService.class);
@@ -113,7 +115,7 @@ public class ShopChat<T extends ChatData> extends Chat<T> implements ItemListene
 //            updateShop();
             
             // 如果新添加了物品则同步物品数量
-            ProtoData pd = itemService.getItem(actor, itemId);
+            ObjectData pd = itemService.getItem(actor, itemId);
             productPanel.syncItem(itemId, pd.getTotal());
             productPanel.refreshPageData();
             
@@ -134,7 +136,7 @@ public class ShopChat<T extends ChatData> extends Chat<T> implements ItemListene
 //            updateShop();
             
             // 如果指定物品已经卖完则从商品列表中移除。
-            ProtoData pd = itemService.getItem(actor, itemId);
+            ObjectData pd = itemService.getItem(actor, itemId);
             if (pd == null || pd.getTotal() <= 0) {
                 productPanel.syncItem(itemId, 0);
             } else {
@@ -190,9 +192,9 @@ public class ShopChat<T extends ChatData> extends Chat<T> implements ItemListene
         super.cleanup(); 
     }
     
-    private class ItemList extends ListView<ProtoData> {
+    private class ItemList extends ListView<ObjectData> {
 
-        final List<ProtoData> datas = new ArrayList<ProtoData>();
+        final List<ObjectData> datas = new ArrayList<ObjectData>();
         
         public ItemList(float width, float height) {
             super(width, height);
@@ -202,12 +204,12 @@ public class ShopChat<T extends ChatData> extends Chat<T> implements ItemListene
         }
 
         @Override
-        protected Row<ProtoData> createEmptyRow() {
+        protected Row<ObjectData> createEmptyRow() {
             return new ItemRow(this);
         }
 
         @Override
-        public List<ProtoData> getDatas() {
+        public List<ObjectData> getDatas() {
             return datas;
         }
         
@@ -215,14 +217,14 @@ public class ShopChat<T extends ChatData> extends Chat<T> implements ItemListene
         // 这可避免在角色快速购买物品时由于物品被移除导致列表刷新带来的错误点击
         public void syncItem(String itemId, int total) {
             // 如果存在列表中则同步total数
-            for (ProtoData pd : datas) {
+            for (ObjectData pd : datas) {
                 if (pd.getId().equals(itemId)) {
                     pd.setTotal(total);
                     return;
                 }
             }
             // 如果列表中不存在，则把data添加进来
-            ProtoData newData = DataFactory.createData(itemId);
+            ObjectData newData = DataFactory.createData(itemId);
             newData.setTotal(total);
             datas.add(newData);
         }
@@ -238,14 +240,14 @@ public class ShopChat<T extends ChatData> extends Chat<T> implements ItemListene
 //        }
 
         @Override
-        protected boolean filter(ProtoData data) {
+        protected boolean filter(ObjectData data) {
             return !itemService.isSellable(data);
         }
         
     }
     
-    private class ItemRow extends Row<ProtoData> {
-        private ProtoData data;
+    private class ItemRow extends Row<ObjectData> {
+        private ObjectData data;
 
         // 物品
         private ColumnIcon icon;
@@ -313,13 +315,13 @@ public class ShopChat<T extends ChatData> extends Chat<T> implements ItemListene
         }
 
         @Override
-        public final void displayRow(ProtoData dd) {
+        public final void displayRow(ObjectData dd) {
             this.data = dd;
             icon.setIcon(data.getIcon());
             body.setNameText(ResourceManager.getObjectName(data));
             body.setDesText(ResourceManager.getObjectDes(data.getId()));
             
-            cost.setText(data.getCost() + "");
+            cost.setText(protoService.getCost(data) + "");
             num.setText(data.getTotal() + "");
             setNeedUpdate();
         }
@@ -408,14 +410,14 @@ public class ShopChat<T extends ChatData> extends Chat<T> implements ItemListene
         public void update() {
             // 注：这里显示的是当前玩家的剩余金币 ，不是卖家
             Actor player = playService.getPlayer();
-            ProtoData goldData =  itemService.getItem(player, IdConstants.ITEM_GOLD);
+            ObjectData goldData =  itemService.getItem(player, IdConstants.ITEM_GOLD);
             int golds = 0;
             if (goldData != null) {
                 golds = goldData.getTotal();
-                goldsIcon.setImage(goldData.getProto().getIcon());
+                goldsIcon.setImage(goldData.getIcon());
             } else {
                 goldData = DataFactory.createData(IdConstants.ITEM_GOLD);
-                goldsIcon.setImage(goldData.getProto().getIcon());
+                goldsIcon.setImage(goldData.getIcon());
             }
             goldsRemain.setText(ResourceManager.get(ResConstants.CHAT_SHOP_GOLDS_REMAIN) + ":" + golds);
             setNeedUpdate();

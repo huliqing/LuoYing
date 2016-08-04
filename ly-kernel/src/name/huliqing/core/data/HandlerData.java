@@ -4,7 +4,6 @@
  */
 package name.huliqing.core.data;
 
-import name.huliqing.core.xml.ProtoData;
 import com.jme3.network.serializing.Serializable;
 
 /**
@@ -12,12 +11,8 @@ import com.jme3.network.serializing.Serializable;
  * @author huliqing
  */
 @Serializable
-public class HandlerData extends ProtoData {
+public class HandlerData extends ObjectData {
     
     public HandlerData(){}
-    
-    public HandlerData(String id) {
-        super(id);
-    }
 
 }

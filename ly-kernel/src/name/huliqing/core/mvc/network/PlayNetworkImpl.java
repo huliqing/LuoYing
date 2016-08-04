@@ -18,7 +18,7 @@ import name.huliqing.core.LY;
 import name.huliqing.core.Config;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.GameData;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.enums.MessageType;
 import name.huliqing.core.mvc.service.ActionService;
 import name.huliqing.core.mvc.service.ActorService;
@@ -123,7 +123,7 @@ public class PlayNetworkImpl implements PlayNetwork {
     }
     
     @Override
-    public void addShortcut(Actor actor, ProtoData data) {
+    public void addShortcut(Actor actor, ObjectData data) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

@@ -7,7 +7,7 @@ package name.huliqing.core.mvc.service;
 import java.util.List;
 import name.huliqing.core.Inject;
 import name.huliqing.core.data.DropData;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.object.actor.Actor;
 
 /**
@@ -29,7 +29,7 @@ public interface DropService extends Inject {
      * @param store 存放结果,如果为null,则创建一个
      * @return 
      */
-    List<ProtoData> getBaseDrop(Actor actor, List<ProtoData> store);
+    List<ObjectData> getBaseDrop(Actor actor, List<ObjectData> store);
     
     /**
      * 获取随机掉落的物品，返回的物品列表将是通过掉落机率计算后的结果。掉落
@@ -40,7 +40,7 @@ public interface DropService extends Inject {
      * @param store 存放结果
      * @return 返回通过计算后可掉落的物品。
      */
-    List<ProtoData> getRandomDrop(Actor actor, float dropFactor, List<ProtoData> store);
+    List<ObjectData> getRandomDrop(Actor actor, float dropFactor, List<ObjectData> store);
     
     /**
      * 从角色身上获取可用于掉落的物品，包含“必掉”和“随机掉”物品
@@ -48,5 +48,5 @@ public interface DropService extends Inject {
      * @param store
      * @return 
      */
-    List<ProtoData> getRandomDropFull(Actor actor, List<ProtoData> store);
+    List<ObjectData> getRandomDropFull(Actor actor, List<ObjectData> store);
 }

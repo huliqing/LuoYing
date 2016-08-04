@@ -10,6 +10,7 @@ import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.constants.InterfaceConstants;
 import name.huliqing.core.constants.ResConstants;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.TaskData;
 import name.huliqing.core.mvc.network.ActorNetwork;
 import name.huliqing.core.mvc.network.ProtoNetwork;
@@ -154,7 +155,7 @@ public abstract class AbstractTask<T extends TaskData> implements Task<T> {
             if (rewardItems != null) {
                 for (RewardItem ri : rewardItems) {
                     IconLabel il = new IconLabel(ri.itemId
-                            , DataFactory.createData(ri.itemId).getIcon()
+                            , ((ObjectData)DataFactory.createData(ri.itemId)).getIcon()
                             , ri.count + "");
                     taskRewardPanel.addView(il);
                 }

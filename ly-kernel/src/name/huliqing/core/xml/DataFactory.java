@@ -103,16 +103,16 @@ public class DataFactory {
             if (dataClass == null) {
                 throw new NullPointerException("No \"dataClass\"  set for proto, id=" + id + ", proto=" + proto);
             }
-            ProtoData protoData = (ProtoData) Class.forName(dataClass).newInstance();
+            ProtoData data = (ProtoData) Class.forName(dataClass).newInstance();
             
             String dataLoader = proto.getDataLoaderClass();
             if (dataLoader == null) {
                 throw new NullPointerException("No \"dataLoader\" set for proto, id=" + id + ", proto=" + proto);
             }
             DataLoader dl = (DataLoader) Class.forName(dataLoader).newInstance();
-            protoData.setId(id);
-            dl.load(proto, protoData);
-            return (T) protoData;
+            data.setProto(proto);
+            dl.load(proto, data);
+            return (T) data;
             
         } catch (NullPointerException ex) {
             LOG.log(Level.SEVERE, "Could not createData by id={0}, error={1}",  new Object[]{id, ex.getMessage()});
@@ -140,7 +140,7 @@ public class DataFactory {
         Class<? extends DataProcessor> dpClass = TAG_PROCESSORS.get(data.getTagName());
         if (dpClass == null) {
             throw new NullPointerException("Could not find data processor to createProcessor"
-                    + ", tagName=" + data.getTagName() 
+                    + ", tagName=" + data.getProto().getTagName() 
                     + ", dataId=" + data.getId());
         }
         try {
@@ -167,7 +167,7 @@ public class DataFactory {
      * @param id
      * @return 
      */
-    public static Class<? extends ProtoData> getDataClassById(String id) {
+    public static Class<? extends Data> getDataClassById(String id) {
         Proto proto = getProto(id);
         return getDataClass(proto.getTagName());
     }
@@ -177,7 +177,7 @@ public class DataFactory {
      * @param tagName
      * @return 
      */
-    public static Class<? extends ProtoData> getDataClass(String tagName) {
+    public static Class<? extends Data> getDataClass(String tagName) {
         return TAG_DATAS.get(tagName);
     }
     

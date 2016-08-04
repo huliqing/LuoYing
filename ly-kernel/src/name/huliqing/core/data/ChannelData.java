@@ -4,7 +4,6 @@
  */
 package name.huliqing.core.data;
 
-import name.huliqing.core.xml.ProtoData;
 import com.jme3.network.serializing.Serializable;
 
 /**
@@ -12,17 +11,13 @@ import com.jme3.network.serializing.Serializable;
  * @author huliqing
  */
 @Serializable
-public class ChannelData extends ProtoData {
+public class ChannelData extends ObjectData {
     
     private String[] fromRootBones;
     private String[] toRootBones;
     private String[] bones;
     
     public ChannelData() {}
-    
-    public ChannelData(String id) {
-        super(id);
-    }
 
     public String[] getFromRootBones() {
         return fromRootBones;

@@ -97,7 +97,7 @@ public class LanGameInfoView extends LinearLayout{
         title.setText(ResourceManager.getObjectName(gameData));
         String des = ResourceManager.getObjectDes(gameData.getId());
         content.setText(des != null ? des : "No description");
-        String gameIcon = gameData.getProto().getIcon();
+        String gameIcon = gameData.getIcon();
         if (gameIcon != null) {
             image.setWidth(0);
             image.setHeight(0);

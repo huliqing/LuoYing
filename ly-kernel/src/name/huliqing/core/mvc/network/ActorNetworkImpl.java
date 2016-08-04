@@ -12,7 +12,7 @@ import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.ActorData;
 import name.huliqing.core.data.AttributeData;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.enums.HurtFace;
 import name.huliqing.core.enums.Sex;
 import name.huliqing.core.mvc.dao.ItemDao;
@@ -98,12 +98,12 @@ public class ActorNetworkImpl implements ActorNetwork{
     }
 
     @Override
-    public ProtoData getItem(Actor actor, String objectId) {
+    public ObjectData getItem(Actor actor, String objectId) {
         return actorService.getItem(actor, objectId); 
     }
 
     @Override
-    public List<ProtoData> getItems(Actor actor, List<ProtoData> store) {
+    public List<ObjectData> getItems(Actor actor, List<ObjectData> store) {
         return actorService.getItems(actor, store);
     }
 

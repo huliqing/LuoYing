@@ -8,7 +8,6 @@ package name.huliqing.core.object.skill;
 import com.jme3.animation.LoopMode;
 import java.util.ArrayList;
 import name.huliqing.core.GameException;
-import name.huliqing.core.constants.DataTypeConstants;
 import name.huliqing.core.data.AttributeUse;
 import name.huliqing.core.xml.Proto;
 import name.huliqing.core.data.SkillData;
@@ -149,7 +148,7 @@ public class SkillDataLoader implements DataLoader<SkillData> {
                 || tagName.equals("skillShotBow")) {
             String stName = proto.getAttribute("skillType");
             if (stName == null) {
-                throw new NullPointerException("Need specify a skillType, tagName=" + tagName + ", objectId=" + proto.getId());
+                throw new NullPointerException("Need specify a skillType, tagName=" + tagName + ", proto=" + proto);
             }
             return SkillType.identifyByName(stName);
         }
@@ -176,6 +175,6 @@ public class SkillDataLoader implements DataLoader<SkillData> {
             return SkillType.skin;
         }
         
-        throw new UnsupportedOperationException("Unsupported skill type, tagName=" + tagName + ", proto=" + proto.getId());
+        throw new UnsupportedOperationException("Unsupported skill type, tagName=" + tagName + ", proto=" + proto);
     }
 }

@@ -13,7 +13,7 @@ import name.huliqing.core.Factory;
 import name.huliqing.core.constants.InterfaceConstants;
 import name.huliqing.core.constants.ResConstants;
 import name.huliqing.core.data.ChatData;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.mvc.network.UserCommandNetwork;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.ItemService;
@@ -24,6 +24,7 @@ import name.huliqing.core.view.transfer.SimpleTransferPanel;
 import name.huliqing.core.view.transfer.TabTransferPanel;
 import name.huliqing.core.view.transfer.TransferPanel;
 import name.huliqing.core.manager.ResourceManager;
+import name.huliqing.core.mvc.service.ProtoService;
 import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.ui.Button;
@@ -42,6 +43,7 @@ import name.huliqing.core.utils.MathUtils;
  * @param <T>
  */
 public class SellChat<T extends ChatData> extends Chat<T> {
+    private final ProtoService protoService = Factory.get(ProtoService.class);
     private final ItemService itemService = Factory.get(ItemService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final SkinService skinService = Factory.get(SkinService.class);
@@ -118,14 +120,14 @@ public class SellChat<T extends ChatData> extends Chat<T> {
         seller = playService.getPlayer();
         
         // 初始化, 数据要复制一份出来，不要去影响角色的包裹中的数据
-        List<ProtoData> items = itemService.getItems(seller, null);
-        List<ProtoData> transferDatas = new ArrayList<ProtoData>(items.size());
-        for (ProtoData item : items) {
+        List<ObjectData> items = itemService.getItems(seller, null);
+        List<ObjectData> transferDatas = new ArrayList<ObjectData>(items.size());
+        for (ObjectData item : items) {
             // 非卖品
             if (!itemService.isSellable(item)) {
                 continue;
             }
-            ProtoData dataCopy = DataFactory.createData(item.getId());
+            ObjectData dataCopy = DataFactory.createData(item.getId());
             dataCopy.setTotal(item.getTotal());
             transferDatas.add(dataCopy);
         }
@@ -139,12 +141,12 @@ public class SellChat<T extends ChatData> extends Chat<T> {
     
     // 结算出售的金额
     private void billing() {
-        List<ProtoData> datas = distPanel.getDatas();
+        List<ObjectData> datas = distPanel.getDatas();
         if (datas.isEmpty())
             return;
         String[] items = new String[datas.size()];
         int[] counts = new int[datas.size()];
-        ProtoData data;
+        ObjectData data;
         for (int i = 0; i < datas.size(); i++) {
             data = datas.get(i);
             items[i] = data.getId();
@@ -158,12 +160,13 @@ public class SellChat<T extends ChatData> extends Chat<T> {
     // 估算价钱,最终价钱由接口计算决定。因为在确认“结算”之前玩家的包裹物品可能
     // 发生变化，并不能确保所有在"distPanel"窗口中的物品及数量都能准确售出。
     private int assess() {
-        List<ProtoData> datas = distPanel.getDatas();
+        List<ObjectData> datas = distPanel.getDatas();
         if (datas.isEmpty())
             return 0;
         float total = 0;
-        for (ProtoData pd : datas) {
-            total += pd.getCost() * pd.getTotal();
+        for (ObjectData pd : datas) {
+//            total += pd.getCost() * pd.getTotal(); // remove
+            total += protoService.getCost(pd) * pd.getTotal();
         }
         total *= discount;
         return (int) total;

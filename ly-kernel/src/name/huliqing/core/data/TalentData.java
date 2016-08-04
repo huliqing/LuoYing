@@ -4,7 +4,6 @@
  */
 package name.huliqing.core.data;
 
-import name.huliqing.core.xml.ProtoData;
 import com.jme3.export.InputCapsule;
 import com.jme3.export.JmeExporter;
 import com.jme3.export.JmeImporter;
@@ -17,7 +16,7 @@ import java.io.IOException;
  * @author huliqing
  */
 @Serializable
-public class TalentData extends ProtoData {
+public class TalentData extends ObjectData {
     // 天赋的最高等级
     private int maxLevel;
     private int level;
@@ -43,10 +42,6 @@ public class TalentData extends ProtoData {
     
     public TalentData(){}
     
-    public TalentData(String id) {
-        super(id);
-    }
-
     public int getMaxLevel() {
         return maxLevel;
     }

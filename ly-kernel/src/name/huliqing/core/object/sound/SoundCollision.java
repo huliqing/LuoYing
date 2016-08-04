@@ -7,8 +7,9 @@ package name.huliqing.core.object.sound;
 import com.jme3.math.Vector3f;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.SoundData;
+import name.huliqing.core.data.define.MatObject;
 import name.huliqing.core.enums.Mat;
 import name.huliqing.core.manager.SoundManager;
 import name.huliqing.core.xml.DataFactory;
@@ -47,8 +48,11 @@ public class SoundCollision {
      * @param obj2 
      * @param position 
      */
-    public void playCollision(ProtoData obj1, ProtoData obj2, Vector3f position) {
-        playCollision(obj1.getProto().getMat(), obj2.getProto().getMat(), position);
+    public void playCollision(ObjectData obj1, ObjectData obj2, Vector3f position) {
+        if (!(obj1 instanceof MatObject) || !(obj2 instanceof MatObject)) {
+            return;
+        }
+        playCollision(((MatObject)obj1).getMat(), ((MatObject)obj2).getMat(), position);
     }
     
     public void playCollision(Mat mat1, Mat mat2, Vector3f position) {

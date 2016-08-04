@@ -5,7 +5,7 @@
 package name.huliqing.core.view;
 
 import java.util.List;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.ui.LinearLayout;
 import name.huliqing.core.ui.UIFactory;
 
@@ -17,7 +17,7 @@ public class ItemPanel extends LinearLayout {
     private ItemTitle title;
     private ItemList itemList;
         
-    public ItemPanel(float width, float height, List<ProtoData> datas) {
+    public ItemPanel(float width, float height, List<ObjectData> datas) {
         super(width, height);
         float titleHeight = UIFactory.getUIConfig().getListTitleHeight();
         title = new ItemTitle(width, titleHeight);

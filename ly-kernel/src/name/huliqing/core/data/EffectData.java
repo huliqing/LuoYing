@@ -4,7 +4,6 @@
  */
 package name.huliqing.core.data;
 
-import name.huliqing.core.xml.ProtoData;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.network.serializing.Serializable;
@@ -17,7 +16,7 @@ import name.huliqing.core.enums.TraceType;
  * @author huliqing
  */
 @Serializable
-public class EffectData extends ProtoData {
+public class EffectData extends ObjectData {
     
     // 定义特效运行时各个阶段的执行时间,注意:各阶段的实际执行时间将与特效的速度有关.
     private float phaseTimeStart;

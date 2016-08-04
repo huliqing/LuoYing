@@ -7,7 +7,7 @@ package name.huliqing.core.mvc.dao;
 import java.util.List;
 import name.huliqing.core.Inject;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 
 /**
  *
@@ -40,7 +40,7 @@ public interface ItemDao extends Inject{
      * @param objectId
      * @return 
      */
-    ProtoData getItemExceptSkill(Actor actor, String objectId);
+    ObjectData getItemExceptSkill(Actor actor, String objectId);
     
     /**
      * 获取角色所有物品(除技能)
@@ -48,6 +48,6 @@ public interface ItemDao extends Inject{
      * @param store 存放结果
      * @return 
      */
-    List<ProtoData> getItems(Actor actor, List<ProtoData> store);
+    List<ObjectData> getItems(Actor actor, List<ObjectData> store);
     
 }

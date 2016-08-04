@@ -4,7 +4,6 @@
  */
 package name.huliqing.core.data;
 
-import name.huliqing.core.xml.ProtoData;
 import com.jme3.export.InputCapsule;
 import com.jme3.export.JmeExporter;
 import com.jme3.export.JmeImporter;
@@ -17,7 +16,7 @@ import java.io.IOException;
  * @author huliqing
  */
 @Serializable
-public class ConfigData extends ProtoData {
+public class ConfigData extends ObjectData {
     
     /**
      * 是否打开调试
@@ -236,10 +235,6 @@ public class ConfigData extends ProtoData {
     }
     
     public ConfigData(){}
-    
-    public ConfigData(String id) {
-        super(id);
-    }
 
     public boolean isDebug() {
         return debug;

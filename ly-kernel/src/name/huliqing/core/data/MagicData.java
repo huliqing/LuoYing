@@ -4,7 +4,6 @@
  */
 package name.huliqing.core.data;
 
-import name.huliqing.core.xml.ProtoData;
 import com.jme3.export.InputCapsule;
 import com.jme3.export.JmeExporter;
 import com.jme3.export.JmeImporter;
@@ -20,7 +19,7 @@ import name.huliqing.core.enums.TraceType;
  * @author huliqing
  */
 @Serializable
-public class MagicData extends ProtoData {
+public class MagicData extends ObjectData {
     
     // 魔法的位置
     private Vector3f location;
@@ -61,10 +60,6 @@ public class MagicData extends ProtoData {
     }
     
     public MagicData() {}
-
-    public MagicData(String id) {
-        super(id);
-    }
 
     public Vector3f getLocation() {
         return location;

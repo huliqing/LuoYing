@@ -4,7 +4,6 @@
  */
 package name.huliqing.core.data;
 
-import name.huliqing.core.xml.ProtoData;
 import com.jme3.export.InputCapsule;
 import com.jme3.export.JmeExporter;
 import com.jme3.export.JmeImporter;
@@ -35,7 +34,7 @@ import java.io.IOException;
  * @author huliqing
  */
 @Serializable
-public class AttributeData extends ProtoData {
+public class AttributeData extends ObjectData {
     
     // 等级设置的id,如果该id存在，则这个属性值会随着等级的改变而发生变化
     private String el;
@@ -74,10 +73,6 @@ public class AttributeData extends ProtoData {
     }
     
     public AttributeData(){}
-    
-    public AttributeData(String id) {
-        super(id);
-    }
     
     /**
      * 获取属性的等级设置

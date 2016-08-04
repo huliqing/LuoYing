@@ -4,7 +4,6 @@
  */
 package name.huliqing.core.data;
 
-import name.huliqing.core.xml.ProtoData;
 import com.jme3.export.InputCapsule;
 import com.jme3.export.JmeExporter;
 import com.jme3.export.JmeImporter;
@@ -17,7 +16,7 @@ import java.io.IOException;
  * @author huliqing
  */
 @Serializable
-public class ActorLogicData extends ProtoData {
+public class ActorLogicData extends ObjectData {
     
     private float interval;
 
@@ -36,10 +35,6 @@ public class ActorLogicData extends ProtoData {
     }
     
     public ActorLogicData(){}
-    
-    public ActorLogicData(String id) {
-        super(id);
-    }
 
     /**
      * 获取逻辑的执行频率，单位秒

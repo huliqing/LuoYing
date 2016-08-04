@@ -25,10 +25,9 @@ import name.huliqing.core.LY;
 import name.huliqing.core.Config;
 import name.huliqing.core.Factory;
 import name.huliqing.core.constants.IdConstants;
-import name.huliqing.core.object.actor.ActorControl;
 import name.huliqing.core.data.ActorData;
 import name.huliqing.core.data.ActorLogicData;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.StateData;
 import name.huliqing.core.data.TalentData;
 import name.huliqing.core.data.TaskData;
@@ -36,8 +35,6 @@ import name.huliqing.core.mvc.service.ConfigService;
 import name.huliqing.core.loader.AssetLoader;
 import name.huliqing.core.loader.Loader;
 import name.huliqing.core.object.action.ActionProcessor;
-import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.actor.CustomSkeletonControl;
 import name.huliqing.core.object.channel.ChannelProcessor;
 import name.huliqing.core.object.channel.ChannelProcessorImpl;
 import name.huliqing.core.object.effect.Effect;
@@ -84,7 +81,7 @@ public class ActorModelLoader {
      */
     public static Spatial loadActorModel(ActorData data, ActorControl actor) {
         // 0.==== Load base model : character
-        String actorFile = data.getProto().getFile();
+        String actorFile = data.getFile();
         
         if (Config.debug) {
             LOG.log(Level.INFO, "Load actor file={0}", actorFile);
@@ -101,7 +98,7 @@ public class ActorModelLoader {
             temp.setQueueBucket(RenderQueue.Bucket.Opaque);
         }
         actorModel.setName(data.getName());
-        actorModel.setUserData(ProtoData.USER_DATA, data);
+        actorModel.setUserData(ObjectData.USER_DATA, data);
         actorModel.setShadowMode(RenderQueue.ShadowMode.Cast);
         
         // 4.====create character control

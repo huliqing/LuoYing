@@ -6,7 +6,7 @@ package name.huliqing.core.mvc.network;
 
 import com.jme3.math.Vector3f;
 import name.huliqing.core.Inject;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.task.Task;
 
@@ -60,7 +60,7 @@ public interface UserCommandNetwork extends Inject {
      * @param actor
      * @param data 
      */
-    void useObject(Actor actor, ProtoData data);
+    void useObject(Actor actor, ObjectData data);
     
     /**
      * 移除物品

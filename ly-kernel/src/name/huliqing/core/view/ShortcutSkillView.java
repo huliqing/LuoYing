@@ -11,7 +11,7 @@ import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Quad;
 import name.huliqing.core.LY;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.utils.MatUtils;
@@ -37,7 +37,7 @@ public class ShortcutSkillView extends ShortcutView {
     // 判断是否需要更新mask,主要用于提高性能
     private boolean needCheckAndUpdateMask = true;
 
-    public ShortcutSkillView(float width, float height, Actor actor, ProtoData data) {
+    public ShortcutSkillView(float width, float height, Actor actor, ObjectData data) {
         super(width, height, actor, data);
         if (!(data instanceof SkillData)) {
             throw new IllegalArgumentException("Not a skill data!");

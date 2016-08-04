@@ -6,7 +6,7 @@ package name.huliqing.core.mvc.service;
 
 import java.util.List;
 import name.huliqing.core.Inject;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.object.actor.Actor;
 
 /**
@@ -38,7 +38,7 @@ public interface ItemService extends Inject {
      * @param itemId
      * @return 
      */
-    ProtoData getItem(Actor actor, String itemId);
+    ObjectData getItem(Actor actor, String itemId);
     
     /**
      * 获取角色的所有物品(除技能外）
@@ -46,7 +46,7 @@ public interface ItemService extends Inject {
      * @param store
      * @return 
      */
-    List<ProtoData> getItems(Actor actor, List<ProtoData> store);
+    List<ObjectData> getItems(Actor actor, List<ObjectData> store);
     
     /**
      * 判断物品在当前情况下是否可卖出，一些物品可能不能进行出售，如金币，或如一些穿
@@ -54,7 +54,7 @@ public interface ItemService extends Inject {
      * @param data
      * @return 
      */
-    boolean isSellable(ProtoData data);
+    boolean isSellable(ObjectData data);
     
     /**
      * 同步物品数量

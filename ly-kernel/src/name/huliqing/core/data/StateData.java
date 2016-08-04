@@ -4,7 +4,6 @@
  */
 package name.huliqing.core.data;
 
-import name.huliqing.core.xml.ProtoData;
 import com.jme3.export.InputCapsule;
 import com.jme3.export.JmeExporter;
 import com.jme3.export.JmeImporter;
@@ -18,7 +17,7 @@ import java.io.IOException;
  * @author huliqing
  */
 @Serializable
-public class StateData extends ProtoData {
+public class StateData extends ObjectData {
     
     /**
      * 状态的存在时间,单位秒
@@ -78,10 +77,6 @@ public class StateData extends ProtoData {
     private float resist;
     
     public StateData() {}
-    
-    public StateData(String id) {
-        super(id);
-    }
 
     public float getUseTime() {
         return useTime;

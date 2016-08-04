@@ -4,7 +4,7 @@
  */
 package name.huliqing.core.view.transfer;
 
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 
 /**
  * 
@@ -12,7 +12,7 @@ import name.huliqing.core.xml.ProtoData;
  */
 public interface TransferListener {
     
-    void onAdded(Transfer transfer, ProtoData data, int count);
+    void onAdded(Transfer transfer, ObjectData data, int count);
     
-    void onRemoved(Transfer transfer, ProtoData data, int count);
+    void onRemoved(Transfer transfer, ObjectData data, int count);
 }

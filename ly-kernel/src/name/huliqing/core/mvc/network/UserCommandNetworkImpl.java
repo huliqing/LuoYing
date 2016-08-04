@@ -9,7 +9,7 @@ import com.jme3.math.Vector3f;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.ActorData;
 import name.huliqing.core.data.GameData;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.enums.MessageType;
 import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.mvc.service.ActionService;
@@ -198,7 +198,7 @@ public class UserCommandNetworkImpl implements UserCommandNetwork {
     }
     
     @Override
-    public void useObject(Actor actor, ProtoData data) {
+    public void useObject(Actor actor, ObjectData data) {
         
         // add20160406，只要是使用物品（玩家点家物品），则角色目标将重定向到当前
         // 界面的主目标,因为有很多物品在使用的时候都需要当前界面的主目标。
@@ -235,7 +235,7 @@ public class UserCommandNetworkImpl implements UserCommandNetwork {
 
     @Override
     public void removeObject(Actor actor, String objectId, int amount) {
-        ProtoData data = protoService.getData(actor, objectId);
+        ObjectData data = protoService.getData(actor, objectId);
         if (data == null)
             return;
         

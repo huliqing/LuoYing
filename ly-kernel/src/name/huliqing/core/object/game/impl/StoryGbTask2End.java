@@ -11,7 +11,7 @@ import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.constants.IdConstants;
 import name.huliqing.core.constants.ResConstants;
 import name.huliqing.core.constants.StoryConstants;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.enums.MessageType;
 import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.view.talk.Talk;
@@ -138,7 +138,7 @@ public class StoryGbTask2End extends IntervalLogic {
             @Override
             public void onTalkEnd() {
                 // 移除主角身上的树根
-                ProtoData stumpData = protoService.getData(player, IdConstants.ITEM_GB_STUMP);
+                ObjectData stumpData = protoService.getData(player, IdConstants.ITEM_GB_STUMP);
                 protoNetwork.removeData(player, stumpData, taskPanel.getTotal());
                 
                 // 移除古柏

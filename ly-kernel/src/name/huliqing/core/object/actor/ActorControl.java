@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 import name.huliqing.core.LY;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.ActorData;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.mvc.network.ActorNetwork;
 import name.huliqing.core.mvc.network.SkillNetwork;
 import name.huliqing.core.mvc.service.ActionService;
@@ -151,7 +151,7 @@ public class ActorControl extends BetterCharacterControl implements Actor, Physi
         
         // 1.添加control,并检测是否忘记设置USER_DATA
         spatial.addControl(this);
-        spatial.setUserData(ProtoData.USER_DATA, data);
+        spatial.setUserData(ObjectData.USER_DATA, data);
     }
     
     @Override

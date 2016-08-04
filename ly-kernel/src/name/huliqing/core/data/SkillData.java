@@ -4,7 +4,6 @@
  */
 package name.huliqing.core.data;
 
-import name.huliqing.core.xml.ProtoData;
 import com.jme3.animation.LoopMode;
 import com.jme3.export.InputCapsule;
 import com.jme3.export.JmeExporter;
@@ -15,6 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.constants.IdConstants;
+import name.huliqing.core.data.define.HandlerObject;
 import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.object.skin.WeaponStateUtils;
 import name.huliqing.core.utils.ConvertUtils;
@@ -24,7 +24,7 @@ import name.huliqing.core.utils.ConvertUtils;
  * @author huliqing
  */
 @Serializable
-public class SkillData extends ProtoData {
+public class SkillData extends ObjectData implements HandlerObject {
     
     private SkillType skillType;
     
@@ -191,10 +191,6 @@ public class SkillData extends ProtoData {
     }
     
     public SkillData() {}
-    
-    public SkillData(String id) {
-        super(id);
-    }
 
     @Override
     public int getTotal() {
@@ -343,7 +339,7 @@ public class SkillData extends ProtoData {
     /**
      * 设置当前技能类型可以打断的其它技能类型列表，以二进制位表示，整形中
      * 每个位代表一个技能类型。
-     * @param overlaps 技能类型
+     * @param interrupts
      */
     public void setInterrupts(long interrupts) {
         this.interrupts = interrupts;
@@ -445,31 +441,9 @@ public class SkillData extends ProtoData {
     public void setNeedLevel(int needLevel) {
         this.needLevel = needLevel;
     }
-  
-    // remove20160503不再使用
-//    /**
-//     * 获取技能的实际使用时间,该时间是以技能的固定使用时间和执行速度进行计算
-//     * 的,即 trueUseTime = useTime / speed.
-//     * 默认的技能是以1.0的速度执行的,这个时候trueUseTime和useTime是一致的,如果提
-//     * 高或降低了技能的執行速度,則getTrueUseTime將與useTime不一樣,使用该方法可
-//     * 始终获得当前技能的实际使用时间.
-//     * @return 
-//     */
-//    public float getTrueUseTime() {
-//        if (speed <= 0) {
-//            return 0;
-//        }
-//        // 最终的实际运行时间是cutTime后的时间。
-//        float tempTime = useTime / speed;
-//        return tempTime - tempTime * (cutTimeStart + cutTimeEnd);
-//    }
 
     @Override
     public String getHandler() {
-        String handler = super.getHandler();
-        if (handler != null) {
-            return handler;
-        }
         // 基本上所有skill都通用一个handler,所以如果handler不特殊配置则默认用这一个
         return IdConstants.HANDLER_SKILL;
     }

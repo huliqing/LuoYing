@@ -4,7 +4,6 @@
  */
 package name.huliqing.core.data;
 
-import name.huliqing.core.xml.ProtoData;
 import com.jme3.export.InputCapsule;
 import com.jme3.export.JmeExporter;
 import com.jme3.export.JmeImporter;
@@ -17,7 +16,7 @@ import java.io.IOException;
  * @author huliqing
  */
 @Serializable
-public class TaskData extends ProtoData {
+public class TaskData extends ObjectData {
     // 这个ID前缀用于标记任务物品ID,角色完成的任务物品数量并不是存放在角色的包裹里面
     // 而是放在TaskData里。因为任务物品比较特殊，不能出售、不能销毁和使用.
     // 并且可能一些不同的任务会需要收集相同的任务物品（物品ID相同）。所以收集到的任务
@@ -34,10 +33,6 @@ public class TaskData extends ProtoData {
     private boolean completion;
     
     public TaskData(){super();}
-    
-    public TaskData(String id) {
-        super(id);
-    }
     
     @Override
     public void write(JmeExporter ex) throws IOException {

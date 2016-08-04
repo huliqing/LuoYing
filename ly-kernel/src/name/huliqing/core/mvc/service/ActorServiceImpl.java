@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 import name.huliqing.core.LY;
 import name.huliqing.core.Factory;
-import name.huliqing.core.constants.DataTypeConstants;
 import name.huliqing.core.utils.NpcNameUtils;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actor.ActorControl;
@@ -26,7 +25,7 @@ import name.huliqing.core.constants.IdConstants;
 import name.huliqing.core.constants.ResConstants;
 import name.huliqing.core.data.ActorData;
 import name.huliqing.core.data.AttributeData;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.SkinData;
 import name.huliqing.core.enums.HurtFace;
 import name.huliqing.core.enums.MessageType;
@@ -103,9 +102,9 @@ public class ActorServiceImpl implements ActorService {
         Actor actor = Loader.loadActor(actorData);
         
         // ==2.穿上装备
-        List<ProtoData> items = itemDao.getItems(actor, null);
+        List<ObjectData> items = itemDao.getItems(actor, null);
         boolean hasOutfit = false;
-        for (ProtoData item : items) {
+        for (ObjectData item : items) {
             if (item instanceof SkinData) {
                 SkinData sd = (SkinData) item;
                 if (sd.isUsing()) {
@@ -194,7 +193,7 @@ public class ActorServiceImpl implements ActorService {
      * @return 
      */
     @Override
-    public ProtoData getItem(Actor actor, String objectId) {
+    public ObjectData getItem(Actor actor, String objectId) {
         return itemDao.getItemExceptSkill(actor, objectId);
     }
 
@@ -205,7 +204,7 @@ public class ActorServiceImpl implements ActorService {
      * @return 
      */
     @Override
-    public List<ProtoData> getItems(Actor actor, List<ProtoData> store) {
+    public List<ObjectData> getItems(Actor actor, List<ObjectData> store) {
         return itemDao.getItems(actor, store);
     }
     
@@ -225,7 +224,7 @@ public class ActorServiceImpl implements ActorService {
      */
     @Override
     public Actor getActor(Spatial spatial) {
-        ProtoData pd = spatial.getUserData(ProtoData.USER_DATA);
+        ObjectData pd = spatial.getUserData(ObjectData.USER_DATA);
         if (pd instanceof ActorData) {
             return spatial.getControl(ActorControl.class);
         }

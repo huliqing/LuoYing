@@ -5,7 +5,7 @@
 package name.huliqing.core.mvc.service;
 
 import name.huliqing.core.Inject;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.object.actor.Actor;
 
 /**
@@ -20,7 +20,7 @@ public interface HandlerService extends Inject {
      * @param data
      * @return 
      */
-    boolean canUse(Actor actor, ProtoData data);
+    boolean canUse(Actor actor, ObjectData data);
     
     /**
      * 让角色强制使用某物品。一般要配合{@link #canUse(name.huliqing.fighter.object.actor.Actor, java.lang.String) }
@@ -28,7 +28,7 @@ public interface HandlerService extends Inject {
      * @param actor
      * @param data 
      */
-    void useForce(Actor actor, ProtoData data);
+    void useForce(Actor actor, ObjectData data);
     
     /**
      * 使用物品，如果成功则返回true,否则返回false
@@ -36,7 +36,7 @@ public interface HandlerService extends Inject {
      * @param data 
      * @return 
      */
-    boolean useObject(Actor actor, ProtoData data);
+    boolean useObject(Actor actor, ObjectData data);
     
     /**
      * 移除角色身上的物品
@@ -44,5 +44,5 @@ public interface HandlerService extends Inject {
      * @param data 要移除的物品
      * @param count 要移除的物品数量
      */
-    void removeObject(Actor actor, ProtoData data, int count);
+    void removeObject(Actor actor, ObjectData data, int count);
 }

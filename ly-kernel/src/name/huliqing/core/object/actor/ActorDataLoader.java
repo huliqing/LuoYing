@@ -16,7 +16,7 @@ import name.huliqing.core.data.AttributeData;
 import name.huliqing.core.data.DropData;
 import name.huliqing.core.data.ActorLogicData;
 import name.huliqing.core.xml.Proto;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.ResistData;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.data.SkinData;
@@ -48,7 +48,7 @@ public class ActorDataLoader implements DataLoader<ActorData> {
                 if (itemArr.length >= 2) {
                     itemTotal = Integer.parseInt(itemArr[1]);
                 }
-                ProtoData itemData = DataFactory.createData(itemId);
+                ObjectData itemData = DataFactory.createData(itemId);
                 itemStore.addItem(itemData, itemTotal);
             }
         }
@@ -71,7 +71,7 @@ public class ActorDataLoader implements DataLoader<ActorData> {
         String[] skinOutfitTemp = proto.getAsArray("skinOutfit");
         if (skinOutfitTemp != null) {
             for (String skinId : skinOutfitTemp) {
-                itemStore.addItem(DataFactory.createData(skinId), 1);
+                itemStore.addItem((ObjectData) DataFactory.createData(skinId), 1);
                 SkinData skinOutfit = (SkinData) itemStore.getItem(skinId);
                 skinOutfit.setUsing(true);
             }
@@ -81,7 +81,7 @@ public class ActorDataLoader implements DataLoader<ActorData> {
         String[] weaponIds = proto.getAsArray("weapon");
         if (weaponIds != null) {
             for (String wid : weaponIds) {
-                itemStore.addItem(DataFactory.createData(wid), 1);
+                itemStore.addItem((ObjectData) DataFactory.createData(wid), 1);
                 SkinData weaponData = (SkinData) itemStore.getItem(wid);
                 weaponData.setUsing(true);
             }
@@ -105,8 +105,8 @@ public class ActorDataLoader implements DataLoader<ActorData> {
                 } else {
                     Logger.getLogger(ActorDataLoader.class.getName())
                             .log(Level.WARNING
-                            , "Skill not found, actorId={0}, skillId={1}"
-                            , new Object[]{proto.getId(), skillId});
+                            , "Skill not found, tagName={0}, skillId={1}"
+                            , new Object[]{proto.getTagName(), skillId});
                 }
             }
         }
@@ -178,7 +178,7 @@ public class ActorDataLoader implements DataLoader<ActorData> {
         // 等级及经验值掉落设置
         data.setLevelUpEl(proto.getAttribute("levelUpEl"));
         data.setXpDropEl(proto.getAttribute("xpDropEl"));
-        data.setName(ResourceManager.getObjectName(proto.getId()));
+        data.setName(ResourceManager.getObjectName(data));
         data.setGroup(proto.getAsInteger("group", 0));
         data.setSex(Sex.identifyByName(proto.getAttribute("sex", "2")));
         data.setRace(proto.getAttribute("race"));

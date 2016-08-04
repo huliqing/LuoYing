@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.LY;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.xml.DataFactory;
 
 /**
@@ -28,13 +28,13 @@ public class ItemDaoImpl implements ItemDao {
                     + "could not less than 0. actor=" + actor.getData().getId() 
                     + ", itemId=" + itemId + ", amount=" + amount);
         }
-        ProtoData item = DataFactory.createData(itemId);
+        ObjectData item = DataFactory.createData(itemId);
         if (item == null) {
             return false;
         }
         
-        List<ProtoData> items = getAll(actor);
-        ProtoData od = findItem(actor, itemId);
+        List<ObjectData> items = getAll(actor);
+        ObjectData od = findItem(actor, itemId);
         // 如果包裹中不存在物品，则创建一个新的,注意：创建的时候要判断物品是否存在。
         if (od == null) {
             od = item;
@@ -54,8 +54,8 @@ public class ItemDaoImpl implements ItemDao {
                     + "could not less than 0. actor=" + actor.getData().getId() 
                     + ", itemId=" + itemId + ", amount=" + amount);
         }
-        List<ProtoData> items = getAll(actor);
-        ProtoData od = findItem(actor, itemId);
+        List<ObjectData> items = getAll(actor);
+        ObjectData od = findItem(actor, itemId);
         int trueRemoved = 0;
         if (od != null) {
             trueRemoved = amount > od.getTotal() ? od.getTotal() : amount;
@@ -71,9 +71,9 @@ public class ItemDaoImpl implements ItemDao {
     }
     
     @Override
-    public ProtoData getItemExceptSkill(Actor actor, String objectId) {
-        List<ProtoData> items = getAll(actor);
-        for (ProtoData od : items) {
+    public ObjectData getItemExceptSkill(Actor actor, String objectId) {
+        List<ObjectData> items = getAll(actor);
+        for (ObjectData od : items) {
             if (od.getId().equals(objectId)) {
                 return od;
             }
@@ -81,26 +81,26 @@ public class ItemDaoImpl implements ItemDao {
         return null;
     }
     
-    private List<ProtoData> getAll(Actor actor) {
-        List<ProtoData> items = actor.getData().getItemStore().getAll();
+    private List<ObjectData> getAll(Actor actor) {
+        List<ObjectData> items = actor.getData().getItemStore().getAll();
         return items;
     }
     
     @Override
-    public List<ProtoData> getItems(Actor actor, List<ProtoData> store) {
+    public List<ObjectData> getItems(Actor actor, List<ObjectData> store) {
         if (store == null) {
-            store = new ArrayList<ProtoData>();
+            store = new ArrayList<ObjectData>();
         }
-        List<ProtoData> items = getAll(actor);
-        for (ProtoData pd : items) {
+        List<ObjectData> items = getAll(actor);
+        for (ObjectData pd : items) {
             store.add(pd);
         }
         return store;
     }
 
-    private ProtoData findItem(Actor actor, String itemId) {
-        List<ProtoData> items = getAll(actor);
-        for (ProtoData od : items) {
+    private ObjectData findItem(Actor actor, String itemId) {
+        List<ObjectData> items = getAll(actor);
+        for (ObjectData od : items) {
             if (od.getId().equals(itemId)) {
                 return od;
             }

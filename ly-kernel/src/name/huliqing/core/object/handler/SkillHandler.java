@@ -12,7 +12,7 @@ import name.huliqing.core.constants.ResConstants;
 import name.huliqing.core.constants.SkillConstants;
 import name.huliqing.core.data.HandlerData;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.enums.MessageType;
 import name.huliqing.core.mvc.network.ActionNetwork;
@@ -46,7 +46,7 @@ public class SkillHandler extends AbstractHandler {
     }
     
     @Override
-    public boolean canUse(Actor actor, ProtoData data) {
+    public boolean canUse(Actor actor, ObjectData data) {
         if (!super.canUse(actor, data)) {
             return false;
         }
@@ -119,7 +119,7 @@ public class SkillHandler extends AbstractHandler {
     }
 
     @Override
-    protected void useObject(Actor actor, ProtoData data) {
+    protected void useObject(Actor actor, ObjectData data) {
         SkillData skillData = (SkillData) data;
         
         // remove20160129
@@ -159,7 +159,7 @@ public class SkillHandler extends AbstractHandler {
     }
 
     @Override
-    public boolean remove(Actor actor, ProtoData data, int count) throws GameException {
+    public boolean remove(Actor actor, ObjectData data, int count) throws GameException {
         // 技能不允许删除
 //        showWarn("Skill could not delete, skill=" + od);
         return false;

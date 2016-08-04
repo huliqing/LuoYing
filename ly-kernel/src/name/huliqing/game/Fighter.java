@@ -49,6 +49,7 @@ public class Fighter extends SimpleApplication {
         settings.setSamples(4);
         settings.setFrameRate(60);
         settings.setIcons(createIcons());
+        settings.setResizable(true);
         settings.setSettingsDialogImage("/data/SDImage.jpg");
         
         // 载入上次的设置来覆盖

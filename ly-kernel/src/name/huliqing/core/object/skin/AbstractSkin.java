@@ -24,7 +24,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.core.Config;
 import name.huliqing.core.Factory;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.SkinData;
 import name.huliqing.core.mvc.service.ConfigService;
 import name.huliqing.core.loader.AssetLoader;
@@ -62,7 +62,7 @@ public abstract class AbstractSkin<T extends SkinData> implements Skin<T> {
 
     protected Spatial loadSkinNode(String file) {
         Spatial skinNode = AssetLoader.loadModel(file);
-        skinNode.setUserData(ProtoData.USER_DATA, data);
+        skinNode.setUserData(ObjectData.USER_DATA, data);
 
         // 由于一些武器（如：弓）可能自身包含动画，即包含SkeletonControl,而
         // 这些节点在CustomSkeletonControl中被排除（避免冲突），因而在这里需要
@@ -84,7 +84,7 @@ public abstract class AbstractSkin<T extends SkinData> implements Skin<T> {
         }
         // 部分Skin可能无指定模型或者不需要模型，则只设置Using标记就可以。不需要加
         // 载模型文件，如部分模拟的武器类型。
-        if (data.getProto().getFile() == null) {
+        if (data.getFile() == null) {
             return;
         }
         
@@ -94,8 +94,8 @@ public abstract class AbstractSkin<T extends SkinData> implements Skin<T> {
         // 首先把挂靠着的武器移除
         Spatial skinNode = findSkinNodes(actor.getModel(), data);
         if (skinNode == null) {
-            skinNode = AssetLoader.loadModel(data.getProto().getFile());
-            skinNode.setUserData(ProtoData.USER_DATA, data);
+            skinNode = AssetLoader.loadModel(data.getFile());
+            skinNode.setUserData(ObjectData.USER_DATA, data);
             
             // remove20160226,移到了下面
 //            // 由于一些武器（如：弓）可能自身包含动画，即包含SkeletonControl,而
@@ -180,7 +180,7 @@ public abstract class AbstractSkin<T extends SkinData> implements Skin<T> {
         Spatial sn = findSkinNodes(actor.getModel(), data);
         if (sn != null) {
             sn.removeFromParent();
-            SkinData sd = sn.getUserData(ProtoData.USER_DATA);
+            SkinData sd = sn.getUserData(ObjectData.USER_DATA);
             sd.setUsing(false);
         }
         
@@ -214,7 +214,7 @@ public abstract class AbstractSkin<T extends SkinData> implements Skin<T> {
         
         @Override
         public void visit(Spatial spatial) {
-            ProtoData pd = spatial.getUserData(ProtoData.USER_DATA);
+            ObjectData pd = spatial.getUserData(ObjectData.USER_DATA);
             if (pd != null && pd == targetSkinData) {
                 skinNode = spatial;
             }

@@ -9,7 +9,7 @@ import com.jme3.audio.AudioSource.Status;
 import com.jme3.math.Vector3f;
 import name.huliqing.core.Factory;
 import name.huliqing.core.constants.IdConstants;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.SoundData;
 import name.huliqing.core.enums.Mat;
 import name.huliqing.core.mvc.service.ConfigService;
@@ -104,7 +104,7 @@ public class SoundManager {
      * @param obj2 
      * @param position 
      */
-    public void playCollision(ProtoData obj1, ProtoData obj2, Vector3f position) {
+    public void playCollision(ObjectData obj1, ObjectData obj2, Vector3f position) {
         if (!configService.isSoundEnabled()) {
             return;
         }

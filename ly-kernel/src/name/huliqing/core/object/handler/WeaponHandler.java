@@ -9,10 +9,9 @@ import java.util.logging.Logger;
 import name.huliqing.core.Config;
 import name.huliqing.core.Factory;
 import name.huliqing.core.GameException;
-import name.huliqing.core.constants.DataTypeConstants;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.data.HandlerData;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.SkinData;
 import name.huliqing.core.mvc.dao.ItemDao;
 import name.huliqing.core.mvc.service.ActionService;
@@ -38,7 +37,7 @@ public class WeaponHandler extends AbstractHandler {
     }
 
     @Override
-    public boolean canUse(Actor actor, ProtoData data) {
+    public boolean canUse(Actor actor, ObjectData data) {
         if (!super.canUse(actor, data)) {
             return false;
         }
@@ -60,7 +59,7 @@ public class WeaponHandler extends AbstractHandler {
     }
 
     @Override
-    protected void useObject(Actor actor, ProtoData data) {
+    protected void useObject(Actor actor, ObjectData data) {
         SkinData skinData = (SkinData) data;
         if (skinData.isUsing()) {
             if (skinService.isWeaponTakeOn(actor) 
@@ -89,7 +88,7 @@ public class WeaponHandler extends AbstractHandler {
     }
 
     @Override
-    public boolean remove(Actor actor, ProtoData data, int count) throws GameException {
+    public boolean remove(Actor actor, ObjectData data, int count) throws GameException {
 //        ProtoData data = actorDao.getItemExceptSkill(actor, objectId);
         if (!(data instanceof SkinData)) {
             return false;

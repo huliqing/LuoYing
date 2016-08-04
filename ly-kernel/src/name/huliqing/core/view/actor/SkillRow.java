@@ -7,13 +7,11 @@ package name.huliqing.core.view.actor;
 import name.huliqing.core.ui.tiles.ColumnBody;
 import name.huliqing.core.ui.tiles.ColumnText;
 import name.huliqing.core.ui.tiles.ColumnIcon;
-import java.util.List;
 import name.huliqing.core.constants.InterfaceConstants;
 import name.huliqing.core.constants.ResConstants;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.ui.ListView;
 import name.huliqing.core.ui.UIFactory;
 import name.huliqing.core.ui.Row;
 
@@ -104,7 +102,7 @@ public class SkillRow extends Row<SkillData> {
     }
     
     protected void display(SkillData data) {
-        icon.setIcon(data.getProto().getIcon());
+        icon.setIcon(data.getIcon());
         
         body.setDesText(ResourceManager.getObjectDes(data.getId()));
         num.setText(data.getLevel() + "/" + data.getMaxLevel());

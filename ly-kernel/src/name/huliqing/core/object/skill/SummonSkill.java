@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 import name.huliqing.core.Factory;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actor.ActorControl;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.mvc.network.ActorNetwork;
 import name.huliqing.core.mvc.network.PlayNetwork;
@@ -216,7 +216,7 @@ public class SummonSkill<T extends SkillData> extends AbstractSkill<T> {
          */
         void preload() {
             if (!loadStarted && summonObjectId != null) {
-                ProtoData data = DataFactory.createData(summonObjectId);
+                ObjectData data = DataFactory.createData(summonObjectId);
                 loader.loadId = summonObjectId;
                 future = ThreadHelper.submit(loader);
                 loadStarted = true;

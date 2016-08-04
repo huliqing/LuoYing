@@ -10,7 +10,7 @@ import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.manager.SoundManager;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.data.SkinData;
 import name.huliqing.core.mvc.network.SkillNetwork;
@@ -152,7 +152,7 @@ public class AttackSkill<T extends SkillData> extends HitSkill<T> {
         List<SkinData> weaponSkins = skinService.getCurrentWeaponSkin(actor);
         SkinData wd1 = weaponSkins.isEmpty() ? null : weaponSkins.get(0);
         
-        ProtoData od1 = wd1 != null ? wd1 : actor.getData();
+        ObjectData od1 = wd1 != null ? wd1 : actor.getData();
         SoundManager.getInstance().playCollision(od1, target.getData(), actor.getModel().getWorldTranslation());
         
         // 伤害计算

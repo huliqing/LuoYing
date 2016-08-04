@@ -8,7 +8,7 @@ import name.huliqing.core.Factory;
 import name.huliqing.core.constants.ResConstants;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.data.HandlerData;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.enums.MessageType;
 import name.huliqing.core.mvc.network.PlayNetwork;
 import name.huliqing.core.mvc.network.SkillNetwork;
@@ -39,7 +39,7 @@ public class SkillBookHandler extends AbstractHandler {
     }
 
     @Override
-    public boolean canUse(Actor actor, ProtoData data) {
+    public boolean canUse(Actor actor, ObjectData data) {
         if (!super.canUse(actor, data)) {
             return false;
         }
@@ -54,7 +54,7 @@ public class SkillBookHandler extends AbstractHandler {
     }
 
     @Override
-    protected void useObject(Actor actor, ProtoData data) {
+    protected void useObject(Actor actor, ObjectData data) {
         // 学习技能
         skillNetwork.addSkill(actor, skill);
         

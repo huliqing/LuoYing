@@ -12,7 +12,7 @@ import name.huliqing.core.constants.IdConstants;
 import name.huliqing.core.constants.ResConstants;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.data.HandlerData;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.enums.MessageType;
 import name.huliqing.core.mvc.network.PlayNetwork;
 import name.huliqing.core.mvc.service.ItemService;
@@ -45,7 +45,7 @@ public class SummonSkillHandler extends AbstractHandler {
     }
 
     @Override
-    public boolean canUse(Actor actor, ProtoData data) {
+    public boolean canUse(Actor actor, ObjectData data) {
         if (!super.canUse(actor, data)) {
             return false;
         }
@@ -67,7 +67,7 @@ public class SummonSkillHandler extends AbstractHandler {
     }
 
     @Override
-    protected void useObject(Actor actor, ProtoData data) {
+    protected void useObject(Actor actor, ObjectData data) {
         Skill skill = skillService.getSkillInstance(actor, skillId);
         if (skill == null || !(skill instanceof SummonSkill)) {
             return;

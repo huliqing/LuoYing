@@ -89,8 +89,8 @@ class DataStore {
                 continue;
             }
             
-            Proto objectDef = new Proto(XmlUtils.getAttributes(ele), tagName);
-            PROTO_MAP.put(objectDef.getId(), objectDef);
+            Proto proto = new Proto(XmlUtils.getAttributes(ele), tagName);
+            PROTO_MAP.put(proto.getId(), proto);
         }
     }
     

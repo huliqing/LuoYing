@@ -19,7 +19,7 @@ import com.jme3.util.TempVars;
 import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.constants.SkinConstants;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.data.SkinData;
 import name.huliqing.core.mvc.service.ActorService;
@@ -226,7 +226,7 @@ public class ShotBowSkill<T extends SkillData> extends ShotSkill<T> {
         
         @Override
         public void visit(Spatial spatial) {
-            ProtoData pd = spatial.getUserData(ProtoData.USER_DATA);
+            ObjectData pd = spatial.getUserData(ObjectData.USER_DATA);
             if (pd != null && pd == bowSkinData) {
                 bowNode = spatial;
             }

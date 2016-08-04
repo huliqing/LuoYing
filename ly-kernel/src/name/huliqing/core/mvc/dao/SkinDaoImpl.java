@@ -6,9 +6,8 @@ package name.huliqing.core.mvc.dao;
 
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.core.constants.DataTypeConstants;
 import name.huliqing.core.data.ActorData;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.SkinData;
 
 /**
@@ -27,8 +26,8 @@ public class SkinDaoImpl implements SkinDao {
         if (store == null) {
             store = new ArrayList<SkinData>();
         }
-        List<ProtoData> items = actorData.getItemStore().getAll();
-        for (ProtoData od : items) {
+        List<ObjectData> items = actorData.getItemStore().getAll();
+        for (ObjectData od : items) {
             if (od instanceof SkinData) {
                 store.add((SkinData) od);
             }
@@ -41,8 +40,8 @@ public class SkinDaoImpl implements SkinDao {
         if (store == null) {
             store = new ArrayList<SkinData>();
         }
-        List<ProtoData> items = actorData.getItemStore().getAll();
-        for (ProtoData od : items) {
+        List<ObjectData> items = actorData.getItemStore().getAll();
+        for (ObjectData od : items) {
             if (od instanceof SkinData) {
                 SkinData sd = (SkinData) od;
                 if (sd.getWeaponType() == 0) {
@@ -58,8 +57,8 @@ public class SkinDaoImpl implements SkinDao {
         if (store == null) {
             store = new ArrayList<SkinData>();
         }
-        List<ProtoData> items = actorData.getItemStore().getAll();
-        for (ProtoData od : items) {
+        List<ObjectData> items = actorData.getItemStore().getAll();
+        for (ObjectData od : items) {
             if (isWeapon(od)) {
                 store.add((SkinData) od);
             }
@@ -98,7 +97,7 @@ public class SkinDaoImpl implements SkinDao {
         return store;
     }
     
-    private boolean isWeapon(ProtoData protoData) {
+    private boolean isWeapon(ObjectData protoData) {
         if (protoData instanceof SkinData) {
             SkinData sd = (SkinData) protoData;
             return sd.isWeapon();

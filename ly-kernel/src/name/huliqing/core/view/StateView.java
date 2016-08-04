@@ -32,7 +32,7 @@ public class StateView extends FrameLayout {
             icon = new Icon();
             addView(icon);
         }
-        icon.setImage(state.getProto().getIcon());
+        icon.setImage(state.getIcon());
     }
 
     @Override

@@ -9,7 +9,7 @@ import com.jme3.math.ColorRGBA;
 import name.huliqing.core.LY;
 import name.huliqing.core.Factory;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.SkinData;
 import name.huliqing.core.mvc.network.UserCommandNetwork;
 import name.huliqing.core.mvc.service.PlayService;
@@ -33,23 +33,22 @@ public class ShortcutView extends FrameLayout implements ItemListener, SkinListe
 //    private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final static float NUM_COUNT_ALPHA = 0.75f;
     
-    private Actor actor;
-    private ProtoData data;
-    
-    private Icon icon;
-    private Text numCount;
+    private ObjectData data;
+    private final Actor actor;
+    private final Icon icon;
+    private final Text numCount;
     
     // 开始拖动的时间点
     private long startDragTime;
     private boolean bucketVisible;
     
-    public ShortcutView(float width, float height, Actor actor, ProtoData data) {
+    public ShortcutView(float width, float height, Actor actor, ObjectData data) {
         super(width, height);
         
         this.actor = actor;
         this.data = data;
         
-        icon = new Icon(data.getProto().getIcon());
+        icon = new Icon(data.getIcon());
         
         numCount = new Text("");
         addView(icon);
@@ -176,7 +175,7 @@ public class ShortcutView extends FrameLayout implements ItemListener, SkinListe
         return actor;
     }
 
-    public ProtoData getData() {
+    public ObjectData getData() {
         return data;
     }
 
@@ -197,7 +196,7 @@ public class ShortcutView extends FrameLayout implements ItemListener, SkinListe
     }
     
     private void itemUpdate() {
-        ProtoData temp = actor.getData().getItemStore().getItem(this.data.getProto().getId());
+        ObjectData temp = actor.getData().getItemStore().getItem(this.data.getId());
         // 物品可能用完
         if (temp == null) {
             this.data.setTotal(0);

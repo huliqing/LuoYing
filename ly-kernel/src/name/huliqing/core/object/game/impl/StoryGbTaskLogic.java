@@ -9,7 +9,7 @@ import name.huliqing.core.Factory;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.constants.IdConstants;
 import name.huliqing.core.data.GameLogicData;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.mvc.network.ActorNetwork;
 import name.huliqing.core.mvc.network.PlayNetwork;
 import name.huliqing.core.mvc.service.PlayService;
@@ -55,7 +55,7 @@ public class StoryGbTaskLogic<T extends GameLogicData> extends AbstractGameLogic
     
     @Override
     protected void doLogic(float tpf) {
-        ProtoData pd = actorNetwork.getItem(player, IdConstants.ITEM_GB_STUMP);
+        ObjectData pd = actorNetwork.getItem(player, IdConstants.ITEM_GB_STUMP);
         count = pd != null ? pd.getTotal() : 0;
         tpv.setText(get("taskSave.saveCount", count, total));
     }

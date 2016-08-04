@@ -8,7 +8,7 @@ import java.util.List;
 import name.huliqing.core.constants.InterfaceConstants;
 import name.huliqing.core.constants.ResConstants;
 import name.huliqing.core.data.AttributeApply;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.SkinData;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.ui.ListView;
@@ -22,9 +22,9 @@ import name.huliqing.core.ui.tiles.ColumnText;
  * 显示物品的数据行
  * @author huliqing
  */
-public class ItemRow extends Row<ProtoData> {
+public class ItemRow extends Row<ObjectData> {
 
-    protected ProtoData data;
+    protected ObjectData data;
     
     // 物品
     protected ColumnIcon icon;
@@ -76,7 +76,7 @@ public class ItemRow extends Row<ProtoData> {
     }
 
     @Override
-    public void displayRow(ProtoData dd) {
+    public void displayRow(ObjectData dd) {
         data = dd;
         icon.setIcon(data.getIcon());
         body.setNameText(ResourceManager.get(data.getId() + ".name"));
@@ -94,7 +94,7 @@ public class ItemRow extends Row<ProtoData> {
      * 获取当前行所显示的ProtoData
      * @return 
      */
-    public ProtoData getData() {
+    public ObjectData getData() {
         return data;
     }
     

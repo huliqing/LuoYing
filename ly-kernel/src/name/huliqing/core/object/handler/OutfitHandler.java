@@ -6,9 +6,8 @@ package name.huliqing.core.object.handler;
 
 import name.huliqing.core.Factory;
 import name.huliqing.core.GameException;
-import name.huliqing.core.constants.DataTypeConstants;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.SkinData;
 import name.huliqing.core.mvc.service.ItemService;
 import name.huliqing.core.mvc.service.SkinService;
@@ -22,7 +21,7 @@ public class OutfitHandler extends AbstractHandler {
     private final ItemService itemService = Factory.get(ItemService.class);
 
     @Override
-    public boolean canUse(Actor actor, ProtoData data) {
+    public boolean canUse(Actor actor, ObjectData data) {
         if (!super.canUse(actor, data)) {
             return false;
         }
@@ -43,7 +42,7 @@ public class OutfitHandler extends AbstractHandler {
     }
 
     @Override
-    protected void useObject(Actor actor, ProtoData pd) {
+    protected void useObject(Actor actor, ObjectData pd) {
         SkinData data = (SkinData) pd;
         if (data.isUsing()) {
             // 脱装备
@@ -55,7 +54,7 @@ public class OutfitHandler extends AbstractHandler {
     }
 
     @Override
-    public boolean remove(Actor actor,  ProtoData data, int count) throws GameException {
+    public boolean remove(Actor actor,  ObjectData data, int count) throws GameException {
         if (!(data instanceof SkinData)) {
 //            logger.log(Level.WARNING, "OutfitHandler only supported Skin type objects");
             return false;

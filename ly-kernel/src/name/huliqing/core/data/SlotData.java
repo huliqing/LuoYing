@@ -4,7 +4,6 @@
  */
 package name.huliqing.core.data;
 
-import name.huliqing.core.xml.ProtoData;
 import com.jme3.math.Vector3f;
 import com.jme3.network.serializing.Serializable;
 
@@ -12,7 +11,7 @@ import com.jme3.network.serializing.Serializable;
  * @author huliqing
  */
 @Serializable
-public class SlotData extends ProtoData{
+public class SlotData extends ObjectData{
     
     // 武器所绑定的骨头
     private String bindBone;
@@ -33,10 +32,6 @@ public class SlotData extends ProtoData{
     private String rightHandSkinSkill;
     
     public SlotData() {}
-    
-    public SlotData(String id) {
-        super(id);
-    }
 
     /**
      * 武器所绑定的骨头

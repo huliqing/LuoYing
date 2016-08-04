@@ -286,7 +286,7 @@ import name.huliqing.core.object.view.TextView;
 import name.huliqing.core.object.view.TimerView;
 import name.huliqing.core.object.view.ViewDataLoader;
 import name.huliqing.core.state.PlayState;
-import name.huliqing.core.xml.DataAttribute;
+import name.huliqing.core.xml.Data;
 import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.xml.Proto;
 import org.xml.sax.SAXException;
@@ -329,7 +329,7 @@ public class LY {
         Serializer.registerClass(SkillStore.class);
         Serializer.registerClass(AttributeApply.class);
         Serializer.registerClass(AttributeUse.class);
-        Serializer.registerClass(DataAttribute.class);
+        Serializer.registerClass(Data.class);
         Serializer.registerClass(DropItem.class);
         Serializer.registerClass(PkgItemData.class);
         

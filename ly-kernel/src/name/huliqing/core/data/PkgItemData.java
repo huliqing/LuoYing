@@ -4,7 +4,6 @@
  */
 package name.huliqing.core.data;
 
-import name.huliqing.core.xml.ProtoData;
 import com.jme3.export.InputCapsule;
 import com.jme3.export.JmeExporter;
 import com.jme3.export.JmeImporter;
@@ -12,7 +11,6 @@ import com.jme3.export.OutputCapsule;
 import com.jme3.network.serializing.Serializable;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import name.huliqing.core.enums.Sex;
 import name.huliqing.core.utils.ConvertUtils;
@@ -23,7 +21,7 @@ import name.huliqing.core.utils.ConvertUtils;
  * @author huliqing
  */
 @Serializable
-public class PkgItemData extends ProtoData {
+public class PkgItemData extends ObjectData {
     
     // 种族限制
     private List<String> raceLimit;
@@ -54,10 +52,6 @@ public class PkgItemData extends ProtoData {
     }
     
     public PkgItemData() {}
-    
-    public PkgItemData(String id) {
-        super(id);
-    }
     
     /**
      * 获取物品使用的种族限制，如果该列表为empty,则表明没有种族限制.否则

@@ -6,10 +6,9 @@ package name.huliqing.core.mvc.service;
 
 import java.util.List;
 import name.huliqing.core.Factory;
-import name.huliqing.core.constants.DataTypeConstants;
 import name.huliqing.core.constants.IdConstants;
 import name.huliqing.core.constants.ResConstants;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.SkinData;
 import name.huliqing.core.enums.MessageType;
 import name.huliqing.core.mvc.dao.ItemDao;
@@ -74,17 +73,17 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ProtoData getItem(Actor actor, String itemId) {
+    public ObjectData getItem(Actor actor, String itemId) {
         return itemDao.getItemExceptSkill(actor, itemId);
     }
 
     @Override
-    public List<ProtoData> getItems(Actor actor, List<ProtoData> store) {
+    public List<ObjectData> getItems(Actor actor, List<ObjectData> store) {
         return itemDao.getItems(actor, store);
     }
 
     @Override
-    public boolean isSellable(ProtoData data) {
+    public boolean isSellable(ObjectData data) {
         if (data.getId().equals(IdConstants.ITEM_GOLD))
             return false;
         
@@ -97,7 +96,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public void syncItemTotal(Actor actor, String itemId, int total) {
-        ProtoData protoData = getItem(actor, itemId);
+        ObjectData protoData = getItem(actor, itemId);
         if (protoData == null) {
             if (total <= 0) {
                 return;
@@ -114,7 +113,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public void useItem(Actor actor, String itemId) {
-        ProtoData data = getItem(actor, itemId);
+        ObjectData data = getItem(actor, itemId);
         if (data == null)
             return;
         

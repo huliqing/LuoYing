@@ -11,13 +11,12 @@ import com.jme3.export.OutputCapsule;
 import com.jme3.export.Savable;
 import com.jme3.network.serializing.Serializable;
 import java.io.IOException;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.core.LY;
-import name.huliqing.core.constants.DataTypeConstants;
 import name.huliqing.core.constants.IdConstants;
 import name.huliqing.core.data.SkinData;
 
@@ -29,7 +28,7 @@ import name.huliqing.core.data.SkinData;
 public class ItemStore implements Savable {
     
     // 所有物品
-    private ArrayList<ProtoData> items = new ArrayList<ProtoData>();
+    private ArrayList<ObjectData> items = new ArrayList<ObjectData>();
     // 最后一次添加物品，删除物品的时间
     private long lastModifyTime;
 
@@ -42,7 +41,7 @@ public class ItemStore implements Savable {
     @Override
     public void read(JmeImporter im) throws IOException {
         InputCapsule ic = im.getCapsule(this);
-        ArrayList<ProtoData> temp = ic.readSavableArrayList("items", null);
+        ArrayList<ObjectData> temp = ic.readSavableArrayList("items", null);
         items.clear();
         if (temp != null) {
             items.addAll(temp);
@@ -56,7 +55,7 @@ public class ItemStore implements Savable {
      * {@link #removeItem(name.huliqing.fighter.data.ProtoData) }方法
      * @return 
      */
-    public List<ProtoData> getAll() {
+    public List<ObjectData> getAll() {
         return items;
     }
     
@@ -65,11 +64,11 @@ public class ItemStore implements Savable {
      * @param store
      * @return 
      */
-    public List<ProtoData> getOthers(List<ProtoData> store) {
+    public List<ObjectData> getOthers(List<ObjectData> store) {
         if (store == null) {
-            store = new ArrayList<ProtoData>();
+            store = new ArrayList<ObjectData>();
         }
-        for (ProtoData od : items) {
+        for (ObjectData od : items) {
             if (od instanceof SkinData) {
                 continue;
             }
@@ -83,7 +82,7 @@ public class ItemStore implements Savable {
      * @param itemId
      * @return 
      */
-    public ProtoData getItem(String itemId) {
+    public ObjectData getItem(String itemId) {
         return findObjectData(itemId);
     }
     
@@ -98,7 +97,7 @@ public class ItemStore implements Savable {
             return false;
         }
             
-        ProtoData od = findObjectData(itemId);
+        ObjectData od = findObjectData(itemId);
         if (od != null) {
             od.increaseTotal(-1 * amount);
             if (od.getTotal() <= 0) {
@@ -123,8 +122,8 @@ public class ItemStore implements Savable {
      * @return 
      */
     public int getTotalGold() {
-        for (ProtoData od : items) {
-            if (od.getProto().getId().equals(IdConstants.ITEM_GOLD)) {
+        for (ObjectData od : items) {
+            if (od.getId().equals(IdConstants.ITEM_GOLD)) {
                 return od.getTotal();
             }
         }
@@ -136,21 +135,21 @@ public class ItemStore implements Savable {
      * @param itemId
      * @return 
      */
-    private ProtoData findObjectData(String itemId) {
-        for (ProtoData od : items) {
-            if (od.getProto().getId().equals(itemId)) {
+    private ObjectData findObjectData(String itemId) {
+        for (ObjectData od : items) {
+            if (od.getId().equals(itemId)) {
                 return od;
             }
         }
         return null;
     }
 
-    public boolean addItem(ProtoData item, int amount) {
+    public boolean addItem(ObjectData item, int amount) {
         if (amount <= 0) {
             Logger.getLogger(getClass().getName()).log(Level.WARNING, "Amount must more than 0");
             return false;
         }
-        ProtoData od = findObjectData(item.getId());
+        ObjectData od = findObjectData(item.getId());
         // 如果包裹中不存在物品，则创建一个新的,注意：创建的时候要判断物品是否存在。
         if (od == null) {
             od = item;

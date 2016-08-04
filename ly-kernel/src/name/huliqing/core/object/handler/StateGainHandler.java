@@ -6,7 +6,7 @@ package name.huliqing.core.object.handler;
 
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.HandlerData;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.mvc.network.StateNetwork;
 import name.huliqing.core.mvc.service.ItemService;
 import name.huliqing.core.mvc.service.StateService;
@@ -46,7 +46,7 @@ public class StateGainHandler extends AbstractHandler {
 //    }
 
     @Override
-    protected void useObject(Actor actor, ProtoData data) {
+    protected void useObject(Actor actor, ObjectData data) {
         if (states == null)
             return;
         

@@ -4,7 +4,6 @@
  */
 package name.huliqing.core.data;
 
-import name.huliqing.core.xml.ProtoData;
 import com.jme3.export.InputCapsule;
 import com.jme3.export.JmeExporter;
 import com.jme3.export.JmeImporter;
@@ -18,7 +17,7 @@ import java.io.IOException;
  * @author huliqing
  */
 @Serializable
-public class ResistData extends ProtoData{
+public class ResistData extends ObjectData{
     
     /**
      * 抵抗率[0.0~1.0]
@@ -40,10 +39,6 @@ public class ResistData extends ProtoData{
     }
     
     public ResistData() {}
-    
-    public ResistData(String id) {
-        super(id);
-    }
 
     /**
      * 获取抵抗率，[0.0~1.0]

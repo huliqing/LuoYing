@@ -14,7 +14,7 @@ import com.jme3.util.TempVars;
 import name.huliqing.core.Factory;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.data.HandlerData;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.enums.MessageType;
 import name.huliqing.core.mvc.network.PlayNetwork;
 import name.huliqing.core.mvc.service.ActorService;
@@ -54,7 +54,7 @@ public class SummonHandler extends AbstractHandler {
     }
 
     @Override
-    protected void useObject(Actor actor, ProtoData data) {
+    protected void useObject(Actor actor, ObjectData data) {
         int count = 0;
         for (int i = 0; i < total; i++) {
             count += summon(actor, actorId) ? 1 : 0;

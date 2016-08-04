@@ -4,7 +4,6 @@
  */
 package name.huliqing.core.data;
 
-import name.huliqing.core.xml.ProtoData;
 import com.jme3.export.InputCapsule;
 import com.jme3.export.JmeExporter;
 import com.jme3.export.JmeImporter;
@@ -18,7 +17,7 @@ import java.util.List;
  * @author huliqing
  */
 @Serializable
-public class DropData extends ProtoData {
+public class DropData extends ObjectData {
     
     // 必须掉落的物品列表。
     private List<DropItem> baseItems;
@@ -45,10 +44,6 @@ public class DropData extends ProtoData {
     }
     
     public DropData() {}
-    
-    public DropData(String id) {
-        super(id);
-    }
 
     public List<DropItem> getBaseItems() {
         return baseItems;

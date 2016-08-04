@@ -8,7 +8,7 @@ package name.huliqing.core.object.env;
 import com.jme3.app.Application;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.scene.Spatial;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.loader.AssetLoader;
 import name.huliqing.core.object.scene.Scene;
 
@@ -75,7 +75,7 @@ public class ModelEnv<T extends ModelEnvData> extends AbstractEnv<T> {
         } else {
             spatial = AssetLoader.loadModelDirect(data.getFile());
         }
-        spatial.setUserData(ProtoData.USER_DATA, data);
+        spatial.setUserData(ObjectData.USER_DATA, data);
         spatial.setLocalTranslation(data.getLocation());
         spatial.setLocalRotation(data.getRotation());
         spatial.setLocalScale(data.getScale());

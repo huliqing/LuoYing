@@ -9,7 +9,7 @@ import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.mvc.network.UserCommandNetwork;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.ui.ListView;
@@ -20,12 +20,12 @@ import name.huliqing.core.ui.UI;
  * 
  * @author huliqing
  */
-public class ItemPanel extends ListView<ProtoData> implements ActorPanel {
+public class ItemPanel extends ListView<ObjectData> implements ActorPanel {
     private PlayService playService = Factory.get(PlayService.class);
     private final UserCommandNetwork userCommandNetwork = Factory.get(UserCommandNetwork.class);
     
     private Actor actor;
-    private List<ProtoData> datas = new ArrayList<ProtoData>();
+    private List<ObjectData> datas = new ArrayList<ObjectData>();
     
     public ItemPanel(float width, float height) {
         super(width, height);
@@ -40,7 +40,7 @@ public class ItemPanel extends ListView<ProtoData> implements ActorPanel {
     }
     
     @Override
-    protected Row<ProtoData> createEmptyRow() {
+    protected Row<ObjectData> createEmptyRow() {
         final ItemRow row = new ItemRow();
         row.setRowClickListener(new Listener() {
             @Override
@@ -63,7 +63,7 @@ public class ItemPanel extends ListView<ProtoData> implements ActorPanel {
     }
 
     @Override
-    public List<ProtoData> getDatas() {
+    public List<ObjectData> getDatas() {
         if (actor != null) {
             datas.clear();
             return actor.getData().getItemStore().getOthers(datas);
@@ -82,17 +82,17 @@ public class ItemPanel extends ListView<ProtoData> implements ActorPanel {
         refreshPageData();
     }
     
-    private class ItemRow extends name.huliqing.core.view.actor.ItemRow<ProtoData> {
+    private class ItemRow extends name.huliqing.core.view.actor.ItemRow<ObjectData> {
 
         public ItemRow() {
             super();
         }
         
         @Override
-        public void display(ProtoData data) {
-            icon.setIcon(data.getProto().getIcon());
-            body.setNameText(ResourceManager.get(data.getProto().getId() + ".name"));
-            body.setDesText(ResourceManager.get(data.getProto().getId() + ".des"));
+        public void display(ObjectData data) {
+            icon.setIcon(data.getIcon());
+            body.setNameText(ResourceManager.get(data.getId() + ".name"));
+            body.setDesText(ResourceManager.get(data.getId() + ".des"));
             num.setText(data.getTotal() + "");
         }
     }

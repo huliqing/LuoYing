@@ -97,7 +97,7 @@ public class WeaponPanel extends ListView<SkinData> implements ActorPanel{
         @Override
         public void display(SkinData data) {
             SkinData wd = (SkinData) data;
-            icon.setIcon(wd.getProto().getIcon());
+            icon.setIcon(wd.getIcon());
             body.setNameText(ResourceManager.getObjectName(wd));
             
             List<AttributeApply> aas = wd.getApplyAttributes();

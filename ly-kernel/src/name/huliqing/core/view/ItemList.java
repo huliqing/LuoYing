@@ -5,7 +5,7 @@
 package name.huliqing.core.view;
 
 import java.util.List;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.ui.ListView;
 import name.huliqing.core.ui.Row;
 import name.huliqing.core.ui.UI;
@@ -15,16 +15,16 @@ import name.huliqing.core.ui.UI.Listener;
  * 显示物品列表
  * @author huliqing
  */
-public class ItemList extends ListView<ProtoData> implements Listener {
+public class ItemList extends ListView<ObjectData> implements Listener {
     
     public interface RowClickListener {
-        void onClick(Row row, boolean isPressed, ProtoData data);
+        void onClick(Row row, boolean isPressed, ObjectData data);
     }
     
-    private List<ProtoData> datas;
+    private List<ObjectData> datas;
     private RowClickListener rowClickListener;
     
-    public ItemList(float width, float height, List<ProtoData> datas) {
+    public ItemList(float width, float height, List<ObjectData> datas) {
         super(width, height);
         this.datas = datas;
         setPageSize(6);
@@ -35,7 +35,7 @@ public class ItemList extends ListView<ProtoData> implements Listener {
     }
     
     @Override
-    protected final Row<ProtoData> createEmptyRow() {
+    protected final Row<ObjectData> createEmptyRow() {
         ItemRow row = new ItemRow(this);
         row.addClickListener(this);
         return row;
@@ -50,7 +50,7 @@ public class ItemList extends ListView<ProtoData> implements Listener {
     }
     
     @Override
-    public List<ProtoData> getDatas() {
+    public List<ObjectData> getDatas() {
         return datas;
     }
     

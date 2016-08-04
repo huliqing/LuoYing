@@ -18,7 +18,8 @@ public class ModelEnvLoader<T extends ModelEnvData> extends EnvDataLoader<T> {
 
     @Override
     public void load(Proto proto, T store) {
-        store.setFile(proto.getFile());
+        store.setFile(proto.getAttribute("file"));
+        
         Vector3f location = proto.getAsVector3f("location");
         if (location != null) {
             store.setLocation(location);

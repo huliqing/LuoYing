@@ -11,7 +11,7 @@ import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.constants.ResConstants;
 import name.huliqing.core.data.ChatData;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.mvc.network.UserCommandNetwork;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.ItemService;
@@ -103,14 +103,14 @@ public class SendChat<T extends ChatData> extends Chat<T> {
         sender = playService.getPlayer();
         
         // 初始化, 数据要复制一份出来，不要去影响角色的包裹中的数据
-        List<ProtoData> items = itemService.getItems(sender, null);
-        List<ProtoData> transferDatas = new ArrayList<ProtoData>(items.size());
-        for (ProtoData item : items) {
+        List<ObjectData> items = itemService.getItems(sender, null);
+        List<ObjectData> transferDatas = new ArrayList<ObjectData>(items.size());
+        for (ObjectData item : items) {
             // 非卖品
             if (!itemService.isSellable(item)) {
                 continue;
             }
-            ProtoData dataCopy = DataFactory.createData(item.getId());
+            ObjectData dataCopy = DataFactory.createData(item.getId());
             dataCopy.setTotal(item.getTotal());
             transferDatas.add(dataCopy);
         }
@@ -124,14 +124,14 @@ public class SendChat<T extends ChatData> extends Chat<T> {
     
     // 给目标发送物品
     private void send() {
-        List<ProtoData> datas = distPanel.getDatas();
+        List<ObjectData> datas = distPanel.getDatas();
         if (datas.isEmpty()) {
             playService.removeObject(this);
             return;
         }
         String[] items = new String[datas.size()];
         int[] counts = new int[datas.size()];
-        ProtoData pd;
+        ObjectData pd;
         for (int i = 0; i < datas.size(); i++) {
             pd = datas.get(i);
             items[i] = pd.getId();

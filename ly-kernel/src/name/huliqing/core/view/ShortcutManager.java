@@ -16,10 +16,9 @@ import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.manager.AnimationManager;
 import name.huliqing.core.LY;
 import name.huliqing.core.Factory;
-import name.huliqing.core.constants.DataTypeConstants;
 import name.huliqing.core.data.ItemData;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.data.SkinData;
 import name.huliqing.core.enums.MessageType;
@@ -112,7 +111,7 @@ public class ShortcutManager {
         } else if (DELETE.isVisible() && isDelete(shortcut)) {
             // delete object
             Actor actor = shortcut.getActor();
-            ProtoData data = shortcut.getData();
+            ObjectData data = shortcut.getData();
             
             // remove20160619
 //            boolean delSuccess = Factory.get(UserCommandNetwork.class).removeObject(actor, data.getId(), data.getTotal());
@@ -129,7 +128,7 @@ public class ShortcutManager {
 
             String objectName = ResourceManager.getObjectName(data);
             Factory.get(UserCommandNetwork.class).removeObject(actor, data.getId(), data.getTotal());
-            ProtoData resultData = Factory.get(ProtoService.class).getData(actor, data.getId());
+            ObjectData resultData = Factory.get(ProtoService.class).getData(actor, data.getId());
             if (resultData == null || resultData.getTotal() <= 0) {
                 // delete shortcut
                 SHORTCUT_ROOT.removeShortcut(shortcut);
@@ -188,7 +187,7 @@ public class ShortcutManager {
         if (!scs.isEmpty()) {
             for (ShortcutView sc : scs) {
                 ShortcutSave ss = new ShortcutSave();
-                ss.setItemId(sc.getData().getProto().getId());
+                ss.setItemId(sc.getData().getId());
                 ss.setX(sc.getWorldTranslation().x);
                 ss.setY(sc.getWorldTranslation().y);
                 result.add(ss);
@@ -197,7 +196,7 @@ public class ShortcutManager {
         return result;
     }
     
-    public static ShortcutView createShortcut(Actor actor, ProtoData data) {
+    public static ShortcutView createShortcut(Actor actor, ObjectData data) {
         ShortcutView shortcut;
         if (data instanceof SkillData) {
             shortcut = new ShortcutSkillView(64, 64, actor, data);
@@ -237,7 +236,7 @@ public class ShortcutManager {
         float shortcutSize = configService.getShortcutSize();
         for (ShortcutSave s : ss) {
             String itemId = s.getItemId();
-            ProtoData data = actorService.getItem(player, itemId);
+            ObjectData data = actorService.getItem(player, itemId);
             if (data == null) {
                 data = DataFactory.createData(itemId);
             }

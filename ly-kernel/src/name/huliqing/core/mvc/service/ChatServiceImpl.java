@@ -7,7 +7,7 @@ package name.huliqing.core.mvc.service;
 import name.huliqing.core.Factory;
 import name.huliqing.core.constants.IdConstants;
 import name.huliqing.core.constants.ResConstants;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.enums.MessageType;
 import name.huliqing.core.loader.Loader;
 import name.huliqing.core.manager.ResourceManager;
@@ -20,11 +20,13 @@ import name.huliqing.core.object.chat.Chat;
  * @author huliqing
  */
 public class ChatServiceImpl implements ChatService {
+    private ProtoService protoService;
     private PlayService playService;
     private ItemService itemService;
     
     @Override
     public void inject() {
+        protoService = Factory.get(ProtoService.class);
         playService = Factory.get(PlayService.class);
         itemService = Factory.get(ItemService.class);
     }
@@ -50,7 +52,7 @@ public class ChatServiceImpl implements ChatService {
     
     @Override
     public void chatShop(Actor seller, Actor buyer, String itemId, int count, float discount) {
-        ProtoData data = itemService.getItem(seller, itemId);
+        ObjectData data = itemService.getItem(seller, itemId);
         if (data == null || data.getTotal() <= 0 || data.getTotal() < count) {
             // 库存不足，如果是当前场景“主角”则显示提示
             if (buyer == playService.getPlayer()) {
@@ -65,8 +67,8 @@ public class ChatServiceImpl implements ChatService {
             return;
         }
         
-        int needGold = (int) (data.getCost() * count * discount);
-        ProtoData gold = itemService.getItem(buyer, IdConstants.ITEM_GOLD);
+        int needGold = (int) (protoService.getCost(data) * count * discount);
+        ObjectData gold = itemService.getItem(buyer, IdConstants.ITEM_GOLD);
         if (gold == null || gold.getTotal() < needGold) {
             // 金币不足
             if (buyer == playService.getPlayer()) {
@@ -109,7 +111,7 @@ public class ChatServiceImpl implements ChatService {
      */
     private boolean sellInner(Actor seller, Actor buyer, String[] items, int[] counts, float discount) {
         String id;
-        ProtoData data;
+        ObjectData data;
         int trueCount;
         float amount;
         boolean result = false; // 标记是否有卖出过任何一件物品
@@ -132,7 +134,7 @@ public class ChatServiceImpl implements ChatService {
             if (data.getTotal() > 0) {
                 // 如果角色身上指定ID物品的数量不够卖，则卖出尽可能多。否则按指定数量卖出。
                 trueCount = data.getTotal() > counts[i] ? counts[i] : data.getTotal();
-                amount = data.getCost() * trueCount * discount;
+                amount = protoService.getCost(data) * trueCount * discount;
                 
                 itemService.addItem(buyer, id, trueCount);
                 itemService.removeItem(seller, id, trueCount);

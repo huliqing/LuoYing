@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.constants.ResConstants;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.TaskData;
 import name.huliqing.core.enums.MessageType;
 import name.huliqing.core.mvc.network.PlayNetwork;
@@ -237,7 +238,7 @@ public class CollectTask<T extends TaskData> extends AbstractTask<T> implements 
             float ilWidth = (width - label.getWidth()) / items.size();
             for (ItemWrap iw : items) {
                 IconLabel<ItemWrap> il = new IconLabel<ItemWrap>(iw
-                        , DataFactory.createData(iw.itemId).getIcon()
+                        , ((ObjectData)DataFactory.createData(iw.itemId)).getIcon()
                         , "0/" + iw.total);
                 il.setWidth(ilWidth);
                 il.setHeight(height);

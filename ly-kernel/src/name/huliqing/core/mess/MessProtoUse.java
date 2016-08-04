@@ -7,7 +7,7 @@ package name.huliqing.core.mess;
 import com.jme3.network.HostedConnection;
 import com.jme3.network.serializing.Serializable;
 import name.huliqing.core.Factory;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.mvc.network.ProtoNetwork;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.ProtoService;
@@ -72,7 +72,7 @@ public class MessProtoUse extends MessBase {
         // 使用物品的必须是客户端角色自身或者客户端角色的宠物
         if (actor.getData().getUniqueId() == clientActorId
                 || actor.getData().getOwnerId() == clientActorId) {
-            ProtoData data = protoService.getData(actor, objectId);
+            ObjectData data = protoService.getData(actor, objectId);
             protoNetwork.useData(actor, data);
         }
     }
@@ -83,7 +83,7 @@ public class MessProtoUse extends MessBase {
         ProtoService protoService = Factory.get(ProtoService.class);
         Actor actor = playService.findActor(actorId);
         if (actor != null) {
-            ProtoData data = protoService.getData(actor, objectId);
+            ObjectData data = protoService.getData(actor, objectId);
             protoService.useData(actor, data); 
         }
     }

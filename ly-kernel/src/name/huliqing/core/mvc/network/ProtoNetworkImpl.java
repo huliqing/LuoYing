@@ -6,7 +6,7 @@
 package name.huliqing.core.mvc.network;
 
 import name.huliqing.core.Factory;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.mess.MessProtoAdd;
 import name.huliqing.core.mess.MessProtoRemove;
 import name.huliqing.core.mess.MessProtoSync;
@@ -29,17 +29,17 @@ public class ProtoNetworkImpl implements ProtoNetwork {
     }
     
     @Override
-    public ProtoData createData(String id) {
+    public ObjectData createData(String id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public ProtoData getData(Actor actor, String id) {
+    public ObjectData getData(Actor actor, String id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void addData(Actor actor, ProtoData data, int count) {
+    public void addData(Actor actor, ObjectData data, int count) {
         if (network.isClient())
             return;
         
@@ -47,7 +47,7 @@ public class ProtoNetworkImpl implements ProtoNetwork {
         protoService.addData(actor, data, count);
 
         // 同步物品数量
-        ProtoData resultData = protoService.getData(actor, data.getId());
+        ObjectData resultData = protoService.getData(actor, data.getId());
         MessProtoAdd mess = new MessProtoAdd();
         mess.setActorId(actor.getData().getUniqueId());
         mess.setObjectId(data.getId());
@@ -57,7 +57,7 @@ public class ProtoNetworkImpl implements ProtoNetwork {
     }
 
     @Override
-    public void useData(Actor actor, ProtoData data) {
+    public void useData(Actor actor, ObjectData data) {
         if (network.isClient())
             return;
         if (data == null)
@@ -84,7 +84,7 @@ public class ProtoNetworkImpl implements ProtoNetwork {
 
         // 同步物品数量
         if (network.hasConnections()) {
-            ProtoData resultData = protoService.getData(actor, data.getId());
+            ObjectData resultData = protoService.getData(actor, data.getId());
             MessProtoSync mess = new MessProtoSync();
             mess.setActorId(actor.getData().getUniqueId());
             mess.setObjectId(data.getId());
@@ -94,7 +94,7 @@ public class ProtoNetworkImpl implements ProtoNetwork {
     }
 
     @Override
-    public void removeData(Actor actor, ProtoData data, int count) {
+    public void removeData(Actor actor, ObjectData data, int count) {
         if (network.isClient())
             return;
         
@@ -114,7 +114,7 @@ public class ProtoNetworkImpl implements ProtoNetwork {
         protoService.removeData(actor, data, count);
         
         if (network.hasConnections()) {
-            ProtoData resultData = protoService.getData(actor, data.getId());
+            ObjectData resultData = protoService.getData(actor, data.getId());
             MessProtoSync messSync = new MessProtoSync();
             messSync.setActorId(actor.getData().getUniqueId());
             messSync.setObjectId(data.getId());
@@ -126,6 +126,11 @@ public class ProtoNetworkImpl implements ProtoNetwork {
     @Override
     public void syncDataTotal(Actor actor, String objectId, int total) {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public float getCost(ObjectData data) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

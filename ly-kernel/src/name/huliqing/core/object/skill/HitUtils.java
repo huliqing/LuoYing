@@ -7,7 +7,7 @@ package name.huliqing.core.object.skill;
 import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.constants.ResConstants;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.enums.MessageType;
 import name.huliqing.core.enums.SkillType;
@@ -100,8 +100,8 @@ public class HitUtils {
                 actorNetwork.applyXp(attacker, xpReward);
                 
                 // 奖励物品
-                List<ProtoData> dropItems = dropService.getRandomDropFull(target, null);
-                for (ProtoData item : dropItems) {
+                List<ObjectData> dropItems = dropService.getRandomDropFull(target, null);
+                for (ObjectData item : dropItems) {
 //                    itemNetwork.addItem(attacker, item.getId(), item.getTotal());
                     protoNetwork.addData(attacker, protoService.createData(item.getId()), item.getTotal());
                 }

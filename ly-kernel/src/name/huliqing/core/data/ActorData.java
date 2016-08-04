@@ -4,7 +4,6 @@
  */
 package name.huliqing.core.data;
 
-import name.huliqing.core.xml.ProtoData;
 import com.jme3.export.InputCapsule;
 import com.jme3.export.JmeExporter;
 import com.jme3.export.JmeImporter;
@@ -17,6 +16,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import name.huliqing.core.data.define.MatObject;
+import name.huliqing.core.enums.Mat;
 import name.huliqing.core.enums.Sex;
 import name.huliqing.core.object.actor.SkillStore;
 import name.huliqing.core.object.actor.ItemStore;
@@ -27,7 +28,7 @@ import name.huliqing.core.utils.MathUtils;
  * @author huliqing
  */
 @Serializable
-public class ActorData extends ProtoData {
+public class ActorData extends ObjectData implements MatObject{
     
     // 角色名称
     private String name = "";
@@ -260,10 +261,6 @@ public class ActorData extends ProtoData {
     }
     
     public ActorData() {}
-    
-    public ActorData(String id) {
-        super(id);
-    }
 
     /**
      * 获取角色的基本皮肤,如果没有基本皮肤则返回null.
@@ -327,15 +324,6 @@ public class ActorData extends ProtoData {
     public boolean isPickable() {
         return true;
     }
-
-    // remove20160408
-//    public boolean isSkillLocked() {
-//        return skillLocked;
-//    }
-//
-//    public void setSkillLocked(boolean skillLocked) {
-//        this.skillLocked = skillLocked;
-//    }
 
     /**
      * 获取逻辑列表，如果没有设置过，则返回一个空列表
@@ -741,4 +729,19 @@ public class ActorData extends ProtoData {
     public boolean isBatchEnabled() {
         return getAsBoolean("batch", false);
     }
+    
+    /**
+     * 获取文件模型
+     * @return 
+     */
+    public String getFile() {
+        return getAttribute("file");
+    }
+
+    @Override
+    public Mat getMat() {
+        int matInt = getAsInteger("mat", Mat.none.getValue());
+        return Mat.identify(matInt);
+    }
+    
 }

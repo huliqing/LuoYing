@@ -4,7 +4,6 @@
  */
 package name.huliqing.core.data;
 
-import name.huliqing.core.xml.ProtoData;
 import com.jme3.network.serializing.Serializable;
 
 /**
@@ -12,16 +11,12 @@ import com.jme3.network.serializing.Serializable;
  * @author huliqing
  */
 @Serializable
-public class ElData extends ProtoData {
+public class ElData extends ObjectData {
     
     // 计算公式
     private String expression;
     
     public ElData(){}
-    
-    public ElData(String id) {
-        super(id);
-    }
 
     public String getExpression() {
         return expression;

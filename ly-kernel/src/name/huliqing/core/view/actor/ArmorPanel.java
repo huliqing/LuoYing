@@ -9,7 +9,7 @@ import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.SkinData;
 import name.huliqing.core.mvc.network.UserCommandNetwork;
 import name.huliqing.core.mvc.service.PlayService;
@@ -84,14 +84,14 @@ public class ArmorPanel extends ListView<SkinData> implements ActorPanel{
         throw new UnsupportedOperationException();
     }
     
-    private class ArmorRow extends ItemRow<ProtoData> {
+    private class ArmorRow extends ItemRow<ObjectData> {
 
         public ArmorRow() {
             super();
         }
         
         @Override
-        protected void display(ProtoData data) {
+        protected void display(ObjectData data) {
             SkinData sd = (SkinData) data;
             
             icon.setIcon(sd.getIcon());

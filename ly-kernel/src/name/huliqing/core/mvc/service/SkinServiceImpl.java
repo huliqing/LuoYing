@@ -16,7 +16,7 @@ import name.huliqing.core.Factory;
 import name.huliqing.core.constants.ActorConstants;
 import name.huliqing.core.data.ArrayListWrap;
 import name.huliqing.core.data.AttributeApply;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.SkinData;
 import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.mvc.dao.SkinDao;
@@ -424,7 +424,7 @@ public class SkinServiceImpl implements SkinService {
         SceneGraphVisitor sgv = new SceneGraphVisitor() {
             @Override
             public void visit(Spatial spatial) {
-                ProtoData pd = spatial.getUserData(ProtoData.USER_DATA);
+                ObjectData pd = spatial.getUserData(ObjectData.USER_DATA);
                 if (pd != null && (pd instanceof SkinData)) {
                     SkinData sd = (SkinData) pd;
                     if (((sd.getType() | sd.getConflictType()) & skinTypes) != 0) {
@@ -447,7 +447,7 @@ public class SkinServiceImpl implements SkinService {
         public int fullSkinTypes;
         @Override
         public void visit(Spatial actorModel) {
-            ProtoData pd = actorModel.getUserData(ProtoData.USER_DATA);
+            ObjectData pd = actorModel.getUserData(ObjectData.USER_DATA);
             if (pd != null && (pd instanceof SkinData)) {
                 SkinData sd = (SkinData) pd;
                 fullSkinTypes |= sd.getType();
@@ -481,7 +481,7 @@ public class SkinServiceImpl implements SkinService {
         
         @Override
         public void visit(Spatial spatial) {
-            ProtoData pd = spatial.getUserData(ProtoData.USER_DATA);
+            ObjectData pd = spatial.getUserData(ObjectData.USER_DATA);
             if (pd != null && pd == targetSkinData) {
                 skinNode = spatial;
             }

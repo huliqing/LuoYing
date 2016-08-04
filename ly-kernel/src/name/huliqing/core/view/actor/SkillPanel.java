@@ -9,7 +9,7 @@ import java.util.List;
 import name.huliqing.core.LY;
 import name.huliqing.core.Factory;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.mvc.network.UserCommandNetwork;
@@ -88,7 +88,7 @@ public class SkillPanel extends ListView<SkillData> implements ActorPanel {
             @Override
             public void onClick(UI ui, boolean isPress) {
                 if (!isPress) {
-                    ProtoData data = row.getData();
+                    ObjectData data = row.getData();
                     data.setTotal(1);
                     playService.addShortcut(actor, data);
                 }

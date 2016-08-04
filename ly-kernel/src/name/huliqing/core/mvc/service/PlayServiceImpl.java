@@ -22,7 +22,7 @@ import name.huliqing.core.Factory;
 import name.huliqing.core.data.GameData;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actor.ActorControl;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.enums.MessageType;
 import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.state.GameState;
@@ -180,7 +180,7 @@ public class PlayServiceImpl implements PlayService {
     }
 
     @Override
-    public void addShortcut(Actor actor, ProtoData data) {        
+    public void addShortcut(Actor actor, ObjectData data) {        
         ShortcutManager.addShortcut(ShortcutManager.createShortcut(actor, data));
     }
     
@@ -216,7 +216,7 @@ public class PlayServiceImpl implements PlayService {
         if (actors == null || actors.isEmpty())
             return null;
         for (Actor actor : actors) {
-            if (actor.getData().getProto().getId().equals(id)) {
+            if (actor.getData().getId().equals(id)) {
                 return actor;
             }
         }

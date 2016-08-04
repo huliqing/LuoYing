@@ -5,14 +5,14 @@
 package name.huliqing.core.object;
 
 import com.jme3.network.serializing.Serializable;
-import name.huliqing.core.xml.DataAttribute;
+import name.huliqing.core.xml.Data;
 
 /**
  * 同步数据
  * @author huliqing
  */
 @Serializable
-public final class SyncData extends DataAttribute{
+public final class SyncData extends Data{
     
     
 }

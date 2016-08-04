@@ -50,13 +50,13 @@ public class Collision {
         List<SkinData> weaponSkinStore = skinService.getCurrentWeaponSkin(attacker);
         if (attackMat == null) {
             if (!weaponSkinStore.isEmpty()) {
-                attackMat = weaponSkinStore.get(0).getProto().getMat();
+                attackMat = weaponSkinStore.get(0).getMat();
             }
         }
         if (defendMat == null) {
             weaponSkinStore = skinService.getCurrentWeaponSkin(defender);
             if (!weaponSkinStore.isEmpty()) {
-                defendMat = weaponSkinStore.get(0).getProto().getMat();
+                defendMat = weaponSkinStore.get(0).getMat();
             }
         }
         
@@ -69,11 +69,6 @@ public class Collision {
         for (MatMatcher matcher : matchers) {
             if (matcher.match(attackMat, defendMat)) {
                 AbstractEffect effect = (AbstractEffect) effectService.loadEffect(matcher.effectId);
-                
-                // remove20160517
-//                effect.setLocation(collidePos);
-//                effect.getLocalRotation().lookAt(attacker.getViewDirection(), Vector3f.UNIT_Y);
-                
                 effect.setLocalTranslation(collidePos);
                 effect.getLocalRotation().lookAt(attacker.getViewDirection(), Vector3f.UNIT_Y);
                 playService.addEffect(effect);

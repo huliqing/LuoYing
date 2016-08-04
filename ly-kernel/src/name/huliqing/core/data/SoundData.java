@@ -4,7 +4,6 @@
  */
 package name.huliqing.core.data;
 
-import name.huliqing.core.xml.ProtoData;
 import com.jme3.network.serializing.Serializable;
 
 /**
@@ -12,17 +11,13 @@ import com.jme3.network.serializing.Serializable;
  * @author huliqing
  */
 @Serializable
-public class SoundData extends ProtoData {
+public class SoundData extends ObjectData {
     
     private float volume;
     private float offset;
     private boolean loop;
     
     public SoundData() {}
-    
-    public SoundData(String id) {
-        super(id);
-    }
 
     public float getVolume() {
         return volume;

@@ -8,14 +8,13 @@ package name.huliqing.core.mvc.service;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.core.Factory;
-import name.huliqing.core.constants.DataTypeConstants;
 import name.huliqing.core.data.ItemData;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.data.SkinData;
-import name.huliqing.core.xml.Proto;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.data.define.CostObject;
 
 /**
  *
@@ -38,13 +37,13 @@ public class ProtoServiceImpl implements ProtoService {
     }
 
     @Override
-    public ProtoData createData(String id) {
-        ProtoData data = DataFactory.createData(id);
+    public ObjectData createData(String id) {
+        ObjectData data = DataFactory.createData(id);
         return data;
     }
 
     @Override
-    public ProtoData getData(Actor actor, String id) {
+    public ObjectData getData(Actor actor, String id) {
         Class<?> cc = DataFactory.getDataClassById(id);
         if (cc == null)
             return null;
@@ -60,7 +59,7 @@ public class ProtoServiceImpl implements ProtoService {
     }
 
     @Override
-    public void addData(Actor actor, ProtoData data, int count) {
+    public void addData(Actor actor, ObjectData data, int count) {
         if (data == null)
             return;
 
@@ -75,7 +74,7 @@ public class ProtoServiceImpl implements ProtoService {
     }
 
     @Override
-    public void useData(Actor actor, ProtoData data) {
+    public void useData(Actor actor, ObjectData data) {
         if (data == null)
             return;
         
@@ -83,7 +82,7 @@ public class ProtoServiceImpl implements ProtoService {
     }
 
     @Override
-    public void removeData(Actor actor, ProtoData data, int count) {
+    public void removeData(Actor actor, ObjectData data, int count) {
         if (data == null)
             return;
         
@@ -103,5 +102,13 @@ public class ProtoServiceImpl implements ProtoService {
         LOG.log(Level.WARNING, "Unsupported syncDataTotal, actor={0}, object id={1}, total={2}"
                 , new Object[] {actor, id, total});
     }
-    
+
+    @Override
+    public float getCost(ObjectData data) {
+        if (data instanceof CostObject) {
+            return ((CostObject)data).getCost();
+        }
+        return 0;
+    }
+ 
 }

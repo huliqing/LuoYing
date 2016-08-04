@@ -5,7 +5,7 @@
 package name.huliqing.core.object.handler;
 
 import name.huliqing.core.data.HandlerData;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.xml.DataProcessor;
 import name.huliqing.core.object.actor.Actor;
 
@@ -23,7 +23,7 @@ public interface Handler<T extends HandlerData> extends DataProcessor<T> {
      * @param count 要移除的数量
      * @return 
      */
-    boolean remove(Actor actor, ProtoData data, int count);
+    boolean remove(Actor actor, ObjectData data, int count);
     
     /**
      * 是否能够使用该物品
@@ -31,12 +31,12 @@ public interface Handler<T extends HandlerData> extends DataProcessor<T> {
      * @param data 
      * @return 
      */
-    boolean canUse(Actor actor, ProtoData data);
+    boolean canUse(Actor actor, ObjectData data);
     
     /**
      * 强制使用物品
      * @param actor
      * @param data
      */
-    void useForce(Actor actor, ProtoData data);
+    void useForce(Actor actor, ObjectData data);
 }

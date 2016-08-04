@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.core.Factory;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.mvc.service.ConfigService;
 
 /**
@@ -170,7 +170,7 @@ public class ResourceManager {
      * @param data
      * @return 
      */
-    public static String getObjectName(ProtoData data) {
+    public static String getObjectName(ObjectData data) {
         return getObjectName(data.getId());
     }
     

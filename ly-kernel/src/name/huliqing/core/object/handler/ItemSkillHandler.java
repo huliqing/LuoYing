@@ -8,7 +8,7 @@ import name.huliqing.core.Factory;
 import name.huliqing.core.constants.ResConstants;
 import name.huliqing.core.constants.SkillConstants;
 import name.huliqing.core.data.HandlerData;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.enums.MessageType;
 import name.huliqing.core.enums.Sex;
 import name.huliqing.core.mvc.network.PlayNetwork;
@@ -58,7 +58,7 @@ public class ItemSkillHandler extends AbstractHandler {
     }
 
     @Override
-    public boolean canUse(Actor actor, ProtoData data) {
+    public boolean canUse(Actor actor, ObjectData data) {
         boolean result = super.canUse(actor, data);
         if (!result)
             return false;
@@ -131,7 +131,7 @@ public class ItemSkillHandler extends AbstractHandler {
     }
 
     @Override
-    protected void useObject(Actor actor, ProtoData data) {
+    protected void useObject(Actor actor, ObjectData data) {
         Skill skill = getSkill(actor);
         if (skill != null) {
             boolean result = skillService.playSkill(actor, skill, false);

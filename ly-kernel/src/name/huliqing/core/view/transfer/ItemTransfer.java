@@ -6,7 +6,7 @@ package name.huliqing.core.view.transfer;
 
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.core.xml.ProtoData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.xml.DataFactory;
 
 /**
@@ -18,7 +18,7 @@ public class ItemTransfer implements Transfer {
     private List<TransferListener> listeners;
     // 需要传输的目标对象
     protected Transfer target;
-    protected final List<ProtoData> datas = new ArrayList<ProtoData>();
+    protected final List<ObjectData> datas = new ArrayList<ObjectData>();
     
     @Override
     public void setTarget(Transfer target) {
@@ -31,19 +31,19 @@ public class ItemTransfer implements Transfer {
     }
 
     @Override
-    public List<ProtoData> getDatas() {
+    public List<ObjectData> getDatas() {
         return datas;
     }
 
     @Override
-    public void setDatas(List<ProtoData> datas) {
+    public void setDatas(List<ObjectData> datas) {
         this.datas.clear();
         this.datas.addAll(datas);
     }
 
     @Override
-    public void addData(ProtoData pd, int count) {
-        ProtoData data = findData(pd.getId());
+    public void addData(ObjectData pd, int count) {
+        ObjectData data = findData(pd.getId());
         if (data == null) {
             data = DataFactory.createData(pd.getId());
             data.setTotal(count);
@@ -61,11 +61,11 @@ public class ItemTransfer implements Transfer {
     }
 
     @Override
-    public void removeData(ProtoData pd, int count) {
+    public void removeData(ObjectData pd, int count) {
         if (count < 0) 
             throw new IllegalArgumentException("Count could not less than ZERO! count=" + count);
         
-        ProtoData data = findData(pd.getId());
+        ObjectData data = findData(pd.getId());
         if (data == null) {
             return;
         }
@@ -84,8 +84,8 @@ public class ItemTransfer implements Transfer {
     }
 
     @Override
-    public ProtoData findData(String id) {
-        for (ProtoData data : datas) {
+    public ObjectData findData(String id) {
+        for (ObjectData data : datas) {
             if (data.getId().equals(id)) {
                 return data;
             }
@@ -94,7 +94,7 @@ public class ItemTransfer implements Transfer {
     }
 
     @Override
-    public final void transfer(ProtoData data, int count) {
+    public final void transfer(ObjectData data, int count) {
         if (target == null)
             return;
         target.addData(data, count);
