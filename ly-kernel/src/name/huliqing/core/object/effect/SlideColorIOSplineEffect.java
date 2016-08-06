@@ -24,7 +24,6 @@ import name.huliqing.core.data.EffectData;
 import name.huliqing.core.loader.Loader;
 import name.huliqing.core.shape.MySpline;
 import name.huliqing.core.shape.SplineSurface;
-import name.huliqing.core.utils.DebugUtils;
 
 /**
  * 滑动的颜色特效,设置两个材质: mask和tex
@@ -86,27 +85,20 @@ public class SlideColorIOSplineEffect extends AbstractEffect {
     }
     
     @Override
-    protected void doInit() {
-        super.doInit(); 
+    public void initialize() {
+        super.initialize();
         create();
-        fullUseTime = data.getPhaseTimeDisplay();
-        if (data.getPhaseTimeStart() > 0) {
-            fullUseTime += data.getPhaseTimeStart();
-        }
-        if (data.getPhaseTimeEnd() > 0) {
-            fullUseTime += data.getPhaseTimeEnd();
-        }
     }
     
     @Override
-    protected void updatePhaseAll(float tpf) {
-        super.updatePhaseAll(tpf);
+    protected void effectUpdate(float tpf) {
+        super.effectUpdate(tpf);
         float inter;
         if (repeatTimes > 1) {
-            inter = data.getTimeUsed() / fullUseTime * repeatTimes;
+            inter = trueTimeUsed / trueTimeTotal * repeatTimes;
             inter %= 1.0f;
         } else {
-            inter = data.getTimeUsed() / fullUseTime;
+            inter = trueTimeUsed / trueTimeTotal;
         }
         mat.setFloat("offsetY", FastMath.interpolateLinear(inter, -1f, 1f));
     }
@@ -137,7 +129,7 @@ public class SlideColorIOSplineEffect extends AbstractEffect {
             animObj = loadAnimModel();
             animObj.setMaterial(mat);
             animObj.setQueueBucket(RenderQueue.Bucket.Transparent);
-            localRoot.attachChild(animObj);
+            animRoot.attachChild(animObj);
             
 //            // for debug
 //            Material debugMat = new Material(Common.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");

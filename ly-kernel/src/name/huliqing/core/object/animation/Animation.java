@@ -7,7 +7,7 @@ package name.huliqing.core.object.animation;
 import com.jme3.scene.Spatial;
 
 /**
- *
+ * @deprecated use Anim instead
  * @author huliqing
  */
 public interface Animation {

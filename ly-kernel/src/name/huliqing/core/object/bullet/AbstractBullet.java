@@ -280,7 +280,7 @@ public abstract class AbstractBullet<T extends BulletData> extends Node implemen
         // 当子弹结束时，附着在子弹上的效果要让它们自动结束。
         if (tempEffects != null) {
             for (Effect eff : tempEffects) {
-                eff.jumpToEnd();
+                eff.requestEnd();
             }
             tempEffects.clear();
         }

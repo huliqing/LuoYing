@@ -36,6 +36,7 @@ import name.huliqing.core.object.PlayObject;
 import name.huliqing.core.object.anim.Anim;
 import name.huliqing.core.object.bullet.Bullet;
 import name.huliqing.core.object.effect.Effect;
+import name.huliqing.core.object.effect.EffectManager;
 import name.huliqing.core.object.scene.Scene;
 import name.huliqing.core.object.view.View;
 import name.huliqing.core.save.SaveHelper;
@@ -143,8 +144,7 @@ public class PlayServiceImpl implements PlayService {
 
     @Override
     public void addEffect(Effect effect) {
-        LY.getPlayState().addObject(effect.getDisplay(), false);
-        effect.start();
+        EffectManager.getInstance().playEffect(effect);
     }
 
     @Override

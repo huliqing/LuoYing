@@ -21,6 +21,7 @@ import name.huliqing.core.view.ClientsWin;
 import name.huliqing.core.object.anim.Anim;
 import name.huliqing.core.object.anim.Listener;
 import name.huliqing.core.object.anim.ScaleAnim;
+import name.huliqing.core.object.effect.EffectManager;
 import name.huliqing.core.object.env.CameraChaseEnv;
 import name.huliqing.core.object.game.Game;
 import name.huliqing.core.object.game.Game.GameListener;
@@ -53,6 +54,14 @@ public abstract class NetworkPlayState extends PlayState implements LanGame {
         super.initialize(stateManager, app); 
         // 初始化Network
         network.initialize(app);
+        
+        stateManager.attach(EffectManager.getInstance());
+    }
+
+    @Override
+    public void stateDetached(AppStateManager stateManager) {
+        super.stateDetached(stateManager);
+        stateManager.detach(EffectManager.getInstance());
     }
 
     @Override

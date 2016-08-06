@@ -29,11 +29,14 @@ xs:time
                         <xs:documentation>动画运行时间，单位秒</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-                <xs:attribute name="speed" type="xs:decimal" use="optional">
+                
+                <!--remove20160805,动画不再开放"speed"参数，因为speed将作为动态参数在游戏中进行控制。-->
+<!--                <xs:attribute name="speed" type="xs:decimal" use="optional">
                     <xs:annotation>
                         <xs:documentation>动画速度倍率,大于1提高速度，小于1则降低速度</xs:documentation>
                     </xs:annotation>
-                </xs:attribute>
+                </xs:attribute>-->
+                
                 <xs:attribute name="loop" type="loop" use="optional">
                     <xs:annotation>
                         <xs:documentation>动画的循环模式</xs:documentation>

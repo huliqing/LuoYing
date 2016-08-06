@@ -15,6 +15,12 @@ import name.huliqing.core.xml.DataProcessor;
  * @param <E>
  */
 public interface Anim<T extends AnimData, E> extends DataProcessor<T>{
+
+    @Override
+    public void setData(T data);
+
+    @Override
+    public T getData();
     
     /**
      * @see #setTarget(java.lang.Object) 

@@ -170,8 +170,7 @@ public class ActorModelLoader {
         if (effects != null) {
             for (String eid : effects) {
                 Effect ae = Loader.loadEffect(eid);
-                ae.start();
-                ((Node) actorModel).attachChild(ae.getDisplay());
+                ((Node) actorModel).attachChild(ae);
             }
         }
         

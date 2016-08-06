@@ -1,149 +1,161 @@
 /*
- * To change this template, choose Tools | Templates
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package name.huliqing.core.object.effect;
 
-import com.jme3.util.SafeArrayList;
+import java.util.ArrayList;
+import java.util.List;
 import name.huliqing.core.data.EffectData;
 import name.huliqing.core.loader.Loader;
-import name.huliqing.core.utils.ConvertUtils;
 
 /**
- * 效果组。该组下的子效果可以同时开始执行
- * ，并且各个子效果可以设置延迟开始执行的时间。默认情况下，该组下的效果会在
- * 一开始时同时开始执行。该用该效果需要注意以下几点：<br />
- * 1.当前效果不会执行任何实质内容，只会负责启动各个子效果。
- * 2.只有各个子效果都结束后，当前效果才会算结束。
- * 3.当前的效果各阶段的时间设置将不会影响到子效果的设置。
- * 4.注:设置GroupEffect的速度将会直接设置覆盖到所有的子效果的速度上,并
- * 且也影响子效果的延迟执行时间.
+ * 效果组
  * @author huliqing
  */
 public class GroupEffect extends AbstractEffect {
-
-    private final SafeArrayList<WrapEffect> childrenEffect = new SafeArrayList<WrapEffect>(WrapEffect.class);
     
-    private enum State {
-        wait,
-        running,
-        stop;
-    }
+    private List<EffectWrap> effects;
+    
+    // 当该参数为true时需要检查并结束当前效果,并且不再启动新的子效果。
+    private boolean endCheck;
     
     @Override
     public void setData(EffectData data) {
         super.setData(data);
         // effects的格式： "effect1,effect2|0.3, effect3..."
-        String[] effects = data.getAsArray("effects");
-        for (String effectStr : effects) {
-            String[] effectArr = effectStr.split("\\|");
-            Effect eff = Loader.loadEffect(effectArr[0]);
-            float delay = 0;
-            if (effectArr.length >= 2) {
-                delay = ConvertUtils.toFloat(effectArr[1], 0);
+        String[] aArr = data.getAsArray("effects");
+        if (aArr != null) {
+            effects = new ArrayList<EffectWrap>(aArr.length);
+            for (String a : aArr) {
+                String[] bArr = a.split("\\|");
+                EffectWrap effect = new EffectWrap();
+                effect.effectId = bArr[0];
+                effect.startTime = bArr.length > 1 ? Float.parseFloat(bArr[1]) : 0;
+                effects.add(effect);
             }
-            WrapEffect we = new WrapEffect(eff, delay);
-            childrenEffect.add(we);
         }
     }
     
     @Override
-    protected void doInit() {
-        super.doInit();
-        for (WrapEffect we : childrenEffect.getArray()) {
-            // 把速度加乘覆盖到子效果中,注:速度每次cleanup都会重置为1.0
-            we.effect.getData().setSpeed(data.getSpeed() * we.effect.getData().getSpeed());
-            we.delaySpeed = data.getSpeed();
-            // 标记为等待执行中。
-            we.state = State.wait;
+    public void initialize() {
+        super.initialize();
+
+        if (effects != null) {
+            for (int i = 0; i < effects.size(); i++) {
+                EffectWrap ew = effects.get(i);
+                ew.trueStartTime = ew.startTime / data.getSpeed();
+            }
         }
     }
 
     @Override
-    protected void updatePhaseAll(float tpf) {
-        for (WrapEffect we : childrenEffect.getArray()) {
-            we.checkToStart(data.getTimeUsed());
+    protected void effectUpdate(float tpf) {
+        super.effectUpdate(tpf);
+        
+        // endCheck为true则检查是否可以结束当前效果组。注：当endCheck为true时未开始执行的子效果将不再执行。
+        // 也就是不再去启动未开始的效果。当所有子效果都结束时则可以将当前效果组(GroupEffect)结束。
+        if (endCheck) {
+            int countEnd = 0;
+            EffectWrap ew;
+            for (int i = 0; i < effects.size(); i++) {
+                ew = effects.get(i);
+                if (!ew.started || (ew.started && ew.effect.isEnd())) {
+                    countEnd++;
+                }
+            }
+            if (countEnd >= effects.size()) {
+                super.doEndEffect();
+            }
+            return;
         }
+        
+        // 检查并启动子效果。
+        EffectWrap ew;
+        int countStarted = 0;
+        for (int i = 0; i < effects.size(); i++) {
+            ew = effects.get(i);
+            ew.checkToStart(trueTimeUsed);
+            countStarted += ew.started ? 1 : 0;
+        }
+        
+        // 当所有子效果启动后开始检查是否可以结束当前效果。
+        endCheck = countStarted >= effects.size();
+        
     }
 
     @Override
-    protected boolean confirmEnd() {
-        // 2.如果有任何一个还在执行，则不应该停止
-        for (WrapEffect we : childrenEffect.getArray()) {
-            // 如果还有子效果在等待执行，则不能结束
-            if (we.state == State.wait) {
-                return false;
-            }
-            // 还有已经执行但未结束的
-            if (!we.effect.isEnd()) {
-                return false;
+    public void requestEnd() {
+        super.requestEnd();
+        
+        // 请求让所有已经运行的子效果结束
+        for (EffectWrap ew : effects) {
+            if (ew.started) {
+                ew.effect.requestEnd();
             }
         }
-        return true;
+        
+        // 标记endCheck,这可以让哪些还未开始执行的子效果不再检查是否要需要执行。
+        endCheck = true;
+        
     }
 
-    @Override
-    public void jumpToEnd() {
-        // 标记为已经中断
-        for (WrapEffect we : childrenEffect.getArray()) {
-            // 把未开始执行的效果状态转化为stop状态,即不需要执行
-            if (we.state == State.wait) {
-                we.state = State.stop;
-            }
-            // 把正在执行的效果跳转到结束阶段
-            if (we.state == State.running) {
-                we.effect.jumpToEnd();
-            }
-        }
-        super.jumpToEnd();
-    }
-    
     @Override
     public void cleanup() {
-        for (WrapEffect we : childrenEffect.getArray()) {
-            we.cleanup();
+        if (effects != null) {
+            for (int i = 0; i < effects.size(); i++) {
+                effects.get(i).cleanup();
+            }
         }
-        super.cleanup();
+        endCheck = false;
+        super.cleanup(); 
+    }
+
+    @Override
+    protected final void doEndEffect() {
+        // GroupEffect的效果不能直接结束,因为所有子效果是依赖于当前GroupEffect的，必须等待所有子效果都结束之后才可以
+        // 结束当前效果组
     }
     
-    // 包装effect
-    private class WrapEffect {
+    private class EffectWrap {
+        // 效果id,这是在xml上的原始设置
+        private String effectId;
+        // 效果的开始时间，这是在xml上的原始设置
+        private float startTime;
+        // 实例化后的效果
         private Effect effect;
-        // 延迟启动时间,单位秒
-        private float delay;
-        private float delaySpeed = 1;
-        private State state = State.stop;
+        // 实际的实际开始时间，这个时间受效果的速度影响
+        private float trueStartTime = 1;
+        // 标记效果是否已经开始
+        private boolean started;
         
-        public WrapEffect(Effect effect, float delay) {
-            this.effect = effect;
-            this.delay = delay;
-        }
-        
-        public void checkToStart(float timeUsed) {
-            // remove20160606
-//            if (state == State.running || state == State.stop) {
-//                return;
-//            }
-//            if (timeUsed >= (delay / delaySpeed)) {
-//                localRoot.attachChild(effect.getDisplay());
-//                effect.start();
-//                state = State.running;
-//            }
-
-            if (state == State.wait) {
-                if (timeUsed >= (delay / delaySpeed)) {
-                    localRoot.attachChild(effect.getDisplay());
-                    effect.start();
-                    state = State.running;
+        public void checkToStart(float effectTimeUsed) {
+            if (started) return;
+            if (effectTimeUsed >= trueStartTime) {
+                if (effect == null) {
+                    effect = Loader.loadEffect(effectId);
                 }
+                // 注意：子效果是直接放在GroupEffect下的，不要放在EffectManager中，
+                // 这会依赖EffectManger,导致GroupEffect不能放在其它Node节点下, 
+                // 所有类型的Effect都应该是可以单独放在任何Node下进行运行的。
+                animRoot.attachChild(effect);
+                // 与group保持一致的速度,这样当设置GroupEffect的速度的时候可以同时影响子效果的速度
+                effect.getData().setSpeed(data.getSpeed());
+                // 把子效果的跟踪目标设置为animRoot，这样当GroupEffect添加了动画控制时，可以同时影响到子效果的变换。
+                effect.setTraceObject(animRoot);
+                // 记得在所有设置完毕后才调用initialize,因为子效果是由GroupEffect特别管理的，这里隔离了与EffectManager的关
+                // 系，initialize也可以交由效果内部调用，但是会慢一帧, 这会造成一些视角稍微滞后。
+                effect.initialize();
+                started = true;
             }
         }
         
         public void cleanup() {
-            state = State.stop;
-            if (!effect.isEnd()) {
+            if (effect != null) {
                 effect.cleanup();
             }
+            started = false;
         }
     }
 }

@@ -68,10 +68,10 @@ public class EncircleHaloEffect extends AbstractEffect {
         scaleEnd = data.getProto().getAsVector3f("scaleEnd", scaleEnd);
         preCreate();
     }
-    
+
     @Override
-    protected void doInit() {
-        super.doInit();
+    public void initialize() {
+        super.initialize();
         // 重置速度
         for (HaloCircle hc : circles) {
             hc.setRotateSpeed(FastMath.nextRandomFloat() * 0.5f + 0.5f);
@@ -81,7 +81,7 @@ public class EncircleHaloEffect extends AbstractEffect {
     private void preCreate() {
         root = new Node("EncircleHalo_localRoot");
         root.setLocalTranslation(offset);
-        localRoot.attachChild(root);
+        animRoot.attachChild(root);
         
         // ---- 创建星光
         circles.clear();
@@ -117,27 +117,16 @@ public class EncircleHaloEffect extends AbstractEffect {
     }
 
     @Override
-    protected void updatePhaseAll(float tpf) {
-    }
-
-    @Override
-    protected void updatePhaseStart(float tpf, float interpolation) {
+    protected void effectUpdate(float tpf) {
+        super.effectUpdate(tpf);
         if (scaleShow) {
-            scaleAnim.display(interpolation);
+            scaleAnim.display(this.trueTimeUsed / this.trueTimeTotal);
         }
-    }
-
-    @Override
-    protected void updatePhaseDisplay(float tpf, float phaseTime) {
         for (HaloCircle hc : circles) {
-            hc.setRotateSpeed(hc.getRotateSpeed() + phaseTime * tpf);
+            hc.setRotateSpeed(hc.getRotateSpeed() + trueTimeUsed * tpf);
         }
-    }
-
-    @Override
-    protected void updatePhaseEnd(float tpf, float interpolation) {
         if (scaleShow) {
-            scaleAnim.display(1 - interpolation);
+            scaleAnim.display(1 - trueTimeUsed / trueTimeTotal);
         }
     }
     

@@ -48,8 +48,8 @@ public class ParticleEffect extends AbstractEffect {
     }
 
     @Override
-    protected void doInit() {
-        super.doInit();
+    public void initialize() {
+        super.initialize();
         
         if (pe == null) {
             Emitter em = Loader.loadEmitter(emitter);
@@ -60,7 +60,7 @@ public class ParticleEffect extends AbstractEffect {
             }
             pe.setInWorldSpace(inWorldSpace);
             pe.getMaterial().getAdditionalRenderState().setBlendMode(blendMode);
-            localRoot.attachChild(pe);
+            animRoot.attachChild(pe);
         }
         if (emitAll) {
             pe.emitAllParticles();

@@ -18,7 +18,7 @@ import name.huliqing.core.object.sound.SoundCollision;
 import name.huliqing.core.object.sound.SoundPlayer;
 
 /**
- *
+ * @deprecated 以后不再使用这个方法来管理声音, 要使用 {@link name.huliqing.core.object.sound.SoundManager}代替。
  * @author huliqing
  */
 public class SoundManager {
@@ -38,6 +38,7 @@ public class SoundManager {
     }
     
     /**
+     * @deprecated 使用 {@link name.huliqing.core.object.sound.SoundManager}代替
      * 播放声效，非循环。
      * @param soundId 声效ID
      * @param position 声源位置
@@ -51,6 +52,7 @@ public class SoundManager {
     }
     
     /**
+     * @deprecated 使用 {@link name.huliqing.core.object.sound.SoundManager}代替
      * 播放声效，非循环
      * @param sound 声效
      * @param position 声源位置

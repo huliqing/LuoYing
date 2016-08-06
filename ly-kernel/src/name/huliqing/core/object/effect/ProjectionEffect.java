@@ -117,7 +117,7 @@ public class ProjectionEffect extends AbstractEffect {
         // 注：材质必须设置到Geometry中去，如果是给节点(Node)添加设置材质,则必须
         // "先确认"节点下有子Geometry,否则setMaterial无效。
         projGeo.setMaterial(projMat);
-        localRoot.attachChild(projGeo);
+        animRoot.attachChild(projGeo);
     }
     
     public void addReceiver(Spatial spatial) {
@@ -137,8 +137,8 @@ public class ProjectionEffect extends AbstractEffect {
     }
 
     @Override
-    protected void doInit() {
-        super.doInit();
+    public void initialize() {
+        super.initialize();
         // 把SceneProcessor加入场景处理器列表，注意在cleanup时要清理掉，避免浪费资源
         Application app = playService.getApplication();
         if (!app.getViewPort().getProcessors().contains(processor)) {
@@ -219,7 +219,7 @@ public class ProjectionEffect extends AbstractEffect {
                     debugGeo = projGeo.clone();
                     debugGeo.setCullHint(CullHint.Never);
                     debugGeo.setMaterial(getDebugMaterial());
-                    localRoot.attachChild(debugGeo);
+                    animRoot.attachChild(debugGeo);
                 }
                 debugGeo.setLocalTransform(projGeo.getLocalTransform());
             }

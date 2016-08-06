@@ -65,7 +65,7 @@ public class MoveSpeedState extends AttributeState {
         
         // 移除效果
         if (tempMoveEffect != null && !tempMoveEffect.isEnd()) {
-            tempMoveEffect.jumpToEnd();
+            tempMoveEffect.requestEnd();
             tempMoveEffect = null;
         }
         super.cleanup();
@@ -91,7 +91,7 @@ public class MoveSpeedState extends AttributeState {
     
     private void endMoveEffect() {
         if (tempMoveEffect != null && !tempMoveEffect.isEnd()) {
-            tempMoveEffect.jumpToEnd();
+            tempMoveEffect.requestEnd();
             tempMoveEffect = null;
         }
     }

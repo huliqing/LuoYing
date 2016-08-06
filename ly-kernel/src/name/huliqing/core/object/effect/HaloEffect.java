@@ -172,7 +172,7 @@ public class HaloEffect extends AbstractEffect {
             }
         }
         tv.release();
-        this.localRoot.attachChild(haloRoot);
+        this.animRoot.attachChild(haloRoot);
         haloRoot.setCullHint(CullHint.Always);
         
     }
@@ -203,8 +203,8 @@ public class HaloEffect extends AbstractEffect {
     }
 
     @Override
-    protected void doInit() {
-        super.doInit();
+    public void initialize() {
+        super.initialize();
         if (needRecreate) {
             reCreate();
             needRecreate = false;
@@ -279,7 +279,7 @@ public class HaloEffect extends AbstractEffect {
         
         // 如果不是动态show或者start阶段时间小于等于0，则应该立即显示全部halo
         // startTime <= 0时，updatePhaseStart方法不会运行
-        if (!dynamicShow || data.getPhaseTimeStart() <= 0) {
+        if (!dynamicShow) {
             List<Spatial> cs = haloRoot.getChildren();
             for (int i = 0; i < cs.size(); i++) {
                 showHalo(cs.get(i));
@@ -288,13 +288,21 @@ public class HaloEffect extends AbstractEffect {
     }
     
     @Override
-    protected void updatePhaseAll(float tpf) {
+    protected void effectUpdate(float tpf) {
+        super.effectUpdate(tpf);
+        
+        float interpolation = trueTimeUsed / trueTimeTotal;
+        updatePhaseStart(tpf, interpolation);
+        
+        updatePhaseDisplay(tpf, trueTimeUsed);
+        
+        updatePhaseEnd(tpf, trueTimeUsed);
+        
         if (rotate && rotateImmediate) {
             rotationAnim.update(tpf);
         }
     }
 
-    @Override
     protected void updatePhaseStart(float tpf, float interpolation) {
         if (dynamicShow) {
             // 根据插值显示halo
@@ -325,14 +333,6 @@ public class HaloEffect extends AbstractEffect {
             }
         }
         
-        // move to doInit 避免start阶段<=0 时updatePhaseStart没有运行的问题
-//        else {
-//            // 立即显示全部halo
-//            List<Spatial> cs = haloRoot.getChildren();
-//            for (int i = 0; i < cs.size(); i++) {
-//                showHalo(cs.get(i));
-//            }
-//        }
     }
     
     /**
@@ -351,7 +351,6 @@ public class HaloEffect extends AbstractEffect {
         }
     }
 
-    @Override
     protected void updatePhaseDisplay(float tpf, float phaseTime) {
 //        logger.log(Level.INFO, "updatePhaseDisplay, phaseTime={0}", phaseTime);
         if(rotate && !rotateImmediate) {
@@ -365,7 +364,6 @@ public class HaloEffect extends AbstractEffect {
         }
     }
 
-    @Override
     protected void updatePhaseEnd(float tpf, float interpolation) {
 //        logger.log(Level.INFO, "updatePhaseEnd, phaseTime={0}", phaseTime);
         if (closeAnim == null) {
@@ -395,202 +393,5 @@ public class HaloEffect extends AbstractEffect {
         haloRoot.setCullHint(CullHint.Always);
         super.cleanup(); 
     }
-
-    public String getTexture() {
-        return texture;
-    }
-
-    public void setTexture(String texture) {
-        this.texture = texture;
-        needRecreate = true;
-    }
-
-    public float getRadius() {
-        return radius;
-    }
-
-    public void setRadius(float radius) {
-        this.radius = radius;
-    }
-
-    public int getHaloTotal() {
-        return haloTotal;
-    }
-
-    public void setHaloTotal(int haloTotal) {
-        this.haloTotal = haloTotal;
-        needRecreate = true;
-    }
-
-    public Vector3f getHaloScale() {
-        return haloSize;
-    }
-
-    public void setHaloScale(Vector3f haloScale) {
-        this.haloSize.set(haloScale);
-        needRecreate = true;
-    }
-
-    public float getIncline() {
-        return incline;
-    }
-
-    public void setIncline(float incline) {
-        this.incline = incline;
-        needRecreate = true;
-    }
-
-    public boolean isDynamicShow() {
-        return dynamicShow;
-    }
-
-    public void setDynamicShow(boolean dynamicShow) {
-        this.dynamicShow = dynamicShow;
-    }
-
-    public boolean isDynamicInvert() {
-        return dynamicInvert;
-    }
-
-    public void setDynamicInvert(boolean dynamicInvert) {
-        this.dynamicInvert = dynamicInvert;
-    }
-
-    public boolean isDynamicRandom() {
-        return dynamicRandom;
-    }
-
-    public void setDynamicRandom(boolean dynamicRandom) {
-        this.dynamicRandom = dynamicRandom;
-    }
-
-    public boolean isRotate() {
-        return rotate;
-    }
-
-    public void setRotate(boolean rotate) {
-        this.rotate = rotate;
-    }
-
-    public boolean isRotateImmediate() {
-        return rotateImmediate;
-    }
-
-    public void setRotateImmediate(boolean rotateImmediate) {
-        this.rotateImmediate = rotateImmediate;
-    }
-
-    public boolean isRotateInvert() {
-        return rotateInvert;
-    }
-
-    public void setRotateInvert(boolean rotateInvert) {
-        this.rotateInvert = rotateInvert;
-    }
-
-    public float getRotateSpeed() {
-        return rotateSpeed;
-    }
-
-    public void setRotateSpeed(float rotateSpeed) {
-        this.rotateSpeed = rotateSpeed;
-    }
-
-    /**
-     * 是否打开了颜色变换动画
-     * @return 
-     */
-    public boolean isColor() {
-        return color;
-    }
-
-    /**
-     * 设置是否使用颜色动画
-     * @param color 
-     */
-    public void setColor(boolean color) {
-        this.color = color;
-    }
-
-    public ColorRGBA getColorStart() {
-        return colorStart;
-    }
-
-    public void setColorStart(ColorRGBA colorStart) {
-        this.colorStart.set(colorStart);
-    }
-
-    public ColorRGBA getColorEnd() {
-        return colorEnd;
-    }
-
-    public void setColorEnd(ColorRGBA colorEnd) {
-        this.colorEnd.set(colorEnd);
-    }
-
-    public boolean isScale() {
-        return scale;
-    }
-
-    public void setScale(boolean scale) {
-        this.scale = scale;
-    }
-
-    public Vector3f getScaleStart() {
-        return scaleStart;
-    }
-
-    public void setScaleStart(Vector3f scaleStart) {
-        this.scaleStart.set(scaleStart);
-    }
-
-    public Vector3f getScaleEnd() {
-        return scaleEnd;
-    }
-
-    public void setScaleEnd(Vector3f scaleEnd) {
-        this.scaleEnd.set(scaleEnd);
-    }
-
-    public float getScaleSpeed() {
-        return scaleSpeed;
-    }
-
-    public void setScaleSpeed(float scaleSpeed) {
-        this.scaleSpeed = scaleSpeed;
-    }
-
-    public boolean isHaloScaleShow() {
-        return haloScaleShow;
-    }
-
-    public void setHaloScaleShow(boolean haloScaleShow) {
-        this.haloScaleShow = haloScaleShow;
-    }
-
-    public Vector3f getHaloScaleStart() {
-        return haloScaleStart;
-    }
-
-    public void setHaloScaleStart(Vector3f haloScaleStart) {
-        this.haloScaleStart.set(haloScaleStart);
-    }
-
-    public Vector3f getHaloScaleEnd() {
-        return haloScaleEnd;
-    }
-
-    public void setHaloScaleEnd(Vector3f haloScaleEnd) {
-        this.haloScaleEnd.set(haloScaleEnd);
-    }
-
-    public float getHaloScaleSpeed() {
-        return haloScaleSpeed;
-    }
-
-    public void setHaloScaleSpeed(float haloScaleSpeed) {
-        this.haloScaleSpeed = haloScaleSpeed;
-    }
-    
     
 }

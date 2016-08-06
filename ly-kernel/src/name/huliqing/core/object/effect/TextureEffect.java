@@ -57,12 +57,12 @@ public class TextureEffect extends AbstractEffect {
             root.setLocalRotation(MathUtils.createRotation(FastMath.HALF_PI, Vector3f.UNIT_Y, root.getLocalRotation()));
         }
         
-        localRoot.attachChild(root);
+        animRoot.attachChild(root);
     }
     
     @Override
-    protected void doInit() {
-        super.doInit();
+    public void initialize() {
+        super.initialize();
         if (root == null) {
             create();
         }

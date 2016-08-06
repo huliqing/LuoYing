@@ -52,7 +52,7 @@ public class SlideColorEffect extends AbstractEffect {
 
     @Override
     public void setData(EffectData data) {
-        super.setData(data); 
+        super.setData(data);
         startColor = data.getAsColor("startColor", startColor);
         endColor = data.getAsColor("endColor", endColor);
         
@@ -76,8 +76,8 @@ public class SlideColorEffect extends AbstractEffect {
     }
     
     @Override
-    protected void doInit() {
-        super.doInit(); 
+    public void initialize() {
+        super.initialize();
         create();
     }
     
@@ -118,7 +118,7 @@ public class SlideColorEffect extends AbstractEffect {
             animObj = loadAnimModel();
             animObj.setMaterial(mat);
             animObj.setQueueBucket(Bucket.Transparent);
-            localRoot.attachChild(animObj);
+            animRoot.attachChild(animObj);
         }
     }
     

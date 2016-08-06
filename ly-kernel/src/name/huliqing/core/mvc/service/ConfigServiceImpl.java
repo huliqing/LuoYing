@@ -15,6 +15,7 @@ import name.huliqing.core.constants.IdConstants;
 import name.huliqing.core.data.ConfigData;
 import name.huliqing.core.manager.HUDManager;
 import name.huliqing.core.manager.ResourceManager;
+import name.huliqing.core.object.sound.SoundManager;
 import name.huliqing.core.view.ShortcutManager;
 import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.save.SaveConfig;
@@ -83,6 +84,8 @@ public class ConfigServiceImpl implements ConfigService {
     public void setSoundEnabled(boolean enabled) {
         cd.setSoundEnabled(enabled);
         notifyListtener();
+        
+        SoundManager.getInstance().setSoundEnabled(enabled);
     }
 
     @Override

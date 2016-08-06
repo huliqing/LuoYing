@@ -167,12 +167,14 @@ import name.huliqing.core.object.config.ConfigDataLoader;
 import name.huliqing.core.object.drop.DropDataLoader;
 import name.huliqing.core.object.effect.EffectDataLoader;
 import name.huliqing.core.object.effect.EncircleHaloEffect;
+//import name.huliqing.core.object.effect.EncircleHaloEffect;
 import name.huliqing.core.object.effect.GroupEffect;
 import name.huliqing.core.object.effect.HaloEffect;
+//import name.huliqing.core.object.effect.HaloEffect;
 import name.huliqing.core.object.effect.ModelEffect;
 import name.huliqing.core.object.effect.ParticleEffect;
 import name.huliqing.core.object.effect.ProjectionEffect;
-import name.huliqing.core.object.effect.SimpleGroupEffect;
+//import name.huliqing.core.object.effect.SimpleGroupEffect;
 import name.huliqing.core.object.effect.SlideColorEffect;
 import name.huliqing.core.object.effect.SlideColorIOSplineEffect;
 import name.huliqing.core.object.effect.SlideColorSplineEffect;
@@ -268,6 +270,7 @@ import name.huliqing.core.object.skin.OutfitSkin;
 import name.huliqing.core.object.skin.SkinDataLoader;
 import name.huliqing.core.object.skin.WeaponSkin;
 import name.huliqing.core.object.slot.SlotDataLoader;
+import name.huliqing.core.object.sound.Sound;
 import name.huliqing.core.object.sound.SoundDataLoader;
 import name.huliqing.core.object.state.AttributeDynamicState;
 import name.huliqing.core.object.state.AttributeState;
@@ -435,7 +438,7 @@ public class LY {
         // Effect
         DataFactory.register("effectHalo",  EffectData.class, EffectDataLoader.class, HaloEffect.class);
         DataFactory.register("effectParticle", EffectData.class, EffectDataLoader.class, ParticleEffect.class);
-        DataFactory.register("effectSimpleGroup", EffectData.class, EffectDataLoader.class, SimpleGroupEffect.class);
+//        DataFactory.register("effectSimpleGroup", EffectData.class, EffectDataLoader.class, SimpleGroupEffect.class);
         DataFactory.register("effectGroup", EffectData.class, EffectDataLoader.class, GroupEffect.class);
         DataFactory.register("effectEncircleHalo", EffectData.class, EffectDataLoader.class, EncircleHaloEffect.class);
         DataFactory.register("effectTexture", EffectData.class, EffectDataLoader.class, TextureEffect.class);
@@ -552,7 +555,7 @@ public class LY {
         DataFactory.register("slot",  SlotData.class, SlotDataLoader.class, null);
         
         // Sound
-        DataFactory.register("sound",  SoundData.class, SoundDataLoader.class, null);
+        DataFactory.register("sound",  SoundData.class, SoundDataLoader.class, Sound.class);
         
         // State
         DataFactory.register("stateAttribute", StateData.class, StateDataLoader.class, AttributeState.class);

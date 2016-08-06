@@ -6,42 +6,42 @@
     xsi:schemaLocation='http://fighter.huliqing.name meta/anim.xsd' >
     
     <!--test-->
-    <animRotation id="animTest1" speed="0.1" loop="loop" axis="0,1,0" degree="360" invert="0" />
-    <animRotation id="animTest2" speed="0.2" loop="loop" axis="0,1,0" degree="360" invert="0" />
-    <animRotation id="animTest3" speed="0.4" loop="loop" axis="0,1,0" degree="360" invert="0" />
+    <animRotation id="animTest1" loop="loop" axis="0,1,0" degree="360" invert="0" />
+    <animRotation id="animTest2" loop="loop" axis="0,1,0" degree="360" invert="0" />
+    <animRotation id="animTest3" loop="loop" axis="0,1,0" degree="360" invert="0" />
     
     
     <!--=====================================================================-->
     <!-- 通用Animation -->
     <!-- "X,Y,Z"代表轴向; i代表invert; S代表show; H代表hide; I代表fadeIn; O代表fadeOut-->
     <!--=====================================================================-->
-    <animRotation id="animCommonRotX"   speed="1" loop="loop"   axis="1,0,0"        degree="360" invert="0" />
-    <animRotation id="animCommonRotY"   speed="1" loop="loop"   axis="0,1,0"        degree="360" invert="0" />
-    <animRotation id="animCommonRotZ"   speed="1" loop="loop"   axis="0,0,1"        degree="360" invert="0" />
-    <animRotation id="animCommonRotZi"  speed="1" loop="loop"   axis="0,0,1"        degree="360" invert="1" />
+    <animRotation id="animCommonRotX"   loop="loop"   axis="1,0,0"        degree="360" invert="0" />
+    <animRotation id="animCommonRotY"   loop="loop"   axis="0,1,0"        degree="360" invert="0" />
+    <animRotation id="animCommonRotZ"   loop="loop"   axis="0,0,1"        degree="360" invert="0" />
+    <animRotation id="animCommonRotZi"  loop="loop"   axis="0,0,1"        degree="360" invert="1" />
     <animRandomRotation id="animCommonRotRandom" minDegree="0" maxDegree="360" />
     
-    <animScale id="animCommonScaleS"    speed="1" loop=""       startScale="0.01,0.01,0.01" endScale="1,1,1"  motionType="Bezier" bezierFactor="0,0,1.5,1" />
-    <animScale id="animCommonScaleH"    speed="1" loop=""       startScale="1,1,1"      endScale="0.01,0.01,0.01" />
+    <animScale id="animCommonScaleS"  startScale="0.01,0.01,0.01" endScale="1,1,1"  motionType="Bezier" bezierFactor="0,0,1.5,1" />
+    <animScale id="animCommonScaleH"  startScale="1,1,1"      endScale="0.01,0.01,0.01" />
     
-    <animColor id="animCommonColorI"    speed="1" loop=""       startColor="0,0,0,0"    endColor="1,1,1,1" />
-    <animColor id="animCommonColorI2"   speed="1" loop=""       startColor="0,0,0,0"    endColor="2,2,2,2" />
-    <animColor id="animCommonColorI3"   speed="1" loop=""       startColor="0,0,0,0"    endColor="3,3,3,3" />
-    <animColor id="animCommonColorO"    speed="1" loop=""       startColor="1,1,1,1"    endColor="0,0,0,0" />
-    <animColor id="animCommonColorO2"   speed="1" loop=""       startColor="2,2,2,2"    endColor="0,0,0,0" />
-    <animColor id="animCommonColorO3"   speed="1" loop=""       startColor="3,3,3,3"    endColor="0,0,0,0" />
+    <animColor id="animCommonColorI"  startColor="0,0,0,0"    endColor="1,1,1,1" />
+    <animColor id="animCommonColorI2" startColor="0,0,0,0"    endColor="2,2,2,2" />
+    <animColor id="animCommonColorI3" startColor="0,0,0,0"    endColor="3,3,3,3" />
+    <animColor id="animCommonColorO"  startColor="1,1,1,1"    endColor="0,0,0,0" />
+    <animColor id="animCommonColorO2" startColor="2,2,2,2"    endColor="0,0,0,0" />
+    <animColor id="animCommonColorO3" startColor="3,3,3,3"    endColor="0,0,0,0" />
     
     <!--=====================================================================-->
     <!--刀光剑影特效动画-->
     <!--=====================================================================-->
-    <animMove id="animSwordShadow1Move" speed="1" startPos="0,0,0" endPos="0,5,0" facing="0" />
-    <animRotation id="animSwordShadow1Rot" speed="1" axis="0,1,0" degree="30" invert="0" restore="1" />
+    <animMove id="animSwordShadow1Move" startPos="0,0,0" endPos="0,5,0" facing="0" />
+    <animRotation id="animSwordShadow1Rot" axis="0,1,0" degree="30" invert="0" restore="1" />
 
-    <animRotation id="animSwordShadow2Rot" speed="1" axis="0,1,0" degree="180" invert="1" restore="1" />
-    <animMove id="animSwordShadow2Move" speed="1" startPos="0,0,0" endPos="0,0,3" facing="0" />
+    <animRotation id="animSwordShadow2Rot" axis="0,1,0" degree="180" invert="1" restore="1" />
+    <animMove id="animSwordShadow2Move" startPos="0,0,0" endPos="0,0,3" facing="0" />
 
-    <animRotation id="animSwordShadow3Rot" speed="1" axis="0,1,0" degree="180" invert="0" restore="1" />
-    <animMove id="animSwordShadow3Move" speed="1" startPos="0,0,0" endPos="0,0,3" facing="0" />
+    <animRotation id="animSwordShadow3Rot" axis="0,1,0" degree="180" invert="0" restore="1" />
+    <animMove id="animSwordShadow3Move" startPos="0,0,0" endPos="0,0,3" facing="0" />
     
     <!--=====================================================================-->
     <!--默认的UI动画-->
@@ -52,48 +52,48 @@
     <!--=====================================================================-->
     <!--野兽召唤-->
     <!--=====================================================================-->
-    <animRotation id="animMagicCircleRotY" speed="0.2" loop="loop" axis="0,1,0" degree="360" invert="0" />
-    <animScale id="animMagicCircleScaleS" speed="1" loop="" startScale="0.01,0.01,0.01" endScale="1,1,1" motionType="Bezier" bezierFactor="0,0,1.5,1" />
-    <animScale id="animMagicCircleScaleH" speed="1" loop="" startScale="0.9,0.9,0.9" endScale="0.01,0.01,0.01" />
-    <animColor id="animMagicCircleColor"  speed="3" loop="cycle"  startColor="3,3,3,1" endColor="0.75,0.75,0.75,0.75" />
+    <animRotation id="animMagicCircleRotY" useTime="5" loop="loop" axis="0,1,0" degree="360" invert="0" />
+    <animScale id="animMagicCircleScaleS" loop="" startScale="0.01,0.01,0.01" endScale="1,1,1" motionType="Bezier" bezierFactor="0,0,1.5,1" />
+    <animScale id="animMagicCircleScaleH" loop="" startScale="0.9,0.9,0.9" endScale="0.01,0.01,0.01" />
+    <animColor id="animMagicCircleColor" useTime="0.33" loop="cycle"  startColor="3,3,3,1" endColor="0.75,0.75,0.75,0.75" />
     
     <!--=====================================================================-->
     <!--星光传送-->
     <!--=====================================================================-->
-    <animRotation id="animBackTownCircle" speed="0.2" loop="loop" axis="0,1,0" degree="360" invert="0" />
-    <animColor id="animBackTownColor" speed="3" loop="cycle" startColor="3,3,3,1" endColor="0.75,0.75,0.75,0.75" />
+    <animRotation id="animBackTownCircle" useTime="5" loop="loop" axis="0,1,0" degree="360" invert="0" />
+    <animColor id="animBackTownColor" useTime="0.33" loop="cycle" startColor="3,3,3,1" endColor="0.75,0.75,0.75,0.75" />
     
     <!--=====================================================================-->
     <!--晕眩：金星旋转-->
     <!--=====================================================================-->
-    <animRotation id="animStateStunRot" speed="0.2" loop="loop" axis="0,1,0" degree="360" invert="0" />
+    <animRotation id="animStateStunRot" useTime="5" loop="loop" axis="0,1,0" degree="360" invert="0" />
     
     <!--=====================================================================-->
     <!--闪电箭:闪光的出现-->
     <!--=====================================================================-->
-    <animScale id="animLightningShotFlareScaleShow" speed="1" loop="" startScale="10,10,10"  endScale="0.02,0.02,0.02" />
+    <animScale id="animLightningShotFlareScaleShow" loop="" startScale="10,10,10"  endScale="0.02,0.02,0.02" />
     
     <!--=====================================================================-->
     <!--疾风步-->
     <!--=====================================================================-->
-    <animRotation id="animStateWindWalkStartRot" speed="0.5" loop="loop" axis="0,1,0" degree="360" invert="0" />
-    <animScale id="animStateWindWalkStartScale" speed="0.5" loop="dontLoop" startScale="1,1,1" endScale="0.1,0.1,0.1" />
+    <animRotation id="animStateWindWalkStartRot" useTime="2" loop="loop" axis="0,1,0" degree="360" invert="0" />
+    <animScale id="animStateWindWalkStartScale" useTime="2" loop="dontLoop" startScale="1,1,1" endScale="0.1,0.1,0.1" />
     
     <!--=====================================================================-->
     <!--落樱舞-->
     <!--=====================================================================-->
-    <animScale id="animDanceSakuraScaleHide" speed="1" loop="" startScale="10,10,10" endScale="0.02,0.02,1" />
-    <animScale id="animDanceSakuraMagicStartScale" speed="1" loop="dontLoop" startScale="0.1,0.1,0.1" endScale="1.2,1.2,1.2" motionType="Bezier" bezierFactor="0,0,1.5,1" />
-    <animScale id="animDanceSakuraMagicEndScale" speed="1" loop="dontLoop" startScale="1.2,1.2,1.2" endScale="0.1,0.1,0.1" />
-    <animColor id="animDanceSakuraMagicStartColor" speed="1" loop="dontLoop" startColor="0.5,0.5,0.5,0.5" endColor="3,3,3,1" />
-    <animColor id="animDanceSakuraMagicDisplayColor" speed="3" loop="cycle" startColor="3,3,3,1" endColor="0.75,0.75,0.75,0.75" />
-    <animScale id="animDanceSakuraDirtShow" speed="2" loop="" startScale="0.01,0.01,0.01" endScale="4,2,4" />
+    <animScale id="animDanceSakuraScaleHide" loop="" startScale="10,10,10" endScale="0.02,0.02,1" />
+    <animScale id="animDanceSakuraMagicStartScale" loop="dontLoop" startScale="0.1,0.1,0.1" endScale="1.2,1.2,1.2" motionType="Bezier" bezierFactor="0,0,1.5,1" />
+    <animScale id="animDanceSakuraMagicEndScale" loop="dontLoop" startScale="1.2,1.2,1.2" endScale="0.1,0.1,0.1" />
+    <animColor id="animDanceSakuraMagicStartColor" loop="dontLoop" startColor="0.5,0.5,0.5,0.5" endColor="3,3,3,1" />
+    <animColor id="animDanceSakuraMagicDisplayColor" useTime="0.33" loop="cycle" startColor="3,3,3,1" endColor="0.75,0.75,0.75,0.75" />
+    <animScale id="animDanceSakuraDirtShow" useTime="0.5" loop="" startScale="0.01,0.01,0.01" endScale="4,2,4" />
 
     <!--=====================================================================-->
     <!--冲击波-->
     <!--=====================================================================-->
     <!--子弹的旋转-->
-    <animRotation id="animWave" speed="0.6" loop="loop" axis="0,0,1" degree="360" invert="0" />
+    <animRotation id="animWave" useTime="1.66" loop="loop" axis="0,0,1" degree="360" invert="0" />
     <!--卷起的烟雾-->
     <animRotation id="animWaveSmokeRot" useTime="2" loop="loop" axis="0,1,0" degree="360" invert="0" />
     <animScale id="animWaveSmokeScale"  useTime="3" startScale="0.2,0.2,0.2" endScale="2,2,2" />

@@ -28,7 +28,7 @@ public class ModelEffect extends AbstractEffect {
             if (bucket != null) {
                 model.setQueueBucket(bucket);
             }
-            localRoot.attachChild(model);
+            animRoot.attachChild(model);
             loaded = true;
         }
     }

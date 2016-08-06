@@ -111,7 +111,7 @@ public class State<T extends StateData> extends AbstractPlayObject implements Da
         if (tempEffects != null) {
             for (Effect effect : tempEffects) {
                 if (!effect.isEnd()) {
-                    effect.jumpToEnd();
+                    effect.requestEnd();
                 }
             }
             tempEffects.clear();

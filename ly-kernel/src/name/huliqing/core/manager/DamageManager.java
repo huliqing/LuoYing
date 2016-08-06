@@ -130,7 +130,6 @@ public class DamageManager extends AbstractPlayObject {
         dt.text.setText(text);
         dt.text.setFontColor(color);
         dt.totalAnimDistance = 50 + getFontSize()  * 0.55f * level;
-        dt.start();
     }
     
     /**
@@ -218,19 +217,21 @@ public class DamageManager extends AbstractPlayObject {
             this.text.setAlignment(BitmapFont.Align.Center);
             this.text.setWidth(300);
             this.text.setFontSize(fontSize);
-            this.data.setPhaseTimeDisplay(ANIM_TIME + DELAY_END);
+            this.data.setUseTime(ANIM_TIME + DELAY_END);
         }
 
         @Override
-        protected void doInit() {
-            super.doInit(); 
+        public void initialize() {
+            super.initialize();
             UIState.getInstance().addUI(this.text);
         }
 
         @Override
-        protected void updatePhaseAll(float tpf) {
-            if (data.getTimeUsed() <= ANIM_TIME) {
-                float factor = FastMath.sin(data.getTimeUsed() / TEMP_VALUE);
+        protected void effectUpdate(float tpf) {
+            super.effectUpdate(tpf);
+            
+            if (trueTimeUsed <= ANIM_TIME) {
+                float factor = FastMath.sin(trueTimeUsed / TEMP_VALUE);
                 text.setLocalScale(factor * factor);
                 Vector3f pos = text.getLocalTranslation();
                 pos.set(startPos);

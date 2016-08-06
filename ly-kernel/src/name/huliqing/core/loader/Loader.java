@@ -62,9 +62,19 @@ import name.huliqing.core.object.state.State;
 import name.huliqing.core.object.talent.Talent;
 import name.huliqing.core.object.task.Task;
 import name.huliqing.core.object.view.View;
+import name.huliqing.core.xml.DataProcessor;
+import name.huliqing.core.xml.ProtoData;
 
 
 public class Loader {
+    
+    public static <T extends DataProcessor> T load(String id) {
+        return load(DataFactory.createData(id));
+    }
+    
+    public static <T extends DataProcessor> T load(ProtoData data) {
+        return DataFactory.createProcessor(data);
+    }
     
     public static Spatial loadModel(String file) {
         return AssetLoader.loadModel(file);
@@ -130,10 +140,7 @@ public class Loader {
     }
     
     public static Effect loadEffect(String id) {
-        EffectData ed = DataFactory.createData(id);
-        Effect effect = DataFactory.createProcessor(ed);
-        LY.preloadScene(effect.getDisplay());
-        return effect;
+        return DataFactory.createProcessor(DataFactory.createData(id));
     }
 
     public static El loadEl(String levelId) {
@@ -295,4 +302,5 @@ public class Loader {
     public static View loadView(ViewData data) {
         return DataFactory.createProcessor(data);
     }
+    
 }

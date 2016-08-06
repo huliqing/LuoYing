@@ -1,10 +1,8 @@
-package name.huliqing.core.object.effect;
-
 ///*
 // * To change this template, choose Tools | Templates
 // * and open the template in the editor.
 // */
-//package name.huliqing.fighter.object.effect;
+//package name.huliqing.core.object.effect;
 //
 //import com.jme3.bounding.BoundingVolume;
 //import com.jme3.math.Quaternion;
@@ -14,16 +12,15 @@ package name.huliqing.core.object.effect;
 //import com.jme3.util.TempVars;
 //import java.util.ArrayList;
 //import java.util.List;
-//import name.huliqing.fighter.Common;
-//import name.huliqing.fighter.data.AnimData;
-//import name.huliqing.fighter.data.EffectData;
-//import name.huliqing.fighter.enums.EffectPhase;
-//import name.huliqing.fighter.enums.TracePositionType;
-//import name.huliqing.fighter.enums.TraceType;
-//import name.huliqing.fighter.loader.Loader;
-//import name.huliqing.fighter.manager.SoundManager;
-//import name.huliqing.fighter.object.anim.Anim;
-//import name.huliqing.fighter.utils.GeometryUtils;
+//import name.huliqing.core.data.AnimData;
+//import name.huliqing.core.data.EffectData;
+//import name.huliqing.core.enums.EffectPhase;
+//import name.huliqing.core.enums.TracePositionType;
+//import name.huliqing.core.enums.TraceType;
+//import name.huliqing.core.loader.Loader;
+//import name.huliqing.core.manager.SoundManager;
+//import name.huliqing.core.object.anim.Anim;
+//import name.huliqing.core.utils.GeometryUtils;
 //
 ///**
 // * <b>A</b>.特效，特效的生命周期阶段： 
@@ -37,6 +34,7 @@ package name.huliqing.core.object.effect;
 // * 注：start和end阶段是不可以循环的，只有display阶段可以循环，即当display时间小于0时.
 // * 
 // * @author huliqing
+// * @param <T>
 // * @since v1.2 20150419
 // */
 //public abstract class AbstractEffect<T extends EffectData> extends Node implements Effect<T> {
@@ -76,18 +74,8 @@ package name.huliqing.core.object.effect;
 //    public AbstractEffect() {
 //        super("AbstractEffect");
 //        // 首先添加本地根作点，确保后续添加的所有子作点都在该localRoot下。
-//        super.attachChild(localRoot);
-//    }
-//
-//    // 覆盖这两个方法，确定效果的子对象都添加到这个本地根作点中。
-//    @Override
-//    public int attachChild(Spatial child) {
-//        return localRoot.attachChild(child);
-//    }
-//
-//    @Override
-//    public int attachChildAt(Spatial child, int index) {
-//        return localRoot.attachChildAt(child, index);
+//        // 并且所有Animation也都是作用于节点”localRoot“,这样animation的动画效果不会影响特效的跟随
+//        attachChild(localRoot);
 //    }
 //    
 //    @Override
@@ -96,7 +84,7 @@ package name.huliqing.core.object.effect;
 //    }
 //
 //    @Override
-//    public void initData(T data) {
+//    public void setData(T data) {
 //        this.data = data;
 //    }
 //    
@@ -119,8 +107,21 @@ package name.huliqing.core.object.effect;
 //            setLocalScale(data.getScale());
 //        }
 //        
+//        // remove20160712,不再依赖于isInScene
 //        // 2.初始化跟随
-//        if (traceObject != null && Common.getPlayState().isInScene(traceObject)) {
+////        if (traceObject != null && Common.getPlayState().isInScene(traceObject)) {
+////            if (data.getTracePosition() == TraceType.once 
+////                    || data.getTracePosition() == TraceType.always) {
+////                doUpdateTracePosition();
+////            }
+////            if (data.getTraceRotation() == TraceType.once 
+////                    || data.getTraceRotation() == TraceType.always) {
+////                doUpdateTraceRotation();
+////            }
+////        }
+//
+//        // 2.初始化跟随
+//        if (traceObject != null) {
 //            if (data.getTracePosition() == TraceType.once 
 //                    || data.getTracePosition() == TraceType.always) {
 //                doUpdateTracePosition();
@@ -198,18 +199,27 @@ package name.huliqing.core.object.effect;
 //        
 //        // 如果是持续跟随的情况则需要不停更新位置
 //        if (tempAlwayTrace) {
-//            if (Common.getPlayState().isInScene(traceObject)) {
-//                if (data.getTracePosition() == TraceType.always) {
-//                    doUpdateTracePosition();
-//                }
-//                if (data.getTraceRotation() == TraceType.always) {
-//                    doUpdateTraceRotation();
-//                }
+//            
+//            // remove20160712,不再依赖于traceObject是否存在于场景中
+////            if (Common.getPlayState().isInScene(traceObject)) {
+////                if (data.getTracePosition() == TraceType.always) {
+////                    doUpdateTracePosition();
+////                }
+////                if (data.getTraceRotation() == TraceType.always) {
+////                    doUpdateTraceRotation();
+////                }
+////            }
+//
+//            if (data.getTracePosition() == TraceType.always) {
+//                doUpdateTracePosition();
+//            }
+//            if (data.getTraceRotation() == TraceType.always) {
+//                doUpdateTraceRotation();
 //            }
 //        }
 //        
 //        // 执行侦听器
-//        if (listeners != null) {
+//        if (listeners != null && !listeners.isEmpty()) {
 //            for (int i = 0; i < listeners.size(); i++) {
 //                listeners.get(i).onEffectPlay(this);
 //            }
@@ -301,7 +311,7 @@ package name.huliqing.core.object.effect;
 //        
 //        // 结束效果
 //        if (end) {
-//            if (listeners != null) {
+//            if (listeners != null && !listeners.isEmpty()) {
 //                for (int i = 0; i < listeners.size(); i++) {
 //                    listeners.get(i).onEffectEnd(this);
 //                }
@@ -441,16 +451,6 @@ package name.huliqing.core.object.effect;
 //    protected boolean confirmEnd() {
 //        return true;
 //    }
-//  
-//    // remove20160519以后不要再这样依赖于被跟踪物体是否在场景中来判断和结束效果了，这种依赖容易
-//    // 产生bug,什么时候结束效果将由外部应用决定,可调用jumpToEnd来结束效果，也可以调用cleanup直接结束
-////    /**
-////     * 如果当前效果为跟踪类型，并且被跟踪对象已经离开场景，则应该结束效果
-////     * @return 
-////     */
-////    private boolean checkTraceEnd() {
-////        return traceObject != null && !Common.getPlayState().isInScene(traceObject);
-////    }
 //    
 //    /**
 //     * 检查是否播放声效。
@@ -497,6 +497,7 @@ package name.huliqing.core.object.effect;
 //            tv.release();
 //        }
 //        setLocalTranslation(pos);
+////        LOG.log(Level.INFO, "AbstractEffect doUpdateTracePosition, pos={0}", new Object[] {pos});
 //    }
 //    
 //    private void doUpdateTraceRotation() {

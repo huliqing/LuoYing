@@ -72,12 +72,13 @@ public class TextureCylinderEffect extends AbstractEffect {
             root.setLocalTranslation(offset);
         }
         
-        localRoot.attachChild(root);
+        animRoot.attachChild(root);
     }
     
     @Override
-    protected void doInit() {
-        super.doInit();
+    public void initialize() {
+        super.initialize();
+        
         if (root == null) {
             create();
         }

@@ -14,17 +14,17 @@ import name.huliqing.core.state.ClientPlayState;
  */
 public class LyClientPlayState extends ClientPlayState {
     
-    private final Fighter app;
+    private final Fighter fighter;
 
     public LyClientPlayState(Fighter app, GameClient gameClient) {
         super(app, gameClient);
-        this.app = app;
+        this.fighter = app;
     }
 
     @Override
     public void exit() {
         super.exit(); 
-        app.changeStartState();
+        fighter.changeStartState();
     }
     
 }

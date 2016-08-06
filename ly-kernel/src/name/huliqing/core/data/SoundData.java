@@ -16,6 +16,7 @@ public class SoundData extends ObjectData {
     private float volume;
     private float offset;
     private boolean loop;
+    private boolean instance;
     
     public SoundData() {}
 
@@ -50,4 +51,14 @@ public class SoundData extends ObjectData {
     public String getSoundFile() {
         return getAttribute("file");
     }
+
+    public boolean isInstance() {
+        return instance;
+    }
+
+    public void setInstance(boolean instance) {
+        this.instance = instance;
+    }
+    
+    
 }

@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.core.object.effect;
+package name.huliqing.core.test;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.asset.TextureKey;
@@ -23,6 +23,7 @@ import com.jme3.shadow.CompareMode;
 import com.jme3.shadow.EdgeFilteringMode;
 import com.jme3.system.AppSettings;
 import com.jme3.texture.Texture;
+import name.huliqing.core.object.effect.ProjectProcessor;
 import name.huliqing.core.utils.GeometryUtils;
 
 /**

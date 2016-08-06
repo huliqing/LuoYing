@@ -4,92 +4,100 @@
  */
 package name.huliqing.core.object.effect;
 
+import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import name.huliqing.core.data.EffectData;
-import name.huliqing.core.enums.EffectPhase;
 import name.huliqing.core.xml.DataProcessor;
 
 /**
- * 特效接口
+ * 特效, 特效可以添加到EffectManager上，也可以直接添加到一个Node下面,所有效果都有一个执行时间，
+ * 当效果执行结束后应该自动脱离场景,并清理释放资源。<br>
  * @author huliqing
  * @param <T>
+ * @version v1.3 20160806
  * @since v1.2 20150421
  */
-public interface Effect<T extends EffectData> extends DataProcessor<T>{
+public abstract class Effect<T extends EffectData> extends Node implements DataProcessor<T>{
+    
+    /**
+     * 特效帧听器，用于临听特效是否结束
+     */
+    public interface EffectListener {
+        
+        /**
+         * 当特效结束时这个方法会被调用。
+         * @param effect
+         */
+        void onEffectEnd(Effect effect);
+    }
+    
+    protected T data;
+    protected boolean initialized;
     
     @Override
-    T getData();
+    public void setData(T data) {
+        this.data = data;
+    }
+    
+    @Override
+    public T getData() {
+        return data;
+    }
     
     /**
-     * 开始执行效果
+     * 初始化特效
      */
-    void start();
+    public void initialize() {
+        initialized = true;
+    }
     
     /**
-     * 更新效果逻辑
-     * @param tpf 
-     */
-    void update(float tpf);
-    
-    /**
-     * 判断效果是否未在执行: 未启动、被打断、正常结束都应返回true.
+     * 判断特效是否已经初始化
      * @return 
      */
-    boolean isEnd();
+    public boolean isInitialized() {
+        return initialized;
+    }
     
     /**
-     * 清理效果数据，该方法不管在效果被“打断”或是“正常结束”都应该至少执行一
-     * 次。即：只要效果启动，那么最终不管效果是否正常或非正常结束，都应该在
-     * 最后执行一次cleanup.<br />
-     * 在cleanup的时候需要清理添加到当前效果的所有侦听器，为下次执行准备。
-     * 侦听器一般针对于特定的调用，上一次的侦听器不一定适合于下一次的效果的运行。
-     * 因为效果是设计为允许复用的。
+     * 清理效果数据，这个方法一般由特效内部调用，当特效结束后自行调用这个方法来清理特效资源。
      */
-    void cleanup();
+    public void cleanup() {
+        initialized = false;
+    }
     
     /**
-     * 获取当前效果所处的阶段。
+     * 请求结束特效，一般情况下不要直接结束特效（如：cleanup)，因为一些特效如果直接结束会非常不自然和难看，
+     * 所以在调用特效，并希望结束一个特效时应该使用这个方法来请求结束一个特效，
+     * 而具体是否结束或者如何结束一个特效由具体的子类去实现. 
+     */
+    public abstract void requestEnd();
+    
+    /**
+     * 判断效果是否已经结束
      * @return 
      */
-    EffectPhase getCurrentPhase();
+    public abstract boolean isEnd();
     
     /**
-     * 直接跳转到指定的结束阶段,让特效自动结束,如果特效未开始，则什么也不处理。
+     * 设置特效要跟随的目标对象，当设置了这个目标之后，特效在运行时可以跟随这个目标的"位置","朝向”等，
+     * 视实现类的情况而定。当特效在结束后要清理这个目标对象，释放相关资源，以避免持续保持对这个对象的引用。
+     * 在重新执行这个特效时可以重新设置这个跟踪对象。
+     * @param traceObject 
      */
-    void jumpToEnd();
-    
+    public abstract void setTraceObject(Spatial traceObject);
+
     /**
-     * @see #setTraceObject(com.jme3.scene.Spatial) 
-     * @return 
-     */
-    Spatial getTraceObject();
-    
-    /**
-     * 设置跟踪目标,要能够跟踪还必须打开trace选项．{@link #setTrace(boolean) }
-     * @param target 
-     */
-    void setTraceObject(Spatial target);
-    
-    /**
-     * 给效果的运行添加侦听器，注：所有侦听器在效果执行结束之后会被移除。
-     * 每次重新开始前需要重新添加。(因为效果是允许重复利用的，前一次效果运行
-     * 时的侦顺器不一定适合下一次效果运行时所用。）
+     * 添加特效监听器,注：特效监听器不会自动移除，所以添加了帧听器之后需要视情况自行移除，以避免内存涉漏，
+     * 特别是对于进行了缓存的特效。
      * @param listener 
      */
-    void addListener(Listener listener);
+    public abstract void addListener(EffectListener listener);
     
     /**
-     * 移除指定的侦听器
+     * 移除特效监听器.
      * @param listener 
-     * @return 如果成功移除则返回true,如果列表中不存在指定的侦听器，或移除失败
-     * 则返回false
+     * @return  如果成功移除了特效则返回true,否则false.
      */
-    boolean removeListener(Listener listener);
-    
-    /**
-     * 获取display object
-     * @return 
-     */
-    Spatial getDisplay();
-    
+    public abstract boolean removeListener(EffectListener listener);
 }
