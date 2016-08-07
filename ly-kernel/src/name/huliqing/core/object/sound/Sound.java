@@ -84,7 +84,7 @@ public class Sound<T extends SoundData> implements DataProcessor<T> {
         an.setMaxDistance(data.getAsFloat("maxDistance", an.getMaxDistance()));
         an.setOuterAngle(data.getAsFloat("outerAngle", an.getOuterAngle()));
         an.setPitch(data.getAsFloat("pitch", an.getPitch()));
-        an.setPositional(data.getAsBoolean("positional", an.isPositional()));
+        an.setPositional(data.getAsBoolean("positional", false)); // 容易java.lang.IllegalStateException: Only mono audio is supported for positional audio nodes
         an.setRefDistance(data.getAsFloat("refDistance", an.getRefDistance()));
         an.setReverbEnabled(data.getAsBoolean("reverbEnabled", an.isReverbEnabled()));
 //        audio.setReverbFilter();

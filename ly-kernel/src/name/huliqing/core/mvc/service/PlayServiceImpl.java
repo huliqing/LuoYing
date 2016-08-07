@@ -144,7 +144,7 @@ public class PlayServiceImpl implements PlayService {
 
     @Override
     public void addEffect(Effect effect) {
-        EffectManager.getInstance().playEffect(effect);
+        EffectManager.getInstance().addEffect(effect);
     }
 
     @Override

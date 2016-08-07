@@ -139,11 +139,15 @@ public class GroupEffect extends AbstractEffect {
                 // 注意：子效果是直接放在GroupEffect下的，不要放在EffectManager中，
                 // 这会依赖EffectManger,导致GroupEffect不能放在其它Node节点下, 
                 // 所有类型的Effect都应该是可以单独放在任何Node下进行运行的。
+                
+                // 把子效果的跟踪目标设置为animRoot，这样当GroupEffect添加了动画控制时，可以同时影响到子效果的变换。
                 animRoot.attachChild(effect);
                 // 与group保持一致的速度,这样当设置GroupEffect的速度的时候可以同时影响子效果的速度
                 effect.getData().setSpeed(data.getSpeed());
-                // 把子效果的跟踪目标设置为animRoot，这样当GroupEffect添加了动画控制时，可以同时影响到子效果的变换。
-                effect.setTraceObject(animRoot);
+                
+//                // 不要再设置子效果的跟随
+//                effect.setTraceObject(animRoot);
+
                 // 记得在所有设置完毕后才调用initialize,因为子效果是由GroupEffect特别管理的，这里隔离了与EffectManager的关
                 // 系，initialize也可以交由效果内部调用，但是会慢一帧, 这会造成一些视角稍微滞后。
                 effect.initialize();

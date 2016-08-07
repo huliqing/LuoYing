@@ -5,14 +5,14 @@
 package name.huliqing.core.object.state;
 
 import com.jme3.app.Application;
+import com.jme3.scene.Spatial;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.StateData;
 import name.huliqing.core.enums.SkillType;
-import name.huliqing.core.mvc.service.AttributeService;
 import name.huliqing.core.mvc.service.EffectService;
-import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.object.effect.Effect;
+import name.huliqing.core.object.effect.EffectManager;
 import name.huliqing.core.object.skill.Skill;
 
 /**
@@ -20,20 +20,20 @@ import name.huliqing.core.object.skill.Skill;
  * @author huliqing
  */
 public class MoveSpeedState extends AttributeState {
-    private final PlayService playService = Factory.get(PlayService.class);
-    private final AttributeService attributeService = Factory.get(AttributeService.class);
+//    private final PlayService playService = Factory.get(PlayService.class);
+//    private final AttributeService attributeService = Factory.get(AttributeService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
     private final EffectService effectService = Factory.get(EffectService.class);
     
-    private String moveEffect;
+    private String moveEffectId;
     
     // ---- inner
-    private Effect tempMoveEffect;
+    private Effect moveEffect;
 
     @Override
     public void setData(StateData data) {
         super.setData(data);
-        moveEffect = data.getAttribute("moveEffect");
+        moveEffectId = data.getAttribute("moveEffect");
     }
 
     @Override
@@ -64,35 +64,36 @@ public class MoveSpeedState extends AttributeState {
         }
         
         // 移除效果
-        if (tempMoveEffect != null && !tempMoveEffect.isEnd()) {
-            tempMoveEffect.requestEnd();
-            tempMoveEffect = null;
+        if (moveEffect != null) {
+            EffectManager.getInstance().removeEffect(moveEffect);
         }
         super.cleanup();
     }
     
     private void checkEffectTrace() {
-        if (moveEffect != null) {
+        if (moveEffectId != null) {
             if (actor.isRunning()) {
-                startMoveEffect();
+                showMoveEffect();
             } else {
-                endMoveEffect();
+                hideMoveEffect();
             }
         }
     }
     
-    private void startMoveEffect() {
-        if (tempMoveEffect == null) {
-            tempMoveEffect = effectService.loadEffect(moveEffect);
-            tempMoveEffect.setTraceObject(actor.getModel());
-            playService.addEffect(tempMoveEffect);
+    private void showMoveEffect() {
+        if (moveEffect == null) {
+            moveEffect = effectService.loadEffect(moveEffectId);
+            moveEffect.setTraceObject(actor.getModel());
+            EffectManager.getInstance().addEffect(moveEffect);
+        }
+        if (moveEffect != null) {
+            moveEffect.setCullHint(Spatial.CullHint.Never);
         }
     }
     
-    private void endMoveEffect() {
-        if (tempMoveEffect != null && !tempMoveEffect.isEnd()) {
-            tempMoveEffect.requestEnd();
-            tempMoveEffect = null;
+    private void hideMoveEffect() {
+        if (moveEffect != null) {
+            moveEffect.setCullHint(Spatial.CullHint.Always);
         }
     }
     

@@ -74,7 +74,7 @@ public class EffectManager extends AbstractAppState {
      * @param effect 
      * @return  
      */
-    public boolean playEffect(Effect effect) {
+    public boolean addEffect(Effect effect) {
         synchronized (initializing) {
             if (!initializing.contains(effect) && effect.getParent() != effectRoot) {
                 initializing.add(effect);
@@ -84,29 +84,28 @@ public class EffectManager extends AbstractAppState {
         }
     }
     
-    // remove20160806,特效结束时自行清理及脱离场景
-//    /**
-//     * 从EffectManager中移除指定的特效,并进行清理。注：该方法只移除添加到EffectManager中的特效，如果目标特效不是
-//     * 添加到EffectManager上的，则什么也不做, 并返回false, 对于添加到其它节点下的特效需要自行清理和移除。
-//     * @param effect
-//     * @return 如果从EffectManager中成功移除了特效则返回true, 如果特效不由EffectManager管理则返回false.
-//     */
-//    public boolean removeEffect(Effect effect) {
-//        boolean result;
-//        if (effect.getParent() == effectRoot) {
-//            effectRoot.detachChild(effect);
-//            result = true;
-//        } else {
-//            synchronized (initializing) {
-//                result = initializing.remove(effect);
-//            }
-//        }
-//        // 注：只有在result为true时，即effect是添加到EffectManager的情况下才应该cleanup, 
-//        if (result) {
-//            effect.cleanup();
-//        }
-//        return result;
-//    }
+    /**
+     * 从EffectManager中移除指定的特效,并进行清理。注：该方法只移除添加到EffectManager中的特效，如果目标特效不是
+     * 添加到EffectManager上的，则什么也不做, 并返回false, 对于添加到其它节点下的特效需要自行清理和移除。
+     * @param effect
+     * @return 如果从EffectManager中成功移除了特效则返回true, 如果特效不由EffectManager管理则返回false.
+     */
+    public boolean removeEffect(Effect effect) {
+        boolean result;
+        if (effect.getParent() == effectRoot) {
+            effectRoot.detachChild(effect);
+            result = true;
+        } else {
+            synchronized (initializing) {
+                result = initializing.remove(effect);
+            }
+        }
+        // 注：只有在result为true时，即effect是添加到EffectManager的情况下才应该cleanup, 
+        if (result) {
+            effect.cleanup();
+        }
+        return result;
+    }
     
     @Override
     public void update(float tpf) {

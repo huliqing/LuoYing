@@ -35,13 +35,9 @@ public class EffectData extends ObjectData {
     /**
      * 特效所合适的总时间，单位秒
      */
-    private float useTime = 1.0f;
+    private float useTime;
     
     // 特效的执行速度,注意:这个参数作为动态配置,不开放到xml中进行配置.
-    // 这个参数在每次cleanup的时候都会重置为1.0,因为特效需要缓存重用.
-    // 如:多个技能使用了当前同一个特效,而这些技能需要的特效播放速度可能都不一样
-    // 这就要求各个技能在执行的过程中都要特别设置特效执行速度,以避免被一些技能
-    // 改变了执行速度,导致后续所有技能都以不正确的速度播放
     private float speed = 1.0f;
     
     public Vector3f getLocation() {

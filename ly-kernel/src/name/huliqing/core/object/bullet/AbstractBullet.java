@@ -10,8 +10,6 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.util.SafeArrayList;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Logger;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.BulletData;
@@ -71,9 +69,6 @@ public abstract class AbstractBullet<T extends BulletData> extends Node implemen
     // 当前已经使用的时间。
     protected float timeUsed;
     
-    // ---- inner
-    private List<Effect> tempEffects;
-
     @Override
     public void setData(T data) {
         this.data = data;
@@ -99,10 +94,6 @@ public abstract class AbstractBullet<T extends BulletData> extends Node implemen
             geo.setLocalTranslation(shapeOffset);
         }
         
-        // 临时引用效果实例 
-        if (effects != null && effects.length > 0) {
-            tempEffects = new ArrayList<Effect>(effects.length);
-        }
     }
     
     @Override
@@ -186,13 +177,15 @@ public abstract class AbstractBullet<T extends BulletData> extends Node implemen
     protected void playEffects() {
         if (effects == null)
             return;
-        for (String eid : effects) {
-            Effect effect = effectService.loadEffect(eid);
-            effect.setTraceObject(this);
-            playService.addEffect(effect);
-            // 保存对效果的引用，以便清理
-            tempEffects.add(effect);
+        
+        if (effects != null) {
+            for (String eid : effects) {
+                Effect effect = effectService.loadEffect(eid);
+                attachChild(effect);
+                effect.initialize();
+            }
         }
+        
     }
     
     protected void playHitEffects() {
@@ -276,15 +269,6 @@ public abstract class AbstractBullet<T extends BulletData> extends Node implemen
         if (listeners != null) {
             listeners.clear();
         }
-        
-        // 当子弹结束时，附着在子弹上的效果要让它们自动结束。
-        if (tempEffects != null) {
-            for (Effect eff : tempEffects) {
-                eff.requestEnd();
-            }
-            tempEffects.clear();
-        }
-        
         // 自行退出场景
         removeFromParent();
     }
