@@ -24,35 +24,27 @@ public class EffectDataLoader<T extends EffectData> implements DataLoader<T>{
 
         store.setUseTime(proto.getAsFloat("useTime", 1.0f));
         store.setTracePosition(TraceType.identity(proto.getAttribute("tracePosition", TraceType.no.name())));
-        store.setTracePositionOffset(proto.getAsVector3f("tracePositionOffset"));
-        store.setTracePositionType(TracePositionType.identify(proto.getAttribute("tracePositionType", TracePositionType.origin.name())));
-        
         store.setTraceRotation(TraceType.identity(proto.getAttribute("traceRotation", TraceType.no.name())));
-        float[] tempRotationOffset = proto.getAsFloatArray("traceRotationOffset");// xyz angle
-        if (tempRotationOffset != null) {
-            Quaternion traceRotationOffset = new Quaternion();
-            traceRotationOffset.fromAngles(tempRotationOffset);
-            store.setTraceRotationOffset(traceRotationOffset);
-        }
+        store.setTracePositionType(TracePositionType.identify(proto.getAttribute("tracePositionType", TracePositionType.origin.name())));
 
         // 特效的初始位置
-        Vector3f location = proto.getAsVector3f("location");
-        if (location != null) {
-            store.setLocation(location);
+        Vector3f initLocation = proto.getAsVector3f("initLocation");
+        if (initLocation != null) {
+            store.setInitLocation(initLocation);
         }
 
         // 特效的初始旋转
-        float[] rotation = proto.getAsFloatArray("rotation");
-        if (rotation != null) {
+        float[] initRotation = proto.getAsFloatArray("initRotation");
+        if (initRotation != null) {
             Quaternion rot = new Quaternion();
-            rot.fromAngles(rotation);
-            store.setRotation(rot);
+            rot.fromAngles(initRotation);
+            store.setInitRotation(rot);
         }
 
         // 缩放
-        Vector3f scale = proto.getAsVector3f("scale");
-        if (scale != null) {
-            store.setScale(scale);
+        Vector3f initScale = proto.getAsVector3f("initScale");
+        if (initScale != null) {
+            store.setInitScale(initScale);
         }
         
         // 以下参数暂不开放到xml中配置。

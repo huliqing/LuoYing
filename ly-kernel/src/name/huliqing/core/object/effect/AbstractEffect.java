@@ -122,15 +122,15 @@ public abstract class AbstractEffect extends Effect {
             attachChild(animRoot);
         }
         
-        // 1.初始化变换
-        if (data.getLocation() != null) {
-            setLocalTranslation(data.getLocation());
+        // 1.初始化, 注：initXXX参数是作为初始偏移存在的，是叠加在setLocalXXX上的。
+        if (data.getInitLocation() != null) {
+            move(data.getInitLocation());
         }
-        if (data.getRotation() != null) {
-            setLocalRotation(data.getRotation());
+        if (data.getInitRotation() != null) {
+            rotate(data.getInitRotation());
         }
-        if (data.getScale() != null) {
-            setLocalScale(data.getScale());
+        if (data.getInitScale() != null) {
+            scale(data.getInitScale().x, data.getInitScale().y, data.getInitScale().z);
         }
         
         // 2.初始化跟随
@@ -231,26 +231,31 @@ public abstract class AbstractEffect extends Effect {
         TracePositionType tpt = data.getTracePositionType();
         if (tpt == TracePositionType.origin) {
             pos.set(traceObject.getWorldTranslation());
+            
         } else if (tpt == TracePositionType.origin_bound_center) {
             pos.set(traceObject.getWorldTranslation());
             BoundingVolume bv = traceObject.getWorldBound();
             if (bv != null) {
                 pos.setY(bv.getCenter().getY());
             }
+            
         } else if (tpt == TracePositionType.origin_bound_top) {
             GeometryUtils.getBoundTopPosition(traceObject, pos);
             pos.setX(traceObject.getWorldTranslation().x);
             pos.setZ(traceObject.getWorldTranslation().z);
+            
         } else if (tpt == TracePositionType.bound_center) {
             pos.set(traceObject.getWorldBound().getCenter());
+            
         } else if (tpt == TracePositionType.bound_top) {
             GeometryUtils.getBoundTopPosition(traceObject, pos);
+            
         }
         // 注：tracePositionOffset是以被跟随的目标对象的本地坐标为基准的,
         // 所以必须mult上目标对象的旋转
-        if (data.getTracePositionOffset() != null) {
+        if (data.getInitLocation() != null) {
             TempVars tv = TempVars.get();
-            traceObject.getWorldRotation().mult(data.getTracePositionOffset(), tv.vect2);
+            traceObject.getWorldRotation().mult(data.getInitLocation(), tv.vect2);
             pos.addLocal(tv.vect2);
             tv.release();
         }
@@ -261,8 +266,8 @@ public abstract class AbstractEffect extends Effect {
     private void doUpdateTraceRotation() {
         Quaternion rot = getLocalRotation();
         rot.set(traceObject.getWorldRotation());
-        if (data.getTraceRotationOffset() != null) {
-            rot.multLocal(data.getTraceRotationOffset());
+        if (data.getInitRotation() != null) {
+            rot.multLocal(data.getInitRotation());
         }
         setLocalRotation(rot);
     }

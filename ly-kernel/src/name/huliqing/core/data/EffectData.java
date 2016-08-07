@@ -16,20 +16,17 @@ import name.huliqing.core.enums.TraceType;
  */
 @Serializable
 public class EffectData extends ObjectData {
-    // 基本变换
-    private Vector3f location;
-    private Quaternion rotation;
-    private Vector3f scale;
+    
+    // 初始变换
+    private Vector3f initLocation;
+    private Quaternion initRotation;
+    private Vector3f initScale;
     
     // 跟随目标的位置
     private TraceType tracePosition;
     // 跟随目标的旋转
     private TraceType traceRotation;
-    // 跟随的位置偏移，必须打开tracePosition功能才有效
-    private Vector3f tracePositionOffset;
-    // 跟随的旋转偏移，必须打开traceRotation功能才有效
-    private Quaternion traceRotationOffset;
-    // 跟随位置类型,该偏移会叠加到tracePositionOffset上
+    
     private TracePositionType tracePositionType;
     
     /**
@@ -39,29 +36,37 @@ public class EffectData extends ObjectData {
     
     // 特效的执行速度,注意:这个参数作为动态配置,不开放到xml中进行配置.
     private float speed = 1.0f;
-    
-    public Vector3f getLocation() {
-        return location;
+
+    public Vector3f getInitLocation() {
+        return initLocation;
     }
 
-    public void setLocation(Vector3f location) {
-        this.location = location;
+    /**
+     * 设置特效的初始位置，这个位置同时也是跟随时的偏移位置。
+     * @param initLocation 
+     */
+    public void setInitLocation(Vector3f initLocation) {
+        this.initLocation = initLocation;
     }
 
-    public Quaternion getRotation() {
-        return rotation;
+    public Quaternion getInitRotation() {
+        return initRotation;
     }
 
-    public void setRotation(Quaternion rotation) {
-        this.rotation = rotation;
+    /**
+     * 设置特效的初始旋转，这个旋转也是跟随效果的偏移旋转。
+     * @param initRotation 
+     */
+    public void setInitRotation(Quaternion initRotation) {
+        this.initRotation = initRotation;
     }
 
-    public Vector3f getScale() {
-        return scale;
+    public Vector3f getInitScale() {
+        return initScale;
     }
 
-    public void setScale(Vector3f scale) {
-        this.scale = scale;
+    public void setInitScale(Vector3f initScale) {
+        this.initScale = initScale;
     }
 
     public TraceType getTracePosition() {
@@ -78,22 +83,6 @@ public class EffectData extends ObjectData {
 
     public void setTraceRotation(TraceType traceRotation) {
         this.traceRotation = traceRotation;
-    }
-
-    public Vector3f getTracePositionOffset() {
-        return tracePositionOffset;
-    }
-
-    public void setTracePositionOffset(Vector3f tracePositionOffset) {
-        this.tracePositionOffset = tracePositionOffset;
-    }
-
-    public Quaternion getTraceRotationOffset() {
-        return traceRotationOffset;
-    }
-
-    public void setTraceRotationOffset(Quaternion traceRotationOffset) {
-        this.traceRotationOffset = traceRotationOffset;
     }
 
     public TracePositionType getTracePositionType() {

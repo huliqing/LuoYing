@@ -10,14 +10,14 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.util.SafeArrayList;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
-import name.huliqing.core.Factory;
 import name.huliqing.core.data.BulletData;
-import name.huliqing.core.mvc.service.EffectService;
-import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.loader.Loader;
 import name.huliqing.core.manager.SoundManager;
 import name.huliqing.core.object.effect.Effect;
+import name.huliqing.core.object.effect.EffectManager;
 import name.huliqing.core.object.shape.Shape;
 
 /**
@@ -27,8 +27,8 @@ import name.huliqing.core.object.shape.Shape;
  */
 public abstract class AbstractBullet<T extends BulletData> extends Node implements Bullet<T> {
     private static final Logger LOG = Logger.getLogger(AbstractBullet.class.getName());
-    private final PlayService playService = Factory.get(PlayService.class);
-    private final EffectService effectService = Factory.get(EffectService.class);
+//    private final PlayService playService = Factory.get(PlayService.class);
+//    private final EffectService effectService = Factory.get(EffectService.class);
     
     protected T data;
     
@@ -45,7 +45,7 @@ public abstract class AbstractBullet<T extends BulletData> extends Node implemen
     // 超时时间限制，单位秒
     protected float timeout = 30;
     // 子弹效果组
-    protected String[] effects;
+    protected String[] effectIds;
     // 击中时的特效
     protected String[] hitEffects;
     // 子弹声效组
@@ -69,6 +69,11 @@ public abstract class AbstractBullet<T extends BulletData> extends Node implemen
     // 当前已经使用的时间。
     protected float timeUsed;
     
+    // ---- inner
+    
+    // 这些是添加在子弹上的特效。
+    private List<Effect> effects;
+    
     @Override
     public void setData(T data) {
         this.data = data;
@@ -78,7 +83,7 @@ public abstract class AbstractBullet<T extends BulletData> extends Node implemen
         this.facing = data.getAsBoolean("facing", false);
         this.trace = data.getAsBoolean("trace", false);
         this.timeout = data.getAsFloat("timeout", timeout);
-        this.effects = data.getAsArray("effects");
+        this.effectIds = data.getAsArray("effects");
         this.sounds = data.getAsArray("sounds");
         this.hitEffects = data.getAsArray("hitEffects");
         this.hitSounds = data.getAsArray("hitSounds");
@@ -175,12 +180,15 @@ public abstract class AbstractBullet<T extends BulletData> extends Node implemen
     }
     
     protected void playEffects() {
-        if (effects == null)
+        if (effectIds == null)
             return;
         
-        if (effects != null) {
-            for (String eid : effects) {
-                Effect effect = effectService.loadEffect(eid);
+        if (effectIds != null) {
+            effects = new ArrayList<Effect>(effectIds.length);
+            for (String eid : effectIds) {
+                Effect effect = EffectManager.getInstance().loadEffect(eid);
+                effects.add(effect);
+                // 把特效添加到子弹节点内，这样当子弹消失或脱离场景时，特效也可以一同立即消息。
                 attachChild(effect);
                 effect.initialize();
             }
@@ -192,9 +200,9 @@ public abstract class AbstractBullet<T extends BulletData> extends Node implemen
         if (hitEffects == null)
             return;
         for (String eid : hitEffects) {
-            Effect effect = effectService.loadEffect(eid);
-            effect.getData().setLocation(getWorldTranslation());
-            playService.addEffect(effect);
+            Effect effect = EffectManager.getInstance().loadEffect(eid);
+            effect.setLocalTranslation(getWorldTranslation());
+            EffectManager.getInstance().addEffect(effect);
         }
     }
     
@@ -229,10 +237,6 @@ public abstract class AbstractBullet<T extends BulletData> extends Node implemen
                 if (bl.hitCheck(this)) {
                     playHitEffects();
                     playHitSounds();
-//                    if (Config.debug) {
-//                        LOG.log(Level.INFO, "Bullet hitCheck,  bullet={0}, playHitEffects={1}, playHitSounds={2}", 
-//                                new Object[] {data.getId(), hitEffects, hitSounds});
-//                    }
                 }
             }
         }
@@ -269,6 +273,14 @@ public abstract class AbstractBullet<T extends BulletData> extends Node implemen
         if (listeners != null) {
             listeners.clear();
         }
+        
+        if (effects != null) {
+            for (Effect e : effects) {
+                e.cleanup();
+                e.removeFromParent();
+            }
+        }
+        
         // 自行退出场景
         removeFromParent();
     }
@@ -311,7 +323,7 @@ public abstract class AbstractBullet<T extends BulletData> extends Node implemen
             listeners.add(listener);
         }
     }
-
+ 
     @Override
     public boolean removeListener(BulletListener listener) {
         if (listeners == null)
