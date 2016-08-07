@@ -35,7 +35,7 @@ public class EffectData extends ObjectData {
     /**
      * 特效所合适的总时间，单位秒
      */
-    private float useTime;
+    private float useTime = 1.0f;
     
     // 特效的执行速度,注意:这个参数作为动态配置,不开放到xml中进行配置.
     // 这个参数在每次cleanup的时候都会重置为1.0,因为特效需要缓存重用.
