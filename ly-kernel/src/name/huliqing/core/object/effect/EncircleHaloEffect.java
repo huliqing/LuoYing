@@ -7,14 +7,12 @@ package name.huliqing.core.object.effect;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
-import com.jme3.scene.Node;
 import com.jme3.util.TempVars;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.data.EffectData;
 import name.huliqing.core.object.anim.Loop;
 import name.huliqing.core.object.anim.RandomRotationAnim;
-import name.huliqing.core.object.anim.ScaleAnim;
 import name.huliqing.core.utils.MathUtils;
 
 /**
@@ -36,21 +34,11 @@ public class EncircleHaloEffect extends AbstractEffect {
     // 是否显示星光的环绕线
     private boolean showLine = true;
     private ColorRGBA lineColor = new ColorRGBA(0.8f, 0.8f, 1, 1f);
-    // 整个星光环的位置偏移。
-    private Vector3f offset = new Vector3f();
-    
-    // 是否缩放显示整个光环
-    private boolean scaleShow = true;
-    private Vector3f scaleStart = new Vector3f(0.01f, 0.01f, 0.01f);
-    private Vector3f scaleEnd = new Vector3f(1, 1, 1);
     
     // ---- inner
-    private Node root;
     // 对所有已经创建的星光环的引用
-    private List<HaloCircle> circles = new ArrayList<HaloCircle>(size);
-    // 用于把localRoot缩放出来
-    private ScaleAnim scaleAnim;
-
+    private final List<HaloCircle> circles = new ArrayList<HaloCircle>(size);
+    
     @Override
     public void setData(EffectData data) {
         super.setData(data);
@@ -61,11 +49,7 @@ public class EncircleHaloEffect extends AbstractEffect {
         haloColor = data.getProto().getAsColor("haloColor", haloColor);
         showLine = data.getProto().getAsBoolean("showLine", showLine);
         lineColor = data.getProto().getAsColor("lineColor", lineColor);
-        offset = data.getProto().getAsVector3f("offset", offset);
         
-        scaleShow = data.getProto().getAsBoolean("scaleShow", scaleShow);
-        scaleStart = data.getProto().getAsVector3f("scaleStart", scaleStart);
-        scaleEnd = data.getProto().getAsVector3f("scaleEnd", scaleEnd);
         preCreate();
     }
 
@@ -79,10 +63,6 @@ public class EncircleHaloEffect extends AbstractEffect {
     }
     
     private void preCreate() {
-        root = new Node("EncircleHalo_localRoot");
-        root.setLocalTranslation(offset);
-        animRoot.attachChild(root);
-        
         // ---- 创建星光
         circles.clear();
         float avgAngle = FastMath.TWO_PI / size; // 每个环要旋转的弧度
@@ -102,41 +82,23 @@ public class EncircleHaloEffect extends AbstractEffect {
             rra.setLoop(Loop.loop);
             rra.setSpeed(0.5f);
             hc.addControl(rra);
-            root.attachChild(hc);
+            animRoot.attachChild(hc);
             rra.start();
         }
         tv.release();
         
-        // 创建缩放动画
-        if (scaleShow) {
-            scaleAnim = new ScaleAnim();
-            scaleAnim.setStartScale(scaleStart);
-            scaleAnim.setEndScale(scaleEnd);
-            scaleAnim.setTarget(root);
-        }
     }
 
     @Override
     protected void effectUpdate(float tpf) {
         super.effectUpdate(tpf);
-        if (scaleShow) {
-            scaleAnim.display(this.trueTimeUsed / this.trueTimeTotal);
-        }
         for (HaloCircle hc : circles) {
             hc.setRotateSpeed(hc.getRotateSpeed() + trueTimeUsed * tpf);
         }
-        if (scaleShow) {
-            scaleAnim.display(1 - trueTimeUsed / trueTimeTotal);
-        }
+        
     }
     
-    @Override
-    public void cleanup() {
-        if (!scaleAnim.isEnd()) {
-            scaleAnim.cleanup();
-        }
-        super.cleanup();
-    }
+
     
     
 }

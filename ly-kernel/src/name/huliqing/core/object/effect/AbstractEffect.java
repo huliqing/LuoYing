@@ -14,8 +14,6 @@ import com.jme3.util.TempVars;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.data.EffectData;
-import name.huliqing.core.enums.TracePositionType;
-import name.huliqing.core.enums.TraceType;
 import name.huliqing.core.loader.Loader;
 import name.huliqing.core.object.anim.Anim;
 import name.huliqing.core.object.sound.Sound;
@@ -122,15 +120,16 @@ public abstract class AbstractEffect extends Effect {
             attachChild(animRoot);
         }
         
-        // 1.初始化, 注：initXXX参数是作为初始偏移存在的，是叠加在setLocalXXX上的。
+        // 1.初始化位置，注：initLocation,initRotation,initScale是允许为null的，在一些情况下程序可能需要在运行时动态设置
+        // 特效的位置，因此允许这几个参数为null.
         if (data.getInitLocation() != null) {
-            move(data.getInitLocation());
+            setLocalTranslation(data.getInitLocation());
         }
         if (data.getInitRotation() != null) {
-            rotate(data.getInitRotation());
+            setLocalRotation(data.getInitRotation());
         }
         if (data.getInitScale() != null) {
-            scale(data.getInitScale().x, data.getInitScale().y, data.getInitScale().z);
+            setLocalScale(data.getInitScale());
         }
         
         // 2.初始化跟随
@@ -142,6 +141,10 @@ public abstract class AbstractEffect extends Effect {
                 doUpdateTraceRotation();
             }
         }
+        
+        // 动画一开始要update一次，因为一些动画是立即执行的,这些动画需要立即初始化，比如一些缩放显示的动画，
+        // 在初始化时需要将目标先隐藏,否则会有一个闪现的不正常现象。这很重要
+        updateAnimations(0, trueTimeUsed);
     }
     
     /**
@@ -163,22 +166,38 @@ public abstract class AbstractEffect extends Effect {
         }
         
         // update Sound
-        if (sounds != null) {
-            for (int i = 0; i < sounds.size(); i++) {
-                sounds.get(i).update(tpf, trueTimeUsed);
-            }
-        }
+        updateSounds(tpf, trueTimeUsed);
         
         // update Animations
+        updateAnimations(tpf, trueTimeUsed);
+        
+        // 特效结束时清理并移除。
+        if (trueTimeUsed > trueTimeTotal) {
+            doEndEffect();
+        }
+    }
+
+    /**
+     * update Animations
+     * @param tpf 
+     */
+    private void updateAnimations(float tpf, float trueTimeUsed) {
         if (animations != null) {
             for (int i = 0; i < animations.size(); i++) {
                 animations.get(i).update(tpf, trueTimeUsed);
             }
         }
-        
-        // 特效结束时清理并移除。
-        if (trueTimeUsed > trueTimeTotal) {
-            doEndEffect();
+    }
+    
+    /**
+     * update Sound
+     * @param tpf 
+     */
+    private void updateSounds(float tpf, float trueTimeUsed) {
+        if (sounds != null) {
+            for (int i = 0; i < sounds.size(); i++) {
+                sounds.get(i).update(tpf, trueTimeUsed);
+            }
         }
     }
     
@@ -203,7 +222,7 @@ public abstract class AbstractEffect extends Effect {
     }
     
     /**
-     * 当效果结束的时候这个方法会被调用，该方法会调用cleanup清理资源，并执行帧听器
+     * 调用这个方法来结束效果，该方法会调用cleanup清理资源，并执行帧听器
      */
     protected void doEndEffect() {
         // 帧听器
@@ -224,7 +243,12 @@ public abstract class AbstractEffect extends Effect {
     public boolean isEnd() {
         return end;
     }
-        
+    
+    @Override
+    public void requestEnd() {
+        // 由特定子类实现
+    }
+    
     private void doUpdateTracePosition() {
         // add type offset
         Vector3f pos = getLocalTranslation();
@@ -270,11 +294,6 @@ public abstract class AbstractEffect extends Effect {
             rot.multLocal(data.getInitRotation());
         }
         setLocalRotation(rot);
-    }
-
-    @Override
-    public void requestEnd() {
-        // 由特定子类实现
     }
     
     @Override

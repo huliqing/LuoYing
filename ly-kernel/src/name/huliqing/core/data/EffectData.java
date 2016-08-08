@@ -7,8 +7,8 @@ package name.huliqing.core.data;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.network.serializing.Serializable;
-import name.huliqing.core.enums.TracePositionType;
-import name.huliqing.core.enums.TraceType;
+import name.huliqing.core.object.effect.TracePositionType;
+import name.huliqing.core.object.effect.TraceType;
 
 /**
  *

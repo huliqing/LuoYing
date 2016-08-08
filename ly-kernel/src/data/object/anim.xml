@@ -21,7 +21,7 @@
     <animRotation id="animCommonRotZi"  loop="loop"   axis="0,0,1"        degree="360" invert="1" />
     <animRandomRotation id="animCommonRotRandom" minDegree="0" maxDegree="360" />
     
-    <animScale id="animCommonScaleS" useTime="0.5" startScale="0.01,0.01,0.01" endScale="1,1,1"  motionType="Bezier" bezierFactor="0,0,1.5,1" />
+    <animScale id="animCommonScaleS" startScale="0.01,0.01,0.01" endScale="1,1,1"  motionType="Bezier" bezierFactor="0,0,1.5,1" />
     <animScale id="animCommonScaleH"  startScale="1,1,1"      endScale="0.01,0.01,0.01" />
     
     <animColor id="animCommonColorI" startColor="0,0,0,0"    endColor="1,1,1,1" />
@@ -58,11 +58,16 @@
     <animScale id="animMagicCircleScaleS" useTime="0.5"  startScale="0.01,0.01,0.01" endScale="1,1,1" motionType="Bezier" bezierFactor="0,0,1.5,1" />
     <animScale id="animMagicCircleScaleH" useTime="0.3" startScale="0.9,0.9,0.9" endScale="0.01,0.01,0.01" />
     <animColor id="animMagicCircleColor" useTime="0.33" loop="cycle"  startColor="3,3,3,1" endColor="0.75,0.75,0.75,0.75" />
+    <animRotation id="animMagicCircleHaloRotY" useTime="4" loop="loop" axis="0,1,0" degree="360" invert="1" />
+    <animScale id="animMagicCircleHaloScaleS" useTime="0.5"  startScale="0.01,0.01,0.01" endScale="1,1,1" motionType="Bezier" bezierFactor="0,0,1.5,1" />
+    <animScale id="animMagicCircleHaloScaleH" useTime="0.3" startScale="1,1,1" endScale="0.01,0.01,0.01" />
     
     <!--=====================================================================-->
     <!--星光传送-->
     <!--=====================================================================-->
-    <animScale id="animBackTownScaleS" useTime="0.5" startScale="0.01,0.01,0.01" endScale="1,1,1"  motionType="Bezier" bezierFactor="0,0,1.5,1" />
+    <animScale id="animBackTownHaloScaleS" extends="animCommonScaleS" useTime="0.5" />
+    <animScale id="animBackTownHaloScaleH" extends="animCommonScaleH" useTime="0.15" />
+    <animScale id="animBackTownScaleS" extends="animCommonScaleS" useTime="0.5" />
     <animRotation id="animBackTownCircle" useTime="1.8" loop="loop" axis="0,1,0" degree="360" invert="0" />
     <animColor id="animBackTownColor" useTime="0.33" loop="cycle" startColor="3,3,3,1" endColor="0.75,0.75,0.75,0.75" />
     
@@ -115,16 +120,20 @@
     <!--冰冻特效：effectFrozenIce冰柱的随机旋转,使用时间非常小，所以不会看到旋转动画
     只是为获得一个随机旋转角度。让每次释放冰柱的时候都使用随机旋转-->
     <!--=====================================================================-->
-    <animScale id="animFrozenIceScale" useTime="0.3" startScale="0.01,0.01,0.01" endScale="1,1,1"  motionType="Bezier" bezierFactor="0,0,1.5,1" />
+    <animScale id="animFrozenIceScale" extends="animCommonScaleS" useTime="0.3" />
     <animRandomRotation id="animFrozenIceRot" useTime="0.3" minDegree="180" maxDegree="360" axis="0,1,0" />
     
-    <!--=====================================================================-->
+    <!--==========================================================================-->
     <!--复活术-->
-    <!--=====================================================================-->
+    <!--==========================================================================-->
     <animScale id="animRebornScaleS" extends="animCommonScaleS" useTime="0.5" />
     <animScale id="animRebornRot" extends="animCommonRotY" useTime="0.5" />
     <animScale id="animRebornScaleH" extends="animCommonScaleH" useTime="0.3" />
     
+    <!--==========================================================================-->
+    <!--学习技能: effectLearnSkill-->
+    <!--==========================================================================-->
+    <animRotation id="animLearnSkillRotY" useTime="4" loop="loop" axis="0,1,0" degree="360" invert="0" />
 </root>
 
 
