@@ -648,26 +648,29 @@
                     </xs:annotation>
                 </xs:attribute>-->
                 
-                <xs:attribute name="location" type="xs:string" use="optional">
+                <xs:attribute name="initLocation" type="xs:string" use="optional">
                     <xs:annotation>
                         <xs:documentation>
-                            effect的初始位置，使用localTranslaction, 当effect被绑定到其它物体上时(直接attach到目标下时)，可以使用该参数来偏移位置.
-                            默认: "0,0,0"
+                            effect的初始位置(localTranslaction), 格式: "x,y,z", 当effect被添加到某个节点下时可以使用该参数来偏移位置，
+                            当设置这个参数之后，effect在初始化的时候会覆盖掉之前的setLocaleTranslation的设置。
+                            另外：当effect为“跟随”类型时这个参数将作为跟随时的偏移位置进行设置。
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-                <xs:attribute name="rotation" type="xs:string" use="optional">
+                <xs:attribute name="initRotation" type="xs:string" use="optional">
                     <xs:annotation>
                         <xs:documentation>
-                            effect的初始旋转，使用localRotation, 当effect被绑定到其它物体上时(直接attach到目标下时)，可以使用该参数来偏移旋转.
-                            默认: "0,0,0",分别对应"x,y,z"的旋转弧度。
+                            effect的初始旋转(localRotation), 格式:"x,y,z", 当effect被添加到某个节点下时可以使用该参数来偏移旋转，
+                            当设置这个参数之后，effect在初始化的时候会覆盖掉之前的setLocaleRotation的设置。
+                            另外：当effect为“跟随”类型时这个参数将作为跟随时的偏移旋转进行设置。
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-                <xs:attribute name="scale" type="xs:string" use="optional">
+                <xs:attribute name="initScale" type="xs:string" use="optional">
                     <xs:annotation>
                         <xs:documentation>
-                            effect的初始缩放，使用localScale,格式, "x,y,z"
+                            effect的初始缩放(localScale), 格式, "x,y,z", 当设置这个参数之后，
+                            effect在初始化的时候会覆盖掉之前的setLocaleScale的设置。
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
@@ -684,11 +687,6 @@
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:attribute>
-                <xs:attribute name="tracePositionOffset" type="xs:string" use="optional" >
-                    <xs:annotation>
-                        <xs:documentation>设置跟踪时的位置偏移,示例："0,0,1". 该跟踪偏移使用的是被跟踪目标的自身坐标系.</xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
                 <xs:attribute name="traceRotation" use="required" >
                     <xs:annotation>
                         <xs:documentation>是否跟随目标的旋转</xs:documentation>
@@ -700,11 +698,6 @@
                             <xs:enumeration value="always" />
                         </xs:restriction>
                     </xs:simpleType>
-                </xs:attribute>
-                <xs:attribute name="traceRotationOffset" type="xs:decimal" use="optional" >
-                    <xs:annotation>
-                        <xs:documentation>跟随目标旋转的初始旋转偏移，格式: "x,y,z"</xs:documentation>
-                    </xs:annotation>
                 </xs:attribute>
                 <xs:attribute name="tracePositionType" use="optional">
                     <xs:annotation>

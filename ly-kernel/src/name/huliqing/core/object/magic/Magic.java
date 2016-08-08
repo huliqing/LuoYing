@@ -15,7 +15,7 @@ import java.util.List;
 import name.huliqing.core.LY;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.MagicData;
-import name.huliqing.core.enums.TraceType;
+import name.huliqing.core.object.effect.TraceType;
 import name.huliqing.core.mvc.service.EffectService;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.loader.Loader;
