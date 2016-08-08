@@ -261,7 +261,7 @@
     <!--旋转的魔法阵-->
     <effectTexture id="effectDanceSakuraMagic" useTime="2.3" 
              texture="Textures/tex/magic/magic.jpg" size="4,4,1" plane="xy" 
-             animations="animDanceSakuraColorRot,animDanceSakuraMagicStartScale,animDanceSakuraMagicStartColor
+             animations="animDanceSakuraRot,animDanceSakuraMagicStartScale,animDanceSakuraMagicStartColor
 ,animDanceSakuraMagicDisplayColor|0.3,animDanceSakuraMagicEndScale|2.0"
              sounds="soundMagicExpand2" />
     
