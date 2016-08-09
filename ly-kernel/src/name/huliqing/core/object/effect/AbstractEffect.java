@@ -36,25 +36,33 @@ public abstract class AbstractEffect extends Effect {
      */
     protected List<SoundWrap> sounds;
     
-    // ---- Inner
     /**
      * 本地根作点, 为了隔离Effect自身的变换和Anim所执行的动画变换，必须提供一个节点用于接受所有动画变换的节点。
      * animations所执行的动画变换都作用在这个节点上。
      */
     protected final Node animRoot = new Node("EffectLocalRoot");
     
-    // 跟踪的目标对象,必须必须有一个目标对象才有可能跟随
+    /**
+     * 跟踪的目标对象,必须必须有一个目标对象才有可能跟随
+     */
     protected Spatial traceObject;
     
-    // 实际效果所用的时间,这个实际时间受速度的影响,效果速度越快则效果的实际执行时间越少。
+    /**
+     * 实际效果所用的时间,这个实际时间受速度的影响,效果速度越快则效果的实际执行时间越少。
+     */
     protected float trueTimeTotal;
+    
+    /**
+     * 当前效果所使用的实际时间。
+     */
     protected float trueTimeUsed;
     
+    /**
+     * 特效帧听器
+     */
     protected List<EffectListener> listeners;
-    
-    // 标记效果是否已经结束
-    private boolean end;
 
+    
     @Override
     public void setData(EffectData data) {
         super.setData(data);
@@ -87,9 +95,8 @@ public abstract class AbstractEffect extends Effect {
         
     @Override
     public final void updateLogicalState(float tpf) {
-        // initialize的初始化可能由外部或者EffectManager进行了调用，所以这里要判断并避免重覆调用初始化。
-        if (!initialized) {
-            initialize();
+        if (!isInitialized()) {
+            return;
         }
         effectUpdate(tpf);
     }
@@ -103,7 +110,6 @@ public abstract class AbstractEffect extends Effect {
     @Override
     public void initialize() {
         super.initialize(); 
-        end = false;
         trueTimeTotal = data.getUseTime() / data.getSpeed();
         trueTimeUsed = 0;
         
@@ -152,7 +158,6 @@ public abstract class AbstractEffect extends Effect {
      * @param tpf 
      */
     protected void effectUpdate(float tpf) {
-        
         trueTimeUsed += tpf;
         
         // 更新位置
@@ -171,9 +176,9 @@ public abstract class AbstractEffect extends Effect {
         // update Animations
         updateAnimations(tpf, trueTimeUsed);
         
-        // 特效结束时清理并移除。
-        if (trueTimeUsed > trueTimeTotal) {
-            doEndEffect();
+        // 特效结束
+        if (trueTimeUsed >= trueTimeTotal) {
+            doEffectEnd();
         }
     }
 
@@ -200,6 +205,31 @@ public abstract class AbstractEffect extends Effect {
             }
         }
     }
+
+    /**
+     * 让特效直接结束，这个方法会在特效结束时自动执行，也可以由子类进行调用以强制结束特效,
+     * 该方法主要执行以下操作。<br>
+     * 1.执行特效相关的帧听器，以通知特效结束。<br>
+     * 2.进行清理，清理并释放特效产生的资源占用。<br>
+     * 3.如果特效设置了autoDetach,则特效将自动从场景中脱离。<br>
+     */
+    protected void doEffectEnd() {
+        if (listeners != null) {
+            for (int i = 0; i < listeners.size(); i++) {
+                listeners.get(i).onEffectEnd(this);
+            }
+        }
+        cleanup();
+        
+        if (data.isAutoDetach()) {
+            removeFromParent();
+        }
+    }
+
+    @Override
+    public boolean isEnd() {
+        return !isInitialized();
+    }
     
     @Override
     public void cleanup() {
@@ -217,31 +247,8 @@ public abstract class AbstractEffect extends Effect {
         
         // 重置效果时间
         trueTimeUsed = 0;
-        traceObject = null;
+
         super.cleanup(); 
-    }
-    
-    /**
-     * 调用这个方法来结束效果，该方法会调用cleanup清理资源，并执行帧听器
-     */
-    protected void doEndEffect() {
-        // 帧听器
-        if (listeners != null) {
-            for (int i = 0; i < listeners.size(); i++) {
-                listeners.get(i).onEffectEnd(this);
-            }
-        }
-        // 清理资源
-        cleanup();
-        // 自动从父节点中脱离。
-        removeFromParent();
-        // 标记为end
-        end = true;
-    }
-    
-    @Override
-    public boolean isEnd() {
-        return end;
     }
     
     @Override
@@ -311,14 +318,14 @@ public abstract class AbstractEffect extends Effect {
         return listeners != null && listeners.remove(listener);
     }
 
-    /**
-     * 设置特效要跟随的目标对象，当设置了这个目标之后，根据设置，特效在运行时会跟随这个目标对象的“位置","朝向”等。
-     * 当特效结束并被清理时这个目标对象会同时被清理，如果需要执行这个特效则需要重新设置这个对象。
-     * @param traceObject 
-     */
     @Override
     public void setTraceObject(Spatial traceObject) {
         this.traceObject = traceObject;
+    }
+
+    @Override
+    public Spatial getTraceObject() {
+        return traceObject;
     }
     
     public class AnimationWrap {

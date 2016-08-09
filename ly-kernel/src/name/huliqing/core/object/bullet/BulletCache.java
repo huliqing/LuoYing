@@ -56,10 +56,14 @@ public class BulletCache extends IntervalLogic implements PlayListener {
         // 如果已经有结束的则添加到空闲列表中(子弹移出场景的动作由子弹内部处理)
         for (Iterator<Bullet> it = busyStore.iterator(); it.hasNext(); ) {
             Bullet bullet = it.next();
-            if (bullet.isEnd()) {
-                it.remove();
-                freeStore.add(bullet);
-            }
+            
+            
+//            if (bullet()) {
+//                it.remove();
+//                freeStore.add(bullet);
+//            }
+
+            throw new UnsupportedOperationException("");
         }
         
         if (Config.debug) {

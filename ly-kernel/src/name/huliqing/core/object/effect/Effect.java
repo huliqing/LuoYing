@@ -10,8 +10,7 @@ import name.huliqing.core.data.EffectData;
 import name.huliqing.core.xml.DataProcessor;
 
 /**
- * 特效, 特效可以添加到EffectManager上，也可以直接添加到一个Node下面,所有效果都有一个执行时间，
- * 当效果执行结束后应该自动脱离场景,并清理释放资源。<br>
+ * 特效, 特效可以添加到EffectManager上，也可以直接添加到一个Node下面,所有效果都有一个执行时间.
  * @author huliqing
  * @param <T>
  * @version v1.3 20160806
@@ -60,7 +59,7 @@ public abstract class Effect<T extends EffectData> extends Node implements DataP
     }
     
     /**
-     * 清理效果数据，这个方法一般由特效内部调用，当特效结束后自行调用这个方法来清理特效资源。
+     * 清理效果数据.
      */
     public void cleanup() {
         initialized = false;
@@ -80,16 +79,20 @@ public abstract class Effect<T extends EffectData> extends Node implements DataP
     public abstract boolean isEnd();
     
     /**
-     * 设置特效要跟随的目标对象，当设置了这个目标之后，特效在运行时可以跟随这个目标的"位置","朝向”等，
-     * 视实现类的情况而定。当特效在结束后要清理这个目标对象，释放相关资源，以避免持续保持对这个对象的引用。
-     * 在重新执行这个特效时可以重新设置这个跟踪对象。
+     * 设置特效要跟随的目标对象，当设置了这个目标之后，特效在运行时可以跟随这个目标的"位置","朝向”等，视实现类的情况而定。
+     * 设置为null来清除这个跟踪对象。
      * @param traceObject 
      */
     public abstract void setTraceObject(Spatial traceObject);
-
+    
     /**
-     * 添加特效监听器,注：特效监听器不会自动移除，所以添加了帧听器之后需要视情况自行移除，以避免内存涉漏，
-     * 特别是对于进行了缓存的特效。
+     * 获取特效的跟随目标，如果没有跟随目标则返回null.
+     * @return 
+     */
+    public abstract Spatial getTraceObject();
+    
+    /**
+     * 添加特效监听器,注：特效监听器不会自动移除，所以添加了帧听器之后需要视情况自行移除，以避免内存涉漏.
      * @param listener 
      */
     public abstract void addListener(EffectListener listener);
@@ -100,4 +103,5 @@ public abstract class Effect<T extends EffectData> extends Node implements DataP
      * @return  如果成功移除了特效则返回true,否则false.
      */
     public abstract boolean removeListener(EffectListener listener);
+    
 }

@@ -12,7 +12,7 @@ import name.huliqing.core.data.BulletData;
  * @param <T>
  * @author huliqing
  */
-public class SimpleBullet<T extends BulletData> extends AbstractBullet<T>{
+public class SimpleBullet<T extends BulletData, S> extends AbstractBullet<T, S>{
     
     @Override
     protected void doUpdatePosition(float tpf, Vector3f endPos) {

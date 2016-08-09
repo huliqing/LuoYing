@@ -18,9 +18,9 @@ import name.huliqing.core.object.position.Position;
 /**
  * 曲线类型的子弹。
  * @author huliqing
- * @param <T>
+ * @param <S>
  */
-public class CurveBullet<T extends BulletData> extends StraightBullet<T> {
+public class CurveBullet<S> extends StraightBullet<BulletData, S> {
     
     // 曲线张力
     private float tension = 0.5f;
@@ -40,7 +40,7 @@ public class CurveBullet<T extends BulletData> extends StraightBullet<T> {
     private List<Vector3f> tempCenterPositions;
 
     @Override
-    public void setData(T data) {
+    public void setData(BulletData data) {
         super.setData(data);
         tension = data.getAsFloat("tension", tension);
         
@@ -60,13 +60,13 @@ public class CurveBullet<T extends BulletData> extends StraightBullet<T> {
     }
 
     @Override
-    protected void doInit() {
-        super.doInit(); 
+    public void initialize() {
+        super.initialize(); 
         if (waypoints != null) {
             // 添加开始和结束坐标点，以及生成中间坐标点。
-            waypoints.add(startPoint);
+            waypoints.add(data.getStartPoint());
             createCenterWappoint(waypoints);
-            waypoints.add(endPoint);
+            waypoints.add(data.getEndPoint());
             
             cma.setControlPoints(waypoints);
             cma.setFacePath(facing);
@@ -94,6 +94,7 @@ public class CurveBullet<T extends BulletData> extends StraightBullet<T> {
     /**
      * 获取当前曲线子弹的插值位置，取值为0.0~1.0.
      * 这个插值只对曲线有效，如果是跟踪形子弹，在转为直线追踪后这个值将始终为1.0.
+     * @param endPos
      * @return 
      */
     protected float getInterpolation(Vector3f endPos) {
@@ -102,13 +103,13 @@ public class CurveBullet<T extends BulletData> extends StraightBullet<T> {
             return 1.0f;
         }
         
-        float inter = 0;
+        float inter;
         
         if (waypoints == null) {
             // 直线
             TempVars tv = TempVars.get();
-            float distance = getWorldTranslation().subtract(startPoint, tv.vect1).length();
-            float fullLength = endPos.subtract(startPoint, tv.vect2).length();
+            float distance = getWorldTranslation().subtract(data.getStartPoint(), tv.vect1).length();
+            float fullLength = endPos.subtract(data.getStartPoint(), tv.vect2).length();
             inter = distance / fullLength;
             tv.release();
         } else {
@@ -127,7 +128,7 @@ public class CurveBullet<T extends BulletData> extends StraightBullet<T> {
         }
         
         if (!tracing) {
-            float currentLength = baseSpeed * speed * timeUsed;
+            float currentLength = baseSpeed * data.getSpeed() * timeUsed;
             cma.display(currentLength / cma.getTotalLength());
             
             // 判断是否进入tracing,在到达最后一个路径点之前转入跟踪
@@ -157,8 +158,8 @@ public class CurveBullet<T extends BulletData> extends StraightBullet<T> {
     private void createCenterWappoint(List<Vector3f> store) {
         if (store == null) 
             return;
-        Vector3f startPos = getStartPoint();
-        Vector3f endPos = getEndPoint();
+        Vector3f startPos = data.getStartPoint();
+        Vector3f endPos = data.getEndPoint();
 
         // 由每一个emmitterShape分别生成一个中间点
         if (positions != null && !positions.isEmpty()) {

@@ -731,6 +731,17 @@
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
+                <xs:attribute name="autoDetach" type="bool" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            是否允许特效在结束的时候自动进行清理并自动从场景中脱离。默认情况下如果特效是添加在EffectManager
+                            下，则当特效在结束的时候会被EffectManager自动从场景中移除，不需要设置该参数。但是在其它情
+                            况下，比如将特效添加在某一个特别的节点内时（非EffectManager管理），当特效结束时是不会自动从节点
+                            内移除的，如果在此类情况下需要让特效自动从父节点中移除，则可以设置autoDetach为true.
+                            这个参数的默认值为:false.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>

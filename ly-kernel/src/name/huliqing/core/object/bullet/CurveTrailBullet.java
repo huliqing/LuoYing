@@ -30,7 +30,7 @@ import name.huliqing.core.utils.MathUtils;
  * @author huliqing
  * @param <T>
  */
-public class CurveTrailBullet<T extends BulletData> extends CurveBullet<T> {
+public class CurveTrailBullet<S> extends CurveBullet<S> {
     private final PlayService playService = Factory.get(PlayService.class);
     
     // 拖尾的宽度
@@ -51,7 +51,7 @@ public class CurveTrailBullet<T extends BulletData> extends CurveBullet<T> {
     private final Node surface = new Node();
 
     @Override
-    public void setData(T data) {
+    public void setData(BulletData data) {
         super.setData(data);
         this.mask = data.getAttribute("mask", null);
         this.tex = data.getAttribute("tex", null);
@@ -63,8 +63,9 @@ public class CurveTrailBullet<T extends BulletData> extends CurveBullet<T> {
     }
 
     @Override
-    protected void doInit() {
-        super.doInit();
+    public void initialize() {
+        super.initialize();
+        
         surface.detachAllChildren();
         
         AssetManager am = LY.getAssetManager();
@@ -88,8 +89,8 @@ public class CurveTrailBullet<T extends BulletData> extends CurveBullet<T> {
         Spline spline = getSpline();
         if (spline == null) {
             spline = new Spline();
-            spline.getControlPoints().add(startPoint);
-            spline.addControlPoint(endPoint);
+            spline.getControlPoints().add(data.getStartPoint());
+            spline.addControlPoint(data.getEndPoint());
             spline.setCurveTension(0);
         }
         
@@ -126,7 +127,6 @@ public class CurveTrailBullet<T extends BulletData> extends CurveBullet<T> {
 
     @Override
     protected void doUpdatePosition(float tpf, Vector3f endPos) {
-//        Logger.getLogger(getClass().getName()).log(Level.INFO, "=Interpolation={0}", inter);
         super.doUpdatePosition(tpf, endPos);
 
         float inter = getInterpolation(endPos) - 0.1f;

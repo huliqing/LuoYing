@@ -12,14 +12,14 @@ import name.huliqing.core.data.BulletData;
  * @author huliqing
  * @param <T>
  */
-public class StraightBullet<T extends BulletData> extends AbstractBullet<T> {
+public class StraightBullet<T extends BulletData, S> extends AbstractBullet<T, S> {
 
     private final Vector3f dir = new Vector3f();
     private final Vector3f temp = new Vector3f();
     
     @Override
-    protected void doInit() {
-        super.doInit();
+    public void initialize() {
+        super.initialize();
         updateDir(getCurrentEndPos());
     }
 
@@ -28,7 +28,7 @@ public class StraightBullet<T extends BulletData> extends AbstractBullet<T> {
         if (trace) {
             updateDir(endPos);
         }
-        temp.set(dir).multLocal(baseSpeed * speed * tpf);
+        temp.set(dir).multLocal(baseSpeed * data.getSpeed() * tpf);
         move(temp);
     }
     

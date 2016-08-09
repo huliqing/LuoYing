@@ -24,6 +24,7 @@ public class EffectDataLoader<T extends EffectData> implements DataLoader<T>{
         store.setTracePosition(TraceType.identity(proto.getAttribute("tracePosition", TraceType.no.name())));
         store.setTraceRotation(TraceType.identity(proto.getAttribute("traceRotation", TraceType.no.name())));
         store.setTracePositionType(TracePositionType.identify(proto.getAttribute("tracePositionType", TracePositionType.origin.name())));
+        store.setAutoDetach(proto.getAsBoolean("autoDetach", false));
 
         // 特效的初始位置
         Vector3f initLocation = proto.getAsVector3f("initLocation");

@@ -36,6 +36,8 @@ public class EffectData extends ObjectData {
     
     // 特效的执行速度,注意:这个参数作为动态配置,不开放到xml中进行配置.
     private float speed = 1.0f;
+    
+    private boolean autoDetach;
 
     /**
      * effect的初始位置(localTranslaction), 格式: "x,y,z", 当effect被添加到某个节点下时可以使用该参数来偏移位置，
@@ -146,5 +148,19 @@ public class EffectData extends ObjectData {
         this.useTime = useTime;
     }
 
-    
+    /**
+     * 如果为true,则特效在结束的时候会自动进行清理并从场景中脱离，不需要手动去移除特效。
+     * @param autoDetach 
+     */
+    public void setAutoDetach(boolean autoDetach) {
+        this.autoDetach = autoDetach;
+    }
+
+    /**
+     * 如果为true,则特效在结束的时候会自动进行清理并从场景中脱离，不需要手动去移除特效。
+     * @return 
+     */
+    public boolean isAutoDetach() {
+        return autoDetach;
+    }
 }

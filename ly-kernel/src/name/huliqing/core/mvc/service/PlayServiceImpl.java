@@ -35,6 +35,7 @@ import name.huliqing.core.object.NetworkObject;
 import name.huliqing.core.object.PlayObject;
 import name.huliqing.core.object.anim.Anim;
 import name.huliqing.core.object.bullet.Bullet;
+import name.huliqing.core.object.bullet.BulletManager;
 import name.huliqing.core.object.effect.Effect;
 import name.huliqing.core.object.effect.EffectManager;
 import name.huliqing.core.object.scene.Scene;
@@ -149,8 +150,7 @@ public class PlayServiceImpl implements PlayService {
 
     @Override
     public void addBullet(Bullet bullet) {
-        LY.getPlayState().addObject(bullet.getDisplay(), false);
-        bullet.start();
+        BulletManager.getInstance().addBullet(bullet);
     }
     
     @Override

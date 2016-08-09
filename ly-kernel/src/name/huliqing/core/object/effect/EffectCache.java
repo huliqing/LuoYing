@@ -16,24 +16,23 @@ import name.huliqing.core.loader.Loader;
 import name.huliqing.core.object.IntervalLogic;
 
 /**
- *
  * @author huliqing
  */
 public class EffectCache extends IntervalLogic implements PlayListener {
     private static final Logger LOG = Logger.getLogger(BulletCache.class.getName());
-    private final static EffectCache ins = new EffectCache();
+    private final static EffectCache INSTANCE = new EffectCache();
     
     // 空闲列表
-    private List<Effect> freeStore = new LinkedList<Effect>();
+    private final List<Effect> freeStore = new LinkedList<Effect>();
     // 忙碌的列表,正在运行的子弹
-    private List<Effect> busyStore = new LinkedList<Effect>();
+    private final List<Effect> busyStore = new LinkedList<Effect>();
     
     private EffectCache() {
         super(3); // 频率不用太高
     }
     
     public static EffectCache getInstance() {
-        return ins;
+        return INSTANCE;
     }
     
     public Effect getEffect(String effectId) {
@@ -74,10 +73,7 @@ public class EffectCache extends IntervalLogic implements PlayListener {
         if (!(object instanceof Effect))
             return;
         // 如果场景中添加了bullet，则把它存入busy列表。
-        Effect effect = (Effect) object;
-//        if (!busyStore.contains(effect)) {
-            busyStore.add(effect);
-//        }
+        busyStore.add((Effect) object);
     }
 
     @Override

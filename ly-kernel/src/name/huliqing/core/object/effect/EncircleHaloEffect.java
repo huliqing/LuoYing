@@ -97,8 +97,6 @@ public class EncircleHaloEffect extends AbstractEffect {
         }
         
     }
-    
 
-    
     
 }

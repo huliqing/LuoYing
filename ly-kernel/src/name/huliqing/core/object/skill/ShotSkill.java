@@ -19,8 +19,6 @@ import name.huliqing.core.mvc.service.StateService;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.bullet.Bullet;
 import name.huliqing.core.object.bullet.BulletListener;
-import name.huliqing.core.object.skill.HitSkill;
-import name.huliqing.core.object.skill.PointChecker;
 import name.huliqing.core.utils.ConvertUtils;
 import name.huliqing.core.utils.MathUtils;
 
@@ -199,16 +197,23 @@ public class ShotSkill<T extends SkillData> extends HitSkill<T> {
         String bullet = getShotBullet();
         Vector3f offset = getShotOffset();
         
+        // remove20160809
+//        Vector3f startPoint = bb.getStartPoint().set(offset);
+//        bb.setPath(convertToWorldPos(startPoint), getShotEndPoint(mainTarget));
+//        bb.setSpeed(shotSpeed);
+    
+        Vector3f startPoint = new Vector3f(offset);
         Bullet bb = bulletService.loadBullet(bullet);
-        Vector3f startPoint = bb.getStartPoint().set(offset);
-        bb.setPath(convertToWorldPos(startPoint), getShotEndPoint(mainTarget));
-        bb.setSpeed(shotSpeed);
+        bb.getData().setStartPoint(convertToWorldPos(startPoint));
+        bb.getData().setEndPoint(getShotEndPoint(mainTarget));
+        bb.getData().setSpeed(shotSpeed);
+        
         bb.addListener(new BulletListener() {
             @Override
             public boolean hitCheck(Bullet bullet) {
                 if (shotHitCheck(bullet, mainTarget)) {
                     // 击中后结束子弹运行。
-                    bullet.doEnd();
+                    bullet.consume();
                     return true;
                 }
                 return false;

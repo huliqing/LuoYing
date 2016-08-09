@@ -5,100 +5,133 @@
 package name.huliqing.core.object.bullet;
 
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import name.huliqing.core.data.BulletData;
 import name.huliqing.core.xml.DataProcessor;
 
 /**
- *
  * @author huliqing
  * @param <T>
+ * @param <S> 发射子弹的源
  */
-public interface Bullet<T extends BulletData> extends DataProcessor<T> {
+public abstract class Bullet<T extends BulletData, S> extends Node implements DataProcessor<T> {
+    
+    protected T data;
     
     /**
-     * 设置开始点和精确的结束点,结束点可以是一个静态点或者是一个动态引用，
-     * 对于跟踪类型的子弹来说，end点必须是一个动态引用，否则跟踪就无意义。
-     * 当子弹的碰撞shape到达end点时即视为击中，即碰撞shape与end点交叉即视为击中。
-     * @param startPoint
-     * @param endPoint 
+     * 发射子弹的目标源,可能是一个角色，也可能是其它
      */
-    void setPath(Vector3f startPoint, Vector3f endPoint);
+    protected S source;
     
-    Vector3f getStartPoint();
-    
-    Vector3f getEndPoint();
+    protected boolean initialized;
     
     /**
-     * 设置子弹速度倍率，默认1.0, 子弹的速度会在每次结束时重置为1.0.
-     * @param speed 
+     * 标记子弹是否已经耗尽。
      */
-    void setSpeed(float speed);
-    
-    /**
-     * 获取子弹速度倍率.
-     * @return 
-     */
-    float getSpeed();
+    protected boolean consumed;
+
+    @Override
+    public void setData(T data) {
+        this.data = data;
+    }
+
+    @Override
+    public T getData() {
+        return data;
+    }
     
     /**
      * 开始运行子弹
      */
-    void start();
+    public void initialize() {
+        initialized = true;
+        consumed = false;
+    }
     
-    /**
-     * 更新逻辑
-     * @param tpf 
-     */
-    void update(float tpf);
-    
-    /**
-     * 判断子弹是否运行结束
-     * @return 
-     */
-    boolean isEnd();
-    
-    /**
-     * 结束子弹运行。
-     */
-    void doEnd();
-    
+    public boolean isInitialized() {
+        return initialized;
+    }
+        
+    @Override
+    public final void updateLogicalState(float tpf) {
+        if (!isInitialized() || isConsumed()) {
+            return;
+        }
+        bulletUpdate(tpf);
+    }
+
     /**
      * 结束子弹并清理和释放资源
      */
-    void cleanup();
+    public void cleanup() {
+        initialized = false;
+    }
     
     /**
-     * 获取子弹实体,用于添加到场景中。
+     * 标记子弹已经完成使命，调用这个方法之后，子弹的逻辑将不会再执行，等着被清理、回收的节奏。
+     * 一般来说，子弹在击中目标后会自动耗尽，不需要调用这个方法来清理。只有在一些特殊情况下，
+     * 应用需要手动结束当前正在运行的子弹时才需要调用这个方法。
+     */
+    public void consume() {
+        consumed = true;
+    }
+    
+    /**
+     * 判断子弹是否已经消耗完，完成子弹的使命。
      * @return 
      */
-    Spatial getDisplay();
+    public boolean isConsumed() {
+        return consumed;
+    }
     
     /**
-     * 判断是否击中目标
+     * 获取发射该子弹的源，比如一个角色？或是一个未知的存在？
+     * @return 
+     */
+    public S getSource() {
+        return source;
+    }
+    
+    /**
+     * 设置发射子弹的源
+     * @param source 
+     */
+    public void setSource(S source) {
+        this.source = source;
+    }
+    
+    /**
+     * 更新子弹逻辑
+     * @param tpf 
+     */
+    protected abstract void bulletUpdate(float tpf);
+    
+    /**
+     * 判断当前子弹是否击中目标
      * @param target
      * @return 
      */
-    boolean isHit(Spatial target);
+    public abstract boolean isHit(Spatial target);
     
     /**
-     * 是否击中目标点
+     * 判断当前子弹是否击中目标点。
      * @param target
      * @return 
      */
-    boolean isHit(Vector3f target);
+    public abstract boolean isHit(Vector3f target);
     
     /**
      * 添加一个子弹侦听器,该侦听器会在结束后清理。
      * @param listener 
      */
-    void addListener(BulletListener listener);
+    public abstract void addListener(BulletListener listener);
     
     /**
      * 删除子弹侦听器
      * @param listener
      * @return 
      */
-    boolean removeListener(BulletListener listener);
+    public abstract boolean removeListener(BulletListener listener);
     
 }

@@ -87,6 +87,9 @@ public class MoveSpeedState extends AttributeState {
             EffectManager.getInstance().addEffect(moveEffect);
         }
         if (moveEffect != null) {
+            if (moveEffect.isEnd()) {
+                moveEffect.initialize();
+            }
             moveEffect.setCullHint(Spatial.CullHint.Never);
         }
     }

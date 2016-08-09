@@ -41,8 +41,12 @@ public class GroupEffect extends AbstractEffect {
     @Override
     public void initialize() {
         super.initialize();
-
+        
         if (effects != null) {
+            
+            // 注：GroupEffect的时间是由子效果的时间决定的。
+            trueTimeTotal = Float.MAX_VALUE;
+            
             for (int i = 0; i < effects.size(); i++) {
                 EffectWrap ew = effects.get(i);
                 ew.trueStartTime = ew.startTime / data.getSpeed();
@@ -66,7 +70,7 @@ public class GroupEffect extends AbstractEffect {
                 }
             }
             if (countEnd >= effects.size()) {
-                super.doEndEffect();
+                doEffectEnd();
             }
             return;
         }
@@ -111,12 +115,6 @@ public class GroupEffect extends AbstractEffect {
         endCheck = false;
         super.cleanup(); 
     }
-
-    @Override
-    protected final void doEndEffect() {
-        // GroupEffect的效果不能直接结束,因为所有子效果是依赖于当前GroupEffect的，必须等待所有子效果都结束之后才可以
-        // 结束当前效果组
-    }
     
     private class EffectWrap {
         // 效果id,这是在xml上的原始设置
@@ -135,18 +133,18 @@ public class GroupEffect extends AbstractEffect {
             if (effectTimeUsed >= trueStartTime) {
                 if (effect == null) {
                     effect = Loader.loadEffect(effectId);
-                }
-                // 注意：子效果是直接放在GroupEffect下的，不要放在EffectManager中，
-                // 这会依赖EffectManger,导致GroupEffect不能放在其它Node节点下, 
-                // 所有类型的Effect都应该是可以单独放在任何Node下进行运行的。
-                
-                // 把子效果的跟踪目标设置为animRoot，这样当GroupEffect添加了动画控制时，可以同时影响到子效果的变换。
-                animRoot.attachChild(effect);
-                // 与group保持一致的速度,这样当设置GroupEffect的速度的时候可以同时影响子效果的速度
-                effect.getData().setSpeed(data.getSpeed());
-                
+                    // 注意：子效果是直接放在GroupEffect下的，不要放在EffectManager中，
+                    // 这会依赖EffectManger,导致GroupEffect不能放在其它Node节点下, 
+                    // 所有类型的Effect都应该是可以单独放在任何Node下进行运行的。
+                    // 把子效果的跟踪目标设置为animRoot，这样当GroupEffect添加了动画控制时，可以同时影响到子效果的变换。
+                    animRoot.attachChild(effect);
+                    
 //                // 不要再设置子效果的跟随
 //                effect.setTraceObject(animRoot);
+                }
+                
+                // 与group保持一致的速度,这样当设置GroupEffect的速度的时候可以同时影响子效果的速度
+                effect.getData().setSpeed(data.getSpeed());
 
                 // 记得在所有设置完毕后才调用initialize,因为子效果是由GroupEffect特别管理的，这里隔离了与EffectManager的关
                 // 系，initialize也可以交由效果内部调用，但是会慢一帧, 这会造成一些视角稍微滞后。
