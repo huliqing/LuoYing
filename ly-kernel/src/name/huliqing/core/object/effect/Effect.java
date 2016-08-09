@@ -58,6 +58,14 @@ public abstract class Effect<T extends EffectData> extends Node implements DataP
         return initialized;
     }
     
+    @Override
+    public final void updateLogicalState(float tpf) {
+        if (!isInitialized()) {
+            return;
+        }
+        effectUpdate(tpf);
+    }
+    
     /**
      * 清理效果数据.
      */
@@ -66,17 +74,17 @@ public abstract class Effect<T extends EffectData> extends Node implements DataP
     }
     
     /**
+     * 判断特效是否已经结束，如果该方法返回true,则特效逻辑将不再执行。
+     * @return 
+     */
+    public abstract boolean isEnd();
+    
+    /**
      * 请求结束特效，一般情况下不要直接结束特效（如：cleanup)，因为一些特效如果直接结束会非常不自然和难看，
      * 所以在调用特效，并希望结束一个特效时应该使用这个方法来请求结束一个特效，
      * 而具体是否结束或者如何结束一个特效由具体的子类去实现. 
      */
     public abstract void requestEnd();
-    
-    /**
-     * 判断效果是否已经结束
-     * @return 
-     */
-    public abstract boolean isEnd();
     
     /**
      * 设置特效要跟随的目标对象，当设置了这个目标之后，特效在运行时可以跟随这个目标的"位置","朝向”等，视实现类的情况而定。
@@ -103,5 +111,11 @@ public abstract class Effect<T extends EffectData> extends Node implements DataP
      * @return  如果成功移除了特效则返回true,否则false.
      */
     public abstract boolean removeListener(EffectListener listener);
+    
+    /**
+     * 更新特效逻辑
+     * @param tpf 
+     */
+    protected abstract void effectUpdate(float tpf);
     
 }

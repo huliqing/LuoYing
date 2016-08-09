@@ -21,6 +21,8 @@ public class GroupEffect extends AbstractEffect {
     // 当该参数为true时需要检查并结束当前效果,并且不再启动新的子效果。
     private boolean endCheck;
     
+    private boolean end;
+    
     @Override
     public void setData(EffectData data) {
         super.setData(data);
@@ -41,12 +43,9 @@ public class GroupEffect extends AbstractEffect {
     @Override
     public void initialize() {
         super.initialize();
+        end = false;
         
         if (effects != null) {
-            
-            // 注：GroupEffect的时间是由子效果的时间决定的。
-            trueTimeTotal = Float.MAX_VALUE;
-            
             for (int i = 0; i < effects.size(); i++) {
                 EffectWrap ew = effects.get(i);
                 ew.trueStartTime = ew.startTime / data.getSpeed();
@@ -69,9 +68,8 @@ public class GroupEffect extends AbstractEffect {
                     countEnd++;
                 }
             }
-            if (countEnd >= effects.size()) {
-                doEffectEnd();
-            }
+            // 结束当前所有特效
+            end = countEnd >= effects.size();
             return;
         }
         
@@ -86,7 +84,12 @@ public class GroupEffect extends AbstractEffect {
         
         // 当所有子效果启动后开始检查是否可以结束当前效果。
         endCheck = countStarted >= effects.size();
-        
+    }
+
+    @Override
+    protected boolean checkForEnd() {
+        // GroupEffect的结束时间不依赖于设置，而依赖于所有子特效是否结束。
+        return end;
     }
 
     @Override
@@ -102,7 +105,6 @@ public class GroupEffect extends AbstractEffect {
         
         // 标记endCheck,这可以让哪些还未开始执行的子效果不再检查是否要需要执行。
         endCheck = true;
-        
     }
 
     @Override

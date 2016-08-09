@@ -62,7 +62,6 @@ public abstract class AbstractEffect extends Effect {
      */
     protected List<EffectListener> listeners;
 
-    
     @Override
     public void setData(EffectData data) {
         super.setData(data);
@@ -92,14 +91,6 @@ public abstract class AbstractEffect extends Effect {
             }
         }
     }
-        
-    @Override
-    public final void updateLogicalState(float tpf) {
-        if (!isInitialized()) {
-            return;
-        }
-        effectUpdate(tpf);
-    }
     
     /**
      * 初始化特效，该方法的调用分以下三种情况：<br>
@@ -109,7 +100,8 @@ public abstract class AbstractEffect extends Effect {
      */
     @Override
     public void initialize() {
-        super.initialize(); 
+        super.initialize();
+        
         trueTimeTotal = data.getUseTime() / data.getSpeed();
         trueTimeUsed = 0;
         
@@ -157,6 +149,7 @@ public abstract class AbstractEffect extends Effect {
      * 更新效果逻辑
      * @param tpf 
      */
+    @Override
     protected void effectUpdate(float tpf) {
         trueTimeUsed += tpf;
         
@@ -176,10 +169,65 @@ public abstract class AbstractEffect extends Effect {
         // update Animations
         updateAnimations(tpf, trueTimeUsed);
         
-        // 特效结束
-        if (trueTimeUsed >= trueTimeTotal) {
-            doEffectEnd();
+        // 检查是否需要结束特效
+        if (checkForEnd()) {
+            
+            // 执行特效结束侦听器
+            if (listeners != null) {
+                for (int i = 0; i < listeners.size(); i++) {
+                    listeners.get(i).onEffectEnd(this);
+                }
+            }
+            
+            // 清理特效
+            cleanup();
+            
+            // 如果特效设置了自动脱离场景则移除。
+            if (data.isAutoDetach()) {
+                removeFromParent();
+            }
         }
+    }
+    
+    /**
+     * 检查是否需要结束特效，这个方法会在运行时持续调用，来检查是否应该结束特效，如果该方法返回true,
+     * 则特效将会立即被结束。
+     * 默认情况下该方法根据特效的已运行时间是否到达设置的特效时间允许运行的时间来判断是否应该结束特效。
+     * 子类可以覆盖这个方法来实现自定义的特效结束方式。
+     * @return 
+     */
+    protected boolean checkForEnd() {
+        return trueTimeUsed >= trueTimeTotal;
+    }
+    
+    @Override
+    public void cleanup() {
+         if (sounds != null) {
+            for (int i = 0; i < sounds.size(); i++) {
+                sounds.get(i).cleanup();
+            }
+        }
+        
+        if (animations != null) {
+            for (int i = 0; i < animations.size(); i++) {
+                animations.get(i).cleanup();
+            }
+        }
+        
+        // 重置效果时间
+        trueTimeUsed = 0;
+
+        super.cleanup(); 
+    }
+    
+    @Override
+    public boolean isEnd() {
+        return !initialized;
+    }
+    
+    @Override
+    public void requestEnd() {
+        // 由特定子类实现
     }
 
     /**
@@ -204,56 +252,6 @@ public abstract class AbstractEffect extends Effect {
                 sounds.get(i).update(tpf, trueTimeUsed);
             }
         }
-    }
-
-    /**
-     * 让特效直接结束，这个方法会在特效结束时自动执行，也可以由子类进行调用以强制结束特效,
-     * 该方法主要执行以下操作。<br>
-     * 1.执行特效相关的帧听器，以通知特效结束。<br>
-     * 2.进行清理，清理并释放特效产生的资源占用。<br>
-     * 3.如果特效设置了autoDetach,则特效将自动从场景中脱离。<br>
-     */
-    protected void doEffectEnd() {
-        if (listeners != null) {
-            for (int i = 0; i < listeners.size(); i++) {
-                listeners.get(i).onEffectEnd(this);
-            }
-        }
-        cleanup();
-        
-        if (data.isAutoDetach()) {
-            removeFromParent();
-        }
-    }
-
-    @Override
-    public boolean isEnd() {
-        return !isInitialized();
-    }
-    
-    @Override
-    public void cleanup() {
-         if (sounds != null) {
-            for (int i = 0; i < sounds.size(); i++) {
-                sounds.get(i).cleanup();
-            }
-        }
-        
-        if (animations != null) {
-            for (int i = 0; i < animations.size(); i++) {
-                animations.get(i).cleanup();
-            }
-        }
-        
-        // 重置效果时间
-        trueTimeUsed = 0;
-
-        super.cleanup(); 
-    }
-    
-    @Override
-    public void requestEnd() {
-        // 由特定子类实现
     }
     
     private void doUpdateTracePosition() {
