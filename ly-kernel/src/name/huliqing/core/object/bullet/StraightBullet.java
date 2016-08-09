@@ -5,14 +5,13 @@
 package name.huliqing.core.object.bullet;
 
 import com.jme3.math.Vector3f;
-import name.huliqing.core.data.BulletData;
 
 /**
  * 直线型子弹
  * @author huliqing
- * @param <T>
+ * @param <S>
  */
-public class StraightBullet<T extends BulletData, S> extends AbstractBullet<T, S> {
+public class StraightBullet<S> extends AbstractBullet<S> {
 
     private final Vector3f dir = new Vector3f();
     private final Vector3f temp = new Vector3f();

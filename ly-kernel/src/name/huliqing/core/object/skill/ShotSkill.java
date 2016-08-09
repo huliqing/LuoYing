@@ -18,7 +18,7 @@ import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.StateService;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.bullet.Bullet;
-import name.huliqing.core.object.bullet.BulletListener;
+import name.huliqing.core.object.bullet.Bullet.Listener;
 import name.huliqing.core.utils.ConvertUtils;
 import name.huliqing.core.utils.MathUtils;
 
@@ -196,11 +196,6 @@ public class ShotSkill<T extends SkillData> extends HitSkill<T> {
         // 在所有可用的Offset设置中轮循
         String bullet = getShotBullet();
         Vector3f offset = getShotOffset();
-        
-        // remove20160809
-//        Vector3f startPoint = bb.getStartPoint().set(offset);
-//        bb.setPath(convertToWorldPos(startPoint), getShotEndPoint(mainTarget));
-//        bb.setSpeed(shotSpeed);
     
         Vector3f startPoint = new Vector3f(offset);
         Bullet bb = bulletService.loadBullet(bullet);
@@ -208,10 +203,10 @@ public class ShotSkill<T extends SkillData> extends HitSkill<T> {
         bb.getData().setEndPoint(getShotEndPoint(mainTarget));
         bb.getData().setSpeed(shotSpeed);
         
-        bb.addListener(new BulletListener() {
+        bb.addListener(new Listener() {
             @Override
-            public boolean hitCheck(Bullet bullet) {
-                if (shotHitCheck(bullet, mainTarget)) {
+            public boolean onBulletFlying(Bullet bullet) {
+                 if (shotHitCheck(bullet, mainTarget)) {
                     // 击中后结束子弹运行。
                     bullet.consume();
                     return true;

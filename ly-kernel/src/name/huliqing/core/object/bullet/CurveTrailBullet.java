@@ -28,7 +28,7 @@ import name.huliqing.core.utils.MathUtils;
 /**
  *
  * @author huliqing
- * @param <T>
+ * @param <S>
  */
 public class CurveTrailBullet<S> extends CurveBullet<S> {
     private final PlayService playService = Factory.get(PlayService.class);

@@ -21,10 +21,9 @@ import name.huliqing.core.object.shape.Shape;
 /**
  * 子弹基类
  * @author huliqing
- * @param <T>
  * @param <S>
  */
-public abstract class AbstractBullet<T extends BulletData, S> extends Bullet<T, S> {
+public abstract class AbstractBullet<S> extends Bullet<BulletData, S> {
     private static final Logger LOG = Logger.getLogger(AbstractBullet.class.getName());
     
     // 调试
@@ -48,10 +47,6 @@ public abstract class AbstractBullet<T extends BulletData, S> extends Bullet<T, 
     protected String[] hitSounds;
     
     // ---- inner
-
-    // 速度倍率,默认1.0，该参数不开放到xml中，主要作为动态加乘的参数使用.
-    // 每次使用过后都重置为1.0
-//    protected float speed = 1.0f;
     
     // 实际的结束点
     private final Vector3f trueEndPoint = new Vector3f();
@@ -59,14 +54,15 @@ public abstract class AbstractBullet<T extends BulletData, S> extends Bullet<T, 
     // 当前已经使用的时间。
     protected float timeUsed;
     
+    protected Geometry hitChecker;
+    
     // ---- inner
     
     // 这些是添加在子弹上的特效。
     private List<Effect> effects;
-    protected List<BulletListener> listeners;
     
     @Override
-    public void setData(T data) {
+    public void setData(BulletData data) {
         this.data = data;
         this.debug = data.getAsBoolean("debug", debug);
         this.shape = Loader.loadShape(data.getAttribute("shape"));
@@ -80,14 +76,16 @@ public abstract class AbstractBullet<T extends BulletData, S> extends Bullet<T, 
         this.hitSounds = data.getAsArray("hitSounds");
         
         // 用于碰撞
-        Geometry geo = shape.getGeometry();
-        geo.setCullHint(debug ? CullHint.Never : CullHint.Always);
-        attachChild(geo);
+        if (hitChecker == null) {
+            hitChecker = shape.getGeometry();
+            hitChecker.setCullHint(debug ? CullHint.Never : CullHint.Always);
+        }
+        attachChild(hitChecker);
         
         // shape的位置偏移
         Vector3f shapeOffset = data.getAsVector3f("shapeOffset");
         if (shapeOffset != null) {
-            geo.setLocalTranslation(shapeOffset);
+            hitChecker.setLocalTranslation(shapeOffset);
         }
         
     }
@@ -123,7 +121,7 @@ public abstract class AbstractBullet<T extends BulletData, S> extends Bullet<T, 
     /**
      * 给子弹添加上特效
      */
-    protected void playEffects() {
+    private void playEffects() {
         // 载入特效
         if (effects == null && effectIds != null) {
             effects = new ArrayList<Effect>(effectIds.length);
@@ -143,28 +141,10 @@ public abstract class AbstractBullet<T extends BulletData, S> extends Bullet<T, 
         }
     }
     
-    protected void playHitEffects() {
-        if (hitEffects == null)
-            return;
-        for (String eid : hitEffects) {
-            Effect effect = EffectManager.getInstance().loadEffect(eid);
-            effect.getData().setInitLocation(getWorldTranslation());
-            EffectManager.getInstance().addEffect(effect);
-        }
-    }
-    
-    protected void playSounds() {
+    private void playSounds() {
         if (sounds == null)
             return;
         for (String sid : sounds) {
-            SoundManager.getInstance().playSound(sid, getWorldTranslation());
-        }
-    }
-    
-    protected void playHitSounds() {
-        if (hitSounds == null)
-            return;
-        for (String sid : hitSounds) {
             SoundManager.getInstance().playSound(sid, getWorldTranslation());
         }
     }
@@ -176,26 +156,9 @@ public abstract class AbstractBullet<T extends BulletData, S> extends Bullet<T, 
         getCurrentEndPos();
         doUpdatePosition(tpf, trueEndPoint);
         
-        // 执行帧听器，通过帧听器来干预子弹的“判断“，如果帧听器hitCheck(this)返回true则说明子弹击中了一个目标，
-        // 则执行hit效果和声音
-        if (listeners != null) {
-            for (int i = 0; i < listeners.size(); i++) {
-                if (listeners.get(i).hitCheck(this)) {
-                    playHitEffects();
-                    playHitSounds();
-                }
-            }
-            // 在listeners的hitCheck内部可能会调用consume()方法来结束子弹，当listeners执行完后如果isConsumed()为true,
-            // 则说明子弹应该立即结束逻辑，不希望再执行后面的击中判断。
-            if (isConsumed()) {
-                return;
-            }
-        }
-        
         // 击中目标结束
         if (isHit(trueEndPoint)) {
-            playHitEffects();
-            playHitSounds();
+            onFiredTaget();
             consume();
         }
         
@@ -221,38 +184,30 @@ public abstract class AbstractBullet<T extends BulletData, S> extends Bullet<T, 
     public boolean isHit(Spatial target) {
         BoundingVolume bv = target.getWorldBound();
         if (bv != null) {
-            return shape.getGeometry().getWorldBound().intersects(bv);
+            return hitChecker.getWorldBound().intersects(bv);
         }
-        return shape.getGeometry().getWorldBound().contains(target.getWorldTranslation());
+        return hitChecker.getWorldBound().contains(target.getWorldTranslation());
     }
 
     @Override
     public boolean isHit(Vector3f target) {
-        return shape.getGeometry().getWorldBound().contains(target);
+        return hitChecker.getWorldBound().contains(target);
     }
-    
-    /**
-     * 添加一个子弹侦听器,该侦听器会在结束后清理。
-     * @param listener 
-     */
+
     @Override
-    public void addListener(BulletListener listener) {
-        if (listeners == null) {
-            listeners = new ArrayList<BulletListener>(1);
+    protected void onFiredTaget() {
+        if (hitEffects != null) {
+            for (String eid : hitEffects) {
+                Effect effect = EffectManager.getInstance().loadEffect(eid);
+                effect.getData().setInitLocation(getWorldTranslation());
+                EffectManager.getInstance().addEffect(effect);
+            }            
         }
-        if (!listeners.contains(listener)) {
-            listeners.add(listener);
+        if (hitSounds != null) {
+            for (String sid : hitSounds) {
+                SoundManager.getInstance().playSound(sid, getWorldTranslation());
+            }
         }
-    }
-    
-    /**
-     * 删除子弹侦听器
-     * @param listener
-     * @return 
-     */
-    @Override
-    public boolean removeListener(BulletListener listener) {
-        return listeners != null && listeners.remove(listener);
     }
     
     /**
@@ -261,5 +216,7 @@ public abstract class AbstractBullet<T extends BulletData, S> extends Bullet<T, 
      * @param endPos 当前实时的结束目标的位置,当子弹是跟踪类型的，并且
      */
     protected abstract void doUpdatePosition(float tpf, Vector3f endPos);
+    
+    
     
 }

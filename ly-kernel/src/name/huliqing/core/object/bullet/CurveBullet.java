@@ -20,7 +20,7 @@ import name.huliqing.core.object.position.Position;
  * @author huliqing
  * @param <S>
  */
-public class CurveBullet<S> extends StraightBullet<BulletData, S> {
+public class CurveBullet<S> extends StraightBullet<S> {
     
     // 曲线张力
     private float tension = 0.5f;
