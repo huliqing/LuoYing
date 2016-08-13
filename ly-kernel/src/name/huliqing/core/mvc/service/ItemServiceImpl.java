@@ -13,9 +13,9 @@ import name.huliqing.core.data.SkinData;
 import name.huliqing.core.enums.MessageType;
 import name.huliqing.core.mvc.dao.ItemDao;
 import name.huliqing.core.manager.ResourceManager;
-import name.huliqing.core.manager.SoundManager;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actor.ItemListener;
+import name.huliqing.core.object.sound.SoundManager;
 
 /**
  *

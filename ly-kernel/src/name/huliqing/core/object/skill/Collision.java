@@ -16,9 +16,9 @@ import name.huliqing.core.enums.Mat;
 import name.huliqing.core.mvc.service.EffectService;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.SkinService;
-import name.huliqing.core.manager.SoundManager;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.effect.AbstractEffect;
+import name.huliqing.core.object.sound.SoundManager;
 
 /**
  * 处理技能的碰撞效果

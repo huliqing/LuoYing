@@ -20,11 +20,11 @@ import name.huliqing.core.mvc.service.ElService;
 import name.huliqing.core.mvc.service.MagicService;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.loader.Loader;
-import name.huliqing.core.manager.SoundManager;
 import name.huliqing.core.object.actoranim.ActorAnim;
 import name.huliqing.core.object.channel.ChannelProcessor;
 import name.huliqing.core.object.effect.Effect;
 import name.huliqing.core.object.magic.Magic;
+import name.huliqing.core.object.sound.SoundManager;
 import name.huliqing.core.utils.ConvertUtils;
 import name.huliqing.core.utils.MathUtils;
 

@@ -20,8 +20,8 @@ import name.huliqing.core.mvc.service.EffectService;
 import name.huliqing.core.mvc.service.ItemService;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.manager.ResourceManager;
-import name.huliqing.core.manager.SoundManager;
 import name.huliqing.core.object.effect.Effect;
+import name.huliqing.core.object.sound.SoundManager;
 
 /**
  * 基本Handler类

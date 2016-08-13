@@ -7,7 +7,7 @@ package name.huliqing.core.object.sound;
 
 import com.jme3.audio.AudioData;
 import com.jme3.audio.AudioNode;
-import com.jme3.math.Vector3f;
+import com.jme3.scene.Node;
 import name.huliqing.core.LY;
 import name.huliqing.core.data.SoundData;
 import name.huliqing.core.xml.DataProcessor;
@@ -16,7 +16,7 @@ import name.huliqing.core.xml.DataProcessor;
  * @author huliqing
  * @param <T>
  */
-public class Sound<T extends SoundData> implements DataProcessor<T> {
+public class Sound<T extends SoundData> extends Node implements DataProcessor<T> {
 
     protected T data;
     
@@ -55,41 +55,44 @@ public class Sound<T extends SoundData> implements DataProcessor<T> {
         audio.stop();
     }
     
-    /**
-     * 判断声音是否为循环的
-     * @return 
-     */
     public boolean isLoop() {
-        return data.isLoop();
+        return audio.isLooping();
     }
     
     /**
-     * 设置声音位置
-     * @param position 
+     * 设置声音循环
+     * @param loop
      */
-    public void setPosition(Vector3f position) {
-        audio.setLocalTranslation(position);
+    public void setLoop(boolean loop) {
+        audio.setLooping(loop);
+    }
+    
+    public AudioNode getAudio() {
+        return audio;
     }
     
     private AudioNode loadAudio() {
         AudioNode an = new AudioNode(LY.getAssetManager(), data.getSoundFile(), AudioData.DataType.Buffer);
         an.setVolume(data.getVolume());
-        an.setTimeOffset(data.getOffset());
-        an.setLooping(data.isLoop());
+        an.setTimeOffset(data.getTimeOffset());
+        an.setLooping(data.isLooping());
+        an.setDirection(data.getDirection());
+        an.setDirectional(data.isDirectional());
+        an.setInnerAngle(data.getInnerAngle());
+        an.setMaxDistance(data.getMaxDistance());
+        an.setOuterAngle(data.getOuterAngle());
+        an.setPitch(data.getPitch());
         
-        an.setDirection(data.getAsVector3f("direction", an.getDirection()));
-        an.setDirectional(data.getAsBoolean("directional", an.isDirectional()));
+        // 容易java.lang.IllegalStateException: Only mono audio is supported for positional audio nodes
+        an.setPositional(data.isPositional());
+        
+        an.setRefDistance(data.getRefDistance());
+        an.setReverbEnabled(data.isReverbEnabled());
+        an.setVelocity(data.getVelocity());
+        an.setVelocityFromTranslation(data.isVelocityFromTranslation());
+        
 //        audio.setDryFilter(); // 使用反射，由class创建dryFilter，暂不支持。
-        an.setInnerAngle(data.getAsFloat("innerAngle", an.getInnerAngle()));
-        an.setMaxDistance(data.getAsFloat("maxDistance", an.getMaxDistance()));
-        an.setOuterAngle(data.getAsFloat("outerAngle", an.getOuterAngle()));
-        an.setPitch(data.getAsFloat("pitch", an.getPitch()));
-        an.setPositional(data.getAsBoolean("positional", false)); // 容易java.lang.IllegalStateException: Only mono audio is supported for positional audio nodes
-        an.setRefDistance(data.getAsFloat("refDistance", an.getRefDistance()));
-        an.setReverbEnabled(data.getAsBoolean("reverbEnabled", an.isReverbEnabled()));
 //        audio.setReverbFilter();
-        an.setVelocity(data.getAsVector3f("velocity", an.getVelocity()));
-        an.setVelocityFromTranslation(data.getAsBoolean("velocityFromTranslation", an.isVelocityFromTranslation()));
         return an;
     }
 }

@@ -13,10 +13,10 @@ import java.util.List;
 import java.util.logging.Logger;
 import name.huliqing.core.data.BulletData;
 import name.huliqing.core.loader.Loader;
-import name.huliqing.core.manager.SoundManager;
 import name.huliqing.core.object.effect.Effect;
 import name.huliqing.core.object.effect.EffectManager;
 import name.huliqing.core.object.shape.Shape;
+import name.huliqing.core.object.sound.SoundManager;
 
 /**
  * 子弹基类

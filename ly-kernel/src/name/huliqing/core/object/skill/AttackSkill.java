@@ -8,7 +8,6 @@ import com.jme3.math.Vector3f;
 import com.jme3.util.TempVars;
 import java.util.List;
 import name.huliqing.core.Factory;
-import name.huliqing.core.manager.SoundManager;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.SkillData;
@@ -18,8 +17,7 @@ import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.SkinService;
 import name.huliqing.core.mvc.service.StateService;
-import name.huliqing.core.object.skill.HitSkill;
-import name.huliqing.core.object.skill.PointChecker;
+import name.huliqing.core.object.sound.SoundManager;
 
 /**
  * 普通攻击技能,会根据damagePoint计算任害值等.主要用于近战类攻击

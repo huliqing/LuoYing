@@ -17,10 +17,7 @@ public class SoundDataLoader implements DataLoader<SoundData> {
 
     @Override
     public void load(Proto proto, SoundData data) {
-        data.setVolume(proto.getAsFloat("volume", 1.0f));
-        data.setOffset(proto.getAsFloat("offset", 0));
-        data.setLoop(proto.getAsBoolean("loop", false));
-        data.setInstance(proto.getAsBoolean("instance", false));
+        // ignore
     }
     
 }

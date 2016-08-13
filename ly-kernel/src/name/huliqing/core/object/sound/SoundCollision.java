@@ -11,7 +11,6 @@ import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.SoundData;
 import name.huliqing.core.data.define.MatObject;
 import name.huliqing.core.enums.Mat;
-import name.huliqing.core.manager.SoundManager;
 import name.huliqing.core.xml.DataFactory;
 
 /**
@@ -61,7 +60,7 @@ public class SoundCollision {
         }
         for (Collision sc : soundCollisions) {
             if (sc.checkCound(mat1, mat2)) {
-                SoundManager.getInstance().playSound(sc.getSound(), position);
+                SoundManagerOutdate.getInstance().playSound(sc.getSound(), position);
                 return;
             }
         }

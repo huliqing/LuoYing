@@ -5,15 +5,18 @@
  */
 package name.huliqing.core.object.sound;
 
+import com.jme3.math.Vector3f;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import name.huliqing.core.data.ObjectData;
+import name.huliqing.core.enums.Mat;
 
 /**
  * 用于统一管理声音的管理器
  * @author huliqing
  */
-public class SoundManager  {
+public class SoundManager {
     
     private final static SoundManager INSTANCE = new SoundManager();
     
@@ -29,10 +32,52 @@ public class SoundManager  {
     }
     
     /**
-     * 添加声音到列表中并立即播放，该方法会立即播放声音。让得当声音不再使用时要将声音从列表中移除。
+     * 简单播放声效，非循环。
+     * @param soundId 声效ID
+     * @param position 声源位置
+     */
+    public void playSound(String soundId, Vector3f position) {
+        if (!soundEnabled) return;
+        SoundManagerOutdate.getInstance().playSound(soundId, position);
+    }
+    
+    /**
+     * 简单播放物体碰撞声音，非循环
+     * @param obj1
+     * @param obj2 
+     * @param position 
+     */
+    public void playCollision(ObjectData obj1, ObjectData obj2, Vector3f position) {
+        if (!soundEnabled) return;
+        SoundManagerOutdate.getInstance().playCollision(obj1, obj2, position);
+    }
+    
+    /**
+     * 简单播放物体碰撞声音，非循环
+     * @param mat1
+     * @param mat2
+     * @param position 
+     */
+    public void playCollision(Mat mat1, Mat mat2, Vector3f position) {
+        if (!soundEnabled) return;
+        SoundManagerOutdate.getInstance().playCollision(mat1, mat2, position);
+    }
+    
+    /**
+     * 简单播放获得物品时的声效，非循环
+     * @param objectId
+     * @param position
+     */
+    public void playGetItemSound(String objectId, Vector3f position) {
+        if (!soundEnabled) return;
+        SoundManagerOutdate.getInstance().playGetItemSound(objectId, position);
+    }
+    
+    /**
+     * 添加声音到列表中并立即播放，该方法会立即播放声音。当声音不再使用时要将声音从列表中移除。
      * @param sound 
      */
-    public void addSound(Sound sound) {
+    public void addAndPlay(Sound sound) {
         // 如果全局声音未打开，则只要将“循环”类型的声音添加到列表即可，不需要执行播放，而”非循环“的声音直接丢弃，不
         // 需要播放也不需要添加到列表中。
         if (!soundEnabled) {
@@ -46,21 +91,25 @@ public class SoundManager  {
     }
     
     /**
-     * 将声音移出列表
+     * 停止声音循环，并将声音移除出列表，这样可以让声音自然停止。
      * @param sound 
      * @return  
+     * @see #removeAndStopDirectly(Sound) 
      */
-    public boolean removeSound(Sound sound) {
+    public boolean removeAndStopLoop(Sound sound) {
+        sound.setLoop(false);
         return sounds.remove(sound);
     }
 
     /**
-     * 停止播放指定的声音，并将声音移出列表。
+     * 直接停止播放指定的声音，并将声音移出列表, 部分情况下这可能会让声音停止得太不自然。
      * @param sound 
+     * @return  
+     * @see #removeAndStopLoop(Sound) 
      */
-    public void stopAndRemove(Sound sound) {
+    public boolean removeAndStopDirectly(Sound sound) {
         sound.stop();
-        removeSound(sound);
+        return sounds.remove(sound);
     }
     
     /**

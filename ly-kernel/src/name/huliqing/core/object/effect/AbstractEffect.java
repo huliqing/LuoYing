@@ -386,16 +386,16 @@ public abstract class AbstractEffect extends Effect {
             if (effectTimeUsed >= trueStartTime) {
                 if (sound == null) {
                     sound = Loader.load(soundId);
+                    attachChild(sound);
                 }
-                sound.setPosition(getWorldTranslation());
-                SoundManager.getInstance().addSound(sound);
+                SoundManager.getInstance().addAndPlay(sound);
                 started = true;
             }
         }
         
         void cleanup() {
             if (sound != null) {
-                SoundManager.getInstance().removeSound(sound);
+                SoundManager.getInstance().removeAndStopLoop(sound);
             }
             started = false;
         }

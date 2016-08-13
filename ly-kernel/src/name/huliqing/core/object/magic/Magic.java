@@ -19,12 +19,12 @@ import name.huliqing.core.object.effect.TraceType;
 import name.huliqing.core.mvc.service.EffectService;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.loader.Loader;
-import name.huliqing.core.manager.SoundManager;
 import name.huliqing.core.object.AbstractPlayObject;
 import name.huliqing.core.xml.DataProcessor;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.effect.Effect;
 import name.huliqing.core.object.hitchecker.HitChecker;
+import name.huliqing.core.object.sound.SoundManager;
 import name.huliqing.core.utils.ConvertUtils;
 import name.huliqing.core.utils.MathUtils;
 

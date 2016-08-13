@@ -49,13 +49,13 @@
     <sound id="soundCoin3"  file="Sounds/coin3.ogg" />
     
     <!--装备弓箭-->
-    <sound id="soundDrawBow" file="Sounds/bow/drawBow.ogg"  volume="1.2" offset="0.2" />
+    <sound id="soundDrawBow" file="Sounds/bow/drawBow.ogg"  volume="1.2" timeOffset="0.2" />
     <!--装备刀剑-->
-    <sound id="soundDrawSword" file="Sounds/sword/drawSword.ogg"  volume="0.5" offset="0" />
+    <sound id="soundDrawSword" file="Sounds/sword/drawSword.ogg"  volume="0.5" timeOffset="0" />
     <!--装备盔甲1-->
-    <sound id="soundDressOutfit" file="Sounds/dress.ogg" offset="0.1" />
+    <sound id="soundDressOutfit" file="Sounds/dress.ogg" timeOffset="0.1" />
     <!--装备盔甲2-->
-    <sound id="soundDressOutfit2" file="Sounds/dress2.ogg" offset="0" />
+    <sound id="soundDressOutfit2" file="Sounds/dress2.ogg" timeOffset="0" />
     
     <!--==========================================================================-->
     <!--通用武器音效: 各种武器的攻击音效，刀剑、弓箭、魔杖、匕首等等-->
@@ -80,9 +80,9 @@
     <!--风: 1秒-->
     <sound id="soundWind2" file="Sounds/magic/wind2.ogg"  />
     <!--风: 1.5秒-->
-    <sound id="soundWind3" file="Sounds/magic/wind3.ogg" offset="1.5"  />
+    <sound id="soundWind3" file="Sounds/magic/wind3.ogg" timeOffset="1.5"  />
     <!--急速环绕的风声-->
-    <sound id="soundWindSurround" file="Sounds/magic/wind_surround.ogg" offset="0.5" />
+    <sound id="soundWindSurround" file="Sounds/magic/wind_surround.ogg" timeOffset="0.5" />
     
     <!--水：跳入水中-->
     <sound id="soundWater" file="Sounds/magic/water.ogg" />
@@ -92,9 +92,9 @@
     <sound id="soundIceBreak" file="Sounds/magic/ice_break.ogg" />
     
     <!--电: 电流涌动、魔幻-->
-    <sound id="soundElectricity" file="Sounds/magic/electricity.ogg"  offset="0" />
+    <sound id="soundElectricity" file="Sounds/magic/electricity.ogg"  timeOffset="0" />
     <!--电: 电流滋滋声-->
-    <sound id="soundElectricity2" file="Sounds/magic/electricity2.ogg"  offset="0.5" />
+    <sound id="soundElectricity2" file="Sounds/magic/electricity2.ogg"  timeOffset="0.5" />
     
     <!--气: 聚气-->
     <sound id="soundGasGathering" file="Sounds/magic/gasGathering.ogg"  volume="0.5" />
@@ -139,7 +139,7 @@
     <!--魔法阵张开2-->
     <sound id="soundMagicExpand2" file="Sounds/magic/magicExpand2.ogg"  />
     <!--魔法射击，多重-->
-    <sound id="soundMagicShot" file="Sounds/magic/magicShot.ogg"  offset="0.5" />
+    <sound id="soundMagicShot" file="Sounds/magic/magicShot.ogg"  timeOffset="0.5" />
     <!--魔法击中-->
     <sound id="soundMagicShotHit" file="Sounds/magic/magicShotHit.ogg"  volume="0.75" />
     <!--闪光收缩-->
@@ -186,10 +186,10 @@
     <sound id="soundManDead2" file="Sounds/creature/man/dead2.ogg"  />
     
     <!-- bow -->
-    <sound id="soundBowPull" file="Sounds/bow/pull.ogg"   offset="0.5" />
-    <sound id="soundBowShot" file="Sounds/bow/shot.ogg"   offset="0" />
-    <sound id="soundBowShotHeavy" file="Sounds/bow/shot_heavy.ogg"   offset="0.5" />
-    <sound id="soundBowHit" file="Sounds/bow/hit.ogg"   offset="0.6" />
+    <sound id="soundBowPull" file="Sounds/bow/pull.ogg"   timeOffset="0.5" />
+    <sound id="soundBowShot" file="Sounds/bow/shot.ogg"   timeOffset="0" />
+    <sound id="soundBowShotHeavy" file="Sounds/bow/shot_heavy.ogg"   timeOffset="0.5" />
+    <sound id="soundBowHit" file="Sounds/bow/hit.ogg"   timeOffset="0.6" />
     
     <!--skeleton-->
     <sound id="soundSkeletonDead" file="Sounds/creature/skeleton/dead.ogg" />

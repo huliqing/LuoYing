@@ -11,9 +11,9 @@ import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.enums.MessageType;
 import name.huliqing.core.loader.Loader;
 import name.huliqing.core.manager.ResourceManager;
-import name.huliqing.core.manager.SoundManager;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.chat.Chat;
+import name.huliqing.core.object.sound.SoundManager;
 
 /**
  *
