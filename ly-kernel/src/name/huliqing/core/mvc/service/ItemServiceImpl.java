@@ -5,6 +5,8 @@
 package name.huliqing.core.mvc.service;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import name.huliqing.core.Factory;
 import name.huliqing.core.constants.IdConstants;
 import name.huliqing.core.constants.ResConstants;
@@ -15,6 +17,7 @@ import name.huliqing.core.mvc.dao.ItemDao;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actor.ItemListener;
+import name.huliqing.core.object.control.ActorItemControl;
 import name.huliqing.core.object.sound.SoundManager;
 
 /**
@@ -22,6 +25,7 @@ import name.huliqing.core.object.sound.SoundManager;
  * @author huliqing
  */
 public class ItemServiceImpl implements ItemService {
+    private static final Logger LOG = Logger.getLogger(ItemServiceImpl.class.getName());
 
     private PlayService playService;
     private ItemDao itemDao;
@@ -37,9 +41,10 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public void addItem(Actor actor, String itemId, int count) {
         itemDao.addItem(actor, itemId, count);
+        ActorItemControl itemControl = actor.getModel().getControl(ActorItemControl.class);
         
         // 通知侦听器
-        List<ItemListener> ils = actor.getItemListeners();
+        List<ItemListener> ils = itemControl.getItemListeners();
         if (ils != null) {
             for (ItemListener il : ils) {
                 il.onItemAdded(actor, itemId, count);
@@ -62,7 +67,8 @@ public class ItemServiceImpl implements ItemService {
         int trueRemoved = itemDao.removeItem(actor, itemId, count);
         
         // 通知侦听器
-        List<ItemListener> ils = actor.getItemListeners();
+        ActorItemControl itemControl = actor.getModel().getControl(ActorItemControl.class);
+        List<ItemListener> ils = itemControl.getItemListeners();
         if (ils != null && trueRemoved > 0) {
             for (ItemListener il : ils) {
                 il.onItemRemoved(actor, itemId, trueRemoved);
@@ -123,6 +129,27 @@ public class ItemServiceImpl implements ItemService {
         
         handlerService.useForce(actor, data);
         
+    }
+
+    @Override
+    public void addItemListener(Actor actor, ItemListener itemListener) {
+        ActorItemControl c = actor.getModel().getControl(ActorItemControl.class);
+        if (c != null) {
+            c.addItemListener(itemListener);
+        } else {
+            LOG.log(Level.WARNING, "ActorItemControl not found! actor={0}", actor);
+        } 
+    }
+
+    @Override
+    public boolean removeItemListener(Actor actor, ItemListener itemListener) {
+        ActorItemControl c = actor.getModel().getControl(ActorItemControl.class);
+        if (c != null) {
+            return c.removeItemListener(itemListener);
+        } else {
+            LOG.log(Level.WARNING, "ActorItemControl not found! actor={0}", actor);
+            return false;
+        }
     }
     
     

@@ -19,7 +19,6 @@ import name.huliqing.core.mvc.network.ActorNetwork;
 import name.huliqing.core.mvc.network.SkillNetwork;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.AttributeService;
-import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actor.ActorListener;
@@ -76,8 +75,9 @@ public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> im
             return;
         if (source == other) 
             return;
-        if (!other.isEnemy(source))
+        if (!actorService.isEnemy(other, source))
             return;
+        
         // 当被other锁定时给other添加侦听器，以侦察other的攻击。以便进行防守和躲闪
         actorService.addSkillListener(other, this);
         
@@ -113,7 +113,7 @@ public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> im
             return;
         
         // 如果已经死亡就不需要处理防守了
-        if (actor.isDead()) 
+        if (actorService.isDead(actor)) 
             return;
         
         // 暂不支持shot类技能的防守
@@ -138,7 +138,7 @@ public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> im
         }
         
         // 3.闪避防守
-        if (actor.isDucking()) {
+        if (actorService.isDucking(actor)) {
             return;
         }
         doDuck();
@@ -163,7 +163,7 @@ public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> im
     @Override
     public void onActorHit(Actor source, Actor attacker, String hitAttribute, float hitValue) {
         // hitValue>0为增益效果，不处理
-        if (source.isDead() || actor.isPlayer() || hitValue > 0)
+        if (actorService.isDead(source) || actorService.isPlayer(actor) || hitValue > 0)
             return;
         
         // 被击中的属性不在监听范围内则不处理。

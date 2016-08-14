@@ -59,7 +59,7 @@ public class TalkLogicFace extends AbstractTalkLogic {
     @Override
     protected void doInit() {
         // 质量小于0的角色不能进行朝向，一般为静物
-        if (actor.getMass() <= 0 || actor.isDead())
+        if (actorService.getMass(actor) <= 0 || actorService.isDead(actor))
             return;
         
         TempVars tv = TempVars.get();

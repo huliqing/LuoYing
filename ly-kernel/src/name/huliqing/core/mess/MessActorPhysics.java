@@ -6,6 +6,7 @@ package name.huliqing.core.mess;
 
 import com.jme3.network.serializing.Serializable;
 import name.huliqing.core.Factory;
+import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.object.actor.Actor;
 
@@ -38,9 +39,11 @@ public class MessActorPhysics extends MessBase {
     @Override
     public void applyOnClient() {
         PlayService playService = Factory.get(PlayService.class);
+        ActorService actorService = Factory.get(ActorService.class);
         Actor actor = playService.findActor(actorId);
         if (actor != null) {
-            actor.setEnabled(enabled);
+//            actor.setEnabled(enabled); // remove0813
+            actorService.setPhysicsEnabled(actor, enabled);
         }
     }
     

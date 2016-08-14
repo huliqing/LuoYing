@@ -86,7 +86,7 @@ public class SkillLockedState extends State implements SkillListener {
     public void initialize(Application app) {
         super.initialize(app);
         // 根据锁定类型来确定要锁定在reset状态还是当前动画帧。
-        if (lockType != null && !actor.isDead()) {
+        if (lockType != null && !actorService.isDead(actor)) {
             if (lockType == LockType.reset) {
                 SkillData skillData = skillService.getSkill(actor, SkillType.reset);
                 if (skillData != null) {
@@ -113,12 +113,12 @@ public class SkillLockedState extends State implements SkillListener {
             }
             // 对于特定的技能ID需要通过技能侦听器来监听,在状态消失时要移除侦听器
             if (lockSkillIds != null) {
-                actorService.addSkillListener(actor, this);
+                skillService.addSkillListener(actor, this);
             }
         }
         
         if (lockPhysics) {
-            actor.setKinematic(true);
+            actorService.setKinematic(actor, true);
         }
         
         // 削弱时间
@@ -152,11 +152,11 @@ public class SkillLockedState extends State implements SkillListener {
             if (lockChannels != null) {
                 skillService.unlockSkillChannels(actor, lockChannels);
             }
-            actorService.removeSkillListener(actor, this);
+            skillService.removeSkillListener(actor, this);
         }
         
         if (lockPhysics) {
-            actor.setKinematic(false);
+            actorService.setKinematic(actor, false);
         }
         super.cleanup();
     }

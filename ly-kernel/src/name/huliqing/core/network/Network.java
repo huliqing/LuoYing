@@ -4,7 +4,6 @@
  */
 package name.huliqing.core.network;
 
-import name.huliqing.core.network.GameServer;
 import com.jme3.network.HostedConnection;
 import com.jme3.network.Message;
 import java.io.IOException;
@@ -16,6 +15,7 @@ import name.huliqing.core.data.GameData;
 import name.huliqing.core.mvc.service.ConfigService;
 import name.huliqing.core.network.GameServer.ServerListener;
 import name.huliqing.core.mess.MessActorTransformDirect;
+import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.object.AbstractPlayObject;
 import name.huliqing.core.object.actor.Actor;
 
@@ -26,6 +26,7 @@ import name.huliqing.core.object.actor.Actor;
 public class Network extends AbstractPlayObject {
     private final static Logger LOG = Logger.getLogger(Network.class.getName());
     private final ConfigService configService = Factory.get(ConfigService.class);
+    private final ActorService actorService = Factory.get(ActorService.class);
     
     private final static Network INSTANCE = new Network();
     private GameServer gameServer;
@@ -174,8 +175,8 @@ public class Network extends AbstractPlayObject {
             MessActorTransformDirect mess = new MessActorTransformDirect();
             mess.setActorId(actor.getData().getUniqueId());
             mess.setLocation(actor.getModel().getWorldTranslation());
-            mess.setWalkDirection(actor.getWalkDirection());
-            mess.setViewDirection(actor.getViewDirection());
+            mess.setWalkDirection(actorService.getWalkDirection(actor));
+            mess.setViewDirection(actorService.getViewDirection(actor));
             broadcast(mess);
             if (Config.debug) {
                 LOG.log(Level.INFO, "broadcastSync message={0}, class={1}"

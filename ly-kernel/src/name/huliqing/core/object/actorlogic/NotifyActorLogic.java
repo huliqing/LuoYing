@@ -49,7 +49,7 @@ public class NotifyActorLogic<T extends ActorLogicData> extends ActorLogic<T> {
     @Override
     protected void doLogic(float tpf) {
         Actor target = actorService.getTarget(actor);
-        if (target != null && target.isEnemy(actor) && !target.isDead()) {
+        if (target != null && actorService.isEnemy(target, actor) && !actorService.isDead(target)) {
             actorService.findNearestFriendly(actor, distance, tempStore);
             if (!tempStore.isEmpty()) {
                 Actor fTarget;
@@ -57,7 +57,7 @@ public class NotifyActorLogic<T extends ActorLogicData> extends ActorLogic<T> {
                     fTarget = actorService.getTarget(friend);
                     if (force 
                             // 以下:如果友军单位没有存在为"敌人"的目标,则可重置它的目标.
-                            || fTarget == null || !fTarget.isEnemy(friend)) {
+                            || fTarget == null || !actorService.isEnemy(fTarget, friend)) {
                         actorNetwork.setTarget(friend, target);
                     }
                 }

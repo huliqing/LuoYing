@@ -8,7 +8,6 @@ import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import name.huliqing.core.Factory;
 import name.huliqing.core.mvc.service.ActorService;
-import name.huliqing.core.object.action.Action;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.utils.MathUtils;
 
@@ -46,7 +45,7 @@ public class RayDetour extends Detour {
         }
         
         float angle = 30 * (count + 1) * FastMath.DEG_TO_RAD * direction;
-        tempDir.set(actor.getWalkDirection()).normalizeLocal();
+        tempDir.set(actorService.getWalkDirection(actor)).normalizeLocal();
         MathUtils.rotate(tempDir, angle, Vector3f.UNIT_Y, tempDir);
         detour(tempDir);
         

@@ -7,8 +7,9 @@ package name.huliqing.core.object.action;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.util.TempVars;
+import name.huliqing.core.Factory;
+import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.action.Action;
 import name.huliqing.core.utils.MathUtils;
 
 /**
@@ -16,6 +17,8 @@ import name.huliqing.core.utils.MathUtils;
  * @author huliqing
  */
 public class TimeDetour extends Detour{
+    private final ActorService actorService = Factory.get(ActorService.class);
+    
     // 遇到障碍物时的调转方向 =》　1:left; -1:right; 0: none;
     private int direction;
     
@@ -56,11 +59,9 @@ public class TimeDetour extends Detour{
         
         TempVars tv = TempVars.get();
         float angle = 30 * (count + 1) * FastMath.DEG_TO_RAD * direction;
-        tv.vect1.set(actor.getWalkDirection());
+        tv.vect1.set(actorService.getWalkDirection(actor));
         MathUtils.rotate(tv.vect1.normalizeLocal(), angle, Vector3f.UNIT_Y, tv.vect2);
         
-        // remove20160420,交由父类处理
-//        skillNetwork.playRun(actor, null, tv.vect2, autoFacing, false);
         detour(tv.vect2);
         
         tv.release();

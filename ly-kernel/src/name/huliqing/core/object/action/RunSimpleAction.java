@@ -6,12 +6,7 @@ package name.huliqing.core.object.action;
 
 import com.jme3.math.Vector3f;
 import com.jme3.util.TempVars;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import name.huliqing.core.Factory;
-import name.huliqing.core.object.action.AbstractAction;
-import name.huliqing.core.object.action.RunAction;
-import name.huliqing.core.data.ActionData;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.mvc.network.SkillNetwork;
@@ -28,7 +23,7 @@ public class RunSimpleAction extends AbstractAction implements RunAction{
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
 
     // 需要走到的目标地址
-    private Vector3f position = new Vector3f();
+    private final Vector3f position = new Vector3f();
     // 允许的最近距离，不能太小，太小会产生两个现象,特别是在侦率较低时容易出现。
     // 1.当角色瞬间太快穿过目标路径点时，可能一直走下去。
     // 2.角色可能在路径起点时的ViewDirection方向不正确，表现为瞬间前后转向。
@@ -36,8 +31,8 @@ public class RunSimpleAction extends AbstractAction implements RunAction{
     private float nearest = 0.5f;
     
     // 避障
-    private Detour rayDetour = new RayDetour(this);
-    private Detour timeDetour = new TimeDetour(this);
+    private final Detour rayDetour = new RayDetour(this);
+    private final Detour timeDetour = new TimeDetour(this);
     
     private boolean resetDir;
     
@@ -90,7 +85,7 @@ public class RunSimpleAction extends AbstractAction implements RunAction{
         }
         
         // == 确定已经走到目标位置
-        float distance = actor.getDistance(position);
+        float distance = actor.getModel().getWorldTranslation().distance(position);
         if (distance <= nearest) {
             if (waitSkillId != null) {
                 skillNetwork.playSkill(actor, waitSkillId, false);
@@ -116,7 +111,7 @@ public class RunSimpleAction extends AbstractAction implements RunAction{
     }
     
     private void runByStraight() {
-        if (!actor.isRunning()) {
+        if (!skillService.isRunning(actor)) {
             TempVars tv = TempVars.get();
             skillNetwork.playWalk(actor, runSkillId, position.subtract(actor.getModel().getWorldTranslation(), tv.vect1), true, false);
             tv.release();
@@ -146,7 +141,7 @@ public class RunSimpleAction extends AbstractAction implements RunAction{
         if (actor == null) {
             return false;
         }
-        return actor.getDistance(pos) <= nearest;
+        return actor.getModel().getWorldTranslation().distance(pos) <= nearest;
     }
 
     @Override

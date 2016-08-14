@@ -163,7 +163,11 @@ public class ActorBuildLogic<T extends GameLogicData> extends AbstractGameLogic<
             try {
                 // 将模型添加到场景和当前列表。
                 Actor actor = future.get();
-                actor.setLocation(getRandomPosition()); // 设置随机位置
+
+                // remove20160813
+//                actor.setLocation(getRandomPosition()); // 设置随机位置
+                actorService.setLocation(actor, getRandomPosition());
+
                 if (callback != null) {
                     actor = callback.onAddBefore(actor);
                 }

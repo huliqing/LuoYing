@@ -8,6 +8,7 @@ import com.jme3.animation.LoopMode;
 import com.jme3.math.Vector3f;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.SkillData;
+import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.ConfigService;
 import name.huliqing.core.network.Network;
 
@@ -19,6 +20,7 @@ import name.huliqing.core.network.Network;
  */
 public class WalkSkill<T extends SkillData> extends AbstractSkill<T> implements Walk{
     private final ConfigService configService = Factory.get(ConfigService.class);
+    private final ActorService actorService = Factory.get(ActorService.class);
     
     // 步行或跑步循环动画的播放速度。
     protected float animSpeed = 1.0f;
@@ -74,10 +76,10 @@ public class WalkSkill<T extends SkillData> extends AbstractSkill<T> implements 
 //            actor.setViewDirection(viewDirection);
 //        }
         
-//        actor.setWalkDirection(walkDirection.setY(0).normalizeLocal().mult(baseSpeed * data.getSpeed()));
-        actor.setWalkDirection(walkDirection.setY(0).normalizeLocal().mult(baseSpeed * getSpeed()));
+        actorService.setWalkDirection(actor, walkDirection.setY(0).normalizeLocal().mult(baseSpeed * getSpeed()));
+        
         if (viewDirection != null) {
-            actor.setViewDirection(viewDirection);
+            actorService.setViewDirection(actor, viewDirection);
         }
         
         // 添加角色自动位置同步
@@ -96,8 +98,9 @@ public class WalkSkill<T extends SkillData> extends AbstractSkill<T> implements 
     @Override
     public void restoreAnimation() {
         String animation = data.getAnimation();
-        if (animation != null && channelProcessor != null) {
-            channelProcessor.restoreAnimation(animation
+        if (animation != null) {
+            actorService.restoreAnimation(actor
+                    , animation
                     , data.getLoopMode()
                     , getAnimFullTime() / animSpeed
                     , getAnimStartTime()
@@ -107,7 +110,8 @@ public class WalkSkill<T extends SkillData> extends AbstractSkill<T> implements 
     
     @Override
     public void cleanup() {
-        actor.setWalkDirection(Vector3f.ZERO.clone());
+        actorService.setWalkDirection(actor, Vector3f.ZERO.clone());
+        
         // 移除角色位置自动同步(平滑同步)
         Network.getInstance().removeAutoSyncTransform(actor);
         
@@ -116,7 +120,6 @@ public class WalkSkill<T extends SkillData> extends AbstractSkill<T> implements 
 //        // 这是绝对位置同步,确保停下来时位置绝对同步正确，因为平滑同步无法确保位置绝对正确.
 //        // 这种同步在FPS太低或延迟太高的情况下容易产生跳跃现象.
 //        Network.getInstance().syncTransformDirect(actor);
-        
         
         super.cleanup();
     }

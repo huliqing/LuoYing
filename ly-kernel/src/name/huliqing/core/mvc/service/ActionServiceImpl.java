@@ -11,11 +11,11 @@ import name.huliqing.core.data.SkillData;
 import name.huliqing.core.mvc.dao.SkillDao;
 import name.huliqing.core.loader.Loader;
 import name.huliqing.core.object.action.Action;
-import name.huliqing.core.object.action.ActionProcessor;
 import name.huliqing.core.object.action.FightAction;
 import name.huliqing.core.object.action.FollowAction;
 import name.huliqing.core.object.action.RunAction;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.control.ActorActionControl;
 
 /**
  *
@@ -45,13 +45,13 @@ public class ActionServiceImpl implements ActionService {
         if (action != null) {
             action.setActor(actor);
         }
-        actor.getActionProcessor().startAction(action);
+        getActionControl(actor).startAction(action);
     }
 
     @Override
     public void playRun(Actor actor, Vector3f pos) {
-        ActionProcessor ap = actor.getActionProcessor();
-        RunAction ra = ap.getDefRunAction();
+        ActorActionControl control = getActionControl(actor);
+        RunAction ra = control.getDefRunAction();
         // 如果角色没有指定默认“跑路”行为，则为角色创建一个。
         if (ra == null) {
             String defRunAction = actor.getData().getActionDefRun();
@@ -61,7 +61,7 @@ public class ActionServiceImpl implements ActionService {
                 ra = (RunAction) Loader.loadAction(IdConstants.ACTION_RUN_SIMPLE);
             }
             ra.setActor(actor);
-            ap.setDefRunAction(ra);
+            control.setDefRunAction(ra);
         }
         
         ra.setPosition(pos);
@@ -69,29 +69,29 @@ public class ActionServiceImpl implements ActionService {
     }
 
     /**
-     * 执行行为：使用目标与指定角色战斗。<br />
+     * 执行行为：使用目标与指定角色战斗。<br>
      * 该方法作为玩家控制角色时使用，不建议在logic和action内部调用该方法。
      * @param target 战斗目标
-     * @param skill 使用的技能
      */
     @Override
     public void playFight(Actor actor, Actor target, String skillId) {
-        ActionProcessor ap = actor.getActionProcessor();
-        FightAction fa = ap.getDefFightAction();
+//        ActionProcessor ap = actor.getActionProcessor();
+        ActorActionControl control = getActionControl(actor);
+        FightAction fa = control.getDefFightAction();
         // 如果角色没有指定特定的战斗行为，则为角色创建一个。
         if (fa == null) {
             String defFightAction = actor.getData().getActionDefFight();
             if (defFightAction != null) {
                 fa = (FightAction) Loader.loadAction(defFightAction);
             } else {
-                if (actor.getMass() <= 0) {
+                if (actorService.getMass(actor) <= 0) {
                     fa = (FightAction) Loader.loadAction(IdConstants.ACTION_FIGHT_STATIC);
                 } else {
                     fa = (FightAction) Loader.loadAction(IdConstants.ACTION_FIGHT_FOR_PLAYER);
                 }
             }
             fa.setActor(actor);
-            ap.setDefFightAction(fa);
+            control.setDefFightAction(fa);
         }
         
         SkillData skillData = null;
@@ -106,24 +106,29 @@ public class ActionServiceImpl implements ActionService {
 
     @Override
     public boolean isPlayingFight(Actor actor) {
-        Action current = actor.getActionProcessor().getAction();
+        ActorActionControl control = getActionControl(actor);
+        Action current = control.getAction();
         return current instanceof FightAction;
     }
 
     @Override
     public boolean isPlayingRun(Actor actor) {
-        Action current = actor.getActionProcessor().getAction();
+        Action current = getActionControl(actor).getAction();
         return current instanceof RunAction;
     }
 
+    @Override
     public boolean isPlayingFollow(Actor actor) {
-        Action current = actor.getActionProcessor().getAction();
+        Action current = getActionControl(actor).getAction();
         return current instanceof FollowAction;
     }
 
+    @Override
     public Action getPlayingAction(Actor actor) {
-        return actor.getActionProcessor().getAction();
+        return getActionControl(actor).getAction();
     }
     
-    
+    private ActorActionControl getActionControl(Actor actor) {
+        return actor.getModel().getControl(ActorActionControl.class);
+    }
 }

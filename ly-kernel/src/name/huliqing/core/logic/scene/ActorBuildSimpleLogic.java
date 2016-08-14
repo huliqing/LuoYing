@@ -163,7 +163,11 @@ public class ActorBuildSimpleLogic extends IntervalLogic {
             if (future.isDone()) {
                 try {
                     actor = future.get();
-                    actor.setLocation(position);
+                    
+                    // remove0813
+//                    actor.setLocation(position);
+                    actorService.setLocation(actor, position);
+
                     if (callback != null) {
                         callback.onload(actor);
                     }

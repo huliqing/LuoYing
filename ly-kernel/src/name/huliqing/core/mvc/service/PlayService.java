@@ -241,13 +241,12 @@ public interface PlayService extends Inject {
     Vector3f getRandomTerrainPoint(Vector3f store);
     
     /**
-     * 移动目标到指定的地点，注意，该方法必须考虑Actor,Obj和一般Spatial的
-     * 类型区别。对于角色类型需要使用物理移动的方式，对于Obj如果存在PhysicsControl
+     * 移动角色到指定的地点
      * 也需要使用该方式进行移动。
-     * @param spatial
+     * @param actor
      * @param position 
      */
-    void moveObject(Spatial spatial, Vector3f position);
+    void moveObject(Actor actor, Vector3f position);
     
     /**
      * 获取场景信息，如果不存在场景则返回null.

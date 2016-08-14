@@ -170,7 +170,7 @@ public class UserCommandNetworkImpl implements UserCommandNetwork {
     @Override
     public void playRunToPos(Actor actor, Vector3f worldPos) {
         // 死亡后不能再移动
-        if (actor.isDead()) {
+        if (actorService.isDead(actor)) {
             return;
         }
         

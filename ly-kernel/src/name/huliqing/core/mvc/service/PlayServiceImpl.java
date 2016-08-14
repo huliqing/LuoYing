@@ -21,7 +21,7 @@ import name.huliqing.core.LY;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.GameData;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.actor.ActorControl;
+import name.huliqing.core.object.control.ActorControl;
 import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.enums.MessageType;
 import name.huliqing.core.enums.SkillType;
@@ -139,7 +139,8 @@ public class PlayServiceImpl implements PlayService {
         // 暂时以1作为默认分组
         actorService.setTeam(actor, 1);
         skillService.playSkill(actor, skillService.getSkill(actor, SkillType.wait).getId(), false);
-        actor.setPlayer(true);
+        
+        actorService.setPlayer(actor, true);
         addActor(actor);
     }
 
@@ -202,7 +203,7 @@ public class PlayServiceImpl implements PlayService {
         for (Actor actor : all) {
             if (actorService.getGroup(actor) == group) {
                 // 一般质量大于０(能移动)的都可视为有机生命
-                if (actor.getMass() > 0) {
+                if (actorService.getMass(actor) > 0) {
                     store.add(actor);
                 }
             }
@@ -322,7 +323,7 @@ public class PlayServiceImpl implements PlayService {
             store = new Vector3f();
         }
         TempVars tv = TempVars.get();
-        Vector3f dirByLength = tv.vect1.set(actor.getViewDirection())
+        Vector3f dirByLength = tv.vect1.set(actorService.getViewDirection(actor))
                 .normalizeLocal().multLocal(distance);
         store.set(actor.getModel().getWorldTranslation()).addLocal(dirByLength);
         store.y = getTerrainHeight(store.x, store.z);
@@ -363,18 +364,8 @@ public class PlayServiceImpl implements PlayService {
     }
 
     @Override
-    public void moveObject(Spatial spatial, Vector3f position) {
-        ActorControl ac = spatial.getControl(ActorControl.class);
-        if (ac != null) {
-            ac.setLocation(position);
-            return;
-        }
-        RigidBodyControl rbc = spatial.getControl(RigidBodyControl.class);
-        if (rbc != null) {
-            rbc.setPhysicsLocation(position);
-            return;
-        }
-        spatial.setLocalTranslation(position);
+    public void moveObject(Actor actor, Vector3f position) {
+        actorService.setLocation(actor, position);
     }
 
     @Override

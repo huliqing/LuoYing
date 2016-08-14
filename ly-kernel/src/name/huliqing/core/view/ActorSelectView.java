@@ -213,9 +213,13 @@ public class ActorSelectView extends LinearLayout {
         
         
         actor.getData().setAutoAi(false); // 必须去掉AI
-        actor.setLocation(new Vector3f(0, 0.75f, 0));
-        actor.setViewDirection(new Vector3f(1, 0, 0));
-        actor.setEnabled(false);
+//        actor.setLocation(new Vector3f(0, 0.75f, 0));
+//        actor.setViewDirection(new Vector3f(1, 0, 0));
+//        actor.setEnabled(false);
+        actorService.setLocation(actor, new Vector3f(0, 0.75f, 0));
+        actorService.setViewDirection(actor, new Vector3f(1, 0, 0));
+        actorService.setPhysicsEnabled(actor, false);
+        
         skillService.playSkill(actor, skillService.getSkill(actor, SkillType.wait).getId(), false);
         skinService.takeOnWeapon(actor, true);
         actorView.detachAllChildren();

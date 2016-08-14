@@ -68,11 +68,11 @@ public class LyLabPlayState extends NetworkPlayState {
             public void onGameStarted(Game game) {
                 // 载入NPC
                 npc1 = loadActor(FastMath.nextRandomInt(0, actorIds.length - 1));
-                npc1.setLocation(new Vector3f(10, 1, 0));
+                actorService.setLocation(npc1, new Vector3f(10, 1, 0));
                 actorService.setGroup(npc1, 1);
 
                 npc2 = loadActor(FastMath.nextRandomInt(0, actorIds.length - 1));
-                npc2.setLocation(new Vector3f(-10, 1, 0));
+                actorService.setLocation(npc2, new Vector3f(-10, 1, 0));
                 actorService.setGroup(npc2, 2);
 
                 addObject(npc1.getModel(), false);
@@ -98,7 +98,7 @@ public class LyLabPlayState extends NetworkPlayState {
         } else {
             actor = actorService.loadActor(actorIds[idIndex]);
         }
-        actor.setLocation(new Vector3f(-5, 2, 0));
+        actorService.setLocation(actor, new Vector3f(-5, 2, 0));
         actorService.setLevel(actor, level);
         skillService.playSkill(actor, skillService.getSkill(actor, SkillType.wait).getId(), false);
         return actor;

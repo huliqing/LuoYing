@@ -2,24 +2,27 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.core.object.channel;
+package name.huliqing.core.object.control;
 
 import com.jme3.animation.AnimChannel;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.Animation;
 import com.jme3.animation.LoopMode;
+import com.jme3.renderer.RenderManager;
+import com.jme3.renderer.ViewPort;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import name.huliqing.core.object.channel.Channel;
+import name.huliqing.core.object.channel.ChannelControl;
 import name.huliqing.core.utils.Temp;
 
 /**
- *
  * @author huliqing
  */
-public class ChannelProcessorImpl implements ChannelProcessor {
-    private static final Logger LOG = Logger.getLogger(ChannelProcessorImpl.class.getName());
+public class ActorChannelControl extends ActorControl implements ChannelControl {
+    private static final Logger LOG = Logger.getLogger(ActorChannelControl.class.getName());
 
     private final List<Channel> channels = new LinkedList<Channel>();
     // 保存一个完整的id引用
@@ -32,6 +35,14 @@ public class ChannelProcessorImpl implements ChannelProcessor {
     // 如走路后无法停止，这时可通过调用reset方法来让角色静止。而resetState则标记了
     // 该状态。
     private boolean resetState;
+
+    @Override
+    public void actorUpdate(float tpf) {
+    }
+
+    @Override
+    public void actorRender(RenderManager rm, ViewPort vp) {
+    }
     
     @Override
     public void addChannel(Channel channel) {

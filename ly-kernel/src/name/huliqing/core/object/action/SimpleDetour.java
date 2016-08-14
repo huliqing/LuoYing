@@ -7,7 +7,6 @@ package name.huliqing.core.object.action;
 import com.jme3.bullet.collision.PhysicsCollisionEvent;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
-import com.jme3.scene.Spatial;
 import com.jme3.util.TempVars;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,7 +18,6 @@ import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.mvc.service.StateService;
-import name.huliqing.core.object.action.Action;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actor.PhysicsListener;
 import name.huliqing.core.utils.MathUtils;
@@ -77,7 +75,7 @@ public class SimpleDetour extends Detour implements PhysicsListener {
             angle = 20 + (FastMath.nextRandomFloat() * 340) * FastMath.DEG_TO_RAD * direction;
         }
         
-        Vector3f walkDir = actor.getWalkDirection();
+        Vector3f walkDir = actorService.getWalkDirection(actor);
         MathUtils.rotate(walkDir, angle, Vector3f.UNIT_Y, tv.vect2);
         tv.vect1.set(tv.vect2);
         skillNetwork.playWalk(actor, skillService.getSkill(actor, SkillType.run).getId(), tv.vect1, autoFacing, true);

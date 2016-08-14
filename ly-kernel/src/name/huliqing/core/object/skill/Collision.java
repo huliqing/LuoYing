@@ -13,6 +13,7 @@ import name.huliqing.core.Config;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.SkinData;
 import name.huliqing.core.enums.Mat;
+import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.EffectService;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.SkinService;
@@ -30,6 +31,7 @@ public class Collision {
     private final static SkinService skinService = Factory.get(SkinService.class);
     private final static PlayService playService = Factory.get(PlayService.class);
     private final static EffectService effectService = Factory.get(EffectService.class);
+    private final static ActorService actorService = Factory.get(ActorService.class);
     
     private static void init() {
         matchers = new ArrayList<MatMatcher>();
@@ -70,7 +72,7 @@ public class Collision {
             if (matcher.match(attackMat, defendMat)) {
                 AbstractEffect effect = (AbstractEffect) effectService.loadEffect(matcher.effectId);
                 effect.setLocalTranslation(collidePos);
-                effect.getLocalRotation().lookAt(attacker.getViewDirection(), Vector3f.UNIT_Y);
+                effect.getLocalRotation().lookAt(actorService.getViewDirection(attacker), Vector3f.UNIT_Y);
                 playService.addEffect(effect);
                 return;
             }

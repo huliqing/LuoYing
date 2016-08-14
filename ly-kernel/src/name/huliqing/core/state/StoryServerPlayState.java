@@ -184,7 +184,7 @@ public abstract class StoryServerPlayState extends NetworkServerPlayState {
         savedActors.add(findActor(actors, clientPlayerId).getData());
         for (Actor a : actors) {
             if (a.getData().getOwnerId() == clientPlayerId 
-                    && !a.isDead() 
+                    && !actorService.isDead(a) 
                     && a.getData().isLiving()) {
                 savedActors.add(a.getData());
             }

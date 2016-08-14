@@ -234,6 +234,11 @@ public class SkillNetworkImpl implements SkillNetwork {
     }
 
     @Override
+    public boolean isRunning(Actor actor) {
+        throw new UnsupportedOperationException("Not supported yet."); 
+    }
+
+    @Override
     public Skill getPlayingSkill(Actor actor, SkillType skillType) {
         throw new UnsupportedOperationException("Not supported yet.");
     }

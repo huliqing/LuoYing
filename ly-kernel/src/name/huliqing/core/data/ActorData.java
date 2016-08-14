@@ -150,6 +150,9 @@ public class ActorData extends ObjectData implements MatObject{
     // 默认值0表示没有任何锁定。
     private long skillLockedState;
     
+    // 标记目标角色是否为“玩家”角色,这个参数为程序动态设置,不存档
+    private transient boolean player;
+    
     @Override
     public void write(JmeExporter ex) throws IOException {
         super.write(ex);
@@ -743,6 +746,22 @@ public class ActorData extends ObjectData implements MatObject{
     public Mat getMat() {
         int matInt = getAsInteger("mat", Mat.none.getValue());
         return Mat.identify(matInt);
+    }
+
+    /**
+     * 判断目标角色是否为一个玩家角色
+     * @return 
+     */
+    public boolean isPlayer() {
+        return player;
+    }
+
+    /**
+     * 标记目标这“玩家”角色
+     * @param player 
+     */
+    public void setPlayer(boolean player) {
+        this.player = player;
     }
     
 }

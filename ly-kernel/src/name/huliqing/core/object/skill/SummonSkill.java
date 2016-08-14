@@ -17,7 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.core.Factory;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.actor.ActorControl;
+import name.huliqing.core.object.control.ActorControl;
 import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.mvc.network.ActorNetwork;
@@ -264,7 +264,7 @@ public class SummonSkill<T extends SkillData> extends AbstractSkill<T> {
                 
                 // 设置同伴等级
                 actorService.setLevel(summonActor, (int) (actorService.getLevel(actor) * configService.getSummonLevelFactor()));
-                actorService.setPhysics(summonActor, false);
+                actorService.setPhysicsEnabled(summonActor, false);
                 actorService.setPartner(actor, summonActor);
                 actorService.setColor(summonActor, new ColorRGBA(1f, 1f, 2f, 1));
                 playNetwork.addActor(summonActor);
@@ -274,8 +274,12 @@ public class SummonSkill<T extends SkillData> extends AbstractSkill<T> {
                 Vector3f start = tv.vect1.set(summonPos).subtractLocal(
                         0, GeometryUtils.getModelHeight(summonActor.getModel()), 0);
                 Vector3f end = tv.vect2.set(summonPos).addLocal(0, 0.5f, 0);
-                summonActor.setLocation(start);
+                
+//                summonActor.setLocation(start);
+                actorService.setLocation(summonActor, start);
                 summonActor.faceTo(tv.vect3.set(actor.getModel().getWorldTranslation()).setY(start.getY()));
+                
+                
                 summonActor.getModel().addControl(showAnim);
                 showAnim.setStartPos(start);
                 showAnim.setEndPos(end);

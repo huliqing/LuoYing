@@ -4,6 +4,7 @@
  */
 package name.huliqing.core.mvc.service;
 
+import com.jme3.animation.LoopMode;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
@@ -16,7 +17,6 @@ import name.huliqing.core.enums.HurtFace;
 import name.huliqing.core.enums.Sex;
 import name.huliqing.core.view.talk.Talk;
 import name.huliqing.core.object.actor.ActorListener;
-import name.huliqing.core.object.actor.SkillListener;
 
 /**
  *
@@ -37,15 +37,6 @@ public interface ActorService extends Inject {
      * @return 
      */
     Actor loadActor(ActorData actorData);
-  
-    // remove 0221
-//    /**
-//     * 给角色添加物品
-//     * @param actor 要添加物品的角色
-//     * @param objectId 添加的物品ID
-//     * @param count 添加的数量
-//     */
-//    boolean rewardItem(Actor actor, String objectId, int count);
     
     /**
      * 生成一个随机名字
@@ -53,15 +44,6 @@ public interface ActorService extends Inject {
      * @return 
      */
     String createRandomName(Sex sex);
-  
-    // remove20160504
-//    /**
-//     * 判断角色前面是否有障碍物
-//     * @param actor
-//     * @return 
-//     * @deprecated use {@link #hasObstacleActor(name.huliqing.fighter.actor.Actor, java.util.List) }
-//     */
-//    boolean hasObstacle(Actor actor);
     
     /**
      * 判断角色前面是否有障碍物（Actor)，为提高性能只判断Actor类，其它的不处理。
@@ -70,15 +52,6 @@ public interface ActorService extends Inject {
      * @return 
      */
     boolean hasObstacleActor(Actor self, List<Actor> others); 
-  
-    // remove 0221
-//    /**
-//     * 给角色添加物品
-//     * @param actor
-//     * @param objectId
-//     * @param count 
-//     */
-//    void addItem(Actor actor, String objectId, int count);
     
     /**
      * 获取角色身上的物品(除技能），如果没有该物品则返回null.
@@ -113,12 +86,13 @@ public interface ActorService extends Inject {
      */
     HurtFace checkFace(Spatial self, Actor target);
     
-    /**
-     * 判断目标是否是一个角色,如果是，则返回Actor,否则返回null.
-     * @param spatial
-     * @return 
-     */
-    Actor getActor(Spatial spatial);
+    // remove20160815
+//    /**
+//     * 判断目标是否是一个角色,如果是，则返回Actor,否则返回null.
+//     * @param spatial
+//     * @return 
+//     */
+//    Actor getActor(Spatial spatial);
     
     /**
      * 寻找角色周围指定范围内最近的敌人,该敌人必须是活着的，如果没有敌人，则返回null.
@@ -278,23 +252,26 @@ public interface ActorService extends Inject {
     /**
      * 判断目标是否为敌人
      * @param actor
+     * @param target
      * @return 
      */
     boolean isEnemy(Actor actor, Actor target);
     
-    /**
-     * 设置是否打开或关闭角色的物理属性
-     * @param actor
-     * @param enabled 
-     */
-    void setPhysics(Actor actor, boolean enabled);
-    
-    /**
-     * 设置角色的视角方向 
-     * @param actor
-     * @param viewDirection 
-     */
-    void setViewDirection(Actor actor, Vector3f viewDirection);
+    // remove20160813    
+//    /**
+//     * 设置是否打开或关闭角色的物理属性
+//     * @param actor
+//     * @param enabled 
+//     */
+//    void setPhysics(Actor actor, boolean enabled);
+//
+// remove20160813    
+//    /**
+//     * 设置角色的视角方向 
+//     * @param actor
+//     * @param viewDirection 
+//     */
+//    void setViewDirection(Actor actor, Vector3f viewDirection);
     
     /**
      * 给角色设置一个颜色
@@ -379,23 +356,25 @@ public interface ActorService extends Inject {
      */
     boolean removeActorListener(Actor actor, ActorListener actorListener);
     
-    /**
-     * 添加技能侦听器
-     * @param actor
-     * @param skillListener 
-     */
-    void addSkillListener(Actor actor, SkillListener skillListener);
-    
-    /**
-     * 移除指定的技能侦听器
-     * @param actor
-     * @param skillListener 
-     * @return 
-     */
-    boolean removeSkillListener(Actor actor, SkillListener skillListener);
+    // remove20160815
+//    /**
+//     * 添加技能侦听器
+//     * @param actor
+//     * @param skillListener 
+//     */
+//    void addSkillListener(Actor actor, SkillListener skillListener);
+//    
+//    /**
+//     * 移除指定的技能侦听器
+//     * @param actor
+//     * @param skillListener 
+//     * @return 
+//     */
+//    boolean removeSkillListener(Actor actor, SkillListener skillListener);
     
     /**
      * 设置角色名称
+     * @param actor
      * @param name 
      */
     void setName(Actor actor, String name);
@@ -526,4 +505,125 @@ public interface ActorService extends Inject {
      * @param times 
      */
     void syncAnimation(Actor actor, String[] channelIds, String[] animNames, byte[] loopModes, float[] speeds, float[] times);
+    
+    // ---- new 20160813 -----------------------------------------------------------------------------------------------------------
+    // ---- new 20160813 -----------------------------------------------------------------------------------------------------------
+    // ---- new 20160813 -----------------------------------------------------------------------------------------------------------
+    // ---- new 20160813 -----------------------------------------------------------------------------------------------------------
+    // ---- new 20160813 -----------------------------------------------------------------------------------------------------------
+    
+    /**
+     * 设置角色位置
+     * @param actor
+     * @param location 
+     */
+    void setLocation(Actor actor, Vector3f location);
+    
+    /**
+     * 打开或关闭角色的物理功能
+     * @param actor
+     * @param enabled 
+     */
+    void setPhysicsEnabled(Actor actor, boolean enabled);
+    
+    /**
+     * 判断目标角色是否打开了物理功能
+     * @param actor
+     * @return 
+     */
+    boolean isPhysicsEnabled(Actor actor);
+    
+    /**
+     * 设置角色视角方向
+     * @param actor
+     * @param viewDirection 
+     */
+    void setViewDirection(Actor actor, Vector3f viewDirection);
+    
+    Vector3f getViewDirection(Actor actor);
+    
+    /**
+     * 设置角色步行方向
+     * @param actor
+     * @param walkDirection 
+     */
+    void setWalkDirection(Actor actor, Vector3f walkDirection);
+    
+    Vector3f getWalkDirection(Actor actor);
+    
+    /**
+     * @param actor
+     * @param animName
+     * @param loop
+     * @param useTime
+     * @param startTime 
+     * @param channelIds
+     */
+    void playAnim(Actor actor, String animName, LoopMode loop, float useTime, float startTime, String... channelIds);
+    
+    /**
+     * 锁定或解锁指定的动画通道，当一个动画通道被锁定之后将不能再执行任何动画，包
+     * 括reset，除非重新进行解锁
+     * @param actor
+     * @param locked true锁定通道，false解锁通道
+     * @param channelIds 指定的通道列表，如果为null或指定的通道不存在则什么也不做。
+     */
+    void setChannelLock(Actor actor, boolean locked, String... channelIds);
+    
+    /**
+     * 恢复动画，有时候当部分通道被打断执行了其它动画之后需要重新回到原来的
+     * 动画上。如当角色在走路的时候所有通道都在执行“走路”动画，这时如果执
+     * 行抽取武器的动画时，可能手部通道会打断走路所需要的一些通道动画。当抽取
+     * 武器完毕之后，手部通道需要重新回到“走路”的动画中以便协调角色走路时的
+     * 动画。
+     * @param actor
+     * @param animName
+     * @param loop
+     * @param useTime
+     * @param startTime
+     * @param channelIds 
+     */
+    void restoreAnimation(Actor actor, String animName, LoopMode loop, float useTime, float startTime, String... channelIds);
+    
+    /**
+     * 把骨骼动画定位在当前所播放动画的第一帧处．
+     * 可使用该方法来使角色停止活动。如：当角色没有“死亡”动画时，
+     * 角色在死后需要停止活动，则可使用该方法来停止正在执行的动画。
+     * @param actor
+     * @return 
+     * @see #resetToAnimationTime(java.lang.String, float) 
+     */
+    boolean reset(Actor actor);
+    
+    /**
+     * 判断角色是否为玩家角色，可能是客户端也可以是主机玩家
+     * @param actor
+     * @return 
+     */
+    boolean isPlayer(Actor actor);
+    
+    /**
+     * 标记目标为玩家角色
+     * @param actor
+     * @param player 
+     */
+    void setPlayer(Actor actor, boolean player);
+    
+    /**
+     * 获取目标位置与当前角色的正前方的夹角度数.简单的说,即当前角色要转多少度才能正视
+     * 到position位
+     * @param actor
+     * @param position
+     * @return 返回值为角度,不是弧度
+     */
+    float getViewAngle(Actor actor, Vector3f position);
+    
+    float getMass(Actor actor);
+    
+    boolean isKinematic(Actor actor);
+    
+    void setKinematic(Actor actor, boolean kinematic);
+    
+//    boolean isDucking(Actor actor);
+//    boolean isWaiting(Actor actor);
 }

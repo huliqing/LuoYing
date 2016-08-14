@@ -35,6 +35,7 @@ import name.huliqing.core.network.discover.MessSCClosed;
 import name.huliqing.core.network.discover.UDPListener;
 import name.huliqing.core.mess.MessBase;
 import name.huliqing.core.manager.ResourceManager;
+import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.mvc.service.SystemService;
 
@@ -46,6 +47,7 @@ import name.huliqing.core.mvc.service.SystemService;
 public class GameServer implements UDPListener, ConnectionListener, MessageListener<HostedConnection> {
     private final SystemService envService = Factory.get(SystemService.class);
     private final PlayService playService = Factory.get(PlayService.class);
+    private final ActorService actorService = Factory.get(ActorService.class);
     private final ConfigService configService = Factory.get(ConfigService.class);
     
     public interface ServerListener<T> {
@@ -297,7 +299,7 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
      * @param message 
      */
     public void send(Actor actor, Message message) {
-        if (!server.isRunning() || !actor.isPlayer())
+        if (!server.isRunning() || actorService.isPlayer(actor))
             return;
         
         Collection<HostedConnection> conns = server.getConnections();

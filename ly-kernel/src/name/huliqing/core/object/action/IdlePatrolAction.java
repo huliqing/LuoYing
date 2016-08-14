@@ -202,10 +202,10 @@ public class IdlePatrolAction extends AbstractAction implements IdleAction {
             
             // 走动过程判断，防止角色走出圈外。
             // 该情况发生在当角色走出idle范围外后返回的情况(如追踪攻击敌人后返回)
-            float angle = actor.getViewAngle(currentPos);
+            float angle = actorService.getViewAngle(actor, currentPos);
             if (angle < 90 
                     //&& actor.getDistance(patrolOrgin) > walkRadius
-                    && actor.getLocation().distanceSquared(patrolOrgin) > walkRadiusSquared
+                    && actor.getModel().getWorldTranslation().distanceSquared(patrolOrgin) > walkRadiusSquared
                     ) {
                 
                 // ignore:不能切换到"等待"或“空闲”状态,这时候角色还在圈外，需要
@@ -237,14 +237,14 @@ public class IdlePatrolAction extends AbstractAction implements IdleAction {
         // 如果距离比较远(在radius外),则使用跑路的方式,否则使用步行.
         // 注：角色从巡逻范围内最长可走一个直径距离，这里用squared比较所以直径也
         // 需要为平方形式，+10主要是判断在距离巡逻范围10码远时使用跑步方式走回来
-        if (actor.getLocation().distanceSquared(targetPos) > walkDiameterSquared + 10) {
+        if (actor.getModel().getWorldTranslation().distanceSquared(targetPos) > walkDiameterSquared + 10) {
             skillNetwork.playWalk(actor
                     , runSkillId
-                    , targetPos.subtract(actor.getLocation(), targetPos).normalizeLocal(), true, false);
+                    , targetPos.subtract(actor.getModel().getWorldTranslation(), targetPos).normalizeLocal(), true, false);
         } else {
             skillNetwork.playWalk(actor
                     , (walkSkillId != null ? walkSkillId : runSkillId)
-                    , targetPos.subtract(actor.getLocation(), targetPos).normalizeLocal()
+                    , targetPos.subtract(actor.getModel().getWorldTranslation(), targetPos).normalizeLocal()
                     , true, false);
         }
         tv.release();

@@ -36,7 +36,7 @@ import name.huliqing.core.manager.PickManager.PickResult;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.view.ShortcutManager;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.actor.ActorControl;
+import name.huliqing.core.object.control.ActorControl;
 import name.huliqing.core.object.anim.Anim;
 import name.huliqing.core.object.bullet.BulletCache;
 import name.huliqing.core.object.effect.EffectCache;
@@ -396,11 +396,11 @@ public  class SimpleGameState extends GameState implements UIEventListener {
         
         // 让动态角色产生时的Y坐标值稍微增加一点，可避免角色加入场景时与地面
         // 发生碰撞而产生的弹跳现象
-        if (actor.getMass() > 0) {
+        if (actorService.getMass(actor) > 0) {
             pos.addLocal(0, 0.2f, 0);
         }
         // 设置位置应该放在加入场景之后
-        actor.setLocation(pos);
+        actorService.setLocation(actor, pos);
         if (!actors.contains(actor)) {
             actors.add(actor);
         }
@@ -450,10 +450,10 @@ public  class SimpleGameState extends GameState implements UIEventListener {
     @Override
     public void setPlayer(Actor actor) {
         if (player != null) {
-            player.setPlayer(false);
+            actorService.setPlayer(player, false);
         }
         player = actor;
-        player.setPlayer(true);
+        actorService.setPlayer(player, true);
         ui.getTeamView().clearPartners();
         ui.getTeamView().setMainActor(player);
         ui.getTeamView().setTeamId(player.getData().getTeam());
@@ -554,9 +554,9 @@ public  class SimpleGameState extends GameState implements UIEventListener {
         // 没有目标，或者目标已经不在战场，则重新查找
         if (temp == null 
                 || temp == player
-                || temp.isDead() 
+                || actorService.isDead(temp) 
+                || !actorService.isEnemy(temp, player)
                 || !isInScene(temp.getModel())
-                || !temp.isEnemy(player)
                 ) {
             float distance = actorService.getViewDistance(player) * 2;
             temp = actorService.findNearestEnemyExcept(player, distance, null);

@@ -8,6 +8,7 @@ import java.util.List;
 import name.huliqing.core.Inject;
 import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.actor.ItemListener;
 
 /**
  *
@@ -70,4 +71,19 @@ public interface ItemService extends Inject {
      * @param itemId  
      */
     void useItem(Actor actor, String itemId);
+    
+    /**
+     * 给角色添加物品侦听器
+     * @param actor
+     * @param itemListener 
+     */
+    void addItemListener(Actor actor, ItemListener itemListener);
+    
+    /**
+     * 删除角色的物品侦听器
+     * @param actor
+     * @param itemListener
+     * @return 
+     */
+    boolean removeItemListener(Actor actor, ItemListener itemListener);
 }

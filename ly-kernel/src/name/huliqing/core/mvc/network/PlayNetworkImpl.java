@@ -36,14 +36,14 @@ import name.huliqing.core.object.SyncData;
 import name.huliqing.core.object.NetworkObject;
 import name.huliqing.core.object.PlayObject;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.actor.ActorControl;
+import name.huliqing.core.object.control.ActorControl;
 import name.huliqing.core.object.anim.Anim;
 import name.huliqing.core.object.bullet.Bullet;
 import name.huliqing.core.object.channel.Channel;
-import name.huliqing.core.object.channel.ChannelProcessor;
 import name.huliqing.core.object.effect.Effect;
 import name.huliqing.core.object.scene.Scene;
 import name.huliqing.core.object.view.View;
+import name.huliqing.core.object.channel.ChannelControl;
 
 /**
  *
@@ -224,7 +224,7 @@ public class PlayNetworkImpl implements PlayNetwork {
      */
     @Override
     public void addMessage(Actor actor, String message, MessageType type) {
-        if (!actor.isPlayer()) {
+        if (!actorService.isPlayer(actor)) {
             if (Config.debug) {
                 LOG.log(Level.INFO, "Do not addMessage to none player!");
             }
@@ -321,13 +321,12 @@ public class PlayNetworkImpl implements PlayNetwork {
     }
 
     @Override
-    public void moveObject(Spatial spatial, Vector3f position) {
+    public void moveObject(Actor actor, Vector3f position) {
         if (!network.isClient()) {
             // 先在服务端移动后再同步,因为移动后的位置可能最终被修正
-            playService.moveObject(spatial, position);
+            playService.moveObject(actor, position);
             
             // 广播同步位置
-            ActorControl actor = spatial.getControl(ActorControl.class);
             if (actor != null) {
                 network.syncTransformDirect(actor);
             }
@@ -453,11 +452,11 @@ public class PlayNetworkImpl implements PlayNetwork {
         // 同步角色数据及位置和视角
         MessPlayActorLoaded mess = new MessPlayActorLoaded();
         mess.setActorData(actor.getData());
-        mess.setLocation(actor.getLocation());
-        mess.setViewDirection(actor.getViewDirection());
+        mess.setLocation(actor.getModel().getWorldTranslation());
+        mess.setViewDirection(actorService.getViewDirection(actor));
 
         // 同步角色动画
-        ChannelProcessor cp = actor.getChannelProcessor();
+        ChannelControl cp = actor.getModel().getControl(ChannelControl.class);
         if (cp != null && !cp.getChannels().isEmpty()) {
             List<Channel> chs = cp.getChannels();
             String[] channels = new String[chs.size()];

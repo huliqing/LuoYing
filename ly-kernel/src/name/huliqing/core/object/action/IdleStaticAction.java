@@ -5,8 +5,6 @@
 package name.huliqing.core.object.action;
 
 import name.huliqing.core.Factory;
-import name.huliqing.core.object.action.AbstractAction;
-import name.huliqing.core.object.action.IdleAction;
 import name.huliqing.core.data.ActionData;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.enums.SkillType;
@@ -43,7 +41,7 @@ public class IdleStaticAction extends AbstractAction implements IdleAction {
     
     @Override
     protected void doLogic(float tpf) {
-        if (!actor.isWaiting()) {
+        if (!skillService.isWaiting(actor)) {
             if (waitSkillId != null) {
                 skillNetwork.playSkill(actor, waitSkillId, false);
             }

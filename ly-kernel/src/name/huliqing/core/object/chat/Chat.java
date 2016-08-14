@@ -11,6 +11,7 @@ import name.huliqing.core.data.ChatData;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.loader.Loader;
 import name.huliqing.core.manager.ResourceManager;
+import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.object.AbstractPlayObject;
 import name.huliqing.core.xml.DataProcessor;
 import name.huliqing.core.object.actor.Actor;
@@ -25,7 +26,7 @@ import name.huliqing.core.ui.state.UIState;
  */
 public abstract class Chat<T extends ChatData> extends AbstractPlayObject implements DataProcessor<T> {
     private final PlayService playService = Factory.get(PlayService.class);
-//    private final ActorService actorService = Factory.get(ActorService.class);
+    private final ActorService actorService = Factory.get(ActorService.class);
     
     // Chat的宽度和高度限制
     protected float width;
@@ -171,10 +172,12 @@ public abstract class Chat<T extends ChatData> extends AbstractPlayObject implem
      * @return 
      */
     public boolean isVisible(Actor target) {
-        if (target == null || target == actor || target.isDead())
+        if (target == null || target == actor || actorService.isDead(target))
             return false;
         
-        if (actor == null || actor.getDistanceSquared(target) > maxDistanceSquared || !playService.isInScene(actor)) 
+        if (actor == null 
+                || actor.getModel().getWorldTranslation().distanceSquared(target.getModel().getWorldTranslation()) > maxDistanceSquared 
+                || !playService.isInScene(actor)) 
             return false;
         
         if (hitChecker != null && !hitChecker.canHit(actor, target))

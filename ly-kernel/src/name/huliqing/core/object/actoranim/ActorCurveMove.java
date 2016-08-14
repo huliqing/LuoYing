@@ -136,10 +136,10 @@ public class ActorCurveMove<T extends ActorAnimData> extends ActorAnim<T> {
         }
         
         // 记住原状态
-        oldKinematicState = target.isKinematic();
+        oldKinematicState = actorService.isKinematic(target);
         // 该设置可避免在运动过程中产生擅抖现象, 但是需要在cleanup的时候复原
         // 直接关闭物理效果也可以避免抖动，但是角色有可能掉入其它物体内部
-        target.setKinematic(true);
+        actorService.setKinematic(target, true);
     }
     
     /**
@@ -169,23 +169,26 @@ public class ActorCurveMove<T extends ActorAnimData> extends ActorAnim<T> {
         // dir
         if (facing == Facing.path) {
             tv.vect1.subtract(target.getModel().getWorldTranslation(), tv.vect2).normalizeLocal();
-            target.setViewDirection(tv.vect2);
+            actorService.setViewDirection(target, tv.vect2);
+            
         } else if (facing == Facing.target) {
             Actor other = actorService.getTarget(target);
             
             if (other != null) {
                 other.getModel().getWorldTranslation()
                         .subtract(target.getModel().getWorldTranslation(), tv.vect5).normalizeLocal();
-                target.setViewDirection(tv.vect5);
+                actorService.setViewDirection(target, tv.vect5);
             }
         }
         
         if (interpolation >= 1) {
             // end
-            target.setLocation(spline.getControlPoints().get(spline.getControlPoints().size() - 1));
+            actorService.setLocation(target, spline.getControlPoints().get(spline.getControlPoints().size() - 1));
+            
         } else {
             // local必须在计算出facing后再设置
-            target.setLocation(tv.vect1);
+            actorService.setLocation(target, tv.vect1);
+            
         }
         tv.release();
     }
@@ -193,13 +196,10 @@ public class ActorCurveMove<T extends ActorAnimData> extends ActorAnim<T> {
     @Override
     public void cleanup() {
         if (target != null) {
-            target.setKinematic(oldKinematicState);
-//            target = null; // remove20160216,不要在内部清除target
+            actorService.setKinematic(target, oldKinematicState);
         }
         super.cleanup(); 
     }
- 
-    
     
     /**
      * compute the index of the waypoint and the interpolation value according to a distance

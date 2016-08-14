@@ -98,9 +98,10 @@ public class ShopChat<T extends ChatData> extends Chat<T> implements ItemListene
     public void setActor(Actor actor) {
         // 移除旧的角色的侦听器（如果存在）
         if (this.actor != null) {
-            this.actor.removeItemListener(this);
+            itemService.removeItemListener(actor, this);
         }
-        actor.addItemListener(this);
+        
+        itemService.addItemListener(actor, this);
         super.setActor(actor); 
     }
 
@@ -187,7 +188,7 @@ public class ShopChat<T extends ChatData> extends Chat<T> implements ItemListene
     public void cleanup() {
         productPanel.datas.clear();
         if (actor != null) {
-            actor.removeItemListener(this);
+            itemService.removeItemListener(actor, this);
         }
         super.cleanup(); 
     }
@@ -229,6 +230,7 @@ public class ShopChat<T extends ChatData> extends Chat<T> implements ItemListene
             datas.add(newData);
         }
         
+        // remove20160814
 //        public void removeData(String itemId) {
 //            Iterator<ProtoData> it = datas.iterator();
 //            while (it.hasNext()) {

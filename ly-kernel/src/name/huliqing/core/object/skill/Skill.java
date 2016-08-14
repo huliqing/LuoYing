@@ -8,8 +8,8 @@ import name.huliqing.core.constants.SkillConstants;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.enums.SkillType;
+import name.huliqing.core.object.control.ActorSkillControl;
 import name.huliqing.core.xml.DataProcessor;
-import name.huliqing.core.object.channel.ChannelProcessor;
 
 /**
  * 接能接口
@@ -64,12 +64,15 @@ public interface Skill<T extends SkillData> extends DataProcessor<T>{
      * @return 
      */
     SkillData getSkillData();
+   
+    // remove20160813
+//    /**
+//     * 设置动画控制器
+//     * @param animChannelProcessor 
+//     */
+//    void setAnimChannelProcessor(ChannelControl animChannelProcessor);
     
-    /**
-     * 设置动画控制器
-     * @param animChannelProcessor 
-     */
-    void setAnimChannelProcessor(ChannelProcessor animChannelProcessor);
+    void setSkillControl(ActorSkillControl skillControl);
     
     /**
      * 重新修复被其它技能重置的动画

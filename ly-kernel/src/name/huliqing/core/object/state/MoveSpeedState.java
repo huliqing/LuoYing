@@ -72,7 +72,7 @@ public class MoveSpeedState extends AttributeState {
     
     private void checkEffectTrace() {
         if (moveEffectId != null) {
-            if (actor.isRunning()) {
+            if (skillService.isRunning(actor)) {
                 showMoveEffect();
             } else {
                 hideMoveEffect();

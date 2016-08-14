@@ -34,6 +34,7 @@ import name.huliqing.core.data.ChannelData;
 import name.huliqing.core.data.ChatData;
 import name.huliqing.core.data.ConfigData;
 import name.huliqing.core.data.ConnData;
+import name.huliqing.core.data.ControlData;
 import name.huliqing.core.data.DropData;
 import name.huliqing.core.data.DropItem;
 import name.huliqing.core.data.EffectData;
@@ -125,7 +126,7 @@ import name.huliqing.core.object.action.IdlePatrolAction;
 import name.huliqing.core.object.action.IdleStaticAction;
 import name.huliqing.core.object.action.RunPathAction;
 import name.huliqing.core.object.action.RunSimpleAction;
-import name.huliqing.core.object.actor.ActorControl;
+import name.huliqing.core.object.control.ActorControl;
 import name.huliqing.core.object.actor.ActorDataLoader;
 import name.huliqing.core.object.actor.ItemStore;
 import name.huliqing.core.object.actor.SkillStore;
@@ -155,6 +156,7 @@ import name.huliqing.core.object.bullet.CurveBullet;
 import name.huliqing.core.object.bullet.CurveTrailBullet;
 import name.huliqing.core.object.bullet.SimpleBullet;
 import name.huliqing.core.object.bullet.StraightBullet;
+import name.huliqing.core.object.control.ActorChannelControl;
 import name.huliqing.core.object.channel.ChannelDataLoader;
 import name.huliqing.core.object.channel.SimpleChannel;
 import name.huliqing.core.object.chat.ChatDataLoader;
@@ -164,6 +166,16 @@ import name.huliqing.core.object.chat.SendChat;
 import name.huliqing.core.object.chat.ShopChat;
 import name.huliqing.core.object.chat.TaskChat;
 import name.huliqing.core.object.config.ConfigDataLoader;
+import name.huliqing.core.object.control.ActorActionControl;
+import name.huliqing.core.object.control.ActorAttributeControl;
+import name.huliqing.core.object.control.ActorBaseControl;
+import name.huliqing.core.object.control.ActorItemControl;
+import name.huliqing.core.object.control.ActorSkinControl;
+import name.huliqing.core.object.control.ControlDataLoader;
+import name.huliqing.core.object.control.ActorPhysicsControl;
+import name.huliqing.core.object.control.ActorSkillControl;
+import name.huliqing.core.object.control.ActorStateControl;
+import name.huliqing.core.object.control.ActorTalentControl;
 import name.huliqing.core.object.drop.DropDataLoader;
 import name.huliqing.core.object.effect.EffectDataLoader;
 import name.huliqing.core.object.effect.EncircleHaloEffect;
@@ -247,7 +259,7 @@ import name.huliqing.core.object.shape.BoxShape;
 import name.huliqing.core.object.shape.ShapeDataLoader;
 import name.huliqing.core.object.skill.AttackSkill;
 import name.huliqing.core.object.skill.BackSkill;
-import name.huliqing.core.object.skill.DeadRagdollSkill;
+//import name.huliqing.core.object.skill.DeadRagdollSkill;
 import name.huliqing.core.object.skill.DeadSkill;
 import name.huliqing.core.object.skill.DefendSkill;
 import name.huliqing.core.object.skill.DuckSkill;
@@ -343,6 +355,7 @@ public class LY {
         Serializer.registerClass(ChannelData.class);
         Serializer.registerClass(ChatData.class);
         Serializer.registerClass(ConfigData.class);
+        Serializer.registerClass(ControlData.class);
         Serializer.registerClass(DropData.class);
         Serializer.registerClass(EffectData.class);
         Serializer.registerClass(ElData.class);
@@ -428,6 +441,18 @@ public class LY {
         
         // Config
         DataFactory.register("config",  ConfigData.class, ConfigDataLoader.class, null);
+        
+        // Control 
+        DataFactory.register("controlActorAction",  ControlData.class, ControlDataLoader.class, ActorActionControl.class);
+        DataFactory.register("controlActorAttribute",  ControlData.class, ControlDataLoader.class, ActorAttributeControl.class);
+        DataFactory.register("controlActorBase",  ControlData.class, ControlDataLoader.class, ActorBaseControl.class);
+        DataFactory.register("controlActorChannel",  ControlData.class, ControlDataLoader.class, ActorChannelControl.class);
+        DataFactory.register("controlActorItem",  ControlData.class, ControlDataLoader.class, ActorItemControl.class);
+        DataFactory.register("controlActorPhysics",  ControlData.class, ControlDataLoader.class, ActorPhysicsControl.class);
+        DataFactory.register("controlActorSkill",  ControlData.class, ControlDataLoader.class, ActorSkillControl.class);
+        DataFactory.register("controlActorSkin",  ControlData.class, ControlDataLoader.class, ActorSkinControl.class);
+        DataFactory.register("controlActorState",  ControlData.class, ControlDataLoader.class, ActorStateControl.class);
+        DataFactory.register("controlActorTalent",  ControlData.class, ControlDataLoader.class, ActorTalentControl.class);
         
         // Drop
         DataFactory.register("drop",  DropData.class, DropDataLoader.class, null);
@@ -532,7 +557,7 @@ public class LY {
         DataFactory.register("skillIdle",  SkillData.class, SkillDataLoader.class, IdleSkill.class);
         DataFactory.register("skillHurt",  SkillData.class, SkillDataLoader.class, HurtSkill.class);
         DataFactory.register("skillDead",  SkillData.class, SkillDataLoader.class, DeadSkill.class);
-        DataFactory.register("skillDeadRagdoll",  SkillData.class, SkillDataLoader.class, DeadRagdollSkill.class);
+//        DataFactory.register("skillDeadRagdoll",  SkillData.class, SkillDataLoader.class, DeadRagdollSkill.class);
         DataFactory.register("skillAttack",  SkillData.class, SkillDataLoader.class, AttackSkill.class);
         DataFactory.register("skillShot",  SkillData.class, SkillDataLoader.class, ShotSkill.class);
         DataFactory.register("skillShotBow",  SkillData.class, SkillDataLoader.class, ShotBowSkill.class);

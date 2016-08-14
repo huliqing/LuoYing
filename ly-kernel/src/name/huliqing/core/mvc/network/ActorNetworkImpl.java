@@ -4,6 +4,7 @@
  */
 package name.huliqing.core.mvc.network;
 
+import com.jme3.animation.LoopMode;
 import com.jme3.math.ColorRGBA;
 import name.huliqing.core.network.Network;
 import com.jme3.math.Vector3f;
@@ -32,7 +33,6 @@ import name.huliqing.core.mess.MessActorViewDir;
 import name.huliqing.core.mess.MessAttributeSync;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actor.ActorListener;
-import name.huliqing.core.object.actor.SkillListener;
 
 /**
  *
@@ -61,36 +61,10 @@ public class ActorNetworkImpl implements ActorNetwork{
         return actorService.loadActor(actorData);
     }
 
-     // remove 0221
-//    @Override
-//    public boolean rewardItem(Actor actor, String objectId, int count) {
-//        if (!network.isClient()) {
-//            actorService.rewardItem(actor, objectId, count); 
-//            
-//            // 同步物品数量
-//            ProtoData data = actorDao.getItemExceptSkill(actor, objectId);
-//            MessSCSyncItemGet messSyn = new MessSCSyncItemGet();
-//            messSyn.setActorId(actor.getData().getUniqueId());
-//            messSyn.setItemId(objectId);
-//            messSyn.setAddCount(count);
-//            messSyn.setSyncTotal(data != null ? data.getTotal() : 0);
-//            network.broadcast(messSyn);
-//            return true;
-//        }
-//        return false;
-//    }
-
     @Override
     public String createRandomName(Sex sex) {
         return actorService.createRandomName(sex); 
     }
-
-    // remove20160504
-//    @Override
-//    public boolean hasObstacle(Actor actor) {
-////        return actorService.hasObstacle(actor); 
-//        throw new UnsupportedOperationException("Not supported yet.");
-//    }
 
     @Override
     public boolean hasObstacleActor(Actor self, List<Actor> actors) {
@@ -112,10 +86,11 @@ public class ActorNetworkImpl implements ActorNetwork{
         return actorService.checkFace(self, target); 
     }
 
-    @Override
-    public Actor getActor(Spatial spatial) {
-        return actorService.getActor(spatial); 
-    }
+    // remove0815
+//    @Override
+//    public Actor getActor(Spatial spatial) {
+//        return actorService.getActor(spatial); 
+//    }
 
     @Override
     public Actor findNearestEnemyExcept(Actor actor, float maxDistance, Actor except) {
@@ -261,29 +236,17 @@ public class ActorNetworkImpl implements ActorNetwork{
 ////        actorService.itemSynTotal(actor, itemId, total);
 //    }
 
-    @Override
-    public void setPhysics(Actor actor, boolean enabled) {
-        if (!network.isClient()) {
-            MessActorPhysics mess = new MessActorPhysics();
-            mess.setActorId(actor.getData().getUniqueId());
-            mess.setEnabled(enabled);
-            network.broadcast(mess);
-            
-            actorService.setPhysics(actor, enabled); 
-        }
-    }
-
-    @Override
-    public void setViewDirection(Actor actor, Vector3f viewDirection) {
-        if (!network.isClient()) {
-            MessActorViewDir mess = new MessActorViewDir();
-            mess.setActorId(actor.getData().getUniqueId());
-            mess.setViewDir(viewDirection);
-            network.broadcast(mess);
-            
-            actorService.setViewDirection(actor, viewDirection);
-        }
-    }
+//    @Override
+//    public void setPhysics(Actor actor, boolean enabled) {
+//        if (!network.isClient()) {
+//            MessActorPhysics mess = new MessActorPhysics();
+//            mess.setActorId(actor.getData().getUniqueId());
+//            mess.setEnabled(enabled);
+//            network.broadcast(mess);
+//            
+//            actorService.setPhysics(actor, enabled); 
+//        }
+//    }
 
     @Override
     public void setColor(Actor actor, ColorRGBA color) {
@@ -384,15 +347,16 @@ public class ActorNetworkImpl implements ActorNetwork{
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @Override
-    public void addSkillListener(Actor actor, SkillListener skillListener) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public boolean removeSkillListener(Actor actor, SkillListener skillListener) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+    // remove20160815
+//    @Override
+//    public void addSkillListener(Actor actor, SkillListener skillListener) {
+//        throw new UnsupportedOperationException("Not supported yet.");
+//    }
+//
+//    @Override
+//    public boolean removeSkillListener(Actor actor, SkillListener skillListener) {
+//        throw new UnsupportedOperationException("Not supported yet.");
+//    }
 
     @Override
     public void setName(Actor actor, String name) {
@@ -509,6 +473,105 @@ public class ActorNetworkImpl implements ActorNetwork{
     @Override
     public int getLife(Actor actor) {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+    
+    @Override
+    public void setViewDirection(Actor actor, Vector3f viewDirection) {
+        if (!network.isClient()) {
+            MessActorViewDir mess = new MessActorViewDir();
+            mess.setActorId(actor.getData().getUniqueId());
+            mess.setViewDir(viewDirection);
+            network.broadcast(mess);
+            
+            actorService.setViewDirection(actor, viewDirection);
+        }
+    }
+
+    @Override
+    public void setLocation(Actor actor, Vector3f location) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setPhysicsEnabled(Actor actor, boolean enabled) {
+         if (!network.isClient()) {
+            MessActorPhysics mess = new MessActorPhysics();
+            mess.setActorId(actor.getData().getUniqueId());
+            mess.setEnabled(enabled);
+            network.broadcast(mess);
+            
+            actorService.setPhysicsEnabled(actor, enabled); 
+        }
+    }
+
+    @Override
+    public boolean isPhysicsEnabled(Actor actor) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Vector3f getViewDirection(Actor actor) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setWalkDirection(Actor actor, Vector3f walkDirection) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Vector3f getWalkDirection(Actor actor) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void playAnim(Actor actor, String animName, LoopMode loop, float useTime, float startTime, String... channelIds) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setChannelLock(Actor actor, boolean locked, String... channelIds) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void restoreAnimation(Actor actor, String animName, LoopMode loop, float useTime, float startTime, String... channelIds) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean reset(Actor actor) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isPlayer(Actor actor) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setPlayer(Actor actor, boolean player) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public float getViewAngle(Actor actor, Vector3f position) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public float getMass(Actor actor) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isKinematic(Actor actor) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setKinematic(Actor actor, boolean kinematic) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

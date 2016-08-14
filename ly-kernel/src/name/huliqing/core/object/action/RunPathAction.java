@@ -14,8 +14,6 @@ import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.core.Factory;
-import name.huliqing.core.object.action.AbstractAction;
-import name.huliqing.core.object.action.RunAction;
 import name.huliqing.core.data.ActionData;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.enums.SkillType;
@@ -127,7 +125,7 @@ public class RunPathAction extends AbstractAction implements RunAction{
         // .走近目标点
         // .或者走过头(该情况与目标会成大于90度的夹角）
         // 当前距离
-        float distance = actor.getDistance(position);
+        float distance = actor.getModel().getWorldTranslation().distance(position);
         if (distance <= nearest) {
             if (waitSkillId != null) {
                 skillNetwork.playSkill(actor, waitSkillId, false);
@@ -186,7 +184,7 @@ public class RunPathAction extends AbstractAction implements RunAction{
     }
     
     private void runByStraight() {
-        if (!actor.isRunning()) {
+        if (!skillService.isRunning(actor)) {
             TempVars tv = TempVars.get();
             skillNetwork.playWalk(actor, runSkillId, position.subtract(actor.getModel().getWorldTranslation(), tv.vect1), true, false);
             tv.release();
@@ -206,7 +204,7 @@ public class RunPathAction extends AbstractAction implements RunAction{
         }
         
         // 转换到下一个路径点
-        if (tempPoint != current || !actor.isRunning()) {
+        if (tempPoint != current || !skillService.isRunning(actor)) {
             current = tempPoint;
             TempVars tv = TempVars.get();
             skillNetwork.playWalk(actor, runSkillId, current.getPosition().subtract(actor.getModel().getWorldTranslation(), tv.vect1), true, false);
@@ -312,7 +310,7 @@ public class RunPathAction extends AbstractAction implements RunAction{
         if (actor == null) {
             return false;
         }
-        return actor.getDistance(pos) <= nearest;
+        return actor.getModel().getWorldTranslation().distance(pos) <= nearest;
     }
 
     @Override

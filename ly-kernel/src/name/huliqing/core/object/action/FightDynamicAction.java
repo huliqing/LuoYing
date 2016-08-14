@@ -16,7 +16,6 @@ import name.huliqing.core.Config;
 import name.huliqing.core.Factory;
 import name.huliqing.core.constants.SkillConstants;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.action.FightAction;
 import name.huliqing.core.data.ActionData;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.enums.SkillType;
@@ -174,7 +173,7 @@ public class FightDynamicAction extends FollowPathAction implements FightAction 
         }
         
         if (enemy == null 
-                || enemy.isDead() 
+                || actorService.isDead(enemy) 
                 || !playService.isInScene(enemy) 
                 
                 // remove20160217,不再判断是否为敌人，是否可攻击目标以后交由hitChecker判断
@@ -443,7 +442,7 @@ public class FightDynamicAction extends FollowPathAction implements FightAction 
      * @return 
      */
     protected boolean isAllowFollow() {
-        return allowFollow && actor.getMass() > 0;
+        return allowFollow && actorService.getMass(actor) > 0;
     }
     
     public float getFollowTimeMax() {

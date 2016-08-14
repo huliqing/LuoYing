@@ -23,6 +23,7 @@ import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actor.SkillListener;
+import name.huliqing.core.object.control.ActorSkillControl;
 import name.huliqing.core.object.skill.Skill;
 import name.huliqing.core.object.skill.Walk;
 
@@ -31,27 +32,23 @@ import name.huliqing.core.object.skill.Walk;
  * @author huliqing
  */
 public class SkillServiceImpl implements SkillService {
-    private final static Logger logger = Logger.getLogger(SkillServiceImpl.class.getName());
+    private final static Logger LOG = Logger.getLogger(SkillServiceImpl.class.getName());
 
-    private StateService stateService;
     private SkinService skinService;
     private AttributeService attributeService;
-    private ConfigService configService;
     private ElService elService;
     private SkillDao skillDao;
     private PlayService playService;
-//    private PlayNetwork playNetwork;
+    private ActorService actorService;
     
     @Override
     public void inject() {
-        stateService = Factory.get(StateService.class);
         attributeService = Factory.get(AttributeService.class);
         skinService = Factory.get(SkinService.class);
-        configService = Factory.get(ConfigService.class);
         elService = Factory.get(ElService.class);
         skillDao = Factory.get(SkillDao.class);
-//        playNetwork = Factory.get(PlayNetwork.class);
         playService = Factory.get(PlayService.class);
+        actorService = Factory.get(ActorService.class);
     }
 
     @Override
@@ -94,7 +91,10 @@ public class SkillServiceImpl implements SkillService {
     public Skill getSkillInstance(Actor actor, String skillId) {
         SkillData skillData = getSkill(actor, skillId);
         if (skillData != null) {
-            return actor.getSkillProcessor().findSkill(skillData);
+            ActorSkillControl skillControl = actor.getModel().getControl(ActorSkillControl.class);
+            if (skillControl != null) {
+                return skillControl.findSkill(skillData);
+            }
         }
         return null;
     }
@@ -146,7 +146,12 @@ public class SkillServiceImpl implements SkillService {
             return false;
         }
         
-        boolean result = actor.getSkillProcessor().playFaceTo(position);
+        ActorSkillControl skillControl = actor.getModel().getControl(ActorSkillControl.class);
+        if (skillControl == null) {
+            return false;
+        }
+        
+        boolean result = skillControl.playFaceTo(position);
         return result;
     }
     
@@ -234,8 +239,12 @@ public class SkillServiceImpl implements SkillService {
         // 效果,这些状态可能会监听角色技能的执行，并判断是否允许执行这个技能。
         // 比如“晕眩”、“缠绕”等状态就可能监测并侦听角色的技能，以阻止一些技能
         // 的执行。
-        List<SkillListener> skillListeners = actor.getSkillListeners();
-        if (!skillListeners.isEmpty()) {
+        ActorSkillControl skillControl = actor.getModel().getControl(ActorSkillControl.class);
+        if (skillControl == null) {
+            return SkillConstants.STATE_UNDEFINE;
+        }
+        List<SkillListener> skillListeners = skillControl.getSkillListeners();
+        if (skillListeners != null && !skillListeners.isEmpty()) {
             for (SkillListener sl : skillListeners) {
                 if (!sl.onSkillHookCheck(actor, skill)) {
                     return SkillConstants.STATE_HOOK;
@@ -248,7 +257,7 @@ public class SkillServiceImpl implements SkillService {
         // 11.如果当前正在执行的所有技能都可以被新技能覆盖，则直接返回OK.
         // 注意：overlaps判断要放在interrupts判断之前，因为如果可以覆盖正在执行
         // 的技能就不需要中断它们
-        long runningStates = actor.getSkillProcessor().getRunningSkillStates();
+        long runningStates = skillControl.getRunningSkillStates();
         if ((data.getOverlaps() & runningStates) == runningStates) {
             return SkillConstants.STATE_OK;
         }
@@ -287,14 +296,18 @@ public class SkillServiceImpl implements SkillService {
         int code = checkStateCode(actor, skill, force);
         if (code != SkillConstants.STATE_OK) {
             if (Config.debug) {
-                logger.log(Level.INFO, "Could not PlaySkill, actor={0}, skill={1}, force={2}, errorCode={3}"
+                LOG.log(Level.INFO, "Could not PlaySkill, actor={0}, skill={1}, force={2}, errorCode={3}"
                         , new Object[]{actor.getData().getName(), skill.getSkillData().getId(), force, code});
             }
             return false;
         }
         
         // --1. 执行技能
-        actor.getSkillProcessor().playSkill(skill);
+        ActorSkillControl c = actor.getModel().getControl(ActorSkillControl.class);
+        if (c == null) {
+            return false;
+        }
+        c.playSkill(skill);
         
         // --2. 技能消耗
         SkillData data = skill.getSkillData();
@@ -318,15 +331,26 @@ public class SkillServiceImpl implements SkillService {
 
     @Override
     public boolean playSkill(Actor actor, String skillId, boolean force) {
+        ActorSkillControl c = actor.getModel().getControl(ActorSkillControl.class);
+        if (c == null) {
+            return false;
+        }
+        
         SkillData skillData = getSkill(actor, skillId);
-        Skill skill = actor.getSkillProcessor().findSkill(skillData);
+        Skill skill = c.findSkill(skillData);
         return playSkill(actor, skill, force);
     }
 
     @Override
     public boolean playWalk(Actor actor, String skillId, Vector3f dir, boolean faceToDir, boolean force) {
+        ActorSkillControl c = actor.getModel().getControl(ActorSkillControl.class);
+        if (c == null) {
+            return false;
+        }
+        
         SkillData sd = getSkill(actor, skillId);
-        Skill skill = actor.getSkillProcessor().findSkill(sd);
+        Skill skill = c.findSkill(sd);
+        
         if (skill instanceof Walk) {
             Walk wSkill = (Walk) skill;
             wSkill.setWalkDirection(dir);
@@ -336,30 +360,59 @@ public class SkillServiceImpl implements SkillService {
         }
         return playSkill(actor, sd.getId(), force);
     }
-
+    
     @Override
     public boolean isPlayingSkill(Actor actor) {
-        return actor.getSkillProcessor().isPlayingSkill();
+        ActorSkillControl skillControl = actor.getModel().getControl(ActorSkillControl.class);
+        if (skillControl != null) {
+            return skillControl.isPlayingSkill();
+        }
+        return false;
     }
-
+    
     @Override
     public boolean isPlayingSkill(Actor actor, SkillType skillType) {
-        return actor.getSkillProcessor().isPlayingSkill(skillType);
+        ActorSkillControl c = actor.getModel().getControl(ActorSkillControl.class);
+        if (c != null) {
+            return c.isPlayingSkill(skillType);
+        }
+        return false;
     }
 
     @Override
     public boolean isWaiting(Actor actor) {
-        return actor.getSkillProcessor().isWaiting();
+        ActorSkillControl c = actor.getModel().getControl(ActorSkillControl.class);
+        if (c != null) {
+            return c.isWaiting();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isRunning(Actor actor) {
+        ActorSkillControl c = actor.getModel().getControl(ActorSkillControl.class);
+        if (c != null) {
+            return c.isRunning();
+        }
+        return false;
     }
 
     @Override
     public Skill getPlayingSkill(Actor actor, SkillType skillType) {
-        return actor.getSkillProcessor().getPlayingSkill(skillType);
+        ActorSkillControl skillControl = actor.getModel().getControl(ActorSkillControl.class);
+        if (skillControl != null) {
+            return skillControl.getPlayingSkill(skillType);
+        }
+        return null;
     }
 
     @Override
     public long getPlayingSkillStates(Actor actor) {
-        return actor.getSkillProcessor().getPlayingSkillStates();
+        ActorSkillControl skillControl = actor.getModel().getControl(ActorSkillControl.class);
+        if (skillControl != null) {
+            return skillControl.getPlayingSkillStates();
+        }
+        return 0;
     }
 
     @Override
@@ -397,18 +450,31 @@ public class SkillServiceImpl implements SkillService {
 
     @Override
     public void lockSkillChannels(Actor actor, String... channels) {
-        actor.getChannelProcessor().setChannelLock(true, channels);
+        actorService.setChannelLock(actor, true, channels);
     }
 
     @Override
     public void unlockSkillChannels(Actor actor, String... channels) {
-        actor.getChannelProcessor().setChannelLock(false, channels);
+        actorService.setChannelLock(actor, false, channels);
     }
     
     @Override
     public float getSkillTrueUseTime(Actor actor, SkillData skillData) {
-        Skill skill = actor.getSkillProcessor().findSkill(skillData);
+        ActorSkillControl skillControl = actor.getModel().getControl(ActorSkillControl.class);
+        Skill skill = skillControl.findSkill(skillData);
         return skill.getTrueUseTime();
+    }
+
+    @Override
+    public void addSkillListener(Actor actor, SkillListener skillListener) {
+        ActorSkillControl control = actor.getModel().getControl(ActorSkillControl.class);
+        control.addSkillListener(skillListener);
+    }
+
+    @Override
+    public boolean removeSkillListener(Actor actor, SkillListener skillListener) {
+        ActorSkillControl control = actor.getModel().getControl(ActorSkillControl.class);
+        return control.removeSkillListener(skillListener);
     }
     
 }

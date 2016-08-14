@@ -4,14 +4,11 @@
  */
 package name.huliqing.core.mess;
 
-import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.network.serializing.Serializable;
 import com.jme3.util.TempVars;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import name.huliqing.core.Config;
 import name.huliqing.core.Factory;
+import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.object.actor.Actor;
 
@@ -21,7 +18,7 @@ import name.huliqing.core.object.actor.Actor;
  */
 @Serializable
 public class MessActorTransform extends MessBase {
-    private static final Logger LOG = Logger.getLogger(MessActorTransform.class.getName());
+//    private static final Logger LOG = Logger.getLogger(MessActorTransform.class.getName());
     
     private long actorId = -1;
     private Vector3f location = new Vector3f();
@@ -66,13 +63,16 @@ public class MessActorTransform extends MessBase {
     @Override
     public void applyOnClient() {
         PlayService playService = Factory.get(PlayService.class);
+        ActorService actorService = Factory.get(ActorService.class);
         Actor actor = playService.findActor(actorId);
         if (actor == null) {
             return;
         }
         
         TempVars tv = TempVars.get();
-        Vector3f sourcePos = tv.vect1.set(actor.getLocation());
+//        Vector3f sourcePos = tv.vect1.set(actor.getLocation()); // remove
+        Vector3f sourcePos = tv.vect1.set(actor.getModel().getWorldTranslation());
+        
         Vector3f targetPos = tv.vect2.set(location);
         float distanceSquared = sourcePos.distanceSquared(targetPos);
         // 1.如果距离太小，在向量计算上容易出现意料之外的错误,所以不处理,直接同步位置
@@ -81,15 +81,17 @@ public class MessActorTransform extends MessBase {
 //                LOG.log(Level.INFO, "--MATransform:........，距离太小，绝对同步:actor={0},distance={1}"
 //                        , new Object[]{actor.getModel().getName(), FastMath.sqrt(distanceSquared)});
 //            }
-            actor.setLocation(location);
-            actor.setWalkDirection(walkDirection);
-            actor.setViewDirection(viewDirection);
+            
+            actorService.setLocation(actor, location);
+            actorService.setWalkDirection(actor, walkDirection);
+            actorService.setViewDirection(actor, viewDirection);
+
             tv.release();
             return;
         }
         
         Vector3f targetDirection = tv.vect3.set(targetPos).subtractLocal(sourcePos);
-        Vector3f sourceWalkDirection = tv.vect4.set(actor.getWalkDirection());
+        Vector3f sourceWalkDirection = tv.vect4.set(actorService.getWalkDirection(actor));
         
         // 2.如果距离大于一定程度，这个时候要判断WalkDirection的偏移程度，如果是
         // 在接近平行的情况下，即基本没有偏移的情况，则仍然可以使用拉伸的方式，
@@ -103,16 +105,18 @@ public class MessActorTransform extends MessBase {
         if (distanceSquared > 4.0f) {
             // 如果超偏移太大则直接绝对同步
             Vector3f targetDirectionNor = tv.vect5.set(targetDirection).normalizeLocal();
-            Vector3f sourceWalkDirectionNor = tv.vect6.set(actor.getWalkDirection()).normalizeLocal();
+            Vector3f sourceWalkDirectionNor = tv.vect6.set(actorService.getWalkDirection(actor)).normalizeLocal();
             float d2 = sourceWalkDirectionNor.dot(targetDirectionNor);
             if ((d2 < 0.95f && d2 > -0.95f)) {
 //                if (Config.debug) {
 //                    LOG.log(Level.INFO, "--MATransform:OOOOOOOO，距离和偏移太大，直接绝对同步:actor={0},distance={1},d2={2}"
 //                            , new Object[]{actor.getModel().getName(), FastMath.sqrt(distanceSquared), d2});
 //                }
-                actor.setLocation(location);
-                actor.setWalkDirection(walkDirection);
-                actor.setViewDirection(viewDirection);
+
+                actorService.setLocation(actor, location);
+                actorService.setWalkDirection(actor, walkDirection);
+                actorService.setViewDirection(actor, viewDirection);
+                
                 tv.release();
                 return;
             }
@@ -123,8 +127,10 @@ public class MessActorTransform extends MessBase {
         // 主机FPS比较低，但是客户端FPS非常高的情况下，客户端角色走动时经常会被拉到空中
 //        sourceWalkDirection.addLocal(targetDirection.setY(0));
         sourceWalkDirection.addLocal(targetDirection).setY(0);
-        actor.setWalkDirection(sourceWalkDirection);
-        actor.setViewDirection(viewDirection);
+        
+        actorService.setWalkDirection(actor, sourceWalkDirection);
+        actorService.setViewDirection(actor, viewDirection);
+        
         tv.release();
     }
     

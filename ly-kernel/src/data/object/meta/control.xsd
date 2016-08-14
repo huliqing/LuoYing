@@ -1,0 +1,151 @@
+<?xml version="1.0"?>
+<!--
+xs:string
+xs:decimal
+xs:integer
+xs:boolean
+xs:date
+xs:time
+-->
+
+<xs:schema version="1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://fighter.huliqing.name"
+           xmlns="http://fighter.huliqing.name"
+           elementFormDefault="qualified"
+        >
+    
+    <xs:include schemaLocation="base.xsd" />
+    
+    <xs:element name="root">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="controlActorAction" />
+                <xs:element ref="controlActorAttribute" />
+                <xs:element ref="controlActorBase" />
+                <xs:element ref="controlActorChannel" />
+                <xs:element ref="controlActorItem" />
+                <xs:element ref="controlActorPhysics" />
+                <xs:element ref="controlActorSkill" />
+                <xs:element ref="controlActorSkin" />
+                <xs:element ref="controlActorState" />
+                <xs:element ref="controlActorTalent" />
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="controlActorTalent">
+        <xs:annotation>
+            <xs:documentation>xxxx</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="base"></xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="controlActorState">
+        <xs:annotation>
+            <xs:documentation>xxxx</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="base"></xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+        
+    <xs:element name="controlActorSkin">
+        <xs:annotation>
+            <xs:documentation>角色装备控制器</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="base"></xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="controlActorSkill">
+        <xs:annotation>
+            <xs:documentation>xxxx</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="base"></xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="controlActorPhysics">
+        <xs:annotation>
+            <xs:documentation>角色物理控制器</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="base">
+                    <xs:attribute name="radius" type="xs:decimal" use="required" />
+                    <xs:attribute name="height" type="xs:decimal" use="required" />
+                    <xs:attribute name="mass" type="xs:decimal" use="required" />
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="controlActorItem">
+        <xs:annotation>
+            <xs:documentation>xxxx</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="base"></xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="controlActorChannel">
+        <xs:annotation>
+            <xs:documentation>xxxx</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="base"></xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+        
+    <xs:element name="controlActorBase">
+        <xs:annotation>
+            <xs:documentation>xxxx</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="base"></xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="controlActorAttribute">
+        <xs:annotation>
+            <xs:documentation>xxxx</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="base"></xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="controlActorAction">
+        <xs:annotation>
+            <xs:documentation>xxxx</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="base"></xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+</xs:schema>

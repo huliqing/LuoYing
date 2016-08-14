@@ -11,6 +11,7 @@ import name.huliqing.core.constants.SkillConstants;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.actor.SkillListener;
 import name.huliqing.core.object.skill.Skill;
 
 /**
@@ -121,7 +122,7 @@ public interface SkillService extends Inject {
     /**
      * 执行“步行”技能，步行的速度等受角色属性的影响
      * @param actor
-     * @param walkSkillId 必须是一个WalkSkill或WalkRun类型的ID
+     * @param skillId
      * @param dir
      * @param faceToDir
      * @param force 是否强制执行,注：如果强制执行则忽略<strong>所有</strong>
@@ -141,7 +142,7 @@ public interface SkillService extends Inject {
     /**
      * 检查技能是否可以执行.
      * @param actor
-     * @param data
+     * @param skill
      * @param force 是否强制执行,注：如果强制执行则忽略<strong>所有</strong>
      * 任何限制，直接执行技能,该方法将保证返回true。
      * @return 
@@ -152,7 +153,7 @@ public interface SkillService extends Inject {
      * 是否可以使用指定的技能，该方法返回一个状态码。使用该状态码来判断是否可以
      * 执行该技能。
      * @param actor
-     * @param data
+     * @param skill
      * @param force 是否强制执行,注：如果强制执行则忽略<strong>所有</strong>
      * 任何限制，该方法将保证返回SkillConstants.STATE_OK
      * @return stateCode {@link SkillConstants#STATE_XXX}
@@ -199,6 +200,8 @@ public interface SkillService extends Inject {
      * @return 
      */
     boolean isWaiting(Actor actor);
+    
+    boolean isRunning(Actor actor);
     
     /**
      * 获取角色当前正在执行的技能,如果没有找到该技能，则返回null.
@@ -302,5 +305,9 @@ public interface SkillService extends Inject {
      * @return 
      */
     float getSkillTrueUseTime(Actor actor, SkillData skillData);
+    
+    void addSkillListener(Actor actor, SkillListener skillListener);
+    
+    boolean removeSkillListener(Actor actor, SkillListener skillListener);
     
 }

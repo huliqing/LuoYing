@@ -71,7 +71,7 @@ public class SearchEnemyActorLogic<T extends ActorLogicData> extends ActorLogic<
         // 增加自动频率的逻辑
         Actor target = actorService.getTarget(actor);
         
-        if (target == null || target.isDead() || !target.isEnemy(actor) 
+        if (target == null || actorService.isDead(target) || !actorService.isEnemy(target, actor) 
                 || !playService.isInScene(target)) {
             
             Actor enemy = actorService.findNearestEnemyExcept(actor, actorService.getViewDistance(actor), null);

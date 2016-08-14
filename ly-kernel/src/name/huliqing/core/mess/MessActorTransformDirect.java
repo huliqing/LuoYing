@@ -7,6 +7,7 @@ package name.huliqing.core.mess;
 import com.jme3.math.Vector3f;
 import com.jme3.network.serializing.Serializable;
 import name.huliqing.core.Factory;
+import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.object.actor.Actor;
 
@@ -64,8 +65,9 @@ public class MessActorTransformDirect extends MessBase {
             return;
         }
         
-        actor.setLocation(location);
-        actor.setWalkDirection(walkDirection);
-        actor.setViewDirection(viewDirection);
+        ActorService actorService = Factory.get(ActorService.class);
+        actorService.setLocation(actor, location);
+        actorService.setWalkDirection(actor, walkDirection);
+        actorService.setViewDirection(actor, viewDirection);
     }
 }

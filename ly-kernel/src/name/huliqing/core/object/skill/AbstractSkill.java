@@ -20,8 +20,9 @@ import name.huliqing.core.mvc.service.ElService;
 import name.huliqing.core.mvc.service.MagicService;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.loader.Loader;
+import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.object.actoranim.ActorAnim;
-import name.huliqing.core.object.channel.ChannelProcessor;
+import name.huliqing.core.object.control.ActorSkillControl;
 import name.huliqing.core.object.effect.Effect;
 import name.huliqing.core.object.magic.Magic;
 import name.huliqing.core.object.sound.SoundManager;
@@ -55,8 +56,8 @@ public abstract class AbstractSkill<T extends SkillData> implements Skill<T> {
     private final PlayService playService = Factory.get(PlayService.class);
     private final EffectService effectService = Factory.get(EffectService.class);
     private final AttributeService attributeService = Factory.get(AttributeService.class);
-//    private final SkillService skillService = Factory.get(SkillService.class);
     private final MagicService magicService = Factory.get(MagicService.class);
+    private final ActorService actorService = Factory.get(ActorService.class);
     
     // 格式: soundId|timePoint,soundId|timePoint...
     protected List<SoundWrap> sounds;
@@ -77,7 +78,6 @@ public abstract class AbstractSkill<T extends SkillData> implements Skill<T> {
     
     // 当前执行技能的角色
     protected Actor actor;
-    protected ChannelProcessor channelProcessor;
     
     // 当前技能已经运行的时间。每一次执行该技能或循环时都重置为0
     protected float time;
@@ -92,6 +92,8 @@ public abstract class AbstractSkill<T extends SkillData> implements Skill<T> {
     // 同步设置速度,这个trueSpeed用于缓存技能的实际速度，在每次init的时候计算一次
     // 在执行过程中就不再需要计算。
     protected float trueSpeed;
+    
+    protected ActorSkillControl skillControl;
 
     @Override
     public void setData(T data) {
@@ -221,8 +223,7 @@ public abstract class AbstractSkill<T extends SkillData> implements Skill<T> {
         // 2.如果没有后续技能，则让当前技能动画自行结束，这也是比较合理的。如武功中的“收式”，如果
         // 没有后续连招，则应该让当前技能动画的“收式”正常播放。
         String animation = data.getAnimation();
-        if (animation != null && channelProcessor != null) {
-            
+        if (animation != null) {
             doUpdateAnimation(animation
                     , data.getLoopMode()
                     , getAnimFullTime()
@@ -282,9 +283,9 @@ public abstract class AbstractSkill<T extends SkillData> implements Skill<T> {
     protected void doUpdateAnimation(String animation, LoopMode loopMode
             , float animFullTime, float animStartTime) {
         
-        channelProcessor.playAnim(animation, loopMode, animFullTime, animStartTime, data.getChannels());
+        actorService.playAnim(actor, animation, loopMode, animFullTime, animStartTime, data.getChannels());
         if (data.isChannelLocked()) {
-            channelProcessor.setChannelLock(true, data.getChannels());
+            actorService.setChannelLock(actor, true, data.getChannels());
         }
     }
     
@@ -407,7 +408,7 @@ public abstract class AbstractSkill<T extends SkillData> implements Skill<T> {
         
         // 如果有锁定过动画通道则必须解锁，否则角色的动画通道将不能被其它技能使用。
         if (data.isChannelLocked()) {
-            channelProcessor.setChannelLock(false, data.getChannels());
+            actorService.setChannelLock(actor, false, data.getChannels());
         }
         
         // 重置
@@ -469,10 +470,16 @@ public abstract class AbstractSkill<T extends SkillData> implements Skill<T> {
     public void setActor(Actor actor) {
         this.actor = actor;
     }
+   
+    // remove20160813
+//    @Override
+//    public void setAnimChannelProcessor(ChannelControl animChannelProcessor) {
+//        this.channelProcessor = animChannelProcessor;
+//    }
     
     @Override
-    public void setAnimChannelProcessor(ChannelProcessor animChannelProcessor) {
-        this.channelProcessor = animChannelProcessor;
+    public void setSkillControl(ActorSkillControl skillControl) {
+        this.skillControl = skillControl;
     }
     
     @Override
@@ -483,11 +490,8 @@ public abstract class AbstractSkill<T extends SkillData> implements Skill<T> {
     @Override
     public void restoreAnimation() {
         String animation = data.getAnimation();
-        if (animation != null && channelProcessor != null) {
-            channelProcessor.restoreAnimation(animation
-                    , data.getLoopMode()
-                    , getAnimFullTime()
-                    , getAnimStartTime()
+        if (animation != null) {
+            actorService.restoreAnimation(actor, animation, data.getLoopMode(), getAnimFullTime(), getAnimStartTime()
                     , data.getChannels());
         }
     }

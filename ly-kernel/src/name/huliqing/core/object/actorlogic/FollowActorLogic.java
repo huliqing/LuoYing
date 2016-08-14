@@ -5,6 +5,7 @@
 package name.huliqing.core.object.actorlogic;
 
 import com.jme3.math.FastMath;
+import com.jme3.math.Vector3f;
 import name.huliqing.core.Factory;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.action.FollowAction;
@@ -92,12 +93,13 @@ public class FollowActorLogic<T extends ActorLogicData> extends ActorLogic<T> {
     }
     
     private void doFollow() {
-        if (followAction.isEnd() && actor.getDistance(target.getModel().getWorldTranslation()) > maxFollow) {
+        if (followAction.isEnd() && actor.getModel().getWorldTranslation().distance(target.getModel().getWorldTranslation()) > maxFollow) {
             lastFollowUsed = FastMath.nextRandomFloat() * (maxFollow - minFollow) + minFollow;
             followAction.setFollow(target.getModel());
             followAction.setNearest(lastFollowUsed);
             playAction(followAction);
         }
     }
+    
     
 }

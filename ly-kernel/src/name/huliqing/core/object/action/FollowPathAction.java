@@ -16,8 +16,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.core.Config;
 import name.huliqing.core.Factory;
-import name.huliqing.core.object.action.AbstractAction;
-import name.huliqing.core.object.action.FollowAction;
 import name.huliqing.core.data.ActionData;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.enums.SkillType;
@@ -145,7 +143,7 @@ public class FollowPathAction extends AbstractAction implements FollowAction {
         }
         
         // 已经到达位置，则不需要再走
-        if (actor.getLocation().distanceSquared(target.getWorldTranslation()) <= nearestSquared) {
+        if (actor.getModel().getWorldTranslation().distanceSquared(target.getWorldTranslation()) <= nearestSquared) {
             if (waitSkillId != null) {
                 skillNetwork.playSkill(actor, waitSkillId, false);
             }
@@ -243,7 +241,7 @@ public class FollowPathAction extends AbstractAction implements FollowAction {
         }
         
         // 转换到下一个路径点
-        if (tempPoint != current || !actor.isRunning()) {
+        if (tempPoint != current || !skillService.isRunning(actor)) {
             current = tempPoint;
             skillNetwork.playWalk(actor
                     , runSkillId
@@ -275,7 +273,7 @@ public class FollowPathAction extends AbstractAction implements FollowAction {
      */
     protected void runByStraight() {
         // 执行技能的过程很耗时，所以必须先作判断，以优化性能
-        if (!actor.isRunning()) {
+        if (!skillService.isRunning(actor)) {
             skillNetwork.playWalk(actor
                     , runSkillId
                     , target.getWorldTranslation().subtract(actor.getModel().getWorldTranslation()), true, false);

@@ -104,7 +104,7 @@ public abstract class HitSkill<T extends SkillData> extends AbstractSkill<T> {
         // 的时候模型的头发和武器错位,即不能faceTo自己，所以target != actor的判断必须的。
         Actor target = actorService.getTarget(actor);
         if (target != null && target != actor) {
-            actor.faceTo(target.getLocation());
+            actor.faceTo(target.getModel().getWorldTranslation());
         }
         
         super.init();

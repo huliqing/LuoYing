@@ -138,7 +138,7 @@ public class AttackSkill<T extends SkillData> extends HitSkill<T> {
     protected void doDefendResult(Actor target) {
         TempVars tv = TempVars.get();
         Vector3f collisionPos = tv.vect1.set(collisionOffset);
-        tv.quat1.lookAt(actor.getViewDirection(), Vector3f.UNIT_Y);
+        tv.quat1.lookAt(actorService.getViewDirection(actor), Vector3f.UNIT_Y);
         tv.quat1.mult(collisionPos, collisionPos);
         collisionPos.addLocal(actor.getModel().getWorldTranslation());
         Collision.playDefend(collisionPos, actor, target, null, null);

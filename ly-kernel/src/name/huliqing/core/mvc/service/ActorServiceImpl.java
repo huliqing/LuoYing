@@ -7,6 +7,7 @@ package name.huliqing.core.mvc.service;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.LoopMode;
 import com.jme3.bounding.BoundingBox;
+import com.jme3.bullet.control.PhysicsControl;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Ray;
@@ -20,7 +21,6 @@ import name.huliqing.core.LY;
 import name.huliqing.core.Factory;
 import name.huliqing.core.utils.NpcNameUtils;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.actor.ActorControl;
 import name.huliqing.core.constants.IdConstants;
 import name.huliqing.core.constants.ResConstants;
 import name.huliqing.core.data.ActorData;
@@ -40,14 +40,15 @@ import name.huliqing.core.view.talk.SpeakManager;
 import name.huliqing.core.view.talk.TalkManager;
 import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.object.actor.ActorListener;
-import name.huliqing.core.object.actor.SkillListener;
 import name.huliqing.core.object.channel.Channel;
-import name.huliqing.core.object.channel.ChannelProcessor;
+import name.huliqing.core.object.control.ActorPhysicsControl;
 import name.huliqing.core.object.effect.Effect;
 import name.huliqing.core.object.el.LevelEl;
 import name.huliqing.core.object.el.XpDropEl;
 import name.huliqing.core.utils.GeometryUtils;
 import name.huliqing.core.utils.Temp;
+import name.huliqing.core.object.channel.ChannelControl;
+import name.huliqing.core.object.control.ActorBaseControl;
 
 /**
  *
@@ -131,8 +132,6 @@ public class ActorServiceImpl implements ActorService {
         return actor;
     }
     
-   
-    
     @Override
     public String createRandomName(Sex sex) {
         return NpcNameUtils.createRandomName(sex);
@@ -144,7 +143,7 @@ public class ActorServiceImpl implements ActorService {
         Temp temp = Temp.get();
         
         Vector3f origin = tv.vect1.set(self.getModel().getWorldBound().getCenter());
-        Vector3f dir = tv.vect2.set(self.getViewDirection()).normalizeLocal();
+        Vector3f dir = tv.vect2.set(getViewDirection(self)).normalizeLocal();
         float zExtent = GeometryUtils.getBoundingVolumeZExtent(self.getModel());
         origin.addLocal(dir.mult(zExtent, tv.vect3));
         
@@ -210,26 +209,27 @@ public class ActorServiceImpl implements ActorService {
     
     @Override
     public HurtFace checkFace(Spatial self, Actor target) {
-        if (target.getViewAngle(self.getWorldTranslation()) < 90) {
+        if (getViewAngle(target, self.getWorldTranslation()) < 90) {
             return HurtFace.front;
         } else {
             return HurtFace.back;
         }
     }
-
-    /**
-     * @deprecated 
-     * @param spatial
-     * @return 
-     */
-    @Override
-    public Actor getActor(Spatial spatial) {
-        ObjectData pd = spatial.getUserData(ObjectData.USER_DATA);
-        if (pd instanceof ActorData) {
-            return spatial.getControl(ActorControl.class);
-        }
-        return null;
-    }
+    
+    // remove20160815
+//    /**
+//     * @deprecated 
+//     * @param spatial
+//     * @return 
+//     */
+//    @Override
+//    public Actor getActor(Spatial spatial) {
+//        ObjectData pd = spatial.getUserData(ObjectData.USER_DATA);
+//        if (pd instanceof ActorData) {
+//            return spatial.getControl(ActorControl.class);
+//        }
+//        return null;
+//    }
 
     @Override
     public Actor findNearestEnemyExcept(Actor actor, float maxDistance, Actor except) {
@@ -246,7 +246,7 @@ public class ActorServiceImpl implements ActorService {
                 continue;
             }
             // 角色已经死亡或同一派别
-            if (target.isDead() || !target.isEnemy(actor)) {
+            if (isDead(target) || !isEnemy(target, actor)) {
                 continue;
             }
             // 判断可视范围内的敌人.
@@ -274,7 +274,7 @@ public class ActorServiceImpl implements ActorService {
                 continue;
             }
             // 角色已经死亡或同一派别
-            if (target.isDead() || !target.isEnemy(actor)) {
+            if (isDead(target) || !isEnemy(target, actor)) {
                 continue;
             }
             // 找出范围内的敌人
@@ -294,7 +294,8 @@ public class ActorServiceImpl implements ActorService {
         }
         List<Actor> actors = LY.getPlayState().getActors();
         for (Actor a : actors) {
-            if (a.isDead() || a.isEnemy(actor) || a.getDistance(actor) > maxDistance) {
+            if (isDead(a) || isEnemy(a, actor) 
+                    || a.getModel().getWorldTranslation().distance(actor.getModel().getWorldTranslation()) > maxDistance) {
                 continue;
             }
             if (getGroup(a) == getGroup(actor)) {
@@ -334,10 +335,10 @@ public class ActorServiceImpl implements ActorService {
         float halfAngle = angle * 0.5f;
         for (Actor a : actors) {
             
-            if (a == actor || a.getDistanceSquared(actor) > maxDistanceSquared) 
+            if (a == actor || a.getModel().getWorldTranslation().distanceSquared(actor.getModel().getWorldTranslation()) > maxDistanceSquared) 
                 continue;
             
-            if (angle >= 360 || actor.getViewAngle(a.getLocation()) < halfAngle) {
+            if (angle >= 360 || getViewAngle(actor, a.getModel().getWorldTranslation()) < halfAngle) {
                 store.add(a);
             }
         }
@@ -439,8 +440,8 @@ public class ActorServiceImpl implements ActorService {
         if (oldTargetId != -1) {
             Actor oldTarget = playService.findActor(oldTargetId);
             if (oldTarget != null) {
-                List<ActorListener> als = oldTarget.getActorListeners();
-                if (als != null) {
+                List<ActorListener> als = getActorBaseControl(oldTarget).getActorListeners(); 
+                if (als != null && als.isEmpty()) {
                     for (ActorListener al : als) {
                         al.onActorReleased(oldTarget, actor);
                     }
@@ -455,7 +456,7 @@ public class ActorServiceImpl implements ActorService {
 
         // 锁定新目标的listener.
         actor.getData().setTarget(target.getData().getUniqueId());
-        List<ActorListener> als = target.getActorListeners();
+        List<ActorListener> als = getActorBaseControl(target).getActorListeners();
         if (als != null) {
             for (ActorListener al : als) {
                 al.onActorLocked(target, actor);
@@ -515,15 +516,16 @@ public class ActorServiceImpl implements ActorService {
         return actor.getData().getGroup() != target.getData().getGroup();
     }
 
-    @Override
-    public void setPhysics(Actor actor, boolean enabled) {
-        actor.setEnabled(enabled);
-    }
-
-    @Override
-    public void setViewDirection(Actor actor, Vector3f viewDirection) {
-        actor.setViewDirection(viewDirection);
-    }
+    // remove20160813
+//    @Override
+//    public void setPhysics(Actor actor, boolean enabled) {
+//        actor.setEnabled(enabled);
+//    }
+//
+//    @Override
+//    public void setViewDirection(Actor actor, Vector3f viewDirection) {
+//        actor.setViewDirection(viewDirection);
+//    }
 
     @Override
     public void setColor(Actor actor, ColorRGBA color) {
@@ -543,7 +545,7 @@ public class ActorServiceImpl implements ActorService {
         
         // 触发"被攻击者(source)"的角色侦听器
         // "被伤害","被杀死"侦听
-        List<ActorListener> sourceListeners = target.getActorListeners();
+        List<ActorListener> sourceListeners = getActorBaseControl(target).getActorListeners();
         if (sourceListeners != null) {
             for (ActorListener l : sourceListeners) {
                 l.onActorHit(target, source, hitAttribute, hitValue);
@@ -557,7 +559,7 @@ public class ActorServiceImpl implements ActorService {
         // 当攻击者“杀死”目标时，要让“攻击者”知道.但有时候攻击者不是一个角色
         // 或者不是任何一个"存在",所以source可能为null.
         if (killed && source != null) {
-            List<ActorListener> attackerListeners = source.getActorListeners();
+            List<ActorListener> attackerListeners = getActorBaseControl(source).getActorListeners();
             if (attackerListeners != null) {
                 for (ActorListener al : attackerListeners) {
                     al.onActorKill(source, target);
@@ -689,7 +691,7 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public boolean isMoveable(Actor actor) {
-        return actor.getMass() > 0;
+        return getMass(actor) > 0;
     }
 
     @Override
@@ -705,7 +707,7 @@ public class ActorServiceImpl implements ActorService {
     public void addActorListener(Actor actor, ActorListener actorListener) {
         if (actorListener == null) 
             return;
-        List<ActorListener> als = actor.getActorListeners();
+        List<ActorListener> als = getActorBaseControl(actor).getActorListeners();
         if (!als.contains(actorListener)) {
             als.add(actorListener);
         }
@@ -713,24 +715,25 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public boolean removeActorListener(Actor actor, ActorListener actorListener) {
-        return actor.getActorListeners().remove(actorListener);
+        return getActorBaseControl(actor).removeActorListener(actorListener);
     }
 
-    @Override
-    public void addSkillListener(Actor actor, SkillListener skillListener) {
-        if (skillListener == null)
-            return;
-        List<SkillListener> sls = actor.getSkillListeners();
-        if (!sls.contains(skillListener)) {
-            sls.add(skillListener);
-        }
-    }
-
-    @Override
-    public boolean removeSkillListener(Actor actor, SkillListener skillListener) {
-        List<SkillListener> sls = actor.getSkillListeners();
-        return sls.remove(skillListener);
-    }
+    // remove20160815
+//    @Override
+//    public void addSkillListener(Actor actor, SkillListener skillListener) {
+//        if (skillListener == null)
+//            return;
+//        List<SkillListener> sls = actor.getSkillListeners();
+//        if (!sls.contains(skillListener)) {
+//            sls.add(skillListener);
+//        }
+//    }
+//
+//    @Override
+//    public boolean removeSkillListener(Actor actor, SkillListener skillListener) {
+//        List<SkillListener> sls = actor.getSkillListeners();
+//        return sls.remove(skillListener);
+//    }
     
     @Override
     public void setName(Actor actor, String name) {
@@ -818,9 +821,10 @@ public class ActorServiceImpl implements ActorService {
     @Override
     public void syncTransform(Actor actor, Vector3f location, Vector3f viewDirection) {
         if (location != null)
-            actor.setLocation(location);
+            setLocation(actor, location);
+        
         if(viewDirection != null)
-            actor.setViewDirection(viewDirection);
+            setViewDirection(actor, viewDirection);
     }
 
     @Override
@@ -828,7 +832,7 @@ public class ActorServiceImpl implements ActorService {
         if (channelIds == null) 
             return;
         
-        ChannelProcessor cp = actor.getChannelProcessor();
+        ChannelControl cp = actor.getModel().getControl(ChannelControl.class);
         if (cp == null)
             return;
         
@@ -878,4 +882,162 @@ public class ActorServiceImpl implements ActorService {
             checkLevelUp(el, currentLevel, currentXp, store, maxLevel);
         }
     }
+
+    @Override
+    public void setLocation(Actor actor, Vector3f location) {
+        ActorPhysicsControl pac = actor.getModel().getControl(ActorPhysicsControl.class);
+        if (pac != null) {
+            pac.setLocation(location);
+        } else {
+            actor.getModel().setLocalTranslation(location);
+        }
+    }
+
+    @Override
+    public void setPhysicsEnabled(Actor actor, boolean enabled) {
+        PhysicsControl pc = actor.getModel().getControl(PhysicsControl.class);
+        if (pc != null) {
+            pc.setEnabled(enabled);
+        }
+    }
+    
+    @Override
+    public boolean isPhysicsEnabled(Actor actor) {
+        PhysicsControl pc = actor.getModel().getControl(PhysicsControl.class);
+        return pc != null && pc.isEnabled();
+    }
+    
+    @Override
+    public void setViewDirection(Actor actor, Vector3f viewDirection) {
+        ActorPhysicsControl pac = actor.getModel().getControl(ActorPhysicsControl.class);
+        if (pac != null) {
+            pac.setViewDirection(viewDirection);
+        }
+    }
+
+    @Override
+    public Vector3f getViewDirection(Actor actor) {
+        ActorPhysicsControl pac = actor.getModel().getControl(ActorPhysicsControl.class);
+        if (pac != null) {
+            pac.getViewDirection();
+        }
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void setWalkDirection(Actor actor, Vector3f walkDirection) {
+        ActorPhysicsControl pac = actor.getModel().getControl(ActorPhysicsControl.class);
+        if (pac != null) {
+            pac.setWalkDirection(walkDirection);
+        }
+    }
+
+    @Override
+    public Vector3f getWalkDirection(Actor actor) {
+        ActorPhysicsControl pac = actor.getModel().getControl(ActorPhysicsControl.class);
+        if (pac != null) {
+            return pac.getWalkDirection();
+        }
+        throw new UnsupportedOperationException("No ActorPhysicsControl set!");
+    }
+    
+    @Override
+    public void playAnim(Actor actor, String animName, LoopMode loop, float useTime, float startTime, String... channelIds) {
+        ChannelControl pac = actor.getModel().getControl(ChannelControl.class);
+        if (pac != null) {
+            pac.playAnim(animName, loop, useTime, startTime, channelIds);
+        }
+        throw new UnsupportedOperationException("");
+    }
+    
+    @Override
+    public void setChannelLock(Actor actor, boolean locked, String... channelIds) {
+        ChannelControl pac = actor.getModel().getControl(ChannelControl.class);
+        if (pac != null) {
+            pac.setChannelLock(locked, channelIds);
+        }
+        throw new UnsupportedOperationException("");
+    }
+
+    @Override
+    public void restoreAnimation(Actor actor, String animName, LoopMode loop, float useTime, float startTime, String... channelIds) {
+        ChannelControl pac = actor.getModel().getControl(ChannelControl.class);
+        if (pac != null) {
+            pac.restoreAnimation(animName, loop, useTime, startTime, channelIds);
+        }
+        throw new UnsupportedOperationException("");
+    }
+
+    @Override
+    public boolean reset(Actor actor) {
+        ChannelControl cc = actor.getModel().getControl(ChannelControl.class);
+        if (cc != null) {
+            cc.reset();
+            return true;
+        }
+        return false;
+    }
+    
+    @Override
+    public boolean isPlayer(Actor actor) {
+        return actor.getData().isPlayer();
+    }
+
+    @Override
+    public void setPlayer(Actor actor, boolean player) {
+        actor.getData().setPlayer(player);
+    }
+    
+    @Override
+    public float getViewAngle(Actor actor, Vector3f position) {
+        // 优化性能
+        TempVars tv = TempVars.get();
+        Vector3f view = tv.vect1.set(getViewDirection(actor)).normalizeLocal();
+        Vector3f dir = tv.vect2.set(position).subtractLocal(actor.getModel().getWorldTranslation()).normalizeLocal();
+        float dot = dir.dot(view);
+        float angle = 90;
+        if (dot > 0) {
+            angle = (1.0f - dot) * 90;
+        } else if (dot < 0) {
+            angle = -dot * 90 + 90;
+        } else {
+//            angle = 90;
+        }
+        tv.release();
+        return angle;
+    }
+
+    @Override
+    public float getMass(Actor actor) {
+        ActorPhysicsControl control = actor.getModel().getControl(ActorPhysicsControl.class);
+        return control != null ? control.getMass() : 0;
+    }
+
+    @Override
+    public boolean isKinematic(Actor actor) {
+        ActorPhysicsControl control = actor.getModel().getControl(ActorPhysicsControl.class);
+        return control != null ? control.isKinematic() : false;
+    }
+
+    @Override
+    public void setKinematic(Actor actor, boolean kinematic) {
+        ActorPhysicsControl control = actor.getModel().getControl(ActorPhysicsControl.class);
+        if (control != null) {
+            control.setKinematic(kinematic);
+        }
+    }
+    
+    private ActorBaseControl getActorBaseControl(Actor actor) {
+        return actor.getModel().getControl(ActorBaseControl.class);
+    }
+
+//    @Override
+//    public boolean isDucking(Actor actor) {
+//        ActorSkillControl c = actor.getModel().getControl(ActorSkillControl.class);
+//        return c != null ? c.isDucking() : false;
+//    }
+//    @Override
+//    public boolean isWaiting(Actor actor) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
 }

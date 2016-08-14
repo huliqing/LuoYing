@@ -5,13 +5,11 @@
 package name.huliqing.core.network;
 
 import name.huliqing.core.data.ConnData;
-import name.huliqing.core.network.GameServer;
 import name.huliqing.core.LY;
 import name.huliqing.core.Factory;
 import name.huliqing.core.constants.ResConstants;
 import name.huliqing.core.enums.MessageType;
 import name.huliqing.core.mvc.service.PlayService;
-import name.huliqing.core.network.AbstractServerListener;
 import name.huliqing.core.mess.MessBase;
 import name.huliqing.core.mess.MessMessage;
 import name.huliqing.core.mess.MessActorTransform;
@@ -25,6 +23,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import name.huliqing.core.mvc.service.ActorService;
 
 /**
  * 默认的服务端监听器,用于监听来自客户端连接的消息。
@@ -33,6 +32,7 @@ import java.util.logging.Logger;
 public class DefaultServerListener extends AbstractServerListener<Actor> {
     private static final Logger LOG = Logger.getLogger(DefaultServerListener.class.getName());
     private final PlayService playService = Factory.get(PlayService.class);
+    private final ActorService actorService = Factory.get(ActorService.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final List<Actor> syncObjects = new LinkedList<Actor>();
     private float syncTimer = 0;
@@ -51,9 +51,9 @@ public class DefaultServerListener extends AbstractServerListener<Actor> {
             syncTimer = 0;
             for (Actor actor : syncObjects) {
                 syncTempCache.setActorId(actor.getData().getUniqueId());
-                syncTempCache.setLocation(actor.getLocation());
-                syncTempCache.setWalkDirection(actor.getWalkDirection());
-                syncTempCache.setViewDirection(actor.getViewDirection());
+                syncTempCache.setLocation(actor.getModel().getWorldTranslation());
+                syncTempCache.setWalkDirection(actorService.getWalkDirection(actor));
+                syncTempCache.setViewDirection(actorService.getViewDirection(actor));
                 gameServer.broadcast(syncTempCache);
             }
         }
