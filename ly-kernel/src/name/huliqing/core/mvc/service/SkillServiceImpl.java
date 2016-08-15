@@ -396,6 +396,24 @@ public class SkillServiceImpl implements SkillService {
         }
         return false;
     }
+    
+    @Override
+    public boolean isDucking(Actor actor) {
+        ActorSkillControl c = actor.getModel().getControl(ActorSkillControl.class);
+        return c != null ? c.isDucking() : false;
+    }
+
+    @Override
+    public boolean isAttacking(Actor actor) {
+        ActorSkillControl c = actor.getModel().getControl(ActorSkillControl.class);
+        return c != null ? c.isAttacking() : false;
+    }
+
+    @Override
+    public boolean isDefending(Actor actor) {
+        ActorSkillControl c = actor.getModel().getControl(ActorSkillControl.class);
+        return c != null ? c.isDefending(): false;
+    }
 
     @Override
     public Skill getPlayingSkill(Actor actor, SkillType skillType) {

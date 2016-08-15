@@ -4,8 +4,9 @@
  */
 package name.huliqing.core.object.skill;
 
+import name.huliqing.core.Factory;
 import name.huliqing.core.data.SkillData;
-import name.huliqing.core.object.skill.AbstractSkill;
+import name.huliqing.core.mvc.service.ActorService;
 
 /**
  * 执行角色受伤技能.
@@ -13,16 +14,14 @@ import name.huliqing.core.object.skill.AbstractSkill;
  * @param <T>
  */
 public class HurtSkill<T extends SkillData> extends AbstractSkill<T> {
-
+    private final ActorService actorService = Factory.get(ActorService.class);
     
     @Override
     public void init() {
         super.init();
         
-        if (data.getAnimation() == null && channelProcessor != null) {
-            // Reset，对于没有“死亡”动画的角色，在死亡时必须让它“静止”
-            // 让角色的其它动画停止播放，以防止角色在死亡之后仍然在做其它动作的奇怪现象。
-            channelProcessor.reset();
+        if (data.getAnimation() == null) {
+            actorService.reset(actor);
         }
     }
 

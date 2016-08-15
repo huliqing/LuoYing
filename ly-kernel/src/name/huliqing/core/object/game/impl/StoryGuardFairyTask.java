@@ -88,7 +88,7 @@ public class StoryGuardFairyTask extends IntervalLogic {
             public void callback(Actor actor, int loadIndex) {
                 String id = actor.getData().getId();
                 actorService.setGroup(actor, StoryGuardGame.GROUP_FAIRY);
-                actor.setLocation(game.getFairyPosition());
+                actorService.setLocation(actor, game.getFairyPosition());
                 if (id.equals(IdConstants.ACTOR_FAIRY)) {
                     fairy = actor;
                     actorService.setLevel(fairy, game.getFairyLevel());

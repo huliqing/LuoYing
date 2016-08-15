@@ -16,6 +16,7 @@ import name.huliqing.core.mess.MessSkill;
 import name.huliqing.core.mess.MessSkillFaceTo;
 import name.huliqing.core.mess.MessSkillWalk;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.actor.SkillListener;
 import name.huliqing.core.object.skill.Skill;
 
 /**
@@ -237,6 +238,21 @@ public class SkillNetworkImpl implements SkillNetwork {
     public boolean isRunning(Actor actor) {
         throw new UnsupportedOperationException("Not supported yet."); 
     }
+    
+    @Override
+    public boolean isAttacking(Actor actor) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isDefending(Actor actor) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isDucking(Actor actor) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
     @Override
     public Skill getPlayingSkill(Actor actor, SkillType skillType) {
@@ -287,5 +303,16 @@ public class SkillNetworkImpl implements SkillNetwork {
     public float getSkillTrueUseTime(Actor actor, SkillData skillData) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+    @Override
+    public void addSkillListener(Actor actor, SkillListener skillListener) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean removeSkillListener(Actor actor, SkillListener skillListener) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     
 }

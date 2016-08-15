@@ -38,18 +38,11 @@ import name.huliqing.core.object.action.ActionProcessor;
 import name.huliqing.core.object.control.ActorChannelControl;
 import name.huliqing.core.object.effect.Effect;
 import name.huliqing.core.object.actorlogic.ActorLogic;
-import name.huliqing.core.object.actorlogic.ActorLogicProcessorImpl;
-import name.huliqing.core.object.resist.ResistProcessor;
 import name.huliqing.core.object.state.State;
-import name.huliqing.core.object.state.StateProcessor;
-import name.huliqing.core.object.state.StateProcessorImpl;
 import name.huliqing.core.object.talent.Talent;
-import name.huliqing.core.object.talent.TalentProcessor;
-import name.huliqing.core.object.talent.TalentProcessorImpl;
 import name.huliqing.core.object.task.Task;
 import name.huliqing.core.utils.ConvertUtils;
 import name.huliqing.core.utils.GeometryUtils;
-import name.huliqing.core.object.actorlogic.ActorLogicProcessor;
 import name.huliqing.core.object.channel.ChannelControl;
 
 /**

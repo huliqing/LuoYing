@@ -16,6 +16,7 @@ import name.huliqing.core.data.SkinData;
 import name.huliqing.core.mvc.dao.ItemDao;
 import name.huliqing.core.mvc.service.ActionService;
 import name.huliqing.core.mvc.service.ActorService;
+import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.mvc.service.SkinService;
 import name.huliqing.core.object.action.Action;
 import name.huliqing.core.object.action.FightAction;
@@ -28,6 +29,7 @@ public class WeaponHandler extends AbstractHandler {
     private final static Logger logger = Logger.getLogger(WeaponHandler.class.getName());
     private final ItemDao actorDao = Factory.get(ItemDao.class);
     private final SkinService skinService = Factory.get(SkinService.class);
+    private final SkillService skillService = Factory.get(SkillService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final ActionService actionService = Factory.get(ActionService.class);
 
@@ -47,7 +49,7 @@ public class WeaponHandler extends AbstractHandler {
             }
             return false;
         }
-        if (actor.isAttacking()) {
+        if (skillService.isAttacking(actor)) {
             return false;
         }
         SkinData skinData = (SkinData) data;

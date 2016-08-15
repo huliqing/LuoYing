@@ -8,6 +8,7 @@ import java.util.List;
 import name.huliqing.core.Inject;
 import name.huliqing.core.data.SkinData;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.actor.SkinListener;
 
 /**
  *
@@ -108,4 +109,7 @@ public interface SkinService extends Inject {
      */
     boolean isWeapon(SkinData skinData);
     
+    void addSkinListener(Actor actor, SkinListener skinListener);
+    
+    boolean removeSkinListener(Actor actor, SkinListener skinListener);
 }

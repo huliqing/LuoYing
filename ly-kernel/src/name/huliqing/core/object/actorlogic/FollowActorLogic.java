@@ -5,7 +5,6 @@
 package name.huliqing.core.object.actorlogic;
 
 import com.jme3.math.FastMath;
-import com.jme3.math.Vector3f;
 import name.huliqing.core.Factory;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.action.FollowAction;
@@ -28,13 +27,6 @@ public class FollowActorLogic<T extends ActorLogicData> extends ActorLogic<T> {
     // 距离的最近点和最远点
     private float minFollow = 3f;
     private float maxFollow = 7f;
-    
-//    // remove20160310,考虑不要这个参数,这会导致角色在跟随和拔刀之间不停来回切换，很难看。
-//    // 绝对的跟随距离限制,在距离达到这个值之后将转为跟随,不论角色是否在战斗.
-//    private float distanceLimit = 25;
-//    // 绝对的最远跟踪距离，当跟随者与被跟随者距离大于这个数值（平方）时，将不管任
-//    // 何条件，直接切换到跟随模式
-//    private float distanceLimitSquared;
     
     private FollowAction followAction;
     private Actor target;

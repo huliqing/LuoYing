@@ -13,6 +13,7 @@ import name.huliqing.core.mvc.service.SkinService;
 import name.huliqing.core.network.Network;
 import name.huliqing.core.mess.MessSkinWeaponTakeOn;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.actor.SkinListener;
 
 /**
  *
@@ -114,6 +115,16 @@ public class SkinNetworkImpl implements SkinNetwork {
     @Override
     public boolean isWeapon(SkinData skinData) {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void addSkinListener(Actor actor, SkinListener skinListener) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean removeSkinListener(Actor actor, SkinListener skinListener) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     

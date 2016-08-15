@@ -203,6 +203,12 @@ public interface SkillService extends Inject {
     
     boolean isRunning(Actor actor);
     
+    boolean isDucking(Actor actor);
+    
+    boolean isAttacking(Actor actor);
+    
+    boolean isDefending(Actor actor);
+    
     /**
      * 获取角色当前正在执行的技能,如果没有找到该技能，则返回null.
      * @param actor 

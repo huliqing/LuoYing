@@ -12,8 +12,8 @@ import name.huliqing.core.loader.Loader;
 import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actor.TalentListener;
+import name.huliqing.core.object.control.ActorTalentControl;
 import name.huliqing.core.object.talent.Talent;
-import name.huliqing.core.object.talent.TalentProcessor;
 
 /**
  *
@@ -46,11 +46,12 @@ public class TalentServiceImpl implements TalentService {
             }
         }
         datas.add(talentData);
-        TalentProcessor tp = actor.getTalentProcessor();
-        tp.addTalent(Loader.loadTalent(talentData));
+        
+        ActorTalentControl control = actor.getModel().getControl(ActorTalentControl.class);
+        control.addTalent(Loader.loadTalent(talentData));
         
         // listener
-        List<TalentListener> tls = actor.getTalentListeners();
+        List<TalentListener> tls = control.getTalentListeners();
         if (tls != null) {
             for (TalentListener tl : tls) {
                 tl.onTalentAdded(actor, talentData);
@@ -72,8 +73,8 @@ public class TalentServiceImpl implements TalentService {
             }
         }
         // 从processor中移除
-        TalentProcessor tp = actor.getTalentProcessor();
-        tp.removeTalent(talentId);
+        ActorTalentControl control = actor.getModel().getControl(ActorTalentControl.class);
+        control.removeTalent(talentId);
     }
 
     @Override
@@ -109,20 +110,32 @@ public class TalentServiceImpl implements TalentService {
         target.setLevel(newLevel);
         
         // 更新处理器的值
-        TalentProcessor tp = actor.getTalentProcessor();
-        Talent talent = tp.getTalent(talentId);
+        ActorTalentControl control = actor.getModel().getControl(ActorTalentControl.class);
+        Talent talent = control.getTalent(talentId);
         talent.updateLevel(target.getLevel());
         
         // 减少可用的天赋点数
         actor.getData().setTalentPoints(actor.getData().getTalentPoints() - trueAdd);
         
         // 告诉侦听器
-        List<TalentListener> tls = actor.getTalentListeners();
+        List<TalentListener> tls = control.getTalentListeners();
         if (tls != null) {
             for (TalentListener tl : tls) {
                 tl.onTalentPointsChange(actor, talentId, trueAdd);
             }
         }
+    }
+
+    @Override
+    public void addTalentListener(Actor actor, TalentListener talentListener) {
+        ActorTalentControl control = actor.getModel().getControl(ActorTalentControl.class);
+        control.addTalentListener(talentListener);
+    }
+
+    @Override
+    public void removeTalentListener(Actor actor, TalentListener talentListener) {
+        ActorTalentControl control = actor.getModel().getControl(ActorTalentControl.class);
+        control.removeTalentListener(talentListener);
     }
 
     

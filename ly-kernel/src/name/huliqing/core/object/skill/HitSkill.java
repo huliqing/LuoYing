@@ -104,7 +104,7 @@ public abstract class HitSkill<T extends SkillData> extends AbstractSkill<T> {
         // 的时候模型的头发和武器错位,即不能faceTo自己，所以target != actor的判断必须的。
         Actor target = actorService.getTarget(actor);
         if (target != null && target != actor) {
-            actor.faceTo(target.getModel().getWorldTranslation());
+            actorService.setLookAt(actor, actorService.getLocation(target));
         }
         
         super.init();
@@ -349,7 +349,7 @@ public abstract class HitSkill<T extends SkillData> extends AbstractSkill<T> {
             return false;
         }
         
-        if (actor.getDistanceSquared(target) <= hitDistanceSquared
+        if (actorService.distanceSquared(actor, target) <= hitDistanceSquared
                 || actor.getModel().getWorldBound().intersects(target.getModel().getWorldBound())) {
             return true;
         }
@@ -372,7 +372,7 @@ public abstract class HitSkill<T extends SkillData> extends AbstractSkill<T> {
 //        return true;
         
         // 如果在技能的攻击视角之外，则视为false(限制distance > 1是避免当距离太近时角度判断不正确。)
-        boolean inAngle = actor.getViewAngle(target.getModel().getWorldTranslation()) * 2 < hitAngle;
+        boolean inAngle = actorService.getViewAngle(actor, target.getModel().getWorldTranslation()) * 2 < hitAngle;
         return inAngle;
     }
     
@@ -382,7 +382,7 @@ public abstract class HitSkill<T extends SkillData> extends AbstractSkill<T> {
     private class TargetsComparator implements Comparator<Actor> {
         @Override
         public int compare(Actor o1, Actor o2) {
-            Vector3f selfPos = actor.getLocation();
+            Vector3f selfPos = actorService.getLocation(actor);
             float dis1 = o1.getModel().getWorldTranslation().distanceSquared(selfPos);
             float dis2 = o2.getModel().getWorldTranslation().distanceSquared(selfPos);
             if (dis1 < dis2) {

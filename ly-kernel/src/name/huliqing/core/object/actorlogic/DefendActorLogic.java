@@ -4,7 +4,6 @@
  */
 package name.huliqing.core.object.actorlogic;
 
-import com.jme3.app.Application;
 import com.jme3.math.FastMath;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -64,8 +63,8 @@ public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> im
     }
     
     @Override
-    public void initialize(Application app) {
-        super.initialize(app);
+    public void initialize() {
+        super.initialize();
         actorService.addActorListener(actor, this);
     }
 
@@ -79,7 +78,7 @@ public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> im
             return;
         
         // 当被other锁定时给other添加侦听器，以侦察other的攻击。以便进行防守和躲闪
-        actorService.addSkillListener(other, this);
+        skillService.addSkillListener(other, this);
         
         // 记录被侦听的对象，以便在当前角色销毁或退出时清理
         if (listenersActors == null) {
@@ -94,7 +93,7 @@ public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> im
             return;
         
         // 当other不再把source当前目标时就不再需要侦听了。
-        actorService.removeSkillListener(other, this);
+        skillService.removeSkillListener(other, this);
         
         // 清理
         if (listenersActors != null) {
@@ -138,7 +137,7 @@ public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> im
         }
         
         // 3.闪避防守
-        if (actorService.isDucking(actor)) {
+        if (skillService.isDucking(actor)) {
             return;
         }
         doDuck();
@@ -213,7 +212,7 @@ public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> im
         // 清理其它被当前逻辑侦听的角色
         if (listenersActors != null) {
             for (Actor other : listenersActors) {
-                actorService.removeSkillListener(other, this);
+                skillService.removeSkillListener(other, this);
             }
         }
         super.cleanup();

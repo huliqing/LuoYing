@@ -5,10 +5,15 @@
 package name.huliqing.core.view;
 
 import java.util.List;
+import name.huliqing.core.Factory;
 import name.huliqing.core.constants.InterfaceConstants;
 import name.huliqing.core.data.SkinData;
 import name.huliqing.core.data.TalentData;
 import name.huliqing.core.manager.ResourceManager;
+import name.huliqing.core.mvc.service.ItemService;
+import name.huliqing.core.mvc.service.SkinService;
+import name.huliqing.core.mvc.service.TalentService;
+import name.huliqing.core.mvc.service.TaskService;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actor.ItemListener;
 import name.huliqing.core.object.actor.SkinListener;
@@ -35,6 +40,11 @@ import name.huliqing.core.view.actor.WeaponPanel;
  * @author huliqing
  */
 public class ActorMainPanel extends Window implements ItemListener, SkinListener, TalentListener, TaskListener {
+    private final ItemService itemService = Factory.get(ItemService.class);
+    private final SkinService skinService = Factory.get(SkinService.class);
+    private final TalentService talentService = Factory.get(TalentService.class);
+    private final TaskService taskService = Factory.get(TaskService.class);
+    
     private Actor actor;
     
     private LinearLayout tabPanel;
@@ -162,10 +172,10 @@ public class ActorMainPanel extends Window implements ItemListener, SkinListener
         
         // 1.先清理上一个角色的侦听
         if (this.actor != null) {
-            this.actor.removeItemListener(this);
-            this.actor.removeSkinListener(this);
-            this.actor.removeTalentListener(this);
-            this.actor.removeTaskListener(this);
+            itemService.removeItemListener(this.actor, this);
+            skinService.removeSkinListener(this.actor, this);
+            talentService.removeTalentListener(this.actor, this);
+            taskService.removeTaskListener(this.actor, this);
         }
         
         // 2.更新角色并更新面板内容
@@ -183,10 +193,10 @@ public class ActorMainPanel extends Window implements ItemListener, SkinListener
         showTab(index);
         
         // 5.为新的角色添加侦听器以便实时更新面板内容
-        this.actor.addItemListener(this);
-        this.actor.addSkinListener(this);
-        this.actor.addTalentListener(this);
-        this.actor.addTaskListener(this);
+        itemService.addItemListener(this.actor, this);
+        skinService.addSkinListener(this.actor, this);
+        talentService.addTalentListener(this.actor, this);
+        taskService.addTaskListener(this.actor, this);
     }
     
     private void showTab(int index) {
@@ -221,10 +231,10 @@ public class ActorMainPanel extends Window implements ItemListener, SkinListener
     
     public void cleanup() {
         if (actor != null) {
-            actor.removeItemListener(this);
-            actor.removeSkinListener(this);
-            actor.removeTalentListener(this);
-            actor.removeTaskListener(this);
+            itemService.removeItemListener(actor, this);
+            skinService.removeSkinListener(actor, this);
+            talentService.removeTalentListener(actor, this);
+            taskService.removeTaskListener(actor, this);
         }
     }
 

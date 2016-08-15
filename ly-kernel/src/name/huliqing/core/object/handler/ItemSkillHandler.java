@@ -70,7 +70,7 @@ public class ItemSkillHandler extends AbstractHandler {
         // 判断所要使用的技能是否可以执行
         int skillStateCode = skillService.checkStateCode(actor, skill, false);
         if (skillStateCode != SkillConstants.STATE_OK) {
-            if (actor.isPlayer()) {
+            if (actorService.isPlayer(actor)) {
                 switch (skillStateCode) {
                     case SkillConstants.STATE_MANA_NOT_ENOUGH:
                         playNetwork.addMessage(actor

@@ -132,12 +132,12 @@ public class StoryGbTask2 extends GameTaskBase{
                         altar.getData().setDrop(dropData);
                     }
                     dropData.setBaseDrop(IdConstants.ITEM_BOOK_007);
-                    altar.setLocation(game.getEnemyPosition());
+                    actorService.setLocation(altar, game.getEnemyPosition());
                 }
                 if (loadIndex > 0) {
                     actorService.setLevel(actor, towerLevel);
                     actorService.setGroup(actor, game.groupEnemy);
-                    actor.setLocation(getRandomEnemyPosition());
+                    actorService.setLocation(actor, getRandomEnemyPosition());
                     actorService.setColor(actor, enemyColor);
                     towers.add(actor);
                 }
@@ -231,7 +231,7 @@ public class StoryGbTask2 extends GameTaskBase{
         
         if (stage == 3) {
             // 如果祭坛死亡，则角色刷新器将停止工作，不再刷新敌人
-            if (altar.isDead()) {
+            if (actorService.isDead(altar)) {
                 playService.removeObject(actorBuilder);
                 stage = 4;
             }
@@ -282,7 +282,7 @@ public class StoryGbTask2 extends GameTaskBase{
             if (gb != null) {
                 // 古柏离开场景之后就不再需要检查了,这里通过判断主角与古柏的距离
                 // 当远离一定距离的时候就从场景移除古柏
-                if (player.getDistance(gb) > 50) {
+                if (player.getModel().getWorldTranslation().distance(gb.getModel().getWorldTranslation()) > 50) {
                     playNetwork.removeObject(gb.getModel());
                     end = true;
                 }
@@ -296,7 +296,7 @@ public class StoryGbTask2 extends GameTaskBase{
         @Override
         protected void doLogic(float tpf) {
             for (Actor tower : towers) {
-                if (!tower.isDead()) {
+                if (!actorService.isDead(tower)) {
                     allTowerDead = false;
                     return;
                 }

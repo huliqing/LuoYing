@@ -60,8 +60,8 @@ public class ShopActorLogic<T extends ActorLogicData> extends ActorLogic<T> {
     }
     
     @Override
-    public void initialize(Application app) {
-        super.initialize(app);
+    public void initialize() {
+        super.initialize();
         
         if (initStock) {
             initStockProduct();

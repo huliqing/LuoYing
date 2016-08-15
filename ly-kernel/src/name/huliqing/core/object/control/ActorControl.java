@@ -9,6 +9,7 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.control.AbstractControl;
 import name.huliqing.core.data.ControlData;
+import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.xml.DataProcessor;
 
 /**
@@ -31,7 +32,7 @@ public abstract class ActorControl<T extends ControlData> extends AbstractContro
         return data;
     }
     
-    public void initialize() {
+    public void initialize(Actor actor) {
         initialized = true;
     }
 

@@ -12,7 +12,9 @@ import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.SkinData;
 import name.huliqing.core.mvc.network.UserCommandNetwork;
+import name.huliqing.core.mvc.service.ItemService;
 import name.huliqing.core.mvc.service.PlayService;
+import name.huliqing.core.mvc.service.SkinService;
 import name.huliqing.core.object.actor.ItemListener;
 import name.huliqing.core.object.actor.SkinListener;
 import name.huliqing.core.ui.UIFactory;
@@ -29,6 +31,8 @@ import name.huliqing.core.ui.UI.Listener;
 public class ShortcutView extends FrameLayout implements ItemListener, SkinListener {
     private final UserCommandNetwork userCommandNetwork = Factory.get(UserCommandNetwork.class);
     private final PlayService playService = Factory.get(PlayService.class);
+    private final ItemService itemService = Factory.get(ItemService.class);
+    private final SkinService skinService = Factory.get(SkinService.class);
 //    private final ActorService actorService = Factory.get(ActorService.class);
 //    private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final static float NUM_COUNT_ALPHA = 0.75f;
@@ -65,9 +69,8 @@ public class ShortcutView extends FrameLayout implements ItemListener, SkinListe
         setBackground("Interface/icon/shortcut2.png", true);
 
         // 注册侦听器
-        actor.addItemListener(this);
-        actor.addSkinListener(this);
-        
+        itemService.addItemListener(actor, this);
+        skinService.addSkinListener(actor, this);
     }
 
     @Override
@@ -167,8 +170,8 @@ public class ShortcutView extends FrameLayout implements ItemListener, SkinListe
      * 快捷删除时进行清理
      */
     public void cleanup() {
-        actor.removeItemListener(this);
-        actor.removeSkinListener(this);
+        itemService.removeItemListener(actor, this);
+        skinService.removeSkinListener(actor, this);
     }
 
     public Actor getActor() {

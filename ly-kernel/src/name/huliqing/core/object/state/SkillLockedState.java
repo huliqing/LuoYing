@@ -4,7 +4,6 @@
  */
 package name.huliqing.core.object.state;
 
-import com.jme3.app.Application;
 import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.constants.IdConstants;
@@ -83,8 +82,8 @@ public class SkillLockedState extends State implements SkillListener {
     }
 
     @Override
-    public void initialize(Application app) {
-        super.initialize(app);
+    public void initialize() {
+        super.initialize();
         // 根据锁定类型来确定要锁定在reset状态还是当前动画帧。
         if (lockType != null && !actorService.isDead(actor)) {
             if (lockType == LockType.reset) {

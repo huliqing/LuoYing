@@ -4,8 +4,11 @@
  */
 package name.huliqing.core.object.actor;
 
+import com.jme3.renderer.RenderManager;
+import com.jme3.renderer.ViewPort;
 import name.huliqing.core.data.ActorData;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.control.AbstractControl;
 import com.jme3.util.SafeArrayList;
 import name.huliqing.core.loader.Loader;
 import name.huliqing.core.object.control.ActorControl;
@@ -16,7 +19,7 @@ import name.huliqing.core.xml.DataProcessor;
  * @author huliqing
  * @param <T>
  */
-public class Actor <T extends ActorData> implements DataProcessor<T> {
+public class Actor<T extends ActorData> extends AbstractControl implements DataProcessor<T> {
     
     protected T data;
     protected boolean initialized;
@@ -43,8 +46,9 @@ public class Actor <T extends ActorData> implements DataProcessor<T> {
      * 初始化角色
      */
     public void initialize() {
-        // 载入基本模型
+        // 载入基本模型并添加当前控制器
         model = loadModel();
+        model.addControl(this);
         
         // 载入并初始化所有控制器
         String[] cArr = data.getAsArray("controls");
@@ -53,7 +57,7 @@ public class Actor <T extends ActorData> implements DataProcessor<T> {
                 ActorControl control = Loader.load(c);
                 model.addControl(control);
                 controls.add(control);
-                control.initialize();
+                control.initialize(this);
             }
         }
         
@@ -66,6 +70,14 @@ public class Actor <T extends ActorData> implements DataProcessor<T> {
      */
     public boolean isInitialized() {
         return initialized;
+    }
+    
+    @Override
+    protected void controlUpdate(float tpf) {
+    }
+
+    @Override
+    protected void controlRender(RenderManager rm, ViewPort vp) {
     }
     
     /**

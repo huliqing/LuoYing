@@ -81,7 +81,7 @@ public class SurvivalLogic<T extends GameLogicData> extends AbstractGameLogic<T>
         
         // 任务逻辑
         if (stage == 1) {
-            if (treasure != null && treasure.isDead()) {
+            if (treasure != null && actorService.isDead(treasure)) {
                 playNetwork.addMessage(get(ResConstants.TASK_FAILURE), MessageType.notice);
                 TextView textView = (TextView) viewService.loadView(IdConstants.VIEW_TEXT_FAILURE);
                 textView.setUseTime(-1);
@@ -101,7 +101,7 @@ public class SurvivalLogic<T extends GameLogicData> extends AbstractGameLogic<T>
     
     private void doInit() {
         treasure = actorService.loadActor(IdConstants.ACTOR_TREASURE);
-        treasure.setLocation(game.treasurePos);
+        actorService.setLocation(treasure, game.treasurePos);
         actorService.setGroup(treasure, game.SELF_GROUP);
         actorService.setTeam(treasure, actorService.getTeam(playService.getPlayer()));
         playNetwork.addActor(treasure);

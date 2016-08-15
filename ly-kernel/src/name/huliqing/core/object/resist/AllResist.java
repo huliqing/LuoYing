@@ -87,19 +87,20 @@ public class AllResist<T extends ResistData> extends AbstractResist<T> {
         return excepts != null ? excepts : Collections.EMPTY_LIST;
     }
 
-    @Override
-    public Resist clone() {
-
-        AllResist result = (AllResist) super.clone();
-        if (excepts != null) {
-            result.excepts = new ArrayList<StateResist>(excepts.size());
-            for (StateResist sr : excepts) {
-                result.excepts.add(sr.clone());
-            }
-        }
-        return result;
-
-    }
+    // remove20160815
+//    @Override
+//    public Resist clone() {
+//
+//        AllResist result = (AllResist) super.clone();
+//        if (excepts != null) {
+//            result.excepts = new ArrayList<StateResist>(excepts.size());
+//            for (StateResist sr : excepts) {
+//                result.excepts.add(sr.clone());
+//            }
+//        }
+//        return result;
+//
+//    }
     
     
     

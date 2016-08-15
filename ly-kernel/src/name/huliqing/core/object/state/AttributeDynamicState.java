@@ -4,7 +4,6 @@
  */
 package name.huliqing.core.object.state;
 
-import com.jme3.app.Application;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.StateData;
 import name.huliqing.core.mvc.service.PlayService;
@@ -46,8 +45,8 @@ public class AttributeDynamicState extends State {
     }
 
     @Override
-    public void initialize(Application app) {
-        super.initialize(app);
+    public void initialize() {
+        super.initialize();
         if (data.getSourceActor() > 0) {
             sourceActor = playService.findActor(data.getSourceActor());
         }

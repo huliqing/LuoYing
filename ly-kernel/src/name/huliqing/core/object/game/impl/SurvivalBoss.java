@@ -146,7 +146,7 @@ public class SurvivalBoss<T extends GameLogicData> extends AbstractGameLogic<T> 
     
     private Actor loadBoss() {
         Actor locBoss = actorService.loadActor(IdConstants.ACTOR_FAIRY);
-        locBoss.setLocation(actorBuilder.getRandomPosition());
+        actorService.setLocation(locBoss, actorBuilder.getRandomPosition());
         actorService.setLevel(locBoss, levelLogic.getMaxLevel() + 5);
         actorService.setGroup(locBoss, game.GROUP_ENEMY);
         skillService.playSkill(locBoss, skillService.getSkill(locBoss, SkillType.wait).getId(), false);

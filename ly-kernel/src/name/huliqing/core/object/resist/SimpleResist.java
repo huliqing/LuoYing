@@ -84,16 +84,17 @@ public class SimpleResist<T extends ResistData> extends AbstractResist<T> {
         return resists != null ? resists : Collections.EMPTY_LIST;
     }
 
-    @Override
-    public SimpleResist clone() {
-        SimpleResist result = (SimpleResist) super.clone();
-        if (resists != null) {
-            result.resists = new ArrayList<StateResist>(resists.size());
-            for (StateResist sr : resists) {
-                result.resists.add(sr.clone());
-            }
-        }
-        return result;
-    }
+    // remove20160815
+//    @Override
+//    public SimpleResist clone() {
+//        SimpleResist result = (SimpleResist) super.clone();
+//        if (resists != null) {
+//            result.resists = new ArrayList<StateResist>(resists.size());
+//            for (StateResist sr : resists) {
+//                result.resists.add(sr.clone());
+//            }
+//        }
+//        return result;
+//    }
     
 }

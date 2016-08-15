@@ -15,6 +15,7 @@ import name.huliqing.core.data.StateData;
 import name.huliqing.core.loader.Loader;
 import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.object.actor.StateListener;
+import name.huliqing.core.object.control.ActorStateControl;
 import name.huliqing.core.object.state.State;
 
 /**
@@ -103,10 +104,12 @@ public class StateServiceImpl implements StateService{
         // 2.添加状态
         actor.getData().getStates().add(newStateData);
         State state = Loader.loadState(newStateData);
-        actor.getStateProcessor().addState(state);
+        
+        ActorStateControl control = actor.getModel().getControl(ActorStateControl.class);
+        control.addState(state);
         
         // 3.侦听器
-        List<StateListener> sls = actor.getStateListeners();
+        List<StateListener> sls = control.getStateListeners();
         if (sls != null && !sls.isEmpty()) {
             for (StateListener sl : sls) {
                 sl.onStateAdded(actor, state);
@@ -126,10 +129,14 @@ public class StateServiceImpl implements StateService{
         }
         
         // 2.从Processor中移除
-        State stateRemoved = actor.getStateProcessor().removeState(removeStateId);
+        ActorStateControl control = actor.getModel().getControl(ActorStateControl.class);
+        State stateRemoved = control.findState(removeStateId);
+        if (stateRemoved != null) {
+            control.removeState(stateRemoved);
+        }
         
         // 3.通知侦听器
-        List<StateListener> sls = actor.getStateListeners();
+        List<StateListener> sls = control.getStateListeners();
         if (sls != null && !sls.isEmpty()) {
             for (StateListener sl : sls) {
                 sl.onStateRemoved(actor, stateRemoved);
@@ -141,7 +148,8 @@ public class StateServiceImpl implements StateService{
 
     @Override
     public State findState(Actor actor, String stateId) {
-        return actor.getStateProcessor().findState(stateId);
+        ActorStateControl control = actor.getModel().getControl(ActorStateControl.class);
+        return control.findState(stateId);
     }
 
     @Override
@@ -151,17 +159,6 @@ public class StateServiceImpl implements StateService{
             removeState(actor, sd.getId());
         }
     }
-
-    // remove20160803
-//    @Override
-//    public boolean existsState(String stateId) {
-//        Proto proto = ObjectLoader.findObjectDef(stateId);
-//        
-//        if (proto != null && proto.getDataType() == DataTypeConstants.STATE) {
-//            return true;
-//        }
-//        return false;
-//    }
 
     @Override
     public boolean existsState(Actor actor, String stateId) {
@@ -181,22 +178,14 @@ public class StateServiceImpl implements StateService{
 
     @Override
     public void addListener(Actor actor, StateListener listener) {
-        List<StateListener> sls = actor.getStateListeners();
-        if (sls == null) {
-            // 注意：这里使用SafeArrayList,以避免某些情况下出现java.util.ConcurrentModificationException异常。
-            // 这种异常可能发生在一些特殊的state中,这类特殊的状态可能在添加状态的同时又把自己从状态列表中移除.
-            sls = new SafeArrayList<StateListener>(StateListener.class);
-            actor.setStateListeners(sls);
-        }
-        if (!sls.contains(listener)) {
-            sls.add(listener);
-        }
+        ActorStateControl control = actor.getModel().getControl(ActorStateControl.class);
+        control.addStateListener(listener);
     }
 
     @Override
     public boolean removeListener(Actor actor, StateListener listener) {
-        List<StateListener> sls = actor.getStateListeners();
-        return sls != null && sls.remove(listener);
+        ActorStateControl control = actor.getModel().getControl(ActorStateControl.class);
+        return control != null && control.removeStateListener(listener);
     }
     
     

@@ -85,7 +85,7 @@ public class SummonHandler extends AbstractHandler {
         Vector3f origin = tv.vect1;
         Vector3f direction = tv.vect2;
         origin.set(actor.getModel().getWorldBound().getCenter()).setY(actor.getModel().getWorldTranslation().y + 1);
-        direction.set(actor.getViewDirection()).normalizeLocal();
+        direction.set(actorService.getViewDirection(actor)).normalizeLocal();
         origin.addLocal(direction.mult(zExtent));
         
         // 通过障碍判断，找出可用于召唤的地点
@@ -108,8 +108,7 @@ public class SummonHandler extends AbstractHandler {
             return false;
         }
         // 设置地点并召唤
-        bcc.setLocation(summonPos);
-        
+        actorService.setLocation(bcc, summonPos);
         playNetwork.addActor(bcc);
         return true;
     }

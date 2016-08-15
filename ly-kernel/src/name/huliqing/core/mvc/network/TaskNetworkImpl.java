@@ -13,6 +13,7 @@ import name.huliqing.core.mess.MessTaskAdd;
 import name.huliqing.core.mess.MessTaskApplyItem;
 import name.huliqing.core.mess.MessTaskComplete;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.actor.TaskListener;
 import name.huliqing.core.object.task.Task;
 
 /**
@@ -20,7 +21,7 @@ import name.huliqing.core.object.task.Task;
  * @author huliqing
  */
 public class TaskNetworkImpl implements TaskNetwork {
-    private final static Network network = Network.getInstance();
+    private final Network network = Network.getInstance();
     private TaskService taskService;
     
     @Override
@@ -108,6 +109,16 @@ public class TaskNetworkImpl implements TaskNetwork {
     @Override
     public int getItemTotal(Actor actor, Task task, String itemId) {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void addTaskListener(Actor actor, TaskListener taskListener) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean removeTaskListener(Actor actor, TaskListener taskListener) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

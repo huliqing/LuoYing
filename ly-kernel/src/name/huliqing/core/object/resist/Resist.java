@@ -38,9 +38,9 @@ public interface Resist<T extends ResistData> extends DataProcessor<T>{
      */
     List<StateResist> getAll();
     
-    /**
-     * 克隆当前对象
-     * @return 
-     */
-    Resist clone();
+//    /**
+//     * 克隆当前对象
+//     * @return 
+//     */
+//    Resist clone();
 }

@@ -47,7 +47,7 @@ public class ActorCleanGameLogic<T extends GameLogicData> extends AbstractGameLo
         Long deadTime;
         for (Actor a : actors) {
             // “Player”、“未死亡”、“必要”的角色都不能移除
-            if (!a.isDead() || a.isPlayer() || actorService.isEssential(a)) {
+            if (!actorService.isDead(a) || actorService.isPlayer(a) || actorService.isEssential(a)) {
                 a.getModel().getUserDataKeys().remove(ActorConstants.USER_DATA_DEAD_TIME_FLAG);
                 continue;
             }

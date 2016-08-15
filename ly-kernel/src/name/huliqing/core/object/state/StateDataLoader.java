@@ -9,8 +9,8 @@ import name.huliqing.core.data.StateData;
 import name.huliqing.core.xml.DataLoader;
 
 /**
- *
  * @author huliqing
+ * @param <T>
  */
 public class StateDataLoader<T extends StateData> implements DataLoader<StateData> {
 

@@ -265,7 +265,7 @@ public class StoryTreasureTask2 extends GameTaskBase {
             }
             
             // 任务失败检测
-            if (treasure != null && treasure.isDead()) {
+            if (treasure != null && actorService.isDead(treasure)) {
                 playNetwork.addMessage(get(ResConstants.TASK_FAILURE), MessageType.notice);
                 playNetwork.addMessage(get(ResConstants.COMMON_BACK_TO_TRY_AGAIN), MessageType.notice);
                 playNetwork.addView(viewService.loadView(IdConstants.VIEW_TEXT_FAILURE));
@@ -277,7 +277,7 @@ public class StoryTreasureTask2 extends GameTaskBase {
             
             // 任务完成检测
             if (companion != null 
-                    && companion.getDistance(game.treasurePos) <= 20
+                    && actorService.distance(companion, game.treasurePos) <= 20
                     && checkEnemyRemain() <= 0) {
                 // 将所有敌人的目标重定向到companion,这个时候应该避免player被打死的可能。
                 setAllEnemyTarget(companion);
@@ -326,8 +326,7 @@ public class StoryTreasureTask2 extends GameTaskBase {
                             doTaskComplete();
                         } else {
                             final BackSkill backSkill = (BackSkill) skill;
-                            backSkill.addBackObject(treasure.getModel());
-                            actorService.addSkillListener(companion, new SkillListenerAdapter() {
+                            skillService.addSkillListener(companion, new SkillListenerAdapter() {
                                 @Override
                                 public void onSkillEnd(Actor source, Skill skill) {
                                     if (skill == backSkill) {
@@ -384,7 +383,7 @@ public class StoryTreasureTask2 extends GameTaskBase {
         for (Actor a : actors) {
             if (actorService.getGroup(a) == game.groupEnemy 
                     && !actorService.isDead(a)
-                    && a.getDistance(player) < 20
+                    && actorService.distance(a, player) < 20
                     ) {
                 alive++;
             }
@@ -399,7 +398,7 @@ public class StoryTreasureTask2 extends GameTaskBase {
     private void setAllEnemyTarget(Actor actor) {
         List<Actor> actors = playService.findAllActor();
         for (Actor a : actors) {
-            if (!a.isDead() && a.isEnemy(actor)) {
+            if (!actorService.isDead(a) && actorService.isEnemy(a, actor)) {
                 actorNetwork.setTarget(a, actor);
             }
         }
@@ -417,7 +416,7 @@ public class StoryTreasureTask2 extends GameTaskBase {
         @Override
         public void callback(Actor actor) {
             companion = actor;
-            companion.setLocation(companionPosition[FastMath.nextRandomInt(0, companionPosition.length - 1)]);
+            actorService.setLocation(companion, companionPosition[FastMath.nextRandomInt(0, companionPosition.length - 1)]);
             actorService.setLevel(companion, 40);
             actorService.setPartner(player, actor);
             actorService.setTeam(companion, player.getData().getTeam());

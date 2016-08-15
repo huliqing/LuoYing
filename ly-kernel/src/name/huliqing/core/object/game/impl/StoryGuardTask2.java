@@ -163,7 +163,7 @@ public class StoryGuardTask2 extends GameTaskBase {
             
             actorService.setLevel(gb, footHoldLevel);
             actorService.setGroup(gb, actorService.getGroup(player));
-            gb.setLocation(new Vector3f(42, 0, -61));
+            actorService.setLocation(gb, new Vector3f(42, 0, -61));
             playNetwork.addActor(gb);
         }
         
@@ -187,7 +187,7 @@ public class StoryGuardTask2 extends GameTaskBase {
         
         actorService.setLevel(altar, footHoldLevel);
         actorService.setGroup(altar, StoryGuardGame.GROUP_ENEMY);
-        altar.setLocation(game.getEnemyPosition());
+        actorService.setLocation(altar, game.getEnemyPosition());
         playNetwork.addActor(altar);
         
         // sinbad和手下的载入
@@ -369,7 +369,7 @@ public class StoryGuardTask2 extends GameTaskBase {
     private boolean checkToDzTalk() {
         if (sinbad != null 
                 && ninjia1 != null && ninjia2 != null && bear != null) {
-            if (altar.getDistance(player) < 60) {
+            if (actorService.distance(altar, player) < 60) {
                 return true;
             }
         }
@@ -385,7 +385,7 @@ public class StoryGuardTask2 extends GameTaskBase {
     }
     
     private void setSelfActor(Actor actor, boolean isTower) {
-        actor.setLocation(getRandomPosition(game.getSelfPosition()));
+        actorService.setLocation(actor, getRandomPosition(game.getSelfPosition()));
         actorNetwork.setGroup(actor, actorService.getGroup(player));
         if (isTower) {
             actorNetwork.setLevel(actor, maxLevel);
@@ -396,7 +396,7 @@ public class StoryGuardTask2 extends GameTaskBase {
     }
     
     private void setEnemyActor(Actor actor, boolean isTower) {
-        actor.setLocation(getRandomPosition(game.getEnemyPosition()));
+        actorService.setLocation(actor, getRandomPosition(game.getEnemyPosition()));
         actorNetwork.setGroup(actor, StoryGuardGame.GROUP_ENEMY);
         if (isTower) {
             actorNetwork.setLevel(actor, maxLevel);
@@ -462,7 +462,7 @@ public class StoryGuardTask2 extends GameTaskBase {
         List<Actor> actors = playService.findAllActor();
         for (Actor actor : actors) {
             if (actorService.getGroup(actor) == StoryGuardGame.GROUP_ENEMY
-                    && !actor.isDead()) {
+                    && !actorService.isDead(actor)) {
                 actorNetwork.kill(actor);
             }
         }
@@ -505,9 +505,9 @@ public class StoryGuardTask2 extends GameTaskBase {
             if (!enabled) {
                 return;
             }
-            if (gb.isDead()) {
+            if (actorService.isDead(gb)) {
                 result = 1;
-            } else if (altar.isDead()){
+            } else if (actorService.isDead(altar)){
                 result = 2;
             }
         }

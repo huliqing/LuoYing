@@ -8,6 +8,7 @@ import java.util.List;
 import name.huliqing.core.Inject;
 import name.huliqing.core.data.TaskData;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.actor.TaskListener;
 import name.huliqing.core.object.task.Task;
 
 /**
@@ -93,4 +94,19 @@ public interface TaskService extends Inject {
      * @return 
      */
     int getItemTotal(Actor actor, Task task, String itemId);
+    
+    /**
+     * 给角色添加一个任务侦听器
+     * @param actor
+     * @param taskListener 
+     */
+    void addTaskListener(Actor actor, TaskListener taskListener);
+
+    /**
+     * 从角色身上移除任务侦听器
+     * @param actor
+     * @param taskListener
+     * @return 
+     */
+    boolean removeTaskListener(Actor actor, TaskListener taskListener);
 }

@@ -8,6 +8,7 @@ import java.util.List;
 import name.huliqing.core.Inject;
 import name.huliqing.core.data.TalentData;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.actor.TalentListener;
 
 /**
  *
@@ -51,4 +52,8 @@ public interface TalentService extends Inject {
      * @param points 增加的点数，必须是正数
      */
     void addTalentPoints(Actor actor, String talentId, int points);
+    
+    void addTalentListener(Actor actor, TalentListener talentListener);
+    
+    void removeTalentListener(Actor actor, TalentListener talentListener);
 }

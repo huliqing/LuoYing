@@ -169,13 +169,17 @@ import name.huliqing.core.object.config.ConfigDataLoader;
 import name.huliqing.core.object.control.ActorActionControl;
 import name.huliqing.core.object.control.ActorAttributeControl;
 import name.huliqing.core.object.control.ActorBaseControl;
+import name.huliqing.core.object.control.ActorChatControl;
 import name.huliqing.core.object.control.ActorItemControl;
+import name.huliqing.core.object.control.ActorLogicControl;
 import name.huliqing.core.object.control.ActorSkinControl;
 import name.huliqing.core.object.control.ControlDataLoader;
 import name.huliqing.core.object.control.ActorPhysicsControl;
+import name.huliqing.core.object.control.ActorResistControl;
 import name.huliqing.core.object.control.ActorSkillControl;
 import name.huliqing.core.object.control.ActorStateControl;
 import name.huliqing.core.object.control.ActorTalentControl;
+import name.huliqing.core.object.control.ActorTaskControl;
 import name.huliqing.core.object.drop.DropDataLoader;
 import name.huliqing.core.object.effect.EffectDataLoader;
 import name.huliqing.core.object.effect.EncircleHaloEffect;
@@ -447,12 +451,16 @@ public class LY {
         DataFactory.register("controlActorAttribute",  ControlData.class, ControlDataLoader.class, ActorAttributeControl.class);
         DataFactory.register("controlActorBase",  ControlData.class, ControlDataLoader.class, ActorBaseControl.class);
         DataFactory.register("controlActorChannel",  ControlData.class, ControlDataLoader.class, ActorChannelControl.class);
+        DataFactory.register("controlActorChat",  ControlData.class, ControlDataLoader.class, ActorChatControl.class);
         DataFactory.register("controlActorItem",  ControlData.class, ControlDataLoader.class, ActorItemControl.class);
+        DataFactory.register("controlActorLogic",  ControlData.class, ControlDataLoader.class, ActorLogicControl.class);
         DataFactory.register("controlActorPhysics",  ControlData.class, ControlDataLoader.class, ActorPhysicsControl.class);
+        DataFactory.register("controlActorResist",  ControlData.class, ControlDataLoader.class, ActorResistControl.class);
         DataFactory.register("controlActorSkill",  ControlData.class, ControlDataLoader.class, ActorSkillControl.class);
         DataFactory.register("controlActorSkin",  ControlData.class, ControlDataLoader.class, ActorSkinControl.class);
         DataFactory.register("controlActorState",  ControlData.class, ControlDataLoader.class, ActorStateControl.class);
         DataFactory.register("controlActorTalent",  ControlData.class, ControlDataLoader.class, ActorTalentControl.class);
+        DataFactory.register("controlActorTask",  ControlData.class, ControlDataLoader.class, ActorTaskControl.class);
         
         // Drop
         DataFactory.register("drop",  DropData.class, DropDataLoader.class, null);

@@ -24,13 +24,28 @@ xs:time
                 <xs:element ref="controlActorAttribute" />
                 <xs:element ref="controlActorBase" />
                 <xs:element ref="controlActorChannel" />
+                <xs:element ref="controlActorChat" />
                 <xs:element ref="controlActorItem" />
+                <xs:element ref="controlActorLogic" />
                 <xs:element ref="controlActorPhysics" />
+                <xs:element ref="controlActorResist" />
                 <xs:element ref="controlActorSkill" />
                 <xs:element ref="controlActorSkin" />
                 <xs:element ref="controlActorState" />
                 <xs:element ref="controlActorTalent" />
+                <xs:element ref="controlActorTask" />
             </xs:all>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="controlActorTask">
+        <xs:annotation>
+            <xs:documentation>角色任务模块</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="base"></xs:extension>
+            </xs:complexContent>
         </xs:complexType>
     </xs:element>
 
@@ -78,6 +93,17 @@ xs:time
         </xs:complexType>
     </xs:element>
     
+    <xs:element name="controlActorResist">
+        <xs:annotation>
+            <xs:documentation>xxxx</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="base"></xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
     <xs:element name="controlActorPhysics">
         <xs:annotation>
             <xs:documentation>角色物理控制器</xs:documentation>
@@ -93,7 +119,29 @@ xs:time
         </xs:complexType>
     </xs:element>
     
+    <xs:element name="controlActorLogic">
+        <xs:annotation>
+            <xs:documentation>角色逻辑控制器</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="base"></xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
     <xs:element name="controlActorItem">
+        <xs:annotation>
+            <xs:documentation>xxxx</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="base"></xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="controlActorChat">
         <xs:annotation>
             <xs:documentation>xxxx</xs:documentation>
         </xs:annotation>

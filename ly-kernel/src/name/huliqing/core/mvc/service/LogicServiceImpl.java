@@ -11,6 +11,7 @@ import name.huliqing.core.loader.Loader;
 import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actorlogic.ActorLogic;
+import name.huliqing.core.object.control.ActorLogicControl;
 
 /**
  *
@@ -48,7 +49,9 @@ public class LogicServiceImpl implements LogicService {
             return false; // 已经存在
         }
         logics.add(data);
-        actor.getLogicProcessor().addLogic(logic);// 直接添加
+        
+        ActorLogicControl control = actor.getModel().getControl(ActorLogicControl.class);
+        control.addLogic(logic);
         return true;
     }
 
@@ -60,13 +63,16 @@ public class LogicServiceImpl implements LogicService {
             return false;
         }
         datas.remove(data);
-        return actor.getLogicProcessor().removeLogic(logic);
+        
+        ActorLogicControl control = actor.getModel().getControl(ActorLogicControl.class);
+        return control.removeLogic(logic);
     }
 
     @Override
     public void clearLogics(Actor actor) {
         actor.getData().getLogics().clear();
-        actor.getLogicProcessor().cleanup();
+        ActorLogicControl control = actor.getModel().getControl(ActorLogicControl.class);
+        control.cleanup();
     }
 
     @Override

@@ -149,7 +149,7 @@ public class StoryGbTask1 extends GameTaskBase {
                     actorService.setGroup(actor, StoryGame.GROUP_PLAYER);
                     gbSmalls.add(actor);
                 }
-                actor.setLocation(game.getGbPosition());
+                actorService.setLocation(actor, game.getGbPosition());
                 // 保护角色不死
                 setProtected(actor, true);
                 playNetwork.addActor(actor);
@@ -206,7 +206,7 @@ public class StoryGbTask1 extends GameTaskBase {
         
         // 4.测试敌人是否全部已死
         if (stage == 4) {
-            if (checkAllEnemyDead() && !player.isDead()) {
+            if (checkAllEnemyDead() && !actorService.isDead(player)) {
                 stage = 5;
             }
             return;
@@ -355,8 +355,7 @@ public class StoryGbTask1 extends GameTaskBase {
     
     // 检测角色是否走近
     private boolean checkPlayerNear() {
-//        return player.getDistance(gb) < stateService.getAiViewDistance(player);  // remove20151229
-        return player.getDistance(gb) < 15;  
+        return player.getModel().getWorldTranslation().distance(gb.getModel().getWorldTranslation()) < 15;  
     }
     
     private void createFightTarget() {
@@ -427,7 +426,7 @@ public class StoryGbTask1 extends GameTaskBase {
     // 检测是否所有敌人已死
     private boolean checkAllEnemyDead() {
         for (Actor a : enemies) {
-            if (!a.isDead()) {
+            if (!actorService.isDead(a)) {
                 return false;
             }
         }

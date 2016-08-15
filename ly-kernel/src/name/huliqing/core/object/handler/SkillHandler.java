@@ -4,8 +4,6 @@
  */
 package name.huliqing.core.object.handler;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import name.huliqing.core.Factory;
 import name.huliqing.core.GameException;
 import name.huliqing.core.constants.ResConstants;
@@ -15,15 +13,11 @@ import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.enums.MessageType;
-import name.huliqing.core.mvc.network.ActionNetwork;
-import name.huliqing.core.mvc.network.ActorNetwork;
 import name.huliqing.core.mvc.network.PlayNetwork;
 import name.huliqing.core.mvc.network.SkillNetwork;
-import name.huliqing.core.mvc.service.ActorService;
-import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.SkillService;
-import name.huliqing.core.mvc.service.StateService;
 import name.huliqing.core.manager.ResourceManager;
+import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.object.skill.Skill;
 
 /**
@@ -32,13 +26,13 @@ import name.huliqing.core.object.skill.Skill;
  */
 public class SkillHandler extends AbstractHandler {
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
-    private final ActionNetwork actionNetwork = Factory.get(ActionNetwork.class);
-    private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
+//    private final ActionNetwork actionNetwork = Factory.get(ActionNetwork.class);
+//    private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
-    private final PlayService playService = Factory.get(PlayService.class);
+//    private final PlayService playService = Factory.get(PlayService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
-    private final StateService stateService = Factory.get(StateService.class);
+//    private final StateService stateService = Factory.get(StateService.class);
 
     @Override
     public void setData(HandlerData data) {
@@ -58,7 +52,7 @@ public class SkillHandler extends AbstractHandler {
         
         int skillStateCode = skillService.checkStateCode(actor, skill, false);
         if (skillStateCode != SkillConstants.STATE_OK) {
-            if (actor.isPlayer()) {
+            if (actorService.isPlayer(actor)) {
                 switch (skillStateCode) {
                     case SkillConstants.STATE_MANA_NOT_ENOUGH:
                         playNetwork.addMessage(actor

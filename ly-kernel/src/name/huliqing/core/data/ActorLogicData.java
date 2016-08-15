@@ -19,23 +19,7 @@ import java.io.IOException;
 public class ActorLogicData extends ObjectData {
     
     private float interval;
-
-    @Override
-    public void write(JmeExporter ex) throws IOException {
-        super.write(ex);
-        OutputCapsule oc = ex.getCapsule(this);
-        oc.write(interval, "interval", 1);
-    }
-
-    @Override
-    public void read(JmeImporter im) throws IOException {
-        super.read(im);
-        InputCapsule ic = im.getCapsule(this);
-        interval = ic.readFloat("interval", 1);
-    }
     
-    public ActorLogicData(){}
-
     /**
      * 获取逻辑的执行频率，单位秒
      * @return 
@@ -50,6 +34,20 @@ public class ActorLogicData extends ObjectData {
      */
     public void setInterval(float interval) {
         this.interval = interval;
+    }
+    
+    @Override
+    public void write(JmeExporter ex) throws IOException {
+        super.write(ex);
+        OutputCapsule oc = ex.getCapsule(this);
+        oc.write(interval, "interval", 1);
+    }
+
+    @Override
+    public void read(JmeImporter im) throws IOException {
+        super.read(im);
+        InputCapsule ic = im.getCapsule(this);
+        interval = ic.readFloat("interval", 1);
     }
 
 }

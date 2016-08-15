@@ -23,6 +23,7 @@ import name.huliqing.core.mvc.dao.SkinDao;
 import name.huliqing.core.loader.Loader;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actor.SkinListener;
+import name.huliqing.core.object.control.ActorSkinControl;
 import name.huliqing.core.object.skin.Skin;
 import name.huliqing.core.object.skin.WeaponSkin;
 import name.huliqing.core.object.skin.WeaponStateUtils;
@@ -34,7 +35,6 @@ import name.huliqing.core.object.skin.WeaponStateUtils;
 public class SkinServiceImpl implements SkinService {
     private static final Logger LOG = Logger.getLogger(SkinServiceImpl.class.getName());
     
-    private ActionService actionService;
     private SkillService skillService;
     private AttributeService attributeService;
     private SkinDao skinDao;
@@ -43,7 +43,6 @@ public class SkinServiceImpl implements SkinService {
     public void inject() {
         skinDao = Factory.get(SkinDao.class);
         skillService = Factory.get(SkillService.class);
-        actionService = Factory.get(ActionService.class);
         attributeService = Factory.get(AttributeService.class);
     }
     
@@ -60,7 +59,8 @@ public class SkinServiceImpl implements SkinService {
             return;
         }
         
-        List<SkinListener> skinListeners = actor.getSkinListeners();
+        ActorSkinControl control = actor.getModel().getControl(ActorSkinControl.class);
+        List<SkinListener> skinListeners = control.getSkinListeners();
         
         // 1.====脱下排斥的装备
         int conflict = skinData.getType();
@@ -128,7 +128,8 @@ public class SkinServiceImpl implements SkinService {
         // 标记装备已经在使用
         skinData.setUsing(false);
         // 触发侦听器
-        List<SkinListener> skinListeners = actor.getSkinListeners();
+        ActorSkinControl control = actor.getModel().getControl(ActorSkinControl.class);
+        List<SkinListener> skinListeners = control.getSkinListeners();
         if (skinListeners != null) {
             for (SkinListener sl : skinListeners) {
                 sl.onSkinDetached(actor, skinData);
@@ -256,6 +257,18 @@ public class SkinServiceImpl implements SkinService {
     public boolean isWeapon(SkinData skinData) {
 //        return skinData.getWeaponType() > 0;
         return skinData.isWeapon();
+    }
+
+    @Override
+    public void addSkinListener(Actor actor, SkinListener skinListener) {
+        ActorSkinControl control = actor.getModel().getControl(ActorSkinControl.class);
+        control.addSkinListener(skinListener);
+    }
+
+    @Override
+    public boolean removeSkinListener(Actor actor, SkinListener skinListener) {
+        ActorSkinControl control = actor.getModel().getControl(ActorSkinControl.class);
+        return control.removeSkinListener(skinListener);
     }
     
     /**

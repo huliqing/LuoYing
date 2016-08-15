@@ -240,7 +240,7 @@ public class ShotSkill<T extends SkillData> extends HitSkill<T> {
      */
     protected Vector3f convertToWorldPos(Vector3f store) {
         TempVars tv = TempVars.get();
-        tv.quat1.lookAt(actor.getViewDirection(), Vector3f.UNIT_Y);
+        tv.quat1.lookAt(actorService.getViewDirection(actor), Vector3f.UNIT_Y);
         tv.quat1.mult(store, store);
         store.addLocal(actor.getModel().getWorldTranslation());
         tv.release();

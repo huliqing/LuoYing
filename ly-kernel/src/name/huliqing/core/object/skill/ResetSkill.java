@@ -6,8 +6,9 @@ package name.huliqing.core.object.skill;
 
 import com.jme3.animation.LoopMode;
 import com.jme3.math.FastMath;
+import name.huliqing.core.Factory;
 import name.huliqing.core.data.SkillData;
-import name.huliqing.core.object.skill.AbstractSkill;
+import name.huliqing.core.mvc.service.ActorService;
 
 /**
  * 这个技能可以允许使用角色动画中的任何一侦作为角色的reset状态．当某些角色
@@ -16,6 +17,7 @@ import name.huliqing.core.object.skill.AbstractSkill;
  * @param <T>
  */
 public class ResetSkill<T extends SkillData> extends AbstractSkill<T> {
+    private final ActorService actorService = Factory.get(ActorService.class);
     
     /**
      * 指定要把角色动画定格在animation动画的哪一帧上，
@@ -34,8 +36,12 @@ public class ResetSkill<T extends SkillData> extends AbstractSkill<T> {
         super.init();
         
         // 如果没有设置动画名称，则把动画定格在角色的当前帧上
-        if (data.getAnimation() == null && channelProcessor != null) {
-            channelProcessor.setSpeed(0.0001f);
+        if (data.getAnimation() == null) {
+            
+            // remove20160815
+//            channelProcessor.setSpeed(0.0001f);
+
+            actorService.reset(actor);
         }
         
     }
@@ -43,7 +49,7 @@ public class ResetSkill<T extends SkillData> extends AbstractSkill<T> {
     @Override
     protected void doUpdateAnimation(String animation, LoopMode loopMode, float animFullTime, float animStartTime) {
         // 直接reset到指定动画的指定时间帧
-        channelProcessor.resetToAnimationTime(animation, timePoint);
+        actorService.resetToAnimationTime(actor, animation, timePoint);
     }
     
     @Override

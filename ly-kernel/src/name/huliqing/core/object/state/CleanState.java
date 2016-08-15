@@ -4,9 +4,7 @@
  */
 package name.huliqing.core.object.state;
 
-import com.jme3.app.Application;
 import java.util.List;
-import java.util.logging.Logger;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.StateData;
 import name.huliqing.core.mvc.service.StateService;
@@ -32,8 +30,8 @@ public class CleanState extends State implements StateListener {
     }
 
     @Override
-    public void initialize(Application app) {
-        super.initialize(app);
+    public void initialize() {
+        super.initialize();
         // 添加侦听器，以便侦听角色状态的变更。
         stateService.addListener(actor, this);
         

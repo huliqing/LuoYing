@@ -12,11 +12,10 @@ import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.data.SkinData;
-import name.huliqing.core.mvc.network.SkillNetwork;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.PlayService;
+import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.mvc.service.SkinService;
-import name.huliqing.core.mvc.service.StateService;
 import name.huliqing.core.object.sound.SoundManager;
 
 /**
@@ -28,9 +27,8 @@ import name.huliqing.core.object.sound.SoundManager;
 public class AttackSkill<T extends SkillData> extends HitSkill<T> {
     private final PlayService playService = Factory.get(PlayService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
-    private final StateService stateService = Factory.get(StateService.class);
     private final SkinService skinService = Factory.get(SkinService.class);
-    private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
+    private final SkillService skillService = Factory.get(SkillService.class);
     
     // 是否允许攻击到多个敌人，默认情况下只能攻击到当前的目标敌人。
     // 如果打开该功能，则在攻击范围内的敌人都可能被攻击到。比如挥剑
@@ -105,8 +103,8 @@ public class AttackSkill<T extends SkillData> extends HitSkill<T> {
                 }
                 // 防守成功(角色正在防守,并且必须是正面防守)
                 if (skillDefendable 
-                        && target.isDefending() 
-                        && target.getViewAngle(actor.getModel().getWorldTranslation()) < 90) {
+                        && skillService.isDefending(target) 
+                        && actorService.getViewAngle(target, actor.getModel().getWorldTranslation()) < 90) {
                     doDefendResult(target);
                 } else {
                     doHitResult(target);
@@ -123,7 +121,7 @@ public class AttackSkill<T extends SkillData> extends HitSkill<T> {
                 return;
             }
             // 防守成功(角色正在防守,并且必须是正面防守)
-            if (skillDefendable && target.isDefending() && target.getViewAngle(actor.getModel().getWorldTranslation()) < 90) {
+            if (skillDefendable && skillService.isDefending(target) && actorService.getViewAngle(target, actor.getModel().getWorldTranslation()) < 90) {
                 doDefendResult(target);
             } else {
                 doHitResult(target);

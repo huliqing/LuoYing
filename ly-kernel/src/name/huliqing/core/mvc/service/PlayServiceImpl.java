@@ -7,7 +7,6 @@ package name.huliqing.core.mvc.service;
 import com.jme3.ai.navmesh.NavMeshPathfinder;
 import com.jme3.app.Application;
 import com.jme3.bounding.BoundingBox;
-import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.collision.CollisionResults;
 import com.jme3.math.FastMath;
 import com.jme3.math.Ray;
@@ -101,8 +100,8 @@ public class PlayServiceImpl implements PlayService {
         // 最后判断是不是Actor
         if (object instanceof Spatial) {
             Spatial ss = (Spatial) object;
-            if (ss.getControl(ActorControl.class) != null) {
-                addActor(ss.getControl(ActorControl.class));
+            if (ss.getControl(Actor.class) != null) {
+                addActor(ss.getControl(Actor.class));
                 return;
             }
         }

@@ -7,8 +7,11 @@ package name.huliqing.core.object.control;
 
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
+import java.util.ArrayList;
+import java.util.List;
 import name.huliqing.core.data.ControlData;
 import name.huliqing.core.data.SkinData;
+import name.huliqing.core.object.actor.SkinListener;
 
 /**
  * 角色的换装控制器
@@ -17,6 +20,9 @@ import name.huliqing.core.data.SkinData;
  */
 public class ActorSkinControl<T extends ControlData> extends ActorControl<T> {
 
+    // 监听角色装备、武器等的穿脱
+    private List<SkinListener> skinListeners;
+    
     @Override
     public void actorUpdate(float tpf) {
         // ignore
@@ -34,5 +40,22 @@ public class ActorSkinControl<T extends ControlData> extends ActorControl<T> {
      */
     public void attachSkin(SkinData skinData) {
         
+    }
+    
+    public void addSkinListener(SkinListener skinListener) {
+        if (skinListeners == null) {
+            skinListeners = new ArrayList<SkinListener>();
+        }
+        if (!skinListeners.contains(skinListener)) {
+            skinListeners.add(skinListener);
+        }
+    }
+
+    public boolean removeSkinListener(SkinListener skinListener) {
+        return skinListeners != null && skinListeners.remove(skinListener);
+    }
+
+    public List<SkinListener> getSkinListeners() {
+        return skinListeners;
     }
 }

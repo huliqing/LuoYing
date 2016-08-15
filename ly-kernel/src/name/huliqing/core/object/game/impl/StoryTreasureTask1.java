@@ -86,7 +86,7 @@ public class StoryTreasureTask1 extends GameTaskBase {
             @Override
             public void callback(Actor actor) {
                 treasure = actor;
-                treasure.setLocation(game.treasurePos);
+                actorService.setLocation(treasure, game.treasurePos);
                 actorService.setLevel(treasure, game.treasureLevel);
                 actorService.setGroup(treasure, game.groupPlayer);
                 playNetwork.addActor(treasure);
@@ -97,7 +97,7 @@ public class StoryTreasureTask1 extends GameTaskBase {
             @Override
             public void callback(Actor actor) {
                 victim = actor;
-                victim.setLocation(game.treasurePos.clone().addLocal(1, 0, 1));
+                actorService.setLocation(victim, game.treasurePos.clone().addLocal(1, 0, 1));
                 actorService.setGroup(victim, game.groupPlayer);
                 stateService.addState(victim, IdConstants.STATE_SAFE, null);
                 actorService.setEssential(victim, true);// 设置为"必要的",这样不会被移除出场景
@@ -115,7 +115,7 @@ public class StoryTreasureTask1 extends GameTaskBase {
             public void callback(Actor actor) {
                 // 邪恶蜘蛛
                 spider = actor;
-                spider.setLocation(game.treasurePos.add(2, 0, 2));
+                actorService.setLocation(spider, game.treasurePos.add(2, 0, 2));
                 actorService.setGroup(spider, game.groupEnemy);
                 stateService.addState(spider, IdConstants.STATE_SAFE, null);
                 playNetwork.addActor(spider);
@@ -157,7 +157,7 @@ public class StoryTreasureTask1 extends GameTaskBase {
         if (stage == 3) {
             // 杀死蜘蛛、与艾琳的对话逻辑
             doSaveVictim();
-            if (victim.isDead() && spider.isDead() && victim.getDistance(player) < 15) {
+            if (actorService.isDead(victim) && actorService.isDead(spider) && actorService.distance(victim, player) < 15) {
                 stage = 4;
             }
             return;
@@ -223,27 +223,27 @@ public class StoryTreasureTask1 extends GameTaskBase {
     
     private void doSaveVictim() {
         // 找到宝箱
-        if (!conditionTreasureFound && player.getDistance(treasure.getModel().getWorldTranslation()) <= 10) {
+        if (!conditionTreasureFound && actorService.distance(player, treasure) <= 10) {
             conditionTreasureFound = true;
             playService.addMessage(get("task1.found"), MessageType.info);
         }
         
         // 1.目标始终
-        Actor target = victim.isDead() ? player : victim;
+        Actor target = actorService.isDead(victim) ? player : victim;
         if (actorService.getTarget(spider) != target) {
             actorNetwork.setTarget(spider, target);
         }
         
         // 2.玩家接近时修改victim防御值,让她受伤而死
-        if (!victim.isDead() && victim.getDistance(player) <= 25 && stateService.existsState(victim, IdConstants.STATE_SAFE)) {
+        if (!actorService.isDead(victim) && actorService.distance(victim, player) <= 25 && stateService.existsState(victim, IdConstants.STATE_SAFE)) {
             stateNetwork.removeState(victim, IdConstants.STATE_SAFE);
         }
         // 3.如果受害者已死，则降低蜘蛛防御。
-        if (!spider.isDead() && victim.isDead() && stateService.existsState(spider, IdConstants.STATE_SAFE)) {
+        if (!actorService.isDead(spider) && actorService.isDead(victim) && stateService.existsState(spider, IdConstants.STATE_SAFE)) {
             stateNetwork.removeState(spider, IdConstants.STATE_SAFE);
         }
         
-        if (!victim.isDead()) {
+        if (!actorService.isDead(victim)) {
             if (victimTalkHelp.isEnd()) {
                 victimTalkHelp.delay(3f);
                 actorNetwork.speak(victim, get("talk1.aiLin.help"), 0);

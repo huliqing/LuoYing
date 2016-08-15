@@ -4,15 +4,16 @@
  */
 package name.huliqing.core.view;
 
-import name.huliqing.core.view.ShortcutView;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Quad;
+import name.huliqing.core.Factory;
 import name.huliqing.core.LY;
 import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.SkillData;
+import name.huliqing.core.mvc.service.ItemService;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.utils.MatUtils;
 
@@ -21,6 +22,7 @@ import name.huliqing.core.utils.MatUtils;
  * @author huliqing
  */
 public class ShortcutSkillView extends ShortcutView {
+    private final ItemService itemService = Factory.get(ItemService.class);
     
     private SkillData data;
     // 技能CD遮罩颜色
@@ -50,7 +52,7 @@ public class ShortcutSkillView extends ShortcutView {
         interval = 1f / 120 * this.data.getCooldown();
         
         // 技能类的快捷方式不需要侦听ItemListener
-        actor.removeItemListener(this);
+        itemService.removeItemListener(actor, this);
     }
 
     @Override

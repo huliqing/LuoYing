@@ -4,7 +4,6 @@
  */
 package name.huliqing.core.object.state;
 
-import com.jme3.app.Application;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.data.StateData;
@@ -28,8 +27,8 @@ public class SkillState extends State {
     }
     
     @Override
-    public void initialize(Application app) {
-        super.initialize(app);
+    public void initialize() {
+        super.initialize();
         SkillData skillData = skillService.getSkill(actor, skillType);
         if (skillData != null) {
             skillService.playSkill(actor, skillData.getId(), force);

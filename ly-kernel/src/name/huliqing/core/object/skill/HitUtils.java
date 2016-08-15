@@ -83,7 +83,7 @@ public class HitUtils {
             }
 
             // 2.通知目标角色死亡
-            if (target.isPlayer()) {
+            if (actorService.isPlayer(target)) {
                 // 告诉所有玩家
                 String attackerName = attacker != null ? actorService.getName(attacker) : "";
                 String targetName = actorService.getName(target);

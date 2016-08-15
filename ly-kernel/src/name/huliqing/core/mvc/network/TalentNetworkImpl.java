@@ -12,6 +12,7 @@ import name.huliqing.core.network.Network;
 import name.huliqing.core.mess.MessTalentAdd;
 import name.huliqing.core.mess.MessTalentAddPoint;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.actor.TalentListener;
 
 /**
  *
@@ -67,6 +68,16 @@ public class TalentNetworkImpl implements TalentNetwork {
         network.broadcast(mess);
         
         talentService.addTalentPoints(actor, talentId, points);
+    }
+
+    @Override
+    public void addTalentListener(Actor actor, TalentListener talentListener) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void removeTalentListener(Actor actor, TalentListener talentListener) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     

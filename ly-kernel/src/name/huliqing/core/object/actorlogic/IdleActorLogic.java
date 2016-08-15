@@ -7,7 +7,6 @@ package name.huliqing.core.object.actorlogic;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.ActorLogicData;
 import name.huliqing.core.mvc.service.ActionService;
-import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.object.action.Action;
 
 /**

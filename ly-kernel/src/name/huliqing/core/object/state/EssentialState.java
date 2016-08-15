@@ -30,8 +30,8 @@ public class EssentialState extends State {
     }
 
     @Override
-    public void initialize(Application app) {
-        super.initialize(app);
+    public void initialize() {
+        super.initialize();
         oldEssential = actorService.isEssential(actor);
         actorService.setEssential(actor, essential);
     }

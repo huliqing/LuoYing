@@ -520,6 +520,13 @@ public interface ActorService extends Inject {
     void setLocation(Actor actor, Vector3f location);
     
     /**
+     * 获取角色当前位置
+     * @param actor
+     * @return 
+     */
+    Vector3f getLocation(Actor actor);
+    
+    /**
      * 打开或关闭角色的物理功能
      * @param actor
      * @param enabled 
@@ -540,7 +547,19 @@ public interface ActorService extends Inject {
      */
     void setViewDirection(Actor actor, Vector3f viewDirection);
     
+    /**
+     * 获取角色视角方向
+     * @param actor
+     * @return 
+     */
     Vector3f getViewDirection(Actor actor);
+    
+    /**
+     * 让角色看向指定<b>位置</b>(非方向)
+     * @param actor
+     * @param position 
+     */
+    void setLookAt(Actor actor, Vector3f position);
     
     /**
      * 设置角色步行方向
@@ -549,6 +568,11 @@ public interface ActorService extends Inject {
      */
     void setWalkDirection(Actor actor, Vector3f walkDirection);
     
+    /**
+     * 获取角色步行方向
+     * @param actor
+     * @return 
+     */
     Vector3f getWalkDirection(Actor actor);
     
     /**
@@ -591,9 +615,17 @@ public interface ActorService extends Inject {
      * 角色在死后需要停止活动，则可使用该方法来停止正在执行的动画。
      * @param actor
      * @return 
-     * @see #resetToAnimationTime(java.lang.String, float) 
+     * @see #resetToAnimationTime(Actor, String, float) 
      */
     boolean reset(Actor actor);
+    
+    /**
+     * 把骨骼动画定位在某一个动画中的某一个时间点(帧)．
+     * @param actor
+     * @param animation 动画名称
+     * @param timePoint 定位的时间插值点，取值[0.0~1.0] 
+     */
+    void resetToAnimationTime(Actor actor, String animation, float timePoint);
     
     /**
      * 判断角色是否为玩家角色，可能是客户端也可以是主机玩家
@@ -624,6 +656,22 @@ public interface ActorService extends Inject {
     
     void setKinematic(Actor actor, boolean kinematic);
     
-//    boolean isDucking(Actor actor);
-//    boolean isWaiting(Actor actor);
+    /**
+     * 判断角色与目标位置的距离
+     * @param actor
+     * @param position
+     * @return 
+     */
+    float distance(Actor actor, Vector3f position);
+    
+    /**
+     * 判断两个角色的距离
+     * @param actor
+     * @param target
+     * @return 
+     */
+    float distance(Actor actor, Actor target);
+ 
+    float distanceSquared(Actor actor, Actor target);
+    
 }

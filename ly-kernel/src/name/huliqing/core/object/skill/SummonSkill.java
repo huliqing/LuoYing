@@ -277,8 +277,7 @@ public class SummonSkill<T extends SkillData> extends AbstractSkill<T> {
                 
 //                summonActor.setLocation(start);
                 actorService.setLocation(summonActor, start);
-                summonActor.faceTo(tv.vect3.set(actor.getModel().getWorldTranslation()).setY(start.getY()));
-                
+                actorService.setLookAt(summonActor, tv.vect3.set(actor.getModel().getWorldTranslation()).setY(start.getY()));
                 
                 summonActor.getModel().addControl(showAnim);
                 showAnim.setStartPos(start);
@@ -323,10 +322,10 @@ public class SummonSkill<T extends SkillData> extends AbstractSkill<T> {
             Spatial summonModel = ma.getTarget();
             if (summonModel != null) {
                 // 让召唤到的目标获得物理碰撞
-                ActorControl ac = summonModel.getControl(ActorControl.class);
-                ac.setLocation(summonModel.getLocalTranslation());
+                Actor ac = summonModel.getControl(Actor.class);
+                actorService.setLocation(ac, summonModel.getLocalTranslation());
                 actorService.setAutoAi(ac, true);
-                actorNetwork.setPhysics(ac, true);// 物理开需要同步
+                actorNetwork.setPhysicsEnabled(ac, true);// 物理开需要同步
                 
                 // 释放showAnim以便重用
                 summonModel.removeControl(ma);

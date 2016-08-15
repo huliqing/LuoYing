@@ -102,7 +102,7 @@ public class StoryGuardTask1 extends GameTaskBase {
             @Override
             public void callback(Actor actor, int loadIndex) {
                 gb = actor;
-                gb.setLocation(game.getSelfPosition());
+                actorService.setLocation(gb, game.getSelfPosition());
                 actorService.setLevel(gb, 30);
                 actorService.setGroup(gb, actorService.getGroup(player));
                 playNetwork.addActor(gb);
@@ -114,7 +114,7 @@ public class StoryGuardTask1 extends GameTaskBase {
             @Override
             public void callback(Actor actor, int loadIndex) {
                 actorService.setLevel(actor, 20);
-                actor.setLocation(getRandomPosition(game.getSelfPosition()));
+                actorService.setLocation(actor, getRandomPosition(game.getSelfPosition()));
                 actorService.setGroup(actor, actorService.getGroup(player));
                 playNetwork.addActor(actor);
             }
@@ -140,7 +140,7 @@ public class StoryGuardTask1 extends GameTaskBase {
         }
         
         if (stage == 1) {
-            if (player.getDistance(gb) < 10) {
+            if (actorService.distance(player, gb) < 10) {
                 createTalk();
                 stage = 2;
             }

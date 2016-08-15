@@ -9,7 +9,9 @@ import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
+import com.jme3.util.TempVars;
 import name.huliqing.core.data.ControlData;
+import name.huliqing.core.object.actor.Actor;
 
 /**
  * 角色的物理控制器
@@ -31,8 +33,8 @@ public class ActorPhysicsControl extends ActorControl<ControlData> {
     }
     
     @Override
-    public void initialize() {
-        super.initialize();
+    public void initialize(Actor actor) {
+        super.initialize(actor);
         if (innerControl == null) {
             innerControl = new BetterCharacterControlWrap(radius, height, mass);
         }
@@ -57,6 +59,14 @@ public class ActorPhysicsControl extends ActorControl<ControlData> {
         super.cleanup(); 
     }
     
+    public Vector3f getLocation() {
+        return spatial.getWorldTranslation();
+    }
+    
+    public void setLocation(Vector3f location) {
+        innerControl.warp(location);
+    }
+    
     public Vector3f getViewDirection() {
         return innerControl.getViewDirection();
     }
@@ -71,10 +81,6 @@ public class ActorPhysicsControl extends ActorControl<ControlData> {
     
     public void setWalkDirection(Vector3f walkDirection) {
         innerControl.setWalkDirection(walkDirection);
-    }
-    
-    public void setLocation(Vector3f location) {
-        innerControl.warp(location);
     }
     
     public float getMass() {
@@ -92,6 +98,21 @@ public class ActorPhysicsControl extends ActorControl<ControlData> {
     
     public void setKinematic(boolean kinematic) {
         innerControl.setKinematic(kinematic);
+    }
+    
+    /**
+     * 让角色看向指定方向
+     * @param position 
+     */
+    public void setLookAt(Vector3f position) {
+        // 静态角色不能朝向
+        if (mass <= 0) {
+            return;
+        }
+        TempVars tv = TempVars.get();
+        position.subtract(getLocation(), tv.vect1); 
+        setViewDirection(tv.vect1.normalizeLocal());
+        tv.release();
     }
     
     // --------------------------------------------------------------------------------------------------------------------------------

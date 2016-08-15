@@ -9,7 +9,6 @@ import name.huliqing.core.Factory;
 import name.huliqing.core.object.action.RunAction;
 import name.huliqing.core.data.ActorLogicData;
 import name.huliqing.core.mvc.service.ActionService;
-import name.huliqing.core.mvc.service.ActorService;
 
 /**
  * 必须两个行为：FightAction, RunAction
@@ -44,14 +43,6 @@ public class PositionActorLogic<T extends ActorLogicData> extends ActorLogic<T> 
     public void setPosition(Vector3f position) {
         this.position.set(position);
     }
-
-//    public float getNearest() {
-//        return nearest;
-//    }
-//
-//    public void setNearest(float nearest) {
-//        this.nearest = nearest;
-//    }
     
     /**
      * 设置允许走到目标位置的最近距离，如果设置为0，则将走到精确的目标位置

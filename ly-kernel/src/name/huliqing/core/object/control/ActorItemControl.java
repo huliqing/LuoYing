@@ -21,11 +21,6 @@ public class ActorItemControl <T extends ControlData> extends ActorControl<T> {
     
     // 监听角色物品的增删
     private List<ItemListener> itemListeners;
-    
-    @Override
-    public void initialize() {
-        super.initialize(); 
-    }
 
     @Override
     public void actorUpdate(float tpf) {}

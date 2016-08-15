@@ -9,6 +9,7 @@ import name.huliqing.core.data.TaskData;
 import name.huliqing.core.loader.Loader;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actor.TaskListener;
+import name.huliqing.core.object.control.ActorTaskControl;
 import name.huliqing.core.object.task.Task;
 
 /**
@@ -40,14 +41,14 @@ public class TaskServiceImpl implements TaskService {
                 return;
             }
         }
-        task.setActor(actor);
-        task.initialize();
         
         actor.getData().getTasks().add(task.getData());
-        actor.getTasks().add(task);
+        
+        ActorTaskControl control = actor.getModel().getControl(ActorTaskControl.class);
+        control.addTask(task);
         
         // 侦听器
-        List<TaskListener> tls = actor.getTaskListeners();
+        List<TaskListener> tls = control.getTaskListeners();
         if (tls != null && !tls.isEmpty()) {
             for (TaskListener tl : tls) {
                 tl.onTaskAdded(actor, task);
@@ -57,31 +58,27 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task getTask(Actor actor, String taskId) {
-        List<Task> ts = actor.getTasks();
-        for (int i = 0; i < ts.size(); i++) {
-            if (ts.get(i).getId().equals(taskId)) {
-                return ts.get(i);
-            }
-        }
-        return null;
+        ActorTaskControl control = actor.getModel().getControl(ActorTaskControl.class);
+        return control.getTask(taskId);
     }
 
     @Override
     public List<Task> getTasks(Actor actor) {
-        return actor.getTasks();
+        ActorTaskControl control = actor.getModel().getControl(ActorTaskControl.class);
+        return control.getTasks();
     }
-
+    
     @Override
     public List<TaskData> getTaskDatas(Actor actor) {
         return actor.getData().getTasks();
     }
-
+    
     @Override
     public boolean checkCompletion(Actor actor, Task task) {
         checkValidState(actor, task);
         return task.checkCompletion();
     }
-
+    
     @Override
     public void completeTask(Actor actor, Task task) {
         checkValidState(actor, task);
@@ -93,7 +90,8 @@ public class TaskServiceImpl implements TaskService {
         task.getData().setCompletion(true);
         
         // 侦听器
-        List<TaskListener> tls = actor.getTaskListeners();
+        ActorTaskControl control = actor.getModel().getControl(ActorTaskControl.class);
+        List<TaskListener> tls = control.getTaskListeners();
         if (tls != null && !tls.isEmpty()) {
             for (TaskListener tl : tls) {
                 tl.onTaskCompleted(actor, task);
@@ -112,6 +110,20 @@ public class TaskServiceImpl implements TaskService {
     public int getItemTotal(Actor actor, Task task, String itemId) {
         checkValidState(actor, task);
         return task.getData().getTaskItemTotal(itemId);
+    }
+
+    @Override
+    public void addTaskListener(Actor actor, TaskListener taskListener) {
+        ActorTaskControl control = actor.getModel().getControl(ActorTaskControl.class);
+        if (control != null) {
+            control.addTaskListener(taskListener);
+        }
+    }
+
+    @Override
+    public boolean removeTaskListener(Actor actor, TaskListener taskListener) {
+        ActorTaskControl control = actor.getModel().getControl(ActorTaskControl.class);
+        return control != null && control.removeTaskListener(taskListener);
     }
     
     // 检查任务状态是否正常

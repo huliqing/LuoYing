@@ -10,6 +10,7 @@ import name.huliqing.core.Factory;
 import name.huliqing.core.data.AttributeData;
 import name.huliqing.core.data.GameLogicData;
 import name.huliqing.core.mvc.network.AttributeNetwork;
+import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.AttributeService;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.object.actor.Actor;
@@ -23,6 +24,7 @@ import name.huliqing.core.object.actor.Actor;
 public class AttributeChangeGameLogic<T extends GameLogicData> extends AbstractGameLogic<T> {
     private final PlayService playService = Factory.get(PlayService.class);
     private final AttributeService attributeService = Factory.get(AttributeService.class);
+    private final ActorService actorService = Factory.get(ActorService.class);
     private final AttributeNetwork attributeNetwork = Factory.get(AttributeNetwork.class);
 
     // 指定要修改的角色的属性值,角色必须有这个属性，否则没有意义。
@@ -61,7 +63,7 @@ public class AttributeChangeGameLogic<T extends GameLogicData> extends AbstractG
             return;
         
         for (Actor actor : actors) {
-            if (!applyToDead && actor.isDead()) {
+            if (!applyToDead && actorService.isDead(actor)) {
                 continue;
             }
             updateAttribute(actor);

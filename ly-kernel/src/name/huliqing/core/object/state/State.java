@@ -4,7 +4,6 @@
  */
 package name.huliqing.core.object.state;
 
-import com.jme3.app.Application;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.Factory;
@@ -14,7 +13,6 @@ import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.EffectService;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.StateService;
-import name.huliqing.core.object.AbstractPlayObject;
 import name.huliqing.core.xml.DataProcessor;
 import name.huliqing.core.object.effect.Effect;
 
@@ -23,11 +21,13 @@ import name.huliqing.core.object.effect.Effect;
  * @author huliqing
  * @param <T>
  */
-public class State<T extends StateData> extends AbstractPlayObject implements DataProcessor<T>{
+public class State<T extends StateData> implements DataProcessor<T>{
     private final PlayService playService = Factory.get(PlayService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final EffectService effectService = Factory.get(EffectService.class);
     private final StateService stateService = Factory.get(StateService.class);
+    
+    protected boolean initialized;
     
     protected T data;
     
@@ -72,9 +72,8 @@ public class State<T extends StateData> extends AbstractPlayObject implements Da
         return actor;
     }
     
-    @Override
-    public void initialize(Application app) {
-        super.initialize(app);
+    public void initialize() {
+        initialized = true;
         if (data.getEffects() != null) {
             if (tempEffects == null) {
                 tempEffects = new ArrayList<Effect>(data.getEffects().length);
@@ -89,23 +88,13 @@ public class State<T extends StateData> extends AbstractPlayObject implements Da
         totalUseTime = data.getUseTime();
     }
     
-    @Override
-    public void update(float tpf) {
-        timeUsed += tpf;
-        
-        // 时间到退出,cleanup由StateProcessor去调用。
-        if (timeUsed >= totalUseTime) {
-            doEnd();
-            return;
-        }
-        
-        if (data.isRemoveOnDead() && actorService.isDead(actor)) {
-            doEnd();
-        }
+    public boolean isInitialized() {
+        return initialized;
     }
-
-    @Override
+    
     public void cleanup() {
+        initialized = false;
+        
         // 在结束时要清理特效,让特效都跳转到end阶段，然后然它们自动结束就可以。
         // 不要用cleanup，这会导致特效突然消失，很不自然。
         if (tempEffects != null) {
@@ -123,7 +112,20 @@ public class State<T extends StateData> extends AbstractPlayObject implements Da
         
         // 清0
         timeUsed = 0;
-        super.cleanup();
+    }
+    
+    public void update(float tpf) {
+        timeUsed += tpf;
+        
+        // 时间到退出,cleanup由StateProcessor去调用。
+        if (timeUsed >= totalUseTime) {
+            doEnd();
+            return;
+        }
+        
+        if (data.isRemoveOnDead() && actorService.isDead(actor)) {
+            doEnd();
+        }
     }
     
     /**

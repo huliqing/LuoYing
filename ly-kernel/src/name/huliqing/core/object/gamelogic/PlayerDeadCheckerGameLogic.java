@@ -13,6 +13,7 @@ import name.huliqing.core.mvc.network.PlayNetwork;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.ViewService;
 import name.huliqing.core.manager.ResourceManager;
+import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.game.Game;
 
@@ -25,6 +26,7 @@ public class PlayerDeadCheckerGameLogic<T extends GameLogicData> extends Abstrac
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final ViewService viewService = Factory.get(ViewService.class);
     private final PlayService playService = Factory.get(PlayService.class);
+    private final ActorService actorService = Factory.get(ActorService.class);
 
     private Game game;
     private Actor player;
@@ -49,7 +51,7 @@ public class PlayerDeadCheckerGameLogic<T extends GameLogicData> extends Abstrac
             return;
         }
         
-        if (!displayed && player.isDead()) {
+        if (!displayed && actorService.isDead(player)) {
             dead = true;
             displayed = true;
             playNetwork.addMessage(ResourceManager.get(ResConstants.TASK_FAILURE), MessageType.notice);

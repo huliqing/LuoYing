@@ -47,11 +47,6 @@ public class ActorSkillControl extends ActorControl {
     private List<SkillListener> skillListeners;
 
     @Override
-    public void initialize() {
-        super.initialize();
-    }
-
-    @Override
     public void cleanup() {
         for (Skill skill : runningSkills.getArray()) {
             if (!skill.isEnd()) {

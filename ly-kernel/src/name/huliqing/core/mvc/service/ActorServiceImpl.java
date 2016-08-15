@@ -894,6 +894,11 @@ public class ActorServiceImpl implements ActorService {
     }
 
     @Override
+    public Vector3f getLocation(Actor actor) {
+        return actor.getModel().getWorldTranslation();
+    }
+
+    @Override
     public void setPhysicsEnabled(Actor actor, boolean enabled) {
         PhysicsControl pc = actor.getModel().getControl(PhysicsControl.class);
         if (pc != null) {
@@ -922,6 +927,14 @@ public class ActorServiceImpl implements ActorService {
             pac.getViewDirection();
         }
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void setLookAt(Actor actor, Vector3f position) {
+        ActorPhysicsControl control = actor.getModel().getControl(ActorPhysicsControl.class);
+        if (control != null) {
+            control.setLookAt(position);
+        }
     }
 
     @Override
@@ -977,6 +990,14 @@ public class ActorServiceImpl implements ActorService {
         }
         return false;
     }
+
+    @Override
+    public void resetToAnimationTime(Actor actor, String animation, float timePoint) {
+        ChannelControl cc = actor.getModel().getControl(ChannelControl.class);
+        if (cc != null) {
+            cc.resetToAnimationTime(animation, timePoint);
+        }
+    }
     
     @Override
     public boolean isPlayer(Actor actor) {
@@ -1031,13 +1052,19 @@ public class ActorServiceImpl implements ActorService {
         return actor.getModel().getControl(ActorBaseControl.class);
     }
 
-//    @Override
-//    public boolean isDucking(Actor actor) {
-//        ActorSkillControl c = actor.getModel().getControl(ActorSkillControl.class);
-//        return c != null ? c.isDucking() : false;
-//    }
-//    @Override
-//    public boolean isWaiting(Actor actor) {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-//    }
+    @Override
+    public float distance(Actor actor, Actor target) {
+        return actor.getModel().getWorldTranslation().distance(target.getModel().getWorldTranslation());
+    }
+
+    @Override
+    public float distanceSquared(Actor actor, Actor target) {
+        return actor.getModel().getWorldTranslation().distanceSquared(target.getModel().getWorldTranslation());
+    }
+
+    @Override
+    public float distance(Actor actor, Vector3f position) {
+        return actor.getModel().getWorldTranslation().distance(position);
+    }
+
 }

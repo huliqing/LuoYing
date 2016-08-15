@@ -83,7 +83,7 @@ public class StoryGbTask2End extends IntervalLogic {
                 gb = actor;
                 actorService.setLevel(gb, 15);
                 actorService.setGroup(gb, actorService.getGroup(player));
-                gb.setLocation(game.getGbPosition());
+                actorService.setLocation(gb, game.getGbPosition());
                 // 保护角色不死
                 setProtected(actor, true);
                 playNetwork.addActor(actor);
@@ -159,22 +159,22 @@ public class StoryGbTask2End extends IntervalLogic {
     // 这要求树根数完成，player不能死，player在gb附近，并且附近没有敌人
     private boolean checkTaskOK() {
         return taskPanel.isOk() 
-                && !player.isDead()
-                && player.getDistance(gb) < 10
+                && !actorService.isDead(player)
+                && actorService.distance(player, gb) < 10
                 && !isEnemyNear(25);
     }
     
     private boolean isAltarDead() {
         Actor actor = playService.findActor(IdConstants.ACTOR_ALTAR);
-        return actor == null || actor.isDead();
+        return actor == null || actorService.isDead(actor);
     }
     
     private boolean isEnemyNear(float distance) {
         List<Actor> actors = playService.findAllActor();
         for (Actor a : actors) {
-            if (!a.isDead() 
-                    && a.isEnemy(player) 
-                    && a.getDistance(player) < distance) {
+            if (!actorService.isDead(a) 
+                    && actorService.isEnemy(a, player) 
+                    && actorService.distance(a, player) < distance) {
                 return true;
             }
         }

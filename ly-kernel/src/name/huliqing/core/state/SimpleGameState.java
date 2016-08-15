@@ -316,8 +316,8 @@ public  class SimpleGameState extends GameState implements UIEventListener {
         Spatial spatialObject = (Spatial) object;
         
         // 因为actor也可以使用spatial来添加，所以这里要兼容
-        if (spatialObject.getControl(ActorControl.class) != null) {
-            addActor(spatialObject.getControl(ActorControl.class), gui);
+        if (spatialObject.getControl(Actor.class) != null) {
+            addActor(spatialObject.getControl(Actor.class), gui);
             return;
         } 
         
@@ -336,7 +336,7 @@ public  class SimpleGameState extends GameState implements UIEventListener {
             actor = (Actor) object;
         } else if (object instanceof Spatial) {
             spatial = (Spatial) object;
-            actor = spatial.getControl(ActorControl.class);
+            actor = spatial.getControl(Actor.class);
         } 
         
         // 根据类型移出场景

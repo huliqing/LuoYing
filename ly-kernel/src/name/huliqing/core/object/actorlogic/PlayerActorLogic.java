@@ -4,7 +4,6 @@
  */
 package name.huliqing.core.object.actorlogic;
 
-import com.jme3.math.Vector3f;
 import name.huliqing.core.Factory;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.action.FightAction;

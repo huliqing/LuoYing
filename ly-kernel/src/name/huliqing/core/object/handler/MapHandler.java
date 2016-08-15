@@ -25,6 +25,7 @@ import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.mvc.network.UserCommandNetwork;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.manager.ResourceManager;
+import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.ui.Button;
 import name.huliqing.core.ui.FrameLayout;
@@ -41,6 +42,7 @@ import name.huliqing.core.utils.ConvertUtils;
  */
 public class MapHandler extends AbstractHandler {
     private final PlayService playService = Factory.get(PlayService.class);
+    private final ActorService actorService = Factory.get(ActorService.class);
     private final UserCommandNetwork userCommandNetwork = Factory.get(UserCommandNetwork.class);
     
     private String image;
@@ -156,7 +158,7 @@ public class MapHandler extends AbstractHandler {
             // 1.将角色视角在世界上的x,z方向转化为GUI上的x,y
             TempVars tv = TempVars.get();
             Vector3f dir = tv.vect1;
-            dir.set(actor.getViewDirection()).setY(0).normalizeLocal();
+            dir.set(actorService.getViewDirection(actor)).setY(0).normalizeLocal();
             dir.y = -dir.z;
             dir.z = 0;
             
