@@ -44,8 +44,8 @@ public class PhysicsEnv <T extends EnvData> extends AbstractEnv <T> implements S
         super.setData(data);
         debug = data.getAsBoolean("debug", debug);
         gravity = data.getAsVector3f("gravity", gravity);
-        broadphaseType = data.getAttribute("broadphaseType");
-        threadingType = data.getAttribute("threadingType");
+        broadphaseType = data.getAsString("broadphaseType");
+        threadingType = data.getAsString("threadingType");
         speed = data.getAsFloat("speed", speed);
         worldMax = data.getAsVector3f("worldMax");
         worldMin = data.getAsVector3f("worldMin");

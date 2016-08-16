@@ -37,13 +37,13 @@ public class SkyEnv <T extends EnvData> extends AbstractEnv<T> {
     @Override
     public void setData(T data) {
         super.setData(data);
-        baseDir = data.getAttribute("baseDir");
-        west = data.getAttribute("west");
-        east = data.getAttribute("east");
-        north = data.getAttribute("north");
-        south = data.getAttribute("south");
-        up = data.getAttribute("up");
-        down = data.getAttribute("down");
+        baseDir = data.getAsString("baseDir");
+        west = data.getAsString("west");
+        east = data.getAsString("east");
+        north = data.getAsString("north");
+        south = data.getAsString("south");
+        up = data.getAsString("up");
+        down = data.getAsString("down");
     }
 
     @Override

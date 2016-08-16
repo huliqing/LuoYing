@@ -10,6 +10,8 @@ import name.huliqing.core.data.ActorData;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import com.jme3.util.SafeArrayList;
+import java.util.List;
+import name.huliqing.core.data.ControlData;
 import name.huliqing.core.loader.Loader;
 import name.huliqing.core.object.control.ActorControl;
 import name.huliqing.core.xml.DataProcessor;
@@ -29,7 +31,9 @@ public class Actor<T extends ActorData> extends AbstractControl implements DataP
      */
     protected Spatial model;
     
-    // 控制器
+    /**
+     * 角色控制器
+     */
     protected final SafeArrayList<ActorControl> controls = new SafeArrayList<ActorControl>(ActorControl.class);
     
     @Override
@@ -51,13 +55,10 @@ public class Actor<T extends ActorData> extends AbstractControl implements DataP
         model.addControl(this);
         
         // 载入并初始化所有控制器
-        String[] cArr = data.getAsArray("controls");
-        if (cArr != null) {
-            for (String c : cArr) {
-                ActorControl control = Loader.load(c);
-                model.addControl(control);
-                controls.add(control);
-                control.initialize(this);
+        List<ControlData> controlDatas= data.getControlDatas();
+        if (!controlDatas.isEmpty()) {
+            for (ControlData cd : controlDatas) {
+                addControl((ActorControl) Loader.load(cd));
             }
         }
         
@@ -73,12 +74,10 @@ public class Actor<T extends ActorData> extends AbstractControl implements DataP
     }
     
     @Override
-    protected void controlUpdate(float tpf) {
-    }
+    protected void controlUpdate(float tpf) {}
 
     @Override
-    protected void controlRender(RenderManager rm, ViewPort vp) {
-    }
+    protected void controlRender(RenderManager rm, ViewPort vp) {}
     
     /**
      * 清理角色
@@ -96,12 +95,38 @@ public class Actor<T extends ActorData> extends AbstractControl implements DataP
     }
     
     /**
+     * 添加角色控制器
+     * @param actorControl 
+     */
+    public void addControl(ActorControl actorControl) {
+        if (controls.contains(actorControl)) {
+            return;
+        }
+        model.addControl(actorControl);
+        controls.add(actorControl);
+        data.getControlDatas().add(actorControl.getData());
+        actorControl.initialize(this);
+    }
+    
+    /**
+     * 移除指定的角色控制器
+     * @param actorControl 
+     * @return  
+     */
+    public boolean removeControl(ActorControl actorControl) {
+        boolean result = controls.remove(actorControl);
+        data.getControlDatas().remove(actorControl.getData());
+        model.removeControl(actorControl);
+        actorControl.cleanup();
+        return result;
+    }
+    
+    /**
      * 载入基本模型
      * @return 
      */
     protected Spatial loadModel() {
         return ActorModelLoader.loadActorModel(data);
     }
-    
     
 }

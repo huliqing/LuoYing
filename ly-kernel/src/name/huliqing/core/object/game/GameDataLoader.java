@@ -22,7 +22,7 @@ public class GameDataLoader<T extends GameData> implements DataLoader<T>{
 
     @Override
     public void load(Proto proto, T store) {
-        SceneData sceneData = DataFactory.createData(store.getAttribute("scene"));
+        SceneData sceneData = DataFactory.createData(store.getAsString("scene"));
         store.setSceneData(sceneData);
         
         String[] gameLogicsArr = proto.getAsArray("gameLogics");

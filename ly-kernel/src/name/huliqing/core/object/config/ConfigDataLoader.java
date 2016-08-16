@@ -18,8 +18,8 @@ public class ConfigDataLoader implements DataLoader<ConfigData> {
     @Override
     public void load(Proto proto, ConfigData data) {
         data.setDebug(proto.getAsBoolean("debug", false));
-        data.setGameName(proto.getAttribute("gameName"));
-        data.setVersionName(proto.getAttribute("versionName"));
+        data.setGameName(proto.getAsString("gameName"));
+        data.setVersionName(proto.getAsString("versionName"));
         data.setVersionCode(proto.getAsInteger("versionCode"));
         data.setPort(proto.getAsInteger("port"));
         
@@ -35,15 +35,15 @@ public class ConfigDataLoader implements DataLoader<ConfigData> {
         data.setShortcutSize(proto.getAsFloat("shortcutSize"));
         data.setBaseWalkSpeed(proto.getAsFloat("baseWalkSpeed"));
         data.setBaseRunSpeed(proto.getAsFloat("baseRunSpeed"));
-        data.setLocale(proto.getAttribute("locale"));
-        data.setLocaleAll(proto.getAttribute("localeAll"));
+        data.setLocale(proto.getAsString("locale"));
+        data.setLocaleAll(proto.getAsString("localeAll"));
         data.setSpeakTimeMin(proto.getAsFloat("speakTimeMin"));
         data.setSpeakTimeMax(proto.getAsFloat("speakTimeMax"));
         data.setSpeakTimeWorld(proto.getAsFloat("speakTimeWorld"));
         data.setSpeakMaxDistance(proto.getAsFloat("speakMaxDistance"));
         data.setUseHardwareSkinning(proto.getAsBoolean("useHardwareSkinning", false));
         data.setSummonLevelFactor(proto.getAsFloat("summonLevelFactor"));
-        data.setLanGames(proto.getAttribute("lanGames"));
+        data.setLanGames(proto.getAsString("lanGames"));
         data.setUseShadow(proto.getAsBoolean("useShadow", false));
     }
     

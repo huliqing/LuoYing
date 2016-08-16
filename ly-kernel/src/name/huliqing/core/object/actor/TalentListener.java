@@ -13,17 +13,24 @@ import name.huliqing.core.data.TalentData;
 public interface TalentListener {
     
     /**
-     * 角色添加了天赋时触发
+     * 在角色添加了天赋后触发
      * @param actor
-     * @param talentData 
+     * @param talentData 新添加的天赋的data
      */
     void onTalentAdded(Actor actor, TalentData talentData);
     
     /**
-     * 角色增加或减少了天赋点数时触发
+     * 在从角色身上移除一个天赋后触发。
      * @param actor
-     * @param talentId
-     * @param pointsAmount 实际增加或减少的天赋点数 
+     * @param talentData 被移除的天赋的data
      */
-    void onTalentPointsChange(Actor actor, String talentId, int pointsAmount);
+    void onTalentRemoved(Actor actor, TalentData talentData);
+    
+    /**
+     * 角色增加或减少了天赋点数后触发该方法。
+     * @param actor
+     * @param data 发生了点数变动的天赋的data.
+     * @param pointsAmount 实际增加或减少的天赋点数
+     */
+    void onTalentPointsChange(Actor actor, TalentData data, int pointsAmount);
 }

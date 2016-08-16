@@ -68,12 +68,12 @@ public class MapHandler extends AbstractHandler {
     @Override
     public void setData(HandlerData data) {
         super.setData(data); 
-        this.image = data.getAttribute("image");
+        this.image = data.getAsString("image");
         this.mapSize = data.getAsFloat("mapSize", mapSize);
         this.mapAlpha = data.getAsFloat("mapAlpha", mapAlpha);
         this.locationSize = data.getAsFloat("locationSize", locationSize);
-        this.locationIcon = data.getAttribute("locationIcon", locationIcon);
-        this.baseIconPath = data.getAttribute("baseIconPath");
+        this.locationIcon = data.getAsString("locationIcon", locationIcon);
+        this.baseIconPath = data.getAsString("baseIconPath");
         this.flipVertical = data.getAsBoolean("flipVertical", flipVertical);
         String[] tempLocations = data.getAsArray("locations");
         if (tempLocations != null) {

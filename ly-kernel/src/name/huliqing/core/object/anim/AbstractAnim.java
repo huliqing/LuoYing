@@ -90,11 +90,11 @@ public abstract class AbstractAnim<T extends AnimData, E> implements Anim<T, E> 
             useTime = 0.0001f;
         }
         this.speed = data.getAsFloat("speed", speed);
-        String tempLoop = data.getAttribute("loop");
+        String tempLoop = data.getAsString("loop");
         if (tempLoop != null) {
             loop = Loop.identify(tempLoop);
         }
-        this.motionType = MotionType.identify(data.getAttribute("motionType"));
+        this.motionType = MotionType.identify(data.getAsString("motionType"));
         if (this.motionType == null) {
             motionType = MotionType.Linear;
         }

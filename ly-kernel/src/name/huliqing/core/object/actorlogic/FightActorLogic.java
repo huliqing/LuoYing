@@ -26,7 +26,7 @@ public class FightActorLogic<T extends ActorLogicData> extends ActorLogic<T> {
     @Override
     public void setData(T data) {
         super.setData(data); 
-        fightAction = (FightAction) actionService.loadAction(data.getAttribute("fightAction"));
+        fightAction = (FightAction) actionService.loadAction(data.getAsString("fightAction"));
     }
     
     @Override

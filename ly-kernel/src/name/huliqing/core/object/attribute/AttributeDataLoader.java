@@ -17,7 +17,7 @@ public class AttributeDataLoader implements DataLoader<AttributeData> {
 
     @Override
     public void load(Proto proto, AttributeData store) {
-        store.setEl(proto.getAttribute("el"));
+        store.setEl(proto.getAsString("el"));
     }
     
 }

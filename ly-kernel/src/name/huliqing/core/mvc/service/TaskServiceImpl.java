@@ -34,43 +34,37 @@ public class TaskServiceImpl implements TaskService {
     
     @Override
     public void addTask(Actor actor, Task task) {
-        // 任务不能重复，如果已经存在，则不再添加
-        List<TaskData> tasks = actor.getData().getTasks();
-        for (TaskData td : tasks) {
-            if (td.getId().equals(task.getId())) {
-                return;
-            }
-        }
-        
-        actor.getData().getTasks().add(task.getData());
-        
         ActorTaskControl control = actor.getModel().getControl(ActorTaskControl.class);
-        control.addTask(task);
-        
-        // 侦听器
-        List<TaskListener> tls = control.getTaskListeners();
-        if (tls != null && !tls.isEmpty()) {
-            for (TaskListener tl : tls) {
-                tl.onTaskAdded(actor, task);
-            }
+        if (control != null) {
+            control.addTask(task);
         }
     }
 
     @Override
     public Task getTask(Actor actor, String taskId) {
         ActorTaskControl control = actor.getModel().getControl(ActorTaskControl.class);
-        return control.getTask(taskId);
+        if (control != null) {
+            return control.getTask(taskId);
+        }
+        return null;
     }
 
     @Override
     public List<Task> getTasks(Actor actor) {
         ActorTaskControl control = actor.getModel().getControl(ActorTaskControl.class);
-        return control.getTasks();
+        if (control != null) {
+            return control.getTasks();
+        }
+        return null;
     }
     
     @Override
     public List<TaskData> getTaskDatas(Actor actor) {
-        return actor.getData().getTasks();
+        ActorTaskControl control = actor.getModel().getControl(ActorTaskControl.class);
+        if (control != null) {
+            return control.getTaskDatas();
+        }
+        return null;
     }
     
     @Override
@@ -81,21 +75,9 @@ public class TaskServiceImpl implements TaskService {
     
     @Override
     public void completeTask(Actor actor, Task task) {
-        checkValidState(actor, task);
-        // 执行“任务完成”如奖励经验、金钱、物品等。。。
-        task.doCompletion();
-        // 清理任务处理器，释放资源，当任务完成之后就不需要这些东西了，如各种侦听器等
-        task.cleanup();
-        // 把任务标记为“完成”
-        task.getData().setCompletion(true);
-        
-        // 侦听器
         ActorTaskControl control = actor.getModel().getControl(ActorTaskControl.class);
-        List<TaskListener> tls = control.getTaskListeners();
-        if (tls != null && !tls.isEmpty()) {
-            for (TaskListener tl : tls) {
-                tl.onTaskCompleted(actor, task);
-            }
+        if (control != null) {
+            control.completeTask(task);
         }
     }
     

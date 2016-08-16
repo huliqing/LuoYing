@@ -41,7 +41,7 @@ public class SkillDataLoader implements DataLoader<SkillData> {
         // remove,不再需要这个属性
 //        data.setRadius(proto.getAsFloat("radius", 1));
         
-        data.setAnimation(proto.getAttribute("animation"));
+        data.setAnimation(proto.getAsString("animation"));
         data.setChannels(proto.getAsArray("channels"));
         data.setChannelLocked(proto.getAsBoolean("channelLocked", false));
         data.setCooldown(proto.getAsFloat("cooldown", 0));
@@ -62,11 +62,11 @@ public class SkillDataLoader implements DataLoader<SkillData> {
         }
         
         // 影响技能执行速度的目标属性ID
-        data.setSpeedAttribute(proto.getAttribute("speedAttribute"));
+        data.setSpeedAttribute(proto.getAsString("speedAttribute"));
         // CutTimeEnd的剪裁
-        data.setCutTimeEndAttribute(proto.getAttribute("cutTimeEndAttribute"));
+        data.setCutTimeEndAttribute(proto.getAsString("cutTimeEndAttribute"));
         
-        String loopTemp = proto.getAttribute("loopMode");
+        String loopTemp = proto.getAsString("loopMode");
         if ("1".equals(loopTemp)) {
             data.setLoopMode(LoopMode.Loop);
         } else if ("2".equals(loopTemp)) {
@@ -102,10 +102,10 @@ public class SkillDataLoader implements DataLoader<SkillData> {
         
         data.setLevel(proto.getAsInteger("level", 1));
         data.setMaxLevel(proto.getAsInteger("maxLevel", 1));
-        data.setLevelEl(proto.getAttribute("levelEl"));
+        data.setLevelEl(proto.getAsString("levelEl"));
 //        data.setSkillEl(proto.getAttribute("skillEl"));
         data.setSkillPoints(proto.getAsInteger("skillPoints", 0));
-        data.setLevelUpEl(proto.getAttribute("levelUpEl"));
+        data.setLevelUpEl(proto.getAsString("levelUpEl"));
         data.setNeedLevel(proto.getAsInteger("needLevel", 0));
         
         // ---- 这几个参数是动态参数,不应该作为配置放到xml
@@ -146,7 +146,7 @@ public class SkillDataLoader implements DataLoader<SkillData> {
         if (tagName.equals("skillAttack") 
                 || tagName.equals("skillShot") 
                 || tagName.equals("skillShotBow")) {
-            String stName = proto.getAttribute("skillType");
+            String stName = proto.getAsString("skillType");
             if (stName == null) {
                 throw new NullPointerException("Need specify a skillType, tagName=" + tagName + ", proto=" + proto);
             }

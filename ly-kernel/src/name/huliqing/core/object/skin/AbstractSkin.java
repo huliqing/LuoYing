@@ -49,7 +49,7 @@ public abstract class AbstractSkin<T extends SkinData> implements Skin<T> {
     @Override
     public void setData(T data) {
         this.data = data;
-        bindBone = data.getAttribute("bindBone");
+        bindBone = data.getAsString("bindBone");
         localTranslation = data.getAsVector3f("localTranslation");
         localRotation = data.getAsFloatArray("localRotation");
         localScale = data.getAsVector3f("localScale");

@@ -48,7 +48,7 @@ public class WaterSimpleEnv<T extends EnvData> extends AbstractEnv<T> implements
     @Override
     public void setData(T data) {
         super.setData(data);
-        waterModelFile = data.getAttribute("waterModel");
+        waterModelFile = data.getAsString("waterModel");
         location = data.getAsVector3f("location");
         rotation = data.getAsVector3f("rotation");
         scale = data.getAsVector3f("scale");
@@ -58,9 +58,9 @@ public class WaterSimpleEnv<T extends EnvData> extends AbstractEnv<T> implements
         distortionMix = data.getAsFloat("distortionMix", distortionMix);
         distortionScale = data.getAsFloat("distortionScale", distortionScale);
         
-        foamMap = data.getAttribute("foamMap");
+        foamMap = data.getAsString("foamMap");
         foamScale = data.getAsVector2f("foamScale");
-        foamMaskMap = data.getAttribute("foamMaskMap");
+        foamMaskMap = data.getAsString("foamMaskMap");
         foamMaskScale = data.getAsVector2f("foamMaskScale");
     }
     

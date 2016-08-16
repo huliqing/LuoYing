@@ -33,7 +33,7 @@ class ProtoUtils {
             return null;
         }
         
-        String extendId = proto.getAttribute(ATTRIBUTE_EXTENDS);
+        String extendId = proto.getAsString(ATTRIBUTE_EXTENDS);
         if (extendId == null) {
             // 如果extId不存在，则说明该Proto没有继承关系，或者说继承关系已经处理过了。
             // 这个时候dataLoader和dataProcessor必须已经存在（通过自身tag配置或是继承自父tag），如果这个时候不存在，则
@@ -72,7 +72,7 @@ class ProtoUtils {
 //        }
 
         // 继承方式是这样的：从父类向下逐层继承
-        String extendId=  parent.getAttribute(ATTRIBUTE_EXTENDS);
+        String extendId=  parent.getAsString(ATTRIBUTE_EXTENDS);
         if (extendId != null) {
             // 检查是否存在无尽继承
             checker.add(parent.getId());

@@ -4,7 +4,6 @@
  */
 package name.huliqing.core.loader;
 
-import com.jme3.animation.AnimControl;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.scene.Spatial;
@@ -15,9 +14,7 @@ import name.huliqing.core.data.ActorAnimData;
 import name.huliqing.core.data.ActorData;
 import name.huliqing.core.data.AnimData;
 import name.huliqing.core.data.BulletData;
-import name.huliqing.core.data.ChannelData;
 import name.huliqing.core.data.ChatData;
-import name.huliqing.core.data.EffectData;
 import name.huliqing.core.data.ElData;
 import name.huliqing.core.data.EmitterData;
 import name.huliqing.core.data.PositionData;
@@ -42,7 +39,6 @@ import name.huliqing.core.object.actoranim.ActorAnim;
 import name.huliqing.core.object.actorlogic.ActorLogic;
 import name.huliqing.core.object.anim.Anim;
 import name.huliqing.core.object.bullet.Bullet;
-import name.huliqing.core.object.channel.Channel;
 import name.huliqing.core.object.chat.Chat;
 import name.huliqing.core.object.effect.Effect;
 import name.huliqing.core.object.env.Env;
@@ -125,13 +121,6 @@ public class Loader {
     
     public static Bullet loadBullet(BulletData data) {
         return DataFactory.createProcessor(data);
-    }
-        
-    public static Channel loadChannel(String channelId, AnimControl ac) {
-        ChannelData data = DataFactory.createData(channelId);
-        Channel channel = DataFactory.createProcessor(data);
-        channel.setAnimControl(ac);
-        return channel;
     }
     
     public static Chat loadChat(String chatId) {
@@ -279,13 +268,13 @@ public class Loader {
         return DataFactory.createProcessor(data);
     }
         
-    public static Talent loadTalent(String talentId) {
-        return loadTalent((TalentData) DataFactory.createData(talentId));
-    }
+//    public static Talent loadTalent(String talentId) {
+//        return loadTalent((TalentData) DataFactory.createData(talentId));
+//    }
     
-    public static Talent loadTalent(TalentData data) {
-        return DataFactory.createProcessor(data);
-    }
+//    public static Talent loadTalent(TalentData data) {
+//        return DataFactory.createProcessor(data);
+//    }
     
     public static Task loadTask(String taskId) {
         return loadTask((TaskData) DataFactory.createData(taskId));

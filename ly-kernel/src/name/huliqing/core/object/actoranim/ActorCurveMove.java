@@ -79,7 +79,7 @@ public class ActorCurveMove<T extends ActorAnimData> extends ActorAnim<T> {
                 }
             }
             
-            String tempFacing = data.getAttribute("facing", facing.name());
+            String tempFacing = data.getAsString("facing", facing.name());
             if (tempFacing.equals(Facing.path.name())) {
                 facing = Facing.path;
             } else if (tempFacing.equals(Facing.target.name())) {

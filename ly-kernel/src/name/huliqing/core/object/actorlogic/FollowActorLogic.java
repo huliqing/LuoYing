@@ -36,7 +36,7 @@ public class FollowActorLogic<T extends ActorLogicData> extends ActorLogic<T> {
     @Override
     public void setData(T data) {
         super.setData(data); 
-        followAction = (FollowAction) actionService.loadAction(data.getAttribute("followAction"));
+        followAction = (FollowAction) actionService.loadAction(data.getAsString("followAction"));
         maxFollow = data.getAsFloat("maxFollow", maxFollow);
         minFollow = data.getAsFloat("minFollow", minFollow);
         

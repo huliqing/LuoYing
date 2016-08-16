@@ -19,7 +19,7 @@ public class ItemDataLoader implements DataLoader<ItemData> {
     @Override
     public void load(Proto proto, ItemData data) {
         data.setRaceLimit(proto.getAsList("raceLimit"));
-        data.setSexLimit(Sex.identifyByName(proto.getAttribute("sexLimit")));
+        data.setSexLimit(Sex.identifyByName(proto.getAsString("sexLimit")));
         data.setDeletable(proto.getAsBoolean("deletable", true));
     }
     

@@ -38,7 +38,7 @@ public class ItemSkillHandler extends AbstractHandler {
     @Override
     public void setData(HandlerData data) {
         super.setData(data); 
-        skillId = data.getAttribute("skill");
+        skillId = data.getAsString("skill");
         // 格式：race|sex|skill,race|sex|skill,...
         // sex=f/m
         String[] tempRsses = data.getAsArray("special");

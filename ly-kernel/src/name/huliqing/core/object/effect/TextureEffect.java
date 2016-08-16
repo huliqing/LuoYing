@@ -37,9 +37,9 @@ public class TextureEffect extends AbstractEffect {
     @Override
     public void setData(EffectData data) {
         super.setData(data); 
-        this.texture = data.getAttribute("texture", texture);
+        this.texture = data.getAsString("texture", texture);
         this.size = data.getAsVector3f("size", size);
-        this.plane = data.getAttribute("plane", plane);
+        this.plane = data.getAsString("plane", plane);
         this.color = data.getAsColor("color", color);
     }
     

@@ -37,7 +37,16 @@ public class State<T extends StateData> implements DataProcessor<T>{
     protected float totalUseTime;
     
     // ---- inner
+    
+    /**
+     * 状态的持有者，即受状态影响的角色，不能为null
+     */
     protected Actor actor;
+    
+    /**
+     * 状态的产生者，也就是说，这个状态是哪一个角色发出的, 如果一个状态没有发起源，则这个参数可能为null.
+     */
+    protected Actor sourceActor;
     
     /**
      * 当前状态已经执行的时间，单位秒，这个时间是用来控制状态结束的。
@@ -62,14 +71,6 @@ public class State<T extends StateData> implements DataProcessor<T>{
     @Override
     public void setData(T data) {
         this.data = data;
-    }
-
-    public void setActor(Actor actor) {
-        this.actor = actor;
-    }
-
-    public Actor getActor() {
-        return actor;
     }
     
     public void initialize() {
@@ -142,5 +143,42 @@ public class State<T extends StateData> implements DataProcessor<T>{
     protected void doEnd() {
         stateService.removeState(actor, data.getId());
     }
+    
+    /**
+     * 设置状态的持有者，即受状态影响的角色，不能为null
+     * @param actor 
+     */
+    public void setActor(Actor actor) {
+        this.actor = actor;
+    }
+
+    /**
+     * 状态的持有者，即受状态影响的角色
+     * @return 
+     */
+    public Actor getActor() {
+        return actor;
+    }
+
+    /**
+     * 状态的产生者，也就是说，这个状态是哪一个角色发出的, 可能为null.
+     * @return 
+     */
+    public Actor getSourceActor() {
+        return sourceActor;
+    }
+
+    /**
+     * 源角色，这个角色主要是指制造这个状态的源角色, 比如：角色A攻击了角色B, A的这个攻击技能对B产生
+     * 了一个“流血”状态。这时A即可以设置为这个“流血”状态的sourceActor。这样状
+     * 态在运行时就可以获得源角色的引用，以便知道谁产生了这个状态。对于一些状态
+     * 效果非常有用，比如“流血”这类伤害效果状态，这些状态在运行时要计算伤害，并
+     * 要知道是谁产生了这些伤害。
+     * @param sourceActor 
+     */
+    public void setSourceActor(Actor sourceActor) {
+        this.sourceActor = sourceActor;
+    }
+    
     
 }

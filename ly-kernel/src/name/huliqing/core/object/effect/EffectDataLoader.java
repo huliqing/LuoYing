@@ -21,9 +21,9 @@ public class EffectDataLoader<T extends EffectData> implements DataLoader<T>{
     public void load(Proto proto, T store) {
 
         store.setUseTime(proto.getAsFloat("useTime", 1.0f));
-        store.setTracePosition(TraceType.identity(proto.getAttribute("tracePosition", TraceType.no.name())));
-        store.setTraceRotation(TraceType.identity(proto.getAttribute("traceRotation", TraceType.no.name())));
-        store.setTracePositionType(TracePositionType.identify(proto.getAttribute("tracePositionType", TracePositionType.origin.name())));
+        store.setTracePosition(TraceType.identity(proto.getAsString("tracePosition", TraceType.no.name())));
+        store.setTraceRotation(TraceType.identity(proto.getAsString("traceRotation", TraceType.no.name())));
+        store.setTracePositionType(TracePositionType.identify(proto.getAsString("tracePositionType", TracePositionType.origin.name())));
         store.setAutoDetach(proto.getAsBoolean("autoDetach", false));
 
         // 特效的初始位置

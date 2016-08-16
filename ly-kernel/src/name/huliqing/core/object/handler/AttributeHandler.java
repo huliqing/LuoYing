@@ -28,7 +28,7 @@ public class AttributeHandler extends AbstractHandler {
     @Override
     public void setData(HandlerData data) {
         super.setData(data); 
-        this.attribute = data.getAttribute("attribute");
+        this.attribute = data.getAsString("attribute");
         this.amount = data.getAsFloat("amount", 0);
     }
 

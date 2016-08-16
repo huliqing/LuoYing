@@ -24,7 +24,7 @@ public class ItemData extends PkgItemData implements CostObject, HandlerObject{
     
     @Override
     public String getHandler() {
-        return getAttribute("handler");
+        return getAsString("handler");
     }
     
 }

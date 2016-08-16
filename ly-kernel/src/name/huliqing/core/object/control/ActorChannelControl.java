@@ -14,11 +14,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import name.huliqing.core.constants.IdConstants;
+import name.huliqing.core.loader.Loader;
+import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.channel.Channel;
 import name.huliqing.core.object.channel.ChannelControl;
 import name.huliqing.core.utils.Temp;
 
 /**
+ * 用于控制角色动画通道的“通道控制器”
  * @author huliqing
  */
 public class ActorChannelControl extends ActorControl implements ChannelControl {
@@ -37,12 +41,32 @@ public class ActorChannelControl extends ActorControl implements ChannelControl 
     private boolean resetState;
 
     @Override
-    public void actorUpdate(float tpf) {
+    public void initialize(Actor actor) {
+        super.initialize(actor);
+        // 载入通道
+        String[] cids = data.getAsArray("channels");
+        if (cids == null) {
+            cids = new String[]{IdConstants.CHANNEL_FULL};
+        }
+        AnimControl animControl = actor.getModel().getControl(AnimControl.class);
+        for (String channelId : cids) {
+            Channel channel = Loader.load(channelId);
+            channel.setAnimControl(animControl);
+            addChannel(channel);
+        }
     }
 
     @Override
-    public void actorRender(RenderManager rm, ViewPort vp) {
+    public void cleanup() {
+        channels.clear();
+        super.cleanup(); 
     }
+
+    @Override
+    public void actorUpdate(float tpf) {}
+
+    @Override
+    public void actorRender(RenderManager rm, ViewPort vp) {}
     
     @Override
     public void addChannel(Channel channel) {

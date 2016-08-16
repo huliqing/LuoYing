@@ -35,7 +35,7 @@ public class SkillBookHandler extends AbstractHandler {
     @Override
     public void setData(HandlerData data) {
         super.setData(data);
-        this.skill = data.getAttribute("skill");
+        this.skill = data.getAsString("skill");
     }
 
     @Override

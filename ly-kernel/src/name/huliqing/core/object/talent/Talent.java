@@ -16,6 +16,12 @@ import name.huliqing.core.object.actor.Actor;
  */
 public interface Talent<T extends TalentData> extends DataProcessor<T> {
     
+    @Override
+    public void setData(T data);
+
+    @Override
+    public T getData();
+    
     /**
      * 初始化天赋,当给指定角色添加天赋时该方法应该被调用一次，以进行初始化。
      */

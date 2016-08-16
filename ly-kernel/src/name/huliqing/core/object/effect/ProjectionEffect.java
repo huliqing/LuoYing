@@ -83,7 +83,7 @@ public class ProjectionEffect extends AbstractEffect {
     public void setData(EffectData data) {
         super.setData(data); 
         // TextureConstants.TEX_MAGIC default value for test.
-        texture = LY.getAssetManager().loadTexture(data.getAttribute("texture", TextureConstants.TEX_MAGIC));
+        texture = LY.getAssetManager().loadTexture(data.getAsString("texture", TextureConstants.TEX_MAGIC));
         color = data.getAsColor("color");
         projPos.set(data.getAsVector3f("projPos", projPos));
         projDir.set(data.getAsVector3f("projDir", projDir)).normalizeLocal();

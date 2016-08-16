@@ -56,23 +56,23 @@ public class SlideColorEffect extends AbstractEffect {
         startColor = data.getAsColor("startColor", startColor);
         endColor = data.getAsColor("endColor", endColor);
         
-        mask = data.getAttribute("mask", mask);
+        mask = data.getAsString("mask", mask);
         maskAnimY = data.getAsBoolean("maskAnimY", maskAnimY);
         maskAnimX = data.getAsBoolean("maskAnimX", maskAnimX);
         maskChangeDir = data.getAsBoolean("maskChangeDir", maskChangeDir);
         maskScaleY = data.getAsFloat("maskScaleY", maskScaleY);
         maskScaleX = data.getAsFloat("maskScaleX", maskScaleX);
         maskSpeed = data.getAsFloat("maskSpeed", maskSpeed);
-        maskWrap = getWrapMode(data.getAttribute("maskWrap"), maskWrap);
+        maskWrap = getWrapMode(data.getAsString("maskWrap"), maskWrap);
         
-        tex = data.getAttribute("tex", tex);
+        tex = data.getAsString("tex", tex);
         texAnimY = data.getAsBoolean("texAnimY", texAnimY);
         texAnimX = data.getAsBoolean("texAnimX", texAnimX);
         texChangeDir = data.getAsBoolean("texChangeDir", texChangeDir);
         texScaleY = data.getAsFloat("texScaleY", texScaleY);
         texScaleX = data.getAsFloat("texScaleX", texScaleX);
         texSpeed = data.getAsFloat("texSpeed", texSpeed);
-        texWrap = getWrapMode(data.getAttribute("texWrap"), texWrap);
+        texWrap = getWrapMode(data.getAsString("texWrap"), texWrap);
     }
     
     @Override

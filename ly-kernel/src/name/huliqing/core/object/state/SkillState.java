@@ -22,7 +22,7 @@ public class SkillState extends State {
     @Override
     public void setData(StateData data) {
         super.setData(data); 
-        skillType = SkillType.identifyByName(data.getAttribute("skillType"));
+        skillType = SkillType.identifyByName(data.getAsString("skillType"));
         force = data.getAsBoolean("force", force);
     }
     

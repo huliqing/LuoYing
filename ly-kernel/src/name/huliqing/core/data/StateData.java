@@ -37,37 +37,6 @@ public class StateData extends ObjectData {
     // 当角色死亡时从角色身上移除这个状态.
     private boolean removeOnDead;
     
-    /**
-     * 设置一个对源角色的引用(唯一ID)，即产生这个状态的源角色，如果没有则可以设置为小于
-     * 或等于0的值。<br />
-     * 说明：<br />
-     * 源角色，这个角色主要是指制造这个状态的源角色，比如某些状态是由特定角色发出
-     * 的，则这里可以保留一个引用。比如：角色A攻击了角色B, A的这个攻击技能对B产生
-     * 了一个“流血”状态。这时A即可以设置为这个“流血”状态的sourceActor。这样状
-     * 态在运行时就可以获得源角色的引用，以便知道谁产生了这个状态。对于一些状态
-     * 效果非常有用，比如“流血”这类伤害效果状态，这些状态在运行时要计算伤害，并
-     * 要知道是谁产生了这些伤害。
-     */
-    private long sourceActor;
-    
-    @Override
-    public void write(JmeExporter ex) throws IOException {
-        super.write(ex);
-        OutputCapsule oc = ex.getCapsule(this);
-        oc.write(useTime, "useTime", 3);
-        oc.write(interval, "interval", 3);
-        oc.write(effects, "effects", null);
-    }
-
-    @Override
-    public void read(JmeImporter im) throws IOException {
-        super.read(im);
-        InputCapsule ic = im.getCapsule(this);
-        useTime = ic.readFloat("useTime", 3);
-        interval = ic.readFloat("interval", 3);
-        effects = ic.readStringArray("effects", null);
-    }
-    
     // ----------------------------------------------------- 以下参数不开放到xml
     
     /**
@@ -135,31 +104,24 @@ public class StateData extends ObjectData {
     public void setRemoveOnDead(boolean removeOnDead) {
         this.removeOnDead = removeOnDead;
     }
-
-    /**
-     * 获取产生这个状态效果的源角色,如果返回值为小于或等于0的值，则表示没有
-     * 任何源角色。
-     * @see #setSourceActor(long) 
-     * @return 
-     */
-    public long getSourceActor() {
-        return sourceActor;
+    
+    @Override
+    public void write(JmeExporter ex) throws IOException {
+        super.write(ex);
+        OutputCapsule oc = ex.getCapsule(this);
+        oc.write(useTime, "useTime", 3);
+        oc.write(interval, "interval", 3);
+        oc.write(effects, "effects", null);
+        oc.write(removeOnDead, "removeOnDead", false);
     }
 
-    /**
-     * 设置一个对源角色的引用(唯一ID)，即产生这个状态的源角色，如果没有则可以设置为小于
-     * 或等于0的值。<br />
-     * 说明：<br />
-     * 源角色，这个角色主要是指制造这个状态的源角色，比如某些状态是由特定角色发出
-     * 的，则这里可以保留一个引用。比如：角色A攻击了角色B, A的这个攻击技能对B产生
-     * 了一个“流血”状态。这时A即可以设置为这个“流血”状态的sourceActor。这样状
-     * 态在运行时就可以获得源角色的引用，以便知道谁产生了这个状态。对于一些状态
-     * 效果非常有用，比如“流血”这类伤害效果状态，这些状态在运行时要计算伤害，并
-     * 要知道是谁产生了这些伤害。
-     */
-    public void setSourceActor(long sourceActor) {
-        this.sourceActor = sourceActor;
+    @Override
+    public void read(JmeImporter im) throws IOException {
+        super.read(im);
+        InputCapsule ic = im.getCapsule(this);
+        useTime = ic.readFloat("useTime", 3);
+        interval = ic.readFloat("interval", 3);
+        effects = ic.readStringArray("effects", null);
+        removeOnDead = ic.readBoolean("removeOnDead", false);
     }
-    
-    
 }

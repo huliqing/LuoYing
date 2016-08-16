@@ -35,7 +35,7 @@ public class ProxyPlatformEnv <T extends EnvData> extends AbstractEnv<T> impleme
     @Override
     public void setData(T data) {
         super.setData(data);
-        defaultEnv = data.getAttribute("defaultEnv");
+        defaultEnv = data.getAsString("defaultEnv");
         // 格式：“env1|platform1|platform2, envId2|platform3|platform4,...”
         String[] mpArr = data.getAsArray("mapping");
         if (mpArr != null) {

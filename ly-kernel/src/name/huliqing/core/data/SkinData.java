@@ -206,7 +206,7 @@ public class SkinData extends PkgItemData implements MatObject, CostObject, Hand
      * @return 
      */
     public String getFile() {
-        return getAttribute("file");
+        return getAsString("file");
     }
     
     /**
@@ -227,7 +227,7 @@ public class SkinData extends PkgItemData implements MatObject, CostObject, Hand
 
     @Override
     public String getHandler() {
-        return getAttribute("handler");
+        return getAsString("handler");
     }
     
     /**

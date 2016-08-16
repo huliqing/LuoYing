@@ -58,23 +58,23 @@ public class ShotBowSkill<T extends SkillData> extends ShotSkill<T> {
     @Override
     public void setData(T data) {
         super.setData(data); 
-        this.weaponAnim = data.getAttribute("weaponAnim");
+        this.weaponAnim = data.getAsString("weaponAnim");
         this.timeBulletTake = data.getAsFloat("timeBulletTake", timeBulletTake);
         this.timeBulletPull = data.getAsFloat("timeBulletPull", timeBulletPull);
-        this.animationShotDown = data.getAttribute("animationShotDown");
-        this.animationShotUp = data.getAttribute("animationShotUp");
+        this.animationShotDown = data.getAsString("animationShotDown");
+        this.animationShotUp = data.getAsString("animationShotUp");
         this.shotDownOffset = data.getAsVector3f("shotDownOffset");
         this.shotUpOffset = data.getAsVector3f("shotUpOffset");
         
         // 载入箭模型, 该箭模型(arrow)主要用于“取箭”及“拉弓上弦”动画。
-        String tempArrow = data.getAttribute("arrow");
+        String tempArrow = data.getAsString("arrow");
         if (tempArrow != null) {
             arrow = Loader.loadModel(tempArrow);
         }
         
         // 取箭的时候，用于绑定“箭”模型的角色骨架上的某一块骨头,如果没有指定，
         // 则默认以角色的右手武器的骨头作为该骨头.
-        this.arrowBindBone = data.getAttribute("arrowBindBone", "weapon.R");
+        this.arrowBindBone = data.getAsString("arrowBindBone", "weapon.R");
     }
 
     @Override

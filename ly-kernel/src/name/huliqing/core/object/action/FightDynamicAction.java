@@ -110,7 +110,7 @@ public class FightDynamicAction extends FollowPathAction implements FightAction 
         followTimeMax = data.getAsFloat("followTimeMax", followTimeMax);
         allowFollow = data.getAsBoolean("allowFollow", allowFollow);
         autoTakeOffWeapon = data.getAsBoolean("autoTakeOffWeapon", autoTakeOffWeapon);
-        attackIntervalAttribute = data.getAttribute("attackIntervalAttribute");
+        attackIntervalAttribute = data.getAsString("attackIntervalAttribute");
         attackIntervalMax = data.getAsFloat("attackIntervalMax", attackIntervalMax);
         String[] tempSkillTypes = data.getAsArray("attackSkillTypes");
         if (tempSkillTypes != null && tempSkillTypes.length > 0) {

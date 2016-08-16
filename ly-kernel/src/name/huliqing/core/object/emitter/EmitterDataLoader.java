@@ -25,7 +25,7 @@ public class EmitterDataLoader implements DataLoader<EmitterData> {
         data.setGravity(proto.getAsVector3f("gravity"));
         data.setHighLife(proto.getAsFloat("highLife"));
         data.setLowLife(proto.getAsFloat("lowLife"));
-        data.setTexture(proto.getAttribute("texture"));
+        data.setTexture(proto.getAsString("texture"));
         data.setImagesX(proto.getAsInteger("imagesX"));
         data.setImagesY(proto.getAsInteger("imagesY"));
         data.setParticlesPerSec(proto.getAsInteger("particlesPerSec"));
@@ -36,7 +36,7 @@ public class EmitterDataLoader implements DataLoader<EmitterData> {
         data.setFacingVelocity(proto.getAsBoolean("facingVelocity", false));
         data.setInitialVelocity(proto.getAsVector3f("initialVelocity"));
         data.setVelocityVariation(proto.getAsFloat("velocityVariation"));
-        data.setShape(proto.getAttribute("shape"));
+        data.setShape(proto.getAsString("shape"));
     }
     
 }

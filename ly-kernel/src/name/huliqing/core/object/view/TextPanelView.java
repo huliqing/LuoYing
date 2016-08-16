@@ -22,7 +22,7 @@ public class TextPanelView<T extends ViewData> extends TextView<T> {
     @Override
     public void setData(T data) {
         super.setData(data); 
-        title = data.getAttribute("title");
+        title = data.getAsString("title");
         if (title == null) {
             title = ResourceManager.getObjectName(data);
         }
@@ -71,7 +71,7 @@ public class TextPanelView<T extends ViewData> extends TextView<T> {
     @Override
     public void applySyncData(SyncData data) {
         super.applySyncData(data);
-        win.setTitle(data.getAttribute("title"));
+        win.setTitle(data.getAsString("title"));
     }
     
 }

@@ -71,7 +71,7 @@ public abstract class Chat<T extends ChatData> extends AbstractPlayObject implem
                 this.animations[i] = Loader.loadAnimation(tempAnims[i]);
             }
         }
-        String tempHitChecker = data.getAttribute("hitChecker");
+        String tempHitChecker = data.getAsString("hitChecker");
         if (tempHitChecker != null) {
             hitChecker = Loader.loadHitChecker(tempHitChecker);
         }

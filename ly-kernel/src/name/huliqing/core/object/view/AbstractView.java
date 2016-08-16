@@ -87,7 +87,7 @@ public abstract class AbstractView<T extends ViewData> extends AbstractPlayObjec
         }
         
         // Corner position
-        String tempCornerPosition = data.getAttribute("cornerPosition");
+        String tempCornerPosition = data.getAsString("cornerPosition");
         if (tempCornerPosition != null) {
             this.cornerPosition = Corner.identify(tempCornerPosition);
         }

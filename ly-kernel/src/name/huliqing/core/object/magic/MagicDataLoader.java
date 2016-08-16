@@ -30,10 +30,10 @@ public class MagicDataLoader<T extends MagicData> implements DataLoader<T> {
         }
         store.setDebug(proto.getAsBoolean("debug", false));
         store.setUseTime(proto.getAsFloat("useTime", 1.0f));
-        store.setTracePosition(TraceType.identity(proto.getAttribute("tracePosition", TraceType.no.name())));
+        store.setTracePosition(TraceType.identity(proto.getAsString("tracePosition", TraceType.no.name())));
         store.setTracePositionOffset(proto.getAsVector3f("tracePositionOffset"));
         
-        store.setTraceRotation(TraceType.identity(proto.getAttribute("traceRotation", TraceType.no.name())));
+        store.setTraceRotation(TraceType.identity(proto.getAsString("traceRotation", TraceType.no.name())));
         float[] tempRotationOffset = proto.getAsFloatArray("traceRotationOffset");// xyz angle
         if (tempRotationOffset != null) {
             Quaternion traceRotationOffset = new Quaternion();
@@ -41,7 +41,7 @@ public class MagicDataLoader<T extends MagicData> implements DataLoader<T> {
             store.setTraceRotationOffset(traceRotationOffset);
         }
         
-        String hitCheckerId = proto.getAttribute("hitChecker");
+        String hitCheckerId = proto.getAsString("hitChecker");
         if (hitCheckerId != null) {
             HitCheckerData hd = DataFactory.createData(hitCheckerId);
             store.setHitCheckerData(hd);

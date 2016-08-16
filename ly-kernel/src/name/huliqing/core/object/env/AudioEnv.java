@@ -53,7 +53,7 @@ public class AudioEnv <T extends EnvData> extends AbstractEnv<T> {
         super.setData(data);
         
         debug = data.getAsBoolean("debug", false);
-        soundId = data.getAttribute("sound");
+        soundId = data.getAsString("sound");
 //        type = data.getAttribute("type", DataType.Buffer.name());
         location = data.getAsVector3f("location");
     }

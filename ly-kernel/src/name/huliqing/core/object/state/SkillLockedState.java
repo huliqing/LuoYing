@@ -63,7 +63,7 @@ public class SkillLockedState extends State implements SkillListener {
     @Override
     public void setData(StateData data) {
         super.setData(data); 
-        lockType = LockType.identify(data.getAttribute("lockType"));
+        lockType = LockType.identify(data.getAsString("lockType"));
         lockAll = data.getAsBoolean("lockAll", lockAll);
         // 如果lockAll(锁定全部技能），则不需要理lockSkills。
         // 否则要获取特定的要锁定的技能类型列表。

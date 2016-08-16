@@ -53,8 +53,8 @@ public class CurveTrailBullet<S> extends CurveBullet<S> {
     @Override
     public void setData(BulletData data) {
         super.setData(data);
-        this.mask = data.getAttribute("mask", null);
-        this.tex = data.getAttribute("tex", null);
+        this.mask = data.getAsString("mask", null);
+        this.tex = data.getAsString("tex", null);
         this.texScale = data.getAsFloat("texScale", texScale);
         this.color = data.getAsColor("color", ColorRGBA.White);
         this.width = data.getAsFloat("width", width);

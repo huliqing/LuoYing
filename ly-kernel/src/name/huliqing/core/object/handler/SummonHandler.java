@@ -49,7 +49,7 @@ public class SummonHandler extends AbstractHandler {
     @Override
     public void setData(HandlerData data) {
         super.setData(data);
-        this.actorId = data.getAttribute("actorId");
+        this.actorId = data.getAsString("actorId");
         this.total = data.getAsInteger("total", total);
     }
 

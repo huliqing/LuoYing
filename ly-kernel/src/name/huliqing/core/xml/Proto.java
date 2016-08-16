@@ -42,7 +42,7 @@ public class Proto extends Data {
      * @return 
      */
     public String getDataClass() {
-        return getAttribute("dataClass");
+        return getAsString("dataClass");
     }
     
     /**
@@ -59,7 +59,7 @@ public class Proto extends Data {
      * @return 
      */
     public String getDataLoaderClass() {
-        return getAttribute("dataLoaderClass");
+        return getAsString("dataLoaderClass");
     }
     
     /**
@@ -77,7 +77,7 @@ public class Proto extends Data {
      * @return 
      */
     public String getDataProcessorClass() {
-        return getAttribute("dataProcessorClass");
+        return getAsString("dataProcessorClass");
     }
     
     /**

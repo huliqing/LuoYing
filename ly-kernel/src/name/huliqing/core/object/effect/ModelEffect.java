@@ -21,8 +21,8 @@ public class ModelEffect extends AbstractEffect {
     public void setData(EffectData data) {
         super.setData(data);
         if (!loaded) {
-            Spatial model = Loader.loadModel(data.getAttribute("file"));
-            Bucket bucket = identifyBucket(data.getAttribute("bucket"));
+            Spatial model = Loader.loadModel(data.getAsString("file"));
+            Bucket bucket = identifyBucket(data.getAsString("bucket"));
             // 一些特效需要指定bucket,特别是一些半透明的物体。半透明的物体需要在阴影
             // 渲染后才能渲染,否则会挡住阴影
             if (bucket != null) {

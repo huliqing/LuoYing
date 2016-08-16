@@ -32,7 +32,7 @@ public class MoveSpeedState extends AttributeState {
     @Override
     public void setData(StateData data) {
         super.setData(data);
-        moveEffectId = data.getAttribute("moveEffect");
+        moveEffectId = data.getAsString("moveEffect");
     }
 
     @Override

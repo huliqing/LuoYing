@@ -42,7 +42,7 @@ public class HaloEffect extends AbstractEffect {
     @Override
     public void setData(EffectData data) {
         super.setData(data); 
-        this.texture = data.getProto().getAttribute("texture", texture);
+        this.texture = data.getProto().getAsString("texture", texture);
         this.radius = data.getProto().getAsFloat("radius", radius);
         this.haloTotal = data.getProto().getAsInteger("haloTotal", haloTotal);
         this.haloSize = data.getProto().getAsVector3f("haloSize", haloSize);

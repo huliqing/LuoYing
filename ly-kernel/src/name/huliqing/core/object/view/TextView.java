@@ -25,12 +25,12 @@ public class TextView<T extends ViewData> extends AbstractView<T> {
     @Override
     public void setData(T data) {
         super.setData(data); 
-        String text = data.getAttribute("text");
-        String textKey = data.getAttribute("textKey");
+        String text = data.getAsString("text");
+        String textKey = data.getAsString("textKey");
         ColorRGBA color = data.getAsColor("fontColor");
         float fontSize = data.getAsFloat("fontSize", UIFactory.getUIConfig().getBodyFontSize());
-        Align align = identifyAlign(data.getAttribute("align"));
-        VAlign valign = identifyVAlign(data.getAttribute("valign"));
+        Align align = identifyAlign(data.getAsString("align"));
+        VAlign valign = identifyVAlign(data.getAsString("valign"));
         
         if (text != null) {
             textUI = new Text(text);
@@ -108,7 +108,7 @@ public class TextView<T extends ViewData> extends AbstractView<T> {
     @Override
     public void applySyncData(SyncData data) {
         super.applySyncData(data);
-        textUI.setText(data.getAttribute("text"));
+        textUI.setText(data.getAsString("text"));
     }
     
 }

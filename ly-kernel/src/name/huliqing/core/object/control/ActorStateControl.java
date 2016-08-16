@@ -10,9 +10,12 @@ import com.jme3.renderer.ViewPort;
 import com.jme3.util.SafeArrayList;
 import java.util.ArrayList;
 import java.util.List;
+import name.huliqing.core.data.StateData;
+import name.huliqing.core.loader.Loader;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actor.StateListener;
 import name.huliqing.core.object.state.State;
+import name.huliqing.core.xml.DataFactory;
 
 /**
  *
@@ -20,16 +23,36 @@ import name.huliqing.core.object.state.State;
  */
 public class ActorStateControl extends ActorControl {
 
-    private final SafeArrayList<State> states = new SafeArrayList<State>(State.class);
     private Actor actor;
     
-    // 状态监听
+    private final SafeArrayList<State> states = new SafeArrayList<State>(State.class);
+    private final List<StateData> stateDatas = new ArrayList<StateData>();
     private List<StateListener> stateListeners;
 
     @Override
     public void initialize(Actor actor) {
         super.initialize(actor); 
         this.actor = actor;
+        
+        // 从存档中载入状态，如果不是存档则从原始参数中获取
+        List<StateData> stateInits = (List<StateData>) data.getAttribute("stateDatas");
+        if (stateInits == null) {
+            String[] stateIdArr = data.getAsArray("states");
+            if (stateIdArr != null) {
+                stateInits = new ArrayList<StateData>(stateIdArr.length);
+                for (String stateId : stateIdArr) {
+                    stateInits.add((StateData) DataFactory.createData(stateId));
+                }
+            }
+        }
+        
+        if (stateInits != null) {
+            for (StateData stateData : stateInits) {
+                addState((State)Loader.load(stateData));
+            }
+        }
+        
+        data.setAttribute("stateDatas", stateDatas);
     }
 
     @Override
@@ -38,6 +61,8 @@ public class ActorStateControl extends ActorControl {
             s.cleanup();
         }
         states.clear();
+        stateDatas.clear();
+        super.cleanup();
     }
     
     @Override
@@ -48,36 +73,58 @@ public class ActorStateControl extends ActorControl {
     }
 
     @Override
-    public void actorRender(RenderManager rm, ViewPort vp) {
-    }
+    public void actorRender(RenderManager rm, ViewPort vp) {}
     
     public void addState(State state) {
         // 如果已经存在相同ID的状态，则要删除旧的，因状态不允许重复。
-        State oldState = findStateInner(state.getData().getId());
+        State oldState = getState(state.getData().getId());
         if (oldState != null) {
             removeState(oldState);
         }
         
         state.setActor(actor);
         state.initialize();
+        
+        // 加入data列表和处理器列表
+        states.add(state);
+        stateDatas.add(state.getData());
+        
+        // 侦听器
+        if (stateListeners != null && !stateListeners.isEmpty()) {
+            for (StateListener sl : stateListeners) {
+                sl.onStateAdded(actor, state);
+            }
+        }
     }
     
     public boolean removeState(State state) {
+        boolean result = states.remove(state);
+        stateDatas.remove(state.getData());
         state.cleanup();
-        return states.remove(state);
+        // 侦听器
+        if (result && stateListeners != null && !stateListeners.isEmpty()) {
+            for (StateListener sl : stateListeners) {
+                sl.onStateRemoved(actor, state);
+            }
+        }
+        return result;
     }
 
-    public State findState(String stateId) {
-        return findStateInner(stateId);
-    }
-
-    private State findStateInner(String stateId) {
+    public State getState(String stateId) {
         for (State s : states.getArray()) {
             if (s.getData().getId().equals(stateId)) {
                 return s;
             }
         }
         return null;
+    }
+    
+    public List<State> getStates() {
+        return states;
+    }
+    
+    public List<StateData> getStateDatas() {
+        return stateDatas;
     }
     
     public void addStateListener(StateListener stateListener) {

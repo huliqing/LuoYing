@@ -17,7 +17,7 @@ public class ElDataLoader implements DataLoader<ElData> {
 
     @Override
     public void load(Proto proto, ElData data) {
-        data.setExpression(proto.getAttribute("expression"));
+        data.setExpression(proto.getAsString("expression"));
     }
     
 }

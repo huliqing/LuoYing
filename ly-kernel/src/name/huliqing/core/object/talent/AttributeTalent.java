@@ -29,8 +29,8 @@ public class AttributeTalent<T extends TalentData> extends AbstractTalent<T> {
     @Override
     public void setData(T data) {
         super.setData(data); 
-        this.applyAttribute = data.getAttribute("applyAttribute");
-        this.levelEl = data.getAttribute("levelEl");
+        this.applyAttribute = data.getAsString("applyAttribute");
+        this.levelEl = data.getAsString("levelEl");
         this.level = data.getLevel();
     }
 

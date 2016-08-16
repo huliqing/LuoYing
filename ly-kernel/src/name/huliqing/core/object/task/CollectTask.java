@@ -101,11 +101,11 @@ public class CollectTask<T extends TaskData> extends AbstractTask<T> implements 
 
     @Override
     public void doCompletion() {
-        super.doCompletion();
         // 扣减任务物品数量
         for (ItemWrap item : items) {
             taskService.applyItem(actor, this, item.itemId, -item.total);
         }
+        super.doCompletion();
     }
 
     @Override

@@ -58,7 +58,7 @@ public final class RandomCirclePosition<T extends PositionData> extends Abstract
     public void setData(T data) {
         super.setData(data);
         
-        String tempPlane = data.getAttribute("plane");
+        String tempPlane = data.getAsString("plane");
         if (tempPlane != null) {
             plane = Plane.identify(tempPlane);
         }

@@ -107,7 +107,7 @@ public class ShotSkill<T extends SkillData> extends HitSkill<T> {
         shotSpeed = data.getAsFloat("shotSpeed", shotSpeed);
         multHit = data.getAsBoolean("multHit", multHit);
         multTarget = data.getAsBoolean("multTarget", multTarget);
-        String tempSTT = data.getAttribute("shotTargetType");
+        String tempSTT = data.getAsString("shotTargetType");
         if (tempSTT != null) {
             shotTargetType = ShotTargetType.identifyByName(tempSTT);
         }

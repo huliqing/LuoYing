@@ -13,14 +13,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.core.data.ActorData;
 import name.huliqing.core.data.AttributeData;
+import name.huliqing.core.data.ControlData;
 import name.huliqing.core.data.DropData;
-import name.huliqing.core.data.ActorLogicData;
 import name.huliqing.core.xml.Proto;
 import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.ResistData;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.data.SkinData;
-import name.huliqing.core.data.TalentData;
 import name.huliqing.core.enums.Sex;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.xml.DataFactory;
@@ -88,7 +87,7 @@ public class ActorDataLoader implements DataLoader<ActorData> {
         }
         
         // ==== 载入物品掉落设置
-        String drop = proto.getAttribute("drop");
+        String drop = proto.getAsString("drop");
         DropData dropData = null;
         if (drop != null) {
             dropData = DataFactory.createData(drop);
@@ -112,30 +111,26 @@ public class ActorDataLoader implements DataLoader<ActorData> {
         }
         
         // ==== 载入逻辑
-        String[] logicIds = proto.getAsArray("logic");
-        List<ActorLogicData> logics = null;
-        if (logicIds != null && logicIds.length > 0) {
-            logics = new ArrayList<ActorLogicData>(logicIds.length);
-            for (String logicId : logicIds) {
-                ActorLogicData logicData = DataFactory.createData(logicId);
-                logics.add(logicData);
-            }
-        }
+        // remove20160816
+//        String[] logicIds = proto.getAsArray("logic");
+//        List<ActorLogicData> logics = null;
+//        if (logicIds != null && logicIds.length > 0) {
+//            logics = new ArrayList<ActorLogicData>(logicIds.length);
+//            for (String logicId : logicIds) {
+//                ActorLogicData logicData = DataFactory.createData(logicId);
+//                logics.add(logicData);
+//            }
+//        }
         
         data.setLevel(proto.getAsInteger("level", 1));
-        
-        // remove201602xx
-//        // physics
-//        boolean physicsEnabled = proto.getAsBoolean("physicsEnabled", true);
-//        data.setPhysicsEnabled(physicsEnabled);
         
         // 武器插槽
         List<String> slots = proto.getAsList("slots");
         
         // 角色属性
         String[] attributeArr = proto.getAsArray("attributes");
-        String lifeAttribute = proto.getAttribute("lifeAttribute");
-        String viewAttribute = proto.getAttribute("viewAttribute");
+        String lifeAttribute = proto.getAsString("lifeAttribute");
+        String viewAttribute = proto.getAsString("viewAttribute");
         Map<String, AttributeData> temp = new LinkedHashMap<String, AttributeData>();
         if (attributeArr != null) {
             for (String attrId : attributeArr) {
@@ -159,47 +154,60 @@ public class ActorDataLoader implements DataLoader<ActorData> {
         
         // Resist
         ResistData resistData = null;
-        String tempResist = proto.getAttribute("resist");
+        String tempResist = proto.getAsString("resist");
         if (tempResist != null) {
             resistData = DataFactory.createData(tempResist);
         }
         
-        // talents
-        String[] talentArr = proto.getAsArray("talents");
-        ArrayList<TalentData> talents = null;
-        if (talentArr != null) {
-            talents = new ArrayList<TalentData>(talentArr.length);
-            for (String talent : talentArr) {
-                TalentData td = DataFactory.createData(talent);
-                talents.add(td);
-            }
-        }
+//        // talents
+//        String[] talentArr = proto.getAsArray("talents");
+//        ArrayList<TalentData> talents = null;
+//        if (talentArr != null) {
+//            talents = new ArrayList<TalentData>(talentArr.length);
+//            for (String talent : talentArr) {
+//                TalentData td = DataFactory.createData(talent);
+//                talents.add(td);
+//            }
+//        }
         
         // 等级及经验值掉落设置
-        data.setLevelUpEl(proto.getAttribute("levelUpEl"));
-        data.setXpDropEl(proto.getAttribute("xpDropEl"));
+        data.setLevelUpEl(proto.getAsString("levelUpEl"));
+        data.setXpDropEl(proto.getAsString("xpDropEl"));
         data.setName(ResourceManager.getObjectName(data));
         data.setGroup(proto.getAsInteger("group", 0));
-        data.setSex(Sex.identifyByName(proto.getAttribute("sex", "2")));
-        data.setRace(proto.getAttribute("race"));
+        data.setSex(Sex.identifyByName(proto.getAsString("sex", "2")));
+        data.setRace(proto.getAsString("race"));
         data.setEssential(proto.getAsBoolean("essential", false));
         data.setSkinBase(skinBases);
         data.setItemStore(itemStore);
         data.setSkillStore(skillStore);
         data.setDrop(dropData);
-        data.setLogics(logics);
         data.setSlots(slots);
         data.setAttributes(attributes);
         data.setLifeAttribute(lifeAttribute);
         data.setViewAttribute(viewAttribute);
         data.setResist(resistData);
-        data.setTalents(talents);
-        data.setTalentPoints(proto.getAsInteger("talentPoints", 0));
-        data.setTalentPointsLevelEl(proto.getAttribute("talentPointsLevelEl"));
+//        data.setTalents(talents);
+//        data.setTalentPoints(proto.getAsInteger("talentPoints", 0));
+        data.setTalentPointsLevelEl(proto.getAsString("talentPointsLevelEl"));
         data.setTeam(proto.getAsInteger("team", 0));
         data.setLiving(proto.getAsBoolean("living", false));
         data.setFollowTarget(proto.getAsInteger("followTarget", -1));
-        data.setChat(proto.getAttribute("chat"));
+        data.setChat(proto.getAsString("chat"));
+        
+        
+        ArrayList<ControlData> controlDatas;
+        String[] cArr = proto.getAsArray("controls");
+        if (cArr != null) {
+            controlDatas = new ArrayList<ControlData>(cArr.length);
+            for (String controlId : cArr) {
+                controlDatas.add((ControlData) DataFactory.createData(controlId));
+            }
+        } else {
+            controlDatas = new ArrayList<ControlData>(1);
+        }
+        data.setControlDatas(controlDatas);
+        
     }
     
 }

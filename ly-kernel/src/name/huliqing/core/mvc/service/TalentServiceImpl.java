@@ -4,8 +4,6 @@
  */
 package name.huliqing.core.mvc.service;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import name.huliqing.core.data.TalentData;
 import name.huliqing.core.loader.Loader;
@@ -23,9 +21,9 @@ public class TalentServiceImpl implements TalentService {
 
     @Override
     public void inject() {
-        // 
+        // ignore
     }
-    
+
     @Override
     public void addTalent(Actor actor, String talentId) {
         TalentData data = DataFactory.createData(talentId);
@@ -34,109 +32,54 @@ public class TalentServiceImpl implements TalentService {
 
     @Override
     public void addTalent(Actor actor, TalentData talentData) {
-        List<TalentData> datas = actor.getData().getTalents();
-        if (datas == null) {
-            datas = new ArrayList<TalentData>();
-            actor.getData().setTalents((ArrayList) datas);
-        }
-        for (TalentData data : datas) {
-            if (data.getId().equals(talentData.getId())) {
-                // 天赋已经存在
-                return;
-            }
-        }
-        datas.add(talentData);
-        
         ActorTalentControl control = actor.getModel().getControl(ActorTalentControl.class);
-        control.addTalent(Loader.loadTalent(talentData));
-        
-        // listener
-        List<TalentListener> tls = control.getTalentListeners();
-        if (tls != null) {
-            for (TalentListener tl : tls) {
-                tl.onTalentAdded(actor, talentData);
-            }
+        if (control != null) {
+            control.addTalent((Talent) Loader.load(talentData));
         }
     }
 
     @Override
     public void removeTalent(Actor actor, String talentId) {
-        List<TalentData> datas = actor.getData().getTalents();
-        if (datas == null) {
-            return;
-        }
-        // 从data中移除
-        Iterator<TalentData> it = datas.iterator();
-        while (it.hasNext()) {
-            if (it.next().getId().equals(talentId)) {
-                it.remove();
+        ActorTalentControl control = actor.getModel().getControl(ActorTalentControl.class);
+        if (control != null) {
+            Talent talent = control.getTalent(talentId);
+            if (talent != null) {
+                control.removeTalent(talent);
             }
         }
-        // 从processor中移除
-        ActorTalentControl control = actor.getModel().getControl(ActorTalentControl.class);
-        control.removeTalent(talentId);
     }
 
     @Override
     public List<TalentData> getTalents(Actor actor) {
-        return actor.getData().getTalents();
+        ActorTalentControl control = actor.getModel().getControl(ActorTalentControl.class);
+        if (control != null) {
+            return control.getTalentDatas();
+        }
+        return null;
     }
 
     @Override
     public void addTalentPoints(Actor actor, String talentId, int points) {
-        List<TalentData> datas = actor.getData().getTalents();
-        // 天赋点必须大于0，并且角色必须有足够的天赋点可用
-        if (datas == null || points <= 0 || actor.getData().getTalentPoints() < points)
-            return;
-        
-        // 查找指定ID的天赋,如果不存在或达到指定天赋级别则不再允许增加
-        TalentData target = null;
-        for (TalentData data : datas) {
-            if (data.getId().equals(talentId)) {
-                target = data;
-                break;
-            }
-        }
-        if (target == null || target.isMax())
-            return;
-        
-        // 处理实际增加的天赋点数
-        int newLevel = target.getLevel() + points;
-        int trueAdd = points;
-        if (newLevel > target.getMaxLevel()) {
-            newLevel = target.getMaxLevel();
-            trueAdd = newLevel - target.getLevel();
-        }
-        target.setLevel(newLevel);
-        
-        // 更新处理器的值
         ActorTalentControl control = actor.getModel().getControl(ActorTalentControl.class);
-        Talent talent = control.getTalent(talentId);
-        talent.updateLevel(target.getLevel());
-        
-        // 减少可用的天赋点数
-        actor.getData().setTalentPoints(actor.getData().getTalentPoints() - trueAdd);
-        
-        // 告诉侦听器
-        List<TalentListener> tls = control.getTalentListeners();
-        if (tls != null) {
-            for (TalentListener tl : tls) {
-                tl.onTalentPointsChange(actor, talentId, trueAdd);
-            }
+        if (control != null) {
+            control.addTalentPoints(talentId, points);
         }
     }
 
     @Override
     public void addTalentListener(Actor actor, TalentListener talentListener) {
         ActorTalentControl control = actor.getModel().getControl(ActorTalentControl.class);
-        control.addTalentListener(talentListener);
+        if (control != null) {
+            control.addTalentListener(talentListener);
+        }
     }
 
     @Override
     public void removeTalentListener(Actor actor, TalentListener talentListener) {
         ActorTalentControl control = actor.getModel().getControl(ActorTalentControl.class);
-        control.removeTalentListener(talentListener);
+        if (control != null) {
+            control.removeTalentListener(talentListener);
+        }
     }
 
-    
 }

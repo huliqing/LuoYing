@@ -70,11 +70,8 @@ public class ActorData extends ObjectData implements MatObject{
     // 角色物品的掉落设置
     private DropData drop;
     
-    // 角色的逻辑列表
-    private List<ActorLogicData> logics;
-    
-    // 角色的状态列表，注：类型为SafeArrayList,部分Service中使用到循环删除的情况
-    private List<StateData> states;
+//    // 角色的状态列表，注：类型为SafeArrayList,部分Service中使用到循环删除的情况
+//    private List<StateData> states;
     
     // 状态抵抗设置
     private ResistData resist;
@@ -119,10 +116,12 @@ public class ActorData extends ObjectData implements MatObject{
     // 角色颜色,对于一些召唤类角色需要
     private ColorRGBA color;
 
-    // 当前可用的天赋点数,天赋点数可用到角色的天赋上，用后天赋点数会减少
-    private int talentPoints;
-    // 角色拥有的天赋列表
-    private ArrayList<TalentData> talents;
+//    // 当前可用的天赋点数,天赋点数可用到角色的天赋上，用后天赋点数会减少
+//    private int talentPoints;
+    
+//    // 角色拥有的天赋列表
+//    private ArrayList<TalentData> talents;
+    
     // 天赋点数的奖励公式
     private String talentPointsLevelEl;
     
@@ -142,8 +141,8 @@ public class ActorData extends ObjectData implements MatObject{
     // 角色的对话面板id
     private String chat;
     
-    // 任务列表
-    private List<TaskData> tasks;
+//    // 任务列表
+//    private List<TaskData> tasks;
     
     // 被锁定的技能列表，二进制表示，其中每1个二进制位表示一个技能类型。
     // 如果指定的位为1，则表示这个技能类型被锁定，则这类技能将不能执行。
@@ -152,6 +151,9 @@ public class ActorData extends ObjectData implements MatObject{
     
     // 标记目标角色是否为“玩家”角色,这个参数为程序动态设置,不存档
     private transient boolean player;
+    
+    // 各种控制器的数据
+    private ArrayList<ControlData> controlDatas;
     
     @Override
     public void write(JmeExporter ex) throws IOException {
@@ -169,10 +171,8 @@ public class ActorData extends ObjectData implements MatObject{
         oc.write(itemStore, "itemStore", null);
         oc.write(skillStore, "skillStore", null);
         oc.write(drop, "drop", null);
-        if (logics != null)
-            oc.writeSavableArrayList(new ArrayList<ActorLogicData>(logics), "logics", null);
-        if (states != null)
-            oc.writeSavableArrayList(new ArrayList<StateData>(states), "states", null);
+//        if (states != null)
+//            oc.writeSavableArrayList(new ArrayList<StateData>(states), "states", null);
         oc.write(resist, "resistData", null);
         oc.write(target, "target", -1);
         oc.write(autoAi, "autoAi", true);
@@ -195,8 +195,8 @@ public class ActorData extends ObjectData implements MatObject{
         oc.write(xpDropEl, "xpDropEl", null);
         oc.write(ownerId, "ownerId", -1);
         oc.write(color, "color", null);
-        oc.write(talentPoints, "talentPoints", 0);
-        oc.writeSavableArrayList(talents, "talents", null);
+//        oc.write(talentPoints, "talentPoints", 0);
+//        oc.writeSavableArrayList(talents, "talents", null);
         oc.write(talentPointsLevelEl, "talentPointsLevelEl", null);
         oc.write(team, "team", 0);
         oc.write(living, "living", false);
@@ -205,9 +205,10 @@ public class ActorData extends ObjectData implements MatObject{
             oc.write(bornPlace, "bornPlace", null);
         }
         oc.write(chat, "chat", null);
-        if (tasks != null)
-            oc.writeSavableArrayList(new ArrayList<TaskData>(tasks), "tasks", null);
+//        if (tasks != null)
+//            oc.writeSavableArrayList(new ArrayList<TaskData>(tasks), "tasks", null);
         oc.write(skillLockedState, "skillLockedState", 0);
+        oc.writeSavableArrayList(controlDatas, "controlDatas", null);
     }
 
     @Override
@@ -225,8 +226,7 @@ public class ActorData extends ObjectData implements MatObject{
         itemStore = (ItemStore) ic.readSavable("itemStore", null);
         skillStore = (SkillStore) ic.readSavable("skillStore", null);
         drop = (DropData) ic.readSavable("drop", null);
-        logics = ic.readSavableArrayList("logics", null);
-        states = ic.readSavableArrayList("states", null);
+//        states = ic.readSavableArrayList("states", null);
         resist = (ResistData) ic.readSavable("resistData", null);
         target = ic.readLong("target", -1);
         autoAi = ic.readBoolean("autoAi", true);
@@ -251,16 +251,17 @@ public class ActorData extends ObjectData implements MatObject{
         xpDropEl = ic.readString("xpDropEl", null);
         ownerId = ic.readLong("ownerId", -1);
         color = (ColorRGBA) ic.readSavable("color", null);
-        talentPoints = ic.readInt("talentPoints", 0);
-        talents = ic.readSavableArrayList("talents", null);
+//        talentPoints = ic.readInt("talentPoints", 0);
+//        talents = ic.readSavableArrayList("talents", null);
         talentPointsLevelEl = ic.readString("talentPointsLevelEl", null);
         team = ic.readInt("team", 0);
         living = ic.readBoolean("living", false);
         followTarget = ic.readLong("followTarget", -1);
         bornPlace = (Vector3f)ic.readSavable("bornPlace", null);
         chat = ic.readString("chat", null);
-        tasks = ic.readSavableArrayList("tasks", null);
+//        tasks = ic.readSavableArrayList("tasks", null);
         skillLockedState = ic.readLong("skillLockedState", 0);
+        controlDatas = ic.readSavableArrayList("controlDatas", null);
     }
     
     public ActorData() {}
@@ -323,56 +324,35 @@ public class ActorData extends ObjectData implements MatObject{
         this.drop = drop;
     }
 
-    // remove20160805
-//    @Override
-//    public boolean isPickable() {
-//        return true;
+//    /**
+//     * 获取状态列表，如果没有设置过，则返回一个空列表
+//     * @return 
+//     */
+//    public List<StateData> getStates() {
+//        if (states == null) {
+//            states = new ArrayList<StateData>();
+//        }
+//        return states;
+//    }
+//
+//    public void setStates(List<StateData> states) {
+//        this.states = states;
 //    }
 
-    /**
-     * 获取逻辑列表，如果没有设置过，则返回一个空列表
-     * @return 
-     */
-    public List<ActorLogicData> getLogics() {
-        if (logics == null) {
-            logics = new ArrayList<ActorLogicData>();
-        }
-        return logics;
-    }
-
-    public void setLogics(List<ActorLogicData> logics) {
-        this.logics = logics;
-    }
-
-    /**
-     * 获取状态列表，如果没有设置过，则返回一个空列表
-     * @return 
-     */
-    public List<StateData> getStates() {
-        if (states == null) {
-            states = new ArrayList<StateData>();
-        }
-        return states;
-    }
-
-    public void setStates(List<StateData> states) {
-        this.states = states;
-    }
-
-    /**
-     * 获取任务列表，如果没有设置过任务则返回一个空列表
-     * @return 
-     */
-    public List<TaskData> getTasks() {
-        if (tasks == null) {
-            tasks = new ArrayList<TaskData>();
-        }
-        return tasks;
-    }
-
-    public void setTasks(List<TaskData> tasks) {
-        this.tasks = tasks;
-    }
+//    /**
+//     * 获取任务列表，如果没有设置过任务则返回一个空列表
+//     * @return 
+//     */
+//    public List<TaskData> getTasks() {
+//        if (tasks == null) {
+//            tasks = new ArrayList<TaskData>();
+//        }
+//        return tasks;
+//    }
+//
+//    public void setTasks(List<TaskData> tasks) {
+//        this.tasks = tasks;
+//    }
 
     public long getTarget() {
         return target;
@@ -609,21 +589,21 @@ public class ActorData extends ObjectData implements MatObject{
         this.resist = resistData;
     }
 
-    public int getTalentPoints() {
-        return talentPoints;
-    }
+//    public int getTalentPoints() {
+//        return talentPoints;
+//    }
+//
+//    public void setTalentPoints(int talentPoints) {
+//        this.talentPoints = talentPoints;
+//    }
 
-    public void setTalentPoints(int talentPoints) {
-        this.talentPoints = talentPoints;
-    }
-
-    public List<TalentData> getTalents() {
-        return talents;
-    }
-
-    public void setTalents(ArrayList<TalentData> talents) {
-        this.talents = talents;
-    }
+//    public List<TalentData> getTalents() {
+//        return talents;
+//    }
+//
+//    public void setTalents(ArrayList<TalentData> talents) {
+//        this.talents = talents;
+//    }
 
     public String getTalentPointsLevelEl() {
         return talentPointsLevelEl;
@@ -739,7 +719,7 @@ public class ActorData extends ObjectData implements MatObject{
      * @return 
      */
     public String getFile() {
-        return getAttribute("file");
+        return getAsString("file");
     }
 
     @Override
@@ -762,6 +742,14 @@ public class ActorData extends ObjectData implements MatObject{
      */
     public void setPlayer(boolean player) {
         this.player = player;
+    }
+
+    public ArrayList<ControlData> getControlDatas() {
+        return controlDatas;
+    }
+
+    public void setControlDatas(ArrayList<ControlData> controlDatas) {
+        this.controlDatas = controlDatas;
     }
     
 }

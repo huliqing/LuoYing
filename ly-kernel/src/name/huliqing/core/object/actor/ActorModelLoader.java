@@ -238,7 +238,7 @@ public class ActorModelLoader {
 //            GeometryUtils.setColor(actorModel, data.getColor());
 //        }
 //        
-//        // 14.偿试激活HardwareSkining
+        // 14.偿试激活HardwareSkining
 //        checkEnableHardwareSkining(actor);
         
         return actorModel;
@@ -253,7 +253,7 @@ public class ActorModelLoader {
      * @return 
      */
     public static boolean loadExtAnim(Actor actor, String animName) {
-        String animDir = actor.getData().getAttribute("extAnim");
+        String animDir = actor.getData().getAsString("extAnim");
         if (animDir == null) {
             LOG.log(Level.WARNING, "Actor {0} no have a extAnim defined"
                     + ", could not load anim {1}", new Object[] {actor.getData().getId(), animName});

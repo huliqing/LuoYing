@@ -57,8 +57,8 @@ public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> im
     public void setData(T data) {
         super.setData(data); 
         interval = 10; 
-        defendRateAttribute = data.getAttribute("defendRateAttribute");
-        duckRateAttribute = data.getAttribute("duckRateAttribute");
+        defendRateAttribute = data.getAsString("defendRateAttribute");
+        duckRateAttribute = data.getAsString("duckRateAttribute");
         listenAttributes = Arrays.asList(data.getAsArray("listenAttributes"));
     }
     

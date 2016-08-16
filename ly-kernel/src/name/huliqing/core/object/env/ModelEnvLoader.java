@@ -18,7 +18,7 @@ public class ModelEnvLoader<T extends ModelEnvData> extends EnvDataLoader<T> {
 
     @Override
     public void load(Proto proto, T store) {
-        store.setFile(proto.getAttribute("file"));
+        store.setFile(proto.getAsString("file"));
         
         Vector3f location = proto.getAsVector3f("location");
         if (location != null) {
@@ -36,7 +36,7 @@ public class ModelEnvLoader<T extends ModelEnvData> extends EnvDataLoader<T> {
         store.setMass(proto.getAsFloat("mass", 0));
         store.setFriction(proto.getAsFloat("friction", 1.0f));
         
-        String shadowMode = proto.getAttribute("shadowMode");
+        String shadowMode = proto.getAsString("shadowMode");
         if (shadowMode != null) {
             if (shadowMode.equalsIgnoreCase(ShadowMode.Cast.name())) {
                 store.setShadowMode(ShadowMode.Cast);

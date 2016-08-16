@@ -67,10 +67,10 @@ public abstract class HitSkill<T extends SkillData> extends AbstractSkill<T> {
     public void setData(T data) {
         super.setData(data); 
         
-        this.hitChecker = hitCheckerService.loadHitChecker(data.getAttribute("hitChecker", IdConstants.HIT_CHECKER_FIGHT_DEFAULT));
-        this.hitAttribute = data.getAttribute("hitAttribute");
+        this.hitChecker = hitCheckerService.loadHitChecker(data.getAsString("hitChecker", IdConstants.HIT_CHECKER_FIGHT_DEFAULT));
+        this.hitAttribute = data.getAsString("hitAttribute");
         this.hitValue = data.getAsFloat("hitValue", 0);
-        this.hitEl = data.getAttribute("hitEl");
+        this.hitEl = data.getAsString("hitEl");
         this.hitDistance = data.getAsFloat("hitDistance", hitDistance);
         this.hitDistanceSquared = hitDistance * hitDistance;
         this.hitAngle = data.getAsFloat("hitAngle", hitAngle);

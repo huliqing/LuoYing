@@ -97,6 +97,8 @@ public abstract class AbstractTask<T extends TaskData> implements Task<T> {
                 protoNetwork.addData(actor, protoService.createData(ri.itemId), ri.count);
             }
         }
+        // 标记为“完结”
+        data.setCompletion(true);
     }
 
     @Override

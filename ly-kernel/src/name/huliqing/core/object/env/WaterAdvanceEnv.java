@@ -42,10 +42,10 @@ public class WaterAdvanceEnv <T extends EnvData> extends AbstractEnv<T> implemen
     @Override
     public void setData(T data) {
         super.setData(data); 
-        this.causticsTexture = data.getAttribute("causticsTexture");
-        this.foamTexture = data.getAttribute("foamTexture");
-        this.heightTexture = data.getAttribute("heightTexture");
-        this.normalTexture = data.getAttribute("normalTexture");
+        this.causticsTexture = data.getAsString("causticsTexture");
+        this.foamTexture = data.getAsString("foamTexture");
+        this.heightTexture = data.getAsString("heightTexture");
+        this.normalTexture = data.getAsString("normalTexture");
         water.setCausticsIntensity(data.getAsFloat("causticsIntensity", water.getCausticsIntensity()));
         Vector3f center = data.getAsVector3f("center");
         if (center != null) {
@@ -67,7 +67,7 @@ public class WaterAdvanceEnv <T extends EnvData> extends AbstractEnv<T> implemen
         water.setRefractionConstant(data.getAsFloat("refractionConstant", water.getRefractionConstant()));
         water.setRefractionStrength(data.getAsFloat("refractionStrength", water.getRefractionStrength()));
         
-        String shapeType = data.getAttribute("shapeType");
+        String shapeType = data.getAsString("shapeType");
         if (AreaShape.Square.name().equals(shapeType)) {
             water.setShapeType(AreaShape.Square);
         } else if (AreaShape.Circular.name().equals(shapeType)) {

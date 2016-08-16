@@ -31,7 +31,7 @@ public class ObjectData extends ProtoData {
      * @return 
      */
     public final String getIcon() {
-        return proto.getAttribute("icon");
+        return proto.getAsString("icon");
     }
     
     // remove20160805
@@ -68,7 +68,7 @@ public class ObjectData extends ProtoData {
      * @return 
      */
     public String getDes() {
-        return proto.getAttribute("des");
+        return proto.getAsString("des");
     }
     
     /**

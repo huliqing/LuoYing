@@ -28,8 +28,8 @@ public class AttributeChangeActorLogic<T extends ActorLogicData> extends ActorLo
     public void setData(T data) {
         super.setData(data); 
         this.value = data.getAsFloat("value");
-        this.targetAttribute = data.getAttribute("targetAttribute");
-        this.useAttribute = data.getAttribute("useAttribute");
+        this.targetAttribute = data.getAsString("targetAttribute");
+        this.useAttribute = data.getAsString("useAttribute");
     }
 
     @Override

@@ -23,13 +23,6 @@ public abstract class AbstractChannel <T extends ChannelData> implements Channel
     protected AnimControl animControl;
     // JME的原始动画通道
     protected AnimChannel animChannel;
-        
-    // remove20160713
-//    public AbstractChannel(AnimControl animControl) {
-//        this.data = data;
-//        this.animControl = animControl;
-//        this.animChannel = createAnimChannel(data, animControl);
-//    }
     
     @Override
     public void setData(T data) {

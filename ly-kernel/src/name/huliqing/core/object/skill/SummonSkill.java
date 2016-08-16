@@ -68,7 +68,7 @@ public class SummonSkill<T extends SkillData> extends AbstractSkill<T> {
     @Override
     public void setData(T data) {
         super.setData(data); 
-        this.summonId = data.getAttribute("summonActorId", summonId);
+        this.summonId = data.getAsString("summonActorId", summonId);
         this.summonPoint = data.getAsFloat("summonPoint", summonPoint);
         this.summonOffset = data.getAsVector3f("summonOffset", summonOffset);
         this.summonTime = data.getAsFloat("summonTime", summonTime);

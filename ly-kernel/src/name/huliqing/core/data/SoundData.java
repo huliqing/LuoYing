@@ -22,7 +22,7 @@ public class SoundData extends ObjectData {
      * @return 
      */
     public String getSoundFile() {
-        return getAttribute("file");
+        return getAsString("file");
     }
     
     public float getVolume() {

@@ -5,7 +5,6 @@
 package name.huliqing.core.mvc.service;
 
 import com.jme3.math.FastMath;
-import com.jme3.util.SafeArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
@@ -23,7 +22,7 @@ import name.huliqing.core.object.state.State;
  * @author huliqing
  */
 public class StateServiceImpl implements StateService{
-    private static final Logger LOG = Logger.getLogger(StateServiceImpl.class.getName());
+//    private static final Logger LOG = Logger.getLogger(StateServiceImpl.class.getName());
 
     private ResistService resistService;
     
@@ -94,86 +93,54 @@ public class StateServiceImpl implements StateService{
         // 创建Data
         StateData newStateData = DataFactory.createData(stateId);
         newStateData.setResist(resist);
-        if (sourceActor != null) {
-            newStateData.setSourceActor(sourceActor.getData().getUniqueId());
-        }
         
-        // 1.先尝试移去旧的，因为状态在设计上是不允许重复存在的。
-        removeState(actor, stateId);
-        
-        // 2.添加状态
-        actor.getData().getStates().add(newStateData);
-        State state = Loader.loadState(newStateData);
+        // 设置状态
+        State state = Loader.load(newStateData);
+        state.setSourceActor(sourceActor);
         
         ActorStateControl control = actor.getModel().getControl(ActorStateControl.class);
         control.addState(state);
-        
-        // 3.侦听器
-        List<StateListener> sls = control.getStateListeners();
-        if (sls != null && !sls.isEmpty()) {
-            for (StateListener sl : sls) {
-                sl.onStateAdded(actor, state);
-            }
-        }
     }
 
     @Override
     public final boolean removeState(Actor actor, String removeStateId) {
-        // 1.从Data中移除
-        List<StateData> datas = actor.getData().getStates();
-        Iterator<StateData> it = datas.iterator();
-        while (it.hasNext()) {
-            if (it.next().getId().equals(removeStateId)) {
-                it.remove();
-            }
-        }
-        
-        // 2.从Processor中移除
         ActorStateControl control = actor.getModel().getControl(ActorStateControl.class);
-        State stateRemoved = control.findState(removeStateId);
-        if (stateRemoved != null) {
-            control.removeState(stateRemoved);
-        }
-        
-        // 3.通知侦听器
-        List<StateListener> sls = control.getStateListeners();
-        if (sls != null && !sls.isEmpty()) {
-            for (StateListener sl : sls) {
-                sl.onStateRemoved(actor, stateRemoved);
-            }
-        }
-        
-        return stateRemoved != null;
-    }
-
-    @Override
-    public State findState(Actor actor, String stateId) {
-        ActorStateControl control = actor.getModel().getControl(ActorStateControl.class);
-        return control.findState(stateId);
-    }
-
-    @Override
-    public void clearStates(Actor actor) {
-        List<StateData> datas = actor.getData().getStates();
-        for (StateData sd : datas) {
-            removeState(actor, sd.getId());
-        }
-    }
-
-    @Override
-    public boolean existsState(Actor actor, String stateId) {
-        List<StateData> datas = actor.getData().getStates();
-        for (StateData data : datas) {
-            if (data.getId().equals(stateId)) {
-                return true;
-            }
+        if (control != null) {
+            State state = control.getState(removeStateId);
+            return state != null ? control.removeState(state) : false;
         }
         return false;
     }
 
     @Override
+    public State findState(Actor actor, String stateId) {
+        ActorStateControl control = actor.getModel().getControl(ActorStateControl.class);
+        return control.getState(stateId);
+    }
+
+    @Override
+    public void clearStates(Actor actor) {
+        ActorStateControl control = actor.getModel().getControl(ActorStateControl.class);
+        if (control != null && control.getStates() != null) {
+            for (State state : control.getStates()) {
+                control.removeState(state);
+            }            
+        }
+    }
+
+    @Override
+    public boolean existsState(Actor actor, String stateId) {
+        ActorStateControl control = actor.getModel().getControl(ActorStateControl.class);
+        return control != null && control.getState(stateId) != null;
+    }
+
+    @Override
     public List<StateData> getStates(Actor actor) {
-        return actor.getData().getStates();
+        ActorStateControl control = actor.getModel().getControl(ActorStateControl.class);
+        if (control != null) {
+            return control.getStateDatas();
+        }
+        return null;
     }
 
     @Override

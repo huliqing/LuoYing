@@ -42,8 +42,8 @@ public class TextureCylinderEffect extends AbstractEffect {
     @Override
     public void setData(EffectData data) {
         super.setData(data); 
-        this.texture = data.getAttribute("texture", texture);
-        this.axis = data.getAttribute("axis", axis);
+        this.texture = data.getAsString("texture", texture);
+        this.axis = data.getAsString("axis", axis);
         this.radius = data.getAsFloat("radius", radius);
         this.height = data.getAsFloat("height", height);
         this.offset = data.getAsVector3f("offset");

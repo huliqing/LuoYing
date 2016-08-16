@@ -38,11 +38,11 @@ xs:time
                             <xs:documentation>为角色指定一个图标(64x64), 如：Interface/item/face/female.jpg</xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="logic" type="xs:string" use="required">
+<!--                    <xs:attribute name="logic" type="xs:string" use="required">
                         <xs:annotation>
                             <xs:documentation>关联逻辑,多个逻辑使用半角逗号分开，如：logic1,logic2,logic3</xs:documentation>
                         </xs:annotation>
-                    </xs:attribute>
+                    </xs:attribute>-->
                     <xs:attribute name="group" type="xs:integer" use="required">
                         <xs:annotation>
                             <xs:documentation>派系,整数</xs:documentation>
@@ -166,14 +166,14 @@ xs:time
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="channels" type="xs:string" use="optional">
+<!--                    <xs:attribute name="channels" type="xs:string" use="optional">
                         <xs:annotation>
                             <xs:documentation>
                                 角色的channel定义,关联一些channel，格式："channel1,channel2,...".
                                 如果不设置则默认使用一个包含所有骨骼的channel
                             </xs:documentation>
                         </xs:annotation>
-                    </xs:attribute>
+                    </xs:attribute>-->
                     <xs:attribute name="slots" type="xs:string" use="optional">
                         <xs:annotation>
                             <xs:documentation>

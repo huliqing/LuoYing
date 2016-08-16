@@ -28,8 +28,6 @@ public class AttributeDynamicState extends State {
     
     // ---- inner
     private float intervalUsed;
-    // 产生这个状态的源角色
-    private Actor sourceActor;
     
     @Override
     public void setData(StateData data) {
@@ -43,15 +41,7 @@ public class AttributeDynamicState extends State {
         }
         interval = data.getAsFloat("interval", 1.0f);
     }
-
-    @Override
-    public void initialize() {
-        super.initialize();
-        if (data.getSourceActor() > 0) {
-            sourceActor = playService.findActor(data.getSourceActor());
-        }
-    }
-
+    
     @Override
     public void update(float tpf) {
         super.update(tpf);
@@ -62,12 +52,6 @@ public class AttributeDynamicState extends State {
                 applyHit(aw.attribute, aw.amount);
             }
         }
-    }
-
-    @Override
-    public void cleanup() {
-        sourceActor = null;
-        super.cleanup(); 
     }
     
     private void applyHit(String attribute, float value) {

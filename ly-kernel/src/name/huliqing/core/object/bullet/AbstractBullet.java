@@ -65,7 +65,7 @@ public abstract class AbstractBullet<S> extends Bullet<BulletData, S> {
     public void setData(BulletData data) {
         this.data = data;
         this.debug = data.getAsBoolean("debug", debug);
-        this.shape = Loader.loadShape(data.getAttribute("shape"));
+        this.shape = Loader.loadShape(data.getAsString("shape"));
         this.baseSpeed = data.getAsFloat("baseSpeed", baseSpeed);
         this.facing = data.getAsBoolean("facing", false);
         this.trace = data.getAsBoolean("trace", false);

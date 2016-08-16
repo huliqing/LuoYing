@@ -45,8 +45,8 @@ public class AttributeChangeGameLogic<T extends GameLogicData> extends AbstractG
     @Override
     public void setData(T data) {
         super.setData(data); 
-        applyAttribute = data.getAttribute("applyAttribute");
-        useAttribute = data.getAttribute("useAttribute");
+        applyAttribute = data.getAsString("applyAttribute");
+        useAttribute = data.getAsString("useAttribute");
         baseValue = data.getAsFloat("baseValue", baseValue);
         speed = data.getAsFloat("speed", speed);
         applyToDead = data.getAsBoolean("applyToDead", applyToDead);

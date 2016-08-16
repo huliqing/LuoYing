@@ -42,7 +42,7 @@ public class EncircleHaloEffect extends AbstractEffect {
     @Override
     public void setData(EffectData data) {
         super.setData(data);
-        texture = data.getProto().getAttribute("texture", texture);
+        texture = data.getProto().getAsString("texture", texture);
         size = data.getProto().getAsInteger("size", size);
         radius = data.getProto().getAsFloat("radius", radius);
         haloSize = data.getProto().getAsVector3f("haloSize", haloSize);

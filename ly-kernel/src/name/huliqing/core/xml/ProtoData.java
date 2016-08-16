@@ -32,7 +32,7 @@ public class ProtoData extends Data {
 
     public void setProto(Proto proto) {
         this.proto = proto;
-        this.id = proto.getAttribute("id");
+        this.id = proto.getAsString("id");
     }
 
     public String getTagName() {
@@ -57,9 +57,9 @@ public class ProtoData extends Data {
      * @return 
      */
     @Override
-    public final String getAttribute(String key) {
+    public final Object getAttribute(String key) {
         //所有数据的查找都是优先从本地实例查找，如果本地找不到再向上从原形proto中查找，如果再找不到则返回null.
-        String result = super.getAttribute(key);
+        Object result = super.getAttribute(key);
         if (result != null) {
             return result;
         }

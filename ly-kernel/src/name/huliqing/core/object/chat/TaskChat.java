@@ -66,8 +66,8 @@ public class TaskChat<T extends ChatData> extends Chat<T> {
     @Override
     public void setData(T data) {
         super.setData(data); 
-        this.taskId = data.getAttribute("task");
-        this.role = Role.identify(data.getAttribute("role", Role.both.name()));
+        this.taskId = data.getAsString("task");
+        this.role = Role.identify(data.getAsString("role", Role.both.name()));
     }
 
     @Override

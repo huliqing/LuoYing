@@ -36,10 +36,10 @@ public class TimerView<T extends ViewData> extends AbstractView<T> {
     @Override
     public void setData(T data) {
         super.setData(data);
-        title = data.getAttribute("title", "");
+        title = data.getAsString("title", "");
         startTime = data.getAsFloat("startTime", 0);
         up = data.getAsBoolean("up", true);
-        format = data.getAttribute("format", format);
+        format = data.getAsString("format", format);
         syncAuto = data.getAsBoolean("syncAuto", false);
         syncInterval = data.getAsFloat("syncInterval", 10);
         
@@ -148,7 +148,7 @@ public class TimerView<T extends ViewData> extends AbstractView<T> {
     @Override
     public void applySyncData(SyncData data) {
         super.applySyncData(data);
-        setTitle(data.getAttribute("title", title));
+        setTitle(data.getAsString("title", title));
         startTime = data.getAsFloat("startTime", startTime);
         up = data.getAsBoolean("up", up);
     }

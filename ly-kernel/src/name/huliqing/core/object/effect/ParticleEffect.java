@@ -37,11 +37,11 @@ public class ParticleEffect extends AbstractEffect {
     @Override
     public void setData(EffectData data) {
         super.setData(data); 
-        emitter = data.getAttribute("emitter", emitter);
+        emitter = data.getAsString("emitter", emitter);
         emitAll = data.getAsBoolean("emitAll", emitAll);
         randomColor = data.getAsBoolean("randomColor", randomColor);
         inWorldSpace = data.getAsBoolean("inWorldSpace", inWorldSpace);
-        String tempBlendMode = data.getAttribute("blendMode");
+        String tempBlendMode = data.getAsString("blendMode");
         if (tempBlendMode != null) {
             blendMode = BlendMode.valueOf(tempBlendMode);
         }

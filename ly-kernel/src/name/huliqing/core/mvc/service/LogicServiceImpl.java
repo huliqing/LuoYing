@@ -43,13 +43,6 @@ public class LogicServiceImpl implements LogicService {
 
     @Override
     public boolean addLogic(Actor actor, ActorLogic logic) {
-        ActorLogicData data = logic.getData();
-        List<ActorLogicData> logics = actor.getData().getLogics();
-        if (logics.contains(data)) {
-            return false; // 已经存在
-        }
-        logics.add(data);
-        
         ActorLogicControl control = actor.getModel().getControl(ActorLogicControl.class);
         control.addLogic(logic);
         return true;
@@ -57,22 +50,22 @@ public class LogicServiceImpl implements LogicService {
 
     @Override
     public boolean removeLogic(Actor actor, ActorLogic logic) {
-        ActorLogicData data = logic.getData();
-        List<ActorLogicData> datas = actor.getData().getLogics();
-        if (!datas.contains(data)) { // 角色身上没有指定逻辑
-            return false;
-        }
-        datas.remove(data);
-        
         ActorLogicControl control = actor.getModel().getControl(ActorLogicControl.class);
         return control.removeLogic(logic);
     }
 
     @Override
     public void clearLogics(Actor actor) {
-        actor.getData().getLogics().clear();
         ActorLogicControl control = actor.getModel().getControl(ActorLogicControl.class);
-        control.cleanup();
+        if (control == null)
+            return;
+        
+        List<ActorLogic> logics = control.getLogics();
+        if (logics != null) {
+            for (ActorLogic logic : logics) {
+                control.removeLogic(logic);
+            }
+        }
     }
 
     @Override

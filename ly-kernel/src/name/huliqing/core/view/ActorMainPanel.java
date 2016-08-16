@@ -266,12 +266,22 @@ public class ActorMainPanel extends Window implements ItemListener, SkinListener
     }
 
     @Override
-    public void onTalentPointsChange(Actor actor, String talentId, int pointsAdded) {
+    public void onTalentPointsChange(Actor actor, TalentData talentData, int pointsAdded) {
+        updatePanel(talentPanel, attrPanel);
+    }
+
+    @Override
+    public void onTalentRemoved(Actor actor, TalentData talentData) {
         updatePanel(talentPanel, attrPanel);
     }
 
     @Override
     public void onTaskAdded(Actor source, Task task) {
+        updatePanel(taskPanel);
+    }
+
+    @Override
+    public void onTaskRemoved(Actor actor, Task taskRemoved) {
         updatePanel(taskPanel);
     }
 

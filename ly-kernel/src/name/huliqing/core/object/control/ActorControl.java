@@ -19,8 +19,8 @@ import name.huliqing.core.xml.DataProcessor;
  */
 public abstract class ActorControl<T extends ControlData> extends AbstractControl implements DataProcessor<T> {
     
-    private T data;
-    private boolean initialized;
+    protected T data;
+    protected boolean initialized;
 
     @Override
     public void setData(T data) {

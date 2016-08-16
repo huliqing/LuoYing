@@ -66,8 +66,8 @@ public class SlideColorIOSplineEffect extends AbstractEffect {
         startColor = data.getAsColor("startColor", startColor);
         endColor = data.getAsColor("endColor", endColor);
         
-        mask = data.getAttribute("mask", mask);
-        tex = data.getAttribute("tex", tex);
+        mask = data.getAsString("mask", mask);
+        tex = data.getAsString("tex", tex);
 //        texAnimY = data.getAsBoolean("texAnimY", texAnimY); // 暂不作为参数，默认true.
         texChangeDir = data.getAsBoolean("texChangeDir", texChangeDir);
         
