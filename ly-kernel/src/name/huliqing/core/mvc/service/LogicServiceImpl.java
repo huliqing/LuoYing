@@ -4,6 +4,7 @@
  */
 package name.huliqing.core.mvc.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.constants.IdConstants;
 import name.huliqing.core.data.ActorLogicData;
@@ -62,7 +63,8 @@ public class LogicServiceImpl implements LogicService {
         
         List<ActorLogic> logics = control.getLogics();
         if (logics != null) {
-            for (ActorLogic logic : logics) {
+            List<ActorLogic> tempLogics = new ArrayList<ActorLogic>(logics);
+            for (ActorLogic logic : tempLogics) {
                 control.removeLogic(logic);
             }
         }

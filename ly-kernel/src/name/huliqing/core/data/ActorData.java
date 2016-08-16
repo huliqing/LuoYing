@@ -51,15 +51,15 @@ public class ActorData extends ObjectData implements MatObject{
     // 角色是否必要的,不能移除的。
     private boolean essential;
     
-    // 角色的基本皮肤，基本皮肤是用来在切换装备后“修补皮肤”缺失的问题。比如当
-    // 穿上一套上下连身的法袍（同时包含lowerBody和upperBody）后，再使用一件只
-    // 包含upperBody的装备来换上时，由于法袍被替换，这时角色身上将丢失lowerBody
-    // 的装备，这时就需要从skinBase中查看是否有lowerBody的基本皮肤来补上，否则角
-    // 色会缺少下半身的装备模型。
-    // 注意：基本皮肤中不要指定哪些包含两个或两个以上type部位的皮肤。比如：
-    // 同时包含lowerBody和upperBody的skin,如上下连身的套装之类的皮肤，这类皮肤
-    // 会造成在换装备后进行修补的时候又替换掉已经穿上的装备。
-    private List<SkinData> skinBase;
+//    // 角色的基本皮肤，基本皮肤是用来在切换装备后“修补皮肤”缺失的问题。比如当
+//    // 穿上一套上下连身的法袍（同时包含lowerBody和upperBody）后，再使用一件只
+//    // 包含upperBody的装备来换上时，由于法袍被替换，这时角色身上将丢失lowerBody
+//    // 的装备，这时就需要从skinBase中查看是否有lowerBody的基本皮肤来补上，否则角
+//    // 色会缺少下半身的装备模型。
+//    // 注意：基本皮肤中不要指定哪些包含两个或两个以上type部位的皮肤。比如：
+//    // 同时包含lowerBody和upperBody的skin,如上下连身的套装之类的皮肤，这类皮肤
+//    // 会造成在换装备后进行修补的时候又替换掉已经穿上的装备。
+//    private List<SkinData> skinBase;
     
     // 角色物品信息,如:金币,装备,武器,杂物等
     private ItemStore itemStore;
@@ -91,9 +91,9 @@ public class ActorData extends ObjectData implements MatObject{
     private String actionDefFight;
     private String actionDefRun;
     
-    // 标记武器是处于takeOn或takeOff状态,即取出或挂起的状态。
-    // 处于使用中(isUsing=true)的武器存在两种状态，“挂起（待机状态）”，“取出（或者叫战斗状态）”
-    private boolean weaponTakeOn;
+//    // 标记武器是处于takeOn或takeOff状态,即取出或挂起的状态。
+//    // 处于使用中(isUsing=true)的武器存在两种状态，“挂起（待机状态）”，“取出（或者叫战斗状态）”
+//    private boolean weaponTakeOn;
     
     // 角色使用的武器插槽优先顺序，当设置了这个值之后，角色的武器在收起时将优先
     // 存放在这些指定的插槽上，否则将根据武器的定义的插槽存放。
@@ -166,8 +166,8 @@ public class ActorData extends ObjectData implements MatObject{
         oc.write(sex, "sex", null);
         oc.write(race, "race", null);
         oc.write(essential, "essential", false);
-        if (skinBase != null)
-            oc.writeSavableArrayList(new ArrayList<SkinData>(skinBase), "skinBase", null);
+//        if (skinBase != null)
+//            oc.writeSavableArrayList(new ArrayList<SkinData>(skinBase), "skinBase", null);
         oc.write(itemStore, "itemStore", null);
         oc.write(skillStore, "skillStore", null);
         oc.write(drop, "drop", null);
@@ -179,7 +179,7 @@ public class ActorData extends ObjectData implements MatObject{
         oc.write(autoDetect, "autoDetect", true);
         oc.write(actionDefFight, "actionDefFight", null);
         oc.write(actionDefRun, "actionDefRun", null);
-        oc.write(weaponTakeOn, "weaponTakeOn", false);
+//        oc.write(weaponTakeOn, "weaponTakeOn", false);
         if (slots != null)
             oc.write(slots.toArray(new String[]{}), "slots", null);
         
@@ -222,7 +222,7 @@ public class ActorData extends ObjectData implements MatObject{
         sex = ic.readEnum("sex", Sex.class, null);
         race = ic.readString("race", null);
         essential = ic.readBoolean("essential", false);
-        skinBase = ic.readSavableArrayList("skinBase", null);
+//        skinBase = ic.readSavableArrayList("skinBase", null);
         itemStore = (ItemStore) ic.readSavable("itemStore", null);
         skillStore = (SkillStore) ic.readSavable("skillStore", null);
         drop = (DropData) ic.readSavable("drop", null);
@@ -233,7 +233,7 @@ public class ActorData extends ObjectData implements MatObject{
         autoDetect = ic.readBoolean("autoDetect", true);
         actionDefFight = ic.readString("actionDefFight", null);
         actionDefRun = ic.readString("actionDefRun", null);
-        weaponTakeOn = ic.readBoolean("weaponTakeOn", false);
+//        weaponTakeOn = ic.readBoolean("weaponTakeOn", false);
         slots = ConvertUtils.toList(ic.readStringArray("slots", null));
         
         ArrayList<AttributeData> ads = ic.readSavableArrayList("attributes", null);
@@ -266,21 +266,21 @@ public class ActorData extends ObjectData implements MatObject{
     
     public ActorData() {}
 
-    /**
-     * 获取角色的基本皮肤,如果没有基本皮肤则返回null.
-     * @return 
-     */
-    public List<SkinData> getSkinBase() {
-        return skinBase;
-    }
-
-    /**
-     * 设置角色的基本皮肤
-     * @param skinBase 
-     */
-    public void setSkinBase(List<SkinData> skinBase) {
-        this.skinBase = skinBase;
-    }
+//    /**
+//     * 获取角色的基本皮肤,如果没有基本皮肤则返回null.
+//     * @return 
+//     */
+//    public List<SkinData> getSkinBase() {
+//        return skinBase;
+//    }
+//
+//    /**
+//     * 设置角色的基本皮肤
+//     * @param skinBase 
+//     */
+//    public void setSkinBase(List<SkinData> skinBase) {
+//        this.skinBase = skinBase;
+//    }
 
     /**
      * 获取角色的物品列表，包含：武器，服装，杂物等等。
@@ -414,18 +414,18 @@ public class ActorData extends ObjectData implements MatObject{
         this.actionDefRun = actionDefRun;
     }
 
-    /**
-     * 标记武器是处于takeOn或takeOff状态,即取出或挂起的状态。
-     * 处于使用中(isUsing=true)的武器存在两种状态，“挂起（待机状态）”，“取出（或者叫战斗状态）”
-     * @return 
-     */
-    public boolean isWeaponTakeOn() {
-        return weaponTakeOn;
-    }
-
-    public void setWeaponTakeOn(boolean weaponTakeOn) {
-        this.weaponTakeOn = weaponTakeOn;
-    }
+//    /**
+//     * 标记武器是处于takeOn或takeOff状态,即取出或挂起的状态。
+//     * 处于使用中(isUsing=true)的武器存在两种状态，“挂起（待机状态）”，“取出（或者叫战斗状态）”
+//     * @return 
+//     */
+//    public boolean isWeaponTakeOn() {
+//        return weaponTakeOn;
+//    }
+//
+//    public void setWeaponTakeOn(boolean weaponTakeOn) {
+//        this.weaponTakeOn = weaponTakeOn;
+//    }
 
     /**
      * 角色使用的武器插槽优先顺序，当设置了这个值之后，角色的武器在收起时将优先

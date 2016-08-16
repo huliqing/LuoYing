@@ -5,6 +5,7 @@
 package name.huliqing.core.object.channel;
 
 import com.jme3.animation.LoopMode;
+import com.jme3.scene.control.Control;
 import java.util.List;
 
 /**
@@ -12,7 +13,7 @@ import java.util.List;
  * ，或者只有一个默认通道，也可能没有默认通道，而只有几个分别的通道。
  * @author huliqing
  */
-public interface ChannelControl {
+public interface ChannelControl extends Control {
     
     /**
      * 添加动画通道

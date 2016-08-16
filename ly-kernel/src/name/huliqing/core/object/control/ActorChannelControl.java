@@ -10,16 +10,19 @@ import com.jme3.animation.Animation;
 import com.jme3.animation.LoopMode;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.core.constants.IdConstants;
+import name.huliqing.core.data.ChannelData;
 import name.huliqing.core.loader.Loader;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.channel.Channel;
 import name.huliqing.core.object.channel.ChannelControl;
 import name.huliqing.core.utils.Temp;
+import name.huliqing.core.xml.DataFactory;
 
 /**
  * 用于控制角色动画通道的“通道控制器”
@@ -29,6 +32,8 @@ public class ActorChannelControl extends ActorControl implements ChannelControl 
     private static final Logger LOG = Logger.getLogger(ActorChannelControl.class.getName());
 
     private final List<Channel> channels = new LinkedList<Channel>();
+    private final List<ChannelData> channelDatas = new ArrayList<ChannelData>();
+    
     // 保存一个完整的id引用
     private String[] fullChannelsIds;
     // 默认blendTime,秒
@@ -43,22 +48,38 @@ public class ActorChannelControl extends ActorControl implements ChannelControl 
     @Override
     public void initialize(Actor actor) {
         super.initialize(actor);
-        // 载入通道
-        String[] cids = data.getAsArray("channels");
-        if (cids == null) {
-            cids = new String[]{IdConstants.CHANNEL_FULL};
+        
+        // 1.优先从存档中载入
+        // 2.如果不是存档则从原始参数xml中获取
+        // 3.如果xml中没有配置则使用一个默认的“全通道”
+        List<ChannelData> channelInits = (List<ChannelData>) data.getAttribute("channelDatas");
+        if (channelInits == null) {
+            String[] channelArr = data.getAsArray("channels");
+            if (channelArr == null) {
+                channelArr = new String[]{IdConstants.CHANNEL_FULL};
+            } 
+            channelInits = new ArrayList<ChannelData>(channelArr.length);
+            for (String cid : channelArr) {
+                channelInits.add((ChannelData) DataFactory.createData(cid));
+            }
         }
+        
+        // 载入通道
         AnimControl animControl = actor.getModel().getControl(AnimControl.class);
-        for (String channelId : cids) {
-            Channel channel = Loader.load(channelId);
+        for (ChannelData cd : channelInits) {
+            Channel channel = Loader.load(cd);
             channel.setAnimControl(animControl);
             addChannel(channel);
         }
+        
+        // 重置channelDatas,用于存档
+        data.setAttribute("channelDatas", channelDatas);
     }
 
     @Override
     public void cleanup() {
         channels.clear();
+        channelDatas.clear();
         super.cleanup(); 
     }
 
@@ -70,8 +91,9 @@ public class ActorChannelControl extends ActorControl implements ChannelControl 
     
     @Override
     public void addChannel(Channel channel) {
-        if (channel != null && !channels.contains(channel)) {
+        if (!channels.contains(channel)) {
             channels.add(channel);
+            channelDatas.add(channel.getData());
             
             // 更新完整通道ID
             if (fullChannelsIds == null) {

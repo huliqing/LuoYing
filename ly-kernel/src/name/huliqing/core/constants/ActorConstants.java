@@ -21,16 +21,17 @@ public class ActorConstants {
 //     * 客户端连接
 //     */
 //    public final static String USER_DATA_CLIENT_CONNECTION_ID = "client_conn_id";
-    
-    /**
-     * 用于保存武器的状态到userData中去
-     */
-    public final static String USER_DATA_TEMP_WEAPON_STATE = "temp_weaponState";
-    
-    /**
-     * 用于保存当前使用的武器列表到userData中去
-     */
-    public final static String USER_DATA_TEMP_WEAPONS = "temp_weapons";
+   
+    // remove20160816
+//    /**
+//     * 用于保存武器的状态到userData中去
+//     */
+//    public final static String USER_DATA_TEMP_WEAPON_STATE = "temp_weaponState";
+//    
+//    /**
+//     * 用于保存当前使用的武器列表到userData中去
+//     */
+//    public final static String USER_DATA_TEMP_WEAPONS = "temp_weapons";
     
     // -------------------------------------------------------------------------
     // -------------------------------------------------------------------------

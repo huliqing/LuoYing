@@ -98,7 +98,7 @@ public class Data implements Savable {
     }
     
     public final Integer getAsInteger(String key) {
-        String value = Data.this.getAsString(key);
+        String value = getAsString(key);
         if (value == null) {
             return null;
         }
@@ -106,11 +106,11 @@ public class Data implements Savable {
     }
     
     public final int getAsInteger(String key, int defValue) {
-        String value = Data.this.getAsString(key);
+        Integer value = getAsInteger(key);
         if (value == null) {
             return defValue;
         }
-        return Integer.parseInt(value);
+        return value;
     }
     
     /**
@@ -121,7 +121,7 @@ public class Data implements Savable {
      * @return 
      */
     public final String[] getAsArray(String key) {
-        String temp = Data.this.getAsString(key);
+        String temp = getAsString(key);
         if (temp == null) 
             return null;
         String[] result = temp.split(",");
@@ -159,7 +159,7 @@ public class Data implements Savable {
     }
     
     public final Float getAsFloat(String key) {
-        String value = Data.this.getAsString(key);
+        String value = getAsString(key);
         if (value == null) {
             return null;
         }
@@ -167,7 +167,7 @@ public class Data implements Savable {
     }
     
     public final float getAsFloat(String key, float defValue) {
-        String value = Data.this.getAsString(key);
+        String value = getAsString(key);
         if (value == null) {
             return defValue;
         }
@@ -175,7 +175,7 @@ public class Data implements Savable {
     }
     
     public final float[] getAsFloatArray(String key) {
-        String value = Data.this.getAsString(key);
+        String value = getAsString(key);
         if (value == null) {
             return null;
         }
@@ -188,19 +188,24 @@ public class Data implements Savable {
     }
     
     public final Boolean getAsBoolean(String key) {
-        String value = Data.this.getAsString(key);
+        Object value = getAttribute(key);
+        if (value instanceof Boolean) {
+            return (Boolean) value;
+        }
         if (value == null) {
             return null;
         }
-        return (value.equalsIgnoreCase("true") || value.equals("1"));
+        String strValue = value.toString();
+        return (strValue.equals("1") || strValue.equalsIgnoreCase("true"));
     }
     
     public final boolean getAsBoolean(String key, boolean defValue) {
-        String value = Data.this.getAsString(key);
+        Boolean value = getAsBoolean(key);
         if (value == null) {
             return defValue;
         }
-        return (value.equalsIgnoreCase("true") || value.equals("1"));
+        return value;
+//        return (value.equalsIgnoreCase("true") || value.equals("1"));
     }
     
     /**
@@ -230,7 +235,7 @@ public class Data implements Savable {
      * @return 
      */
     public final Vector3f getAsVector3f(String key) {
-        String temp = Data.this.getAsString(key);
+        String temp = getAsString(key);
         if (temp == null) 
             return null;
         String[] arr = temp.split(",");
@@ -263,7 +268,7 @@ public class Data implements Savable {
      * @return 
      */
     public final Vector3f[] getAsVector3fArray(String key) {
-        String temp = Data.this.getAsString(key);
+        String temp = getAsString(key);
         if (temp == null) 
             return null;
         String[] arrStr = temp.split(",");
@@ -280,7 +285,7 @@ public class Data implements Savable {
     }
     
     public final Vector2f getAsVector2f(String key) {
-        String temp = Data.this.getAsString(key);
+        String temp = getAsString(key);
         if (temp == null) 
             return null;
         String[] arr = temp.split(",");
@@ -305,7 +310,7 @@ public class Data implements Savable {
      * @return 
      */
     public final Quaternion getAsQuaternion(String key) {
-        String temp = Data.this.getAsString(key);
+        String temp = getAsString(key);
         if (temp == null) 
             return null;
         String[] arr = temp.split(",");
@@ -335,7 +340,7 @@ public class Data implements Savable {
      * @return 
      */
     public final ColorRGBA getAsColor(String key) {
-        String temp = Data.this.getAsString(key);
+        String temp = getAsString(key);
         if (temp == null) 
             return null;
         String[] arr = temp.split(",");
@@ -388,7 +393,7 @@ public class Data implements Savable {
      * @return 
      */
     public final int checkAttributeLength(String key) {
-        String value = Data.this.getAsString(key);
+        String value = getAsString(key);
         if (value == null || value.trim().isEmpty()) {
             return 0;
         }

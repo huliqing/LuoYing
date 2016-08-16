@@ -15,6 +15,12 @@ import name.huliqing.core.xml.DataProcessor;
  * @param <T>
  */
 public interface Channel<T extends ChannelData> extends DataProcessor<T>{
+
+    @Override
+    public void setData(T data);
+
+    @Override
+    public T getData();
     
     /**
      * 设置AnimControl控制器

@@ -178,7 +178,7 @@ public class ActorDataLoader implements DataLoader<ActorData> {
         data.setSex(Sex.identifyByName(proto.getAsString("sex", "2")));
         data.setRace(proto.getAsString("race"));
         data.setEssential(proto.getAsBoolean("essential", false));
-        data.setSkinBase(skinBases);
+//        data.setSkinBase(skinBases);
         data.setItemStore(itemStore);
         data.setSkillStore(skillStore);
         data.setDrop(dropData);

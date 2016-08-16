@@ -10,8 +10,8 @@ import name.huliqing.core.mvc.dao.ItemDao;
 import name.huliqing.core.mvc.dao.ItemDaoImpl;
 import name.huliqing.core.mvc.dao.SkillDao;
 import name.huliqing.core.mvc.dao.SkillDaoImpl;
-import name.huliqing.core.mvc.dao.SkinDao;
-import name.huliqing.core.mvc.dao.SkinDaoImpl;
+//import name.huliqing.core.mvc.dao.SkinDao;
+//import name.huliqing.core.mvc.dao.SkinDaoImpl;
 import name.huliqing.core.mvc.network.ActionNetwork;
 import name.huliqing.core.mvc.network.ActionNetworkImpl;
 import name.huliqing.core.mvc.network.ActorNetwork;
@@ -159,7 +159,7 @@ public class Factory {
         // dao
         CLASS_MAP.put(ItemDao.class, ItemDaoImpl.class);
         CLASS_MAP.put(SkillDao.class, SkillDaoImpl.class);
-        CLASS_MAP.put(SkinDao.class, SkinDaoImpl.class);
+//        CLASS_MAP.put(SkinDao.class, SkinDaoImpl.class);
     }
     
     public static <T extends Object> void register(Class<T> c, Class ins) {
