@@ -85,9 +85,9 @@ public class FollowActorLogic<T extends ActorLogicData> extends ActorLogic<T> {
     }
     
     private void doFollow() {
-        if (followAction.isEnd() && actor.getModel().getWorldTranslation().distance(target.getModel().getWorldTranslation()) > maxFollow) {
+        if (followAction.isEnd() && actor.getSpatial().getWorldTranslation().distance(target.getSpatial().getWorldTranslation()) > maxFollow) {
             lastFollowUsed = FastMath.nextRandomFloat() * (maxFollow - minFollow) + minFollow;
-            followAction.setFollow(target.getModel());
+            followAction.setFollow(target.getSpatial());
             followAction.setNearest(lastFollowUsed);
             playAction(followAction);
         }

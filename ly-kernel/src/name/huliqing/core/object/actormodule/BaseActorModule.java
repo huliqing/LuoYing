@@ -3,13 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.core.object.control;
+package name.huliqing.core.object.actormodule;
 
-import com.jme3.renderer.RenderManager;
-import com.jme3.renderer.ViewPort;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.core.data.ControlData;
+import name.huliqing.core.data.ModuleData;
 import name.huliqing.core.object.actor.ActorListener;
 
 /**
@@ -17,16 +15,10 @@ import name.huliqing.core.object.actor.ActorListener;
  * @author huliqing
  * @param <T>
  */
-public class ActorBaseControl<T extends ControlData> extends ActorControl<T>{
+public class BaseActorModule<T extends ModuleData> extends AbstractSimpleActorModule<T>{
 
     // 监听角色被目标锁定/释放,被击中,被杀死或杀死目标的侦听器
     private List<ActorListener> actorListeners;
-    
-    @Override
-    public void actorUpdate(float tpf) {}
-
-    @Override
-    public void actorRender(RenderManager rm, ViewPort vp) {}
     
      /**
      * 添加物品侦听器

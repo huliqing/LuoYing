@@ -3,10 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.core.object.control;
+package name.huliqing.core.object.actormodule;
 
-import com.jme3.renderer.RenderManager;
-import com.jme3.renderer.ViewPort;
 import com.jme3.scene.SceneGraphVisitor;
 import com.jme3.scene.Spatial;
 import com.jme3.util.SafeArrayList;
@@ -14,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.AttributeApply;
-import name.huliqing.core.data.ControlData;
+import name.huliqing.core.data.ModuleData;
 import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.SkinData;
 import name.huliqing.core.loader.Loader;
@@ -31,11 +29,9 @@ import name.huliqing.core.xml.DataFactory;
  * @author huliqing
  * @param <T>
  */
-public class ActorSkinControl<T extends ControlData> extends ActorControl<T> {
+public class SkinActorModule<T extends ModuleData> extends AbstractSimpleActorModule<T> {
     private final AttributeService attributeService = Factory.get(AttributeService.class);
 
-    private Actor actor;
-    
     // 角色的基本皮肤，基本皮肤是用来在切换装备后“修补皮肤”缺失的问题。比如当
     // 穿上一套上下连身的法袍（同时包含lowerBody和upperBody）后，再使用一件只
     // 包含upperBody的装备来换上时，由于法袍被替换，这时角色身上将丢失lowerBody
@@ -58,9 +54,8 @@ public class ActorSkinControl<T extends ControlData> extends ActorControl<T> {
     private int cacheWeaponState = -1;
     
     @Override
-    public void initialize(Actor actor) {
-        super.initialize(actor);
-        this.actor = actor;
+    public void initialize() {
+        super.initialize();
         
         // 载入skinBase,skinBase是直接从xml配置上载入的，不进行存档，也就是不允许动态改变。
         String[] skinBasesTemp = data.getAsArray("skinBase");
@@ -90,12 +85,6 @@ public class ActorSkinControl<T extends ControlData> extends ActorControl<T> {
         }
     }
     
-    @Override
-    public void actorUpdate(float tpf) {}
-    
-    @Override
-    public void actorRender(RenderManager rm, ViewPort vp) {}
-    
     /**
      * 给角色换上装备,注：换装备的时候需要考虑冲突的装备，并把冲突的装备换
      * 下来
@@ -103,14 +92,14 @@ public class ActorSkinControl<T extends ControlData> extends ActorControl<T> {
      */
     public void attachSkin(SkinData skinData) {
         // 装备已经存在于身上
-        if (isSkinAttached(actor.getModel(), skinData)) {
+        if (isSkinAttached(actor.getSpatial(), skinData)) {
             return;
         }
         
         // 1.====脱下排斥的装备
         int conflict = skinData.getType();
         conflict |= skinData.getConflictType();
-        List<SkinData> conflictSkins = findSkinByType(actor.getModel(), conflict);
+        List<SkinData> conflictSkins = findSkinByType(actor.getSpatial(), conflict);
         if (!conflictSkins.isEmpty()) {
             for (SkinData sd : conflictSkins) {
                 // 移除装备效果
@@ -132,7 +121,7 @@ public class ActorSkinControl<T extends ControlData> extends ActorControl<T> {
         // 为武器选择槽位(如果是武器）
         selectWeaponSlot(actor, skinData);
         // 装备模型
-        Loader.loadSkin(skinData).attach(actor);
+        Loader.loadSkin(skinData).attach(actor, isWeaponTakeOn());
         // 装备效果
         addSkinApplyAttributes(actor, skinData);
         // 标记
@@ -218,7 +207,7 @@ public class ActorSkinControl<T extends ControlData> extends ActorControl<T> {
                 selectSlots(slotCandidate, sd);
                 
                 // 装备上武器
-                ((WeaponSkin) skin).takeOn(actor, force);
+                ((WeaponSkin) skin).takeOn(actor, force, isWeaponTakeOn());
                 
                 // 标记武器为using
                 sd.setUsing(true);
@@ -232,6 +221,7 @@ public class ActorSkinControl<T extends ControlData> extends ActorControl<T> {
 //            return false;
 //        }
         setWeaponTakeOn(false);
+        
         List<SkinData> weaponSkins = getCurrentWeaponSkin();
         // 可用的要优先选择的槽位
         SafeArrayList<String> slotCandidate = null;
@@ -245,7 +235,7 @@ public class ActorSkinControl<T extends ControlData> extends ActorControl<T> {
                 selectSlots(slotCandidate, sd);
                 
                 // 取下武器
-                ((WeaponSkin) skin).takeOff(actor, force);
+                ((WeaponSkin) skin).takeOff(actor, force, isWeaponTakeOn());
             }
         }
         return true;
@@ -411,7 +401,7 @@ public class ActorSkinControl<T extends ControlData> extends ActorControl<T> {
     private void fixActorSkinBase() {
         // 获取当前角色已经装备的所有skinTypes
         FullSkinTypesTraversal traversal = new FullSkinTypesTraversal(); 
-        actor.getModel().breadthFirstTraversal(traversal);
+        actor.getSpatial().breadthFirstTraversal(traversal);
         int actorSkinTypes = traversal.fullSkinTypes;
         
 //        List<SkinData> skinBases = actor.getData().getSkinBase();
@@ -420,7 +410,7 @@ public class ActorSkinControl<T extends ControlData> extends ActorControl<T> {
                 if ((actorSkinTypes & sd.getType()) == 0) {
                     // 如果是武器则尝试找一个优先的武器槽位
                     selectWeaponSlot(actor, sd); 
-                    Loader.loadSkin(sd).attach(actor);
+                    Loader.loadSkin(sd).attach(actor, isWeaponTakeOn());
                     addSkinApplyAttributes(actor, sd);
                     sd.setUsing(true);
                 }

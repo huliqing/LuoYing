@@ -10,39 +10,41 @@ import name.huliqing.core.data.ActorData;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import com.jme3.util.SafeArrayList;
+import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.core.data.ControlData;
+import name.huliqing.core.data.ModuleData;
 import name.huliqing.core.loader.Loader;
-import name.huliqing.core.object.control.ActorControl;
+import name.huliqing.core.object.actormodule.AbstractLogicActorModule;
+import name.huliqing.core.object.actormodule.ActorModule;
 import name.huliqing.core.xml.DataProcessor;
 
 /**
  * 角色
  * @author huliqing
- * @param <T>
  */
-public class Actor<T extends ActorData> extends AbstractControl implements DataProcessor<T> {
+public class Actor extends AbstractControl implements DataProcessor<ActorData> {
     
-    protected T data;
+    protected ActorData data;
     protected boolean initialized;
     
     /**
-     *  角色模型
+     * 所有的模块,这里面包含logicModules中的模块。
      */
-    protected Spatial model;
+    protected final SafeArrayList<ActorModule> modules = new SafeArrayList<ActorModule>(ActorModule.class);
     
     /**
-     * 角色控制器
+     * 逻辑模块,这些模块需要"持续"更新,需要实现update(tpf)功能。
      */
-    protected final SafeArrayList<ActorControl> controls = new SafeArrayList<ActorControl>(ActorControl.class);
+    protected final SafeArrayList<AbstractLogicActorModule> logicModules = 
+            new SafeArrayList<AbstractLogicActorModule>(AbstractLogicActorModule.class);
     
     @Override
-    public void setData(T data) {
+    public void setData(ActorData data) {
         this.data = data;
     }
 
     @Override
-    public T getData() {
+    public ActorData getData() {
         return data;
     }
     
@@ -51,14 +53,16 @@ public class Actor<T extends ActorData> extends AbstractControl implements DataP
      */
     public void initialize() {
         // 载入基本模型并添加当前控制器
-        model = loadModel();
-        model.addControl(this);
+        loadModel().addControl(this);
         
         // 载入并初始化所有控制器
-        List<ControlData> controlDatas= data.getControlDatas();
-        if (!controlDatas.isEmpty()) {
-            for (ControlData cd : controlDatas) {
-                addControl((ActorControl) Loader.load(cd));
+        if (data.getModuleDatas() != null) {
+            // 注：这里要把data.getModuleDatas迁移到tempMDS中，因为addModule的时候会重新添加进去，
+            // 要避免重复添加，并且避免循环时modify异常
+            List<ModuleData> tempMDS= new ArrayList<ModuleData>(data.getModuleDatas());
+            data.getModuleDatas().clear();
+            for (ModuleData cd : tempMDS) {
+                addModule((ActorModule)Loader.load(cd));
             }
         }
         
@@ -74,7 +78,12 @@ public class Actor<T extends ActorData> extends AbstractControl implements DataP
     }
     
     @Override
-    protected void controlUpdate(float tpf) {}
+    protected void controlUpdate(float tpf) {
+        // 更新逻辑模块
+        for (AbstractLogicActorModule module : logicModules.getArray()) {
+            module.update(tpf);
+        }
+    }
 
     @Override
     protected void controlRender(RenderManager rm, ViewPort vp) {}
@@ -83,42 +92,62 @@ public class Actor<T extends ActorData> extends AbstractControl implements DataP
      * 清理角色
      */
     public void cleanup() {
-        for (ActorControl c : controls) {
-            c.cleanup();
+        for (ActorModule module : modules) {
+            module.cleanup();
         }
-        controls.clear();
+        modules.clear();
+        logicModules.clear();
         initialized = false;
     }
     
-    public Spatial getModel() {
-        return model;
-    }
-    
     /**
-     * 添加角色控制器
-     * @param actorControl 
+     * 添加角色扩展模块
+     * @param actorModule 
      */
-    public void addControl(ActorControl actorControl) {
-        if (controls.contains(actorControl)) {
+    public void addModule(ActorModule actorModule) {
+        if (modules.contains(actorModule)) {
             return;
         }
-        model.addControl(actorControl);
-        controls.add(actorControl);
-        data.getControlDatas().add(actorControl.getData());
-        actorControl.initialize(this);
+        modules.add(actorModule);
+        if (actorModule instanceof AbstractLogicActorModule) {
+            logicModules.add((AbstractLogicActorModule) actorModule);
+        }
+        data.getModuleDatas().add(actorModule.getData());
+        actorModule.setActor(this);
+        actorModule.initialize();
     }
     
     /**
-     * 移除指定的角色控制器
-     * @param actorControl 
+     * 移除指定的角色模块
+     * @param actorModule 
      * @return  
      */
-    public boolean removeControl(ActorControl actorControl) {
-        boolean result = controls.remove(actorControl);
-        data.getControlDatas().remove(actorControl.getData());
-        model.removeControl(actorControl);
-        actorControl.cleanup();
-        return result;
+    public boolean removeModule(ActorModule actorModule) {
+        if (!modules.contains(actorModule)) {
+            return false;
+        }
+        modules.remove(actorModule);
+        if (actorModule instanceof AbstractLogicActorModule) {
+            logicModules.remove((AbstractLogicActorModule) actorModule);
+        }
+        data.getModuleDatas().remove(actorModule.getData());
+        actorModule.cleanup();
+        return true;
+    }
+    
+    /**
+     * 从角色身上获取指定类型的模块, 这个方法返回第一个符合类型的实例，如果找不到符合类型的实例则返回null.
+     * @param <T>
+     * @param moduleType
+     * @return 
+     */
+    public <T extends ActorModule> T  getModule(Class<T> moduleType) {
+        for (ActorModule m : modules.getArray()) {
+            if (moduleType.isAssignableFrom(m.getClass())) {
+                return (T) m;
+            }
+        }
+        return null;
     }
     
     /**

@@ -65,7 +65,7 @@ public class TalkLogicFace extends AbstractTalkLogic {
         TempVars tv = TempVars.get();
         Vector3f targetPos = tv.vect1;
         if (target != null) {
-            targetPos.set(target.getModel().getWorldTranslation());
+            targetPos.set(target.getSpatial().getWorldTranslation());
         } else if (position != null) {
             targetPos.set(position);
         } else {
@@ -87,7 +87,7 @@ public class TalkLogicFace extends AbstractTalkLogic {
                 (UNABLE_FACE_SKILL_STATE & skillService.getPlayingSkillStates(actor)) == 0;
         
         if (canFace) {
-            Vector3f viewDirection = targetPos.subtract(actor.getModel().getWorldTranslation());
+            Vector3f viewDirection = targetPos.subtract(actor.getSpatial().getWorldTranslation());
             if (network) {
                 actorNetwork.setViewDirection(actor, viewDirection);
             } else {

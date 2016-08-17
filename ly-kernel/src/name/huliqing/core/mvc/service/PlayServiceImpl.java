@@ -20,7 +20,6 @@ import name.huliqing.core.LY;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.GameData;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.control.ActorControl;
 import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.enums.MessageType;
 import name.huliqing.core.enums.SkillType;
@@ -324,7 +323,7 @@ public class PlayServiceImpl implements PlayService {
         TempVars tv = TempVars.get();
         Vector3f dirByLength = tv.vect1.set(actorService.getViewDirection(actor))
                 .normalizeLocal().multLocal(distance);
-        store.set(actor.getModel().getWorldTranslation()).addLocal(dirByLength);
+        store.set(actor.getSpatial().getWorldTranslation()).addLocal(dirByLength);
         store.y = getTerrainHeight(store.x, store.z);
         tv.release();
         
@@ -378,7 +377,7 @@ public class PlayServiceImpl implements PlayService {
 
     @Override
     public boolean isInScene(Actor actor) {
-        return LY.getPlayState().isInScene(actor.getModel());
+        return LY.getPlayState().isInScene(actor.getSpatial());
     }
 
     @Override

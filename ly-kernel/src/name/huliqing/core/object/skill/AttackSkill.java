@@ -104,7 +104,7 @@ public class AttackSkill<T extends SkillData> extends HitSkill<T> {
                 // 防守成功(角色正在防守,并且必须是正面防守)
                 if (skillDefendable 
                         && skillService.isDefending(target) 
-                        && actorService.getViewAngle(target, actor.getModel().getWorldTranslation()) < 90) {
+                        && actorService.getViewAngle(target, actor.getSpatial().getWorldTranslation()) < 90) {
                     doDefendResult(target);
                 } else {
                     doHitResult(target);
@@ -121,7 +121,7 @@ public class AttackSkill<T extends SkillData> extends HitSkill<T> {
                 return;
             }
             // 防守成功(角色正在防守,并且必须是正面防守)
-            if (skillDefendable && skillService.isDefending(target) && actorService.getViewAngle(target, actor.getModel().getWorldTranslation()) < 90) {
+            if (skillDefendable && skillService.isDefending(target) && actorService.getViewAngle(target, actor.getSpatial().getWorldTranslation()) < 90) {
                 doDefendResult(target);
             } else {
                 doHitResult(target);
@@ -138,7 +138,7 @@ public class AttackSkill<T extends SkillData> extends HitSkill<T> {
         Vector3f collisionPos = tv.vect1.set(collisionOffset);
         tv.quat1.lookAt(actorService.getViewDirection(actor), Vector3f.UNIT_Y);
         tv.quat1.mult(collisionPos, collisionPos);
-        collisionPos.addLocal(actor.getModel().getWorldTranslation());
+        collisionPos.addLocal(actor.getSpatial().getWorldTranslation());
         Collision.playDefend(collisionPos, actor, target, null, null);
         tv.release();
     }
@@ -149,7 +149,7 @@ public class AttackSkill<T extends SkillData> extends HitSkill<T> {
         SkinData wd1 = weaponSkins.isEmpty() ? null : weaponSkins.get(0);
         
         ObjectData od1 = wd1 != null ? wd1 : actor.getData();
-        SoundManager.getInstance().playCollision(od1, target.getData(), actor.getModel().getWorldTranslation());
+        SoundManager.getInstance().playCollision(od1, target.getData(), actor.getSpatial().getWorldTranslation());
         
         // 伤害计算
         applyHit(target);

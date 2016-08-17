@@ -77,14 +77,14 @@ public class SummonHandler extends AbstractHandler {
         actorService.setPartner(actor, bcc);
         
         // --添加角色到场景
-        Spatial root = GeometryUtils.findRootNode(actor.getModel());
-        float zExtent = GeometryUtils.getBoundingVolumeZExtent(actor.getModel()) * 0.5f;
-        float distance = GeometryUtils.getBoundingVolumeZExtent(bcc.getModel());
+        Spatial root = GeometryUtils.findRootNode(actor.getSpatial());
+        float zExtent = GeometryUtils.getBoundingVolumeZExtent(actor.getSpatial()) * 0.5f;
+        float distance = GeometryUtils.getBoundingVolumeZExtent(bcc.getSpatial());
         
         TempVars tv = TempVars.get();
         Vector3f origin = tv.vect1;
         Vector3f direction = tv.vect2;
-        origin.set(actor.getModel().getWorldBound().getCenter()).setY(actor.getModel().getWorldTranslation().y + 1);
+        origin.set(actor.getSpatial().getWorldBound().getCenter()).setY(actor.getSpatial().getWorldTranslation().y + 1);
         direction.set(actorService.getViewDirection(actor)).normalizeLocal();
         origin.addLocal(direction.mult(zExtent));
         

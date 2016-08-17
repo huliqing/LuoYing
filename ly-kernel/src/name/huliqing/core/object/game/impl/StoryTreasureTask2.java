@@ -321,8 +321,8 @@ public class StoryTreasureTask2 extends GameTaskBase {
                     public void onTalkEnd() {
                         Skill skill = skillService.getSkillInstance(companion, IdConstants.SKILL_BACK);
                         if (skill == null || !(skill instanceof BackSkill)) {
-                            playNetwork.removeObject(companion.getModel());
-                            playNetwork.removeObject(treasure.getModel());
+                            playNetwork.removeObject(companion.getSpatial());
+                            playNetwork.removeObject(treasure.getSpatial());
                             doTaskComplete();
                         } else {
                             final BackSkill backSkill = (BackSkill) skill;
@@ -330,8 +330,8 @@ public class StoryTreasureTask2 extends GameTaskBase {
                                 @Override
                                 public void onSkillEnd(Actor source, Skill skill) {
                                     if (skill == backSkill) {
-                                        playNetwork.removeObject(companion.getModel());
-                                        playNetwork.removeObject(treasure.getModel());
+                                        playNetwork.removeObject(companion.getSpatial());
+                                        playNetwork.removeObject(treasure.getSpatial());
                                         doTaskComplete();
                                     }
                                 }

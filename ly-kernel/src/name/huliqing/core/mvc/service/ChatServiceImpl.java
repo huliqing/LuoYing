@@ -13,7 +13,7 @@ import name.huliqing.core.loader.Loader;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.chat.Chat;
-import name.huliqing.core.object.control.ActorChatControl;
+import name.huliqing.core.object.actormodule.ChatActorModule;
 import name.huliqing.core.object.sound.SoundManager;
 
 /**
@@ -39,14 +39,14 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public Chat getChat(Actor actor) {
-        ActorChatControl control = actor.getModel().getControl(ActorChatControl.class);
+        ChatActorModule module = actor.getModule(ChatActorModule.class);
         Chat chat = null;
-        if (control.getChat() == null) {
+        if (module.getChat() == null) {
             String chatId = actor.getData().getChat();
             if (chatId != null) {
                 chat = loadChat(chatId);
                 chat.setActor(actor);
-                control.setChat(chat);
+                module.setChat(chat);
             }
         }
         return chat;
@@ -86,7 +86,7 @@ public class ChatServiceImpl implements ChatService {
         itemService.addItem(seller, IdConstants.ITEM_GOLD, needGold);
         itemService.removeItem(buyer, IdConstants.ITEM_GOLD, needGold);
         
-        SoundManager.getInstance().playSound(IdConstants.SOUND_COIN1, buyer.getModel().getWorldTranslation());
+        SoundManager.getInstance().playSound(IdConstants.SOUND_COIN1, buyer.getSpatial().getWorldTranslation());
         
     }
 
@@ -94,7 +94,7 @@ public class ChatServiceImpl implements ChatService {
     public void chatSell(Actor seller, Actor buyer, String[] items, int[] counts, float discount) {
         if (sellInner(seller, buyer, items, counts, discount)) {
             // 有卖出过东西则播放声音
-            SoundManager.getInstance().playSound(IdConstants.SOUND_COIN2, seller.getModel().getWorldTranslation());
+            SoundManager.getInstance().playSound(IdConstants.SOUND_COIN2, seller.getSpatial().getWorldTranslation());
         }
     }
 

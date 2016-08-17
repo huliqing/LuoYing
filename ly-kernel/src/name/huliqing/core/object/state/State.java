@@ -81,7 +81,7 @@ public class State<T extends StateData> implements DataProcessor<T>{
             }
             for (String effectId : data.getEffects()) {
                 Effect effect = effectService.loadEffect(effectId);
-                effect.setTraceObject(actor.getModel());
+                effect.setTraceObject(actor.getSpatial());
                 playService.addEffect(effect);
                 tempEffects.add(effect);
             }

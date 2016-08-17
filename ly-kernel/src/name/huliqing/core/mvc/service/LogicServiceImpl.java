@@ -12,7 +12,7 @@ import name.huliqing.core.loader.Loader;
 import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actorlogic.ActorLogic;
-import name.huliqing.core.object.control.ActorLogicControl;
+import name.huliqing.core.object.actormodule.LogicActorModule;
 
 /**
  *
@@ -44,28 +44,28 @@ public class LogicServiceImpl implements LogicService {
 
     @Override
     public boolean addLogic(Actor actor, ActorLogic logic) {
-        ActorLogicControl control = actor.getModel().getControl(ActorLogicControl.class);
-        control.addLogic(logic);
+        LogicActorModule module = actor.getModule(LogicActorModule.class);
+        module.addLogic(logic);
         return true;
     }
 
     @Override
     public boolean removeLogic(Actor actor, ActorLogic logic) {
-        ActorLogicControl control = actor.getModel().getControl(ActorLogicControl.class);
-        return control.removeLogic(logic);
+        LogicActorModule module = actor.getModule(LogicActorModule.class);
+        return module.removeLogic(logic);
     }
 
     @Override
     public void clearLogics(Actor actor) {
-        ActorLogicControl control = actor.getModel().getControl(ActorLogicControl.class);
-        if (control == null)
+        LogicActorModule module = actor.getModule(LogicActorModule.class);
+        if (module == null)
             return;
         
-        List<ActorLogic> logics = control.getLogics();
+        List<ActorLogic> logics = module.getLogics();
         if (logics != null) {
             List<ActorLogic> tempLogics = new ArrayList<ActorLogic>(logics);
             for (ActorLogic logic : tempLogics) {
-                control.removeLogic(logic);
+                module.removeLogic(logic);
             }
         }
     }

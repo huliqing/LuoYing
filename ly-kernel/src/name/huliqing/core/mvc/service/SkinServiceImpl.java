@@ -4,38 +4,28 @@
  */
 package name.huliqing.core.mvc.service;
 
-import com.jme3.util.SafeArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 import name.huliqing.core.Factory;
-import name.huliqing.core.constants.ActorConstants;
-import name.huliqing.core.data.ArrayListWrap;
 import name.huliqing.core.data.SkinData;
 import name.huliqing.core.enums.SkillType;
-import name.huliqing.core.mvc.dao.SkinDao;
-import name.huliqing.core.loader.Loader;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actor.SkinListener;
-import name.huliqing.core.object.control.ActorSkinControl;
-import name.huliqing.core.object.skin.Skin;
-import name.huliqing.core.object.skin.WeaponSkin;
+import name.huliqing.core.object.actormodule.SkinActorModule;
 
 /**
  *
  * @author huliqing
  */
 public class SkinServiceImpl implements SkinService {
-    private static final Logger LOG = Logger.getLogger(SkinServiceImpl.class.getName());
+//    private static final Logger LOG = Logger.getLogger(SkinServiceImpl.class.getName());
     
     private SkillService skillService;
-    private AttributeService attributeService;
-    private SkinDao skinDao;
+//    private AttributeService attributeService;
 
     @Override
     public void inject() {
-        skinDao = Factory.get(SkinDao.class);
         skillService = Factory.get(SkillService.class);
-        attributeService = Factory.get(AttributeService.class);
+//        attributeService = Factory.get(AttributeService.class);
     }
     
     @Override
@@ -100,7 +90,7 @@ public class SkinServiceImpl implements SkinService {
 //        cacheWeaponsAndState(actor);
 
 
-        ActorSkinControl control = actor.getModel().getControl(ActorSkinControl.class);
+        SkinActorModule control = actor.getModule(SkinActorModule.class);
         if (control != null) {
             control.attachSkin(skinData);
         }
@@ -142,7 +132,7 @@ public class SkinServiceImpl implements SkinService {
 //        // 3.====重新缓存武器状态及武器列表信息
 //        cacheWeaponsAndState(actor);
 
-        ActorSkinControl control = actor.getModel().getControl(ActorSkinControl.class);
+        SkinActorModule control = actor.getModule(SkinActorModule.class);
         if (control != null) {
             control.detachSkin(skinData);
         }
@@ -189,7 +179,7 @@ public class SkinServiceImpl implements SkinService {
 //        }
 //        return true;
 
-        ActorSkinControl control = actor.getModel().getControl(ActorSkinControl.class);
+        SkinActorModule control = actor.getModule(SkinActorModule.class);
         if (control != null) {
             return control.takeOnWeapon(force);
         }
@@ -222,21 +212,29 @@ public class SkinServiceImpl implements SkinService {
 //        }
 //        return true;
 
-        ActorSkinControl control = actor.getModel().getControl(ActorSkinControl.class);
-        if (control != null) {
-            return control.takeOffWeapon(force);
+        SkinActorModule module = actor.getModule(SkinActorModule.class);
+        if (module != null) {
+            return module.takeOffWeapon(force);
         }
         return false;
     }
     
     @Override
     public List<SkinData> getArmorSkins(Actor actor, List<SkinData> store) {
-        return skinDao.getArmorSkins(actor.getData(), store);
+        SkinActorModule control = actor.getModule(SkinActorModule.class);
+        if (control != null) {
+            return control.getArmorSkins(store);
+        }
+        return null;
     }
 
     @Override
     public List<SkinData> getWeaponSkins(Actor actor, List<SkinData> store) {
-        return skinDao.getWeaponSkins(actor.getData(), store);
+        SkinActorModule module = actor.getModule(SkinActorModule.class);
+        if (module != null) {
+            return module.getWeaponSkins(store);
+        }
+        return null;
     }
     
     @Override
@@ -252,9 +250,9 @@ public class SkinServiceImpl implements SkinService {
 //        currentWeapons = actor.getModel().getUserData(ActorConstants.USER_DATA_TEMP_WEAPONS);
 //        return currentWeapons.getInnerData();
 
-        ActorSkinControl control = actor.getModel().getControl(ActorSkinControl.class);
-        if (control != null) {
-            return control.getCurrentWeaponSkin();
+        SkinActorModule module = actor.getModule(SkinActorModule.class);
+        if (module != null) {
+            return module.getCurrentWeaponSkin();
         }
         return null;
     }
@@ -270,17 +268,17 @@ public class SkinServiceImpl implements SkinService {
 //        state = actor.getModel().getUserData(ActorConstants.USER_DATA_TEMP_WEAPON_STATE);
 //        return state;
 
-        ActorSkinControl control = actor.getModel().getControl(ActorSkinControl.class);
-        if (control != null) {
-            return control.getWeaponState();
+        SkinActorModule module = actor.getModule(SkinActorModule.class);
+        if (module != null) {
+            return module.getWeaponState();
         }
         return -1;
     }
     
     @Override
     public boolean isWeaponTakeOn(Actor actor) {
-        ActorSkinControl control = actor.getModel().getControl(ActorSkinControl.class);
-        return control != null && control.isWeaponTakeOn();
+        SkinActorModule module = actor.getModule(SkinActorModule.class);
+        return module != null && module.isWeaponTakeOn();
     }
     
     @Override
@@ -290,14 +288,19 @@ public class SkinServiceImpl implements SkinService {
 
     @Override
     public void addSkinListener(Actor actor, SkinListener skinListener) {
-        ActorSkinControl control = actor.getModel().getControl(ActorSkinControl.class);
-        control.addSkinListener(skinListener);
+        SkinActorModule module = actor.getModule(SkinActorModule.class);
+        if (module != null) {
+            module.addSkinListener(skinListener);
+        }
     }
 
     @Override
     public boolean removeSkinListener(Actor actor, SkinListener skinListener) {
-        ActorSkinControl control = actor.getModel().getControl(ActorSkinControl.class);
-        return control.removeSkinListener(skinListener);
+        SkinActorModule module = actor.getModule(SkinActorModule.class);
+        if (module != null) {
+            return module.removeSkinListener(skinListener);
+        }
+        return false;
     }
     
     // remove20160817

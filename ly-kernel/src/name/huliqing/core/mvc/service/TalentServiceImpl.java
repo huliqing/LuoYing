@@ -10,7 +10,7 @@ import name.huliqing.core.loader.Loader;
 import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actor.TalentListener;
-import name.huliqing.core.object.control.ActorTalentControl;
+import name.huliqing.core.object.actormodule.TalentActorModule;
 import name.huliqing.core.object.talent.Talent;
 
 /**
@@ -32,53 +32,70 @@ public class TalentServiceImpl implements TalentService {
 
     @Override
     public void addTalent(Actor actor, TalentData talentData) {
-        ActorTalentControl control = actor.getModel().getControl(ActorTalentControl.class);
-        if (control != null) {
-            control.addTalent((Talent) Loader.load(talentData));
+        TalentActorModule module = actor.getModule(TalentActorModule.class);
+        if (module != null) {
+            module.addTalent((Talent) Loader.load(talentData));
         }
     }
 
     @Override
     public void removeTalent(Actor actor, String talentId) {
-        ActorTalentControl control = actor.getModel().getControl(ActorTalentControl.class);
-        if (control != null) {
-            Talent talent = control.getTalent(talentId);
+        TalentActorModule module = actor.getModule(TalentActorModule.class);
+        if (module != null) {
+            Talent talent = module.getTalent(talentId);
             if (talent != null) {
-                control.removeTalent(talent);
+                module.removeTalent(talent);
             }
         }
     }
 
     @Override
     public List<TalentData> getTalents(Actor actor) {
-        ActorTalentControl control = actor.getModel().getControl(ActorTalentControl.class);
-        if (control != null) {
-            return control.getTalentDatas();
+        TalentActorModule module = actor.getModule(TalentActorModule.class);
+        if (module != null) {
+            return module.getTalentDatas();
         }
         return null;
     }
 
     @Override
+    public int getTalentPoints(Actor actor) {
+        TalentActorModule module = actor.getModule(TalentActorModule.class);
+        if (module != null) {
+            return module.getTalentPoints();
+        }
+        return 0;
+    }
+
+    @Override
+    public void setTalentPoints(Actor actor, int talentPoints) {
+        TalentActorModule module = actor.getModule(TalentActorModule.class);
+        if (module != null) {
+            module.setTalentPoints(talentPoints);
+        }
+    }
+    
+    @Override
     public void addTalentPoints(Actor actor, String talentId, int points) {
-        ActorTalentControl control = actor.getModel().getControl(ActorTalentControl.class);
-        if (control != null) {
-            control.addTalentPoints(talentId, points);
+        TalentActorModule module = actor.getModule(TalentActorModule.class);
+        if (module != null) {
+            module.addTalentPoints(talentId, points);
         }
     }
 
     @Override
     public void addTalentListener(Actor actor, TalentListener talentListener) {
-        ActorTalentControl control = actor.getModel().getControl(ActorTalentControl.class);
-        if (control != null) {
-            control.addTalentListener(talentListener);
+        TalentActorModule module = actor.getModule(TalentActorModule.class);
+        if (module != null) {
+            module.addTalentListener(talentListener);
         }
     }
 
     @Override
     public void removeTalentListener(Actor actor, TalentListener talentListener) {
-        ActorTalentControl control = actor.getModel().getControl(ActorTalentControl.class);
-        if (control != null) {
-            control.removeTalentListener(talentListener);
+        TalentActorModule module = actor.getModule(TalentActorModule.class);
+        if (module != null) {
+            module.removeTalentListener(talentListener);
         }
     }
 

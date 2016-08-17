@@ -36,14 +36,13 @@ import name.huliqing.core.object.SyncData;
 import name.huliqing.core.object.NetworkObject;
 import name.huliqing.core.object.PlayObject;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.control.ActorControl;
+import name.huliqing.core.object.actormodule.ChannelActorModule;
 import name.huliqing.core.object.anim.Anim;
 import name.huliqing.core.object.bullet.Bullet;
 import name.huliqing.core.object.channel.Channel;
 import name.huliqing.core.object.effect.Effect;
 import name.huliqing.core.object.scene.Scene;
 import name.huliqing.core.object.view.View;
-import name.huliqing.core.object.channel.ChannelControl;
 
 /**
  *
@@ -184,7 +183,7 @@ public class PlayNetworkImpl implements PlayNetwork {
                     
                 } else if (object instanceof Spatial) {
                     Spatial spatialObject = (Spatial) object;
-                    ActorControl actor = spatialObject.getControl(ActorControl.class);
+                    Actor actor = spatialObject.getControl(Actor.class);
                     if (actor != null) {
                         MessSCActorRemove mess = new MessSCActorRemove();
                         mess.setActorId(actor.getData().getUniqueId());
@@ -452,11 +451,11 @@ public class PlayNetworkImpl implements PlayNetwork {
         // 同步角色数据及位置和视角
         MessPlayActorLoaded mess = new MessPlayActorLoaded();
         mess.setActorData(actor.getData());
-        mess.setLocation(actor.getModel().getWorldTranslation());
+        mess.setLocation(actor.getSpatial().getWorldTranslation());
         mess.setViewDirection(actorService.getViewDirection(actor));
 
         // 同步角色动画
-        ChannelControl cp = actor.getModel().getControl(ChannelControl.class);
+        ChannelActorModule cp = actor.getModule(ChannelActorModule.class);
         if (cp != null && !cp.getChannels().isEmpty()) {
             List<Channel> chs = cp.getChannels();
             String[] channels = new String[chs.size()];

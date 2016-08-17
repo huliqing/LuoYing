@@ -3,13 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.core.object.control;
+package name.huliqing.core.object.actormodule;
 
-import com.jme3.renderer.RenderManager;
-import com.jme3.renderer.ViewPort;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.core.data.ControlData;
+import name.huliqing.core.data.ModuleData;
 import name.huliqing.core.object.actor.ItemListener;
 
 /**
@@ -17,16 +15,15 @@ import name.huliqing.core.object.actor.ItemListener;
  * @author huliqing
  * @param <T>
  */
-public class ActorItemControl <T extends ControlData> extends ActorControl<T> {
+public class ItemActorModule<T extends ModuleData> extends AbstractSimpleActorModule<T> {
     
     // 监听角色物品的增删
     private List<ItemListener> itemListeners;
 
     @Override
-    public void actorUpdate(float tpf) {}
-    
-    @Override
-    public void actorRender(RenderManager rm, ViewPort vp) {}
+    public void initialize() {
+        super.initialize(); 
+    }
     
     @Override
     public void cleanup() {

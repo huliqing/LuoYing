@@ -3,36 +3,31 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.core.object.control;
+package name.huliqing.core.object.actormodule;
 
-import com.jme3.renderer.RenderManager;
-import com.jme3.renderer.ViewPort;
 import com.jme3.util.SafeArrayList;
 import java.util.ArrayList;
 import java.util.List;
+import name.huliqing.core.data.ModuleData;
 import name.huliqing.core.data.TalentData;
 import name.huliqing.core.loader.Loader;
-import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actor.TalentListener;
 import name.huliqing.core.object.talent.Talent;
 import name.huliqing.core.xml.DataFactory;
 
 /**
- *
  * @author huliqing
+ * @param <T>
  */
-public class ActorTalentControl extends ActorControl {
-    
-    private Actor actor;
+public class TalentActorModule<T extends ModuleData> extends AbstractLogicActorModule<T> {
     
     private final SafeArrayList<Talent> talents = new SafeArrayList<Talent>(Talent.class);
     private final List<TalentData> talentDatas = new ArrayList<TalentData>();
     private List<TalentListener> talentListeners;
-
+    
     @Override
-    public void initialize(Actor actor) {
-        super.initialize(actor);
-        this.actor = actor;
+    public void initialize() {
+        super.initialize();
         
         // 从存档中获取需要初始化的talentDatas，如果不是存档，则从原始xml配置中获取
         List<TalentData> talentInits = (List<TalentData>) data.getAttribute("talentDatas");
@@ -67,15 +62,12 @@ public class ActorTalentControl extends ActorControl {
     }
     
     @Override
-    public void actorUpdate(float tpf) {
+    public void update(float tpf) {
         for (Talent t : talents.getArray()) {
             t.update(tpf);
         }
     }
 
-    @Override
-    public void actorRender(RenderManager rm, ViewPort vp) {}
-    
     public void addTalent(Talent talent) {
         // 判断天赋是否已经存在
         if (existsTalent(talent.getData().getId()))
@@ -194,6 +186,22 @@ public class ActorTalentControl extends ActorControl {
      */
     public int getTalentPoints() {
         return data.getAsInteger("talentPoints", 0);
+    }
+    
+    /**
+     * 天赋点数的奖励公式
+     * @return 
+     */
+    public String getTalentPointsLevelEl() {
+        return data.getAsString("talentPointsLevelEl");
+    }
+
+    /**
+     * 天赋点数的奖励公式
+     * @param talentPointsLevelEl 
+     */
+    public void setTalentPointsLevelEl(String talentPointsLevelEl) {
+        data.setAttribute("talentPointsLevelEl", talentPointsLevelEl);
     }
     
     /**

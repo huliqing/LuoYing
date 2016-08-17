@@ -451,14 +451,16 @@ public class ActorNetworkImpl implements ActorNetwork{
         
     }
 
+    @Override
     public long getFollow(Actor actor) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public int getTalentPoints(Actor actor) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+    // remove20160817
+//    @Override
+//    public int getTalentPoints(Actor actor) {
+//        throw new UnsupportedOperationException("Not supported yet.");
+//    }
 
     @Override
     public void syncTransform(Actor actor, Vector3f location, Vector3f viewDirection) {

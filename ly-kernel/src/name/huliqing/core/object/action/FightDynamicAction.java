@@ -124,7 +124,7 @@ public class FightDynamicAction extends FollowPathAction implements FightAction 
     @Override
     public void setEnemy(Actor enemy) {
         this.enemy = enemy;
-        super.setFollow(enemy.getModel());
+        super.setFollow(enemy.getSpatial());
         
 //      // TODO 20150612,timeUsed=interval主要是让player能够在执行action后立即
         // 响应行为，但是Ai逻辑中可能会直接调用setEnemy和setSkill,所以这里可能
@@ -241,7 +241,7 @@ public class FightDynamicAction extends FollowPathAction implements FightAction 
                 }
                 
             } else {
-                super.doFollow(enemy.getModel(), tpf);
+                super.doFollow(enemy.getSpatial(), tpf);
                 // 如果跟随的时间达到允许的跟随限制,则不再跟随,并退出当前行为.
                 followTimeUsed += tpf;
                 if (followTimeUsed >= followTimeMax) {
@@ -309,7 +309,7 @@ public class FightDynamicAction extends FollowPathAction implements FightAction 
     protected boolean attack(SkillData skill) {
         // 使角色朝向目标
         if (isAutoFacing()) {
-            skillNetwork.playFaceTo(actor, enemy.getModel().getWorldTranslation());
+            skillNetwork.playFaceTo(actor, enemy.getSpatial().getWorldTranslation());
         }
         return skillNetwork.playSkill(actor, skill.getId(), false);
     }

@@ -110,7 +110,7 @@ public class MessPlayActorLoaded extends MessBase {
         actorService.setAutoAi(actor, false);
         actorService.syncTransform(actor, location, viewDirection);
         actorService.syncAnimation(actor, channels, anims, loopModes, speeds, times);
-        playService.addObject(actor.getModel(), false);
+        playService.addObject(actor.getSpatial(), false);
         
     }
     

@@ -122,7 +122,7 @@ public abstract class AbstractHandler<T extends HandlerData> implements Handler<
             Effect effect;
             for (String eid : effects) {
                  effect = effectService.loadEffect(eid);
-                 effect.setTraceObject(actor.getModel());
+                 effect.setTraceObject(actor.getSpatial());
                  playService.addEffect(effect);
             }
         }
@@ -136,7 +136,7 @@ public abstract class AbstractHandler<T extends HandlerData> implements Handler<
     private void playSounds(Actor actor, String[] sounds) {
         if (sounds != null) {
             for (String sid : sounds) {
-                SoundManager.getInstance().playSound(sid, actor.getModel().getWorldTranslation());
+                SoundManager.getInstance().playSound(sid, actor.getSpatial().getWorldTranslation());
             }
         }
     }

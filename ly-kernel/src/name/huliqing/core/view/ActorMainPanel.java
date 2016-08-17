@@ -180,7 +180,7 @@ public class ActorMainPanel extends Window implements ItemListener, SkinListener
         
         // 2.更新角色并更新面板内容
         this.actor = actor;
-        this.setTitle(ResourceManager.get("common.characterPanel") + "-" + actor.getModel().getName());
+        this.setTitle(ResourceManager.get("common.characterPanel") + "-" + actor.getSpatial().getName());
         
         // remove20160324,不需要一打开时把所有panel都update一次，按需update就可以
         // 3.即打开哪一个tab就更新哪一个就行，以避免panel太多，在手机上影响性能。

@@ -36,7 +36,7 @@ public class BackSkill<T extends SkillData> extends AbstractSkill<T> {
     protected void doUpdateLogic(float tpf) {
         if (!backed && time >= trueUseTime * backPoint) {
             // 注意：因为涉及到随机传送，所以必须统一由服务端处理。use Network
-            Vector3f loc = actor.getModel().getLocalTranslation();
+            Vector3f loc = actor.getSpatial().getLocalTranslation();
             playNetwork.getRandomTerrainPoint(loc);
             playNetwork.moveObject(actor, loc);
             backed = true;

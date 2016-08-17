@@ -282,8 +282,8 @@ public class StoryGbTask2 extends GameTaskBase{
             if (gb != null) {
                 // 古柏离开场景之后就不再需要检查了,这里通过判断主角与古柏的距离
                 // 当远离一定距离的时候就从场景移除古柏
-                if (player.getModel().getWorldTranslation().distance(gb.getModel().getWorldTranslation()) > 50) {
-                    playNetwork.removeObject(gb.getModel());
+                if (player.getSpatial().getWorldTranslation().distance(gb.getSpatial().getWorldTranslation()) > 50) {
+                    playNetwork.removeObject(gb.getSpatial());
                     end = true;
                 }
             }
@@ -328,7 +328,7 @@ public class StoryGbTask2 extends GameTaskBase{
     private Vector3f findGbPosition() {
         Actor gb = playService.findActor(IdConstants.ACTOR_GB);
         if (gb != null) {
-            return gb.getModel().getWorldTranslation();
+            return gb.getSpatial().getWorldTranslation();
         }
         return new Vector3f(0, 1, 0);
     }

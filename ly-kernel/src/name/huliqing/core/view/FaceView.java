@@ -387,7 +387,7 @@ public final class FaceView extends LinearLayout {
             if (actor == null) return;
             
             // 1.update position
-            Vector3f pos = actor.getModel().getWorldTranslation();
+            Vector3f pos = actor.getSpatial().getWorldTranslation();
             if (pos.distanceSquared(lastPos) >= 1) {
                 lastPos.set(pos);
                 position.setText(" (" + decimal.format(lastPos.x) + ","  + decimal.format(lastPos.z) + ")");

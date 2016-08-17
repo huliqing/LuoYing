@@ -20,25 +20,25 @@ xs:time
     <xs:element name="root">
         <xs:complexType>
             <xs:all>
-                <xs:element ref="controlActorAction" />
-                <xs:element ref="controlActorAttribute" />
-                <xs:element ref="controlActorBase" />
-                <xs:element ref="controlActorChannel" />
-                <xs:element ref="controlActorChat" />
-                <xs:element ref="controlActorItem" />
-                <xs:element ref="controlActorLogic" />
-                <xs:element ref="controlActorPhysics" />
-                <xs:element ref="controlActorResist" />
-                <xs:element ref="controlActorSkill" />
-                <xs:element ref="controlActorSkin" />
-                <xs:element ref="controlActorState" />
-                <xs:element ref="controlActorTalent" />
-                <xs:element ref="controlActorTask" />
+                <xs:element ref="actorModuleAction" />
+                <xs:element ref="actorModuleAttribute" />
+                <xs:element ref="actorModuleBase" />
+                <xs:element ref="actorModuleChannel" />
+                <xs:element ref="actorModuleChat" />
+                <xs:element ref="actorModuleItem" />
+                <xs:element ref="actorModuleLogic" />
+                <xs:element ref="actorModulePhysics" />
+                <xs:element ref="actorModuleResist" />
+                <xs:element ref="actorModuleSkill" />
+                <xs:element ref="actorModuleSkin" />
+                <xs:element ref="actorModuleState" />
+                <xs:element ref="actorModuleTalent" />
+                <xs:element ref="actorModuleTask" />
             </xs:all>
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="controlActorTask">
+    <xs:element name="actorModuleTask">
         <xs:annotation>
             <xs:documentation>角色任务模块</xs:documentation>
         </xs:annotation>
@@ -49,7 +49,7 @@ xs:time
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="controlActorTalent">
+    <xs:element name="actorModuleTalent">
         <xs:annotation>
             <xs:documentation>xxxx</xs:documentation>
         </xs:annotation>
@@ -60,7 +60,7 @@ xs:time
         </xs:complexType>
     </xs:element>
     
-    <xs:element name="controlActorState">
+    <xs:element name="actorModuleState">
         <xs:annotation>
             <xs:documentation>xxxx</xs:documentation>
         </xs:annotation>
@@ -71,7 +71,7 @@ xs:time
         </xs:complexType>
     </xs:element>
         
-    <xs:element name="controlActorSkin">
+    <xs:element name="actorModuleSkin">
         <xs:annotation>
             <xs:documentation>角色装备控制器</xs:documentation>
         </xs:annotation>
@@ -82,7 +82,7 @@ xs:time
         </xs:complexType>
     </xs:element>
     
-    <xs:element name="controlActorSkill">
+    <xs:element name="actorModuleSkill">
         <xs:annotation>
             <xs:documentation>xxxx</xs:documentation>
         </xs:annotation>
@@ -93,7 +93,7 @@ xs:time
         </xs:complexType>
     </xs:element>
     
-    <xs:element name="controlActorResist">
+    <xs:element name="actorModuleResist">
         <xs:annotation>
             <xs:documentation>xxxx</xs:documentation>
         </xs:annotation>
@@ -104,7 +104,7 @@ xs:time
         </xs:complexType>
     </xs:element>
     
-    <xs:element name="controlActorPhysics">
+    <xs:element name="actorModulePhysics">
         <xs:annotation>
             <xs:documentation>角色物理控制器</xs:documentation>
         </xs:annotation>
@@ -119,7 +119,7 @@ xs:time
         </xs:complexType>
     </xs:element>
     
-    <xs:element name="controlActorLogic">
+    <xs:element name="actorModuleLogic">
         <xs:annotation>
             <xs:documentation>角色逻辑控制器</xs:documentation>
         </xs:annotation>
@@ -136,7 +136,7 @@ xs:time
         </xs:complexType>
     </xs:element>
     
-    <xs:element name="controlActorItem">
+    <xs:element name="actorModuleItem">
         <xs:annotation>
             <xs:documentation>xxxx</xs:documentation>
         </xs:annotation>
@@ -147,7 +147,7 @@ xs:time
         </xs:complexType>
     </xs:element>
     
-    <xs:element name="controlActorChat">
+    <xs:element name="actorModuleChat">
         <xs:annotation>
             <xs:documentation>xxxx</xs:documentation>
         </xs:annotation>
@@ -158,7 +158,7 @@ xs:time
         </xs:complexType>
     </xs:element>
     
-    <xs:element name="controlActorChannel">
+    <xs:element name="actorModuleChannel">
         <xs:annotation>
             <xs:documentation>xxxx</xs:documentation>
         </xs:annotation>
@@ -178,7 +178,7 @@ xs:time
         </xs:complexType>
     </xs:element>
         
-    <xs:element name="controlActorBase">
+    <xs:element name="actorModuleBase">
         <xs:annotation>
             <xs:documentation>xxxx</xs:documentation>
         </xs:annotation>
@@ -189,7 +189,7 @@ xs:time
         </xs:complexType>
     </xs:element>
     
-    <xs:element name="controlActorAttribute">
+    <xs:element name="actorModuleAttribute">
         <xs:annotation>
             <xs:documentation>xxxx</xs:documentation>
         </xs:annotation>
@@ -200,7 +200,7 @@ xs:time
         </xs:complexType>
     </xs:element>
     
-    <xs:element name="controlActorAction">
+    <xs:element name="actorModuleAction">
         <xs:annotation>
             <xs:documentation>xxxx</xs:documentation>
         </xs:annotation>

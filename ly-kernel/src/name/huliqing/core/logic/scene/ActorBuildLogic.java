@@ -174,7 +174,7 @@ public class ActorBuildLogic<T extends GameLogicData> extends AbstractGameLogic<
                 // 注：如果callback存在，并onAddBefore返回null,则不载入场景
                 if (actor != null) {
                     playNetwork.addActor(actor);
-                    models.add(actor.getModel());
+                    models.add(actor.getSpatial());
                 }
             } catch (Exception ex) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);

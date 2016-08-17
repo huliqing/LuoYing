@@ -3,36 +3,31 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.core.object.control;
+package name.huliqing.core.object.actormodule;
 
-import com.jme3.renderer.RenderManager;
-import com.jme3.renderer.ViewPort;
 import com.jme3.util.SafeArrayList;
 import java.util.ArrayList;
 import java.util.List;
+import name.huliqing.core.data.ModuleData;
 import name.huliqing.core.data.StateData;
 import name.huliqing.core.loader.Loader;
-import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actor.StateListener;
 import name.huliqing.core.object.state.State;
 import name.huliqing.core.xml.DataFactory;
 
 /**
- *
  * @author huliqing
+ * @param <T>
  */
-public class ActorStateControl extends ActorControl {
+public class StateActorModule<T extends ModuleData> extends AbstractLogicActorModule<T> {
 
-    private Actor actor;
-    
     private final SafeArrayList<State> states = new SafeArrayList<State>(State.class);
     private final List<StateData> stateDatas = new ArrayList<StateData>();
     private List<StateListener> stateListeners;
 
     @Override
-    public void initialize(Actor actor) {
-        super.initialize(actor); 
-        this.actor = actor;
+    public void initialize() {
+        super.initialize(); 
         
         // 从存档中载入状态，如果不是存档则从原始参数中获取
         List<StateData> stateInits = (List<StateData>) data.getAttribute("stateDatas");
@@ -66,15 +61,12 @@ public class ActorStateControl extends ActorControl {
     }
     
     @Override
-    public void actorUpdate(float tpf) {
+    public void update(float tpf) {
         for (State s : states.getArray()) {
             s.update(tpf);
         }
     }
 
-    @Override
-    public void actorRender(RenderManager rm, ViewPort vp) {}
-    
     public void addState(State state) {
         // 如果已经存在相同ID的状态，则要删除旧的，因状态不允许重复。
         State oldState = getState(state.getData().getId());

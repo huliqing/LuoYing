@@ -76,7 +76,7 @@ public class AttributeHitMagic extends Magic {
             return;
         
         for (Actor hitTarget : actors) {
-            if (hitTarget.getModel().getWorldTranslation().distanceSquared(localRoot.getWorldTranslation()) <= distanceSquared) {
+            if (hitTarget.getSpatial().getWorldTranslation().distanceSquared(localRoot.getWorldTranslation()) <= distanceSquared) {
                 if (hitChecker == null || hitChecker.canHit(source, hitTarget)) {
                     for (AttributeWrap aw : attributes) {
                         HitUtils.getInstance().applyHit(source, hitTarget, aw.attribute, aw.amount);

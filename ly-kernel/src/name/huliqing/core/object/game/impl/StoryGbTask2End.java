@@ -142,7 +142,7 @@ public class StoryGbTask2End extends IntervalLogic {
                 protoNetwork.removeData(player, stumpData, taskPanel.getTotal());
                 
                 // 移除古柏
-                playNetwork.removeObject(gb.getModel());
+                playNetwork.removeObject(gb.getSpatial());
                 // 停止任务面板的更新及移除提示面板
                 playService.removeObject(taskPanel);
                 // 保存关卡完成状态

@@ -124,7 +124,7 @@ public class DamageManager extends AbstractPlayObject {
         DynamicText dt = getFromCache();
         app.getGuiNode().attachChild(dt);
         Vector3f pos = dt.text.getLocalTranslation();
-        pos.set(target.getModel().getWorldTranslation()).addLocal(0, 2.5f, 0);
+        pos.set(target.getSpatial().getWorldTranslation()).addLocal(0, 2.5f, 0);
         app.getCamera().getScreenCoordinates(pos, pos);
         dt.startPos.set(pos);
         dt.text.setText(text);
@@ -141,19 +141,19 @@ public class DamageManager extends AbstractPlayObject {
     private boolean checkDisplay(Actor target) {
         // 在距离太远也不显示
         Camera cam = LY.getApp().getCamera();
-        if (cam.getLocation().distanceSquared(target.getModel().getWorldTranslation()) > MAX_DISTANCE_SQUARED) {
+        if (cam.getLocation().distanceSquared(target.getSpatial().getWorldTranslation()) > MAX_DISTANCE_SQUARED) {
             if (Config.debug) {
                 Logger.getLogger(DamageManager.class.getName()).log(Level.INFO
-                        , "The distance is too far, do not need to show damageText, target={0}", target.getModel().getName());
+                        , "The distance is too far, do not need to show damageText, target={0}", target.getSpatial().getName());
             }
             return false;
         }
         
         // 不在镜头内也不显示
-        if (!GeometryUtils.intersectCamera(target.getModel())) {
+        if (!GeometryUtils.intersectCamera(target.getSpatial())) {
             if (Config.debug) {
                 Logger.getLogger(DamageManager.class.getName()).log(Level.INFO
-                        , "Target not in camera, do not need to show damageText, target={0}", target.getModel().getName());
+                        , "Target not in camera, do not need to show damageText, target={0}", target.getSpatial().getName());
             }
             return false;
         }

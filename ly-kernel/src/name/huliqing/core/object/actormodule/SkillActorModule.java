@@ -3,33 +3,30 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.core.object.control;
+package name.huliqing.core.object.actormodule;
 
 import com.jme3.math.Vector3f;
-import com.jme3.renderer.RenderManager;
-import com.jme3.renderer.ViewPort;
 import com.jme3.util.SafeArrayList;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import name.huliqing.core.Factory;
+import name.huliqing.core.data.ModuleData;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.loader.Loader;
 import name.huliqing.core.mvc.service.ActorService;
-import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actor.SkillListener;
 import name.huliqing.core.object.skill.Skill;
 
 /**
- *
  * @author huliqing
+ * @param <T>
  */
-public class ActorSkillControl extends ActorControl {
+public class SkillActorModule<T extends ModuleData> extends AbstractLogicActorModule<T> {
     
     private final ActorService actorService = Factory.get(ActorService.class);
-    private Actor actor;
     
     // 所有可用的技能处理器,缓存技能处理器,这样不需要每次都去重新载入技能处理器
     private final Map<String, Skill> skills = new HashMap<String, Skill>();
@@ -146,7 +143,7 @@ public class ActorSkillControl extends ActorControl {
     
     public boolean playFaceTo(Vector3f position) {
         Vector3f viewDir = actorService.getViewDirection(actor);
-        position.subtract(actor.getModel().getWorldTranslation(), viewDir).normalizeLocal();
+        position.subtract(actor.getSpatial().getWorldTranslation(), viewDir).normalizeLocal();
         actorService.setViewDirection(actor, viewDir);
         
         // 朝向的时候如果角色正在走动，则应该同时更新角色的跑步方向。
@@ -184,7 +181,7 @@ public class ActorSkillControl extends ActorControl {
     }
     
     @Override
-    public void actorUpdate(float tpf) {
+    public void update(float tpf) {
         // 更新并尝试移除已经结束的技能
         if (!runningSkills.isEmpty()) {
 
@@ -220,10 +217,6 @@ public class ActorSkillControl extends ActorControl {
         }
     }
 
-    @Override
-    public void actorRender(RenderManager rm, ViewPort vp) {
-    }
-    
     public boolean isPlayingSkill() {
         return runningSkillStates != 0;
     }

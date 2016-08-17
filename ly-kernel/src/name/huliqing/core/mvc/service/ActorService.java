@@ -480,12 +480,12 @@ public interface ActorService extends Inject {
      */
     long getFollow(Actor actor);
     
-    /**
-     * 获取角色当前可用的天赋点数
-     * @param actor
-     * @return 
-     */
-    int getTalentPoints(Actor actor);
+//    /**
+//     * 获取角色当前可用的天赋点数
+//     * @param actor
+//     * @return 
+//     */
+//    int getTalentPoints(Actor actor);
     
     /**
      * 同步角色的变换信息

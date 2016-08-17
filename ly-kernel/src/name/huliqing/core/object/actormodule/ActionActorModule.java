@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.core.object.control;
+package name.huliqing.core.object.actormodule;
 
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
-import name.huliqing.core.data.ControlData;
+import name.huliqing.core.data.ModuleData;
 import name.huliqing.core.object.action.Action;
 import name.huliqing.core.object.action.FightAction;
 import name.huliqing.core.object.action.RunAction;
@@ -17,7 +17,7 @@ import name.huliqing.core.object.action.RunAction;
  * @author huliqing
  * @param <T>
  */
-public class ActorActionControl<T extends ControlData> extends ActorControl<T> {
+public class ActionActorModule<T extends ModuleData> extends AbstractLogicActorModule<T> {
     
     // 两个默认行为,当角色接收玩家控制时需要这两个默认行为
     // see ActionServcice.playRun,playFight
@@ -40,7 +40,7 @@ public class ActorActionControl<T extends ControlData> extends ActorControl<T> {
     }
     
     @Override
-    public void actorUpdate(float tpf) {
+    public void update(float tpf) {
         if (current != null) {
             if (current.isEnd()) {
                 current.cleanup();
@@ -50,9 +50,6 @@ public class ActorActionControl<T extends ControlData> extends ActorControl<T> {
             }
         }
     }
-
-    @Override
-    public void actorRender(RenderManager rm, ViewPort vp) {}
     
      /**
      * 执行行为逻辑，如果当前没有正在执行的逻辑，则立即执行．否则偿试打断正在执

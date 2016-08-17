@@ -71,7 +71,7 @@ public class MessActorTransform extends MessBase {
         
         TempVars tv = TempVars.get();
 //        Vector3f sourcePos = tv.vect1.set(actor.getLocation()); // remove
-        Vector3f sourcePos = tv.vect1.set(actor.getModel().getWorldTranslation());
+        Vector3f sourcePos = tv.vect1.set(actor.getSpatial().getWorldTranslation());
         
         Vector3f targetPos = tv.vect2.set(location);
         float distanceSquared = sourcePos.distanceSquared(targetPos);

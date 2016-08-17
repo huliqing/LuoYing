@@ -48,15 +48,15 @@ public class ActorCleanGameLogic<T extends GameLogicData> extends AbstractGameLo
         for (Actor a : actors) {
             // “Player”、“未死亡”、“必要”的角色都不能移除
             if (!actorService.isDead(a) || actorService.isPlayer(a) || actorService.isEssential(a)) {
-                a.getModel().getUserDataKeys().remove(ActorConstants.USER_DATA_DEAD_TIME_FLAG);
+                a.getSpatial().getUserDataKeys().remove(ActorConstants.USER_DATA_DEAD_TIME_FLAG);
                 continue;
             }
-            deadTime = (Long) a.getModel().getUserData(ActorConstants.USER_DATA_DEAD_TIME_FLAG);
+            deadTime = (Long) a.getSpatial().getUserData(ActorConstants.USER_DATA_DEAD_TIME_FLAG);
             if (deadTime == null) {
-                a.getModel().setUserData(ActorConstants.USER_DATA_DEAD_TIME_FLAG, LY.getGameTime());
+                a.getSpatial().setUserData(ActorConstants.USER_DATA_DEAD_TIME_FLAG, LY.getGameTime());
             } else {
                 if (LY.getGameTime() - deadTime > cleanInterval * 1000) {
-                    a.getModel().getUserDataKeys().remove(ActorConstants.USER_DATA_DEAD_TIME_FLAG);
+                    a.getSpatial().getUserDataKeys().remove(ActorConstants.USER_DATA_DEAD_TIME_FLAG);
                     temps.add(a);
                 }
             }
@@ -65,7 +65,7 @@ public class ActorCleanGameLogic<T extends GameLogicData> extends AbstractGameLo
         // 清理角色
         if (!temps.isEmpty()) {
             for (Actor a : temps) {
-                playNetwork.removeObject(a.getModel());
+                playNetwork.removeObject(a.getSpatial());
             }
             temps.clear();
         }

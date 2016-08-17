@@ -34,11 +34,10 @@ public class WeaponSkin<T extends SkinData> extends AbstractSkin<T> {
     private final SkillService skillService = Factory.get(SkillService.class);
     
     @Override
-    public void attach(Actor actor) {
+    public void attach(Actor actor, boolean isWeaponTakedOn) {
         // 对于武器的attach不能用动画,直接attach就可以
-        boolean takeOn = actor.getData().isWeaponTakeOn();
-        if (takeOn) {
-            super.attach(actor);
+        if (isWeaponTakedOn) {
+            super.attach(actor, isWeaponTakedOn);
         } else {
             takeOffDirect(actor);
         }
@@ -48,11 +47,12 @@ public class WeaponSkin<T extends SkinData> extends AbstractSkin<T> {
      * 把武器取出放到手上使用。
      * @param actor
      * @param force
+     * @param isWeaponTakedOn
      */
-    public void takeOn(Actor actor, boolean force) {
+    public void takeOn(Actor actor, boolean force, boolean isWeaponTakedOn) {
         String weaponSlot = data.getSlot();
         if (weaponSlot == null) {
-            super.attach(actor);
+            super.attach(actor, isWeaponTakedOn);
             return;
         }
         // 根据武器的左右手属性确定要用哪一个手拿武器的技能。
@@ -64,7 +64,7 @@ public class WeaponSkin<T extends SkinData> extends AbstractSkin<T> {
             hangSkill = sd.getRightHandSkinSkill();
         }
         if (hangSkill == null) {
-            super.attach(actor);
+            super.attach(actor, true);
             return;
         }
         
@@ -81,7 +81,7 @@ public class WeaponSkin<T extends SkinData> extends AbstractSkin<T> {
         skillService.playSkill(actor, skill, force);
 
         // 动画逻辑处理
-        TOAnimProcessLogic processor = new TOAnimProcessLogic(actor, 1, skillUseTime, hangTimePoint);
+        TOAnimProcessLogic processor = new TOAnimProcessLogic(actor, 1, skillUseTime, hangTimePoint, isWeaponTakedOn);
         playService.addObject(processor, false);
         
     }
@@ -90,11 +90,12 @@ public class WeaponSkin<T extends SkinData> extends AbstractSkin<T> {
      * 把武器挂起，如挂在后背
      * @param actor
      * @param force
+     * @param isWeaponTakedOn
      */
-    public void takeOff(Actor actor, boolean force) {
+    public void takeOff(Actor actor, boolean force, boolean isWeaponTakedOn) {
         String weaponSlot = data.getSlot();
         if (weaponSlot == null) {
-            super.attach(actor);
+            super.attach(actor, isWeaponTakedOn);
             return;
         }
         // 根据武器的左右手属性确定要用哪一个手拿武器的技能。
@@ -106,7 +107,7 @@ public class WeaponSkin<T extends SkinData> extends AbstractSkin<T> {
             hangSkill = sd.getRightHandSkinSkill();
         }
         if (hangSkill == null) {
-            super.attach(actor);
+            super.attach(actor, isWeaponTakedOn);
             return;
         }
         
@@ -123,13 +124,13 @@ public class WeaponSkin<T extends SkinData> extends AbstractSkin<T> {
         skillService.playSkill(actor, skill, force);
 
         // 动画逻辑处理
-        TOAnimProcessLogic processor = new TOAnimProcessLogic(actor, 0, skillUseTime, hangTimePoint);
+        TOAnimProcessLogic processor = new TOAnimProcessLogic(actor, 0, skillUseTime, hangTimePoint, isWeaponTakedOn);
         playService.addObject(processor, false);
         
     }
     
     private void takeOffDirect(Actor actor) {
-        Spatial skinNode = findSkinNodes(actor.getModel(), data);
+        Spatial skinNode = findSkinNodes(actor.getSpatial(), data);
         if (skinNode == null) {
             String modelFile = data.getFile();
             if (modelFile == null) {
@@ -142,7 +143,7 @@ public class WeaponSkin<T extends SkinData> extends AbstractSkin<T> {
         // 如果找不到合适的槽位或者武器根据不支持槽位，则直接attach到角色身上。
         // 不作takeOff处理
         if (weaponSlot == null) {
-            super.attach(actor);
+            super.attach(actor, false);
             return;
         }
         
@@ -154,7 +155,7 @@ public class WeaponSkin<T extends SkinData> extends AbstractSkin<T> {
         
         // 如果指定了骨头，则将skin绑定到目标骨头
         if (toBindBone != null) {
-            SkeletonControl sc = actor.getModel().getControl(SkeletonControl.class);
+            SkeletonControl sc = actor.getSpatial().getControl(SkeletonControl.class);
             Node boneNode = sc.getAttachmentsNode(toBindBone);
             
             // 如果没有指定本地变换，则直接从bone中获取
@@ -205,13 +206,15 @@ public class WeaponSkin<T extends SkinData> extends AbstractSkin<T> {
         private final float hangTimePoint;
         private float timeUsed;
         private boolean isOk;
+        private boolean isWeaponTakedOn;
         
-        public TOAnimProcessLogic(Actor actor, int type, float fullUseTime, float hangTimePoint) {
+        public TOAnimProcessLogic(Actor actor, int type, float fullUseTime, float hangTimePoint, boolean isWeaponTakedOn) {
             super(0);
             this.actor = actor;
             this.type = type;
             this.fullUseTime = fullUseTime;
             this.hangTimePoint = hangTimePoint;
+            this.isWeaponTakedOn = isWeaponTakedOn;
         }
 
         @Override
@@ -220,7 +223,7 @@ public class WeaponSkin<T extends SkinData> extends AbstractSkin<T> {
            
             if (!isOk && timeUsed >= fullUseTime * hangTimePoint) {
                 if (type == 1) {
-                    WeaponSkin.super.attach(actor);
+                    WeaponSkin.super.attach(actor, isWeaponTakedOn);
                 } else {
                     takeOffDirect(actor);
                 }

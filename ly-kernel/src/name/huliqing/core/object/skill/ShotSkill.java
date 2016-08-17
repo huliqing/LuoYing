@@ -226,10 +226,10 @@ public class ShotSkill<T extends SkillData> extends HitSkill<T> {
         switch (shotTargetType) {
             case bound:
             case center:
-                return target.getModel().getWorldBound().getCenter();
+                return target.getSpatial().getWorldBound().getCenter();
             case origin:
             default:
-                return target.getModel().getWorldTranslation();
+                return target.getSpatial().getWorldTranslation();
         }
     }
     
@@ -242,7 +242,7 @@ public class ShotSkill<T extends SkillData> extends HitSkill<T> {
         TempVars tv = TempVars.get();
         tv.quat1.lookAt(actorService.getViewDirection(actor), Vector3f.UNIT_Y);
         tv.quat1.mult(store, store);
-        store.addLocal(actor.getModel().getWorldTranslation());
+        store.addLocal(actor.getSpatial().getWorldTranslation());
         tv.release();
         return store;
     }
@@ -277,11 +277,11 @@ public class ShotSkill<T extends SkillData> extends HitSkill<T> {
     private boolean isBulletHit(Bullet bullet, Actor target) {
         switch (shotTargetType) {
             case bound:
-                return bullet.isHit(target.getModel());
+                return bullet.isHit(target.getSpatial());
             case center:
-                return bullet.isHit(target.getModel().getWorldBound().getCenter());
+                return bullet.isHit(target.getSpatial().getWorldBound().getCenter());
             case origin:
-                return bullet.isHit(target.getModel().getWorldTranslation());
+                return bullet.isHit(target.getSpatial().getWorldTranslation());
         }
         return false;
     }

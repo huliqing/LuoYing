@@ -3,16 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.core.object.control;
+package name.huliqing.core.object.actormodule;
 
-import com.jme3.renderer.RenderManager;
-import com.jme3.renderer.ViewPort;
 import com.jme3.util.SafeArrayList;
 import java.util.ArrayList;
 import java.util.List;
+import name.huliqing.core.data.ModuleData;
 import name.huliqing.core.data.TaskData;
 import name.huliqing.core.loader.Loader;
-import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actor.TaskListener;
 import name.huliqing.core.object.task.Task;
 import name.huliqing.core.xml.DataFactory;
@@ -20,19 +18,17 @@ import name.huliqing.core.xml.DataFactory;
 /**
  * 任务管理
  * @author huliqing
+ * @param <T>
  */
-public class ActorTaskControl extends ActorControl {
+public class TaskActorModule<T extends ModuleData> extends AbstractSimpleActorModule<T> {
 
-    private Actor actor;
-    
     private final SafeArrayList<Task> tasks = new SafeArrayList<Task>(Task.class);
     private final List<TaskData> taskDatas = new ArrayList<TaskData>();
     private List<TaskListener> taskListeners;
 
     @Override
-    public void initialize(Actor actor) {
-        super.initialize(actor); 
-        this.actor = actor;
+    public void initialize() {
+        super.initialize(); 
 
         // 从存档中获取Datas，如果不是存档，则从原始配置的参数xml中获取
         List<TaskData> taskInits = (List<TaskData>) data.getAttribute("taskDatas");
@@ -66,12 +62,6 @@ public class ActorTaskControl extends ActorControl {
         taskDatas.clear();
         super.cleanup();
     }
-    
-    @Override
-    public void actorUpdate(float tpf) {}
-
-    @Override
-    public void actorRender(RenderManager rm, ViewPort vp) {}
     
     /**
      * 添加任务

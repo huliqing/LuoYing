@@ -75,15 +75,15 @@ public class LyLabPlayState extends NetworkPlayState {
                 actorService.setLocation(npc2, new Vector3f(-10, 1, 0));
                 actorService.setGroup(npc2, 2);
 
-                addObject(npc1.getModel(), false);
-                addObject(npc2.getModel(), false);
+                addObject(npc1.getSpatial(), false);
+                addObject(npc2.getSpatial(), false);
 
                 gameState.getTeamView().setMainActor(npc1);
                 gameState.setTarget(npc2);
                 
                 CameraChaseEnv cce = SceneUtils.findEnv(gameState.getScene(), CameraChaseEnv.class);
                 if (cce != null) {
-                    cce.setChase(npc1.getModel());
+                    cce.setChase(npc1.getSpatial());
                 }
             }
         });

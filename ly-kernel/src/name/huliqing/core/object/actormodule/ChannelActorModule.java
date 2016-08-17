@@ -2,14 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.core.object.control;
+package name.huliqing.core.object.actormodule;
 
 import com.jme3.animation.AnimChannel;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.Animation;
 import com.jme3.animation.LoopMode;
-import com.jme3.renderer.RenderManager;
-import com.jme3.renderer.ViewPort;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,8 +15,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.core.constants.IdConstants;
 import name.huliqing.core.data.ChannelData;
+import name.huliqing.core.data.ModuleData;
 import name.huliqing.core.loader.Loader;
-import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.channel.Channel;
 import name.huliqing.core.object.channel.ChannelControl;
 import name.huliqing.core.utils.Temp;
@@ -27,9 +25,10 @@ import name.huliqing.core.xml.DataFactory;
 /**
  * 用于控制角色动画通道的“通道控制器”
  * @author huliqing
+ * @param <T>
  */
-public class ActorChannelControl extends ActorControl implements ChannelControl {
-    private static final Logger LOG = Logger.getLogger(ActorChannelControl.class.getName());
+public class ChannelActorModule<T extends ModuleData> extends AbstractSimpleActorModule<T> implements ChannelControl {
+    private static final Logger LOG = Logger.getLogger(ChannelActorModule.class.getName());
 
     private final List<Channel> channels = new LinkedList<Channel>();
     private final List<ChannelData> channelDatas = new ArrayList<ChannelData>();
@@ -46,8 +45,8 @@ public class ActorChannelControl extends ActorControl implements ChannelControl 
     private boolean resetState;
 
     @Override
-    public void initialize(Actor actor) {
-        super.initialize(actor);
+    public void initialize() {
+        super.initialize();
         
         // 1.优先从存档中载入
         // 2.如果不是存档则从原始参数xml中获取
@@ -65,7 +64,7 @@ public class ActorChannelControl extends ActorControl implements ChannelControl 
         }
         
         // 载入通道
-        AnimControl animControl = actor.getModel().getControl(AnimControl.class);
+        AnimControl animControl = actor.getSpatial().getControl(AnimControl.class);
         for (ChannelData cd : channelInits) {
             Channel channel = Loader.load(cd);
             channel.setAnimControl(animControl);
@@ -82,12 +81,6 @@ public class ActorChannelControl extends ActorControl implements ChannelControl 
         channelDatas.clear();
         super.cleanup(); 
     }
-
-    @Override
-    public void actorUpdate(float tpf) {}
-
-    @Override
-    public void actorRender(RenderManager rm, ViewPort vp) {}
     
     @Override
     public void addChannel(Channel channel) {

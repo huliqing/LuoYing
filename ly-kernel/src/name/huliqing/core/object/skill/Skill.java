@@ -8,7 +8,7 @@ import name.huliqing.core.constants.SkillConstants;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.enums.SkillType;
-import name.huliqing.core.object.control.ActorSkillControl;
+import name.huliqing.core.object.actormodule.SkillActorModule;
 import name.huliqing.core.xml.DataProcessor;
 
 /**
@@ -72,7 +72,7 @@ public interface Skill<T extends SkillData> extends DataProcessor<T>{
 //     */
 //    void setAnimChannelProcessor(ChannelControl animChannelProcessor);
     
-    void setSkillControl(ActorSkillControl skillControl);
+    void setSkillControl(SkillActorModule skillControl);
     
     /**
      * 重新修复被其它技能重置的动画

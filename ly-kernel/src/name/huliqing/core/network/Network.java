@@ -174,7 +174,7 @@ public class Network extends AbstractPlayObject {
         if (hasConnections()) {
             MessActorTransformDirect mess = new MessActorTransformDirect();
             mess.setActorId(actor.getData().getUniqueId());
-            mess.setLocation(actor.getModel().getWorldTranslation());
+            mess.setLocation(actor.getSpatial().getWorldTranslation());
             mess.setWalkDirection(actorService.getWalkDirection(actor));
             mess.setViewDirection(actorService.getViewDirection(actor));
             broadcast(mess);

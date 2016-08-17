@@ -107,7 +107,7 @@ public class ActorCurveMove<T extends ActorAnimData> extends ActorAnim<T> {
         // 清理后重新加载控制点
         spline.clearControlPoints();
         // 第一个点为角色的当前位置
-        spline.getControlPoints().add(target.getModel().getWorldTranslation().clone());
+        spline.getControlPoints().add(target.getSpatial().getWorldTranslation().clone());
         if (points != null && !points.isEmpty()) {
             TempVars tv = TempVars.get();
             for (int i = 0; i < points.size(); i++) {
@@ -149,8 +149,8 @@ public class ActorCurveMove<T extends ActorAnimData> extends ActorAnim<T> {
      * @return 
      */
     private Vector3f localToWorld(Vector3f local, Vector3f store) {
-        target.getModel().getWorldRotation().mult(local, store);
-        store.addLocal(target.getModel().getWorldTranslation());
+        target.getSpatial().getWorldRotation().mult(local, store);
+        store.addLocal(target.getSpatial().getWorldTranslation());
         return store;
     }
 
@@ -168,15 +168,15 @@ public class ActorCurveMove<T extends ActorAnimData> extends ActorAnim<T> {
         
         // dir
         if (facing == Facing.path) {
-            tv.vect1.subtract(target.getModel().getWorldTranslation(), tv.vect2).normalizeLocal();
+            tv.vect1.subtract(target.getSpatial().getWorldTranslation(), tv.vect2).normalizeLocal();
             actorService.setViewDirection(target, tv.vect2);
             
         } else if (facing == Facing.target) {
             Actor other = actorService.getTarget(target);
             
             if (other != null) {
-                other.getModel().getWorldTranslation()
-                        .subtract(target.getModel().getWorldTranslation(), tv.vect5).normalizeLocal();
+                other.getSpatial().getWorldTranslation()
+                        .subtract(target.getSpatial().getWorldTranslation(), tv.vect5).normalizeLocal();
                 actorService.setViewDirection(target, tv.vect5);
             }
         }

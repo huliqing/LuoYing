@@ -96,7 +96,7 @@ public class ShotBowSkill<T extends SkillData> extends ShotSkill<T> {
             }
             if (bowSkinData != null) {
                 WeaponBowFinder finder = new WeaponBowFinder(bowSkinData);
-                actor.getModel().breadthFirstTraversal(finder);
+                actor.getSpatial().breadthFirstTraversal(finder);
                 weapon = finder.bowNode;
             }
         }
@@ -129,9 +129,9 @@ public class ShotBowSkill<T extends SkillData> extends ShotSkill<T> {
             
             TempVars tv = TempVars.get();
             Vector3f viewPos = tv.vect1;
-            Vector3f targetPos = actorService.getTarget(actor).getModel().getWorldBound().getCenter();
+            Vector3f targetPos = actorService.getTarget(actor).getSpatial().getWorldBound().getCenter();
             
-            Vector3f selfPos = actor.getModel().getWorldBound().getCenter();
+            Vector3f selfPos = actor.getSpatial().getWorldBound().getCenter();
             viewPos.set(targetPos).setY(selfPos.getY());
             Vector3f vec1 = tv.vect2;
             Vector3f vec2 = tv.vect3;
@@ -189,7 +189,7 @@ public class ShotBowSkill<T extends SkillData> extends ShotSkill<T> {
     
     // 取箭
     private void takeArrow() {
-        SkeletonControl sc = actor.getModel().getControl(SkeletonControl.class);
+        SkeletonControl sc = actor.getSpatial().getControl(SkeletonControl.class);
         if (sc != null && arrow != null) {
             Bone abb = sc.getSkeleton().getBone(arrowBindBone);
             if (abb != null) {

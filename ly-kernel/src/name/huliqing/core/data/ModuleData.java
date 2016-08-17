@@ -12,6 +12,6 @@ import com.jme3.network.serializing.Serializable;
  * @author huliqing
  */
 @Serializable
-public class ControlData extends ObjectData {
+public class ModuleData extends ObjectData {
     
 }

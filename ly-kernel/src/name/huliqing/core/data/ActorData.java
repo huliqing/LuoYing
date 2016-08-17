@@ -51,16 +51,6 @@ public class ActorData extends ObjectData implements MatObject{
     // 角色是否必要的,不能移除的。
     private boolean essential;
     
-//    // 角色的基本皮肤，基本皮肤是用来在切换装备后“修补皮肤”缺失的问题。比如当
-//    // 穿上一套上下连身的法袍（同时包含lowerBody和upperBody）后，再使用一件只
-//    // 包含upperBody的装备来换上时，由于法袍被替换，这时角色身上将丢失lowerBody
-//    // 的装备，这时就需要从skinBase中查看是否有lowerBody的基本皮肤来补上，否则角
-//    // 色会缺少下半身的装备模型。
-//    // 注意：基本皮肤中不要指定哪些包含两个或两个以上type部位的皮肤。比如：
-//    // 同时包含lowerBody和upperBody的skin,如上下连身的套装之类的皮肤，这类皮肤
-//    // 会造成在换装备后进行修补的时候又替换掉已经穿上的装备。
-//    private List<SkinData> skinBase;
-    
     // 角色物品信息,如:金币,装备,武器,杂物等
     private ItemStore itemStore;
     
@@ -69,9 +59,6 @@ public class ActorData extends ObjectData implements MatObject{
     
     // 角色物品的掉落设置
     private DropData drop;
-    
-//    // 角色的状态列表，注：类型为SafeArrayList,部分Service中使用到循环删除的情况
-//    private List<StateData> states;
     
     // 状态抵抗设置
     private ResistData resist;
@@ -90,10 +77,6 @@ public class ActorData extends ObjectData implements MatObject{
     // See ActionService.playFight,playRun
     private String actionDefFight;
     private String actionDefRun;
-    
-//    // 标记武器是处于takeOn或takeOff状态,即取出或挂起的状态。
-//    // 处于使用中(isUsing=true)的武器存在两种状态，“挂起（待机状态）”，“取出（或者叫战斗状态）”
-//    private boolean weaponTakeOn;
     
     // 角色使用的武器插槽优先顺序，当设置了这个值之后，角色的武器在收起时将优先
     // 存放在这些指定的插槽上，否则将根据武器的定义的插槽存放。
@@ -116,15 +99,6 @@ public class ActorData extends ObjectData implements MatObject{
     // 角色颜色,对于一些召唤类角色需要
     private ColorRGBA color;
 
-//    // 当前可用的天赋点数,天赋点数可用到角色的天赋上，用后天赋点数会减少
-//    private int talentPoints;
-    
-//    // 角色拥有的天赋列表
-//    private ArrayList<TalentData> talents;
-    
-    // 天赋点数的奖励公式
-    private String talentPointsLevelEl;
-    
     // 角色所在的队伍,0或小于0表示无分组
     private int team;
     
@@ -141,9 +115,6 @@ public class ActorData extends ObjectData implements MatObject{
     // 角色的对话面板id
     private String chat;
     
-//    // 任务列表
-//    private List<TaskData> tasks;
-    
     // 被锁定的技能列表，二进制表示，其中每1个二进制位表示一个技能类型。
     // 如果指定的位为1，则表示这个技能类型被锁定，则这类技能将不能执行。
     // 默认值0表示没有任何锁定。
@@ -153,7 +124,7 @@ public class ActorData extends ObjectData implements MatObject{
     private transient boolean player;
     
     // 各种控制器的数据
-    private ArrayList<ControlData> controlDatas;
+    private ArrayList<ModuleData> moduleDatas;
     
     @Override
     public void write(JmeExporter ex) throws IOException {
@@ -166,20 +137,15 @@ public class ActorData extends ObjectData implements MatObject{
         oc.write(sex, "sex", null);
         oc.write(race, "race", null);
         oc.write(essential, "essential", false);
-//        if (skinBase != null)
-//            oc.writeSavableArrayList(new ArrayList<SkinData>(skinBase), "skinBase", null);
         oc.write(itemStore, "itemStore", null);
         oc.write(skillStore, "skillStore", null);
         oc.write(drop, "drop", null);
-//        if (states != null)
-//            oc.writeSavableArrayList(new ArrayList<StateData>(states), "states", null);
         oc.write(resist, "resistData", null);
         oc.write(target, "target", -1);
         oc.write(autoAi, "autoAi", true);
         oc.write(autoDetect, "autoDetect", true);
         oc.write(actionDefFight, "actionDefFight", null);
         oc.write(actionDefRun, "actionDefRun", null);
-//        oc.write(weaponTakeOn, "weaponTakeOn", false);
         if (slots != null)
             oc.write(slots.toArray(new String[]{}), "slots", null);
         
@@ -195,9 +161,6 @@ public class ActorData extends ObjectData implements MatObject{
         oc.write(xpDropEl, "xpDropEl", null);
         oc.write(ownerId, "ownerId", -1);
         oc.write(color, "color", null);
-//        oc.write(talentPoints, "talentPoints", 0);
-//        oc.writeSavableArrayList(talents, "talents", null);
-        oc.write(talentPointsLevelEl, "talentPointsLevelEl", null);
         oc.write(team, "team", 0);
         oc.write(living, "living", false);
         oc.write(followTarget, "followTarget", -1);
@@ -205,10 +168,8 @@ public class ActorData extends ObjectData implements MatObject{
             oc.write(bornPlace, "bornPlace", null);
         }
         oc.write(chat, "chat", null);
-//        if (tasks != null)
-//            oc.writeSavableArrayList(new ArrayList<TaskData>(tasks), "tasks", null);
         oc.write(skillLockedState, "skillLockedState", 0);
-        oc.writeSavableArrayList(controlDatas, "controlDatas", null);
+        oc.writeSavableArrayList(moduleDatas, "moduleDatas", null);
     }
 
     @Override
@@ -222,18 +183,15 @@ public class ActorData extends ObjectData implements MatObject{
         sex = ic.readEnum("sex", Sex.class, null);
         race = ic.readString("race", null);
         essential = ic.readBoolean("essential", false);
-//        skinBase = ic.readSavableArrayList("skinBase", null);
         itemStore = (ItemStore) ic.readSavable("itemStore", null);
         skillStore = (SkillStore) ic.readSavable("skillStore", null);
         drop = (DropData) ic.readSavable("drop", null);
-//        states = ic.readSavableArrayList("states", null);
         resist = (ResistData) ic.readSavable("resistData", null);
         target = ic.readLong("target", -1);
         autoAi = ic.readBoolean("autoAi", true);
         autoDetect = ic.readBoolean("autoDetect", true);
         actionDefFight = ic.readString("actionDefFight", null);
         actionDefRun = ic.readString("actionDefRun", null);
-//        weaponTakeOn = ic.readBoolean("weaponTakeOn", false);
         slots = ConvertUtils.toList(ic.readStringArray("slots", null));
         
         ArrayList<AttributeData> ads = ic.readSavableArrayList("attributes", null);
@@ -251,36 +209,16 @@ public class ActorData extends ObjectData implements MatObject{
         xpDropEl = ic.readString("xpDropEl", null);
         ownerId = ic.readLong("ownerId", -1);
         color = (ColorRGBA) ic.readSavable("color", null);
-//        talentPoints = ic.readInt("talentPoints", 0);
-//        talents = ic.readSavableArrayList("talents", null);
-        talentPointsLevelEl = ic.readString("talentPointsLevelEl", null);
         team = ic.readInt("team", 0);
         living = ic.readBoolean("living", false);
         followTarget = ic.readLong("followTarget", -1);
         bornPlace = (Vector3f)ic.readSavable("bornPlace", null);
         chat = ic.readString("chat", null);
-//        tasks = ic.readSavableArrayList("tasks", null);
         skillLockedState = ic.readLong("skillLockedState", 0);
-        controlDatas = ic.readSavableArrayList("controlDatas", null);
+        moduleDatas = ic.readSavableArrayList("moduleDatas", null);
     }
     
     public ActorData() {}
-
-//    /**
-//     * 获取角色的基本皮肤,如果没有基本皮肤则返回null.
-//     * @return 
-//     */
-//    public List<SkinData> getSkinBase() {
-//        return skinBase;
-//    }
-//
-//    /**
-//     * 设置角色的基本皮肤
-//     * @param skinBase 
-//     */
-//    public void setSkinBase(List<SkinData> skinBase) {
-//        this.skinBase = skinBase;
-//    }
 
     /**
      * 获取角色的物品列表，包含：武器，服装，杂物等等。
@@ -323,36 +261,6 @@ public class ActorData extends ObjectData implements MatObject{
     public void setDrop(DropData drop) {
         this.drop = drop;
     }
-
-//    /**
-//     * 获取状态列表，如果没有设置过，则返回一个空列表
-//     * @return 
-//     */
-//    public List<StateData> getStates() {
-//        if (states == null) {
-//            states = new ArrayList<StateData>();
-//        }
-//        return states;
-//    }
-//
-//    public void setStates(List<StateData> states) {
-//        this.states = states;
-//    }
-
-//    /**
-//     * 获取任务列表，如果没有设置过任务则返回一个空列表
-//     * @return 
-//     */
-//    public List<TaskData> getTasks() {
-//        if (tasks == null) {
-//            tasks = new ArrayList<TaskData>();
-//        }
-//        return tasks;
-//    }
-//
-//    public void setTasks(List<TaskData> tasks) {
-//        this.tasks = tasks;
-//    }
 
     public long getTarget() {
         return target;
@@ -413,19 +321,6 @@ public class ActorData extends ObjectData implements MatObject{
     public void setActionDefRun(String actionDefRun) {
         this.actionDefRun = actionDefRun;
     }
-
-//    /**
-//     * 标记武器是处于takeOn或takeOff状态,即取出或挂起的状态。
-//     * 处于使用中(isUsing=true)的武器存在两种状态，“挂起（待机状态）”，“取出（或者叫战斗状态）”
-//     * @return 
-//     */
-//    public boolean isWeaponTakeOn() {
-//        return weaponTakeOn;
-//    }
-//
-//    public void setWeaponTakeOn(boolean weaponTakeOn) {
-//        this.weaponTakeOn = weaponTakeOn;
-//    }
 
     /**
      * 角色使用的武器插槽优先顺序，当设置了这个值之后，角色的武器在收起时将优先
@@ -589,30 +484,6 @@ public class ActorData extends ObjectData implements MatObject{
         this.resist = resistData;
     }
 
-//    public int getTalentPoints() {
-//        return talentPoints;
-//    }
-//
-//    public void setTalentPoints(int talentPoints) {
-//        this.talentPoints = talentPoints;
-//    }
-
-//    public List<TalentData> getTalents() {
-//        return talents;
-//    }
-//
-//    public void setTalents(ArrayList<TalentData> talents) {
-//        this.talents = talents;
-//    }
-
-    public String getTalentPointsLevelEl() {
-        return talentPointsLevelEl;
-    }
-
-    public void setTalentPointsLevelEl(String talentPointsLevelEl) {
-        this.talentPointsLevelEl = talentPointsLevelEl;
-    }
-
     /**
      * 获取角色队伍分组，默认0表示无队伍分组
      * @return 
@@ -744,12 +615,12 @@ public class ActorData extends ObjectData implements MatObject{
         this.player = player;
     }
 
-    public ArrayList<ControlData> getControlDatas() {
-        return controlDatas;
+    public ArrayList<ModuleData> getModuleDatas() {
+        return moduleDatas;
     }
 
-    public void setControlDatas(ArrayList<ControlData> controlDatas) {
-        this.controlDatas = controlDatas;
+    public void setModuleDatas(ArrayList<ModuleData> moduleDatas) {
+        this.moduleDatas = moduleDatas;
     }
     
 }

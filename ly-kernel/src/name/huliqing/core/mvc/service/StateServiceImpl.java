@@ -5,16 +5,14 @@
 package name.huliqing.core.mvc.service;
 
 import com.jme3.math.FastMath;
-import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Logger;
 import name.huliqing.core.Factory;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.data.StateData;
 import name.huliqing.core.loader.Loader;
 import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.object.actor.StateListener;
-import name.huliqing.core.object.control.ActorStateControl;
+import name.huliqing.core.object.actormodule.StateActorModule;
 import name.huliqing.core.object.state.State;
 
 /**
@@ -98,61 +96,66 @@ public class StateServiceImpl implements StateService{
         State state = Loader.load(newStateData);
         state.setSourceActor(sourceActor);
         
-        ActorStateControl control = actor.getModel().getControl(ActorStateControl.class);
-        control.addState(state);
+        StateActorModule module = actor.getModule(StateActorModule.class);
+        module.addState(state);
     }
 
     @Override
     public final boolean removeState(Actor actor, String removeStateId) {
-        ActorStateControl control = actor.getModel().getControl(ActorStateControl.class);
-        if (control != null) {
-            State state = control.getState(removeStateId);
-            return state != null ? control.removeState(state) : false;
+        StateActorModule module = actor.getModule(StateActorModule.class);
+        if (module != null) {
+            State state = module.getState(removeStateId);
+            return state != null ? module.removeState(state) : false;
         }
         return false;
     }
 
     @Override
     public State findState(Actor actor, String stateId) {
-        ActorStateControl control = actor.getModel().getControl(ActorStateControl.class);
-        return control.getState(stateId);
+        StateActorModule module = actor.getModule(StateActorModule.class);
+        if (module != null) {
+            return module.getState(stateId);
+        }
+        return null;
     }
 
     @Override
     public void clearStates(Actor actor) {
-        ActorStateControl control = actor.getModel().getControl(ActorStateControl.class);
-        if (control != null && control.getStates() != null) {
-            for (State state : control.getStates()) {
-                control.removeState(state);
+        StateActorModule module = actor.getModule(StateActorModule.class);
+        if (module != null && module.getStates() != null) {
+            for (State state : module.getStates()) {
+                module.removeState(state);
             }            
         }
     }
 
     @Override
     public boolean existsState(Actor actor, String stateId) {
-        ActorStateControl control = actor.getModel().getControl(ActorStateControl.class);
-        return control != null && control.getState(stateId) != null;
+        StateActorModule module = actor.getModule(StateActorModule.class);
+        return module != null && module.getState(stateId) != null;
     }
 
     @Override
     public List<StateData> getStates(Actor actor) {
-        ActorStateControl control = actor.getModel().getControl(ActorStateControl.class);
-        if (control != null) {
-            return control.getStateDatas();
+        StateActorModule module = actor.getModule(StateActorModule.class);
+        if (module != null) {
+            return module.getStateDatas();
         }
         return null;
     }
 
     @Override
     public void addListener(Actor actor, StateListener listener) {
-        ActorStateControl control = actor.getModel().getControl(ActorStateControl.class);
-        control.addStateListener(listener);
+        StateActorModule module = actor.getModule(StateActorModule.class);
+        if (module != null) {
+            module.addStateListener(listener);
+        }
     }
 
     @Override
     public boolean removeListener(Actor actor, StateListener listener) {
-        ActorStateControl control = actor.getModel().getControl(ActorStateControl.class);
-        return control != null && control.removeStateListener(listener);
+        StateActorModule module = actor.getModule(StateActorModule.class);
+        return module != null && module.removeStateListener(listener);
     }
     
     

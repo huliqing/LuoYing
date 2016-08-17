@@ -51,7 +51,7 @@ public class DeadSkill<T extends SkillData> extends AbstractSkill<T> {
     protected void end() {
         // 注意这里不能放在cleanup中进行，不要再在cleanup中去调用service.
         stateService.clearStates(actor);
-        playService.removeObject(actor.getModel());
+        playService.removeObject(actor.getSpatial());
         super.end();
     }
 

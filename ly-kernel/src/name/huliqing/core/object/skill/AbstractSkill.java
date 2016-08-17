@@ -22,7 +22,7 @@ import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.loader.Loader;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.object.actoranim.ActorAnim;
-import name.huliqing.core.object.control.ActorSkillControl;
+import name.huliqing.core.object.actormodule.SkillActorModule;
 import name.huliqing.core.object.effect.Effect;
 import name.huliqing.core.object.magic.Magic;
 import name.huliqing.core.object.sound.SoundManager;
@@ -93,7 +93,7 @@ public abstract class AbstractSkill<T extends SkillData> implements Skill<T> {
     // 在执行过程中就不再需要计算。
     protected float trueSpeed;
     
-    protected ActorSkillControl skillControl;
+    protected SkillActorModule skillControl;
 
     @Override
     public void setData(T data) {
@@ -348,7 +348,7 @@ public abstract class AbstractSkill<T extends SkillData> implements Skill<T> {
         Effect effect = effectService.loadEffect(effectId);
         // 同步与技能相同的执行速度
         effect.getData().setSpeed(trueSpeed);
-        effect.setTraceObject(actor.getModel());
+        effect.setTraceObject(actor.getSpatial());
         playService.addEffect(effect);
     }
     
@@ -369,7 +369,7 @@ public abstract class AbstractSkill<T extends SkillData> implements Skill<T> {
      * @param soundId 
      */
     protected void playSound(String soundId) {
-        SoundManager.getInstance().playSound(soundId, actor.getModel().getWorldTranslation());
+        SoundManager.getInstance().playSound(soundId, actor.getSpatial().getWorldTranslation());
     }
     
     /**
@@ -478,7 +478,7 @@ public abstract class AbstractSkill<T extends SkillData> implements Skill<T> {
 //    }
     
     @Override
-    public void setSkillControl(ActorSkillControl skillControl) {
+    public void setSkillControl(SkillActorModule skillControl) {
         this.skillControl = skillControl;
     }
     
@@ -615,7 +615,7 @@ public abstract class AbstractSkill<T extends SkillData> implements Skill<T> {
                 // 计算出实际的动画时间
 //                actorAnim.setUseTime((trueTimePointEnd - trueTimePointStart) * data.getTrueUseTime());
                 actorAnim.setUseTime((trueTimePointEnd - trueTimePointStart) * getTrueUseTime());
-                actor.getModel().addControl(actorAnim);
+                actor.getSpatial().addControl(actorAnim);
                 actorAnim.start();
                 started = true;
             }

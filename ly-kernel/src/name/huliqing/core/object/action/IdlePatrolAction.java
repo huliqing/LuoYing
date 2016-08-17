@@ -128,7 +128,7 @@ public class IdlePatrolAction extends AbstractAction implements IdleAction {
             if (bornPlace != null) {
                 patrolOrgin.set(bornPlace);
             } else {
-                patrolOrgin.set(actor.getModel().getWorldTranslation());
+                patrolOrgin.set(actor.getSpatial().getWorldTranslation());
             }
 
             // 生成可用idle坐标点.
@@ -205,7 +205,7 @@ public class IdlePatrolAction extends AbstractAction implements IdleAction {
             float angle = actorService.getViewAngle(actor, currentPos);
             if (angle < 90 
                     //&& actor.getDistance(patrolOrgin) > walkRadius
-                    && actor.getModel().getWorldTranslation().distanceSquared(patrolOrgin) > walkRadiusSquared
+                    && actor.getSpatial().getWorldTranslation().distanceSquared(patrolOrgin) > walkRadiusSquared
                     ) {
                 
                 // ignore:不能切换到"等待"或“空闲”状态,这时候角色还在圈外，需要
@@ -237,14 +237,14 @@ public class IdlePatrolAction extends AbstractAction implements IdleAction {
         // 如果距离比较远(在radius外),则使用跑路的方式,否则使用步行.
         // 注：角色从巡逻范围内最长可走一个直径距离，这里用squared比较所以直径也
         // 需要为平方形式，+10主要是判断在距离巡逻范围10码远时使用跑步方式走回来
-        if (actor.getModel().getWorldTranslation().distanceSquared(targetPos) > walkDiameterSquared + 10) {
+        if (actor.getSpatial().getWorldTranslation().distanceSquared(targetPos) > walkDiameterSquared + 10) {
             skillNetwork.playWalk(actor
                     , runSkillId
-                    , targetPos.subtract(actor.getModel().getWorldTranslation(), targetPos).normalizeLocal(), true, false);
+                    , targetPos.subtract(actor.getSpatial().getWorldTranslation(), targetPos).normalizeLocal(), true, false);
         } else {
             skillNetwork.playWalk(actor
                     , (walkSkillId != null ? walkSkillId : runSkillId)
-                    , targetPos.subtract(actor.getModel().getWorldTranslation(), targetPos).normalizeLocal()
+                    , targetPos.subtract(actor.getSpatial().getWorldTranslation(), targetPos).normalizeLocal()
                     , true, false);
         }
         tv.release();

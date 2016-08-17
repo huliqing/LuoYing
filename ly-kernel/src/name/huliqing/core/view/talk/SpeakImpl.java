@@ -89,10 +89,10 @@ public class SpeakImpl extends Speak {
         playService.addObject(speakPanel, true);
         
         // 在HUD上添加谈话内容,只要求角色在场景内，并且距离允许即可。不需要摄像机剔除检测。
-        float distanceSquared = actor.getModel().getWorldTranslation()
+        float distanceSquared = actor.getSpatial().getWorldTranslation()
                 .distanceSquared(LY.getApp().getCamera().getLocation());
-        if (playService.isInScene(actor.getModel()) && checkDistance(distanceSquared)) {
-            playService.addMessage(actor.getModel().getName() + ": " + mess, MessageType.talk);
+        if (playService.isInScene(actor.getSpatial()) && checkDistance(distanceSquared)) {
+            playService.addMessage(actor.getSpatial().getName() + ": " + mess, MessageType.talk);
         }
     }
     
@@ -104,7 +104,7 @@ public class SpeakImpl extends Speak {
             return;
         }
         
-        float distanceSquared = actor.getModel().getWorldTranslation()
+        float distanceSquared = actor.getSpatial().getWorldTranslation()
                 .distanceSquared(LY.getApp().getCamera().getLocation());
         
         // 2.如果距离太远则不显示
@@ -132,7 +132,7 @@ public class SpeakImpl extends Speak {
         
         // 更新text 位置
         TempVars tv = TempVars.get();
-        GeometryUtils.getBoundTopPosition(actor.getModel(), tv.vect1);
+        GeometryUtils.getBoundTopPosition(actor.getSpatial(), tv.vect1);
         GeometryUtils.convertWorldToScreen(tv.vect1, tv.vect2);
         speakPanel.setVisible(true);
         speakPanel.setLocalTranslation(tv.vect2.addLocal(speakPanel.getWidth() * -0.5f + fixXScalePos, 10, -1));
@@ -155,7 +155,7 @@ public class SpeakImpl extends Speak {
      * @return 
      */
     private boolean checkInCamera() {
-        return GeometryUtils.intersectCamera(actor.getModel());
+        return GeometryUtils.intersectCamera(actor.getSpatial());
     }
     
     /**

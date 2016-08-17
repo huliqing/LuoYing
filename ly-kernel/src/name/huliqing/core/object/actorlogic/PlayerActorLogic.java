@@ -48,7 +48,7 @@ public class PlayerActorLogic<T extends ActorLogicData> extends ActorLogic<T> {
         Actor t = actorService.getTarget(actor);
         
         if (t != null && !actorService.isDead(t) 
-                && t.getModel().getWorldTranslation().distance(actor.getModel().getWorldTranslation()) < actorService.getViewDistance(actor)
+                && t.getSpatial().getWorldTranslation().distance(actor.getSpatial().getWorldTranslation()) < actorService.getViewDistance(actor)
                 
                 // remove20160328 -> remove20160217,不再判断是否为敌人，是否可攻击目标以后交由hitChecker判断
                 // 放开这个判断可允许玩家控制角色攻击同伴，只要技能的hitChecker设置即可。

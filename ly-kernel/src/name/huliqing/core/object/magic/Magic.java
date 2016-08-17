@@ -117,7 +117,7 @@ public class Magic<T extends MagicData> extends AbstractPlayObject implements Da
         if (data.getTraceActor() > 0) {
             Actor traceActor = playService.findActor(data.getTraceActor());
             if (traceActor != null) {
-                traceObject = traceActor.getModel();
+                traceObject = traceActor.getSpatial();
             }
         }
         // 首次时进行一次位置更新

@@ -143,7 +143,7 @@ public class FollowPathAction extends AbstractAction implements FollowAction {
         }
         
         // 已经到达位置，则不需要再走
-        if (actor.getModel().getWorldTranslation().distanceSquared(target.getWorldTranslation()) <= nearestSquared) {
+        if (actor.getSpatial().getWorldTranslation().distanceSquared(target.getWorldTranslation()) <= nearestSquared) {
             if (waitSkillId != null) {
                 skillNetwork.playSkill(actor, waitSkillId, false);
             }
@@ -175,7 +175,7 @@ public class FollowPathAction extends AbstractAction implements FollowAction {
             TempVars tv = TempVars.get();
             skillNetwork.playWalk(actor
                     , runSkillId
-                    , target.getWorldTranslation().subtract(actor.getModel().getWorldTranslation(), tv.vect1), true, false);
+                    , target.getWorldTranslation().subtract(actor.getSpatial().getWorldTranslation(), tv.vect1), true, false);
             tv.release();
         }
         
@@ -187,12 +187,12 @@ public class FollowPathAction extends AbstractAction implements FollowAction {
             if (path != null && current != null) {
                 skillNetwork.playWalk(actor
                         , runSkillId
-                        , current.getPosition().subtract(actor.getModel().getWorldTranslation(), tv.vect1)
+                        , current.getPosition().subtract(actor.getSpatial().getWorldTranslation(), tv.vect1)
                         , true, false);
             } else {
                 skillNetwork.playWalk(actor
                         , runSkillId
-                        , target.getWorldTranslation().subtract(actor.getModel().getWorldTranslation(), tv.vect1)
+                        , target.getWorldTranslation().subtract(actor.getSpatial().getWorldTranslation(), tv.vect1)
                         , true, false);
             }
             tv.release();
@@ -208,7 +208,7 @@ public class FollowPathAction extends AbstractAction implements FollowAction {
             } else {
                 finder.clearPath();
                 pathFindTimeUsed = 0;
-                future = findPath(actor.getModel().getWorldTranslation(), target.getWorldTranslation(), false);
+                future = findPath(actor.getSpatial().getWorldTranslation(), target.getWorldTranslation(), false);
                 if (Config.debug) {
                     Logger.getLogger(getClass().getName()).log(Level.INFO, "{0} findPath.", toString());
                 }
@@ -245,7 +245,7 @@ public class FollowPathAction extends AbstractAction implements FollowAction {
             current = tempPoint;
             skillNetwork.playWalk(actor
                     , runSkillId
-                    , current.getPosition().subtract(actor.getModel().getWorldTranslation()), true, false);
+                    , current.getPosition().subtract(actor.getSpatial().getWorldTranslation()), true, false);
         }
     }
     
@@ -257,8 +257,8 @@ public class FollowPathAction extends AbstractAction implements FollowAction {
         // 将Y值移到与角色相同的Y值再比较距离，避免漂浮在空中的路径点无法比较
         TempVars temp = TempVars.get();
         temp.vect1.set(waypoint.getPosition());
-        temp.vect1.setY(actor.getModel().getWorldTranslation().y);
-        float distance = temp.vect1.distance(actor.getModel().getWorldTranslation());
+        temp.vect1.setY(actor.getSpatial().getWorldTranslation().y);
+        float distance = temp.vect1.distance(actor.getSpatial().getWorldTranslation());
         temp.release();
         
         if (distance < 1f) {
@@ -276,7 +276,7 @@ public class FollowPathAction extends AbstractAction implements FollowAction {
         if (!skillService.isRunning(actor)) {
             skillNetwork.playWalk(actor
                     , runSkillId
-                    , target.getWorldTranslation().subtract(actor.getModel().getWorldTranslation()), true, false);
+                    , target.getWorldTranslation().subtract(actor.getSpatial().getWorldTranslation()), true, false);
         }
     }
     
@@ -338,19 +338,19 @@ public class FollowPathAction extends AbstractAction implements FollowAction {
                 Boolean result = future.get();
                 if (!result) {
                     finder.clearPath();
-                    future = findPath(actor.getModel().getWorldTranslation(), target.getWorldTranslation(), true);
+                    future = findPath(actor.getSpatial().getWorldTranslation(), target.getWorldTranslation(), true);
 //                    Logger.getLogger(getClass().getName()).log(Level.INFO, "{0} findPath.", toString());
                 } else {
                     path = finder.getPath();
                     future = null; // 获得线路后清空
                     if (debug) {
-                        DebugDynamicUtils.debugPath(actor.getModel().getName() + toString(), path.getWaypoints());
+                        DebugDynamicUtils.debugPath(actor.getSpatial().getName() + toString(), path.getWaypoints());
                     }
                 }
             } catch (Exception ex) {
                 // 重要：这个异常必须处理。
                 Logger.getLogger(getClass().getName()).log(Level.WARNING, "actorName={}, error={1}"
-                        , new Object[] {actor.getModel().getName(),ex.getMessage()});
+                        , new Object[] {actor.getSpatial().getName(),ex.getMessage()});
                 if (future != null) {
                     future.cancel(true);
                 }

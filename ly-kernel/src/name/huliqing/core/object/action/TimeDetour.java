@@ -35,18 +35,18 @@ public class TimeDetour extends Detour{
     @Override
     public void setActor(Actor actor) {
         super.setActor(actor);
-        lastPos.set(actor.getModel().getWorldTranslation());
+        lastPos.set(actor.getSpatial().getWorldTranslation());
     }
 
     @Override
     protected boolean isNeedDetour() {
 //        float lastDistance = actor.getModel().getWorldTranslation().distance(lastPos);
-        float distanceSquared = actor.getModel().getWorldTranslation().distanceSquared(lastPos);
+        float distanceSquared = actor.getSpatial().getWorldTranslation().distanceSquared(lastPos);
         if (distanceSquared <= minDistanceSquared) {
             return true;
         } else {
 //            Logger.get(getClass()).log(Level.INFO, "TimeDetour ---- Not need detour ----");
-            lastPos.set(actor.getModel().getWorldTranslation());
+            lastPos.set(actor.getSpatial().getWorldTranslation());
             return false;
         }
     }

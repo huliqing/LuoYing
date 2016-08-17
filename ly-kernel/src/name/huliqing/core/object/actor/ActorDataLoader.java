@@ -13,7 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.core.data.ActorData;
 import name.huliqing.core.data.AttributeData;
-import name.huliqing.core.data.ControlData;
+import name.huliqing.core.data.ModuleData;
 import name.huliqing.core.data.DropData;
 import name.huliqing.core.xml.Proto;
 import name.huliqing.core.data.ObjectData;
@@ -52,29 +52,29 @@ public class ActorDataLoader implements DataLoader<ActorData> {
             }
         }
         
-        // skinBase 基本皮肤,
-        // 注1：可能部分角色没有基本皮肤，如不可换装备的角色类型
-        // 注2: 基本皮肤不会存放在itemStore中，而skinOutfit会存放在itemStore
-        List<SkinData> skinBases = null;
-        String[] skinBasesTemp = proto.getAsArray("skinBase");
-        if (skinBasesTemp != null) {
-            skinBases = new ArrayList<SkinData>(skinBasesTemp.length);
-            for (String sbt : skinBasesTemp) {
-                SkinData sdb = DataFactory.createData(sbt);
-                sdb.setUsing(true);// 对于skinBase来说设置using=true没有太大意义，因为skinBase不会在界面上显示
-                skinBases.add(sdb);
-            }            
-        }
+//        // skinBase 基本皮肤,
+//        // 注1：可能部分角色没有基本皮肤，如不可换装备的角色类型
+//        // 注2: 基本皮肤不会存放在itemStore中，而skinOutfit会存放在itemStore
+//        List<SkinData> skinBases = null;
+//        String[] skinBasesTemp = proto.getAsArray("skinBase");
+//        if (skinBasesTemp != null) {
+//            skinBases = new ArrayList<SkinData>(skinBasesTemp.length);
+//            for (String sbt : skinBasesTemp) {
+//                SkinData sdb = DataFactory.createData(sbt);
+//                sdb.setUsing(true);// 对于skinBase来说设置using=true没有太大意义，因为skinBase不会在界面上显示
+//                skinBases.add(sdb);
+//            }            
+//        }
         
-        // skinOutfit
-        String[] skinOutfitTemp = proto.getAsArray("skinOutfit");
-        if (skinOutfitTemp != null) {
-            for (String skinId : skinOutfitTemp) {
-                itemStore.addItem((ObjectData) DataFactory.createData(skinId), 1);
-                SkinData skinOutfit = (SkinData) itemStore.getItem(skinId);
-                skinOutfit.setUsing(true);
-            }
-        }
+//        // skinOutfit
+//        String[] skinOutfitTemp = proto.getAsArray("skinOutfit");
+//        if (skinOutfitTemp != null) {
+//            for (String skinId : skinOutfitTemp) {
+//                itemStore.addItem((ObjectData) DataFactory.createData(skinId), 1);
+//                SkinData skinOutfit = (SkinData) itemStore.getItem(skinId);
+//                skinOutfit.setUsing(true);
+//            }
+//        }
         
         // items - weapon
         String[] weaponIds = proto.getAsArray("weapon");
@@ -189,24 +189,24 @@ public class ActorDataLoader implements DataLoader<ActorData> {
         data.setResist(resistData);
 //        data.setTalents(talents);
 //        data.setTalentPoints(proto.getAsInteger("talentPoints", 0));
-        data.setTalentPointsLevelEl(proto.getAsString("talentPointsLevelEl"));
+//        data.setTalentPointsLevelEl(proto.getAsString("talentPointsLevelEl"));
         data.setTeam(proto.getAsInteger("team", 0));
         data.setLiving(proto.getAsBoolean("living", false));
         data.setFollowTarget(proto.getAsInteger("followTarget", -1));
         data.setChat(proto.getAsString("chat"));
         
         
-        ArrayList<ControlData> controlDatas;
+        ArrayList<ModuleData> controlDatas;
         String[] cArr = proto.getAsArray("controls");
         if (cArr != null) {
-            controlDatas = new ArrayList<ControlData>(cArr.length);
+            controlDatas = new ArrayList<ModuleData>(cArr.length);
             for (String controlId : cArr) {
-                controlDatas.add((ControlData) DataFactory.createData(controlId));
+                controlDatas.add((ModuleData) DataFactory.createData(controlId));
             }
         } else {
-            controlDatas = new ArrayList<ControlData>(1);
+            controlDatas = new ArrayList<ModuleData>(1);
         }
-        data.setControlDatas(controlDatas);
+        data.setModuleDatas(controlDatas);
         
     }
     

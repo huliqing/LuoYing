@@ -33,7 +33,7 @@ public class MessSCActorRemove extends MessBase {
         PlayService playService = Factory.get(PlayService.class);
         Actor actorToRemove = playService.findActor(actorId);
         if (actorToRemove != null) {
-            playService.removeObject(actorToRemove.getModel());
+            playService.removeObject(actorToRemove.getSpatial());
         }
     }
     

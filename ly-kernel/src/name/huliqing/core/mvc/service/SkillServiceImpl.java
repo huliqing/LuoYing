@@ -23,7 +23,7 @@ import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actor.SkillListener;
-import name.huliqing.core.object.control.ActorSkillControl;
+import name.huliqing.core.object.actormodule.SkillActorModule;
 import name.huliqing.core.object.skill.Skill;
 import name.huliqing.core.object.skill.Walk;
 
@@ -91,9 +91,9 @@ public class SkillServiceImpl implements SkillService {
     public Skill getSkillInstance(Actor actor, String skillId) {
         SkillData skillData = getSkill(actor, skillId);
         if (skillData != null) {
-            ActorSkillControl skillControl = actor.getModel().getControl(ActorSkillControl.class);
-            if (skillControl != null) {
-                return skillControl.findSkill(skillData);
+            SkillActorModule module = actor.getModule(SkillActorModule.class);
+            if (module != null) {
+                return module.findSkill(skillData);
             }
         }
         return null;
@@ -146,12 +146,12 @@ public class SkillServiceImpl implements SkillService {
             return false;
         }
         
-        ActorSkillControl skillControl = actor.getModel().getControl(ActorSkillControl.class);
-        if (skillControl == null) {
+        SkillActorModule module = actor.getModule(SkillActorModule.class);
+        if (module == null) {
             return false;
         }
         
-        boolean result = skillControl.playFaceTo(position);
+        boolean result = module.playFaceTo(position);
         return result;
     }
     
@@ -201,7 +201,7 @@ public class SkillServiceImpl implements SkillService {
                 return SkillConstants.STATE_WEAPON_NOT_ALLOW;
             }
             
-            if (!actor.getData().isWeaponTakeOn()) {
+            if (!skinService.isWeaponTakeOn(actor)) {
                 return SkillConstants.STATE_WEAPON_NEED_TAKE_ON;
             }
         }
@@ -239,11 +239,11 @@ public class SkillServiceImpl implements SkillService {
         // 效果,这些状态可能会监听角色技能的执行，并判断是否允许执行这个技能。
         // 比如“晕眩”、“缠绕”等状态就可能监测并侦听角色的技能，以阻止一些技能
         // 的执行。
-        ActorSkillControl skillControl = actor.getModel().getControl(ActorSkillControl.class);
-        if (skillControl == null) {
+        SkillActorModule module = actor.getModule(SkillActorModule.class);
+        if (module == null) {
             return SkillConstants.STATE_UNDEFINE;
         }
-        List<SkillListener> skillListeners = skillControl.getSkillListeners();
+        List<SkillListener> skillListeners = module.getSkillListeners();
         if (skillListeners != null && !skillListeners.isEmpty()) {
             for (SkillListener sl : skillListeners) {
                 if (!sl.onSkillHookCheck(actor, skill)) {
@@ -257,7 +257,7 @@ public class SkillServiceImpl implements SkillService {
         // 11.如果当前正在执行的所有技能都可以被新技能覆盖，则直接返回OK.
         // 注意：overlaps判断要放在interrupts判断之前，因为如果可以覆盖正在执行
         // 的技能就不需要中断它们
-        long runningStates = skillControl.getRunningSkillStates();
+        long runningStates = module.getRunningSkillStates();
         if ((data.getOverlaps() & runningStates) == runningStates) {
             return SkillConstants.STATE_OK;
         }
@@ -303,7 +303,7 @@ public class SkillServiceImpl implements SkillService {
         }
         
         // --1. 执行技能
-        ActorSkillControl c = actor.getModel().getControl(ActorSkillControl.class);
+        SkillActorModule c = actor.getModule(SkillActorModule.class);
         if (c == null) {
             return false;
         }
@@ -331,7 +331,7 @@ public class SkillServiceImpl implements SkillService {
 
     @Override
     public boolean playSkill(Actor actor, String skillId, boolean force) {
-        ActorSkillControl c = actor.getModel().getControl(ActorSkillControl.class);
+        SkillActorModule c = actor.getModule(SkillActorModule.class);
         if (c == null) {
             return false;
         }
@@ -343,7 +343,7 @@ public class SkillServiceImpl implements SkillService {
 
     @Override
     public boolean playWalk(Actor actor, String skillId, Vector3f dir, boolean faceToDir, boolean force) {
-        ActorSkillControl c = actor.getModel().getControl(ActorSkillControl.class);
+        SkillActorModule c = actor.getModule(SkillActorModule.class);
         if (c == null) {
             return false;
         }
@@ -363,16 +363,16 @@ public class SkillServiceImpl implements SkillService {
     
     @Override
     public boolean isPlayingSkill(Actor actor) {
-        ActorSkillControl skillControl = actor.getModel().getControl(ActorSkillControl.class);
-        if (skillControl != null) {
-            return skillControl.isPlayingSkill();
+        SkillActorModule module = actor.getModule(SkillActorModule.class);
+        if (module != null) {
+            return module.isPlayingSkill();
         }
         return false;
     }
     
     @Override
     public boolean isPlayingSkill(Actor actor, SkillType skillType) {
-        ActorSkillControl c = actor.getModel().getControl(ActorSkillControl.class);
+        SkillActorModule c = actor.getModule(SkillActorModule.class);
         if (c != null) {
             return c.isPlayingSkill(skillType);
         }
@@ -381,7 +381,7 @@ public class SkillServiceImpl implements SkillService {
 
     @Override
     public boolean isWaiting(Actor actor) {
-        ActorSkillControl c = actor.getModel().getControl(ActorSkillControl.class);
+        SkillActorModule c = actor.getModule(SkillActorModule.class);
         if (c != null) {
             return c.isWaiting();
         }
@@ -390,7 +390,7 @@ public class SkillServiceImpl implements SkillService {
 
     @Override
     public boolean isRunning(Actor actor) {
-        ActorSkillControl c = actor.getModel().getControl(ActorSkillControl.class);
+        SkillActorModule c = actor.getModule(SkillActorModule.class);
         if (c != null) {
             return c.isRunning();
         }
@@ -399,36 +399,36 @@ public class SkillServiceImpl implements SkillService {
     
     @Override
     public boolean isDucking(Actor actor) {
-        ActorSkillControl c = actor.getModel().getControl(ActorSkillControl.class);
+        SkillActorModule c = actor.getModule(SkillActorModule.class);
         return c != null ? c.isDucking() : false;
     }
 
     @Override
     public boolean isAttacking(Actor actor) {
-        ActorSkillControl c = actor.getModel().getControl(ActorSkillControl.class);
+        SkillActorModule c = actor.getModule(SkillActorModule.class);
         return c != null ? c.isAttacking() : false;
     }
 
     @Override
     public boolean isDefending(Actor actor) {
-        ActorSkillControl c = actor.getModel().getControl(ActorSkillControl.class);
+        SkillActorModule c = actor.getModule(SkillActorModule.class);
         return c != null ? c.isDefending(): false;
     }
 
     @Override
     public Skill getPlayingSkill(Actor actor, SkillType skillType) {
-        ActorSkillControl skillControl = actor.getModel().getControl(ActorSkillControl.class);
-        if (skillControl != null) {
-            return skillControl.getPlayingSkill(skillType);
+        SkillActorModule module = actor.getModule(SkillActorModule.class);
+        if (module != null) {
+            return module.getPlayingSkill(skillType);
         }
         return null;
     }
 
     @Override
     public long getPlayingSkillStates(Actor actor) {
-        ActorSkillControl skillControl = actor.getModel().getControl(ActorSkillControl.class);
-        if (skillControl != null) {
-            return skillControl.getPlayingSkillStates();
+        SkillActorModule module = actor.getModule(SkillActorModule.class);
+        if (module != null) {
+            return module.getPlayingSkillStates();
         }
         return 0;
     }
@@ -478,21 +478,21 @@ public class SkillServiceImpl implements SkillService {
     
     @Override
     public float getSkillTrueUseTime(Actor actor, SkillData skillData) {
-        ActorSkillControl skillControl = actor.getModel().getControl(ActorSkillControl.class);
-        Skill skill = skillControl.findSkill(skillData);
+        SkillActorModule module = actor.getModule(SkillActorModule.class);
+        Skill skill = module.findSkill(skillData);
         return skill.getTrueUseTime();
     }
 
     @Override
     public void addSkillListener(Actor actor, SkillListener skillListener) {
-        ActorSkillControl control = actor.getModel().getControl(ActorSkillControl.class);
-        control.addSkillListener(skillListener);
+        SkillActorModule module = actor.getModule(SkillActorModule.class);
+        module.addSkillListener(skillListener);
     }
 
     @Override
     public boolean removeSkillListener(Actor actor, SkillListener skillListener) {
-        ActorSkillControl control = actor.getModel().getControl(ActorSkillControl.class);
-        return control.removeSkillListener(skillListener);
+        SkillActorModule module = actor.getModule(SkillActorModule.class);
+        return module.removeSkillListener(skillListener);
     }
     
 }

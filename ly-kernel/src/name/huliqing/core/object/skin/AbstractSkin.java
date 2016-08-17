@@ -74,8 +74,8 @@ public abstract class AbstractSkin<T extends SkinData> implements Skin<T> {
     }
     
     @Override
-    public void attach(Actor actor) {
-        Spatial actorSpatial = (Spatial) actor.getModel();
+    public void attach(Actor actor, boolean isWeaponTakedOn) {
+        Spatial actorSpatial = (Spatial) actor.getSpatial();
         if (!(actorSpatial instanceof Node)) {
             Logger.getLogger(OutfitSkin.class.getName()).log(Level.WARNING
                     , "actorSpatial is not a Node, could not attach skins, actorId={0}, skinId={1}"
@@ -92,7 +92,7 @@ public abstract class AbstractSkin<T extends SkinData> implements Skin<T> {
         Node actorNode = (Node) actorSpatial;
         
         // 首先把挂靠着的武器移除
-        Spatial skinNode = findSkinNodes(actor.getModel(), data);
+        Spatial skinNode = findSkinNodes(actor.getSpatial(), data);
         if (skinNode == null) {
             skinNode = AssetLoader.loadModel(data.getFile());
             skinNode.setUserData(ObjectData.USER_DATA, data);
@@ -177,7 +177,7 @@ public abstract class AbstractSkin<T extends SkinData> implements Skin<T> {
 
     @Override
     public void detach(Actor actor) {
-        Spatial sn = findSkinNodes(actor.getModel(), data);
+        Spatial sn = findSkinNodes(actor.getSpatial(), data);
         if (sn != null) {
             sn.removeFromParent();
             SkinData sd = sn.getUserData(ObjectData.USER_DATA);
@@ -229,7 +229,7 @@ public abstract class AbstractSkin<T extends SkinData> implements Skin<T> {
     // 打开skin的hws,如果角色actor主SkeletonControl已经打开该功能,则skinNode必须自已打开.
     private void checkSwitchToHardware(Actor actor, Spatial skinNode) {
         // 如果hsw未打开,则不需要管,交由sc内部去一起处理就可以.
-        SkeletonControl sc = actor.getModel().getControl(SkeletonControl.class);
+        SkeletonControl sc = actor.getSpatial().getControl(SkeletonControl.class);
         if (!sc.isHardwareSkinningUsed()) {
             return;
         }
@@ -252,7 +252,7 @@ public abstract class AbstractSkin<T extends SkinData> implements Skin<T> {
                 mesh.prepareForAnim(false);
             }
         }
-        sc.setSpatial(actor.getModel());
+        sc.setSpatial(actor.getSpatial());
     }
     
     private void findTargets(Node node, Set<Mesh> targets, Set<Material> materials) {

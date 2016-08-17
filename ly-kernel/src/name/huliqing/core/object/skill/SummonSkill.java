@@ -17,7 +17,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.core.Factory;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.control.ActorControl;
 import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.mvc.network.ActorNetwork;
@@ -272,14 +271,14 @@ public class SummonSkill<T extends SkillData> extends AbstractSkill<T> {
                 // 动画展示召唤角色，上升动画,end位置要向上加大一些，以避免召唤后角色在
                 // 开启物理特性后掉到地下。
                 Vector3f start = tv.vect1.set(summonPos).subtractLocal(
-                        0, GeometryUtils.getModelHeight(summonActor.getModel()), 0);
+                        0, GeometryUtils.getModelHeight(summonActor.getSpatial()), 0);
                 Vector3f end = tv.vect2.set(summonPos).addLocal(0, 0.5f, 0);
                 
 //                summonActor.setLocation(start);
                 actorService.setLocation(summonActor, start);
-                actorService.setLookAt(summonActor, tv.vect3.set(actor.getModel().getWorldTranslation()).setY(start.getY()));
+                actorService.setLookAt(summonActor, tv.vect3.set(actor.getSpatial().getWorldTranslation()).setY(start.getY()));
                 
-                summonActor.getModel().addControl(showAnim);
+                summonActor.getSpatial().addControl(showAnim);
                 showAnim.setStartPos(start);
                 showAnim.setEndPos(end);
                 showAnim.start();

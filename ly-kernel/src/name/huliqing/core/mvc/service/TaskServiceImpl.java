@@ -9,7 +9,7 @@ import name.huliqing.core.data.TaskData;
 import name.huliqing.core.loader.Loader;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actor.TaskListener;
-import name.huliqing.core.object.control.ActorTaskControl;
+import name.huliqing.core.object.actormodule.TaskActorModule;
 import name.huliqing.core.object.task.Task;
 
 /**
@@ -32,9 +32,13 @@ public class TaskServiceImpl implements TaskService {
         return Loader.loadTask(taskData);
     }
     
+    public <T extends Object> T  getModule(Class<T> moduleType) {
+        return null;
+    }
+    
     @Override
     public void addTask(Actor actor, Task task) {
-        ActorTaskControl control = actor.getModel().getControl(ActorTaskControl.class);
+        TaskActorModule control = actor.getModule(TaskActorModule.class);
         if (control != null) {
             control.addTask(task);
         }
@@ -42,7 +46,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task getTask(Actor actor, String taskId) {
-        ActorTaskControl control = actor.getModel().getControl(ActorTaskControl.class);
+        TaskActorModule control = actor.getModule(TaskActorModule.class);
         if (control != null) {
             return control.getTask(taskId);
         }
@@ -51,7 +55,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<Task> getTasks(Actor actor) {
-        ActorTaskControl control = actor.getModel().getControl(ActorTaskControl.class);
+        TaskActorModule control = actor.getModule(TaskActorModule.class);
         if (control != null) {
             return control.getTasks();
         }
@@ -60,7 +64,7 @@ public class TaskServiceImpl implements TaskService {
     
     @Override
     public List<TaskData> getTaskDatas(Actor actor) {
-        ActorTaskControl control = actor.getModel().getControl(ActorTaskControl.class);
+        TaskActorModule control = actor.getModule(TaskActorModule.class);
         if (control != null) {
             return control.getTaskDatas();
         }
@@ -75,7 +79,7 @@ public class TaskServiceImpl implements TaskService {
     
     @Override
     public void completeTask(Actor actor, Task task) {
-        ActorTaskControl control = actor.getModel().getControl(ActorTaskControl.class);
+        TaskActorModule control = actor.getModule(TaskActorModule.class);
         if (control != null) {
             control.completeTask(task);
         }
@@ -96,7 +100,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public void addTaskListener(Actor actor, TaskListener taskListener) {
-        ActorTaskControl control = actor.getModel().getControl(ActorTaskControl.class);
+        TaskActorModule control = actor.getModule(TaskActorModule.class);
         if (control != null) {
             control.addTaskListener(taskListener);
         }
@@ -104,7 +108,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public boolean removeTaskListener(Actor actor, TaskListener taskListener) {
-        ActorTaskControl control = actor.getModel().getControl(ActorTaskControl.class);
+        TaskActorModule control = actor.getModule(TaskActorModule.class);
         return control != null && control.removeTaskListener(taskListener);
     }
     

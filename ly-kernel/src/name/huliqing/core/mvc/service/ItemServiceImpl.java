@@ -17,7 +17,7 @@ import name.huliqing.core.mvc.dao.ItemDao;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actor.ItemListener;
-import name.huliqing.core.object.control.ActorItemControl;
+import name.huliqing.core.object.actormodule.ItemActorModule;
 import name.huliqing.core.object.sound.SoundManager;
 
 /**
@@ -41,7 +41,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public void addItem(Actor actor, String itemId, int count) {
         itemDao.addItem(actor, itemId, count);
-        ActorItemControl itemControl = actor.getModel().getControl(ActorItemControl.class);
+        ItemActorModule itemControl = actor.getModule(ItemActorModule.class);
         
         // 通知侦听器
         List<ItemListener> ils = itemControl.getItemListeners();
@@ -58,7 +58,7 @@ public class ItemServiceImpl implements ItemService {
                     , MessageType.item);
 
             // 播放获得物品时的声效
-            SoundManager.getInstance().playGetItemSound(itemId, actor.getModel().getWorldTranslation());
+            SoundManager.getInstance().playGetItemSound(itemId, actor.getSpatial().getWorldTranslation());
         }
     }
 
@@ -67,7 +67,7 @@ public class ItemServiceImpl implements ItemService {
         int trueRemoved = itemDao.removeItem(actor, itemId, count);
         
         // 通知侦听器
-        ActorItemControl itemControl = actor.getModel().getControl(ActorItemControl.class);
+        ItemActorModule itemControl = actor.getModule(ItemActorModule.class);
         List<ItemListener> ils = itemControl.getItemListeners();
         if (ils != null && trueRemoved > 0) {
             for (ItemListener il : ils) {
@@ -133,7 +133,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public void addItemListener(Actor actor, ItemListener itemListener) {
-        ActorItemControl c = actor.getModel().getControl(ActorItemControl.class);
+        ItemActorModule c = actor.getModule(ItemActorModule.class);
         if (c != null) {
             c.addItemListener(itemListener);
         } else {
@@ -143,7 +143,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public boolean removeItemListener(Actor actor, ItemListener itemListener) {
-        ActorItemControl c = actor.getModel().getControl(ActorItemControl.class);
+        ItemActorModule c = actor.getModule(ItemActorModule.class);
         if (c != null) {
             return c.removeItemListener(itemListener);
         } else {

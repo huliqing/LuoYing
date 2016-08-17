@@ -15,7 +15,7 @@ import name.huliqing.core.object.action.FightAction;
 import name.huliqing.core.object.action.FollowAction;
 import name.huliqing.core.object.action.RunAction;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.control.ActorActionControl;
+import name.huliqing.core.object.actormodule.ActionActorModule;
 
 /**
  *
@@ -50,7 +50,7 @@ public class ActionServiceImpl implements ActionService {
 
     @Override
     public void playRun(Actor actor, Vector3f pos) {
-        ActorActionControl control = getActionControl(actor);
+        ActionActorModule control = getActionControl(actor);
         RunAction ra = control.getDefRunAction();
         // 如果角色没有指定默认“跑路”行为，则为角色创建一个。
         if (ra == null) {
@@ -76,7 +76,7 @@ public class ActionServiceImpl implements ActionService {
     @Override
     public void playFight(Actor actor, Actor target, String skillId) {
 //        ActionProcessor ap = actor.getActionProcessor();
-        ActorActionControl control = getActionControl(actor);
+        ActionActorModule control = getActionControl(actor);
         FightAction fa = control.getDefFightAction();
         // 如果角色没有指定特定的战斗行为，则为角色创建一个。
         if (fa == null) {
@@ -106,7 +106,7 @@ public class ActionServiceImpl implements ActionService {
 
     @Override
     public boolean isPlayingFight(Actor actor) {
-        ActorActionControl control = getActionControl(actor);
+        ActionActorModule control = getActionControl(actor);
         Action current = control.getAction();
         return current instanceof FightAction;
     }
@@ -128,7 +128,7 @@ public class ActionServiceImpl implements ActionService {
         return getActionControl(actor).getAction();
     }
     
-    private ActorActionControl getActionControl(Actor actor) {
-        return actor.getModel().getControl(ActorActionControl.class);
+    private ActionActorModule getActionControl(Actor actor) {
+        return actor.getModule(ActionActorModule.class);
     }
 }

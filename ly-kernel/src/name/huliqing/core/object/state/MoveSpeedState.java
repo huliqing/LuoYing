@@ -82,7 +82,7 @@ public class MoveSpeedState extends AttributeState {
     private void showMoveEffect() {
         if (moveEffect == null) {
             moveEffect = effectService.loadEffect(moveEffectId);
-            moveEffect.setTraceObject(actor.getModel());
+            moveEffect.setTraceObject(actor.getSpatial());
             EffectManager.getInstance().addEffect(moveEffect);
         }
         if (moveEffect != null) {

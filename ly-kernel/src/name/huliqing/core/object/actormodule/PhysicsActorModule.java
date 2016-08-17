@@ -3,21 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.core.object.control;
+package name.huliqing.core.object.actormodule;
 
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.math.Vector3f;
-import com.jme3.renderer.RenderManager;
-import com.jme3.renderer.ViewPort;
 import com.jme3.util.TempVars;
-import name.huliqing.core.data.ControlData;
-import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.data.ModuleData;
 
 /**
  * 角色的物理控制器
  * @author huliqing
+ * @param <T>
  */
-public class ActorPhysicsControl extends ActorControl<ControlData> {
+public class PhysicsActorModule<T extends ModuleData> extends AbstractSimpleActorModule<T> {
 
     private BetterCharacterControlWrap innerControl;
     private float radius = 1;
@@ -25,7 +23,7 @@ public class ActorPhysicsControl extends ActorControl<ControlData> {
     private float mass = 1;
 
     @Override
-    public void setData(ControlData data) {
+    public void setData(T data) {
         super.setData(data);
         this.radius = data.getAsFloat("radius", radius);
         this.height = data.getAsFloat("height", height);
@@ -33,34 +31,30 @@ public class ActorPhysicsControl extends ActorControl<ControlData> {
     }
     
     @Override
-    public void initialize(Actor actor) {
-        super.initialize(actor);
+    public void initialize() {
+        super.initialize();
         if (innerControl == null) {
             innerControl = new BetterCharacterControlWrap(radius, height, mass);
         }
-        spatial.addControl(innerControl);
+        actor.getSpatial().addControl(innerControl);
     }
 
-    @Override
-    public void actorUpdate(float tpf) {}
-    
-    @Override
-    public void actorRender(RenderManager rm, ViewPort vp) {}
-
-    @Override
     public void setEnabled(boolean enabled) {
-        super.setEnabled(enabled);
         innerControl.setEnabled(enabled);
+    }
+    
+    public boolean isEnabled() {
+        return innerControl.isEnabled();
     }
 
     @Override
     public void cleanup() {
-        spatial.removeControl(innerControl);
+        actor.getSpatial().removeControl(innerControl);
         super.cleanup(); 
     }
     
     public Vector3f getLocation() {
-        return spatial.getWorldTranslation();
+        return actor.getSpatial().getWorldTranslation();
     }
     
     public void setLocation(Vector3f location) {

@@ -51,7 +51,7 @@ public class DefaultServerListener extends AbstractServerListener<Actor> {
             syncTimer = 0;
             for (Actor actor : syncObjects) {
                 syncTempCache.setActorId(actor.getData().getUniqueId());
-                syncTempCache.setLocation(actor.getModel().getWorldTranslation());
+                syncTempCache.setLocation(actor.getSpatial().getWorldTranslation());
                 syncTempCache.setWalkDirection(actorService.getWalkDirection(actor));
                 syncTempCache.setViewDirection(actorService.getViewDirection(actor));
                 gameServer.broadcast(syncTempCache);

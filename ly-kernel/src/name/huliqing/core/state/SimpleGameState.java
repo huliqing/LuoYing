@@ -36,7 +36,6 @@ import name.huliqing.core.manager.PickManager.PickResult;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.view.ShortcutManager;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.control.ActorControl;
 import name.huliqing.core.object.anim.Anim;
 import name.huliqing.core.object.bullet.BulletCache;
 import name.huliqing.core.object.effect.EffectCache;
@@ -193,7 +192,7 @@ public  class SimpleGameState extends GameState implements UIEventListener {
             if (!playerPickable && a == getPlayer()) {
                 continue;
             }
-            if (a.getModel().getWorldBound().intersects(ray)) {
+            if (a.getSpatial().getWorldBound().intersects(ray)) {
                 cList.add(a);
             }
         }
@@ -204,7 +203,7 @@ public  class SimpleGameState extends GameState implements UIEventListener {
         float tempDistance;
         Actor result = null;
         for (Actor a : cList) {
-            tempDistance = a.getModel().getWorldBound().getCenter().distanceSquared(camLoc);
+            tempDistance = a.getSpatial().getWorldBound().getCenter().distanceSquared(camLoc);
             if (tempDistance < minDistance) {
                 minDistance = tempDistance;
                 result = a;
@@ -346,7 +345,7 @@ public  class SimpleGameState extends GameState implements UIEventListener {
             
             // 移出场景
 //            actor.getModel().removeFromParent();
-            scene.removeSceneObject(actor.getModel());
+            scene.removeSceneObject(actor.getSpatial());
 
             // 销毁角色，释放资源
             actor.cleanup();
@@ -391,7 +390,7 @@ public  class SimpleGameState extends GameState implements UIEventListener {
     
     private boolean addActor(Actor actor, boolean gui) {
         // 防止添加的角色掉到地面以下。
-        Vector3f pos = actor.getModel().getWorldTranslation();
+        Vector3f pos = actor.getSpatial().getWorldTranslation();
         pos.setY(playService.getTerrainHeight(pos.x, pos.z));
         
         // 让动态角色产生时的Y坐标值稍微增加一点，可避免角色加入场景时与地面
@@ -407,9 +406,9 @@ public  class SimpleGameState extends GameState implements UIEventListener {
         // 不要将角色或object添加到scene中，因为scene会进行缓存，以免忘记清理的时候
         // 在再次进入state时还残留角色。
         if (gui) {
-            UIState.getInstance().addUI(actor.getModel());
+            UIState.getInstance().addUI(actor.getSpatial());
         } 
-        scene.addSceneObject(actor.getModel());
+        scene.addSceneObject(actor.getSpatial());
         
         // 如果角色有指定队伍，则应该处理是否在当前队伍列表中。
         if (actor.getData().getTeam() > 0) {
@@ -465,7 +464,7 @@ public  class SimpleGameState extends GameState implements UIEventListener {
         }
         
         // 相机跟随
-        setChase(player.getModel());
+        setChase(player.getSpatial());
     }
     
     @Override
@@ -556,7 +555,7 @@ public  class SimpleGameState extends GameState implements UIEventListener {
                 || temp == player
                 || actorService.isDead(temp) 
                 || !actorService.isEnemy(temp, player)
-                || !isInScene(temp.getModel())
+                || !isInScene(temp.getSpatial())
                 ) {
             float distance = actorService.getViewDistance(player) * 2;
             temp = actorService.findNearestEnemyExcept(player, distance, null);

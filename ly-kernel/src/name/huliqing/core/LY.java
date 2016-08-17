@@ -34,7 +34,7 @@ import name.huliqing.core.data.ChannelData;
 import name.huliqing.core.data.ChatData;
 import name.huliqing.core.data.ConfigData;
 import name.huliqing.core.data.ConnData;
-import name.huliqing.core.data.ControlData;
+import name.huliqing.core.data.ModuleData;
 import name.huliqing.core.data.DropData;
 import name.huliqing.core.data.DropItem;
 import name.huliqing.core.data.EffectData;
@@ -126,7 +126,6 @@ import name.huliqing.core.object.action.IdlePatrolAction;
 import name.huliqing.core.object.action.IdleStaticAction;
 import name.huliqing.core.object.action.RunPathAction;
 import name.huliqing.core.object.action.RunSimpleAction;
-import name.huliqing.core.object.control.ActorControl;
 import name.huliqing.core.object.actor.ActorDataLoader;
 import name.huliqing.core.object.actor.ItemStore;
 import name.huliqing.core.object.actor.SkillStore;
@@ -156,7 +155,7 @@ import name.huliqing.core.object.bullet.CurveBullet;
 import name.huliqing.core.object.bullet.CurveTrailBullet;
 import name.huliqing.core.object.bullet.SimpleBullet;
 import name.huliqing.core.object.bullet.StraightBullet;
-import name.huliqing.core.object.control.ActorChannelControl;
+import name.huliqing.core.object.actormodule.ChannelActorModule;
 import name.huliqing.core.object.channel.ChannelDataLoader;
 import name.huliqing.core.object.channel.SimpleChannel;
 import name.huliqing.core.object.chat.ChatDataLoader;
@@ -166,20 +165,19 @@ import name.huliqing.core.object.chat.SendChat;
 import name.huliqing.core.object.chat.ShopChat;
 import name.huliqing.core.object.chat.TaskChat;
 import name.huliqing.core.object.config.ConfigDataLoader;
-import name.huliqing.core.object.control.ActorActionControl;
-import name.huliqing.core.object.control.ActorAttributeControl;
-import name.huliqing.core.object.control.ActorBaseControl;
-import name.huliqing.core.object.control.ActorChatControl;
-import name.huliqing.core.object.control.ActorItemControl;
-import name.huliqing.core.object.control.ActorLogicControl;
-import name.huliqing.core.object.control.ActorSkinControl;
-import name.huliqing.core.object.control.ControlDataLoader;
-import name.huliqing.core.object.control.ActorPhysicsControl;
-import name.huliqing.core.object.control.ActorResistControl;
-import name.huliqing.core.object.control.ActorSkillControl;
-import name.huliqing.core.object.control.ActorStateControl;
-import name.huliqing.core.object.control.ActorTalentControl;
-import name.huliqing.core.object.control.ActorTaskControl;
+import name.huliqing.core.object.actormodule.ActionActorModule;
+import name.huliqing.core.object.actormodule.AttributeActorModule;
+import name.huliqing.core.object.actormodule.BaseActorModule;
+import name.huliqing.core.object.actormodule.ChatActorModule;
+import name.huliqing.core.object.actormodule.ItemActorModule;
+import name.huliqing.core.object.actormodule.LogicActorModule;
+import name.huliqing.core.object.actormodule.SkinActorModule;
+import name.huliqing.core.object.actormodule.PhysicsActorModule;
+import name.huliqing.core.object.actormodule.ResistActorModule;
+import name.huliqing.core.object.actormodule.SkillActorModule;
+import name.huliqing.core.object.actormodule.StateActorModule;
+import name.huliqing.core.object.actormodule.TalentActorModule;
+import name.huliqing.core.object.actormodule.TaskActorModule;
 import name.huliqing.core.object.drop.DropDataLoader;
 import name.huliqing.core.object.effect.EffectDataLoader;
 import name.huliqing.core.object.effect.EncircleHaloEffect;
@@ -359,7 +357,7 @@ public class LY {
         Serializer.registerClass(ChannelData.class);
         Serializer.registerClass(ChatData.class);
         Serializer.registerClass(ConfigData.class);
-        Serializer.registerClass(ControlData.class);
+        Serializer.registerClass(ModuleData.class);
         Serializer.registerClass(DropData.class);
         Serializer.registerClass(EffectData.class);
         Serializer.registerClass(ElData.class);
@@ -389,6 +387,7 @@ public class LY {
     
         
     private static void registerProcessor() {
+        
         // Action
         DataFactory.register("actionIdleStatic", ActionData.class, ActionDataLoader.class, IdleStaticAction.class);
         DataFactory.register("actionIdleDynamic", ActionData.class, ActionDataLoader.class,  IdleDynamicAction.class);
@@ -398,11 +397,11 @@ public class LY {
         DataFactory.register("actionFollow", ActionData.class, ActionDataLoader.class,  FollowPathAction.class);
         DataFactory.register("actionFight", ActionData.class, ActionDataLoader.class,  FightDynamicAction.class);
         
-         //ActorAnim
-        DataFactory.register("actorAnimCurveMove",  ActorAnimData.class, ActorAnimDataLoader.class, ActorCurveMove.class);
-        
         // Actor
         DataFactory.register("actor",  ActorData.class, ActorDataLoader.class, ActorControl.class);
+        
+         //ActorAnim
+        DataFactory.register("actorAnimCurveMove",  ActorAnimData.class, ActorAnimDataLoader.class, ActorCurveMove.class);
         
         // ActorLogic
         DataFactory.register("actorLogicFight",  ActorLogicData.class, ActorLogicDataLoader.class, FightActorLogic.class);
@@ -415,6 +414,22 @@ public class LY {
         DataFactory.register("actorLogicDefend",  ActorLogicData.class, ActorLogicDataLoader.class,  DefendActorLogic.class);
         DataFactory.register("actorLogicIdle",  ActorLogicData.class, ActorLogicDataLoader.class,  IdleActorLogic.class);
         DataFactory.register("actorLogicShop",  ActorLogicData.class, ActorLogicDataLoader.class,  ShopActorLogic.class);
+        
+        // actorModule 
+        DataFactory.register("actorModuleAction",  ActionActorModuleData.class, ActionActorModuleDataLoader.class, ActionActorModule.class);
+        DataFactory.register("actorModuleAttribute",  AttributeActorModuleData.class, AttributeActorModuleDataLoader.class, AttributeActorModule.class);
+        DataFactory.register("actorModuleBase",  BaseActorModuleData.class, BaseActorModuleDataLoader.class, BaseActorModule.class);
+        DataFactory.register("actorModuleChannel",  ChannelActorModuleData.class, ChannelActorModuleDataLoader.class, ChannelActorModule.class);
+        DataFactory.register("actorModuleChat",  ChatActorModuleData.class, ChatActorModuleDataLoader.class, ChatActorModule.class);
+        DataFactory.register("actorModuleItem",  ItemActorModuleData.class, ItemActorModuleDataLoader.class, ItemActorModule.class);
+        DataFactory.register("actorModuleLogic",  LogicActorModuleData.class, LogicActorModuleDataLoader.class, LogicActorModule.class);
+        DataFactory.register("actorModulePhysics",  PhysicsActorModuleData.class, PhysicsActorModuleDataLoader.class, PhysicsActorModule.class);
+        DataFactory.register("actorModuleResist",  ResistActorModuleData.class, ResistActorModuleDataLoader.class, ResistActorModule.class);
+        DataFactory.register("actorModuleSkill",  SkillActorModuleData.class, SkillActorModuleDataLoader.class, SkillActorModule.class);
+        DataFactory.register("actorModuleSkin",  SkinActorModuleData.class, SkinActorModuleDataLoader.class, SkinActorModule.class);
+        DataFactory.register("actorModuleState",  StateActorModuleData.class, StateActorModuleDataLoader.class, StateActorModule.class);
+        DataFactory.register("actorModuleTalent",  TalentActorModuleData.class, TalentActorModuleDataLoader.class, TalentActorModule.class);
+        DataFactory.register("actorModuleTask",  TaskActorModuleData.class, TaskActorModuleDataLoader.class, TaskActorModule.class);
         
         // Anim
         DataFactory.register("animMove",  AnimData.class, AnimDataLoader.class, MoveAnim.class); 
@@ -446,21 +461,6 @@ public class LY {
         // Config
         DataFactory.register("config",  ConfigData.class, ConfigDataLoader.class, null);
         
-        // Control 
-        DataFactory.register("controlActorAction",  ControlData.class, ControlDataLoader.class, ActorActionControl.class);
-        DataFactory.register("controlActorAttribute",  ControlData.class, ControlDataLoader.class, ActorAttributeControl.class);
-        DataFactory.register("controlActorBase",  ControlData.class, ControlDataLoader.class, ActorBaseControl.class);
-        DataFactory.register("controlActorChannel",  ControlData.class, ControlDataLoader.class, ActorChannelControl.class);
-        DataFactory.register("controlActorChat",  ControlData.class, ControlDataLoader.class, ActorChatControl.class);
-        DataFactory.register("controlActorItem",  ControlData.class, ControlDataLoader.class, ActorItemControl.class);
-        DataFactory.register("controlActorLogic",  ControlData.class, ControlDataLoader.class, ActorLogicControl.class);
-        DataFactory.register("controlActorPhysics",  ControlData.class, ControlDataLoader.class, ActorPhysicsControl.class);
-        DataFactory.register("controlActorResist",  ControlData.class, ControlDataLoader.class, ActorResistControl.class);
-        DataFactory.register("controlActorSkill",  ControlData.class, ControlDataLoader.class, ActorSkillControl.class);
-        DataFactory.register("controlActorSkin",  ControlData.class, ControlDataLoader.class, ActorSkinControl.class);
-        DataFactory.register("controlActorState",  ControlData.class, ControlDataLoader.class, ActorStateControl.class);
-        DataFactory.register("controlActorTalent",  ControlData.class, ControlDataLoader.class, ActorTalentControl.class);
-        DataFactory.register("controlActorTask",  ControlData.class, ControlDataLoader.class, ActorTaskControl.class);
         
         // Drop
         DataFactory.register("drop",  DropData.class, DropDataLoader.class, null);
@@ -612,8 +612,9 @@ public class LY {
         try {
             DataFactory.loadDataFile("/data/object/action.xml");
             DataFactory.loadDataFile("/data/object/actor.xml");
-            DataFactory.loadDataFile("/data/object/actorAnim.xml"); // 角色运动动画
+            DataFactory.loadDataFile("/data/object/actorAnim.xml");
             DataFactory.loadDataFile("/data/object/actorLogic.xml");
+            DataFactory.loadDataFile("/data/object/actorModule.xml");
             DataFactory.loadDataFile("/data/object/anim.xml");
             DataFactory.loadDataFile("/data/object/attribute.xml");
             DataFactory.loadDataFile("/data/object/bullet.xml");

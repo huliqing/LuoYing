@@ -177,7 +177,7 @@ public abstract class Chat<T extends ChatData> extends AbstractPlayObject implem
             return false;
         
         if (actor == null 
-                || actor.getModel().getWorldTranslation().distanceSquared(target.getModel().getWorldTranslation()) > maxDistanceSquared 
+                || actor.getSpatial().getWorldTranslation().distanceSquared(target.getSpatial().getWorldTranslation()) > maxDistanceSquared 
                 || !playService.isInScene(actor)) 
             return false;
         

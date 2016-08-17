@@ -350,7 +350,7 @@ public abstract class HitSkill<T extends SkillData> extends AbstractSkill<T> {
         }
         
         if (actorService.distanceSquared(actor, target) <= hitDistanceSquared
-                || actor.getModel().getWorldBound().intersects(target.getModel().getWorldBound())) {
+                || actor.getSpatial().getWorldBound().intersects(target.getSpatial().getWorldBound())) {
             return true;
         }
         
@@ -372,7 +372,7 @@ public abstract class HitSkill<T extends SkillData> extends AbstractSkill<T> {
 //        return true;
         
         // 如果在技能的攻击视角之外，则视为false(限制distance > 1是避免当距离太近时角度判断不正确。)
-        boolean inAngle = actorService.getViewAngle(actor, target.getModel().getWorldTranslation()) * 2 < hitAngle;
+        boolean inAngle = actorService.getViewAngle(actor, target.getSpatial().getWorldTranslation()) * 2 < hitAngle;
         return inAngle;
     }
     
@@ -383,8 +383,8 @@ public abstract class HitSkill<T extends SkillData> extends AbstractSkill<T> {
         @Override
         public int compare(Actor o1, Actor o2) {
             Vector3f selfPos = actorService.getLocation(actor);
-            float dis1 = o1.getModel().getWorldTranslation().distanceSquared(selfPos);
-            float dis2 = o2.getModel().getWorldTranslation().distanceSquared(selfPos);
+            float dis1 = o1.getSpatial().getWorldTranslation().distanceSquared(selfPos);
+            float dis2 = o2.getSpatial().getWorldTranslation().distanceSquared(selfPos);
             if (dis1 < dis2) {
                 return -1;
             } else if (dis1 > dis2) {

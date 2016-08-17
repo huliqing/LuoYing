@@ -57,6 +57,16 @@ public class TalentNetworkImpl implements TalentNetwork {
     }
 
     @Override
+    public int getTalentPoints(Actor actor) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setTalentPoints(Actor actor, int talentPoints) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
     public void addTalentPoints(Actor actor, String talentId, int points) {
         if (network.isClient())
             return;

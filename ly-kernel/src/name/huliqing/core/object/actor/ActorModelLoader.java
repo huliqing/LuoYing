@@ -35,7 +35,7 @@ import name.huliqing.core.mvc.service.ConfigService;
 import name.huliqing.core.loader.AssetLoader;
 import name.huliqing.core.loader.Loader;
 import name.huliqing.core.object.action.ActionProcessor;
-import name.huliqing.core.object.control.ActorChannelControl;
+import name.huliqing.core.object.actormodule.ChannelActorModule;
 import name.huliqing.core.object.effect.Effect;
 import name.huliqing.core.object.actorlogic.ActorLogic;
 import name.huliqing.core.object.state.State;
@@ -262,7 +262,7 @@ public class ActorModelLoader {
         String animFile = animDir + "/" + animName + ".mesh.j3o";
         try {
             Spatial animExtModel = AssetLoader.loadModelDirect(animFile);
-            GeometryUtils.addSkeletonAnim(animExtModel, actor.getModel());
+            GeometryUtils.addSkeletonAnim(animExtModel, actor.getSpatial());
             return true;
         } catch (Exception e) {
             LOG.log(Level.WARNING, "Could not load extAnim, actor={0}, animName={1}, exception={2}"

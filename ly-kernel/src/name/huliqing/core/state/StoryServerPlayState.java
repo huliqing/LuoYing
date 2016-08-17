@@ -222,7 +222,7 @@ public abstract class StoryServerPlayState extends NetworkServerPlayState {
             for (ActorData data : actors) {
                 if  (data.getOwnerId() == player.getData().getUniqueId()) {
                     Actor actor = actorService.loadActor(data);
-                    addObject(actor.getModel(), false);
+                    addObject(actor.getSpatial(), false);
                 }
             }
         } else {

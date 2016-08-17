@@ -355,7 +355,7 @@ public class StoryGbTask1 extends GameTaskBase {
     
     // 检测角色是否走近
     private boolean checkPlayerNear() {
-        return player.getModel().getWorldTranslation().distance(gb.getModel().getWorldTranslation()) < 15;  
+        return player.getSpatial().getWorldTranslation().distance(gb.getSpatial().getWorldTranslation()) < 15;  
     }
     
     private void createFightTarget() {

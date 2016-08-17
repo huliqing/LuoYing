@@ -107,6 +107,6 @@ public class StoryGuardFairyTask extends IntervalLogic {
     // 检查是否打开“妖精”任务
     private boolean checkToEnableFairTask() {
         return game.getFairyPosition().distanceSquared(
-                playService.getPlayer().getModel().getWorldTranslation()) < distanceSquare;
+                playService.getPlayer().getSpatial().getWorldTranslation()) < distanceSquare;
     }
 }

@@ -79,13 +79,13 @@ public class RunSimpleAction extends AbstractAction implements RunAction{
         
         if (resetDir) {
             TempVars tv = TempVars.get();
-            skillNetwork.playWalk(actor, runSkillId, position.subtract(actor.getModel().getWorldTranslation(), tv.vect1), true, false);
+            skillNetwork.playWalk(actor, runSkillId, position.subtract(actor.getSpatial().getWorldTranslation(), tv.vect1), true, false);
             tv.release();
             resetDir = false;
         }
         
         // == 确定已经走到目标位置
-        float distance = actor.getModel().getWorldTranslation().distance(position);
+        float distance = actor.getSpatial().getWorldTranslation().distance(position);
         if (distance <= nearest) {
             if (waitSkillId != null) {
                 skillNetwork.playSkill(actor, waitSkillId, false);
@@ -113,7 +113,7 @@ public class RunSimpleAction extends AbstractAction implements RunAction{
     private void runByStraight() {
         if (!skillService.isRunning(actor)) {
             TempVars tv = TempVars.get();
-            skillNetwork.playWalk(actor, runSkillId, position.subtract(actor.getModel().getWorldTranslation(), tv.vect1), true, false);
+            skillNetwork.playWalk(actor, runSkillId, position.subtract(actor.getSpatial().getWorldTranslation(), tv.vect1), true, false);
             tv.release();
         }
     }
@@ -141,7 +141,7 @@ public class RunSimpleAction extends AbstractAction implements RunAction{
         if (actor == null) {
             return false;
         }
-        return actor.getModel().getWorldTranslation().distance(pos) <= nearest;
+        return actor.getSpatial().getWorldTranslation().distance(pos) <= nearest;
     }
 
     @Override

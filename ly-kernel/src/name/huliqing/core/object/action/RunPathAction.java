@@ -125,7 +125,7 @@ public class RunPathAction extends AbstractAction implements RunAction{
         // .走近目标点
         // .或者走过头(该情况与目标会成大于90度的夹角）
         // 当前距离
-        float distance = actor.getModel().getWorldTranslation().distance(position);
+        float distance = actor.getSpatial().getWorldTranslation().distance(position);
         if (distance <= nearest) {
             if (waitSkillId != null) {
                 skillNetwork.playSkill(actor, waitSkillId, false);
@@ -148,7 +148,7 @@ public class RunPathAction extends AbstractAction implements RunAction{
         if (path == null && finder != null && future == null) {
             // 一开始不需要warp,只有找不到时才warp
             finder.clearPath();
-            future = findPath(actor.getModel().getWorldTranslation(), position, false);
+            future = findPath(actor.getSpatial().getWorldTranslation(), position, false);
         }
         
         if (future != null) {
@@ -171,12 +171,12 @@ public class RunPathAction extends AbstractAction implements RunAction{
             if (path != null && current != null) {
                 skillNetwork.playWalk(actor
                         , skillService.getSkill(actor, SkillType.run).getId()
-                        , current.getPosition().subtract(actor.getModel().getWorldTranslation(), tv.vect1), true, false);
+                        , current.getPosition().subtract(actor.getSpatial().getWorldTranslation(), tv.vect1), true, false);
                 
             } else {
                 skillNetwork.playWalk(actor
                         , skillService.getSkill(actor, SkillType.run).getId()
-                        , position.subtract(actor.getModel().getWorldTranslation(), tv.vect1), true, false);
+                        , position.subtract(actor.getSpatial().getWorldTranslation(), tv.vect1), true, false);
             }
             tv.release();
         }
@@ -186,7 +186,7 @@ public class RunPathAction extends AbstractAction implements RunAction{
     private void runByStraight() {
         if (!skillService.isRunning(actor)) {
             TempVars tv = TempVars.get();
-            skillNetwork.playWalk(actor, runSkillId, position.subtract(actor.getModel().getWorldTranslation(), tv.vect1), true, false);
+            skillNetwork.playWalk(actor, runSkillId, position.subtract(actor.getSpatial().getWorldTranslation(), tv.vect1), true, false);
             tv.release();
         }
     }
@@ -207,7 +207,7 @@ public class RunPathAction extends AbstractAction implements RunAction{
         if (tempPoint != current || !skillService.isRunning(actor)) {
             current = tempPoint;
             TempVars tv = TempVars.get();
-            skillNetwork.playWalk(actor, runSkillId, current.getPosition().subtract(actor.getModel().getWorldTranslation(), tv.vect1), true, false);
+            skillNetwork.playWalk(actor, runSkillId, current.getPosition().subtract(actor.getSpatial().getWorldTranslation(), tv.vect1), true, false);
             tv.release();
         }
     }
@@ -227,8 +227,8 @@ public class RunPathAction extends AbstractAction implements RunAction{
         // 将Y值移到与角色相同的Y值再比较距离，避免漂浮在空中的路径点无法比较
         TempVars temp = TempVars.get();
         temp.vect1.set(waypoint.getPosition());
-        temp.vect1.setY(actor.getModel().getWorldTranslation().y);
-        float distance = temp.vect1.distance(actor.getModel().getWorldTranslation());
+        temp.vect1.setY(actor.getSpatial().getWorldTranslation().y);
+        float distance = temp.vect1.distance(actor.getSpatial().getWorldTranslation());
         temp.release();
         
         if (distance < 1f) {
@@ -245,7 +245,7 @@ public class RunPathAction extends AbstractAction implements RunAction{
                 Boolean result = future.get();
                 if (!result) {
 
-                    Vector3f newStartPos = actor.getModel().getWorldTranslation();
+                    Vector3f newStartPos = actor.getSpatial().getWorldTranslation();
                     finder.clearPath();
                     future = findPath(newStartPos, position, true);
 
@@ -254,7 +254,7 @@ public class RunPathAction extends AbstractAction implements RunAction{
                     path = finder.getPath();
                     future = null; // 获得线路后清空
                     if (debug) {
-                        DebugDynamicUtils.debugPath(actor.getModel().getName() + toString(), path.getWaypoints());
+                        DebugDynamicUtils.debugPath(actor.getSpatial().getName() + toString(), path.getWaypoints());
                     }
                 }
             } catch (Exception ex) {
@@ -310,7 +310,7 @@ public class RunPathAction extends AbstractAction implements RunAction{
         if (actor == null) {
             return false;
         }
-        return actor.getModel().getWorldTranslation().distance(pos) <= nearest;
+        return actor.getSpatial().getWorldTranslation().distance(pos) <= nearest;
     }
 
     @Override

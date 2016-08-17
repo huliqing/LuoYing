@@ -118,7 +118,7 @@ public class StateMagic extends Magic {
             return;
         ActorAnim anim = actorAnimService.loadAnim(actorAnimId);
         anim.setActor(target);
-        target.getModel().addControl(anim);
+        target.getSpatial().addControl(anim);
         anim.start();
     }
     
