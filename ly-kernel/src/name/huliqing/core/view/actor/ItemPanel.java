@@ -11,6 +11,7 @@ import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.mvc.network.UserCommandNetwork;
+import name.huliqing.core.mvc.service.ItemService;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.ui.ListView;
 import name.huliqing.core.ui.Row;
@@ -21,11 +22,12 @@ import name.huliqing.core.ui.UI;
  * @author huliqing
  */
 public class ItemPanel extends ListView<ObjectData> implements ActorPanel {
-    private PlayService playService = Factory.get(PlayService.class);
+    private final PlayService playService = Factory.get(PlayService.class);
+    private final ItemService itemService = Factory.get(ItemService.class);
     private final UserCommandNetwork userCommandNetwork = Factory.get(UserCommandNetwork.class);
     
     private Actor actor;
-    private List<ObjectData> datas = new ArrayList<ObjectData>();
+    private final List<ObjectData> datas = new ArrayList<ObjectData>();
     
     public ItemPanel(float width, float height) {
         super(width, height);
@@ -34,7 +36,9 @@ public class ItemPanel extends ListView<ObjectData> implements ActorPanel {
     @Override
     public void refreshPageData() {
         if (actor != null) {
-            actor.getData().getItemStore().getOthers(datas);
+//            actor.getData().getItemStore().getOthers(datas);
+            datas.clear();
+            datas.addAll(itemService.getItems(actor));
         }
         super.refreshPageData();
     }
@@ -65,8 +69,9 @@ public class ItemPanel extends ListView<ObjectData> implements ActorPanel {
     @Override
     public List<ObjectData> getDatas() {
         if (actor != null) {
+//            return actor.getData().getItemStore().getOthers(datas);
             datas.clear();
-            return actor.getData().getItemStore().getOthers(datas);
+            datas.addAll(itemService.getItems(actor));
         }
         return datas;
     }

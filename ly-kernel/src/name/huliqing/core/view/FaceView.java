@@ -17,7 +17,6 @@ import com.jme3.util.TempVars;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import name.huliqing.core.LY;
 import name.huliqing.core.Factory;
 import name.huliqing.core.constants.IdConstants;
@@ -27,6 +26,7 @@ import name.huliqing.core.data.ActorData;
 import name.huliqing.core.data.AttributeData;
 import name.huliqing.core.data.StateData;
 import name.huliqing.core.mvc.service.ActorService;
+import name.huliqing.core.mvc.service.AttributeService;
 import name.huliqing.core.mvc.service.ChatService;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.mvc.service.PlayService;
@@ -49,6 +49,7 @@ public final class FaceView extends LinearLayout {
     private final StateService stateService = Factory.get(StateService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final ChatService chatService = Factory.get(ChatService.class);
+    private final AttributeService attributeService = Factory.get(AttributeService.class);
     
     private Actor actor;
     
@@ -328,13 +329,10 @@ public final class FaceView extends LinearLayout {
             }
 
             // mana
-            Map<String, AttributeData> attrMaps = data.getAttributes();
-            if (attrMaps != null) {
-                AttributeData manaData = attrMaps.get(IdConstants.ATTRIBUTE_MANA);
-                if (manaData != null) {
-                    magic.setMaxValue(manaData.getMaxValue());
-                    magic.setValue(manaData.getDynamicValue());
-                }
+            AttributeData manaData = attributeService.getAttributeData(actor, IdConstants.ATTRIBUTE_MANA);
+            if (manaData != null) {
+                magic.setMaxValue(manaData.getMaxValue());
+                magic.setValue(manaData.getDynamicValue());
             }
 
             // xp

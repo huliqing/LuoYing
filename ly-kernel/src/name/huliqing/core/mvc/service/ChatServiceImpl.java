@@ -40,16 +40,21 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public Chat getChat(Actor actor) {
         ChatModule module = actor.getModule(ChatModule.class);
-        Chat chat = null;
-        if (module.getChat() == null) {
-            String chatId = actor.getData().getChat();
-            if (chatId != null) {
-                chat = loadChat(chatId);
-                chat.setActor(actor);
-                module.setChat(chat);
-            }
+        if (module != null) {
+            return module.getChat();
         }
-        return chat;
+        return null;
+        
+//        Chat chat = null;
+//        if (module.getChat() == null) {
+//            String chatId = actor.getData().getChat();
+//            if (chatId != null) {
+//                chat = loadChat(chatId);
+//                chat.setActor(actor);
+//                module.setChat(chat);
+//            }
+//        }
+//        return chat;
     }
     
     @Override

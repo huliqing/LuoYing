@@ -4,11 +4,8 @@
  */
 package name.huliqing.core.mvc.service;
 
-import name.huliqing.core.Factory;
 import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.define.HandlerObject;
-import name.huliqing.core.mvc.dao.ItemDao;
-import name.huliqing.core.mvc.dao.SkillDao;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.handler.Handler;
@@ -21,16 +18,12 @@ public class HandlerServiceImpl implements HandlerService {
 
 //    private SkillService skillService;
 //    private PlayService playService;
-//    private ItemDao actorDao;
-//    private SkillDao skillDao;
     
     @Override
     public void inject() {
 //        // inject
 //        playService = Factory.get(PlayService.class);
 //        skillService = Factory.get(SkillService.class);
-//        actorDao = Factory.get(ItemDao.class);
-//        skillDao = Factory.get(SkillDao.class);
     }
     
     @Override

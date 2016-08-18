@@ -29,7 +29,6 @@ import name.huliqing.core.data.SkinData;
 import name.huliqing.core.enums.HurtFace;
 import name.huliqing.core.enums.MessageType;
 import name.huliqing.core.enums.Sex;
-import name.huliqing.core.mvc.dao.ItemDao;
 import name.huliqing.core.view.talk.Talk;
 import name.huliqing.core.object.actor.ActorModelLoader;
 import name.huliqing.core.object.Loader;
@@ -46,7 +45,7 @@ import name.huliqing.core.object.el.LevelEl;
 import name.huliqing.core.object.el.XpDropEl;
 import name.huliqing.core.utils.GeometryUtils;
 import name.huliqing.core.utils.Temp;
-import name.huliqing.core.object.module.BaseModule;
+import name.huliqing.core.object.module.ActorModule;
 import name.huliqing.core.object.module.ChannelModule;
 
 /**
@@ -65,14 +64,12 @@ public class ActorServiceImpl implements ActorService {
     private TalentService talentService;
     private EffectService effectService;
     private ConfigService configService;
-    private ItemDao itemDao;
     
     @Override
     public void inject() {
         skillService = Factory.get(SkillService.class);
         stateService = Factory.get(StateService.class);
         logicService = Factory.get(LogicService.class);
-        itemDao = Factory.get(ItemDao.class);
         playService = Factory.get(PlayService.class);
         skinService = Factory.get(SkinService.class);
         elService = Factory.get(ElService.class);
@@ -184,27 +181,28 @@ public class ActorServiceImpl implements ActorService {
         return obstacle;
     }
 
-    /**
-     * @deprecated use ItemService instead
-     * @param actor
-     * @param objectId
-     * @return 
-     */
-    @Override
-    public ObjectData getItem(Actor actor, String objectId) {
-        return itemDao.getItemExceptSkill(actor, objectId);
-    }
-
-    /**
-     * @deprecated use ItemService instead
-     * @param actor
-     * @param store
-     * @return 
-     */
-    @Override
-    public List<ObjectData> getItems(Actor actor, List<ObjectData> store) {
-        return itemDao.getItems(actor, store);
-    }
+    // remove20160818
+//    /**
+//     * @deprecated use ItemService instead
+//     * @param actor
+//     * @param objectId
+//     * @return 
+//     */
+//    @Override
+//    public ObjectData getItem(Actor actor, String objectId) {
+//        return itemDao.getItemExceptSkill(actor, objectId);
+//    }
+//
+//    /**
+//     * @deprecated use ItemService instead
+//     * @param actor
+//     * @param store
+//     * @return 
+//     */
+//    @Override
+//    public List<ObjectData> getItems(Actor actor, List<ObjectData> store) {
+//        return itemDao.getItems(actor, store);
+//    }
     
     @Override
     public HurtFace checkFace(Spatial self, Actor target) {
@@ -306,19 +304,6 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public List<Actor> findNearestActors(Actor actor, float maxDistance, List<Actor> store) {
-        // remove20160413
-//        if (store == null) {
-//            store = new ArrayList<Actor>();
-//        }
-//        float maxDistanceSquared = FastMath.pow(maxDistance, 2);
-//        List<Actor> actors = Common.getPlayState().getActors();
-//        for (Actor a : actors) {
-//            if (a == actor || a.getDistanceSquared(actor) > maxDistanceSquared) 
-//                continue;
-//            store.add(a);
-//        }
-//        return store;
-        
         return findNearestActors(actor, maxDistance, 360, store);
     }
 
@@ -716,23 +701,6 @@ public class ActorServiceImpl implements ActorService {
     public boolean removeActorListener(Actor actor, ActorListener actorListener) {
         return getActorBaseControl(actor).removeActorListener(actorListener);
     }
-
-    // remove20160815
-//    @Override
-//    public void addSkillListener(Actor actor, SkillListener skillListener) {
-//        if (skillListener == null)
-//            return;
-//        List<SkillListener> sls = actor.getSkillListeners();
-//        if (!sls.contains(skillListener)) {
-//            sls.add(skillListener);
-//        }
-//    }
-//
-//    @Override
-//    public boolean removeSkillListener(Actor actor, SkillListener skillListener) {
-//        List<SkillListener> sls = actor.getSkillListeners();
-//        return sls.remove(skillListener);
-//    }
     
     @Override
     public void setName(Actor actor, String name) {
@@ -812,6 +780,7 @@ public class ActorServiceImpl implements ActorService {
         return actor.getData().getFollowTarget();
     }
     
+    // remove20160818
 //    @Override
 //    public int getTalentPoints(Actor actor) {
 //        return actor.getData().getTalentPoints();
@@ -1047,8 +1016,8 @@ public class ActorServiceImpl implements ActorService {
         }
     }
     
-    private BaseModule getActorBaseControl(Actor actor) {
-        return actor.getModule(BaseModule.class);
+    private ActorModule getActorBaseControl(Actor actor) {
+        return actor.getModule(ActorModule.class);
     }
 
     @Override

@@ -17,6 +17,12 @@ import name.huliqing.core.xml.DataProcessor;
  * @param <T>
  */
 public interface Skill<T extends SkillData> extends DataProcessor<T>{
+
+    @Override
+    public void setData(T data);
+
+    @Override
+    public T getData();
     
     /**
      * 开始执行技能
@@ -58,12 +64,13 @@ public interface Skill<T extends SkillData> extends DataProcessor<T>{
      * @param character 
      */
     void setActor(Actor character);
-    
-    /**
-     * @deprecated use getData instead
-     * @return 
-     */
-    SkillData getSkillData();
+   
+    // remove20160818
+//    /**
+//     * @deprecated use getData instead
+//     * @return 
+//     */
+//    SkillData getSkillData();
    
     // remove20160813
 //    /**

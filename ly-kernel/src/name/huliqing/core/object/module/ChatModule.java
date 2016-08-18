@@ -5,25 +5,42 @@
  */
 package name.huliqing.core.object.module;
 
-import name.huliqing.core.data.module.ModuleData;
+import name.huliqing.core.data.module.ChatModuleData;
+import name.huliqing.core.object.Loader;
+import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.chat.Chat;
-import name.huliqing.core.object.module.AbstractModule;
 
 /**
- * 控制角色对话面板的控制器
+ * 角色对话模块
  * @author huliqing
  * @param <T>
  */
-public class ChatModule<T extends ModuleData> extends AbstractModule<T> {
+public class ChatModule<T extends ChatModuleData> extends AbstractModule<T> {
 
-    // 角色的主对话面板
+    private Actor actor;
     private Chat chat;
 
-    public void setChat(Chat chat) {
-        this.chat = chat;
+    @Override
+    public void initialize(Actor actor) {
+        super.initialize(actor);
+        this.actor = actor;
     }
 
+    @Override
+    public void cleanup() {
+        chat = null;
+        super.cleanup(); 
+    }
+
+    /**
+     * 获取角色的主对话面板,如果没有为角色设置对话功能则返回null.
+     * @return 
+     */
     public Chat getChat() {
+        if (chat == null && data.getChat() != null) {
+            chat = Loader.load(data.getChat());
+            chat.setActor(actor);
+        }
         return chat;
     }
     

@@ -12,12 +12,13 @@ import name.huliqing.core.ui.UIFactory;
 /**
  *
  * @author huliqing
+ * @param <T>
  */
-public class ItemPanel extends LinearLayout {
+public class ItemPanel<T extends ObjectData> extends LinearLayout {
     private ItemTitle title;
     private ItemList itemList;
         
-    public ItemPanel(float width, float height, List<ObjectData> datas) {
+    public ItemPanel(float width, float height, List<T> datas) {
         super(width, height);
         float titleHeight = UIFactory.getUIConfig().getListTitleHeight();
         title = new ItemTitle(width, titleHeight);

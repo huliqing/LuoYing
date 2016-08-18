@@ -4,6 +4,7 @@
  */
 package name.huliqing.core.mvc.service;
 
+import java.util.List;
 import name.huliqing.core.Inject;
 import name.huliqing.core.data.AttributeData;
 import name.huliqing.core.object.actor.Actor;
@@ -69,6 +70,13 @@ public interface AttributeService extends Inject{
      * @return 
      */
     AttributeData getAttributeData(Actor actor, String attribute);
+
+    /**
+     * 获取角色的所有属性
+     * @param actor
+     * @return 
+     */
+    List<AttributeData> getAttributes(Actor actor);
     
     /**
      * 同步目标角色的指定属性值

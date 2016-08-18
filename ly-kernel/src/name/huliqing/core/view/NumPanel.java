@@ -5,7 +5,6 @@
 package name.huliqing.core.view;
 
 import com.jme3.font.BitmapFont;
-import com.jme3.math.ColorRGBA;
 import name.huliqing.core.constants.InterfaceConstants;
 import name.huliqing.core.constants.ResConstants;
 import name.huliqing.core.manager.ResourceManager;

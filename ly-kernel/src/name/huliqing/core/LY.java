@@ -168,7 +168,7 @@ import name.huliqing.core.object.chat.TaskChat;
 import name.huliqing.core.loader.ConfigDataLoader;
 import name.huliqing.core.object.module.ActionModule;
 import name.huliqing.core.object.module.AttributeModule;
-import name.huliqing.core.object.module.BaseModule;
+import name.huliqing.core.object.module.ActorModule;
 import name.huliqing.core.object.module.ChatModule;
 import name.huliqing.core.object.module.ItemModule;
 import name.huliqing.core.object.module.LogicModule;
@@ -542,7 +542,7 @@ public class LY {
         // Module 
         DataFactory.register("moduleAction",  ActionModuleData.class, ActionModuleDataLoader.class, ActionModule.class);
         DataFactory.register("moduleAttribute",  AttributeModuleData.class, AttributeModuleDataLoader.class, AttributeModule.class);
-        DataFactory.register("moduleBase",  BaseModuleData.class, BaseModuleDataLoader.class, BaseModule.class);
+        DataFactory.register("moduleBase",  BaseModuleData.class, BaseModuleDataLoader.class, ActorModule.class);
         DataFactory.register("moduleChannel",  ChannelModuleData.class, ChannelModuleDataLoader.class, ChannelModule.class);
         DataFactory.register("moduleChat",  ChatModuleData.class, ChatModuleDataLoader.class, ChatModule.class);
         DataFactory.register("moduleItem",  ItemModuleData.class, ItemModuleDataLoader.class, ItemModule.class);

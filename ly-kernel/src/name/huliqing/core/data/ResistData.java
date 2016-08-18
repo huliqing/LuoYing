@@ -17,7 +17,7 @@ import java.io.IOException;
  * @author huliqing
  */
 @Serializable
-public class ResistData extends ObjectData{
+public class ResistData extends ObjectData {
     
     /**
      * 抵抗率[0.0~1.0]

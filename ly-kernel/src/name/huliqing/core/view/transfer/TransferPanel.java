@@ -17,11 +17,12 @@ import name.huliqing.core.ui.state.UIState;
 /**
  * 数据传输界面
  * @author huliqing
+ * @param <T>
  */
-public abstract class TransferPanel extends LinearLayout implements TransferListener, NumConfirmListener {
+public abstract class TransferPanel<T extends ObjectData> extends LinearLayout implements TransferListener<T>, NumConfirmListener {
     private final ItemTransfer transfer = new ItemTransfer();
     private static NumPanel numPanel; // 一个实例就行
-    private ObjectData tempData;
+    private T tempData;
 
     public TransferPanel(float width, float height) {
         super(width, height);
@@ -40,7 +41,7 @@ public abstract class TransferPanel extends LinearLayout implements TransferList
      * 设置初始化数据
      * @param datas 
      */
-    public void setDatas(List<ObjectData> datas) {
+    public void setDatas(List<T> datas) {
         transfer.setDatas(datas);
         setNeedUpdate();
     }
@@ -49,7 +50,7 @@ public abstract class TransferPanel extends LinearLayout implements TransferList
      * 获取传输数据
      * @return 
      */
-    public List<ObjectData> getDatas() {
+    public List<T> getDatas() {
         return transfer.getDatas();
     }
     
@@ -57,7 +58,7 @@ public abstract class TransferPanel extends LinearLayout implements TransferList
      * 传输数据
      * @param data 
      */
-    public final void transfer(ObjectData data) {
+    public final void transfer(T data) {
         if (data.getTotal() == 1) {
             // 如果数量只有一个，则直接传输
             transferInner(data, 1);
@@ -68,7 +69,7 @@ public abstract class TransferPanel extends LinearLayout implements TransferList
         }
     }
     
-    private void transferByNumPanel(ObjectData data, int count) {
+    private void transferByNumPanel(T data, int count) {
         if (numPanel == null) {
             numPanel = new NumPanel(UIFactory.getUIConfig().getScreenWidth() * 0.5f
                     , UIFactory.getUIConfig().getScreenHeight() * 0.33f);
@@ -108,7 +109,7 @@ public abstract class TransferPanel extends LinearLayout implements TransferList
      * @param data
      * @param count 
      */
-    private void transferInner(ObjectData data, int count) {
+    private void transferInner(T data, int count) {
         transfer.transfer(data, count);
     }
     

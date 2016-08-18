@@ -14,17 +14,18 @@ import name.huliqing.core.ui.UI.Listener;
 /**
  * 显示物品列表
  * @author huliqing
+ * @param <T>
  */
-public class ItemList extends ListView<ObjectData> implements Listener {
+public class ItemList<T extends ObjectData> extends ListView<T> implements Listener {
     
-    public interface RowClickListener {
-        void onClick(Row row, boolean isPressed, ObjectData data);
+    public interface RowClickListener<T> {
+        void onClick(Row row, boolean isPressed, T data);
     }
     
-    private List<ObjectData> datas;
+    private List<T> datas;
     private RowClickListener rowClickListener;
     
-    public ItemList(float width, float height, List<ObjectData> datas) {
+    public ItemList(float width, float height, List<T> datas) {
         super(width, height);
         this.datas = datas;
         setPageSize(6);
@@ -35,7 +36,7 @@ public class ItemList extends ListView<ObjectData> implements Listener {
     }
     
     @Override
-    protected final Row<ObjectData> createEmptyRow() {
+    protected final Row<T> createEmptyRow() {
         ItemRow row = new ItemRow(this);
         row.addClickListener(this);
         return row;
@@ -50,7 +51,7 @@ public class ItemList extends ListView<ObjectData> implements Listener {
     }
     
     @Override
-    public List<ObjectData> getDatas() {
+    public List<T> getDatas() {
         return datas;
     }
     

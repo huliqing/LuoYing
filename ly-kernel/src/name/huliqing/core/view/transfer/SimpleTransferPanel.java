@@ -13,17 +13,18 @@ import name.huliqing.core.ui.Row;
 /**
  *
  * @author huliqing
+ * @param <T>
  */
-public class SimpleTransferPanel extends TransferPanel {
+public class SimpleTransferPanel<T extends ObjectData> extends TransferPanel<T> {
     private ItemPanel itemPanel;
     
     public SimpleTransferPanel(float width, float height) {
         super(width, height);
         
         itemPanel = new ItemPanel(width, height, getDatas());
-        itemPanel.setRowClickListener(new ItemList.RowClickListener() {
+        itemPanel.setRowClickListener(new ItemList.RowClickListener<T>() {
             @Override
-            public void onClick(Row row, boolean isPressed, ObjectData data) {
+            public void onClick(Row row, boolean isPressed, T data) {
                 if (isPressed) return;
                 transfer(data);
             }
@@ -32,18 +33,18 @@ public class SimpleTransferPanel extends TransferPanel {
     }
 
     @Override
-    public void setDatas(List<ObjectData> datas) {
+    public void setDatas(List<T> datas) {
         super.setDatas(datas); 
         itemPanel.refresh();
     }
     
     @Override
-    public void onAdded(Transfer transfer, ObjectData data, int count) {
+    public void onAdded(Transfer<T> transfer, T data, int count) {
         itemPanel.refresh();
     }
 
     @Override
-    public void onRemoved(Transfer transfer, ObjectData data, int count) {
+    public void onRemoved(Transfer<T> transfer, T data, int count) {
         itemPanel.refresh();
     }
     

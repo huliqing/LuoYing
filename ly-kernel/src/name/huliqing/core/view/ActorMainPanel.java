@@ -7,6 +7,7 @@ package name.huliqing.core.view;
 import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.constants.InterfaceConstants;
+import name.huliqing.core.data.ItemData;
 import name.huliqing.core.data.SkinData;
 import name.huliqing.core.data.TalentData;
 import name.huliqing.core.manager.ResourceManager;
@@ -240,12 +241,12 @@ public class ActorMainPanel extends Window implements ItemListener, SkinListener
 
     // 物口添加或减少的时候要更新指定面板信息
     @Override
-    public void onItemAdded(Actor actor, String itemId, int trueAdded) {
+    public void onItemAdded(Actor actor, ItemData itemId, int trueAdded) {
         updatePanel(this.itemPanel, this.armorPanel, this.weaponPanel, this.skillPanel);
     }
 
     @Override
-    public void onItemRemoved(Actor actor, String itemId, int trueRemoved) {
+    public void onItemRemoved(Actor actor, ItemData itemId, int trueRemoved) {
         updatePanel(this.itemPanel, this.armorPanel, this.weaponPanel, this.skillPanel);
     }
 

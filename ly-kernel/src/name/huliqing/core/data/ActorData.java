@@ -14,14 +14,11 @@ import com.jme3.math.Vector3f;
 import com.jme3.network.serializing.Serializable;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import name.huliqing.core.data.define.MatObject;
 import name.huliqing.core.enums.Mat;
 import name.huliqing.core.enums.Sex;
 import name.huliqing.core.object.actor.SkillStore;
-import name.huliqing.core.object.actor.ItemStore;
 import name.huliqing.core.utils.ConvertUtils;
 import name.huliqing.core.utils.MathUtils;
 
@@ -52,17 +49,17 @@ public class ActorData extends ObjectData implements MatObject{
     // 角色是否必要的,不能移除的。
     private boolean essential;
     
-    // 角色物品信息,如:金币,装备,武器,杂物等
-    private ItemStore itemStore;
+//    // 角色物品信息,如:金币,装备,武器,杂物等
+//    private ItemStore itemStore;
     
     // 角色技能信息
-    private SkillStore skillStore;
+//    private SkillStore skillStore;
     
     // 角色物品的掉落设置
     private DropData drop;
     
-    // 状态抵抗设置
-    private ResistData resist;
+//    // 状态抵抗设置
+//    private ResistData resist;
     
     // 角色的当前目标(唯一ID)
     private long target = -1;
@@ -83,8 +80,9 @@ public class ActorData extends ObjectData implements MatObject{
     // 存放在这些指定的插槽上，否则将根据武器的定义的插槽存放。
     private List<String> slots;
     
-    // 角色的所有属性设置，包含lifeAttributes
-    private Map<String, AttributeData> attributes;
+//    // 角色的所有属性设置，包含lifeAttributes
+//    private Map<String, AttributeData> attributes;
+    
     // 用于决定角色是否死亡的属性,当这个属性值小于或等于0时，角色将被视为"死亡"
     private String lifeAttribute;
     // 用于决定角色的视角
@@ -113,8 +111,8 @@ public class ActorData extends ObjectData implements MatObject{
     // TODO: sync to client
     private transient Vector3f bornPlace;
     
-    // 角色的对话面板id
-    private String chat;
+//    // 角色的对话面板id
+//    private String chat;
     
     // 被锁定的技能列表，二进制表示，其中每1个二进制位表示一个技能类型。
     // 如果指定的位为1，则表示这个技能类型被锁定，则这类技能将不能执行。
@@ -138,10 +136,10 @@ public class ActorData extends ObjectData implements MatObject{
         oc.write(sex, "sex", null);
         oc.write(race, "race", null);
         oc.write(essential, "essential", false);
-        oc.write(itemStore, "itemStore", null);
-        oc.write(skillStore, "skillStore", null);
+//        oc.write(itemStore, "itemStore", null);
+//        oc.write(skillStore, "skillStore", null);
         oc.write(drop, "drop", null);
-        oc.write(resist, "resistData", null);
+//        oc.write(resist, "resistData", null);
         oc.write(target, "target", -1);
         oc.write(autoAi, "autoAi", true);
         oc.write(autoDetect, "autoDetect", true);
@@ -150,11 +148,11 @@ public class ActorData extends ObjectData implements MatObject{
         if (slots != null)
             oc.write(slots.toArray(new String[]{}), "slots", null);
         
-        // 这里把attributes转换成arrayList是因为jme在read的时候会把map转换成无序的(即使是LinkedHashMap)
-        // 所以为了保证在读入的时候顺序正确，需要把map转换成list.
-        if (attributes != null) {
-            oc.writeSavableArrayList(new ArrayList<AttributeData>(attributes.values()), "attributes", null);
-        }
+//        // 这里把attributes转换成arrayList是因为jme在read的时候会把map转换成无序的(即使是LinkedHashMap)
+//        // 所以为了保证在读入的时候顺序正确，需要把map转换成list.
+//        if (attributes != null) {
+//            oc.writeSavableArrayList(new ArrayList<AttributeData>(attributes.values()), "attributes", null);
+//        }
         
         oc.write(lifeAttribute, "lifeAttribute", null);
         oc.write(viewAttribute, "viewAttribute", null);
@@ -168,7 +166,7 @@ public class ActorData extends ObjectData implements MatObject{
         if (bornPlace != null) {
             oc.write(bornPlace, "bornPlace", null);
         }
-        oc.write(chat, "chat", null);
+//        oc.write(chat, "chat", null);
         oc.write(skillLockedState, "skillLockedState", 0);
         oc.writeSavableArrayList(moduleDatas, "moduleDatas", null);
     }
@@ -184,10 +182,10 @@ public class ActorData extends ObjectData implements MatObject{
         sex = ic.readEnum("sex", Sex.class, null);
         race = ic.readString("race", null);
         essential = ic.readBoolean("essential", false);
-        itemStore = (ItemStore) ic.readSavable("itemStore", null);
-        skillStore = (SkillStore) ic.readSavable("skillStore", null);
+//        itemStore = (ItemStore) ic.readSavable("itemStore", null);
+//        skillStore = (SkillStore) ic.readSavable("skillStore", null);
         drop = (DropData) ic.readSavable("drop", null);
-        resist = (ResistData) ic.readSavable("resistData", null);
+//        resist = (ResistData) ic.readSavable("resistData", null);
         target = ic.readLong("target", -1);
         autoAi = ic.readBoolean("autoAi", true);
         autoDetect = ic.readBoolean("autoDetect", true);
@@ -195,15 +193,15 @@ public class ActorData extends ObjectData implements MatObject{
         actionDefRun = ic.readString("actionDefRun", null);
         slots = ConvertUtils.toList(ic.readStringArray("slots", null));
         
-        ArrayList<AttributeData> ads = ic.readSavableArrayList("attributes", null);
-        if (ads != null) {
-            if (attributes == null) {
-                attributes = new LinkedHashMap<String, AttributeData>(ads.size());
-            }
-            for (AttributeData ad : ads) {
-                attributes.put(ad.getId(), ad);
-            }
-        }
+//        ArrayList<AttributeData> ads = ic.readSavableArrayList("attributes", null);
+//        if (ads != null) {
+//            if (attributes == null) {
+//                attributes = new LinkedHashMap<String, AttributeData>(ads.size());
+//            }
+//            for (AttributeData ad : ads) {
+//                attributes.put(ad.getId(), ad);
+//            }
+//        }
         lifeAttribute = ic.readString("lifeAttribute", null);
         viewAttribute = ic.readString("viewAttribute", null);
         levelUpEl = ic.readString("levelUpEl", null);
@@ -214,38 +212,38 @@ public class ActorData extends ObjectData implements MatObject{
         living = ic.readBoolean("living", false);
         followTarget = ic.readLong("followTarget", -1);
         bornPlace = (Vector3f)ic.readSavable("bornPlace", null);
-        chat = ic.readString("chat", null);
+//        chat = ic.readString("chat", null);
         skillLockedState = ic.readLong("skillLockedState", 0);
         moduleDatas = ic.readSavableArrayList("moduleDatas", null);
     }
     
     public ActorData() {}
 
-    /**
-     * 获取角色的物品列表，包含：武器，服装，杂物等等。
-     * @return 
-     */
-    public ItemStore getItemStore() {
-        if (itemStore == null) {
-            itemStore = new ItemStore();
-        }
-        return itemStore;
-    }
-
-    public void setItemStore(ItemStore itemStore) {
-        this.itemStore = itemStore;
-    }
-
-    public SkillStore getSkillStore() {
-        if (skillStore == null) {
-            skillStore = new SkillStore();
-        }
-        return skillStore;
-    }
-
-    public void setSkillStore(SkillStore skillStore) {
-        this.skillStore = skillStore;
-    }
+//    /**
+//     * 获取角色的物品列表，包含：武器，服装，杂物等等。
+//     * @return 
+//     */
+//    public ItemStore getItemStore() {
+//        if (itemStore == null) {
+//            itemStore = new ItemStore();
+//        }
+//        return itemStore;
+//    }
+//
+//    public void setItemStore(ItemStore itemStore) {
+//        this.itemStore = itemStore;
+//    }
+//
+//    public SkillStore getSkillStore() {
+//        if (skillStore == null) {
+//            skillStore = new SkillStore();
+//        }
+//        return skillStore;
+//    }
+//
+//    public void setSkillStore(SkillStore skillStore) {
+//        this.skillStore = skillStore;
+//    }
 
     /**
      * 获取角色物品的掉落设置，
@@ -341,13 +339,13 @@ public class ActorData extends ObjectData implements MatObject{
         this.slots = slots;
     }
 
-    public Map<String, AttributeData> getAttributes() {
-        return attributes;
-    }
-
-    public void setAttributes(Map<String, AttributeData> attributes) {
-        this.attributes = attributes;
-    }
+//    public Map<String, AttributeData> getAttributes() {
+//        return attributes;
+//    }
+//
+//    public void setAttributes(Map<String, AttributeData> attributes) {
+//        this.attributes = attributes;
+//    }
     
     public String getLifeAttribute() {
         return lifeAttribute;
@@ -357,12 +355,12 @@ public class ActorData extends ObjectData implements MatObject{
         this.lifeAttribute = lifeAttribute;
     }
     
-    public AttributeData getLifeAttributeData() {
-        if (attributes == null || lifeAttribute == null) {
-            return null;
-        }
-        return attributes.get(lifeAttribute);
-    }
+//    public AttributeData getLifeAttributeData() {
+//        if (attributes == null || lifeAttribute == null) {
+//            return null;
+//        }
+//        return attributes.get(lifeAttribute);
+//    }
 
     public String getViewAttribute() {
         return viewAttribute;
@@ -372,12 +370,12 @@ public class ActorData extends ObjectData implements MatObject{
         this.viewAttribute = viewAttribute;
     }
 
-    public AttributeData getViewAttributeData() {
-        if (attributes == null || viewAttribute == null) {
-            return null;
-        }
-        return attributes.get(viewAttribute);
-    }
+//    public AttributeData getViewAttributeData() {
+//        if (attributes == null || viewAttribute == null) {
+//            return null;
+//        }
+//        return attributes.get(viewAttribute);
+//    }
 
     public int getLevel() {
         return level;
@@ -477,13 +475,13 @@ public class ActorData extends ObjectData implements MatObject{
         this.ownerId = ownerId;
     }
     
-    public ResistData getResist() {
-        return resist;
-    }
-
-    public void setResist(ResistData resistData) {
-        this.resist = resistData;
-    }
+//    public ResistData getResist() {
+//        return resist;
+//    }
+//
+//    public void setResist(ResistData resistData) {
+//        this.resist = resistData;
+//    }
 
     /**
      * 获取角色队伍分组，默认0表示无队伍分组
@@ -545,17 +543,17 @@ public class ActorData extends ObjectData implements MatObject{
         this.bornPlace = bornPlace;
     }
 
-    /**
-     * 获取角色的对话面板ID，如果没有设置则返回null.
-     * @return 
-     */
-    public String getChat() {
-        return chat;
-    }
-
-    public void setChat(String chat) {
-        this.chat = chat;
-    }
+//    /**
+//     * 获取角色的对话面板ID，如果没有设置则返回null.
+//     * @return 
+//     */
+//    public String getChat() {
+//        return chat;
+//    }
+//
+//    public void setChat(String chat) {
+//        this.chat = chat;
+//    }
 
     /**
      * 获取技能的锁定状态，返回的整数中每一个二进制位表示一个被锁定的技能类

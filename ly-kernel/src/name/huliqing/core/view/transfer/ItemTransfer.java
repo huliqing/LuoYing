@@ -12,13 +12,14 @@ import name.huliqing.core.xml.DataFactory;
 /**
  * 数据传输基类
  * @author huliqing
+ * @param <T>
  */
-public class ItemTransfer implements Transfer {
+public class ItemTransfer<T extends ObjectData> implements Transfer<T> {
 
     private List<TransferListener> listeners;
     // 需要传输的目标对象
     protected Transfer target;
-    protected final List<ObjectData> datas = new ArrayList<ObjectData>();
+    protected final List<T> datas = new ArrayList<T>();
     
     @Override
     public void setTarget(Transfer target) {
@@ -31,19 +32,19 @@ public class ItemTransfer implements Transfer {
     }
 
     @Override
-    public List<ObjectData> getDatas() {
+    public List<T> getDatas() {
         return datas;
     }
 
     @Override
-    public void setDatas(List<ObjectData> datas) {
+    public void setDatas(List<T> datas) {
         this.datas.clear();
         this.datas.addAll(datas);
     }
 
     @Override
-    public void addData(ObjectData pd, int count) {
-        ObjectData data = findData(pd.getId());
+    public void addData(T pd, int count) {
+        T data = findData(pd.getId());
         if (data == null) {
             data = DataFactory.createData(pd.getId());
             data.setTotal(count);
@@ -61,11 +62,11 @@ public class ItemTransfer implements Transfer {
     }
 
     @Override
-    public void removeData(ObjectData pd, int count) {
+    public void removeData(T pd, int count) {
         if (count < 0) 
             throw new IllegalArgumentException("Count could not less than ZERO! count=" + count);
         
-        ObjectData data = findData(pd.getId());
+        T data = findData(pd.getId());
         if (data == null) {
             return;
         }
@@ -84,8 +85,8 @@ public class ItemTransfer implements Transfer {
     }
 
     @Override
-    public ObjectData findData(String id) {
-        for (ObjectData data : datas) {
+    public T findData(String id) {
+        for (T data : datas) {
             if (data.getId().equals(id)) {
                 return data;
             }
@@ -94,7 +95,7 @@ public class ItemTransfer implements Transfer {
     }
 
     @Override
-    public final void transfer(ObjectData data, int count) {
+    public final void transfer(T data, int count) {
         if (target == null)
             return;
         target.addData(data, count);

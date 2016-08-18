@@ -6,7 +6,7 @@ package name.huliqing.core.mvc.service;
 
 import java.util.List;
 import name.huliqing.core.Inject;
-import name.huliqing.core.data.ObjectData;
+import name.huliqing.core.data.ItemData;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actor.ItemListener;
 
@@ -29,9 +29,9 @@ public interface ItemService extends Inject {
      * @param actor
      * @param itemId
      * @param count 要移除的数量,可能比角色实际拥有的数量大
-     * @return 返回实际移除的数量
+     * @return
      */
-    int removeItem(Actor actor, String itemId, int count);
+    boolean removeItem(Actor actor, String itemId, int count);
     
     /**
      * 获取角色的非技能物品
@@ -39,38 +39,15 @@ public interface ItemService extends Inject {
      * @param itemId
      * @return 
      */
-    ObjectData getItem(Actor actor, String itemId);
+    ItemData getItem(Actor actor, String itemId);
     
     /**
-     * 获取角色的所有物品(除技能外）
+     * 获取角色的所有物品,注意：不要直接删除列表中的物品，
+     * 使用物品使用 {@link #removeItem(Actor, java.lang.String, int) }
      * @param actor
-     * @param store
      * @return 
      */
-    List<ObjectData> getItems(Actor actor, List<ObjectData> store);
-    
-    /**
-     * 判断物品在当前情况下是否可卖出，一些物品可能不能进行出售，如金币，或如一些穿
-     * 在身上的装备（正在使用中）。
-     * @param data
-     * @return 
-     */
-    boolean isSellable(ObjectData data);
-    
-    /**
-     * 同步物品数量
-     * @param actor
-     * @param itemId
-     * @param total 
-     */
-    void syncItemTotal(Actor actor, String itemId, int total);
-    
-    /**
-     * 让角色使用物品
-     * @param actor
-     * @param itemId  
-     */
-    void useItem(Actor actor, String itemId);
+    List<ItemData> getItems(Actor actor);
     
     /**
      * 给角色添加物品侦听器
@@ -86,4 +63,28 @@ public interface ItemService extends Inject {
      * @return 
      */
     boolean removeItemListener(Actor actor, ItemListener itemListener);
+    
+    /**
+     * 判断物品在当前情况下是否可卖出，一些物品可能不能进行出售，如金币
+     * @param data
+     * @return 
+     */
+    boolean isSellable(ItemData data);
+    
+    /**
+     * 同步物品数量,如果total小于或等于0，则移除物品
+     * @param actor
+     * @param itemId
+     * @param total 
+     */
+    void syncItemTotal(Actor actor, String itemId, int total);
+    
+    /**
+     * 让角色使用物品
+     * @param actor
+     * @param itemId  
+     */
+    void useItem(Actor actor, String itemId);
+    
+
 }

@@ -13,6 +13,7 @@ import name.huliqing.core.Factory;
 import name.huliqing.core.constants.InterfaceConstants;
 import name.huliqing.core.constants.ResConstants;
 import name.huliqing.core.data.ChatData;
+import name.huliqing.core.data.ItemData;
 import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.mvc.network.UserCommandNetwork;
 import name.huliqing.core.mvc.service.ActorService;
@@ -120,18 +121,20 @@ public class SellChat<T extends ChatData> extends Chat<T> {
         seller = playService.getPlayer();
         
         // 初始化, 数据要复制一份出来，不要去影响角色的包裹中的数据
-        List<ObjectData> items = itemService.getItems(seller, null);
-        List<ObjectData> transferDatas = new ArrayList<ObjectData>(items.size());
-        for (ObjectData item : items) {
-            // 非卖品
-            if (!itemService.isSellable(item)) {
-                continue;
+        List<ItemData> items = itemService.getItems(seller);
+        if (items != null) {
+            List<ItemData> transferDatas = new ArrayList<ItemData>(items.size());
+            for (ItemData item : items) {
+                // 非卖品
+                if (!itemService.isSellable(item)) {
+                    continue;
+                }
+                ItemData dataCopy = DataFactory.createData(item.getId());
+                dataCopy.setTotal(item.getTotal());
+                transferDatas.add(dataCopy);
             }
-            ObjectData dataCopy = DataFactory.createData(item.getId());
-            dataCopy.setTotal(item.getTotal());
-            transferDatas.add(dataCopy);
+            sourcePanel.setDatas(transferDatas);
         }
-        sourcePanel.setDatas(transferDatas);
         
         // 清空dist面板
         distPanel.setDatas(Collections.EMPTY_LIST);

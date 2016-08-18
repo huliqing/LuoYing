@@ -7,19 +7,26 @@ package name.huliqing.core.object.module;
 
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.core.data.module.ModuleData;
+import name.huliqing.core.data.ItemData;
+import name.huliqing.core.data.module.ItemModuleData;
+import name.huliqing.core.object.Loader;
+import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actor.ItemListener;
-import name.huliqing.core.object.module.AbstractModule;
 
 /**
- *
  * @author huliqing
- * @param <T>
  */
-public class ItemModule<T extends ModuleData> extends AbstractModule<T> {
+public class ItemModule extends AbstractModule<ItemModuleData> {
     
+    private Actor actor;
     // 监听角色物品的增删
     private List<ItemListener> itemListeners;
+
+    @Override
+    public void initialize(Actor actor) {
+        super.initialize(actor); 
+        this.actor = actor;
+    }
     
     @Override
     public void cleanup() {
@@ -48,12 +55,94 @@ public class ItemModule<T extends ModuleData> extends AbstractModule<T> {
         return itemListeners != null && itemListeners.remove(itemListener);
     }
     
+    public boolean addItem(String itemId, int amount) {
+        if (amount <= 0) {
+            return false;
+        }
+        ItemData item = getItem(itemId);
+        if (item == null) {
+            item = Loader.load(itemId);
+            item.setTotal(amount);
+            if (data.getItems() == null) {
+                data.setItems(new ArrayList<ItemData>());
+            }
+            data.getItems().add(item);
+        } else {
+            item.increaseTotal(amount);
+        }
+        
+        // 触发侦听器
+        if (itemListeners != null) {
+            for (int i = 0; i < itemListeners.size(); i++) {
+                itemListeners.get(i).onItemAdded(actor, item, amount);
+            }
+        }
+        
+        return true;
+    }
+    
     /**
-     * 获取角色的物品帧听器
+     * 删除物品
+     * @param itemId 物品id
+     * @param amount 要删除的数量，不能小于0
      * @return 
      */
-    public List<ItemListener> getItemListeners() {
-        return itemListeners;
+    public boolean removeItem(String itemId, int amount) {
+        if (itemId == null || amount <= 0) {
+            return false;
+        }
+        ItemData item = getItem(itemId);
+        if (item == null)
+            return false;
+        
+        int oldTotal = item.getTotal();
+        int trueRemoved;
+        item.increaseTotal(-1 * amount);
+        if (item.getTotal() <= 0) {
+            data.getItems().remove(item);
+            trueRemoved = oldTotal;
+        } else {
+            trueRemoved = oldTotal - item.getTotal();
+        }
+        
+        // 触发侦听器
+        if (itemListeners != null) {
+            for (int i = 0; i < itemListeners.size(); i++) {
+                itemListeners.get(i).onItemRemoved(actor, item, trueRemoved);
+            }
+        }
+        
+        return true;
     }
+    
+    /**
+     * 获取指定ID的物品
+     * @param itemId
+     * @return 
+     */
+    public ItemData getItem(String itemId) {
+        if (data.getItems() == null)
+            return null;
+        List<ItemData> items = data.getItems();
+        for (int i = 0; i < items.size(); i++) {
+            if (items.get(i).getId().equals(itemId)) {
+                return items.get(i);
+            }
+        }
+        return null;
+    }
+    
+     /**
+     * 获取所有物品列表,如果没有任何物品则返回null
+     * 注意: 不要手动移除列表中的物品.移除物品应该使用：
+     * {@link #removeItem(name.huliqing.fighter.data.ProtoData) }方法
+     * @return 
+     */
+    public List<ItemData> getAll() {
+        return data.getItems();
+    }
+    
+
+    
     
 }

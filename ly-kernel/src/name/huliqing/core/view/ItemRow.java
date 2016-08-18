@@ -21,10 +21,11 @@ import name.huliqing.core.ui.tiles.ColumnText;
 /**
  * 显示物品的数据行
  * @author huliqing
+ * @param <T>
  */
-public class ItemRow extends Row<ObjectData> {
+public class ItemRow<T extends ObjectData> extends Row<T> {
 
-    protected ObjectData data;
+    protected T data;
     
     // 物品
     protected ColumnIcon icon;
@@ -76,7 +77,7 @@ public class ItemRow extends Row<ObjectData> {
     }
 
     @Override
-    public void displayRow(ObjectData dd) {
+    public void displayRow(T dd) {
         data = dd;
         icon.setIcon(data.getIcon());
         body.setNameText(ResourceManager.get(data.getId() + ".name"));
@@ -94,7 +95,7 @@ public class ItemRow extends Row<ObjectData> {
      * 获取当前行所显示的ProtoData
      * @return 
      */
-    public ObjectData getData() {
+    public T getData() {
         return data;
     }
     

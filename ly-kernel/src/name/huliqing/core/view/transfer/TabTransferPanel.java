@@ -21,13 +21,14 @@ import name.huliqing.core.ui.tiles.Tab;
 /**
  *
  * @author huliqing
+ * @param <T>
  */
-public class TabTransferPanel extends TransferPanel implements RowClickListener {
+public class TabTransferPanel<T extends ObjectData> extends TransferPanel<T> implements RowClickListener<T> {
     private final SkinService skinService = Factory.get(SkinService.class);
     
-    private final List<ObjectData> itemDatas = new ArrayList<ObjectData>();
-    private final List<ObjectData> armorDatas = new ArrayList<ObjectData>();
-    private final List<ObjectData> weaponDatas = new ArrayList<ObjectData>();
+    private final List<T> itemDatas = new ArrayList<T>();
+    private final List<T> armorDatas = new ArrayList<T>();
+    private final List<T> weaponDatas = new ArrayList<T>();
     
     private final Tab tab;
     private final IconPanel btnItem;      // 物品列表
@@ -62,14 +63,14 @@ public class TabTransferPanel extends TransferPanel implements RowClickListener 
     }
     
     @Override
-    public void setDatas(List<ObjectData> datas) {
+    public void setDatas(List<T> datas) {
         super.setDatas(datas);
         itemDatas.clear();
         armorDatas.clear();
         weaponDatas.clear();
         
         // 载入角色的数据，注意：不要直接使用获取到的data，因为这会影响原始数据
-        for (ObjectData data : datas) {
+        for (T data : datas) {
             if (data instanceof ItemData) {
                 itemDatas.add(data);
             } else if (data instanceof SkinData) {
@@ -86,14 +87,14 @@ public class TabTransferPanel extends TransferPanel implements RowClickListener 
     }
 
     @Override
-    public void onClick(Row row, boolean isPressed, ObjectData data) {
+    public void onClick(Row row, boolean isPressed, T data) {
         if (isPressed) return;
         transfer(data);
     }
 
     @Override
-    public void onAdded(Transfer transfer, ObjectData data, int count) {
-        ObjectData temp = findLocalData(itemDatas, data.getId());
+    public void onAdded(Transfer<T> transfer, T data, int count) {
+        T temp = findLocalData(itemDatas, data.getId());
         if (temp == null)
             temp = findLocalData(armorDatas, data.getId());
         if (temp == null)
@@ -118,9 +119,9 @@ public class TabTransferPanel extends TransferPanel implements RowClickListener 
     }
 
     @Override
-    public void onRemoved(Transfer transfer, ObjectData data, int count) {
+    public void onRemoved(Transfer<T> transfer, T data, int count) {
         // temp == null说明该物品已经完全被移除
-        ObjectData temp = transfer.findData(data.getId());
+        T temp = transfer.findData(data.getId());
         if (temp == null || temp.getTotal() <= 0) {
             itemDatas.remove(data);
             weaponDatas.remove(data);
@@ -137,8 +138,8 @@ public class TabTransferPanel extends TransferPanel implements RowClickListener 
         weaponPanel.refresh();
     }
     
-    private ObjectData findLocalData(List<ObjectData> datas, String id) {
-        for (ObjectData data : datas) {
+    private T findLocalData(List<T> datas, String id) {
+        for (T data : datas) {
             if (data.getId().equals(id)) {
                 return data;
             }

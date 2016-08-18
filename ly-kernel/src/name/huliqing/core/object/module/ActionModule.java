@@ -11,7 +11,6 @@ import name.huliqing.core.object.action.Action;
 import name.huliqing.core.object.action.FightAction;
 import name.huliqing.core.object.action.RunAction;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.module.AbstractModule;
 
 /**
  * 角色行为控制器

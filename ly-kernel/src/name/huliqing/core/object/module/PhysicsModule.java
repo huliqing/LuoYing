@@ -10,7 +10,6 @@ import com.jme3.math.Vector3f;
 import com.jme3.util.TempVars;
 import name.huliqing.core.data.module.ModuleData;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.module.AbstractModule;
 
 /**
  * 角色的物理控制器

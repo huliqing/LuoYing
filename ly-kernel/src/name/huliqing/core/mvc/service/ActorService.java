@@ -53,21 +53,22 @@ public interface ActorService extends Inject {
      */
     boolean hasObstacleActor(Actor self, List<Actor> others); 
     
-    /**
-     * 获取角色身上的物品(除技能），如果没有该物品则返回null.
-     * @param actor
-     * @param objectId 物品ID
-     * @return 
-     */
-    ObjectData getItem(Actor actor, String objectId);
-    
-    /**
-     * 获取角色的所有物品(除技能外）
-     * @param actor
-     * @param store
-     * @return 
-     */
-    List<ObjectData> getItems(Actor actor, List<ObjectData> store);
+    // remove20160818
+//    /**
+//     * 获取角色身上的物品(除技能），如果没有该物品则返回null.
+//     * @param actor
+//     * @param objectId 物品ID
+//     * @return 
+//     */
+//    ObjectData getItem(Actor actor, String objectId);
+//    
+//    /**
+//     * 获取角色的所有物品(除技能外）
+//     * @param actor
+//     * @param store
+//     * @return 
+//     */
+//    List<ObjectData> getItems(Actor actor, List<ObjectData> store);
     
     /**
      * 给定一个时间点，判断从目标时间点之后是否角色的技能有更新（包含技能增加

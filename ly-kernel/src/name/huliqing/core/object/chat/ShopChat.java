@@ -14,6 +14,7 @@ import name.huliqing.core.constants.IdConstants;
 import name.huliqing.core.constants.InterfaceConstants;
 import name.huliqing.core.constants.ResConstants;
 import name.huliqing.core.data.ChatData;
+import name.huliqing.core.data.ItemData;
 import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.mvc.network.UserCommandNetwork;
 import name.huliqing.core.mvc.service.ActorService;
@@ -106,7 +107,7 @@ public class ShopChat<T extends ChatData> extends Chat<T> implements ItemListene
     }
 
     @Override
-    public void onItemAdded(Actor actor, String itemId, int trueAdded) {
+    public void onItemAdded(Actor actor, ItemData item, int trueAdded) {
         if (isInitialized()) {
             if (this.actor != actor) {
                 throw new IllegalStateException(); // 防止BUG
@@ -116,8 +117,7 @@ public class ShopChat<T extends ChatData> extends Chat<T> implements ItemListene
 //            updateShop();
             
             // 如果新添加了物品则同步物品数量
-            ObjectData pd = itemService.getItem(actor, itemId);
-            productPanel.syncItem(itemId, pd.getTotal());
+            productPanel.syncItem(item.getId(), item.getTotal());
             productPanel.refreshPageData();
             
             // 更新玩家剩余金币数
@@ -127,7 +127,7 @@ public class ShopChat<T extends ChatData> extends Chat<T> implements ItemListene
     }
 
     @Override
-    public void onItemRemoved(Actor actor, String itemId, int trueRemoved) {
+    public void onItemRemoved(Actor actor, ItemData item, int trueRemoved) {
         if (isInitialized()) {
             if (this.actor != actor) {
                 throw new IllegalStateException(); // 防止BUG
@@ -137,12 +137,7 @@ public class ShopChat<T extends ChatData> extends Chat<T> implements ItemListene
 //            updateShop();
             
             // 如果指定物品已经卖完则从商品列表中移除。
-            ObjectData pd = itemService.getItem(actor, itemId);
-            if (pd == null || pd.getTotal() <= 0) {
-                productPanel.syncItem(itemId, 0);
-            } else {
-                productPanel.syncItem(itemId, pd.getTotal());
-            }
+            productPanel.syncItem(item.getId(), item.getTotal());
             productPanel.refreshPageData();
             
             // 更新玩家剩余金币数
@@ -162,7 +157,7 @@ public class ShopChat<T extends ChatData> extends Chat<T> implements ItemListene
         
         // 载入产品信息
         productPanel.datas.clear();
-        itemService.getItems(actor, productPanel.datas);
+        productPanel.datas.addAll(itemService.getItems(actor));
         productPanel.refreshPageData();
         // 更新玩家剩余金币数
         footerPanel.update();

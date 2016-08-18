@@ -8,6 +8,7 @@ import com.jme3.font.BitmapFont;
 import com.jme3.math.ColorRGBA;
 import name.huliqing.core.LY;
 import name.huliqing.core.Factory;
+import name.huliqing.core.data.ItemData;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.SkinData;
@@ -183,23 +184,23 @@ public class ShortcutView extends FrameLayout implements ItemListener, SkinListe
     }
 
     @Override
-    public void onItemAdded(Actor actor, String itemId, int trueAdded) {
-        if (!itemId.equals(data.getId()))
+    public void onItemAdded(Actor actor, ItemData item, int trueAdded) {
+        if (!item.getId().equals(data.getId()))
             return;
         
         itemUpdate();
     }
 
     @Override
-    public void onItemRemoved(Actor actor, String itemId, int trueRemoved) {
-        if (!itemId.equals(data.getId()))
+    public void onItemRemoved(Actor actor, ItemData item, int trueRemoved) {
+        if (!item.getId().equals(data.getId()))
             return;
         
         itemUpdate();
     }
     
     private void itemUpdate() {
-        ObjectData temp = actor.getData().getItemStore().getItem(this.data.getId());
+        ObjectData temp = itemService.getItem(actor, this.data.getId());
         // 物品可能用完
         if (temp == null) {
             this.data.setTotal(0);

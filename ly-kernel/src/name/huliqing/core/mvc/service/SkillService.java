@@ -22,11 +22,18 @@ import name.huliqing.core.object.skill.Skill;
 public interface SkillService extends Inject {
     
     /**
-     * 载入一个技能。
+     * 载入技能。
      * @param skillId
      * @return 
      */
     Skill loadSkill(String skillId);
+    
+    /**
+     * 载入技能
+     * @param skillData
+     * @return 
+     */
+    Skill loadSkill(SkillData skillData);
     
     /**
      * 给角色添加技能
@@ -36,12 +43,20 @@ public interface SkillService extends Inject {
     void addSkill(Actor actor, String skillId);
     
     /**
-     * 获取角色的技能，如果不存在该技能则返回null
+     * 从角色身上移除一个技能
      * @param actor
      * @param skillId
      * @return 
      */
-    SkillData getSkill(Actor actor, String skillId);
+    boolean removeSkill(Actor actor, String skillId);
+    
+    /**
+     * 获取角色的技能，如果角色身上不存在该技能则返回null
+     * @param actor
+     * @param skillId
+     * @return 
+     */
+    Skill getSkill(Actor actor, String skillId);
     
     /**
      * 获取角色身上指定的技能，如果存在多个相同类型的技能，则返回第一个找到
@@ -50,54 +65,79 @@ public interface SkillService extends Inject {
      * @param skillType
      * @return 
      */
-    SkillData getSkill(Actor actor, SkillType skillType);
+    Skill getSkill(Actor actor, SkillType skillType);
     
     /**
-     * 获得一个可用于直接执行的技能,角色必须拥有该技能，否则该方法将返回null.
-     * @param actor
-     * @param skillId
-     * @return 
-     */
-    Skill getSkillInstance(Actor actor, String skillId);
-    
-    /**
-     * 获取角色所有技能,注意：返回列表只作为只读使用，不要增删其中的数据
+     * 获取角色当前身上的所有技能，
      * @param actor
      * @return 
      */
-    List<SkillData> getSkill(Actor actor);
+    List<Skill> getSkills(Actor actor);
     
     /**
-     * @deprecated 以后不要使用随机获取技能，这会在客户端和服务端执行的时候不一致。
-     * 获取一个随机指定类型的技能,如果不存在指定类型的技能则返回null.
+     * 给角色添加一个技能侦听器
      * @param actor
-     * @param skillType
-     * @return 
+     * @param skillListener 
      */
-    SkillData getSkillRandom(Actor actor, SkillType skillType);
+    void addSkillListener(Actor actor, SkillListener skillListener);
     
     /**
-     * @deprecated 以后不要使用随机获取技能，这会在客户端和服务端执行的时候不一致。
-     * 获取一个随机防御技能,如果没有该技能则返回null.
+     * 移除角色身上的技能侦听器
      * @param actor
+     * @param skillListener
      * @return 
      */
-    SkillData getSkillRandomDefend(Actor actor);
+    boolean removeSkillListener(Actor actor, SkillListener skillListener);
     
-    /**
-     * @deprecated 以后不要使用随机获取技能，这会在客户端和服务端执行的时候不一致。
-     * 获取一个随机躲闪技能,如果没有则返回null
-     * @param actor
-     * @return 
-     */
-    SkillData getSkillRandomDuck(Actor actor);
+     // remove20160819
+//    /**
+//     * 获得一个可用于直接执行的技能,角色必须拥有该技能，否则该方法将返回null.
+//     * @param actor
+//     * @param skillId
+//     * @return 
+//     */
+//    Skill getSkillInstance(Actor actor, String skillId);
+
+    // remove20160819
+//    /**
+//     * 获取角色所有技能,注意：返回列表只作为只读使用，不要增删其中的数据
+//     * @param actor
+//     * @return 
+//     */
+//    List<SkillData> getSkill(Actor actor);
     
-    /**
-     * @deprecated 以后不要使用随机获取技能，这会在客户端和服务端执行的时候不一致。
-     * @param actor
-     * @return 
-     */
-    SkillData getSkillRandomWalk(Actor actor);
+     // remove20160819
+//    /**
+//     * @deprecated 以后不要使用随机获取技能，这会在客户端和服务端执行的时候不一致。
+//     * 获取一个随机指定类型的技能,如果不存在指定类型的技能则返回null.
+//     * @param actor
+//     * @param skillType
+//     * @return 
+//     */
+//    SkillData getSkillRandom(Actor actor, SkillType skillType);
+//    
+//    /**
+//     * @deprecated 以后不要使用随机获取技能，这会在客户端和服务端执行的时候不一致。
+//     * 获取一个随机防御技能,如果没有该技能则返回null.
+//     * @param actor
+//     * @return 
+//     */
+//    SkillData getSkillRandomDefend(Actor actor);
+//    
+//    /**
+//     * @deprecated 以后不要使用随机获取技能，这会在客户端和服务端执行的时候不一致。
+//     * 获取一个随机躲闪技能,如果没有则返回null
+//     * @param actor
+//     * @return 
+//     */
+//    SkillData getSkillRandomDuck(Actor actor);
+//    
+//    /**
+//     * @deprecated 以后不要使用随机获取技能，这会在客户端和服务端执行的时候不一致。
+//     * @param actor
+//     * @return 
+//     */
+//    SkillData getSkillRandomWalk(Actor actor);
     
     /**
      * 执行一个技能实例
@@ -229,8 +269,7 @@ public interface SkillService extends Inject {
      * 锁定指定角色的技能类型,当这些技能类型被锁定后，属于这些类型的技能将不
      * 能再执行，直到进行unlockSkill
      * @param actor
-     * @param skillType
-     * @return 
+     * @param skillType 
      * @see #unlockSkill(name.huliqing.fighter.object.actor.Actor, name.huliqing.fighter.enums.SkillType[]) 
      */
     void lockSkill(Actor actor, SkillType... skillType);
@@ -280,6 +319,7 @@ public interface SkillService extends Inject {
      */
     void unlockSkillChannels(Actor actor, String... channels);
     
+    // remove20160818
 //    /**
 //     * 获取技能的CutTimeEndRate,这个值是对技能执行时间的剪裁，即对技能的结束阶段
 //     * 的时间进行剪裁，这个值受角色属性影响，并且不会大于CutTimeEndMax.
@@ -302,18 +342,15 @@ public interface SkillService extends Inject {
 //     * @return 返回的最小值为0.0001f，为避免除0错误，速度不能小于或等于0
 //     */
 //    float getSkillSpeed(Actor actor, SkillData skillData);
-    
-    /**
-     * 获取技能的实际执行时间,技能的实际执行时间受：技能总时间、技能执行速度、
-     * 技能的剪裁时间等影响
-     * @param actor
-     * @param skillData
-     * @return 
-     */
-    float getSkillTrueUseTime(Actor actor, SkillData skillData);
-    
-    void addSkillListener(Actor actor, SkillListener skillListener);
-    
-    boolean removeSkillListener(Actor actor, SkillListener skillListener);
+//    
+//    /**
+//     * 获取技能的实际执行时间,技能的实际执行时间受：技能总时间、技能执行速度、
+//     * 技能的剪裁时间等影响
+//     * @param actor
+//     * @param skillData
+//     * @return 
+//     */
+//    float getSkillTrueUseTime(Actor actor, SkillData skillData);
+
     
 }

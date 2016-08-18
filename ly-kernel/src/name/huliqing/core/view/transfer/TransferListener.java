@@ -4,15 +4,14 @@
  */
 package name.huliqing.core.view.transfer;
 
-import name.huliqing.core.data.ObjectData;
-
 /**
  * 
  * @author huliqing
+ * @param <T>
  */
-public interface TransferListener {
+public interface TransferListener<T> {
     
-    void onAdded(Transfer transfer, ObjectData data, int count);
+    void onAdded(Transfer<T> transfer, T data, int count);
     
-    void onRemoved(Transfer transfer, ObjectData data, int count);
+    void onRemoved(Transfer<T> transfer, T data, int count);
 }

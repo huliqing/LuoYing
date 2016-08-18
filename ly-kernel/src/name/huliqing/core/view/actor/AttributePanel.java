@@ -8,12 +8,12 @@ import com.jme3.font.BitmapFont;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import name.huliqing.core.Factory;
 import name.huliqing.core.constants.ResConstants;
 import name.huliqing.core.data.AttributeData;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.manager.ResourceManager;
+import name.huliqing.core.mvc.service.AttributeService;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.ui.UIFactory;
 import name.huliqing.core.ui.LinearLayout;
@@ -26,7 +26,8 @@ import name.huliqing.core.ui.UI;
  */
 public class AttributePanel extends LinearLayout implements ActorPanel {
     private final ActorService actorService = Factory.get(ActorService.class);
-    private final static DecimalFormat format = new DecimalFormat("#.#");
+    private final AttributeService attributeService = Factory.get(AttributeService.class);
+    private final DecimalFormat format = new DecimalFormat("#.#");
     
     // 等级
     private AttrItem level;
@@ -73,10 +74,11 @@ public class AttributePanel extends LinearLayout implements ActorPanel {
         level.setValue(actorService.getLevel(actor));
         
         // attributes
-        Map<String, AttributeData> attributes = actor.getData().getAttributes();
+        List<AttributeData> attributes = attributeService.getAttributes(actor);
+        
         int count = 0;
         if (attributes != null) {
-            for (AttributeData data : attributes.values()) {
+            for (AttributeData data : attributes) {
                 AttrItem item;
                 if (count >= attrs.size()) {
                     item = new AttrItem("", "");

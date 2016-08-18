@@ -13,28 +13,24 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import name.huliqing.core.constants.IdConstants;
 import name.huliqing.core.data.ChannelData;
-import name.huliqing.core.data.module.ModuleData;
+import name.huliqing.core.data.module.ChannelModuleData;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.channel.Channel;
 import name.huliqing.core.object.channel.ChannelControl;
-import name.huliqing.core.object.module.AbstractModule;
 import name.huliqing.core.utils.Temp;
-import name.huliqing.core.xml.DataFactory;
 
 /**
  * 用于控制角色动画通道的“通道控制器”
  * @author huliqing
  * @param <T>
  */
-public class ChannelModule<T extends ModuleData> extends AbstractModule<T> implements ChannelControl {
+public class ChannelModule<T extends ChannelModuleData> extends AbstractModule<T> implements ChannelControl {
     private static final Logger LOG = Logger.getLogger(ChannelModule.class.getName());
 
+    // 通道处理器列表
     private final List<Channel> channels = new LinkedList<Channel>();
-    private final List<ChannelData> channelDatas = new ArrayList<ChannelData>();
-    
     // 保存一个完整的id引用
     private String[] fullChannelsIds;
     // 默认blendTime,秒
@@ -45,60 +41,68 @@ public class ChannelModule<T extends ModuleData> extends AbstractModule<T> imple
     // 如走路后无法停止，这时可通过调用reset方法来让角色静止。而resetState则标记了
     // 该状态。
     private boolean resetState;
+    
+    // 角色模型的动画控制器
+    private AnimControl animControl;
 
     @Override
     public void initialize(Actor actor) {
-        super.initialize(actor); 
+        super.initialize(actor);
+        animControl = actor.getSpatial().getControl(AnimControl.class);
         
-        // 1.优先从存档中载入
-        // 2.如果不是存档则从原始参数xml中获取
-        // 3.如果xml中没有配置则使用一个默认的“全通道”
-        List<ChannelData> channelInits = (List<ChannelData>) data.getAttribute("channelDatas");
-        if (channelInits == null) {
-            String[] channelArr = data.getAsArray("channels");
-            if (channelArr == null) {
-                channelArr = new String[]{IdConstants.CHANNEL_FULL};
-            } 
-            channelInits = new ArrayList<ChannelData>(channelArr.length);
-            for (String cid : channelArr) {
-                channelInits.add((ChannelData) DataFactory.createData(cid));
+        // remove
+//        // 1.优先从存档中载入
+//        // 2.如果不是存档则从原始参数xml中获取
+//        // 3.如果xml中没有配置则使用一个默认的“全通道”
+//        List<ChannelData> channelInits = (List<ChannelData>) data.getAttribute("channelDatas");
+//        if (channelInits == null) {
+//            String[] channelArr = data.getAsArray("channels");
+//            if (channelArr == null) {
+//                channelArr = new String[]{IdConstants.CHANNEL_FULL};
+//            } 
+//            channelInits = new ArrayList<ChannelData>(channelArr.length);
+//            for (String cid : channelArr) {
+//                channelInits.add((ChannelData) DataFactory.createData(cid));
+//            }
+//        }
+
+        if (data.getChannels() != null) {
+            List<ChannelData> tempChannels = new ArrayList<ChannelData>(data.getChannels());
+            data.clear(); // 清理后通过addChannel重新添加
+            for (ChannelData cd : tempChannels) {
+                Channel channel = Loader.load(cd);
+                addChannel(channel);
             }
         }
-        
-        // 载入通道
-        AnimControl animControl = actor.getSpatial().getControl(AnimControl.class);
-        for (ChannelData cd : channelInits) {
-            Channel channel = Loader.load(cd);
-            channel.setAnimControl(animControl);
-            addChannel(channel);
-        }
-        
-        // 重置channelDatas,用于存档
-        data.setAttribute("channelDatas", channelDatas);
     }
 
     @Override
     public void cleanup() {
         channels.clear();
-        channelDatas.clear();
+        fullChannelsIds = null;
         super.cleanup(); 
     }
     
     @Override
     public void addChannel(Channel channel) {
-        if (!channels.contains(channel)) {
-            channels.add(channel);
-            channelDatas.add(channel.getData());
-            
-            // 更新完整通道ID
-            if (fullChannelsIds == null) {
-                fullChannelsIds = new String[] {channel.getId()};
-            } else {
-                String[] ids = new String[fullChannelsIds.length + 1];
-                System.arraycopy(fullChannelsIds, 0, ids, 0, fullChannelsIds.length);
-                ids[ids.length - 1] = channel.getId();
-                fullChannelsIds = ids;
-            }
+        if (channels.contains(channel))
+            return;
+        
+        channel.setAnimControl(animControl);
+        channels.add(channel);
+        if (data.getChannels() == null) {
+            data.setChannels(new ArrayList<ChannelData>());
+        }
+        data.getChannels().add(channel.getData());
+
+        // 更新完整通道ID
+        if (fullChannelsIds == null) {
+            fullChannelsIds = new String[] {channel.getId()};
+        } else {
+            String[] ids = new String[fullChannelsIds.length + 1];
+            System.arraycopy(fullChannelsIds, 0, ids, 0, fullChannelsIds.length);
+            ids[ids.length - 1] = channel.getId();
+            fullChannelsIds = ids;
         }
     }
 

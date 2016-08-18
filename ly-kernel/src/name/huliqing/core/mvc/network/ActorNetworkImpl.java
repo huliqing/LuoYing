@@ -13,10 +13,8 @@ import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.ActorData;
 import name.huliqing.core.data.AttributeData;
-import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.enums.HurtFace;
 import name.huliqing.core.enums.Sex;
-import name.huliqing.core.mvc.dao.ItemDao;
 import name.huliqing.core.view.talk.Talk;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.AttributeService;
@@ -39,16 +37,14 @@ import name.huliqing.core.object.actor.ActorListener;
  * @author huliqing
  */
 public class ActorNetworkImpl implements ActorNetwork{
-    private final static Network network = Network.getInstance();
+    private final static Network NETWORK = Network.getInstance();
     private ActorService actorService;
     private AttributeService attributeService;
-    private ItemDao actorDao;
     
     @Override
     public void inject() {
         actorService = Factory.get(ActorService.class);
         attributeService = Factory.get(AttributeService.class);
-        actorDao = Factory.get(ItemDao.class);
     }
 
     @Override
@@ -72,25 +68,9 @@ public class ActorNetworkImpl implements ActorNetwork{
     }
 
     @Override
-    public ObjectData getItem(Actor actor, String objectId) {
-        return actorService.getItem(actor, objectId); 
-    }
-
-    @Override
-    public List<ObjectData> getItems(Actor actor, List<ObjectData> store) {
-        return actorService.getItems(actor, store);
-    }
-
-    @Override
     public HurtFace checkFace(Spatial self, Actor target) {
         return actorService.checkFace(self, target); 
     }
-
-    // remove0815
-//    @Override
-//    public Actor getActor(Spatial spatial) {
-//        return actorService.getActor(spatial); 
-//    }
 
     @Override
     public Actor findNearestEnemyExcept(Actor actor, float maxDistance, Actor except) {
@@ -134,12 +114,12 @@ public class ActorNetworkImpl implements ActorNetwork{
 
     @Override
     public void speak(Actor actor, String mess, float useTime) {
-        if (!network.isClient()) {
+        if (!NETWORK.isClient()) {
             //broadcast
             MessActorSpeak mas = new MessActorSpeak();
             mas.setActorId(actor.getData().getUniqueId());
             mas.setMess(mess);
-            network.broadcast(mas);
+            NETWORK.broadcast(mas);
             
             // local speak
             actorService.speak(actor, mess, useTime); 
@@ -152,31 +132,23 @@ public class ActorNetworkImpl implements ActorNetwork{
         actorService.talk(talk); 
     }
 
-    // remove20151230
-//    @Override
-//    public void clearState(Actor actor) {
-//        actorService.clearState(actor); 
-//    }
-
     @Override
     public Vector3f getLocalToWorld(Actor actor, Vector3f localPos, Vector3f store) {
-//        return actorService.getLocalToWorld(actor, localPos, store); 
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public boolean checkAndLoadAnim(Actor actor, String animName) {
-//        return actorService.checkAndLoadAnim(actor, animName); // remove20151210
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public void kill(Actor actor) {
-        if (!network.isClient()) {
-            if (network.hasConnections()) {
+        if (!NETWORK.isClient()) {
+            if (NETWORK.hasConnections()) {
                 MessActorKill mess = new MessActorKill();
                 mess.setKillActorId(actor.getData().getUniqueId());
-                network.broadcast(mess);
+                NETWORK.broadcast(mess);
             }
             
             actorService.kill(actor); 
@@ -191,11 +163,11 @@ public class ActorNetworkImpl implements ActorNetwork{
 
     @Override
     public void setTarget(Actor actor, Actor target) {
-        if (!network.isClient()) {
+        if (!NETWORK.isClient()) {
             MessActorSetTarget mess = new MessActorSetTarget();
             mess.setActorId(actor.getData().getUniqueId());
             mess.setTargetId(target != null ? target.getData().getUniqueId() : -1);
-            network.broadcast(mess);
+            NETWORK.broadcast(mess);
             
             actorService.setTarget(actor, target); 
         }
@@ -204,7 +176,6 @@ public class ActorNetworkImpl implements ActorNetwork{
     @Override
     public Actor getTarget(Actor actor) {
         throw new UnsupportedOperationException("Not supported yet.");
-//        return actorService.getTarget(actor); 
     }
 
     @Override
@@ -215,38 +186,17 @@ public class ActorNetworkImpl implements ActorNetwork{
     @Override
     public boolean isAutoAi(Actor actor) {
         throw new UnsupportedOperationException("Not supported yet.");
-//        return actorService.isAutoAi(actor);
     }
 
     @Override
     public boolean isDead(Actor actor) {
         throw new UnsupportedOperationException("Not supported yet.");
-//        return actorService.isDead(actor); 
     }
 
     @Override
     public boolean isEnemy(Actor actor, Actor target) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
-    // remove 0221
-//    @Override
-//    public void itemSynTotal(Actor actor, String itemId, int total) {
-//        throw new UnsupportedOperationException("Not supported yet.");
-////        actorService.itemSynTotal(actor, itemId, total);
-//    }
-
-//    @Override
-//    public void setPhysics(Actor actor, boolean enabled) {
-//        if (!network.isClient()) {
-//            MessActorPhysics mess = new MessActorPhysics();
-//            mess.setActorId(actor.getData().getUniqueId());
-//            mess.setEnabled(enabled);
-//            network.broadcast(mess);
-//            
-//            actorService.setPhysics(actor, enabled); 
-//        }
-//    }
 
     @Override
     public void setColor(Actor actor, ColorRGBA color) {
@@ -255,19 +205,19 @@ public class ActorNetworkImpl implements ActorNetwork{
     
     @Override
     public void hitAttribute(Actor target, Actor source, String hitAttribute, float hitValue) {
-        if (!network.isClient()) {
+        if (!NETWORK.isClient()) {
             actorService.hitAttribute(target, source, hitAttribute, hitValue);
             
             // 同步生命值
             AttributeData attrData = attributeService.getAttributeData(target, hitAttribute);
-            if (network.hasConnections() && attrData != null) {
+            if (NETWORK.hasConnections() && attrData != null) {
                 MessAttributeSync mess = new MessAttributeSync();
                 mess.setActorId(target.getData().getUniqueId());
                 mess.setAttribute(attrData.getId());
                 mess.setLevelValue(attrData.getLevelValue());
                 mess.setStaticValue(attrData.getStaticValue());
                 mess.setDynamicValue(attrData.getDynamicValue());
-                network.broadcast(mess);
+                NETWORK.broadcast(mess);
             }
         }
     }
@@ -279,12 +229,12 @@ public class ActorNetworkImpl implements ActorNetwork{
 
     @Override
     public void setLevel(Actor actor, int level) {
-        if (!network.isClient()) {
-            if (network.hasConnections()) {
+        if (!NETWORK.isClient()) {
+            if (NETWORK.hasConnections()) {
                 MessActorSetLevel mess = new MessActorSetLevel();
                 mess.setActorId(actor.getData().getUniqueId());
                 mess.setLevel(level);
-                network.broadcast(mess);
+                NETWORK.broadcast(mess);
             }
             
             actorService.setLevel(actor, level);
@@ -298,12 +248,12 @@ public class ActorNetworkImpl implements ActorNetwork{
     
     @Override
     public int applyXp(Actor actor, int xp) {
-        if (!network.isClient()) {
-            if (network.hasConnections()) {
+        if (!NETWORK.isClient()) {
+            if (NETWORK.hasConnections()) {
                 MessActorApplyXp mess = new MessActorApplyXp();
                 mess.setActorId(actor.getData().getUniqueId());
                 mess.setXp(xp);
-                network.broadcast(mess);
+                NETWORK.broadcast(mess);
             }
             
             return actorService.applyXp(actor, xp);
@@ -375,12 +325,12 @@ public class ActorNetworkImpl implements ActorNetwork{
 
     @Override
     public void setGroup(Actor actor, int group) {
-        if (!network.isClient()) {
-            if (network.hasConnections()) {
+        if (!NETWORK.isClient()) {
+            if (NETWORK.hasConnections()) {
                 MessActorSetGroup mess = new MessActorSetGroup();
                 mess.setActorId(actor.getData().getUniqueId());
                 mess.setGroup(group);
-                network.broadcast(mess);
+                NETWORK.broadcast(mess);
             }
             
             actorService.setGroup(actor, group);
@@ -394,12 +344,12 @@ public class ActorNetworkImpl implements ActorNetwork{
 
     @Override
     public void setTeam(Actor actor, int team) {
-        if (!network.isClient()) {
-            if (network.hasConnections()) {
+        if (!NETWORK.isClient()) {
+            if (NETWORK.hasConnections()) {
                 MessActorTeam mess = new MessActorTeam();
                 mess.setActorId(actor.getData().getUniqueId());
                 mess.setTeamId(team);
-                network.broadcast(mess);
+                NETWORK.broadcast(mess);
             }
             
             actorService.setTeam(actor, team);
@@ -438,12 +388,12 @@ public class ActorNetworkImpl implements ActorNetwork{
 
     @Override
     public void setFollow(Actor actor, long targetId) {
-        if (!network.isClient()) {
-            if (network.hasConnections()) {
+        if (!NETWORK.isClient()) {
+            if (NETWORK.hasConnections()) {
                 MessActorFollow mess = new MessActorFollow();
                 mess.setActorId(actor.getData().getUniqueId());
                 mess.setTargetId(targetId);
-                network.broadcast(mess);
+                NETWORK.broadcast(mess);
             }
             
             actorService.setFollow(actor, targetId);
@@ -479,11 +429,11 @@ public class ActorNetworkImpl implements ActorNetwork{
     
     @Override
     public void setViewDirection(Actor actor, Vector3f viewDirection) {
-        if (!network.isClient()) {
+        if (!NETWORK.isClient()) {
             MessActorViewDir mess = new MessActorViewDir();
             mess.setActorId(actor.getData().getUniqueId());
             mess.setViewDir(viewDirection);
-            network.broadcast(mess);
+            NETWORK.broadcast(mess);
             
             actorService.setViewDirection(actor, viewDirection);
         }
@@ -496,11 +446,11 @@ public class ActorNetworkImpl implements ActorNetwork{
 
     @Override
     public void setPhysicsEnabled(Actor actor, boolean enabled) {
-         if (!network.isClient()) {
+         if (!NETWORK.isClient()) {
             MessActorPhysics mess = new MessActorPhysics();
             mess.setActorId(actor.getData().getUniqueId());
             mess.setEnabled(enabled);
-            network.broadcast(mess);
+            NETWORK.broadcast(mess);
             
             actorService.setPhysicsEnabled(actor, enabled); 
         }

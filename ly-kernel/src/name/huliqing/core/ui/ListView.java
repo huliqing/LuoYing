@@ -11,6 +11,7 @@ import java.util.List;
 /**
  *
  * @author huliqing
+ * @param <T>
  */
 public abstract class ListView<T> extends AbstractUI implements ScrollListener {
     

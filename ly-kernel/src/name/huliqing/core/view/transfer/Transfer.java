@@ -5,13 +5,13 @@
 package name.huliqing.core.view.transfer;
 
 import java.util.List;
-import name.huliqing.core.data.ObjectData;
 
 /**
  * 数据传输交换接口
  * @author huliqing
+ * @param <T>
  */
-public interface Transfer {
+public interface Transfer<T> {
     
     /**
      * 设置要传输的目标对象
@@ -29,40 +29,41 @@ public interface Transfer {
      * 获取数据列表
      * @return 
      */
-    List<ObjectData> getDatas();
+    List<T> getDatas();
     
     /**
      * 设置数据列表
      * @param datas 
      */
-    void setDatas(List<ObjectData> datas);
+    void setDatas(List<T> datas);
     
     /**
      * 添加数据到列表
+     * @param data
      * @param count 要添加的数量
      */
-    void addData(ObjectData data, int count);
+    void addData(T data, int count);
     
     /**
      * 从列表中移除数据
-     * @param itemId
+     * @param data
      * @param count 
      */
-    void removeData(ObjectData data, int count);
+    void removeData(T data, int count);
     
     /**
      * 通过id查找data,如果不存在则返回null.
      * @param id
      * @return 
      */
-    ObjectData findData(String id);
+    T findData(String id);
     
     /**
      * 传输数据到目标transfer(target)
      * @param data 传输的目标数据
      * @param count 传输的数量
      */
-    void transfer(ObjectData data, int count);
+    void transfer(T data, int count);
     
     /**
      * 添加数据传输侦听器

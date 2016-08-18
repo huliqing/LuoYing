@@ -4,6 +4,7 @@
  */
 package name.huliqing.core.mvc.network;
 
+import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.AttributeData;
 import name.huliqing.core.mvc.service.AttributeService;
@@ -85,6 +86,11 @@ public class AttributeNetworkImpl implements AttributeNetwork {
                 network.broadcast(mess);
             }
         }
+    }
+
+    @Override
+    public List<AttributeData> getAttributes(Actor actor) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     

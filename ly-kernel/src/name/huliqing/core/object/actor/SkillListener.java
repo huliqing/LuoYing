@@ -13,6 +13,20 @@ import name.huliqing.core.object.skill.Skill;
 public interface SkillListener {
     
     /**
+     * 当角色添加了一个新技能后该方法被调用。
+     * @param actor
+     * @param skill 新添加的技能
+     */
+    void onSkillAdded(Actor actor, Skill skill);
+    
+    /**
+     * 当角色被移除了一个技能后该方法被调用。
+     * @param actor
+     * @param skill 被移除的技能
+     */
+    void onSkillRemoved(Actor actor, Skill skill);
+    
+    /**
      * 如果角色可以执行这个技能则该方法返回true,否则返回false.这个方法主要
      * 用于支持一些状态效果，比如一些状态效果可能不允许角色去执行某些特定的
      * 技能，则这时可以返回false,以阻止技能的执行。默认情况下应该始终返回true.
@@ -32,7 +46,7 @@ public interface SkillListener {
  
     /**
      * 当技能结束时调用,这个方法发生在技能完成执行之后，即表示技能已经cleanup
-     * 完毕，目标技能已经完全退出的情况。<br />
+     * 完毕，目标技能已经完全退出的情况。<br>
      * 注：不管技能是否正常结束或被其它技能打断而结束，该方法都会在结束后被调用。
      * @param source
      * @param skill 

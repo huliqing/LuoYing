@@ -9,14 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.data.module.ModuleData;
 import name.huliqing.core.object.actor.ActorListener;
-import name.huliqing.core.object.module.AbstractModule;
 
 /**
  * 角色的基本控制器
  * @author huliqing
  * @param <T>
  */
-public class BaseModule<T extends ModuleData> extends AbstractModule<T>{
+public class ActorModule<T extends ModuleData> extends AbstractModule<T>{
 
     // 监听角色被目标锁定/释放,被击中,被杀死或杀死目标的侦听器
     private List<ActorListener> actorListeners;
