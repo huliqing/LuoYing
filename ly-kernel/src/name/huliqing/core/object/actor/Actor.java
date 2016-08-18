@@ -12,11 +12,10 @@ import com.jme3.scene.control.AbstractControl;
 import com.jme3.util.SafeArrayList;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.core.data.ModuleData;
-import name.huliqing.core.loader.Loader;
-import name.huliqing.core.object.actormodule.AbstractLogicActorModule;
-import name.huliqing.core.object.actormodule.ActorModule;
+import name.huliqing.core.data.module.ModuleData;
+import name.huliqing.core.object.Loader;
 import name.huliqing.core.xml.DataProcessor;
+import name.huliqing.core.object.module.Module;
 
 /**
  * 角色
@@ -30,13 +29,7 @@ public class Actor extends AbstractControl implements DataProcessor<ActorData> {
     /**
      * 所有的模块,这里面包含logicModules中的模块。
      */
-    protected final SafeArrayList<ActorModule> modules = new SafeArrayList<ActorModule>(ActorModule.class);
-    
-    /**
-     * 逻辑模块,这些模块需要"持续"更新,需要实现update(tpf)功能。
-     */
-    protected final SafeArrayList<AbstractLogicActorModule> logicModules = 
-            new SafeArrayList<AbstractLogicActorModule>(AbstractLogicActorModule.class);
+    protected final SafeArrayList<Module> modules = new SafeArrayList<Module>(Module.class);
     
     @Override
     public void setData(ActorData data) {
@@ -52,6 +45,10 @@ public class Actor extends AbstractControl implements DataProcessor<ActorData> {
      * 初始化角色
      */
     public void initialize() {
+        if (initialized) {
+            throw new IllegalStateException("Actor already initialized! actor=" + this);
+        }
+        
         // 载入基本模型并添加当前控制器
         loadModel().addControl(this);
         
@@ -62,7 +59,7 @@ public class Actor extends AbstractControl implements DataProcessor<ActorData> {
             List<ModuleData> tempMDS= new ArrayList<ModuleData>(data.getModuleDatas());
             data.getModuleDatas().clear();
             for (ModuleData cd : tempMDS) {
-                addModule((ActorModule)Loader.load(cd));
+                addModule((Module)Loader.load(cd));
             }
         }
         
@@ -77,61 +74,42 @@ public class Actor extends AbstractControl implements DataProcessor<ActorData> {
         return initialized;
     }
     
-    @Override
-    protected void controlUpdate(float tpf) {
-        // 更新逻辑模块
-        for (AbstractLogicActorModule module : logicModules.getArray()) {
-            module.update(tpf);
-        }
-    }
-
-    @Override
-    protected void controlRender(RenderManager rm, ViewPort vp) {}
-    
     /**
      * 清理角色
      */
     public void cleanup() {
-        for (ActorModule module : modules) {
+        for (Module module : modules) {
             module.cleanup();
         }
         modules.clear();
-        logicModules.clear();
         initialized = false;
     }
     
     /**
      * 添加角色扩展模块
-     * @param actorModule 
+     * @param module 
      */
-    public void addModule(ActorModule actorModule) {
-        if (modules.contains(actorModule)) {
+    public void addModule(Module module) {
+        if (modules.contains(module)) {
             return;
         }
-        modules.add(actorModule);
-        if (actorModule instanceof AbstractLogicActorModule) {
-            logicModules.add((AbstractLogicActorModule) actorModule);
-        }
-        data.getModuleDatas().add(actorModule.getData());
-        actorModule.setActor(this);
-        actorModule.initialize();
+        modules.add(module);
+        data.getModuleDatas().add(module.getData());
+        module.initialize(this);
     }
     
     /**
      * 移除指定的角色模块
-     * @param actorModule 
+     * @param module 
      * @return  
      */
-    public boolean removeModule(ActorModule actorModule) {
-        if (!modules.contains(actorModule)) {
+    public boolean removeModule(Module module) {
+        if (!modules.contains(module)) {
             return false;
         }
-        modules.remove(actorModule);
-        if (actorModule instanceof AbstractLogicActorModule) {
-            logicModules.remove((AbstractLogicActorModule) actorModule);
-        }
-        data.getModuleDatas().remove(actorModule.getData());
-        actorModule.cleanup();
+        modules.remove(module);
+        data.getModuleDatas().remove(module.getData());
+        module.cleanup();
         return true;
     }
     
@@ -141,8 +119,8 @@ public class Actor extends AbstractControl implements DataProcessor<ActorData> {
      * @param moduleType
      * @return 
      */
-    public <T extends ActorModule> T  getModule(Class<T> moduleType) {
-        for (ActorModule m : modules.getArray()) {
+    public <T extends Module> T  getModule(Class<T> moduleType) {
+        for (Module m : modules.getArray()) {
             if (moduleType.isAssignableFrom(m.getClass())) {
                 return (T) m;
             }
@@ -158,4 +136,13 @@ public class Actor extends AbstractControl implements DataProcessor<ActorData> {
         return ActorModelLoader.loadActorModel(data);
     }
     
+    @Override
+    protected void controlUpdate(float tpf) {
+        // ignore
+    }
+
+    @Override
+    protected void controlRender(RenderManager rm, ViewPort vp) {
+        // ignore
+    }
 }

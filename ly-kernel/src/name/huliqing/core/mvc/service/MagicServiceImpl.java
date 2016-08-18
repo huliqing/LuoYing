@@ -5,7 +5,7 @@
 package name.huliqing.core.mvc.service;
 
 import name.huliqing.core.data.MagicData;
-import name.huliqing.core.loader.Loader;
+import name.huliqing.core.object.Loader;
 import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.object.magic.Magic;
 

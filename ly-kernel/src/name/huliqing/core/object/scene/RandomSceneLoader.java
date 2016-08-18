@@ -4,15 +4,16 @@
  */
 package name.huliqing.core.object.scene;
 
+import name.huliqing.core.loader.SceneDataLoader;
 import com.jme3.math.Vector3f;
 import com.jme3.util.TempVars;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.core.data.EnvData;
+import name.huliqing.core.data.env.EnvData;
 import name.huliqing.core.xml.Proto;
 import name.huliqing.core.data.SceneData;
 import name.huliqing.core.xml.DataFactory;
-import name.huliqing.core.object.env.ModelEnvData;
+import name.huliqing.core.data.env.ModelEnvData;
 import name.huliqing.core.utils.ConvertUtils;
 import name.huliqing.core.utils.MathUtils;
 

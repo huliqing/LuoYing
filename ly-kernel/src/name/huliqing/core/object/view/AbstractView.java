@@ -12,7 +12,7 @@ import name.huliqing.core.Factory;
 import name.huliqing.core.data.ViewData;
 import name.huliqing.core.mvc.network.PlayNetwork;
 import name.huliqing.core.mvc.service.PlayService;
-import name.huliqing.core.loader.Loader;
+import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.AbstractPlayObject;
 import name.huliqing.core.object.SyncData;
 import name.huliqing.core.object.NetworkObject;

@@ -6,10 +6,10 @@ package name.huliqing.core.mvc.service;
 
 import java.util.List;
 import name.huliqing.core.data.TaskData;
-import name.huliqing.core.loader.Loader;
+import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actor.TaskListener;
-import name.huliqing.core.object.actormodule.TaskActorModule;
+import name.huliqing.core.object.module.TaskModule;
 import name.huliqing.core.object.task.Task;
 
 /**
@@ -38,7 +38,7 @@ public class TaskServiceImpl implements TaskService {
     
     @Override
     public void addTask(Actor actor, Task task) {
-        TaskActorModule control = actor.getModule(TaskActorModule.class);
+        TaskModule control = actor.getModule(TaskModule.class);
         if (control != null) {
             control.addTask(task);
         }
@@ -46,7 +46,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task getTask(Actor actor, String taskId) {
-        TaskActorModule control = actor.getModule(TaskActorModule.class);
+        TaskModule control = actor.getModule(TaskModule.class);
         if (control != null) {
             return control.getTask(taskId);
         }
@@ -55,7 +55,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<Task> getTasks(Actor actor) {
-        TaskActorModule control = actor.getModule(TaskActorModule.class);
+        TaskModule control = actor.getModule(TaskModule.class);
         if (control != null) {
             return control.getTasks();
         }
@@ -64,7 +64,7 @@ public class TaskServiceImpl implements TaskService {
     
     @Override
     public List<TaskData> getTaskDatas(Actor actor) {
-        TaskActorModule control = actor.getModule(TaskActorModule.class);
+        TaskModule control = actor.getModule(TaskModule.class);
         if (control != null) {
             return control.getTaskDatas();
         }
@@ -79,7 +79,7 @@ public class TaskServiceImpl implements TaskService {
     
     @Override
     public void completeTask(Actor actor, Task task) {
-        TaskActorModule control = actor.getModule(TaskActorModule.class);
+        TaskModule control = actor.getModule(TaskModule.class);
         if (control != null) {
             control.completeTask(task);
         }
@@ -100,7 +100,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public void addTaskListener(Actor actor, TaskListener taskListener) {
-        TaskActorModule control = actor.getModule(TaskActorModule.class);
+        TaskModule control = actor.getModule(TaskModule.class);
         if (control != null) {
             control.addTaskListener(taskListener);
         }
@@ -108,7 +108,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public boolean removeTaskListener(Actor actor, TaskListener taskListener) {
-        TaskActorModule control = actor.getModule(TaskActorModule.class);
+        TaskModule control = actor.getModule(TaskModule.class);
         return control != null && control.removeTaskListener(taskListener);
     }
     

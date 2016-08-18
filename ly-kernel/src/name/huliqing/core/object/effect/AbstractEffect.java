@@ -14,7 +14,7 @@ import com.jme3.util.TempVars;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.data.EffectData;
-import name.huliqing.core.loader.Loader;
+import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.anim.Anim;
 import name.huliqing.core.object.sound.Sound;
 import name.huliqing.core.object.sound.SoundManager;

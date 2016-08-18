@@ -14,7 +14,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.texture.Texture2D;
 import com.jme3.water.WaterFilter;
 import com.jme3.water.WaterFilter.AreaShape;
-import name.huliqing.core.data.EnvData;
+import name.huliqing.core.data.env.EnvData;
 import name.huliqing.core.object.scene.Scene;
 
 /**

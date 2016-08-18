@@ -7,7 +7,7 @@ package name.huliqing.core.object.effect;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.scene.Spatial;
 import name.huliqing.core.data.EffectData;
-import name.huliqing.core.loader.Loader;
+import name.huliqing.core.object.Loader;
 
 /**
  * 用一个模型作为一个效果

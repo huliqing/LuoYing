@@ -9,11 +9,11 @@ import name.huliqing.core.constants.IdConstants;
 import name.huliqing.core.constants.ResConstants;
 import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.enums.MessageType;
-import name.huliqing.core.loader.Loader;
+import name.huliqing.core.object.Loader;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.chat.Chat;
-import name.huliqing.core.object.actormodule.ChatActorModule;
+import name.huliqing.core.object.module.ChatModule;
 import name.huliqing.core.object.sound.SoundManager;
 
 /**
@@ -39,7 +39,7 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public Chat getChat(Actor actor) {
-        ChatActorModule module = actor.getModule(ChatActorModule.class);
+        ChatModule module = actor.getModule(ChatModule.class);
         Chat chat = null;
         if (module.getChat() == null) {
             String chatId = actor.getData().getChat();

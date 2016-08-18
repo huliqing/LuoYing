@@ -17,7 +17,7 @@ import name.huliqing.core.constants.MaterialConstants;
 import name.huliqing.core.constants.ModelConstants;
 import name.huliqing.core.constants.TextureConstants;
 import name.huliqing.core.data.EffectData;
-import name.huliqing.core.loader.Loader;
+import name.huliqing.core.object.Loader;
 
 /**
  *

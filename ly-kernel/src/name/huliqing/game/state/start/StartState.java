@@ -22,7 +22,7 @@ import name.huliqing.core.Factory;
 import name.huliqing.core.constants.IdConstants;
 import name.huliqing.core.constants.InterfaceConstants;
 import name.huliqing.core.mvc.service.GameService;
-import name.huliqing.core.loader.Loader;
+import name.huliqing.core.object.Loader;
 import name.huliqing.core.save.SaveHelper;
 import name.huliqing.core.save.SaveStory;
 import name.huliqing.core.shape.QuadXY;

@@ -10,7 +10,7 @@ import name.huliqing.core.data.SkinData;
 import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actor.SkinListener;
-import name.huliqing.core.object.actormodule.SkinActorModule;
+import name.huliqing.core.object.module.SkinModule;
 
 /**
  *
@@ -90,7 +90,7 @@ public class SkinServiceImpl implements SkinService {
 //        cacheWeaponsAndState(actor);
 
 
-        SkinActorModule control = actor.getModule(SkinActorModule.class);
+        SkinModule control = actor.getModule(SkinModule.class);
         if (control != null) {
             control.attachSkin(skinData);
         }
@@ -132,7 +132,7 @@ public class SkinServiceImpl implements SkinService {
 //        // 3.====重新缓存武器状态及武器列表信息
 //        cacheWeaponsAndState(actor);
 
-        SkinActorModule control = actor.getModule(SkinActorModule.class);
+        SkinModule control = actor.getModule(SkinModule.class);
         if (control != null) {
             control.detachSkin(skinData);
         }
@@ -179,7 +179,7 @@ public class SkinServiceImpl implements SkinService {
 //        }
 //        return true;
 
-        SkinActorModule control = actor.getModule(SkinActorModule.class);
+        SkinModule control = actor.getModule(SkinModule.class);
         if (control != null) {
             return control.takeOnWeapon(force);
         }
@@ -212,7 +212,7 @@ public class SkinServiceImpl implements SkinService {
 //        }
 //        return true;
 
-        SkinActorModule module = actor.getModule(SkinActorModule.class);
+        SkinModule module = actor.getModule(SkinModule.class);
         if (module != null) {
             return module.takeOffWeapon(force);
         }
@@ -221,7 +221,7 @@ public class SkinServiceImpl implements SkinService {
     
     @Override
     public List<SkinData> getArmorSkins(Actor actor, List<SkinData> store) {
-        SkinActorModule control = actor.getModule(SkinActorModule.class);
+        SkinModule control = actor.getModule(SkinModule.class);
         if (control != null) {
             return control.getArmorSkins(store);
         }
@@ -230,7 +230,7 @@ public class SkinServiceImpl implements SkinService {
 
     @Override
     public List<SkinData> getWeaponSkins(Actor actor, List<SkinData> store) {
-        SkinActorModule module = actor.getModule(SkinActorModule.class);
+        SkinModule module = actor.getModule(SkinModule.class);
         if (module != null) {
             return module.getWeaponSkins(store);
         }
@@ -250,7 +250,7 @@ public class SkinServiceImpl implements SkinService {
 //        currentWeapons = actor.getModel().getUserData(ActorConstants.USER_DATA_TEMP_WEAPONS);
 //        return currentWeapons.getInnerData();
 
-        SkinActorModule module = actor.getModule(SkinActorModule.class);
+        SkinModule module = actor.getModule(SkinModule.class);
         if (module != null) {
             return module.getCurrentWeaponSkin();
         }
@@ -268,7 +268,7 @@ public class SkinServiceImpl implements SkinService {
 //        state = actor.getModel().getUserData(ActorConstants.USER_DATA_TEMP_WEAPON_STATE);
 //        return state;
 
-        SkinActorModule module = actor.getModule(SkinActorModule.class);
+        SkinModule module = actor.getModule(SkinModule.class);
         if (module != null) {
             return module.getWeaponState();
         }
@@ -277,7 +277,7 @@ public class SkinServiceImpl implements SkinService {
     
     @Override
     public boolean isWeaponTakeOn(Actor actor) {
-        SkinActorModule module = actor.getModule(SkinActorModule.class);
+        SkinModule module = actor.getModule(SkinModule.class);
         return module != null && module.isWeaponTakeOn();
     }
     
@@ -288,7 +288,7 @@ public class SkinServiceImpl implements SkinService {
 
     @Override
     public void addSkinListener(Actor actor, SkinListener skinListener) {
-        SkinActorModule module = actor.getModule(SkinActorModule.class);
+        SkinModule module = actor.getModule(SkinModule.class);
         if (module != null) {
             module.addSkinListener(skinListener);
         }
@@ -296,7 +296,7 @@ public class SkinServiceImpl implements SkinService {
 
     @Override
     public boolean removeSkinListener(Actor actor, SkinListener skinListener) {
-        SkinActorModule module = actor.getModule(SkinActorModule.class);
+        SkinModule module = actor.getModule(SkinModule.class);
         if (module != null) {
             return module.removeSkinListener(skinListener);
         }

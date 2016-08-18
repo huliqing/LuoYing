@@ -5,20 +5,29 @@
  */
 package name.huliqing.core.object.module;
 
-import name.huliqing.core.data.ModuleData;
+import name.huliqing.core.data.module.ModuleData;
+import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.xml.DataProcessor;
 
 /**
- * 角色的扩展模块
+ * Module是用来扩展角色功能的,一个角色可以拥有一个至无穷多个的扩展模块，所有角色扩展模块都应该实现这个
+ * 接口.
  * @author huliqing
  * @param <T>
  */
-public interface Module<T extends ModuleData> extends DataProcessor<T> {
+public interface Module<T extends ModuleData> extends DataProcessor<T>{
+
+    @Override
+    public void setData(T data);
+
+    @Override
+    public T getData();
     
     /**
      * 初始化模块
+     * @param actor
      */
-    void initialize();
+    void initialize(Actor actor);
     
     /**
      * 判断模块是否已经初始化
@@ -30,4 +39,5 @@ public interface Module<T extends ModuleData> extends DataProcessor<T> {
      * 清理模块
      */
     void cleanup();
+    
 }

@@ -30,7 +30,7 @@ import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.mvc.service.StateService;
 import name.huliqing.core.mvc.service.ViewService;
-import name.huliqing.core.loader.Loader;
+import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.actorlogic.PositionActorLogic;
 import name.huliqing.core.logic.scene.ActorLoadHelper;
 import name.huliqing.core.logic.scene.ActorBuildLogic;

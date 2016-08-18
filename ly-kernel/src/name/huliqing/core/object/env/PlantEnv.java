@@ -5,6 +5,7 @@
  */
 package name.huliqing.core.object.env;
 
+import name.huliqing.core.data.env.ModelEnvData;
 import com.jme3.scene.Spatial;
 import name.huliqing.core.utils.GeometryUtils;
 

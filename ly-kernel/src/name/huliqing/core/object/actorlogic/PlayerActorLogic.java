@@ -10,7 +10,7 @@ import name.huliqing.core.object.action.FightAction;
 import name.huliqing.core.data.ActorLogicData;
 import name.huliqing.core.mvc.service.ActionService;
 import name.huliqing.core.mvc.service.ActorService;
-import name.huliqing.core.loader.Loader;
+import name.huliqing.core.object.Loader;
 
 /**
  * 只用于player角色的逻辑,不会有idle行为，因为不让玩角角色在停下来的时候或

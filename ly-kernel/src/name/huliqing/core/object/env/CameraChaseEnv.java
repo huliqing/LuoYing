@@ -8,7 +8,7 @@ package name.huliqing.core.object.env;
 import com.jme3.app.Application;
 import com.jme3.scene.Spatial;
 import java.util.List;
-import name.huliqing.core.data.EnvData;
+import name.huliqing.core.data.env.EnvData;
 import name.huliqing.core.object.scene.Scene;
 import name.huliqing.core.object.scene.Scene.SceneEnvListener;
 import name.huliqing.core.object.scene.Scene.SceneListener;

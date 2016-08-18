@@ -16,7 +16,7 @@ import com.jme3.scene.Spatial;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.Factory;
-import name.huliqing.core.data.EnvData;
+import name.huliqing.core.data.env.EnvData;
 import name.huliqing.core.data.SceneData;
 import name.huliqing.core.xml.DataProcessor;
 import name.huliqing.core.object.env.Env;

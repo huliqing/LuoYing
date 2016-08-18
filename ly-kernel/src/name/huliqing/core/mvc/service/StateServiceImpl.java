@@ -9,10 +9,10 @@ import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.data.StateData;
-import name.huliqing.core.loader.Loader;
+import name.huliqing.core.object.Loader;
 import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.object.actor.StateListener;
-import name.huliqing.core.object.actormodule.StateActorModule;
+import name.huliqing.core.object.module.StateModule;
 import name.huliqing.core.object.state.State;
 
 /**
@@ -96,13 +96,13 @@ public class StateServiceImpl implements StateService{
         State state = Loader.load(newStateData);
         state.setSourceActor(sourceActor);
         
-        StateActorModule module = actor.getModule(StateActorModule.class);
+        StateModule module = actor.getModule(StateModule.class);
         module.addState(state);
     }
 
     @Override
     public final boolean removeState(Actor actor, String removeStateId) {
-        StateActorModule module = actor.getModule(StateActorModule.class);
+        StateModule module = actor.getModule(StateModule.class);
         if (module != null) {
             State state = module.getState(removeStateId);
             return state != null ? module.removeState(state) : false;
@@ -112,7 +112,7 @@ public class StateServiceImpl implements StateService{
 
     @Override
     public State findState(Actor actor, String stateId) {
-        StateActorModule module = actor.getModule(StateActorModule.class);
+        StateModule module = actor.getModule(StateModule.class);
         if (module != null) {
             return module.getState(stateId);
         }
@@ -121,23 +121,23 @@ public class StateServiceImpl implements StateService{
 
     @Override
     public void clearStates(Actor actor) {
-        StateActorModule module = actor.getModule(StateActorModule.class);
+        StateModule module = actor.getModule(StateModule.class);
         if (module != null && module.getStates() != null) {
             for (State state : module.getStates()) {
                 module.removeState(state);
-            }            
+            }
         }
     }
 
     @Override
     public boolean existsState(Actor actor, String stateId) {
-        StateActorModule module = actor.getModule(StateActorModule.class);
+        StateModule module = actor.getModule(StateModule.class);
         return module != null && module.getState(stateId) != null;
     }
 
     @Override
     public List<StateData> getStates(Actor actor) {
-        StateActorModule module = actor.getModule(StateActorModule.class);
+        StateModule module = actor.getModule(StateModule.class);
         if (module != null) {
             return module.getStateDatas();
         }
@@ -146,7 +146,7 @@ public class StateServiceImpl implements StateService{
 
     @Override
     public void addListener(Actor actor, StateListener listener) {
-        StateActorModule module = actor.getModule(StateActorModule.class);
+        StateModule module = actor.getModule(StateModule.class);
         if (module != null) {
             module.addStateListener(listener);
         }
@@ -154,7 +154,7 @@ public class StateServiceImpl implements StateService{
 
     @Override
     public boolean removeListener(Actor actor, StateListener listener) {
-        StateActorModule module = actor.getModule(StateActorModule.class);
+        StateModule module = actor.getModule(StateModule.class);
         return module != null && module.removeStateListener(listener);
     }
     

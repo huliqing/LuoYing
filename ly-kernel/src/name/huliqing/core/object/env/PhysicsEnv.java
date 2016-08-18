@@ -11,7 +11,7 @@ import com.jme3.bullet.BulletAppState.ThreadingType;
 import com.jme3.bullet.PhysicsSpace.BroadphaseType;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
-import name.huliqing.core.data.EnvData;
+import name.huliqing.core.data.env.EnvData;
 import name.huliqing.core.object.scene.Scene;
 
 /**

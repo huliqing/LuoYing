@@ -18,7 +18,7 @@ import name.huliqing.core.data.MagicData;
 import name.huliqing.core.object.effect.TraceType;
 import name.huliqing.core.mvc.service.EffectService;
 import name.huliqing.core.mvc.service.PlayService;
-import name.huliqing.core.loader.Loader;
+import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.AbstractPlayObject;
 import name.huliqing.core.xml.DataProcessor;
 import name.huliqing.core.object.actor.Actor;

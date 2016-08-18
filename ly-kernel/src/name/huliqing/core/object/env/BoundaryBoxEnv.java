@@ -12,8 +12,8 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
 import name.huliqing.core.constants.ModelConstants;
-import name.huliqing.core.data.EnvData;
-import name.huliqing.core.loader.Loader;
+import name.huliqing.core.data.env.EnvData;
+import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.scene.Scene;
 
 /**

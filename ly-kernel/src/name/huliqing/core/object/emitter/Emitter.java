@@ -11,7 +11,7 @@ import com.jme3.effect.ParticleMesh;
 import com.jme3.material.Material;
 import name.huliqing.core.LY;
 import name.huliqing.core.data.EmitterData;
-import name.huliqing.core.loader.Loader;
+import name.huliqing.core.object.Loader;
 import name.huliqing.core.xml.DataProcessor;
 import name.huliqing.core.object.position.EmitterShapeWrap;
 

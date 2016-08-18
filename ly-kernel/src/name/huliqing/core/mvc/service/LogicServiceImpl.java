@@ -8,11 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.constants.IdConstants;
 import name.huliqing.core.data.ActorLogicData;
-import name.huliqing.core.loader.Loader;
+import name.huliqing.core.object.Loader;
 import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actorlogic.ActorLogic;
-import name.huliqing.core.object.actormodule.LogicActorModule;
+import name.huliqing.core.object.module.LogicModule;
 
 /**
  *
@@ -44,20 +44,20 @@ public class LogicServiceImpl implements LogicService {
 
     @Override
     public boolean addLogic(Actor actor, ActorLogic logic) {
-        LogicActorModule module = actor.getModule(LogicActorModule.class);
+        LogicModule module = actor.getModule(LogicModule.class);
         module.addLogic(logic);
         return true;
     }
 
     @Override
     public boolean removeLogic(Actor actor, ActorLogic logic) {
-        LogicActorModule module = actor.getModule(LogicActorModule.class);
+        LogicModule module = actor.getModule(LogicModule.class);
         return module.removeLogic(logic);
     }
 
     @Override
     public void clearLogics(Actor actor) {
-        LogicActorModule module = actor.getModule(LogicActorModule.class);
+        LogicModule module = actor.getModule(LogicModule.class);
         if (module == null)
             return;
         

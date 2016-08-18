@@ -24,7 +24,7 @@ import name.huliqing.core.data.SkillData;
 import name.huliqing.core.data.SkinData;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.SkinService;
-import name.huliqing.core.loader.Loader;
+import name.huliqing.core.object.Loader;
 
 /**
  * 弓箭的射击技能

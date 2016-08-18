@@ -5,11 +5,12 @@
  */
 package name.huliqing.core.object.env;
 
+import name.huliqing.core.data.env.ModelEnvData;
 import com.jme3.app.Application;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.scene.Spatial;
 import name.huliqing.core.data.ObjectData;
-import name.huliqing.core.loader.AssetLoader;
+import name.huliqing.core.object.AssetLoader;
 import name.huliqing.core.object.scene.Scene;
 
 /**

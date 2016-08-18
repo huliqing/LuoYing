@@ -5,7 +5,7 @@
 package name.huliqing.core.mvc.service;
 
 import java.util.HashMap;
-import name.huliqing.core.loader.Loader;
+import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.el.El;
 import name.huliqing.core.object.el.HitEl;
 import name.huliqing.core.object.el.LevelEl;

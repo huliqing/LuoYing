@@ -4,7 +4,7 @@
  */
 package name.huliqing.core.mvc.service;
 
-import name.huliqing.core.loader.Loader;
+import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.actoranim.ActorAnim;
 
 /**

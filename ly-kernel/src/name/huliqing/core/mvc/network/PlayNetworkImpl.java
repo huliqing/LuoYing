@@ -36,7 +36,7 @@ import name.huliqing.core.object.SyncData;
 import name.huliqing.core.object.NetworkObject;
 import name.huliqing.core.object.PlayObject;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.actormodule.ChannelActorModule;
+import name.huliqing.core.object.module.ChannelModule;
 import name.huliqing.core.object.anim.Anim;
 import name.huliqing.core.object.bullet.Bullet;
 import name.huliqing.core.object.channel.Channel;
@@ -455,7 +455,7 @@ public class PlayNetworkImpl implements PlayNetwork {
         mess.setViewDirection(actorService.getViewDirection(actor));
 
         // 同步角色动画
-        ChannelActorModule cp = actor.getModule(ChannelActorModule.class);
+        ChannelModule cp = actor.getModule(ChannelModule.class);
         if (cp != null && !cp.getChannels().isEmpty()) {
             List<Channel> chs = cp.getChannels();
             String[] channels = new String[chs.size()];

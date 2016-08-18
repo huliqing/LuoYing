@@ -13,7 +13,7 @@ import com.jme3.util.TempVars;
 import java.util.Arrays;
 import java.util.List;
 import name.huliqing.core.data.AnimData;
-import name.huliqing.core.loader.Loader;
+import name.huliqing.core.object.Loader;
 import name.huliqing.core.utils.DebugDynamicUtils;
 
 /**

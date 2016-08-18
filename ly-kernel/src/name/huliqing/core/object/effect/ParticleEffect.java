@@ -11,7 +11,7 @@ import com.jme3.effect.influencers.ParticleInfluencer;
 import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.FastMath;
 import name.huliqing.core.data.EffectData;
-import name.huliqing.core.loader.Loader;
+import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.emitter.Emitter;
 
 /**

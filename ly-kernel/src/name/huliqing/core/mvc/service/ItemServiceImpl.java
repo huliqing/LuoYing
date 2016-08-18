@@ -17,7 +17,7 @@ import name.huliqing.core.mvc.dao.ItemDao;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actor.ItemListener;
-import name.huliqing.core.object.actormodule.ItemActorModule;
+import name.huliqing.core.object.module.ItemModule;
 import name.huliqing.core.object.sound.SoundManager;
 
 /**
@@ -41,7 +41,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public void addItem(Actor actor, String itemId, int count) {
         itemDao.addItem(actor, itemId, count);
-        ItemActorModule itemControl = actor.getModule(ItemActorModule.class);
+        ItemModule itemControl = actor.getModule(ItemModule.class);
         
         // 通知侦听器
         List<ItemListener> ils = itemControl.getItemListeners();
@@ -67,7 +67,7 @@ public class ItemServiceImpl implements ItemService {
         int trueRemoved = itemDao.removeItem(actor, itemId, count);
         
         // 通知侦听器
-        ItemActorModule itemControl = actor.getModule(ItemActorModule.class);
+        ItemModule itemControl = actor.getModule(ItemModule.class);
         List<ItemListener> ils = itemControl.getItemListeners();
         if (ils != null && trueRemoved > 0) {
             for (ItemListener il : ils) {
@@ -133,7 +133,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public void addItemListener(Actor actor, ItemListener itemListener) {
-        ItemActorModule c = actor.getModule(ItemActorModule.class);
+        ItemModule c = actor.getModule(ItemModule.class);
         if (c != null) {
             c.addItemListener(itemListener);
         } else {
@@ -143,7 +143,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public boolean removeItemListener(Actor actor, ItemListener itemListener) {
-        ItemActorModule c = actor.getModule(ItemActorModule.class);
+        ItemModule c = actor.getModule(ItemModule.class);
         if (c != null) {
             return c.removeItemListener(itemListener);
         } else {

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import name.huliqing.core.data.BulletData;
-import name.huliqing.core.loader.Loader;
+import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.effect.Effect;
 import name.huliqing.core.object.effect.EffectManager;
 import name.huliqing.core.object.shape.Shape;

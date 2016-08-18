@@ -9,13 +9,13 @@ import name.huliqing.core.Factory;
 import name.huliqing.core.constants.IdConstants;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.mvc.dao.SkillDao;
-import name.huliqing.core.loader.Loader;
+import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.action.Action;
 import name.huliqing.core.object.action.FightAction;
 import name.huliqing.core.object.action.FollowAction;
 import name.huliqing.core.object.action.RunAction;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.actormodule.ActionActorModule;
+import name.huliqing.core.object.module.ActionModule;
 
 /**
  *
@@ -50,7 +50,7 @@ public class ActionServiceImpl implements ActionService {
 
     @Override
     public void playRun(Actor actor, Vector3f pos) {
-        ActionActorModule control = getActionControl(actor);
+        ActionModule control = getActionControl(actor);
         RunAction ra = control.getDefRunAction();
         // 如果角色没有指定默认“跑路”行为，则为角色创建一个。
         if (ra == null) {
@@ -76,7 +76,7 @@ public class ActionServiceImpl implements ActionService {
     @Override
     public void playFight(Actor actor, Actor target, String skillId) {
 //        ActionProcessor ap = actor.getActionProcessor();
-        ActionActorModule control = getActionControl(actor);
+        ActionModule control = getActionControl(actor);
         FightAction fa = control.getDefFightAction();
         // 如果角色没有指定特定的战斗行为，则为角色创建一个。
         if (fa == null) {
@@ -106,7 +106,7 @@ public class ActionServiceImpl implements ActionService {
 
     @Override
     public boolean isPlayingFight(Actor actor) {
-        ActionActorModule control = getActionControl(actor);
+        ActionModule control = getActionControl(actor);
         Action current = control.getAction();
         return current instanceof FightAction;
     }
@@ -128,7 +128,7 @@ public class ActionServiceImpl implements ActionService {
         return getActionControl(actor).getAction();
     }
     
-    private ActionActorModule getActionControl(Actor actor) {
-        return actor.getModule(ActionActorModule.class);
+    private ActionModule getActionControl(Actor actor) {
+        return actor.getModule(ActionModule.class);
     }
 }

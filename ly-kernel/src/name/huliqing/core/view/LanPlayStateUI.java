@@ -13,7 +13,7 @@ import name.huliqing.core.constants.IdConstants;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.state.GameState;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.loader.Loader;
+import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.anim.Anim;
 import name.huliqing.core.ui.Icon;
 import name.huliqing.core.ui.UI;

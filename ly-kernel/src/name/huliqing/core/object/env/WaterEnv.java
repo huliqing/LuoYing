@@ -6,7 +6,7 @@
 package name.huliqing.core.object.env;
 
 import com.jme3.math.Vector3f;
-import name.huliqing.core.data.EnvData;
+import name.huliqing.core.data.env.EnvData;
 
 /**
  * @author huliqing

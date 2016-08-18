@@ -32,7 +32,7 @@ import name.huliqing.core.enums.Sex;
 import name.huliqing.core.mvc.dao.ItemDao;
 import name.huliqing.core.view.talk.Talk;
 import name.huliqing.core.object.actor.ActorModelLoader;
-import name.huliqing.core.loader.Loader;
+import name.huliqing.core.object.Loader;
 import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.view.talk.SpeakManager;
@@ -40,14 +40,14 @@ import name.huliqing.core.view.talk.TalkManager;
 import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.object.actor.ActorListener;
 import name.huliqing.core.object.channel.Channel;
-import name.huliqing.core.object.actormodule.PhysicsActorModule;
+import name.huliqing.core.object.module.PhysicsModule;
 import name.huliqing.core.object.effect.Effect;
 import name.huliqing.core.object.el.LevelEl;
 import name.huliqing.core.object.el.XpDropEl;
 import name.huliqing.core.utils.GeometryUtils;
 import name.huliqing.core.utils.Temp;
-import name.huliqing.core.object.actormodule.BaseActorModule;
-import name.huliqing.core.object.actormodule.ChannelActorModule;
+import name.huliqing.core.object.module.BaseModule;
+import name.huliqing.core.object.module.ChannelModule;
 
 /**
  *
@@ -831,7 +831,7 @@ public class ActorServiceImpl implements ActorService {
         if (channelIds == null) 
             return;
         
-        ChannelActorModule cp = actor.getModule(ChannelActorModule.class);
+        ChannelModule cp = actor.getModule(ChannelModule.class);
         if (cp == null)
             return;
         
@@ -884,7 +884,7 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public void setLocation(Actor actor, Vector3f location) {
-        PhysicsActorModule module = actor.getModule(PhysicsActorModule.class);
+        PhysicsModule module = actor.getModule(PhysicsModule.class);
         if (module != null) {
             module.setLocation(location);
         } else {
@@ -899,7 +899,7 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public void setPhysicsEnabled(Actor actor, boolean enabled) {
-        PhysicsActorModule module = actor.getModule(PhysicsActorModule.class);
+        PhysicsModule module = actor.getModule(PhysicsModule.class);
         if (module != null) {
             module.setEnabled(enabled);
         }
@@ -907,13 +907,13 @@ public class ActorServiceImpl implements ActorService {
     
     @Override
     public boolean isPhysicsEnabled(Actor actor) {
-        PhysicsActorModule module = actor.getModule(PhysicsActorModule.class);
+        PhysicsModule module = actor.getModule(PhysicsModule.class);
         return module != null && module.isEnabled();
     }
     
     @Override
     public void setViewDirection(Actor actor, Vector3f viewDirection) {
-        PhysicsActorModule module = actor.getModule(PhysicsActorModule.class);
+        PhysicsModule module = actor.getModule(PhysicsModule.class);
         if (module != null) {
             module.setViewDirection(viewDirection);
         }
@@ -921,7 +921,7 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public Vector3f getViewDirection(Actor actor) {
-        PhysicsActorModule module = actor.getModule(PhysicsActorModule.class);
+        PhysicsModule module = actor.getModule(PhysicsModule.class);
         if (module != null) {
             module.getViewDirection();
         }
@@ -930,7 +930,7 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public void setLookAt(Actor actor, Vector3f position) {
-        PhysicsActorModule module = actor.getModule(PhysicsActorModule.class);
+        PhysicsModule module = actor.getModule(PhysicsModule.class);
         if (module != null) {
             module.setLookAt(position);
         }
@@ -938,7 +938,7 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public void setWalkDirection(Actor actor, Vector3f walkDirection) {
-        PhysicsActorModule module = actor.getModule(PhysicsActorModule.class);
+        PhysicsModule module = actor.getModule(PhysicsModule.class);
         if (module != null) {
             module.setWalkDirection(walkDirection);
         }
@@ -946,7 +946,7 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public Vector3f getWalkDirection(Actor actor) {
-        PhysicsActorModule module = actor.getModule(PhysicsActorModule.class);
+        PhysicsModule module = actor.getModule(PhysicsModule.class);
         if (module != null) {
             return module.getWalkDirection();
         }
@@ -955,7 +955,7 @@ public class ActorServiceImpl implements ActorService {
     
     @Override
     public void playAnim(Actor actor, String animName, LoopMode loop, float useTime, float startTime, String... channelIds) {
-        ChannelActorModule module = actor.getModule(ChannelActorModule.class);
+        ChannelModule module = actor.getModule(ChannelModule.class);
         if (module != null) {
             module.playAnim(animName, loop, useTime, startTime, channelIds);
         }
@@ -964,7 +964,7 @@ public class ActorServiceImpl implements ActorService {
     
     @Override
     public void setChannelLock(Actor actor, boolean locked, String... channelIds) {
-        ChannelActorModule module = actor.getModule(ChannelActorModule.class);
+        ChannelModule module = actor.getModule(ChannelModule.class);
         if (module != null) {
             module.setChannelLock(locked, channelIds);
         }
@@ -973,7 +973,7 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public void restoreAnimation(Actor actor, String animName, LoopMode loop, float useTime, float startTime, String... channelIds) {
-        ChannelActorModule module = actor.getModule(ChannelActorModule.class);
+        ChannelModule module = actor.getModule(ChannelModule.class);
         if (module != null) {
             module.restoreAnimation(animName, loop, useTime, startTime, channelIds);
         }
@@ -982,7 +982,7 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public boolean reset(Actor actor) {
-        ChannelActorModule module = actor.getModule(ChannelActorModule.class);
+        ChannelModule module = actor.getModule(ChannelModule.class);
         if (module != null) {
             module.reset();
             return true;
@@ -992,7 +992,7 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public void resetToAnimationTime(Actor actor, String animation, float timePoint) {
-        ChannelActorModule module = actor.getModule(ChannelActorModule.class);
+        ChannelModule module = actor.getModule(ChannelModule.class);
         if (module != null) {
             module.resetToAnimationTime(animation, timePoint);
         }
@@ -1029,26 +1029,26 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public float getMass(Actor actor) {
-        PhysicsActorModule module = actor.getModule(PhysicsActorModule.class);
+        PhysicsModule module = actor.getModule(PhysicsModule.class);
         return module != null ? module.getMass() : 0;
     }
 
     @Override
     public boolean isKinematic(Actor actor) {
-        PhysicsActorModule module = actor.getModule(PhysicsActorModule.class);
+        PhysicsModule module = actor.getModule(PhysicsModule.class);
         return module != null ? module.isKinematic() : false;
     }
 
     @Override
     public void setKinematic(Actor actor, boolean kinematic) {
-        PhysicsActorModule module = actor.getModule(PhysicsActorModule.class);
+        PhysicsModule module = actor.getModule(PhysicsModule.class);
         if (module != null) {
             module.setKinematic(kinematic);
         }
     }
     
-    private BaseActorModule getActorBaseControl(Actor actor) {
-        return actor.getModule(BaseActorModule.class);
+    private BaseModule getActorBaseControl(Actor actor) {
+        return actor.getModule(BaseModule.class);
     }
 
     @Override

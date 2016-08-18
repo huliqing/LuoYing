@@ -21,7 +21,7 @@ import name.huliqing.core.LY;
 import name.huliqing.core.constants.MaterialConstants;
 import name.huliqing.core.constants.TextureConstants;
 import name.huliqing.core.data.EffectData;
-import name.huliqing.core.loader.Loader;
+import name.huliqing.core.object.Loader;
 import name.huliqing.core.shape.MySpline;
 import name.huliqing.core.shape.SplineSurface;
 

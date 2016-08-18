@@ -4,6 +4,7 @@
  */
 package name.huliqing.core.data;
 
+import name.huliqing.core.data.env.EnvData;
 import com.jme3.network.serializing.Serializable;
 import java.util.List;
 

@@ -4,6 +4,7 @@
  */
 package name.huliqing.core.data;
 
+import name.huliqing.core.data.module.ModuleData;
 import com.jme3.export.InputCapsule;
 import com.jme3.export.JmeExporter;
 import com.jme3.export.JmeImporter;

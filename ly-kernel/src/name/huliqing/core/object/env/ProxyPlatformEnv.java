@@ -11,7 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import name.huliqing.core.Factory;
-import name.huliqing.core.data.EnvData;
+import name.huliqing.core.data.env.EnvData;
 import name.huliqing.core.object.scene.Scene;
 import name.huliqing.core.mvc.service.SystemService;
 import name.huliqing.core.mvc.service.EnvService;

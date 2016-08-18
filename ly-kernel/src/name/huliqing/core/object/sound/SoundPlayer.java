@@ -10,7 +10,7 @@ import java.util.Map;
 import name.huliqing.core.LY;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.SoundData;
-import name.huliqing.core.loader.Loader;
+import name.huliqing.core.object.Loader;
 import name.huliqing.core.mvc.service.ConfigService;
 
 /**

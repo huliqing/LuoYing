@@ -4,6 +4,7 @@
  */
 package name.huliqing.core.object.env;
 
+import name.huliqing.core.data.env.ModelEnvData;
 import com.jme3.bullet.collision.shapes.MeshCollisionShape;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.scene.Spatial;

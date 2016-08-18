@@ -9,7 +9,7 @@ import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.define.HandlerObject;
 import name.huliqing.core.mvc.dao.ItemDao;
 import name.huliqing.core.mvc.dao.SkillDao;
-import name.huliqing.core.loader.Loader;
+import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.handler.Handler;
 

@@ -19,10 +19,10 @@ import name.huliqing.core.mvc.service.EffectService;
 import name.huliqing.core.mvc.service.ElService;
 import name.huliqing.core.mvc.service.MagicService;
 import name.huliqing.core.mvc.service.PlayService;
-import name.huliqing.core.loader.Loader;
+import name.huliqing.core.object.Loader;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.object.actoranim.ActorAnim;
-import name.huliqing.core.object.actormodule.SkillActorModule;
+import name.huliqing.core.object.module.SkillModule;
 import name.huliqing.core.object.effect.Effect;
 import name.huliqing.core.object.magic.Magic;
 import name.huliqing.core.object.sound.SoundManager;
@@ -93,7 +93,7 @@ public abstract class AbstractSkill<T extends SkillData> implements Skill<T> {
     // 在执行过程中就不再需要计算。
     protected float trueSpeed;
     
-    protected SkillActorModule skillControl;
+    protected SkillModule skillControl;
 
     @Override
     public void setData(T data) {
@@ -478,7 +478,7 @@ public abstract class AbstractSkill<T extends SkillData> implements Skill<T> {
 //    }
     
     @Override
-    public void setSkillControl(SkillActorModule skillControl) {
+    public void setSkillControl(SkillModule skillControl) {
         this.skillControl = skillControl;
     }
     
