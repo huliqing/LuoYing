@@ -17,14 +17,13 @@ import name.huliqing.core.mvc.service.ElService;
 public class AttributeTalent<T extends TalentData> extends AbstractTalent<T> {
     private final ElService elService = Factory.get(ElService.class);
     private final AttributeService attributeService = Factory.get(AttributeService.class);
-    
+
     protected String applyAttribute;
     protected String levelEl;
     
     // ----
     private int level;
     private float applyValue;
-    private boolean init;
 
     @Override
     public void setData(T data) {
@@ -35,15 +34,12 @@ public class AttributeTalent<T extends TalentData> extends AbstractTalent<T> {
     }
 
     @Override
-    public void init() {
-        if (init) {
-            return;
-        }
+    public void initialize() {
+        super.initialize();
         applyValue = getLevelValue(levelEl, level);
         attributeService.applyStaticValue(actor, applyAttribute, applyValue);
         attributeService.applyDynamicValue(actor, applyAttribute, applyValue);
         attributeService.clampDynamicValue(actor, applyAttribute);
-        init = true;
     }
 
     @Override
@@ -53,19 +49,19 @@ public class AttributeTalent<T extends TalentData> extends AbstractTalent<T> {
 
     @Override
     public void cleanup() {
-        if (init) {
+        if (initialized) {
             attributeService.applyStaticValue(actor, applyAttribute, -applyValue);
             attributeService.applyDynamicValue(actor, applyAttribute, -applyValue);
             attributeService.clampDynamicValue(actor, applyAttribute);
-            init = false;
         }
+        super.cleanup();
     }
 
     @Override
     public void updateLevel(int level) {
         cleanup();
         this.level = level;
-        init();
+        initialize();
     }
     
     protected float getLevelValue(String levelEl, int level) {

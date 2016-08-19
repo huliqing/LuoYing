@@ -15,6 +15,7 @@ import name.huliqing.core.object.actor.Actor;
 public abstract class AbstractTalent<T extends TalentData> implements Talent<T> {
 //    private final static ElService elService = Factory.get(ElService.class);
     
+    protected boolean initialized;
     protected T data;
     protected Actor actor;
     private float timeUsed;
@@ -30,8 +31,16 @@ public abstract class AbstractTalent<T extends TalentData> implements Talent<T> 
     }
 
     @Override
-    public void setActor(Actor actor) {
-        this.actor = actor;
+    public void initialize() {
+        if (initialized) {
+            throw new IllegalStateException("Talent already initialized! talent=" + this);
+        }
+        initialized = true;
+    }
+
+    @Override
+    public boolean isInitialized() {
+        return initialized;
     }
 
     @Override
@@ -41,6 +50,16 @@ public abstract class AbstractTalent<T extends TalentData> implements Talent<T> 
             timeUsed = 0;
             doLogic(tpf);
         }
+    }
+
+    @Override
+    public void cleanup() {
+        initialized = false;
+    }
+
+    @Override
+    public void setActor(Actor actor) {
+        this.actor = actor;
     }
     
     protected abstract void doLogic(float tpf);

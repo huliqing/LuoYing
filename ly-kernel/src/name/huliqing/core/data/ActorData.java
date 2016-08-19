@@ -4,7 +4,6 @@
  */
 package name.huliqing.core.data;
 
-import name.huliqing.core.data.module.ModuleData;
 import com.jme3.export.InputCapsule;
 import com.jme3.export.JmeExporter;
 import com.jme3.export.JmeImporter;
@@ -15,6 +14,7 @@ import com.jme3.network.serializing.Serializable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import name.huliqing.core.data.module.ModuleData;
 import name.huliqing.core.data.define.MatObject;
 import name.huliqing.core.enums.Mat;
 import name.huliqing.core.enums.Sex;
@@ -69,11 +69,11 @@ public class ActorData extends ObjectData implements MatObject{
     // 是否自动侦察敌人，如果关闭该功能，则角色不会查找敌人。
     private boolean autoDetect = true;
     
-    // 角色的两个默认的行为，当角色处于玩家控制时需要这两个行为来执行打架和跑路
-    // 如果这两个行为没有设置，则ActionService在必要时会为目标actor创建两个默认的行为
-    // See ActionService.playFight,playRun
-    private String actionDefFight;
-    private String actionDefRun;
+//    // 角色的两个默认的行为，当角色处于玩家控制时需要这两个行为来执行打架和跑路
+//    // 如果这两个行为没有设置，则ActionService在必要时会为目标actor创建两个默认的行为
+//    // See ActionService.playFight,playRun
+//    private String actionDefFight;
+//    private String actionDefRun;
     
     // 角色使用的武器插槽优先顺序，当设置了这个值之后，角色的武器在收起时将优先
     // 存放在这些指定的插槽上，否则将根据武器的定义的插槽存放。
@@ -142,8 +142,8 @@ public class ActorData extends ObjectData implements MatObject{
         oc.write(target, "target", -1);
         oc.write(autoAi, "autoAi", true);
         oc.write(autoDetect, "autoDetect", true);
-        oc.write(actionDefFight, "actionDefFight", null);
-        oc.write(actionDefRun, "actionDefRun", null);
+//        oc.write(actionDefFight, "actionDefFight", null);
+//        oc.write(actionDefRun, "actionDefRun", null);
         if (slots != null)
             oc.write(slots.toArray(new String[]{}), "slots", null);
         
@@ -188,8 +188,8 @@ public class ActorData extends ObjectData implements MatObject{
         target = ic.readLong("target", -1);
         autoAi = ic.readBoolean("autoAi", true);
         autoDetect = ic.readBoolean("autoDetect", true);
-        actionDefFight = ic.readString("actionDefFight", null);
-        actionDefRun = ic.readString("actionDefRun", null);
+//        actionDefFight = ic.readString("actionDefFight", null);
+//        actionDefRun = ic.readString("actionDefRun", null);
         slots = ConvertUtils.toList(ic.readStringArray("slots", null));
         
 //        ArrayList<AttributeData> ads = ic.readSavableArrayList("attributes", null);
@@ -296,29 +296,29 @@ public class ActorData extends ObjectData implements MatObject{
         }
     }
 
-    /**
-     * 获取角色默认的“战斗”行为的id
-     * @return 
-     */
-    public String getActionDefFight() {
-        return actionDefFight;
-    }
-
-    public void setActionDefFight(String actionDefFight) {
-        this.actionDefFight = actionDefFight;
-    }
-
-    /**
-     * 获取角色默认的“跑路”行为的id
-     * @return 
-     */
-    public String getActionDefRun() {
-        return actionDefRun;
-    }
-
-    public void setActionDefRun(String actionDefRun) {
-        this.actionDefRun = actionDefRun;
-    }
+//    /**
+//     * 获取角色默认的“战斗”行为的id
+//     * @return 
+//     */
+//    public String getActionDefFight() {
+//        return actionDefFight;
+//    }
+//
+//    public void setActionDefFight(String actionDefFight) {
+//        this.actionDefFight = actionDefFight;
+//    }
+//
+//    /**
+//     * 获取角色默认的“跑路”行为的id
+//     * @return 
+//     */
+//    public String getActionDefRun() {
+//        return actionDefRun;
+//    }
+//
+//    public void setActionDefRun(String actionDefRun) {
+//        this.actionDefRun = actionDefRun;
+//    }
 
     /**
      * 角色使用的武器插槽优先顺序，当设置了这个值之后，角色的武器在收起时将优先

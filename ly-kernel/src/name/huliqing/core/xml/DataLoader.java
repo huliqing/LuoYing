@@ -15,8 +15,8 @@ public interface DataLoader<T extends Data> {
     /**
      * 载入数据，从proto中载入指定数据到store中。
      * @param proto
-     * @param store 
+     * @param data 
      */
-    void load(Proto proto, T store);
+    void load(Proto proto, T data);
     
 }

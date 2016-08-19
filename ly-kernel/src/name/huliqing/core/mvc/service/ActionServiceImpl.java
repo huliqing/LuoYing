@@ -7,7 +7,6 @@ package name.huliqing.core.mvc.service;
 import com.jme3.math.Vector3f;
 import name.huliqing.core.Factory;
 import name.huliqing.core.constants.IdConstants;
-import name.huliqing.core.data.SkillData;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.action.Action;
 import name.huliqing.core.object.action.FightAction;
@@ -49,18 +48,13 @@ public class ActionServiceImpl implements ActionService {
 
     @Override
     public void playRun(Actor actor, Vector3f pos) {
-        ActionModule control = getActionControl(actor);
-        RunAction ra = control.getDefRunAction();
+        ActionModule module = getActionControl(actor);
+        RunAction ra = module.getDefRunAction();
         // 如果角色没有指定默认“跑路”行为，则为角色创建一个。
         if (ra == null) {
-            String defRunAction = actor.getData().getActionDefRun();
-            if (defRunAction != null) {
-                ra = (RunAction) Loader.loadAction(defRunAction);
-            } else {
-                ra = (RunAction) Loader.loadAction(IdConstants.ACTION_RUN_SIMPLE);
-            }
+            ra = (RunAction) Loader.loadAction(IdConstants.ACTION_RUN_SIMPLE);
             ra.setActor(actor);
-            control.setDefRunAction(ra);
+            module.setDefRunAction(ra);
         }
         
         ra.setPosition(pos);
@@ -74,32 +68,23 @@ public class ActionServiceImpl implements ActionService {
      */
     @Override
     public void playFight(Actor actor, Actor target, String skillId) {
-//        ActionProcessor ap = actor.getActionProcessor();
-        ActionModule control = getActionControl(actor);
-        FightAction fa = control.getDefFightAction();
+        ActionModule module = getActionControl(actor);
+        FightAction fa = module.getDefFightAction();
         // 如果角色没有指定特定的战斗行为，则为角色创建一个。
         if (fa == null) {
-            String defFightAction = actor.getData().getActionDefFight();
-            if (defFightAction != null) {
-                fa = (FightAction) Loader.loadAction(defFightAction);
+            if (actorService.getMass(actor) <= 0) {
+                fa = (FightAction) Loader.loadAction(IdConstants.ACTION_FIGHT_STATIC);
             } else {
-                if (actorService.getMass(actor) <= 0) {
-                    fa = (FightAction) Loader.loadAction(IdConstants.ACTION_FIGHT_STATIC);
-                } else {
-                    fa = (FightAction) Loader.loadAction(IdConstants.ACTION_FIGHT_FOR_PLAYER);
-                }
+                fa = (FightAction) Loader.loadAction(IdConstants.ACTION_FIGHT_FOR_PLAYER);
             }
             fa.setActor(actor);
-            control.setDefFightAction(fa);
-        }
-        
-        SkillData skillData = null;
-        if (skillId != null) {
-            skillData = skillDao.getSkillById(actor.getData(), skillId);
+            module.setDefFightAction(fa);
         }
         
         fa.setEnemy(target);
-        fa.setSkill(skillData);
+        if (skillId != null) {
+            fa.setSkill(skillService.getSkill(actor, skillId));
+        }
         playAction(actor, fa);
     }
 

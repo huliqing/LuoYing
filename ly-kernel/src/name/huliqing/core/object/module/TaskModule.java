@@ -8,52 +8,55 @@ package name.huliqing.core.object.module;
 import com.jme3.util.SafeArrayList;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.core.data.module.ModuleData;
 import name.huliqing.core.data.TaskData;
+import name.huliqing.core.data.module.TaskModuleData;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actor.TaskListener;
-import name.huliqing.core.object.module.AbstractModule;
 import name.huliqing.core.object.task.Task;
-import name.huliqing.core.xml.DataFactory;
 
 /**
  * 任务管理
  * @author huliqing
  * @param <T>
  */
-public class TaskModule<T extends ModuleData> extends AbstractModule<T> {
+public class TaskModule<T extends TaskModuleData> extends AbstractModule<T> {
 
     private Actor actor;
     private final SafeArrayList<Task> tasks = new SafeArrayList<Task>(Task.class);
-    private final List<TaskData> taskDatas = new ArrayList<TaskData>();
     private List<TaskListener> taskListeners;
 
     @Override
     public void initialize(Actor actor) {
         super.initialize(actor); 
         this.actor = actor;
-        
-        // 从存档中获取Datas，如果不是存档，则从原始配置的参数xml中获取
-        List<TaskData> taskInits = (List<TaskData>) data.getAttribute("taskDatas");
-        if (taskInits == null) {
-            String[] taskArr = data.getAsArray("tasks");
-            if (taskArr != null) {
-                taskInits = new ArrayList<TaskData>(taskArr.length);
-                for (String taskId : taskArr) {
-                    taskInits.add((TaskData) DataFactory.createData(taskId));
-                }
-            }
-        }
+   
+        // remove
+//        // 从存档中获取Datas，如果不是存档，则从原始配置的参数xml中获取
+//        List<TaskData> taskInits = (List<TaskData>) data.getAttribute("taskDatas");
+//        if (taskInits == null) {
+//            String[] taskArr = data.getAsArray("tasks");
+//            if (taskArr != null) {
+//                taskInits = new ArrayList<TaskData>(taskArr.length);
+//                for (String taskId : taskArr) {
+//                    taskInits.add((TaskData) DataFactory.createData(taskId));
+//                }
+//            }
+//        }
+//
+//        if (taskInits != null) {
+//            for (TaskData td : taskInits) {
+//                addTask((Task) Loader.load(td));
+//            }
+//        }
+//        // 重新设置data.
+//        data.setAttribute("taskDatas", taskDatas);
 
-        if (taskInits != null) {
-            for (TaskData td : taskInits) {
+        if (data.getTaskDatas() != null) {
+            for (TaskData td : data.getTaskDatas()) {
                 addTask((Task) Loader.load(td));
             }
         }
-
-        // 重新设置data.
-        data.setAttribute("taskDatas", taskDatas);
 
     }
 
@@ -63,7 +66,6 @@ public class TaskModule<T extends ModuleData> extends AbstractModule<T> {
             task.cleanup();
         }
         tasks.clear();
-        taskDatas.clear();
         super.cleanup();
     }
     
@@ -76,11 +78,14 @@ public class TaskModule<T extends ModuleData> extends AbstractModule<T> {
             return;
         }
         
+        tasks.add(task);
+        if (data.getTaskDatas() == null) {
+            data.setTaskDatas(new ArrayList<TaskData>());
+        }
+        data.getTaskDatas().add(task.getData());
+        
         task.setActor(actor);
         task.initialize();
-
-        tasks.add(task);
-        taskDatas.add(task.getData());
         
         // 侦听器
         if (taskListeners != null && !taskListeners.isEmpty()) {
@@ -96,23 +101,21 @@ public class TaskModule<T extends ModuleData> extends AbstractModule<T> {
      * @return 
      */
     public boolean removeTask(Task task) {
-        if (tasks == null || tasks.isEmpty()) 
+        if (tasks.isEmpty()) 
             return false;
         
-        boolean result = tasks.remove(task);
-        taskDatas.remove(task.getData());
+        tasks.remove(task);
+        data.getTaskDatas().remove(task.getData());
         task.cleanup();
         
         // 侦听器
-        if (result) {
-            if (taskListeners != null && !taskListeners.isEmpty()) {
-                for (TaskListener tl : taskListeners) {
-                    tl.onTaskRemoved(actor, task);
-                }
+        if (taskListeners != null && !taskListeners.isEmpty()) {
+            for (TaskListener tl : taskListeners) {
+                tl.onTaskRemoved(actor, task);
             }
         }
         
-        return result;
+        return true;
     }
     
     /**
@@ -121,9 +124,6 @@ public class TaskModule<T extends ModuleData> extends AbstractModule<T> {
      * @return 
      */
     public Task getTask(String taskId) {
-        if (tasks == null) 
-            return null;
-        
         for (Task t : tasks) {
             if (t.getId().equals(taskId)) {
                 return t;
@@ -141,7 +141,7 @@ public class TaskModule<T extends ModuleData> extends AbstractModule<T> {
     }
     
     public List<TaskData> getTaskDatas() {
-        return taskDatas;
+        return data.getTaskDatas();
     }
     
     /**

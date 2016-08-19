@@ -9,25 +9,22 @@ import com.jme3.scene.control.Control;
 import com.jme3.util.SafeArrayList;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.core.data.module.ModuleData;
 import name.huliqing.core.data.StateData;
+import name.huliqing.core.data.module.StateModuleData;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actor.StateListener;
-import name.huliqing.core.object.module.AbstractModule;
 import name.huliqing.core.object.state.State;
-import name.huliqing.core.xml.DataFactory;
 
 /**
  * @author huliqing
  */
-public class StateModule extends AbstractModule<ModuleData> {
+public class StateModule extends AbstractModule<StateModuleData> {
 
     private Actor actor;
     private final SafeArrayList<State> states = new SafeArrayList<State>(State.class);
-    private final List<StateData> stateDatas = new ArrayList<StateData>();
     private List<StateListener> stateListeners;
-
+    
     private Control updateControl;
     
     @Override
@@ -35,25 +32,30 @@ public class StateModule extends AbstractModule<ModuleData> {
         super.initialize(actor); 
         this.actor = actor;
         
-        // 从存档中载入状态，如果不是存档则从原始参数中获取
-        List<StateData> stateInits = (List<StateData>) data.getAttribute("stateDatas");
-        if (stateInits == null) {
-            String[] stateIdArr = data.getAsArray("states");
-            if (stateIdArr != null) {
-                stateInits = new ArrayList<StateData>(stateIdArr.length);
-                for (String stateId : stateIdArr) {
-                    stateInits.add((StateData) DataFactory.createData(stateId));
-                }
+        // remove
+//        // 从存档中载入状态，如果不是存档则从原始参数中获取
+//        List<StateData> stateInits = (List<StateData>) data.getAttribute("stateDatas");
+//        if (stateInits == null) {
+//            String[] stateIdArr = data.getAsArray("states");
+//            if (stateIdArr != null) {
+//                stateInits = new ArrayList<StateData>(stateIdArr.length);
+//                for (String stateId : stateIdArr) {
+//                    stateInits.add((StateData) DataFactory.createData(stateId));
+//                }
+//            }
+//        }
+//        if (stateInits != null) {
+//            for (StateData stateData : stateInits) {
+//                addState((State)Loader.load(stateData));
+//            }
+//        }
+//        data.setAttribute("stateDatas", stateDatas);
+
+        if (data.getStateDatas() != null) {
+            for (StateData sd : data.getStateDatas()) {
+                addState((State)Loader.load(sd));
             }
         }
-        
-        if (stateInits != null) {
-            for (StateData stateData : stateInits) {
-                addState((State)Loader.load(stateData));
-            }
-        }
-        
-        data.setAttribute("stateDatas", stateDatas);
         
         updateControl = new AdapterControl() {
             @Override
@@ -70,14 +72,13 @@ public class StateModule extends AbstractModule<ModuleData> {
 
     @Override
     public void cleanup() {
-        if (updateControl != null) {
-            actor.getSpatial().removeControl(updateControl);
-        }
         for (State s : states.getArray()) {
             s.cleanup();
         }
         states.clear();
-        stateDatas.clear();
+        if (updateControl != null) {
+            actor.getSpatial().removeControl(updateControl);
+        }
         super.cleanup();
     }
 
@@ -93,7 +94,10 @@ public class StateModule extends AbstractModule<ModuleData> {
         
         // 加入data列表和处理器列表
         states.add(state);
-        stateDatas.add(state.getData());
+        if (data.getStateDatas() == null) {
+            data.setStateDatas(new ArrayList<StateData>());
+        }
+        data.getStateDatas().add(state.getData());
         
         // 侦听器
         if (stateListeners != null && !stateListeners.isEmpty()) {
@@ -104,16 +108,19 @@ public class StateModule extends AbstractModule<ModuleData> {
     }
     
     public boolean removeState(State state) {
-        boolean result = states.remove(state);
-        stateDatas.remove(state.getData());
+        if (!states.contains(state))
+            return false;
+        
+        states.remove(state);
+        data.getStateDatas().remove(state.getData());
         state.cleanup();
         // 侦听器
-        if (result && stateListeners != null && !stateListeners.isEmpty()) {
+        if (stateListeners != null && !stateListeners.isEmpty()) {
             for (StateListener sl : stateListeners) {
                 sl.onStateRemoved(actor, state);
             }
         }
-        return result;
+        return true;
     }
 
     public State getState(String stateId) {
@@ -130,7 +137,7 @@ public class StateModule extends AbstractModule<ModuleData> {
     }
     
     public List<StateData> getStateDatas() {
-        return stateDatas;
+        return data.getStateDatas();
     }
     
     public void addStateListener(StateListener stateListener) {

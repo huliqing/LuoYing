@@ -99,11 +99,6 @@ public class ActorNetworkImpl implements ActorNetwork{
     }
 
     @Override
-    public boolean isSkillUpdated(Actor actor, long timePoint) {
-        return actorService.isSkillUpdated(actor, timePoint); 
-    }
-
-    @Override
     public float getHeight(Actor actor) {
         return actorService.getHeight(actor); 
     }

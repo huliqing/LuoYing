@@ -22,7 +22,7 @@ public class ObjectData extends ProtoData {
     public final static String USER_DATA = "PROTO_USER_DATA";
     
     // 物品数量
-    private int total;
+    protected int total;
     
     public ObjectData() {}
     

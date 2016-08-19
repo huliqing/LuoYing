@@ -9,24 +9,21 @@ import com.jme3.scene.control.Control;
 import com.jme3.util.SafeArrayList;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.core.data.module.ModuleData;
 import name.huliqing.core.data.TalentData;
+import name.huliqing.core.data.module.TalentModuleData;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actor.TalentListener;
-import name.huliqing.core.object.module.AbstractModule;
 import name.huliqing.core.object.talent.Talent;
-import name.huliqing.core.xml.DataFactory;
 
 /**
  * @author huliqing
  * @param <T>
  */
-public class TalentModule<T extends ModuleData> extends AbstractModule<T> {
+public class TalentModule<T extends TalentModuleData> extends AbstractModule<T> {
     
     private Actor actor;
     private final SafeArrayList<Talent> talents = new SafeArrayList<Talent>(Talent.class);
-    private final List<TalentData> talentDatas = new ArrayList<TalentData>();
     private List<TalentListener> talentListeners;
     
     private Control updateControl;
@@ -36,26 +33,32 @@ public class TalentModule<T extends ModuleData> extends AbstractModule<T> {
         super.initialize(actor); 
         this.actor = actor;
         
-        // 从存档中获取需要初始化的talentDatas，如果不是存档，则从原始xml配置中获取
-        List<TalentData> talentInits = (List<TalentData>) data.getAttribute("talentDatas");
-        if (talentInits == null) {
-            String[] talentArr = data.getAsArray("talents");
-            if (talentArr != null) {
-                talentInits = new ArrayList<TalentData>(talentArr.length);
-                for (String talentId : talentArr) {
-                    talentInits.add((TalentData) DataFactory.createData(talentId));
-                }
-            }
-        }
-        
-        if (talentInits != null) {
-            for (TalentData td : talentInits) {
+        // remove
+//        // 从存档中获取需要初始化的talentDatas，如果不是存档，则从原始xml配置中获取
+//        List<TalentData> talentInits = (List<TalentData>) data.getAttribute("talentDatas");
+//        if (talentInits == null) {
+//            String[] talentArr = data.getAsArray("talents");
+//            if (talentArr != null) {
+//                talentInits = new ArrayList<TalentData>(talentArr.length);
+//                for (String talentId : talentArr) {
+//                    talentInits.add((TalentData) DataFactory.createData(talentId));
+//                }
+//            }
+//        }
+//        
+//        if (talentInits != null) {
+//            for (TalentData td : talentInits) {
+//                addTalent((Talent) Loader.load(td));
+//            }
+//        }
+//        // 重新设置talentDatas
+//        data.setAttribute("talentDatas", talentDatas);
+
+        if (data.getTalentDatas() != null) {
+            for (TalentData td : data.getTalentDatas()) {
                 addTalent((Talent) Loader.load(td));
             }
         }
-        
-        // 重新设置talentDatas
-        data.setAttribute("talentDatas", talentDatas);
         
         updateControl = new AdapterControl() {
             @Override
@@ -63,23 +66,22 @@ public class TalentModule<T extends ModuleData> extends AbstractModule<T> {
         };
         this.actor.getSpatial().addControl(updateControl);
     }
-        
+    
     private void talentUpdate(float tpf) {
         for (Talent t : talents.getArray()) {
             t.update(tpf);
         }
     }
-
+    
     @Override
     public void cleanup() {
-        if (updateControl != null) {
-            actor.getSpatial().removeControl(updateControl);
-        }
         for (Talent t : talents.getArray()) {
             t.cleanup();
         }
         talents.clear();
-        talentDatas.clear();
+        if (updateControl != null) {
+            actor.getSpatial().removeControl(updateControl);
+        }
         super.cleanup();
     }
 
@@ -88,10 +90,15 @@ public class TalentModule<T extends ModuleData> extends AbstractModule<T> {
         if (existsTalent(talent.getData().getId()))
             return;
         
-        talent.setActor(actor);
-        talent.init();
         talents.add(talent);
-        talentDatas.add(talent.getData());
+        if (data.getTalentDatas() == null) {
+            data.setTalentDatas(new ArrayList<TalentData>());
+        }
+        data.getTalentDatas().add(talent.getData());
+        
+        talent.setActor(actor);
+        talent.initialize();
+        
         if (talentListeners != null) {
             for (TalentListener listener : talentListeners) {
                 listener.onTalentAdded(actor, talent.getData());
@@ -107,7 +114,7 @@ public class TalentModule<T extends ModuleData> extends AbstractModule<T> {
      */
     public void addTalentPoints(String talentId, int points) {
         // 天赋点必须大于0，并且角色必须有足够的天赋点可用
-        if (talentDatas == null || points <= 0 || getTalentPoints() < points)
+        if (data.getTalentDatas() == null || points <= 0 || getTalentPoints() < points)
             return;
         
         // 如果指定的天赋ID不存在则不处理
@@ -145,8 +152,11 @@ public class TalentModule<T extends ModuleData> extends AbstractModule<T> {
     }
     
     public boolean removeTalent(Talent talent) {
-        talentDatas.remove(talent.getData());
-        boolean result = talents.remove(talent);
+        if (!talents.contains(talent)) 
+            return false;
+        
+        talents.remove(talent);
+        data.getTalentDatas().remove(talent.getData());
         talent.cleanup();
         
         if (talentListeners != null) {
@@ -154,9 +164,9 @@ public class TalentModule<T extends ModuleData> extends AbstractModule<T> {
                 tl.onTalentRemoved(actor, talent.getData());
             }
         }
-        return result;
+        return true;
     }
-
+    
     public Talent getTalent(String talentId) {
         for (Talent t : talents.getArray()) {
             if (t.getData().getId().equals(talentId)) {
@@ -171,7 +181,7 @@ public class TalentModule<T extends ModuleData> extends AbstractModule<T> {
     }
     
     public List<TalentData> getTalentDatas() {
-        return talentDatas;
+        return data.getTalentDatas();
     }
     
     public void addTalentListener(TalentListener talentListener) {
@@ -192,7 +202,7 @@ public class TalentModule<T extends ModuleData> extends AbstractModule<T> {
      * @param talentPoints 
      */
     public void setTalentPoints(int talentPoints) {
-        data.setAttribute("talentPoints", talentPoints);
+        data.setTalentPoints(talentPoints);
     }
     
     /**
@@ -200,7 +210,7 @@ public class TalentModule<T extends ModuleData> extends AbstractModule<T> {
      * @return 
      */
     public int getTalentPoints() {
-        return data.getAsInteger("talentPoints", 0);
+        return data.getTalentPoints();
     }
     
     /**
@@ -208,7 +218,7 @@ public class TalentModule<T extends ModuleData> extends AbstractModule<T> {
      * @return 
      */
     public String getTalentPointsLevelEl() {
-        return data.getAsString("talentPointsLevelEl");
+        return data.getTalentPointsLevelEl();
     }
 
     /**
@@ -216,7 +226,7 @@ public class TalentModule<T extends ModuleData> extends AbstractModule<T> {
      * @param talentPointsLevelEl 
      */
     public void setTalentPointsLevelEl(String talentPointsLevelEl) {
-        data.setAttribute("talentPointsLevelEl", talentPointsLevelEl);
+        data.setTalentPointsLevelEl(talentPointsLevelEl);
     }
     
     /**

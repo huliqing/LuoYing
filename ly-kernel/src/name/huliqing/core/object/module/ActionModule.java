@@ -6,7 +6,8 @@
 package name.huliqing.core.object.module;
 
 import com.jme3.scene.control.Control;
-import name.huliqing.core.data.module.ModuleData;
+import name.huliqing.core.data.module.ActionModuleData;
+import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.action.Action;
 import name.huliqing.core.object.action.FightAction;
 import name.huliqing.core.object.action.RunAction;
@@ -15,9 +16,8 @@ import name.huliqing.core.object.actor.Actor;
 /**
  * 角色行为控制器
  * @author huliqing
- * @param <T>
  */
-public class ActionModule<T extends ModuleData> extends AbstractModule<T> {
+public class ActionModule extends AbstractModule<ActionModuleData> {
     
     private Actor actor;
     // 两个默认行为,当角色接收玩家控制时需要这两个默认行为
@@ -60,6 +60,8 @@ public class ActionModule<T extends ModuleData> extends AbstractModule<T> {
             current.cleanup();
             current = null;
         }
+        defRunAction = null;
+        defFightAction = null;
 
         if (updateControl != null) {
             actor.getSpatial().removeControl(updateControl);
@@ -96,6 +98,9 @@ public class ActionModule<T extends ModuleData> extends AbstractModule<T> {
     }
 
     public RunAction getDefRunAction() {
+        if (defRunAction == null && data.getActionDefRun() != null) {
+            defRunAction = (RunAction) Loader.load(data.getActionDefRun());
+        }
         return defRunAction;
     }
 
@@ -104,6 +109,9 @@ public class ActionModule<T extends ModuleData> extends AbstractModule<T> {
     }
 
     public FightAction getDefFightAction() {
+         if (defFightAction == null && data.getActionDefFight() != null) {
+            defFightAction = (FightAction) Loader.load(data.getActionDefFight());
+        }
         return defFightAction;
     }
 

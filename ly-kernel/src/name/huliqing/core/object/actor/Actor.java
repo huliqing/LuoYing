@@ -12,6 +12,7 @@ import com.jme3.scene.control.AbstractControl;
 import com.jme3.util.SafeArrayList;
 import java.util.ArrayList;
 import java.util.List;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.module.ModuleData;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.xml.DataProcessor;
@@ -136,13 +137,60 @@ public class Actor extends AbstractControl implements DataProcessor<ActorData> {
         return ActorModelLoader.loadActorModel(data);
     }
     
+    // ignore
     @Override
-    protected void controlUpdate(float tpf) {
-        // ignore
-    }
+    protected void controlUpdate(float tpf) {}
 
+    // ignore
     @Override
-    protected void controlRender(RenderManager rm, ViewPort vp) {
-        // ignore
+    protected void controlRender(RenderManager rm, ViewPort vp) {}
+    
+    // ------------------------- 考虑增加的方法,统一物体的添加，移除，获取
+    
+    /**
+     * 添加一个物体
+     * @param data 
+     */
+    public void addObject(ObjectData data) {
+        throw new UnsupportedOperationException();
+    }
+    
+    /**
+     * 移除一个物体
+     * @param data 
+     * @return  
+     */
+    public boolean removeObject(ObjectData data) {
+        throw new UnsupportedOperationException();
+    }
+    
+    /**
+     * 使用一个物体
+     * @param <T>
+     * @param data 
+     */
+    public <T extends ObjectData> void useObject(T data) {
+        throw new UnsupportedOperationException();
+    }
+    
+    /**
+     * 获取所有物体
+     * @param <T>
+     * @param store
+     * @return 
+     */
+    public <T extends ObjectData> List<T> getObjects(List<T> store) {
+        throw new UnsupportedOperationException();
+    }
+    
+    /**
+     * 指定获取某个类型的物体
+     * @param <T>
+     * @param store
+     * @param objectType
+     * @return 
+     */
+    public <T extends ObjectData> List<T> getObjects(List<T> store, Class<T> objectType) {
+        throw new UnsupportedOperationException();
     }
 }

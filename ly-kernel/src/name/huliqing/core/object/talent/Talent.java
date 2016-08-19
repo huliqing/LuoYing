@@ -25,7 +25,13 @@ public interface Talent<T extends TalentData> extends DataProcessor<T> {
     /**
      * 初始化天赋,当给指定角色添加天赋时该方法应该被调用一次，以进行初始化。
      */
-    void init();
+    void initialize();
+    
+    /**
+     * 判断天赋是否已经初始化
+     * @return 
+     */
+    boolean isInitialized();
     
     /**
      * 天赋逻辑

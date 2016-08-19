@@ -12,41 +12,26 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.AttributeApply;
-import name.huliqing.core.data.module.ModuleData;
 import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.SkinData;
+import name.huliqing.core.data.module.SkinModuleData;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.mvc.service.AttributeService;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actor.SkinListener;
-import name.huliqing.core.object.module.AbstractModule;
 import name.huliqing.core.object.skin.Skin;
 import name.huliqing.core.object.skin.WeaponSkin;
 import name.huliqing.core.object.skin.WeaponStateUtils;
-import name.huliqing.core.xml.DataFactory;
 
 /**
  * 角色的换装控制器
  * @author huliqing
  * @param <T>
  */
-public class SkinModule<T extends ModuleData> extends AbstractModule<T> {
+public class SkinModule<T extends SkinModuleData> extends AbstractModule<T> {
     private final AttributeService attributeService = Factory.get(AttributeService.class);
 
     private Actor actor;
-    
-    // 角色的基本皮肤，基本皮肤是用来在切换装备后“修补皮肤”缺失的问题。比如当
-    // 穿上一套上下连身的法袍（同时包含lowerBody和upperBody）后，再使用一件只
-    // 包含upperBody的装备来换上时，由于法袍被替换，这时角色身上将丢失lowerBody
-    // 的装备，这时就需要从skinBase中查看是否有lowerBody的基本皮肤来补上，否则角
-    // 色会缺少下半身的装备模型。
-    // 注意：基本皮肤中不要指定哪些包含两个或两个以上type部位的皮肤。比如：
-    // 同时包含lowerBody和upperBody的skin,如上下连身的套装之类的皮肤，这类皮肤
-    // 会造成在换装备后进行修补的时候又替换掉已经穿上的装备。
-    private List<SkinData> skinBase;
-    
-    // 角色身上所有的装备,有可能一些是穿在身上的,不包含skinBase
-    private List<SkinData> skinDatas;
     
     // 监听角色装备、武器等的穿脱
     private List<SkinListener> skinListeners;
@@ -61,32 +46,96 @@ public class SkinModule<T extends ModuleData> extends AbstractModule<T> {
         super.initialize(actor); 
         this.actor = actor;
         
-        // 载入skinBase,skinBase是直接从xml配置上载入的，不进行存档，也就是不允许动态改变。
-        String[] skinBasesTemp = data.getAsArray("skinBase");
-        if (skinBasesTemp != null) {
-            skinBase = new ArrayList<SkinData>(skinBasesTemp.length);
-            for (String sbt : skinBasesTemp) {
-                SkinData sdb = DataFactory.createData(sbt);
-                sdb.setUsing(true); // 对于skinBase来说设置using=true没有意义，因为skinBase不会在界面上显示
-                skinBase.add(sdb);
-            }            
-        }
-        
-        // 从存档中载入装备,如果skinDatas为null说明不是存档，则直接从xml获取配置。
-        // 注：skinOutfit是正穿在身上的装备,所以setUsing(true);
-        skinDatas = (List<SkinData>) data.getAttribute("skinDatas");
-        if (skinDatas == null) {
-            String[] skinOutfitTemp = data.getAsArray("skinOutfit");
-            if (skinOutfitTemp != null) {
-                skinDatas = new ArrayList<SkinData>(skinOutfitTemp.length);
-                for (String skinId : skinOutfitTemp) {
-                    SkinData skinOutfit = (SkinData) DataFactory.createData(skinId);
-                    skinOutfit.setUsing(true);
-                    skinOutfit.setTotal(1);
-                    skinDatas.add(skinOutfit);
+        // remove
+//        // 载入skinBase,skinBase是直接从xml配置上载入的，不进行存档，也就是不允许动态改变。
+//        String[] skinBasesTemp = data.getAsArray("skinBase");
+//        if (skinBasesTemp != null) {
+//            skinBase = new ArrayList<SkinData>(skinBasesTemp.length);
+//            for (String sbt : skinBasesTemp) {
+//                SkinData sdb = DataFactory.createData(sbt);
+//                sdb.setUsing(true); // 对于skinBase来说设置using=true没有意义，因为skinBase不会在界面上显示
+//                skinBase.add(sdb);
+//            }            
+//        }
+//        
+//        // 从存档中载入装备,如果skinDatas为null说明不是存档，则直接从xml获取配置。
+//        // 注：skinOutfit是正穿在身上的装备,所以setUsing(true);
+//        skinDatas = (List<SkinData>) data.getAttribute("skinDatas");
+//        if (skinDatas == null) {
+//            String[] skinOutfitTemp = data.getAsArray("skinOutfit");
+//            if (skinOutfitTemp != null) {
+//                skinDatas = new ArrayList<SkinData>(skinOutfitTemp.length);
+//                for (String skinId : skinOutfitTemp) {
+//                    SkinData skinOutfit = (SkinData) DataFactory.createData(skinId);
+//                    skinOutfit.setUsing(true);
+//                    skinOutfit.setTotal(1);
+//                    skinDatas.add(skinOutfit);
+//                }
+//            }
+//        }
+
+        // 穿上装备
+        List<SkinData> skinDatas = data.getSkinDatas();
+        if (skinDatas != null) {
+            for (SkinData sd : skinDatas) {
+                if (sd.isUsing()) {
+                    attachSkin(sd);
                 }
             }
         }
+        
+        // 补上基本皮肤
+        fixActorSkinBase();
+    }
+    
+    /**
+     * 添加装备到角色包裹,添加的数量由{@link SkinData#setTotal(int)指定, 如果数量小于或等于0则什么也不做。
+     * @param skinData 
+     */
+    public void addSkin(SkinData skinData) {
+        if (skinData.getTotal() <= 0)
+            return;
+        if (data.getSkinDatas() == null) {
+            data.setSkinDatas(new ArrayList<SkinData>());
+        }
+        SkinData oriSkinData = getSkinData(skinData.getId());
+        if (oriSkinData != null) {
+            oriSkinData.setTotal(oriSkinData.getTotal() + skinData.getTotal());
+        } else {
+            data.getSkinDatas().add(skinData);
+        }
+    }
+    
+    /**
+     * 从角色包裹上移除装备,移除的数量由{@link SkinData#setTotal(int)指定, 如果数量小于或等于0则什么也不做。<br>
+     * 注：skinData必须是角色包裹中已经存在的实例，否则这个方法将什么也不做并返回false.<br>
+     * 可以通过 {@link #getSkinData(java.lang.String) }先获得角色身上的装备再使用该方法来移除。
+     * @param skinData 
+     * @return  
+     * @see #getSkinData(java.lang.String) 
+     */
+    public boolean removeSkin(SkinData skinData) {
+        if (skinData.getTotal() <= 0 || data.getSkinDatas() == null)
+            return false;
+        
+        return data.getSkinDatas().remove(skinData);
+    }
+    
+    /**
+     * 从角色包裹中查找指定ID的SkinData
+     * @param skinId
+     * @return 
+     */
+    public SkinData getSkinData(String skinId) {
+        if (data.getSkinDatas() == null) 
+            return null;
+        
+        for (SkinData sd : data.getSkinDatas()) {
+            if (sd.getId().equals(skinId)) {
+                return sd;
+            }
+        }
+        return null;
     }
     
     /**
@@ -265,13 +314,13 @@ public class SkinModule<T extends ModuleData> extends AbstractModule<T> {
      * @see #getWeaponSkinsAll(java.util.List) 
      */
     public List<SkinData> getWeaponSkins(List<SkinData> store) {
-        if (skinDatas == null)
+        if (data.getSkinDatas() == null)
             return store;
         
         if (store == null) {
             store = new ArrayList<SkinData>();
         }
-        for (SkinData sd : skinDatas) {
+        for (SkinData sd : data.getSkinDatas()) {
             if (isWeapon(sd)) {
                 store.add(sd);
             }
@@ -280,13 +329,13 @@ public class SkinModule<T extends ModuleData> extends AbstractModule<T> {
     }
     
     public List<SkinData> getArmorSkins(List<SkinData> store) {
-        if (skinDatas == null)
+        if (data.getSkinDatas() == null)
             return store;
         
         if (store == null) {
             store = new ArrayList<SkinData>();
         }
-        for (SkinData sd : skinDatas) {
+        for (SkinData sd : data.getSkinDatas()) {
             if (isArmor(sd)) {
                 store.add(sd);
             }
@@ -332,8 +381,8 @@ public class SkinModule<T extends ModuleData> extends AbstractModule<T> {
         store = getWeaponSkins(store);
         
         // 2.加入基本皮肤中的武器
-        if (skinBase != null && !skinBase.isEmpty()) {
-            for (SkinData sd : skinBase) {
+        if (data.getSkinBase() != null && !data.getSkinBase().isEmpty()) {
+            for (SkinData sd : data.getSkinBase()) {
                 if (isWeapon(sd)) {
                     store.add(sd);
                 }
@@ -407,10 +456,9 @@ public class SkinModule<T extends ModuleData> extends AbstractModule<T> {
         FullSkinTypesTraversal traversal = new FullSkinTypesTraversal(); 
         actor.getSpatial().breadthFirstTraversal(traversal);
         int actorSkinTypes = traversal.fullSkinTypes;
-        
-//        List<SkinData> skinBases = actor.getData().getSkinBase();
-        if (skinBase != null) {
-            for (SkinData sd : skinBase) {
+
+        if (data.getSkinBase() != null) {
+            for (SkinData sd : data.getSkinBase()) {
                 if ((actorSkinTypes & sd.getType()) == 0) {
                     // 如果是武器则尝试找一个优先的武器槽位
                     selectWeaponSlot(actor, sd); 

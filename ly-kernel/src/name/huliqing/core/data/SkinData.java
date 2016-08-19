@@ -49,6 +49,10 @@ public class SkinData extends PkgItemData implements MatObject, CostObject, Hand
     // 标记当前武器所在的槽位
     private String slot;
     
+    public SkinData() {
+        this.total = 1;
+    }
+    
     @Override
     public void write(JmeExporter ex) throws IOException {
         super.write(ex);
@@ -76,8 +80,6 @@ public class SkinData extends PkgItemData implements MatObject, CostObject, Hand
         slot = ic.readString("slot", null);
     }
     
-    public SkinData() {}
-
     /**
      * 获取skin的类型，注：这里返回的整数使用的是二进制位来表示skin的类型，
      * 每一个位表示一个skin类型。

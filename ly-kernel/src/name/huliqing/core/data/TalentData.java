@@ -22,26 +22,6 @@ public class TalentData extends ObjectData {
     private int level;
     private float interval;
     
-    @Override
-    public void write(JmeExporter ex) throws IOException {
-        super.write(ex);
-        OutputCapsule oc = ex.getCapsule(this);
-        oc.write(maxLevel, "maxLevel", 10);
-        oc.write(level, "level", 0);
-        oc.write(interval, "interval", 10);
-    }
-
-    @Override
-    public void read(JmeImporter im) throws IOException {
-        super.read(im);
-        InputCapsule ic = im.getCapsule(this);
-        maxLevel = ic.readInt("maxLevel", 10);
-        level = ic.readInt("level", 0);
-        interval = ic.readFloat("interval", 10);
-    }
-    
-    public TalentData(){}
-    
     public int getMaxLevel() {
         return maxLevel;
     }
@@ -72,5 +52,23 @@ public class TalentData extends ObjectData {
      */
     public boolean isMax() {
         return level >= maxLevel;
+    }
+    
+    @Override
+    public void write(JmeExporter ex) throws IOException {
+        super.write(ex);
+        OutputCapsule oc = ex.getCapsule(this);
+        oc.write(maxLevel, "maxLevel", 10);
+        oc.write(level, "level", 0);
+        oc.write(interval, "interval", 10);
+    }
+
+    @Override
+    public void read(JmeImporter im) throws IOException {
+        super.read(im);
+        InputCapsule ic = im.getCapsule(this);
+        maxLevel = ic.readInt("maxLevel", 10);
+        level = ic.readInt("level", 0);
+        interval = ic.readFloat("interval", 10);
     }
 }
