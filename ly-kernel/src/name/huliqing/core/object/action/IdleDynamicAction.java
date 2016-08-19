@@ -9,21 +9,22 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.LY;
 import name.huliqing.core.Factory;
-import name.huliqing.core.object.action.AbstractAction;
-import name.huliqing.core.object.action.IdleAction;
 import name.huliqing.core.data.ActionData;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.mvc.network.ActorNetwork;
 import name.huliqing.core.mvc.network.SkillNetwork;
 import name.huliqing.core.mvc.service.SkillService;
+import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.actor.SkillListener;
+import name.huliqing.core.object.skill.Skill;
 
 /**
  * 适合于生物角色的空闲行为，角色每隔一段时间就会随机执行一个idle动作,在idle动作执行
  * 完毕的间隔期则执行wait循环动作。在此期间角色不会移动位置。
  * @author huliqing
  */
-public class IdleDynamicAction extends AbstractAction implements IdleAction {
+public class IdleDynamicAction extends AbstractAction implements IdleAction, SkillListener{
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
     private final SkillService skillService = Factory.get(SkillService.class);
@@ -33,13 +34,12 @@ public class IdleDynamicAction extends AbstractAction implements IdleAction {
     private float intervalMin = 3.0f;
     
     // ---- 内部参数
-    private List<SkillData> skills = new ArrayList<SkillData>();
-    private long lastGetSkillTime;
+    private final List<Skill> skills = new ArrayList<Skill>();
     private float interval = 4.0f;
     private float intervalUsed;
     
     // 缓存技能id
-    private String waitSkillId;
+    private Skill waitSkill;
     
     public IdleDynamicAction() {
         super();
@@ -53,11 +53,17 @@ public class IdleDynamicAction extends AbstractAction implements IdleAction {
     }
 
     @Override
-    protected void doInit() {
-        SkillData waitSkill = skillService.getSkill(actor, SkillType.wait);
-        if (waitSkill != null) {
-            waitSkillId = waitSkill.getId();
-        }
+    public void initialize() {
+        super.initialize();
+        recacheIdleSkills();
+        waitSkill = skillService.getSkill(actor, SkillType.wait);
+        skillService.addSkillListener(actor, this);
+    }
+
+    @Override
+    public void cleanup() {
+        skillService.removeSkillListener(actor, this);
+        super.cleanup();
     }
     
     @Override
@@ -68,42 +74,50 @@ public class IdleDynamicAction extends AbstractAction implements IdleAction {
             // 在idle动作执行的间隔要执行一个wait动作，使角色看起来不会像是完全静止的。
             if (!skillService.isPlayingSkill(actor)) {
                 // 注：wait可能不是循环的，所以需要判断
-                if (!skillService.isWaiting(actor) && waitSkillId != null) {
-                    skillNetwork.playSkill(actor, waitSkillId, false);
+                if (!skillService.isWaiting(actor) && waitSkill != null) {
+                    skillNetwork.playSkill(actor, waitSkill, false);
                 }
             }
             return;
         }
         
-        SkillData idle = getIdleSkill();
+        Skill idle = getIdleSkill();
         if (idle == null) {
             return;
         }
-        skillNetwork.playSkill(actor, idle.getId(), false);
+        skillNetwork.playSkill(actor, idle, false);
         
         intervalUsed = 0;
         interval = (intervalMax - intervalMin) * FastMath.nextRandomFloat() + intervalMin;
-        
-//        interval += idle.getTrueUseTime(); // remove
-        interval += skillService.getSkillTrueUseTime(actor, idle);
+        interval += idle.getTrueUseTime();
     }
     
-    private SkillData getIdleSkill() {
-        if (actorNetwork.isSkillUpdated(actor, lastGetSkillTime)) {
-            lastGetSkillTime = LY.getGameTime();
-            skills.clear();
-            List<SkillData> all = skillService.getSkill(actor);
-            for (SkillData sd : all) {
-                if (sd.getSkillType() == SkillType.idle) {
-                    skills.add(sd);
-                }
-            }
-        }
-        if (skills == null || skills.isEmpty()) {
+    private Skill getIdleSkill() {
+        if (skills.isEmpty()) {
             return null;
         }
         return skills.get(FastMath.nextRandomInt(0, skills.size() - 1));
     }
 
-  
+    @Override
+    public void onSkillAdded(Actor actor, Skill skill) {
+        recacheIdleSkills();
+    }
+
+    @Override
+    public void onSkillRemoved(Actor actor, Skill skill) {
+        recacheIdleSkills();
+    }
+
+    // 重新缓存技能
+    private void recacheIdleSkills() {
+        List<Skill> all = skillService.getSkills(actor);
+        skills.clear();
+        for (Skill sd : all) {
+            if (sd.getSkillType() == SkillType.idle) {
+                skills.add(sd);
+            }
+        }
+    }
+    
 }

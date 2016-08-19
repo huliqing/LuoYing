@@ -29,6 +29,7 @@ import name.huliqing.core.mess.MessActorSpeak;
 import name.huliqing.core.mess.MessActorTeam;
 import name.huliqing.core.mess.MessActorViewDir;
 import name.huliqing.core.mess.MessAttributeSync;
+import name.huliqing.core.mess.MessActorLookAt;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actor.ActorListener;
 
@@ -533,7 +534,15 @@ public class ActorNetworkImpl implements ActorNetwork{
 
     @Override
     public void setLookAt(Actor actor, Vector3f position) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (!NETWORK.isClient()) {
+            if (NETWORK.hasConnections()) {
+                MessActorLookAt mess = new MessActorLookAt();
+                mess.setActorId(actor.getData().getUniqueId());
+                mess.setPos(position);
+                NETWORK.broadcast(mess);
+            }
+            actorService.setLookAt(actor, position); 
+        }
     }
 
     @Override

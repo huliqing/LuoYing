@@ -329,10 +329,10 @@ public class ActorServiceImpl implements ActorService {
         return store;
     }
 
-    @Override
-    public boolean isSkillUpdated(Actor actor, long timePoint) {
-        return actor.getData().getSkillStore().getLastModifyTime() > timePoint;
-    }
+//    @Override
+//    public boolean isSkillUpdated(Actor actor, long timePoint) {
+//        return actor.getData().getSkillStore().getLastModifyTime() > timePoint;
+//    }
 
     @Override
     public float getHeight(Actor actor) {
@@ -894,7 +894,7 @@ public class ActorServiceImpl implements ActorService {
         if (module != null) {
             module.getViewDirection();
         }
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     @Override
@@ -919,16 +919,18 @@ public class ActorServiceImpl implements ActorService {
         if (module != null) {
             return module.getWalkDirection();
         }
-        throw new UnsupportedOperationException("No ActorPhysicsControl set!");
+        return null;
     }
     
     @Override
     public void playAnim(Actor actor, String animName, LoopMode loop, float useTime, float startTime, String... channelIds) {
         ChannelModule module = actor.getModule(ChannelModule.class);
         if (module != null) {
+            // 检查anim是否存在
+            checkAndLoadAnim(actor, animName);
+            // 执行anim
             module.playAnim(animName, loop, useTime, startTime, channelIds);
         }
-        throw new UnsupportedOperationException("");
     }
     
     @Override
@@ -937,7 +939,6 @@ public class ActorServiceImpl implements ActorService {
         if (module != null) {
             module.setChannelLock(locked, channelIds);
         }
-        throw new UnsupportedOperationException("");
     }
 
     @Override
@@ -946,7 +947,6 @@ public class ActorServiceImpl implements ActorService {
         if (module != null) {
             module.restoreAnimation(animName, loop, useTime, startTime, channelIds);
         }
-        throw new UnsupportedOperationException("");
     }
 
     @Override

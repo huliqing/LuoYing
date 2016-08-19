@@ -12,6 +12,7 @@ import name.huliqing.core.data.SkillData;
 import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actor.SkillListener;
+import name.huliqing.core.object.module.SkillPlayListener;
 import name.huliqing.core.object.skill.Skill;
 
 /**
@@ -75,11 +76,34 @@ public interface SkillService extends Inject {
     List<Skill> getSkills(Actor actor);
     
     /**
+     * 获取角色当前正在执行的指定技能类型的技能,如果没有找到该技能，则返回null.
+     * @param actor 
+     * @param skillType 正在执行的技能类型 
+     * @return 
+     */
+    Skill getPlayingSkill(Actor actor, SkillType skillType);
+    
+    /**
+     * 获取角色当前正在执行的技能状态，返回值中每一个二进制位表示一个技能类
+     * 型。如果没有正在技能的技能则返回0.
+     * @param actor
+     * @return 
+     */
+    long getPlayingSkillStates(Actor actor);
+    
+    /**
      * 给角色添加一个技能侦听器
      * @param actor
      * @param skillListener 
      */
     void addSkillListener(Actor actor, SkillListener skillListener);
+    
+    /**
+     * 给角色添加一个技能侦听器
+     * @param actor
+     * @param skillPlayListener 
+     */
+    void addSkillPlayListener(Actor actor, SkillPlayListener skillPlayListener);
     
     /**
      * 移除角色身上的技能侦听器
@@ -88,6 +112,14 @@ public interface SkillService extends Inject {
      * @return 
      */
     boolean removeSkillListener(Actor actor, SkillListener skillListener);
+    
+    /**
+     * 移除角色身上的技能侦听器
+     * @param actor
+     * @param skillPlayListener
+     * @return 
+     */
+    boolean removeSkillPlayListener(Actor actor, SkillPlayListener skillPlayListener);
     
      // remove20160819
 //    /**
@@ -170,14 +202,15 @@ public interface SkillService extends Inject {
      * @return 
      */
     boolean playWalk(Actor actor, String skillId, Vector3f dir, boolean faceToDir, boolean force);
-    
-    /**
-     * 执行朝向目标位置，注意是位置．
-     * @param actor
-     * @param position
-     * @return 
-     */
-    boolean playFaceTo(Actor actor, Vector3f position);
+   
+    // remove20160819
+//    /**
+//     * 执行朝向目标位置，注意是位置．
+//     * @param actor
+//     * @param position
+//     * @return 
+//     */
+//    boolean playFaceTo(Actor actor, Vector3f position);
     
     /**
      * 检查技能是否可以执行.
@@ -202,10 +235,10 @@ public interface SkillService extends Inject {
 
     /**
      * 判断技能是否处于冷却中
-     * @param skillData
+     * @param skill
      * @return 
      */
-    boolean isCooldown(SkillData skillData);
+    boolean isCooldown(Skill skill);
     
     /**
      * 判断角色是否已经学习了指定的技能
@@ -248,22 +281,6 @@ public interface SkillService extends Inject {
     boolean isAttacking(Actor actor);
     
     boolean isDefending(Actor actor);
-    
-    /**
-     * 获取角色当前正在执行的技能,如果没有找到该技能，则返回null.
-     * @param actor 
-     * @param skillType 正在执行的技能类型 
-     * @return 
-     */
-    Skill getPlayingSkill(Actor actor, SkillType skillType);
-    
-    /**
-     * 获取角色当前正在执行的技能状态，返回值中每一个二进制位表示一个技能类
-     * 型。如果没有正在技能的技能则返回0.
-     * @param actor
-     * @return 
-     */
-    long getPlayingSkillStates(Actor actor);
     
     /**
      * 锁定指定角色的技能类型,当这些技能类型被锁定后，属于这些类型的技能将不

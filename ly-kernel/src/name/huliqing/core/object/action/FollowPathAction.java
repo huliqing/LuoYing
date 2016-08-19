@@ -17,12 +17,12 @@ import java.util.logging.Logger;
 import name.huliqing.core.Config;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.ActionData;
-import name.huliqing.core.data.SkillData;
 import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.mvc.network.SkillNetwork;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.SkillService;
+import name.huliqing.core.object.skill.Skill;
 import name.huliqing.core.utils.DebugDynamicUtils;
 import name.huliqing.core.utils.ThreadHelper;
 
@@ -79,8 +79,8 @@ public class FollowPathAction extends AbstractAction implements FollowAction {
     private final Vector3f tempLastTargetPos = new Vector3f(-999, -999, -999);
     
     // 缓存技能id
-    private String runSkillId;
-    private String waitSkillId;
+    private Skill runSkill;
+    private Skill waitSkill;
     
     public FollowPathAction() {
         super();
@@ -96,20 +96,16 @@ public class FollowPathAction extends AbstractAction implements FollowAction {
     }
     
     @Override
-    protected void doInit() {
+    public void initialize() {
+        super.initialize();
+        
         rayDetour.setActor(actor);
         rayDetour.setAutoFacing(autoFacing);
         timeDetour.setActor(actor);
         timeDetour.setAutoFacing(autoFacing);
         
-        SkillData runSkill = skillService.getSkill(actor, SkillType.run);
-        if (runSkill != null) {
-            runSkillId = runSkill.getId();
-        }
-        SkillData waitSkill = skillService.getSkill(actor, SkillType.wait);
-        if (waitSkill != null) {
-            waitSkillId = waitSkill.getId();
-        }
+        runSkill = skillService.getSkill(actor, SkillType.run);
+        waitSkill = skillService.getSkill(actor, SkillType.wait);
     }
     
     @Override
@@ -128,15 +124,15 @@ public class FollowPathAction extends AbstractAction implements FollowAction {
      */
     protected void doFollow(Spatial target, float tpf) {
         // 如果角色是不可移动的，则直接返回不处理逻辑
-        if (!actorService.isMoveable(actor) || runSkillId == null) {
+        if (!actorService.isMoveable(actor) || runSkill == null) {
             end();
             return;
         }
         
         // target 不存在或已经脱场景
         if (target == null || target.getParent() == null) {
-            if (waitSkillId != null) {
-                skillNetwork.playSkill(actor, waitSkillId, false);
+            if (waitSkill != null) {
+                skillNetwork.playSkill(actor, waitSkill, false);
             }
             end();
             return;
@@ -144,8 +140,8 @@ public class FollowPathAction extends AbstractAction implements FollowAction {
         
         // 已经到达位置，则不需要再走
         if (actor.getSpatial().getWorldTranslation().distanceSquared(target.getWorldTranslation()) <= nearestSquared) {
-            if (waitSkillId != null) {
-                skillNetwork.playSkill(actor, waitSkillId, false);
+            if (waitSkill != null) {
+                skillNetwork.playSkill(actor, waitSkill, false);
             }
             end();
             return;
@@ -174,7 +170,7 @@ public class FollowPathAction extends AbstractAction implements FollowAction {
             path = null;
             TempVars tv = TempVars.get();
             skillNetwork.playWalk(actor
-                    , runSkillId
+                    , runSkill.getData().getId()
                     , target.getWorldTranslation().subtract(actor.getSpatial().getWorldTranslation(), tv.vect1), true, false);
             tv.release();
         }
@@ -186,12 +182,12 @@ public class FollowPathAction extends AbstractAction implements FollowAction {
             TempVars tv = TempVars.get();
             if (path != null && current != null) {
                 skillNetwork.playWalk(actor
-                        , runSkillId
+                        , runSkill.getData().getId()
                         , current.getPosition().subtract(actor.getSpatial().getWorldTranslation(), tv.vect1)
                         , true, false);
             } else {
                 skillNetwork.playWalk(actor
-                        , runSkillId
+                        , runSkill.getData().getId()
                         , target.getWorldTranslation().subtract(actor.getSpatial().getWorldTranslation(), tv.vect1)
                         , true, false);
             }
@@ -244,7 +240,7 @@ public class FollowPathAction extends AbstractAction implements FollowAction {
         if (tempPoint != current || !skillService.isRunning(actor)) {
             current = tempPoint;
             skillNetwork.playWalk(actor
-                    , runSkillId
+                    , runSkill.getData().getId()
                     , current.getPosition().subtract(actor.getSpatial().getWorldTranslation()), true, false);
         }
     }
@@ -275,7 +271,7 @@ public class FollowPathAction extends AbstractAction implements FollowAction {
         // 执行技能的过程很耗时，所以必须先作判断，以优化性能
         if (!skillService.isRunning(actor)) {
             skillNetwork.playWalk(actor
-                    , runSkillId
+                    , runSkill.getData().getId()
                     , target.getWorldTranslation().subtract(actor.getSpatial().getWorldTranslation()), true, false);
         }
     }
@@ -324,8 +320,8 @@ public class FollowPathAction extends AbstractAction implements FollowAction {
         // add20160325,在退出跟随行为的时候要让角色停止下来，以避免突然中断跟
         // 随的时候角色还一直在向前冲
         if (actor != null) {
-            if (waitSkillId != null) {
-                skillNetwork.playSkill(actor, waitSkillId, false);
+            if (waitSkill != null) {
+                skillNetwork.playSkill(actor, waitSkill, false);
             }
         }
         

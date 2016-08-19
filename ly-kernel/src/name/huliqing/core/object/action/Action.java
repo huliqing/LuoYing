@@ -11,19 +11,32 @@ import name.huliqing.core.object.actor.Actor;
 /**
  *
  * @author huliqing
+ * @param <T>
  */
-public interface Action extends DataProcessor<ActionData>{
+public interface Action<T extends ActionData> extends DataProcessor<T>{
     
     /**
      * 开始行为
      */
-    void start();
+    void initialize();
+    
+    /**
+     * 判断行为是否已经初始化
+     * @return 
+     */
+    boolean isInitialized();
     
     /**
      * 更新行为逻辑
      * @param tpf 
      */
     void update(float tpf);
+    
+    /**
+     * 清理行为数据，当行为正常退出或被打断时都会调用该方法来清理数
+     * 据。
+     */
+    void cleanup();
     
     /**
      * 判断行为是否已经正常结束
@@ -36,12 +49,6 @@ public interface Action extends DataProcessor<ActionData>{
      * @param time 
      */
     void lock(float time);
-    
-    /**
-     * 清理行为数据，当行为正常退出或被打断时都会调用该方法来清理数
-     * 据。
-     */
-    void cleanup();
     
     /**
      * 设置执行行为的角色。

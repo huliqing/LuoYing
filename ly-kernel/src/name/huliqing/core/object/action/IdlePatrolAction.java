@@ -10,26 +10,24 @@ import com.jme3.math.Vector3f;
 import com.jme3.util.TempVars;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.core.LY;
 import name.huliqing.core.Factory;
-import name.huliqing.core.object.action.AbstractAction;
-import name.huliqing.core.object.action.IdleAction;
 import name.huliqing.core.data.ActionData;
-import name.huliqing.core.data.SkillData;
 import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.mvc.network.SkillNetwork;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.SkillService;
+import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.actor.SkillListener;
+import name.huliqing.core.object.skill.Skill;
 
 /**
  * 简单的IDLE行为，巡逻，会在一个地点来回走动
  * @author huliqing
  */
-public class IdlePatrolAction extends AbstractAction implements IdleAction {
+public class IdlePatrolAction extends AbstractAction implements IdleAction, SkillListener{
     private final ActorService actorService = Factory.get(ActorService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
-    
     
     // 限制:半径范围内的最多坐标点
     private int walkPosTotal = 7;
@@ -65,17 +63,16 @@ public class IdlePatrolAction extends AbstractAction implements IdleAction {
     private Vector3f currentPos; 
     
     // idle动作缓存
-    private final List<SkillData> idleSkills = new ArrayList<SkillData>();
-    private long lastGetSkillTime;
+    private final List<Skill> idleSkills = new ArrayList<Skill>();
     
     // 当巡逻位置上有比较多角色时，防止角色之间冲撞
-    private Detour rayDetour = new RayDetour(this);
+    private final Detour rayDetour = new RayDetour(this);
     private boolean needRedir;
     
     // 缓存技能id
-    private String walkSkillId;
-    private String runSkillId;
-    private String waitSkillId;
+    private Skill walkSkill;
+    private Skill runSkill;
+    private Skill waitSkill;
     
     public IdlePatrolAction() {
         super();
@@ -120,7 +117,8 @@ public class IdlePatrolAction extends AbstractAction implements IdleAction {
     }
     
     @Override
-    protected void doInit() {
+    public void initialize() {
+        super.initialize();
         // 初始化巡逻点坐标,如果没有指别设置角色的出生地点则将当前世界位置作为巡逻
         // 的原点,并在这个原点上向四周生成几个巡逻坐标点。
         if (idlePositions == null) {
@@ -155,18 +153,19 @@ public class IdlePatrolAction extends AbstractAction implements IdleAction {
         rayDetour.setAutoFacing(true);
         rayDetour.setUseRun(false);
         
-        SkillData walkSkill = skillService.getSkill(actor, SkillType.walk);
-        if (walkSkill != null) {
-            walkSkillId = walkSkill.getId();
-        }
-        SkillData runSkill = skillService.getSkill(actor, SkillType.run);
-        if (runSkill != null) {
-            runSkillId = runSkill.getId();
-        }
-        SkillData waitSkill = skillService.getSkill(actor, SkillType.wait);
-        if (waitSkill != null) {
-            waitSkillId = waitSkill.getId();
-        }
+        walkSkill = skillService.getSkill(actor, SkillType.walk);
+        runSkill = skillService.getSkill(actor, SkillType.run);
+        waitSkill = skillService.getSkill(actor, SkillType.wait);
+        
+        // 缓存IDLE技能并添加侦听器
+        recacheIdleSkill();
+        skillService.addSkillListener(actor, this);
+    }
+
+    @Override
+    public void cleanup() {
+        skillService.removeSkillListener(actor, this);
+        super.cleanup(); 
     }
 
     @Override
@@ -217,13 +216,13 @@ public class IdlePatrolAction extends AbstractAction implements IdleAction {
                 // 1.正确走到目标位置
                 // 2.走过头(viewAngle与currentPos方向相反则判断为走过头,当方向相反时这个角度大约在170~180度.
                 // 3.存在障碍物一直走不到目标位置，达到限制的允许时间。
-                SkillData idleSkill = getIdleSkill();
-                if (idleSkill != null && skillNetwork.playSkill(actor, idleSkill.getId(), false)) {
+                Skill idleSkill = getIdleSkill();
+                if (idleSkill != null && skillNetwork.playSkill(actor, idleSkill, false)) {
                     // 如果存在idleSkill并执行成功则目的达到。
                 } else {
                     // 注意：如果idle不存在或idle执行失败（如冷却中），这时需要转到playWait
                     // 否则角色会停不下来，一直走到巡逻点外直到达到时间限制。这有点不太好。
-                    skillNetwork.playSkill(actor, waitSkillId, false);
+                    skillNetwork.playSkill(actor, waitSkill, false);
                 }
                 waitingTime = waitingTimeMax * FastMath.nextRandomFloat();
                 waiting = true;
@@ -239,11 +238,11 @@ public class IdlePatrolAction extends AbstractAction implements IdleAction {
         // 需要为平方形式，+10主要是判断在距离巡逻范围10码远时使用跑步方式走回来
         if (actor.getSpatial().getWorldTranslation().distanceSquared(targetPos) > walkDiameterSquared + 10) {
             skillNetwork.playWalk(actor
-                    , runSkillId
+                    , runSkill.getData().getId()
                     , targetPos.subtract(actor.getSpatial().getWorldTranslation(), targetPos).normalizeLocal(), true, false);
         } else {
             skillNetwork.playWalk(actor
-                    , (walkSkillId != null ? walkSkillId : runSkillId)
+                    , (walkSkill != null ? walkSkill.getData().getId() : runSkill.getData().getId())
                     , targetPos.subtract(actor.getSpatial().getWorldTranslation(), targetPos).normalizeLocal()
                     , true, false);
         }
@@ -251,21 +250,30 @@ public class IdlePatrolAction extends AbstractAction implements IdleAction {
     }
     
     // 随机获取一个idle技能
-    private SkillData getIdleSkill() {
-        if (actorService.isSkillUpdated(actor, lastGetSkillTime)) {
-            lastGetSkillTime = LY.getGameTime();
-            idleSkills.clear();
-            List<SkillData> all = skillService.getSkill(actor);
-            for (SkillData sd : all) {
-                if (sd.getSkillType() == SkillType.idle) {
-                    idleSkills.add(sd);
-                }
-            }
-        }
-        if (idleSkills == null || idleSkills.isEmpty()) {
+    private Skill getIdleSkill() {
+        if (idleSkills.isEmpty()) {
             return null;
         }
         return idleSkills.get(FastMath.nextRandomInt(0, idleSkills.size() - 1));
     }
 
+    @Override
+    public void onSkillAdded(Actor actor, Skill skill) {
+        recacheIdleSkill();
+    }
+
+    @Override
+    public void onSkillRemoved(Actor actor, Skill skill) {
+        recacheIdleSkill();
+    }
+
+    private void recacheIdleSkill() {
+        idleSkills.clear();
+        List<Skill> all = skillService.getSkills(actor);
+        for (Skill sd : all) {
+            if (sd.getSkillType() == SkillType.idle) {
+                idleSkills.add(sd);
+            }
+        }
+    }
 }

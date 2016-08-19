@@ -11,6 +11,7 @@ import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.mvc.network.SkillNetwork;
+import name.huliqing.core.object.skill.Skill;
 
 /**
  * 实现障碍功能
@@ -38,8 +39,8 @@ public abstract class Detour {
     // 当绕道时，指定要使用walk还是run,默认run
     private boolean useRun = true;
     
-    private String runSkillId;
-    private String walkSkillId;
+    private Skill runSkill;
+    private Skill walkSkill;
     
     public Detour() {}
     
@@ -53,15 +54,8 @@ public abstract class Detour {
     
     public void setActor(Actor actor) {
         this.actor = actor;
-        SkillData runSkill = skillService.getSkill(actor, SkillType.run);
-        SkillData walkSkill = skillService.getSkill(actor, SkillType.walk);
-        if (runSkill != null) {
-            runSkillId = runSkill.getId();
-        }
-        if (walkSkill != null) {
-            walkSkillId = walkSkill.getId();
-        }
-        
+        runSkill = skillService.getSkill(actor, SkillType.run);
+        walkSkill = skillService.getSkill(actor, SkillType.walk);        
     }
     
     public boolean detouring(float tpf) {
@@ -103,16 +97,16 @@ public abstract class Detour {
      */
     protected void detour(Vector3f dir) {
         if (useRun) {
-            if (runSkillId != null) {
-                skillNetwork.playWalk(actor, runSkillId, dir, autoFacing, false);
-            } else if (walkSkillId != null) {
-                skillNetwork.playWalk(actor, walkSkillId, dir, autoFacing, false);
+            if (runSkill != null) {
+                skillNetwork.playWalk(actor, runSkill.getData().getId(), dir, autoFacing, false);
+            } else if (walkSkill != null) {
+                skillNetwork.playWalk(actor, walkSkill.getData().getId(), dir, autoFacing, false);
             }
         } else {
-            if (walkSkillId != null) {
-                skillNetwork.playWalk(actor, walkSkillId, dir, autoFacing, false);
-            } else if (runSkillId != null) {
-                skillNetwork.playWalk(actor, runSkillId, dir, autoFacing, false);
+            if (walkSkill != null) {
+                skillNetwork.playWalk(actor, walkSkill.getData().getId(), dir, autoFacing, false);
+            } else if (runSkill != null) {
+                skillNetwork.playWalk(actor, runSkill.getData().getId(), dir, autoFacing, false);
             }
         }
     }

@@ -4,7 +4,6 @@
  */
 package name.huliqing.core.object.game.impl;
 
-import com.jme3.app.Application;
 import name.huliqing.core.Factory;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.constants.IdConstants;
@@ -15,6 +14,7 @@ import name.huliqing.core.mvc.network.PlayNetwork;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.ViewService;
 import name.huliqing.core.manager.ResourceManager;
+import name.huliqing.core.mvc.service.ItemService;
 import name.huliqing.core.object.game.Game;
 import name.huliqing.core.object.gamelogic.AbstractGameLogic;
 import name.huliqing.core.object.view.TextPanelView;
@@ -29,6 +29,7 @@ public class StoryGbTaskLogic<T extends GameLogicData> extends AbstractGameLogic
     private final PlayService playService = Factory.get(PlayService.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
+    private final ItemService itemService = Factory.get(ItemService.class);
 
     // 需要获得树根的数量
     private final int total;
@@ -55,7 +56,7 @@ public class StoryGbTaskLogic<T extends GameLogicData> extends AbstractGameLogic
     
     @Override
     protected void doLogic(float tpf) {
-        ObjectData pd = actorNetwork.getItem(player, IdConstants.ITEM_GB_STUMP);
+        ObjectData pd = itemService.getItem(player, IdConstants.ITEM_GB_STUMP);
         count = pd != null ? pd.getTotal() : 0;
         tpv.setText(get("taskSave.saveCount", count, total));
     }

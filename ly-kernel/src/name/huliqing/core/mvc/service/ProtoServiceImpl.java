@@ -52,7 +52,7 @@ public class ProtoServiceImpl implements ProtoService {
             return itemService.getItem(actor, id);
         }
         if (cc == SkillData.class) {
-            return skillService.getSkill(actor, id);
+            return skillService.getSkill(actor, id).getData();
         }
         LOG.log(Level.WARNING, "Unsupported getData, id={0}, dataClass={1} ", new Object[] {id, cc});
         return null;

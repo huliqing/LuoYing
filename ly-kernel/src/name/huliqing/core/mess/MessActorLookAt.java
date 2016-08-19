@@ -7,8 +7,8 @@ package name.huliqing.core.mess;
 import com.jme3.math.Vector3f;
 import com.jme3.network.serializing.Serializable;
 import name.huliqing.core.Factory;
+import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.PlayService;
-import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.object.actor.Actor;
 
 /**
@@ -16,7 +16,7 @@ import name.huliqing.core.object.actor.Actor;
  * @author huliqing
  */
 @Serializable
-public class MessSkillFaceTo extends MessBase {
+public class MessActorLookAt extends MessBase {
  
     private long actorId;
     private Vector3f pos;
@@ -47,11 +47,10 @@ public class MessSkillFaceTo extends MessBase {
 
     @Override
     public void applyOnClient() {
-        PlayService playService = Factory.get(PlayService.class);
-        SkillService skillService = Factory.get(SkillService.class);
-        Actor actor = playService.findActor(actorId);
-        if (actor == null) return;
-        skillService.playFaceTo(actor, pos);
+        Actor actor = Factory.get(PlayService.class).findActor(actorId);
+        if (actor != null) {
+            Factory.get(ActorService.class).setLookAt(actor, pos);
+        }
     }
     
     

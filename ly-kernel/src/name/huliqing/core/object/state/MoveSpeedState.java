@@ -42,7 +42,7 @@ public class MoveSpeedState extends AttributeState {
         // 如果角色当前正在执行“跑路”技能，则强制重新执行，以适应速度的变化。
         Skill running = skillService.getPlayingSkill(actor, SkillType.run);
         if (running != null) {
-            skillService.playSkill(actor, running.getSkillData().getId(), true);
+            skillService.playSkill(actor, running, true);
         }
         
         checkEffectTrace();
@@ -59,7 +59,7 @@ public class MoveSpeedState extends AttributeState {
         // 如果角色当前正在执行“跑路”技能，则强制重新执行，以适应速度的变化。
         Skill running = skillService.getPlayingSkill(actor, SkillType.run);
         if (running != null) {
-            skillService.playSkill(actor, running.getSkillData().getId(), true);
+            skillService.playSkill(actor, running, true);
         }
         
         // 移除效果

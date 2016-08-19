@@ -4,8 +4,8 @@
  */
 package name.huliqing.core.object.action;
 
-import name.huliqing.core.data.SkillData;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.skill.Skill;
 
 /**
  * 角色的战斗PK行为
@@ -19,7 +19,7 @@ public interface FightAction extends Action {
      * 2.必须是攻击技能,可为普通攻击，技能攻击，魔法攻击
      * @param skill 
      */
-    public void setSkill(SkillData skill);
+    public void setSkill(Skill skill);
     
     /**
      * 设置目标敌人

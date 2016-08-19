@@ -48,7 +48,7 @@ public class SkillHandler extends AbstractHandler {
             return false;
         }
         SkillData skillData = (SkillData) data;
-        Skill skill = skillService.getSkillInstance(actor, skillData.getId());
+        Skill skill = skillService.getSkill(actor, skillData.getId());
         
         int skillStateCode = skillService.checkStateCode(actor, skill, false);
         if (skillStateCode != SkillConstants.STATE_OK) {

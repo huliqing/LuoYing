@@ -208,7 +208,7 @@ public class StoryTreasureTask2 extends GameTaskBase {
             @Override
             public Actor onAddBefore(Actor actor) {
                 actorService.setGroup(actor, game.groupEnemy);
-                skillService.playSkill(actor, skillService.getSkill(actor, SkillType.wait).getId(), false);
+                skillService.playSkill(actor, skillService.getSkill(actor, SkillType.wait), false);
 
                 TempVars tv = TempVars.get();
                 tv.vect1.set(game.treasurePos);
@@ -319,14 +319,14 @@ public class StoryTreasureTask2 extends GameTaskBase {
                 endTalk.addListener(new TalkListener() {
                     @Override
                     public void onTalkEnd() {
-                        Skill skill = skillService.getSkillInstance(companion, IdConstants.SKILL_BACK);
+                        Skill skill = skillService.getSkill(companion, IdConstants.SKILL_BACK);
                         if (skill == null || !(skill instanceof BackSkill)) {
                             playNetwork.removeObject(companion.getSpatial());
                             playNetwork.removeObject(treasure.getSpatial());
                             doTaskComplete();
                         } else {
                             final BackSkill backSkill = (BackSkill) skill;
-                            skillService.addSkillListener(companion, new SkillListenerAdapter() {
+                            skillService.addSkillPlayListener(companion, new SkillListenerAdapter() {
                                 @Override
                                 public void onSkillEnd(Actor source, Skill skill) {
                                     if (skill == backSkill) {
@@ -336,7 +336,7 @@ public class StoryTreasureTask2 extends GameTaskBase {
                                     }
                                 }
                             });
-                            skillNetwork.playSkill(companion, backSkill.getSkillData().getId(), true);
+                            skillNetwork.playSkill(companion, backSkill.getData().getId(), true);
                         }
                     }
                 });
@@ -420,7 +420,7 @@ public class StoryTreasureTask2 extends GameTaskBase {
             actorService.setLevel(companion, 40);
             actorService.setPartner(player, actor);
             actorService.setTeam(companion, player.getData().getTeam());
-            skillService.playSkill(companion, skillService.getSkill(companion, SkillType.wait).getId(), false);
+            skillService.playSkill(companion, skillService.getSkill(companion, SkillType.wait), false);
             // 同伴进入战场后，刷新器不再刷怪。
             sceneBuilder.setEnabled(false);
             // 同伴进入战场后宝箱不死

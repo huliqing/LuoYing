@@ -15,12 +15,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.ActionData;
-import name.huliqing.core.data.SkillData;
 import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.mvc.network.SkillNetwork;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.SkillService;
+import name.huliqing.core.object.skill.Skill;
 import name.huliqing.core.utils.DebugDynamicUtils;
 import name.huliqing.core.utils.ThreadHelper;
 
@@ -35,7 +35,7 @@ public class RunPathAction extends AbstractAction implements RunAction{
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
 
     // 需要走到的目标地址
-    private Vector3f position = new Vector3f();
+    private final Vector3f position = new Vector3f();
     // 允许的最近距离，不能太小，太小会产生两个现象,特别是在侦率较低时容易出现。
     // 1.当角色瞬间太快穿过目标路径点时，可能一直走下去。
     // 2.角色可能在路径起点时的ViewDirection方向不正确，表现为瞬间前后转向。
@@ -46,8 +46,8 @@ public class RunPathAction extends AbstractAction implements RunAction{
     private boolean debug = false;
      
     // 避障
-    private Detour rayDetour = new RayDetour(this);
-    private Detour timeDetour = new TimeDetour(this);
+    private final Detour rayDetour = new RayDetour(this);
+    private final Detour timeDetour = new TimeDetour(this);
     
     // 寻路
     private NavMeshPathfinder finder;
@@ -62,8 +62,8 @@ public class RunPathAction extends AbstractAction implements RunAction{
     private float fixTimeUsed;
     
     // 缓存技能id
-    private String runSkillId;
-    private String waitSkillId;
+    private Skill runSkill;
+    private Skill waitSkill;
     
     public RunPathAction() {
         super();
@@ -78,7 +78,8 @@ public class RunPathAction extends AbstractAction implements RunAction{
     }
 
     @Override
-    protected void doInit() {
+    public void initialize() {
+        super.initialize();
         path = null;
         future = null;
         rayDetour.setActor(actor);
@@ -87,14 +88,8 @@ public class RunPathAction extends AbstractAction implements RunAction{
         timeDetour.setActor(actor);
         timeDetour.setAutoFacing(true);
         
-        SkillData runSkill = skillService.getSkill(actor, SkillType.run);
-        if (runSkill != null) {
-            runSkillId = runSkill.getId();
-        }
-        SkillData waitSkill = skillService.getSkill(actor, SkillType.wait);
-        if (waitSkill != null) {
-            waitSkillId = waitSkill.getId();
-        }
+        runSkill = skillService.getSkill(actor, SkillType.run);
+        waitSkill = skillService.getSkill(actor, SkillType.wait);
     }
     
     @Override
@@ -116,7 +111,7 @@ public class RunPathAction extends AbstractAction implements RunAction{
     @Override
     public void doLogic(float tpf) {
         // 如果角色是不可移动的，则直接返回不处理逻辑
-        if (!actorService.isMoveable(actor) || runSkillId == null) {
+        if (!actorService.isMoveable(actor) || runSkill == null) {
             end();
             return;
         }
@@ -127,8 +122,8 @@ public class RunPathAction extends AbstractAction implements RunAction{
         // 当前距离
         float distance = actor.getSpatial().getWorldTranslation().distance(position);
         if (distance <= nearest) {
-            if (waitSkillId != null) {
-                skillNetwork.playSkill(actor, waitSkillId, false);
+            if (waitSkill != null) {
+                skillNetwork.playSkill(actor, waitSkill, false);
             }
             end();
             return;
@@ -170,12 +165,12 @@ public class RunPathAction extends AbstractAction implements RunAction{
             TempVars tv = TempVars.get();
             if (path != null && current != null) {
                 skillNetwork.playWalk(actor
-                        , skillService.getSkill(actor, SkillType.run).getId()
+                        , skillService.getSkill(actor, SkillType.run).getData().getId()
                         , current.getPosition().subtract(actor.getSpatial().getWorldTranslation(), tv.vect1), true, false);
                 
             } else {
                 skillNetwork.playWalk(actor
-                        , skillService.getSkill(actor, SkillType.run).getId()
+                        , skillService.getSkill(actor, SkillType.run).getData().getId()
                         , position.subtract(actor.getSpatial().getWorldTranslation(), tv.vect1), true, false);
             }
             tv.release();
@@ -186,7 +181,8 @@ public class RunPathAction extends AbstractAction implements RunAction{
     private void runByStraight() {
         if (!skillService.isRunning(actor)) {
             TempVars tv = TempVars.get();
-            skillNetwork.playWalk(actor, runSkillId, position.subtract(actor.getSpatial().getWorldTranslation(), tv.vect1), true, false);
+            skillNetwork.playWalk(actor, runSkill.getData().getId()
+                    , position.subtract(actor.getSpatial().getWorldTranslation(), tv.vect1), true, false);
             tv.release();
         }
     }
@@ -207,7 +203,8 @@ public class RunPathAction extends AbstractAction implements RunAction{
         if (tempPoint != current || !skillService.isRunning(actor)) {
             current = tempPoint;
             TempVars tv = TempVars.get();
-            skillNetwork.playWalk(actor, runSkillId, current.getPosition().subtract(actor.getSpatial().getWorldTranslation(), tv.vect1), true, false);
+            skillNetwork.playWalk(actor, runSkill.getData().getId()
+                    , current.getPosition().subtract(actor.getSpatial().getWorldTranslation(), tv.vect1), true, false);
             tv.release();
         }
     }

@@ -8,7 +8,6 @@ import com.jme3.math.Vector3f;
 import name.huliqing.core.Factory;
 import name.huliqing.core.constants.IdConstants;
 import name.huliqing.core.data.SkillData;
-import name.huliqing.core.mvc.dao.SkillDao;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.action.Action;
 import name.huliqing.core.object.action.FightAction;
@@ -25,13 +24,13 @@ public class ActionServiceImpl implements ActionService {
 
     private ActorService actorService;
     private SkinService skinService;
-    private SkillDao skillDao;
+    private SkillService skillService;
     
     @Override
     public void inject() {
         actorService = Factory.get(ActorService.class);
         skinService = Factory.get(SkinService.class);
-        skillDao = Factory.get(SkillDao.class);
+        skillService = Factory.get(SkillService.class);
     }
 
     @Override

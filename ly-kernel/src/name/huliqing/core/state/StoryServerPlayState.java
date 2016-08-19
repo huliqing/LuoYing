@@ -6,7 +6,6 @@
 package name.huliqing.core.state;
 
 import com.jme3.app.Application;
-import com.jme3.app.state.AppStateManager;
 import com.jme3.network.HostedConnection;
 import com.jme3.network.Message;
 import java.util.ArrayList;
@@ -19,7 +18,6 @@ import name.huliqing.core.Factory;
 import name.huliqing.core.constants.IdConstants;
 import name.huliqing.core.data.ActorData;
 import name.huliqing.core.data.GameData;
-import name.huliqing.core.data.SkillData;
 import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.mvc.network.ActorNetwork;
 import name.huliqing.core.mvc.network.PlayNetwork;
@@ -41,6 +39,7 @@ import name.huliqing.core.view.ShortcutManager;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.game.Game;
 import name.huliqing.core.object.game.Game.GameListener;
+import name.huliqing.core.object.skill.Skill;
 import name.huliqing.core.save.ClientData;
 import name.huliqing.core.save.SaveConfig;
 import name.huliqing.core.save.SaveHelper;
@@ -231,7 +230,7 @@ public abstract class StoryServerPlayState extends NetworkServerPlayState {
         }
         // 故事模式玩家始终队伍分组为1
         actorService.setTeam(player, 1);
-        skillService.playSkill(player, skillService.getSkill(player, SkillType.wait).getId(), false);
+        skillService.playSkill(player, skillService.getSkill(player, SkillType.wait), false);
         
         addObject(player, false);
         setPlayer(player);
@@ -265,9 +264,9 @@ public abstract class StoryServerPlayState extends NetworkServerPlayState {
         for (ActorData data : actors) {
             if  (data.getOwnerId() == clientPlayerData.getUniqueId()) {
                 Actor actor = actorService.loadActor(data);
-                SkillData waitSkill = skillService.getSkill(actor, SkillType.wait);
+                Skill waitSkill = skillService.getSkill(actor, SkillType.wait);
                 if (waitSkill != null) {
-                    skillService.playSkill(actor, waitSkill.getId(), false);
+                    skillService.playSkill(actor, waitSkill, false);
                 }
                 playNetwork.addActor(actor);
             }

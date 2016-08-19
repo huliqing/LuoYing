@@ -481,11 +481,6 @@ public abstract class AbstractSkill<T extends SkillData> implements Skill<T> {
     public void setSkillControl(SkillModule skillControl) {
         this.skillControl = skillControl;
     }
-    
-    @Override
-    public SkillData getSkillData() {
-        return data;
-    }
 
     @Override
     public void restoreAnimation() {

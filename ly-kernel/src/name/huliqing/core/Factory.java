@@ -6,8 +6,6 @@ package name.huliqing.core;
 
 import java.util.HashMap;
 import java.util.Map;
-import name.huliqing.core.mvc.dao.SkillDao;
-import name.huliqing.core.mvc.dao.SkillDaoImpl;
 import name.huliqing.core.mvc.network.ActionNetwork;
 import name.huliqing.core.mvc.network.ActionNetworkImpl;
 import name.huliqing.core.mvc.network.ActorNetwork;
@@ -152,8 +150,6 @@ public class Factory {
         CLASS_MAP.put(TaskService.class, TaskServiceImpl.class);
         CLASS_MAP.put(ViewService.class, ViewServiceImpl.class);
         
-        // dao
-        CLASS_MAP.put(SkillDao.class, SkillDaoImpl.class);
     }
     
     public static <T extends Object> void register(Class<T> c, Class ins) {

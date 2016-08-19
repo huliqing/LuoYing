@@ -13,13 +13,13 @@ import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.actor.SkillListener;
+import name.huliqing.core.object.module.SkillPlayListener;
 import name.huliqing.core.object.skill.Skill;
 
 /**
  * @author huliqing
  */
-public class SkillLockedState extends State implements SkillListener {
+public class SkillLockedState extends State implements SkillPlayListener {
     private final SkillService skillService = Factory.get(SkillService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
 //    private final StateService stateService = Factory.get(StateService.class);
@@ -87,9 +87,9 @@ public class SkillLockedState extends State implements SkillListener {
         // 根据锁定类型来确定要锁定在reset状态还是当前动画帧。
         if (lockType != null && !actorService.isDead(actor)) {
             if (lockType == LockType.reset) {
-                SkillData skillData = skillService.getSkill(actor, SkillType.reset);
-                if (skillData != null) {
-                    skillService.playSkill(actor, skillData.getId(), true);
+                Skill skill = skillService.getSkill(actor, SkillType.reset);
+                if (skill != null) {
+                    skillService.playSkill(actor, skill, true);
                 }
             } else if (lockType == LockType.frame) {
                 // SKILL_RESET_DEFAULT会把当前动画帧定格住
@@ -112,7 +112,7 @@ public class SkillLockedState extends State implements SkillListener {
             }
             // 对于特定的技能ID需要通过技能侦听器来监听,在状态消失时要移除侦听器
             if (lockSkillIds != null) {
-                skillService.addSkillListener(actor, this);
+                skillService.addSkillPlayListener(actor, this);
             }
         }
         
@@ -128,7 +128,7 @@ public class SkillLockedState extends State implements SkillListener {
     @Override
     public boolean onSkillHookCheck(Actor source, Skill skill) {
         // 如果要执行的技能刚才是被锁定的特定技能，则返回false,表示不能执行。
-        if (lockSkillIds != null && lockSkillIds.contains(skill.getSkillData().getId())) {
+        if (lockSkillIds != null && lockSkillIds.contains(skill.getData().getId())) {
             return false;
         }
         return true;
@@ -151,7 +151,7 @@ public class SkillLockedState extends State implements SkillListener {
             if (lockChannels != null) {
                 skillService.unlockSkillChannels(actor, lockChannels);
             }
-            skillService.removeSkillListener(actor, this);
+            skillService.removeSkillPlayListener(actor, this);
         }
         
         if (lockPhysics) {

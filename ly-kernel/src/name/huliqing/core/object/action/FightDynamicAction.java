@@ -9,15 +9,11 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-import name.huliqing.core.LY;
-import name.huliqing.core.Config;
 import name.huliqing.core.Factory;
 import name.huliqing.core.constants.SkillConstants;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.data.ActionData;
-import name.huliqing.core.data.SkillData;
 import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.mvc.network.ActorNetwork;
 import name.huliqing.core.mvc.network.SkillNetwork;
@@ -28,6 +24,7 @@ import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.mvc.service.SkinService;
 import name.huliqing.core.mvc.service.StateService;
+import name.huliqing.core.object.actor.SkillListener;
 import name.huliqing.core.object.skill.HitSkill;
 import name.huliqing.core.object.skill.Skill;
 import name.huliqing.core.utils.MathUtils;
@@ -36,7 +33,7 @@ import name.huliqing.core.utils.MathUtils;
  * 动态的角色战斗行为，该战斗行为下角色能够移动，转向跟随等。
  * @author huliqing
  */
-public class FightDynamicAction extends FollowPathAction implements FightAction {
+public class FightDynamicAction extends FollowPathAction implements FightAction, SkillListener {
     private static final Logger LOG = Logger.getLogger(FightDynamicAction.class.getName());
     
     private final StateService stateService = Factory.get(StateService.class);
@@ -77,9 +74,7 @@ public class FightDynamicAction extends FollowPathAction implements FightAction 
     // --- inner
     
     // 当前准备使用于攻击的技能
-    protected SkillData skill;
-    // 性能优化
-    protected Skill tempSkillInstance;
+    protected Skill skill;
     protected Actor enemy;
     
     // 上一次使用技能后到当前所使用的时间，如果该值小于interval则不允许NPC发技能，
@@ -91,14 +86,12 @@ public class FightDynamicAction extends FollowPathAction implements FightAction 
     // 最近一次切换武器后的武器状态
     private int lastWeaponState = -1;
     
-    // 最近获取技能的时间。
-    protected long lastGetCommonSkillTime;
     // 最近获取到的技能缓存,注：当武器类型发生变化或者角色的技能增或减少
     // 时都应该重新获取。
-    protected List<SkillData> attackSkills = new ArrayList<SkillData>();
+    protected List<Skill> attackSkills = new ArrayList<Skill>();
     
-    // 缓存技能id
-    private String waitSkillId;
+    // 缓存技能
+    private Skill waitSkillId;
 
     public FightDynamicAction() {
         super();
@@ -133,10 +126,10 @@ public class FightDynamicAction extends FollowPathAction implements FightAction 
     }
     
     @Override
-    public void setSkill(SkillData skill) {
+    public void setSkill(Skill skill) {
+        // 这里判断skill是否为null以便不要覆盖当前this.skill
         if (skill != null) {
             this.skill = skill;
-            this.tempSkillInstance = skillService.getSkillInstance(actor, skill.getId());
         }
         
         // add20150611,处理player在点了“攻击”图标后会不定时长的延迟一段时间的问题
@@ -144,17 +137,24 @@ public class FightDynamicAction extends FollowPathAction implements FightAction 
     }
     
     @Override
-    protected void doInit() {
-        super.doInit();
+    public void initialize() {
+        super.initialize();
         // 如果角色切换到战斗状态，则强制取出武器
         if (!skinService.isWeaponTakeOn(actor)) {
             skinNetwork.takeOnWeapon(actor, true);
         }
         
-        SkillData waitSkill = skillService.getSkill(actor, SkillType.wait);
-        if (waitSkill != null) {
-            waitSkillId = waitSkill.getId();
+        waitSkillId = skillService.getSkill(actor, SkillType.wait);
+        skillService.addSkillListener(actor, this);
+    }
+    
+    @Override
+    public void cleanup() {
+        if (autoTakeOffWeapon && skinService.isWeaponTakeOn(actor)) {
+            skinNetwork.takeOffWeapon(actor, true);
         }
+        skillService.removeSkillListener(actor, this);
+        super.cleanup();
     }
     
     @Override
@@ -216,7 +216,6 @@ public class FightDynamicAction extends FollowPathAction implements FightAction 
             if (skill == null) {
                 return;
             }
-            tempSkillInstance = skillService.getSkillInstance(actor, skill.getId());
         }
         
         // 判断是否在攻击范围内,或者跟随目标
@@ -279,26 +278,17 @@ public class FightDynamicAction extends FollowPathAction implements FightAction 
                 attackLimit = attackIntervalMax - attackIntervalMax * attributeService.getDynamicValue(actor, attackIntervalAttribute);
                 attackLimit = MathUtils.clamp(attackLimit, 0, attackIntervalMax);
             }
-            interval = skillService.getSkillTrueUseTime(actor, skill) + attackLimit;
+            interval = skill.getTrueUseTime() + attackLimit;
             
         }
         
         // 不管攻击是否成功，都要清空技能，以便使用下一个技能。
         skill = null;
-        tempSkillInstance = null;
         
         // 如果不是自动AI，则应该退出。 
         if (!actorService.isAutoAi(actor) || actorService.getTarget(actor) == null) {
             end();
         }
-    }
-
-    @Override
-    public void cleanup() {
-        if (autoTakeOffWeapon && skinService.isWeaponTakeOn(actor)) {
-            skinNetwork.takeOffWeapon(actor, true);
-        }
-        super.cleanup();
     }
     
     /**
@@ -306,64 +296,41 @@ public class FightDynamicAction extends FollowPathAction implements FightAction 
      * @param skill
      * @return 
      */
-    protected boolean attack(SkillData skill) {
+    protected boolean attack(Skill skill) {
         // 使角色朝向目标
         if (isAutoFacing()) {
-            skillNetwork.playFaceTo(actor, enemy.getSpatial().getWorldTranslation());
+            actorNetwork.setLookAt(actor, enemy.getSpatial().getWorldTranslation());
         }
-        return skillNetwork.playSkill(actor, skill.getId(), false);
+        return skillNetwork.playSkill(actor, skill, false);
     }
     
     /**
      * 判断是否在技能的攻击范围内
      * @param attackSkill 使用的技能
+     * @param target
      * @return 
      */
-    protected boolean isPlayable(SkillData attackSkill, Actor target) {
+    protected boolean isPlayable(Skill attackSkill, Actor target) {
         // 正常攻击类技能都应该是HitSkill,使用hitSkill的isInHitDistance来判断以优化
         // 性能，
-//        Skill as = skillService.getSkillInstance(actor, attackSkill.getId());
-        if (tempSkillInstance instanceof HitSkill) {
-            return ((HitSkill) tempSkillInstance).isInHitDistance(target);
+        if (attackSkill instanceof HitSkill) {
+            return ((HitSkill) attackSkill).isInHitDistance(target);
         }
         
         // 只有非HitSkill时才使用canPlay，这个方法稍微耗性能
-        return tempSkillInstance.canPlay() == SkillConstants.STATE_OK;
+        return attackSkill.canPlay() == SkillConstants.STATE_OK;
     }
     
     private void checkAndRecacheSkill() {
-        
-        // 如果技能列表有更新,或者角色武器类型发生变化则重新获取技能进行缓存
+        // 角色武器类型发生变化则重新获取技能进行缓存
         int weaponState = skinService.getWeaponState(actor);
-        if (lastWeaponState != weaponState
-                || lastGetCommonSkillTime < actor.getData().getSkillStore().getLastModifyTime()) {
-            if (Config.debug) {
-                LOG.log(Level.INFO, "last weaponState={0}({1}), actor current weaponState={2}({3}), need to reload skills."
-                        , new Object[] {lastWeaponState, Integer.toBinaryString(lastWeaponState)
-                                , weaponState, Integer.toBinaryString(weaponState)});
-            }
-            
-            lastGetCommonSkillTime = LY.getGameTime();
-            
+        if (lastWeaponState != weaponState) {
             lastWeaponState = weaponState;
-            if (attackSkills != null) {
-                attackSkills.clear();
-            }
-            attackSkills = loadAttackSkill(actor, lastWeaponState, attackSkillTypes, attackSkills);
-            
-            // 重新缓存技能后，检查一次当前正在使用的技能是否适合当前的武器，如果不行则清除它，让它
-            // 重新获取一个可用的。否则不应该清除当前的技能。
-            if (skill != null) {
-                List<Integer> weaponLimit = skill.getWeaponStateLimit();
-                if (weaponLimit != null && !weaponLimit.isEmpty() && !weaponLimit.contains(lastWeaponState)) {
-                    skill = null;
-                    tempSkillInstance = null;
-                }
-            }
+            recacheSkill();
         }
     }
     
-    private SkillData getSkill() {
+    private Skill getSkill() {
         if (attackSkills == null || attackSkills .isEmpty()) {
             return null;
         } else {
@@ -372,9 +339,9 @@ public class FightDynamicAction extends FollowPathAction implements FightAction 
         }
     }
     
-    private SkillData getNotCooldown(List<SkillData> skills) {
+    private Skill getNotCooldown(List<Skill> skills) {
         int startIndex = FastMath.nextRandomInt(0, skills.size() - 1);
-        SkillData result;
+        Skill result;
         for (int i = startIndex;;) {
             result = skills.get(i);
             if (!skillService.isCooldown(result)) {
@@ -401,14 +368,14 @@ public class FightDynamicAction extends FollowPathAction implements FightAction 
      * @param store 存放结果集，如果为null则创建一个
      * @return "攻击"技能列表,可能包含：attack.common/shot/trick/magic
      */
-    protected List<SkillData> loadAttackSkill(Actor ac, int weaponState, Set<SkillType> skillTypes, List<SkillData> store) {
+    protected List<Skill> loadAttackSkill(Actor ac, int weaponState, Set<SkillType> skillTypes, List<Skill> store) {
         if (store == null) {
-            store = new ArrayList<SkillData>();
+            store = new ArrayList<Skill>();
         }
         
         // 从攻击类技能中找出符合当前武器使用的以及在指定的技能类型内
-        List<SkillData> allSkills = skillService.getSkill(actor);
-        for (SkillData as : allSkills) {
+        List<Skill> allSkills = skillService.getSkills(actor);
+        for (Skill as : allSkills) {
             // 如果非攻击类技能
             if (as.getSkillType() != SkillType.attack && as.getSkillType() != SkillType.trick) {
                 continue;
@@ -420,8 +387,8 @@ public class FightDynamicAction extends FollowPathAction implements FightAction 
             }
             
             // 武器类型的过滤,只有技能与当前武器相容才能添加
-            if (as.getWeaponStateLimit() == null 
-                    || as.getWeaponStateLimit().contains(weaponState)) {
+            if (as.getData().getWeaponStateLimit() == null 
+                    || as.getData().getWeaponStateLimit().contains(weaponState)) {
                 store.add(as);
             }
         }
@@ -452,5 +419,29 @@ public class FightDynamicAction extends FollowPathAction implements FightAction 
     public void setFollowTimeMax(float followTimeMax) {
         this.followTimeMax = followTimeMax;
     }
+
+    @Override
+    public void onSkillAdded(Actor actor, Skill skill) {
+        recacheSkill();
+    }
+
+    @Override
+    public void onSkillRemoved(Actor actor, Skill skill) {
+        recacheSkill();
+    }
     
+    private void recacheSkill() {
+        if (attackSkills != null) {
+            attackSkills.clear();
+        }
+        attackSkills = loadAttackSkill(actor, lastWeaponState, attackSkillTypes, attackSkills);
+        // 重新缓存技能后，检查一次当前正在使用的技能是否适合当前的武器，如果不行则清除它，让它
+        // 重新获取一个可用的。否则不应该清除当前的技能。
+        if (skill != null) {
+            List<Integer> weaponLimit = skill.getData().getWeaponStateLimit();
+            if (weaponLimit != null && !weaponLimit.isEmpty() && !weaponLimit.contains(lastWeaponState)) {
+                skill = null;
+            }
+        }
+    }
 }

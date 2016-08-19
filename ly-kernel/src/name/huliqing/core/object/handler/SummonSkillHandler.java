@@ -56,7 +56,7 @@ public class SummonSkillHandler extends AbstractHandler {
             return false;
         }
         // 需要召唤技能
-        Skill skill = skillService.getSkillInstance(actor, skillId);
+        Skill skill = skillService.getSkill(actor, skillId);
         if (skill == null || !(skill instanceof SummonSkill)) {
             String skillName = ResourceManager.getObjectName(IdConstants.SKILL_SUMMON);
             playNetwork.addMessage(actor, 
@@ -68,7 +68,7 @@ public class SummonSkillHandler extends AbstractHandler {
 
     @Override
     protected void useObject(Actor actor, ObjectData data) {
-        Skill skill = skillService.getSkillInstance(actor, skillId);
+        Skill skill = skillService.getSkill(actor, skillId);
         if (skill == null || !(skill instanceof SummonSkill)) {
             return;
         }
@@ -77,8 +77,7 @@ public class SummonSkillHandler extends AbstractHandler {
         SummonSkill ssk = (SummonSkill) skill;
         ssk.setSummonActorId(actorId);
         
-        if (skillService.playSkill(actor, ssk.getSkillData().getId(), false)) {
-//            remove(actor, data.getId(), 1);
+        if (skillService.playSkill(actor, ssk, false)) {
             itemService.removeItem(actor, data.getId(), 1);
         }
     }

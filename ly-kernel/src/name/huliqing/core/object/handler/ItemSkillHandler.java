@@ -114,7 +114,7 @@ public class ItemSkillHandler extends AbstractHandler {
                         break;
                     case SkillConstants.STATE_NEED_LEVEL:
                         playNetwork.addMessage(actor
-                                , ResourceManager.get(ResConstants.SKILL_NEED_LEVEL, new Object[] {skill.getSkillData().getNeedLevel()})
+                                , ResourceManager.get(ResConstants.SKILL_NEED_LEVEL, new Object[] {skill.getData().getNeedLevel()})
                                 , MessageType.notice);
                         break;
                     case SkillConstants.STATE_CAN_NOT_INTERRUPT:

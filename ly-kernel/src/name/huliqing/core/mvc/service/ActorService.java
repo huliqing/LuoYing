@@ -12,7 +12,6 @@ import java.util.List;
 import name.huliqing.core.Inject;
 import name.huliqing.core.data.ActorData;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.enums.HurtFace;
 import name.huliqing.core.enums.Sex;
 import name.huliqing.core.view.talk.Talk;
@@ -69,15 +68,16 @@ public interface ActorService extends Inject {
 //     * @return 
 //     */
 //    List<ObjectData> getItems(Actor actor, List<ObjectData> store);
-    
-    /**
-     * 给定一个时间点，判断从目标时间点之后是否角色的技能有更新（包含技能增加
-     * ，减少，升级等）。
-     * @param actor
-     * @param timePoint
-     * @return 
-     */
-    boolean isSkillUpdated(Actor actor, long timePoint);
+   
+    // remove20160819
+//    /**
+//     * 给定一个时间点，判断从目标时间点之后是否角色的技能有更新（包含技能增加
+//     * ，减少，升级等）。
+//     * @param actor
+//     * @param timePoint
+//     * @return 
+//     */
+//    boolean isSkillUpdated(Actor actor, long timePoint);
   
     /**
      * 检查目标target在角色self的哪一个方向

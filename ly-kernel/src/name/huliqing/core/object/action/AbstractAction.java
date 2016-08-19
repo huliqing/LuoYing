@@ -10,9 +10,13 @@ import name.huliqing.core.data.ActionData;
 /**
  * 行为逻辑基础
  * @author huliqing
+ * @param <T>
  */
-public abstract class AbstractAction implements Action {
-    protected ActionData data;
+public abstract class AbstractAction<T extends ActionData> implements Action<T> {
+    
+    private boolean initialized;
+    
+    protected T data;
     protected Actor actor;
     // 行为是否正在执行
     protected boolean started;
@@ -25,12 +29,12 @@ public abstract class AbstractAction implements Action {
     public AbstractAction() {}
 
     @Override
-    public void setData(ActionData data) {
+    public void setData(T data) {
         this.data = data;
     }
 
     @Override
-    public ActionData getData() {
+    public T getData() {
         return data;
     }
     
@@ -40,13 +44,46 @@ public abstract class AbstractAction implements Action {
      * 2.从另一个行为切换到当前行为时
      */
     @Override
-    public final void start() {
+    public void initialize() {
+        if (initialized) {
+            throw new IllegalStateException("Action already initialized! action=" + this);
+        }
+        initialized = true;
         started = true;
         locked = false;
         lockTime = 0;
         lockTimeUsed = 0;
+    }
+
+    @Override
+    public boolean isInitialized() {
+        return initialized;
+    }
+    
+    @Override
+    public final void update(float tpf) {
+        if (!started) {
+            return;
+        }
         
-        doInit();
+        if (locked) {
+            lockTimeUsed += tpf;
+            if (lockTimeUsed >= lockTime) {
+                locked = false;
+                lockTimeUsed = 0;
+            }
+        } else {
+            doLogic(tpf);
+        }
+    }
+    
+    /**
+     * 行为执行后的清理操作。该方法在行为正常终止、退出、被打断、切换等都会执行。
+     */
+    @Override
+    public void cleanup() {
+        initialized = false;
+        started = false;
     }
     
     /**
@@ -78,31 +115,6 @@ public abstract class AbstractAction implements Action {
         this.actor = actor;
     }
     
-    @Override
-    public final void update(float tpf) {
-        if (!started) {
-            return;
-        }
-        
-        if (locked) {
-            lockTimeUsed += tpf;
-            if (lockTimeUsed >= lockTime) {
-                locked = false;
-                lockTimeUsed = 0;
-            }
-        } else {
-            doLogic(tpf);
-        }
-    }
-    
-    /**
-     * 行为执行后的清理操作。该方法在行为正常终止、退出、被打断、切换等都会执行。
-     */
-    @Override
-    public void cleanup() {
-        started = false;
-    }
-    
     /**
      * 标记行为已经完成，调用该方法来使行为自动退出。
      */
@@ -110,10 +122,10 @@ public abstract class AbstractAction implements Action {
         started = false;
     }    
     
-    /**
-     * 初始化action
-     */
-    protected abstract void doInit();
+//    /**
+//     * 初始化action
+//     */
+//    protected abstract void doInit();
     
     /**
      * 执行行为逻辑

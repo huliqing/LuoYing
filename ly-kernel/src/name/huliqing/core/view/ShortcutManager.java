@@ -26,6 +26,7 @@ import name.huliqing.core.mvc.network.UserCommandNetwork;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.ConfigService;
 import name.huliqing.core.mvc.service.ProtoService;
+import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.object.animation.Animation;
 import name.huliqing.core.object.animation.BounceMotion;
 import name.huliqing.core.object.animation.CurveMove;
@@ -232,6 +233,7 @@ public class ShortcutManager {
             return;
         ActorService actorService = Factory.get(ActorService.class);
         ConfigService configService = Factory.get(ConfigService.class);
+        SkillService skillService = Factory.get(SkillService.class);
         
         float shortcutSize = configService.getShortcutSize();
         for (ShortcutSave s : ss) {
@@ -254,11 +256,12 @@ public class ShortcutManager {
                 continue;
             }
             
-            // 由于skill的创建过程比较特殊，SkillData只有在创建了AnimSkill之后
+            // 由于skill的创建过程比较特殊，SkillData只有在创建了Skill之后
             // 才能获得skillType,所以不能直接使用createProtoData方式获得的SkillData
             // 这会找不到SkillData中的skillType,所以需要从角色身上重新找回SkillData
             if (data instanceof SkillData) {
-                data = player.getData().getSkillStore().getSkillById(data.getId());
+//                data = player.getData().getSkillStore().getSkillById(data.getId());
+                data = skillService.getSkill(player, data.getId()).getData();
             }
             
             ShortcutView shortcut = ShortcutManager.createShortcut(player, data);

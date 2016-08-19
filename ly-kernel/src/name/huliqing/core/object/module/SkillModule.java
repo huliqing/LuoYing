@@ -22,8 +22,6 @@ import name.huliqing.core.object.skill.Skill;
  * @author huliqing
  */
 public class SkillModule extends AbstractModule<SkillModuleData> {
-//    private final ActorService actorService = Factory.get(ActorService.class);
-    
     private Actor actor;
     
     // 所有可用的技能处理器
@@ -42,6 +40,7 @@ public class SkillModule extends AbstractModule<SkillModuleData> {
     
     // 临听角色技能的执行和结束 
     private List<SkillListener> skillListeners;
+    private List<SkillPlayListener> skillPlayListeners;
     
     // 用于支持技能更新逻辑的control.
     private Control updateControl;
@@ -67,9 +66,9 @@ public class SkillModule extends AbstractModule<SkillModuleData> {
                 if (skill.isEnd()) {
                     runningSkills.remove(skill);
                     // 执行侦听器
-                    if (skillListeners != null && !skillListeners.isEmpty()) {
-                        for (int i = 0; i < skillListeners.size(); i++) {
-                            skillListeners.get(i).onSkillEnd(actor, skill);
+                    if (skillPlayListeners != null && !skillPlayListeners.isEmpty()) {
+                        for (int i = 0; i < skillPlayListeners.size(); i++) {
+                            skillPlayListeners.get(i).onSkillEnd(actor, skill);
                         }
                     }
                 } else {
@@ -202,11 +201,33 @@ public class SkillModule extends AbstractModule<SkillModuleData> {
     }
     
     /**
+     * 添加技能"执行“侦听器
+     * @param skillPlayListener 
+     */
+    public void addSkillPlayListener(SkillPlayListener skillPlayListener) {
+        if (skillPlayListeners == null) {
+            skillPlayListeners = new ArrayList<SkillPlayListener>();
+        }
+        if (!skillPlayListeners.contains(skillPlayListener)) {
+            skillPlayListeners.add(skillPlayListener);
+        }
+    }
+    
+    /**
+     * 移除技能"执行"侦听器
+     * @param skillPlayListener
+     * @return 
+     */
+    public boolean removeSkillPlayListener(SkillPlayListener skillPlayListener) {
+        return skillPlayListeners != null && skillPlayListeners.remove(skillPlayListener);
+    }
+    
+    /**
      * 获取技能侦听器，如果没有添加过技能侦听器则返回null.
      * @return 
      */
-    public List<SkillListener> getSkillListeners() {
-        return skillListeners;
+    public List<SkillPlayListener> getSkillPlayListeners() {
+        return skillPlayListeners;
     }
     
     /**
@@ -264,47 +285,8 @@ public class SkillModule extends AbstractModule<SkillModuleData> {
         }
         startNewSkill(newSkill);
     }
-
-    // remove20160818
-//    public boolean playReset() {
-//        // reset时需要把所有可能还在执行中的技能结束，并清除出列表．
-//        // 注意: 一定要清除出列表,这可避免在reset后由于角色的状态发生变化引起runningSkills中的skill
-//        // 触发onStateChange而导致skill做出一些重新运行的可能，如下(walkSkill)
-//        // skillProcessor.playReset　-> skillProcessor.notifyStateChange -> skill.onStateChange (walkSkill可能重启animation)
-//        if (!runningSkills.isEmpty()) {
-//            for (Skill skill : runningSkills.getArray()) {
-//                if (!skill.isEnd()) {
-//                    skill.cleanup();
-//                }
-//            }
-//            runningSkills.clear();
-//        }
-//        
-//        actorService.reset(actor);
-//        return true;
-//    }
-    
-    // remove20160818
-//    public boolean playFaceTo(Vector3f position) {
-//        Vector3f viewDir = actorService.getViewDirection(actor);
-//        position.subtract(actor.getSpatial().getWorldTranslation(), viewDir).normalizeLocal();
-//        actorService.setViewDirection(actor, viewDir);
-//        
-//        // 朝向的时候如果角色正在走动，则应该同时更新角色的跑步方向。
-//        // 或者通过walkDir.length()来判断角色是否在移动也可以
-//        if (isRunning() || isWalking()) {
-//            Vector3f walkDir = actorService.getWalkDirection(actor);
-//            float speed = walkDir.length();
-//            actorService.setWalkDirection(actor, viewDir.mult(speed, walkDir));
-//        }
-//        
-//        return true;
-//    }
     
     private void startNewSkill(Skill newSkill) {
-        // 检查是否存在动画，如果没有则载入。
-//        actorService.checkAndLoadAnim(actor, newSkill.getData().getAnimation());
-        
         // 执行技能
         lastSkill = newSkill;
         lastSkill.setActor(actor);
@@ -317,74 +299,12 @@ public class SkillModule extends AbstractModule<SkillModuleData> {
         }
         
         // 执行侦听器
-        if (skillListeners != null && !skillListeners.isEmpty()) {
-            for (int i = 0; i < skillListeners.size(); i++) {
-                skillListeners.get(i).onSkillStart(actor, lastSkill);
+        if (skillPlayListeners != null && !skillPlayListeners.isEmpty()) {
+            for (int i = 0; i < skillPlayListeners.size(); i++) {
+                skillPlayListeners.get(i).onSkillStart(actor, lastSkill);
             }
         }
         
-        
-        throw new UnsupportedOperationException("检查是否存在动画，如果没有则载入。");
     }
 
-    // remove20160818
-//    public boolean isPlayingSkill() {
-//        return runningSkillStates != 0;
-//    }
-//
-//    public boolean isPlayingSkill(SkillType skillType) {
-//        return (runningSkillStates & (1 << skillType.getValue())) != 0;
-//    }
-//    
-//    public boolean isWaiting() {
-//        // remove20160420,保持简单，少BUG，不要把isReset混进来
-//        // 部分角色可能没有wait状态，则需要使用该方法来判断。
-////        if (actor.getChannelProcessor() != null && actor.getChannelProcessor().isReset()) {
-////            return true;
-////        }
-//        
-//        return lastSkill != null
-//                && lastSkill.getSkillType() == SkillType.wait;
-//    }
-//    
-//    public boolean isWalking() {
-//        return (runningSkillStates & (1 << SkillType.walk.getValue())) != 0;
-//    }
-//    
-//    public boolean isRunning() {
-//        return (runningSkillStates & (1 << SkillType.run.getValue())) != 0;
-//    }
-//  
-//    public boolean isAttacking() {
-//        return (runningSkillStates & (1 << SkillType.attack.getValue())) != 0;
-//    }
-//    
-//    public boolean isDefending() {
-//        return (runningSkillStates & (1 << SkillType.defend.getValue())) != 0;
-//    }
-//    
-//    public boolean isDucking() {
-//        return (runningSkillStates & (1 << SkillType.duck.getValue())) != 0;
-//    }
-
-
-//    public Skill getLastPlayingSkill() {
-//        if (lastSkill != null && !lastSkill.isEnd()) {
-//            return lastSkill;
-//        }
-//        return null;
-//    }
-
-//    public Skill getPlayingSkill(SkillType skillType) {
-//        for (Skill skill : runningSkills.getArray()) {
-//            if (skill.getSkillType() == skillType) {
-//                return skill;
-//            }
-//        }
-//        return null;
-//    }
-
-
-    
-    
 }

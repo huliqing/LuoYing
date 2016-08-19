@@ -13,10 +13,10 @@ import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.mess.MessActorAddSkill;
 import name.huliqing.core.mess.MessSkill;
-import name.huliqing.core.mess.MessSkillFaceTo;
 import name.huliqing.core.mess.MessSkillWalk;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actor.SkillListener;
+import name.huliqing.core.object.module.SkillPlayListener;
 import name.huliqing.core.object.skill.Skill;
 
 /**
@@ -24,7 +24,7 @@ import name.huliqing.core.object.skill.Skill;
  * @author huliqing
  */
 public class SkillNetworkImpl implements SkillNetwork {
-    private final static Network network = Network.getInstance();
+    private final static Network NETWORK = Network.getInstance();
     private SkillService skillService;
     
     @Override
@@ -38,57 +38,22 @@ public class SkillNetworkImpl implements SkillNetwork {
     }
     
     @Override
+    public Skill loadSkill(SkillData skillData) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    @Override
     public void addSkill(Actor actor, String skillId) {
-        if (!network.isClient()) {
+        if (!NETWORK.isClient()) {
             // 1.broadcast to all client
             MessActorAddSkill mess = new MessActorAddSkill();
             mess.setActorId(actor.getData().getUniqueId());
             mess.setSkillId(skillId);
-            network.broadcast(mess);
+            NETWORK.broadcast(mess);
             
             // 1.addskill
             skillService.addSkill(actor, skillId);
         }
-    }
-
-    @Override
-    public SkillData getSkill(Actor actor, String skillId) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public SkillData getSkill(Actor actor, SkillType skillType) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public Skill getSkillInstance(Actor actor, String skillId) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public List<SkillData> getSkill(Actor actor) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public SkillData getSkillRandom(Actor actor, SkillType skillType) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public SkillData getSkillRandomDefend(Actor actor) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public SkillData getSkillRandomDuck(Actor actor) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public SkillData getSkillRandomWalk(Actor actor) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
     
     /**
@@ -100,13 +65,8 @@ public class SkillNetworkImpl implements SkillNetwork {
      */
     @Override
     public boolean playSkill(Actor actor, Skill skill, boolean force) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-    
-    @Override
-    public boolean playSkill(Actor actor, String skillId, boolean force) {
         boolean result = false;
-        if (!network.isClient()) {
+        if (!NETWORK.isClient()) {
             
             // ============================20160504=============================
             // 重要：所有技能的执行顺序是这样的：
@@ -141,60 +101,50 @@ public class SkillNetworkImpl implements SkillNetwork {
             // 端和客户端所有状态完全同步几乎是不可能的。
             // ============================20160504=============================
             
-            Skill skill = skillService.getSkillInstance(actor, skillId);
             result = skillService.isPlayable(actor, skill, force);
             
             if (result) {
-                if (network.hasConnections()) {
+                if (NETWORK.hasConnections()) {
                     MessSkill mess = new MessSkill();
                     mess.setActorId(actor.getData().getUniqueId());
-                    mess.setSkillId(skillId);
+                    mess.setSkillId(skill.getData().getId());
                     mess.setForce(true); // 注：强制执行
-                    network.broadcast(mess);
+                    NETWORK.broadcast(mess);
                 }
-                skillService.playSkill(actor, skillId, true);// 注：强制执行
-            }
-        }
-        return result;
-    }
-
-    @Override
-    public boolean playWalk(Actor actor, String skillId, Vector3f dir, boolean faceToDir, boolean force) {
-        boolean result = false;
-        if (!network.isClient()) {
-            
-            // ============================20160504=============================
-            // 重要：参考上面playSkill中的说明。
-            // ============================20160504=============================
-            Skill skill = skillService.getSkillInstance(actor, skillId);
-            result = skillService.isPlayable(actor, skill, force);
-            if (result) {
-                if (network.hasConnections()) {
-                    MessSkillWalk mess = new MessSkillWalk();
-                    mess.setActorId(actor.getData().getUniqueId());
-                    mess.setDir(dir);
-                    mess.setFace(faceToDir);
-                    mess.setForce(true); // 注：强制执行
-                    mess.setSkillId(skillId);
-                    network.broadcast(mess);
-                }
-                skillService.playWalk(actor, skillId, dir, faceToDir, true); // 注：强制执行
+                skillService.playSkill(actor, skill, true);// 注：强制执行
             }
         }
         return result;
     }
     
     @Override
-    public boolean playFaceTo(Actor actor, Vector3f position) {
+    public boolean playSkill(Actor actor, String skillId, boolean force) {
+        Skill skill = skillService.getSkill(actor, skillId);
+        return playSkill(actor, skill, force);
+    }
+
+    @Override
+    public boolean playWalk(Actor actor, String skillId, Vector3f dir, boolean faceToDir, boolean force) {
         boolean result = false;
-        if (!network.isClient()) {
-            if (network.hasConnections()) {
-                MessSkillFaceTo mess = new MessSkillFaceTo();
-                mess.setActorId(actor.getData().getUniqueId());
-                mess.setPos(position);
-                network.broadcast(mess);
+        if (!NETWORK.isClient()) {
+            
+            // ============================20160504=============================
+            // 重要：参考上面playSkill中的说明。
+            // ============================20160504=============================
+            Skill skill = skillService.getSkill(actor, skillId);
+            result = skillService.isPlayable(actor, skill, force);
+            if (result) {
+                if (NETWORK.hasConnections()) {
+                    MessSkillWalk mess = new MessSkillWalk();
+                    mess.setActorId(actor.getData().getUniqueId());
+                    mess.setDir(dir);
+                    mess.setFace(faceToDir);
+                    mess.setForce(true); // 注：强制执行
+                    mess.setSkillId(skillId);
+                    NETWORK.broadcast(mess);
+                }
+                skillService.playWalk(actor, skillId, dir, faceToDir, true); // 注：强制执行
             }
-            result = skillService.playFaceTo(actor, position); 
         }
         return result;
     }
@@ -210,7 +160,7 @@ public class SkillNetworkImpl implements SkillNetwork {
     }
 
     @Override
-    public boolean isCooldown(SkillData skillData) {
+    public boolean isCooldown(Skill skill) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -300,17 +250,42 @@ public class SkillNetworkImpl implements SkillNetwork {
     }
 
     @Override
-    public float getSkillTrueUseTime(Actor actor, SkillData skillData) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
     public void addSkillListener(Actor actor, SkillListener skillListener) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    @Override
+    public void addSkillPlayListener(Actor actor, SkillPlayListener skillPlayListener) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public boolean removeSkillListener(Actor actor, SkillListener skillListener) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean removeSkillPlayListener(Actor actor, SkillPlayListener skillPlayListener) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean removeSkill(Actor actor, String skillId) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Skill getSkill(Actor actor, String skillId) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Skill getSkill(Actor actor, SkillType skillType) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Skill> getSkills(Actor actor) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

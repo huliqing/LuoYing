@@ -22,8 +22,6 @@ import name.huliqing.core.data.SkillData;
 import name.huliqing.core.data.SkinData;
 import name.huliqing.core.enums.Sex;
 import name.huliqing.core.manager.ResourceManager;
-import name.huliqing.core.object.actor.ItemStore;
-import name.huliqing.core.object.actor.SkillStore;
 import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.xml.DataLoader;
 

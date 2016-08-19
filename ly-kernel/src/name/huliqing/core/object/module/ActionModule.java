@@ -56,11 +56,10 @@ public class ActionModule<T extends ModuleData> extends AbstractModule<T> {
 
     @Override
     public void cleanup() {
-        // remove20151231,暂不支持cleanup
-//        if (current != null) {
-//            current.cleanup();
-//            current = null;
-//        }
+        if (current != null) {
+            current.cleanup();
+            current = null;
+        }
 
         if (updateControl != null) {
             actor.getSpatial().removeControl(updateControl);
@@ -84,7 +83,7 @@ public class ActionModule<T extends ModuleData> extends AbstractModule<T> {
         
         current = action;
         if (current != null) {
-            current.start();
+            current.initialize();
         }
     }
     

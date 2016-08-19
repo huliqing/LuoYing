@@ -101,7 +101,7 @@ public class StoryTreasureTask1 extends GameTaskBase {
                 actorService.setGroup(victim, game.groupPlayer);
                 stateService.addState(victim, IdConstants.STATE_SAFE, null);
                 actorService.setEssential(victim, true);// 设置为"必要的",这样不会被移除出场景
-                skillService.playSkill(actor, skillService.getSkill(actor, SkillType.wait).getId(), false);
+                skillService.playSkill(actor, skillService.getSkill(actor, SkillType.wait), false);
                 playNetwork.addActor(victim);
                 
                 // 救命

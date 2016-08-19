@@ -12,6 +12,7 @@ import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.mvc.network.SkillNetwork;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.SkillService;
+import name.huliqing.core.object.skill.Skill;
 
 /**
  *
@@ -37,29 +38,24 @@ public class RunSimpleAction extends AbstractAction implements RunAction{
     private boolean resetDir;
     
     // 缓存技能id
-    private String runSkillId;
-    private String waitSkillId;
+    private Skill runSkillId;
+    private Skill waitSkillId;
     
     public RunSimpleAction() {
         super();
     }
     
     @Override
-    protected void doInit() {
+    public void initialize() {
+        super.initialize();
         resetDir = true;
         rayDetour.setActor(actor);
         rayDetour.setAutoFacing(true);
         timeDetour.setActor(actor);
         timeDetour.setAutoFacing(true);
         
-        SkillData runSkill = skillService.getSkill(actor, SkillType.run);
-        if (runSkill != null) {
-            runSkillId = runSkill.getId();
-        }
-        SkillData waitSkill = skillService.getSkill(actor, SkillType.wait);
-        if (waitSkill != null) {
-            waitSkillId = waitSkill.getId();
-        }
+        runSkillId = skillService.getSkill(actor, SkillType.run);
+        waitSkillId = skillService.getSkill(actor, SkillType.wait);
     }
 
     @Override
@@ -79,7 +75,8 @@ public class RunSimpleAction extends AbstractAction implements RunAction{
         
         if (resetDir) {
             TempVars tv = TempVars.get();
-            skillNetwork.playWalk(actor, runSkillId, position.subtract(actor.getSpatial().getWorldTranslation(), tv.vect1), true, false);
+            skillNetwork.playWalk(actor, runSkillId.getData().getId()
+                    , position.subtract(actor.getSpatial().getWorldTranslation(), tv.vect1), true, false);
             tv.release();
             resetDir = false;
         }
@@ -113,7 +110,8 @@ public class RunSimpleAction extends AbstractAction implements RunAction{
     private void runByStraight() {
         if (!skillService.isRunning(actor)) {
             TempVars tv = TempVars.get();
-            skillNetwork.playWalk(actor, runSkillId, position.subtract(actor.getSpatial().getWorldTranslation(), tv.vect1), true, false);
+            skillNetwork.playWalk(actor, runSkillId.getData().getId()
+                    , position.subtract(actor.getSpatial().getWorldTranslation(), tv.vect1), true, false);
             tv.release();
         }
     }

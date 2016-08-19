@@ -104,7 +104,7 @@ import name.huliqing.core.mess.MessSCInitGameOK;
 import name.huliqing.core.mess.MessSCServerState;
 import name.huliqing.core.mess.MessSkill;
 import name.huliqing.core.mess.MessSkillAbstract;
-import name.huliqing.core.mess.MessSkillFaceTo;
+import name.huliqing.core.mess.MessActorLookAt;
 import name.huliqing.core.mess.MessSkillWalk;
 import name.huliqing.core.mess.MessSkinWeaponTakeOn;
 import name.huliqing.core.mess.MessStateAdd;
@@ -128,8 +128,6 @@ import name.huliqing.core.object.action.RunPathAction;
 import name.huliqing.core.object.action.RunSimpleAction;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.loader.ActorDataLoader;
-import name.huliqing.core.object.actor.ItemStore;
-import name.huliqing.core.object.actor.SkillStore;
 import name.huliqing.core.loader.ActorAnimDataLoader;
 import name.huliqing.core.object.actoranim.ActorCurveMove;
 import name.huliqing.core.loader.ActorLogicDataLoader;
@@ -354,8 +352,6 @@ public class LY {
 
     private static void registerSerializer() {
         Serializer.registerClass(Proto.class);
-        Serializer.registerClass(ItemStore.class);
-        Serializer.registerClass(SkillStore.class);
         Serializer.registerClass(AttributeApply.class);
         Serializer.registerClass(AttributeUse.class);
         Serializer.registerClass(Data.class);
@@ -738,7 +734,7 @@ public class LY {
         // Skill
         Serializer.registerClass(MessSkill.class);
         Serializer.registerClass(MessSkillAbstract.class);
-        Serializer.registerClass(MessSkillFaceTo.class);
+        Serializer.registerClass(MessActorLookAt.class);
         Serializer.registerClass(MessSkillWalk.class);
         
         // Skin

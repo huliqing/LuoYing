@@ -136,7 +136,7 @@ public class PlayServiceImpl implements PlayService {
         logicService.resetPlayerLogic(actor);
         // 暂时以1作为默认分组
         actorService.setTeam(actor, 1);
-        skillService.playSkill(actor, skillService.getSkill(actor, SkillType.wait).getId(), false);
+        skillService.playSkill(actor, skillService.getSkill(actor, SkillType.wait), false);
         
         actorService.setPlayer(actor, true);
         addActor(actor);

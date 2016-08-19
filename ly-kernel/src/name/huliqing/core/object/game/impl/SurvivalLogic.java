@@ -111,7 +111,7 @@ public class SurvivalLogic<T extends GameLogicData> extends AbstractGameLogic<T>
             @Override
             public Actor onAddBefore(Actor actor) {
                 actorService.setGroup(actor, game.GROUP_ENEMY);
-                skillService.playSkill(actor, skillService.getSkill(actor, SkillType.wait).getId(), false);
+                skillService.playSkill(actor, skillService.getSkill(actor, SkillType.wait), false);
 
                 TempVars tv = TempVars.get();
                 tv.vect1.set(game.treasurePos);
