@@ -75,7 +75,7 @@ public class Data implements Savable {
 //        return value;
 
         Object value = getAttribute(key);
-        if (value == null) {
+        if (value == null || value.equals("")) {
             return null;
         }
         return value.toString();

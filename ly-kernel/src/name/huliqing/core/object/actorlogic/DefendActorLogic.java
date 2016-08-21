@@ -51,7 +51,7 @@ public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> im
     
     // ---- 节能
     // 判断是否有可用的技能进行防守
-    private boolean hasUsableSkill = true;
+    private boolean hasUsableSkill = false;
     
     private boolean needRecacheSkill = true;
     

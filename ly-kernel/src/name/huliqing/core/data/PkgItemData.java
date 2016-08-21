@@ -51,8 +51,6 @@ public class PkgItemData extends ObjectData {
         deletable = ic.readBoolean("deletable", true);
     }
     
-    public PkgItemData() {}
-    
     /**
      * 获取物品使用的种族限制，如果该列表为empty,则表明没有种族限制.否则
      * 指定的角色的种族必须符合该列表中的限制。

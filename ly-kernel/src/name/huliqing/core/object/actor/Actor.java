@@ -12,6 +12,7 @@ import com.jme3.scene.control.AbstractControl;
 import com.jme3.util.SafeArrayList;
 import java.util.ArrayList;
 import java.util.List;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.module.ModuleData;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.xml.DataProcessor;
@@ -23,6 +24,33 @@ import name.huliqing.core.object.module.Module;
  */
 public class Actor extends AbstractControl implements DataProcessor<ActorData> {
     
+//    public interface ActorObjectListener {
+//        
+//        /**
+//         * 当角色添加了物品时该方法被调用
+//         * @param actor
+//         * @param data 被添加的物体
+//         * @param added 实际添加了的物品的数量
+//         */
+//        void onObjectAdded(Actor actor, ObjectData data, int added);
+//        
+//        /**
+//         * 当从角色身上移除了物品时该方法被调用.
+//         * @param actor
+//         * @param data 被移除了物体数量的data,如果移除后的物体的数量为0，则该物体可能被移除出角色身上。
+//         * @param removed 实际移除的物体的数量
+//         */
+//        void onObjectRemoved(Actor actor, ObjectData data, int removed);
+//        
+//        /**
+//         * 当角色使用物体时该方法被调用,侦听器可以实现这个方法来处理物品的使用逻辑.
+//         * @param actor
+//         * @param data 
+//         */
+//        void onObjectUse(Actor actor, ObjectData data);
+//        
+//    }
+    
     protected ActorData data;
     protected boolean initialized;
     
@@ -30,6 +58,7 @@ public class Actor extends AbstractControl implements DataProcessor<ActorData> {
      * 所有的模块,这里面包含logicModules中的模块。
      */
     protected final SafeArrayList<Module> modules = new SafeArrayList<Module>(Module.class);
+//    protected final List<ActorObjectListener> listeners = new ArrayList<ActorObjectListener>();
     
     @Override
     public void setData(ActorData data) {
@@ -94,7 +123,7 @@ public class Actor extends AbstractControl implements DataProcessor<ActorData> {
             return;
         }
         modules.add(module);
-        data.getModuleDatas().add(module.getData());
+        data.addModuleData(module.getData());
         module.initialize(this);
     }
     
@@ -108,7 +137,7 @@ public class Actor extends AbstractControl implements DataProcessor<ActorData> {
             return false;
         }
         modules.remove(module);
-        data.getModuleDatas().remove(module.getData());
+        data.removeModuleData(module.getData());
         module.cleanup();
         return true;
     }
@@ -133,7 +162,7 @@ public class Actor extends AbstractControl implements DataProcessor<ActorData> {
      * @return 
      */
     protected Spatial loadModel() {
-        return ActorModelLoader.loadActorModel(data);
+        return ActorModelLoader.loadActorModel(this);
     }
     
     // ignore
@@ -146,96 +175,88 @@ public class Actor extends AbstractControl implements DataProcessor<ActorData> {
     
     // ------------------------- 考虑增加的方法,统一物体的添加，移除，获取
     
-    
-//    public interface ActorListener {
-//        /**
-//         * 当角色添加了物品时该方法被调用
-//         * @param actor
-//         * @param data 被添加的物体
-//         */
-//        void onObjectAdded(Actor actor, ObjectData data);
-//        
-//        /**
-//         * 当从角色身上移除了物品时该方法被调用,
-//         * @param actor
-//         * @param data
-//         */
-//        void onObjectRemoved(Actor actor, ObjectData data);
-//        
-//        /**
-//         * 当角色使用物体时该方法被调用,侦听器可以实现这个方法来处理物品的使用逻辑.
-//         * @param actor
-//         * @param data 
-//         */
-//        void onObjectUse(Actor actor, ObjectData data);
-//    }
-//    protected final List<ActorListener> actorListeners = new ArrayList<ActorListener>();
-    
-//    
 //    /**
 //     * 给角色添加物体.
-//     * @param objectData
+//     * @param objectId
+//     * @param amount
 //     */
-//    public void addObject(ObjectData objectData) {
-//        if (data.getObjectDatas() == null) {
-//            data.setObjectDatas(new ArrayList<ObjectData>());
+//    public void addObject(String objectId, int amount) {
+//        if (amount <= 0) {
+//            return;
 //        }
-//        // 不允许重复添加同一个实例的对象，但允许相同ID的物体的不同实例。
-//        if (!data.getObjectDatas().contains(objectData)) {
-//            data.getObjectDatas().add(objectData);
+//        ObjectData od = data.getObjectData(objectId);
+//        if (od == null) {
+//            od = Loader.load(objectId);
+//            od.setTotal(amount);
+//            data.addObjectData(od);
+//        } else {
+//            od.setTotal(od.getTotal() + amount);
 //        }
-//        // 触发侦听器
-//        if (!actorListeners.isEmpty()) {
-//            for (int i = 0; i < actorListeners.size(); i++) {
-//                actorListeners.get(i).onObjectAdded(this, objectData);
+//        if (!listeners.isEmpty()) {
+//            for (int i = 0; i < listeners.size(); i++) {
+//                listeners.get(i).onObjectAdded(this, od, amount);
 //            }
 //        }
 //    }
 //    
 //    /**
-//     * 移除物体，amount必须大于0，否则什么也不做.
-//     * @param id
+//     * 移除物体，如果角色没有存在指定objectId的物体或者amount小于等于0则什么也不做。
+//     * @param objectId
 //     * @param amount
 //     * @return  
 //     */
-//    public boolean removeObject(String id, int amount) {
+//    public boolean removeObject(String objectId, int amount) {
 //        if (amount <= 0 || data.getObjectDatas() == null)
 //            return false;
 //        
 //        // 不存在指定物品
-//        ObjectData od = getObject(id);
+//        ObjectData od = data.getObjectData(objectId);
 //        if (od == null) {
 //            return false;
 //        }
 //        
+//        int trueRemoved = amount;
+//        int oldTotal = od.getTotal();
 //        od.setTotal(od.getTotal() - amount);
 //        if (od.getTotal() <= 0) {
 //            data.getObjectDatas().remove(od);
+//            trueRemoved = oldTotal;
 //        }
 //        
 //        // 触发侦听器
-//        if (!actorListeners.isEmpty()) {
-//            for (int i = 0; i < actorListeners.size(); i++) {
-//                actorListeners.get(i).onObjectRemoved(this, od);
+//        if (!listeners.isEmpty()) {
+//            for (int i = 0; i < listeners.size(); i++) {
+//                listeners.get(i).onObjectRemoved(this, od, trueRemoved);
 //            }
 //        }
 //        return true;
 //    }
 //    
 //    /**
-//     * 使用一个物体
+//     * 使用一个物体，由子类或侦听器去实现逻辑.
 //     * @param data 
 //     */
 //    public void useObject(ObjectData data) {
 //        // 触发侦听器
-//        if (!actorListeners.isEmpty()) {
-//            for (int i = 0; i < actorListeners.size(); i++) {
-//                actorListeners.get(i).onObjectUse(this, data);
+//        if (!listeners.isEmpty()) {
+//            for (int i = 0; i < listeners.size(); i++) {
+//                listeners.get(i).onObjectUse(this, data);
 //            }
 //        }
 //    }
 //    
-//    /**
+//    public void addListener(ActorObjectListener listener) {
+//        if (!listeners.contains(listener)) {
+//            listeners.add(listener);
+//        }
+//    }
+//    
+//    public boolean removeListener(ActorObjectListener listener) {
+//        return listeners.remove(listener);
+//    }
+    
+    // ---------------------------------------------- 测试1----------------------------------------------------------------------
+    //    /**
 //     * 获得角色包裹内的物体
 //     * @param <T>
 //     * @param id
@@ -293,15 +314,5 @@ public class Actor extends AbstractControl implements DataProcessor<ActorData> {
 //            }
 //        }
 //        return store;
-//    }
-    
-//    public void addActorListener(ActorListener actorListener) {
-//        if (!actorListeners.contains(actorListener)) {
-//            actorListeners.add(actorListener);
-//        }
-//    }
-//    
-//    public boolean removeActorListener(ActorListener actorListener) {
-//        return actorListeners.remove(actorListener);
 //    }
 }

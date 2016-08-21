@@ -21,7 +21,7 @@ public class AttributeModuleDataLoader implements DataLoader<AttributeModuleData
 
     @Override
     public void load(Proto proto, AttributeModuleData data) {
-        String[] attributeArr = proto.getAsArray("attributes");
+//        String[] attributeArr = proto.getAsArray("attributes");
 //        if (attributeArr != null) {
 //            List<AttributeData> attributes = new ArrayList<AttributeData>(attributeArr.length);
 //            for (String attrId : attributeArr) {

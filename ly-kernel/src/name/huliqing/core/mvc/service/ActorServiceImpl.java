@@ -15,7 +15,6 @@ import com.jme3.scene.Spatial;
 import com.jme3.util.TempVars;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import name.huliqing.core.LY;
 import name.huliqing.core.Factory;
 import name.huliqing.core.utils.NpcNameUtils;
@@ -24,8 +23,6 @@ import name.huliqing.core.constants.IdConstants;
 import name.huliqing.core.constants.ResConstants;
 import name.huliqing.core.data.ActorData;
 import name.huliqing.core.data.AttributeData;
-import name.huliqing.core.data.ObjectData;
-import name.huliqing.core.data.SkinData;
 import name.huliqing.core.enums.HurtFace;
 import name.huliqing.core.enums.MessageType;
 import name.huliqing.core.enums.Sex;
@@ -39,7 +36,6 @@ import name.huliqing.core.view.talk.TalkManager;
 import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.object.actor.ActorListener;
 import name.huliqing.core.object.channel.Channel;
-import name.huliqing.core.object.module.PhysicsModule;
 import name.huliqing.core.object.effect.Effect;
 import name.huliqing.core.object.el.LevelEl;
 import name.huliqing.core.object.el.XpDropEl;
@@ -129,6 +125,7 @@ public class ActorServiceImpl implements ActorService {
 //        return actor;
 
         Actor actor = Loader.loadActor(actorData);
+        actor.initialize();
         updateLevel(actor.getData());
         return actor;
     }
@@ -682,10 +679,8 @@ public class ActorServiceImpl implements ActorService {
     public void addActorListener(Actor actor, ActorListener actorListener) {
         if (actorListener == null) 
             return;
-        List<ActorListener> als = getActorBaseControl(actor).getActorListeners();
-        if (!als.contains(actorListener)) {
-            als.add(actorListener);
-        }
+        ActorModule module = getActorBaseControl(actor);
+        module.addActorListener(actorListener);
     }
 
     @Override
@@ -845,7 +840,7 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public void setLocation(Actor actor, Vector3f location) {
-        PhysicsModule module = actor.getModule(PhysicsModule.class);
+        ActorModule module = actor.getModule(ActorModule.class);
         if (module != null) {
             module.setLocation(location);
         } else {
@@ -860,7 +855,7 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public void setPhysicsEnabled(Actor actor, boolean enabled) {
-        PhysicsModule module = actor.getModule(PhysicsModule.class);
+        ActorModule module = actor.getModule(ActorModule.class);
         if (module != null) {
             module.setEnabled(enabled);
         }
@@ -868,13 +863,13 @@ public class ActorServiceImpl implements ActorService {
     
     @Override
     public boolean isPhysicsEnabled(Actor actor) {
-        PhysicsModule module = actor.getModule(PhysicsModule.class);
+        ActorModule module = actor.getModule(ActorModule.class);
         return module != null && module.isEnabled();
     }
     
     @Override
     public void setViewDirection(Actor actor, Vector3f viewDirection) {
-        PhysicsModule module = actor.getModule(PhysicsModule.class);
+        ActorModule module = actor.getModule(ActorModule.class);
         if (module != null) {
             module.setViewDirection(viewDirection);
         }
@@ -882,16 +877,16 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public Vector3f getViewDirection(Actor actor) {
-        PhysicsModule module = actor.getModule(PhysicsModule.class);
+        ActorModule module = actor.getModule(ActorModule.class);
         if (module != null) {
-            module.getViewDirection();
+            return module.getViewDirection();
         }
         return null;
     }
 
     @Override
     public void setLookAt(Actor actor, Vector3f position) {
-        PhysicsModule module = actor.getModule(PhysicsModule.class);
+        ActorModule module = actor.getModule(ActorModule.class);
         if (module != null) {
             module.setLookAt(position);
         }
@@ -899,7 +894,7 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public void setWalkDirection(Actor actor, Vector3f walkDirection) {
-        PhysicsModule module = actor.getModule(PhysicsModule.class);
+        ActorModule module = actor.getModule(ActorModule.class);
         if (module != null) {
             module.setWalkDirection(walkDirection);
         }
@@ -907,7 +902,7 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public Vector3f getWalkDirection(Actor actor) {
-        PhysicsModule module = actor.getModule(PhysicsModule.class);
+        ActorModule module = actor.getModule(ActorModule.class);
         if (module != null) {
             return module.getWalkDirection();
         }
@@ -955,6 +950,8 @@ public class ActorServiceImpl implements ActorService {
     public void resetToAnimationTime(Actor actor, String animation, float timePoint) {
         ChannelModule module = actor.getModule(ChannelModule.class);
         if (module != null) {
+            // 检查anim是否存在
+            checkAndLoadAnim(actor, animation);
             module.resetToAnimationTime(animation, timePoint);
         }
     }
@@ -990,19 +987,20 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public float getMass(Actor actor) {
-        PhysicsModule module = actor.getModule(PhysicsModule.class);
-        return module != null ? module.getMass() : 0;
+        return actor.getData().getMass();
+//        ActorModule module = actor.getModule(ActorModule.class);
+//        return module != null ? module.getMass() : 0;
     }
 
     @Override
     public boolean isKinematic(Actor actor) {
-        PhysicsModule module = actor.getModule(PhysicsModule.class);
+        ActorModule module = actor.getModule(ActorModule.class);
         return module != null ? module.isKinematic() : false;
     }
 
     @Override
     public void setKinematic(Actor actor, boolean kinematic) {
-        PhysicsModule module = actor.getModule(PhysicsModule.class);
+        ActorModule module = actor.getModule(ActorModule.class);
         if (module != null) {
             module.setKinematic(kinematic);
         }

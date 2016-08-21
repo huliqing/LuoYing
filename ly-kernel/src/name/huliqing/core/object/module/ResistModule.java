@@ -27,7 +27,7 @@ public class ResistModule<T extends ResistModuleData> extends AbstractModule<T> 
         super.initialize(actor);
         this.actor = actor;
         List<ResistData> rds = actor.getData().getObjectDatas(ResistData.class, null);
-        if (rds != null) {
+        if (rds != null && !rds.isEmpty()) {
             setResist((Resist)Loader.load(rds.get(0)));
         }
     }

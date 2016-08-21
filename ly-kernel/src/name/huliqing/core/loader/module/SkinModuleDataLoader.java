@@ -64,12 +64,12 @@ public class SkinModuleDataLoader implements DataLoader<SkinModuleData> {
 //        }
     }
 
-    private SkinData findInList(String skinId, List<SkinData> skinDatas) {
-        for (SkinData sd : skinDatas) {
-            if (sd.getId().equals(skinId)) {
-                return sd;
-            }
-        }
-        return null;
-    }
+//    private SkinData findInList(String skinId, List<SkinData> skinDatas) {
+//        for (SkinData sd : skinDatas) {
+//            if (sd.getId().equals(skinId)) {
+//                return sd;
+//            }
+//        }
+//        return null;
+//    }
 }

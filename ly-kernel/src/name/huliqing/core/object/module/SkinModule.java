@@ -22,6 +22,7 @@ import name.huliqing.core.object.actor.SkinListener;
 import name.huliqing.core.object.skin.Skin;
 import name.huliqing.core.object.skin.WeaponSkin;
 import name.huliqing.core.object.skin.WeaponStateUtils;
+import name.huliqing.core.xml.DataFactory;
 
 /**
  * 角色的换装控制器
@@ -46,39 +47,10 @@ public class SkinModule<T extends SkinModuleData> extends AbstractModule<T> {
         super.initialize(actor); 
         this.actor = actor;
         
-        // remove
-//        // 载入skinBase,skinBase是直接从xml配置上载入的，不进行存档，也就是不允许动态改变。
-//        String[] skinBasesTemp = data.getAsArray("skinBase");
-//        if (skinBasesTemp != null) {
-//            skinBase = new ArrayList<SkinData>(skinBasesTemp.length);
-//            for (String sbt : skinBasesTemp) {
-//                SkinData sdb = DataFactory.createData(sbt);
-//                sdb.setUsing(true); // 对于skinBase来说设置using=true没有意义，因为skinBase不会在界面上显示
-//                skinBase.add(sdb);
-//            }            
-//        }
-//        
-//        // 从存档中载入装备,如果skinDatas为null说明不是存档，则直接从xml获取配置。
-//        // 注：skinOutfit是正穿在身上的装备,所以setUsing(true);
-//        skinDatas = (List<SkinData>) data.getAttribute("skinDatas");
-//        if (skinDatas == null) {
-//            String[] skinOutfitTemp = data.getAsArray("skinOutfit");
-//            if (skinOutfitTemp != null) {
-//                skinDatas = new ArrayList<SkinData>(skinOutfitTemp.length);
-//                for (String skinId : skinOutfitTemp) {
-//                    SkinData skinOutfit = (SkinData) DataFactory.createData(skinId);
-//                    skinOutfit.setUsing(true);
-//                    skinOutfit.setTotal(1);
-//                    skinDatas.add(skinOutfit);
-//                }
-//            }
-//        }
-
         // 穿上普通装备
-        List<SkinData> tempStore = new ArrayList<SkinData>();
-        actor.getData().getObjectDatas(SkinData.class, tempStore);
-        if (tempStore.isEmpty()) {
-            for (SkinData sd : tempStore) {
+        List<SkinData> skinDatas =  actor.getData().getObjectDatas(SkinData.class, null);
+        if (skinDatas != null && !skinDatas.isEmpty()) {
+            for (SkinData sd : skinDatas) {
                 if (sd.isUsing() && !sd.isBaseSkin()) {
                     attachSkin(sd);
                 }
@@ -102,7 +74,7 @@ public class SkinModule<T extends SkinModuleData> extends AbstractModule<T> {
         if (skinData != null) {
             skinData.setTotal(skinData.getTotal() + amount);
         } else {
-            skinData = Loader.load(skinId);
+            skinData = DataFactory.createData(skinId);
             skinData.setTotal(amount);
             actor.getData().addObjectData(skinData);
         }

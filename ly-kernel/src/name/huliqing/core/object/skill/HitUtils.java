@@ -77,9 +77,9 @@ public class HitUtils {
         if (actorService.isDead(target)) {
             
             // 1.让死亡目标执行死亡技能
-            SkillData deadSkill = skillService.getSkill(target, SkillType.dead);
+            Skill deadSkill = skillService.getSkill(target, SkillType.dead);
             if (deadSkill != null) {
-                skillNetwork.playSkill(target, deadSkill.getId(), false);
+                skillNetwork.playSkill(target, deadSkill, false);
             }
 
             // 2.通知目标角色死亡
@@ -103,7 +103,7 @@ public class HitUtils {
                 List<ObjectData> dropItems = dropService.getRandomDropFull(target, null);
                 for (ObjectData item : dropItems) {
 //                    itemNetwork.addItem(attacker, item.getId(), item.getTotal());
-                    protoNetwork.addData(attacker, protoService.createData(item.getId()), item.getTotal());
+                    protoNetwork.addData(attacker, item.getId(), item.getTotal());
                 }
             }
             
@@ -118,9 +118,9 @@ public class HitUtils {
             // 当减益发生时则判断为受伤并执行hurt.
             float newAttrValue = attributeService.getDynamicValue(target, hitAttribute);
             if (newAttrValue < oldAttrValue) {
-                SkillData sd = skillService.getSkill(target, SkillType.hurt);
-                if (sd != null) {
-                    skillNetwork.playSkill(target, sd.getId(), false);
+                Skill skill = skillService.getSkill(target, SkillType.hurt);
+                if (skill != null) {
+                    skillNetwork.playSkill(target, skill, false);
                 }
             }
         }

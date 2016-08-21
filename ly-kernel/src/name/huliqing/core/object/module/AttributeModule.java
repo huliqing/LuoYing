@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import name.huliqing.core.data.AttributeData;
-import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.module.AttributeModuleData;
 import name.huliqing.core.object.actor.Actor;
 
@@ -27,12 +26,10 @@ public class AttributeModule<T extends AttributeModuleData> extends AbstractModu
     public void initialize(Actor actor) {
         super.initialize(actor);
         
-        List<ObjectData> ods = actor.getData().getObjectDatas();
+        List<AttributeData> ods = actor.getData().getObjectDatas(AttributeData.class, null);
         if (ods != null && !ods.isEmpty()) {
-            for (ObjectData od : ods) {
-                if (od instanceof AttributeData) {
-                    attributeMap.put(od.getId(), (AttributeData) od);
-                }
+            for (AttributeData od : ods) {
+                attributeMap.put(od.getId(), od);
             }
         }
     }

@@ -12,6 +12,7 @@ import name.huliqing.core.data.module.ItemModuleData;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actor.ItemListener;
+import name.huliqing.core.xml.DataFactory;
 
 /**
  * @author huliqing
@@ -61,7 +62,7 @@ public class ItemModule extends AbstractModule<ItemModuleData> {
         }
         ItemData item = getItem(itemId);
         if (item == null) {
-            item = Loader.load(itemId);
+            item = DataFactory.createData(itemId);
             item.setTotal(amount);
         } else {
             item.increaseTotal(amount);

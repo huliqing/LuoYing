@@ -469,6 +469,9 @@ public class SkillData extends ObjectData implements HandlerObject {
             }
             weaponStateLimit.clear();
             for (String wsStr : weaponStateLimitArr) {
+                if (wsStr.trim().equals("")) {
+                    continue;
+                }
                 String[] wsArr = wsStr.split("\\|");
                 int weaponState = WeaponStateUtils.createWeaponState(ConvertUtils.toIntegerArray(wsArr));
                 weaponStateLimit.add(weaponState);

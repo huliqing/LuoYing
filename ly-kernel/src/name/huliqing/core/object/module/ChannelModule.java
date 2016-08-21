@@ -72,7 +72,8 @@ public class ChannelModule<T extends ChannelModuleData> extends AbstractModule<T
     
     @Override
     public void addChannel(Channel channel) {
-        if (channels.contains(channel))
+        // 注：如果角色不存在AnimControl则添加通道就没有意义，还会报错
+        if (animControl == null || channels.contains(channel))
             return;
         
         channel.setAnimControl(animControl);

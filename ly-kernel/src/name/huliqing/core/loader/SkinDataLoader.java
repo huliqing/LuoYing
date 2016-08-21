@@ -24,6 +24,8 @@ public class SkinDataLoader implements DataLoader<SkinData> {
         data.setRaceLimit(proto.getAsList("raceLimit"));
         data.setSexLimit(Sex.identifyByName(proto.getAsString("sexLimit")));
         data.setDeletable(proto.getAsBoolean("deletable", true));
+        data.setBaseSkin(proto.getAsBoolean("baseSkin", false));
+        data.setUsing(true);
         
         String[] aaStr = proto.getAsArray("applyAttributes");
         if (aaStr != null) {

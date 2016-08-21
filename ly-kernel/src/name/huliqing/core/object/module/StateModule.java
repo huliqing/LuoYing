@@ -30,25 +30,6 @@ public class StateModule extends AbstractModule<StateModuleData> {
     public void initialize(Actor actor) {
         super.initialize(actor); 
         this.actor = actor;
-        
-        // remove
-//        // 从存档中载入状态，如果不是存档则从原始参数中获取
-//        List<StateData> stateInits = (List<StateData>) data.getAttribute("stateDatas");
-//        if (stateInits == null) {
-//            String[] stateIdArr = data.getAsArray("states");
-//            if (stateIdArr != null) {
-//                stateInits = new ArrayList<StateData>(stateIdArr.length);
-//                for (String stateId : stateIdArr) {
-//                    stateInits.add((StateData) DataFactory.createData(stateId));
-//                }
-//            }
-//        }
-//        if (stateInits != null) {
-//            for (StateData stateData : stateInits) {
-//                addState((State)Loader.load(stateData));
-//            }
-//        }
-//        data.setAttribute("stateDatas", stateDatas);
 
         List<StateData> stateDatas = actor.getData().getObjectDatas(StateData.class, null);
         if (stateDatas != null) {
@@ -88,7 +69,6 @@ public class StateModule extends AbstractModule<StateModuleData> {
         if (oldState != null) {
             removeState(oldState);
         }
-        
         
         // 加入data列表和处理器列表
         states.add(state);
@@ -133,11 +113,6 @@ public class StateModule extends AbstractModule<StateModuleData> {
     public List<State> getStates() {
         return states;
     }
-    
-    // remove20160821
-//    public List<StateData> getStateDatas() {
-//        return data.getStateDatas();
-//    }
     
     public void addStateListener(StateListener stateListener) {
         if (stateListeners == null) {

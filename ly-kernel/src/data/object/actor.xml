@@ -54,18 +54,22 @@
 ,attributeAttackSpeed,attributeMagicSpeed,attributeMoveSpeed
 ,attributeDefenceRate,attributeDuckRate,attributeGhostRate" 
            lifeAttribute="attributeHealth" viewAttribute="attributeVision" 
-           xpDropEl="elXpDrop" />
+           xpDropEl="elXpDrop" channels="channelFull"
+           modules="moduleActor,moduleAction,moduleAttribute,moduleChannel,moduleChat,moduleItem,moduleLogic
+    ,moduleResist,moduleSkill,moduleSkin,moduleState,moduleTalent,moduleTask"
+  
+    />
     
     <!--生物基类：所有生物类角色都继承自这里,如人物、动物、野兽、怪物等 -->
     <actor id="actorLiveBase" extends="actorBase" mass="60" 
            living="1" levelUpEl="elLevelUp" talentPointsLevelEl="elLevelTalentPoints" chat="chatSimple" 
-           logic="logicSearchEnemy,logicDynamicFight,logicPatrol,logicFollow,logicDefend"
+           logics="logicSearchEnemy,logicDynamicFight,logicPatrol,logicFollow,logicDefend"
            />
     
     <!--非生物基类:所有非生物类的角色都继承自这里,如炮塔、宝箱、祭坛、房屋等-->
     <actor id="actorNonLiveBase" extends="actorBase"
            living="0" resist="resistNonLife"
-           logic="logicSearchEnemy,logicStaticFight" 
+           logics="logicSearchEnemy,logicStaticFight" 
            levelUpEl="" talentPointsLevelEl="" chat="" 
            />
     
@@ -95,12 +99,12 @@
     <!-- player-->
     <actor id="actorPlayer" extends="actorHumanFemaleBase" weapon="weaponBow000" 
            talents="talentLifeRestore,talentDefence,talentAttack"
-           logic="logicSearchEnemyForPlayer,logicPlayer" />
+           logics="logicSearchEnemyForPlayer,logicPlayer" />
     
     
     <!--战士-->
     <actor id="actorWarrior" extends="actorHumanFemaleBase" icon="Interface/face/female1.jpg"
-           logic="logicSearchEnemyForPlayer,logicPlayer"
+           logics="logicSearchEnemyForPlayer,logicPlayer"
            talents="talentLifeRestore,talentDefence,talentAttack"
            skinOutfit="skinFoot005,skinHand005,skinLowerBody005,skinUpperBody005"
            items="itemTonicRed|10,itemTonicBlue|5,itemTower|1,weaponSword002L" 
@@ -114,7 +118,7 @@
     
     <!--牧师-->
     <actor id="actorPastor" extends="actorHumanFemaleBase" icon="Interface/face/female2.jpg"
-           logic="logicSearchEnemyForPlayer,logicPlayer"
+           logics="logicSearchEnemyForPlayer,logicPlayer"
            talents="talentManaRestore,talentMagicDefence,talentMagicAttack"
            skinBase="skinEar000,skinEye000,skinFace000,skinFoot000,skinHair006,skinHand000,skinLowerBody000,skinUpperBody000"
            skinOutfit="skinFoot006,skinHand006,skinUpperBody006"
@@ -127,7 +131,7 @@
     
     <!--猎人-->
     <actor id="actorHunter" extends="actorHumanFemaleBase" icon="Interface/face/female3.jpg"
-           logic="logicSearchEnemyForPlayer,logicPlayer"
+           logics="logicSearchEnemyForPlayer,logicPlayer"
            talents="talentAttack,talentDefence,talentVision,talentMoveSpeed"
            skinBase="skinEar000,skinEye000,skinFace000,skinFoot000,skinHair011,skinHand000,skinLowerBody000,skinUpperBody000"
            skinOutfit="skinFoot003,skinHand003,skinUpperBody003,skinLowerBody003,skinMouthmask001"
@@ -179,7 +183,7 @@
     
     <!-- 宝箱 -->
     <actor id="actorTreasure" extends="actorNonLiveBase" icon="Interface/face/treasure.jpg"
-           file="Models/objects/treasure2/treasure2.j3o" mat="2" logic="logicShopTreasure" group="1"
+           file="Models/objects/treasure2/treasure2.j3o" mat="2" logics="logicShopTreasure" group="1"
            sex="2" level="10" mass="0" skills="" scale="0.025" collisionShape="box" 
            items="" chat="chatTreasure" />
     
@@ -260,7 +264,7 @@
 
     <!-- 黑暗祭坛 -->
     <actor id="actorAltar" extends="actorNonLiveBase" file="Models/objects/altar/altar.j3o" icon="Interface/face/altar.jpg"
-           logic="logicNotifyForce,logicUpdateLife" group="1" sex="2" race="" level="15" mass="0" skills="" mat="3" scale="1" 
+           logics="logicNotifyForce,logicUpdateLife" group="1" sex="2" race="" level="15" mass="0" skills="" mat="3" scale="1" 
            collisionShape="box" collisionBoxScale="0.8, 1, 0.8" effects="effectAltar,effectAltar2" />
     
     <!-- Sinbad:辛巴德 -->
@@ -292,7 +296,7 @@
     
     <!--Jaime-->
     <actor id="actorJaime" extends="actorLiveBase" file="Models/monster/Jaime.mesh.j3o" 
-           items="" icon="Interface/face/jaime.jpg" logic="logicPatrol,logicFollow,logicShopJaime"
+           items="" icon="Interface/face/jaime.jpg" logics="logicPatrol,logicFollow,logicShopJaime"
            talents=""
            group="1" sex="1" race="0" level="20" mass="240" scale="1.5"
            skills="skillJaimeWait,skillJaimeIdle,skillJaimeRun" 

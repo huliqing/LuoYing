@@ -65,11 +65,12 @@ public class ActorModelLoader {
      *      |- hair
      *      |- weaponLeft
      *      |- weaponRight
-     * @param data
+     * @param actor
      * @return 
      */
-    public static Spatial loadActorModel(ActorData data) {
+    public static Spatial loadActorModel(Actor actor) {
         // 0.==== Load base model : character
+        ActorData data = actor.getData();
         String actorFile = data.getFile();
         
         if (Config.debug) {
@@ -176,7 +177,7 @@ public class ActorModelLoader {
 //        actor.setSkillProcessor(skillProcessor);
 //        actor.setResistProcessor(resistProcessor);
 //        actor.setTalentProcessor(talentProcessor);
-        
+//        
 //        // 7.创建角色的动画通道,注意：不是所有角色都会有ChannelProcessor.
 //        // 如：防御塔，宝箱等一些静态类的角色就没有。
 //        // 对于包含骨骼动画的角色才有ChannelProcessor，对于这些角色如果指定了
@@ -236,9 +237,10 @@ public class ActorModelLoader {
 //        if (data.getColor() != null) {
 //            GeometryUtils.setColor(actorModel, data.getColor());
 //        }
-//        
+        
+
         // 14.偿试激活HardwareSkining
-//        checkEnableHardwareSkining(actor);
+        checkEnableHardwareSkining(actor, actorModel);
         
         return actorModel;
     }
@@ -294,35 +296,35 @@ public class ActorModelLoader {
 //        }
 //    }
 //    
-//    /**
-//     * 检测并判断是否打开或关闭该模型的硬件skining加速
-//     * @param actor 角色模型
-//     */
-//    private static void checkEnableHardwareSkining(Actor actor) {
-//        ActorData data = actor.getData();
-//        SkeletonControl sc = actor.getModel().getControl(SkeletonControl.class);
-//        
-//        if (data == null || sc == null) {
-//            return;
-//        }
-//        
-//        // 全局没有打开的情况下则不处理。
-//        if (!Factory.get(ConfigService.class).isUseHardwareSkinning()) {
-//            return;
-//        }
-//        
-//        // 默认情冲下打开hardwareSkinning,除非在actor.xml中设置不打开。
-//        if (!data.getAsBoolean("hardwareSkinning", true)) {
-//            return;
-//        }
-//        
-//        // 代换自定义的SkeletonControl,因为默认的SkeletonControl会把带
-//        // SkeletonControl的子节点也进行处理。比如弓武器，当弓武器带有动画时可能
-//        // 导致角色的SkeletonControl和弓的SkeletonControl存在冲突导致弓模型变形
-//        CustomSkeletonControl csc = new CustomSkeletonControl(sc.getSkeleton());
-//        actor.getModel().removeControl(sc);
-//        actor.getModel().addControl(csc);
-//        csc.setHardwareSkinningPreferred(true);
-//    }
+    /**
+     * 检测并判断是否打开或关闭该模型的硬件skining加速
+     * @param actor 角色模型
+     */
+    private static void checkEnableHardwareSkining(Actor actor, Spatial actorModel) {
+        ActorData data = actor.getData();
+        SkeletonControl sc = actorModel.getControl(SkeletonControl.class);
+        
+        if (data == null || sc == null) {
+            return;
+        }
+        
+        // 全局没有打开的情况下则不处理。
+        if (!Factory.get(ConfigService.class).isUseHardwareSkinning()) {
+            return;
+        }
+        
+        // 默认情冲下打开hardwareSkinning,除非在actor.xml中设置不打开。
+        if (!data.getAsBoolean("hardwareSkinning", true)) {
+            return;
+        }
+        
+        // 代换自定义的SkeletonControl,因为默认的SkeletonControl会把带
+        // SkeletonControl的子节点也进行处理。比如弓武器，当弓武器带有动画时可能
+        // 导致角色的SkeletonControl和弓的SkeletonControl存在冲突导致弓模型变形
+        CustomSkeletonControl csc = new CustomSkeletonControl(sc.getSkeleton());
+        actorModel.removeControl(sc);
+        actorModel.addControl(csc);
+        csc.setHardwareSkinningPreferred(true);
+    }
     
 }

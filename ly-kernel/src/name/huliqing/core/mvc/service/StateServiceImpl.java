@@ -128,13 +128,13 @@ public class StateServiceImpl implements StateService{
             }
         }
     }
-
+    
     @Override
     public boolean existsState(Actor actor, String stateId) {
         StateModule module = actor.getModule(StateModule.class);
         return module != null && module.getState(stateId) != null;
     }
-
+    
     @Override
     public List<StateData> getStates(Actor actor) {
 //        StateModule module = actor.getModule(StateModule.class);

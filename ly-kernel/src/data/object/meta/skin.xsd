@@ -41,19 +41,6 @@ xs:time
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    
-                    <!--remove20151226,交由applyAttributes代替-->
-<!--                    <xs:attribute name="damage" type="xs:integer" use="required" >
-                        <xs:annotation>
-                            <xs:documentation>物理攻击力,默认0</xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
-                    <xs:attribute name="magicDamage" type="xs:integer" use="required" >
-                        <xs:annotation>
-                            <xs:documentation>魔法攻击力,默认0</xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>-->
-                    
                     <xs:attribute name="slots" type="xs:integer" use="required" >
                         <xs:annotation>
                             <xs:documentation>
@@ -61,7 +48,6 @@ xs:time
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
@@ -86,6 +72,11 @@ xs:time
             <xs:extension base="base">
                 <xs:attribute name="icon" ref="icon" use="required" />
                 <xs:attribute name="file" ref="file" use="required" />
+                <xs:attribute name="baseSkin" type="bool" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>是否为基本破肤</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
                 <xs:attribute name="type" use="required" >
                     <xs:annotation>
                         <xs:documentation>

@@ -95,6 +95,7 @@ public class State<T extends StateData> implements DataProcessor<T>{
     
     public void cleanup() {
         initialized = false;
+        timeUsed = 0;
         
         // 在结束时要清理特效,让特效都跳转到end阶段，然后然它们自动结束就可以。
         // 不要用cleanup，这会导致特效突然消失，很不自然。
@@ -106,13 +107,6 @@ public class State<T extends StateData> implements DataProcessor<T>{
             }
             tempEffects.clear();
         }
-        
-        // 清理后应该直接把这三个参数清理掉，每次运行时重新设置。
-        // 要尽量避免进行cleanup时做了多余的
-        actor = null;
-        
-        // 清0
-        timeUsed = 0;
     }
     
     public void update(float tpf) {

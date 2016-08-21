@@ -31,28 +31,27 @@ public class LogicServiceImpl implements LogicService {
     }
 
     @Override
-    public boolean addLogic(Actor actor, String logicId) {
+    public void addLogic(Actor actor, String logicId) {
         ActorLogicData newLogic = DataFactory.createData(logicId);
-        return addLogic(actor, newLogic);
+        addLogic(actor, newLogic);
     }
 
     @Override
-    public boolean addLogic(Actor actor, ActorLogicData logicData) {
+    public void addLogic(Actor actor, ActorLogicData logicData) {
         ActorLogic logic = Loader.loadLogic(logicData);
-        return addLogic(actor, logic);
+        addLogic(actor, logic);
     }
 
     @Override
-    public boolean addLogic(Actor actor, ActorLogic logic) {
+    public void addLogic(Actor actor, ActorLogic logic) {
         LogicModule module = actor.getModule(LogicModule.class);
         module.addLogic(logic);
-        return true;
     }
 
     @Override
     public boolean removeLogic(Actor actor, ActorLogic logic) {
         LogicModule module = actor.getModule(LogicModule.class);
-        return module.removeLogic(logic);
+        return module != null && module.removeLogic(logic);
     }
 
     @Override

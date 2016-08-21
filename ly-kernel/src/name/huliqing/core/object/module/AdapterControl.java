@@ -27,7 +27,6 @@ public class AdapterControl implements Control {
 
     @Override
     public void setSpatial(Spatial spatial) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -42,12 +41,10 @@ public class AdapterControl implements Control {
 
     @Override
     public void write(JmeExporter ex) throws IOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void read(JmeImporter im) throws IOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

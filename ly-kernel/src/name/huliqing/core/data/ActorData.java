@@ -614,6 +614,14 @@ public class ActorData extends ObjectData implements MatObject{
     }
 
     /**
+     * @deprecated 
+     * @return 
+     */
+    public float getMass() {
+        return getAsFloat("mass", 0);
+    }
+    
+    /**
      * 判断目标角色是否为一个玩家角色
      * @return 
      */
@@ -657,6 +665,19 @@ public class ActorData extends ObjectData implements MatObject{
 
     public void setModuleDatas(List<ModuleData> moduleDatas) {
         this.moduleDatas = moduleDatas;
+    }
+    
+    public void addModuleData(ModuleData moduleData) {
+        if (moduleDatas == null) {
+            moduleDatas = new ArrayList<ModuleData>();
+        }
+        if (!moduleDatas.contains(moduleData)) {
+            moduleDatas.add(moduleData);
+        }
+    }
+    
+    public boolean removeModuleData(ModuleData moduleData) {
+        return moduleDatas != null && moduleDatas.remove(moduleData);
     }
     
     public void addObjectData(ObjectData objectData) {

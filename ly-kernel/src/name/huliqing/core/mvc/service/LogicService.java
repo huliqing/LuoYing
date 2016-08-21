@@ -26,9 +26,8 @@ public interface LogicService extends Inject {
      * 给角色添加一个逻辑
      * @param actor
      * @param logicId
-     * @return 
      */
-    boolean addLogic(Actor actor, String logicId);
+    void addLogic(Actor actor, String logicId);
     
     /**
      * 给角色添加一个逻辑
@@ -36,7 +35,7 @@ public interface LogicService extends Inject {
      * @param logicData
      * @return 
      */
-    boolean addLogic(Actor actor, ActorLogicData logicData);
+    void addLogic(Actor actor, ActorLogicData logicData);
         
     /**
      * 给角色添加逻辑
@@ -44,7 +43,7 @@ public interface LogicService extends Inject {
      * @param logic
      * @return 
      */
-    boolean addLogic(Actor actor, ActorLogic logic);
+    void addLogic(Actor actor, ActorLogic logic);
     
     /**
      * 移除指定的逻辑，如果移除成功则返回true.

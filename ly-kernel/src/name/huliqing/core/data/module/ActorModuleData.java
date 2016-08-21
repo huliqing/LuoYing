@@ -12,6 +12,6 @@ import com.jme3.network.serializing.Serializable;
  * @author huliqing
  */
 @Serializable
-public class BaseModuleData extends ModuleData {
+public class ActorModuleData extends ModuleData {
     
 }

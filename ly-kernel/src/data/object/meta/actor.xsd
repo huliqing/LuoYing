@@ -199,19 +199,21 @@ xs:time
                         </xs:annotation>
                     </xs:attribute>
                     
-<!--                    <xs:attribute name="logic" type="xs:string" use="required">
+                    <xs:attribute name="logics" type="xs:string" use="required">
                         <xs:annotation>
                             <xs:documentation>关联逻辑,多个逻辑使用半角逗号分开，如：logic1,logic2,logic3</xs:documentation>
                         </xs:annotation>
-                    </xs:attribute>-->
-<!--                    <xs:attribute name="skills" type="xs:string" use="required">
+                    </xs:attribute>
+                    
+                    <xs:attribute name="skills" type="xs:string" use="required">
                         <xs:annotation>
                             <xs:documentation>
                                 技能列表,半角色逗号分隔
                             </xs:documentation>
                         </xs:annotation>
-                    </xs:attribute>-->
-<!--                    <xs:attribute name="skinBase" type="xs:string" use="optional">
+                    </xs:attribute>
+                    
+                    <xs:attribute name="skinBase" type="xs:string" use="optional">
                         <xs:annotation>
                             <xs:documentation>
                                 角色的基本皮肤，基本皮肤是用来在切换装备后“修补皮肤”缺失的问题。比如当
@@ -224,69 +226,72 @@ xs:time
                                 会造成在换装备后进行修补的时候又替换掉已经穿上的装备。
                             </xs:documentation>
                         </xs:annotation>
-                    </xs:attribute>-->
-                    <!--<xs:attribute name="skinOutfit" type="xs:string" use="optional"/>-->
+                    </xs:attribute>
+                    <xs:attribute name="skinOutfit" type="xs:string" use="optional"/>
+                    
 <!--                    <xs:attribute name="weapon" type="xs:string" use="optional">
                         <xs:annotation>
                             <xs:documentation>关联到一件武器，作为角色默认使用</xs:documentation>
                         </xs:annotation>
                     </xs:attribute>-->
-<!--                    <xs:attribute name="items" type="xs:string" use="optional">
+                    
+                    <xs:attribute name="items" type="xs:string" use="optional">
                         <xs:annotation>
                             <xs:documentation>角色包裹物品列表，半角逗号分隔,格式如: 
                                 objId1|total,objId2|total,objId3</xs:documentation>
                         </xs:annotation>
-                    </xs:attribute>-->
-                    <!--                    <xs:attribute name="resist" type="xs:string" use="optional">
+                    </xs:attribute>
+                    <xs:attribute name="resist" type="xs:string" use="optional">
                         <xs:annotation>
                             <xs:documentation>
                                 关联一个抗性设置．
                             </xs:documentation>
                         </xs:annotation>
-                    </xs:attribute>-->
-<!--                    <xs:attribute name="channels" type="xs:string" use="optional">
+                    </xs:attribute>
+                    <xs:attribute name="channels" type="xs:string" use="optional">
                         <xs:annotation>
                             <xs:documentation>
                                 角色的channel定义,关联一些channel，格式："channel1,channel2,...".
                                 如果不设置则默认使用一个包含所有骨骼的channel
                             </xs:documentation>
                         </xs:annotation>
-                    </xs:attribute>-->
-<!--                    <xs:attribute name="attributes" type="xs:string" use="required">
+                    </xs:attribute>
+                    <xs:attribute name="attributes" type="xs:string" use="required">
                         <xs:annotation>
                             <xs:documentation>
                                 定义角色的所有属性值,格式如："attribute1,attribute2,attribute3,..."
                             </xs:documentation>
                         </xs:annotation>
-                    </xs:attribute>-->
-<!--                    <xs:attribute name="talents" type="xs:string" use="optional" >
+                    </xs:attribute>
+                    <xs:attribute name="talents" type="xs:string" use="optional" >
                         <xs:annotation>
                             <xs:documentation>
                                 角色的天赋，格式: "talent1,talent2,talent3"
                             </xs:documentation>
                         </xs:annotation>
-                    </xs:attribute>-->
-<!--                    <xs:attribute name="chat" type="xs:string" use="optional" >
+                    </xs:attribute>
+                    <xs:attribute name="chat" type="xs:string" use="optional" >
                         <xs:annotation>
                             <xs:documentation>
                                 关联到一个Chat
                             </xs:documentation>
                         </xs:annotation>
-                    </xs:attribute>-->
-                    <!--                    <xs:attribute name="talentPoints" type="xs:integer" use="optional" >
+                    </xs:attribute>
+                    
+                    <xs:attribute name="talentPoints" type="xs:integer" use="optional" >
                         <xs:annotation>
                             <xs:documentation>
                                 当前角色已有的天赋点数。
                             </xs:documentation>
                         </xs:annotation>
-                    </xs:attribute>-->
-<!--                    <xs:attribute name="talentPointsLevelEl" type="xs:integer" use="optional" >
+                    </xs:attribute>
+                    <xs:attribute name="talentPointsLevelEl" type="xs:integer" use="optional" >
                         <xs:annotation>
                             <xs:documentation>
                                 天赋点数的奖励公式，当达到指定等级时可获得的天赋数奖励。
                             </xs:documentation>
                         </xs:annotation>
-                    </xs:attribute>-->
+                    </xs:attribute>
                     
                 </xs:extension>
             </xs:complexContent>

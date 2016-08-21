@@ -6,4 +6,20 @@
     xsi:schemaLocation='http://fighter.huliqing.name meta/module.xsd'>
     
     
+    <moduleActor id="moduleActor" />
+    <moduleAction id="moduleAction" />
+    <moduleAttribute id="moduleAttribute"/>
+    <moduleChannel id="moduleChannel"/>
+    <moduleChat id="moduleChat"/>
+    <moduleItem id="moduleItem"/>
+    <moduleLogic id="moduleLogic"/>
+    <modulePhysics id="modulePhysics" />
+    <moduleResist id="moduleResist" />
+    <moduleSkill id="moduleSkill"/>
+    <moduleSkin id="moduleSkin"/>
+    <moduleState id="moduleState"/>
+    <moduleTalent id="moduleTalent"/>
+    <moduleTask id="moduleTask"/>
+        
+
 </root>
