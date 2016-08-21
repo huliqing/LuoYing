@@ -63,10 +63,6 @@ public class ItemModule extends AbstractModule<ItemModuleData> {
         if (item == null) {
             item = Loader.load(itemId);
             item.setTotal(amount);
-            if (data.getItems() == null) {
-                data.setItems(new ArrayList<ItemData>());
-            }
-            data.getItems().add(item);
         } else {
             item.increaseTotal(amount);
         }
@@ -99,7 +95,7 @@ public class ItemModule extends AbstractModule<ItemModuleData> {
         int trueRemoved;
         item.increaseTotal(-1 * amount);
         if (item.getTotal() <= 0) {
-            data.getItems().remove(item);
+            actor.getData().getObjectDatas().remove(item);
             trueRemoved = oldTotal;
         } else {
             trueRemoved = oldTotal - item.getTotal();
@@ -121,15 +117,7 @@ public class ItemModule extends AbstractModule<ItemModuleData> {
      * @return 
      */
     public ItemData getItem(String itemId) {
-        if (data.getItems() == null)
-            return null;
-        List<ItemData> items = data.getItems();
-        for (int i = 0; i < items.size(); i++) {
-            if (items.get(i).getId().equals(itemId)) {
-                return items.get(i);
-            }
-        }
-        return null;
+        return actor.getData().getObjectData(itemId);
     }
     
      /**
@@ -139,7 +127,7 @@ public class ItemModule extends AbstractModule<ItemModuleData> {
      * @return 
      */
     public List<ItemData> getAll() {
-        return data.getItems();
+        return actor.getData().getObjectDatas(ItemData.class, null);
     }
     
 

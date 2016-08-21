@@ -20,6 +20,7 @@ import name.huliqing.core.object.actor.ItemListener;
 import name.huliqing.core.object.actor.SkinListener;
 import name.huliqing.core.object.actor.TalentListener;
 import name.huliqing.core.object.actor.TaskListener;
+import name.huliqing.core.object.skin.Skin;
 import name.huliqing.core.object.task.Task;
 import name.huliqing.core.ui.UIFactory;
 import name.huliqing.core.ui.FrameLayout;
@@ -251,12 +252,22 @@ public class ActorMainPanel extends Window implements ItemListener, SkinListener
     }
 
     @Override
-    public void onSkinAttached(Actor actor, SkinData data) {
+    public void onSkinAttached(Actor actor, Skin data) {
         updatePanel(armorPanel, weaponPanel, attrPanel);
     }
 
     @Override
-    public void onSkinDetached(Actor actor, SkinData data) {
+    public void onSkinDetached(Actor actor, Skin data) {
+        updatePanel(armorPanel, weaponPanel, attrPanel);
+    }
+
+    @Override
+    public void onSkinAdded(Actor actor, SkinData data) {
+        updatePanel(armorPanel, weaponPanel, attrPanel);
+    }
+
+    @Override
+    public void onSkinRemoved(Actor actor, SkinData data) {
         updatePanel(armorPanel, weaponPanel, attrPanel);
     }
 

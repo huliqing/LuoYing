@@ -275,7 +275,7 @@ public class StoryGbTask1 extends GameTaskBase {
                 
 //                itemNetwork.addItem(player, IdConstants.ITEM_BOOK_006, 1);
                 
-                protoNetwork.addData(player, protoService.createData(IdConstants.ITEM_BOOK_006), 1);
+                protoNetwork.addData(player, IdConstants.ITEM_BOOK_006, 1);
                 
                 gotBook = true;
             }

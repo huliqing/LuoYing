@@ -39,21 +39,48 @@ public class ProtoNetworkImpl implements ProtoNetwork {
     }
 
     @Override
-    public void addData(Actor actor, ObjectData data, int count) {
+    public void addData(Actor actor, String id, int count) {
         if (network.isClient())
             return;
         
         // 本地服务端更新数量后同步到客户端
-        protoService.addData(actor, data, count);
+        protoService.addData(actor, id, count);
 
         // 同步物品数量
-        ObjectData resultData = protoService.getData(actor, data.getId());
+        ObjectData resultData = protoService.getData(actor, id);
         MessProtoAdd mess = new MessProtoAdd();
         mess.setActorId(actor.getData().getUniqueId());
-        mess.setObjectId(data.getId());
+        mess.setObjectId(id);
         mess.setAddCount(count);
         mess.setSyncTotal(resultData != null ? resultData.getTotal() : 0);
         network.broadcast(mess);
+    }
+    
+    @Override
+    public void removeData(Actor actor, String id, int count) {
+        if (network.isClient())
+            return;
+        
+        // 广播到所有客户端
+        if (network.hasConnections()) {
+            MessProtoRemove mess = new MessProtoRemove();
+            mess.setActorId(actor.getData().getUniqueId());
+            mess.setObjectId(id);
+            mess.setAmount(count);
+            network.broadcast(mess);
+        }
+        
+        // 服务端删除
+        protoService.removeData(actor, id, count);
+        
+        if (network.hasConnections()) {
+            ObjectData resultData = protoService.getData(actor, id);
+            MessProtoSync messSync = new MessProtoSync();
+            messSync.setActorId(actor.getData().getUniqueId());
+            messSync.setObjectId(id);
+            messSync.setTotal(resultData != null ? resultData.getTotal() : 0);
+            network.broadcast(messSync);
+        }
     }
 
     @Override
@@ -94,42 +121,17 @@ public class ProtoNetworkImpl implements ProtoNetwork {
     }
 
     @Override
-    public void removeData(Actor actor, ObjectData data, int count) {
-        if (network.isClient())
-            return;
-        
-        if (data == null)
-            return;
-        
-        // 广播到所有客户端
-        if (network.hasConnections()) {
-            MessProtoRemove mess = new MessProtoRemove();
-            mess.setActorId(actor.getData().getUniqueId());
-            mess.setObjectId(data.getId());
-            mess.setAmount(count);
-            network.broadcast(mess);
-        }
-
-        // 服务端删除
-        protoService.removeData(actor, data, count);
-        
-        if (network.hasConnections()) {
-            ObjectData resultData = protoService.getData(actor, data.getId());
-            MessProtoSync messSync = new MessProtoSync();
-            messSync.setActorId(actor.getData().getUniqueId());
-            messSync.setObjectId(data.getId());
-            messSync.setTotal(resultData != null ? resultData.getTotal() : 0);
-            network.broadcast(messSync);
-        }
-    }
-
-    @Override
     public void syncDataTotal(Actor actor, String objectId, int total) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public float getCost(ObjectData data) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isSellable(ObjectData data) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

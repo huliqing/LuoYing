@@ -54,8 +54,9 @@ public class TalentModule<T extends TalentModuleData> extends AbstractModule<T> 
 //        // 重新设置talentDatas
 //        data.setAttribute("talentDatas", talentDatas);
 
-        if (data.getTalentDatas() != null) {
-            for (TalentData td : data.getTalentDatas()) {
+        List<TalentData> talentDatas = actor.getData().getObjectDatas(TalentData.class, null);
+        if (talentDatas != null) {
+            for (TalentData td : talentDatas) {
                 addTalent((Talent) Loader.load(td));
             }
         }
@@ -91,10 +92,7 @@ public class TalentModule<T extends TalentModuleData> extends AbstractModule<T> 
             return;
         
         talents.add(talent);
-        if (data.getTalentDatas() == null) {
-            data.setTalentDatas(new ArrayList<TalentData>());
-        }
-        data.getTalentDatas().add(talent.getData());
+        actor.getData().addObjectData(talent.getData());
         
         talent.setActor(actor);
         talent.initialize();
@@ -114,7 +112,7 @@ public class TalentModule<T extends TalentModuleData> extends AbstractModule<T> 
      */
     public void addTalentPoints(String talentId, int points) {
         // 天赋点必须大于0，并且角色必须有足够的天赋点可用
-        if (data.getTalentDatas() == null || points <= 0 || getTalentPoints() < points)
+        if (points <= 0 || actor.getData().getTalentPoints() < points)
             return;
         
         // 如果指定的天赋ID不存在则不处理
@@ -141,7 +139,7 @@ public class TalentModule<T extends TalentModuleData> extends AbstractModule<T> 
         talent.updateLevel(talentData.getLevel());
         
         // 减少可用的天赋点数
-        setTalentPoints(getTalentPoints() - trueAdd);
+        actor.getData().setTalentPoints(actor.getData().getTalentPoints() - trueAdd);
         
         // 告诉侦听器
         if (talentListeners != null) {
@@ -156,7 +154,7 @@ public class TalentModule<T extends TalentModuleData> extends AbstractModule<T> 
             return false;
         
         talents.remove(talent);
-        data.getTalentDatas().remove(talent.getData());
+        actor.getData().removeObjectData(talent.getData());
         talent.cleanup();
         
         if (talentListeners != null) {
@@ -180,10 +178,6 @@ public class TalentModule<T extends TalentModuleData> extends AbstractModule<T> 
         return talents;
     }
     
-    public List<TalentData> getTalentDatas() {
-        return data.getTalentDatas();
-    }
-    
     public void addTalentListener(TalentListener talentListener) {
         if (talentListeners == null) {
             talentListeners = new ArrayList<TalentListener>();
@@ -197,37 +191,38 @@ public class TalentModule<T extends TalentModuleData> extends AbstractModule<T> 
         return talentListeners != null && talentListeners.remove(talentListener);
     }
         
-    /**
-     * 设置可用的天赋点数,天赋点数可用到角色的天赋上
-     * @param talentPoints 
-     */
-    public void setTalentPoints(int talentPoints) {
-        data.setTalentPoints(talentPoints);
-    }
-    
-    /**
-     * 获取角色当前可用的所有天赋点数量.
-     * @return 
-     */
-    public int getTalentPoints() {
-        return data.getTalentPoints();
-    }
-    
-    /**
-     * 天赋点数的奖励公式
-     * @return 
-     */
-    public String getTalentPointsLevelEl() {
-        return data.getTalentPointsLevelEl();
-    }
-
-    /**
-     * 天赋点数的奖励公式
-     * @param talentPointsLevelEl 
-     */
-    public void setTalentPointsLevelEl(String talentPointsLevelEl) {
-        data.setTalentPointsLevelEl(talentPointsLevelEl);
-    }
+    // remove20160821
+//    /**
+//     * 设置可用的天赋点数,天赋点数可用到角色的天赋上
+//     * @param talentPoints 
+//     */
+//    public void setTalentPoints(int talentPoints) {
+//        data.setTalentPoints(talentPoints);
+//    }
+//    
+//    /**
+//     * 获取角色当前可用的所有天赋点数量.
+//     * @return 
+//     */
+//    public int getTalentPoints() {
+//        return data.getTalentPoints();
+//    }
+//    
+//    /**
+//     * 天赋点数的奖励公式
+//     * @return 
+//     */
+//    public String getTalentPointsLevelEl() {
+//        return data.getTalentPointsLevelEl();
+//    }
+//
+//    /**
+//     * 天赋点数的奖励公式
+//     * @param talentPointsLevelEl 
+//     */
+//    public void setTalentPointsLevelEl(String talentPointsLevelEl) {
+//        data.setTalentPointsLevelEl(talentPointsLevelEl);
+//    }
     
     /**
      * 根据天赋id判断天赋是否已经存在，天赋不能重复，只要ID相同就视为已经存在。

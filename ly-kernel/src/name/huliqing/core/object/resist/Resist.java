@@ -15,6 +15,12 @@ import name.huliqing.core.xml.DataProcessor;
  * @param <T>
  */
 public interface Resist<T extends ResistData> extends DataProcessor<T>{
+
+    @Override
+    public void setData(T data);
+
+    @Override
+    public T getData();
     
     /**
      * 获取指定状态的抗性值,如果不存在指定状态的抗性设置，则返回0.
@@ -38,9 +44,4 @@ public interface Resist<T extends ResistData> extends DataProcessor<T>{
      */
     List<StateResist> getAll();
     
-//    /**
-//     * 克隆当前对象
-//     * @return 
-//     */
-//    Resist clone();
 }

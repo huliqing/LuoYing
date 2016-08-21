@@ -17,9 +17,9 @@ import name.huliqing.core.enums.MessageType;
 import name.huliqing.core.mvc.network.PlayNetwork;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.EffectService;
-import name.huliqing.core.mvc.service.ItemService;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.manager.ResourceManager;
+import name.huliqing.core.mvc.service.ProtoService;
 import name.huliqing.core.object.effect.Effect;
 import name.huliqing.core.object.sound.SoundManager;
 
@@ -33,7 +33,8 @@ public abstract class AbstractHandler<T extends HandlerData> implements Handler<
     private final PlayService playService = Factory.get(PlayService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final EffectService effectService = Factory.get(EffectService.class);
-    private final ItemService itemService = Factory.get(ItemService.class);
+//    private final ItemService itemService = Factory.get(ItemService.class);
+    private final ProtoService protoService = Factory.get(ProtoService.class);
     
     protected T data;
     protected String[] effects;
@@ -152,7 +153,11 @@ public abstract class AbstractHandler<T extends HandlerData> implements Handler<
         }
         
         // 删除并提示,只提示当前场景中的主玩家
-        int trueRemoved = itemService.removeItem(actor, data.getId(), count);
+        int oldCount = data.getTotal();
+        protoService.removeData(actor, data.getId(), count);
+        ObjectData od = protoService.getData(actor, data.getId());
+        int trueRemoved = od != null ? oldCount - od.getTotal() : oldCount;
+        
         if (actor == playService.getPlayer()) {
             playService.addMessage(ResourceManager.get("common.remove"
                             , new Object[] {ResourceManager.getObjectName(data.getId())

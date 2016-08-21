@@ -16,6 +16,10 @@ import name.huliqing.core.object.actor.SkinListener;
  */
 public interface SkinService extends Inject {
     
+    void addSkin(Actor actor, String skinId, int amount);
+    
+    boolean removeSkin(Actor actor, String skinId, int amount);
+    
     /**
      * 给角色换上装备,注：换装备的时候需要考虑冲突的装备，并把冲突的装备换
      * 下来

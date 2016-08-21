@@ -28,26 +28,27 @@ import name.huliqing.core.utils.ConvertUtils;
 @Serializable
 public class SkinData extends PkgItemData implements MatObject, CostObject, HandlerObject {
     
-    // 注：一件skin可属于多个type,如上下连身的套装，如法袍可属于 "7,8".
-    // 同时一件skin也可与多个其它skin进行排斥。这里的type和conflictType使用二
-    // 进制位来表示各个类型，例如一件上下连身的套装（类型属于7,8）在二进制表示为
-    // "11000000"
+    //注：一件skin可属于多个type,如上下连身的套装，如法袍可属于 "7,8".
+    //同时一件skin也可与多个其它skin进行排斥。这里的type和conflictType使用二
+    //进制位来表示各个类型，例如一件上下连身的套装（类型属于7,8）在二进制表示为
+    //"11000000"
     private int type;
     // 定义与其它skin的排斥,当一件skin穿上身时，角色身上受排斥的skin将会脱下来。
     private int conflictType;
     // 是否正在使用
-    private boolean using; 
+    private boolean using;
     
-    // 装备应用到目标身上时对目标属性的影响
-    private ArrayList<AttributeApply> applyAttributes;
-    
-    // 武器类型，如果该值大于0，则说明为武器类型
-    // 否则为普通装备
+    // 这个值如果为0则说明是普通装备，如果该值大于0则说明为某种类型的武器
     private int weaponType;
     // 标记当前武器所有可支持的槽位
     private List<String> slots;
     // 标记当前武器所在的槽位
     private String slot;
+    // 标记着这件装备是否为基本皮肤
+    private boolean baseSkin;
+    
+    // 装备应用到目标身上时对目标属性的影响
+    private List<AttributeApply> applyAttributes;
     
     public SkinData() {
         this.total = 1;
@@ -60,11 +61,14 @@ public class SkinData extends PkgItemData implements MatObject, CostObject, Hand
         oc.write(type, "type", 0);
         oc.write(conflictType, "conflictType", 0);
         oc.write(using, "using", false);
-        oc.writeSavableArrayList(applyAttributes, "applyAttributes", null);
+        if (applyAttributes != null) {
+            oc.writeSavableArrayList(new ArrayList<AttributeApply>(applyAttributes), "applyAttributes", null);
+        }
         oc.write(weaponType, "weaponType", 0);
         if (slots != null) 
             oc.write(slots.toArray(new String[]{}), "slots", null);
         oc.write(slot, "slot", null);
+        oc.write(baseSkin, "baseSkin", false);
     }
 
     @Override
@@ -78,11 +82,15 @@ public class SkinData extends PkgItemData implements MatObject, CostObject, Hand
         weaponType = ic.readInt("weaponType", 0);
         slots = ConvertUtils.toList(ic.readStringArray("slots", null));
         slot = ic.readString("slot", null);
+        baseSkin = ic.readBoolean("baseSkin", false);
     }
     
     /**
      * 获取skin的类型，注：这里返回的整数使用的是二进制位来表示skin的类型，
-     * 每一个位表示一个skin类型。
+     * 每一个位表示一个skin类型。<br>
+     *  注：一件skin可属于多个type,如上下连身的套装，如法袍可属于 "7,8".
+     * 同时一件skin也可与多个其它skin进行排斥。这里的type和conflictType使用二进制位来表示各个类型，
+     * 例如一件上下连身的套装（类型属于7,8）在二进制表示为"11000000"
      * @return 
      */
     public int getType() {
@@ -195,7 +203,7 @@ public class SkinData extends PkgItemData implements MatObject, CostObject, Hand
         return (type & (1 << SkinConstants.TYPE_WEAPON_RIGHT)) != 0;
     }
 
-    public ArrayList<AttributeApply> getApplyAttributes() {
+    public List<AttributeApply> getApplyAttributes() {
         return applyAttributes;
     }
 
@@ -251,6 +259,22 @@ public class SkinData extends PkgItemData implements MatObject, CostObject, Hand
             return sb.toString();
         }
         return ResourceManager.get(ResConstants.COMMON_UNKNOW);
+    }
+
+    /**
+     * 判断这件skin是否为基本皮肤
+     * @return 
+     */
+    public boolean isBaseSkin() {
+        return baseSkin;
+    }
+
+    /**
+     * 设置这件skin是否为基本皮肤，对于基本皮肤来说，不可以删除和出售。
+     * @param baseSkin 
+     */
+    public void setBaseSkin(boolean baseSkin) {
+        this.baseSkin = baseSkin;
     }
 
 }

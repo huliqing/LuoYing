@@ -5,6 +5,9 @@
  */
 package name.huliqing.core.object.module;
 
+import java.util.List;
+import name.huliqing.core.data.ChatData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.module.ChatModuleData;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.actor.Actor;
@@ -24,6 +27,16 @@ public class ChatModule<T extends ChatModuleData> extends AbstractModule<T> {
     public void initialize(Actor actor) {
         super.initialize(actor);
         this.actor = actor;
+        
+        List<ObjectData> ods = actor.getData().getObjectDatas();
+        if (ods != null && !ods.isEmpty()) {
+            for (ObjectData od : ods) {
+                if (od instanceof ChatData) {
+                    setChat((Chat) Loader.load(od));
+                }
+            }
+        }
+        
     }
 
     @Override
@@ -31,16 +44,17 @@ public class ChatModule<T extends ChatModuleData> extends AbstractModule<T> {
         chat = null;
         super.cleanup(); 
     }
+    
+    private void setChat(Chat chat) {
+        chat.setActor(actor);
+        this.chat = chat;
+    }
 
     /**
      * 获取角色的主对话面板,如果没有为角色设置对话功能则返回null.
      * @return 
      */
     public Chat getChat() {
-        if (chat == null && data.getChat() != null) {
-            chat = Loader.load(data.getChat());
-            chat.setActor(actor);
-        }
         return chat;
     }
     

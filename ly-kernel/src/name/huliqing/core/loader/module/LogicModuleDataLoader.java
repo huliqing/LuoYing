@@ -21,13 +21,13 @@ public class LogicModuleDataLoader implements DataLoader<LogicModuleData> {
 
     @Override
     public void load(Proto proto, LogicModuleData data) {
-        String[] logicArr = proto.getAsArray("logics");
-        if (logicArr != null && logicArr.length > 0) {
-            data.setLogics(new ArrayList<ActorLogicData>(logicArr.length));
-            for (String logicId : logicArr) {
-                data.getLogics().add((ActorLogicData) DataFactory.createData(logicId));
-            }
-        }
+//        String[] logicArr = proto.getAsArray("logics");
+//        if (logicArr != null && logicArr.length > 0) {
+//            data.setLogics(new ArrayList<ActorLogicData>(logicArr.length));
+//            for (String logicId : logicArr) {
+//                data.getLogics().add((ActorLogicData) DataFactory.createData(logicId));
+//            }
+//        }
     }
 
 }

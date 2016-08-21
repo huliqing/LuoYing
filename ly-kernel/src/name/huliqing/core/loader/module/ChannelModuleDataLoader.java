@@ -20,19 +20,13 @@ public class ChannelModuleDataLoader implements DataLoader<ChannelModuleData> {
 
     @Override
     public void load(Proto proto, ChannelModuleData data) {
-        // remove20160820,不再在这里默认配置IdConstants.CHANNEL_FULL, 交由xml去配置
-//            String[] channels = proto.getAsArray("channels");
-//            if (channels == null) {
-//                channels = new String[]{IdConstants.CHANNEL_FULL};
+//        String[] channels = proto.getAsArray("channels");
+//        if (channels != null) {
+//            data.setChannels(new ArrayList<ChannelData>(channels.length));
+//            for (String channelId : channels) {
+//                data.getChannels().add((ChannelData) DataFactory.createData(channelId));
 //            }
-
-        String[] channels = proto.getAsArray("channels");
-        if (channels != null) {
-            data.setChannels(new ArrayList<ChannelData>(channels.length));
-            for (String channelId : channels) {
-                data.getChannels().add((ChannelData) DataFactory.createData(channelId));
-            }
-        }
+//        }
     }
 
 }

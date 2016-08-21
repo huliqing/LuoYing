@@ -94,7 +94,7 @@ public abstract class AbstractTask<T extends TaskData> implements Task<T> {
         // 奖励物品
         if (rewardItems != null) {
             for (RewardItem ri : rewardItems) {
-                protoNetwork.addData(actor, protoService.createData(ri.itemId), ri.count);
+                protoNetwork.addData(actor, ri.itemId, ri.count);
             }
         }
         // 标记为“完结”

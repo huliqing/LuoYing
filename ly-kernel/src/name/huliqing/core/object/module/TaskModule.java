@@ -52,8 +52,9 @@ public class TaskModule<T extends TaskModuleData> extends AbstractModule<T> {
 //        // 重新设置data.
 //        data.setAttribute("taskDatas", taskDatas);
 
-        if (data.getTaskDatas() != null) {
-            for (TaskData td : data.getTaskDatas()) {
+        List<TaskData> taskDatas = actor.getData().getObjectDatas(TaskData.class, null);
+        if (taskDatas != null && !taskDatas.isEmpty()) {
+            for (TaskData td : taskDatas) {
                 addTask((Task) Loader.load(td));
             }
         }
@@ -79,10 +80,7 @@ public class TaskModule<T extends TaskModuleData> extends AbstractModule<T> {
         }
         
         tasks.add(task);
-        if (data.getTaskDatas() == null) {
-            data.setTaskDatas(new ArrayList<TaskData>());
-        }
-        data.getTaskDatas().add(task.getData());
+        actor.getData().addObjectData(task.getData());
         
         task.setActor(actor);
         task.initialize();
@@ -105,7 +103,7 @@ public class TaskModule<T extends TaskModuleData> extends AbstractModule<T> {
             return false;
         
         tasks.remove(task);
-        data.getTaskDatas().remove(task.getData());
+        actor.getData().removeObjectData(task.getData());
         task.cleanup();
         
         // 侦听器
@@ -140,9 +138,10 @@ public class TaskModule<T extends TaskModuleData> extends AbstractModule<T> {
         return tasks;
     }
     
-    public List<TaskData> getTaskDatas() {
-        return data.getTaskDatas();
-    }
+    // remove
+//    public List<TaskData> getTaskDatas() {
+//        return data.getTaskDatas();
+//    }
     
     /**
      * 完成一个指定的任务

@@ -20,7 +20,7 @@ import name.huliqing.core.object.actor.TalentListener;
  */
 public class TalentNetworkImpl implements TalentNetwork {
     
-    private final static Network network = Network.getInstance();
+    private final static Network NETWORK = Network.getInstance();
     private TalentService talentService;
     
     @Override
@@ -30,13 +30,13 @@ public class TalentNetworkImpl implements TalentNetwork {
     
     @Override
     public void addTalent(Actor actor, String talentId) {
-        if (network.isClient())
+        if (NETWORK.isClient())
             return;
         
         MessTalentAdd mess = new MessTalentAdd();
         mess.setActorId(actor.getData().getUniqueId());
         mess.setTalentId(talentId);
-        network.broadcast(mess);
+        NETWORK.broadcast(mess);
         
         talentService.addTalent(actor, talentId);
     }
@@ -57,25 +57,15 @@ public class TalentNetworkImpl implements TalentNetwork {
     }
 
     @Override
-    public int getTalentPoints(Actor actor) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void setTalentPoints(Actor actor, int talentPoints) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
     public void addTalentPoints(Actor actor, String talentId, int points) {
-        if (network.isClient())
+        if (NETWORK.isClient())
             return;
         
         MessTalentAddPoint mess = new MessTalentAddPoint();
         mess.setActorId(actor.getData().getUniqueId());
         mess.setTalentId(talentId);
         mess.setPoints(points);
-        network.broadcast(mess);
+        NETWORK.broadcast(mess);
         
         talentService.addTalentPoints(actor, talentId, points);
     }

@@ -14,6 +14,7 @@ import com.jme3.network.serializing.Serializable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import name.huliqing.core.data.module.ModuleData;
 import name.huliqing.core.data.define.MatObject;
 import name.huliqing.core.enums.Mat;
@@ -82,6 +83,9 @@ public class ActorData extends ObjectData implements MatObject{
 //    // 角色的所有属性设置，包含lifeAttributes
 //    private Map<String, AttributeData> attributes;
     
+    private int talentPoints;
+    private String talentPointsLevelEl;
+    
     // 用于决定角色是否死亡的属性,当这个属性值小于或等于0时，角色将被视为"死亡"
     private String lifeAttribute;
     // 用于决定角色的视角
@@ -122,7 +126,9 @@ public class ActorData extends ObjectData implements MatObject{
     private transient boolean player;
     
     // 各种控制器的数据
-    private ArrayList<ModuleData> moduleDatas;
+    private List<ModuleData> moduleDatas;
+    private List<ObjectData> objectDatas;
+    
     
     @Override
     public void write(JmeExporter ex) throws IOException {
@@ -165,9 +171,16 @@ public class ActorData extends ObjectData implements MatObject{
         if (bornPlace != null) {
             oc.write(bornPlace, "bornPlace", null);
         }
+        oc.write(talentPoints, "talentPoints", 0);
+        oc.write(talentPointsLevelEl, "talentPointsLevelEl", null);
 //        oc.write(chat, "chat", null);
         oc.write(skillLockedState, "skillLockedState", 0);
-        oc.writeSavableArrayList(moduleDatas, "moduleDatas", null);
+        if (moduleDatas != null) {
+            oc.writeSavableArrayList(new ArrayList<ModuleData>(moduleDatas), "moduleDatas", null);
+        }
+        if (objectDatas != null) {
+            oc.writeSavableArrayList(new ArrayList<ObjectData>(objectDatas), "objectDatas", null);
+        }
     }
 
     @Override
@@ -212,8 +225,11 @@ public class ActorData extends ObjectData implements MatObject{
         followTarget = ic.readLong("followTarget", -1);
         bornPlace = (Vector3f)ic.readSavable("bornPlace", null);
 //        chat = ic.readString("chat", null);
+        talentPoints = ic.readInt("talentPoints", 0);
+        talentPointsLevelEl = ic.readString("talentPointsLevelEl", null);
         skillLockedState = ic.readLong("skillLockedState", 0);
         moduleDatas = ic.readSavableArrayList("moduleDatas", null);
+        objectDatas = ic.readSavableArrayList("objectDatas", null);
     }
     
     public ActorData() {}
@@ -613,12 +629,94 @@ public class ActorData extends ObjectData implements MatObject{
         this.player = player;
     }
 
-    public ArrayList<ModuleData> getModuleDatas() {
+     public int getTalentPoints() {
+        return talentPoints;
+    }
+
+    public void setTalentPoints(int talentPoints) {
+        this.talentPoints = talentPoints;
+    }
+
+    public String getTalentPointsLevelEl() {
+        return talentPointsLevelEl;
+    }
+
+    public void setTalentPointsLevelEl(String talentPointsLevelEl) {
+        this.talentPointsLevelEl = talentPointsLevelEl;
+    }
+    
+    // -------------------------------------------------------------------------------------------------------------------------------
+    
+    /**
+     * 获取角色的所有模块
+     * @return 
+     */
+    public List<ModuleData> getModuleDatas() {
         return moduleDatas;
     }
 
-    public void setModuleDatas(ArrayList<ModuleData> moduleDatas) {
+    public void setModuleDatas(List<ModuleData> moduleDatas) {
         this.moduleDatas = moduleDatas;
     }
+    
+    public void addObjectData(ObjectData objectData) {
+        if (objectDatas == null) {
+            objectDatas = new ArrayList<ObjectData>();
+        }
+        if (!objectDatas.contains(objectData)) {
+            objectDatas.add(objectData);
+        }
+    }
+
+    public boolean removeObjectData(ObjectData objectData) {
+        return objectDatas != null && objectDatas.remove(objectData);
+    }
+    
+    public void setObjectDatas(List<ObjectData> objectDatas) {
+        this.objectDatas = objectDatas;
+    }
+    
+    /**
+     * 获取角色所持有的所有物品列表
+     * @return 
+     */
+    public List<ObjectData> getObjectDatas() {
+        return objectDatas;
+    }
+
+    /**
+     * 查找指定类型的数据
+     * @param <T>
+     * @param objectType 数据类型
+     * @param store 存放结束
+     * @return 
+     */
+    public <T extends ObjectData> List<T> getObjectDatas(Class<T> objectType, List<T> store) {
+        if (store == null) {
+            store = new ArrayList<T>();
+        }
+        if (objectDatas != null) {
+            for (ObjectData od : objectDatas) {
+                if (objectType.isAssignableFrom(od.getClass())) {
+                    store.add((T) od);
+                }
+            }
+        }
+        return store;
+    }
+    
+    public <T extends ObjectData> T getObjectData(String id) {
+        if (objectDatas == null)
+            return null;
+        
+        for (int i = 0; i < objectDatas.size(); i++) {
+            if (objectDatas.get(i).getId().equals(id)) {
+                return (T) objectDatas.get(i);
+            }
+        }
+        return null;
+    }
+    
+
     
 }

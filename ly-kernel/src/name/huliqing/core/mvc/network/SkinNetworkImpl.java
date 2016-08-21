@@ -30,6 +30,16 @@ public class SkinNetworkImpl implements SkinNetwork {
     }
     
     @Override
+    public void addSkin(Actor actor, String skinId, int amount) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean removeSkin(Actor actor, String skinId, int amount) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    @Override
     public void attachSkin(Actor actor, SkinData skinData) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -126,6 +136,8 @@ public class SkinNetworkImpl implements SkinNetwork {
     public boolean removeSkinListener(Actor actor, SkinListener skinListener) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+
 
     
 }

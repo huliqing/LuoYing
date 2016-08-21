@@ -74,51 +74,70 @@ public class SkinModule<T extends SkinModuleData> extends AbstractModule<T> {
 //            }
 //        }
 
-        // 穿上装备
-        List<SkinData> skinDatas = data.getSkinDatas();
-        if (skinDatas != null) {
-            for (SkinData sd : skinDatas) {
-                if (sd.isUsing()) {
+        // 穿上普通装备
+        List<SkinData> tempStore = new ArrayList<SkinData>();
+        actor.getData().getObjectDatas(SkinData.class, tempStore);
+        if (tempStore.isEmpty()) {
+            for (SkinData sd : tempStore) {
+                if (sd.isUsing() && !sd.isBaseSkin()) {
                     attachSkin(sd);
                 }
             }
         }
         
-        // 补上基本皮肤
+        // 再补上基本皮肤
         fixActorSkinBase();
     }
     
     /**
-     * 添加装备到角色包裹,添加的数量由{@link SkinData#setTotal(int)指定, 如果数量小于或等于0则什么也不做。
-     * @param skinData 
+     * 添加装备到角色包裹.
+     * @param skinId
+     * @param amount 数量，必须大于0
      */
-    public void addSkin(SkinData skinData) {
-        if (skinData.getTotal() <= 0)
+    public void addSkin(String skinId, int amount) {
+        if (amount <= 0)
             return;
-        if (data.getSkinDatas() == null) {
-            data.setSkinDatas(new ArrayList<SkinData>());
-        }
-        SkinData oriSkinData = getSkinData(skinData.getId());
-        if (oriSkinData != null) {
-            oriSkinData.setTotal(oriSkinData.getTotal() + skinData.getTotal());
+
+        SkinData skinData = getSkinData(skinId);
+        if (skinData != null) {
+            skinData.setTotal(skinData.getTotal() + amount);
         } else {
-            data.getSkinDatas().add(skinData);
+            skinData = Loader.load(skinId);
+            skinData.setTotal(amount);
+            actor.getData().addObjectData(skinData);
+        }
+        
+        if (skinListeners != null) {
+            for (int i = 0; i < skinListeners.size(); i++) {
+                skinListeners.get(i).onSkinAdded(actor, skinData);
+            }
         }
     }
     
     /**
-     * 从角色包裹上移除装备,移除的数量由{@link SkinData#setTotal(int)指定, 如果数量小于或等于0则什么也不做。<br>
-     * 注：skinData必须是角色包裹中已经存在的实例，否则这个方法将什么也不做并返回false.<br>
-     * 可以通过 {@link #getSkinData(java.lang.String) }先获得角色身上的装备再使用该方法来移除。
-     * @param skinData 
+     * 从角色包裹上移除装备,
+     * @param skinId
+     * @param amount
      * @return  
      * @see #getSkinData(java.lang.String) 
      */
-    public boolean removeSkin(SkinData skinData) {
-        if (skinData.getTotal() <= 0 || data.getSkinDatas() == null)
+    public boolean removeSkin(String skinId, int amount) {
+        SkinData skinData = getSkinData(skinId);
+        if (skinData == null) 
             return false;
         
-        return data.getSkinDatas().remove(skinData);
+        skinData.setTotal(skinData.getTotal() - amount);
+        if (skinData.getTotal() <= 0) {
+            actor.getData().removeObjectData(skinData);
+        }
+        
+        if (skinListeners != null) {
+            for (int i = 0; i < skinListeners.size(); i++) {
+                skinListeners.get(i).onSkinRemoved(actor, skinData);
+            }
+        }
+        
+        return true;
     }
     
     /**
@@ -127,15 +146,7 @@ public class SkinModule<T extends SkinModuleData> extends AbstractModule<T> {
      * @return 
      */
     public SkinData getSkinData(String skinId) {
-        if (data.getSkinDatas() == null) 
-            return null;
-        
-        for (SkinData sd : data.getSkinDatas()) {
-            if (sd.getId().equals(skinId)) {
-                return sd;
-            }
-        }
-        return null;
+        return actor.getData().getObjectData(skinId);
     }
     
     /**
@@ -158,13 +169,12 @@ public class SkinModule<T extends SkinModuleData> extends AbstractModule<T> {
                 // 移除装备效果
                 removeSkinApplyAttributes(actor, sd);
                 // 装备御下
-                Loader.loadSkin(sd).detach(actor);
-                // 标记
-                sd.setUsing(false);
+                Skin skin = Loader.loadSkin(sd);
+                skin.detach(actor);
                 // 触发侦听器(脱)
                 if (skinListeners != null) {
                     for (SkinListener sl : skinListeners) {
-                        sl.onSkinDetached(actor, sd);
+                        sl.onSkinDetached(actor, skin);
                     }
                 }
             }
@@ -174,15 +184,14 @@ public class SkinModule<T extends SkinModuleData> extends AbstractModule<T> {
         // 为武器选择槽位(如果是武器）
         selectWeaponSlot(actor, skinData);
         // 装备模型
-        Loader.loadSkin(skinData).attach(actor, isWeaponTakeOn());
+        Skin skin = Loader.loadSkin(skinData);
+        skin.attach(actor, isWeaponTakeOn());
         // 装备效果
         addSkinApplyAttributes(actor, skinData);
-        // 标记
-        skinData.setUsing(true);
         // 触发侦听器(穿)
         if (skinListeners != null) {
             for (SkinListener sl : skinListeners) {
-                sl.onSkinAttached(actor, skinData);
+                sl.onSkinAttached(actor, skin);
             }
         }
         
@@ -204,14 +213,12 @@ public class SkinModule<T extends SkinModuleData> extends AbstractModule<T> {
         // 移除装备效果
         removeSkinApplyAttributes(actor, skinData);
         // 装备模型移除
-        Loader.loadSkin(skinData).detach(actor);
-        // 标记装备已经在使用
-        skinData.setUsing(false);
-        
+        Skin skin = Loader.loadSkin(skinData);
+        skin.detach(actor);
         // 触发侦听器
         if (skinListeners != null) {
             for (SkinListener sl : skinListeners) {
-                sl.onSkinDetached(actor, skinData);
+                sl.onSkinDetached(actor, skin);
             }
         }
         
@@ -270,9 +277,11 @@ public class SkinModule<T extends SkinModuleData> extends AbstractModule<T> {
     }
     
     public boolean takeOffWeapon(boolean force) {
+        // remove20160821
 //        if (!force && !isCanTakeOffWeapon(actor)) {
 //            return false;
 //        }
+
         setWeaponTakeOn(false);
         
         List<SkinData> weaponSkins = getCurrentWeaponSkin();
@@ -314,13 +323,14 @@ public class SkinModule<T extends SkinModuleData> extends AbstractModule<T> {
      * @see #getWeaponSkinsAll(java.util.List) 
      */
     public List<SkinData> getWeaponSkins(List<SkinData> store) {
-        if (data.getSkinDatas() == null)
+        List<SkinData> skinDatas = actor.getData().getObjectDatas(SkinData.class, null);
+        if (skinDatas == null)
             return store;
         
         if (store == null) {
             store = new ArrayList<SkinData>();
         }
-        for (SkinData sd : data.getSkinDatas()) {
+        for (SkinData sd : skinDatas) {
             if (isWeapon(sd)) {
                 store.add(sd);
             }
@@ -329,13 +339,14 @@ public class SkinModule<T extends SkinModuleData> extends AbstractModule<T> {
     }
     
     public List<SkinData> getArmorSkins(List<SkinData> store) {
-        if (data.getSkinDatas() == null)
+        List<SkinData> skinDatas = actor.getData().getObjectDatas(SkinData.class, null);
+        if (skinDatas == null)
             return store;
         
         if (store == null) {
             store = new ArrayList<SkinData>();
         }
-        for (SkinData sd : data.getSkinDatas()) {
+        for (SkinData sd : skinDatas) {
             if (isArmor(sd)) {
                 store.add(sd);
             }
@@ -370,26 +381,27 @@ public class SkinModule<T extends SkinModuleData> extends AbstractModule<T> {
     public List<SkinListener> getSkinListeners() {
         return skinListeners;
     }
-    
-    /**
-     * 获取角色当前包裹中的所有武器，"包含"基本皮肤中的武器
-     * @param store
-     * @return 
-     */
-    public List<SkinData> getWeaponSkinsAll(List<SkinData> store) {
-        // 1.包裹中的武器
-        store = getWeaponSkins(store);
-        
-        // 2.加入基本皮肤中的武器
-        if (data.getSkinBase() != null && !data.getSkinBase().isEmpty()) {
-            for (SkinData sd : data.getSkinBase()) {
-                if (isWeapon(sd)) {
-                    store.add(sd);
-                }
-            }
-        }
-        return store;
-    }
+   
+    // remove20160821
+//    /**
+//     * 获取角色当前包裹中的所有武器，"包含"基本皮肤中的武器
+//     * @param store
+//     * @return 
+//     */
+//    public List<SkinData> getWeaponSkinsAll(List<SkinData> store) {
+//        // 1.包裹中的武器
+//        store = getWeaponSkins(store);
+//        
+//        // 2.加入基本皮肤中的武器
+//        if (data.getSkinBase() != null && !data.getSkinBase().isEmpty()) {
+//            for (SkinData sd : data.getSkinBase()) {
+//                if (isWeapon(sd)) {
+//                    store.add(sd);
+//                }
+//            }
+//        }
+//        return store;
+//    }
     
     /**
      * 标记武器是处于takeOn或takeOff状态,即取出或挂起的状态。
@@ -419,7 +431,7 @@ public class SkinModule<T extends SkinModuleData> extends AbstractModule<T> {
         if (store == null) {
             store = new ArrayList<SkinData>(2);
         }
-        List<SkinData> allWeapon = getWeaponSkinsAll(null);
+        List<SkinData> allWeapon = getWeaponSkins(null);
         if (allWeapon != null) {
             for (SkinData sd : allWeapon) {
                 if (sd.isUsing()) {
@@ -457,8 +469,13 @@ public class SkinModule<T extends SkinModuleData> extends AbstractModule<T> {
         actor.getSpatial().breadthFirstTraversal(traversal);
         int actorSkinTypes = traversal.fullSkinTypes;
 
-        if (data.getSkinBase() != null) {
-            for (SkinData sd : data.getSkinBase()) {
+        List<SkinData> skinDatas = actor.getData().getObjectDatas(SkinData.class, null);
+        
+        if (skinDatas != null && !skinDatas.isEmpty()) {
+            for (SkinData sd : skinDatas) {
+                if (!sd.isBaseSkin()) {
+                    continue;
+                }
                 if ((actorSkinTypes & sd.getType()) == 0) {
                     // 如果是武器则尝试找一个优先的武器槽位
                     selectWeaponSlot(actor, sd); 

@@ -74,6 +74,8 @@ public abstract class AbstractSkin<T extends SkinData> implements Skin<T> {
     
     @Override
     public void attach(Actor actor, boolean isWeaponTakedOn) {
+        data.setUsing(true);
+        
         Spatial actorSpatial = (Spatial) actor.getSpatial();
         if (!(actorSpatial instanceof Node)) {
             Logger.getLogger(OutfitSkin.class.getName()).log(Level.WARNING

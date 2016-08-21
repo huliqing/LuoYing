@@ -20,30 +20,30 @@ import name.huliqing.core.data.ResistData;
 @Serializable
 public class ResistModuleData extends ModuleData {
     
-    // 状态抵抗设置
-    private ResistData resist;
-
-    public ResistData getResist() {
-        return resist;
-    }
-
-    public void setResist(ResistData resist) {
-        this.resist = resist;
-    }
-    
-    @Override
-    public void write(JmeExporter ex) throws IOException {
-        super.write(ex);
-        if (resist != null) {
-            OutputCapsule oc = ex.getCapsule(this);
-            oc.write(resist, "resist", null);
-        }
-    }
-
-    @Override
-    public void read(JmeImporter im) throws IOException {
-        super.read(im); 
-        InputCapsule ic = im.getCapsule(this);
-        resist = (ResistData) ic.readSavable("resist", null);
-    }
+//    // 状态抵抗设置
+//    private ResistData resist;
+//
+//    public ResistData getResist() {
+//        return resist;
+//    }
+//
+//    public void setResist(ResistData resist) {
+//        this.resist = resist;
+//    }
+//    
+//    @Override
+//    public void write(JmeExporter ex) throws IOException {
+//        super.write(ex);
+//        if (resist != null) {
+//            OutputCapsule oc = ex.getCapsule(this);
+//            oc.write(resist, "resist", null);
+//        }
+//    }
+//
+//    @Override
+//    public void read(JmeImporter im) throws IOException {
+//        super.read(im); 
+//        InputCapsule ic = im.getCapsule(this);
+//        resist = (ResistData) ic.readSavable("resist", null);
+//    }
 }

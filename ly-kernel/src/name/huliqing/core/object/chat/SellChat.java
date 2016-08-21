@@ -126,7 +126,7 @@ public class SellChat<T extends ChatData> extends Chat<T> {
             List<ItemData> transferDatas = new ArrayList<ItemData>(items.size());
             for (ItemData item : items) {
                 // 非卖品
-                if (!itemService.isSellable(item)) {
+                if (!protoService.isSellable(item)) {
                     continue;
                 }
                 ItemData dataCopy = DataFactory.createData(item.getId());

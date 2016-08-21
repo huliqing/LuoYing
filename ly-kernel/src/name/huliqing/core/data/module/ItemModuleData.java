@@ -22,30 +22,30 @@ import name.huliqing.core.data.ItemData;
 @Serializable
 public class ItemModuleData extends ModuleData {
  
-    // 所有物品
-    private List<ItemData> items;
-
-    public List<ItemData> getItems() {
-        return items;
-    }
-
-    public void setItems(List<ItemData> items) {
-        this.items = items;
-    }
-    
-    @Override
-    public void write(JmeExporter ex) throws IOException {
-        super.write(ex);
-        if (items != null) {
-            OutputCapsule oc = ex.getCapsule(this);
-            oc.writeSavableArrayList(new ArrayList<ItemData>(items), "items", null);
-        }
-    }
-
-    @Override
-    public void read(JmeImporter im) throws IOException {
-        super.read(im); 
-        InputCapsule ic = im.getCapsule(this);
-        items = ic.readSavableArrayList("items", null);
-    }
+//    // 所有物品
+//    private List<ItemData> items;
+//
+//    public List<ItemData> getItems() {
+//        return items;
+//    }
+//
+//    public void setItems(List<ItemData> items) {
+//        this.items = items;
+//    }
+//    
+//    @Override
+//    public void write(JmeExporter ex) throws IOException {
+//        super.write(ex);
+//        if (items != null) {
+//            OutputCapsule oc = ex.getCapsule(this);
+//            oc.writeSavableArrayList(new ArrayList<ItemData>(items), "items", null);
+//        }
+//    }
+//
+//    @Override
+//    public void read(JmeImporter im) throws IOException {
+//        super.read(im); 
+//        InputCapsule ic = im.getCapsule(this);
+//        items = ic.readSavableArrayList("items", null);
+//    }
 }

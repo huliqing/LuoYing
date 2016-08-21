@@ -235,13 +235,14 @@ public class UserCommandNetworkImpl implements UserCommandNetwork {
 
     @Override
     public void removeObject(Actor actor, String objectId, int amount) {
-        ObjectData data = protoService.getData(actor, objectId);
-        if (data == null)
-            return;
+        // remove20160821
+//        ObjectData data = protoService.getData(actor, objectId);
+//        if (data == null)
+//            return;
         
         if (network.isClient()) {
             // 客户端本地先删除 
-            protoService.removeData(actor, data, amount);
+            protoService.removeData(actor, objectId, amount);
             
             // 通知服务端
             MessProtoRemove mess = new MessProtoRemove();
@@ -250,7 +251,7 @@ public class UserCommandNetworkImpl implements UserCommandNetwork {
             mess.setAmount(amount);
             network.sendToServer(mess);
         } else {
-            protoNetwork.removeData(actor, data, amount);
+            protoNetwork.removeData(actor, objectId, amount);
         }
     }
 

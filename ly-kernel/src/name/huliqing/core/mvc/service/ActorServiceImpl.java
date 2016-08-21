@@ -87,44 +87,49 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public Actor loadActor(ActorData actorData) {
-        // 在载入角色之前需要把所有属性清除，这些属性会根据等级及状态、装备、天赋
-        // 等进行重新计算，以避免叠加BUG。
-        for (AttributeData ad : actorData.getAttributes().values()) {
-            ad.setDynamicValue(0);
-            ad.setLevelValue(0);
-            ad.setStaticValue(0);
-        }
-        
-        // ==1.基本角色
+        // remove20160821
+//        // 在载入角色之前需要把所有属性清除，这些属性会根据等级及状态、装备、天赋
+//        // 等进行重新计算，以避免叠加BUG。
+//        for (AttributeData ad : actorData.getAttributes().values()) {
+//            ad.setDynamicValue(0);
+//            ad.setLevelValue(0);
+//            ad.setStaticValue(0);
+//        }
+//        
+//        // ==1.基本角色
+//        Actor actor = Loader.loadActor(actorData);
+//        
+//        // ==2.穿上装备
+//        List<ObjectData> items = itemDao.getItems(actor, null);
+//        boolean hasOutfit = false;
+//        for (ObjectData item : items) {
+//            if (item instanceof SkinData) {
+//                SkinData sd = (SkinData) item;
+//                if (sd.isUsing()) {
+//                    hasOutfit = true;
+//                    skinService.attachSkin(actor, sd);
+//                }
+//            }
+//        }
+//        
+//        // 如果角色没有指定装备，则需要补上基本皮肤（如果存在基本皮肤）
+//        if (!hasOutfit) {
+//            if (actorData.getSkinBase() != null && !actorData.getSkinBase().isEmpty()) {
+//                // 这里使用一个基本皮肤就可以，会自动补上其它皮肤
+//                skinService.attachSkin(actor, actorData.getSkinBase().get(0));
+//            }
+//        }
+//        
+//        // ==3.更新属性的等级值,根据等级计算公式为角色设置相应属性的等级值
+//        updateLevel(actor.getData());
+//        
+//        // ==4.更新天赋值（已经在ActorLoader中处理）
+//        // ignore
+//        
+//        return actor;
+
         Actor actor = Loader.loadActor(actorData);
-        
-        // ==2.穿上装备
-        List<ObjectData> items = itemDao.getItems(actor, null);
-        boolean hasOutfit = false;
-        for (ObjectData item : items) {
-            if (item instanceof SkinData) {
-                SkinData sd = (SkinData) item;
-                if (sd.isUsing()) {
-                    hasOutfit = true;
-                    skinService.attachSkin(actor, sd);
-                }
-            }
-        }
-        
-        // 如果角色没有指定装备，则需要补上基本皮肤（如果存在基本皮肤）
-        if (!hasOutfit) {
-            if (actorData.getSkinBase() != null && !actorData.getSkinBase().isEmpty()) {
-                // 这里使用一个基本皮肤就可以，会自动补上其它皮肤
-                skinService.attachSkin(actor, actorData.getSkinBase().get(0));
-            }
-        }
-        
-        // ==3.更新属性的等级值,根据等级计算公式为角色设置相应属性的等级值
         updateLevel(actor.getData());
-        
-        // ==4.更新天赋值（已经在ActorLoader中处理）
-        // ignore
-        
         return actor;
     }
     
@@ -388,26 +393,27 @@ public class ActorServiceImpl implements ActorService {
     @Override
     public void kill(Actor actor) {
         // 血量降低
-        AttributeData life = actor.getData().getLifeAttributeData();
+//        AttributeData life = actor.getData().getLifeAttributeData();
+        AttributeData life = actor.getData().getObjectData(actor.getData().getLifeAttribute());
         if (life != null) {
             life.setDynamicValue(0);
         }
         
         // 执行死亡动画
-        skillService.playSkill(actor, skillService.getSkill(actor, SkillType.dead).getId(), false);
+        skillService.playSkill(actor, skillService.getSkill(actor, SkillType.dead), false);
     }
     
     @Override
     public void reborn(Actor actor) {
         // 重生的时候属性值全满
-        Map<String, AttributeData> attrMaps = actor.getData().getAttributes();
-        if (attrMaps != null) {
-            for (AttributeData ad : attrMaps.values()) {
+        List<AttributeData> ads = actor.getData().getObjectDatas(AttributeData.class, null);
+        if (ads != null) {
+            for (AttributeData ad : ads) {
                 ad.setDynamicValue(ad.getMaxValue());
             }
         }
         
-        skillService.playSkill(actor, skillService.getSkill(actor, SkillType.wait).getId(), false);
+        skillService.playSkill(actor, skillService.getSkill(actor, SkillType.wait), false);
     }
 
     @Override
@@ -484,7 +490,8 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public boolean isDead(Actor actor) {
-        AttributeData life = actor.getData().getLifeAttributeData();
+//        AttributeData life = actor.getData().getLifeAttributeData();
+        AttributeData life =  actor.getData().getObjectData(actor.getData().getLifeAttribute());
         if (life != null) {
             return life.getDynamicValue() <= 0;
         }
@@ -499,17 +506,6 @@ public class ActorServiceImpl implements ActorService {
         }
         return actor.getData().getGroup() != target.getData().getGroup();
     }
-
-    // remove20160813
-//    @Override
-//    public void setPhysics(Actor actor, boolean enabled) {
-//        actor.setEnabled(enabled);
-//    }
-//
-//    @Override
-//    public void setViewDirection(Actor actor, Vector3f viewDirection) {
-//        actor.setViewDirection(viewDirection);
-//    }
 
     @Override
     public void setColor(Actor actor, ColorRGBA color) {
@@ -566,19 +562,13 @@ public class ActorServiceImpl implements ActorService {
     // 更新角色的属性等级
     private void updateLevel(ActorData actorData) {
         // 根据等级计算公式为角色设置相应属性的等级值
-        Map<String, AttributeData> attributeMap = actorData.getAttributes();
-        if (attributeMap != null) {
+        List<AttributeData> attributes = actorData.getObjectDatas(AttributeData.class, null);
+        if (attributes != null) {
             LevelEl levelEl;
-            for (AttributeData attrData : attributeMap.values()) {
+            for (AttributeData attrData : attributes) {
                 levelEl = (LevelEl) elService.getEl(attrData.getEl());
                 attrData.setLevelValue((float)levelEl.getValue(actorData.getLevel()));
                 attrData.setDynamicValue(attrData.getMaxValue());
-//                if (Config.debug) {
-//                    Logger.getLogger(ElServiceImpl.class.getName())
-//                            .log(Level.INFO
-//                            , "setLevel, id={0}, levelValue={1}, staticValue={2}, DynamicValue={3}"
-//                            , new Object[] {attrData.getId(), attrData.getLevelValue(), attrData.getStaticValue(), attrData.getDynamicValue()});
-//                }
             }
         }
     }
@@ -680,7 +670,8 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public float getViewDistance(Actor actor) {
-        AttributeData viewAttr = actor.getData().getViewAttributeData();
+//        AttributeData viewAttr = actor.getData().getViewAttributeData();
+        AttributeData viewAttr = actor.getData().getObjectData(actor.getData().getViewAttribute());
         if (viewAttr != null) {
             return viewAttr.getDynamicValue();
         }
@@ -715,7 +706,8 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public int getLife(Actor actor) {
-        AttributeData life = actor.getData().getLifeAttributeData();
+//        AttributeData life = actor.getData().getLifeAttributeData();
+        AttributeData life = actor.getData().getObjectData(actor.getData().getLifeAttribute());
         return (int) life.getDynamicValue();
     }
 

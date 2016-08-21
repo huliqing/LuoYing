@@ -65,7 +65,7 @@ public class TalentPanel extends LinearLayout implements ActorPanel{
         
         int talentRemain = 0;
         if (actor != null) {
-            talentRemain = talentService.getTalentPoints(actor);
+            talentRemain = actor.getData().getTalentPoints();
         }
         text.setText(ResourceManager.get(ResConstants.TALENT_TALENT_POINTS_REMAIN, new Object[] {talentRemain}));
             

@@ -52,6 +52,8 @@ public final class FaceView extends LinearLayout {
     private final AttributeService attributeService = Factory.get(AttributeService.class);
     
     private Actor actor;
+    private AttributeData lifeAttribute;
+    private AttributeData manaAttribute;
     
     // 左区：角色头像
     private LinearLayout leftZone;
@@ -148,10 +150,12 @@ public final class FaceView extends LinearLayout {
     
     public void setActor(Actor actor) {
         this.actor = actor;
+        this.lifeAttribute = actor.getData().getObjectData(actor.getData().getLifeAttribute());
+        this.manaAttribute = actor.getData().getObjectData(IdConstants.ATTRIBUTE_MANA);
         
         picPanel.setActor(actor);
         namePanel.setActor(actor);
-        lastLife = actor.getData().getLifeAttributeData().getDynamicValue();
+        lastLife = lifeAttribute != null ? lifeAttribute.getDynamicValue() : 0;
         
         // 立即更新一次，必要的
         update(interval);
@@ -178,11 +182,10 @@ public final class FaceView extends LinearLayout {
         
         if (actor != null) {
             // 显示受伤动画,头像动画
-            AttributeData data = actor.getData().getLifeAttributeData();
-            if (data.getDynamicValue() < lastLife) {
+            if (lifeAttribute.getDynamicValue() < lastLife) {
                 picPanel.colorAnim.start();
             }
-            lastLife = data.getDynamicValue();
+            lastLife = lifeAttribute.getDynamicValue();
             
             // 确定Chat是否显示
             Chat chat = chatService.getChat(actor);
@@ -322,17 +325,15 @@ public final class FaceView extends LinearLayout {
         public void update(float tpf) {
             ActorData data = actor.getData();
             // life
-            AttributeData lifeData = data.getLifeAttributeData();
-            if (lifeData != null) {
-                health.setMaxValue(lifeData.getMaxValue());
-                health.setValue(lifeData.getDynamicValue());
+            if (lifeAttribute != null) {
+                health.setMaxValue(lifeAttribute.getMaxValue());
+                health.setValue(lifeAttribute.getDynamicValue());
             }
 
             // mana
-            AttributeData manaData = attributeService.getAttributeData(actor, IdConstants.ATTRIBUTE_MANA);
-            if (manaData != null) {
-                magic.setMaxValue(manaData.getMaxValue());
-                magic.setValue(manaData.getDynamicValue());
+            if (manaAttribute != null) {
+                magic.setMaxValue(manaAttribute.getMaxValue());
+                magic.setValue(manaAttribute.getDynamicValue());
             }
 
             // xp

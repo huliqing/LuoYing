@@ -22,29 +22,29 @@ import name.huliqing.core.data.ChannelData;
 @Serializable
 public class ChannelModuleData extends ModuleData {
     
-    private List<ChannelData> channels;
-
-    public List<ChannelData> getChannels() {
-        return channels;
-    }
-
-    public void setChannels(List<ChannelData> channels) {
-        this.channels = channels;
-    }
-
-    @Override
-    public void write(JmeExporter ex) throws IOException {
-        super.write(ex);
-        if (channels != null) {
-            OutputCapsule oc = ex.getCapsule(this);
-            oc.writeSavableArrayList(new ArrayList<ChannelData>(channels), "channels", null);
-        }
-    }
-    
-    @Override
-    public void read(JmeImporter im) throws IOException {
-        super.read(im);
-        InputCapsule ic = im.getCapsule(this);
-        channels = ic.readSavableArrayList("channels", null);
-    }
+//    private List<ChannelData> channels;
+//
+//    public List<ChannelData> getChannels() {
+//        return channels;
+//    }
+//
+//    public void setChannels(List<ChannelData> channels) {
+//        this.channels = channels;
+//    }
+//
+//    @Override
+//    public void write(JmeExporter ex) throws IOException {
+//        super.write(ex);
+//        if (channels != null) {
+//            OutputCapsule oc = ex.getCapsule(this);
+//            oc.writeSavableArrayList(new ArrayList<ChannelData>(channels), "channels", null);
+//        }
+//    }
+//    
+//    @Override
+//    public void read(JmeImporter im) throws IOException {
+//        super.read(im);
+//        InputCapsule ic = im.getCapsule(this);
+//        channels = ic.readSavableArrayList("channels", null);
+//    }
 }

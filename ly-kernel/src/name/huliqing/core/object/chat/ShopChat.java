@@ -238,7 +238,7 @@ public class ShopChat<T extends ChatData> extends Chat<T> implements ItemListene
 
         @Override
         protected boolean filter(ObjectData data) {
-            return !itemService.isSellable(data);
+            return !protoService.isSellable(data);
         }
         
     }

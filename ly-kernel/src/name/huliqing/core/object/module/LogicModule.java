@@ -31,30 +31,10 @@ public class LogicModule<T extends LogicModuleData> extends AbstractModule<T> {
     public void initialize(Actor actor) {
         super.initialize(actor);
         this.actor = actor;
-
-//        // 从存档中载入状态，如果不是存档则从原始参数中获取
-//        List<ActorLogicData> logicInits = (List<ActorLogicData>) data.getAttribute("logicDatas");
-//        if (logicInits == null) {
-//            String[] logicArr = data.getAsArray("logics");
-//            if (logicArr != null) {
-//                logicInits = new ArrayList<ActorLogicData>(logicArr.length);
-//                for (String logicId : logicArr) {
-//                    logicInits.add((ActorLogicData) DataFactory.createData(logicId));
-//                }
-//            }
-//        }
-//        if (logicInits != null) {
-//            for (ActorLogicData stateData : logicInits) {
-//                addLogic((ActorLogic)Loader.load(stateData));
-//            }
-//        }
-//        data.setAttribute("logicDatas", logicDatas);
-
-
-        if (data.getLogics() != null) {
-            List<ActorLogicData> tempLogics = new ArrayList<ActorLogicData>(data.getLogics());
-            data.clear();
-            for (ActorLogicData ld : tempLogics) {
+        
+        List<ActorLogicData> logicDatas = actor.getData().getObjectDatas(ActorLogicData.class, null);
+        if (logicDatas != null) {
+            for (ActorLogicData ld : logicDatas) {
                 addLogic((ActorLogic) Loader.load(ld));
             }
         }
@@ -89,10 +69,8 @@ public class LogicModule<T extends LogicModuleData> extends AbstractModule<T> {
             return;
         
         logics.add(logic);
-        if (data.getLogics() == null) {
-            data.setLogics(new ArrayList<ActorLogicData>());
-        }
-        data.getLogics().add(logic.getData());
+        actor.getData().addObjectData(logic.getData());
+        
         logic.setActor(actor);
         logic.initialize();
     }
@@ -101,7 +79,7 @@ public class LogicModule<T extends LogicModuleData> extends AbstractModule<T> {
         if (!logics.contains(logic))
             return false;
         
-        data.getLogics().remove(logic.getData());
+        actor.getData().removeObjectData(logic.getData());
         logics.remove(logic);
         logic.cleanup();
         return true;

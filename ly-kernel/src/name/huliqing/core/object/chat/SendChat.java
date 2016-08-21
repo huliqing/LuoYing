@@ -23,6 +23,7 @@ import name.huliqing.core.view.transfer.SimpleTransferPanel;
 import name.huliqing.core.view.transfer.TabTransferPanel;
 import name.huliqing.core.view.transfer.TransferPanel;
 import name.huliqing.core.manager.ResourceManager;
+import name.huliqing.core.mvc.service.ProtoService;
 import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.ui.Button;
@@ -39,6 +40,7 @@ import name.huliqing.core.ui.Window;
  */
 public class SendChat<T extends ChatData> extends Chat<T> {
     private final ItemService itemService = Factory.get(ItemService.class);
+    private final ProtoService protoService = Factory.get(ProtoService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final SkinService skinService = Factory.get(SkinService.class);
     private final PlayService playService = Factory.get(PlayService.class);
@@ -109,7 +111,7 @@ public class SendChat<T extends ChatData> extends Chat<T> {
             List<ItemData> transferDatas = new ArrayList<ItemData>(items.size());
             for (ItemData item : items) {
                 // 非卖品
-                if (!itemService.isSellable(item)) {
+                if (!protoService.isSellable(item)) {
                     continue;
                 }
                 ItemData dataCopy = DataFactory.createData(item.getId());

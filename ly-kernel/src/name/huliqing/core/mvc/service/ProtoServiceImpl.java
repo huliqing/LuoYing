@@ -8,6 +8,7 @@ package name.huliqing.core.mvc.service;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.core.Factory;
+import name.huliqing.core.constants.IdConstants;
 import name.huliqing.core.data.ItemData;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.data.SkinData;
@@ -15,6 +16,7 @@ import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.data.define.CostObject;
+import name.huliqing.core.xml.Proto;
 
 /**
  *
@@ -44,31 +46,39 @@ public class ProtoServiceImpl implements ProtoService {
 
     @Override
     public ObjectData getData(Actor actor, String id) {
-        Class<?> cc = DataFactory.getDataClassById(id);
-        if (cc == null)
-            return null;
-        
-        if (cc == ItemData.class || cc == SkinData.class) {
-            return itemService.getItem(actor, id);
-        }
-        if (cc == SkillData.class) {
-            return skillService.getSkill(actor, id).getData();
-        }
-        LOG.log(Level.WARNING, "Unsupported getData, id={0}, dataClass={1} ", new Object[] {id, cc});
-        return null;
+        // remove20160821
+//        Class<?> cc = DataFactory.getDataClassById(id);
+//        if (cc == null)
+//            return null;
+//        if (cc == ItemData.class || cc == SkinData.class) {
+//            return itemService.getItem(actor, id);
+//        }
+//        if (cc == SkillData.class) {
+//            return skillService.getSkill(actor, id).getData();
+//        }
+//        LOG.log(Level.WARNING, "Unsupported getData, id={0}, dataClass={1} ", new Object[] {id, cc});
+//        return null;
+
+        return actor.getData().getObjectData(id);
     }
 
     @Override
-    public void addData(Actor actor, ObjectData data, int count) {
-        if (data == null)
+    public void addData(Actor actor, String id, int count) {
+        Class<?> cc = DataFactory.getDataClassById(id);
+        if (cc == null)
             return;
-
-        if ((data instanceof ItemData) || (data instanceof SkinData)) {
-            itemService.addItem(actor, data.getId(), count);
-        } else if (data instanceof SkillData) {
-            skillService.addSkill(actor, data.getId());
+        
+        if (ItemData.class.isAssignableFrom(cc)) {
+            itemService.addItem(actor, id, count);
+            
+        } else if (SkinData.class.isAssignableFrom(cc)) {
+            skinService.addSkin(actor, id, count);
+            
+        } else if (SkillData.class.isAssignableFrom(cc)) {
+            skillService.addSkill(actor, id);
+            
         } else {
-            throw new UnsupportedOperationException("Could not addData, actor=" + actor + ", data" + data);
+            throw new UnsupportedOperationException("Could not addData, actor=" + actor + ", id" + id);
         }
 
     }
@@ -82,10 +92,8 @@ public class ProtoServiceImpl implements ProtoService {
     }
 
     @Override
-    public void removeData(Actor actor, ObjectData data, int count) {
-        if (data == null)
-            return;
-        
+    public void removeData(Actor actor, String id, int count) {
+        ObjectData data = actor.getData().getObjectData(id);
         handlerService.removeObject(actor, data, count);
     }
 
@@ -109,6 +117,12 @@ public class ProtoServiceImpl implements ProtoService {
             return ((CostObject)data).getCost();
         }
         return 0;
+    }
+    
+    @Override
+    public boolean isSellable(ObjectData data) {
+        // 金币不能卖
+        return !data.getId().equals(IdConstants.ITEM_GOLD);
     }
  
 }

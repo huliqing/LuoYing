@@ -22,54 +22,54 @@ import name.huliqing.core.data.TalentData;
 @Serializable
 public class TalentModuleData extends ModuleData {
     
-    private List<TalentData> talentDatas;
+//    private List<TalentData> talentDatas;
     
-    private int talentPoints;
-    private String talentPointsLevelEl;
+//    private int talentPoints;
+//    private String talentPointsLevelEl;
 
-    public List<TalentData> getTalentDatas() {
-        return talentDatas;
-    }
+//    public List<TalentData> getTalentDatas() {
+//        return talentDatas;
+//    }
+//
+//    public void setTalentDatas(List<TalentData> talentDatas) {
+//        this.talentDatas = talentDatas;
+//    }
 
-    public void setTalentDatas(List<TalentData> talentDatas) {
-        this.talentDatas = talentDatas;
-    }
-
-    public int getTalentPoints() {
-        return talentPoints;
-    }
-
-    public void setTalentPoints(int talentPoints) {
-        this.talentPoints = talentPoints;
-    }
-
-    public String getTalentPointsLevelEl() {
-        return talentPointsLevelEl;
-    }
-
-    public void setTalentPointsLevelEl(String talentPointsLevelEl) {
-        this.talentPointsLevelEl = talentPointsLevelEl;
-    }
+//    public int getTalentPoints() {
+//        return talentPoints;
+//    }
+//
+//    public void setTalentPoints(int talentPoints) {
+//        this.talentPoints = talentPoints;
+//    }
+//
+//    public String getTalentPointsLevelEl() {
+//        return talentPointsLevelEl;
+//    }
+//
+//    public void setTalentPointsLevelEl(String talentPointsLevelEl) {
+//        this.talentPointsLevelEl = talentPointsLevelEl;
+//    }
     
-    @Override
-    public void write(JmeExporter ex) throws IOException {
-        super.write(ex);
-        OutputCapsule oc = ex.getCapsule(this);
-        if (talentDatas != null) {
-            oc.writeSavableArrayList(new ArrayList<TalentData>(talentDatas), "talentDatas", null);
-        }
-        oc.write(talentPoints, "talentPoints", 0);
-        oc.write(talentPointsLevelEl, "talentPointsLevelEl", null);
-    }
-
-    @Override
-    public void read(JmeImporter im) throws IOException {
-        super.read(im);
-        InputCapsule ic = im.getCapsule(this);
-        talentDatas = ic.readSavableArrayList("talentDatas", null);
-        talentPoints = ic.readInt("talentPoints", 0);
-        talentPointsLevelEl = ic.readString("talentPointsLevelEl", null);
-    }
+//    @Override
+//    public void write(JmeExporter ex) throws IOException {
+//        super.write(ex);
+//        OutputCapsule oc = ex.getCapsule(this);
+////        if (talentDatas != null) {
+////            oc.writeSavableArrayList(new ArrayList<TalentData>(talentDatas), "talentDatas", null);
+////        }
+//        oc.write(talentPoints, "talentPoints", 0);
+//        oc.write(talentPointsLevelEl, "talentPointsLevelEl", null);
+//    }
+//
+//    @Override
+//    public void read(JmeImporter im) throws IOException {
+//        super.read(im);
+//        InputCapsule ic = im.getCapsule(this);
+////        talentDatas = ic.readSavableArrayList("talentDatas", null);
+//        talentPoints = ic.readInt("talentPoints", 0);
+//        talentPointsLevelEl = ic.readString("talentPointsLevelEl", null);
+//    }
     
     
     

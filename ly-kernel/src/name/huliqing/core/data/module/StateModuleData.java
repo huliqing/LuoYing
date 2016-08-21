@@ -22,30 +22,30 @@ import name.huliqing.core.data.StateData;
 @Serializable
 public class StateModuleData extends ModuleData {
     
-    private List<StateData> stateDatas;
-
-    public List<StateData> getStateDatas() {
-        return stateDatas;
-    }
-
-    public void setStateDatas(List<StateData> stateDatas) {
-        this.stateDatas = stateDatas;
-    }
-    
-    @Override
-    public void write(JmeExporter ex) throws IOException {
-        super.write(ex);
-        if (stateDatas != null) {
-            OutputCapsule oc = ex.getCapsule(this);
-            oc.writeSavableArrayList(new ArrayList<StateData>(stateDatas), "stateDatas", null);
-        }
-    }
-
-    @Override
-    public void read(JmeImporter im) throws IOException {
-        super.read(im);
-        InputCapsule ic = im.getCapsule(this);
-        stateDatas = ic.readSavableArrayList("stateDatas", null);
-    }
+//    private List<StateData> stateDatas;
+//
+//    public List<StateData> getStateDatas() {
+//        return stateDatas;
+//    }
+//
+//    public void setStateDatas(List<StateData> stateDatas) {
+//        this.stateDatas = stateDatas;
+//    }
+//    
+//    @Override
+//    public void write(JmeExporter ex) throws IOException {
+//        super.write(ex);
+//        if (stateDatas != null) {
+//            OutputCapsule oc = ex.getCapsule(this);
+//            oc.writeSavableArrayList(new ArrayList<StateData>(stateDatas), "stateDatas", null);
+//        }
+//    }
+//
+//    @Override
+//    public void read(JmeImporter im) throws IOException {
+//        super.read(im);
+//        InputCapsule ic = im.getCapsule(this);
+//        stateDatas = ic.readSavableArrayList("stateDatas", null);
+//    }
     
 }

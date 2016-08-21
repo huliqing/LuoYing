@@ -55,20 +55,22 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<Task> getTasks(Actor actor) {
-        TaskModule control = actor.getModule(TaskModule.class);
-        if (control != null) {
-            return control.getTasks();
+        TaskModule module = actor.getModule(TaskModule.class);
+        if (module != null) {
+            return module.getTasks();
         }
         return null;
     }
     
     @Override
     public List<TaskData> getTaskDatas(Actor actor) {
-        TaskModule control = actor.getModule(TaskModule.class);
-        if (control != null) {
-            return control.getTaskDatas();
-        }
-        return null;
+//        TaskModule module = actor.getModule(TaskModule.class);
+//        if (module != null) {
+//            return module.getTaskDatas();
+//        }
+//        return null;
+        
+        return actor.getData().getObjectDatas(TaskData.class, null);
     }
     
     @Override

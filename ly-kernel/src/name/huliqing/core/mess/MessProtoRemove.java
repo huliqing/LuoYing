@@ -74,8 +74,8 @@ public class MessProtoRemove extends MessBase {
                 messSyn.setTotal(data != null ? data.getTotal() : 0);
                 gameServer.broadcast(messSyn);
             } else {
-                ObjectData data = protoService.getData(actor, objectId);
-                protoNetwork.removeData(actor, data, amount);
+//                ObjectData data = protoService.getData(actor, objectId);// remove
+                protoNetwork.removeData(actor, objectId, amount);
             }
         }
     }

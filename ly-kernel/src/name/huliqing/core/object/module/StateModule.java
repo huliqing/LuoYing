@@ -7,7 +7,6 @@ package name.huliqing.core.object.module;
 
 import com.jme3.scene.control.Control;
 import com.jme3.util.SafeArrayList;
-import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.data.StateData;
 import name.huliqing.core.data.module.StateModuleData;
@@ -51,8 +50,9 @@ public class StateModule extends AbstractModule<StateModuleData> {
 //        }
 //        data.setAttribute("stateDatas", stateDatas);
 
-        if (data.getStateDatas() != null) {
-            for (StateData sd : data.getStateDatas()) {
+        List<StateData> stateDatas = actor.getData().getObjectDatas(StateData.class, null);
+        if (stateDatas != null) {
+            for (StateData sd : stateDatas) {
                 addState((State)Loader.load(sd));
             }
         }
@@ -89,15 +89,13 @@ public class StateModule extends AbstractModule<StateModuleData> {
             removeState(oldState);
         }
         
-        state.setActor(actor);
-        state.initialize();
         
         // 加入data列表和处理器列表
         states.add(state);
-        if (data.getStateDatas() == null) {
-            data.setStateDatas(new ArrayList<StateData>());
-        }
-        data.getStateDatas().add(state.getData());
+        actor.getData().addObjectData(state.getData());
+        
+        state.setActor(actor);
+        state.initialize();
         
         // 侦听器
         if (stateListeners != null && !stateListeners.isEmpty()) {
@@ -112,7 +110,7 @@ public class StateModule extends AbstractModule<StateModuleData> {
             return false;
         
         states.remove(state);
-        data.getStateDatas().remove(state.getData());
+        actor.getData().removeObjectData(state.getData());
         state.cleanup();
         // 侦听器
         if (stateListeners != null && !stateListeners.isEmpty()) {
@@ -136,9 +134,10 @@ public class StateModule extends AbstractModule<StateModuleData> {
         return states;
     }
     
-    public List<StateData> getStateDatas() {
-        return data.getStateDatas();
-    }
+    // remove20160821
+//    public List<StateData> getStateDatas() {
+//        return data.getStateDatas();
+//    }
     
     public void addStateListener(StateListener stateListener) {
         if (stateListeners == null) {

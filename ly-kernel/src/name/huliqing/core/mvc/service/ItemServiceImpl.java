@@ -88,11 +88,7 @@ public class ItemServiceImpl implements ItemService {
         return module != null && module.removeItemListener(itemListener);
     }
     
-    @Override
-    public boolean isSellable(ItemData data) {
-        // 金币不能卖
-        return !data.getId().equals(IdConstants.ITEM_GOLD);
-    }
+
 
     @Override
     public void syncItemTotal(Actor actor, String itemId, int total) {

@@ -22,29 +22,29 @@ import name.huliqing.core.data.ActorLogicData;
 @Serializable
 public class LogicModuleData extends ModuleData {
     
-    private List<ActorLogicData> logics;
-
-    public List<ActorLogicData> getLogics() {
-        return logics;
-    }
-
-    public void setLogics(List<ActorLogicData> logics) {
-        this.logics = logics;
-    }
-    
-    @Override
-    public void write(JmeExporter ex) throws IOException {
-        super.write(ex);
-        if (logics != null) {
-            OutputCapsule oc = ex.getCapsule(this);
-            oc.writeSavableArrayList(new ArrayList<ActorLogicData>(logics), "logics", null);
-        }
-    }
-
-    @Override
-    public void read(JmeImporter im) throws IOException {
-        super.read(im); 
-        InputCapsule ic = im.getCapsule(this);
-        logics = ic.readSavableArrayList("logics", null);
-    }
+//    private List<ActorLogicData> logics;
+//
+//    public List<ActorLogicData> getLogics() {
+//        return logics;
+//    }
+//
+//    public void setLogics(List<ActorLogicData> logics) {
+//        this.logics = logics;
+//    }
+//    
+//    @Override
+//    public void write(JmeExporter ex) throws IOException {
+//        super.write(ex);
+//        if (logics != null) {
+//            OutputCapsule oc = ex.getCapsule(this);
+//            oc.writeSavableArrayList(new ArrayList<ActorLogicData>(logics), "logics", null);
+//        }
+//    }
+//
+//    @Override
+//    public void read(JmeImporter im) throws IOException {
+//        super.read(im); 
+//        InputCapsule ic = im.getCapsule(this);
+//        logics = ic.readSavableArrayList("logics", null);
+//    }
 }

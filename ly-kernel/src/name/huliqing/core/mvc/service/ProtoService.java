@@ -33,25 +33,25 @@ public interface ProtoService extends Inject {
     /**
      * 给指定角色添加物体
      * @param actor
-     * @param data
+     * @param id
      * @param count 
      */
-    void addData(Actor actor, ObjectData data, int count);
+    void addData(Actor actor, String id, int count);
     
+    /**
+     * 从角色身上移除指定的物体
+     * @param actor
+     * @param objectId
+     * @param count 
+     */
+    void removeData(Actor actor, String objectId, int count);
+
     /**
      * 让指定角色使用物体
      * @param actor
      * @param data 
      */
     void useData(Actor actor, ObjectData data);
-    
-    /**
-     * 从角色身上移除指定的物体
-     * @param actor
-     * @param data
-     * @param count 
-     */
-    void removeData(Actor actor, ObjectData data, int count);
     
     /**
      * 同步指定角色身上的物体数量
@@ -67,4 +67,11 @@ public interface ProtoService extends Inject {
      * @return 
      */
     float getCost(ObjectData data);
+    
+    /**
+     * 判断物品在当前情况下是否可卖出，一些物品可能不能进行出售，如金币
+     * @param data
+     * @return 
+     */
+    boolean isSellable(ObjectData data);
 }

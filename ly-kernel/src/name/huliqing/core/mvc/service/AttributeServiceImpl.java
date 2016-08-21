@@ -91,11 +91,13 @@ public class AttributeServiceImpl implements AttributeService {
 
     @Override
     public List<AttributeData> getAttributes(Actor actor) {
-        AttributeModule module = actor.getModule(AttributeModule.class);
-        if (module != null) {
-            module.getAttributes();
-        }
-        return null;
+//        AttributeModule module = actor.getModule(AttributeModule.class);
+//        if (module != null) {
+//            module.getAttributes();
+//        }
+//        return null;
+
+        return actor.getData().getObjectDatas(AttributeData.class, null);
     }
 
     private AttributeData getAttribute(Actor actor, String attributeId) {

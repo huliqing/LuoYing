@@ -65,13 +65,6 @@ public interface ItemService extends Inject {
     boolean removeItemListener(Actor actor, ItemListener itemListener);
     
     /**
-     * 判断物品在当前情况下是否可卖出，一些物品可能不能进行出售，如金币
-     * @param data
-     * @return 
-     */
-    boolean isSellable(ItemData data);
-    
-    /**
      * 同步物品数量,如果total小于或等于0，则移除物品
      * @param actor
      * @param itemId

@@ -19,10 +19,10 @@ public class ResistModuleDataLoader implements DataLoader<ResistModuleData> {
 
     @Override
     public void load(Proto proto, ResistModuleData data) {
-        String resistId = proto.getAsString("resist");
-        if (resistId != null) {
-            data.setResist((ResistData) DataFactory.createData(resistId));
-        }
+//        String resistId = proto.getAsString("resist");
+//        if (resistId != null) {
+//            data.setResist((ResistData) DataFactory.createData(resistId));
+//        }
     }
 
 }

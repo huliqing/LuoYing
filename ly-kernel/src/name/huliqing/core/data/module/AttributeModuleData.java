@@ -22,29 +22,29 @@ import name.huliqing.core.data.AttributeData;
 @Serializable
 public class AttributeModuleData extends ModuleData {
     
-    private List<AttributeData> attributes;
+//    private List<AttributeData> attributes;
     
-    public List<AttributeData> getAttributes() {
-        return attributes;
-    }
-    
-    public void setAttributes(List<AttributeData> attributes) {
-        this.attributes = attributes;
-    }
-    
-    @Override
-    public void write(JmeExporter ex) throws IOException {
-        super.write(ex);
-        if (attributes != null) {
-            OutputCapsule oc = ex.getCapsule(this);
-            oc.writeSavableArrayList(new ArrayList<AttributeData>(attributes), "attributes", null);
-        }
-    }
-    
-    @Override
-    public void read(JmeImporter im) throws IOException {
-        super.read(im);
-        InputCapsule ic = im.getCapsule(this);
-        attributes = ic.readSavableArrayList("attributes", null);
-    }
+//    public List<AttributeData> getAttributes() {
+//        return attributes;
+//    }
+//    
+//    public void setAttributes(List<AttributeData> attributes) {
+//        this.attributes = attributes;
+//    }
+//    
+//    @Override
+//    public void write(JmeExporter ex) throws IOException {
+//        super.write(ex);
+//        if (attributes != null) {
+//            OutputCapsule oc = ex.getCapsule(this);
+//            oc.writeSavableArrayList(new ArrayList<AttributeData>(attributes), "attributes", null);
+//        }
+//    }
+//    
+//    @Override
+//    public void read(JmeImporter im) throws IOException {
+//        super.read(im);
+//        InputCapsule ic = im.getCapsule(this);
+//        attributes = ic.readSavableArrayList("attributes", null);
+//    }
 }

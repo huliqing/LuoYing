@@ -22,31 +22,31 @@ import name.huliqing.core.data.TaskData;
 @Serializable
 public class TaskModuleData extends ModuleData {
     
-    private List<TaskData> taskDatas;
-
-    public List<TaskData> getTaskDatas() {
-        return taskDatas;
-    }
-
-    public void setTaskDatas(List<TaskData> taskDatas) {
-        this.taskDatas = taskDatas;
-    }
-    
-    @Override
-    public void write(JmeExporter ex) throws IOException {
-        super.write(ex);
-        OutputCapsule oc = ex.getCapsule(this);
-        if (taskDatas != null) {
-            oc.writeSavableArrayList(new ArrayList<TaskData>(taskDatas), "taskDatas", null);
-        }
-    }
-
-    @Override
-    public void read(JmeImporter im) throws IOException {
-        super.read(im);
-        InputCapsule ic = im.getCapsule(this);
-        taskDatas = ic.readSavableArrayList("taskDatas", null);
-    }
+//    private List<TaskData> taskDatas;
+//
+//    public List<TaskData> getTaskDatas() {
+//        return taskDatas;
+//    }
+//
+//    public void setTaskDatas(List<TaskData> taskDatas) {
+//        this.taskDatas = taskDatas;
+//    }
+//    
+//    @Override
+//    public void write(JmeExporter ex) throws IOException {
+//        super.write(ex);
+//        OutputCapsule oc = ex.getCapsule(this);
+//        if (taskDatas != null) {
+//            oc.writeSavableArrayList(new ArrayList<TaskData>(taskDatas), "taskDatas", null);
+//        }
+//    }
+//
+//    @Override
+//    public void read(JmeImporter im) throws IOException {
+//        super.read(im);
+//        InputCapsule ic = im.getCapsule(this);
+//        taskDatas = ic.readSavableArrayList("taskDatas", null);
+//    }
     
     
 }

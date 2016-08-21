@@ -82,7 +82,7 @@ public class ShopActorLogic<T extends ActorLogicData> extends ActorLogic<T> {
             currentCount = temp != null ? temp.getTotal() : 0;
             actualStock = p.maxCount - currentCount;
             if (actualStock > 0) {
-                protoNetwork.addData(actor, protoService.createData(p.itemId), actualStock);
+                protoNetwork.addData(actor, p.itemId, actualStock);
             }
         }
     }
@@ -113,7 +113,7 @@ public class ShopActorLogic<T extends ActorLogicData> extends ActorLogic<T> {
                 actualStock = p.maxCount - currentCount;
             }
             if (actualStock > 0) {
-                protoNetwork.addData(actor, protoService.createData(p.itemId), actualStock);
+                protoNetwork.addData(actor, p.itemId, actualStock);
             }
         }
     }

@@ -6,6 +6,7 @@ package name.huliqing.core.mvc.service;
 
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.module.ResistModule;
+import name.huliqing.core.object.resist.Resist;
 
 /**
  *
@@ -21,7 +22,13 @@ public class ResistServiceImpl implements ResistService {
     @Override
     public float getResist(Actor actor, String stateId) {
         ResistModule module = actor.getModule(ResistModule.class);
-        return module.getResist(stateId);
+        if (module != null) {
+            Resist resist = module.getResist();
+            if (resist != null) {
+                return resist.getResist(stateId);
+            }
+        }
+        return 0;
     }
     
 }

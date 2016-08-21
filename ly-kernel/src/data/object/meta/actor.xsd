@@ -38,11 +38,17 @@ xs:time
                             <xs:documentation>为角色指定一个图标(64x64), 如：Interface/item/face/female.jpg</xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-<!--                    <xs:attribute name="logic" type="xs:string" use="required">
+                    <xs:attribute name="modules" type="xs:string" use="optional" >
                         <xs:annotation>
-                            <xs:documentation>关联逻辑,多个逻辑使用半角逗号分开，如：logic1,logic2,logic3</xs:documentation>
+                            <xs:documentation></xs:documentation>
                         </xs:annotation>
-                    </xs:attribute>-->
+                    </xs:attribute>
+                    <xs:attribute name="datas" type="xs:string" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation></xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <!-- =================== outdate ============== -->
                     <xs:attribute name="group" type="xs:integer" use="required">
                         <xs:annotation>
                             <xs:documentation>派系,整数</xs:documentation>
@@ -58,40 +64,7 @@ xs:time
                         </xs:annotation>
                     </xs:attribute>
                     <xs:attribute name="mass" ref="mass" use="required"/>
-                    <xs:attribute name="skills" type="xs:string" use="required">
-                        <xs:annotation>
-                            <xs:documentation>
-                                技能列表,半角色逗号分隔
-                            </xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
-                    <xs:attribute name="skinBase" type="xs:string" use="optional">
-                        <xs:annotation>
-                            <xs:documentation>
-                                角色的基本皮肤，基本皮肤是用来在切换装备后“修补皮肤”缺失的问题。比如当
-                                穿上一套上下连身的法袍（同时包含lowerBody和upperBody）后，再使用一件只
-                                包含upperBody的装备来换上时，由于法袍被替换，这时角色身上将丢失lowerBody
-                                的装备，这时就需要从skinBase中查看是否有lowerBody的基本皮肤来补上，否则角
-                                色会缺少下半身的装备模型。
-                                注意：基本皮肤中不要指定哪些包含两个或两个以上type部位的皮肤。比如：
-                                同时包含lowerBody和upperBody的skin,如上下连身的套装之类的皮肤，这类皮肤
-                                会造成在换装备后进行修补的时候又替换掉已经穿上的装备。
-                            </xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
-                    <xs:attribute name="skinOutfit" type="xs:string" use="optional"/>
                     <xs:attribute name="scale" type="xs:decimal" use="optional"/>
-                    <xs:attribute name="weapon" type="xs:string" use="optional">
-                        <xs:annotation>
-                            <xs:documentation>关联到一件武器，作为角色默认使用</xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
-                    <xs:attribute name="items" type="xs:string" use="optional">
-                        <xs:annotation>
-                            <xs:documentation>角色包裹物品列表，半角逗号分隔,格式如: 
-                                objId1|total,objId2|total,objId3</xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
                     <xs:attribute name="mat" ref="mat" use="required" />
                     <xs:attribute name="localForward" type="xs:string" use="optional">
                         <xs:annotation>
@@ -159,21 +132,6 @@ xs:time
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="resist" type="xs:string" use="optional">
-                        <xs:annotation>
-                            <xs:documentation>
-                                关联一个抗性设置．
-                            </xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
-<!--                    <xs:attribute name="channels" type="xs:string" use="optional">
-                        <xs:annotation>
-                            <xs:documentation>
-                                角色的channel定义,关联一些channel，格式："channel1,channel2,...".
-                                如果不设置则默认使用一个包含所有骨骼的channel
-                            </xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>-->
                     <xs:attribute name="slots" type="xs:string" use="optional">
                         <xs:annotation>
                             <xs:documentation>
@@ -183,13 +141,7 @@ xs:time
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="attributes" type="xs:string" use="required">
-                        <xs:annotation>
-                            <xs:documentation>
-                                定义角色的所有属性值,格式如："attribute1,attribute2,attribute3,..."
-                            </xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
+                    
                     <xs:attribute name="lifeAttribute" type="xs:string" use="required">
                         <xs:annotation>
                             <xs:documentation>
@@ -221,27 +173,6 @@ xs:time
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="talents" type="xs:string" use="optional" >
-                        <xs:annotation>
-                            <xs:documentation>
-                                角色的天赋，格式: "talent1,talent2,talent3"
-                            </xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
-                    <xs:attribute name="talentPoints" type="xs:integer" use="optional" >
-                        <xs:annotation>
-                            <xs:documentation>
-                                当前角色已有的天赋点数。
-                            </xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
-                    <xs:attribute name="talentPointsLevelEl" type="xs:integer" use="optional" >
-                        <xs:annotation>
-                            <xs:documentation>
-                                天赋点数的奖励公式，当达到指定等级时可获得的天赋数奖励。
-                            </xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
                     <xs:attribute name="team" type="xs:integer" use="optional" >
                         <xs:annotation>
                             <xs:documentation>
@@ -267,13 +198,96 @@ xs:time
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="chat" type="xs:string" use="optional" >
+                    
+<!--                    <xs:attribute name="logic" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>关联逻辑,多个逻辑使用半角逗号分开，如：logic1,logic2,logic3</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>-->
+<!--                    <xs:attribute name="skills" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>
+                                技能列表,半角色逗号分隔
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>-->
+<!--                    <xs:attribute name="skinBase" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                角色的基本皮肤，基本皮肤是用来在切换装备后“修补皮肤”缺失的问题。比如当
+                                穿上一套上下连身的法袍（同时包含lowerBody和upperBody）后，再使用一件只
+                                包含upperBody的装备来换上时，由于法袍被替换，这时角色身上将丢失lowerBody
+                                的装备，这时就需要从skinBase中查看是否有lowerBody的基本皮肤来补上，否则角
+                                色会缺少下半身的装备模型。
+                                注意：基本皮肤中不要指定哪些包含两个或两个以上type部位的皮肤。比如：
+                                同时包含lowerBody和upperBody的skin,如上下连身的套装之类的皮肤，这类皮肤
+                                会造成在换装备后进行修补的时候又替换掉已经穿上的装备。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>-->
+                    <!--<xs:attribute name="skinOutfit" type="xs:string" use="optional"/>-->
+<!--                    <xs:attribute name="weapon" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>关联到一件武器，作为角色默认使用</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>-->
+<!--                    <xs:attribute name="items" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>角色包裹物品列表，半角逗号分隔,格式如: 
+                                objId1|total,objId2|total,objId3</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>-->
+                    <!--                    <xs:attribute name="resist" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                关联一个抗性设置．
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>-->
+<!--                    <xs:attribute name="channels" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                角色的channel定义,关联一些channel，格式："channel1,channel2,...".
+                                如果不设置则默认使用一个包含所有骨骼的channel
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>-->
+<!--                    <xs:attribute name="attributes" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>
+                                定义角色的所有属性值,格式如："attribute1,attribute2,attribute3,..."
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>-->
+<!--                    <xs:attribute name="talents" type="xs:string" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                角色的天赋，格式: "talent1,talent2,talent3"
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>-->
+<!--                    <xs:attribute name="chat" type="xs:string" use="optional" >
                         <xs:annotation>
                             <xs:documentation>
                                 关联到一个Chat
                             </xs:documentation>
                         </xs:annotation>
-                    </xs:attribute>
+                    </xs:attribute>-->
+                    <!--                    <xs:attribute name="talentPoints" type="xs:integer" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                当前角色已有的天赋点数。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>-->
+<!--                    <xs:attribute name="talentPointsLevelEl" type="xs:integer" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                天赋点数的奖励公式，当达到指定等级时可获得的天赋数奖励。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>-->
+                    
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>

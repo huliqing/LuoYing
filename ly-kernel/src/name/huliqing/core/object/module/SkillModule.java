@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.data.module.SkillModuleData;
+import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actor.SkillListener;
 import name.huliqing.core.object.skill.Skill;
@@ -50,6 +51,15 @@ public class SkillModule extends AbstractModule<SkillModuleData> {
         super.initialize(actor);
         this.actor = actor;
         
+        // 载入技能
+        List<SkillData> skillDatas = actor.getData().getObjectDatas(SkillData.class, null);
+        if (skillDatas != null && !skillDatas.isEmpty()) {
+            for (SkillData sd : skillDatas) {
+                addSkill((Skill) Loader.load(sd));
+            }
+        }
+        
+        // 技能的更新支持
         updateControl = new AdapterControl() {
             @Override
             public void update(float tpf) {skillUpdate(tpf);}
@@ -122,10 +132,7 @@ public class SkillModule extends AbstractModule<SkillModuleData> {
         skill.setSkillControl(this);
         skills.add(skill);
         skillMap.put(skill.getData().getId(), skill);
-        if (data.getSkills() == null) {
-            data.setSkills(new ArrayList<SkillData>());
-        }
-        data.getSkills().add(skill.getData());
+        actor.getData().addObjectData(skill.getData());
         
         // 通知侦听器
         if (skillListeners != null) {
@@ -148,7 +155,7 @@ public class SkillModule extends AbstractModule<SkillModuleData> {
         
         skills.remove(skill);
         skillMap.remove(skill.getData().getId());
-        data.getSkills().remove(skill.getData());
+        actor.getData().removeObjectData(skill.getData());
         skill.cleanup();
         
         // 通知侦听器

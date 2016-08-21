@@ -27,6 +27,20 @@ public class SkinServiceImpl implements SkinService {
         skillService = Factory.get(SkillService.class);
 //        attributeService = Factory.get(AttributeService.class);
     }
+
+    @Override
+    public void addSkin(Actor actor, String skinId, int amount) {
+        SkinModule module = actor.getModule(SkinModule.class);
+        if (module != null) {
+            module.addSkin(skinId, amount);
+        }
+    }
+
+    @Override
+    public boolean removeSkin(Actor actor, String skinId, int amount) {
+        SkinModule module = actor.getModule(SkinModule.class);
+        return module != null && module.removeSkin(skinId, amount);
+    }
     
     @Override
     public void attachSkin(Actor actor, SkinData skinData) {

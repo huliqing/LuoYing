@@ -70,7 +70,7 @@ public class ChatServiceImpl implements ChatService {
         }
         
         // 非卖品
-        if (!itemService.isSellable(data)) {
+        if (!protoService.isSellable(data)) {
             return;
         }
         
@@ -133,7 +133,7 @@ public class ChatServiceImpl implements ChatService {
             }
             
             // 非卖品
-            if (!itemService.isSellable(data)) {
+            if (!protoService.isSellable(data)) {
                 continue;
             }
             

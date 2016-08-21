@@ -44,19 +44,19 @@ public interface TalentService extends Inject {
      */
     List<TalentData> getTalents(Actor actor);
     
-    /**
-     * 获取角色当前可用的天赋点数
-     * @param actor
-     * @return 
-     */
-    int getTalentPoints(Actor actor);
+//    /**
+//     * 获取角色当前可用的天赋点数
+//     * @param actor
+//     * @return 
+//     */
+//    int getTalentPoints(Actor actor);
     
-    /**
-     * 设置角色当前可用的总天赋点数。
-     * @param actor
-     * @param talentPoints 
-     */
-    void setTalentPoints(Actor actor, int talentPoints);
+//    /**
+//     * 设置角色当前可用的总天赋点数。
+//     * @param actor
+//     * @param talentPoints 
+//     */
+//    void setTalentPoints(Actor actor, int talentPoints);
     
     /**
      * 增加角色某个天赋的点数,注：角色必须拥有足够的可用天赋点数才能增加。

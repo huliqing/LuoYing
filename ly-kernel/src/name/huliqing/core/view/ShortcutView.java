@@ -18,6 +18,7 @@ import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.SkinService;
 import name.huliqing.core.object.actor.ItemListener;
 import name.huliqing.core.object.actor.SkinListener;
+import name.huliqing.core.object.skin.Skin;
 import name.huliqing.core.ui.UIFactory;
 import name.huliqing.core.ui.FrameLayout;
 import name.huliqing.core.ui.Icon;
@@ -211,16 +212,32 @@ public class ShortcutView extends FrameLayout implements ItemListener, SkinListe
     }
 
     @Override
-    public void onSkinAttached(Actor actor, SkinData data) {
-        if (!data.getId().equals(this.data.getId()))
-            return;
-        setNeedUpdate();
+    public void onSkinAttached(Actor actor, Skin skin) {
+        if (skin.getData() == this.data) {
+            setNeedUpdate();
+        }
     }
 
     @Override
-    public void onSkinDetached(Actor actor, SkinData data) {
-        if (!data.getId().equals(this.data.getId()))
-            return;
-        setNeedUpdate();
+    public void onSkinDetached(Actor actor, Skin skin) {
+        if (skin.getData() == this.data) {
+            setNeedUpdate();
+        }
     }
+
+    @Override
+    public void onSkinAdded(Actor actor, SkinData data) {
+        if (data == this.data) {
+            setNeedUpdate();
+        }
+    }
+
+    @Override
+    public void onSkinRemoved(Actor actor, SkinData data) {
+        if (data == this.data) {
+            setNeedUpdate();
+        }
+    }
+    
+    
 }

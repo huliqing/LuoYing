@@ -67,8 +67,8 @@ public class MessProtoAdd extends MessBase {
         }
         
         if (addCount > 0) {
-            ObjectData data = protoService.createData(objectId);
-            protoService.addData(actor, data, addCount);
+//            ObjectData data = protoService.createData(objectId); // remove
+            protoService.addData(actor, objectId, addCount);
         }
         protoService.syncDataTotal(actor, objectId, syncTotal);
     }

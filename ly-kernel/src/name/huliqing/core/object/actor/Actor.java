@@ -12,7 +12,6 @@ import com.jme3.scene.control.AbstractControl;
 import com.jme3.util.SafeArrayList;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.module.ModuleData;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.xml.DataProcessor;
@@ -147,50 +146,162 @@ public class Actor extends AbstractControl implements DataProcessor<ActorData> {
     
     // ------------------------- 考虑增加的方法,统一物体的添加，移除，获取
     
-    /**
-     * 添加一个物体
-     * @param data 
-     */
-    public void addObject(ObjectData data) {
-        throw new UnsupportedOperationException();
-    }
     
-    /**
-     * 移除一个物体
-     * @param data 
-     * @return  
-     */
-    public boolean removeObject(ObjectData data) {
-        throw new UnsupportedOperationException();
-    }
+//    public interface ActorListener {
+//        /**
+//         * 当角色添加了物品时该方法被调用
+//         * @param actor
+//         * @param data 被添加的物体
+//         */
+//        void onObjectAdded(Actor actor, ObjectData data);
+//        
+//        /**
+//         * 当从角色身上移除了物品时该方法被调用,
+//         * @param actor
+//         * @param data
+//         */
+//        void onObjectRemoved(Actor actor, ObjectData data);
+//        
+//        /**
+//         * 当角色使用物体时该方法被调用,侦听器可以实现这个方法来处理物品的使用逻辑.
+//         * @param actor
+//         * @param data 
+//         */
+//        void onObjectUse(Actor actor, ObjectData data);
+//    }
+//    protected final List<ActorListener> actorListeners = new ArrayList<ActorListener>();
     
-    /**
-     * 使用一个物体
-     * @param <T>
-     * @param data 
-     */
-    public <T extends ObjectData> void useObject(T data) {
-        throw new UnsupportedOperationException();
-    }
+//    
+//    /**
+//     * 给角色添加物体.
+//     * @param objectData
+//     */
+//    public void addObject(ObjectData objectData) {
+//        if (data.getObjectDatas() == null) {
+//            data.setObjectDatas(new ArrayList<ObjectData>());
+//        }
+//        // 不允许重复添加同一个实例的对象，但允许相同ID的物体的不同实例。
+//        if (!data.getObjectDatas().contains(objectData)) {
+//            data.getObjectDatas().add(objectData);
+//        }
+//        // 触发侦听器
+//        if (!actorListeners.isEmpty()) {
+//            for (int i = 0; i < actorListeners.size(); i++) {
+//                actorListeners.get(i).onObjectAdded(this, objectData);
+//            }
+//        }
+//    }
+//    
+//    /**
+//     * 移除物体，amount必须大于0，否则什么也不做.
+//     * @param id
+//     * @param amount
+//     * @return  
+//     */
+//    public boolean removeObject(String id, int amount) {
+//        if (amount <= 0 || data.getObjectDatas() == null)
+//            return false;
+//        
+//        // 不存在指定物品
+//        ObjectData od = getObject(id);
+//        if (od == null) {
+//            return false;
+//        }
+//        
+//        od.setTotal(od.getTotal() - amount);
+//        if (od.getTotal() <= 0) {
+//            data.getObjectDatas().remove(od);
+//        }
+//        
+//        // 触发侦听器
+//        if (!actorListeners.isEmpty()) {
+//            for (int i = 0; i < actorListeners.size(); i++) {
+//                actorListeners.get(i).onObjectRemoved(this, od);
+//            }
+//        }
+//        return true;
+//    }
+//    
+//    /**
+//     * 使用一个物体
+//     * @param data 
+//     */
+//    public void useObject(ObjectData data) {
+//        // 触发侦听器
+//        if (!actorListeners.isEmpty()) {
+//            for (int i = 0; i < actorListeners.size(); i++) {
+//                actorListeners.get(i).onObjectUse(this, data);
+//            }
+//        }
+//    }
+//    
+//    /**
+//     * 获得角色包裹内的物体
+//     * @param <T>
+//     * @param id
+//     * @return 
+//     */
+//    public <T extends ObjectData> T getObject(String id) {
+//        if (data.getObjectDatas() == null)
+//            return null;
+//        
+//        for (ObjectData od : data.getObjectDatas()) {
+//            if (od.getId().equals(id)) {
+//                return (T) od;
+//            }
+//        }
+//        return null;
+//    }
+//    
+//    /**
+//     * 获取所有物体
+//     * @param store
+//     * @return 
+//     */
+//    public List<ObjectData> getObjects(List<ObjectData> store) {
+//        if (data.getObjectDatas() == null)
+//            return store;
+//        
+//        if (store == null) {
+//            store = new ArrayList<ObjectData>();
+//        }
+//        store.addAll(data.getObjectDatas());
+//        return store;
+//    }
+//    
+//    /**
+//     * 获取指定类型的物体
+//     * @param <T>
+//     * @param store
+//     * @param objectType
+//     * @return 
+//     */
+//    public <T extends ObjectData> List<T> getObjects(List<T> store, Class<T> objectType) {
+//        if (data.getObjectDatas() == null)
+//            return store;
+//        
+//        if (store == null) {
+//            store = new ArrayList<T>();
+//        }
+//        List<ObjectData> ods = data.getObjectDatas();
+//        int size = ods.size();
+//        ObjectData temp;
+//        for (int i = 0; i < size; i++) {
+//            temp = ods.get(i);
+//            if (objectType.isAssignableFrom(temp.getClass())) {
+//                store.add((T) temp);
+//            }
+//        }
+//        return store;
+//    }
     
-    /**
-     * 获取所有物体
-     * @param <T>
-     * @param store
-     * @return 
-     */
-    public <T extends ObjectData> List<T> getObjects(List<T> store) {
-        throw new UnsupportedOperationException();
-    }
-    
-    /**
-     * 指定获取某个类型的物体
-     * @param <T>
-     * @param store
-     * @param objectType
-     * @return 
-     */
-    public <T extends ObjectData> List<T> getObjects(List<T> store, Class<T> objectType) {
-        throw new UnsupportedOperationException();
-    }
+//    public void addActorListener(ActorListener actorListener) {
+//        if (!actorListeners.contains(actorListener)) {
+//            actorListeners.add(actorListener);
+//        }
+//    }
+//    
+//    public boolean removeActorListener(ActorListener actorListener) {
+//        return actorListeners.remove(actorListener);
+//    }
 }

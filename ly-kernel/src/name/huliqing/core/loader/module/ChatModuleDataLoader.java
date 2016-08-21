@@ -17,7 +17,7 @@ public class ChatModuleDataLoader implements DataLoader<ChatModuleData> {
 
     @Override
     public void load(Proto proto, ChatModuleData data) {
-        data.setChat(proto.getAsString("chat"));
+//        data.setChat(proto.getAsString("chat"));
     }
 
 }

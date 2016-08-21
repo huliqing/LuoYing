@@ -19,13 +19,13 @@ public class TaskModuleDataLoader implements DataLoader<TaskModuleData> {
 
     @Override
     public void load(Proto proto, TaskModuleData data) {
-        String[] taskArr = proto.getAsArray("tasks");
-        if (taskArr != null && taskArr.length > 0) {
-            data.setTaskDatas(new ArrayList<TaskData>(taskArr.length));
-            for (String taskId : taskArr) {
-                data.getTaskDatas().add((TaskData) DataFactory.createData(taskId));
-            }
-        }
+//        String[] taskArr = proto.getAsArray("tasks");
+//        if (taskArr != null && taskArr.length > 0) {
+//            data.setTaskDatas(new ArrayList<TaskData>(taskArr.length));
+//            for (String taskId : taskArr) {
+//                data.getTaskDatas().add((TaskData) DataFactory.createData(taskId));
+//            }
+//        }
     }
 
 }

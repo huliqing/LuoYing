@@ -22,30 +22,30 @@ import name.huliqing.core.data.SkillData;
 @Serializable
 public class SkillModuleData extends ModuleData {
     
-    // 所有技能
-    private List<SkillData> skills;
-
-    public List<SkillData> getSkills() {
-        return skills;
-    }
-    
-    public void setSkills(List<SkillData> skills) {
-        this.skills = skills;
-    }
-    
-    @Override
-    public void write(JmeExporter ex) throws IOException {
-        super.write(ex);
-        if (skills != null) {
-            OutputCapsule oc = ex.getCapsule(this);
-            oc.writeSavableArrayList(new ArrayList<SkillData>(skills), "skills", null);
-        }
-    }
-
-    @Override
-    public void read(JmeImporter im) throws IOException {
-        super.read(im);
-        InputCapsule ic = im.getCapsule(this);
-        skills = ic.readSavableArrayList("skills", null);
-    }
+//    // 所有技能
+//    private List<SkillData> skills;
+//
+//    public List<SkillData> getSkills() {
+//        return skills;
+//    }
+//    
+//    public void setSkills(List<SkillData> skills) {
+//        this.skills = skills;
+//    }
+//    
+//    @Override
+//    public void write(JmeExporter ex) throws IOException {
+//        super.write(ex);
+//        if (skills != null) {
+//            OutputCapsule oc = ex.getCapsule(this);
+//            oc.writeSavableArrayList(new ArrayList<SkillData>(skills), "skills", null);
+//        }
+//    }
+//
+//    @Override
+//    public void read(JmeImporter im) throws IOException {
+//        super.read(im);
+//        InputCapsule ic = im.getCapsule(this);
+//        skills = ic.readSavableArrayList("skills", null);
+//    }
 }

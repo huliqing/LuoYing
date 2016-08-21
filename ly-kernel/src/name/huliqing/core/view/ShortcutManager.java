@@ -234,11 +234,12 @@ public class ShortcutManager {
         ActorService actorService = Factory.get(ActorService.class);
         ConfigService configService = Factory.get(ConfigService.class);
         SkillService skillService = Factory.get(SkillService.class);
+        ProtoService protoService = Factory.get(ProtoService.class);
         
         float shortcutSize = configService.getShortcutSize();
         for (ShortcutSave s : ss) {
             String itemId = s.getItemId();
-            ObjectData data = actorService.getItem(player, itemId);
+            ObjectData data = protoService.getData(player, itemId);
             if (data == null) {
                 data = DataFactory.createData(itemId);
             }

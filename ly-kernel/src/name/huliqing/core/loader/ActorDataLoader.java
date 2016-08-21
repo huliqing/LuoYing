@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import name.huliqing.core.data.ActorData;
 import name.huliqing.core.data.AttributeData;
 import name.huliqing.core.data.module.ModuleData;
@@ -18,8 +16,6 @@ import name.huliqing.core.data.DropData;
 import name.huliqing.core.xml.Proto;
 import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.ResistData;
-import name.huliqing.core.data.SkillData;
-import name.huliqing.core.data.SkinData;
 import name.huliqing.core.enums.Sex;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.xml.DataFactory;
@@ -33,58 +29,6 @@ public class ActorDataLoader implements DataLoader<ActorData> {
 
     @Override
     public void load(Proto proto, ActorData data) {
-        // ==== 2.items 
-        ItemStore itemStore = new ItemStore();
-        String[] itemsTemp = proto.getAsArray("items");
-        if (itemsTemp != null && itemsTemp.length > 0) {
-            for (String item : itemsTemp) {
-                if (item == null || item.trim().equals("")) {
-                    continue;
-                }
-                String[] itemArr = item.split("\\|");
-                String itemId = itemArr[0];
-                int itemTotal = 1;
-                if (itemArr.length >= 2) {
-                    itemTotal = Integer.parseInt(itemArr[1]);
-                }
-                ObjectData itemData = DataFactory.createData(itemId);
-                itemStore.addItem(itemData, itemTotal);
-            }
-        }
-        
-//        // skinBase 基本皮肤,
-//        // 注1：可能部分角色没有基本皮肤，如不可换装备的角色类型
-//        // 注2: 基本皮肤不会存放在itemStore中，而skinOutfit会存放在itemStore
-//        List<SkinData> skinBases = null;
-//        String[] skinBasesTemp = proto.getAsArray("skinBase");
-//        if (skinBasesTemp != null) {
-//            skinBases = new ArrayList<SkinData>(skinBasesTemp.length);
-//            for (String sbt : skinBasesTemp) {
-//                SkinData sdb = DataFactory.createData(sbt);
-//                sdb.setUsing(true);// 对于skinBase来说设置using=true没有太大意义，因为skinBase不会在界面上显示
-//                skinBases.add(sdb);
-//            }            
-//        }
-        
-//        // skinOutfit
-//        String[] skinOutfitTemp = proto.getAsArray("skinOutfit");
-//        if (skinOutfitTemp != null) {
-//            for (String skinId : skinOutfitTemp) {
-//                itemStore.addItem((ObjectData) DataFactory.createData(skinId), 1);
-//                SkinData skinOutfit = (SkinData) itemStore.getItem(skinId);
-//                skinOutfit.setUsing(true);
-//            }
-//        }
-        
-        // items - weapon
-        String[] weaponIds = proto.getAsArray("weapon");
-        if (weaponIds != null) {
-            for (String wid : weaponIds) {
-                itemStore.addItem((ObjectData) DataFactory.createData(wid), 1);
-                SkinData weaponData = (SkinData) itemStore.getItem(wid);
-                weaponData.setUsing(true);
-            }
-        }
         
         // ==== 载入物品掉落设置
         String drop = proto.getAsString("drop");
@@ -92,35 +36,6 @@ public class ActorDataLoader implements DataLoader<ActorData> {
         if (drop != null) {
             dropData = DataFactory.createData(drop);
         }
-        
-        // ==== 载入技能
-        String[] skillIds = proto.getAsArray("skills");
-        SkillStore skillStore = new SkillStore();
-        if (skillIds != null && skillIds.length > 0) {
-            for (String skillId : skillIds) {
-                SkillData skillData = DataFactory.createData(skillId);
-                if (skillData != null) {
-                    skillStore.add(skillData);
-                } else {
-                    Logger.getLogger(ActorDataLoader.class.getName())
-                            .log(Level.WARNING
-                            , "Skill not found, tagName={0}, skillId={1}"
-                            , new Object[]{proto.getTagName(), skillId});
-                }
-            }
-        }
-        
-        // ==== 载入逻辑
-        // remove20160816
-//        String[] logicIds = proto.getAsArray("logic");
-//        List<ActorLogicData> logics = null;
-//        if (logicIds != null && logicIds.length > 0) {
-//            logics = new ArrayList<ActorLogicData>(logicIds.length);
-//            for (String logicId : logicIds) {
-//                ActorLogicData logicData = DataFactory.createData(logicId);
-//                logics.add(logicData);
-//            }
-//        }
         
         data.setLevel(proto.getAsInteger("level", 1));
         
@@ -159,17 +74,6 @@ public class ActorDataLoader implements DataLoader<ActorData> {
             resistData = DataFactory.createData(tempResist);
         }
         
-//        // talents
-//        String[] talentArr = proto.getAsArray("talents");
-//        ArrayList<TalentData> talents = null;
-//        if (talentArr != null) {
-//            talents = new ArrayList<TalentData>(talentArr.length);
-//            for (String talent : talentArr) {
-//                TalentData td = DataFactory.createData(talent);
-//                talents.add(td);
-//            }
-//        }
-        
         // 等级及经验值掉落设置
         data.setLevelUpEl(proto.getAsString("levelUpEl"));
         data.setXpDropEl(proto.getAsString("xpDropEl"));
@@ -178,35 +82,40 @@ public class ActorDataLoader implements DataLoader<ActorData> {
         data.setSex(Sex.identifyByName(proto.getAsString("sex", "2")));
         data.setRace(proto.getAsString("race"));
         data.setEssential(proto.getAsBoolean("essential", false));
-//        data.setSkinBase(skinBases);
-        data.setItemStore(itemStore);
-        data.setSkillStore(skillStore);
         data.setDrop(dropData);
         data.setSlots(slots);
-        data.setAttributes(attributes);
         data.setLifeAttribute(lifeAttribute);
         data.setViewAttribute(viewAttribute);
-        data.setResist(resistData);
-//        data.setTalents(talents);
-//        data.setTalentPoints(proto.getAsInteger("talentPoints", 0));
-//        data.setTalentPointsLevelEl(proto.getAsString("talentPointsLevelEl"));
+        data.setTalentPoints(proto.getAsInteger("talentPoints", 0));
+        data.setTalentPointsLevelEl(proto.getAsString("talentPointsLevelEl"));
         data.setTeam(proto.getAsInteger("team", 0));
         data.setLiving(proto.getAsBoolean("living", false));
         data.setFollowTarget(proto.getAsInteger("followTarget", -1));
-        data.setChat(proto.getAsString("chat"));
-        
-        
-        ArrayList<ModuleData> controlDatas;
-        String[] cArr = proto.getAsArray("controls");
-        if (cArr != null) {
-            controlDatas = new ArrayList<ModuleData>(cArr.length);
-            for (String controlId : cArr) {
-                controlDatas.add((ModuleData) DataFactory.createData(controlId));
+
+        // ---------------------------------------------------------------------- add 20160820
+
+        String[] moduleArr = proto.getAsArray("modules");
+        if (moduleArr != null) {
+            data.setModuleDatas(new ArrayList<ModuleData>(moduleArr.length));
+            for (String mid : moduleArr) {
+                data.getModuleDatas().add((ModuleData) DataFactory.createData(mid));
             }
-        } else {
-            controlDatas = new ArrayList<ModuleData>(1);
         }
-        data.setModuleDatas(controlDatas);
+        
+        // 格式示例：datas="itemMapWorld,item000|10,itemGold|10,itemTowerSnow|100,itemScrollLife|10"
+        String[] dataArr = proto.getAsArray("datas");
+        if (dataArr != null && dataArr.length > 0) {
+            data.setObjectDatas(new ArrayList<ObjectData>(dataArr.length));
+            for (String dataStr : dataArr) {
+                if (dataStr == null || dataStr.trim().equals("")) {
+                    continue;
+                }
+                String[] bArr = dataStr.split("\\|");
+                ObjectData objectData = DataFactory.createData(bArr[0]);
+                objectData.setTotal(bArr.length >= 2 ? Integer.parseInt(bArr[1]) : 1);
+                data.getObjectDatas().add(objectData);
+            }
+        }
         
     }
     

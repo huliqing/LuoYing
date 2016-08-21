@@ -8,12 +8,12 @@ import com.jme3.animation.AnimChannel;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.Animation;
 import com.jme3.animation.LoopMode;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.core.data.ChannelData;
+import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.module.ChannelModuleData;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.actor.Actor;
@@ -29,6 +29,7 @@ import name.huliqing.core.utils.Temp;
 public class ChannelModule<T extends ChannelModuleData> extends AbstractModule<T> implements ChannelControl {
     private static final Logger LOG = Logger.getLogger(ChannelModule.class.getName());
 
+    private Actor actor;
     // 通道处理器列表
     private final List<Channel> channels = new LinkedList<Channel>();
     // 保存一个完整的id引用
@@ -48,32 +49,18 @@ public class ChannelModule<T extends ChannelModuleData> extends AbstractModule<T
     @Override
     public void initialize(Actor actor) {
         super.initialize(actor);
+        this.actor = actor;
         animControl = actor.getSpatial().getControl(AnimControl.class);
         
-        // remove
-//        // 1.优先从存档中载入
-//        // 2.如果不是存档则从原始参数xml中获取
-//        // 3.如果xml中没有配置则使用一个默认的“全通道”
-//        List<ChannelData> channelInits = (List<ChannelData>) data.getAttribute("channelDatas");
-//        if (channelInits == null) {
-//            String[] channelArr = data.getAsArray("channels");
-//            if (channelArr == null) {
-//                channelArr = new String[]{IdConstants.CHANNEL_FULL};
-//            } 
-//            channelInits = new ArrayList<ChannelData>(channelArr.length);
-//            for (String cid : channelArr) {
-//                channelInits.add((ChannelData) DataFactory.createData(cid));
-//            }
-//        }
-
-        if (data.getChannels() != null) {
-            List<ChannelData> tempChannels = new ArrayList<ChannelData>(data.getChannels());
-            data.clear(); // 清理后通过addChannel重新添加
-            for (ChannelData cd : tempChannels) {
-                Channel channel = Loader.load(cd);
-                addChannel(channel);
+        List<ObjectData> ods = actor.getData().getObjectDatas();
+        if (ods != null && !ods.isEmpty()) {
+            for (ObjectData od : ods) {
+                if (od instanceof ChannelData) {
+                    addChannel((Channel) Loader.load(od));
+                }
             }
         }
+       
     }
 
     @Override
@@ -90,10 +77,7 @@ public class ChannelModule<T extends ChannelModuleData> extends AbstractModule<T
         
         channel.setAnimControl(animControl);
         channels.add(channel);
-        if (data.getChannels() == null) {
-            data.setChannels(new ArrayList<ChannelData>());
-        }
-        data.getChannels().add(channel.getData());
+        actor.getData().addObjectData(channel.getData());
 
         // 更新完整通道ID
         if (fullChannelsIds == null) {

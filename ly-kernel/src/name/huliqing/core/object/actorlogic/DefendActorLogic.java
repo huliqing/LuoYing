@@ -5,6 +5,7 @@
 package name.huliqing.core.object.actorlogic;
 
 import com.jme3.math.FastMath;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -12,7 +13,6 @@ import java.util.Set;
 import java.util.logging.Logger;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.ActorLogicData;
-import name.huliqing.core.data.SkillData;
 import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.mvc.network.ActorNetwork;
 import name.huliqing.core.mvc.network.SkillNetwork;
@@ -22,6 +22,7 @@ import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actor.ActorListener;
 import name.huliqing.core.object.actor.SkillListener;
+import name.huliqing.core.object.module.SkillPlayListener;
 import name.huliqing.core.object.skill.Skill;
 import name.huliqing.core.object.skill.AttackSkill;
 import name.huliqing.core.object.skill.ShotSkill;
@@ -31,7 +32,7 @@ import name.huliqing.core.object.skill.ShotSkill;
  * @author huliqing
  * @param <T>
  */
-public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> implements SkillListener, ActorListener {
+public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> implements SkillListener, SkillPlayListener, ActorListener {
     private static final Logger LOG = Logger.getLogger(DefendActorLogic.class.getName());
     
     private final ActorService actorService = Factory.get(ActorService.class);
@@ -49,9 +50,13 @@ public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> im
     private Set<Actor> listenersActors;
     
     // ---- 节能
-    private long lastCheckTime = -1;
     // 判断是否有可用的技能进行防守
     private boolean hasUsableSkill = true;
+    
+    private boolean needRecacheSkill = true;
+    
+    private List<Skill> defendSkills;
+    private List<Skill> duckSkills;
     
     @Override
     public void setData(T data) {
@@ -66,19 +71,37 @@ public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> im
     public void initialize() {
         super.initialize();
         actorService.addActorListener(actor, this);
+        skillService.addSkillListener(actor, this);
+    }
+
+    @Override
+    public void cleanup() {
+        // 清理当前角色的侦听器
+        actorService.removeActorListener(actor, this);
+        skillService.removeSkillListener(actor, this);
+        
+        // 清理其它被当前逻辑侦听的角色
+        if (listenersActors != null) {
+            for (Actor other : listenersActors) {
+                skillService.removeSkillPlayListener(other, this);
+            }
+            listenersActors.clear();
+        }
+        super.cleanup();
     }
 
     @Override
     public void onActorLocked(Actor source, Actor other) {
         if (!hasUsableSkill) 
             return;
+        
         if (source == other) 
             return;
         if (!actorService.isEnemy(other, source))
             return;
         
         // 当被other锁定时给other添加侦听器，以侦察other的攻击。以便进行防守和躲闪
-        skillService.addSkillListener(other, this);
+        skillService.addSkillPlayListener(other, this);
         
         // 记录被侦听的对象，以便在当前角色销毁或退出时清理
         if (listenersActors == null) {
@@ -93,12 +116,47 @@ public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> im
             return;
         
         // 当other不再把source当前目标时就不再需要侦听了。
-        skillService.removeSkillListener(other, this);
+        skillService.removeSkillPlayListener(other, this);
         
         // 清理
         if (listenersActors != null) {
             listenersActors.remove(other);
         }
+    }
+    
+    // ignore
+    @Override
+    public void onActorKill(Actor source, Actor target) {}
+
+    // ignore
+    @Override
+    public void onActorKilled(Actor source, Actor target) {}
+
+    // 受到攻击时将目标设为首要敌人
+    @Override
+    public void onActorHit(Actor source, Actor attacker, String hitAttribute, float hitValue) {
+        // hitValue>0为增益效果，不处理
+        if (actorService.isDead(source) || actorService.isPlayer(actor) || hitValue > 0)
+            return;
+        
+        // 被击中的属性不在监听范围内则不处理。
+        if (!listenAttributes.contains(hitAttribute)) {
+            return;
+        }
+        
+        if (attacker != null) {
+            actorNetwork.setTarget(source, attacker);
+        }
+    }
+
+    @Override
+    public void onSkillAdded(Actor actor, Skill skill) {
+        needRecacheSkill = true;
+    }
+
+    @Override
+    public void onSkillRemoved(Actor actor, Skill skill) {
+        needRecacheSkill = true;
     }
 
     @Override
@@ -148,96 +206,52 @@ public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> im
         // ignore
     }
     
-    @Override
-    public void onActorKill(Actor source, Actor target) {
-        // ignore
-    }
-
-    @Override
-    public void onActorKilled(Actor source, Actor target) {
-        // ignore
-    }
-
-    // 受到攻击时将目标设为首要敌人
-    @Override
-    public void onActorHit(Actor source, Actor attacker, String hitAttribute, float hitValue) {
-        // hitValue>0为增益效果，不处理
-        if (actorService.isDead(source) || actorService.isPlayer(actor) || hitValue > 0)
-            return;
-        
-        // 被击中的属性不在监听范围内则不处理。
-        if (!listenAttributes.contains(hitAttribute)) {
-            return;
-        }
-        
-        if (attacker != null) {
-            actorNetwork.setTarget(source, attacker);
-        }
-    }
     
     private boolean doDefend() {
-        if (defendRateAttribute != null) {
+        if (defendRateAttribute != null && defendSkills.size() > 0) {
             float defendRate = attributeService.getDynamicValue(actor, defendRateAttribute);
             if(defendRate >= FastMath.nextRandomFloat()) {
-                SkillData defendSkill = skillService.getSkillRandomDefend(actor);
-                if (defendSkill != null) {
-                    skillNetwork.playSkill(actor, defendSkill.getId(), false);
-                    return true;
-                }
+                Skill defendSkill = defendSkills.get(FastMath.nextRandomInt(0, defendSkills.size() - 1));
+                skillNetwork.playSkill(actor, defendSkill.getData().getId(), false);
+                return true;
             }
         }
         return false;
     }
     
     private boolean doDuck() {
-        if (duckRateAttribute != null) {
+        if (duckRateAttribute != null && duckSkills.size() > 0) {
             float duckRate = attributeService.getDynamicValue(actor, defendRateAttribute);
             if (duckRate >= FastMath.nextRandomFloat()) {
-                SkillData duckSkill = skillService.getSkillRandomDuck(actor);
-                if (duckSkill != null) {
-                    skillNetwork.playSkill(actor, duckSkill.getId(), false);
-                    return true;
-                }
+                Skill duckSkill = duckSkills.get(FastMath.nextRandomInt(0, duckSkills.size() - 1));
+                skillNetwork.playSkill(actor, duckSkill.getData().getId(), false);
+                return true;
             }
         }
         return false;
     }
 
-
-    @Override
-    public void cleanup() {
-        // 清理当前角色的侦听器
-        actorService.removeActorListener(actor, this);
-        
-        // 清理其它被当前逻辑侦听的角色
-        if (listenersActors != null) {
-            for (Actor other : listenersActors) {
-                skillService.removeSkillListener(other, this);
-            }
-        }
-        super.cleanup();
-    }
-
     @Override
     protected void doLogic(float tpf) {
         // 技能无更新则不处理
-        if (!actorService.isSkillUpdated(actor, lastCheckTime)) {
-            return;
-        }
-        // 判断是否有可用技能
-        List<SkillData> skills = skillService.getSkill(actor);
-        if (skills == null) {
-            hasUsableSkill = false;
-            lastCheckTime = actor.getData().getSkillStore().getLastModifyTime();
-            return;
-        }
-        // 如果存在defend或duck技能则认为可用
-        for (SkillData sd : skills) {
-            if (sd.getSkillType() == SkillType.defend || sd.getSkillType() == SkillType.duck) {
-                hasUsableSkill = true;
-                lastCheckTime = actor.getData().getSkillStore().getLastModifyTime();
-                return;
+        if (needRecacheSkill) {
+            // 判断是否有可用技能
+            List<Skill> skills = skillService.getSkills(actor);
+            if (skills != null) {
+                defendSkills = new ArrayList<Skill>();
+                duckSkills = new ArrayList<Skill>();
+                // 如果存在defend或duck技能则认为可用
+                for (Skill skill : skills) {
+                    if (skill.getSkillType() == SkillType.defend) {
+                        defendSkills.add(skill);
+                    }
+                    if (skill.getSkillType() == SkillType.duck) {
+                        duckSkills.add(skill);
+                    }
+                }
+                hasUsableSkill = defendSkills.size() > 0 || duckSkills.size() > 0;
             }
+            needRecacheSkill = false;
         }
     }
 

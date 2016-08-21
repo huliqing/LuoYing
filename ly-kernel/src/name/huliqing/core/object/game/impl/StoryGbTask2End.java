@@ -139,7 +139,7 @@ public class StoryGbTask2End extends IntervalLogic {
             public void onTalkEnd() {
                 // 移除主角身上的树根
                 ObjectData stumpData = protoService.getData(player, IdConstants.ITEM_GB_STUMP);
-                protoNetwork.removeData(player, stumpData, taskPanel.getTotal());
+                protoNetwork.removeData(player, stumpData.getId(), taskPanel.getTotal());
                 
                 // 移除古柏
                 playNetwork.removeObject(gb.getSpatial());
