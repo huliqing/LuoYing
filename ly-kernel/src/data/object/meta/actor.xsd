@@ -48,7 +48,6 @@ xs:time
                             <xs:documentation></xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <!-- =================== outdate ============== -->
                     <xs:attribute name="group" type="xs:integer" use="required">
                         <xs:annotation>
                             <xs:documentation>派系,整数</xs:documentation>
@@ -227,18 +226,27 @@ xs:time
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="skinOutfit" type="xs:string" use="optional"/>
-                    
-<!--                    <xs:attribute name="weapon" type="xs:string" use="optional">
+                    <xs:attribute name="skins" type="xs:string" use="optional">
                         <xs:annotation>
-                            <xs:documentation>关联到一件武器，作为角色默认使用</xs:documentation>
+                            <xs:documentation>指定角色拥有的装备，这些装备是存放在角色包裹上的，格式如: "skin1|total,skin2|total,..."
+                                其中total可以省略，默认total=1
+                            </xs:documentation>
                         </xs:annotation>
-                    </xs:attribute>-->
-                    
+                    </xs:attribute>
+                    <xs:attribute name="skinOutfit" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>这个参数指定了正在使用中的装备，关联到一件或多件装备,格式如："skinOutfit1,skinOutfit2,..."</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="skinWeapon" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>这个参数指定了正在使用中的武器，关联到一件或多件武器，格式如："skinWeapon1,skinWeapon2,..."</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
                     <xs:attribute name="items" type="xs:string" use="optional">
                         <xs:annotation>
                             <xs:documentation>角色包裹物品列表，半角逗号分隔,格式如: 
-                                objId1|total,objId2|total,objId3</xs:documentation>
+                                itemId1|total,itemId2|total,itemId3</xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
                     <xs:attribute name="resist" type="xs:string" use="optional">

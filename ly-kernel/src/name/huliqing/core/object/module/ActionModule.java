@@ -6,7 +6,9 @@
 package name.huliqing.core.object.module;
 
 import com.jme3.scene.control.Control;
+import name.huliqing.core.Factory;
 import name.huliqing.core.data.module.ActionModuleData;
+import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.action.Action;
 import name.huliqing.core.object.action.FightAction;
@@ -18,6 +20,7 @@ import name.huliqing.core.object.actor.Actor;
  * @author huliqing
  */
 public class ActionModule extends AbstractModule<ActionModuleData> {
+    private final ActorService actorService = Factory.get(ActorService.class);
     
     private Actor actor;
     // 两个默认行为,当角色接收玩家控制时需要这两个默认行为
@@ -44,6 +47,10 @@ public class ActionModule extends AbstractModule<ActionModuleData> {
     
     // 更新action逻辑
     private void actionUpdate(float tpf) {
+        if (actorService.isDead(actor)) {
+            return;
+        }
+        
         if (current != null) {
             if (current.isEnd()) {
                 current.cleanup();

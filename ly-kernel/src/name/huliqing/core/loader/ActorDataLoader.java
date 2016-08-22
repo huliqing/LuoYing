@@ -65,6 +65,19 @@ public class ActorDataLoader implements DataLoader<ActorData> {
             }            
         }
         
+        // 包裹上的装备，没穿在身上
+        String[] skinsArr = proto.getAsArray("skins");
+        if (skinsArr != null && skinsArr.length > 0) {
+            for (String skinStr : skinsArr) {
+                String[] skinArr = skinStr.split("\\|");
+                SkinData skinData = DataFactory.createData(skinArr[0]);
+                skinData.setTotal(skinArr.length > 1 ? Integer.parseInt(skinArr[1]) : 1);
+                skinData.setBaseSkin(false);
+                skinData.setUsing(false);
+                data.addObjectData(skinData);
+            }
+        }
+        
         // skinOutfit
         String[] skinOutfit = proto.getAsArray("skinOutfit");
         if (skinOutfit != null) {
@@ -76,6 +89,17 @@ public class ActorDataLoader implements DataLoader<ActorData> {
             }
         }
         
+        // weapon - 拿在手上的武器
+        String[] weaponIds = proto.getAsArray("skinWeapon");
+        if (weaponIds != null) {
+            for (String wid : weaponIds) {
+                SkinData weaponData = (SkinData) DataFactory.createData(wid);
+                weaponData.setBaseSkin(false);
+                weaponData.setUsing(true);
+                data.addObjectData(weaponData);
+            }
+        }
+        
         // 角色属性
         String[] channels = proto.getAsArray("channels");
         if (channels != null) {
@@ -83,16 +107,6 @@ public class ActorDataLoader implements DataLoader<ActorData> {
                 data.addObjectData((ChannelData)DataFactory.createData(id));
             }
         }
-        
-//        // items - weapon
-//        String[] weaponIds = proto.getAsArray("weapon");
-//        if (weaponIds != null) {
-//            for (String wid : weaponIds) {
-//                itemStore.addItem((ObjectData) DataFactory.createData(wid), 1);
-//                SkinData weaponData = (SkinData) itemStore.getItem(wid);
-//                weaponData.setUsing(true);
-//            }
-//        }
         
         // ==== 载入物品掉落设置
         String drop = proto.getAsString("drop");

@@ -15,13 +15,13 @@ skinPart => 0:ear;1:eyeL;2:eyeR;3:face;4:foot;5:hair;6:hand;7:lowerBody;8:upperB
 
     <!--头发-->
     <skinOutfit id="skinHair001" icon="Models/actor/female_hair/hair.001.png" file="Models/actor/female_hair/hair.001.j3o" type="5"  
-                raceLimit="1" sexLimit="0" defence="0" handler="handlerOutfit" bindBone="head" cost="800" baseSkin="1" />
+                raceLimit="1" sexLimit="0" defence="0" handler="handlerOutfit" bindBone="head" cost="800"  />
     <skinOutfit id="skinHair006" icon="Models/actor/female_hair/hair.006.png" file="Models/actor/female_hair/hair.006.j3o" type="5"  
-                raceLimit="1" sexLimit="0" defence="0" handler="handlerOutfit" bindBone="head" cost="800" baseSkin="1" />
+                raceLimit="1" sexLimit="0" defence="0" handler="handlerOutfit" bindBone="head" cost="800"  />
     <skinOutfit id="skinHair010" icon="Models/actor/female_hair/hair.010.png" file="Models/actor/female_hair/hair.010.j3o" type="5"  
-                raceLimit="1" sexLimit="0" defence="0" handler="handlerOutfit" bindBone="head" cost="800" baseSkin="1" />
+                raceLimit="1" sexLimit="0" defence="0" handler="handlerOutfit" bindBone="head" cost="800"  />
     <skinOutfit id="skinHair011" icon="Models/actor/female_hair/hair.011.png" file="Models/actor/female_hair/hair.011.j3o" type="5"  
-                raceLimit="1" sexLimit="0" defence="0" handler="handlerOutfit" bindBone="head" cost="800" baseSkin="1" />
+                raceLimit="1" sexLimit="0" defence="0" handler="handlerOutfit" bindBone="head" cost="800"  />
     
     <!-- ========================================================================= -->
     <!--耳朵-->
@@ -29,31 +29,31 @@ skinPart => 0:ear;1:eyeL;2:eyeR;3:face;4:foot;5:hair;6:hand;7:lowerBody;8:upperB
     
     <!--普通耳朵-->
     <skinOutfit id="skinEar000" icon="Models/actor/female/ear.000.png" file="Models/actor/female/ear.000.j3o" type="1" 
-                raceLimit="1" sexLimit="0" defence="0" handler="handlerOutfit" bindBone="head" cost="800" baseSkin="1" />
+                raceLimit="1" sexLimit="0" defence="0" handler="handlerOutfit" bindBone="head" cost="800"  />
     <!--精灵耳朵-->
     <skinOutfit id="skinEar004" icon="Models/actor/female/ear.004.png" file="Models/actor/female/ear.004.j3o" type="1" 
-                raceLimit="1" sexLimit="0" defence="0" handler="handlerOutfit" bindBone="head" cost="800" baseSkin="1" />
+                raceLimit="1" sexLimit="0" defence="0" handler="handlerOutfit" bindBone="head" cost="800"  />
 
     <!-- ========================================================================= -->
     <!--眼睛和脸-->
     <!-- ========================================================================= -->
     <!--眼睛和脸-->
     <skinOutfit id="skinEye000" icon="" file="Models/actor/female/eye.000.mesh.j3o" type="2"  
-                raceLimit="1" sexLimit="0" defence="0" handler="handlerOutfit" cost="800" baseSkin="1" />
+                raceLimit="1" sexLimit="0" defence="0" handler="handlerOutfit" cost="800"  />
     <skinOutfit id="skinFace000" icon="" file="Models/actor/female/face.000.mesh.j3o" type="3"  
-                raceLimit="1" sexLimit="0" defence="0" handler="handlerOutfit" cost="800" baseSkin="1" />
+                raceLimit="1" sexLimit="0" defence="0" handler="handlerOutfit" cost="800"  />
 
     <!-- ========================================================================= -->
     <!--基本身形(内衣身形)-->
     <!-- ========================================================================= -->
     <skinOutfit id="skinFoot000" icon="" file="Models/actor/female/foot.000.mesh.j3o" type="4"  
-                raceLimit="1" sexLimit="0" defence="0" handler="handlerOutfit" baseSkin="1"/>
+                raceLimit="1" sexLimit="0" defence="0" handler="handlerOutfit" />
     <skinOutfit id="skinHand000" icon="" file="Models/actor/female/hand.000.mesh.j3o" type="6"  
-                raceLimit="1" sexLimit="0" defence="0" handler="handlerOutfit" baseSkin="1"/>
+                raceLimit="1" sexLimit="0" defence="0" handler="handlerOutfit" />
     <skinOutfit id="skinLowerBody000" icon="" file="Models/actor/female/lowerBody.000.mesh.j3o" type="7"  
-                raceLimit="1" sexLimit="0" defence="0" handler="handlerOutfit" baseSkin="1"/>
+                raceLimit="1" sexLimit="0" defence="0" handler="handlerOutfit" />
     <skinOutfit id="skinUpperBody000" icon="" file="Models/actor/female/upperBody.000.mesh.j3o" type="8"  
-                raceLimit="1" sexLimit="0" defence="0" handler="handlerOutfit" baseSkin="1"/>
+                raceLimit="1" sexLimit="0" defence="0" handler="handlerOutfit" />
 
     <!-- ========================================================================= -->
     <!--套装-->
@@ -150,7 +150,7 @@ skinPart => 0:ear;1:eyeL;2:eyeR;3:face;4:foot;5:hair;6:hand;7:lowerBody;8:upperB
     
     <!--角-->
     <skinOutfit id="skinHorn001" icon="Models/actor/horn/horn001.png" file="Models/actor/horn/horn001.j3o" 
-                type="14" handler="handlerOutfit" bindBone="head" raceLimit="1" sexLimit="0" cost="1200" baseSkin="1" />
+                type="14" handler="handlerOutfit" bindBone="head" raceLimit="1" sexLimit="0" cost="1200"  />
     
     
     

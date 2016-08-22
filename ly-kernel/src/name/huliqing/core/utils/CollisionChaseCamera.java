@@ -26,8 +26,8 @@ import com.jme3.scene.shape.Box;
 import com.jme3.util.TempVars;
 
 /**
- * 可防止穿墙的相机,当该相机与场景中带”物理特性“的物体产生碰撞时，相机会拉近与被跟随物体的距离，来防止穿过被碰撞物体。
- * 使用时需要给相机设置物理空间，使用示例：
+ * 可防止穿墙的相机,当该相机与场景中带”物理特性“的物体产生碰撞时，相机会拉近与被跟随物体的距离，
+ * 来防止穿过被碰撞物体。使用时需要给相机设置物理空间，使用示例：
  * <pre>
  * <code>
  * CollisionChaseCamera ccc = new CollisionChaseCamera(app.getCamera(), app.getInputManager());
@@ -37,7 +37,8 @@ import com.jme3.util.TempVars;
  * </pre>
  * @author huliqing
  */
-public class CollisionChaseCamera extends ChaseCamera implements PhysicsCollisionListener, com.jme3.input.controls.TouchListener{
+public class CollisionChaseCamera extends ChaseCamera 
+        implements PhysicsCollisionListener, com.jme3.input.controls.TouchListener{
 //    private final static Logger LOG = Logger.getLogger(CollisionChaseCamera.class.getName());
     
     // 相机旋转;
@@ -62,7 +63,7 @@ public class CollisionChaseCamera extends ChaseCamera implements PhysicsCollisio
     private float collisionNearDistanceLimit = 2;
     private float collisionNearDistanceLimitSquared = 4;
     
-    // ---- 用于处理在JME3.1后不能在Android环境下自动缩放镜头的问题 
+    // 用于处理在JME3.1后不能在Android环境下自动缩放镜头的问题 
     private final static String TOUCH_SCALE_EVENT = "TouchSE";
     
     // 当前和相机发生碰撞的物体
@@ -205,8 +206,8 @@ public class CollisionChaseCamera extends ChaseCamera implements PhysicsCollisio
     private boolean fixingCameraDistance(Spatial collisionObject) {
         // 如果相机碰撞的是被跟随的对象本身，则不要做任何处理。因为当相机拉近目标时可能会产生持续的碰撞，这个时候可能
         // 相机与被跟随目标的距离比nearDistanceLimit还近，如果把相机反向往远处（nearDistanceLimit）拉，则可能返而导致
-        // 相机穿过其它障碍物，比如当被跟随目标离墙壁很近时，如果相机与被跟随目标这时产生碰撞，当相机往回拉到nearDistanceLimit
-        // 时可能会穿墙。
+        // 相机穿过其它障碍物，比如当被跟随目标离墙壁很近时，如果相机与被跟随目标这时产生碰撞，
+        // 当相机往回拉到nearDistanceLimit时可能会穿墙。
         if (isChaseTarget(collisionObject)) {
             return false;
         }
@@ -248,7 +249,6 @@ public class CollisionChaseCamera extends ChaseCamera implements PhysicsCollisio
 
     @Override
     public void collision(PhysicsCollisionEvent event) {
-        // 这里只要负责检测到needFixDistance=true就可以，解除needFixDistance将由fixCameraDistance来完成
         if (event.getNodeA()  == collisionChecker) {
             collisionTarget = event.getNodeB();
 //            LOG.log(Level.INFO, "CollisionChaseCamera,Collision target(nodeB)={0}", event.getNodeB());
@@ -256,15 +256,6 @@ public class CollisionChaseCamera extends ChaseCamera implements PhysicsCollisio
             collisionTarget = event.getNodeA();
 //            LOG.log(Level.INFO, "CollisionChaseCamera,Collision target(nodeA)={0}", event.getNodeB());
         }
-        
-//        // test:测试碰撞组是否有效果
-//        if (event.getNodeA() == camCollisionChecker || event.getNodeB() == camCollisionChecker) {
-//            logger.log(Level.INFO, "CollideA={0}, collisionGroup={1}, CollideB={2}, collisionGroup={3}"
-//                    , new Object[] {event.getNodeA().getName()
-//                            , event.getObjectA().getCollisionGroup()
-//                            , event.getNodeB().getName()
-//                            , event.getObjectB().getCollisionGroup()});
-//        }
         
     }
     

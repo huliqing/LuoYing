@@ -7,10 +7,11 @@ package name.huliqing.core.object.module;
 
 import com.jme3.scene.control.Control;
 import com.jme3.util.SafeArrayList;
-import java.util.ArrayList;
 import java.util.List;
+import name.huliqing.core.Factory;
 import name.huliqing.core.data.ActorLogicData;
 import name.huliqing.core.data.module.LogicModuleData;
+import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actorlogic.ActorLogic;
@@ -21,6 +22,7 @@ import name.huliqing.core.object.actorlogic.ActorLogic;
  * @param <T>
  */
 public class LogicModule<T extends LogicModuleData> extends AbstractModule<T> {
+    private final ActorService actorService = Factory.get(ActorService.class);
 
     private Actor actor;
     private final SafeArrayList<ActorLogic> logics = new SafeArrayList<ActorLogic>(ActorLogic.class);
@@ -47,6 +49,12 @@ public class LogicModule<T extends LogicModuleData> extends AbstractModule<T> {
     }
     
     private void logicUpdate(float tpf) {
+        if (actorService.isDead(actor)) {
+            return;
+        }
+        if (!actorService.isAutoAi(actor)) {
+            return;
+        }
         for (ActorLogic logic : logics.getArray()) {
             logic.update(tpf);
         }

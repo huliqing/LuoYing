@@ -57,6 +57,7 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T>{
     }
     
     public void setLocation(Vector3f location) {
+        actor.getSpatial().setLocalTranslation(location);
         innerControl.warp(location);
     }
     

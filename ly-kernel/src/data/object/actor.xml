@@ -13,22 +13,23 @@
     <!-- player test -->    
     <actor id="actorPlayerTest" extends="actorPlayer" level="7" 
            items="itemMapWorld,item000|100,itemGold|10000,itemTowerSnow|100,itemScrollLife|10
-,weaponSword000,weaponSword000L,weaponSword001,weaponSword001L,weaponSword002,weaponSword002L,weaponSword003,weaponSword003L
-,weaponBow000,weaponBow001
-,weaponWand000
-,skinFoot006,skinHand006,skinUpperBody006
-,skinHair001,skinHair006,skinHair010,skinHair011,skinBlinder001|12,skinMouthmask001|13,skinHorn001|14
 ,itemDetoxifyGrass|100,itemTonicRed|5,itemTonicBlue|5,itemHerb|100,itemASTonic|100
 ,itemTowerStone|100,itemTower|100,itemSpiderSpawn|100
 ,itemScrollBear|100,itemScrollWolf|100,itemScrollScorpion|100,itemScrollRaptor|100,itemScrollTrex|100
 ,itemBook005,itemBook006,itemBook007,itemBook008,itemBook010
-,skinFoot005,skinLowerBody005,skinUpperBody005,skinHand005
-,skinFoot001,skinLowerBody001,skinUpperBody001,skinHand001
-,skinFoot002,skinLowerBody002,skinUpperBody002,skinHand002
-,skinFoot004,skinLowerBody004,skinUpperBody004,skinHand004" 
+" 
            talents="talentLifeRestore,talentManaRestore,talentDefence,talentMagicDefence,talentAttack,talentMagicAttack,talentVision,talentMoveSpeed"
            talentPoints="100"
-           weapon="weaponSword000,weaponSword000L"
+           skins="weaponSword000,weaponSword000L,weaponSword001,weaponSword001L,weaponSword002,weaponSword002L,weaponSword003,weaponSword003L
+,weaponBow000,weaponBow001,weaponWand000
+,skinHair001,skinHair006,skinHair010,skinHair011,skinBlinder001|12,skinMouthmask001|13,skinHorn001|14
+,skinFoot001,skinLowerBody001,skinUpperBody001,skinHand001
+,skinFoot002,skinLowerBody002,skinUpperBody002,skinHand002
+,skinFoot004,skinLowerBody004,skinUpperBody004,skinHand004
+,skinFoot005,skinLowerBody005,skinUpperBody005,skinHand005
+,skinFoot006,skinHand006,skinUpperBody006
+"
+           skinWeapon="weaponSword000,weaponSword000L"
            skills="skillDualSwordWave,skillBowShot,skillIceShot
 ,skillShotLight,skillShotAddLife,skillShotReborn,skillShotWindWalk,skillShotCleanBuff
 ,skillDualSwordAttack
@@ -84,10 +85,11 @@
             channels="channelLowerBody,channelUpperBody,channelLeftHand,channelRightHand,channelHead"
             extAnim="Models/actor/ext_anim" 
             skinBase="skinEar000,skinEye000,skinFace000,skinFoot000,skinHair010,skinHand000,skinLowerBody000,skinUpperBody000"
+            skins="skinLowerBody002|1,weaponSword000"
             skinOutfit="skinFoot003,skinHand003,skinLowerBody003,skinUpperBody003"
+            skinWeapon="weaponSword000" 
             slots="slotSwordLeftBack,slotSwordLeftBack2,slotSwordLeftWaist,slotSwordLeftWaist2,slotBowLeftBack,slotWandLeftBack"
-            weapon="weaponSword000" 
-            items="itemTonicRed|5,itemTonicBlue|5,itemSpiderSpawn|1,itemTower|1,skinLowerBody002|1,weaponSword000" 
+            items="itemTonicRed|5,itemTonicBlue|5,itemSpiderSpawn|1,itemTower|1" 
             skills="skillWait,skillWalk,skillRun,skillReset,skillDead,skillHurtFront,skillHurtBack
 ,skillDefend1,skillDefend2
 ,skillDuckLeft,skillDuckRight,skillDuckBack,skillDuckLeftRoll,skillDuckRightRoll
@@ -97,7 +99,7 @@
             />
     
     <!-- player-->
-    <actor id="actorPlayer" extends="actorHumanFemaleBase" weapon="weaponBow000" 
+    <actor id="actorPlayer" extends="actorHumanFemaleBase" skinWeapon="weaponBow000" 
            talents="talentLifeRestore,talentDefence,talentAttack"
            logics="logicSearchEnemyForPlayer,logicPlayer" />
     
@@ -107,8 +109,9 @@
            logics="logicSearchEnemyForPlayer,logicPlayer"
            talents="talentLifeRestore,talentDefence,talentAttack"
            skinOutfit="skinFoot005,skinHand005,skinLowerBody005,skinUpperBody005"
-           items="itemTonicRed|10,itemTonicBlue|5,itemTower|1,weaponSword002L" 
-           weapon="weaponSword001" 
+           items="itemTonicRed|10,itemTonicBlue|5,itemTower|1" 
+           skins="weaponSword002L"
+           skinWeapon="weaponSword001" 
            skills="skillWait,skillWalk,skillRun,skillReset,skillDead,skillHurtFront,skillHurtBack
 ,skillAttack,skillAttack2,skillAttack3,skillDualSwordAttack,skillBowShot
 ,skillDanceSakura,skillDualSwordWave
@@ -120,10 +123,10 @@
     <actor id="actorPastor" extends="actorHumanFemaleBase" icon="Interface/face/female2.jpg"
            logics="logicSearchEnemyForPlayer,logicPlayer"
            talents="talentManaRestore,talentMagicDefence,talentMagicAttack"
+           items="itemTonicRed|5,itemTonicBlue|10" 
            skinBase="skinEar000,skinEye000,skinFace000,skinFoot000,skinHair006,skinHand000,skinLowerBody000,skinUpperBody000"
            skinOutfit="skinFoot006,skinHand006,skinUpperBody006"
-           items="itemTonicRed|5,itemTonicBlue|10" 
-           weapon="weaponWand000" 
+           skinWeapon="weaponWand000" 
            skills="skillWait,skillWalk,skillRun,skillReset,skillDead,skillHurtFront,skillHurtBack
 ,skillAttack,skillAttack2,skillAttack3,skillDualSwordAttack,skillBowShot
 ,skillShotLight,skillShotAddLife,skillShotReborn,skillShotWindWalk,skillShotCleanBuff
@@ -133,10 +136,11 @@
     <actor id="actorHunter" extends="actorHumanFemaleBase" icon="Interface/face/female3.jpg"
            logics="logicSearchEnemyForPlayer,logicPlayer"
            talents="talentAttack,talentDefence,talentVision,talentMoveSpeed"
+           items="itemTonicRed|10,itemTonicBlue|5,itemHerb|5,itemTowerStone|1" 
            skinBase="skinEar000,skinEye000,skinFace000,skinFoot000,skinHair011,skinHand000,skinLowerBody000,skinUpperBody000"
+           skins="weaponSword000"
            skinOutfit="skinFoot003,skinHand003,skinUpperBody003,skinLowerBody003,skinMouthmask001"
-           items="itemTonicRed|10,itemTonicBlue|5,itemHerb|5,weaponSword000,itemTowerStone|1" 
-           weapon="weaponBow001" 
+           skinWeapon="weaponBow001" 
            skills="skillWait,skillWalk,skillRun,skillReset,skillDead,skillHurtFront,skillHurtBack
 ,skillAttack,skillAttack2,skillAttack3,skillDualSwordAttack,skillBowShot
 ,skillSummon,skillLightningShot,skillIceShot
@@ -162,7 +166,7 @@
     
     <!-- 保箱任务角色：蒂娜 -->
     <actor id="actorDiNa" extends="actorHumanFemaleBase"  slots="slotSwordLeftWaist,slotSwordLeftWaist2"
-           weapon="weaponSword000" icon="Interface/face/female4.jpg"
+           skinWeapon="weaponSword000" icon="Interface/face/female4.jpg"
            skinBase="skinEar000,skinEye000,skinFace000,skinFoot000,skinHair011,skinHand000,skinLowerBody000,skinUpperBody000"
            skinOutfit="skinFoot001,skinHand001,skinLowerBody001,skinUpperBody001" 
            skills="skillBack,skillReset,skillWalk,skillWait,skillRun,skillDead,skillHurtFront,skillHurtBack,skillDefend1,skillDefend2
@@ -208,7 +212,7 @@
            file="Models/monster/spider/spider.j3o" scale="0.5"
            drop="dropSpider"
            skills="skillSpiderWait,skillSpiderHurt,skillSpiderDead,skillSpiderReset,skillSpiderWalk,skillSpiderRun,skillSpiderAttack,skillSpiderWeb" group="0" mass="60" mat="4"
-           level="5" weapon="weaponMockAnimalClaw"
+           level="5" skinWeapon="weaponMockAnimalClaw"
            collisionRadius="0.6" resist="resistCreature" />
     
     <!-- 蜘蛛幼仔 -->
@@ -216,14 +220,14 @@
            file="Models/monster/spider/spider.j3o" 
            group="1" sex="2" level="5" mass="30" 
            skills="skillSpiderWait,skillSpiderReset,skillSpiderWalk,skillSpiderMinRun,skillSpiderAttack,skillSpiderWeb" mat="4"
-           scale="0.25" weapon="weaponMockAnimalClaw"
+           scale="0.25" skinWeapon="weaponMockAnimalClaw"
            items="itemTonicRed|10,itemTonicBlue|10" resist="resistCreature" />
     
     <!-- 丛林盗贼 -->
     <actor id="actorNinja" extends="actorLiveBase" file="Models/monster/ninja/Ninja.mesh.j3o"  
            drop="dropNinja" group="1" sex="1" icon="Interface/face/ninja.jpg"
            scale="0.014" mass="60" mat="4" localForward="0, 0, -1"
-           weapon="weaponMockRightSword" hardwareSkinning="1"
+           skinWeapon="weaponMockRightSword" hardwareSkinning="1"
            skills="saNinjaReset,saNinjaWait,saNinjaWalk,saNinjaRun
 ,saNinjaAttack1,saNinjaAttack2,saNinjaAttack3,saNinjaAttack4,saNinjaAttack5,saNinjaAttack6
 ,saNinjaDead1,saNinjaHurt,saNinjaIdle1,saNinjaIdle2,saNinjaIdle3,saNinjaIdle4"
@@ -232,14 +236,14 @@
     <!-- wolf -->
     <actor id="actorWolf" extends="actorLiveBase" file="Models/monster/wolf/wolf.mesh.j3o" group="1" 
            sex="2" race="" level="7" mass="60" icon="Interface/face/wolf.jpg"
-           drop="dropWolf" weapon="weaponMockAnimalClaw"
+           drop="dropWolf" skinWeapon="weaponMockAnimalClaw"
            skills="saWolfReset,saWolfWalk,saWolfRun,saWolfWait,saWolfAttack,saWolfDead,saWolfHurt,saWolfIdle,saWolfIdle2,saWolfIdle3,saWolfIdle4" 
            mat="4" scale="0.2" collisionRadius="0.6" resist="resistCreature" />
     
     <!-- bear -->
     <actor id="actorBear" extends="actorLiveBase" file="Models/monster/bear/bear.mesh.j3o" group="1" 
            sex="2" race="" level="8"  mass="120" icon="Interface/face/bear.jpg"
-           drop="dropBear" weapon="weaponMockAnimalClaw"
+           drop="dropBear" skinWeapon="weaponMockAnimalClaw"
            skills="saBearReset,saBearWalk,saBearRun,saBearWait,saBearAttack1,saBearAttack2,saBearDead,saBearHurt,saBearIdle1,saBearIdle2,saBearIdle3" 
            mat="4" scale="0.2" collisionRadius="0.6"  resist="resistCreature" />
     
@@ -247,7 +251,7 @@
     <actor id="actorScorpion" extends="actorLiveBase" file="Models/monster/scorpion/scorpion.mesh.j3o" group="1" sex="2" race="" 
            level="6" mass="15" drop="dropScorpion" icon="Interface/face/scorpion.jpg"
            skills="saScorpionReset,saScorpionWalk,saScorpionRun,saScorpionWait,saScorpionAttack,saScorpionHurt,saScorpionDead,saScorpionIdle,saScorpionIdle2" 
-           mat="4" scale="0.05f"  weapon="weaponMockAnimalClaw" resist="resistScorpion" />
+           mat="4" scale="0.05f"  skinWeapon="weaponMockAnimalClaw" resist="resistScorpion" />
     
     <!-- scorpion big -->
     <actor id="actorScorpionBig" extends="actorScorpion" scale="0.25" />
@@ -256,7 +260,7 @@
     <actor id="actorGb" extends="actorLiveBase" file="Models/monster/gb/gb.mesh.j3o" icon="Interface/face/gb.jpg"
            group="1" sex="2" race="" level="1"  mass="180" collisionRadius="1.2" collisionHeight="6.4" 
            skills="skillGbReset,skillGbWalk,skillGbRun,skillGbIdle,skillGbIdle2,skillGbDead,skillGbAttack,skillGbWait,skillGbHurt" 
-           mat="4" scale="0.5" weapon="weaponMockRightWoodSword" resist="resistCreature" />
+           mat="4" scale="0.5" skinWeapon="weaponMockRightWoodSword" resist="resistCreature" />
 
     <!-- 古柏幼仔 -->
     <actor id="actorGbSmall" extends="actorGb" mass="60" scale="0.2" drop="dropGb"
@@ -274,7 +278,7 @@
            talents="talentSinbadDefence"
            skills="skillSinbadReset,skillSinbadWait,skillSinbadWalk,skillSinbadRun,skillSinbadHurt,skillSinbadDead
 ,skillSinbadAttack,skillSinbadAttack2,skillSinbadAttack3,skillSinbadDefence,skillSinbadDefence2" 
-           mat="4" weapon="weaponSinbad" resist="resistOrc" drop="dropSinbad" hardwareSkinning="0" />
+           mat="4" skinWeapon="weaponSinbad" resist="resistOrc" drop="dropSinbad" hardwareSkinning="0" />
 
     <!--T.Rex-->
     <actor id="actorTrex" extends="actorLiveBase" file="Models/monster/trex/trex.mesh.j3o" 
@@ -306,7 +310,7 @@
     <actor id="actorSkeleton" extends="actorLiveBase" file="Models/monster/skeleton/skeleton.mesh.j3o" 
            items="" icon="Interface/face/skeleton.jpg" extAnim="Models/actor/ext_anim" 
            talents="" mat="5" resist="resistNonLife" drop="" 
-           weapon="weaponSword000" slots=""
+           skinWeapon="weaponSword000" slots=""
            group="1" sex="2" race="0" level="20" scale="0.2"
            skills="skillSkeletonWait,skillSkeletonAttack,skillSkeletonDead,skillSkeletonRun
 ,skillWalk,skillRun,skillReset,skillHurtFront,skillHurtBack,skillBowShot,skillDualSwordAttack," />

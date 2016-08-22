@@ -353,27 +353,6 @@ public class SkinModule<T extends SkinModuleData> extends AbstractModule<T> {
     public List<SkinListener> getSkinListeners() {
         return skinListeners;
     }
-   
-    // remove20160821
-//    /**
-//     * 获取角色当前包裹中的所有武器，"包含"基本皮肤中的武器
-//     * @param store
-//     * @return 
-//     */
-//    public List<SkinData> getWeaponSkinsAll(List<SkinData> store) {
-//        // 1.包裹中的武器
-//        store = getWeaponSkins(store);
-//        
-//        // 2.加入基本皮肤中的武器
-//        if (data.getSkinBase() != null && !data.getSkinBase().isEmpty()) {
-//            for (SkinData sd : data.getSkinBase()) {
-//                if (isWeapon(sd)) {
-//                    store.add(sd);
-//                }
-//            }
-//        }
-//        return store;
-//    }
     
     /**
      * 标记武器是处于takeOn或takeOff状态,即取出或挂起的状态。
@@ -424,6 +403,7 @@ public class SkinModule<T extends SkinModuleData> extends AbstractModule<T> {
             cacheWeaponInUsed = new ArrayList<SkinData>(2);
         }
         // 正在使用的武器列表
+        cacheWeaponInUsed.clear();
         cacheWeaponInUsed = getWeaponSkinsAllInUsed(cacheWeaponInUsed);
 
         // 生成武器状态信息

@@ -8,19 +8,19 @@ import com.jme3.animation.Bone;
 import com.jme3.animation.SkeletonControl;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.RenderManager;
+import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.control.AbstractControl;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.SkinData;
 import name.huliqing.core.data.SlotData;
-import name.huliqing.core.mvc.service.ActorService;
-import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.object.AssetLoader;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.xml.DataFactory;
-import name.huliqing.core.object.IntervalLogic;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.skill.SkinSkill;
 
@@ -29,8 +29,6 @@ import name.huliqing.core.object.skill.SkinSkill;
  * @param <T>
  */
 public class WeaponSkin<T extends SkinData> extends AbstractSkin<T> {
-    private final PlayService playService = Factory.get(PlayService.class);
-    private final ActorService actorService = Factory.get(ActorService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
     
     @Override
@@ -82,7 +80,7 @@ public class WeaponSkin<T extends SkinData> extends AbstractSkin<T> {
 
         // 动画逻辑处理
         TOAnimProcessLogic processor = new TOAnimProcessLogic(actor, 1, skillUseTime, hangTimePoint, isWeaponTakedOn);
-        playService.addObject(processor, false);
+        actor.getSpatial().addControl(processor);
         
     }
     
@@ -125,7 +123,7 @@ public class WeaponSkin<T extends SkinData> extends AbstractSkin<T> {
 
         // 动画逻辑处理
         TOAnimProcessLogic processor = new TOAnimProcessLogic(actor, 0, skillUseTime, hangTimePoint, isWeaponTakedOn);
-        playService.addObject(processor, false);
+        actor.getSpatial().addControl(processor);
         
     }
     
@@ -198,7 +196,7 @@ public class WeaponSkin<T extends SkinData> extends AbstractSkin<T> {
         }
     }
     
-    private class TOAnimProcessLogic extends IntervalLogic {
+    private class TOAnimProcessLogic extends AbstractControl {
 
         private final Actor actor;
         private final int type; // 0:takeOff; 1 : takeOn
@@ -206,10 +204,9 @@ public class WeaponSkin<T extends SkinData> extends AbstractSkin<T> {
         private final float hangTimePoint;
         private float timeUsed;
         private boolean isOk;
-        private boolean isWeaponTakedOn;
+        private final boolean isWeaponTakedOn;
         
         public TOAnimProcessLogic(Actor actor, int type, float fullUseTime, float hangTimePoint, boolean isWeaponTakedOn) {
-            super(0);
             this.actor = actor;
             this.type = type;
             this.fullUseTime = fullUseTime;
@@ -217,8 +214,9 @@ public class WeaponSkin<T extends SkinData> extends AbstractSkin<T> {
             this.isWeaponTakedOn = isWeaponTakedOn;
         }
 
+        
         @Override
-        protected void doLogic(float tpf) {
+        protected void controlUpdate(float tpf) {
             timeUsed += tpf;
            
             if (!isOk && timeUsed >= fullUseTime * hangTimePoint) {
@@ -232,8 +230,12 @@ public class WeaponSkin<T extends SkinData> extends AbstractSkin<T> {
             
             // 执行完要从全局移除动画逻辑
             if (timeUsed > fullUseTime) {
-                playService.removeObject(this);
+                actor.getSpatial().removeControl(this);
             }
+        }
+
+        @Override
+        protected void controlRender(RenderManager rm, ViewPort vp) {
         }
         
     }

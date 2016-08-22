@@ -9,8 +9,10 @@ import com.jme3.scene.control.Control;
 import com.jme3.util.SafeArrayList;
 import java.util.ArrayList;
 import java.util.List;
+import name.huliqing.core.Factory;
 import name.huliqing.core.data.TalentData;
 import name.huliqing.core.data.module.TalentModuleData;
+import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actor.TalentListener;
@@ -21,6 +23,7 @@ import name.huliqing.core.object.talent.Talent;
  * @param <T>
  */
 public class TalentModule<T extends TalentModuleData> extends AbstractModule<T> {
+    private final ActorService actorService = Factory.get(ActorService.class);
     
     private Actor actor;
     private final SafeArrayList<Talent> talents = new SafeArrayList<Talent>(Talent.class);
@@ -32,27 +35,6 @@ public class TalentModule<T extends TalentModuleData> extends AbstractModule<T> 
     public void initialize(Actor actor) {
         super.initialize(actor); 
         this.actor = actor;
-        
-        // remove
-//        // 从存档中获取需要初始化的talentDatas，如果不是存档，则从原始xml配置中获取
-//        List<TalentData> talentInits = (List<TalentData>) data.getAttribute("talentDatas");
-//        if (talentInits == null) {
-//            String[] talentArr = data.getAsArray("talents");
-//            if (talentArr != null) {
-//                talentInits = new ArrayList<TalentData>(talentArr.length);
-//                for (String talentId : talentArr) {
-//                    talentInits.add((TalentData) DataFactory.createData(talentId));
-//                }
-//            }
-//        }
-//        
-//        if (talentInits != null) {
-//            for (TalentData td : talentInits) {
-//                addTalent((Talent) Loader.load(td));
-//            }
-//        }
-//        // 重新设置talentDatas
-//        data.setAttribute("talentDatas", talentDatas);
 
         List<TalentData> talentDatas = actor.getData().getObjectDatas(TalentData.class, null);
         if (talentDatas != null) {
@@ -69,6 +51,9 @@ public class TalentModule<T extends TalentModuleData> extends AbstractModule<T> 
     }
     
     private void talentUpdate(float tpf) {
+        if (actorService.isDead(actor)) {
+            return;
+        }
         for (Talent t : talents.getArray()) {
             t.update(tpf);
         }

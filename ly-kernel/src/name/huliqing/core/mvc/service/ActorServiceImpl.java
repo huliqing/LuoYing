@@ -427,7 +427,7 @@ public class ActorServiceImpl implements ActorService {
         if (oldTargetId != -1) {
             Actor oldTarget = playService.findActor(oldTargetId);
             if (oldTarget != null) {
-                List<ActorListener> als = getActorBaseControl(oldTarget).getActorListeners(); 
+                List<ActorListener> als = getActorModule(oldTarget).getActorListeners(); 
                 if (als != null && als.isEmpty()) {
                     for (ActorListener al : als) {
                         al.onActorReleased(oldTarget, actor);
@@ -443,11 +443,14 @@ public class ActorServiceImpl implements ActorService {
 
         // 锁定新目标的listener.
         actor.getData().setTarget(target.getData().getUniqueId());
-        List<ActorListener> als = getActorBaseControl(target).getActorListeners();
-        if (als != null) {
-            for (ActorListener al : als) {
-                al.onActorLocked(target, actor);
-            }
+        ActorModule targetModule = getActorModule(target);
+        if (targetModule != null) {
+            List<ActorListener> als = targetModule.getActorListeners();
+            if (als != null && !als.isEmpty()) {
+                for (ActorListener al : als) {
+                    al.onActorLocked(target, actor);
+                }
+            }            
         }
     }
 
@@ -522,7 +525,7 @@ public class ActorServiceImpl implements ActorService {
         
         // 触发"被攻击者(source)"的角色侦听器
         // "被伤害","被杀死"侦听
-        List<ActorListener> sourceListeners = getActorBaseControl(target).getActorListeners();
+        List<ActorListener> sourceListeners = getActorModule(target).getActorListeners();
         if (sourceListeners != null) {
             for (ActorListener l : sourceListeners) {
                 l.onActorHit(target, source, hitAttribute, hitValue);
@@ -536,7 +539,7 @@ public class ActorServiceImpl implements ActorService {
         // 当攻击者“杀死”目标时，要让“攻击者”知道.但有时候攻击者不是一个角色
         // 或者不是任何一个"存在",所以source可能为null.
         if (killed && source != null) {
-            List<ActorListener> attackerListeners = getActorBaseControl(source).getActorListeners();
+            List<ActorListener> attackerListeners = getActorModule(source).getActorListeners();
             if (attackerListeners != null) {
                 for (ActorListener al : attackerListeners) {
                     al.onActorKill(source, target);
@@ -679,13 +682,13 @@ public class ActorServiceImpl implements ActorService {
     public void addActorListener(Actor actor, ActorListener actorListener) {
         if (actorListener == null) 
             return;
-        ActorModule module = getActorBaseControl(actor);
+        ActorModule module = getActorModule(actor);
         module.addActorListener(actorListener);
     }
 
     @Override
     public boolean removeActorListener(Actor actor, ActorListener actorListener) {
-        return getActorBaseControl(actor).removeActorListener(actorListener);
+        return getActorModule(actor).removeActorListener(actorListener);
     }
     
     @Override
@@ -841,11 +844,11 @@ public class ActorServiceImpl implements ActorService {
     @Override
     public void setLocation(Actor actor, Vector3f location) {
         ActorModule module = actor.getModule(ActorModule.class);
-        if (module != null) {
-            module.setLocation(location);
-        } else {
-            actor.getSpatial().setLocalTranslation(location);
+        if (module == null) {
+            throw new RuntimeException("ActorModule not found on actor, actor=" 
+                    + actor.getData().getId() + ", location=" + location);
         }
+        module.setLocation(location);
     }
 
     @Override
@@ -1006,7 +1009,7 @@ public class ActorServiceImpl implements ActorService {
         }
     }
     
-    private ActorModule getActorBaseControl(Actor actor) {
+    private ActorModule getActorModule(Actor actor) {
         return actor.getModule(ActorModule.class);
     }
 

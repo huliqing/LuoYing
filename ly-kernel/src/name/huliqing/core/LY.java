@@ -550,8 +550,8 @@ public class LY {
 
         // Module 
         DataFactory.register("moduleAction",  ActionModuleData.class, ActionModuleDataLoader.class, ActionModule.class);
-        DataFactory.register("moduleAttribute",  AttributeModuleData.class, AttributeModuleDataLoader.class, AttributeModule.class);
         DataFactory.register("moduleActor",  ActorModuleData.class, ActorModuleDataLoader.class, ActorModule.class);
+        DataFactory.register("moduleAttribute",  AttributeModuleData.class, AttributeModuleDataLoader.class, AttributeModule.class);
         DataFactory.register("moduleChannel",  ChannelModuleData.class, ChannelModuleDataLoader.class, ChannelModule.class);
         DataFactory.register("moduleChat",  ChatModuleData.class, ChatModuleDataLoader.class, ChatModule.class);
         DataFactory.register("moduleItem",  ItemModuleData.class, ItemModuleDataLoader.class, ItemModule.class);
