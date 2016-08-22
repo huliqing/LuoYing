@@ -5,6 +5,7 @@
  */
 package name.huliqing.core.mvc.service;
 
+import java.util.List;
 import name.huliqing.core.Inject;
 import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.object.actor.Actor;
@@ -21,14 +22,6 @@ public interface ProtoService extends Inject {
      * @return 
      */
     ObjectData createData(String id);
-    
-    /**
-     * 从角色身上获取物品,如果角色存上不存在该物品则返回null.
-     * @param actor
-     * @param id 
-     * @return  
-     */
-    ObjectData getData(Actor actor, String id);
     
     /**
      * 给指定角色添加物体
@@ -52,6 +45,21 @@ public interface ProtoService extends Inject {
      * @param data 
      */
     void useData(Actor actor, ObjectData data);
+    
+    /**
+     * 从角色身上获取物品,如果角色存上不存在该物品则返回null.
+     * @param actor
+     * @param id 
+     * @return  
+     */
+    ObjectData getData(Actor actor, String id);
+    
+    /**
+     * 获取角色身上所有的物体,注：返回的列表不可以直接修改,只能作为只读使用。
+     * @param actor
+     * @return 
+     */
+    List<ObjectData> getDatas(Actor actor);
     
     /**
      * 同步指定角色身上的物体数量

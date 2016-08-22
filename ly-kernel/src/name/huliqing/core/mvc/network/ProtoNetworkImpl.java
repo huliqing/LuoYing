@@ -5,6 +5,7 @@
  */
 package name.huliqing.core.mvc.network;
 
+import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.mess.MessProtoAdd;
@@ -30,11 +31,6 @@ public class ProtoNetworkImpl implements ProtoNetwork {
     
     @Override
     public ObjectData createData(String id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public ObjectData getData(Actor actor, String id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -118,6 +114,16 @@ public class ProtoNetworkImpl implements ProtoNetwork {
             mess.setTotal(resultData != null ? resultData.getTotal() : 0);
             network.broadcast(mess);
         }
+    }
+
+    @Override
+    public ObjectData getData(Actor actor, String id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<ObjectData> getDatas(Actor actor) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

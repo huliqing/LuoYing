@@ -64,6 +64,7 @@ public class ItemModule extends AbstractModule<ItemModuleData> {
         if (item == null) {
             item = DataFactory.createData(itemId);
             item.setTotal(amount);
+            actor.getData().addObjectData(item);
         } else {
             item.increaseTotal(amount);
         }

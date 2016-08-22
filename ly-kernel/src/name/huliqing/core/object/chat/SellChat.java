@@ -15,6 +15,7 @@ import name.huliqing.core.constants.ResConstants;
 import name.huliqing.core.data.ChatData;
 import name.huliqing.core.data.ItemData;
 import name.huliqing.core.data.ObjectData;
+import name.huliqing.core.data.SkinData;
 import name.huliqing.core.mvc.network.UserCommandNetwork;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.ItemService;
@@ -121,20 +122,28 @@ public class SellChat<T extends ChatData> extends Chat<T> {
         seller = playService.getPlayer();
         
         // 初始化, 数据要复制一份出来，不要去影响角色的包裹中的数据
-        List<ItemData> items = itemService.getItems(seller);
-        if (items != null) {
-            List<ItemData> transferDatas = new ArrayList<ItemData>(items.size());
-            for (ItemData item : items) {
-                // 非卖品
-                if (!protoService.isSellable(item)) {
+        List<ObjectData> transferDatas = new ArrayList<ObjectData>();
+        List<ObjectData> datas = protoService.getDatas(seller);
+        if (datas != null && !datas.isEmpty()) {
+            for (ObjectData od : datas) {
+                if (!protoService.isSellable(od)) {
                     continue;
                 }
-                ItemData dataCopy = DataFactory.createData(item.getId());
-                dataCopy.setTotal(item.getTotal());
+                if (!SkinData.class.isAssignableFrom(od.getClass()) && !ItemData.class.isAssignableFrom(od.getClass())) {
+                    continue;
+                }
+                if (SkinData.class.isAssignableFrom(od.getClass())) {
+                    SkinData sd = (SkinData) od;
+                    if (sd.isUsing() || sd.isBaseSkin()) {
+                        continue;
+                    }
+                }
+                ObjectData dataCopy = DataFactory.createData(od.getId());
+                dataCopy.setTotal(od.getTotal());
                 transferDatas.add(dataCopy);
             }
-            sourcePanel.setDatas(transferDatas);
         }
+        sourcePanel.setDatas(transferDatas);
         
         // 清空dist面板
         distPanel.setDatas(Collections.EMPTY_LIST);

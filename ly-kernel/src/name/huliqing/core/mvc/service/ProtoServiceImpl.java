@@ -5,6 +5,8 @@
  */
 package name.huliqing.core.mvc.service;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.core.Factory;
@@ -45,24 +47,6 @@ public class ProtoServiceImpl implements ProtoService {
     }
 
     @Override
-    public ObjectData getData(Actor actor, String id) {
-        // remove20160821
-//        Class<?> cc = DataFactory.getDataClassById(id);
-//        if (cc == null)
-//            return null;
-//        if (cc == ItemData.class || cc == SkinData.class) {
-//            return itemService.getItem(actor, id);
-//        }
-//        if (cc == SkillData.class) {
-//            return skillService.getSkill(actor, id).getData();
-//        }
-//        LOG.log(Level.WARNING, "Unsupported getData, id={0}, dataClass={1} ", new Object[] {id, cc});
-//        return null;
-
-        return actor.getData().getObjectData(id);
-    }
-
-    @Override
     public void addData(Actor actor, String id, int count) {
         Class<?> cc = DataFactory.getDataClassById(id);
         if (cc == null)
@@ -84,6 +68,31 @@ public class ProtoServiceImpl implements ProtoService {
     }
 
     @Override
+    public void removeData(Actor actor, String id, int count) {
+        // remove20160822
+//        ObjectData data = actor.getData().getObjectData(id);
+//        handlerService.removeObject(actor, data, count);
+
+        Class<?> cc = DataFactory.getDataClassById(id);
+        if (cc == null)
+            return;
+        
+        if (ItemData.class.isAssignableFrom(cc)) {
+            itemService.removeItem(actor, id, count);
+            
+        } else if (SkinData.class.isAssignableFrom(cc)) {
+            skinService.removeSkin(actor, id, count);
+            
+        } else if (SkillData.class.isAssignableFrom(cc)) {
+            skillService.removeSkill(actor, id);
+            
+        } else {
+            throw new UnsupportedOperationException();
+        }
+
+    }
+
+    @Override
     public void useData(Actor actor, ObjectData data) {
         if (data == null)
             return;
@@ -92,9 +101,26 @@ public class ProtoServiceImpl implements ProtoService {
     }
 
     @Override
-    public void removeData(Actor actor, String id, int count) {
-        ObjectData data = actor.getData().getObjectData(id);
-        handlerService.removeObject(actor, data, count);
+    public ObjectData getData(Actor actor, String id) {
+        // remove20160821
+//        Class<?> cc = DataFactory.getDataClassById(id);
+//        if (cc == null)
+//            return null;
+//        if (cc == ItemData.class || cc == SkinData.class) {
+//            return itemService.getItem(actor, id);
+//        }
+//        if (cc == SkillData.class) {
+//            return skillService.getSkill(actor, id).getData();
+//        }
+//        LOG.log(Level.WARNING, "Unsupported getData, id={0}, dataClass={1} ", new Object[] {id, cc});
+//        return null;
+
+        return actor.getData().getObjectData(id);
+    }
+
+    @Override
+    public List<ObjectData> getDatas(Actor actor) {
+        return Collections.unmodifiableList(actor.getData().getObjectDatas());
     }
 
     @Override

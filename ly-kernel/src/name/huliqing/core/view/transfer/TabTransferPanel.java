@@ -80,7 +80,7 @@ public class TabTransferPanel<T extends ObjectData> extends TransferPanel<T> imp
                     armorDatas.add(data);
                 }
             } else {
-                throw new UnsupportedOperationException("Unsupported data=" + data);
+                throw new UnsupportedOperationException("Unsupported data id=" + data.getId());
             }
         }
         refresh();

@@ -13,6 +13,7 @@ import name.huliqing.core.constants.ResConstants;
 import name.huliqing.core.data.ChatData;
 import name.huliqing.core.data.ItemData;
 import name.huliqing.core.data.ObjectData;
+import name.huliqing.core.data.SkinData;
 import name.huliqing.core.mvc.network.UserCommandNetwork;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.ItemService;
@@ -24,7 +25,6 @@ import name.huliqing.core.view.transfer.TabTransferPanel;
 import name.huliqing.core.view.transfer.TransferPanel;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.mvc.service.ProtoService;
-import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.ui.Button;
 import name.huliqing.core.ui.FrameLayout;
@@ -32,6 +32,7 @@ import name.huliqing.core.ui.LinearLayout;
 import name.huliqing.core.ui.UI;
 import name.huliqing.core.ui.UIFactory;
 import name.huliqing.core.ui.Window;
+import name.huliqing.core.xml.DataFactory;
 
 /**
  * 出售物品到商店类角色
@@ -106,21 +107,29 @@ public class SendChat<T extends ChatData> extends Chat<T> {
         sender = playService.getPlayer();
         
         // 初始化, 数据要复制一份出来，不要去影响角色的包裹中的数据
-        List<ItemData> items = itemService.getItems(sender);
-        if (items != null) {
-            List<ItemData> transferDatas = new ArrayList<ItemData>(items.size());
-            for (ItemData item : items) {
-                // 非卖品
-                if (!protoService.isSellable(item)) {
+        List<ObjectData> transferDatas = new ArrayList<ObjectData>();
+        List<ObjectData> datas = protoService.getDatas(sender);
+        if (datas != null && !datas.isEmpty()) {
+            for (ObjectData od : datas) {
+                if (!protoService.isSellable(od)) {
                     continue;
                 }
-                ItemData dataCopy = DataFactory.createData(item.getId());
-                dataCopy.setTotal(item.getTotal());
+                if (!SkinData.class.isAssignableFrom(od.getClass()) && !ItemData.class.isAssignableFrom(od.getClass())) {
+                    continue;
+                }
+                if (SkinData.class.isAssignableFrom(od.getClass())) {
+                    SkinData sd = (SkinData) od;
+                    if (sd.isUsing() || sd.isBaseSkin()) {
+                        continue;
+                    }
+                }
+                ObjectData dataCopy = DataFactory.createData(od.getId());
+                dataCopy.setTotal(od.getTotal());
                 transferDatas.add(dataCopy);
             }
-            sourcePanel.setDatas(transferDatas);
         }
         
+        sourcePanel.setDatas(transferDatas);
         // 清空dist面板
         distPanel.setDatas(Collections.EMPTY_LIST);
         
@@ -134,15 +143,15 @@ public class SendChat<T extends ChatData> extends Chat<T> {
             playService.removeObject(this);
             return;
         }
-        String[] items = new String[datas.size()];
+        String[] objects = new String[datas.size()];
         int[] counts = new int[datas.size()];
         ObjectData pd;
         for (int i = 0; i < datas.size(); i++) {
             pd = datas.get(i);
-            items[i] = pd.getId();
+            objects[i] = pd.getId();
             counts[i] = pd.getTotal();
         }
-        userCommandNetwork.chatSend(sender, actor, items, counts);
+        userCommandNetwork.chatSend(sender, actor, objects, counts);
         playService.removeObject(this);
     }
     

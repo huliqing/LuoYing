@@ -23,20 +23,18 @@ import name.huliqing.core.object.sound.SoundManager;
 public class ChatServiceImpl implements ChatService {
     private ProtoService protoService;
     private PlayService playService;
-    private ItemService itemService;
     
     @Override
     public void inject() {
         protoService = Factory.get(ProtoService.class);
         playService = Factory.get(PlayService.class);
-        itemService = Factory.get(ItemService.class);
     }
-
+    
     @Override
     public Chat loadChat(String chatId) {
         return Loader.loadChat(chatId);
     }
-
+    
     @Override
     public Chat getChat(Actor actor) {
         ChatModule module = actor.getModule(ChatModule.class);
@@ -44,22 +42,11 @@ public class ChatServiceImpl implements ChatService {
             return module.getChat();
         }
         return null;
-        
-//        Chat chat = null;
-//        if (module.getChat() == null) {
-//            String chatId = actor.getData().getChat();
-//            if (chatId != null) {
-//                chat = loadChat(chatId);
-//                chat.setActor(actor);
-//                module.setChat(chat);
-//            }
-//        }
-//        return chat;
     }
     
     @Override
     public void chatShop(Actor seller, Actor buyer, String itemId, int count, float discount) {
-        ObjectData data = itemService.getItem(seller, itemId);
+        ObjectData data = protoService.getData(seller, itemId);
         if (data == null || data.getTotal() <= 0 || data.getTotal() < count) {
             // 库存不足，如果是当前场景“主角”则显示提示
             if (buyer == playService.getPlayer()) {
@@ -75,7 +62,7 @@ public class ChatServiceImpl implements ChatService {
         }
         
         int needGold = (int) (protoService.getCost(data) * count * discount);
-        ObjectData gold = itemService.getItem(buyer, IdConstants.ITEM_GOLD);
+        ObjectData gold = protoService.getData(buyer, IdConstants.ITEM_GOLD);
         if (gold == null || gold.getTotal() < needGold) {
             // 金币不足
             if (buyer == playService.getPlayer()) {
@@ -85,11 +72,11 @@ public class ChatServiceImpl implements ChatService {
             return;
         }
         
-        itemService.addItem(buyer, itemId, count);
-        itemService.removeItem(seller, itemId, count);
+        protoService.addData(buyer, itemId, count);
+        protoService.removeData(seller, itemId, count);
         
-        itemService.addItem(seller, IdConstants.ITEM_GOLD, needGold);
-        itemService.removeItem(buyer, IdConstants.ITEM_GOLD, needGold);
+        protoService.addData(seller, IdConstants.ITEM_GOLD, needGold);
+        protoService.removeData(buyer, IdConstants.ITEM_GOLD, needGold);
         
         SoundManager.getInstance().playSound(IdConstants.SOUND_COIN1, buyer.getSpatial().getWorldTranslation());
         
@@ -124,7 +111,7 @@ public class ChatServiceImpl implements ChatService {
         boolean result = false; // 标记是否有卖出过任何一件物品
         for (int i = 0; i < items.length; i++) {
             id = items[i];
-            data = itemService.getItem(seller, id);
+            data = protoService.getData(seller, id);
             
             // 这里可能为null,因为“出售”或“发送”物品并不是与物品的使用动作同步的，有可能在点击“出售”或“发送”的时候
             // 包裹中的物品已经被使用掉。
@@ -143,12 +130,12 @@ public class ChatServiceImpl implements ChatService {
                 trueCount = data.getTotal() > counts[i] ? counts[i] : data.getTotal();
                 amount = protoService.getCost(data) * trueCount * discount;
                 
-                itemService.addItem(buyer, id, trueCount);
-                itemService.removeItem(seller, id, trueCount);
+                protoService.addData(buyer, id, trueCount);
+                protoService.removeData(seller, id, trueCount);
                 
                 if (amount > 0) {
-                    itemService.removeItem(buyer, IdConstants.ITEM_GOLD, (int) amount);
-                    itemService.addItem(seller, IdConstants.ITEM_GOLD, (int) amount);
+                    protoService.removeData(buyer, IdConstants.ITEM_GOLD, (int) amount);
+                    protoService.addData(seller, IdConstants.ITEM_GOLD, (int) amount);
                 }
                 result = true;
             }
