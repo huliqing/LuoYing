@@ -205,26 +205,6 @@ public class SkinServiceImpl implements SkinService {
         if (!force && !isCanTakeOffWeapon(actor)) {
             return false;
         }
-        
-         // remove20160817
-//        actor.getData().setWeaponTakeOn(false);
-//        List<SkinData> weaponSkins = getCurrentWeaponSkin(actor);
-//        // 可用的要优先选择的槽位
-//        SafeArrayList<String> slotCandidate = null;
-//        if (actor.getData().getSlots() != null) {
-//            slotCandidate = new SafeArrayList<String>(String.class, actor.getData().getSlots());
-//        }
-//        for (SkinData sd : weaponSkins) {
-//            Skin skin = Loader.loadSkin(sd);
-//            if (skin instanceof WeaponSkin) {
-//                // 给武器查找一个合适的槽位
-//                selectSlots(slotCandidate, sd);
-//                
-//                // 取下武器
-//                ((WeaponSkin) skin).takeOff(actor, force);
-//            }
-//        }
-//        return true;
 
         SkinModule module = actor.getModule(SkinModule.class);
         if (module != null) {
@@ -253,17 +233,6 @@ public class SkinServiceImpl implements SkinService {
     
     @Override
     public List<SkinData> getCurrentWeaponSkin(Actor actor) {
-        // remove20160817
-//        // 先从缓存中获取，如果没有就重新生成。
-//        ArrayListWrap currentWeapons = actor.getModel()
-//                .getUserData(ActorConstants.USER_DATA_TEMP_WEAPONS);
-//        if (currentWeapons == null) {
-//            // 缓存武器状态及武器列表信息
-//            cacheWeaponsAndState(actor);
-//        }
-//        currentWeapons = actor.getModel().getUserData(ActorConstants.USER_DATA_TEMP_WEAPONS);
-//        return currentWeapons.getInnerData();
-
         SkinModule module = actor.getModule(SkinModule.class);
         if (module != null) {
             return module.getCurrentWeaponSkin();
@@ -273,15 +242,6 @@ public class SkinServiceImpl implements SkinService {
     
     @Override
     public int getWeaponState(Actor actor) {
-        // remove20160817
-//        Integer state = actor.getModel().getUserData(ActorConstants.USER_DATA_TEMP_WEAPON_STATE);
-//        if (state == null) {
-//            // 缓存武器状态及武器列表信息
-//            cacheWeaponsAndState(actor);
-//        }
-//        state = actor.getModel().getUserData(ActorConstants.USER_DATA_TEMP_WEAPON_STATE);
-//        return state;
-
         SkinModule module = actor.getModule(SkinModule.class);
         if (module != null) {
             return module.getWeaponState();

@@ -5,6 +5,7 @@
 package name.huliqing.core.view.actor;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.manager.ResourceManager;
@@ -28,7 +29,7 @@ public class ArmorPanel extends ListView<SkinData> implements ActorPanel{
     private final PlayService playService = Factory.get(PlayService.class);
     private final SkinService skinService = Factory.get(SkinService.class);
     private Actor actor;
-    private List<SkinData> datas = new ArrayList<SkinData>();
+    private final List<SkinData> datas = new ArrayList<SkinData>();
     
     public ArmorPanel(float width, float height) {
         super(width, height);
@@ -73,8 +74,14 @@ public class ArmorPanel extends ListView<SkinData> implements ActorPanel{
     public List<SkinData> getDatas() {
         if (actor != null) {
             datas.clear();
-            
-            return skinService.getArmorSkins(actor, datas);
+            skinService.getArmorSkins(actor, datas);
+            // 过虑掉“基本身形”
+            Iterator<SkinData> it = datas.iterator();
+            while (it.hasNext()) {
+                if (it.next().isBaseSkin()) {
+                    it.remove();
+                }
+            }
         }
         return datas;
     }

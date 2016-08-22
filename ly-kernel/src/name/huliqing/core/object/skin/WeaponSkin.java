@@ -33,6 +33,7 @@ public class WeaponSkin<T extends SkinData> extends AbstractSkin<T> {
     
     @Override
     public void attach(Actor actor, boolean isWeaponTakedOn) {
+        data.setUsing(true);
         // 对于武器的attach不能用动画,直接attach就可以
         if (isWeaponTakedOn) {
             super.attach(actor, isWeaponTakedOn);

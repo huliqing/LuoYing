@@ -318,7 +318,7 @@ public class CollisionChaseCamera extends ChaseCamera
             inputManager.deleteMapping(s);
         }
         
-        // 4.MyChaseCamera中自定义的监听
+        // 4.ChaseCamera中自定义的监听
         inputManager.deleteMapping(TOUCH_SCALE_EVENT);
         inputManager.deleteMapping(TOUCH_SCALE_EVENT);
     }
