@@ -5,10 +5,7 @@
  */
 package name.huliqing.core.loader.module;
 
-import java.util.ArrayList;
-import name.huliqing.core.data.ChannelData;
 import name.huliqing.core.data.module.ChannelModuleData;
-import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.xml.DataLoader;
 import name.huliqing.core.xml.Proto;
 
@@ -20,13 +17,6 @@ public class ChannelModuleDataLoader implements DataLoader<ChannelModuleData> {
 
     @Override
     public void load(Proto proto, ChannelModuleData data) {
-//        String[] channels = proto.getAsArray("channels");
-//        if (channels != null) {
-//            data.setChannels(new ArrayList<ChannelData>(channels.length));
-//            for (String channelId : channels) {
-//                data.getChannels().add((ChannelData) DataFactory.createData(channelId));
-//            }
-//        }
     }
 
 }

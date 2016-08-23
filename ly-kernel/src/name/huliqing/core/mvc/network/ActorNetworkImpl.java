@@ -31,7 +31,7 @@ import name.huliqing.core.mess.MessActorViewDir;
 import name.huliqing.core.mess.MessAttributeSync;
 import name.huliqing.core.mess.MessActorLookAt;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.actor.ActorListener;
+import name.huliqing.core.object.module.ActorListener;
 
 /**
  *

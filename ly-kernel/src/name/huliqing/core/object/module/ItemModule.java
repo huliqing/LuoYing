@@ -11,7 +11,6 @@ import name.huliqing.core.data.ItemData;
 import name.huliqing.core.data.module.ItemModuleData;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.actor.ItemListener;
 import name.huliqing.core.xml.DataFactory;
 
 /**

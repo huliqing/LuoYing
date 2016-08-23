@@ -34,7 +34,7 @@ import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.view.talk.SpeakManager;
 import name.huliqing.core.view.talk.TalkManager;
 import name.huliqing.core.xml.DataFactory;
-import name.huliqing.core.object.actor.ActorListener;
+import name.huliqing.core.object.module.ActorListener;
 import name.huliqing.core.object.channel.Channel;
 import name.huliqing.core.object.effect.Effect;
 import name.huliqing.core.object.el.LevelEl;

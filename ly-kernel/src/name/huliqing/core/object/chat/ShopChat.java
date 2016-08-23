@@ -24,7 +24,7 @@ import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.mvc.service.ProtoService;
 import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.actor.ItemListener;
+import name.huliqing.core.object.module.ItemListener;
 import name.huliqing.core.ui.Button;
 import name.huliqing.core.ui.Icon;
 import name.huliqing.core.ui.LinearLayout;

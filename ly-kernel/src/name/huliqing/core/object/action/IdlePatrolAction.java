@@ -17,7 +17,7 @@ import name.huliqing.core.mvc.network.SkillNetwork;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.actor.SkillListener;
+import name.huliqing.core.object.module.SkillListener;
 import name.huliqing.core.object.skill.Skill;
 
 /**

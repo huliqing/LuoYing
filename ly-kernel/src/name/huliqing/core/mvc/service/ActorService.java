@@ -15,7 +15,7 @@ import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.enums.HurtFace;
 import name.huliqing.core.enums.Sex;
 import name.huliqing.core.view.talk.Talk;
-import name.huliqing.core.object.actor.ActorListener;
+import name.huliqing.core.object.module.ActorListener;
 
 /**
  *

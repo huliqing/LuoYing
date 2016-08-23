@@ -12,7 +12,6 @@ import name.huliqing.core.data.StateData;
 import name.huliqing.core.data.module.StateModuleData;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.actor.StateListener;
 import name.huliqing.core.object.state.State;
 
 /**

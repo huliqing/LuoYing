@@ -9,7 +9,7 @@ import name.huliqing.core.Factory;
 import name.huliqing.core.data.SkinData;
 import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.actor.SkinListener;
+import name.huliqing.core.object.module.SkinListener;
 import name.huliqing.core.object.module.SkinModule;
 
 /**

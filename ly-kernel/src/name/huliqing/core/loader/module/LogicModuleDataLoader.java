@@ -5,11 +5,7 @@
  */
 package name.huliqing.core.loader.module;
 
-import java.util.ArrayList;
-import java.util.List;
-import name.huliqing.core.data.ActorLogicData;
 import name.huliqing.core.data.module.LogicModuleData;
-import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.xml.DataLoader;
 import name.huliqing.core.xml.Proto;
 
@@ -21,13 +17,6 @@ public class LogicModuleDataLoader implements DataLoader<LogicModuleData> {
 
     @Override
     public void load(Proto proto, LogicModuleData data) {
-//        String[] logicArr = proto.getAsArray("logics");
-//        if (logicArr != null && logicArr.length > 0) {
-//            data.setLogics(new ArrayList<ActorLogicData>(logicArr.length));
-//            for (String logicId : logicArr) {
-//                data.getLogics().add((ActorLogicData) DataFactory.createData(logicId));
-//            }
-//        }
     }
 
 }

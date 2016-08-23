@@ -15,7 +15,6 @@ import name.huliqing.core.data.module.TalentModuleData;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.actor.TalentListener;
 import name.huliqing.core.object.talent.Talent;
 
 /**

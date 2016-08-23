@@ -8,7 +8,7 @@ import java.util.List;
 import name.huliqing.core.Inject;
 import name.huliqing.core.data.SkinData;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.actor.SkinListener;
+import name.huliqing.core.object.module.SkinListener;
 
 /**
  *

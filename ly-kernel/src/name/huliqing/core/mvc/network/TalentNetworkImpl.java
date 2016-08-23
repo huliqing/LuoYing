@@ -12,7 +12,7 @@ import name.huliqing.core.network.Network;
 import name.huliqing.core.mess.MessTalentAdd;
 import name.huliqing.core.mess.MessTalentAddPoint;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.actor.TalentListener;
+import name.huliqing.core.object.module.TalentListener;
 
 /**
  *

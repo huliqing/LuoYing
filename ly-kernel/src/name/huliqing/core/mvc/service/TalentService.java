@@ -8,7 +8,7 @@ import java.util.List;
 import name.huliqing.core.Inject;
 import name.huliqing.core.data.TalentData;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.actor.TalentListener;
+import name.huliqing.core.object.module.TalentListener;
 
 /**
  *

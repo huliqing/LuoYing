@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.data.module.ModuleData;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.actor.ActorListener;
 
 /**
  * 角色的基本控制器

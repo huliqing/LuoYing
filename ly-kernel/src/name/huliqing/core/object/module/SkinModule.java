@@ -18,7 +18,6 @@ import name.huliqing.core.data.module.SkinModuleData;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.mvc.service.AttributeService;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.actor.SkinListener;
 import name.huliqing.core.object.skin.Skin;
 import name.huliqing.core.object.skin.WeaponSkin;
 import name.huliqing.core.object.skin.WeaponStateUtils;

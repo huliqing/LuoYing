@@ -38,7 +38,7 @@ import name.huliqing.core.logic.scene.ActorBuildLogic.Callback;
 import name.huliqing.core.logic.scene.ActorBuildLogic.ModelLoader;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.view.talk.AbstractTalkLogic;
-import name.huliqing.core.object.actor.SkillListenerAdapter;
+import name.huliqing.core.object.module.SkillListenerAdapter;
 import name.huliqing.core.object.skill.Skill;
 import name.huliqing.core.object.skill.BackSkill;
 import name.huliqing.core.object.view.TimerView;

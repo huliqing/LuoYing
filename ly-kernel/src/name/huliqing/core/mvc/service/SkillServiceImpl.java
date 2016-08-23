@@ -20,7 +20,7 @@ import name.huliqing.core.enums.MessageType;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.actor.SkillListener;
+import name.huliqing.core.object.module.SkillListener;
 import name.huliqing.core.object.module.SkillModule;
 import name.huliqing.core.object.module.SkillPlayListener;
 import name.huliqing.core.object.skill.Skill;

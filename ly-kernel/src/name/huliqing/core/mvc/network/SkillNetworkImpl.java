@@ -15,7 +15,7 @@ import name.huliqing.core.mess.MessActorAddSkill;
 import name.huliqing.core.mess.MessSkill;
 import name.huliqing.core.mess.MessSkillWalk;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.actor.SkillListener;
+import name.huliqing.core.object.module.SkillListener;
 import name.huliqing.core.object.module.SkillPlayListener;
 import name.huliqing.core.object.skill.Skill;
 

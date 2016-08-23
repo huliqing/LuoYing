@@ -318,7 +318,6 @@ import name.huliqing.core.loader.module.ChannelModuleDataLoader;
 import name.huliqing.core.loader.module.ChatModuleDataLoader;
 import name.huliqing.core.loader.module.ItemModuleDataLoader;
 import name.huliqing.core.loader.module.LogicModuleDataLoader;
-import name.huliqing.core.loader.module.PhysicsModuleDataLoader;
 import name.huliqing.core.loader.module.ResistModuleDataLoader;
 import name.huliqing.core.loader.module.SkillModuleDataLoader;
 import name.huliqing.core.loader.module.SkinModuleDataLoader;

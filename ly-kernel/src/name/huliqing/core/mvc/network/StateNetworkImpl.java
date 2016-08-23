@@ -12,7 +12,7 @@ import name.huliqing.core.mvc.service.StateService;
 import name.huliqing.core.mess.MessStateAdd;
 import name.huliqing.core.mess.MessStateRemove;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.actor.StateListener;
+import name.huliqing.core.object.module.StateListener;
 import name.huliqing.core.object.state.State;
 
 /**

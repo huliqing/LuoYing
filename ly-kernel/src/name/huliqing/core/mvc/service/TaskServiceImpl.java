@@ -8,7 +8,7 @@ import java.util.List;
 import name.huliqing.core.data.TaskData;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.actor.TaskListener;
+import name.huliqing.core.object.module.TaskListener;
 import name.huliqing.core.object.module.TaskModule;
 import name.huliqing.core.object.task.Task;
 

@@ -13,7 +13,7 @@ import name.huliqing.core.data.ItemData;
 import name.huliqing.core.enums.MessageType;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.actor.ItemListener;
+import name.huliqing.core.object.module.ItemListener;
 import name.huliqing.core.object.module.ItemModule;
 import name.huliqing.core.object.sound.SoundManager;
 

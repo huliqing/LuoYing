@@ -9,7 +9,7 @@ import name.huliqing.core.Factory;
 import name.huliqing.core.data.StateData;
 import name.huliqing.core.mvc.service.StateService;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.actor.StateListener;
+import name.huliqing.core.object.module.StateListener;
 
 /**
  * 这类状态可以用来清除角色身上的一些其它状态,当状态在运行时会不停的检查角色当前的状态

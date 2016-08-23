@@ -2,7 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.core.object.actor;
+package name.huliqing.core.object.module;
+
+import name.huliqing.core.object.actor.Actor;
 
 /**
  * 角色监听器,source对象为被监听的角色。

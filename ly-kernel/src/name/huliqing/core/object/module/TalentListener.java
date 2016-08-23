@@ -2,9 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.core.object.actor;
+package name.huliqing.core.object.module;
 
 import name.huliqing.core.data.TalentData;
+import name.huliqing.core.object.actor.Actor;
 
 /**
  * 监听角色的天赋状态变化

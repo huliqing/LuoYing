@@ -8,7 +8,7 @@ import java.util.List;
 import name.huliqing.core.Inject;
 import name.huliqing.core.data.StateData;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.actor.StateListener;
+import name.huliqing.core.object.module.StateListener;
 import name.huliqing.core.object.state.State;
 
 /**

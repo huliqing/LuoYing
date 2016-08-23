@@ -17,13 +17,6 @@ public class TalentModuleDataLoader implements DataLoader<TalentModuleData> {
 
     @Override
     public void load(Proto proto, TalentModuleData data) {
-//        String[] talentArr = proto.getAsArray("talents");
-//        if (talentArr != null) {
-//            data.setTalentDatas(new ArrayList<TalentData>(talentArr.length));
-//            for (String tid : talentArr) {
-//                data.getTalentDatas().add((TalentData)DataFactory.createData(tid));
-//            }
-//        }
     }
 
 }

@@ -11,7 +11,7 @@ import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.data.StateData;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.xml.DataFactory;
-import name.huliqing.core.object.actor.StateListener;
+import name.huliqing.core.object.module.StateListener;
 import name.huliqing.core.object.module.StateModule;
 import name.huliqing.core.object.state.State;
 

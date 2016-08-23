@@ -9,7 +9,7 @@ import name.huliqing.core.data.TalentData;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.actor.TalentListener;
+import name.huliqing.core.object.module.TalentListener;
 import name.huliqing.core.object.module.TalentModule;
 import name.huliqing.core.object.talent.Talent;
 

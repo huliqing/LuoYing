@@ -16,7 +16,6 @@ import name.huliqing.core.data.SkillData;
 import name.huliqing.core.data.module.SkillModuleData;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.actor.SkillListener;
 import name.huliqing.core.object.skill.Skill;
 
 /**

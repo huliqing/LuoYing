@@ -13,7 +13,7 @@ import name.huliqing.core.mvc.service.SkinService;
 import name.huliqing.core.network.Network;
 import name.huliqing.core.mess.MessSkinWeaponTakeOn;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.actor.SkinListener;
+import name.huliqing.core.object.module.SkinListener;
 
 /**
  *

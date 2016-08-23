@@ -13,7 +13,7 @@ import name.huliqing.core.mess.MessTaskAdd;
 import name.huliqing.core.mess.MessTaskApplyItem;
 import name.huliqing.core.mess.MessTaskComplete;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.actor.TaskListener;
+import name.huliqing.core.object.module.TaskListener;
 import name.huliqing.core.object.task.Task;
 
 /**
