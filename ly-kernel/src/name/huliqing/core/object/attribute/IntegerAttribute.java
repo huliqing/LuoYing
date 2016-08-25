@@ -8,12 +8,23 @@ package name.huliqing.core.object.attribute;
 import name.huliqing.core.data.AttributeData;
 
 /**
- *
  * @author huliqing
  */
 public class IntegerAttribute extends NumberAttribute<Integer, AttributeData> {
 
     private int value;
+
+    @Override
+    public void setData(AttributeData data) {
+        super.setData(data);
+        value = data.getAsInteger("value", value);
+    }
+
+    @Override
+    public AttributeData getData() {
+        data.setAttribute("value", value);
+        return super.getData(); 
+    }
     
     @Override
     public final int intValue() {
@@ -104,4 +115,5 @@ public class IntegerAttribute extends NumberAttribute<Integer, AttributeData> {
             notifyValueChangeListeners(oldValue, this.value);
         }
     }
+    
 }

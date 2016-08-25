@@ -8,12 +8,16 @@ import java.util.List;
 import name.huliqing.core.Inject;
 import name.huliqing.core.data.AttributeData;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.attribute.Attribute;
 
 /**
  *
  * @author huliqing
  */
 public interface AttributeService extends Inject{
+    
+    
+    
     
     /**
      * 判断角色是否存在某个属性，如果不存在则返回false.
@@ -69,7 +73,7 @@ public interface AttributeService extends Inject{
      * @param attribute
      * @return 
      */
-    AttributeData getAttributeData(Actor actor, String attribute);
+    Attribute getAttributeById(Actor actor, String attribute);
 
     /**
      * 获取角色的所有属性

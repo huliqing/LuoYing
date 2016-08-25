@@ -15,11 +15,18 @@ import name.huliqing.core.xml.DataProcessor;
  * @param <T>
  */
 public interface Attribute<V, T extends AttributeData> extends DataProcessor<T> {
+
+    @Override
+    public void setData(T data);
+
+    @Override
+    public T getData();
     
      /**
      * 初始化属性
+     * @param store
      */
-    void initialize();
+    void initialize(AttributeStore store);
     
     /**
      * 判断属性是否已经初始化

@@ -71,7 +71,7 @@ public class AttributeChangeGameLogic<T extends GameLogicData> extends AbstractG
     }
     
     private void updateAttribute(Actor actor) {
-        AttributeData applyAttributeData = attributeService.getAttributeData(actor, applyAttribute);
+        AttributeData applyAttributeData = attributeService.getAttributeById(actor, applyAttribute).getData();
         if (applyAttributeData == null) {
             return;
         }

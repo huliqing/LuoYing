@@ -205,7 +205,7 @@ public class ActorNetworkImpl implements ActorNetwork{
             actorService.hitAttribute(target, source, hitAttribute, hitValue);
             
             // 同步生命值
-            AttributeData attrData = attributeService.getAttributeData(target, hitAttribute);
+            AttributeData attrData = attributeService.getAttributeById(target, hitAttribute).getData();
             if (NETWORK.hasConnections() && attrData != null) {
                 MessAttributeSync mess = new MessAttributeSync();
                 mess.setActorId(target.getData().getUniqueId());

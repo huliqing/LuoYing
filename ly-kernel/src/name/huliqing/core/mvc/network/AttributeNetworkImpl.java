@@ -11,6 +11,7 @@ import name.huliqing.core.mvc.service.AttributeService;
 import name.huliqing.core.network.Network;
 import name.huliqing.core.mess.MessAttributeSync;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.attribute.Attribute;
 
 /**
  *
@@ -57,7 +58,7 @@ public class AttributeNetworkImpl implements AttributeNetwork {
     }
 
     @Override
-    public AttributeData getAttributeData(Actor actor, String attribute) {
+    public Attribute getAttributeById(Actor actor, String attribute) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -75,7 +76,7 @@ public class AttributeNetworkImpl implements AttributeNetwork {
     @Override
     public void syncAttribute(Actor actor, String attributeId) {
         if (!network.isClient()) {
-            AttributeData aData = attributeService.getAttributeData(actor, attributeId);
+            AttributeData aData = attributeService.getAttributeById(actor, attributeId).getData();
             if (network.hasConnections()) {
                 MessAttributeSync mess = new MessAttributeSync();
                 mess.setActorId(actor.getData().getUniqueId());

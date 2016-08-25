@@ -5,9 +5,9 @@
 package name.huliqing.core.mvc.service;
 
 import java.util.List;
-import java.util.Map;
 import name.huliqing.core.data.AttributeData;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.attribute.Attribute;
 import name.huliqing.core.object.module.AttributeModule;
 import name.huliqing.core.utils.MathUtils;
 
@@ -24,12 +24,12 @@ public class AttributeServiceImpl implements AttributeService {
 
     @Override
     public boolean existsAttribute(Actor actor, String attributeId) {
-        return getAttribute(actor, attributeId) != null;
+        return getAttributeById(actor, attributeId) != null;
     }
 
     @Override
     public float getDynamicValue(Actor actor, String attributeId) {
-        AttributeData data = getAttribute(actor, attributeId);
+        AttributeData data = getAttributeById(actor, attributeId).getData();
         if (data != null) {
             return data.getDynamicValue();
         }
@@ -38,7 +38,7 @@ public class AttributeServiceImpl implements AttributeService {
 
     @Override
     public float getMaxValue(Actor actor, String attributeId) {
-        AttributeData data = getAttribute(actor, attributeId);
+        AttributeData data = getAttributeById(actor, attributeId).getData();
         if (data != null) {
             return data.getMaxValue();
         }
@@ -47,7 +47,7 @@ public class AttributeServiceImpl implements AttributeService {
 
     @Override
     public void applyDynamicValue(Actor actor, String attributeId, float amount) {
-        AttributeData data = getAttribute(actor, attributeId);
+        AttributeData data = getAttributeById(actor, attributeId).getData();
         if (data != null) {
             data.setDynamicValue(data.getDynamicValue() + amount);
         }
@@ -55,7 +55,7 @@ public class AttributeServiceImpl implements AttributeService {
 
     @Override
     public void clampDynamicValue(Actor actor, String attributeId) {
-        AttributeData data = getAttribute(actor, attributeId);
+        AttributeData data = getAttributeById(actor, attributeId).getData();
         if (data != null) {
             float dValue = data.getDynamicValue();
             data.setDynamicValue(MathUtils.clamp(dValue, 0, data.getMaxValue()));
@@ -64,24 +64,24 @@ public class AttributeServiceImpl implements AttributeService {
 
     @Override
     public void applyStaticValue(Actor actor, String attributeId, float amount) {
-        AttributeData data = getAttribute(actor, attributeId);
+        AttributeData data = getAttributeById(actor, attributeId).getData();
         if (data != null) {
             data.setStaticValue(data.getStaticValue() + amount);
         } 
     }
 
     @Override
-    public AttributeData getAttributeData(Actor actor, String attribute) {
+    public Attribute getAttributeById(Actor actor, String attrId) {
         AttributeModule module = actor.getModule(AttributeModule.class);
         if (module != null) {
-            return module.getAttribute(attribute);
+            return module.getAttributeById(attrId);
         }
         return null;
     }
 
     @Override
     public void syncAttribute(Actor actor, String attributeId, float levelValue, float staticValue, float dynamicValue) {
-        AttributeData data = getAttribute(actor, attributeId);
+        AttributeData data = getAttributeById(actor, attributeId).getData();
         if (data != null) {
             data.setLevelValue(levelValue);
             data.setStaticValue(staticValue);
@@ -100,11 +100,4 @@ public class AttributeServiceImpl implements AttributeService {
         return actor.getData().getObjectDatas(AttributeData.class, null);
     }
 
-    private AttributeData getAttribute(Actor actor, String attributeId) {
-        AttributeModule module = actor.getModule(AttributeModule.class);
-        if (module != null) {
-            return module.getAttribute(attributeId);
-        }
-        return null;
-    }
 }

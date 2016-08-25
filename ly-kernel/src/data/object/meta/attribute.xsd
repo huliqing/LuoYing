@@ -19,12 +19,20 @@ xs:time
     <xs:element name="root">
         <xs:complexType>
             <xs:all>
-                <xs:element ref="attribute" />
+                <xs:element ref="attributeInteger" />
+                <xs:element ref="attributeFloat" />
+                <xs:element ref="attributeLevelInteger" />
+                <xs:element ref="attributeLimitInteger" />
+
+                <!--remove20160825-->
+                <!--<xs:element ref="attribute" />-->
+                
             </xs:all>
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="attribute" >
+<!--remove20160825-->
+<!--    <xs:element name="attribute" >
         <xs:annotation>
             <xs:documentation>定义一个等级</xs:documentation>
         </xs:annotation>
@@ -42,11 +50,103 @@ xs:time
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
+    </xs:element>-->
+    
+    <xs:element name="attributeLimitInteger" >
+        <xs:annotation>
+            <xs:documentation>可以限制取值范围的属性，这种属性可以通过设置minValue,maxValue或绑定一个
+                其它属性来限制当前属性的取值范围。
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="attributeBase">
+                    <xs:attribute name="value" type="xs:decimals" use="optional" >
+                        <xs:annotation><xs:documentation>属性初始值, int值.</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="minValue" type="xs:integer" use="optional" >
+                        <xs:annotation><xs:documentation>最小值限制，int类型，如果设置了minLimitAttributeName则minValue将会被忽略</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="maxValue" type="xs:integer" use="optional" >
+                        <xs:annotation><xs:documentation>最大值限制，int类型，如果设置了maxLimitAttributeName则maxValue将会被忽略</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="minLimitAttributeName" type="xs:integer" use="optional" >
+                        <xs:annotation><xs:documentation>绑定一个属性"名称", 用这个属性的值来限制当前属性值的最小值。如果设置了这个值，则minValue的设置将会被忽略。</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="maxLimitAttributeName" type="xs:integer" use="optional" >
+                        <xs:annotation><xs:documentation>绑定一个属性"名称", 用这个属性的值来限制当前属性值的最大值。如果设置了这个值，则maxValue的设置将会被忽略。</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="attributeLevelInteger" >
+        <xs:annotation>
+            <xs:documentation>可以设置等级的属性,这种属性可以随着等级而改变属性值。</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="attributeBase">
+                    <xs:attribute name="value" type="xs:decimals" use="optional" >
+                        <xs:annotation><xs:documentation>属性初始值, int值.</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="level" type="xs:integer" use="optional" >
+                        <xs:annotation><xs:documentation>属性的初始等级，默认"1"</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="levelEl" type="xs:string" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                绑定一个等级类型的计算公式(el id), 必须是 level 类型的el. 属性通过这个el公式来计算属性的等级值。
+                                如果没有设置这个公式，则设置属性的等级将没有意义。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="attributeFloat" >
+        <xs:annotation>
+            <xs:documentation>整数类型的属性</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="attributeBase">
+                    <xs:attribute name="value" type="xs:decimals" use="optional" >
+                        <xs:annotation><xs:documentation>属性初始值, 可以是float或int值.</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="attributeInteger" >
+        <xs:annotation>
+            <xs:documentation>整数类型的属性</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="attributeBase">
+                    <xs:attribute name="value" type="xs:integer" use="optional" >
+                        <xs:annotation><xs:documentation>属性初始值，必须是int值.</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
     </xs:element>
     
     <xs:complexType name="attributeBase">
         <xs:complexContent>
             <xs:extension base="base">
+                <xs:attribute name="name" type="xs:string" use="required" >
+                    <xs:annotation>
+                        <xs:documentation>
+                            属性名称,每个属性都需要一个名称。
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>

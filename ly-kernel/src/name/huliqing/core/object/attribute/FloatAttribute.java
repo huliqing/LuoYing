@@ -16,6 +16,12 @@ public class FloatAttribute extends NumberAttribute<Float, AttributeData> {
     private float value;
 
     @Override
+    public void setData(AttributeData data) {
+        super.setData(data);
+        value = data.getAsFloat("value", value);
+    }
+
+    @Override
     public final int intValue() {
         return (int) value;
     }
@@ -104,4 +110,5 @@ public class FloatAttribute extends NumberAttribute<Float, AttributeData> {
             notifyValueChangeListeners(oldValue, this.value);
         }
     }
+
 }

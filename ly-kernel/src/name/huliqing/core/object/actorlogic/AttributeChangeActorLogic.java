@@ -34,7 +34,7 @@ public class AttributeChangeActorLogic<T extends ActorLogicData> extends ActorLo
 
     @Override
     protected void doLogic(float tpf) {
-        AttributeData data = attributeService.getAttributeData(actor, targetAttribute);
+        AttributeData data = attributeService.getAttributeById(actor, targetAttribute).getData();
         if (data == null) {
             return;
         }

@@ -42,7 +42,7 @@ public abstract class AbstractAttribute<V, T extends AttributeData> implements A
     }
     
     @Override
-    public void initialize() {
+    public void initialize(AttributeStore store) {
         if (initialized) {
             throw new IllegalStateException("Attribute already initialized! attributeId=" + this.getId());
         }

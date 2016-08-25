@@ -5,6 +5,14 @@
     xmlns='http://fighter.huliqing.name'
     xsi:schemaLocation='http://fighter.huliqing.name meta/attribute.xsd'>
     
+    <!--最高生命值-->
+    <attributeLevelInteger id="attrHealthMax" name="attrHealthMax" levelEl="elLevelAttrHealth" />
+    <!--当前生命值-->
+    <attributeLimitInteger id="attrHealth" name="attrHealth" minValue="0" maxLimitAttributeName="attrHealthMax" />
+    
+    
+    <!--- ======================================================================== -->
+
     <!--健康值:定义角色的生命值-->
     <attribute id="attributeHealth" el="elLevelAttrHealth" />
 
@@ -50,6 +58,7 @@
     <!--鬼魅能力:[0.0~1.0] -->
     <attribute id="attributeGhostRate" el="elLevelAttrGhostRate" />
     
+
 </root>
 
 
