@@ -5,15 +5,11 @@
  */
 package name.huliqing.core.object.attribute;
 
-import name.huliqing.core.data.AttributeData;
-
 /**
  * 拥有“等级”功能的属性接口，这种属性可以设置等级。
  * @author huliqing
- * @param <V>
- * @param <T>
  */
-public interface LevelAttribute<V, T extends AttributeData> extends Attribute<V, T>{
+public interface LevelAttribute {
     
     /**
      * 设置属性等级

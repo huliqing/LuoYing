@@ -17,15 +17,15 @@ import name.huliqing.core.object.el.LevelEl;
  * 等级值只能通过设置等级来设置,而动态值可能通过普通的setValue, add, subtract等方式来操作。<br>
  * @author huliqing
  */
-public class LevelIntegerAttribute extends NumberAttribute<Integer, AttributeData> implements LevelAttribute {
+public class LevelFloatAttribute extends NumberAttribute<Float, AttributeData> implements LevelAttribute {
     private final ElService elService = Factory.get(ElService.class);
 
     // 等级值只能通过设置等级来设置
-    private int levelValue;
+    private float levelValue;
     // 动态值可以进行随时改变
-    private int dynamicValue;
+    private float dynamicValue;
     // 完整的value是由levelValue+dynamicValue
-    private int fullValue;
+    private float fullValue;
     
     // 等级公式id,通过这个id来创建一条等级公式
     private String levelEl;
@@ -37,7 +37,7 @@ public class LevelIntegerAttribute extends NumberAttribute<Integer, AttributeDat
     @Override
     public void setData(AttributeData data) {
         super.setData(data); 
-        fullValue = data.getAsInteger("value", 0);
+        fullValue = data.getAsFloat("value", 0);
         level = data.getAsInteger("level", 1);
         levelEl = data.getAsString("levelEl");
     }
@@ -52,7 +52,7 @@ public class LevelIntegerAttribute extends NumberAttribute<Integer, AttributeDat
     
     @Override
     public final int intValue() {
-        return fullValue;
+        return (int) fullValue;
     }
 
     @Override
@@ -67,7 +67,7 @@ public class LevelIntegerAttribute extends NumberAttribute<Integer, AttributeDat
      * @return 
      */
     @Override
-    public final Integer getValue() {
+    public final Float getValue() {
         return fullValue;
     }
     
@@ -79,7 +79,7 @@ public class LevelIntegerAttribute extends NumberAttribute<Integer, AttributeDat
      * @see #getValue() 
      */
     @Override
-    public final void setValue(Integer value) {
+    public final void setValue(Float value) {
         this.dynamicValue = value;
         setAndNotify(levelValue + dynamicValue);
     }
@@ -88,10 +88,10 @@ public class LevelIntegerAttribute extends NumberAttribute<Integer, AttributeDat
      * 重新计算属性的最终值,这个方法可以在改变了动态值或等级值之后进行调用，以重新计算当前属性值。
      * @param newFullValue
      */
-    protected final void setAndNotify(int newFullValue) {
-        int oldValue = this.fullValue;
+    protected final void setAndNotify(float newFullValue) {
+        float oldValue = this.fullValue;
         this.fullValue = newFullValue;
-        if (oldValue != this.fullValue) {
+        if (Float.compare(oldValue, this.fullValue) != 0) {
             notifyValueChangeListeners(oldValue, this.fullValue);
         }
     }

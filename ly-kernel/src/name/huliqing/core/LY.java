@@ -325,6 +325,7 @@ import name.huliqing.core.loader.module.TalentModuleDataLoader;
 import name.huliqing.core.loader.module.TaskModuleDataLoader;
 import name.huliqing.core.object.attribute.FloatAttribute;
 import name.huliqing.core.object.attribute.IntegerAttribute;
+import name.huliqing.core.object.attribute.LevelFloatAttribute;
 import name.huliqing.core.object.attribute.LevelIntegerAttribute;
 import name.huliqing.core.object.attribute.LimitIntegerAttribute;
 import name.huliqing.core.state.PlayState;
@@ -451,11 +452,11 @@ public class LY {
         
         // Attribute
         DataFactory.register("attribute",  AttributeData.class, AttributeDataLoader.class, null);
-        DataFactory.register("attributeInteger",  AttributeData.class, AttributeDataLoader.class, IntegerAttribute.class);
         DataFactory.register("attributeFloat",  AttributeData.class, AttributeDataLoader.class, FloatAttribute.class);
+        DataFactory.register("attributeInteger",  AttributeData.class, AttributeDataLoader.class, IntegerAttribute.class);
+        DataFactory.register("attributeLevelFloat",  AttributeData.class, AttributeDataLoader.class, LevelFloatAttribute.class);
         DataFactory.register("attributeLevelInteger",  AttributeData.class, AttributeDataLoader.class, LevelIntegerAttribute.class);
         DataFactory.register("attributeLimitInteger",  AttributeData.class, AttributeDataLoader.class, LimitIntegerAttribute.class);
-        
         
         // Bullet
         DataFactory.register("bulletSimple",  BulletData.class, BulletDataLoader.class, SimpleBullet.class);

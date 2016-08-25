@@ -7,56 +7,94 @@
     
     <!--最高生命值-->
     <attributeLevelInteger id="attrHealthMax" name="attrHealthMax" levelEl="elLevelAttrHealth" />
-    <!--当前生命值-->
+    <!--实时生命值-->
     <attributeLimitInteger id="attrHealth" name="attrHealth" minValue="0" maxLimitAttributeName="attrHealthMax" />
     
+    <!--最高魔法值-->
+    <attributeLevelInteger id="attrManaMax" name="attrManaMax" levelEl="elLevelAttrMana" />
+    <!--实时魔法值-->
+    <attributeLimitInteger id="attrMana" name="attrMana" minValue="0" maxLimitAttributeName="attrManaMax" />
+    
+    <!--物理攻击力-->
+    <attributeLevelInteger id="attributeAttack" name="attributeAttack" levelEl="elLevelAttrAttack" />
+    
+    <!--魔法攻击力-->
+    <attributeLevelInteger id="attributeMagicAttack" name="attributeMagicAttack" levelEl="elLevelAttrMagicAttack" />
+    
+    <!--物理防御力-->
+    <attributeLevelInteger id="attributeDefence" name="attributeDefence" levelEl="elLevelAttrDefence" />
+    
+    <!--魔法防御力-->
+    <attributeLevelInteger id="attributeMagicDefence" name="attributeMagicDefence" levelEl="elLevelAttrMagicDefence" />
+    
+    <!--视力:影响角色的侦察范围-->
+    <attributeFloat id="attributeVision" name="attributeVision" />
+    
+    <!--健康值恢复速度: 定义每秒恢复多少点生命值-->
+    <attributeLevelInteger id="attributeHealthRestore" name="attributeHealthRestore" levelEl="elLevelAttrHealthRestore" />
+    
+    <!--魔法值恢复速度: 定义每秒恢复多少点魔法值-->
+    <attributeLevelInteger id="attributeManaRestore" name="attributeManaRestore" levelEl="elLevelAttrManaRestore" />
+    
+    <!--攻击速度: 定义攻击速度倍率，1.0为原始速度，-->
+    <attributeLevelFloat id="attributeAttackSpeed" name="attributeAttackSpeed" levelEl="elLevelAttrAttackSpeed" />
+    
+    <!--施法速度:1.0为原始速度，2.0为双倍速度-->
+    <attributeLevelFloat id="attributeMagicSpeed" name="attributeMagicSpeed" levelEl="elLevelAttrMagicSpeed" />
+    
+    <!--移动速度：1.0为原始速度,2.0为两倍速度-->
+    <attributeLevelFloat id="attributeMoveSpeed" name="attributeMoveSpeed" />
+    
+    <!--防御概率:[0.0~1.0], 1.0为百分百防御-->
+    <attributeLevelFloat id="attributeDefenceRate" name="attributeDefenceRate" />
+    
+    <!--躲闪概率:[0.0~1.0]，1.0为百分百躲闪-->
+    <attributeLevelFloat id="attributeDuckRate" name="attributeDuckRate" />
+    
+    <!--鬼魅能力:[0.0~1.0] -->
+    <attributeLevelFloat id="attributeGhostRate" name="attributeGhostRate" />
     
     <!--- ======================================================================== -->
 
-    <!--健康值:定义角色的生命值-->
+<!--    健康值:定义角色的生命值
     <attribute id="attributeHealth" el="elLevelAttrHealth" />
-
-    <!--魔法值:定义角色最多可拥有多少魔法量-->
+    魔法值:定义角色最多可拥有多少魔法量
     <attribute id="attributeMana" el="elLevelAttrMana" />
-
-    <!--物理攻击力-->
+    物理攻击力
     <attribute id="attributeAttack" el="elLevelAttrAttack" />
-
-    <!--魔法攻击力-->
+    魔法攻击力
     <attribute id="attributeMagicAttack" el="elLevelAttrMagicAttack" />
-
-    <!--物理防御力-->
+    物理防御力
     <attribute id="attributeDefence" el="elLevelAttrDefence" />
-
-    <!--魔法防御力-->
+    魔法防御力
     <attribute id="attributeMagicDefence" el="elLevelAttrMagicDefence" />
 
-    <!--视力:影响角色的侦察范围-->
+    视力:影响角色的侦察范围
     <attribute id="attributeVision" el="elLevelAttrVision" />
 
-    <!--健康值恢复速度:1.0为每秒恢复一点生命值，2.0为每秒恢复2点生命值-->
+    健康值恢复速度:1.0为每秒恢复一点生命值，2.0为每秒恢复2点生命值
     <attribute id="attributeHealthRestore" el="elLevelAttrHealthRestore" />
 
-    <!--魔法值恢复速度:1.0为每秒恢复一点魔法值，2.0为每秒恢复2点魔法值-->
-    <attribute id="attributeManaRestore" el="elLevelAttrManaRestore" />
+    魔法值恢复速度:1.0为每秒恢复一点魔法值，2.0为每秒恢复2点魔法值
+    <attribute id="attributeManaRestore" el="elLevelAttrManaRestore" />-->
     
     <!--攻击速度:1.0为原始速度，2.0为双倍速度-->
-    <attribute id="attributeAttackSpeed" el="elLevelAttrAttackSpeed" />
+    <!--<attribute id="attributeAttackSpeed" el="elLevelAttrAttackSpeed" />-->
 
     <!--施法速度:1.0为原始速度，2.0为双倍速度-->
-    <attribute id="attributeMagicSpeed" el="elLevelAttrMagicSpeed" />
+    <!--<attribute id="attributeMagicSpeed" el="elLevelAttrMagicSpeed" />-->
     
     <!--移动速度：1.0为原始速度,2.0为两倍速度-->
-    <attribute id="attributeMoveSpeed" el="elLevelAttrMoveSpeed" />
+    <!--<attribute id="attributeMoveSpeed" el="elLevelAttrMoveSpeed" />-->
     
     <!--防御概率:[0.0~1.0], 1.0为百分百防御-->
-    <attribute id="attributeDefenceRate" el="elLevelAttrDefenceRate" />
+    <!--<attribute id="attributeDefenceRate" el="elLevelAttrDefenceRate" />-->
 
     <!--躲闪概率:[0.0~1.0]，1.0为百分百躲闪-->
-    <attribute id="attributeDuckRate" el="elLevelAttrDuckRate" />
+    <!--<attribute id="attributeDuckRate" el="elLevelAttrDuckRate" />-->
     
     <!--鬼魅能力:[0.0~1.0] -->
-    <attribute id="attributeGhostRate" el="elLevelAttrGhostRate" />
+<!--    <attribute id="attributeGhostRate" el="elLevelAttrGhostRate" />-->
     
 
 </root>

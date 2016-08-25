@@ -19,8 +19,9 @@ xs:time
     <xs:element name="root">
         <xs:complexType>
             <xs:all>
-                <xs:element ref="attributeInteger" />
                 <xs:element ref="attributeFloat" />
+                <xs:element ref="attributeInteger" />
+                <xs:element ref="attributeLevelFloat" />
                 <xs:element ref="attributeLevelInteger" />
                 <xs:element ref="attributeLimitInteger" />
 
@@ -88,6 +89,32 @@ xs:time
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="attributeBase">
+                    <xs:attribute name="value" type="xs:integer" use="optional" >
+                        <xs:annotation><xs:documentation>属性初始值, int值.</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="level" type="xs:integer" use="optional" >
+                        <xs:annotation><xs:documentation>属性的初始等级，默认"1"</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="levelEl" type="xs:string" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                绑定一个等级类型的计算公式(el id), 必须是 level 类型的el. 属性通过这个el公式来计算属性的等级值。
+                                如果没有设置这个公式，则设置属性的等级将没有意义。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="attributeLevelFloat" >
+        <xs:annotation>
+            <xs:documentation>可以设置等级的属性,这种属性可以随着等级而改变属性值。</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="attributeBase">
                     <xs:attribute name="value" type="xs:decimals" use="optional" >
                         <xs:annotation><xs:documentation>属性初始值, int值.</xs:documentation></xs:annotation>
                     </xs:attribute>
@@ -107,21 +134,6 @@ xs:time
         </xs:complexType>
     </xs:element>
     
-    <xs:element name="attributeFloat" >
-        <xs:annotation>
-            <xs:documentation>整数类型的属性</xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="attributeBase">
-                    <xs:attribute name="value" type="xs:decimals" use="optional" >
-                        <xs:annotation><xs:documentation>属性初始值, 可以是float或int值.</xs:documentation></xs:annotation>
-                    </xs:attribute>
-                </xs:extension>
-            </xs:complexContent>
-        </xs:complexType>
-    </xs:element>
-    
     <xs:element name="attributeInteger" >
         <xs:annotation>
             <xs:documentation>整数类型的属性</xs:documentation>
@@ -131,6 +143,21 @@ xs:time
                 <xs:extension base="attributeBase">
                     <xs:attribute name="value" type="xs:integer" use="optional" >
                         <xs:annotation><xs:documentation>属性初始值，必须是int值.</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="attributeFloat" >
+        <xs:annotation>
+            <xs:documentation>整数类型的属性</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="attributeBase">
+                    <xs:attribute name="value" type="xs:decimals" use="optional" >
+                        <xs:annotation><xs:documentation>属性初始值, 可以是float或int值.</xs:documentation></xs:annotation>
                     </xs:attribute>
                 </xs:extension>
             </xs:complexContent>
