@@ -9,6 +9,8 @@ import name.huliqing.core.Inject;
 import name.huliqing.core.data.AttributeData;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.attribute.Attribute;
+import name.huliqing.core.object.attribute.AttributeStore.AttributeConflictException;
+import name.huliqing.core.object.module.AttributeListener;
 
 /**
  *
@@ -16,80 +18,93 @@ import name.huliqing.core.object.attribute.Attribute;
  */
 public interface AttributeService extends Inject{
     
+    Attribute loadAttribute(String attributeId);
     
-    
+    Attribute loadAttribute(AttributeData data);
     
     /**
-     * 判断角色是否存在某个属性，如果不存在则返回false.
+     * 给指定角色添加一个新的属性，注：一个角色不能同时拥有两个相同”id“或”名称“的属性。否则将报错。
      * @param actor
-     * @param attributeId 如果不存在该属性或者attributeId=null则返回false.
+     * @param attribute 
+     * @throws AttributeConflictException 如果属性已经存在, 比如id重复，或者名称重复
+     */
+    void addAttribute(Actor actor, Attribute attribute) throws AttributeConflictException;
+    
+    /**
+     * 使用属性“ID”来查找属性,如果角色不存在指定属性则返回null.
+     * @param <T>
+     * @param actor
+     * @param attrId
      * @return 
      */
-    boolean existsAttribute(Actor actor, String attributeId);
+    <T extends Attribute> T getAttributeById(Actor actor, String attrId);
     
     /**
-     * 获取属性的动态值,如果角色不存在指定的属性设置则返回0.
+     * 使用属性“名称”来查找属性，如果角色不存在指定属性则返回null.
+     * @param <T>
      * @param actor
-     * @param attributeId
+     * @param attrName
      * @return 
      */
-    float getDynamicValue(Actor actor, String attributeId);
+    <T extends Attribute> T getAttributeByName(Actor actor, String attrName);
     
-    /**
-     * 获得角色某个属性的最高值，如果不存在该属性则返回0
-     * @param actor
-     * @param attributeId
-     * @return 
-     */
-    float getMaxValue(Actor actor, String attributeId);
-    
-    /**
-     * 增加或减少角色某个属性的值,如果目标没有指定的属性则什么也不做.
-     * @param actor 目标角色
-     * @param attributeId 属性ID
-     * @param amount 数量，正为增加，负为减少
-     */
-    void applyDynamicValue(Actor actor, String attributeId, float amount);
-    
-    /**
-     * 使角色某个属性的动态值限制在0~max范围内.注：max等于等级值levelValue和
-     * 静态值staticValue之和。
-     * @param actor
-     * @param attributeId 
-     */
-    void clampDynamicValue(Actor actor, String attributeId);
-    
-    /**
-     * 增加或减少角色某个属性的静态值,如果目标没有指定的属性则什么也不做。
-     * @param actor
-     * @param attributeId
-     * @param amount 
-     */
-    void applyStaticValue(Actor actor, String attributeId, float amount);
-    
-    /**
-     * 获取属性
-     * @param actor
-     * @param attribute
-     * @return 
-     */
-    Attribute getAttributeById(Actor actor, String attribute);
-
     /**
      * 获取角色的所有属性
      * @param actor
      * @return 
      */
-    List<AttributeData> getAttributes(Actor actor);
+    List<Attribute> getAttributes(Actor actor);
     
     /**
-     * 同步目标角色的指定属性值
+     * 给角色添加一个属性侦听器
      * @param actor
-     * @param attributeId
-     * @param levelValue
-     * @param staticValue
-     * @param dynamicValue 
+     * @param attributeListener 
+     */    
+    void addListener(Actor actor, AttributeListener attributeListener);
+    
+    /**
+     * 从角色身上移除一个属性侦听器
+     * @param actor
+     * @param attributeListener
+     * @return 
      */
-    void syncAttribute(Actor actor, String attributeId, float levelValue, float staticValue, float dynamicValue);
+    boolean removeListener(Actor actor, AttributeListener attributeListener);
+    
+    /**
+     * 设置指定属性名称的值。
+     * @param <V>
+     * @param actor
+     * @param attrName 属性“名称”
+     * @param value 
+     */
+    <V extends Object> void setAttributeValue(Actor actor, String attrName, V value);
+    
+    /**
+     * 给指定“名称”的属性添加值。注:所指定的属性必须存在，并且必须是 {@link NumberAttribute}类型的属性，
+     * 否则什么也不做。
+     * @param actor
+     * @param attrName 属性名称
+     * @param value 
+     */
+    void addAttributeValue(Actor actor, String attrName, float value);
+    
+//    /**
+//     * 给指定“名称”的属性减少值。注:所指定的属性必须存在，并且必须是 {@link NumberAttribute}类型的属性，
+//     * 否则什么也不做。
+//     * @param actor
+//     * @param attrName
+//     * @param value 
+//     */
+//    void subtractAttributeValue(Actor actor, String attrName, float value);
+    
+    /**
+     * 获取指定“名称“的NumberAttribute类型的属性的值，目标属性必须存在，并且必须是NubmerAttribute，
+     * 否则这个方法将指返回defValue值。
+     * @param actor
+     * @param attrName 属性"名称"非id.
+     * @param defValue 默认值，如果找不到指定的属性或属性不是NumberAttribute类型则返回这个默认值。
+     * @return 
+     */
+    float getNumberAttributeValue(Actor actor, String attrName, float defValue);
     
 }

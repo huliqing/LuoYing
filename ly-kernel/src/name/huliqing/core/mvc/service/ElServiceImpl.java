@@ -9,7 +9,7 @@ import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.el.El;
 import name.huliqing.core.object.el.HitEl;
 import name.huliqing.core.object.el.LevelEl;
-import name.huliqing.core.object.el.XpDropEl;
+import name.huliqing.core.object.el.AttributeEl;
 
 /**
  *
@@ -46,8 +46,8 @@ public class ElServiceImpl implements ElService {
     }
 
     @Override
-    public XpDropEl getXpDropEl(String id) {
-        return (XpDropEl) getEl(id);
+    public AttributeEl getAttributeEl(String id) {
+        return (AttributeEl) getEl(id);
     }
     
     @Override

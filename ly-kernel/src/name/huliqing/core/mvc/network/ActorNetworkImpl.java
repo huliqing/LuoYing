@@ -12,13 +12,11 @@ import com.jme3.scene.Spatial;
 import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.ActorData;
-import name.huliqing.core.data.AttributeData;
 import name.huliqing.core.enums.HurtFace;
 import name.huliqing.core.enums.Sex;
 import name.huliqing.core.view.talk.Talk;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.AttributeService;
-import name.huliqing.core.mess.MessActorApplyXp;
 import name.huliqing.core.mess.MessActorFollow;
 import name.huliqing.core.mess.MessActorKill;
 import name.huliqing.core.mess.MessActorPhysics;
@@ -31,6 +29,7 @@ import name.huliqing.core.mess.MessActorViewDir;
 import name.huliqing.core.mess.MessAttributeSync;
 import name.huliqing.core.mess.MessActorLookAt;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.attribute.Attribute;
 import name.huliqing.core.object.module.ActorListener;
 
 /**
@@ -200,19 +199,17 @@ public class ActorNetworkImpl implements ActorNetwork{
     }
     
     @Override
-    public void hitAttribute(Actor target, Actor source, String hitAttribute, float hitValue) {
+    public void hitAttribute(Actor target, Actor source, String hitAttrName, float hitValue) {
         if (!NETWORK.isClient()) {
-            actorService.hitAttribute(target, source, hitAttribute, hitValue);
+            actorService.hitAttribute(target, source, hitAttrName, hitValue);
             
             // 同步生命值
-            AttributeData attrData = attributeService.getAttributeById(target, hitAttribute).getData();
-            if (NETWORK.hasConnections() && attrData != null) {
+            Attribute attr = attributeService.getAttributeByName(target, hitAttrName);
+            if (NETWORK.hasConnections() && attr != null) {
                 MessAttributeSync mess = new MessAttributeSync();
                 mess.setActorId(target.getData().getUniqueId());
-                mess.setAttribute(attrData.getId());
-                mess.setLevelValue(attrData.getLevelValue());
-                mess.setStaticValue(attrData.getStaticValue());
-                mess.setDynamicValue(attrData.getDynamicValue());
+                mess.setAttrName(hitAttrName);
+                mess.setValue(attr.getValue());
                 NETWORK.broadcast(mess);
             }
         }
@@ -241,24 +238,25 @@ public class ActorNetworkImpl implements ActorNetwork{
     public int getXpReward(Actor attacker, Actor dead) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-    
-    @Override
-    public int applyXp(Actor actor, int xp) {
-        if (!NETWORK.isClient()) {
-            if (NETWORK.hasConnections()) {
-                MessActorApplyXp mess = new MessActorApplyXp();
-                mess.setActorId(actor.getData().getUniqueId());
-                mess.setXp(xp);
-                NETWORK.broadcast(mess);
-            }
-            
-            return actorService.applyXp(actor, xp);
-        }
-        return 0;
-    }
+   
+    // remove20160829
+//    @Override
+//    public int applyXp(Actor actor, int xp) {
+//        if (!NETWORK.isClient()) {
+//            if (NETWORK.hasConnections()) {
+//                MessActorApplyXp mess = new MessActorApplyXp();
+//                mess.setActorId(actor.getData().getUniqueId());
+//                mess.setXp(xp);
+//                NETWORK.broadcast(mess);
+//            }
+//            
+//            return actorService.applyXp(actor, xp);
+//        }
+//        return 0;
+//    }
 
     @Override
-    public int getNextLevelXp(Actor actor) {
+    public int getLevelXp(Actor actor, int level) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -402,12 +400,6 @@ public class ActorNetworkImpl implements ActorNetwork{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    // remove20160817
-//    @Override
-//    public int getTalentPoints(Actor actor) {
-//        throw new UnsupportedOperationException("Not supported yet.");
-//    }
-
     @Override
     public void syncTransform(Actor actor, Vector3f location, Vector3f viewDirection) {
         throw new UnsupportedOperationException("Not supported yet.");
@@ -418,10 +410,11 @@ public class ActorNetworkImpl implements ActorNetwork{
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @Override
-    public int getLife(Actor actor) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+    // remove20160829
+//    @Override
+//    public int getLife(Actor actor) {
+//        throw new UnsupportedOperationException("Not supported yet.");
+//    }
     
     @Override
     public void setViewDirection(Actor actor, Vector3f viewDirection) {

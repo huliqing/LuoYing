@@ -4,6 +4,7 @@
  */
 package name.huliqing.core.view.actor;
 
+import name.huliqing.core.Factory;
 import name.huliqing.core.ui.tiles.ColumnBody;
 import name.huliqing.core.ui.tiles.ColumnText;
 import name.huliqing.core.ui.tiles.ColumnIcon;
@@ -11,6 +12,7 @@ import name.huliqing.core.constants.InterfaceConstants;
 import name.huliqing.core.constants.ResConstants;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.manager.ResourceManager;
+import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.ui.UIFactory;
 import name.huliqing.core.ui.Row;
@@ -21,6 +23,7 @@ import name.huliqing.core.ui.Row;
  */
 public class SkillRow extends Row<SkillData> {
 //    private final PlayService playService = Factory.get(PlayService.class);
+    private final ActorService actorService = Factory.get(ActorService.class);
     
     private SkillPanel skillPanel;
     
@@ -108,7 +111,7 @@ public class SkillRow extends Row<SkillData> {
         num.setText(data.getLevel() + "/" + data.getMaxLevel());
         
         Actor actor = skillPanel.getActor();
-        if (actor != null && actor.getData().getLevel() < data.getNeedLevel()) {
+        if (actor != null && actorService.getLevel(actor) < data.getNeedLevel()) {
             body.setDisabled(true);
             body.setNameText(ResourceManager.getObjectName(data) 
                     + "(" + ResourceManager.get(ResConstants.COMMON_NEED_LEVEL, new Object[] {data.getNeedLevel()}) + ")");

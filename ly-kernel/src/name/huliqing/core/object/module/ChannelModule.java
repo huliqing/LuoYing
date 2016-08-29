@@ -14,7 +14,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.core.data.ChannelData;
 import name.huliqing.core.data.ObjectData;
-import name.huliqing.core.data.module.ChannelModuleData;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.channel.Channel;
@@ -24,9 +23,8 @@ import name.huliqing.core.utils.Temp;
 /**
  * 用于控制角色动画通道的“通道控制器”
  * @author huliqing
- * @param <T>
  */
-public class ChannelModule<T extends ChannelModuleData> extends AbstractModule<T> implements ChannelControl {
+public class ChannelModule extends AbstractModule implements ChannelControl {
     private static final Logger LOG = Logger.getLogger(ChannelModule.class.getName());
 
     private Actor actor;

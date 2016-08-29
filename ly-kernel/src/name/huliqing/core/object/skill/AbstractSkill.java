@@ -22,6 +22,8 @@ import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.object.actoranim.ActorAnim;
+import name.huliqing.core.object.attribute.Attribute;
+import name.huliqing.core.object.attribute.NumberAttribute;
 import name.huliqing.core.object.module.SkillModule;
 import name.huliqing.core.object.effect.Effect;
 import name.huliqing.core.object.magic.Magic;
@@ -635,8 +637,10 @@ public abstract class AbstractSkill<T extends SkillData> implements Skill<T> {
         float cutTime = 0;
         String ctea = data.getCutTimeEndAttribute();
         if (ctea != null) {
-            float cutFactor = attributeService.getDynamicValue(actor, ctea);
-            cutTime = (data.getCutTimeEndMax() * MathUtils.clamp(cutFactor, 0, 1.0f));
+            NumberAttribute attr = attributeService.getAttributeByName(actor, ctea);
+            if (attr != null) {
+                cutTime = (data.getCutTimeEndMax() * MathUtils.clamp(attr.floatValue(), 0, 1.0f));
+            }
         }
         return cutTime;
     }
@@ -646,7 +650,10 @@ public abstract class AbstractSkill<T extends SkillData> implements Skill<T> {
         float speed = 1.0f;
         String speedAttribute = data.getSpeedAttribute();
         if (speedAttribute != null) {
-            speed = attributeService.getDynamicValue(actor, speedAttribute);
+            NumberAttribute attr = attributeService.getAttributeByName(actor, speedAttribute);
+            if (attr != null) {
+                speed = attr.floatValue();
+            }
             if (speed < 0) {
                 speed = 0.0001f;
             }

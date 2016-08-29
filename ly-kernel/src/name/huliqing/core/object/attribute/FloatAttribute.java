@@ -20,6 +20,11 @@ public class FloatAttribute extends NumberAttribute<Float, AttributeData> {
         super.setData(data);
         value = data.getAsFloat("value", value);
     }
+    
+    // 更新data值，以避免在外部使用data时获取不到实时的数据
+    protected void updateData() {
+        data.setAttribute("value", value);
+    }
 
     @Override
     public final int intValue() {
@@ -28,6 +33,16 @@ public class FloatAttribute extends NumberAttribute<Float, AttributeData> {
 
     @Override
     public final float floatValue() {
+        return value;
+    }
+
+    @Override
+    public final long longValue() {
+        return (long) value;
+    }
+
+    @Override
+    public final double doubleValue() {
         return value;
     }
     
@@ -106,6 +121,7 @@ public class FloatAttribute extends NumberAttribute<Float, AttributeData> {
     protected void setAndNotify(float value) {
         float oldValue = this.value;
         this.value = value;
+        updateData();
         if (Float.compare(oldValue, this.value) != 0) {
             notifyValueChangeListeners(oldValue, this.value);
         }

@@ -34,17 +34,26 @@ public class AttributeChangeActorLogic<T extends ActorLogicData> extends ActorLo
 
     @Override
     protected void doLogic(float tpf) {
-        AttributeData data = attributeService.getAttributeById(actor, targetAttribute).getData();
-        if (data == null) {
-            return;
-        }
-        
-        float useFactor = attributeService.getDynamicValue(actor, useAttribute);
+        // remove20160827
+//        AttributeData data = attributeService.getAttributeById(actor, targetAttribute).getData();
+//        if (data == null) {
+//            return;
+//        }
+
+        // remove20160827
+//        float useFactor = attributeService.getDynamicValue(actor, useAttribute);
+
+        float useFactor = attributeService.getNumberAttributeValue(actor, useAttribute, 0);
         float applyValue = value * useFactor * interval;
         
-        data.setDynamicValue(data.getDynamicValue() + applyValue);
-        attributeService.clampDynamicValue(actor, data.getId());
-        attributeNetwork.syncAttribute(actor, data.getId()
-                , data.getLevelValue(), data.getStaticValue(), data.getDynamicValue());
+        // remove20160827
+//        data.setDynamicValue(data.getDynamicValue() + applyValue);
+//        attributeService.clampDynamicValue(actor, data.getId());
+//        attributeNetwork.syncAttribute(actor, data.getId()
+//                , data.getLevelValue(), data.getStaticValue(), data.getDynamicValue());
+        
+        if (applyValue > 0.0001f) {
+            attributeNetwork.addAttributeValue(actor, targetAttribute, applyValue);
+        }
     }
 }

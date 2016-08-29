@@ -17,10 +17,12 @@ public abstract class AbstractModule<T extends ModuleData> implements Module<T> 
 
     protected T data;
     protected boolean initialized;
+    private int moduleOrder;
 
     @Override
     public void setData(T data) {
         this.data = data;
+        this.moduleOrder = data.getAsInteger("moduleOrder", moduleOrder);
     }
 
     @Override

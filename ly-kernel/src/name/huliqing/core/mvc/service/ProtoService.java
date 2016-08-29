@@ -60,14 +60,15 @@ public interface ProtoService extends Inject {
      * @return 
      */
     List<ObjectData> getDatas(Actor actor);
-    
-    /**
-     * 同步指定角色身上的物体数量
-     * @param actor
-     * @param objectId
-     * @param total 
-     */
-    void syncDataTotal(Actor actor, String objectId, int total);
+   
+    // remove20160830
+//    /**
+//     * 同步指定角色身上的物体数量
+//     * @param actor
+//     * @param objectId
+//     * @param total 
+//     */
+//    void syncDataTotal(Actor actor, String objectId, int total);
     
     /**
      * 获取物体的价值

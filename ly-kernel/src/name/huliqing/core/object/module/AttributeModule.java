@@ -5,9 +5,10 @@
  */
 package name.huliqing.core.object.module;
 
+import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.data.AttributeData;
-import name.huliqing.core.data.module.AttributeModuleData;
+import name.huliqing.core.data.module.ModuleData;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.attribute.Attribute;
@@ -17,12 +18,12 @@ import name.huliqing.core.object.attribute.AttributeStore.AttributeConflictExcep
 /**
  * 属性模块
  * @author huliqing
- * @param <T>
  */
-public class AttributeModule<T extends AttributeModuleData> extends AbstractModule<T> {
+public class AttributeModule extends AbstractModule<ModuleData> {
 
     private Actor actor;
     private final AttributeStore store = new AttributeStore();
+    private List<AttributeListener> listeners;
     
     @Override
     public void initialize(Actor actor) {
@@ -71,6 +72,11 @@ public class AttributeModule<T extends AttributeModuleData> extends AbstractModu
         if (!attribute.isInitialized()) {
             attribute.initialize(store);
         }
+        if (listeners != null) {
+            for (int i = 0; i < listeners.size(); i++) {
+                listeners.get(i).onAttributeAdded(actor, attribute);
+            }
+        }
     }
     
     /**
@@ -81,11 +87,16 @@ public class AttributeModule<T extends AttributeModuleData> extends AbstractModu
     public boolean removeAttribute(Attribute attribute) {
         boolean result = store.removeAttribute(attribute);
         attribute.cleanup();
+        if (result && listeners != null) {
+            for (int i = 0; i < listeners.size(); i++) {
+                listeners.get(i).onAttributeRemoved(actor, attribute);
+            }
+        }
         return result;
     }
     
     /**
-     * 获取指定id的属性，如果不存在，则返回null.
+     * 使用”id“来获取指定的属性，如果找不到则返回null.
      * @param attrId
      * @return 
      */
@@ -93,11 +104,33 @@ public class AttributeModule<T extends AttributeModuleData> extends AbstractModu
         return store.getAttributeById(attrId);
     }
 
+    /**
+     * 使用”名称“来查找指定的属性，如果找不到则返回null.
+     * @param attrName
+     * @return 
+     */
     public Attribute getAttributeByName(String attrName) {
         return store.getAttributeByName(attrName);
     }
     
+    /**
+     * 获取角色当前的所有属性，注：返回的列表只能只读，否则报错。
+     * @return 
+     */
     public List<Attribute>getAttributes() {
         return store.getAttributes();
+    }
+    
+    public void addListener(AttributeListener attributeListener) {
+        if (listeners == null) {
+            listeners = new ArrayList<AttributeListener>();
+        }
+        if (!listeners.contains(attributeListener)) {
+            listeners.add(attributeListener);
+        }
+    }
+    
+    public boolean removeListener(AttributeListener attributeListener) {
+        return listeners != null && listeners.remove(attributeListener);
     }
 }

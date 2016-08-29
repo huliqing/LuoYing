@@ -7,7 +7,7 @@ package name.huliqing.core.mvc.service;
 import name.huliqing.core.Inject;
 import name.huliqing.core.object.el.El;
 import name.huliqing.core.object.el.HitEl;
-import name.huliqing.core.object.el.XpDropEl;
+import name.huliqing.core.object.el.AttributeEl;
 
 /**
  *
@@ -36,7 +36,7 @@ public interface ElService extends Inject{
      * @param id
      * @return 
      */
-    XpDropEl getXpDropEl(String id);
+    AttributeEl getAttributeEl(String id);
 
     /**
      * 获取一个HitEl.

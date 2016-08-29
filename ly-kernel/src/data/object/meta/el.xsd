@@ -20,17 +20,16 @@ xs:time
         <xs:complexType>
             <xs:all>
                 <xs:element ref="elLevel" />
-                <xs:element ref="elXpDrop" />
                 <xs:element ref="elHit" />
+                <xs:element ref="elAttribute" />
             </xs:all>
         </xs:complexType>
     </xs:element>
     
-    <xs:element name="elXpDrop" >
+    <xs:element name="elAttribute" >
         <xs:annotation>
             <xs:documentation>
-                经验掉落，指定一条用于计算源角色在死亡后掉落的经验值。掉落的经验值
-                可以被目标攻击者获得。支持参数：[s_level]源角色（死亡角色）等级; [t_level]目标角色（一般为攻击者角色）等级
+                通过源角色和目标角色的属性来计算一个值。支持参数：{s_attributeName}源角色属性; {t_attributeName}目标角色属性
             </xs:documentation>
         </xs:annotation>
         <xs:complexType>

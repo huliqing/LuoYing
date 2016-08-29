@@ -6,6 +6,8 @@
 package name.huliqing.core.loader;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import name.huliqing.core.data.ActorData;
 import name.huliqing.core.data.AttributeData;
@@ -100,7 +102,7 @@ public class ActorDataLoader implements DataLoader<ActorData> {
             }
         }
         
-        // 角色属性
+        // 角色动画通道
         String[] channels = proto.getAsArray("channels");
         if (channels != null) {
             for (String id : channels) {
@@ -108,11 +110,12 @@ public class ActorDataLoader implements DataLoader<ActorData> {
             }
         }
         
-        // ==== 载入物品掉落设置
-        String drop = proto.getAsString("drop");
-        DropData dropData = null;
-        if (drop != null) {
-            dropData = DataFactory.createData(drop);
+        // 物品掉落设置
+        String[] drops = proto.getAsArray("drops");
+        if (drops != null && drops.length > 0) {
+            for (String id : drops) {
+                data.addObjectData((DropData)DataFactory.createData(id));
+            }
         }
         
         String chat = proto.getAsString("chat");
@@ -136,12 +139,8 @@ public class ActorDataLoader implements DataLoader<ActorData> {
             }
         }
         
-        data.setLevel(proto.getAsInteger("level", 1));
-        
-        // remove201602xx
-//        // physics
-//        boolean physicsEnabled = proto.getAsBoolean("physicsEnabled", true);
-//        data.setPhysicsEnabled(physicsEnabled);
+        // remove20160828
+//        data.setLevel(proto.getAsInteger("level", 1));
         
         // 武器插槽
         List<String> slots = proto.getAsList("slots");
@@ -157,6 +156,7 @@ public class ActorDataLoader implements DataLoader<ActorData> {
         String lifeAttribute = proto.getAsString("lifeAttribute");
         String viewAttribute = proto.getAsString("viewAttribute");
         
+        // remove20160828
 //        Map<String, AttributeData> temp = new LinkedHashMap<String, AttributeData>();
 //        if (lifeAttribute != null) {
 //            AttributeData ad = DataFactory.createData(lifeAttribute);
@@ -187,39 +187,46 @@ public class ActorDataLoader implements DataLoader<ActorData> {
         }
         
         // 等级及经验值掉落设置
-        data.setLevelUpEl(proto.getAsString("levelUpEl"));
-        data.setXpDropEl(proto.getAsString("xpDropEl"));
+//        data.setLevelUpEl(proto.getAsString("levelUpEl"));
+//        data.setXpDropEl(proto.getAsString("xpDropEl"));
         data.setName(ResourceManager.getObjectName(data));
         data.setGroup(proto.getAsInteger("group", 0));
         data.setSex(Sex.identifyByName(proto.getAsString("sex", "2")));
         data.setRace(proto.getAsString("race"));
         data.setEssential(proto.getAsBoolean("essential", false));
-//        data.setSkinBase(skinBases);
-//        data.setItemStore(itemStore);
-//        data.setSkillStore(skillStore);
-        data.setDrop(dropData);
-//        data.setLogics(logics);
+        
+        // remove20160830
+//        data.setDrop(dropData);
+
         data.setSlots(slots);
-//        data.setAttributes(attributes);
         data.setLifeAttribute(lifeAttribute);
         data.setViewAttribute(viewAttribute);
-//        data.setResist(resist);
-//        data.setTalents(talents);
-        data.setTalentPoints(proto.getAsInteger("talentPoints", 0));
-        data.setTalentPointsLevelEl(proto.getAsString("talentPointsLevelEl"));
+
+            // remove20160828
+//        data.setTalentPoints(proto.getAsInteger("talentPoints", 0));
+//        data.setTalentPointsLevelEl(proto.getAsString("talentPointsLevelEl"));
+
         data.setTeam(proto.getAsInteger("team", 0));
         data.setLiving(proto.getAsBoolean("living", false));
         data.setFollowTarget(proto.getAsInteger("followTarget", -1));
         
-
-        // 载入模块配置
+        // 载入模块配置,并根据ModuleOrder进行排序
         String[] moduleArr = proto.getAsArray("modules");
         if (moduleArr != null) {
             data.setModuleDatas(new ArrayList<ModuleData>(moduleArr.length));
             for (String mid : moduleArr) {
                 data.getModuleDatas().add((ModuleData) DataFactory.createData(mid));
             }
+            Collections.sort(data.getModuleDatas(), new Comparator<ModuleData>() {
+                @Override
+                public int compare(ModuleData o1, ModuleData o2) {
+                    return o1.getModuleOrder() - o2.getModuleOrder();
+                }
+            });
         }
+        
     }
+    
+    
     
 }

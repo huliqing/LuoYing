@@ -308,7 +308,7 @@ public class SkillServiceImpl implements SkillService {
         }
         
         // 6.角色需要达到指定等级才能使用技能
-        if (actor.getData().getLevel() < data.getNeedLevel()) {
+        if (actorService.getLevel(actor) < data.getNeedLevel()) {
             return SkillConstants.STATE_NEED_LEVEL;
         }
         
@@ -321,7 +321,7 @@ public class SkillServiceImpl implements SkillService {
         List<AttributeUse> uas = data.getUseAttributes();
         if (uas != null) {
             for (AttributeUse ua : uas) {
-                if (attributeService.getDynamicValue(actor, ua.getAttribute()) < ua.getAmount()) {
+                if (attributeService.getNumberAttributeValue(actor, ua.getAttribute(), 0) < ua.getAmount()) {
                     return SkillConstants.STATE_MANA_NOT_ENOUGH;
                 }
             }
@@ -379,17 +379,6 @@ public class SkillServiceImpl implements SkillService {
 
     @Override
     public boolean isSkillLearned(Actor actor, String skillId) {
-//        List<SkillData> skills = actor.getData().getSkillStore().getSkills();
-//        if (skills == null || skills.isEmpty()) {
-//            return false;
-//        }
-//        for (SkillData sd : skills) {
-//            if (sd.getId().equals(skillId)) {
-//                return true;
-//            }
-//        }
-//        return false;
-
         SkillModule module = actor.getModule(SkillModule.class);
         return module != null && module.getSkill(skillId) != null;
     }
@@ -417,8 +406,12 @@ public class SkillServiceImpl implements SkillService {
         List<AttributeUse> uas = data.getUseAttributes();
         if (uas != null) {
             for (AttributeUse ua : uas) {
-                attributeService.applyDynamicValue(actor, ua.getAttribute(), ua.getAmount() * -1);
-                attributeService.clampDynamicValue(actor, ua.getAttribute());
+                
+                // remove20160827
+//                attributeService.applyDynamicValue(actor, ua.getAttribute(), ua.getAmount() * -1);
+//                attributeService.clampDynamicValue(actor, ua.getAttribute());
+
+                attributeService.addAttributeValue(actor, ua.getAttribute(), -ua.getAmount());
             }
         }
 

@@ -9,7 +9,6 @@ import com.jme3.util.SafeArrayList;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.data.TaskData;
-import name.huliqing.core.data.module.TaskModuleData;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.task.Task;
@@ -17,9 +16,8 @@ import name.huliqing.core.object.task.Task;
 /**
  * 任务管理
  * @author huliqing
- * @param <T>
  */
-public class TaskModule<T extends TaskModuleData> extends AbstractModule<T> {
+public class TaskModule extends AbstractModule {
 
     private Actor actor;
     private final SafeArrayList<Task> tasks = new SafeArrayList<Task>(Task.class);
@@ -29,27 +27,6 @@ public class TaskModule<T extends TaskModuleData> extends AbstractModule<T> {
     public void initialize(Actor actor) {
         super.initialize(actor); 
         this.actor = actor;
-   
-        // remove
-//        // 从存档中获取Datas，如果不是存档，则从原始配置的参数xml中获取
-//        List<TaskData> taskInits = (List<TaskData>) data.getAttribute("taskDatas");
-//        if (taskInits == null) {
-//            String[] taskArr = data.getAsArray("tasks");
-//            if (taskArr != null) {
-//                taskInits = new ArrayList<TaskData>(taskArr.length);
-//                for (String taskId : taskArr) {
-//                    taskInits.add((TaskData) DataFactory.createData(taskId));
-//                }
-//            }
-//        }
-//
-//        if (taskInits != null) {
-//            for (TaskData td : taskInits) {
-//                addTask((Task) Loader.load(td));
-//            }
-//        }
-//        // 重新设置data.
-//        data.setAttribute("taskDatas", taskDatas);
 
         List<TaskData> taskDatas = actor.getData().getObjectDatas(TaskData.class, null);
         if (taskDatas != null && !taskDatas.isEmpty()) {
@@ -57,7 +34,6 @@ public class TaskModule<T extends TaskModuleData> extends AbstractModule<T> {
                 addTask((Task) Loader.load(td));
             }
         }
-
     }
 
     @Override
@@ -136,11 +112,6 @@ public class TaskModule<T extends TaskModuleData> extends AbstractModule<T> {
     public List<Task> getTasks() {
         return tasks;
     }
-    
-    // remove
-//    public List<TaskData> getTaskDatas() {
-//        return data.getTaskDatas();
-//    }
     
     /**
      * 完成一个指定的任务

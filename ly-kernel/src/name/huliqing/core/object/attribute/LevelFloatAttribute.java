@@ -19,13 +19,14 @@ import name.huliqing.core.object.el.LevelEl;
  */
 public class LevelFloatAttribute extends NumberAttribute<Float, AttributeData> implements LevelAttribute {
     private final ElService elService = Factory.get(ElService.class);
+    
+    // 完整的value是由levelValue+dynamicValue
+    private float value;
 
     // 等级值只能通过设置等级来设置
     private float levelValue;
     // 动态值可以进行随时改变
     private float dynamicValue;
-    // 完整的value是由levelValue+dynamicValue
-    private float fullValue;
     
     // 等级公式id,通过这个id来创建一条等级公式
     private String levelEl;
@@ -37,27 +38,40 @@ public class LevelFloatAttribute extends NumberAttribute<Float, AttributeData> i
     @Override
     public void setData(AttributeData data) {
         super.setData(data); 
-        fullValue = data.getAsFloat("value", 0);
+        value = data.getAsFloat("value", 0);
+        levelValue = data.getAsFloat("levelValue", levelValue);
+        dynamicValue = data.getAsFloat("dynamicValue", dynamicValue);
         level = data.getAsInteger("level", 1);
         levelEl = data.getAsString("levelEl");
     }
-
-    @Override
-    public AttributeData getData() {
-        data.setAttribute("value", fullValue);
+    
+    // 更新data值，以避免在外部使用data时获取不到实时的数据
+    protected void updateData() {
+        data.setAttribute("value", value);
+        data.setAttribute("levelValue", levelValue);
+        data.setAttribute("dynamicValue", dynamicValue);
         data.setAttribute("level", level);
-        // 一些不变化的值不需要重设回data, skip: levelEl
-        return super.getData(); 
+//        data.setAttribute("levelEl", levelEl); // levelEl不会改变，所以不需要重新设置回去。
     }
     
     @Override
     public final int intValue() {
-        return (int) fullValue;
+        return (int) value;
     }
 
     @Override
     public final float floatValue() {
-        return fullValue;
+        return value;
+    }
+
+    @Override
+    public final long longValue() {
+        return (long) value;
+    }
+
+    @Override
+    public final double doubleValue() {
+        return value;
     }
     
     /**
@@ -68,7 +82,7 @@ public class LevelFloatAttribute extends NumberAttribute<Float, AttributeData> i
      */
     @Override
     public final Float getValue() {
-        return fullValue;
+        return value;
     }
     
     /**
@@ -89,10 +103,11 @@ public class LevelFloatAttribute extends NumberAttribute<Float, AttributeData> i
      * @param newFullValue
      */
     protected final void setAndNotify(float newFullValue) {
-        float oldValue = this.fullValue;
-        this.fullValue = newFullValue;
-        if (Float.compare(oldValue, this.fullValue) != 0) {
-            notifyValueChangeListeners(oldValue, this.fullValue);
+        float oldValue = this.value;
+        this.value = newFullValue;
+        updateData();
+        if (Float.compare(oldValue, this.value) != 0) {
+            notifyValueChangeListeners(oldValue, this.value);
         }
     }
     
@@ -156,38 +171,38 @@ public class LevelFloatAttribute extends NumberAttribute<Float, AttributeData> i
 
     @Override
     public final boolean isEqualTo(int other) {
-        return fullValue == other;
+        return value == other;
     }
 
     @Override
     public final boolean isEqualTo(float other) {
-        return fullValue == other;
+        return value == other;
     }
 
     @Override
     public final boolean greaterThan(int other) {
-        return fullValue > other;
+        return value > other;
     }
 
     @Override
     public final boolean greaterThan(float other) {
-        return fullValue > other;
+        return value > other;
     }
 
     @Override
     public final boolean lessThan(int other) {
-        return fullValue < other;
+        return value < other;
     }
 
     @Override
     public final boolean lessThan(float other) {
-        return fullValue < other;
+        return value < other;
     }
     
     @Override
     public final boolean match(Attribute other) {
         if (other instanceof NumberAttribute) {
-            return NumberCompare.isEqualTo(fullValue, (NumberAttribute) other);
+            return NumberCompare.isEqualTo(value, (NumberAttribute) other);
         }
         return false;
     }

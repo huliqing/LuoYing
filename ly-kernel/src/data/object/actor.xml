@@ -47,17 +47,15 @@
     <!--==========================================================================-->
     
     <!--所有角色基类-->
-    <actor id="actorBase" attributes="attributeHealth,attributeMana
-,attributeAttack,attributeMagicAttack
-,attributeDefence,attributeMagicDefence
-,attributeVision
-,attributeHealthRestore,attributeManaRestore
-,attributeAttackSpeed,attributeMagicSpeed,attributeMoveSpeed
-,attributeDefenceRate,attributeDuckRate,attributeGhostRate" 
+    <actor id="actorBase" attributes="
+    attrHealthMax,attrHealth,attrManaMax,attrMana,attrAttack,attrMagicAttack
+    ,attrDefence,attrMagicDefence,attrVision,attrHealthRestore,attrManaRestore
+    ,attrAttackSpeed,attrMagicSpeed,attrMoveSpeed
+    ,attrDefenceRate,attrDuckRate,attrGhostRate" 
            lifeAttribute="attributeHealth" viewAttribute="attributeVision" 
            xpDropEl="elXpDrop" channels="channelFull"
            modules="moduleActor,moduleAction,moduleAttribute,moduleChannel,moduleChat,moduleItem,moduleLogic
-    ,moduleResist,moduleSkill,moduleSkin,moduleState,moduleTalent,moduleTask"
+    ,moduleResist,moduleSkill,moduleSkin,moduleState,moduleTalent,moduleTask,moduleLevel,moduleDrop"
   
     />
     
@@ -174,7 +172,7 @@
 ,skillDuckLeft,skillDuckRight,skillDuckBack,skillDuckLeftRoll,skillDuckRightRoll" />
     
     <!--森林妖精-->
-    <actor id="actorFairy" extends="actorHumanFemaleBase"  level="30" resist="resistFairy" drop="dropFairy" icon="Interface/face/female5.jpg"
+    <actor id="actorFairy" extends="actorHumanFemaleBase"  level="30" resist="resistFairy" drops="dropFairy" icon="Interface/face/female5.jpg"
            skinBase="skinEar004,skinEye000,skinFace000,skinFoot000,skinHair011,skinHand000,skinLowerBody000,skinUpperBody000"
            skinOutfit="skinFoot004,skinHand004,skinLowerBody004,skinUpperBody004"
            skills="skillReset,skillBack,skillWalk,skillWait,skillRun,skillDead,skillHurtFront,skillHurtBack,skillDefend1,skillDefend2
@@ -210,7 +208,7 @@
     <!-- 丛林蜘蛛 -->
     <actor id="actorSpider" extends="actorLiveBase" icon="Interface/face/spider.jpg"
            file="Models/monster/spider/spider.j3o" scale="0.5"
-           drop="dropSpider"
+           drops="dropSpider"
            skills="skillSpiderWait,skillSpiderHurt,skillSpiderDead,skillSpiderReset,skillSpiderWalk,skillSpiderRun,skillSpiderAttack,skillSpiderWeb" group="0" mass="60" mat="4"
            level="5" skinWeapon="weaponMockAnimalClaw"
            collisionRadius="0.6" resist="resistCreature" />
@@ -225,7 +223,7 @@
     
     <!-- 丛林盗贼 -->
     <actor id="actorNinja" extends="actorLiveBase" file="Models/monster/ninja/Ninja.mesh.j3o"  
-           drop="dropNinja" group="1" sex="1" icon="Interface/face/ninja.jpg"
+           drops="dropNinja" group="1" sex="1" icon="Interface/face/ninja.jpg"
            scale="0.014" mass="60" mat="4" localForward="0, 0, -1"
            skinWeapon="weaponMockRightSword" hardwareSkinning="1"
            skills="saNinjaReset,saNinjaWait,saNinjaWalk,saNinjaRun
@@ -236,20 +234,20 @@
     <!-- wolf -->
     <actor id="actorWolf" extends="actorLiveBase" file="Models/monster/wolf/wolf.mesh.j3o" group="1" 
            sex="2" race="" level="7" mass="60" icon="Interface/face/wolf.jpg"
-           drop="dropWolf" skinWeapon="weaponMockAnimalClaw"
+           drops="dropWolf" skinWeapon="weaponMockAnimalClaw"
            skills="saWolfReset,saWolfWalk,saWolfRun,saWolfWait,saWolfAttack,saWolfDead,saWolfHurt,saWolfIdle,saWolfIdle2,saWolfIdle3,saWolfIdle4" 
            mat="4" scale="0.2" collisionRadius="0.6" resist="resistCreature" />
     
     <!-- bear -->
     <actor id="actorBear" extends="actorLiveBase" file="Models/monster/bear/bear.mesh.j3o" group="1" 
            sex="2" race="" level="8"  mass="120" icon="Interface/face/bear.jpg"
-           drop="dropBear" skinWeapon="weaponMockAnimalClaw"
+           drops="dropBear" skinWeapon="weaponMockAnimalClaw"
            skills="saBearReset,saBearWalk,saBearRun,saBearWait,saBearAttack1,saBearAttack2,saBearDead,saBearHurt,saBearIdle1,saBearIdle2,saBearIdle3" 
            mat="4" scale="0.2" collisionRadius="0.6"  resist="resistCreature" />
     
     <!-- scorpion -->
     <actor id="actorScorpion" extends="actorLiveBase" file="Models/monster/scorpion/scorpion.mesh.j3o" group="1" sex="2" race="" 
-           level="6" mass="15" drop="dropScorpion" icon="Interface/face/scorpion.jpg"
+           level="6" mass="15" drops="dropScorpion" icon="Interface/face/scorpion.jpg"
            skills="saScorpionReset,saScorpionWalk,saScorpionRun,saScorpionWait,saScorpionAttack,saScorpionHurt,saScorpionDead,saScorpionIdle,saScorpionIdle2" 
            mat="4" scale="0.05f"  skinWeapon="weaponMockAnimalClaw" resist="resistScorpion" />
     
@@ -263,7 +261,7 @@
            mat="4" scale="0.5" skinWeapon="weaponMockRightWoodSword" resist="resistCreature" />
 
     <!-- 古柏幼仔 -->
-    <actor id="actorGbSmall" extends="actorGb" mass="60" scale="0.2" drop="dropGb"
+    <actor id="actorGbSmall" extends="actorGb" mass="60" scale="0.2" drops="dropGb"
            skills="skillGbReset,skillGbSmallWalk,skillGbSmallRun,skillGbIdle,skillGbIdle2,skillGbDead,skillGbAttack,skillGbWait,skillGbHurt" />
 
     <!-- 黑暗祭坛 -->
@@ -278,7 +276,7 @@
            talents="talentSinbadDefence"
            skills="skillSinbadReset,skillSinbadWait,skillSinbadWalk,skillSinbadRun,skillSinbadHurt,skillSinbadDead
 ,skillSinbadAttack,skillSinbadAttack2,skillSinbadAttack3,skillSinbadDefence,skillSinbadDefence2" 
-           mat="4" skinWeapon="weaponSinbad" resist="resistOrc" drop="dropSinbad" hardwareSkinning="0" />
+           mat="4" skinWeapon="weaponSinbad" resist="resistOrc" drops="dropSinbad" hardwareSkinning="0" />
 
     <!--T.Rex-->
     <actor id="actorTrex" extends="actorLiveBase" file="Models/monster/trex/trex.mesh.j3o" 
@@ -286,7 +284,7 @@
            talents="talentTrexAttack,talentTrexDefence"
            group="1" sex="1" race="0" level="20"  mass="240" scale="0.75"
            skills="skillTrexWait,skillTrexWalk,skillTrexRunSlow,skillTrexHurt1,skillTrexHurt2,skillTrexDead,skillTrexAttack,skillTrexIdle1" 
-           mat="4" resist="resistCreature" drop="dropTrex" collisionShape="capsule" 
+           mat="4" resist="resistCreature" drops="dropTrex" collisionShape="capsule" 
            collisionRadius="1.6" collisionHeight="4.2" />
     
     <!--Raptor-->
@@ -295,7 +293,7 @@
            talents="talentRaptorMoveSpeed"
            group="1" sex="1" race="0" level="20"  mass="240" scale="0.75"
            skills="skillRaptorWait,skillRaptorWalk,skillRaptorRun,skillRaptorHurt1,skillRaptorHurt2,skillRaptorDead,skillRaptorAttack,skillRaptorIdle" 
-           mat="4" resist="resistCreature" drop="dropRaptor" collisionShape="capsule" 
+           mat="4" resist="resistCreature" drops="dropRaptor" collisionShape="capsule" 
            collisionRadius="1.4" collisionHeight="4.2" />
     
     <!--Jaime-->
@@ -304,12 +302,12 @@
            talents=""
            group="1" sex="1" race="0" level="20" mass="240" scale="1.5"
            skills="skillJaimeWait,skillJaimeIdle,skillJaimeRun" 
-           mat="4" resist="resistCreature" drop="" chat="chatJaime" />
+           mat="4" resist="resistCreature" drops="" chat="chatJaime" />
 
     <!--Skeleton-->
     <actor id="actorSkeleton" extends="actorLiveBase" file="Models/monster/skeleton/skeleton.mesh.j3o" 
            items="" icon="Interface/face/skeleton.jpg" extAnim="Models/actor/ext_anim" 
-           talents="" mat="5" resist="resistNonLife" drop="" 
+           talents="" mat="5" resist="resistNonLife" drops="" 
            skinWeapon="weaponSword000" slots=""
            group="1" sex="2" race="0" level="20" scale="0.2"
            skills="skillSkeletonWait,skillSkeletonAttack,skillSkeletonDead,skillSkeletonRun

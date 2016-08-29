@@ -21,37 +21,16 @@ xs:time
             <xs:all>
                 <xs:element ref="attributeFloat" />
                 <xs:element ref="attributeInteger" />
+                <xs:element ref="attributeLong" />
+                <xs:element ref="attributeString" />
+                <xs:element ref="attributeBoolean" />
                 <xs:element ref="attributeLevelFloat" />
                 <xs:element ref="attributeLevelInteger" />
                 <xs:element ref="attributeLimitInteger" />
-
-                <!--remove20160825-->
-                <!--<xs:element ref="attribute" />-->
-                
             </xs:all>
         </xs:complexType>
     </xs:element>
 
-<!--remove20160825-->
-<!--    <xs:element name="attribute" >
-        <xs:annotation>
-            <xs:documentation>定义一个等级</xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="attributeBase">
-                    <xs:attribute name="el" type="xs:string" use="required" >
-                        <xs:annotation>
-                            <xs:documentation>
-                                指定一个默认的等级设置,如果设置了该值，则该属性会随着等级的提升而改变。
-                                该参绑必须绑定到一个elLevel类型的表达式设置。参考el.xml
-                            </xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
-                </xs:extension>
-            </xs:complexContent>
-        </xs:complexType>
-    </xs:element>-->
     
     <xs:element name="attributeLimitInteger" >
         <xs:annotation>
@@ -128,6 +107,51 @@ xs:time
                                 如果没有设置这个公式，则设置属性的等级将没有意义。
                             </xs:documentation>
                         </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="attributeBoolean" >
+        <xs:annotation>
+            <xs:documentation>整数类型的属性</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="attributeBase">
+                    <xs:attribute name="value" type="bool" use="optional" >
+                        <xs:annotation><xs:documentation>属性初始值</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+            
+    <xs:element name="attributeString" >
+        <xs:annotation>
+            <xs:documentation>整数类型的属性</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="attributeBase">
+                    <xs:attribute name="value" type="xs:string" use="optional" >
+                        <xs:annotation><xs:documentation>属性初始值, String类型</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="attributeLong" >
+        <xs:annotation>
+            <xs:documentation>整数类型的属性</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="attributeBase">
+                    <xs:attribute name="value" type="xs:integer" use="optional" >
+                        <xs:annotation><xs:documentation>属性初始值, long或int</xs:documentation></xs:annotation>
                     </xs:attribute>
                 </xs:extension>
             </xs:complexContent>

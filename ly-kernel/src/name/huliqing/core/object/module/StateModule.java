@@ -9,7 +9,6 @@ import com.jme3.scene.control.Control;
 import com.jme3.util.SafeArrayList;
 import java.util.List;
 import name.huliqing.core.data.StateData;
-import name.huliqing.core.data.module.StateModuleData;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.state.State;
@@ -17,7 +16,7 @@ import name.huliqing.core.object.state.State;
 /**
  * @author huliqing
  */
-public class StateModule extends AbstractModule<StateModuleData> {
+public class StateModule extends AbstractModule {
 
     private Actor actor;
     private final SafeArrayList<State> states = new SafeArrayList<State>(State.class);

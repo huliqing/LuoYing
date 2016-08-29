@@ -62,7 +62,6 @@ import name.huliqing.core.data.TaskData;
 import name.huliqing.core.data.ViewData;
 import name.huliqing.core.mess.MessActionRun;
 import name.huliqing.core.mess.MessActorAddSkill;
-import name.huliqing.core.mess.MessActorApplyXp;
 import name.huliqing.core.mess.MessActorFollow;
 import name.huliqing.core.mess.MessActorKill;
 import name.huliqing.core.mess.MessActorPhysics;
@@ -95,7 +94,6 @@ import name.huliqing.core.mess.MessPlayLoadSavedActor;
 import name.huliqing.core.mess.MessPlayLoadSavedActorResult;
 import name.huliqing.core.mess.MessProtoAdd;
 import name.huliqing.core.mess.MessProtoRemove;
-import name.huliqing.core.mess.MessProtoSync;
 import name.huliqing.core.mess.MessProtoUse;
 import name.huliqing.core.mess.MessSCActorRemove;
 import name.huliqing.core.mess.MessSCClientList;
@@ -192,7 +190,7 @@ import name.huliqing.core.object.effect.TextureEffect;
 import name.huliqing.core.loader.ElDataLoader;
 import name.huliqing.core.object.el.HitEl;
 import name.huliqing.core.object.el.LevelEl;
-import name.huliqing.core.object.el.XpDropEl;
+import name.huliqing.core.object.el.AttributeEl;
 import name.huliqing.core.object.emitter.Emitter;
 import name.huliqing.core.loader.EmitterDataLoader;
 import name.huliqing.core.object.env.AudioEnv;
@@ -244,18 +242,6 @@ import name.huliqing.core.object.magic.AttributeHitMagic;
 import name.huliqing.core.loader.MagicDataLoader;
 import name.huliqing.core.object.magic.StateMagic;
 import name.huliqing.core.data.module.ActionModuleData;
-import name.huliqing.core.data.module.AttributeModuleData;
-import name.huliqing.core.data.module.ActorModuleData;
-import name.huliqing.core.data.module.ChannelModuleData;
-import name.huliqing.core.data.module.ChatModuleData;
-import name.huliqing.core.data.module.ItemModuleData;
-import name.huliqing.core.data.module.LogicModuleData;
-import name.huliqing.core.data.module.ResistModuleData;
-import name.huliqing.core.data.module.SkillModuleData;
-import name.huliqing.core.data.module.SkinModuleData;
-import name.huliqing.core.data.module.StateModuleData;
-import name.huliqing.core.data.module.TalentModuleData;
-import name.huliqing.core.data.module.TaskModuleData;
 import name.huliqing.core.object.position.FixedPosition;
 import name.huliqing.core.loader.PositionDataLoader;
 import name.huliqing.core.object.position.RandomBoxPosition;
@@ -310,24 +296,21 @@ import name.huliqing.core.object.view.TextPanelView;
 import name.huliqing.core.object.view.TextView;
 import name.huliqing.core.object.view.TimerView;
 import name.huliqing.core.loader.ViewDataLoader;
-import name.huliqing.core.loader.module.ActionModuleDataLoader;
-import name.huliqing.core.loader.module.AttributeModuleDataLoader;
-import name.huliqing.core.loader.module.ActorModuleDataLoader;
-import name.huliqing.core.loader.module.ChannelModuleDataLoader;
-import name.huliqing.core.loader.module.ChatModuleDataLoader;
-import name.huliqing.core.loader.module.ItemModuleDataLoader;
-import name.huliqing.core.loader.module.LogicModuleDataLoader;
-import name.huliqing.core.loader.module.ResistModuleDataLoader;
-import name.huliqing.core.loader.module.SkillModuleDataLoader;
-import name.huliqing.core.loader.module.SkinModuleDataLoader;
-import name.huliqing.core.loader.module.StateModuleDataLoader;
-import name.huliqing.core.loader.module.TalentModuleDataLoader;
-import name.huliqing.core.loader.module.TaskModuleDataLoader;
+import name.huliqing.core.loader.ModuleDataLoader;
+import name.huliqing.core.object.attribute.BooleanAttribute;
 import name.huliqing.core.object.attribute.FloatAttribute;
 import name.huliqing.core.object.attribute.IntegerAttribute;
 import name.huliqing.core.object.attribute.LevelFloatAttribute;
 import name.huliqing.core.object.attribute.LevelIntegerAttribute;
 import name.huliqing.core.object.attribute.LimitIntegerAttribute;
+import name.huliqing.core.object.attribute.LongAttribute;
+import name.huliqing.core.object.attribute.StringAttribute;
+import name.huliqing.core.object.drop.AttributeDrop;
+import name.huliqing.core.object.drop.GroupDrop;
+import name.huliqing.core.object.drop.ItemDrop;
+import name.huliqing.core.object.drop.SkinDrop;
+import name.huliqing.core.object.module.LevelModule;
+import name.huliqing.core.object.state.GroupState;
 import name.huliqing.core.state.PlayState;
 import name.huliqing.core.xml.Data;
 import name.huliqing.core.xml.DataFactory;
@@ -452,8 +435,11 @@ public class LY {
         
         // Attribute
         DataFactory.register("attribute",  AttributeData.class, AttributeDataLoader.class, null);
+        DataFactory.register("attributeBoolean",  AttributeData.class, AttributeDataLoader.class, BooleanAttribute.class);
         DataFactory.register("attributeFloat",  AttributeData.class, AttributeDataLoader.class, FloatAttribute.class);
         DataFactory.register("attributeInteger",  AttributeData.class, AttributeDataLoader.class, IntegerAttribute.class);
+        DataFactory.register("attributeLong",  AttributeData.class, AttributeDataLoader.class, LongAttribute.class);
+        DataFactory.register("attributeString",  AttributeData.class, AttributeDataLoader.class, StringAttribute.class);
         DataFactory.register("attributeLevelFloat",  AttributeData.class, AttributeDataLoader.class, LevelFloatAttribute.class);
         DataFactory.register("attributeLevelInteger",  AttributeData.class, AttributeDataLoader.class, LevelIntegerAttribute.class);
         DataFactory.register("attributeLimitInteger",  AttributeData.class, AttributeDataLoader.class, LimitIntegerAttribute.class);
@@ -477,14 +463,15 @@ public class LY {
         // Config
         DataFactory.register("config",  ConfigData.class, ConfigDataLoader.class, null);
         
-        
         // Drop
-        DataFactory.register("drop",  DropData.class, DropDataLoader.class, null);
+        DataFactory.register("dropAttribute",  DropData.class, DropDataLoader.class, AttributeDrop.class);
+        DataFactory.register("dropGroup",  DropData.class, DropDataLoader.class, GroupDrop.class);
+        DataFactory.register("dropItem",  DropData.class, DropDataLoader.class, ItemDrop.class);
+        DataFactory.register("dropSkin",  DropData.class, DropDataLoader.class, SkinDrop.class);
         
         // Effect
         DataFactory.register("effectHalo",  EffectData.class, EffectDataLoader.class, HaloEffect.class);
         DataFactory.register("effectParticle", EffectData.class, EffectDataLoader.class, ParticleEffect.class);
-//        DataFactory.register("effectSimpleGroup", EffectData.class, EffectDataLoader.class, SimpleGroupEffect.class);
         DataFactory.register("effectGroup", EffectData.class, EffectDataLoader.class, GroupEffect.class);
         DataFactory.register("effectEncircleHalo", EffectData.class, EffectDataLoader.class, EncircleHaloEffect.class);
         DataFactory.register("effectTexture", EffectData.class, EffectDataLoader.class, TextureEffect.class);
@@ -497,8 +484,8 @@ public class LY {
         
         // El
         DataFactory.register("elLevel",  ElData.class, ElDataLoader.class, LevelEl.class);
+        DataFactory.register("elAttribute",  ElData.class, ElDataLoader.class, AttributeEl.class);
         DataFactory.register("elHit",  ElData.class, ElDataLoader.class, HitEl.class);
-        DataFactory.register("elXpDrop",  ElData.class, ElDataLoader.class, XpDropEl.class);
         
         // Emitter
         DataFactory.register("emitter",  EmitterData.class, EmitterDataLoader.class, Emitter.class);
@@ -557,19 +544,20 @@ public class LY {
         DataFactory.register("magicAttributeHit", MagicData.class, MagicDataLoader.class, AttributeHitMagic.class);
 
         // Module 
-        DataFactory.register("moduleAction",  ActionModuleData.class, ActionModuleDataLoader.class, ActionModule.class);
-        DataFactory.register("moduleActor",  ActorModuleData.class, ActorModuleDataLoader.class, ActorModule.class);
-        DataFactory.register("moduleAttribute",  AttributeModuleData.class, AttributeModuleDataLoader.class, AttributeModule.class);
-        DataFactory.register("moduleChannel",  ChannelModuleData.class, ChannelModuleDataLoader.class, ChannelModule.class);
-        DataFactory.register("moduleChat",  ChatModuleData.class, ChatModuleDataLoader.class, ChatModule.class);
-        DataFactory.register("moduleItem",  ItemModuleData.class, ItemModuleDataLoader.class, ItemModule.class);
-        DataFactory.register("moduleLogic",  LogicModuleData.class, LogicModuleDataLoader.class, LogicModule.class);
-        DataFactory.register("moduleResist",  ResistModuleData.class, ResistModuleDataLoader.class, ResistModule.class);
-        DataFactory.register("moduleSkill",  SkillModuleData.class, SkillModuleDataLoader.class, SkillModule.class);
-        DataFactory.register("moduleSkin",  SkinModuleData.class, SkinModuleDataLoader.class, SkinModule.class);
-        DataFactory.register("moduleState",  StateModuleData.class, StateModuleDataLoader.class, StateModule.class);
-        DataFactory.register("moduleTalent",  TalentModuleData.class, TalentModuleDataLoader.class, TalentModule.class);
-        DataFactory.register("moduleTask",  TaskModuleData.class, TaskModuleDataLoader.class, TaskModule.class);
+        DataFactory.register("moduleAction",  ActionModuleData.class, ModuleDataLoader.class, ActionModule.class);
+        DataFactory.register("moduleActor",  ModuleData.class, ModuleDataLoader.class, ActorModule.class);
+        DataFactory.register("moduleAttribute",  ModuleData.class, ModuleDataLoader.class, AttributeModule.class);
+        DataFactory.register("moduleChannel",  ModuleData.class, ModuleDataLoader.class, ChannelModule.class);
+        DataFactory.register("moduleChat",  ModuleData.class, ModuleDataLoader.class, ChatModule.class);
+        DataFactory.register("moduleItem",  ModuleData.class, ModuleDataLoader.class, ItemModule.class);
+        DataFactory.register("moduleLevel",  ModuleData.class, ModuleDataLoader.class, LevelModule.class);
+        DataFactory.register("moduleLogic",  ModuleData.class, ModuleDataLoader.class, LogicModule.class);
+        DataFactory.register("moduleResist",  ModuleData.class, ModuleDataLoader.class, ResistModule.class);
+        DataFactory.register("moduleSkill",  ModuleData.class, ModuleDataLoader.class, SkillModule.class);
+        DataFactory.register("moduleSkin",  ModuleData.class, ModuleDataLoader.class, SkinModule.class);
+        DataFactory.register("moduleState",  ModuleData.class, ModuleDataLoader.class, StateModule.class);
+        DataFactory.register("moduleTalent",  ModuleData.class, ModuleDataLoader.class, TalentModule.class);
+        DataFactory.register("moduleTask",  ModuleData.class, ModuleDataLoader.class, TaskModule.class);
         
         // Position
         DataFactory.register("positionRandomSphere",  PositionData.class, PositionDataLoader.class, RandomSpherePosition.class);
@@ -626,6 +614,7 @@ public class LY {
         DataFactory.register("stateEssential", StateData.class, StateDataLoader.class, EssentialState.class);
         DataFactory.register("stateSkill", StateData.class, StateDataLoader.class, SkillState.class);
         DataFactory.register("stateClean", StateData.class, StateDataLoader.class, CleanState.class);
+        DataFactory.register("stateGroup", StateData.class, StateDataLoader.class, GroupState.class);
         
         // Talent
         DataFactory.register("talentAttribute",  TalentData.class, TalentDataLoader.class, AttributeTalent.class);
@@ -725,7 +714,10 @@ public class LY {
         
         Serializer.registerClass(MessProtoAdd.class);
         Serializer.registerClass(MessProtoRemove.class);
-        Serializer.registerClass(MessProtoSync.class);
+        
+        // remove20160830
+//        Serializer.registerClass(MessProtoSync.class);
+
         Serializer.registerClass(MessProtoUse.class);
         Serializer.registerClass(MessMessage.class);
         Serializer.registerClass(MessPlayActorLoaded.class);
@@ -737,7 +729,6 @@ public class LY {
         Serializer.registerClass(MessAutoAttack.class);
         Serializer.registerClass(MessActionRun.class);
         Serializer.registerClass(MessActorAddSkill.class);
-        Serializer.registerClass(MessActorApplyXp.class);
         Serializer.registerClass(MessActorFollow.class);
         Serializer.registerClass(MessActorKill.class);
         Serializer.registerClass(MessActorPhysics.class);

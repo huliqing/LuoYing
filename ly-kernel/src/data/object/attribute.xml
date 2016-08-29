@@ -5,15 +5,19 @@
     xmlns='http://fighter.huliqing.name'
     xsi:schemaLocation='http://fighter.huliqing.name meta/attribute.xsd'>
     
+    <!--==========================================================================-->
+    <!--标准设置-->
+    <!--==========================================================================-->
+    
     <!--最高生命值-->
-    <attributeLevelInteger id="attrHealthMax" name="attrHealthMax" levelEl="elLevelAttrHealth" />
+    <attributeLevelInteger id="attributeHealthMax" name="attributeHealthMax" levelEl="elLevelAttrHealth" />
     <!--实时生命值-->
-    <attributeLimitInteger id="attrHealth" name="attrHealth" minValue="0" maxLimitAttributeName="attrHealthMax" />
+    <attributeLimitInteger id="attributeHealth" name="attributeHealth" minValue="0" maxLimitAttributeName="attributeHealthMax" />
     
     <!--最高魔法值-->
-    <attributeLevelInteger id="attrManaMax" name="attrManaMax" levelEl="elLevelAttrMana" />
+    <attributeLevelInteger id="attributeManaMax" name="attributeManaMax" levelEl="elLevelAttrMana" />
     <!--实时魔法值-->
-    <attributeLimitInteger id="attrMana" name="attrMana" minValue="0" maxLimitAttributeName="attrManaMax" />
+    <attributeLimitInteger id="attributeMana" name="attributeMana" minValue="0" maxLimitAttributeName="attributeManaMax" />
     
     <!--物理攻击力-->
     <attributeLevelInteger id="attributeAttack" name="attributeAttack" levelEl="elLevelAttrAttack" />
@@ -54,7 +58,32 @@
     <!--鬼魅能力:[0.0~1.0] -->
     <attributeLevelFloat id="attributeGhostRate" name="attributeGhostRate" />
     
-    <!--- ======================================================================== -->
+    <!--<attributeString id="name" name="name" />-->
+    
+    <!--角色当前的等级-->
+    <attributeInteger id="attributeLevel" name="attributeLevel" />
+
+    <!--当前角色可用的经验值-->
+    <attributeInteger id="attributeXp" name="attributeXp" />
+    <!--到达下一个等级角色需要的经验值-->
+    <attributeInteger id="attributeXpNext" name="attributeXp" />
+    
+    <attributeInteger id="attributeGroup" name="attributeGroup" />
+    <attributeInteger id="attributeTeam" name="attributeTeam" />
+    <attributeInteger id="attributeSex" name="attributeSex" />
+    <attributeInteger id="attributeRace" name="attributeRace" />
+    <attributeBoolean id="attributeLiving" name="attributeLiving" />
+    <attributeInteger id="attributeTalentPoints" name="attributeTalentPoints" />
+    <attributeLong id="attributeTarget" name="attributeTarget" />
+    <attributeLong id="attributeFollowTarget" name="attributeFollowTarget" />
+    <attributeBoolean id="attributeEssential" name="attributeEssential" />
+    <attributeBoolean id="attributeAutoAi" name="attributeAutoAi" />
+    <attributeBoolean id="attributeAutoDetect" name="attributeAutoDetect" />
+    <attributeBoolean id="attributePlayer" name="attributePlayer" />
+    
+    <!--==========================================================================-->
+    <!--特殊角色设置-->
+    <!--==========================================================================-->
 
 <!--    健康值:定义角色的生命值
     <attribute id="attributeHealth" el="elLevelAttrHealth" />

@@ -35,11 +35,9 @@ public class AttributeHandler extends AbstractHandler {
     @Override
     protected void useObject(Actor actor, ObjectData data) {
         // 补充属性值
-        attributeService.applyDynamicValue(actor, attribute, amount);
-        attributeService.clampDynamicValue(actor, attribute);
+        attributeService.addAttributeValue(actor, attribute, amount);
         
         // 物品减少
-//        remove(actor, data.getId(), 1); // remove
         itemService.removeItem(actor, data.getId(), 1);
     }
     

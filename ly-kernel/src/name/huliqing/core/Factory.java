@@ -14,6 +14,8 @@ import name.huliqing.core.mvc.network.AttributeNetwork;
 import name.huliqing.core.mvc.network.AttributeNetworkImpl;
 import name.huliqing.core.mvc.network.ChatNetwork;
 import name.huliqing.core.mvc.network.ChatNetworkImpl;
+import name.huliqing.core.mvc.network.DropNetwork;
+import name.huliqing.core.mvc.network.DropNetworkImpl;
 import name.huliqing.core.mvc.network.PlayNetwork;
 import name.huliqing.core.mvc.network.PlayNetworkImpl;
 import name.huliqing.core.mvc.network.ProtoNetwork;
@@ -108,6 +110,7 @@ public class Factory {
         CLASS_MAP.put(ActorNetwork.class, ActorNetworkImpl.class);
         CLASS_MAP.put(AttributeNetwork.class, AttributeNetworkImpl.class);
         CLASS_MAP.put(ChatNetwork.class, ChatNetworkImpl.class);
+        CLASS_MAP.put(DropNetwork.class, DropNetworkImpl.class);
         CLASS_MAP.put(PlayNetwork.class, PlayNetworkImpl.class);
         CLASS_MAP.put(ProtoNetwork.class, ProtoNetworkImpl.class);
         CLASS_MAP.put(SkillNetwork.class, SkillNetworkImpl.class);

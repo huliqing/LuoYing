@@ -15,4 +15,13 @@ import name.huliqing.core.data.ObjectData;
 @Serializable
 public class ModuleData extends ObjectData {
     
+    /**
+     * 获取module的载入顺序
+     * @return 
+     */
+    public int getModuleOrder() {
+        // 这个参数不需要放在本地实例中，所以直接从proto中获取即可。
+        return getAsInteger("moduleOrder", 0);
+    }
+    
 }

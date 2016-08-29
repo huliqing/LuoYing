@@ -7,7 +7,6 @@ package name.huliqing.core.mess;
 import com.jme3.network.HostedConnection;
 import com.jme3.network.serializing.Serializable;
 import name.huliqing.core.Factory;
-import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.mvc.network.ProtoNetwork;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.ProtoService;
@@ -65,19 +64,31 @@ public class MessProtoRemove extends MessBase {
         Actor actor = playService.findActor(actorId);
         if (actor != null) {
             if (actor.getData().getUniqueId() != clientActorId) {
-                // 角色不是客户端所控制的,则不应该删除，这时需要同步物品数量回客户端。
-                // 因为物品的删除是客户端优先原则的。
-                ObjectData data = protoService.getData(actor, objectId);
-                MessProtoSync messSyn = new MessProtoSync();
-                messSyn.setActorId(actor.getData().getUniqueId());
-                messSyn.setObjectId(objectId);
-                messSyn.setTotal(data != null ? data.getTotal() : 0);
-                gameServer.broadcast(messSyn);
+                
+                // remove20160830,不再使用同步回客户端方式
+//                // 角色不是客户端所控制的,则不应该删除，这时需要同步物品数量回客户端。
+//                // 因为物品的删除是客户端优先原则的。
+//                ObjectData data = protoService.getData(actor, objectId);
+//                MessProtoSync messSyn = new MessProtoSync();
+//                messSyn.setActorId(actor.getData().getUniqueId());
+//                messSyn.setObjectId(objectId);
+//                messSyn.setTotal(data != null ? data.getTotal() : 0);
+//                gameServer.broadcast(messSyn);
+
             } else {
-//                ObjectData data = protoService.getData(actor, objectId);// remove
                 protoNetwork.removeData(actor, objectId, amount);
             }
         }
     }
+
+    @Override
+    public void applyOnClient() {
+        super.applyOnClient();
+        Actor actor = Factory.get(PlayService.class).findActor(actorId);
+        if (actor != null) {
+            Factory.get(ProtoService.class).removeData(actor, objectId, amount);
+        }
+    }
+    
     
 }

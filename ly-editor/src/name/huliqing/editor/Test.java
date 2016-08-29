@@ -14,6 +14,8 @@ import javafx.beans.property.IntegerProperty;
 public class Test {
     
     public static void main(String[] args) {
-        IntegerProperty pp = null;
+        Object aa = null;
+        Integer bb = (Integer) aa;
+        System.out.println("bb=" + bb);
     }
 }

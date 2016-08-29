@@ -19,11 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.LY;
 import name.huliqing.core.Factory;
-import name.huliqing.core.constants.IdConstants;
 import name.huliqing.core.constants.InterfaceConstants;
 import name.huliqing.core.constants.MaterialConstants;
-import name.huliqing.core.data.ActorData;
-import name.huliqing.core.data.AttributeData;
 import name.huliqing.core.data.StateData;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.AttributeService;
@@ -33,6 +30,7 @@ import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.StateService;
 import name.huliqing.core.object.anim.Loop;
 import name.huliqing.core.object.anim.ColorAnim;
+import name.huliqing.core.object.attribute.NumberAttribute;
 import name.huliqing.core.object.chat.Chat;
 import name.huliqing.core.ui.Icon;
 import name.huliqing.core.ui.LinearLayout;
@@ -52,8 +50,12 @@ public final class FaceView extends LinearLayout {
     private final AttributeService attributeService = Factory.get(AttributeService.class);
     
     private Actor actor;
-    private AttributeData lifeAttribute;
-    private AttributeData manaAttribute;
+    private NumberAttribute lifeAttribute;
+    private NumberAttribute lifeAttributeMax;
+    private NumberAttribute manaAttribute;
+    private NumberAttribute manaAttributeMax;
+    private NumberAttribute xpAttribute;
+    private NumberAttribute xpAttributeNext;
     
     // 左区：角色头像
     private LinearLayout leftZone;
@@ -71,7 +73,7 @@ public final class FaceView extends LinearLayout {
     // 最近一次坐标
     private final Vector3f lastPos = new Vector3f();
     // 最近一次的生命值
-    private float lastLife = -1;
+    private int lastLife = -1;
     // 坐标数字格式化
     private final DecimalFormat decimal = new DecimalFormat("#");
     // 更新间隔时间，单位秒
@@ -150,12 +152,19 @@ public final class FaceView extends LinearLayout {
     
     public void setActor(Actor actor) {
         this.actor = actor;
-        this.lifeAttribute = actor.getData().getObjectData(actor.getData().getLifeAttribute());
-        this.manaAttribute = actor.getData().getObjectData(IdConstants.ATTRIBUTE_MANA);
+        
+        lifeAttribute = attributeService.getAttributeByName(actor, "attributeHealth");
+         lifeAttributeMax = attributeService.getAttributeByName(actor, "attributeHealthMax");
+        
+        manaAttribute = attributeService.getAttributeByName(actor, "attributeMana");
+        manaAttributeMax = attributeService.getAttributeByName(actor, "attributeManaMax");
+        
+        xpAttribute = attributeService.getAttributeByName(actor, "attributeXp");
+        xpAttributeNext = attributeService.getAttributeByName(actor, "attributeXpNext");
         
         picPanel.setActor(actor);
         namePanel.setActor(actor);
-        lastLife = lifeAttribute != null ? lifeAttribute.getDynamicValue() : 0;
+        lastLife = lifeAttribute != null ? lifeAttribute.intValue() : 0;
         
         // 立即更新一次，必要的
         update(interval);
@@ -182,10 +191,10 @@ public final class FaceView extends LinearLayout {
         
         if (actor != null) {
             // 显示受伤动画,头像动画
-            if (lifeAttribute.getDynamicValue() < lastLife) {
+            if (lifeAttribute.floatValue() < lastLife) {
                 picPanel.colorAnim.start();
             }
-            lastLife = lifeAttribute.getDynamicValue();
+            lastLife = lifeAttribute.intValue();
             
             // 确定Chat是否显示
             Chat chat = chatService.getChat(actor);
@@ -323,22 +332,23 @@ public final class FaceView extends LinearLayout {
         }
         
         public void update(float tpf) {
-            ActorData data = actor.getData();
             // life
-            if (lifeAttribute != null) {
-                health.setMaxValue(lifeAttribute.getMaxValue());
-                health.setValue(lifeAttribute.getDynamicValue());
+            if (lifeAttribute != null && lifeAttributeMax != null) {
+                health.setMaxValue(lifeAttributeMax.intValue());
+                health.setValue(lifeAttribute.intValue());
             }
 
             // mana
-            if (manaAttribute != null) {
-                magic.setMaxValue(manaAttribute.getMaxValue());
-                magic.setValue(manaAttribute.getDynamicValue());
+            if (manaAttribute != null && manaAttributeMax != null) {
+                magic.setMaxValue(manaAttributeMax.intValue());
+                magic.setValue(manaAttribute.intValue());
             }
 
             // xp
-            xp.setMaxValue(actorService.getNextLevelXp(actor));
-            xp.setValue(data.getXp());
+            if (xpAttribute != null && xpAttributeNext != null) {
+                xp.setMaxValue(xpAttributeNext.intValue());
+                xp.setValue(xpAttribute.intValue());
+            }
         }
     }
     
@@ -397,7 +407,7 @@ public final class FaceView extends LinearLayout {
             Actor player = playService.getPlayer();
             if (player != null) {
                 // 显示骷髅头
-                int levelDis = actor.getData().getLevel() - player.getData().getLevel();
+                int levelDis = actorService.getLevel(actor) - actorService.getLevel(player);
                 skull.setVisible(levelDis >= 10);
 
                 // 根据级别差距显示目标颜色

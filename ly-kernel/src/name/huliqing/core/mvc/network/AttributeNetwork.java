@@ -5,7 +5,6 @@
 package name.huliqing.core.mvc.network;
 
 import name.huliqing.core.mvc.service.AttributeService;
-import name.huliqing.core.object.actor.Actor;
 
 /**
  *
@@ -13,10 +12,4 @@ import name.huliqing.core.object.actor.Actor;
  */
 public interface AttributeNetwork extends AttributeService {
     
-    /**
-     * 同步目标角色的指定属性值到客户端
-     * @param actor
-     * @param attributeId
-     */
-    void syncAttribute(Actor actor, String attributeId);
 }

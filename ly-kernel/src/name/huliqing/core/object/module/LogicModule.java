@@ -10,7 +10,6 @@ import com.jme3.util.SafeArrayList;
 import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.ActorLogicData;
-import name.huliqing.core.data.module.LogicModuleData;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.actor.Actor;
@@ -19,9 +18,8 @@ import name.huliqing.core.object.actorlogic.ActorLogic;
 /**
  * 逻辑控制器，控制角色的所有逻辑的运行。
  * @author huliqing
- * @param <T>
  */
-public class LogicModule<T extends LogicModuleData> extends AbstractModule<T> {
+public class LogicModule extends AbstractModule {
     private final ActorService actorService = Factory.get(ActorService.class);
 
     private Actor actor;

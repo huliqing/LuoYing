@@ -31,8 +31,11 @@ public class HitEl<T extends ElData> extends AbstractEl<T> {
      * @param target 技能目标角色
      * @return 
      */
-    public float getValue(Actor source, float sourceSkillValue, Actor target) {
+    public synchronized float getValue(Actor source, float sourceSkillValue, Actor target) {
         String strResult;
+        
+        // params中包含的是带有"{}"符号的参数，如果params为空，则说明没有表达式中没有特殊参数需要替换值,
+        // 则直接计算这个表达式就可以, 也就是允许表达式中直接使用javascript的普通表达式。
         if (params.size() <= 0) {
             strResult = eval(null);
             return ConvertUtils.toFloat(strResult, 0);
@@ -41,14 +44,18 @@ public class HitEl<T extends ElData> extends AbstractEl<T> {
         if (valueMap == null) {
             valueMap = new HashMap<String, Object>(params.size());
         }
-        
         valueMap.clear();
         for (String p : params) {
             float attributeValue = 0;
             if (p.startsWith("s_")) {
-                attributeValue = attributeService.getDynamicValue(source, p.substring(2));
+                
+//                attributeValue = attributeService.getDynamicValue(source, p.substring(2));
+                attributeValue = attributeService.getNumberAttributeValue(source, p.substring(2), 0);
+                
             } else if (p.startsWith("t_")) {
-                attributeValue = attributeService.getDynamicValue(target, p.substring(2));
+//                attributeValue = attributeService.getDynamicValue(target, p.substring(2));
+                attributeValue = attributeService.getNumberAttributeValue(target, p.substring(2), 0);
+                
             } else if (p.startsWith("sk_value")) {
                 attributeValue = sourceSkillValue;
             }

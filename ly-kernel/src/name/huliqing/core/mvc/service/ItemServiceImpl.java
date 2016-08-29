@@ -87,9 +87,13 @@ public class ItemServiceImpl implements ItemService {
         ItemModule module = actor.getModule(ItemModule.class);
         return module != null && module.removeItemListener(itemListener);
     }
-    
 
-
+    /**
+     * @deprecated 不再使用
+     * @param actor
+     * @param itemId
+     * @param total 
+     */
     @Override
     public void syncItemTotal(Actor actor, String itemId, int total) {
         ItemModule module = actor.getModule(ItemModule.class);

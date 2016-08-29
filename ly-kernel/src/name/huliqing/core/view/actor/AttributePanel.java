@@ -10,11 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.constants.ResConstants;
-import name.huliqing.core.data.AttributeData;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.mvc.service.AttributeService;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.attribute.Attribute;
+import name.huliqing.core.object.attribute.LimitAttribute;
 import name.huliqing.core.ui.UIFactory;
 import name.huliqing.core.ui.LinearLayout;
 import name.huliqing.core.ui.Text;
@@ -74,11 +75,11 @@ public class AttributePanel extends LinearLayout implements ActorPanel {
         level.setValue(actorService.getLevel(actor));
         
         // attributes
-        List<AttributeData> attributes = attributeService.getAttributes(actor);
+        List<Attribute> attributes = attributeService.getAttributes(actor);
         
         int count = 0;
         if (attributes != null) {
-            for (AttributeData data : attributes) {
+            for (Attribute attr:  attributes) {
                 AttrItem item;
                 if (count >= attrs.size()) {
                     item = new AttrItem("", "");
@@ -87,8 +88,12 @@ public class AttributePanel extends LinearLayout implements ActorPanel {
                 } else {
                     item = (AttrItem) attrs.get(count);
                 }
-                item.setLabel(ResourceManager.getObjectName(data));
-                item.setValue(format.format(data.getDynamicValue()) + "/" + format.format(data.getMaxValue()));
+                item.setLabel(ResourceManager.getObjectName(attr.getData()));
+                if (attr instanceof LimitAttribute) {
+                    item.setValue(attr.getValue() + "/" + ((LimitAttribute) attr).getMaxLimit());
+                } else {
+                    item.setValue(attr.getValue());
+                }
                 count++;
             }
         }

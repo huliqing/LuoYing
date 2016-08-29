@@ -23,6 +23,8 @@ public abstract class NumberAttribute<V extends Number, T extends AttributeData>
     
     public abstract int intValue();
     public abstract float floatValue();
+    public abstract long longValue();
+    public abstract double doubleValue();
     
     public abstract void add(int other);
     public abstract void add(float other);

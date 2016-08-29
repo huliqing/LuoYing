@@ -46,9 +46,12 @@ public class SkinData extends PkgItemData implements MatObject, CostObject, Hand
     private String slot;
     // 标记着这件装备是否为基本皮肤
     private boolean baseSkin;
-    
     // 装备应用到目标身上时对目标属性的影响
     private List<AttributeApply> applyAttributes;
+    
+    // 标记着当前属性是否已经应用到角色身上,在角色穿上当前装备之后应该把这个参数设置为true， 在脱下当前装备后应该设置
+    // 为false.
+    private boolean attributeApplied;
     
     public SkinData() {
         this.total = 1;
@@ -69,6 +72,7 @@ public class SkinData extends PkgItemData implements MatObject, CostObject, Hand
             oc.write(slots.toArray(new String[]{}), "slots", null);
         oc.write(slot, "slot", null);
         oc.write(baseSkin, "baseSkin", false);
+        oc.write(attributeApplied, "attributeApplied", false);
     }
 
     @Override
@@ -83,6 +87,7 @@ public class SkinData extends PkgItemData implements MatObject, CostObject, Hand
         slots = ConvertUtils.toList(ic.readStringArray("slots", null));
         slot = ic.readString("slot", null);
         baseSkin = ic.readBoolean("baseSkin", false);
+        attributeApplied = ic.readBoolean("attributeApplied", false);
     }
     
     /**
@@ -277,4 +282,24 @@ public class SkinData extends PkgItemData implements MatObject, CostObject, Hand
         this.baseSkin = baseSkin;
     }
 
+    /**
+     * 获取装备的属性是否已经应用到了角色身上，如果该参数返回true,则说明属性已经应用到角色身上，
+     * 在这种情况下，当角色再穿上这件装备的时候就不再需要处理applyAttributes的问题,
+     * 以避免重复给角色添加属性值。
+     * @return 
+     */
+    public boolean isAttributeApplied() {
+        return attributeApplied;
+    }
+
+    /**
+     * 标记着当前属性是否已经应用到角色身上,在角色穿上装备之后应该把这个参数设置为true， 
+     * 在脱下装备后应该设置为false.
+     * @param attributeApplied 
+     */
+    public void setAttributeApplied(boolean attributeApplied) {
+        this.attributeApplied = attributeApplied;
+    }
+
+    
 }

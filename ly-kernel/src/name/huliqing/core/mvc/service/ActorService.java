@@ -285,11 +285,11 @@ public interface ActorService extends Inject {
      * 操作角色的某个属性.
      * @param target 接受hit的目标角色,或者说是被击中的角色。
      * @param source 攻击者，或者施放hit动作的角色。
-     * @param hitAttribute hit的目标属性id
+     * @param attrName hit的目标属性名称
      * @param hitValue hit值,这个值将直接执行在target角色的属性上，也即不受角色
      * 任何其它属性的影响。
      */
-    void hitAttribute(Actor target, Actor source, String hitAttribute, float hitValue);
+    void hitAttribute(Actor target, Actor source, String attrName, float hitValue);
     
     /**
      * 获取角色等级
@@ -312,21 +312,24 @@ public interface ActorService extends Inject {
      * @return 
      */
     int getXpReward(Actor attacker, Actor dead);
+   
+    // remove20160829
+//    /**
+//     * 给指定的角色添加XP,如果添加XP后角色等级提升，则返回等级提升数。否则返
+//     * 回0.
+//     * @param actor
+//     * @param xp 
+//     * @return  
+//     */
+//    int applyXp(Actor actor, int xp);
     
     /**
-     * 给指定的角色添加XP,如果添加XP后角色等级提升，则返回等级提升数。否则返
-     * 回0.
+     * 获取指定等级需要的经验值（XP)
      * @param actor
-     * @param xp 
-     */
-    int applyXp(Actor actor, int xp);
-    
-    /**
-     * 获取角色下一等级需要的XP值。
-     * @param actor
+     * @param level
      * @return 
      */
-    int getNextLevelXp(Actor actor);
+    int getLevelXp(Actor actor, int level);
     
     /**
      * 判断目标角色是否是可移动的
@@ -387,12 +390,13 @@ public interface ActorService extends Inject {
      */
     String getName(Actor actor);
     
-    /**
-     * 获取角色的生命值。
-     * @param actor
-     * @return 
-     */
-    int getLife(Actor actor);
+    // remove20160826
+//    /**
+//     * 获取角色的生命值。
+//     * @param actor
+//     * @return 
+//     */
+//    int getLife(Actor actor);
     
     /**
      * 获取角色的分组

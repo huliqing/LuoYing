@@ -132,7 +132,7 @@ public class AbstractEl<T extends ElData> implements El<T> {
     
     public static void main(String[] args) {
         ElData data = new ElData();
-        data.setExpression("[s_attributeHealth] + 5 + [t_attributeDefence]");
+        data.setExpression("{s_attributeHealth} + 5 + {t_attributeDefence}");
         AbstractEl ae = new AbstractEl();
         ae.setData(data);
         

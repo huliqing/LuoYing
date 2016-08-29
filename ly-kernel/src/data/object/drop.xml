@@ -10,16 +10,32 @@
     <!--=====================================================================-->
     <!-- 基本配置 -->
     <!--=====================================================================-->
-    
+
+    <!--remove20160830-->    
     <!--什么也不掉: 用于游戏中动态设置-->
-    <drop id="dropEmpty" />
+    <!--<drop id="dropEmpty" />-->
+    
+    <!--基本掉落设置-->
+    <dropGroup id="dropBase" drops="dropBase1,dropBase2,dropBase3,dropBase4" />
+    <dropItem id="dropBase1" item="itemGold" count="20" rate="0.99" />
+    <dropItem id="dropBase2" item="itemTonicRed" count="2" rate="0.3" />
+    <dropItem id="dropBase3" item="itemTonicBlue" count="2" rate="0.3" />
+    
+    <dropGroup id="dropTowers" drops="dropTowers1,dropTowers2,dropTowers3" />
+    <dropItem id="dropTowers1" item="itemTower" count="1" rate="0.3" />
+    <dropItem id="dropTowers2" item="itemTowerStone" count="1" rate="0.3" />
+    <dropItem id="dropTowers3" item="itemTowerSnow" count="1" rate="0.3" />
     
     <!--=====================================================================-->
     <!-- 特殊配置 -->
     <!--=====================================================================-->
     
     <!--丛林蜘蛛掉落设置-->
-    <drop id="dropSpider" random="itemGold|20,itemTonicRed|2|0.2,itemTonicBlue|2|0.2,itemSpiderSpawn|1|0.15,itemHerb|1|0.2" />
+<!--    <drop id="dropSpider" random="itemGold|20,itemTonicRed|2|0.2,itemTonicBlue|2|0.2,itemSpiderSpawn|1|0.15,itemHerb|1|0.2" />-->
+    <dropGroup id="dropSpider" drops="dropBase,dropSpider1,dropSpider2" />
+    <dropItem id="dropSpider1" item="itemSpiderSpawn" count="1" rate="0.2" />
+    <dropItem id="dropSpider2" item="itemHerb" count="1" rate="0.2" />
+    
     
     <!--丛林盗贼-->
     <drop id="dropNinja" random="itemGold|20,itemTonicRed|2|0.2,itemTonicBlue|2|0.2,itemTower|1|0.15,itemTowerStone|1|0.15,itemTowerSnow|1|0.15" />

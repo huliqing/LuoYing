@@ -11,10 +11,10 @@ import name.huliqing.core.Factory;
 import name.huliqing.core.constants.ResConstants;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.data.TalentData;
 import name.huliqing.core.mvc.network.UserCommandNetwork;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.TalentService;
+import name.huliqing.core.object.talent.Talent;
 import name.huliqing.core.ui.UIFactory;
 import name.huliqing.core.ui.LinearLayout;
 import name.huliqing.core.ui.ListView;
@@ -65,10 +65,9 @@ public class TalentPanel extends LinearLayout implements ActorPanel{
         
         int talentRemain = 0;
         if (actor != null) {
-            talentRemain = actor.getData().getTalentPoints();
+            talentRemain = talentService.getTalentPoints(actor);
         }
         text.setText(ResourceManager.get(ResConstants.TALENT_TALENT_POINTS_REMAIN, new Object[] {talentRemain}));
-            
     }
     
     public void setPageSize(int pageSize) {
@@ -87,8 +86,8 @@ public class TalentPanel extends LinearLayout implements ActorPanel{
     
     // ---------------------------
     
-    private class TalentListPanel extends ListView<TalentData>{
-        private List<TalentData> datas;
+    private class TalentListPanel extends ListView<Talent>{
+        private List<Talent> datas;
         public TalentListPanel(float width, float height) {
             super(width, height);
         }
@@ -99,7 +98,7 @@ public class TalentPanel extends LinearLayout implements ActorPanel{
                 @Override
                 public void onClick(UI ui, boolean isPress) {
                     if (!isPress) {
-                        userCommandNetwork.addTalentPoints(actor, row.getData().getId(), 1);
+                        userCommandNetwork.addTalentPoints(actor, row.getData().getData().getId(), 1);
                         setPanelUpdate(actor);
                     }
                 }
@@ -108,7 +107,7 @@ public class TalentPanel extends LinearLayout implements ActorPanel{
         }
 
         @Override
-        public List<TalentData> getDatas() {
+        public List<Talent> getDatas() {
             if (actor != null) {
                 datas = talentService.getTalents(actor);
             }
@@ -119,7 +118,7 @@ public class TalentPanel extends LinearLayout implements ActorPanel{
         }
 
         @Override
-        public boolean removeItem(TalentData data) {
+        public boolean removeItem(Talent data) {
             throw new UnsupportedOperationException();
         }
     }

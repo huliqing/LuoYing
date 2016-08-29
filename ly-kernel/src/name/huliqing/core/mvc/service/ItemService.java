@@ -66,6 +66,7 @@ public interface ItemService extends Inject {
     
     /**
      * 同步物品数量,如果total小于或等于0，则移除物品
+     * @deprecated 不再使用
      * @param actor
      * @param itemId
      * @param total 

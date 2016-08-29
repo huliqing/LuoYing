@@ -8,7 +8,6 @@ package name.huliqing.core.object.module;
 import java.util.List;
 import name.huliqing.core.data.ChatData;
 import name.huliqing.core.data.ObjectData;
-import name.huliqing.core.data.module.ChatModuleData;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.chat.Chat;
@@ -16,9 +15,8 @@ import name.huliqing.core.object.chat.Chat;
 /**
  * 角色对话模块
  * @author huliqing
- * @param <T>
  */
-public class ChatModule<T extends ChatModuleData> extends AbstractModule<T> {
+public class ChatModule extends AbstractModule {
 
     private Actor actor;
     private Chat chat;

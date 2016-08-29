@@ -9,6 +9,7 @@ import name.huliqing.core.Inject;
 import name.huliqing.core.data.TalentData;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.module.TalentListener;
+import name.huliqing.core.object.talent.Talent;
 
 /**
  *
@@ -42,14 +43,14 @@ public interface TalentService extends Inject {
      * @param actor
      * @return 
      */
-    List<TalentData> getTalents(Actor actor);
+    List<Talent> getTalents(Actor actor);
     
-//    /**
-//     * 获取角色当前可用的天赋点数
-//     * @param actor
-//     * @return 
-//     */
-//    int getTalentPoints(Actor actor);
+    /**
+     * 获取角色当前可用的天赋点数
+     * @param actor
+     * @return 
+     */
+    int getTalentPoints(Actor actor);
     
 //    /**
 //     * 设置角色当前可用的总天赋点数。

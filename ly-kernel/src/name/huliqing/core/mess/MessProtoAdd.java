@@ -22,8 +22,10 @@ public class MessProtoAdd extends MessBase {
     private String objectId;
     // 获得的物品数量,如果count为0，则只同步物品数量
     private int addCount;
-    // 同步物品总数
-    private int syncTotal;
+    
+    // remove20160830
+//    // 同步物品总数
+//    private int syncTotal;
 
     public long getActorId() {
         return actorId;
@@ -49,13 +51,14 @@ public class MessProtoAdd extends MessBase {
         this.addCount = count;
     }
 
-    public int getSyncTotal() {
-        return syncTotal;
-    }
-
-    public void setSyncTotal(int syncTotal) {
-        this.syncTotal = syncTotal;
-    }
+    // remove20160830
+//    public int getSyncTotal() {
+//        return syncTotal;
+//    }
+//
+//    public void setSyncTotal(int syncTotal) {
+//        this.syncTotal = syncTotal;
+//    }
 
     @Override
     public void applyOnClient() {
@@ -67,9 +70,11 @@ public class MessProtoAdd extends MessBase {
         }
         
         if (addCount > 0) {
-//            ObjectData data = protoService.createData(objectId); // remove
             protoService.addData(actor, objectId, addCount);
         }
-        protoService.syncDataTotal(actor, objectId, syncTotal);
+        
+        // remove20160830
+//        protoService.syncDataTotal(actor, objectId, syncTotal);
+
     }
 }

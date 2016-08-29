@@ -7,7 +7,6 @@ package name.huliqing.core.object.gamelogic;
 
 import java.util.List;
 import name.huliqing.core.Factory;
-import name.huliqing.core.data.AttributeData;
 import name.huliqing.core.data.GameLogicData;
 import name.huliqing.core.mvc.network.AttributeNetwork;
 import name.huliqing.core.mvc.service.ActorService;
@@ -55,7 +54,7 @@ public class AttributeChangeGameLogic<T extends GameLogicData> extends AbstractG
             interval = 1;
         }
     }
-
+    
     @Override
     protected void doLogic(float tpf) {
         List<Actor> actors = playService.findAllActor();
@@ -71,26 +70,22 @@ public class AttributeChangeGameLogic<T extends GameLogicData> extends AbstractG
     }
     
     private void updateAttribute(Actor actor) {
-        AttributeData applyAttributeData = attributeService.getAttributeById(actor, applyAttribute).getData();
-        if (applyAttributeData == null) {
-            return;
-        }
-        
-        // useAttribute是角色的已有属性，这个属性的值将影响最终的apply值。比如角色的属性（生命恢复速度)将影响这个游戏逻
-        // 辑最终要修改角色生命值的属性。
-        float useAttributeValue = 0;
-        if (useAttribute != null) {
-            useAttributeValue = attributeService.getDynamicValue(actor, useAttribute);
-        }
+        // useAttribute是角色的已有属性，这个属性的值将影响最终的apply值。
+        // 比如角色的属性（生命恢复速度)将影响这个游戏逻辑最终要修改角色生命值的属性。
+        float useAttributeValue = attributeService.getNumberAttributeValue(actor, useAttribute, 0);
         
         float applyValue = (baseValue + useAttributeValue) * interval * speed;
         
         // 注意：applyValue 有可能大于0或小于0,只有等于0时才没有意义（这里用一个接近0的值代替）
         if (Math.abs(applyValue) > 0.0001f) {
-            applyAttributeData.setDynamicValue(applyAttributeData.getDynamicValue() + applyValue);
-            attributeService.clampDynamicValue(actor, applyAttributeData.getId());
-            attributeNetwork.syncAttribute(actor, applyAttributeData.getId()
-                    , applyAttributeData.getLevelValue(), applyAttributeData.getStaticValue(), applyAttributeData.getDynamicValue());
+            
+            // remove20160827
+//            applyAttributeData.setDynamicValue(applyAttributeData.getDynamicValue() + applyValue);
+//            attributeService.clampDynamicValue(actor, applyAttributeData.getId());
+//            attributeNetwork.syncAttribute(actor, applyAttributeData.getId()
+//                    , applyAttributeData.getLevelValue(), applyAttributeData.getStaticValue(), applyAttributeData.getDynamicValue());
+         
+            attributeNetwork.addAttributeValue(actor, applyAttribute, applyValue);
         }
     }
 }

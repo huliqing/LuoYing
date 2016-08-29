@@ -5,7 +5,7 @@
  */
 package name.huliqing.core.loader.module;
 
-import name.huliqing.core.data.module.AttributeModuleData;
+import name.huliqing.core.data.module.ModuleData;
 import name.huliqing.core.xml.DataLoader;
 import name.huliqing.core.xml.Proto;
 
@@ -13,9 +13,9 @@ import name.huliqing.core.xml.Proto;
  *
  * @author huliqing
  */
-public class AttributeModuleDataLoader implements DataLoader<AttributeModuleData> {
+public class AttributeModuleDataLoader implements DataLoader<ModuleData> {
 
     @Override
-    public void load(Proto proto, AttributeModuleData data) {
+    public void load(Proto proto, ModuleData data) {
     }
 }

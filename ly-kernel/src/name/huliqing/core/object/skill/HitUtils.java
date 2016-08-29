@@ -4,11 +4,8 @@
  */
 package name.huliqing.core.object.skill;
 
-import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.constants.ResConstants;
-import name.huliqing.core.data.ObjectData;
-import name.huliqing.core.data.SkillData;
 import name.huliqing.core.enums.MessageType;
 import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.mvc.network.ActorNetwork;
@@ -17,12 +14,12 @@ import name.huliqing.core.mvc.network.ProtoNetwork;
 import name.huliqing.core.mvc.network.SkillNetwork;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.AttributeService;
-import name.huliqing.core.mvc.service.DropService;
-import name.huliqing.core.mvc.service.ProtoService;
 import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.manager.DamageManager;
 import name.huliqing.core.manager.ResourceManager;
+import name.huliqing.core.mvc.network.DropNetwork;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.attribute.NumberAttribute;
 
 /**
  *
@@ -30,15 +27,13 @@ import name.huliqing.core.object.actor.Actor;
  */
 public class HitUtils {
     private final ActorService actorService = Factory.get(ActorService.class);
-    private final DropService dropService = Factory.get(DropService.class);
+    private final DropNetwork dropNetwork = Factory.get(DropNetwork.class);
     private final AttributeService attributeService = Factory.get(AttributeService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
-//    private final ItemNetwork itemNetwork = Factory.get(ItemNetwork.class);
     private final ProtoNetwork protoNetwork = Factory.get(ProtoNetwork.class);
-    private final ProtoService protoService = Factory.get(ProtoService.class);
     
     private final static HitUtils INSTANCE = new HitUtils();
     
@@ -52,17 +47,22 @@ public class HitUtils {
      * 执行HIT操作
      * @param attacker HIT的施放者,attacker可能为null,当攻击者为一些特殊魔法或是状态时可能为null.
      * @param target HIT的受者
-     * @param hitAttribute hit的是哪一个属性ID
+     * @param hitAttrName hit的是哪一个属性ID
      * @param hitFinalValue 最终的hitValue
      */
-    public void applyHit(Actor attacker, Actor target, String hitAttribute, float hitFinalValue) {
+    public void applyHit(Actor attacker, Actor target, String hitAttrName, float hitFinalValue) {
+        
+        NumberAttribute attribute = attributeService.getAttributeByName(target, hitAttrName);
+        if (attribute == null)
+            return;
+        
         // 记住HIT之前的死亡状态
         boolean oldDead = actorService.isDead(target);
         // 记住HIT之前属性值。
-        float oldAttrValue = attributeService.getDynamicValue(target, hitAttribute);
+        float oldAttrValue = attribute.floatValue();
         
         // Apply hit
-        actorNetwork.hitAttribute(target, attacker, hitAttribute, hitFinalValue);
+        actorNetwork.hitAttribute(target, attacker, hitAttrName, hitFinalValue);
         
         // 注意：这里要判断之前是不是已经死亡了。如果已经死亡就不能再执行“死亡”或
         // “受伤”技能
@@ -95,16 +95,21 @@ public class HitUtils {
             
             // 3.对攻击者进行经验和物品奖励
             if (attacker != null) {
-                // 奖励经验
-                int xpReward = actorService.getXpReward(attacker, target);
-                actorNetwork.applyXp(attacker, xpReward);
                 
-                // 奖励物品
-                List<ObjectData> dropItems = dropService.getRandomDropFull(target, null);
-                for (ObjectData item : dropItems) {
-//                    itemNetwork.addItem(attacker, item.getId(), item.getTotal());
-                    protoNetwork.addData(attacker, item.getId(), item.getTotal());
-                }
+                // remove20160830, 已经直接交由dropService.doDrop就行。
+//                // 奖励经验
+//                int xpReward = actorService.getXpReward(attacker, target);
+//                actorNetwork.applyXp(attacker, xpReward);
+//                
+//                // 奖励物品
+//                List<ObjectData> dropItems = dropService.getRandomDropFull(target, null);
+//                for (ObjectData item : dropItems) {
+////                    itemNetwork.addItem(attacker, item.getId(), item.getTotal());
+//                    protoNetwork.addData(attacker, item.getId(), item.getTotal());
+//                }
+
+                // 掉落物品给attacker
+                dropNetwork.doDrop(target, attacker);
             }
             
             // remove0221由 actorNetwork.applyXp(attacker, xpReward);内部处理
@@ -113,10 +118,11 @@ public class HitUtils {
 //            if (attacker.isPlayer()) {
 //                playNetwork.addMessage(attacker, ResourceManager.get(ResConstants.COMMON_GET_XP, new Object[]{xpReward}), MessageType.info);
 //            }
+
         } else {
             // 注：hit技能不一定是减益的。当目标受hit后属性值降低才是减益技能，
             // 当减益发生时则判断为受伤并执行hurt.
-            float newAttrValue = attributeService.getDynamicValue(target, hitAttribute);
+            float newAttrValue = attribute.floatValue();
             if (newAttrValue < oldAttrValue) {
                 Skill skill = skillService.getSkill(target, SkillType.hurt);
                 if (skill != null) {

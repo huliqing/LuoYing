@@ -15,14 +15,13 @@ import name.huliqing.core.object.actor.Actor;
  * @author huliqing
  */
 @Serializable
-public class MessAttributeSync extends MessBase {
+public class MessAttributeSync<V> extends MessBase {
     
     private long actorId;
     // 属性ID
-    private String attribute;
-    private float levelValue;
-    private float staticValue;
-    private float dynamicValue;
+    private String attrName;
+    // 属性值
+    private V value;
 
     public long getActorId() {
         return actorId;
@@ -32,36 +31,20 @@ public class MessAttributeSync extends MessBase {
         this.actorId = actorId;
     }
 
-    public String getAttribute() {
-        return attribute;
+    public String getAttrName() {
+        return attrName;
     }
 
-    public void setAttribute(String attribute) {
-        this.attribute = attribute;
+    public void setAttrName(String attrName) {
+        this.attrName = attrName;
     }
 
-    public float getLevelValue() {
-        return levelValue;
+    public V getValue() {
+        return value;
     }
 
-    public void setLevelValue(float levelValue) {
-        this.levelValue = levelValue;
-    }
-
-    public float getStaticValue() {
-        return staticValue;
-    }
-
-    public void setStaticValue(float staticValue) {
-        this.staticValue = staticValue;
-    }
-
-    public float getDynamicValue() {
-        return dynamicValue;
-    }
-
-    public void setDynamicValue(float dynamicValue) {
-        this.dynamicValue = dynamicValue;
+    public void setValue(V value) {
+        this.value = value;
     }
    
     @Override
@@ -70,7 +53,8 @@ public class MessAttributeSync extends MessBase {
         AttributeService attributeService = Factory.get(AttributeService.class);
         Actor actor = playService.findActor(actorId);
         if (actor != null) {
-            attributeService.syncAttribute(actor, attribute, levelValue, staticValue, dynamicValue);
+//            attributeService.syncAttribute(actor, attribute, levelValue, staticValue, dynamicValue); // remove20160826
+            attributeService.setAttributeValue(actor, attrName, value);
         }
     }
 

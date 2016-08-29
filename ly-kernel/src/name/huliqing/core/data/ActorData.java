@@ -14,13 +14,11 @@ import com.jme3.network.serializing.Serializable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import name.huliqing.core.data.module.ModuleData;
 import name.huliqing.core.data.define.MatObject;
 import name.huliqing.core.enums.Mat;
 import name.huliqing.core.enums.Sex;
 import name.huliqing.core.utils.ConvertUtils;
-import name.huliqing.core.utils.MathUtils;
 
 /**
  * @author huliqing
@@ -31,11 +29,11 @@ public class ActorData extends ObjectData implements MatObject{
     // 角色名称
     private String name = "";
     
-    // 角色等级
-    private int level;
+//    // 角色等级
+//    private int level;
     
-    // 当前的经验值,每经过一个等级后清0
-    private int xp;
+//    // 当前的经验值,每经过一个等级后清0
+//    private int xp;
     
     // 角色所在分组
     private int group;
@@ -48,18 +46,11 @@ public class ActorData extends ObjectData implements MatObject{
     
     // 角色是否必要的,不能移除的。
     private boolean essential;
+
     
-//    // 角色物品信息,如:金币,装备,武器,杂物等
-//    private ItemStore itemStore;
+//    // 角色物品的掉落设置
+//    private DropData drop;
     
-    // 角色技能信息
-//    private SkillStore skillStore;
-    
-    // 角色物品的掉落设置
-    private DropData drop;
-    
-//    // 状态抵抗设置
-//    private ResistData resist;
     
     // 角色的当前目标(唯一ID)
     private long target = -1;
@@ -70,30 +61,22 @@ public class ActorData extends ObjectData implements MatObject{
     // 是否自动侦察敌人，如果关闭该功能，则角色不会查找敌人。
     private boolean autoDetect = true;
     
-//    // 角色的两个默认的行为，当角色处于玩家控制时需要这两个行为来执行打架和跑路
-//    // 如果这两个行为没有设置，则ActionService在必要时会为目标actor创建两个默认的行为
-//    // See ActionService.playFight,playRun
-//    private String actionDefFight;
-//    private String actionDefRun;
-    
     // 角色使用的武器插槽优先顺序，当设置了这个值之后，角色的武器在收起时将优先
     // 存放在这些指定的插槽上，否则将根据武器的定义的插槽存放。
     private List<String> slots;
     
-//    // 角色的所有属性设置，包含lifeAttributes
-//    private Map<String, AttributeData> attributes;
-    
-    private int talentPoints;
-    private String talentPointsLevelEl;
+//    private int talentPoints;
+//    private String talentPointsLevelEl;
     
     // 用于决定角色是否死亡的属性,当这个属性值小于或等于0时，角色将被视为"死亡"
     private String lifeAttribute;
     // 用于决定角色的视角
     private String viewAttribute;
-    // 角色的升级设置,关联到一个elLevel id
-    private String levelUpEl;
-    // 角色的经验掉落设置,关联到一个elXpDrop id
-    private String xpDropEl;
+    
+//    // 角色的升级设置,关联到一个elLevel id
+//    private String levelUpEl; 
+//    // 角色的经验掉落设置,关联到一个elXpDrop id
+//    private String xpDropEl;
     
     // 当前角色的主人(所有者)的ID,这是一个唯一ID
     private long ownerId = -1;
@@ -114,9 +97,6 @@ public class ActorData extends ObjectData implements MatObject{
     // TODO: sync to client
     private transient Vector3f bornPlace;
     
-//    // 角色的对话面板id
-//    private String chat;
-    
     // 被锁定的技能列表，二进制表示，其中每1个二进制位表示一个技能类型。
     // 如果指定的位为1，则表示这个技能类型被锁定，则这类技能将不能执行。
     // 默认值0表示没有任何锁定。
@@ -135,15 +115,15 @@ public class ActorData extends ObjectData implements MatObject{
         super.write(ex);
         OutputCapsule oc = ex.getCapsule(this);
         oc.write(name.getBytes(), "name", null);
-        oc.write(level, "level", 0);
-        oc.write(xp, "xp", 0);
+//        oc.write(level, "level", 0);
+//        oc.write(xp, "xp", 0);
         oc.write(group, "group", 0);
         oc.write(sex, "sex", null);
         oc.write(race, "race", null);
         oc.write(essential, "essential", false);
 //        oc.write(itemStore, "itemStore", null);
 //        oc.write(skillStore, "skillStore", null);
-        oc.write(drop, "drop", null);
+//        oc.write(drop, "drop", null);
 //        oc.write(resist, "resistData", null);
         oc.write(target, "target", -1);
         oc.write(autoAi, "autoAi", true);
@@ -161,8 +141,8 @@ public class ActorData extends ObjectData implements MatObject{
         
         oc.write(lifeAttribute, "lifeAttribute", null);
         oc.write(viewAttribute, "viewAttribute", null);
-        oc.write(levelUpEl, "levelUpEl", null);
-        oc.write(xpDropEl, "xpDropEl", null);
+//        oc.write(levelUpEl, "levelUpEl", null);
+//        oc.write(xpDropEl, "xpDropEl", null);
         oc.write(ownerId, "ownerId", -1);
         oc.write(color, "color", null);
         oc.write(team, "team", 0);
@@ -171,8 +151,8 @@ public class ActorData extends ObjectData implements MatObject{
         if (bornPlace != null) {
             oc.write(bornPlace, "bornPlace", null);
         }
-        oc.write(talentPoints, "talentPoints", 0);
-        oc.write(talentPointsLevelEl, "talentPointsLevelEl", null);
+//        oc.write(talentPoints, "talentPoints", 0);
+//        oc.write(talentPointsLevelEl, "talentPointsLevelEl", null);
 //        oc.write(chat, "chat", null);
         oc.write(skillLockedState, "skillLockedState", 0);
         if (moduleDatas != null) {
@@ -188,45 +168,33 @@ public class ActorData extends ObjectData implements MatObject{
         super.read(im);
         InputCapsule ic = im.getCapsule(this);
         name = new String(ic.readByteArray("name", "".getBytes()), "utf-8");
-        level = ic.readInt("level", 0);
-        xp = ic.readInt("xp", 0);
+//        level = ic.readInt("level", 0);
+//        xp = ic.readInt("xp", 0);
         group = ic.readInt("group", 0);
         sex = ic.readEnum("sex", Sex.class, null);
         race = ic.readString("race", null);
         essential = ic.readBoolean("essential", false);
 //        itemStore = (ItemStore) ic.readSavable("itemStore", null);
 //        skillStore = (SkillStore) ic.readSavable("skillStore", null);
-        drop = (DropData) ic.readSavable("drop", null);
+//        drop = (DropData) ic.readSavable("drop", null);
 //        resist = (ResistData) ic.readSavable("resistData", null);
         target = ic.readLong("target", -1);
         autoAi = ic.readBoolean("autoAi", true);
         autoDetect = ic.readBoolean("autoDetect", true);
-//        actionDefFight = ic.readString("actionDefFight", null);
-//        actionDefRun = ic.readString("actionDefRun", null);
         slots = ConvertUtils.toList(ic.readStringArray("slots", null));
         
-//        ArrayList<AttributeData> ads = ic.readSavableArrayList("attributes", null);
-//        if (ads != null) {
-//            if (attributes == null) {
-//                attributes = new LinkedHashMap<String, AttributeData>(ads.size());
-//            }
-//            for (AttributeData ad : ads) {
-//                attributes.put(ad.getId(), ad);
-//            }
-//        }
         lifeAttribute = ic.readString("lifeAttribute", null);
         viewAttribute = ic.readString("viewAttribute", null);
-        levelUpEl = ic.readString("levelUpEl", null);
-        xpDropEl = ic.readString("xpDropEl", null);
+//        levelUpEl = ic.readString("levelUpEl", null);
+//        xpDropEl = ic.readString("xpDropEl", null);
         ownerId = ic.readLong("ownerId", -1);
         color = (ColorRGBA) ic.readSavable("color", null);
         team = ic.readInt("team", 0);
         living = ic.readBoolean("living", false);
         followTarget = ic.readLong("followTarget", -1);
         bornPlace = (Vector3f)ic.readSavable("bornPlace", null);
-//        chat = ic.readString("chat", null);
-        talentPoints = ic.readInt("talentPoints", 0);
-        talentPointsLevelEl = ic.readString("talentPointsLevelEl", null);
+//        talentPoints = ic.readInt("talentPoints", 0);
+//        talentPointsLevelEl = ic.readString("talentPointsLevelEl", null);
         skillLockedState = ic.readLong("skillLockedState", 0);
         moduleDatas = ic.readSavableArrayList("moduleDatas", null);
         objectDatas = ic.readSavableArrayList("objectDatas", null);
@@ -235,46 +203,20 @@ public class ActorData extends ObjectData implements MatObject{
     public ActorData() {}
 
 //    /**
-//     * 获取角色的物品列表，包含：武器，服装，杂物等等。
+//     * 获取角色物品的掉落设置，
 //     * @return 
 //     */
-//    public ItemStore getItemStore() {
-//        if (itemStore == null) {
-//            itemStore = new ItemStore();
-//        }
-//        return itemStore;
+//    public DropData getDrop() {
+//        return drop;
 //    }
 //
-//    public void setItemStore(ItemStore itemStore) {
-//        this.itemStore = itemStore;
+//    /**
+//     * 设置角色的物品掉落设置
+//     * @param drop 
+//     */
+//    public void setDrop(DropData drop) {
+//        this.drop = drop;
 //    }
-//
-//    public SkillStore getSkillStore() {
-//        if (skillStore == null) {
-//            skillStore = new SkillStore();
-//        }
-//        return skillStore;
-//    }
-//
-//    public void setSkillStore(SkillStore skillStore) {
-//        this.skillStore = skillStore;
-//    }
-
-    /**
-     * 获取角色物品的掉落设置，
-     * @return 
-     */
-    public DropData getDrop() {
-        return drop;
-    }
-
-    /**
-     * 设置角色的物品掉落设置
-     * @param drop 
-     */
-    public void setDrop(DropData drop) {
-        this.drop = drop;
-    }
 
     public long getTarget() {
         return target;
@@ -392,45 +334,45 @@ public class ActorData extends ObjectData implements MatObject{
 //        return attributes.get(viewAttribute);
 //    }
 
-    public int getLevel() {
-        return level;
-    }
+//    public int getLevel() {
+//        return level;
+//    }
+//
+//    public void setLevel(int level) {
+//        this.level = level;
+//    }
 
-    public void setLevel(int level) {
-        this.level = level;
-    }
-
-    public String getLevelUpEl() {
-        return levelUpEl;
-    }
-
-    public void setLevelUpEl(String levelUpEl) {
-        this.levelUpEl = levelUpEl;
-    }
-
-    public String getXpDropEl() {
-        return xpDropEl;
-    }
-
-    public void setXpDropEl(String xpDropEl) {
-        this.xpDropEl = xpDropEl;
-    }
+//    public String getLevelUpEl() {
+//        return levelUpEl;
+//    }
+//
+//    public void setLevelUpEl(String levelUpEl) {
+//        this.levelUpEl = levelUpEl;
+//    }
+//
+//    public String getXpDropEl() {
+//        return xpDropEl;
+//    }
+//
+//    public void setXpDropEl(String xpDropEl) {
+//        this.xpDropEl = xpDropEl;
+//    }
     
-    /**
-     * 获取当前的经验值,该值表示距离下一个等级，目前已经获得的经验值
-     * @return 
-     */
-    public int getXp() {
-        return xp;
-    }
+//    /**
+//     * 获取当前的经验值,该值表示距离下一个等级，目前已经获得的经验值
+//     * @return 
+//     */
+//    public int getXp() {
+//        return xp;
+//    }
 
-    /**
-     * 设置当前的经验值，该值表示距离下一个等级，目前已经获得的经验值
-     * @param xp 
-     */
-    public void setXp(int xp) {
-        this.xp = MathUtils.clamp(xp, 0, Integer.MAX_VALUE);
-    }
+//    /**
+//     * 设置当前的经验值，该值表示距离下一个等级，目前已经获得的经验值
+//     * @param xp 
+//     */
+//    public void setXp(int xp) {
+//        this.xp = MathUtils.clamp(xp, 0, Integer.MAX_VALUE);
+//    }
     
     public String getName() {
         return name;
@@ -489,14 +431,6 @@ public class ActorData extends ObjectData implements MatObject{
     public void setOwnerId(long ownerId) {
         this.ownerId = ownerId;
     }
-    
-//    public ResistData getResist() {
-//        return resist;
-//    }
-//
-//    public void setResist(ResistData resistData) {
-//        this.resist = resistData;
-//    }
 
     /**
      * 获取角色队伍分组，默认0表示无队伍分组
@@ -557,18 +491,6 @@ public class ActorData extends ObjectData implements MatObject{
     public void setBornPlace(Vector3f bornPlace) {
         this.bornPlace = bornPlace;
     }
-
-//    /**
-//     * 获取角色的对话面板ID，如果没有设置则返回null.
-//     * @return 
-//     */
-//    public String getChat() {
-//        return chat;
-//    }
-//
-//    public void setChat(String chat) {
-//        this.chat = chat;
-//    }
 
     /**
      * 获取技能的锁定状态，返回的整数中每一个二进制位表示一个被锁定的技能类
@@ -637,21 +559,21 @@ public class ActorData extends ObjectData implements MatObject{
         this.player = player;
     }
 
-     public int getTalentPoints() {
-        return talentPoints;
-    }
-
-    public void setTalentPoints(int talentPoints) {
-        this.talentPoints = talentPoints;
-    }
-
-    public String getTalentPointsLevelEl() {
-        return talentPointsLevelEl;
-    }
-
-    public void setTalentPointsLevelEl(String talentPointsLevelEl) {
-        this.talentPointsLevelEl = talentPointsLevelEl;
-    }
+//     public int getTalentPoints() {
+//        return talentPoints;
+//    }
+//
+//    public void setTalentPoints(int talentPoints) {
+//        this.talentPoints = talentPoints;
+//    }
+//
+//    public String getTalentPointsLevelEl() {
+//        return talentPointsLevelEl;
+//    }
+//
+//    public void setTalentPointsLevelEl(String talentPointsLevelEl) {
+//        this.talentPointsLevelEl = talentPointsLevelEl;
+//    }
     
     // -------------------------------------------------------------------------------------------------------------------------------
     

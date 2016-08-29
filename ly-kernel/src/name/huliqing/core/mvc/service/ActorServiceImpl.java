@@ -31,6 +31,7 @@ import name.huliqing.core.object.actor.ActorModelLoader;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.manager.ResourceManager;
+import name.huliqing.core.object.attribute.NumberAttribute;
 import name.huliqing.core.view.talk.SpeakManager;
 import name.huliqing.core.view.talk.TalkManager;
 import name.huliqing.core.xml.DataFactory;
@@ -38,11 +39,12 @@ import name.huliqing.core.object.module.ActorListener;
 import name.huliqing.core.object.channel.Channel;
 import name.huliqing.core.object.effect.Effect;
 import name.huliqing.core.object.el.LevelEl;
-import name.huliqing.core.object.el.XpDropEl;
+import name.huliqing.core.object.el.AttributeEl;
 import name.huliqing.core.utils.GeometryUtils;
 import name.huliqing.core.utils.Temp;
 import name.huliqing.core.object.module.ActorModule;
 import name.huliqing.core.object.module.ChannelModule;
+import name.huliqing.core.object.module.LevelModule;
 
 /**
  *
@@ -83,50 +85,12 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public Actor loadActor(ActorData actorData) {
-        // remove20160821
-//        // 在载入角色之前需要把所有属性清除，这些属性会根据等级及状态、装备、天赋
-//        // 等进行重新计算，以避免叠加BUG。
-//        for (AttributeData ad : actorData.getAttributes().values()) {
-//            ad.setDynamicValue(0);
-//            ad.setLevelValue(0);
-//            ad.setStaticValue(0);
-//        }
-//        
-//        // ==1.基本角色
-//        Actor actor = Loader.loadActor(actorData);
-//        
-//        // ==2.穿上装备
-//        List<ObjectData> items = itemDao.getItems(actor, null);
-//        boolean hasOutfit = false;
-//        for (ObjectData item : items) {
-//            if (item instanceof SkinData) {
-//                SkinData sd = (SkinData) item;
-//                if (sd.isUsing()) {
-//                    hasOutfit = true;
-//                    skinService.attachSkin(actor, sd);
-//                }
-//            }
-//        }
-//        
-//        // 如果角色没有指定装备，则需要补上基本皮肤（如果存在基本皮肤）
-//        if (!hasOutfit) {
-//            if (actorData.getSkinBase() != null && !actorData.getSkinBase().isEmpty()) {
-//                // 这里使用一个基本皮肤就可以，会自动补上其它皮肤
-//                skinService.attachSkin(actor, actorData.getSkinBase().get(0));
-//            }
-//        }
-//        
-//        // ==3.更新属性的等级值,根据等级计算公式为角色设置相应属性的等级值
-//        updateLevel(actor.getData());
-//        
-//        // ==4.更新天赋值（已经在ActorLoader中处理）
-//        // ignore
-//        
-//        return actor;
-
         Actor actor = Loader.loadActor(actorData);
         actor.initialize();
-        updateLevel(actor.getData());
+        
+        // remove20160826
+//        updateLevel(actor.getData());
+
         return actor;
     }
     
@@ -183,29 +147,6 @@ public class ActorServiceImpl implements ActorService {
         return obstacle;
     }
 
-    // remove20160818
-//    /**
-//     * @deprecated use ItemService instead
-//     * @param actor
-//     * @param objectId
-//     * @return 
-//     */
-//    @Override
-//    public ObjectData getItem(Actor actor, String objectId) {
-//        return itemDao.getItemExceptSkill(actor, objectId);
-//    }
-//
-//    /**
-//     * @deprecated use ItemService instead
-//     * @param actor
-//     * @param store
-//     * @return 
-//     */
-//    @Override
-//    public List<ObjectData> getItems(Actor actor, List<ObjectData> store) {
-//        return itemDao.getItems(actor, store);
-//    }
-    
     @Override
     public HurtFace checkFace(Spatial self, Actor target) {
         if (getViewAngle(target, self.getWorldTranslation()) < 90) {
@@ -214,21 +155,6 @@ public class ActorServiceImpl implements ActorService {
             return HurtFace.back;
         }
     }
-    
-    // remove20160815
-//    /**
-//     * @deprecated 
-//     * @param spatial
-//     * @return 
-//     */
-//    @Override
-//    public Actor getActor(Spatial spatial) {
-//        ObjectData pd = spatial.getUserData(ObjectData.USER_DATA);
-//        if (pd instanceof ActorData) {
-//            return spatial.getControl(ActorControl.class);
-//        }
-//        return null;
-//    }
 
     @Override
     public Actor findNearestEnemyExcept(Actor actor, float maxDistance, Actor except) {
@@ -331,11 +257,6 @@ public class ActorServiceImpl implements ActorService {
         return store;
     }
 
-//    @Override
-//    public boolean isSkillUpdated(Actor actor, long timePoint) {
-//        return actor.getData().getSkillStore().getLastModifyTime() > timePoint;
-//    }
-
     @Override
     public float getHeight(Actor actor) {
         BoundingBox bb = (BoundingBox) actor.getSpatial().getWorldBound();
@@ -389,12 +310,14 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public void kill(Actor actor) {
-        // 血量降低
-//        AttributeData life = actor.getData().getLifeAttributeData();
-        AttributeData life = actor.getData().getObjectData(actor.getData().getLifeAttribute());
-        if (life != null) {
-            life.setDynamicValue(0);
-        }
+        // remove20160828
+//        // 血量降低
+//        AttributeData life = actor.getData().getObjectData(actor.getData().getLifeAttribute());
+//        if (life != null) {
+//            life.setDynamicValue(0);
+//        }
+
+        getActorModule(actor).kill();
         
         // 执行死亡动画
         skillService.playSkill(actor, skillService.getSkill(actor, SkillType.dead), false);
@@ -402,13 +325,16 @@ public class ActorServiceImpl implements ActorService {
     
     @Override
     public void reborn(Actor actor) {
-        // 重生的时候属性值全满
-        List<AttributeData> ads = actor.getData().getObjectDatas(AttributeData.class, null);
-        if (ads != null) {
-            for (AttributeData ad : ads) {
-                ad.setDynamicValue(ad.getMaxValue());
-            }
-        }
+        // remove20160828
+//        // 重生的时候属性值全满
+//        List<AttributeData> ads = actor.getData().getObjectDatas(AttributeData.class, null);
+//        if (ads != null) {
+//            for (AttributeData ad : ads) {
+//                ad.setDynamicValue(ad.getMaxValue());
+//            }
+//        }
+
+        getActorModule(actor).resurrect();
         
         skillService.playSkill(actor, skillService.getSkill(actor, SkillType.wait), false);
     }
@@ -490,12 +416,14 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public boolean isDead(Actor actor) {
-//        AttributeData life = actor.getData().getLifeAttributeData();
-        AttributeData life =  actor.getData().getObjectData(actor.getData().getLifeAttribute());
-        if (life != null) {
-            return life.getDynamicValue() <= 0;
-        }
-        return false;
+        // remove20160828
+//        AttributeData life =  actor.getData().getObjectData(actor.getData().getLifeAttribute());
+//        if (life != null) {
+//            return life.getDynamicValue() <= 0;
+//        }
+//        return false;
+
+        return getActorModule(actor).isDead();
     }
 
     @Override
@@ -515,12 +443,45 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public void hitAttribute(Actor target, Actor source, String hitAttribute, float hitValue) {
-        if (!attributeService.existsAttribute(target, hitAttribute)) {
+        // remove20160827
+//        if (!attributeService.existsAttribute(target, hitAttribute)) {
+//            return;
+//        }
+//        boolean deadBefore = isDead(target);
+//        attributeService.applyDynamicValue(target, hitAttribute, hitValue);
+//        attributeService.clampDynamicValue(target, hitAttribute);
+//        boolean killed = !deadBefore && isDead(target);
+//        
+//        // 触发"被攻击者(source)"的角色侦听器
+//        // "被伤害","被杀死"侦听
+//        List<ActorListener> sourceListeners = getActorModule(target).getActorListeners();
+//        if (sourceListeners != null) {
+//            for (ActorListener l : sourceListeners) {
+//                l.onActorHit(target, source, hitAttribute, hitValue);
+//                if (killed) {
+//                    l.onActorKilled(target, source);
+//                }
+//            }
+//        }
+//        
+//        // 触发"攻击者(attacker)"的角色侦听器
+//        // 当攻击者“杀死”目标时，要让“攻击者”知道.但有时候攻击者不是一个角色
+//        // 或者不是任何一个"存在",所以source可能为null.
+//        if (killed && source != null) {
+//            List<ActorListener> attackerListeners = getActorModule(source).getActorListeners();
+//            if (attackerListeners != null) {
+//                for (ActorListener al : attackerListeners) {
+//                    al.onActorKill(source, target);
+//                }
+//            }
+//        }
+
+        NumberAttribute attr = (NumberAttribute) attributeService.getAttributeByName(target, hitAttribute);
+        if (attr == null) {
             return;
         }
         boolean deadBefore = isDead(target);
-        attributeService.applyDynamicValue(target, hitAttribute, hitValue);
-        attributeService.clampDynamicValue(target, hitAttribute);
+        attr.add(hitValue);
         boolean killed = !deadBefore && isDead(target);
         
         // 触发"被攻击者(source)"的角色侦听器
@@ -550,35 +511,44 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public int getLevel(Actor actor) {
-        return actor.getData().getLevel();
+        LevelModule module = actor.getModule(LevelModule.class);
+        if (module != null) {
+            return module.getLevel();
+        }
+        return 0;
     }
 
     @Override
     public void setLevel(Actor actor, int level) {
-        actor.getData().setLevel(level);
-        updateLevel(actor.getData());
-    }
-    
-    // 更新角色的属性等级
-    private void updateLevel(ActorData actorData) {
-        // 根据等级计算公式为角色设置相应属性的等级值
-        List<AttributeData> attributes = actorData.getObjectDatas(AttributeData.class, null);
-        if (attributes != null) {
-            LevelEl levelEl;
-            for (AttributeData attrData : attributes) {
-                levelEl = (LevelEl) elService.getEl(attrData.getEl());
-                attrData.setLevelValue((float)levelEl.getValue(actorData.getLevel()));
-                attrData.setDynamicValue(attrData.getMaxValue());
-            }
+        LevelModule module = actor.getModule(LevelModule.class);
+        if (module != null) {
+            module.setLevel(level);
         }
     }
+    
+    // remove20160828
+    // 更新角色的属性等级
+//    private void updateLevel(Actor actor) {
+        // remove20160826
+//        // 根据等级计算公式为角色设置相应属性的等级值
+//        List<AttributeData> attributes = actorData.getObjectDatas(AttributeData.class, null);
+//        if (attributes != null) {
+//            LevelEl levelEl;
+//            for (AttributeData attrData : attributes) {
+//                levelEl = (LevelEl) elService.getEl(attrData.getEl());
+//                attrData.setLevelValue((float)levelEl.getValue(actorData.getLevel()));
+//                attrData.setDynamicValue(attrData.getMaxValue());
+//            }
+//        }
+//    }
 
     @Override
     public int getXpReward(Actor attacker, Actor dead) {
         String xpDropEl = dead.getData().getXpDropEl();
         if (xpDropEl != null) {
-            XpDropEl xde = elService.getXpDropEl(xpDropEl);
-            return xde.getValue(dead.getData().getLevel(), attacker.getData().getLevel());
+            AttributeEl xde = elService.getAttributeEl(xpDropEl);
+//            return xde.getValue(dead.getData().getLevel(), attacker.getData().getLevel());
+            return xde.getValue(getLevel(dead), getLevel(attacker));
         }
         return 0;
     }
@@ -654,13 +624,20 @@ public class ActorServiceImpl implements ActorService {
     }
 
     @Override
-    public int getNextLevelXp(Actor actor) {
-        String levelUpEl = actor.getData().getLevelUpEl();
-        if (levelUpEl != null) {
-            LevelEl el = (LevelEl) elService.getEl(actor.getData().getLevelUpEl());
-            return (int) el.getValue(actor.getData().getLevel() + 1);
+    public int getLevelXp(Actor actor, int level) {
+        LevelModule module = actor.getModule(LevelModule.class);
+        if (module != null) {
+            return module.getLevelXp(level);
         }
         return 0;
+        
+        // remove20160829
+//        String levelUpEl = actor.getData().getLevelUpEl();
+//        if (levelUpEl != null) {
+//            LevelEl el = (LevelEl) elService.getEl(actor.getData().getLevelUpEl());
+//            return (int) el.getValue(actor.getData().getLevel() + 1);
+//        }
+//        return 0;
     }
 
     @Override
@@ -702,12 +679,13 @@ public class ActorServiceImpl implements ActorService {
         return actor.getData().getName();
     }
 
-    @Override
-    public int getLife(Actor actor) {
-//        AttributeData life = actor.getData().getLifeAttributeData();
-        AttributeData life = actor.getData().getObjectData(actor.getData().getLifeAttribute());
-        return (int) life.getDynamicValue();
-    }
+    // remove20160826
+//    @Override
+//    public int getLife(Actor actor) {
+////        AttributeData life = actor.getData().getLifeAttributeData();
+//        AttributeData life = actor.getData().getObjectData(actor.getData().getLifeAttribute());
+//        return (int) life.getDynamicValue();
+//    }
 
     @Override
     public int getGroup(Actor actor) {

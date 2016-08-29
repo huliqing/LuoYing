@@ -13,16 +13,17 @@ import name.huliqing.core.data.TalentData;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.view.SimpleRow;
 import name.huliqing.core.manager.ResourceManager;
+import name.huliqing.core.object.talent.Talent;
 import name.huliqing.core.ui.ListView;
 
 /**
  * 
  * @author huliqing
  */
-public class TalentRow extends SimpleRow<TalentData> {
+public class TalentRow extends SimpleRow<Talent> {
     protected PlayService playService = Factory.get(PlayService.class);
     
-    protected TalentData data;
+    protected Talent data;
     
     // 物品
     protected ColumnIcon icon;
@@ -63,12 +64,12 @@ public class TalentRow extends SimpleRow<TalentData> {
     }
 
     @Override
-    public final void displayRow(TalentData data) {
+    public final void displayRow(Talent data) {
         this.data = data;
         display(this.data);
     }
     
-    public TalentData getData() {
+    public Talent getData() {
         return this.data;
     }
     
@@ -80,10 +81,11 @@ public class TalentRow extends SimpleRow<TalentData> {
         shortcut.addClickListener(listener);
     }
     
-    protected void display(TalentData data) {
-        icon.setIcon(data.getIcon());
-        body.setNameText(ResourceManager.getObjectName(data));
-        body.setDesText(ResourceManager.getObjectDes(data.getId()));
-        num.setText(data.getLevel() + "/" + data.getMaxLevel());
+    protected void display(Talent talent) {
+        TalentData td = talent.getData();
+        icon.setIcon(td.getIcon());
+        body.setNameText(ResourceManager.getObjectName(td));
+        body.setDesText(ResourceManager.getObjectDes(td.getId()));
+        num.setText(td.getLevel() + "/" + td.getMaxLevel());
     }
 }

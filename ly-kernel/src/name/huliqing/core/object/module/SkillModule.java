@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import name.huliqing.core.data.SkillData;
-import name.huliqing.core.data.module.SkillModuleData;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.skill.Skill;
@@ -21,7 +20,7 @@ import name.huliqing.core.object.skill.Skill;
 /**
  * @author huliqing
  */
-public class SkillModule extends AbstractModule<SkillModuleData> {
+public class SkillModule extends AbstractModule {
     private Actor actor;
     
     // 所有可用的技能处理器

@@ -5,21 +5,31 @@
     xmlns='http://fighter.huliqing.name'
     xsi:schemaLocation='http://fighter.huliqing.name meta/module.xsd'>
     
+    <moduleAttribute id="moduleAttribute" moduleOrder="0" />
     
-    <moduleActor id="moduleActor" />
-    <moduleAction id="moduleAction" />
-    <moduleAttribute id="moduleAttribute"/>
-    <moduleChannel id="moduleChannel"/>
-    <moduleChat id="moduleChat"/>
-    <moduleItem id="moduleItem"/>
-    <moduleLogic id="moduleLogic"/>
-    <modulePhysics id="modulePhysics" />
-    <moduleResist id="moduleResist" />
-    <moduleSkill id="moduleSkill"/>
-    <moduleSkin id="moduleSkin"/>
-    <moduleState id="moduleState"/>
-    <moduleTalent id="moduleTalent"/>
-    <moduleTask id="moduleTask"/>
-        
+    <moduleAction id="moduleAction" moduleOrder="10" />
+    <moduleChannel id="moduleChannel" moduleOrder="10" />
+    <moduleChat id="moduleChat" moduleOrder="10" />
+    <moduleItem id="moduleItem" moduleOrder="10" />
+    <moduleLogic id="moduleLogic" moduleOrder="10"/>
+    <moduleResist id="moduleResist" moduleOrder="10"/>
+    <moduleSkill id="moduleSkill" moduleOrder="10"/>
+    <moduleSkin id="moduleSkin" moduleOrder="10" />
+    <moduleState id="moduleState" moduleOrder="10"/>
+    <moduleTask id="moduleTask" moduleOrder="10"/>
+    
+    <!--基本角色模块-->
+    <moduleActor id="moduleActor" moduleOrder="10" lifeAttributeName="attributeHealth" />
+    
+    <!--等级控制模块-->
+    <moduleLevel id="moduleLevel" moduleOrder="10" levelAttributeName="attributeLevel" 
+                 xpAttributeName="attributeXp" xpNextAttributeName="attributeXpNext" xpLevelEl="elLevelUp" maxLevel="60" effect="effectLevelUp" />
+    
+    <!--天赋模块-->
+    <moduleTalent id="moduleTalent" moduleOrder="10" levelAttributeName="attributeLevel" 
+                  talentPointsAttributeName="attributeTalentPoints" talentPointsLevelEl="elLevelTalentPoints" />
+     
+    <!--角色物品掉落模块-->
+    <moduleDrop id="moduleDrop" moduleOrder="10" />
 
 </root>

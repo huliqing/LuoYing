@@ -10,7 +10,6 @@ import name.huliqing.core.Factory;
 import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.mess.MessProtoAdd;
 import name.huliqing.core.mess.MessProtoRemove;
-import name.huliqing.core.mess.MessProtoSync;
 import name.huliqing.core.mess.MessProtoUse;
 import name.huliqing.core.mvc.service.ProtoService;
 import name.huliqing.core.network.Network;
@@ -48,7 +47,10 @@ public class ProtoNetworkImpl implements ProtoNetwork {
         mess.setActorId(actor.getData().getUniqueId());
         mess.setObjectId(id);
         mess.setAddCount(count);
-        mess.setSyncTotal(resultData != null ? resultData.getTotal() : 0);
+        
+        // remove20160830
+//        mess.setSyncTotal(resultData != null ? resultData.getTotal() : 0);
+
         network.broadcast(mess);
     }
     
@@ -68,15 +70,16 @@ public class ProtoNetworkImpl implements ProtoNetwork {
         
         // 服务端删除
         protoService.removeData(actor, id, count);
-        
-        if (network.hasConnections()) {
-            ObjectData resultData = protoService.getData(actor, id);
-            MessProtoSync messSync = new MessProtoSync();
-            messSync.setActorId(actor.getData().getUniqueId());
-            messSync.setObjectId(id);
-            messSync.setTotal(resultData != null ? resultData.getTotal() : 0);
-            network.broadcast(messSync);
-        }
+   
+        // remove20160830
+//        if (network.hasConnections()) {
+//            ObjectData resultData = protoService.getData(actor, id);
+//            MessProtoSync messSync = new MessProtoSync();
+//            messSync.setActorId(actor.getData().getUniqueId());
+//            messSync.setObjectId(id);
+//            messSync.setTotal(resultData != null ? resultData.getTotal() : 0);
+//            network.broadcast(messSync);
+//        }
     }
 
     @Override
@@ -105,15 +108,16 @@ public class ProtoNetworkImpl implements ProtoNetwork {
         // 自身执行
         protoService.useData(actor, data);
 
-        // 同步物品数量
-        if (network.hasConnections()) {
-            ObjectData resultData = protoService.getData(actor, data.getId());
-            MessProtoSync mess = new MessProtoSync();
-            mess.setActorId(actor.getData().getUniqueId());
-            mess.setObjectId(data.getId());
-            mess.setTotal(resultData != null ? resultData.getTotal() : 0);
-            network.broadcast(mess);
-        }
+        // remove20160830
+//        // 同步物品数量
+//        if (network.hasConnections()) {
+//            ObjectData resultData = protoService.getData(actor, data.getId());
+//            MessProtoSync mess = new MessProtoSync();
+//            mess.setActorId(actor.getData().getUniqueId());
+//            mess.setObjectId(data.getId());
+//            mess.setTotal(resultData != null ? resultData.getTotal() : 0);
+//            network.broadcast(mess);
+//        }
     }
 
     @Override
@@ -126,10 +130,11 @@ public class ProtoNetworkImpl implements ProtoNetwork {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public void syncDataTotal(Actor actor, String objectId, int total) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+    // remove20160830
+//    @Override
+//    public void syncDataTotal(Actor actor, String objectId, int total) {
+//        throw new UnsupportedOperationException("Not supported yet.");
+//    }
 
     @Override
     public float getCost(ObjectData data) {

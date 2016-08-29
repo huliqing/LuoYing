@@ -7,7 +7,7 @@ import name.huliqing.core.data.AttributeData;
  * 或者通过绑定其它属性来限制当前属性的取值范围。
  * @author huliqing
  */
-public class LimitIntegerAttribute extends IntegerAttribute implements ValueChangeListener<Number> {
+public class LimitIntegerAttribute extends IntegerAttribute implements LimitAttribute, ValueChangeListener<Number>{
 
     private int minValue = Integer.MIN_VALUE;
     private int maxValue = Integer.MAX_VALUE;
@@ -26,21 +26,33 @@ public class LimitIntegerAttribute extends IntegerAttribute implements ValueChan
     }
 
     @Override
-    public AttributeData getData() {
+    protected void updateData() {
+        super.updateData();
         data.setAttribute("minValue", minValue);
         data.setAttribute("maxValue", maxValue);
         // minLimitAttributeName, maxLimitAttributeName不发生变化，所以不需要回设到data中去
 //        data.setAttribute("minLimitAttributeName", minLimitAttributeName);
 //        data.setAttribute("maxLimitAttributeName", maxLimitAttributeName);
-        return super.getData();
     }
 
-    public int getMinValue() {
+    @Override
+    public float getMaxLimit() {
+        return maxValue;
+    }
+
+    @Override
+    public void setMax() {
+        setAndNotify(maxValue);
+    }
+
+    @Override
+    public float getMinLimit() {
         return minValue;
     }
 
-    public int getMaxValue() {
-        return maxValue;
+    @Override
+    public void setMin() {
+        setAndNotify(minValue);
     }
 
     @Override

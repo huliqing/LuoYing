@@ -65,14 +65,14 @@ xs:time
         </xs:annotation>
         <xs:complexContent>
             <xs:extension base="base">
-                <xs:attribute name="rewardExp" type="xs:integer" use="optional">
-                    <xs:annotation>
-                        <xs:documentation>奖励的经验值</xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
                 <xs:attribute name="rewardItems" type="xs:string" use="optional">
                     <xs:annotation>
                         <xs:documentation>指定奖励物品，格式, "item1|count1,item2|count2,...", count为奖励的物品数量</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="rewardAttributes" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>指定要奖励的属性值，格式, "attributeName1|addValue1,attributeName2|addValue2,...", addValue为要添加到属性上的数值。</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
             </xs:extension>

@@ -12,8 +12,7 @@ xs:time
            xmlns:xs="http://www.w3.org/2001/XMLSchema"
            targetNamespace="http://fighter.huliqing.name"
            xmlns="http://fighter.huliqing.name"
-           elementFormDefault="qualified"
-        >
+           elementFormDefault="qualified" >
     
     <xs:include schemaLocation="base.xsd" />
     
@@ -25,9 +24,10 @@ xs:time
                 <xs:element ref="moduleAttribute" />
                 <xs:element ref="moduleChannel" />
                 <xs:element ref="moduleChat" />
+                <xs:element ref="moduleDrop" />
                 <xs:element ref="moduleItem" />
+                <xs:element ref="moduleLevel" />
                 <xs:element ref="moduleLogic" />
-                <xs:element ref="modulePhysics" />
                 <xs:element ref="moduleResist" />
                 <xs:element ref="moduleSkill" />
                 <xs:element ref="moduleSkin" />
@@ -37,36 +37,166 @@ xs:time
             </xs:all>
         </xs:complexType>
     </xs:element>
-
-    <xs:element name="moduleTask">
+    
+    <xs:element name="moduleAction">
         <xs:annotation>
-            <xs:documentation>角色任务模块</xs:documentation>
+            <xs:documentation>角色行为模块， 必要的</xs:documentation>
         </xs:annotation>
         <xs:complexType>
             <xs:complexContent>
-                <xs:extension base="base"></xs:extension>
+                <xs:extension base="moduleBase">
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+            
+    <xs:element name="moduleActor">
+        <xs:annotation>
+            <xs:documentation>基本角色控制器，每个角色都必要的</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="moduleBase">
+                    <xs:attribute name="lifeAttributeName" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>生命属性的名称，绑定一个属性名称，这个属性将用于计算角色的生命值
+                            ，当这个属性的值为0时，角色将被判定为死亡。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+        
+    <xs:element name="moduleAttribute">
+        <xs:annotation>
+            <xs:documentation>角色属性控制模块</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="moduleBase"></xs:extension>
             </xs:complexContent>
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="moduleTalent">
+    <xs:element name="moduleChannel">
         <xs:annotation>
-            <xs:documentation>xxxx</xs:documentation>
+            <xs:documentation>角色动画通道模块，用于支持角色的通道动画</xs:documentation>
         </xs:annotation>
         <xs:complexType>
             <xs:complexContent>
-                <xs:extension base="base"></xs:extension>
+                <xs:extension base="moduleBase">
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+        
+    <xs:element name="moduleChat">
+        <xs:annotation>
+            <xs:documentation>角色对话模块</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="moduleBase"></xs:extension>
             </xs:complexContent>
         </xs:complexType>
     </xs:element>
     
-    <xs:element name="moduleState">
+    <xs:element name="moduleDrop">
         <xs:annotation>
-            <xs:documentation>xxxx</xs:documentation>
+            <xs:documentation>角色物品掉落模块,给角色增加这个模块之后，当角色被某个目标打死之后可以从角色身上掉落物品给指定目标。</xs:documentation>
         </xs:annotation>
         <xs:complexType>
             <xs:complexContent>
-                <xs:extension base="base"></xs:extension>
+                <xs:extension base="moduleBase"></xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+        
+    <xs:element name="moduleItem">
+        <xs:annotation>
+            <xs:documentation>角色包裹物品管理模块</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="moduleBase"></xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="moduleLevel">
+        <xs:annotation>
+            <xs:documentation>“等级”功能模块，给角色添加这个模块可以让角色具有升级功能。</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="moduleBase">
+                    <xs:attribute name="levelAttributeName" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>角色的等级属性名称，这个属性用于存放角色的等级值,当角色的等级变化后会存取在这个属性中。</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="xpAttributeName" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>角色的经验值（xp）属性名称，模块通过这个属性的值变化来计算角色的等级值。</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="xpNextAttributeName" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>到达下一个等级角色需要的经验值（xp）属性名称，模块在运行时会自动把下一等级需要的经验值计算后放在这个属性上。</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="xpLevelEl" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>角色等级公式,关联一个Level El, 这个公式用来计算角色在升级到每一个等级时需要的经验值(xp)数量。</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="maxLevel" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>可升级的最高等级值，默认情况下无限制。</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="effect" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>升级时的特效</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+        
+    <xs:element name="moduleLogic">
+        <xs:annotation>
+            <xs:documentation>角色逻辑控制器</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="moduleBase">
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+        
+    <xs:element name="moduleResist">
+        <xs:annotation>
+            <xs:documentation>角色抗性模块，用于计算角色对状态的抵抗值</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="moduleBase"></xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="moduleSkill">
+        <xs:annotation>
+            <xs:documentation>技能模块</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="moduleBase"></xs:extension>
             </xs:complexContent>
         </xs:complexType>
     </xs:element>
@@ -77,138 +207,88 @@ xs:time
         </xs:annotation>
         <xs:complexType>
             <xs:complexContent>
-                <xs:extension base="base"></xs:extension>
+                <xs:extension base="moduleBase"></xs:extension>
             </xs:complexContent>
         </xs:complexType>
     </xs:element>
     
-    <xs:element name="moduleSkill">
+    <xs:element name="moduleState">
         <xs:annotation>
-            <xs:documentation>xxxx</xs:documentation>
+            <xs:documentation>状态模块，buff,debuff模块</xs:documentation>
         </xs:annotation>
         <xs:complexType>
             <xs:complexContent>
-                <xs:extension base="base"></xs:extension>
+                <xs:extension base="moduleBase"></xs:extension>
             </xs:complexContent>
         </xs:complexType>
     </xs:element>
-    
-    <xs:element name="moduleResist">
+
+    <xs:element name="moduleTalent">
         <xs:annotation>
-            <xs:documentation>xxxx</xs:documentation>
+            <xs:documentation>角色“天赋”功能模块</xs:documentation>
         </xs:annotation>
         <xs:complexType>
             <xs:complexContent>
-                <xs:extension base="base"></xs:extension>
-            </xs:complexContent>
-        </xs:complexType>
-    </xs:element>
-    
-    <xs:element name="modulePhysics">
-        <xs:annotation>
-            <xs:documentation>角色物理控制器</xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="base">
-                    <xs:attribute name="radius" type="xs:decimal" use="required" />
-                    <xs:attribute name="height" type="xs:decimal" use="required" />
-                    <xs:attribute name="mass" type="xs:decimal" use="required" />
-                </xs:extension>
-            </xs:complexContent>
-        </xs:complexType>
-    </xs:element>
-    
-    <xs:element name="moduleLogic">
-        <xs:annotation>
-            <xs:documentation>角色逻辑控制器</xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="base">
-<!--                    <xs:attribute name="logics" type="xs:string" use="required">
-                        <xs:annotation>
-                            <xs:documentation>关联逻辑,多个逻辑使用半角逗号分开，如：logic1,logic2,logic3</xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>-->
-                </xs:extension>
-            </xs:complexContent>
-        </xs:complexType>
-    </xs:element>
-    
-    <xs:element name="moduleItem">
-        <xs:annotation>
-            <xs:documentation>xxxx</xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="base"></xs:extension>
-            </xs:complexContent>
-        </xs:complexType>
-    </xs:element>
-    
-    <xs:element name="moduleChat">
-        <xs:annotation>
-            <xs:documentation>xxxx</xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="base"></xs:extension>
-            </xs:complexContent>
-        </xs:complexType>
-    </xs:element>
-    
-    <xs:element name="moduleChannel">
-        <xs:annotation>
-            <xs:documentation>xxxx</xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="base">
-<!--                    <xs:attribute name="channels" type="xs:string" use="optional">
+                <xs:extension base="moduleBase">
+                    <xs:attribute name="levelAttributeName" type="xs:string" use="required">
                         <xs:annotation>
                             <xs:documentation>
-                                角色的channel定义,关联一些channel，格式："channel1,channel2,...".
-                                如果不设置则默认使用一个包含所有骨骼的channel
+                                绑定角色的等级属性的名称(Number类型），天赋模块用这个属性的值变化来判断角色是否升级。
                             </xs:documentation>
                         </xs:annotation>
-                    </xs:attribute>-->
+                    </xs:attribute>
+                    <xs:attribute name="talentPointsAttributeName" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>
+                                绑定一个属性名称，这个属性将作为天赋点数的容器，属性类型必须是Number类型。
+                                当角色升级时获得的天赋点数将累加在这个属性上。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="talentPointsValue" type="xs:integer" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                天赋点奖励数量，整数类型，这个参数表示当角色每升一级时可以获得的天赋点数,
+                                固定值，默认0. 注：如果设置了talentPointsLevelEl参数则忽略talentPointsValue设置。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="talentPointsLevelEl" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                绑定一个levelEl,这个LevelEl用于计算在角色升级到不同等级时角色可以获得的天赋点数.
+                                如果设置了这个值，则忽略talentPointsValue的设置。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
     </xs:element>
     
-    <xs:element name="moduleAttribute">
+    <xs:element name="moduleTask">
         <xs:annotation>
-            <xs:documentation>xxxx</xs:documentation>
+            <xs:documentation>角色任务模块</xs:documentation>
         </xs:annotation>
         <xs:complexType>
             <xs:complexContent>
-                <xs:extension base="base"></xs:extension>
-            </xs:complexContent>
-        </xs:complexType>
-    </xs:element>
-        
-    <xs:element name="moduleActor">
-        <xs:annotation>
-            <xs:documentation>xxxx</xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="base"></xs:extension>
+                <xs:extension base="moduleBase"></xs:extension>
             </xs:complexContent>
         </xs:complexType>
     </xs:element>
     
-    <xs:element name="moduleAction">
-        <xs:annotation>
-            <xs:documentation>xxxx</xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="base"></xs:extension>
-            </xs:complexContent>
-        </xs:complexType>
-    </xs:element>
+    <xs:complexType name="moduleBase">
+        <xs:complexContent>
+            <xs:extension base="base">
+                <xs:attribute name="moduleOrder" type="xs:integer" use="required">
+                    <xs:annotation>
+                        <xs:documentation>
+                            模块载入时的优先顺序,默认：0，值越小排越前，值越大排在越后面载入。
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
     
 </xs:schema>

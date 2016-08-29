@@ -104,10 +104,10 @@ xs:time
                             碰撞盒太大或者太小时，可使用该参数进行适当缩放</xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="drop" type="xs:string" use="optional">
+                    <xs:attribute name="drops" type="xs:string" use="optional">
                         <xs:annotation>
                             <xs:documentation>
-                                角色物品的掉落设置，连接一个drop设置
+                                角色物品的掉落设置，格式： "drop1,drop2,..."
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>

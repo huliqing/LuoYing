@@ -12,12 +12,12 @@ import name.huliqing.core.constants.InterfaceConstants;
 import name.huliqing.core.constants.ResConstants;
 import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.TaskData;
-import name.huliqing.core.mvc.network.ActorNetwork;
 import name.huliqing.core.mvc.network.ProtoNetwork;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.ProtoService;
 import name.huliqing.core.view.IconLabel;
 import name.huliqing.core.manager.ResourceManager;
+import name.huliqing.core.mvc.network.AttributeNetwork;
 import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.ui.LinearLayout;
@@ -35,14 +35,14 @@ import name.huliqing.core.utils.ConvertUtils;
 public abstract class AbstractTask<T extends TaskData> implements Task<T> {
     private final PlayService playService = Factory.get(PlayService.class);
     private final ProtoService protoService = Factory.get(ProtoService.class);
-    private final ActorNetwork atorNetwork = Factory.get(ActorNetwork.class);
     private final ProtoNetwork protoNetwork = Factory.get(ProtoNetwork.class);
+    private final AttributeNetwork attributeNetwork = Factory.get(AttributeNetwork.class);
 
     protected T data;
     protected Actor actor;
     
-    protected int rewardExp;
     protected List<RewardItem> rewardItems;
+    protected List<RewardAttribute> rewardAttributes;
     
     // ---- inner
     protected Window detailWin;
@@ -50,7 +50,7 @@ public abstract class AbstractTask<T extends TaskData> implements Task<T> {
     @Override
     public void setData(T data) {
         this.data = data;
-        this.rewardExp = data.getAsInteger("rewardExp", 0);
+        
         // "item1|count1,item2|count2,..."
         String[] rewardItemsArr = data.getAsArray("rewardItems");
         if (rewardItemsArr != null) {
@@ -61,6 +61,19 @@ public abstract class AbstractTask<T extends TaskData> implements Task<T> {
                 ri.itemId = tempArr[0];
                 ri.count = tempArr.length > 1 ? ConvertUtils.toInteger(tempArr[1], 1) : 1;
                 rewardItems.add(ri);
+            }
+        }
+        
+        // 格式, "attributeName1|addValue1,attributeName2|addValue2,...", 
+        String[] rewardAttributesArr = data.getAsArray("rewardAttributes");
+        if (rewardAttributesArr != null) {
+            rewardAttributes = new ArrayList<RewardAttribute>(rewardAttributesArr.length);
+            for (int i = 0; i < rewardAttributesArr.length; i++) {
+                String[] tempArr = rewardAttributesArr[i].split("\\|");
+                RewardAttribute ri = new RewardAttribute();
+                ri.attributeName = tempArr[0];
+                ri.value = tempArr.length > 1 ? ConvertUtils.toFloat(tempArr[1], 1) : 1;
+                rewardAttributes.add(ri);
             }
         }
     }
@@ -87,9 +100,14 @@ public abstract class AbstractTask<T extends TaskData> implements Task<T> {
 
     @Override
     public void doCompletion() {
-        // 奖励经验 
-        if (rewardExp > 0) {
-            atorNetwork.applyXp(actor, rewardExp);
+        if (data.isCompletion())
+            return;
+
+        // 奖励属性值
+        if (rewardAttributes != null) {
+            for (RewardAttribute ra : rewardAttributes) {
+                attributeNetwork.addAttributeValue(actor, ra.attributeName, ra.value);
+            }
         }
         // 奖励物品
         if (rewardItems != null) {
@@ -117,6 +135,12 @@ public abstract class AbstractTask<T extends TaskData> implements Task<T> {
     protected class RewardItem {
         String itemId;
         int count;
+    }
+    
+    // 奖励到属性上
+    protected class RewardAttribute {
+        String attributeName;
+        float value;
     }
     
     private class DetailWindow extends Window {
@@ -149,17 +173,27 @@ public abstract class AbstractTask<T extends TaskData> implements Task<T> {
             rewardHead.setVerticalAlignment(BitmapFont.VAlign.Center);
             taskRewardPanel.addView(rewardHead);
             
-            if (rewardExp > 0) {
-                IconLabel il = new IconLabel("_EXP_", InterfaceConstants.ITEM_EXP, rewardExp + "");
-                taskRewardPanel.addView(il);
+            // remove20160829
+//            if (rewardExp > 0) {
+//                IconLabel il = new IconLabel("_EXP_", InterfaceConstants.ITEM_EXP, rewardExp + "");
+//                taskRewardPanel.addView(il);
+//            }
+
+            if (rewardAttributes != null && !rewardAttributes.isEmpty()) {
+                for (RewardAttribute ra : rewardAttributes) {
+                    IconLabel label = new IconLabel(ra.attributeName
+                            ,  ((ObjectData)DataFactory.createData(ra.attributeName)).getIcon()
+                            , ra.value + "");
+                    taskRewardPanel.addView(label);
+                }
             }
             
             if (rewardItems != null) {
                 for (RewardItem ri : rewardItems) {
-                    IconLabel il = new IconLabel(ri.itemId
+                    IconLabel label = new IconLabel(ri.itemId
                             , ((ObjectData)DataFactory.createData(ri.itemId)).getIcon()
                             , ri.count + "");
-                    taskRewardPanel.addView(il);
+                    taskRewardPanel.addView(label);
                 }
             }
             

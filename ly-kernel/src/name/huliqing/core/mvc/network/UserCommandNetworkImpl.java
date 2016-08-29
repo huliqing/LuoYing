@@ -241,8 +241,10 @@ public class UserCommandNetworkImpl implements UserCommandNetwork {
 //            return;
         
         if (network.isClient()) {
-            // 客户端本地先删除 
-            protoService.removeData(actor, objectId, amount);
+            
+            // remove20160830 不再使用本地优先删除的方式
+//            // 客户端本地先删除 
+//            protoService.removeData(actor, objectId, amount);
             
             // 通知服务端
             MessProtoRemove mess = new MessProtoRemove();

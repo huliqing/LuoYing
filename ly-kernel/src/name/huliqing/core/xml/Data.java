@@ -43,6 +43,35 @@ public class Data implements Savable {
     }
     
     /**
+     * 清理所有数据
+     */
+    public final void clear() {
+        data.clear();
+    }
+    
+    /**
+     * 检查data是否为空
+     * @return 
+     */
+    public final boolean isEmpty() {
+        return data.isEmpty();
+    }
+    
+    /**
+     * 检查某个参数中有多少个项，每个项以半角逗号分隔,如果参数不存在或没有值
+     * ，则返回0
+     * @param key
+     * @return 
+     */
+    public final int checkAttributeLength(String key) {
+        String value = getAsString(key);
+        if (value == null || value.trim().isEmpty()) {
+            return 0;
+        }
+        return value.split(",").length;
+    }
+    
+    /**
      * 设置一个参数值，如果value为null则清除该值。
      * @param key
      * @param value 
@@ -55,8 +84,27 @@ public class Data implements Savable {
         }
     }
     
+    /**
+     * 直接获得属性值，这个方法不会返回“”(空值），所有“”值的参数都将返回null.
+     * @param key
+     * @return 
+     */
     public Object getAttribute(String key) {
-        return data.get(key);
+        Object obj = data.get(key);
+        // 注：这里要防止返回“空”值，这样其它依赖于这个方法的方法就不需要再判断空值，并在转换类型的时候比较简单.
+        // 比如在：Integer.parseInt的时候就不需要再判断空值。
+        if (obj == null || obj.equals("")) {
+            return null;
+        }
+        return obj;
+    }
+    
+    public final String getAsString(String key, String defValue) {
+        Object value = getAttribute(key);
+        if (value != null) {
+            return value.toString();
+        }
+        return defValue;
     }
     
     /**
@@ -65,52 +113,7 @@ public class Data implements Savable {
      * @return 
      */
     public final String getAsString(String key) {
-//        if (!data.containsKey(key)) {
-//            return null;
-//        }
-//        String value = data.get(key).toString();
-//        if ("".equals(value)) {
-//            return null;
-//        }
-//        return value;
-
-        Object value = getAttribute(key);
-        if (value == null || value.equals("")) {
-            return null;
-        }
-        return value.toString();
-    }
-    
-    public final String getAsString(String key, String defValue) {
-        String value = getAsString(key);
-        if (value == null) {
-            return defValue;
-        }
-        return value;
-    }
-
-    public final <T extends Savable> T getAsSavable(String key, Class<T> type) {
-        if (!data.containsKey(key)) {
-            return null;
-        }
-        Object object = data.get(key);
-        return (T) object;
-    }
-    
-    public final Integer getAsInteger(String key) {
-        String value = getAsString(key);
-        if (value == null) {
-            return null;
-        }
-        return Integer.parseInt(value);
-    }
-    
-    public final int getAsInteger(String key, int defValue) {
-        Integer value = getAsInteger(key);
-        if (value == null) {
-            return defValue;
-        }
-        return value;
+        return getAsString(key, null);
     }
     
     /**
@@ -131,6 +134,22 @@ public class Data implements Savable {
         return result;
     }
     
+    public final Integer getAsInteger(String key) {
+        Object value = getAttribute(key);
+        if (value instanceof Integer) {
+            return (Integer) value;
+        }
+        return value != null ? Integer.parseInt(value.toString()) : null;
+    }
+    
+    public final int getAsInteger(String key, int defValue) {
+        Integer value = getAsInteger(key);
+        if (value != null) {
+            return value;
+        }
+        return defValue;
+    }
+    
     /**
      * 把参数获取为整形数组，如果没有设置该参数则返回null.
      * @param key
@@ -143,7 +162,6 @@ public class Data implements Savable {
         }
         return null;
     }
-
     
     /**
      * 把参数获取为整形集合，如果没有设置该参数则返回null.
@@ -158,20 +176,36 @@ public class Data implements Savable {
         return null;
     }
     
-    public final Float getAsFloat(String key) {
-        String value = getAsString(key);
-        if (value == null) {
-            return null;
+    public final Long getAsLong(String key) {
+        Object value = getAttribute(key);
+        if (value instanceof Long) {
+            return (Long) value;
         }
-        return Float.parseFloat(value);
+        return value != null ? Long.parseLong(value.toString()) : null;
+    }
+    
+    public final Long getAsLong(String key, long defValue) {
+        Long value = getAsLong(key);
+        if (value != null) {
+            return value;
+        }
+        return defValue;
+    }
+    
+    public final Float getAsFloat(String key) {
+        Object value = getAttribute(key);
+        if (value instanceof Float) {
+            return (Float) value;
+        }
+        return value != null ? Float.parseFloat(value.toString()) : null;
     }
     
     public final float getAsFloat(String key, float defValue) {
-        String value = getAsString(key);
-        if (value == null) {
-            return defValue;
+        Float value = getAsFloat(key);
+        if (value != null) {
+            return value;
         }
-        return Float.parseFloat(value);
+        return defValue;
     }
     
     public final float[] getAsFloatArray(String key) {
@@ -189,11 +223,8 @@ public class Data implements Savable {
     
     public final Boolean getAsBoolean(String key) {
         Object value = getAttribute(key);
-        if (value instanceof Boolean) {
+        if (value == null || (value instanceof Boolean)) {
             return (Boolean) value;
-        }
-        if (value == null) {
-            return null;
         }
         String strValue = value.toString();
         return (strValue.equals("1") || strValue.equalsIgnoreCase("true"));
@@ -201,11 +232,10 @@ public class Data implements Savable {
     
     public final boolean getAsBoolean(String key, boolean defValue) {
         Boolean value = getAsBoolean(key);
-        if (value == null) {
-            return defValue;
+        if (value != null) {
+            return value;
         }
-        return value;
-//        return (value.equalsIgnoreCase("true") || value.equals("1"));
+        return defValue;
     }
     
     /**
@@ -371,33 +401,12 @@ public class Data implements Savable {
         return temp != null ? temp : defValue;
     }
     
-    /**
-     * 清理所有数据
-     */
-    public final void clear() {
-        data.clear();
-    }
-    
-    /**
-     * 检查data是否为空
-     * @return 
-     */
-    public final boolean isEmpty() {
-        return data.isEmpty();
-    }
-    
-    /**
-     * 检查某个参数中有多少个项，每个项以半角逗号分隔,如果参数不存在或没有值
-     * ，则返回0
-     * @param key
-     * @return 
-     */
-    public final int checkAttributeLength(String key) {
-        String value = getAsString(key);
-        if (value == null || value.trim().isEmpty()) {
-            return 0;
+    public final <T extends Savable> T getAsSavable(String key, Class<T> type) {
+        if (!data.containsKey(key)) {
+            return null;
         }
-        return value.split(",").length;
+        Object object = data.get(key);
+        return (T) object;
     }
     
     /**

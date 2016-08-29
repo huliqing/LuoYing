@@ -18,6 +18,9 @@ public class NumberCompare {
         if (na instanceof FloatAttribute) {
             return value1 == ((FloatAttribute)na).floatValue();
         }
+        if (na instanceof LongAttribute) {
+            return value1 == ((LongAttribute)na).longValue();
+        }
         return false;
     }
     
@@ -27,6 +30,22 @@ public class NumberCompare {
         }
         if (na instanceof FloatAttribute) {
             return value1 == ((FloatAttribute)na).floatValue();
+        }
+        if (na instanceof LongAttribute) {
+            return value1 == ((LongAttribute)na).longValue();
+        }
+        return false;
+    }
+    
+    public static boolean isEqualTo(long value1, NumberAttribute na) {
+        if (na instanceof IntegerAttribute) {
+            return value1 == ((IntegerAttribute) na).intValue();
+        }
+        if (na instanceof FloatAttribute) {
+            return value1 == ((FloatAttribute)na).floatValue();
+        }
+        if (na instanceof LongAttribute) {
+            return value1 == ((LongAttribute)na).longValue();
         }
         return false;
     }

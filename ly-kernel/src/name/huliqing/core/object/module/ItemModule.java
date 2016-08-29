@@ -8,15 +8,13 @@ package name.huliqing.core.object.module;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.data.ItemData;
-import name.huliqing.core.data.module.ItemModuleData;
-import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.xml.DataFactory;
 
 /**
  * @author huliqing
  */
-public class ItemModule extends AbstractModule<ItemModuleData> {
+public class ItemModule extends AbstractModule {
     
     private Actor actor;
     // 监听角色物品的增删

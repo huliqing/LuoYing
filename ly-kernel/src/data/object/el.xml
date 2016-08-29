@@ -20,7 +20,7 @@
     <!--=====================================================================-->
     
     <!--默认公式-->
-    <elXpDrop id="elXpDrop" expression="(({s_level} + 1) / ({t_level} + 1)) * (0 + 12 * Math.pow(1.1, {s_level}))" />
+    <elAttribute id="elXpDrop" expression="(({s_attributeLevel} + 1) / ({t_attributeLevel} + 1)) * (0 + 12 * Math.pow(1.1, {s_attributeLevel}))" />
 
     <!--=====================================================================-->
     <!--属性值等级公式: 配置给属性，用于计算属性在指定等级时的属性值。-->

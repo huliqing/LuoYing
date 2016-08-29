@@ -123,19 +123,25 @@ public class ProtoServiceImpl implements ProtoService {
         return Collections.unmodifiableList(actor.getData().getObjectDatas());
     }
 
-    @Override
-    public void syncDataTotal(Actor actor, String id, int total) {
-        Class<?> cc = DataFactory.getDataClassById(id);
-        if (cc == null)
-            return;
-        
-        if (cc == ItemData.class || cc == SkinData.class) {
-            itemService.syncItemTotal(actor, id, total);
-            return;
-        } 
-        LOG.log(Level.WARNING, "Unsupported syncDataTotal, actor={0}, object id={1}, total={2}"
-                , new Object[] {actor, id, total});
-    }
+    // remove20160830
+//    @Override
+//    public void syncDataTotal(Actor actor, String id, int total) {
+//        Class<?> cc = DataFactory.getDataClassById(id);
+//        if (cc == null)
+//            return;
+//        
+//        if (cc == ItemData.class) {
+//            itemService.syncItemTotal(actor, id, total);
+//            return;
+//        } 
+//        
+//        if (cc == SkinData.class) {
+//            throw new UnsupportedOperationException();
+//        }
+//        
+//        LOG.log(Level.WARNING, "Unsupported syncDataTotal, actor={0}, object id={1}, total={2}"
+//                , new Object[] {actor, id, total});
+//    }
 
     @Override
     public float getCost(ObjectData data) {

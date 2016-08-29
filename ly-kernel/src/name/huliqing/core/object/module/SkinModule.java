@@ -18,6 +18,7 @@ import name.huliqing.core.data.module.SkinModuleData;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.mvc.service.AttributeService;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.attribute.NumberAttribute;
 import name.huliqing.core.object.skin.Skin;
 import name.huliqing.core.object.skin.WeaponSkin;
 import name.huliqing.core.object.skin.WeaponStateUtils;
@@ -26,9 +27,8 @@ import name.huliqing.core.xml.DataFactory;
 /**
  * 角色的换装控制器
  * @author huliqing
- * @param <T>
  */
-public class SkinModule<T extends SkinModuleData> extends AbstractModule<T> {
+public class SkinModule extends AbstractModule {
     private final AttributeService attributeService = Factory.get(AttributeService.class);
 
     private Actor actor;
@@ -219,6 +219,7 @@ public class SkinModule<T extends SkinModuleData> extends AbstractModule<T> {
     }
     
     public boolean takeOnWeapon(boolean force) {
+        // remove20160827
 //        if (!force && !isCanTakeOnWeapon(actor)) {
 //            return false;
 //        }
@@ -500,12 +501,17 @@ public class SkinModule<T extends SkinModuleData> extends AbstractModule<T> {
      * @param skinData 
      */
     private void addSkinApplyAttributes(Actor actor, SkinData skinData) {
+        if (skinData.isAttributeApplied()) {
+            return;
+        }
+        skinData.setAttributeApplied(true);
         List<AttributeApply> aas = skinData.getApplyAttributes();
         if (aas != null) {
             for (AttributeApply aa : aas) {
-                attributeService.applyDynamicValue(actor, aa.getAttribute(), aa.getAmount());
-                attributeService.applyStaticValue(actor, aa.getAttribute(), aa.getAmount());
-                attributeService.clampDynamicValue(actor, aa.getAttribute());
+                NumberAttribute attr = attributeService.getAttributeByName(actor, aa.getAttribute());
+                if (attr != null) {
+                    attr.add(aa.getAmount());
+                }
             }
         }
     }
@@ -516,12 +522,17 @@ public class SkinModule<T extends SkinModuleData> extends AbstractModule<T> {
      * @param skinData 
      */
     private void removeSkinApplyAttributes(Actor actor, SkinData skinData) {
+        if (!skinData.isAttributeApplied()) {
+            return;
+        }
+        skinData.setAttributeApplied(false);
         List<AttributeApply> aas = skinData.getApplyAttributes();
         if (aas != null) {
             for (AttributeApply aa : aas) {
-                attributeService.applyDynamicValue(actor, aa.getAttribute(), -aa.getAmount());
-                attributeService.applyStaticValue(actor, aa.getAttribute(), -aa.getAmount());
-                attributeService.clampDynamicValue(actor, aa.getAttribute());
+                NumberAttribute attr = attributeService.getAttributeByName(actor, aa.getAttribute());
+                if (attr != null) {
+                    attr.subtract(aa.getAmount());
+                }
             }
         }
     }

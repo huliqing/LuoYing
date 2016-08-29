@@ -39,7 +39,28 @@ xs:time
 
                 <!--状态清除-->
                 <xs:element ref="stateClean" />
+
+                <!--状态组-->
+                <xs:element ref="stateGroup" />
             </xs:all>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="stateGroup">
+        <xs:annotation>
+            <xs:documentation>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="stateBase">
+                    <xs:attribute name="states" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>状态组，格式："stateId,stateId,..."</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
         </xs:complexType>
     </xs:element>
     
@@ -56,31 +77,6 @@ xs:time
                     <xs:attribute name="states" type="xs:string" use="required">
                         <xs:annotation>
                             <xs:documentation>指定要清除的状态列表，格式:"stateId,stateId,..."</xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
-                </xs:extension>
-            </xs:complexContent>
-        </xs:complexType>
-    </xs:element>
-    
-    <xs:element name="stateAttributeDynamic">
-        <xs:annotation>
-            <xs:documentation>可以"持续"改变角色属性"动态值"的状态.</xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="stateBase">
-                    <xs:attribute name="attributes" type="xs:string" use="required">
-                        <xs:annotation>
-                            <xs:documentation>指定要改变的属性值列表,格式："attribute|value,attribute|value,..."</xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
-                    <xs:attribute name="interval" type="xs:decimal" use="required">
-                        <xs:annotation>
-                            <xs:documentation>
-                                改变的时间间隔，单位秒,默认1.0秒，这表示每隔1秒就增加或减少某个属性的值。改变哪些属性和改变数值由
-                                属性attributes指定。
-                            </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
                 </xs:extension>
@@ -200,6 +196,36 @@ xs:time
         </xs:complexType>
     </xs:element>
     
+    <xs:element name="stateAttributeDynamic">
+        <xs:annotation>
+            <xs:documentation>可以"持续"改变角色属性"动态值"的状态.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="stateBase">
+                    <xs:attribute name="attributeName" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>指定要改变的属性”名称“（不是id）</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="value" type="xs:decimal" use="required">
+                        <xs:annotation>
+                            <xs:documentation>指定每次要改变的属性值。
+                                示例，如：attrName="attributeHealth" value="10", interval="3", 则表示每3秒给角色的attributeHealth属性添加10点值。</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="interval" type="xs:decimal" use="required">
+                        <xs:annotation>
+                            <xs:documentation>
+                                改变的时间间隔，单位秒,默认1.0秒.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
     <xs:element name="stateAttributeMove">
         <xs:annotation>
             <xs:documentation>
@@ -224,59 +250,33 @@ xs:time
     <xs:element name="stateAttribute">
         <xs:annotation>
             <xs:documentation>
-                可以改变角色属性数值的状态,可指定改变动态值或静态值，或者两者都
-                改变，也可以在状态结束时恢复属性值。
+                可以改变角色属性数值的状态
             </xs:documentation>
         </xs:annotation>
         <xs:complexType>
             <xs:complexContent>
-                <xs:extension base="stateAttributeBase"></xs:extension>
+                <xs:extension base="stateAttributeBase">
+                </xs:extension>
             </xs:complexContent>
         </xs:complexType>
     </xs:element>
-        
+    
     <xs:complexType name="stateAttributeBase">
         <xs:complexContent>
             <xs:extension base="stateBase">
-                <xs:attribute name="attributes" type="xs:string" use="required">
-                    <xs:annotation>
-                        <xs:documentation>
-                            指定影响的是哪些属性,格式："attribute1|value1,attribute2|value2,..."
-                        </xs:documentation>
-                    </xs:annotation>
+                <xs:attribute name="attributeName" type="xs:string" use="required">
+                    <xs:annotation><xs:documentation>属性名称（非ID)，这个名称指定了状态要改变的是哪一个属性</xs:documentation></xs:annotation>
                 </xs:attribute>
-                <xs:attribute name="dynamicApply" type="bool" use="required">
-                    <xs:annotation>
-                        <xs:documentation>
-                            是否增加或减少到动态值
-                        </xs:documentation>
-                    </xs:annotation>
+                <xs:attribute name="value" type="xs:decimal" use="required">
+                    <xs:annotation><xs:documentation>要改变的属性数值。可正，可负</xs:documentation></xs:annotation>
                 </xs:attribute>
-                <xs:attribute name="dynamicRestore" type="bool" use="required">
-                    <xs:annotation>
-                        <xs:documentation>
-                            是否在状态退出时恢复动态值
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="staticApply" type="bool" use="required">
-                    <xs:annotation>
-                        <xs:documentation>
-                            是否增加或减少到静态值
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="staticRestore" type="bool" use="required">
-                    <xs:annotation>
-                        <xs:documentation>
-                            是否在状态退出时恢复静态值
-                        </xs:documentation>
-                    </xs:annotation>
+                <xs:attribute name="restore" type="bool" use="required">
+                    <xs:annotation><xs:documentation>是否在状态移除时恢复属性的原值。</xs:documentation></xs:annotation>
                 </xs:attribute>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
-    
+
     <xs:complexType name="stateBase">
         <xs:complexContent>
             <xs:extension base="base">

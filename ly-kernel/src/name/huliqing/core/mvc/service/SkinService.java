@@ -16,8 +16,21 @@ import name.huliqing.core.object.module.SkinListener;
  */
 public interface SkinService extends Inject {
     
+    /**
+     * 给角色添加skin装备
+     * @param actor
+     * @param skinId
+     * @param amount 
+     */
     void addSkin(Actor actor, String skinId, int amount);
     
+    /**
+     * 移除角色身上的skin装备。
+     * @param actor
+     * @param skinId
+     * @param amount
+     * @return 
+     */
     boolean removeSkin(Actor actor, String skinId, int amount);
     
     /**

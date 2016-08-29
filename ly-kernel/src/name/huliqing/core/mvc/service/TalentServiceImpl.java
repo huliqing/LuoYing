@@ -50,26 +50,24 @@ public class TalentServiceImpl implements TalentService {
     }
 
     @Override
-    public List<TalentData> getTalents(Actor actor) {
-//        TalentModule module = actor.getModule(TalentModule.class);
-//        if (module != null) {
-//            return module.getTalentDatas();
-//        }
-//        return null;
-        
-        return actor.getData().getObjectDatas(TalentData.class, null);
+    public List<Talent> getTalents(Actor actor) {
+        TalentModule module = actor.getModule(TalentModule.class);
+        if (module != null) {
+            return module.getTalents();
+        }
+        return null;
+    }
+
+    @Override
+    public int getTalentPoints(Actor actor) {
+        TalentModule module = actor.getModule(TalentModule.class);
+        if (module != null) {
+            return module.getTalentPoints();
+        }
+        return 0;
     }
 
     // remove20160821
-//    @Override
-//    public int getTalentPoints(Actor actor) {
-//        TalentModule module = actor.getModule(TalentModule.class);
-//        if (module != null) {
-//            return module.getTalentPoints();
-//        }
-//        return 0;
-//    }
-//
 //    @Override
 //    public void setTalentPoints(Actor actor, int talentPoints) {
 //        TalentModule module = actor.getModule(TalentModule.class);

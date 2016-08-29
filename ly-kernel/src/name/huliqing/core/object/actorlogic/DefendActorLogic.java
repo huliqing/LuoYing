@@ -209,7 +209,9 @@ public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> im
     
     private boolean doDefend() {
         if (defendRateAttribute != null && defendSkills.size() > 0) {
-            float defendRate = attributeService.getDynamicValue(actor, defendRateAttribute);
+            
+            float defendRate = attributeService.getNumberAttributeValue(actor, defendRateAttribute, 0);
+            
             if(defendRate >= FastMath.nextRandomFloat()) {
                 Skill defendSkill = defendSkills.get(FastMath.nextRandomInt(0, defendSkills.size() - 1));
                 skillNetwork.playSkill(actor, defendSkill.getData().getId(), false);
@@ -221,7 +223,9 @@ public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> im
     
     private boolean doDuck() {
         if (duckRateAttribute != null && duckSkills.size() > 0) {
-            float duckRate = attributeService.getDynamicValue(actor, defendRateAttribute);
+            
+            float duckRate = attributeService.getNumberAttributeValue(actor, defendRateAttribute, 0);
+            
             if (duckRate >= FastMath.nextRandomFloat()) {
                 Skill duckSkill = duckSkills.get(FastMath.nextRandomInt(0, duckSkills.size() - 1));
                 skillNetwork.playSkill(actor, duckSkill.getData().getId(), false);

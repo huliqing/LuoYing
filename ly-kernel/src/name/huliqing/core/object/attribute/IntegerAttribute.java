@@ -19,11 +19,10 @@ public class IntegerAttribute extends NumberAttribute<Integer, AttributeData> {
         super.setData(data);
         value = data.getAsInteger("value", value);
     }
-
-    @Override
-    public AttributeData getData() {
+    
+    // 更新data值，以避免在外部使用data时获取不到实时的数据
+    protected void updateData() {
         data.setAttribute("value", value);
-        return super.getData(); 
     }
     
     @Override
@@ -33,6 +32,16 @@ public class IntegerAttribute extends NumberAttribute<Integer, AttributeData> {
 
     @Override
     public final float floatValue() {
+        return value;
+    }
+
+    @Override
+    public final long longValue() {
+        return value;
+    }
+
+    @Override
+    public final double doubleValue() {
         return value;
     }
     
@@ -111,6 +120,7 @@ public class IntegerAttribute extends NumberAttribute<Integer, AttributeData> {
     protected void setAndNotify(int value) {
         int oldValue = this.value;
         this.value = value;
+        updateData();
         if (oldValue != this.value) {
             notifyValueChangeListeners(oldValue, this.value);
         }

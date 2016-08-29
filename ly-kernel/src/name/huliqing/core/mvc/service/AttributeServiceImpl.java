@@ -5,17 +5,22 @@
 package name.huliqing.core.mvc.service;
 
 import java.util.List;
+import java.util.logging.Logger;
 import name.huliqing.core.data.AttributeData;
+import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.attribute.Attribute;
+import name.huliqing.core.object.attribute.AttributeStore;
+import name.huliqing.core.object.attribute.NumberAttribute;
+import name.huliqing.core.object.module.AttributeListener;
 import name.huliqing.core.object.module.AttributeModule;
-import name.huliqing.core.utils.MathUtils;
 
 /**
  *
  * @author huliqing
  */
 public class AttributeServiceImpl implements AttributeService {
+    private static final Logger LOG = Logger.getLogger(AttributeServiceImpl.class.getName());
 
     @Override
     public void inject() {
@@ -23,81 +28,103 @@ public class AttributeServiceImpl implements AttributeService {
     }
 
     @Override
-    public boolean existsAttribute(Actor actor, String attributeId) {
-        return getAttributeById(actor, attributeId) != null;
+    public Attribute loadAttribute(String attributeId) {
+        return Loader.load(attributeId);
     }
 
     @Override
-    public float getDynamicValue(Actor actor, String attributeId) {
-        AttributeData data = getAttributeById(actor, attributeId).getData();
-        if (data != null) {
-            return data.getDynamicValue();
+    public Attribute loadAttribute(AttributeData data) {
+        return Loader.load(data);
+    }
+
+    @Override
+    public void addAttribute(Actor actor, Attribute attribute) throws AttributeStore.AttributeConflictException{
+        AttributeModule module = actor.getModule(AttributeModule.class);
+        if (module != null) {
+            module.addAttribute(attribute);
         }
-        return 0;
-    }
-
-    @Override
-    public float getMaxValue(Actor actor, String attributeId) {
-        AttributeData data = getAttributeById(actor, attributeId).getData();
-        if (data != null) {
-            return data.getMaxValue();
-        }
-        return 0;
-    }
-
-    @Override
-    public void applyDynamicValue(Actor actor, String attributeId, float amount) {
-        AttributeData data = getAttributeById(actor, attributeId).getData();
-        if (data != null) {
-            data.setDynamicValue(data.getDynamicValue() + amount);
-        }
-    }
-
-    @Override
-    public void clampDynamicValue(Actor actor, String attributeId) {
-        AttributeData data = getAttributeById(actor, attributeId).getData();
-        if (data != null) {
-            float dValue = data.getDynamicValue();
-            data.setDynamicValue(MathUtils.clamp(dValue, 0, data.getMaxValue()));
-        }
-    }
-
-    @Override
-    public void applyStaticValue(Actor actor, String attributeId, float amount) {
-        AttributeData data = getAttributeById(actor, attributeId).getData();
-        if (data != null) {
-            data.setStaticValue(data.getStaticValue() + amount);
-        } 
     }
 
     @Override
     public Attribute getAttributeById(Actor actor, String attrId) {
+        if (attrId == null)
+            throw new NullPointerException("attrId could not be null, actorId=" + actor.getData().getId());
+                
         AttributeModule module = actor.getModule(AttributeModule.class);
         if (module != null) {
-            return module.getAttributeById(attrId);
+            module.getAttributeById(attrId);
         }
         return null;
     }
 
     @Override
-    public void syncAttribute(Actor actor, String attributeId, float levelValue, float staticValue, float dynamicValue) {
-        AttributeData data = getAttributeById(actor, attributeId).getData();
-        if (data != null) {
-            data.setLevelValue(levelValue);
-            data.setStaticValue(staticValue);
-            data.setDynamicValue(dynamicValue);
+    public Attribute getAttributeByName(Actor actor, String attrName) {
+        if (attrName == null) {
+            return null;
+        }
+        AttributeModule module = actor.getModule(AttributeModule.class);
+        if (module != null) {
+            module.getAttributeByName(attrName);
+        }
+        return null;
+    }
+
+    @Override
+    public List<Attribute> getAttributes(Actor actor) {
+        AttributeModule module = actor.getModule(AttributeModule.class);
+        if (module != null) {
+            module.getAttributes();
+        }
+        return null;
+    }
+
+
+    @Override
+    public void addListener(Actor actor, AttributeListener attributeListener) {
+        AttributeModule module = actor.getModule(AttributeModule.class);
+        if (module != null) {
+            module.addListener(attributeListener);
         }
     }
 
     @Override
-    public List<AttributeData> getAttributes(Actor actor) {
-//        AttributeModule module = actor.getModule(AttributeModule.class);
-//        if (module != null) {
-//            module.getAttributes();
-//        }
-//        return null;
-
-        return actor.getData().getObjectDatas(AttributeData.class, null);
+    public boolean removeListener(Actor actor, AttributeListener attributeListener) {
+        AttributeModule module = actor.getModule(AttributeModule.class);
+        return module != null && module.removeListener(attributeListener);
     }
 
+    @Override
+    public <V> void setAttributeValue(Actor actor, String attrName, V value) {
+        Attribute attr = getAttributeByName(actor, attrName);
+        if (attr != null) {
+            attr.setValue(value);
+        }
+    }
+
+    @Override
+    public void addAttributeValue(Actor actor, String attrName, float value) {
+        Attribute attr = getAttributeByName(actor, attrName);
+        if (attr instanceof NumberAttribute) {
+            ((NumberAttribute)attr).add(value);
+        }
+    }
+
+//    @Override
+//    public void subtractAttributeValue(Actor actor, String attrName, float value) {
+//        Attribute attr = getAttributeByName(actor, attrName);
+//        if (attr instanceof NumberAttribute) {
+//            ((NumberAttribute)attr).subtract(value);
+//        }
+//    }
+
+    @Override
+    public float getNumberAttributeValue(Actor actor, String attrName, float defValue) {
+        Attribute attr = getAttributeByName(actor, attrName);
+        if (attr instanceof NumberAttribute) {
+            return ((NumberAttribute) attr).floatValue();
+        }
+        return defValue;
+    }
+
+    
 }
