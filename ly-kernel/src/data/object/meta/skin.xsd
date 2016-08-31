@@ -151,6 +151,14 @@ xs:time
                 <xs:attribute name="sexLimit" ref="sexLimit" use="optional" />
                 <xs:attribute name="careerLimit" ref="careerLimit" use="optional" />
                 <xs:attribute name="cost" ref="cost" use="optional" />
+                <xs:attribute name="matchAttributes" type="xs:string" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>
+                            属性限制，这些限制定义了：只有角色的属性与这些限制完全匹配时才可以使用这件物品
+                            格式："attributeName|value,attributeName|value,..."
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>

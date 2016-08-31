@@ -139,11 +139,11 @@ public class CollectTask<T extends TaskData> extends AbstractTask<T> implements 
 
     // ignore
     @Override
-    public void onActorLocked(Actor source, Actor other) {}
+    public void onActorLocked(long source, Actor other) {}
     
     // ignore
     @Override
-    public void onActorReleased(Actor source, Actor other) {}
+    public void onActorReleased(long source, Actor other) {}
 
     // ignore
     @Override

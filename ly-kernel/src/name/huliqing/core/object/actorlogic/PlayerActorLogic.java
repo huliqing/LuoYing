@@ -56,7 +56,7 @@ public class PlayerActorLogic<T extends ActorLogicData> extends ActorLogic<T> {
                 
                 ) {
             fightAction.setEnemy(t);
-            playAction(fightAction);
+            actionService.playAction(actor, fightAction);
         }
     }
     

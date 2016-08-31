@@ -174,16 +174,6 @@ public class ActorNetworkImpl implements ActorNetwork{
     }
 
     @Override
-    public void setAutoAi(Actor actor, boolean autoAi) {
-        throw new UnsupportedOperationException("Not supported yet.不需要实现");
-    }
-
-    @Override
-    public boolean isAutoAi(Actor actor) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
     public boolean isDead(Actor actor) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -262,17 +252,6 @@ public class ActorNetworkImpl implements ActorNetwork{
     }
 
     @Override
-    public boolean isAutoDetect(Actor actor) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void setAutoDetect(Actor actor, boolean autoDetect) {
-        // 客户端是不需要该参数的，所以不需要实现在这里
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
     public boolean isMoveable(Actor actor) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -291,17 +270,6 @@ public class ActorNetworkImpl implements ActorNetwork{
     public boolean removeActorListener(Actor actor, ActorListener actorListener) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
-    // remove20160815
-//    @Override
-//    public void addSkillListener(Actor actor, SkillListener skillListener) {
-//        throw new UnsupportedOperationException("Not supported yet.");
-//    }
-//
-//    @Override
-//    public boolean removeSkillListener(Actor actor, SkillListener skillListener) {
-//        throw new UnsupportedOperationException("Not supported yet.");
-//    }
 
     @Override
     public void setName(Actor actor, String name) {
@@ -352,22 +320,12 @@ public class ActorNetworkImpl implements ActorNetwork{
     }
 
     @Override
-    public Sex getSex(Actor actor) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
     public boolean isEssential(Actor actor) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public void setEssential(Actor actor, boolean essential) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public String getRace(Actor actor) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -551,6 +509,11 @@ public class ActorNetworkImpl implements ActorNetwork{
 
     @Override
     public float distanceSquared(Actor actor, Actor target) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isLiving(Actor actor) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

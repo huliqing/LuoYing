@@ -215,33 +215,34 @@ public interface ActorService extends Inject {
      */
     Actor getTarget(Actor actor);
     
-    /**
-     * 判断角色是否开启了自动AI
-     * @param actor
-     * @return 
-     */
-    boolean isAutoAi(Actor actor);
-
-    /**
-     * 开启或关闭角色的自动AI
-     * @param actor
-     * @param autoAi 
-     */
-    void setAutoAi(Actor actor, boolean autoAi);
-
-    /**
-     * 判断角色是否自动侦察敌人
-     * @param actor
-     * @return 
-     */
-    boolean isAutoDetect(Actor actor);
-    
-    /**
-     * 设置角色是否自动侦察敌人
-     * @param actor 
-     * @param autoDetect
-     */
-    void setAutoDetect(Actor actor, boolean autoDetect);
+    // remove20160831
+//    /**
+//     * 判断角色是否开启了自动AI
+//     * @param actor
+//     * @return 
+//     */
+//    boolean isAutoAi(Actor actor);
+//
+//    /**
+//     * 开启或关闭角色的自动AI
+//     * @param actor
+//     * @param autoAi 
+//     */
+//    void setAutoAi(Actor actor, boolean autoAi);
+//
+//    /**
+//     * 判断角色是否自动侦察敌人
+//     * @param actor
+//     * @return 
+//     */
+//    boolean isAutoDetect(Actor actor);
+//    
+//    /**
+//     * 设置角色是否自动侦察敌人
+//     * @param actor 
+//     * @param autoDetect
+//     */
+//    void setAutoDetect(Actor actor, boolean autoDetect);
     
     /**
      * 判断角色是否死亡
@@ -428,13 +429,6 @@ public interface ActorService extends Inject {
     void setTeam(Actor actor, int team);
     
     /**
-     * 获取角色的性别
-     * @param actor
-     * @return 
-     */
-    Sex getSex(Actor actor);
-    
-    /**
      * 判断角色是否为必要的，即不能被移除出场景的。"必要"的角色可以死亡，
      * 但是不能被移除出场景。
      * @param actor
@@ -450,6 +444,8 @@ public interface ActorService extends Inject {
      * @param essential 
      */
     void setEssential(Actor actor, boolean essential);
+    
+    boolean isLiving(Actor actor);
     
 //    /**
 //     * 获取角色的种族

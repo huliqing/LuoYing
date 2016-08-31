@@ -32,16 +32,14 @@ public interface LogicService extends Inject {
     /**
      * 给角色添加一个逻辑
      * @param actor
-     * @param logicData
-     * @return 
+     * @param logicData 
      */
     void addLogic(Actor actor, ActorLogicData logicData);
         
     /**
      * 给角色添加逻辑
      * @param actor
-     * @param logic
-     * @return 
+     * @param logic 
      */
     void addLogic(Actor actor, ActorLogic logic);
     
@@ -55,8 +53,7 @@ public interface LogicService extends Inject {
     
     /**
      * 清除角色身上的所有逻辑
-     * @param actor
-     * @return 
+     * @param actor 
      */
     void clearLogics(Actor actor);
     
@@ -68,4 +65,32 @@ public interface LogicService extends Inject {
      * @param actor 
      */
     void resetPlayerLogic(Actor actor);
+    
+    /**
+     * 判断角色的逻辑是否打开
+     * @param actor
+     * @return 
+     */
+    boolean isAutoLogic(Actor actor);
+    
+    /**
+     * 打开或关闭角色的自动逻辑
+     * @param actor
+     * @param enabled 
+     */
+    void setAutoLogic(Actor actor, boolean enabled);
+    
+    /**
+     * 判断角色是否自动侦察敌人
+     * @param actor
+     * @return 
+     */
+    boolean isAutoDetect(Actor actor);
+    
+    /**
+     * 设置角色是否自动侦察敌人
+     * @param actor 
+     * @param autoDetect
+     */
+    void setAutoDetect(Actor actor, boolean autoDetect);
 }

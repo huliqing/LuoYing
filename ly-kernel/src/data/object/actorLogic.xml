@@ -28,7 +28,7 @@
     <actorLogicFight id="logicStaticFight" fightAction="actionFightStatic" />
 
     <!-- 跟随目标的逻辑 -->
-    <actorLogicFollow id="logicFollow" followAction="actionFollow" />
+    <actorLogicFollow id="logicFollow" bindFollowTargetAttribute="attributeFollowTarget" followAction="actionFollow" />
 
     <!--通知逻辑-->
     <actorLogicNotify id="logicNotify" />

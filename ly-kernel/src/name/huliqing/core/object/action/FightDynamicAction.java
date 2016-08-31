@@ -35,8 +35,7 @@ import name.huliqing.core.utils.MathUtils;
  */
 public class FightDynamicAction extends FollowPathAction implements FightAction, SkillListener {
     private static final Logger LOG = Logger.getLogger(FightDynamicAction.class.getName());
-    
-    private final StateService stateService = Factory.get(StateService.class);
+//    private final StateService stateService = Factory.get(StateService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
     private final PlayService playService = Factory.get(PlayService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
@@ -284,9 +283,15 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
         
         // 不管攻击是否成功，都要清空技能，以便使用下一个技能。
         skill = null;
-        
+   
+        // remove20160831,暂不判断isAutoAi(actor)
+//        // 如果不是自动AI，则应该退出。 
+//        if (!actorService.isAutoAi(actor) || actorService.getTarget(actor) == null) {
+//            end();
+//        }
+
         // 如果不是自动AI，则应该退出。 
-        if (!actorService.isAutoAi(actor) || actorService.getTarget(actor) == null) {
+        if (actorService.getTarget(actor) == null) {
             end();
         }
     }

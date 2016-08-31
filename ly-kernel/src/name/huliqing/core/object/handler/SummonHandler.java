@@ -24,14 +24,13 @@ import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.StateService;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.utils.GeometryUtils;
-import name.huliqing.core.utils.RayUtils;
 import name.huliqing.core.utils.Temp;
 
 /**
  * 召唤角色，召唤后目标角色的物品会减少
  * @author huliqing
  */
-public class SummonHandler extends AbstractHandler {
+public class SummonHandler extends AbstractItemHandler {
     private final StateService stateService = Factory.get(StateService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final ConfigService configService = Factory.get(ConfigService.class);

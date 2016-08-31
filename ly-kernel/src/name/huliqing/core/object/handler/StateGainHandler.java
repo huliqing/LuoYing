@@ -16,7 +16,7 @@ import name.huliqing.core.object.actor.Actor;
  * 可让角色获得某些状态的handler
  * @author huliqing
  */
-public class StateGainHandler extends AbstractHandler {
+public class StateGainHandler extends AbstractItemHandler {
     private final StateService stateService = Factory.get(StateService.class);
     private final StateNetwork stateNetwork = Factory.get(StateNetwork.class);
     private final ItemService itemService = Factory.get(ItemService.class);
@@ -28,22 +28,6 @@ public class StateGainHandler extends AbstractHandler {
         super.setData(data);
         states = data.getAsArray("states");
     }
-
-    // remove20160521
-//    @Override
-//    public boolean canUse(Actor actor, ProtoData data) {
-//        if (!super.canUse(actor, data)) {
-//            return false;
-//        }
-//        // 不存在指定ID的状态
-//        if (!stateService.existsState(stateId)) {
-//            if (Config.debug) {
-//                Logger.getLogger(StateGainHandler.class.getName()).log(Level.WARNING, "State not found: {0}", stateId);
-//            }
-//            return false;
-//        }
-//        return true;
-//    }
 
     @Override
     protected void useObject(Actor actor, ObjectData data) {

@@ -62,9 +62,8 @@ public class SearchEnemyActorLogic<T extends ActorLogicData> extends ActorLogic<
     
     @Override
     protected void doLogic(float tpf) {
-        
         // 只有打开了自动侦察功能才执行逻辑
-        if (!actorService.isAutoDetect(actor)) {
+        if (!logicModule.isAutoDetect()) {
             return;
         }
         

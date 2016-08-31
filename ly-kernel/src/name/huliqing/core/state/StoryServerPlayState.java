@@ -161,7 +161,14 @@ public abstract class StoryServerPlayState extends NetworkServerPlayState {
         Iterator<ActorData> sait = savedActors.iterator();
         while (sait.hasNext()) {
             ActorData actorData = sait.next();
-            if (actorData.getUniqueId() == clientPlayerId || actorData.getOwnerId() == clientPlayerId) {
+            // 如果是玩家
+            if (actorData.getUniqueId() == clientPlayerId) {
+                sait.remove();
+                continue;
+            }
+            // 如果是玩家的宠物
+            Actor actor = actorService.loadActor(actorData);
+            if (actorService.getOwner(actor) == clientPlayerId) {
                 sait.remove();
             }
         }
@@ -182,9 +189,9 @@ public abstract class StoryServerPlayState extends NetworkServerPlayState {
         // 3.必须是生物类角色，不要保存防御塔或其它建筑之类
         savedActors.add(findActor(actors, clientPlayerId).getData());
         for (Actor a : actors) {
-            if (a.getData().getOwnerId() == clientPlayerId 
+            if (actorService.getOwner(a) == clientPlayerId 
                     && !actorService.isDead(a) 
-                    && a.getData().isLiving()) {
+                    && actorService.isLiving(a)) {
                 savedActors.add(a.getData());
             }
         }
@@ -219,8 +226,8 @@ public abstract class StoryServerPlayState extends NetworkServerPlayState {
             // 载入玩家主角的宠物(这里还不需要载入其他玩家的角色及宠物,由其他玩家重新连接的时候再载入)
             ArrayList<ActorData> actors = saveStory.getActors();
             for (ActorData data : actors) {
-                if  (data.getOwnerId() == player.getData().getUniqueId()) {
-                    Actor actor = actorService.loadActor(data);
+                Actor actor = actorService.loadActor(data);
+                if  (actorService.getOwner(actor) == player.getData().getUniqueId()) {
                     addObject(actor.getSpatial(), false);
                 }
             }
@@ -253,22 +260,17 @@ public abstract class StoryServerPlayState extends NetworkServerPlayState {
         // 载入客户端玩家及其宠物，注：这里要用Network,因为服务端和客户端已经为running状态.
         PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
         Actor  clientPlayer= actorService.loadActor(clientPlayerData);
-        
-        // remove20160630
-//        clientPlayer.setPlayer(true);
-//        skillService.playSkill(clientPlayer, skillService.getSkill(clientPlayer, SkillType.wait).getId(), false);
-//        playNetwork.addActor(clientPlayer);
 
         addPlayer(clientPlayer);
         
         for (ActorData data : actors) {
-            if  (data.getOwnerId() == clientPlayerData.getUniqueId()) {
-                Actor actor = actorService.loadActor(data);
+            Actor actor = actorService.loadActor(data);
+            if (actorService.getOwner(actor) == clientPlayerData.getUniqueId()) {
                 Skill waitSkill = skillService.getSkill(actor, SkillType.wait);
                 if (waitSkill != null) {
                     skillService.playSkill(actor, waitSkill, false);
                 }
-                playNetwork.addActor(actor);
+                playNetwork.addActor(actor);                    
             }
         }
         return true;

@@ -15,7 +15,7 @@ import name.huliqing.core.mvc.service.ItemService;
  * 补血，补蓝
  * @author huliqing
  */
-public class AttributeHandler extends AbstractHandler {
+public class AttributeHandler extends AbstractItemHandler {
     private final AttributeService attributeService = Factory.get(AttributeService.class);
     private final ItemService itemService = Factory.get(ItemService.class);
 

@@ -18,6 +18,7 @@ import name.huliqing.core.mvc.network.ActorNetwork;
 import name.huliqing.core.mvc.network.SkillNetwork;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.AttributeService;
+import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.module.ActorListener;
@@ -36,6 +37,7 @@ public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> im
     private static final Logger LOG = Logger.getLogger(DefendActorLogic.class.getName());
     
     private final ActorService actorService = Factory.get(ActorService.class);
+    private final PlayService playService = Factory.get(PlayService.class);
     private final AttributeService attributeService = Factory.get(AttributeService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
@@ -91,13 +93,14 @@ public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> im
     }
 
     @Override
-    public void onActorLocked(Actor source, Actor other) {
+    public void onActorLocked(long source, Actor other) {
         if (!hasUsableSkill) 
             return;
         
-        if (source == other) 
+        if (source == other.getData().getUniqueId()) 
             return;
-        if (!actorService.isEnemy(other, source))
+        
+        if (!actorService.isEnemy(other, playService.findActor(source)))
             return;
         
         // 当被other锁定时给other添加侦听器，以侦察other的攻击。以便进行防守和躲闪
@@ -111,7 +114,7 @@ public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> im
     }
 
     @Override
-    public void onActorReleased(Actor source, Actor other) {
+    public void onActorReleased(long source, Actor other) {
         if (!hasUsableSkill) 
             return;
         

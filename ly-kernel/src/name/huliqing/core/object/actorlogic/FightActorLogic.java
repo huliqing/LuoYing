@@ -41,7 +41,7 @@ public class FightActorLogic<T extends ActorLogicData> extends ActorLogic<T> {
                 
                 && playService.isInScene(t)) {
             fightAction.setEnemy(t);
-            playAction(fightAction);
+            actionService.playAction(actor, fightAction);
         }
     }
     

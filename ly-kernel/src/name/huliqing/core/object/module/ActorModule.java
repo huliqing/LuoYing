@@ -16,14 +16,17 @@ import name.huliqing.core.Factory;
 import name.huliqing.core.data.module.ModuleData;
 import name.huliqing.core.mvc.service.AttributeService;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.attribute.Attribute;
+import name.huliqing.core.object.attribute.BooleanAttribute;
 import name.huliqing.core.object.attribute.NumberAttribute;
+import name.huliqing.core.object.attribute.ValueChangeListener;
 
 /**
  * 角色的基本控制器
  * @author huliqing
  * @param <T>
  */
-public class ActorModule<T extends ModuleData> extends AbstractModule<T>{
+public class ActorModule<T extends ModuleData> extends AbstractModule<T> implements ValueChangeListener<Number> {
 
     private static final Logger LOG = Logger.getLogger(ActorModule.class.getName());
     
@@ -38,27 +41,52 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T>{
     private List<ActorListener> actorListeners;
     
     // 生命值属性名称
-    private String lifeAttributeName;
+    private String bindLifeAttribute;
     // 角色所在分组属性名称,分组决定了角色所在的派系
-    private String groupAttributeName;
+    private String bindGroupAttribute;
     // 角色所在队伍
-    private String teamAttributeName;
+    private String bindTeamAttribute;
     // 角色的可视范围属性名称
     private String viewAttributeName;
+    // 角色的当前目标对象。
+    private String bindTargetAttribute;
+    // 当前角色所跟踪的目标对象
+    private String bindFollowTargetAttribute;
+    // 当前角色的所有者唯一id,也可以说是当前角色的主人的id
+    private String bindOwnerAttribute;
+    
+    private String bindEssentialAttribute;
+    private String bindLivingAttribute;
     
     private NumberAttribute lifeAttribute;
     private NumberAttribute groupAttribute;
     private NumberAttribute teamAttribute;
     private NumberAttribute viewAttribute;
+    private NumberAttribute targetAttribute;
+    private NumberAttribute followTargetAttribute;
+    private NumberAttribute ownerAttribute;
+    
+    private BooleanAttribute essentialAttribute;
+    private BooleanAttribute livingAttribute;
+    
+    // ---- ext
+    // 标记目标角色是否为“玩家”角色,这个参数为程序动态设置,不存档
+    private boolean player;
     
     @Override
     public void setData(T data) {
         super.setData(data);
         this.radius = data.getAsFloat("radius", radius);
         this.height = data.getAsFloat("height", height);
-        this.lifeAttributeName = data.getAsString("lifeAttributeName");
-        this.groupAttributeName = data.getAsString("groupAttributeName");
-        this.teamAttributeName = data.getAsString("teamAttributeName");
+        this.bindLifeAttribute = data.getAsString("bindLifeAttribute");
+        this.bindGroupAttribute = data.getAsString("bindGroupAttribute");
+        this.bindTeamAttribute = data.getAsString("bindTeamAttribute");
+        this.bindTargetAttribute = data.getAsString("bindTargetAttribute");
+        this.bindFollowTargetAttribute = data.getAsString("bindFollowTargetAttribute");
+        this.bindOwnerAttribute = data.getAsString("bindOwnerAttribute");
+        
+        this.bindEssentialAttribute = data.getAsString("bindEssentialAttribute");
+        this.bindLivingAttribute = data.getAsString("bindLivingAttribute");
     }
     
     private class BetterCharacterControlWrap extends BetterCharacterControl {
@@ -91,15 +119,24 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T>{
         this.actor = actor;
         this.actor.getSpatial().addControl(innerControl);
         
-        lifeAttribute = attributeService.getAttributeByName(actor, lifeAttributeName);
+        lifeAttribute = attributeService.getAttributeByName(actor, bindLifeAttribute);
         if (lifeAttribute == null) {
             LOG.log(Level.WARNING, "Life attribute not found, by lifeAttributeName={0}, actorId={1}"
-                    , new Object[] {lifeAttributeName, actor.getData().getId()});
+                    , new Object[] {bindLifeAttribute, actor.getData().getId()});
         }
         
-        groupAttribute = attributeService.getAttributeByName(actor, groupAttributeName);
-        teamAttribute = attributeService.getAttributeByName(actor, teamAttributeName);
+        groupAttribute = attributeService.getAttributeByName(actor, bindGroupAttribute);
+        teamAttribute = attributeService.getAttributeByName(actor, bindTeamAttribute);
         viewAttribute = attributeService.getAttributeByName(actor, viewAttributeName);
+        // 注：这里要给targetAttribute加一个侦听器，以便targetAttribute在补外部改变的时候可以触发侦听器
+        targetAttribute = attributeService.getAttributeByName(actor, bindTargetAttribute);
+        targetAttribute.addListener(this);
+        // 角色当前的跟随目标
+        followTargetAttribute = attributeService.getAttributeByName(actor, bindFollowTargetAttribute);
+        ownerAttribute = attributeService.getAttributeByName(actor, bindOwnerAttribute);
+        
+        essentialAttribute = attributeService.getAttributeByName(actor, bindEssentialAttribute);
+        livingAttribute = attributeService.getAttributeByName(actor, bindLivingAttribute);
     }
     
     @Override
@@ -305,4 +342,138 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T>{
         }
     }
     
+    /**
+     * 获取角色当前的目标对象的唯一ID
+     * @return 
+     */
+    public long getTarget() {
+        if (targetAttribute != null) {
+            return targetAttribute.getValue().longValue();
+        }
+        return 0;
+    }
+    
+    /**
+     * 设置当前角色的目标对象
+     * @param target 目标对象的唯一ID
+     */
+    public void setTarget(long target) {
+        if (targetAttribute != null) {
+            targetAttribute.setValue(target);
+        }
+    }
+    
+    // 当targetAttribute发生变化时触发侦听器
+    @Override
+    public void onValueChanged(Attribute attribute, Number oldValue, Number newValue) {
+        if (attribute == targetAttribute) {
+            // 释放旧目标的listener
+            long oldTargetId = oldValue.longValue();
+            if (oldTargetId > 0) {
+                if (actorListeners != null && actorListeners.isEmpty()) {
+                    for (int i = 0; i < actorListeners.size(); i++) {
+                        actorListeners.get(i).onActorReleased(oldTargetId, actor);
+                    }
+                }
+            }
+            // 锁定新目标的listener.
+            if (newValue.longValue() > 0) {
+                if (actorListeners != null && !actorListeners.isEmpty()) {
+                    for (int i = 0; i < actorListeners.size(); i++) {
+                        actorListeners.get(i).onActorLocked(newValue.longValue(), actor);
+                    }
+                }
+            }
+        }
+    }
+    
+    /**
+     * 获取角色当前的跟随目标
+     * @return 
+     */
+    public long getFollowTarget() {
+        if (followTargetAttribute != null) {
+            return followTargetAttribute.longValue();
+        }
+        return 0;
+    }
+    
+    /**
+     * 设置角色当前的跟随目标
+     * @param target 
+     */
+    public void setFollowTarget(long target) {
+        if (followTargetAttribute != null) {
+            followTargetAttribute.setValue(target);
+        }
+    }
+
+    /**
+     * 判断角色是否为“必不可少的”这种角色即使死亡也不应该被移除出场景
+     * @return 
+     */
+    public boolean isEssential() {
+        if (essentialAttribute != null) {
+            return essentialAttribute.booleanValue();
+        }
+        return false;
+    }
+
+    /**
+     * 设置角色为“必不可少的”这种角色即使死亡也不应该被移除出场景
+     * @param essential 
+     */
+    public void setEssential(boolean essential) {
+        if (essentialAttribute != null) {
+            essentialAttribute.setValue(essential);
+        }
+    }
+    
+    /**
+     * 判断角色是否为“生物”
+     * @return 
+     */
+    public boolean isLiving() {
+        if (livingAttribute != null) {
+            return livingAttribute.booleanValue();
+        }
+        return false;
+    }
+    
+    /**
+     * 获取当前角色的所有者id,如果没有则返回0
+     * @return 
+     */
+    public long getOwner() {
+        if (ownerAttribute != null) {
+            return ownerAttribute.longValue();
+        }
+        return 0;
+    }
+
+    /**
+     * 设置当前角色的所有者
+     * @param ownerId 
+     */
+    public void setOwner(long ownerId) {
+        if (ownerAttribute != null) {
+            ownerAttribute.setValue(ownerId);
+        }
+    }
+    
+    /**
+     * 判断目标角色是否为一个玩家角色
+     * @return 
+     */
+    public boolean isPlayer() {
+        return player;
+    }
+
+    /**
+     * 标记目标这“玩家”角色
+     * @param player 
+     */
+    public void setPlayer(boolean player) {
+        this.player = player;
+    }
 }

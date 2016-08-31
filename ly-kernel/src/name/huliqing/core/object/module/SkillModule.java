@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import name.huliqing.core.data.SkillData;
+import name.huliqing.core.data.module.ModuleData;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.skill.Skill;
@@ -22,6 +23,7 @@ import name.huliqing.core.object.skill.Skill;
  */
 public class SkillModule extends AbstractModule {
     private Actor actor;
+    private Control updateControl;
     
     // 所有可用的技能处理器
     private final List<Skill> skills = new ArrayList<Skill>();
@@ -41,8 +43,20 @@ public class SkillModule extends AbstractModule {
     private List<SkillListener> skillListeners;
     private List<SkillPlayListener> skillPlayListeners;
     
-    // 用于支持技能更新逻辑的control.
-    private Control updateControl;
+    // 被锁定的技能列表，二进制表示，其中每1个二进制位表示一个技能类型。
+    // 如果指定的位为1，则表示这个技能类型被锁定，则这类技能将不能执行。
+    // 默认值0表示没有任何锁定。
+    private long skillLockedState;
+
+    @Override
+    public void setData(ModuleData data) {
+        super.setData(data);
+        skillLockedState = data.getAsLong("skillLockedState", 0);
+    }
+    
+    protected void updateData() {
+        data.setAttribute("skillLockedState", skillLockedState);
+    }
 
     @Override
     public void initialize(Actor actor) {
@@ -309,7 +323,24 @@ public class SkillModule extends AbstractModule {
                 skillPlayListeners.get(i).onSkillStart(actor, lastSkill);
             }
         }
-        
     }
 
+    /**
+     * 获取技能的锁定状态，返回的整数中每一个二进制位表示一个被锁定的技能类
+     * 型，当一个技能类型被锁定时，这个技能将不能被执行。
+     * @return 
+     */
+    public long getSkillLockedState() {
+        return skillLockedState;
+    }
+
+    /**
+     * 设置技能的锁定状态.
+     * @param skillLockedState 
+     * @see #getSkillLockedState() 
+     */
+    public void setSkillLockedState(long skillLockedState) {
+        this.skillLockedState = skillLockedState;
+        updateData();
+    }
 }

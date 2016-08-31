@@ -22,7 +22,7 @@ import name.huliqing.core.manager.ResourceManager;
  * @author huliqing
  * @since 1.2
  */
-public class SkillBookHandler extends AbstractHandler {
+public class SkillBookHandler extends AbstractItemHandler {
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
     private final SkillService skillService = Factory.get(SkillService.class);

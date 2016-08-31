@@ -11,6 +11,7 @@ import name.huliqing.core.mvc.network.SkinNetwork;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.SkinService;
 import name.huliqing.core.data.ConnData;
+import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.network.GameServer;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.save.ClientData;
@@ -52,6 +53,7 @@ public class MessSkinWeaponTakeOn extends MessBase {
     @Override
     public void applyOnServer(GameServer gameServer, HostedConnection source) {
         PlayService playService = Factory.get(PlayService.class);
+        ActorService actorService = Factory.get(ActorService.class);
         SkinNetwork skinNetwork = Factory.get(SkinNetwork.class);
         Actor actor = playService.findActor(actorId);
         if (actor == null) {
@@ -62,7 +64,7 @@ public class MessSkinWeaponTakeOn extends MessBase {
         
         // 使用物品的必须是客户端角色自身或者客户端角色的宠物
         if (actor.getData().getUniqueId() == clientActorId
-                || actor.getData().getOwnerId() == clientActorId) {
+                || actorService.getOwner(actor) == clientActorId) {
             if (takeOn) {
                 skinNetwork.takeOnWeapon(actor, false);
             } else {

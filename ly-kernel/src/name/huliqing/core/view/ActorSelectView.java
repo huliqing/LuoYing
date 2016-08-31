@@ -16,6 +16,7 @@ import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.mvc.service.SkinService;
 import name.huliqing.core.manager.ResourceManager;
+import name.huliqing.core.mvc.service.LogicService;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.ui.Icon;
 import name.huliqing.core.ui.LinearLayout;
@@ -31,6 +32,7 @@ public class ActorSelectView extends LinearLayout {
     private final SkillService skillService = Factory.get(SkillService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final SkinService skinService = Factory.get(SkinService.class);
+    private final LogicService logicService = Factory.get(LogicService.class);
     
     public interface SelectedListener {
         
@@ -212,10 +214,10 @@ public class ActorSelectView extends LinearLayout {
         Actor actor = actorService.loadActor(models.get(index));
         
         
-        actor.getData().setAutoAi(false); // 必须去掉AI
 //        actor.setLocation(new Vector3f(0, 0.75f, 0));
 //        actor.setViewDirection(new Vector3f(1, 0, 0));
 //        actor.setEnabled(false);
+        logicService.setAutoLogic(actor, false); // 必须去掉AI
         actorService.setLocation(actor, new Vector3f(0, 0.75f, 0));
         actorService.setViewDirection(actor, new Vector3f(1, 0, 0));
         actorService.setPhysicsEnabled(actor, false);

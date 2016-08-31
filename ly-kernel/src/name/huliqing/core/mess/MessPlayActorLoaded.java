@@ -9,6 +9,7 @@ import com.jme3.network.serializing.Serializable;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.ActorData;
 import name.huliqing.core.mvc.service.ActorService;
+import name.huliqing.core.mvc.service.LogicService;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.object.actor.Actor;
 
@@ -104,12 +105,13 @@ public class MessPlayActorLoaded extends MessBase {
     public void applyOnClient() {
         PlayService playService = Factory.get(PlayService.class);
         ActorService actorService = Factory.get(ActorService.class);
+        LogicService logicService = Factory.get(LogicService.class);
         
-        // 对于客户端来说，角色永远都是无AI的
         Actor actor = actorService.loadActor(actorData);
-        actorService.setAutoAi(actor, false);
         actorService.syncTransform(actor, location, viewDirection);
         actorService.syncAnimation(actor, channels, anims, loopModes, speeds, times);
+        // 对于客户端来说，角色永远都是无AI的
+        logicService.setAutoLogic(actor, false);
         playService.addObject(actor.getSpatial(), false);
         
     }

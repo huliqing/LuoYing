@@ -9,10 +9,12 @@ import java.util.logging.Logger;
 import name.huliqing.core.Factory;
 import name.huliqing.core.constants.IdConstants;
 import name.huliqing.core.constants.ResConstants;
+import name.huliqing.core.data.AttributeMatch;
 import name.huliqing.core.data.ItemData;
 import name.huliqing.core.enums.MessageType;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.attribute.Attribute;
 import name.huliqing.core.object.module.ItemListener;
 import name.huliqing.core.object.module.ItemModule;
 import name.huliqing.core.object.sound.SoundManager;
@@ -25,12 +27,16 @@ public class ItemServiceImpl implements ItemService {
 //    private static final Logger LOG = Logger.getLogger(ItemServiceImpl.class.getName());
 
     private PlayService playService;
+    private ActorService actorService;
     private HandlerService handlerService;
+    private AttributeService attributeService;
     
     @Override
     public void inject() {
         playService = Factory.get(PlayService.class);
         handlerService = Factory.get(HandlerService.class);
+        attributeService = Factory.get(AttributeService.class);
+        actorService = Factory.get(ActorService.class);
     }
     
     @Override

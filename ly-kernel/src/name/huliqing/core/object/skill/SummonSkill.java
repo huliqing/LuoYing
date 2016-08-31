@@ -23,10 +23,9 @@ import name.huliqing.core.mvc.network.ActorNetwork;
 import name.huliqing.core.mvc.network.PlayNetwork;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.PlayService;
-import name.huliqing.core.mvc.service.StateService;
 import name.huliqing.core.network.Network;
 import name.huliqing.core.mvc.service.ConfigService;
-import name.huliqing.core.mvc.service.EffectService;
+import name.huliqing.core.mvc.service.LogicService;
 import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.object.anim.Anim;
 import name.huliqing.core.object.anim.Listener;
@@ -44,10 +43,11 @@ public class SummonSkill<T extends SkillData> extends AbstractSkill<T> {
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final PlayService playService = Factory.get(PlayService.class);
-    private final StateService stateService = Factory.get(StateService.class);
+//    private final StateService stateService = Factory.get(StateService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final ConfigService configService = Factory.get(ConfigService.class);
-    private final EffectService effectService = Factory.get(EffectService.class);
+//    private final EffectService effectService = Factory.get(EffectService.class);
+    private final LogicService logicService = Factory.get(LogicService.class);
     
     // 要召唤的角色的ID
     private String summonId;
@@ -61,7 +61,7 @@ public class SummonSkill<T extends SkillData> extends AbstractSkill<T> {
     private float summonTime = 4.0f;
     
     // ---- 内部
-    private List<SummonOper> cache = new ArrayList<SummonOper>(1);
+    private final List<SummonOper> cache = new ArrayList<SummonOper>(1);
     private SummonOper currentSummon;
     
     @Override
@@ -323,7 +323,7 @@ public class SummonSkill<T extends SkillData> extends AbstractSkill<T> {
                 // 让召唤到的目标获得物理碰撞
                 Actor ac = summonModel.getControl(Actor.class);
                 actorService.setLocation(ac, summonModel.getLocalTranslation());
-                actorService.setAutoAi(ac, true);
+                logicService.setAutoLogic(ac, true);
                 actorNetwork.setPhysicsEnabled(ac, true);// 物理开需要同步
                 
                 // 释放showAnim以便重用

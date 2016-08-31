@@ -22,7 +22,6 @@ import name.huliqing.core.data.SkillData;
 import name.huliqing.core.data.SkinData;
 import name.huliqing.core.data.TalentData;
 import name.huliqing.core.data.module.ModuleData;
-import name.huliqing.core.enums.Sex;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.xml.DataLoader;
@@ -191,9 +190,9 @@ public class ActorDataLoader implements DataLoader<ActorData> {
 //        data.setXpDropEl(proto.getAsString("xpDropEl"));
         data.setName(ResourceManager.getObjectName(data));
 //        data.setGroup(proto.getAsInteger("group", 0));
-        data.setSex(Sex.identifyByName(proto.getAsString("sex", "2")));
+//        data.setSex(Sex.identifyByName(proto.getAsString("sex", "2")));
 //        data.setRace(proto.getAsString("race"));
-        data.setEssential(proto.getAsBoolean("essential", false));
+//        data.setEssential(proto.getAsBoolean("essential", false));
         
         // remove20160830
 //        data.setDrop(dropData);
@@ -207,8 +206,8 @@ public class ActorDataLoader implements DataLoader<ActorData> {
 //        data.setTalentPointsLevelEl(proto.getAsString("talentPointsLevelEl"));
 //        data.setTeam(proto.getAsInteger("team", 0));
 
-        data.setLiving(proto.getAsBoolean("living", false));
-        data.setFollowTarget(proto.getAsInteger("followTarget", -1));
+//        data.setLiving(proto.getAsBoolean("living", false));
+//        data.setFollowTarget(proto.getAsInteger("followTarget", -1));
         
         // 载入模块配置,并根据ModuleOrder进行排序
         String[] moduleArr = proto.getAsArray("modules");

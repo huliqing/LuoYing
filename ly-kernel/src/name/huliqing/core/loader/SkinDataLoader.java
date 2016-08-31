@@ -7,9 +7,9 @@ package name.huliqing.core.loader;
 
 import java.util.ArrayList;
 import name.huliqing.core.data.AttributeApply;
+import name.huliqing.core.data.AttributeMatch;
 import name.huliqing.core.xml.Proto;
 import name.huliqing.core.data.SkinData;
-import name.huliqing.core.enums.Sex;
 import name.huliqing.core.xml.DataLoader;
 import name.huliqing.core.utils.ConvertUtils;
 
@@ -21,9 +21,11 @@ public class SkinDataLoader implements DataLoader<SkinData> {
 
     @Override
     public void load(Proto proto, SkinData data) {
-        data.setRaceLimit(proto.getAsList("raceLimit"));
-        data.setSexLimit(Sex.identifyByName(proto.getAsString("sexLimit")));
-        data.setDeletable(proto.getAsBoolean("deletable", true));
+        // remove20160831
+//        data.setRaceLimit(proto.getAsList("raceLimit"));
+//        data.setSexLimit(Sex.identifyByName(proto.getAsString("sexLimit")));
+//        data.setDeletable(proto.getAsBoolean("deletable", true));
+
         data.setBaseSkin(proto.getAsBoolean("baseSkin", false));
         data.setUsing(true);
         
@@ -58,6 +60,20 @@ public class SkinDataLoader implements DataLoader<SkinData> {
                 conflict |= 1 << ci;
             }
             data.setConflictType(conflict);
+        }
+        
+        // 属性限制，这些限制定义了：只有角色的属性与这些限制完全匹配时才可以使用这件物品
+        // 格式：attributeName|value,attributeName|value,...
+        String[] maArr = proto.getAsArray("matchAttributes");
+        if (maArr != null && maArr.length > 0) {
+            data.setMatchAttributes(new ArrayList<AttributeMatch>(maArr.length));
+            for (String ma : maArr) {
+                String[] vArr = ma.split("\\|");
+                AttributeMatch am = new AttributeMatch();
+                am.setAttributeName(vArr[0].trim());
+                am.setValue(vArr[1].trim());
+                data.getMatchAttributes().add(am);
+            }
         }
         
         // data.setUsing(false);不需要

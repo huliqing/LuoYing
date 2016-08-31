@@ -26,7 +26,7 @@ import name.huliqing.core.utils.ConvertUtils;
  * @author huliqing
  */
 @Serializable
-public class SkinData extends PkgItemData implements MatObject, CostObject, HandlerObject {
+public class SkinData extends ObjectData implements MatObject, CostObject, HandlerObject {
     
     //注：一件skin可属于多个type,如上下连身的套装，如法袍可属于 "7,8".
     //同时一件skin也可与多个其它skin进行排斥。这里的type和conflictType使用二
@@ -49,9 +49,12 @@ public class SkinData extends PkgItemData implements MatObject, CostObject, Hand
     // 装备应用到目标身上时对目标属性的影响
     private List<AttributeApply> applyAttributes;
     
-    // 标记着当前属性是否已经应用到角色身上,在角色穿上当前装备之后应该把这个参数设置为true， 在脱下当前装备后应该设置
-    // 为false.
+    // 标记着当前属性是否已经应用到角色身上,在角色穿上当前装备之后应该把这个参数设置为true， 
+    // 在脱下当前装备后应该设置为false.
     private boolean attributeApplied;
+    
+    // 属性限制
+    private List<AttributeMatch> matchAttributes;
     
     public SkinData() {
         this.total = 1;
@@ -73,6 +76,9 @@ public class SkinData extends PkgItemData implements MatObject, CostObject, Hand
         oc.write(slot, "slot", null);
         oc.write(baseSkin, "baseSkin", false);
         oc.write(attributeApplied, "attributeApplied", false);
+        if (matchAttributes != null) {
+            oc.writeSavableArrayList(new ArrayList<AttributeMatch>(matchAttributes), "matchAttributes", null);
+        }
     }
 
     @Override
@@ -88,6 +94,7 @@ public class SkinData extends PkgItemData implements MatObject, CostObject, Hand
         slot = ic.readString("slot", null);
         baseSkin = ic.readBoolean("baseSkin", false);
         attributeApplied = ic.readBoolean("attributeApplied", false);
+        matchAttributes = ic.readSavableArrayList("matchAttributes", null);
     }
     
     /**
@@ -301,5 +308,19 @@ public class SkinData extends PkgItemData implements MatObject, CostObject, Hand
         this.attributeApplied = attributeApplied;
     }
 
-    
+    /**
+     * 获取属性限制
+     * @return 
+     */
+    public List<AttributeMatch> getMatchAttributes() {
+        return matchAttributes;
+    }
+
+    /**
+     * 设置使用物品时的属性限制。
+     * @param matchAttributes 
+     */
+    public void setMatchAttributes(List<AttributeMatch> matchAttributes) {
+        this.matchAttributes = matchAttributes;
+    }
 }

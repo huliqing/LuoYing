@@ -47,7 +47,6 @@ import name.huliqing.core.data.HandlerData;
 import name.huliqing.core.data.HitCheckerData;
 import name.huliqing.core.data.ItemData;
 import name.huliqing.core.data.MagicData;
-import name.huliqing.core.data.PkgItemData;
 import name.huliqing.core.data.PositionData;
 import name.huliqing.core.data.ResistData;
 import name.huliqing.core.data.SceneData;
@@ -355,7 +354,6 @@ public class LY {
         Serializer.registerClass(AttributeUse.class);
         Serializer.registerClass(Data.class);
         Serializer.registerClass(DropItem.class);
-        Serializer.registerClass(PkgItemData.class);
         
         Serializer.registerClass(ActionData.class);
         Serializer.registerClass(ActorAnimData.class);

@@ -4,13 +4,8 @@
  */
 package name.huliqing.core.object.handler;
 
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import name.huliqing.core.Config;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.HandlerData;
-import name.huliqing.core.data.PkgItemData;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.enums.MessageType;
@@ -29,7 +24,6 @@ import name.huliqing.core.object.sound.SoundManager;
  * @param <T>
  */
 public abstract class AbstractHandler<T extends HandlerData> implements Handler<T> {
-    private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final PlayService playService = Factory.get(PlayService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final EffectService effectService = Factory.get(EffectService.class);
@@ -67,45 +61,10 @@ public abstract class AbstractHandler<T extends HandlerData> implements Handler<
         if (actorService.isDead(actor)) {
             return false;
         }
-        
-        if (!checkRaceAndSex(actor, data)) {
-            playNetwork.addMessage(actor, ResourceManager.get("handler.notRaceAndSex"), MessageType.notice);
-            return false;
-        }
+   
         return true;
     }
     
-    /**
-     * 检查物品的种族限制和性别限制是否允许使用该物品。
-     * @param actor
-     * @param data
-     * @return 
-     */
-    protected final boolean checkRaceAndSex(Actor actor, ObjectData data) {
-        // 只检查PkgItemData类型的物品，其它物品默认为无限制
-        if (!(data instanceof PkgItemData)) {
-            return true;
-        }
-        PkgItemData pkgData = (PkgItemData) data;
-        List<String> raceLimit = pkgData.getRaceLimit();
-        // 种族限制
-        if (!raceLimit.isEmpty() && !raceLimit.contains(actorService.getRace(actor))) {
-            if (Config.debug) {
-                Logger.getLogger(AbstractHandler.class.getName()).log(Level.INFO, "Check race limit failure, found race={0}, expect={1}"
-                        , new Object[] {actorService.getRace(actor),  raceLimit.toString()});
-            }
-            return false;
-        }
-        if (pkgData.getSexLimit() != null && pkgData.getSexLimit() != actorService.getSex(actor)) {
-            if (Config.debug) {
-                Logger.getLogger(AbstractHandler.class.getName()).log(Level.INFO, "Check sex limit failure, found sex={0}, expect={1}"
-                        , new Object[] {actorService.getRace(actor),  pkgData.getSexLimit()});
-            }
-            return false;
-        }
-        return true;
-    }
-
     @Override
     public final void useForce(Actor actor, ObjectData data) {
         useObject(actor, data);
@@ -144,13 +103,15 @@ public abstract class AbstractHandler<T extends HandlerData> implements Handler<
     
     @Override
     public boolean remove(Actor actor, ObjectData data, int count) {
+        
+        // remove20160831
         // 一些物品是不能删除的,如地图
-        if (data instanceof PkgItemData) {
-            PkgItemData pkgData = (PkgItemData) data;
-            if (!pkgData.isDeletable()) {
-                return false;
-            }
-        }
+//        if (data instanceof PkgItemData) {
+//            PkgItemData pkgData = (PkgItemData) data;
+//            if (!pkgData.isDeletable()) {
+//                return false;
+//            }
+//        }
         
         // 删除并提示,只提示当前场景中的主玩家
         int oldCount = data.getTotal();
@@ -158,7 +119,7 @@ public abstract class AbstractHandler<T extends HandlerData> implements Handler<
         ObjectData od = protoService.getData(actor, data.getId());
         int trueRemoved = od != null ? oldCount - od.getTotal() : oldCount;
         
-        if (actor == playService.getPlayer()) {
+        if (trueRemoved > 0 && actor == playService.getPlayer()) {
             playService.addMessage(ResourceManager.get("common.remove"
                             , new Object[] {ResourceManager.getObjectName(data.getId())
                                     , trueRemoved > 1 ? "(" + trueRemoved + ")" : ""})

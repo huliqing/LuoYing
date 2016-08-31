@@ -9,6 +9,10 @@ import name.huliqing.core.Factory;
 import name.huliqing.core.object.action.RunAction;
 import name.huliqing.core.data.ActorLogicData;
 import name.huliqing.core.mvc.service.ActionService;
+import name.huliqing.core.object.action.Action;
+import name.huliqing.core.object.action.FightAction;
+import name.huliqing.core.object.action.FollowAction;
+import name.huliqing.core.object.module.ActionModule;
 
 /**
  * 必须两个行为：FightAction, RunAction
@@ -19,7 +23,8 @@ import name.huliqing.core.mvc.service.ActionService;
  * @param <T>
  */
 public class PositionActorLogic<T extends ActorLogicData> extends ActorLogic<T> {
-    private final ActionService actionService = Factory.get(ActionService.class);;
+    private final ActionService actionService = Factory.get(ActionService.class);
+    private ActionModule actionModule;
     
     protected RunAction runAction;
     
@@ -34,6 +39,12 @@ public class PositionActorLogic<T extends ActorLogicData> extends ActorLogic<T> 
         runAction = (RunAction) actionService.loadAction(data.getAsString("runAction"));
         position.set(data.getAsVector3f("position", position));
         nearest = data.getAsFloat("nearest", nearest);
+    }
+
+    @Override
+    public void initialize() {
+        super.initialize();
+        actionModule = actor.getModule(ActionModule.class);
     }
 
     public Vector3f getPosition() {
@@ -52,17 +63,18 @@ public class PositionActorLogic<T extends ActorLogicData> extends ActorLogic<T> 
         runAction.setNearest(distance);
     }
 
+    private Action tempAction;
     @Override
     protected void doLogic(float tpf) {
-        if (actionService.isPlayingFight(actor) 
-                || actionService.isPlayingFollow(actor)) {
+        tempAction = actionModule.getAction();
+        if ((tempAction  instanceof FightAction) || (tempAction  instanceof FollowAction)) {
             return;
         }
         
         runAction.setNearest(nearest);
         runAction.setPosition(position);
         if (!runAction.isEndPosition()) {
-            playAction(runAction);
+            actionService.playAction(actor, runAction);
         }
     }
     

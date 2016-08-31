@@ -15,7 +15,7 @@ import name.huliqing.core.object.actor.Actor;
  * 可用于删除角色身上某些状态的Handler
  * @author huliqing
  */
-public class StateRemoveHandler extends AbstractHandler {
+public class StateRemoveHandler extends AbstractItemHandler {
     private final StateService stateService = Factory.get(StateService.class);
     private final ItemService itemService = Factory.get(ItemService.class);
 

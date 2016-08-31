@@ -11,7 +11,6 @@
     <moduleChannel id="moduleChannel" moduleOrder="10" />
     <moduleChat id="moduleChat" moduleOrder="10" />
     <moduleItem id="moduleItem" moduleOrder="10" />
-    <moduleLogic id="moduleLogic" moduleOrder="10"/>
     <moduleResist id="moduleResist" moduleOrder="10"/>
     <moduleSkill id="moduleSkill" moduleOrder="10"/>
     <moduleSkin id="moduleSkin" moduleOrder="10" />
@@ -19,12 +18,16 @@
     <moduleTask id="moduleTask" moduleOrder="10"/>
     
     <!--基本角色模块-->
-    <moduleActor id="moduleActor" moduleOrder="10" lifeAttributeName="attributeHealth" />
+    <moduleActor id="moduleActor" moduleOrder="10" bindLifeAttribute="attributeHealth" />
+
+    <!--角色的逻辑功能-->
+    <moduleLogic id="moduleLogic" moduleOrder="10" bindAutoLogicAttribute="attributeAutoLogic" 
+                 bindAutoDetectAttribute="attributeAutoDetect" />
     
     <!--等级控制模块-->
     <moduleLevel id="moduleLevel" moduleOrder="10" levelAttributeName="attributeLevel" 
                  xpAttributeName="attributeXp" xpNextAttributeName="attributeXpNext" xpLevelEl="elLevelUp" maxLevel="60" effect="effectLevelUp" />
-    
+
     <!--天赋模块-->
     <moduleTalent id="moduleTalent" moduleOrder="10" levelAttributeName="attributeLevel" 
                   talentPointsAttributeName="attributeTalentPoints" talentPointsLevelEl="elLevelTalentPoints" />

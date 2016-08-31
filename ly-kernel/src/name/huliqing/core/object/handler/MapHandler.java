@@ -40,7 +40,7 @@ import name.huliqing.core.utils.ConvertUtils;
 /**
  * @author huliqing
  */
-public class MapHandler extends AbstractHandler {
+public class MapHandler extends AbstractItemHandler {
     private final PlayService playService = Factory.get(PlayService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final UserCommandNetwork userCommandNetwork = Factory.get(UserCommandNetwork.class);

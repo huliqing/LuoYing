@@ -76,5 +76,32 @@ public class LogicServiceImpl implements LogicService {
             addLogic(actor, logic);
         }
     }
+
+    @Override
+    public boolean isAutoLogic(Actor actor) {
+        LogicModule module = actor.getModule(LogicModule.class);
+        return module != null && module.isAutoLogic();
+    }
+
+    @Override
+    public void setAutoLogic(Actor actor, boolean enabled) {
+        LogicModule module = actor.getModule(LogicModule.class);
+        if (module != null) {
+            module.setAutoLogic(enabled);
+        }
+    }
     
+    @Override
+    public boolean isAutoDetect(Actor actor) {
+        LogicModule module = actor.getModule(LogicModule.class);
+        return module != null && module.isAutoDetect();
+    }
+    
+    @Override
+    public void setAutoDetect(Actor actor, boolean autoDetect) {
+        LogicModule module = actor.getModule(LogicModule.class);
+        if (module != null) {
+            module.setAutoDetect(autoDetect);
+        }
+    }
 }

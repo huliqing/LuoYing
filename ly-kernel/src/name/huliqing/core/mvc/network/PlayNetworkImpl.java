@@ -32,6 +32,7 @@ import name.huliqing.core.mess.MessSyncObject;
 import name.huliqing.core.mess.MessViewAdd;
 import name.huliqing.core.mess.MessViewRemove;
 import name.huliqing.core.mvc.service.GameService;
+import name.huliqing.core.mvc.service.LogicService;
 import name.huliqing.core.object.SyncData;
 import name.huliqing.core.object.NetworkObject;
 import name.huliqing.core.object.PlayObject;
@@ -56,6 +57,7 @@ public class PlayNetworkImpl implements PlayNetwork {
     private ActionService actionService;
     private SkinService skinService;
     private GameService gameService;
+    private LogicService logicService;
     
     private ActionNetwork actionNetwork;
     private SkinNetwork skinNetwork;
@@ -68,6 +70,7 @@ public class PlayNetworkImpl implements PlayNetwork {
         actionService = Factory.get(ActionService.class);
         skinService = Factory.get(SkinService.class);
         gameService = Factory.get(GameService.class);
+        logicService = Factory.get(LogicService.class);
         actionNetwork = Factory.get(ActionNetwork.class);
         skinNetwork = Factory.get(SkinNetwork.class);
         skillNetwork = Factory.get(SkillNetwork.class);
@@ -418,7 +421,7 @@ public class PlayNetworkImpl implements PlayNetwork {
         }
         // 打开或关闭侦察敌人的逻辑,autoDetect不需要广播到客户端，因为客户端不会有
         // 逻辑
-        actorService.setAutoDetect(actor, skinService.isWeaponTakeOn(actor));
+        logicService.setAutoDetect(actor, skinService.isWeaponTakeOn(actor));
     }
 
     @Override

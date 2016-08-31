@@ -261,6 +261,11 @@ xs:time
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="actorLogicBase">
+                    <xs:attribute name="bindFollowTargetAttribute" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>绑定角色的followTarget属性名称，这个属性用于查找被跟随角色。</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
                     <xs:attribute name="followAction" type="xs:string" use="required">
                         <xs:annotation>
                             <xs:documentation>指定一个跟随行为</xs:documentation>

@@ -120,7 +120,7 @@ xs:time
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="attributeBase">
-                    <xs:attribute name="value" type="bool" use="optional" >
+                    <xs:attribute name="value" type="bool" >
                         <xs:annotation><xs:documentation>属性初始值</xs:documentation></xs:annotation>
                     </xs:attribute>
                 </xs:extension>

@@ -8,6 +8,7 @@ import com.jme3.math.Vector3f;
 import name.huliqing.core.Inject;
 import name.huliqing.core.object.action.Action;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.module.ActionModule;
 
 /**
  * 
@@ -71,4 +72,5 @@ public interface ActionService extends Inject {
      * @return 
      */
     Action getPlayingAction(Actor actor);
+
 }

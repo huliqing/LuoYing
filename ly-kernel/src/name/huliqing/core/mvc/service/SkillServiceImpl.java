@@ -80,17 +80,6 @@ public class SkillServiceImpl implements SkillService {
     
     @Override
     public Skill getSkill(Actor actor, String skillId) {
-        // remove20160819
-//        List<SkillData> skills = skillDao.getSkills(actor.getData());
-//        if (skills == null)
-//            return null;
-//        for (SkillData sd : skills) {
-//            if (sd.getId().equals(skillId)) {
-//                return sd;
-//            }
-//        }
-//        return null;
-
         SkillModule module = actor.getModule(SkillModule.class);
         if (module != null) {
             return module.getSkill(skillId);
@@ -180,82 +169,6 @@ public class SkillServiceImpl implements SkillService {
         return module != null && module.removeSkillPlayListener(skillPlayListener);
     }
 
-    // remove20160819
-//    @Override
-//    public Skill getSkillInstance(Actor actor, String skillId) {
-//        SkillData skillData = getSkill(actor, skillId);
-//        if (skillData != null) {
-//            SkillModule module = actor.getModule(SkillModule.class);
-//            if (module != null) {
-//                return module.getSkill(skillData);
-//            }
-//        }
-//        return null;
-//    }
-   
-    // remove20160819
-//    @Override
-//    public List<SkillData> getSkill(Actor actor) {
-////        return skillDao.getSkills(actor.getData());
-//        
-//        SkillModule module = actor.getModule(SkillModule.class);
-//        if (module != null) {
-//            module.getSkills().values();
-//        }
-//        return null;
-//    }
-//    
-//    @Override
-//    public SkillData getSkillRandom(Actor actor, SkillType skillType) {
-//        int wt = skinService.getWeaponState(actor);
-//        SkillData randomSkill = skillDao.getSkillRandom(actor.getData(), skillType, wt);
-//        if (randomSkill != null) {
-//            return randomSkill;
-//        }
-//        return null;
-//    }
-//
-//    @Override
-//    public SkillData getSkillRandomDefend(Actor actor) {
-//        int wt = skinService.getWeaponState(actor);
-//        SkillData defendSkillData = skillDao.getSkillRandom(actor.getData(), SkillType.defend, wt);
-//        if (defendSkillData != null) {
-//            return defendSkillData;
-//        }
-//        return null;
-//    }
-//
-//    @Override
-//    public SkillData getSkillRandomDuck(Actor actor) {
-//        int wt = skinService.getWeaponState(actor);
-//        SkillData duckSkillData = skillDao.getDuckSkillRandom(actor.getData(), wt);
-//        if (duckSkillData != null) {
-//            return duckSkillData;
-//        }
-//        return null;
-//    }
-//    
-//    @Override
-//    public SkillData getSkillRandomWalk(Actor actor) {
-//        int wt = skinService.getWeaponState(actor);
-//        return skillDao.getSkillRandom(actor.getData(), SkillType.walk, wt);
-//    }
-//    
-//    @Override
-//    public boolean playFaceTo(Actor actor, Vector3f position) {
-//        if (isLocked(actor, SkillType.walk) && isLocked(actor, SkillType.run)) {
-//            return false;
-//        }
-//        
-//        SkillModule module = actor.getModule(SkillModule.class);
-//        if (module == null) {
-//            return false;
-//        }
-//        
-//        boolean result = module.playFaceTo(position);
-//        return result;
-//    }
-    
     // 检查并升级技能
     private void skillLevelUp(Actor actor, SkillData data) {
         if (data.getLevel() >= data.getMaxLevel()) 
@@ -406,11 +319,6 @@ public class SkillServiceImpl implements SkillService {
         List<AttributeUse> uas = data.getUseAttributes();
         if (uas != null) {
             for (AttributeUse ua : uas) {
-                
-                // remove20160827
-//                attributeService.applyDynamicValue(actor, ua.getAttribute(), ua.getAmount() * -1);
-//                attributeService.clampDynamicValue(actor, ua.getAttribute());
-
                 attributeService.addAttributeValue(actor, ua.getAttribute(), -ua.getAmount());
             }
         }
@@ -523,37 +431,50 @@ public class SkillServiceImpl implements SkillService {
 
     @Override
     public void lockSkill(Actor actor, SkillType... skillType) {
-        long lockedState = actor.getData().getSkillLockedState();
-        for (SkillType st : skillType) {
-            lockedState |= 1 << st.getValue();
+        SkillModule module = actor.getModule(SkillModule.class);
+        if (module != null) {
+            long lockedState = module.getSkillLockedState();
+            for (SkillType st : skillType) {
+                lockedState |= 1 << st.getValue();
+            }
+            module.setSkillLockedState(lockedState);
         }
-        actor.getData().setSkillLockedState(lockedState);
     }
 
     @Override
     public void lockSkillAll(Actor actor) {
-        actor.getData().setSkillLockedState(0xFFFFFFFF);
+        SkillModule module = actor.getModule(SkillModule.class);
+        if (module != null) {
+            module.setSkillLockedState(0xFFFFFFFF);
+        }
     }
 
     @Override
     public void unlockSkill(Actor actor, SkillType... skillType) {
-        long lockedState = actor.getData().getSkillLockedState();
-        for (SkillType st : skillType) {
-            lockedState &= ~(1 << st.getValue());
+        SkillModule module = actor.getModule(SkillModule.class);
+        if (module != null) {
+            long lockedState = module.getSkillLockedState();
+            for (SkillType st : skillType) {
+                lockedState &= ~(1 << st.getValue());
+            }
+            module.setSkillLockedState(lockedState);
         }
-        actor.getData().setSkillLockedState(lockedState);
     }
 
     @Override
     public void unlockSkillAll(Actor actor) {
-        actor.getData().setSkillLockedState(0);
+        SkillModule module = actor.getModule(SkillModule.class);
+        if (module != null) {
+            module.setSkillLockedState(0);
+        }
     }
     
     @Override
     public boolean isLocked(Actor actor, SkillType skillType) {
-        return (actor.getData().getSkillLockedState() & (1 << skillType.getValue())) != 0;
+        SkillModule module = actor.getModule(SkillModule.class);
+        return module != null && (module.getSkillLockedState() & (1 << skillType.getValue())) != 0;
     }
-
+    
     @Override
     public void lockSkillChannels(Actor actor, String... channels) {
         actorService.setChannelLock(actor, true, channels);
@@ -562,18 +483,5 @@ public class SkillServiceImpl implements SkillService {
     @Override
     public void unlockSkillChannels(Actor actor, String... channels) {
         actorService.setChannelLock(actor, false, channels);
-    }
-   
-    // remove20160819
-//    @Override
-//    public float getSkillTrueUseTime(Actor actor, SkillData skillData) {
-//        SkillModule module = actor.getModule(SkillModule.class);
-//        if (module != null) {
-//            Skill skill = module.getSkill(skillData);
-//            return skill.getTrueUseTime();
-//        }
-//        return 0;
-//    }
-
-    
+    }    
 }

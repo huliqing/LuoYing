@@ -45,29 +45,29 @@ import name.huliqing.core.object.module.LevelModule;
  */
 public class ActorServiceImpl implements ActorService {
 
-    private SkillService skillService;
-    private StateService stateService;
-    private LogicService logicService;
-    private PlayService playService;
-    private SkinService skinService;
-    private ElService elService;
     private AttributeService attributeService;
-    private TalentService talentService;
-    private EffectService effectService;
-    private ConfigService configService;
+    private SkillService skillService;
+//    private StateService stateService;
+//    private LogicService logicService;
+//    private PlayService playService;
+//    private SkinService skinService;
+//    private ElService elService;
+//    private TalentService talentService;
+//    private EffectService effectService;
+//    private ConfigService configService;
     
     @Override
     public void inject() {
-        skillService = Factory.get(SkillService.class);
-        stateService = Factory.get(StateService.class);
-        logicService = Factory.get(LogicService.class);
-        playService = Factory.get(PlayService.class);
-        skinService = Factory.get(SkinService.class);
-        elService = Factory.get(ElService.class);
         attributeService = Factory.get(AttributeService.class);
-        configService = Factory.get(ConfigService.class);
-        talentService = Factory.get(TalentService.class);
-        effectService = Factory.get(EffectService.class);
+        skillService = Factory.get(SkillService.class);
+//        stateService = Factory.get(StateService.class);
+//        logicService = Factory.get(LogicService.class);
+//        playService = Factory.get(PlayService.class);
+//        skinService = Factory.get(SkinService.class);
+//        elService = Factory.get(ElService.class);
+//        configService = Factory.get(ConfigService.class);
+//        talentService = Factory.get(TalentService.class);
+//        effectService = Factory.get(EffectService.class);
     }
 
     @Override
@@ -303,81 +303,28 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public void kill(Actor actor) {
-        // remove20160828
-//        // 血量降低
-//        AttributeData life = actor.getData().getObjectData(actor.getData().getLifeAttribute());
-//        if (life != null) {
-//            life.setDynamicValue(0);
-//        }
-
         getActorModule(actor).kill();
-        
         // 执行死亡动画
         skillService.playSkill(actor, skillService.getSkill(actor, SkillType.dead), false);
     }
     
     @Override
     public void reborn(Actor actor) {
-        // remove20160828
-//        // 重生的时候属性值全满
-//        List<AttributeData> ads = actor.getData().getObjectDatas(AttributeData.class, null);
-//        if (ads != null) {
-//            for (AttributeData ad : ads) {
-//                ad.setDynamicValue(ad.getMaxValue());
-//            }
-//        }
-
         getActorModule(actor).resurrect();
-        
         skillService.playSkill(actor, skillService.getSkill(actor, SkillType.wait), false);
     }
-
+    
     @Override
     public void setTarget(Actor actor, Actor target) {
-        ActorData data = actor.getData();
-        
-        // 同一个目标不需要重新设置
-        if (target != null && target.getData().getUniqueId() == data.getTarget()) {
-            return;
-        }
-        
-        // 释放旧目标的listener
-        long oldTargetId = data.getTarget();
-        if (oldTargetId != -1) {
-            Actor oldTarget = playService.findActor(oldTargetId);
-            if (oldTarget != null) {
-                List<ActorListener> als = getActorModule(oldTarget).getActorListeners(); 
-                if (als != null && als.isEmpty()) {
-                    for (ActorListener al : als) {
-                        al.onActorReleased(oldTarget, actor);
-                    }
-                }
-            }
-        }
-        
-        if (target == null) {
-            actor.getData().setTarget(-1);
-            return ;
-        }
-
-        // 锁定新目标的listener.
-        actor.getData().setTarget(target.getData().getUniqueId());
-        ActorModule targetModule = getActorModule(target);
-        if (targetModule != null) {
-            List<ActorListener> als = targetModule.getActorListeners();
-            if (als != null && !als.isEmpty()) {
-                for (ActorListener al : als) {
-                    al.onActorLocked(target, actor);
-                }
-            }            
-        }
+        actor.getModule(ActorModule.class).setTarget(target.getData().getUniqueId());
     }
 
     @Override
     public Actor getTarget(Actor actor) {
-        long targetId = actor.getData().getTarget();
-        if (targetId == -1)
+        long targetId = actor.getModule(ActorModule.class).getTarget();
+        if (targetId <= 0)
             return null;
+        
         List<Actor> actors = LY.getPlayState().getActors();
         for (Actor a : actors) {
             if (a.getData().getUniqueId() == targetId) {
@@ -388,46 +335,12 @@ public class ActorServiceImpl implements ActorService {
     }
 
     @Override
-    public boolean isAutoAi(Actor actor) {
-        return actor.getData().isAutoAi();
-    }
-
-    @Override
-    public void setAutoAi(Actor actor, boolean autoAi) {
-        actor.getData().setAutoAi(autoAi);
-    }
-
-    @Override
-    public boolean isAutoDetect(Actor actor) {
-        return actor.getData().isAutoDetect();
-    }
-
-    @Override
-    public void setAutoDetect(Actor actor, boolean autoDetect) {
-        actor.getData().setAutoDetect(autoDetect);
-    }
-
-    @Override
     public boolean isDead(Actor actor) {
-        // remove20160828
-//        AttributeData life =  actor.getData().getObjectData(actor.getData().getLifeAttribute());
-//        if (life != null) {
-//            return life.getDynamicValue() <= 0;
-//        }
-//        return false;
-
         return getActorModule(actor).isDead();
     }
-
+    
     @Override
     public boolean isEnemy(Actor actor, Actor target) {
-        // remove20160830
-//        // 如果组别小于0则视为非敌人。
-//        if (target.getData().getGroup() < 0) {
-//            return false;
-//        }
-//        return actor.getData().getGroup() != target.getData().getGroup();
-
         return actor.getModule(ActorModule.class).isEnemy(target);
     }
 
@@ -628,33 +541,18 @@ public class ActorServiceImpl implements ActorService {
             return module.getLevelXp(level);
         }
         return 0;
-        
-        // remove20160829
-//        String levelUpEl = actor.getData().getLevelUpEl();
-//        if (levelUpEl != null) {
-//            LevelEl el = (LevelEl) elService.getEl(actor.getData().getLevelUpEl());
-//            return (int) el.getValue(actor.getData().getLevel() + 1);
-//        }
-//        return 0;
     }
 
     @Override
     public boolean isMoveable(Actor actor) {
         return getMass(actor) > 0;
     }
-
+    
     @Override
     public float getViewDistance(Actor actor) {
-        // remove20160830
-//        AttributeData viewAttr = actor.getData().getObjectData(actor.getData().getViewAttribute());
-//        if (viewAttr != null) {
-//            return viewAttr.getDynamicValue();
-//        }
-//        return 0;
-
         return actor.getModule(ActorModule.class).getViewDistance();
     }
-
+    
     @Override
     public void addActorListener(Actor actor, ActorListener actorListener) {
         if (actorListener == null) 
@@ -678,20 +576,12 @@ public class ActorServiceImpl implements ActorService {
     public String getName(Actor actor) {
         return actor.getData().getName();
     }
-
-    // remove20160826
-//    @Override
-//    public int getLife(Actor actor) {
-////        AttributeData life = actor.getData().getLifeAttributeData();
-//        AttributeData life = actor.getData().getObjectData(actor.getData().getLifeAttribute());
-//        return (int) life.getDynamicValue();
-//    }
-
+    
     @Override
     public int getGroup(Actor actor) {
         return actor.getModule(ActorModule.class).getGroup();
     }
-
+    
     @Override
     public void setGroup(Actor actor, int group) {
         actor.getModule(ActorModule.class).setGroup(group);
@@ -709,50 +599,39 @@ public class ActorServiceImpl implements ActorService {
     }
 
     @Override
-    public Sex getSex(Actor actor) {
-        return actor.getData().getSex();
-    }
-
-    @Override
     public boolean isEssential(Actor actor) {
-        return actor.getData().isEssential();
+        return actor.getModule(ActorModule.class).isEssential();
     }
 
     @Override
     public void setEssential(Actor actor, boolean essential) {
-        actor.getData().setEssential(essential);
+        actor.getModule(ActorModule.class).setEssential(essential);
     }
 
-//    @Override
-//    public String getRace(Actor actor) {
-//        return actor.getData().getRace();
-//    }
+    @Override
+    public boolean isLiving(Actor actor) {
+        return actor.getModule(ActorModule.class).isLiving(); 
+    }
 
     @Override
     public void setOwner(Actor actor, long ownerId) {
-        actor.getData().setOwnerId(ownerId);
+        actor.getModule(ActorModule.class).setOwner(ownerId);
     }
 
     @Override
     public long getOwner(Actor actor) {
-        return actor.getData().getOwnerId();
+        return actor.getModule(ActorModule.class).getOwner();
     }
 
     @Override
     public void setFollow(Actor actor, long targetId) {
-        actor.getData().setFollowTarget(targetId);
+        actor.getModule(ActorModule.class).setFollowTarget(targetId);
     }
 
     @Override
     public long getFollow(Actor actor) {
-        return actor.getData().getFollowTarget();
+        return actor.getModule(ActorModule.class).getFollowTarget();
     }
-    
-    // remove20160818
-//    @Override
-//    public int getTalentPoints(Actor actor) {
-//        return actor.getData().getTalentPoints();
-//    }
 
     @Override
     public void syncTransform(Actor actor, Vector3f location, Vector3f viewDirection) {
@@ -939,12 +818,12 @@ public class ActorServiceImpl implements ActorService {
     
     @Override
     public boolean isPlayer(Actor actor) {
-        return actor.getData().isPlayer();
+        return actor.getModule(ActorModule.class).isPlayer();
     }
 
     @Override
     public void setPlayer(Actor actor, boolean player) {
-        actor.getData().setPlayer(player);
+        actor.getModule(ActorModule.class).setPlayer(player);
     }
     
     @Override

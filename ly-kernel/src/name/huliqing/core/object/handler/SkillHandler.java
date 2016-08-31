@@ -21,18 +21,14 @@ import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.object.skill.Skill;
 
 /**
- *
+ * 专门用于技能的Handler
  * @author huliqing
  */
 public class SkillHandler extends AbstractHandler {
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
-//    private final ActionNetwork actionNetwork = Factory.get(ActionNetwork.class);
-//    private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
-//    private final PlayService playService = Factory.get(PlayService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
-//    private final StateService stateService = Factory.get(StateService.class);
 
     @Override
     public void setData(HandlerData data) {
@@ -115,39 +111,6 @@ public class SkillHandler extends AbstractHandler {
     @Override
     protected void useObject(Actor actor, ObjectData data) {
         SkillData skillData = (SkillData) data;
-        
-        // remove20160129
-//        // 注意所有物品的使用和技能的使用不一定都是玩家在执行。也就是useForce中的
-//        // actor参数不一定是player
-//        
-//        // 对于攻击技能，需要转入"战斗行为", 其它
-//        SkillType st = skillData.getSkillType();
-//        if (st == SkillType.attack || st == SkillType.trick) {
-//            
-//            Actor target = actorService.getTarget(actor);
-//            float viewDistance = actorService.getViewDistance(actor);
-//            if (target == null 
-//                    || target.getModel().getParent() == null 
-//                    || target.isDead() 
-//                    || !target.isEnemy(actor)
-//                    || target.getDistance(actor) > viewDistance * 2
-//                    ) {
-//                target = actorService.findNearestEnemyExcept(actor, viewDistance * 2, null);
-//                
-//                actorNetwork.setTarget(actor, target);
-//                
-//                if (target == null) {
-//                    // 没目标：攻击类技能需要目标，如果没有目标则不执行技能，否则会经常浪费魔法值
-//                    playNetwork.addMessage(actor, ResourceManager.get(ResConstants.SKILL_TARGET_NOT_FOUND), MessageType.notice);
-//                    return;
-//                }
-//            }
-//            // 注意：客户端不能执行action
-//            actionNetwork.playFight(actor, target, skillData.getId());
-//        } else {
-//            // 执行普通技能
-//            skillNetwork.playSkill(actor, skillData, false);
-//        }
         
         skillNetwork.playSkill(actor, skillData.getId(), false);
     }

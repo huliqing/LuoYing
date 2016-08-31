@@ -9,16 +9,14 @@ import name.huliqing.core.GameException;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.SkinData;
-import name.huliqing.core.mvc.service.ItemService;
 import name.huliqing.core.mvc.service.SkinService;
 
 /**
  * 处理装备的使用,用于切换装备
  * @author huliqing
  */
-public class OutfitHandler extends AbstractHandler {
+public class OutfitHandler extends AbstractSkinHandler {
     private final SkinService skinService = Factory.get(SkinService.class);
-    private final ItemService itemService = Factory.get(ItemService.class);
 
     @Override
     public boolean canUse(Actor actor, ObjectData data) {
@@ -43,13 +41,13 @@ public class OutfitHandler extends AbstractHandler {
 
     @Override
     protected void useObject(Actor actor, ObjectData pd) {
-        SkinData data = (SkinData) pd;
-        if (data.isUsing()) {
+        SkinData skinData = (SkinData) pd;
+        if (skinData.isUsing()) {
             // 脱装备
-            skinService.detachSkin(actor, data);
+            skinService.detachSkin(actor, skinData);
         } else {
             // 穿装备
-            skinService.attachSkin(actor, data);
+            skinService.attachSkin(actor, skinData);
         }
     }
 

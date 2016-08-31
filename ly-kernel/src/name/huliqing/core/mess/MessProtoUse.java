@@ -12,6 +12,7 @@ import name.huliqing.core.mvc.network.ProtoNetwork;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.ProtoService;
 import name.huliqing.core.data.ConnData;
+import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.network.GameServer;
 import name.huliqing.core.object.actor.Actor;
 
@@ -59,6 +60,7 @@ public class MessProtoUse extends MessBase {
     public void applyOnServer(GameServer gameServer, HostedConnection source) {
         PlayService playService = Factory.get(PlayService.class);
         ProtoService protoService = Factory.get(ProtoService.class);
+        ActorService actorService = Factory.get(ActorService.class);
         ProtoNetwork protoNetwork = Factory.get(ProtoNetwork.class);
         
         ConnData cd = source.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
@@ -71,7 +73,7 @@ public class MessProtoUse extends MessBase {
         }
         // 使用物品的必须是客户端角色自身或者客户端角色的宠物
         if (actor.getData().getUniqueId() == clientActorId
-                || actor.getData().getOwnerId() == clientActorId) {
+                || actorService.getOwner(actor) == clientActorId) {
             ObjectData data = protoService.getData(actor, objectId);
             protoNetwork.useData(actor, data);
         }

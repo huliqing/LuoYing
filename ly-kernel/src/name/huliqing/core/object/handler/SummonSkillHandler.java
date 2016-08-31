@@ -27,7 +27,7 @@ import name.huliqing.core.object.skill.SummonSkill;
  * @author huliqing
  * @since 1.2
  */
-public class SummonSkillHandler extends AbstractHandler {
+public class SummonSkillHandler extends AbstractItemHandler {
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final SkillService skillService = Factory.get(SkillService.class);
     private final ItemService itemService = Factory.get(ItemService.class);

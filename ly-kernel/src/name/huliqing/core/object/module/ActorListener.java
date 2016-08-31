@@ -18,7 +18,7 @@ public interface ActorListener {
      * @param source 源角色
      * @param other 另一角色
      */
-    void onActorLocked(Actor source, Actor other);
+    void onActorLocked(long source, Actor other);
     
     /**
      * 当角色被从另一个角色的目标对象中释放时该方法被调用,
@@ -26,7 +26,7 @@ public interface ActorListener {
      * @param source
      * @param other 
      */
-    void onActorReleased(Actor source, Actor other);
+    void onActorReleased(long source, Actor other);
     
     /**
      * 当角色被击中时调用,即：当source受到attacker击中时触发该方法。

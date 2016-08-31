@@ -23,11 +23,10 @@ import name.huliqing.core.mvc.network.StateNetwork;
 import name.huliqing.core.mvc.service.ActionService;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.PlayService;
-import name.huliqing.core.mvc.service.ProtoService;
 import name.huliqing.core.mvc.service.SkillService;
-import name.huliqing.core.mvc.service.StateService;
 import name.huliqing.core.logic.scene.ActorMultLoadHelper;
 import name.huliqing.core.manager.ResourceManager;
+import name.huliqing.core.mvc.service.LogicService;
 import name.huliqing.core.ui.Button;
 import name.huliqing.core.ui.TextPanel;
 import name.huliqing.core.ui.UI;
@@ -41,16 +40,15 @@ import name.huliqing.core.ui.UI.Listener;
 public class StoryGbTask1 extends GameTaskBase {
     private final ActorService actorService = Factory.get(ActorService.class);
     private final PlayService playService = Factory.get(PlayService.class);
-    private final StateService stateService = Factory.get(StateService.class);
     private final ActionService actionService = Factory.get(ActionService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
+    private final LogicService logicService = Factory.get(LogicService.class);
+    
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
     private final StateNetwork stateNetwork = Factory.get(StateNetwork.class);
-//    private final ItemNetwork itemNetwork = Factory.get(ItemNetwork.class);
     private final ProtoNetwork protoNetwork = Factory.get(ProtoNetwork.class);
-    private final ProtoService protoService = Factory.get(ProtoService.class);
     
     // 开始任务面板:说明任务信息
     private TextPanel taskFind;
@@ -215,7 +213,7 @@ public class StoryGbTask1 extends GameTaskBase {
         // 5.古柏与小樱的对话
         if (stage == 5) {
             // 不让乱动，不然在对话的时候会执行idle行为
-            actorService.setAutoAi(gb, false);
+            logicService.setAutoLogic(gb, false);
             actionService.playAction(gb, null);
             skillNetwork.playSkill(gb, skillService.getSkill(gb, SkillType.wait), true);
             createGbPlayerTalk();
@@ -245,7 +243,7 @@ public class StoryGbTask1 extends GameTaskBase {
         
         if (stage == 8) {
             if (gotBook) {
-                actorService.setAutoAi(gb, true);
+                logicService.setAutoLogic(gb, true);
                 finished = true;
                 stage = 9;
             }

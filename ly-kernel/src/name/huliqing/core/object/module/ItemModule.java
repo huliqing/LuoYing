@@ -87,7 +87,7 @@ public class ItemModule extends AbstractModule {
             return false;
         }
         ItemData item = getItem(itemId);
-        if (item == null)
+        if (item == null || !item.isDeletable())
             return false;
         
         int oldTotal = item.getTotal();

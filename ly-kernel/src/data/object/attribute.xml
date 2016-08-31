@@ -10,91 +10,105 @@
     <!--==========================================================================-->
     
     <!--最高生命值-->
-    <attributeLevelInteger id="attributeHealthMax" name="attributeHealthMax" levelEl="elLevelAttrHealth" />
+    <attributeLevelInteger id="attributeBaseHealthMax" name="attributeHealthMax" levelEl="elLevelAttrHealth" />
     <!--实时生命值-->
-    <attributeLimitInteger id="attributeHealth" name="attributeHealth" minValue="0" maxLimitAttributeName="attributeHealthMax" />
+    <attributeLimitInteger id="attributeBaseHealth" name="attributeHealth" minValue="0" maxLimitAttributeName="attributeHealthMax" />
     
     <!--最高魔法值-->
-    <attributeLevelInteger id="attributeManaMax" name="attributeManaMax" levelEl="elLevelAttrMana" />
+    <attributeLevelInteger id="attributeBaseManaMax" name="attributeManaMax" levelEl="elLevelAttrMana" />
     <!--实时魔法值-->
-    <attributeLimitInteger id="attributeMana" name="attributeMana" minValue="0" maxLimitAttributeName="attributeManaMax" />
+    <attributeLimitInteger id="attributeBaseMana" name="attributeMana" minValue="0" maxLimitAttributeName="attributeManaMax" />
     
     <!--物理攻击力-->
-    <attributeLevelInteger id="attributeAttack" name="attributeAttack" levelEl="elLevelAttrAttack" />
+    <attributeLevelInteger id="attributeBaseAttack" name="attributeAttack" levelEl="elLevelAttrAttack" />
     
     <!--魔法攻击力-->
-    <attributeLevelInteger id="attributeMagicAttack" name="attributeMagicAttack" levelEl="elLevelAttrMagicAttack" />
+    <attributeLevelInteger id="attributeBaseMagicAttack" name="attributeMagicAttack" levelEl="elLevelAttrMagicAttack" />
     
     <!--物理防御力-->
-    <attributeLevelInteger id="attributeDefence" name="attributeDefence" levelEl="elLevelAttrDefence" />
+    <attributeLevelInteger id="attributeBaseDefence" name="attributeDefence" levelEl="elLevelAttrDefence" />
     
     <!--魔法防御力-->
-    <attributeLevelInteger id="attributeMagicDefence" name="attributeMagicDefence" levelEl="elLevelAttrMagicDefence" />
+    <attributeLevelInteger id="attributeBaseMagicDefence" name="attributeMagicDefence" levelEl="elLevelAttrMagicDefence" />
     
     <!--视力:影响角色的侦察范围-->
-    <attributeFloat id="attributeVision" name="attributeVision" />
+    <attributeFloat id="attributeBaseVision" name="attributeVision" />
     
     <!--健康值恢复速度: 定义每秒恢复多少点生命值-->
-    <attributeLevelInteger id="attributeHealthRestore" name="attributeHealthRestore" levelEl="elLevelAttrHealthRestore" />
+    <attributeLevelInteger id="attributeBaseHealthRestore" name="attributeHealthRestore" levelEl="elLevelAttrHealthRestore" />
     
     <!--魔法值恢复速度: 定义每秒恢复多少点魔法值-->
-    <attributeLevelInteger id="attributeManaRestore" name="attributeManaRestore" levelEl="elLevelAttrManaRestore" />
+    <attributeLevelInteger id="attributeBaseManaRestore" name="attributeManaRestore" levelEl="elLevelAttrManaRestore" />
     
     <!--攻击速度: 定义攻击速度倍率，1.0为原始速度，-->
-    <attributeLevelFloat id="attributeAttackSpeed" name="attributeAttackSpeed" levelEl="elLevelAttrAttackSpeed" />
+    <attributeLevelFloat id="attributeBaseAttackSpeed" name="attributeAttackSpeed" levelEl="elLevelAttrAttackSpeed" />
     
     <!--施法速度:1.0为原始速度，2.0为双倍速度-->
-    <attributeLevelFloat id="attributeMagicSpeed" name="attributeMagicSpeed" levelEl="elLevelAttrMagicSpeed" />
+    <attributeLevelFloat id="attributeBaseMagicSpeed" name="attributeMagicSpeed" levelEl="elLevelAttrMagicSpeed" />
     
     <!--移动速度：1.0为原始速度,2.0为两倍速度-->
-    <attributeLevelFloat id="attributeMoveSpeed" name="attributeMoveSpeed" />
+    <attributeLevelFloat id="attributeBaseMoveSpeed" name="attributeMoveSpeed" />
     
     <!--防御概率:[0.0~1.0], 1.0为百分百防御-->
-    <attributeLevelFloat id="attributeDefenceRate" name="attributeDefenceRate" />
+    <attributeLevelFloat id="attributeBaseDefenceRate" name="attributeDefenceRate" />
     
     <!--躲闪概率:[0.0~1.0]，1.0为百分百躲闪-->
-    <attributeLevelFloat id="attributeDuckRate" name="attributeDuckRate" />
+    <attributeLevelFloat id="attributeBaseDuckRate" name="attributeDuckRate" />
     
     <!--鬼魅能力:[0.0~1.0] -->
-    <attributeLevelFloat id="attributeGhostRate" name="attributeGhostRate" />
-    
-    <!--<attributeString id="name" name="name" />-->
+    <attributeLevelFloat id="attributeBaseGhostRate" name="attributeGhostRate" />
     
     <!--角色当前的等级-->
-    <attributeInteger id="attributeLevel" name="attributeLevel" />
+    <attributeInteger id="attributeBaseLevel" name="attributeLevel" />
 
     <!--当前角色可用的经验值-->
-    <attributeInteger id="attributeXp" name="attributeXp" />
+    <attributeInteger id="attributeBaseXp" name="attributeXp" />
+    
     <!--到达下一个等级角色需要的经验值-->
-    <attributeInteger id="attributeXpNext" name="attributeXp" />
+    <attributeInteger id="attributeBaseXpNext" name="attributeXp" />
     
     <!--角色所在分组-->
-    <attributeInteger id="attributeGroup" name="attributeGroup" />
+    <attributeInteger id="attributeBaseGroup" name="attributeGroup" />
     
     <!--角色所在队伍-->
-    <attributeInteger id="attributeTeam" name="attributeTeam" />
+    <attributeInteger id="attributeBaseTeam" name="attributeTeam" />
     
     <!--角色性别：0: 未知; 1:女性; 2: 男性-->
-    <attributeInteger id="attributeSex" name="attributeSex" />
+    <attributeInteger id="attributeBaseSex" name="attributeSex" />
 
-    <!--角色种族: 0.未分类; 1:人类; --> 
-    <attributeInteger id="attributeRace" name="attributeRace" />
+    <!--角色种族: 0.未分类; 1:人类; 2...--> 
+    <attributeInteger id="attributeBaseRace" name="attributeRace" />
     
     <!--角色天赋点数容器-->
-    <attributeInteger id="attributeTalentPoints" name="attributeTalentPoints" />
+    <attributeInteger id="attributeBaseTalentPoints" name="attributeTalentPoints" />
     
-    <attributeLong id="attributeTarget" name="attributeTarget" />
-    <attributeLong id="attributeFollowTarget" name="attributeFollowTarget" />
+    <!--这个属性用来存放角色的当前目标-->
+    <attributeLong id="attributeBaseTarget" name="attributeTarget" />
     
-    <attributeBoolean id="attributeLiving" name="attributeLiving" />
-    <attributeBoolean id="attributeEssential" name="attributeEssential" />
-    <attributeBoolean id="attributeAutoAi" name="attributeAutoAi" />
-    <attributeBoolean id="attributeAutoDetect" name="attributeAutoDetect" />
-    <attributeBoolean id="attributePlayer" name="attributePlayer" />
+    <!--这个属性用来存放角色当前跟随的目标-->
+    <attributeLong id="attributeBaseFollowTarget" name="attributeFollowTarget" />
+    
+    <!--角色的主人(所有者)的ID(唯一ID) -->
+    <attributeLong id="attributeBaseOwner" name="attributeOwner" />
+    
+    <!--Essential这个属性用来标记一个角色是否是必要的，即使死亡后也不能移出场景的-->
+    <attributeBoolean id="attributeBaseEssential" name="attributeEssential" />
+
+    <!--这个属性来标记角色是否是一个生物（活物）-->    
+    <attributeBoolean id="attributeBaseLiving" name="attributeLiving" />
+
+    <!--是否自动AI,如果关闭AI功能，则角色将完全停止运行所有逻辑-->
+    <attributeBoolean id="attributeBaseAutoLogic" name="attributeAutoAi" value="1" />
+    
+    <!--是否自动侦察敌人，如果关闭该功能，则角色不会查找敌人。-->
+    <attributeBoolean id="attributeBaseAutoDetect" name="attributeAutoDetect" value="1" />
     
     <!--==========================================================================-->
     <!--特殊角色设置-->
     <!--==========================================================================-->
+
+
+
 
 <!--    健康值:定义角色的生命值
     <attribute id="attributeHealth" el="elLevelAttrHealth" />

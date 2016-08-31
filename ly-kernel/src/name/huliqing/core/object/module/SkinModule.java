@@ -14,7 +14,6 @@ import name.huliqing.core.Factory;
 import name.huliqing.core.data.AttributeApply;
 import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.SkinData;
-import name.huliqing.core.data.module.SkinModuleData;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.mvc.service.AttributeService;
 import name.huliqing.core.object.actor.Actor;

@@ -245,6 +245,11 @@ public class Data implements Savable {
      * @return 
      */
     public final List<String> getAsList(String key) {
+        Object value = getAttribute(key);
+        if (value instanceof List) {
+            return (List) value;
+        }
+        
         String[] arr = getAsArray(key);
         if (arr == null)
             return null;

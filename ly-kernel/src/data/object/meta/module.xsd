@@ -57,12 +57,33 @@ xs:time
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="moduleBase">
-                    <xs:attribute name="lifeAttributeName" type="xs:string" use="required">
+                    <xs:attribute name="bindLifeAttribute" type="xs:string" use="required">
                         <xs:annotation>
-                            <xs:documentation>生命属性的名称，绑定一个属性名称，这个属性将用于计算角色的生命值
-                            ，当这个属性的值为0时，角色将被判定为死亡。
+                            <xs:documentation>bind a IntegerAttribute. 生命属性的名称，绑定一个属性名称，
+                                这个属性将用于计算角色的生命值，当这个属性的值为0时，角色将被判定为死亡。
                             </xs:documentation>
                         </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="bindGroupAttribute" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>bind a IntegerAttribute</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="bindTeamAttribute" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>bind a IntegerAttribute</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="bindTargetAttribute" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>bind a LongAttribute</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="bindFollowTargetAttribute" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>bind a LongAttribute</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="bindOwnerAttribute" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>bind a LongAttribute</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="bindEssentialAttribute" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>bind a BooleanAttribute</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="bindLivingAttribute" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>bind a BooleanAttribute</xs:documentation></xs:annotation>
                     </xs:attribute>
                 </xs:extension>
             </xs:complexContent>
@@ -174,6 +195,12 @@ xs:time
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="moduleBase">
+                    <xs:attribute name="bindAutoLogicAttribute" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>绑定一个BooleanAttribute属性,这个属性用于控制是否打开角色的逻辑AI功能。</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="bindAutoDetectAttribute" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>绑定一个BooleanAttribute属性,这个属性用于控制是否自动侦察敌人。</xs:documentation></xs:annotation>
+                    </xs:attribute>
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>

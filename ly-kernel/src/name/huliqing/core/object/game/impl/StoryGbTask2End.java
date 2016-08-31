@@ -27,11 +27,11 @@ import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.ProtoService;
 import name.huliqing.core.mvc.service.SkillService;
-import name.huliqing.core.mvc.service.StateService;
 import name.huliqing.core.mvc.service.ViewService;
 import name.huliqing.core.object.IntervalLogic;
 import name.huliqing.core.logic.scene.ActorMultLoadHelper;
 import name.huliqing.core.manager.ResourceManager;
+import name.huliqing.core.mvc.service.LogicService;
 
 /**
  * task2中收集完树根之后，向古柏交任务。
@@ -39,12 +39,12 @@ import name.huliqing.core.manager.ResourceManager;
  */
 public class StoryGbTask2End extends IntervalLogic {
     private final PlayService playService = Factory.get(PlayService.class);
-    private final StateService stateService = Factory.get(StateService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final ActionService actionService = Factory.get(ActionService.class);
     private final ViewService viewService = Factory.get(ViewService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
     private final ProtoService protoService = Factory.get(ProtoService.class);
+    private final LogicService logicService = Factory.get(LogicService.class);
     
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
@@ -110,7 +110,7 @@ public class StoryGbTask2End extends IntervalLogic {
         
         if (stage == 2) {
             if (checkTaskOK()) {
-                actorService.setAutoAi(gb, false);
+                logicService.setAutoLogic(gb, false);
                 actionService.playAction(gb, null);
                 skillNetwork.playSkill(gb, skillService.getSkill(gb, SkillType.wait), false);
                 createTalk();
