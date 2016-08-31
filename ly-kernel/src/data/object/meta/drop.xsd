@@ -67,9 +67,7 @@ xs:time
     
     <xs:element name="dropAttribute">
         <xs:annotation>
-            <xs:documentation>
-                
-            </xs:documentation>
+            <xs:documentation></xs:documentation>
         </xs:annotation>
         <xs:complexType>
             <xs:complexContent>
@@ -77,10 +75,10 @@ xs:time
                     <xs:attribute name="attributeName" type="xs:string" use="required">
                         <xs:annotation><xs:documentation>掉落的属性值</xs:documentation></xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="attributeEl" type="xs:string" use="optional">
+                    <xs:attribute name="attributeEl" type="xs:string" use="required">
                         <xs:annotation><xs:documentation>绑定一条公式（ElAttribute类型）,用来计算要掉落的动态值.这个值在计算后会和fixedValue一起增加到属性上</xs:documentation></xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="fixedValue" type="xs:decimal" use="optional">
+                    <xs:attribute name="fixedValue" type="xs:decimal" use="required">
                         <xs:annotation><xs:documentation>固定的掉落值，设置了这个参数后，这个值会始终增加到属性上。</xs:documentation></xs:annotation>
                     </xs:attribute>
                 </xs:extension>

@@ -411,7 +411,7 @@ public  class SimpleGameState extends GameState implements UIEventListener {
         scene.addSceneObject(actor.getSpatial());
         
         // 如果角色有指定队伍，则应该处理是否在当前队伍列表中。
-        if (actor.getData().getTeam() > 0) {
+        if (actorService.getTeam(actor) > 0) {
             ui.getTeamView().checkAddOrRemove(actor);
         }
         
@@ -455,7 +455,7 @@ public  class SimpleGameState extends GameState implements UIEventListener {
         actorService.setPlayer(player, true);
         ui.getTeamView().clearPartners();
         ui.getTeamView().setMainActor(player);
-        ui.getTeamView().setTeamId(player.getData().getTeam());
+        ui.getTeamView().setTeamId(actorService.getTeam(player));
         List<Actor> _actors = getActors();
         if (_actors != null) {
             for (Actor a : _actors) {

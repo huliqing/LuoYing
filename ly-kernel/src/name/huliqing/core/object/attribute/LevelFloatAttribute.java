@@ -93,8 +93,8 @@ public class LevelFloatAttribute extends NumberAttribute<Float, AttributeData> i
      * @see #getValue() 
      */
     @Override
-    public final void setValue(Float value) {
-        this.dynamicValue = value;
+    public final void setValue(Number value) {
+        this.dynamicValue = value.floatValue();
         setAndNotify(levelValue + dynamicValue);
     }
     
@@ -198,13 +198,16 @@ public class LevelFloatAttribute extends NumberAttribute<Float, AttributeData> i
     public final boolean lessThan(float other) {
         return value < other;
     }
-    
+   
     @Override
-    public final boolean match(Attribute other) {
-        if (other instanceof NumberAttribute) {
-            return NumberCompare.isEqualTo(value, (NumberAttribute) other);
+    public final boolean match(final Object other) {
+        if (other instanceof Number) {
+            return this.doubleValue() == ((Number) other).doubleValue();
         }
-        return false;
+        if (other instanceof String) {
+            return this.floatValue() == Float.parseFloat((String) other);
+        }
+        return super.match(other);
     }
 
     @Override

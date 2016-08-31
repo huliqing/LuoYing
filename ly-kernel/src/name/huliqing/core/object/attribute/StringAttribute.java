@@ -9,6 +9,7 @@ import name.huliqing.core.data.AttributeData;
 
 /**
  * 字符串类型的属性
+ * @deprecated 不推荐使用。
  * @author huliqing
  */
 public class StringAttribute extends AbstractAttribute<String, AttributeData>{
@@ -42,8 +43,11 @@ public class StringAttribute extends AbstractAttribute<String, AttributeData>{
     }
 
     @Override
-    public boolean match(Attribute other) {
-        return value.equals(other.getValue().toString());
+    public boolean match(final Object other) {
+        if (other instanceof Number) {
+            return value.equals(other.toString());
+        }
+        return super.match(other);
     }
     
     

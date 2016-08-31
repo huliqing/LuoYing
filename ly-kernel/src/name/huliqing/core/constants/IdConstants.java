@@ -257,4 +257,10 @@ public class IdConstants {
     
     /** 默认的View出现动画 */
     public final static String ANIM_VIEW_MOVE = "animViewMove";
+    
+    /** 古柏树根 */
+    public final static String DROP_TREE_STUMP = "dropTreeStump";
+    
+    /** 掉落：星光传送术 */
+    public final static String DROP_BOOK_007 = "dropBook007";
 }

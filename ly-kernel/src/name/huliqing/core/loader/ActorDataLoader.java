@@ -190,23 +190,23 @@ public class ActorDataLoader implements DataLoader<ActorData> {
 //        data.setLevelUpEl(proto.getAsString("levelUpEl"));
 //        data.setXpDropEl(proto.getAsString("xpDropEl"));
         data.setName(ResourceManager.getObjectName(data));
-        data.setGroup(proto.getAsInteger("group", 0));
+//        data.setGroup(proto.getAsInteger("group", 0));
         data.setSex(Sex.identifyByName(proto.getAsString("sex", "2")));
-        data.setRace(proto.getAsString("race"));
+//        data.setRace(proto.getAsString("race"));
         data.setEssential(proto.getAsBoolean("essential", false));
         
         // remove20160830
 //        data.setDrop(dropData);
 
         data.setSlots(slots);
-        data.setLifeAttribute(lifeAttribute);
-        data.setViewAttribute(viewAttribute);
+//        data.setLifeAttribute(lifeAttribute);
+//        data.setViewAttribute(viewAttribute);
 
             // remove20160828
 //        data.setTalentPoints(proto.getAsInteger("talentPoints", 0));
 //        data.setTalentPointsLevelEl(proto.getAsString("talentPointsLevelEl"));
+//        data.setTeam(proto.getAsInteger("team", 0));
 
-        data.setTeam(proto.getAsInteger("team", 0));
         data.setLiving(proto.getAsBoolean("living", false));
         data.setFollowTarget(proto.getAsInteger("followTarget", -1));
         

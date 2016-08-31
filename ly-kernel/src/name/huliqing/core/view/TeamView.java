@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.mvc.network.UserCommandNetwork;
+import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.ui.LinearLayout;
@@ -22,7 +23,7 @@ import name.huliqing.core.ui.UI.Listener;
  */
 public class TeamView extends LinearLayout {
     private final PlayService playService = Factory.get(PlayService.class);
-//    private final ActorService actorService = Factory.get(ActorService.class);
+    private final ActorService actorService = Factory.get(ActorService.class);
 //    private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final UserCommandNetwork userCommandNetwork = Factory.get(UserCommandNetwork.class);
     
@@ -88,7 +89,7 @@ public class TeamView extends LinearLayout {
      */
     public void checkAddOrRemove(Actor actor) {
         // teamId不匹配则移出队伍
-        int team = actor.getData().getTeam();
+        int team = actorService.getTeam(actor);
         if (team != teamId) {
             removeActor(actor);
             return;

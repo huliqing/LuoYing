@@ -59,6 +59,19 @@ public abstract class AbstractAttribute<V, T extends AttributeData> implements A
         initialized = false;
     }
 
+    /**
+     * 判断当前属性值是否与指定目标object匹配
+     * @param other
+     * @return 
+     */
+    @Override
+    public boolean match(Object other) {
+        if (other instanceof Attribute) {
+            return match(((Attribute) other).getValue());
+        }
+        return getValue().equals(other);
+    }
+
     @Override
     public void addListener(ValueChangeListener<V> listener) {
         if (listeners == null) {

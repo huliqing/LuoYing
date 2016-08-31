@@ -123,15 +123,8 @@ public class StoryGbTask2 extends GameTaskBase{
                     altar = actor;
                     actorService.setLevel(altar, altarLevel);
                     actorService.setGroup(altar, game.groupEnemy);
-                    stateService.addStateForce(altar, IdConstants.STATE_SAFE, 0, null);
-                    
-                    // 意外的收获
-                    DropData dropData = altar.getData().getDrop();
-                    if (dropData == null) {
-                        dropData = dropService.createDrop(IdConstants.DROP_EMPTY);
-                        altar.getData().setDrop(dropData);
-                    }
-                    dropData.setBaseDrop(IdConstants.ITEM_BOOK_007);
+                    stateService.addStateForce(altar, IdConstants.STATE_SAFE, 0, null);                    
+                    dropService.addDrop(altar, IdConstants.DROP_BOOK_007); // // 意外的收获:星光传送术掉落
                     actorService.setLocation(altar, game.getEnemyPosition());
                 }
                 if (loadIndex > 0) {
@@ -152,14 +145,9 @@ public class StoryGbTask2 extends GameTaskBase{
             public void onload(Actor actor) {
                 actorService.setLevel(actor, enemyBaseLevel);
                 actorService.setGroup(actor, game.groupEnemy);
-                // 如果是古柏幼仔，则设置它的必然掉落物品
+                // 如果是古柏幼仔，则让它掉落任务物品：树根
                 if (actor.getData().getId().equals(IdConstants.ACTOR_GB_SMALL)) {
-                    DropData dropData = actor.getData().getDrop();
-                    if (dropData == null) {
-                        dropData = dropService.createDrop(IdConstants.DROP_EMPTY);
-                        actor.getData().setDrop(dropData);
-                    }
-                    dropData.setBaseDrop(IdConstants.ITEM_GB_STUMP);
+                    dropService.addDrop(actor, IdConstants.DROP_TREE_STUMP);
                 }
                 actorService.setColor(actor, enemyColor);
             }

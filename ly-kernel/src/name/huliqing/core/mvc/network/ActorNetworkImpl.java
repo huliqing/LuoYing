@@ -234,10 +234,11 @@ public class ActorNetworkImpl implements ActorNetwork{
         }
     }
 
-    @Override
-    public int getXpReward(Actor attacker, Actor dead) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+    // remove20160830
+//    @Override
+//    public int getXpReward(Actor attacker, Actor dead) {
+//        throw new UnsupportedOperationException("Not supported yet.");
+//    }
    
     // remove20160829
 //    @Override

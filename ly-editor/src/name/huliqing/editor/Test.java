@@ -14,8 +14,7 @@ import javafx.beans.property.IntegerProperty;
 public class Test {
     
     public static void main(String[] args) {
-        Object aa = null;
-        Integer bb = (Integer) aa;
-        System.out.println("bb=" + bb);
+        Float aa = 1.0f;
+        System.out.println(aa.toString().equals("1.0"));
     }
 }

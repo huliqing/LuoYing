@@ -64,11 +64,10 @@ public interface Attribute<V, T extends AttributeData> extends DataProcessor<T> 
     void setValue(V value);
     
     /**
-     * 判断当前属性与另一个属性是否匹配。
      * @param other
      * @return 
      */
-    boolean match(Attribute other);
+    boolean match(Object other);
     
     /**
      * 添加一个侦听器用于监听属性值的变化

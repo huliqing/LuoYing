@@ -419,7 +419,7 @@ public class StoryTreasureTask2 extends GameTaskBase {
             actorService.setLocation(companion, companionPosition[FastMath.nextRandomInt(0, companionPosition.length - 1)]);
             actorService.setLevel(companion, 40);
             actorService.setPartner(player, actor);
-            actorService.setTeam(companion, player.getData().getTeam());
+            actorService.setTeam(companion, actorService.getTeam(player));
             skillService.playSkill(companion, skillService.getSkill(companion, SkillType.wait), false);
             // 同伴进入战场后，刷新器不再刷怪。
             sceneBuilder.setEnabled(false);

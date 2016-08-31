@@ -52,8 +52,8 @@ public class FloatAttribute extends NumberAttribute<Float, AttributeData> {
     }
 
     @Override
-    public final void setValue(final Float value) {
-        setAndNotify(value);
+    public final void setValue(final Number value) {
+        setAndNotify(value.floatValue());
     }
     
     @Override
@@ -107,11 +107,14 @@ public class FloatAttribute extends NumberAttribute<Float, AttributeData> {
     }
 
     @Override
-    public final boolean match(final Attribute other) {
-        if (other instanceof NumberAttribute) {
-            return NumberCompare.isEqualTo(value, (NumberAttribute) other);
+    public final boolean match(Object other) {
+        if (other instanceof Number) {
+            return this.doubleValue() == ((Number) other).doubleValue();
         }
-        return false;
+        if (other instanceof String) {
+            return this.floatValue() == Float.parseFloat((String) other);
+        }
+        return super.match(other);
     }
     
     /**

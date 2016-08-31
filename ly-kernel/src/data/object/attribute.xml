@@ -68,14 +68,25 @@
     <!--到达下一个等级角色需要的经验值-->
     <attributeInteger id="attributeXpNext" name="attributeXp" />
     
+    <!--角色所在分组-->
     <attributeInteger id="attributeGroup" name="attributeGroup" />
+    
+    <!--角色所在队伍-->
     <attributeInteger id="attributeTeam" name="attributeTeam" />
+    
+    <!--角色性别：0: 未知; 1:女性; 2: 男性-->
     <attributeInteger id="attributeSex" name="attributeSex" />
+
+    <!--角色种族: 0.未分类; 1:人类; --> 
     <attributeInteger id="attributeRace" name="attributeRace" />
-    <attributeBoolean id="attributeLiving" name="attributeLiving" />
+    
+    <!--角色天赋点数容器-->
     <attributeInteger id="attributeTalentPoints" name="attributeTalentPoints" />
+    
     <attributeLong id="attributeTarget" name="attributeTarget" />
     <attributeLong id="attributeFollowTarget" name="attributeFollowTarget" />
+    
+    <attributeBoolean id="attributeLiving" name="attributeLiving" />
     <attributeBoolean id="attributeEssential" name="attributeEssential" />
     <attributeBoolean id="attributeAutoAi" name="attributeAutoAi" />
     <attributeBoolean id="attributeAutoDetect" name="attributeAutoDetect" />

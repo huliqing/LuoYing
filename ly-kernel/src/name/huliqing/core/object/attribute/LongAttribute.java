@@ -51,8 +51,8 @@ public class LongAttribute extends NumberAttribute<Long, AttributeData> {
     }
 
     @Override
-    public final void setValue(final Long value) {
-        setAndNotify(value);
+    public final void setValue(final Number value) {
+        setAndNotify(value.longValue());
     }
     
     @Override
@@ -104,13 +104,16 @@ public class LongAttribute extends NumberAttribute<Long, AttributeData> {
     public final boolean lessThan(final float other) {
         return value < other;
     }
-    
+   
     @Override
-    public final boolean match(final Attribute other) {
-        if (other instanceof NumberAttribute) {
-            return NumberCompare.isEqualTo(value, (NumberAttribute) other);
+    public final boolean match(final Object other) {
+        if (other instanceof Number) {
+            return this.doubleValue() == ((Number) other).doubleValue();
         }
-        return false;
+        if (other instanceof String) {
+            return this.longValue() == Long.parseLong((String) other);
+        }
+        return super.match(other);
     }
     
     /**

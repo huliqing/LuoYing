@@ -304,14 +304,15 @@ public interface ActorService extends Inject {
      * @param level 
      */
     void setLevel(Actor actor, int level);
-    
-    /**
-     * 从攻击死亡角色身上获取经验奖励
-     * @param attacker 攻击角色
-     * @param dead 死亡角色
-     * @return 
-     */
-    int getXpReward(Actor attacker, Actor dead);
+   
+    // remove20160830
+//    /**
+//     * 从攻击死亡角色身上获取经验奖励
+//     * @param attacker 攻击角色
+//     * @param dead 死亡角色
+//     * @return 
+//     */
+//    int getXpReward(Actor attacker, Actor dead);
    
     // remove20160829
 //    /**
@@ -450,12 +451,12 @@ public interface ActorService extends Inject {
      */
     void setEssential(Actor actor, boolean essential);
     
-    /**
-     * 获取角色的种族
-     * @param actor
-     * @return 
-     */
-    String getRace(Actor actor);
+//    /**
+//     * 获取角色的种族
+//     * @param actor
+//     * @return 
+//     */
+//    String getRace(Actor actor);
     
     /**
      * 设置角色的目标拥有者

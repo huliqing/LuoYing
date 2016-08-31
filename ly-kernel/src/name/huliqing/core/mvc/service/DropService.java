@@ -21,6 +21,13 @@ public interface DropService extends Inject {
      */
     DropData createDrop(String objectId);
     
+    /**
+     * 给角色添加一个掉落设置。
+     * @param actor
+     * @param dropId 
+     */
+    void addDrop(Actor actor, String dropId);
+    
     // remove20160829,以后使用doDrop(source, target)代替 
 //    /**
 //     * 获取基本掉落的物品列表，这些物品被定义为必然掉落，即不受任何机率的影响.

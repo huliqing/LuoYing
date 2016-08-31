@@ -53,10 +53,24 @@ public class BooleanAttribute extends AbstractAttribute<Boolean, AttributeData>{
      * @return 
      */
     @Override
-    public boolean match(Attribute other) {
-        if (other instanceof BooleanAttribute) {
-            return value == ((BooleanAttribute)other).value;
+    public boolean match(Object other) {
+        if (other instanceof Boolean) {
+            return this.booleanValue() == ((Boolean) other);
+        }
+        if (other instanceof Number) {
+            return this.booleanValue() == convertNumber((Number) other);
+        }
+        if (other instanceof String) {
+            return this.booleanValue() == convertString((String) other);
         }
         return false;
+    }
+    
+    private boolean convertNumber(Number other) {
+        return other.doubleValue() == 1;
+    }
+    
+    private boolean convertString(String other) {
+        return "1".equals(other) || "true".equals(other);
     }
 }

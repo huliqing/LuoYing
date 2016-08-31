@@ -20,6 +20,11 @@ public class DropNetworkImpl implements DropNetwork {
     }
 
     @Override
+    public void addDrop(Actor actor, String dropId) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
     public DropData createDrop(String objectId) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }

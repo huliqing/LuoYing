@@ -7,8 +7,10 @@ package name.huliqing.core.mvc.service;
 import java.util.logging.Logger;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.DropData;
+import name.huliqing.core.object.Loader;
 import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.drop.Drop;
 import name.huliqing.core.object.module.DropModule;
 
 /**
@@ -29,6 +31,14 @@ public class DropServiceImpl implements DropService {
     @Override
     public DropData createDrop(String objectId) {
         return DataFactory.createData(objectId);
+    }
+
+    @Override
+    public void addDrop(Actor actor, String dropId) {
+        DropModule module = actor.getModule(DropModule.class);
+        if (module != null) {
+            module.addDrop((Drop)Loader.load(dropId));
+        }
     }
 
     // remove20160830

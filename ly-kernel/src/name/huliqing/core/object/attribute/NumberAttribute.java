@@ -19,7 +19,7 @@ public abstract class NumberAttribute<V extends Number, T extends AttributeData>
     public abstract V getValue();
 
     @Override
-    public abstract void setValue(V value);
+    public abstract void setValue(Number value);
     
     public abstract int intValue();
     public abstract float floatValue();

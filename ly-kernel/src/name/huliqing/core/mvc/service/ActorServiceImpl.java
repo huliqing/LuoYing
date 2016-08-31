@@ -19,27 +19,20 @@ import name.huliqing.core.LY;
 import name.huliqing.core.Factory;
 import name.huliqing.core.utils.NpcNameUtils;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.constants.IdConstants;
-import name.huliqing.core.constants.ResConstants;
 import name.huliqing.core.data.ActorData;
-import name.huliqing.core.data.AttributeData;
 import name.huliqing.core.enums.HurtFace;
-import name.huliqing.core.enums.MessageType;
 import name.huliqing.core.enums.Sex;
 import name.huliqing.core.view.talk.Talk;
 import name.huliqing.core.object.actor.ActorModelLoader;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.enums.SkillType;
-import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.object.attribute.NumberAttribute;
 import name.huliqing.core.view.talk.SpeakManager;
 import name.huliqing.core.view.talk.TalkManager;
 import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.object.module.ActorListener;
 import name.huliqing.core.object.channel.Channel;
-import name.huliqing.core.object.effect.Effect;
 import name.huliqing.core.object.el.LevelEl;
-import name.huliqing.core.object.el.AttributeEl;
 import name.huliqing.core.utils.GeometryUtils;
 import name.huliqing.core.utils.Temp;
 import name.huliqing.core.object.module.ActorModule;
@@ -428,11 +421,14 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public boolean isEnemy(Actor actor, Actor target) {
-        // 如果组别小于0则视为非敌人。
-        if (target.getData().getGroup() < 0) {
-            return false;
-        }
-        return actor.getData().getGroup() != target.getData().getGroup();
+        // remove20160830
+//        // 如果组别小于0则视为非敌人。
+//        if (target.getData().getGroup() < 0) {
+//            return false;
+//        }
+//        return actor.getData().getGroup() != target.getData().getGroup();
+
+        return actor.getModule(ActorModule.class).isEnemy(target);
     }
 
     @Override
@@ -542,86 +538,88 @@ public class ActorServiceImpl implements ActorService {
 //        }
 //    }
 
-    @Override
-    public int getXpReward(Actor attacker, Actor dead) {
-        String xpDropEl = dead.getData().getXpDropEl();
-        if (xpDropEl != null) {
-            AttributeEl xde = elService.getAttributeEl(xpDropEl);
-//            return xde.getValue(dead.getData().getLevel(), attacker.getData().getLevel());
-            return xde.getValue(getLevel(dead), getLevel(attacker));
-        }
-        return 0;
-    }
+    // remove20160830
+//    @Override
+//    public int getXpReward(Actor attacker, Actor dead) {
+//        String xpDropEl = dead.getData().getXpDropEl();
+//        if (xpDropEl != null) {
+//            AttributeEl xde = elService.getAttributeEl(xpDropEl);
+////            return xde.getValue(dead.getData().getLevel(), attacker.getData().getLevel());
+//            return xde.getValue(getLevel(dead), getLevel(attacker));
+//        }
+//        return 0;
+//    }
     
-    @Override
-    public int applyXp(Actor actor, int xp) {
-        // 如果没有配置升级公式则不作处理
-        String levelUpEl = actor.getData().getLevelUpEl();
-        if (levelUpEl == null) {
-            return 0;
-        }
-        
-        // 增加经验
-        ActorData data = actor.getData();
-        data.setXp(data.getXp() + xp);
-        
-        // 对当前场景角色进行提示，注：不需要对其它玩家角色提示
-        if (actor == playService.getPlayer()) {
-            playService.addMessage(ResourceManager.get(ResConstants.COMMON_GET_XP, new Object[]{xp}), MessageType.info);
-        }
-        
-        // 检查升级
-        Temp tv = Temp.get();
-        tv.array2[0] = 0;   // upCount 可以升多少级
-        tv.array2[1] = 0;   // needXp 需要多少XP
-        ActorData actorData = actor.getData();
-        LevelEl levelEl = (LevelEl) elService.getEl(actorData.getLevelUpEl());
-        checkLevelUp(levelEl, actorData.getLevel(), actorData.getXp(), tv.array2, configService.getMaxLevel());
-        int upCount = tv.array2[0];
-        int needXp = tv.array2[1];
-        tv.release();
-        
-        // 升级角色，如果可以升级
-        if (upCount > 0) {
-            
-            // 1.奖励天赋点数
-            String tpel = data.getTalentPointsLevelEl();
-            int rewardTP = 0; // item talentPoints;
-            if (tpel != null) {
-                for (int i = 1; i <= upCount; i++) {
-                    rewardTP += (int) elService.getLevelEl(tpel, data.getLevel() + i);
-                }
-                data.setTalentPoints(data.getTalentPoints() + rewardTP);
-            }
-            
-            // 2.升级等级
-            data.setLevel(data.getLevel() + upCount);
-            actorData.setXp(actorData.getXp() - needXp);
-            updateLevel(actorData);
-            
-            // 3.提示升级(效果）
-            Effect effect = effectService.loadEffect(IdConstants.EFFECT_LEVEL_UP);
-            effect.setTraceObject(actor.getSpatial());
-            playService.addEffect(effect);
-            
-            // 4.提示升级(mess)
-            if (actor == playService.getPlayer()) {
-                playService.addMessage(ResourceManager.get(ResConstants.COMMON_LEVEL_UP) 
-                            + "(" + actor.getData().getLevel() + ")"
-                        , MessageType.levelUp);
-                
-            }
-            
-            // 4.提示获得天赋点数
-            if (actor == playService.getPlayer() && rewardTP > 0) {
-                playService.addMessage(ResourceManager.get(ResConstants.COMMON_GET_TALENT
-                            , new Object[] {rewardTP})
-                        , MessageType.levelUp);
-            }
-        }
-        
-        return upCount;
-    }
+    // remove20160830
+//    @Override
+//    public int applyXp(Actor actor, int xp) {
+//        // 如果没有配置升级公式则不作处理
+//        String levelUpEl = actor.getData().getLevelUpEl();
+//        if (levelUpEl == null) {
+//            return 0;
+//        }
+//        
+//        // 增加经验
+//        ActorData data = actor.getData();
+//        data.setXp(data.getXp() + xp);
+//        
+//        // 对当前场景角色进行提示，注：不需要对其它玩家角色提示
+//        if (actor == playService.getPlayer()) {
+//            playService.addMessage(ResourceManager.get(ResConstants.COMMON_GET_XP, new Object[]{xp}), MessageType.info);
+//        }
+//        
+//        // 检查升级
+//        Temp tv = Temp.get();
+//        tv.array2[0] = 0;   // upCount 可以升多少级
+//        tv.array2[1] = 0;   // needXp 需要多少XP
+//        ActorData actorData = actor.getData();
+//        LevelEl levelEl = (LevelEl) elService.getEl(actorData.getLevelUpEl());
+//        checkLevelUp(levelEl, actorData.getLevel(), actorData.getXp(), tv.array2, configService.getMaxLevel());
+//        int upCount = tv.array2[0];
+//        int needXp = tv.array2[1];
+//        tv.release();
+//        
+//        // 升级角色，如果可以升级
+//        if (upCount > 0) {
+//            
+//            // 1.奖励天赋点数
+//            String tpel = data.getTalentPointsLevelEl();
+//            int rewardTP = 0; // item talentPoints;
+//            if (tpel != null) {
+//                for (int i = 1; i <= upCount; i++) {
+//                    rewardTP += (int) elService.getLevelEl(tpel, data.getLevel() + i);
+//                }
+//                data.setTalentPoints(data.getTalentPoints() + rewardTP);
+//            }
+//            
+//            // 2.升级等级
+//            data.setLevel(data.getLevel() + upCount);
+//            actorData.setXp(actorData.getXp() - needXp);
+//            updateLevel(actorData);
+//            
+//            // 3.提示升级(效果）
+//            Effect effect = effectService.loadEffect(IdConstants.EFFECT_LEVEL_UP);
+//            effect.setTraceObject(actor.getSpatial());
+//            playService.addEffect(effect);
+//            
+//            // 4.提示升级(mess)
+//            if (actor == playService.getPlayer()) {
+//                playService.addMessage(ResourceManager.get(ResConstants.COMMON_LEVEL_UP) 
+//                            + "(" + actor.getData().getLevel() + ")"
+//                        , MessageType.levelUp);
+//                
+//            }
+//            
+//            // 4.提示获得天赋点数
+//            if (actor == playService.getPlayer() && rewardTP > 0) {
+//                playService.addMessage(ResourceManager.get(ResConstants.COMMON_GET_TALENT
+//                            , new Object[] {rewardTP})
+//                        , MessageType.levelUp);
+//            }
+//        }
+//        
+//        return upCount;
+//    }
 
     @Override
     public int getLevelXp(Actor actor, int level) {
@@ -647,12 +645,14 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public float getViewDistance(Actor actor) {
-//        AttributeData viewAttr = actor.getData().getViewAttributeData();
-        AttributeData viewAttr = actor.getData().getObjectData(actor.getData().getViewAttribute());
-        if (viewAttr != null) {
-            return viewAttr.getDynamicValue();
-        }
-        return 0;
+        // remove20160830
+//        AttributeData viewAttr = actor.getData().getObjectData(actor.getData().getViewAttribute());
+//        if (viewAttr != null) {
+//            return viewAttr.getDynamicValue();
+//        }
+//        return 0;
+
+        return actor.getModule(ActorModule.class).getViewDistance();
     }
 
     @Override
@@ -689,22 +689,22 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public int getGroup(Actor actor) {
-        return actor.getData().getGroup();
+        return actor.getModule(ActorModule.class).getGroup();
     }
 
     @Override
     public void setGroup(Actor actor, int group) {
-        actor.getData().setGroup(group);
+        actor.getModule(ActorModule.class).setGroup(group);
     }
 
     @Override
     public int getTeam(Actor actor) {
-        return actor.getData().getTeam();
+        return actor.getModule(ActorModule.class).getTeam();
     }
 
     @Override
     public void setTeam(Actor actor, int team) {
-        actor.getData().setTeam(team);
+        actor.getModule(ActorModule.class).setTeam(team);
         LY.getPlayState().getTeamView().checkAddOrRemove(actor);
     }
 
@@ -723,10 +723,10 @@ public class ActorServiceImpl implements ActorService {
         actor.getData().setEssential(essential);
     }
 
-    @Override
-    public String getRace(Actor actor) {
-        return actor.getData().getRace();
-    }
+//    @Override
+//    public String getRace(Actor actor) {
+//        return actor.getData().getRace();
+//    }
 
     @Override
     public void setOwner(Actor actor, long ownerId) {

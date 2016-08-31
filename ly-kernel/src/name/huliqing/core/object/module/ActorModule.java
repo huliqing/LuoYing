@@ -37,9 +37,19 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T>{
     // 监听角色被目标锁定/释放,被击中,被杀死或杀死目标的侦听器
     private List<ActorListener> actorListeners;
     
-    // 生命值属性
+    // 生命值属性名称
     private String lifeAttributeName;
+    // 角色所在分组属性名称,分组决定了角色所在的派系
+    private String groupAttributeName;
+    // 角色所在队伍
+    private String teamAttributeName;
+    // 角色的可视范围属性名称
+    private String viewAttributeName;
+    
     private NumberAttribute lifeAttribute;
+    private NumberAttribute groupAttribute;
+    private NumberAttribute teamAttribute;
+    private NumberAttribute viewAttribute;
     
     @Override
     public void setData(T data) {
@@ -47,6 +57,31 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T>{
         this.radius = data.getAsFloat("radius", radius);
         this.height = data.getAsFloat("height", height);
         this.lifeAttributeName = data.getAsString("lifeAttributeName");
+        this.groupAttributeName = data.getAsString("groupAttributeName");
+        this.teamAttributeName = data.getAsString("teamAttributeName");
+    }
+    
+    private class BetterCharacterControlWrap extends BetterCharacterControl {
+
+        public BetterCharacterControlWrap(float radius, float height, float mass) {
+            super(radius, height, mass);
+        }
+        
+        public float getMass() {
+            return rigidBody.getMass();
+        }
+        
+        public void setMass(float mass) {
+            this.rigidBody.setMass(mass);
+        }
+        
+        public boolean isKinematic() {
+            return rigidBody.isKinematic();
+        }
+
+        public void setKinematic(boolean kinematic) {
+            rigidBody.setKinematic(kinematic);
+        }
     }
 
     @Override
@@ -61,6 +96,10 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T>{
             LOG.log(Level.WARNING, "Life attribute not found, by lifeAttributeName={0}, actorId={1}"
                     , new Object[] {lifeAttributeName, actor.getData().getId()});
         }
+        
+        groupAttribute = attributeService.getAttributeByName(actor, groupAttributeName);
+        teamAttribute = attributeService.getAttributeByName(actor, teamAttributeName);
+        viewAttribute = attributeService.getAttributeByName(actor, viewAttributeName);
     }
     
     @Override
@@ -69,36 +108,9 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T>{
             actor.getSpatial().removeControl(innerControl);
         }
         lifeAttribute = null;
+        groupAttribute = null;
+        teamAttribute = null;
         super.cleanup(); 
-    }
-    
-    /**
-     * 杀死角色
-     */
-    public void kill() {
-        if (lifeAttribute != null) {
-            lifeAttribute.setValue(0);
-        }
-    }
-    
-    /**
-     * 让角色复活
-     */
-    public void resurrect() {
-        if (lifeAttribute != null) {
-            lifeAttribute.setValue(1);
-        }
-    }
-    
-    /**
-     * 判断角色是否已经死亡
-     * @return 
-     */
-    public boolean isDead() {
-        if (lifeAttribute != null) {
-            return lifeAttribute.intValue() > 0;
-        }
-        return false;
     }
     
     public Vector3f getLocation() {
@@ -187,29 +199,110 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T>{
         return actorListeners;
     }
     
-    
-    // --------------------------------------------------------------------------------------------------------------------------------
-    
-    private class BetterCharacterControlWrap extends BetterCharacterControl {
-
-        public BetterCharacterControlWrap(float radius, float height, float mass) {
-            super(radius, height, mass);
-        }
-        
-        public float getMass() {
-            return rigidBody.getMass();
-        }
-        
-        public void setMass(float mass) {
-            this.rigidBody.setMass(mass);
-        }
-        
-        public boolean isKinematic() {
-            return rigidBody.isKinematic();
-        }
-
-        public void setKinematic(boolean kinematic) {
-            rigidBody.setKinematic(kinematic);
+    /**
+     * 杀死角色
+     */
+    public void kill() {
+        if (lifeAttribute != null) {
+            lifeAttribute.setValue(0);
         }
     }
+    
+    /**
+     * 让角色复活
+     */
+    public void resurrect() {
+        if (lifeAttribute != null) {
+            lifeAttribute.setValue(1);
+        }
+    }
+    
+    /**
+     * 判断角色是否已经死亡
+     * @return 
+     */
+    public boolean isDead() {
+        if (lifeAttribute != null) {
+            return lifeAttribute.intValue() > 0;
+        }
+        return false;
+    }
+    
+    /**
+     * 判断一个目标是否为敌人
+     * @param target
+     * @return 
+     */
+    public boolean isEnemy(Actor target) {
+        // 如果目标分组值小于或等于0，则始终认为“不”是敌人，这样允许游戏添加一些无害的中立小动物
+        ActorModule targetActorModule = target.getModule(ActorModule.class);
+        if (targetActorModule.getGroup() <= 0) {
+            return false;
+        }
+        return (getGroup() != targetActorModule.getGroup());
+    }
+    
+    /**
+     * 获取角色的分组（派系），如果没有给角色配置任何分组，则该方法始终返回0;
+     * @return 
+     */
+    public int getGroup() {
+        if (groupAttribute != null) {
+            return groupAttribute.intValue();
+        }
+        return 0;
+    }
+    
+    /**
+     * 设置角色分组,如果当前模块没有绑定分组属性，则该方法什么也不做。
+     * @param group 
+     */
+    public void setGroup(int group) {
+        if (groupAttribute != null) {
+            groupAttribute.setValue(group);
+        }
+    }
+    
+    /**
+     * 获取角色的队伍，如果没有给角色配置任何队伍，则该方法始终返回0;
+     * @return 
+     */
+    public int getTeam() {
+        if (teamAttribute != null) {
+            return teamAttribute.intValue();
+        }
+        return 0;
+    }
+
+    /**
+     * 设置角色队伍,如果当前模块没有绑定队伍属性，则该方法什么也不做。
+     * @param team 
+     */
+    public void setTeam(int team) {
+        if (teamAttribute != null) {
+            teamAttribute.setValue(team);
+        }
+    }
+    
+    /**
+     * 获取角色的视角距离,如果模块没有绑定角色的视角属性，则该方法始终返回0.
+     * @return 
+     */
+    public float getViewDistance() {
+        if (viewAttribute != null) {
+            return viewAttribute.floatValue();
+        }
+        return 0;
+    }
+    
+    /**
+     * 设置角色的视角距离。
+     * @param viewDistance 
+     */
+    public void setViewDistance(float viewDistance) {
+        if (viewAttribute != null) {
+            viewAttribute.setValue(viewDistance);
+        }
+    }
+    
 }

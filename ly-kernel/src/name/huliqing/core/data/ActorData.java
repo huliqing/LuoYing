@@ -35,14 +35,14 @@ public class ActorData extends ObjectData implements MatObject{
 //    // 当前的经验值,每经过一个等级后清0
 //    private int xp;
     
-    // 角色所在分组
-    private int group;
+//    // 角色所在分组
+//    private int group;
     
     // 角色性别
     private Sex sex;
     
-    // 角色种族,0表示未设置
-    private String race;
+//    // 角色种族,0表示未设置
+//    private String race;
     
     // 角色是否必要的,不能移除的。
     private boolean essential;
@@ -68,10 +68,11 @@ public class ActorData extends ObjectData implements MatObject{
 //    private int talentPoints;
 //    private String talentPointsLevelEl;
     
-    // 用于决定角色是否死亡的属性,当这个属性值小于或等于0时，角色将被视为"死亡"
-    private String lifeAttribute;
-    // 用于决定角色的视角
-    private String viewAttribute;
+//    // 用于决定角色是否死亡的属性,当这个属性值小于或等于0时，角色将被视为"死亡"
+//    private String lifeAttribute;
+    
+//    // 用于决定角色的视角
+//    private String viewAttribute;
     
 //    // 角色的升级设置,关联到一个elLevel id
 //    private String levelUpEl; 
@@ -84,8 +85,8 @@ public class ActorData extends ObjectData implements MatObject{
     // 角色颜色,对于一些召唤类角色需要
     private ColorRGBA color;
 
-    // 角色所在的队伍,0或小于0表示无分组
-    private int team;
+//    // 角色所在的队伍,0或小于0表示无分组
+//    private int team;
     
     // 是否为活着的生命体,活着是指能生物类,如人物角色,怪兽,野兽等. 像防御塔,宝箱等角色为非生物
     private boolean living;
@@ -109,7 +110,6 @@ public class ActorData extends ObjectData implements MatObject{
     private List<ModuleData> moduleDatas;
     private List<ObjectData> objectDatas;
     
-    
     @Override
     public void write(JmeExporter ex) throws IOException {
         super.write(ex);
@@ -117,9 +117,9 @@ public class ActorData extends ObjectData implements MatObject{
         oc.write(name.getBytes(), "name", null);
 //        oc.write(level, "level", 0);
 //        oc.write(xp, "xp", 0);
-        oc.write(group, "group", 0);
+//        oc.write(group, "group", 0);
         oc.write(sex, "sex", null);
-        oc.write(race, "race", null);
+//        oc.write(race, "race", null);
         oc.write(essential, "essential", false);
 //        oc.write(itemStore, "itemStore", null);
 //        oc.write(skillStore, "skillStore", null);
@@ -139,13 +139,13 @@ public class ActorData extends ObjectData implements MatObject{
 //            oc.writeSavableArrayList(new ArrayList<AttributeData>(attributes.values()), "attributes", null);
 //        }
         
-        oc.write(lifeAttribute, "lifeAttribute", null);
-        oc.write(viewAttribute, "viewAttribute", null);
+//        oc.write(lifeAttribute, "lifeAttribute", null);
+//        oc.write(viewAttribute, "viewAttribute", null);
 //        oc.write(levelUpEl, "levelUpEl", null);
 //        oc.write(xpDropEl, "xpDropEl", null);
         oc.write(ownerId, "ownerId", -1);
         oc.write(color, "color", null);
-        oc.write(team, "team", 0);
+//        oc.write(team, "team", 0);
         oc.write(living, "living", false);
         oc.write(followTarget, "followTarget", -1);
         if (bornPlace != null) {
@@ -170,9 +170,9 @@ public class ActorData extends ObjectData implements MatObject{
         name = new String(ic.readByteArray("name", "".getBytes()), "utf-8");
 //        level = ic.readInt("level", 0);
 //        xp = ic.readInt("xp", 0);
-        group = ic.readInt("group", 0);
+//        group = ic.readInt("group", 0);
         sex = ic.readEnum("sex", Sex.class, null);
-        race = ic.readString("race", null);
+//        race = ic.readString("race", null);
         essential = ic.readBoolean("essential", false);
 //        itemStore = (ItemStore) ic.readSavable("itemStore", null);
 //        skillStore = (SkillStore) ic.readSavable("skillStore", null);
@@ -183,13 +183,13 @@ public class ActorData extends ObjectData implements MatObject{
         autoDetect = ic.readBoolean("autoDetect", true);
         slots = ConvertUtils.toList(ic.readStringArray("slots", null));
         
-        lifeAttribute = ic.readString("lifeAttribute", null);
-        viewAttribute = ic.readString("viewAttribute", null);
+//        lifeAttribute = ic.readString("lifeAttribute", null);
+//        viewAttribute = ic.readString("viewAttribute", null);
 //        levelUpEl = ic.readString("levelUpEl", null);
 //        xpDropEl = ic.readString("xpDropEl", null);
         ownerId = ic.readLong("ownerId", -1);
         color = (ColorRGBA) ic.readSavable("color", null);
-        team = ic.readInt("team", 0);
+//        team = ic.readInt("team", 0);
         living = ic.readBoolean("living", false);
         followTarget = ic.readLong("followTarget", -1);
         bornPlace = (Vector3f)ic.readSavable("bornPlace", null);
@@ -304,13 +304,13 @@ public class ActorData extends ObjectData implements MatObject{
 //        this.attributes = attributes;
 //    }
     
-    public String getLifeAttribute() {
-        return lifeAttribute;
-    }
-
-    public void setLifeAttribute(String lifeAttribute) {
-        this.lifeAttribute = lifeAttribute;
-    }
+//    public String getLifeAttribute() {
+//        return lifeAttribute;
+//    }
+//
+//    public void setLifeAttribute(String lifeAttribute) {
+//        this.lifeAttribute = lifeAttribute;
+//    }
     
 //    public AttributeData getLifeAttributeData() {
 //        if (attributes == null || lifeAttribute == null) {
@@ -319,13 +319,13 @@ public class ActorData extends ObjectData implements MatObject{
 //        return attributes.get(lifeAttribute);
 //    }
 
-    public String getViewAttribute() {
-        return viewAttribute;
-    }
-
-    public void setViewAttribute(String viewAttribute) {
-        this.viewAttribute = viewAttribute;
-    }
+//    public String getViewAttribute() {
+//        return viewAttribute;
+//    }
+//
+//    public void setViewAttribute(String viewAttribute) {
+//        this.viewAttribute = viewAttribute;
+//    }
 
 //    public AttributeData getViewAttributeData() {
 //        if (attributes == null || viewAttribute == null) {
@@ -384,21 +384,21 @@ public class ActorData extends ObjectData implements MatObject{
         this.name = name;
     }
     
-    /**
-     * 获取角色的派系。
-     * @return 
-     */
-    public int getGroup() {
-        return group;
-    }
-
-    /**
-     * 设置角色的派系
-     * @param group 
-     */
-    public void setGroup(int group) {
-        this.group = group;
-    }
+//    /**
+//     * 获取角色的派系。
+//     * @return 
+//     */
+//    public int getGroup() {
+//        return group;
+//    }
+//
+//    /**
+//     * 设置角色的派系
+//     * @param group 
+//     */
+//    public void setGroup(int group) {
+//        this.group = group;
+//    }
 
     public Sex getSex() {
         return sex;
@@ -408,13 +408,13 @@ public class ActorData extends ObjectData implements MatObject{
         this.sex = sex;
     }
     
-    public String getRace() {
-        return race;
-    }
-
-    public void setRace(String race) {
-        this.race = race;
-    }
+//    public String getRace() {
+//        return race;
+//    }
+//
+//    public void setRace(String race) {
+//        this.race = race;
+//    }
 
     public boolean isEssential() {
         return essential;
@@ -432,17 +432,17 @@ public class ActorData extends ObjectData implements MatObject{
         this.ownerId = ownerId;
     }
 
-    /**
-     * 获取角色队伍分组，默认0表示无队伍分组
-     * @return 
-     */
-    public int getTeam() {
-        return team;
-    }
-    
-    public void setTeam(int team) {
-        this.team = team;
-    }
+//    /**
+//     * 获取角色队伍分组，默认0表示无队伍分组
+//     * @return 
+//     */
+//    public int getTeam() {
+//        return team;
+//    }
+//    
+//    public void setTeam(int team) {
+//        this.team = team;
+//    }
 
     /**
      * 判断角色是否为生物

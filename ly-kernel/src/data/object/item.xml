@@ -55,7 +55,7 @@
     
     <!--树根-->
     <item id="itemTreeStump" icon="Interface/item/treeStump.png" handler="handlerSummonGb" cost="200" />
-    <!--药草-->
+    <!--风中劲草-->
     <item id="itemHerb" icon="Interface/item/grass.png" handler="handlerStateGainWindWalk" cost="100" />
     <!--复活卷轴-->
     <item id="itemScrollLife" icon="Interface/item/scroll_life.png" handler="handlerItemReborn" cost="100" />
