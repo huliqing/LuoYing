@@ -228,7 +228,6 @@ public class CustomSkeletonControl extends SkeletonControl implements Cloneable 
                 continue;
             }
             
-            
             if (child instanceof Geometry) {
                 Geometry geom = (Geometry) child;
 

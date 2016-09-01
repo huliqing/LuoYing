@@ -6,6 +6,7 @@
 package name.huliqing.core.object.attribute;
 
 import name.huliqing.core.data.AttributeData;
+import name.huliqing.core.object.module.AttributeModule;
 import name.huliqing.core.xml.DataProcessor;
 
 /**
@@ -24,9 +25,9 @@ public interface Attribute<V, T extends AttributeData> extends DataProcessor<T> 
     
      /**
      * 初始化属性
-     * @param store
+     * @param module
      */
-    void initialize(AttributeStore store);
+    void initialize(AttributeModule module);
     
     /**
      * 判断属性是否已经初始化

@@ -36,115 +36,12 @@ import java.io.IOException;
 @Serializable
 public class AttributeData extends ObjectData {
     
-//    // 等级设置的id,如果该id存在，则这个属性值会随着等级的改变而发生变化
-//    private String el;
-//    
-//    // 受level影响的基本属性值,每个等级都会有不一样的值。
-//    private transient float levelValue;
-//    
-//    // 静态值
-//    private transient float staticValue;
-//    
-//    // 动态值,即当前值
-//    private transient float dynamicValue;
-//    
-//    @Override
-//    public void write(JmeExporter ex) throws IOException {
-//        super.write(ex);
-//        OutputCapsule oc = ex.getCapsule(this);
-//        oc.write(el, "el", null);
-//        // 注：20160103这些数值不保存到存档中，因为这些数值必须在actorService.load(ActorData)
-//        // 时重新计算，特别是staticValue.以避免在存档中读取出来的属性中存在staticValue
-//        // 导致在载入actorData时staticValue的值叠加的bug.最好是让这些值在载入时重新计算
-////        oc.write(levelValue, "levelValue", 0);
-////        oc.write(staticValue, "staticValue", 0);
-////        oc.write(dynamicValue, "dynamicValue", 0);
-//    }
-//
-//    @Override
-//    public void read(JmeImporter im) throws IOException {
-//        super.read(im);
-//        InputCapsule ic = im.getCapsule(this);
-//        el = ic.readString("el", null);
-//        // 注：同上
-////        levelValue = ic.readFloat("levelValue", 0);
-////        staticValue = ic.readFloat("staticValue", 0);
-////        dynamicValue = ic.readFloat("dynamicValue", 0);
-//    }
-//    
-//    public AttributeData(){}
-//    
-//    /**
-//     * 获取属性的等级设置
-//     * @return 
-//     */
-//    public String getEl() {
-//        return el;
-//    }
-//
-//    /**
-//     * 设置属性的等级设置,指向一个el,该el必须是一个等级el(LevelEl)
-//     * @param el 
-//     */
-//    public void setEl(String el) {
-//        this.el = el;
-//    }
-//
-//    /**
-//     * 获取属性的等级值
-//     * @return 
-//     */
-//    public float getLevelValue() {
-//        return levelValue;
-//    }
-//
-//    /**
-//     * 设置属性的等级值,等级值是每个等级固定的，角色升级之后会根据属性所绑
-//     * 定的计算公式来算出这个值。
-//     * @param levelValue 
-//     */
-//    public void setLevelValue(float levelValue) {
-//        this.levelValue = levelValue;
-//    }
-//
-//    /**
-//     * 获取静态值
-//     * @return 
-//     */
-//    public float getStaticValue() {
-//        return staticValue;
-//    }
-//
-//    /**
-//     * 设置静态值
-//     * @param staticValue 
-//     */
-//    public void setStaticValue(float staticValue) {
-//        this.staticValue = staticValue;
-//    }
-//    
-//    /**
-//     * 获取属性的当前动态值。
-//     * @return 
-//     */
-//    public float getDynamicValue() {
-//        return dynamicValue;
-//    }
-//
-//    /**
-//     * 设置属性的当前动态值
-//     * @param dynamicValue 
-//     */
-//    public void setDynamicValue(float dynamicValue) {
-//        this.dynamicValue = dynamicValue;
-//    }
-//    
-//    /**
-//     * 获取属性的最高值,最高值是由等级值和静态值组成的。
-//     * @return 
-//     */
-//    public float getMaxValue() {
-//        return levelValue + staticValue;
-//    }
+    /**
+     * 获取属性名称
+     * @return 
+     */
+    public String getName() {
+        return getAsString("name");
+    }
 
 }

@@ -298,6 +298,7 @@ import name.huliqing.core.loader.ViewDataLoader;
 import name.huliqing.core.loader.ModuleDataLoader;
 import name.huliqing.core.object.attribute.BooleanAttribute;
 import name.huliqing.core.object.attribute.FloatAttribute;
+import name.huliqing.core.object.attribute.GroupAttribute;
 import name.huliqing.core.object.attribute.IntegerAttribute;
 import name.huliqing.core.object.attribute.LevelFloatAttribute;
 import name.huliqing.core.object.attribute.LevelIntegerAttribute;
@@ -432,7 +433,7 @@ public class LY {
         DataFactory.register("animColor",  AnimData.class, AnimDataLoader.class, ColorAnim.class);
         
         // Attribute
-        DataFactory.register("attribute",  AttributeData.class, AttributeDataLoader.class, null);
+//        DataFactory.register("attribute",  AttributeData.class, AttributeDataLoader.class, null);
         DataFactory.register("attributeBoolean",  AttributeData.class, AttributeDataLoader.class, BooleanAttribute.class);
         DataFactory.register("attributeFloat",  AttributeData.class, AttributeDataLoader.class, FloatAttribute.class);
         DataFactory.register("attributeInteger",  AttributeData.class, AttributeDataLoader.class, IntegerAttribute.class);
@@ -441,6 +442,7 @@ public class LY {
         DataFactory.register("attributeLevelFloat",  AttributeData.class, AttributeDataLoader.class, LevelFloatAttribute.class);
         DataFactory.register("attributeLevelInteger",  AttributeData.class, AttributeDataLoader.class, LevelIntegerAttribute.class);
         DataFactory.register("attributeLimitInteger",  AttributeData.class, AttributeDataLoader.class, LimitIntegerAttribute.class);
+        DataFactory.register("attributeGroup",  AttributeData.class, AttributeDataLoader.class, GroupAttribute.class);
         
         // Bullet
         DataFactory.register("bulletSimple",  BulletData.class, BulletDataLoader.class, SimpleBullet.class);

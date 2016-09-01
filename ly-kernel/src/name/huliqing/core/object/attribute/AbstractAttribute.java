@@ -8,10 +8,11 @@ package name.huliqing.core.object.attribute;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.data.AttributeData;
+import name.huliqing.core.object.module.AttributeModule;
 
 /**
  *
- * @author huliqing
+ * @author huliqing 
  * @param <V>
  * @param <T>
  */
@@ -38,11 +39,11 @@ public abstract class AbstractAttribute<V, T extends AttributeData> implements A
 
     @Override
     public String getName() {
-        return data.getAsString("name");
+        return data.getName();
     }
     
     @Override
-    public void initialize(AttributeStore store) {
+    public void initialize(AttributeModule module) {
         if (initialized) {
             throw new IllegalStateException("Attribute already initialized! attributeId=" + this.getId());
         }

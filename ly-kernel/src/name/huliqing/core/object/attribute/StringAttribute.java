@@ -9,7 +9,6 @@ import name.huliqing.core.data.AttributeData;
 
 /**
  * 字符串类型的属性
- * @deprecated 不推荐使用。
  * @author huliqing
  */
 public class StringAttribute extends AbstractAttribute<String, AttributeData>{

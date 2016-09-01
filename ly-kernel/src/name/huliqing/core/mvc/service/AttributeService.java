@@ -23,12 +23,11 @@ public interface AttributeService extends Inject{
     Attribute loadAttribute(AttributeData data);
     
     /**
-     * 给指定角色添加一个新的属性，注：一个角色不能同时拥有两个相同”id“或”名称“的属性。否则将报错。
+     * 给指定角色添加新的属性，注：如果已经存在相同id或名称的属性，则旧的属性会被替换掉。
      * @param actor
      * @param attribute 
-     * @throws AttributeConflictException 如果属性已经存在, 比如id重复，或者名称重复
      */
-    void addAttribute(Actor actor, Attribute attribute) throws AttributeConflictException;
+    void addAttribute(Actor actor, Attribute attribute);
     
     /**
      * 使用属性“ID”来查找属性,如果角色不存在指定属性则返回null.

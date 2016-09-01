@@ -403,7 +403,7 @@ public class GeometryUtils {
     
     /**
      * 根据给定的顶点位置及变换来计算一个BoundingBox.
-     * @param locations 原始顶点位置
+     * @param pts
      * @param transform 变换
      * @param store 存取最终的结果
      * @return 

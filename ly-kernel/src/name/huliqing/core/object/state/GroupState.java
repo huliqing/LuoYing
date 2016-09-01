@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.data.StateData;
 import name.huliqing.core.object.Loader;
-import name.huliqing.core.xml.DataFactory;
 
 /**
  * 状态组

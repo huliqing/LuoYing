@@ -9,6 +9,7 @@ import name.huliqing.core.Factory;
 import name.huliqing.core.data.AttributeData;
 import name.huliqing.core.mvc.service.ElService;
 import name.huliqing.core.object.el.LevelEl;
+import name.huliqing.core.object.module.AttributeModule;
 
 /**
  * LevelAttribute主要用于拥有等级功能的属性，这种属性会随着等级的提升,属性值也会随着改变。<br>
@@ -211,8 +212,8 @@ public class LevelIntegerAttribute extends NumberAttribute<Integer, AttributeDat
     }
 
     @Override
-    public void initialize(AttributeStore store) {
-        super.initialize(store);
+    public void initialize(AttributeModule module) {
+        super.initialize(module);
         // 初始化时只处理等级值，动态值由程序运行时去操作。
         if (levelEl != null) {
             el = (LevelEl) elService.getEl(levelEl);

@@ -5,6 +5,7 @@
 package name.huliqing.core.mvc.service;
 
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.core.data.AttributeData;
 import name.huliqing.core.object.Loader;
@@ -38,7 +39,7 @@ public class AttributeServiceImpl implements AttributeService {
     }
 
     @Override
-    public void addAttribute(Actor actor, Attribute attribute) throws AttributeStore.AttributeConflictException{
+    public void addAttribute(Actor actor, Attribute attribute) {
         AttributeModule module = actor.getModule(AttributeModule.class);
         if (module != null) {
             module.addAttribute(attribute);

@@ -27,14 +27,21 @@ public class State<T extends StateData> implements DataProcessor<T>{
     private final EffectService effectService = Factory.get(EffectService.class);
     private final StateService stateService = Factory.get(StateService.class);
     
-    protected boolean initialized;
-    
     protected T data;
+    
+    protected boolean initialized;
     
     /**
      * 状态的执行时长，单位秒
      */
     protected float totalUseTime;
+    
+    /**
+     * 当前状态已经执行的时间，单位秒，这个时间是用来控制状态结束的。
+     * 当这个时间达到useTime设定的时间时，状态就结束。但是这个时间可以被重置
+     * 即重置为0，这时状态又会从头开始计算时间。
+     */
+    protected float timeUsed;
     
     // ---- inner
     
@@ -48,12 +55,6 @@ public class State<T extends StateData> implements DataProcessor<T>{
      */
     protected Actor sourceActor;
     
-    /**
-     * 当前状态已经执行的时间，单位秒，这个时间是用来控制状态结束的。
-     * 当这个时间达到useTime设定的时间时，状态就结束。但是这个时间可以被重置
-     * 即重置为0，这时状态又会从头开始计算时间。
-     */
-    protected float timeUsed;
     
     // ---- inner
         
@@ -70,11 +71,25 @@ public class State<T extends StateData> implements DataProcessor<T>{
 
     @Override
     public void setData(T data) {
+        if (initialized) {
+            throw new IllegalStateException("State was initialized, could not reset data. origin state id=" + this.data.getId() 
+                    + ", new state id=" + data.getId() + ", actorId=" + actor.getData().getId());
+        }
         this.data = data;
+        this.initialized = data.getAsBoolean("initialized", initialized);
+        this.timeUsed = data.getAsFloat("timeUsed", timeUsed);
+    }
+    
+    protected void updateData() {
+        // ...
     }
     
     public void initialize() {
+        if (initialized) {
+            throw new IllegalArgumentException("State already initialized");
+        }
         initialized = true;
+        
         if (data.getEffects() != null) {
             if (tempEffects == null) {
                 tempEffects = new ArrayList<Effect>(data.getEffects().length);
@@ -94,9 +109,6 @@ public class State<T extends StateData> implements DataProcessor<T>{
     }
     
     public void cleanup() {
-        initialized = false;
-        timeUsed = 0;
-        
         // 在结束时要清理特效,让特效都跳转到end阶段，然后然它们自动结束就可以。
         // 不要用cleanup，这会导致特效突然消失，很不自然。
         if (tempEffects != null) {
@@ -107,6 +119,9 @@ public class State<T extends StateData> implements DataProcessor<T>{
             }
             tempEffects.clear();
         }
+        
+        initialized = false;
+        timeUsed = 0;
     }
     
     public void update(float tpf) {

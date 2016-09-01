@@ -6,6 +6,7 @@
 package name.huliqing.core.object.attribute;
 
 import name.huliqing.core.data.AttributeData;
+import name.huliqing.core.object.module.AttributeModule;
 
 /**
  *
@@ -73,4 +74,5 @@ public class BooleanAttribute extends AbstractAttribute<Boolean, AttributeData>{
     private boolean convertString(String other) {
         return "1".equals(other) || "true".equals(other);
     }
+
 }
