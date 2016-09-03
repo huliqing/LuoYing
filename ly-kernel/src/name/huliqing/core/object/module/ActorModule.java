@@ -47,7 +47,7 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     // 角色所在队伍
     private String bindTeamAttribute;
     // 角色的可视范围属性名称
-    private String viewAttributeName;
+    private String bindViewAttribute;
     // 角色的当前目标对象。
     private String bindTargetAttribute;
     // 当前角色所跟踪的目标对象
@@ -81,6 +81,7 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
         this.bindLifeAttribute = data.getAsString("bindLifeAttribute");
         this.bindGroupAttribute = data.getAsString("bindGroupAttribute");
         this.bindTeamAttribute = data.getAsString("bindTeamAttribute");
+        this.bindViewAttribute = data.getAsString("bindViewAttribute");
         this.bindTargetAttribute = data.getAsString("bindTargetAttribute");
         this.bindFollowTargetAttribute = data.getAsString("bindFollowTargetAttribute");
         this.bindOwnerAttribute = data.getAsString("bindOwnerAttribute");
@@ -127,7 +128,7 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
         
         groupAttribute = attributeService.getAttributeByName(actor, bindGroupAttribute);
         teamAttribute = attributeService.getAttributeByName(actor, bindTeamAttribute);
-        viewAttribute = attributeService.getAttributeByName(actor, viewAttributeName);
+        viewAttribute = attributeService.getAttributeByName(actor, bindViewAttribute);
         // 注：这里要给targetAttribute加一个侦听器，以便targetAttribute在补外部改变的时候可以触发侦听器
         targetAttribute = attributeService.getAttributeByName(actor, bindTargetAttribute);
         targetAttribute.addListener(this);
@@ -143,6 +144,9 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     public void cleanup() {
         if (innerControl != null) {
             actor.getSpatial().removeControl(innerControl);
+        }
+        if (targetAttribute != null) {
+            targetAttribute.removeListener(this);
         }
         lifeAttribute = null;
         groupAttribute = null;
@@ -164,6 +168,8 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     }
     
     public void setWalkDirection(Vector3f walkDirection) {
+        LOG.log(Level.INFO, "setWalkDirection, actor={0}, walkDirection={1}"
+                , new Object[] {actor.getData().getId(), walkDirection});
         innerControl.setWalkDirection(walkDirection);
     }
     
@@ -260,7 +266,7 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
      */
     public boolean isDead() {
         if (lifeAttribute != null) {
-            return lifeAttribute.intValue() > 0;
+            return lifeAttribute.intValue() <= 0;
         }
         return false;
     }

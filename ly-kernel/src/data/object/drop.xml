@@ -8,102 +8,91 @@
     xsi:schemaLocation='http://fighter.huliqing.name meta/drop.xsd'>
 
     <!--=====================================================================-->
-    <!-- 基本配置, 主要配置各种物品的掉落机率 -->
+    <!-- 基本配置, 主要配置各种物品的掉落机率
+    注：在定义一个DropGroup时要注意不要互相嵌套DropGroup，尽量保持简单清晰.避免造成无限循环异常（StackOverflowError）。
+    比如：dropGroupA -> dropGroupB -> ... -> dropGroupA. 
+    -->
     <!--=====================================================================-->
 
-    <!--remove20160830-->    
-    <!--什么也不掉: 用于游戏中动态设置-->
-    <!--<drop id="dropEmpty" />-->
-    
     <!--基本掉落: level1-->
-    <dropGroup id="dropGroupBase" drops="dropGold,dropTonicRed,dropTonicBlue" />
-    <dropItem id="dropGold" item="itemGold" count="20" rate="0.99" />
-    <dropItem id="dropTonicRed" item="itemTonicRed" count="2" rate="0.5" />
-    <dropItem id="dropTonicBlue" item="itemTonicBlue" count="2" rate="0.5" />
+    <dropItem id="dropItemGold1" item="itemGold" count="20" rate="0.99" />
+    <dropItem id="dropItemTonicRed1" item="itemTonicRed" count="2" rate="0.5" />
+    <dropItem id="dropItemTonicBlue1" item="itemTonicBlue" count="2" rate="0.5" />
+    <dropGroup id="dropBaseGroup1" drops="dropItemGold1,dropItemTonicRed1,dropItemTonicBlue1" />
 
     <!--基本掉落: level2-->
-    <dropGroup id="dropGroupBase2" drops="dropGold2,dropTonicRed2,dropTonicBlue2" />
-    <dropItem id="dropGold2" item="itemGold" count="40" rate="0.99" />
-    <dropItem id="dropTonicRed2" item="itemTonicRed" count="4" rate="0.5" />
-    <dropItem id="dropTonicBlue2" item="itemTonicBlue" count="4" rate="0.5" />
+    <dropItem id="dropItemGold2" item="itemGold" count="40" rate="0.99" />
+    <dropItem id="dropItemTonicRed2" item="itemTonicRed" count="4" rate="0.5" />
+    <dropItem id="dropItemTonicBlue2" item="itemTonicBlue" count="4" rate="0.5" />
+    <dropGroup id="dropBaseGroup2" drops="dropItemGold2,dropItemTonicRed2,dropItemTonicBlue2" />
 
     <!--基本掉落: level3-->
-    <dropGroup id="dropGroupBase3" drops="dropGold3,dropTonicRed3,dropTonicBlue3" />
-    <dropItem id="dropGold3" item="itemGold" count="80" rate="0.99" />
-    <dropItem id="dropTonicRed3" item="itemTonicRed" count="8" rate="0.5" />
-    <dropItem id="dropTonicBlue3" item="itemTonicBlue" count="8" rate="0.5" />
+    <dropItem id="dropItemGold3" item="itemGold" count="80" rate="0.99" />
+    <dropItem id="dropItemTonicRed3" item="itemTonicRed" count="8" rate="0.5" />
+    <dropItem id="dropItemTonicBlue3" item="itemTonicBlue" count="8" rate="0.5" />
+    <dropGroup id="dropBaseGroup3" drops="dropItemGold3,dropItemTonicRed3,dropItemTonicBlue3" />
     
     <!--防御塔-->
-    <dropGroup id="dropGroupTowers" drops="dropTowers,dropTowersStone,dropTowersSnow" />
-    <dropItem id="dropTowers" item="itemTower" count="1" rate="0.3" />
-    <dropItem id="dropTowersStone" item="itemTowerStone" count="1" rate="0.3" />
-    <dropItem id="dropTowersSnow" item="itemTowerSnow" count="1" rate="0.3" />
+    <dropItem id="dropItemTowers" item="itemTower" count="1" rate="0.3" />
+    <dropItem id="dropItemTowersStone" item="itemTowerStone" count="1" rate="0.3" />
+    <dropItem id="dropItemTowersSnow" item="itemTowerSnow" count="1" rate="0.3" />
+    <dropGroup id="dropItemTowersGroup" drops="dropItemTowers,dropItemTowersStone,dropItemTowersSnow" />
 
     <!--药草：风中劲草-->
-    <dropItem id="dropHerb" item="itemHerb" count="1" rate="0.2" />
+    <dropItem id="dropItemHerb" item="itemHerb" count="1" rate="0.2" />
     <!--解毒草--> 
-    <dropItem id="dropDetoxifyGrass" item="itemDetoxifyGrass" count="1" rate="0.3" />
+    <dropItem id="dropItemDetoxifyGrass" item="itemDetoxifyGrass" count="1" rate="0.3" />
     <!--攻击、施法速度药水-->
-    <dropItem id="dropASTonic" item="itemASTonic" count="1" rate="0.1" />
+    <dropItem id="dropItemASTonic" item="itemASTonic" count="1" rate="0.1" />
     
     <!--蜘蛛卵-->
-    <dropItem id="dropSpiderSpawn" item="itemSpiderSpawn" count="1" rate="0.2" />
+    <dropItem id="dropItemSpiderSpawn" item="itemSpiderSpawn" count="1" rate="0.2" />
     
     <!--卷轴：狼、熊...-->
-    <dropItem id="dropWolf" item="itemScrollWolf" count="1" rate="0.3" />
-    <dropItem id="dropBear" item="itemScrollBear" count="1" rate="0.3" />
-    <dropItem id="dropScorpion" item="itemScrollScorpion" count="1" rate="0.3" />
+    <dropItem id="dropItemScrollWolf" item="itemScrollWolf" count="1" rate="0.3" />
+    <dropItem id="dropItemScrollBear" item="itemScrollBear" count="1" rate="0.3" />
+    <dropItem id="dropItemScrollScorpion" item="itemScrollScorpion" count="1" rate="0.3" />
     
     <!--妖精套装掉落设置-->
-    <dropGroup id="dropGroupSkin004" drops="dropSkin004Foot,dropSkin004Hand,dropSkin004LowerBody,dropSkin004UpperBody" />
     <dropSkin id="dropSkin004Foot" skin="skinFoot004" count="1" rate="0.5" />
     <dropSkin id="dropSkin004Hand" skin="skinHand004" count="1" rate="0.5" />
     <dropSkin id="dropSkin004LowerBody" skin="skinLowerBody004" count="1" rate="0.5" />
     <dropSkin id="dropSkin004UpperBody" skin="skinUpperBody004" count="1" rate="0.5" />
+    <dropGroup id="dropSkin004Group" drops="dropSkin004Foot,dropSkin004Hand,dropSkin004LowerBody,dropSkin004UpperBody" />
     
     <!--==========================================================================-->
     <!-- 特殊配置: 配置给各种角色的掉落设置 -->
     <!--==========================================================================-->
     
     <!--丛林蜘蛛掉落设置-->
-<!--    <drop id="dropSpider" random="itemGold|20,itemTonicRed|2|0.2,itemTonicBlue|2|0.2,itemSpiderSpawn|1|0.15,itemHerb|1|0.2" />-->
-    <dropGroup id="dropSpider" drops="dropGroupBase,dropSpiderSpawn,dropHerb" />
+    <dropGroup id="dropSpider" drops="dropBaseGroup1,dropItemSpiderSpawn,dropItemHerb" />
     
     <!--丛林盗贼-->
-    <!--<drop id="dropNinja" random="itemGold|20,itemTonicRed|2|0.2,itemTonicBlue|2|0.2,itemTower|1|0.15,itemTowerStone|1|0.15,itemTowerSnow|1|0.15" />-->
-    <dropGroup id="dropNinja" drops="dropGroupBase,dropGroupTowers" />
+    <dropGroup id="dropNinja" drops="dropBaseGroup1,dropItemTowersGroup" />
         
     <!--狼-->
-    <!--<drop id="dropWolf" random="itemGold|10,itemTonicRed|2|0.2,itemTonicBlue|2|0.2,itemScrollWolf|1|0.3" />-->
-    <dropGroup id="dropWolf" drops="dropGroupBase,dropWolf" />
+    <dropGroup id="dropWolf" drops="dropBaseGroup1,dropItemScrollWolf" />
     
     <!--熊-->
-    <!--<drop id="dropBear" random="itemGold|10,itemTonicRed|2|0.2,itemTonicBlue|2|0.2,itemScrollBear|1|0.3" />-->
-    <dropGroup id="dropBear" drops="dropGroupBase,dropBear" />
+    <dropGroup id="dropBear" drops="dropBaseGroup1,dropItemScrollBear" />
 
     <!--蝎子-->
-    <!--<drop id="dropScorpion" random="itemGold|10,itemTonicRed|2|0.2,itemTonicBlue|2|0.2,itemScrollScorpion|1|0.3,itemDetoxifyGrass|1|0.2" />-->
-    <dropGroup id="dropScorpion" drops="dropGroupBase,dropScorpion,dropDetoxifyGrass" />
+    <dropGroup id="dropScorpion" drops="dropBaseGroup1,dropItemScrollScorpion,dropItemDetoxifyGrass" />
     
     <!--古柏幼仔-->
-    <!--<drop id="dropGb" random="itemGold|20,itemTonicRed|1|0.2,itemTonicBlue|1|0.2,itemHerb|1|0.1" />-->
-    <dropGroup id="dropGb" drops="dropGroupBase,dropHerb,dropDetoxifyGrass" />
+    <dropGroup id="dropGb" drops="dropBaseGroup1,dropItemHerb,dropItemDetoxifyGrass" />
 
     <!--山老大－辛巴达-->
-    <!--<drop id="dropSinbad" random="itemGold|20,itemTonicRed|2|0.3,itemTonicBlue|2|0.3,itemTower|1|0.3,itemTowerStone|1|0.3,itemTowerSnow|1|0.2,itemHerb|1|0.3,itemASTonic|1|0.05" />-->
-    <dropGroup id="dropSinbad" drops="dropGroupBase2,dropGroupTowers,dropHerb,dropASTonic" />
+    <dropGroup id="dropSinbad" drops="dropBaseGroup2,dropItemTowersGroup,dropItemHerb,dropItemASTonic" />
     
     <!--森林妖精-->
-    <!--<drop id="dropFairy" base="itemBook008" random="itemGold|20,skinFoot004|1|0.5,skinHand004|1|0.5,skinLowerBody004|1|0.5,skinUpperBody004|1|0.5,itemHerb|1|1,itemASTonic|1|0.05" />-->
-    <dropGroup id="dropFairy" drops="dropGroupBase3,dropHerb,dropASTonic,dropGroupSkin004" />
+    <dropGroup id="dropFairy" drops="dropBaseGroup3,dropItemHerb,dropItemASTonic,dropSkin004Group" />
     
     <!--trex-->
-    <!--<drop id="dropTrex" random="itemGold|100,itemTonicRed|5|0.3,itemTonicBlue|5|0.3,itemHerb|1|0.2,itemASTonic|1|0.1" />-->
-    <dropGroup id="dropTrex" drops="dropGroupBase2,dropHerb,dropASTonic" />
+    <dropGroup id="dropTrex" drops="dropBaseGroup2,dropItemHerb,dropItemASTonic" />
     
     <!--raptor-->
-    <!--<drop id="dropRaptor" random="itemGold|40,itemTonicRed|2|0.3,itemTonicBlue|2|0.3,itemHerb|1|0.2,itemASTonic|1|0.05" />-->
-    <dropGroup id="dropRaptor" drops="dropGroupBase2,dropHerb,dropASTonic" />
+    <dropGroup id="dropRaptor" drops="dropBaseGroup2,dropItemHerb,dropItemASTonic" />
 
     <!--==========================================================================-->
     <!-- 特殊任务物品掉落 -->

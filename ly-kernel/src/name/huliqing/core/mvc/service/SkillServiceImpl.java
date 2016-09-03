@@ -351,8 +351,7 @@ public class SkillServiceImpl implements SkillService {
             return false;
         }
         
-        Skill skill = c.getSkill(skillId);
-        
+        Skill skill = c.getSkill(skillId);        
         if (skill instanceof Walk) {
             Walk wSkill = (Walk) skill;
             wSkill.setWalkDirection(dir);

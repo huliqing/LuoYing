@@ -172,13 +172,15 @@ public class Factory {
             try {
                 // 1.实例化
                 ins = (T) clazz.newInstance();
-                // 2.存入缓存
-                INSTANCE_MAP.put(cla, ins);
-                // 3.注入其它引用
-                ((Inject) ins).inject();
-            } catch (Exception ex) {
-                throw new NullPointerException("Could not instance for class=" + cla + ", error=" + ex.getMessage());
+            } catch (InstantiationException ex) {
+                throw new RuntimeException("Could not instance for class=" + cla + ", error=" + ex.getMessage());
+            } catch (IllegalAccessException ex) {
+                throw new RuntimeException("Could not instance for class=" + cla + ", error=" + ex.getMessage());
             }
+            // 2.存入缓存
+            INSTANCE_MAP.put(cla, ins);
+            // 3.注入其它引用
+            ((Inject) ins).inject();
         } else {
             throw new NullPointerException("No instance register for class:" + cla);
         }

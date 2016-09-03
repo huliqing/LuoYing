@@ -654,7 +654,7 @@ public abstract class AbstractSkill<T extends SkillData> implements Skill<T> {
             if (attr != null) {
                 speed = attr.floatValue();
             }
-            if (speed < 0) {
+            if (speed <= 0) {
                 speed = 0.0001f;
             }
         }

@@ -15,6 +15,8 @@ import com.jme3.scene.Spatial;
 import com.jme3.util.TempVars;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import name.huliqing.core.LY;
 import name.huliqing.core.Factory;
 import name.huliqing.core.utils.NpcNameUtils;
@@ -44,6 +46,8 @@ import name.huliqing.core.object.module.LevelModule;
  * @author huliqing
  */
 public class ActorServiceImpl implements ActorService {
+
+    private static final Logger LOG = Logger.getLogger(ActorServiceImpl.class.getName());
 
     private AttributeService attributeService;
     private SkillService skillService;
@@ -140,14 +144,15 @@ public class ActorServiceImpl implements ActorService {
         return obstacle;
     }
 
-    @Override
-    public HurtFace checkFace(Spatial self, Actor target) {
-        if (getViewAngle(target, self.getWorldTranslation()) < 90) {
-            return HurtFace.front;
-        } else {
-            return HurtFace.back;
-        }
-    }
+    // remove20160903
+//    @Override
+//    public HurtFace checkFace(Spatial self, Actor target) {
+//        if (getViewAngle(target, self.getWorldTranslation()) < 90) {
+//            return HurtFace.front;
+//        } else {
+//            return HurtFace.back;
+//        }
+//    }
 
     @Override
     public Actor findNearestEnemyExcept(Actor actor, float maxDistance, Actor except) {
@@ -316,7 +321,7 @@ public class ActorServiceImpl implements ActorService {
     
     @Override
     public void setTarget(Actor actor, Actor target) {
-        actor.getModule(ActorModule.class).setTarget(target.getData().getUniqueId());
+        actor.getModule(ActorModule.class).setTarget(target != null ? target.getData().getUniqueId() : -1);
     }
 
     @Override
@@ -336,11 +341,16 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public boolean isDead(Actor actor) {
+        if (!actor.isInitialized()) {
+            return true;
+        }
         return getActorModule(actor).isDead();
     }
     
     @Override
     public boolean isEnemy(Actor actor, Actor target) {
+        if (target == null)
+            return false;
         return actor.getModule(ActorModule.class).isEnemy(target);
     }
 
@@ -677,26 +687,27 @@ public class ActorServiceImpl implements ActorService {
         }
     }
     
-    /**
-     * 检查可以升多少级和需要多少经验
-     * @param currentLevel 当前的等级
-     * @param currentXp 当前的经验值
-     * @param store 存放结果的数组，store[2] {upCount, needXp} upCount表示可以
-     * 升多少级，needXp表示需要多少xp.
-     */
-    private void checkLevelUp(LevelEl el, int currentLevel, int currentXp, int[] store, int maxLevel) {
-        if (currentLevel >= maxLevel) {
-            return;
-        }
-        long nextXp = (long) el.getValue(currentLevel + 1);
-        if (currentXp >= nextXp) {
-            currentLevel++;
-            currentXp -= nextXp;
-            store[0] += 1;
-            store[1] += (int) nextXp;
-            checkLevelUp(el, currentLevel, currentXp, store, maxLevel);
-        }
-    }
+    // remove20160903
+//    /**
+//     * 检查可以升多少级和需要多少经验
+//     * @param currentLevel 当前的等级
+//     * @param currentXp 当前的经验值
+//     * @param store 存放结果的数组，store[2] {upCount, needXp} upCount表示可以
+//     * 升多少级，needXp表示需要多少xp.
+//     */
+//    private void checkLevelUp(LevelEl el, int currentLevel, int currentXp, int[] store, int maxLevel) {
+//        if (currentLevel >= maxLevel) {
+//            return;
+//        }
+//        long nextXp = (long) el.getValue(currentLevel + 1);
+//        if (currentXp >= nextXp) {
+//            currentLevel++;
+//            currentXp -= nextXp;
+//            store[0] += 1;
+//            store[1] += (int) nextXp;
+//            checkLevelUp(el, currentLevel, currentXp, store, maxLevel);
+//        }
+//    }
 
     @Override
     public void setLocation(Actor actor, Vector3f location) {
@@ -867,7 +878,11 @@ public class ActorServiceImpl implements ActorService {
     }
     
     private ActorModule getActorModule(Actor actor) {
-        return actor.getModule(ActorModule.class);
+        ActorModule module = actor.getModule(ActorModule.class);
+        if (module == null) {
+            LOG.log(Level.WARNING, "Actor need a ActorModule!!! actorId={0}", actor.getData().getId());
+        }
+        return module;
     }
 
     @Override

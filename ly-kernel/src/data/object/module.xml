@@ -18,7 +18,17 @@
     <moduleTask id="moduleTask" moduleOrder="10"/>
     
     <!--基本角色模块-->
-    <moduleActor id="moduleActor" moduleOrder="10" bindLifeAttribute="attributeHealth" />
+    <moduleActor id="moduleActor" moduleOrder="10" 
+                bindLifeAttribute="attributeHealth" 
+                bindEssentialAttribute="attributeEssential" 
+                bindFollowTargetAttribute="attributeFollowTarget" 
+                bindGroupAttribute="attributeGroup"
+                bindLivingAttribute="attributeLiving"
+                bindOwnerAttribute="attributeOwner"
+                bindTargetAttribute="attributeTarget" 
+                bindTeamAttribute="attributeTeam"
+                bindViewAttribute="attributeVision"
+    />
 
     <!--角色的逻辑功能-->
     <moduleLogic id="moduleLogic" moduleOrder="10" bindAutoLogicAttribute="attributeAutoLogic" 

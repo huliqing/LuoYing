@@ -7,6 +7,8 @@ package name.huliqing.core.object.drop;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import name.huliqing.core.data.DropData;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.actor.Actor;
@@ -16,25 +18,33 @@ import name.huliqing.core.object.actor.Actor;
  * @author huliqing
  */
 public class GroupDrop extends Drop {
+    private static final Logger LOG = Logger.getLogger(GroupDrop.class.getName());
     
+    private String[] dropIds;
     private List<Drop> drops;
     
     @Override
     public void setData(DropData data) {
         super.setData(data);
-        String[] dropArr = data.getAsArray("drops");
-        if (dropArr != null && dropArr.length > 0) {
-            drops = new ArrayList<Drop>(dropArr.length);
-            for (String dropId : dropArr) {
-                drops.add((Drop)Loader.load(dropId));
-            }
-        }
+        dropIds = data.getAsArray("drops");
     }
     
     @Override
     public void doDrop(Actor source, Actor target) {
-        if (drops != null && !drops.isEmpty()) {
+        
+        if (drops == null && dropIds != null) {
+             if (dropIds != null && dropIds.length > 0) {
+                drops = new ArrayList<Drop>(dropIds.length);
+                for (String dropId : dropIds) {
+                    drops.add((Drop)Loader.load(dropId));
+                }
+            }
+        }
+        
+        if (drops != null) {
             for (int i = 0; i < drops.size(); i++) {
+                LOG.log(Level.INFO, "doDrop, source={0}, target={1}, drop={2}"
+                        , new Object[] {source.getData().getId(), target.getData().getId(), drops.get(i).getData().getId()});
                 drops.get(i).doDrop(source, target);
             }
         }

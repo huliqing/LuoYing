@@ -296,6 +296,7 @@ import name.huliqing.core.object.view.TextView;
 import name.huliqing.core.object.view.TimerView;
 import name.huliqing.core.loader.ViewDataLoader;
 import name.huliqing.core.loader.ModuleDataLoader;
+import name.huliqing.core.mess.MessAttributeAddValue;
 import name.huliqing.core.object.attribute.BooleanAttribute;
 import name.huliqing.core.object.attribute.FloatAttribute;
 import name.huliqing.core.object.attribute.GroupAttribute;
@@ -309,6 +310,7 @@ import name.huliqing.core.object.drop.AttributeDrop;
 import name.huliqing.core.object.drop.GroupDrop;
 import name.huliqing.core.object.drop.ItemDrop;
 import name.huliqing.core.object.drop.SkinDrop;
+import name.huliqing.core.object.module.DropModule;
 import name.huliqing.core.object.module.LevelModule;
 import name.huliqing.core.object.state.GroupState;
 import name.huliqing.core.state.PlayState;
@@ -549,6 +551,7 @@ public class LY {
         DataFactory.register("moduleAttribute",  ModuleData.class, ModuleDataLoader.class, AttributeModule.class);
         DataFactory.register("moduleChannel",  ModuleData.class, ModuleDataLoader.class, ChannelModule.class);
         DataFactory.register("moduleChat",  ModuleData.class, ModuleDataLoader.class, ChatModule.class);
+        DataFactory.register("moduleDrop",  ModuleData.class, ModuleDataLoader.class, DropModule.class);
         DataFactory.register("moduleItem",  ModuleData.class, ModuleDataLoader.class, ItemModule.class);
         DataFactory.register("moduleLevel",  ModuleData.class, ModuleDataLoader.class, LevelModule.class);
         DataFactory.register("moduleLogic",  ModuleData.class, ModuleDataLoader.class, LogicModule.class);
@@ -740,6 +743,7 @@ public class LY {
         Serializer.registerClass(MessActorViewDir.class);
         
         // Attribute
+        Serializer.registerClass(MessAttributeAddValue.class);
         Serializer.registerClass(MessAttributeSync.class);
         
         // Skill

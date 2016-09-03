@@ -7,20 +7,27 @@
     
     <!--==========================================================================-->
     <!--标准属性
-    属性用于配置到角色身上，一个角色可以同时拥有多个属性，每个属性的id和名称都是唯一的，如果给角色配置了-->
+    属性用于配置到角色身上，一个角色可以同时拥有多个属性，每个属性的id和名称都是唯一的，如果给角色配置了
+    
+    说明1：带有等级的属性（attributeLevel***) 的值会随着等级的改变而变化，对这些属性设置初始值(value)可能会被替换。
+    说明2：
+    -->
     <!--==========================================================================-->
 
-    <!--这个属性来标记角色是否是一个生物（活物）-->    
-    <attributeBoolean id="attributeLiving" name="attributeLiving" />
+    <!--生物属性： 这个属性用来标记角色是否是生物，即有"生命迹象"的角色，1：表示生物; 0：表示非生物-->    
+    <attributeBoolean id="attributeLiving" name="attributeLiving" value="" />
 
-    <!--角色种族--> 
+    <!--角色种族: 这个属性用来存放角色的种族标识，用不同的数字来定义不同的种族,存放的值由具体实现去定义。--> 
     <attributeInteger id="attributeRace" name="attributeRace" value="0" />
     
-    <!--角色性别-->
+    <!--角色性别: 这个属性用不同的数字(整数)来定义和区分不同的性别-->
     <attributeInteger id="attributeSex" name="attributeSex" />
     
-        <!--角色当前的等级-->
+    <!--角色的等级, 这个属性在运行时存放角色的等级值。-->
     <attributeInteger id="attributeLevel" name="attributeLevel" value="1" />
+    
+    <!--移动速度：1.0为原始速度,2.0为两倍速度,默认1.0-->
+    <attributeFloat id="attributeMoveSpeed" name="attributeMoveSpeed" value="1.0" />
 
     <!--当前角色可用的经验值-->
     <attributeInteger id="attributeXp" name="attributeXp" />
@@ -38,7 +45,7 @@
     <attributeBoolean id="attributeEssential" name="attributeEssential" />
 
     <!--是否自动AI,如果关闭AI功能，则角色将完全停止运行所有逻辑-->
-    <attributeBoolean id="attributeAutoLogic" name="attributeAutoAi" value="1" />
+    <attributeBoolean id="attributeAutoLogic" name="attributeAutoLogic" value="1" />
     
     <!--是否自动侦察敌人，如果关闭该功能，则角色不会查找敌人。-->
     <attributeBoolean id="attributeAutoDetect" name="attributeAutoDetect" value="1" />
@@ -58,7 +65,7 @@
     <!--最高生命值-->
     <attributeLevelInteger id="attributeHealthMax" name="attributeHealthMax" levelEl="elLevelAttrHealth" />
     <!--实时生命值-->
-    <attributeLimitInteger id="attributeHealth" name="attributeHealth" minValue="0" maxLimitAttributeName="attributeHealthMax" />
+    <attributeLimitInteger id="attributeHealth" name="attributeHealth" minValue="0" maxLimitAttributeName="attributeHealthMax" value="100" />
     
     <!--最高魔法值-->
     <attributeLevelInteger id="attributeManaMax" name="attributeManaMax" levelEl="elLevelAttrMana" />
@@ -89,9 +96,6 @@
     <!--施法速度:1.0为原始速度，2.0为双倍速度-->
     <attributeLevelFloat id="attributeMagicSpeed" name="attributeMagicSpeed" levelEl="elLevelAttrMagicSpeed" />
     
-    <!--移动速度：1.0为原始速度,2.0为两倍速度-->
-    <attributeLevelFloat id="attributeMoveSpeed" name="attributeMoveSpeed" />
-    
     <!--防御概率:[0.0~1.0], 1.0为百分百防御-->
     <attributeLevelFloat id="attributeDefenceRate" name="attributeDefenceRate" />
     
@@ -110,13 +114,13 @@
     
     <attributeGroup id="attributeGroupBase" name="attributeGroupBase" 
                     attributes="attributeLiving,attributeRace,attributeSex
-    ,attributeLevel,attributeXp,attributeXpNext,attributeGroup,attributeTeam
+    ,attributeLevel,attributeMoveSpeed,attributeXp,attributeXpNext,attributeGroup,attributeTeam
     ,attributeEssential,attributeAutoLogic,attributeAutoDetect
     ,attributeTarget,attributeFollowTarget,attributeOwner,attributeTalentPoints
     ,attributeHealthMax,attributeHealth,attributeManaMax,attributeMana
     ,attributeAttack,attributeMagicAttack,attributeDefence,attributeMagicDefence
     ,attributeHealthRestore,attributeManaRestore
-    ,attributeAttackSpeed,attributeMagicSpeed,attributeMoveSpeed
+    ,attributeAttackSpeed,attributeMagicSpeed
     ,attributeDefenceRate,attributeDuckRate,attributeGhostRate,attributeVision
 " />
     
@@ -147,19 +151,19 @@
     <!--==========================================================================-->
     
     <!--配置给：无生命、种族示知、性别未知的角色-->
-    <attributeReplacer id="attributeActorUnliving" name="attributeActorUnliving" 
+    <attributeGroup id="attributeActorUnliving" name="attributeActorUnliving" 
                        attributes="attributeGroupBase,attributeLivingNo,attributeRaceUnknow,attributeSexUnknow" />
     
     <!--配置给：有生命、种族未知、性别未知的角色-->
-    <attributeReplacer id="attributeActorLiving" name="attributeActorLiving" 
+    <attributeGroup id="attributeActorLiving" name="attributeActorLiving" 
                        attributes="attributeGroupBase,attributeLivingYes,attributeRaceUnknow,attributeSexUnknow" />
     
     <!--配置给：人类女性角色-->
-    <attributeReplacer id="attributeHumanFemale" name="attributeHumanFemale" 
+    <attributeGroup id="attributeHumanFemale" name="attributeHumanFemale" 
                        attributes="attributeGroupBase,attributeLivingYes,attributeRaceHuman,attributeSexFemale" />
     
     <!--配置给：人类男性角色-->
-    <attributeReplacer id="attributeHumanMale" name="attributeHumanMale" 
+    <attributeGroup id="attributeHumanMale" name="attributeHumanMale" 
                        attributes="attributeGroupBase,attributeLivingYes,attributeRaceHuman,attributeSexMale" />
     
     

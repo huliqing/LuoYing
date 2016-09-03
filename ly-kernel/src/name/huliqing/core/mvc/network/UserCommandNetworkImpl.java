@@ -40,6 +40,7 @@ import name.huliqing.core.mvc.service.GameService;
 import name.huliqing.core.mvc.service.ProtoService;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.module.ActorModule;
 import name.huliqing.core.object.task.Task;
 
 /**
@@ -180,8 +181,12 @@ public class UserCommandNetworkImpl implements UserCommandNetwork {
             runAction.setPos(worldPos);
             network.sendToServer(runAction);
         } else {
+                // for test
+//            actor.getModule(ActorModule.class).setWalkDirection(worldPos.subtract(actor.getSpatial().getWorldTranslation()).normalizeLocal());
+
             actorNetwork.setFollow(actor, -1);
             actionService.playRun(actor, worldPos);
+                        
             // 不需要广播
         }
     }

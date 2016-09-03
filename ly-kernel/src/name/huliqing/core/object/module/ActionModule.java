@@ -40,7 +40,9 @@ public class ActionModule extends AbstractModule<ActionModuleData> {
         
         updateControl = new AdapterControl() {
             @Override
-            public void update(float tpf) {actionUpdate(tpf);}
+            public void update(float tpf) {
+                actionUpdate(tpf);
+            }
         };
         this.actor.getSpatial().addControl(updateControl);
     }

@@ -344,13 +344,13 @@ public  class SimpleGameState extends GameState implements UIEventListener {
             ui.getTeamView().removeActor(actor);
             
             // 移出场景
-//            actor.getModel().removeFromParent();
             scene.removeSceneObject(actor.getSpatial());
 
-            // 销毁角色，释放资源
-            actor.cleanup();
             // 移出列表
             actors.remove(actor);
+            
+            // 销毁角色，释放资源
+            actor.cleanup();
             return;
         }
         
@@ -553,9 +553,9 @@ public  class SimpleGameState extends GameState implements UIEventListener {
         // 没有目标，或者目标已经不在战场，则重新查找
         if (temp == null 
                 || temp == player
+                || !isInScene(temp.getSpatial()) // 有可能角色已经被移出场景并已经被cleanup,所以这里需要比isDead优先判断
                 || actorService.isDead(temp) 
                 || !actorService.isEnemy(temp, player)
-                || !isInScene(temp.getSpatial())
                 ) {
             float distance = actorService.getViewDistance(player) * 2;
             temp = actorService.findNearestEnemyExcept(player, distance, null);

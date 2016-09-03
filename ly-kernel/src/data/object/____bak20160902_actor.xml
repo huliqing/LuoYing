@@ -11,7 +11,7 @@
     
     <!--test-->
     <!-- player test -->    
-    <actor id="actorPlayerTest" extends="actorPlayer"
+    <actor id="actorPlayerTest" extends="actorPlayer" level="7" 
            items="itemMapWorld,item000|100,itemGold|10000,itemTowerSnow|100,itemScrollLife|10
 ,itemDetoxifyGrass|100,itemTonicRed|5,itemTonicBlue|5,itemHerb|100,itemASTonic|100
 ,itemTowerStone|100,itemTower|100,itemSpiderSpawn|100
@@ -47,59 +47,36 @@
     <!--==========================================================================-->
     
     <!--所有角色基类-->
-    <actor id="actorBase" channels="channelFull" chat="chatSimple" 
+    <actor id="actorBase" attributes="
+    attrHealthMax,attrHealth,attrManaMax,attrMana,attrAttack,attrMagicAttack
+    ,attrDefence,attrMagicDefence,attrVision,attrHealthRestore,attrManaRestore
+    ,attrAttackSpeed,attrMagicSpeed,attrMoveSpeed
+    ,attrDefenceRate,attrDuckRate,attrGhostRate" 
+           lifeAttribute="attributeHealth" viewAttribute="attributeVision" 
+           xpDropEl="elXpDrop" channels="channelFull"
            modules="moduleActor,moduleAction,moduleAttribute,moduleChannel,moduleChat,moduleItem,moduleLogic
     ,moduleResist,moduleSkill,moduleSkin,moduleState,moduleTalent,moduleTask,moduleLevel,moduleDrop"
+  
     />
     
-    <!--未分类生物：有生命现象、种族未知、性别未知的角色, 如: 未分类人物、动物、野兽、怪物等 -->
-    <actor id="actorLiveBase" extends="actorBase" attributes="attributeActorLiving"
-           modules="moduleActor,moduleAction,moduleAttribute,moduleChannel,moduleChat,moduleItem,moduleLogic
-    ,moduleResist,moduleSkill,moduleSkin,moduleState,moduleTalent,moduleTask,moduleLevel,moduleDrop"
+    <!--生物基类：所有生物类角色都继承自这里,如人物、动物、野兽、怪物等 -->
+    <actor id="actorLiveBase" extends="actorBase" mass="60" 
+           living="1" levelUpEl="elLevelUp" talentPointsLevelEl="elLevelTalentPoints" chat="chatSimple" 
            logics="logicSearchEnemy,logicDynamicFight,logicPatrol,logicFollow,logicDefend"
            />
     
-    <!--未分类静物：无生命迹象、种族未知、性别未知的角色， 如: 炮塔、宝箱、祭坛、房屋等-->
-    <actor id="actorNonLiveBase" extends="actorBase" attributes="attributeActorUnliving"
-           modules="moduleActor,moduleAction,moduleAttribute,moduleChannel,moduleChat,moduleItem,moduleLogic
-    ,moduleResist,moduleSkill,moduleSkin,moduleState,moduleTask,moduleDrop"
-           logics="logicSearchEnemy,logicStaticFight"
-           resist="resistNonLife"
+    <!--非生物基类:所有非生物类的角色都继承自这里,如炮塔、宝箱、祭坛、房屋等-->
+    <actor id="actorNonLiveBase" extends="actorBase"
+           living="0" resist="resistNonLife"
+           logics="logicSearchEnemy,logicStaticFight" 
+           levelUpEl="" talentPointsLevelEl="" chat="" 
            />
-
-    <!--种族配置： 人类女性-->
-    <actor id="actorHumanFemaleBase" extends="actorBase" attributes="attributeHumanFemale"
-            modules="moduleActor,moduleAction,moduleAttribute,moduleChannel,moduleChat,moduleItem,moduleLogic
-    ,moduleResist,moduleSkill,moduleSkin,moduleState,moduleTask,moduleDrop"
-            logics="logicSearchEnemy,logicDynamicFight,logicPatrol,logicFollow,logicDefend"
-            channels="channelLowerBody,channelUpperBody,channelLeftHand,channelRightHand,channelHead"
-            resist="resistHuman"
-            file="Models/actor/ske.mesh.j3o"
-            icon="Interface/face/female1.jpg"
-            extAnim="Models/actor/ext_anim" 
-            skinBase="skinEar000,skinEye000,skinFace000,skinFoot000,skinHair010,skinHand000,skinLowerBody000,skinUpperBody000"
-            skins="skinLowerBody002|1,weaponSword000"
-            skinOutfit="skinFoot003,skinHand003,skinLowerBody003,skinUpperBody003"
-            skinWeapon="weaponSword000"
-            skills="skillWait,skillWalk,skillRun,skillReset,skillDead,skillHurtFront,skillHurtBack
-,skillDefend1,skillDefend2
-,skillDuckLeft,skillDuckRight,skillDuckBack,skillDuckLeftRoll,skillDuckRightRoll
-,skillAttack,skillAttack2,skillAttack3
-,skillBowShot
-,skillDualSwordAttack"
-
-            scale="0.2" mass="60" group="1" mat="4"
-           />
-           
-    <!--种族配置： 人类男性（暂无）-->
-    <!--种族配置： 兽人女性（暂无）-->
-    <!--种族配置： 兽人男性（暂无）-->
     
     <!--==========================================================================-->
     <!--种族类角色配置: 人类-女性-->
     <!--==========================================================================-->
     
-<!--    人类种族、女性基本配置
+    <!--人类种族、女性基本配置-->
     <actor id="actorHumanFemaleBase" extends="actorLiveBase" file="Models/actor/ske.mesh.j3o" sex="0" race="1"
             icon="Interface/face/female1.jpg"
             scale="0.2" mass="60" group="1" mat="4" level="1" resist="resistHuman"
@@ -117,14 +94,12 @@
 ,skillAttack,skillAttack2,skillAttack3
 ,skillBowShot
 ,skillDualSwordAttack"
-            />-->
+            />
     
     <!-- player-->
     <actor id="actorPlayer" extends="actorHumanFemaleBase" skinWeapon="weaponBow000" 
-           logics="logicSearchEnemyForPlayer,logicPlayer" 
            talents="talentLifeRestore,talentDefence,talentAttack"
-           items="itemTonicRed|5,itemTonicBlue|5,itemSpiderSpawn|1,itemTower|1" 
-    />
+           logics="logicSearchEnemyForPlayer,logicPlayer" />
     
     
     <!--战士-->

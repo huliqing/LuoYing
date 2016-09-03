@@ -5,13 +5,11 @@
 package name.huliqing.core.mvc.service;
 
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.core.data.AttributeData;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.attribute.Attribute;
-import name.huliqing.core.object.attribute.AttributeStore;
 import name.huliqing.core.object.attribute.NumberAttribute;
 import name.huliqing.core.object.module.AttributeListener;
 import name.huliqing.core.object.module.AttributeModule;
@@ -53,7 +51,7 @@ public class AttributeServiceImpl implements AttributeService {
                 
         AttributeModule module = actor.getModule(AttributeModule.class);
         if (module != null) {
-            module.getAttributeById(attrId);
+            return module.getAttributeById(attrId);
         }
         return null;
     }
@@ -65,7 +63,7 @@ public class AttributeServiceImpl implements AttributeService {
         }
         AttributeModule module = actor.getModule(AttributeModule.class);
         if (module != null) {
-            module.getAttributeByName(attrName);
+            return module.getAttributeByName(attrName);
         }
         return null;
     }
@@ -74,7 +72,7 @@ public class AttributeServiceImpl implements AttributeService {
     public List<Attribute> getAttributes(Actor actor) {
         AttributeModule module = actor.getModule(AttributeModule.class);
         if (module != null) {
-            module.getAttributes();
+            return module.getAttributes();
         }
         return null;
     }

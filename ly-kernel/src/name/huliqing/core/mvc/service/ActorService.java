@@ -51,49 +51,15 @@ public interface ActorService extends Inject {
      * @return 
      */
     boolean hasObstacleActor(Actor self, List<Actor> others); 
-    
-    // remove20160818
-//    /**
-//     * 获取角色身上的物品(除技能），如果没有该物品则返回null.
-//     * @param actor
-//     * @param objectId 物品ID
-//     * @return 
-//     */
-//    ObjectData getItem(Actor actor, String objectId);
-//    
-//    /**
-//     * 获取角色的所有物品(除技能外）
-//     * @param actor
-//     * @param store
-//     * @return 
-//     */
-//    List<ObjectData> getItems(Actor actor, List<ObjectData> store);
-   
-    // remove20160819
-//    /**
-//     * 给定一个时间点，判断从目标时间点之后是否角色的技能有更新（包含技能增加
-//     * ，减少，升级等）。
-//     * @param actor
-//     * @param timePoint
-//     * @return 
-//     */
-//    boolean isSkillUpdated(Actor actor, long timePoint);
   
-    /**
-     * 检查目标target在角色self的哪一个方向
-     * @param self
-     * @param target
-     * @return 
-     */
-    HurtFace checkFace(Spatial self, Actor target);
-    
-    // remove20160815
+    // remove20160903
 //    /**
-//     * 判断目标是否是一个角色,如果是，则返回Actor,否则返回null.
-//     * @param spatial
+//     * 检查目标target在角色self的哪一个方向
+//     * @param self
+//     * @param target
 //     * @return 
 //     */
-//    Actor getActor(Spatial spatial);
+//    HurtFace checkFace(Spatial self, Actor target);
     
     /**
      * 寻找角色周围指定范围内最近的敌人,该敌人必须是活着的，如果没有敌人，则返回null.
@@ -215,35 +181,6 @@ public interface ActorService extends Inject {
      */
     Actor getTarget(Actor actor);
     
-    // remove20160831
-//    /**
-//     * 判断角色是否开启了自动AI
-//     * @param actor
-//     * @return 
-//     */
-//    boolean isAutoAi(Actor actor);
-//
-//    /**
-//     * 开启或关闭角色的自动AI
-//     * @param actor
-//     * @param autoAi 
-//     */
-//    void setAutoAi(Actor actor, boolean autoAi);
-//
-//    /**
-//     * 判断角色是否自动侦察敌人
-//     * @param actor
-//     * @return 
-//     */
-//    boolean isAutoDetect(Actor actor);
-//    
-//    /**
-//     * 设置角色是否自动侦察敌人
-//     * @param actor 
-//     * @param autoDetect
-//     */
-//    void setAutoDetect(Actor actor, boolean autoDetect);
-    
     /**
      * 判断角色是否死亡
      * @param actor
@@ -258,22 +195,6 @@ public interface ActorService extends Inject {
      * @return 
      */
     boolean isEnemy(Actor actor, Actor target);
-    
-    // remove20160813    
-//    /**
-//     * 设置是否打开或关闭角色的物理属性
-//     * @param actor
-//     * @param enabled 
-//     */
-//    void setPhysics(Actor actor, boolean enabled);
-//
-// remove20160813    
-//    /**
-//     * 设置角色的视角方向 
-//     * @param actor
-//     * @param viewDirection 
-//     */
-//    void setViewDirection(Actor actor, Vector3f viewDirection);
     
     /**
      * 给角色设置一个颜色
@@ -305,25 +226,6 @@ public interface ActorService extends Inject {
      * @param level 
      */
     void setLevel(Actor actor, int level);
-   
-    // remove20160830
-//    /**
-//     * 从攻击死亡角色身上获取经验奖励
-//     * @param attacker 攻击角色
-//     * @param dead 死亡角色
-//     * @return 
-//     */
-//    int getXpReward(Actor attacker, Actor dead);
-   
-    // remove20160829
-//    /**
-//     * 给指定的角色添加XP,如果添加XP后角色等级提升，则返回等级提升数。否则返
-//     * 回0.
-//     * @param actor
-//     * @param xp 
-//     * @return  
-//     */
-//    int applyXp(Actor actor, int xp);
     
     /**
      * 获取指定等级需要的经验值（XP)
@@ -362,22 +264,6 @@ public interface ActorService extends Inject {
      */
     boolean removeActorListener(Actor actor, ActorListener actorListener);
     
-    // remove20160815
-//    /**
-//     * 添加技能侦听器
-//     * @param actor
-//     * @param skillListener 
-//     */
-//    void addSkillListener(Actor actor, SkillListener skillListener);
-//    
-//    /**
-//     * 移除指定的技能侦听器
-//     * @param actor
-//     * @param skillListener 
-//     * @return 
-//     */
-//    boolean removeSkillListener(Actor actor, SkillListener skillListener);
-    
     /**
      * 设置角色名称
      * @param actor
@@ -391,14 +277,6 @@ public interface ActorService extends Inject {
      * @return 
      */
     String getName(Actor actor);
-    
-    // remove20160826
-//    /**
-//     * 获取角色的生命值。
-//     * @param actor
-//     * @return 
-//     */
-//    int getLife(Actor actor);
     
     /**
      * 获取角色的分组
@@ -445,14 +323,12 @@ public interface ActorService extends Inject {
      */
     void setEssential(Actor actor, boolean essential);
     
+    /**
+     * 判断角色是否是生物
+     * @param actor
+     * @return 
+     */
     boolean isLiving(Actor actor);
-    
-//    /**
-//     * 获取角色的种族
-//     * @param actor
-//     * @return 
-//     */
-//    String getRace(Actor actor);
     
     /**
      * 设置角色的目标拥有者
@@ -482,13 +358,6 @@ public interface ActorService extends Inject {
      */
     long getFollow(Actor actor);
     
-//    /**
-//     * 获取角色当前可用的天赋点数
-//     * @param actor
-//     * @return 
-//     */
-//    int getTalentPoints(Actor actor);
-    
     /**
      * 同步角色的变换信息
      * @param actor 同步的角色
@@ -507,12 +376,6 @@ public interface ActorService extends Inject {
      * @param times 
      */
     void syncAnimation(Actor actor, String[] channelIds, String[] animNames, byte[] loopModes, float[] speeds, float[] times);
-    
-    // ---- new 20160813 -----------------------------------------------------------------------------------------------------------
-    // ---- new 20160813 -----------------------------------------------------------------------------------------------------------
-    // ---- new 20160813 -----------------------------------------------------------------------------------------------------------
-    // ---- new 20160813 -----------------------------------------------------------------------------------------------------------
-    // ---- new 20160813 -----------------------------------------------------------------------------------------------------------
     
     /**
      * 设置角色位置

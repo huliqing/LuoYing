@@ -220,6 +220,7 @@ public class LevelFloatAttribute extends NumberAttribute<Float, AttributeData> i
         }
         if (el != null) {
             levelValue = (int) el.getValue(level);
+            
         }
         
         // 设置值并在可能值变的情况下触发侦听器,当有其它属性绑定了当前属性时，这个值变侦听很重要。

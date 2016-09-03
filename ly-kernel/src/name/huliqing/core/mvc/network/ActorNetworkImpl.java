@@ -67,10 +67,11 @@ public class ActorNetworkImpl implements ActorNetwork{
         return actorService.hasObstacleActor(self, actors); 
     }
 
-    @Override
-    public HurtFace checkFace(Spatial self, Actor target) {
-        return actorService.checkFace(self, target); 
-    }
+    // remove20160903
+//    @Override
+//    public HurtFace checkFace(Spatial self, Actor target) {
+//        return actorService.checkFace(self, target); 
+//    }
 
     @Override
     public Actor findNearestEnemyExcept(Actor actor, float maxDistance, Actor except) {

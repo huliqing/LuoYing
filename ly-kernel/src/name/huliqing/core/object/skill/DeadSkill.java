@@ -26,7 +26,7 @@ public class DeadSkill<T extends SkillData> extends AbstractSkill<T> {
     @Override
     public void setData(T data) {
         super.setData(data); 
-       remove = data.getAsBoolean("remove", remove);
+        remove = data.getAsBoolean("remove", remove);
     }
 
     @Override
@@ -50,8 +50,10 @@ public class DeadSkill<T extends SkillData> extends AbstractSkill<T> {
     @Override
     protected void end() {
         // 注意这里不能放在cleanup中进行，不要再在cleanup中去调用service.
-        stateService.clearStates(actor);
-        playService.removeObject(actor.getSpatial());
+//        stateService.clearStates(actor);
+        if (remove) {
+            playService.removeObject(actor.getSpatial());
+        }
         super.end();
     }
 

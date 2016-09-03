@@ -18,7 +18,7 @@ import name.huliqing.core.object.chat.Chat;
  * @author huliqing
  */
 public class ChatNetworkImpl implements ChatNetwork {
-    private final static Network network = Network.getInstance();
+    private final static Network NETWORK = Network.getInstance();
     private ChatService chatService;
     
     @Override
@@ -39,19 +39,19 @@ public class ChatNetworkImpl implements ChatNetwork {
     @Override
     public void chatShop(Actor seller, Actor buyer, String itemId, int count, float discount) {
         // 客户端不处理
-        if (network.isClient()) {
+        if (NETWORK.isClient()) {
             return;
         }
         
         // 服务端逻辑
-        if (network.hasConnections()) {
+        if (NETWORK.hasConnections()) {
             MessChatShop mess = new MessChatShop();
             mess.setSeller(seller.getData().getUniqueId());
             mess.setBuyer(buyer.getData().getUniqueId());
             mess.setItemId(itemId);
             mess.setCount(count);
             mess.setDiscount(discount);
-            network.broadcast(mess);
+            NETWORK.broadcast(mess);
         }
         
         chatService.chatShop(seller, buyer, itemId, count, discount);
@@ -59,17 +59,17 @@ public class ChatNetworkImpl implements ChatNetwork {
 
     @Override
     public void chatSell(Actor seller, Actor buyer, String[] items, int[] counts, float discount) {
-        if (network.isClient())
+        if (NETWORK.isClient())
             return;
         
-        if (network.hasConnections()) {
+        if (NETWORK.hasConnections()) {
             MessChatSell mess = new MessChatSell();
             mess.setBuyer(buyer.getData().getUniqueId());
             mess.setCounts(counts);
             mess.setDiscount(discount);
             mess.setItems(items);
             mess.setSeller(seller.getData().getUniqueId());
-            network.broadcast(mess);
+            NETWORK.broadcast(mess);
         }
         
         chatService.chatSell(seller, buyer, items, counts, discount);
@@ -77,16 +77,16 @@ public class ChatNetworkImpl implements ChatNetwork {
 
     @Override
     public void chatSend(Actor sender, Actor receiver, String[] items, int[] counts) {
-        if (network.isClient())
+        if (NETWORK.isClient())
             return;
         
-        if (network.hasConnections()) {
+        if (NETWORK.hasConnections()) {
             MessChatSend mess = new MessChatSend();
             mess.setCounts(counts);
             mess.setItems(items);
             mess.setReceiver(receiver.getData().getUniqueId());
             mess.setSender(sender.getData().getUniqueId());
-            network.broadcast(mess);
+            NETWORK.broadcast(mess);
         }
         
         chatService.chatSend(sender, receiver, items, counts);

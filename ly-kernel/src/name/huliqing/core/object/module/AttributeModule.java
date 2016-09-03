@@ -7,8 +7,6 @@ package name.huliqing.core.object.module;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import name.huliqing.core.data.AttributeData;
 import name.huliqing.core.data.module.ModuleData;
 import name.huliqing.core.object.Loader;

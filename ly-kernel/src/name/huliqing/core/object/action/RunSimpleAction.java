@@ -7,7 +7,6 @@ package name.huliqing.core.object.action;
 import com.jme3.math.Vector3f;
 import com.jme3.util.TempVars;
 import name.huliqing.core.Factory;
-import name.huliqing.core.data.SkillData;
 import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.mvc.network.SkillNetwork;
 import name.huliqing.core.mvc.service.ActorService;
@@ -67,6 +66,8 @@ public class RunSimpleAction extends AbstractAction implements RunAction{
     
     @Override
     public void doLogic(float tpf) {
+//        System.out.println("actor.position=" + actor.getSpatial().getWorldTranslation());
+        
         // 如果角色是不可移动的，则直接返回不处理逻辑
         if (!actorService.isMoveable(actor) || runSkillId == null) {
             end();

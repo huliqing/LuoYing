@@ -70,6 +70,9 @@ xs:time
                     <xs:attribute name="bindTeamAttribute" type="xs:string" use="required">
                         <xs:annotation><xs:documentation>bind a IntegerAttribute</xs:documentation></xs:annotation>
                     </xs:attribute>
+                    <xs:attribute name="bindViewAttribute" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>bind a IntegerAttribute</xs:documentation></xs:annotation>
+                    </xs:attribute>
                     <xs:attribute name="bindTargetAttribute" type="xs:string" use="required">
                         <xs:annotation><xs:documentation>bind a LongAttribute</xs:documentation></xs:annotation>
                     </xs:attribute>

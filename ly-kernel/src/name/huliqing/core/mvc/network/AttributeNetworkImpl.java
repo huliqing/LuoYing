@@ -7,11 +7,11 @@ package name.huliqing.core.mvc.network;
 import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.AttributeData;
+import name.huliqing.core.mess.MessAttributeAddValue;
 import name.huliqing.core.mvc.service.AttributeService;
 import name.huliqing.core.network.Network;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.attribute.Attribute;
-import name.huliqing.core.object.attribute.AttributeStore;
 import name.huliqing.core.object.module.AttributeListener;
 
 /**
@@ -19,8 +19,7 @@ import name.huliqing.core.object.module.AttributeListener;
  * @author huliqing
  */
 public class AttributeNetworkImpl implements AttributeNetwork {
-    
-    private final static Network network = Network.getInstance();
+    private final static Network NETWORK = Network.getInstance();
     private AttributeService attributeService;
     
     @Override
@@ -107,7 +106,7 @@ public class AttributeNetworkImpl implements AttributeNetwork {
     }
 
     @Override
-    public void addAttribute(Actor actor, Attribute attribute) throws AttributeStore.AttributeConflictException {
+    public void addAttribute(Actor actor, Attribute attribute) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -143,7 +142,20 @@ public class AttributeNetworkImpl implements AttributeNetwork {
 
     @Override
     public void addAttributeValue(Actor actor, String attrName, float value) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        if (NETWORK.isClient()) {
+            return;
+        }
+        
+        if (NETWORK.hasConnections()) {
+            MessAttributeAddValue mess = new MessAttributeAddValue();
+            mess.setActorId(actor.getData().getUniqueId());
+            mess.setAttributeName(attrName);
+            mess.setValue(value);
+            NETWORK.broadcast(mess);
+        }
+        
+        attributeService.addAttributeValue(actor, attrName, value);
     }
 
     @Override

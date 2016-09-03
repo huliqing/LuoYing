@@ -5,7 +5,10 @@
  */
 package name.huliqing.core.mvc.network;
 
+import name.huliqing.core.Factory;
 import name.huliqing.core.data.DropData;
+import name.huliqing.core.mvc.service.DropService;
+import name.huliqing.core.network.Network;
 import name.huliqing.core.object.actor.Actor;
 
 /**
@@ -13,10 +16,12 @@ import name.huliqing.core.object.actor.Actor;
  * @author huliqing
  */
 public class DropNetworkImpl implements DropNetwork {
+    private final static Network NETWORK = Network.getInstance();
+    private DropService dropService;
 
     @Override
     public void inject() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        dropService = Factory.get(DropService.class);
     }
 
     @Override
@@ -31,7 +36,11 @@ public class DropNetworkImpl implements DropNetwork {
 
     @Override
     public void doDrop(Actor source, Actor target) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (NETWORK.isClient()) 
+            return;
+        
+        // DROP只在服务端处理，不需要向客户端广播事件，因为奖励物品不能由客户端来计算机率
+        dropService.doDrop(source, target);
     }
     
 }
