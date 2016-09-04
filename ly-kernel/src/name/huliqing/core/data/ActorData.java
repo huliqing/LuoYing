@@ -17,7 +17,6 @@ import java.util.List;
 import name.huliqing.core.data.module.ModuleData;
 import name.huliqing.core.data.define.MatObject;
 import name.huliqing.core.enums.Mat;
-import name.huliqing.core.utils.ConvertUtils;
 
 /**
  * @author huliqing
@@ -534,13 +533,13 @@ public class ActorData extends ObjectData implements MatObject{
         return Mat.identify(matInt);
     }
 
-    /**
-     * @deprecated 
-     * @return 
-     */
-    public float getMass() {
-        return getAsFloat("mass", 0);
-    }
+//    /**
+//     * @deprecated 
+//     * @return 
+//     */
+//    public float getMass() {
+//        return getAsFloat("mass", 0);
+//    }
     
 //    /**
 //     * 判断目标角色是否为一个玩家角色

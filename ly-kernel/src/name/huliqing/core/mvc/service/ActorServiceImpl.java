@@ -672,9 +672,8 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public float getMass(Actor actor) {
-        return actor.getData().getMass();
-//        ActorModule module = actor.getModule(ActorModule.class);
-//        return module != null ? module.getMass() : 0;
+        ActorModule module = actor.getModule(ActorModule.class);
+        return module != null ? module.getMass() : 0;
     }
 
     @Override

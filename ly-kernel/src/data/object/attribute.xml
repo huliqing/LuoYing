@@ -7,10 +7,11 @@
     
     <!--==========================================================================-->
     <!--标准属性
-    属性用于配置到角色身上，一个角色可以同时拥有多个属性，每个属性的id和名称都是唯一的，如果给角色配置了
+    属性用于配置到角色身上，一个角色可以同时拥有多个属性，这些属性可以绑定任何其它模块或处理器上。
     
-    说明1：带有等级的属性（attributeLevel***) 的值会随着等级的改变而变化，对这些属性设置初始值(value)可能会被替换。
-    说明2：
+    说明1：给一个角色配置属性时，属性id和名称都不能重复，如果给角色配置的属性存在相同的id或名称，则先加上去的会被替换掉。
+    说明2：模块在绑定属性时应该使用“属性名称”而非属性id
+    说明3：带有等级的属性（attributeLevel***) 的值会随着等级的改变而变化，对这些属性设置初始值(value)可能会被替换。
     -->
     <!--==========================================================================-->
 
@@ -40,6 +41,9 @@
     
     <!--角色所在队伍-->
     <attributeInteger id="attributeTeam" name="attributeTeam" />
+    
+    <!--角色的质量:默认角色质量都是大于0的，即默认都为动态角色。 -->
+    <attributeFloat id="attributeMass" name="attributeMass" value="60" />
 
     <!--Essential这个属性用来标记一个角色是否是必要的，即使死亡后也不能移出场景的-->
     <attributeBoolean id="attributeEssential" name="attributeEssential" />
@@ -110,14 +114,14 @@
     
     <!--武器槽位：这个参数定义角色默认支持的武器槽位,默认空，由不同的角色去配置。-->
     <attributeStringList id="attributeWeaponSlots" name="attributeWeaponSlots" />
-
+    
     <!--==========================================================================-->
     <!--基本属性打包-->
     <!--==========================================================================-->
     
     <attributeGroup id="attributeGroupBase" name="attributeGroupBase" 
                     attributes="attributeLiving,attributeRace,attributeSex
-    ,attributeLevel,attributeMoveSpeed,attributeXp,attributeXpNext,attributeGroup,attributeTeam
+    ,attributeLevel,attributeMoveSpeed,attributeXp,attributeXpNext,attributeGroup,attributeTeam,attributeMass
     ,attributeEssential,attributeAutoLogic,attributeAutoDetect
     ,attributeTarget,attributeFollowTarget,attributeOwner,attributeTalentPoints
     ,attributeHealthMax,attributeHealth,attributeManaMax,attributeMana
@@ -149,37 +153,47 @@
     <attributeInteger id="attributeSexFemale" extends="attributeSex" value="1" />
     <attributeInteger id="attributeSexMale" extends="attributeSex" value="2" />
     
+    <!-- 角色质量，定义动态角色或静态角色 -->
+    <attributeFloat id="attributeMassDynamic" extends="attributeMass" value="60" />
+    <attributeFloat id="attributeMassStatic" extends="attributeMass" value="0" />
+    
     <!--武器槽位: 人类女性武器槽位-->
     <attributeStringList id="attributeHumanFemaleWeaponSlot" extends="attributeWeaponSlots" 
                          values="slotSwordLeftBack,slotSwordLeftBack2,slotSwordLeftWaist,slotSwordLeftWaist2,slotBowLeftBack,slotWandLeftBack" />
     
     <!--==========================================================================-->
-    <!--角色属性配置： 这些属性是直接配置给角色的。-->
+    <!--种族配置： 这些属性是直接配置给角色的。-->
     <!--==========================================================================-->
     
-    <!--配置给：无生命、种族示知、性别未知的角色-->
+    <!--配置给：非生物、种族未知、性别未知、动态类的角色，如：坦克、飞机、战车等可移动的等非生物类角色. -->
     <attributeGroup id="attributeActorUnliving" name="attributeActorUnliving" 
-                       attributes="attributeGroupBase,attributeLivingNo,attributeRaceUnknow,attributeSexUnknow" />
+                       attributes="attributeGroupBase,attributeLivingNo,attributeRaceUnknow,attributeSexUnknow,attributeMassDynamic" />
+
+    <!--配置给：非生物、种族未知、性别未知、静态类的角色，如：防御塔、堡垒、基地等静止角色-->
+    <attributeGroup id="attributeActorUnlivingStatic" name="attributeActorUnliving" 
+                       attributes="attributeGroupBase,attributeLivingNo,attributeRaceUnknow,attributeSexUnknow,attributeMassStatic" />
     
-    <!--配置给：有生命、种族未知、性别未知的角色-->
+    <!--配置给：生物、种族未知、性别未知、动态类角色，如：虫子、怪物、野兽、飞禽、未知生物等活动类角色.-->
     <attributeGroup id="attributeActorLiving" name="attributeActorLiving" 
-                       attributes="attributeGroupBase,attributeLivingYes,attributeRaceUnknow,attributeSexUnknow" />
-    
+                       attributes="attributeGroupBase,attributeLivingYes,attributeRaceUnknow,attributeSexUnknow,attributeMassDynamic" />
+
     <!--配置给：人类女性角色-->
     <attributeGroup id="attributeHumanFemale" name="attributeHumanFemale" 
-                       attributes="attributeGroupBase,attributeLivingYes,attributeRaceHuman,attributeSexFemale
-                       ,attributeHumanFemaleWeaponSlot" />
+                       attributes="attributeGroupBase,attributeLivingYes,attributeRaceHuman,attributeSexFemale,attributeMassDynamic
+,attributeHumanFemaleWeaponSlot" />
     
     <!--配置给：人类男性角色-->
     <attributeGroup id="attributeHumanMale" name="attributeHumanMale" 
-                       attributes="attributeGroupBase,attributeLivingYes,attributeRaceHuman,attributeSexMale" />
+                       attributes="attributeGroupBase,attributeLivingYes,attributeRaceHuman,attributeSexMale,attributeMassDynamic" />
     
     <!--==========================================================================-->
     <!-- 特殊角色的属性 -->
     <!--==========================================================================-->
     
-    <!--蒂娜的武器槽位-->
+    <!--蒂娜的武器槽位：挂在左腰间-->
     <attributeStringList id="attributeWeaponSlotDiNa" extends="attributeWeaponSlots" values="slotSwordLeftWaist,slotSwordLeftWaist2" />
+    
+    
     
     <!--remove20160901-->
 <!--    健康值:定义角色的生命值

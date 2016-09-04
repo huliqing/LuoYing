@@ -54,8 +54,11 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     private String bindFollowTargetAttribute;
     // 当前角色的所有者唯一id,也可以说是当前角色的主人的id
     private String bindOwnerAttribute;
-    
+    // 角色的质量
+    private String bindMassAttribute;
+    // 角色是否是“必要的”
     private String bindEssentialAttribute;
+    // 角色是否是生物
     private String bindLivingAttribute;
     
     private NumberAttribute lifeAttribute;
@@ -65,6 +68,7 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     private NumberAttribute targetAttribute;
     private NumberAttribute followTargetAttribute;
     private NumberAttribute ownerAttribute;
+    private NumberAttribute massAttribute;
     
     private BooleanAttribute essentialAttribute;
     private BooleanAttribute livingAttribute;
@@ -85,6 +89,7 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
         this.bindTargetAttribute = data.getAsString("bindTargetAttribute");
         this.bindFollowTargetAttribute = data.getAsString("bindFollowTargetAttribute");
         this.bindOwnerAttribute = data.getAsString("bindOwnerAttribute");
+        this.bindMassAttribute = data.getAsString("bindMassAttribute");
         
         this.bindEssentialAttribute = data.getAsString("bindEssentialAttribute");
         this.bindLivingAttribute = data.getAsString("bindLivingAttribute");
@@ -116,28 +121,35 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     @Override
     public void initialize(Actor actor) {
         super.initialize(actor);
-        this.innerControl = new BetterCharacterControlWrap(radius, height, actor.getData().getMass());
         this.actor = actor;
-        this.actor.getSpatial().addControl(innerControl);
         
         lifeAttribute = attributeService.getAttributeByName(actor, bindLifeAttribute);
         if (lifeAttribute == null) {
             LOG.log(Level.WARNING, "Life attribute not found, by lifeAttributeName={0}, actorId={1}"
                     , new Object[] {bindLifeAttribute, actor.getData().getId()});
         }
-        
         groupAttribute = attributeService.getAttributeByName(actor, bindGroupAttribute);
         teamAttribute = attributeService.getAttributeByName(actor, bindTeamAttribute);
         viewAttribute = attributeService.getAttributeByName(actor, bindViewAttribute);
+        // 角色的当前目标属性
         // 注：这里要给targetAttribute加一个侦听器，以便targetAttribute在补外部改变的时候可以触发侦听器
         targetAttribute = attributeService.getAttributeByName(actor, bindTargetAttribute);
         targetAttribute.addListener(this);
         // 角色当前的跟随目标
         followTargetAttribute = attributeService.getAttributeByName(actor, bindFollowTargetAttribute);
         ownerAttribute = attributeService.getAttributeByName(actor, bindOwnerAttribute);
-        
+        // 角色质量
+        // 注：角色质量可能被外部改变，所以要监听,当改变时要触发innerControl更新
+        massAttribute = attributeService.getAttributeByName(actor, bindMassAttribute);
+        massAttribute.addListener(this);
         essentialAttribute = attributeService.getAttributeByName(actor, bindEssentialAttribute);
         livingAttribute = attributeService.getAttributeByName(actor, bindLivingAttribute);
+        
+        // 控制器
+        this.innerControl = new BetterCharacterControlWrap(radius, height, getMass());
+        this.actor.getSpatial().addControl(innerControl);
+        
+        
     }
     
     @Override
@@ -187,7 +199,7 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
      */
     public void setLookAt(Vector3f position) {
         // 静态角色不能朝向
-        if (actor.getData().getMass() <= 0) {
+        if (getMass() <= 0) {
             return;
         }
         TempVars tv = TempVars.get();
@@ -369,9 +381,9 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
         }
     }
     
-    // 当targetAttribute发生变化时触发侦听器
     @Override
     public void onValueChanged(Attribute attribute, Number oldValue, Number newValue) {
+        // 当targetAttribute发生变化时触发侦听器
         if (attribute == targetAttribute) {
             // 释放旧目标的listener
             long oldTargetId = oldValue.longValue();
@@ -390,6 +402,11 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
                     }
                 }
             }
+            return;
+        }
+        // 角色质量属性在外部被改变时要更新innerControl.
+        if (attribute == massAttribute) {
+            innerControl.setMass(massAttribute.floatValue());
         }
     }
     
@@ -481,5 +498,23 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
      */
     public void setPlayer(boolean player) {
         this.player = player;
+    }
+    
+    public float getMass() {
+        if (massAttribute != null) {
+            return massAttribute.floatValue();
+        }
+        return 0;
+    }
+    
+    /**
+     * 设置角色的质量
+     * @param mass 
+     */
+    public void setMass(float mass) {
+        if (massAttribute != null) {
+            massAttribute.setValue(mass);
+            innerControl.setMass(mass);
+        }
     }
 }
