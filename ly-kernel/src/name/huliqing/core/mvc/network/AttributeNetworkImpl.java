@@ -7,7 +7,7 @@ package name.huliqing.core.mvc.network;
 import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.AttributeData;
-import name.huliqing.core.mess.MessAttributeAddValue;
+import name.huliqing.core.mess.MessAttributeNumberAddValue;
 import name.huliqing.core.mvc.service.AttributeService;
 import name.huliqing.core.network.Network;
 import name.huliqing.core.object.actor.Actor;
@@ -136,26 +136,26 @@ public class AttributeNetworkImpl implements AttributeNetwork {
     }
 
     @Override
-    public <V> void setAttributeValue(Actor actor, String attrName, V value) {
+    public <V> void setSimpleAttributeValue(Actor actor, String attrName, V value) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void addAttributeValue(Actor actor, String attrName, float value) {
+    public void addNumberAttributeValue(Actor actor, String attrName, float value) {
         
         if (NETWORK.isClient()) {
             return;
         }
         
         if (NETWORK.hasConnections()) {
-            MessAttributeAddValue mess = new MessAttributeAddValue();
+            MessAttributeNumberAddValue mess = new MessAttributeNumberAddValue();
             mess.setActorId(actor.getData().getUniqueId());
             mess.setAttributeName(attrName);
             mess.setValue(value);
             NETWORK.broadcast(mess);
         }
         
-        attributeService.addAttributeValue(actor, attrName, value);
+        attributeService.addNumberAttributeValue(actor, attrName, value);
     }
 
     @Override

@@ -14,8 +14,8 @@ public class LimitIntegerAttribute extends IntegerAttribute implements LimitAttr
 
     private int minValue = Integer.MIN_VALUE;
     private int maxValue = Integer.MAX_VALUE;
-    private String minLimitAttributeName;
-    private String maxLimitAttributeName;
+    private String bindMinLimitAttribute;
+    private String bindMaxLimitAttribute;
     private NumberAttribute minLimitAttribute;
     private NumberAttribute maxLimitAttribute;
     
@@ -24,8 +24,8 @@ public class LimitIntegerAttribute extends IntegerAttribute implements LimitAttr
         super.setData(data);
         minValue = data.getAsInteger("minValue", minValue);
         maxValue = data.getAsInteger("maxValue", maxValue);
-        minLimitAttributeName = data.getAsString("minLimitAttributeName");
-        maxLimitAttributeName = data.getAsString("maxLimitAttributeName");
+        bindMinLimitAttribute = data.getAsString("bindMinLimitAttribute");
+        bindMaxLimitAttribute = data.getAsString("bindMaxLimitAttribute");
     }
 
     @Override
@@ -33,9 +33,9 @@ public class LimitIntegerAttribute extends IntegerAttribute implements LimitAttr
         super.updateData();
         data.setAttribute("minValue", minValue);
         data.setAttribute("maxValue", maxValue);
-        // minLimitAttributeName, maxLimitAttributeName不发生变化，所以不需要回设到data中去
-//        data.setAttribute("minLimitAttributeName", minLimitAttributeName);
-//        data.setAttribute("maxLimitAttributeName", maxLimitAttributeName);
+        // bindMinLimitAttribute, bindMaxLimitAttribute不发生变化，所以不需要回设到data中去
+//        data.setAttribute("bindMinLimitAttribute", bindMinLimitAttribute);
+//        data.setAttribute("bindMaxLimitAttribute", bindMaxLimitAttribute);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class LimitIntegerAttribute extends IntegerAttribute implements LimitAttr
 
     @Override
     public void setMax() {
-        setAndNotify(maxValue);
+        setValue(maxValue);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class LimitIntegerAttribute extends IntegerAttribute implements LimitAttr
 
     @Override
     public void setMin() {
-        setAndNotify(minValue);
+        setValue(minValue);
     }
 
     @Override
@@ -64,7 +64,7 @@ public class LimitIntegerAttribute extends IntegerAttribute implements LimitAttr
         // 监听attributeModule，当module添加或减少属性时要重新获取绑定minLimitAttribute，maxLimitAttribute属性。
         // 注：只有在minLimitAttributeName或maxLimitAttributeName存在的情况下才需要这么做。
         // 并且这个侦听器也应该一直存在，因为模块可能在任何运行时增加或删除属性。
-        if (minLimitAttributeName != null || maxLimitAttributeName != null) {
+        if (bindMinLimitAttribute != null || bindMaxLimitAttribute != null) {
             module.addListener(this);
         }
         
@@ -73,17 +73,17 @@ public class LimitIntegerAttribute extends IntegerAttribute implements LimitAttr
         // onAttributeAdded.这样也可以载入。
         // 2.如果minLimitAttributeName所指定的属性已经在当前属性之前已经载入，
         // 则触发器不会触发到（onAttributeAdded）, 所以这里也不能省略。
-        if (minLimitAttributeName != null) {
-            bindMinLimitAttribute(module.getAttributeByName(minLimitAttributeName));
+        if (bindMinLimitAttribute != null) {
+            bindMinLimitAttribute(module.getAttributeByName(bindMinLimitAttribute));
         }
         
         // 同上
-        if (maxLimitAttributeName != null) {
-            bindMaxLimitAttribute(module.getAttributeByName(maxLimitAttributeName));
+        if (bindMaxLimitAttribute != null) {
+            bindMaxLimitAttribute(module.getAttributeByName(bindMaxLimitAttribute));
         }
         
         // 初始化值并触发一次侦听器
-        setAndNotify(getValue());
+        setValue(intValue());
     }
 
     @Override
@@ -98,14 +98,15 @@ public class LimitIntegerAttribute extends IntegerAttribute implements LimitAttr
     }
     
     @Override
-    protected void setAndNotify(int value) {
-        if (value < minValue) {
-            value = minValue;
+    public void setValue(Number value) {
+        int newValue = value.intValue();
+        if (newValue < minValue) {
+            newValue = minValue;
         }
-        if (value > maxValue) {
-            value = maxValue;
+        if (newValue > maxValue) {
+            newValue = maxValue;
         }
-        super.setAndNotify(value);
+        super.setValue(newValue);
     }
     
     // 值变侦听，当绑定的minLimitAttribute或maxLimitAttribute的值发生变化时，当前属性的值会受影响。
@@ -113,11 +114,11 @@ public class LimitIntegerAttribute extends IntegerAttribute implements LimitAttr
     public void onValueChanged(Attribute attribute, Number oldValue, Number newValue) {
         if (attribute == minLimitAttribute) {
             minValue = minLimitAttribute.intValue();
-            setAndNotify(intValue());
+            setValue(intValue());
         }
         if (attribute == maxLimitAttribute) {
             maxValue = maxLimitAttribute.intValue();
-            setAndNotify(intValue());
+            setValue(intValue());
         }
     }
 
@@ -128,10 +129,10 @@ public class LimitIntegerAttribute extends IntegerAttribute implements LimitAttr
         if (attribute == this)
             return;
         
-        if (minLimitAttributeName != null && attribute.getName().equals(minLimitAttributeName)) {
+        if (bindMinLimitAttribute != null && attribute.getName().equals(bindMinLimitAttribute)) {
             bindMinLimitAttribute(attribute);
         }
-        if (maxLimitAttributeName != null && attribute.getName().equals(maxLimitAttributeName)) {
+        if (bindMaxLimitAttribute != null && attribute.getName().equals(bindMaxLimitAttribute)) {
             bindMaxLimitAttribute(attribute);
         }
     }
@@ -179,7 +180,7 @@ public class LimitIntegerAttribute extends IntegerAttribute implements LimitAttr
         minLimitAttribute.addListener(this);
         if (minLimitAttribute.isInitialized()) {
             minValue = minLimitAttribute.intValue();
-            setAndNotify(intValue());
+            setValue(intValue());
         }
     }
     
@@ -204,7 +205,7 @@ public class LimitIntegerAttribute extends IntegerAttribute implements LimitAttr
         maxLimitAttribute.addListener(this);
         if (maxLimitAttribute.isInitialized()) {
             maxValue = maxLimitAttribute.intValue();
-            setAndNotify(intValue());
+            setValue(intValue());
         }
     }
 }

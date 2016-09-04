@@ -35,7 +35,7 @@ public class AttributeHandler extends AbstractItemHandler {
     @Override
     protected void useObject(Actor actor, ObjectData data) {
         // 补充属性值
-        attributeService.addAttributeValue(actor, attribute, amount);
+        attributeService.addNumberAttributeValue(actor, attribute, amount);
         
         // 物品减少
         itemService.removeItem(actor, data.getId(), 1);

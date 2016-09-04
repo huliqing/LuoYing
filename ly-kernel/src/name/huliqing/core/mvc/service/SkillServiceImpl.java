@@ -319,7 +319,7 @@ public class SkillServiceImpl implements SkillService {
         List<AttributeUse> uas = data.getUseAttributes();
         if (uas != null) {
             for (AttributeUse ua : uas) {
-                attributeService.addAttributeValue(actor, ua.getAttribute(), -ua.getAmount());
+                attributeService.addNumberAttributeValue(actor, ua.getAttribute(), -ua.getAmount());
             }
         }
 

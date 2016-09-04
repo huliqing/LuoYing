@@ -49,7 +49,7 @@ public class AttributeTalent<T extends TalentData> extends AbstractTalent<T> {
         
         if (!attributeApplied) {
             applyValue = elService.getLevelEl(levelEl, level); 
-            attributeService.addAttributeValue(actor, applyAttribute, applyValue);
+            attributeService.addNumberAttributeValue(actor, applyAttribute, applyValue);
             attributeApplied = true;
             updateData();
         }
@@ -63,7 +63,7 @@ public class AttributeTalent<T extends TalentData> extends AbstractTalent<T> {
     @Override
     public void cleanup() {
         if (attributeApplied) {
-            attributeService.addAttributeValue(actor, applyAttribute, -applyValue);
+            attributeService.addNumberAttributeValue(actor, applyAttribute, -applyValue);
             attributeApplied = false;
             updateData();
         }

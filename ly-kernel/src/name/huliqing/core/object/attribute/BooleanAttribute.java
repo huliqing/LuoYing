@@ -6,73 +6,75 @@
 package name.huliqing.core.object.attribute;
 
 import name.huliqing.core.data.AttributeData;
-import name.huliqing.core.object.module.AttributeModule;
 
 /**
  *
  * @author huliqing
  */
-public class BooleanAttribute extends AbstractAttribute<Boolean, AttributeData>{
-
-    private boolean value;
+public class BooleanAttribute extends AbstractSimpleAttribute<Boolean> {
 
     @Override
     public void setData(AttributeData data) {
         super.setData(data); 
-        value = data.getAsBoolean("value", value);
-    }
-    
-    // 更新data值，以避免在外部使用data时获取不到实时的数据
-    protected void updateData() {
-        data.setAttribute("value", value);
-    }
-    
-    @Override
-    public Boolean getValue() {
-        return value;
-    }
-
-    @Override
-    public void setValue(Boolean newValue) {
-        boolean old = this.value;
-        this.value = newValue;
-        updateData();
-        if (old != this.value) {
-            notifyValueChangeListeners(old, this.value);
-        }
+        value = data.getAsBoolean("value", false);
     }
     
     public boolean booleanValue() {
-        return this.value;
+        return value.booleanValue();
+    }
+    
+    @Override
+    protected void notifyValueChangeListeners(Boolean oldValue, Boolean newValue) {
+        // 只有值变化时才触发侦听器
+        if (oldValue.booleanValue() != newValue.booleanValue()) {
+            super.notifyValueChangeListeners(oldValue, newValue); 
+        }
     }
 
     /**
-     * 判断与另一个属性是否匹配，首先：other必须是BooleanAttribute类型，否则这个方法始终返回false.<br>
-     * 其次，如果两个BooleanAttribute的值都为true或false,则被认为相同的，只有一个为true，
-     * 另一个为false时这个方法才会返回false.
+     * 判断与另一个属性是否匹配，这里要注意：BooleanAttribute会把数值: 1或字符串"1"视为true,
      * @param other
      * @return 
      */
     @Override
     public boolean match(Object other) {
+        Boolean bOther = convertToBoolean(other);
+        return bOther != null && bOther == booleanValue();
+    }
+    
+    private Boolean convertToBoolean(Object other) {
         if (other instanceof Boolean) {
-            return this.booleanValue() == ((Boolean) other);
+            return (Boolean) other;
         }
-        if (other instanceof Number) {
-            return this.booleanValue() == convertNumber((Number) other);
+        // 注：对于整数字来说,只有 0或1可以转化为Boolean
+        if (other instanceof Integer) {
+            Integer iOther = (Integer) other;
+            if (iOther == 1) {
+                return true;
+            } else if (iOther == 0) {
+                return false;
+            }
         }
+        // 注：对于字符串来说,只有 "0", "1", "true", "false"可以转化为Boolean
         if (other instanceof String) {
-            return this.booleanValue() == convertString((String) other);
+            String sOther = (String) other;
+            if ("1".equals(sOther) || "true".equals(sOther)) {
+                return true;
+            } else if ("0".equals(sOther) || "false".equals(sOther)) {
+                return false;
+            }
         }
-        return false;
+        // 其它值不能转化
+        return null;
     }
     
-    private boolean convertNumber(Number other) {
-        return other.doubleValue() == 1;
-    }
-    
-    private boolean convertString(String other) {
-        return "1".equals(other) || "true".equals(other);
-    }
+//    // 这里要注意：BooleanAttribute会把数值: 1或字符串"1"视为true,
+//    private boolean convertNumber(Number other) {
+//        return other.doubleValue() == 1;
+//    }
+//    
+//    private boolean convertString(String other) {
+//        return "1".equals(other) || "true".equals(other);
+//    }
 
 }

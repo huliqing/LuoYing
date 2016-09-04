@@ -18,7 +18,7 @@ import name.huliqing.core.mvc.service.PlayService;
  * 动画控制，V2
  * @author huliqing
  * @param <T>
- * @param <E>
+ * @param <E> 
  */
 public abstract class AbstractAnim<T extends AnimData, E> implements Anim<T, E> {
     private final static Logger LOG = Logger.getLogger(AbstractAnim.class.getName());
@@ -213,10 +213,6 @@ public abstract class AbstractAnim<T extends AnimData, E> implements Anim<T, E> 
         
         display(timeInterpolation);
         
-        // remove20160214,没有什么意义
-//        // listener
-//        doListenerDisplay();
-        
         if (stepEnd) {
             if (loop == Loop.dontLoop) {
                 doListenerDone();
@@ -238,16 +234,6 @@ public abstract class AbstractAnim<T extends AnimData, E> implements Anim<T, E> 
     public void pause(boolean paused) {
         this.paused = paused;
     }
-    
-    // remove20160214,没有什么意义
-//    private void doListenerDisplay() {
-//        if (listeners == null) {
-//            return;
-//        }
-//        for (int i = 0; i < listeners.size(); i++) {
-//            listeners.get(i).onDisplay(this);
-//        }
-//    }
     
     private void doListenerDone() {
         if (listeners == null) {

@@ -142,7 +142,7 @@ public class ActorDataLoader implements DataLoader<ActorData> {
 //        data.setLevel(proto.getAsInteger("level", 1));
         
         // 武器插槽
-        List<String> slots = proto.getAsList("slots");
+        List<String> slots = proto.getAsStringList("slots");
         
         // 角色属性
         String[] attributeArr = proto.getAsArray("attributes");
@@ -197,7 +197,7 @@ public class ActorDataLoader implements DataLoader<ActorData> {
         // remove20160830
 //        data.setDrop(dropData);
 
-        data.setSlots(slots);
+//        data.setSlots(slots);
 //        data.setLifeAttribute(lifeAttribute);
 //        data.setViewAttribute(viewAttribute);
 

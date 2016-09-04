@@ -354,7 +354,7 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
      */
     public long getTarget() {
         if (targetAttribute != null) {
-            return targetAttribute.getValue().longValue();
+            return targetAttribute.longValue();
         }
         return 0;
     }

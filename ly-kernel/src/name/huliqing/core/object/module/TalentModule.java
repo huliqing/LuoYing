@@ -34,16 +34,14 @@ public class TalentModule extends AbstractModule implements ValueChangeListener<
     private final AttributeService attributeService = Factory.get(AttributeService.class);
     private final ElService elService = Factory.get(ElService.class);
     
-    /**
-     * 角色等级属性的名称，用于查找角色的“等级属性”并进行绑定监听等级变化
-     */
-    private String levelAttributeName;
+    private Control updateControl;
     
-    /**
-     * 天赋属性名称，这个属性将作为天赋点数的容器，属性类型必须是Number类型。
-     * 当角色升级时获得的天赋点数将累加在这个属性上。
-     */
-    private String talentPointsAttributeName;
+    // 角色等级属性的名称，用于查找角色的“等级属性”并进行绑定监听等级变化
+    private String bindLevelAttribute;
+    
+    // 天赋属性名称，这个属性将作为天赋点数的容器，属性类型必须是Number类型。
+    // 当角色升级时获得的天赋点数将累加在这个属性上。
+    private String bindTalentPointsAttribute;
     
     /**
      * 默认的天赋奖励点数，如果没有设置talentPointsLevelEl则始终使用这个值作为天赋点数奖励。
@@ -60,31 +58,23 @@ public class TalentModule extends AbstractModule implements ValueChangeListener<
     
     // 天赋实例
     private final SafeArrayList<Talent> talents = new SafeArrayList<Talent>(Talent.class);
+    
     // 天赋侦听器
     private List<TalentListener> talentListeners;
     
-    /** 
-     * 角色的等级属性，用于监听角色等级变化
-     */
+    // 角色的等级属性，用于监听角色等级变化
     private NumberAttribute levelAttribute;
-    
-    /** 
-     * 角色的天赋点数容器属性,用于存放角色所增加的天赋点数 
-     */
+    // 角色的天赋点数容器属性,用于存放角色所增加的天赋点数 
     private NumberAttribute talentPointsAttribute;
     
-    /**
-     * 最近一次给角色添加天赋点数时角色的等级,记住这个值用于避免重复给角色添加天赋点数。
-     */
+    // 最近一次给角色添加天赋点数时角色的等级,记住这个值用于避免重复给角色添加天赋点数。
     private int lastApplyTalentPointsLevel;
-    
-    private Control updateControl;
 
     @Override
     public void setData(ModuleData data) {
         super.setData(data); 
-        levelAttributeName = data.getAsString("levelAttributeName");
-        talentPointsAttributeName = data.getAsString("talentPointsAttributeName");
+        bindLevelAttribute = data.getAsString("bindLevelAttribute");
+        bindTalentPointsAttribute = data.getAsString("bindTalentPointsAttribute");
         talentPointsValue = data.getAsInteger("talentPointsValue", 0);
         talentPointsLevelEl = data.getAsString("talentPointsLevelEl");
         lastApplyTalentPointsLevel = data.getAsInteger("lastApplyTalentPointsLevel", 0);
@@ -100,19 +90,19 @@ public class TalentModule extends AbstractModule implements ValueChangeListener<
         this.actor = actor;
         
         // 绑定并监听角色等级变化
-        levelAttribute = attributeService.getAttributeByName(actor, levelAttributeName);
+        levelAttribute = attributeService.getAttributeByName(actor, bindLevelAttribute);
         if (levelAttribute != null) {
             levelAttribute.addListener(this);
         } else {
             LOG.log(Level.WARNING, "levelAttribute not found by levelAttributeName={0}, actorId={1}"
-                    , new Object[] {levelAttributeName, actor.getData().getId()});
+                    , new Object[] {bindLevelAttribute, actor.getData().getId()});
         }
         
         // 获取天赋点数容器属性
-        talentPointsAttribute = attributeService.getAttributeByName(actor, talentPointsAttributeName);
+        talentPointsAttribute = attributeService.getAttributeByName(actor, bindTalentPointsAttribute);
         if (talentPointsAttribute == null) {
             LOG.log(Level.WARNING, "talentPointsAttribute not found, by talentPointsAttributeName={0}, actorId={1}"
-                    , new Object[] {talentPointsAttributeName, actor.getData().getId()});
+                    , new Object[] {bindTalentPointsAttribute, actor.getData().getId()});
         }
         
         // 初始化，载入天赋

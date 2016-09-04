@@ -106,7 +106,7 @@ public abstract class AbstractTask<T extends TaskData> implements Task<T> {
         // 奖励属性值
         if (rewardAttributes != null) {
             for (RewardAttribute ra : rewardAttributes) {
-                attributeNetwork.addAttributeValue(actor, ra.attributeName, ra.value);
+                attributeNetwork.addNumberAttributeValue(actor, ra.attributeName, ra.value);
             }
         }
         // 奖励物品

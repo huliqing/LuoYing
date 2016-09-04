@@ -18,11 +18,10 @@ import name.huliqing.core.object.module.AttributeModule;
  * 等级值只能通过设置等级来设置,而动态值可能通过普通的setValue, add, subtract等方式来操作。<br>
  * @author huliqing
  */
-public class LevelIntegerAttribute extends NumberAttribute<Integer, AttributeData> implements LevelAttribute {
+public class LevelIntegerAttribute extends IntegerAttribute implements LevelAttribute {
     private final ElService elService = Factory.get(ElService.class);
     
     // 完整的value是由levelValue+dynamicValue
-    private int value;
 
     // 等级值只能通过设置等级来设置
     private int levelValue;
@@ -38,8 +37,7 @@ public class LevelIntegerAttribute extends NumberAttribute<Integer, AttributeDat
 
     @Override
     public void setData(AttributeData data) {
-        super.setData(data); 
-        value = data.getAsInteger("value", 0);
+        super.setData(data);
         levelValue = data.getAsInteger("levelValue", levelValue);
         dynamicValue = data.getAsInteger("dynamicValue", dynamicValue);
         level = data.getAsInteger("level", 1);
@@ -47,69 +45,13 @@ public class LevelIntegerAttribute extends NumberAttribute<Integer, AttributeDat
     }
     
     // 更新data值，以避免在外部使用data时获取不到实时的数据
+    @Override
     protected void updateData() {
-        data.setAttribute("value", value);
+        super.updateData();
         data.setAttribute("levelValue", levelValue);
         data.setAttribute("dynamicValue", dynamicValue);
         data.setAttribute("level", level);
 //        data.setAttribute("levelEl", levelEl); // levelEl不会改变，所以不需要重新设置回去。
-    }
-    
-    @Override
-    public final int intValue() {
-        return value;
-    }
-
-    @Override
-    public final float floatValue() {
-        return value;
-    }
-    
-    @Override
-    public final long longValue() {
-        return value;
-    }
-
-    @Override
-    public final double doubleValue() {
-        return value;
-    }
-    
-    /**
-     * 获取属性的最终值，这个值是由当前属性的等级值和当前的动态值决定的。
-     * 最终的返回值为 fullValue = levelValue + dynamicValue, 
-     * 注：LevelIntegerAttribute根据不同等级可能会计算出不同的等级值。
-     * @return 
-     */
-    @Override
-    public final Integer getValue() {
-        return value;
-    }
-    
-    /**
-     * 设置动态值，注：这个方法会把value设置在动态值上，
-     * 最终的返回值 {@link #getValue() } 并不一定等于这个设置的值，
-     * {@link #getValue() }的最终返回值会受当前属性的等级值的影响。
-     * @param value 
-     * @see #getValue() 
-     */
-    @Override
-    public final void setValue(Number value) {
-        this.dynamicValue = value.intValue();
-        setAndNotify(levelValue + dynamicValue);
-    }
-    
-    /**
-     * 重新计算属性的最终值,这个方法可以在改变了动态值或等级值之后进行调用，以重新计算当前属性值。
-     * @param newFullValue
-     */
-    protected final void setAndNotify(int newFullValue) {
-        int oldValue = this.value;
-        this.value = newFullValue;
-        updateData();
-        if (oldValue != this.value) {
-            notifyValueChangeListeners(oldValue, this.value);
-        }
     }
     
     @Override
@@ -127,7 +69,7 @@ public class LevelIntegerAttribute extends NumberAttribute<Integer, AttributeDat
         if (el != null) {
             levelValue = (int) el.getValue(level);
         }
-        setAndNotify(levelValue + dynamicValue);
+        setValue(levelValue + dynamicValue);
     }
     
     /**
@@ -137,7 +79,7 @@ public class LevelIntegerAttribute extends NumberAttribute<Integer, AttributeDat
     @Override
     public final void add(int other) {
         dynamicValue += other;
-        setAndNotify(levelValue + dynamicValue);
+        setValue(levelValue + dynamicValue);
     }
 
     /**
@@ -147,7 +89,7 @@ public class LevelIntegerAttribute extends NumberAttribute<Integer, AttributeDat
     @Override
     public final void add(float other) {
         dynamicValue += other;
-        setAndNotify(levelValue + dynamicValue);
+        setValue(levelValue + dynamicValue);
     }
 
     /**
@@ -157,7 +99,7 @@ public class LevelIntegerAttribute extends NumberAttribute<Integer, AttributeDat
     @Override
     public final void subtract(int other) {
         dynamicValue -= other;
-        setAndNotify(levelValue + dynamicValue);
+        setValue(levelValue + dynamicValue);
     }
     
     /**
@@ -167,48 +109,7 @@ public class LevelIntegerAttribute extends NumberAttribute<Integer, AttributeDat
     @Override
     public final void subtract(float other) {
         dynamicValue -= other;
-        setAndNotify(levelValue + dynamicValue);
-    }
-
-    @Override
-    public final boolean isEqualTo(int other) {
-        return value == other;
-    }
-
-    @Override
-    public final boolean isEqualTo(float other) {
-        return value == other;
-    }
-
-    @Override
-    public final boolean greaterThan(int other) {
-        return value > other;
-    }
-
-    @Override
-    public final boolean greaterThan(float other) {
-        return value > other;
-    }
-
-    @Override
-    public final boolean lessThan(int other) {
-        return value < other;
-    }
-
-    @Override
-    public final boolean lessThan(float other) {
-        return value < other;
-    }
-   
-    @Override
-    public final boolean match(final Object other) {
-        if (other instanceof Number) {
-            return this.doubleValue() == ((Number) other).doubleValue();
-        }
-        if (other instanceof String) {
-            return this.intValue() == Integer.parseInt((String) other);
-        }
-        return super.match(other);
+        setValue(levelValue + dynamicValue);
     }
 
     @Override
@@ -223,7 +124,7 @@ public class LevelIntegerAttribute extends NumberAttribute<Integer, AttributeDat
         }
         
         // 设置值并在可能值变的情况下触发侦听器,当有其它属性绑定了当前属性时，这个值变侦听很重要。
-        setAndNotify(levelValue + dynamicValue);
+        setValue(levelValue + dynamicValue);
         
     }
     

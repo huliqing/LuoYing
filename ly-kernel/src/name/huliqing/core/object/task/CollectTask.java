@@ -73,7 +73,7 @@ public class CollectTask<T extends TaskData> extends AbstractTask<T> implements 
             iw.total = itemArr.length > 1 ? ConvertUtils.toInteger(itemArr[1], 1) : 1;
             items.add(iw);
         }
-        targets = data.getAsList("targets");
+        targets = data.getAsStringList("targets");
         dropFactor = MathUtils.clamp(data.getAsFloat("dropFactor", dropFactor), 0f, 1f);
     }
 

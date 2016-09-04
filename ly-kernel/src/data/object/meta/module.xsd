@@ -156,19 +156,19 @@ xs:time
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="moduleBase">
-                    <xs:attribute name="levelAttributeName" type="xs:string" use="required">
+                    <xs:attribute name="bindLevelAttribute" type="xs:string" use="required">
                         <xs:annotation>
-                            <xs:documentation>角色的等级属性名称，这个属性用于存放角色的等级值,当角色的等级变化后会存取在这个属性中。</xs:documentation>
+                            <xs:documentation>bind NumberAttribute, 角色的等级属性名称，这个属性用于存放角色的等级值,当角色的等级变化后会存取在这个属性中。</xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="xpAttributeName" type="xs:string" use="required">
+                    <xs:attribute name="bindXpAttribute" type="xs:string" use="required">
                         <xs:annotation>
-                            <xs:documentation>角色的经验值（xp）属性名称，模块通过这个属性的值变化来计算角色的等级值。</xs:documentation>
+                            <xs:documentation>bind NumberAttribute, 角色的经验值（xp）属性名称，模块通过这个属性的值变化来计算角色的等级值。</xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="xpNextAttributeName" type="xs:string" use="required">
+                    <xs:attribute name="bindXpNextAttribute" type="xs:string" use="required">
                         <xs:annotation>
-                            <xs:documentation>到达下一个等级角色需要的经验值（xp）属性名称，模块在运行时会自动把下一等级需要的经验值计算后放在这个属性上。</xs:documentation>
+                            <xs:documentation>bind NumberAttribute, 到达下一个等级角色需要的经验值（xp）属性名称，模块在运行时会自动把下一等级需要的经验值计算后放在这个属性上。</xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
                     <xs:attribute name="xpLevelEl" type="xs:string" use="required">
@@ -237,7 +237,15 @@ xs:time
         </xs:annotation>
         <xs:complexType>
             <xs:complexContent>
-                <xs:extension base="moduleBase"></xs:extension>
+                <xs:extension base="moduleBase">
+                    <xs:attribute name="bindWeaponSlotAttribute" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>
+                                bind CollectionAttribute&lt;String&gt; 绑定角色属性，这个属性中存放角色优先支持的武器槽位的id.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
             </xs:complexContent>
         </xs:complexType>
     </xs:element>
@@ -260,18 +268,17 @@ xs:time
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="moduleBase">
-                    <xs:attribute name="levelAttributeName" type="xs:string" use="required">
+                    <xs:attribute name="bindLevelAttribute" type="xs:string" use="required">
                         <xs:annotation>
                             <xs:documentation>
-                                绑定角色的等级属性的名称(Number类型），天赋模块用这个属性的值变化来判断角色是否升级。
+                                bind NumberAttribute, 绑定角色的等级属性的名称(Number类型），天赋模块用这个属性的值变化来判断角色是否升级。
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="talentPointsAttributeName" type="xs:string" use="required">
+                    <xs:attribute name="bindTalentPointsAttribute" type="xs:string" use="required">
                         <xs:annotation>
                             <xs:documentation>
-                                绑定一个属性名称，这个属性将作为天赋点数的容器，属性类型必须是Number类型。
-                                当角色升级时获得的天赋点数将累加在这个属性上。
+                                bind NumberAttribute, 绑定一个属性名称，这个属性将作为天赋点数的容器，当角色升级时获得的天赋点数将累加在这个属性上。
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>

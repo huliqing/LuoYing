@@ -28,7 +28,23 @@ xs:time
                 <xs:element ref="attributeLimitInteger" />
                 <xs:element ref="attributeLong" />
                 <xs:element ref="attributeString" />
+                <xs:element ref="attributeStringList" />
             </xs:all>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="attributeBoolean" >
+        <xs:annotation>
+            <xs:documentation>整数类型的属性</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="attributeBase">
+                    <xs:attribute name="value" type="bool" >
+                        <xs:annotation><xs:documentation>属性初始值</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
         </xs:complexType>
     </xs:element>
             
@@ -41,6 +57,23 @@ xs:time
                 <xs:extension base="attributeBase">
                     <xs:attribute name="value" type="xs:decimals" use="optional" >
                         <xs:annotation><xs:documentation>属性初始值, 可以是float或int值.</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="attributeGroup" >
+        <xs:annotation>
+            <xs:documentation>
+                属性组
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="attributeBase">
+                    <xs:attribute name="attributes" type="xs:string" use="required" >
+                        <xs:annotation><xs:documentation>添加其它属性ID, 格式："attributeId1,attributeId2,..."</xs:documentation></xs:annotation>
                     </xs:attribute>
                 </xs:extension>
             </xs:complexContent>
@@ -62,49 +95,6 @@ xs:time
         </xs:complexType>
     </xs:element>
     
-    <xs:element name="attributeLong" >
-        <xs:annotation>
-            <xs:documentation>整数类型的属性</xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="attributeBase">
-                    <xs:attribute name="value" type="xs:integer" use="optional" >
-                        <xs:annotation><xs:documentation>属性初始值, long或int</xs:documentation></xs:annotation>
-                    </xs:attribute>
-                </xs:extension>
-            </xs:complexContent>
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="attributeString" >
-        <xs:annotation>
-            <xs:documentation>整数类型的属性</xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="attributeBase">
-                    <xs:attribute name="value" type="xs:string" use="optional" >
-                        <xs:annotation><xs:documentation>属性初始值, String类型</xs:documentation></xs:annotation>
-                    </xs:attribute>
-                </xs:extension>
-            </xs:complexContent>
-        </xs:complexType>
-    </xs:element>
-    
-    <xs:element name="attributeBoolean" >
-        <xs:annotation>
-            <xs:documentation>整数类型的属性</xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="attributeBase">
-                    <xs:attribute name="value" type="bool" >
-                        <xs:annotation><xs:documentation>属性初始值</xs:documentation></xs:annotation>
-                    </xs:attribute>
-                </xs:extension>
-            </xs:complexContent>
-        </xs:complexType>
-    </xs:element>
     <xs:element name="attributeLevelFloat" >
         <xs:annotation>
             <xs:documentation>可以设置等级的属性,这种属性可以随着等级而改变属性值。</xs:documentation>
@@ -170,62 +160,74 @@ xs:time
                         <xs:annotation><xs:documentation>属性初始值, int值.</xs:documentation></xs:annotation>
                     </xs:attribute>
                     <xs:attribute name="minValue" type="xs:integer" use="optional" >
-                        <xs:annotation><xs:documentation>最小值限制，int类型，如果设置了minLimitAttributeName则minValue将会被忽略</xs:documentation></xs:annotation>
+                        <xs:annotation><xs:documentation>最小值限制，int类型，如果设置了bindMinLimitAttribute则minValue将会被忽略</xs:documentation></xs:annotation>
                     </xs:attribute>
                     <xs:attribute name="maxValue" type="xs:integer" use="optional" >
-                        <xs:annotation><xs:documentation>最大值限制，int类型，如果设置了maxLimitAttributeName则maxValue将会被忽略</xs:documentation></xs:annotation>
+                        <xs:annotation><xs:documentation>最大值限制，int类型，如果设置了bindMaxLimitAttribute则maxValue将会被忽略</xs:documentation></xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="minLimitAttributeName" type="xs:integer" use="optional" >
-                        <xs:annotation><xs:documentation>绑定一个属性"名称", 用这个属性的值来限制当前属性值的最小值。如果设置了这个值，则minValue的设置将会被忽略。</xs:documentation></xs:annotation>
+                    <xs:attribute name="bindMinLimitAttribute" type="xs:string" use="optional" >
+                        <xs:annotation><xs:documentation>bind NumberAttribute, 绑定一个属性"名称", 用这个属性的值来限制当前属性值的最小值。如果设置了这个值，则minValue的设置将会被忽略。</xs:documentation></xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="maxLimitAttributeName" type="xs:integer" use="optional" >
-                        <xs:annotation><xs:documentation>绑定一个属性"名称", 用这个属性的值来限制当前属性值的最大值。如果设置了这个值，则maxValue的设置将会被忽略。</xs:documentation></xs:annotation>
-                    </xs:attribute>
-                </xs:extension>
-            </xs:complexContent>
-        </xs:complexType>
-    </xs:element>
-    
-    <xs:element name="attributeGroup" >
-        <xs:annotation>
-            <xs:documentation>
-                属性组
-            </xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="attributeBase">
-                    <xs:attribute name="attributes" type="xs:string" use="required" >
-                        <xs:annotation><xs:documentation>添加其它属性ID, 格式："attributeId1,attributeId2,..."</xs:documentation></xs:annotation>
+                    <xs:attribute name="bindMaxLimitAttribute" type="xs:string" use="optional" >
+                        <xs:annotation><xs:documentation>bind NumberAttribute, 绑定一个属性"名称", 用这个属性的值来限制当前属性值的最大值。如果设置了这个值，则maxValue的设置将会被忽略。</xs:documentation></xs:annotation>
                     </xs:attribute>
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
     </xs:element>
     
-<!--    <xs:element name="attributeReplacer" >
+    <xs:element name="attributeLong" >
         <xs:annotation>
-            <xs:documentation>ReplacerAttribute属性与GroupAttribute相似，可以将一系列的属性打包成一个属性组，
-                区别是这个属性组中的所有属性在载入时都会偿试去替换掉原有的属性，替换的时候是根据属性"名称"来进行替换的。
-                当ReplaceAttribute在载入一个子属性时会去判断角色是否已经存在了一个相同名称的子属性，
-                如果已经存在则移除旧的，并将新的属性替换进去。
-            </xs:documentation>
+            <xs:documentation>整数类型的属性</xs:documentation>
         </xs:annotation>
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="attributeBase">
-                    <xs:attribute name="attributes" type="xs:string" use="required" >
+                    <xs:attribute name="value" type="xs:integer" use="optional" >
+                        <xs:annotation><xs:documentation>属性初始值, long或int</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="attributeString" >
+        <xs:annotation>
+            <xs:documentation>整数类型的属性</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="attributeBase">
+                    <xs:attribute name="value" type="xs:string" use="optional" >
+                        <xs:annotation><xs:documentation>属性初始值, String类型</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="attributeStringList">
+        <xs:annotation>
+            <xs:documentation>字符串集合</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="attributeBase">
+                    <xs:attribute name="values" type="xs:string" use="required" >
+                        <xs:annotation><xs:documentation>格式：“value1,value2,...”</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="duplication" type="bool" use="optional" >
                         <xs:annotation>
                             <xs:documentation>
-                                添加一些需要用于替换掉角色属性的属性。格式："attributeId1,attributeId2,..."
+                                是否允许重复,默认情况下不允许存放重复元素, 比如已经有元素："apple,banana", 当再次添加元素"apple"时将会被忽略。
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
-    </xs:element>-->
-                    
+    </xs:element>
+    
     <xs:complexType name="attributeBase">
         <xs:complexContent>
             <xs:extension base="base">

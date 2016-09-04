@@ -42,7 +42,7 @@ public class AttributeDrop extends Drop{
             AttributeEl el = elService.getAttributeEl(attributeEl);
             value += el.getValue(source, target);
         }
-        attributeService.addAttributeValue(target, attributeName, value);
+        attributeService.addNumberAttributeValue(target, attributeName, value);
     }
 
 }

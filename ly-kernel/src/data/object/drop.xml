@@ -18,19 +18,22 @@
     <dropItem id="dropItemGold1" item="itemGold" count="20" rate="0.99" />
     <dropItem id="dropItemTonicRed1" item="itemTonicRed" count="2" rate="0.5" />
     <dropItem id="dropItemTonicBlue1" item="itemTonicBlue" count="2" rate="0.5" />
-    <dropGroup id="dropBaseGroup1" drops="dropItemGold1,dropItemTonicRed1,dropItemTonicBlue1" />
-
+    <dropAttribute id="dropXp1" attributeName="attributeXp" attributeEl="elAttributeDropXp" fixedValue="0" />
+    <dropGroup id="dropBaseGroup1" drops="dropXp1, dropItemGold1,dropItemTonicRed1,dropItemTonicBlue1" />
+    
     <!--基本掉落: level2-->
     <dropItem id="dropItemGold2" item="itemGold" count="40" rate="0.99" />
     <dropItem id="dropItemTonicRed2" item="itemTonicRed" count="4" rate="0.5" />
     <dropItem id="dropItemTonicBlue2" item="itemTonicBlue" count="4" rate="0.5" />
-    <dropGroup id="dropBaseGroup2" drops="dropItemGold2,dropItemTonicRed2,dropItemTonicBlue2" />
+    <dropAttribute id="dropXp2" attributeName="attributeXp" attributeEl="elAttributeDropXp" fixedValue="100" />
+    <dropGroup id="dropBaseGroup2" drops="dropXp2, dropItemGold2,dropItemTonicRed2,dropItemTonicBlue2" />
 
     <!--基本掉落: level3-->
     <dropItem id="dropItemGold3" item="itemGold" count="80" rate="0.99" />
     <dropItem id="dropItemTonicRed3" item="itemTonicRed" count="8" rate="0.5" />
     <dropItem id="dropItemTonicBlue3" item="itemTonicBlue" count="8" rate="0.5" />
-    <dropGroup id="dropBaseGroup3" drops="dropItemGold3,dropItemTonicRed3,dropItemTonicBlue3" />
+    <dropAttribute id="dropXp3" attributeName="attributeXp" attributeEl="elAttributeDropXp" fixedValue="200" />
+    <dropGroup id="dropBaseGroup3" drops="dropXp3, dropItemGold3,dropItemTonicRed3,dropItemTonicBlue3" />
     
     <!--防御塔-->
     <dropItem id="dropItemTowers" item="itemTower" count="1" rate="0.3" />

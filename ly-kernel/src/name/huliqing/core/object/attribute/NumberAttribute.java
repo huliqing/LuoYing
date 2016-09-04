@@ -5,38 +5,72 @@
  */
 package name.huliqing.core.object.attribute;
 
-import name.huliqing.core.data.AttributeData;
 
 /**
  * Number类型的属性。
  * @author huliqing
- * @param <V>
  * @param <T>
  */
-public abstract class NumberAttribute<V extends Number, T extends AttributeData> extends AbstractAttribute<V, T> {
+public abstract class NumberAttribute<T extends Number> extends AbstractSimpleAttribute<Number> {
 
     @Override
-    public abstract V getValue();
+    public Number getValue() {
+        return super.getValue(); 
+    }
 
     @Override
-    public abstract void setValue(Number value);
+    public void setValue(Number newValue) {
+        super.setValue(newValue);
+    }
     
-    public abstract int intValue();
-    public abstract float floatValue();
-    public abstract long longValue();
-    public abstract double doubleValue();
+    public byte byteValue() {
+        return value.byteValue();
+    }
+    
+    public short shortValue() {
+        return value.shortValue();
+    }
+    
+    public int intValue() {
+        return value.intValue();
+    }
+    
+    public float floatValue() {
+        return value.floatValue();
+    }
+    
+    public long longValue() {
+        return value.longValue();
+    }
+    
+    public double doubleValue() {
+        return value.doubleValue();
+    }
+    
+    @Override
+    public final boolean match(Object other) {
+        if (other instanceof Number) {
+            return Double.compare(doubleValue(), ((Number) other).doubleValue()) == 0;
+        }
+        if (other instanceof String) {
+            return Double.compare(doubleValue(), Double.parseDouble((String) other)) == 0;
+        }
+        return this.equals(other);
+    }
     
     public abstract void add(int other);
     public abstract void add(float other);
     public abstract void subtract(int other);
     public abstract void subtract(float other);
     
-    public abstract boolean isEqualTo(int other);
-    public abstract boolean isEqualTo(float other);
+//    public abstract boolean isEqualTo(int other);
+//    public abstract boolean isEqualTo(float other);
+//    
+//    public abstract boolean greaterThan(final int other);
+//    public abstract boolean greaterThan(final float other);
+//    
+//    public abstract boolean lessThan(final int other);
+//    public abstract boolean lessThan(final float other);
+
     
-    public abstract boolean greaterThan(final int other);
-    public abstract boolean greaterThan(final float other);
-    
-    public abstract boolean lessThan(final int other);
-    public abstract boolean lessThan(final float other);
 }

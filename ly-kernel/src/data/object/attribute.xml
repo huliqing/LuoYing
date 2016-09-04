@@ -15,13 +15,13 @@
     <!--==========================================================================-->
 
     <!--生物属性： 这个属性用来标记角色是否是生物，即有"生命迹象"的角色，1：表示生物; 0：表示非生物-->    
-    <attributeBoolean id="attributeLiving" name="attributeLiving" value="" />
+    <attributeBoolean id="attributeLiving" name="attributeLiving" value="1" />
 
     <!--角色种族: 这个属性用来存放角色的种族标识，用不同的数字来定义不同的种族,存放的值由具体实现去定义。--> 
     <attributeInteger id="attributeRace" name="attributeRace" value="0" />
     
     <!--角色性别: 这个属性用不同的数字(整数)来定义和区分不同的性别-->
-    <attributeInteger id="attributeSex" name="attributeSex" />
+    <attributeInteger id="attributeSex" name="attributeSex" value="0" />
     
     <!--角色的等级, 这个属性在运行时存放角色的等级值。-->
     <attributeInteger id="attributeLevel" name="attributeLevel" value="1" />
@@ -33,7 +33,7 @@
     <attributeInteger id="attributeXp" name="attributeXp" />
     
     <!--到达下一个等级角色需要的经验值-->
-    <attributeInteger id="attributeXpNext" name="attributeXp" />
+    <attributeInteger id="attributeXpNext" name="attributeXpNext" />
     
     <!--角色所在分组-->
     <attributeInteger id="attributeGroup" name="attributeGroup" />
@@ -65,12 +65,12 @@
     <!--最高生命值-->
     <attributeLevelInteger id="attributeHealthMax" name="attributeHealthMax" levelEl="elLevelAttrHealth" />
     <!--实时生命值-->
-    <attributeLimitInteger id="attributeHealth" name="attributeHealth" minValue="0" maxLimitAttributeName="attributeHealthMax" value="100" />
+    <attributeLimitInteger id="attributeHealth" name="attributeHealth" minValue="0" bindMaxLimitAttribute="attributeHealthMax" />
     
     <!--最高魔法值-->
     <attributeLevelInteger id="attributeManaMax" name="attributeManaMax" levelEl="elLevelAttrMana" />
     <!--实时魔法值-->
-    <attributeLimitInteger id="attributeMana" name="attributeMana" minValue="0" maxLimitAttributeName="attributeManaMax" />
+    <attributeLimitInteger id="attributeMana" name="attributeMana" minValue="0" bindMaxLimitAttribute="attributeManaMax" />
     
     <!--物理攻击力-->
     <attributeLevelInteger id="attributeAttack" name="attributeAttack" levelEl="elLevelAttrAttack" />
@@ -106,7 +106,10 @@
     <attributeLevelFloat id="attributeGhostRate" name="attributeGhostRate" />
     
     <!--视力:影响角色的侦察范围-->
-    <attributeInteger id="attributeVision" name="attributeVision" value="20" />
+    <attributeInteger id="attributeVision" name="attributeVision" value="30" />
+    
+    <!--武器槽位：这个参数定义角色默认支持的武器槽位,默认空，由不同的角色去配置。-->
+    <attributeStringList id="attributeWeaponSlots" name="attributeWeaponSlots" />
 
     <!--==========================================================================-->
     <!--基本属性打包-->
@@ -146,6 +149,10 @@
     <attributeInteger id="attributeSexFemale" extends="attributeSex" value="1" />
     <attributeInteger id="attributeSexMale" extends="attributeSex" value="2" />
     
+    <!--武器槽位: 人类女性武器槽位-->
+    <attributeStringList id="attributeHumanFemaleWeaponSlot" extends="attributeWeaponSlots" 
+                         values="slotSwordLeftBack,slotSwordLeftBack2,slotSwordLeftWaist,slotSwordLeftWaist2,slotBowLeftBack,slotWandLeftBack" />
+    
     <!--==========================================================================-->
     <!--角色属性配置： 这些属性是直接配置给角色的。-->
     <!--==========================================================================-->
@@ -160,12 +167,19 @@
     
     <!--配置给：人类女性角色-->
     <attributeGroup id="attributeHumanFemale" name="attributeHumanFemale" 
-                       attributes="attributeGroupBase,attributeLivingYes,attributeRaceHuman,attributeSexFemale" />
+                       attributes="attributeGroupBase,attributeLivingYes,attributeRaceHuman,attributeSexFemale
+                       ,attributeHumanFemaleWeaponSlot" />
     
     <!--配置给：人类男性角色-->
     <attributeGroup id="attributeHumanMale" name="attributeHumanMale" 
                        attributes="attributeGroupBase,attributeLivingYes,attributeRaceHuman,attributeSexMale" />
     
+    <!--==========================================================================-->
+    <!-- 特殊角色的属性 -->
+    <!--==========================================================================-->
+    
+    <!--蒂娜的武器槽位-->
+    <attributeStringList id="attributeWeaponSlotDiNa" extends="attributeWeaponSlots" values="slotSwordLeftWaist,slotSwordLeftWaist2" />
     
     <!--remove20160901-->
 <!--    健康值:定义角色的生命值

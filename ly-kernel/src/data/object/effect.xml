@@ -286,7 +286,7 @@
     <!-- ========================================================================= -->
     <!--状态:晕眩,金星旋转-->
     <!-- ========================================================================= -->
-    <effectParticle id="effectStateStun" useTime="6" emitter="emitterStun" 
+    <effectParticle id="effectStateStun" useTime="3" emitter="emitterStun" 
         animations="animStateStunRot" tracePosition="always" 
               tracePositionType="origin_bound_top" initLocation="0,0.2,0" 
               inWorldSpace="0" sounds="soundStun" />

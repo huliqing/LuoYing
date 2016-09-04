@@ -12,16 +12,14 @@ import name.huliqing.core.xml.DataProcessor;
 /**
  *
  * @author huliqing
- * @param <V>
- * @param <T>
  */
-public interface Attribute<V, T extends AttributeData> extends DataProcessor<T> {
+public interface Attribute extends DataProcessor<AttributeData> {
 
     @Override
-    public void setData(T data);
+    public void setData(AttributeData data);
 
     @Override
-    public T getData();
+    public AttributeData getData();
     
      /**
      * 初始化属性
@@ -52,34 +50,34 @@ public interface Attribute<V, T extends AttributeData> extends DataProcessor<T> 
      */
     String getName();
     
-    /**
-     * 获取属性值。
-     * @return 
-     */
-    V getValue();
-
-    /**
-     * 设置属性值。
-     * @param value 
-     */
-    void setValue(V value);
+//    /**
+//     * 获取属性值。
+//     * @return 
+//     */
+//    V getValue();
+//
+//    /**
+//     * 设置属性值。
+//     * @param value 
+//     */
+//    void setValue(V value);
+//    
+//    /**
+//     * @param other
+//     * @return 
+//     */
+//    boolean match(Object other);
     
-    /**
-     * @param other
-     * @return 
-     */
-    boolean match(Object other);
-    
-    /**
-     * 添加一个侦听器用于监听属性值的变化
-     * @param listener 
-     */
-    void addListener(ValueChangeListener<V> listener);
-    
-    /**
-     * 移除属性侦听器
-     * @param listener
-     * @return 
-     */
-    boolean removeListener(ValueChangeListener<V> listener);
+//    /**
+//     * 添加一个侦听器用于监听属性值的变化
+//     * @param listener 
+//     */
+//    void addListener(ValueChangeListener<V> listener);
+//    
+//    /**
+//     * 移除属性侦听器
+//     * @param listener
+//     * @return 
+//     */
+//    boolean removeListener(ValueChangeListener<V> listener);
 }

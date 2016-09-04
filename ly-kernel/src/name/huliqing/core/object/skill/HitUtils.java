@@ -62,7 +62,7 @@ public class HitUtils {
         float oldAttrValue = attribute.floatValue();
         
         // Apply hit
-        actorNetwork.hitAttribute(target, attacker, hitAttrName, hitFinalValue);
+        actorNetwork.hitNumberAttribute(target, attacker, hitAttrName, hitFinalValue);
         
         // 注意：这里要判断之前是不是已经死亡了。如果已经死亡就不能再执行“死亡”或
         // “受伤”技能

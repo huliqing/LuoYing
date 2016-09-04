@@ -11,18 +11,17 @@ import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.object.actor.Actor;
 
 /**
- * SC,同步角色的属性值
  * @author huliqing
  */
 @Serializable
-public class MessAttributeSync<V> extends MessBase {
+public class MessAttributeNumberAddValue extends MessBase {
     
     private long actorId;
-    // 属性ID
-    private String attrName;
-    // 属性值
-    private V value;
 
+    private String attributeName;
+    
+    private float value;
+    
     public long getActorId() {
         return actorId;
     }
@@ -31,31 +30,30 @@ public class MessAttributeSync<V> extends MessBase {
         this.actorId = actorId;
     }
 
-    public String getAttrName() {
-        return attrName;
+    public String getAttributeName() {
+        return attributeName;
     }
 
-    public void setAttrName(String attrName) {
-        this.attrName = attrName;
+    public void setAttributeName(String attributeName) {
+        this.attributeName = attributeName;
     }
 
-    public V getValue() {
+    public float getValue() {
         return value;
     }
 
-    public void setValue(V value) {
+    public void setValue(float value) {
         this.value = value;
     }
-   
+
     @Override
     public void applyOnClient() {
         PlayService playService = Factory.get(PlayService.class);
         AttributeService attributeService = Factory.get(AttributeService.class);
         Actor actor = playService.findActor(actorId);
         if (actor != null) {
-//            attributeService.syncAttribute(actor, attribute, levelValue, staticValue, dynamicValue); // remove20160826
-            attributeService.setAttributeValue(actor, attrName, value);
+            attributeService.addNumberAttributeValue(actor, attributeName, value);
         }
     }
-
+    
 }

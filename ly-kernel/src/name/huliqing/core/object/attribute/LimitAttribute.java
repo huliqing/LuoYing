@@ -8,8 +8,9 @@ package name.huliqing.core.object.attribute;
 /**
  *
  * @author huliqing
+ * @param <T>
  */
-public interface LimitAttribute {
+public interface LimitAttribute<T extends Number> {
     
     /**
      * 获取最大限制值
@@ -33,5 +34,9 @@ public interface LimitAttribute {
      */
     void setMin();
     
-    
+    /**
+     * 获得当前值
+     * @return 
+     */
+    Number getValue();
 }

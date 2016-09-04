@@ -5,10 +5,12 @@
 package name.huliqing.core.mvc.service;
 
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.core.data.AttributeData;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.attribute.AbstractSimpleAttribute;
 import name.huliqing.core.object.attribute.Attribute;
 import name.huliqing.core.object.attribute.NumberAttribute;
 import name.huliqing.core.object.module.AttributeListener;
@@ -93,18 +95,21 @@ public class AttributeServiceImpl implements AttributeService {
     }
 
     @Override
-    public <V> void setAttributeValue(Actor actor, String attrName, V value) {
+    public <V> void setSimpleAttributeValue(Actor actor, String attrName, V value) {
         Attribute attr = getAttributeByName(actor, attrName);
-        if (attr != null) {
-            attr.setValue(value);
+        if (attr instanceof AbstractSimpleAttribute) {
+            ((AbstractSimpleAttribute) attr).setValue(value);
         }
     }
 
     @Override
-    public void addAttributeValue(Actor actor, String attrName, float value) {
+    public void addNumberAttributeValue(Actor actor, String attrName, float value) {
         Attribute attr = getAttributeByName(actor, attrName);
         if (attr instanceof NumberAttribute) {
             ((NumberAttribute)attr).add(value);
+        } else {
+            LOG.log(Level.WARNING, "Could not addNumberAttributeValue, attrName is not a NumberAttribute,"
+                    + " actorId={0}, attrName={1}, value={2}", new Object[] {actor.getData().getId(), attrName, value});
         }
     }
 

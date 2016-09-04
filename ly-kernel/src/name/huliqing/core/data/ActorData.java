@@ -65,7 +65,7 @@ public class ActorData extends ObjectData implements MatObject{
     
     // 角色使用的武器插槽优先顺序，当设置了这个值之后，角色的武器在收起时将优先
     // 存放在这些指定的插槽上，否则将根据武器的定义的插槽存放。
-    private List<String> slots;
+//    private List<String> slots;
     
 //    private int talentPoints;
 //    private String talentPointsLevelEl;
@@ -129,8 +129,8 @@ public class ActorData extends ObjectData implements MatObject{
 //        oc.write(autoDetect, "autoDetect", true);
 //        oc.write(actionDefFight, "actionDefFight", null);
 //        oc.write(actionDefRun, "actionDefRun", null);
-        if (slots != null)
-            oc.write(slots.toArray(new String[]{}), "slots", null);
+//        if (slots != null)
+//            oc.write(slots.toArray(new String[]{}), "slots", null);
         
 //        // 这里把attributes转换成arrayList是因为jme在read的时候会把map转换成无序的(即使是LinkedHashMap)
 //        // 所以为了保证在读入的时候顺序正确，需要把map转换成list.
@@ -180,7 +180,7 @@ public class ActorData extends ObjectData implements MatObject{
 //        target = ic.readLong("target", -1);
 //        autoAi = ic.readBoolean("autoAi", true);
 //        autoDetect = ic.readBoolean("autoDetect", true);
-        slots = ConvertUtils.toList(ic.readStringArray("slots", null));
+//        slots = ConvertUtils.toList(ic.readStringArray("slots", null));
         
 //        lifeAttribute = ic.readString("lifeAttribute", null);
 //        viewAttribute = ic.readString("viewAttribute", null);
@@ -282,18 +282,18 @@ public class ActorData extends ObjectData implements MatObject{
      * 存放在这些指定的插槽上，否则将根据武器的定义的插槽存放。
      * @return 
      */
-    public List<String> getSlots() {
-        return slots;
-    }
+//    public List<String> getSlots() {
+//        return slots;
+//    }
 
-    /**
-     * 角色使用的武器插槽优先顺序，当设置了这个值之后，角色的武器在收起时将优先
-     * 存放在这些指定的插槽上，否则将根据武器的定义的插槽存放。
-     * @param slots 
-     */
-    public void setSlots(List<String> slots) {
-        this.slots = slots;
-    }
+//    /**
+//     * 角色使用的武器插槽优先顺序，当设置了这个值之后，角色的武器在收起时将优先
+//     * 存放在这些指定的插槽上，否则将根据武器的定义的插槽存放。
+//     * @param slots 
+//     */
+//    public void setSlots(List<String> slots) {
+//        this.slots = slots;
+//    }
 
 //    public Map<String, AttributeData> getAttributes() {
 //        return attributes;

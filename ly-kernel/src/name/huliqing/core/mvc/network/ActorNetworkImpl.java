@@ -8,11 +8,9 @@ import com.jme3.animation.LoopMode;
 import com.jme3.math.ColorRGBA;
 import name.huliqing.core.network.Network;
 import com.jme3.math.Vector3f;
-import com.jme3.scene.Spatial;
 import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.ActorData;
-import name.huliqing.core.enums.HurtFace;
 import name.huliqing.core.enums.Sex;
 import name.huliqing.core.view.talk.Talk;
 import name.huliqing.core.mvc.service.ActorService;
@@ -26,9 +24,10 @@ import name.huliqing.core.mess.MessActorSetTarget;
 import name.huliqing.core.mess.MessActorSpeak;
 import name.huliqing.core.mess.MessActorTeam;
 import name.huliqing.core.mess.MessActorViewDir;
-import name.huliqing.core.mess.MessAttributeSync;
 import name.huliqing.core.mess.MessActorLookAt;
+import name.huliqing.core.mess.MessAttributeNumberHit;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.attribute.AbstractSimpleAttribute;
 import name.huliqing.core.object.attribute.Attribute;
 import name.huliqing.core.object.module.ActorListener;
 
@@ -190,17 +189,17 @@ public class ActorNetworkImpl implements ActorNetwork{
     }
     
     @Override
-    public void hitAttribute(Actor target, Actor source, String hitAttrName, float hitValue) {
+    public void hitNumberAttribute(Actor target, Actor source, String hitAttrName, float hitValue) {
         if (!NETWORK.isClient()) {
-            actorService.hitAttribute(target, source, hitAttrName, hitValue);
+            actorService.hitNumberAttribute(target, source, hitAttrName, hitValue);
             
-            // 同步生命值
-            Attribute attr = attributeService.getAttributeByName(target, hitAttrName);
-            if (NETWORK.hasConnections() && attr != null) {
-                MessAttributeSync mess = new MessAttributeSync();
-                mess.setActorId(target.getData().getUniqueId());
+            // 同步属性值
+            if (NETWORK.hasConnections()) {
+                MessAttributeNumberHit mess = new MessAttributeNumberHit();
+                mess.setTargetActor(target.getData().getUniqueId());
+                mess.setSourceActor(source.getData().getUniqueId());
                 mess.setAttrName(hitAttrName);
-                mess.setValue(attr.getValue());
+                mess.setValue(hitValue);
                 NETWORK.broadcast(mess);
             }
         }

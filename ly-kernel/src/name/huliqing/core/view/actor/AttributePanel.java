@@ -14,6 +14,7 @@ import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.mvc.service.AttributeService;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.attribute.AbstractSimpleAttribute;
 import name.huliqing.core.object.attribute.Attribute;
 import name.huliqing.core.object.attribute.LimitAttribute;
 import name.huliqing.core.ui.UIFactory;
@@ -90,9 +91,11 @@ public class AttributePanel extends LinearLayout implements ActorPanel {
                 }
                 item.setLabel(ResourceManager.getObjectName(attr.getData()));
                 if (attr instanceof LimitAttribute) {
-                    item.setValue(attr.getValue() + "/" + ((LimitAttribute) attr).getMaxLimit());
+                    item.setValue(((LimitAttribute)attr).getValue() + "/" + ((LimitAttribute) attr).getMaxLimit());
+                } else if (attr instanceof AbstractSimpleAttribute) {
+                    item.setValue(((AbstractSimpleAttribute)attr).getValue());
                 } else {
-                    item.setValue(attr.getValue());
+                    item.setValue(attr.toString());
                 }
                 count++;
             }

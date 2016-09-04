@@ -11,7 +11,6 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
-import com.jme3.scene.Spatial;
 import com.jme3.util.TempVars;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,19 +21,18 @@ import name.huliqing.core.Factory;
 import name.huliqing.core.utils.NpcNameUtils;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.data.ActorData;
-import name.huliqing.core.enums.HurtFace;
 import name.huliqing.core.enums.Sex;
 import name.huliqing.core.view.talk.Talk;
 import name.huliqing.core.object.actor.ActorModelLoader;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.enums.SkillType;
+import name.huliqing.core.object.attribute.Attribute;
 import name.huliqing.core.object.attribute.NumberAttribute;
 import name.huliqing.core.view.talk.SpeakManager;
 import name.huliqing.core.view.talk.TalkManager;
 import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.object.module.ActorListener;
 import name.huliqing.core.object.channel.Channel;
-import name.huliqing.core.object.el.LevelEl;
 import name.huliqing.core.utils.GeometryUtils;
 import name.huliqing.core.utils.Temp;
 import name.huliqing.core.object.module.ActorModule;
@@ -51,27 +49,11 @@ public class ActorServiceImpl implements ActorService {
 
     private AttributeService attributeService;
     private SkillService skillService;
-//    private StateService stateService;
-//    private LogicService logicService;
-//    private PlayService playService;
-//    private SkinService skinService;
-//    private ElService elService;
-//    private TalentService talentService;
-//    private EffectService effectService;
-//    private ConfigService configService;
     
     @Override
     public void inject() {
         attributeService = Factory.get(AttributeService.class);
         skillService = Factory.get(SkillService.class);
-//        stateService = Factory.get(StateService.class);
-//        logicService = Factory.get(LogicService.class);
-//        playService = Factory.get(PlayService.class);
-//        skinService = Factory.get(SkinService.class);
-//        elService = Factory.get(ElService.class);
-//        configService = Factory.get(ConfigService.class);
-//        talentService = Factory.get(TalentService.class);
-//        effectService = Factory.get(EffectService.class);
     }
 
     @Override
@@ -84,10 +66,6 @@ public class ActorServiceImpl implements ActorService {
     public Actor loadActor(ActorData actorData) {
         Actor actor = Loader.loadActor(actorData);
         actor.initialize();
-        
-        // remove20160826
-//        updateLevel(actor.getData());
-
         return actor;
     }
     
@@ -143,16 +121,6 @@ public class ActorServiceImpl implements ActorService {
         temp.release();
         return obstacle;
     }
-
-    // remove20160903
-//    @Override
-//    public HurtFace checkFace(Spatial self, Actor target) {
-//        if (getViewAngle(target, self.getWorldTranslation()) < 90) {
-//            return HurtFace.front;
-//        } else {
-//            return HurtFace.back;
-//        }
-//    }
 
     @Override
     public Actor findNearestEnemyExcept(Actor actor, float maxDistance, Actor except) {
@@ -361,46 +329,13 @@ public class ActorServiceImpl implements ActorService {
     }
 
     @Override
-    public void hitAttribute(Actor target, Actor source, String hitAttribute, float hitValue) {
-        // remove20160827
-//        if (!attributeService.existsAttribute(target, hitAttribute)) {
-//            return;
-//        }
-//        boolean deadBefore = isDead(target);
-//        attributeService.applyDynamicValue(target, hitAttribute, hitValue);
-//        attributeService.clampDynamicValue(target, hitAttribute);
-//        boolean killed = !deadBefore && isDead(target);
-//        
-//        // 触发"被攻击者(source)"的角色侦听器
-//        // "被伤害","被杀死"侦听
-//        List<ActorListener> sourceListeners = getActorModule(target).getActorListeners();
-//        if (sourceListeners != null) {
-//            for (ActorListener l : sourceListeners) {
-//                l.onActorHit(target, source, hitAttribute, hitValue);
-//                if (killed) {
-//                    l.onActorKilled(target, source);
-//                }
-//            }
-//        }
-//        
-//        // 触发"攻击者(attacker)"的角色侦听器
-//        // 当攻击者“杀死”目标时，要让“攻击者”知道.但有时候攻击者不是一个角色
-//        // 或者不是任何一个"存在",所以source可能为null.
-//        if (killed && source != null) {
-//            List<ActorListener> attackerListeners = getActorModule(source).getActorListeners();
-//            if (attackerListeners != null) {
-//                for (ActorListener al : attackerListeners) {
-//                    al.onActorKill(source, target);
-//                }
-//            }
-//        }
-
-        NumberAttribute attr = (NumberAttribute) attributeService.getAttributeByName(target, hitAttribute);
-        if (attr == null) {
+    public void hitNumberAttribute(Actor target, Actor source, String numberAttribute, float hitValue) {
+        Attribute attr = attributeService.getAttributeByName(target, numberAttribute);
+        if (!(attr instanceof NumberAttribute)) {
             return;
         }
         boolean deadBefore = isDead(target);
-        attr.add(hitValue);
+        attributeService.addNumberAttributeValue(target, numberAttribute, hitValue);
         boolean killed = !deadBefore && isDead(target);
         
         // 触发"被攻击者(source)"的角色侦听器
@@ -408,7 +343,7 @@ public class ActorServiceImpl implements ActorService {
         List<ActorListener> sourceListeners = getActorModule(target).getActorListeners();
         if (sourceListeners != null) {
             for (ActorListener l : sourceListeners) {
-                l.onActorHit(target, source, hitAttribute, hitValue);
+                l.onActorHit(target, source, numberAttribute, hitValue);
                 if (killed) {
                     l.onActorKilled(target, source);
                 }
@@ -418,7 +353,7 @@ public class ActorServiceImpl implements ActorService {
         // 触发"攻击者(attacker)"的角色侦听器
         // 当攻击者“杀死”目标时，要让“攻击者”知道.但有时候攻击者不是一个角色
         // 或者不是任何一个"存在",所以source可能为null.
-        if (killed && source != null) {
+        if (killed && source != null && source.isInitialized()) {
             List<ActorListener> attackerListeners = getActorModule(source).getActorListeners();
             if (attackerListeners != null) {
                 for (ActorListener al : attackerListeners) {
@@ -445,105 +380,6 @@ public class ActorServiceImpl implements ActorService {
         }
     }
     
-    // remove20160828
-    // 更新角色的属性等级
-//    private void updateLevel(Actor actor) {
-        // remove20160826
-//        // 根据等级计算公式为角色设置相应属性的等级值
-//        List<AttributeData> attributes = actorData.getObjectDatas(AttributeData.class, null);
-//        if (attributes != null) {
-//            LevelEl levelEl;
-//            for (AttributeData attrData : attributes) {
-//                levelEl = (LevelEl) elService.getEl(attrData.getEl());
-//                attrData.setLevelValue((float)levelEl.getValue(actorData.getLevel()));
-//                attrData.setDynamicValue(attrData.getMaxValue());
-//            }
-//        }
-//    }
-
-    // remove20160830
-//    @Override
-//    public int getXpReward(Actor attacker, Actor dead) {
-//        String xpDropEl = dead.getData().getXpDropEl();
-//        if (xpDropEl != null) {
-//            AttributeEl xde = elService.getAttributeEl(xpDropEl);
-////            return xde.getValue(dead.getData().getLevel(), attacker.getData().getLevel());
-//            return xde.getValue(getLevel(dead), getLevel(attacker));
-//        }
-//        return 0;
-//    }
-    
-    // remove20160830
-//    @Override
-//    public int applyXp(Actor actor, int xp) {
-//        // 如果没有配置升级公式则不作处理
-//        String levelUpEl = actor.getData().getLevelUpEl();
-//        if (levelUpEl == null) {
-//            return 0;
-//        }
-//        
-//        // 增加经验
-//        ActorData data = actor.getData();
-//        data.setXp(data.getXp() + xp);
-//        
-//        // 对当前场景角色进行提示，注：不需要对其它玩家角色提示
-//        if (actor == playService.getPlayer()) {
-//            playService.addMessage(ResourceManager.get(ResConstants.COMMON_GET_XP, new Object[]{xp}), MessageType.info);
-//        }
-//        
-//        // 检查升级
-//        Temp tv = Temp.get();
-//        tv.array2[0] = 0;   // upCount 可以升多少级
-//        tv.array2[1] = 0;   // needXp 需要多少XP
-//        ActorData actorData = actor.getData();
-//        LevelEl levelEl = (LevelEl) elService.getEl(actorData.getLevelUpEl());
-//        checkLevelUp(levelEl, actorData.getLevel(), actorData.getXp(), tv.array2, configService.getMaxLevel());
-//        int upCount = tv.array2[0];
-//        int needXp = tv.array2[1];
-//        tv.release();
-//        
-//        // 升级角色，如果可以升级
-//        if (upCount > 0) {
-//            
-//            // 1.奖励天赋点数
-//            String tpel = data.getTalentPointsLevelEl();
-//            int rewardTP = 0; // item talentPoints;
-//            if (tpel != null) {
-//                for (int i = 1; i <= upCount; i++) {
-//                    rewardTP += (int) elService.getLevelEl(tpel, data.getLevel() + i);
-//                }
-//                data.setTalentPoints(data.getTalentPoints() + rewardTP);
-//            }
-//            
-//            // 2.升级等级
-//            data.setLevel(data.getLevel() + upCount);
-//            actorData.setXp(actorData.getXp() - needXp);
-//            updateLevel(actorData);
-//            
-//            // 3.提示升级(效果）
-//            Effect effect = effectService.loadEffect(IdConstants.EFFECT_LEVEL_UP);
-//            effect.setTraceObject(actor.getSpatial());
-//            playService.addEffect(effect);
-//            
-//            // 4.提示升级(mess)
-//            if (actor == playService.getPlayer()) {
-//                playService.addMessage(ResourceManager.get(ResConstants.COMMON_LEVEL_UP) 
-//                            + "(" + actor.getData().getLevel() + ")"
-//                        , MessageType.levelUp);
-//                
-//            }
-//            
-//            // 4.提示获得天赋点数
-//            if (actor == playService.getPlayer() && rewardTP > 0) {
-//                playService.addMessage(ResourceManager.get(ResConstants.COMMON_GET_TALENT
-//                            , new Object[] {rewardTP})
-//                        , MessageType.levelUp);
-//            }
-//        }
-//        
-//        return upCount;
-//    }
-
     @Override
     public int getLevelXp(Actor actor, int level) {
         LevelModule module = actor.getModule(LevelModule.class);
@@ -686,28 +522,6 @@ public class ActorServiceImpl implements ActorService {
             ch.setLock(oldLocked);
         }
     }
-    
-    // remove20160903
-//    /**
-//     * 检查可以升多少级和需要多少经验
-//     * @param currentLevel 当前的等级
-//     * @param currentXp 当前的经验值
-//     * @param store 存放结果的数组，store[2] {upCount, needXp} upCount表示可以
-//     * 升多少级，needXp表示需要多少xp.
-//     */
-//    private void checkLevelUp(LevelEl el, int currentLevel, int currentXp, int[] store, int maxLevel) {
-//        if (currentLevel >= maxLevel) {
-//            return;
-//        }
-//        long nextXp = (long) el.getValue(currentLevel + 1);
-//        if (currentXp >= nextXp) {
-//            currentLevel++;
-//            currentXp -= nextXp;
-//            store[0] += 1;
-//            store[1] += (int) nextXp;
-//            checkLevelUp(el, currentLevel, currentXp, store, maxLevel);
-//        }
-//    }
 
     @Override
     public void setLocation(Actor actor, Vector3f location) {

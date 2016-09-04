@@ -53,7 +53,7 @@ public class AttributeModule extends AbstractModule<ModuleData> {
     public void addAttribute(Attribute attribute) {
         // 如果已经存在指定属性，则替换掉
         Attribute oldAttriubteById = store.getAttributeById(attribute.getId());
-        Attribute oldAttriubteByName = store.getAttributeById(attribute.getName());
+        Attribute oldAttriubteByName = store.getAttributeByName(attribute.getName());
         if (oldAttriubteById != null) {
             removeAttribute(oldAttriubteById);
         }

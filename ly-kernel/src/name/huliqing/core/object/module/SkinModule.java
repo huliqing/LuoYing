@@ -14,9 +14,11 @@ import name.huliqing.core.Factory;
 import name.huliqing.core.data.AttributeApply;
 import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.SkinData;
+import name.huliqing.core.data.module.ModuleData;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.mvc.service.AttributeService;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.attribute.CollectionAttribute;
 import name.huliqing.core.object.attribute.NumberAttribute;
 import name.huliqing.core.object.skin.Skin;
 import name.huliqing.core.object.skin.WeaponSkin;
@@ -29,9 +31,8 @@ import name.huliqing.core.xml.DataFactory;
  */
 public class SkinModule extends AbstractModule {
     private final AttributeService attributeService = Factory.get(AttributeService.class);
-
-    private Actor actor;
     
+    private Actor actor;
     // 监听角色装备、武器等的穿脱
     private List<SkinListener> skinListeners;
     
@@ -40,10 +41,26 @@ public class SkinModule extends AbstractModule {
     private List<SkinData> cacheWeaponInUsed;
     private int cacheWeaponState = -1;
     
+    // 绑定一个用于存放武器槽位的属性，必须是CollectionAttribute,这个属性中存放着角色优先支持的武器槽位列表（id)
+    private String bindWeaponSlotAttribute;
+    
+    // 武器槽位属性
+    private CollectionAttribute<String> weaponSlotAttribute;
+
+    @Override
+    public void setData(ModuleData data) {
+        super.setData(data);
+        bindWeaponSlotAttribute = data.getAsString("bindWeaponSlotAttribute");
+    }
+    
     @Override
     public void initialize(Actor actor) {
         super.initialize(actor); 
         this.actor = actor;
+        
+        if (bindWeaponSlotAttribute != null) {
+            weaponSlotAttribute = attributeService.getAttributeByName(actor, bindWeaponSlotAttribute);
+        }
         
         // 穿上普通装备
         List<SkinData> skinDatas =  actor.getData().getObjectDatas(SkinData.class, null);
@@ -228,8 +245,8 @@ public class SkinModule extends AbstractModule {
         List<SkinData> weaponSkins = getCurrentWeaponSkin();
         // 可用的要优先选择的槽位
         SafeArrayList<String> slotCandidate = null;
-        if (actor.getData().getSlots() != null) {
-            slotCandidate = new SafeArrayList<String>(String.class, actor.getData().getSlots());
+        if (weaponSlotAttribute != null && !weaponSlotAttribute.isEmpty()) {
+            slotCandidate = new SafeArrayList<String>(String.class, weaponSlotAttribute.values());
         }
         for (SkinData sd : weaponSkins) {
             Skin skin = Loader.loadSkin(sd);
@@ -258,8 +275,8 @@ public class SkinModule extends AbstractModule {
         List<SkinData> weaponSkins = getCurrentWeaponSkin();
         // 可用的要优先选择的槽位
         SafeArrayList<String> slotCandidate = null;
-        if (actor.getData().getSlots() != null) {
-            slotCandidate = new SafeArrayList<String>(String.class, actor.getData().getSlots());
+        if (weaponSlotAttribute != null && !weaponSlotAttribute.isEmpty()) {
+            slotCandidate = new SafeArrayList<String>(String.class, weaponSlotAttribute.values());
         }
         for (SkinData sd : weaponSkins) {
             Skin skin = Loader.loadSkin(sd);
@@ -452,8 +469,8 @@ public class SkinModule extends AbstractModule {
         // 找出角色当前可用的用于存放武器的槽位
         // 逻辑：从角色配置中的所有可用槽位中进行选择，需要移除当前正在使用中的武器的槽位.
         SafeArrayList<String> slotCandidate = null;
-        if (actor.getData().getSlots() != null) {
-            slotCandidate = new SafeArrayList<String>(String.class, actor.getData().getSlots());
+        if (weaponSlotAttribute != null && !weaponSlotAttribute.isEmpty()) {
+            slotCandidate = new SafeArrayList<String>(String.class, weaponSlotAttribute.values());
             // 获取正在使用中的武器，以便移除这些槽位
             List<SkinData> weaponSkins = getWeaponSkinsAllInUsed(null);
             if (weaponSkins != null) {

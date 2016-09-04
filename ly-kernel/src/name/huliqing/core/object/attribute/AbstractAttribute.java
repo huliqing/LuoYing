@@ -5,30 +5,25 @@
  */
 package name.huliqing.core.object.attribute;
 
-import java.util.ArrayList;
-import java.util.List;
 import name.huliqing.core.data.AttributeData;
 import name.huliqing.core.object.module.AttributeModule;
 
 /**
  *
  * @author huliqing 
- * @param <V>
- * @param <T>
  */
-public abstract class AbstractAttribute<V, T extends AttributeData> implements Attribute<V, T>{
+public abstract class AbstractAttribute implements Attribute {
 
-    protected T data;
+    protected AttributeData data;
     protected boolean initialized;
-    protected List<ValueChangeListener> listeners;
     
     @Override
-    public void setData(T data) {
+    public void setData(AttributeData data) {
         this.data = data;
     }
 
     @Override
-    public T getData() {
+    public AttributeData getData() {
         return data;
     }
 
@@ -60,44 +55,7 @@ public abstract class AbstractAttribute<V, T extends AttributeData> implements A
         initialized = false;
     }
 
-    /**
-     * 判断当前属性值是否与指定目标object匹配
-     * @param other
-     * @return 
-     */
-    @Override
-    public boolean match(Object other) {
-        if (other instanceof Attribute) {
-            return match(((Attribute) other).getValue());
-        }
-        return getValue().equals(other);
-    }
 
-    @Override
-    public void addListener(ValueChangeListener<V> listener) {
-        if (listeners == null) {
-            listeners = new ArrayList<ValueChangeListener>();
-        }
-        if (!listeners.contains(listener)) {
-            listeners.add(listener);
-        }
-    }
 
-    @Override
-    public boolean removeListener(ValueChangeListener<V> listener) {
-        return listeners != null && listeners.remove(listener);
-    }
-
-    /**
-     * 通知提示值变侦听器
-     * @param oldValue
-     * @param newValue 
-     */
-    protected void notifyValueChangeListeners(V oldValue, V newValue) {
-        if (listeners != null) {
-            for (int i = 0; i < listeners.size(); i++) {
-                listeners.get(i).onValueChanged(this, oldValue, newValue);
-            }
-        }
-    }
+    
 }

@@ -17,7 +17,7 @@ import name.huliqing.core.data.define.HandlerObject;
 public class ItemData extends ObjectData implements CostObject, HandlerObject{
     
     // 属性限制
-    private List<AttributeMatch> matchAttributes;
+    private List<AttributeMatch> attributeMatchs;
     
     // 判断物品是否是可删除的
     private boolean deletable = true;
@@ -38,16 +38,16 @@ public class ItemData extends ObjectData implements CostObject, HandlerObject{
      * 获取属性限制
      * @return 
      */
-    public List<AttributeMatch> getMatchAttributes() {
-        return matchAttributes;
+    public List<AttributeMatch> getAttributeMatchs() {
+        return attributeMatchs;
     }
 
     /**
      * 设置使用物品时的属性限制。
-     * @param matchAttributes 
+     * @param attributeMatchs 
      */
-    public void setMatchAttributes(List<AttributeMatch> matchAttributes) {
-        this.matchAttributes = matchAttributes;
+    public void setAttributeMatchs(List<AttributeMatch> attributeMatchs) {
+        this.attributeMatchs = attributeMatchs;
     }
     
     /**

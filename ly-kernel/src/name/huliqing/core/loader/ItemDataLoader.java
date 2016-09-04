@@ -29,13 +29,13 @@ public class ItemDataLoader implements DataLoader<ItemData> {
         // 属性限制，这些限制定义了：只有角色的属性与这些限制完全匹配时才可以使用这件物品
         String[] maArr = proto.getAsArray("matchAttributes");
         if (maArr != null && maArr.length > 0) {
-            data.setMatchAttributes(new ArrayList<AttributeMatch>(maArr.length));
+            data.setAttributeMatchs(new ArrayList<AttributeMatch>(maArr.length));
             for (String ma : maArr) {
                 String[] vArr = ma.split("\\|");
                 AttributeMatch am = new AttributeMatch();
                 am.setAttributeName(vArr[0].trim());
                 am.setValue(vArr[1].trim());
-                data.getMatchAttributes().add(am);
+                data.getAttributeMatchs().add(am);
             }
         }
     }

@@ -62,7 +62,7 @@
     <!--未分类静物：无生命迹象、种族未知、性别未知的角色， 如: 炮塔、宝箱、祭坛、房屋等-->
     <actor id="actorNonLiveBase" extends="actorBase" attributes="attributeActorUnliving"
            modules="moduleActor,moduleAction,moduleAttribute,moduleChannel,moduleChat,moduleItem,moduleLogic
-    ,moduleResist,moduleSkill,moduleSkin,moduleState,moduleTask,moduleDrop"
+    ,moduleResist,moduleSkill,moduleSkin,moduleState,moduleTask,moduleLevel,moduleDrop"
            logics="logicSearchEnemy,logicStaticFight"
            resist="resistNonLife"
            />
@@ -70,7 +70,7 @@
     <!--种族配置： 人类女性-->
     <actor id="actorHumanFemaleBase" extends="actorBase" attributes="attributeHumanFemale"
             modules="moduleActor,moduleAction,moduleAttribute,moduleChannel,moduleChat,moduleItem,moduleLogic
-    ,moduleResist,moduleSkill,moduleSkin,moduleState,moduleTask,moduleDrop"
+    ,moduleResist,moduleSkill,moduleSkin,moduleState,moduleTalent,moduleTask,moduleLevel,moduleDrop"
             logics="logicSearchEnemy,logicDynamicFight,logicPatrol,logicFollow,logicDefend"
             channels="channelLowerBody,channelUpperBody,channelLeftHand,channelRightHand,channelHead"
             resist="resistHuman"
@@ -188,7 +188,7 @@
              skinOutfit="skinFoot002,skinHand002,skinLowerBody002,skinUpperBody002" />
     
     <!-- 保箱任务角色：蒂娜 -->
-    <actor id="actorDiNa" extends="actorHumanFemaleBase"  slots="slotSwordLeftWaist,slotSwordLeftWaist2"
+    <actor id="actorDiNa" extends="actorHumanFemaleBase"  attributes="attributeHumanFemale,attributeWeaponSlotDiNa"
            skinWeapon="weaponSword000" icon="Interface/face/female4.jpg"
            skinBase="skinEar000,skinEye000,skinFace000,skinFoot000,skinHair011,skinHand000,skinLowerBody000,skinUpperBody000"
            skinOutfit="skinFoot001,skinHand001,skinLowerBody001,skinUpperBody001" 
@@ -333,7 +333,7 @@
     <actor id="actorSkeleton" extends="actorLiveBase" file="Models/monster/skeleton/skeleton.mesh.j3o" 
            items="" icon="Interface/face/skeleton.jpg" extAnim="Models/actor/ext_anim" 
            talents="" mat="5" resist="resistNonLife" drops="" 
-           skinWeapon="weaponSword000" slots=""
+           skinWeapon="weaponSword000" 
            group="1" sex="2" race="0" level="20" scale="0.2"
            skills="skillSkeletonWait,skillSkeletonAttack,skillSkeletonDead,skillSkeletonRun
 ,skillWalk,skillRun,skillReset,skillHurtFront,skillHurtBack,skillBowShot,skillDualSwordAttack," />

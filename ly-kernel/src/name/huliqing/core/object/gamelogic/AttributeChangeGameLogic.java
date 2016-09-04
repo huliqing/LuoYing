@@ -85,7 +85,7 @@ public class AttributeChangeGameLogic<T extends GameLogicData> extends AbstractG
 //            attributeNetwork.syncAttribute(actor, applyAttributeData.getId()
 //                    , applyAttributeData.getLevelValue(), applyAttributeData.getStaticValue(), applyAttributeData.getDynamicValue());
          
-            attributeNetwork.addAttributeValue(actor, applyAttribute, applyValue);
+            attributeNetwork.addNumberAttributeValue(actor, applyAttribute, applyValue);
         }
     }
 }

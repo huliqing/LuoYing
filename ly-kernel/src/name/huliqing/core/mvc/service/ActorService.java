@@ -207,11 +207,11 @@ public interface ActorService extends Inject {
      * 操作角色的某个属性.
      * @param target 接受hit的目标角色,或者说是被击中的角色。
      * @param source 攻击者，或者施放hit动作的角色。
-     * @param attrName hit的目标属性名称
+     * @param numberAttribute hit的目标属性名称,必须是NumberAttribute属性，否则什么也不做
      * @param hitValue hit值,这个值将直接执行在target角色的属性上，也即不受角色
      * 任何其它属性的影响。
      */
-    void hitAttribute(Actor target, Actor source, String attrName, float hitValue);
+    void hitNumberAttribute(Actor target, Actor source, String numberAttribute, float hitValue);
     
     /**
      * 获取角色等级

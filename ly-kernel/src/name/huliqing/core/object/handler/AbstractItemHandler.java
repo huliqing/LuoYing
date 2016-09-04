@@ -12,6 +12,7 @@ import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.mvc.service.AttributeService;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.attribute.Attribute;
+import name.huliqing.core.object.attribute.MatchAttribute;
 
 /**
  *
@@ -35,14 +36,17 @@ public abstract class AbstractItemHandler extends AbstractHandler {
     
     private boolean canUseItem(Actor actor, ItemData data) {
         // attributeMatchs == null 说明没有任何限制
-        if (data.getMatchAttributes() == null)
+        if (data.getAttributeMatchs() == null)
             return true;
         
         // 如果角色的属性中有一个不能和AttributeMatchs中要求的不匹配则视为不能使用。
         Attribute attr;
-        for (AttributeMatch am : data.getMatchAttributes()) {
+        for (AttributeMatch am : data.getAttributeMatchs()) {
             attr = attributeService.getAttributeByName(actor, am.getAttributeName());
-            if (attr == null || !attr.match(am.getValue())) {
+            if (!(attr instanceof MatchAttribute)) {
+                return false;
+            }
+            if (!((MatchAttribute)attr).match(am.getValue())) {
                 return false;
             }
         }

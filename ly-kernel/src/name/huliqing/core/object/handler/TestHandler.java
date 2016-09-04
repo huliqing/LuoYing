@@ -17,6 +17,7 @@ import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.mvc.service.StateService;
 import name.huliqing.core.mvc.service.ViewService;
+import name.huliqing.core.object.module.ActorModule;
 
 /**
  *
@@ -61,7 +62,8 @@ public class TestHandler extends AbstractHandler {
 //            stateService.addState(target, "stateScorpionVenom", actor);
 //        }
 
-        Actor aa = actorService.loadActor("actorAltar");
+        Actor aa = actorService.loadActor("actorDiNa");
+//        aa.getModule(ActorModule.class).setGroup(3);
         playService.addActor(aa);
 
     }

@@ -16,6 +16,7 @@ import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.attribute.Attribute;
 import name.huliqing.core.object.attribute.LevelAttribute;
+import name.huliqing.core.object.attribute.LimitAttribute;
 import name.huliqing.core.object.attribute.NumberAttribute;
 import name.huliqing.core.object.attribute.ValueChangeListener;
 import name.huliqing.core.object.effect.Effect;
@@ -33,34 +34,22 @@ public class LevelModule extends AbstractModule implements ValueChangeListener<N
     private final AttributeService attributeService = Factory.get(AttributeService.class);
     private final ElService elService = Factory.get(ElService.class);
 
-    /**
-     * 角色的等级属性名称，这个属性用于存放角色的等级值,当角色的等级变化后会存取在这个属性中。
-     */
-    private String levelAttributeName;
+    // 角色的等级属性名称，这个属性用于存放角色的等级值,当角色的等级变化后会存取在这个属性中。
+    private String bindLevelAttribute;
     
-    /**
-     * 角色的xp属性名称，用于查找角色的xp属性，模块通过监听这个属性的值变来操作角色的等级。
-     */
-    private String xpAttributeName;
+    // 角色的xp属性名称，用于查找角色的xp属性，模块通过监听这个属性的值变来操作角色的等级。
+    private String bindXpAttribute;
     
-    /**
-     * 到达下一个等级角色需要的经验值（xp）属性名称，模块在运行时会自动把下一等级需要的经验值计算后放在这个属性上。
-     */
-    private String xpNextAttributeName;
+    // 到达下一个等级角色需要的经验值（xp）属性名称，模块在运行时会自动把下一等级需要的经验值计算后放在这个属性上。
+    private String bindXpNextAttribute;
 
-    /**
-     * 角色等级公式,关联一个Level El, 这个公式用来计算角色在升级到每一个等级时需要的经验值(xp)数量。
-     */
+    // 角色等级公式,关联一个Level El, 这个公式用来计算角色在升级到每一个等级时需要的经验值(xp)数量。
     private String xpLevelElId;
 
-    /**
-     * 限制最高等级
-     */
+    // 限制最高等级
     private int maxLevel = Integer.MAX_VALUE;
     
-    /**
-     * 升级时的特效
-     */
+    // 升级时的特效
     private String effect;
     
     // ---- inner
@@ -73,9 +62,9 @@ public class LevelModule extends AbstractModule implements ValueChangeListener<N
     @Override
     public void setData(ModuleData data) {
         super.setData(data);
-        levelAttributeName = data.getAsString("levelAttributeName");
-        xpAttributeName = data.getAsString("xpAttributeName");
-        xpNextAttributeName = data.getAsString("xpNextAttributeName");
+        bindLevelAttribute = data.getAsString("bindLevelAttribute");
+        bindXpAttribute = data.getAsString("bindXpAttribute");
+        bindXpNextAttribute = data.getAsString("bindXpNextAttribute");
         xpLevelElId = data.getAsString("xpLevelEl");
         maxLevel = data.getAsInteger("maxLevel", maxLevel);
         effect = data.getAsString("effect");
@@ -86,24 +75,31 @@ public class LevelModule extends AbstractModule implements ValueChangeListener<N
         super.initialize(actor);
         this.actor = actor;
         // 查找角色的等级属性
-        levelAttribute = attributeService.getAttributeByName(actor, levelAttributeName);
+        levelAttribute = attributeService.getAttributeByName(actor, bindLevelAttribute);
         if (levelAttribute == null) {
-            LOG.log(Level.WARNING, "levelAttribute not found by levelAttributeName={0}, actorId={1}"
-                    , new Object[] {levelAttributeName, actor.getData().getId()});
+            LOG.log(Level.WARNING, "levelAttribute not found by bindLevelAttribute={0}, actorId={1}"
+                    , new Object[] {bindLevelAttribute, actor.getData().getId()});
         }
         
         // 角色的xp属性
-        xpAttribute = attributeService.getAttributeByName(actor, xpAttributeName);
+        xpAttribute = attributeService.getAttributeByName(actor, bindXpAttribute);
         if (xpAttribute != null) {
             xpAttribute.addListener(this);
         } else {
-            LOG.log(Level.WARNING, "xpAttribute not found by xpAttributeName={0}, actorId={1}"
-                    , new Object[] {xpAttributeName, actor.getData().getId()});
+            LOG.log(Level.WARNING, "xpAttribute not found by bindXpAttribute={0}, actorId={1}"
+                    , new Object[] {bindXpAttribute, actor.getData().getId()});
         }
         
-        xpNextAttribute = attributeService.getAttributeByName(actor, xpNextAttributeName);
+        // 这个属性用于存放要到达下一个等级所需要的经验值
+        xpNextAttribute = attributeService.getAttributeByName(actor, bindXpNextAttribute);
         
+        // 经验值计算公式。
         xpLevelEl = (LevelEl) elService.getEl(xpLevelElId);
+        
+        // 初始化等级
+        if (levelAttribute != null) {
+            setLevel(levelAttribute.intValue());
+        }
     }
 
     @Override
@@ -132,8 +128,9 @@ public class LevelModule extends AbstractModule implements ValueChangeListener<N
         }
         
         // 1.设置等级并
-        // 2.升级其它等级属性,注：只有等级属性(LevelAttribute)才可以升级
         levelAttribute.setValue(newLevel);
+        
+        // 2.升级其它等级属性,注：只有等级属性(LevelAttribute)才可以升级
         List<Attribute> attributes = attributeService.getAttributes(actor);
         for (Attribute attr : attributes) {
             if (attr == levelAttribute || attr == xpAttribute) {
@@ -141,6 +138,17 @@ public class LevelModule extends AbstractModule implements ValueChangeListener<N
             }
             if (attr instanceof LevelAttribute) {
                 ((LevelAttribute) attr).setLevel(newLevel);
+            }
+        }
+        
+        // 3.重置LimitAttribute,让这些属性“涨满”如，当前生命值，魔法值
+        // 注：这一步要放在“升级其它等级属性”之后处理，因为一些LimitAttribute属性可能依赖于一些等级属性的值。
+        for (Attribute attr : attributes) {
+            if (attr == levelAttribute || attr == xpAttribute) {
+                continue;
+            }
+            if (attr instanceof LimitAttribute) {
+                ((LimitAttribute) attr).setMax();
             }
         }
         
@@ -165,13 +173,11 @@ public class LevelModule extends AbstractModule implements ValueChangeListener<N
     // 当角色的xp属性的值发生变化时检查角色是否可以升级
     @Override
     public void onValueChanged(Attribute attribute, Number oldValue, Number newValue) {
-        if (attribute != this.xpAttribute) {
-            return;
+        if (attribute == this.xpAttribute) {
+            if (xpLevelEl != null && levelAttribute != null) {
+                levelUpCheck();
+            }
         }
-        if (xpLevelEl == null || levelAttribute == null || xpAttribute == null) {
-            return;
-        }
-        levelUpCheck();
     }
     
     // 检查并升级角色

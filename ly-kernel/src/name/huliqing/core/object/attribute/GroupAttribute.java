@@ -15,7 +15,7 @@ import name.huliqing.core.object.module.AttributeModule;
  * 属性组，属性组允许将一系列的属性打包成一个属性。在属性组载入时会把这些子属性一个一个载入到角色中。
  * @author huliqing
  */
-public class GroupAttribute extends AbstractAttribute<Void, AttributeData>{
+public class GroupAttribute extends AbstractAttribute {
 
     private AttributeModule module;
     
@@ -35,16 +35,6 @@ public class GroupAttribute extends AbstractAttribute<Void, AttributeData>{
     
     protected void updateData() {
         data.setAttribute("attributesApplied", attributesApplied);
-    }
-    
-    @Override
-    public Void getValue() {
-        return null;
-    }
-
-    @Override
-    public void setValue(Void value) {
-        // ignore
     }
 
     @Override

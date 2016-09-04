@@ -53,7 +53,7 @@ public class AttributeChangeActorLogic<T extends ActorLogicData> extends ActorLo
 //                , data.getLevelValue(), data.getStaticValue(), data.getDynamicValue());
         
         if (applyValue > 0.0001f) {
-            attributeNetwork.addAttributeValue(actor, targetAttribute, applyValue);
+            attributeNetwork.addNumberAttributeValue(actor, targetAttribute, applyValue);
         }
     }
 }

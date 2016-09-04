@@ -238,13 +238,34 @@ public class Data implements Savable {
         return defValue;
     }
     
+//    /**
+//     * 获取参数值，并以List形式返回，原始参数值格式必须是使用半角逗号","分隔的,
+//     * 如：属性值 "1,3,2", 如果属性值为null或空，则返回null.
+//     * @param key
+//     * @return 
+//     */
+//    public final List getAsList(String key) {
+//        Object value = getAttribute(key);
+//        if (value instanceof List) {
+//            return (List) value;
+//        }
+//        String[] arr = getAsArray(key);
+//        if (arr == null) {
+//            return null;
+//        }
+////        return Arrays.asList(arr); // 不要再使用asList, asList使用的是内部类，这会在序列化时异常
+//        List<Object> result = new ArrayList<Object>(arr.length);
+//        Collections.addAll(result, arr);
+//        return result;
+//    }
+    
     /**
      * 获取参数值，并以List形式返回，原始参数值格式必须是使用半角逗号","分隔的,
      * 如：属性值 "1,3,2", 如果属性值为null或空，则返回null.
      * @param key
      * @return 
      */
-    public final List<String> getAsList(String key) {
+    public final List<String> getAsStringList(String key) {
         Object value = getAttribute(key);
         if (value instanceof List) {
             return (List) value;
@@ -255,7 +276,6 @@ public class Data implements Savable {
             return null;
         
 //        return Arrays.asList(arr); // 不要再使用asList, asList使用的是内部类，这会在序列化时异常
-
         List<String> result = new ArrayList<String>(arr.length);
         Collections.addAll(result, arr);
         return result;

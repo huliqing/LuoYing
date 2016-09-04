@@ -14,13 +14,13 @@
     <elLevel  id="elLevelUp" expression="0 + 50 * Math.pow(1.2, {level})" />
     
     <!--=====================================================================-->
-    <!--经验掉落公式:配置给角色，用于指定当角色死亡后可以奖励给目标角色的经验值.
+    <!--DropAttribute掉落公式, 配置给Drop，用于指定当角色死亡后可以掉落的属性值。
     {s_level}为源角色等级（死亡的角色), {t_level}为目标角色，即获得获励的角色等级
     一般为攻击者角色。-->
     <!--=====================================================================-->
     
     <!--默认公式-->
-    <elAttribute id="elXpDrop" expression="(({s_attributeLevel} + 1) / ({t_attributeLevel} + 1)) * (0 + 12 * Math.pow(1.1, {s_attributeLevel}))" />
+    <elAttribute id="elAttributeDropXp" expression="(({s_attributeLevel} + 1) / ({t_attributeLevel} + 1)) * (0 + 12 * Math.pow(1.1, {s_attributeLevel}))" />
 
     <!--=====================================================================-->
     <!--属性值等级公式: 配置给属性，用于计算属性在指定等级时的属性值。-->

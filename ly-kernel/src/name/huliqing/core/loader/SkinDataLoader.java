@@ -40,7 +40,7 @@ public class SkinDataLoader implements DataLoader<SkinData> {
         }
         
         data.setWeaponType(proto.getAsInteger("weaponType", 0));
-        data.setSlots(proto.getAsList("slots"));
+        data.setSlots(proto.getAsStringList("slots"));
         
         // type是使用二进制位来存储skin类型
         String[] typeStr = proto.getAsArray("type");

@@ -12,6 +12,7 @@ import name.huliqing.core.data.SkinData;
 import name.huliqing.core.mvc.service.AttributeService;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.attribute.Attribute;
+import name.huliqing.core.object.attribute.MatchAttribute;
 
 /**
  *
@@ -42,7 +43,10 @@ public abstract class AbstractSkinHandler extends AbstractHandler {
         Attribute attr;
         for (AttributeMatch am : data.getMatchAttributes()) {
             attr = attributeService.getAttributeByName(actor, am.getAttributeName());
-            if (attr == null || !attr.match(am.getValue())) {
+            if (!(attr instanceof MatchAttribute)) {
+                return false;
+            }
+            if (!((MatchAttribute)attr).match(am.getValue())) {
                 return false;
             }
         }

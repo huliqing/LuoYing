@@ -75,7 +75,7 @@ public class SkillLockedState extends State implements SkillPlayListener {
                     lockSkillTypes[i] = SkillType.identifyByName(tempLockSkills[i]);
                 }
             }
-            lockSkillIds = data.getAsList("lockSkillIds");
+            lockSkillIds = data.getAsStringList("lockSkillIds");
             lockChannels = data.getAsArray("lockChannels");
         }
         lockPhysics = data.getAsBoolean("lockPhysics", false);

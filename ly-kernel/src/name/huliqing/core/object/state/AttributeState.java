@@ -52,7 +52,7 @@ public class AttributeState extends State {
         
         // data.getResist()为抵抗率，取值 [0.0~1.0], 如果为1.0则说明完全抵抗. 
         applyValue = value * (1 - data.getResist());
-        attributeService.addAttributeValue(actor, attributeName, applyValue);
+        attributeService.addNumberAttributeValue(actor, attributeName, applyValue);
         attributeApplied = true;
         updateData();
     }
@@ -60,7 +60,7 @@ public class AttributeState extends State {
     @Override
     public void cleanup() {
         if (attributeApplied && restore) {
-            attributeService.addAttributeValue(actor, attributeName, -applyValue);
+            attributeService.addNumberAttributeValue(actor, attributeName, -applyValue);
             attributeApplied = false;
             updateData();
         }
