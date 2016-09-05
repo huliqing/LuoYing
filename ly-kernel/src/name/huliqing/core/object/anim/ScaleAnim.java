@@ -6,15 +6,15 @@ package name.huliqing.core.object.anim;
 
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Spatial;
 import com.jme3.util.TempVars;
 import name.huliqing.core.data.AnimData;
 
 /**
  * 缩放动画
- * @param <T>
  * @author huliqing
  */
-public final class ScaleAnim<T extends AnimData> extends SpatialAnim<T> {
+public final class ScaleAnim extends AbstractAnim<Spatial> {
     // 记住原始缩放值
     private final Vector3f originScale = new Vector3f();
     // 缩放值
@@ -35,7 +35,7 @@ public final class ScaleAnim<T extends AnimData> extends SpatialAnim<T> {
     }
     
     @Override
-    public void setData(T data) {
+    public void setData(AnimData data) {
         super.setData(data);
         this.startScale = data.getAsVector3f("startScale", startScale);
         this.endScale = data.getAsVector3f("endScale", endScale);

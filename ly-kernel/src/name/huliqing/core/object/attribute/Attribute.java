@@ -50,34 +50,4 @@ public interface Attribute extends DataProcessor<AttributeData> {
      */
     String getName();
     
-//    /**
-//     * 获取属性值。
-//     * @return 
-//     */
-//    V getValue();
-//
-//    /**
-//     * 设置属性值。
-//     * @param value 
-//     */
-//    void setValue(V value);
-//    
-//    /**
-//     * @param other
-//     * @return 
-//     */
-//    boolean match(Object other);
-    
-//    /**
-//     * 添加一个侦听器用于监听属性值的变化
-//     * @param listener 
-//     */
-//    void addListener(ValueChangeListener<V> listener);
-//    
-//    /**
-//     * 移除属性侦听器
-//     * @param listener
-//     * @return 
-//     */
-//    boolean removeListener(ValueChangeListener<V> listener);
 }

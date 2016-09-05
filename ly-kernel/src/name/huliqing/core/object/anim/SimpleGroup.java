@@ -8,15 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import name.huliqing.core.data.AnimData;
 
 /**
  * 简单的动画组,该组允许指定子动画在什么插值点开始执行，在子动画启动后，当
  * 前插值点即不再影响子动画的插值。当子动画全部结束后，当前动画才算完全结束。
- * @param <T>
  * @author huliqing
  */
-public final class SimpleGroup<T extends AnimData, E> extends AbstractAnim<T, E> {
+public final class SimpleGroup<E> extends AbstractAnim<E> {
     private final static Logger logger = Logger.getLogger(SimpleGroup.class.getName());
     private List<AnimWrap> anims = new ArrayList<AnimWrap>();
     

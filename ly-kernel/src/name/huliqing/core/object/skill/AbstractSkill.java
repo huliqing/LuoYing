@@ -22,7 +22,6 @@ import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.object.actoranim.ActorAnim;
-import name.huliqing.core.object.attribute.Attribute;
 import name.huliqing.core.object.attribute.NumberAttribute;
 import name.huliqing.core.object.module.SkillModule;
 import name.huliqing.core.object.effect.Effect;
@@ -153,7 +152,7 @@ public abstract class AbstractSkill<T extends SkillData> implements Skill<T> {
             for (int i = 0; i < tempActorAnims.length; i++) {
                 String[] actorAnimArr = tempActorAnims[i].split("\\|");
                 ActorAnimWrap aaw = new ActorAnimWrap();
-                aaw.actorAnim = Loader.loadActorAnim(actorAnimArr[0]);
+                aaw.actorAnim = Loader.load(actorAnimArr[0]);
                 if (actorAnimArr.length >= 2) {
                     aaw.timePointStart = ConvertUtils.toFloat(actorAnimArr[1], 0);
                 }
@@ -257,7 +256,7 @@ public abstract class AbstractSkill<T extends SkillData> implements Skill<T> {
         doUpdateMagic(interpolation);
         
         // 5.update force;
-        doUpdateAnims(interpolation);
+        doUpdateAnims(tpf, interpolation);
         
         // 6.update logic
         // 为保证所有checkPoint都有执行到，
@@ -332,12 +331,13 @@ public abstract class AbstractSkill<T extends SkillData> implements Skill<T> {
     
     /**
      * 更新所有角色动画
+     * @param tpf
      * @param interpolation 
      */
-    protected void doUpdateAnims(float interpolation) {
+    protected void doUpdateAnims(float tpf, float interpolation) {
         if (actorAnims != null) {
             for (ActorAnimWrap aaw : actorAnims) {
-                aaw.update(actor, this, interpolation);
+                aaw.update(actor, this, tpf, interpolation);
             }
         }
     }
@@ -605,14 +605,15 @@ public abstract class AbstractSkill<T extends SkillData> implements Skill<T> {
         ActorAnim actorAnim;
         boolean started;
         
-        void update(Actor actor, Skill skill, float interpolation) {
-            if (started) return;
+        void update(Actor actor, Skill skill, float tpf, float interpolation) {
+            if (started) {
+                actorAnim.update(tpf);
+                return;
+            }
             if (interpolation >= trueTimePointStart) {
-                actorAnim.setActor(actor);
+                actorAnim.setTarget(actor);
                 // 计算出实际的动画时间
-//                actorAnim.setUseTime((trueTimePointEnd - trueTimePointStart) * data.getTrueUseTime());
                 actorAnim.setUseTime((trueTimePointEnd - trueTimePointStart) * getTrueUseTime());
-                actor.getSpatial().addControl(actorAnim);
                 actorAnim.start();
                 started = true;
             }

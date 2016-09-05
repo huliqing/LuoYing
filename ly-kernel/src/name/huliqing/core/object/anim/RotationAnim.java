@@ -7,14 +7,14 @@ package name.huliqing.core.object.anim;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Spatial;
 import com.jme3.util.TempVars;
 import name.huliqing.core.data.AnimData;
 
 /**
- * @param <T>
  * @author huliqing
  */
-public final class RotationAnim<T extends AnimData> extends SpatialAnim<T> {
+public final class RotationAnim extends AbstractAnim<Spatial> {
 //    private final static Logger logger = Logger.getLogger(RotationAnim.class.getName());
     
     // 旋转
@@ -33,7 +33,7 @@ public final class RotationAnim<T extends AnimData> extends SpatialAnim<T> {
     }
     
     @Override
-    public void setData(T data) {
+    public void setData(AnimData data) {
         super.setData(data);
         this.axis = data.getAsVector3f("axis", axis);
         Float degree = data.getAsFloat("degree");

@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import name.huliqing.core.Factory;
-import name.huliqing.core.data.ActorAnimData;
+import name.huliqing.core.data.AnimData;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.object.actor.Actor;
@@ -23,9 +23,8 @@ import name.huliqing.core.utils.DebugDynamicUtils;
 /**
  * 让角色进行曲线运动
  * @author huliqing
- * @param <T>
  */
-public class ActorCurveMove<T extends ActorAnimData> extends ActorAnim<T> {
+public class ActorCurveMove extends ActorAnim {
     private final PlayService playService = Factory.get(PlayService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     
@@ -60,7 +59,7 @@ public class ActorCurveMove<T extends ActorAnimData> extends ActorAnim<T> {
     private boolean oldKinematicState;
 
     @Override
-    public void setData(T data) {
+    public void setData(AnimData data) {
         super.setData(data);
         if (data != null) {
             // 1.points

@@ -4,7 +4,6 @@
  */
 package name.huliqing.core.object.anim;
 
-import java.util.List;
 import name.huliqing.core.data.AnimData;
 import name.huliqing.core.xml.DataProcessor;
 
@@ -68,13 +67,6 @@ public interface Anim<T extends AnimData, E> extends DataProcessor<T>{
      * @return 
      */
     float getInterpolation();
-    
-//    /**
-//     * 设置动画播放的插值位置，取值[0.0, 1.0], 任何超过该范围的值都应该截取。
-//     * 0表示执行动画的开始位置，1表示执行动画的结束位置。
-//     * @param interpolate 
-//     */
-//    void setInterpolation(float interpolation);
     
     /**
      * @see #setLoop(name.huliqing.fighter.object.animation.Loop) 
@@ -143,11 +135,12 @@ public interface Anim<T extends AnimData, E> extends DataProcessor<T>{
      */
     void addListener(Listener listener);
     
-    /**
-     * 获取动画侦听器
-     * @return 
-     */
-    List<Listener> getListeners();
+    // remove20160905
+//    /**
+//     * 获取动画侦听器
+//     * @return 
+//     */
+//    List<Listener> getListeners();
     
     /**
      * 移除侦听器

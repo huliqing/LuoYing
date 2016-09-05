@@ -4,7 +4,6 @@
  */
 package name.huliqing.core.object.anim;
 
-import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Spline;
 import com.jme3.math.Vector3f;
@@ -19,9 +18,8 @@ import name.huliqing.core.utils.DebugDynamicUtils;
 /**
  *
  * @author huliqing
- * @param <T>
  */
-public final class CurveMoveAnim<T extends AnimData> extends SpatialAnim<T> {
+public final class CurveMoveAnim extends AbstractAnim<Spatial> {
     
     // 是否自动跟随路径朝向
     private boolean facePath;
@@ -40,7 +38,7 @@ public final class CurveMoveAnim<T extends AnimData> extends SpatialAnim<T> {
     }
 
     @Override
-    public void setData(T data) {
+    public void setData(AnimData data) {
         super.setData(data);
         // 路径点
         String[] positions = data.getAsArray("waypoints");

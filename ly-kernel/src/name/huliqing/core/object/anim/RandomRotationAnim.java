@@ -7,16 +7,16 @@ package name.huliqing.core.object.anim;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Spatial;
 import com.jme3.util.TempVars;
 import name.huliqing.core.data.AnimData;
 import name.huliqing.core.utils.MathUtils;
 
 /**
  * 随机旋转动画.
- * @param <T>
  * @author huliqing
  */
-public final class RandomRotationAnim<T extends AnimData> extends SpatialAnim<T> {
+public final class RandomRotationAnim extends AbstractAnim<Spatial> {
     
     // 开始旋转
     private final Quaternion startRotation = new Quaternion();
@@ -29,7 +29,7 @@ public final class RandomRotationAnim<T extends AnimData> extends SpatialAnim<T>
     private Vector3f axis;
 
     @Override
-    public void setData(T data) {
+    public void setData(AnimData data) {
         super.setData(data);
         
         // 在xml的配置上是角度，需要转为弧度

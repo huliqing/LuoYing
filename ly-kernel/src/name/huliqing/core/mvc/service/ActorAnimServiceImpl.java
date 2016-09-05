@@ -20,7 +20,7 @@ public class ActorAnimServiceImpl implements ActorAnimService {
 
     @Override
     public ActorAnim loadAnim(String actorAnimId) {
-        return Loader.loadActorAnim(actorAnimId);
+        return Loader.load(actorAnimId);
     }
     
 }

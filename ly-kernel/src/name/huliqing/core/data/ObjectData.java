@@ -34,15 +34,6 @@ public class ObjectData extends ProtoData {
         return proto.getAsString("icon");
     }
     
-    // remove20160805
-//    /**
-//     * 物体是否是可选择的
-//     * @return 
-//     */
-//    public boolean isPickable() {
-//        return getAsBoolean("pickable", false);
-//    }
-    
     /**
      * 判断是否为本地物体，对于本地物体在使用的时候不需要把事件广播到客户端或服务端。
      * @return 

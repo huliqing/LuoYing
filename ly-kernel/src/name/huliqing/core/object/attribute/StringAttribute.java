@@ -18,11 +18,6 @@ public class StringAttribute extends AbstractSimpleAttribute<String> {
         super.setData(data); 
         value = data.getAsString("value");
     }
-    
-    // 更新data值，以避免在外部使用data时获取不到实时的数据
-    protected void updateData() {
-        data.setAttribute("value", value);
-    }
 
     @Override
     public void setValue(String value) {
@@ -37,6 +32,7 @@ public class StringAttribute extends AbstractSimpleAttribute<String> {
         }
     }
     
+    @Override
     public boolean match(final Object other) {
         if (other instanceof Number) {
             return value.equals(other.toString());

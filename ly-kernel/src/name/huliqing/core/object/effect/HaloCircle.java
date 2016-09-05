@@ -7,13 +7,13 @@ package name.huliqing.core.object.effect;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Spline;
-import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Curve;
+import name.huliqing.core.object.anim.AnimationControl;
 import name.huliqing.core.object.anim.Loop;
 import name.huliqing.core.object.anim.RotationAnim;
 import name.huliqing.core.shape.QuadXYC;
@@ -109,7 +109,7 @@ public class HaloCircle extends Node {
         
         // 创建旋转动画控制
         rotationAnim = createAnim();
-        localRoot.addControl(rotationAnim);
+        localRoot.addControl(new AnimationControl(rotationAnim));
     }
     
     private RotationAnim createAnim() {

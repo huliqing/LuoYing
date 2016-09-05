@@ -17,7 +17,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.core.Factory;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.mvc.network.ActorNetwork;
 import name.huliqing.core.mvc.network.PlayNetwork;
@@ -26,8 +25,8 @@ import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.network.Network;
 import name.huliqing.core.mvc.service.ConfigService;
 import name.huliqing.core.mvc.service.LogicService;
-import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.object.anim.Anim;
+import name.huliqing.core.object.anim.AnimationControl;
 import name.huliqing.core.object.anim.Listener;
 import name.huliqing.core.object.anim.MoveAnim;
 import name.huliqing.core.utils.GeometryUtils;
@@ -199,6 +198,7 @@ public class SummonSkill<T extends SkillData> extends AbstractSkill<T> {
         boolean showing;
         // 用于显示角色的动画处理器
         MoveAnim showAnim = new MoveAnim();
+        AnimationControl animationControl = new AnimationControl(showAnim);
         
         SummonOper() {
             // remove20160504,不要设置boundFactor，这会让角色往下掉
@@ -215,7 +215,7 @@ public class SummonSkill<T extends SkillData> extends AbstractSkill<T> {
          */
         void preload() {
             if (!loadStarted && summonObjectId != null) {
-                ObjectData data = DataFactory.createData(summonObjectId);
+//                ObjectData data = DataFactory.createData(summonObjectId);
                 loader.loadId = summonObjectId;
                 future = ThreadHelper.submit(loader);
                 loadStarted = true;
@@ -278,7 +278,7 @@ public class SummonSkill<T extends SkillData> extends AbstractSkill<T> {
                 actorService.setLocation(summonActor, start);
                 actorService.setLookAt(summonActor, tv.vect3.set(actor.getSpatial().getWorldTranslation()).setY(start.getY()));
                 
-                summonActor.getSpatial().addControl(showAnim);
+                summonActor.getSpatial().addControl(animationControl);
                 showAnim.setStartPos(start);
                 showAnim.setEndPos(end);
                 showAnim.start();
@@ -317,8 +317,11 @@ public class SummonSkill<T extends SkillData> extends AbstractSkill<T> {
 
         @Override
         public void onDone(Anim anim) {
-            MoveAnim ma = (MoveAnim) anim;
-            Spatial summonModel = ma.getTarget();
+            // remove20160905
+//            MoveAnim ma = (MoveAnim) anim;
+//            Spatial summonModel = ma.getTarget();
+
+            Spatial summonModel = animationControl.getSpatial();
             if (summonModel != null) {
                 // 让召唤到的目标获得物理碰撞
                 Actor ac = summonModel.getControl(Actor.class);
@@ -327,7 +330,7 @@ public class SummonSkill<T extends SkillData> extends AbstractSkill<T> {
                 actorNetwork.setPhysicsEnabled(ac, true);// 物理开需要同步
                 
                 // 释放showAnim以便重用
-                summonModel.removeControl(ma);
+                summonModel.removeControl(animationControl);
             }
             cleanup();
         }

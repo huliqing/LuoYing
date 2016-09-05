@@ -11,6 +11,7 @@ import com.jme3.util.TempVars;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.data.EffectData;
+import name.huliqing.core.object.anim.AnimationControl;
 import name.huliqing.core.object.anim.Loop;
 import name.huliqing.core.object.anim.RandomRotationAnim;
 import name.huliqing.core.utils.MathUtils;
@@ -81,7 +82,7 @@ public class EncircleHaloEffect extends AbstractEffect {
             RandomRotationAnim rra = new RandomRotationAnim();
             rra.setLoop(Loop.loop);
             rra.setSpeed(0.5f);
-            hc.addControl(rra);
+            hc.addControl(new AnimationControl(rra));
             animRoot.attachChild(hc);
             rra.start();
         }

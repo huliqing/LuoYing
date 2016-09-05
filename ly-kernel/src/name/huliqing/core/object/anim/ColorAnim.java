@@ -11,6 +11,7 @@ import com.jme3.math.FastMath;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.SceneGraphVisitor;
 import com.jme3.scene.SceneGraphVisitorAdapter;
+import com.jme3.scene.Spatial;
 import com.jme3.shader.VarType;
 import com.jme3.util.TempVars;
 import java.util.ArrayList;
@@ -20,15 +21,15 @@ import name.huliqing.core.data.AnimData;
 /**
  *
  * @author huliqing
- * @param <T>
  */
-public class ColorAnim<T extends AnimData> extends SpatialAnim<T> {
+public class ColorAnim extends AbstractAnim<Spatial> {
 //    private final static Logger logger = Logger.getLogger(ColorAnim.class.getName());
     
     private final ColorRGBA startColor = ColorRGBA.DarkGray.clone();
     private final ColorRGBA endColor = ColorRGBA.White.mult(1.5f);
     private boolean useSine;
     private final List<MatParam> mats = new ArrayList<MatParam>();
+    
     private final SceneGraphVisitor visitor = new SceneGraphVisitorAdapter() {
         @Override
         public void visit(Geometry geom) {
@@ -50,7 +51,7 @@ public class ColorAnim<T extends AnimData> extends SpatialAnim<T> {
     };
 
     @Override
-    public void setData(T data) {
+    public void setData(AnimData data) {
         super.setData(data);
         this.startColor.set(data.getAsColor("startColor", startColor));
         this.endColor.set(data.getAsColor("endColor", endColor));

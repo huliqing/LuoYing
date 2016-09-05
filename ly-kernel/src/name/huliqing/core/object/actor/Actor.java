@@ -107,8 +107,9 @@ public class Actor extends AbstractControl implements DataProcessor<ActorData> {
      * 清理角色
      */
     public void cleanup() {
-        for (Module module : modules) {
-            module.cleanup();
+        // 这里要注意反向清理，因为modules是有依赖顺序的
+        for (int i = modules.size() - 1; i >= 0; i--) {
+            modules.get(i).cleanup();
         }
         modules.clear();
         initialized = false;

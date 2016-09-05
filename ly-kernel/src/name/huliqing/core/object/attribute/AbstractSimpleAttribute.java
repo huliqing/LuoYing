@@ -22,7 +22,9 @@ public abstract class AbstractSimpleAttribute<V> extends AbstractAttribute imple
      * 更新属性值到data中。
      */
     protected void updateData() {
-        data.setAttribute("value", value);
+        if (value != null) {
+            data.setAttribute("value", value);
+        }
     }
     
     public V getValue() {

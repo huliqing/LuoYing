@@ -6,6 +6,7 @@ package name.huliqing.core.object.anim;
 
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Spatial;
 import com.jme3.util.TempVars;
 import name.huliqing.core.data.AnimData;
 
@@ -14,7 +15,7 @@ import name.huliqing.core.data.AnimData;
  * @author huliqing
  * @param <T>
  */
-public final class MoveAnim<T extends AnimData> extends SpatialAnim<T> {
+public final class MoveAnim extends AbstractAnim<Spatial> {
 //    private final static Logger LOG = Logger.getLogger(MoveAnim.class.getName());
 
     // 开始位置及结束位置
@@ -30,7 +31,7 @@ public final class MoveAnim<T extends AnimData> extends SpatialAnim<T> {
     private final Vector3f trueEndPos = new Vector3f();
     
     @Override
-    public void setData(T data) {
+    public void setData(AnimData data) {
         super.setData(data);
         this.startPos = data.getAsVector3f("startPos");
         this.endPos = data.getAsVector3f("endPos");

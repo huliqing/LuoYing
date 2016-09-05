@@ -37,7 +37,7 @@ public class IntegerAttribute extends NumberAttribute<Integer> {
 
     @Override
     public void add(final float other) {
-        setValue((int)(value.intValue() + other));
+        setValue(value.intValue() + other);
     }
 
     @Override
@@ -47,7 +47,7 @@ public class IntegerAttribute extends NumberAttribute<Integer> {
 
     @Override
     public void subtract(final float other) {
-        setValue((int)(value.intValue() - other));
+        setValue(value.intValue() - other);
     }
     
 }

@@ -73,7 +73,7 @@ public class StateMagic extends Magic {
         doUpdateStates(inter);
         
         // update actorAnims
-        doUpdateActorAnims(inter);
+        doUpdateActorAnims(tpf, inter);
     }
 
     @Override
@@ -93,34 +93,35 @@ public class StateMagic extends Magic {
     
     protected void doUpdateStates(float inter) {
         if (states != null) {
-            for (StateWrap sw : states) {
-                sw.update(inter);
+            for (int i = 0; i < states.size(); i++) {
+                states.get(i).update(inter);
             }
         }
     }
     
-    protected void doUpdateActorAnims(float inter) {
+    protected void doUpdateActorAnims(float tpf, float inter) {
         if (actorAnims != null) {
-            for (ActorAnimWrap aaw : actorAnims) {
-                aaw.update(inter);
+            for (int i = 0; i < actorAnims.size(); i++) {
+                actorAnims.get(i).update(tpf, inter);
             }
         }
     }
     
-    protected void playState(String stateId) {
-        if (target == null)
-            return;
-        stateService.addState(target, stateId, null);
-    }
-    
-    protected void playActorAnim(String actorAnimId) {
-        if (target == null) 
-            return;
-        ActorAnim anim = actorAnimService.loadAnim(actorAnimId);
-        anim.setActor(target);
-        target.getSpatial().addControl(anim);
-        anim.start();
-    }
+//    protected void playState(String stateId) {
+//        if (target == null)
+//            return;
+//        stateService.addState(target, stateId, null);
+//    }
+   
+    // remove20160905
+//    protected void playActorAnim(String actorAnimId) {
+//        if (target == null) 
+//            return;
+//        ActorAnim anim = actorAnimService.loadAnim(actorAnimId);
+//        anim.setTarget(target);
+//        target.getSpatial().addControl(anim);
+//        anim.start();
+//    }
     
     // 状态更新控制
     protected class StateWrap {
@@ -134,7 +135,7 @@ public class StateMagic extends Magic {
             if (started) return;
             if (interpolation >= timePoint) {
                 if (hitChecker == null || (target != null && hitChecker.canHit(source, target))) {
-                    playState(stateId);
+                    stateService.addState(target, stateId, null);
                 }
                 started = true;
             }
@@ -150,18 +151,32 @@ public class StateMagic extends Magic {
         String actorAnimId;
         float timePoint;
         boolean started;
+        ActorAnim actorAnim;
         
-        void update(float interpolation) {
-            if (started) return;
+        void update(float tpf, float interpolation) {
+            if (started) {
+                if (actorAnim != null) {
+                    actorAnim.update(tpf);
+                }
+                return;
+            }
             if (interpolation >= timePoint) {
                 if (hitChecker == null || (target != null && hitChecker.canHit(source, target))) {
-                    playActorAnim(actorAnimId);
+                    if (target != null) {
+                        actorAnim = actorAnimService.loadAnim(actorAnimId);
+                        actorAnim.setTarget(target);
+                        actorAnim.start();
+                    }
                 }
                 started = true;
             }
         }
       
         void cleanup() {
+            if (actorAnim != null) {
+                actorAnim.cleanup();
+                actorAnim = null;
+            }
             started = false;
         }
     }

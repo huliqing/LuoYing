@@ -467,6 +467,7 @@ public class Data implements Savable {
         OutputCapsule oc = ex.getCapsule(this);
         UserData dataObject = new UserData(UserData.getObjectType(data), data);
         oc.write(dataObject, "_dataObject_", null);
+        
     }
 
     @Override

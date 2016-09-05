@@ -22,7 +22,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
 import name.huliqing.core.data.ActionData;
-import name.huliqing.core.data.ActorAnimData;
 import name.huliqing.core.data.ActorData;
 import name.huliqing.core.data.ActorLogicData;
 import name.huliqing.core.data.AnimData;
@@ -124,7 +123,6 @@ import name.huliqing.core.object.action.RunPathAction;
 import name.huliqing.core.object.action.RunSimpleAction;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.loader.ActorDataLoader;
-import name.huliqing.core.loader.ActorAnimDataLoader;
 import name.huliqing.core.object.actoranim.ActorCurveMove;
 import name.huliqing.core.loader.ActorLogicDataLoader;
 import name.huliqing.core.object.actorlogic.AttributeChangeActorLogic;
@@ -350,6 +348,8 @@ public class LY {
         
         // 载入数据
         loadData();
+        
+        System.out.println("Load data ok!");
     }
 
     private static void registerSerializer() {
@@ -360,7 +360,6 @@ public class LY {
         Serializer.registerClass(DropItem.class);
         
         Serializer.registerClass(ActionData.class);
-        Serializer.registerClass(ActorAnimData.class);
         Serializer.registerClass(ActorData.class);
         Serializer.registerClass(ActorLogicData.class);
         Serializer.registerClass(AnimData.class);
@@ -412,8 +411,8 @@ public class LY {
         // Actor
         DataFactory.register("actor",  ActorData.class, ActorDataLoader.class, Actor.class);
         
-         //ActorAnim
-        DataFactory.register("actorAnimCurveMove",  ActorAnimData.class, ActorAnimDataLoader.class, ActorCurveMove.class);
+        //ActorAnim
+        DataFactory.register("actorAnimCurveMove",  AnimData.class, AnimDataLoader.class, ActorCurveMove.class);
         
         // ActorLogic
         DataFactory.register("actorLogicFight",  ActorLogicData.class, ActorLogicDataLoader.class, FightActorLogic.class);

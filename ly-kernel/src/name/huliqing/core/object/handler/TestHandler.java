@@ -4,8 +4,11 @@
  */
 package name.huliqing.core.object.handler;
 
+import java.util.Iterator;
 import java.util.logging.Logger;
 import name.huliqing.core.Factory;
+import name.huliqing.core.data.ActorData;
+import name.huliqing.core.data.AttributeData;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.data.HandlerData;
 import name.huliqing.core.data.ObjectData;
@@ -14,10 +17,10 @@ import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.EffectService;
 import name.huliqing.core.mvc.service.MagicService;
 import name.huliqing.core.mvc.service.PlayService;
+import name.huliqing.core.mvc.service.SaveService;
 import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.mvc.service.StateService;
 import name.huliqing.core.mvc.service.ViewService;
-import name.huliqing.core.object.module.ActorModule;
 
 /**
  *
@@ -28,6 +31,7 @@ public class TestHandler extends AbstractHandler {
     
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     
+    private final SaveService saveService = Factory.get(SaveService.class);
     private final PlayService playService = Factory.get(PlayService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final StateService stateService = Factory.get(StateService.class);
@@ -62,14 +66,45 @@ public class TestHandler extends AbstractHandler {
 //            stateService.addState(target, "stateScorpionVenom", actor);
 //        }
 
-        Actor aa = actorService.loadActor("actorDiNa");
-//        aa.getModule(ActorModule.class).setGroup(3);
-        playService.addActor(aa);
+        
+        Actor aa = actorService.loadActor("actorPlayerTest");
+        aa.getData().getModuleDatas().clear();
+        
+        Iterator<ObjectData> it = aa.getData().getObjectDatas().iterator();
+        System.out.println("size before=" + aa.getData().getObjectDatas().size());
+        while (it.hasNext()) {
+            ObjectData od = it.next();
+            if (od instanceof AttributeData) {
+                if (1 == 2
+                        || od.getTagName().equals("attributeInteger")
+                        || od.getTagName().equals("attributeFloat")
+                        
+                        || od.getTagName().equals("attributeLimitInteger")
+//                        || od.getTagName().equals("attributeLevelInteger")
+                        
+                        //|| od.getTagName().equals("attributeLevelFloat")
+                        ) {
+                    System.out.println("tagName=" + od.getTagName() + ", removeAttribute=" + od.getId());
+                    it.remove();
+                }
+            }
+        }
+        System.out.println("size after=" + aa.getData().getObjectDatas().size());
+        saveService.saveSavable("TestSave", aa.getData());
+        
+        
 
+        ActorData actorData = saveService.loadSavable("TestSave");
+        System.out.println("actorData=" + actorData);
     }
 
    
     
+//        AttributeData attrData = DataFactory.createData("attributeRace");
+//        attrData.setAttribute("valueInt", 1);
+//        attrData.setAttribute("valueFloat", 1.0f);
+//        attrData.setAttribute("valueString", "hello");
+//        aa.getData().addObjectData(attrData);
   
 
 }

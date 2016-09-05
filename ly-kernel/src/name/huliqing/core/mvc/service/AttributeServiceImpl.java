@@ -110,16 +110,9 @@ public class AttributeServiceImpl implements AttributeService {
         } else {
             LOG.log(Level.WARNING, "Could not addNumberAttributeValue, attrName is not a NumberAttribute,"
                     + " actorId={0}, attrName={1}, value={2}", new Object[] {actor.getData().getId(), attrName, value});
+            throw new RuntimeException("Could not addNumberAttributeValue, attrName is not a NumberAttribute");
         }
     }
-
-//    @Override
-//    public void subtractAttributeValue(Actor actor, String attrName, float value) {
-//        Attribute attr = getAttributeByName(actor, attrName);
-//        if (attr instanceof NumberAttribute) {
-//            ((NumberAttribute)attr).subtract(value);
-//        }
-//    }
 
     @Override
     public float getNumberAttributeValue(Actor actor, String attrName, float defValue) {

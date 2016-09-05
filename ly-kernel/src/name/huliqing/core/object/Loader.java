@@ -10,7 +10,6 @@ import com.jme3.scene.Spatial;
 import name.huliqing.core.LY;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.data.ActionData;
-import name.huliqing.core.data.ActorAnimData;
 import name.huliqing.core.data.ActorData;
 import name.huliqing.core.data.AnimData;
 import name.huliqing.core.data.BulletData;
@@ -86,15 +85,6 @@ public class Loader {
     }
       
     public static Action loadAction(ActionData data) {
-        return DataFactory.createProcessor(data);
-    }
-    
-    public static ActorAnim loadActorAnim(String id) {
-        ActorAnimData data = DataFactory.createData(id);
-        return loadActorAnim(data);
-    }
-    
-    public static ActorAnim loadActorAnim(ActorAnimData data) {
         return DataFactory.createProcessor(data);
     }
     

@@ -27,6 +27,7 @@
                 bindLivingAttribute="attributeLiving"
                 bindOwnerAttribute="attributeOwner"
                 bindTargetAttribute="attributeTarget" 
+                bindMassAttribute="attributeMass"
                 bindTeamAttribute="attributeTeam"
                 bindViewAttribute="attributeVision"
     />

@@ -17,10 +17,9 @@ import name.huliqing.core.mvc.service.PlayService;
 /**
  * 动画控制，V2
  * @author huliqing
- * @param <T>
  * @param <E> 
  */
-public abstract class AbstractAnim<T extends AnimData, E> implements Anim<T, E> {
+public abstract class AbstractAnim<E> implements Anim<AnimData, E> {
     private final static Logger LOG = Logger.getLogger(AbstractAnim.class.getName());
     private final PlayService playService = Factory.get(PlayService.class);
     
@@ -47,7 +46,7 @@ public abstract class AbstractAnim<T extends AnimData, E> implements Anim<T, E> 
         }
     }
     
-    protected T data;
+    protected AnimData data;
     
     // 提示显示调试信息，但是具体由各个子类去实现。
     protected boolean debug;
@@ -81,7 +80,7 @@ public abstract class AbstractAnim<T extends AnimData, E> implements Anim<T, E> 
     private int dir = 1;
     
     @Override
-    public void setData(T data) {
+    public void setData(AnimData data) {
         this.data = data;
         this.debug = data.getAsBoolean("debug", debug);
         this.useTime = data.getAsFloat("useTime", useTime);
@@ -121,7 +120,7 @@ public abstract class AbstractAnim<T extends AnimData, E> implements Anim<T, E> 
     }
 
     @Override
-    public T getData() {
+    public AnimData getData() {
         return data;
     }
     
@@ -291,14 +290,14 @@ public abstract class AbstractAnim<T extends AnimData, E> implements Anim<T, E> 
         }
     }
     
-    /**
-     * 获取动画侦听器,如果没有添加过侦听器，则返回null.
-     * @return 
-     */
-    @Override
-    public List<Listener> getListeners() {
-        return listeners;
-    }
+//    /**
+//     * 获取动画侦听器,如果没有添加过侦听器，则返回null.
+//     * @return 
+//     */
+//    @Override
+//    public List<Listener> getListeners() {
+//        return listeners;
+//    }
     
     @Override
     public boolean removeListener(Listener listener) {

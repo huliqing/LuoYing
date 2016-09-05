@@ -57,7 +57,6 @@ public class SaveHelper {
     
     /**
      * 将最近一次存档保存为新存档
-     * @param key 
      */
     public static void saveStoryNew() {
         try {
@@ -78,7 +77,8 @@ public class SaveHelper {
             SaveStory saveStory = (SaveStory) saveService.loadSavable(key);
             return saveStory;
         } catch (Exception e) {
-            LOG.log(Level.SEVERE, "Could not loadStory, e={0}", e);
+//            LOG.log(Level.SEVERE, "Could not loadStory, e={0}", e.getMessage());
+            e.printStackTrace();
         }
         return null;
     }

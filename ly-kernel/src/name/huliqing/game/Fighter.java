@@ -97,14 +97,14 @@ public class Fighter extends SimpleApplication {
 
     @Override
     public void start(JmeContext.Type contextType, boolean waitFor) {
-        super.start(contextType, waitFor); 
         startInit();
+        super.start(contextType, waitFor); 
     }
 
     @Override
     public void startCanvas(boolean waitFor) {
-        super.startCanvas(waitFor);
         startInit();
+        super.startCanvas(waitFor);
     }
     
     private void startInit() {
