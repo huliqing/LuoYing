@@ -14,7 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.TalentData;
-import name.huliqing.core.data.module.ModuleData;
+import name.huliqing.core.data.ModuleData;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.AttributeService;
 import name.huliqing.core.mvc.service.ElService;

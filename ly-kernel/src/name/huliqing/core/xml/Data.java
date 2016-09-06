@@ -31,9 +31,7 @@ public class Data implements Savable {
     // 扩展参数
     protected Map<String, Object> data;
     
-    public Data() {
-        this.data = new HashMap<String, Object>();
-    }
+    public Data() {}
     
     public Data(Map data) {
         if (data == null) {
@@ -46,7 +44,9 @@ public class Data implements Savable {
      * 清理所有数据
      */
     public final void clear() {
-        data.clear();
+        if (data != null) {
+            data.clear();
+        }
     }
     
     /**
@@ -54,7 +54,7 @@ public class Data implements Savable {
      * @return 
      */
     public final boolean isEmpty() {
-        return data.isEmpty();
+        return data == null || data.isEmpty();
     }
     
     /**
@@ -78,10 +78,15 @@ public class Data implements Savable {
      */
     public void setAttribute(String key, Object value) {
         if (value == null) {
-            data.remove(key);
-        } else {
-            data.put(key, value);
+            if (data != null) {
+                data.remove(key);
+            }
+            return;
+        } 
+        if (data == null) {
+            data = new HashMap<String, Object>();
         }
+        data.put(key, value);
     }
     
     /**
@@ -90,6 +95,9 @@ public class Data implements Savable {
      * @return 
      */
     public Object getAttribute(String key) {
+        if (data == null) {
+            return null;
+        }
         Object obj = data.get(key);
         // 注：这里要防止返回“空”值，这样其它依赖于这个方法的方法就不需要再判断空值，并在转换类型的时候比较简单.
         // 比如在：Integer.parseInt的时候就不需要再判断空值。
@@ -465,16 +473,20 @@ public class Data implements Savable {
     @Override
     public void write(JmeExporter ex) throws IOException {
         OutputCapsule oc = ex.getCapsule(this);
-        UserData dataObject = new UserData(UserData.getObjectType(data), data);
-        oc.write(dataObject, "_dataObject_", null);
+        if (data != null) {
+            UserData dataObject = new UserData(UserData.getObjectType(data), data);
+            oc.write(dataObject, "_dataObject_", null);
+        }
         
     }
 
     @Override
     public void read(JmeImporter im) throws IOException {
         InputCapsule ic = im.getCapsule(this);
-        UserData dataObject = (UserData) ic.readSavable("_dataObject_", new UserData(UserData.getObjectType(data), data));
-        data = (Map) dataObject.getValue();
+        UserData dataObject = (UserData) ic.readSavable("_dataObject_", null);
+        if (dataObject != null) {
+            data = (Map) dataObject.getValue();
+        }
     }
 
     @Override

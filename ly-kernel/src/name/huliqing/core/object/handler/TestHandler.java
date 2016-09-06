@@ -67,32 +67,29 @@ public class TestHandler extends AbstractHandler {
 //        }
 
         
-        Actor aa = actorService.loadActor("actorPlayerTest");
-        aa.getData().getModuleDatas().clear();
+        Actor aa = actorService.loadActor("tttt");
         
         Iterator<ObjectData> it = aa.getData().getObjectDatas().iterator();
         System.out.println("size before=" + aa.getData().getObjectDatas().size());
-        while (it.hasNext()) {
-            ObjectData od = it.next();
-            if (od instanceof AttributeData) {
-                if (1 == 2
-                        || od.getTagName().equals("attributeInteger")
-                        || od.getTagName().equals("attributeFloat")
-                        
-                        || od.getTagName().equals("attributeLimitInteger")
+        
+//        while (it.hasNext()) {
+//            ObjectData od = it.next();
+//            if (od instanceof AttributeData) {
+//                if (1 == 2
+//                        || od.getTagName().equals("attributeLimitInteger")
 //                        || od.getTagName().equals("attributeLevelInteger")
-                        
-                        //|| od.getTagName().equals("attributeLevelFloat")
-                        ) {
-                    System.out.println("tagName=" + od.getTagName() + ", removeAttribute=" + od.getId());
-                    it.remove();
-                }
-            }
-        }
+//                        || od.getTagName().equals("attributeLevelFloat")
+//                        || od.getTagName().equals("attributeFloat")
+//                        || od.getTagName().equals("attributeInteger")
+//                        ) {
+//                    System.out.println("tagName=" + od.getTagName() + ", removeAttribute=" + od.getId());
+//                    it.remove();
+//                }
+//            }
+//        } 
+
         System.out.println("size after=" + aa.getData().getObjectDatas().size());
         saveService.saveSavable("TestSave", aa.getData());
-        
-        
 
         ActorData actorData = saveService.loadSavable("TestSave");
         System.out.println("actorData=" + actorData);

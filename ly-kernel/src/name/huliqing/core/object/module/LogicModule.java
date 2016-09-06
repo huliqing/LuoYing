@@ -10,7 +10,7 @@ import com.jme3.util.SafeArrayList;
 import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.ActorLogicData;
-import name.huliqing.core.data.module.ModuleData;
+import name.huliqing.core.data.ModuleData;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.AttributeService;
 import name.huliqing.core.object.Loader;

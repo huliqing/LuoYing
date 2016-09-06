@@ -7,7 +7,7 @@ package name.huliqing.core.object.module;
 
 import com.jme3.scene.control.Control;
 import name.huliqing.core.Factory;
-import name.huliqing.core.data.module.ActionModuleData;
+import name.huliqing.core.data.ModuleData;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.action.Action;
@@ -19,7 +19,7 @@ import name.huliqing.core.object.actor.Actor;
  * 角色行为控制器
  * @author huliqing
  */
-public class ActionModule extends AbstractModule<ActionModuleData> {
+public class ActionModule extends AbstractModule<ModuleData> {
     private final ActorService actorService = Factory.get(ActorService.class);
     
     private Actor actor;
@@ -107,9 +107,6 @@ public class ActionModule extends AbstractModule<ActionModuleData> {
     }
 
     public RunAction getDefRunAction() {
-        if (defRunAction == null && data.getActionDefRun() != null) {
-            defRunAction = (RunAction) Loader.load(data.getActionDefRun());
-        }
         return defRunAction;
     }
 
@@ -118,9 +115,6 @@ public class ActionModule extends AbstractModule<ActionModuleData> {
     }
 
     public FightAction getDefFightAction() {
-         if (defFightAction == null && data.getActionDefFight() != null) {
-            defFightAction = (FightAction) Loader.load(data.getActionDefFight());
-        }
         return defFightAction;
     }
 

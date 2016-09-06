@@ -11,34 +11,24 @@ import java.util.List;
 /**
  * 
  * @author huliqing
- * @param <V>
+ * @param <T>
  */
-public abstract class AbstractSimpleAttribute<V> extends AbstractAttribute implements MatchAttribute {
+public abstract class AbstractSimpleAttribute<T> extends AbstractAttribute implements MatchAttribute {
     
-    protected V value;
+    protected T value;
     protected List<ValueChangeListener> listeners;
     
-    /**
-     * 更新属性值到data中。
-     */
-    protected void updateData() {
-        if (value != null) {
-            data.setAttribute("value", value);
-        }
-    }
-    
-    public V getValue() {
+    public T getValue() {
         return value;
     }
     
-    public void setValue(V newValue) {
-        V oldValue = this.value;
+    public void setValue(T newValue) {
+        T oldValue = this.value;
         this.value = newValue;
-        updateData();
         notifyValueChangeListeners(oldValue, this.value);
     }
     
-    public void addListener(ValueChangeListener<V> listener) {
+    public void addListener(ValueChangeListener<T> listener) {
         if (listeners == null) {
             listeners = new ArrayList<ValueChangeListener>();
         }
@@ -47,7 +37,7 @@ public abstract class AbstractSimpleAttribute<V> extends AbstractAttribute imple
         }
     }
 
-    public boolean removeListener(ValueChangeListener<V> listener) {
+    public boolean removeListener(ValueChangeListener<T> listener) {
         return listeners != null && listeners.remove(listener);
     }
     
@@ -56,7 +46,7 @@ public abstract class AbstractSimpleAttribute<V> extends AbstractAttribute imple
      * @param oldValue
      * @param newValue 
      */
-    protected void notifyValueChangeListeners(V oldValue, V newValue) {
+    protected void notifyValueChangeListeners(T oldValue, T newValue) {
         if (listeners != null) {
             for (int i = 0; i < listeners.size(); i++) {
                 listeners.get(i).onValueChanged(this, oldValue, newValue);

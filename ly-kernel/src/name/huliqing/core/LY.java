@@ -33,7 +33,8 @@ import name.huliqing.core.data.ChannelData;
 import name.huliqing.core.data.ChatData;
 import name.huliqing.core.data.ConfigData;
 import name.huliqing.core.data.ConnData;
-import name.huliqing.core.data.module.ModuleData;
+import name.huliqing.core.data.CustomUserData;
+import name.huliqing.core.data.ModuleData;
 import name.huliqing.core.data.DropData;
 import name.huliqing.core.data.DropItem;
 import name.huliqing.core.data.EffectData;
@@ -237,7 +238,6 @@ import name.huliqing.core.loader.ItemDataLoader;
 import name.huliqing.core.object.magic.AttributeHitMagic;
 import name.huliqing.core.loader.MagicDataLoader;
 import name.huliqing.core.object.magic.StateMagic;
-import name.huliqing.core.data.module.ActionModuleData;
 import name.huliqing.core.object.position.FixedPosition;
 import name.huliqing.core.loader.PositionDataLoader;
 import name.huliqing.core.object.position.RandomBoxPosition;
@@ -353,6 +353,9 @@ public class LY {
     }
 
     private static void registerSerializer() {
+
+        Serializer.registerClass(CustomUserData.class);
+        
         Serializer.registerClass(Proto.class);
         Serializer.registerClass(AttributeApply.class);
         Serializer.registerClass(AttributeUse.class);
@@ -368,7 +371,6 @@ public class LY {
         Serializer.registerClass(ChannelData.class);
         Serializer.registerClass(ChatData.class);
         Serializer.registerClass(ConfigData.class);
-        Serializer.registerClass(ModuleData.class);
         Serializer.registerClass(DropData.class);
         Serializer.registerClass(EffectData.class);
         Serializer.registerClass(ElData.class);
@@ -380,6 +382,7 @@ public class LY {
         Serializer.registerClass(HitCheckerData.class);
         Serializer.registerClass(ItemData.class);
         Serializer.registerClass(MagicData.class);
+        Serializer.registerClass(ModuleData.class);
         Serializer.registerClass(PositionData.class);
         Serializer.registerClass(ResistData.class);
         Serializer.registerClass(SceneData.class);
@@ -396,7 +399,6 @@ public class LY {
         Serializer.registerClass(ModelEnvData.class);
     }
     
-        
     private static void registerProcessor() {
         
         // Action
@@ -546,7 +548,7 @@ public class LY {
         DataFactory.register("magicAttributeHit", MagicData.class, MagicDataLoader.class, AttributeHitMagic.class);
 
         // Module 
-        DataFactory.register("moduleAction",  ActionModuleData.class, ModuleDataLoader.class, ActionModule.class);
+        DataFactory.register("moduleAction",  ModuleData.class, ModuleDataLoader.class, ActionModule.class);
         DataFactory.register("moduleActor",  ModuleData.class, ModuleDataLoader.class, ActorModule.class);
         DataFactory.register("moduleAttribute",  ModuleData.class, ModuleDataLoader.class, AttributeModule.class);
         DataFactory.register("moduleChannel",  ModuleData.class, ModuleDataLoader.class, ChannelModule.class);

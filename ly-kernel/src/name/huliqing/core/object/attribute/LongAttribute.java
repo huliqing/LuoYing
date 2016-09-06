@@ -10,19 +10,24 @@ import name.huliqing.core.data.AttributeData;
 /**
  * @author huliqing
  */
-public class LongAttribute extends NumberAttribute<Long> {
+public class LongAttribute extends NumberAttribute {
 
     @Override
     public void setData(AttributeData data) {
         super.setData(data);
         value = data.getAsLong("value", 0);
-    }
+    }    
     
     @Override
-    protected void notifyValueChangeListeners(Number oldValue, Number newValue) {
-        if (oldValue.longValue() != newValue.longValue()) {
-            super.notifyValueChangeListeners(oldValue, newValue); 
-        }
+    protected void updateData() {
+        // 这里一定要确保存的是long类型
+        data.setAttribute("value", value.longValue());
+    }
+
+    @Override
+    public void setValue(Number value) {
+        // 转成long类型。
+        super.setValue(value.longValue());
     }
     
     @Override
@@ -35,14 +40,4 @@ public class LongAttribute extends NumberAttribute<Long> {
         setValue((long)(value.longValue() + other));
     }
 
-    @Override
-    public final void subtract(final int other) {
-        setValue(value.longValue() - other);
-    }
-
-    @Override
-    public final void subtract(final float other) {
-        setValue((long)(value.longValue() - other));
-    }
-    
 }

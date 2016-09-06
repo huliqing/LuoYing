@@ -18,16 +18,15 @@ public class StringAttribute extends AbstractSimpleAttribute<String> {
         super.setData(data); 
         value = data.getAsString("value");
     }
-
-    @Override
-    public void setValue(String value) {
-        super.setValue(value);
-        updateData();
+    
+    protected void updateData() {
+        data.setAttribute("value", value);
     }
     
     @Override
     protected void notifyValueChangeListeners(String oldValue, String newValue) {
         if (!oldValue.equals(newValue)) {
+            updateData();
             super.notifyValueChangeListeners(oldValue, newValue); 
         }
     }

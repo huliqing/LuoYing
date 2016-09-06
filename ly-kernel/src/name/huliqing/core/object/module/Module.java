@@ -5,7 +5,7 @@
  */
 package name.huliqing.core.object.module;
 
-import name.huliqing.core.data.module.ModuleData;
+import name.huliqing.core.data.ModuleData;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.xml.DataProcessor;
 

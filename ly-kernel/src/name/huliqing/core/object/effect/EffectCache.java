@@ -62,10 +62,10 @@ public class EffectCache extends IntervalLogic implements PlayListener {
             }
         }
         
-        if (Config.debug) {
-            LOG.log(Level.INFO, "EffectCache, busy effects={0}, free effects={1}"
-                    , new Object[] {busyStore.size(), freeStore.size()});
-        }
+//        if (Config.debug) {
+//            LOG.log(Level.INFO, "EffectCache, busy effects={0}, free effects={1}"
+//                    , new Object[] {busyStore.size(), freeStore.size()});
+//        }
     }
 
     @Override

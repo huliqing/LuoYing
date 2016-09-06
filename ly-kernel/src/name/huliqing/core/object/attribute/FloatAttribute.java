@@ -5,13 +5,15 @@
  */
 package name.huliqing.core.object.attribute;
 
+import java.util.logging.Logger;
 import name.huliqing.core.data.AttributeData;
 
 /**
- *
+ * 使用float类型作为属性参数
  * @author huliqing
  */
-public class FloatAttribute extends NumberAttribute<Float> {
+public class FloatAttribute extends NumberAttribute {
+    private static final Logger LOG = Logger.getLogger(FloatAttribute.class.getName());
 
     @Override
     public void setData(AttributeData data) {
@@ -20,18 +22,16 @@ public class FloatAttribute extends NumberAttribute<Float> {
     }
 
     @Override
-    public void setValue(Number newValue) {
-        super.setValue(newValue.floatValue());
+    protected void updateData() {
+        // 这里一定要转成float类型,否则下次从存档载入的时候data.getAsFloat("value", 0)获得的就不一定是Float,
+        // 因为value是抽象的Number类型。
+        data.setAttribute("value", value.floatValue());
     }
     
     @Override
-    protected void notifyValueChangeListeners(Number oldValue, Number newValue) {
-//        if (oldValue.compareTo(newValue) != 0) {
-//            super.notifyValueChangeListeners(oldValue, newValue); 
-//        }
-        if (oldValue.floatValue() != newValue.floatValue()) {
-            super.notifyValueChangeListeners(oldValue, newValue); 
-        }
+    public void setValue(Number value) {
+        // 转成float类型。
+        super.setValue(value.floatValue());
     }
     
     @Override
@@ -44,13 +44,4 @@ public class FloatAttribute extends NumberAttribute<Float> {
         setValue(value.floatValue() + other);
     }
 
-    @Override
-    public void subtract(final int other) {
-        setValue(value.floatValue() - other);
-    }
-
-    @Override
-    public void subtract(final float other) {
-        setValue(value.floatValue() - other);
-    }
 }

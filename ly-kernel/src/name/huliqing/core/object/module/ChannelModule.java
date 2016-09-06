@@ -120,6 +120,10 @@ public class ChannelModule extends AbstractModule implements ChannelControl {
     public void playAnim(String animName, float blendTime, LoopMode loop
             , float useTime, float startTime, String... channelIds) {
         
+        if (!initialized) {
+            return;
+        }
+        
         Channel sampleChannel = channels.get(0);
         AnimControl ac = sampleChannel.getAnimChannel().getControl();
         Animation anim = ac.getAnim(animName);

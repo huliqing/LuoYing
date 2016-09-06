@@ -14,7 +14,6 @@ import com.jme3.network.serializing.Serializable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.core.data.module.ModuleData;
 import name.huliqing.core.data.define.MatObject;
 import name.huliqing.core.enums.Mat;
 

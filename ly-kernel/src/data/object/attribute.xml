@@ -43,7 +43,7 @@
     <attributeInteger id="attributeTeam" name="attributeTeam" />
     
     <!--角色的质量:默认角色质量都是大于0的，即默认都为动态角色。 -->
-    <attributeFloat id="attributeMass" name="attributeMass" value="60" />
+    <attributeFloat id="attributeMass" name="attributeMass" value="60.1" />
 
     <!--Essential这个属性用来标记一个角色是否是必要的，即使死亡后也不能移出场景的-->
     <attributeBoolean id="attributeEssential" name="attributeEssential" />

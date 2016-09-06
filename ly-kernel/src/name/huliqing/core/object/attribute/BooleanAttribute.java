@@ -17,6 +17,12 @@ public class BooleanAttribute extends AbstractSimpleAttribute<Boolean> {
     public void setData(AttributeData data) {
         super.setData(data); 
         value = data.getAsBoolean("value", false);
+    }    
+    
+    protected void updateData() {
+        if (value != null) {
+            data.setAttribute("value", value);
+        }
     }
     
     public boolean booleanValue() {
@@ -27,6 +33,7 @@ public class BooleanAttribute extends AbstractSimpleAttribute<Boolean> {
     protected void notifyValueChangeListeners(Boolean oldValue, Boolean newValue) {
         // 只有值变化时才触发侦听器
         if (oldValue.booleanValue() != newValue.booleanValue()) {
+            updateData();
             super.notifyValueChangeListeners(oldValue, newValue); 
         }
     }

@@ -13,7 +13,7 @@ import com.jme3.util.SafeArrayList;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.data.ObjectData;
-import name.huliqing.core.data.module.ModuleData;
+import name.huliqing.core.data.ModuleData;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.xml.DataProcessor;
 import name.huliqing.core.object.module.Module;

@@ -167,7 +167,7 @@ public class DataFactory {
      * @param id
      * @return 
      */
-    public static Class<? extends Data> getDataClassById(String id) {
+    public static Class<? extends ProtoData> getDataClassById(String id) {
         Proto proto = getProto(id);
         return getDataClass(proto.getTagName());
     }
@@ -177,7 +177,7 @@ public class DataFactory {
      * @param tagName
      * @return 
      */
-    public static Class<? extends Data> getDataClass(String tagName) {
+    public static Class<? extends ProtoData> getDataClass(String tagName) {
         return TAG_DATAS.get(tagName);
     }
     

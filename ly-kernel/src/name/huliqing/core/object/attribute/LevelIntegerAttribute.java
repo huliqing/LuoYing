@@ -40,8 +40,8 @@ public class LevelIntegerAttribute extends IntegerAttribute implements LevelAttr
         super.setData(data);
         levelValue = data.getAsInteger("levelValue", levelValue);
         dynamicValue = data.getAsInteger("dynamicValue", dynamicValue);
-        level = data.getAsInteger("level", 1);
-        levelEl = data.getAsString("levelEl");
+        level = data.getAsInteger("level", level);
+        levelEl = data.getAsString("levelEl", levelEl);
     }
     
     // 更新data值，以避免在外部使用data时获取不到实时的数据
@@ -51,7 +51,9 @@ public class LevelIntegerAttribute extends IntegerAttribute implements LevelAttr
         data.setAttribute("levelValue", levelValue);
         data.setAttribute("dynamicValue", dynamicValue);
         data.setAttribute("level", level);
-//        data.setAttribute("levelEl", levelEl); // levelEl不会改变，所以不需要重新设置回去。
+        
+        // levelEl不会改变，所以不需要重新设置回去。
+//        data.setAttribute("levelEl", levelEl); 
     }
     
     @Override
@@ -77,7 +79,7 @@ public class LevelIntegerAttribute extends IntegerAttribute implements LevelAttr
      * @param other 
      */
     @Override
-    public final void add(int other) {
+    public void add(int other) {
         dynamicValue += other;
         setValue(levelValue + dynamicValue);
     }
@@ -92,26 +94,6 @@ public class LevelIntegerAttribute extends IntegerAttribute implements LevelAttr
         setValue(levelValue + dynamicValue);
     }
 
-    /**
-     * 在动态值上减少值.
-     * @param other 
-     */
-    @Override
-    public final void subtract(int other) {
-        dynamicValue -= other;
-        setValue(levelValue + dynamicValue);
-    }
-    
-    /**
-     * 在动态值上减少值.
-     * @param other 
-     */
-    @Override
-    public final void subtract(float other) {
-        dynamicValue -= other;
-        setValue(levelValue + dynamicValue);
-    }
-
     @Override
     public void initialize(AttributeModule module) {
         super.initialize(module);
@@ -122,10 +104,8 @@ public class LevelIntegerAttribute extends IntegerAttribute implements LevelAttr
         if (el != null) {
             levelValue = (int) el.getValue(level);
         }
-        
         // 设置值并在可能值变的情况下触发侦听器,当有其它属性绑定了当前属性时，这个值变侦听很重要。
         setValue(levelValue + dynamicValue);
-        
     }
     
 }

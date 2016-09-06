@@ -9,20 +9,9 @@ package name.huliqing.core.object.attribute;
 /**
  * Number类型的属性。
  * @author huliqing
- * @param <T>
  */
-public abstract class NumberAttribute<T extends Number> extends AbstractSimpleAttribute<Number> {
+public abstract class NumberAttribute extends AbstractSimpleAttribute<Number> {
 
-    @Override
-    public Number getValue() {
-        return super.getValue(); 
-    }
-
-    @Override
-    public void setValue(Number newValue) {
-        super.setValue(newValue);
-    }
-    
     public byte byteValue() {
         return value.byteValue();
     }
@@ -55,13 +44,29 @@ public abstract class NumberAttribute<T extends Number> extends AbstractSimpleAt
         if (other instanceof String) {
             return Double.compare(doubleValue(), Double.parseDouble((String) other)) == 0;
         }
-        return this.equals(other);
+        return value.equals(other);
     }
+    
+    /**
+     * 通知提示值变侦听器
+     * @param oldValue
+     * @param newValue 
+     */
+    @Override
+    protected void notifyValueChangeListeners(Number oldValue, Number newValue) {
+        if (oldValue.doubleValue() != newValue.doubleValue()) {
+            updateData();
+            super.notifyValueChangeListeners(oldValue, newValue); 
+        }
+    }
+    
+    /**
+     * 更新数据到data中,这个方法在数据发生变化时被自动调用,子类实现这个方法来存档数据
+     */
+    protected abstract void updateData();
     
     public abstract void add(int other);
     public abstract void add(float other);
-    public abstract void subtract(int other);
-    public abstract void subtract(float other);
     
 //    public abstract boolean isEqualTo(int other);
 //    public abstract boolean isEqualTo(float other);

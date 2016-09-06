@@ -21,7 +21,7 @@ import name.huliqing.core.data.ResistData;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.data.SkinData;
 import name.huliqing.core.data.TalentData;
-import name.huliqing.core.data.module.ModuleData;
+import name.huliqing.core.data.ModuleData;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.xml.DataLoader;

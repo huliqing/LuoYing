@@ -8,26 +8,29 @@ package name.huliqing.core.object.attribute;
 import name.huliqing.core.data.AttributeData;
 
 /**
+ * 以慗形int作为属性参数。
  * @author huliqing
  */
-public class IntegerAttribute extends NumberAttribute<Integer> {
+public class IntegerAttribute extends NumberAttribute {
 
+//    private static final Logger LOG = Logger.getLogger(IntegerAttribute.class.getName());
+    
     @Override
     public void setData(AttributeData data) {
         super.setData(data);
         value = data.getAsInteger("value", 0);
     }
-    
+
+    @Override
+    protected void updateData() {
+        // 这里一定要确保存的是int类型
+        data.setAttribute("value", value.intValue()); 
+    }
+
     @Override
     public void setValue(Number newValue) {
+        // 转成int类型。
         super.setValue(newValue.intValue()); 
-    }
-    
-    @Override
-    protected void notifyValueChangeListeners(Number oldValue, Number newValue) {
-        if (oldValue.intValue() != newValue.intValue()) {
-            super.notifyValueChangeListeners(oldValue, newValue); 
-        }
     }
     
     @Override
@@ -38,16 +41,6 @@ public class IntegerAttribute extends NumberAttribute<Integer> {
     @Override
     public void add(final float other) {
         setValue(value.intValue() + other);
-    }
-
-    @Override
-    public void subtract(final int other) {
-        setValue(value.intValue() - other);
-    }
-
-    @Override
-    public void subtract(final float other) {
-        setValue(value.intValue() - other);
     }
     
 }

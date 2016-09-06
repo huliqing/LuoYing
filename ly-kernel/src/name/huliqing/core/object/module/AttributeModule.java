@@ -8,7 +8,7 @@ package name.huliqing.core.object.module;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.data.AttributeData;
-import name.huliqing.core.data.module.ModuleData;
+import name.huliqing.core.data.ModuleData;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.attribute.Attribute;

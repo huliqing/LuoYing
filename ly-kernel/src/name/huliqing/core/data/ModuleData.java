@@ -3,10 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.core.data.module;
+package name.huliqing.core.data;
 
 import com.jme3.network.serializing.Serializable;
-import name.huliqing.core.data.ObjectData;
 
 /**
  *

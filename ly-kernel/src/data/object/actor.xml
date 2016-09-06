@@ -9,6 +9,12 @@
     <!--Debug test-->
     <!--==========================================================================-->
     
+    <actor id="tttt" attributes="
+attributeMagicAttack,attributeAttackSpeed
+"
+            modules="moduleAttribute"  file="Models/actor/ske.mesh.j3o" />
+    
+    
     <!--test-->
     <!-- player test -->    
     <actor id="actorPlayerTest" extends="actorPlayer"

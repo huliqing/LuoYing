@@ -10,7 +10,7 @@ package name.huliqing.core.xml;
  * @author huliqing
  * @param <T>
  */
-public interface DataLoader<T extends Data> {
+public interface DataLoader<T extends ProtoData> { 
     
     /**
      * 载入数据，从proto中载入指定数据到store中。

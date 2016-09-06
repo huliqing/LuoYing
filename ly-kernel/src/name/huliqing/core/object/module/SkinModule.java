@@ -14,7 +14,7 @@ import name.huliqing.core.Factory;
 import name.huliqing.core.data.AttributeApply;
 import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.SkinData;
-import name.huliqing.core.data.module.ModuleData;
+import name.huliqing.core.data.ModuleData;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.mvc.service.AttributeService;
 import name.huliqing.core.object.actor.Actor;
@@ -547,7 +547,7 @@ public class SkinModule extends AbstractModule {
             for (AttributeApply aa : aas) {
                 NumberAttribute attr = attributeService.getAttributeByName(actor, aa.getAttribute());
                 if (attr != null) {
-                    attr.subtract(aa.getAmount());
+                    attr.add(-aa.getAmount());
                 }
             }
         }

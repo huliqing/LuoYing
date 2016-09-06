@@ -31,7 +31,7 @@ public class ObjectData extends ProtoData {
      * @return 
      */
     public final String getIcon() {
-        return proto.getAsString("icon");
+        return getProto().getAsString("icon");
     }
     
     /**
@@ -59,7 +59,7 @@ public class ObjectData extends ProtoData {
      * @return 
      */
     public String getDes() {
-        return proto.getAsString("des");
+        return getProto().getAsString("des");
     }
     
     /**
