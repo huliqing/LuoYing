@@ -230,6 +230,7 @@ public class ResourceManager {
             return mess.split("\\s+").length;
         }
         throw new UnsupportedOperationException("Unknow supported locale:" + locale);
-        
     }
+    
+    
 }

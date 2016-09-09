@@ -12,45 +12,17 @@ import com.jme3.scene.control.AbstractControl;
 import com.jme3.util.SafeArrayList;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.ModuleData;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.xml.DataProcessor;
 import name.huliqing.core.object.module.Module;
 
 /**
- * 角色
+ * 角色，角色由数据(ObjectData)和模块处理器(Module)组成。
  * @author huliqing
  */
 public class Actor extends AbstractControl implements DataProcessor<ActorData> {
-    
-//    public interface ActorObjectListener {
-//        
-//        /**
-//         * 当角色添加了物品时该方法被调用
-//         * @param actor
-//         * @param data 被添加的物体
-//         * @param added 实际添加了的物品的数量
-//         */
-//        void onObjectAdded(Actor actor, ObjectData data, int added);
-//        
-//        /**
-//         * 当从角色身上移除了物品时该方法被调用.
-//         * @param actor
-//         * @param data 被移除了物体数量的data,如果移除后的物体的数量为0，则该物体可能被移除出角色身上。
-//         * @param removed 实际移除的物体的数量
-//         */
-//        void onObjectRemoved(Actor actor, ObjectData data, int removed);
-//        
-//        /**
-//         * 当角色使用物体时该方法被调用,侦听器可以实现这个方法来处理物品的使用逻辑.
-//         * @param actor
-//         * @param data 
-//         */
-//        void onObjectUse(Actor actor, ObjectData data);
-//        
-//    }
-    
+ 
     protected ActorData data;
     protected boolean initialized;
     
@@ -58,7 +30,6 @@ public class Actor extends AbstractControl implements DataProcessor<ActorData> {
      * 所有的模块,这里面包含logicModules中的模块。
      */
     protected final SafeArrayList<Module> modules = new SafeArrayList<Module>(Module.class);
-//    protected final List<ActorObjectListener> listeners = new ArrayList<ActorObjectListener>();
     
     @Override
     public void setData(ActorData data) {
@@ -75,7 +46,7 @@ public class Actor extends AbstractControl implements DataProcessor<ActorData> {
      */
     public void initialize() {
         if (initialized) {
-            throw new IllegalStateException("Actor already initialized! actor=" + this);
+            throw new IllegalStateException("Actor already initialized! actorId=" + data.getId());
         }
         
         // 载入基本模型并添加当前控制器
@@ -107,7 +78,8 @@ public class Actor extends AbstractControl implements DataProcessor<ActorData> {
      * 清理角色
      */
     public void cleanup() {
-        // 这里要注意反向清理，因为modules是有依赖顺序的
+        // 这里要注意反向清理，因为modules是有依赖顺序的,可能存在一些module，这些module在清理的时候会依赖于
+        // 其它module.
         for (int i = modules.size() - 1; i >= 0; i--) {
             modules.get(i).cleanup();
         }
@@ -175,6 +147,35 @@ public class Actor extends AbstractControl implements DataProcessor<ActorData> {
     protected void controlRender(RenderManager rm, ViewPort vp) {}
     
     // ------------------------- 考虑增加的方法,统一物体的添加，移除，获取
+       
+//    public interface ActorObjectListener {
+//        
+//        /**
+//         * 当角色添加了物品时该方法被调用
+//         * @param actor
+//         * @param data 被添加的物体
+//         * @param added 实际添加了的物品的数量
+//         */
+//        void onObjectAdded(Actor actor, ObjectData data, int added);
+//        
+//        /**
+//         * 当从角色身上移除了物品时该方法被调用.
+//         * @param actor
+//         * @param data 被移除了物体数量的data,如果移除后的物体的数量为0，则该物体可能被移除出角色身上。
+//         * @param removed 实际移除的物体的数量
+//         */
+//        void onObjectRemoved(Actor actor, ObjectData data, int removed);
+//        
+//        /**
+//         * 当角色使用物体时该方法被调用,侦听器可以实现这个方法来处理物品的使用逻辑.
+//         * @param actor
+//         * @param data 
+//         */
+//        void onObjectUse(Actor actor, ObjectData data);
+//        
+//    }
+    
+//    protected final List<ActorObjectListener> listeners = new ArrayList<ActorObjectListener>();
     
 //    /**
 //     * 给角色添加物体.

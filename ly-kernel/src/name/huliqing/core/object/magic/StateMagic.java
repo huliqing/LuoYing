@@ -107,13 +107,14 @@ public class StateMagic extends Magic {
         }
     }
     
+        // remove20160905
 //    protected void playState(String stateId) {
 //        if (target == null)
 //            return;
 //        stateService.addState(target, stateId, null);
 //    }
-   
-    // remove20160905
+
+        // remove20160905
 //    protected void playActorAnim(String actorAnimId) {
 //        if (target == null) 
 //            return;

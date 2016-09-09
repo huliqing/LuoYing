@@ -102,4 +102,13 @@ public class StringListAttribute extends AbstractAttribute implements Collection
         return listeners != null && listeners.remove(listener);
     }
     
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (String v : values) {
+            sb.append(v);
+        }
+        return sb.toString();
+    }
+    
 }

@@ -6,10 +6,11 @@ package name.huliqing.core.ui;
 
 /**
  * @author huliqing
+ * @param <T>
  */
 public abstract class Row<T> extends LinearLayout {
     
-    protected ListView parentView;
+    protected ListView parentList;
     
     /**
      * @deprecated 使用 {@link #Row(name.huliqing.fighter.ui.ListView) }代替。
@@ -24,23 +25,21 @@ public abstract class Row<T> extends LinearLayout {
     
     public Row(ListView parentView) {
         super();
-        this.parentView = parentView;
+        this.parentList = parentView;
     }
 
     @Override
     public void setNeedUpdate() {
         super.setNeedUpdate();
         // 通知父ListView需要更新
-        if (parentView != null) {
-            parentView.setNeedUpdate();
+        if (parentList != null) {
+            parentList.setNeedUpdate();
         }
     }
     
     /**
      * 渲染显示行数据
-     * @param rowIndex 第几行记录
-     * @param datas 所有数据
+     * @param data
      */
-//    public abstract void displayRow(int rowIndex, List<T> datas);
     public abstract void displayRow(T data);
 }

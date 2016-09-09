@@ -69,6 +69,7 @@ public interface AttributeService extends Inject{
      */
     boolean removeListener(Actor actor, AttributeListener attributeListener);
     
+    // remove20160909
 //    /**
 //     * 设置指定属性名称的值。
 //     * @param <V>

@@ -99,7 +99,7 @@ import name.huliqing.core.constants.TextureConstants;
  * </code>
  * @author Normen Hansen & R茅my Bouquet
  * 
- * 这个类修改自com.jme3.water.SimpleWaterProcessor, 主要处理在Android下发生的异常。
+ * 这个类修改自com.jme3.water.SimpleWaterProcessor, 主要处理在Android下发生的异常,并进行了廋身
  */
 public class VerySimpleWaterProcessor implements SceneProcessor {
 

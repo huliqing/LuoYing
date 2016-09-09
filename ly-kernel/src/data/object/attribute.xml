@@ -26,9 +26,6 @@
     
     <!--角色的等级, 这个属性在运行时存放角色的等级值。-->
     <attributeInteger id="attributeLevel" name="attributeLevel" value="1" />
-    
-    <!--移动速度：1.0为原始速度,2.0为两倍速度,默认1.0-->
-    <attributeFloat id="attributeMoveSpeed" name="attributeMoveSpeed" value="1.0" />
 
     <!--当前角色可用的经验值-->
     <attributeInteger id="attributeXp" name="attributeXp" />
@@ -41,6 +38,9 @@
     
     <!--角色所在队伍-->
     <attributeInteger id="attributeTeam" name="attributeTeam" />
+    
+    <!--移动速度：1.0为原始速度,2.0为两倍速度,默认1.0-->
+    <attributeFloat id="attributeMoveSpeed" name="attributeMoveSpeed" value="1.0" />
     
     <!--角色的质量:默认角色质量都是大于0的，即默认都为动态角色。 -->
     <attributeFloat id="attributeMass" name="attributeMass" value="60.1" />
@@ -121,7 +121,7 @@
     
     <attributeGroup id="attributeGroupBase" name="attributeGroupBase" 
                     attributes="attributeLiving,attributeRace,attributeSex
-    ,attributeLevel,attributeMoveSpeed,attributeXp,attributeXpNext,attributeGroup,attributeTeam,attributeMass
+    ,attributeLevel,attributeXp,attributeXpNext,attributeGroup,attributeTeam,attributeMoveSpeed,attributeMass
     ,attributeEssential,attributeAutoLogic,attributeAutoDetect
     ,attributeTarget,attributeFollowTarget,attributeOwner,attributeTalentPoints
     ,attributeHealthMax,attributeHealth,attributeManaMax,attributeMana
@@ -193,50 +193,6 @@
     <!--蒂娜的武器槽位：挂在左腰间-->
     <attributeStringList id="attributeWeaponSlotDiNa" extends="attributeWeaponSlots" values="slotSwordLeftWaist,slotSwordLeftWaist2" />
     
-    
-    
-    <!--remove20160901-->
-<!--    健康值:定义角色的生命值
-    <attribute id="attributeHealth" el="elLevelAttrHealth" />
-    魔法值:定义角色最多可拥有多少魔法量
-    <attribute id="attributeMana" el="elLevelAttrMana" />
-    物理攻击力
-    <attribute id="attributeAttack" el="elLevelAttrAttack" />
-    魔法攻击力
-    <attribute id="attributeMagicAttack" el="elLevelAttrMagicAttack" />
-    物理防御力
-    <attribute id="attributeDefence" el="elLevelAttrDefence" />
-    魔法防御力
-    <attribute id="attributeMagicDefence" el="elLevelAttrMagicDefence" />
-
-    视力:影响角色的侦察范围
-    <attribute id="attributeVision" el="elLevelAttrVision" />
-
-    健康值恢复速度:1.0为每秒恢复一点生命值，2.0为每秒恢复2点生命值
-    <attribute id="attributeHealthRestore" el="elLevelAttrHealthRestore" />
-
-    魔法值恢复速度:1.0为每秒恢复一点魔法值，2.0为每秒恢复2点魔法值
-    <attribute id="attributeManaRestore" el="elLevelAttrManaRestore" />-->
-    
-    <!--攻击速度:1.0为原始速度，2.0为双倍速度-->
-    <!--<attribute id="attributeAttackSpeed" el="elLevelAttrAttackSpeed" />-->
-
-    <!--施法速度:1.0为原始速度，2.0为双倍速度-->
-    <!--<attribute id="attributeMagicSpeed" el="elLevelAttrMagicSpeed" />-->
-    
-    <!--移动速度：1.0为原始速度,2.0为两倍速度-->
-    <!--<attribute id="attributeMoveSpeed" el="elLevelAttrMoveSpeed" />-->
-    
-    <!--防御概率:[0.0~1.0], 1.0为百分百防御-->
-    <!--<attribute id="attributeDefenceRate" el="elLevelAttrDefenceRate" />-->
-
-    <!--躲闪概率:[0.0~1.0]，1.0为百分百躲闪-->
-    <!--<attribute id="attributeDuckRate" el="elLevelAttrDuckRate" />-->
-    
-    <!--鬼魅能力:[0.0~1.0] -->
-<!--    <attribute id="attributeGhostRate" el="elLevelAttrGhostRate" />-->
-    
-
 </root>
 
 

@@ -8,7 +8,7 @@ import name.huliqing.core.data.AnimData;
 import name.huliqing.core.xml.DataProcessor;
 
 /**
- *
+ * 动画功能接口
  * @author huliqing
  * @param <T>
  * @param <E>
@@ -32,6 +32,34 @@ public interface Anim<T extends AnimData, E> extends DataProcessor<T>{
      * @param target 
      */
     void setTarget(E target);
+    
+    /**
+     * 开始执行动画
+     */
+    void start();
+    
+    /**
+     * 设置暂停当前动画或继续执行
+     * @param paused 
+     */
+    void pause(boolean paused);
+    
+    /**
+     * 自动更新动画逻辑。
+     * @param tpf 
+     */
+    void update(float tpf);
+    
+    /**
+     * 将动画更新到指定的插值位置进行显示,如：interpolation设置为0.5f,则动画将显示在一半的位置处。
+     * @param interpolation 
+     */
+    void display(float interpolation);
+    
+    /**
+     * 清理当前动画，以便下次执行。当动画正常结束或者被打断，该方法都应该执行。
+     */
+    void cleanup();
     
     /**
      * @see #setSpeed(float) 
@@ -69,7 +97,7 @@ public interface Anim<T extends AnimData, E> extends DataProcessor<T>{
     float getInterpolation();
     
     /**
-     * @see #setLoop(name.huliqing.fighter.object.animation.Loop) 
+     * 获取动画的循环模式
      * @return 
      */
     Loop getLoop();
@@ -88,31 +116,6 @@ public interface Anim<T extends AnimData, E> extends DataProcessor<T>{
     boolean isInverse();
     
     /**
-     * 开始执行动画
-     */
-    void start();
-    
-    /**
-     * 设置暂停当前动画或继续执行
-     * @param paused 
-     */
-    void pause(boolean paused);
-    
-    /**
-     * 自动更新动画逻辑。
-     * @param tpf 
-     */
-    void update(float tpf);
-    
-    /**
-     * 将动画更新到指定的插值位置进行显示,该方法不受是否start,pause和break的
-     * 影响，如：interpolation设置为0.5f,则动画将显示在一半的位置处。不管是
-     * 否已经start.
-     * @param interpolation 
-     */
-    void display(float interpolation);
-    
-    /**
      * 判断当前动画是否暂停中
      * @return 
      */
@@ -125,22 +128,10 @@ public interface Anim<T extends AnimData, E> extends DataProcessor<T>{
     boolean isEnd();
     
     /**
-     * 清理当前动画，以便下次执行。当动画正常结束或者被打断，该方法都应该执行。
-     */
-    void cleanup();
-    
-    /**
      * 添加动画侦听器
      * @param listener 
      */
     void addListener(Listener listener);
-    
-    // remove20160905
-//    /**
-//     * 获取动画侦听器
-//     * @return 
-//     */
-//    List<Listener> getListeners();
     
     /**
      * 移除侦听器

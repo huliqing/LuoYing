@@ -7,6 +7,42 @@ gameStoryGuard.name=守护之战
 gameSurvival.name=生存挑战(塔防)
 gameSurvival.des=生存挑战，这个小游戏仍处于测试中，规则与故事模式中的“黄金宝箱”相似，宝箱不能被破坏，敌人每隔一段时间会自动升级，玩家也要不断升级，创建更多的防御塔和召唤更多的宠物来防御敌人的进攻，直到打完最后BOSS！
 
+# ========== Attribute
+attributeLiving.name=生物
+attributeRace.name=种族
+attributeSex.name=性别
+attributeLevel.name=当前等级
+attributeXp.name=当前经验
+attributeXpNext.name=下一级需要的经验
+attributeGroup.name=角色所在分组
+attributeTeam.name=角色所在队伍
+attributeMoveSpeed.name=移动速度
+attributeMass.name=角色质量
+attributeEssential.name=必要的角色
+attributeAutoLogic.name=逻辑功能开启
+attributeAutoDetect.name=自动寻敌
+attributeTarget.name=当前目标
+attributeFollowTarget.name=跟随目标
+attributeOwner.name=主人
+attributeTalentPoints.name=可用天赋点数
+attributeHealthMax.name=最高生命值
+attributeHealth.name=生命值
+attributeManaMax.name=最高魔法值
+attributeMana.name=魔法值
+attributeAttack.name=物理攻击力
+attributeMagicAttack.name=魔法攻击力
+attributeDefence.name=物理防御力
+attributeMagicDefence.name=魔法防御力
+attributeHealthRestore.name=生命恢复速度
+attributeManaRestore.name=魔法恢复速度
+attributeAttackSpeed.name=攻击速度
+attributeMagicSpeed.name=施法速度
+attributeDefenceRate.name=防守
+attributeDuckRate.name=躲闪
+attributeGhostRate.name=鬼魅
+attributeVision.name=视力
+attributeWeaponSlots.name=武器槽位
+
 # ========== Basic item
 itemGold.name=金币
 itemGold.des=金币

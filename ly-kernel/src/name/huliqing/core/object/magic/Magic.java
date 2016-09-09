@@ -29,7 +29,8 @@ import name.huliqing.core.utils.ConvertUtils;
 import name.huliqing.core.utils.MathUtils;
 
 /**
- *
+ * //TODO Magic功能需要重构.
+ * 
  * @author huliqing
  * @param <T>
  */
@@ -51,10 +52,13 @@ public class Magic<T extends MagicData> extends AbstractPlayObject implements Da
     protected final Spatial localRoot = new Node();
     
     protected Spatial traceObject;
+    
     // 魔法的施放者，有可能为null.
     protected Actor source;
+    
     // 魔法针对的主目标,如果魔法没有特定的目标，则有可能为null
     protected Actor target;
+    
     protected HitChecker hitChecker;
     
     // 标记是否已经开始运行
@@ -197,8 +201,8 @@ public class Magic<T extends MagicData> extends AbstractPlayObject implements Da
     } 
 
     /**
-     * 播放声音事件
-     * @param tpf 
+     * 播放声音事件 
+     * @param inter
      */
     protected void doUpdateSounds(float inter) {
         if (sounds != null) {

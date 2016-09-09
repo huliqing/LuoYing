@@ -79,7 +79,6 @@ public class AttributeServiceImpl implements AttributeService {
         return null;
     }
 
-
     @Override
     public void addListener(Actor actor, AttributeListener attributeListener) {
         AttributeModule module = actor.getModule(AttributeModule.class);

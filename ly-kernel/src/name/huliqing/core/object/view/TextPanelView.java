@@ -67,7 +67,7 @@ public class TextPanelView<T extends ViewData> extends TextView<T> {
         vd.setAttribute("title", title);
         return vd;
     }
-
+    
     @Override
     public void applySyncData(SyncData data) {
         super.applySyncData(data);

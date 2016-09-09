@@ -10,7 +10,7 @@ import name.huliqing.core.object.module.AttributeModule;
 import name.huliqing.core.xml.DataProcessor;
 
 /**
- *
+ * 属性接口定义
  * @author huliqing
  */
 public interface Attribute extends DataProcessor<AttributeData> {

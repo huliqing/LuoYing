@@ -10,7 +10,7 @@ import com.jme3.renderer.ViewPort;
 import com.jme3.scene.control.AbstractControl;
 
 /**
- *
+ * 这个AnimationControl是用来包装Anim的，让Anim可以作为Control直接添加到某个节点下面。
  * @author huliqing
  */
 public class AnimationControl extends AbstractControl {

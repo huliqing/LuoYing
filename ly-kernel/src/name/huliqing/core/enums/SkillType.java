@@ -9,11 +9,10 @@ import java.util.logging.Logger;
 import name.huliqing.core.Config;
 
 /**
- * 定义技能类型,目标只支持1~31类技能，暂不支持超过31的技能。
+ * 定义技能类型,目前只支持1~31类技能。
  * @author huliqing
  */
 public enum SkillType {
-    
     
     /** 等待 */
     wait(1  , makeBits(13)           // make overlaps
@@ -83,13 +82,14 @@ public enum SkillType {
     common(63   , makeBits(0)
                 , makeBits(3,4,6,7)),
     ;
+    
     private static final Logger LOG = Logger.getLogger(SkillType.class.getName());
     // 技能类型的10进制值
-    private int value;
+    private final int value;
     // 可覆盖的所有其它技能类型的二进制表示,每1个二进制位表示一个特定技能
-    private long overlaps;
+    private final long overlaps;
     // 可中断的所有其它技能类型的二进制表示,每1个二进制位表示一个特定技能
-    private long interrupts;
+    private final long interrupts;
     
     private SkillType(int value, int overlaps, int interrupts) {
         this.value = value;

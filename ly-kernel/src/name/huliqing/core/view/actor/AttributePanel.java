@@ -7,54 +7,40 @@ package name.huliqing.core.view.actor;
 import com.jme3.font.BitmapFont;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import name.huliqing.core.Factory;
-import name.huliqing.core.constants.ResConstants;
-import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.manager.ResourceManager;
+import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.AttributeService;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.attribute.AbstractSimpleAttribute;
 import name.huliqing.core.object.attribute.Attribute;
+import name.huliqing.core.object.attribute.GroupAttribute;
 import name.huliqing.core.object.attribute.LimitAttribute;
-import name.huliqing.core.ui.UIFactory;
-import name.huliqing.core.ui.LinearLayout;
+import name.huliqing.core.ui.ListView;
+import name.huliqing.core.ui.Row;
 import name.huliqing.core.ui.Text;
-import name.huliqing.core.ui.UI;
 
 /**
  * 角色属性面板
  * @author huliqing
  */
-public class AttributePanel extends LinearLayout implements ActorPanel {
+public class AttributePanel extends ListView<Attribute> implements ActorPanel {
     private final ActorService actorService = Factory.get(ActorService.class);
     private final AttributeService attributeService = Factory.get(AttributeService.class);
     private final DecimalFormat format = new DecimalFormat("#.#");
     
-    // 等级
-    private AttrItem level;
+    // 临时性的用于过滤不想显示的属性名称，后续需要添加到xml配置中去。
+    private final List<String> filterAttributeNames;
     
-    // 属性列表，保持对列表的引用
-    private final List<AttrItem> attrs = new ArrayList<AttrItem>();
+    private Actor actor;
     
-    public AttributePanel() {
-        super();
-        setPadding(5, 0, 5, 0);
-        level = new AttrItem(ResourceManager.get(ResConstants.COMMON_LEVEL), "");
-        addView(level);
-    }
-
-    @Override
-    public void updateViewChildren() {
-        super.updateViewChildren();
-        List<UI> uis = this.getViews();
-        float itemHeight = height / uis.size();
-        for (UI ui : uis) {
-            AttrItem item = (AttrItem) ui;
-            item.setWidth(width - 10);
-            item.setHeight(itemHeight);
-//            item.setMargin(5, 0, 0, 0);
-        }
+    public AttributePanel(float width, float height) {
+        super(width, height);
+        
+        filterAttributeNames = new ArrayList<String>(1);
+        filterAttributeNames.add("attributeWeaponSlots");
     }
     
     /**
@@ -64,63 +50,50 @@ public class AttributePanel extends LinearLayout implements ActorPanel {
     @Override
     public void setPanelVisible(boolean visible) {
         this.setVisible(visible);
-    }   
+    }
     
     @Override
     public void setPanelUpdate(Actor actor) {
-        if (actor == null) {
-            return;
-        }
-        
-        // level
-        level.setValue(actorService.getLevel(actor));
-        
-        // attributes
-        List<Attribute> attributes = attributeService.getAttributes(actor);
-        
-        int count = 0;
-        if (attributes != null) {
-            for (Attribute attr:  attributes) {
-                AttrItem item;
-                if (count >= attrs.size()) {
-                    item = new AttrItem("", "");
-                    addView(item);
-                    attrs.add(item);
-                } else {
-                    item = (AttrItem) attrs.get(count);
-                }
-                item.setLabel(ResourceManager.getObjectName(attr.getData()));
-                if (attr instanceof LimitAttribute) {
-                    item.setValue(((LimitAttribute)attr).getValue() + "/" + ((LimitAttribute) attr).getMaxLimit());
-                } else if (attr instanceof AbstractSimpleAttribute) {
-                    item.setValue(((AbstractSimpleAttribute)attr).getValue());
-                } else {
-                    item.setValue(attr.toString());
-                }
-                count++;
-            }
-        }
-        
-        // 角色的属性配置数量可能不尽相同，可能存在空的栏位，则清空。
-        if (count < attrs.size()) {
-            for (int i = count; i < attrs.size(); i++) {
-                AttrItem item = (AttrItem) attrs.get(i);
-                item.setValue("");
-                item.setVisible(false);
-            }
-        }
-
+        this.actor = actor;
+        getDatas();
+        super.refreshPageData();
     }
     
-    private class AttrItem extends LinearLayout {
-        private Text label;
-        private Text value;
+    @Override
+    protected Row<Attribute> createEmptyRow() {
+        return new AttributeRow(this);
+    }
+    
+    @Override
+    protected boolean filter(Attribute data) {
+        if (data instanceof GroupAttribute) {
+            return true;
+        }
+        if (filterAttributeNames.contains(data.getName())) {
+            return true;
+        }
+        return super.filter(data); 
+    }
 
-        public AttrItem(String label, Object value) {
-            super();
+    @Override
+    public List<Attribute> getDatas() {
+        if (actor != null) {
+            return attributeService.getAttributes(actor);
+        }
+        return Collections.EMPTY_LIST;
+    }
+    
+    private class AttributeRow extends Row<Attribute> {
+
+        private final Text label;
+        private final Text value;
+        
+        public AttributeRow(ListView parentView) {
+            super(parentView);
             this.setLayout(Layout.horizontal);
-            this.label = new Text(label);
-            this.value = new Text(String.valueOf(value));
+            this.label = new Text("");
+            this.value = new Text("");
+            this.value.setAlignment(BitmapFont.Align.Right);
             this.addView(this.label);
             this.addView(this.value);
         }
@@ -128,32 +101,24 @@ public class AttributePanel extends LinearLayout implements ActorPanel {
         @Override
         protected void updateViewChildren() {
             super.updateViewChildren();
-            
-            float fontSize = UIFactory.getUIConfig().getBodyFontSize();
-            if (fontSize > height) {
-                fontSize = height;
-            }
-            
-            this.label.setWidth(width * 0.6f);
-            this.label.setHeight(height);
-            this.label.setFontSize(fontSize);
-//            this.label.setVerticalAlignment(BitmapFont.VAlign.Center);
-            
-            this.value.setWidth(width * 0.4f);
-            this.value.setHeight(height);
-            this.value.setFontSize(fontSize);
-            this.value.setVerticalAlignment(BitmapFont.VAlign.Center);
-            this.value.setAlignment(BitmapFont.Align.Right);
-            value.setMargin(0, 0, 10, 0);
+            label.setWidth(width * 0.5f);
+            label.setHeight(height);
+            value.setWidth(width * 0.5f);
+            value.setHeight(height);
         }
         
-        public void setValue(Object value) {
-            this.value.setText(String.valueOf(value));
+        @Override
+        public void displayRow(Attribute attr) {
+            // 这里使用属性"名称"来获取资源文件中的值，与默认使用id不同。
+            label.setText(ResourceManager.getObjectName(attr.getName()));
+            
+            if (attr instanceof LimitAttribute) {
+                value.setText(((LimitAttribute)attr).getValue() + "/" + ((LimitAttribute) attr).getMaxLimit());
+            } else if (attr instanceof AbstractSimpleAttribute) {
+                value.setText(String.valueOf(((AbstractSimpleAttribute)attr).getValue()));
+            } else {
+                value.setText(attr.toString());
+            }
         }
-
-        public void setLabel(String label) {
-            this.label.setText(label);
-        }
-
     }
 }

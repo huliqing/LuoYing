@@ -19,7 +19,7 @@ import java.util.List;
 import name.huliqing.core.data.AnimData;
 
 /**
- *
+ * 改变一个节点的颜色
  * @author huliqing
  */
 public class ColorAnim extends AbstractAnim<Spatial> {

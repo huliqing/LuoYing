@@ -29,7 +29,7 @@ public enum Mat {
     /** 钙质，如牙齿，爪子之类 */
     calcium(5),
     ;
-    private int value;
+    private final int value;
     
     private Mat(int value) {
         this.value = value;
@@ -46,7 +46,7 @@ public enum Mat {
                 return s;
             }
         }
-        throw new UnsupportedOperationException("不支持的Sex类型:" + value);
+        throw new UnsupportedOperationException("不支持的Mat类型:" + value);
     }
     
     public static Mat identify(String value) {

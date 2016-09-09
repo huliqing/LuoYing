@@ -14,8 +14,8 @@ import name.huliqing.core.ui.UIFactory;
 import name.huliqing.core.ui.Row;
 
 /**
- *
  * @author huliqing
+ * @param <T>
  */
 public abstract class ItemRow<T> extends Row<T> {
     protected final PlayService playService = Factory.get(PlayService.class);

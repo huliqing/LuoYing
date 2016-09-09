@@ -86,8 +86,9 @@ public class ActorMainPanel extends Window implements ItemListener, SkinListener
         float ch = getContentHeight();
         
         // body panel 
-        attrPanel = new AttributePanel();
+        attrPanel = new AttributePanel(cw, ch);
         attrPanel.setVisible(false);
+        attrPanel.setPageSize(10);
 
         armorPanel = new ArmorPanel(cw, ch);
         armorPanel.setPageSize(globalPageSize);

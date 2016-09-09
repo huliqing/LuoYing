@@ -18,7 +18,7 @@ public enum Sex {
     /** 无性别类型 */
     unknow(2);
     
-    private int value;
+    private final int value;
     
     private Sex(int value) {
         this.value = value;

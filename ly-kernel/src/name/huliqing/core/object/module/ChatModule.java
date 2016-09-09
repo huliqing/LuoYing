@@ -26,6 +26,7 @@ public class ChatModule extends AbstractModule {
         super.initialize(actor);
         this.actor = actor;
         
+        // 目标只支持配置一个chat, 如果需要多个chat，则应该包装在GroupChat下面。
         List<ObjectData> ods = actor.getData().getObjectDatas();
         if (ods != null && !ods.isEmpty()) {
             for (ObjectData od : ods) {
