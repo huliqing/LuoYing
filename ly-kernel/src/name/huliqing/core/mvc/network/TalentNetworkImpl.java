@@ -48,6 +48,11 @@ public class TalentNetworkImpl implements TalentNetwork {
     }
 
     @Override
+    public void addTalent(Actor actor, Talent talent) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
     public void removeTalent(Actor actor, String talentId) {
         throw new UnsupportedOperationException("Not supported yet.");
     }

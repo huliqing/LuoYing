@@ -39,6 +39,14 @@ public class TalentServiceImpl implements TalentService {
     }
 
     @Override
+    public void addTalent(Actor actor, Talent talent) {
+        TalentModule module = actor.getModule(TalentModule.class);
+        if (module != null) {
+            module.addTalent(talent);
+        }
+    }
+
+    @Override
     public void removeTalent(Actor actor, String talentId) {
         TalentModule module = actor.getModule(TalentModule.class);
         if (module != null) {

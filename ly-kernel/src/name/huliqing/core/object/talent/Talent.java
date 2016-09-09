@@ -34,21 +34,38 @@ public interface Talent<T extends TalentData> extends DataProcessor<T> {
     boolean isInitialized();
     
     /**
-     * 天赋逻辑
-     * @param tpf 
-     */
-    void update(float tpf);
-    
-    /**
      * 清理并释放资源，当天赋从目标身上移除时应该执行一次该方法。
      */
     void cleanup();
     
-    void setActor(Actor actor);
+    /**
+     * 获取天赋的当前等级
+     * @return 
+     */
+    int getLevel();
     
     /**
-     * 更新天赋到指定的级别
+     * 设置天赋的级别
      * @param level 
      */
-    void updateLevel(int level);
+    void setLevel(int level);
+    
+    /**
+     * 获取天赋的最高等级限制
+     * @return 
+     */
+    int getMaxLevel();
+    
+    /**
+     * 设置天赋的最高等级限制
+     * @param maxLevel
+     */
+    void setMaxLevel(int maxLevel);
+    
+    /**
+     * 设置天赋的作用目标。
+     * @param actor 
+     */
+    void setActor(Actor actor);
+    
 }

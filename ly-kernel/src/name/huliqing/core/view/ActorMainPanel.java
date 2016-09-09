@@ -21,6 +21,7 @@ import name.huliqing.core.object.module.SkinListener;
 import name.huliqing.core.object.module.TalentListener;
 import name.huliqing.core.object.module.TaskListener;
 import name.huliqing.core.object.skin.Skin;
+import name.huliqing.core.object.talent.Talent;
 import name.huliqing.core.object.task.Task;
 import name.huliqing.core.ui.UIFactory;
 import name.huliqing.core.ui.FrameLayout;
@@ -273,18 +274,18 @@ public class ActorMainPanel extends Window implements ItemListener, SkinListener
     }
 
     @Override
-    public void onTalentAdded(Actor actor, TalentData talentData) {
+    public void onTalentAdded(Actor actor, Talent talent) {
         // 因为天赋影响属性，所以属性面板也需要更新
         updatePanel(talentPanel, attrPanel);
     }
 
     @Override
-    public void onTalentPointsChange(Actor actor, TalentData talentData, int pointsAdded) {
+    public void onTalentPointsChange(Actor actor, Talent talent, int pointsAdded) {
         updatePanel(talentPanel, attrPanel);
     }
 
     @Override
-    public void onTalentRemoved(Actor actor, TalentData talentData) {
+    public void onTalentRemoved(Actor actor, Talent talent) {
         updatePanel(talentPanel, attrPanel);
     }
 

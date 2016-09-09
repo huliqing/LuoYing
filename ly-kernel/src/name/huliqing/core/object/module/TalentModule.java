@@ -15,7 +15,6 @@ import java.util.logging.Logger;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.TalentData;
 import name.huliqing.core.data.ModuleData;
-import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.AttributeService;
 import name.huliqing.core.mvc.service.ElService;
 import name.huliqing.core.object.Loader;
@@ -30,11 +29,8 @@ import name.huliqing.core.object.talent.Talent;
  */
 public class TalentModule extends AbstractModule implements ValueChangeListener<Number>{
     private static final Logger LOG = Logger.getLogger(TalentModule.class.getName());
-    private final ActorService actorService = Factory.get(ActorService.class);
     private final AttributeService attributeService = Factory.get(AttributeService.class);
     private final ElService elService = Factory.get(ElService.class);
-    
-    private Control updateControl;
     
     // 角色等级属性的名称，用于查找角色的“等级属性”并进行绑定监听等级变化
     private String bindLevelAttribute;
@@ -42,15 +38,11 @@ public class TalentModule extends AbstractModule implements ValueChangeListener<
     // 天赋属性名称，这个属性将作为天赋点数的容器，属性类型必须是Number类型。
     // 当角色升级时获得的天赋点数将累加在这个属性上。
     private String bindTalentPointsAttribute;
-    
-    /**
-     * 默认的天赋奖励点数，如果没有设置talentPointsLevelEl则始终使用这个值作为天赋点数奖励。
-     */
+
+    // 默认的天赋奖励点数，如果没有设置talentPointsLevelEl则始终使用这个值作为天赋点数奖励。
     private int talentPointsValue;
-    
-    /**
-     * 天赋公式ID,如果用于为每个变化等级计算天赋点数的奖励
-     */
+
+    // 天赋公式ID,如果用于为每个变化等级计算天赋点数的奖励
     private String talentPointsLevelEl;
     
     // ---- inner
@@ -64,6 +56,7 @@ public class TalentModule extends AbstractModule implements ValueChangeListener<
     
     // 角色的等级属性，用于监听角色等级变化
     private NumberAttribute levelAttribute;
+    
     // 角色的天赋点数容器属性,用于存放角色所增加的天赋点数 
     private NumberAttribute talentPointsAttribute;
     
@@ -112,21 +105,6 @@ public class TalentModule extends AbstractModule implements ValueChangeListener<
                 addTalent((Talent) Loader.load(td));
             }
         }
-        
-        updateControl = new AdapterControl() {
-            @Override
-            public void update(float tpf) {talentUpdate(tpf);}
-        };
-        this.actor.getSpatial().addControl(updateControl);
-    }
-    
-    private void talentUpdate(float tpf) {
-        if (actorService.isDead(actor)) {
-            return;
-        }
-        for (Talent t : talents.getArray()) {
-            t.update(tpf);
-        }
     }
     
     @Override
@@ -135,30 +113,27 @@ public class TalentModule extends AbstractModule implements ValueChangeListener<
             t.cleanup();
         }
         talents.clear();
-        if (updateControl != null) {
-            actor.getSpatial().removeControl(updateControl);
-        }
         super.cleanup();
     }
 
     /**
-     * 给角色添加一个新的天赋，如果天赋已经存在，则什么也不做。
+     * 给角色添加一个新的天赋，如果天赋已经存在(天赋ID相同),则旧的天赋将会被新的天赋覆盖掉。
      * @param talent 
      */
     public void addTalent(Talent talent) {
-        // 判断天赋是否已经存在
-        if (existsTalent(talent.getData().getId()))
-            return;
+        Talent oldTalent = getTalent(talent.getData().getId());
+        if (oldTalent != null) {
+            removeTalent(oldTalent);
+        }
         
         talents.add(talent);
         actor.getData().addObjectData(talent.getData());
-        
         talent.setActor(actor);
         talent.initialize();
         
         if (talentListeners != null) {
             for (TalentListener listener : talentListeners) {
-                listener.onTalentAdded(actor, talent.getData());
+                listener.onTalentAdded(actor, talent);
             }
         }
     }
@@ -167,11 +142,10 @@ public class TalentModule extends AbstractModule implements ValueChangeListener<
      * 增加角色某个天赋的点数,注：角色必须拥有足够的可用天赋点数才能增加。
      * 否则该方法将什么也不处理，当天赋的点数增加后，角色的可用天赋将会减少。
      * @param talentId 天赋ID
-     * @param points 增加的点数，必须是正数
+     * @param points 增加的点数
      */
     public void addTalentPoints(String talentId, int points) {
-        // 天赋点必须大于0，并且角色必须有足够的天赋点可用
-        if (points <= 0 || talentPointsAttribute == null || talentPointsAttribute.intValue() < points)
+        if (points == 0 || talentPointsAttribute == null || talentPointsAttribute.intValue() < points)
             return;
         
         // 如果指定的天赋ID不存在则不处理
@@ -180,22 +154,16 @@ public class TalentModule extends AbstractModule implements ValueChangeListener<
             return;
         }
         
-        // 如果天赋点数已经满，则不再处理
-        TalentData talentData = talent.getData();
-        if (talentData.isMax())
-            return;
-        
         // 处理实际增加的天赋点数
-        int newLevel = talentData.getLevel() + points;
+        int newLevel = talent.getLevel() + points;
         int trueAdd = points;
-        if (newLevel > talentData.getMaxLevel()) {
-            newLevel = talentData.getMaxLevel();
-            trueAdd = newLevel - talentData.getLevel();
+        if (newLevel > talent.getMaxLevel()) {
+            newLevel = talent.getMaxLevel();
+            trueAdd = newLevel - talent.getLevel();
         }
-        talentData.setLevel(newLevel);
         
         // 更新处理器的值
-        talent.updateLevel(talentData.getLevel());
+        talent.setLevel(newLevel);
         
         // 减少可用的天赋点数
         talentPointsAttribute.setValue(talentPointsAttribute.intValue() - trueAdd);
@@ -203,7 +171,7 @@ public class TalentModule extends AbstractModule implements ValueChangeListener<
         // 告诉侦听器
         if (talentListeners != null) {
             for (TalentListener tl : talentListeners) {
-                tl.onTalentPointsChange(actor, talentData, trueAdd);
+                tl.onTalentPointsChange(actor, talent, trueAdd);
             }
         }
     }
@@ -223,14 +191,14 @@ public class TalentModule extends AbstractModule implements ValueChangeListener<
         
         if (talentListeners != null) {
             for (TalentListener tl : talentListeners) {
-                tl.onTalentRemoved(actor, talent.getData());
+                tl.onTalentRemoved(actor, talent);
             }
         }
         return true;
     }
     
     /**
-     * 获取角色身上指定ID的天赋。
+     * 获取角色身上指定ID的天赋,如果角色不存在指定天赋的id，则该方法返回null.
      * @param talentId
      * @return 
      */
@@ -282,20 +250,6 @@ public class TalentModule extends AbstractModule implements ValueChangeListener<
      */
     public boolean removeTalentListener(TalentListener talentListener) {
         return talentListeners != null && talentListeners.remove(talentListener);
-    }
-    
-    /**
-     * 根据天赋id判断天赋是否已经存在，天赋不能重复，只要ID相同就视为已经存在。
-     * @param talentId
-     * @return 
-     */
-    private boolean existsTalent(String talentId) {
-        for (Talent t : talents) {
-            if (t.getData().getId().equals(talentId)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     // 监听等级的变化，并当等级变化时为角色增加天赋点数。

@@ -57,12 +57,7 @@ xs:time
                 </xs:attribute>
                 <xs:attribute name="maxLevel" type="xs:integer" use="required">
                     <xs:annotation>
-                        <xs:documentation>指定天赋允许的最高等级</xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="interval" type="xs:decimal" use="optional">
-                    <xs:annotation>
-                        <xs:documentation>天赋的逻辑更新时间间隔，单位秒</xs:documentation>
+                        <xs:documentation>指定天赋允许的最高等级，当天赋达到这个等级之后将不再升级。</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
             </xs:extension>

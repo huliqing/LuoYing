@@ -80,6 +80,7 @@ public class EncircleHaloEffect extends AbstractEffect {
             
             // 星光的随机旋转
             RandomRotationAnim rra = new RandomRotationAnim();
+            rra.setTarget(hc);
             rra.setLoop(Loop.loop);
             rra.setSpeed(0.5f);
             hc.addControl(new AnimationControl(rra));

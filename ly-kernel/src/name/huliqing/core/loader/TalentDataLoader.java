@@ -17,9 +17,6 @@ public class TalentDataLoader implements DataLoader<TalentData> {
 
     @Override
     public void load(Proto proto, TalentData data) {
-        data.setInterval(proto.getAsFloat("interval", 10));
-        data.setLevel(proto.getAsInteger("level", 0));
-        data.setMaxLevel(proto.getAsInteger("maxLevel", 10));
     }
     
 }

@@ -21,6 +21,7 @@ import name.huliqing.core.utils.MatUtils;
 
 /**
  * 渲染一个在XZ平面上的圆环及附着在该环上的一个星光
+ * @deprecated 不建议再使用这个例子。
  * @author huliqing
  */
 public class HaloCircle extends Node {
@@ -109,6 +110,7 @@ public class HaloCircle extends Node {
         
         // 创建旋转动画控制
         rotationAnim = createAnim();
+        rotationAnim.setTarget(localRoot);
         localRoot.addControl(new AnimationControl(rotationAnim));
     }
     

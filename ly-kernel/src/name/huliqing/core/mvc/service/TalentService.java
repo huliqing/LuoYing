@@ -32,6 +32,13 @@ public interface TalentService extends Inject {
     void addTalent(Actor actor, TalentData talentData);
     
     /**
+     * 添加天赋
+     * @param actor
+     * @param talent 
+     */
+    void addTalent(Actor actor, Talent talent);
+    
+    /**
      * 移除角色身上指定的天赋
      * @param actor
      * @param talentId 
@@ -52,13 +59,6 @@ public interface TalentService extends Inject {
      */
     int getTalentPoints(Actor actor);
     
-//    /**
-//     * 设置角色当前可用的总天赋点数。
-//     * @param actor
-//     * @param talentPoints 
-//     */
-//    void setTalentPoints(Actor actor, int talentPoints);
-    
     /**
      * 增加角色某个天赋的点数,注：角色必须拥有足够的可用天赋点数才能增加。
      * 否则该方法将什么也不处理，当天赋的点数增加后，角色的可用天赋将会减少。
@@ -68,7 +68,17 @@ public interface TalentService extends Inject {
      */
     void addTalentPoints(Actor actor, String talentId, int points);
     
+    /**
+     * 添加天赋侦听器
+     * @param actor
+     * @param talentListener 
+     */
     void addTalentListener(Actor actor, TalentListener talentListener);
     
+    /**
+     * 移除天赋侦听器
+     * @param actor
+     * @param talentListener 
+     */
     void removeTalentListener(Actor actor, TalentListener talentListener);
 }

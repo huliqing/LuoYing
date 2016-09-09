@@ -74,7 +74,7 @@ public abstract class AbstractAnim<E> implements Anim<AnimData, E> {
     
     protected boolean started;
     protected boolean paused;
-    protected boolean init;
+    protected boolean initialized;
     
     // 正向1, 反向 -1
     private int dir = 1;
@@ -183,9 +183,9 @@ public abstract class AbstractAnim<E> implements Anim<AnimData, E> {
         // Animation可以通过直接调用display(float)方法来让动画直接显示在某一个位置
         // 当调用display(float方法时也会进行doInit,因此这里需要进行init判断，确定是否
         // 已经初始化
-        if (!init) {
+        if (!initialized) {
             doInit();
-            init = true;
+            initialized = true;
         }
         started = true;
     }
@@ -265,12 +265,8 @@ public abstract class AbstractAnim<E> implements Anim<AnimData, E> {
     public void cleanup() {
         started = false;
         paused = false;
-        init = false;
+        initialized = false;
         timeInterpolation = 0;
-        
-        // remove20160217
-//        // 从场景中移除动画控制器
-//        playService.removeAnimation(this);
     }
     
     /**
@@ -290,15 +286,6 @@ public abstract class AbstractAnim<E> implements Anim<AnimData, E> {
         }
     }
     
-//    /**
-//     * 获取动画侦听器,如果没有添加过侦听器，则返回null.
-//     * @return 
-//     */
-//    @Override
-//    public List<Listener> getListeners() {
-//        return listeners;
-//    }
-    
     @Override
     public boolean removeListener(Listener listener) {
         if (listeners != null) {
@@ -309,9 +296,9 @@ public abstract class AbstractAnim<E> implements Anim<AnimData, E> {
     
     @Override
     public void display(float timeInterpolation) {
-        if (!init) {
+        if (!initialized) {
             doInit();
-            init = true;
+            initialized = true;
         }
         
         if (motionType == MotionType.Bezier) {

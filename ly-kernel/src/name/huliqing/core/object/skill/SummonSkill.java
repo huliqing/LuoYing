@@ -279,6 +279,7 @@ public class SummonSkill<T extends SkillData> extends AbstractSkill<T> {
                 actorService.setLookAt(summonActor, tv.vect3.set(actor.getSpatial().getWorldTranslation()).setY(start.getY()));
                 
                 summonActor.getSpatial().addControl(animationControl);
+                showAnim.setTarget(summonActor.getSpatial());
                 showAnim.setStartPos(start);
                 showAnim.setEndPos(end);
                 showAnim.start();

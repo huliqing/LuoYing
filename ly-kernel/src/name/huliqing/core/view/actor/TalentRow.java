@@ -86,6 +86,6 @@ public class TalentRow extends SimpleRow<Talent> {
         icon.setIcon(td.getIcon());
         body.setNameText(ResourceManager.getObjectName(td));
         body.setDesText(ResourceManager.getObjectDes(td.getId()));
-        num.setText(td.getLevel() + "/" + td.getMaxLevel());
+        num.setText(talent.getLevel() + "/" + talent.getMaxLevel());
     }
 }

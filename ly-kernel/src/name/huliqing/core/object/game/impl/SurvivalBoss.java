@@ -10,7 +10,6 @@ import name.huliqing.core.Factory;
 import name.huliqing.core.constants.IdConstants;
 import name.huliqing.core.constants.ResConstants;
 import name.huliqing.core.data.GameLogicData;
-import name.huliqing.core.data.TalentData;
 import name.huliqing.core.enums.MessageType;
 import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.mvc.network.ActorNetwork;
@@ -23,10 +22,10 @@ import name.huliqing.core.mvc.service.TalentService;
 import name.huliqing.core.mvc.service.ViewService;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.logic.scene.ActorBuildLogic;
-import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.actorlogic.PositionActorLogic;
 import name.huliqing.core.object.gamelogic.AbstractGameLogic;
+import name.huliqing.core.object.talent.Talent;
 import name.huliqing.core.object.view.TextView;
 import name.huliqing.core.object.view.View;
 
@@ -155,17 +154,18 @@ public class SurvivalBoss<T extends GameLogicData> extends AbstractGameLogic<T> 
         addPositionLogic(locBoss);
                 
         // 为BOSS添加特殊天赋
-        TalentData attack = DataFactory.createData(IdConstants.TALENT_ATTACK);
-        TalentData defence = DataFactory.createData(IdConstants.TALENT_DEFENCE);
-        TalentData defenceMagic = DataFactory.createData(IdConstants.TALENT_DEFENCE_MAGIC);
-        TalentData lifeRestore = DataFactory.createData(IdConstants.TALENT_LIFE_RESTORE);
-        TalentData moveSpeed = DataFactory.createData(IdConstants.TALENT_MOVE_SPEED);
+        Talent attack = Loader.load(IdConstants.TALENT_ATTACK);
+        Talent defence = Loader.load(IdConstants.TALENT_DEFENCE);
+        Talent defenceMagic = Loader.load(IdConstants.TALENT_DEFENCE_MAGIC);
+        Talent lifeRestore = Loader.load(IdConstants.TALENT_LIFE_RESTORE);
+        Talent moveSpeed = Loader.load(IdConstants.TALENT_MOVE_SPEED);
         attack.setLevel(attack.getMaxLevel());
         defence.setLevel(defence.getMaxLevel());
         defenceMagic.setLevel(defenceMagic.getMaxLevel());
         moveSpeed.setLevel(moveSpeed.getMaxLevel());
         lifeRestore.setMaxLevel(15);
         lifeRestore.setLevel(15);
+        
         talentService.addTalent(locBoss, attack);
         talentService.addTalent(locBoss, defence);
         talentService.addTalent(locBoss, defenceMagic);

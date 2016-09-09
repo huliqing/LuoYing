@@ -22,7 +22,6 @@ public class AttributeTalent<T extends TalentData> extends AbstractTalent<T> {
     protected String levelEl;
     
     // ----
-    private int level;
     private float applyValue;
     // 判断天赋是否已经apply到角色身上, 需要这个判断是因为有可能角色是从存档中载入的，
     // 由于从存档中载入时角色的属性值已经被当前天赋改变过，所以就不再需要再去改变角色的属性，
@@ -34,12 +33,14 @@ public class AttributeTalent<T extends TalentData> extends AbstractTalent<T> {
         super.setData(data); 
         this.applyAttribute = data.getAsString("applyAttribute");
         this.levelEl = data.getAsString("levelEl");
-        this.level = data.getLevel();
         this.attributeApplied = data.getAsBoolean("attributeApplied", attributeApplied);
     }
     
+    // 天赋data是存放在actorData.objectDatas上的，当角色存档时，天赋的一些参数也需要进行保存。
+    // 以便下次载入时可以恢复
+    @Override
     protected void updateData() {
-        data.setLevel(level);
+        super.updateData();
         data.setAttribute("attributeApplied", attributeApplied);
     }
 
@@ -56,11 +57,6 @@ public class AttributeTalent<T extends TalentData> extends AbstractTalent<T> {
     }
 
     @Override
-    protected void doLogic(float tpf) {
-        // dologic
-    }
-
-    @Override
     public void cleanup() {
         if (attributeApplied) {
             attributeService.addNumberAttributeValue(actor, applyAttribute, -applyValue);
@@ -68,13 +64,6 @@ public class AttributeTalent<T extends TalentData> extends AbstractTalent<T> {
             updateData();
         }
         super.cleanup();
-    }
-
-    @Override
-    public void updateLevel(int level) {
-        cleanup();
-        this.level = level;
-        initialize();
     }
     
 }
