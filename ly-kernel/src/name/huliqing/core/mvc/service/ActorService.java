@@ -225,13 +225,14 @@ public interface ActorService extends Inject {
      */
     void setLevel(Actor actor, int level);
     
-    /**
-     * 获取指定等级需要的经验值（XP)
-     * @param actor
-     * @param level
-     * @return 
-     */
-    int getLevelXp(Actor actor, int level);
+    // remove20160910
+//    /**
+//     * 获取指定等级需要的经验值（XP)
+//     * @param actor
+//     * @param level
+//     * @return 
+//     */
+//    int getLevelXp(Actor actor, int level);
     
     /**
      * 判断目标角色是否是可移动的

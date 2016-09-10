@@ -40,7 +40,7 @@ public class ActorDataLoader implements DataLoader<ActorData> {
             for (String item : itemsTemp) {
                 if (item == null || item.trim().equals("")) {
                     continue;
-                } 
+                }
                 String[] itemArr = item.split("\\|");
                 String itemId = itemArr[0];
                 int itemTotal = 1;
@@ -138,12 +138,6 @@ public class ActorDataLoader implements DataLoader<ActorData> {
             }
         }
         
-        // remove20160828
-//        data.setLevel(proto.getAsInteger("level", 1));
-        
-        // 武器插槽
-        List<String> slots = proto.getAsStringList("slots");
-        
         // 角色属性
         String[] attributeArr = proto.getAsArray("attributes");
         if (attributeArr != null) {
@@ -151,25 +145,6 @@ public class ActorDataLoader implements DataLoader<ActorData> {
                 data.addObjectData((AttributeData)DataFactory.createData(attrId));
             }
         }
-        
-        String lifeAttribute = proto.getAsString("lifeAttribute");
-        String viewAttribute = proto.getAsString("viewAttribute");
-        
-        // remove20160828
-//        Map<String, AttributeData> temp = new LinkedHashMap<String, AttributeData>();
-//        if (lifeAttribute != null) {
-//            AttributeData ad = DataFactory.createData(lifeAttribute);
-//            temp.put(lifeAttribute, ad);
-//        }
-//        if (viewAttribute != null) {
-//            AttributeData ad = DataFactory.createData(viewAttribute);
-//            temp.put(viewAttribute, ad);
-//        }
-//        Map<String, AttributeData> attributes = null;
-//        if (temp.size() > 0) {
-//            attributes = new LinkedHashMap<String, AttributeData>(temp.size());
-//            attributes.putAll(temp);
-//        }
         
         // Resist
         String resist = proto.getAsString("resist");
@@ -184,30 +159,7 @@ public class ActorDataLoader implements DataLoader<ActorData> {
                 data.addObjectData((TalentData)DataFactory.createData(talent));
             }
         }
-        
-        // 等级及经验值掉落设置
-//        data.setLevelUpEl(proto.getAsString("levelUpEl"));
-//        data.setXpDropEl(proto.getAsString("xpDropEl"));
         data.setName(ResourceManager.getObjectName(data));
-//        data.setGroup(proto.getAsInteger("group", 0));
-//        data.setSex(Sex.identifyByName(proto.getAsString("sex", "2")));
-//        data.setRace(proto.getAsString("race"));
-//        data.setEssential(proto.getAsBoolean("essential", false));
-        
-        // remove20160830
-//        data.setDrop(dropData);
-
-//        data.setSlots(slots);
-//        data.setLifeAttribute(lifeAttribute);
-//        data.setViewAttribute(viewAttribute);
-
-            // remove20160828
-//        data.setTalentPoints(proto.getAsInteger("talentPoints", 0));
-//        data.setTalentPointsLevelEl(proto.getAsString("talentPointsLevelEl"));
-//        data.setTeam(proto.getAsInteger("team", 0));
-
-//        data.setLiving(proto.getAsBoolean("living", false));
-//        data.setFollowTarget(proto.getAsInteger("followTarget", -1));
         
         // 载入模块配置,并根据ModuleOrder进行排序
         String[] moduleArr = proto.getAsArray("modules");

@@ -4,45 +4,23 @@
  */
 package name.huliqing.core.object.actor;
 
-import com.jme3.animation.AnimControl;
 import com.jme3.animation.SkeletonControl;
-import com.jme3.bounding.BoundingBox;
-import com.jme3.bullet.collision.shapes.BoxCollisionShape;
-import com.jme3.bullet.collision.shapes.CollisionShape;
-import com.jme3.bullet.collision.shapes.CompoundCollisionShape;
-import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.jme3.util.TempVars;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import jme3tools.optimize.GeometryBatchFactory;
-import name.huliqing.core.LY;
 import name.huliqing.core.Config;
 import name.huliqing.core.Factory;
-import name.huliqing.core.constants.IdConstants;
 import name.huliqing.core.data.ActorData;
-import name.huliqing.core.data.ActorLogicData;
 import name.huliqing.core.data.ObjectData;
-import name.huliqing.core.data.StateData;
-import name.huliqing.core.data.TalentData;
-import name.huliqing.core.data.TaskData;
 import name.huliqing.core.mvc.service.ConfigService;
 import name.huliqing.core.object.AssetLoader;
 import name.huliqing.core.object.Loader;
-import name.huliqing.core.object.module.ChannelModule;
 import name.huliqing.core.object.effect.Effect;
-import name.huliqing.core.object.actorlogic.ActorLogic;
-import name.huliqing.core.object.state.State;
-import name.huliqing.core.object.talent.Talent;
-import name.huliqing.core.object.task.Task;
-import name.huliqing.core.utils.ConvertUtils;
 import name.huliqing.core.utils.GeometryUtils;
-import name.huliqing.core.object.channel.ChannelControl;
 
 /**
  *

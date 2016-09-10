@@ -26,7 +26,7 @@ public class ResourceManager {
     private static Map<String, String> resource;
     
     // 其它资源文件
-    private static Map<String, Map<String, String>> otherResources = new HashMap<String, Map<String, String>>();
+    private final static Map<String, Map<String, String>> OTHER_RESOURCE = new HashMap<String, Map<String, String>>();
     
     /**
      * 从默认资源文件中获取资源
@@ -63,10 +63,10 @@ public class ResourceManager {
      * @return 
      */
     public static String getOther(String resourceName, String key, Object[] params) {
-        Map<String, String> otherResource = otherResources.get(resourceName);
+        Map<String, String> otherResource = OTHER_RESOURCE.get(resourceName);
         if (otherResource == null) {
             otherResource = loadResource(resourceName);
-            otherResources.put(resourceName, otherResource);
+            OTHER_RESOURCE.put(resourceName, otherResource);
         }
         return getString(otherResource, key, params);
     }
@@ -76,7 +76,7 @@ public class ResourceManager {
      */
     public static void clearResources() {
         resource = null;
-        otherResources.clear();
+        OTHER_RESOURCE.clear();
     }
     
     private static String getString(Map<String, String> resource, String key, Object[] params) {

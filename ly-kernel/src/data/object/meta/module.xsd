@@ -85,6 +85,12 @@ xs:time
                     <xs:attribute name="bindMassAttribute" type="xs:string" use="required">
                         <xs:annotation><xs:documentation>bind a FloatAttribute, 该属性用于存取角色的"质量"</xs:documentation></xs:annotation>
                     </xs:attribute>
+                    <xs:attribute name="bindMovableAttribute" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>bind a BooleanAttribute 绑定一个角色属性，这个属性定义角色是否是可移动的</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="bindRotatableAttribute" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>bind a BooleanAttribute, 绑定一个角色属性，这个属性定义角色是否是可转动朝向的。</xs:documentation></xs:annotation>
+                    </xs:attribute>
                     <xs:attribute name="bindEssentialAttribute" type="xs:string" use="required">
                         <xs:annotation><xs:documentation>bind a BooleanAttribute</xs:documentation></xs:annotation>
                     </xs:attribute>

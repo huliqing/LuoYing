@@ -21,7 +21,7 @@ import name.huliqing.core.ui.UI;
 import name.huliqing.core.ui.state.UIState;
 
 /**
- * 对话面板，
+ * 对话功能。
  * @author huliqing
  * @param <T>
  */

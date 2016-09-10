@@ -379,19 +379,20 @@ public class ActorServiceImpl implements ActorService {
             module.setLevel(level);
         }
     }
-    
-    @Override
-    public int getLevelXp(Actor actor, int level) {
-        LevelModule module = actor.getModule(LevelModule.class);
-        if (module != null) {
-            return module.getLevelXp(level);
-        }
-        return 0;
-    }
+   
+    // remove20160910
+//    @Override
+//    public int getLevelXp(Actor actor, int level) {
+//        LevelModule module = actor.getModule(LevelModule.class);
+//        if (module != null) {
+//            return module.getLevelXp(level);
+//        }
+//        return 0;
+//    }
 
     @Override
     public boolean isMoveable(Actor actor) {
-        return getMass(actor) > 0;
+        return getActorModule(actor).isMovable();
     }
     
     @Override
@@ -401,10 +402,7 @@ public class ActorServiceImpl implements ActorService {
     
     @Override
     public void addActorListener(Actor actor, ActorListener actorListener) {
-        if (actorListener == null) 
-            return;
-        ActorModule module = getActorModule(actor);
-        module.addActorListener(actorListener);
+        getActorModule(actor).addActorListener(actorListener);
     }
 
     @Override
@@ -437,13 +435,13 @@ public class ActorServiceImpl implements ActorService {
     public int getTeam(Actor actor) {
         return actor.getModule(ActorModule.class).getTeam();
     }
-
+    
     @Override
     public void setTeam(Actor actor, int team) {
         actor.getModule(ActorModule.class).setTeam(team);
         LY.getPlayState().getTeamView().checkAddOrRemove(actor);
     }
-
+    
     @Override
     public boolean isEssential(Actor actor) {
         return actor.getModule(ActorModule.class).isEssential();
@@ -525,12 +523,7 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public void setLocation(Actor actor, Vector3f location) {
-        ActorModule module = actor.getModule(ActorModule.class);
-        if (module == null) {
-            throw new RuntimeException("ActorModule not found on actor, actor=" 
-                    + actor.getData().getId() + ", location=" + location);
-        }
-        module.setLocation(location);
+        actor.getModule(ActorModule.class).setLocation(location);
     }
 
     @Override
@@ -540,26 +533,19 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public void setPhysicsEnabled(Actor actor, boolean enabled) {
-        ActorModule module = actor.getModule(ActorModule.class);
-        if (module != null) {
-            module.setEnabled(enabled);
-        }
+        actor.getModule(ActorModule.class).setEnabled(enabled);
     }
     
     @Override
     public boolean isPhysicsEnabled(Actor actor) {
-        ActorModule module = actor.getModule(ActorModule.class);
-        return module != null && module.isEnabled();
+        return actor.getModule(ActorModule.class).isEnabled();
     }
     
     @Override
     public void setViewDirection(Actor actor, Vector3f viewDirection) {
-        ActorModule module = actor.getModule(ActorModule.class);
-        if (module != null) {
-            module.setViewDirection(viewDirection);
-        }
+        actor.getModule(ActorModule.class).setViewDirection(viewDirection);
     }
-
+    
     @Override
     public Vector3f getViewDirection(Actor actor) {
         ActorModule module = actor.getModule(ActorModule.class);

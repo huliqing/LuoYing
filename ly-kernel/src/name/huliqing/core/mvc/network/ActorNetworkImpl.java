@@ -27,8 +27,6 @@ import name.huliqing.core.mess.MessActorViewDir;
 import name.huliqing.core.mess.MessActorLookAt;
 import name.huliqing.core.mess.MessAttributeNumberHit;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.attribute.AbstractSimpleAttribute;
-import name.huliqing.core.object.attribute.Attribute;
 import name.huliqing.core.object.module.ActorListener;
 
 /**
@@ -65,12 +63,6 @@ public class ActorNetworkImpl implements ActorNetwork{
     public boolean hasObstacleActor(Actor self, List<Actor> actors) {
         return actorService.hasObstacleActor(self, actors); 
     }
-
-    // remove20160903
-//    @Override
-//    public HurtFace checkFace(Spatial self, Actor target) {
-//        return actorService.checkFace(self, target); 
-//    }
 
     @Override
     public Actor findNearestEnemyExcept(Actor actor, float maxDistance, Actor except) {
@@ -222,33 +214,6 @@ public class ActorNetworkImpl implements ActorNetwork{
             
             actorService.setLevel(actor, level);
         }
-    }
-
-    // remove20160830
-//    @Override
-//    public int getXpReward(Actor attacker, Actor dead) {
-//        throw new UnsupportedOperationException("Not supported yet.");
-//    }
-   
-    // remove20160829
-//    @Override
-//    public int applyXp(Actor actor, int xp) {
-//        if (!NETWORK.isClient()) {
-//            if (NETWORK.hasConnections()) {
-//                MessActorApplyXp mess = new MessActorApplyXp();
-//                mess.setActorId(actor.getData().getUniqueId());
-//                mess.setXp(xp);
-//                NETWORK.broadcast(mess);
-//            }
-//            
-//            return actorService.applyXp(actor, xp);
-//        }
-//        return 0;
-//    }
-
-    @Override
-    public int getLevelXp(Actor actor, int level) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override

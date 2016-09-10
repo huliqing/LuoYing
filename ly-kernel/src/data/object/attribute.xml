@@ -43,8 +43,14 @@
     <attributeFloat id="attributeMoveSpeed" name="attributeMoveSpeed" value="1.0" />
     
     <!--角色的质量:默认角色质量都是大于0的，即默认都为动态角色。 -->
-    <attributeFloat id="attributeMass" name="attributeMass" value="60.1" />
+    <attributeFloat id="attributeMass" name="attributeMass" value="60" />
 
+    <!--定义角色是否可移动的-->
+    <attributeBoolean id="attributeMovable" name="attributeMovable" value="1" />
+    
+    <!--定义角色是否是可转动的-->
+    <attributeBoolean id="attributeRotatable" name="attributeRotatable" value="1" />
+    
     <!--Essential这个属性用来标记一个角色是否是必要的，即使死亡后也不能移出场景的-->
     <attributeBoolean id="attributeEssential" name="attributeEssential" />
 
@@ -122,7 +128,7 @@
     <attributeGroup id="attributeGroupBase" name="attributeGroupBase" 
                     attributes="attributeLiving,attributeRace,attributeSex
     ,attributeLevel,attributeXp,attributeXpNext,attributeGroup,attributeTeam,attributeMoveSpeed,attributeMass
-    ,attributeEssential,attributeAutoLogic,attributeAutoDetect
+    ,attributeMovable,attributeRotatable,attributeEssential,attributeAutoLogic,attributeAutoDetect
     ,attributeTarget,attributeFollowTarget,attributeOwner,attributeTalentPoints
     ,attributeHealthMax,attributeHealth,attributeManaMax,attributeMana
     ,attributeAttack,attributeMagicAttack,attributeDefence,attributeMagicDefence
@@ -153,6 +159,14 @@
     <attributeInteger id="attributeSexFemale" extends="attributeSex" value="1" />
     <attributeInteger id="attributeSexMale" extends="attributeSex" value="2" />
     
+    <!--定义角色是否是可移动的-->
+    <attributeBoolean id="attributeMovableYes" extends="attributeMovable" value="1" />
+    <attributeBoolean id="attributeMovableNo" extends="attributeMovable" value="0" />
+    
+    <!--定义角色是否是可转向的-->
+    <attributeBoolean id="attributeRotatableYes" extends="attributeRotatable" value="1" />
+    <attributeBoolean id="attributeRotatableNo" extends="attributeRotatable" value="0" />
+    
     <!-- 角色质量，定义动态角色或静态角色 -->
     <attributeFloat id="attributeMassDynamic" extends="attributeMass" value="60" />
     <attributeFloat id="attributeMassStatic" extends="attributeMass" value="0" />
@@ -165,26 +179,34 @@
     <!--种族配置： 这些属性是直接配置给角色的。-->
     <!--==========================================================================-->
     
-    <!--配置给：非生物、种族未知、性别未知、动态类的角色，如：坦克、飞机、战车等可移动的等非生物类角色. -->
-    <attributeGroup id="attributeActorUnliving" name="attributeActorUnliving" 
-                       attributes="attributeGroupBase,attributeLivingNo,attributeRaceUnknow,attributeSexUnknow,attributeMassDynamic" />
+    <!--配置给：非生物、种族未知、性别未知、可移动、可转向的角色。如：坦克、飞机、战车等可移动的等非生物类角色. -->
+    <attributeGroup id="attributeActorUnlivingMovableRotatable" name="attributeActorUnlivingMovableRotatable" 
+                       attributes="attributeGroupBase,attributeLivingNo,attributeRaceUnknow,attributeSexUnknow
+,attributeMovableYes,attributeRotatableYes,attributeMassDynamic" />
 
-    <!--配置给：非生物、种族未知、性别未知、静态类的角色，如：防御塔、堡垒、基地等静止角色-->
-    <attributeGroup id="attributeActorUnlivingStatic" name="attributeActorUnliving" 
-                       attributes="attributeGroupBase,attributeLivingNo,attributeRaceUnknow,attributeSexUnknow,attributeMassStatic" />
+    <!--配置给：非生物、种族未知、性别未知、不可移动、不可转向的角色。如：防御塔、堡垒、基地等静止角色-->
+<!--    <attributeGroup id="attributeActorUnlivingStatic" name="attributeActorUnliving" 
+                       attributes="attributeGroupBase,attributeLivingNo,attributeRaceUnknow,attributeSexUnknow,attributeMassStatic" />-->
+    <attributeGroup id="attributeActorUnlivingUnmovableUnrotatable" name="attributeActorUnlivingUnmovableUnrotatable" 
+                       attributes="attributeGroupBase,attributeLivingNo,attributeRaceUnknow,attributeSexUnknow
+,attributeMovableNo,attributeRotatableNo,attributeMassStatic" />
     
-    <!--配置给：生物、种族未知、性别未知、动态类角色，如：虫子、怪物、野兽、飞禽、未知生物等活动类角色.-->
-    <attributeGroup id="attributeActorLiving" name="attributeActorLiving" 
-                       attributes="attributeGroupBase,attributeLivingYes,attributeRaceUnknow,attributeSexUnknow,attributeMassDynamic" />
+    <!--配置给：生物、种族未知、性别未知、可移动、可转向的角色。如：虫子、怪物、野兽、飞禽、未知生物等活动类角色.-->
+<!--    <attributeGroup id="attributeActorLiving" name="attributeActorLiving" 
+                       attributes="attributeGroupBase,attributeLivingYes,attributeRaceUnknow,attributeSexUnknow,attributeMassDynamic" />-->
+    <attributeGroup id="attributeActorLivingMovableRotatable" name="attributeActorLiving" 
+                       attributes="attributeGroupBase,attributeLivingYes,attributeRaceUnknow,attributeSexUnknow
+,attributeMovableYes,attributeRotatableYes,attributeMassDynamic" />
 
     <!--配置给：人类女性角色-->
     <attributeGroup id="attributeHumanFemale" name="attributeHumanFemale" 
-                       attributes="attributeGroupBase,attributeLivingYes,attributeRaceHuman,attributeSexFemale,attributeMassDynamic
-,attributeHumanFemaleWeaponSlot" />
+                       attributes="attributeGroupBase,attributeLivingYes,attributeRaceHuman,attributeSexFemale
+,attributeMovableYes,attributeRotatableYes,attributeMassDynamic,attributeHumanFemaleWeaponSlot" />
     
     <!--配置给：人类男性角色-->
     <attributeGroup id="attributeHumanMale" name="attributeHumanMale" 
-                       attributes="attributeGroupBase,attributeLivingYes,attributeRaceHuman,attributeSexMale,attributeMassDynamic" />
+                       attributes="attributeGroupBase,attributeLivingYes,attributeRaceHuman,attributeSexMale
+,attributeMovableYes,attributeRotatableYes,attributeMassDynamic" />
     
     <!--==========================================================================-->
     <!-- 特殊角色的属性 -->

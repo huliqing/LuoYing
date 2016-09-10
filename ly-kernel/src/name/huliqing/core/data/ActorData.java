@@ -105,16 +105,16 @@ public class ActorData extends ObjectData implements MatObject{
         this.bornPlace = bornPlace;
     }
 
-    /**
-     * @deprecated 暂不开放这个功能,作用不大
-     * 判断角色是否打开了batch优化,默认false.不可动态设置。只能在xml中初始
-     * 化配置.打开了batch功能之后角色的装备不可穿和脱.对于一些不需要动态更
-     * 换装备和武器的角色可以打开该选项进行优化。如：固定装备的NPC。
-     * @return 
-     */
-    public boolean isBatchEnabled() {
-        return getAsBoolean("batch", false);
-    }
+//    /**
+//     * @deprecated 暂不开放这个功能,作用不大
+//     * 判断角色是否打开了batch优化,默认false.不可动态设置。只能在xml中初始
+//     * 化配置.打开了batch功能之后角色的装备不可穿和脱.对于一些不需要动态更
+//     * 换装备和武器的角色可以打开该选项进行优化。如：固定装备的NPC。
+//     * @return 
+//     */
+//    public boolean isBatchEnabled() {
+//        return getAsBoolean("batch", false);
+//    }
     
     /**
      * 获取文件模型

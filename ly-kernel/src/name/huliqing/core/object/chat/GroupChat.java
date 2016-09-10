@@ -29,7 +29,7 @@ import name.huliqing.core.ui.UIFactory;
 import name.huliqing.core.view.SimpleRow;
 
 /**
- * Chat群组
+ * 对话组
  * @author huliqing
  * @param <T>
  */

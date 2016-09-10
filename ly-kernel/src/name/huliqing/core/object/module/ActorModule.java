@@ -60,6 +60,10 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     private String bindEssentialAttribute;
     // 角色是否是生物
     private String bindLivingAttribute;
+    // 绑定角色属性，这个属性定义角色是否是可移动的
+    private String bindMovableAttribute;
+    // 绑定一个角色属性，这个属性定义角色是否是可转动朝向的。
+    private String bindRotatableAttribute;
     
     private NumberAttribute lifeAttribute;
     private NumberAttribute groupAttribute;
@@ -70,6 +74,8 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     private NumberAttribute ownerAttribute;
     private NumberAttribute massAttribute;
     
+    private BooleanAttribute movableAttribute;
+    private BooleanAttribute rotatableAttribute;
     private BooleanAttribute essentialAttribute;
     private BooleanAttribute livingAttribute;
     
@@ -90,7 +96,8 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
         this.bindFollowTargetAttribute = data.getAsString("bindFollowTargetAttribute");
         this.bindOwnerAttribute = data.getAsString("bindOwnerAttribute");
         this.bindMassAttribute = data.getAsString("bindMassAttribute");
-        
+        this.bindMovableAttribute = data.getAsString("bindMovableAttribute");
+        this.bindRotatableAttribute = data.getAsString("bindRotatableAttribute");
         this.bindEssentialAttribute = data.getAsString("bindEssentialAttribute");
         this.bindLivingAttribute = data.getAsString("bindLivingAttribute");
     }
@@ -142,13 +149,15 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
         // 注：角色质量可能被外部改变，所以要监听,当改变时要触发innerControl更新
         massAttribute = attributeService.getAttributeByName(actor, bindMassAttribute);
         massAttribute.addListener(this);
+        
+        movableAttribute = attributeService.getAttributeByName(actor, bindMovableAttribute);
+        rotatableAttribute = attributeService.getAttributeByName(actor, bindRotatableAttribute);
         essentialAttribute = attributeService.getAttributeByName(actor, bindEssentialAttribute);
         livingAttribute = attributeService.getAttributeByName(actor, bindLivingAttribute);
         
         // 控制器
         this.innerControl = new BetterCharacterControlWrap(radius, height, getMass());
         this.actor.getSpatial().addControl(innerControl);
-        
         
     }
     
@@ -160,9 +169,6 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
         if (targetAttribute != null) {
             targetAttribute.removeListener(this);
         }
-        lifeAttribute = null;
-        groupAttribute = null;
-        teamAttribute = null;
         super.cleanup(); 
     }
     
@@ -180,9 +186,11 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     }
     
     public void setWalkDirection(Vector3f walkDirection) {
-        LOG.log(Level.INFO, "setWalkDirection, actor={0}, walkDirection={1}"
-                , new Object[] {actor.getData().getId(), walkDirection});
-        innerControl.setWalkDirection(walkDirection);
+//        LOG.log(Level.INFO, "setWalkDirection, actor={0}, walkDirection={1}"
+//                , new Object[] {actor.getData().getId(), walkDirection});
+        if (movableAttribute != null && movableAttribute.booleanValue()) {
+            innerControl.setWalkDirection(walkDirection);
+        }
     }
     
     public Vector3f getViewDirection() {
@@ -190,7 +198,9 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     }
     
     public void setViewDirection(Vector3f viewDirection) {
-        innerControl.setViewDirection(viewDirection);
+        if (rotatableAttribute != null && rotatableAttribute.booleanValue()) {
+            innerControl.setViewDirection(viewDirection);
+        }
     }
     
     /**
@@ -229,6 +239,8 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
      * @param actorListener 
      */
     public void addActorListener(ActorListener actorListener) {
+        if (actorListener == null)
+            return;
         if (actorListeners == null) {
             actorListeners = new ArrayList<ActorListener>();
         }
@@ -340,6 +352,27 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     }
     
     /**
+     * 获取角色的生命值
+     * @return 
+     */
+    public int getLife() {
+        if (lifeAttribute != null) {
+            return lifeAttribute.intValue();
+        }
+        return 0;
+    }
+    
+    /**
+     * 设置角色的生命值。
+     * @param life 
+     */
+    public void setLife(int life) {
+        if (lifeAttribute != null) {
+            lifeAttribute.setValue(life);
+        }
+    }
+    
+    /**
      * 获取角色的视角距离,如果模块没有绑定角色的视角属性，则该方法始终返回0.
      * @return 
      */
@@ -423,7 +456,7 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     
     /**
      * 设置角色当前的跟随目标
-     * @param target 
+     * @param target  角色的唯一ID
      */
     public void setFollowTarget(long target) {
         if (followTargetAttribute != null) {
@@ -457,10 +490,17 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
      * @return 
      */
     public boolean isLiving() {
+        return livingAttribute != null && livingAttribute.booleanValue();
+    }
+    
+    /**
+     * 设置角色为是否为“生物”类型角色
+     * @param living 
+     */
+    public void setLiving(boolean living) {
         if (livingAttribute != null) {
-            return livingAttribute.booleanValue();
+            livingAttribute.setValue(living);
         }
-        return false;
     }
     
     /**
@@ -491,7 +531,7 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     public boolean isPlayer() {
         return player;
     }
-
+    
     /**
      * 标记目标这“玩家”角色
      * @param player 
@@ -500,6 +540,10 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
         this.player = player;
     }
     
+    /**
+     * 获取角色的物理质量
+     * @return 
+     */
     public float getMass() {
         if (massAttribute != null) {
             return massAttribute.floatValue();
@@ -508,13 +552,49 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     }
     
     /**
-     * 设置角色的质量
+     * 设置角色的物理质量
      * @param mass 
      */
     public void setMass(float mass) {
         if (massAttribute != null) {
             massAttribute.setValue(mass);
             innerControl.setMass(mass);
+        }
+    }
+    
+    /**
+     * 判断角色是否是可移动的
+     * @return 
+     */
+    public boolean isMovable() {
+        return movableAttribute != null && movableAttribute.booleanValue();
+    }
+    
+    /**
+     * 设置角色是否为可移动
+     * @param movable 
+     */
+    public void setMovable(boolean movable) {
+        if (movableAttribute != null) {
+            movableAttribute.setValue(movable);
+        }
+    }
+    
+    /**
+     * 判断角色是否为可转动，可转换朝向的
+     * @return 
+     */
+    public boolean isRotatable() {
+        return rotatableAttribute != null && rotatableAttribute.booleanValue();
+    }
+    
+    /**
+     * 设置角色为是否可转动，可转换朝向的
+     * @param rotatable 
+     */
+    public void setRotatable(boolean rotatable) {
+        if (rotatableAttribute != null) {
+            rotatableAttribute.setValue(rotatable);
         }
     }
 }

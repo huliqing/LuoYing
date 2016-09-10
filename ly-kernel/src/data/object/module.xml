@@ -5,33 +5,41 @@
     xmlns='http://fighter.huliqing.name'
     xsi:schemaLocation='http://fighter.huliqing.name meta/module.xsd'>
     
-    <moduleAttribute id="moduleAttribute" moduleOrder="0" />
+    <!--==========================================================================-->
+    <!--
+    角色模块：配置给角色，角色模块通过绑定角色的各种属性来控制角色的行为，当角色初始化的时候会自动初始化所有配置的
+    模块，如果模块之间存在依赖，则通过moduleOrder属性来设置载入的优先顺序。
     
+    -->
+    <!--==========================================================================-->
+    
+    <moduleAttribute id="moduleAttribute" moduleOrder="0" />
     <moduleAction id="moduleAction" moduleOrder="10" />
     <moduleChannel id="moduleChannel" moduleOrder="10" />
     <moduleChat id="moduleChat" moduleOrder="10" />
     <moduleItem id="moduleItem" moduleOrder="10" />
-    <moduleResist id="moduleResist" moduleOrder="10"/>
-    <moduleSkill id="moduleSkill" moduleOrder="10"/>
-    <moduleState id="moduleState" moduleOrder="10"/>
-    <moduleTask id="moduleTask" moduleOrder="10"/>
-    
+    <moduleResist id="moduleResist" moduleOrder="10" />
+    <moduleSkill id="moduleSkill" moduleOrder="10" />
+    <moduleState id="moduleState" moduleOrder="10" />
+    <moduleTask id="moduleTask" moduleOrder="10" />
     <moduleSkin id="moduleSkin" moduleOrder="10" bindWeaponSlotAttribute="attributeWeaponSlots" />
     
     <!--基本角色模块-->
     <moduleActor id="moduleActor" moduleOrder="10" 
                 bindLifeAttribute="attributeHealth" 
-                bindEssentialAttribute="attributeEssential" 
                 bindFollowTargetAttribute="attributeFollowTarget" 
                 bindGroupAttribute="attributeGroup"
-                bindLivingAttribute="attributeLiving"
                 bindOwnerAttribute="attributeOwner"
                 bindTargetAttribute="attributeTarget" 
                 bindMassAttribute="attributeMass"
                 bindTeamAttribute="attributeTeam"
                 bindViewAttribute="attributeVision"
+                bindMovableAttribute="attributeMovable"
+                bindRotatableAttribute="attributeRotatable"
+                bindEssentialAttribute="attributeEssential" 
+                bindLivingAttribute="attributeLiving"
     />
-
+    
     <!--角色的逻辑功能-->
     <moduleLogic id="moduleLogic" moduleOrder="10" 
                  bindAutoLogicAttribute="attributeAutoLogic" 
