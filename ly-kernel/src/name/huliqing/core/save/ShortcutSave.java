@@ -17,18 +17,18 @@ import java.io.IOException;
  */
 public class ShortcutSave implements Savable {
 
-    private String itemId;
+    private String objectId;
     private float x; // x位置
     private float y; // y位置
 
-    public String getItemId() {
-        return itemId;
+    public String getObjectId() {
+        return objectId;
     }
 
-    public void setItemId(String itemId) {
-        this.itemId = itemId;
+    public void setObjectId(String objectId) {
+        this.objectId = objectId;
     }
-
+    
     public float getX() {
         return x;
     }
@@ -48,7 +48,7 @@ public class ShortcutSave implements Savable {
    @Override
     public void write(JmeExporter ex) throws IOException {
         OutputCapsule oc = ex.getCapsule(this);
-        oc.write(itemId, "itemId", null);
+        oc.write(objectId, "itemId", null);
         oc.write(x, "x", 0);
         oc.write(y, "y", 0);
     }
@@ -56,7 +56,7 @@ public class ShortcutSave implements Savable {
     @Override
     public void read(JmeImporter im) throws IOException {
         InputCapsule ic = im.getCapsule(this);
-        itemId = ic.readString("itemId", null);
+        objectId = ic.readString("itemId", null);
         x = ic.readFloat("x", 0);
         y = ic.readFloat("y", 0);
     }

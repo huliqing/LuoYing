@@ -27,7 +27,7 @@ public class SkinDataLoader implements DataLoader<SkinData> {
 //        data.setDeletable(proto.getAsBoolean("deletable", true));
 
         data.setBaseSkin(proto.getAsBoolean("baseSkin", false));
-        data.setUsing(true);
+        data.setUsed(true);
         
         String[] aaStr = proto.getAsArray("applyAttributes");
         if (aaStr != null) {

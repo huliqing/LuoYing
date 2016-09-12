@@ -16,7 +16,6 @@ import name.huliqing.core.object.Loader;
 import name.huliqing.core.utils.DebugDynamicUtils;
 
 /**
- *
  * @author huliqing
  */
 public final class CurveMoveAnim extends AbstractAnim<Spatial> {
@@ -79,9 +78,9 @@ public final class CurveMoveAnim extends AbstractAnim<Spatial> {
     
     /**
      * 初始旋转
-     * @param x 弧度
-     * @param y 弧度
-     * @param z 弧度
+     * @param xAngle 弧度
+     * @param yAngle 弧度
+     * @param zAngle 弧度
      */
     public void setRotationOffset(float xAngle, float yAngle, float zAngle) {
         if (rotationOffset == null) {
@@ -101,14 +100,6 @@ public final class CurveMoveAnim extends AbstractAnim<Spatial> {
     public void setFacePath(boolean facePath) {
         this.facePath = facePath;
     }
-
-//    public boolean isUseSine() {
-//        return useSine;
-//    }
-//
-//    public void setUseSine(boolean useSine) {
-//        this.useSine = useSine;
-//    }
     
     /**
      * 设置曲线的张力
@@ -133,7 +124,7 @@ public final class CurveMoveAnim extends AbstractAnim<Spatial> {
     public float getTotalLength() {
         return spline.getTotalLength();
     }
-
+    
     @Override
     protected void doInit() {
         currentPointIndex = 0;

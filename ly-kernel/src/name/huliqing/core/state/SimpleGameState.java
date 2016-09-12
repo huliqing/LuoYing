@@ -34,7 +34,7 @@ import name.huliqing.core.manager.HUDManager;
 import name.huliqing.core.manager.PickManager;
 import name.huliqing.core.manager.PickManager.PickResult;
 import name.huliqing.core.manager.ResourceManager;
-import name.huliqing.core.view.ShortcutManager;
+import name.huliqing.core.object.shortcut.ShortcutManager;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.anim.Anim;
 import name.huliqing.core.object.bullet.BulletCache;

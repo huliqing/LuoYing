@@ -119,7 +119,7 @@ public class SendChat<T extends ChatData> extends Chat<T> {
                 }
                 if (SkinData.class.isAssignableFrom(od.getClass())) {
                     SkinData sd = (SkinData) od;
-                    if (sd.isUsing() || sd.isBaseSkin()) {
+                    if (sd.isUsed() || sd.isBaseSkin()) {
                         continue;
                     }
                 }

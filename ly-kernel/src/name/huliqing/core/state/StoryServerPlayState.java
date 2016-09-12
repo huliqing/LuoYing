@@ -35,7 +35,7 @@ import name.huliqing.core.mess.MessPlayClientExit;
 import name.huliqing.core.mess.MessSCClientList;
 import name.huliqing.core.mvc.network.UserCommandNetwork;
 import name.huliqing.core.network.GameServer.ServerState;
-import name.huliqing.core.view.ShortcutManager;
+import name.huliqing.core.object.shortcut.ShortcutManager;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.game.Game;
 import name.huliqing.core.object.game.Game.GameListener;

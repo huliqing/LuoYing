@@ -28,7 +28,7 @@ import name.huliqing.core.state.LoadingState;
 import name.huliqing.core.state.PlayState;
 import name.huliqing.core.state.SimpleGameState;
 import name.huliqing.core.state.StoryServerPlayState;
-import name.huliqing.core.view.ShortcutManager;
+import name.huliqing.core.object.shortcut.ShortcutManager;
 import name.huliqing.core.object.NetworkObject;
 import name.huliqing.core.object.PlayObject;
 import name.huliqing.core.object.anim.Anim;
@@ -180,7 +180,7 @@ public class PlayServiceImpl implements PlayService {
 
     @Override
     public void addShortcut(Actor actor, ObjectData data) {        
-        ShortcutManager.addShortcut(ShortcutManager.createShortcut(actor, data));
+        ShortcutManager.addShortcut(actor, data);
     }
     
     @Override

@@ -42,7 +42,7 @@ public class OutfitHandler extends AbstractSkinHandler {
     @Override
     protected void useObject(Actor actor, ObjectData pd) {
         SkinData skinData = (SkinData) pd;
-        if (skinData.isUsing()) {
+        if (skinData.isUsed()) {
             // 脱装备
             skinService.detachSkin(actor, skinData);
         } else {
@@ -58,7 +58,7 @@ public class OutfitHandler extends AbstractSkinHandler {
             return false;
         }
         SkinData skinData = (SkinData) data;
-        if (skinData.isUsing()) {
+        if (skinData.isUsed()) {
             return false;
         }
         return super.remove(actor, data, data.getTotal());

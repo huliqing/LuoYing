@@ -35,8 +35,8 @@ public class SkinData extends ObjectData implements MatObject, CostObject, Handl
     private int type;
     // 定义与其它skin的排斥,当一件skin穿上身时，角色身上受排斥的skin将会脱下来。
     private int conflictType;
-    // 是否正在使用
-    private boolean using;
+    // 是否已在使用中
+    private boolean used;
     
     // 这个值如果为0则说明是普通装备，如果该值大于0则说明为某种类型的武器
     private int weaponType;
@@ -66,7 +66,7 @@ public class SkinData extends ObjectData implements MatObject, CostObject, Handl
         OutputCapsule oc = ex.getCapsule(this);
         oc.write(type, "type", 0);
         oc.write(conflictType, "conflictType", 0);
-        oc.write(using, "using", false);
+        oc.write(used, "used", false);
         if (applyAttributes != null) {
             oc.writeSavableArrayList(new ArrayList<AttributeApply>(applyAttributes), "applyAttributes", null);
         }
@@ -87,7 +87,7 @@ public class SkinData extends ObjectData implements MatObject, CostObject, Handl
         InputCapsule ic = im.getCapsule(this);
         type = ic.readInt("type", 0);
         conflictType = ic.readInt("conflictType", 0);
-        using = ic.readBoolean("using", false);
+        used = ic.readBoolean("used", false);
         applyAttributes = ic.readSavableArrayList("applyAttributes", null);
         weaponType = ic.readInt("weaponType", 0);
         slots = ConvertUtils.toList(ic.readStringArray("slots", null));
@@ -133,12 +133,20 @@ public class SkinData extends ObjectData implements MatObject, CostObject, Handl
         this.conflictType = conflictType;
     }
 
-    public boolean isUsing() {
-        return using;
+    /**
+     * 判断当前装备是否正在使用中
+     * @return 
+     */
+    public boolean isUsed() {
+        return used;
     }
 
-    public void setUsing(boolean using) {
-        this.using = using;
+    /**
+     * 标记这件装备正在使用中
+     * @param used 
+     */
+    public void setUsed(boolean used) {
+        this.used = used;
     }
 
     /**

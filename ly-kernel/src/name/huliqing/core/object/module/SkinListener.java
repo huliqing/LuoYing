@@ -4,12 +4,11 @@
  */
 package name.huliqing.core.object.module;
 
-import name.huliqing.core.data.SkinData;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.skin.Skin;
 
 /**
- * 监听角色的装备的穿戴，包含武器
+ * 监听角色的装备的穿戴
  * @author huliqing
  */
 public interface SkinListener {
@@ -17,16 +16,16 @@ public interface SkinListener {
     /**
      * 当角色添加了装备之后该方法被调用。
      * @param actor
-     * @param data 添加后的装备
+     * @param skinAdded 刚添加的装备
      */
-    void onSkinAdded(Actor actor, SkinData data);
+    void onSkinAdded(Actor actor, Skin skinAdded);
     
     /**
      * 当角色装备被移除之后该方法被调用.
      * @param actor
-     * @param data 移除后的装备，如果该装备的数量小于或等于0，则该装备可能已经被完全移除出角色身上。
+     * @param skinRemoved 刚移除的装备
      */
-    void onSkinRemoved(Actor actor, SkinData data);
+    void onSkinRemoved(Actor actor, Skin skinRemoved);
     
     /**
      * 角色穿上装备后触发

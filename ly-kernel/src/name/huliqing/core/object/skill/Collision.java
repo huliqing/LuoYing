@@ -19,6 +19,7 @@ import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.SkinService;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.effect.AbstractEffect;
+import name.huliqing.core.object.skin.Skin;
 import name.huliqing.core.object.sound.SoundManager;
 
 /**
@@ -49,16 +50,16 @@ public class Collision {
      */
     public static void playDefend(Vector3f collidePos, Actor attacker, Actor defender, Mat attackMat, Mat defendMat) {
         
-        List<SkinData> weaponSkinStore = skinService.getCurrentWeaponSkin(attacker);
         if (attackMat == null) {
-            if (!weaponSkinStore.isEmpty()) {
-                attackMat = weaponSkinStore.get(0).getMat();
+            Skin attackerWeaponSkin = getFirstWeaponSkin(attacker);
+            if (attackerWeaponSkin != null) {
+                attackMat = attackerWeaponSkin.getData().getMat();
             }
         }
         if (defendMat == null) {
-            weaponSkinStore = skinService.getCurrentWeaponSkin(defender);
-            if (!weaponSkinStore.isEmpty()) {
-                defendMat = weaponSkinStore.get(0).getMat();
+            Skin defendWeaponSkin = getFirstWeaponSkin(defender);
+            if (defendWeaponSkin != null) {
+                defendMat = defendWeaponSkin.getData().getMat();
             }
         }
         
@@ -81,6 +82,19 @@ public class Collision {
             Logger.getLogger(Collision.class.getName()).log(Level.WARNING, "No collision effect match for mat1={0}, mat2={1}"
                     , new Object[] {attackMat, defendMat});
         }
+    }
+    
+    private static Skin getFirstWeaponSkin(Actor actor) {
+         // 伤害声音
+        List<Skin> skins = skinService.getUsingSkins(actor);
+        if (skins != null) {
+            for (Skin s : skins) {
+                if (s.isWeapon()) {
+                    return s;
+                }
+            }
+        }
+        return null;
     }
     
     private static class MatMatcher {

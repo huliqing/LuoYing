@@ -19,7 +19,6 @@ public class AssetLoader {
     private static final Logger LOG = Logger.getLogger(AssetLoader.class.getName());
     
     /**
-     * @deprecated 
      * 载入模型，但是会根据系统是否使用light进行makeUnshaded
      * @param file
      * @return 

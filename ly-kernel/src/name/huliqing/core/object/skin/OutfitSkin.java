@@ -4,13 +4,21 @@
  */
 package name.huliqing.core.object.skin;
 
-import name.huliqing.core.data.SkinData;
-
 /**
- * 简单的皮肤，装备处理器
+ * 简单的皮肤，装备处理器,没什么特殊内容。
  * @author huliqing
- * @param <T>
  */
-public class OutfitSkin<T extends SkinData> extends AbstractSkin<T> {
+public class OutfitSkin extends AbstractSkin {
+
+    @Override
+    public boolean isWeapon() {
+        return false;
+    }
+
+    @Override
+    public int getWeaponType() {
+        return -1;
+    }
+
 
 }

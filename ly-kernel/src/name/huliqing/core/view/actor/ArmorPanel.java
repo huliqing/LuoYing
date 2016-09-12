@@ -5,16 +5,15 @@
 package name.huliqing.core.view.actor;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.SkinData;
 import name.huliqing.core.mvc.network.UserCommandNetwork;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.SkinService;
+import name.huliqing.core.object.skin.Skin;
 import name.huliqing.core.ui.ListView;
 import name.huliqing.core.ui.Row;
 import name.huliqing.core.ui.UI;
@@ -23,13 +22,13 @@ import name.huliqing.core.ui.UI;
  *
  * @author huliqing
  */
-public class ArmorPanel extends ListView<SkinData> implements ActorPanel{
+public class ArmorPanel extends ListView<Skin> implements ActorPanel{
     private final UserCommandNetwork userCommandNetwork = Factory
             .get(UserCommandNetwork.class);
     private final PlayService playService = Factory.get(PlayService.class);
     private final SkinService skinService = Factory.get(SkinService.class);
     private Actor actor;
-    private final List<SkinData> datas = new ArrayList<SkinData>();
+    private final List<Skin> datas = new ArrayList<Skin>();
     
     public ArmorPanel(float width, float height) {
         super(width, height);
@@ -42,7 +41,7 @@ public class ArmorPanel extends ListView<SkinData> implements ActorPanel{
             @Override
             public void onClick(UI ui, boolean isPress) {
                 if (!isPress) {
-                    userCommandNetwork.useObject(actor, row.getData());
+                    userCommandNetwork.useObject(actor, row.getData().getData());
                     refreshPageData();
                 }
             }
@@ -51,7 +50,7 @@ public class ArmorPanel extends ListView<SkinData> implements ActorPanel{
             @Override
             public void onClick(UI ui, boolean isPress) {
                 if (!isPress) {
-                    playService.addShortcut(actor, row.getData());
+                    playService.addShortcut(actor, row.getData().getData());
                 }
             }
         });
@@ -71,15 +70,15 @@ public class ArmorPanel extends ListView<SkinData> implements ActorPanel{
     }
 
     @Override
-    public List<SkinData> getDatas() {
+    public List<Skin> getDatas() {
         if (actor != null) {
             datas.clear();
-            skinService.getArmorSkins(actor, datas);
-            // 过虑掉“基本身形”
-            Iterator<SkinData> it = datas.iterator();
-            while (it.hasNext()) {
-                if (it.next().isBaseSkin()) {
-                    it.remove();
+            List<Skin> skins = skinService.getSkins(actor);
+            if (skins != null && !skins.isEmpty()) {
+                for (Skin s : skins) {
+                    if (!s.isBaseSkin() && !s.isWeapon()) {
+                        datas.add(s);
+                    }
                 }
             }
         }
@@ -87,44 +86,47 @@ public class ArmorPanel extends ListView<SkinData> implements ActorPanel{
     }
 
     @Override
-    public boolean removeItem(SkinData data) {
+    public boolean removeItem(Skin data) {
         throw new UnsupportedOperationException();
     }
     
-    private class ArmorRow extends ItemRow<ObjectData> {
+    private class ArmorRow extends ItemRow<Skin> {
 
         public ArmorRow() {
             super();
         }
         
         @Override
-        protected void display(ObjectData data) {
-            SkinData sd = (SkinData) data;
+        protected void display(Skin skin) {
+            SkinData skinData = skin.getData();
             
-            icon.setIcon(sd.getIcon());
-            body.setNameText(ResourceManager.getObjectName(sd));
+            icon.setIcon(skinData.getIcon());
+            body.setNameText(ResourceManager.getObjectName(skinData));
+
+            // remove20160912
+//            if (skin instanceof SkinData) {
+////                body.setDesText(data.getDes());
+//                body.setDesText("----TO DO----");
+//            } else {
+//                body.setDesText(ResourceManager.getObjectDes(skin.getData().getId()));
+//            }
             
-            if (data instanceof SkinData) {
-                body.setDesText(data.getDes());
-            } else {
-                body.setDesText(ResourceManager.getObjectDes(data.getId()));
-            }
+            body.setDesText("----TO DO----");
+            num.setText(String.valueOf(skinData.getTotal()));
             
-            num.setText(String.valueOf(sd.getTotal()));
-            
-            setBackgroundVisible(sd.isUsing());
+            setBackgroundVisible(skinData.isUsed());
         }
 
         @Override
         protected void clickEffect(boolean isPress) {
             super.clickEffect(isPress);
-            setBackgroundVisible(((SkinData)data).isUsing());
+            setBackgroundVisible(((SkinData)data).isUsed());
         }
         
         @Override
         public void onRelease() {
             SkinData sd = ((SkinData)data);
-            setBackgroundVisible(sd.isUsing());
+            setBackgroundVisible(sd.isUsed());
         }
     }
     

@@ -27,7 +27,7 @@ import name.huliqing.core.mess.MessPlayClientExit;
 import name.huliqing.core.mvc.network.UserCommandNetwork;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.SaveService;
-import name.huliqing.core.view.ShortcutManager;
+import name.huliqing.core.object.shortcut.ShortcutManager;
 import name.huliqing.core.object.IntervalLogic;
 import name.huliqing.core.object.PlayObject;
 import name.huliqing.core.object.actor.Actor;

@@ -105,6 +105,7 @@ public class ActorData extends ObjectData implements MatObject{
         this.bornPlace = bornPlace;
     }
 
+    // remove20160911
 //    /**
 //     * @deprecated 暂不开放这个功能,作用不大
 //     * 判断角色是否打开了batch优化,默认false.不可动态设置。只能在xml中初始

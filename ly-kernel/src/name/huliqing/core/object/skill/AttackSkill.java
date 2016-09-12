@@ -16,6 +16,7 @@ import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.mvc.service.SkinService;
+import name.huliqing.core.object.skin.Skin;
 import name.huliqing.core.object.sound.SoundManager;
 
 /**
@@ -145,9 +146,18 @@ public class AttackSkill<T extends SkillData> extends HitSkill<T> {
     
     protected void doHitResult(Actor target) {
         // 伤害声音
-        List<SkinData> weaponSkins = skinService.getCurrentWeaponSkin(actor);
-        SkinData wd1 = weaponSkins.isEmpty() ? null : weaponSkins.get(0);
-        
+        Skin weaponSkin = null;
+        List<Skin> skins = skinService.getUsingSkins(actor);
+        if (skins != null) {
+            for (Skin s : skins) {
+                if (s.isWeapon()) {
+                    weaponSkin = s;
+                    break;
+                }
+            }
+        }
+
+        SkinData wd1 = weaponSkin != null ? weaponSkin.getData() : null;
         ObjectData od1 = wd1 != null ? wd1 : actor.getData();
         SoundManager.getInstance().playCollision(od1, target.getData(), actor.getSpatial().getWorldTranslation());
         
@@ -158,4 +168,6 @@ public class AttackSkill<T extends SkillData> extends HitSkill<T> {
     public boolean isDefendable() {
         return defendable;
     }
+    
+    
 }

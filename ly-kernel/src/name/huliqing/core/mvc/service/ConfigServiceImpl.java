@@ -16,7 +16,7 @@ import name.huliqing.core.data.ConfigData;
 import name.huliqing.core.manager.HUDManager;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.object.sound.SoundManager;
-import name.huliqing.core.view.ShortcutManager;
+import name.huliqing.core.object.shortcut.ShortcutManager;
 import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.save.SaveConfig;
 import name.huliqing.core.save.SaveHelper;

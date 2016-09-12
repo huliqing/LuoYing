@@ -264,12 +264,12 @@ public class ActorMainPanel extends Window implements ItemListener, SkinListener
     }
 
     @Override
-    public void onSkinAdded(Actor actor, SkinData data) {
+    public void onSkinAdded(Actor actor, Skin skin) {
         updatePanel(armorPanel, weaponPanel, attrPanel);
     }
 
     @Override
-    public void onSkinRemoved(Actor actor, SkinData data) {
+    public void onSkinRemoved(Actor actor, Skin skin) {
         updatePanel(armorPanel, weaponPanel, attrPanel);
     }
 

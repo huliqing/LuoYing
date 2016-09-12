@@ -845,7 +845,6 @@ public class LY {
     }
     
     /**
-     * @deprecated 
      * 获取当前游戏时间,返回游戏运行到当前时间的毫秒数
      * @return 
      */

@@ -15,6 +15,7 @@ import name.huliqing.core.mvc.network.UserCommandNetwork;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.SkinService;
+import name.huliqing.core.object.skin.Skin;
 import name.huliqing.core.ui.ListView;
 import name.huliqing.core.ui.Row;
 import name.huliqing.core.ui.UI;
@@ -23,14 +24,13 @@ import name.huliqing.core.ui.UI;
  * 武器面板列表
  * @author huliqing
  */
-public class WeaponPanel extends ListView<SkinData> implements ActorPanel{
+public class WeaponPanel extends ListView<Skin> implements ActorPanel{
     private final UserCommandNetwork userCommandNetwork = Factory.get(UserCommandNetwork.class);
     private final PlayService playService = Factory.get(PlayService.class);
-    private final ActorService actorService = Factory.get(ActorService.class);
     private final SkinService skinService = Factory.get(SkinService.class);
     
     private Actor actor;
-    private List<SkinData> datas = new ArrayList<SkinData>();
+    private final List<Skin> datas = new ArrayList<Skin>();
     
     public WeaponPanel(float width, float height) {
         super(width, height);
@@ -43,7 +43,7 @@ public class WeaponPanel extends ListView<SkinData> implements ActorPanel{
             @Override
             public void onClick(UI ui, boolean isPress) {
                 if (!isPress) {
-                    userCommandNetwork.useObject(actor, row.getData());
+                    userCommandNetwork.useObject(actor, row.getData().getData());
                     refreshPageData();
                 }
             }
@@ -52,7 +52,7 @@ public class WeaponPanel extends ListView<SkinData> implements ActorPanel{
             @Override
             public void onClick(UI ui, boolean isPress) {
                 if (!isPress) {
-                    playService.addShortcut(actor, row.getData());
+                    playService.addShortcut(actor, row.getData().getData());
                 }
             }
         });
@@ -72,35 +72,39 @@ public class WeaponPanel extends ListView<SkinData> implements ActorPanel{
     }
 
     @Override
-    public List<SkinData> getDatas() {
+    public List<Skin> getDatas() {
         if (actor != null) {
-            // 清理
             datas.clear();
-            
-            // 载入
-            skinService.getWeaponSkins(actor, datas);
+            List<Skin> skins = skinService.getSkins(actor);
+            if (skins != null && !skins.isEmpty()) {
+                for (Skin s : skins) {
+                    if (s.isWeapon() && !s.isBaseSkin()) {
+                        datas.add(s);
+                    }
+                }
+            }
         }
         return datas;
     }
   
     @Override
-    public boolean removeItem(SkinData data) {
+    public boolean removeItem(Skin data) {
         throw new UnsupportedOperationException();
     }
     
-    private class WeaponRow extends ItemRow<SkinData> {
+    private class WeaponRow extends ItemRow<Skin> {
 
         public WeaponRow() {
             super();
         }
         
         @Override
-        public void display(SkinData data) {
-            SkinData wd = (SkinData) data;
-            icon.setIcon(wd.getIcon());
-            body.setNameText(ResourceManager.getObjectName(wd));
+        public void display(Skin skin) {
+            SkinData skinData = skin.getData();
+            icon.setIcon(skinData.getIcon());
+            body.setNameText(ResourceManager.getObjectName(skinData));
             
-            List<AttributeApply> aas = wd.getApplyAttributes();
+            List<AttributeApply> aas = skinData.getApplyAttributes();
             if (aas != null) {
                 StringBuilder sb = new StringBuilder();
                 for (AttributeApply aa : aas) {
@@ -114,21 +118,21 @@ public class WeaponPanel extends ListView<SkinData> implements ActorPanel{
                 body.setDesText("");
             }
             
-            num.setText(String.valueOf(wd.getTotal()));
+            num.setText(String.valueOf(skinData.getTotal()));
             
-            setBackgroundVisible(wd.isUsing());
+            setBackgroundVisible(skinData.isUsed());
         }
         
         @Override
         protected void clickEffect(boolean isPress) {
             super.clickEffect(isPress);
-            setBackgroundVisible(((SkinData)data).isUsing());
+            setBackgroundVisible(((SkinData)data).isUsed());
         }
         
         @Override
         public void onRelease() {
             SkinData sd = ((SkinData)data);
-            setBackgroundVisible(sd.isUsing());
+            setBackgroundVisible(sd.isUsed());
         }
     }
 }

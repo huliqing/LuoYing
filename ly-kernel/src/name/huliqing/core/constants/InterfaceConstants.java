@@ -14,6 +14,7 @@ public class InterfaceConstants {
      * shortcut图标背景
      */
     public final static String UI_SHORTCUT_BACKGROUND = "Interface/icon/shortcut.png";
+    public final static String UI_SHORTCUT_BACKGROUND2 = "Interface/icon/shortcut2.png";
     
     /** Interface/icon/miss.png */
     public final static String UI_MISS = "Interface/icon/miss.png";
@@ -73,6 +74,7 @@ public class InterfaceConstants {
     
     /** Close图标 */
     public final static String UI_CLOSE = "Interface/map/close.png";
+    
     
     
     /** 金币图标 */

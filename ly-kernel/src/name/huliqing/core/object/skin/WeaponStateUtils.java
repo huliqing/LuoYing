@@ -58,7 +58,7 @@ public class WeaponStateUtils {
      * getWeaponState(0, 1)
      * </code>
      * 将为左手空 + 右手剑生成另一个武器状态。
-     * @param weaponType1s
+     * @param weaponTypes
      * @return 
      */
     public static int createWeaponState(int... weaponTypes) {

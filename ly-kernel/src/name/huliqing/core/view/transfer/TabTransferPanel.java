@@ -24,7 +24,7 @@ import name.huliqing.core.ui.tiles.Tab;
  * @param <T>
  */
 public class TabTransferPanel<T extends ObjectData> extends TransferPanel<T> implements RowClickListener<T> {
-    private final SkinService skinService = Factory.get(SkinService.class);
+//    private final SkinService skinService = Factory.get(SkinService.class);
     
     private final List<T> itemDatas = new ArrayList<T>();
     private final List<T> armorDatas = new ArrayList<T>();
@@ -74,7 +74,7 @@ public class TabTransferPanel<T extends ObjectData> extends TransferPanel<T> imp
             if (data instanceof ItemData) {
                 itemDatas.add(data);
             } else if (data instanceof SkinData) {
-                if (skinService.isWeapon((SkinData) data)) {
+                if (((SkinData) data).isWeapon()) {
                     weaponDatas.add(data);
                 } else {
                     armorDatas.add(data);
@@ -105,7 +105,7 @@ public class TabTransferPanel<T extends ObjectData> extends TransferPanel<T> imp
             if (data instanceof ItemData) {
                 itemDatas.add(data);
             } else if (data instanceof SkinData) {
-                if (skinService.isWeapon((SkinData) data)) {
+                if (((SkinData) data).isWeapon()) {
                     weaponDatas.add(data);
                 } else {
                     armorDatas.add(data);

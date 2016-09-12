@@ -63,7 +63,7 @@ public class WeaponHandler extends AbstractSkinHandler {
     @Override
     protected void useObject(Actor actor, ObjectData data) {
         SkinData skinData = (SkinData) data;
-        if (skinData.isUsing()) {
+        if (skinData.isUsed()) {
             if (skinService.isWeaponTakeOn(actor) 
                     && skinData.getSlots() != null && !skinData.getSlots().isEmpty()) {
                 skinService.takeOffWeapon(actor, false);
@@ -99,7 +99,7 @@ public class WeaponHandler extends AbstractSkinHandler {
         if (!skinService.isWeapon(weaponData)) {
             return false;
         }
-        if (weaponData.isUsing()) {
+        if (weaponData.isUsed()) {
             return false;
         }
         return super.remove(actor, data, count);

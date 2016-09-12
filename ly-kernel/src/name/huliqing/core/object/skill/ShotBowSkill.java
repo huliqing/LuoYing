@@ -13,18 +13,16 @@ import com.jme3.animation.SkeletonControl;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
-import com.jme3.scene.SceneGraphVisitor;
 import com.jme3.scene.Spatial;
 import com.jme3.util.TempVars;
 import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.constants.SkinConstants;
-import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.SkillData;
-import name.huliqing.core.data.SkinData;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.SkinService;
 import name.huliqing.core.object.Loader;
+import name.huliqing.core.object.skin.Skin;
 
 /**
  * 弓箭的射击技能
@@ -85,19 +83,13 @@ public class ShotBowSkill<T extends SkillData> extends ShotSkill<T> {
         
         // 偿试查找出弓模型，用于执行拉弓动画
         Spatial weapon = null;
-        List<SkinData> weaponSkins = skinService.getCurrentWeaponSkin(actor);
-        if (!weaponSkins.isEmpty()) {
-            SkinData bowSkinData = null;
-            for (SkinData sd : weaponSkins) {
-                if (sd.getWeaponType() == SkinConstants.WEAPON_BOW) {
-                    bowSkinData = sd;
+        List<Skin> usingSkins = skinService.getUsingSkins(actor);
+        if (usingSkins != null && !usingSkins.isEmpty()) {
+            for (Skin skin : usingSkins) {
+                if (skin.isWeapon() && skin.getWeaponType() == SkinConstants.WEAPON_BOW) {
+                    weapon = skin.getSpatial();
                     break;
                 }
-            }
-            if (bowSkinData != null) {
-                WeaponBowFinder finder = new WeaponBowFinder(bowSkinData);
-                actor.getSpatial().breadthFirstTraversal(finder);
-                weapon = finder.bowNode;
             }
         }
   
@@ -212,25 +204,6 @@ public class ShotBowSkill<T extends SkillData> extends ShotSkill<T> {
             arrow.removeFromParent();
         }
         super.cleanup();
-    }
-    
-    // 用于查找弓模型
-    private class WeaponBowFinder implements SceneGraphVisitor {
-        
-        private SkinData bowSkinData;
-        private Spatial bowNode;
-        
-        public WeaponBowFinder(SkinData bowSkinData) {
-            this.bowSkinData = bowSkinData;
-        }
-        
-        @Override
-        public void visit(Spatial spatial) {
-            ObjectData pd = spatial.getUserData(ObjectData.USER_DATA);
-            if (pd != null && pd == bowSkinData) {
-                bowNode = spatial;
-            }
-        }
     }
     
 }

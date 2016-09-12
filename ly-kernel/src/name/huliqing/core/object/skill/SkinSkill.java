@@ -5,7 +5,6 @@
 package name.huliqing.core.object.skill;
 
 import name.huliqing.core.data.SkillData;
-import name.huliqing.core.object.skill.AbstractSkill;
 
 /**
  *

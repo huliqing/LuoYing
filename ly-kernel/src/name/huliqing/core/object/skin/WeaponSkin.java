@@ -11,49 +11,61 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
-import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
+import java.util.ArrayList;
+import java.util.List;
 import name.huliqing.core.Factory;
-import name.huliqing.core.data.ObjectData;
-import name.huliqing.core.data.SkinData;
 import name.huliqing.core.data.SlotData;
 import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.object.AssetLoader;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.module.SkinModule;
 import name.huliqing.core.object.skill.SkinSkill;
 
 /**
  * @author huliqing
- * @param <T>
  */
-public class WeaponSkin<T extends SkinData> extends AbstractSkin<T> {
+public class WeaponSkin extends AbstractSkin {
     private final SkillService skillService = Factory.get(SkillService.class);
     
     @Override
-    public void attach(Actor actor, boolean isWeaponTakedOn) {
-        data.setUsing(true);
+    public void attach(Actor actor) {
+        data.setUsed(true);
         // 对于武器的attach不能用动画,直接attach就可以
-        if (isWeaponTakedOn) {
-            super.attach(actor, isWeaponTakedOn);
+        SkinModule sm = actor.getModule(SkinModule.class);
+        if (sm.isWeaponTakeOn()) {
+            super.attach(actor);
         } else {
             takeOffDirect(actor);
         }
+    }
+
+    @Override
+    public boolean isWeapon() {
+        return true;
+    }
+
+    @Override
+    public int getWeaponType() {
+        return data.getWeaponType();
     }
     
     /**
      * 把武器取出放到手上使用。
      * @param actor
-     * @param force
-     * @param isWeaponTakedOn
      */
-    public void takeOn(Actor actor, boolean force, boolean isWeaponTakedOn) {
+    public void takeOn(Actor actor) {
         String weaponSlot = data.getSlot();
         if (weaponSlot == null) {
-            super.attach(actor, isWeaponTakedOn);
+            super.attach(actor);
             return;
         }
+        
+        // 武器取出后取消槽位占用
+        data.setSlot(null);
+        
         // 根据武器的左右手属性确定要用哪一个手拿武器的技能。
         SlotData sd = DataFactory.createData(weaponSlot);
         String hangSkill = null;
@@ -63,40 +75,34 @@ public class WeaponSkin<T extends SkinData> extends AbstractSkin<T> {
             hangSkill = sd.getRightHandSkinSkill();
         }
         if (hangSkill == null) {
-            super.attach(actor, true);
+            super.attach(actor);
             return;
         }
         
-        SkinSkill skill = (SkinSkill) Loader.loadSkill(hangSkill);
-        
-//        float skillUseTime = skill.getSkillData().getTrueUseTime(); // remove20160503
-        skill.setActor(actor);
-        float skillUseTime = skill.getTrueUseTime();
-        
-        float hangTimePoint = skill.getHangTimePoint();
-        // 这里必须使用skill实例，而不用SkillData，因为同一个skillData id执行的时候
-        // 可能使用的是同一个Skill实例来处理，当角色同时有两把武器在切换时，就不能同
-        // 一时刻用同一个SkillData，而应该特别指定用不同实例来同时执行。
-        skillService.playSkill(actor, skill, force);
-
         // 动画逻辑处理
-        TOAnimProcessLogic processor = new TOAnimProcessLogic(actor, 1, skillUseTime, hangTimePoint, isWeaponTakedOn);
+        SkinSkill skill = (SkinSkill) Loader.loadSkill(hangSkill);
+        skill.setActor(actor);
+
+        // hangTime：把武器节点添加到角色身上的时间点。
+        float hangTime = skill.getTrueUseTime() * skill.getHangTimePoint();
+        HangProcessor processor = new HangProcessor(actor, hangTime, true);
         actor.getSpatial().addControl(processor);
         
+        skillService.playSkill(actor, skill, false);
     }
     
     /**
      * 把武器挂起，如挂在后背
      * @param actor
-     * @param force
-     * @param isWeaponTakedOn
      */
-    public void takeOff(Actor actor, boolean force, boolean isWeaponTakedOn) {
-        String weaponSlot = data.getSlot();
+    public void takeOff(Actor actor) {
+        String weaponSlot = getWeaponSlot(actor);
         if (weaponSlot == null) {
-            super.attach(actor, isWeaponTakedOn);
+            data.setSlot(null);
+            super.attach(actor);
             return;
         }
+        data.setSlot(weaponSlot);
         // 根据武器的左右手属性确定要用哪一个手拿武器的技能。
         SlotData sd = DataFactory.createData(weaponSlot);
         String hangSkill = null;
@@ -106,43 +112,35 @@ public class WeaponSkin<T extends SkinData> extends AbstractSkin<T> {
             hangSkill = sd.getRightHandSkinSkill();
         }
         if (hangSkill == null) {
-            super.attach(actor, isWeaponTakedOn);
+            super.attach(actor);
             return;
         }
         
         SkinSkill skill = (SkinSkill) Loader.loadSkill(hangSkill);
-        
-//        float skillUseTime = skill.getSkillData().getTrueUseTime(); // remove
         skill.setActor(actor);
-        float skillUseTime = skill.getTrueUseTime();
-        
-        float hangTimePoint = skill.getHangTimePoint();
-        // 这里必须使用skill实例，而不用SkillData，因为同一个skillData id执行的时候
-        // 可能使用的是同一个Skill实例来处理，当角色同时有两把武器在切换时，就不能同
-        // 一时刻用同一个SkillData，而应该特别指定用不同实例来同时执行。
-        skillService.playSkill(actor, skill, force);
 
-        // 动画逻辑处理
-        TOAnimProcessLogic processor = new TOAnimProcessLogic(actor, 0, skillUseTime, hangTimePoint, isWeaponTakedOn);
+        float hangTime = skill.getTrueUseTime() * skill.getHangTimePoint();
+        HangProcessor processor = new HangProcessor(actor, hangTime, false);
         actor.getSpatial().addControl(processor);
         
+        // 动画逻辑处理
+        skillService.playSkill(actor, skill, false);
     }
     
     private void takeOffDirect(Actor actor) {
-        Spatial skinNode = findSkinNodes(actor.getSpatial(), data);
         if (skinNode == null) {
             String modelFile = data.getFile();
             if (modelFile == null) {
                 return;
             }
             skinNode = AssetLoader.loadModel(modelFile);
-            skinNode.setUserData(ObjectData.USER_DATA, data);
         }
+        
         String weaponSlot = data.getSlot();
         // 如果找不到合适的槽位或者武器根据不支持槽位，则直接attach到角色身上。
         // 不作takeOff处理
         if (weaponSlot == null) {
-            super.attach(actor, false);
+            super.attach(actor);
             return;
         }
         
@@ -197,47 +195,89 @@ public class WeaponSkin<T extends SkinData> extends AbstractSkin<T> {
         }
     }
     
-    private class TOAnimProcessLogic extends AbstractControl {
+    /**
+     * 为角色指定的武器选择一个合适的槽位来装备武器
+     * @param actor
+     * @param skinData 
+     */
+    private String getWeaponSlot(Actor actor) {
+        SkinModule sm = actor.getModule(SkinModule.class);
+        // supportedSlots角色可以支持的武器槽位列表
+        List<String> supportedSlots = sm.getSupportedSlots();
+        if (supportedSlots == null || supportedSlots.isEmpty()) {
+            return null;
+        }
+        // 武器可以支持的槽位
+        if (data.getSlots() == null || data.getSlots().isEmpty()) {
+            return null;
+        }
+        
+        // 已经被占用的槽位
+        List<String> slotsInUsing = getUsingSlots(sm);
+        
+        // 从武器所支持的所有槽位中选择一个可用的。
+        for (String slot : data.getSlots()) {
+            // 槽位被占用
+            if (slotsInUsing.contains(slot)) {
+                continue;
+            }
+            // 角色不支持这个槽位
+            if(!supportedSlots.contains(slot)) {
+                continue;
+            }
+            return slot;
+        }
+        return null;
+    }
+    
+    /**
+     * 获取角色当前被占用的武器槽位id列表
+     * @return 
+     */
+    private List<String> getUsingSlots(SkinModule sm) {
+        List<Skin> usingSkins = sm.getUsingSkins();
+        if (usingSkins == null || usingSkins.isEmpty()) {
+            return null;
+        }
+        List<String> usingSlots = new ArrayList<String>(2);
+        for (Skin s : usingSkins) {
+            if (s.isWeapon() && s.getData().getSlot() != null) {
+                usingSlots.add(s.getData().getSlot());
+            }
+        }
+        return usingSlots;
+    }
+    
+    private class HangProcessor extends AbstractControl {
 
         private final Actor actor;
-        private final int type; // 0:takeOff; 1 : takeOn
-        private final float fullUseTime;
-        private final float hangTimePoint;
+        private final float hangTime;
         private float timeUsed;
-        private boolean isOk;
-        private final boolean isWeaponTakedOn;
+        // 取出、收起
+        private final boolean takeOn;
         
-        public TOAnimProcessLogic(Actor actor, int type, float fullUseTime, float hangTimePoint, boolean isWeaponTakedOn) {
+        public HangProcessor(Actor actor, float hangTime, boolean takeOn) {
             this.actor = actor;
-            this.type = type;
-            this.fullUseTime = fullUseTime;
-            this.hangTimePoint = hangTimePoint;
-            this.isWeaponTakedOn = isWeaponTakedOn;
+            this.hangTime = hangTime;
+            this.takeOn = takeOn;
         }
-
         
         @Override
         protected void controlUpdate(float tpf) {
             timeUsed += tpf;
            
-            if (!isOk && timeUsed >= fullUseTime * hangTimePoint) {
-                if (type == 1) {
-                    WeaponSkin.super.attach(actor, isWeaponTakedOn);
+            if (timeUsed >= hangTime) {
+                if (takeOn) {
+                    WeaponSkin.super.attach(actor);
                 } else {
                     takeOffDirect(actor);
                 }
-                isOk = true;
-            }
-            
-            // 执行完要从全局移除动画逻辑
-            if (timeUsed > fullUseTime) {
                 actor.getSpatial().removeControl(this);
             }
         }
 
         @Override
-        protected void controlRender(RenderManager rm, ViewPort vp) {
-        }
+        protected void controlRender(RenderManager rm, ViewPort vp) {}
         
     }
 }

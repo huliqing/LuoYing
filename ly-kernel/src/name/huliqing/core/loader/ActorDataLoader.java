@@ -61,7 +61,7 @@ public class ActorDataLoader implements DataLoader<ActorData> {
             for (String sbt : skinBases) {
                 SkinData sdb = DataFactory.createData(sbt);
                 sdb.setBaseSkin(true);
-                sdb.setUsing(false);
+                sdb.setUsed(false);
                 data.addObjectData(sdb);
             }            
         }
@@ -74,7 +74,7 @@ public class ActorDataLoader implements DataLoader<ActorData> {
                 SkinData skinData = DataFactory.createData(skinArr[0]);
                 skinData.setTotal(skinArr.length > 1 ? Integer.parseInt(skinArr[1]) : 1);
                 skinData.setBaseSkin(false);
-                skinData.setUsing(false);
+                skinData.setUsed(false);
                 data.addObjectData(skinData);
             }
         }
@@ -85,7 +85,7 @@ public class ActorDataLoader implements DataLoader<ActorData> {
             for (String skinId : skinOutfit) {
                 SkinData sdb = DataFactory.createData(skinId);
                 sdb.setBaseSkin(false);
-                sdb.setUsing(true);
+                sdb.setUsed(true);
                 data.addObjectData(sdb);
             }
         }
@@ -96,7 +96,7 @@ public class ActorDataLoader implements DataLoader<ActorData> {
             for (String wid : weaponIds) {
                 SkinData weaponData = (SkinData) DataFactory.createData(wid);
                 weaponData.setBaseSkin(false);
-                weaponData.setUsing(true);
+                weaponData.setUsed(true);
                 data.addObjectData(weaponData);
             }
         }

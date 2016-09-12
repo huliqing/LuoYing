@@ -13,10 +13,11 @@ import java.util.logging.Logger;
  * 简单的动画组,该组允许指定子动画在什么插值点开始执行，在子动画启动后，当
  * 前插值点即不再影响子动画的插值。当子动画全部结束后，当前动画才算完全结束。
  * @author huliqing
+ * @param <E>
  */
 public final class SimpleGroup<E> extends AbstractAnim<E> {
-    private final static Logger logger = Logger.getLogger(SimpleGroup.class.getName());
-    private List<AnimWrap> anims = new ArrayList<AnimWrap>();
+    private final static Logger LOG = Logger.getLogger(SimpleGroup.class.getName());
+    private final List<AnimWrap> anims = new ArrayList<AnimWrap>();
     
     // 记住tpf，以便在update子动画时使用
     private float tpf;
@@ -30,7 +31,7 @@ public final class SimpleGroup<E> extends AbstractAnim<E> {
     public void setLoop(Loop loop) {
         // 不能使用dontLoop, 因为当前动画要负责更新子动画，所在在子动画未全部结束时
         // 当前动画不能结束。
-        logger.log(Level.WARNING, "SimpleGroup unsupported setLoop, it auto set to Loop or Cycle");
+        LOG.log(Level.WARNING, "SimpleGroup unsupported setLoop, it auto set to Loop or Cycle");
     }
     
     /**
