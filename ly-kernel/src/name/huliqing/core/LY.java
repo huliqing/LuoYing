@@ -223,7 +223,6 @@ import name.huliqing.core.object.handler.AttributeHandler;
 import name.huliqing.core.loader.HandlerDataLoader;
 import name.huliqing.core.object.handler.ItemSkillHandler;
 import name.huliqing.core.object.handler.MapHandler;
-import name.huliqing.core.object.handler.OutfitHandler;
 import name.huliqing.core.object.handler.SkillBookHandler;
 import name.huliqing.core.object.handler.SkillHandler;
 import name.huliqing.core.object.handler.StateGainHandler;
@@ -231,7 +230,6 @@ import name.huliqing.core.object.handler.StateRemoveHandler;
 import name.huliqing.core.object.handler.SummonHandler;
 import name.huliqing.core.object.handler.SummonSkillHandler;
 import name.huliqing.core.object.handler.TestHandler;
-import name.huliqing.core.object.handler.WeaponHandler;
 import name.huliqing.core.loader.HitCheckerDataLoader;
 import name.huliqing.core.object.hitchecker.SimpleHitChecker;
 import name.huliqing.core.loader.ItemDataLoader;
@@ -295,6 +293,10 @@ import name.huliqing.core.loader.ViewDataLoader;
 import name.huliqing.core.loader.ModuleDataLoader;
 import name.huliqing.core.mess.MessAttributeNumberAddValue;
 import name.huliqing.core.mess.MessAttributeNumberHit;
+import name.huliqing.core.mess.MessSkinAdd;
+import name.huliqing.core.mess.MessSkinAttach;
+import name.huliqing.core.mess.MessSkinDetach;
+import name.huliqing.core.mess.MessSkinRemove;
 import name.huliqing.core.object.attribute.BooleanAttribute;
 import name.huliqing.core.object.attribute.FloatAttribute;
 import name.huliqing.core.object.attribute.GroupAttribute;
@@ -527,8 +529,8 @@ public class LY {
         DataFactory.register("handlerTest", HandlerData.class, HandlerDataLoader.class, TestHandler.class);
         DataFactory.register("handlerSummon", HandlerData.class, HandlerDataLoader.class, SummonHandler.class);
         DataFactory.register("handlerAttribute", HandlerData.class, HandlerDataLoader.class, AttributeHandler.class);
-        DataFactory.register("handlerOutfit", HandlerData.class, HandlerDataLoader.class, OutfitHandler.class);
-        DataFactory.register("handlerWeapon", HandlerData.class, HandlerDataLoader.class, WeaponHandler.class);
+//        DataFactory.register("handlerOutfit", HandlerData.class, HandlerDataLoader.class, OutfitHandler.class);
+//        DataFactory.register("handlerWeapon", HandlerData.class, HandlerDataLoader.class, WeaponHandler.class);
         DataFactory.register("handlerSkill", HandlerData.class, HandlerDataLoader.class, SkillHandler.class);
         DataFactory.register("handlerSummonSkill", HandlerData.class, HandlerDataLoader.class, SummonSkillHandler.class);
         DataFactory.register("handlerSkillBook", HandlerData.class, HandlerDataLoader.class, SkillBookHandler.class);
@@ -736,6 +738,7 @@ public class LY {
         Serializer.registerClass(MessActorAddSkill.class);
         Serializer.registerClass(MessActorFollow.class);
         Serializer.registerClass(MessActorKill.class);
+        Serializer.registerClass(MessActorLookAt.class);
         Serializer.registerClass(MessActorPhysics.class);
         Serializer.registerClass(MessActorSetGroup.class);
         Serializer.registerClass(MessActorSetLevel.class);
@@ -751,8 +754,13 @@ public class LY {
         // Skill
         Serializer.registerClass(MessSkill.class);
         Serializer.registerClass(MessSkillAbstract.class);
-        Serializer.registerClass(MessActorLookAt.class);
         Serializer.registerClass(MessSkillWalk.class);
+        
+        // Skin
+        Serializer.registerClass(MessSkinAdd.class);
+        Serializer.registerClass(MessSkinAttach.class);
+        Serializer.registerClass(MessSkinDetach.class);
+        Serializer.registerClass(MessSkinRemove.class);
         
         // Skin
         Serializer.registerClass(MessSkinWeaponTakeOn.class);

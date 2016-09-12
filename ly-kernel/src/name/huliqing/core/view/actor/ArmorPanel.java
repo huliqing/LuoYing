@@ -10,7 +10,7 @@ import name.huliqing.core.Factory;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.data.SkinData;
-import name.huliqing.core.mvc.network.UserCommandNetwork;
+import name.huliqing.core.mvc.network.SkinNetwork;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.SkinService;
 import name.huliqing.core.object.skin.Skin;
@@ -23,10 +23,13 @@ import name.huliqing.core.ui.UI;
  * @author huliqing
  */
 public class ArmorPanel extends ListView<Skin> implements ActorPanel{
-    private final UserCommandNetwork userCommandNetwork = Factory
-            .get(UserCommandNetwork.class);
+//    private final UserCommandNetwork userCommandNetwork = Factory
+//            .get(UserCommandNetwork.class);
     private final PlayService playService = Factory.get(PlayService.class);
     private final SkinService skinService = Factory.get(SkinService.class);
+    private final SkinNetwork skinNetwork = Factory.get(SkinNetwork.class);
+    
+    
     private Actor actor;
     private final List<Skin> datas = new ArrayList<Skin>();
     
@@ -41,7 +44,12 @@ public class ArmorPanel extends ListView<Skin> implements ActorPanel{
             @Override
             public void onClick(UI ui, boolean isPress) {
                 if (!isPress) {
-                    userCommandNetwork.useObject(actor, row.getData().getData());
+                    Skin skin = row.getData();
+                    if (skin.isAttached()) {
+                        skinNetwork.detachSkin(actor, skin);
+                    } else {
+                        skinNetwork.attachSkin(actor, skin);
+                    }
                     refreshPageData();
                 }
             }
@@ -76,9 +84,13 @@ public class ArmorPanel extends ListView<Skin> implements ActorPanel{
             List<Skin> skins = skinService.getSkins(actor);
             if (skins != null && !skins.isEmpty()) {
                 for (Skin s : skins) {
-                    if (!s.isBaseSkin() && !s.isWeapon()) {
-                        datas.add(s);
+//                    if (s.isBaseSkin()) {
+//                        continue;
+//                    }
+                    if (s.isWeapon()) {
+                        continue;
                     }
+                    datas.add(s);
                 }
             }
         }
@@ -120,13 +132,12 @@ public class ArmorPanel extends ListView<Skin> implements ActorPanel{
         @Override
         protected void clickEffect(boolean isPress) {
             super.clickEffect(isPress);
-            setBackgroundVisible(((SkinData)data).isUsed());
+            setBackgroundVisible(data.isAttached());
         }
         
         @Override
         public void onRelease() {
-            SkinData sd = ((SkinData)data);
-            setBackgroundVisible(sd.isUsed());
+            setBackgroundVisible(data.isAttached());
         }
     }
     

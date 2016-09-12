@@ -31,7 +31,7 @@ public interface SkinService extends Inject {
      * @param amount
      * @return 
      */
-    boolean removeSkin(Actor actor, String skinId, int amount);
+    void removeSkin(Actor actor, String skinId, int amount);
     
     /**
      * 给角色换上装备,注：换装备的时候需要考虑冲突的装备，并把冲突的装备换
@@ -86,6 +86,14 @@ public interface SkinService extends Inject {
     void takeOffWeapon(Actor actor, boolean force);
     
     /**
+     * 获取角色身上指定ID的Skin
+     * @param actor
+     * @param skinId 唯一ID
+     * @return 
+     */
+    Skin getSkin(Actor actor, String skinId);
+    
+    /**
      * 获取角色所有的皮肤
      * @param actor
      * @return 
@@ -98,6 +106,7 @@ public interface SkinService extends Inject {
      * @return 
      */
     List<Skin> getUsingSkins(Actor actor);
+    
     
     /**
      * 获取角色当前正在使用的武器类型状态

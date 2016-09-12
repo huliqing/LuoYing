@@ -219,23 +219,29 @@ public class ShortcutManager {
                     , MessageType.info);
             
         } else if (DELETE.isVisible() && isDelete(shortcut)) {
-            // delete object
-            Actor actor = shortcut.getActor();
-            ObjectData data = shortcut.getObjectData();
-
-            String objectName = ResourceManager.getObjectName(data);
-            Factory.get(UserCommandNetwork.class).removeObject(actor, data.getId(), data.getTotal());
             
-            ObjectData resultData = Factory.get(ProtoService.class).getData(actor, data.getId());
-            if (resultData == null || resultData.getTotal() <= 0) {
-                // delete shortcut
-                SHORTCUT_ROOT.removeShortcut(shortcut);
-                LY.getPlayState().addMessage(ResourceManager.get("common.deleteSuccess", new String[] {objectName})
-                    , MessageType.info);
-            } else {
-                LY.getPlayState().addMessage(ResourceManager.get("common.deleteFail", new String[] {objectName})
-                    , MessageType.notice);
-            }
+            shortcut.removeObject();
+            
+            // remove20160912
+//            // delete object
+//            Actor actor = shortcut.getActor();
+//            ObjectData data = shortcut.getObjectData();
+//
+//            String objectName = ResourceManager.getObjectName(data);
+//            Factory.get(UserCommandNetwork.class).removeObject(actor, data.getId(), data.getTotal());
+//            
+//            ObjectData resultData = Factory.get(ProtoService.class).getData(actor, data.getId());
+//            if (resultData == null || resultData.getTotal() <= 0) {
+//                // delete shortcut
+//                SHORTCUT_ROOT.removeShortcut(shortcut);
+//                LY.getPlayState().addMessage(ResourceManager.get("common.deleteSuccess", new String[] {objectName})
+//                    , MessageType.info);
+//            } else {
+//                LY.getPlayState().addMessage(ResourceManager.get("common.deleteFail", new String[] {objectName})
+//                    , MessageType.notice);
+//            }
+            
+            
         }
     }
     

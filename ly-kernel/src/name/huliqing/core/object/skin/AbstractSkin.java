@@ -47,11 +47,11 @@ public abstract class AbstractSkin implements Skin {
 
     // ---- inner
     protected Spatial skinNode;
+    protected boolean attached;
     
     @Override
     public void setData(SkinData data) {
         this.data = data;
-        
         
         bindBone = data.getAsString("bindBone");
         localTranslation = data.getAsVector3f("localTranslation");
@@ -84,6 +84,7 @@ public abstract class AbstractSkin implements Skin {
         return data.isBaseSkin();
     }
 
+    // remove20160912
 //    protected Spatial loadSkinNode(String file) {
 //        Spatial skinNode = AssetLoader.loadModel(file);
 //        skinNode.setUserData(ObjectData.USER_DATA, data);
@@ -96,10 +97,16 @@ public abstract class AbstractSkin implements Skin {
 //        }
 //        return skinNode;
 //    }
+
+    @Override
+    public boolean isAttached() {
+        return attached;
+    }
     
     @Override
     public void attach(Actor actor) {
         data.setUsed(true);
+        attached = true;
         
         //  附加装备属性
         attachSkinAttributes(actor);
@@ -215,6 +222,7 @@ public abstract class AbstractSkin implements Skin {
     public void detach(Actor actor) {
         // 1.----标记Using=false
         data.setUsed(false);
+        attached = false;
         
         // 2.----移除装备属性
         detachSkinAttributes(actor);

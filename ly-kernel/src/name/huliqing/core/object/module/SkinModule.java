@@ -41,7 +41,6 @@ public class SkinModule extends AbstractModule {
     // 当前穿在身上的装备和武器
     private SafeArrayList<Skin> skinUsed;
     
-    
     private boolean weaponTakeOn;
     
     // 绑定一个用于存放武器槽位的属性，必须是CollectionAttribute,这个属性中存放着角色优先支持的武器槽位列表（id)
@@ -73,14 +72,17 @@ public class SkinModule extends AbstractModule {
         // 穿上普通装备
         List<SkinData> skinDatas =  actor.getData().getObjectDatas(SkinData.class, null);
         if (skinDatas != null && !skinDatas.isEmpty()) {
+            skinAll = new SafeArrayList<Skin>(Skin.class);
             for (SkinData sd : skinDatas) {
                 Skin skin = Loader.load(sd);
                 skinAll.add(skin);
                 if (sd.isUsed() && !sd.isBaseSkin()) {
-                    attachSkin(skin);
+                    attachInner(skin);
                 }
             }
         }
+        
+        attachBaseSkin();
     }
     
     /**
@@ -98,6 +100,9 @@ public class SkinModule extends AbstractModule {
         } else {
             skin = Loader.load(skinId);
             skin.getData().setTotal(amount);
+            if (skinAll == null) {
+                skinAll = new SafeArrayList<Skin>(Skin.class);
+            }
             skinAll.add(skin);
             actor.getData().addObjectData(skin.getData());
         }
@@ -111,10 +116,10 @@ public class SkinModule extends AbstractModule {
     
     /**
      * 从角色包裹上移除装备,
-     * @param skinId
+     * @param skinId 唯一id
      * @param amount
      * @return  
-     * @see #getSkinData(java.lang.String) 
+     * @see #getSkin(Long) 
      */
     public boolean removeSkin(String skinId, int amount) {
         Skin skin = getSkin(skinId);
@@ -161,7 +166,11 @@ public class SkinModule extends AbstractModule {
      * @param skin 
      */
     public void detachSkin(Skin skin) {
+        // 脱下装备
         detachInner(skin);
+        
+        // 穿上基本装备进行补全
+        attachBaseSkin();
     }
     
     /**
@@ -171,9 +180,9 @@ public class SkinModule extends AbstractModule {
     private void detachConflicts(Skin skin) {
         if (skinUsed != null) {
             int conflicts = skin.getConflicts();
-            for (Skin s : skinUsed.getArray()) {
-                if ((s.getConflicts() & conflicts) != 0) {
-                    detachInner(skin);
+            for (Skin conflictSkin : skinUsed.getArray()) {
+                if ((conflictSkin.getConflicts() & conflicts) != 0) {
+                    detachInner(conflictSkin);
                 }
             }
         }
@@ -192,15 +201,15 @@ public class SkinModule extends AbstractModule {
         }
 
         if (skinAll != null) {
-            for (Skin skin : skinAll.getArray()) {
-                if (skinUsed.contains(skin)) {
+            for (Skin baseSkin : skinAll.getArray()) {
+                if (skinUsed != null && skinUsed.contains(baseSkin)) {
                     continue;
                 }
-                if (!skin.isBaseSkin()) {
+                if (!baseSkin.isBaseSkin()) {
                     continue;
                 }
-                if ((typeUsed & skin.getType()) == 0) {
-                    attachInner(skin);
+                if ((typeUsed & baseSkin.getType()) == 0) {
+                    attachInner(baseSkin);
                 }
             }
         }
@@ -208,6 +217,9 @@ public class SkinModule extends AbstractModule {
     
     private void attachInner(Skin skin) {
         // 穿上装备
+        if (skinUsed == null) {
+            skinUsed = new SafeArrayList<Skin>(Skin.class); 
+        }
         if (!skinUsed.contains(skin)) {
             skinUsed.add(skin);
         }
@@ -291,6 +303,23 @@ public class SkinModule extends AbstractModule {
         }
         return null;
     }
+    
+//    /**
+//     * 通过唯一id查找角色身上的装备
+//     * @param skinId
+//     * @return 
+//     */
+//    public Skin getSkin(long skinId) {
+//        if (skinAll == null)
+//            return null;
+//        
+//        for (Skin s : skinAll) {
+//            if (s.getData().getUniqueId() == skinId) {
+//                return s;
+//            }
+//        }
+//        return null;
+//    }
     
     /**
      * 获取角色的所有皮肤,返回的列表只能只读，如果角色没有皮肤则返回empty.

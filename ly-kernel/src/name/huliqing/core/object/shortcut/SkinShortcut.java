@@ -8,9 +8,10 @@ package name.huliqing.core.object.shortcut;
 import com.jme3.math.ColorRGBA;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.SkinData;
-import name.huliqing.core.mvc.service.SkinService;
+import name.huliqing.core.mvc.network.SkinNetwork;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.module.SkinListener;
+import name.huliqing.core.object.module.SkinModule;
 import name.huliqing.core.object.skin.Skin;
 import name.huliqing.core.ui.UIFactory;
 
@@ -19,27 +20,41 @@ import name.huliqing.core.ui.UIFactory;
  * @author huliqing
  */
 public class SkinShortcut extends BaseUIShortcut<SkinData> implements SkinListener {
-    private final SkinService skinService = Factory.get(SkinService.class);
+    private final SkinNetwork skinNetwork = Factory.get(SkinNetwork.class);
+    private SkinModule skinModule;
 
     @Override
     public void initialize() {
         super.initialize();
-        skinService.addSkinListener(actor, this);
+        skinModule = actor.getModule(SkinModule.class);
+        skinModule.addSkinListener(this);
     }
 
     @Override
     public void cleanup() {
-        skinService.removeSkinListener(actor, this);
+        if (skinModule != null) {
+            skinModule.removeSkinListener(this);
+        }
         super.cleanup(); 
     }
 
+    @Override
+    public void removeObject() {
+        Skin skin = skinModule.getSkin(objectData.getId());
+        if (skin != null && skin.isAttached()) {
+            // 正在使用的Skin不能删除 
+            return;
+        }
+        skinNetwork.removeSkin(actor, objectData.getId(), objectData.getTotal());
+    }
+    
     @Override
     public void onSkinAdded(Actor actor, Skin skinAdded) {
         if (skinAdded.getData().getId().equals(objectData.getId())) {
             updateObjectData(skinAdded.getData());
         }
     }
-
+    
     @Override
     public void onSkinRemoved(Actor actor, Skin skinRemoved) {
         if (skinRemoved.getData().getId().equals(objectData.getId())) {
@@ -65,8 +80,32 @@ public class SkinShortcut extends BaseUIShortcut<SkinData> implements SkinListen
 
     @Override
     public void onShortcutClick(boolean pressed) {
-        super.onShortcutClick(pressed); 
-//To change body of generated methods, choose Tools | Templates.
+        if (pressed) {
+            return;
+        }
+        Skin skin = skinModule.getSkin(objectData.getId());
+        
+        // Outfit
+        if (!skin.isWeapon()) {
+            if (skin.isAttached()) {
+                skinNetwork.detachSkin(actor, skin);
+            } else {
+                skinNetwork.attachSkin(actor, skin);
+            }
+            return;
+        }
+        
+        // weapon
+        if (skin.isAttached()) {
+            if (skinModule.isWeaponTakeOn()) {
+                skinNetwork.takeOffWeapon(actor, false);
+            } else {
+                skinNetwork.detachSkin(actor, skin);
+            }
+        } else {
+            skinNetwork.attachSkin(actor, skin);
+        }
+
     }
     
 }

@@ -171,6 +171,7 @@ public abstract class BaseUIShortcut<T extends ObjectData> extends AbstractShort
         icon.setHeight(height * 0.85f);
         count.setWidth(width);
         count.setHeight(height);
+        updateObjectData(objectData);
     }
     
     /**

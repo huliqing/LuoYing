@@ -202,6 +202,11 @@ public class UserCommandNetworkImpl implements UserCommandNetwork {
         }
     }
     
+    /**
+     * @deprecated 
+     * @param actor
+     * @param data 
+     */
     @Override
     public void useObject(Actor actor, ObjectData data) {
         

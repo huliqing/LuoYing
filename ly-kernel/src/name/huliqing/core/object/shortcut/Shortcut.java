@@ -110,4 +110,9 @@ public interface Shortcut<T extends ObjectData> extends DataProcessor<ShortcutDa
      * @param dragEnabled 
      */
     void setDragEnagled(boolean dragEnabled);
+    
+    /**
+     * 删除物品
+     */
+    void removeObject();
 }

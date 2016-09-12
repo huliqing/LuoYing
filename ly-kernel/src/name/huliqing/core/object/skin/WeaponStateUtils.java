@@ -14,7 +14,6 @@ import java.util.logging.Logger;
 import name.huliqing.core.Config;
 import name.huliqing.core.constants.SkinConstants;
 import name.huliqing.core.data.SkinData;
-import name.huliqing.core.utils.Temp;
 
 /**
  * 该类主要为武器的所有可能组合生成一个唯一的武器状态。主要用于在角色进行攻击时判定所使用

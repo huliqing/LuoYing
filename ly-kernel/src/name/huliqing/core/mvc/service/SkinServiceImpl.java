@@ -33,9 +33,11 @@ public class SkinServiceImpl implements SkinService {
     }
 
     @Override
-    public boolean removeSkin(Actor actor, String skinId, int amount) {
+    public void removeSkin(Actor actor, String skinId, int amount) {
         SkinModule module = actor.getModule(SkinModule.class);
-        return module != null && module.removeSkin(skinId, amount);
+        if (module != null) {
+            module.removeSkin(skinId, amount);
+        }
     }
     
     @Override
@@ -107,6 +109,15 @@ public class SkinServiceImpl implements SkinService {
         }
     }
 
+    @Override
+    public Skin getSkin(Actor actor, String skinId) {
+        SkinModule module = actor.getModule(SkinModule.class);
+        if (module != null) {
+            return module.getSkin(skinId);
+        }
+        return null;
+    }
+
     /**
      * 获取角色的所有皮肤,返回的列表只能只读，如果角色没有皮肤则返回empty.
      * @param actor
@@ -116,7 +127,7 @@ public class SkinServiceImpl implements SkinService {
     public List<Skin> getSkins(Actor actor) {
         SkinModule module = actor.getModule(SkinModule.class);
         if (module != null) {
-            module.getSkins();
+            return module.getSkins();
         }
         return null;
     }
@@ -130,7 +141,7 @@ public class SkinServiceImpl implements SkinService {
     public List<Skin> getUsingSkins(Actor actor) {
         SkinModule module = actor.getModule(SkinModule.class);
         if (module != null) {
-            module.getUsingSkins();
+            return module.getUsingSkins();
         }
         return null;
     }

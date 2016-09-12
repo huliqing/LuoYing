@@ -17,6 +17,7 @@ import name.huliqing.core.object.module.ItemListener;
  */
 public class ItemShortcut extends BaseUIShortcut<ItemData> implements ItemListener {
     private final ItemService itemService = Factory.get(ItemService.class);
+//    private final ItemNetwork itemNetwork = Factory.get(ItemNetwork.class);
         
     @Override
     public void initialize() {
@@ -28,6 +29,11 @@ public class ItemShortcut extends BaseUIShortcut<ItemData> implements ItemListen
     public void cleanup() {
         itemService.removeItemListener(actor, this);
         super.cleanup(); 
+    }
+    
+    @Override
+    public void removeObject() {
+        throw new UnsupportedOperationException();
     }
     
     @Override
@@ -46,5 +52,5 @@ public class ItemShortcut extends BaseUIShortcut<ItemData> implements ItemListen
         updateObjectData(item);
     }
     
-    
+
 }

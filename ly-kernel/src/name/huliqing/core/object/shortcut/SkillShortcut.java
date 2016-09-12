@@ -94,6 +94,11 @@ public class SkillShortcut extends BaseUIShortcut<SkillData> {
         }
         super.cleanup();
     }
+
+    @Override
+    public void removeObject() {
+        // 技能不能删除
+    }
     
     @Override
     public void onShortcutClick(boolean pressed) {

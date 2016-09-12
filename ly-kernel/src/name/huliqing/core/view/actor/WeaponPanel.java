@@ -120,19 +120,18 @@ public class WeaponPanel extends ListView<Skin> implements ActorPanel{
             
             num.setText(String.valueOf(skinData.getTotal()));
             
-            setBackgroundVisible(skinData.isUsed());
+            setBackgroundVisible(data.isAttached());
         }
         
         @Override
         protected void clickEffect(boolean isPress) {
             super.clickEffect(isPress);
-            setBackgroundVisible(((SkinData)data).isUsed());
+            setBackgroundVisible(data.isAttached());
         }
         
         @Override
         public void onRelease() {
-            SkinData sd = ((SkinData)data);
-            setBackgroundVisible(sd.isUsed());
+            setBackgroundVisible(data.isAttached());
         }
     }
 }

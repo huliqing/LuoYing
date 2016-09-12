@@ -5,8 +5,11 @@
 package name.huliqing.core.mvc.network;
 
 import java.util.List;
-import java.util.logging.Logger;
 import name.huliqing.core.Factory;
+import name.huliqing.core.mess.MessSkinAdd;
+import name.huliqing.core.mess.MessSkinAttach;
+import name.huliqing.core.mess.MessSkinDetach;
+import name.huliqing.core.mess.MessSkinRemove;
 import name.huliqing.core.mvc.service.SkinService;
 import name.huliqing.core.network.Network;
 import name.huliqing.core.mess.MessSkinWeaponTakeOn;
@@ -30,22 +33,55 @@ public class SkinNetworkImpl implements SkinNetwork {
     
     @Override
     public void addSkin(Actor actor, String skinId, int amount) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (NETWORK.isClient()) {
+            // ignore 客户端不能主动添加物品
+        } else {
+            MessSkinAdd mess = new MessSkinAdd();
+            mess.setActorId(actor.getData().getUniqueId());
+            mess.setSkinId(skinId);
+            mess.setCount(amount);
+            NETWORK.broadcast(mess);
+        }
     }
 
     @Override
-    public boolean removeSkin(Actor actor, String skinId, int amount) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void removeSkin(Actor actor, String skinId, int amount) {
+        MessSkinRemove mess = new MessSkinRemove();
+        mess.setActorId(actor.getData().getUniqueId());
+        mess.setSkinId(skinId);
+        mess.setCount(amount);
+        if (NETWORK.isClient()) {
+            NETWORK.sendToServer(mess);
+        } else {
+            NETWORK.broadcast(mess);
+            skinService.removeSkin(actor, skinId, amount);
+        }
     }
     
     @Override
     public void attachSkin(Actor actor, Skin skin) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        MessSkinAttach mess = new MessSkinAttach();
+        mess.setActorId(actor.getData().getUniqueId());
+        mess.setSkinId(skin.getData().getId());
+        if (NETWORK.isClient()) {
+            NETWORK.sendToServer(mess);
+        } else {
+            NETWORK.broadcast(mess);
+            skinService.attachSkin(actor, skin);
+        }
     }
 
     @Override
     public void detachSkin(Actor actor, Skin skin) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        MessSkinDetach mess = new MessSkinDetach();
+        mess.setActorId(actor.getData().getUniqueId());
+        mess.setSkinId(skin.getData().getId());
+        if (NETWORK.isClient()) {
+            NETWORK.sendToServer(mess);
+        } else {
+            NETWORK.broadcast(mess);
+            skinService.detachSkin(actor, skin);
+        }
     }
 
     @Override
@@ -96,7 +132,12 @@ public class SkinNetworkImpl implements SkinNetwork {
             }
         }
     }
-
+    
+    @Override
+    public Skin getSkin(Actor actor, String skinId) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
     @Override
     public List<Skin> getSkins(Actor actor) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -121,6 +162,8 @@ public class SkinNetworkImpl implements SkinNetwork {
     public boolean removeSkinListener(Actor actor, SkinListener skinListener) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+
 
 
 

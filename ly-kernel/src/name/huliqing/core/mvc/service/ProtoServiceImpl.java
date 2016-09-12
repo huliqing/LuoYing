@@ -7,7 +7,6 @@ package name.huliqing.core.mvc.service;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.core.Factory;
 import name.huliqing.core.constants.IdConstants;
@@ -18,7 +17,6 @@ import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.data.define.CostObject;
-import name.huliqing.core.xml.Proto;
 
 /**
  *
@@ -81,7 +79,8 @@ public class ProtoServiceImpl implements ProtoService {
             itemService.removeItem(actor, id, count);
             
         } else if (SkinData.class.isAssignableFrom(cc)) {
-            skinService.removeSkin(actor, id, count);
+//            skinService.removeSkin(actor, id, count);
+            throw new UnsupportedOperationException();
             
         } else if (SkillData.class.isAssignableFrom(cc)) {
             skillService.removeSkill(actor, id);
