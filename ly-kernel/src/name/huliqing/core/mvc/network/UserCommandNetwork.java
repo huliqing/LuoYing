@@ -56,6 +56,7 @@ public interface UserCommandNetwork extends Inject {
     void attack(Actor actor, Actor target);
     
     /**
+     * @deprecated 
      * 使用物品
      * @param actor
      * @param data 

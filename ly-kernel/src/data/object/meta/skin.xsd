@@ -145,12 +145,6 @@ xs:time
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-                <xs:attribute name="mat" ref="mat" use="required" />
-                <xs:attribute name="handler" ref="handler" use="required" />
-                <xs:attribute name="raceLimit" ref="raceLimit" use="optional" />
-                <xs:attribute name="sexLimit" ref="sexLimit" use="optional" />
-                <xs:attribute name="careerLimit" ref="careerLimit" use="optional" />
-                <xs:attribute name="cost" ref="cost" use="optional" />
                 <xs:attribute name="matchAttributes" type="xs:string" use="optional" >
                     <xs:annotation>
                         <xs:documentation>
@@ -159,6 +153,17 @@ xs:time
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
+                <xs:attribute name="mat" ref="mat" use="required" />
+                <xs:attribute name="cost" ref="cost" use="optional" />
+                <xs:attribute name="sounds" type="xs:string" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>声效,格式:"sound1,sound2,..."</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <!--<xs:attribute name="handler" ref="handler" use="required" />-->
+                <!--<xs:attribute name="raceLimit" ref="raceLimit" use="optional" />-->
+                <!--<xs:attribute name="sexLimit" ref="sexLimit" use="optional" />-->
+                <!--<xs:attribute name="careerLimit" ref="careerLimit" use="optional" />-->
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>

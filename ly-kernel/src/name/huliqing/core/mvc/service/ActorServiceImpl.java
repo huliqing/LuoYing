@@ -289,12 +289,20 @@ public class ActorServiceImpl implements ActorService {
     
     @Override
     public void setTarget(Actor actor, Actor target) {
-        actor.getModule(ActorModule.class).setTarget(target != null ? target.getData().getUniqueId() : -1);
+        ActorModule actorModule = actor.getModule(ActorModule.class);
+        if (actorModule == null)
+            return;
+        
+        actorModule.setTarget(target != null ? target.getData().getUniqueId() : -1);
     }
 
     @Override
     public Actor getTarget(Actor actor) {
-        long targetId = actor.getModule(ActorModule.class).getTarget();
+        ActorModule actorModule = actor.getModule(ActorModule.class);
+        if (actorModule == null)
+            return null;
+        
+        long targetId = actorModule.getTarget();
         if (targetId <= 0)
             return null;
         

@@ -5,16 +5,13 @@
 package name.huliqing.core.mvc.service;
 
 import java.util.List;
-import java.util.logging.Logger;
 import name.huliqing.core.Factory;
 import name.huliqing.core.constants.IdConstants;
 import name.huliqing.core.constants.ResConstants;
-import name.huliqing.core.data.AttributeMatch;
 import name.huliqing.core.data.ItemData;
 import name.huliqing.core.enums.MessageType;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.attribute.Attribute;
 import name.huliqing.core.object.module.ItemListener;
 import name.huliqing.core.object.module.ItemModule;
 import name.huliqing.core.object.sound.SoundManager;
@@ -24,19 +21,13 @@ import name.huliqing.core.object.sound.SoundManager;
  * @author huliqing
  */
 public class ItemServiceImpl implements ItemService {
-//    private static final Logger LOG = Logger.getLogger(ItemServiceImpl.class.getName());
-
     private PlayService playService;
-    private ActorService actorService;
     private HandlerService handlerService;
-    private AttributeService attributeService;
     
     @Override
     public void inject() {
         playService = Factory.get(PlayService.class);
         handlerService = Factory.get(HandlerService.class);
-        attributeService = Factory.get(AttributeService.class);
-        actorService = Factory.get(ActorService.class);
     }
     
     @Override
@@ -51,7 +42,11 @@ public class ItemServiceImpl implements ItemService {
                         , MessageType.item);
 
                 // 播放获得物品时的声效
-                SoundManager.getInstance().playGetItemSound(itemId, actor.getSpatial().getWorldTranslation());
+                if (itemId.equals(IdConstants.ITEM_GOLD)) {
+                    SoundManager.getInstance().playSound(IdConstants.SOUND_GET_COIN, actor.getSpatial().getWorldTranslation());
+                } else {
+                    SoundManager.getInstance().playSound(IdConstants.SOUND_GET_ITEM, actor.getSpatial().getWorldTranslation());
+                }
             }
         }
     }
@@ -75,7 +70,7 @@ public class ItemServiceImpl implements ItemService {
     public List<ItemData> getItems(Actor actor) {
         ItemModule module = actor.getModule(ItemModule.class);
         if (module != null) {
-            return module.getAll();
+            return module.getItems();
         }
         return null;
     }

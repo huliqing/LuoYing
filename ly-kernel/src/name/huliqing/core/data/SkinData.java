@@ -15,7 +15,6 @@ import java.util.List;
 import name.huliqing.core.constants.ResConstants;
 import name.huliqing.core.constants.SkinConstants;
 import name.huliqing.core.data.define.CostObject;
-import name.huliqing.core.data.define.HandlerObject;
 import name.huliqing.core.data.define.MatObject;
 import name.huliqing.core.enums.Mat;
 import name.huliqing.core.manager.ResourceManager;
@@ -26,7 +25,7 @@ import name.huliqing.core.utils.ConvertUtils;
  * @author huliqing
  */
 @Serializable
-public class SkinData extends ObjectData implements MatObject, CostObject, HandlerObject {
+public class SkinData extends ObjectData implements MatObject, CostObject {
     
     //注：一件skin可属于多个type,如上下连身的套装，如法袍可属于 "7,8".
     //同时一件skin也可与多个其它skin进行排斥。这里的type和conflictType使用二
@@ -255,11 +254,6 @@ public class SkinData extends ObjectData implements MatObject, CostObject, Handl
         return getAsFloat("cost", 0);
     }
 
-    @Override
-    public String getHandler() {
-        return getAsString("handler");
-    }
-    
     /**
      * 获取描述说明
      * @return 

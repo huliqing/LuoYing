@@ -118,10 +118,10 @@ public class ShortcutManager {
         
         float shortcutSize = configService.getShortcutSize();
         for (ShortcutSave s : ss) {
-            String itemId = s.getObjectId();
-            ObjectData data = protoService.getData(player, itemId);
+            String objectId = s.getObjectId();
+            ObjectData data = protoService.getData(player, objectId);
             if (data == null) {
-                data = DataFactory.createData(itemId);
+                data = DataFactory.createData(objectId);
             }
             
             // 防止物品被删除
@@ -268,7 +268,7 @@ public class ShortcutManager {
         if (!scs.isEmpty()) {
             for (Shortcut sc : scs) {
                 ShortcutSave ss = new ShortcutSave();
-                ss.setObjectId(sc.getData().getId());
+                ss.setObjectId(sc.getObjectData().getId());
                 ss.setX(sc.getLocation().x);
                 ss.setY(sc.getLocation().y);
                 result.add(ss);

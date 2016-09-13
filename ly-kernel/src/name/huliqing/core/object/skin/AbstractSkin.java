@@ -28,6 +28,7 @@ import name.huliqing.core.data.SkinData;
 import name.huliqing.core.mvc.service.AttributeService;
 import name.huliqing.core.object.AssetLoader;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.sound.SoundManager;
 
 /**
  * 
@@ -37,6 +38,7 @@ public abstract class AbstractSkin implements Skin {
     private final AttributeService attributeService = Factory.get(AttributeService.class);
     
     protected SkinData data;
+    protected String[] sounds;
     
     // 当指定了bindBone时，皮肤应该添加到bindBone所在的骨骼上，否则直接添加到角色根节点。
     private String bindBone;
@@ -52,7 +54,7 @@ public abstract class AbstractSkin implements Skin {
     @Override
     public void setData(SkinData data) {
         this.data = data;
-        
+        sounds = data.getAsArray("sounds");
         bindBone = data.getAsString("bindBone");
         localTranslation = data.getAsVector3f("localTranslation");
         localRotation = data.getAsFloatArray("localRotation");
@@ -107,6 +109,9 @@ public abstract class AbstractSkin implements Skin {
     public void attach(Actor actor) {
         data.setUsed(true);
         attached = true;
+        
+        // 执行装备声音
+        playSounds(actor, sounds);
         
         //  附加装备属性
         attachSkinAttributes(actor);
@@ -197,7 +202,14 @@ public abstract class AbstractSkin implements Skin {
         if (localScale != null) {
             skinNode.setLocalScale(localScale);
         }
-        
+    }
+    
+    private void playSounds(Actor actor, String[] sounds) {
+        if (sounds != null) {
+            for (String sid : sounds) {
+                SoundManager.getInstance().playSound(sid, actor.getSpatial().getWorldTranslation());
+            }
+        }
     }
         
     /**
@@ -223,6 +235,9 @@ public abstract class AbstractSkin implements Skin {
         // 1.----标记Using=false
         data.setUsed(false);
         attached = false;
+        
+        // 执行装备声音
+        playSounds(actor, sounds);
         
         // 2.----移除装备属性
         detachSkinAttributes(actor);

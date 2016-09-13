@@ -19,17 +19,22 @@ import name.huliqing.core.enums.Mat;
 public class SoundManager {
     
     private final static SoundManager INSTANCE = new SoundManager();
-    
-    private final Set<Sound> sounds = new HashSet<Sound>();
-    
-    // 声音的开启或关闭
-    private boolean soundEnabled = true;
-    
     private SoundManager() {}
-    
     public static SoundManager getInstance() {
         return INSTANCE;
     }
+    
+    // 声音的开启或关闭
+    private boolean soundEnabled = true;
+    private float volume = 1.0f;
+    
+    // 普通无循环声效,用于播放非常普通的声效
+    private final SoundPlayer simplePlayer = new SoundPlayer();
+    // 碰撞声效
+    private final SoundCollision collision = new SoundCollision();
+    
+    // 当前音效列表
+    private final Set<Sound> sounds = new HashSet<Sound>();
     
     /**
      * 简单播放声效，非循环。
@@ -38,7 +43,7 @@ public class SoundManager {
      */
     public void playSound(String soundId, Vector3f position) {
         if (!soundEnabled) return;
-        SoundManagerOutdate.getInstance().playSound(soundId, position);
+        simplePlayer.playSound(soundId, position, volume);
     }
     
     /**
@@ -48,8 +53,10 @@ public class SoundManager {
      * @param position 
      */
     public void playCollision(ObjectData obj1, ObjectData obj2, Vector3f position) {
-        if (!soundEnabled) return;
-        SoundManagerOutdate.getInstance().playCollision(obj1, obj2, position);
+        String soundId = collision.getCollisionSound(obj1, obj2);
+        if (soundId != null) {
+            playSound(soundId, position);
+        }
     }
     
     /**
@@ -59,25 +66,22 @@ public class SoundManager {
      * @param position 
      */
     public void playCollision(Mat mat1, Mat mat2, Vector3f position) {
-        if (!soundEnabled) return;
-        SoundManagerOutdate.getInstance().playCollision(mat1, mat2, position);
+        String soundId = collision.getCollisionSound(mat1, mat2);
+        if (soundId != null) {
+            playSound(soundId, position);
+        }
     }
     
-    /**
-     * 简单播放获得物品时的声效，非循环
-     * @param objectId
-     * @param position
-     */
-    public void playGetItemSound(String objectId, Vector3f position) {
-        if (!soundEnabled) return;
-        SoundManagerOutdate.getInstance().playGetItemSound(objectId, position);
-    }
+    // --------------------------------------------------------------------------------------------------------------------------------
     
     /**
      * 添加声音到列表中并立即播放，该方法会立即播放声音。当声音不再使用时要将声音从列表中移除。
      * @param sound 
      */
     public void addAndPlay(Sound sound) {
+        if (!sound.isInitialized()) {
+            sound.initialize();
+        }
         // 如果全局声音未打开，则只要将“循环”类型的声音添加到列表即可，不需要执行播放，而”非循环“的声音直接丢弃，不
         // 需要播放也不需要添加到列表中。
         if (!soundEnabled) {
@@ -97,7 +101,9 @@ public class SoundManager {
      * @see #removeAndStopDirectly(Sound) 
      */
     public boolean removeAndStopLoop(Sound sound) {
-        sound.setLoop(false);
+        if (sound.isInitialized()) {
+            sound.setLoop(false);
+        }
         return sounds.remove(sound);
     }
 
@@ -108,8 +114,18 @@ public class SoundManager {
      * @see #removeAndStopLoop(Sound) 
      */
     public boolean removeAndStopDirectly(Sound sound) {
-        sound.stop();
+        if (sound.isInitialized()) {
+            sound.stop();
+        }
         return sounds.remove(sound);
+    }
+    
+    /**
+     * 判断音效是否打开.
+     * @return 
+     */
+    public boolean isSoundEnabled() {
+        return soundEnabled;
     }
     
     /**
@@ -128,6 +144,22 @@ public class SoundManager {
         } else {
             stopSounds();
         }
+    }
+
+    /**
+     * 设置音量，0.0~1.0
+     * @return 
+     */
+    public float getVolume() {
+        return volume;
+    }
+
+    /**
+     * 获取音量，0.0~1.0
+     * @param volume 
+     */
+    public void setVolume(float volume) {
+        this.volume = volume;
     }
     
     /**

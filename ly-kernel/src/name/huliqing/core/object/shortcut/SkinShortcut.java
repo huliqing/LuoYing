@@ -107,5 +107,18 @@ public class SkinShortcut extends BaseUIShortcut<SkinData> implements SkinListen
         }
 
     }
+
+    @Override
+    protected void updateShortcutViewChildren(float width, float height) {
+        super.updateShortcutViewChildren(width, height);
+        Skin skin = skinModule.getSkin(objectData.getId());
+        if (skin != null) {
+            if (skin.isAttached()) {
+                icon.setBackgroundColor(UIFactory.getUIConfig().getActiveColor(), true);
+            } else {
+                icon.setBackgroundColor(ColorRGBA.White, true);
+            }
+        }
+    }
     
 }

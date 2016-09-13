@@ -7,54 +7,39 @@ package name.huliqing.core.object.sound;
 import com.jme3.math.Vector3f;
 import java.util.HashMap;
 import java.util.Map;
-import name.huliqing.core.LY;
-import name.huliqing.core.Factory;
-import name.huliqing.core.data.SoundData;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import name.huliqing.core.object.Loader;
-import name.huliqing.core.mvc.service.ConfigService;
 
 /**
  *
  * @author huliqing
  */
 public class SoundPlayer {
-//    private final ConfigService configService = Factory.get(ConfigService.class);
+    private static final Logger LOG = Logger.getLogger(SoundPlayer.class.getName());
     
-    // 允许播放声音的最远距离，在该距离之外则不播放声音。
-    // 该距离指与摄像机的距离,注意距离是平方表示，比较的时候用平方进行比较
-    // 减少一次开方操作
-    private final float MAX_DISTANCE_SQUARED = 80 * 80;
+    private final Map<String, Sound> soundCache = new HashMap<String, Sound>();
     
-    private final Map<String, Sound> audioMap = new HashMap<String, Sound>();
-    
-    public void playSound(SoundData sound, Vector3f position) {
-        Sound audio = getSound(sound.getId());
-        Vector3f camLoc = LY.getApp().getCamera().getLocation();
-        // 注意：比较的是平方，可减少一次开方运算
-        float distanceSquared = camLoc.distanceSquared(position);
-        if (distanceSquared >= MAX_DISTANCE_SQUARED) {
+    public void playSound(String soundId, Vector3f position, float volume) {
+        Sound sound = getSound(soundId);
+        if (sound == null) {
+            LOG.log(Level.WARNING, "Sound not found by soundId={0}", soundId);
             return;
         }
-        
-        // remove20160811,后续交由AudioNode去控制声音大小
-//        float distanceFactor = (MAX_DISTANCE_SQUARED - distanceSquared) / MAX_DISTANCE_SQUARED;
-//        audio.getAudio().setVolume(audio.getData().getVolume() * distanceFactor * configService.getSoundVolume());
-
-        audio.play();
-    }
-    
-    public void stopSound(SoundData sound) {
-        getSound(sound.getId()).stop();
+        sound.setLocalTranslation(position);
+        sound.setVolume(volume);
+        sound.play();
     }
     
     private Sound getSound(String soundId) {
-        Sound audio = audioMap.get(soundId);
-        if (audio == null) {
-            audio = Loader.load(soundId);
-            audio.setLoop(false);
-            audioMap.put(soundId, audio);
+        Sound sound = soundCache.get(soundId);
+        if (sound == null) {
+            sound = Loader.load(soundId);
+            sound.initialize();
+            sound.setLoop(false);
+            soundCache.put(soundId, sound);
         }
-        return audio;
+        return sound;
     }
     
 }

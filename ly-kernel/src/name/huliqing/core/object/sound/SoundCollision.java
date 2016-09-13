@@ -4,17 +4,14 @@
  */
 package name.huliqing.core.object.sound;
 
-import com.jme3.math.Vector3f;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.data.ObjectData;
-import name.huliqing.core.data.SoundData;
 import name.huliqing.core.data.define.MatObject;
 import name.huliqing.core.enums.Mat;
-import name.huliqing.core.xml.DataFactory;
 
 /**
- *
+ * 用于为两个材质的物体计算一个碰撞声音。
  * @author huliqing
  */
 public class SoundCollision {
@@ -24,53 +21,58 @@ public class SoundCollision {
         soundCollisions = new ArrayList<Collision>();
         
         // v2 wood hit stone
-        soundCollisions.add(new Collision(Mat.wood, Mat.stone, (SoundData) DataFactory.createData("soundCollisionWS")));
+        soundCollisions.add(new Collision(Mat.wood, Mat.stone, "soundCollisionWS"));
         // v2 wood hit body
-        soundCollisions.add(new Collision(Mat.wood, Mat.body,  (SoundData) DataFactory.createData("soundCollisionWB")));
+        soundCollisions.add(new Collision(Mat.wood, Mat.body,  "soundCollisionWB"));
         // v2 wood hit wood
-        soundCollisions.add(new Collision(Mat.wood, Mat.wood, (SoundData) DataFactory.createData("soundCollisionWW")));
+        soundCollisions.add(new Collision(Mat.wood, Mat.wood, "soundCollisionWW"));
         // v2 wood hit metal
-        soundCollisions.add(new Collision(Mat.wood, Mat.metal, (SoundData) DataFactory.createData("soundCollisionWM")));
+        soundCollisions.add(new Collision(Mat.wood, Mat.metal, "soundCollisionWM"));
         
         // old
-        soundCollisions.add(new Collision(Mat.metal, Mat.metal, (SoundData) DataFactory.createData("soundCollisionMM")));
-        soundCollisions.add(new Collision(Mat.metal, Mat.stone, (SoundData) DataFactory.createData("soundCollisionMS")));
-        soundCollisions.add(new Collision(Mat.metal, Mat.body,  (SoundData) DataFactory.createData("soundCollisionMB")));
-        soundCollisions.add(new Collision(Mat.stone, Mat.body,  (SoundData) DataFactory.createData("soundCollisionMB")));
-        soundCollisions.add(new Collision(Mat.body, Mat.body,   (SoundData) DataFactory.createData("soundCollisionMB")));
-        
+        soundCollisions.add(new Collision(Mat.metal, Mat.metal, "soundCollisionMM"));
+        soundCollisions.add(new Collision(Mat.metal, Mat.stone, "soundCollisionMS"));
+        soundCollisions.add(new Collision(Mat.metal, Mat.body,  "soundCollisionMB"));
+        soundCollisions.add(new Collision(Mat.stone, Mat.body,  "soundCollisionMB"));
+        soundCollisions.add(new Collision(Mat.body, Mat.body,   "soundCollisionMB"));
     }
     
     /**
-     * 处理物体碰撞声音。
+     * 通过两种物体来获取物体之间的碰撞声音，返回结束为声音ID
      * @param obj1
      * @param obj2 
-     * @param position 
+     * @return  
      */
-    public void playCollision(ObjectData obj1, ObjectData obj2, Vector3f position) {
+    public String getCollisionSound(ObjectData obj1, ObjectData obj2) {
         if (!(obj1 instanceof MatObject) || !(obj2 instanceof MatObject)) {
-            return;
+            return null;
         }
-        playCollision(((MatObject)obj1).getMat(), ((MatObject)obj2).getMat(), position);
+        return getCollisionSound(((MatObject)obj1).getMat(), ((MatObject)obj2).getMat());
     }
     
-    public void playCollision(Mat mat1, Mat mat2, Vector3f position) {
+    /**
+     * 通过两种材质获取材质碰撞声音，返回结束为声音ID
+     * @param mat1
+     * @param mat2
+     * @return 
+     */
+    public String getCollisionSound(Mat mat1, Mat mat2) {
         if (soundCollisions == null) {
             initSoundCollision();
         }
         for (Collision sc : soundCollisions) {
             if (sc.checkCound(mat1, mat2)) {
-                SoundManagerOutdate.getInstance().playSound(sc.getSound(), position);
-                return;
+                return sc.getSound();
             }
         }
+        return null;
     }
     
     private class Collision {
         private final Mat mat1;
         private final Mat mat2;
-        private final SoundData sound;
-        public Collision(Mat mat1, Mat mat2, SoundData sound) {
+        private final String sound;
+        public Collision(Mat mat1, Mat mat2, String sound) {
             this.mat1 = mat1;
             this.mat2 = mat2;
             this.sound = sound;
@@ -81,7 +83,7 @@ public class SoundCollision {
                     || (this.mat1 == mat2 && this.mat2 == mat1);
         }
         
-        public SoundData getSound() {
+        public String getSound() {
             return this.sound;
         }
 

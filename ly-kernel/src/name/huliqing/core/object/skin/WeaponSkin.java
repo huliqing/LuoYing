@@ -33,6 +33,7 @@ public class WeaponSkin extends AbstractSkin {
     @Override
     public void attach(Actor actor) {
         data.setUsed(true);
+        attached = true;
         // 对于武器的attach不能用动画,直接attach就可以
         SkinModule sm = actor.getModule(SkinModule.class);
         if (sm.isWeaponTakeOn()) {
@@ -136,15 +137,18 @@ public class WeaponSkin extends AbstractSkin {
             skinNode = AssetLoader.loadModel(modelFile);
         }
         
-        String weaponSlot = data.getSlot();
+        if (data.getSlot() == null) {
+            data.setSlot(getWeaponSlot(actor));
+        }
+        
         // 如果找不到合适的槽位或者武器根据不支持槽位，则直接attach到角色身上。
         // 不作takeOff处理
-        if (weaponSlot == null) {
+        if (data.getSlot() == null) {
             super.attach(actor);
             return;
         }
         
-        SlotData sd = DataFactory.createData(weaponSlot);
+        SlotData sd = DataFactory.createData(data.getSlot());
         String toBindBone = sd.getBindBone();
         Vector3f toLocalTranslation = sd.getLocalTranslation();
         float[] toLocalRotation = sd.getLocalRotation();

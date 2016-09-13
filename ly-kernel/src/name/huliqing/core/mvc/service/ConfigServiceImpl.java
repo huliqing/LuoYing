@@ -72,6 +72,9 @@ public class ConfigServiceImpl implements ConfigService {
             cd.setSpeakTimeMin(scd.getSpeakTimeMin());
             cd.setSpeakTimeWorld(scd.getSpeakTimeWorld());
             cd.setUseHardwareSkinning(scd.isUseHardwareSkinning());
+            
+            SoundManager.getInstance().setSoundEnabled(cd.isSoundEnabled());
+            SoundManager.getInstance().setVolume(cd.getSoundVolume());
         }
     }
     
@@ -83,9 +86,9 @@ public class ConfigServiceImpl implements ConfigService {
     @Override
     public void setSoundEnabled(boolean enabled) {
         cd.setSoundEnabled(enabled);
-        notifyListtener();
-        
         SoundManager.getInstance().setSoundEnabled(enabled);
+        
+        notifyListtener();
     }
 
     @Override
@@ -96,6 +99,7 @@ public class ConfigServiceImpl implements ConfigService {
     @Override
     public void setSoundVolume(float volume) {
         cd.setSoundVolume(MathUtils.clamp(volume, 0f, 1.0f));
+        SoundManager.getInstance().setVolume(volume);
         notifyListtener();
     }
 

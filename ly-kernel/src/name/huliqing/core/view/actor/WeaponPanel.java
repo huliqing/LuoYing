@@ -10,9 +10,8 @@ import name.huliqing.core.Factory;
 import name.huliqing.core.data.AttributeApply;
 import name.huliqing.core.data.SkinData;
 import name.huliqing.core.manager.ResourceManager;
+import name.huliqing.core.mvc.network.SkinNetwork;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.mvc.network.UserCommandNetwork;
-import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.SkinService;
 import name.huliqing.core.object.skin.Skin;
@@ -25,9 +24,10 @@ import name.huliqing.core.ui.UI;
  * @author huliqing
  */
 public class WeaponPanel extends ListView<Skin> implements ActorPanel{
-    private final UserCommandNetwork userCommandNetwork = Factory.get(UserCommandNetwork.class);
+//    private final UserCommandNetwork userCommandNetwork = Factory.get(UserCommandNetwork.class);
     private final PlayService playService = Factory.get(PlayService.class);
     private final SkinService skinService = Factory.get(SkinService.class);
+    private final SkinNetwork skinNetwork = Factory.get(SkinNetwork.class);
     
     private Actor actor;
     private final List<Skin> datas = new ArrayList<Skin>();
@@ -43,7 +43,16 @@ public class WeaponPanel extends ListView<Skin> implements ActorPanel{
             @Override
             public void onClick(UI ui, boolean isPress) {
                 if (!isPress) {
-                    userCommandNetwork.useObject(actor, row.getData().getData());
+                    Skin skin = row.getData();
+                    if (skin.isAttached()) {
+                        if (skinService.isWeaponTakeOn(actor)) {
+                            skinNetwork.takeOffWeapon(actor, false);
+                        } else {
+                            skinNetwork.detachSkin(actor, skin);
+                        }
+                    } else {
+                        skinNetwork.attachSkin(actor, skin);
+                    }
                     refreshPageData();
                 }
             }

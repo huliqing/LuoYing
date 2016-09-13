@@ -22,10 +22,14 @@ xs:time
                 <xs:element ref="handlerTest" />
                 <xs:element ref="handlerAttribute" />
                 <xs:element ref="handlerSummon" />
+
                 <!--remove20160406,use handlerItemSkill instead-->
                 <!--<xs:element ref="handlerSummonSkill" />-->
-                <xs:element ref="handlerOutfit" />
-                <xs:element ref="handlerWeapon" />
+                
+                <!--remove20160913-->
+                <!--<xs:element ref="handlerOutfit" />-->
+                <!--<xs:element ref="handlerWeapon" />-->
+
                 <xs:element ref="handlerSkill" />
                 <xs:element ref="handlerSkillBook" />
                 <xs:element ref="handlerStateGain" />

@@ -48,14 +48,14 @@
     <!-- ========================================================================= -->
     
     <!-- 换装 -->
-    <handlerOutfit id="handlerOutfit" sounds="soundDressOutfit" />
+    <!--<handlerOutfit id="handlerOutfit" sounds="soundDressOutfit" />-->
     
     <!-- ========================================================================= -->
     
-    <!-- 换武器 -->
+<!--     换武器 
     <handlerWeapon id="handlerWeaponSword" sounds="soundDrawSword" />
     <handlerWeapon id="handlerWeaponBow" sounds="soundDrawBow" />
-    <handlerWeapon id="handlerWeaponWand" sounds="soundDressOutfit2" />
+    <handlerWeapon id="handlerWeaponWand" sounds="soundDressOutfit2" />-->
     
     <!-- ========================================================================= -->
     

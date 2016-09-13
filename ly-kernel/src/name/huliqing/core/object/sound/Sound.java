@@ -5,6 +5,7 @@
  */
 package name.huliqing.core.object.sound;
 
+import com.jme3.audio.AudioContext;
 import com.jme3.audio.AudioData;
 import com.jme3.audio.AudioNode;
 import com.jme3.scene.Node;
@@ -13,6 +14,7 @@ import name.huliqing.core.data.SoundData;
 import name.huliqing.core.xml.DataProcessor;
 
 /**
+ * 声效接口
  * @author huliqing
  * @param <T>
  */
@@ -21,22 +23,61 @@ public class Sound<T extends SoundData> extends Node implements DataProcessor<T>
     protected T data;
     
     private AudioNode audio;
+    private boolean initialized;
     
     @Override
     public void setData(T data) {
         this.data = data;
-        this.audio = loadAudio();
     }
-
+    
     @Override
     public T getData() {
         return data;
     }
     
     /**
+     * 初始化声音
+     */
+    public void initialize() {
+        if (audio == null) {
+            audio = loadAudio();
+            attachChild(audio);
+        }
+        initialized = true;
+    }
+    
+    /**
+     * 判断音效是否已经初始化
+     * @return 
+     */
+    public boolean isInitialized() {
+        return initialized;
+    }
+    
+    /**
+     * 清理并释放音效资源
+     */
+    public void cleanup() {
+        if (audio != null) {
+            audio.stop();
+            audio = null;
+        }
+        initialized = false;
+    }
+    
+    /**
      * 播放声音文件
      */
     public void play() {
+        // 声音文件在播放的时候需要在渲染线程,不然会报错。
+        //    Caused by: java.lang.IllegalStateException: No audio renderer available, make sure call is being performed on render thread.
+        //	at com.jme3.audio.AudioNode.getRenderer(AudioNode.java:207)
+        //	at com.jme3.audio.AudioNode.play(AudioNode.java:218)
+        //	at name.huliqing.core.object.sound.Sound.play(Sound.java:43)
+        if (AudioContext.getAudioRenderer() == null) {
+            return;
+        }
+        
         if (data.isInstance()) {
             audio.playInstance();
         } else {
@@ -45,6 +86,9 @@ public class Sound<T extends SoundData> extends Node implements DataProcessor<T>
     }
     
     public void pause() {
+        if (AudioContext.getAudioRenderer() == null) {
+            return;
+        }
         audio.pause();
     }
     
@@ -52,6 +96,9 @@ public class Sound<T extends SoundData> extends Node implements DataProcessor<T>
      * 停止声音
      */
     public void stop() {
+        if (AudioContext.getAudioRenderer() == null) {
+            return;
+        }
         audio.stop();
     }
     
@@ -67,8 +114,8 @@ public class Sound<T extends SoundData> extends Node implements DataProcessor<T>
         audio.setLooping(loop);
     }
     
-    public AudioNode getAudio() {
-        return audio;
+    public void setVolume(float volume) {
+        audio.setVolume(volume);
     }
     
     private AudioNode loadAudio() {
@@ -91,7 +138,7 @@ public class Sound<T extends SoundData> extends Node implements DataProcessor<T>
         an.setVelocity(data.getVelocity());
         an.setVelocityFromTranslation(data.isVelocityFromTranslation());
         
-//        audio.setDryFilter(); // 使用反射，由class创建dryFilter，暂不支持。
+//        audio.setDryFilter(); // 暂不支持。
 //        audio.setReverbFilter();
         return an;
     }

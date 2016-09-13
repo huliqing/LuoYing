@@ -31,8 +31,8 @@ public class SkinModule extends AbstractModule {
     // 监听角色装备、武器等的穿脱
     private List<SkinListener> skinListeners;
     
-//    // 缓存当前正在使用的武器和武器状态, 武器状态用来标识不同的武器组合，不同组合的武器或者不同排列顺序的武器都会产生
-//    // 唯一的武器状态码。
+    // 缓存当前正在使用的武器和武器状态, 武器状态用来标识不同的武器组合，不同组合的武器或者不同排列顺序的武器都会产生
+    // 唯一的武器状态码。
     private List<SkinData> tempWeaponList;
     private int cacheWeaponState = -1;
     
@@ -262,7 +262,6 @@ public class SkinModule extends AbstractModule {
     public void takeOnWeapon() {
         weaponTakeOn = true;
         updateData();
-        
         if (skinUsed != null) {
             for (Skin s : skinUsed.getArray()) {
                 if (s instanceof WeaponSkin) {

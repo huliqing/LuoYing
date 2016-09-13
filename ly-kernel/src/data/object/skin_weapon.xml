@@ -14,7 +14,7 @@ skinPart => 0:ear;1:eyeL;2:eyeR;3:face;4:foot;5:hair;6:hand;7:lowerBody;8:upperB
     <!--=====================================================================-->
     
     <!--虚拟一把右手剑-->
-    <skinWeapon id="weaponMockRightSword" type="10" mat="1" weaponType="1" handler="handlerWeaponSword" />
+    <skinWeapon id="weaponMockRightSword" type="10" mat="1" weaponType="1" handler="handlerWeaponSword" sounds="soundDrawSword" />
     <!--虚拟一柄木剑-->
     <skinWeapon id="weaponMockRightWoodSword" type="10" mat="2" weaponType="1" handler="handlerWeaponSword" />
     <!--虚拟一双动物爪子-->
@@ -27,7 +27,7 @@ skinPart => 0:ear;1:eyeL;2:eyeR;3:face;4:foot;5:hair;6:hand;7:lowerBody;8:upperB
     <!--右手剑-->
     <skinWeapon id="weaponRightSwordBase" type="10" weaponType="1" mat="1" 
                 handler="handlerWeaponSword" raceLimit="1" bindBone="weapon.R" 
-                localTranslation="0,0,0" localRotation="0,0,0" 
+                localTranslation="0,0,0" localRotation="0,0,0" sounds="soundDrawSword"
                 slots="slotSwordLeftBack,slotSwordLeftBack2,slotSwordRightBack,slotSwordRightBack2,slotSwordLeftWaist,slotSwordLeftWaist2" />
     
     <!--左手剑-->
@@ -36,15 +36,15 @@ skinPart => 0:ear;1:eyeL;2:eyeR;3:face;4:foot;5:hair;6:hand;7:lowerBody;8:upperB
 
     <!--弓-->
     <skinWeapon id="weaponBowBase" type="9" conflictType="10" bindBone="weapon.L" localRotation="0,0,0" localTranslation="0,0,0"
-                mat="2" handler="handlerWeaponBow" weaponType="3" raceLimit="1" slots="slotBowLeftBack" />
+                mat="2" handler="handlerWeaponBow" weaponType="3" raceLimit="1" slots="slotBowLeftBack" sounds="soundDrawBow" />
 
     <!--魔杖-->
     <skinWeapon id="weaponWandBase" type="10" conflictType="9" bindBone="weapon.R" localRotation="0,0,0" localTranslation="0,0,0"
-                mat="2" handler="handlerWeaponWand" weaponType="6" raceLimit="1" slots="slotWandLeftBack" />
+                mat="2" handler="handlerWeaponWand" weaponType="6" raceLimit="1" slots="slotWandLeftBack" sounds="soundDressOutfit2" />
     
     <!--魔法书：暂未开放-->
     <skinWeapon id="weaponBookBase" type="9" conflictType="10" bindBone="weapon.L" mat="0" localRotation="0,0,0" localTranslation="0,0,0"
-                handler="" weaponType="5" />
+                handler="" weaponType="5" sounds="" />
     
     <!-- ====================================================================-->
     <!--实质武器:刀，剑-->

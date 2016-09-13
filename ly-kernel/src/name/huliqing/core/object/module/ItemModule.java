@@ -125,7 +125,7 @@ public class ItemModule extends AbstractModule {
      * {@link #removeItem(name.huliqing.fighter.data.ProtoData) }方法
      * @return 
      */
-    public List<ItemData> getAll() {
+    public List<ItemData> getItems() {
         return actor.getData().getObjectDatas(ItemData.class, null);
     }
     
