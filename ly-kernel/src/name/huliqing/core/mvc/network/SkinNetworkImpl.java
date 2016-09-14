@@ -60,6 +60,10 @@ public class SkinNetworkImpl implements SkinNetwork {
     
     @Override
     public void attachSkin(Actor actor, Skin skin) {
+        if (!skin.canUse(actor)) {
+            return;
+        }
+        
         MessSkinAttach mess = new MessSkinAttach();
         mess.setActorId(actor.getData().getUniqueId());
         mess.setSkinId(skin.getData().getId());

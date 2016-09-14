@@ -74,14 +74,5 @@ public class BooleanAttribute extends AbstractSimpleAttribute<Boolean> {
         // 其它值不能转化
         return null;
     }
-    
-//    // 这里要注意：BooleanAttribute会把数值: 1或字符串"1"视为true,
-//    private boolean convertNumber(Number other) {
-//        return other.doubleValue() == 1;
-//    }
-//    
-//    private boolean convertString(String other) {
-//        return "1".equals(other) || "true".equals(other);
-//    }
 
 }

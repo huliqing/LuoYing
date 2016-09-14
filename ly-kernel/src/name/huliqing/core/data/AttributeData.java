@@ -4,12 +4,7 @@
  */
 package name.huliqing.core.data;
 
-import com.jme3.export.InputCapsule;
-import com.jme3.export.JmeExporter;
-import com.jme3.export.JmeImporter;
-import com.jme3.export.OutputCapsule;
 import com.jme3.network.serializing.Serializable;
-import java.io.IOException;
 
 /**
  * 属性， 属性由三个主要值构成，

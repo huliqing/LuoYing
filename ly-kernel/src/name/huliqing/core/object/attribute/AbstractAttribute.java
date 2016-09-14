@@ -55,7 +55,9 @@ public abstract class AbstractAttribute implements Attribute {
         initialized = false;
     }
 
-
-
+    @Override
+    public String toString() {
+        return "attributeId=" + getId() + ", attributeName=" + getName();
+    }
     
 }

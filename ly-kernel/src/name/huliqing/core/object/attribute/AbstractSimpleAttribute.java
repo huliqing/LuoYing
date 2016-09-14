@@ -53,6 +53,10 @@ public abstract class AbstractSimpleAttribute<T> extends AbstractAttribute imple
             }
         }
     }
-    
+
+    @Override
+    public String toString() {
+        return super.toString() + ", value=" + value;
+    }
     
 }

@@ -10,164 +10,171 @@ skinPart => 0:ear;1:eyeL;2:eyeR;3:face;4:foot;5:hair;6:hand;7:lowerBody;8:upperB
     xsi:schemaLocation='http://fighter.huliqing.name meta/skin.xsd'>
     
     <!-- ========================================================================= -->
+    <!--基本配置-->
+    <!-- ========================================================================= -->
+    
+    <!--人类女性装备-->
+    <skinOutfit id="skinHumanFemale" matchAttributes="attributeRace|1,attributeSex|0" />
+    
+    <!-- ========================================================================= -->
     <!--头发-->
     <!-- ========================================================================= -->
 
     <!--头发-->
-    <skinOutfit id="skinHair001" icon="Models/actor/female_hair/hair.001.png" file="Models/actor/female_hair/hair.001.j3o" type="5"  
-                raceLimit="1" sexLimit="0" defence="0" handler="handlerOutfit" bindBone="head" cost="800" />
-    <skinOutfit id="skinHair006" icon="Models/actor/female_hair/hair.006.png" file="Models/actor/female_hair/hair.006.j3o" type="5"  
-                raceLimit="1" sexLimit="0" defence="0" handler="handlerOutfit" bindBone="head" cost="800"  />
-    <skinOutfit id="skinHair010" icon="Models/actor/female_hair/hair.010.png" file="Models/actor/female_hair/hair.010.j3o" type="5"  
-                raceLimit="1" sexLimit="0" defence="0" handler="handlerOutfit" bindBone="head" cost="800"  />
-    <skinOutfit id="skinHair011" icon="Models/actor/female_hair/hair.011.png" file="Models/actor/female_hair/hair.011.j3o" type="5"  
-                raceLimit="1" sexLimit="0" defence="0" handler="handlerOutfit" bindBone="head" cost="800"  />
+    <skinOutfit id="skinHair001" extends="skinHumanFemale" icon="Models/actor/female_hair/hair.001.png" file="Models/actor/female_hair/hair.001.j3o" type="5"  
+                 defence="0" handler="handlerOutfit" bindBone="head" cost="800"  />
+    <skinOutfit id="skinHair006" extends="skinHumanFemale" icon="Models/actor/female_hair/hair.006.png" file="Models/actor/female_hair/hair.006.j3o" type="5"  
+                 defence="0" handler="handlerOutfit" bindBone="head" cost="800"  />
+    <skinOutfit id="skinHair010" extends="skinHumanFemale" icon="Models/actor/female_hair/hair.010.png" file="Models/actor/female_hair/hair.010.j3o" type="5"  
+                 defence="0" handler="handlerOutfit" bindBone="head" cost="800"  />
+    <skinOutfit id="skinHair011" extends="skinHumanFemale" icon="Models/actor/female_hair/hair.011.png" file="Models/actor/female_hair/hair.011.j3o" type="5"  
+                 defence="0" handler="handlerOutfit" bindBone="head" cost="800"  />
     
     <!-- ========================================================================= -->
     <!--耳朵-->
     <!-- ========================================================================= -->
     
     <!--普通耳朵-->
-    <skinOutfit id="skinEar000" icon="Models/actor/female/ear.000.png" file="Models/actor/female/ear.000.j3o" type="1" 
-                raceLimit="1" sexLimit="0" defence="0" handler="handlerOutfit" bindBone="head" cost="800"  />
+    <skinOutfit id="skinEar000" extends="skinHumanFemale" icon="Models/actor/female/ear.000.png" file="Models/actor/female/ear.000.j3o" type="1" 
+                 defence="0" handler="handlerOutfit" bindBone="head" cost="800"  />
     <!--精灵耳朵-->
-    <skinOutfit id="skinEar004" icon="Models/actor/female/ear.004.png" file="Models/actor/female/ear.004.j3o" type="1" 
-                raceLimit="1" sexLimit="0" defence="0" handler="handlerOutfit" bindBone="head" cost="800"  />
+    <skinOutfit id="skinEar004" extends="skinHumanFemale" icon="Models/actor/female/ear.004.png" file="Models/actor/female/ear.004.j3o" type="1" 
+                 defence="0" handler="handlerOutfit" bindBone="head" cost="800"  />
 
     <!-- ========================================================================= -->
     <!--眼睛和脸-->
     <!-- ========================================================================= -->
     <!--眼睛和脸-->
-    <skinOutfit id="skinEye000" icon="" file="Models/actor/female/eye.000.mesh.j3o" type="2"  
-                raceLimit="1" sexLimit="0" defence="0" handler="handlerOutfit" cost="800"  />
-    <skinOutfit id="skinFace000" icon="" file="Models/actor/female/face.000.mesh.j3o" type="3"  
-                raceLimit="1" sexLimit="0" defence="0" handler="handlerOutfit" cost="800"  />
+    <skinOutfit id="skinEye000" extends="skinHumanFemale" icon="" file="Models/actor/female/eye.000.mesh.j3o" type="2"  
+                 defence="0" handler="handlerOutfit" cost="800"  />
+    <skinOutfit id="skinFace000" extends="skinHumanFemale" icon="" file="Models/actor/female/face.000.mesh.j3o" type="3"  
+                 defence="0" handler="handlerOutfit" cost="800"  />
 
     <!-- ========================================================================= -->
     <!--基本身形(内衣身形)-->
     <!-- ========================================================================= -->
-    <skinOutfit id="skinFoot000" icon="" file="Models/actor/female/foot.000.mesh.j3o" type="4"  
-                raceLimit="1" sexLimit="0" defence="0" handler="handlerOutfit" />
-    <skinOutfit id="skinHand000" icon="" file="Models/actor/female/hand.000.mesh.j3o" type="6"  
-                raceLimit="1" sexLimit="0" defence="0" handler="handlerOutfit" />
-    <skinOutfit id="skinLowerBody000" icon="" file="Models/actor/female/lowerBody.000.mesh.j3o" type="7"  
-                raceLimit="1" sexLimit="0" defence="0" handler="handlerOutfit" />
-    <skinOutfit id="skinUpperBody000" icon="" file="Models/actor/female/upperBody.000.mesh.j3o" type="8"  
-                raceLimit="1" sexLimit="0" defence="0" handler="handlerOutfit" />
+    <skinOutfit id="skinFoot000" extends="skinHumanFemale" icon="" file="Models/actor/female/foot.000.mesh.j3o" type="4"  
+                 defence="0" handler="handlerOutfit" />
+    <skinOutfit id="skinHand000" extends="skinHumanFemale" icon="" file="Models/actor/female/hand.000.mesh.j3o" type="6"  
+                 defence="0" handler="handlerOutfit" />
+    <skinOutfit id="skinLowerBody000" extends="skinHumanFemale" icon="" file="Models/actor/female/lowerBody.000.mesh.j3o" type="7"  
+                 defence="0" handler="handlerOutfit" />
+    <skinOutfit id="skinUpperBody000" extends="skinHumanFemale" icon="" file="Models/actor/female/upperBody.000.mesh.j3o" type="8"  
+                 defence="0" handler="handlerOutfit" />
 
     <!-- ========================================================================= -->
     <!--套装-->
     <!-- ========================================================================= -->
     
     <!--精灵风衣-->
-    <skinOutfit id="skinFoot001" icon="Models/actor/female/foot.001.mesh.png" file="Models/actor/female/foot.001.mesh.j3o" 
-                type="4" raceLimit="1" sexLimit="0" handler="handlerOutfit" cost="800" 
+    <skinOutfit id="skinFoot001" extends="skinHumanFemale" icon="Models/actor/female/foot.001.mesh.png" file="Models/actor/female/foot.001.mesh.j3o" 
+                type="4"  handler="handlerOutfit" cost="800" 
                 applyAttributes="attributeDefence|3,attributeMagicDefence|3" sounds="soundDressOutfit" />
     
-    <skinOutfit id="skinHand001" icon="Models/actor/female/hand.001.mesh.png" file="Models/actor/female/hand.001.mesh.j3o" 
-                type="6" raceLimit="1" sexLimit="0" handler="handlerOutfit" cost="800" 
+    <skinOutfit id="skinHand001" extends="skinHumanFemale" icon="Models/actor/female/hand.001.mesh.png" file="Models/actor/female/hand.001.mesh.j3o" 
+                type="6"  handler="handlerOutfit" cost="800" 
                 applyAttributes="attributeDefence|3,attributeMagicDefence|3" sounds="soundDressOutfit" />
     
-    <skinOutfit id="skinLowerBody001" icon="Models/actor/female/lowerBody.001.mesh.png" file="Models/actor/female/lowerBody.001.mesh.j3o" 
-                type="7" raceLimit="1" sexLimit="0" handler="handlerOutfit" cost="800" 
+    <skinOutfit id="skinLowerBody001" extends="skinHumanFemale" icon="Models/actor/female/lowerBody.001.mesh.png" file="Models/actor/female/lowerBody.001.mesh.j3o" 
+                type="7"  handler="handlerOutfit" cost="800" 
                 applyAttributes="attributeDefence|7,attributeMagicDefence|3" sounds="soundDressOutfit" />
     
-    <skinOutfit id="skinUpperBody001" icon="Models/actor/female/upperBody.001.mesh.png" file="Models/actor/female/upperBody.001.mesh.j3o" 
-                type="8" raceLimit="1" sexLimit="0" handler="handlerOutfit" cost="800" 
+    <skinOutfit id="skinUpperBody001" extends="skinHumanFemale" icon="Models/actor/female/upperBody.001.mesh.png" file="Models/actor/female/upperBody.001.mesh.j3o" 
+                type="8"  handler="handlerOutfit" cost="800" 
                 applyAttributes="attributeDefence|7,attributeMagicDefence|3" sounds="soundDressOutfit" />
     
     <!--机动铠甲-->
-    <skinOutfit id="skinFoot002" icon="Models/actor/female/foot.002.mesh.png" file="Models/actor/female/foot.002.mesh.j3o" 
-                type="4" raceLimit="1" sexLimit="0" handler="handlerOutfit" cost="800" 
+    <skinOutfit id="skinFoot002" extends="skinHumanFemale" icon="Models/actor/female/foot.002.mesh.png" file="Models/actor/female/foot.002.mesh.j3o" 
+                type="4"  handler="handlerOutfit" cost="800" 
                 applyAttributes="attributeDefence|2,attributeMagicDefence|1" sounds="soundDressOutfit" />
     
-    <skinOutfit id="skinHand002" icon="Models/actor/female/hand.002.mesh.png" file="Models/actor/female/hand.002.mesh.j3o" 
-                type="6" raceLimit="1" sexLimit="0" handler="handlerOutfit" cost="800" 
+    <skinOutfit id="skinHand002" extends="skinHumanFemale" icon="Models/actor/female/hand.002.mesh.png" file="Models/actor/female/hand.002.mesh.j3o" 
+                type="6"  handler="handlerOutfit" cost="800" 
                 applyAttributes="attributeDefence|2,attributeMagicDefence|1" sounds="soundDressOutfit" />
     
-    <skinOutfit id="skinLowerBody002" icon="Models/actor/female/lowerBody.002.mesh.png" file="Models/actor/female/lowerBody.002.mesh.j3o" 
-                type="7" raceLimit="1" sexLimit="0" handler="handlerOutfit" cost="800" 
+    <skinOutfit id="skinLowerBody002" extends="skinHumanFemale" icon="Models/actor/female/lowerBody.002.mesh.png" file="Models/actor/female/lowerBody.002.mesh.j3o" 
+                type="7"  handler="handlerOutfit" cost="800" 
                 applyAttributes="attributeDefence|5,attributeMagicDefence|2" sounds="soundDressOutfit" />
     
-    <skinOutfit id="skinUpperBody002" icon="Models/actor/female/upperBody.002.mesh.png" file="Models/actor/female/upperBody.002.mesh.j3o" 
-                type="8" raceLimit="1" sexLimit="0" handler="handlerOutfit" cost="800" 
+    <skinOutfit id="skinUpperBody002" extends="skinHumanFemale" icon="Models/actor/female/upperBody.002.mesh.png" file="Models/actor/female/upperBody.002.mesh.j3o" 
+                type="8"  handler="handlerOutfit" cost="800" 
                 applyAttributes="attributeDefence|5,attributeMagicDefence|2" sounds="soundDressOutfit" />
     
     <!--绿色工作服-->
-    <skinOutfit id="skinFoot003" icon="Models/actor/female/foot.003.mesh.png" file="Models/actor/female/foot.003.mesh.j3o" 
-                type="4"  raceLimit="1" sexLimit="0" handler="handlerOutfit" cost="800" 
+    <skinOutfit id="skinFoot003" extends="skinHumanFemale" icon="Models/actor/female/foot.003.mesh.png" file="Models/actor/female/foot.003.mesh.j3o" 
+                type="4"   handler="handlerOutfit" cost="800" 
                 applyAttributes="attributeDefence|2,attributeMagicDefence|1" sounds="soundDressOutfit" />
     
-    <skinOutfit id="skinHand003" icon="Models/actor/female/hand.003.mesh.png" file="Models/actor/female/hand.003.mesh.j3o" 
-                type="6"  raceLimit="1" sexLimit="0" handler="handlerOutfit" cost="800" 
+    <skinOutfit id="skinHand003" extends="skinHumanFemale" icon="Models/actor/female/hand.003.mesh.png" file="Models/actor/female/hand.003.mesh.j3o" 
+                type="6"   handler="handlerOutfit" cost="800" 
                 applyAttributes="attributeDefence|2,attributeMagicDefence|1" sounds="soundDressOutfit" />
     
-    <skinOutfit id="skinLowerBody003" icon="Models/actor/female/lowerBody.003.mesh.png" file="Models/actor/female/lowerBody.003.mesh.j3o" 
-		type="7"  raceLimit="1" sexLimit="0" handler="handlerOutfit" cost="800" 
+    <skinOutfit id="skinLowerBody003" extends="skinHumanFemale" icon="Models/actor/female/lowerBody.003.mesh.png" file="Models/actor/female/lowerBody.003.mesh.j3o" 
+		type="7"   handler="handlerOutfit" cost="800" 
                 applyAttributes="attributeDefence|5,attributeMagicDefence|2" sounds="soundDressOutfit" />
     
-    <skinOutfit id="skinUpperBody003" icon="Models/actor/female/upperBody.003.mesh.png" file="Models/actor/female/upperBody.003.mesh.j3o" 
-		type="8"  raceLimit="1" sexLimit="0" handler="handlerOutfit" cost="800" 
+    <skinOutfit id="skinUpperBody003" extends="skinHumanFemale" icon="Models/actor/female/upperBody.003.mesh.png" file="Models/actor/female/upperBody.003.mesh.j3o" 
+		type="8"   handler="handlerOutfit" cost="800" 
                 applyAttributes="attributeDefence|5,attributeMagicDefence|2" sounds="soundDressOutfit" />
 
     <!--妖精装-->
-    <skinOutfit id="skinFoot004" icon="Models/actor/female/foot.004.mesh.png" file="Models/actor/female/foot.004.mesh.j3o" 
-		type="4"  raceLimit="1" sexLimit="0" handler="handlerOutfit" cost="800" 
+    <skinOutfit id="skinFoot004" extends="skinHumanFemale" icon="Models/actor/female/foot.004.mesh.png" file="Models/actor/female/foot.004.mesh.j3o" 
+		type="4"   handler="handlerOutfit" cost="800" 
                 applyAttributes="attributeDefence|3,attributeMagicDefence|3" sounds="soundDressOutfit" />
     
-    <skinOutfit id="skinHand004" icon="Models/actor/female/hand.004.mesh.png" file="Models/actor/female/hand.004.mesh.j3o" 
-		type="6"  raceLimit="1" sexLimit="0" handler="handlerOutfit" cost="800" 
+    <skinOutfit id="skinHand004" extends="skinHumanFemale" icon="Models/actor/female/hand.004.mesh.png" file="Models/actor/female/hand.004.mesh.j3o" 
+		type="6"   handler="handlerOutfit" cost="800" 
                 applyAttributes="attributeDefence|3,attributeMagicDefence|3" sounds="soundDressOutfit" />
     
-    <skinOutfit id="skinLowerBody004" icon="Models/actor/female/lowerBody.004.mesh.png" file="Models/actor/female/lowerBody.004.mesh.j3o" 
-		type="7"  raceLimit="1" sexLimit="0" handler="handlerOutfit" cost="800" 
+    <skinOutfit id="skinLowerBody004" extends="skinHumanFemale" icon="Models/actor/female/lowerBody.004.mesh.png" file="Models/actor/female/lowerBody.004.mesh.j3o" 
+		type="7"   handler="handlerOutfit" cost="800" 
                 applyAttributes="attributeDefence|6,attributeMagicDefence|6" sounds="soundDressOutfit" />
     
-    <skinOutfit id="skinUpperBody004" icon="Models/actor/female/upperBody.004.mesh.png" file="Models/actor/female/upperBody.004.mesh.j3o" 
-		type="8"  raceLimit="1" sexLimit="0" handler="handlerOutfit" cost="800" 
+    <skinOutfit id="skinUpperBody004" extends="skinHumanFemale" icon="Models/actor/female/upperBody.004.mesh.png" file="Models/actor/female/upperBody.004.mesh.j3o" 
+		type="8"   handler="handlerOutfit" cost="800" 
                 applyAttributes="attributeDefence|6,attributeMagicDefence|6" sounds="soundDressOutfit" />
 
     <!--战士装-->
-    <skinOutfit id="skinFoot005" icon="Models/actor/female/foot.005.mesh.png" file="Models/actor/female/foot.005.mesh.j3o" 
-		type="4"  raceLimit="1" sexLimit="0" handler="handlerOutfit" cost="800" 
+    <skinOutfit id="skinFoot005" extends="skinHumanFemale" icon="Models/actor/female/foot.005.mesh.png" file="Models/actor/female/foot.005.mesh.j3o" 
+		type="4"   handler="handlerOutfit" cost="800" 
                 applyAttributes="attributeDefence|3,attributeMagicDefence|2" sounds="soundDressOutfit" />
     
-    <skinOutfit id="skinHand005" icon="Models/actor/female/hand.005.mesh.png" file="Models/actor/female/hand.005.mesh.j3o" 
-		type="6"  raceLimit="1" sexLimit="0" handler="handlerOutfit" cost="800" 
+    <skinOutfit id="skinHand005" extends="skinHumanFemale" icon="Models/actor/female/hand.005.mesh.png" file="Models/actor/female/hand.005.mesh.j3o" 
+		type="6"   handler="handlerOutfit" cost="800" 
                 applyAttributes="attributeDefence|3,attributeMagicDefence|2" sounds="soundDressOutfit" />
     
-    <skinOutfit id="skinLowerBody005" icon="Models/actor/female/lowerBody.005.mesh.png" file="Models/actor/female/lowerBody.005.mesh.j3o" 
-		type="7"  raceLimit="1" sexLimit="0" handler="handlerOutfit" cost="800" 
+    <skinOutfit id="skinLowerBody005" extends="skinHumanFemale" icon="Models/actor/female/lowerBody.005.mesh.png" file="Models/actor/female/lowerBody.005.mesh.j3o" 
+		type="7"   handler="handlerOutfit" cost="800" 
                 applyAttributes="attributeDefence|6,attributeMagicDefence|3" sounds="soundDressOutfit" />
     
-    <skinOutfit id="skinUpperBody005" icon="Models/actor/female/upperBody.005.mesh.png" file="Models/actor/female/upperBody.005.mesh.j3o" 
-		type="8"  raceLimit="1" sexLimit="0" handler="handlerOutfit" cost="800" 
+    <skinOutfit id="skinUpperBody005" extends="skinHumanFemale" icon="Models/actor/female/upperBody.005.mesh.png" file="Models/actor/female/upperBody.005.mesh.j3o" 
+		type="8"   handler="handlerOutfit" cost="800" 
                 applyAttributes="attributeDefence|6,attributeMagicDefence|3" sounds="soundDressOutfit" />
     
     <!--法袍-->
-    <skinOutfit id="skinFoot006" icon="Models/actor/female/foot.006.mesh.png" file="Models/actor/female/foot.006.mesh.j3o" 
-		type="4"  raceLimit="1" sexLimit="0" handler="handlerOutfit" cost="800" 
+    <skinOutfit id="skinFoot006" extends="skinHumanFemale" icon="Models/actor/female/foot.006.mesh.png" file="Models/actor/female/foot.006.mesh.j3o" 
+		type="4"   handler="handlerOutfit" cost="800" 
                 applyAttributes="attributeDefence|3,attributeMagicDefence|6" sounds="soundDressOutfit" />
     
-    <skinOutfit id="skinHand006" icon="Models/actor/female/hand.006.mesh.png" file="Models/actor/female/hand.006.mesh.j3o" 
-		type="6"  raceLimit="1" sexLimit="0" handler="handlerOutfit" cost="800" 
+    <skinOutfit id="skinHand006" extends="skinHumanFemale" icon="Models/actor/female/hand.006.mesh.png" file="Models/actor/female/hand.006.mesh.j3o" 
+		type="6"   handler="handlerOutfit" cost="800" 
                 applyAttributes="attributeDefence|3,attributeMagicDefence|6" sounds="soundDressOutfit" />
     
-    <skinOutfit id="skinUpperBody006" icon="Models/actor/female/upperBody.006.mesh.png" file="Models/actor/female/upperBody.006.mesh.j3o" 
-		type="7,8" raceLimit="1" sexLimit="0" handler="handlerOutfit" cost="800" 
+    <skinOutfit id="skinUpperBody006" extends="skinHumanFemale" icon="Models/actor/female/upperBody.006.mesh.png" file="Models/actor/female/upperBody.006.mesh.j3o" 
+		type="7,8"  handler="handlerOutfit" cost="800" 
                 applyAttributes="attributeDefence|6,attributeMagicDefence|12,attributeMana|50" sounds="soundDressOutfit" />
 
     <!--眼罩-->
-    <skinOutfit id="skinBlinder001" icon="Models/actor/blinder/blinder001.png" file="Models/actor/blinder/blinder001.j3o" 
-                type="11" handler="handlerOutfit" bindBone="head" raceLimit="1" sexLimit="0" cost="1000" />
+    <skinOutfit id="skinBlinder001" extends="skinHumanFemale" icon="Models/actor/blinder/blinder001.png" file="Models/actor/blinder/blinder001.j3o" 
+                type="11" handler="handlerOutfit" bindBone="head" cost="1000" />
     
     <!--口罩-->
-    <skinOutfit id="skinMouthmask001" icon="Models/actor/mouthmask/mouthmask001.png" file="Models/actor/mouthmask/mouthmask001.j3o" 
-                type="12" handler="handlerOutfit" bindBone="head" raceLimit="1" sexLimit="0" cost="1000" />
+    <skinOutfit id="skinMouthmask001" extends="skinHumanFemale" icon="Models/actor/mouthmask/mouthmask001.png" file="Models/actor/mouthmask/mouthmask001.j3o" 
+                type="12" handler="handlerOutfit" bindBone="head" cost="1000" />
     
     <!--角-->
-    <skinOutfit id="skinHorn001" icon="Models/actor/horn/horn001.png" file="Models/actor/horn/horn001.j3o" 
-                type="14" handler="handlerOutfit" bindBone="head" raceLimit="1" sexLimit="0" cost="1200"  />
+    <skinOutfit id="skinHorn001" extends="skinHumanFemale" icon="Models/actor/horn/horn001.png" file="Models/actor/horn/horn001.j3o" 
+                type="14" handler="handlerOutfit" bindBone="head" cost="1200"  />
     
     
     

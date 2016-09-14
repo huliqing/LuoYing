@@ -24,10 +24,14 @@ import java.util.logging.Logger;
 import name.huliqing.core.Config;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.AttributeApply;
+import name.huliqing.core.data.AttributeMatch;
 import name.huliqing.core.data.SkinData;
 import name.huliqing.core.mvc.service.AttributeService;
+import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.object.AssetLoader;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.attribute.Attribute;
+import name.huliqing.core.object.attribute.MatchAttribute;
 import name.huliqing.core.object.sound.SoundManager;
 
 /**
@@ -35,7 +39,9 @@ import name.huliqing.core.object.sound.SoundManager;
  * @author huliqing
  */
 public abstract class AbstractSkin implements Skin {
+    private static final Logger LOG = Logger.getLogger(AbstractSkin.class.getName());
     private final AttributeService attributeService = Factory.get(AttributeService.class);
+    private final SkillService skillService = Factory.get(SkillService.class);
     
     protected SkinData data;
     protected String[] sounds;
@@ -46,7 +52,7 @@ public abstract class AbstractSkin implements Skin {
     private Vector3f localTranslation;
     private float[] localRotation;
     private Vector3f localScale;
-
+    
     // ---- inner
     protected Spatial skinNode;
     protected boolean attached;
@@ -86,23 +92,40 @@ public abstract class AbstractSkin implements Skin {
         return data.isBaseSkin();
     }
 
-    // remove20160912
-//    protected Spatial loadSkinNode(String file) {
-//        Spatial skinNode = AssetLoader.loadModel(file);
-//        skinNode.setUserData(ObjectData.USER_DATA, data);
-//
-//        // 由于一些武器（如：弓）可能自身包含动画，即包含SkeletonControl,而
-//        // 这些节点在CustomSkeletonControl中被排除（避免冲突），因而在这里需要
-//        // 自已打开该功能。
-//        if (configService.isUseHardwareSkinning() && skinNode.getControl(SkeletonControl.class) != null) {
-//            skinNode.getControl(SkeletonControl.class).setHardwareSkinningPreferred(true);
-//        }
-//        return skinNode;
-//    }
-
     @Override
     public boolean isAttached() {
         return attached;
+    }
+
+    @Override
+    public boolean canUse(Actor actor) {
+        // 角色在战斗过程中不能换装
+        if (skillService.isAttacking(actor)) {
+            LOG.log(Level.INFO, "攻击过程中不能使用装备 actorId={0}, skinId={1}"
+                    , new Object[] {actor.getData().getId(), data.getId()});
+            return false;
+        }
+        
+        // 如果角色的属性中有一个不能和getMatchAttributes中要求的不匹配则视为不能使用。
+        if (data.getMatchAttributes() != null) {
+            Attribute attr;
+            for (AttributeMatch am : data.getMatchAttributes()) {
+                attr = attributeService.getAttributeByName(actor, am.getAttributeName());
+                if (!(attr instanceof MatchAttribute)) {
+                    LOG.log(Level.INFO, "指定的属性不是MatchAttribute类型，所以不能使用装备"
+                            + "，actorId={0}, skinId={1},  match attributeName={2}", 
+                            new Object[] {actor.getData().getId(), data.getId(), am.getAttributeName()});
+                    return false;
+                }
+                if (!((MatchAttribute)attr).match(am.getValue())) {
+                    LOG.log(Level.INFO, "属性值不匹配,所以不能使用装备,actorId={0}, skinId={1}"
+                            + ", match attributeName={2}, match attributeValue={3}, actor attribute={4}"
+                            , new Object[] {actor.getData().getId(), data.getId(), am.getAttributeName(), am.getValue(), attr});
+                    return false;
+                }
+            }            
+        }
+        return true;
     }
     
     @Override
@@ -131,7 +154,7 @@ public abstract class AbstractSkin implements Skin {
         }
         
         if (skinNode == null) {
-            skinNode = AssetLoader.loadModel(data.getFile());
+            skinNode = loadSkinNode(data.getFile());
         }
         
         // 由于一些武器（如：弓）可能自身包含动画，即包含SkeletonControl,而
@@ -264,6 +287,17 @@ public abstract class AbstractSkin implements Skin {
             }
         }
         data.setAttributeApplied(false);
+    }
+    
+    protected Spatial loadSkinNode(String file) {
+        // 由于一些武器（如：弓）可能自身包含动画，即包含SkeletonControl,而
+        // 这些节点在CustomSkeletonControl中被排除（避免冲突），因而在这里需要
+        // 自已打开该功能。
+        Spatial spatial = AssetLoader.loadModel(file);
+        if (spatial.getControl(SkeletonControl.class) != null) {
+            spatial.getControl(SkeletonControl.class).setHardwareSkinningPreferred(true);
+        }
+        return spatial;
     }
     
     // --------------------------------------------------------------------------------------------------------------------------------

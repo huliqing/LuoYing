@@ -70,4 +70,11 @@ public interface Skin extends DataProcessor<SkinData>{
      * @return 
      */
     boolean isAttached();
+    
+    /**
+     * 判断指定角色是否可以使用当前这件装备.
+     * @param actor
+     * @return 
+     */
+    boolean canUse(Actor actor);
 }

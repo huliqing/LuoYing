@@ -134,7 +134,7 @@ public class WeaponSkin extends AbstractSkin {
             if (modelFile == null) {
                 return;
             }
-            skinNode = AssetLoader.loadModel(modelFile);
+            skinNode = loadSkinNode(modelFile);
         }
         
         if (data.getSlot() == null) {

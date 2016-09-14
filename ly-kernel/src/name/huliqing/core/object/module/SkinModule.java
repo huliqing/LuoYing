@@ -303,22 +303,14 @@ public class SkinModule extends AbstractModule {
         return null;
     }
     
-//    /**
-//     * 通过唯一id查找角色身上的装备
-//     * @param skinId
-//     * @return 
-//     */
-//    public Skin getSkin(long skinId) {
-//        if (skinAll == null)
-//            return null;
-//        
-//        for (Skin s : skinAll) {
-//            if (s.getData().getUniqueId() == skinId) {
-//                return s;
-//            }
-//        }
-//        return null;
-//    }
+    /**
+     * 判断角色是否可以使用指定的装备
+     * @param skin
+     * @return 
+     */
+    public boolean canUse(Skin skin) {
+        return skin.canUse(actor);
+    }
     
     /**
      * 获取角色的所有皮肤,返回的列表只能只读，如果角色没有皮肤则返回empty.
