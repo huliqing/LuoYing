@@ -150,6 +150,15 @@ public abstract class AbstractSkin implements Skin {
         attach(actor, bindBone, skinNode, localLocation, localRotation, localScale);
     }
     
+    /**
+     * 给角色穿上装备
+     * @param actor 指定的角色
+     * @param bindBone 角色身上某块骨头的名称，如果没有指定这个骨头名称，则直接添加到角色节点下面。
+     * @param skinNode 装备模型，如果为null则什么也不做。
+     * @param localLocation 装备模型的位置偏移。
+     * @param localRotation 装备模型的旋转偏移。
+     * @param localScale 装备模型的缩放。
+     */
     protected void attach(Actor actor, String bindBone, Spatial skinNode, Vector3f localLocation, Quaternion localRotation, Vector3f localScale) {
         if (skinNode == null) {
             return;
@@ -293,17 +302,6 @@ public abstract class AbstractSkin implements Skin {
         }
         data.setAttributeApplied(false);
     }
-    
-//    protected Spatial loadSkinNode(String file) {
-//        // 由于一些武器（如：弓）可能自身包含动画，即包含SkeletonControl,而
-//        // 这些节点在CustomSkeletonControl中被排除（避免冲突），因而在这里需要
-//        // 自已打开该功能。
-//        Spatial spatial = AssetLoader.loadModel(file);
-//        if (spatial.getControl(SkeletonControl.class) != null) {
-//            spatial.getControl(SkeletonControl.class).setHardwareSkinningPreferred(true);
-//        }
-//        return spatial;
-//    }
     
     // --------------------------------------------------------------------------------------------------------------------------------
     // 打开skin的hws,如果角色actor主SkeletonControl已经打开该功能,则skinNode必须自已打开.

@@ -4,19 +4,14 @@
  */
 package name.huliqing.core.object.skin;
 
-import com.jme3.animation.Bone;
-import com.jme3.animation.SkeletonControl;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
-import com.jme3.scene.Node;
 import com.jme3.scene.control.AbstractControl;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.Factory;
-import name.huliqing.core.data.SkinData;
 import name.huliqing.core.data.SlotData;
 import name.huliqing.core.mvc.service.SkillService;
-import name.huliqing.core.object.AssetLoader;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.object.actor.Actor;
@@ -42,7 +37,7 @@ public class WeaponSkin extends AbstractSkin {
     @Override
     public void attach(Actor actor) {
         super.attach(actor);
-        // 对于武器的attach不能用动画,直接attach就可以
+        // 如果当前角色的武器状态是"挂起"的，则应该把武器放到指定的槽位上。
         SkinModule sm = actor.getModule(SkinModule.class);
         if (!sm.isWeaponTakeOn()) {
             attachWeaponOff(actor);
