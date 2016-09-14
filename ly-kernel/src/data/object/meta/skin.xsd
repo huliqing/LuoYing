@@ -128,14 +128,14 @@ xs:time
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-                <xs:attribute name="localTranslation" type="xs:stirng" use="optional">
-                    <xs:annotation>skin添加到目标时的本地变换，格式："x,y,z"</xs:annotation>
+                <xs:attribute name="localLocation" type="xs:stirng" use="optional">
+                    <xs:annotation><xs:documentation>skin添加到目标时的本地变换，格式："x,y,z"</xs:documentation></xs:annotation>
                 </xs:attribute>
                 <xs:attribute name="localRotation" type="xs:stirng" use="optional">
-                    <xs:annotation>skin添加到目标时的本地旋转，格式："x,y,z"</xs:annotation>
+                    <xs:annotation><xs:documentation>skin添加到目标时的本地旋转(弧度)，格式："x,y,z"</xs:documentation></xs:annotation>
                 </xs:attribute>
                 <xs:attribute name="localScale" type="xs:stirng" use="optional">
-                    <xs:annotation>skin添加到目标时的本地缩放，格式："x,y,z"</xs:annotation>
+                    <xs:annotation><xs:documentation>skin添加到目标时的本地缩放，格式："x,y,z"</xs:documentation></xs:annotation>
                 </xs:attribute>
                 <xs:attribute name="applyAttributes" type="xs:string" use="optional" >
                     <xs:annotation>
@@ -160,10 +160,6 @@ xs:time
                         <xs:documentation>声效,格式:"sound1,sound2,..."</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-                <!--<xs:attribute name="handler" ref="handler" use="required" />-->
-                <!--<xs:attribute name="raceLimit" ref="raceLimit" use="optional" />-->
-                <!--<xs:attribute name="sexLimit" ref="sexLimit" use="optional" />-->
-                <!--<xs:attribute name="careerLimit" ref="careerLimit" use="optional" />-->
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>

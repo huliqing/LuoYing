@@ -7,7 +7,6 @@ package name.huliqing.core.view.actor;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.Factory;
-import name.huliqing.core.data.AttributeApply;
 import name.huliqing.core.data.SkinData;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.mvc.network.SkinNetwork;
@@ -112,23 +111,8 @@ public class WeaponPanel extends ListView<Skin> implements ActorPanel{
             SkinData skinData = skin.getData();
             icon.setIcon(skinData.getIcon());
             body.setNameText(ResourceManager.getObjectName(skinData));
-            
-            List<AttributeApply> aas = skinData.getApplyAttributes();
-            if (aas != null) {
-                StringBuilder sb = new StringBuilder();
-                for (AttributeApply aa : aas) {
-                    sb.append(ResourceManager.getObjectName(aa.getAttribute()))
-                            .append(":")
-                            .append(aa.getAmount())
-                            .append("  ");
-                }
-                body.setDesText(sb.toString());
-            } else {
-                body.setDesText("");
-            }
-            
+            body.setDesText(skinData.getDes());
             num.setText(String.valueOf(skinData.getTotal()));
-            
             setBackgroundVisible(data.isAttached());
         }
         

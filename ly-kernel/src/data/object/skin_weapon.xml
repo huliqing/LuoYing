@@ -22,23 +22,23 @@ skinPart => 0:ear;1:eyeL;2:eyeR;3:face;4:foot;5:hair;6:hand;7:lowerBody;8:upperB
     
     <!--右手剑-->
     <skinWeapon id="weaponHumanRightSwordBase" extends="weaponHumanBase" type="10" weaponType="1" mat="1" 
-                bindBone="weapon.R" localTranslation="0,0,0" localRotation="0,0,0" sounds="soundDrawSword"
+                bindBone="weapon.R" localLocation="0,0,0" localRotation="0,0,0" sounds="soundDrawSword" 
                 slots="slotSwordLeftBack,slotSwordLeftBack2,slotSwordRightBack,slotSwordRightBack2,slotSwordLeftWaist,slotSwordLeftWaist2" />
     
     <!--左手剑-->
     <skinWeapon id="weaponHumanLeftSwordBase" extends="weaponHumanRightSwordBase" type="9" 
-                bindBone="weapon.L" localRotation="0,3.14159265,0" localTranslation="0,0,0" />
+                bindBone="weapon.L" localRotation="0,3.14159265,0" localLocation="0,0,0" />
 
     <!--弓-->
-    <skinWeapon id="weaponHumanBowBase" extends="weaponHumanBase" type="9" conflictType="10" bindBone="weapon.L" localRotation="0,0,0" localTranslation="0,0,0"
+    <skinWeapon id="weaponHumanBowBase" extends="weaponHumanBase" type="9" conflictType="10" bindBone="weapon.L" localRotation="0,0,0" localLocation="0,0,0"
                 mat="2"  weaponType="3"  slots="slotBowLeftBack" sounds="soundDrawBow" />
 
     <!--魔杖-->
-    <skinWeapon id="weaponHumanWandBase" extends="weaponHumanBase" type="10" conflictType="9" bindBone="weapon.R" localRotation="0,0,0" localTranslation="0,0,0"
+    <skinWeapon id="weaponHumanWandBase" extends="weaponHumanBase" type="10" conflictType="9" bindBone="weapon.R" localRotation="0,0,0" localLocation="0,0,0"
                 mat="2" weaponType="6"  slots="slotWandLeftBack" sounds="soundDressOutfit2" />
     
     <!--魔法书：暂未开放-->
-    <skinWeapon id="weaponHumanBookBase" extends="weaponHumanBase" type="9" conflictType="10" bindBone="weapon.L" mat="0" localRotation="0,0,0" localTranslation="0,0,0"
+    <skinWeapon id="weaponHumanBookBase" extends="weaponHumanBase" type="9" conflictType="10" bindBone="weapon.L" mat="0" localRotation="0,0,0" localLocation="0,0,0"
                 weaponType="5" sounds="" />
     
     <!--=====================================================================-->

@@ -4,6 +4,7 @@
  */
 package name.huliqing.core.data;
 
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.network.serializing.Serializable;
 
@@ -17,10 +18,10 @@ public class SlotData extends ObjectData{
     private String bindBone;
     
     // 武器挂起时的本地变换
-    private Vector3f localTranslation;
+    private Vector3f localLocation;
     
     // 武器挂起时的本地旋转
-    private float[] localRotation;
+    private Quaternion localRotation;
     
     // 武器挂起时的本地缩放
     private Vector3f localScale;
@@ -46,18 +47,18 @@ public class SlotData extends ObjectData{
     }
 
     public Vector3f getLocalTranslation() {
-        return localTranslation;
+        return localLocation;
     }
 
-    public void setLocalTranslation(Vector3f localTranslation) {
-        this.localTranslation = localTranslation;
+    public void setLocalTranslation(Vector3f localLocation) {
+        this.localLocation = localLocation;
     }
 
-    public float[] getLocalRotation() {
+    public Quaternion getLocalRotation() {
         return localRotation;
     }
 
-    public void setLocalRotation(float[] localRotation) {
+    public void setLocalRotation(Quaternion localRotation) {
         this.localRotation = localRotation;
     }
 

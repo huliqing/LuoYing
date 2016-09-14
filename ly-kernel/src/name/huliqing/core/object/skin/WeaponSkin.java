@@ -6,8 +6,6 @@ package name.huliqing.core.object.skin;
 
 import com.jme3.animation.Bone;
 import com.jme3.animation.SkeletonControl;
-import com.jme3.math.Quaternion;
-import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
@@ -15,6 +13,7 @@ import com.jme3.scene.control.AbstractControl;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.Factory;
+import name.huliqing.core.data.SkinData;
 import name.huliqing.core.data.SlotData;
 import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.object.AssetLoader;
@@ -29,19 +28,6 @@ import name.huliqing.core.object.skill.SkinSkill;
  */
 public class WeaponSkin extends AbstractSkin {
     private final SkillService skillService = Factory.get(SkillService.class);
-    
-    @Override
-    public void attach(Actor actor) {
-        data.setUsed(true);
-        attached = true;
-        // 对于武器的attach不能用动画,直接attach就可以
-        SkinModule sm = actor.getModule(SkinModule.class);
-        if (sm.isWeaponTakeOn()) {
-            super.attach(actor);
-        } else {
-            takeOffDirect(actor);
-        }
-    }
 
     @Override
     public boolean isWeapon() {
@@ -52,28 +38,55 @@ public class WeaponSkin extends AbstractSkin {
     public int getWeaponType() {
         return data.getWeaponType();
     }
+        
+    @Override
+    public void attach(Actor actor) {
+        super.attach(actor);
+        // 对于武器的attach不能用动画,直接attach就可以
+        SkinModule sm = actor.getModule(SkinModule.class);
+        if (!sm.isWeaponTakeOn()) {
+            attachWeaponOff(actor);
+        }
+    }
+    
+    /**
+     * 武器收起
+     */
+    private void attachWeaponOff(Actor actor) {
+        // 为武器找一个合适的槽位
+        if (data.getSlot() == null) {
+            data.setSlot(getWeaponSlot(actor));
+        }
+        
+        // 如果找不到合适的槽位或者武器不支持槽位,直不处理
+        if (data.getSlot() == null) {
+            return;
+        }
+        
+        SlotData slot = DataFactory.createData(data.getSlot());
+        attach(actor, slot.getBindBone(), skinNode, slot.getLocalTranslation(), slot.getLocalRotation(), slot.getLocalScale());
+    }
     
     /**
      * 把武器取出放到手上使用。
      * @param actor
      */
     public void takeOn(Actor actor) {
-        String weaponSlot = data.getSlot();
-        if (weaponSlot == null) {
-            super.attach(actor);
+        if (!attached) {
             return;
         }
         
-        // 武器取出后取消槽位占用
-        data.setSlot(null);
+        if (data.getSlot() == null) {
+            return;
+        }
         
         // 根据武器的左右手属性确定要用哪一个手拿武器的技能。
-        SlotData sd = DataFactory.createData(weaponSlot);
+        SlotData slot = DataFactory.createData(data.getSlot());
         String hangSkill = null;
         if (data.isLeftHandWeapon()) {
-            hangSkill = sd.getLeftHandSkinSkill();
+            hangSkill = slot.getLeftHandSkinSkill();
         } else if (data.isRightHandWeapon()) {
-            hangSkill = sd.getRightHandSkinSkill();
+            hangSkill = slot.getRightHandSkinSkill();
         }
         if (hangSkill == null) {
             super.attach(actor);
@@ -83,13 +96,13 @@ public class WeaponSkin extends AbstractSkin {
         // 动画逻辑处理
         SkinSkill skill = (SkinSkill) Loader.loadSkill(hangSkill);
         skill.setActor(actor);
+        skillService.playSkill(actor, skill, false);
 
         // hangTime：把武器节点添加到角色身上的时间点。
-        float hangTime = skill.getTrueUseTime() * skill.getHangTimePoint();
-        HangProcessor processor = new HangProcessor(actor, hangTime, true);
-        actor.getSpatial().addControl(processor);
+        actor.getSpatial().addControl(new HangProcessor(actor, skill.getTrueUseTime() * skill.getHangTimePoint(), true));
         
-        skillService.playSkill(actor, skill, false);
+        // 武器取出后取消槽位占用
+        data.setSlot(null);
     }
     
     /**
@@ -97,107 +110,38 @@ public class WeaponSkin extends AbstractSkin {
      * @param actor
      */
     public void takeOff(Actor actor) {
-        String weaponSlot = getWeaponSlot(actor);
-        if (weaponSlot == null) {
-            data.setSlot(null);
-            super.attach(actor);
+        if (!attached) {
             return;
         }
+        
+        // 挂起武器时先为武器找一个合适的槽位，如果没有合适或不支持槽位，则什么也不处理
+        String weaponSlot = getWeaponSlot(actor);
         data.setSlot(weaponSlot);
+        if (data.getSlot() == null) {
+            return;
+        }
+        
         // 根据武器的左右手属性确定要用哪一个手拿武器的技能。
-        SlotData sd = DataFactory.createData(weaponSlot);
+        SlotData slot = DataFactory.createData(weaponSlot);
         String hangSkill = null;
         if (data.isLeftHandWeapon()) {
-            hangSkill = sd.getLeftHandSkinSkill();
+            hangSkill = slot.getLeftHandSkinSkill();
         } else if (data.isRightHandWeapon()) {
-            hangSkill = sd.getRightHandSkinSkill();
-        }
-        if (hangSkill == null) {
-            super.attach(actor);
-            return;
+            hangSkill = slot.getRightHandSkinSkill();
         }
         
-        SkinSkill skill = (SkinSkill) Loader.loadSkill(hangSkill);
-        skill.setActor(actor);
-
-        float hangTime = skill.getTrueUseTime() * skill.getHangTimePoint();
-        HangProcessor processor = new HangProcessor(actor, hangTime, false);
-        actor.getSpatial().addControl(processor);
+        // 使用一个动画技能来"取下"武器
+        if (hangSkill != null) {
+            SkinSkill skill = (SkinSkill) Loader.loadSkill(hangSkill);
+            skill.setActor(actor);
+            skillService.playSkill(actor, skill, false);
+            actor.getSpatial().addControl(new HangProcessor(actor, skill.getTrueUseTime() * skill.getHangTimePoint(), false));
+        } else {
+            attach(actor, slot.getBindBone(), skinNode, slot.getLocalTranslation(), slot.getLocalRotation(), slot.getLocalScale());
+        }
         
-        // 动画逻辑处理
-        skillService.playSkill(actor, skill, false);
     }
     
-    private void takeOffDirect(Actor actor) {
-        if (skinNode == null) {
-            String modelFile = data.getFile();
-            if (modelFile == null) {
-                return;
-            }
-            skinNode = loadSkinNode(modelFile);
-        }
-        
-        if (data.getSlot() == null) {
-            data.setSlot(getWeaponSlot(actor));
-        }
-        
-        // 如果找不到合适的槽位或者武器根据不支持槽位，则直接attach到角色身上。
-        // 不作takeOff处理
-        if (data.getSlot() == null) {
-            super.attach(actor);
-            return;
-        }
-        
-        SlotData sd = DataFactory.createData(data.getSlot());
-        String toBindBone = sd.getBindBone();
-        Vector3f toLocalTranslation = sd.getLocalTranslation();
-        float[] toLocalRotation = sd.getLocalRotation();
-        Vector3f toLocalScale = sd.getLocalScale();
-        
-        // 如果指定了骨头，则将skin绑定到目标骨头
-        if (toBindBone != null) {
-            SkeletonControl sc = actor.getSpatial().getControl(SkeletonControl.class);
-            Node boneNode = sc.getAttachmentsNode(toBindBone);
-            
-            // 如果没有指定本地变换，则直接从bone中获取
-            Bone bone = sc.getSkeleton().getBone(toBindBone);
-            if (toLocalRotation == null) {
-                toLocalRotation = bone.getModelBindInverseRotation().toAngles(toLocalRotation);
-            }
-            if (toLocalScale == null) {
-                toLocalScale = bone.getModelBindInverseScale();
-            }
-            // 因为大部分情况下Skin并不是以原点（0,0,0)作为模型的中心点，而是以模型
-            // 的其中某一个位置，通常这个位置刚好是被绑定的骨头的位置，当模型attach到骨头
-            // 位置时由于受到骨头的初始位置，旋转，缩放的影响，这个时候有必要把
-            // 该点重新移到骨头所在的位置处。下面默认以被绑定的骨骼点作为模型原始点
-            // 进行处理。
-            if (toLocalTranslation == null) {
-                // 骨骼点的位置
-                toLocalTranslation = bone.getModelBindInversePosition().negate();
-                // 被缩放后的位置
-                bone.getModelBindInverseScale().mult(toLocalTranslation, toLocalTranslation);
-                // 被旋转后的位置
-                bone.getModelBindInverseRotation().mult(toLocalTranslation, toLocalTranslation);
-                // 移动回骷髅点的位置
-                toLocalTranslation.negateLocal();
-            } 
-            
-            boneNode.attachChild(skinNode);
-        }
-        
-        // 初始坐标变换
-        if (toLocalTranslation != null) {
-            skinNode.setLocalTranslation(toLocalTranslation);
-        }
-        if (toLocalRotation != null) {
-            Quaternion rot = new Quaternion();
-            skinNode.setLocalRotation(rot.fromAngles(toLocalRotation));
-        }
-        if (toLocalScale != null) {
-            skinNode.setLocalScale(toLocalScale);
-        }
-    }
     
     /**
      * 为角色指定的武器选择一个合适的槽位来装备武器
@@ -274,7 +218,7 @@ public class WeaponSkin extends AbstractSkin {
                 if (takeOn) {
                     WeaponSkin.super.attach(actor);
                 } else {
-                    takeOffDirect(actor);
+                    attachWeaponOff(actor);
                 }
                 actor.getSpatial().removeControl(this);
             }

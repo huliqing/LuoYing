@@ -15,7 +15,6 @@ import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.UserData;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -49,8 +48,8 @@ public abstract class AbstractSkin implements Skin {
     // 当指定了bindBone时，皮肤应该添加到bindBone所在的骨骼上，否则直接添加到角色根节点。
     private String bindBone;
     // skin的本地模型初始变换，注：localRotation需要使用Quaternion.fromAngle转换成Quaternion.
-    private Vector3f localTranslation;
-    private float[] localRotation;
+    private Vector3f localLocation;
+    private Quaternion localRotation;
     private Vector3f localScale;
     
     // ---- inner
@@ -62,8 +61,8 @@ public abstract class AbstractSkin implements Skin {
         this.data = data;
         sounds = data.getAsArray("sounds");
         bindBone = data.getAsString("bindBone");
-        localTranslation = data.getAsVector3f("localTranslation");
-        localRotation = data.getAsFloatArray("localRotation");
+        localLocation = data.getAsVector3f("localLocation");
+        localRotation = data.getAsQuaternion("localRotation");
         localScale = data.getAsVector3f("localScale");
     }
 
@@ -139,22 +138,21 @@ public abstract class AbstractSkin implements Skin {
         //  附加装备属性
         attachSkinAttributes(actor);
         
-        // 如果角色节点不是Node类型，则不再进行后续处理，因为非Node模型不能添加子节点（装备模型）。
-        Spatial actorSpatial = actor.getSpatial();
-        if (!(actorSpatial instanceof Node)) {
-            Logger.getLogger(OutfitSkin.class.getName()).log(Level.WARNING
-                    , "actorSpatial is not a Node, could not attach skins, actorId={0}, skinId={1}"
-                    , new Object[] {actor.getData().getId(), data.getId()});
-            return;
-        }
-        
         // 部分Skin可能无指定模型或者不需要模型(如一些Mock武器，不存在实体模型)。
         if (data.getFile() == null) {
             return;
         }
         
         if (skinNode == null) {
-            skinNode = loadSkinNode(data.getFile());
+            skinNode = AssetLoader.loadModel(data.getFile());
+        }
+        
+        attach(actor, bindBone, skinNode, localLocation, localRotation, localScale);
+    }
+    
+    protected void attach(Actor actor, String bindBone, Spatial skinNode, Vector3f localLocation, Quaternion localRotation, Vector3f localScale) {
+        if (skinNode == null) {
+            return;
         }
         
         // 由于一些武器（如：弓）可能自身包含动画，即包含SkeletonControl,而
@@ -169,13 +167,13 @@ public abstract class AbstractSkin implements Skin {
         
         // 如果指定了bindBone，则将skin绑定到特定的骨头上。
         if (bindBone != null) {
-            SkeletonControl actorSC = actorSpatial.getControl(SkeletonControl.class);
+            SkeletonControl actorSC = actor.getSpatial().getControl(SkeletonControl.class);
             Node boneNode = actorSC.getAttachmentsNode(bindBone);
             
             // 如果没有指定本地变换，则直接从bone中获取
             Bone bone = actorSC.getSkeleton().getBone(bindBone);
             if (localRotation == null) {
-                localRotation = bone. getModelBindInverseRotation().toAngles(localRotation);
+                localRotation = bone. getModelBindInverseRotation().clone();
             }
             if (localScale == null) {
                 localScale = bone.getModelBindInverseScale();
@@ -185,21 +183,21 @@ public abstract class AbstractSkin implements Skin {
             // 位置时由于受到骨头的初始位置，旋转，缩放的影响，这个时候有必要把
             // 该点重新移到骨头所在的位置处。下面默认以被绑定的骨骼点作为模型原始点
             // 进行处理。
-            if (localTranslation == null) {
+            if (localLocation == null) {
                 // 骨骼点的位置
-                localTranslation = bone.getModelBindInversePosition().negate();
+                localLocation = bone.getModelBindInversePosition().negate();
                 // 被缩放后的位置
-                bone.getModelBindInverseScale().mult(localTranslation, localTranslation);
+                bone.getModelBindInverseScale().mult(localLocation, localLocation);
                 // 被旋转后的位置
-                bone.getModelBindInverseRotation().mult(localTranslation, localTranslation);
+                bone.getModelBindInverseRotation().mult(localLocation, localLocation);
                 // 移动回骷髅点的位置
-                localTranslation.negateLocal();
+                localLocation.negateLocal();
             }
             
             if (Config.debug) {
                 Logger.getLogger(getClass().getName())
                         .log(Level.INFO, "Skin model attach Transform => localRotation={0}, localScale={1}, localTranslation={2}"
-                        , new Object[] {Arrays.toString(localRotation), localScale.toString(), localTranslation.toString()});
+                        , new Object[] {localRotation.toString(), localScale.toString(), localLocation.toString()});
                 
             }
             
@@ -207,20 +205,27 @@ public abstract class AbstractSkin implements Skin {
             
         } else {
             
+            // 如果角色节点不是Node类型，则不再进行后续处理，因为非Node模型不能添加子节点（装备模型）。
+            if (!(actor.getSpatial() instanceof Node)) {
+                Logger.getLogger(OutfitSkin.class.getName()).log(Level.WARNING
+                        , "actorSpatial is not a Node, could not attach skins, actorId={0}, skinId={1}"
+                        , new Object[] {actor.getData().getId(), data.getId()});
+                return;
+            }
+            
             // 检查是否需要为skin打开HardWareSkinning
             checkSwitchToHardware(actor, skinNode);
             
             // 添加到角色身上
-            ((Node) actorSpatial).attachChild(skinNode);
+            ((Node) actor.getSpatial()).attachChild(skinNode);
         }
         
         // 初始坐标变换
-        if (localTranslation != null) {
-            skinNode.setLocalTranslation(localTranslation);
+        if (localLocation != null) {
+            skinNode.setLocalTranslation(localLocation);
         }
         if (localRotation != null) {
-            Quaternion rot = new Quaternion();
-            skinNode.setLocalRotation(rot.fromAngles(localRotation));
+            skinNode.setLocalRotation(localRotation);
         }
         if (localScale != null) {
             skinNode.setLocalScale(localScale);
@@ -289,16 +294,16 @@ public abstract class AbstractSkin implements Skin {
         data.setAttributeApplied(false);
     }
     
-    protected Spatial loadSkinNode(String file) {
-        // 由于一些武器（如：弓）可能自身包含动画，即包含SkeletonControl,而
-        // 这些节点在CustomSkeletonControl中被排除（避免冲突），因而在这里需要
-        // 自已打开该功能。
-        Spatial spatial = AssetLoader.loadModel(file);
-        if (spatial.getControl(SkeletonControl.class) != null) {
-            spatial.getControl(SkeletonControl.class).setHardwareSkinningPreferred(true);
-        }
-        return spatial;
-    }
+//    protected Spatial loadSkinNode(String file) {
+//        // 由于一些武器（如：弓）可能自身包含动画，即包含SkeletonControl,而
+//        // 这些节点在CustomSkeletonControl中被排除（避免冲突），因而在这里需要
+//        // 自已打开该功能。
+//        Spatial spatial = AssetLoader.loadModel(file);
+//        if (spatial.getControl(SkeletonControl.class) != null) {
+//            spatial.getControl(SkeletonControl.class).setHardwareSkinningPreferred(true);
+//        }
+//        return spatial;
+//    }
     
     // --------------------------------------------------------------------------------------------------------------------------------
     // 打开skin的hws,如果角色actor主SkeletonControl已经打开该功能,则skinNode必须自已打开.

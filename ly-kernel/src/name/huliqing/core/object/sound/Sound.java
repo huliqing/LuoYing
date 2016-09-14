@@ -111,10 +111,16 @@ public class Sound<T extends SoundData> extends Node implements DataProcessor<T>
      * @param loop
      */
     public void setLoop(boolean loop) {
+        if (AudioContext.getAudioRenderer() == null) {
+            return;
+        }
         audio.setLooping(loop);
     }
     
     public void setVolume(float volume) {
+        if (AudioContext.getAudioRenderer() == null) {
+            return;
+        }
         audio.setVolume(volume);
     }
     

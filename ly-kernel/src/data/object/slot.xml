@@ -10,32 +10,32 @@
     <!-- ====================================================================-->
     
     <!--刀剑槽位1,2: 左肩,支持左右手刀剑-->
-    <slot id="slotSwordLeftBack"  bindBone="chest" localTranslation="1,2.8,-0.3" localRotation="0.27,3.1415926,-2.8" 
+    <slot id="slotSwordLeftBack"  bindBone="chest" localLocation="1,2.8,-0.3" localRotation="0.27,3.1415926,-2.8" 
          leftHandSkinSkill="skillSkin_LH_LS" rightHandSkinSkill="skillSkin_RH_LS" />
-    <slot id="slotSwordLeftBack2"  bindBone="chest" localTranslation="0.7,2.8,-0.5" localRotation="0.27,3.1415926,-3" 
+    <slot id="slotSwordLeftBack2"  bindBone="chest" localLocation="0.7,2.8,-0.5" localRotation="0.27,3.1415926,-3" 
          leftHandSkinSkill="skillSkin_LH_LS" rightHandSkinSkill="skillSkin_RH_LS" />
     
     <!--刀剑槽位1,2: 右肩,支持左右手刀剑-->
-    <slot id="slotSwordRightBack" bindBone="chest" localTranslation="-1,2.8,-0.5" localRotation="-0.27,0,-2.8" 
+    <slot id="slotSwordRightBack" bindBone="chest" localLocation="-1,2.8,-0.5" localRotation="-0.27,0,-2.8" 
          leftHandSkinSkill="skillSkin_LH_RS" rightHandSkinSkill="skillSkin_RH_RS" />
-    <slot id="slotSwordRightBack2" bindBone="chest" localTranslation="-0.7,2.8,-0.3" localRotation="-0.27,0,-3" 
+    <slot id="slotSwordRightBack2" bindBone="chest" localLocation="-0.7,2.8,-0.3" localRotation="-0.27,0,-3" 
          leftHandSkinSkill="skillSkin_LH_RS" rightHandSkinSkill="skillSkin_RH_RS" />
     
     <!--刀剑槽位1,2: 左腰，支持左右手刀剑-->
-    <slot id="slotSwordLeftWaist" bindBone="hips" localTranslation="0.95,1.5,1" localRotation="0.5,2.0,-2.5" 
+    <slot id="slotSwordLeftWaist" bindBone="hips" localLocation="0.95,1.5,1" localRotation="0.5,2.0,-2.5" 
           leftHandSkinSkill="skillSkin_LH_LW" rightHandSkinSkill="skillSkin_RH_LW" />
-    <slot id="slotSwordLeftWaist2" bindBone="hips" localTranslation="1.02,1.65,0.95" localRotation="0.5,2.0,-2.7" 
+    <slot id="slotSwordLeftWaist2" bindBone="hips" localLocation="1.02,1.65,0.95" localRotation="0.5,2.0,-2.7" 
           leftHandSkinSkill="skillSkin_LH_LW" rightHandSkinSkill="skillSkin_RH_LW" />
     
     <!--弓槽位：左肩，支持左手弓 -->
-    <slot id="slotBowLeftBack" bindBone="chest" localTranslation="0.5,0.5,-1.05" localRotation="-0.25,0.1,2.75" 
+    <slot id="slotBowLeftBack" bindBone="chest" localLocation="0.5,0.5,-1.05" localRotation="-0.25,0.1,2.75" 
           leftHandSkinSkill="skillSkinBow_LH_LS" rightHandSkinSkill="" />
     
     <!--魔杖槽位: 左肩，支持右手魔杖-->
-    <slot id="slotWandLeftBack" bindBone="chest" localTranslation="0,0,-1.2" localRotation="0.27,0,-0.35" 
+    <slot id="slotWandLeftBack" bindBone="chest" localLocation="0,0,-1.2" localRotation="0.27,0,-0.35" 
          leftHandSkinSkill="" rightHandSkinSkill="skillSkinWand_RH_LS" />
     <!--魔杖槽位: 右肩，支持左手魔杖(暂不开放,-_-懒得再去调一个左手取魔杖的角色动画)-->
-    <slot id="slotWandRightBack" bindBone="chest" localTranslation="0,0,-1.2" localRotation="0.27,0,0.35" 
+    <slot id="slotWandRightBack" bindBone="chest" localLocation="0,0,-1.2" localRotation="0.27,0,0.35" 
          leftHandSkinSkill="" rightHandSkinSkill="skillSkinWand_LH_RS" />
 </root>
 

@@ -23,12 +23,9 @@ import name.huliqing.core.ui.UI;
  * @author huliqing
  */
 public class ArmorPanel extends ListView<Skin> implements ActorPanel{
-//    private final UserCommandNetwork userCommandNetwork = Factory
-//            .get(UserCommandNetwork.class);
     private final PlayService playService = Factory.get(PlayService.class);
     private final SkinService skinService = Factory.get(SkinService.class);
     private final SkinNetwork skinNetwork = Factory.get(SkinNetwork.class);
-    
     
     private Actor actor;
     private final List<Skin> datas = new ArrayList<Skin>();
@@ -84,9 +81,9 @@ public class ArmorPanel extends ListView<Skin> implements ActorPanel{
             List<Skin> skins = skinService.getSkins(actor);
             if (skins != null && !skins.isEmpty()) {
                 for (Skin s : skins) {
-//                    if (s.isBaseSkin()) {
-//                        continue;
-//                    }
+                    if (s.isBaseSkin()) {
+                        continue;
+                    }
                     if (s.isWeapon()) {
                         continue;
                     }
@@ -103,10 +100,6 @@ public class ArmorPanel extends ListView<Skin> implements ActorPanel{
     }
     
     private class ArmorRow extends ItemRow<Skin> {
-
-        public ArmorRow() {
-            super();
-        }
         
         @Override
         protected void display(Skin skin) {
@@ -114,19 +107,10 @@ public class ArmorPanel extends ListView<Skin> implements ActorPanel{
             
             icon.setIcon(skinData.getIcon());
             body.setNameText(ResourceManager.getObjectName(skinData));
-
-            // remove20160912
-//            if (skin instanceof SkinData) {
-////                body.setDesText(data.getDes());
-//                body.setDesText("----TO DO----");
-//            } else {
-//                body.setDesText(ResourceManager.getObjectDes(skin.getData().getId()));
-//            }
-            
-            body.setDesText("----TO DO----");
+            body.setDesText(skinData.getDes());
             num.setText(String.valueOf(skinData.getTotal()));
             
-            setBackgroundVisible(skinData.isUsed());
+            setBackgroundVisible(skin.isAttached());
         }
 
         @Override

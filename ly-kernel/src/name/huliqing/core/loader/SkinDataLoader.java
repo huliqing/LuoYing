@@ -21,13 +21,9 @@ public class SkinDataLoader implements DataLoader<SkinData> {
 
     @Override
     public void load(Proto proto, SkinData data) {
-        // remove20160831
-//        data.setRaceLimit(proto.getAsList("raceLimit"));
-//        data.setSexLimit(Sex.identifyByName(proto.getAsString("sexLimit")));
-//        data.setDeletable(proto.getAsBoolean("deletable", true));
-
         data.setBaseSkin(proto.getAsBoolean("baseSkin", false));
-        data.setUsed(true);
+        data.setWeaponType(proto.getAsInteger("weaponType", 0));
+        data.setSlots(proto.getAsStringList("slots"));
         
         String[] aaStr = proto.getAsArray("applyAttributes");
         if (aaStr != null) {
@@ -38,9 +34,6 @@ public class SkinDataLoader implements DataLoader<SkinData> {
             }
             data.setApplyAttributes(aas);
         }
-        
-        data.setWeaponType(proto.getAsInteger("weaponType", 0));
-        data.setSlots(proto.getAsStringList("slots"));
         
         // type是使用二进制位来存储skin类型
         String[] typeStr = proto.getAsArray("type");
@@ -75,9 +68,6 @@ public class SkinDataLoader implements DataLoader<SkinData> {
                 data.getMatchAttributes().add(am);
             }
         }
-        
-        // data.setUsing(false);不需要
-        
     }
     
 }
