@@ -13,8 +13,6 @@ import com.jme3.network.serializing.Serializable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.core.constants.IdConstants;
-import name.huliqing.core.data.define.HandlerObject;
 import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.object.skin.WeaponStateUtils;
 import name.huliqing.core.utils.ConvertUtils;
@@ -24,15 +22,12 @@ import name.huliqing.core.utils.ConvertUtils;
  * @author huliqing
  */
 @Serializable
-public class SkillData extends ObjectData implements HandlerObject {
+public class SkillData extends ObjectData {
     
     private SkillType skillType;
     
     // 技能的执行时间，单位秒
     private float useTime;
-    
-    // remove20160503,不再需要radius这个参数,因为除了hitSkill之外，其它技能几乎都不需要这个属性
-//    private float radius;
     
     // 技能动画名称
     private String animation;
@@ -212,14 +207,6 @@ public class SkillData extends ObjectData implements HandlerObject {
     public void setUseTime(float useTime) {
         this.useTime = useTime;
     }
-
-//    public float getRadius() {
-//        return radius;
-//    }
-//
-//    public void setRadius(float radius) {
-//        this.radius = radius;
-//    }
 
     public String getAnimation() {
         return animation;
@@ -440,12 +427,6 @@ public class SkillData extends ObjectData implements HandlerObject {
 
     public void setNeedLevel(int needLevel) {
         this.needLevel = needLevel;
-    }
-
-    @Override
-    public String getHandler() {
-        // 基本上所有skill都通用一个handler,所以如果handler不特殊配置则默认用这一个
-        return IdConstants.HANDLER_SKILL;
     }
    
     /**

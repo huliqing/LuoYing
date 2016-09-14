@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.core.object.handler;
+package name.huliqing.core.object.item;
 
 import com.jme3.font.BitmapFont;
 import com.jme3.material.MatParamOverride;
@@ -20,12 +20,11 @@ import java.util.Map;
 import name.huliqing.core.Factory;
 import name.huliqing.core.constants.InterfaceConstants;
 import name.huliqing.core.constants.ResConstants;
-import name.huliqing.core.data.HandlerData;
-import name.huliqing.core.data.ObjectData;
-import name.huliqing.core.mvc.network.UserCommandNetwork;
-import name.huliqing.core.mvc.service.PlayService;
+import name.huliqing.core.data.ItemData;
 import name.huliqing.core.manager.ResourceManager;
+import name.huliqing.core.mvc.network.UserCommandNetwork;
 import name.huliqing.core.mvc.service.ActorService;
+import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.ui.Button;
 import name.huliqing.core.ui.FrameLayout;
@@ -38,9 +37,10 @@ import name.huliqing.core.ui.UIUtils;
 import name.huliqing.core.utils.ConvertUtils;
 
 /**
+ * 地图物品，点击后可打开地图
  * @author huliqing
  */
-public class MapHandler extends AbstractItemHandler {
+public class MapItem extends AbstractItem {
     private final PlayService playService = Factory.get(PlayService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final UserCommandNetwork userCommandNetwork = Factory.get(UserCommandNetwork.class);
@@ -66,7 +66,7 @@ public class MapHandler extends AbstractItemHandler {
     private MapView mapView;
     
     @Override
-    public void setData(HandlerData data) {
+    public void setData(ItemData data) {
         super.setData(data); 
         this.image = data.getAsString("image");
         this.mapSize = data.getAsFloat("mapSize", mapSize);
@@ -94,20 +94,11 @@ public class MapHandler extends AbstractItemHandler {
             }
         }
     }
-    
-    @Override
-    protected void useObject(Actor actor, ObjectData data) {
-//        // test
-//        for (int i = 0; i < 100; i++) {
-//            Location loc = new Location();
-//                loc.id = i + "";
-//                loc.x = FastMath.nextRandomFloat();
-//                loc.y = FastMath.nextRandomFloat();
-//                loc.gameId = null;
-//                loc.icon = null;
-//                locations.add(loc);
-//        }
 
+    @Override
+    public void use(Actor actor) {
+        super.use(actor);
+        
         // 创建一个map view用于显示地图
         if (mapView == null) {
             mapView = new MapView(image, locations);
@@ -119,6 +110,7 @@ public class MapHandler extends AbstractItemHandler {
         mapView.mapContainer.addFlag(playerFlag);
         playService.addObjectGui(mapView);
     }
+    
     
     private Flag createFlag(Actor actor, String gameId, boolean showDirection, boolean focus) {
         Flag flag = new Flag(actor.getData().getUniqueId(), InterfaceConstants.MAP_FLAG_PLAYER);
@@ -229,7 +221,7 @@ public class MapHandler extends AbstractItemHandler {
             close.setImage(InterfaceConstants.UI_CLOSE);
             close.setWidth(32);
             close.setHeight(32);
-            close.addClickListener(new Listener() {
+            close.addClickListener(new UI.Listener() {
                 @Override
                 public void onClick(UI view, boolean isPressed) {
                     if (isPressed) return;
@@ -244,7 +236,7 @@ public class MapHandler extends AbstractItemHandler {
         @Override
         protected void updateViewLayout() {
             super.updateViewLayout(); 
-            close.setToCorner(Corner.RT);
+            close.setToCorner(UI.Corner.RT);
         }
         
     }
@@ -283,7 +275,7 @@ public class MapHandler extends AbstractItemHandler {
                     icon.setWidth(icon.getWidth() * locationSize);
                     icon.setHeight(icon.getHeight() * locationSize);
                     icon.setPosition(posX - icon.getWidth() * 0.5f, posY - icon.getHeight() * 0.5f);
-                    icon.addClickListener(new Listener() {
+                    icon.addClickListener(new UI.Listener() {
                         @Override
                         public void onClick(UI view, boolean isPressed) {
                             if (isPressed) return;
@@ -418,7 +410,7 @@ public class MapHandler extends AbstractItemHandler {
             title.setVerticalAlignment(BitmapFont.VAlign.Center);
             transfer = new Button(ResourceManager.get(ResConstants.COMMON_MAP_TRANSFER));
             transfer.setWidth(width);
-            transfer.addClickListener(new Listener() {
+            transfer.addClickListener(new UI.Listener() {
                 @Override
                 public void onClick(UI view, boolean isPressed) {
                     if (isPressed) 
@@ -433,7 +425,7 @@ public class MapHandler extends AbstractItemHandler {
             
             cancel = new Button(ResourceManager.get(ResConstants.COMMON_MAP_CANCEL));
             cancel.setWidth(width);
-            cancel.addClickListener(new Listener() {
+            cancel.addClickListener(new UI.Listener() {
                 @Override
                 public void onClick(UI view, boolean isPressed) {
                     if (isPressed) return;
@@ -458,4 +450,5 @@ public class MapHandler extends AbstractItemHandler {
             }
         }
     }
+    
 }

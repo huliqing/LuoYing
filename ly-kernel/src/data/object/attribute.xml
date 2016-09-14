@@ -15,7 +15,7 @@
     -->
     <!--==========================================================================-->
 
-    <!--生物属性： 这个属性用来标记角色是否是生物，即有"生命迹象"的角色，1：表示生物; 0：表示非生物-->    
+    <!--生物属性： 这个属性用来标记角色是否是生物，即有"生命迹象"的角色，1：表示生物; 0：表示非生物-->
     <attributeBoolean id="attributeLiving" name="attributeLiving" value="1" />
 
     <!--角色种族: 这个属性用来存放角色的种族标识，用不同的数字来定义不同的种族,存放的值由具体实现去定义。--> 
@@ -72,9 +72,9 @@
     <!--角色天赋点数容器-->
     <attributeInteger id="attributeTalentPoints" name="attributeTalentPoints" />
 
-    <!--最高生命值-->
+    <!--最高健康值-->
     <attributeLevelInteger id="attributeHealthMax" name="attributeHealthMax" levelEl="elLevelAttrHealth" />
-    <!--实时生命值-->
+    <!--实时健康值-->
     <attributeLimitInteger id="attributeHealth" name="attributeHealth" minValue="0" bindMaxLimitAttribute="attributeHealthMax" />
     
     <!--最高魔法值-->

@@ -52,7 +52,6 @@ import name.huliqing.core.mvc.service.EffectService;
 import name.huliqing.core.mvc.service.EffectServiceImpl;
 import name.huliqing.core.mvc.service.SystemServiceImpl;
 import name.huliqing.core.mvc.service.HandlerService;
-import name.huliqing.core.mvc.service.HandlerServiceImpl;
 import name.huliqing.core.mvc.service.ElService;
 import name.huliqing.core.mvc.service.ElServiceImpl;
 import name.huliqing.core.mvc.service.EnvServiceImpl;
@@ -134,7 +133,6 @@ public class Factory {
         CLASS_MAP.put(EnvService.class, EnvServiceImpl.class);
         CLASS_MAP.put(GameService.class, GameServiceImpl.class);
         CLASS_MAP.put(GameLogicService.class, GameLogicServiceImpl.class);
-        CLASS_MAP.put(HandlerService.class, HandlerServiceImpl.class);
         CLASS_MAP.put(HitCheckerService.class, HitCheckerServiceImpl.class);
         CLASS_MAP.put(ItemService.class, ItemServiceImpl.class);
         CLASS_MAP.put(LogicService.class, LogicServiceImpl.class);

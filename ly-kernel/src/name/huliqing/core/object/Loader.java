@@ -19,7 +19,6 @@ import name.huliqing.core.data.EmitterData;
 import name.huliqing.core.data.PositionData;
 import name.huliqing.core.data.env.EnvData;
 import name.huliqing.core.data.GameData;
-import name.huliqing.core.data.HandlerData;
 import name.huliqing.core.data.HitCheckerData;
 import name.huliqing.core.data.ActorLogicData;
 import name.huliqing.core.data.SkinData;
@@ -33,7 +32,6 @@ import name.huliqing.core.data.TaskData;
 import name.huliqing.core.data.ViewData;
 import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.object.action.Action;
-import name.huliqing.core.object.actoranim.ActorAnim;
 import name.huliqing.core.object.actorlogic.ActorLogic;
 import name.huliqing.core.object.anim.Anim;
 import name.huliqing.core.object.bullet.Bullet;
@@ -41,7 +39,6 @@ import name.huliqing.core.object.chat.Chat;
 import name.huliqing.core.object.effect.Effect;
 import name.huliqing.core.object.env.Env;
 import name.huliqing.core.object.game.Game;
-import name.huliqing.core.object.handler.Handler;
 import name.huliqing.core.object.hitchecker.HitChecker;
 import name.huliqing.core.object.el.El;
 import name.huliqing.core.object.emitter.Emitter;
@@ -163,18 +160,6 @@ public class Loader {
         return game;
     }
     
-    public static Handler loadHandler(HandlerData data) {
-        return DataFactory.createProcessor(data);
-    }
-    
-    public static Handler loadHandler(String handlerId) {
-        if (handlerId == null) {
-            return null;
-        }
-        HandlerData ad = DataFactory.createData(handlerId);
-        return loadHandler(ad);
-    }
-    
     public static HitChecker loadHitChecker(String id) {
         HitCheckerData data = DataFactory.createData(id);
         return loadHitChecker(data);
@@ -255,14 +240,6 @@ public class Loader {
     public static State loadState(StateData data) {
         return DataFactory.createProcessor(data);
     }
-        
-//    public static Talent loadTalent(String talentId) {
-//        return loadTalent((TalentData) DataFactory.createData(talentId));
-//    }
-    
-//    public static Talent loadTalent(TalentData data) {
-//        return DataFactory.createProcessor(data);
-//    }
     
     public static Task loadTask(String taskId) {
         return loadTask((TaskData) DataFactory.createData(taskId));

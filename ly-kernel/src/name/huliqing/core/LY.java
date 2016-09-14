@@ -43,7 +43,6 @@ import name.huliqing.core.data.EmitterData;
 import name.huliqing.core.data.env.EnvData;
 import name.huliqing.core.data.GameData;
 import name.huliqing.core.data.GameLogicData;
-import name.huliqing.core.data.HandlerData;
 import name.huliqing.core.data.HitCheckerData;
 import name.huliqing.core.data.ItemData;
 import name.huliqing.core.data.MagicData;
@@ -219,17 +218,6 @@ import name.huliqing.core.object.gamelogic.ActorCleanGameLogic;
 import name.huliqing.core.object.gamelogic.AttributeChangeGameLogic;
 import name.huliqing.core.loader.GameLogicDataLoader;
 import name.huliqing.core.object.gamelogic.PlayerDeadCheckerGameLogic;
-import name.huliqing.core.object.handler.AttributeHandler;
-import name.huliqing.core.loader.HandlerDataLoader;
-import name.huliqing.core.object.handler.ItemSkillHandler;
-import name.huliqing.core.object.handler.MapHandler;
-import name.huliqing.core.object.handler.SkillBookHandler;
-import name.huliqing.core.object.handler.SkillHandler;
-import name.huliqing.core.object.handler.StateGainHandler;
-import name.huliqing.core.object.handler.StateRemoveHandler;
-import name.huliqing.core.object.handler.SummonHandler;
-import name.huliqing.core.object.handler.SummonSkillHandler;
-import name.huliqing.core.object.handler.TestHandler;
 import name.huliqing.core.loader.HitCheckerDataLoader;
 import name.huliqing.core.object.hitchecker.SimpleHitChecker;
 import name.huliqing.core.loader.ItemDataLoader;
@@ -311,6 +299,14 @@ import name.huliqing.core.object.drop.AttributeDrop;
 import name.huliqing.core.object.drop.GroupDrop;
 import name.huliqing.core.object.drop.ItemDrop;
 import name.huliqing.core.object.drop.SkinDrop;
+import name.huliqing.core.object.item.AttributeItem;
+import name.huliqing.core.object.item.BookItem;
+import name.huliqing.core.object.item.MapItem;
+import name.huliqing.core.object.item.SimpleItem;
+import name.huliqing.core.object.item.SkillItem;
+import name.huliqing.core.object.item.StateItem;
+import name.huliqing.core.object.item.StateRemoveItem;
+import name.huliqing.core.object.item.SummonItem;
 import name.huliqing.core.object.module.DropModule;
 import name.huliqing.core.object.module.LevelModule;
 import name.huliqing.core.object.state.GroupState;
@@ -380,7 +376,6 @@ public class LY {
         Serializer.registerClass(EnvData.class);
         Serializer.registerClass(GameData.class);
         Serializer.registerClass(GameLogicData.class);
-        Serializer.registerClass(HandlerData.class);
         Serializer.registerClass(HitCheckerData.class);
         Serializer.registerClass(ItemData.class);
         Serializer.registerClass(MagicData.class);
@@ -525,25 +520,31 @@ public class LY {
         DataFactory.register("gameLogicActorClean", GameLogicData.class, GameLogicDataLoader.class, ActorCleanGameLogic.class);
         DataFactory.register("gameLogicAttributeChange", GameLogicData.class, GameLogicDataLoader.class, AttributeChangeGameLogic.class);
         
+        // remove20160915
         // Handler
-        DataFactory.register("handlerTest", HandlerData.class, HandlerDataLoader.class, TestHandler.class);
-        DataFactory.register("handlerSummon", HandlerData.class, HandlerDataLoader.class, SummonHandler.class);
-        DataFactory.register("handlerAttribute", HandlerData.class, HandlerDataLoader.class, AttributeHandler.class);
-//        DataFactory.register("handlerOutfit", HandlerData.class, HandlerDataLoader.class, OutfitHandler.class);
-//        DataFactory.register("handlerWeapon", HandlerData.class, HandlerDataLoader.class, WeaponHandler.class);
-        DataFactory.register("handlerSkill", HandlerData.class, HandlerDataLoader.class, SkillHandler.class);
-        DataFactory.register("handlerSummonSkill", HandlerData.class, HandlerDataLoader.class, SummonSkillHandler.class);
-        DataFactory.register("handlerSkillBook", HandlerData.class, HandlerDataLoader.class, SkillBookHandler.class);
-        DataFactory.register("handlerStateGain", HandlerData.class, HandlerDataLoader.class, StateGainHandler.class);
-        DataFactory.register("handlerStateRemove", HandlerData.class, HandlerDataLoader.class, StateRemoveHandler.class);
-        DataFactory.register("handlerItemSkill", HandlerData.class, HandlerDataLoader.class, ItemSkillHandler.class);
-        DataFactory.register("handlerMap", HandlerData.class, HandlerDataLoader.class, MapHandler.class);
+//        DataFactory.register("handlerTest", HandlerData.class, HandlerDataLoader.class, TestHandler.class);
+//        DataFactory.register("handlerSummon", HandlerData.class, HandlerDataLoader.class, SummonHandler.class);
+//        DataFactory.register("handlerAttribute", HandlerData.class, HandlerDataLoader.class, AttributeHandler.class);
+//        DataFactory.register("handlerSkill", HandlerData.class, HandlerDataLoader.class, SkillHandler.class);
+//        DataFactory.register("handlerSummonSkill", HandlerData.class, HandlerDataLoader.class, SummonSkillHandler.class);
+//        DataFactory.register("handlerSkillBook", HandlerData.class, HandlerDataLoader.class, SkillBookHandler.class);
+//        DataFactory.register("handlerStateGain", HandlerData.class, HandlerDataLoader.class, StateGainHandler.class);
+//        DataFactory.register("handlerStateRemove", HandlerData.class, HandlerDataLoader.class, StateRemoveHandler.class);
+//        DataFactory.register("handlerItemSkill", HandlerData.class, HandlerDataLoader.class, ItemSkillHandler.class);
+//        DataFactory.register("handlerMap", HandlerData.class, HandlerDataLoader.class, MapHandler.class);
         
         // HitChecker
         DataFactory.register("hitChecker",  HitCheckerData.class, HitCheckerDataLoader.class, SimpleHitChecker.class);
         
         // Item
-        DataFactory.register("item",  ItemData.class, ItemDataLoader.class, null);
+        DataFactory.register("itemAttribute",  ItemData.class, ItemDataLoader.class, AttributeItem.class);
+        DataFactory.register("itemBook",  ItemData.class, ItemDataLoader.class, BookItem.class);
+        DataFactory.register("itemMap",  ItemData.class, ItemDataLoader.class, MapItem.class);
+        DataFactory.register("itemSimple",  ItemData.class, ItemDataLoader.class, SimpleItem.class);
+        DataFactory.register("itemSkill",  ItemData.class, ItemDataLoader.class, SkillItem.class);
+        DataFactory.register("itemState",  ItemData.class, ItemDataLoader.class, StateItem.class);
+        DataFactory.register("itemStateRemove",  ItemData.class, ItemDataLoader.class, StateRemoveItem.class);
+        DataFactory.register("itemSummon",  ItemData.class, ItemDataLoader.class, SummonItem.class);
 
         // Magic
         DataFactory.register("magicState", MagicData.class, MagicDataLoader.class, StateMagic.class);
@@ -655,7 +656,10 @@ public class LY {
             DataFactory.loadDataFile("/data/object/env.xml");
             DataFactory.loadDataFile("/data/object/game.xml");
             DataFactory.loadDataFile("/data/object/gameLogic.xml");
-            DataFactory.loadDataFile("/data/object/handler.xml");
+            
+            // remove20160915
+//            DataFactory.loadDataFile("/data/object/handler.xml");
+
             DataFactory.loadDataFile("/data/object/hitChecker.xml");
             DataFactory.loadDataFile("/data/object/magic.xml");
             DataFactory.loadDataFile("/data/object/module.xml");

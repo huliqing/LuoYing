@@ -10,52 +10,35 @@
     
     <!-- ========================================================================= -->
     
-    <!--召唤防御塔－火-->
+<!--    召唤防御塔－火
     <handlerSummon id="handlerSummonTower" actorId="actorTower" total="1" />
-    <!--召唤防御塔-石-->
+    召唤防御塔-石
     <handlerSummon id="handlerSummonTowerStone" actorId="actorTowerStone" total="1" />
-    <!--召唤防御塔-冰-->
-    <handlerSummon id="handlerSummonTowerSnow" actorId="actorTowerSnow" total="1" />
+    召唤防御塔-冰
+    <handlerSummon id="handlerSummonTowerSnow" actorId="actorTowerSnow" total="1" />-->
     
     <!-- ========================================================================= -->
     
-    <!--<handlerSummonSkill id="handlerSummonSpider" actorId="actorSpiderMin" skillId="skillSummon" />-->
-    <!--<handlerSummonSkill id="handlerSummonWolf" actorId="actorWolf" skillId="skillSummon" />-->
-    <!--<handlerSummonSkill id="handlerSummonBear" actorId="actorBear" skillId="skillSummon" />-->
-    <!--<handlerSummonSkill id="handlerSummonScorpion" actorId="actorScorpion" skillId="skillSummon" />-->
-    <!--<handlerSummonSkill id="handlerSummonGb" actorId="actorGbSmall" skillId="skillSummon" />-->
-    <!--召唤蜘蛛-->
+<!--    召唤蜘蛛
     <handlerItemSkill id="handlerSummonSpider" skill="skillSummonSpider" />
-    <!--召唤狼-->
+    召唤狼
     <handlerItemSkill id="handlerSummonWolf" skill="skillSummonWolf" />
-    <!--召唤熊-->
+    召唤熊
     <handlerItemSkill id="handlerSummonBear" skill="skillSummonBear" />
-    <!--召唤蝎子-->
+    召唤蝎子
     <handlerItemSkill id="handlerSummonScorpion" skill="skillSummonScorpion" />
-    <!--召唤古柏子孙-->
+    召唤古柏子孙
     <handlerItemSkill id="handlerSummonGb" skill="skillSummonGb" />
-    <!--召唤迅猛龙raptor-->
+    召唤迅猛龙raptor
     <handlerItemSkill id="handlerSummonRaptor" skill="skillSummonRaptor" />
-    <!--召唤雷克斯-->
-    <handlerItemSkill id="handlerSummonTrex" skill="skillSummonTrex" />
+    召唤雷克斯
+    <handlerItemSkill id="handlerSummonTrex" skill="skillSummonTrex" />-->
     
     <!-- ========================================================================= -->
 
     <!-- 补血补魔 -->
-    <handlerAttribute id="handlerTonicHealth" attribute="attributeHealth" amount="200" effects="effectRandomFire" />
-    <handlerAttribute id="handlerTonicMagic" attribute="attributeMana" amount="200" effects="effectRandomFire" />
-    
-    <!-- ========================================================================= -->
-    
-    <!-- 换装 -->
-    <!--<handlerOutfit id="handlerOutfit" sounds="soundDressOutfit" />-->
-    
-    <!-- ========================================================================= -->
-    
-<!--     换武器 
-    <handlerWeapon id="handlerWeaponSword" sounds="soundDrawSword" />
-    <handlerWeapon id="handlerWeaponBow" sounds="soundDrawBow" />
-    <handlerWeapon id="handlerWeaponWand" sounds="soundDressOutfit2" />-->
+    <!--<handlerAttribute id="handlerTonicHealth" attribute="attributeHealth" amount="200" effects="effectRandomFire" />-->
+    <!--<handlerAttribute id="handlerTonicMagic" attribute="attributeMana" amount="200" effects="effectRandomFire" />-->
     
     <!-- ========================================================================= -->
     
@@ -64,42 +47,42 @@
     
     <!-- ========================================================================= -->
     
-    <!--技能书基本配置-->
+<!--    技能书基本配置
     <handlerSkillBook id="handlerSkillBookBase" effects="effectLearnSkill" />
-    <!--学习野兽召唤-->
+    学习野兽召唤
     <handlerSkillBook id="handlerSkillBookSummon"  extends="handlerSkillBookBase"  skill="skillSummon" />
-    <!--学习闪电箭-->
+    学习闪电箭
     <handlerSkillBook id="handlerSkillBookLightningShot" extends="handlerSkillBookBase"  skill="skillLightningShot" />
-    <!--学习传送术-->
+    学习传送术
     <handlerSkillBook id="handlerSkillBookBack" extends="handlerSkillBookBase"  skill="skillBack" />
-    <!--学习落樱飞舞-->
+    学习落樱飞舞
     <handlerSkillBook id="handlerSkillBookDanceSakura" extends="handlerSkillBookBase"  skill="skillDanceSakura" />
-    <!--学习寒冰箭-->
+    学习寒冰箭
     <handlerSkillBook id="handlerSkillBookIceShot" extends="handlerSkillBookBase"  skill="skillIceShot" />
-    <!--学习二刀流冲击波-->
-    <handlerSkillBook id="handlerSkillBookDualSwordWave" extends="handlerSkillBookBase" skill="skillDualSwordWave" />
+    学习二刀流冲击波
+    <handlerSkillBook id="handlerSkillBookDualSwordWave" extends="handlerSkillBookBase" skill="skillDualSwordWave" />-->
 
     <!-- ========================================================================= -->
     <!--复活-->
-    <handlerItemSkill id="handlerItemReborn" skill="skillShotReborn" />
+    <!--<handlerItemSkill id="handlerItemReborn" skill="skillShotReborn" />-->
     
     <!-- ========================================================================= -->
     <!--获得状态、解除状态-->
     <!-- ========================================================================= -->
 
     <!--获得“疾风步”的状态-->
-    <handlerStateGain id="handlerStateGainWindWalk" states="stateWindWalk" effects="effectRandomFire" />
+    <!--<handlerStateGain id="handlerStateGainWindWalk" states="stateWindWalk" effects="effectRandomFire" />-->
     <!--获得“狂暴”状态-->
-    <handlerStateGain id="handlerStateGainAS" states="stateSpeedUpAS" effects="effectRandomFire" />
+    <!--<handlerStateGain id="handlerStateGainAS" states="stateSpeedUpAS" effects="effectRandomFire" />-->
     
     <!--解除中毒状态: 解毒草用-->
-    <handlerStateRemove id="handlerStateRemoveScorpionVenom" states="stateScorpionVenom" effects="effectTonic" />
+    <!--<handlerStateRemove id="handlerStateRemoveScorpionVenom" states="stateScorpionVenom" effects="effectTonic" />-->
     
     <!-- ========================================================================= -->
     <!--地图数据-->
     <!-- ========================================================================= -->
-    
-    <!--落樱大陆-->
+<!--    
+    落樱大陆
     <handlerMap id="handlerMapWorld" image="Interface/map/map_world.jpg" locationSize="0.5" flipVertical="1"
                 baseIconPath="Interface/map/loc/"
                 locations="
@@ -128,7 +111,7 @@
 , camp6|0.82|0.17|0||camp.png
 , camp7|0.59|0.14|0||camp.png
 , camp8|0.45|0.13|0||camp.png
-"/>
+"/>-->
     
     <!--落樱小岛:20160626暂不开放-->
     <!--<handlerMap id="handlerMapIsland" image="Interface/map/map_island.jpg"  />-->

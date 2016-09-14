@@ -44,7 +44,9 @@ xs:time
         <xs:attribute name="dataProcessorClass" type="xs:string" use="optional" >
             <xs:annotation><xs:documentation></xs:documentation></xs:annotation>
         </xs:attribute>
-        <xs:attribute name="localObject" type="bool" use="optional" >
+        
+        <!--move to item.xsd-->
+<!--        <xs:attribute name="localObject" type="bool" use="optional" >
             <xs:annotation>
                 <xs:documentation>
                     是否为本地物体,对于本地物体在使用的时候不需要把事件传递到服务端或客户端。比如：客户端或服务端在打开地图
@@ -52,7 +54,7 @@ xs:time
                     所以使用后物品数量不会实时同步到其它客户端。需要注意这一点。
                 </xs:documentation>
             </xs:annotation>
-        </xs:attribute>
+        </xs:attribute>-->
     </xs:complexType>
     
     <!-- 布尔类型 -->

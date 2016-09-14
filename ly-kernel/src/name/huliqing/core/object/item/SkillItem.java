@@ -1,20 +1,20 @@
 /*
- * To change this template, choose Tools | Templates
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.core.object.handler;
+package name.huliqing.core.object.item;
 
 import name.huliqing.core.Factory;
 import name.huliqing.core.constants.ResConstants;
 import name.huliqing.core.constants.SkillConstants;
-import name.huliqing.core.data.HandlerData;
-import name.huliqing.core.data.ObjectData;
+import name.huliqing.core.data.ItemData;
 import name.huliqing.core.enums.MessageType;
+import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.mvc.network.PlayNetwork;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.ItemService;
 import name.huliqing.core.mvc.service.SkillService;
-import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.skill.Skill;
 
@@ -23,53 +23,35 @@ import name.huliqing.core.object.skill.Skill;
  * 个技能来让角色执行。
  * @author huliqing
  */
-public class ItemSkillHandler extends AbstractItemHandler {
+public class SkillItem extends AbstractItem {
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
     private final ItemService itemService = Factory.get(ItemService.class);
     
     private String skillId;
-    
-    // remove20160831
-//    private RaceSexSkill[] rsses;
-    
-    // ---- inner
+
+    //----
+    private Skill skill;
     
     @Override
-    public void setData(HandlerData data) {
+    public void setData(ItemData data) {
         super.setData(data); 
         skillId = data.getAsString("skill");
-        
-        // remove20160831
-//        // 格式：race|sex|skill,race|sex|skill,...
-//        // sex=f/m
-//        String[] tempRsses = data.getAsArray("special");
-//        if (tempRsses != null) {
-//            rsses = new RaceSexSkill[tempRsses.length];
-//            String[] rssArr;
-//            for (int i = 0; i < tempRsses.length; i++) {
-//                rssArr = tempRsses[i].split("\\|");
-//                RaceSexSkill rss = new RaceSexSkill();
-//                rss.race = rssArr[0];
-//                rss.sex = Sex.identifyByFM(rssArr[1]);
-//                rss.skillId = rssArr[2];
-//            }
-//        } else {
-//            rsses = new RaceSexSkill[0]; 
-//        }
     }
-
+    
     @Override
-    public boolean canUse(Actor actor, ObjectData data) {
-        if (!super.canUse(actor, data))
-            return false;
-        
-        Skill skill = getSkill(actor);
-        if (skill == null)
+    public boolean canUse(Actor actor) {
+        if (!super.canUse(actor))
             return false;
         
         // 判断所要使用的技能是否可以执行
+        if (skill == null) {
+            skill = skillService.loadSkill(skillId);
+            if (skill == null) {
+                return false;
+            }
+        }
         int skillStateCode = skillService.checkStateCode(actor, skill, false);
         if (skillStateCode != SkillConstants.STATE_OK) {
             if (actorService.isPlayer(actor)) {
@@ -131,14 +113,14 @@ public class ItemSkillHandler extends AbstractItemHandler {
         }
         return true;
     }
-
+    
     @Override
-    protected void useObject(Actor actor, ObjectData data) {
+    public void use(Actor actor) {
+        super.use(actor);
         
-        // remove20160831
-//        Skill skill = getSkill(actor);
-
-        Skill skill = getSkill(actor);
+        if (skill == null) {
+            skill = skillService.loadSkill(skillId);
+        }
         if (skill != null) {
             boolean result = skillService.playSkill(actor, skill, false);
             if (result) {
@@ -147,38 +129,5 @@ public class ItemSkillHandler extends AbstractItemHandler {
         }
     }
     
-    private Skill getSkill(Actor actor) {
-        return skillService.loadSkill(skillId);
-    }
     
-    // remove20160831
-//    private Skill getSkill(Actor actor) {
-//        String useSkillId = findRaceSexSkill(actorService.getRace(actor), actorService.getSex(actor));
-//        if (useSkillId == null) {
-//            useSkillId = skillId;
-//        }
-//        return skillService.loadSkill(useSkillId);
-//    }
-//    
-//    private String findRaceSexSkill(String race, Sex sex) {
-//        if (rsses.length <= 0) 
-//            return null;
-//        
-//        for (RaceSexSkill rss : rsses) {
-//            if (rss.race.equals(race) && rss.sex == sex) {
-//                return rss.skillId;
-//            }
-//        }
-//        return null;
-//    }
-//    
-//    // 匹配种族，性别，技能
-//    private class RaceSexSkill {
-//        // 种族类型
-//        String race;
-//        // 性别
-//        Sex sex;
-//        // 技能id
-//        String skillId;
-//    }
 }
