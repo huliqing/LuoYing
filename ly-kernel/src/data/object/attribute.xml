@@ -185,15 +185,11 @@
 ,attributeMovableYes,attributeRotatableYes,attributeMassDynamic" />
 
     <!--配置给：非生物、种族未知、性别未知、不可移动、不可转向的角色。如：防御塔、堡垒、基地等静止角色-->
-<!--    <attributeGroup id="attributeActorUnlivingStatic" name="attributeActorUnliving" 
-                       attributes="attributeGroupBase,attributeLivingNo,attributeRaceUnknow,attributeSexUnknow,attributeMassStatic" />-->
     <attributeGroup id="attributeActorUnlivingUnmovableUnrotatable" name="attributeActorUnlivingUnmovableUnrotatable" 
                        attributes="attributeGroupBase,attributeLivingNo,attributeRaceUnknow,attributeSexUnknow
 ,attributeMovableNo,attributeRotatableNo,attributeMassStatic" />
     
     <!--配置给：生物、种族未知、性别未知、可移动、可转向的角色。如：虫子、怪物、野兽、飞禽、未知生物等活动类角色.-->
-<!--    <attributeGroup id="attributeActorLiving" name="attributeActorLiving" 
-                       attributes="attributeGroupBase,attributeLivingYes,attributeRaceUnknow,attributeSexUnknow,attributeMassDynamic" />-->
     <attributeGroup id="attributeActorLivingMovableRotatable" name="attributeActorLiving" 
                        attributes="attributeGroupBase,attributeLivingYes,attributeRaceUnknow,attributeSexUnknow
 ,attributeMovableYes,attributeRotatableYes,attributeMassDynamic" />
