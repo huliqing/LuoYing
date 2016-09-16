@@ -14,6 +14,7 @@ import name.huliqing.core.data.SkillData;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.skill.Skill;
 import name.huliqing.core.ui.UIFactory;
 import name.huliqing.core.ui.Row;
 
@@ -21,19 +22,18 @@ import name.huliqing.core.ui.Row;
  *
  * @author huliqing
  */
-public class SkillRow extends Row<SkillData> {
-//    private final PlayService playService = Factory.get(PlayService.class);
+public class SkillRow extends Row<Skill> {
     private final ActorService actorService = Factory.get(ActorService.class);
     
-    private SkillPanel skillPanel;
+    private final SkillPanel skillPanel;
     
-    private SkillData data;
+    private Skill data;
     
     // 物品
-    private ColumnIcon icon;
-    private ColumnBody body;
-    private ColumnText num;
-    private ColumnIcon shortcut;
+    private final ColumnIcon icon;
+    private final ColumnBody body;
+    private final ColumnText num;
+    private final ColumnIcon shortcut;
     
     public SkillRow(SkillPanel skillPanel) {
         super();
@@ -74,12 +74,12 @@ public class SkillRow extends Row<SkillData> {
     }
 
     @Override
-    public final void displayRow(SkillData data) {
+    public final void displayRow(Skill data) {
         this.data = data;
         display(this.data);
     }
     
-    public SkillData getData() {
+    public Skill getData() {
         return this.data;
     }
     
@@ -104,20 +104,20 @@ public class SkillRow extends Row<SkillData> {
         setBackgroundVisible(false);
     }
     
-    protected void display(SkillData data) {
-        icon.setIcon(data.getIcon());
+    protected void display(Skill data) {
+        icon.setIcon(data.getData().getIcon());
         
-        body.setDesText(ResourceManager.getObjectDes(data.getId()));
-        num.setText(data.getLevel() + "/" + data.getMaxLevel());
+        body.setDesText(ResourceManager.getObjectDes(data.getData().getId()));
+        num.setText(data.getData().getLevel() + "/" + data.getData().getMaxLevel());
         
         Actor actor = skillPanel.getActor();
-        if (actor != null && actorService.getLevel(actor) < data.getNeedLevel()) {
+        if (actor != null && actorService.getLevel(actor) < data.getData().getNeedLevel()) {
             body.setDisabled(true);
-            body.setNameText(ResourceManager.getObjectName(data) 
-                    + "(" + ResourceManager.get(ResConstants.COMMON_NEED_LEVEL, new Object[] {data.getNeedLevel()}) + ")");
+            body.setNameText(ResourceManager.getObjectName(data.getData()) 
+                    + "(" + ResourceManager.get(ResConstants.COMMON_NEED_LEVEL, new Object[] {data.getData().getNeedLevel()}) + ")");
         } else {
             body.setDisabled(false);
-            body.setNameText(ResourceManager.getObjectName(data));
+            body.setNameText(ResourceManager.getObjectName(data.getData()));
         }
     }
 }

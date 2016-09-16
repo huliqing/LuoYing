@@ -97,8 +97,6 @@ import name.huliqing.core.mess.MessSCClientList;
 import name.huliqing.core.mess.MessSCGameData;
 import name.huliqing.core.mess.MessSCInitGameOK;
 import name.huliqing.core.mess.MessSCServerState;
-import name.huliqing.core.mess.MessSkill;
-import name.huliqing.core.mess.MessSkillAbstract;
 import name.huliqing.core.mess.MessActorLookAt;
 import name.huliqing.core.mess.MessSkillWalk;
 import name.huliqing.core.mess.MessSkinWeaponTakeOn;
@@ -281,6 +279,7 @@ import name.huliqing.core.loader.ViewDataLoader;
 import name.huliqing.core.loader.ModuleDataLoader;
 import name.huliqing.core.mess.MessAttributeNumberAddValue;
 import name.huliqing.core.mess.MessAttributeNumberHit;
+import name.huliqing.core.mess.MessSkillPlay;
 import name.huliqing.core.mess.MessSkinAdd;
 import name.huliqing.core.mess.MessSkinAttach;
 import name.huliqing.core.mess.MessSkinDetach;
@@ -756,8 +755,7 @@ public class LY {
         Serializer.registerClass(MessAttributeNumberHit.class);
         
         // Skill
-        Serializer.registerClass(MessSkill.class);
-        Serializer.registerClass(MessSkillAbstract.class);
+        Serializer.registerClass(MessSkillPlay.class);
         Serializer.registerClass(MessSkillWalk.class);
         
         // Skin

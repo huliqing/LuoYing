@@ -208,22 +208,6 @@ public interface SkillService extends Inject {
     boolean isPlayingSkill(Actor actor, SkillType skillType);
     
     /**
-     * 判断指定角色是否处理“等待”状态，注：不管该“等待”技能是循环或者非
-     * 循环的，只要角色最后一个执行的是“等待”技能，则该方法应该返回true.
-     * @param actor
-     * @return 
-     */
-    boolean isWaiting(Actor actor);
-    
-    boolean isRunning(Actor actor);
-    
-    boolean isDucking(Actor actor);
-    
-    boolean isAttacking(Actor actor);
-    
-    boolean isDefending(Actor actor);
-    
-    /**
      * 锁定指定角色的技能类型,当这些技能类型被锁定后，属于这些类型的技能将不
      * 能再执行，直到进行unlockSkill
      * @param actor
@@ -276,5 +260,21 @@ public interface SkillService extends Inject {
      * @param channels 
      */
     void unlockSkillChannels(Actor actor, String... channels);
+
+    /**
+     * 判断指定角色是否处理“等待”状态，注：不管该“等待”技能是循环或者非
+     * 循环的，只要角色最后一个执行的是“等待”技能，则该方法应该返回true.
+     * @param actor
+     * @return 
+     */
+    boolean isWaiting(Actor actor);
+    
+    boolean isRunning(Actor actor);
+    
+    boolean isDucking(Actor actor);
+    
+    boolean isAttacking(Actor actor);
+    
+    boolean isDefending(Actor actor);
     
 }

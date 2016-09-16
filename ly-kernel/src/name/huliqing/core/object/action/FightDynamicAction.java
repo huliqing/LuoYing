@@ -23,7 +23,6 @@ import name.huliqing.core.mvc.service.AttributeService;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.mvc.service.SkinService;
-import name.huliqing.core.mvc.service.StateService;
 import name.huliqing.core.object.module.SkillListener;
 import name.huliqing.core.object.skill.HitSkill;
 import name.huliqing.core.object.skill.Skill;

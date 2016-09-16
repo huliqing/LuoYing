@@ -12,8 +12,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import name.huliqing.core.constants.SkillConstants;
+import name.huliqing.core.data.AttributeUse;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.data.ModuleData;
+import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.skill.Skill;
@@ -241,13 +244,60 @@ public class SkillModule extends AbstractModule {
         return skillPlayListeners != null && skillPlayListeners.remove(skillPlayListener);
     }
     
-//    /**
-//     * 获取技能侦听器，如果没有添加过技能侦听器则返回null.
-//     * @return 
-//     */
-//    public List<SkillPlayListener> getSkillPlayListeners() {
-//        return skillPlayListeners;
-//    }
+    public int checkStateCode(Skill skill, boolean force) {
+        // 1.强制执行，则忽略所有任何检查,即使武器不符合条件
+        if (force) {
+            return SkillConstants.STATE_OK;
+        }
+        
+        SkillData skillData = skill.getData();
+        
+        // 2.如果技能被锁定中，则不能执行
+        if (isLocked(skillData.getSkillType())) {
+            return SkillConstants.STATE_SKILL_LOCKED;
+        }
+        
+//        skill.setActor(actor); // 有时候skill是从外部载入的，没有设置actor，所以这里必须设置。
+        
+        // 9.如果新技能自身判断不能执行，例如加血技能或许就不可能给敌军执行。
+        // 有很多特殊技能是不能对一些特定目标执行的，所以这里需要包含技能自身的判断
+        int stateCode = skill.canPlay();
+        if (stateCode != SkillConstants.STATE_OK) {
+            return stateCode;
+        }
+        
+        if (skillPlayListeners != null && !skillPlayListeners.isEmpty()) {
+            for (SkillPlayListener sl : skillPlayListeners) {
+                if (!sl.onSkillHookCheck(actor, skill)) {
+                    return SkillConstants.STATE_HOOK;
+                }
+            }
+        }
+        
+        // 11.如果当前正在执行的所有技能都可以被新技能覆盖，则直接返回OK.
+        // 注意：overlaps判断要放在interrupts判断之前，因为如果可以覆盖正在执行
+        // 的技能就不需要中断它们
+        if ((skillData.getOverlaps() & runningSkillStates) == runningSkillStates) {
+            return SkillConstants.STATE_OK;
+        }
+        
+        // 12.当正在执行中的某些技能不能被新技能中断则也不能执行新技能。
+        // 只要有一个正在执行的技能不能被中断，则不能执行新技能
+        if ((skillData.getInterrupts() & runningSkillStates) != runningSkillStates) {
+            return SkillConstants.STATE_CAN_NOT_INTERRUPT;
+        }
+        
+        return SkillConstants.STATE_OK;
+    }
+    
+    /**
+     * 判断技能类型是否被锁定.
+     * @param skillType
+     * @return 
+     */
+    public boolean isLocked(SkillType skillType) {
+        return (skillLockedState & (1 << skillType.getValue())) != 0;
+    }
     
     /**
      * 获取当前正在执行的所有技能。

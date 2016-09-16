@@ -204,17 +204,6 @@ public abstract class HitSkill extends AbstractSkill {
         if (stateWraps == null)
             return;
         
-        // remove20160408,移除 !target.isDead(),看下面解释
-//        // 当角色死亡时不添加状态到角色身上。
-//        if (!target.isDead()) {
-//            for (SkillStateWrap sw : stateWraps) {
-//                if (sw.factor >= FastMath.nextRandomFloat()) {
-//                    // 状态存在机率影响，为同步服务端与客户端状态所以统以服务端为准。
-//                    stateNetwork.addState(target, sw.stateId);
-//                }
-//            }
-//        }
-        
         // 在角色死亡的时候仍可以添加状态，以避免角色刚好被射死后却没有看到状态特效.
         // 如：当寒冰箭刚好射击"死"敌人后应允许添加状态，否则会看不到冰冻效果
         // 因为“冰冻效果”是在状态上的，只有冰冻状态运行的时候才能看到。
@@ -260,7 +249,7 @@ public abstract class HitSkill extends AbstractSkill {
         if (!hitChecker.canHit(actor, target))
             return SkillConstants.STATE_TARGET_UNSUITABLE;
         
-        return SkillConstants.STATE_OK;
+        return super.canPlay();
         
     }
     

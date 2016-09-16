@@ -9,7 +9,9 @@ import com.jme3.math.FastMath;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.Factory;
+import name.huliqing.core.LY;
 import name.huliqing.core.constants.SkillConstants;
+import name.huliqing.core.data.AttributeUse;
 import name.huliqing.core.data.MagicData;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.data.SkillData;
@@ -21,6 +23,7 @@ import name.huliqing.core.mvc.service.MagicService;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.mvc.service.ActorService;
+import name.huliqing.core.mvc.service.SkinService;
 import name.huliqing.core.object.actoranim.ActorAnim;
 import name.huliqing.core.object.attribute.NumberAttribute;
 import name.huliqing.core.object.module.SkillModule;
@@ -58,6 +61,7 @@ public abstract class AbstractSkill implements Skill {
     private final AttributeService attributeService = Factory.get(AttributeService.class);
     private final MagicService magicService = Factory.get(MagicService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
+    private final SkinService skinService = Factory.get(SkinService.class);
     
     // 格式: soundId|timePoint,soundId|timePoint...
     protected List<SoundWrap> sounds;
@@ -515,6 +519,40 @@ public abstract class AbstractSkill implements Skill {
 
     @Override
     public int canPlay() {
+                
+        // 武器状态检查,有一些技能需要拿特定的武器才能执行。
+        List<Integer> wts = data.getWeaponStateLimit();
+        if (wts != null) {
+            int weaponState = skinService.getWeaponState(actor);
+            if (!wts.contains(weaponState)) {
+                return SkillConstants.STATE_WEAPON_NOT_ALLOW;
+            }
+            
+            if (!skinService.isWeaponTakeOn(actor)) {
+                return SkillConstants.STATE_WEAPON_NEED_TAKE_ON;
+            }
+        }
+        
+        // 角色需要达到指定等级才能使用技能
+        if (actorService.getLevel(actor) < data.getNeedLevel()) {
+            return SkillConstants.STATE_NEED_LEVEL;
+        }
+        
+        // 冷却中
+        if (LY.getGameTime() - data.getLastPlayTime() < data.getCooldown() * 1000) {
+            return SkillConstants.STATE_SKILL_COOLDOWN;
+        }
+        
+        // 属性值不够用
+        List<AttributeUse> uas = data.getUseAttributes();
+        if (uas != null) {
+            for (AttributeUse ua : uas) {
+                if (attributeService.getNumberAttributeValue(actor, ua.getAttribute(), 0) < ua.getAmount()) {
+                    return SkillConstants.STATE_MANA_NOT_ENOUGH;
+                }
+            }
+        }
+        
         return SkillConstants.STATE_OK;
     }
     

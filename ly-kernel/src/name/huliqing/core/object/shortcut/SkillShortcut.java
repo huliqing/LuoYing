@@ -17,7 +17,9 @@ import com.jme3.scene.shape.Quad;
 import name.huliqing.core.Factory;
 import name.huliqing.core.LY;
 import name.huliqing.core.data.SkillData;
+import name.huliqing.core.mvc.network.ActorNetwork;
 import name.huliqing.core.mvc.network.SkillNetwork;
+import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.object.skill.Skill;
 import name.huliqing.core.utils.MatUtils;
@@ -27,8 +29,10 @@ import name.huliqing.core.utils.MatUtils;
  * @author huliqing
  */
 public class SkillShortcut extends BaseUIShortcut<SkillData> {
-    private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
+    private final PlayService playService = Factory.get(PlayService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
+    private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
+    private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     
      // 技能CD遮罩颜色
     private final ColorRGBA maskColor = new ColorRGBA(1.0f, 0, 0.5f, 0.5f);
@@ -113,6 +117,10 @@ public class SkillShortcut extends BaseUIShortcut<SkillData> {
             if (objectData.getCooldown() > 0) {
                 needCheckAndUpdateMask = true;
             }
+            // 一些技能在执行前必须设置目标对象。
+            actorNetwork.setTarget(actor, playService.getTarget());
+        
+            // 执行技能
             Skill skill = skillService.getSkill(actor, objectData.getId());
             skillNetwork.playSkill(actor, skill, false);
         }

@@ -16,14 +16,31 @@ import name.huliqing.core.object.actor.Actor;
  * @author huliqing
  */
 @Serializable
-public class MessSkillWalk extends MessSkillAbstract {
+public class MessSkillWalk extends MessBase {
  
+    protected long actorId;
+    protected String skillId;
+    
     // 目标方向
     private Vector3f dir = new Vector3f();
     private boolean face;
-    
-    public MessSkillWalk() {}
 
+    public long getActorId() {
+        return actorId;
+    }
+
+    public void setActorId(long actorId) {
+        this.actorId = actorId;
+    }
+
+    public String getSkillId() {
+        return skillId;
+    }
+
+    public void setSkillId(String skillId) {
+        this.skillId = skillId;
+    }
+    
     public Vector3f getDir() {
         return dir;
     }
@@ -49,8 +66,7 @@ public class MessSkillWalk extends MessSkillAbstract {
         Actor actor = playService.findActor(actorId);
         if (actor == null) return;
         
-//        SkillData skillData = skillService.getSkill(actor, skillId);
-        skillService.playWalk(actor, skillId, dir, face, force);
+        skillService.playWalk(actor, skillId, dir, face, true);
     }
     
     

@@ -195,93 +195,11 @@ public class SkillServiceImpl implements SkillService {
     
     @Override
     public int checkStateCode(Actor actor, Skill skill, boolean force) {
-        // 1.强制执行，则忽略所有任何检查,即使武器不符合条件
-        if (force) {
-            return SkillConstants.STATE_OK;
-        }
-        
-        SkillData data = skill.getData();
-        
-        // 2.如果技能被锁定中，则不能执行
-        if (isLocked(actor, data.getSkillType())) {
-            return SkillConstants.STATE_SKILL_LOCKED;
-        }
-        
-        // 3.武器状态检查,有一些技能需要拿特定的武器才能执行。
-        List<Integer> wts = data.getWeaponStateLimit();
-        if (wts != null) {
-            int weaponState = skinService.getWeaponState(actor);
-            if (!wts.contains(weaponState)) {
-                return SkillConstants.STATE_WEAPON_NOT_ALLOW;
-            }
-            
-            if (!skinService.isWeaponTakeOn(actor)) {
-                return SkillConstants.STATE_WEAPON_NEED_TAKE_ON;
-            }
-        }
-        
-        // 6.角色需要达到指定等级才能使用技能
-        if (actorService.getLevel(actor) < data.getNeedLevel()) {
-            return SkillConstants.STATE_NEED_LEVEL;
-        }
-        
-        // 7.冷却中
-        if (isCooldown(skill)) {
-            return SkillConstants.STATE_SKILL_COOLDOWN;
-        }
-        
-        // 8.属性值不够用
-        List<AttributeUse> uas = data.getUseAttributes();
-        if (uas != null) {
-            for (AttributeUse ua : uas) {
-                if (attributeService.getNumberAttributeValue(actor, ua.getAttribute(), 0) < ua.getAmount()) {
-                    return SkillConstants.STATE_MANA_NOT_ENOUGH;
-                }
-            }
-        }
-        
-        // 9.如果新技能自身判断不能执行，例如加血技能或许就不可能给敌军执行。
-        // 有很多特殊技能是不能对一些特定目标执行的，所以这里需要包含技能自身的判断
-        skill.setActor(actor); // 有时候skill是从外部载入的，没有设置actor，所以这里必须设置。
-        int stateCode = skill.canPlay();
-        if (stateCode != SkillConstants.STATE_OK) {
-            return stateCode;
-        }
-        
-        // 10.侦听器监听，允许一些侦听器阻止技能的执行,比如角色身上存在的一些状态
-        // 效果,这些状态可能会监听角色技能的执行，并判断是否允许执行这个技能。
-        // 比如“晕眩”、“缠绕”等状态就可能监测并侦听角色的技能，以阻止一些技能
-        // 的执行。
         SkillModule module = actor.getModule(SkillModule.class);
-        if (module == null) {
-            return SkillConstants.STATE_UNDEFINE;
+        if (module != null) {
+            return module.checkStateCode(skill, force);
         }
-        List<SkillPlayListener> skillPlayListeners = module.getSkillPlayListeners();
-        if (skillPlayListeners != null && !skillPlayListeners.isEmpty()) {
-            for (SkillPlayListener sl : skillPlayListeners) {
-                if (!sl.onSkillHookCheck(actor, skill)) {
-                    return SkillConstants.STATE_HOOK;
-                }
-            }
-        }
-        
-        // ---- 
-        
-        // 11.如果当前正在执行的所有技能都可以被新技能覆盖，则直接返回OK.
-        // 注意：overlaps判断要放在interrupts判断之前，因为如果可以覆盖正在执行
-        // 的技能就不需要中断它们
-        long runningStates = module.getRunningSkillStates();
-        if ((data.getOverlaps() & runningStates) == runningStates) {
-            return SkillConstants.STATE_OK;
-        }
-        
-        // 12.当正在执行中的某些技能不能被新技能中断则也不能执行新技能。
-        // 只要有一个正在执行的技能不能被中断，则不能执行新技能
-        if ((data.getInterrupts() & runningStates) != runningStates) {
-            return SkillConstants.STATE_CAN_NOT_INTERRUPT;
-        }
-        
-        return SkillConstants.STATE_OK;
+        return SkillConstants.STATE_UNDEFINE;
     }
 
     @Override
@@ -329,7 +247,6 @@ public class SkillServiceImpl implements SkillService {
         // --4.检查技能升级
         data.setSkillPoints(data.getSkillPoints() + 1);
         skillLevelUp(actor, data);
-        
         return true;
     }
 
@@ -471,7 +388,7 @@ public class SkillServiceImpl implements SkillService {
     @Override
     public boolean isLocked(Actor actor, SkillType skillType) {
         SkillModule module = actor.getModule(SkillModule.class);
-        return module != null && (module.getSkillLockedState() & (1 << skillType.getValue())) != 0;
+        return module != null && module.isLocked(skillType);
     }
     
     @Override

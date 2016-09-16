@@ -8,10 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.data.ObjectData;
-import name.huliqing.core.data.SkillData;
 import name.huliqing.core.enums.SkillType;
-import name.huliqing.core.mvc.network.UserCommandNetwork;
+import name.huliqing.core.mvc.network.ActorNetwork;
+import name.huliqing.core.mvc.network.SkillNetwork;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.object.skill.Skill;
@@ -23,31 +22,32 @@ import name.huliqing.core.ui.UI;
  *
  * @author huliqing
  */
-public class SkillPanel extends ListView<SkillData> implements ActorPanel {
+public class SkillPanel extends ListView<Skill> implements ActorPanel {
     private final PlayService playService = Factory.get(PlayService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
-    private final UserCommandNetwork userCommandNetwork = Factory.get(UserCommandNetwork.class);
+    private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
+    private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
 
     private Actor actor;
     // 最近一次获取技能列表的时间,当角色切换或者技能列表发生变化时应该重新载入
-    private final List<SkillData> datas = new ArrayList<SkillData>();
+    private final List<Skill> datas = new ArrayList<Skill>();
     
     public SkillPanel(float width, float height) {
         super(width, height);
     }
     
     @Override
-    public List<SkillData> getDatas() {
+    public List<Skill> getDatas() {
         if (actor == null) {
             return datas;
         }
         datas.clear();
         List<Skill> temps = skillService.getSkills(actor);
         if (temps != null && !temps.isEmpty()) {
-            for (Skill as : temps) {
+            for (Skill skill : temps) {
                 // 过滤掉一些不要显示的技能
-                if (!filter(as.getSkillType())) {
-                    datas.add(as.getData());
+                if (!filter(skill.getSkillType())) {
+                    datas.add(skill);
                 }
             }
         }
@@ -77,9 +77,12 @@ public class SkillPanel extends ListView<SkillData> implements ActorPanel {
             public void onClick(UI ui, boolean isPress) {
                 if (!isPress) {
                     
-                    // remove20160915
-//                    userCommandNetwork.useObject(actor, row.getData());
-
+                    // 一些技能在执行前必须设置目标对象。
+                    actorNetwork.setTarget(actor, playService.getTarget());
+            
+                    // 执行技能
+                    skillNetwork.playSkill(actor, row.getData(), false);
+                    
 //                    refreshPageData();// skill不会删除
                 }
             }
@@ -88,9 +91,7 @@ public class SkillPanel extends ListView<SkillData> implements ActorPanel {
             @Override
             public void onClick(UI ui, boolean isPress) {
                 if (!isPress) {
-                    ObjectData data = row.getData();
-                    data.setTotal(1);
-                    playService.addShortcut(actor, data);
+                    playService.addShortcut(actor, row.getData().getData());
                 }
             }
         });
