@@ -55,9 +55,7 @@ public class SkinData extends ObjectData implements MatObject, CostObject {
     // 属性限制
     private List<AttributeMatch> matchAttributes;
     
-    public SkinData() {
-        this.total = 1;
-    }
+    public SkinData() {}
     
     @Override
     public void write(JmeExporter ex) throws IOException {

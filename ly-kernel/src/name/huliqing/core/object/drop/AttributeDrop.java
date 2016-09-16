@@ -16,7 +16,7 @@ import name.huliqing.core.object.el.AttributeEl;
  * 掉落属性值设置
  * @author huliqing
  */
-public class AttributeDrop extends Drop{
+public class AttributeDrop extends AbstractDrop {
     private final AttributeService attributeService = Factory.get(AttributeService.class);
     private final ElService elService = Factory.get(ElService.class);
     
@@ -36,13 +36,15 @@ public class AttributeDrop extends Drop{
     }
 
     @Override
-    public void doDrop(Actor source, Actor target) {
+    public boolean doDrop(Actor source, Actor target) {
         float value = fixedValue;
         if (attributeEl != null) {
             AttributeEl el = elService.getAttributeEl(attributeEl);
             value += el.getValue(source, target);
         }
         attributeService.addNumberAttributeValue(target, attributeName, value);
+        playDropSounds(source);
+        return true;
     }
 
 }

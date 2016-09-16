@@ -7,15 +7,13 @@ package name.huliqing.core.view;
 import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.constants.InterfaceConstants;
-import name.huliqing.core.data.ItemData;
-import name.huliqing.core.data.SkinData;
-import name.huliqing.core.data.TalentData;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.mvc.service.ItemService;
 import name.huliqing.core.mvc.service.SkinService;
 import name.huliqing.core.mvc.service.TalentService;
 import name.huliqing.core.mvc.service.TaskService;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.item.Item;
 import name.huliqing.core.object.module.ItemListener;
 import name.huliqing.core.object.module.SkinListener;
 import name.huliqing.core.object.module.TalentListener;
@@ -50,25 +48,26 @@ public class ActorMainPanel extends Window implements ItemListener, SkinListener
     
     private Actor actor;
     
-    private LinearLayout tabPanel;
-    private TabButton btnAttr;  // 人物属性面板
-    private TabButton btnTalent;  // 人物属性面板
-    private TabButton btnWeapon;    // 武器
-    private TabButton btnArmor; // 装备面板
-    private TabButton btnSkill; // 技能列表
-    private TabButton btnItem; // 物品列表
-    private TabButton btnTask; // 任务列表
+    private final LinearLayout tabPanel;
+    private final TabButton btnAttr;  // 人物属性面板
+    private final TabButton btnTalent;  // 人物属性面板
+    private final TabButton btnWeapon;    // 武器
+    private final TabButton btnArmor; // 装备面板
+    private final TabButton btnSkill; // 技能列表
+    private final TabButton btnItem; // 物品列表
+    private final TabButton btnTask; // 任务列表
     
-    private LinearLayout bodyPanel;
-    private AttributePanel attrPanel;
-    private TalentPanel talentPanel;
-    private WeaponPanel weaponPanel;
-    private ArmorPanel armorPanel;
-    private SkillPanel skillPanel;
-    private ItemPanel itemPanel;
-    private TaskPanel taskPanel;
+    private final LinearLayout bodyPanel;
+    private final AttributePanel attrPanel;
+    private final TalentPanel talentPanel;
+    private final WeaponPanel weaponPanel;
+    private final ArmorPanel armorPanel;
+    private final SkillPanel skillPanel;
+    private final ItemPanel itemPanel;
+    private final TaskPanel taskPanel;
     
-    private int globalPageSize = 7;
+    private final int globalPageSize = 7;
+    
     // 当前激活的tab和激活的ActorView
     private int index;
     private ActorPanel indexPanel;
@@ -244,13 +243,18 @@ public class ActorMainPanel extends Window implements ItemListener, SkinListener
 
     // 物口添加或减少的时候要更新指定面板信息
     @Override
-    public void onItemAdded(Actor actor, ItemData itemId, int trueAdded) {
-        updatePanel(this.itemPanel, this.armorPanel, this.weaponPanel, this.skillPanel);
+    public void onItemAdded(Actor actor, Item itemId, int trueAdded) {
+        updatePanel(this.itemPanel);
     }
 
     @Override
-    public void onItemRemoved(Actor actor, ItemData itemId, int trueRemoved) {
-        updatePanel(this.itemPanel, this.armorPanel, this.weaponPanel, this.skillPanel);
+    public void onItemRemoved(Actor actor, Item itemId, int trueRemoved) {
+        updatePanel(this.itemPanel);
+    }
+
+    @Override
+    public void onItemUsed(Actor source, Item item) {
+        updatePanel(this.itemPanel);
     }
 
     @Override
@@ -306,7 +310,7 @@ public class ActorMainPanel extends Window implements ItemListener, SkinListener
     
     private class TabButton extends FrameLayout {
         
-        private Icon tabIcon;
+        private final Icon tabIcon;
         private ActorPanel actorPanel;
         
         public TabButton(String icon, ActorPanel actorPanel) {

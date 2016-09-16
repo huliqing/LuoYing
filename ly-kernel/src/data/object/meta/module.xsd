@@ -142,7 +142,13 @@ xs:time
         </xs:annotation>
         <xs:complexType>
             <xs:complexContent>
-                <xs:extension base="moduleBase"></xs:extension>
+                <xs:extension base="moduleBase">
+                    <xs:attribute name="sounds" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>默认的掉落声效，格式："sound1,sound2,sound3"</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
             </xs:complexContent>
         </xs:complexType>
     </xs:element>

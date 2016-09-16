@@ -102,7 +102,6 @@ public class SkillShortcut extends BaseUIShortcut<SkillData> {
     
     @Override
     public void onShortcutClick(boolean pressed) {
-        super.onShortcutClick(pressed);
         if (!pressed) {
             if (objectData.getCooldown() > 0) {
                 needCheckAndUpdateMask = true;

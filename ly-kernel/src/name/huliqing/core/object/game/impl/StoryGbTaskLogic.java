@@ -17,6 +17,7 @@ import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.mvc.service.ItemService;
 import name.huliqing.core.object.game.Game;
 import name.huliqing.core.object.gamelogic.AbstractGameLogic;
+import name.huliqing.core.object.item.Item;
 import name.huliqing.core.object.view.TextPanelView;
 
 /** 
@@ -56,8 +57,8 @@ public class StoryGbTaskLogic<T extends GameLogicData> extends AbstractGameLogic
     
     @Override
     protected void doLogic(float tpf) {
-        ObjectData pd = itemService.getItem(player, IdConstants.ITEM_GB_STUMP);
-        count = pd != null ? pd.getTotal() : 0;
+        Item item = itemService.getItem(player, IdConstants.ITEM_GB_STUMP);
+        count = item != null ? item.getData().getTotal() : 0;
         tpv.setText(get("taskSave.saveCount", count, total));
     }
     

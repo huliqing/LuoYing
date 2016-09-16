@@ -14,7 +14,6 @@ import name.huliqing.core.enums.MessageType;
 import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.mvc.service.ActionService;
 import name.huliqing.core.mvc.service.ActorService;
-import name.huliqing.core.mvc.service.HandlerService;
 import name.huliqing.core.mvc.service.LogicService;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.SkillService;
@@ -40,7 +39,6 @@ import name.huliqing.core.mvc.service.GameService;
 import name.huliqing.core.mvc.service.ProtoService;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.module.ActorModule;
 import name.huliqing.core.object.task.Task;
 
 /**
@@ -62,7 +60,6 @@ import name.huliqing.core.object.task.Task;
  */
 public class UserCommandNetworkImpl implements UserCommandNetwork {
     private final static Network network = Network.getInstance();
-    private HandlerService handlerService;
     private LogicService logicService;
     private SkillService skillService;
     private ActorService actorService;
@@ -86,7 +83,6 @@ public class UserCommandNetworkImpl implements UserCommandNetwork {
     
     @Override
     public void inject() {
-        handlerService = Factory.get(HandlerService.class);
         logicService = Factory.get(LogicService.class);
         skillService = Factory.get(SkillService.class);
         actorService = Factory.get(ActorService.class);

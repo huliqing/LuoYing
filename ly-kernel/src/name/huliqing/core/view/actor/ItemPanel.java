@@ -8,11 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.manager.ResourceManager;
+import name.huliqing.core.mvc.network.ItemNetwork;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.data.ObjectData;
-import name.huliqing.core.mvc.network.UserCommandNetwork;
 import name.huliqing.core.mvc.service.ItemService;
 import name.huliqing.core.mvc.service.PlayService;
+import name.huliqing.core.object.item.Item;
 import name.huliqing.core.ui.ListView;
 import name.huliqing.core.ui.Row;
 import name.huliqing.core.ui.UI;
@@ -21,13 +21,13 @@ import name.huliqing.core.ui.UI;
  * 
  * @author huliqing
  */
-public class ItemPanel extends ListView<ObjectData> implements ActorPanel {
+public class ItemPanel extends ListView<Item> implements ActorPanel {
     private final PlayService playService = Factory.get(PlayService.class);
     private final ItemService itemService = Factory.get(ItemService.class);
-    private final UserCommandNetwork userCommandNetwork = Factory.get(UserCommandNetwork.class);
+    private final ItemNetwork itemNetwork = Factory.get(ItemNetwork.class);
     
     private Actor actor;
-    private final List<ObjectData> datas = new ArrayList<ObjectData>();
+    private final List<Item> datas = new ArrayList<Item>();
     
     public ItemPanel(float width, float height) {
         super(width, height);
@@ -44,13 +44,13 @@ public class ItemPanel extends ListView<ObjectData> implements ActorPanel {
     }
     
     @Override
-    protected Row<ObjectData> createEmptyRow() {
+    protected Row<Item> createEmptyRow() {
         final ItemRow row = new ItemRow();
         row.setRowClickListener(new Listener() {
             @Override
             public void onClick(UI ui, boolean isPress) {
                 if (!isPress) {
-                    userCommandNetwork.useObject(actor, row.getData());
+                    itemNetwork.useItem(actor, row.getData().getId());
                     refreshPageData();
                 }
             }
@@ -59,7 +59,7 @@ public class ItemPanel extends ListView<ObjectData> implements ActorPanel {
             @Override
             public void onClick(UI ui, boolean isPress) {
                 if (!isPress) {
-                    playService.addShortcut(actor, row.getData());
+                    playService.addShortcut(actor, row.getData().getData());
                 }
             }
         });
@@ -67,9 +67,8 @@ public class ItemPanel extends ListView<ObjectData> implements ActorPanel {
     }
 
     @Override
-    public List<ObjectData> getDatas() {
+    public List<Item> getDatas() {
         if (actor != null) {
-//            return actor.getData().getItemStore().getOthers(datas);
             datas.clear();
             datas.addAll(itemService.getItems(actor));
         }
@@ -87,18 +86,18 @@ public class ItemPanel extends ListView<ObjectData> implements ActorPanel {
         refreshPageData();
     }
     
-    private class ItemRow extends name.huliqing.core.view.actor.ItemRow<ObjectData> {
+    private class ItemRow extends name.huliqing.core.view.actor.ItemRow<Item> {
 
         public ItemRow() {
             super();
         }
         
         @Override
-        public void display(ObjectData data) {
-            icon.setIcon(data.getIcon());
+        public void display(Item data) {
+            icon.setIcon(data.getData().getIcon());
             body.setNameText(ResourceManager.get(data.getId() + ".name"));
             body.setDesText(ResourceManager.get(data.getId() + ".des"));
-            num.setText(data.getTotal() + "");
+            num.setText(data.getData().getTotal() + "");
         }
     }
 }

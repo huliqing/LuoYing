@@ -76,7 +76,10 @@ public class SkillPanel extends ListView<SkillData> implements ActorPanel {
             @Override
             public void onClick(UI ui, boolean isPress) {
                 if (!isPress) {
-                    userCommandNetwork.useObject(actor, row.getData());
+                    
+                    // remove20160915
+//                    userCommandNetwork.useObject(actor, row.getData());
+
 //                    refreshPageData();// skill不会删除
                 }
             }

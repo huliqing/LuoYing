@@ -6,8 +6,8 @@ package name.huliqing.core.mvc.service;
 
 import java.util.List;
 import name.huliqing.core.Inject;
-import name.huliqing.core.data.ItemData;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.item.Item;
 import name.huliqing.core.object.module.ItemListener;
 
 /**
@@ -31,7 +31,7 @@ public interface ItemService extends Inject {
      * @param count 要移除的数量,可能比角色实际拥有的数量大
      * @return
      */
-    boolean removeItem(Actor actor, String itemId, int count);
+    void removeItem(Actor actor, String itemId, int count);
     
     /**
      * 获取角色的非技能物品
@@ -39,15 +39,14 @@ public interface ItemService extends Inject {
      * @param itemId
      * @return 
      */
-    ItemData getItem(Actor actor, String itemId);
+    Item getItem(Actor actor, String itemId);
     
     /**
-     * 获取角色的所有物品,注意：不要直接删除列表中的物品，
-     * 使用物品使用 {@link #removeItem(Actor, java.lang.String, int) }
+     * 获取角色的所有物品,返回的列表不能直接修改
      * @param actor
      * @return 
      */
-    List<ItemData> getItems(Actor actor);
+    List<Item> getItems(Actor actor);
     
     /**
      * 给角色添加物品侦听器

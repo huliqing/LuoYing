@@ -24,9 +24,6 @@ public class ItemData extends ObjectData implements CostObject{
     // 属性限制
     private List<AttributeMatch> matchAttributes;
     
-    // 判断物品是否是可删除的
-    private boolean deletable = true;
-    
     @Override
     public float getCost() {
         return getAsFloat("cost", 0);
@@ -53,7 +50,7 @@ public class ItemData extends ObjectData implements CostObject{
      * @return 
      */
     public boolean isDeletable() {
-        return deletable;
+        return getAsBoolean("deletable", true);
     }
 
     /**
@@ -61,14 +58,29 @@ public class ItemData extends ObjectData implements CostObject{
      * @param deletable 
      */
     public void setDeletable(boolean deletable) {
-        this.deletable = deletable;
+        setAttribute("deletable", deletable);
+    }
+    
+    /**
+     * 判断物品是否是可以出售的
+     * @return 
+     */
+    public boolean isSellable() {
+        return getAsBoolean("sellable", true);
+    }
+    
+    /**
+     * 设置物品是否是可以出售的。
+     * @param sellable 
+     */
+    public void setSellable(boolean sellable) {
+        setAttribute("sellable", sellable);
     }
     
     @Override
     public void write(JmeExporter ex) throws IOException {
         super.write(ex);
         OutputCapsule oc = ex.getCapsule(this);
-        oc.write(deletable, "deletable", true);
         if (matchAttributes != null) {
             oc.writeSavableArrayList(new ArrayList<AttributeMatch>(matchAttributes), "matchAttributes", null);
         }
@@ -78,7 +90,6 @@ public class ItemData extends ObjectData implements CostObject{
     public void read(JmeImporter im) throws IOException {
         super.read(im);
         InputCapsule ic = im.getCapsule(this);
-        deletable = ic.readBoolean("deletable", true);
         matchAttributes = ic.readSavableArrayList("matchAttributes", null);
     }
 }

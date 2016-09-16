@@ -9,9 +9,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import name.huliqing.core.data.DropData;
+import name.huliqing.core.data.ModuleData;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.drop.Drop;
+import name.huliqing.core.object.sound.SoundManager;
 
 /**
  *
@@ -21,6 +23,15 @@ public class DropModule extends AbstractModule {
 
     private Actor actor;
     private List<Drop> drops;
+    
+    // 掉落物品时的默认提示声效
+    private String[] sounds; 
+
+    @Override
+    public void setData(ModuleData data) {
+        super.setData(data); 
+        sounds = data.getAsArray("sounds");
+    }
     
     @Override
     public void initialize(Actor actor) {
@@ -84,14 +95,31 @@ public class DropModule extends AbstractModule {
     }
     
     /**
-     * 处理掉落物品给指定角色
-     * @param target 
+     * 处理掉落物品给指定角色, 注：物品是从当前角色掉落到指定角色(target)身上。
+     * @param target
      */
-    public void doDropToTarget(Actor target) {
-        if (drops != null) {
-            for (int i = 0; i < drops.size(); i++) {
-                drops.get(i).doDrop(actor, target);
+    public void doDrop(Actor target) {
+        if (drops == null) {
+            return;
+        }
+        boolean hasDrop = false;
+        for (int i = 0; i < drops.size(); i++) {
+            if (drops.get(i).doDrop(actor, target)) {
+                hasDrop = true;
             }
+        }
+        if (hasDrop) {
+            playDefaultDropSound();
+        }
+    }
+    
+    // 播放默认的掉落声音
+    private void playDefaultDropSound() {
+        if (sounds == null)
+            return;
+        
+        for (String s : sounds) {
+            SoundManager.getInstance().playSound(s, actor.getSpatial().getWorldTranslation());
         }
     }
 }

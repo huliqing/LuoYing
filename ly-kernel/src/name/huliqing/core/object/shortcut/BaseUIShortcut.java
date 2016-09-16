@@ -154,12 +154,7 @@ public abstract class BaseUIShortcut<T extends ObjectData> extends AbstractShort
      * 当快捷方式被点击时该方法被调用。
      * @param pressed 鼠标或按键是否处于被按下状态。
      */
-    public void onShortcutClick(boolean pressed) {
-        if (!pressed) {
-            // 物品使用
-            userCommandNetwork.useObject(actor, objectData);
-        }
-    }
+    public abstract void onShortcutClick(boolean pressed);
     
     /**
      * 更新快捷方式子组件的布局

@@ -117,7 +117,7 @@ public class DropServiceImpl implements DropService {
     public void doDrop(Actor source, Actor target) {
         DropModule module = source.getModule(DropModule.class);
         if (module != null) {
-            module.doDropToTarget(target);
+            module.doDrop(target);
         }
     }
     

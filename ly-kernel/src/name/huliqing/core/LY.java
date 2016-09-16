@@ -155,7 +155,7 @@ import name.huliqing.core.loader.ChatDataLoader;
 import name.huliqing.core.object.chat.GroupChat;
 import name.huliqing.core.object.chat.SellChat;
 import name.huliqing.core.object.chat.SendChat;
-import name.huliqing.core.object.chat.ShopChat;
+import name.huliqing.core.object.chat.ShopItemChat;
 import name.huliqing.core.object.chat.TaskChat;
 import name.huliqing.core.loader.ConfigDataLoader;
 import name.huliqing.core.object.module.ActionModule;
@@ -457,7 +457,7 @@ public class LY {
         // Chat
         DataFactory.register("chatGroup",  ChatData.class, ChatDataLoader.class, GroupChat.class);
         DataFactory.register("chatSend",  ChatData.class, ChatDataLoader.class, SendChat.class);
-        DataFactory.register("chatShop",  ChatData.class, ChatDataLoader.class, ShopChat.class);
+        DataFactory.register("chatShopItem",  ChatData.class, ChatDataLoader.class, ShopItemChat.class);
         DataFactory.register("chatSell",  ChatData.class, ChatDataLoader.class, SellChat.class);
         DataFactory.register("chatTask",  ChatData.class, ChatDataLoader.class, TaskChat.class);
         

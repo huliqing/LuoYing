@@ -14,16 +14,16 @@ import name.huliqing.core.constants.IdConstants;
 import name.huliqing.core.constants.InterfaceConstants;
 import name.huliqing.core.constants.ResConstants;
 import name.huliqing.core.data.ChatData;
-import name.huliqing.core.data.ItemData;
-import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.mvc.network.UserCommandNetwork;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.ItemService;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.mvc.service.ProtoService;
+import name.huliqing.core.object.Loader;
 import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.item.Item;
 import name.huliqing.core.object.module.ItemListener;
 import name.huliqing.core.ui.Button;
 import name.huliqing.core.ui.Icon;
@@ -42,11 +42,11 @@ import name.huliqing.core.ui.Window;
 import name.huliqing.core.ui.Window.CloseListener;
 
 /**
- * 商店购物,用于玩家向商店角色购买物品
+ * 杂物商店,用于玩家向商店角色购买物品
  * @author huliqing
  * @param <T>
  */
-public class ShopChat<T extends ChatData> extends Chat<T> implements ItemListener {
+public class ShopItemChat<T extends ChatData> extends Chat<T> implements ItemListener {
     private final ProtoService protoService = Factory.get(ProtoService.class);
     private final ItemService itemService = Factory.get(ItemService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
@@ -85,7 +85,7 @@ public class ShopChat<T extends ChatData> extends Chat<T> implements ItemListene
         win.addCloseListener(new CloseListener() {
             @Override
             public void onClosed(Window win) {
-                playService.removeObject(ShopChat.this);
+                playService.removeObject(ShopItemChat.this);
             }
         });
         win.addView(titlePanel);
@@ -107,39 +107,30 @@ public class ShopChat<T extends ChatData> extends Chat<T> implements ItemListene
     }
 
     @Override
-    public void onItemAdded(Actor actor, ItemData item, int trueAdded) {
-        if (isInitialized()) {
-            if (this.actor != actor) {
-                throw new IllegalStateException(); // 防止BUG
-            }
-            
-            // remove20160312,不要直接updateShop，这会导致玩家在买东西的时候列表经验刷新，导致可能误点物品
-//            updateShop();
-            
-            // 如果新添加了物品则同步物品数量
-            productPanel.syncItem(item.getId(), item.getTotal());
-            productPanel.refreshPageData();
-            
-            // 更新玩家剩余金币数
-            footerPanel.update();
-            
-        }
+    public void onItemAdded(Actor actor, Item item, int trueAdded) {
+         updateProductPanel(actor, item);
     }
 
     @Override
-    public void onItemRemoved(Actor actor, ItemData item, int trueRemoved) {
-        if (isInitialized()) {
+    public void onItemRemoved(Actor actor, Item item, int trueRemoved) {
+         updateProductPanel(actor, item);
+    }
+    
+    @Override
+    public void onItemUsed(Actor source, Item item) {
+         updateProductPanel(source, item);
+    }
+    
+    private void updateProductPanel(Actor source, Item item) {
+         if (isInitialized()) {
             if (this.actor != actor) {
                 throw new IllegalStateException(); // 防止BUG
             }
-            
             // 不要直接updateShop，这会导致玩家在买东西的时候列表经验刷新，导致可能误点物品
 //            updateShop();
-            
             // 如果指定物品已经卖完则从商品列表中移除。
-            productPanel.syncItem(item.getId(), item.getTotal());
+            productPanel.syncItem(item.getData().getId(), item.getData().getTotal());
             productPanel.refreshPageData();
-            
             // 更新玩家剩余金币数
             footerPanel.update();
         }
@@ -167,17 +158,6 @@ public class ShopChat<T extends ChatData> extends Chat<T> implements ItemListene
             playService.removeObject(parent);
         }
     }
-    
-    // remove20160312,不要直接updateShop，这会导致玩家在买东西的时候列表经验刷新，导致可能误点物品
-//    private void updateShop() {
-//         // 载入角色当前所有的物品进行出售
-//        productPanel.datas.clear();
-//        itemService.getItems(actor, productPanel.datas);
-//        productPanel.refreshPageData();
-//        
-//        // 更新玩家剩余金币数
-//        footerPanel.update();
-//    }
 
     @Override
     public void cleanup() {
@@ -188,9 +168,9 @@ public class ShopChat<T extends ChatData> extends Chat<T> implements ItemListene
         super.cleanup(); 
     }
     
-    private class ItemList extends ListView<ObjectData> {
+    private class ItemList extends ListView<Item> {
 
-        final List<ObjectData> datas = new ArrayList<ObjectData>();
+        final List<Item> datas = new ArrayList<Item>();
         
         public ItemList(float width, float height) {
             super(width, height);
@@ -200,12 +180,12 @@ public class ShopChat<T extends ChatData> extends Chat<T> implements ItemListene
         }
 
         @Override
-        protected Row<ObjectData> createEmptyRow() {
+        protected Row<Item> createEmptyRow() {
             return new ItemRow(this);
         }
 
         @Override
-        public List<ObjectData> getDatas() {
+        public List<Item> getDatas() {
             return datas;
         }
         
@@ -213,38 +193,27 @@ public class ShopChat<T extends ChatData> extends Chat<T> implements ItemListene
         // 这可避免在角色快速购买物品时由于物品被移除导致列表刷新带来的错误点击
         public void syncItem(String itemId, int total) {
             // 如果存在列表中则同步total数
-            for (ObjectData pd : datas) {
-                if (pd.getId().equals(itemId)) {
-                    pd.setTotal(total);
+            for (Item item : datas) {
+                if (item.getId().equals(itemId)) {
+                    item.getData().setTotal(total);
                     return;
                 }
             }
             // 如果列表中不存在，则把data添加进来
-            ObjectData newData = DataFactory.createData(itemId);
-            newData.setTotal(total);
-            datas.add(newData);
+            Item item = Loader.load(itemId);
+            item.getData().setTotal(total);
+            datas.add(item);
         }
         
-        // remove20160814
-//        public void removeData(String itemId) {
-//            Iterator<ProtoData> it = datas.iterator();
-//            while (it.hasNext()) {
-//                if (it.next().getId().equals(itemId)) {
-//                    it.remove();
-//                    break;
-//                }
-//            }
-//        }
-
         @Override
-        protected boolean filter(ObjectData data) {
-            return !protoService.isSellable(data);
+        protected boolean filter(Item item) {
+            return !item.getData().isSellable();
         }
         
     }
     
-    private class ItemRow extends Row<ObjectData> {
-        private ObjectData data;
+    private class ItemRow extends Row<Item> {
+        private Item data;
 
         // 物品
         private ColumnIcon icon;
@@ -312,14 +281,14 @@ public class ShopChat<T extends ChatData> extends Chat<T> implements ItemListene
         }
 
         @Override
-        public final void displayRow(ObjectData dd) {
+        public final void displayRow(Item dd) {
             this.data = dd;
-            icon.setIcon(data.getIcon());
-            body.setNameText(ResourceManager.getObjectName(data));
+            icon.setIcon(data.getData().getIcon());
+            body.setNameText(ResourceManager.getObjectName(data.getData()));
             body.setDesText(ResourceManager.getObjectDes(data.getId()));
             
-            cost.setText(protoService.getCost(data) + "");
-            num.setText(data.getTotal() + "");
+            cost.setText(protoService.getCost(data.getData()) + "");
+            num.setText(data.getData().getTotal() + "");
             setNeedUpdate();
         }
     }
@@ -406,15 +375,14 @@ public class ShopChat<T extends ChatData> extends Chat<T> implements ItemListene
         
         public void update() {
             // 注：这里显示的是当前玩家的剩余金币 ，不是卖家
-            Actor player = playService.getPlayer();
-            ObjectData goldData =  itemService.getItem(player, IdConstants.ITEM_GOLD);
+            Item gold =  itemService.getItem(playService.getPlayer(), IdConstants.ITEM_GOLD);
             int golds = 0;
-            if (goldData != null) {
-                golds = goldData.getTotal();
-                goldsIcon.setImage(goldData.getIcon());
+            if (gold != null) {
+                golds = gold.getData().getTotal();
+                goldsIcon.setImage(gold.getData().getIcon());
             } else {
-                goldData = DataFactory.createData(IdConstants.ITEM_GOLD);
-                goldsIcon.setImage(goldData.getIcon());
+                gold = DataFactory.createData(IdConstants.ITEM_GOLD);
+                goldsIcon.setImage(gold.getData().getIcon());
             }
             goldsRemain.setText(ResourceManager.get(ResConstants.CHAT_SHOP_GOLDS_REMAIN) + ":" + golds);
             setNeedUpdate();

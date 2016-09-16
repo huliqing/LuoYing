@@ -17,14 +17,13 @@ import name.huliqing.core.object.attribute.Attribute;
 import name.huliqing.core.object.attribute.MatchAttribute;
 import name.huliqing.core.object.effect.Effect;
 import name.huliqing.core.object.effect.EffectManager;
-import name.huliqing.core.object.skin.AbstractSkin;
 import name.huliqing.core.object.sound.SoundManager;
 
 /**
  * @author huliqing
  */
 public abstract class AbstractItem implements Item {
-    private static final Logger LOG = Logger.getLogger(AbstractSkin.class.getName());
+    private static final Logger LOG = Logger.getLogger(AbstractItem.class.getName());
     private final AttributeService attributeService = Factory.get(AttributeService.class);
 
     protected ItemData data;
@@ -45,6 +44,19 @@ public abstract class AbstractItem implements Item {
     @Override
     public ItemData getData() {
         return data;
+    }
+
+    @Override
+    public String getId() {
+        return data.getId();
+    }
+
+    @Override
+    public void use(Actor actor) {
+        playEffects(actor, effects);
+        playSounds(actor, sounds);
+        // 子类逻辑
+        // do "use" logic in children.
     }
     
     @Override
@@ -76,14 +88,6 @@ public abstract class AbstractItem implements Item {
             }
         }
         return true;
-    }
-
-    @Override
-    public void use(Actor actor) {
-        playEffects(actor, effects);
-        playSounds(actor, sounds);
-        // 子类逻辑
-        // do "use" logic in children.
     }
     
     /**

@@ -21,7 +21,7 @@ xs:time
             <xs:all>
                 <xs:element ref="chat" />
                 <xs:element ref="chatGroup" />
-                <xs:element ref="chatShop" />
+                <xs:element ref="chatShopItem" />
                 <xs:element ref="chatSell" />
                 <xs:element ref="chatSend" />
                 <xs:element ref="chatTask" />
@@ -100,10 +100,10 @@ xs:time
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="chatShop" >
+    <xs:element name="chatShopItem" >
         <xs:annotation>
             <xs:documentation>
-                商店面板,用于出售物品,注：给指定角色配置chatShop时，应该同时给
+                商店面板,用于出售物品,注：给指定角色配置chatShopItem时，应该同时给
                 角色配置一个shopLogic，用于为角色定时进货,否则角色货物卖完就没有了。
             </xs:documentation>
         </xs:annotation>

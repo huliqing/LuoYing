@@ -28,14 +28,12 @@ public class ProtoServiceImpl implements ProtoService {
     private ItemService itemService;
     private SkinService skinService;
     private SkillService skillService;
-    private HandlerService handlerService;
 
     @Override
     public void inject() {
         itemService = Factory.get(ItemService.class);
         skinService = Factory.get(SkinService.class);
         skillService = Factory.get(SkillService.class);
-        handlerService = Factory.get(HandlerService.class);
     }
 
     @Override
@@ -96,7 +94,7 @@ public class ProtoServiceImpl implements ProtoService {
         if (data == null)
             return;
         
-        handlerService.useObject(actor, data);
+        throw new UnsupportedOperationException();
     }
 
     @Override

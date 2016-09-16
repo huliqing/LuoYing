@@ -21,10 +21,13 @@
    
    <!--测试用-->
    <chatTask id="chatTest" extends="chatTaskBase" task="taskCollectSpiderClaw" role="both" />
+   
    <!--发送东西:一般配置给同伴-->
    <chatSend id="chatSend" extends="chatSendBase" />
+   
    <!--商店购买：一般配置给商店角色（一般需要配合商店逻辑Logic）-->
-   <chatShop id="chatShop" extends="chatShopBase" />
+   <chatShopItem id="chatShopItem" extends="chatShopBase" />
+   
    <!--商店出售：一般配置给商店角色(一般需要配合商店逻辑Logic)--> 
    <chatSell id="chatSell" extends="chatSellBase" discount="0.5" />
    
@@ -40,10 +43,10 @@
    <!-- ==================================================================== -->
    
    <!--宝箱: 1.买东西; 2 卖东西-->
-   <chatGroup id="chatTreasure" extends="chatBase" chats="chatShop,chatSell" hitChecker="hitCheckerChatFriend" />
+   <chatGroup id="chatTreasure" extends="chatBase" chats="chatShopItem,chatSell" hitChecker="hitCheckerChatFriend" />
    
    <!--杰米: 1.买东西; 2 卖东西；3 任务：杰米的烦恼 -->
-   <chatGroup id="chatJaime" extends="chatBase" chats="chatShop,chatSell,chatJaimeTask" />
+   <chatGroup id="chatJaime" extends="chatBase" chats="chatShopItem,chatSell,chatJaimeTask" />
    <chatTask id="chatJaimeTask" extends="chatTaskBase" task="taskCollectSpiderClaw" role="both" hitChecker="hitCheckerChatTask" />
 
 </root>

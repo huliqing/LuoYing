@@ -8,10 +8,10 @@ import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.constants.IdConstants;
 import name.huliqing.core.constants.ResConstants;
-import name.huliqing.core.data.ItemData;
 import name.huliqing.core.enums.MessageType;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.item.Item;
 import name.huliqing.core.object.module.ItemListener;
 import name.huliqing.core.object.module.ItemModule;
 import name.huliqing.core.object.sound.SoundManager;
@@ -22,12 +22,10 @@ import name.huliqing.core.object.sound.SoundManager;
  */
 public class ItemServiceImpl implements ItemService {
     private PlayService playService;
-    private HandlerService handlerService;
     
     @Override
     public void inject() {
         playService = Factory.get(PlayService.class);
-        handlerService = Factory.get(HandlerService.class);
     }
     
     @Override
@@ -52,13 +50,15 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public boolean removeItem(Actor actor, String itemId, int count) {
+    public void removeItem(Actor actor, String itemId, int count) {
         ItemModule module = actor.getModule(ItemModule.class);
-        return module != null && module.removeItem(itemId, count);
+        if (module != null) {
+            module.removeItem(itemId, count);
+        }
     }
 
     @Override
-    public ItemData getItem(Actor actor, String itemId) {
+    public Item getItem(Actor actor, String itemId) {
         ItemModule module = actor.getModule(ItemModule.class);
         if (module != null) {
             return module.getItem(itemId);
@@ -67,7 +67,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemData> getItems(Actor actor) {
+    public List<Item> getItems(Actor actor) {
         ItemModule module = actor.getModule(ItemModule.class);
         if (module != null) {
             return module.getItems();
@@ -101,7 +101,7 @@ public class ItemServiceImpl implements ItemService {
         if (module == null)
             return;
         
-        ItemData item = module.getItem(itemId);
+        Item item = module.getItem(itemId);
         if (item == null) {
             if (total <= 0) {
                 return;
@@ -109,25 +109,22 @@ public class ItemServiceImpl implements ItemService {
             module.addItem(itemId, total);
         } else {
             if (total < 0) {
-                module.removeItem(itemId, item.getTotal());
+                module.removeItem(itemId, item.getData().getTotal());
             } else {
-                item.setTotal(total);
+                item.getData().setTotal(total);
             }
         }
     }
 
     @Override
     public void useItem(Actor actor, String itemId) {
-        ItemData data = getItem(actor, itemId);
-        if (data == null)
-            return;
-        
-        boolean canUse = handlerService.canUse(actor, data);
-        if (!canUse)
-            return;
-        
-        handlerService.useForce(actor, data);
-        
+        ItemModule module = actor.getModule(ItemModule.class);
+        if (module != null) {
+            Item item = module.getItem(itemId);
+            if (item != null) {
+                module.useItem(item);
+            }
+        }
     }
 
 

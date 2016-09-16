@@ -59,6 +59,6 @@
                   talentPointsLevelEl="elLevelTalentPoints" />
      
     <!--角色物品掉落模块-->
-    <moduleDrop id="moduleDrop" moduleOrder="10" />
+    <moduleDrop id="moduleDrop" moduleOrder="10" sounds="soundNote" />
 
 </root>

@@ -149,6 +149,9 @@ xs:time
     <xs:complexType name="dropBase">
         <xs:complexContent>
             <xs:extension base="base">
+                <xs:attribute name="sounds" type="xs:string" use="optional">
+                    <xs:annotation><xs:documentation>掉落物品时的声效，格式 : "sound1,sound2,..."</xs:documentation></xs:annotation>
+                </xs:attribute>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>

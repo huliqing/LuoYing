@@ -13,24 +13,13 @@ import name.huliqing.core.xml.DataProcessor;
  *
  * @author huliqing
  */
-public abstract class  Drop implements  DataProcessor<DropData> {
-
-    protected DropData data;
-    
-    @Override
-    public void setData(DropData data) {
-        this.data = data;
-    }
-
-    @Override
-    public DropData getData() {
-        return data;
-    }
+public interface Drop extends DataProcessor<DropData> {
     
     /**
-     * 处理掉落物品，物品从source掉落到target身上。
+     * 处理掉落物品，物品从source掉落到target身上。如果有任何物品成功掉落则返回true,否则返回false.
      * @param source 掉落源
      * @param target 接受掉落物品的角色
+     * @return 
      */
-    public abstract void doDrop(Actor source, Actor target);
+    boolean doDrop(Actor source, Actor target);
 }
