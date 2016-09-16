@@ -41,10 +41,8 @@ public class SummonSkill extends AbstractSkill {
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final PlayService playService = Factory.get(PlayService.class);
-//    private final StateService stateService = Factory.get(StateService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final ConfigService configService = Factory.get(ConfigService.class);
-//    private final EffectService effectService = Factory.get(EffectService.class);
     private final LogicService logicService = Factory.get(LogicService.class);
     
     // 要召唤的角色的ID
@@ -88,8 +86,8 @@ public class SummonSkill extends AbstractSkill {
     }
 
     @Override
-    public void init() {
-        super.init();
+    public void initialize() {
+        super.initialize();
         
         if (summonId == null) {
 //            logger.log(Level.INFO, "No summonActorId set!");

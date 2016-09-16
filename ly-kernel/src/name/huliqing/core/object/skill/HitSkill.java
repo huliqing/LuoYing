@@ -98,15 +98,15 @@ public abstract class HitSkill extends AbstractSkill {
     }
 
     @Override
-    protected void init() {
+    public void initialize() {
+        super.initialize();
+        
         // 注：这里target必须不能是自己(actor),否则在faceTo时会导致在执行animation
         // 的时候模型的头发和武器错位,即不能faceTo自己，所以target != actor的判断必须的。
         Actor target = actorService.getTarget(actor);
         if (target != null && target != actor) {
             actorService.setLookAt(actor, actorService.getLocation(target));
         }
-        
-        super.init();
     }
     
     @Override

@@ -16,11 +16,17 @@ import name.huliqing.core.xml.DataProcessor;
  * @author huliqing
  */
 public interface Skill extends DataProcessor<SkillData>{
-
+    
     /**
      * 开始执行技能
      */
     void initialize();
+    
+    /**
+     * 判断技能是否已经初始化
+     * @return 
+     */
+    boolean isInitialized();
     
     /**
      * 更新技能逻辑

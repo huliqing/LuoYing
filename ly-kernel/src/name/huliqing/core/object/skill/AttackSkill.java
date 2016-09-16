@@ -57,8 +57,8 @@ public class AttackSkill extends HitSkill {
     }
 
     @Override
-    public void init() {
-        super.init();
+    public void initialize() {
+        super.initialize();
         
         // 计算实际的技能检测点，主要受cutTime影响，要按比例缩放
         if (checkPoint != null) {

@@ -87,7 +87,7 @@ public abstract class AbstractSkill implements Skill {
     protected float time;
     
     // 技能是否已经开始运行。
-    private boolean started;
+    private boolean initialized;
     
     // 优化性能,这样就不需要在update中不停的去计算trueUseTime
     // 只在start的时候计算一次，在update中不再去计算
@@ -173,22 +173,14 @@ public abstract class AbstractSkill implements Skill {
     }
     
     @Override
-    public final void initialize() {
-        if (started) {
+    public void initialize() {
+        if (initialized) {
             return;
         }
         
+        initialized = true;
         trueUseTime = getTrueUseTime();
         trueSpeed = getSpeed();
-        started = true;
-        
-        init();
-    }
-    
-    /**
-     * 初始化技能,该方法只在技能start后执行一次,循环过程不会再执行。
-     */
-    protected  void init() {
         
         // 计算实际的声效执行时间点，受cutTime影响
         if (sounds != null) {
@@ -233,12 +225,16 @@ public abstract class AbstractSkill implements Skill {
                     , getAnimFullTime()
                     , getAnimStartTime());
         }
-        
+    }
+    
+    @Override
+    public boolean isInitialized() {
+        return initialized;
     }
 
     @Override
     public final void update(float tpf) {
-        if (!started) {
+        if (!initialized) {
             return;
         }
         // 检查是否结束
@@ -383,7 +379,7 @@ public abstract class AbstractSkill implements Skill {
      * 释放资源使用。只有在确定一定需要确保被释放的资源时才应该在cleanup中操作。
      */
     protected void end() {
-        started = false;
+        initialized = false;
     }
     
     @Override
@@ -418,12 +414,12 @@ public abstract class AbstractSkill implements Skill {
         
         // 重置
         time = 0;
-        started = false;
+        initialized = false;
     }
     
     @Override
     public boolean isEnd() {
-        return !started;
+        return !initialized;
     }
 
     @Override
@@ -475,12 +471,6 @@ public abstract class AbstractSkill implements Skill {
     public void setActor(Actor actor) {
         this.actor = actor;
     }
-   
-    // remove20160813
-//    @Override
-//    public void setAnimChannelProcessor(ChannelControl animChannelProcessor) {
-//        this.channelProcessor = animChannelProcessor;
-//    }
     
     @Override
     public void setSkillControl(SkillModule skillControl) {

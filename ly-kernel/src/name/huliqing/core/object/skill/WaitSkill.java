@@ -16,8 +16,9 @@ public class WaitSkill extends AbstractSkill {
     private final ActorService actorService = Factory.get(ActorService.class);
 
     @Override
-    protected void init() {
-        super.init();
+    public void initialize() {
+        super.initialize();
+        
         // 对于一些没有“Wait动画”的角色必须想办法让它静止下来
         if (data.getAnimation() == null) {
             actorService.reset(actor);

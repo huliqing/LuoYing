@@ -144,8 +144,8 @@ public class ShotSkill extends HitSkill {
     }
 
     @Override
-    protected void init() {
-        super.init(); 
+    public void initialize() {
+        super.initialize();
         
         for (int i = 0; i < shotTimes.length; i++) {
             float shotTime = MathUtils.clamp(fixTimePointByCutTime(shotTimes[i]), 0f, 1f);

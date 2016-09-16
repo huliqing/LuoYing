@@ -75,8 +75,8 @@ public class ShotBowSkill extends ShotSkill {
     }
 
     @Override
-    protected void init() {
-        super.init();
+    public void initialize() {
+        super.initialize();
         // -- 重置state
         shotState = 0;
         

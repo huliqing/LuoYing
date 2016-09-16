@@ -15,8 +15,8 @@ public class HurtSkill extends AbstractSkill {
     private final ActorService actorService = Factory.get(ActorService.class);
     
     @Override
-    public void init() {
-        super.init();
+    public void initialize() {
+        super.initialize();
         
         if (data.getAnimation() == null) {
             actorService.reset(actor);

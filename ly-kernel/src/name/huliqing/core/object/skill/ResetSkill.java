@@ -31,8 +31,8 @@ public class ResetSkill extends AbstractSkill {
     }
 
     @Override
-    protected void init() {
-        super.init();
+    public void initialize() {
+        super.initialize();
         
         // 如果没有设置动画名称，则把动画定格在角色的当前帧上
         if (data.getAnimation() == null) {

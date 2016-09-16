@@ -64,16 +64,8 @@ public class WalkSkill extends AbstractSkill implements Walk{
     }
 
     @Override
-    public void init() {
-        super.init();
-        
-        // remove20160502
-//        Vector3f dir = actor.getWalkDirection();
-//        dir.setX(walkDirection.x).setZ(walkDirection.z);
-//        actor.setWalkDirection(dir.normalizeLocal().mult(baseSpeed * data.getSpeed()));
-//        if (viewDirection != null) {
-//            actor.setViewDirection(viewDirection);
-//        }
+    public void initialize() {
+        super.initialize();
         
         actorService.setWalkDirection(actor, walkDirection.setY(0).normalizeLocal().mult(baseSpeed * getSpeed()));
         
