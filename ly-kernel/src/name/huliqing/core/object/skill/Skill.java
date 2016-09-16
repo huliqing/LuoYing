@@ -67,13 +67,14 @@ public interface Skill extends DataProcessor<SkillData>{
     void restoreAnimation();
     
     /**
-     * 判断当前技能是否可以执行,该方法返回一个状态码，来判断当前技能是否可以
+     * 判断指定角色是否可以执行当前技能,该方法返回一个状态码，来判断当前技能是否可以
      * 执行，比如某些情况下一个技能是不能对角色的当前指定目标执行的。比如：加
      * 血技能应该不可以对敌军施行，或者攻击技能就不应该对友军施行之类
+     * @param actor
      * @return 
      * @see SkillConstants
      */
-    int canPlay();
+    int canPlay(Actor actor);
 
     /**
      * 获取技能的执行速度,技能的执行速度受角色属性的影响，当技能指定了speedAttribute

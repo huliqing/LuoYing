@@ -261,7 +261,7 @@ public class SkillModule extends AbstractModule {
         
         // 9.如果新技能自身判断不能执行，例如加血技能或许就不可能给敌军执行。
         // 有很多特殊技能是不能对一些特定目标执行的，所以这里需要包含技能自身的判断
-        int stateCode = skill.canPlay();
+        int stateCode = skill.canPlay(actor);
         if (stateCode != SkillConstants.STATE_OK) {
             return stateCode;
         }

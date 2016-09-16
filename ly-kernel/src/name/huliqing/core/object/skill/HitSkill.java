@@ -235,7 +235,7 @@ public abstract class HitSkill extends AbstractSkill {
     }
 
     @Override
-    public int canPlay() {
+    public int canPlay(Actor actor) {
         if (actor == null || hitChecker == null)
             return SkillConstants.STATE_UNDEFINE;
         
@@ -249,7 +249,7 @@ public abstract class HitSkill extends AbstractSkill {
         if (!hitChecker.canHit(actor, target))
             return SkillConstants.STATE_TARGET_UNSUITABLE;
         
-        return super.canPlay();
+        return super.canPlay(actor);
         
     }
     

@@ -518,7 +518,7 @@ public abstract class AbstractSkill implements Skill {
     }
 
     @Override
-    public int canPlay() {
+    public int canPlay(Actor actor) {
                 
         // 武器状态检查,有一些技能需要拿特定的武器才能执行。
         List<Integer> wts = data.getWeaponStateLimit();

@@ -27,6 +27,7 @@ import name.huliqing.core.data.ActorLogicData;
 import name.huliqing.core.data.AnimData;
 import name.huliqing.core.data.AttributeApply;
 import name.huliqing.core.data.AttributeData;
+import name.huliqing.core.data.AttributeMatch;
 import name.huliqing.core.data.AttributeUse;
 import name.huliqing.core.data.BulletData;
 import name.huliqing.core.data.ChannelData;
@@ -355,6 +356,7 @@ public class LY {
         
         Serializer.registerClass(Proto.class);
         Serializer.registerClass(AttributeApply.class);
+        Serializer.registerClass(AttributeMatch.class);
         Serializer.registerClass(AttributeUse.class);
         Serializer.registerClass(Data.class);
         Serializer.registerClass(DropItem.class);

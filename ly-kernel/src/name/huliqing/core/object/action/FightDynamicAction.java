@@ -322,7 +322,7 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
         }
         
         // 只有非HitSkill时才使用canPlay，这个方法稍微耗性能
-        return attackSkill.canPlay() == SkillConstants.STATE_OK;
+        return attackSkill.canPlay(actor) == SkillConstants.STATE_OK;
     }
     
     private void checkAndRecacheSkill() {

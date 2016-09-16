@@ -96,9 +96,6 @@ public class SkillServiceImpl implements SkillService {
      */
     @Override
     public Skill getSkill(Actor actor, SkillType skillType) {
-        // remove
-//        return skillDao.getSkillFirst(actor.getData(), skillType);
-
         SkillModule module = actor.getModule(SkillModule.class);
         if (module != null) {
             for (Skill s : module.getSkills()) {
