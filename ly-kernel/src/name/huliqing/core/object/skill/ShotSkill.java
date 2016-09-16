@@ -25,9 +25,8 @@ import name.huliqing.core.utils.MathUtils;
 /**
  * 射击技能的基本类
  * @author huliqing
- * @param <T>
  */
-public class ShotSkill<T extends SkillData> extends HitSkill<T> {
+public class ShotSkill extends HitSkill {
 
     private final ActorService actorService = Factory.get(ActorService.class);
     private final PlayService playService = Factory.get(PlayService.class);
@@ -87,7 +86,7 @@ public class ShotSkill<T extends SkillData> extends HitSkill<T> {
     private final List<Actor> tempTargets = new ArrayList<Actor>();
     
     @Override
-    public void setData(T data) {
+    public void setData(SkillData data) {
         super.setData(data); 
         bullets = data.getAsArray("bullets");
         shotTimes = data.getAsFloatArray("shotTimes");

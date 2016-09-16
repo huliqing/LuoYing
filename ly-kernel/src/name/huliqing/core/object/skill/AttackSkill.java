@@ -23,9 +23,8 @@ import name.huliqing.core.object.sound.SoundManager;
  * 普通攻击技能,会根据damagePoint计算任害值等.主要用于近战类攻击
  *
  * @author huliqing
- * @param <T>
  */
-public class AttackSkill<T extends SkillData> extends HitSkill<T> {
+public class AttackSkill extends HitSkill {
     private final PlayService playService = Factory.get(PlayService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final SkinService skinService = Factory.get(SkinService.class);
@@ -49,7 +48,7 @@ public class AttackSkill<T extends SkillData> extends HitSkill<T> {
     protected float[] trueCheckPoint;
 
     @Override
-    public void setData(T data) {
+    public void setData(SkillData data) {
         super.setData(data); 
         multHit = data.getAsBoolean("multHit", multHit);
         checkPoint = data.getAsFloatArray("checkPoint");

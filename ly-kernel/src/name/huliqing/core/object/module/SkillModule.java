@@ -241,13 +241,13 @@ public class SkillModule extends AbstractModule {
         return skillPlayListeners != null && skillPlayListeners.remove(skillPlayListener);
     }
     
-    /**
-     * 获取技能侦听器，如果没有添加过技能侦听器则返回null.
-     * @return 
-     */
-    public List<SkillPlayListener> getSkillPlayListeners() {
-        return skillPlayListeners;
-    }
+//    /**
+//     * 获取技能侦听器，如果没有添加过技能侦听器则返回null.
+//     * @return 
+//     */
+//    public List<SkillPlayListener> getSkillPlayListeners() {
+//        return skillPlayListeners;
+//    }
     
     /**
      * 获取当前正在执行的所有技能。
@@ -310,7 +310,7 @@ public class SkillModule extends AbstractModule {
         lastSkill = newSkill;
         lastSkill.setActor(actor);
         lastSkill.setSkillControl(this);
-        lastSkill.start();
+        lastSkill.initialize();
         // 记录当前正在运行的所有技能类型
         if (!runningSkills.contains(lastSkill)) {
             runningSkills.add(lastSkill);

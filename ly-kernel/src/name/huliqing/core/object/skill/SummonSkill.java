@@ -35,9 +35,8 @@ import name.huliqing.core.utils.ThreadHelper;
 /**
  * 召唤技
  * @author huliqing
- * @param <T>
  */
-public class SummonSkill<T extends SkillData> extends AbstractSkill<T> {
+public class SummonSkill extends AbstractSkill {
 //    private final static Logger logger = Logger.getLogger(SummonSkill.class.getName());
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
@@ -64,7 +63,7 @@ public class SummonSkill<T extends SkillData> extends AbstractSkill<T> {
     private SummonOper currentSummon;
     
     @Override
-    public void setData(T data) {
+    public void setData(SkillData data) {
         super.setData(data); 
         this.summonId = data.getAsString("summonActorId", summonId);
         this.summonPoint = data.getAsFloat("summonPoint", summonPoint);

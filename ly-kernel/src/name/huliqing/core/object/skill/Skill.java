@@ -14,20 +14,13 @@ import name.huliqing.core.xml.DataProcessor;
 /**
  * 接能接口
  * @author huliqing
- * @param <T>
  */
-public interface Skill<T extends SkillData> extends DataProcessor<T>{
+public interface Skill extends DataProcessor<SkillData>{
 
-    @Override
-    public void setData(T data);
-
-    @Override
-    public T getData();
-    
     /**
      * 开始执行技能
      */
-    void start();
+    void initialize();
     
     /**
      * 更新技能逻辑
@@ -36,16 +29,16 @@ public interface Skill<T extends SkillData> extends DataProcessor<T>{
     void update(float tpf);
     
     /**
-     * 判断技能是否正常结束或未启动
-     * @return 
-     */
-    boolean isEnd();
-    
-    /**
      * 清理技能产生的数据以释放资源,一般只处理内部数据，不要再去调用service之类
      * 以避免循环调用。
      */
     void cleanup();
+    
+    /**
+     * 判断技能是否正常结束或未启动
+     * @return 
+     */
+    boolean isEnd();
     
     /**
      * 获取技能类型
@@ -64,20 +57,6 @@ public interface Skill<T extends SkillData> extends DataProcessor<T>{
      * @param character 
      */
     void setActor(Actor character);
-   
-    // remove20160818
-//    /**
-//     * @deprecated use getData instead
-//     * @return 
-//     */
-//    SkillData getSkillData();
-   
-    // remove20160813
-//    /**
-//     * 设置动画控制器
-//     * @param animChannelProcessor 
-//     */
-//    void setAnimChannelProcessor(ChannelControl animChannelProcessor);
     
     void setSkillControl(SkillModule skillControl);
     

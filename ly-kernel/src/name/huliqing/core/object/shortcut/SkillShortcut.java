@@ -14,8 +14,12 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.control.Control;
 import com.jme3.scene.shape.Quad;
+import name.huliqing.core.Factory;
 import name.huliqing.core.LY;
 import name.huliqing.core.data.SkillData;
+import name.huliqing.core.mvc.network.SkillNetwork;
+import name.huliqing.core.mvc.service.SkillService;
+import name.huliqing.core.object.skill.Skill;
 import name.huliqing.core.utils.MatUtils;
 
 /**
@@ -23,6 +27,9 @@ import name.huliqing.core.utils.MatUtils;
  * @author huliqing
  */
 public class SkillShortcut extends BaseUIShortcut<SkillData> {
+    private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
+    private final SkillService skillService = Factory.get(SkillService.class);
+    
      // 技能CD遮罩颜色
     private final ColorRGBA maskColor = new ColorRGBA(1.0f, 0, 0.5f, 0.5f);
     // 材质
@@ -106,6 +113,8 @@ public class SkillShortcut extends BaseUIShortcut<SkillData> {
             if (objectData.getCooldown() > 0) {
                 needCheckAndUpdateMask = true;
             }
+            Skill skill = skillService.getSkill(actor, objectData.getId());
+            skillNetwork.playSkill(actor, skill, false);
         }
     }
 

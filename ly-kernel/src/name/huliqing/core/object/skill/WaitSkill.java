@@ -5,15 +5,13 @@
 package name.huliqing.core.object.skill;
 
 import name.huliqing.core.Factory;
-import name.huliqing.core.data.SkillData;
 import name.huliqing.core.mvc.service.ActorService;
 
 /**
  * 让角色“等待”的技能
  * @author huliqing
- * @param <T>
  */
-public class WaitSkill<T extends SkillData> extends AbstractSkill<T> {
+public class WaitSkill extends AbstractSkill {
     
     private final ActorService actorService = Factory.get(ActorService.class);
 

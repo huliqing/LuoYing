@@ -121,56 +121,6 @@ public interface SkillService extends Inject {
      */
     boolean removeSkillPlayListener(Actor actor, SkillPlayListener skillPlayListener);
     
-     // remove20160819
-//    /**
-//     * 获得一个可用于直接执行的技能,角色必须拥有该技能，否则该方法将返回null.
-//     * @param actor
-//     * @param skillId
-//     * @return 
-//     */
-//    Skill getSkillInstance(Actor actor, String skillId);
-
-    // remove20160819
-//    /**
-//     * 获取角色所有技能,注意：返回列表只作为只读使用，不要增删其中的数据
-//     * @param actor
-//     * @return 
-//     */
-//    List<SkillData> getSkill(Actor actor);
-    
-     // remove20160819
-//    /**
-//     * @deprecated 以后不要使用随机获取技能，这会在客户端和服务端执行的时候不一致。
-//     * 获取一个随机指定类型的技能,如果不存在指定类型的技能则返回null.
-//     * @param actor
-//     * @param skillType
-//     * @return 
-//     */
-//    SkillData getSkillRandom(Actor actor, SkillType skillType);
-//    
-//    /**
-//     * @deprecated 以后不要使用随机获取技能，这会在客户端和服务端执行的时候不一致。
-//     * 获取一个随机防御技能,如果没有该技能则返回null.
-//     * @param actor
-//     * @return 
-//     */
-//    SkillData getSkillRandomDefend(Actor actor);
-//    
-//    /**
-//     * @deprecated 以后不要使用随机获取技能，这会在客户端和服务端执行的时候不一致。
-//     * 获取一个随机躲闪技能,如果没有则返回null
-//     * @param actor
-//     * @return 
-//     */
-//    SkillData getSkillRandomDuck(Actor actor);
-//    
-//    /**
-//     * @deprecated 以后不要使用随机获取技能，这会在客户端和服务端执行的时候不一致。
-//     * @param actor
-//     * @return 
-//     */
-//    SkillData getSkillRandomWalk(Actor actor);
-    
     /**
      * 执行一个技能实例
      * @param actor
@@ -202,15 +152,6 @@ public interface SkillService extends Inject {
      * @return 
      */
     boolean playWalk(Actor actor, String skillId, Vector3f dir, boolean faceToDir, boolean force);
-   
-    // remove20160819
-//    /**
-//     * 执行朝向目标位置，注意是位置．
-//     * @param actor
-//     * @param position
-//     * @return 
-//     */
-//    boolean playFaceTo(Actor actor, Vector3f position);
     
     /**
      * 检查技能是否可以执行.
@@ -335,39 +276,5 @@ public interface SkillService extends Inject {
      * @param channels 
      */
     void unlockSkillChannels(Actor actor, String... channels);
-    
-    // remove20160818
-//    /**
-//     * 获取技能的CutTimeEndRate,这个值是对技能执行时间的剪裁，即对技能的结束阶段
-//     * 的时间进行剪裁，这个值受角色属性影响，并且不会大于CutTimeEndMax.
-//     * 如果技能没有指定影响该值的角色属性，或者角色没有指定的属性值，则这个值应
-//     * 返回0.<br />
-//     * 注：这个值返回的是一个比率，取值为[0.0,1.0]之间，即表示要剪裁掉的技能总时间
-//     * 的比率。例如：当返回值为0.5时，即表示技能的总执行时间要剪裁掉一半（时间的后半部分）
-//     * @param actor
-//     * @param skillData
-//     * @return 
-//     */
-//    float getSkillCutTimeEndRate(Actor actor, SkillData skillData);
-//    
-//    /**
-//     * 获取技能的执行速度,技能的执行速度受角色属性的影响，当技能指定了speedAttribute
-//     * 后，角色的这个属性值将影响技能的执行速度。如果技能没有指定这个属性或
-//     * 者角色没有这个属性，则这个方法应该返回1.0,即原始速度。
-//     * @param actor
-//     * @param skillData
-//     * @return 返回的最小值为0.0001f，为避免除0错误，速度不能小于或等于0
-//     */
-//    float getSkillSpeed(Actor actor, SkillData skillData);
-//    
-//    /**
-//     * 获取技能的实际执行时间,技能的实际执行时间受：技能总时间、技能执行速度、
-//     * 技能的剪裁时间等影响
-//     * @param actor
-//     * @param skillData
-//     * @return 
-//     */
-//    float getSkillTrueUseTime(Actor actor, SkillData skillData);
-
     
 }

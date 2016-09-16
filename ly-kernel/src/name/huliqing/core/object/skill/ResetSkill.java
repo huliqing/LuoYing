@@ -14,9 +14,8 @@ import name.huliqing.core.mvc.service.ActorService;
  * 这个技能可以允许使用角色动画中的任何一侦作为角色的reset状态．当某些角色
  * 没有可用的reset动画时可以使用这个技能来代替．
  * @author huliqing
- * @param <T>
  */
-public class ResetSkill<T extends SkillData> extends AbstractSkill<T> {
+public class ResetSkill extends AbstractSkill {
     private final ActorService actorService = Factory.get(ActorService.class);
     
     /**
@@ -26,7 +25,7 @@ public class ResetSkill<T extends SkillData> extends AbstractSkill<T> {
     private float timePoint;
 
     @Override
-    public void setData(T data) {
+    public void setData(SkillData data) {
         super.setData(data); 
         timePoint = FastMath.clamp(data.getAsFloat("timePoint", timePoint), 0, 1.0f);
     }

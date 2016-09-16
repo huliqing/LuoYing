@@ -4,15 +4,11 @@
  */
 package name.huliqing.core.object.skill;
 
-import name.huliqing.core.data.SkillData;
-import name.huliqing.core.object.skill.AbstractSkill;
-
 /**
  * 防守技能
  * @author huliqing
- * @param <T>
  */
-public class DefendSkill<T extends SkillData> extends AbstractSkill<T> {
+public class DefendSkill extends AbstractSkill {
     
     @Override
     protected void doUpdateLogic(float tpf) {

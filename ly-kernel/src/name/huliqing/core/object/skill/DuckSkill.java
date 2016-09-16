@@ -4,15 +4,11 @@
  */
 package name.huliqing.core.object.skill;
 
-import name.huliqing.core.data.SkillData;
-import name.huliqing.core.object.skill.AbstractSkill;
-
 /**
  *
  * @author huliqing
- * @param <T>
  */
-public class DuckSkill<T extends SkillData> extends AbstractSkill<T> {
+public class DuckSkill extends AbstractSkill {
     
     @Override
     protected void doUpdateLogic(float tpf) {

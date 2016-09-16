@@ -13,9 +13,8 @@ import name.huliqing.core.network.Network;
 /**
  * 回城、瞬移技能
  * @author huliqing
- * @param <T>
  */
-public class BackSkill<T extends SkillData> extends AbstractSkill<T> {
+public class BackSkill extends AbstractSkill {
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     
     // 人物消失的时间插值点
@@ -27,7 +26,7 @@ public class BackSkill<T extends SkillData> extends AbstractSkill<T> {
     private boolean backed;
     
     @Override
-    public void setData(T data) {
+    public void setData(SkillData data) {
         super.setData(data); 
         this.backPoint = data.getAsFloat("backPoint", backPoint);
     }

@@ -13,9 +13,8 @@ import name.huliqing.core.mvc.service.StateService;
 /**
  * 执行死亡技能,简单的死亡效果
  * @author huliqing
- * @param <T>
  */
-public class DeadSkill<T extends SkillData> extends AbstractSkill<T> {
+public class DeadSkill extends AbstractSkill {
     private final PlayService playService = Factory.get(PlayService.class);
     private final StateService stateService = Factory.get(StateService.class);;
     private final ActorService actorService = Factory.get(ActorService.class);;
@@ -24,7 +23,7 @@ public class DeadSkill<T extends SkillData> extends AbstractSkill<T> {
     private boolean remove;
     
     @Override
-    public void setData(T data) {
+    public void setData(SkillData data) {
         super.setData(data); 
         remove = data.getAsBoolean("remove", remove);
     }

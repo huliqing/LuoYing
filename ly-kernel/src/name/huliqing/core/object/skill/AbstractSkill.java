@@ -48,9 +48,8 @@ import name.huliqing.core.utils.MathUtils;
  * 关于cutTime: 影响技能时间、动画时间,但不影响技能速度和动画速度
  * 
  * @author huliqing
- * @param <T>
  */
-public abstract class AbstractSkill<T extends SkillData> implements Skill<T> {
+public abstract class AbstractSkill implements Skill {
 //    private static final Logger logger = Logger.getLogger(AbstractSkill.class.getName());
 //    private final AttributeService attributeService = Factory.get(AttributeService.class);
     private final ElService elService = Factory.get(ElService.class);
@@ -75,7 +74,7 @@ public abstract class AbstractSkill<T extends SkillData> implements Skill<T> {
     protected List<ActorAnimWrap> actorAnims;
     
     // ---- 内部参数 ----
-    protected T data;
+    protected SkillData data;
     
     // 当前执行技能的角色
     protected Actor actor;
@@ -97,7 +96,7 @@ public abstract class AbstractSkill<T extends SkillData> implements Skill<T> {
     protected SkillModule skillControl;
 
     @Override
-    public void setData(T data) {
+    public void setData(SkillData data) {
         this.data = data;
         
         // Sounds
@@ -165,12 +164,12 @@ public abstract class AbstractSkill<T extends SkillData> implements Skill<T> {
     }
 
     @Override
-    public T getData() {
+    public SkillData getData() {
         return data;
     }
     
     @Override
-    public final void start() {
+    public final void initialize() {
         if (started) {
             return;
         }

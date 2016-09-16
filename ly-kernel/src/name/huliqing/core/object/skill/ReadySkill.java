@@ -4,14 +4,10 @@
  */
 package name.huliqing.core.object.skill;
 
-import name.huliqing.core.data.SkillData;
-import name.huliqing.core.object.skill.AbstractSkill;
-
 /**
  * @author huliqing
- * @param <T>
  */
-public class ReadySkill<T extends SkillData> extends AbstractSkill<T> {
+public class ReadySkill extends AbstractSkill {
 
 
     @Override

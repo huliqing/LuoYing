@@ -16,9 +16,8 @@ import name.huliqing.core.network.Network;
  * 行路的技能
  * @see RunSkill
  * @author huliqing
- * @param <T>
  */
-public class WalkSkill<T extends SkillData> extends AbstractSkill<T> implements Walk{
+public class WalkSkill extends AbstractSkill implements Walk{
     private final ConfigService configService = Factory.get(ConfigService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     
@@ -31,7 +30,7 @@ public class WalkSkill<T extends SkillData> extends AbstractSkill<T> implements 
     protected final Vector3f viewDirection = new Vector3f();
 
     @Override
-    public void setData(T data) {
+    public void setData(SkillData data) {
         super.setData(data);
         animSpeed = data.getAsFloat("animSpeed", animSpeed);
         baseSpeed = data.getAsFloat("baseSpeed", configService.getBaseWalkSpeed());

@@ -31,9 +31,8 @@ import name.huliqing.core.utils.ConvertUtils;
 /**
  * Hit技能，可与目标角色进行交互的技能。例如攻击技能，BUFF技能，射击技能。
  * @author huliqing
- * @param <T>
  */
-public abstract class HitSkill<T extends SkillData> extends AbstractSkill<T> {
+public abstract class HitSkill extends AbstractSkill {
     private final ActorService actorService = Factory.get(ActorService.class);
     private final PlayService playService = Factory.get(PlayService.class);
     private final MagicService magicService = Factory.get(MagicService.class);
@@ -64,7 +63,7 @@ public abstract class HitSkill<T extends SkillData> extends AbstractSkill<T> {
     private float hitDistanceSquared;
     
     @Override
-    public void setData(T data) {
+    public void setData(SkillData data) {
         super.setData(data); 
         
         this.hitChecker = hitCheckerService.loadHitChecker(data.getAsString("hitChecker", IdConstants.HIT_CHECKER_FIGHT_DEFAULT));
