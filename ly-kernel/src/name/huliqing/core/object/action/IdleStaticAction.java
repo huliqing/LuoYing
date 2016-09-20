@@ -4,9 +4,10 @@
  */
 package name.huliqing.core.object.action;
 
+import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.mvc.network.SkillNetwork;
-import name.huliqing.core.mvc.service.SkillService;
+import name.huliqing.core.object.module.SkillModule;
 import name.huliqing.core.object.skill.Skill;
 
 /**
@@ -14,27 +15,31 @@ import name.huliqing.core.object.skill.Skill;
  * @author huliqing
  */
 public class IdleStaticAction extends AbstractAction implements IdleAction {
-    private final SkillService skillService = Factory.get(SkillService.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
-
+    private SkillModule skillModule;
+    
     // 缓存技能id
-    private Skill waitSkillId;
+    private Skill waitSkill;
     
     @Override
     public void initialize() {
         super.initialize();
-        waitSkillId = skillService.getSkill(actor, SkillType.wait);
+        skillModule = actor.getModule(SkillModule.class);
+        
+        List<Skill> waitSkills = skillModule.getSkillWait(null);
+        if (waitSkills != null && !waitSkills.isEmpty()) {
+            waitSkill = waitSkills.get(0);
+        }
     }
     
     @Override
     protected void doLogic(float tpf) {
-        if (!skillService.isWaiting(actor)) {
-            if (waitSkillId != null) {
-                skillNetwork.playSkill(actor, waitSkillId, false);
+        if (!skillModule.isWaiting()) {
+            if (waitSkill != null) {
+                skillNetwork.playSkill(actor, waitSkill, false);
             }
             end();
         }
     }
-
     
 }

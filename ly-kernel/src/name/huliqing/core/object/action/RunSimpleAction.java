@@ -6,10 +6,12 @@ package name.huliqing.core.object.action;
 
 import com.jme3.math.Vector3f;
 import com.jme3.util.TempVars;
+import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.mvc.network.SkillNetwork;
-import name.huliqing.core.mvc.service.ActorService;
-import name.huliqing.core.mvc.service.SkillService;
+import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.module.ActorModule;
+import name.huliqing.core.object.module.SkillModule;
 import name.huliqing.core.object.skill.Skill;
 
 /**
@@ -17,9 +19,9 @@ import name.huliqing.core.object.skill.Skill;
  * @author huliqing
  */
 public class RunSimpleAction extends AbstractAction implements RunAction{
-    private final ActorService actorService = Factory.get(ActorService.class);
-    private final SkillService skillService = Factory.get(SkillService.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
+    private ActorModule actorModule;
+    private SkillModule skillModule;
 
     // 需要走到的目标地址
     private final Vector3f position = new Vector3f();
@@ -36,24 +38,38 @@ public class RunSimpleAction extends AbstractAction implements RunAction{
     private boolean resetDir;
     
     // 缓存技能id
-    private Skill runSkillId;
-    private Skill waitSkillId;
+    private Skill runSkill;
+    private Skill waitSkill;
     
     public RunSimpleAction() {
         super();
+    }
+
+    @Override
+    public void setActor(Actor actor) {
+        this.actor = actor;
+        actorModule = actor.getModule(ActorModule.class);
+        skillModule = actor.getModule(SkillModule.class);
     }
     
     @Override
     public void initialize() {
         super.initialize();
+        
         resetDir = true;
         rayDetour.setActor(actor);
         rayDetour.setAutoFacing(true);
         timeDetour.setActor(actor);
         timeDetour.setAutoFacing(true);
         
-        runSkillId = skillService.getSkill(actor, SkillType.run);
-        waitSkillId = skillService.getSkill(actor, SkillType.wait);
+        List<Skill> waitSkills = skillModule.getSkillWait(null);
+        if (waitSkills != null && !waitSkills.isEmpty()) {
+            waitSkill = waitSkills.get(0);
+        }
+        List<Skill> runSkills = skillModule.getSkillRun(null);
+        if (runSkills != null && !runSkills.isEmpty()) {
+            runSkill = runSkills.get(0);
+        }
     }
 
     @Override
@@ -68,14 +84,14 @@ public class RunSimpleAction extends AbstractAction implements RunAction{
 //        System.out.println("actor.position=" + actor.getSpatial().getWorldTranslation());
         
         // 如果角色是不可移动的，则直接返回不处理逻辑
-        if (!actorService.isMoveable(actor) || runSkillId == null) {
+        if (!actorModule.isMovable() || runSkill == null) {
             end();
             return;
         }
         
         if (resetDir) {
             TempVars tv = TempVars.get();
-            skillNetwork.playWalk(actor, runSkillId.getData().getId()
+            skillNetwork.playWalk(actor, runSkill.getData().getId()
                     , position.subtract(actor.getSpatial().getWorldTranslation(), tv.vect1), true, false);
             tv.release();
             resetDir = false;
@@ -84,8 +100,8 @@ public class RunSimpleAction extends AbstractAction implements RunAction{
         // == 确定已经走到目标位置
         float distance = actor.getSpatial().getWorldTranslation().distance(position);
         if (distance <= nearest) {
-            if (waitSkillId != null) {
-                skillNetwork.playSkill(actor, waitSkillId, false);
+            if (waitSkill != null) {
+                skillNetwork.playSkill(actor, waitSkill, false);
             }
             end();
             return;
@@ -108,9 +124,9 @@ public class RunSimpleAction extends AbstractAction implements RunAction{
     }
     
     private void runByStraight() {
-        if (!skillService.isRunning(actor)) {
+        if (!skillModule.isRunning()) {
             TempVars tv = TempVars.get();
-            skillNetwork.playWalk(actor, runSkillId.getData().getId()
+            skillNetwork.playWalk(actor, runSkill.getData().getId()
                     , position.subtract(actor.getSpatial().getWorldTranslation(), tv.vect1), true, false);
             tv.release();
         }

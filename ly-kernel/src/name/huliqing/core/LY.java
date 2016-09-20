@@ -403,10 +403,10 @@ public class LY {
         DataFactory.register("actionIdleStatic", ActionData.class, ActionDataLoader.class, IdleStaticAction.class);
         DataFactory.register("actionIdleDynamic", ActionData.class, ActionDataLoader.class,  IdleDynamicAction.class);
         DataFactory.register("actionIdlePatrol", ActionData.class, ActionDataLoader.class,  IdlePatrolAction.class);
-        DataFactory.register("actionRun", ActionData.class, ActionDataLoader.class,  RunPathAction.class);
+        DataFactory.register("actionRunPath", ActionData.class, ActionDataLoader.class,  RunPathAction.class);
         DataFactory.register("actionRunSimple", ActionData.class, ActionDataLoader.class, RunSimpleAction.class);
-        DataFactory.register("actionFollow", ActionData.class, ActionDataLoader.class,  FollowPathAction.class);
-        DataFactory.register("actionFight", ActionData.class, ActionDataLoader.class,  FightDynamicAction.class);
+        DataFactory.register("actionFollowPath", ActionData.class, ActionDataLoader.class,  FollowPathAction.class);
+        DataFactory.register("actionFightDynamic", ActionData.class, ActionDataLoader.class,  FightDynamicAction.class);
         
         // Actor
         DataFactory.register("actor",  ActorData.class, ActorDataLoader.class, Actor.class);

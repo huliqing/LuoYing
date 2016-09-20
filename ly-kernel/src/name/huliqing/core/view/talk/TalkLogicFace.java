@@ -84,7 +84,7 @@ public class TalkLogicFace extends AbstractTalkLogic {
 //                && !actor.isRunning()
 //                );
 
-        Skill waitSkill = skillService.getSkillWait(actor);
+        Skill waitSkill = skillService.getSkillWaitDefault(actor);
         boolean canFace = force || (waitSkill != null && skillService.isPlayingSkill(actor, waitSkill.getData().getTags()));
         
         if (canFace) {

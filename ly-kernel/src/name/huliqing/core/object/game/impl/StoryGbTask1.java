@@ -214,9 +214,7 @@ public class StoryGbTask1 extends GameTaskBase {
             // 不让乱动，不然在对话的时候会执行idle行为
             logicService.setAutoLogic(gb, false);
             actionService.playAction(gb, null);
-//            skillNetwork.playSkill(gb, skillService.getSkill(gb, SkillType.wait), true);
-            skillNetwork.playWait(gb, true);
-            
+            skillNetwork.playSkill(gb, skillService.getSkillWaitDefault(gb), true);
             
             createGbPlayerTalk();
             stage = 6;

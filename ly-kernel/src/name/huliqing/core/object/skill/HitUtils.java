@@ -4,6 +4,7 @@
  */
 package name.huliqing.core.object.skill;
 
+import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.constants.ResConstants;
 import name.huliqing.core.enums.MessageType;
@@ -32,7 +33,6 @@ public class HitUtils {
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
-    private final ProtoNetwork protoNetwork = Factory.get(ProtoNetwork.class);
     
     private final static HitUtils INSTANCE = new HitUtils();
     
@@ -76,9 +76,9 @@ public class HitUtils {
         if (actorService.isDead(target)) {
             
             // 1.让死亡目标执行死亡技能
-            Skill deadSkill = skillService.getSkill(target, SkillType.dead);
-            if (deadSkill != null) {
-                skillNetwork.playSkill(target, deadSkill, false);
+            List<Skill> deadSkills = skillService.getSkillDead(target);
+            if (deadSkills != null && !deadSkills.isEmpty()) {
+                skillNetwork.playSkill(target, deadSkills.get(0), false);
             }
 
             // 2.通知目标角色死亡
@@ -102,9 +102,9 @@ public class HitUtils {
             // 当减益发生时则判断为受伤并执行hurt.
             float newAttrValue = attribute.floatValue();
             if (newAttrValue < oldAttrValue) {
-                Skill skill = skillService.getSkill(target, SkillType.hurt);
-                if (skill != null) {
-                    skillNetwork.playSkill(target, skill, false);
+                List<Skill> hurtSkills = skillService.getSkillHurt(target);
+                if (hurtSkills != null && !hurtSkills.isEmpty()) {
+                    skillNetwork.playSkill(target, hurtSkills.get(0), false);
                 }
             }
         }

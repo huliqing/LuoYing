@@ -16,13 +16,13 @@
     <!--系统默认的技能标记： wait,sit,walk,run,jump,dance,idle,hurt,dead,reset,duck,defend,skin,attack,trick,magic-->
     
     <!--普通的idle技能-->
-    <skillBase id="skillIdleTagBase" tags="idle" prior="0" overlapTags="skin" />
+    <skillBase id="skillIdleTagBase" tags="idle" prior="0" overlapTags="skin" interruptTags="idle,wait,walk,run" />
     <!--等待、待机-->
-    <skillBase id="skillWaitTagBase" tags="wait" prior="0" overlapTags="skin" />
+    <skillBase id="skillWaitTagBase" tags="wait" prior="0" overlapTags="skin" interruptTags="idle,wait,walk,run" />
     <!--走路、步行-->
-    <skillBase id="skillWalkTagBase" tags="walk" prior="0" overlapTags="skin" interruptTags="walk,run" />
+    <skillBase id="skillWalkTagBase" tags="walk" prior="0" overlapTags="skin" interruptTags="idle,wait,walk,run" />
     <!--跑步-->
-    <skillBase id="skillRunTagBase" tags="run" prior="0" overlapTags="skin" interruptTags="walk,run" />
+    <skillBase id="skillRunTagBase" tags="run" prior="0" overlapTags="skin" interruptTags="idle,wait,walk,run" />
     <!--穿装备-->
     <skillBase id="skillSkinTagBase" tags="skin" prior="0" overlapTags="idle,wait,walk,run,skin" />
 

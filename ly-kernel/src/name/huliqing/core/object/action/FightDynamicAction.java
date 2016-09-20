@@ -6,9 +6,7 @@ package name.huliqing.core.object.action;
 
 import com.jme3.math.FastMath;
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Logger;
 import name.huliqing.core.Factory;
 import name.huliqing.core.constants.SkillConstants;
@@ -22,9 +20,11 @@ import name.huliqing.core.mvc.service.AttributeService;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.mvc.service.SkinService;
+import name.huliqing.core.object.module.ActorModule;
 import name.huliqing.core.object.module.SkillListener;
 import name.huliqing.core.object.skill.HitSkill;
 import name.huliqing.core.object.skill.Skill;
+import name.huliqing.core.object.skill.SkillTagFactory;
 import name.huliqing.core.utils.MathUtils;
 
 /**
@@ -39,10 +39,10 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
     private final ActorService actorService = Factory.get(ActorService.class);
     private final SkinService skinService = Factory.get(SkinService.class);
     private final AttributeService attributeService = Factory.get(AttributeService.class);
-    
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final SkinNetwork skinNetwork = Factory.get(SkinNetwork.class);
+    private ActorModule actorModule;
     
     // 是否允许跟随敌人
     protected boolean allowFollow = true;
@@ -51,11 +51,8 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
     protected float followTimeMax = 8;
     protected float followTimeUsed;
     
-    // 能够自动使用的攻击技能,该参数指定战斗过程中允许使用的攻击技能类型：包含：
-    // attack.common/trick/shot/magic, 如果该值为null,则允许所有类型的战斗技能.
-    // 否则只使用给定的攻击技能。该参数主要是为了让玩家角色在战斗过程中能够自行
-    // 控制一些技能，如魔法技能，可能玩家角色不希望AI自动使用这些技能以消耗魔法。
-    private Set<SkillType> attackSkillTypes;
+    //  战斗技能tags
+    private long fightSkillTags;
     
     // 战斗结束后自动摘下武器
     private boolean autoTakeOffWeapon = true;
@@ -68,7 +65,7 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
     // 攻击时间间隔受属性影响。
     private float attackIntervalMax = 1f;
     
-    // --- inner
+    // ---- inner
     
     // 当前准备使用于攻击的技能
     protected Skill skill;
@@ -85,10 +82,10 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
     
     // 最近获取到的技能缓存,注：当武器类型发生变化或者角色的技能增或减少
     // 时都应该重新获取。
-    protected List<Skill> attackSkills = new ArrayList<Skill>();
+    protected List<Skill> fightSkills = new ArrayList<Skill>();
     
     // 缓存技能
-    private Skill waitSkillId;
+    private Skill waitSkill;
 
     public FightDynamicAction() {
         super();
@@ -102,13 +99,7 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
         autoTakeOffWeapon = data.getAsBoolean("autoTakeOffWeapon", autoTakeOffWeapon);
         attackIntervalAttribute = data.getAsString("attackIntervalAttribute");
         attackIntervalMax = data.getAsFloat("attackIntervalMax", attackIntervalMax);
-        String[] tempSkillTypes = data.getAsArray("attackSkillTypes");
-        if (tempSkillTypes != null && tempSkillTypes.length > 0) {
-            attackSkillTypes = EnumSet.noneOf(SkillType.class);
-            for (String st : tempSkillTypes) {
-                attackSkillTypes.add(SkillType.identifyByName(st));
-            }
-        }
+        fightSkillTags = SkillTagFactory.convert(data.getAsArray("fightSkillTags"));
     }
 
     @Override
@@ -136,12 +127,14 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
     @Override
     public void initialize() {
         super.initialize();
+        actorModule = actor.getModule(ActorModule.class);
+        
         // 如果角色切换到战斗状态，则强制取出武器
         if (!skinService.isWeaponTakeOn(actor)) {
             skinNetwork.takeOnWeapon(actor, true);
         }
         
-        waitSkillId = skillService.getSkill(actor, SkillType.wait);
+        waitSkill = skillService.getSkillWaitDefault(actor);
         skillService.addSkillListener(actor, this);
     }
     
@@ -157,12 +150,6 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
     @Override
     public void doLogic(float tpf) {
         timeUsed += tpf;
-        
-        // remove20151229
-//        // 很重要:自动AI需要进行攻击时间限制
-//        if (actorService.isAutoAi(actor) && timeUsed < interval) {
-//            return;
-//        }
 
         // 攻击间隔时间限制
         if (timeUsed < interval) {
@@ -187,9 +174,8 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
             } else {
                 // 如果找不到下一个目标，则这里要释放目标。
                 actorNetwork.setTarget(actor, null);
-//                SkillData waitSkill = skillService.getSkill(actor, SkillType.wait);
-                if (waitSkillId != null) {
-                    skillNetwork.playSkill(actor, waitSkillId, false);
+                if (waitSkill != null) {
+                    skillNetwork.playSkill(actor, waitSkill, false);
                 }
                 end();
             }
@@ -220,7 +206,7 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
             
             // 如果不允许跟随敌人,则清空敌人（或许敌人已经走出攻击范围外。）
             // 清空目标及结束当前行为
-            if (!isAllowFollow()) {
+            if (!allowFollow || !actorModule.isMovable()) {
                 
                 // 刻偿试为当前角色查找一次敌人，以避免SearchEnemyLogic的延迟
                 Actor newTarget = actorService.findNearestEnemyExcept(actor, actorService.getViewDistance(actor), enemy);
@@ -230,8 +216,8 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
                 } else {
                     // 如果找不到下一个目标，则这里要释放目标。
                     actorNetwork.setTarget(actor, null);
-                    if (waitSkillId != null) {
-                        skillNetwork.playSkill(actor, waitSkillId, false);
+                    if (waitSkill != null) {
+                        skillNetwork.playSkill(actor, waitSkill, false);
                     }
                     end();
                 }
@@ -251,8 +237,8 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
                     } else {
                         // 如果找不到下一个目标，则这里要释放目标。
                         actorNetwork.setTarget(actor, null);
-                        if (waitSkillId != null) {
-                            skillNetwork.playSkill(actor, waitSkillId, false);
+                        if (waitSkill != null) {
+                            skillNetwork.playSkill(actor, waitSkill, false);
                         }
                         end();
                     }
@@ -301,7 +287,7 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
      */
     protected boolean attack(Skill skill) {
         // 使角色朝向目标
-        if (isAutoFacing()) {
+        if (autoFacing) {
             actorNetwork.setLookAt(actor, enemy.getSpatial().getWorldTranslation());
         }
         return skillNetwork.playSkill(actor, skill, false);
@@ -334,11 +320,11 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
     }
     
     private Skill getSkill() {
-        if (attackSkills == null || attackSkills .isEmpty()) {
+        if (fightSkills == null || fightSkills .isEmpty()) {
             return null;
         } else {
             // 获取一个不处于冷却中的技能
-            return getNotCooldown(attackSkills);
+            return getNotCooldown(fightSkills);
         }
     }
     
@@ -361,43 +347,6 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
             }
         }
     }
-    
-    /**
-     * 从角色身上获取适用于指定武器类型的攻击技能,只要适合于该武器的"攻击“技能就可以，
-     * 不管是否处于冷却中。另外如果skillTypes不为null,则获取的攻击技能必须限制在这个列表之内
-     * @param ac 指定的角色
-     * @param weaponState 
-     * @param skillTypes 指定的技能类型限制
-     * @param store 存放结果集，如果为null则创建一个
-     * @return "攻击"技能列表,可能包含：attack.common/shot/trick/magic
-     */
-    protected List<Skill> loadAttackSkill(Actor ac, int weaponState, Set<SkillType> skillTypes, List<Skill> store) {
-        if (store == null) {
-            store = new ArrayList<Skill>();
-        }
-        
-        // 从攻击类技能中找出符合当前武器使用的以及在指定的技能类型内
-        List<Skill> allSkills = skillService.getSkills(actor);
-        for (Skill as : allSkills) {
-            // 如果非攻击类技能
-            if (as.getSkillType() != SkillType.attack && as.getSkillType() != SkillType.trick) {
-                continue;
-            }
-            
-            // 技能类型过滤,如果指定了只能使用的技能类型。
-            if (skillTypes != null && !skillTypes.contains(as.getSkillType())) {
-                continue;
-            }
-            
-            // 武器类型的过滤,只有技能与当前武器相容才能添加
-            if (as.getData().getWeaponStateLimit() == null 
-                    || as.getData().getWeaponStateLimit().contains(weaponState)) {
-                store.add(as);
-            }
-        }
-
-        return store;
-    }
 
     /**
      * 设置是否允许跟随，只有打开跟随，并且角色质量mass大于0才能进行跟随。
@@ -407,21 +356,23 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
         this.allowFollow = allowFollow;
     }
     
-    /**
-     * 是否允许跟随攻击敌人,只有打开跟随并且角色质量(mass)大于0才能进行跟随。
-     * @return 
-     */
-    protected boolean isAllowFollow() {
-        return allowFollow && actorService.getMass(actor) > 0;
-    }
-    
-    public float getFollowTimeMax() {
-        return followTimeMax;
-    }
-
-    public void setFollowTimeMax(float followTimeMax) {
-        this.followTimeMax = followTimeMax;
-    }
+    // remove20160920
+//    /**
+//     * 是否允许跟随攻击敌人,只有打开跟随并且角色质量(mass)大于0才能进行跟随。
+//     * @return 
+//     */
+//    protected boolean isAllowFollow() {
+//
+//        return allowFollow && actorModule.isMovable();
+//    }
+//    
+//    public float getFollowTimeMax() {
+//        return followTimeMax;
+//    }
+//
+//    public void setFollowTimeMax(float followTimeMax) {
+//        this.followTimeMax = followTimeMax;
+//    }
 
     @Override
     public void onSkillAdded(Actor actor, Skill skill) {
@@ -434,10 +385,10 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
     }
     
     private void recacheSkill() {
-        if (attackSkills != null) {
-            attackSkills.clear();
+        if (fightSkills != null) {
+            fightSkills.clear();
         }
-        attackSkills = loadAttackSkill(actor, lastWeaponState, attackSkillTypes, attackSkills);
+        fightSkills = loadAttackSkill(actor, lastWeaponState, fightSkillTags, fightSkills);
         // 重新缓存技能后，检查一次当前正在使用的技能是否适合当前的武器，如果不行则清除它，让它
         // 重新获取一个可用的。否则不应该清除当前的技能。
         if (skill != null) {
@@ -446,5 +397,31 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
                 skill = null;
             }
         }
+    }
+    
+    /**
+     * 从角色身上获取适用于指定武器类型的攻击技能,只要适合于该武器的"攻击“技能就可以，
+     * 不管是否处于冷却中。另外如果skillTypes不为null,则获取的攻击技能必须限制在这个列表之内
+     * @param ac 指定的角色
+     * @param weaponState 
+     * @param skillTags 指定的技能类型限制
+     * @param store 存放结果集，如果为null则创建一个
+     * @return "攻击"技能列表,可能包含：attack.common/shot/trick/magic
+     */
+    private List<Skill> loadAttackSkill(Actor ac, int weaponState, long skillTags, List<Skill> store) {
+        if (store == null) {
+            store = new ArrayList<Skill>();
+        }
+        List<Skill> allSkills = skillService.getSkills(actor);
+        for (Skill as : allSkills) {
+            if ((skillTags & as.getData().getTags()) != 0) {
+                // 武器类型的过滤,只有技能与当前武器相容才能添加
+                if (as.getData().getWeaponStateLimit() == null 
+                        || as.getData().getWeaponStateLimit().contains(weaponState)) {
+                    store.add(as);
+                }
+            }
+        }
+        return store;
     }
 }

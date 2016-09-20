@@ -99,7 +99,7 @@ public class LyLabPlayState extends NetworkPlayState {
         }
         actorService.setLocation(actor, new Vector3f(-5, 2, 0));
         actorService.setLevel(actor, level);
-        skillService.playSkill(actor, skillService.getSkillWait(actor), false);
+        skillService.playSkill(actor, skillService.getSkillWaitDefault(actor), false);
         return actor;
     }
 

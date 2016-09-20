@@ -13,7 +13,6 @@ import name.huliqing.core.object.effect.Effect;
 import name.huliqing.core.object.effect.EffectManager;
 import name.huliqing.core.object.module.SkillModule;
 import name.huliqing.core.object.skill.Skill;
-import name.huliqing.core.object.skill.SkillTagFactory;
 
 /**
  * 速度效果，提升角色或降低角色的速度
@@ -24,7 +23,6 @@ public class MoveSpeedState extends AttributeState {
     private SkillModule skillModule;
     
     private String moveEffectId;
-    private long runSkillTag;
     
     // ---- inner
     private Effect moveEffect;
@@ -34,10 +32,6 @@ public class MoveSpeedState extends AttributeState {
     public void setData(StateData data) {
         super.setData(data);
         moveEffectId = data.getAsString("moveEffect");
-        String tempRunSkillTag = data.getAsString("runSkillTag");
-        if (tempRunSkillTag != null) {
-            runSkillTag = SkillTagFactory.convert(tempRunSkillTag);
-        }
     }
 
     @Override
@@ -46,15 +40,13 @@ public class MoveSpeedState extends AttributeState {
         skillModule = actor.getModule(SkillModule.class);
         
         // 查找"run"技能
-        if (runSkillTag > 0) {
-            List<Skill> runSkills = skillModule.getSkillByTags(runSkillTag);
-            if (runSkills != null && !runSkills.isEmpty()) {
-                runSkill = runSkills.get(0);
-            }
+        List<Skill> runSkills = skillModule.getSkillRun(null);
+        if (runSkills != null && !runSkills.isEmpty()) {
+            runSkill = runSkills.get(0);
         }
         
         // 如果角色当前正在执行“跑路”技能，则强制重新执行，以适应速度的变化。
-        if (skillModule.isRunningSkill(runSkillTag) && runSkill != null) {
+        if (skillModule.isRunning() && runSkill != null) {
             skillModule.playSkill(runSkill, false);
         }
         
@@ -76,7 +68,7 @@ public class MoveSpeedState extends AttributeState {
     @Override
     public void cleanup() {
         // 如果角色当前正在执行“跑路”技能，则强制重新执行，以适应速度的变化。
-        if (skillModule != null && skillModule.isRunningSkill(runSkillTag)) {
+        if (skillModule != null && skillModule.isRunning()) {
             if (runSkill != null) {
                 skillModule.playSkill(runSkill, false);
             }
@@ -91,7 +83,7 @@ public class MoveSpeedState extends AttributeState {
     
     private void checkEffectTrace() {
         if (moveEffect != null) {
-            if (skillModule.isRunningSkill(runSkillTag)) {
+            if (skillModule.isRunning()) {
                 showMoveEffect();
             } else {
                 hideMoveEffect();

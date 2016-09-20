@@ -221,7 +221,7 @@ public class ActorSelectView extends LinearLayout {
         actorService.setViewDirection(actor, new Vector3f(1, 0, 0));
         actorService.setPhysicsEnabled(actor, false);
         
-        skillService.playSkill(actor, skillService.getSkillWait(actor), false);
+        skillService.playSkill(actor, skillService.getSkillWaitDefault(actor), false);
         skinService.takeOnWeapon(actor, true);
         actorView.detachAllChildren();
         actorView.attachChild(actor.getSpatial());

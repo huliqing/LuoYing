@@ -85,7 +85,7 @@ public class SkillLockedState extends State implements SkillPlayListener {
         
         // 锁定在特定标记的技能上
         if (lockAtSkillTags > 0) {
-            List<Skill> lockedSkills = skillModule.getSkillByTags(lockAtSkillTags);
+            List<Skill> lockedSkills = skillModule.getSkillByTags(lockAtSkillTags, null);
             if (lockedSkills != null && !lockedSkills.isEmpty()) {
                 // 用到随机数时要使用Network.
                 skillNetwork.playSkill(actor, lockedSkills.get(FastMath.nextRandomInt(0, lockedSkills.size() - 1)), false);

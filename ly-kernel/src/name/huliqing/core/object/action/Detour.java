@@ -5,10 +5,11 @@
 package name.huliqing.core.object.action;
 
 import com.jme3.math.Vector3f;
+import java.util.List;
 import name.huliqing.core.Factory;
-import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.mvc.network.SkillNetwork;
+import name.huliqing.core.object.module.SkillModule;
 import name.huliqing.core.object.skill.Skill;
 
 /**
@@ -16,8 +17,9 @@ import name.huliqing.core.object.skill.Skill;
  * @author huliqing
  */
 public abstract class Detour {
-    private final SkillService skillService = Factory.get(SkillService.class);
+//    private final SkillService skillService = Factory.get(SkillService.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
+    private SkillModule skillModule;
     
     protected Action action;
     protected Actor actor;
@@ -37,8 +39,8 @@ public abstract class Detour {
     // 当绕道时，指定要使用walk还是run,默认run
     private boolean useRun = true;
     
-    private Skill runSkill;
     private Skill walkSkill;
+    private Skill runSkill;
     
     public Detour() {}
     
@@ -52,8 +54,21 @@ public abstract class Detour {
     
     public void setActor(Actor actor) {
         this.actor = actor;
-        runSkill = skillService.getSkill(actor, SkillType.run);
-        walkSkill = skillService.getSkill(actor, SkillType.walk);        
+        skillModule = actor.getModule(SkillModule.class);
+
+        if (walkSkill == null) {
+            List<Skill> walkSkills = skillModule.getSkillWalk(null);
+            if (walkSkills != null && !walkSkills.isEmpty()) {
+                walkSkill = walkSkills.get(0);
+            }                
+        }
+
+        if (runSkill == null) {
+            List<Skill> runSkills = skillModule.getSkillRun(null);
+            if (runSkills != null && !runSkills.isEmpty()) {
+                runSkill = runSkills.get(0);
+            }                
+        }
     }
     
     public boolean detouring(float tpf) {

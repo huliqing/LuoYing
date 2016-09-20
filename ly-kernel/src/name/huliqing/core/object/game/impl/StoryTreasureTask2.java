@@ -207,7 +207,7 @@ public class StoryTreasureTask2 extends GameTaskBase {
             @Override
             public Actor onAddBefore(Actor actor) {
                 actorService.setGroup(actor, game.groupEnemy);
-                skillService.playSkill(actor, skillService.getSkill(actor, SkillType.wait), false);
+                skillService.playSkill(actor, skillService.getSkillWaitDefault(actor), false);
 
                 TempVars tv = TempVars.get();
                 tv.vect1.set(game.treasurePos);
@@ -419,7 +419,7 @@ public class StoryTreasureTask2 extends GameTaskBase {
             actorService.setLevel(companion, 40);
             actorService.setPartner(player, actor);
             actorService.setTeam(companion, actorService.getTeam(player));
-            skillService.playSkill(companion, skillService.getSkill(companion, SkillType.wait), false);
+            skillService.playSkill(companion, skillService.getSkillWaitDefault(companion), false);
             // 同伴进入战场后，刷新器不再刷怪。
             sceneBuilder.setEnabled(false);
             // 同伴进入战场后宝箱不死

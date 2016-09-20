@@ -29,7 +29,7 @@
                       lockAllSkillTags="1" lockLocation="1" effects="effectStateStun" />
 
     <!--疾风步: 增加移动速度50% -->
-    <stateAttributeMove id="stateWindWalk" icon="Interface/skill/rapidWind.jpg" useTime="60" runSkillTag="run"
+    <stateAttributeMove id="stateWindWalk" icon="Interface/skill/rapidWind.jpg" useTime="60"
                         attributeName="attributeMoveSpeed" value="0.3" restore="1" moveEffect="effectStateWindWalk" />
     
     <!--冰霜: 减速50%-->

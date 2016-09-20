@@ -9,6 +9,7 @@ import com.jme3.ai.navmesh.Path;
 import com.jme3.ai.navmesh.Path.Waypoint;
 import com.jme3.math.Vector3f;
 import com.jme3.util.TempVars;
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
@@ -18,7 +19,7 @@ import name.huliqing.core.data.ActionData;
 import name.huliqing.core.mvc.network.SkillNetwork;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.PlayService;
-import name.huliqing.core.mvc.service.SkillService;
+import name.huliqing.core.object.module.SkillModule;
 import name.huliqing.core.object.skill.Skill;
 import name.huliqing.core.utils.DebugDynamicUtils;
 import name.huliqing.core.utils.ThreadHelper;
@@ -30,8 +31,9 @@ import name.huliqing.core.utils.ThreadHelper;
 public class RunPathAction extends AbstractAction implements RunAction{
     private final PlayService playService = Factory.get(PlayService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
-    private final SkillService skillService = Factory.get(SkillService.class);
+//    private final SkillService skillService = Factory.get(SkillService.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
+    private SkillModule skillModule;
 
     // 需要走到的目标地址
     private final Vector3f position = new Vector3f();
@@ -79,6 +81,8 @@ public class RunPathAction extends AbstractAction implements RunAction{
     @Override
     public void initialize() {
         super.initialize();
+        skillModule = actor.getModule(SkillModule.class);
+        
         path = null;
         future = null;
         rayDetour.setActor(actor);
@@ -87,8 +91,14 @@ public class RunPathAction extends AbstractAction implements RunAction{
         timeDetour.setActor(actor);
         timeDetour.setAutoFacing(true);
         
-        runSkill = skillService.getSkill(actor, SkillType.run);
-        waitSkill = skillService.getSkill(actor, SkillType.wait);
+        List<Skill> waitSkills = skillModule.getSkillWait(null);
+        if (waitSkills != null && !waitSkills.isEmpty()) {
+            waitSkill = waitSkills.get(0);
+        }
+        List<Skill> runSkills = skillModule.getSkillRun(null);
+        if (runSkills != null && !runSkills.isEmpty()) {
+            runSkill = runSkills.get(0);
+        }
     }
     
     @Override
@@ -164,12 +174,12 @@ public class RunPathAction extends AbstractAction implements RunAction{
             TempVars tv = TempVars.get();
             if (path != null && current != null) {
                 skillNetwork.playWalk(actor
-                        , skillService.getSkill(actor, SkillType.run).getData().getId()
+                        , runSkill.getData().getId()
                         , current.getPosition().subtract(actor.getSpatial().getWorldTranslation(), tv.vect1), true, false);
                 
             } else {
                 skillNetwork.playWalk(actor
-                        , skillService.getSkill(actor, SkillType.run).getData().getId()
+                        , runSkill.getData().getId()
                         , position.subtract(actor.getSpatial().getWorldTranslation(), tv.vect1), true, false);
             }
             tv.release();
@@ -178,7 +188,7 @@ public class RunPathAction extends AbstractAction implements RunAction{
     }
     
     private void runByStraight() {
-        if (!skillService.isRunning(actor)) {
+        if (!skillModule.isRunning()) {
             TempVars tv = TempVars.get();
             skillNetwork.playWalk(actor, runSkill.getData().getId()
                     , position.subtract(actor.getSpatial().getWorldTranslation(), tv.vect1), true, false);
@@ -199,7 +209,7 @@ public class RunPathAction extends AbstractAction implements RunAction{
         }
         
         // 转换到下一个路径点
-        if (tempPoint != current || !skillService.isRunning(actor)) {
+        if (tempPoint != current || !skillModule.isRunning()) {
             current = tempPoint;
             TempVars tv = TempVars.get();
             skillNetwork.playWalk(actor, runSkill.getData().getId()

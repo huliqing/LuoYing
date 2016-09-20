@@ -166,7 +166,7 @@ public class StoryGbTask2 extends GameTaskBase{
             @Override
             public void callback(Actor actor, int loadIndex) {
                 actorService.setGroup(actor, -1);
-                skillService.playSkill(actor, skillService.getSkill(actor, SkillType.wait), false);
+                skillService.playSkill(actor, skillService.getSkillWaitDefault(actor), false);
                 playNetwork.addActor(actor);
             }
         };

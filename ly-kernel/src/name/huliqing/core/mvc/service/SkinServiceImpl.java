@@ -41,11 +41,11 @@ public class SkinServiceImpl implements SkinService {
     
     @Override
     public void attachSkin(Actor actor, Skin skin) {
-        // 为了防止与takeOnWeapon/takeOffWeapon在异步上的冲突，这里必须限制在取
-        // 摘武器的时候换装备
-        if (skillService.isPlayingSkill(actor, SkillType.skin)) {
-            return;
-        }
+//        // 为了防止与takeOnWeapon/takeOffWeapon在异步上的冲突，这里必须限制在取
+//        // 摘武器的时候换装备
+//        if (skillService.isPlayingSkill(actor, SkillType.skin)) {
+//            return;
+//        }
 
         SkinModule control = actor.getModule(SkinModule.class);
         if (control != null) {
@@ -55,11 +55,11 @@ public class SkinServiceImpl implements SkinService {
     
     @Override
     public void detachSkin(Actor actor, Skin skin) {
-        // 为了防止与takeOnWeapon/takeOffWeapon在异步上的冲突，这里必须限制在取
-        // 摘武器的时候换装备
-        if (skillService.isPlayingSkill(actor, SkillType.skin)) {
-            return;
-        }
+//        // 为了防止与takeOnWeapon/takeOffWeapon在异步上的冲突，这里必须限制在取
+//        // 摘武器的时候换装备
+//        if (skillService.isPlayingSkill(actor, SkillType.skin)) {
+//            return;
+//        }
 
         SkinModule control = actor.getModule(SkinModule.class);
         if (control != null) {

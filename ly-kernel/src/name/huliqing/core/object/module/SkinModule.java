@@ -26,6 +26,7 @@ import name.huliqing.core.object.skin.WeaponStateUtils;
  */
 public class SkinModule extends AbstractModule {
     private final AttributeService attributeService = Factory.get(AttributeService.class);
+    private SkillModule skillModule;
     
     private Actor actor;
     // 监听角色装备、武器等的穿脱
@@ -41,6 +42,7 @@ public class SkinModule extends AbstractModule {
     // 当前穿在身上的装备和武器
     private SafeArrayList<Skin> skinUsed;
     
+    // 当前武器状态
     private boolean weaponTakeOn;
     
     // 绑定一个用于存放武器槽位的属性，必须是CollectionAttribute,这个属性中存放着角色优先支持的武器槽位列表（id)
@@ -48,6 +50,8 @@ public class SkinModule extends AbstractModule {
     
     // 武器槽位属性
     private CollectionAttribute<String> weaponSlotAttribute;
+    
+    private long attachLimitBySkillTag;
 
     @Override
     public void setData(ModuleData data) {
@@ -146,11 +150,28 @@ public class SkinModule extends AbstractModule {
         return true;
     }
     
+//    /**
+//     * 判断角色当前状态是否可以穿指定的装备
+//     * @param skin
+//     * @return 
+//     */
+//    public boolean canAttach(Skin skin) {
+//        // 角色在战斗过程中不能换装
+//        if (skillService.isAttacking(actor)) {
+////            LOG.log(Level.INFO, "攻击过程中不能使用装备 actorId={0}, skinId={1}"
+////                    , new Object[] {actor.getData().getId(), data.getId()});
+//            return false;
+//        }
+//        
+//        return skin.canUse(actor);
+//    }
+    
     /**
      * 给角色换上装备
      * @param skin
      */
     public void attachSkin(Skin skin) {
+        
         // 脱下排斥的装备
         detachConflicts(skin);
 
@@ -301,15 +322,6 @@ public class SkinModule extends AbstractModule {
             }
         }
         return null;
-    }
-    
-    /**
-     * 判断角色是否可以使用指定的装备
-     * @param skin
-     * @return 
-     */
-    public boolean canUse(Skin skin) {
-        return skin.canUse(actor);
     }
     
     /**

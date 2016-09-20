@@ -206,12 +206,37 @@ public class SkillNetworkImpl implements SkillNetwork {
     }
 
     @Override
-    public Skill getSkillWait(Actor actor) {
+    public Skill getSkillWaitDefault(Actor actor) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public Skill getSkillDead(Actor actor) {
+    public Skill getSkillHurtDefault(Actor actor) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Skill getSkillDeadDefault(Actor actor) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Skill> getSkillWait(Actor actor) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Skill> getSkillHurt(Actor actor) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Skill> getSkillByTags(Actor actor, long skillTags) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Skill> getSkillDead(Actor actor) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -229,42 +254,6 @@ public class SkillNetworkImpl implements SkillNetwork {
     public void unlockSkillTags(Actor actor, long skillTags) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
-    @Override
-    public List<Skill> getSkillByTag(Actor actor, String... skillTags) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    // remove20160920
-//    @Override
-//    public boolean playWait(Actor actor, boolean force) {
-//        if (NETWORK.isClient()) {
-//            return false;
-//        }
-//        
-//        Skill waitSkill = skillService.getSkillWait(actor);
-//        if (waitSkill == null) {
-//            return false;
-//        }
-//        
-//        MessSkillWait mess = new MessSkillWait();
-//        mess.setActorId(actor.getData().getUniqueId());
-//        NETWORK.broadcast(mess);
-//        return skillService.playWait(actor, force);
-//    }
-//
-//    @Override
-//    public boolean playDead(Actor actor, boolean force) {
-//        MessSkillWait mess = new MessSkillWait();
-//        mess.setActorId(actor.getData().getUniqueId());
-//        if (NETWORK.isClient()) {
-//            NETWORK.sendToServer(mess);
-//            return false;
-//        } else {
-//            NETWORK.broadcast(mess);
-//            return skillService.playWait(actor, force);
-//        }
-//    }
 
     @Override
     public boolean isPlayingSkill(Actor actor, long skillTags) {

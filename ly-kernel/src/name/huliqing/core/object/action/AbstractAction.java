@@ -111,7 +111,7 @@ public abstract class AbstractAction<T extends ActionData> implements Action<T> 
      * @param actor 
      */
     @Override
-    public final void setActor(Actor actor) {
+    public void setActor(Actor actor) {
         this.actor = actor;
     }
     

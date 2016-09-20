@@ -59,16 +59,25 @@ public interface SkillService extends Inject {
      */
     Skill getSkill(Actor actor, String skillId);
     
-    Skill getSkillWait(Actor actor);
+    Skill getSkillWaitDefault(Actor actor);
     
-    Skill getSkillDead(Actor actor);
+    Skill getSkillHurtDefault(Actor actor);
     
+    Skill getSkillDeadDefault(Actor actor);
+            
     /**
      * 获取角色当前身上的所有技能，
      * @param actor
      * @return 
      */
     List<Skill> getSkills(Actor actor);
+    
+    List<Skill> getSkillWait(Actor actor);
+    
+    List<Skill> getSkillHurt(Actor actor);
+    
+    List<Skill> getSkillDead(Actor actor);
+    
     
     /**
      * 通过技能标记来获取角色身上的技能

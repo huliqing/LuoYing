@@ -229,11 +229,6 @@ xs:time
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="stateAttributeBase">
-                    <xs:attribute name="runSkillTag" type="xs:string" use="required">
-                        <xs:annotation>
-                            <xs:documentation>指定"走路"技能的tag, 状态通过这个tag来查找角色的“走路”技能</xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
                     <xs:attribute name="moveEffect" type="xs:string" use="optional">
                         <xs:annotation>
                             <xs:documentation>

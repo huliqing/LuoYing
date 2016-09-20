@@ -242,11 +242,23 @@ xs:time
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="moduleBase">
-                    <xs:attribute name="waitSkillTag" type="xs:string" use="required">
-                        <xs:annotation><xs:documentation>默认的“等待”技能的标签, 默认"wait"</xs:documentation></xs:annotation>
+                    <xs:attribute name="idleSkillTags" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>默认的“空闲”技能的标签, 格式: "skillTag1,skillTag2,..."</xs:documentation></xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="deadSkillTag" type="xs:string" use="required">
-                        <xs:annotation><xs:documentation>默认的“死亡”技能的标签,默认"dead"</xs:documentation></xs:annotation>
+                    <xs:attribute name="waitSkillTags" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>默认的“等待”技能的标签, 格式: "skillTag1,skillTag2,..."</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="walkSkillTags" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>默认的“步行”技能的标签, 格式: "skillTag1,skillTag2,..."</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="runSkillTags" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>默认的“跑步”技能的标签, 格式: "skillTag1,skillTag2,..."</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="hurtSkillTags" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>默认的“受伤”技能的标签, 格式: "skillTag1,skillTag2,..."</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="deadSkillTags" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>默认的“死亡”技能的标签, 格式: "skillTag1,skillTag2,..."</xs:documentation></xs:annotation>
                     </xs:attribute>
                 </xs:extension>
             </xs:complexContent>

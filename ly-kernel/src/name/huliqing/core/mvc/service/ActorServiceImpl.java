@@ -276,13 +276,13 @@ public class ActorServiceImpl implements ActorService {
     @Override
     public void kill(Actor actor) {
         getActorModule(actor).kill();
-        skillService.playSkill(actor, skillService.getSkillDead(actor), false);
+        skillService.playSkill(actor, skillService.getSkillDeadDefault(actor), false);
     }
     
     @Override
     public void reborn(Actor actor) {
         getActorModule(actor).resurrect();
-        skillService.playSkill(actor, skillService.getSkillWait(actor), false);
+        skillService.playSkill(actor, skillService.getSkillWaitDefault(actor), false);
     }
     
     @Override

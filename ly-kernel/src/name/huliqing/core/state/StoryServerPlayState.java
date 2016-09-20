@@ -236,7 +236,7 @@ public abstract class StoryServerPlayState extends NetworkServerPlayState {
         }
         // 故事模式玩家始终队伍分组为1
         actorService.setTeam(player, 1);
-        skillService.playSkill(player, skillService.getSkillWait(player), false);
+        skillService.playSkill(player, skillService.getSkillWaitDefault(player), false);
         
         addObject(player, false);
         setPlayer(player);
@@ -265,7 +265,7 @@ public abstract class StoryServerPlayState extends NetworkServerPlayState {
         for (ActorData data : actors) {
             Actor actor = actorService.loadActor(data);
             if (actorService.getOwner(actor) == clientPlayerData.getUniqueId()) {
-                skillService.playSkill(actor, skillService.getSkillWait(actor), false);
+                skillService.playSkill(actor, skillService.getSkillWaitDefault(actor), false);
                 playNetwork.addActor(actor);                    
             }
         }

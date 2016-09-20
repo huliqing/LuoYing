@@ -14,9 +14,9 @@ import name.huliqing.core.Factory;
 import name.huliqing.core.data.ActionData;
 import name.huliqing.core.mvc.network.SkillNetwork;
 import name.huliqing.core.mvc.service.ActorService;
-import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.module.SkillListener;
+import name.huliqing.core.object.module.SkillModule;
 import name.huliqing.core.object.skill.Skill;
 
 /**
@@ -25,8 +25,9 @@ import name.huliqing.core.object.skill.Skill;
  */
 public class IdlePatrolAction extends AbstractAction implements IdleAction, SkillListener{
     private final ActorService actorService = Factory.get(ActorService.class);
-    private final SkillService skillService = Factory.get(SkillService.class);
+//    private final SkillService skillService = Factory.get(SkillService.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
+    private SkillModule skillModule;
     
     // 限制:半径范围内的最多坐标点
     private int walkPosTotal = 7;
@@ -118,6 +119,8 @@ public class IdlePatrolAction extends AbstractAction implements IdleAction, Skil
     @Override
     public void initialize() {
         super.initialize();
+        skillModule = actor.getModule(SkillModule.class);
+        
         // 初始化巡逻点坐标,如果没有指别设置角色的出生地点则将当前世界位置作为巡逻
         // 的原点,并在这个原点上向四周生成几个巡逻坐标点。
         if (idlePositions == null) {
@@ -151,19 +154,31 @@ public class IdlePatrolAction extends AbstractAction implements IdleAction, Skil
         rayDetour.setActor(actor);
         rayDetour.setAutoFacing(true);
         rayDetour.setUseRun(false);
-        
-        walkSkill = skillService.getSkill(actor, SkillType.walk);
-        runSkill = skillService.getSkill(actor, SkillType.run);
-        waitSkill = skillService.getSkill(actor, SkillType.wait);
+
+        List<Skill> waitSkills = skillModule.getSkillWait(null);
+        if (waitSkills != null && !waitSkills.isEmpty()) {
+            waitSkill = waitSkills.get(0);
+        }
+        List<Skill> walkSkills = skillModule.getSkillWalk(null);
+        if (walkSkills != null && !walkSkills.isEmpty()) {
+            walkSkill = walkSkills.get(0);
+        }
+        List<Skill> runSkills = skillModule.getSkillRun(null);
+        if (runSkills != null && !runSkills.isEmpty()) {
+            runSkill = runSkills.get(0);
+        }
         
         // 缓存IDLE技能并添加侦听器
         recacheIdleSkill();
-        skillService.addSkillListener(actor, this);
+        
+        skillModule.addSkillListener(this);
     }
 
     @Override
     public void cleanup() {
-        skillService.removeSkillListener(actor, this);
+        if (skillModule != null) {
+            skillModule.removeSkillListener(this);
+        }
         super.cleanup(); 
     }
 
@@ -268,11 +283,6 @@ public class IdlePatrolAction extends AbstractAction implements IdleAction, Skil
 
     private void recacheIdleSkill() {
         idleSkills.clear();
-        List<Skill> all = skillService.getSkills(actor);
-        for (Skill sd : all) {
-            if (sd.getSkillType() == SkillType.idle) {
-                idleSkills.add(sd);
-            }
-        }
+        skillModule.getSkillIdle(idleSkills);
     }
 }

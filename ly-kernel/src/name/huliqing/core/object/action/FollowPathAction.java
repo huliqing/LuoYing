@@ -10,6 +10,7 @@ import com.jme3.ai.navmesh.Path.Waypoint;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import com.jme3.util.TempVars;
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
@@ -21,6 +22,7 @@ import name.huliqing.core.mvc.network.SkillNetwork;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.SkillService;
+import name.huliqing.core.object.module.SkillModule;
 import name.huliqing.core.object.skill.Skill;
 import name.huliqing.core.utils.DebugDynamicUtils;
 import name.huliqing.core.utils.ThreadHelper;
@@ -35,6 +37,7 @@ public class FollowPathAction extends AbstractAction implements FollowAction {
     private final ActorService actorService = Factory.get(ActorService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
+    private SkillModule skillModule;
     
     // 被跟随的目标
     protected Spatial target;
@@ -97,14 +100,28 @@ public class FollowPathAction extends AbstractAction implements FollowAction {
     @Override
     public void initialize() {
         super.initialize();
+        skillModule = actor.getModule(SkillModule.class);
         
         rayDetour.setActor(actor);
         rayDetour.setAutoFacing(autoFacing);
         timeDetour.setActor(actor);
         timeDetour.setAutoFacing(autoFacing);
         
-        runSkill = skillService.getSkill(actor, SkillType.run);
-        waitSkill = skillService.getSkill(actor, SkillType.wait);
+        if (skillModule != null) {
+            if (waitSkill == null) {
+                List<Skill> waitSkills = skillModule.getSkillWait(null);
+                if (waitSkills != null && !waitSkills.isEmpty()) {
+                    waitSkill = waitSkills.get(0);
+                }                
+            }
+
+            if (runSkill == null) {
+                List<Skill> runSkills = skillModule.getSkillRun(null);
+                if (runSkills != null && !runSkills.isEmpty()) {
+                    runSkill = runSkills.get(0);
+                }                
+            }
+        }
     }
     
     @Override
@@ -236,7 +253,9 @@ public class FollowPathAction extends AbstractAction implements FollowAction {
         }
         
         // 转换到下一个路径点
-        if (tempPoint != current || !skillService.isRunning(actor)) {
+        if (tempPoint != current || 
+                !skillModule.isPlayingSkill(runSkill.getData().getTags())
+                ) {
             current = tempPoint;
             skillNetwork.playWalk(actor
                     , runSkill.getData().getId()
@@ -268,20 +287,20 @@ public class FollowPathAction extends AbstractAction implements FollowAction {
      */
     protected void runByStraight() {
         // 执行技能的过程很耗时，所以必须先作判断，以优化性能
-        if (!skillService.isRunning(actor)) {
+        if (!skillModule.isRunning()) {
             skillNetwork.playWalk(actor
                     , runSkill.getData().getId()
                     , target.getWorldTranslation().subtract(actor.getSpatial().getWorldTranslation()), true, false);
         }
     }
     
-    /**
-     * 是否在跟随过程中自动朝向目标,默认true.
-     * @return 
-     */
-    public boolean isAutoFacing() {
-        return autoFacing;
-    }
+//    /**
+//     * 是否在跟随过程中自动朝向目标,默认true.
+//     * @return 
+//     */
+//    public boolean isAutoFacing() {
+//        return autoFacing;
+//    }
 
     /**
      * 设置跟随时是否面向目标

@@ -37,11 +37,11 @@ public class SkillModule extends AbstractModule {
     
     // 当前正在执行的技能列表,
     // 如果runningSkills都执行完毕,则清空.但是lastSkill仍保持最近刚刚执行的技能的引用.
-    private final SafeArrayList<Skill> runningSkills = new SafeArrayList<Skill>(Skill.class);
+    private final SafeArrayList<Skill> playingSkills = new SafeArrayList<Skill>(Skill.class);
     // 当前正在运行的所有技能的类型，其中每一个二进制位表示一个技能标记。
-    private long runningSkillTags;
+    private long playingSkillTags;
     // 当前正在执行中的技能中优先级最高的值。
-    private int runningPriorMax;
+    private int playingPriorMax;
     
     // 最近一个执行的技能,这个技能可能正在执行，也可能已经停止。
     private Skill lastSkill;
@@ -51,18 +51,24 @@ public class SkillModule extends AbstractModule {
     // 默认值0表示没有任何锁定。
     private long lockedSkillTags;
     
-    // 默认的技能tag
-    private String waitSkillTag;
-    private String deadSkillTag;
-    private Skill waitSkill;
-    private Skill deadSkill;
+    // 默认的技能: “空闲”"等待"，“受伤”，“死亡”。。
+    private long idleSkillTags;
+    private long waitSkillTags;
+    private long walkSkillTags;
+    private long runSkillTags;
+    private long hurtSkillTags;
+    private long deadSkillTags;
 
     @Override
     public void setData(ModuleData data) {
         super.setData(data);
         lockedSkillTags = data.getAsLong("lockedSkillTags", 0);
-        waitSkillTag = data.getAsString("waitSkillTag", "wait");
-        deadSkillTag = data.getAsString("deadSkillTag", "dead");
+        idleSkillTags = SkillTagFactory.convert(data.getAsArray("idleSkillTags"));
+        waitSkillTags = SkillTagFactory.convert(data.getAsArray("waitSkillTags"));
+        walkSkillTags = SkillTagFactory.convert(data.getAsArray("walkSkillTags"));
+        runSkillTags = SkillTagFactory.convert(data.getAsArray("runSkillTags"));
+        hurtSkillTags = SkillTagFactory.convert(data.getAsArray("hurtSkillTags"));
+        deadSkillTags = SkillTagFactory.convert(data.getAsArray("deadSkillTags"));
     }
     
     protected void updateData() {
@@ -92,12 +98,12 @@ public class SkillModule extends AbstractModule {
     
     private void skillUpdate(float tpf) {
         // 更新并尝试移除已经结束的技能
-        if (!runningSkills.isEmpty()) {
+        if (!playingSkills.isEmpty()) {
 
-            int oldSize = runningSkills.size();
-            for (Skill skill : runningSkills.getArray()) {
+            int oldSize = playingSkills.size();
+            for (Skill skill : playingSkills.getArray()) {
                 if (skill.isEnd()) {
-                    runningSkills.remove(skill);
+                    playingSkills.remove(skill);
                     // 执行侦听器
                     if (skillPlayListeners != null && !skillPlayListeners.isEmpty()) {
                         for (int i = 0; i < skillPlayListeners.size(); i++) {
@@ -113,12 +119,12 @@ public class SkillModule extends AbstractModule {
             // 1.重新缓存runningSkillTags
             // 2.重新缓存技能中最高优先级的值。
             // 3.修复、重启部分被覆盖的动画通道的动画，比如在走动时取武器后双手应该重新回到走动时的协调运动。
-            if (runningSkills.size() != oldSize) {
-                runningSkillTags = 0;
-                for (Skill skill : runningSkills.getArray()) {
-                    runningSkillTags |= skill.getData().getTags();
-                    if (skill.getData().getPrior() > runningPriorMax) {
-                        runningPriorMax = skill.getData().getPrior();
+            if (playingSkills.size() != oldSize) {
+                playingSkillTags = 0;
+                for (Skill skill : playingSkills.getArray()) {
+                    playingSkillTags |= skill.getData().getTags();
+                    if (skill.getData().getPrior() > playingPriorMax) {
+                        playingPriorMax = skill.getData().getPrior();
                     }
                     skill.restoreAnimation();
                 }
@@ -132,15 +138,15 @@ public class SkillModule extends AbstractModule {
     
     @Override
     public void cleanup() {
-        for (Skill skill : runningSkills.getArray()) {
+        for (Skill skill : playingSkills.getArray()) {
             if (!skill.isEnd()) {
                 skill.cleanup();
             }
         }
-        runningSkills.clear();
+        playingSkills.clear();
         skills.clear();
         skillMap.clear();
-        runningSkillTags = 0;
+        playingSkillTags = 0;
         if (updateControl != null) {
             actor.getSpatial().removeControl(updateControl);
         }
@@ -214,47 +220,76 @@ public class SkillModule extends AbstractModule {
     /**
      * 查找拥有指定tags的所有技能。
      * @param skillTags
+     * @param store 存放结果
      * @return 
      */
-    public List<Skill> getSkillByTags(long skillTags) {
-        if (skills == null) {
-            return null;
+    public List<Skill> getSkillByTags(long skillTags, List<Skill> store) {
+        if (store == null) {
+            store = new ArrayList<Skill>();
         }
-        List<Skill> tagSkills = new ArrayList<Skill>();
+        if (skills == null) {
+            return store;
+        }
         for (Skill s : skills) {
             if ((s.getData().getTags() & skillTags) != 0) {
-                tagSkills.add(s);
+                store.add(s);
             }
         }
-        return tagSkills;
+        return store;
     }
     
     /**
-     * 获取“等待”的技能，如果没有则返回null.
+     * 获取角色的“空闲”技能
+     * @param store
      * @return 
      */
-    public Skill getSkillWait() {
-        if (waitSkill == null && waitSkillTag != null) {
-            List<Skill> temp = getSkillByTags(SkillTagFactory.convert(waitSkillTag));
-            if (temp != null && !temp.isEmpty()) {
-                waitSkill = temp.get(0);
-            }
-        }
-        return waitSkill;
+    public List<Skill> getSkillIdle(List<Skill> store) {
+        return getSkillByTags(idleSkillTags, store);
     }
     
     /**
-     * 获取“死亡”的技能，如果没有则返回null.
+     * 获取“等待”的技能
+     * @param store
      * @return 
      */
-    public Skill getSkillDead() {
-        if (deadSkill == null && deadSkillTag != null) {
-            List<Skill> temp = getSkillByTags(SkillTagFactory.convert(deadSkillTag));
-            if (temp != null && !temp.isEmpty()) {
-                deadSkill = temp.get(0);
-            }
-        }
-        return deadSkill;
+    public List<Skill> getSkillWait(List<Skill> store) {
+        return getSkillByTags(waitSkillTags, store);
+    }
+    
+    /**
+     * 获取“步行”技能
+     * @param store
+     * @return 
+     */
+    public List<Skill> getSkillWalk(List<Skill> store) {
+        return getSkillByTags(walkSkillTags, store);
+    }
+    
+    /**
+     * 获取“跑步”技能
+     * @param store
+     * @return 
+     */
+    public List<Skill> getSkillRun(List<Skill> store) {
+        return getSkillByTags(runSkillTags, store);
+    }
+    
+    /**
+     * 获取“受伤”的技能，
+     * @param store
+     * @return 
+     */
+    public List<Skill> getSkillHurt(List<Skill> store) {
+        return getSkillByTags(hurtSkillTags, store);
+    }
+    
+    /**
+     * 获取“死亡”的技能
+     * @param store
+     * @return 
+     */
+    public List<Skill> getSkillDead(List<Skill> store) {
+        return getSkillByTags(deadSkillTags, store);
     }
     
     /**
@@ -334,46 +369,21 @@ public class SkillModule extends AbstractModule {
         // 如果当前正在执行的所有技能都可以被新技能覆盖，则直接返回OK.
         // 注意：overlaps判断要放在interrupts判断之前，因为如果可以覆盖正在执行
         // 的技能就不需要中断它们
-        if ((skillData.getOverlapTags() & runningSkillTags) == runningSkillTags) {
+        if ((skillData.getOverlapTags() & playingSkillTags) == playingSkillTags) {
             return SkillConstants.STATE_OK;
         }
         
         // 如果当前正在执行的所有技能都可以被新技能打断，则直接返回OK.
-        if ((skillData.getInterruptTags() & runningSkillTags) == runningSkillTags) {
+        if ((skillData.getInterruptTags() & playingSkillTags) == playingSkillTags) {
             return SkillConstants.STATE_OK;
         }
         
-        if (skillData.getPrior() > runningPriorMax) {
+        if (skillData.getPrior() > playingPriorMax) {
             return SkillConstants.STATE_OK;
         }
         
         return SkillConstants.STATE_CAN_NOT_INTERRUPT;
     }
-    
-    // remove20160920
-//    /**
-//     * 执行"等待"技能
-//     * @param force
-//     * @return 
-//     */
-//    public boolean playWait(boolean force) {
-//        if (waitSkill != null) {
-//            return playSkill(waitSkill, force);
-//        }
-//        return false;
-//    }
-//    
-//    /**
-//     * 执行"死亡"技能
-//     * @param force
-//     * @return 
-//     */
-//    public boolean playDead(boolean force) {
-//        if (deadSkill != null) {
-//            return playSkill(deadSkill, force);
-//        }
-//        return false;
-//    }
     
     /**
      * 执行技能，如果成功执行则返回true,否则返回false, <br>
@@ -402,14 +412,14 @@ public class SkillModule extends AbstractModule {
      */
     private void playSkillInner(Skill newSkill) {
         // 1.如果当前没有任何正在执行的技能则直接执行技能
-        if (runningSkills.isEmpty()) {
+        if (playingSkills.isEmpty()) {
             startNewSkill(newSkill);
             return;
         }
         
         // 2.如果新技能可以与正在执行的所有技能进行重叠则直接执行, 不需要再通过后面的判断。
         long overlaps = newSkill.getData().getOverlapTags();
-        if (overlaps > 0 && (overlaps & runningSkillTags) == runningSkillTags) {
+        if (overlaps > 0 && (overlaps & playingSkillTags) == playingSkillTags) {
             startNewSkill(newSkill);
             return;
         }
@@ -417,7 +427,7 @@ public class SkillModule extends AbstractModule {
         // 3.把可以打断的技能都打断,然后执行新技能。
         long interrupts = newSkill.getData().getInterruptTags();
         if (interrupts > 0) {
-            for (Skill skill : runningSkills.getArray()) {
+            for (Skill skill : playingSkills.getArray()) {
                 if ((interrupts & skill.getData().getTags()) == skill.getData().getTags()) {
                     skill.cleanup();
                 }
@@ -433,9 +443,9 @@ public class SkillModule extends AbstractModule {
         lastSkill.setActor(actor);
         lastSkill.initialize();
         // 记录当前正在运行的所有技能类型
-        if (!runningSkills.contains(lastSkill)) {
-            runningSkills.add(lastSkill);
-            runningSkillTags |= lastSkill.getData().getTags();
+        if (!playingSkills.contains(lastSkill)) {
+            playingSkills.add(lastSkill);
+            playingSkillTags |= lastSkill.getData().getTags();
         }
         
         // 执行侦听器
@@ -459,8 +469,8 @@ public class SkillModule extends AbstractModule {
      * 获取当前正在执行的所有技能。
      * @return 
      */
-    public List<Skill> getRunningSkills() {
-        return runningSkills;
+    public List<Skill> getPlayingSkills() {
+        return playingSkills;
     }
     
     /**
@@ -470,8 +480,8 @@ public class SkillModule extends AbstractModule {
      * @return 
      * @see SkillTagFactory#toStringTags(long) 
      */
-    public long getRunningSkillTags() {
-        return runningSkillTags;
+    public long getPlayingSkillTags() {
+        return playingSkillTags;
     }
     
     /**
@@ -479,8 +489,8 @@ public class SkillModule extends AbstractModule {
      * @param skillTags
      * @return 
      */
-    public boolean isRunningSkill(long skillTags) {
-        return (runningSkillTags & skillTags) != 0;
+    public boolean isPlayingSkill(long skillTags) {
+        return (playingSkillTags & skillTags) != 0;
     }
 
     /**
@@ -519,4 +529,29 @@ public class SkillModule extends AbstractModule {
         updateData();
     }
 
+    /**
+     * 判断角色是否处于等待状态
+     * @return 
+     */
+    public boolean isWaiting() {
+        return lastSkill == null
+                || (lastSkill.getData().getTags() & waitSkillTags) != 0
+                || (playingSkillTags & waitSkillTags) != 0;
+    }
+    
+    /**
+     * 判断角色是否处于“步行 ”状态
+     * @return 
+     */
+    public boolean isWalking() {
+        return (playingSkillTags & walkSkillTags) != 0;
+    }
+    
+    /**
+     * 判断角色是否处于“跑步”状态
+     * @return 
+     */
+    public boolean isRunning() {
+        return (playingSkillTags & runSkillTags) != 0;
+    }
 }

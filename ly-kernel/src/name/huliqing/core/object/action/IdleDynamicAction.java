@@ -14,6 +14,7 @@ import name.huliqing.core.mvc.network.SkillNetwork;
 import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.module.SkillListener;
+import name.huliqing.core.object.module.SkillModule;
 import name.huliqing.core.object.skill.Skill;
 
 /**
@@ -25,13 +26,14 @@ public class IdleDynamicAction extends AbstractAction implements IdleAction, Ski
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
     private final SkillService skillService = Factory.get(SkillService.class);
+    private SkillModule skillModule;
     
     //  IDLE行为的最大时间间隔,单位秒
     private float intervalMax = 7.0f;
     private float intervalMin = 3.0f;
     
     // ---- 内部参数
-    private final List<Skill> skills = new ArrayList<Skill>();
+    private final List<Skill> idleSkills = new ArrayList<Skill>();
     private float interval = 4.0f;
     private float intervalUsed;
     
@@ -53,7 +55,15 @@ public class IdleDynamicAction extends AbstractAction implements IdleAction, Ski
     public void initialize() {
         super.initialize();
         recacheIdleSkills();
-        waitSkill = skillService.getSkill(actor, SkillType.wait);
+        skillModule = actor.getModule(SkillModule.class);
+        
+        if (waitSkill == null) {
+            List<Skill> waitSkills = skillModule.getSkillWait(null);
+            if (waitSkills != null && !waitSkills.isEmpty()) {
+                waitSkill = waitSkills.get(0);
+            }
+        }
+        
         skillService.addSkillListener(actor, this);
     }
 
@@ -71,7 +81,7 @@ public class IdleDynamicAction extends AbstractAction implements IdleAction, Ski
             // 在idle动作执行的间隔要执行一个wait动作，使角色看起来不会像是完全静止的。
             if (!skillService.isPlayingSkill(actor)) {
                 // 注：wait可能不是循环的，所以需要判断
-                if (!skillService.isWaiting(actor) && waitSkill != null) {
+                if (!skillModule.isWaiting() && waitSkill != null) {
                     skillNetwork.playSkill(actor, waitSkill, false);
                 }
             }
@@ -90,10 +100,10 @@ public class IdleDynamicAction extends AbstractAction implements IdleAction, Ski
     }
     
     private Skill getIdleSkill() {
-        if (skills.isEmpty()) {
+        if (idleSkills.isEmpty()) {
             return null;
         }
-        return skills.get(FastMath.nextRandomInt(0, skills.size() - 1));
+        return idleSkills.get(FastMath.nextRandomInt(0, idleSkills.size() - 1));
     }
 
     @Override
@@ -108,13 +118,8 @@ public class IdleDynamicAction extends AbstractAction implements IdleAction, Ski
 
     // 重新缓存技能
     private void recacheIdleSkills() {
-        List<Skill> all = skillService.getSkills(actor);
-        skills.clear();
-        for (Skill sd : all) {
-            if (sd.getSkillType() == SkillType.idle) {
-                skills.add(sd);
-            }
-        }
+        idleSkills.clear();
+        skillModule.getSkillIdle(idleSkills);
     }
     
 }

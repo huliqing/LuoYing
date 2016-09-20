@@ -33,7 +33,7 @@ import name.huliqing.core.object.skill.ShotSkill;
  * @param <T>
  */
 public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> implements SkillListener, SkillPlayListener, ActorListener {
-    private static final Logger LOG = Logger.getLogger(DefendActorLogic.class.getName());
+//    private static final Logger LOG = Logger.getLogger(DefendActorLogic.class.getName());
     
     private final ActorService actorService = Factory.get(ActorService.class);
     private final PlayService playService = Factory.get(PlayService.class);

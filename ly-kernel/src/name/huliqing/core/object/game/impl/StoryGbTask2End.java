@@ -111,7 +111,7 @@ public class StoryGbTask2End extends IntervalLogic {
             if (checkTaskOK()) {
                 logicService.setAutoLogic(gb, false);
                 actionService.playAction(gb, null);
-                skillNetwork.playSkill(gb, skillService.getSkill(gb, SkillType.wait), false);
+                skillNetwork.playSkill(gb, skillService.getSkillWaitDefault(gb), false);
                 createTalk();
                 stage = 3;
             }

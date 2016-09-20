@@ -39,7 +39,7 @@ public class SkillState extends State {
         if (skillModule == null)
             return;
         
-        List<Skill> tagSkills = skillModule.getSkillByTags(skillTags);
+        List<Skill> tagSkills = skillModule.getSkillByTags(skillTags, null);
         if (tagSkills == null || tagSkills.isEmpty())
             return;
         

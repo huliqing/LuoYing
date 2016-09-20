@@ -37,9 +37,14 @@ public class AttackSkill extends HitSkill {
     protected float[] checkPoint;
     // 技能是否为可防守的
     protected boolean defendable = true;
+    // 指定防守技能的标记，格式 : "skillTag1,skillTag2,...", 这表示当这个技能在执行时，如果目标角色正在执行属
+    // 于这些技能标记的技能时，目标可以视为“正在防守”
+    private long defendSkillTags;
+    
     // 攻击被防守时的碰撞位置，主要用于产生碰撞声音，碰撞特效的位置。
     // 相对于当前攻击者的本地坐标偏移。
     protected Vector3f collisionOffset = new Vector3f(0, 2, 2.5f);
+    
     
     // ---- 内部参数
     protected final PointChecker pointChecker = new PointChecker();
@@ -53,6 +58,7 @@ public class AttackSkill extends HitSkill {
         multHit = data.getAsBoolean("multHit", multHit);
         checkPoint = data.getAsFloatArray("checkPoint");
         defendable = data.getAsBoolean("defendable", defendable);
+        defendSkillTags = SkillTagFactory.convert(data.getAsArray("defendSkillTags"));
         collisionOffset = data.getAsVector3f("collisionOffset", collisionOffset);
     }
 
@@ -103,7 +109,8 @@ public class AttackSkill extends HitSkill {
                 }
                 // 防守成功(角色正在防守,并且必须是正面防守)
                 if (skillDefendable 
-                        && skillService.isDefending(target) 
+                        && skillService.isPlayingSkill(target, defendSkillTags)
+//                        && skillService.isDefending(target)  // remove20160920
                         && actorService.getViewAngle(target, actor.getSpatial().getWorldTranslation()) < 90) {
                     doDefendResult(target);
                 } else {
@@ -121,7 +128,10 @@ public class AttackSkill extends HitSkill {
                 return;
             }
             // 防守成功(角色正在防守,并且必须是正面防守)
-            if (skillDefendable && skillService.isDefending(target) && actorService.getViewAngle(target, actor.getSpatial().getWorldTranslation()) < 90) {
+            if (skillDefendable 
+                    && skillService.isPlayingSkill(target, defendSkillTags)
+//                    && skillService.isDefending(target) // remove20160920
+                    && actorService.getViewAngle(target, actor.getSpatial().getWorldTranslation()) < 90) {
                 doDefendResult(target);
             } else {
                 doHitResult(target);

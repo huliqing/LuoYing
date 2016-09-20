@@ -99,14 +99,6 @@ public abstract class AbstractSkin implements Skin {
     @Override
     public boolean canUse(Actor actor) {
         
-        
-        // 角色在战斗过程中不能换装
-        if (skillService.isAttacking(actor)) {
-            LOG.log(Level.INFO, "攻击过程中不能使用装备 actorId={0}, skinId={1}"
-                    , new Object[] {actor.getData().getId(), data.getId()});
-            return false;
-        }
-        
         // 如果角色的属性中有一个不能和getMatchAttributes中要求的不匹配则视为不能使用。
         if (data.getMatchAttributes() != null) {
             Attribute attr;

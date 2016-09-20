@@ -6,6 +6,7 @@ package name.huliqing.core.mvc.network;
 
 import name.huliqing.core.network.Network;
 import com.jme3.math.Vector3f;
+import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.ActorData;
 import name.huliqing.core.data.GameData;
@@ -38,6 +39,7 @@ import name.huliqing.core.mvc.service.GameService;
 import name.huliqing.core.mvc.service.ProtoService;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.skill.Skill;
 import name.huliqing.core.object.task.Task;
 
 /**
@@ -118,7 +120,10 @@ public class UserCommandNetworkImpl implements UserCommandNetwork {
             actorService.setName(actor, actorName);
             // 暂时以1作为默认分组
             actorService.setTeam(actor, 1);
-            skillService.playSkill(actor, skillService.getSkillWait(actor), false);
+            List<Skill> waitSkills = skillService.getSkillWait(actor);
+            if (waitSkills != null && !waitSkills.isEmpty()) {
+                skillService.playSkill(actor, waitSkills.get(0), false);
+            }
             
             // 这是主机,所以要设置为当前主场景玩家,与actor.setPlayer(true)不同
             // 注:在设置名字之后再setAsPlayer,否则FacePanel中的player名字不会更新

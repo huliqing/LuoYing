@@ -558,20 +558,6 @@ xs:time
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="skillHitBase">
-                    
-                    <!--remove20160504后续使用HitSkill的hitAngle代替-->
-<!--                    <xs:attribute name="damageAngle" type="xs:integer" use="optional">
-                        <xs:annotation>
-                            <xs:documentation>
-                                技能的攻击视角范围（角度），取值[0 ~ 180]，默认值5，
-                                当敌人与当前角色的视线夹角小于该值时，则被视为在当前
-                                技能的攻击角度之内，敌人被当前技能击中的判定至少必须
-                                满足两个条件：1.在技能攻击范围内(distance)；2.在攻击角度内(damageAngle).
-                                当damageAngle = "180"时即全方位攻击。
-                            </xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>-->
-                    
                     <xs:attribute name="multHit" type="bool" use="optional" >
                         <xs:annotation>
                             <xs:documentation>
@@ -597,6 +583,14 @@ xs:time
                         <xs:annotation>
                             <xs:documentation>
                                 技能是否是可防御的, 这里主要指短兵器的防御。默认都是可防御的。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="defendSkillTags" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                指定防守技能的标记，格式 : "skillTag1,skillTag2,...", 这表示当这个技能在执行时，如果目标角色正在执行属
+                                于这些技能标记的技能时，目标可以视为“正在防守”
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>

@@ -18,7 +18,6 @@ import name.huliqing.core.object.module.SkillListener;
 import name.huliqing.core.object.module.SkillModule;
 import name.huliqing.core.object.module.SkillPlayListener;
 import name.huliqing.core.object.skill.Skill;
-import name.huliqing.core.object.skill.SkillTag;
 import name.huliqing.core.object.skill.Walk;
 
 /**
@@ -81,19 +80,64 @@ public class SkillServiceImpl implements SkillService {
     }
 
     @Override
-    public Skill getSkillWait(Actor actor) {
+    public Skill getSkillWaitDefault(Actor actor) {
         SkillModule module = actor.getModule(SkillModule.class);
         if (module != null) {
-            return module.getSkillWait();
+            List<Skill> waitSkills = module.getSkillWait(null);
+            if (waitSkills != null && !waitSkills.isEmpty()) {
+                return waitSkills.get(0);
+            }
         }
         return null;
     }
 
     @Override
-    public Skill getSkillDead(Actor actor) {
+    public Skill getSkillHurtDefault(Actor actor) {
         SkillModule module = actor.getModule(SkillModule.class);
         if (module != null) {
-            return module.getSkillDead();
+            List<Skill> hurtSkills = module.getSkillHurt(null);
+            if (hurtSkills != null && !hurtSkills.isEmpty()) {
+                return hurtSkills.get(0);
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Skill getSkillDeadDefault(Actor actor) {
+        SkillModule module = actor.getModule(SkillModule.class);
+        if (module != null) {
+            List<Skill> deadSkills = module.getSkillDead(null);
+            if (deadSkills != null && !deadSkills.isEmpty()) {
+                return deadSkills.get(0);
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public List<Skill> getSkillWait(Actor actor) {
+        SkillModule module = actor.getModule(SkillModule.class);
+        if (module != null) {
+            return module.getSkillWait(null);
+        }
+        return null;
+    }
+
+    @Override
+    public List<Skill> getSkillHurt(Actor actor) {
+        SkillModule module = actor.getModule(SkillModule.class);
+        if (module != null) {
+            return module.getSkillHurt(null);
+        }
+        return null;
+    }
+
+    @Override
+    public List<Skill> getSkillDead(Actor actor) {
+        SkillModule module = actor.getModule(SkillModule.class);
+        if (module != null) {
+            return module.getSkillDead(null);
         }
         return null;
     }
@@ -102,7 +146,7 @@ public class SkillServiceImpl implements SkillService {
     public List<Skill> getSkillByTags(Actor actor, long skillTags) {
         SkillModule module = actor.getModule(SkillModule.class);
         if (module != null) {
-            return module.getSkillByTags(skillTags);
+            return module.getSkillByTags(skillTags, null);
         }
         return null;
     }
@@ -275,7 +319,7 @@ public class SkillServiceImpl implements SkillService {
     public boolean isPlayingSkill(Actor actor) {
         SkillModule module = actor.getModule(SkillModule.class);
         if (module != null) {
-            return module.getRunningSkills().size() > 0;
+            return module.getPlayingSkills().size() > 0;
         }
         return false;
     }
@@ -284,7 +328,7 @@ public class SkillServiceImpl implements SkillService {
     public boolean isPlayingSkill(Actor actor, long skillTags) {
         SkillModule module = actor.getModule(SkillModule.class);
         if (module != null) {
-            return (module.getRunningSkillTags() & skillTags) != 0;
+            return (module.getPlayingSkillTags() & skillTags) != 0;
         }
         return false;
     }
@@ -341,7 +385,7 @@ public class SkillServiceImpl implements SkillService {
     public long getPlayingSkillTags(Actor actor) {
         SkillModule module = actor.getModule(SkillModule.class);
         if (module != null) {
-            return module.getRunningSkillTags();
+            return module.getPlayingSkillTags();
         }
         return -1;
     }

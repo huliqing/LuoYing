@@ -40,7 +40,13 @@
     />
     
     <!--技能模块: 让角色可以执行各种动画-->
-    <moduleSkill id="moduleSkill" moduleOrder="10" waitSkillTag="wait" deadSkillTag="dead" />
+    <moduleSkill id="moduleSkill" moduleOrder="10" 
+                 idleSkillTags="idle"
+                 waitSkillTags="wait" 
+                 walkSkillTags="walk" 
+                 runSkillTags="run" 
+                 hurtSkillTags="hurt" 
+                 deadSkillTags="dead" />
     
     <!--角色的逻辑功能-->
     <moduleLogic id="moduleLogic" moduleOrder="10" 
