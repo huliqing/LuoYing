@@ -33,7 +33,7 @@ public class BookItem extends AbstractItem {
         if (skill == null) {
             return false;
         }
-        if (skillService.isSkillLearned(actor, skill)) {
+        if (skillService.hasSkill(actor, skill)) {
 //            playNetwork.addMessage(actor, ResourceManager.get(ResConstants.SKILL_SKILL_LEARNED), MessageType.notice);
             return false;
         }

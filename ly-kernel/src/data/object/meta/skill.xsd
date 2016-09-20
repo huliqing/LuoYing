@@ -19,6 +19,7 @@ xs:time
     <xs:element name="root">
         <xs:complexType>
             <xs:all>
+                <xs:element ref="skillBase" />
                 <xs:element ref="skillWait" />
                 <xs:element ref="skillWalk" />
                 <xs:element ref="skillRun"  />
@@ -42,6 +43,18 @@ xs:time
                 <xs:element ref="skillSummon" />
                 <xs:element ref="skillSkin" />
             </xs:all>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="skillBase">
+        <xs:annotation>
+            <xs:documentation></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="skillBase">
+                </xs:extension>
+            </xs:complexContent>
         </xs:complexType>
     </xs:element>
     
@@ -683,14 +696,33 @@ xs:time
                     </xs:annotation>
                 </xs:attribute>
                 
-                <!--暂不开放这个功能-->
-<!--                <xs:attribute name="processor" type="xs:string" use="optional">
+                <xs:attribute name="prior" type="xs:integer" use="required" >
                     <xs:annotation>
-                        <xs:documentation>给技能指定一个自定义处理类,默认情况下
-                            系统会根据技能的类型为自动选择一个处理类。
+                        <xs:documentation>
+                            技能的优先级,默认值0. 值越高优先级越高，默认情况下优先级高的技能执行时会打断优先级低的技能。
+                            对于一些特殊情况，当优先级高的技能不想直接打断优先级低的技能，或是优先级低的技能希望打断优先级高的
+                            技能时可以通过参数overlapTags，interruptTags来进行例外配置。
                         </xs:documentation>
                     </xs:annotation>
-                </xs:attribute>-->
+                </xs:attribute>
+                <xs:attribute name="tags" type="xs:string" use="required" >
+                    <xs:annotation>
+                        <xs:documentation>技能的自定义标记,格式: "tag1,tag2,...", 如："walk,run,idle,fight,buff,..."</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="overlapTags" type="xs:string" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>设置当前技能可以覆盖的其它技能的tags,格式 : "tag1,tag2,..."</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="interruptTags" type="xs:string" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>设置当前技能可以打断的其它技能的tags,格式 : "tag1,tag2,..."</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                
+                
+                
                 
                 <xs:attribute name="animation" type="xs:string" use="required" >
                     <xs:annotation>
@@ -820,7 +852,9 @@ xs:time
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-                <xs:attribute name="extOverlaps" type="xs:string" use="optional">
+                
+                
+<!--                <xs:attribute name="extOverlaps" type="xs:string" use="optional">
                     <xs:annotation>
                         <xs:documentation>
                             扩展的技能覆盖设置。
@@ -832,8 +866,8 @@ xs:time
                             则可以为当前设置extOverlaps="4,5".
                         </xs:documentation>
                     </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="extInterrupts" type="xs:string" use="optional">
+                </xs:attribute>-->
+<!--                <xs:attribute name="extInterrupts" type="xs:string" use="optional">
                     <xs:annotation>
                         <xs:documentation>
                             扩展的技能打断设置。
@@ -842,7 +876,9 @@ xs:time
                             interrupts是单向的，当设置了一个技能A可以打断技能B时，并不表示B也可以打断A.
                         </xs:documentation>
                     </xs:annotation>
-                </xs:attribute>
+                </xs:attribute>-->
+                
+                
                 <xs:attribute name="level" type="xs:integer" use="optional">
                     <xs:annotation>
                         <xs:documentation>

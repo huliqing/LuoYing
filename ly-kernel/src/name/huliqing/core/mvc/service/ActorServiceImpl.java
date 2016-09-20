@@ -25,7 +25,6 @@ import name.huliqing.core.enums.Sex;
 import name.huliqing.core.view.talk.Talk;
 import name.huliqing.core.object.actor.ActorModelLoader;
 import name.huliqing.core.object.Loader;
-import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.object.attribute.Attribute;
 import name.huliqing.core.object.attribute.NumberAttribute;
 import name.huliqing.core.view.talk.SpeakManager;
@@ -277,14 +276,13 @@ public class ActorServiceImpl implements ActorService {
     @Override
     public void kill(Actor actor) {
         getActorModule(actor).kill();
-        // 执行死亡动画
-        skillService.playSkill(actor, skillService.getSkill(actor, SkillType.dead), false);
+        skillService.playSkill(actor, skillService.getSkillDead(actor), false);
     }
     
     @Override
     public void reborn(Actor actor) {
         getActorModule(actor).resurrect();
-        skillService.playSkill(actor, skillService.getSkill(actor, SkillType.wait), false);
+        skillService.playSkill(actor, skillService.getSkillWait(actor), false);
     }
     
     @Override
@@ -387,16 +385,6 @@ public class ActorServiceImpl implements ActorService {
             module.setLevel(level);
         }
     }
-   
-    // remove20160910
-//    @Override
-//    public int getLevelXp(Actor actor, int level) {
-//        LevelModule module = actor.getModule(LevelModule.class);
-//        if (module != null) {
-//            return module.getLevelXp(level);
-//        }
-//        return 0;
-//    }
 
     @Override
     public boolean isMoveable(Actor actor) {

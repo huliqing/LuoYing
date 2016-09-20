@@ -7,7 +7,6 @@ package name.huliqing.core.object.skill;
 import name.huliqing.core.Factory;
 import name.huliqing.core.constants.ResConstants;
 import name.huliqing.core.enums.MessageType;
-import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.mvc.network.ActorNetwork;
 import name.huliqing.core.mvc.network.PlayNetwork;
 import name.huliqing.core.mvc.network.ProtoNetwork;
@@ -95,30 +94,9 @@ public class HitUtils {
             
             // 3.对攻击者进行经验和物品奖励
             if (attacker != null) {
-                
-                // remove20160830, 已经直接交由dropService.doDrop就行。
-//                // 奖励经验
-//                int xpReward = actorService.getXpReward(attacker, target);
-//                actorNetwork.applyXp(attacker, xpReward);
-//                
-//                // 奖励物品
-//                List<ObjectData> dropItems = dropService.getRandomDropFull(target, null);
-//                for (ObjectData item : dropItems) {
-////                    itemNetwork.addItem(attacker, item.getId(), item.getTotal());
-//                    protoNetwork.addData(attacker, item.getId(), item.getTotal());
-//                }
-
                 // 掉落物品给attacker
                 dropNetwork.doDrop(target, attacker);
             }
-            
-            // remove0221由 actorNetwork.applyXp(attacker, xpReward);内部处理
-//            // 5.对玩家提示经验获得,注：这里的玩家可能为其他客户端的玩家
-//            // 需要向特定的客户端发送通知"经验获得"。
-//            if (attacker.isPlayer()) {
-//                playNetwork.addMessage(attacker, ResourceManager.get(ResConstants.COMMON_GET_XP, new Object[]{xpReward}), MessageType.info);
-//            }
-
         } else {
             // 注：hit技能不一定是减益的。当目标受hit后属性值降低才是减益技能，
             // 当减益发生时则判断为受伤并执行hurt.

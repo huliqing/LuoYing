@@ -13,7 +13,6 @@ import com.jme3.network.serializing.Serializable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.object.skin.WeaponStateUtils;
 import name.huliqing.core.utils.ConvertUtils;
 
@@ -23,8 +22,6 @@ import name.huliqing.core.utils.ConvertUtils;
  */
 @Serializable
 public class SkillData extends ObjectData {
-    
-    private SkillType skillType;
     
     // 技能的执行时间，单位秒
     private float useTime;
@@ -49,19 +46,14 @@ public class SkillData extends ObjectData {
     private String cutTimeEndAttribute;
     private LoopMode loopMode;
     
-    // 设置当前技能类型可以覆盖的其它技能类型列表。覆盖的意思是：在不停止其它正在执
-    // 行的技能的情况下同时执行当前技能，优先级高于interrupts,即技能可覆盖其它技能
-    // 的时候就不使用打断的情况。
-    // 注：overlaps是单向的,当设置技能A可以覆盖技能B时，技能B却不一定可以覆盖A,除非设置B也可以覆盖A
-    private long overlaps;
-    // 设置当前技能可以打断的其它类型的技能,如果没有设置该项，则使用系统默认的配置
-    // 注：interrupts是单向的，当设置技能A可以打断技能B时，技能B却不一定可以打断A,除非设置B也可以打断A
-    private long interrupts;
-    
-    // remove20160503,不要这个功能，否则复杂度太高
-    // 20151215 consider to => 后续有必须时考虑被动覆盖和被中打断设置
-//    private long byOverlaps;
-//    private long byInterrupts;
+//    // 设置当前技能类型可以覆盖的其它技能类型列表。覆盖的意思是：在不停止其它正在执
+//    // 行的技能的情况下同时执行当前技能，优先级高于interrupts,即技能可覆盖其它技能
+//    // 的时候就不使用打断的情况。
+//    // 注：overlaps是单向的,当设置技能A可以覆盖技能B时，技能B却不一定可以覆盖A,除非设置B也可以覆盖A
+//    private long overlaps;
+//    // 设置当前技能可以打断的其它类型的技能,如果没有设置该项，则使用系统默认的配置
+//    // 注：interrupts是单向的，当设置技能A可以打断技能B时，技能B却不一定可以打断A,除非设置B也可以打断A
+//    private long interrupts;
     
     // 这两个参数标记useTime中可以剔除掉的<b>最高</b>时间比率.
     // 分别标记可剔除的前面和后面的时间.比如: useTime=5秒,
@@ -89,6 +81,24 @@ public class SkillData extends ObjectData {
     // 指定技能需要多少等级才能使用,只有角色达到指定等级时才能使用该技能.
     private int needLevel;
     
+    // 技能标记
+//    private List<String> tags;
+//    // 例外的，在排除优先级比较的前提下，如果一个技能可以覆盖另一个技能，则不需要比较优先级。
+//    private List<String> overlapTagList;
+//    // 例外的，在排除优先级比较的前提下，如果一个技能可以打断另一个技能，则不需要比较优先级。
+//    private List<String> interruptTagList;
+    // overlapTagList as long.
+    
+    private long tags;
+    private long overlapTags;
+    private long interruptTags;
+    // 技能的优先级,优先级高的可以打断优先级低的技能
+    private int prior;
+    
+    // 暂不要支持这个优先级
+//    // 技能的优先级,在排除了，overlapTags和interruptTags比较之后，当一个技能优先级高于另一个技能时，可以打断优先级低的技能。
+//    private int prior;
+    
     //--------------------------------------------------------------------------
     // inner内部参数，不开放到xml中配置,这些参数作为动态参数进行配置
     //--------------------------------------------------------------------------
@@ -114,7 +124,6 @@ public class SkillData extends ObjectData {
     public void write(JmeExporter ex) throws IOException {
         super.write(ex);
         OutputCapsule oc = ex.getCapsule(this);
-        oc.write(skillType, "skillType", null);
         oc.write(useTime, "useTime", 1);
 //        oc.write(radius, "radius", 1);
         oc.write(animation, "animation", null);
@@ -131,8 +140,10 @@ public class SkillData extends ObjectData {
         oc.write(speedAttribute, "speedAttribute", null);
         oc.write(cutTimeEndAttribute, "cutTimeEndAttribute", null);
         oc.write(loopMode, "loopMode", null);
-        oc.write(overlaps, "overlaps", 0);
-        oc.write(interrupts, "interrupts", 0);
+        
+//        oc.write(overlaps, "overlaps", 0);
+//        oc.write(interrupts, "interrupts", 0);
+
         oc.write(cutTimeStartMax, "cutTimeStartMax", 0);
         oc.write(cutTimeEndMax, "cutTimeEndMax", 0);
         oc.write(level, "level", 1);
@@ -145,13 +156,16 @@ public class SkillData extends ObjectData {
         oc.write(cutTimeEnd, "cutTimeEnd", 0);
         oc.write(lastPlayTime, "lastPlayTime", 0);
 //        oc.write(speed, "speed", 1);
+        oc.write(tags, "tags", 0);
+        oc.write(overlapTags, "overlapTags", 0);
+        oc.write(interruptTags, "interruptTags", 0);
+        oc.write(prior, "prior", 0);
     }
 
     @Override
     public void read(JmeImporter im) throws IOException {
         super.read(im);
         InputCapsule ic = im.getCapsule(this);
-        skillType = ic.readEnum("skillType", SkillType.class, null);
         useTime = ic.readFloat("useTime", 1);
 //        radius = ic.readFloat("radius", 1);
         animation = ic.readString("animation", null);
@@ -169,8 +183,8 @@ public class SkillData extends ObjectData {
         speedAttribute = ic.readString("speedAttribute", null);
         cutTimeEndAttribute = ic.readString("cutTimeEndAttribute", null);
         loopMode = ic.readEnum("loopMode", LoopMode.class, null);
-        overlaps = ic.readLong("overlaps", 0);
-        interrupts = ic.readLong("interrupts", 0);
+//        overlaps = ic.readLong("overlaps", 0);
+//        interrupts = ic.readLong("interrupts", 0);
         cutTimeStartMax = ic.readFloat("cutTimeStartMax", 0);
         cutTimeEndMax = ic.readFloat("cutTimeEndMax", 0);
         level = ic.readInt("level", 1);
@@ -183,21 +197,15 @@ public class SkillData extends ObjectData {
         cutTimeEnd = ic.readFloat("cutTimeEnd", 0);
         lastPlayTime = ic.readLong("lastPlayTime", 0);
 //        speed = ic.readFloat("speed", 1);
+        tags = ic.readLong("tags", 0);
+        overlapTags = ic.readLong("overlapTags", 0);
+        interruptTags = ic.readLong("interruptTags", 0);
+        prior = ic.readInt("prior", 0);
     }
     
-    public SkillData() {}
-
     @Override
     public int getTotal() {
         return 1;
-    }
-
-    public SkillType getSkillType() {
-        return skillType;
-    }
-
-    public void setSkillType(SkillType skillType) {
-        this.skillType = skillType;
     }
 
     public float getUseTime() {
@@ -296,41 +304,41 @@ public class SkillData extends ObjectData {
         this.loopMode = loopMode;
     }
 
-    /**
-     * 获取当前技能类型可以覆盖的其它技能的类型，以二进制位表示，返回的整形中
-     * 每个位代表一个技能类型。
-     * @return 
-     */
-    public long getOverlaps() {
-        return overlaps;
-    }
+//    /**
+//     * 获取当前技能类型可以覆盖的其它技能的类型，以二进制位表示，返回的整形中
+//     * 每个位代表一个技能类型。
+//     * @return 
+//     */
+//    public long getOverlaps() {
+//        return overlaps;
+//    }
+//
+//    /**
+//     * 设置当前技能类型可以覆盖的其它技能类型列表，以二进制位表示，整形中
+//     * 每个位代表一个技能类型。
+//     * @param overlaps 技能类型
+//     */
+//    public void setOverlaps(long overlaps) {
+//        this.overlaps = overlaps;
+//    }
 
-    /**
-     * 设置当前技能类型可以覆盖的其它技能类型列表，以二进制位表示，整形中
-     * 每个位代表一个技能类型。
-     * @param overlaps 技能类型
-     */
-    public void setOverlaps(long overlaps) {
-        this.overlaps = overlaps;
-    }
-
-    /**
-     * 获取当前技能类型可以打断的其它技能的类型，以二进制位表示，返回的整形中
-     * 每个位代表一个技能类型。
-     * @return 
-     */
-    public long getInterrupts() {
-        return interrupts;
-    }
-
-    /**
-     * 设置当前技能类型可以打断的其它技能类型列表，以二进制位表示，整形中
-     * 每个位代表一个技能类型。
-     * @param interrupts
-     */
-    public void setInterrupts(long interrupts) {
-        this.interrupts = interrupts;
-    }
+//    /**
+//     * 获取当前技能类型可以打断的其它技能的类型，以二进制位表示，返回的整形中
+//     * 每个位代表一个技能类型。
+//     * @return 
+//     */
+//    public long getInterrupts() {
+//        return interrupts;
+//    }
+//
+//    /**
+//     * 设置当前技能类型可以打断的其它技能类型列表，以二进制位表示，整形中
+//     * 每个位代表一个技能类型。
+//     * @param interrupts
+//     */
+//    public void setInterrupts(long interrupts) {
+//        this.interrupts = interrupts;
+//    }
 
     public float getCutTimeStartMax() {
         return cutTimeStartMax;
@@ -371,15 +379,6 @@ public class SkillData extends ObjectData {
     public void setCutTimeEnd(float cutTimeEnd) {
         this.cutTimeEnd = cutTimeEnd;
     }
-
-    // remove20160503
-//    public float getSpeed() {
-//        return speed;
-//    }
-//
-//    public void setSpeed(float speed) {
-//        this.speed = speed;
-//    }
 
     public int getLevel() {
         return level;
@@ -461,4 +460,38 @@ public class SkillData extends ObjectData {
             weaponStateLimit = null;
         }
     }
+        
+    public long getTags() {
+        return tags;
+    }
+    
+    public void setTags(long tags) {
+        this.tags = tags;
+    }
+    
+    public long getOverlapTags() {
+        return overlapTags;
+    }
+
+    public void setOverlapTags(long overlapTags) {
+        this.overlapTags = overlapTags;
+    }
+
+    public long getInterruptTags() {
+        return interruptTags;
+    }
+
+    public void setInterruptTags(long interruptTags) {
+        this.interruptTags = interruptTags;
+    }
+
+    public int getPrior() {
+        return prior;
+    }
+
+    public void setPrior(int prior) {
+        this.prior = prior;
+    }
+    
+    
 }

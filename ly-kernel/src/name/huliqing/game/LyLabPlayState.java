@@ -18,7 +18,6 @@ import name.huliqing.core.enums.Sex;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.mvc.service.StateService;
-import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.mvc.service.SceneService;
 import name.huliqing.core.object.env.CameraChaseEnv;
 import name.huliqing.core.object.game.Game;
@@ -100,7 +99,7 @@ public class LyLabPlayState extends NetworkPlayState {
         }
         actorService.setLocation(actor, new Vector3f(-5, 2, 0));
         actorService.setLevel(actor, level);
-        skillService.playSkill(actor, skillService.getSkill(actor, SkillType.wait), false);
+        skillService.playSkill(actor, skillService.getSkillWait(actor), false);
         return actor;
     }
 

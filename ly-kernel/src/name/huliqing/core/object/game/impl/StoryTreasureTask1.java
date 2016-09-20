@@ -9,7 +9,6 @@ import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.constants.IdConstants;
 import name.huliqing.core.enums.MessageType;
-import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.view.talk.Talk;
 import name.huliqing.core.view.talk.TalkImpl;
 import name.huliqing.core.view.talk.TalkListener;
@@ -101,7 +100,9 @@ public class StoryTreasureTask1 extends GameTaskBase {
                 actorService.setGroup(victim, game.groupPlayer);
                 stateService.addState(victim, IdConstants.STATE_SAFE, null);
                 actorService.setEssential(victim, true);// 设置为"必要的",这样不会被移除出场景
-                skillService.playSkill(actor, skillService.getSkill(actor, SkillType.wait), false);
+                
+//                skillService.playSkill(actor, skillService.getSkill(actor, SkillType.wait), false);
+
                 playNetwork.addActor(victim);
                 
                 // 救命

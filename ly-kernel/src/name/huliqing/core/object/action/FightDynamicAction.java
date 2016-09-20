@@ -14,7 +14,6 @@ import name.huliqing.core.Factory;
 import name.huliqing.core.constants.SkillConstants;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.data.ActionData;
-import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.mvc.network.ActorNetwork;
 import name.huliqing.core.mvc.network.SkillNetwork;
 import name.huliqing.core.mvc.network.SkinNetwork;

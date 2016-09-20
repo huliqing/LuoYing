@@ -103,8 +103,7 @@ public interface ChannelControl {
     void resetToAnimationTime(String anim, float timeInterpolation);
     
     /**
-     * 设置当前所有通道动画的播放速度，注意: speed不能设置为0.只能设置为
-     * 一个极小的值来代替0,否则可能会出现"除0"错误。
+     * 设置当前所有通道动画的播放速度.
      * @param speed 
      */
     public void setSpeed(float speed);

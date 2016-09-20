@@ -11,7 +11,6 @@ import name.huliqing.core.Config;
 import name.huliqing.core.Factory;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.constants.IdConstants;
-import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.view.talk.Talk;
 import name.huliqing.core.view.talk.TalkImpl;
 import name.huliqing.core.view.talk.TalkListener;
@@ -215,7 +214,10 @@ public class StoryGbTask1 extends GameTaskBase {
             // 不让乱动，不然在对话的时候会执行idle行为
             logicService.setAutoLogic(gb, false);
             actionService.playAction(gb, null);
-            skillNetwork.playSkill(gb, skillService.getSkill(gb, SkillType.wait), true);
+//            skillNetwork.playSkill(gb, skillService.getSkill(gb, SkillType.wait), true);
+            skillNetwork.playWait(gb, true);
+            
+            
             createGbPlayerTalk();
             stage = 6;
         }

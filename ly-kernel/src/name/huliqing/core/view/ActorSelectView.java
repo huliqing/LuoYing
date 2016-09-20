@@ -11,7 +11,6 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import java.util.List;
 import name.huliqing.core.Factory;
-import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.mvc.service.SkinService;
@@ -222,7 +221,7 @@ public class ActorSelectView extends LinearLayout {
         actorService.setViewDirection(actor, new Vector3f(1, 0, 0));
         actorService.setPhysicsEnabled(actor, false);
         
-        skillService.playSkill(actor, skillService.getSkill(actor, SkillType.wait), false);
+        skillService.playSkill(actor, skillService.getSkillWait(actor), false);
         skinService.takeOnWeapon(actor, true);
         actorView.detachAllChildren();
         actorView.attachChild(actor.getSpatial());

@@ -91,16 +91,12 @@ xs:time
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="stateBase">
-                    <xs:attribute name="skillType" use="required">
+                    <xs:attribute name="skillTags" type="xs:string" use="required">
                         <xs:annotation>
-                            <xs:documentation>指定要执行的是哪一个类型的技能，如果角色不存在该类型的技能则什么也不做。</xs:documentation>
+                            <xs:documentation>
+                                指定要执行的是哪些标记的技能，如果角色不存在该类型的技能则什么也不做， 如果存在多个则随机选择一个。
+                            </xs:documentation>
                         </xs:annotation>
-                        <xs:simpleType>
-                            <xs:restriction base="xs:string">
-                                <xs:enumeration value="wait" />
-                                <xs:enumeration value="reset"  />
-                            </xs:restriction>
-                        </xs:simpleType>
                     </xs:attribute>
                     <xs:attribute name="force" type="bool" use="optional">
                         <xs:annotation>
@@ -119,19 +115,28 @@ xs:time
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="stateBase">
-                    <xs:attribute name="lockAll" type="bool" use="optional">
+                    <xs:attribute name="lockAtSkillTags" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>把角色锁定在特定标记的技能上, 格式 : "skillTag1,skillTag2,..."</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="lockAtFrame" type="bool" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>把角色锁定在当前动画帧上</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="lockAllSkillTags" type="bool" use="optional">
                         <xs:annotation>
                             <xs:documentation>
-                                强制锁定所有技能,如果该值设置为true,
-                                则忽略参数:lockSkillTypes、lockSkillIds、lockChannels的设置。
+                                强制锁定所有技能,如果该值设置为true, 则忽略参数:lockSkillTags、lockSkillIds的设置。
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="lockSkillTypes" type="skillType" use="optional">
+                    <xs:attribute name="lockSkillTags" type="skillType" use="optional">
                         <xs:annotation>
                             <xs:documentation>
-                                指定要锁定的特定的技能类型列表,可以设置多个，使用半角逗号分隔，
-                                如："wait,sit,run,..."， 注：如果参数 lockAll=true,则忽略lockSkills设置
+                                指定要锁定的特定的技能标记列表,可以设置多个，使用半角逗号分隔，
+                                如："wait,walk,run,fight..."
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
@@ -151,21 +156,10 @@ xs:time
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="lockType" use="optional">
-                        <xs:annotation>
-                            <xs:documentation>reset表示锁定在ResetSkill上，frame表示锁定在当前动画帧上</xs:documentation>
-                        </xs:annotation>
-                        <xs:simpleType>
-                            <xs:restriction base="xs:string" >
-                                <xs:enumeration value="reset" />
-                                <xs:enumeration value="frame" />
-                            </xs:restriction>
-                        </xs:simpleType>
-                    </xs:attribute>
-                    <xs:attribute name="lockPhysics" type="bool" use="optional">
+                    <xs:attribute name="lockLocation" type="bool" use="optional">
                         <xs:annotation>
                             <xs:documentation>
-                                是否锁定物理特性,不让移动。
+                                是否锁定位置,不让移动。
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
@@ -235,6 +229,11 @@ xs:time
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="stateAttributeBase">
+                    <xs:attribute name="runSkillTag" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>指定"走路"技能的tag, 状态通过这个tag来查找角色的“走路”技能</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
                     <xs:attribute name="moveEffect" type="xs:string" use="optional">
                         <xs:annotation>
                             <xs:documentation>

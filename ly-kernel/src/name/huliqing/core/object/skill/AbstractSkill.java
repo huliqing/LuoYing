@@ -15,7 +15,6 @@ import name.huliqing.core.data.AttributeUse;
 import name.huliqing.core.data.MagicData;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.data.SkillData;
-import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.mvc.service.AttributeService;
 import name.huliqing.core.mvc.service.EffectService;
 import name.huliqing.core.mvc.service.ElService;
@@ -26,7 +25,6 @@ import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.SkinService;
 import name.huliqing.core.object.actoranim.ActorAnim;
 import name.huliqing.core.object.attribute.NumberAttribute;
-import name.huliqing.core.object.module.SkillModule;
 import name.huliqing.core.object.effect.Effect;
 import name.huliqing.core.object.magic.Magic;
 import name.huliqing.core.object.sound.SoundManager;
@@ -97,8 +95,6 @@ public abstract class AbstractSkill implements Skill {
     // 在执行过程中就不再需要计算。
     protected float trueSpeed;
     
-    protected SkillModule skillControl;
-
     @Override
     public void setData(SkillData data) {
         this.data = data;
@@ -225,7 +221,43 @@ public abstract class AbstractSkill implements Skill {
                     , getAnimFullTime()
                     , getAnimStartTime());
         }
+        
+        
+        // --技能消耗
+        List<AttributeUse> uas = data.getUseAttributes();
+        if (uas != null) {
+            for (AttributeUse ua : uas) {
+                attributeService.addNumberAttributeValue(actor, ua.getAttribute(), -ua.getAmount());
+            }
+        }
+
+        // --记录技能执行时间及增加技能点数
+        data.setLastPlayTime(LY.getGameTime());
+        data.setSkillPoints(data.getSkillPoints() + 1);
+        
+        // 检查技能等级提升
+        skillLevelUp();
     }
+    
+        // 检查并升级技能
+    private void skillLevelUp() {
+        if (data.getLevel() >= data.getMaxLevel()) 
+            return;
+        if (data.getLevelUpEl() == null)
+            return;
+        int levelPoints = (int) elService.getLevelEl(data.getLevelUpEl(), data.getLevel() + 1);
+        if (data.getSkillPoints() >= levelPoints) {
+            data.setLevel(data.getLevel() + 1);
+            data.setSkillPoints(data.getSkillPoints() - levelPoints);
+//            if (playService.getPlayer() == actor) {
+//                playService.addMessage(
+//                        ResourceManager.get(ResConstants.SKILL_LEVEL_UP, new Object[]{ResourceManager.getObjectName(data)})
+//                        , MessageType.item);
+//            }
+            skillLevelUp();
+        }
+    }
+    
     
     @Override
     public boolean isInitialized() {
@@ -422,11 +454,6 @@ public abstract class AbstractSkill implements Skill {
         return !initialized;
     }
 
-    @Override
-    public SkillType getSkillType() {
-        return data.getSkillType();
-    }
-    
     /**
      * 获取"动画"的完整执行时间,注：动画的完整时间并不等于动画的实际执行时间,
      * 实际动画的执行时间受cutTime的影响。该值返回: useTime / speed.
@@ -470,11 +497,6 @@ public abstract class AbstractSkill implements Skill {
     @Override
     public void setActor(Actor actor) {
         this.actor = actor;
-    }
-    
-    @Override
-    public void setSkillControl(SkillModule skillControl) {
-        this.skillControl = skillControl;
     }
 
     @Override

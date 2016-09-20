@@ -20,6 +20,7 @@ xs:time
         <xs:complexType>
             <xs:all>
                 <xs:element ref="config" />
+                <xs:element ref="configSkillType" />
             </xs:all>
         </xs:complexType>
     </xs:element>
@@ -192,6 +193,23 @@ xs:time
             </xs:complexContent>
         </xs:complexType>
     </xs:element>
+    
+<!--    <xs:element name="configSkillType" >
+        <xs:annotation>
+            <xs:documentation>技能类型的定义</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="configBase">
+                    <xs:attribute name="types" type="xs:string" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>技能类型定义，格式: "type1, type2, type3", 如: "walk,run,idle,fight"</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>-->
     
     <xs:complexType name="configBase">
         <xs:complexContent>

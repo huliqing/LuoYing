@@ -19,7 +19,6 @@
     <moduleChat id="moduleChat" moduleOrder="10" />
     <moduleItem id="moduleItem" moduleOrder="10" />
     <moduleResist id="moduleResist" moduleOrder="10" />
-    <moduleSkill id="moduleSkill" moduleOrder="10" />
     <moduleState id="moduleState" moduleOrder="10" />
     <moduleTask id="moduleTask" moduleOrder="10" />
     <moduleSkin id="moduleSkin" moduleOrder="10" bindWeaponSlotAttribute="attributeWeaponSlots" />
@@ -39,6 +38,9 @@
                 bindEssentialAttribute="attributeEssential" 
                 bindLivingAttribute="attributeLiving"
     />
+    
+    <!--技能模块: 让角色可以执行各种动画-->
+    <moduleSkill id="moduleSkill" moduleOrder="10" waitSkillTag="wait" deadSkillTag="dead" />
     
     <!--角色的逻辑功能-->
     <moduleLogic id="moduleLogic" moduleOrder="10" 

@@ -11,7 +11,7 @@ import name.huliqing.core.GameException;
 import name.huliqing.core.data.AttributeUse;
 import name.huliqing.core.xml.Proto;
 import name.huliqing.core.data.SkillData;
-import name.huliqing.core.enums.SkillType;
+import name.huliqing.core.object.skill.SkillTagFactory;
 import name.huliqing.core.xml.DataLoader;
 import name.huliqing.core.utils.ConvertUtils;
 
@@ -35,12 +35,7 @@ public class SkillDataLoader implements DataLoader<SkillData> {
 //            proto.putAttribute("handler", IdConstants.HANDLER_SKILL);
 //        }
         
-        data.setSkillType(identifySkillType(proto));
         data.setUseTime(proto.getAsFloat("useTime", 1));
-        
-        // remove,不再需要这个属性
-//        data.setRadius(proto.getAsFloat("radius", 1));
-        
         data.setAnimation(proto.getAsString("animation"));
         data.setChannels(proto.getAsArray("channels"));
         data.setChannelLocked(proto.getAsBoolean("channelLocked", false));
@@ -75,26 +70,6 @@ public class SkillDataLoader implements DataLoader<SkillData> {
             data.setLoopMode(LoopMode.DontLoop);
         }
         
-        // extOverlaps存取的是一个一个的技能类型的value, 格式如："skillTypeValue1,skillTypeValue2,..."
-        // 完整的overlaps是包含默认设置的和额外各个独立技能定制的
-        long overlaps = data.getSkillType().getOverlaps();           // 系统默认的类型
-        int[] extOverlaps = proto.getAsIntegerArray("extOverlaps"); // 技能定制的类型
-        if (extOverlaps != null) {
-            for (int eo : extOverlaps) {
-                overlaps |= 1 << eo;
-            }
-        }
-        data.setOverlaps(overlaps);
-        
-        // 同上
-        long interrupts = data.getSkillType().getInterrupts();       
-        int[] extInterrupts = proto.getAsIntegerArray("extInterrupts"); 
-        if (extInterrupts != null) {
-            for (int ei : extInterrupts) {
-                interrupts |= 1 << ei;
-            }
-        }
-        data.setInterrupts(interrupts);
         
         // 时间\动画剪裁参数
         data.setCutTimeStartMax(proto.getAsFloat("cutTimeStartMax", 0));
@@ -103,7 +78,6 @@ public class SkillDataLoader implements DataLoader<SkillData> {
         data.setLevel(proto.getAsInteger("level", 1));
         data.setMaxLevel(proto.getAsInteger("maxLevel", 1));
         data.setLevelEl(proto.getAsString("levelEl"));
-//        data.setSkillEl(proto.getAttribute("skillEl"));
         data.setSkillPoints(proto.getAsInteger("skillPoints", 0));
         data.setLevelUpEl(proto.getAsString("levelUpEl"));
         data.setNeedLevel(proto.getAsInteger("needLevel", 0));
@@ -112,69 +86,12 @@ public class SkillDataLoader implements DataLoader<SkillData> {
         data.setCutTimeStart(0);
         data.setCutTimeEnd(0);
 //        data.setSpeed(1f); // 不再使用speed,现在默认为1
-        
+
+        data.setTags(SkillTagFactory.convert(proto.getAsArray("tags")));
+        data.setOverlapTags(SkillTagFactory.convert(proto.getAsArray("overlapTags")));
+        data.setInterruptTags(SkillTagFactory.convert(proto.getAsArray("interruptTags")));
+        data.setPrior(proto.getAsInteger("prior", 0));
     }
     
-    private SkillType identifySkillType(Proto proto) {
-        String tagName = proto.getTagName();
-        if (tagName.equals("skillWalk")) {
-            return SkillType.walk;
-        } 
-
-        if (tagName.equals("skillRun")) {
-            return SkillType.run;
-        } 
-
-        if (tagName.equals("skillWait")) {
-            return SkillType.wait;
-        }
-
-        if (tagName.equals("skillIdle")) {
-            return SkillType.idle;
-        } 
-
-        if (tagName.equals("skillHurt")) {
-            return SkillType.hurt;
-        }
-
-        if (tagName.equals("skillDead")
-                || tagName.equals("skillDeadRagdoll")) {
-            return SkillType.dead;
-        } 
-
-        // 技能箭\多重射击术
-        if (tagName.equals("skillAttack") 
-                || tagName.equals("skillShot") 
-                || tagName.equals("skillShotBow")) {
-            String stName = proto.getAsString("skillType");
-            if (stName == null) {
-                throw new NullPointerException("Need specify a skillType, tagName=" + tagName + ", proto=" + proto);
-            }
-            return SkillType.identifyByName(stName);
-        }
-
-        // 召唤技\回城技
-        if (tagName.equals("skillSummon")
-                || tagName.equals("skillBack")) { 
-            return SkillType.magic;
-        }
-
-        if (tagName.equals("skillDefend")) {
-            return SkillType.defend;
-        }
-
-        if (tagName.equals("skillDuck")) {
-            return SkillType.duck;
-        }
-        
-        if (tagName.equals("skillReset")) {
-            return SkillType.reset;
-        }
-        
-        if (tagName.equals("skillSkin")) {
-            return SkillType.skin;
-        }
-        
-        throw new UnsupportedOperationException("Unsupported skill type, tagName=" + tagName + ", proto=" + proto);
-    }
+    
 }

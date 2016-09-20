@@ -15,7 +15,6 @@ import name.huliqing.core.constants.IdConstants;
 import name.huliqing.core.constants.ResConstants;
 import name.huliqing.core.constants.StoryConstants;
 import name.huliqing.core.enums.MessageType;
-import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.view.talk.Talk;
 import name.huliqing.core.view.talk.TalkImpl;
 import name.huliqing.core.view.talk.TalkListener;

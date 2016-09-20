@@ -4,125 +4,146 @@
  */
 package name.huliqing.core.object.state;
 
+import com.jme3.math.FastMath;
+import com.jme3.math.Vector3f;
 import java.util.List;
 import name.huliqing.core.Factory;
-import name.huliqing.core.constants.IdConstants;
-import name.huliqing.core.data.SkillData;
 import name.huliqing.core.data.StateData;
-import name.huliqing.core.enums.SkillType;
-import name.huliqing.core.mvc.service.ActorService;
-import name.huliqing.core.mvc.service.SkillService;
+import name.huliqing.core.mvc.network.SkillNetwork;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.module.ActorModule;
+import name.huliqing.core.object.module.ChannelModule;
+import name.huliqing.core.object.module.SkillModule;
 import name.huliqing.core.object.module.SkillPlayListener;
 import name.huliqing.core.object.skill.Skill;
+import name.huliqing.core.object.skill.SkillTagFactory;
+import name.huliqing.core.utils.MathUtils;
 
 /**
  * @author huliqing
  */
 public class SkillLockedState extends State implements SkillPlayListener {
-    private final SkillService skillService = Factory.get(SkillService.class);
-    private final ActorService actorService = Factory.get(ActorService.class);
-//    private final StateService stateService = Factory.get(StateService.class);
-//    private final AttributeService attributeService = Factory.get(AttributeService.class);
+    private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
+    private ActorModule actorModule;
+    private SkillModule skillModule;
+    private ChannelModule channelModule;
     
-    private enum LockType {
-        /** 锁定为Reset状态 */
-        reset,
-        
-        /** 锁定当前动画帧 */
-        frame;
-        
-        public static LockType identify(String name) {
-            if (name == null)
-                return null;
-            
-            for (LockType lt : values()) {
-                if (lt.name().equals(name)) {
-                    return lt;
-                }
-            }
-            return null;
-        }
-    }
-    
-    // 表示要锁定的类型。
-    private LockType lockType;
+    // 把角色锁定在特定标记的技能上
+    private long lockAtSkillTags;
+    // 把角色锁定在当前动画帧上。
+    private boolean lockAtFrame;
     
     // 是否锁定全部技能，如果为true,则忽略lockSkills.
-    private boolean lockAll = false;
-    
+    private boolean lockAllSkillTags;
+    // 要锁定的技能tags
+    private long lockSkillTags;
     // 要锁定的特定的技能列表.
-    private SkillType[] lockSkillTypes;
     private List<String> lockSkillIds;
+    // 要锁定的技能通道
     private String[] lockChannels;
     // 这个选项可以防止角色被锁定后仍然可被其它角色“推动”的bug.(由于物理特性的原因)
-    private boolean lockPhysics;
+    private boolean lockLocation;
     
     // ---- inner
-
+    private final long SKILL_ALL = 0xFFFFFFFF;
+    // 被锁定的位置
+    private Vector3f lockedLocation;
+    
     @Override
     public void setData(StateData data) {
         super.setData(data); 
-        lockType = LockType.identify(data.getAsString("lockType"));
-        lockAll = data.getAsBoolean("lockAll", lockAll);
-        // 如果lockAll(锁定全部技能），则不需要理lockSkills。
-        // 否则要获取特定的要锁定的技能类型列表。
-        if (!lockAll) {
-            String[] tempLockSkills = data.getAsArray("lockSkillTypes");
-            if (tempLockSkills != null) {
-                lockSkillTypes = new SkillType[tempLockSkills.length];
-                for (int i = 0; i < tempLockSkills.length; i++) {
-                    lockSkillTypes[i] = SkillType.identifyByName(tempLockSkills[i]);
-                }
-            }
-            lockSkillIds = data.getAsStringList("lockSkillIds");
-            lockChannels = data.getAsArray("lockChannels");
-        }
-        lockPhysics = data.getAsBoolean("lockPhysics", false);
+        lockAtSkillTags = SkillTagFactory.convert(data.getAsArray("lockAtSkillTags"));
+        lockAtFrame = data.getAsBoolean("lockAtFrame", false);
+        lockAllSkillTags = data.getAsBoolean("lockAllSkillTags", false);
+        lockSkillTags = SkillTagFactory.convert(data.getAsArray("lockSkillTags"));
+        lockSkillIds = data.getAsStringList("lockSkillIds");
+        lockChannels = data.getAsArray("lockChannels");
+        lockLocation = data.getAsBoolean("lockLocation", false);
     }
 
     @Override
     public void initialize() {
         super.initialize();
-        // 根据锁定类型来确定要锁定在reset状态还是当前动画帧。
-        if (lockType != null && !actorService.isDead(actor)) {
-            if (lockType == LockType.reset) {
-                Skill skill = skillService.getSkill(actor, SkillType.reset);
-                if (skill != null) {
-                    skillService.playSkill(actor, skill, true);
-                }
-            } else if (lockType == LockType.frame) {
-                // SKILL_RESET_DEFAULT会把当前动画帧定格住
-                Skill skill = skillService.loadSkill(IdConstants.SKILL_RESET_DEFAULT);
-                skillService.playSkill(actor, skill, true);
-            }
-        }
-
-        // 锁定所有技能或特定技能。
-        if (lockAll) {
-            skillService.lockSkillAll(actor);
-        } else {
-            // 锁定特殊技能类型
-            if (lockSkillTypes != null) {
-                skillService.lockSkill(actor, lockSkillTypes);
-            }
-            // 锁定技能动画通道
-            if (lockChannels != null) {
-                skillService.lockSkillChannels(actor, lockChannels);
-            }
-            // 对于特定的技能ID需要通过技能侦听器来监听,在状态消失时要移除侦听器
-            if (lockSkillIds != null) {
-                skillService.addSkillPlayListener(actor, this);
+        actorModule = actor.getModule(ActorModule.class);
+        channelModule = actor.getModule(ChannelModule.class);
+        skillModule = actor.getModule(SkillModule.class);
+        
+        // remove20160920
+//        // 根据锁定类型来确定要锁定在reset状态还是当前动画帧。
+//        if (lockType != null && !actorService.isDead(actor)) {
+//            if (lockType == LockType.reset) {
+//                Skill skill = skillService.getSkill(actor, SkillType.reset);
+//                if (skill != null) {
+//                    skillService.playSkill(actor, skill, true);
+//                }
+//            } else if (lockType == LockType.frame) {
+//                // SKILL_RESET_DEFAULT会把当前动画帧定格住
+//                Skill skill = skillService.loadSkill(IdConstants.SKILL_RESET_DEFAULT);
+//                skillService.playSkill(actor, skill, true);
+//            }
+//        }
+        
+        // 锁定在特定标记的技能上
+        if (lockAtSkillTags > 0) {
+            List<Skill> lockedSkills = skillModule.getSkillByTags(lockAtSkillTags);
+            if (lockedSkills != null && !lockedSkills.isEmpty()) {
+                // 用到随机数时要使用Network.
+                skillNetwork.playSkill(actor, lockedSkills.get(FastMath.nextRandomInt(0, lockedSkills.size() - 1)), false);
             }
         }
         
-        if (lockPhysics) {
-            actorService.setKinematic(actor, true);
+        // 锁定在当前动画侦上
+        if (lockAtFrame) {
+            channelModule.setSpeed(0);
+        }
+        
+        // 锁定所有技能或特定技能。
+        if (lockAllSkillTags) {
+            skillModule.lockSkillTags(SKILL_ALL);
+        } else {
+            // 锁定特殊技能类型
+            skillModule.lockSkillTags(lockSkillTags);
+            // 对于特定的技能ID需要通过技能侦听器来监听,在状态消失时要移除侦听器
+            if (lockSkillIds != null) {
+                skillModule.addSkillPlayListener(this);
+            }
+        }
+        
+        // 锁定动画通道
+        if (lockChannels != null && channelModule != null) {
+            channelModule.setChannelLock(true, lockChannels);
+        }
+        
+        // 如果锁定位置，则记住初始位置
+        if (lockLocation) {
+            lockedLocation = new Vector3f();
+            lockedLocation.set(actorModule.getLocation());
         }
         
         // 削弱时间
         totalUseTime = data.getUseTime() - data.getUseTime() * data.getResist();
         
+    }
+
+    @Override
+    public void update(float tpf) {
+        super.update(tpf);
+        // 锁定位置，防止位置移动
+        if (lockLocation) {
+            if (moved(lockedLocation, actorModule.getLocation())) {
+                actorModule.setLocation(lockedLocation);
+            }
+        }
+    }
+    
+    private boolean moved(Vector3f loc1, Vector3f loc2) {
+        if (MathUtils.abs(loc1.x - loc2.x) > 0.0001f 
+                ||  MathUtils.abs(loc1.y - loc2.y) > 0.0001f 
+                ||  MathUtils.abs(loc1.z - loc2.z) > 0.0001f 
+                ) {
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -142,20 +163,14 @@ public class SkillLockedState extends State implements SkillPlayListener {
 
     @Override
     public void cleanup() {
-        if (lockAll) {
-            skillService.unlockSkillAll(actor);
+        if (lockAllSkillTags) {
+            skillModule.unlockSkillTags(SKILL_ALL);
         } else {
-            if (lockSkillTypes != null) {
-                skillService.unlockSkill(actor, lockSkillTypes);
-            }
-            if (lockChannels != null) {
-                skillService.unlockSkillChannels(actor, lockChannels);
-            }
-            skillService.removeSkillPlayListener(actor, this);
+            skillModule.unlockSkillTags(lockSkillTags);
+            skillModule.removeSkillPlayListener(this);
         }
-        
-        if (lockPhysics) {
-            actorService.setKinematic(actor, false);
+        if (lockChannels != null && channelModule != null) {
+            channelModule.setChannelLock(false, lockChannels);
         }
         super.cleanup();
     }

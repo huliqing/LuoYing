@@ -7,7 +7,6 @@ package name.huliqing.core.object.action;
 import com.jme3.math.Vector3f;
 import com.jme3.util.TempVars;
 import name.huliqing.core.Factory;
-import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.mvc.network.SkillNetwork;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.SkillService;

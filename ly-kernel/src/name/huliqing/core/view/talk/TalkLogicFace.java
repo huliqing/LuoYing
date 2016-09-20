@@ -7,11 +7,11 @@ package name.huliqing.core.view.talk;
 import com.jme3.math.Vector3f;
 import com.jme3.util.TempVars;
 import name.huliqing.core.Factory;
-import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.mvc.network.ActorNetwork;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.skill.Skill;
 
 /**
  * 处理谈话逻辑：朝向, 使用朝向角色或是朝向位置只能二选一。
@@ -22,13 +22,14 @@ public class TalkLogicFace extends AbstractTalkLogic {
     private final ActorService actorService = Factory.get(ActorService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
     
-    // 当角色在执行这些技能的时候不能进行“朝向”，除非强制执行（force=true)
-    private final long UNABLE_FACE_SKILL_STATE = SkillType.createSkillStates(
-              SkillType.attack, SkillType.dance, SkillType.dead, SkillType.defend
-            , SkillType.duck, SkillType.hurt, SkillType.jump, SkillType.magic
-            , SkillType.reset, SkillType.run, SkillType.sit, SkillType.trick
-            , SkillType.walk
-            );
+    // remove20160920
+//    // 当角色在执行这些技能的时候不能进行“朝向”，除非强制执行（force=true)
+//    private final long UNABLE_FACE_SKILL_STATE = SkillType.createSkillStates(
+//              SkillType.attack, SkillType.dance, SkillType.dead, SkillType.defend
+//            , SkillType.duck, SkillType.hurt, SkillType.jump, SkillType.magic
+//            , SkillType.reset, SkillType.run, SkillType.sit, SkillType.trick
+//            , SkillType.walk
+//            );
     
     // 朝向的源角色
     private Actor actor;
@@ -82,9 +83,9 @@ public class TalkLogicFace extends AbstractTalkLogic {
 //                && !actor.isDucking()
 //                && !actor.isRunning()
 //                );
-        
-        boolean canFace = force || 
-                (UNABLE_FACE_SKILL_STATE & skillService.getPlayingSkillStates(actor)) == 0;
+
+        Skill waitSkill = skillService.getSkillWait(actor);
+        boolean canFace = force || (waitSkill != null && skillService.isPlayingSkill(actor, waitSkill.getData().getTags()));
         
         if (canFace) {
             Vector3f viewDirection = targetPos.subtract(actor.getSpatial().getWorldTranslation());

@@ -5,9 +5,6 @@
 package name.huliqing.core.object.action;
 
 import name.huliqing.core.Factory;
-import name.huliqing.core.data.ActionData;
-import name.huliqing.core.data.SkillData;
-import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.mvc.network.SkillNetwork;
 import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.object.skill.Skill;

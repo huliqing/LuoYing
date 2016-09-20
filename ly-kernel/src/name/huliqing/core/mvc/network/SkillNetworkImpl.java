@@ -9,12 +9,10 @@ import com.jme3.math.Vector3f;
 import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.SkillData;
-import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.mess.MessActorAddSkill;
 import name.huliqing.core.mess.MessSkillPlay;
 import name.huliqing.core.mess.MessSkillWalk;
-import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.module.SkillListener;
 import name.huliqing.core.object.module.SkillPlayListener;
@@ -107,7 +105,7 @@ public class SkillNetworkImpl implements SkillNetwork {
         // 关于服务端和客户端的状态同步，受各种不确定因素的影响太多,保证服务
         // 端和客户端所有状态完全同步几乎是不可能的。
         // ============================20160504=============================
-        if (skillService.isPlayable(actor, skill, force)) {
+        if (force || skillService.isPlayable(actor, skill)) {
             NETWORK.broadcast(mess);
             return skillService.playSkill(actor, skill, true);
         }
@@ -137,7 +135,7 @@ public class SkillNetworkImpl implements SkillNetwork {
         // 重要：参考上面playSkill中的说明。
         // ============================20160504=============================
         Skill skill = skillService.getSkill(actor, skillId);
-        if (skillService.isPlayable(actor, skill, force)) {
+        if (force || skillService.isPlayable(actor, skill)) {
             if (NETWORK.hasConnections()) {
                 NETWORK.broadcast(mess);
             }
@@ -148,12 +146,12 @@ public class SkillNetworkImpl implements SkillNetwork {
     }
     
     @Override
-    public boolean isPlayable(Actor actor, Skill skill, boolean force) {
+    public boolean isPlayable(Actor actor, Skill skill) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public int checkStateCode(Actor actor, Skill skill, boolean force) {
+    public int checkStateCode(Actor actor, Skill skill) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -163,7 +161,7 @@ public class SkillNetworkImpl implements SkillNetwork {
     }
 
     @Override
-    public boolean isSkillLearned(Actor actor, String skillId) {
+    public boolean hasSkill(Actor actor, String skillId) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -173,77 +171,7 @@ public class SkillNetworkImpl implements SkillNetwork {
     }
 
     @Override
-    public boolean isPlayingSkill(Actor actor, SkillType skillType) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public boolean isWaiting(Actor actor) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public boolean isRunning(Actor actor) {
-        throw new UnsupportedOperationException("Not supported yet."); 
-    }
-    
-    @Override
-    public boolean isAttacking(Actor actor) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean isDefending(Actor actor) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean isDucking(Actor actor) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Skill getPlayingSkill(Actor actor, SkillType skillType) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public long getPlayingSkillStates(Actor actor) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void lockSkill(Actor actor, SkillType... skillType) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void lockSkillAll(Actor actor) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void unlockSkill(Actor actor, SkillType... skillType) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void unlockSkillAll(Actor actor) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public boolean isLocked(Actor actor, SkillType skillType) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void lockSkillChannels(Actor actor, String... channels) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void unlockSkillChannels(Actor actor, String... channels) {
+    public long getPlayingSkillTags(Actor actor) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -278,12 +206,68 @@ public class SkillNetworkImpl implements SkillNetwork {
     }
 
     @Override
-    public Skill getSkill(Actor actor, SkillType skillType) {
+    public Skill getSkillWait(Actor actor) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Skill getSkillDead(Actor actor) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public List<Skill> getSkills(Actor actor) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void lockSkillTags(Actor actor, long skillTags) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void unlockSkillTags(Actor actor, long skillTags) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Skill> getSkillByTag(Actor actor, String... skillTags) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    // remove20160920
+//    @Override
+//    public boolean playWait(Actor actor, boolean force) {
+//        if (NETWORK.isClient()) {
+//            return false;
+//        }
+//        
+//        Skill waitSkill = skillService.getSkillWait(actor);
+//        if (waitSkill == null) {
+//            return false;
+//        }
+//        
+//        MessSkillWait mess = new MessSkillWait();
+//        mess.setActorId(actor.getData().getUniqueId());
+//        NETWORK.broadcast(mess);
+//        return skillService.playWait(actor, force);
+//    }
+//
+//    @Override
+//    public boolean playDead(Actor actor, boolean force) {
+//        MessSkillWait mess = new MessSkillWait();
+//        mess.setActorId(actor.getData().getUniqueId());
+//        if (NETWORK.isClient()) {
+//            NETWORK.sendToServer(mess);
+//            return false;
+//        } else {
+//            NETWORK.broadcast(mess);
+//            return skillService.playWait(actor, force);
+//        }
+//    }
+
+    @Override
+    public boolean isPlayingSkill(Actor actor, long skillTags) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

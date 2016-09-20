@@ -7,8 +7,6 @@ package name.huliqing.core.object.skill;
 import name.huliqing.core.constants.SkillConstants;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.enums.SkillType;
-import name.huliqing.core.object.module.SkillModule;
 import name.huliqing.core.xml.DataProcessor;
 
 /**
@@ -47,12 +45,6 @@ public interface Skill extends DataProcessor<SkillData>{
     boolean isEnd();
     
     /**
-     * 获取技能类型
-     * @return 
-     */
-    SkillType getSkillType();
-    
-    /**
      * 获取发起技能的角色，如果没有，则返回null
      * @return 
      */
@@ -63,8 +55,6 @@ public interface Skill extends DataProcessor<SkillData>{
      * @param character 
      */
     void setActor(Actor character);
-    
-    void setSkillControl(SkillModule skillControl);
     
     /**
      * 重新修复被其它技能重置的动画

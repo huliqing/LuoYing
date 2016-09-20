@@ -11,7 +11,6 @@ import name.huliqing.core.data.ActorData;
 import name.huliqing.core.data.GameData;
 import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.enums.MessageType;
-import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.mvc.service.ActionService;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.LogicService;
@@ -119,7 +118,8 @@ public class UserCommandNetworkImpl implements UserCommandNetwork {
             actorService.setName(actor, actorName);
             // 暂时以1作为默认分组
             actorService.setTeam(actor, 1);
-            skillService.playSkill(actor, skillService.getSkill(actor, SkillType.wait), false);
+            skillService.playSkill(actor, skillService.getSkillWait(actor), false);
+            
             // 这是主机,所以要设置为当前主场景玩家,与actor.setPlayer(true)不同
             // 注:在设置名字之后再setAsPlayer,否则FacePanel中的player名字不会更新
             playService.setMainPlayer(actor);

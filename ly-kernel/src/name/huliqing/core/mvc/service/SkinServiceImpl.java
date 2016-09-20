@@ -6,7 +6,6 @@ package name.huliqing.core.mvc.service;
 
 import java.util.List;
 import name.huliqing.core.Factory;
-import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.module.SkinListener;
 import name.huliqing.core.object.module.SkinModule;

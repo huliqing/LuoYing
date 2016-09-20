@@ -188,7 +188,7 @@ public class ChannelModule extends AbstractModule implements ChannelControl {
     public void setSpeed(float speed) {
         // 避免除0及不正常的速度
         if (speed <= 0) {
-            speed = 0.0001f;
+            speed = 0.00001f;
         }
         for (Channel ch : channels) {
             ch.updateSpeed(speed);

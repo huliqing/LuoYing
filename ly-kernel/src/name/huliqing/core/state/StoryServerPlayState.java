@@ -18,7 +18,6 @@ import name.huliqing.core.Factory;
 import name.huliqing.core.constants.IdConstants;
 import name.huliqing.core.data.ActorData;
 import name.huliqing.core.data.GameData;
-import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.mvc.network.ActorNetwork;
 import name.huliqing.core.mvc.network.PlayNetwork;
 import name.huliqing.core.mvc.network.StateNetwork;
@@ -237,7 +236,7 @@ public abstract class StoryServerPlayState extends NetworkServerPlayState {
         }
         // 故事模式玩家始终队伍分组为1
         actorService.setTeam(player, 1);
-        skillService.playSkill(player, skillService.getSkill(player, SkillType.wait), false);
+        skillService.playSkill(player, skillService.getSkillWait(player), false);
         
         addObject(player, false);
         setPlayer(player);
@@ -266,10 +265,7 @@ public abstract class StoryServerPlayState extends NetworkServerPlayState {
         for (ActorData data : actors) {
             Actor actor = actorService.loadActor(data);
             if (actorService.getOwner(actor) == clientPlayerData.getUniqueId()) {
-                Skill waitSkill = skillService.getSkill(actor, SkillType.wait);
-                if (waitSkill != null) {
-                    skillService.playSkill(actor, waitSkill, false);
-                }
+                skillService.playSkill(actor, skillService.getSkillWait(actor), false);
                 playNetwork.addActor(actor);                    
             }
         }

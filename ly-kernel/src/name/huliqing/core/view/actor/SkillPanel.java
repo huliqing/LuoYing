@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.enums.SkillType;
 import name.huliqing.core.mvc.network.ActorNetwork;
 import name.huliqing.core.mvc.network.SkillNetwork;
 import name.huliqing.core.mvc.service.PlayService;
@@ -42,31 +41,13 @@ public class SkillPanel extends ListView<Skill> implements ActorPanel {
             return datas;
         }
         datas.clear();
-        List<Skill> temps = skillService.getSkills(actor);
-        if (temps != null && !temps.isEmpty()) {
-            for (Skill skill : temps) {
-                // 过滤掉一些不要显示的技能
-                if (!filter(skill.getSkillType())) {
-                    datas.add(skill);
-                }
-            }
-        }
+        datas.addAll(skillService.getSkills(actor));
         return datas;
     }
-    
-    // 是否过滤指定的技能
-    private boolean filter(SkillType st) {
-        switch (st) {
-            case trick:
-            case common:
-            case dance:
-            case jump:
-            case sit:
-            case magic:
-                return false;
-            default:
-                return true;
-        }
+
+    @Override
+    protected boolean filter(Skill data) {
+        return false;
     }
     
     @Override

@@ -186,10 +186,16 @@ public class IdConstants {
     // Skill
     // =========================================================================
     
-    /** 技能：回城技能 */
+    /**
+     * @deprecated 
+     * 技能：回城技能 
+     */
     public final static String SKILL_BACK = "skillBack";
-    /** 技能：默认的Reset技能，适应所有没有设置Reset技能的角色 */
-    public final static String SKILL_RESET_DEFAULT = "skillResetDefault";
+    /** 
+     * @deprecated 
+     * 技能：默认的Reset技能，适应所有没有设置Reset技能的角色 
+     */
+    public final static String SKILL_RESET_DEFAULT = "skillResetBase";
     /** @deprecated 不再使用 */
     public final static String SKILL_SUMMON = "skillSummon";
     
