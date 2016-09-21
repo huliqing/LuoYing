@@ -54,9 +54,8 @@ public class IdleDynamicAction extends AbstractAction implements IdleAction, Ski
     @Override
     public void initialize() {
         super.initialize();
-        recacheIdleSkills();
         skillModule = actor.getModule(SkillModule.class);
-        
+        skillModule.addSkillListener(this);
         if (waitSkill == null) {
             List<Skill> waitSkills = skillModule.getSkillWait(null);
             if (waitSkills != null && !waitSkills.isEmpty()) {
@@ -64,7 +63,7 @@ public class IdleDynamicAction extends AbstractAction implements IdleAction, Ski
             }
         }
         
-        skillService.addSkillListener(actor, this);
+        recacheIdleSkills();
     }
 
     @Override

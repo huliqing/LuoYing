@@ -14,7 +14,8 @@
     <actorLogicAttributeChange id="logicUpdateMana" value="1" targetAttribute="attributeMana" useAttribute="attributeManaRestore" interval="3" />
     
     <!--默认的防守及躲闪逻辑-->
-    <actorLogicDefend id="logicDefend" interval="5" defendRateAttribute="attributeDefenceRate" duckRateAttribute="attributeDuckRate" listenAttributes="attributeHealth" />
+    <actorLogicDefend id="logicDefend" interval="5" defendRateAttribute="attributeDefenceRate" duckRateAttribute="attributeDuckRate" 
+                      listenAttributes="attributeHealth" listenSkillTags="fight" defendSkillTags="defend" duckSkillTags="duck" />
     <!--空闲行为-->
     <actorLogicIdle id="logicPatrol" interval="5" idleSimpleAction="actionIdleDynamic" idlePatrolAction="actionIdlePatrol" />
     

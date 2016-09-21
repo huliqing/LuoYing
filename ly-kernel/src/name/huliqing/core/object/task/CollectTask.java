@@ -40,9 +40,7 @@ import name.huliqing.core.utils.MathUtils;
  * @param <T>
  */
 public class CollectTask<T extends TaskData> extends AbstractTask<T> implements ActorListener {
-    private final PlayService playService = Factory.get(PlayService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
-    private final ItemService itemService = Factory.get(ItemService.class);
     private final TaskService taskService = Factory.get(TaskService.class);
     private final TaskNetwork taskNetwork = Factory.get(TaskNetwork.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);

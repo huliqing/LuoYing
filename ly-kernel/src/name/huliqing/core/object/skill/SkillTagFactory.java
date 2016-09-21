@@ -37,6 +37,7 @@ public class SkillTagFactory {
         TAGS.add(new SkillTag(14, "trick"));
         TAGS.add(new SkillTag(15, "magic"));
         TAGS.add(new SkillTag(16, "common"));
+        TAGS.add(new SkillTag(17, "fight"));
     }
     
     /**

@@ -4,17 +4,15 @@
  */
 package name.huliqing.core.object.state;
 
-import com.jme3.app.Application;
-import name.huliqing.core.Factory;
 import name.huliqing.core.data.StateData;
-import name.huliqing.core.mvc.service.ActorService;
+import name.huliqing.core.object.module.ActorModule;
 
 /**
  *
  * @author huliqing
  */
 public class EssentialState extends State {
-    private final static ActorService actorService = Factory.get(ActorService.class);
+    private ActorModule actorModule;
     
     private boolean essential;
     private boolean restore;
@@ -32,14 +30,16 @@ public class EssentialState extends State {
     @Override
     public void initialize() {
         super.initialize();
-        oldEssential = actorService.isEssential(actor);
-        actorService.setEssential(actor, essential);
+        actorModule = actor.getModule(ActorModule.class);
+        
+        oldEssential = actorModule.isEssential();
+        actorModule.setEssential(essential);
     }
 
     @Override
     public void cleanup() {
-        if (restore) {
-            actorService.setEssential(actor, oldEssential);
+        if (restore && actorModule != null) {
+            actorModule.setEssential(oldEssential);
         }
         super.cleanup();
     }

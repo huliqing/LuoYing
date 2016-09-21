@@ -6,7 +6,6 @@ package name.huliqing.core.object.actorlogic;
 
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.data.ActorLogicData;
-import name.huliqing.core.object.module.LogicModule;
 import name.huliqing.core.xml.DataProcessor;
 
 /**
@@ -15,7 +14,6 @@ import name.huliqing.core.xml.DataProcessor;
  * @param <T>
  */
 public abstract class ActorLogic<T extends ActorLogicData> implements DataProcessor<T>{
-//    private final ActionService actionService = Factory.get(ActionService.class);
     
     protected T data;
     protected boolean initialized;
@@ -26,7 +24,6 @@ public abstract class ActorLogic<T extends ActorLogicData> implements DataProces
      * 运行当前逻辑的角色.
      */
     protected Actor actor;
-    protected LogicModule logicModule;
 
     @Override
     public void setData(T data) {
@@ -75,14 +72,6 @@ public abstract class ActorLogic<T extends ActorLogicData> implements DataProces
         this.actor = self;
     }
 
-    public LogicModule getLogicModule() {
-        return logicModule;
-    }
-
-    public void setLogicModule(LogicModule logicModule) {
-        this.logicModule = logicModule;
-    }
-
     public void setInterval(float interval) {
         data.setInterval(interval);
         this.interval = interval;
@@ -91,15 +80,6 @@ public abstract class ActorLogic<T extends ActorLogicData> implements DataProces
     public float getInterval() {
         return interval;
     }
-    
-    // remove20160831
-//    /**
-//     * 执行行为
-//     * @param action 
-//     */
-//    protected void playAction(Action action) {
-//        actionService.playAction(actor, action);
-//    }
     
     /**
      * 更新逻辑

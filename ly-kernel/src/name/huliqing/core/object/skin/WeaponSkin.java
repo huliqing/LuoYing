@@ -7,6 +7,7 @@ package name.huliqing.core.object.skin;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.control.AbstractControl;
+import com.jme3.scene.control.Control;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.Factory;
@@ -24,16 +25,26 @@ import name.huliqing.core.object.skill.SkinSkill;
 public class WeaponSkin extends AbstractSkin {
     private final SkillService skillService = Factory.get(SkillService.class);
 
+    private final HangControl hangControl = new HangControl();
+    
     @Override
     public boolean isWeapon() {
         return true;
     }
 
-    @Override
+    /**
+     * 获取武器类型,Skin必须是武器时才有意义
+     * @return 
+     */
     public int getWeaponType() {
         return data.getWeaponType();
     }
-        
+
+    @Override
+    public boolean isSkinning() {
+        return hangControl.initialized;
+    }
+    
     @Override
     public void attach(Actor actor) {
         super.attach(actor);
@@ -67,7 +78,10 @@ public class WeaponSkin extends AbstractSkin {
      * @param actor
      */
     public void takeOn(Actor actor) {
-        if (!attached) {
+        // 这里要直接清理一下，以避免上一次的takeOn执行过程还未结束的情况下导致冲突。
+        hangControl.cleanup();
+        
+        if (!data.isUsed()) {
             return;
         }
         
@@ -83,6 +97,7 @@ public class WeaponSkin extends AbstractSkin {
         } else if (data.isRightHandWeapon()) {
             hangSkill = slot.getRightHandSkinSkill();
         }
+        
         if (hangSkill == null) {
             super.attach(actor);
             return;
@@ -93,8 +108,10 @@ public class WeaponSkin extends AbstractSkin {
         skill.setActor(actor);
         skillService.playSkill(actor, skill, false);
 
+        // 标记装备正在”执行“,在武器实际取出之后才设置为false
         // hangTime：把武器节点添加到角色身上的时间点。
-        actor.getSpatial().addControl(new HangProcessor(actor, skill.getTrueUseTime() * skill.getHangTimePoint(), true));
+        hangControl.initialize(actor, skill.getTrueUseTime() * skill.getHangTimePoint(), true);
+        actor.getSpatial().addControl(hangControl);
         
         // 武器取出后取消槽位占用
         data.setSlot(null);
@@ -105,7 +122,10 @@ public class WeaponSkin extends AbstractSkin {
      * @param actor
      */
     public void takeOff(Actor actor) {
-        if (!attached) {
+        // 这里要直接清理一下，以防止上一次的执行过程还未结束的情况下导致冲突。
+        hangControl.cleanup();
+        
+        if (!data.isUsed()) {
             return;
         }
         
@@ -127,16 +147,18 @@ public class WeaponSkin extends AbstractSkin {
         
         // 使用一个动画技能来"取下"武器
         if (hangSkill != null) {
+            // 这是一个动画执行过程，在执行前标记为true,在执行后才设置为false.
             SkinSkill skill = (SkinSkill) Loader.loadSkill(hangSkill);
             skill.setActor(actor);
             skillService.playSkill(actor, skill, false);
-            actor.getSpatial().addControl(new HangProcessor(actor, skill.getTrueUseTime() * skill.getHangTimePoint(), false));
+            
+            // hangControl作为control用于判断时间点，根据时间点进行”取出“或”收起“装备
+            hangControl.initialize(actor, skill.getTrueUseTime() * skill.getHangTimePoint(), false);
+            actor.getSpatial().addControl(hangControl);
         } else {
             attach(actor, slot.getBindBone(), skinNode, slot.getLocalTranslation(), slot.getLocalRotation(), slot.getLocalScale());
         }
-        
     }
-    
     
     /**
      * 为角色指定的武器选择一个合适的槽位来装备武器
@@ -191,32 +213,49 @@ public class WeaponSkin extends AbstractSkin {
         return usingSlots;
     }
     
-    private class HangProcessor extends AbstractControl {
+    /**
+     * 这个Processor用来计算时间点，并在指定的时间点取出或收起武器模型。
+     */
+    private class HangControl extends AbstractControl {
 
-        private final Actor actor;
-        private final float hangTime;
+        private Actor actor;
+        private float hangTime;
+        private boolean takeOn;
         private float timeUsed;
-        // 取出、收起
-        private final boolean takeOn;
+        private boolean initialized;
         
-        public HangProcessor(Actor actor, float hangTime, boolean takeOn) {
+        private void initialize(Actor actor, float hangTime, boolean takeOn) {
+            if (initialized) {
+                // 防止bug
+                throw new IllegalStateException("HangControl is already initialized!");
+            }
             this.actor = actor;
             this.hangTime = hangTime;
             this.takeOn = takeOn;
+            initialized = true;
         }
         
         @Override
         protected void controlUpdate(float tpf) {
+            if (!initialized) 
+                return;
+            
             timeUsed += tpf;
-           
             if (timeUsed >= hangTime) {
+                cleanup();
+            }
+        }
+        
+        public void cleanup() {
+            if (initialized) {
                 if (takeOn) {
                     WeaponSkin.super.attach(actor);
                 } else {
                     attachWeaponOff(actor);
                 }
-                actor.getSpatial().removeControl(this);
+                spatial.removeControl(this);
             }
+            initialized = false;
         }
 
         @Override

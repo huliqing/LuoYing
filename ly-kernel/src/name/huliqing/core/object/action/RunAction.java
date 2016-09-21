@@ -28,6 +28,7 @@ public interface RunAction extends Action {
      * 判断当前是否已经行走到目标位置。只要当前角色与pos的距离小于或等于
      * nearest时就视为已经到达。
      * @param pos 
+     * @return  
      */
     public boolean isInPosition(Vector3f pos);
     

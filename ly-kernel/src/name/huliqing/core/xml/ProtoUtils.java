@@ -83,7 +83,7 @@ class ProtoUtils {
             // 检查被继承的对象是否存在
             Proto extProto = dataStore.getProto(extendId);
             if (extProto == null) {
-                throw new RuntimeException("Could not find extends object=" + extendId + ", extends=" + checker);
+                throw new RuntimeException("Could not find extends object, extendId=" + extendId + ", extends=" + checker);
             }
             parent = extendsProto(dataStore, parent, extProto, checker);
         }

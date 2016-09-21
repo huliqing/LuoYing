@@ -10,6 +10,7 @@ import name.huliqing.core.data.ActorLogicData;
 import name.huliqing.core.mvc.network.ActorNetwork;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.PlayService;
+import name.huliqing.core.object.module.LogicModule;
 
 /**
  * 逻辑：
@@ -22,6 +23,7 @@ public class SearchEnemyActorLogic<T extends ActorLogicData> extends ActorLogic<
     private final PlayService playService = Factory.get(PlayService.class);
     private final ActorService actorService = Factory.get(ActorService.class);;
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);;
+    private LogicModule logicModule;
     
     // 自动频率，
     private boolean autoInterval = true;
@@ -36,29 +38,36 @@ public class SearchEnemyActorLogic<T extends ActorLogicData> extends ActorLogic<
         this.minInterval = data.getProto().getAsFloat("minInterval", minInterval);
     }
 
-    public boolean isAutoInterval() {
-        return autoInterval;
+    @Override
+    public void initialize() {
+        super.initialize();
+        logicModule = actor.getModule(LogicModule.class);
     }
 
-    public void setAutoInterval(boolean autoInterval) {
-        this.autoInterval = autoInterval;
-    }
-
-    public float getMaxInterval() {
-        return maxInterval;
-    }
-
-    public void setMaxInterval(float maxInterval) {
-        this.maxInterval = maxInterval;
-    }
-
-    public float getMinInterval() {
-        return minInterval;
-    }
-
-    public void setMinInterval(float minInterval) {
-        this.minInterval = minInterval;
-    }
+    // remove20160922,不需要
+//    public boolean isAutoInterval() {
+//        return autoInterval;
+//    }
+//
+//    public void setAutoInterval(boolean autoInterval) {
+//        this.autoInterval = autoInterval;
+//    }
+//
+//    public float getMaxInterval() {
+//        return maxInterval;
+//    }
+//
+//    public void setMaxInterval(float maxInterval) {
+//        this.maxInterval = maxInterval;
+//    }
+//
+//    public float getMinInterval() {
+//        return minInterval;
+//    }
+//
+//    public void setMinInterval(float minInterval) {
+//        this.minInterval = minInterval;
+//    }
     
     @Override
     protected void doLogic(float tpf) {

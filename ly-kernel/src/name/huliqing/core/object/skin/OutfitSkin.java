@@ -15,10 +15,4 @@ public class OutfitSkin extends AbstractSkin {
         return false;
     }
 
-    @Override
-    public int getWeaponType() {
-        return -1;
-    }
-
-
 }

@@ -8,13 +8,11 @@ import com.jme3.font.BitmapFont;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.Factory;
-import name.huliqing.core.constants.InterfaceConstants;
 import name.huliqing.core.constants.ResConstants;
 import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.TaskData;
 import name.huliqing.core.mvc.network.ProtoNetwork;
 import name.huliqing.core.mvc.service.PlayService;
-import name.huliqing.core.mvc.service.ProtoService;
 import name.huliqing.core.view.IconLabel;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.mvc.network.AttributeNetwork;
@@ -34,7 +32,6 @@ import name.huliqing.core.utils.ConvertUtils;
  */
 public abstract class AbstractTask<T extends TaskData> implements Task<T> {
     private final PlayService playService = Factory.get(PlayService.class);
-    private final ProtoService protoService = Factory.get(ProtoService.class);
     private final ProtoNetwork protoNetwork = Factory.get(ProtoNetwork.class);
     private final AttributeNetwork attributeNetwork = Factory.get(AttributeNetwork.class);
 

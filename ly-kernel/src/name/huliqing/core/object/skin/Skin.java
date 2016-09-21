@@ -16,6 +16,13 @@ import name.huliqing.core.object.actor.Actor;
 public interface Skin extends DataProcessor<SkinData>{
     
     /**
+     * 判断指定角色是否可以使用当前这件装备.
+     * @param actor
+     * @return 
+     */
+    boolean canUse(Actor actor);
+    
+    /**
      * 把skin添加到角色身上
      * @param actor 
      */
@@ -48,10 +55,12 @@ public interface Skin extends DataProcessor<SkinData>{
     Spatial getSpatial();
     
     /**
-     * 获取武器类型,Skin必须是武器时才有意义
+     * 判断当前装备是否正在执行"attach","detach", 穿装备或脱装备可以是一个"过程", 
+     * 也就是可以是一个有update()过程的逻辑，当装备在这个过程时这个方法应该始终返回true, 
+     * 比如：一个穿装备、脱装备的动画过程; 一个取武器、收武器的动画过程。
      * @return 
      */
-    int getWeaponType();
+    boolean isSkinning();
     
     /**
      * 判断皮肤是否是一件武器
@@ -70,11 +79,5 @@ public interface Skin extends DataProcessor<SkinData>{
      * @return 
      */
     boolean isAttached();
-    
-    /**
-     * 判断指定角色是否可以使用当前这件装备.
-     * @param actor
-     * @return 
-     */
-    boolean canUse(Actor actor);
+
 }

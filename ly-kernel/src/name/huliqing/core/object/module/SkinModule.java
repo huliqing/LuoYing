@@ -26,7 +26,6 @@ import name.huliqing.core.object.skin.WeaponStateUtils;
  */
 public class SkinModule extends AbstractModule {
     private final AttributeService attributeService = Factory.get(AttributeService.class);
-    private SkillModule skillModule;
     
     private Actor actor;
     // 监听角色装备、武器等的穿脱
@@ -50,8 +49,10 @@ public class SkinModule extends AbstractModule {
     
     // 武器槽位属性
     private CollectionAttribute<String> weaponSlotAttribute;
-    
-    private long attachLimitBySkillTag;
+   
+    // for test
+//    // 正在skinning的装备或武器。
+//    private final SafeArrayList<Skin> inSkinningList = new SafeArrayList<Skin>(Skin.class);
 
     @Override
     public void setData(ModuleData data) {
@@ -171,7 +172,6 @@ public class SkinModule extends AbstractModule {
      * @param skin
      */
     public void attachSkin(Skin skin) {
-        
         // 脱下排斥的装备
         detachConflicts(skin);
 

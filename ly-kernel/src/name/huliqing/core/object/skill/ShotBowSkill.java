@@ -23,6 +23,7 @@ import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.SkinService;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.skin.Skin;
+import name.huliqing.core.object.skin.WeaponSkin;
 
 /**
  * 弓箭的射击技能
@@ -85,7 +86,10 @@ public class ShotBowSkill extends ShotSkill {
         List<Skin> usingSkins = skinService.getUsingSkins(actor);
         if (usingSkins != null && !usingSkins.isEmpty()) {
             for (Skin skin : usingSkins) {
-                if (skin.isWeapon() && skin.getWeaponType() == SkinConstants.WEAPON_BOW) {
+                if (!(skin instanceof WeaponSkin)) {
+                    continue;
+                }
+                if (((WeaponSkin)skin).getWeaponType() == SkinConstants.WEAPON_BOW) {
                     weapon = skin.getSpatial();
                     break;
                 }

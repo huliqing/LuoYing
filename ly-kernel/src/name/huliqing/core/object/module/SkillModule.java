@@ -41,7 +41,7 @@ public class SkillModule extends AbstractModule {
     // 当前正在运行的所有技能的类型，其中每一个二进制位表示一个技能标记。
     private long playingSkillTags;
     // 当前正在执行中的技能中优先级最高的值。
-    private int playingPriorMax;
+    private int playingPriorMax = Integer.MIN_VALUE;
     
     // 最近一个执行的技能,这个技能可能正在执行，也可能已经停止。
     private Skill lastSkill;
@@ -121,17 +121,18 @@ public class SkillModule extends AbstractModule {
             // 3.修复、重启部分被覆盖的动画通道的动画，比如在走动时取武器后双手应该重新回到走动时的协调运动。
             if (playingSkills.size() != oldSize) {
                 playingSkillTags = 0;
-                for (Skill skill : playingSkills.getArray()) {
-                    playingSkillTags |= skill.getData().getTags();
-                    if (skill.getData().getPrior() > playingPriorMax) {
-                        playingPriorMax = skill.getData().getPrior();
+                playingPriorMax = Integer.MIN_VALUE;
+                for (Skill playSkill : playingSkills.getArray()) {
+                    playingSkillTags |= playSkill.getData().getTags();
+                    if (playSkill.getData().getPrior() > playingPriorMax) {
+                        playingPriorMax = playSkill.getData().getPrior();
                     }
-                    skill.restoreAnimation();
+                    playSkill.restoreAnimation();
                 }
             }
             
 //            if (Config.debug) {
-//                Log.get(getClass()).log(Level.INFO, "skillProcessor runningSkills.size={0}", runningSkills.size());
+//                Log.get(getClass()).log(Level.INFO, "skillProcessor playingSkills.size={0}", playingSkills.size());
 //            }
         }
     }
@@ -151,6 +152,122 @@ public class SkillModule extends AbstractModule {
             actor.getSpatial().removeControl(updateControl);
         }
         super.cleanup();
+    }
+    
+    /**
+     * 检查技能在当前状态下是否可以执行，如果返回值为 {@link SkillConstants#STATE_OK} 则表示可以执行，
+     * 否则不能执行。
+     * @param skill
+     * @return 
+     */
+    public int checkStateCode(Skill skill) {
+        SkillData skillData = skill.getData();
+        
+        // 如果技能被锁定中，则不能执行
+        if (isLockedSkillTags(skillData.getTags())) {
+            return SkillConstants.STATE_SKILL_LOCKED;
+        }
+        
+        // 如果新技能自身判断不能执行，例如加血技能或许就不可能给敌军执行。
+        // 有很多特殊技能是不能对一些特定目标执行的，所以这里需要包含技能自身的判断
+        int stateCode = skill.canPlay(actor);
+        if (stateCode != SkillConstants.STATE_OK) {
+            return stateCode;
+        }
+        
+        // 通过钩子来判断是否可以执行, 如果有一个钩子返回不允许执行则后面不再需要判断。
+        if (skillPlayListeners != null && !skillPlayListeners.isEmpty()) {
+            for (SkillPlayListener sl : skillPlayListeners) {
+                if (!sl.onSkillHookCheck(actor, skill)) {
+                    return SkillConstants.STATE_HOOK;
+                }
+            }
+        }
+        
+        // 判断正在执行中的所有技能，如果“正在执行”中的所有技能都可以被覆盖或打断后执行，
+        // 则不需要再判断技能优先级如果其中有任何一个即不能被覆盖，并且也不能被打断，
+        // 则需要判断技能优先级
+        boolean allCanOverlapOrInterrupt = true;
+        long overlaps = skillData.getOverlapTags();
+        long interrupts = skillData.getInterruptTags();
+        for (Skill runSkill : playingSkills.getArray()) {
+            if ((overlaps & runSkill.getData().getTags()) == 0 && (interrupts & runSkill.getData().getTags()) == 0) {
+                allCanOverlapOrInterrupt = false;
+                break;
+            }
+        }
+        if (allCanOverlapOrInterrupt || skillData.getPrior() > playingPriorMax) {
+            return SkillConstants.STATE_OK;
+        }
+        
+        return SkillConstants.STATE_CAN_NOT_INTERRUPT;
+    }
+    
+    /**
+     * 执行技能，如果成功执行则返回true,否则返回false, <br>
+     * 在执行技能之前可以通过 {@link #checkStateCode(Skill) }来查询当前状态下技能是否可以执行。<br>
+     * 如果需要强制执行技能，则可以将参数force设置为true,这可以保证技能始终执行。
+     * @param newSkill
+     * @param force
+     * @return 
+     */
+    public boolean playSkill(Skill newSkill, boolean force) {
+        if (force || checkStateCode(newSkill) == SkillConstants.STATE_OK) {
+            playSkillInner(newSkill);
+            return true;
+        }
+        return false;
+    }
+    
+    /**
+     * 强制执行一个技能,这个方法是强制执行的，如果需要判断技能是否可以合理执行,可以调用 
+     * {@link #checkStateCode(Skill, boolean) }来进行判断。<br>
+     * 执行逻辑是这样的：<br>
+     * 1.如果当前没有任何正在执行的技能则直接执行新技能，否则继续步骤2.<br>
+     * 2.把当前正在执行的技能中所有可以重叠执行的进行保留，其余的强制打断。<br>
+     * 3.执行新技能。<br>
+     * @param newSkill 
+     */
+    private void playSkillInner(Skill newSkill) {
+        // 1.如果当前没有任何正在执行的技能则直接执行技能
+        if (playingSkills.isEmpty()) {
+            startNewSkill(newSkill);
+            return;
+        }
+        
+        // 这个方法是强制执行的
+        long overlaps = newSkill.getData().getOverlapTags();
+        for (Skill playSkill : playingSkills.getArray()) {
+            if ((overlaps & playSkill.getData().getTags()) != 0) {
+                continue;
+            }
+            // 不能被覆盖的都要强制打断
+            playSkill.cleanup();
+        }
+        startNewSkill(newSkill);
+    }
+    
+    private void startNewSkill(Skill newSkill) {
+        // 执行技能
+        lastSkill = newSkill;
+        lastSkill.setActor(actor);
+        lastSkill.initialize();
+        // 记录当前正在运行的所有技能类型
+        if (!playingSkills.contains(lastSkill)) {
+            playingSkills.add(lastSkill);
+            playingSkillTags |= lastSkill.getData().getTags();
+            // 更新当前playing中所有技能的最高优先级的值。
+            if (newSkill.getData().getPrior() > playingPriorMax) {
+                playingPriorMax = newSkill.getData().getPrior();
+            }
+        }
+        
+        // 执行侦听器
+        if (skillPlayListeners != null && !skillPlayListeners.isEmpty()) {
+            for (int i = 0; i < skillPlayListeners.size(); i++) {
+                skillPlayListeners.get(i).onSkillStart(actor, lastSkill);
+            }
+        }
     }
     
     /**
@@ -337,126 +454,6 @@ public class SkillModule extends AbstractModule {
     }
     
     /**
-     * 检查技能在当前状态下是否可以执行，如果返回值为 {@link SkillConstants#STATE_OK} 则表示可以执行，
-     * 否则不能执行。
-     * @param skill
-     * @return 
-     */
-    public int checkStateCode(Skill skill) {
-        SkillData skillData = skill.getData();
-        
-        // 如果技能被锁定中，则不能执行
-        if (isLockedSkillTags(skill.getData().getTags())) {
-            return SkillConstants.STATE_SKILL_LOCKED;
-        }
-        
-        // 如果新技能自身判断不能执行，例如加血技能或许就不可能给敌军执行。
-        // 有很多特殊技能是不能对一些特定目标执行的，所以这里需要包含技能自身的判断
-        int stateCode = skill.canPlay(actor);
-        if (stateCode != SkillConstants.STATE_OK) {
-            return stateCode;
-        }
-        
-        // 通过钩子来判断是否可以执行, 如果有一个钩子返回不允许执行则后面不再需要判断。
-        if (skillPlayListeners != null && !skillPlayListeners.isEmpty()) {
-            for (SkillPlayListener sl : skillPlayListeners) {
-                if (!sl.onSkillHookCheck(actor, skill)) {
-                    return SkillConstants.STATE_HOOK;
-                }
-            }
-        }
-        
-        // 如果当前正在执行的所有技能都可以被新技能覆盖，则直接返回OK.
-        // 注意：overlaps判断要放在interrupts判断之前，因为如果可以覆盖正在执行
-        // 的技能就不需要中断它们
-        if ((skillData.getOverlapTags() & playingSkillTags) == playingSkillTags) {
-            return SkillConstants.STATE_OK;
-        }
-        
-        // 如果当前正在执行的所有技能都可以被新技能打断，则直接返回OK.
-        if ((skillData.getInterruptTags() & playingSkillTags) == playingSkillTags) {
-            return SkillConstants.STATE_OK;
-        }
-        
-        if (skillData.getPrior() > playingPriorMax) {
-            return SkillConstants.STATE_OK;
-        }
-        
-        return SkillConstants.STATE_CAN_NOT_INTERRUPT;
-    }
-    
-    /**
-     * 执行技能，如果成功执行则返回true,否则返回false, <br>
-     * 在执行技能之前可以通过 {@link #checkStateCode(Skill) }来查询当前状态下技能是否可以执行。<br>
-     * 如果需要强制执行技能，则可以将参数force设置为true,这可以保证技能始终执行。
-     * @param newSkill
-     * @param force
-     * @return 
-     */
-    public boolean playSkill(Skill newSkill, boolean force) {
-        if (force || checkStateCode(newSkill) == SkillConstants.STATE_OK) {
-            playSkillInner(newSkill);
-            return true;
-        }
-        return false;
-    }
-    
-    /**
-     * 强制执行一个技能,这个方法是强制执行的，如果需要判断技能是否可以合理执行,可以调用 
-     * {@link #checkStateCode(Skill, boolean) }来进行判断。<br>
-     * 执行逻辑是这样的：<br>
-     * 1.如果当前没有任何正在执行的技能则直接执行新技能并返回,不再执行后续判断，否则继续。<br>
-     * 2.如果当前有正在执行的技能，并且新技能可以与这些技能重叠执行，则执行新技能并返回，否则继续。<br>
-     * 3.打断当前正在执行的所有可以打断的技能,然后执行新技能并返回。<br>
-     * @param newSkill 
-     */
-    private void playSkillInner(Skill newSkill) {
-        // 1.如果当前没有任何正在执行的技能则直接执行技能
-        if (playingSkills.isEmpty()) {
-            startNewSkill(newSkill);
-            return;
-        }
-        
-        // 2.如果新技能可以与正在执行的所有技能进行重叠则直接执行, 不需要再通过后面的判断。
-        long overlaps = newSkill.getData().getOverlapTags();
-        if (overlaps > 0 && (overlaps & playingSkillTags) == playingSkillTags) {
-            startNewSkill(newSkill);
-            return;
-        }
-        
-        // 3.把可以打断的技能都打断,然后执行新技能。
-        long interrupts = newSkill.getData().getInterruptTags();
-        if (interrupts > 0) {
-            for (Skill skill : playingSkills.getArray()) {
-                if ((interrupts & skill.getData().getTags()) == skill.getData().getTags()) {
-                    skill.cleanup();
-                }
-            }            
-        }
-
-        startNewSkill(newSkill);
-    }
-    
-    private void startNewSkill(Skill newSkill) {
-        // 执行技能
-        lastSkill = newSkill;
-        lastSkill.setActor(actor);
-        lastSkill.initialize();
-        // 记录当前正在运行的所有技能类型
-        if (!playingSkills.contains(lastSkill)) {
-            playingSkills.add(lastSkill);
-            playingSkillTags |= lastSkill.getData().getTags();
-        }
-        
-        // 执行侦听器
-        if (skillPlayListeners != null && !skillPlayListeners.isEmpty()) {
-            for (int i = 0; i < skillPlayListeners.size(); i++) {
-                skillPlayListeners.get(i).onSkillStart(actor, lastSkill);
-            }
-        }
-    }
-    
-    /**
      * 获取最近一个执行的技能，如果没有执行过任何技能则返回null.<br>
      * 注：返回的技能有可能正在执行，也有可能已经结束。
      * @return 
@@ -482,15 +479,6 @@ public class SkillModule extends AbstractModule {
      */
     public long getPlayingSkillTags() {
         return playingSkillTags;
-    }
-    
-    /**
-     * 判断skillTags标记的技能是否正在执行。如果skillTags标记的技能中有<b>任何一个</b>正在执行则该方法返回true.
-     * @param skillTags
-     * @return 
-     */
-    public boolean isPlayingSkill(long skillTags) {
-        return (playingSkillTags & skillTags) != 0;
     }
 
     /**
@@ -528,7 +516,16 @@ public class SkillModule extends AbstractModule {
         lockedSkillTags &= ~skillTags;
         updateData();
     }
-
+        
+    /**
+     * 判断skillTags标记的技能是否正在执行。如果skillTags标记的技能中有<b>任何一个</b>正在执行则该方法返回true.
+     * @param skillTags
+     * @return 
+     */
+    public boolean isPlayingSkill(long skillTags) {
+        return (playingSkillTags & skillTags) != 0;
+    }
+    
     /**
      * 判断角色是否处于等待状态
      * @return 

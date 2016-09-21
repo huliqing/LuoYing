@@ -45,7 +45,7 @@
     <skillAttack id="skillSpiderAttack" extends="skillFightSimpleAttackBase" useTime="1" 
                  hitDistance="3" animation="Strike" cooldown="0.5" sounds="soundSpiderAttack1" 
                  hitValue="25" checkPoint="0.5" />
-    <skillShot id="skillSpiderWeb" extends="skillShotBase" icon="Interface/skill/ysh_48.jpg" 
+    <skillShot id="skillSpiderWeb" extends="skillFightSimpleAttackShotBase" icon="Interface/skill/ysh_48.jpg" 
                useTime="0.5" animation="Strike" cooldown="3" hitValue="0"
                sounds="soundSpiderAttack1" hitDistance="10" bullets="bulletDefault" shotTimes="0.5" 
                shotOffsets="0|1|1" hitStates="stateSpiderWeb|0.3" />

@@ -52,14 +52,18 @@ public class Actor extends AbstractControl implements DataProcessor<ActorData> {
         // 载入基本模型并添加当前控制器
         loadModel().addControl(this);
         
-        // 载入并初始化所有控制器
+        // 载入并初始化所有控制器，这里分两步处理，第一步先添加，第二步再初始化，
+        // 因为一些module在初始化的时候可能会引用到另一些module.
         if (data.getModuleDatas() != null) {
-            // 注：这里要把data.getModuleDatas迁移到tempMDS中，因为addModule的时候会重新添加进去，
-            // 要避免重复添加，并且避免循环时modify异常
+            // 添加module
             List<ModuleData> tempMDS= new ArrayList<ModuleData>(data.getModuleDatas());
-            data.getModuleDatas().clear();
             for (ModuleData cd : tempMDS) {
-                addModule((Module)Loader.load(cd));
+                modules.add((Module)Loader.load(cd));
+            }
+            
+            // 初始化module
+            for (Module module : modules) {
+                module.initialize(this);
             }
         }
         
@@ -146,175 +150,4 @@ public class Actor extends AbstractControl implements DataProcessor<ActorData> {
     @Override
     protected void controlRender(RenderManager rm, ViewPort vp) {}
     
-    // ------------------------- 考虑增加的方法,统一物体的添加，移除，获取
-       
-//    public interface ActorObjectListener {
-//        
-//        /**
-//         * 当角色添加了物品时该方法被调用
-//         * @param actor
-//         * @param data 被添加的物体
-//         * @param added 实际添加了的物品的数量
-//         */
-//        void onObjectAdded(Actor actor, ObjectData data, int added);
-//        
-//        /**
-//         * 当从角色身上移除了物品时该方法被调用.
-//         * @param actor
-//         * @param data 被移除了物体数量的data,如果移除后的物体的数量为0，则该物体可能被移除出角色身上。
-//         * @param removed 实际移除的物体的数量
-//         */
-//        void onObjectRemoved(Actor actor, ObjectData data, int removed);
-//        
-//        /**
-//         * 当角色使用物体时该方法被调用,侦听器可以实现这个方法来处理物品的使用逻辑.
-//         * @param actor
-//         * @param data 
-//         */
-//        void onObjectUse(Actor actor, ObjectData data);
-//        
-//    }
-    
-//    protected final List<ActorObjectListener> listeners = new ArrayList<ActorObjectListener>();
-    
-//    /**
-//     * 给角色添加物体.
-//     * @param objectId
-//     * @param amount
-//     */
-//    public void addObject(String objectId, int amount) {
-//        if (amount <= 0) {
-//            return;
-//        }
-//        ObjectData od = data.getObjectData(objectId);
-//        if (od == null) {
-//            od = Loader.load(objectId);
-//            od.setTotal(amount);
-//            data.addObjectData(od);
-//        } else {
-//            od.setTotal(od.getTotal() + amount);
-//        }
-//        if (!listeners.isEmpty()) {
-//            for (int i = 0; i < listeners.size(); i++) {
-//                listeners.get(i).onObjectAdded(this, od, amount);
-//            }
-//        }
-//    }
-//    
-//    /**
-//     * 移除物体，如果角色没有存在指定objectId的物体或者amount小于等于0则什么也不做。
-//     * @param objectId
-//     * @param amount
-//     * @return  
-//     */
-//    public boolean removeObject(String objectId, int amount) {
-//        if (amount <= 0 || data.getObjectDatas() == null)
-//            return false;
-//        
-//        // 不存在指定物品
-//        ObjectData od = data.getObjectData(objectId);
-//        if (od == null) {
-//            return false;
-//        }
-//        
-//        int trueRemoved = amount;
-//        int oldTotal = od.getTotal();
-//        od.setTotal(od.getTotal() - amount);
-//        if (od.getTotal() <= 0) {
-//            data.getObjectDatas().remove(od);
-//            trueRemoved = oldTotal;
-//        }
-//        
-//        // 触发侦听器
-//        if (!listeners.isEmpty()) {
-//            for (int i = 0; i < listeners.size(); i++) {
-//                listeners.get(i).onObjectRemoved(this, od, trueRemoved);
-//            }
-//        }
-//        return true;
-//    }
-//    
-//    /**
-//     * 使用一个物体，由子类或侦听器去实现逻辑.
-//     * @param data 
-//     */
-//    public void useObject(ObjectData data) {
-//        // 触发侦听器
-//        if (!listeners.isEmpty()) {
-//            for (int i = 0; i < listeners.size(); i++) {
-//                listeners.get(i).onObjectUse(this, data);
-//            }
-//        }
-//    }
-//    
-//    public void addListener(ActorObjectListener listener) {
-//        if (!listeners.contains(listener)) {
-//            listeners.add(listener);
-//        }
-//    }
-//    
-//    public boolean removeListener(ActorObjectListener listener) {
-//        return listeners.remove(listener);
-//    }
-    
-    // ---------------------------------------------- 测试1----------------------------------------------------------------------
-    //    /**
-//     * 获得角色包裹内的物体
-//     * @param <T>
-//     * @param id
-//     * @return 
-//     */
-//    public <T extends ObjectData> T getObject(String id) {
-//        if (data.getObjectDatas() == null)
-//            return null;
-//        
-//        for (ObjectData od : data.getObjectDatas()) {
-//            if (od.getId().equals(id)) {
-//                return (T) od;
-//            }
-//        }
-//        return null;
-//    }
-//    
-//    /**
-//     * 获取所有物体
-//     * @param store
-//     * @return 
-//     */
-//    public List<ObjectData> getObjects(List<ObjectData> store) {
-//        if (data.getObjectDatas() == null)
-//            return store;
-//        
-//        if (store == null) {
-//            store = new ArrayList<ObjectData>();
-//        }
-//        store.addAll(data.getObjectDatas());
-//        return store;
-//    }
-//    
-//    /**
-//     * 获取指定类型的物体
-//     * @param <T>
-//     * @param store
-//     * @param objectType
-//     * @return 
-//     */
-//    public <T extends ObjectData> List<T> getObjects(List<T> store, Class<T> objectType) {
-//        if (data.getObjectDatas() == null)
-//            return store;
-//        
-//        if (store == null) {
-//            store = new ArrayList<T>();
-//        }
-//        List<ObjectData> ods = data.getObjectDatas();
-//        int size = ods.size();
-//        ObjectData temp;
-//        for (int i = 0; i < size; i++) {
-//            temp = ods.get(i);
-//            if (objectType.isAssignableFrom(temp.getClass())) {
-//                store.add((T) temp);
-//            }
-//        }
-//        return store;
-//    }
 }

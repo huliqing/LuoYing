@@ -5,25 +5,38 @@
     xmlns='http://fighter.huliqing.name'
     xsi:schemaLocation='http://fighter.huliqing.name meta/module.xsd'>
     
-    <!--==========================================================================-->
     <!--
     角色模块：配置给角色，角色模块通过绑定角色的各种属性来控制角色的行为，当角色初始化的时候会自动初始化所有配置的
     模块，如果模块之间存在依赖，则通过moduleOrder属性来设置载入的优先顺序。
-    
     -->
+
+    <!--==========================================================================-->
+    <!-- 核心模块 -->
     <!--==========================================================================-->
     
+    <!--角色属性管理模块：优先级最高-->
     <moduleAttribute id="moduleAttribute" moduleOrder="0" />
-    <moduleAction id="moduleAction" moduleOrder="10" />
+
+    <!--==========================================================================-->
+    <!-- 基本模块 -->
+    <!--==========================================================================-->
+        
+    <!--动画通道管理模块: 不直接依赖其它模块 -->
     <moduleChannel id="moduleChannel" moduleOrder="10" />
-    <moduleChat id="moduleChat" moduleOrder="10" />
-    <moduleItem id="moduleItem" moduleOrder="10" />
-    <moduleResist id="moduleResist" moduleOrder="10" />
-    <moduleState id="moduleState" moduleOrder="10" />
-    <moduleTask id="moduleTask" moduleOrder="10" />
-    <moduleSkin id="moduleSkin" moduleOrder="10" bindWeaponSlotAttribute="attributeWeaponSlots" />
     
-    <!--基本角色模块-->
+    <!--包裹物品管理模块: 不直接依赖其它模块-->
+    <moduleItem id="moduleItem" moduleOrder="10" />
+    
+    <!--物品掉落管理模块: 不直接依赖其它模块-->
+    <moduleDrop id="moduleDrop" moduleOrder="10" sounds="soundNote" />
+    
+    <!--对话功能管理模块: 不直接依赖其它模块 -->
+    <moduleChat id="moduleChat" moduleOrder="10" />
+    
+    <!--抗性设置管理模块：不直接依赖其它模块-->
+    <moduleResist id="moduleResist" moduleOrder="10" />
+    
+    <!--基本角色管理模块: 依赖moduleAttribute -->
     <moduleActor id="moduleActor" moduleOrder="10" 
                 bindLifeAttribute="attributeHealth" 
                 bindFollowTargetAttribute="attributeFollowTarget" 
@@ -36,10 +49,9 @@
                 bindMovableAttribute="attributeMovable"
                 bindRotatableAttribute="attributeRotatable"
                 bindEssentialAttribute="attributeEssential" 
-                bindLivingAttribute="attributeLiving"
-    />
-    
-    <!--技能模块: 让角色可以执行各种动画-->
+                bindLivingAttribute="attributeLiving" />
+
+    <!--技能管理模块: 不直接依赖其它模块 -->
     <moduleSkill id="moduleSkill" moduleOrder="10" 
                  idleSkillTags="idle"
                  waitSkillTags="wait" 
@@ -47,26 +59,41 @@
                  runSkillTags="run" 
                  hurtSkillTags="hurt" 
                  deadSkillTags="dead" />
+
+    <!--角色行为模块：直接或间接依赖：moduleAttribute, moduleActor, moduleSkill -->
+    <moduleAction id="moduleAction" moduleOrder="20" />
     
-    <!--角色的逻辑功能-->
-    <moduleLogic id="moduleLogic" moduleOrder="10" 
+    <!--角色的逻辑功能：直接或间接依赖：moduleAttribute, moduleActor, moduleSkill, moduleAction -->
+    <moduleLogic id="moduleLogic" moduleOrder="30" 
                  bindAutoLogicAttribute="attributeAutoLogic" 
                  bindAutoDetectAttribute="attributeAutoDetect" />
+
+    <!--==========================================================================-->
+    <!--其它模块-->
+    <!--==========================================================================-->
     
-    <!--等级控制模块-->
-    <moduleLevel id="moduleLevel" moduleOrder="10" 
+    <!--任务管理模块：直接或间接依赖：moduleAttribute, moduleActor -->
+    <moduleTask id="moduleTask" moduleOrder="40" />
+
+    <!--皮肤管理模块(装备、武器)：直接或间接依赖：moduleAttribute, moduleActor, moduleSkill -->
+    <moduleSkin id="moduleSkin" moduleOrder="40" bindWeaponSlotAttribute="attributeWeaponSlots" />    
+    
+    <!--状态管理模块: 直接或间接依赖：moduleAttribute, moduleActor, moduleSkill -->
+    <moduleState id="moduleState" moduleOrder="40" />
+    
+    <!--天赋管理模块：直接或间接依赖：moduleAttribute, moduleActor-->
+    <moduleTalent id="moduleTalent" moduleOrder="40" 
+                  bindLevelAttribute="attributeLevel" 
+                  bindTalentPointsAttribute="attributeTalentPoints" 
+                  talentPointsLevelEl="elLevelTalentPoints" />
+
+    <!--等级控制模块: 直接或间接依赖：moduleAttribute -->
+    <moduleLevel id="moduleLevel" moduleOrder="40" 
                  bindLevelAttribute="attributeLevel" 
                  bindXpAttribute="attributeXp" 
                  bindXpNextAttribute="attributeXpNext" 
                  xpLevelEl="elLevelUp" maxLevel="60" effect="effectLevelUp" />
-
-    <!--天赋模块-->
-    <moduleTalent id="moduleTalent" moduleOrder="10" 
-                  bindLevelAttribute="attributeLevel" 
-                  bindTalentPointsAttribute="attributeTalentPoints" 
-                  talentPointsLevelEl="elLevelTalentPoints" />
-     
-    <!--角色物品掉落模块-->
-    <moduleDrop id="moduleDrop" moduleOrder="10" sounds="soundNote" />
+    
+    
 
 </root>

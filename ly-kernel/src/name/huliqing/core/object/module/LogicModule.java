@@ -55,6 +55,11 @@ public class LogicModule extends AbstractModule {
         };
         this.actor.getSpatial().addControl(updateControl);
         
+        // 绑定“自动AI”属性
+        autoLogicAttribute = attributeService.getAttributeByName(actor, bindAutoLogicAttribute);
+        // 自动侦察敌人
+        autoDetectAttribute = attributeService.getAttributeByName(actor, bindAutoDetectAttribute);
+        
         // 载入逻辑
         List<ActorLogicData> logicDatas = actor.getData().getObjectDatas(ActorLogicData.class, null);
         if (logicDatas != null) {
@@ -62,11 +67,6 @@ public class LogicModule extends AbstractModule {
                 addLogic((ActorLogic) Loader.load(ld));
             }
         }
-        
-        // 绑定“自动AI”属性
-        autoLogicAttribute = attributeService.getAttributeByName(actor, bindAutoLogicAttribute);
-        // 自动侦察敌人
-        autoDetectAttribute = attributeService.getAttributeByName(actor, bindAutoDetectAttribute);
     }
     
     private void logicUpdate(float tpf) {
@@ -101,7 +101,6 @@ public class LogicModule extends AbstractModule {
         actor.getData().addObjectData(logic.getData());
         
         logic.setActor(actor);
-        logic.setLogicModule(this);
         logic.initialize();
     }
 

@@ -28,6 +28,11 @@ public class StateModule extends AbstractModule {
     public void initialize(Actor actor) {
         super.initialize(actor); 
         this.actor = actor;
+        updateControl = new AdapterControl() {
+            @Override
+            public void update(float tpf) {stateUpdate(tpf);}
+        };
+        this.actor.getSpatial().addControl(updateControl);
 
         List<StateData> stateDatas = actor.getData().getObjectDatas(StateData.class, null);
         if (stateDatas != null) {
@@ -36,11 +41,6 @@ public class StateModule extends AbstractModule {
             }
         }
         
-        updateControl = new AdapterControl() {
-            @Override
-            public void update(float tpf) {stateUpdate(tpf);}
-        };
-        this.actor.getSpatial().addControl(updateControl);
     }
     
     private void stateUpdate(float tpf) {

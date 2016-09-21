@@ -8,7 +8,6 @@ import name.huliqing.core.data.TalentData;
 import name.huliqing.core.object.actor.Actor;
 
 /**
- *
  * @author huliqing
  * @param <T>
  */

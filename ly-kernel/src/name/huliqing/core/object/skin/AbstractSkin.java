@@ -34,13 +34,11 @@ import name.huliqing.core.object.attribute.MatchAttribute;
 import name.huliqing.core.object.sound.SoundManager;
 
 /**
- * 
  * @author huliqing
  */
 public abstract class AbstractSkin implements Skin {
     private static final Logger LOG = Logger.getLogger(AbstractSkin.class.getName());
     private final AttributeService attributeService = Factory.get(AttributeService.class);
-    private final SkillService skillService = Factory.get(SkillService.class);
     
     protected SkinData data;
     protected String[] sounds;
@@ -53,8 +51,8 @@ public abstract class AbstractSkin implements Skin {
     private Vector3f localScale;
     
     // ---- inner
+    // 装备的网格节点
     protected Spatial skinNode;
-    protected boolean attached;
     
     @Override
     public void setData(SkinData data) {
@@ -85,6 +83,16 @@ public abstract class AbstractSkin implements Skin {
     public Spatial getSpatial() {
         return skinNode;
     }
+
+    /**
+     * 这个方法默认情况下始终返回false, 只有在装备的穿、脱或者武器的取出、收起是一个动作的执行过程时,
+     *  并且在这个过程中才应该返回true.
+     * @return 
+     */
+    @Override
+    public boolean isSkinning() {
+        return false;
+    }
     
     @Override
     public boolean isBaseSkin() {
@@ -93,7 +101,7 @@ public abstract class AbstractSkin implements Skin {
 
     @Override
     public boolean isAttached() {
-        return attached;
+        return data.isUsed();
     }
 
     @Override
@@ -124,7 +132,6 @@ public abstract class AbstractSkin implements Skin {
     @Override
     public void attach(Actor actor) {
         data.setUsed(true);
-        attached = true;
         
         // 执行装备声音
         playSounds(actor, sounds);
@@ -233,6 +240,7 @@ public abstract class AbstractSkin implements Skin {
         if (localScale != null) {
             skinNode.setLocalScale(localScale);
         }
+        
     }
     
     private void playSounds(Actor actor, String[] sounds) {
@@ -265,7 +273,6 @@ public abstract class AbstractSkin implements Skin {
     public void detach(Actor actor) {
         // 1.----标记Using=false
         data.setUsed(false);
-        attached = false;
         
         // 执行装备声音
         playSounds(actor, sounds);

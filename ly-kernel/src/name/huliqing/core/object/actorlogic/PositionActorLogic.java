@@ -5,10 +5,9 @@
 package name.huliqing.core.object.actorlogic;
 
 import com.jme3.math.Vector3f;
-import name.huliqing.core.Factory;
 import name.huliqing.core.object.action.RunAction;
 import name.huliqing.core.data.ActorLogicData;
-import name.huliqing.core.mvc.service.ActionService;
+import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.action.Action;
 import name.huliqing.core.object.action.FightAction;
 import name.huliqing.core.object.action.FollowAction;
@@ -23,21 +22,22 @@ import name.huliqing.core.object.module.ActionModule;
  * @param <T>
  */
 public class PositionActorLogic<T extends ActorLogicData> extends ActorLogic<T> {
-    private final ActionService actionService = Factory.get(ActionService.class);
     private ActionModule actionModule;
     
-    protected RunAction runAction;
-    
-    // 目标位置
-    private final Vector3f position = new Vector3f();
     // 允许走到的最近距离
     private float nearest = 5;
+    
+    // ---- inner
+    protected RunAction runAction;
     
     @Override
     public void setData(T data) {
         super.setData(data); 
-        runAction = (RunAction) actionService.loadAction(data.getAsString("runAction"));
-        position.set(data.getAsVector3f("position", position));
+        runAction = (RunAction) Loader.load(data.getAsString("runAction"));
+        Vector3f position = data.getAsVector3f("position");
+        if (position != null) {
+            runAction.setPosition(position);
+        }
         nearest = data.getAsFloat("nearest", nearest);
     }
 
@@ -45,14 +45,11 @@ public class PositionActorLogic<T extends ActorLogicData> extends ActorLogic<T> 
     public void initialize() {
         super.initialize();
         actionModule = actor.getModule(ActionModule.class);
+        runAction.setActor(actor);
     }
-
-    public Vector3f getPosition() {
-        return position;
-    }
-
+    
     public void setPosition(Vector3f position) {
-        this.position.set(position);
+        runAction.setPosition(position);
     }
     
     /**
@@ -71,10 +68,8 @@ public class PositionActorLogic<T extends ActorLogicData> extends ActorLogic<T> 
             return;
         }
         
-        runAction.setNearest(nearest);
-        runAction.setPosition(position);
         if (!runAction.isEndPosition()) {
-            actionService.playAction(actor, runAction);
+            actionModule.startAction(runAction);
         }
     }
     

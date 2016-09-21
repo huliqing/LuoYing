@@ -43,12 +43,12 @@ public class ActionServiceImpl implements ActionService {
         if (action != null) {
             action.setActor(actor);
         }
-        getActionControl(actor).startAction(action);
+        getActionModule(actor).startAction(action);
     }
 
     @Override
     public void playRun(Actor actor, Vector3f pos) {
-        ActionModule module = getActionControl(actor);
+        ActionModule module = getActionModule(actor);
         RunAction ra = module.getDefRunAction();
         // 如果角色没有指定默认“跑路”行为，则为角色创建一个。
         if (ra == null) {
@@ -68,7 +68,7 @@ public class ActionServiceImpl implements ActionService {
      */
     @Override
     public void playFight(Actor actor, Actor target, String skillId) {
-        ActionModule module = getActionControl(actor);
+        ActionModule module = getActionModule(actor);
         FightAction fa = module.getDefFightAction();
         // 如果角色没有指定特定的战斗行为，则为角色创建一个。
         if (fa == null) {
@@ -90,29 +90,29 @@ public class ActionServiceImpl implements ActionService {
 
     @Override
     public boolean isPlayingFight(Actor actor) {
-        ActionModule control = getActionControl(actor);
+        ActionModule control = getActionModule(actor);
         Action current = control.getAction();
         return current instanceof FightAction;
     }
 
     @Override
     public boolean isPlayingRun(Actor actor) {
-        Action current = getActionControl(actor).getAction();
+        Action current = getActionModule(actor).getAction();
         return current instanceof RunAction;
     }
 
     @Override
     public boolean isPlayingFollow(Actor actor) {
-        Action current = getActionControl(actor).getAction();
+        Action current = getActionModule(actor).getAction();
         return current instanceof FollowAction;
     }
 
     @Override
     public Action getPlayingAction(Actor actor) {
-        return getActionControl(actor).getAction();
+        return getActionModule(actor).getAction();
     }
     
-    private ActionModule getActionControl(Actor actor) {
+    private ActionModule getActionModule(Actor actor) {
         return actor.getModule(ActionModule.class);
     }
 }

@@ -5,12 +5,10 @@
 package name.huliqing.core.object.actorlogic;
 
 import com.jme3.math.FastMath;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Logger;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.ActorLogicData;
 import name.huliqing.core.mvc.network.ActorNetwork;
@@ -22,10 +20,12 @@ import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.module.ActorListener;
 import name.huliqing.core.object.module.SkillListener;
+import name.huliqing.core.object.module.SkillModule;
 import name.huliqing.core.object.module.SkillPlayListener;
 import name.huliqing.core.object.skill.Skill;
 import name.huliqing.core.object.skill.AttackSkill;
 import name.huliqing.core.object.skill.ShotSkill;
+import name.huliqing.core.object.skill.SkillTagFactory;
 
 /**
  * 防守逻辑
@@ -41,6 +41,8 @@ public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> im
     private final SkillService skillService = Factory.get(SkillService.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
+    private SkillModule skillModule;
+    
     // 使用哪一个属性作为防守概率及躲闪概率
     private String defendRateAttribute;
     private String duckRateAttribute;
@@ -49,6 +51,12 @@ public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> im
     
     // 被当前侦听(skillListener)的其它角色
     private Set<Actor> listenersActors;
+    // 指定要监听的目标角色所发出的技能,当目标角色发出这些技能时，当前角色会偿试进行防守或躲闪
+    private long listenSkillTags;
+    // 当前角色可以用来防守的技能类型
+    private long defendSkillTags;
+    // 当前角色可以用来躲闪的技能类型。
+    private long duckSkillTags;
     
     // ---- 节能
     // 判断是否有可用的技能进行防守
@@ -66,6 +74,9 @@ public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> im
         defendRateAttribute = data.getAsString("defendRateAttribute");
         duckRateAttribute = data.getAsString("duckRateAttribute");
         listenAttributes = Arrays.asList(data.getAsArray("listenAttributes"));
+        listenSkillTags = SkillTagFactory.convert(data.getAsArray("listenSkillTags"));
+        defendSkillTags = SkillTagFactory.convert(data.getAsArray("defendSkillTags"));
+        duckSkillTags = SkillTagFactory.convert(data.getAsArray("duckSkillTags"));
     }
     
     @Override
@@ -74,7 +85,7 @@ public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> im
         actorService.addActorListener(actor, this);
         skillService.addSkillListener(actor, this);
     }
-
+    
     @Override
     public void cleanup() {
         // 清理当前角色的侦听器
@@ -179,8 +190,8 @@ public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> im
         if (skill instanceof ShotSkill)
             return;
         
-        // 只有attack和trick才需要防守
-        if (skill.getSkillType() != SkillType.attack && skill.getSkillType() != SkillType.trick)
+        // 不是所侦听的技能(只有listenSkillTags所指定的技能类型才需要防守或躲闪 )
+        if ((listenSkillTags & skill.getData().getTags()) == 0) 
             return;
         
         // 2.正常防守,只有普通攻击技能才允许防守
@@ -197,7 +208,7 @@ public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> im
         }
         
         // 3.闪避防守
-        if (skillService.isDucking(actor)) {
+        if (getSkillModule().isPlayingSkill(duckSkillTags)) {
             return;
         }
         doDuck();
@@ -208,12 +219,9 @@ public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> im
         // ignore
     }
     
-    
     private boolean doDefend() {
         if (defendRateAttribute != null && defendSkills.size() > 0) {
-            
             float defendRate = attributeService.getNumberAttributeValue(actor, defendRateAttribute, 0);
-            
             if(defendRate >= FastMath.nextRandomFloat()) {
                 Skill defendSkill = defendSkills.get(FastMath.nextRandomInt(0, defendSkills.size() - 1));
                 skillNetwork.playSkill(actor, defendSkill.getData().getId(), false);
@@ -225,12 +233,10 @@ public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> im
     
     private boolean doDuck() {
         if (duckRateAttribute != null && duckSkills.size() > 0) {
-            
             float duckRate = attributeService.getNumberAttributeValue(actor, defendRateAttribute, 0);
-            
             if (duckRate >= FastMath.nextRandomFloat()) {
                 Skill duckSkill = duckSkills.get(FastMath.nextRandomInt(0, duckSkills.size() - 1));
-                skillNetwork.playSkill(actor, duckSkill.getData().getId(), false);
+                skillNetwork.playSkill(actor, duckSkill, false);
                 return true;
             }
         }
@@ -239,28 +245,20 @@ public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> im
 
     @Override
     protected void doLogic(float tpf) {
-        // 技能无更新则不处理
+        // 技能重新缓存技能
         if (needRecacheSkill) {
-            // 判断是否有可用技能
-            List<Skill> skills = skillService.getSkills(actor);
-            if (skills != null) {
-                defendSkills = new ArrayList<Skill>();
-                duckSkills = new ArrayList<Skill>();
-                // 如果存在defend或duck技能则认为可用
-                for (Skill skill : skills) {
-                    if (skill.getSkillType() == SkillType.defend) {
-                        defendSkills.add(skill);
-                    }
-                    if (skill.getSkillType() == SkillType.duck) {
-                        duckSkills.add(skill);
-                    }
-                }
-                hasUsableSkill = defendSkills.size() > 0 || duckSkills.size() > 0;
-            }
+            defendSkills = getSkillModule().getSkillByTags(defendSkillTags, defendSkills);
+            duckSkills = getSkillModule().getSkillByTags(duckSkillTags, duckSkills);
+            hasUsableSkill = (defendSkills != null && defendSkills.size() > 0) || (duckSkills != null && duckSkills.size() > 0);
             needRecacheSkill = false;
         }
     }
 
-
+    private SkillModule getSkillModule() {
+        if (skillModule == null) {
+            skillModule = actor.getModule(SkillModule.class);
+        }
+        return skillModule;
+    }
 
 }
