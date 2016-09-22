@@ -263,7 +263,12 @@ public abstract class HitSkill extends AbstractSkill {
             return false;
         }
         
-        if (actorService.distanceSquared(actor, target) <= hitDistanceSquared
+//        if (actorService.distanceSquared(actor, target) <= hitDistanceSquared
+//                || actor.getSpatial().getWorldBound().intersects(target.getSpatial().getWorldBound())) {
+//            return true;
+//        }
+
+        if (actor.getSpatial().getWorldTranslation().distanceSquared(target.getSpatial().getWorldTranslation()) <= hitDistanceSquared
                 || actor.getSpatial().getWorldBound().intersects(target.getSpatial().getWorldBound())) {
             return true;
         }

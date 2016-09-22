@@ -260,7 +260,9 @@ public class StoryTreasureTask2 extends GameTaskBase {
                 game.addLogic(companionLoader);
                 
                 playNetwork.removeObject(timerView);
-                timerView = null;
+                
+                // remove20160922
+//                timerView = null;
             }
             
             // 任务失败检测

@@ -55,12 +55,20 @@ public interface Skin extends DataProcessor<SkinData>{
     Spatial getSpatial();
     
     /**
-     * 判断当前装备是否正在执行"attach","detach", 穿装备或脱装备可以是一个"过程", 
+     * 判断当前装备是否正在执行装配过程, 穿装备或脱装备可以是一个"过程", 
      * 也就是可以是一个有update()过程的逻辑，当装备在这个过程时这个方法应该始终返回true, 
      * 比如：一个穿装备、脱装备的动画过程; 一个取武器、收武器的动画过程。
      * @return 
      */
     boolean isSkinning();
+    
+    /**
+     * 强制或提前结束skinning过程，对于一些比较特殊的装备，
+     * 如果穿、脱、取、收...等装配过程是一个<b>持续动画</b>过程，<br>
+     * 那么当这个过程在进行时，如果调用了{@link #endSkinning() }这个方法，则应该立即停止或提前结束这个过程。
+     * 装备是否正处于装配过程可以调用{@link #isSkinning() }来判断。
+     */
+    void endSkinning();
     
     /**
      * 判断皮肤是否是一件武器

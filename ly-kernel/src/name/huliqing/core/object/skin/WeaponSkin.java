@@ -7,7 +7,6 @@ package name.huliqing.core.object.skin;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.control.AbstractControl;
-import com.jme3.scene.control.Control;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.Factory;
@@ -20,11 +19,14 @@ import name.huliqing.core.object.module.SkinModule;
 import name.huliqing.core.object.skill.SkinSkill;
 
 /**
+ * 武器装备处理。武器有一个比较特殊的地方，即武器除了"attach","detach"之外还有“取出(takeOn)” 和“收起(takeOff)”
+ * 取出和收起是包含于attach状态的，只有武器处于attach时才可以进行takeOn和takeOff
  * @author huliqing
  */
 public class WeaponSkin extends AbstractSkin {
     private final SkillService skillService = Factory.get(SkillService.class);
 
+    // 这个Control是用来处理武器的“取出”和“收起”这个装配过程。
     private final HangControl hangControl = new HangControl();
     
     @Override
@@ -42,7 +44,14 @@ public class WeaponSkin extends AbstractSkin {
 
     @Override
     public boolean isSkinning() {
+        // 武器的“取出”和“收起”是一个装配过程，所以这里当hangControl在处理过程中这个方法应该始终返回true.
         return hangControl.initialized;
+    }
+
+    @Override
+    public void endSkinning() {
+        // 调用hangControl来提前结束,由hangControl去自动判断。
+        hangControl.cleanup();
     }
     
     @Override
@@ -103,14 +112,9 @@ public class WeaponSkin extends AbstractSkin {
             return;
         }
         
-        // 动画逻辑处理
-        SkinSkill skill = (SkinSkill) Loader.loadSkill(hangSkill);
-        skill.setActor(actor);
-        skillService.playSkill(actor, skill, false);
-
         // 标记装备正在”执行“,在武器实际取出之后才设置为false
         // hangTime：把武器节点添加到角色身上的时间点。
-        hangControl.initialize(actor, skill.getTrueUseTime() * skill.getHangTimePoint(), true);
+        hangControl.initialize(actor, hangSkill, true);
         actor.getSpatial().addControl(hangControl);
         
         // 武器取出后取消槽位占用
@@ -147,13 +151,7 @@ public class WeaponSkin extends AbstractSkin {
         
         // 使用一个动画技能来"取下"武器
         if (hangSkill != null) {
-            // 这是一个动画执行过程，在执行前标记为true,在执行后才设置为false.
-            SkinSkill skill = (SkinSkill) Loader.loadSkill(hangSkill);
-            skill.setActor(actor);
-            skillService.playSkill(actor, skill, false);
-            
-            // hangControl作为control用于判断时间点，根据时间点进行”取出“或”收起“装备
-            hangControl.initialize(actor, skill.getTrueUseTime() * skill.getHangTimePoint(), false);
+            hangControl.initialize(actor, hangSkill,  false);
             actor.getSpatial().addControl(hangControl);
         } else {
             attach(actor, slot.getBindBone(), skinNode, slot.getLocalTranslation(), slot.getLocalRotation(), slot.getLocalScale());
@@ -221,18 +219,28 @@ public class WeaponSkin extends AbstractSkin {
         private Actor actor;
         private float hangTime;
         private boolean takeOn;
+        
+        SkinSkill skinSkill;
+        
         private float timeUsed;
         private boolean initialized;
         
-        private void initialize(Actor actor, float hangTime, boolean takeOn) {
+        private void initialize(Actor actor, String hangSkill, boolean takeOn) {
             if (initialized) {
                 // 防止bug
                 throw new IllegalStateException("HangControl is already initialized!");
             }
+            // 这是一个动画执行过程，在执行前标记为true,在执行后才设置为false.
+            skinSkill = (SkinSkill) Loader.loadSkill(hangSkill);
+            skinSkill.setActor(actor);
+            skillService.playSkill(actor, skinSkill, false);
+            
             this.actor = actor;
-            this.hangTime = hangTime;
+            this.hangTime = skinSkill.getTrueUseTime() * skinSkill.getHangTimePoint();
             this.takeOn = takeOn;
+            
             initialized = true;
+            timeUsed = 0;
         }
         
         @Override
@@ -254,6 +262,10 @@ public class WeaponSkin extends AbstractSkin {
                     attachWeaponOff(actor);
                 }
                 spatial.removeControl(this);
+                if (!skinSkill.isEnd()) {
+                    skinSkill.cleanup();
+                }
+                skinSkill = null;
             }
             initialized = false;
         }

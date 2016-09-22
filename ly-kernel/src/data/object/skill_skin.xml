@@ -23,7 +23,7 @@
     <!--切换武器用的技能-->
     <!-- =================================================================== -->
     
-    <skillSkin id="skillSkinHangWeaponBase" useTime="0.75" channelLocked="1" hangTimePoint="0.5" />
+    <skillSkin id="skillSkinHangWeaponBase" extends="skillSkinBase" useTime="0.75" channelLocked="1" hangTimePoint="0.5" />
     <skillSkin id="skillSkin_LH_LS" extends="skillSkinHangWeaponBase" animation="hang_LH_LS" channels="channelLeftHand" sounds="soundDrawSword|0.5" />
     <skillSkin id="skillSkin_LH_LW" extends="skillSkinHangWeaponBase" animation="hang_LH_LW" channels="channelLeftHand" sounds="soundDrawSword|0.5" />
     <skillSkin id="skillSkin_LH_RS" extends="skillSkinHangWeaponBase" animation="hang_LH_RS" channels="channelLeftHand" sounds="soundDrawSword|0.5" />

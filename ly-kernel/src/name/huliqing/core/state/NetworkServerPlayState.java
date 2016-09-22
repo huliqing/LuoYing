@@ -13,10 +13,7 @@ import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.network.HostedConnection;
 import com.jme3.network.Message;
-import name.huliqing.core.state.NetworkPlayState;
 import name.huliqing.core.network.DefaultServerListener;
-import name.huliqing.core.state.StoryServerPlayState;
-import name.huliqing.core.state.GameState;
 import name.huliqing.core.data.ConnData;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.GameData;
@@ -24,15 +21,8 @@ import name.huliqing.core.mess.MessPlayActorSelect;
 import name.huliqing.core.mess.MessPlayActorSelectResult;
 import name.huliqing.core.mess.MessPlayClientExit;
 import name.huliqing.core.mess.MessSCClientList;
-import name.huliqing.core.mvc.network.ActorNetwork;
-import name.huliqing.core.mvc.network.StateNetwork;
 import name.huliqing.core.mvc.network.UserCommandNetwork;
 import name.huliqing.core.mvc.service.ActorService;
-import name.huliqing.core.mvc.service.ConfigService;
-import name.huliqing.core.mvc.service.LogicService;
-import name.huliqing.core.mvc.service.PlayService;
-import name.huliqing.core.mvc.service.SkillService;
-import name.huliqing.core.mvc.service.StateService;
 import name.huliqing.core.network.GameServer;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.game.Game;
@@ -41,16 +31,9 @@ import name.huliqing.core.object.game.Game;
  * 联网模式的服务端
  * @author huliqing
  */
-public class NetworkServerPlayState extends NetworkPlayState {
+public abstract class NetworkServerPlayState extends NetworkPlayState {
     private final UserCommandNetwork userCommandNetwork = Factory.get(UserCommandNetwork.class);
     private final ActorService actorService = Factory.get(ActorService.class);
-    private final PlayService playService = Factory.get(PlayService.class);
-    private final ConfigService configService = Factory.get(ConfigService.class);
-    private final StateService stateService = Factory.get(StateService.class);
-    private final LogicService logicService = Factory.get(LogicService.class);
-    private final SkillService skillService = Factory.get(SkillService.class);
-    private final StateNetwork stateNetwork = Factory.get(StateNetwork.class);
-    private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
 
     protected GameServer gameServer;
     

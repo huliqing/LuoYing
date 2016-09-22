@@ -151,27 +151,14 @@ public class SkinModule extends AbstractModule {
         return true;
     }
     
-//    /**
-//     * 判断角色当前状态是否可以穿指定的装备
-//     * @param skin
-//     * @return 
-//     */
-//    public boolean canAttach(Skin skin) {
-//        // 角色在战斗过程中不能换装
-//        if (skillService.isAttacking(actor)) {
-////            LOG.log(Level.INFO, "攻击过程中不能使用装备 actorId={0}, skinId={1}"
-////                    , new Object[] {actor.getData().getId(), data.getId()});
-//            return false;
-//        }
-//        
-//        return skin.canUse(actor);
-//    }
-    
     /**
      * 给角色换上装备
      * @param skin
      */
     public void attachSkin(Skin skin) {
+        // 提前结束其它正在装备过程中的装备
+        doEndAllSkinning();
+        
         // 脱下排斥的装备
         detachConflicts(skin);
 
@@ -187,6 +174,9 @@ public class SkinModule extends AbstractModule {
      * @param skin 
      */
     public void detachSkin(Skin skin) {
+        // 不需要doEndAllSkinning
+//        doEndAllSkinning();
+        
         // 脱下装备
         detachInner(skin);
         
@@ -281,6 +271,12 @@ public class SkinModule extends AbstractModule {
      * 把武器备上。
      */
     public void takeOnWeapon() {
+        if (weaponTakeOn) {
+            return;
+        }
+        // 提前结束其它正在装备过程中的装备
+        doEndAllSkinning();
+        
         weaponTakeOn = true;
         updateData();
         if (skinUsed != null) {
@@ -296,6 +292,12 @@ public class SkinModule extends AbstractModule {
      * 把武器收起
      */
     public void takeOffWeapon() {
+        if (!weaponTakeOn) {
+            return;
+        }
+        // 提前结束其它正在装备过程中的装备
+        doEndAllSkinning();
+        
         weaponTakeOn = false;
         updateData();
         if (skinUsed != null) {
@@ -303,6 +305,22 @@ public class SkinModule extends AbstractModule {
                 if (s instanceof WeaponSkin) {
                     ((WeaponSkin) s).takeOff(actor);
                 }
+            }
+        }
+    }
+    
+    /**
+     * 结束当前正在使用的所有装备的装配过程,因为装备是有“排斥”性的，一些装备与另一些装备是不能同时穿在身上的。
+     * 当一件装备要装配到角色身上时，角色身上可能还有其它正在装配(skinning)的装备，这些装备可能会造成冲突。
+     * 所以使用这个方法来提前结束正在装配过程中的其它装备, 让这些装备处于正常状态，
+     * 这样新装备在装配到角色身上之前可以正确判断并排斥存在冲突的装备。
+     */
+    private void doEndAllSkinning() {
+        if (skinUsed == null)
+            return;
+        for (Skin s : skinUsed) {
+            if (s.isSkinning()) {
+                s.endSkinning();
             }
         }
     }

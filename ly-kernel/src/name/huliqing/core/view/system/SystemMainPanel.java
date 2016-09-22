@@ -13,8 +13,6 @@ import name.huliqing.core.ui.UIFactory;
 import name.huliqing.core.ui.UI;
 import name.huliqing.core.ui.Window;
 import name.huliqing.core.ui.tiles.Tab;
-import name.huliqing.core.view.system.SystemSoundPanel;
-import name.huliqing.core.view.system.SystemUIPanel;
 
 /**
  *

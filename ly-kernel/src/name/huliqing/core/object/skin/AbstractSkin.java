@@ -85,13 +85,22 @@ public abstract class AbstractSkin implements Skin {
     }
 
     /**
-     * 这个方法默认情况下始终返回false, 只有在装备的穿、脱或者武器的取出、收起是一个动作的执行过程时,
-     *  并且在这个过程中才应该返回true.
+     * 默认情况下装备都是一次性装配，不需要装配过程，所以这个方法始终返回false，只有子类在实现一些特殊的装备过程时
+     * 才需要覆盖这个方法。
      * @return 
      */
     @Override
     public boolean isSkinning() {
         return false;
+    }
+
+    /**
+     * 默认情况下装备都是一次性立即装配，所以这个方法什么也不做。只有子类在实现一些特殊的装备过程时
+     * 才需要覆盖这个方法。
+     */
+    @Override
+    public void endSkinning() {
+        // donothing
     }
     
     @Override

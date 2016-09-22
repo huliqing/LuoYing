@@ -280,6 +280,9 @@ import name.huliqing.core.loader.ViewDataLoader;
 import name.huliqing.core.loader.ModuleDataLoader;
 import name.huliqing.core.mess.MessAttributeNumberAddValue;
 import name.huliqing.core.mess.MessAttributeNumberHit;
+import name.huliqing.core.mess.MessItemAdd;
+import name.huliqing.core.mess.MessItemRemove;
+import name.huliqing.core.mess.MessItemUse;
 import name.huliqing.core.mess.MessSkillPlay;
 import name.huliqing.core.mess.MessSkinAdd;
 import name.huliqing.core.mess.MessSkinAttach;
@@ -726,9 +729,6 @@ public class LY {
         
         Serializer.registerClass(MessProtoAdd.class);
         Serializer.registerClass(MessProtoRemove.class);
-        
-        // remove20160830
-//        Serializer.registerClass(MessProtoSync.class);
 
         Serializer.registerClass(MessProtoUse.class);
         Serializer.registerClass(MessMessage.class);
@@ -756,6 +756,16 @@ public class LY {
         Serializer.registerClass(MessAttributeNumberAddValue.class);
         Serializer.registerClass(MessAttributeNumberHit.class);
         
+        // Chat
+        Serializer.registerClass(MessChatSell.class); 
+        Serializer.registerClass(MessChatSend.class); 
+        Serializer.registerClass(MessChatShop.class); 
+        
+        // Item
+        Serializer.registerClass(MessItemAdd.class); 
+        Serializer.registerClass(MessItemRemove.class); 
+        Serializer.registerClass(MessItemUse.class); 
+        
         // Skill
         Serializer.registerClass(MessSkillPlay.class);
         Serializer.registerClass(MessSkillWalk.class);
@@ -765,8 +775,6 @@ public class LY {
         Serializer.registerClass(MessSkinAttach.class);
         Serializer.registerClass(MessSkinDetach.class);
         Serializer.registerClass(MessSkinRemove.class);
-        
-        // Skin
         Serializer.registerClass(MessSkinWeaponTakeOn.class);
         
         // State
@@ -793,11 +801,6 @@ public class LY {
         // Sync
         Serializer.registerClass(MessActorTransform.class);
         Serializer.registerClass(MessActorTransformDirect.class);
-        
-        // Chat
-        Serializer.registerClass(MessChatSell.class); 
-        Serializer.registerClass(MessChatSend.class); 
-        Serializer.registerClass(MessChatShop.class); 
         
     }
     

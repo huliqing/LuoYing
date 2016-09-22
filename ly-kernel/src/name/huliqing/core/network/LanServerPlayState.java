@@ -5,19 +5,8 @@
 package name.huliqing.core.network;
 
 import name.huliqing.core.state.GameState;
-import name.huliqing.core.Factory;
 import name.huliqing.core.mess.MessPlayLoadSavedActor;
 import name.huliqing.core.mess.MessPlayLoadSavedActorResult;
-import name.huliqing.core.network.GameServer;
-import name.huliqing.core.mvc.network.ActorNetwork;
-import name.huliqing.core.mvc.network.StateNetwork;
-import name.huliqing.core.mvc.network.UserCommandNetwork;
-import name.huliqing.core.mvc.service.ActorService;
-import name.huliqing.core.mvc.service.ConfigService;
-import name.huliqing.core.mvc.service.LogicService;
-import name.huliqing.core.mvc.service.PlayService;
-import name.huliqing.core.mvc.service.SkillService;
-import name.huliqing.core.mvc.service.StateService;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.game.Game;
 import name.huliqing.core.object.game.Game.GameListener;
@@ -30,16 +19,7 @@ import name.huliqing.core.state.NetworkServerPlayState;
  * 局域网模式下的游戏服务端。不保存服务端和客户端的资料，每都都需要选择角色进行游戏。
  * @author huliqing
  */
-public class LanServerPlayState extends NetworkServerPlayState  {
-    private final UserCommandNetwork userCommandNetwork = Factory.get(UserCommandNetwork.class);
-    private final ActorService actorService = Factory.get(ActorService.class);
-    private final PlayService playService = Factory.get(PlayService.class);
-    private final ConfigService configService = Factory.get(ConfigService.class);
-    private final StateService stateService = Factory.get(StateService.class);
-    private final LogicService logicService = Factory.get(LogicService.class);
-    private final SkillService skillService = Factory.get(SkillService.class);
-    private final StateNetwork stateNetwork = Factory.get(StateNetwork.class);
-    private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
+public abstract class LanServerPlayState extends NetworkServerPlayState  {
     
     public LanServerPlayState(Application app, GameServer gameServer) {
         super(app, gameServer);

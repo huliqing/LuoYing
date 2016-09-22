@@ -34,7 +34,6 @@ import name.huliqing.core.object.view.View;
 import name.huliqing.core.ui.state.UIState;
 
 /**
- *
  * @author huliqing
  */
 public abstract class GameState extends AbstractAppState {

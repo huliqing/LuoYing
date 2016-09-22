@@ -63,6 +63,8 @@ public class SkillNetworkImpl implements SkillNetwork {
      */
     @Override
     public boolean playSkill(Actor actor, Skill skill, boolean force) {
+        if (skill == null)
+            return false;
         
         MessSkillPlay mess = new MessSkillPlay();
         mess.setActorId(actor.getData().getUniqueId());

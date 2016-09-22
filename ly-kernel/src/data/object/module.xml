@@ -60,11 +60,15 @@
                  hurtSkillTags="hurt" 
                  deadSkillTags="dead" />
 
-    <!--角色行为模块：直接或间接依赖：moduleAttribute, moduleActor, moduleSkill -->
-    <moduleAction id="moduleAction" moduleOrder="20" />
     
+    <!--皮肤管理模块(装备、武器)：直接或间接依赖：moduleAttribute, moduleActor, moduleSkill -->
+    <moduleSkin id="moduleSkin" moduleOrder="20" bindWeaponSlotAttribute="attributeWeaponSlots" />    
+    
+    <!--角色行为模块：直接或间接依赖：moduleAttribute, moduleActor, moduleSkill, moduleSkin -->
+    <moduleAction id="moduleAction" moduleOrder="30" />
+
     <!--角色的逻辑功能：直接或间接依赖：moduleAttribute, moduleActor, moduleSkill, moduleAction -->
-    <moduleLogic id="moduleLogic" moduleOrder="30" 
+    <moduleLogic id="moduleLogic" moduleOrder="40" 
                  bindAutoLogicAttribute="attributeAutoLogic" 
                  bindAutoDetectAttribute="attributeAutoDetect" />
 
@@ -73,22 +77,19 @@
     <!--==========================================================================-->
     
     <!--任务管理模块：直接或间接依赖：moduleAttribute, moduleActor -->
-    <moduleTask id="moduleTask" moduleOrder="40" />
+    <moduleTask id="moduleTask" moduleOrder="50" />
 
-    <!--皮肤管理模块(装备、武器)：直接或间接依赖：moduleAttribute, moduleActor, moduleSkill -->
-    <moduleSkin id="moduleSkin" moduleOrder="40" bindWeaponSlotAttribute="attributeWeaponSlots" />    
-    
     <!--状态管理模块: 直接或间接依赖：moduleAttribute, moduleActor, moduleSkill -->
-    <moduleState id="moduleState" moduleOrder="40" />
+    <moduleState id="moduleState" moduleOrder="50" />
     
     <!--天赋管理模块：直接或间接依赖：moduleAttribute, moduleActor-->
-    <moduleTalent id="moduleTalent" moduleOrder="40" 
+    <moduleTalent id="moduleTalent" moduleOrder="50" 
                   bindLevelAttribute="attributeLevel" 
                   bindTalentPointsAttribute="attributeTalentPoints" 
                   talentPointsLevelEl="elLevelTalentPoints" />
 
     <!--等级控制模块: 直接或间接依赖：moduleAttribute -->
-    <moduleLevel id="moduleLevel" moduleOrder="40" 
+    <moduleLevel id="moduleLevel" moduleOrder="50" 
                  bindLevelAttribute="attributeLevel" 
                  bindXpAttribute="attributeXp" 
                  bindXpNextAttribute="attributeXpNext" 

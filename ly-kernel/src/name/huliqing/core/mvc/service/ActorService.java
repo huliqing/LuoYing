@@ -532,10 +532,17 @@ public interface ActorService extends Inject {
      * 判断两个角色的距离
      * @param actor
      * @param target
+     * @deprecated 
      * @return 
      */
     float distance(Actor actor, Actor target);
  
+    /**
+     * @deprecated 
+     * @param actor
+     * @param target
+     * @return 
+     */
     float distanceSquared(Actor actor, Actor target);
     
 }

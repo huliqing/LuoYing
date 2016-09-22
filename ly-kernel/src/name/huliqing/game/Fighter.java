@@ -39,6 +39,13 @@ public class Fighter extends SimpleApplication {
         final String SETTINGS_KEY = "luoying-settings";
         AppSettings settings = new AppSettings(true);
 
+        // 载入上次的设置来覆盖
+        try {
+            settings.load(SETTINGS_KEY);
+        } catch (BackingStoreException ex) {
+            Logger.getLogger(Fighter.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
 //        settings.setResolution(960, 540);     // HUAWEI G6-U00
 //        settings.setResolution(1280, 800);    // GT N8010
 //        settings.setResolution(1280, 720);    // 高清
@@ -52,9 +59,9 @@ public class Fighter extends SimpleApplication {
         settings.setResizable(true);
         settings.setSettingsDialogImage("/data/SDImage.jpg");
         
-        // 载入上次的设置来覆盖
+        // 必须在start后才把settings保存下来。
         try {
-            settings.load(SETTINGS_KEY);
+            settings.save(SETTINGS_KEY);
         } catch (BackingStoreException ex) {
             Logger.getLogger(Fighter.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -65,12 +72,6 @@ public class Fighter extends SimpleApplication {
         app.setPauseOnLostFocus(false);
         app.start();
         
-        // 必须在start后才把settings保存下来。
-        try {
-            settings.save(SETTINGS_KEY);
-        } catch (BackingStoreException ex) {
-            Logger.getLogger(Fighter.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
     
     private static Object[] createIcons() {

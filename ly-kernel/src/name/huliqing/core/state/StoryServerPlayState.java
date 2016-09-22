@@ -20,25 +20,21 @@ import name.huliqing.core.data.ActorData;
 import name.huliqing.core.data.GameData;
 import name.huliqing.core.mvc.network.ActorNetwork;
 import name.huliqing.core.mvc.network.PlayNetwork;
-import name.huliqing.core.mvc.network.StateNetwork;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.ConfigService;
 import name.huliqing.core.mvc.service.LogicService;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.SkillService;
-import name.huliqing.core.mvc.service.StateService;
 import name.huliqing.core.network.GameServer;
 import name.huliqing.core.mess.MessPlayLoadSavedActor;
 import name.huliqing.core.mess.MessPlayLoadSavedActorResult;
 import name.huliqing.core.mess.MessPlayClientExit;
 import name.huliqing.core.mess.MessSCClientList;
-import name.huliqing.core.mvc.network.UserCommandNetwork;
 import name.huliqing.core.network.GameServer.ServerState;
 import name.huliqing.core.object.shortcut.ShortcutManager;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.game.Game;
 import name.huliqing.core.object.game.Game.GameListener;
-import name.huliqing.core.object.skill.Skill;
 import name.huliqing.core.save.ClientData;
 import name.huliqing.core.save.SaveConfig;
 import name.huliqing.core.save.SaveHelper;
@@ -50,14 +46,11 @@ import name.huliqing.core.save.ShortcutSave;
  * @author huliqing
  */
 public abstract class StoryServerPlayState extends NetworkServerPlayState {
-    private final UserCommandNetwork userCommandNetwork = Factory.get(UserCommandNetwork.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final PlayService playService = Factory.get(PlayService.class);
     private final ConfigService configService = Factory.get(ConfigService.class);
-    private final StateService stateService = Factory.get(StateService.class);
     private final LogicService logicService = Factory.get(LogicService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
-    private final StateNetwork stateNetwork = Factory.get(StateNetwork.class);
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
 
     // 存档数据

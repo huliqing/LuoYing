@@ -21,20 +21,24 @@ import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.mvc.service.SkinService;
 import name.huliqing.core.object.module.ActorModule;
+import name.huliqing.core.object.module.LogicModule;
 import name.huliqing.core.object.module.SkillListener;
+import name.huliqing.core.object.module.SkillModule;
+import name.huliqing.core.object.module.SkinListener;
+import name.huliqing.core.object.module.SkinModule;
 import name.huliqing.core.object.skill.HitSkill;
 import name.huliqing.core.object.skill.Skill;
 import name.huliqing.core.object.skill.SkillTagFactory;
+import name.huliqing.core.object.skin.Skin;
 import name.huliqing.core.utils.MathUtils;
 
 /**
  * 动态的角色战斗行为，该战斗行为下角色能够移动，转向跟随等。
  * @author huliqing
  */
-public class FightDynamicAction extends FollowPathAction implements FightAction, SkillListener {
-    private static final Logger LOG = Logger.getLogger(FightDynamicAction.class.getName());
-//    private final StateService stateService = Factory.get(StateService.class);
-    private final SkillService skillService = Factory.get(SkillService.class);
+public class FightDynamicAction extends FollowPathAction implements FightAction, SkillListener, SkinListener {
+//    private static final Logger LOG = Logger.getLogger(FightDynamicAction.class.getName());
+//    private final SkillService skillService = Factory.get(SkillService.class);
     private final PlayService playService = Factory.get(PlayService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final SkinService skinService = Factory.get(SkinService.class);
@@ -43,6 +47,10 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final SkinNetwork skinNetwork = Factory.get(SkinNetwork.class);
     private ActorModule actorModule;
+    private LogicModule logicModule;
+    private SkinModule skinModule;
+    private SkillModule skillModule;
+    private ActorModule enemyActorModule;
     
     // 是否允许跟随敌人
     protected boolean allowFollow = true;
@@ -76,13 +84,10 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
     protected float timeUsed;
     // 出招延迟限制,避免NPC角色出招间隔太短
     protected float interval;
-  
-    // 最近一次切换武器后的武器状态
-    private int lastWeaponState = -1;
     
     // 最近获取到的技能缓存,注：当武器类型发生变化或者角色的技能增或减少
     // 时都应该重新获取。
-    protected List<Skill> fightSkills = new ArrayList<Skill>();
+    protected final List<Skill> fightSkills = new ArrayList<Skill>();
     
     // 缓存技能
     private Skill waitSkill;
@@ -105,12 +110,8 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
     @Override
     public void setEnemy(Actor enemy) {
         this.enemy = enemy;
+        this.enemyActorModule = enemy.getModule(ActorModule.class);
         super.setFollow(enemy.getSpatial());
-        
-//      // TODO 20150612,timeUsed=interval主要是让player能够在执行action后立即
-        // 响应行为，但是Ai逻辑中可能会直接调用setEnemy和setSkill,所以这里可能
-        // 需要优化，拆分一个API出来直接让player调用。
-//        timeUsed = interval;
     }
     
     @Override
@@ -128,22 +129,35 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
     public void initialize() {
         super.initialize();
         actorModule = actor.getModule(ActorModule.class);
+        logicModule = actor.getModule(LogicModule.class);
+        skillModule = actor.getModule(SkillModule.class);
+        skinModule = actor.getModule(SkinModule.class);
+        skillModule.addSkillListener(this);
+        skinModule.addSkinListener(this);
         
         // 如果角色切换到战斗状态，则强制取出武器
-        if (!skinService.isWeaponTakeOn(actor)) {
+        if (!skinModule.isWeaponTakeOn()) {
             skinNetwork.takeOnWeapon(actor, true);
         }
         
-        waitSkill = skillService.getSkillWaitDefault(actor);
-        skillService.addSkillListener(actor, this);
+        if (waitSkill == null) {
+            List<Skill> tempSkills = skillModule.getSkillWait(null);
+            if (tempSkills != null && !tempSkills.isEmpty()) {
+                waitSkill = tempSkills.get(0);
+            }
+        }
+        
+        // 载入战斗技能
+        recacheSkill();
     }
     
     @Override
     public void cleanup() {
+        skillModule.removeSkillListener(this);
+        skinModule.removeSkinListener(this);
         if (autoTakeOffWeapon && skinService.isWeaponTakeOn(actor)) {
             skinNetwork.takeOffWeapon(actor, true);
         }
-        skillService.removeSkillListener(actor, this);
         super.cleanup();
     }
     
@@ -157,7 +171,7 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
         }
         
         if (enemy == null 
-                || actorService.isDead(enemy) 
+                || (enemyActorModule != null && enemyActorModule.isDead())
                 || !playService.isInScene(enemy) 
                 
                 // remove20160217,不再判断是否为敌人，是否可攻击目标以后交由hitChecker判断
@@ -186,12 +200,6 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
 //        if (actor.getData().getAttributeStore().getName().equals("樱")) {
 //            System.out.println("测试。。。");
 //        }
-        
-        // 检查是否需要重新缓存技能，没有技能，或者期间突然切换了武器则需要重新载入技能。
-        // 因为武器切换稍频繁，为了及时检测到武器切换，所以放在这里进行检查,这可避免像这种情况：
-        // 当角色突然从刀类切换到弓类武器后，因没有更新技能，导致角色拿着弓类武器
-        // 却使用刀剑类的技能去判断目标是否在技能范围内。这导致角色拿着弓类武器走到刀剑的技能范围内才进行射击。
-        checkAndRecacheSkill();
 
         if (skill == null) {
             skill = getSkill();
@@ -216,9 +224,7 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
                 } else {
                     // 如果找不到下一个目标，则这里要释放目标。
                     actorNetwork.setTarget(actor, null);
-                    if (waitSkill != null) {
-                        skillNetwork.playSkill(actor, waitSkill, false);
-                    }
+                    skillNetwork.playSkill(actor, waitSkill, false);
                     end();
                 }
                 
@@ -237,9 +243,7 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
                     } else {
                         // 如果找不到下一个目标，则这里要释放目标。
                         actorNetwork.setTarget(actor, null);
-                        if (waitSkill != null) {
-                            skillNetwork.playSkill(actor, waitSkill, false);
-                        }
+                        skillNetwork.playSkill(actor, waitSkill, false);
                         end();
                     }
                 }
@@ -268,14 +272,8 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
         // 不管攻击是否成功，都要清空技能，以便使用下一个技能。
         skill = null;
    
-        // remove20160831,暂不判断isAutoAi(actor)
-//        // 如果不是自动AI，则应该退出。 
-//        if (!actorService.isAutoAi(actor) || actorService.getTarget(actor) == null) {
-//            end();
-//        }
-
         // 如果不是自动AI，则应该退出。 
-        if (actorService.getTarget(actor) == null) {
+        if (!logicModule.isAutoLogic() || actorModule.getTarget() <= 0) {
             end();
         }
     }
@@ -310,35 +308,25 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
         return attackSkill.canPlay(actor) == SkillConstants.STATE_OK;
     }
     
-    private void checkAndRecacheSkill() {
-        // 角色武器类型发生变化则重新获取技能进行缓存
-        int weaponState = skinService.getWeaponState(actor);
-        if (lastWeaponState != weaponState) {
-            lastWeaponState = weaponState;
-            recacheSkill();
-        }
-    }
-    
+    /**
+     * 获取一个可以用的fight技能
+     * @return 
+     */
     private Skill getSkill() {
-        if (fightSkills == null || fightSkills .isEmpty()) {
+        if (fightSkills.isEmpty()) {
             return null;
-        } else {
-            // 获取一个不处于冷却中的技能
-            return getNotCooldown(fightSkills);
         }
-    }
-    
-    private Skill getNotCooldown(List<Skill> skills) {
-        int startIndex = FastMath.nextRandomInt(0, skills.size() - 1);
+        
+        int startIndex = FastMath.nextRandomInt(0, fightSkills.size() - 1);
         Skill result;
         for (int i = startIndex;;) {
-            result = skills.get(i);
-            if (!skillService.isCooldown(result)) {
+            result = fightSkills.get(i);
+            if (!result.isCooldown()) {
                 return result;
             }
             i++;
             // 达到list最后则i重新从0开始。
-            if (i >= skills.size()) {
+            if (i >= fightSkills.size()) {
                 i = 0;
             }
             // 绕了一个loop，如果还没有适合的技能，则返回null.
@@ -347,33 +335,7 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
             }
         }
     }
-
-    /**
-     * 设置是否允许跟随，只有打开跟随，并且角色质量mass大于0才能进行跟随。
-     * @param allowFollow 
-     */
-    public void setAllowFollow(boolean allowFollow) {
-        this.allowFollow = allowFollow;
-    }
     
-    // remove20160920
-//    /**
-//     * 是否允许跟随攻击敌人,只有打开跟随并且角色质量(mass)大于0才能进行跟随。
-//     * @return 
-//     */
-//    protected boolean isAllowFollow() {
-//
-//        return allowFollow && actorModule.isMovable();
-//    }
-//    
-//    public float getFollowTimeMax() {
-//        return followTimeMax;
-//    }
-//
-//    public void setFollowTimeMax(float followTimeMax) {
-//        this.followTimeMax = followTimeMax;
-//    }
-
     @Override
     public void onSkillAdded(Actor actor, Skill skill) {
         recacheSkill();
@@ -384,16 +346,36 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
         recacheSkill();
     }
     
-    private void recacheSkill() {
-        if (fightSkills != null) {
-            fightSkills.clear();
+    @Override
+    public void onSkinAdded(Actor actor, Skin skinAdded) {}
+
+    @Override
+    public void onSkinRemoved(Actor actor, Skin skinRemoved) {}
+
+    @Override
+    public void onSkinAttached(Actor actor, Skin skin) {
+        // 当角色武器切换之后需要重新缓存技能，因为技能是有武器状态限制的。切换武器后当前的技能不一定能适应。
+        if (skin.isWeapon()) {
+            recacheSkill();
         }
-        fightSkills = loadAttackSkill(actor, lastWeaponState, fightSkillTags, fightSkills);
+    }
+
+    @Override
+    public void onSkinDetached(Actor actor, Skin skin) {
+        if (skin.isWeapon()) {
+            recacheSkill();
+        }
+    }
+    
+    private void recacheSkill() {
+        fightSkills.clear();
+        int weaponState = skinModule.getWeaponState();
+        loadAttackSkill(weaponState, fightSkillTags, fightSkills);
         // 重新缓存技能后，检查一次当前正在使用的技能是否适合当前的武器，如果不行则清除它，让它
         // 重新获取一个可用的。否则不应该清除当前的技能。
         if (skill != null) {
             List<Integer> weaponLimit = skill.getData().getWeaponStateLimit();
-            if (weaponLimit != null && !weaponLimit.isEmpty() && !weaponLimit.contains(lastWeaponState)) {
+            if (weaponLimit != null && !weaponLimit.isEmpty() && !weaponLimit.contains(weaponState)) {
                 skill = null;
             }
         }
@@ -402,17 +384,13 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
     /**
      * 从角色身上获取适用于指定武器类型的攻击技能,只要适合于该武器的"攻击“技能就可以，
      * 不管是否处于冷却中。另外如果skillTypes不为null,则获取的攻击技能必须限制在这个列表之内
-     * @param ac 指定的角色
      * @param weaponState 
      * @param skillTags 指定的技能类型限制
      * @param store 存放结果集，如果为null则创建一个
      * @return "攻击"技能列表,可能包含：attack.common/shot/trick/magic
      */
-    private List<Skill> loadAttackSkill(Actor ac, int weaponState, long skillTags, List<Skill> store) {
-        if (store == null) {
-            store = new ArrayList<Skill>();
-        }
-        List<Skill> allSkills = skillService.getSkills(actor);
+    private List<Skill> loadAttackSkill(int weaponState, long skillTags, List<Skill> store) {
+        List<Skill> allSkills = skillModule.getSkills();
         for (Skill as : allSkills) {
             if ((skillTags & as.getData().getTags()) != 0) {
                 // 武器类型的过滤,只有技能与当前武器相容才能添加
@@ -424,4 +402,5 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
         }
         return store;
     }
+
 }

@@ -454,6 +454,11 @@ public abstract class AbstractSkill implements Skill {
         return !initialized;
     }
 
+    @Override
+    public boolean isCooldown() {
+        return LY.getGameTime() - data.getLastPlayTime() < data.getCooldown() * 1000;
+    }
+
     /**
      * 获取"动画"的完整执行时间,注：动画的完整时间并不等于动画的实际执行时间,
      * 实际动画的执行时间受cutTime的影响。该值返回: useTime / speed.

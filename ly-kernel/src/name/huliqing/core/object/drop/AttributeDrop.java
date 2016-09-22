@@ -7,7 +7,7 @@ package name.huliqing.core.object.drop;
 
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.DropData;
-import name.huliqing.core.mvc.service.AttributeService;
+import name.huliqing.core.mvc.network.AttributeNetwork;
 import name.huliqing.core.mvc.service.ElService;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.el.AttributeEl;
@@ -17,8 +17,9 @@ import name.huliqing.core.object.el.AttributeEl;
  * @author huliqing
  */
 public class AttributeDrop extends AbstractDrop {
-    private final AttributeService attributeService = Factory.get(AttributeService.class);
     private final ElService elService = Factory.get(ElService.class);
+//    private final AttributeService attributeService = Factory.get(AttributeService.class);
+    private final AttributeNetwork attributeNetwork = Factory.get(AttributeNetwork.class);
     
     // 属性名
     private String attributeName;
@@ -42,7 +43,7 @@ public class AttributeDrop extends AbstractDrop {
             AttributeEl el = elService.getAttributeEl(attributeEl);
             value += el.getValue(source, target);
         }
-        attributeService.addNumberAttributeValue(target, attributeName, value);
+        attributeNetwork.addNumberAttributeValue(target, attributeName, value);
         playDropSounds(source);
         return true;
     }

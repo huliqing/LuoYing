@@ -39,12 +39,6 @@ public interface Skill extends DataProcessor<SkillData>{
     void cleanup();
     
     /**
-     * 判断技能是否正常结束或未启动
-     * @return 
-     */
-    boolean isEnd();
-    
-    /**
      * 获取发起技能的角色，如果没有，则返回null
      * @return 
      */
@@ -79,6 +73,18 @@ public interface Skill extends DataProcessor<SkillData>{
      * @return 返回的最小值为0.0001f，为避免除0错误，速度不能小于或等于0
      */
     float getSpeed();
+    
+    /**
+     * 判断技能是否正常结束或未启动
+     * @return 
+     */
+    boolean isEnd();
+    
+    /**
+     * 技能是否处于冷却中
+     * @return 
+     */
+    boolean isCooldown();
     
     /**
      * 获取技能的CutTimeEndRate,这个值是对技能执行时间的剪裁，即对技能的结束阶段

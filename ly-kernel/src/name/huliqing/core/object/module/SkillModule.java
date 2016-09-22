@@ -161,6 +161,10 @@ public class SkillModule extends AbstractModule {
      * @return 
      */
     public int checkStateCode(Skill skill) {
+        if (skill == null) {
+            return SkillConstants.STATE_UNDEFINE;
+        }
+        
         SkillData skillData = skill.getData();
         
         // 如果技能被锁定中，则不能执行

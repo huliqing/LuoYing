@@ -18,7 +18,6 @@ import name.huliqing.core.network.Network;
 import name.huliqing.core.network.GameServer;
 import name.huliqing.core.data.GameData;
 import name.huliqing.core.data.ConnData;
-import name.huliqing.core.network.LanServerPlayState;
 import name.huliqing.core.network.GameServer.ServerState;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.view.HelpView;
@@ -26,6 +25,7 @@ import name.huliqing.core.ui.LinearLayout;
 import name.huliqing.core.ui.UIFactory;
 import name.huliqing.core.ui.state.UIState;
 import name.huliqing.game.Fighter;
+import name.huliqing.game.LyLanServerPlayState;
 
 /**
  * 服务端在房间里面
@@ -49,7 +49,7 @@ public class RoomStateServerImpl extends AbstractAppState implements RoomState {
     private RoomStateBtnPanel btnPanel;
 
     // 游戏关卡地图信息
-    private GameData gameData;
+    private final GameData gameData;
     // 标记是否开始了游戏
     private boolean startGame;
     
@@ -110,7 +110,7 @@ public class RoomStateServerImpl extends AbstractAppState implements RoomState {
             LOG.log(Level.INFO, "RoomStateServerImpl.startGame");
             gameServer.setServerListener(null);
             gameServer.setServerState(ServerState.loading);
-            app.changeState(new LanServerPlayState(app, gameServer));
+            app.changeState(new LyLanServerPlayState(app, gameServer));
         }
     }
     
