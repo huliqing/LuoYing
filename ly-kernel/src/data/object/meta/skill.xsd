@@ -792,9 +792,9 @@ xs:time
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-                <xs:attribute name="loopMode" type="xs:string" use="optional">
+                <xs:attribute name="loop" type="bool" use="optional">
                     <xs:annotation>
-                        <xs:documentation>技能是否循环执行: 0: dontLoop;  l => loop; 2 => cycle</xs:documentation>
+                        <xs:documentation>让技能循环执行</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
                 <xs:attribute name="sounds" type="xs:string" use="required" >

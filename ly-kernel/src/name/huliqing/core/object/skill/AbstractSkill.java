@@ -75,6 +75,9 @@ public abstract class AbstractSkill implements Skill {
     // 格式：motionId|timeStart|timeEnd,motionId|timeStart|timeEnd
     protected List<ActorAnimWrap> actorAnims;
     
+    
+    
+    
     // ---- 内部参数 ----
     protected SkillData data;
     
@@ -217,7 +220,7 @@ public abstract class AbstractSkill implements Skill {
         String animation = data.getAnimation();
         if (animation != null) {
             doUpdateAnimation(animation
-                    , data.getLoopMode()
+                    , data.isLoop()
                     , getAnimFullTime()
                     , getAnimStartTime());
         }
@@ -265,11 +268,6 @@ public abstract class AbstractSkill implements Skill {
 
     @Override
     public final void update(float tpf) {
-        
-//        if (!initialized) {
-//            return;
-//        }
-
         // 检查是否结束
         time += tpf;
         
@@ -294,9 +292,8 @@ public abstract class AbstractSkill implements Skill {
         doUpdateLogic(tpf);
         
         if (time >= trueUseTime) {
-            if (data.getLoopMode() == LoopMode.Loop || data.getLoopMode() == LoopMode.Cycle) {
-                // remove20160701暂不使用这种方式，当前只loop角色动画就可以。
-//                loopStart();
+            if (data.isLoop()) {
+                time = 0;
             } else {
                 end();
             }
@@ -306,14 +303,13 @@ public abstract class AbstractSkill implements Skill {
     /**
      * 执行动画
      * @param animation 动画名称
-     * @param loopMode　循环类型
+     * @param loop
      * @param animFullTime 动画的完整执行时间
      * @param animStartTime 指定动画的起始执行时间 
      */
-    protected void doUpdateAnimation(String animation, LoopMode loopMode
+    protected void doUpdateAnimation(String animation, boolean loop
             , float animFullTime, float animStartTime) {
-        
-        actorService.playAnim(actor, animation, loopMode, animFullTime, animStartTime, data.getChannels());
+        actorService.playAnim(actor, animation, loop ? LoopMode.Loop : LoopMode.DontLoop, animFullTime, animStartTime, data.getChannels());
         if (data.isChannelLocked()) {
             actorService.setChannelLock(actor, true, data.getChannels());
         }
@@ -462,7 +458,6 @@ public abstract class AbstractSkill implements Skill {
      * @return 
      */
     protected float getAnimFullTime() {
-//        return data.getUseTime() / data.getSpeed();
         return data.getUseTime() / getSpeed();
     }
     
@@ -504,7 +499,9 @@ public abstract class AbstractSkill implements Skill {
     public void restoreAnimation() {
         String animation = data.getAnimation();
         if (animation != null) {
-            actorService.restoreAnimation(actor, animation, data.getLoopMode(), getAnimFullTime(), getAnimStartTime()
+            actorService.restoreAnimation(actor, animation
+                    , data.isLoop() ? LoopMode.Loop : LoopMode.DontLoop
+                    , getAnimFullTime(), getAnimStartTime()
                     , data.getChannels());
         }
     }

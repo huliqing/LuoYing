@@ -44,16 +44,8 @@ public class SkillData extends ObjectData {
     
     // 用于剪裁cutTimeEndMax的角色属性ID。
     private String cutTimeEndAttribute;
-    private LoopMode loopMode;
-    
-//    // 设置当前技能类型可以覆盖的其它技能类型列表。覆盖的意思是：在不停止其它正在执
-//    // 行的技能的情况下同时执行当前技能，优先级高于interrupts,即技能可覆盖其它技能
-//    // 的时候就不使用打断的情况。
-//    // 注：overlaps是单向的,当设置技能A可以覆盖技能B时，技能B却不一定可以覆盖A,除非设置B也可以覆盖A
-//    private long overlaps;
-//    // 设置当前技能可以打断的其它类型的技能,如果没有设置该项，则使用系统默认的配置
-//    // 注：interrupts是单向的，当设置技能A可以打断技能B时，技能B却不一定可以打断A,除非设置B也可以打断A
-//    private long interrupts;
+    // 让技能循环执行
+    private boolean loop;
     
     // 这两个参数标记useTime中可以剔除掉的<b>最高</b>时间比率.
     // 分别标记可剔除的前面和后面的时间.比如: useTime=5秒,
@@ -82,22 +74,13 @@ public class SkillData extends ObjectData {
     private int needLevel;
     
     // 技能标记
-//    private List<String> tags;
-//    // 例外的，在排除优先级比较的前提下，如果一个技能可以覆盖另一个技能，则不需要比较优先级。
-//    private List<String> overlapTagList;
-//    // 例外的，在排除优先级比较的前提下，如果一个技能可以打断另一个技能，则不需要比较优先级。
-//    private List<String> interruptTagList;
-    // overlapTagList as long.
-    
     private long tags;
+    // 例外的，在排除优先级比较的前提下，如果一个技能可以覆盖另一个技能，则不需要比较优先级。
     private long overlapTags;
+    // 例外的，在排除优先级比较的前提下，如果一个技能可以打断另一个技能，则不需要比较优先级。
     private long interruptTags;
     // 技能的优先级,优先级高的可以打断优先级低的技能
     private int prior;
-    
-    // 暂不要支持这个优先级
-//    // 技能的优先级,在排除了，overlapTags和interruptTags比较之后，当一个技能优先级高于另一个技能时，可以打断优先级低的技能。
-//    private int prior;
     
     //--------------------------------------------------------------------------
     // inner内部参数，不开放到xml中配置,这些参数作为动态参数进行配置
@@ -125,7 +108,6 @@ public class SkillData extends ObjectData {
         super.write(ex);
         OutputCapsule oc = ex.getCapsule(this);
         oc.write(useTime, "useTime", 1);
-//        oc.write(radius, "radius", 1);
         oc.write(animation, "animation", null);
         oc.write(channels, "channels", null);
         oc.write(channelLocked, "channelLocked", false);
@@ -139,11 +121,8 @@ public class SkillData extends ObjectData {
         oc.writeSavableArrayList(useAttributes, "useAttributes", null);
         oc.write(speedAttribute, "speedAttribute", null);
         oc.write(cutTimeEndAttribute, "cutTimeEndAttribute", null);
-        oc.write(loopMode, "loopMode", null);
+        oc.write(loop, "loop", false);
         
-//        oc.write(overlaps, "overlaps", 0);
-//        oc.write(interrupts, "interrupts", 0);
-
         oc.write(cutTimeStartMax, "cutTimeStartMax", 0);
         oc.write(cutTimeEndMax, "cutTimeEndMax", 0);
         oc.write(level, "level", 1);
@@ -182,9 +161,7 @@ public class SkillData extends ObjectData {
         useAttributes = ic.readSavableArrayList("useAttributes", null);
         speedAttribute = ic.readString("speedAttribute", null);
         cutTimeEndAttribute = ic.readString("cutTimeEndAttribute", null);
-        loopMode = ic.readEnum("loopMode", LoopMode.class, null);
-//        overlaps = ic.readLong("overlaps", 0);
-//        interrupts = ic.readLong("interrupts", 0);
+        loop = ic.readBoolean("loop", false);
         cutTimeStartMax = ic.readFloat("cutTimeStartMax", 0);
         cutTimeEndMax = ic.readFloat("cutTimeEndMax", 0);
         level = ic.readInt("level", 1);
@@ -296,12 +273,12 @@ public class SkillData extends ObjectData {
         this.cutTimeEndAttribute = cutTimeEndAttribute;
     }
 
-    public LoopMode getLoopMode() {
-        return loopMode;
+    public boolean isLoop() {
+        return loop;
     }
 
-    public void setLoopMode(LoopMode loopMode) {
-        this.loopMode = loopMode;
+    public void setLoop(boolean loop) {
+        this.loop = loop;
     }
 
 //    /**

@@ -49,10 +49,6 @@ public class SkinModule extends AbstractModule {
     
     // 武器槽位属性
     private CollectionAttribute<String> weaponSlotAttribute;
-   
-    // for test
-//    // 正在skinning的装备或武器。
-//    private final SafeArrayList<Skin> inSkinningList = new SafeArrayList<Skin>(Skin.class);
 
     @Override
     public void setData(ModuleData data) {

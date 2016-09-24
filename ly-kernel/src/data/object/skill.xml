@@ -59,10 +59,10 @@
     <skillWait id="skillWaitBase" extends="skillWaitTagBase" />
     
     <!--步行-->
-    <skillWalk id="skillWalkBase" extends="skillWalkTagBase" useTime="1" loopMode="1" speedAttribute="attributeMoveSpeed" />
+    <skillWalk id="skillWalkBase" extends="skillWalkTagBase" useTime="1" loop="1" speedAttribute="attributeMoveSpeed" />
     
     <!--跑步-->
-    <skillRun id="skillRunBase" extends="skillRunTagBase" useTime="1" loopMode="1" speedAttribute="attributeMoveSpeed" />
+    <skillRun id="skillRunBase" extends="skillRunTagBase" useTime="1" loop="1" speedAttribute="attributeMoveSpeed" />
     
     <!--穿装备用-->
     <skillSkin id="skillSkinBase" extends="skillSkinTagBase" />

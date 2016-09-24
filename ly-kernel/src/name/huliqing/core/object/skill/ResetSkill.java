@@ -4,7 +4,6 @@
  */
 package name.huliqing.core.object.skill;
 
-import com.jme3.animation.LoopMode;
 import com.jme3.math.FastMath;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.SkillData;
@@ -46,7 +45,7 @@ public class ResetSkill extends AbstractSkill {
     }
 
     @Override
-    protected void doUpdateAnimation(String animation, LoopMode loopMode, float animFullTime, float animStartTime) {
+    protected void doUpdateAnimation(String animation, boolean loop, float animFullTime, float animStartTime) {
         // 直接reset到指定动画的指定时间帧
         actorService.resetToAnimationTime(actor, animation, timePoint);
     }

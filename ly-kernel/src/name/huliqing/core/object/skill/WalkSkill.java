@@ -81,9 +81,9 @@ public class WalkSkill extends AbstractSkill implements Walk{
     protected void doUpdateLogic(float tpf) {}
 
     @Override
-    protected void doUpdateAnimation(String animation, LoopMode loopMode
+    protected void doUpdateAnimation(String animation, boolean loop
             , float animFullTime, float animStartTime) {
-        super.doUpdateAnimation(animation, loopMode, animFullTime / animSpeed, animStartTime);
+        super.doUpdateAnimation(animation, loop, animFullTime / animSpeed, animStartTime);
     }
 
     @Override
@@ -92,7 +92,7 @@ public class WalkSkill extends AbstractSkill implements Walk{
         if (animation != null) {
             actorService.restoreAnimation(actor
                     , animation
-                    , data.getLoopMode()
+                    , data.isLoop() ? LoopMode.Loop : LoopMode.DontLoop
                     , getAnimFullTime() / animSpeed
                     , getAnimStartTime()
                     , data.getChannels());
@@ -102,15 +102,8 @@ public class WalkSkill extends AbstractSkill implements Walk{
     @Override
     public void cleanup() {
         actorService.setWalkDirection(actor, Vector3f.ZERO.clone());
-        
         // 移除角色位置自动同步(平滑同步)
         Network.getInstance().removeAutoSyncTransform(actor);
-        
-        // remove20160503,这个方法会直接导致客户端被严重拉扯，发生很糟糕的抖动！！！
-        // remove20160503,这个方法会直接导致客户端被严重拉扯，发生很糟糕的抖动！！！
-//        // 这是绝对位置同步,确保停下来时位置绝对同步正确，因为平滑同步无法确保位置绝对正确.
-//        // 这种同步在FPS太低或延迟太高的情况下容易产生跳跃现象.
-//        Network.getInstance().syncTransformDirect(actor);
         
         super.cleanup();
     }

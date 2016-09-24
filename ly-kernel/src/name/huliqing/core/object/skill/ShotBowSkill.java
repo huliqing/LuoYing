@@ -19,9 +19,11 @@ import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.constants.SkinConstants;
 import name.huliqing.core.data.SkillData;
-import name.huliqing.core.mvc.service.ActorService;
-import name.huliqing.core.mvc.service.SkinService;
+import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.object.Loader;
+import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.module.ActorModule;
+import name.huliqing.core.object.module.SkinModule;
 import name.huliqing.core.object.skin.Skin;
 import name.huliqing.core.object.skin.WeaponSkin;
 
@@ -30,8 +32,9 @@ import name.huliqing.core.object.skin.WeaponSkin;
  * @author huliqing
  */
 public class ShotBowSkill extends ShotSkill {
-    private final ActorService actorService = Factory.get(ActorService.class);
-    private final SkinService skinService = Factory.get(SkinService.class);
+    private final PlayService playService = Factory.get(PlayService.class);
+    private ActorModule actorModule;
+    private SkinModule skinModule;
     
     private String weaponAnim;
     private float timeBulletTake = 0.2f;
@@ -78,12 +81,15 @@ public class ShotBowSkill extends ShotSkill {
     @Override
     public void initialize() {
         super.initialize();
+        actorModule = actor.getModule(ActorModule.class);
+        skinModule = actor.getModule(SkinModule.class);
+        
         // -- 重置state
         shotState = 0;
         
         // 偿试查找出弓模型，用于执行拉弓动画
         Spatial weapon = null;
-        List<Skin> usingSkins = skinService.getUsingSkins(actor);
+        List<Skin> usingSkins = skinModule.getUsingSkins();
         if (usingSkins != null && !usingSkins.isEmpty()) {
             for (Skin skin : usingSkins) {
                 if (!(skin instanceof WeaponSkin)) {
@@ -116,15 +122,20 @@ public class ShotBowSkill extends ShotSkill {
     }
 
     @Override
-    protected void doUpdateAnimation(String animation, LoopMode loopMode
+    protected void doUpdateAnimation(String animation, boolean loop
             , float animFullTime, float animStartTime) {
         shotDir = 1; // horizontal
         if ((this.animationShotDown != null || this.animationShotUp != null) 
-                && actorService.getTarget(actor) != null) {
+//                && actorService.getTarget(actor) != null
+                && actorModule.getTarget() > 0
+                ) {
+            
+            // 目标角色
+            Actor target = playService.findActor(actorModule.getTarget());
             
             TempVars tv = TempVars.get();
             Vector3f viewPos = tv.vect1;
-            Vector3f targetPos = actorService.getTarget(actor).getSpatial().getWorldBound().getCenter();
+            Vector3f targetPos = target.getSpatial().getWorldBound().getCenter();
             
             Vector3f selfPos = actor.getSpatial().getWorldBound().getCenter();
             viewPos.set(targetPos).setY(selfPos.getY());
@@ -145,11 +156,7 @@ public class ShotBowSkill extends ShotSkill {
                 }
             }
         }
-        
-        // animationShotDown和animationShotUp是额外指定的武器，这里必须检查一下是否存在。
-        actorService.checkAndLoadAnim(actor, animation);
-        
-        super.doUpdateAnimation(animation, loopMode, animFullTime, animStartTime);
+        super.doUpdateAnimation(animation, loop, animFullTime, animStartTime);
     }
 
     @Override

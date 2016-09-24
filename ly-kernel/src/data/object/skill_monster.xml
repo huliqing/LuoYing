@@ -54,7 +54,7 @@
     <skillRun id="skillSpiderMinRun" extends="skillRunBase" animation="Run" animSpeed="3" />
     
     <!-- Ninja -->
-    <skillWait id="saNinjaWait" extends="skillWaitBase" useTime="3"  animation="Idle2" loopMode="0" />
+    <skillWait id="saNinjaWait" extends="skillWaitBase" useTime="3"  animation="Idle2" />
     <skillWalk id="saNinjaWalk" extends="skillWalkBase" animation="Walk" animSpeed="0.7" baseSpeed="2"/>
     <skillRun id="saNinjaRun" extends="skillRunBase" animation="Walk"  animSpeed="2.1" />
     <skillHurt id="saNinjaHurt" extends="skillHurtBase" useTime="0.2"  animation="Block"  hurtFace="front" />
@@ -148,7 +148,7 @@
     <skillReset id="skillSinbadReset" extends="skillResetBase" useTime="0" animation="n_ready" timePoint="0.9" />
     
     <!--T.Rex-->
-    <skillWait id="skillTrexWait" extends="skillWaitBase" useTime="4"  animation="wait" loopMode="1" />
+    <skillWait id="skillTrexWait" extends="skillWaitBase" useTime="4"  animation="wait" loop="1" />
     <skillWalk id="skillTrexWalk" extends="skillWalkBase" animation="walk" />
     <skillRun id="skillTrexRunSlow" extends="skillRunBase" animation="run" />
     <skillRun id="skillTrexRunQuick" extends="skillRunBase" useTime="0.4" animation="run" />
@@ -160,7 +160,7 @@
     <skillIdle id="skillTrexIdle1" extends="skillIdleBase" useTime="4" animation="idle1" />
     
     <!--Raptor-->
-    <skillWait id="skillRaptorWait" extends="skillWaitBase" useTime="3"  animation="wait" loopMode="1" />
+    <skillWait id="skillRaptorWait" extends="skillWaitBase" useTime="3"  animation="wait" loop="1" />
     <skillWalk id="skillRaptorWalk" extends="skillWalkBase" animation="walk" />
     <skillRun id="skillRaptorRun" extends="skillRunBase" animation="run" />
     <skillHurt id="skillRaptorHurt1" extends="skillHurtBase" useTime="0.5" animation="hurt_left" hurtFace="front" sounds="soundDinosaurHurt" />
@@ -169,16 +169,16 @@
     <skillAttack id="skillRaptorAttack" extends="skillFightSimpleAttackBase" useTime="0.75" hitDistance="4" animation="attack" cooldown="1.5" hitValue="50" checkPoint="0.5" 
             cutTimeStartMax="0" cutTimeEndMax="0" sounds="soundDinosaurAttack" />
     <skillIdle id="skillRaptorIdle" extends="skillIdleBase" useTime="4" animation="idle" />
-
+    
     <!--Jaime-->
-    <skillWait id="skillJaimeWait" extends="skillWaitBase" useTime="4" animation="Idle" loopMode="1" />
+    <skillWait id="skillJaimeWait" extends="skillWaitBase" useTime="4" animation="Idle" loop="1" />
     <skillIdle id="skillJaimeIdle"  extends="skillIdleBase" useTime="3" animation="Idle" />
     <skillRun id="skillJaimeRun" extends="skillRunBase" animation="Run" animSpeed="2" />
     
     <!--skeleton-->
     <skillAttack id="skillSkeletonAttack" extends="skillFightSimpleAttackBase" icon="" useTime="0.75" animation="ske_attack" cooldown="1"
                  weaponStateLimit="0|1" hitValue="50" checkPoint="0.68" cutTimeStartMax="0.4" cutTimeEndMax="0.24"  />
-    <skillWait id="skillSkeletonWait" extends="skillWaitBase"  useTime="4" animation="ske_wait" loopMode="1" />
+    <skillWait id="skillSkeletonWait" extends="skillWaitBase"  useTime="4" animation="ske_wait" loop="1" />
     <skillDead id="skillSkeletonDead" extends="skillDeadBase" remove="1" useTime="0.0001" effects="effectSkeletonDead" />
     <skillRun id="skillSkeletonRun" extends="skillRunBase" animation="idle_run" animSpeed="1.5" sounds="soundSkeletonStep1,soundSkeletonStep2|0.4" />
     

@@ -46,18 +46,14 @@ import name.huliqing.core.save.SaveStory;
  */
 public class PlayServiceImpl implements PlayService {
     
-    private StateService stateService;
     private ActorService actorService;
-    private ItemService itemService;
     private SkillService skillService;
     private GameService gameService;
     private LogicService logicService;
     
     @Override
     public void inject() {
-        stateService = Factory.get(StateService.class);
         actorService = Factory.get(ActorService.class);
-        itemService = Factory.get(ItemService.class);
         gameService = Factory.get(GameService.class);
         skillService = Factory.get(SkillService.class);
         logicService = Factory.get(LogicService.class);

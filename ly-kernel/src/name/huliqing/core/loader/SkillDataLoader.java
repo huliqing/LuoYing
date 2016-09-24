@@ -61,19 +61,11 @@ public class SkillDataLoader implements DataLoader<SkillData> {
         // CutTimeEnd的剪裁
         data.setCutTimeEndAttribute(proto.getAsString("cutTimeEndAttribute"));
         
-        String loopTemp = proto.getAsString("loopMode");
-        if ("1".equals(loopTemp)) {
-            data.setLoopMode(LoopMode.Loop);
-        } else if ("2".equals(loopTemp)) {
-            data.setLoopMode(LoopMode.Cycle);
-        } else {
-            data.setLoopMode(LoopMode.DontLoop);
-        }
-        
         // 时间\动画剪裁参数
         data.setCutTimeStartMax(proto.getAsFloat("cutTimeStartMax", 0));
         data.setCutTimeEndMax(proto.getAsFloat("cutTimeEndMax", 0));
         
+        data.setLoop(proto.getAsBoolean("loop", false));
         data.setLevel(proto.getAsInteger("level", 1));
         data.setMaxLevel(proto.getAsInteger("maxLevel", 1));
         data.setLevelEl(proto.getAsString("levelEl"));
