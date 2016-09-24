@@ -17,6 +17,7 @@ import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.module.SkillListener;
 import name.huliqing.core.object.module.SkillPlayListener;
 import name.huliqing.core.object.skill.Skill;
+import name.huliqing.core.object.skill.SkillTag;
 
 /**
  *
@@ -259,6 +260,16 @@ public class SkillNetworkImpl implements SkillNetwork {
 
     @Override
     public boolean isPlayingSkill(Actor actor, long skillTags) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public SkillTag getSkillTag(String skillTag) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public long convertSkillTags(String... tags) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

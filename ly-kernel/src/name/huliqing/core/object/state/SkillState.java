@@ -9,9 +9,9 @@ import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.StateData;
 import name.huliqing.core.mvc.network.SkillNetwork;
+import name.huliqing.core.object.define.DefineFactory;
 import name.huliqing.core.object.module.SkillModule;
 import name.huliqing.core.object.skill.Skill;
-import name.huliqing.core.object.skill.SkillTagFactory;
 
 /**
  * 让目标角色执行一个技能
@@ -26,8 +26,8 @@ public class SkillState extends State {
 
     @Override
     public void setData(StateData data) {
-        super.setData(data); 
-        skillTags = SkillTagFactory.convert(data.getAsArray("skillTags"));
+        super.setData(data);
+        skillTags = DefineFactory.getSkillTagDefine().convert(data.getAsArray("skillTags"));
         force = data.getAsBoolean("force", force);
     }
     

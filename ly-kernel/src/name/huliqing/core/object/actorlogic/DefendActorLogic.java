@@ -25,7 +25,6 @@ import name.huliqing.core.object.module.SkillPlayListener;
 import name.huliqing.core.object.skill.Skill;
 import name.huliqing.core.object.skill.AttackSkill;
 import name.huliqing.core.object.skill.ShotSkill;
-import name.huliqing.core.object.skill.SkillTagFactory;
 
 /**
  * 防守逻辑
@@ -74,9 +73,9 @@ public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> im
         defendRateAttribute = data.getAsString("defendRateAttribute");
         duckRateAttribute = data.getAsString("duckRateAttribute");
         listenAttributes = Arrays.asList(data.getAsArray("listenAttributes"));
-        listenSkillTags = SkillTagFactory.convert(data.getAsArray("listenSkillTags"));
-        defendSkillTags = SkillTagFactory.convert(data.getAsArray("defendSkillTags"));
-        duckSkillTags = SkillTagFactory.convert(data.getAsArray("duckSkillTags"));
+        listenSkillTags = skillService.convertSkillTags(data.getAsArray("listenSkillTags"));
+        defendSkillTags = skillService.convertSkillTags(data.getAsArray("defendSkillTags"));
+        duckSkillTags = skillService.convertSkillTags(data.getAsArray("duckSkillTags"));
     }
     
     @Override

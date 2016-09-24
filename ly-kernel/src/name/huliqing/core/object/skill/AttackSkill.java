@@ -21,7 +21,6 @@ import name.huliqing.core.object.sound.SoundManager;
 
 /**
  * 普通攻击技能,会根据damagePoint计算任害值等.主要用于近战类攻击
- *
  * @author huliqing
  */
 public class AttackSkill extends HitSkill {
@@ -45,7 +44,6 @@ public class AttackSkill extends HitSkill {
     // 相对于当前攻击者的本地坐标偏移。
     protected Vector3f collisionOffset = new Vector3f(0, 2, 2.5f);
     
-    
     // ---- 内部参数
     protected final PointChecker pointChecker = new PointChecker();
     // 实际的攻击技能检测点，这个会受cutTime的影响，如果cutTime都为0,则该参数
@@ -58,7 +56,7 @@ public class AttackSkill extends HitSkill {
         multHit = data.getAsBoolean("multHit", multHit);
         checkPoint = data.getAsFloatArray("checkPoint");
         defendable = data.getAsBoolean("defendable", defendable);
-        defendSkillTags = SkillTagFactory.convert(data.getAsArray("defendSkillTags"));
+        defendSkillTags = skillService.convertSkillTags(data.getAsArray("defendSkillTags"));
         collisionOffset = data.getAsVector3f("collisionOffset", collisionOffset);
     }
 
@@ -130,7 +128,6 @@ public class AttackSkill extends HitSkill {
             // 防守成功(角色正在防守,并且必须是正面防守)
             if (skillDefendable 
                     && skillService.isPlayingSkill(target, defendSkillTags)
-//                    && skillService.isDefending(target) // remove20160920
                     && actorService.getViewAngle(target, actor.getSpatial().getWorldTranslation()) < 90) {
                 doDefendResult(target);
             } else {

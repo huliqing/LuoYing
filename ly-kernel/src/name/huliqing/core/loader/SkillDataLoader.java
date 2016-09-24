@@ -11,7 +11,7 @@ import name.huliqing.core.GameException;
 import name.huliqing.core.data.AttributeUse;
 import name.huliqing.core.xml.Proto;
 import name.huliqing.core.data.SkillData;
-import name.huliqing.core.object.skill.SkillTagFactory;
+import name.huliqing.core.object.define.DefineFactory;
 import name.huliqing.core.xml.DataLoader;
 import name.huliqing.core.utils.ConvertUtils;
 
@@ -70,7 +70,6 @@ public class SkillDataLoader implements DataLoader<SkillData> {
             data.setLoopMode(LoopMode.DontLoop);
         }
         
-        
         // 时间\动画剪裁参数
         data.setCutTimeStartMax(proto.getAsFloat("cutTimeStartMax", 0));
         data.setCutTimeEndMax(proto.getAsFloat("cutTimeEndMax", 0));
@@ -81,16 +80,14 @@ public class SkillDataLoader implements DataLoader<SkillData> {
         data.setSkillPoints(proto.getAsInteger("skillPoints", 0));
         data.setLevelUpEl(proto.getAsString("levelUpEl"));
         data.setNeedLevel(proto.getAsInteger("needLevel", 0));
+        data.setTags(DefineFactory.getSkillTagDefine().convert(proto.getAsArray("tags")));
+        data.setOverlapTags(DefineFactory.getSkillTagDefine().convert(proto.getAsArray("overlapTags")));
+        data.setInterruptTags(DefineFactory.getSkillTagDefine().convert(proto.getAsArray("interruptTags")));
+        data.setPrior(proto.getAsInteger("prior", 0));
         
         // ---- 这几个参数是动态参数,不应该作为配置放到xml
         data.setCutTimeStart(0);
         data.setCutTimeEnd(0);
-//        data.setSpeed(1f); // 不再使用speed,现在默认为1
-
-        data.setTags(SkillTagFactory.convert(proto.getAsArray("tags")));
-        data.setOverlapTags(SkillTagFactory.convert(proto.getAsArray("overlapTags")));
-        data.setInterruptTags(SkillTagFactory.convert(proto.getAsArray("interruptTags")));
-        data.setPrior(proto.getAsInteger("prior", 0));
     }
     
     

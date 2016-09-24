@@ -11,12 +11,12 @@ import name.huliqing.core.Factory;
 import name.huliqing.core.data.StateData;
 import name.huliqing.core.mvc.network.SkillNetwork;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.define.DefineFactory;
 import name.huliqing.core.object.module.ActorModule;
 import name.huliqing.core.object.module.ChannelModule;
 import name.huliqing.core.object.module.SkillModule;
 import name.huliqing.core.object.module.SkillPlayListener;
 import name.huliqing.core.object.skill.Skill;
-import name.huliqing.core.object.skill.SkillTagFactory;
 import name.huliqing.core.utils.MathUtils;
 
 /**
@@ -52,10 +52,10 @@ public class SkillLockedState extends State implements SkillPlayListener {
     @Override
     public void setData(StateData data) {
         super.setData(data); 
-        lockAtSkillTags = SkillTagFactory.convert(data.getAsArray("lockAtSkillTags"));
+        lockAtSkillTags = DefineFactory.getSkillTagDefine().convert(data.getAsArray("lockAtSkillTags"));
         lockAtFrame = data.getAsBoolean("lockAtFrame", false);
         lockAllSkillTags = data.getAsBoolean("lockAllSkillTags", false);
-        lockSkillTags = SkillTagFactory.convert(data.getAsArray("lockSkillTags"));
+        lockSkillTags = DefineFactory.getSkillTagDefine().convert(data.getAsArray("lockSkillTags"));
         lockSkillIds = data.getAsStringList("lockSkillIds");
         lockChannels = data.getAsArray("lockChannels");
         lockLocation = data.getAsBoolean("lockLocation", false);

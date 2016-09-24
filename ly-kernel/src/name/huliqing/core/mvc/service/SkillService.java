@@ -78,7 +78,6 @@ public interface SkillService extends Inject {
     
     List<Skill> getSkillDead(Actor actor);
     
-    
     /**
      * 通过技能标记来获取角色身上的技能
      * 的就可以。
@@ -154,23 +153,6 @@ public interface SkillService extends Inject {
      * @return 
      */
     boolean playSkill(Actor actor, String skillId, boolean force);
-   
-    // remove20160920
-//    /**
-//     * 让角色执行"等待"技能
-//     * @param actor
-//     * @param force
-//     * @return 
-//     */
-//    boolean playWait(Actor actor, boolean force);
-//    
-//    /**
-//     * 让角色执行"死亡"技能
-//     * @param actor
-//     * @param force
-//     * @return 
-//     */
-//    boolean playDead(Actor actor, boolean force);
     
     /**
      * 执行“步行”技能，步行的速度等受角色属性的影响
@@ -241,5 +223,19 @@ public interface SkillService extends Inject {
      */
     void unlockSkillTags(Actor actor, long skillTags);
 
+    /**
+     * 获取技能标记
+     * @param skillTag
+     * @return 
+     */
+    SkillTag getSkillTag(String skillTag);
+    
+    /**
+     * 将技能标记转换为使用二进制位表示的整数值，返回的数值中每个"1"位表示一个技能标记。
+     * @param tags
+     * @return 
+     */
+    long convertSkillTags(String... tags);
+    
     
 }

@@ -7,7 +7,6 @@ package name.huliqing.core.object.action;
 import com.jme3.math.FastMath;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 import name.huliqing.core.Factory;
 import name.huliqing.core.constants.SkillConstants;
 import name.huliqing.core.object.actor.Actor;
@@ -28,7 +27,6 @@ import name.huliqing.core.object.module.SkinListener;
 import name.huliqing.core.object.module.SkinModule;
 import name.huliqing.core.object.skill.HitSkill;
 import name.huliqing.core.object.skill.Skill;
-import name.huliqing.core.object.skill.SkillTagFactory;
 import name.huliqing.core.object.skin.Skin;
 import name.huliqing.core.utils.MathUtils;
 
@@ -38,10 +36,10 @@ import name.huliqing.core.utils.MathUtils;
  */
 public class FightDynamicAction extends FollowPathAction implements FightAction, SkillListener, SkinListener {
 //    private static final Logger LOG = Logger.getLogger(FightDynamicAction.class.getName());
-//    private final SkillService skillService = Factory.get(SkillService.class);
     private final PlayService playService = Factory.get(PlayService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final SkinService skinService = Factory.get(SkinService.class);
+    private final SkillService skillService = Factory.get(SkillService.class);
     private final AttributeService attributeService = Factory.get(AttributeService.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
@@ -104,7 +102,7 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
         autoTakeOffWeapon = data.getAsBoolean("autoTakeOffWeapon", autoTakeOffWeapon);
         attackIntervalAttribute = data.getAsString("attackIntervalAttribute");
         attackIntervalMax = data.getAsFloat("attackIntervalMax", attackIntervalMax);
-        fightSkillTags = SkillTagFactory.convert(data.getAsArray("fightSkillTags"));
+        fightSkillTags = skillService.convertSkillTags(data.getAsArray("fightSkillTags"));
     }
 
     @Override

@@ -45,4 +45,11 @@ public class SkillTag {
     public final String name() {
         return name;
     }
+
+    @Override
+    public String toString() {
+        return "skillTagIndex=" + index + ", skillTagName=" + name; 
+    }
+    
+    
 }

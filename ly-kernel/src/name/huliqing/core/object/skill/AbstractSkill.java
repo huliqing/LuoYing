@@ -258,7 +258,6 @@ public abstract class AbstractSkill implements Skill {
         }
     }
     
-    
     @Override
     public boolean isInitialized() {
         return initialized;
@@ -266,9 +265,11 @@ public abstract class AbstractSkill implements Skill {
 
     @Override
     public final void update(float tpf) {
-        if (!initialized) {
-            return;
-        }
+        
+//        if (!initialized) {
+//            return;
+//        }
+
         // 检查是否结束
         time += tpf;
         
@@ -290,8 +291,6 @@ public abstract class AbstractSkill implements Skill {
         doUpdateAnims(tpf, interpolation);
         
         // 6.update logic
-        // 为保证所有checkPoint都有执行到，
-        // doUpdateLogic(tpf)必须放在 time += tpf 和 cleanup中间
         doUpdateLogic(tpf);
         
         if (time >= trueUseTime) {
@@ -300,7 +299,6 @@ public abstract class AbstractSkill implements Skill {
 //                loopStart();
             } else {
                 end();
-                cleanup();
             }
         }
     }
@@ -406,9 +404,7 @@ public abstract class AbstractSkill implements Skill {
     }
     
     /**
-     * 标记技能结束。注意：end与cleanup的不同，cleanup不管在什么时候都
-     * 会执行，即使技能在被打断的时候也会执行。而end()则不一定。一般cleanup只作为
-     * 释放资源使用。只有在确定一定需要确保被释放的资源时才应该在cleanup中操作。
+     * 标记技能结束。
      */
     protected void end() {
         initialized = false;

@@ -35,6 +35,7 @@ import name.huliqing.core.data.ChatData;
 import name.huliqing.core.data.ConfigData;
 import name.huliqing.core.data.ConnData;
 import name.huliqing.core.data.CustomUserData;
+import name.huliqing.core.data.DefineData;
 import name.huliqing.core.data.ModuleData;
 import name.huliqing.core.data.DropData;
 import name.huliqing.core.data.DropItem;
@@ -196,6 +197,7 @@ import name.huliqing.core.object.env.LightAmbientEnv;
 import name.huliqing.core.object.env.LightDirectionalEnv;
 import name.huliqing.core.object.env.ModelEnv;
 import name.huliqing.core.data.env.ModelEnvData;
+import name.huliqing.core.loader.DefineDataLoader;
 import name.huliqing.core.loader.env.ModelEnvLoader;
 import name.huliqing.core.object.env.PhysicsEnv;
 import name.huliqing.core.object.env.PlantEnv;
@@ -239,7 +241,6 @@ import name.huliqing.core.object.shape.BoxShape;
 import name.huliqing.core.loader.ShapeDataLoader;
 import name.huliqing.core.object.skill.AttackSkill;
 import name.huliqing.core.object.skill.BackSkill;
-//import name.huliqing.core.object.skill.DeadRagdollSkill;
 import name.huliqing.core.object.skill.DeadSkill;
 import name.huliqing.core.object.skill.DefendSkill;
 import name.huliqing.core.object.skill.DuckSkill;
@@ -298,6 +299,7 @@ import name.huliqing.core.object.attribute.LimitIntegerAttribute;
 import name.huliqing.core.object.attribute.LongAttribute;
 import name.huliqing.core.object.attribute.StringAttribute;
 import name.huliqing.core.object.attribute.StringListAttribute;
+import name.huliqing.core.object.define.SkillTagDefine;
 import name.huliqing.core.object.drop.AttributeDrop;
 import name.huliqing.core.object.drop.GroupDrop;
 import name.huliqing.core.object.drop.ItemDrop;
@@ -320,10 +322,10 @@ import name.huliqing.core.xml.Proto;
 import org.xml.sax.SAXException;
 
 /**
- *
  * @author huliqing
  */
 public class LY {
+    private static final Logger LOG = Logger.getLogger(LY.class.getName());
     
     private static Application app;
     private static AppSettings settings; 
@@ -340,17 +342,19 @@ public class LY {
         
         // 注册需要序列化的数据，对于网络版进行序列化时需要用到。
         registerSerializer();
+        LOG.log(Level.INFO, "registerSerializer ok");
         
         // 注册数据处理器
         registerProcessor();
+        LOG.log(Level.INFO, "registerProcessor ok.");
         
         // 注册messages,用于network通信
         registerMessage();
+        LOG.log(Level.INFO, "registerMessage ok.");
         
         // 载入数据
         loadData();
-        
-        System.out.println("Load data ok!");
+        LOG.log(Level.INFO, "loadData ok.");
     }
 
     private static void registerSerializer() {
@@ -373,6 +377,7 @@ public class LY {
         Serializer.registerClass(ChannelData.class);
         Serializer.registerClass(ChatData.class);
         Serializer.registerClass(ConfigData.class);
+        Serializer.registerClass(DefineData.class);
         Serializer.registerClass(DropData.class);
         Serializer.registerClass(EffectData.class);
         Serializer.registerClass(ElData.class);
@@ -396,7 +401,6 @@ public class LY {
         Serializer.registerClass(TalentData.class);
         Serializer.registerClass(TaskData.class);
         Serializer.registerClass(ViewData.class);
-        
         Serializer.registerClass(ModelEnvData.class);
     }
     
@@ -468,6 +472,9 @@ public class LY {
         // Config
         DataFactory.register("config",  ConfigData.class, ConfigDataLoader.class, null);
         
+        // Define
+        DataFactory.register("defineSkillTag", DefineData.class, DefineDataLoader.class, SkillTagDefine.class);
+        
         // Drop
         DataFactory.register("dropAttribute",  DropData.class, DropDataLoader.class, AttributeDrop.class);
         DataFactory.register("dropGroup",  DropData.class, DropDataLoader.class, GroupDrop.class);
@@ -523,19 +530,6 @@ public class LY {
         DataFactory.register("gameLogicPlayerDeadChecker", GameLogicData.class, GameLogicDataLoader.class, PlayerDeadCheckerGameLogic.class);
         DataFactory.register("gameLogicActorClean", GameLogicData.class, GameLogicDataLoader.class, ActorCleanGameLogic.class);
         DataFactory.register("gameLogicAttributeChange", GameLogicData.class, GameLogicDataLoader.class, AttributeChangeGameLogic.class);
-        
-        // remove20160915
-        // Handler
-//        DataFactory.register("handlerTest", HandlerData.class, HandlerDataLoader.class, TestHandler.class);
-//        DataFactory.register("handlerSummon", HandlerData.class, HandlerDataLoader.class, SummonHandler.class);
-//        DataFactory.register("handlerAttribute", HandlerData.class, HandlerDataLoader.class, AttributeHandler.class);
-//        DataFactory.register("handlerSkill", HandlerData.class, HandlerDataLoader.class, SkillHandler.class);
-//        DataFactory.register("handlerSummonSkill", HandlerData.class, HandlerDataLoader.class, SummonSkillHandler.class);
-//        DataFactory.register("handlerSkillBook", HandlerData.class, HandlerDataLoader.class, SkillBookHandler.class);
-//        DataFactory.register("handlerStateGain", HandlerData.class, HandlerDataLoader.class, StateGainHandler.class);
-//        DataFactory.register("handlerStateRemove", HandlerData.class, HandlerDataLoader.class, StateRemoveHandler.class);
-//        DataFactory.register("handlerItemSkill", HandlerData.class, HandlerDataLoader.class, ItemSkillHandler.class);
-//        DataFactory.register("handlerMap", HandlerData.class, HandlerDataLoader.class, MapHandler.class);
         
         // HitChecker
         DataFactory.register("hitChecker",  HitCheckerData.class, HitCheckerDataLoader.class, SimpleHitChecker.class);
@@ -652,6 +646,7 @@ public class LY {
             DataFactory.loadDataFile("/data/object/channel.xml");
             DataFactory.loadDataFile("/data/object/chat.xml");
             DataFactory.loadDataFile("/data/object/config.xml");
+            DataFactory.loadDataFile("/data/object/define.xml");
             DataFactory.loadDataFile("/data/object/drop.xml");
             DataFactory.loadDataFile("/data/object/effect.xml");
             DataFactory.loadDataFile("/data/object/el.xml");
@@ -660,10 +655,6 @@ public class LY {
             DataFactory.loadDataFile("/data/object/env.xml");
             DataFactory.loadDataFile("/data/object/game.xml");
             DataFactory.loadDataFile("/data/object/gameLogic.xml");
-            
-            // remove20160915
-//            DataFactory.loadDataFile("/data/object/handler.xml");
-
             DataFactory.loadDataFile("/data/object/hitChecker.xml");
             DataFactory.loadDataFile("/data/object/magic.xml");
             DataFactory.loadDataFile("/data/object/module.xml");

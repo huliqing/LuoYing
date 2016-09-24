@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://luoying.huliqing.name'
+    xsi:schemaLocation='http://luoying.huliqing.name meta/define.xsd'>
+    
+    <!-- ========================================================================= -->
+    <!--技能标记定义: 系统中所有使用到的技能标记都必须在这里进行登记，目前最多允许64个标记-->
+    <!-- ========================================================================= -->
+    
+    <defineSkillTag id="defineSkillTag" tags="wait,walk,run,jump,idle,hurt,dead,reset,defend,duck,fight,attack,trick,magic,skin" />
+    
+</root>
+
+
+

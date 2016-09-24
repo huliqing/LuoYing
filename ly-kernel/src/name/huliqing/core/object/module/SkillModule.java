@@ -12,18 +12,20 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import name.huliqing.core.Factory;
 import name.huliqing.core.constants.SkillConstants;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.data.ModuleData;
+import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.skill.Skill;
-import name.huliqing.core.object.skill.SkillTagFactory;
 
 /**
  * @author huliqing
  */
 public class SkillModule extends AbstractModule {
+    private final SkillService skillService = Factory.get(SkillService.class);
     private Actor actor;
     private Control updateControl;
     
@@ -63,12 +65,12 @@ public class SkillModule extends AbstractModule {
     public void setData(ModuleData data) {
         super.setData(data);
         lockedSkillTags = data.getAsLong("lockedSkillTags", 0);
-        idleSkillTags = SkillTagFactory.convert(data.getAsArray("idleSkillTags"));
-        waitSkillTags = SkillTagFactory.convert(data.getAsArray("waitSkillTags"));
-        walkSkillTags = SkillTagFactory.convert(data.getAsArray("walkSkillTags"));
-        runSkillTags = SkillTagFactory.convert(data.getAsArray("runSkillTags"));
-        hurtSkillTags = SkillTagFactory.convert(data.getAsArray("hurtSkillTags"));
-        deadSkillTags = SkillTagFactory.convert(data.getAsArray("deadSkillTags"));
+        idleSkillTags = skillService.convertSkillTags(data.getAsArray("idleSkillTags"));
+        waitSkillTags = skillService.convertSkillTags(data.getAsArray("waitSkillTags"));
+        walkSkillTags = skillService.convertSkillTags(data.getAsArray("walkSkillTags"));
+        runSkillTags = skillService.convertSkillTags(data.getAsArray("runSkillTags"));
+        hurtSkillTags = skillService.convertSkillTags(data.getAsArray("hurtSkillTags"));
+        deadSkillTags = skillService.convertSkillTags(data.getAsArray("deadSkillTags"));
     }
     
     protected void updateData() {
@@ -104,6 +106,7 @@ public class SkillModule extends AbstractModule {
             for (Skill skill : playingSkills.getArray()) {
                 if (skill.isEnd()) {
                     playingSkills.remove(skill);
+                    skill.cleanup();
                     // 执行侦听器
                     if (skillPlayListeners != null && !skillPlayListeners.isEmpty()) {
                         for (int i = 0; i < skillPlayListeners.size(); i++) {
