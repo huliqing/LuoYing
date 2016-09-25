@@ -107,13 +107,12 @@ public interface SkinService extends Inject {
      */
     List<Skin> getUsingSkins(Actor actor);
     
-    
     /**
      * 获取角色当前正在使用的武器类型状态
      * @param actor
      * @return 
      */
-    int getWeaponState(Actor actor);
+    long getWeaponState(Actor actor);
     
     /**
      * 添加皮肤侦听器

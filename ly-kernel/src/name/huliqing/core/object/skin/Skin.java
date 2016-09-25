@@ -35,18 +35,17 @@ public interface Skin extends DataProcessor<SkinData>{
     void detach(Actor actor);
     
     /**
-     * 获取skin的类型，注：这里返回的整数使用的是二进制位来表示skin的类型，每一个位表示一个skin类型。<br>
-     *  注：一件skin可属于多个type,如上下连身的套装，如法袍可属于 "7,8", 二进制表示为"11000000"
+     * 获取skin的部位类型，注：这里返回的整数使用的是二进制位来表示skin的部分，每一个位表示一个skin类型
      * @return 
      */
-    public int getType();
+    public long getParts();
     
     /**
      * 获取与当前皮肤“排斥”的其它皮肤类型，返回的二进制值中每个位(1)表示一个皮肤类型。
      * “排斥”表示如果当前这件装备穿上角色身上，则这些“冲突”的装备必须从角色身上脱下。
      * @return 
      */
-    int getConflicts();
+    long getConflictParts();
     
     /**
      * 获取皮肤的模型节点,如果没有则返回null.
@@ -70,11 +69,12 @@ public interface Skin extends DataProcessor<SkinData>{
      */
     void endSkinning();
     
-    /**
-     * 判断皮肤是否是一件武器
-     * @return 
-     */
-    boolean isWeapon();
+    // remove20160924
+//    /**
+//     * 判断皮肤是否是一件武器
+//     * @return 
+//     */
+//    boolean isWeapon();
     
     /**
      * 判断是否为“基本皮肤”

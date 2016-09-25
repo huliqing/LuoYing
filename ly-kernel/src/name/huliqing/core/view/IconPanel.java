@@ -4,7 +4,6 @@
  */
 package name.huliqing.core.view;
 
-import com.jme3.math.ColorRGBA;
 import name.huliqing.core.ui.Icon;
 import name.huliqing.core.ui.LinearLayout;
 import name.huliqing.core.ui.UIFactory;

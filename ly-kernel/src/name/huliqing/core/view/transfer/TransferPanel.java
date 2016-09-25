@@ -13,13 +13,14 @@ import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.ui.LinearLayout;
 import name.huliqing.core.ui.UIFactory;
 import name.huliqing.core.ui.state.UIState;
+import name.huliqing.core.xml.DataProcessor;
 
 /**
  * 数据传输界面
  * @author huliqing
  * @param <T>
  */
-public abstract class TransferPanel<T extends ObjectData> extends LinearLayout implements TransferListener<T>, NumConfirmListener {
+public abstract class TransferPanel<T extends DataProcessor<ObjectData>> extends LinearLayout implements TransferListener<T>, NumConfirmListener {
     private final ItemTransfer transfer = new ItemTransfer();
     private static NumPanel numPanel; // 一个实例就行
     private T tempData;
@@ -59,7 +60,7 @@ public abstract class TransferPanel<T extends ObjectData> extends LinearLayout i
      * @param data 
      */
     public final void transfer(T data) {
-        if (data.getTotal() == 1) {
+        if (data.getData().getTotal() == 1) {
             // 如果数量只有一个，则直接传输
             transferInner(data, 1);
         } else {
@@ -77,10 +78,10 @@ public abstract class TransferPanel<T extends ObjectData> extends LinearLayout i
             numPanel.setDragEnabled(true);
         }
         numPanel.setTitle(ResourceManager.get(ResConstants.CHAT_SHOP_CONFIRM_COUNT)
-                + "-" + ResourceManager.getObjectName(data));
+                + "-" + ResourceManager.getObjectName(data.getData()));
         numPanel.setNumConfirmListener(this);
         numPanel.setMinLimit(0);
-        numPanel.setMaxLimit(data.getTotal());
+        numPanel.setMaxLimit(data.getData().getTotal());
         numPanel.setValue(count);
         // 记录临时数据
         tempData = data;

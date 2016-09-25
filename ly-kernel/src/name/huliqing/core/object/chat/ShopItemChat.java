@@ -19,7 +19,6 @@ import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.ItemService;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.manager.ResourceManager;
-import name.huliqing.core.mvc.service.ProtoService;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.object.actor.Actor;
@@ -47,7 +46,6 @@ import name.huliqing.core.ui.Window.CloseListener;
  * @param <T>
  */
 public class ShopItemChat<T extends ChatData> extends Chat<T> implements ItemListener {
-    private final ProtoService protoService = Factory.get(ProtoService.class);
     private final ItemService itemService = Factory.get(ItemService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final PlayService playService = Factory.get(PlayService.class);
@@ -286,8 +284,7 @@ public class ShopItemChat<T extends ChatData> extends Chat<T> implements ItemLis
             icon.setIcon(data.getData().getIcon());
             body.setNameText(ResourceManager.getObjectName(data.getData()));
             body.setDesText(ResourceManager.getObjectDes(data.getId()));
-            
-            cost.setText(protoService.getCost(data.getData()) + "");
+            cost.setText(data.getData().getCost() + "");
             num.setText(data.getData().getTotal() + "");
             setNeedUpdate();
         }

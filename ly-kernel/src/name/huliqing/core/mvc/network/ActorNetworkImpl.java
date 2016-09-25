@@ -14,7 +14,6 @@ import name.huliqing.core.data.ActorData;
 import name.huliqing.core.enums.Sex;
 import name.huliqing.core.view.talk.Talk;
 import name.huliqing.core.mvc.service.ActorService;
-import name.huliqing.core.mvc.service.AttributeService;
 import name.huliqing.core.mess.MessActorFollow;
 import name.huliqing.core.mess.MessActorKill;
 import name.huliqing.core.mess.MessActorPhysics;
@@ -36,12 +35,10 @@ import name.huliqing.core.object.module.ActorListener;
 public class ActorNetworkImpl implements ActorNetwork{
     private final static Network NETWORK = Network.getInstance();
     private ActorService actorService;
-    private AttributeService attributeService;
     
     @Override
     public void inject() {
         actorService = Factory.get(ActorService.class);
-        attributeService = Factory.get(AttributeService.class);
     }
 
     @Override
@@ -121,11 +118,6 @@ public class ActorNetworkImpl implements ActorNetwork{
 
     @Override
     public Vector3f getLocalToWorld(Actor actor, Vector3f localPos, Vector3f store) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public boolean checkAndLoadAnim(Actor actor, String animName) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -333,12 +325,6 @@ public class ActorNetworkImpl implements ActorNetwork{
     public void syncAnimation(Actor actor, String[] channelIds, String[] animNames, byte[] loopModes, float[] speeds, float[] times) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
-    // remove20160829
-//    @Override
-//    public int getLife(Actor actor) {
-//        throw new UnsupportedOperationException("Not supported yet.");
-//    }
     
     @Override
     public void setViewDirection(Actor actor, Vector3f viewDirection) {
@@ -386,11 +372,6 @@ public class ActorNetworkImpl implements ActorNetwork{
 
     @Override
     public Vector3f getWalkDirection(Actor actor) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void playAnim(Actor actor, String animName, LoopMode loop, float useTime, float startTime, String... channelIds) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

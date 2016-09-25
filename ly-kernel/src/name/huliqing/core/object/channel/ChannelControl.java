@@ -33,40 +33,40 @@ public interface ChannelControl {
      */
     List<Channel> getChannels();
     
-    /**
-     * @see #playAnim(java.lang.String, com.jme3.animation.LoopMode, float, float, float, java.lang.String[]) 
-     * @param animName 动画名称
-     * @param loop 循环模式
-     * @param useTime 动画的使用时间,单位秒
-     * @param channelIds
-     */
-    void playAnim(String animName, LoopMode loop, float useTime, String... channelIds);
+    // remove20160926
+//    /**
+//     * @see #playAnim(java.lang.String, com.jme3.animation.LoopMode, float, float, float, java.lang.String[]) 
+//     * @param animName 动画名称
+//     * @param loop 循环模式
+//     * @param useTime 动画的使用时间,单位秒
+//     * @param channelIds
+//     */
+//    void playAnim(String animName, LoopMode loop, float useTime, String... channelIds);
     
     /**
      * @see #playAnim(java.lang.String, com.jme3.animation.LoopMode, float, float, float, java.lang.String[]) 
      * @param animName
+     * @param channelIds
      * @param loop
      * @param useTime
      * @param startTime 
-     * @param channelIds
      */
-    void playAnim(String animName, LoopMode loop, float useTime, float startTime, String... channelIds);
+    void playAnim(String animName, String[] channelIds, LoopMode loop, float useTime, float startTime);
     
     /**
      * 执行动画。
      * @param animName 动画名称
+     * @param channelIds 指定使用哪些通道来执行该动画，如果没有特别指定，则偿试
+     * 使用全部通道来执行动画或者使用默认通道来执行动画
      * @param loop 循环模式
      * @param useTime 动画的使用时间,单位秒
      * @param startTime 动画的开始时间点，单位秒.该开始时间是以useTime为依据的,需要转换
      * 为动画的实际开始时间点。该参数影响动画的实际播放时间，比如useTime=4,
      * startTime=1,则实际动画时间为4-1=3秒。
      * @param blendTime
-     * @param channelIds 指定使用哪些通道来执行该动画，如果没有特别指定，则偿试
-     * 使用全部通道来执行动画或者使用默认通道来执行动画
      */
-    void playAnim(String animName, float blendTime, LoopMode loop
-            , float useTime, float startTime, String... channelIds);
-        
+    void playAnim(String animName, String[] channelIds, LoopMode loop, float useTime, float startTime, float blendTime);
+
     /**
      * 恢复动画，有时候当部分通道被打断执行了其它动画之后需要重新回到原来的
      * 动画上。如当角色在走路的时候所有通道都在执行“走路”动画，这时如果执
@@ -74,12 +74,12 @@ public interface ChannelControl {
      * 武器完毕之后，手部通道需要重新回到“走路”的动画中以便协调角色走路时的
      * 动画。
      * @param animName
+     * @param channelIds 
      * @param loop
      * @param useTime
      * @param startTime
-     * @param channelIds 
      */
-    void restoreAnimation(String animName, LoopMode loop, float useTime, float startTime, String... channelIds);
+    void restoreAnimation(String animName, String[] channelIds, LoopMode loop, float useTime, float startTime);
     
     /**
      * 把骨骼动画定位在当前所播放动画的第一帧处．

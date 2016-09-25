@@ -10,13 +10,14 @@ import name.huliqing.core.ui.ListView;
 import name.huliqing.core.ui.Row;
 import name.huliqing.core.ui.UI;
 import name.huliqing.core.ui.UI.Listener;
+import name.huliqing.core.xml.DataProcessor;
 
 /**
  * 显示物品列表
  * @author huliqing
  * @param <T>
  */
-public class ItemList<T extends ObjectData> extends ListView<T> implements Listener {
+public class ItemList<T extends DataProcessor<ObjectData>> extends ListView<T> implements Listener {
     
     public interface RowClickListener<T> {
         void onClick(Row row, boolean isPressed, T data);

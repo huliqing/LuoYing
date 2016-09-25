@@ -99,19 +99,6 @@ public class ProtoServiceImpl implements ProtoService {
 
     @Override
     public ObjectData getData(Actor actor, String id) {
-        // remove20160821
-//        Class<?> cc = DataFactory.getDataClassById(id);
-//        if (cc == null)
-//            return null;
-//        if (cc == ItemData.class || cc == SkinData.class) {
-//            return itemService.getItem(actor, id);
-//        }
-//        if (cc == SkillData.class) {
-//            return skillService.getSkill(actor, id).getData();
-//        }
-//        LOG.log(Level.WARNING, "Unsupported getData, id={0}, dataClass={1} ", new Object[] {id, cc});
-//        return null;
-
         return actor.getData().getObjectData(id);
     }
 
@@ -119,26 +106,6 @@ public class ProtoServiceImpl implements ProtoService {
     public List<ObjectData> getDatas(Actor actor) {
         return Collections.unmodifiableList(actor.getData().getObjectDatas());
     }
-
-    // remove20160830
-//    @Override
-//    public void syncDataTotal(Actor actor, String id, int total) {
-//        Class<?> cc = DataFactory.getDataClassById(id);
-//        if (cc == null)
-//            return;
-//        
-//        if (cc == ItemData.class) {
-//            itemService.syncItemTotal(actor, id, total);
-//            return;
-//        } 
-//        
-//        if (cc == SkinData.class) {
-//            throw new UnsupportedOperationException();
-//        }
-//        
-//        LOG.log(Level.WARNING, "Unsupported syncDataTotal, actor={0}, object id={1}, total={2}"
-//                , new Object[] {actor, id, total});
-//    }
 
     @Override
     public float getCost(ObjectData data) {

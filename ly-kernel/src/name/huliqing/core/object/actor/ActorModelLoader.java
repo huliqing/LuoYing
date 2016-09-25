@@ -141,81 +141,6 @@ public class ActorModelLoader {
                 ((Node) actorModel).attachChild(ae);
             }
         }
-        
-//        // =====.行为,技能,和逻辑
-//        ActorLogicProcessor logicProcessor = new ActorLogicProcessorImpl(LY.getApp(), actor);
-//        ActionProcessor actionProcessor = new ActionProcessor();
-//        SkillProcessor skillProcessor = new SkillProcessorImpl(actor);
-//        StateProcessor stateProcessor = new StateProcessorImpl(LY.getApp(), actor);
-//        ResistProcessor resistProcessor = new ResistProcessor();
-//        TalentProcessor talentProcessor = new TalentProcessorImpl(actor);
-//        actor.setLogicProcessor(logicProcessor);
-//        actor.setStateProcessor(stateProcessor);
-//        actor.setActionProcessor(actionProcessor);
-//        actor.setSkillProcessor(skillProcessor);
-//        actor.setResistProcessor(resistProcessor);
-//        actor.setTalentProcessor(talentProcessor);
-//        
-//        // 7.创建角色的动画通道,注意：不是所有角色都会有ChannelProcessor.
-//        // 如：防御塔，宝箱等一些静态类的角色就没有。
-//        // 对于包含骨骼动画的角色才有ChannelProcessor，对于这些角色如果指定了
-//        // channels，则根据设置为他们创建分别的通道，否则创建一个默认的包含
-//        // 所有骨骼的完整通道。单独的通道和默认全骨骼的通道不能同时使用，否则单独
-//        // 的通道将无效果。
-//        AnimControl ac = actor.getModel().getControl(AnimControl.class);
-//        if (ac != null) {
-//            ChannelProcessor acp = new ChannelProcessorImpl();
-//            actor.setChannelProcessor(acp);
-//            String[] channels = data.getAsArray("channels");
-//            if (channels == null) {
-//                channels = new String[]{IdConstants.CHANNEL_FULL};
-//            }
-//            for (String channelId : channels) {
-//                acp.addChannel(Loader.loadChannel(channelId, ac));
-//            }
-//        }
-//        
-//        // 8.==== 载入角色的逻辑
-//        List<ActorLogicData> logics = data.getLogics();
-//        if (logics != null) {
-//            for (ActorLogicData logicData : logics) {
-//                ActorLogic logic = Loader.loadLogic(logicData);
-//                logicProcessor.addLogic(logic);
-//            }
-//        }
-//        
-//        // 9.==== 载入角色的状态
-//        List<StateData> stateDatas = data.getStates();
-//        if (stateDatas != null) {
-//            for (StateData stateData : stateDatas) {
-//                State state = Loader.loadState(stateData);
-//                stateProcessor.addState(state);
-//            }
-//        }
-//        
-//        // 10.==== 载入天赋
-//        List<TalentData> talentDatas = data.getTalents();
-//        if (talentDatas != null) {
-//            for (TalentData td : talentDatas) {
-//                Talent talent = Loader.loadTalent(td);
-//                talentProcessor.addTalent(talent);
-//            }
-//        }
-//        
-//        // 11.==== 载入任务
-//        List<TaskData> tasks = data.getTasks();
-//        for (TaskData td : tasks) {
-//            Task task = Loader.loadTask(td);
-//            task.setActor(actor);
-//            task.initialize();
-//            actor.getTasks().add(task);
-//        }
-//        
-//        // 13.color
-//        if (data.getColor() != null) {
-//            GeometryUtils.setColor(actorModel, data.getColor());
-//        }
-        
 
         // 14.偿试激活HardwareSkining
         checkEnableHardwareSkining(actor, actorModel);
@@ -250,30 +175,6 @@ public class ActorModelLoader {
         return false;
     }
     
-//    /**
-//     * @deprecated 暂不使用该功能，作用不是特别大
-//     * 检查是否打开了batch功能
-//     * @param actor 
-//     */
-//    public static void checkEnableBatch(Actor actor) {
-//        if (actor.getData().isBatchEnabled()) {
-//            if (actor.getModel() instanceof Node) {
-//                GeometryBatchFactory.optimize((Node) actor.getModel());
-//                String[] scaleArr = actor.getData().getAsArray("scale");
-//                if (scaleArr == null)
-//                    return;
-//                
-//                if (scaleArr.length >= 3) {
-//                    Vector3f scale = new Vector3f();
-//                    ConvertUtils.toVector3f(scaleArr, scale);
-//                    actor.getModel().setLocalScale(scale);
-//                } else {
-//                    actor.getModel().setLocalScale(ConvertUtils.toFloat(scaleArr[0], 1));
-//                }
-//            }
-//        }
-//    }
-//    
     /**
      * 检测并判断是否打开或关闭该模型的硬件skining加速
      * @param actor 角色模型

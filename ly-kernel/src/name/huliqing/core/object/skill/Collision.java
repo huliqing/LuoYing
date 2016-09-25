@@ -11,7 +11,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.core.Config;
 import name.huliqing.core.Factory;
-import name.huliqing.core.data.SkinData;
 import name.huliqing.core.enums.Mat;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.EffectService;
@@ -20,6 +19,7 @@ import name.huliqing.core.mvc.service.SkinService;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.effect.AbstractEffect;
 import name.huliqing.core.object.skin.Skin;
+import name.huliqing.core.object.skin.Weapon;
 import name.huliqing.core.object.sound.SoundManager;
 
 /**
@@ -89,7 +89,7 @@ public class Collision {
         List<Skin> skins = skinService.getUsingSkins(actor);
         if (skins != null) {
             for (Skin s : skins) {
-                if (s.isWeapon()) {
+                if (s instanceof Weapon) {
                     return s;
                 }
             }

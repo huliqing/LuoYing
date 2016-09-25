@@ -44,17 +44,6 @@ xs:time
         <xs:attribute name="dataProcessorClass" type="xs:string" use="optional" >
             <xs:annotation><xs:documentation></xs:documentation></xs:annotation>
         </xs:attribute>
-        
-        <!--move to item.xsd-->
-<!--        <xs:attribute name="localObject" type="bool" use="optional" >
-            <xs:annotation>
-                <xs:documentation>
-                    是否为本地物体,对于本地物体在使用的时候不需要把事件传递到服务端或客户端。比如：客户端或服务端在打开地图
-                    的时候是不需要把事件传递到其它客户端或服务端的。localObject这是一种特殊的物品，只通过本地handler执行，
-                    所以使用后物品数量不会实时同步到其它客户端。需要注意这一点。
-                </xs:documentation>
-            </xs:annotation>
-        </xs:attribute>-->
     </xs:complexType>
     
     <!-- 布尔类型 -->
@@ -66,7 +55,7 @@ xs:time
     </xs:simpleType>
     
     <!--技能类型：以 SkillType.java的为准-->
-    <xs:simpleType name="skillType">
+<!--    <xs:simpleType name="skillType">
         <xs:restriction base="xs:string">
             <xs:enumeration value="wait"/>
             <xs:enumeration value="sit"/>
@@ -86,7 +75,7 @@ xs:time
             <xs:enumeration value="magic"/>
             <xs:enumeration value="common"/>
         </xs:restriction>
-    </xs:simpleType>
+    </xs:simpleType>-->
     
     <!-- 定义平面：xy,xz,yz: remove20160805 -->
     <xs:simpleType name="plane" >
@@ -106,7 +95,8 @@ xs:time
         </xs:restriction>
     </xs:simpleType>
     
-    <xs:attribute name="sex">
+        <!--remove20160924-->
+<!--    <xs:attribute name="sex">
         <xs:annotation>
             <xs:documentation>0:female; 1:male;</xs:documentation>
         </xs:annotation>
@@ -123,9 +113,10 @@ xs:time
                 </xs:enumeration>
             </xs:restriction>
         </xs:simpleType>
-    </xs:attribute>
+    </xs:attribute>-->
     
-    <xs:attribute name="weaponType">
+    <!--remove20160924-->
+<!--    <xs:attribute name="weaponType">
         <xs:annotation>
             <xs:documentation>
                 武器类型：1:刀、剑; 2:匕首; 3:弓; 4:爪子; 5.魔法书; 6.魔法杖
@@ -141,20 +132,7 @@ xs:time
                 <xs:enumeration value="5"/>
             </xs:restriction>
         </xs:simpleType>
-    </xs:attribute>
-    
-    <xs:attribute name="race">
-        <xs:annotation>
-            <xs:documentation>种族 => 0:未分类； 1：人种;  2:兽族; 如果没有设置种族，则默认为0</xs:documentation>
-        </xs:annotation>
-        <xs:simpleType>
-            <xs:restriction base="xs:string">
-                <xs:enumeration value="0"/>
-                <xs:enumeration value="1"/>
-                <xs:enumeration value="2"/>
-            </xs:restriction>
-        </xs:simpleType>
-    </xs:attribute>
+    </xs:attribute>-->
     
     <xs:attribute name="mat">
         <xs:annotation>
@@ -187,14 +165,6 @@ xs:time
         </xs:annotation>
     </xs:attribute>
     
-    <xs:attribute name="mass" type="xs:decimal">
-        <xs:annotation>
-            <xs:documentation>角色质量，默认0，对于能够行动的角色，如人物，怪物等应该设置大于0。
-                对于静止的角色，如防御塔等不能移动的角色应该设置为0。
-            </xs:documentation>
-        </xs:annotation>
-    </xs:attribute>
-    
     <xs:attribute name="file" type="xs:string">
         <xs:annotation>
             <xs:documentation>指定物品的模型文件路径，如：Models/trees/flower/flower1.j3o</xs:documentation>
@@ -206,12 +176,6 @@ xs:time
             <xs:documentation>给物品指定一个图标(64x64), 如：Interface/icon/gold.png.
                 图标一般用于在物品栏中显示,如果没有图标，则显示为"MISS"
             </xs:documentation>
-        </xs:annotation>
-    </xs:attribute>
-    
-    <xs:attribute name="handler" type="xs:string">
-        <xs:annotation>
-            <xs:documentation>指定一个handler来处理该物品的使用</xs:documentation>
         </xs:annotation>
     </xs:attribute>
     
@@ -241,40 +205,6 @@ xs:time
                 <xs:enumeration value="mesh"/>
                 <xs:enumeration value="dynamicMesh"/>
                 <xs:enumeration value="capsule"/>
-            </xs:restriction>
-        </xs:simpleType>
-    </xs:attribute>
-    
-    <xs:attribute name="careerLimit">
-        <xs:annotation>
-            <xs:documentation>
-                职业限制，格式:"career1,career2,career3",如:"1,2,3"
-            </xs:documentation>
-        </xs:annotation>
-    </xs:attribute>
-    
-    <xs:attribute name="raceLimit">
-        <xs:annotation>
-            <xs:documentation>
-                限制物品只能在指定的种族使用，格式："race1,race2,race3,...",
-                如果值为空或null,则表示无限制，所有种族都可以使用.
-                种族定义参考=》
-                0:未分类； 1：人种;  2:兽族; 如果没有设置种族，则默认为0
-            </xs:documentation>
-        </xs:annotation>
-    </xs:attribute>
-    
-    <xs:attribute name="sexLimit">
-        <xs:annotation>
-            <xs:documentation>
-                限制物品只能由指定性别的角色使用,如果为空或null则表示无任何限制。
-                0:female; 1:male;
-            </xs:documentation>
-        </xs:annotation>
-        <xs:simpleType>
-            <xs:restriction base="xs:string">
-                <xs:enumeration value="0" />
-                <xs:enumeration value="1" />
             </xs:restriction>
         </xs:simpleType>
     </xs:attribute>

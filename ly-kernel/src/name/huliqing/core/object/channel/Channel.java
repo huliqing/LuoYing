@@ -31,14 +31,14 @@ public interface Channel<T extends ChannelData> extends DataProcessor<T>{
     /**
      * 执行动画。
      * @param animName 动画名称
-     * @param blendTime
      * @param loop 循环模式
      * @param speed 动画的执行速度
      * @param time 动画的开始时间点，单位秒.该开始时间是以useTime为依据的,需要转换
      * 为动画的实际开始时间点。该参数影响动画的实际播放时间，比如useTime=4,
      * startTime=1,则实际动画时间为4-1=3秒。
+     * @param blendTime
      */
-    void playAnim(String animName, float blendTime, LoopMode loop, float speed, float time);
+    void playAnim(String animName, LoopMode loop, float speed, float time, float blendTime);
     
     /**
      * 更新当前动画动道的循环模式

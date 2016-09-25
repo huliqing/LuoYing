@@ -300,6 +300,8 @@ import name.huliqing.core.object.attribute.LongAttribute;
 import name.huliqing.core.object.attribute.StringAttribute;
 import name.huliqing.core.object.attribute.StringListAttribute;
 import name.huliqing.core.object.define.SkillTagDefine;
+import name.huliqing.core.object.define.SkinPartDefine;
+import name.huliqing.core.object.define.WeaponTypeDefine;
 import name.huliqing.core.object.drop.AttributeDrop;
 import name.huliqing.core.object.drop.GroupDrop;
 import name.huliqing.core.object.drop.ItemDrop;
@@ -314,6 +316,7 @@ import name.huliqing.core.object.item.StateRemoveItem;
 import name.huliqing.core.object.item.SummonItem;
 import name.huliqing.core.object.module.DropModule;
 import name.huliqing.core.object.module.LevelModule;
+import name.huliqing.core.object.slot.Slot;
 import name.huliqing.core.object.state.GroupState;
 import name.huliqing.core.state.PlayState;
 import name.huliqing.core.xml.Data;
@@ -474,6 +477,8 @@ public class LY {
         
         // Define
         DataFactory.register("defineSkillTag", DefineData.class, DefineDataLoader.class, SkillTagDefine.class);
+        DataFactory.register("defineSkinPart", DefineData.class, DefineDataLoader.class, SkinPartDefine.class);
+        DataFactory.register("defineWeaponType", DefineData.class, DefineDataLoader.class, WeaponTypeDefine.class);
         
         // Drop
         DataFactory.register("dropAttribute",  DropData.class, DropDataLoader.class, AttributeDrop.class);
@@ -607,7 +612,7 @@ public class LY {
         DataFactory.register("skinWeapon",  SkinData.class, SkinDataLoader.class, WeaponSkin.class);
         
         // Slot
-        DataFactory.register("slot",  SlotData.class, SlotDataLoader.class, null);
+        DataFactory.register("slot",  SlotData.class, SlotDataLoader.class, Slot.class);
         
         // Sound
         DataFactory.register("sound",  SoundData.class, SoundDataLoader.class, Sound.class);

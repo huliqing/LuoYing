@@ -28,6 +28,7 @@ import name.huliqing.core.object.module.SkinModule;
 import name.huliqing.core.object.skill.HitSkill;
 import name.huliqing.core.object.skill.Skill;
 import name.huliqing.core.object.skin.Skin;
+import name.huliqing.core.object.skin.Weapon;
 import name.huliqing.core.utils.MathUtils;
 
 /**
@@ -353,26 +354,26 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
     @Override
     public void onSkinAttached(Actor actor, Skin skin) {
         // 当角色武器切换之后需要重新缓存技能，因为技能是有武器状态限制的。切换武器后当前的技能不一定能适应。
-        if (skin.isWeapon()) {
+        if (skin instanceof Weapon) {
             recacheSkill();
         }
     }
 
     @Override
     public void onSkinDetached(Actor actor, Skin skin) {
-        if (skin.isWeapon()) {
+        if (skin instanceof Weapon) {
             recacheSkill();
         }
     }
     
     private void recacheSkill() {
         fightSkills.clear();
-        int weaponState = skinModule.getWeaponState();
+        long weaponState = skinModule.getWeaponState();
         loadAttackSkill(weaponState, fightSkillTags, fightSkills);
         // 重新缓存技能后，检查一次当前正在使用的技能是否适合当前的武器，如果不行则清除它，让它
         // 重新获取一个可用的。否则不应该清除当前的技能。
         if (skill != null) {
-            List<Integer> weaponLimit = skill.getData().getWeaponStateLimit();
+            List<Long> weaponLimit = skill.getData().getWeaponStateLimit();
             if (weaponLimit != null && !weaponLimit.isEmpty() && !weaponLimit.contains(weaponState)) {
                 skill = null;
             }
@@ -387,7 +388,7 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
      * @param store 存放结果集，如果为null则创建一个
      * @return "攻击"技能列表,可能包含：attack.common/shot/trick/magic
      */
-    private List<Skill> loadAttackSkill(int weaponState, long skillTags, List<Skill> store) {
+    private List<Skill> loadAttackSkill(long weaponState, long skillTags, List<Skill> store) {
         List<Skill> allSkills = skillModule.getSkills();
         for (Skill as : allSkills) {
             if ((skillTags & as.getData().getTags()) != 0) {

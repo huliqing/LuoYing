@@ -26,11 +26,11 @@ import name.huliqing.core.data.AttributeApply;
 import name.huliqing.core.data.AttributeMatch;
 import name.huliqing.core.data.SkinData;
 import name.huliqing.core.mvc.service.AttributeService;
-import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.object.AssetLoader;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.attribute.Attribute;
 import name.huliqing.core.object.attribute.MatchAttribute;
+import name.huliqing.core.object.define.DefineFactory;
 import name.huliqing.core.object.sound.SoundManager;
 
 /**
@@ -42,6 +42,13 @@ public abstract class AbstractSkin implements Skin {
     
     protected SkinData data;
     protected String[] sounds;
+    
+    //注：一件skin可属于多个type,如上下连身的套装，如法袍可属于 "7,8".
+    //同时一件skin也可与多个其它skin进行排斥。这里的type和conflictType使用二
+    //进制位来表示各个类型，例如一件上下连身的套装（类型属于7,8）在二进制表示为
+    private long parts;
+    // 定义与其它skin的排斥,当一件skin穿上身时，角色身上受排斥的skin将会脱下来。
+    private long conflictParts;
     
     // 当指定了bindBone时，皮肤应该添加到bindBone所在的骨骼上，否则直接添加到角色根节点。
     private String bindBone;
@@ -57,6 +64,9 @@ public abstract class AbstractSkin implements Skin {
     @Override
     public void setData(SkinData data) {
         this.data = data;
+        parts = DefineFactory.getSkinPartDefine().convert(data.getAsArray("parts"));
+        conflictParts = DefineFactory.getSkinPartDefine().convert(data.getAsArray("conflictParts"));
+        
         sounds = data.getAsArray("sounds");
         bindBone = data.getAsString("bindBone");
         localLocation = data.getAsVector3f("localLocation");
@@ -70,13 +80,13 @@ public abstract class AbstractSkin implements Skin {
     }
 
     @Override
-    public int getType() {
-        return data.getType();
+    public long getParts() {
+        return parts;
     }
 
     @Override
-    public int getConflicts() {
-        return data.getType() | data.getConflictType();
+    public long getConflictParts() {
+        return parts | conflictParts;
     }
 
     @Override

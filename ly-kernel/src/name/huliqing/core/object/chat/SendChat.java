@@ -7,13 +7,12 @@ package name.huliqing.core.object.chat;
 import com.jme3.app.Application;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.constants.ResConstants;
 import name.huliqing.core.data.ChatData;
-import name.huliqing.core.data.ItemData;
 import name.huliqing.core.data.ObjectData;
-import name.huliqing.core.data.SkinData;
 import name.huliqing.core.mvc.network.UserCommandNetwork;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.ItemService;
@@ -24,8 +23,10 @@ import name.huliqing.core.view.transfer.SimpleTransferPanel;
 import name.huliqing.core.view.transfer.TabTransferPanel;
 import name.huliqing.core.view.transfer.TransferPanel;
 import name.huliqing.core.manager.ResourceManager;
-import name.huliqing.core.mvc.service.ProtoService;
+import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.item.Item;
+import name.huliqing.core.object.skin.Skin;
 import name.huliqing.core.ui.Button;
 import name.huliqing.core.ui.FrameLayout;
 import name.huliqing.core.ui.LinearLayout;
@@ -33,6 +34,7 @@ import name.huliqing.core.ui.UI;
 import name.huliqing.core.ui.UIFactory;
 import name.huliqing.core.ui.Window;
 import name.huliqing.core.xml.DataFactory;
+import name.huliqing.core.xml.DataProcessor;
 
 /**
  * 出售物品到商店类角色
@@ -41,7 +43,7 @@ import name.huliqing.core.xml.DataFactory;
  */
 public class SendChat<T extends ChatData> extends Chat<T> {
     private final ItemService itemService = Factory.get(ItemService.class);
-    private final ProtoService protoService = Factory.get(ProtoService.class);
+//    private final ProtoService protoService = Factory.get(ProtoService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final SkinService skinService = Factory.get(SkinService.class);
     private final PlayService playService = Factory.get(PlayService.class);
@@ -50,8 +52,8 @@ public class SendChat<T extends ChatData> extends Chat<T> {
     // ---- inner
     private Window win;
     private LinearLayout bodyPanel;
-    private TransferPanel sourcePanel;  // 玩家物品面板,显示角色已经有的物品
-    private TransferPanel distPanel;    // 等发送物品面板
+    private TransferPanel<DataProcessor<ObjectData>> sourcePanel;  // 玩家物品面板,显示角色已经有的物品
+    private TransferPanel<DataProcessor<ObjectData>> distPanel;    // 等发送物品面板
     private CenterPanel centerPanel;    // 分隔线
     private FooterPanel footerPanel;    // 显示确认按钮
     
@@ -106,30 +108,70 @@ public class SendChat<T extends ChatData> extends Chat<T> {
         // 记住卖者
         sender = playService.getPlayer();
         
+        // remove20160925
+//        // 初始化, 数据要复制一份出来，不要去影响角色的包裹中的数据
+//        List<ObjectData> transferDatas = new ArrayList<ObjectData>();
+//        List<ObjectData> datas = protoService.getDatas(sender);
+//        if (datas != null && !datas.isEmpty()) {
+//            for (ObjectData od : datas) {
+//                if (!protoService.isSellable(od)) {
+//                    continue;
+//                }
+//                if (!SkinData.class.isAssignableFrom(od.getClass()) && !ItemData.class.isAssignableFrom(od.getClass())) {
+//                    continue;
+//                }
+//                if (SkinData.class.isAssignableFrom(od.getClass())) {
+//                    SkinData sd = (SkinData) od;
+//                    if (sd.isUsed() || sd.isBaseSkin()) {
+//                        continue;
+//                    }
+//                }
+//                ObjectData dataCopy = DataFactory.createData(od.getId());
+//                dataCopy.setTotal(od.getTotal());
+//                transferDatas.add(dataCopy);
+//            }
+//        }
+//        
+//        sourcePanel.setDatas(transferDatas);
+
         // 初始化, 数据要复制一份出来，不要去影响角色的包裹中的数据
-        List<ObjectData> transferDatas = new ArrayList<ObjectData>();
-        List<ObjectData> datas = protoService.getDatas(sender);
-        if (datas != null && !datas.isEmpty()) {
-            for (ObjectData od : datas) {
-                if (!protoService.isSellable(od)) {
+        List<DataProcessor> tempDatas = new ArrayList<DataProcessor>();
+        List<Item> items = itemService.getItems(sender);
+        if (items != null) {
+            tempDatas.addAll(items);
+        }
+        List<Skin> skins = skinService.getSkins(sender);
+        if (skins != null) {
+            tempDatas.addAll(skins);
+        }
+        // 移除不能出售的物品
+        Iterator<DataProcessor> it = tempDatas.iterator();
+        while (it.hasNext()) {
+            DataProcessor dp = it.next();
+            if (dp instanceof Item) {
+                Item item = (Item) dp;
+                if (!item.getData().isSellable()) {
+                    it.remove();
                     continue;
                 }
-                if (!SkinData.class.isAssignableFrom(od.getClass()) && !ItemData.class.isAssignableFrom(od.getClass())) {
+            }
+            if (dp instanceof Skin) {
+                Skin skin = (Skin) dp;
+                if (skin.isAttached() || skin.isBaseSkin() || skin.isSkinning()) {
+                    it.remove();
                     continue;
                 }
-                if (SkinData.class.isAssignableFrom(od.getClass())) {
-                    SkinData sd = (SkinData) od;
-                    if (sd.isUsed() || sd.isBaseSkin()) {
-                        continue;
-                    }
-                }
-                ObjectData dataCopy = DataFactory.createData(od.getId());
-                dataCopy.setTotal(od.getTotal());
-                transferDatas.add(dataCopy);
             }
         }
         
-        sourcePanel.setDatas(transferDatas);
+        List<DataProcessor<ObjectData>> transforDatas = new ArrayList<DataProcessor<ObjectData>>();
+        for (DataProcessor dp : tempDatas) {
+            ObjectData dataCopy = DataFactory.createData(dp.getData().getId());
+            dataCopy.setTotal(((ObjectData)dp.getData()).getTotal());
+            transforDatas.add(Loader.load(dataCopy));
+        }
+        sourcePanel.setDatas(transforDatas);
+        
         // 清空dist面板
         distPanel.setDatas(Collections.EMPTY_LIST);
         
@@ -138,18 +180,18 @@ public class SendChat<T extends ChatData> extends Chat<T> {
     
     // 给目标发送物品
     private void send() {
-        List<ObjectData> datas = distPanel.getDatas();
+        List<DataProcessor<ObjectData>> datas = distPanel.getDatas();
         if (datas.isEmpty()) {
             playService.removeObject(this);
             return;
         }
         String[] objects = new String[datas.size()];
         int[] counts = new int[datas.size()];
-        ObjectData pd;
+        DataProcessor<ObjectData> pd;
         for (int i = 0; i < datas.size(); i++) {
             pd = datas.get(i);
-            objects[i] = pd.getId();
-            counts[i] = pd.getTotal();
+            objects[i] = pd.getData().getId();
+            counts[i] = pd.getData().getTotal();
         }
         userCommandNetwork.chatSend(sender, actor, objects, counts);
         playService.removeObject(this);

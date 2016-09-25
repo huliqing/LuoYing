@@ -17,12 +17,7 @@ public class SlotDataLoader implements DataLoader<SlotData> {
 
     @Override
     public void load(Proto proto, SlotData data) {
-        data.setBindBone(proto.getAsString("bindBone"));
-        data.setLocalTranslation(proto.getAsVector3f("localLocation"));
-        data.setLocalRotation(proto.getAsQuaternion("localRotation"));
-        data.setLocalScale(proto.getAsVector3f("localScale"));
-        data.setLeftHandSkinSkill(proto.getAsString("leftHandSkinSkill"));
-        data.setRightHandSkinSkill(proto.getAsString("rightHandSkinSkill"));
+        // ignore
     }
     
 }

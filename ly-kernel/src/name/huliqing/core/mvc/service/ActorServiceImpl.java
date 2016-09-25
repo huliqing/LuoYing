@@ -260,18 +260,19 @@ public class ActorServiceImpl implements ActorService {
         return store;
     }
 
-    @Override
-    public boolean checkAndLoadAnim(Actor actor, String animName) {
-        if (animName == null) {
-            return false;
-        }
-        AnimControl ac = actor.getSpatial().getControl(AnimControl.class);
-        if (ac.getAnim(animName) != null) {
-            return true;
-        } else {
-            return ActorModelLoader.loadExtAnim(actor, animName);
-        }
-    }
+    // remove20160925
+//    @Override
+//    public boolean checkAndLoadAnim(Actor actor, String animName) {
+//        if (animName == null) {
+//            return false;
+//        }
+//        AnimControl ac = actor.getSpatial().getControl(AnimControl.class);
+//        if (ac.getAnim(animName) != null) {
+//            return true;
+//        } else {
+//            return ActorModelLoader.loadExtAnim(actor, animName);
+//        }
+//    }
 
     @Override
     public void kill(Actor actor) {
@@ -487,21 +488,21 @@ public class ActorServiceImpl implements ActorService {
         if (channelIds == null) 
             return;
         
-        ChannelModule cp = actor.getModule(ChannelModule.class);
-        if (cp == null)
+        ChannelModule module = actor.getModule(ChannelModule.class);
+        if (module == null)
             return;
         
         for (int i = 0; i < channelIds.length; i++) {
-            Channel ch = cp.getChannel(channelIds[i]);
-            if (ch == null)
+            Channel channel = module.getChannel(channelIds[i]);
+            if (channel == null)
                 continue;
             if (animNames[i] == null) 
                 continue;
             
             // 同步动画通道时先解锁，因为可能存在一些正处于锁定状态的通道。
             // 比如正在抽取武器的过程，手部通道可能会锁定。同步完动画之后再把状态设置回去。
-            boolean oldLocked = ch.isLocked();
-            ch.setLock(false);
+            boolean oldLocked = channel.isLocked();
+            channel.setLock(false);
             byte loopByte = loopModes[i];
             LoopMode lm = LoopMode.DontLoop;
             if (loopByte == 1) {
@@ -509,11 +510,11 @@ public class ActorServiceImpl implements ActorService {
             } else if (loopByte == 2) {
                 lm = LoopMode.Cycle;
             }
-            // 检查是否存在动画，如果没有则载入。
-            checkAndLoadAnim(actor, animNames[i]);
+            
             // 同步动画
-            ch.playAnim(animNames[i], 0, lm, speeds[i], times[i]);
-            ch.setLock(oldLocked);
+            channel.playAnim(animNames[i], lm, speeds[i], times[i], 0); 
+            
+            channel.setLock(oldLocked);
         }
     }
 
@@ -575,17 +576,15 @@ public class ActorServiceImpl implements ActorService {
         }
         return null;
     }
-    
-    @Override
-    public void playAnim(Actor actor, String animName, LoopMode loop, float useTime, float startTime, String... channelIds) {
-        ChannelModule module = actor.getModule(ChannelModule.class);
-        if (module != null) {
-            // 检查anim是否存在
-            checkAndLoadAnim(actor, animName);
-            // 执行anim
-            module.playAnim(animName, loop, useTime, startTime, channelIds);
-        }
-    }
+   
+    // remove20160926
+//    @Override
+//    public void playAnim(Actor actor, String animName, LoopMode loop, float useTime, float startTime, String... channelIds) {
+//        ChannelModule module = actor.getModule(ChannelModule.class);
+//        if (module != null) {
+//            module.playAnim(animName, channelIds, loop, useTime, startTime);
+//        }
+//    }
     
     @Override
     public void setChannelLock(Actor actor, boolean locked, String... channelIds) {
@@ -599,7 +598,7 @@ public class ActorServiceImpl implements ActorService {
     public void restoreAnimation(Actor actor, String animName, LoopMode loop, float useTime, float startTime, String... channelIds) {
         ChannelModule module = actor.getModule(ChannelModule.class);
         if (module != null) {
-            module.restoreAnimation(animName, loop, useTime, startTime, channelIds);
+            module.restoreAnimation(animName, channelIds, loop, useTime, startTime);
         }
     }
 
@@ -617,8 +616,6 @@ public class ActorServiceImpl implements ActorService {
     public void resetToAnimationTime(Actor actor, String animation, float timePoint) {
         ChannelModule module = actor.getModule(ChannelModule.class);
         if (module != null) {
-            // 检查anim是否存在
-            checkAndLoadAnim(actor, animation);
             module.resetToAnimationTime(animation, timePoint);
         }
     }

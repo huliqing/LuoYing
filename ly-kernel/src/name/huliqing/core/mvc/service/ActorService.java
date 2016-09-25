@@ -144,14 +144,14 @@ public interface ActorService extends Inject {
      */
     Vector3f getLocalToWorld(Actor actor, Vector3f localPos, Vector3f store);
     
-    /**
-     * 检查是否存在指定的骨骼动画,如果没有则偿试载入该动画。如果找不到动画文件
-     * 则返回false, 如果已经存在动画或载入动画成功则返回true.
-     * @param actor　角色
-     * @param animName　动画名称
-     * @return 
-     */
-    boolean checkAndLoadAnim(Actor actor, String animName);
+//    /**
+//     * 检查是否存在指定的骨骼动画,如果没有则偿试载入该动画。如果找不到动画文件
+//     * 则返回false, 如果已经存在动画或载入动画成功则返回true.
+//     * @param actor　角色
+//     * @param animName　动画名称
+//     * @return 
+//     */
+//    boolean checkAndLoadAnim(Actor actor, String animName);
     
     /**
      * 杀死一个角色
@@ -438,17 +438,7 @@ public interface ActorService extends Inject {
      * @return 
      */
     Vector3f getWalkDirection(Actor actor);
-    
-    /**
-     * @param actor
-     * @param animName
-     * @param loop
-     * @param useTime
-     * @param startTime 
-     * @param channelIds
-     */
-    void playAnim(Actor actor, String animName, LoopMode loop, float useTime, float startTime, String... channelIds);
-    
+   
     /**
      * 锁定或解锁指定的动画通道，当一个动画通道被锁定之后将不能再执行任何动画，包
      * 括reset，除非重新进行解锁

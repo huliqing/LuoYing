@@ -34,10 +34,10 @@ xs:time
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="baseSkin">
-                    <xs:attribute name="weaponType" ref="weaponType" use="required" >
+                    <xs:attribute name="weaponType" type="xs:string" use="required" >
                         <xs:annotation>
                             <xs:documentation>
-                                指定一个武器类型，只有设置了该值，该skin才能作为武器类型存在,否则只作为普通装备。
+                                指定武器类型，格式："weaponType", 如："rightSword", 参考: define.xml中weaponType的定义 
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
@@ -77,44 +77,18 @@ xs:time
                         <xs:documentation>是否为基本破肤</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-                <xs:attribute name="type" use="required" >
+                <xs:attribute name="parts" use="required" >
                     <xs:annotation>
                         <xs:documentation>
-                            skin的类型，格式如："type1,type2,type3",注：即一个skin可以属于多个type的。
-                            比如上下连身的长袍的type可能为"7,8", 目前最多支持32个类型，取值从[0-31],
-                            不要超过该范围
-                            type参考如下（具体以SkinConstants所定义的type为准）：
-                            ear(1), eye(2), face(3), foot(4), hair(5), hand(6), lowerBody(7), upperBody(8);
-                            weaponLeft左武器(9),weaponRight右武器(10),
-                            blinder眼罩(11),mouthMask口罩(12),faceMask面罩(13),horn角(14),
+                            皮肤部位定义，see define.xml => defineSkinType,  格式 : "skinPart1,skinPart2,..."
                         </xs:documentation>
                     </xs:annotation>
-                    <xs:simpleType>
-                        <xs:restriction base="xs:string" >
-                            <xs:enumeration value="1" />
-                            <xs:enumeration value="2" />
-                            <xs:enumeration value="3" />
-                            <xs:enumeration value="4" />
-                            <xs:enumeration value="5" />
-                            <xs:enumeration value="6" />
-                            <xs:enumeration value="7" />
-                            <xs:enumeration value="8" />
-                            <xs:enumeration value="9" />
-                            <xs:enumeration value="10" />
-                            <xs:enumeration value="11" />
-                            <xs:enumeration value="12" />
-                            <xs:enumeration value="13" />
-                            <xs:enumeration value="14" />
-                        </xs:restriction>
-                    </xs:simpleType>
                 </xs:attribute>
-                <xs:attribute name="conflictType" type="xs:string" use="optional">
+                <xs:attribute name="conflictParts" type="xs:string" use="optional">
                     <xs:annotation>
                         <xs:documentation>
-                            排斥的目标skin类型，格式："type1,type2,type3,...",一般情况下，当一个skin添加到角色身上时，目标角色身上的
-                            相同类型(type)的skin会脱下来收起，即同一个类型的skin不可能同时添加到角色身上.而conflictType参数可指定其它
-                            类型的skin也脱下来，比如当面具带上去时，这时眼罩和口罩可能要从角色身上脱下。则对面具类型的conflictType参数可
-                            设定为:"11,12"
+                            排斥的目标skinPart，格式："skinPart1,skinPart2,...",一般情况下，当一个skin添加到角色身上时，目标角色身上的
+                            相同部位的皮肤会脱下来，即同一个类型的skin不可能同时添加到角色身上.而conflictParts可以指定额外的排斥部位。
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>

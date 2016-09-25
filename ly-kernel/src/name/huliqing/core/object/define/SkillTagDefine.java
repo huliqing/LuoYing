@@ -13,6 +13,7 @@ import name.huliqing.core.data.DefineData;
 import name.huliqing.core.object.skill.SkillTag;
 
 /**
+ * 技能类型的定义
  * @author huliqing
  */
 public class SkillTagDefine extends Define {
@@ -21,12 +22,12 @@ public class SkillTagDefine extends Define {
     /**
      * 技能标记列表,这个列表是有序的,并且在载入后不在运行时改变
      */
-    private final List<SkillTag> TAGS = new ArrayList<SkillTag>();
+    private final List<SkillTag> tagList = new ArrayList<SkillTag>();
 
     @Override
     public void setData(DefineData data) {
         super.setData(data);
-        String[] tags = data.getAsArray("tags");
+        String[] tags = data.getAsArray("skinTags");
         if (tags != null && tags.length > 0) {
             for (String tag : tags) {
                 registerSkillTag(tag);
@@ -39,7 +40,7 @@ public class SkillTagDefine extends Define {
      * @return 
      */
     public final int size() {
-        return TAGS.size();
+        return tagList.size();
     }
     
     /**
@@ -91,18 +92,18 @@ public class SkillTagDefine extends Define {
                     , new Object[] {skillTag, size()});
             return;
         }
-        TAGS.add(new SkillTag(TAGS.size(), skillTag));
+        tagList.add(new SkillTag(tagList.size(), skillTag));
     }
     
     /**
      * 清理所有技能标记
      */
     public synchronized void clearTags() {
-        TAGS.clear();
+        tagList.clear();
     }
     
     private SkillTag getSkillTagInner(String skillTag) {
-        for (SkillTag st : TAGS) {
+        for (SkillTag st : tagList) {
             if (st.name().equals(skillTag)) {
                 return st;
             }
@@ -110,24 +111,20 @@ public class SkillTagDefine extends Define {
         return null;
     }
     
-    /**
-     * 打印当前所有的标记，调试用。
-     * @return 
-     */
-    public String toStringTags() {
-        return TAGS.toString();
+    @Override
+    public String toString() {
+        return tagList.toString();
     }
     
     /**
-     * 打印出所有技能tag类型。
      * @param tags
      * @return 
      */
-    public String toStringTags(long tags) {
+    public String toString(long tags) {
         List<String> temp = new ArrayList<String>();
         for (int i = 0; i < size(); i++) {
             if ((tags & 1 << i) != 0) {
-                temp.add(TAGS.get(i).name());
+                temp.add(tagList.get(i).name());
             }
         }
         return temp.toString();

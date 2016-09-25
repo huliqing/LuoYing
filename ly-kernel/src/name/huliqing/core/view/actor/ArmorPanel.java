@@ -14,12 +14,12 @@ import name.huliqing.core.mvc.network.SkinNetwork;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.SkinService;
 import name.huliqing.core.object.skin.Skin;
+import name.huliqing.core.object.skin.Weapon;
 import name.huliqing.core.ui.ListView;
 import name.huliqing.core.ui.Row;
 import name.huliqing.core.ui.UI;
 
 /**
- *
  * @author huliqing
  */
 public class ArmorPanel extends ListView<Skin> implements ActorPanel{
@@ -80,18 +80,21 @@ public class ArmorPanel extends ListView<Skin> implements ActorPanel{
             datas.clear();
             List<Skin> skins = skinService.getSkins(actor);
             if (skins != null && !skins.isEmpty()) {
-                for (Skin s : skins) {
-                    if (s.isBaseSkin()) {
-                        continue;
-                    }
-                    if (s.isWeapon()) {
-                        continue;
-                    }
-                    datas.add(s);
-                }
+                datas.addAll(skins);
             }
         }
         return datas;
+    }
+
+    @Override
+    protected boolean filter(Skin data) {
+        if (data.isBaseSkin()) {
+            return true;
+        }
+        if (data instanceof Weapon) {
+            return true;
+        }
+        return false;
     }
 
     @Override

@@ -9,6 +9,9 @@ import com.jme3.util.SafeArrayList;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import name.huliqing.core.Config;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.SkinData;
 import name.huliqing.core.data.ModuleData;
@@ -16,15 +19,18 @@ import name.huliqing.core.object.Loader;
 import name.huliqing.core.mvc.service.AttributeService;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.attribute.CollectionAttribute;
+import name.huliqing.core.object.define.DefineFactory;
 import name.huliqing.core.object.skin.Skin;
+import name.huliqing.core.object.skin.Weapon;
 import name.huliqing.core.object.skin.WeaponSkin;
-import name.huliqing.core.object.skin.WeaponStateUtils;
 
 /**
  * 角色的换装控制器
  * @author huliqing
  */
 public class SkinModule extends AbstractModule {
+    private static final Logger LOG = Logger.getLogger(SkinModule.class.getName());
+    
     private final AttributeService attributeService = Factory.get(AttributeService.class);
     
     private Actor actor;
@@ -34,7 +40,7 @@ public class SkinModule extends AbstractModule {
     // 缓存当前正在使用的武器和武器状态, 武器状态用来标识不同的武器组合，不同组合的武器或者不同排列顺序的武器都会产生
     // 唯一的武器状态码。
     private List<SkinData> tempWeaponList;
-    private int cacheWeaponState = -1;
+    private long cacheWeaponState = 0L;
     
     // 角色所有的皮肤，包含装备、武器（含skinUseds）
     private SafeArrayList<Skin> skinAll;
@@ -186,9 +192,9 @@ public class SkinModule extends AbstractModule {
      */
     private void detachConflicts(Skin skin) {
         if (skinUsed != null) {
-            int conflicts = skin.getConflicts();
+            long conflicts = skin.getConflictParts();
             for (Skin conflictSkin : skinUsed.getArray()) {
-                if ((conflictSkin.getConflicts() & conflicts) != 0) {
+                if ((conflictSkin.getConflictParts() & conflicts) != 0) {
                     detachInner(conflictSkin);
                 }
             }
@@ -200,10 +206,10 @@ public class SkinModule extends AbstractModule {
      */
     private void attachBaseSkin() {
         // 获取当前角色已经装备的所有skinTypes
-        int typeUsed = 0;
+        long typeUsed = 0;
         if (skinUsed != null) {
             for (Skin s : skinUsed.getArray()) {
-                typeUsed |= s.getType();
+                typeUsed |= s.getParts();
             }
         }
 
@@ -215,7 +221,7 @@ public class SkinModule extends AbstractModule {
                 if (!baseSkin.isBaseSkin()) {
                     continue;
                 }
-                if ((typeUsed & baseSkin.getType()) == 0) {
+                if ((typeUsed & baseSkin.getParts()) == 0) {
                     attachInner(baseSkin);
                 }
             }
@@ -232,7 +238,7 @@ public class SkinModule extends AbstractModule {
         }
         skin.attach(actor);
         // 重新缓存武器状态
-        if (skin.isWeapon()) {
+        if (skin instanceof Weapon) {
             cacheWeaponState();
         }
         if (skinListeners != null) {
@@ -245,7 +251,7 @@ public class SkinModule extends AbstractModule {
     private void detachInner(Skin skin) {
         skinUsed.remove(skin);
         skin.detach(actor);
-        if (skin.isWeapon()) {
+        if (skin instanceof Weapon) {
             cacheWeaponState();
         }
         if (skinListeners != null) {
@@ -375,7 +381,7 @@ public class SkinModule extends AbstractModule {
      * 获取角色当前正在使用的武器状态。
      * @return 
      */
-    public int getWeaponState() {
+    public long getWeaponState() {
         if (cacheWeaponState <= -1) {
             cacheWeaponState();
         }
@@ -398,28 +404,27 @@ public class SkinModule extends AbstractModule {
     public List<SkinListener> getSkinListeners() {
         return skinListeners;
     }
-    
+
     /**
-     * 重新计算并缓存角色的武器状态和当前武器列表，该方法只有在角色切换装备 或者未初始化武器状态时调用，
-     * 因为比较耗性能，在战斗过程中可能需要频繁 调用查询角色的当前武器状态及武器信息，因此把这两个信息缓存起来。
+     * 重新计算并缓存角色的武器状态和当前武器列表
      * @param actor
      */
     private void cacheWeaponState() {
-        if (tempWeaponList == null) {
-            tempWeaponList = new ArrayList<SkinData>(2);
-        }
-        // 正在使用的武器列表
-        tempWeaponList.clear();
+        cacheWeaponState = 0;
         if (skinUsed != null) {
             for (Skin s : skinUsed) {
-                if (s.isWeapon()) {
-                    tempWeaponList.add(s.getData());
+                if (s instanceof Weapon) {
+                    cacheWeaponState |= DefineFactory.getWeaponTypeDefine().convert(((Weapon)s).getWeaponType());
                 }
             }
         }
-
-        // 生成武器状态信息
-        cacheWeaponState = WeaponStateUtils.createWeaponState(tempWeaponList);
+        if (Config.debug) {
+            LOG.log(Level.INFO, "cacheWeaponState, actor={0}, weaponStateToBinary={1}, weaponsToString={2}"
+                    , new Object[] {actor.getData().getId()
+                            , Long.toBinaryString(cacheWeaponState)
+                            , DefineFactory.getWeaponTypeDefine().toString(cacheWeaponState)
+                    });
+        }
     }
-
+    
 }

@@ -8,13 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.xml.DataFactory;
+import name.huliqing.core.xml.DataProcessor;
 
 /**
  * 数据传输基类
  * @author huliqing
  * @param <T>
  */
-public class ItemTransfer<T extends ObjectData> implements Transfer<T> {
+public class ItemTransfer<T extends DataProcessor<ObjectData>> implements Transfer<T> {
 
     private List<TransferListener> listeners;
     // 需要传输的目标对象
@@ -44,13 +45,13 @@ public class ItemTransfer<T extends ObjectData> implements Transfer<T> {
 
     @Override
     public void addData(T pd, int count) {
-        T data = findData(pd.getId());
+        T data = findData(pd.getData().getId());
         if (data == null) {
-            data = DataFactory.createData(pd.getId());
-            data.setTotal(count);
+            data = (T) DataFactory.createData(pd.getData().getId());
+            data.getData().setTotal(count);
             datas.add(data);
         } else {
-            data.setTotal(data.getTotal() + count);
+            data.getData().setTotal(data.getData().getTotal() + count);
         }
         
         // fireListener
@@ -66,13 +67,13 @@ public class ItemTransfer<T extends ObjectData> implements Transfer<T> {
         if (count < 0) 
             throw new IllegalArgumentException("Count could not less than ZERO! count=" + count);
         
-        T data = findData(pd.getId());
+        T data = findData(pd.getData().getId());
         if (data == null) {
             return;
         }
         
-        data.setTotal(data.getTotal() - count);
-        if (data.getTotal() <= 0) {
+        data.getData().setTotal(data.getData().getTotal() - count);
+        if (data.getData().getTotal() <= 0) {
             datas.remove(data);
         }
         
@@ -87,7 +88,7 @@ public class ItemTransfer<T extends ObjectData> implements Transfer<T> {
     @Override
     public T findData(String id) {
         for (T data : datas) {
-            if (data.getId().equals(id)) {
+            if (data.getData().getId().equals(id)) {
                 return data;
             }
         }

@@ -27,6 +27,7 @@ import name.huliqing.core.object.actoranim.ActorAnim;
 import name.huliqing.core.object.attribute.NumberAttribute;
 import name.huliqing.core.object.effect.Effect;
 import name.huliqing.core.object.magic.Magic;
+import name.huliqing.core.object.module.ChannelModule;
 import name.huliqing.core.object.sound.SoundManager;
 import name.huliqing.core.utils.ConvertUtils;
 import name.huliqing.core.utils.MathUtils;
@@ -52,7 +53,6 @@ import name.huliqing.core.utils.MathUtils;
  */
 public abstract class AbstractSkill implements Skill {
 //    private static final Logger logger = Logger.getLogger(AbstractSkill.class.getName());
-//    private final AttributeService attributeService = Factory.get(AttributeService.class);
     private final ElService elService = Factory.get(ElService.class);
     private final PlayService playService = Factory.get(PlayService.class);
     private final EffectService effectService = Factory.get(EffectService.class);
@@ -60,6 +60,7 @@ public abstract class AbstractSkill implements Skill {
     private final MagicService magicService = Factory.get(MagicService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final SkinService skinService = Factory.get(SkinService.class);
+    private ChannelModule channelModule;
     
     // 格式: soundId|timePoint,soundId|timePoint...
     protected List<SoundWrap> sounds;
@@ -74,9 +75,6 @@ public abstract class AbstractSkill implements Skill {
     
     // 格式：motionId|timeStart|timeEnd,motionId|timeStart|timeEnd
     protected List<ActorAnimWrap> actorAnims;
-    
-    
-    
     
     // ---- 内部参数 ----
     protected SkillData data;
@@ -176,6 +174,7 @@ public abstract class AbstractSkill implements Skill {
         if (initialized) {
             return;
         }
+        channelModule = actor.getModule(ChannelModule.class);
         
         initialized = true;
         trueUseTime = getTrueUseTime();
@@ -309,9 +308,14 @@ public abstract class AbstractSkill implements Skill {
      */
     protected void doUpdateAnimation(String animation, boolean loop
             , float animFullTime, float animStartTime) {
-        actorService.playAnim(actor, animation, loop ? LoopMode.Loop : LoopMode.DontLoop, animFullTime, animStartTime, data.getChannels());
+        channelModule.playAnim(animation
+                , data.getChannels()
+                , loop ? LoopMode.Loop : LoopMode.DontLoop
+                , animFullTime
+                , animStartTime
+        );
         if (data.isChannelLocked()) {
-            actorService.setChannelLock(actor, true, data.getChannels());
+            channelModule.setChannelLock(true, data.getChannels());
         }
     }
     
@@ -531,9 +535,9 @@ public abstract class AbstractSkill implements Skill {
     public int canPlay(Actor actor) {
                 
         // 武器状态检查,有一些技能需要拿特定的武器才能执行。
-        List<Integer> wts = data.getWeaponStateLimit();
+        List<Long> wts = data.getWeaponStateLimit();
         if (wts != null) {
-            int weaponState = skinService.getWeaponState(actor);
+            Long weaponState = skinService.getWeaponState(actor);
             if (!wts.contains(weaponState)) {
                 return SkillConstants.STATE_WEAPON_NOT_ALLOW;
             }

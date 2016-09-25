@@ -146,9 +146,9 @@ public class SkinServiceImpl implements SkinService {
         }
         return null;
     }
-      
+    
     @Override
-    public int getWeaponState(Actor actor) {
+    public long getWeaponState(Actor actor) {
         SkinModule module = actor.getModule(SkinModule.class);
         if (module != null) {
             return module.getWeaponState();

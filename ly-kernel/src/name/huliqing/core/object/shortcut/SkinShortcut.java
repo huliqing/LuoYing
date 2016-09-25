@@ -13,6 +13,7 @@ import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.module.SkinListener;
 import name.huliqing.core.object.module.SkinModule;
 import name.huliqing.core.object.skin.Skin;
+import name.huliqing.core.object.skin.Weapon;
 import name.huliqing.core.ui.UIFactory;
 
 /**
@@ -86,7 +87,7 @@ public class SkinShortcut extends BaseUIShortcut<SkinData> implements SkinListen
         Skin skin = skinModule.getSkin(objectData.getId());
         
         // Outfit
-        if (!skin.isWeapon()) {
+        if (!(skin instanceof Weapon)) {
             if (skin.isAttached()) {
                 skinNetwork.detachSkin(actor, skin);
             } else {
@@ -95,7 +96,7 @@ public class SkinShortcut extends BaseUIShortcut<SkinData> implements SkinListen
             return;
         }
         
-        // weapon
+        // Weapon
         if (skin.isAttached()) {
             if (skinModule.isWeaponTakeOn()) {
                 skinNetwork.takeOffWeapon(actor, false);

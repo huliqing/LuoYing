@@ -58,17 +58,9 @@ public interface ProtoService extends Inject {
      * 获取角色身上所有的物体,注：返回的列表不可以直接修改,只能作为只读使用。
      * @param actor
      * @return 
+     * @deprecated 
      */
     List<ObjectData> getDatas(Actor actor);
-   
-    // remove20160830
-//    /**
-//     * 同步指定角色身上的物体数量
-//     * @param actor
-//     * @param objectId
-//     * @param total 
-//     */
-//    void syncDataTotal(Actor actor, String objectId, int total);
     
     /**
      * 获取物体的价值

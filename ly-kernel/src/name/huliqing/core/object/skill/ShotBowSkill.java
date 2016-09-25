@@ -17,7 +17,6 @@ import com.jme3.scene.Spatial;
 import com.jme3.util.TempVars;
 import java.util.List;
 import name.huliqing.core.Factory;
-import name.huliqing.core.constants.SkinConstants;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.object.Loader;
@@ -92,10 +91,7 @@ public class ShotBowSkill extends ShotSkill {
         List<Skin> usingSkins = skinModule.getUsingSkins();
         if (usingSkins != null && !usingSkins.isEmpty()) {
             for (Skin skin : usingSkins) {
-                if (!(skin instanceof WeaponSkin)) {
-                    continue;
-                }
-                if (((WeaponSkin)skin).getWeaponType() == SkinConstants.WEAPON_BOW) {
+                if (skin instanceof WeaponSkin) {
                     weapon = skin.getSpatial();
                     break;
                 }
@@ -172,7 +168,6 @@ public class ShotBowSkill extends ShotSkill {
     @Override
     protected void doUpdateLogic(float tpf) {
         super.doUpdateLogic(tpf);
-//        float trueUseTime = data.getTrueUseTime();
         if (shotState == 0 && arrow != null && time >= timeBulletTake * trueUseTime) {
             takeArrow(); // 取箭
             shotState = 1;

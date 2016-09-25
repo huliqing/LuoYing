@@ -6,25 +6,24 @@ package name.huliqing.core.view.transfer;
 
 import java.util.List;
 import name.huliqing.core.data.ObjectData;
-import name.huliqing.core.view.ItemList;
 import name.huliqing.core.view.ItemPanel;
 import name.huliqing.core.ui.Row;
+import name.huliqing.core.view.ItemList.RowClickListener;
+import name.huliqing.core.xml.DataProcessor;
 
 /**
- *
  * @author huliqing
- * @param <T>
  */
-public class SimpleTransferPanel<T extends ObjectData> extends TransferPanel<T> {
+public class SimpleTransferPanel extends TransferPanel<DataProcessor<ObjectData>> {
     private ItemPanel itemPanel;
     
     public SimpleTransferPanel(float width, float height) {
         super(width, height);
         
         itemPanel = new ItemPanel(width, height, getDatas());
-        itemPanel.setRowClickListener(new ItemList.RowClickListener<T>() {
+        itemPanel.setRowClickListener(new RowClickListener<DataProcessor<ObjectData>>() {
             @Override
-            public void onClick(Row row, boolean isPressed, T data) {
+            public void onClick(Row row, boolean isPressed, DataProcessor<ObjectData> data) {
                 if (isPressed) return;
                 transfer(data);
             }
@@ -33,18 +32,18 @@ public class SimpleTransferPanel<T extends ObjectData> extends TransferPanel<T> 
     }
 
     @Override
-    public void setDatas(List<T> datas) {
+    public void setDatas(List<DataProcessor<ObjectData>> datas) {
         super.setDatas(datas); 
         itemPanel.refresh();
     }
     
     @Override
-    public void onAdded(Transfer<T> transfer, T data, int count) {
+    public void onAdded(Transfer<DataProcessor<ObjectData>> transfer, DataProcessor<ObjectData> data, int count) {
         itemPanel.refresh();
     }
 
     @Override
-    public void onRemoved(Transfer<T> transfer, T data, int count) {
+    public void onRemoved(Transfer<DataProcessor<ObjectData>> transfer, DataProcessor<ObjectData> data, int count) {
         itemPanel.refresh();
     }
     

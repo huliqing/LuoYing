@@ -13,12 +13,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.constants.ResConstants;
-import name.huliqing.core.constants.SkinConstants;
 import name.huliqing.core.data.define.CostObject;
 import name.huliqing.core.data.define.MatObject;
 import name.huliqing.core.enums.Mat;
 import name.huliqing.core.manager.ResourceManager;
-import name.huliqing.core.utils.ConvertUtils;
 
 /**
  * 皮肤，装甲，武器等.
@@ -27,24 +25,12 @@ import name.huliqing.core.utils.ConvertUtils;
 @Serializable
 public class SkinData extends ObjectData implements MatObject, CostObject {
     
-    //注：一件skin可属于多个type,如上下连身的套装，如法袍可属于 "7,8".
-    //同时一件skin也可与多个其它skin进行排斥。这里的type和conflictType使用二
-    //进制位来表示各个类型，例如一件上下连身的套装（类型属于7,8）在二进制表示为
-    //"11000000"
-    private int type;
-    // 定义与其它skin的排斥,当一件skin穿上身时，角色身上受排斥的skin将会脱下来。
-    private int conflictType;
     // 是否已在使用中
     private boolean used;
     
-    // 这个值如果为0则说明是普通装备，如果该值大于0则说明为某种类型的武器
-    private int weaponType;
-    // 标记当前武器所有可支持的槽位
-    private List<String> slots;
-    // 标记当前武器所在的槽位
-    private String slot;
     // 标记着这件装备是否为基本皮肤
     private boolean baseSkin;
+    
     // 装备应用到目标身上时对目标属性的影响
     private List<AttributeApply> applyAttributes;
     
@@ -61,16 +47,10 @@ public class SkinData extends ObjectData implements MatObject, CostObject {
     public void write(JmeExporter ex) throws IOException {
         super.write(ex);
         OutputCapsule oc = ex.getCapsule(this);
-        oc.write(type, "type", 0);
-        oc.write(conflictType, "conflictType", 0);
         oc.write(used, "used", false);
         if (applyAttributes != null) {
             oc.writeSavableArrayList(new ArrayList<AttributeApply>(applyAttributes), "applyAttributes", null);
         }
-        oc.write(weaponType, "weaponType", 0);
-        if (slots != null) 
-            oc.write(slots.toArray(new String[]{}), "slots", null);
-        oc.write(slot, "slot", null);
         oc.write(baseSkin, "baseSkin", false);
         oc.write(attributeApplied, "attributeApplied", false);
         if (matchAttributes != null) {
@@ -82,52 +62,11 @@ public class SkinData extends ObjectData implements MatObject, CostObject {
     public void read(JmeImporter im) throws IOException {
         super.read(im);
         InputCapsule ic = im.getCapsule(this);
-        type = ic.readInt("type", 0);
-        conflictType = ic.readInt("conflictType", 0);
         used = ic.readBoolean("used", false);
         applyAttributes = ic.readSavableArrayList("applyAttributes", null);
-        weaponType = ic.readInt("weaponType", 0);
-        slots = ConvertUtils.toList(ic.readStringArray("slots", null));
-        slot = ic.readString("slot", null);
         baseSkin = ic.readBoolean("baseSkin", false);
         attributeApplied = ic.readBoolean("attributeApplied", false);
         matchAttributes = ic.readSavableArrayList("matchAttributes", null);
-    }
-    
-    /**
-     * 获取skin的类型，注：这里返回的整数使用的是二进制位来表示skin的类型，
-     * 每一个位表示一个skin类型。<br>
-     *  注：一件skin可属于多个type,如上下连身的套装，如法袍可属于 "7,8".
-     * 同时一件skin也可与多个其它skin进行排斥。这里的type和conflictType使用二进制位来表示各个类型，
-     * 例如一件上下连身的套装（类型属于7,8）在二进制表示为"11000000"
-     * @return 
-     */
-    public int getType() {
-        return type;
-    }
-
-    /**
-     * 设置skin的类型
-     * @param type 二进制位表示，每个位表示一个skin类型。
-     */
-    public void setType(int type) {
-        this.type = type;
-    }
-
-    /**
-     * 获取skin的排斥类型，二进制表示，参考type
-     * @return 
-     */
-    public int getConflictType() {
-        return conflictType;
-    }
-
-    /**
-     * 设置skin的排斥类型
-     * @param conflictType 二进制位表示，每个位表示一个skin类型。
-     */
-    public void setConflictType(int conflictType) {
-        this.conflictType = conflictType;
     }
 
     /**
@@ -145,81 +84,7 @@ public class SkinData extends ObjectData implements MatObject, CostObject {
     public void setUsed(boolean used) {
         this.used = used;
     }
-
-    /**
-     * 获取武器类型值，如果该值为0，则表示该装备不是武器。
-     * 武器类型参考：SkinConstants.WEAPON_SWORD,...
-     * @return 
-     */
-    public int getWeaponType() {
-        return weaponType;
-    }
-
-    /**
-     * 设置一个武器类型，如果设置为0，则表示非武器
-     * 武器类型参考：SkinConstants.WEAPON_SWORD,...
-     * @param weaponType 
-     */
-    public void setWeaponType(int weaponType) {
-        this.weaponType = weaponType;
-    }
-
-    /**
-     * 获取武器所有可支持的槽位
-     * @return 
-     */
-    public List<String> getSlots() {
-        return slots;
-    }
-
-    /**
-     * 设置武器所有可支持的槽位 
-     * @param slots
-     */
-    public void setSlots(List<String> slots) {
-        this.slots = slots;
-    }
-
-    /**
-     * 获得武器所在的槽位
-     * @return 
-     */
-    public String getSlot() {
-        return slot;
-    }
-
-    /**
-     * 设置武器所在的槽位 
-     * @param slot
-     */
-    public void setSlot(String slot) {
-        this.slot = slot;
-    }
     
-    /**
-     * 判断是不是武器
-     * @return 
-     */
-    public boolean isWeapon() {
-        return getWeaponType() > 0;
-    }
-    
-    /**
-     * 判断是不是一把左手武器
-     * @return 
-     */
-    public boolean isLeftHandWeapon() {
-        return (type & (1 << SkinConstants.TYPE_WEAPON_LEFT)) != 0;
-    }
-    
-    /**
-     * 判断是不是一把右手武器
-     * @return 
-     */
-    public boolean isRightHandWeapon() {
-        return (type & (1 << SkinConstants.TYPE_WEAPON_RIGHT)) != 0;
-    }
-
     public List<AttributeApply> getApplyAttributes() {
         return applyAttributes;
     }

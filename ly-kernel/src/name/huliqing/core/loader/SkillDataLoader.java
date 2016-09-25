@@ -5,7 +5,6 @@
  */
 package name.huliqing.core.loader;
 
-import com.jme3.animation.LoopMode;
 import java.util.ArrayList;
 import name.huliqing.core.GameException;
 import name.huliqing.core.data.AttributeUse;
@@ -72,7 +71,7 @@ public class SkillDataLoader implements DataLoader<SkillData> {
         data.setSkillPoints(proto.getAsInteger("skillPoints", 0));
         data.setLevelUpEl(proto.getAsString("levelUpEl"));
         data.setNeedLevel(proto.getAsInteger("needLevel", 0));
-        data.setTags(DefineFactory.getSkillTagDefine().convert(proto.getAsArray("tags")));
+        data.setTags(DefineFactory.getSkillTagDefine().convert(proto.getAsArray("skillTags")));
         data.setOverlapTags(DefineFactory.getSkillTagDefine().convert(proto.getAsArray("overlapTags")));
         data.setInterruptTags(DefineFactory.getSkillTagDefine().convert(proto.getAsArray("interruptTags")));
         data.setPrior(proto.getAsInteger("prior", 0));

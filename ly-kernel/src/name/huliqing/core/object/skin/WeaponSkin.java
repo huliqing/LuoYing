@@ -8,38 +8,65 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.control.AbstractControl;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import name.huliqing.core.Factory;
-import name.huliqing.core.data.SlotData;
+import name.huliqing.core.data.SkinData;
 import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.object.Loader;
-import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.define.DefineFactory;
 import name.huliqing.core.object.module.SkinModule;
 import name.huliqing.core.object.skill.SkinSkill;
+import name.huliqing.core.object.slot.Slot;
 
 /**
  * 武器装备处理。武器有一个比较特殊的地方，即武器除了"attach","detach"之外还有“取出(takeOn)” 和“收起(takeOff)”
  * 取出和收起是包含于attach状态的，只有武器处于attach时才可以进行takeOn和takeOff
  * @author huliqing
  */
-public class WeaponSkin extends AbstractSkin {
+public class WeaponSkin extends AbstractSkin implements Weapon {
     private final SkillService skillService = Factory.get(SkillService.class);
-
+    
+    // 武器类型
+    private String weaponType;
+    // 武器所有可支持的槽位
+    private Slot[] slots;
+    // 标记当前武器所在的槽位
+    private Slot slot;
+    
     // 这个Control是用来处理武器的“取出”和“收起”这个装配过程。
     private final HangControl hangControl = new HangControl();
-    
-    @Override
-    public boolean isWeapon() {
-        return true;
-    }
 
+    @Override
+    public void setData(SkinData data) {
+        super.setData(data);
+        weaponType = data.getAsString("weaponType");
+        String[] tempSlots = data.getAsArray("slots");
+        if (tempSlots != null) {
+            slots = new Slot[tempSlots.length];
+            for (int i = 0; i < tempSlots.length; i++) {
+                slots[i] = Loader.load(tempSlots[i]);
+            }
+        }
+    }
+    
     /**
-     * 获取武器类型,Skin必须是武器时才有意义
+     * 获取武器类型
      * @return 
      */
-    public int getWeaponType() {
-        return data.getWeaponType();
+    @Override
+    public String getWeaponType() {
+        return weaponType;
+    }
+    
+    /**
+     * 获取当前武器占用的槽位,如果没有则返回null.
+     * @return 
+     */
+    @Override
+    public Slot getUsingSlot() {
+        return slot;
     }
 
     @Override
@@ -69,16 +96,13 @@ public class WeaponSkin extends AbstractSkin {
      */
     private void attachWeaponOff(Actor actor) {
         // 为武器找一个合适的槽位
-        if (data.getSlot() == null) {
-            data.setSlot(getWeaponSlot(actor));
-        }
+        slot = getWeaponSlot(actor);
         
-        // 如果找不到合适的槽位或者武器不支持槽位,直不处理
-        if (data.getSlot() == null) {
+        // 如果找不到合适的槽位或者武器不支持槽位,则不处理
+        if (slot == null) {
             return;
         }
         
-        SlotData slot = DataFactory.createData(data.getSlot());
         attach(actor, slot.getBindBone(), skinNode, slot.getLocalTranslation(), slot.getLocalRotation(), slot.getLocalScale());
     }
     
@@ -86,6 +110,7 @@ public class WeaponSkin extends AbstractSkin {
      * 把武器取出放到手上使用。
      * @param actor
      */
+    @Override
     public void takeOn(Actor actor) {
         // 这里要直接清理一下，以避免上一次的takeOn执行过程还未结束的情况下导致冲突。
         hangControl.cleanup();
@@ -94,21 +119,16 @@ public class WeaponSkin extends AbstractSkin {
             return;
         }
         
-        if (data.getSlot() == null) {
+        if (slot == null) {
             return;
         }
         
-        // 根据武器的左右手属性确定要用哪一个手拿武器的技能。
-        SlotData slot = DataFactory.createData(data.getSlot());
-        String hangSkill = null;
-        if (data.isLeftHandWeapon()) {
-            hangSkill = slot.getLeftHandSkinSkill();
-        } else if (data.isRightHandWeapon()) {
-            hangSkill = slot.getRightHandSkinSkill();
-        }
-        
+        // 根据武器类型从slot中获得“动画”技能.
+        // 如果没有技能则直接attach, 并取消槽位占用
+        String hangSkill = slot.getHangSkill(weaponType);
         if (hangSkill == null) {
             super.attach(actor);
+            slot = null; 
             return;
         }
         
@@ -118,13 +138,14 @@ public class WeaponSkin extends AbstractSkin {
         actor.getSpatial().addControl(hangControl);
         
         // 武器取出后取消槽位占用
-        data.setSlot(null);
+        slot = null;
     }
     
     /**
      * 把武器挂起，如挂在后背
      * @param actor
      */
+    @Override
     public void takeOff(Actor actor) {
         // 这里要直接清理一下，以防止上一次的执行过程还未结束的情况下导致冲突。
         hangControl.cleanup();
@@ -134,21 +155,13 @@ public class WeaponSkin extends AbstractSkin {
         }
         
         // 挂起武器时先为武器找一个合适的槽位，如果没有合适或不支持槽位，则什么也不处理
-        String weaponSlot = getWeaponSlot(actor);
-        data.setSlot(weaponSlot);
-        if (data.getSlot() == null) {
+        slot = getWeaponSlot(actor);
+        if (slot == null) {
             return;
         }
         
         // 根据武器的左右手属性确定要用哪一个手拿武器的技能。
-        SlotData slot = DataFactory.createData(weaponSlot);
-        String hangSkill = null;
-        if (data.isLeftHandWeapon()) {
-            hangSkill = slot.getLeftHandSkinSkill();
-        } else if (data.isRightHandWeapon()) {
-            hangSkill = slot.getRightHandSkinSkill();
-        }
-        
+        String hangSkill = slot.getHangSkill(weaponType);
         // 使用一个动画技能来"取下"武器
         if (hangSkill != null) {
             hangControl.initialize(actor, hangSkill,  false);
@@ -163,49 +176,54 @@ public class WeaponSkin extends AbstractSkin {
      * @param actor
      * @param skinData 
      */
-    private String getWeaponSlot(Actor actor) {
+    private Slot getWeaponSlot(Actor actor) {
         SkinModule sm = actor.getModule(SkinModule.class);
         // supportedSlots角色可以支持的武器槽位列表
         List<String> supportedSlots = sm.getSupportedSlots();
         if (supportedSlots == null || supportedSlots.isEmpty()) {
             return null;
         }
-        // 武器可以支持的槽位
-        if (data.getSlots() == null || data.getSlots().isEmpty()) {
+        
+        // 如果当前武器不支持任何槽位则直接返回null.
+        if (slots == null || slots.length <= 0) {
             return null;
         }
         
         // 已经被占用的槽位
-        List<String> slotsInUsing = getUsingSlots(sm);
+        List<String> slotsInUsing = getActorUsingSlots(sm);
         
         // 从武器所支持的所有槽位中选择一个可用的。
-        for (String slot : data.getSlots()) {
+        for (Slot weaponSlot : slots) {
             // 槽位被占用
-            if (slotsInUsing.contains(slot)) {
+            if (slotsInUsing.contains(weaponSlot.getData().getId())) {
                 continue;
             }
             // 角色不支持这个槽位
-            if(!supportedSlots.contains(slot)) {
+            if(!supportedSlots.contains(weaponSlot.getData().getId())) {
                 continue;
             }
-            return slot;
+            return weaponSlot;
         }
         return null;
     }
     
     /**
-     * 获取角色当前被占用的武器槽位id列表
+     * 获取角色当前被占用的武器槽位列表
      * @return 
      */
-    private List<String> getUsingSlots(SkinModule sm) {
+    private List<String> getActorUsingSlots(SkinModule sm) {
         List<Skin> usingSkins = sm.getUsingSkins();
         if (usingSkins == null || usingSkins.isEmpty()) {
-            return null;
+            return Collections.EMPTY_LIST;
         }
         List<String> usingSlots = new ArrayList<String>(2);
         for (Skin s : usingSkins) {
-            if (s.isWeapon() && s.getData().getSlot() != null) {
-                usingSlots.add(s.getData().getSlot());
+            if (!(s instanceof Weapon)) {
+                continue;
+            }
+            Slot usingSlot = ((Weapon)s).getUsingSlot();
+            if (usingSlot != null) {
+                usingSlots.add(usingSlot.getData().getId());
             }
         }
         return usingSlots;

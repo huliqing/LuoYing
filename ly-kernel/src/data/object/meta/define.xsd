@@ -20,6 +20,8 @@ xs:time
         <xs:complexType>
             <xs:all>
                 <xs:element ref="defineSkillTag" />
+                <xs:element ref="defineSkinType" />
+                <xs:element ref="defineWeaponType" />
             </xs:all>
         </xs:complexType>
     </xs:element>
@@ -32,8 +34,40 @@ xs:time
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="defineBase">
-                    <xs:attribute name="tags" type="xs:string" use="required">
-                        <xs:annotation><xs:documentation>定义技能标记，格式："skillTag,skillTag,..." 最多不能超过64个</xs:documentation></xs:annotation>
+                    <xs:attribute name="skillTags" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>定义技能标记，格式："skillTag,skillTag,..." 目前限制最多64个类型.</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="defineSkinPart" >
+        <xs:annotation>
+            <xs:documentation>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="defineBase">
+                    <xs:attribute name="skinParts" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>皮肤定义，格式："skinPart1,skinPart2,...", 目前限制最多64个部位.</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="defineWeaponType" >
+        <xs:annotation>
+            <xs:documentation>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="defineBase">
+                    <xs:attribute name="weaponTypes" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>武器类型定义，格式："weaponType1,weaponType2,...", 目前限制最多64个类型.</xs:documentation></xs:annotation>
                     </xs:attribute>
                 </xs:extension>
             </xs:complexContent>

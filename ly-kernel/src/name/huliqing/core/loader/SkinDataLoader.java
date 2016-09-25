@@ -22,9 +22,6 @@ public class SkinDataLoader implements DataLoader<SkinData> {
     @Override
     public void load(Proto proto, SkinData data) {
         data.setBaseSkin(proto.getAsBoolean("baseSkin", false));
-        data.setWeaponType(proto.getAsInteger("weaponType", 0));
-        data.setSlots(proto.getAsStringList("slots"));
-        
         String[] aaStr = proto.getAsArray("applyAttributes");
         if (aaStr != null) {
             ArrayList<AttributeApply> aas = new ArrayList<AttributeApply>(aaStr.length);
@@ -33,26 +30,6 @@ public class SkinDataLoader implements DataLoader<SkinData> {
                 aas.add(new AttributeApply(aaArr[0], ConvertUtils.toFloat(aaArr[1], 0)));
             }
             data.setApplyAttributes(aas);
-        }
-        
-        // type是使用二进制位来存储skin类型
-        String[] typeStr = proto.getAsArray("type");
-        int[] types = ConvertUtils.toIntegerArray(typeStr);
-        int type = 0;
-        for (int t : types) {
-            type |= 1 << t;
-        }
-        data.setType(type);
-        
-        // conflictType可为null,所以需要判断
-        String[] conflictTypeStr = proto.getAsArray("conflictType");
-        if (conflictTypeStr != null) {
-            int[] conflictInts = ConvertUtils.toIntegerArray(conflictTypeStr);
-            int conflict = 0;
-            for (int ci : conflictInts) {
-                conflict |= 1 << ci;
-            }
-            data.setConflictType(conflict);
         }
         
         // 属性限制，这些限制定义了：只有角色的属性与这些限制完全匹配时才可以使用这件物品

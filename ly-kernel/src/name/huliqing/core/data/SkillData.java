@@ -4,7 +4,6 @@
  */
 package name.huliqing.core.data;
 
-import com.jme3.animation.LoopMode;
 import com.jme3.export.InputCapsule;
 import com.jme3.export.JmeExporter;
 import com.jme3.export.JmeImporter;
@@ -13,7 +12,6 @@ import com.jme3.network.serializing.Serializable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.core.object.skin.WeaponStateUtils;
 import name.huliqing.core.utils.ConvertUtils;
 
 /**
@@ -35,7 +33,8 @@ public class SkillData extends ObjectData {
     //被锁定的通道应该在退出技能时(cleanup时)重新解锁，避免其它技能无法使用。
     private boolean channelLocked;
     private float cooldown;
-    private List<Integer> weaponStateLimit;
+    private List<Long> weaponStateLimit;
+    
     // 定义当前技能需要消耗的角色的属性值
     private ArrayList<AttributeUse> useAttributes;
     // 影响技能执行速度的角色属性，指向一个attribute id,默认技能的执行速度为1，当设置了
@@ -146,7 +145,6 @@ public class SkillData extends ObjectData {
         super.read(im);
         InputCapsule ic = im.getCapsule(this);
         useTime = ic.readFloat("useTime", 1);
-//        radius = ic.readFloat("radius", 1);
         animation = ic.readString("animation", null);
         channels = ic.readStringArray("channels", null);
         channelLocked = ic.readBoolean("channelLocked", false);
@@ -233,11 +231,11 @@ public class SkillData extends ObjectData {
         this.cooldown = cooldown;
     }
 
-    public List<Integer> getWeaponStateLimit() {
+    public List<Long> getWeaponStateLimit() {
         return weaponStateLimit;
     }
 
-    public void setWeaponStateLimit(ArrayList<Integer> weaponStateLimit) {
+    public void setWeaponStateLimit(List<Long> weaponStateLimit) {
         this.weaponStateLimit = weaponStateLimit;
     }
     
@@ -405,38 +403,39 @@ public class SkillData extends ObjectData {
         this.needLevel = needLevel;
     }
    
-    /**
-     * 重新创建武器状态限制列表，这个方法必须在SkillData创建的时候或从存档读入的
-     * 时候调用一次，以重新创建状态列表，因为武器状态列表是不固定的，每次重起游戏
-     * 都会重新创建。
-     */
-    public void rebuildWeaponStateLimit() {
-        // ---- 把武器状态限制的字符串状态设置转化为weaponState----
-        // 参数的格式为："左武器类型|右武器类型|其它部位武器类型1|其它部位武器类型2|...", 右边如果无武器时可省略
-        // 伪示例1："0|剑" => 表示只有右武器为剑时可执行该技能，其它部分不能装备武器（0表示空，无武器）
-        // 伪示例2："匕首|剑" => 表示只有左武器为匕首，右武器为剑时可执行该技能
-        // 伪示例3："剑" => 表示只有左武器为剑时才可使用该技能。
-        // 伪示例4："剑|剑,剑|剑|剑" => 表示二刀流或三刀流可以使用该技能。
-        // 这里的左武器，右武器通常为左手的武器和右手拿的武器。
-        // 武器类型代码参考：剑(1),匕首（2），弓箭（3) 具体参考SkinConstants.java定义
-        String[] weaponStateLimitArr = getProto().getAsArray("weaponStateLimit");
-        if (weaponStateLimitArr != null && weaponStateLimitArr.length > 0) {
-            if (weaponStateLimit == null) {
-                weaponStateLimit = new ArrayList<Integer>(weaponStateLimitArr.length);
-            }
-            weaponStateLimit.clear();
-            for (String wsStr : weaponStateLimitArr) {
-                if (wsStr.trim().equals("")) {
-                    continue;
-                }
-                String[] wsArr = wsStr.split("\\|");
-                int weaponState = WeaponStateUtils.createWeaponState(ConvertUtils.toIntegerArray(wsArr));
-                weaponStateLimit.add(weaponState);
-            }
-        } else {
-            weaponStateLimit = null;
-        }
-    }
+    // remove20160925,太复杂
+//    /**
+//     * 重新创建武器状态限制列表，这个方法必须在SkillData创建的时候或从存档读入的
+//     * 时候调用一次，以重新创建状态列表，因为武器状态列表是不固定的，每次重起游戏
+//     * 都会重新创建。
+//     */
+//    public void rebuildWeaponStateLimit() {
+//        // ---- 把武器状态限制的字符串状态设置转化为weaponState----
+//        // 参数的格式为："左武器类型|右武器类型|其它部位武器类型1|其它部位武器类型2|...", 右边如果无武器时可省略
+//        // 伪示例1："0|剑" => 表示只有右武器为剑时可执行该技能，其它部分不能装备武器（0表示空，无武器）
+//        // 伪示例2："匕首|剑" => 表示只有左武器为匕首，右武器为剑时可执行该技能
+//        // 伪示例3："剑" => 表示只有左武器为剑时才可使用该技能。
+//        // 伪示例4："剑|剑,剑|剑|剑" => 表示二刀流或三刀流可以使用该技能。
+//        // 这里的左武器，右武器通常为左手的武器和右手拿的武器。
+//        // 武器类型代码参考：剑(1),匕首（2），弓箭（3) 具体参考SkinConstants.java定义
+//        String[] weaponStateLimitArr = getProto().getAsArray("weaponStateLimit");
+//        if (weaponStateLimitArr != null && weaponStateLimitArr.length > 0) {
+//            if (weaponStateLimit == null) {
+//                weaponStateLimit = new ArrayList<Long>(weaponStateLimitArr.length);
+//            }
+//            weaponStateLimit.clear();
+//            for (String wsStr : weaponStateLimitArr) {
+//                if (wsStr.trim().equals("")) {
+//                    continue;
+//                }
+//                String[] wsArr = wsStr.split("\\|");
+//                int weaponState = WeaponStateUtils.createWeaponState(ConvertUtils.toIntegerArray(wsArr));
+//                weaponStateLimit.add(weaponState);
+//            }
+//        } else {
+//            weaponStateLimit = null;
+//        }
+//    }
         
     public long getTags() {
         return tags;

@@ -16,6 +16,7 @@ import name.huliqing.core.data.ChannelData;
 import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.actor.ActorModelLoader;
 import name.huliqing.core.object.channel.Channel;
 import name.huliqing.core.object.channel.ChannelControl;
 import name.huliqing.core.utils.Temp;
@@ -106,23 +107,26 @@ public class ChannelModule extends AbstractModule implements ChannelControl {
         return channels;
     }
 
-    @Override
-    public void playAnim(String animName, LoopMode loop, float useTime, String... channelIds) {
-        playAnim(animName, loop, useTime, 0, channelIds);
-    }
+     // remove20160926
+//    @Override
+//    public void playAnim(String animName, LoopMode loop, float useTime, String... channelIds) {
+//        playAnim(animName, loop, useTime, 0, channelIds);
+//    }
 
     @Override
-    public void playAnim(String animName, LoopMode loop, float useTime, float startTime, String... channelIds) {
-        playAnim(animName, DEFAULT_BLEND_TIME, loop, useTime, startTime, channelIds);
+    public void playAnim(String animName, String[] channelIds, LoopMode loop, float useTime, float startTime) {
+        playAnim(animName, channelIds, loop, useTime, startTime, DEFAULT_BLEND_TIME);
     }
-
+    
     @Override
-    public void playAnim(String animName, float blendTime, LoopMode loop
-            , float useTime, float startTime, String... channelIds) {
+    public void playAnim(String animName, String[] channelIds, LoopMode loop, float useTime, float startTime, float blendTime) {
         
         if (!initialized) {
             return;
         }
+        
+        // 检查动画是否存在
+        checkAndLoadAnim(animName);
         
         Channel sampleChannel = channels.get(0);
         AnimControl ac = sampleChannel.getAnimChannel().getControl();
@@ -142,7 +146,23 @@ public class ChannelModule extends AbstractModule implements ChannelControl {
         } else {
             playAnimInner(animName, blendTime, loop, speed, trueStartTime, fullChannelsIds);
         }
-        
+    }
+    
+    /**
+     * 检查是否存在指定的骨骼动画,如果没有则偿试载入该动画。如果找不到动画文件
+     * 则返回false, 如果已经存在动画或载入动画成功则返回true.
+     * @param animName　动画名称
+     * @return 
+     */
+    private boolean checkAndLoadAnim(String animName) {
+        if (animName == null) {
+            return false;
+        }
+        if (animControl.getAnim(animName) != null) {
+            return true;
+        } else {
+            return ActorModelLoader.loadExtAnim(actor, animName);
+        }
     }
     
     /**
@@ -163,7 +183,7 @@ public class ChannelModule extends AbstractModule implements ChannelControl {
                 LOG.log(Level.WARNING, "Channel not found,channelId={0}", cid);
                 continue;
             }
-            channel.playAnim(animName, blendTime, loop, speed, time);
+            channel.playAnim(animName, loop, speed, time, blendTime);
         }
         resetState = false;
     }
@@ -178,6 +198,7 @@ public class ChannelModule extends AbstractModule implements ChannelControl {
 
     @Override
     public void resetToAnimationTime(String anim, float timeInter) {
+        checkAndLoadAnim(anim);
         for (Channel ch : channels) {
             ch.resetToAnimationTime(anim, timeInter);
         }
@@ -215,7 +236,7 @@ public class ChannelModule extends AbstractModule implements ChannelControl {
     }
 
     @Override
-    public void restoreAnimation(String animName, LoopMode loop, float useTime, float startTime, String... channelIds) {
+    public void restoreAnimation(String animName, String[] channelIds, LoopMode loop, float useTime, float startTime) {
         String[] ids = channelIds != null ? channelIds : fullChannelsIds;
         Temp tp = Temp.get();
         // 存放所有需要fix的通道，哪些与animName相同名称的通道不需要修复
@@ -239,14 +260,15 @@ public class ChannelModule extends AbstractModule implements ChannelControl {
         
         if (sampleChannel != null) {
             for (Channel ch : needFixs) {
-                ch.playAnim(animName, DEFAULT_BLEND_TIME
+                ch.playAnim(animName
                         , sampleChannel.getLoopMode()
                         , sampleChannel.getSpeed()
-                        , sampleChannel.getTime());
+                        , sampleChannel.getTime()
+                        , DEFAULT_BLEND_TIME);
             }
         } else {
             // 如果没有sampleChannel则直接重启所有通道就可以。
-            playAnim(animName, loop, useTime, startTime, ids);
+            playAnim(animName, ids, loop, useTime, startTime);
         }
         
         tp.release();

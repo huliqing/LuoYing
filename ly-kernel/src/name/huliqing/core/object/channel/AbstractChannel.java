@@ -41,7 +41,7 @@ public abstract class AbstractChannel <T extends ChannelData> implements Channel
     }
 
     @Override
-    public void playAnim(String animName, float blendTime, LoopMode loop, float speed, float time) {
+    public void playAnim(String animName, LoopMode loop, float speed, float time, float blendTime) {
         if (locked) {
             return;
         }

@@ -153,17 +153,17 @@ public class SkinNetworkImpl implements SkinNetwork {
     }
 
     @Override
-    public int getWeaponState(Actor actor) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
     public void addSkinListener(Actor actor, SkinListener skinListener) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public boolean removeSkinListener(Actor actor, SkinListener skinListener) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public long getWeaponState(Actor actor) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
