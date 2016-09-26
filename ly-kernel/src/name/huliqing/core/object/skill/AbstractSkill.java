@@ -6,7 +6,6 @@ package name.huliqing.core.object.skill;
 
 import com.jme3.animation.LoopMode;
 import com.jme3.math.FastMath;
-import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.LY;
@@ -15,22 +14,21 @@ import name.huliqing.core.data.AttributeUse;
 import name.huliqing.core.data.MagicData;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.data.SkillData;
-import name.huliqing.core.mvc.service.AttributeService;
-import name.huliqing.core.mvc.service.EffectService;
 import name.huliqing.core.mvc.service.ElService;
-import name.huliqing.core.mvc.service.MagicService;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.object.Loader;
-import name.huliqing.core.mvc.service.ActorService;
-import name.huliqing.core.mvc.service.SkinService;
 import name.huliqing.core.object.actoranim.ActorAnim;
-import name.huliqing.core.object.attribute.NumberAttribute;
 import name.huliqing.core.object.effect.Effect;
+import name.huliqing.core.object.effect.EffectManager;
 import name.huliqing.core.object.magic.Magic;
+import name.huliqing.core.object.module.AttributeModule;
 import name.huliqing.core.object.module.ChannelModule;
+import name.huliqing.core.object.module.LevelModule;
+import name.huliqing.core.object.module.SkinModule;
 import name.huliqing.core.object.sound.SoundManager;
 import name.huliqing.core.utils.ConvertUtils;
 import name.huliqing.core.utils.MathUtils;
+import name.huliqing.core.xml.DataFactory;
 
 /**
  *
@@ -55,29 +53,68 @@ public abstract class AbstractSkill implements Skill {
 //    private static final Logger logger = Logger.getLogger(AbstractSkill.class.getName());
     private final ElService elService = Factory.get(ElService.class);
     private final PlayService playService = Factory.get(PlayService.class);
-    private final EffectService effectService = Factory.get(EffectService.class);
-    private final AttributeService attributeService = Factory.get(AttributeService.class);
-    private final MagicService magicService = Factory.get(MagicService.class);
-    private final ActorService actorService = Factory.get(ActorService.class);
-    private final SkinService skinService = Factory.get(SkinService.class);
-    private ChannelModule channelModule;
+//    private final AttributeService attributeService = Factory.get(AttributeService.class);
+    protected AttributeModule attributeModule;
+    protected LevelModule levelModule;
+    protected ChannelModule channelModule;
+    protected SkinModule skinModule;
     
-    // 格式: soundId|timePoint,soundId|timePoint...
-    protected List<SoundWrap> sounds;
+    protected SkillData data;
     
-    // 格式:effectId|timePoint,effect|timePoint,effectId|timePoint...
-    protected List<EffectWrap> effects;
+    /** 技能声效 */
+    protected SoundWrap[] sounds;
     
-    // 关联一些魔法物体，这些魔法物体会在角色施放技能的时候放置在角色所在的位置上,根据
-    // 魔法物体的设置，这些魔法物体也可能跟随着角色。
-    // 格式："magic|timePoint,magic|timePoint,..."
-    protected List<MagicWrap> magics;
+    /** 技能特效 */
+    protected EffectWrap[] effects;
     
-    // 格式：motionId|timeStart|timeEnd,motionId|timeStart|timeEnd
-    protected List<ActorAnimWrap> actorAnims;
+    /** 关联一些魔法物体，这些魔法物体会在角色施放技能的时候放置在角色所在的位置上,根据\魔法物体的设置*/
+    protected MagicWrap[] magics;
+    
+    /** 角色动画 */
+    protected ActorAnimWrap[] actorAnims;
+    
+    /** 技能动画名称 */
+    protected String animation;
+    
+    /** 执行这个技能的角色动画通道名称，角色必须配置有这些动画骨骼通道才有用。*/
+    protected String[] channels;
+    
+    /**
+     * 当执行动画时是否锁定动画通道，这可以避免当技能交叉重叠执行时动画通道被互相覆盖。
+     * 比如在执行取武器的动画时，这时的手部通道的动画不能被重新执行的“跑路”动画的相关通道覆盖。
+     * 被锁定的通道应该在退出技能时(cleanup时)重新解锁，避免其它技能无法使用。
+     */
+    protected boolean channelLocked;
+    
+    /** 让技能循环执行 */
+    protected boolean loop;
+    
+    /**
+     * 影响技能执行速度的角色属性，指向一个attribute id,默认技能的执行速度为1，当设置了这个值之后，
+     * 目标角色的指定属性的值将会影响到技能的执行速度。
+    */
+    protected String speedAttribute;
+
+    // 用于剪裁cutTimeEndMax的角色属性ID。
+    protected String cutTimeEndAttribute;
+    
+    // 这两个参数标记useTime中可以剔除掉的<b>最高</b>时间比率.
+    // 分别标记可剔除的前面和后面的时间.比如: useTime=5秒,
+    // cutTimeStartMax=0.1,cutTimeEndMax=0.1, 则最高允许剔除的时间 = 5 * (0.1 + 0.1) = 1秒
+    // cutTime的影响不只是技能的实际使用时间,与speed作用不同的地方在于:speed只会影响动画的
+    // 播放速度,但是cutTime除了影响动画速度之外还影响动画长度.cutTimeStart和cutTimeEnd同时会剪裁
+    // 掉动画的前面和后面一部分的片段,这可以用于在一些"攻击"招式上去除掉"起招"和"收招"动作,实现"连招"
+    // 的效果.
+    // 这两个值加起来不应该超过1.0
+    protected float cutTimeStartMax;
+    protected float cutTimeEndMax;
+    
+    /** 技能的等级公式，该公式与技能等级（level）可以计算出当前技能的一个等级值。*/
+    protected String levelEl;
+    /** 技能升级等级公式，该公式中的每一个等级值表示每次技能升级时需要的sp数（skillPoints)*/
+    protected String levelUpEl;
     
     // ---- 内部参数 ----
-    protected SkillData data;
     
     // 当前执行技能的角色
     protected Actor actor;
@@ -100,10 +137,10 @@ public abstract class AbstractSkill implements Skill {
     public void setData(SkillData data) {
         this.data = data;
         
-        // Sounds
+        // Sounds 参数格式: soundId|timePoint,soundId|timePoint...
         String[] tempSounds = data.getAsArray("sounds");
         if (tempSounds != null) {
-            sounds = new ArrayList<SoundWrap>(tempSounds.length);
+            sounds = new SoundWrap[tempSounds.length];
             for (int i = 0; i < tempSounds.length; i++) {
                 String[] soundArr = tempSounds[i].split("\\|");
                 SoundWrap sw = new SoundWrap();
@@ -111,14 +148,14 @@ public abstract class AbstractSkill implements Skill {
                 if (soundArr.length >= 2) {
                     sw.timePoint = ConvertUtils.toFloat(soundArr[1], 0f);
                 }
-                sounds.add(sw);
+                sounds[i] = sw;
             }
         }
         
         // Effects, 格式:effectId|timePoint,effect|timePoint,effectId|timePoint...
         String[] tempEffects = data.getAsArray("effects");
         if (tempEffects != null) {
-            effects = new ArrayList<EffectWrap>(tempEffects.length);
+            effects = new EffectWrap[tempEffects.length];
             for (int i = 0; i < tempEffects.length; i++) {
                 String[] effectArr = tempEffects[i].split("\\|");
                 EffectWrap ew = new EffectWrap();
@@ -126,14 +163,14 @@ public abstract class AbstractSkill implements Skill {
                 if (effectArr.length >= 2) {
                     ew.timePoint = ConvertUtils.toFloat(effectArr[1], 0f);
                 }
-                effects.add(ew);
+                effects[i] = ew;
             }
         }
         
         // Magics, 格式:magicId|timePoint,magic|timePoint,magicId|timePoint...
         String[] tempMagics = data.getAsArray("magics");
         if (tempMagics != null) {
-            magics = new ArrayList<MagicWrap>(tempMagics.length);
+            magics = new MagicWrap[tempMagics.length];
             for (int i = 0; i < tempMagics.length; i++) {
                 String[] magicArr = tempMagics[i].split("\\|");
                 MagicWrap mw = new MagicWrap();
@@ -141,14 +178,14 @@ public abstract class AbstractSkill implements Skill {
                 if (magicArr.length >= 2) {
                     mw.timePoint = ConvertUtils.toFloat(magicArr[1], 0f);
                 }
-                magics.add(mw);
+                magics[i] = mw;
             }
         }
         
         // Motions, 格式: actorAnimId|timeStart|timeEnd,actorAnimId|timeStart|timeEnd
         String[] tempActorAnims = data.getAsArray("actorAnims");
         if (tempActorAnims != null) {
-            actorAnims = new ArrayList<ActorAnimWrap>(tempActorAnims.length);
+            actorAnims = new ActorAnimWrap[tempActorAnims.length];
             for (int i = 0; i < tempActorAnims.length; i++) {
                 String[] actorAnimArr = tempActorAnims[i].split("\\|");
                 ActorAnimWrap aaw = new ActorAnimWrap();
@@ -159,9 +196,21 @@ public abstract class AbstractSkill implements Skill {
                 if (actorAnimArr.length >= 3) {
                     aaw.timePointEnd = ConvertUtils.toFloat(actorAnimArr[2], 1);
                 }
-                actorAnims.add(aaw);
+                actorAnims[i] = aaw;
             }
         }
+        animation = data.getAsString("animation");
+        channels = data.getAsArray("channels");
+        channelLocked = data.getAsBoolean("channelLocked", false);
+        loop = data.getAsBoolean("loop", false);
+        speedAttribute = data.getAsString("speedAttribute");
+        // CutTimeEnd的剪裁
+        cutTimeEndAttribute = data.getAsString("cutTimeEndAttribute");
+        // 时间\动画剪裁参数
+        cutTimeStartMax = data.getAsFloat("cutTimeStartMax", 0);
+        cutTimeEndMax = data.getAsFloat("cutTimeEndMax", 0);
+        levelEl = data.getAsString("levelEl");
+        levelUpEl = data.getAsString("levelUpEl");
     }
 
     @Override
@@ -170,12 +219,19 @@ public abstract class AbstractSkill implements Skill {
     }
     
     @Override
+    public void setActor(Actor actor) {
+        this.actor = actor;
+        attributeModule = actor.getModule(AttributeModule.class);
+        channelModule = actor.getModule(ChannelModule.class);
+        levelModule = actor.getModule(LevelModule.class);
+        skinModule = actor.getModule(SkinModule.class);
+    }
+    
+    @Override
     public void initialize() {
         if (initialized) {
             return;
         }
-        channelModule = actor.getModule(ChannelModule.class);
-        
         initialized = true;
         trueUseTime = getTrueUseTime();
         trueSpeed = getSpeed();
@@ -216,26 +272,24 @@ public abstract class AbstractSkill implements Skill {
         // 会立即执行后续技能，所以当前动画会被立即停止（切换到新技能动画）。所以无需手动设置
         // 2.如果没有后续技能，则让当前技能动画自行结束，这也是比较合理的。如武功中的“收式”，如果
         // 没有后续连招，则应该让当前技能动画的“收式”正常播放。
-        String animation = data.getAnimation();
         if (animation != null) {
             doUpdateAnimation(animation
-                    , data.isLoop()
+                    , loop
                     , getAnimFullTime()
                     , getAnimStartTime());
         }
-        
         
         // --技能消耗
         List<AttributeUse> uas = data.getUseAttributes();
         if (uas != null) {
             for (AttributeUse ua : uas) {
-                attributeService.addNumberAttributeValue(actor, ua.getAttribute(), -ua.getAmount());
+                attributeModule.addNumberAttributeValue(ua.getAttribute(), -ua.getAmount());
             }
         }
 
         // --记录技能执行时间及增加技能点数
         data.setLastPlayTime(LY.getGameTime());
-        data.setSkillPoints(data.getSkillPoints() + 1);
+        data.setPlayCount(data.getPlayCount() + 1);
         
         // 检查技能等级提升
         skillLevelUp();
@@ -245,12 +299,12 @@ public abstract class AbstractSkill implements Skill {
     private void skillLevelUp() {
         if (data.getLevel() >= data.getMaxLevel()) 
             return;
-        if (data.getLevelUpEl() == null)
+        if (levelUpEl == null)
             return;
-        int levelPoints = (int) elService.getLevelEl(data.getLevelUpEl(), data.getLevel() + 1);
-        if (data.getSkillPoints() >= levelPoints) {
+        int levelPoints = (int) elService.getLevelEl(levelUpEl, data.getLevel() + 1);
+        if (data.getPlayCount() >= levelPoints) {
             data.setLevel(data.getLevel() + 1);
-            data.setSkillPoints(data.getSkillPoints() - levelPoints);
+            data.setPlayCount(data.getPlayCount() - levelPoints);
 //            if (playService.getPlayer() == actor) {
 //                playService.addMessage(
 //                        ResourceManager.get(ResConstants.SKILL_LEVEL_UP, new Object[]{ResourceManager.getObjectName(data)})
@@ -266,7 +320,11 @@ public abstract class AbstractSkill implements Skill {
     }
 
     @Override
-    public final void update(float tpf) {
+    public void update(float tpf) {
+        if (!initialized) {
+            return;
+        }
+        
         // 检查是否结束
         time += tpf;
         
@@ -276,25 +334,44 @@ public abstract class AbstractSkill implements Skill {
         }
         
         // 2.update sounds
-        doUpdateSound(interpolation);
+        if (sounds != null) {
+            for (SoundWrap sw : sounds) {
+                if (sw.started) continue;
+                sw.update(interpolation);
+            }
+        }
         
         // 3.update effects
-        doUpdateEffect(interpolation);
+        if (effects != null) {
+            for (EffectWrap ew : effects) {
+                if (ew.started) continue;
+                ew.update(interpolation);
+            }
+        }
         
         // 4.update magics
-        doUpdateMagic(interpolation);
+        if (magics != null) {
+            for (MagicWrap mw : magics) {
+                if (mw.started) continue;
+                mw.update(interpolation);
+            }
+        }
         
         // 5.update force;
-        doUpdateAnims(tpf, interpolation);
+        if (actorAnims != null) {
+            for (ActorAnimWrap aaw : actorAnims) {
+                aaw.update(tpf, interpolation);
+            }
+        }
         
         // 6.update logic
         doUpdateLogic(tpf);
         
         if (time >= trueUseTime) {
-            if (data.isLoop()) {
+            if (loop) {
                 time = 0;
             } else {
-                end();
+                initialized = false;
             }
         }
     }
@@ -309,65 +386,13 @@ public abstract class AbstractSkill implements Skill {
     protected void doUpdateAnimation(String animation, boolean loop
             , float animFullTime, float animStartTime) {
         channelModule.playAnim(animation
-                , data.getChannels()
+                , channels
                 , loop ? LoopMode.Loop : LoopMode.DontLoop
                 , animFullTime
                 , animStartTime
         );
-        if (data.isChannelLocked()) {
-            channelModule.setChannelLock(true, data.getChannels());
-        }
-    }
-    
-    /**
-     * 播放声音事件 
-     * @param interpolation
-     */
-    protected void doUpdateSound(float interpolation) {
-        if (sounds != null) {
-            for (SoundWrap sw : sounds) {
-                if (sw.started) continue;
-                sw.update(interpolation);
-            }
-        }
-    }
-    
-    /**
-     * 更新效果逻辑 
-     * @param interpolation
-     */
-    protected void doUpdateEffect(float interpolation) {
-        if (effects != null) {
-            for (EffectWrap ew : effects) {
-                if (ew.started) continue;
-                ew.update(interpolation);
-            }
-        }
-    }
-    
-    /**
-     * 更新魔法 
-     * @param interpolation
-     */
-    protected void doUpdateMagic(float interpolation) {
-        if (magics != null) {
-            for (MagicWrap mw : magics) {
-                if (mw.started) continue;
-                mw.update(interpolation);
-            }
-        }
-    }
-    
-    /**
-     * 更新所有角色动画
-     * @param tpf
-     * @param interpolation 
-     */
-    protected void doUpdateAnims(float tpf, float interpolation) {
-        if (actorAnims != null) {
-            for (ActorAnimWrap aaw : actorAnims) {
-                aaw.update(actor, this, tpf, interpolation);
-            }
+        if (channelLocked) {
+            channelModule.setChannelLock(true, channels);
         }
     }
     
@@ -376,11 +401,11 @@ public abstract class AbstractSkill implements Skill {
      * @param effectId
      */
     protected void playEffect(String effectId) {
-        Effect effect = effectService.loadEffect(effectId);
+        Effect effect = Loader.load(effectId);
         // 同步与技能相同的执行速度
         effect.getData().setSpeed(trueSpeed);
         effect.setTraceObject(actor.getSpatial());
-        playService.addEffect(effect);
+        EffectManager.getInstance().addEffect(effect);
     }
     
     /**
@@ -388,10 +413,10 @@ public abstract class AbstractSkill implements Skill {
      * @param magicId 
      */
     protected void playMagic(String magicId) {
-        MagicData magicData = magicService.loadMagic(magicId);
+        MagicData magicData = DataFactory.createData(magicId);
         magicData.setSourceActor(actor.getData().getUniqueId());
         magicData.setTraceActor(actor.getData().getUniqueId());
-        Magic magic = magicService.loadMagic(magicData);
+        Magic magic = Loader.load(magicData);
         playService.addPlayObject(magic);
     }
     
@@ -401,13 +426,6 @@ public abstract class AbstractSkill implements Skill {
      */
     protected void playSound(String soundId) {
         SoundManager.getInstance().playSound(soundId, actor.getSpatial().getWorldTranslation());
-    }
-    
-    /**
-     * 标记技能结束。
-     */
-    protected void end() {
-        initialized = false;
     }
     
     @Override
@@ -436,8 +454,8 @@ public abstract class AbstractSkill implements Skill {
         }
         
         // 如果有锁定过动画通道则必须解锁，否则角色的动画通道将不能被其它技能使用。
-        if (data.isChannelLocked()) {
-            actorService.setChannelLock(actor, false, data.getChannels());
+        if (channelLocked) {
+            channelModule.setChannelLock(false, channels);
         }
         
         // 重置
@@ -471,42 +489,31 @@ public abstract class AbstractSkill implements Skill {
      */
     protected float getAnimStartTime() {
         // 时间的起点在播放时间段开始的剪裁点上
-        return getAnimFullTime() * data.getCutTimeStart();
+//        return getAnimFullTime() * data.getCutTimeStart();
+        return 0;
     }
     
     /**
-     * 重新计算受cutTime影响的时间插值点。基本上所有在xml中配置的时间插值点在
-     * 使用前都应该经过这个方法进行一次处理。
+     * 重新计算受cutTime影响的时间插值点。
      * @param interpolation 原始的时间插值点(未受cutTime影响的时间插值)
      * @return 经过cutTime计算后的实际的时间插值点
      */
     protected float fixTimePointByCutTime(float interpolation) {
-        float cutTimeStart = data.getCutTimeStart();
-        float cutTimeEnd = data.getCutTimeEnd();
-        float result = FastMath.clamp(
-                (interpolation - cutTimeStart) / (1.0f - cutTimeStart - cutTimeEnd)
+//        float cutTimeStart = data.getCutTimeStart();
+//        float cutTimeEnd = data.getCutTimeEnd();
+        float cutTimeStart = 0;
+        float cutTimeEnd = 0;
+        float result = FastMath.clamp((interpolation - cutTimeStart) / (1.0f - cutTimeStart - cutTimeEnd)
                 , 0f, 1.0f);
         return result;
     }
 
     @Override
-    public Actor getActor() {
-        return actor;
-    }
-    
-    @Override
-    public void setActor(Actor actor) {
-        this.actor = actor;
-    }
-
-    @Override
     public void restoreAnimation() {
-        String animation = data.getAnimation();
         if (animation != null) {
-            actorService.restoreAnimation(actor, animation
-                    , data.isLoop() ? LoopMode.Loop : LoopMode.DontLoop
-                    , getAnimFullTime(), getAnimStartTime()
-                    , data.getChannels());
+            channelModule.restoreAnimation(animation, channels
+                    , loop ? LoopMode.Loop : LoopMode.DontLoop
+                    , getAnimFullTime(), getAnimStartTime());
         }
     }
     
@@ -515,10 +522,10 @@ public abstract class AbstractSkill implements Skill {
      * @return 
      */
     protected float getLevelValue() {
-        if (data.getLevelEl() == null) {
+        if (levelEl == null) {
             return -1;
         }
-        return elService.getLevelEl(data.getLevelEl(), data.getLevel());
+        return elService.getLevelEl(levelEl, data.getLevel());
     }
     
     /**
@@ -530,30 +537,27 @@ public abstract class AbstractSkill implements Skill {
         // 由子类覆盖
         return getLevelValue();
     }
-
+    
     @Override
-    public int canPlay(Actor actor) {
-                
+    public int checkState() {
         // 武器状态检查,有一些技能需要拿特定的武器才能执行。
-        List<Long> wts = data.getWeaponStateLimit();
-        if (wts != null) {
-            Long weaponState = skinService.getWeaponState(actor);
-            if (!wts.contains(weaponState)) {
-                return SkillConstants.STATE_WEAPON_NOT_ALLOW;
-            }
-            
-            if (!skinService.isWeaponTakeOn(actor)) {
+        if (!isPlayable(skinModule.getWeaponState())) {
+            return SkillConstants.STATE_WEAPON_NOT_ALLOW;
+        }
+        
+        if (data.getWeaponStateLimit() != null) {
+            if (!skinModule.isWeaponTakeOn()) {
                 return SkillConstants.STATE_WEAPON_NEED_TAKE_ON;
-            }
+            }            
         }
         
         // 角色需要达到指定等级才能使用技能
-        if (actorService.getLevel(actor) < data.getNeedLevel()) {
+        if (levelModule.getLevel() < data.getLevelLimit()) {
             return SkillConstants.STATE_NEED_LEVEL;
         }
         
         // 冷却中
-        if (LY.getGameTime() - data.getLastPlayTime() < data.getCooldown() * 1000) {
+        if (isCooldown()) {
             return SkillConstants.STATE_SKILL_COOLDOWN;
         }
         
@@ -561,13 +565,24 @@ public abstract class AbstractSkill implements Skill {
         List<AttributeUse> uas = data.getUseAttributes();
         if (uas != null) {
             for (AttributeUse ua : uas) {
-                if (attributeService.getNumberAttributeValue(actor, ua.getAttribute(), 0) < ua.getAmount()) {
+                if (attributeModule.getNumberAttributeValue(ua.getAttribute(), 0) < ua.getAmount()) {
                     return SkillConstants.STATE_MANA_NOT_ENOUGH;
                 }
             }
         }
-        
         return SkillConstants.STATE_OK;
+    }
+
+    @Override
+    public boolean isPlayable(long weaponState) {
+        if (data.getWeaponStateLimit() == null)
+            return true;
+        for (long ws : data.getWeaponStateLimit()) {
+            if (ws == weaponState) {
+                return true;
+            }
+        }
+        return false;
     }
     
     // -------------------------------------------------------------------------
@@ -644,7 +659,6 @@ public abstract class AbstractSkill implements Skill {
         }
     }
     
-    
     public class ActorAnimWrap {
         // 原始的时间开始点和结束点
         float timePointStart;
@@ -656,7 +670,7 @@ public abstract class AbstractSkill implements Skill {
         ActorAnim actorAnim;
         boolean started;
         
-        void update(Actor actor, Skill skill, float tpf, float interpolation) {
+        void update(float tpf, float interpolation) {
             if (started) {
                 actorAnim.update(tpf);
                 return;
@@ -684,35 +698,40 @@ public abstract class AbstractSkill implements Skill {
      */
     protected abstract void doUpdateLogic(float tpf);
 
-    @Override
-    public float getCutTimeEndRate() {
+    /**
+     * 获取技能的CutTimeEndRate,这个值是对技能执行时间的剪裁，即对技能的结束阶段
+     * 的时间进行剪裁，这个值受角色属性影响，并且不会大于CutTimeEndMax.
+     * 如果技能没有指定影响该值的角色属性，或者角色没有指定的属性值，则这个值应
+     * 返回0.<br >
+     * 注：这个值返回的是一个比率，取值为[0.0,1.0]之间，即表示要剪裁掉的技能总时间
+     * 的比率。例如：当返回值为0.5时，即表示技能的总执行时间要剪裁掉一半（时间的后半部分）
+     * @return 
+     */
+    private float getCutTimeEndRate() {
         float cutTime = 0;
-        String ctea = data.getCutTimeEndAttribute();
-        if (ctea != null) {
-            NumberAttribute attr = attributeService.getAttributeByName(actor, ctea);
-            if (attr != null) {
-                cutTime = (data.getCutTimeEndMax() * MathUtils.clamp(attr.floatValue(), 0, 1.0f));
-            }
+        if (cutTimeEndAttribute != null) {
+            cutTime = (cutTimeEndMax * MathUtils.clamp(attributeModule.getNumberAttributeValue(cutTimeEndAttribute, 0), 0, 1.0f));
         }
         return cutTime;
     }
-
-    @Override
+    
+    /**
+     * 获取技能的执行速度,技能的执行速度受角色属性的影响，当技能指定了speedAttribute
+     * 后，角色的这个属性值将影响技能的执行速度。如果技能没有指定这个属性或
+     * 者角色没有这个属性，则这个方法应该返回1.0,即原始速度。
+     * @return 返回的最小值为0.0001f，为避免除0错误，速度不能小于或等于0
+     */
     public float getSpeed() {
         float speed = 1.0f;
-        String speedAttribute = data.getSpeedAttribute();
         if (speedAttribute != null) {
-            NumberAttribute attr = attributeService.getAttributeByName(actor, speedAttribute);
-            if (attr != null) {
-                speed = attr.floatValue();
-            }
+            speed = attributeModule.getNumberAttributeValue(speedAttribute, 1.0f);
             if (speed <= 0) {
                 speed = 0.0001f;
             }
         }
         return speed;
     }
-
+    
     @Override
     public float getTrueUseTime() {
         // 最终的实际运行时间是cutTime后的时间。

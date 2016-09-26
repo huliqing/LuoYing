@@ -10,10 +10,8 @@
     xsi:schemaLocation='http://fighter.huliqing.name meta/skill.xsd'>
     
     <!-- ========================================================================= -->
-    <!--基本配置: 配置技能的优先级-->
+    <!--基本配置: 配置技能的优先级(技能标记参考: define.xml)-->
     <!-- ========================================================================= -->
-    
-    <!--系统默认的技能标记： wait,sit,walk,run,jump,dance,idle,hurt,dead,reset,duck,defend,skin,attack,trick,magic-->
     
     <!--普通的idle技能-->
     <skillBase id="skillIdleTagBase" tags="idle" prior="0" overlapTags="skin" interruptTags="idle,wait,walk,run" />
@@ -44,7 +42,6 @@
     <!--死亡-->
     <skillBase id="skillDeadTagBase" tags="dead" prior="60" />
     
-    
     <!-- ========================================================================= -->
     <!--基本配置:-->
     <!-- ========================================================================= -->
@@ -68,10 +65,10 @@
     <skillSkin id="skillSkinBase" extends="skillSkinTagBase" />
     
     <!--防守-->
-    <skillDefend id="skillDefendBase" extends="skillDefendTagBase" weaponStateLimit="0|1,1|1" speedAttribute="attributeAttackSpeed" cutTimeEndAttribute="attributeGhostRate" />
+    <skillDefend id="skillDefendBase" extends="skillDefendTagBase" weaponStateLimit="leftSword|rightSword,rightSword" speedAttribute="attributeAttackSpeed" cutTimeEndAttribute="attributeGhostRate" />
     
     <!--及躲闪-->
-    <skillDuck   id="skillDuckBase"      extends="skillDuckTagBase"     weaponStateLimit="0|1,1|1" speedAttribute="attributeAttackSpeed" cutTimeEndAttribute="attributeGhostRate" />
+    <skillDuck   id="skillDuckBase"      extends="skillDuckTagBase"     weaponStateLimit="leftSword|rightSword,rightSword" speedAttribute="attributeAttackSpeed" cutTimeEndAttribute="attributeGhostRate" />
     
     <!--受伤-->
     <skillHurt id="skillHurtBase" extends="skillHurtTagBase" />
@@ -84,7 +81,6 @@
     <!--魔法:BUFF类-->
     <skillShot id="skillMagicBuffBase" extends="skillMagicBase" hitDistance="35" hitEl="elSkillBuff" hitChecker="hitCheckerBuff" bullets="bulletBuff" />
 
-    
     <!--普通物理攻击：配置给普通的物理攻击技能，一般可配置给冷兵器技能，如刀、剑、匕首、大刀、长枪、弓箭等普通攻击技-->
     <skillAttack id="skillFightSimpleAttackBase"            extends="skillFightSimpleTagBase" hitAttribute="attributeHealth" levelEl="elLevelSkill" hitEl="elSkillAttack" speedAttribute="attributeAttackSpeed" cutTimeEndAttribute="attributeGhostRate" />
     <skillShot    id="skillFightSimpleAttackShotBase"    extends="skillFightSimpleAttackBase" hitDistance="35" cooldown="2.5" shotSpeed="1" shotTimes="0" useTime="0" />
@@ -101,7 +97,7 @@
     
     <!--弓箭普通攻击-->
     <skillShotBow id="skillFightSimpleAttackShotBowBase" extends="skillFightSimpleAttackShotBase" icon="Interface/skill/shot.png" 
-                  useTime="2" weaponStateLimit="3" hitValue="50" bullets="bulletArrow" hitAngle="90"
+                  useTime="2" weaponStateLimit="bow" hitValue="50" bullets="bulletArrow" hitAngle="90"
              shotSpeed="1.5" shotTimes="0.83" shotOffsets="0|2.1|2" shotDownOffset="0,1.5,2" shotUpOffset="0,2.7,2"
              timeBulletTake="0.16" timeBulletPull="0.33"  
              sounds="soundBowPull|0.33,soundBowShot|0.83" 
@@ -110,7 +106,7 @@
     
     <!--弓箭特殊技能-->
     <skillShotBow id="skillFightTrickAttackShotBowBase" extends="skillFightTrickAttackShotBase" hitAngle="135"
-                  useTime="3" cooldown="30" weaponStateLimit="3" hitValue="50" bullets="bulletArrow" 
+                  useTime="3" cooldown="30" weaponStateLimit="bow" hitValue="50" bullets="bulletArrow" 
              shotTimes="0.83" shotOffsets="0|2.1|2" shotDownOffset="0, 1.5, 2" shotUpOffset="0, 2.7, 2"
              timeBulletPull="0.23" timeBulletTake="0.0" 
              sounds="soundBowPull|0.33,soundBowShot|0.83" 
@@ -169,11 +165,11 @@
     <!--刀剑技能：单手-->
     <!-- =================================================================== -->
     
-    <skillDefend id="skillDefend1" extends="skillDefendBase" animation="sword_defend"  weaponStateLimit="0|1"  useTime="0.75" cutTimeEndMax="0.45" />
-    <skillDefend id="skillDefend2" extends="skillDefendBase" animation="sword_defend2"  weaponStateLimit="0|1"  useTime="0.75" cutTimeEndMax="0.33" />
+    <skillDefend id="skillDefend1" extends="skillDefendBase" animation="sword_defend"  weaponStateLimit="rightSword"  useTime="0.75" cutTimeEndMax="0.45" />
+    <skillDefend id="skillDefend2" extends="skillDefendBase" animation="sword_defend2"  weaponStateLimit="rightSword"  useTime="0.75" cutTimeEndMax="0.33" />
     
     <skillAttack id="skillAttack" extends="skillFightSimpleAttackBase" useTime="0.75" hitDistance="3.5" animation="sword_attack"  
-            cooldown="0.75" sounds="soundSwordAttack3"  weaponStateLimit="0|1" effects="effectSwordShadow1|0.5"
+            cooldown="0.75" sounds="soundSwordAttack3"  weaponStateLimit="rightSword" effects="effectSwordShadow1|0.5"
             hitValue="20" checkPoint="0.48" defendable="1" cutTimeStartMax="0.36" cutTimeEndMax="0.44" />
     
     <skillAttack id="skillAttack2" extends="skillAttack" animation="sword_attack2" effects="effectSwordShadow2|0.5" sounds="soundSwordAttack2"  
@@ -184,7 +180,7 @@
     
     <!--落樱飞舞：绝对攻击-->
     <skillShot id="skillDanceSakura" extends="skillFightTrickAttackShotBase" icon="Interface/skill/ysh_09.jpg"  
-                            useTime="4" animation="sword_jumpUp" weaponStateLimit="0|1,1|1" 
+                            useTime="4" animation="sword_jumpUp" weaponStateLimit="rightSword,leftSword|rightSword" 
                             sounds="soundJump|0.04,soundJumpFallDown|0.84" effects="effectDanceSakuraJump|0.08,effectDanceSakura|0.23,effectDanceSakuraJump|0.9"   
                             actorAnims="actorAnimDanceSakura|0.08|0.23" cooldown="30" 
                             useAttributes="attributeMana|80" 
@@ -200,13 +196,13 @@
     <!--普通攻击-->
     <skillAttack id="skillDualSwordAttack" extends="skillFightSimpleAttackBase" 
             icon="" useTime="1.15" cooldown="1.2" hitDistance="3.5" animation="dualSword_attack" 
-            weaponStateLimit="1|1" sounds="soundSwordAttack1|0.3,soundSwordAttack2|0.6" 
+            weaponStateLimit="leftSword|rightSword" sounds="soundSwordAttack1|0.3,soundSwordAttack2|0.6" 
             effects="" hitValue="25" checkPoint="0.37,0.7" cutTimeStartMax="0.2" cutTimeEndMax="0.29" />
     
     <!--冲击波-->
     <skillShot id="skillDualSwordWave" extends="skillFightTrickAttackBase" icon="Interface/skill/ysh_81.jpg"
                useTime="2" animation="dualSword_wave" magics="magicWaveHit" hitDistance="35"
-               weaponStateLimit="1|1" sounds="" effects="effectWaveSpline,effectWaveFlash|0.6"
+               weaponStateLimit="leftSword|rightSword" sounds="" effects="effectWaveSpline,effectWaveFlash|0.6"
                hitValue="250" hitStates="" hitMagics="" useAttributes="attributeMana|100" 
                cutTimeStartMax="0.4" cutTimeEndMax="0.34" needLevel="7"
                bullets="bulletWave" shotTimes="0.61" shotSpeed="3" shotOffsets="0|2.1|2" />
@@ -243,7 +239,7 @@
     
     <!--电光火石-->
     <skillShot id="skillShotLight" extends="skillFightSimpleMagicBase" icon="" useTime="1.5" hitDistance="25" animation="wand_spell" 
-               weaponStateLimit="0|6" sounds="soundShot2|0.58" effects="effectFlowLightning|0.11" useAttributes="attributeMana|20" cooldown="1.5"
+               weaponStateLimit="wand" sounds="soundShot2|0.58" effects="effectFlowLightning|0.11" useAttributes="attributeMana|20" cooldown="1.5"
                hitValue="30" shotSpeed="1" shotTimes="0.58" shotOffsets="0.5|2.2|0.5" bullets="bulletFlowLight" />
     
     <!--Pastor buff Base-->

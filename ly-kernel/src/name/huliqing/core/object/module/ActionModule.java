@@ -22,7 +22,6 @@ import name.huliqing.core.object.actor.Actor;
 public class ActionModule extends AbstractModule<ModuleData> {
     private final ActorService actorService = Factory.get(ActorService.class);
     
-    private Actor actor;
     // 两个默认行为,当角色接收玩家控制时需要这两个默认行为
     // see ActionServcice.playRun,playFight
     private RunAction defRunAction;
@@ -36,7 +35,6 @@ public class ActionModule extends AbstractModule<ModuleData> {
     @Override
     public void initialize(Actor actor) {
         super.initialize(actor);
-        this.actor = actor;
         
         updateControl = new AdapterControl() {
             @Override

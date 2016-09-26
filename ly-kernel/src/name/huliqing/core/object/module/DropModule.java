@@ -21,7 +21,6 @@ import name.huliqing.core.object.sound.SoundManager;
  */
 public class DropModule extends AbstractModule {
 
-    private Actor actor;
     private List<Drop> drops;
     
     // 掉落物品时的默认提示声效
@@ -36,7 +35,6 @@ public class DropModule extends AbstractModule {
     @Override
     public void initialize(Actor actor) {
         super.initialize(actor); 
-        this.actor = actor;
         
         List<DropData> dropDatas = actor.getData().getObjectDatas(DropData.class, null);
         if (dropDatas != null) {

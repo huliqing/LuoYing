@@ -206,12 +206,6 @@ public class ConfigData extends ObjectData {
         super.read(im);
         InputCapsule ic = im.getCapsule(this);
         debug = ic.readBoolean("debug", false);
-//        gameName = ic.readString("gameName", "落樱3D"); 
-//        versionName = ic.readString("versionName", versionName);
-//        versionCode = ic.readInt("versionCode", -1);
-//        port = ic.readInt("port", 32991);
-//        portDiscoverServer = ic.readInt("portDiscoverServer", 32992);
-//        portDiscoverClient = ic.readInt("portDiscoverClient", 32993);
         dropFactor = ic.readFloat("dropFactor", 0.3f);
         expFactor = ic.readFloat("expFactor", 1.0f);
         useLight = ic.readBoolean("useLight", false);

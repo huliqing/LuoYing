@@ -9,7 +9,6 @@ import com.jme3.math.Vector3f;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.mvc.service.ActorService;
-import name.huliqing.core.mvc.service.ConfigService;
 import name.huliqing.core.network.Network;
 
 /**
@@ -18,13 +17,12 @@ import name.huliqing.core.network.Network;
  * @author huliqing
  */
 public class WalkSkill extends AbstractSkill implements Walk{
-    private final ConfigService configService = Factory.get(ConfigService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     
     // 步行或跑步循环动画的播放速度。
     protected float animSpeed = 1.0f;
     // 基本移动速度
-    protected float baseSpeed;
+    protected float baseSpeed = 1.5f;
     
     protected final Vector3f walkDirection = new Vector3f();
     protected final Vector3f viewDirection = new Vector3f();
@@ -33,7 +31,7 @@ public class WalkSkill extends AbstractSkill implements Walk{
     public void setData(SkillData data) {
         super.setData(data);
         animSpeed = data.getAsFloat("animSpeed", animSpeed);
-        baseSpeed = data.getAsFloat("baseSpeed", configService.getBaseWalkSpeed());
+        baseSpeed = data.getAsFloat("baseSpeed", baseSpeed);
     }
 
     public Vector3f getWalkDirection() {
@@ -88,14 +86,12 @@ public class WalkSkill extends AbstractSkill implements Walk{
 
     @Override
     public void restoreAnimation() {
-        String animation = data.getAnimation();
         if (animation != null) {
-            actorService.restoreAnimation(actor
-                    , animation
-                    , data.isLoop() ? LoopMode.Loop : LoopMode.DontLoop
+            channelModule.restoreAnimation(animation
+                    , channels
+                    , loop ? LoopMode.Loop : LoopMode.DontLoop
                     , getAnimFullTime() / animSpeed
-                    , getAnimStartTime()
-                    , data.getChannels());
+                    , getAnimStartTime());
         }
     }
     

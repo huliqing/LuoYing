@@ -26,7 +26,6 @@ public class LogicModule extends AbstractModule {
     private final ActorService actorService = Factory.get(ActorService.class);
     private final AttributeService attributeService = Factory.get(AttributeService.class);
 
-    private Actor actor;
     private Control updateControl;
     private final SafeArrayList<ActorLogic> logics = new SafeArrayList<ActorLogic>(ActorLogic.class);
 
@@ -48,7 +47,6 @@ public class LogicModule extends AbstractModule {
     @Override
     public void initialize(Actor actor) {
         super.initialize(actor);
-        this.actor = actor;
         updateControl = new AdapterControl() {
             @Override
             public void update(float tpf) {logicUpdate(tpf);}

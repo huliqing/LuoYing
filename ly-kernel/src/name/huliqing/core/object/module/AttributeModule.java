@@ -7,6 +7,8 @@ package name.huliqing.core.object.module;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import name.huliqing.core.data.AttributeData;
 import name.huliqing.core.data.ModuleData;
 import name.huliqing.core.object.Loader;
@@ -14,6 +16,7 @@ import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.attribute.Attribute;
 import name.huliqing.core.object.attribute.AttributeStore;
 import name.huliqing.core.object.attribute.AttributeStore.AttributeConflictException;
+import name.huliqing.core.object.attribute.NumberAttribute;
 
 /**
  * 属性模块
@@ -21,14 +24,14 @@ import name.huliqing.core.object.attribute.AttributeStore.AttributeConflictExcep
  */
 public class AttributeModule extends AbstractModule<ModuleData> {
 
-    private Actor actor;
+    private static final Logger LOG = Logger.getLogger(AttributeModule.class.getName());
+
     private final AttributeStore store = new AttributeStore();
     private List<AttributeListener> listeners;
     
     @Override
     public void initialize(Actor actor) {
         super.initialize(actor);
-        this.actor = actor;
         
         // 载入所有属性
         List<AttributeData> ods = actor.getData().getObjectDatas(AttributeData.class, null);
@@ -132,5 +135,36 @@ public class AttributeModule extends AbstractModule<ModuleData> {
     
     public boolean removeListener(AttributeListener attributeListener) {
         return listeners != null && listeners.remove(attributeListener);
+    }
+    
+    /**
+     * 给指定“名称”的属性添加值。注:所指定的属性必须存在，并且必须是 {@link NumberAttribute}类型的属性，
+     * 否则什么也不做。
+     * @param attrName 属性名称
+     * @param value 
+     */
+    public void addNumberAttributeValue(String attrName, float value) {
+        Attribute attr = getAttributeByName(attrName);
+        if (attr instanceof NumberAttribute) {
+            ((NumberAttribute)attr).add(value);
+        } else {
+            LOG.log(Level.WARNING, "Could not addNumberAttributeValue, attrName is not a NumberAttribute,"
+                    + " actorId={0}, attrName={1}, value={2}", new Object[] {actor.getData().getId(), attrName, value});
+        }
+    }
+    
+    /**
+     * 获取指定“名称“的NumberAttribute类型的属性的值，目标属性必须存在，并且必须是NubmerAttribute，
+     * 否则这个方法将指返回defValue值。
+     * @param attrName 属性"名称"非id.
+     * @param defValue 默认值，如果找不到指定的属性或属性不是NumberAttribute类型则返回这个默认值。
+     * @return 
+     */
+    public float getNumberAttributeValue(String attrName, float defValue) {
+        Attribute attr = getAttributeByName(attrName);
+        if (attr instanceof NumberAttribute) {
+            return ((NumberAttribute) attr).floatValue();
+        }
+        return defValue;
     }
 }

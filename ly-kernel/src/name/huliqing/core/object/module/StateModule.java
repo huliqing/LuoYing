@@ -18,7 +18,6 @@ import name.huliqing.core.object.state.State;
  */
 public class StateModule extends AbstractModule {
 
-    private Actor actor;
     private final SafeArrayList<State> states = new SafeArrayList<State>(State.class);
     private List<StateListener> stateListeners;
     
@@ -27,7 +26,6 @@ public class StateModule extends AbstractModule {
     @Override
     public void initialize(Actor actor) {
         super.initialize(actor); 
-        this.actor = actor;
         updateControl = new AdapterControl() {
             @Override
             public void update(float tpf) {stateUpdate(tpf);}

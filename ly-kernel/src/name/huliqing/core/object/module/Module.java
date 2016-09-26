@@ -40,4 +40,9 @@ public interface Module<T extends ModuleData> extends DataProcessor<T>{
      */
     void cleanup();
     
+    /**
+     * 获取模块角色
+     * @return 
+     */
+    Actor getActor();
 }

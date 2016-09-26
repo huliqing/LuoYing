@@ -103,21 +103,17 @@ public class AttributeServiceImpl implements AttributeService {
 
     @Override
     public void addNumberAttributeValue(Actor actor, String attrName, float value) {
-        Attribute attr = getAttributeByName(actor, attrName);
-        if (attr instanceof NumberAttribute) {
-            ((NumberAttribute)attr).add(value);
-        } else {
-            LOG.log(Level.WARNING, "Could not addNumberAttributeValue, attrName is not a NumberAttribute,"
-                    + " actorId={0}, attrName={1}, value={2}", new Object[] {actor.getData().getId(), attrName, value});
-            throw new RuntimeException("Could not addNumberAttributeValue, attrName is not a NumberAttribute");
+        AttributeModule module = actor.getModule(AttributeModule.class);
+        if (module != null) {
+            module.addNumberAttributeValue(attrName, value);
         }
     }
 
     @Override
     public float getNumberAttributeValue(Actor actor, String attrName, float defValue) {
-        Attribute attr = getAttributeByName(actor, attrName);
-        if (attr instanceof NumberAttribute) {
-            return ((NumberAttribute) attr).floatValue();
+        AttributeModule module = actor.getModule(AttributeModule.class);
+        if (module != null) {
+            return module.getNumberAttributeValue(attrName, defValue);
         }
         return defValue;
     }

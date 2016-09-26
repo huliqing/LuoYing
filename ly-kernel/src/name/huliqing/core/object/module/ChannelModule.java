@@ -28,7 +28,6 @@ import name.huliqing.core.utils.Temp;
 public class ChannelModule extends AbstractModule implements ChannelControl {
     private static final Logger LOG = Logger.getLogger(ChannelModule.class.getName());
 
-    private Actor actor;
     // 通道处理器列表
     private final List<Channel> channels = new LinkedList<Channel>();
     // 保存一个完整的id引用
@@ -48,7 +47,6 @@ public class ChannelModule extends AbstractModule implements ChannelControl {
     @Override
     public void initialize(Actor actor) {
         super.initialize(actor);
-        this.actor = actor;
         animControl = actor.getSpatial().getControl(AnimControl.class);
         
         List<ObjectData> ods = actor.getData().getObjectDatas();

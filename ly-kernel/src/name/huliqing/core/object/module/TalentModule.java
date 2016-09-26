@@ -45,8 +45,6 @@ public class TalentModule extends AbstractModule implements ValueChangeListener<
     private String talentPointsLevelEl;
     
     // ---- inner
-    private Actor actor;
-    
     // 天赋实例
     private final SafeArrayList<Talent> talents = new SafeArrayList<Talent>(Talent.class);
     
@@ -79,7 +77,6 @@ public class TalentModule extends AbstractModule implements ValueChangeListener<
     @Override
     public void initialize(Actor actor) {
         super.initialize(actor); 
-        this.actor = actor;
         
         // 绑定并监听角色等级变化
         levelAttribute = attributeService.getAttributeByName(actor, bindLevelAttribute);

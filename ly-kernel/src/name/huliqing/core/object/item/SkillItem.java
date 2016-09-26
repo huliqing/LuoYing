@@ -98,7 +98,7 @@ public class SkillItem extends AbstractItem {
                         break;
                     case SkillConstants.STATE_NEED_LEVEL:
                         playNetwork.addMessage(actor
-                                , ResourceManager.get(ResConstants.SKILL_NEED_LEVEL, new Object[] {skill.getData().getNeedLevel()})
+                                , ResourceManager.get(ResConstants.SKILL_NEED_LEVEL, new Object[] {skill.getData().getLevelLimit()})
                                 , MessageType.notice);
                         break;
                     case SkillConstants.STATE_CAN_NOT_INTERRUPT:

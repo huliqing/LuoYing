@@ -18,13 +18,11 @@ import name.huliqing.core.object.chat.Chat;
  */
 public class ChatModule extends AbstractModule {
 
-    private Actor actor;
     private Chat chat;
 
     @Override
     public void initialize(Actor actor) {
         super.initialize(actor);
-        this.actor = actor;
         
         // 目标只支持配置一个chat, 如果需要多个chat，则应该包装在GroupChat下面。
         List<ObjectData> ods = actor.getData().getObjectDatas();

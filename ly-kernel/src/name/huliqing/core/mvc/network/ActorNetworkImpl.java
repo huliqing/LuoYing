@@ -27,6 +27,7 @@ import name.huliqing.core.mess.MessActorLookAt;
 import name.huliqing.core.mess.MessAttributeNumberHit;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.module.ActorListener;
+import name.huliqing.core.object.module.ActorModule;
 
 /**
  *
@@ -460,6 +461,11 @@ public class ActorNetworkImpl implements ActorNetwork{
 
     @Override
     public boolean isLiving(Actor actor) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isAvailableEnemy(ActorModule actor, ActorModule target) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

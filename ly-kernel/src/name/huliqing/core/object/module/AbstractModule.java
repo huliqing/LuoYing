@@ -17,7 +17,8 @@ public abstract class AbstractModule<T extends ModuleData> implements Module<T> 
 
     protected T data;
     protected boolean initialized;
-    private int moduleOrder;
+    protected int moduleOrder;
+    protected Actor actor;
 
     @Override
     public void setData(T data) {
@@ -35,6 +36,7 @@ public abstract class AbstractModule<T extends ModuleData> implements Module<T> 
         if (initialized) {
             throw new IllegalStateException("Module is already initialized! module=" + getClass());
         }
+        this.actor = actor;
         initialized = true;
     }
 
@@ -47,4 +49,10 @@ public abstract class AbstractModule<T extends ModuleData> implements Module<T> 
     public void cleanup() {
         initialized = false;
     }
+
+    @Override
+    public Actor getActor() {
+        return actor;
+    }
+    
 }

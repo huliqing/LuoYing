@@ -52,8 +52,10 @@ public class Actor extends AbstractControl implements DataProcessor<ActorData> {
         // 载入基本模型并添加当前控制器
         loadModel().addControl(this);
         
-        // 载入并初始化所有控制器，这里分两步处理，第一步先添加，第二步再初始化，
-        // 因为一些module在初始化的时候可能会引用到另一些module.
+        // 载入并初始化所有控制器，这里分两步处理:
+        // 第一步先添加;
+        // 第二步再初始化;
+        // 因为一些module在初始化的时候可能会引用到另一些module
         if (data.getModuleDatas() != null) {
             // 添加module
             List<ModuleData> tempMDS= new ArrayList<ModuleData>(data.getModuleDatas());

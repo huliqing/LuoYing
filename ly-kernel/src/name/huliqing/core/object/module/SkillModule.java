@@ -26,7 +26,6 @@ import name.huliqing.core.object.skill.Skill;
  */
 public class SkillModule extends AbstractModule {
     private final SkillService skillService = Factory.get(SkillService.class);
-    private Actor actor;
     private Control updateControl;
     
     // 所有可用的技能处理器
@@ -80,7 +79,6 @@ public class SkillModule extends AbstractModule {
     @Override
     public void initialize(Actor actor) {
         super.initialize(actor);
-        this.actor = actor;
         
         // 技能的更新支持
         updateControl = new AdapterControl() {
@@ -177,7 +175,7 @@ public class SkillModule extends AbstractModule {
         
         // 如果新技能自身判断不能执行，例如加血技能或许就不可能给敌军执行。
         // 有很多特殊技能是不能对一些特定目标执行的，所以这里需要包含技能自身的判断
-        int stateCode = skill.canPlay(actor);
+        int stateCode = skill.checkState();
         if (stateCode != SkillConstants.STATE_OK) {
             return stateCode;
         }

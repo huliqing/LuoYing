@@ -4,22 +4,28 @@
  */
 package name.huliqing.core.object.skill;
 
-import name.huliqing.core.Factory;
-import name.huliqing.core.mvc.service.ActorService;
+import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.module.ChannelModule;
 
 /**
  * 执行角色受伤技能.
  * @author huliqing
  */
 public class HurtSkill extends AbstractSkill {
-    private final ActorService actorService = Factory.get(ActorService.class);
+    private ChannelModule channelModule;
+
+    @Override
+    public void setActor(Actor actor) {
+        super.setActor(actor); 
+        channelModule = actor.getModule(ChannelModule.class);
+    }
     
     @Override
     public void initialize() {
         super.initialize();
         
-        if (data.getAnimation() == null) {
-            actorService.reset(actor);
+        if (animation == null) {
+            channelModule.reset();
         }
     }
 

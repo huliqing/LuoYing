@@ -18,7 +18,6 @@ import name.huliqing.core.object.item.Item;
  */
 public class ItemModule extends AbstractModule {
     
-    private Actor actor;
     // 监听角色物品的增删
     private List<ItemListener> itemListeners;
     
@@ -27,7 +26,6 @@ public class ItemModule extends AbstractModule {
     @Override
     public void initialize(Actor actor) {
         super.initialize(actor);
-        this.actor = actor;
         
          // 载入技能
         List<ItemData> itemDatas = actor.getData().getObjectDatas(ItemData.class, null);

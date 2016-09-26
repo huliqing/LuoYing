@@ -19,14 +19,12 @@ import name.huliqing.core.object.task.Task;
  */
 public class TaskModule extends AbstractModule {
 
-    private Actor actor;
     private final SafeArrayList<Task> tasks = new SafeArrayList<Task>(Task.class);
     private List<TaskListener> taskListeners;
 
     @Override
     public void initialize(Actor actor) {
         super.initialize(actor); 
-        this.actor = actor;
 
         List<TaskData> taskDatas = actor.getData().getObjectDatas(TaskData.class, null);
         if (taskDatas != null && !taskDatas.isEmpty()) {

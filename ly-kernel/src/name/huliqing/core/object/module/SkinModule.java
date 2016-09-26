@@ -33,13 +33,11 @@ public class SkinModule extends AbstractModule {
     
     private final AttributeService attributeService = Factory.get(AttributeService.class);
     
-    private Actor actor;
     // 监听角色装备、武器等的穿脱
     private List<SkinListener> skinListeners;
     
-    // 缓存当前正在使用的武器和武器状态, 武器状态用来标识不同的武器组合，不同组合的武器或者不同排列顺序的武器都会产生
+    // 缓存当前正在使用的武器状态, 武器状态用来标识不同的武器组合，不同组合的武器或者不同排列顺序的武器都会产生
     // 唯一的武器状态码。
-    private List<SkinData> tempWeaponList;
     private long cacheWeaponState = 0L;
     
     // 角色所有的皮肤，包含装备、武器（含skinUseds）
@@ -70,7 +68,6 @@ public class SkinModule extends AbstractModule {
     @Override
     public void initialize(Actor actor) {
         super.initialize(actor); 
-        this.actor = actor;
         
         if (bindWeaponSlotAttribute != null) {
             weaponSlotAttribute = attributeService.getAttributeByName(actor, bindWeaponSlotAttribute);

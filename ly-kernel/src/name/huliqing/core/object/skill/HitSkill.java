@@ -26,6 +26,7 @@ import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.el.HitEl;
 import name.huliqing.core.object.hitchecker.HitChecker;
 import name.huliqing.core.object.magic.Magic;
+import name.huliqing.core.object.module.ActorModule;
 import name.huliqing.core.utils.ConvertUtils;
 
 /**
@@ -39,6 +40,7 @@ public abstract class HitSkill extends AbstractSkill {
     private final ElService elService = Factory.get(ElService.class);
     private final HitCheckerService hitCheckerService = Factory.get(HitCheckerService.class);
     private final StateNetwork stateNetwork = Factory.get(StateNetwork.class);
+    private ActorModule actorModule;
     
     protected HitChecker hitChecker;
     // 指定HIT目标的哪一个属性
@@ -95,6 +97,12 @@ public abstract class HitSkill extends AbstractSkill {
             }
         }
         hitMagics = data.getAsArray("hitMagics");
+    }
+
+    @Override
+    public void setActor(Actor actor) {
+        super.setActor(actor); 
+        actorModule = actor.getModule(ActorModule.class);
     }
 
     @Override
@@ -235,13 +243,14 @@ public abstract class HitSkill extends AbstractSkill {
     }
 
     @Override
-    public int canPlay(Actor actor) {
+    public int checkState() {
         if (actor == null || hitChecker == null)
             return SkillConstants.STATE_UNDEFINE;
         
-        Actor target = actorService.getTarget(actor);
-        if (target == null)
+        Actor target = playService.findActor(actorModule.getTarget());
+        if (target == null) {
             return SkillConstants.STATE_TARGET_NOT_FOUND;
+        }
         
         if (!isInHitDistance(target))
             return SkillConstants.STATE_TARGET_NOT_IN_RANGE;
@@ -249,8 +258,7 @@ public abstract class HitSkill extends AbstractSkill {
         if (!hitChecker.canHit(actor, target))
             return SkillConstants.STATE_TARGET_UNSUITABLE;
         
-        return super.canPlay(actor);
-        
+        return super.checkState();
     }
     
     /**
@@ -262,18 +270,9 @@ public abstract class HitSkill extends AbstractSkill {
         if (target == null) {
             return false;
         }
-        
-//        if (actorService.distanceSquared(actor, target) <= hitDistanceSquared
-//                || actor.getSpatial().getWorldBound().intersects(target.getSpatial().getWorldBound())) {
-//            return true;
-//        }
-
-        if (actor.getSpatial().getWorldTranslation().distanceSquared(target.getSpatial().getWorldTranslation()) <= hitDistanceSquared
-                || actor.getSpatial().getWorldBound().intersects(target.getSpatial().getWorldBound())) {
-            return true;
-        }
-        
-        return false;
+        return actor.getSpatial().getWorldTranslation().distanceSquared(target.getSpatial().getWorldTranslation()) 
+                <= hitDistanceSquared
+                || actor.getSpatial().getWorldBound().intersects(target.getSpatial().getWorldBound());
     }
     
     /**
@@ -282,17 +281,8 @@ public abstract class HitSkill extends AbstractSkill {
      * @return 
      */
     public boolean isInHitAngle(Actor target) {
-        // remove20160504
-//        // 如果在技能的攻击视角之外，则视为false(限制distance > 1是避免当距离太近时角度判断不正确。)
-//        boolean inAngle = actor.getViewAngle(target.getModel().getWorldTranslation()) * 2 < hitAngle;
-//        if (!inAngle && actor.getDistanceSquared(target) > 1) {
-//            return false;
-//        }
-//        return true;
-        
         // 如果在技能的攻击视角之外，则视为false(限制distance > 1是避免当距离太近时角度判断不正确。)
-        boolean inAngle = actorService.getViewAngle(actor, target.getSpatial().getWorldTranslation()) * 2 < hitAngle;
-        return inAngle;
+        return actorService.getViewAngle(actor, target.getSpatial().getWorldTranslation()) * 2 < hitAngle;
     }
     
     /**

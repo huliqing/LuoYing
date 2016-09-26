@@ -6,22 +6,21 @@
     xsi:schemaLocation='http://luoying.huliqing.name meta/define.xsd'>
     
     <!-- ========================================================================= -->
-    <!--技能标记定义 : 最多允许64个标记-->
+    <!--系统默认的技能标记定义(id不能改): 最多允许64个标记-->
     <!-- ========================================================================= -->
     
     <defineSkillTag id="defineSkillTag" skillTags="wait,walk,run,jump,idle,hurt,dead,reset,defend,duck,fight,attack,trick,magic,skin" />
     
     <!-- ========================================================================= -->
-    <!--装备部位的定义 : 最多允许64个部位定义-->
+    <!--系统默认装备部位的定义(id不能改) : 最多允许64个部位定义-->
     <!-- ========================================================================= -->
     
-    <defineSkinType id="defineSkinType" skinParts="
-foot,lowerBody,upperBody,hand,face,eye,ear,hair
+    <defineSkinType id="defineSkinType" skinParts="foot,lowerBody,upperBody,hand,face,eye,ear,hair
 ,blinder,mouthMask,faceMask,horn
 ,leftHandWeapon,rightHandWeapon" />
     
     <!-- ========================================================================= -->
-    <!--武器类型定义 : 最多允许64种武器类型
+    <!--系统默认武器类型定义(id不能改) : 最多允许64种武器类型
             leftSword: 左手剑; rightSword: 右手剑; bow : 弓; wand: 魔杖; leftClaw: 左手爪子; rightClaw: 右手爪子
     -->
     <!-- ========================================================================= -->

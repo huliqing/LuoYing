@@ -5,9 +5,9 @@
 package name.huliqing.core.object.skill;
 
 import com.jme3.math.FastMath;
-import name.huliqing.core.Factory;
 import name.huliqing.core.data.SkillData;
-import name.huliqing.core.mvc.service.ActorService;
+import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.module.ChannelModule;
 
 /**
  * 这个技能可以允许使用角色动画中的任何一侦作为角色的reset状态．当某些角色
@@ -15,12 +15,9 @@ import name.huliqing.core.mvc.service.ActorService;
  * @author huliqing
  */
 public class ResetSkill extends AbstractSkill {
-    private final ActorService actorService = Factory.get(ActorService.class);
+    private ChannelModule channelModule;
     
-    /**
-     * 指定要把角色动画定格在animation动画的哪一帧上，
-     * 这是一个插值点。
-     */
+    // 指定要把角色动画定格在animation动画的哪一帧上， 这是一个插值点。
     private float timePoint;
 
     @Override
@@ -30,28 +27,28 @@ public class ResetSkill extends AbstractSkill {
     }
 
     @Override
+    public void setActor(Actor actor) {
+        super.setActor(actor); 
+        channelModule = actor.getModule(ChannelModule.class);
+    }
+
+    @Override
     public void initialize() {
         super.initialize();
         
         // 如果没有设置动画名称，则把动画定格在角色的当前帧上
-        if (data.getAnimation() == null) {
-            
-            // remove20160815
-//            channelProcessor.setSpeed(0.0001f);
-
-            actorService.reset(actor);
+        if (animation == null) {
+            channelModule.reset();
         }
-        
     }
 
     @Override
     protected void doUpdateAnimation(String animation, boolean loop, float animFullTime, float animStartTime) {
         // 直接reset到指定动画的指定时间帧
-        actorService.resetToAnimationTime(actor, animation, timePoint);
+        channelModule.resetToAnimationTime(animation, timePoint);
     }
     
     @Override
-    protected void doUpdateLogic(float tpf) {
-    }
+    protected void doUpdateLogic(float tpf) {}
     
 }

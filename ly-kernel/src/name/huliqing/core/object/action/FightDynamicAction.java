@@ -107,6 +107,15 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
     }
 
     @Override
+    public void setActor(Actor actor) {
+        super.setActor(actor); 
+        actorModule = actor.getModule(ActorModule.class);
+        logicModule = actor.getModule(LogicModule.class);
+        skillModule = actor.getModule(SkillModule.class);
+        skinModule = actor.getModule(SkinModule.class);
+    }
+    
+    @Override
     public void setEnemy(Actor enemy) {
         this.enemy = enemy;
         this.enemyActorModule = enemy.getModule(ActorModule.class);
@@ -127,10 +136,6 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
     @Override
     public void initialize() {
         super.initialize();
-        actorModule = actor.getModule(ActorModule.class);
-        logicModule = actor.getModule(LogicModule.class);
-        skillModule = actor.getModule(SkillModule.class);
-        skinModule = actor.getModule(SkinModule.class);
         skillModule.addSkillListener(this);
         skinModule.addSkinListener(this);
         
@@ -297,14 +302,15 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
      * @return 
      */
     protected boolean isPlayable(Skill attackSkill, Actor target) {
-        // 正常攻击类技能都应该是HitSkill,使用hitSkill的isInHitDistance来判断以优化
-        // 性能，
-        if (attackSkill instanceof HitSkill) {
-            return ((HitSkill) attackSkill).isInHitDistance(target);
-        }
+        // remove20160926,不再需要这样搞特殊。
+//        // 正常攻击类技能都应该是HitSkill,使用hitSkill的isInHitDistance来判断以优化
+//        // 性能，
+//        if (attackSkill instanceof HitSkill) {
+//            return ((HitSkill) attackSkill).isInHitDistance(target);
+//        }
         
         // 只有非HitSkill时才使用canPlay，这个方法稍微耗性能
-        return attackSkill.canPlay(actor) == SkillConstants.STATE_OK;
+        return attackSkill.checkState() == SkillConstants.STATE_OK;
     }
     
     /**
@@ -373,8 +379,7 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
         // 重新缓存技能后，检查一次当前正在使用的技能是否适合当前的武器，如果不行则清除它，让它
         // 重新获取一个可用的。否则不应该清除当前的技能。
         if (skill != null) {
-            List<Long> weaponLimit = skill.getData().getWeaponStateLimit();
-            if (weaponLimit != null && !weaponLimit.isEmpty() && !weaponLimit.contains(weaponState)) {
+            if (!skill.isPlayable(weaponState)) {
                 skill = null;
             }
         }
@@ -390,12 +395,11 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
      */
     private List<Skill> loadAttackSkill(long weaponState, long skillTags, List<Skill> store) {
         List<Skill> allSkills = skillModule.getSkills();
-        for (Skill as : allSkills) {
-            if ((skillTags & as.getData().getTags()) != 0) {
+        for (Skill skill : allSkills) {
+            if ((skillTags & skill.getData().getTags()) != 0) {
                 // 武器类型的过滤,只有技能与当前武器相容才能添加
-                if (as.getData().getWeaponStateLimit() == null 
-                        || as.getData().getWeaponStateLimit().contains(weaponState)) {
-                    store.add(as);
+                if (skill.isPlayable(weaponState)) {
+                    store.add(skill);
                 }
             }
         }

@@ -32,7 +32,6 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     
     private final AttributeService attributeService = Factory.get(AttributeService.class);
 
-    private Actor actor;
     private BetterCharacterControlWrap innerControl;
     private float radius = 0.4f;
     private float height = 3.2f;
@@ -128,7 +127,6 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     @Override
     public void initialize(Actor actor) {
         super.initialize(actor);
-        this.actor = actor;
         
         lifeAttribute = attributeService.getAttributeByName(actor, bindLifeAttribute);
         if (lifeAttribute == null) {
@@ -301,12 +299,15 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
      * @return 
      */
     public boolean isEnemy(Actor target) {
+        if (target == null || target == actor) {
+            return false;
+        }
         // 如果目标分组值小于或等于0，则始终认为“不”是敌人，这样允许游戏添加一些无害的中立小动物
         ActorModule targetActorModule = target.getModule(ActorModule.class);
         if (targetActorModule.getGroup() <= 0) {
             return false;
         }
-        return (getGroup() != targetActorModule.getGroup());
+        return (targetActorModule.getGroup() != getGroup());
     }
     
     /**

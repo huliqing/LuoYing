@@ -39,16 +39,10 @@ public interface Skill extends DataProcessor<SkillData>{
     void cleanup();
     
     /**
-     * 获取发起技能的角色，如果没有，则返回null
-     * @return 
-     */
-    Actor getActor();
-    
-    /**
      * 设置发起技能的角色。
-     * @param character 
+     * @param actor 
      */
-    void setActor(Actor character);
+    void setActor(Actor actor);
     
     /**
      * 重新修复被其它技能重置的动画
@@ -57,22 +51,19 @@ public interface Skill extends DataProcessor<SkillData>{
     void restoreAnimation();
     
     /**
-     * 判断指定角色是否可以执行当前技能,该方法返回一个状态码，来判断当前技能是否可以
-     * 执行，比如某些情况下一个技能是不能对角色的当前指定目标执行的。比如：加
-     * 血技能应该不可以对敌军施行，或者攻击技能就不应该对友军施行之类
-     * @param actor
+     * 判断角色在当前状态下是否可以执行这个技能,该方法返回一个状态码{@link SkillConstants}，来判断当前技能是否可以执行.
      * @return 
      * @see SkillConstants
      */
-    int canPlay(Actor actor);
-
+    int checkState();
+    
     /**
-     * 获取技能的执行速度,技能的执行速度受角色属性的影响，当技能指定了speedAttribute
-     * 后，角色的这个属性值将影响技能的执行速度。如果技能没有指定这个属性或
-     * 者角色没有这个属性，则这个方法应该返回1.0,即原始速度。
-     * @return 返回的最小值为0.0001f，为避免除0错误，速度不能小于或等于0
+     * 判断在指定的武器状态下是否可以执行这个技能。这个方法即用来判断使用指定的武器类型是否可以执行这个技能。
+     * weaponState包含了指定的武器类型。
+     * @param weaponState
+     * @return 
      */
-    float getSpeed();
+    boolean isPlayable(long weaponState);
     
     /**
      * 判断技能是否正常结束或未启动
@@ -86,16 +77,16 @@ public interface Skill extends DataProcessor<SkillData>{
      */
     boolean isCooldown();
     
-    /**
-     * 获取技能的CutTimeEndRate,这个值是对技能执行时间的剪裁，即对技能的结束阶段
-     * 的时间进行剪裁，这个值受角色属性影响，并且不会大于CutTimeEndMax.
-     * 如果技能没有指定影响该值的角色属性，或者角色没有指定的属性值，则这个值应
-     * 返回0.<br >
-     * 注：这个值返回的是一个比率，取值为[0.0,1.0]之间，即表示要剪裁掉的技能总时间
-     * 的比率。例如：当返回值为0.5时，即表示技能的总执行时间要剪裁掉一半（时间的后半部分）
-     * @return 
-     */
-    float getCutTimeEndRate();
+//    /**
+//     * 获取技能的CutTimeEndRate,这个值是对技能执行时间的剪裁，即对技能的结束阶段
+//     * 的时间进行剪裁，这个值受角色属性影响，并且不会大于CutTimeEndMax.
+//     * 如果技能没有指定影响该值的角色属性，或者角色没有指定的属性值，则这个值应
+//     * 返回0.<br >
+//     * 注：这个值返回的是一个比率，取值为[0.0,1.0]之间，即表示要剪裁掉的技能总时间
+//     * 的比率。例如：当返回值为0.5时，即表示技能的总执行时间要剪裁掉一半（时间的后半部分）
+//     * @return 
+//     */
+//    float getCutTimeEndRate();
 
     /**
      * 获取技能的实际执行时间,技能的实际执行时间受：技能总时间、技能执行速度、

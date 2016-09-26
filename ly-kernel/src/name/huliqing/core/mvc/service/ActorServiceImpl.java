@@ -4,7 +4,6 @@
  */
 package name.huliqing.core.mvc.service;
 
-import com.jme3.animation.AnimControl;
 import com.jme3.animation.LoopMode;
 import com.jme3.bounding.BoundingBox;
 import com.jme3.math.ColorRGBA;
@@ -23,7 +22,6 @@ import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.data.ActorData;
 import name.huliqing.core.enums.Sex;
 import name.huliqing.core.view.talk.Talk;
-import name.huliqing.core.object.actor.ActorModelLoader;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.attribute.Attribute;
 import name.huliqing.core.object.attribute.NumberAttribute;
@@ -47,11 +45,13 @@ public class ActorServiceImpl implements ActorService {
     private static final Logger LOG = Logger.getLogger(ActorServiceImpl.class.getName());
 
     private AttributeService attributeService;
+    private PlayService playService;
     private SkillService skillService;
     
     @Override
     public void inject() {
         attributeService = Factory.get(AttributeService.class);
+        playService = Factory.get(PlayService.class);
         skillService = Factory.get(SkillService.class);
     }
 
@@ -690,6 +690,23 @@ public class ActorServiceImpl implements ActorService {
     @Override
     public float distance(Actor actor, Vector3f position) {
         return actor.getSpatial().getWorldTranslation().distance(position);
+    }
+
+    @Override
+    public boolean isAvailableEnemy(ActorModule actor, ActorModule target) {
+        if (target == null) {
+            return false;
+        }
+        if (target.isDead()) {
+            return false;
+        }
+        if (!actor.isEnemy(target.getActor())) {
+            return false;
+        }
+        if (!playService.isInScene(target.getActor())) {
+            return false;
+        }
+        return true;
     }
 
 }

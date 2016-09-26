@@ -14,6 +14,7 @@ import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.enums.Sex;
 import name.huliqing.core.view.talk.Talk;
 import name.huliqing.core.object.module.ActorListener;
+import name.huliqing.core.object.module.ActorModule;
 
 /**
  *
@@ -49,15 +50,6 @@ public interface ActorService extends Inject {
      * @return 
      */
     boolean hasObstacleActor(Actor self, List<Actor> others); 
-  
-    // remove20160903
-//    /**
-//     * 检查目标target在角色self的哪一个方向
-//     * @param self
-//     * @param target
-//     * @return 
-//     */
-//    HurtFace checkFace(Spatial self, Actor target);
     
     /**
      * 寻找角色周围指定范围内最近的敌人,该敌人必须是活着的，如果没有敌人，则返回null.
@@ -535,4 +527,12 @@ public interface ActorService extends Inject {
      */
     float distanceSquared(Actor actor, Actor target);
     
+    /**
+     * 判断目标角色target是否是actor的<b>有效</b>敌人，这里的有效是指目标角色target存在于场景中、非死亡、并且是
+     * 角色actor的有效敌人。
+     * @param actor
+     * @param target
+     * @return 
+     */
+    boolean isAvailableEnemy(ActorModule actor, ActorModule target);
 }

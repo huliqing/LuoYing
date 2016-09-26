@@ -714,10 +714,6 @@ xs:time
                         <xs:documentation>设置当前技能可以打断的其它技能的tags,格式 : "tag1,tag2,..."</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-                
-                
-                
-                
                 <xs:attribute name="animation" type="xs:string" use="required" >
                     <xs:annotation>
                         <xs:documentation>技能的model动画名称，角色必须有该动画，否则报错。</xs:documentation>
@@ -757,15 +753,9 @@ xs:time
                 <xs:attribute name="weaponStateLimit" type="xs:string" use="required">
                     <xs:annotation>
                         <xs:documentation>
-                            武器状态限制，该参数限制什么样的武器可以使用该技能，如果不设置则
-                            表示任何武器都可以使用该技能。
-                            参数的格式为："左武器类型|右武器类型|其它部位武器类型1|其它部位武器类型2|...", 右边如果无武器时可省略
-                            伪示例1："0|剑" => 表示只有右武器为剑时可执行该技能，其它部分不能装备武器（0表示空，无武器）
-                            伪示例2："匕首|剑" => 表示只有左武器为匕首，右武器为剑时可执行该技能
-                            伪示例3："剑" => 表示只有左武器为剑时才可使用该技能。
-                            伪示例4："剑|剑,剑|剑|剑" => 表示二刀流或三刀流可以使用该技能。
-                            这里的左武器，右武器通常为左手的武器和右手拿的武器。
-                            武器类型代码参考：剑(1),匕首（2），弓箭（3) 具体参考SkinConstants.java定义
+                            武器类型限制，如果想要限制只有装备特定武器之后才可以使用这个技能则可以设置这个参数。
+                            格式："weaponType1|weaponType2|..., weaponTypeX,...", WeaponType参数define.xml中的定义。
+                            示例："leftSword|rightSword,rightSword", 这表示只有使用"二刀流"或"右手剑"时才可以使用这个技能。
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>

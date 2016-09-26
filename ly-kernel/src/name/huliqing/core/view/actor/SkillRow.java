@@ -111,10 +111,10 @@ public class SkillRow extends Row<Skill> {
         num.setText(data.getData().getLevel() + "/" + data.getData().getMaxLevel());
         
         Actor actor = skillPanel.getActor();
-        if (actor != null && actorService.getLevel(actor) < data.getData().getNeedLevel()) {
+        if (actor != null && actorService.getLevel(actor) < data.getData().getLevelLimit()) {
             body.setDisabled(true);
             body.setNameText(ResourceManager.getObjectName(data.getData()) 
-                    + "(" + ResourceManager.get(ResConstants.COMMON_NEED_LEVEL, new Object[] {data.getData().getNeedLevel()}) + ")");
+                    + "(" + ResourceManager.get(ResConstants.COMMON_NEED_LEVEL, new Object[] {data.getData().getLevelLimit()}) + ")");
         } else {
             body.setDisabled(false);
             body.setNameText(ResourceManager.getObjectName(data.getData()));

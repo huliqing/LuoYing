@@ -53,7 +53,6 @@ public class LevelModule extends AbstractModule implements ValueChangeListener<N
     private String effect;
     
     // ---- inner
-    private Actor actor;
     private NumberAttribute levelAttribute;
     private NumberAttribute xpAttribute;
     private NumberAttribute xpNextAttribute;
@@ -73,7 +72,6 @@ public class LevelModule extends AbstractModule implements ValueChangeListener<N
     @Override
     public void initialize(Actor actor) {
         super.initialize(actor);
-        this.actor = actor;
         // 查找角色的等级属性
         levelAttribute = attributeService.getAttributeByName(actor, bindLevelAttribute);
         if (levelAttribute == null) {
