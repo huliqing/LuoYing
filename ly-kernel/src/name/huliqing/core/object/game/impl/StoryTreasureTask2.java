@@ -329,7 +329,7 @@ public class StoryTreasureTask2 extends GameTaskBase {
                             final BackSkill backSkill = (BackSkill) skill;
                             skillService.addSkillPlayListener(companion, new SkillListenerAdapter() {
                                 @Override
-                                public void onSkillEnd(Actor source, Skill skill) {
+                                public void onSkillEnd(Skill skill) {
                                     if (skill == backSkill) {
                                         playNetwork.removeObject(companion.getSpatial());
                                         playNetwork.removeObject(treasure.getSpatial());

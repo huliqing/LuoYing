@@ -52,6 +52,7 @@ public class SkillItem extends AbstractItem {
                 return false;
             }
         }
+        skill.setActor(actor);
         int skillStateCode = skillService.checkStateCode(actor, skill);
         if (skillStateCode != SkillConstants.STATE_OK) {
             if (actorService.isPlayer(actor)) {

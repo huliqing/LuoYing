@@ -27,6 +27,8 @@ public class SkinPartDefine extends Define {
         String[] tempParts = data.getAsArray("skinParts");
         if (tempParts != null) {
             skinParts.addAll(Arrays.asList(tempParts));
+        } else {
+            LOG.log(Level.WARNING, "skinParts not defined.");
         }
     }
     
@@ -42,6 +44,9 @@ public class SkinPartDefine extends Define {
      * @return 
      */
     public long convert(String... parts) {
+        if (parts == null) {
+            return 0;
+        }
         long result = 0L;
         int idx;
         for (String p : parts) {

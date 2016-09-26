@@ -10,6 +10,8 @@ import name.huliqing.core.Factory;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.network.Network;
+import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.module.ChannelModule;
 
 /**
  * 行路的技能
@@ -18,6 +20,7 @@ import name.huliqing.core.network.Network;
  */
 public class WalkSkill extends AbstractSkill implements Walk{
     private final ActorService actorService = Factory.get(ActorService.class);
+    private ChannelModule channelModule;
     
     // 步行或跑步循环动画的播放速度。
     protected float animSpeed = 1.0f;
@@ -32,6 +35,12 @@ public class WalkSkill extends AbstractSkill implements Walk{
         super.setData(data);
         animSpeed = data.getAsFloat("animSpeed", animSpeed);
         baseSpeed = data.getAsFloat("baseSpeed", baseSpeed);
+    }
+
+    @Override
+    public void setActor(Actor actor) {
+        super.setActor(actor);
+        channelModule = actor.getModule(ChannelModule.class);
     }
 
     public Vector3f getWalkDirection() {

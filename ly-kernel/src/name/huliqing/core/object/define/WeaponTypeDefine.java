@@ -27,6 +27,8 @@ public class WeaponTypeDefine extends Define {
         String[] tempTypes = data.getAsArray("weaponTypes");
         if (tempTypes != null) {
             typeList.addAll(Arrays.asList(tempTypes));
+        } else {
+            LOG.log(Level.WARNING, "weaponTypes not defined.");
         }
     }
     

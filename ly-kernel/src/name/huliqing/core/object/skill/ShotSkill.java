@@ -30,10 +30,7 @@ public class ShotSkill extends HitSkill {
 
     private final ActorService actorService = Factory.get(ActorService.class);
     private final PlayService playService = Factory.get(PlayService.class);
-    private final StateService stateService = Factory.get(StateService.class);
     private final BulletService bulletService = Factory.get(BulletService.class);
-    private final MagicService magicService = Factory.get(MagicService.class);
-    private final StateNetwork stateNetwork = Factory.get(StateNetwork.class);
     
     // 靶点类型
     protected enum ShotTargetType {

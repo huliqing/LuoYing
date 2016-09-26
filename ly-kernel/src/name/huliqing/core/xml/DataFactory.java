@@ -114,14 +114,9 @@ public class DataFactory {
             dl.load(proto, data);
             return (T) data;
             
-        } catch (NullPointerException ex) {
+        } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Could not createData by id={0}, error={1}",  new Object[]{id, ex.getMessage()});
-        } catch (ClassNotFoundException ex) {
-            LOG.log(Level.SEVERE, "Could not createData by id={0}, error={1}",  new Object[]{id, ex.getMessage()});
-        } catch (InstantiationException ex) {
-            LOG.log(Level.SEVERE, "Could not createData by id={0}, error={1}",  new Object[]{id, ex.getMessage()});
-        } catch (IllegalAccessException ex) {
-            LOG.log(Level.SEVERE, "Could not createData by id={0}, error={1}",  new Object[]{id, ex.getMessage()});
+            ex.printStackTrace();
         }
         return null;
     }

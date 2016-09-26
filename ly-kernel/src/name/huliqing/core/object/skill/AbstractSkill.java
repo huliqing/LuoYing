@@ -53,11 +53,10 @@ public abstract class AbstractSkill implements Skill {
 //    private static final Logger logger = Logger.getLogger(AbstractSkill.class.getName());
     private final ElService elService = Factory.get(ElService.class);
     private final PlayService playService = Factory.get(PlayService.class);
-//    private final AttributeService attributeService = Factory.get(AttributeService.class);
-    protected AttributeModule attributeModule;
-    protected LevelModule levelModule;
-    protected ChannelModule channelModule;
-    protected SkinModule skinModule;
+    private AttributeModule attributeModule;
+    private LevelModule levelModule;
+    private ChannelModule channelModule;
+    private SkinModule skinModule;
     
     protected SkillData data;
     
@@ -225,6 +224,11 @@ public abstract class AbstractSkill implements Skill {
         channelModule = actor.getModule(ChannelModule.class);
         levelModule = actor.getModule(LevelModule.class);
         skinModule = actor.getModule(SkinModule.class);
+    }
+    
+    @Override
+    public Actor getActor() {
+        return actor;
     }
     
     @Override
@@ -572,7 +576,7 @@ public abstract class AbstractSkill implements Skill {
         }
         return SkillConstants.STATE_OK;
     }
-
+    
     @Override
     public boolean isPlayable(long weaponState) {
         if (data.getWeaponStateLimit() == null)
@@ -586,7 +590,6 @@ public abstract class AbstractSkill implements Skill {
     }
     
     // -------------------------------------------------------------------------
-    // inner
     
     // 声音控制
     public class SoundWrap {
@@ -693,12 +696,6 @@ public abstract class AbstractSkill implements Skill {
     }
     
     /**
-     * 实现技能逻辑
-     * @param tpf 
-     */
-    protected abstract void doUpdateLogic(float tpf);
-
-    /**
      * 获取技能的CutTimeEndRate,这个值是对技能执行时间的剪裁，即对技能的结束阶段
      * 的时间进行剪裁，这个值受角色属性影响，并且不会大于CutTimeEndMax.
      * 如果技能没有指定影响该值的角色属性，或者角色没有指定的属性值，则这个值应
@@ -742,4 +739,9 @@ public abstract class AbstractSkill implements Skill {
         return tempTime - tempTime * (0 + getCutTimeEndRate());
     }
     
+    /**
+     * 实现技能逻辑
+     * @param tpf 
+     */
+    protected abstract void doUpdateLogic(float tpf);
 }

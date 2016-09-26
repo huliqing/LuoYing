@@ -37,7 +37,7 @@ xs:time
                     <xs:attribute name="weaponType" type="xs:string" use="required" >
                         <xs:annotation>
                             <xs:documentation>
-                                指定武器类型，格式："weaponType", 如："rightSword", 参考: define.xml中weaponType的定义 
+                                指定一个武器类型，格式："weaponType", 如："rightSword", 参考: define.xml中weaponType的定义 
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>

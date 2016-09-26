@@ -16,7 +16,6 @@ import name.huliqing.core.xml.DataLoader;
 import name.huliqing.core.utils.ConvertUtils;
 
 /**
- *
  * @author huliqing
  */
 public class SkillDataLoader implements DataLoader<SkillData> {
@@ -56,7 +55,7 @@ public class SkillDataLoader implements DataLoader<SkillData> {
         data.setMaxLevel(proto.getAsInteger("maxLevel", 1));
         data.setPlayCount(proto.getAsInteger("skillPoints", 0));
         data.setLevelLimit(proto.getAsInteger("needLevel", 0));
-        data.setTags(DefineFactory.getSkillTagDefine().convert(proto.getAsArray("skillTags")));
+        data.setTags(DefineFactory.getSkillTagDefine().convert(proto.getAsArray("tags")));
         data.setOverlapTags(DefineFactory.getSkillTagDefine().convert(proto.getAsArray("overlapTags")));
         data.setInterruptTags(DefineFactory.getSkillTagDefine().convert(proto.getAsArray("interruptTags")));
         data.setPrior(proto.getAsInteger("prior", 0));

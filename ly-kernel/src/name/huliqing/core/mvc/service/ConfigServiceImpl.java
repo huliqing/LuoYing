@@ -284,16 +284,6 @@ public class ConfigServiceImpl implements ConfigService {
     public float getSummonLevelFactor() {
         return cd.getSummonLevelFactor();
     }
-
-    @Override
-    public float getBaseWalkSpeed() {
-        return cd.getBaseWalkSpeed();
-    }
-
-    @Override
-    public float getBaseRunSpeed() {
-        return cd.getBaseRunSpeed();
-    }
     
     // 检测及获取一个可用的语言环境。
     private String detectLocale() {

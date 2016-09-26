@@ -10,12 +10,13 @@ import com.jme3.scene.control.AbstractControl;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.SkinData;
 import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.define.DefineFactory;
 import name.huliqing.core.object.module.SkinModule;
 import name.huliqing.core.object.skill.SkinSkill;
 import name.huliqing.core.object.slot.Slot;
@@ -26,6 +27,7 @@ import name.huliqing.core.object.slot.Slot;
  * @author huliqing
  */
 public class WeaponSkin extends AbstractSkin implements Weapon {
+    private static final Logger LOG = Logger.getLogger(WeaponSkin.class.getName());
     private final SkillService skillService = Factory.get(SkillService.class);
     
     // 武器类型
@@ -48,6 +50,9 @@ public class WeaponSkin extends AbstractSkin implements Weapon {
             for (int i = 0; i < tempSlots.length; i++) {
                 slots[i] = Loader.load(tempSlots[i]);
             }
+        }
+        if (weaponType == null) {
+            LOG.log(Level.WARNING, "weaponType could not be null! weaponSkin={0}", data.getId());
         }
     }
     

@@ -105,12 +105,6 @@ public class ChannelModule extends AbstractModule implements ChannelControl {
         return channels;
     }
 
-     // remove20160926
-//    @Override
-//    public void playAnim(String animName, LoopMode loop, float useTime, String... channelIds) {
-//        playAnim(animName, loop, useTime, 0, channelIds);
-//    }
-
     @Override
     public void playAnim(String animName, String[] channelIds, LoopMode loop, float useTime, float startTime) {
         playAnim(animName, channelIds, loop, useTime, startTime, DEFAULT_BLEND_TIME);
@@ -118,7 +112,6 @@ public class ChannelModule extends AbstractModule implements ChannelControl {
     
     @Override
     public void playAnim(String animName, String[] channelIds, LoopMode loop, float useTime, float startTime, float blendTime) {
-        
         if (!initialized) {
             return;
         }
@@ -152,7 +145,7 @@ public class ChannelModule extends AbstractModule implements ChannelControl {
      * @param animName　动画名称
      * @return 
      */
-    private boolean checkAndLoadAnim(String animName) {
+    public boolean checkAndLoadAnim(String animName) {
         if (animName == null) {
             return false;
         }

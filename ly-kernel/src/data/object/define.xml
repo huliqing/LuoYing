@@ -15,18 +15,16 @@
     <!--系统默认装备部位的定义(id不能改) : 最多允许64个部位定义-->
     <!-- ========================================================================= -->
     
-    <defineSkinType id="defineSkinType" skinParts="foot,lowerBody,upperBody,hand,face,eye,ear,hair
+    <defineSkinPart id="defineSkinPart" skinParts="foot,lowerBody,upperBody,hand,face,eye,ear,hair
 ,blinder,mouthMask,faceMask,horn
 ,leftHandWeapon,rightHandWeapon" />
     
     <!-- ========================================================================= -->
     <!--系统默认武器类型定义(id不能改) : 最多允许64种武器类型
-            leftSword: 左手剑; rightSword: 右手剑; bow : 弓; wand: 魔杖; leftClaw: 左手爪子; rightClaw: 右手爪子
-    -->
+            leftSword: 左手剑; rightSword: 右手剑; bow : 弓; wand: 魔杖; leftClaw: 左手爪子; rightClaw: 右手爪子-->
     <!-- ========================================================================= -->
     
-    <defineWeaponType id="defineWeaponType" 
-                      weaponTypes="leftSword,rightSword,bow,wand,leftClaw,rightClaw" />
+    <defineWeaponType id="defineWeaponType" weaponTypes="leftSword,rightSword,bow,wand,leftClaw,rightClaw" />
     
 </root>
 

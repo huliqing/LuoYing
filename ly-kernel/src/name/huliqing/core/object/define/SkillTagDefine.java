@@ -27,11 +27,13 @@ public class SkillTagDefine extends Define {
     @Override
     public void setData(DefineData data) {
         super.setData(data);
-        String[] tags = data.getAsArray("skinTags");
+        String[] tags = data.getAsArray("skillTags");
         if (tags != null && tags.length > 0) {
             for (String tag : tags) {
                 registerSkillTag(tag);
             }
+        } else {
+            LOG.log(Level.WARNING, "skillTags not defined.");
         }
     }
     

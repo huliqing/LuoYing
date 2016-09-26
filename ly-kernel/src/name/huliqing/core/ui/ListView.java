@@ -142,18 +142,6 @@ public abstract class ListView<T> extends AbstractUI implements ScrollListener {
         this.pageSize = pageSize;
         refreshPageData();
     }
-  
-    // TODO: 20160312暂不处理，因需要同时同步scroll的位置。
-//    /**
-//     * 设置从哪一行开始显示数据记录。
-//     * @param startIndex 从0开始，最大为datas.size - 1;
-//     */
-//    public void setStartIndex(int startIndex) {
-//        int rowTotal = getRowTotal();
-//        if (rowTotal <= 0)
-//            currentStartRowIndex = 0;
-//        currentStartRowIndex = MathUtils.clamp(startIndex, 0, rowTotal - 1);
-//    }
     
     /**
      * 判断是否要过滤某一条数据,即让某一条数据不显示在列表中。默认情况下所有

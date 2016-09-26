@@ -37,7 +37,6 @@ import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.object.shortcut.ShortcutManager;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.anim.Anim;
-import name.huliqing.core.object.bullet.BulletCache;
 import name.huliqing.core.object.effect.EffectCache;
 import name.huliqing.core.object.env.CameraChaseEnv;
 import name.huliqing.core.object.scene.SceneUtils;
@@ -115,8 +114,9 @@ public  class SimpleGameState extends GameState implements UIEventListener {
         bindPickListener();
         
         // ==== 4.子弹、特效缓存器
-        addListener(BulletCache.getInstance());
-        addObject(BulletCache.getInstance(), false);
+        // remove20160926
+//        addListener(BulletCache.getInstance());
+//        addObject(BulletCache.getInstance(), false);
         
         addListener(EffectCache.getInstance());
         addObject(EffectCache.getInstance(), false);

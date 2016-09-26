@@ -78,10 +78,15 @@ public class ShotBowSkill extends ShotSkill {
     }
 
     @Override
+    public void setActor(Actor actor) {
+        super.setActor(actor);
+        actorModule = actor.getModule(ActorModule.class);
+        skinModule = actor.getModule(SkinModule.class);        
+    }
+
+    @Override
     public void initialize() {
         super.initialize();
-        actorModule = actor.getModule(ActorModule.class);
-        skinModule = actor.getModule(SkinModule.class);
         
         // -- 重置state
         shotState = 0;

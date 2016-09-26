@@ -168,9 +168,6 @@ public interface ConfigService extends Inject {
     int getPortDiscoverClient();
     float getSummonLevelFactor();
     
-    float getBaseWalkSpeed();
-    float getBaseRunSpeed();
-    
     /**
      * 获取所有支持的语言环境，返回格式， “{en_US,zh_CN}”
      * @return 

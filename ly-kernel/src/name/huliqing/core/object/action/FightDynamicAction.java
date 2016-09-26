@@ -25,7 +25,6 @@ import name.huliqing.core.object.module.SkillListener;
 import name.huliqing.core.object.module.SkillModule;
 import name.huliqing.core.object.module.SkinListener;
 import name.huliqing.core.object.module.SkinModule;
-import name.huliqing.core.object.skill.HitSkill;
 import name.huliqing.core.object.skill.Skill;
 import name.huliqing.core.object.skin.Skin;
 import name.huliqing.core.object.skin.Weapon;
@@ -185,7 +184,7 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
                 ) {
             
             // 刻偿试为当前角色查找一次敌人，以避免SearchEnemyLogic的延迟
-            Actor newTarget = actorService.findNearestEnemyExcept(actor, actorService.getViewDistance(actor), enemy);
+            Actor newTarget = actorService.findNearestEnemyExcept(actor, actorModule.getViewDistance(), enemy);
             if (newTarget != null) {
                 actorNetwork.setTarget(actor, newTarget);
                 setEnemy(newTarget);
@@ -201,9 +200,9 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
             return;
         }
         
-//        if (actor.getData().getAttributeStore().getName().equals("樱")) {
-//            System.out.println("测试。。。");
-//        }
+        if (actor.getData().getName().equals("樱")) {
+            System.out.println("测试。。。");
+        }
 
         if (skill == null) {
             skill = getSkill();

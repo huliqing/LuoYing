@@ -172,12 +172,12 @@ public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> im
     }
 
     @Override
-    public boolean onSkillHookCheck(Actor source, Skill skill) {
+    public boolean onSkillHookCheck(Skill skill) {
         return true;
     }
     
     @Override
-    public void onSkillStart(Actor source, Skill skill) {
+    public void onSkillStart(Skill skill) {
         if (!hasUsableSkill) 
             return;
         
@@ -214,7 +214,7 @@ public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> im
     }
     
     @Override
-    public void onSkillEnd(Actor source, Skill skill) {
+    public void onSkillEnd(Skill skill) {
         // ignore
     }
     

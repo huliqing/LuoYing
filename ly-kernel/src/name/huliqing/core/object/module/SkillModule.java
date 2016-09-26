@@ -108,7 +108,7 @@ public class SkillModule extends AbstractModule {
                     // 执行侦听器
                     if (skillPlayListeners != null && !skillPlayListeners.isEmpty()) {
                         for (int i = 0; i < skillPlayListeners.size(); i++) {
-                            skillPlayListeners.get(i).onSkillEnd(actor, skill);
+                            skillPlayListeners.get(i).onSkillEnd(skill);
                         }
                     }
                 } else {
@@ -165,6 +165,9 @@ public class SkillModule extends AbstractModule {
         if (skill == null) {
             return SkillConstants.STATE_UNDEFINE;
         }
+        if (skill.getActor() == null) {
+            skill.setActor(actor);
+        }
         
         SkillData skillData = skill.getData();
         
@@ -183,7 +186,7 @@ public class SkillModule extends AbstractModule {
         // 通过钩子来判断是否可以执行, 如果有一个钩子返回不允许执行则后面不再需要判断。
         if (skillPlayListeners != null && !skillPlayListeners.isEmpty()) {
             for (SkillPlayListener sl : skillPlayListeners) {
-                if (!sl.onSkillHookCheck(actor, skill)) {
+                if (!sl.onSkillHookCheck(skill)) {
                     return SkillConstants.STATE_HOOK;
                 }
             }
@@ -255,7 +258,9 @@ public class SkillModule extends AbstractModule {
     private void startNewSkill(Skill newSkill) {
         // 执行技能
         lastSkill = newSkill;
-        lastSkill.setActor(actor);
+        if (lastSkill.getActor() == null) {
+            lastSkill.setActor(actor);
+        }
         lastSkill.initialize();
         // 记录当前正在运行的所有技能类型
         if (!playingSkills.contains(lastSkill)) {
@@ -270,7 +275,7 @@ public class SkillModule extends AbstractModule {
         // 执行侦听器
         if (skillPlayListeners != null && !skillPlayListeners.isEmpty()) {
             for (int i = 0; i < skillPlayListeners.size(); i++) {
-                skillPlayListeners.get(i).onSkillStart(actor, lastSkill);
+                skillPlayListeners.get(i).onSkillStart(lastSkill);
             }
         }
     }

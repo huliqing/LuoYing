@@ -4,13 +4,9 @@
  */
 package name.huliqing.core.object.effect;
 
-import name.huliqing.core.object.bullet.BulletCache;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import name.huliqing.core.Config;
 import name.huliqing.core.state.GameState.PlayListener;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.IntervalLogic;
@@ -19,7 +15,7 @@ import name.huliqing.core.object.IntervalLogic;
  * @author huliqing
  */
 public class EffectCache extends IntervalLogic implements PlayListener {
-    private static final Logger LOG = Logger.getLogger(BulletCache.class.getName());
+//    private static final Logger LOG = Logger.getLogger(EffectCache.class.getName());
     private final static EffectCache INSTANCE = new EffectCache();
     
     // 空闲列表

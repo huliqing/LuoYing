@@ -147,7 +147,7 @@ public class SkillLockedState extends State implements SkillPlayListener {
     }
 
     @Override
-    public boolean onSkillHookCheck(Actor source, Skill skill) {
+    public boolean onSkillHookCheck(Skill skill) {
         // 如果要执行的技能刚才是被锁定的特定技能，则返回false,表示不能执行。
         if (lockSkillIds != null && lockSkillIds.contains(skill.getData().getId())) {
             return false;
@@ -156,10 +156,10 @@ public class SkillLockedState extends State implements SkillPlayListener {
     }
 
     @Override
-    public void onSkillStart(Actor source, Skill skill) {}
+    public void onSkillStart(Skill skill) {}
 
     @Override
-    public void onSkillEnd(Actor source, Skill skill) {}
+    public void onSkillEnd(Skill skill) {}
 
     @Override
     public void cleanup() {

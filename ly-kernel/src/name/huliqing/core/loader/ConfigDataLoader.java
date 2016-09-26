@@ -20,29 +20,25 @@ public class ConfigDataLoader implements DataLoader<ConfigData> {
         data.setDebug(proto.getAsBoolean("debug", false));
         data.setGameName(proto.getAsString("gameName"));
         data.setVersionName(proto.getAsString("versionName"));
-        data.setVersionCode(proto.getAsInteger("versionCode"));
-        data.setPort(proto.getAsInteger("port"));
-        
-        // remove20160501，后续合并为一个端口
-        data.setPortDiscoverServer(proto.getAsInteger("portDiscoverServer"));
-        data.setPortDiscoverClient(proto.getAsInteger("portDiscoverClient"));
-        data.setDropFactor(proto.getAsFloat("dropFactor"));
-        data.setExpFactor(proto.getAsFloat("expFactor"));
-        data.setMaxLevel(proto.getAsInteger("maxLevel"));
+        data.setVersionCode(proto.getAsInteger("versionCode", -1));
+        data.setPort(proto.getAsInteger("port", 32991));
+        data.setPortDiscoverServer(proto.getAsInteger("portDiscoverServer", 32992));
+        data.setPortDiscoverClient(proto.getAsInteger("portDiscoverClient", 32993));
+        data.setDropFactor(proto.getAsFloat("dropFactor", 1.0f));
+        data.setExpFactor(proto.getAsFloat("expFactor", 1.0f));
+        data.setMaxLevel(proto.getAsInteger("maxLevel", 60));
         data.setSoundEnabled(proto.getAsBoolean("soundEnabled", false));
-        data.setSoundVolume(proto.getAsFloat("soundVolume"));
+        data.setSoundVolume(proto.getAsFloat("soundVolume", 1.0f));
         data.setShortcutLocked(proto.getAsBoolean("shortcutLocked", false));
-        data.setShortcutSize(proto.getAsFloat("shortcutSize"));
-        data.setBaseWalkSpeed(proto.getAsFloat("baseWalkSpeed"));
-        data.setBaseRunSpeed(proto.getAsFloat("baseRunSpeed"));
+        data.setShortcutSize(proto.getAsFloat("shortcutSize", 1.0f));
         data.setLocale(proto.getAsString("locale"));
         data.setLocaleAll(proto.getAsString("localeAll"));
-        data.setSpeakTimeMin(proto.getAsFloat("speakTimeMin"));
-        data.setSpeakTimeMax(proto.getAsFloat("speakTimeMax"));
-        data.setSpeakTimeWorld(proto.getAsFloat("speakTimeWorld"));
-        data.setSpeakMaxDistance(proto.getAsFloat("speakMaxDistance"));
+        data.setSpeakTimeMin(proto.getAsFloat("speakTimeMin", 0.25f));
+        data.setSpeakTimeMax(proto.getAsFloat("speakTimeMax", 8.0f));
+        data.setSpeakTimeWorld(proto.getAsFloat("speakTimeWorld", 0.22f));
+        data.setSpeakMaxDistance(proto.getAsFloat("speakMaxDistance", 80f));
         data.setUseHardwareSkinning(proto.getAsBoolean("useHardwareSkinning", false));
-        data.setSummonLevelFactor(proto.getAsFloat("summonLevelFactor"));
+        data.setSummonLevelFactor(proto.getAsFloat("summonLevelFactor", 1.0f));
         data.setLanGames(proto.getAsString("lanGames"));
         data.setUseShadow(proto.getAsBoolean("useShadow", false));
     }

@@ -512,6 +512,7 @@ public class ActorServiceImpl implements ActorService {
             }
             
             // 同步动画
+            module.checkAndLoadAnim(animNames[i]);
             channel.playAnim(animNames[i], lm, speeds[i], times[i], 0); 
             
             channel.setLock(oldLocked);

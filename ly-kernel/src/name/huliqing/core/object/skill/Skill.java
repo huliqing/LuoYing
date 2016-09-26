@@ -45,8 +45,13 @@ public interface Skill extends DataProcessor<SkillData>{
     void setActor(Actor actor);
     
     /**
+     * 获取技能的执行角色
+     * @return 
+     */
+    Actor getActor();
+    
+    /**
      * 重新修复被其它技能重置的动画
-     * add20151212
      */
     void restoreAnimation();
     
@@ -76,17 +81,6 @@ public interface Skill extends DataProcessor<SkillData>{
      * @return 
      */
     boolean isCooldown();
-    
-//    /**
-//     * 获取技能的CutTimeEndRate,这个值是对技能执行时间的剪裁，即对技能的结束阶段
-//     * 的时间进行剪裁，这个值受角色属性影响，并且不会大于CutTimeEndMax.
-//     * 如果技能没有指定影响该值的角色属性，或者角色没有指定的属性值，则这个值应
-//     * 返回0.<br >
-//     * 注：这个值返回的是一个比率，取值为[0.0,1.0]之间，即表示要剪裁掉的技能总时间
-//     * 的比率。例如：当返回值为0.5时，即表示技能的总执行时间要剪裁掉一半（时间的后半部分）
-//     * @return 
-//     */
-//    float getCutTimeEndRate();
 
     /**
      * 获取技能的实际执行时间,技能的实际执行时间受：技能总时间、技能执行速度、

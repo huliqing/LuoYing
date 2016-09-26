@@ -20,7 +20,7 @@ xs:time
         <xs:complexType>
             <xs:all>
                 <xs:element ref="defineSkillTag" />
-                <xs:element ref="defineSkinType" />
+                <xs:element ref="defineSkinPart" />
                 <xs:element ref="defineWeaponType" />
             </xs:all>
         </xs:complexType>

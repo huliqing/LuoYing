@@ -31,7 +31,6 @@ import name.huliqing.core.utils.ThreadHelper;
 public class RunPathAction extends AbstractAction implements RunAction{
     private final PlayService playService = Factory.get(PlayService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
-//    private final SkillService skillService = Factory.get(SkillService.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
     private SkillModule skillModule;
 

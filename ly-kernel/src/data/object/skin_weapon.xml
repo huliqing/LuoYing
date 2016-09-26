@@ -22,30 +22,30 @@ skinPart => 0:ear;1:eyeL;2:eyeR;3:face;4:foot;5:hair;6:hand;7:lowerBody;8:upperB
     
     <!--右手剑-->
     <skinWeapon id="weaponHumanRightSwordBase" extends="weaponHumanBase" 
-                parts="rightHandWeapon" weaponTypes="rightSword" mat="1" 
+                parts="rightHandWeapon" weaponType="rightSword" mat="1" 
                 bindBone="weapon.R" localLocation="0,0,0" localRotation="0,0,0" sounds="soundDrawSword" 
                 slots="slotSwordLeftBack,slotSwordLeftBack2,slotSwordRightBack,slotSwordRightBack2,slotSwordLeftWaist,slotSwordLeftWaist2" />
     
     <!--左手剑-->
     <skinWeapon id="weaponHumanLeftSwordBase" extends="weaponHumanRightSwordBase" 
-                parts="leftHandWeapon" weaponTypes="leftSword"
+                parts="leftHandWeapon" weaponType="leftSword"
                 bindBone="weapon.L" localRotation="0,3.14159265,0" localLocation="0,0,0" />
 
     <!--弓-->
     <skinWeapon id="weaponHumanBowBase" extends="weaponHumanBase" 
-                parts="leftHandWeapon,rightHandWeapon" weaponTypes="bow"
+                parts="leftHandWeapon,rightHandWeapon" weaponType="bow"
                 bindBone="weapon.L" localRotation="0,0,0" localLocation="0,0,0"
                 mat="2" slots="slotBowLeftBack" sounds="soundDrawBow" />
 
     <!--魔杖-->
     <skinWeapon id="weaponHumanWandBase" extends="weaponHumanBase" 
-                parts="leftHandWeapon,rightHandWeapon" weaponTypes="wand" 
+                parts="leftHandWeapon,rightHandWeapon" weaponType="wand" 
                 bindBone="weapon.R" localRotation="0,0,0" localLocation="0,0,0"
                 mat="2" slots="slotWandLeftBack" sounds="soundDressOutfit2" />
     
     <!--魔法书：暂未开放-->
     <skinWeapon id="weaponHumanBookBase" extends="weaponHumanBase" 
-                parts="leftHandWeapon,rightHandWeapon" weaponTypes="unknow" 
+                parts="leftHandWeapon,rightHandWeapon" weaponType="unknow" 
                 bindBone="weapon.L" mat="0" localRotation="0,0,0" localLocation="0,0,0"
                 sounds="" />
     
@@ -54,11 +54,11 @@ skinPart => 0:ear;1:eyeL;2:eyeR;3:face;4:foot;5:hair;6:hand;7:lowerBody;8:upperB
     <!--=====================================================================-->
     
     <!--虚拟一把右手剑-->
-    <skinWeapon id="weaponMockRightSword" parts="rightHandWeapon" weaponTypes="rightSword" mat="1" sounds="soundDrawSword" />
+    <skinWeapon id="weaponMockRightSword" parts="rightHandWeapon" weaponType="rightSword" mat="1" sounds="soundDrawSword" />
     <!--虚拟一把右手剑（木）-->
-    <skinWeapon id="weaponMockRightWoodSword" parts="rightHandWeapon" weaponTypes="rightSword" mat="2" sounds="soundDrawSword" />
+    <skinWeapon id="weaponMockRightWoodSword" parts="rightHandWeapon" weaponType="rightSword" mat="2" sounds="soundDrawSword" />
     <!--虚拟一双爪子-->
-    <skinWeapon id="weaponMockAnimalClaw" parts="leftHandWeapon,rightHandWeapon" weaponTypes="leftClaw,rightClaw" mat="5" sounds="soundDrawSword" />
+    <skinWeapon id="weaponMockAnimalClaw" parts="leftHandWeapon,rightHandWeapon" weaponType="leftClaw,rightClaw" mat="5" sounds="soundDrawSword" />
     
     <!-- ====================================================================-->
     <!--实质武器:刀，剑-->
@@ -125,7 +125,7 @@ skinPart => 0:ear;1:eyeL;2:eyeR;3:face;4:foot;5:hair;6:hand;7:lowerBody;8:upperB
     
     <!--Sinbad的大刀-->
     <skinWeapon id="weaponSinbad" icon="" file="Models/monster/sinbad/Sword.j3o" 
-                parts="rightHandWeapon" weaponTypes="rightSword" 
+                parts="rightHandWeapon" weaponType="rightSword" 
                 bindBone="weapon.R" mat="1" sounds="soundDrawSword" 
                 applyAttributes="attributeAttack|25" />
 

@@ -85,7 +85,12 @@ public class WeaponPanel extends ListView<Skin> implements ActorPanel{
             datas.clear();
             List<Skin> skins = skinService.getSkins(actor);
             if (skins != null && !skins.isEmpty()) {
-                datas.addAll(skins);
+                for (Skin s : skins) {
+                    if (filter(s)) {
+                        continue;
+                    }
+                    datas.add(s);
+                }
             }
         }
         return datas;
@@ -101,8 +106,6 @@ public class WeaponPanel extends ListView<Skin> implements ActorPanel{
         }
         return true;
     }
-    
-    
   
     @Override
     public boolean removeItem(Skin data) {

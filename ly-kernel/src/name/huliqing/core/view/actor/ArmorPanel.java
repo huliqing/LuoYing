@@ -29,6 +29,7 @@ public class ArmorPanel extends ListView<Skin> implements ActorPanel{
     
     private Actor actor;
     private final List<Skin> datas = new ArrayList<Skin>();
+    private int rowTotal;
     
     public ArmorPanel(float width, float height) {
         super(width, height);
@@ -80,18 +81,23 @@ public class ArmorPanel extends ListView<Skin> implements ActorPanel{
             datas.clear();
             List<Skin> skins = skinService.getSkins(actor);
             if (skins != null && !skins.isEmpty()) {
-                datas.addAll(skins);
+                for (Skin s : skins) {
+                    if (filter(s)) {
+                        continue;
+                    }
+                    datas.add(s);
+                }
             }
         }
         return datas;
     }
 
     @Override
-    protected boolean filter(Skin data) {
-        if (data.isBaseSkin()) {
+    protected boolean filter(Skin skin) {
+        if (skin.isBaseSkin()) {
             return true;
         }
-        if (data instanceof Weapon) {
+        if (skin instanceof Weapon) {
             return true;
         }
         return false;

@@ -95,15 +95,15 @@ public class ConfigData extends ObjectData {
      */
     private float shortcutSize = 1.0f;
     
-    /**
-     * 默认的基本"步行"速度:1.5
-     */
-    private float baseWalkSpeed = 1.5f;
-    
-    /**
-     * 默认的基本"跑步"速度:6
-     */
-    private float baseRunSpeed = 6;
+//    /**
+//     * 默认的基本"步行"速度:1.5
+//     */
+//    private float baseWalkSpeed = 1.5f;
+//    
+//    /**
+//     * 默认的基本"跑步"速度:6
+//     */
+//    private float baseRunSpeed = 6;
     
     /**
      * 当前使用的语言,e.g. zh_CN, en_US
@@ -187,8 +187,8 @@ public class ConfigData extends ObjectData {
         oc.write(soundVolume, "soundVolume", 0.5f);
         oc.write(shortcutLocked, "shortcutLocked", false);
         oc.write(shortcutSize, "shortcutSize", 1.0f);
-        oc.write(baseWalkSpeed, "baseWalkSpeed", 1.5f);
-        oc.write(baseRunSpeed, "baseRunSpeed", 6f);
+//        oc.write(baseWalkSpeed, "baseWalkSpeed", 1.5f);
+//        oc.write(baseRunSpeed, "baseRunSpeed", 6f);
         oc.write(locale, "locale", "en_US");
         oc.write(localeAll, "localeAll", "en_US,zh_CN");
         oc.write(speakTimeMin, "speakTimeMin", 0.1f);
@@ -214,8 +214,8 @@ public class ConfigData extends ObjectData {
         soundVolume = ic.readFloat("soundVolume", 0.5f);
         shortcutLocked = ic.readBoolean("shortcutLocked", false);
         shortcutSize = ic.readFloat("shortcutSize", 1.0f);
-        baseWalkSpeed = ic.readFloat("baseWalkSpeed", 1.5f);
-        baseRunSpeed = ic.readFloat("baseRunSpeed", 6f);
+//        baseWalkSpeed = ic.readFloat("baseWalkSpeed", 1.5f);
+//        baseRunSpeed = ic.readFloat("baseRunSpeed", 6f);
         locale = ic.readString("locale", "en_US");
         localeAll = ic.readString("localeAll", "en_US,zh_CN");
         speakTimeMin = ic.readFloat("speakTimeMin", 0.1f);
@@ -348,22 +348,6 @@ public class ConfigData extends ObjectData {
 
     public void setShortcutSize(float shortcutSize) {
         this.shortcutSize = shortcutSize;
-    }
-
-    public float getBaseWalkSpeed() {
-        return baseWalkSpeed;
-    }
-
-    public void setBaseWalkSpeed(float baseWalkSpeed) {
-        this.baseWalkSpeed = baseWalkSpeed;
-    }
-
-    public float getBaseRunSpeed() {
-        return baseRunSpeed;
-    }
-
-    public void setBaseRunSpeed(float baseRunSpeed) {
-        this.baseRunSpeed = baseRunSpeed;
     }
 
     public String getLocale() {

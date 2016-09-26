@@ -4,8 +4,6 @@
  */
 package name.huliqing.core.object.module;
 
-import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.module.SkillPlayListener;
 import name.huliqing.core.object.skill.Skill;
 
 /**
@@ -15,16 +13,16 @@ import name.huliqing.core.object.skill.Skill;
 public class SkillListenerAdapter implements SkillPlayListener {
 
     @Override
-    public boolean onSkillHookCheck(Actor source, Skill skill) {
+    public boolean onSkillHookCheck(Skill skill) {
         return true;
     }
 
     @Override
-    public void onSkillStart(Actor source, Skill skill) {
+    public void onSkillStart(Skill skill) {
     }
 
     @Override
-    public void onSkillEnd(Actor source, Skill skill) {
+    public void onSkillEnd(Skill skill) {
     }
     
 }

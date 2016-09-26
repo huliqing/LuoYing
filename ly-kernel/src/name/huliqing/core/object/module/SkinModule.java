@@ -379,7 +379,7 @@ public class SkinModule extends AbstractModule {
      * @return 
      */
     public long getWeaponState() {
-        if (cacheWeaponState <= -1) {
+        if (cacheWeaponState <= 0) {
             cacheWeaponState();
         }
         return cacheWeaponState;
