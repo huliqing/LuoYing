@@ -82,25 +82,6 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     // 标记目标角色是否为“玩家”角色,这个参数为程序动态设置,不存档
     private boolean player;
     
-    @Override
-    public void setData(T data) {
-        super.setData(data);
-        this.radius = data.getAsFloat("radius", radius);
-        this.height = data.getAsFloat("height", height);
-        this.bindLifeAttribute = data.getAsString("bindLifeAttribute");
-        this.bindGroupAttribute = data.getAsString("bindGroupAttribute");
-        this.bindTeamAttribute = data.getAsString("bindTeamAttribute");
-        this.bindViewAttribute = data.getAsString("bindViewAttribute");
-        this.bindTargetAttribute = data.getAsString("bindTargetAttribute");
-        this.bindFollowTargetAttribute = data.getAsString("bindFollowTargetAttribute");
-        this.bindOwnerAttribute = data.getAsString("bindOwnerAttribute");
-        this.bindMassAttribute = data.getAsString("bindMassAttribute");
-        this.bindMovableAttribute = data.getAsString("bindMovableAttribute");
-        this.bindRotatableAttribute = data.getAsString("bindRotatableAttribute");
-        this.bindEssentialAttribute = data.getAsString("bindEssentialAttribute");
-        this.bindLivingAttribute = data.getAsString("bindLivingAttribute");
-    }
-    
     private class BetterCharacterControlWrap extends BetterCharacterControl {
 
         public BetterCharacterControlWrap(float radius, float height, float mass) {
@@ -122,6 +103,30 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
         public void setKinematic(boolean kinematic) {
             rigidBody.setKinematic(kinematic);
         }
+        public void setLocalForward(Vector3f localForward) {
+            if (localForward != null) {
+                this.localForward.set(localForward);
+            }
+        }
+    }
+    
+    @Override
+    public void setData(T data) {
+        super.setData(data);
+        this.radius = data.getAsFloat("radius", radius);
+        this.height = data.getAsFloat("height", height);
+        this.bindLifeAttribute = data.getAsString("bindLifeAttribute");
+        this.bindGroupAttribute = data.getAsString("bindGroupAttribute");
+        this.bindTeamAttribute = data.getAsString("bindTeamAttribute");
+        this.bindViewAttribute = data.getAsString("bindViewAttribute");
+        this.bindTargetAttribute = data.getAsString("bindTargetAttribute");
+        this.bindFollowTargetAttribute = data.getAsString("bindFollowTargetAttribute");
+        this.bindOwnerAttribute = data.getAsString("bindOwnerAttribute");
+        this.bindMassAttribute = data.getAsString("bindMassAttribute");
+        this.bindMovableAttribute = data.getAsString("bindMovableAttribute");
+        this.bindRotatableAttribute = data.getAsString("bindRotatableAttribute");
+        this.bindEssentialAttribute = data.getAsString("bindEssentialAttribute");
+        this.bindLivingAttribute = data.getAsString("bindLivingAttribute");
     }
 
     @Override
@@ -155,6 +160,7 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
         
         // 控制器
         this.innerControl = new BetterCharacterControlWrap(radius, height, getMass());
+        this.innerControl.setLocalForward(actor.getData().getLocalForward());
         this.actor.getSpatial().addControl(innerControl);
         
     }

@@ -40,6 +40,7 @@ public class SkinPartDefine extends Define {
     }
     
     /**
+     * 把装备各部分转换为二进制表示形式，返回的整形中每个二进制位(1)表示一个装备"部位"
      * @param parts
      * @return 
      */
@@ -59,7 +60,7 @@ public class SkinPartDefine extends Define {
     }
     
     /**
-     * 注册一个新的装备部位
+     * 注册一个新的装备部位,这个注册必须放在系统初始化的时候进行。
      * @param skinPart 
      */
     public synchronized void registerSkinPart(String skinPart) {
@@ -77,7 +78,7 @@ public class SkinPartDefine extends Define {
     }
     
      /**
-     * 清理
+     * 清理所有装备"部位"的定义
      */
     public synchronized void clear() {
         skinParts.clear();

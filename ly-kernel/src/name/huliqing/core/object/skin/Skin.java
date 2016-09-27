@@ -10,10 +10,9 @@ import name.huliqing.core.xml.DataProcessor;
 import name.huliqing.core.object.actor.Actor;
 
 /**
- *
  * @author huliqing
  */
-public interface Skin extends DataProcessor<SkinData>{
+public interface Skin extends DataProcessor<SkinData> {
     
     /**
      * 判断指定角色是否可以使用当前这件装备.
@@ -68,13 +67,6 @@ public interface Skin extends DataProcessor<SkinData>{
      * 装备是否正处于装配过程可以调用{@link #isSkinning() }来判断。
      */
     void endSkinning();
-    
-    // remove20160924
-//    /**
-//     * 判断皮肤是否是一件武器
-//     * @return 
-//     */
-//    boolean isWeapon();
     
     /**
      * 判断是否为“基本皮肤”

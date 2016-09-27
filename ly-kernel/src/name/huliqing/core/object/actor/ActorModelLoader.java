@@ -71,19 +71,20 @@ public class ActorModelLoader {
         
         // 4.====create character control
         
+        // remove20160927
         // 4.1 注缩放必须放在碰撞盒加入之前，因为碰撞盒不能跟着缩放
-        int scaleLen = data.getProto().checkAttributeLength("scale");
-        if (scaleLen >= 3) {
-            actorModel.setLocalScale(data.getAsVector3f("scale"));
-        } else if (scaleLen == 1) {
-            float s = data.getAsFloat("scale");
-            actorModel.setLocalScale(new Vector3f(s,s,s));
-        }
-        
-        // location
-        Vector3f location = data.getAsVector3f("location");
-        if (location != null) {
-            actorModel.setLocalTranslation(location);
+//        int scaleLen = data.getProto().checkAttributeLength("scale");
+//        if (scaleLen >= 3) {
+//            actorModel.setLocalScale(data.getAsVector3f("scale"));
+//        } else if (scaleLen == 1) {
+//            float s = data.getAsFloat("scale");
+//            actorModel.setLocalScale(new Vector3f(s,s,s));
+//        }
+
+        // 4.1 注缩放必须放在碰撞盒加入之前，因为碰撞盒不能跟着缩放
+        Vector3f scale = data.getScale();
+        if (scale != null) {
+            actorModel.setLocalScale(scale);
         }
         
         // 4.2 碰撞盒
@@ -157,7 +158,8 @@ public class ActorModelLoader {
      * @return 
      */
     public static boolean loadExtAnim(Actor actor, String animName) {
-        String animDir = actor.getData().getAsString("extAnim");
+//        String animDir = actor.getData().getAsString("extAnim");
+        String animDir = actor.getData().getExtAnim();
         if (animDir == null) {
             LOG.log(Level.WARNING, "Actor {0} no have a extAnim defined"
                     + ", could not load anim {1}", new Object[] {actor.getData().getId(), animName});
@@ -191,9 +193,9 @@ public class ActorModelLoader {
         if (!Factory.get(ConfigService.class).isUseHardwareSkinning()) {
             return;
         }
-        
+
         // 默认情冲下打开hardwareSkinning,除非在actor.xml中设置不打开。
-        if (!data.getAsBoolean("hardwareSkinning", true)) {
+        if (!data.isHardwareSkinning()) {
             return;
         }
         

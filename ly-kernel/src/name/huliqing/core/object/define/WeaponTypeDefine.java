@@ -6,7 +6,6 @@
 package name.huliqing.core.object.define;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,8 +24,10 @@ public class WeaponTypeDefine extends Define {
     public void setData(DefineData data) {
         super.setData(data); 
         String[] tempTypes = data.getAsArray("weaponTypes");
-        if (tempTypes != null) {
-            typeList.addAll(Arrays.asList(tempTypes));
+        if (tempTypes != null && tempTypes.length > 0) {
+            for (String type : tempTypes) {
+                registerWeaponType(type);
+            }
         } else {
             LOG.log(Level.WARNING, "weaponTypes not defined.");
         }
@@ -40,6 +41,7 @@ public class WeaponTypeDefine extends Define {
     }
     
     /**
+     * 把武器类型转化为二进制表示形式，返回的整形中每个二进制位(1)表示一个武器类型。
      * @param weaponTypes
      * @return 
      */
@@ -56,9 +58,10 @@ public class WeaponTypeDefine extends Define {
     }
     
     /**
+     * 注册一个新的武器类型，这个方法必须在系统初始化时调用注册。
      * @param weaponType 
      */
-    public synchronized void registerSkinPart(String weaponType) {
+    public synchronized void registerWeaponType(String weaponType) {
         if (typeList.contains(weaponType)) {
             LOG.log(Level.WARNING, "Could not register weapon type,  weapon type already exists! weaponType={0}", weaponType);
             return;
@@ -72,6 +75,9 @@ public class WeaponTypeDefine extends Define {
         typeList.add(weaponType);
     }
     
+    /**
+     * 清理所有”技能类型“的定义
+     */
     public synchronized void clear() {
         typeList.clear();
     }
@@ -82,6 +88,7 @@ public class WeaponTypeDefine extends Define {
     }
     
     /**
+     * 显示weaponTypes中所代表的各种武器类型，以字符串形式返回.
      * @param weaponTypes
      * @return 
      */

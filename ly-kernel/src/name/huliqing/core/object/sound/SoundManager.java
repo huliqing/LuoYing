@@ -9,8 +9,6 @@ import com.jme3.math.Vector3f;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-import name.huliqing.core.data.ObjectData;
-import name.huliqing.core.enums.Mat;
 
 /**
  * 用于统一管理声音的管理器
@@ -30,8 +28,6 @@ public class SoundManager {
     
     // 普通无循环声效,用于播放非常普通的声效
     private final SoundPlayer simplePlayer = new SoundPlayer();
-    // 碰撞声效
-    private final SoundCollision collision = new SoundCollision();
     
     // 当前音效列表
     private final Set<Sound> sounds = new HashSet<Sound>();
@@ -46,31 +42,32 @@ public class SoundManager {
         simplePlayer.playSound(soundId, position, volume);
     }
     
-    /**
-     * 简单播放物体碰撞声音，非循环
-     * @param obj1
-     * @param obj2 
-     * @param position 
-     */
-    public void playCollision(ObjectData obj1, ObjectData obj2, Vector3f position) {
-        String soundId = collision.getCollisionSound(obj1, obj2);
-        if (soundId != null) {
-            playSound(soundId, position);
-        }
-    }
-    
-    /**
-     * 简单播放物体碰撞声音，非循环
-     * @param mat1
-     * @param mat2
-     * @param position 
-     */
-    public void playCollision(Mat mat1, Mat mat2, Vector3f position) {
-        String soundId = collision.getCollisionSound(mat1, mat2);
-        if (soundId != null) {
-            playSound(soundId, position);
-        }
-    }
+    // remove20160927
+//    /**
+//     * 简单播放物体碰撞声音，非循环
+//     * @param obj1
+//     * @param obj2 
+//     * @param position 
+//     */
+//    public void playCollision(ObjectData obj1, ObjectData obj2, Vector3f position) {
+//        String soundId = collision.getCollisionSound(obj1, obj2);
+//        if (soundId != null) {
+//            playSound(soundId, position);
+//        }
+//    }
+//    
+//    /**
+//     * 简单播放物体碰撞声音，非循环
+//     * @param mat1
+//     * @param mat2
+//     * @param position 
+//     */
+//    public void playCollision(Mat mat1, Mat mat2, Vector3f position) {
+//        String soundId = collision.getCollisionSound(mat1, mat2);
+//        if (soundId != null) {
+//            playSound(soundId, position);
+//        }
+//    }
     
     // --------------------------------------------------------------------------------------------------------------------------------
     

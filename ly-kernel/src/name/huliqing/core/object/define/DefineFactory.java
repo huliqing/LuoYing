@@ -8,7 +8,7 @@ package name.huliqing.core.object.define;
 import name.huliqing.core.object.Loader;
 
 /**
- * 
+ * 各种”定义“的工厂类。
  * @author huliqing
  */
 public class DefineFactory {
@@ -21,9 +21,13 @@ public class DefineFactory {
     // 武器类型的定义
     private final static String WEAPON_TYPE_DEFINE_ID = "defineWeaponType";
     
+    // 物体构成成分（质的）的定义(id)。
+    private final static String MAT_DEFINE_ID = "defineMat";
+    
     private static SkillTagDefine skillTagDefine;
     private static SkinPartDefine skinPartDefine;
     private static WeaponTypeDefine weaponTypeDefine;
+    private static MatDefine matDefine;
     
     /**
      * 获取技能标记定义
@@ -56,6 +60,17 @@ public class DefineFactory {
             weaponTypeDefine = loadDefine(WEAPON_TYPE_DEFINE_ID);
         }
         return weaponTypeDefine;
+    }
+    
+    /**
+     * 获取物体质地定义
+     * @return 
+     */
+    public static MatDefine getMatDefine() {
+        if (matDefine == null) {
+            matDefine = loadDefine(MAT_DEFINE_ID);
+        }
+        return matDefine;
     }
     
     private static <T extends Define> T loadDefine(String id) {

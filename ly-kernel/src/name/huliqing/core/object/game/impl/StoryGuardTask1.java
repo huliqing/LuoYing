@@ -43,7 +43,7 @@ import name.huliqing.core.ui.UI.Listener;
  */
 public class StoryGuardTask1 extends GameTaskBase {
     private final PlayService playService = Factory.get(PlayService.class);
-    private final StateService stateService = Factory.get(StateService.class);
+//    private final StateService stateService = Factory.get(StateService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);

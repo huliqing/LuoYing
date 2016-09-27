@@ -22,6 +22,7 @@ xs:time
                 <xs:element ref="defineSkillTag" />
                 <xs:element ref="defineSkinPart" />
                 <xs:element ref="defineWeaponType" />
+                <xs:element ref="defineMat" />
             </xs:all>
         </xs:complexType>
     </xs:element>
@@ -61,6 +62,7 @@ xs:time
     <xs:element name="defineWeaponType" >
         <xs:annotation>
             <xs:documentation>
+                定义武器类型
             </xs:documentation>
         </xs:annotation>
         <xs:complexType>
@@ -68,6 +70,26 @@ xs:time
                 <xs:extension base="defineBase">
                     <xs:attribute name="weaponTypes" type="xs:string" use="required">
                         <xs:annotation><xs:documentation>武器类型定义，格式："weaponType1,weaponType2,...", 目前限制最多64个类型.</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="defineMat" >
+        <xs:annotation>
+            <xs:documentation>
+                定义物体的质地,最多64个质地定义
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="defineBase">
+                    <xs:attribute name="mats" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>材质列表，如："metal,stone,wood"</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="collisionSounds" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>材质碰撞声效，格式："mat1|mat2|soundId1,mat3|mat4|soundId2,..."</xs:documentation></xs:annotation>
                     </xs:attribute>
                 </xs:extension>
             </xs:complexContent>

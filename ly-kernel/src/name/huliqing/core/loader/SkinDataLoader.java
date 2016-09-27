@@ -10,6 +10,7 @@ import name.huliqing.core.data.AttributeApply;
 import name.huliqing.core.data.AttributeMatch;
 import name.huliqing.core.xml.Proto;
 import name.huliqing.core.data.SkinData;
+import name.huliqing.core.object.define.DefineFactory;
 import name.huliqing.core.xml.DataLoader;
 import name.huliqing.core.utils.ConvertUtils;
 
@@ -45,6 +46,8 @@ public class SkinDataLoader implements DataLoader<SkinData> {
                 data.getMatchAttributes().add(am);
             }
         }
+        // 设置质的
+        data.setMat(DefineFactory.getMatDefine().getMat(proto.getAsString("mat")));
     }
     
 }

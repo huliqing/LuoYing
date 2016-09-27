@@ -43,12 +43,17 @@ xs:time
                             <xs:documentation>角色模块列表，格式: "module1,module2,..."</xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
+                    <xs:attribute name="mat" type="xs:string" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>质地，参考：define.xml的定义</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
                     <xs:attribute name="scale" type="xs:decimal" use="optional"/>
-                    <xs:attribute name="mat" ref="mat" use="required" />
                     <xs:attribute name="localForward" type="xs:string" use="optional">
                         <xs:annotation>
                             <xs:documentation>指定角色原始视角方向,默认情况下为(0,0,1),如果模型默认不是该方向,
-                                则需要使用该方向指定模型的正视角方向。</xs:documentation>
+                                则需要使用该方向指定模型的正视角方向。
+                            </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
                     <xs:attribute name="effects" type="xs:string" use="optional">
@@ -58,7 +63,7 @@ xs:time
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="collisionShape" ref="collisionShape" use="optional" ></xs:attribute>
+<!--                    <xs:attribute name="collisionShape" ref="collisionShape" use="optional" ></xs:attribute>
                     <xs:attribute name="collisionRadius" type="xs:decimal" use="optional">
                         <xs:annotation>
                             <xs:documentation>碰撞盒半径,只对capsule类型的collisionShape有效，默认0.4</xs:documentation>
@@ -74,7 +79,7 @@ xs:time
                             <xs:documentation>碰撞盒高度的缩放，只对box类型的collisionShape有效，默认"1,1,1",当box类型的
                             碰撞盒太大或者太小时，可使用该参数进行适当缩放</xs:documentation>
                         </xs:annotation>
-                    </xs:attribute>
+                    </xs:attribute>-->
                     <xs:attribute name="drops" type="xs:string" use="optional">
                         <xs:annotation>
                             <xs:documentation>

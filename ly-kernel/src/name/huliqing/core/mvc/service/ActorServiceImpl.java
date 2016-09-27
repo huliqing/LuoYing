@@ -331,7 +331,6 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public void setColor(Actor actor, ColorRGBA color) {
-        actor.getData().setColor(color);
         GeometryUtils.setColor(actor.getSpatial(), color);
     }
 

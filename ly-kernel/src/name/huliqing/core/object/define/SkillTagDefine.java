@@ -79,7 +79,7 @@ public class SkillTagDefine extends Define {
     }
  
     /**
-     * 注册、登记一个技能类型标记
+     * 注册、登记一个技能类型标记,这个注册应该放在系统初始化的时候进行。
      * @param skillTag 
      */
     public synchronized void registerSkillTag(String skillTag) {
@@ -100,7 +100,7 @@ public class SkillTagDefine extends Define {
     /**
      * 清理所有技能标记
      */
-    public synchronized void clearTags() {
+    public synchronized void clear() {
         tagList.clear();
     }
     

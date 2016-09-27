@@ -26,6 +26,28 @@
     
     <defineWeaponType id="defineWeaponType" weaponTypes="leftSword,rightSword,bow,wand,leftClaw,rightClaw" />
     
+    <!-- ========================================================================= -->
+    <!--物体的质地定义：与网格的材质(material)不同，这里主要用于定义物体的构成成分以及不同质地的碰撞声效。
+    用于作为物体的默认碰撞声音。
+    metal: 金属; 
+    wood: 木材; 
+    stone:  石头;
+    derma: 普通皮肤， 如人体、动物各类生物等的皮肤， 
+    calcium: 钙质，如牙齿、动物爪子、骨头等
+    cloth: 布料，织物
+    -->
+    <!-- ========================================================================= -->
+    
+    <defineMat id="defineMat" mats="metal,wood,stone,derma,calcium,cloth" 
+               collisionSounds="metal|metal|soundCollisionMM
+, metal|stone|soundCollisionMS
+, metal|wood|soundCollisionWM 
+, metal|derma|soundCollisionMB
+, wood|wood|soundCollisionWW
+, wood|stone|soundCollisionWS
+, wood|derma|soundCollisionWB
+" />
+    
 </root>
 
 

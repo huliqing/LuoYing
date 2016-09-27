@@ -15,7 +15,6 @@ import java.util.List;
 import name.huliqing.core.constants.ResConstants;
 import name.huliqing.core.data.define.CostObject;
 import name.huliqing.core.data.define.MatObject;
-import name.huliqing.core.enums.Mat;
 import name.huliqing.core.manager.ResourceManager;
 
 /**
@@ -40,6 +39,8 @@ public class SkinData extends ObjectData implements MatObject, CostObject {
     
     // 属性限制
     private List<AttributeMatch> matchAttributes;
+    
+    private int mat;
     
     public SkinData() {}
     
@@ -101,15 +102,14 @@ public class SkinData extends ObjectData implements MatObject, CostObject {
         return getAsString("file");
     }
     
-    /**
-     * 获取物品的材质（mat)，如果没有设置则返回Mat.none.该材质信息目前主要
-     * 用于计算物体碰撞声音。
-     * @return 
-     */
     @Override
-    public Mat getMat() {
-        int matInt = getAsInteger("mat", Mat.none.getValue());
-        return Mat.identify(matInt);
+    public int getMat() {
+        return mat;
+    }
+    
+    @Override
+    public void setMat(int mat) {
+        this.mat = mat;
     }
 
     @Override

@@ -16,10 +16,10 @@
     <sound id="soundCollisionMM" file="Sounds/collision/metal_metal.ogg" des="metal and metal collision" volume="0.5" />
     <sound id="soundCollisionMS" file="Sounds/collision/metal_stone.ogg" des="metal and stone collision" />
     <sound id="soundCollisionMB" file="Sounds/collision/metal_body.ogg" des="metal and body collision" />
+    <sound id="soundCollisionWM" file="Sounds/collision/wood_metal.ogg" des="v2-wood hit metal sound" />
+    <sound id="soundCollisionWW" file="Sounds/collision/wood_wood.ogg" des="v2-wood hit wood sound" />
     <sound id="soundCollisionWS" file="Sounds/collision/wood_stone.ogg" des="v2-wood hit stone sound" />
     <sound id="soundCollisionWB" file="Sounds/collision/wood_body.ogg" des="v2-wood hit body sound" />
-    <sound id="soundCollisionWW" file="Sounds/collision/wood_wood.ogg" des="v2-wood hit wood sound" />
-    <sound id="soundCollisionWM" file="Sounds/collision/wood_metal.ogg" des="v2-wood hit metal sound" />
     
     <!--==========================================================================-->
     <!--环境-->

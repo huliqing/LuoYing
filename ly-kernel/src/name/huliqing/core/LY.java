@@ -299,6 +299,7 @@ import name.huliqing.core.object.attribute.LimitIntegerAttribute;
 import name.huliqing.core.object.attribute.LongAttribute;
 import name.huliqing.core.object.attribute.StringAttribute;
 import name.huliqing.core.object.attribute.StringListAttribute;
+import name.huliqing.core.object.define.MatDefine;
 import name.huliqing.core.object.define.SkillTagDefine;
 import name.huliqing.core.object.define.SkinPartDefine;
 import name.huliqing.core.object.define.WeaponTypeDefine;
@@ -480,6 +481,7 @@ public class LY {
         DataFactory.register("defineSkillTag", DefineData.class, DefineDataLoader.class, SkillTagDefine.class);
         DataFactory.register("defineSkinPart", DefineData.class, DefineDataLoader.class, SkinPartDefine.class);
         DataFactory.register("defineWeaponType", DefineData.class, DefineDataLoader.class, WeaponTypeDefine.class);
+        DataFactory.register("defineMat", DefineData.class, DefineDataLoader.class, MatDefine.class);
         
         // Drop
         DataFactory.register("dropAttribute",  DropData.class, DropDataLoader.class, AttributeDrop.class);

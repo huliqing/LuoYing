@@ -127,7 +127,11 @@ xs:time
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-                <xs:attribute name="mat" ref="mat" use="required" />
+                <xs:attribute name="mat" type="xs:string" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>装备的“质的”mat, 具体定义参考: "define.xml"</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
                 <xs:attribute name="cost" ref="cost" use="optional" />
                 <xs:attribute name="sounds" type="xs:string" use="optional" >
                     <xs:annotation>

@@ -8,7 +8,6 @@ package name.huliqing.core.loader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 import name.huliqing.core.data.ActorData;
 import name.huliqing.core.data.AttributeData;
 import name.huliqing.core.data.DropData;
@@ -23,6 +22,7 @@ import name.huliqing.core.data.SkinData;
 import name.huliqing.core.data.TalentData;
 import name.huliqing.core.data.ModuleData;
 import name.huliqing.core.manager.ResourceManager;
+import name.huliqing.core.object.define.DefineFactory;
 import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.xml.DataLoader;
 
@@ -34,6 +34,9 @@ public class ActorDataLoader implements DataLoader<ActorData> {
 
     @Override
     public void load(Proto proto, ActorData data) {
+        data.setName(ResourceManager.getObjectName(proto.getId()));
+        data.setMat(DefineFactory.getMatDefine().getMat(proto.getAsString("mat")));
+        
         // ==== 2.items 
         String[] itemsTemp = proto.getAsArray("items");
         if (itemsTemp != null && itemsTemp.length > 0) {
@@ -159,7 +162,6 @@ public class ActorDataLoader implements DataLoader<ActorData> {
                 data.addObjectData((TalentData)DataFactory.createData(talent));
             }
         }
-        data.setName(ResourceManager.getObjectName(data));
         
         // 载入模块配置,并根据ModuleOrder进行排序
         String[] moduleArr = proto.getAsArray("modules");
@@ -175,6 +177,7 @@ public class ActorDataLoader implements DataLoader<ActorData> {
                 }
             });
         }
+        
         
     }
     

@@ -16,6 +16,9 @@ import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.mvc.service.SkinService;
+import name.huliqing.core.object.define.DefineFactory;
+import name.huliqing.core.object.module.ActorModule;
+import name.huliqing.core.object.module.SkinModule;
 import name.huliqing.core.object.skin.Skin;
 import name.huliqing.core.object.skin.Weapon;
 import name.huliqing.core.object.sound.SoundManager;
@@ -29,6 +32,8 @@ public class AttackSkill extends HitSkill {
     private final ActorService actorService = Factory.get(ActorService.class);
     private final SkinService skinService = Factory.get(SkinService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
+    private ActorModule actorModule;
+    private SkinModule skinModule;
     
     // 是否允许攻击到多个敌人，默认情况下只能攻击到当前的目标敌人。
     // 如果打开该功能，则在攻击范围内的敌人都可能被攻击到。比如挥剑
@@ -59,6 +64,13 @@ public class AttackSkill extends HitSkill {
         defendable = data.getAsBoolean("defendable", defendable);
         defendSkillTags = skillService.convertSkillTags(data.getAsArray("defendSkillTags"));
         collisionOffset = data.getAsVector3f("collisionOffset", collisionOffset);
+    }
+
+    @Override
+    public void setActor(Actor actor) {
+        super.setActor(actor);
+        actorModule = actor.getModule(ActorModule.class);
+        skinModule = actor.getModule(SkinModule.class);
     }
 
     @Override
@@ -137,36 +149,75 @@ public class AttackSkill extends HitSkill {
         }
     }
     
+    // 获取角色的武器质地
+    private int getWeaponMat(SkinModule sm) {
+        if (sm == null) {
+            return -1;
+        }
+        List<Skin> usingSkins = sm.getUsingSkins();
+        if (usingSkins != null) {
+            for (Skin s : usingSkins) {
+                if (s instanceof Weapon) {
+                    if ( s.getData().getMat() != -1) {
+                        return s.getData().getMat();
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+    
     /**
      * 处理防守
      * @param target 
      */
     protected void doDefendResult(Actor target) {
-        TempVars tv = TempVars.get();
-        Vector3f collisionPos = tv.vect1.set(collisionOffset);
-        tv.quat1.lookAt(actorService.getViewDirection(actor), Vector3f.UNIT_Y);
-        tv.quat1.mult(collisionPos, collisionPos);
-        collisionPos.addLocal(actor.getSpatial().getWorldTranslation());
-        Collision.playDefend(collisionPos, actor, target, null, null);
-        tv.release();
+        int mat1 = getWeaponMat(skinModule);
+        int mat2 = getWeaponMat(target.getModule(SkinModule.class));
+        if (mat1 < 0 || mat2 < 0) {
+            return;
+        }
+        
+        // 播放碰撞声效
+        String soundId = DefineFactory.getMatDefine().getCollisionSound(mat1, mat2);
+        if (soundId != null) {
+            SoundManager.getInstance().playSound(soundId, actor.getSpatial().getWorldTranslation());
+        }
+        
+        // 播放碰撞特效: TODO: 要进行处理
+//        TempVars tv = TempVars.get();
+//        Vector3f collisionPos = tv.vect1.set(collisionOffset);
+//        tv.quat1.lookAt(actorModule.getViewDirection(), Vector3f.UNIT_Y);
+//        tv.quat1.mult(collisionPos, collisionPos);
+//        collisionPos.addLocal(actor.getSpatial().getWorldTranslation());
+//        Collision.playDefend(collisionPos, actor, target, null, null);
+//        tv.release();
     }
     
     protected void doHitResult(Actor target) {
-        // 伤害声音
-        Skin weaponSkin = null;
-        List<Skin> skins = skinService.getUsingSkins(actor);
-        if (skins != null) {
-            for (Skin s : skins) {
-                if (s instanceof Weapon) {
-                    weaponSkin = s;
-                    break;
-                }
-            }
-        }
         
-        SkinData wd1 = weaponSkin != null ? weaponSkin.getData() : null;
-        ObjectData od1 = wd1 != null ? wd1 : actor.getData();
-        SoundManager.getInstance().playCollision(od1, target.getData(), actor.getSpatial().getWorldTranslation());
+//        // 伤害声音
+//        Skin weaponSkin = null;
+//        List<Skin> skins = skinService.getUsingSkins(actor);
+//        if (skins != null) {
+//            for (Skin s : skins) {
+//                if (s instanceof Weapon) {
+//                    weaponSkin = s;
+//                    break;
+//                }
+//            }
+//        }
+//        SkinData wd1 = weaponSkin != null ? weaponSkin.getData() : null;
+//        ObjectData od1 = wd1 != null ? wd1 : actor.getData();
+//        SoundManager.getInstance().playCollision(od1, target.getData(), actor.getSpatial().getWorldTranslation());
+
+        // 播放击中声效
+        int weaponMat = getWeaponMat(skinModule);
+        int targetMat = target.getData().getMat();
+        String collisionSound = DefineFactory.getMatDefine().getCollisionSound(weaponMat, targetMat);
+        if (collisionSound != null) {
+            SoundManager.getInstance().playSound(collisionSound, actor.getSpatial().getWorldTranslation());
+        }
         
         // 伤害计算
         applyHit(target);

@@ -8,26 +8,22 @@ import com.jme3.export.InputCapsule;
 import com.jme3.export.JmeExporter;
 import com.jme3.export.JmeImporter;
 import com.jme3.export.OutputCapsule;
-import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.network.serializing.Serializable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.data.define.MatObject;
-import name.huliqing.core.enums.Mat;
 
 /**
  * @author huliqing
  */
 @Serializable
-public class ActorData extends ObjectData implements MatObject{
+public class ActorData extends ObjectData implements MatObject {
     
     // 角色名称
     private String name = "";
-    
-    // 角色颜色,对于一些召唤类角色需要
-    private ColorRGBA color;
+    private int mat;
 
     // 角色出生地,坐标位置,暂时不同步到客户端
     // TODO: sync to client
@@ -42,7 +38,7 @@ public class ActorData extends ObjectData implements MatObject{
         super.write(ex);
         OutputCapsule oc = ex.getCapsule(this);
         oc.write(name.getBytes(), "name", null);
-        oc.write(color, "color", null);
+        oc.write(mat, "mat", -1);
         if (bornPlace != null) {
             oc.write(bornPlace, "bornPlace", null);
         }
@@ -59,30 +55,10 @@ public class ActorData extends ObjectData implements MatObject{
         super.read(im);
         InputCapsule ic = im.getCapsule(this);
         name = new String(ic.readByteArray("name", "".getBytes()), "utf-8");
-        color = (ColorRGBA) ic.readSavable("color", null);
+        mat = ic.readInt("mat", -1);
         bornPlace = (Vector3f)ic.readSavable("bornPlace", null);
         moduleDatas = ic.readSavableArrayList("moduleDatas", null);
         objectDatas = ic.readSavableArrayList("objectDatas", null);
-    }
-    
-    /**
-     * @deprecated 
-     * @return 
-     */
-    public ColorRGBA getColor() {
-        return color;
-    }
-
-    /**
-     * @deprecated 
-     * @param color 
-     */
-    public void setColor(ColorRGBA color) {
-        if (this.color == null) {
-            this.color = new ColorRGBA(color);
-        } else {
-            this.color.set(color);
-        }
     }
     
     public String getName() {
@@ -113,18 +89,15 @@ public class ActorData extends ObjectData implements MatObject{
         this.bornPlace = bornPlace;
     }
     
-    /**
-     * 获取文件模型
-     * @return 
-     */
-    public String getFile() {
-        return getAsString("file");
-    }
 
     @Override
-    public Mat getMat() {
-        int matInt = getAsInteger("mat", Mat.none.getValue());
-        return Mat.identify(matInt);
+    public int getMat() {
+        return mat;
+    }
+    
+    @Override
+    public void setMat(int mat) {
+        this.mat = mat;
     }
 
     /**
@@ -209,7 +182,45 @@ public class ActorData extends ObjectData implements MatObject{
         }
         return null;
     }
-    
 
+    /**
+     * 获取文件模型
+     * @return 
+     */
+    public String getFile() {
+        return getAsString("file");
+    }
     
+    /**
+     * 扩展的骨骼动画目标路径，这个参数指向一个asset中的目录,
+     * 如："Models/actor/anim" 当角色使用的技能中找不到相应的动画时将会从这个目录中查找动画文件
+     * @return 
+     */
+    public String getExtAnim() {
+        return getAsString("extAnim");
+    }
+    
+    /**
+     * 指定角色原始视角方向,默认情况下为(0,0,1),如果模型默认不是该方向,则需要使用该方向指定模型的正视角方向。
+     * @return 
+     */
+    public Vector3f getLocalForward() {
+        return getAsVector3f("localForward");
+    }
+    
+    /**
+     * 获取角色模型的初始缩放定义
+     * @return 
+     */
+    public Vector3f getScale() {
+        return getAsVector3f("scale");
+    }
+    
+    /**
+     * 判断角色是否打开hardwareSkinning,默认true
+     * @return 
+     */
+    public boolean isHardwareSkinning() {
+        return getAsBoolean("hardwareSkinning", true);
+    }
 }

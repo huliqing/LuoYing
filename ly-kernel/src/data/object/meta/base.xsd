@@ -54,37 +54,14 @@ xs:time
         </xs:restriction>
     </xs:simpleType>
     
-    <!--技能类型：以 SkillType.java的为准-->
-<!--    <xs:simpleType name="skillType">
-        <xs:restriction base="xs:string">
-            <xs:enumeration value="wait"/>
-            <xs:enumeration value="sit"/>
-            <xs:enumeration value="walk"/>
-            <xs:enumeration value="run"/>
-            <xs:enumeration value="jump"/>
-            <xs:enumeration value="dance"/>
-            <xs:enumeration value="idle"/>
-            <xs:enumeration value="hurt"/>
-            <xs:enumeration value="dead"/>
-            <xs:enumeration value="reset"/>
-            <xs:enumeration value="duck"/>
-            <xs:enumeration value="defend"/>
-            <xs:enumeration value="skin"/>
-            <xs:enumeration value="attack"/>
-            <xs:enumeration value="trick"/>
-            <xs:enumeration value="magic"/>
-            <xs:enumeration value="common"/>
-        </xs:restriction>
-    </xs:simpleType>-->
-    
     <!-- 定义平面：xy,xz,yz: remove20160805 -->
-    <xs:simpleType name="plane" >
+<!--    <xs:simpleType name="plane" >
         <xs:restriction base="xs:string">
             <xs:enumeration value="xy"/>
             <xs:enumeration value="xz"/>
             <xs:enumeration value="yz"/>
         </xs:restriction>
-    </xs:simpleType>
+    </xs:simpleType>-->
     
     <!-- Animation的循环模式 -->
     <xs:simpleType name="loop" >
@@ -94,70 +71,6 @@ xs:time
             <xs:enumeration value="cycle"/>
         </xs:restriction>
     </xs:simpleType>
-    
-        <!--remove20160924-->
-<!--    <xs:attribute name="sex">
-        <xs:annotation>
-            <xs:documentation>0:female; 1:male;</xs:documentation>
-        </xs:annotation>
-        <xs:simpleType>
-            <xs:restriction base="xs:string">
-                <xs:enumeration value="0">
-                    <xs:annotation><xs:documentation>female</xs:documentation></xs:annotation>
-                </xs:enumeration>
-                <xs:enumeration value="1">
-                    <xs:annotation><xs:documentation>male</xs:documentation></xs:annotation>
-                </xs:enumeration>
-                <xs:enumeration value="2">
-                    <xs:annotation><xs:documentation>unknow</xs:documentation></xs:annotation>
-                </xs:enumeration>
-            </xs:restriction>
-        </xs:simpleType>
-    </xs:attribute>-->
-    
-    <!--remove20160924-->
-<!--    <xs:attribute name="weaponType">
-        <xs:annotation>
-            <xs:documentation>
-                武器类型：1:刀、剑; 2:匕首; 3:弓; 4:爪子; 5.魔法书; 6.魔法杖
-                以SkinConstants.java定义的为准
-            </xs:documentation>
-        </xs:annotation>
-        <xs:simpleType>
-            <xs:restriction base="xs:integer">
-                <xs:enumeration value="1"/>
-                <xs:enumeration value="2"/>
-                <xs:enumeration value="3"/>
-                <xs:enumeration value="4"/>
-                <xs:enumeration value="5"/>
-            </xs:restriction>
-        </xs:simpleType>
-    </xs:attribute>-->
-    
-    <xs:attribute name="mat">
-        <xs:annotation>
-            <xs:documentation>
-                给物品指定一个材质，当物品在互相碰撞时会根据不同的材质发出不同的声音。可选：
-                0 => none(默认不需要材质,如：ai,sound,skill之类); 
-                1 => metal(金属，如金银铜铁之类); 
-                2 => wood (木质); 
-                3 => stone(石头、宝石、矿石之类);
-                4 => body(生物体,皮肤、肌肤); 
-                5 => calcium (钙质，如牙齿，爪子之类）
-            see alse Mat.java
-            </xs:documentation>
-        </xs:annotation>
-        <xs:simpleType>
-            <xs:restriction base="xs:string">
-                <xs:enumeration value="0"/>
-                <xs:enumeration value="1"/>
-                <xs:enumeration value="2"/>
-                <xs:enumeration value="3"/>
-                <xs:enumeration value="4"/>
-                <xs:enumeration value="5"/>
-            </xs:restriction>
-        </xs:simpleType>
-    </xs:attribute>
     
     <xs:attribute name="cost" type="xs:integer" use="optional" >
         <xs:annotation>
