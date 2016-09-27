@@ -4,10 +4,7 @@
  */
 package name.huliqing.core.view;
 
-import java.util.List;
 import name.huliqing.core.constants.InterfaceConstants;
-import name.huliqing.core.constants.ResConstants;
-import name.huliqing.core.data.AttributeApply;
 import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.SkinData;
 import name.huliqing.core.manager.ResourceManager;
@@ -17,13 +14,14 @@ import name.huliqing.core.ui.UIFactory;
 import name.huliqing.core.ui.tiles.ColumnBody;
 import name.huliqing.core.ui.tiles.ColumnIcon;
 import name.huliqing.core.ui.tiles.ColumnText;
+import name.huliqing.core.xml.DataProcessor;
 
 /**
  * 显示物品的数据行
  * @author huliqing
  * @param <T>
  */
-public class ItemRow<T extends ObjectData> extends Row<T> {
+public class ItemRow<T extends DataProcessor<ObjectData>> extends Row<T> {
 
     protected T data;
     
@@ -79,16 +77,16 @@ public class ItemRow<T extends ObjectData> extends Row<T> {
     @Override
     public void displayRow(T dd) {
         data = dd;
-        icon.setIcon(data.getIcon());
-        body.setNameText(ResourceManager.get(data.getId() + ".name"));
+        icon.setIcon(data.getData().getIcon());
+        body.setNameText(ResourceManager.get(data.getData().getId() + ".name"));
         
         if (data instanceof SkinData) {
-            body.setDesText(data.getDes());
+            body.setDesText(data.getData().getDes());
         } else {
-            body.setDesText(ResourceManager.getObjectDes(data.getId()));
+            body.setDesText(ResourceManager.getObjectDes(data.getData().getId()));
         }
         
-        num.setText(data.getTotal() + "");
+        num.setText(data.getData().getTotal() + "");
     }
     
     /**

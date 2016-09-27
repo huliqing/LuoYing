@@ -23,13 +23,13 @@
     
     <!--for test-->
     <itemTest id="item000" icon="Interface/item/book.png" /> 
-
+    
     <!--Gold-->
     <itemSimple id="itemGold" icon="Interface/item/gold.png" cost="1" />
     
     <!--复活卷轴-->
     <itemSkill id="itemScrollLife" icon="Interface/item/scroll_life.png" skill="skillShotReborn" cost="100" />
-
+    
     <!-- ========================================================================= -->
     <!--技能书籍-->
     <!-- ========================================================================= -->

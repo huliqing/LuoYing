@@ -23,8 +23,8 @@ public class ItemList<T extends DataProcessor<ObjectData>> extends ListView<T> i
         void onClick(Row row, boolean isPressed, T data);
     }
     
-    private List<T> datas;
-    private RowClickListener rowClickListener;
+    private final List<T> datas;
+    private RowClickListener<DataProcessor<ObjectData>> rowClickListener;
     
     public ItemList(float width, float height, List<T> datas) {
         super(width, height);

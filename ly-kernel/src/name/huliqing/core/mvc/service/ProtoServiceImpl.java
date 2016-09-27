@@ -65,9 +65,6 @@ public class ProtoServiceImpl implements ProtoService {
 
     @Override
     public void removeData(Actor actor, String id, int count) {
-        // remove20160822
-//        ObjectData data = actor.getData().getObjectData(id);
-//        handlerService.removeObject(actor, data, count);
 
         Class<?> cc = DataFactory.getDataClassById(id);
         if (cc == null)
@@ -75,18 +72,13 @@ public class ProtoServiceImpl implements ProtoService {
         
         if (ItemData.class.isAssignableFrom(cc)) {
             itemService.removeItem(actor, id, count);
-            
         } else if (SkinData.class.isAssignableFrom(cc)) {
-//            skinService.removeSkin(actor, id, count);
-            throw new UnsupportedOperationException();
-            
+            skinService.removeSkin(actor, id, count);            
         } else if (SkillData.class.isAssignableFrom(cc)) {
             skillService.removeSkill(actor, id);
-            
         } else {
             throw new UnsupportedOperationException();
         }
-
     }
 
     @Override

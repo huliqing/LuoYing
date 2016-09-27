@@ -40,12 +40,12 @@ public class TestItem extends AbstractItem {
     public void use(Actor actor) {
         super.use(actor);
         
-        Actor aa = actorService.loadActor("actorAltar");
+        Actor aa = actorService.loadActor("actorTreasure");
         actorService.setGroup(aa, 10);
         actorService.setLevel(aa, 20);
         playService.addActor(aa);
         
-        
+        actorService.setGroup(playService.getPlayer(), 10);
     }
     
 }

@@ -7,6 +7,7 @@ package name.huliqing.core.view.transfer;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.data.ObjectData;
+import name.huliqing.core.object.Loader;
 import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.xml.DataProcessor;
 
@@ -47,7 +48,7 @@ public class ItemTransfer<T extends DataProcessor<ObjectData>> implements Transf
     public void addData(T pd, int count) {
         T data = findData(pd.getData().getId());
         if (data == null) {
-            data = (T) DataFactory.createData(pd.getData().getId());
+            data = Loader.load(pd.getData().getId());
             data.getData().setTotal(count);
             datas.add(data);
         } else {

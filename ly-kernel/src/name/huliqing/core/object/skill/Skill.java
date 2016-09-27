@@ -56,19 +56,19 @@ public interface Skill extends DataProcessor<SkillData>{
     void restoreAnimation();
     
     /**
-     * 判断角色在当前状态下是否可以执行这个技能,该方法返回一个状态码{@link SkillConstants}，来判断当前技能是否可以执行.
-     * @return 
-     * @see SkillConstants
-     */
-    int checkState();
-    
-    /**
      * 获取技能的实际执行时间,技能的实际执行时间受：技能总时间、技能执行速度、
      * 技能的剪裁时间等影响
      * @return 
      */
     float getTrueUseTime();
         
+    /**
+     * 判断角色在当前状态下是否可以执行这个技能,该方法返回一个状态码{@link SkillConstants}，来判断当前技能是否可以执行.
+     * @return 
+     * @see SkillConstants
+     */
+    int checkState();
+
     /**
      * 判断技能是否正常结束或未启动
      * @return 
