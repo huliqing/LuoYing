@@ -20,7 +20,6 @@ import name.huliqing.core.Factory;
 import name.huliqing.core.data.GameData;
 import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.enums.MessageType;
-import name.huliqing.core.mvc.service.ActionService;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.SkinService;
@@ -51,29 +50,25 @@ import name.huliqing.core.object.view.View;
  */
 public class PlayNetworkImpl implements PlayNetwork {
     private static final Logger LOG = Logger.getLogger(PlayNetworkImpl.class.getName());
-    private final static Network network = Network.getInstance();
+    private final static Network NETWORK = Network.getInstance();
     private PlayService playService;
     private ActorService actorService;
-    private ActionService actionService;
     private SkinService skinService;
     private GameService gameService;
     private LogicService logicService;
     
     private ActionNetwork actionNetwork;
     private SkinNetwork skinNetwork;
-    private SkillNetwork skillNetwork;
     
     @Override
     public void inject() {
         playService = Factory.get(PlayService.class);
         actorService = Factory.get(ActorService.class);
-        actionService = Factory.get(ActionService.class);
         skinService = Factory.get(SkinService.class);
         gameService = Factory.get(GameService.class);
         logicService = Factory.get(LogicService.class);
         actionNetwork = Factory.get(ActionNetwork.class);
         skinNetwork = Factory.get(SkinNetwork.class);
-        skillNetwork = Factory.get(SkillNetwork.class);
     }
 
     @Override
@@ -88,10 +83,10 @@ public class PlayNetworkImpl implements PlayNetwork {
     
     @Override
     public void addActor(Actor actor) {
-        if (!network.isClient()) {
-            if (network.hasConnections()) {
+        if (!NETWORK.isClient()) {
+            if (NETWORK.hasConnections()) {
                 MessPlayActorLoaded mess = createActorLoadedMess(actor);
-                network.broadcast(mess);
+                NETWORK.broadcast(mess);
             }
             
             // 在场景中添加角色
@@ -101,16 +96,16 @@ public class PlayNetworkImpl implements PlayNetwork {
 
     @Override
     public void addSimplePlayer(Actor actor) {
-        if (network.isClient())
+        if (NETWORK.isClient())
             return;
         
         // 服务端添加角色
         playService.addSimplePlayer(actor);
         
         // 广播到客户端进行载入角色
-        if (network.hasConnections()) {
+        if (NETWORK.hasConnections()) {
             MessPlayActorLoaded mess = createActorLoadedMess(actor);
-            network.broadcast(mess);
+            NETWORK.broadcast(mess);
         }
     }
  
@@ -131,11 +126,11 @@ public class PlayNetworkImpl implements PlayNetwork {
 
     @Override
     public void addView(View view) {
-        if (!network.isClient()) {
-            if (network.hasConnections()) {
+        if (!NETWORK.isClient()) {
+            if (NETWORK.hasConnections()) {
                 MessViewAdd mess = new MessViewAdd();
                 mess.setViewData(view.getUpdateData());
-                network.broadcast(mess);
+                NETWORK.broadcast(mess);
             }
             
             playService.addView(view);
@@ -169,20 +164,20 @@ public class PlayNetworkImpl implements PlayNetwork {
     
     @Override
     public void removeObject(Object object) {
-        if (!network.isClient()) {
+        if (!NETWORK.isClient()) {
             
-            if (network.hasConnections()) {
+            if (NETWORK.hasConnections()) {
                 if (object instanceof Actor) {
                     Actor actor = (Actor) object;
                     MessSCActorRemove mess = new MessSCActorRemove();
                     mess.setActorId(actor.getData().getUniqueId());
-                    network.broadcast(mess);
+                    NETWORK.broadcast(mess);
                     
                 } else if (object instanceof View) {
                     View view = (View) object;
                     MessViewRemove mess = new MessViewRemove();
                     mess.setViewId(view.getData().getUniqueId());
-                    network.broadcast(mess);
+                    NETWORK.broadcast(mess);
                     
                 } else if (object instanceof Spatial) {
                     Spatial spatialObject = (Spatial) object;
@@ -190,7 +185,7 @@ public class PlayNetworkImpl implements PlayNetwork {
                     if (actor != null) {
                         MessSCActorRemove mess = new MessSCActorRemove();
                         mess.setActorId(actor.getData().getUniqueId());
-                        network.broadcast(mess);
+                        NETWORK.broadcast(mess);
                     }
                 }
             }
@@ -206,12 +201,12 @@ public class PlayNetworkImpl implements PlayNetwork {
      */
     @Override
     public void addMessage(String message, MessageType type) {
-        if (!network.isClient()) {
-            if (network.hasConnections()) {
+        if (!NETWORK.isClient()) {
+            if (NETWORK.hasConnections()) {
                 MessMessage mess = new MessMessage();
                 mess.setMessage(message);
                 mess.setType(type);
-                network.broadcast(mess);
+                NETWORK.broadcast(mess);
             }
             
             playService.addMessage(message, type);
@@ -233,18 +228,18 @@ public class PlayNetworkImpl implements PlayNetwork {
             return;
         }
         
-        if (!network.isClient()) {
+        if (!NETWORK.isClient()) {
             // 服务端主机
             if (LY.getPlayState().getPlayer() == actor) {
                 playService.addMessage(message, type);
                 
             // 发送到指定客户端
             } else {
-                if (network.hasConnections()) {
+                if (NETWORK.hasConnections()) {
                     MessMessage mess = new MessMessage();
                     mess.setMessage(message);
                     mess.setType(type);
-                    network.sendToClient(actor, mess);
+                    NETWORK.sendToClient(actor, mess);
                 }
             }
         }
@@ -324,13 +319,13 @@ public class PlayNetworkImpl implements PlayNetwork {
 
     @Override
     public void moveObject(Actor actor, Vector3f position) {
-        if (!network.isClient()) {
+        if (!NETWORK.isClient()) {
             // 先在服务端移动后再同步,因为移动后的位置可能最终被修正
             playService.moveObject(actor, position);
             
             // 广播同步位置
             if (actor != null) {
-                network.syncTransformDirect(actor);
+                NETWORK.syncTransformDirect(actor);
             }
         }
     }
@@ -388,13 +383,13 @@ public class PlayNetworkImpl implements PlayNetwork {
     
     @Override
     public void addMessageOnlyClients(String message, MessageType type) {
-        if (!network.isClient()) {
+        if (!NETWORK.isClient()) {
             // 广播到客户端(主机不要)
-            if (network.hasConnections()) {
+            if (NETWORK.hasConnections()) {
                 MessMessage mess = new MessMessage();
                 mess.setMessage(message);
                 mess.setType(type);
-                network.broadcast(mess);
+                NETWORK.broadcast(mess);
             }
         }
     }
@@ -402,7 +397,7 @@ public class PlayNetworkImpl implements PlayNetwork {
     @Override
     public void attack(Actor actor, Actor target) {
         // 客户端不处理
-        if (network.isClient()) {
+        if (NETWORK.isClient()) {
             return;
         }
         
@@ -417,7 +412,7 @@ public class PlayNetworkImpl implements PlayNetwork {
         }
         
         if (!skinService.isWeaponTakeOn(actor)) {
-            skinNetwork.takeOnWeapon(actor, false);
+            skinNetwork.takeOnWeapon(actor);
         }
         // 打开或关闭侦察敌人的逻辑,autoDetect不需要广播到客户端，因为客户端不会有
         // 逻辑
@@ -426,7 +421,7 @@ public class PlayNetworkImpl implements PlayNetwork {
 
     @Override
     public void syncGameInitToClient(HostedConnection client) {
-        if (network.isClient()) 
+        if (NETWORK.isClient()) 
             return;
         
         // 注意：同步当前场景中的对象时不要一起发送，
@@ -437,7 +432,7 @@ public class PlayNetworkImpl implements PlayNetwork {
         List<Actor> actors = playService.findAllActor();
         for (Actor actor : actors) {
             MessPlayActorLoaded mess = createActorLoadedMess(actor);
-            network.sendToClient(client, mess);
+            NETWORK.sendToClient(client, mess);
         }
         
         // 同步所有视图
@@ -445,7 +440,7 @@ public class PlayNetworkImpl implements PlayNetwork {
         for (View v : views) {
             MessViewAdd mess = new MessViewAdd();
             mess.setViewData(v.getUpdateData());
-            network.sendToClient(client, mess);
+            NETWORK.sendToClient(client, mess);
         }
     }
     
@@ -492,14 +487,14 @@ public class PlayNetworkImpl implements PlayNetwork {
     
     @Override
     public void syncObject(NetworkObject syncObject, SyncData syncData, boolean reliable) {
-        if (network.isClient()) 
+        if (NETWORK.isClient()) 
             return;
         
         MessSyncObject mess = new MessSyncObject();
         mess.setReliable(reliable);
         mess.setObjectId(syncObject.getSyncId());
         mess.setSyncData(syncData);
-        network.broadcast(mess);
+        NETWORK.broadcast(mess);
     }
 
     @Override
@@ -514,12 +509,12 @@ public class PlayNetworkImpl implements PlayNetwork {
 
     @Override
     public void changeGame(GameData gameData) {
-        if (network.isClient())
+        if (NETWORK.isClient())
             return;
         
         MessPlayChangeGameState mess = new MessPlayChangeGameState();
         mess.setGameData(gameData);
-        network.broadcast(mess);
+        NETWORK.broadcast(mess);
 
         playService.changeGame(gameData);
     }

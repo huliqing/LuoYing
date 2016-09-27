@@ -100,7 +100,7 @@ public class WalkSkill extends AbstractSkill implements Walk{
                     , channels
                     , loop ? LoopMode.Loop : LoopMode.DontLoop
                     , getAnimFullTime() / animSpeed
-                    , getAnimStartTime());
+                    , 0);
         }
     }
     

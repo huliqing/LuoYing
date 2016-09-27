@@ -19,6 +19,7 @@ xs:time
     <xs:element name="root">
         <xs:complexType>
             <xs:all>
+                <xs:element ref="itemTest" />
                 <xs:element ref="itemAttribute" />
                 <xs:element ref="itemBook" />
                 <xs:element ref="itemMap" />
@@ -28,6 +29,18 @@ xs:time
                 <xs:element ref="itemStateRemove" />
                 <xs:element ref="itemSummon" />
             </xs:all>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="itemTest">
+        <xs:annotation>
+            <xs:documentation>测试用</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="itemBase">
+                </xs:extension>
+            </xs:complexContent>
         </xs:complexType>
     </xs:element>
     

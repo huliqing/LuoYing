@@ -314,6 +314,7 @@ import name.huliqing.core.object.item.SkillItem;
 import name.huliqing.core.object.item.StateItem;
 import name.huliqing.core.object.item.StateRemoveItem;
 import name.huliqing.core.object.item.SummonItem;
+import name.huliqing.core.object.item.TestItem;
 import name.huliqing.core.object.module.DropModule;
 import name.huliqing.core.object.module.LevelModule;
 import name.huliqing.core.object.slot.Slot;
@@ -540,6 +541,7 @@ public class LY {
         DataFactory.register("hitChecker",  HitCheckerData.class, HitCheckerDataLoader.class, SimpleHitChecker.class);
         
         // Item
+        DataFactory.register("itemTest",  ItemData.class, ItemDataLoader.class, TestItem.class);
         DataFactory.register("itemAttribute",  ItemData.class, ItemDataLoader.class, AttributeItem.class);
         DataFactory.register("itemBook",  ItemData.class, ItemDataLoader.class, BookItem.class);
         DataFactory.register("itemMap",  ItemData.class, ItemDataLoader.class, MapItem.class);

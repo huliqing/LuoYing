@@ -16,13 +16,13 @@ import name.huliqing.core.LY;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.MagicData;
 import name.huliqing.core.object.effect.TraceType;
-import name.huliqing.core.mvc.service.EffectService;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.AbstractPlayObject;
 import name.huliqing.core.xml.DataProcessor;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.effect.Effect;
+import name.huliqing.core.object.effect.EffectManager;
 import name.huliqing.core.object.hitchecker.HitChecker;
 import name.huliqing.core.object.sound.SoundManager;
 import name.huliqing.core.utils.ConvertUtils;
@@ -36,7 +36,6 @@ import name.huliqing.core.utils.MathUtils;
  */
 public class Magic<T extends MagicData> extends AbstractPlayObject implements DataProcessor<T>{
     private final PlayService playService = Factory.get(PlayService.class);
-    private final EffectService effectService = Factory.get(EffectService.class);
     
     protected T data;
     
@@ -168,10 +167,6 @@ public class Magic<T extends MagicData> extends AbstractPlayObject implements Da
 
         // 判断是否结束魔法
         if (data.getTimeUsed() >= data.getUseTime()) {
-            
-            // remove20160516以后不再直接调用cleanup来退出。
-//            cleanup();
-            
             playService.removePlayObject(this);
         }
 
@@ -265,9 +260,9 @@ public class Magic<T extends MagicData> extends AbstractPlayObject implements Da
     }
     
     protected void playEffect(String effectId) {
-        Effect effect = effectService.loadEffect(effectId);
+        Effect effect = Loader.load(effectId);
         effect.setTraceObject(localRoot);
-        playService.addEffect(effect);
+        EffectManager.getInstance().addEffect(effect);
     }
     
     // -------------------------------------------------------------------------

@@ -11,6 +11,7 @@ import com.jme3.export.OutputCapsule;
 import com.jme3.network.serializing.Serializable;
 import java.io.IOException; 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author huliqing
@@ -31,7 +32,7 @@ public class SkillData extends ObjectData {
     private long[] weaponStateLimit;
     
     // 定义当前技能需要消耗的角色的属性值
-    private ArrayList<AttributeUse> useAttributes;
+    private List<AttributeUse> useAttributes;
     
     // 技能等级
     private int level;
@@ -61,7 +62,9 @@ public class SkillData extends ObjectData {
         oc.write(useTime, "useTime", 1);
         oc.write(cooldown, "cooldown", 0);
         oc.write(weaponStateLimit, "weaponStateLimit", null);
-        oc.writeSavableArrayList(useAttributes, "useAttributes", null);
+        if (useAttributes != null) {
+            oc.writeSavableArrayList(new ArrayList<AttributeUse>(useAttributes), "useAttributes", null);
+        }
         oc.write(level, "level", 1);
         oc.write(maxLevel, "maxLevel", 1);
         oc.write(playCount, "playCount", 0);
@@ -137,7 +140,7 @@ public class SkillData extends ObjectData {
      * 获取技能需要消耗的属性
      * @return 
      */
-    public ArrayList<AttributeUse> getUseAttributes() {
+    public List<AttributeUse> getUseAttributes() {
         return useAttributes;
     }
 
@@ -145,7 +148,7 @@ public class SkillData extends ObjectData {
      * 设置技能需要消息的属性
      * @param useAttributes 
      */
-    public void setUseAttributes(ArrayList<AttributeUse> useAttributes) {
+    public void setUseAttributes(List<AttributeUse> useAttributes) {
         this.useAttributes = useAttributes;
     }
 

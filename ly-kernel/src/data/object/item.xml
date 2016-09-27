@@ -22,7 +22,7 @@
     <!-- ========================================================================= -->
     
     <!--for test-->
-    <itemSimple id="item000" icon="Interface/item/book.png" /> 
+    <itemTest id="item000" icon="Interface/item/book.png" /> 
 
     <!--Gold-->
     <itemSimple id="itemGold" icon="Interface/item/gold.png" cost="1" />

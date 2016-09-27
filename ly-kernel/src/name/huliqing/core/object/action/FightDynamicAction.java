@@ -140,7 +140,7 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
         
         // 如果角色切换到战斗状态，则强制取出武器
         if (!skinModule.isWeaponTakeOn()) {
-            skinNetwork.takeOnWeapon(actor, true);
+            skinNetwork.takeOnWeapon(actor);
         }
         
         if (waitSkill == null) {
@@ -159,7 +159,7 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
         skillModule.removeSkillListener(this);
         skinModule.removeSkinListener(this);
         if (autoTakeOffWeapon && skinService.isWeaponTakeOn(actor)) {
-            skinNetwork.takeOffWeapon(actor, true);
+            skinNetwork.takeOffWeapon(actor);
         }
         super.cleanup();
     }
@@ -200,10 +200,10 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
             return;
         }
         
-        if (actor.getData().getName().equals("樱")) {
-            System.out.println("测试。。。");
-        }
-
+//        if (actor.getData().getName().equals("樱")) {
+//            System.out.println("测试。。。");
+//        }
+        
         if (skill == null) {
             skill = getSkill();
             // 并不一定能够找到合适的技能，如果没有合适的技能则返回。
@@ -373,32 +373,29 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
     
     private void recacheSkill() {
         fightSkills.clear();
-        long weaponState = skinModule.getWeaponState();
-        loadAttackSkill(weaponState, fightSkillTags, fightSkills);
+        loadFightSkill(fightSkillTags, fightSkills);
         // 重新缓存技能后，检查一次当前正在使用的技能是否适合当前的武器，如果不行则清除它，让它
         // 重新获取一个可用的。否则不应该清除当前的技能。
         if (skill != null) {
-            if (!skill.isPlayable(weaponState)) {
+            if (!skill.isPlayableByWeapon()) {
                 skill = null;
             }
         }
     }
     
     /**
-     * 从角色身上获取适用于指定武器类型的攻击技能,只要适合于该武器的"攻击“技能就可以，
-     * 不管是否处于冷却中。另外如果skillTypes不为null,则获取的攻击技能必须限制在这个列表之内
-     * @param weaponState 
+     * 载入战斗技能
      * @param skillTags 指定的技能类型限制
-     * @param store 存放结果集，如果为null则创建一个
+     * @param store
      * @return "攻击"技能列表,可能包含：attack.common/shot/trick/magic
      */
-    private List<Skill> loadAttackSkill(long weaponState, long skillTags, List<Skill> store) {
+    private List<Skill> loadFightSkill(long skillTags, List<Skill> store) {
         List<Skill> allSkills = skillModule.getSkills();
-        for (Skill skill : allSkills) {
-            if ((skillTags & skill.getData().getTags()) != 0) {
+        for (Skill fightSkill : allSkills) {
+            if ((skillTags & fightSkill.getData().getTags()) != 0) {
                 // 武器类型的过滤,只有技能与当前武器相容才能添加
-                if (skill.isPlayable(weaponState)) {
-                    store.add(skill);
+                if (fightSkill.isPlayableByWeapon() && fightSkill.isPlayableByLevelLimit()) {
+                    store.add(fightSkill);
                 }
             }
         }

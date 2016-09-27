@@ -256,13 +256,9 @@ public class StoryTreasureTask2 extends GameTaskBase {
             
             if (timerView != null && timerView.getTime() <= 0) {
                 companionLoader = new CompanionLoader();
-                
                 game.addLogic(companionLoader);
-                
                 playNetwork.removeObject(timerView);
-                
-                // remove20160922
-//                timerView = null;
+                timerView = null;
             }
             
             // 任务失败检测
@@ -311,7 +307,7 @@ public class StoryTreasureTask2 extends GameTaskBase {
                     @Override
                     protected void doInit() {
                         useTime = 1.2f;
-                        skinNetwork.takeOnWeapon(companion, true);
+                        skinNetwork.takeOnWeapon(companion);
                     }
                     @Override
                     protected void doTalkLogic(float tpf) {}

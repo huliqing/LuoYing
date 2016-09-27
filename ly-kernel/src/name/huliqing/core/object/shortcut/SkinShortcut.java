@@ -99,7 +99,7 @@ public class SkinShortcut extends BaseUIShortcut<SkinData> implements SkinListen
         // Weapon
         if (skin.isAttached()) {
             if (skinModule.isWeaponTakeOn()) {
-                skinNetwork.takeOffWeapon(actor, false);
+                skinNetwork.takeOffWeapon(actor);
             } else {
                 skinNetwork.detachSkin(actor, skin);
             }

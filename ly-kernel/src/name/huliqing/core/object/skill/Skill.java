@@ -63,13 +63,12 @@ public interface Skill extends DataProcessor<SkillData>{
     int checkState();
     
     /**
-     * 判断在指定的武器状态下是否可以执行这个技能。这个方法即用来判断使用指定的武器类型是否可以执行这个技能。
-     * weaponState包含了指定的武器类型。
-     * @param weaponState
+     * 获取技能的实际执行时间,技能的实际执行时间受：技能总时间、技能执行速度、
+     * 技能的剪裁时间等影响
      * @return 
      */
-    boolean isPlayable(long weaponState);
-    
+    float getTrueUseTime();
+        
     /**
      * 判断技能是否正常结束或未启动
      * @return 
@@ -81,12 +80,27 @@ public interface Skill extends DataProcessor<SkillData>{
      * @return 
      */
     boolean isCooldown();
-
+    
     /**
-     * 获取技能的实际执行时间,技能的实际执行时间受：技能总时间、技能执行速度、
-     * 技能的剪裁时间等影响
+     * 判断在指定的武器状态下是否可以执行这个技能, 一些技能在使用的时候会要求角色必须使用指定的武器,
+     * 如果技能没有任何武器限制则该方法应该返回true,否则根据角色当前的武器状态来判断是否可以使用这个技能。
      * @return 
      */
-    float getTrueUseTime();
+    boolean isPlayableByWeapon();
+
+    /**
+     * 判断角色在当前的等级下是否可以使用这个技能，一些技能在使用的时候会有等级限制，如果角色的当前等级不足以使用
+     * 这个技能，则该方法应该返回false, 否则返回true
+     * @return 
+     */
+    boolean isPlayableByLevelLimit();
+
+    /**
+     * 判断角色当前的属性状态是否可以使用这个技能，有些技能在使用的时候会要求消耗角色的一些属性值，
+     * 比如：魔法值、怒气值...等, 这个方法用于判断角色当前的各种属性的值是否满使用这个技能。
+     * 如果技能没有任何属性限制则这个方法应该始终返回true.
+     * @return 
+     */
+    boolean isPlayableByAttributeLimit();
 }
 

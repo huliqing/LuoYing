@@ -280,7 +280,7 @@ public abstract class AbstractSkill implements Skill {
             doUpdateAnimation(animation
                     , loop
                     , getAnimFullTime()
-                    , getAnimStartTime());
+                    , 0);
         }
         
         // --技能消耗
@@ -488,16 +488,6 @@ public abstract class AbstractSkill implements Skill {
     }
     
     /**
-     * 获取动画的开始时间点，单位秒
-     * @return 
-     */
-    protected float getAnimStartTime() {
-        // 时间的起点在播放时间段开始的剪裁点上
-//        return getAnimFullTime() * data.getCutTimeStart();
-        return 0;
-    }
-    
-    /**
      * 重新计算受cutTime影响的时间插值点。
      * @param interpolation 原始的时间插值点(未受cutTime影响的时间插值)
      * @return 经过cutTime计算后的实际的时间插值点
@@ -517,7 +507,7 @@ public abstract class AbstractSkill implements Skill {
         if (animation != null) {
             channelModule.restoreAnimation(animation, channels
                     , loop ? LoopMode.Loop : LoopMode.DontLoop
-                    , getAnimFullTime(), getAnimStartTime());
+                    , getAnimFullTime(), 0);
         }
     }
     
@@ -544,20 +534,11 @@ public abstract class AbstractSkill implements Skill {
     
     @Override
     public int checkState() {
-        // 武器状态检查,有一些技能需要拿特定的武器才能执行。
-        if (!isPlayable(skinModule.getWeaponState())) {
-            return SkillConstants.STATE_WEAPON_NOT_ALLOW;
-        }
-        
+        // 武器必须取出
         if (data.getWeaponStateLimit() != null) {
             if (!skinModule.isWeaponTakeOn()) {
                 return SkillConstants.STATE_WEAPON_NEED_TAKE_ON;
             }            
-        }
-        
-        // 角色需要达到指定等级才能使用技能
-        if (levelModule.getLevel() < data.getLevelLimit()) {
-            return SkillConstants.STATE_NEED_LEVEL;
         }
         
         // 冷却中
@@ -565,28 +546,53 @@ public abstract class AbstractSkill implements Skill {
             return SkillConstants.STATE_SKILL_COOLDOWN;
         }
         
+        // 武器状态检查,有一些技能需要拿特定的武器才能执行。
+        if (!isPlayableByWeapon()) {
+            return SkillConstants.STATE_WEAPON_NOT_ALLOW;
+        }
+        
+        // 角色需要达到指定等级才能使用技能
+        if (!isPlayableByLevelLimit()) {
+            return SkillConstants.STATE_NEED_LEVEL;
+        }
+        
         // 属性值不够用
-        List<AttributeUse> uas = data.getUseAttributes();
-        if (uas != null) {
-            for (AttributeUse ua : uas) {
-                if (attributeModule.getNumberAttributeValue(ua.getAttribute(), 0) < ua.getAmount()) {
-                    return SkillConstants.STATE_MANA_NOT_ENOUGH;
-                }
-            }
+        if (!isPlayableByAttributeLimit()) {
+            return SkillConstants.STATE_MANA_NOT_ENOUGH;
         }
         return SkillConstants.STATE_OK;
     }
     
     @Override
-    public boolean isPlayable(long weaponState) {
+    public boolean isPlayableByWeapon() {
         if (data.getWeaponStateLimit() == null)
             return true;
+        
+        long weaponState = skinModule.getWeaponState();
         for (long ws : data.getWeaponStateLimit()) {
             if (ws == weaponState) {
                 return true;
             }
         }
         return false;
+    }
+
+    @Override
+    public boolean isPlayableByLevelLimit() {
+        return levelModule.getLevel() >= data.getLevelLimit();
+    }
+
+    @Override
+    public boolean isPlayableByAttributeLimit() {
+        List<AttributeUse> uas = data.getUseAttributes();
+        if (uas != null) {
+            for (AttributeUse ua : uas) {
+                if (attributeModule.getNumberAttributeValue(ua.getAttribute(), 0) < ua.getAmount()) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
     
     // -------------------------------------------------------------------------

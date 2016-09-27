@@ -45,7 +45,7 @@ public class WeaponPanel extends ListView<Skin> implements ActorPanel{
                     Skin skin = row.getData();
                     if (skin.isAttached()) {
                         if (skinService.isWeaponTakeOn(actor)) {
-                            skinNetwork.takeOffWeapon(actor, false);
+                            skinNetwork.takeOffWeapon(actor);
                         } else {
                             skinNetwork.detachSkin(actor, skin);
                         }

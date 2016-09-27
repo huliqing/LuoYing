@@ -66,9 +66,9 @@ public class MessSkinWeaponTakeOn extends MessBase {
         if (actor.getData().getUniqueId() == clientActorId
                 || actorService.getOwner(actor) == clientActorId) {
             if (takeOn) {
-                skinNetwork.takeOnWeapon(actor, false);
+                skinNetwork.takeOnWeapon(actor);
             } else {
-                skinNetwork.takeOffWeapon(actor, false);
+                skinNetwork.takeOffWeapon(actor);
             }
         }
     }
@@ -81,10 +81,10 @@ public class MessSkinWeaponTakeOn extends MessBase {
         if (actor != null) {
             if (takeOn) {
                 // 如果是客户端，则这里使用强制takeOn,以保证与服务端同步。
-                skinService.takeOnWeapon(actor, true);
+                skinService.takeOnWeapon(actor);
             } else {
                 // 如果是客户端，则这里使用强制takeOff,以保证与服务端同步。
-                skinService.takeOffWeapon(actor, true);
+                skinService.takeOffWeapon(actor);
             }
         }
     }

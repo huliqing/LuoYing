@@ -66,20 +66,22 @@ public class SkinServiceImpl implements SkinService {
             control.detachSkin(skin);
         }
     }
-    
-    @Override
-    public boolean isCanTakeOnWeapon(Actor actor) {
-        // 如果角色当前正在执行换装技能，则直接返回。因为换装技能可能是异步的。
-        // 在换装完成之前不能再执行换装，否则可能造成多把武器穿在身上的BUG。
-//        return !skillService.isPlayingSkill(actor, SkillType.skin);
-        return true;
-    }
-    
-    @Override
-    public boolean isCanTakeOffWeapon(Actor actor) {
-//        return !skillService.isPlayingSkill(actor, SkillType.skin);
-        return true;
-    }
+
+    // remove20160927
+//    @Override
+//    public boolean isCanAttach(Actor actor, Skin skin) {
+//        
+//    }
+//    
+//    @Override
+//    public boolean isCanTakeOnWeapon(Actor actor) {
+//        return true;
+//    }
+//    
+//    @Override
+//    public boolean isCanTakeOffWeapon(Actor actor) {
+//        return true;
+//    }
         
     @Override
     public boolean isWeaponTakeOn(Actor actor) {
@@ -88,10 +90,7 @@ public class SkinServiceImpl implements SkinService {
     }
 
     @Override
-    public void takeOnWeapon(Actor actor, boolean force) {
-        if (!force && !isCanTakeOnWeapon(actor)) {
-            return;
-        }
+    public void takeOnWeapon(Actor actor) {
         SkinModule control = actor.getModule(SkinModule.class);
         if (control != null) {
             control.takeOnWeapon();
@@ -99,11 +98,7 @@ public class SkinServiceImpl implements SkinService {
     }
     
     @Override
-    public void takeOffWeapon(Actor actor, boolean force) {
-        if (!force && !isCanTakeOffWeapon(actor)) {
-            return;
-        }
-
+    public void takeOffWeapon(Actor actor) {
         SkinModule module = actor.getModule(SkinModule.class);
         if (module != null) {
             module.takeOffWeapon();

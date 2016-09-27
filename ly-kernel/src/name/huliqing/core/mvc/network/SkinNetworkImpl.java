@@ -89,51 +89,28 @@ public class SkinNetworkImpl implements SkinNetwork {
     }
 
     @Override
-    public boolean isCanTakeOnWeapon(Actor actor) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public boolean isCanTakeOffWeapon(Actor actor) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-    
-    @Override
-    public boolean isWeaponTakeOn(Actor actor) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void takeOnWeapon(Actor actor, boolean force) {
+    public void takeOnWeapon(Actor actor) {
         if (!NETWORK.isClient()) {
-            boolean can = force || skinService.isCanTakeOnWeapon(actor);
-            if (can) {
-                if (NETWORK.hasConnections()) {
-                    MessSkinWeaponTakeOn mess = new MessSkinWeaponTakeOn();
-                    mess.setActorId(actor.getData().getUniqueId());
-                    mess.setTakeOn(true);
-                    NETWORK.broadcast(mess);
-                }
-                
-                skinService.takeOnWeapon(actor, true);
+            if (NETWORK.hasConnections()) {
+                MessSkinWeaponTakeOn mess = new MessSkinWeaponTakeOn();
+                mess.setActorId(actor.getData().getUniqueId());
+                mess.setTakeOn(true);
+                NETWORK.broadcast(mess);
             }
+            skinService.takeOnWeapon(actor);
         }
     }
 
     @Override
-    public void takeOffWeapon(Actor actor, boolean force) {
+    public void takeOffWeapon(Actor actor) {
         if (!NETWORK.isClient()) {
-            boolean can = force || skinService.isCanTakeOffWeapon(actor);
-            if (can) {
-                if (NETWORK.hasConnections()) {
-                    MessSkinWeaponTakeOn mess = new MessSkinWeaponTakeOn();
-                    mess.setActorId(actor.getData().getUniqueId());
-                    mess.setTakeOn(false);
-                    NETWORK.broadcast(mess);
-                }
-                
-                skinService.takeOffWeapon(actor, true);
+            if (NETWORK.hasConnections()) {
+                MessSkinWeaponTakeOn mess = new MessSkinWeaponTakeOn();
+                mess.setActorId(actor.getData().getUniqueId());
+                mess.setTakeOn(false);
+                NETWORK.broadcast(mess);
             }
+            skinService.takeOffWeapon(actor);
         }
     }
     
@@ -164,6 +141,11 @@ public class SkinNetworkImpl implements SkinNetwork {
 
     @Override
     public long getWeaponState(Actor actor) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isWeaponTakeOn(Actor actor) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

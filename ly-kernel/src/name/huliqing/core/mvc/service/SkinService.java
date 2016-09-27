@@ -29,7 +29,6 @@ public interface SkinService extends Inject {
      * @param actor
      * @param skinId
      * @param amount
-     * @return 
      */
     void removeSkin(Actor actor, String skinId, int amount);
     
@@ -48,19 +47,28 @@ public interface SkinService extends Inject {
      */
     void detachSkin(Actor actor, Skin skin);
     
-    /**
-     * 判断目标角色是否可以取出武器
-     * @param actor
-     * @return 
-     */
-    boolean isCanTakeOnWeapon(Actor actor);
-    
-    /**
-     * 判断目标角色是否可以取下武器
-     * @param actor
-     * @return 
-     */
-    boolean isCanTakeOffWeapon(Actor actor);
+    // remove20160927
+//    /**
+//     * 判断当前状态下角色是否可以attach装备
+//     * @param actor
+//     * @param skin
+//     * @return 
+//     */
+//    boolean isCanAttach(Actor actor, Skin skin);
+//    
+//    /**
+//     * 判断目标角色是否可以取出武器
+//     * @param actor
+//     * @return 
+//     */
+//    boolean isCanTakeOnWeapon(Actor actor);
+//    
+//    /**
+//     * 判断目标角色是否可以取下武器
+//     * @param actor
+//     * @return 
+//     */
+//    boolean isCanTakeOffWeapon(Actor actor);
     
     /**
      * 判断目标角色的武器是否拿在手上。
@@ -70,20 +78,16 @@ public interface SkinService extends Inject {
     boolean isWeaponTakeOn(Actor actor);
     
     /**
-     * 让角色取出武器。部分情况下是不能取出武器的，除非force=true,要判断在当
-     * 前情况下是否可以取出武器，use {@link #isCanTakeOnWeapon(name.huliqing.fighter.object.actor.Actor) }
+     * 让角色取出武器。
      * @param actor 
-     * @param force 是否强制取出武器。
      */
-    void takeOnWeapon(Actor actor, boolean force);
+    void takeOnWeapon(Actor actor);
     
     /**
-     * 让角色取下武器，部分情况下是不能取下武器的，除非force=true,要判断在当
-     * 前情况下是否可以取下武器，use {@link #isCanTakeOffWeapon(name.huliqing.fighter.object.actor.Actor) }
+     * 让角色取下武器
      * @param actor 
-     * @param force 强制解除武器
      */
-    void takeOffWeapon(Actor actor, boolean force);
+    void takeOffWeapon(Actor actor);
     
     /**
      * 获取角色身上指定ID的Skin
