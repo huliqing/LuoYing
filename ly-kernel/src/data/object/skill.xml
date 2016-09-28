@@ -82,7 +82,7 @@
     <skillShot id="skillMagicBuffBase" extends="skillMagicBase" hitDistance="35" hitEl="elSkillBuff" hitChecker="hitCheckerBuff" bullets="bulletBuff" />
 
     <!--普通物理攻击：配置给普通的物理攻击技能，一般可配置给冷兵器技能，如刀、剑、匕首、大刀、长枪、弓箭等普通攻击技-->
-    <skillAttack id="skillFightSimpleAttackBase"            extends="skillFightSimpleTagBase" hitAttribute="attributeHealth" levelEl="elLevelSkill" hitEl="elSkillAttack" speedAttribute="attributeAttackSpeed" cutTimeEndAttribute="attributeGhostRate" />
+    <skillAttack id="skillFightSimpleAttackBase"            extends="skillFightSimpleTagBase" defendSkillTags="defend" hitAttribute="attributeHealth" levelEl="elLevelSkill" hitEl="elSkillAttack" speedAttribute="attributeAttackSpeed" cutTimeEndAttribute="attributeGhostRate" />
     <skillShot    id="skillFightSimpleAttackShotBase"    extends="skillFightSimpleAttackBase" hitDistance="35" cooldown="2.5" shotSpeed="1" shotTimes="0" useTime="0" />
     <!--普通魔法攻击：配置给普通的魔法攻击, shot为远程魔法技能-->
     <skillAttack id="skillFightSimpleMagicBase"             extends="skillFightSimpleTagBase" hitAttribute="attributeHealth" levelEl="elLevelSkill" hitEl="elSkillMagicAttack" speedAttribute="attributeMagicSpeed"  cutTimeEndAttribute="attributeGhostRate" />

@@ -12,6 +12,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import name.huliqing.core.Config;
 import name.huliqing.core.Factory;
 import name.huliqing.core.constants.SkillConstants;
 import name.huliqing.core.data.SkillData;
@@ -25,6 +28,8 @@ import name.huliqing.core.object.skill.Skill;
  * @author huliqing
  */
 public class SkillModule extends AbstractModule {
+    private static final Logger LOG = Logger.getLogger(SkillModule.class.getName());
+    
     private final SkillService skillService = Factory.get(SkillService.class);
     private Control updateControl;
     
@@ -262,6 +267,12 @@ public class SkillModule extends AbstractModule {
             lastSkill.setActor(actor);
         }
         lastSkill.initialize();
+        
+//        if (Config.debug) {
+//            LOG.log(Level.INFO, "startNewSkill, actor={0}, newSkill={1}"
+//                    , new Object[] {lastSkill.getActor().getData().getId(), lastSkill.getData().getId()});
+//        }
+        
         // 记录当前正在运行的所有技能类型
         if (!playingSkills.contains(lastSkill)) {
             playingSkills.add(lastSkill);
@@ -446,6 +457,10 @@ public class SkillModule extends AbstractModule {
      * @param skillPlayListener 
      */
     public void addSkillPlayListener(SkillPlayListener skillPlayListener) {
+        if (Config.debug) {
+            LOG.log(Level.INFO, "addSkillPlayListener, actor={0}, skillPlayListener={1}"
+                    , new Object[] {actor.getData().getId(), skillPlayListener});
+        }
         if (skillPlayListeners == null) {
             skillPlayListeners = new ArrayList<SkillPlayListener>();
         }

@@ -121,7 +121,6 @@ public class AttackSkill extends HitSkill {
                 // 防守成功(角色正在防守,并且必须是正面防守)
                 if (skillDefendable 
                         && skillService.isPlayingSkill(target, defendSkillTags)
-//                        && skillService.isDefending(target)  // remove20160920
                         && actorService.getViewAngle(target, actor.getSpatial().getWorldTranslation()) < 90) {
                     doDefendResult(target);
                 } else {
@@ -129,7 +128,7 @@ public class AttackSkill extends HitSkill {
                 }
             }
         } else {
-            Actor target = actorService.getTarget(actor);
+            Actor target = actorModule.getTarget();
             
             // 只有在技能作用范围内　及　在攻击角度内才视为可能被击中
             if (!isInHitDistance(target) 
@@ -168,7 +167,7 @@ public class AttackSkill extends HitSkill {
     }
     
     /**
-     * 处理防守
+     * 处理防守的声效，特效
      * @param target 
      */
     protected void doDefendResult(Actor target) {

@@ -5,11 +5,10 @@
 package name.huliqing.core.mvc.service;
 
 import com.jme3.math.Vector3f;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.core.LY;
-import name.huliqing.core.Factory;
 import name.huliqing.core.constants.SkillConstants;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.object.Loader;
@@ -27,7 +26,7 @@ import name.huliqing.core.object.skill.Walk;
  * @author huliqing
  */
 public class SkillServiceImpl implements SkillService {
-//    private final static Logger LOG = Logger.getLogger(SkillServiceImpl.class.getName());
+    private final static Logger LOG = Logger.getLogger(SkillServiceImpl.class.getName());
 
     @Override
     public void inject() {
@@ -210,7 +209,10 @@ public class SkillServiceImpl implements SkillService {
     public int checkStateCode(Actor actor, Skill skill) {
         SkillModule module = actor.getModule(SkillModule.class);
         if (module != null) {
-            return module.checkStateCode(skill);
+            int stateCode = module.checkStateCode(skill);
+            LOG.log(Level.INFO, "checkStateCode: actor={0}, skill={1}, stateCode={2}"
+                    , new Object[]{actor.getData().getId(), skill.getData().getId(), stateCode});
+            return stateCode;
         }
         return SkillConstants.STATE_UNDEFINE;
     }

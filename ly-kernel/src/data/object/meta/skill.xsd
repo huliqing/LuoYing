@@ -579,14 +579,14 @@ xs:time
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="defendable" type="bool" use="optional">
+                    <xs:attribute name="defendable" type="bool" use="required">
                         <xs:annotation>
                             <xs:documentation>
                                 技能是否是可防御的, 这里主要指短兵器的防御。默认都是可防御的。
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="defendSkillTags" type="xs:string" use="optional">
+                    <xs:attribute name="defendSkillTags" type="xs:string" use="required">
                         <xs:annotation>
                             <xs:documentation>
                                 指定防守技能的标记，格式 : "skillTag1,skillTag2,...", 这表示当这个技能在执行时，如果目标角色正在执行属

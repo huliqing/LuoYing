@@ -95,6 +95,7 @@ public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> im
         super.initialize();
         actorModule.addActorListener(this);
         skillModule.addSkillListener(this);
+        recacheSkill();
     }
     
     @Override
@@ -115,10 +116,6 @@ public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> im
 
     @Override
     public void onActorTargetLocked(Actor sourceBeLocked, Actor other) {
-//        if (Config.debug) {
-//            LOG.log(Level.INFO, "onActorTargetLocked: source={0}, other={1}", new Object[] {sourceBeLocked.getData().getId(), other.getData().getId()});
-//        }
-        
         if (!hasUsableSkill) 
             return;
         
@@ -192,8 +189,9 @@ public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> im
     
     @Override
     public void onSkillStart(Skill skill) {
+        
         if (Config.debug) {
-            LOG.log(Level.INFO, "defendActorLogic==> onSkillStart, actor={0}, skill={1}", new Object[] {skill.getActor().getData().getName(), skill.getData().getId()});
+            LOG.log(Level.INFO, "defendActorLogic==> onSkillStart, actor={0}, skill={1}", new Object[] {skill.getActor().getData().getId(), skill.getData().getId()});
         }
         
         if (!hasUsableSkill) 
@@ -238,8 +236,8 @@ public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> im
     }
     
     private boolean doDefend() {
-        LOG.log(Level.INFO, "defendActorLogic==> doDefend actor={0} defendRateAttribute={1}, defendSkill size={2}"
-                , new Object[] {actor.getData().getId(), defendRateAttribute, defendSkills.size()});
+//        LOG.log(Level.INFO, "defendActorLogic==> doDefend actor={0} defendRateAttribute={1}, defendSkill size={2}"
+//                , new Object[] {actor.getData().getId(), defendRateAttribute, defendSkills.size()});
         if (defendRateAttribute != null && defendSkills.size() > 0) {
             float defendRate = attributeService.getNumberAttributeValue(actor, defendRateAttribute, 0);
             if(defendRate >= FastMath.nextRandomFloat()) {
@@ -252,8 +250,8 @@ public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> im
     }
     
     private boolean doDuck() {
-        LOG.log(Level.INFO, "defendActorLogic==> doDuck actor={0} duckRateAttribute={1}, duckSkill size={2}"
-                , new Object[] {actor.getData().getId(), duckRateAttribute, duckSkills.size()});
+//        LOG.log(Level.INFO, "defendActorLogic==> doDuck actor={0} duckRateAttribute={1}, duckSkill size={2}"
+//                , new Object[] {actor.getData().getId(), duckRateAttribute, duckSkills.size()});
         if (duckRateAttribute != null && duckSkills.size() > 0) {
             float duckRate = attributeService.getNumberAttributeValue(actor, defendRateAttribute, 0);
             if (duckRate >= FastMath.nextRandomFloat()) {
@@ -269,20 +267,25 @@ public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> im
     protected void doLogic(float tpf) {
         // 技能重新缓存技能
         if (needRecacheSkill) {
-            if (defendSkills != null) {
-                defendSkills.clear();
-            }
-            if (duckSkills != null) {
-                duckSkills.clear();
-            }
-            defendSkills = getSkillModule().getSkillByTags(defendSkillTags, defendSkills);
-            duckSkills = getSkillModule().getSkillByTags(duckSkillTags, duckSkills);
-            hasUsableSkill = (defendSkills != null && defendSkills.size() > 0) || (duckSkills != null && duckSkills.size() > 0);
-            needRecacheSkill = false;
-            
-            LOG.log(Level.INFO, "needRecache defend/duck Skill, actor={0}, defendSkills={1}, duckSkills={2}"
-                    , new Object[]{actor.getData().getId(), defendSkills.size(), duckSkills.size()});
+            recacheSkill();
         }
+    }
+    
+    // 重装缓存技能
+    private void recacheSkill() {
+        if (defendSkills != null) {
+            defendSkills.clear();
+        }
+        if (duckSkills != null) {
+            duckSkills.clear();
+        }
+        defendSkills = getSkillModule().getSkillByTags(defendSkillTags, defendSkills);
+        duckSkills = getSkillModule().getSkillByTags(duckSkillTags, duckSkills);
+        hasUsableSkill = (defendSkills != null && defendSkills.size() > 0) || (duckSkills != null && duckSkills.size() > 0);
+        needRecacheSkill = false;
+
+//        LOG.log(Level.INFO, "needRecache defend/duck Skill, actor={0}, defendSkills={1}, duckSkills={2}"
+//                , new Object[]{actor.getData().getId(), defendSkills.size(), duckSkills.size()});
     }
 
     private SkillModule getSkillModule() {
