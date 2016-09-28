@@ -100,20 +100,32 @@ public class AttributeModule extends AbstractModule<ModuleData> {
     
     /**
      * 使用”id“来获取指定的属性，如果找不到则返回null.
+     * @param <T>
      * @param attrId
      * @return 
      */
-    public Attribute getAttributeById(String attrId) {
-        return store.getAttributeById(attrId);
+    public <T extends Attribute> T getAttributeById(String attrId) {
+        return (T) store.getAttributeById(attrId);
     }
 
     /**
-     * 使用”名称“来查找指定的属性，如果找不到则返回null.
+     * 使用”名称“来查找指定的属性，如果找不到或者指定的属性类型不匹配则返回null.
+     * @param <T>
      * @param attrName
+     * @param type 如果不为null, 则找到的属性必须符合这个类型，否则返回null.
      * @return 
      */
-    public Attribute getAttributeByName(String attrName) {
-        return store.getAttributeByName(attrName);
+    public <T extends Attribute> T getAttributeByName(String attrName, Class<T> type) {
+        Attribute attribute = store.getAttributeByName(attrName);
+        if (attribute == null) {
+            return null;
+        }
+        if (type != null && !type.isAssignableFrom(attribute.getClass())) {
+            LOG.log(Level.WARNING, "Attribute {0} is not type of {1}, actorId={2}"
+                    , new Object[] {attrName, type.getName(), actor.getData().getId()});
+            return null;
+        }
+        return (T) attribute;
     }
     
     /**
@@ -124,6 +136,10 @@ public class AttributeModule extends AbstractModule<ModuleData> {
         return store.getAttributes();
     }
     
+    /**
+     * 添加属性侦听器
+     * @param attributeListener 
+     */
     public void addListener(AttributeListener attributeListener) {
         if (listeners == null) {
             listeners = new ArrayList<AttributeListener>();
@@ -133,6 +149,11 @@ public class AttributeModule extends AbstractModule<ModuleData> {
         }
     }
     
+    /**
+     * 移除指定的属性侦听器
+     * @param attributeListener
+     * @return 
+     */
     public boolean removeListener(AttributeListener attributeListener) {
         return listeners != null && listeners.remove(attributeListener);
     }
@@ -144,12 +165,9 @@ public class AttributeModule extends AbstractModule<ModuleData> {
      * @param value 
      */
     public void addNumberAttributeValue(String attrName, float value) {
-        Attribute attr = getAttributeByName(attrName);
-        if (attr instanceof NumberAttribute) {
-            ((NumberAttribute)attr).add(value);
-        } else {
-            LOG.log(Level.WARNING, "Could not addNumberAttributeValue, attrName is not a NumberAttribute,"
-                    + " actorId={0}, attrName={1}, value={2}", new Object[] {actor.getData().getId(), attrName, value});
+        NumberAttribute attr = getAttributeByName(attrName, NumberAttribute.class);
+        if (attr != null) {
+            attr.add(value);
         }
     }
     
@@ -161,9 +179,9 @@ public class AttributeModule extends AbstractModule<ModuleData> {
      * @return 
      */
     public float getNumberAttributeValue(String attrName, float defValue) {
-        Attribute attr = getAttributeByName(attrName);
-        if (attr instanceof NumberAttribute) {
-            return ((NumberAttribute) attr).floatValue();
+        NumberAttribute attr = getAttributeByName(attrName, NumberAttribute.class);
+        if (attr != null) {
+            return attr.floatValue();
         }
         return defValue;
     }

@@ -107,13 +107,13 @@
     <attributeLevelFloat id="attributeMagicSpeed" name="attributeMagicSpeed" levelEl="elLevelAttrMagicSpeed" />
     
     <!--防御概率:[0.0~1.0], 1.0为百分百防御-->
-    <attributeLevelFloat id="attributeDefenceRate" name="attributeDefenceRate" />
+    <attributeLevelFloat id="attributeDefenceRate" name="attributeDefenceRate" levelEl="elLevelAttrDefenceRate" />
     
     <!--躲闪概率:[0.0~1.0]，1.0为百分百躲闪-->
-    <attributeLevelFloat id="attributeDuckRate" name="attributeDuckRate" />
+    <attributeLevelFloat id="attributeDuckRate" name="attributeDuckRate" levelEl="elLevelAttrDuckRate" />
     
     <!--鬼魅能力:[0.0~1.0] -->
-    <attributeLevelFloat id="attributeGhostRate" name="attributeGhostRate" />
+    <attributeLevelFloat id="attributeGhostRate" name="attributeGhostRate" levelEl="elLevelAttrGhostRate" />
     
     <!--视力:影响角色的侦察范围-->
     <attributeInteger id="attributeVision" name="attributeVision" value="30" />

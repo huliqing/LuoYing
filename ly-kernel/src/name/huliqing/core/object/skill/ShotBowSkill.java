@@ -127,12 +127,11 @@ public class ShotBowSkill extends ShotSkill {
             , float animFullTime, float animStartTime) {
         shotDir = 1; // horizontal
         if ((this.animationShotDown != null || this.animationShotUp != null) 
-//                && actorService.getTarget(actor) != null
-                && actorModule.getTarget() > 0
+                && actorModule.getTarget() != null
                 ) {
             
             // 目标角色
-            Actor target = playService.findActor(actorModule.getTarget());
+            Actor target = actorModule.getTarget();
             
             TempVars tv = TempVars.get();
             Vector3f viewPos = tv.vect1;

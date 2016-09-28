@@ -23,8 +23,6 @@ import name.huliqing.core.data.ActorData;
 import name.huliqing.core.enums.Sex;
 import name.huliqing.core.view.talk.Talk;
 import name.huliqing.core.object.Loader;
-import name.huliqing.core.object.attribute.Attribute;
-import name.huliqing.core.object.attribute.NumberAttribute;
 import name.huliqing.core.view.talk.SpeakManager;
 import name.huliqing.core.view.talk.TalkManager;
 import name.huliqing.core.xml.DataFactory;
@@ -250,15 +248,16 @@ public class ActorServiceImpl implements ActorService {
         TalkManager.getInstance().startTalk(talk);
     }
 
-    @Override
-    public Vector3f getLocalToWorld(Actor actor, Vector3f localPos, Vector3f store) {
-        if (store == null) {
-            store = new Vector3f();
-        }
-        actor.getSpatial().getWorldRotation().mult(localPos, store);
-        store.addLocal(actor.getSpatial().getWorldTranslation());
-        return store;
-    }
+    // remove201609228
+//    @Override
+//    public Vector3f getLocalToWorld(Actor actor, Vector3f localPos, Vector3f store) {
+//        if (store == null) {
+//            store = new Vector3f();
+//        }
+//        actor.getSpatial().getWorldRotation().mult(localPos, store);
+//        store.addLocal(actor.getSpatial().getWorldTranslation());
+//        return store;
+//    }
 
     // remove20160925
 //    @Override
@@ -292,7 +291,7 @@ public class ActorServiceImpl implements ActorService {
         if (actorModule == null)
             return;
         
-        actorModule.setTarget(target != null ? target.getData().getUniqueId() : -1);
+        actorModule.setTarget(target);
     }
 
     @Override
@@ -301,17 +300,7 @@ public class ActorServiceImpl implements ActorService {
         if (actorModule == null)
             return null;
         
-        long targetId = actorModule.getTarget();
-        if (targetId <= 0)
-            return null;
-        
-        List<Actor> actors = LY.getPlayState().getActors();
-        for (Actor a : actors) {
-            if (a.getData().getUniqueId() == targetId) {
-                return a;
-            }
-        }
-        return null;
+        return actorModule.getTarget();
     }
 
     @Override
@@ -335,38 +324,8 @@ public class ActorServiceImpl implements ActorService {
     }
 
     @Override
-    public void hitNumberAttribute(Actor target, Actor source, String numberAttribute, float hitValue) {
-        Attribute attr = attributeService.getAttributeByName(target, numberAttribute);
-        if (!(attr instanceof NumberAttribute)) {
-            return;
-        }
-        boolean deadBefore = isDead(target);
-        attributeService.addNumberAttributeValue(target, numberAttribute, hitValue);
-        boolean killed = !deadBefore && isDead(target);
-        
-        // 触发"被攻击者(source)"的角色侦听器
-        // "被伤害","被杀死"侦听
-        List<ActorListener> sourceListeners = getActorModule(target).getActorListeners();
-        if (sourceListeners != null) {
-            for (ActorListener l : sourceListeners) {
-                l.onActorHit(target, source, numberAttribute, hitValue);
-                if (killed) {
-                    l.onActorKilled(target, source);
-                }
-            }
-        }
-        
-        // 触发"攻击者(attacker)"的角色侦听器
-        // 当攻击者“杀死”目标时，要让“攻击者”知道.但有时候攻击者不是一个角色
-        // 或者不是任何一个"存在",所以source可能为null.
-        if (killed && source != null && source.isInitialized()) {
-            List<ActorListener> attackerListeners = getActorModule(source).getActorListeners();
-            if (attackerListeners != null) {
-                for (ActorListener al : attackerListeners) {
-                    al.onActorKill(source, target);
-                }
-            }
-        }
+    public void hitNumberAttribute(Actor beHit, Actor hitter, String hitAttribute, float hitValue) {
+        getActorModule(beHit).applyHitByTarget(hitter, hitAttribute, hitValue);
     }
 
     @Override
@@ -384,16 +343,6 @@ public class ActorServiceImpl implements ActorService {
         if (module != null) {
             module.setLevel(level);
         }
-    }
-
-    @Override
-    public boolean isMoveable(Actor actor) {
-        return getActorModule(actor).isMovable();
-    }
-    
-    @Override
-    public float getViewDistance(Actor actor) {
-        return actor.getModule(ActorModule.class).getViewDistance();
     }
     
     @Override

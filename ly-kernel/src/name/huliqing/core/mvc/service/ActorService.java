@@ -127,23 +127,14 @@ public interface ActorService extends Inject {
      */
     void talk(Talk talk);
     
-    /**
-     * 将角色本地坐标系中的点转换为世界坐标系中的点。
-     * @param actor 目标角色
-     * @param localPos 存在于角色坐标系中的位置
-     * @param store 存放结果,store可与localPos是同一个实例
-     * @return 返回localPos在世界坐标系中的位置
-     */
-    Vector3f getLocalToWorld(Actor actor, Vector3f localPos, Vector3f store);
-    
 //    /**
-//     * 检查是否存在指定的骨骼动画,如果没有则偿试载入该动画。如果找不到动画文件
-//     * 则返回false, 如果已经存在动画或载入动画成功则返回true.
-//     * @param actor　角色
-//     * @param animName　动画名称
-//     * @return 
+//     * 将角色本地坐标系中的点转换为世界坐标系中的点。
+//     * @param actor 目标角色
+//     * @param localPos 存在于角色坐标系中的位置
+//     * @param store 存放结果,store可与localPos是同一个实例
+//     * @return 返回localPos在世界坐标系中的位置
 //     */
-//    boolean checkAndLoadAnim(Actor actor, String animName);
+//    Vector3f getLocalToWorld(Actor actor, Vector3f localPos, Vector3f store);
     
     /**
      * 杀死一个角色
@@ -195,13 +186,13 @@ public interface ActorService extends Inject {
     
     /**
      * 操作角色的某个属性.
-     * @param target 接受hit的目标角色,或者说是被击中的角色。
-     * @param source 攻击者，或者施放hit动作的角色。
-     * @param numberAttribute hit的目标属性名称,必须是NumberAttribute属性，否则什么也不做
+     * @param beHit 接受hit的目标角色,或者说是被击中的角色。
+     * @param hitter 攻击者，或者施放hit动作的角色。
+     * @param hitAttribute hit的目标属性名称,必须是NumberAttribute属性，否则什么也不做
      * @param hitValue hit值,这个值将直接执行在target角色的属性上，也即不受角色
      * 任何其它属性的影响。
      */
-    void hitNumberAttribute(Actor target, Actor source, String numberAttribute, float hitValue);
+    void hitNumberAttribute(Actor beHit, Actor hitter, String hitAttribute, float hitValue);
     
     /**
      * 获取角色等级
@@ -217,28 +208,20 @@ public interface ActorService extends Inject {
      */
     void setLevel(Actor actor, int level);
     
-    // remove20160910
+    // remove20160928
 //    /**
-//     * 获取指定等级需要的经验值（XP)
+//     * 判断目标角色是否是可移动的
 //     * @param actor
-//     * @param level
 //     * @return 
 //     */
-//    int getLevelXp(Actor actor, int level);
-    
-    /**
-     * 判断目标角色是否是可移动的
-     * @param actor
-     * @return 
-     */
-    boolean isMoveable(Actor actor);
-    
-    /**
-     * 获取角色视力，如果没有配置则返回0.
-     * @param actor
-     * @return 
-     */
-    float getViewDistance(Actor actor);
+//    boolean isMoveable(Actor actor);
+//    
+//    /**
+//     * 获取角色视力，如果没有配置则返回0.
+//     * @param actor
+//     * @return 
+//     */
+//    float getViewDistance(Actor actor);
     
     /**
      * 添加角色侦听器

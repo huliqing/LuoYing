@@ -14,7 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.ModuleData;
-import name.huliqing.core.mvc.service.AttributeService;
+import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.attribute.Attribute;
 import name.huliqing.core.object.attribute.BooleanAttribute;
@@ -27,10 +27,10 @@ import name.huliqing.core.object.attribute.ValueChangeListener;
  * @param <T>
  */
 public class ActorModule<T extends ModuleData> extends AbstractModule<T> implements ValueChangeListener<Number> {
-
     private static final Logger LOG = Logger.getLogger(ActorModule.class.getName());
+    private final PlayService playService = Factory.get(PlayService.class);
     
-    private final AttributeService attributeService = Factory.get(AttributeService.class);
+    private AttributeModule attributeModule;
 
     private BetterCharacterControlWrap innerControl;
     private float radius = 0.4f;
@@ -132,31 +132,32 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     @Override
     public void initialize(Actor actor) {
         super.initialize(actor);
+        attributeModule = actor.getModule(AttributeModule.class);
         
-        lifeAttribute = attributeService.getAttributeByName(actor, bindLifeAttribute);
+        lifeAttribute = attributeModule.getAttributeByName(bindLifeAttribute, NumberAttribute.class);
         if (lifeAttribute == null) {
             LOG.log(Level.WARNING, "Life attribute not found, by lifeAttributeName={0}, actorId={1}"
                     , new Object[] {bindLifeAttribute, actor.getData().getId()});
         }
-        groupAttribute = attributeService.getAttributeByName(actor, bindGroupAttribute);
-        teamAttribute = attributeService.getAttributeByName(actor, bindTeamAttribute);
-        viewAttribute = attributeService.getAttributeByName(actor, bindViewAttribute);
+        groupAttribute = attributeModule.getAttributeByName(bindGroupAttribute, NumberAttribute.class);
+        teamAttribute = attributeModule.getAttributeByName(bindTeamAttribute, NumberAttribute.class);
+        viewAttribute = attributeModule.getAttributeByName(bindViewAttribute, NumberAttribute.class);
         // 角色的当前目标属性
         // 注：这里要给targetAttribute加一个侦听器，以便targetAttribute在补外部改变的时候可以触发侦听器
-        targetAttribute = attributeService.getAttributeByName(actor, bindTargetAttribute);
+        targetAttribute = attributeModule.getAttributeByName(bindTargetAttribute, NumberAttribute.class);
         targetAttribute.addListener(this);
         // 角色当前的跟随目标
-        followTargetAttribute = attributeService.getAttributeByName(actor, bindFollowTargetAttribute);
-        ownerAttribute = attributeService.getAttributeByName(actor, bindOwnerAttribute);
+        followTargetAttribute = attributeModule.getAttributeByName(bindFollowTargetAttribute, NumberAttribute.class);
+        ownerAttribute = attributeModule.getAttributeByName(bindOwnerAttribute, NumberAttribute.class);
         // 角色质量
         // 注：角色质量可能被外部改变，所以要监听,当改变时要触发innerControl更新
-        massAttribute = attributeService.getAttributeByName(actor, bindMassAttribute);
+        massAttribute = attributeModule.getAttributeByName(bindMassAttribute, NumberAttribute.class);
         massAttribute.addListener(this);
         
-        movableAttribute = attributeService.getAttributeByName(actor, bindMovableAttribute);
-        rotatableAttribute = attributeService.getAttributeByName(actor, bindRotatableAttribute);
-        essentialAttribute = attributeService.getAttributeByName(actor, bindEssentialAttribute);
-        livingAttribute = attributeService.getAttributeByName(actor, bindLivingAttribute);
+        movableAttribute = attributeModule.getAttributeByName(bindMovableAttribute, BooleanAttribute.class);
+        rotatableAttribute = attributeModule.getAttributeByName(bindRotatableAttribute, BooleanAttribute.class);
+        essentialAttribute = attributeModule.getAttributeByName(bindEssentialAttribute, BooleanAttribute.class);
+        livingAttribute = attributeModule.getAttributeByName(bindLivingAttribute, BooleanAttribute.class);
         
         // 控制器
         this.innerControl = new BetterCharacterControlWrap(radius, height, getMass());
@@ -263,19 +264,12 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     }
     
     /**
-     * 获取角色的物品帧听器
-     * @return 
-     */
-    public List<ActorListener> getActorListeners() {
-        return actorListeners;
-    }
-    
-    /**
      * 杀死角色
      */
     public void kill() {
         if (lifeAttribute != null) {
-            lifeAttribute.setValue(0);
+//            lifeAttribute.setValue(0); // remove
+            applyHitByTarget(null, lifeAttribute.getName(), Float.MAX_VALUE);
         }
     }
     
@@ -401,23 +395,23 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     }
     
     /**
-     * 获取角色当前的目标对象的唯一ID
+     * 获取角色当前的目标,如果没有或者目标角色不存在则返回null.
      * @return 
      */
-    public long getTarget() {
+    public Actor getTarget() {
         if (targetAttribute != null) {
-            return targetAttribute.longValue();
+            return playService.findActor(targetAttribute.longValue());
         }
-        return 0;
+        return null;
     }
     
     /**
      * 设置当前角色的目标对象
      * @param target 目标对象的唯一ID
      */
-    public void setTarget(long target) {
+    public void setTarget(Actor target) {
         if (targetAttribute != null) {
-            targetAttribute.setValue(target);
+            targetAttribute.setValue(target != null ? target.getData().getUniqueId() : -1L);
         }
     }
     
@@ -426,20 +420,19 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
         // 当targetAttribute发生变化时触发侦听器
         if (attribute == targetAttribute) {
             // 释放旧目标的listener
-            long oldTargetId = oldValue.longValue();
-            if (oldTargetId > 0) {
-                if (actorListeners != null && actorListeners.isEmpty()) {
-                    for (int i = 0; i < actorListeners.size(); i++) {
-                        actorListeners.get(i).onActorReleased(oldTargetId, actor);
-                    }
+            Actor oldTarget = playService.findActor(oldValue.longValue());
+            if (oldTarget != null) {
+                ActorModule oldTargetActorModule = oldTarget.getModule(ActorModule.class);
+                if (oldTargetActorModule != null) {
+                    oldTargetActorModule.notifyActorTargetReleasedListener(actor);
                 }
             }
             // 锁定新目标的listener.
-            if (newValue.longValue() > 0) {
-                if (actorListeners != null && !actorListeners.isEmpty()) {
-                    for (int i = 0; i < actorListeners.size(); i++) {
-                        actorListeners.get(i).onActorLocked(newValue.longValue(), actor);
-                    }
+            Actor newTarget = playService.findActor(newValue.longValue());
+            if (newTarget != null) {
+                ActorModule newTargetActorModule = newTarget.getModule(ActorModule.class);
+                if (newTargetActorModule != null) {
+                    newTargetActorModule.notifyActorTargetLockedListener(actor);
                 }
             }
             return;
@@ -604,4 +597,95 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
             rotatableAttribute.setValue(rotatable);
         }
     }
+    
+    /**
+     * 执行“让当前角色被另一个角色击中的逻辑”，注：属性必须是NumberAttribute类型，否则什么也不做
+     * @param hitter 发起hit的角色, hitter可以为null
+     * @param hitAttribute 属性名称
+     * @param hitValue apply到指定属性的值，可正可负
+     */
+    public void applyHitByTarget(Actor hitter, String hitAttribute, float hitValue) {
+        NumberAttribute attr = attributeModule.getAttributeByName(hitAttribute, NumberAttribute.class);
+        if (attr == null) {
+            return;
+        }
+        boolean deadBefore = isDead();
+        attr.add(hitValue);
+        boolean deadAfter = isDead();
+        // 这个killed用来判断角色是否由于这次攻击而死亡。
+        boolean killed = !deadBefore && deadAfter;
+        
+        // 通过侦听器：当前角色被另一个家伙击中
+        notifyActorHitByTarget(hitter, hitAttribute, hitValue, killed);
+        
+        // 通知攻击者，告诉攻击者：你已经击中一个目标。
+        if (hitter != null) {
+            ActorModule hitterActorModule = hitter.getModule(ActorModule.class);
+            hitterActorModule.notifyActorHitOtherListener(actor, hitAttribute, hitValue, killed);
+        }
+    }
+    
+    /**
+     * 通知侦听器，让侦听器知道当前角色(actor)已经被某一个目标(lockedByTarget)锁定。
+     * @param lockedByTarget 
+     */
+    private void notifyActorTargetLockedListener(Actor lockedByTarget) {
+        LOG.log(Level.INFO, "notifyActorTargetLockedListener, sourceBeLocked={0}, lockedByTarget={1}"
+                , new Object[] {actor.getData().getId(), lockedByTarget.getData().getId()});
+        if (actorListeners != null) {
+            for (ActorListener lis : actorListeners) {
+                lis.onActorTargetLocked(actor, lockedByTarget);
+            }
+        }
+    }
+    
+    /**
+     * 通知侦听器，让侦听器知道当前角色(actor)已经被某一个目标(releasedByTarget)释放锁定。
+     * @param releasedByTarget 
+     */
+    private void notifyActorTargetReleasedListener(Actor releasedByTarget) {
+        LOG.log(Level.INFO, "notifyActorTargetReleasedListener, sourceBeReleased={0}, releasedByTarget={1}"
+                , new Object[] {actor.getData().getId(), releasedByTarget.getData().getId()});
+        if (actorListeners != null) {
+            for (ActorListener lis : actorListeners) {
+                lis.onActorTargetReleased(actor, releasedByTarget);
+            }
+        }
+    }
+    
+    /**
+     * 通知侦听器，让侦听器知道当前角色Hit了另一个目标角色.<br>
+     * 注：这个方法只由ActorModule内部调用。
+     * @param actorBeHit 被击中的角色
+     * @param hitAttribute
+     * @param hitValue
+     * @param killedByHit
+     */
+    private void notifyActorHitOtherListener(Actor actorBeHit, String hitAttribute, float hitValue, boolean killedByHit) {
+        LOG.log(Level.INFO, "notifyActorHitOtherListener, actorBeHit={0}, hitAttribute={1}, hitValue={2}, killedByHit={3}"
+                , new Object[] {actorBeHit.getData().getId(), hitAttribute, hitValue, killedByHit});
+        if (actorListeners != null) {
+            for (ActorListener l : actorListeners) {
+                l.onActorHitTarget(actor, actorBeHit, hitAttribute, hitValue, killedByHit);
+            }
+        }
+    }
+    
+    /**
+     * 通知侦听器，让侦听器知道当前角色被某一个目标角色击中
+     * @param hitter
+     * @param hitAttribute
+     * @param hitValue
+     * @param killedByHit 
+     */
+    private void notifyActorHitByTarget(Actor hitter, String hitAttribute, float hitValue, boolean killedByHit) {
+        LOG.log(Level.INFO, "notifyActorHitByTarget, hitter={0}, hitAttribute={1}, hitValue={2}, killedByHit={3}"
+                , new Object[] {hitter != null ? hitter.getData().getId() : null, hitAttribute, hitValue, killedByHit});
+        if (actorListeners != null) {
+            for (ActorListener l : actorListeners) {
+                l.onActorHitByTarget(actor, hitter, hitAttribute, hitValue, killedByHit);
+            }
+        }
+    }
+    
 }

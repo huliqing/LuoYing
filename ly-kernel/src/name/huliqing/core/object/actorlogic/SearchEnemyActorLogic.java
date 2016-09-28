@@ -10,6 +10,7 @@ import name.huliqing.core.data.ActorLogicData;
 import name.huliqing.core.mvc.network.ActorNetwork;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.PlayService;
+import name.huliqing.core.object.module.ActorModule;
 import name.huliqing.core.object.module.LogicModule;
 
 /**
@@ -21,8 +22,10 @@ import name.huliqing.core.object.module.LogicModule;
  */
 public class SearchEnemyActorLogic<T extends ActorLogicData> extends ActorLogic<T> {
     private final PlayService playService = Factory.get(PlayService.class);
-    private final ActorService actorService = Factory.get(ActorService.class);;
-    private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);;
+    private final ActorService actorService = Factory.get(ActorService.class);
+    private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
+    
+    private ActorModule actorModule;
     private LogicModule logicModule;
     
     // 自动频率，
@@ -37,38 +40,14 @@ public class SearchEnemyActorLogic<T extends ActorLogicData> extends ActorLogic<
         this.maxInterval = data.getProto().getAsFloat("maxInterval", maxInterval);
         this.minInterval = data.getProto().getAsFloat("minInterval", minInterval);
     }
-
+    
     @Override
-    public void initialize() {
-        super.initialize();
+    public void setActor(Actor actor) {
+        super.setActor(actor); 
+        actorModule = actor.getModule(ActorModule.class);
         logicModule = actor.getModule(LogicModule.class);
     }
-
-    // remove20160922,不需要
-//    public boolean isAutoInterval() {
-//        return autoInterval;
-//    }
-//
-//    public void setAutoInterval(boolean autoInterval) {
-//        this.autoInterval = autoInterval;
-//    }
-//
-//    public float getMaxInterval() {
-//        return maxInterval;
-//    }
-//
-//    public void setMaxInterval(float maxInterval) {
-//        this.maxInterval = maxInterval;
-//    }
-//
-//    public float getMinInterval() {
-//        return minInterval;
-//    }
-//
-//    public void setMinInterval(float minInterval) {
-//        this.minInterval = minInterval;
-//    }
-    
+  
     @Override
     protected void doLogic(float tpf) {
         // 只有打开了自动侦察功能才执行逻辑
@@ -82,7 +61,7 @@ public class SearchEnemyActorLogic<T extends ActorLogicData> extends ActorLogic<
         if (target == null || actorService.isDead(target) || !actorService.isEnemy(target, actor) 
                 || !playService.isInScene(target)) {
             
-            Actor enemy = actorService.findNearestEnemyExcept(actor, actorService.getViewDistance(actor), null);
+            Actor enemy = actorService.findNearestEnemyExcept(actor, actorModule.getViewDistance(), null);
             if (enemy != null) {
                 actorNetwork.setTarget(actor, enemy);
             }

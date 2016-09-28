@@ -10,7 +10,6 @@ import name.huliqing.core.constants.ResConstants;
 import name.huliqing.core.enums.MessageType;
 import name.huliqing.core.mvc.network.ActorNetwork;
 import name.huliqing.core.mvc.network.PlayNetwork;
-import name.huliqing.core.mvc.network.ProtoNetwork;
 import name.huliqing.core.mvc.network.SkillNetwork;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.AttributeService;

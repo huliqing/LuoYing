@@ -91,6 +91,9 @@ xs:time
                     <xs:attribute name="collisionSounds" type="xs:string" use="required">
                         <xs:annotation><xs:documentation>材质碰撞声效，格式："mat1|mat2|soundId1,mat3|mat4|soundId2,..."</xs:documentation></xs:annotation>
                     </xs:attribute>
+                    <xs:attribute name="collisionEffects" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>材质碰撞特效，格式："mat1|mat2|effect1,mat3|mat4|effect2,..."</xs:documentation></xs:annotation>
+                    </xs:attribute>
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>

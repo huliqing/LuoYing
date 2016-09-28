@@ -27,19 +27,11 @@ import name.huliqing.core.object.skill.Walk;
  * @author huliqing
  */
 public class SkillServiceImpl implements SkillService {
-    private final static Logger LOG = Logger.getLogger(SkillServiceImpl.class.getName());
+//    private final static Logger LOG = Logger.getLogger(SkillServiceImpl.class.getName());
 
-    private AttributeService attributeService;
-    private ElService elService;
-    private PlayService playService;
-//    private ActorService actorService;
-    
     @Override
     public void inject() {
-        attributeService = Factory.get(AttributeService.class);
-        elService = Factory.get(ElService.class);
-        playService = Factory.get(PlayService.class);
-//        actorService = Factory.get(ActorService.class);
+        // ignore
     }
 
     @Override
@@ -162,29 +154,6 @@ public class SkillServiceImpl implements SkillService {
         return null;
     }
    
-    // remove20160919
-//    @Override
-//    public Skill getPlayingSkill(Actor actor, SkillType skillType) {
-//        SkillModule module = actor.getModule(SkillModule.class);
-//        if (module != null) {
-//            for (Skill skill : module.getRunningSkills()) {
-//                if (skill.getSkillType() == skillType) {
-//                    return skill;
-//                }
-//            }
-//        }
-//        return null;
-//    }
-
-//    @Override
-//    public long getPlayingSkillStates(Actor actor) {
-//        SkillModule module = actor.getModule(SkillModule.class);
-//        if (module != null) {
-//            return module.getRunningSkillStates();
-//        }
-//        return 0;
-//    }
-    
     @Override
     public void addSkillListener(Actor actor, SkillListener skillListener) {
         SkillModule module = actor.getModule(SkillModule.class);

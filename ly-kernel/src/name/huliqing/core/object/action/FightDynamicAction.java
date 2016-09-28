@@ -200,7 +200,7 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
             return;
         }
         
-//        if (actor.getData().getName().equals("樱")) {
+//        if (actor.getData().getId().equals("sinbad")) {
 //            System.out.println("测试。。。");
 //        }
         
@@ -220,7 +220,7 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
             if (!allowFollow || !actorModule.isMovable()) {
                 
                 // 刻偿试为当前角色查找一次敌人，以避免SearchEnemyLogic的延迟
-                Actor newTarget = actorService.findNearestEnemyExcept(actor, actorService.getViewDistance(actor), enemy);
+                Actor newTarget = actorService.findNearestEnemyExcept(actor, actorModule.getViewDistance(), enemy);
                 if (newTarget != null) {
                     actorNetwork.setTarget(actor, newTarget);
                     setEnemy(newTarget);
@@ -239,7 +239,7 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
                     followTimeUsed = 0;
                     
                     // 刻偿试为当前角色查找一次敌人，以避免SearchEnemyLogic的延迟
-                    Actor newTarget = actorService.findNearestEnemyExcept(actor, actorService.getViewDistance(actor), enemy);
+                    Actor newTarget = actorService.findNearestEnemyExcept(actor, actorModule.getViewDistance(), enemy);
                     if (newTarget != null) {
                         actorNetwork.setTarget(actor, newTarget);
                         setEnemy(newTarget);
@@ -276,7 +276,7 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
         skill = null;
    
         // 如果不是自动AI，则应该退出。 
-        if (!logicModule.isAutoLogic() || actorModule.getTarget() <= 0) {
+        if (!logicModule.isAutoLogic() || actorModule.getTarget() == null) {
             end();
         }
     }

@@ -16,8 +16,6 @@ import name.huliqing.core.enums.MessageType;
 import name.huliqing.core.mvc.network.PlayNetwork;
 import name.huliqing.core.mvc.network.TaskNetwork;
 import name.huliqing.core.mvc.service.ActorService;
-import name.huliqing.core.mvc.service.ItemService;
-import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.TaskService;
 import name.huliqing.core.view.IconLabel;
 import name.huliqing.core.manager.ResourceManager;
@@ -137,26 +135,27 @@ public class CollectTask<T extends TaskData> extends AbstractTask<T> implements 
 
     // ignore
     @Override
-    public void onActorLocked(long source, Actor other) {}
+    public void onActorTargetLocked(Actor source, Actor other) {}
     
     // ignore
     @Override
-    public void onActorReleased(long source, Actor other) {}
+    public void onActorTargetReleased(Actor source, Actor other) {}
 
     // ignore
     @Override
-    public void onActorHit(Actor source, Actor attacker, String hitAttribute, float hitValue) {}
+    public void onActorHitByTarget(Actor source, Actor attacker, String hitAttribute, float hitValue, boolean killedByHit) {}
 
     @Override
-    public void onActorKill(Actor source, Actor target) {
-        // 两种情况可以不再需要“收集任务物品”的逻辑
+    public void onActorHitTarget(Actor sourceHitter, Actor beHit, String hitAttribute, float hitValue, boolean killedByHit) {
+        // 几种情况可以不再需要“收集任务物品”的逻辑
         // 1.如果任务已经完成并且已经提交
         // 2.如果任务已经收集完毕但未提交
-        if (data.isCompletion() || collected)
+        // 3.如果目标不是被当前角色杀死的
+        if (data.isCompletion() || collected || !killedByHit)
             return;
         
         // 如果打死的目标不是指定的任务目标则不处理
-        String targetId = target.getData().getId();
+        String targetId = beHit.getData().getId();
         if (targets == null || !targets.contains(targetId)) {
             return;
         }
@@ -204,10 +203,6 @@ public class CollectTask<T extends TaskData> extends AbstractTask<T> implements 
             goldPanel.update(actor);
         }
     }
-
-    // ignore
-    @Override
-    public void onActorKilled(Actor source, Actor target) {}
     
     private class ItemWrap {
         /** 需要收集的物品的ID */

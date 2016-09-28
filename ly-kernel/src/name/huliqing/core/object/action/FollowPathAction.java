@@ -22,6 +22,8 @@ import name.huliqing.core.mvc.network.SkillNetwork;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.SkillService;
+import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.module.ActorModule;
 import name.huliqing.core.object.module.SkillModule;
 import name.huliqing.core.object.skill.Skill;
 import name.huliqing.core.utils.DebugDynamicUtils;
@@ -37,6 +39,8 @@ public class FollowPathAction extends AbstractAction implements FollowAction {
     private final ActorService actorService = Factory.get(ActorService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
+    
+    private ActorModule actorModule;
     private SkillModule skillModule;
     
     // 被跟随的目标
@@ -96,12 +100,17 @@ public class FollowPathAction extends AbstractAction implements FollowAction {
         this.debug = ad.getAsBoolean("debug", debug);
         finder = playService.createPathfinder();
     }
+
+    @Override
+    public void setActor(Actor actor) {
+        super.setActor(actor);
+        actorModule = actor.getModule(ActorModule.class);
+        skillModule = actor.getModule(SkillModule.class);
+    }
     
     @Override
     public void initialize() {
         super.initialize();
-        skillModule = actor.getModule(SkillModule.class);
-        
         rayDetour.setActor(actor);
         rayDetour.setAutoFacing(autoFacing);
         timeDetour.setActor(actor);
@@ -140,7 +149,7 @@ public class FollowPathAction extends AbstractAction implements FollowAction {
      */
     protected void doFollow(Spatial target, float tpf) {
         // 如果角色是不可移动的，则直接返回不处理逻辑
-        if (!actorService.isMoveable(actor) || runSkill == null) {
+        if (!actorModule.isMovable() || runSkill == null) {
             end();
             return;
         }

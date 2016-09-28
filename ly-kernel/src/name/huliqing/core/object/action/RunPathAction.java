@@ -19,6 +19,8 @@ import name.huliqing.core.data.ActionData;
 import name.huliqing.core.mvc.network.SkillNetwork;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.PlayService;
+import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.module.ActorModule;
 import name.huliqing.core.object.module.SkillModule;
 import name.huliqing.core.object.skill.Skill;
 import name.huliqing.core.utils.DebugDynamicUtils;
@@ -32,6 +34,7 @@ public class RunPathAction extends AbstractAction implements RunAction{
     private final PlayService playService = Factory.get(PlayService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
+    private ActorModule actorModule;
     private SkillModule skillModule;
 
     // 需要走到的目标地址
@@ -78,6 +81,13 @@ public class RunPathAction extends AbstractAction implements RunAction{
     }
 
     @Override
+    public void setActor(Actor actor) {
+        super.setActor(actor);
+        actorModule = actor.getModule(ActorModule.class);
+        skillModule = actor.getModule(SkillModule.class);
+    }
+
+    @Override
     public void initialize() {
         super.initialize();
         skillModule = actor.getModule(SkillModule.class);
@@ -119,7 +129,7 @@ public class RunPathAction extends AbstractAction implements RunAction{
     @Override
     public void doLogic(float tpf) {
         // 如果角色是不可移动的，则直接返回不处理逻辑
-        if (!actorService.isMoveable(actor) || runSkill == null) {
+        if (!actorModule.isMovable() || runSkill == null) {
             end();
             return;
         }

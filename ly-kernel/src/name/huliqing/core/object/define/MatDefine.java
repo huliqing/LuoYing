@@ -20,8 +20,12 @@ import name.huliqing.core.data.DefineData;
 public class MatDefine extends Define {
     private static final Logger LOG = Logger.getLogger(MatDefine.class.getName());
 
+    // 质地定义列表
     private final List<String> matList = new ArrayList<String>();
+    // 质地碰撞声效
     private final Map<Long, String> collisionSounds = new HashMap<Long, String>();
+    // 质地碰撞特效
+    private final Map<Long, String> collisionEffects = new HashMap<Long, String>();
     
     @Override
     public void setData(DefineData data) {
@@ -32,7 +36,7 @@ public class MatDefine extends Define {
                 registerMat(mat);
             }
         }
-        // 声音碰撞的定义："mat1|mat2|soundId1,mat3|mat4|soundId2,..."
+        // 碰撞声音的定义："mat1|mat2|soundId1,mat3|mat4|soundId2,..."
         String[] csArr = data.getAsArray("collisionSounds");
         if (csArr != null && csArr.length > 0) {
             for (String cs : csArr) {
@@ -40,6 +44,16 @@ public class MatDefine extends Define {
                 if (arr.length < 3)
                     continue;
                 registerCollisionSound(arr[0], arr[1], arr[2]);
+            }
+        }
+        // 碰撞特效的定义："mat1|mat2|effect1,mat3|mat4|effect2,..."
+        String[] ceArr = data.getAsArray("collisionEffects");
+        if (ceArr != null && ceArr.length > 0) {
+            for (String ce : ceArr) {
+                String[] arr = ce.split("\\|");
+                if (arr.length < 3)
+                    continue;
+                registerCollisionEffect(arr[0], arr[1], arr[2]);
             }
         }
     }
@@ -100,6 +114,19 @@ public class MatDefine extends Define {
     }
     
     /**
+     * 获取两个Mat的碰撞效果(id),如果找不到则返回null.
+     * @param mat1
+     * @param mat2
+     * @return 
+     */
+    public String getCollisionEffect(int mat1, int mat2) {
+        if (mat1 < 0 || mat2 < 0)
+            return null;
+        
+        return collisionEffects.get(1L << mat1 | 1L << mat2);
+    }
+    
+    /**
      * 注册、登记一个质地(mat)类型
      * @param mat 
      */
@@ -134,8 +161,28 @@ public class MatDefine extends Define {
             LOG.log(Level.WARNING, "Mat undefined, could not register collision sounds, mat={0}", mat2);
             return;
         }
-        long key = 1L << indexMat1;
-        key |= 1L << indexMat2;
-        collisionSounds.put(key, soundId);
+        collisionSounds.put(1L << indexMat1 | 1L << indexMat2, soundId);
     }
+    
+    /**
+     * 注册一个碰撞特效, 注意：如果给定的两种质地(mat)有任何一种未定义，则该方法将什么也不做,注册将不会成功。
+     * @param mat1 质地1
+     * @param mat2 质地2
+     * @param effectId 特效id.
+     */
+    public synchronized void registerCollisionEffect(String mat1, String mat2, String effectId) {
+        int indexMat1 = getMat(mat1);
+        if (indexMat1 == -1) {
+            LOG.log(Level.WARNING, "Mat undefined, could not register collision effect, mat={0}", mat1);
+            return;
+        }
+        int indexMat2 = getMat(mat2);
+        if (indexMat2 == -1) {
+            LOG.log(Level.WARNING, "Mat undefined, could not register collision effect, mat={0}", mat2);
+            return;
+        }
+        collisionEffects.put(1L << indexMat1 | 1L << indexMat2, effectId);
+    }
+    
+    
 }

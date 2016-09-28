@@ -218,6 +218,9 @@ public class PlayServiceImpl implements PlayService {
     
     @Override
     public Actor findActor(long actorUniqueId) {
+        if (actorUniqueId <= 0) {
+            return null;
+        }
         List<Actor> actors = LY.getPlayState().getActors();
         if (actors == null || actors.isEmpty())
             return null;

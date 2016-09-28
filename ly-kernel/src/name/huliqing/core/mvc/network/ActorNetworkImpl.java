@@ -118,11 +118,6 @@ public class ActorNetworkImpl implements ActorNetwork{
     }
 
     @Override
-    public Vector3f getLocalToWorld(Actor actor, Vector3f localPos, Vector3f store) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
     public void kill(Actor actor) {
         if (!NETWORK.isClient()) {
             if (NETWORK.hasConnections()) {
@@ -208,16 +203,17 @@ public class ActorNetworkImpl implements ActorNetwork{
             actorService.setLevel(actor, level);
         }
     }
-
-    @Override
-    public boolean isMoveable(Actor actor) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public float getViewDistance(Actor actor) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+    
+//// remove20160928
+//    @Override
+//    public boolean isMoveable(Actor actor) {
+//        throw new UnsupportedOperationException("Not supported yet.");
+//    }
+//
+//    @Override
+//    public float getViewDistance(Actor actor) {
+//        throw new UnsupportedOperationException("Not supported yet.");
+//    }
 
     @Override
     public void addActorListener(Actor actor, ActorListener actorListener) {

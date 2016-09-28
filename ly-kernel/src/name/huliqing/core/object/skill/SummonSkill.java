@@ -123,12 +123,21 @@ public class SummonSkill extends AbstractSkill {
         // 召唤点不一致的问题，因为召唤角色的时间和播放效果的时间点时不一致的。
         // 当效果播放后角色可能转向，角色可能发生转向，如果后续再计算召唤点就会出
         // 现召唤位置和效果位置不一致的奇怪现象
-        actorService.getLocalToWorld(actor, summonOffset, currentSummon.summonPos);
+        getLocalToWorld(actor, summonOffset, currentSummon.summonPos);
         currentSummon.summonPos.setY(playService.getTerrainHeight(currentSummon.summonPos.x, currentSummon.summonPos.z));
         currentSummon.summonPos.setY(currentSummon.summonPos.y + summonOffset.y);
         currentSummon.setLocalTranslation(currentSummon.summonPos);
         
         super.playEffect(effectId);
+    }
+    
+    private Vector3f getLocalToWorld(Actor actor, Vector3f localPos, Vector3f store) {
+        if (store == null) {
+            store = new Vector3f();
+        }
+        actor.getSpatial().getWorldRotation().mult(localPos, store);
+        store.addLocal(actor.getSpatial().getWorldTranslation());
+        return store;
     }
     
     @Override

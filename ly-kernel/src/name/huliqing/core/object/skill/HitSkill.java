@@ -247,7 +247,7 @@ public abstract class HitSkill extends AbstractSkill {
         if (actor == null || hitChecker == null)
             return SkillConstants.STATE_UNDEFINE;
         
-        Actor target = playService.findActor(actorModule.getTarget());
+        Actor target = actorModule.getTarget();
         if (target == null) {
             return SkillConstants.STATE_TARGET_NOT_FOUND;
         }

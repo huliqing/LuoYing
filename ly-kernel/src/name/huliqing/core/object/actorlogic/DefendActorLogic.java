@@ -9,6 +9,9 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import name.huliqing.core.Config;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.ActorLogicData;
 import name.huliqing.core.mvc.network.ActorNetwork;
@@ -19,6 +22,7 @@ import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.module.ActorListener;
+import name.huliqing.core.object.module.ActorModule;
 import name.huliqing.core.object.module.SkillListener;
 import name.huliqing.core.object.module.SkillModule;
 import name.huliqing.core.object.module.SkillPlayListener;
@@ -32,7 +36,7 @@ import name.huliqing.core.object.skill.ShotSkill;
  * @param <T>
  */
 public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> implements SkillListener, SkillPlayListener, ActorListener {
-//    private static final Logger LOG = Logger.getLogger(DefendActorLogic.class.getName());
+    private static final Logger LOG = Logger.getLogger(DefendActorLogic.class.getName());
     
     private final ActorService actorService = Factory.get(ActorService.class);
     private final PlayService playService = Factory.get(PlayService.class);
@@ -40,6 +44,7 @@ public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> im
     private final SkillService skillService = Factory.get(SkillService.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
+    private ActorModule actorModule;
     private SkillModule skillModule;
     
     // 使用哪一个属性作为防守概率及躲闪概率
@@ -69,7 +74,7 @@ public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> im
     @Override
     public void setData(T data) {
         super.setData(data); 
-        interval = 10; 
+        interval = 5; 
         defendRateAttribute = data.getAsString("defendRateAttribute");
         duckRateAttribute = data.getAsString("duckRateAttribute");
         listenAttributes = Arrays.asList(data.getAsArray("listenAttributes"));
@@ -77,19 +82,26 @@ public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> im
         defendSkillTags = skillService.convertSkillTags(data.getAsArray("defendSkillTags"));
         duckSkillTags = skillService.convertSkillTags(data.getAsArray("duckSkillTags"));
     }
+
+    @Override
+    public void setActor(Actor self) {
+        super.setActor(self); 
+        actorModule = actor.getModule(ActorModule.class);
+        skillModule = actor.getModule(SkillModule.class);
+    }
     
     @Override
     public void initialize() {
         super.initialize();
-        actorService.addActorListener(actor, this);
-        skillService.addSkillListener(actor, this);
+        actorModule.addActorListener(this);
+        skillModule.addSkillListener(this);
     }
     
     @Override
     public void cleanup() {
         // 清理当前角色的侦听器
-        actorService.removeActorListener(actor, this);
-        skillService.removeSkillListener(actor, this);
+        actorModule.removeActorListener(this);
+        skillModule.removeSkillListener(this);
         
         // 清理其它被当前逻辑侦听的角色
         if (listenersActors != null) {
@@ -102,14 +114,18 @@ public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> im
     }
 
     @Override
-    public void onActorLocked(long source, Actor other) {
+    public void onActorTargetLocked(Actor sourceBeLocked, Actor other) {
+//        if (Config.debug) {
+//            LOG.log(Level.INFO, "onActorTargetLocked: source={0}, other={1}", new Object[] {sourceBeLocked.getData().getId(), other.getData().getId()});
+//        }
+        
         if (!hasUsableSkill) 
             return;
         
-        if (source == other.getData().getUniqueId()) 
+        if (sourceBeLocked.getData().getUniqueId() == other.getData().getUniqueId()) 
             return;
         
-        if (!actorService.isEnemy(other, playService.findActor(source)))
+        if (!actorService.isAvailableEnemy(other.getModule(ActorModule.class), sourceBeLocked.getModule(ActorModule.class)))
             return;
         
         // 当被other锁定时给other添加侦听器，以侦察other的攻击。以便进行防守和躲闪
@@ -123,7 +139,7 @@ public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> im
     }
 
     @Override
-    public void onActorReleased(long source, Actor other) {
+    public void onActorTargetReleased(Actor sourceBeReleased, Actor other) {
         if (!hasUsableSkill) 
             return;
         
@@ -135,29 +151,27 @@ public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> im
             listenersActors.remove(other);
         }
     }
-    
-    // ignore
-    @Override
-    public void onActorKill(Actor source, Actor target) {}
 
-    // ignore
     @Override
-    public void onActorKilled(Actor source, Actor target) {}
+    public void onActorHitTarget(Actor sourceHitter, Actor beHit, String hitAttribute, float hitValue, boolean killedByHit) {
+        // ignore
+    }
 
     // 受到攻击时将目标设为首要敌人
     @Override
-    public void onActorHit(Actor source, Actor attacker, String hitAttribute, float hitValue) {
+    public void onActorHitByTarget(Actor sourceBeHit, Actor hitter, String hitAttribute, float hitValue, boolean killedByHit) {
         // hitValue>0为增益效果，不处理
-        if (actorService.isDead(source) || actorService.isPlayer(actor) || hitValue > 0)
-            return;
+        // 这里不作用于player，不要影响player控制的目标的设置
+        if (actorModule.isDead() || actorModule.isPlayer() || hitValue > 0)
+            return; 
         
         // 被击中的属性不在监听范围内则不处理。
         if (!listenAttributes.contains(hitAttribute)) {
             return;
         }
         
-        if (attacker != null) {
-            actorNetwork.setTarget(source, attacker);
+        if (hitter != null) {
+            actorNetwork.setTarget(sourceBeHit, hitter);
         }
     }
 
@@ -178,12 +192,17 @@ public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> im
     
     @Override
     public void onSkillStart(Skill skill) {
+        if (Config.debug) {
+            LOG.log(Level.INFO, "defendActorLogic==> onSkillStart, actor={0}, skill={1}", new Object[] {skill.getActor().getData().getName(), skill.getData().getId()});
+        }
+        
         if (!hasUsableSkill) 
             return;
         
         // 如果已经死亡就不需要处理防守了
-        if (actorService.isDead(actor)) 
+        if (actorModule.isDead()) {
             return;
+        }
         
         // 暂不支持shot类技能的防守
         if (skill instanceof ShotSkill)
@@ -219,11 +238,13 @@ public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> im
     }
     
     private boolean doDefend() {
+        LOG.log(Level.INFO, "defendActorLogic==> doDefend actor={0} defendRateAttribute={1}, defendSkill size={2}"
+                , new Object[] {actor.getData().getId(), defendRateAttribute, defendSkills.size()});
         if (defendRateAttribute != null && defendSkills.size() > 0) {
             float defendRate = attributeService.getNumberAttributeValue(actor, defendRateAttribute, 0);
             if(defendRate >= FastMath.nextRandomFloat()) {
                 Skill defendSkill = defendSkills.get(FastMath.nextRandomInt(0, defendSkills.size() - 1));
-                skillNetwork.playSkill(actor, defendSkill.getData().getId(), false);
+                skillNetwork.playSkill(actor, defendSkill, false);
                 return true;
             }
         }
@@ -231,6 +252,8 @@ public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> im
     }
     
     private boolean doDuck() {
+        LOG.log(Level.INFO, "defendActorLogic==> doDuck actor={0} duckRateAttribute={1}, duckSkill size={2}"
+                , new Object[] {actor.getData().getId(), duckRateAttribute, duckSkills.size()});
         if (duckRateAttribute != null && duckSkills.size() > 0) {
             float duckRate = attributeService.getNumberAttributeValue(actor, defendRateAttribute, 0);
             if (duckRate >= FastMath.nextRandomFloat()) {
@@ -246,10 +269,19 @@ public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> im
     protected void doLogic(float tpf) {
         // 技能重新缓存技能
         if (needRecacheSkill) {
+            if (defendSkills != null) {
+                defendSkills.clear();
+            }
+            if (duckSkills != null) {
+                duckSkills.clear();
+            }
             defendSkills = getSkillModule().getSkillByTags(defendSkillTags, defendSkills);
             duckSkills = getSkillModule().getSkillByTags(duckSkillTags, duckSkills);
             hasUsableSkill = (defendSkills != null && defendSkills.size() > 0) || (duckSkills != null && duckSkills.size() > 0);
             needRecacheSkill = false;
+            
+            LOG.log(Level.INFO, "needRecache defend/duck Skill, actor={0}, defendSkills={1}, duckSkills={2}"
+                    , new Object[]{actor.getData().getId(), defendSkills.size(), duckSkills.size()});
         }
     }
 

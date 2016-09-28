@@ -39,6 +39,7 @@ import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.anim.Anim;
 import name.huliqing.core.object.effect.EffectCache;
 import name.huliqing.core.object.env.CameraChaseEnv;
+import name.huliqing.core.object.module.ActorModule;
 import name.huliqing.core.object.scene.SceneUtils;
 import name.huliqing.core.object.view.View;
 import name.huliqing.core.ui.AbstractUI;
@@ -557,7 +558,7 @@ public  class SimpleGameState extends GameState implements UIEventListener {
                 || actorService.isDead(temp) 
                 || !actorService.isEnemy(temp, player)
                 ) {
-            float distance = actorService.getViewDistance(player) * 2;
+            float distance = player.getModule(ActorModule.class).getViewDistance() * 2;
             temp = actorService.findNearestEnemyExcept(player, distance, null);
             
             // 需要

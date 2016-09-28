@@ -45,8 +45,8 @@
 , metal|derma|soundCollisionMB
 , wood|wood|soundCollisionWW
 , wood|stone|soundCollisionWS
-, wood|derma|soundCollisionWB
-" />
+, wood|derma|soundCollisionWB" collisionEffects="metal|metal|effectCollisionMM"
+    />
     
 </root>
 

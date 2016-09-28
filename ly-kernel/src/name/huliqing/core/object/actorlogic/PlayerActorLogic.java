@@ -10,7 +10,9 @@ import name.huliqing.core.object.action.FightAction;
 import name.huliqing.core.data.ActorLogicData;
 import name.huliqing.core.mvc.service.ActionService;
 import name.huliqing.core.mvc.service.ActorService;
+import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.object.Loader;
+import name.huliqing.core.object.module.ActorModule;
 
 /**
  * 只用于player角色的逻辑,不会有idle行为，因为不让玩角角色在停下来的时候或
@@ -19,8 +21,10 @@ import name.huliqing.core.object.Loader;
  * @param <T>
  */
 public class PlayerActorLogic<T extends ActorLogicData> extends ActorLogic<T> {
-    private final ActionService actionService = Factory.get(ActionService.class);;
-    private final ActorService actorService = Factory.get(ActorService.class);;
+    private final ActionService actionService = Factory.get(ActionService.class);
+    private final ActorService actorService = Factory.get(ActorService.class);
+    private final PlayService playService = Factory.get(PlayService.class);
+    private ActorModule actorModule;
     
     protected FightAction fightAction;
     
@@ -30,12 +34,10 @@ public class PlayerActorLogic<T extends ActorLogicData> extends ActorLogic<T> {
         fightAction = (FightAction) Loader.loadAction(data.getAsString("fightAction"));
     }
 
-    public FightAction getFightAction() {
-        return fightAction;
-    }
-
-    public void setFightAction(FightAction fightAction) {
-        this.fightAction = fightAction;
+    @Override
+    public void setActor(Actor actor) {
+        super.setActor(actor); 
+        actorModule = actor.getModule(ActorModule.class);
     }
     
     @Override
@@ -45,17 +47,13 @@ public class PlayerActorLogic<T extends ActorLogicData> extends ActorLogic<T> {
             return;
         }
         
-        Actor t = actorService.getTarget(actor);
+        Actor target = actorModule.getTarget();
         
-        if (t != null && !actorService.isDead(t) 
-                && t.getSpatial().getWorldTranslation().distance(actor.getSpatial().getWorldTranslation()) < actorService.getViewDistance(actor)
-                
-                // remove20160328 -> remove20160217,不再判断是否为敌人，是否可攻击目标以后交由hitChecker判断
-                // 放开这个判断可允许玩家控制角色攻击同伴，只要技能的hitChecker设置即可。
-                &&  actorService.isEnemy(t, actor)
-                
+        if (target != null && !actorService.isDead(target) 
+                && target.getSpatial().getWorldTranslation().distance(actor.getSpatial().getWorldTranslation()) < actorModule.getViewDistance()
+                &&  actorModule.isEnemy(target)
                 ) {
-            fightAction.setEnemy(t);
+            fightAction.setEnemy(target);
             actionService.playAction(actor, fightAction);
         }
     }

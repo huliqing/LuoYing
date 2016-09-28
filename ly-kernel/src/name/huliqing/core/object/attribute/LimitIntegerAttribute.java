@@ -74,12 +74,12 @@ public class LimitIntegerAttribute extends IntegerAttribute implements LimitAttr
         // 2.如果minLimitAttributeName所指定的属性已经在当前属性之前已经载入，
         // 则触发器不会触发到（onAttributeAdded）, 所以这里也不能省略。
         if (bindMinLimitAttribute != null) {
-            bindMinLimitAttribute(module.getAttributeByName(bindMinLimitAttribute));
+            bindMinLimitAttribute(module.getAttributeByName(bindMinLimitAttribute, null));
         }
         
         // 同上
         if (bindMaxLimitAttribute != null) {
-            bindMaxLimitAttribute(module.getAttributeByName(bindMaxLimitAttribute));
+            bindMaxLimitAttribute(module.getAttributeByName(bindMaxLimitAttribute, null));
         }
         
         // 初始化值并触发一次侦听器

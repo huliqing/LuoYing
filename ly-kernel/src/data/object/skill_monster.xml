@@ -131,20 +131,20 @@
     <skillRun id="skillSinbadRun" extends="skillRunBase" animation="run" />
     <skillHurt id="skillSinbadHurt" extends="skillHurtBase" useTime="0.3" animation="n_hurt_front" hurtFace="front" />
     <skillDead id="skillSinbadDead" extends="skillDeadBase" useTime="2" animation="n_dead" useRagdoll="0" />
-    <skillAttack id="skillSinbadAttack" extends="skillFightSimpleAttackBase" weaponStateLimit="0|1" 
+    <skillAttack id="skillSinbadAttack" extends="skillFightSimpleAttackBase" weaponStateLimit="rightSword" 
             effects="effectSwordShadow1|0.5"
             useTime="1.2" hitDistance="4" animation="n_attack"  cooldown="1" hitValue="70" checkPoint="0.41" 
             defendable="0" cutTimeStartMax="0.32" cutTimeEndMax="0.44" hitStates="stateStun|0.5" />
-    <skillAttack id="skillSinbadAttack2" extends="skillFightSimpleAttackBase" weaponStateLimit="0|1" 
+    <skillAttack id="skillSinbadAttack2" extends="skillFightSimpleAttackBase" weaponStateLimit="rightSword" 
             effects="effectSwordShadow3|0.3"
             useTime="1.1" hitDistance="4" animation="n_attack2" cooldown="1" hitValue="50" checkPoint="0.3" 
             cutTimeStartMax="0.2" cutTimeEndMax="0.29" hitStates="stateStun|0.2"  />
-    <skillAttack id="skillSinbadAttack3" extends="skillFightSimpleAttackBase" weaponStateLimit="0|1" 
+    <skillAttack id="skillSinbadAttack3" extends="skillFightSimpleAttackBase" weaponStateLimit="rightSword" 
             effects="effectSwordShadow2|0.4"
             useTime="1.0" hitDistance="4" animation="n_attack3" cooldown="1" hitValue="50" checkPoint="0.3" 
             cutTimeStartMax="0.25" cutTimeEndMax="0.58" hitStates="stateStun|0.2" />
-    <skillDefend id="skillSinbadDefence"   extends="skillDefendBase" animation="n_defence"   weaponStateLimit="0|1" useTime="0.75" />
-    <skillDefend id="skillSinbadDefence2" extends="skillDefendBase" animation="n_defence2" weaponStateLimit="0|1" useTime="0.75" />
+    <skillDefend id="skillSinbadDefence"   extends="skillDefendBase" animation="n_defence"   weaponStateLimit="rightSword" useTime="0.75" />
+    <skillDefend id="skillSinbadDefence2" extends="skillDefendBase" animation="n_defence2" weaponStateLimit="rightSword" useTime="0.75" />
     <skillReset id="skillSinbadReset" extends="skillResetBase" useTime="0" animation="n_ready" timePoint="0.9" />
     
     <!--T.Rex-->
@@ -177,7 +177,7 @@
     
     <!--skeleton-->
     <skillAttack id="skillSkeletonAttack" extends="skillFightSimpleAttackBase" icon="" useTime="0.75" animation="ske_attack" cooldown="1"
-                 weaponStateLimit="0|1" hitValue="50" checkPoint="0.68" cutTimeStartMax="0.4" cutTimeEndMax="0.24"  />
+                 weaponStateLimit="rightSword" hitValue="50" checkPoint="0.68" cutTimeStartMax="0.4" cutTimeEndMax="0.24"  />
     <skillWait id="skillSkeletonWait" extends="skillWaitBase"  useTime="4" animation="ske_wait" loop="1" />
     <skillDead id="skillSkeletonDead" extends="skillDeadBase" remove="1" useTime="0.0001" effects="effectSkeletonDead" />
     <skillRun id="skillSkeletonRun" extends="skillRunBase" animation="idle_run" animSpeed="1.5" sounds="soundSkeletonStep1,soundSkeletonStep2|0.4" />

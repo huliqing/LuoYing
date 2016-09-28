@@ -9,14 +9,14 @@ import com.jme3.util.TempVars;
 import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.SkillData;
-import name.huliqing.core.data.SkinData;
 import name.huliqing.core.mvc.service.ActorService;
+import name.huliqing.core.mvc.service.EffectService;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.SkillService;
-import name.huliqing.core.mvc.service.SkinService;
 import name.huliqing.core.object.define.DefineFactory;
+import name.huliqing.core.object.effect.Effect;
+import name.huliqing.core.object.effect.EffectManager;
 import name.huliqing.core.object.module.ActorModule;
 import name.huliqing.core.object.module.SkinModule;
 import name.huliqing.core.object.skin.Skin;
@@ -30,8 +30,8 @@ import name.huliqing.core.object.sound.SoundManager;
 public class AttackSkill extends HitSkill {
     private final PlayService playService = Factory.get(PlayService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
-    private final SkinService skinService = Factory.get(SkinService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
+    private final EffectService effectService = Factory.get(EffectService.class);
     private ActorModule actorModule;
     private SkinModule skinModule;
     
@@ -183,19 +183,29 @@ public class AttackSkill extends HitSkill {
         if (soundId != null) {
             SoundManager.getInstance().playSound(soundId, actor.getSpatial().getWorldTranslation());
         }
-        
-        // 播放碰撞特效: TODO: 要进行处理
-//        TempVars tv = TempVars.get();
-//        Vector3f collisionPos = tv.vect1.set(collisionOffset);
-//        tv.quat1.lookAt(actorModule.getViewDirection(), Vector3f.UNIT_Y);
-//        tv.quat1.mult(collisionPos, collisionPos);
-//        collisionPos.addLocal(actor.getSpatial().getWorldTranslation());
-//        Collision.playDefend(collisionPos, actor, target, null, null);
-//        tv.release();
+        String effectId = DefineFactory.getMatDefine().getCollisionEffect(mat1, mat2);
+        if (effectId != null) {
+            // 播放碰撞特效: TODO: 要进行处理
+            TempVars tv = TempVars.get();
+            Vector3f collisionPos = tv.vect1.set(collisionOffset);
+            tv.quat1.lookAt(actorModule.getViewDirection(), Vector3f.UNIT_Y);
+            tv.quat1.mult(collisionPos, collisionPos);
+            collisionPos.addLocal(actor.getSpatial().getWorldTranslation());
+            
+            Effect effect = effectService.loadEffect(effectId);
+            effect.setLocalTranslation(collisionPos);
+            effect.getLocalRotation().lookAt(actorModule.getViewDirection(), Vector3f.UNIT_Y);
+            EffectManager.getInstance().addEffect(effect);
+            
+    //        Collision.playDefend(collisionPos, actor, target, null, null); // remove20160928
+    
+            tv.release();
+        }
     }
     
     protected void doHitResult(Actor target) {
         
+        // remove20160928
 //        // 伤害声音
 //        Skin weaponSkin = null;
 //        List<Skin> skins = skinService.getUsingSkins(actor);
@@ -226,6 +236,5 @@ public class AttackSkill extends HitSkill {
     public boolean isDefendable() {
         return defendable;
     }
-    
     
 }

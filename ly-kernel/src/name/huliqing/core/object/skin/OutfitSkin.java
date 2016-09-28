@@ -10,9 +10,5 @@ package name.huliqing.core.object.skin;
  */
 public class OutfitSkin extends AbstractSkin {
 
-//    @Override
-//    public boolean isWeapon() {
-//        return false;
-//    }
 
 }

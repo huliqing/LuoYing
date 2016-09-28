@@ -117,7 +117,7 @@
     <!--特殊配置-->
     <!-- ========================================================================= -->
 
-<!--野兽召唤术-->
+    <!--野兽召唤术-->
     <skillSummon id="skillSummon" extends="skillMagicBase" icon="Interface/skill/ysh_91.jpg" useTime="2" animation="summon" 
              cooldown="1" useAttributes="attributeMana|30" summonOffset="0,0.1,4.5" summonPoint="0.95" summonTime="4" effects="effectSummon|0.5" />
         
@@ -187,7 +187,7 @@
                             hitValue="40" hitEl="elSkillAbsoluteAttack" hitAngle="360"
                             shotTimes="0.39,0.41,0.43,0.45,0.48,0.50,0.52,0.54,0.56,0.58,0.61,0.63,0.65,0.67,0.69,0.72,0.74,0.76,0.78,0.80"
                             bullets="bulletCurve" shotOffsets="0|4.1|-2.7" multTarget="1"
-                            cutTimeStartMax="0.07" cutTimeEndMax="0.07" needLevel="5" />
+                            cutTimeStartMax="0.07" cutTimeEndMax="0.07" needLevel="5" shotSpeed="2" />
     
     <!-- =================================================================== -->
     <!--二刀流:左右手-->
