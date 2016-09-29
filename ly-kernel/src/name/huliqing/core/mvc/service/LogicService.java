@@ -5,9 +5,9 @@
 package name.huliqing.core.mvc.service;
 
 import name.huliqing.core.Inject;
-import name.huliqing.core.data.ActorLogicData;
+import name.huliqing.core.data.LogicData;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.actorlogic.ActorLogic;
+import name.huliqing.core.object.logic.Logic;
 
 /**
  *
@@ -20,7 +20,7 @@ public interface LogicService extends Inject {
      * @param logicId
      * @return 
      */
-    ActorLogic loadLogic(String logicId);
+    Logic loadLogic(String logicId);
     
     /**
      * 给角色添加一个逻辑
@@ -34,14 +34,14 @@ public interface LogicService extends Inject {
      * @param actor
      * @param logicData 
      */
-    void addLogic(Actor actor, ActorLogicData logicData);
+    void addLogic(Actor actor, LogicData logicData);
         
     /**
      * 给角色添加逻辑
      * @param actor
      * @param logic 
      */
-    void addLogic(Actor actor, ActorLogic logic);
+    void addLogic(Actor actor, Logic logic);
     
     /**
      * 移除指定的逻辑，如果移除成功则返回true.
@@ -49,7 +49,7 @@ public interface LogicService extends Inject {
      * @param logic
      * @return 
      */
-    boolean removeLogic(Actor actor, ActorLogic logic);
+    boolean removeLogic(Actor actor, Logic logic);
     
     /**
      * 清除角色身上的所有逻辑

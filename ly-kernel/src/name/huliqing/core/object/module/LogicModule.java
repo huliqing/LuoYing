@@ -9,13 +9,13 @@ import com.jme3.scene.control.Control;
 import com.jme3.util.SafeArrayList;
 import java.util.List;
 import name.huliqing.core.Factory;
-import name.huliqing.core.data.ActorLogicData;
+import name.huliqing.core.data.LogicData;
 import name.huliqing.core.data.ModuleData;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.AttributeService;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.actorlogic.ActorLogic;
+import name.huliqing.core.object.logic.Logic;
 import name.huliqing.core.object.attribute.BooleanAttribute;
 
 /**
@@ -27,7 +27,7 @@ public class LogicModule extends AbstractModule {
     private final AttributeService attributeService = Factory.get(AttributeService.class);
 
     private Control updateControl;
-    private final SafeArrayList<ActorLogic> logics = new SafeArrayList<ActorLogic>(ActorLogic.class);
+    private final SafeArrayList<Logic> logics = new SafeArrayList<Logic>(Logic.class);
 
     // 属性：控制逻辑开关
     private String bindAutoLogicAttribute;
@@ -59,10 +59,10 @@ public class LogicModule extends AbstractModule {
         autoDetectAttribute = attributeService.getAttributeByName(actor, bindAutoDetectAttribute);
         
         // 载入逻辑
-        List<ActorLogicData> logicDatas = actor.getData().getObjectDatas(ActorLogicData.class, null);
+        List<LogicData> logicDatas = actor.getData().getObjectDatas(LogicData.class, null);
         if (logicDatas != null) {
-            for (ActorLogicData ld : logicDatas) {
-                addLogic((ActorLogic) Loader.load(ld));
+            for (LogicData ld : logicDatas) {
+                addLogic((Logic) Loader.load(ld));
             }
         }
     }
@@ -74,14 +74,14 @@ public class LogicModule extends AbstractModule {
         if (!isAutoLogic()) {
             return;
         }
-        for (ActorLogic logic : logics.getArray()) {
+        for (Logic logic : logics.getArray()) {
             logic.update(tpf);
         }
     }
 
     @Override
     public void cleanup() {
-        for (ActorLogic logic : logics) {
+        for (Logic logic : logics) {
             logic.cleanup();
         }
         logics.clear();
@@ -91,7 +91,7 @@ public class LogicModule extends AbstractModule {
         super.cleanup(); 
     }
 
-    public void addLogic(ActorLogic logic) {
+    public void addLogic(Logic logic) {
         if (logics.contains(logic))
             return;
         
@@ -102,7 +102,7 @@ public class LogicModule extends AbstractModule {
         logic.initialize();
     }
 
-    public boolean removeLogic(ActorLogic logic) {
+    public boolean removeLogic(Logic logic) {
         if (!logics.contains(logic))
             return false;
         
@@ -112,7 +112,7 @@ public class LogicModule extends AbstractModule {
         return true;
     }
     
-    public List<ActorLogic> getLogics() {
+    public List<Logic> getLogics() {
         return logics;
     }
     

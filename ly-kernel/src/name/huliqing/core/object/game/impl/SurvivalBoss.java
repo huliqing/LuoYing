@@ -22,7 +22,7 @@ import name.huliqing.core.mvc.service.ViewService;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.logic.scene.ActorBuildLogic;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.actorlogic.PositionActorLogic;
+import name.huliqing.core.object.logic.PositionLogic;
 import name.huliqing.core.object.gamelogic.AbstractGameLogic;
 import name.huliqing.core.object.talent.Talent;
 import name.huliqing.core.object.view.TextView;
@@ -191,7 +191,7 @@ public class SurvivalBoss<T extends GameLogicData> extends AbstractGameLogic<T> 
         TempVars tv = TempVars.get();
         tv.vect1.set(game.treasurePos);
         tv.vect1.setY(playService.getTerrainHeight(tv.vect1.x, tv.vect1.z));
-        PositionActorLogic runLogic = (PositionActorLogic) Loader.loadLogic(IdConstants.LOGIC_POSITION);
+        PositionLogic runLogic = (PositionLogic) Loader.loadLogic(IdConstants.LOGIC_POSITION);
         runLogic.setInterval(3);
         runLogic.setPosition(tv.vect1);
         runLogic.setNearestDistance(game.nearestDistance);

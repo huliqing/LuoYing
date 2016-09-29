@@ -2,10 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.core.object.actorlogic;
+package name.huliqing.core.object.logic;
 
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.data.ActorLogicData;
+import name.huliqing.core.data.LogicData;
 import name.huliqing.core.xml.DataProcessor;
 
 /**
@@ -13,12 +13,12 @@ import name.huliqing.core.xml.DataProcessor;
  * @author huliqing
  * @param <T>
  */
-public abstract class ActorLogic<T extends ActorLogicData> implements DataProcessor<T>{
+public abstract class Logic<T extends LogicData> implements DataProcessor<T>{
     
     protected T data;
     protected boolean initialized;
-    protected float interval = 1;
-    private float timeUsed;
+    protected float interval = 1.0f;
+    protected float timeUsed;
     
     /**
      * 运行当前逻辑的角色.
@@ -28,7 +28,7 @@ public abstract class ActorLogic<T extends ActorLogicData> implements DataProces
     @Override
     public void setData(T data) {
         this.data = data;
-        interval = data.getInterval();
+        interval = data.getAsFloat("interval", interval);
     }
 
     @Override
@@ -57,14 +57,6 @@ public abstract class ActorLogic<T extends ActorLogicData> implements DataProces
     }
     
     /**
-     * 获取执行逻辑的角色.
-     * @return 
-     */
-    public Actor getActor() {
-        return actor;
-    }
-    
-    /**
      * 设置执行逻辑的角色。
      * @param self 
      */
@@ -73,7 +65,6 @@ public abstract class ActorLogic<T extends ActorLogicData> implements DataProces
     }
 
     public void setInterval(float interval) {
-        data.setInterval(interval);
         this.interval = interval;
     }
 

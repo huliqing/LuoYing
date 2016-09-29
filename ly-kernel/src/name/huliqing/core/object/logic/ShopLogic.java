@@ -2,13 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.core.object.actorlogic;
+package name.huliqing.core.object.logic;
 
 import com.jme3.app.Application;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.Factory;
-import name.huliqing.core.data.ActorLogicData;
+import name.huliqing.core.data.LogicData;
 import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.utils.ConvertUtils;
 import name.huliqing.core.mvc.service.ObjectService;
@@ -19,9 +19,9 @@ import name.huliqing.core.mvc.network.ObjectNetwork;
  * @author huliqing
  * @param <T>
  */
-public class ShopActorLogic<T extends ActorLogicData> extends ActorLogic<T> {
-    private final ObjectNetwork protoNetwork = Factory.get(ObjectNetwork.class);
-    private final ObjectService protoService = Factory.get(ObjectService.class);
+public class ShopLogic<T extends LogicData> extends Logic<T> {
+    private final ObjectNetwork objectNetwork = Factory.get(ObjectNetwork.class);
+    private final ObjectService objectService = Factory.get(ObjectService.class);
     
     private List<Product> products;
     // 进货速度，如：1.0 表示每秒进货一件（每件未达到maxCount的商品各进货一件）
@@ -78,11 +78,11 @@ public class ShopActorLogic<T extends ActorLogicData> extends ActorLogic<T> {
             if (p.maxCount <= 0) 
                 continue;
             
-            temp = protoService.getData(actor, p.itemId);
+            temp = objectService.getData(actor, p.itemId);
             currentCount = temp != null ? temp.getTotal() : 0;
             actualStock = p.maxCount - currentCount;
             if (actualStock > 0) {
-                protoNetwork.addData(actor, p.itemId, actualStock);
+                objectNetwork.addData(actor, p.itemId, actualStock);
             }
         }
     }
@@ -106,14 +106,14 @@ public class ShopActorLogic<T extends ActorLogicData> extends ActorLogic<T> {
                 continue;
             
             actualStock = stockCount;
-            temp = protoService.getData(actor, p.itemId);
+            temp = objectService.getData(actor, p.itemId);
             currentCount = temp != null ? temp.getTotal() : 0;
             
             if (currentCount + actualStock > p.maxCount) {
                 actualStock = p.maxCount - currentCount;
             }
             if (actualStock > 0) {
-                protoNetwork.addData(actor, p.itemId, actualStock);
+                objectNetwork.addData(actor, p.itemId, actualStock);
             }
         }
     }

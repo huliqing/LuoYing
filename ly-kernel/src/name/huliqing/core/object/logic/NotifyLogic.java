@@ -2,13 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.core.object.actorlogic;
+package name.huliqing.core.object.logic;
 
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.data.ActorLogicData;
+import name.huliqing.core.data.LogicData;
 import name.huliqing.core.mvc.network.ActorNetwork;
 import name.huliqing.core.mvc.service.ActorService;
 
@@ -25,7 +25,7 @@ import name.huliqing.core.mvc.service.ActorService;
  * @author huliqing
  * @param <T>
  */
-public class NotifyActorLogic<T extends ActorLogicData> extends ActorLogic<T> {
+public class NotifyLogic<T extends LogicData> extends Logic<T> {
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     

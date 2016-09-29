@@ -20,7 +20,7 @@ import name.huliqing.core.data.PositionData;
 import name.huliqing.core.data.env.EnvData;
 import name.huliqing.core.data.GameData;
 import name.huliqing.core.data.HitCheckerData;
-import name.huliqing.core.data.ActorLogicData;
+import name.huliqing.core.data.LogicData;
 import name.huliqing.core.data.SkinData;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.data.ResistData;
@@ -32,7 +32,7 @@ import name.huliqing.core.data.TaskData;
 import name.huliqing.core.data.ViewData;
 import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.object.action.Action;
-import name.huliqing.core.object.actorlogic.ActorLogic;
+import name.huliqing.core.object.logic.Logic;
 import name.huliqing.core.object.anim.Anim;
 import name.huliqing.core.object.bullet.Bullet;
 import name.huliqing.core.object.chat.Chat;
@@ -169,12 +169,12 @@ public class Loader {
         return DataFactory.createProcessor(data);
     }
        
-    public static ActorLogic loadLogic(ActorLogicData data) {
+    public static Logic loadLogic(LogicData data) {
         return DataFactory.createProcessor(data);
     }
     
-    public static ActorLogic loadLogic(String logicId) {
-        return loadLogic((ActorLogicData) DataFactory.createData(logicId));
+    public static Logic loadLogic(String logicId) {
+        return loadLogic((LogicData) DataFactory.createData(logicId));
     }
     
     public static Magic loadMagic(MagicData data) {

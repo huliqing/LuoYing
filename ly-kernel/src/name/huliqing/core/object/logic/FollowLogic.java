@@ -2,13 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.core.object.actorlogic;
+package name.huliqing.core.object.logic;
 
 import com.jme3.math.FastMath;
 import name.huliqing.core.Factory;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.action.FollowAction;
-import name.huliqing.core.data.ActorLogicData;
+import name.huliqing.core.data.LogicData;
 import name.huliqing.core.mvc.service.ActionService;
 import name.huliqing.core.mvc.service.AttributeService;
 import name.huliqing.core.mvc.service.PlayService;
@@ -21,7 +21,7 @@ import name.huliqing.core.utils.MathUtils;
  * @author huliqing
  * @param <T>
  */
-public class FollowActorLogic<T extends ActorLogicData> extends ActorLogic<T> {
+public class FollowLogic<T extends LogicData> extends Logic<T> {
 //    private final static Logger logger = Logger.getLogger(FollowLogic.class.getName());
     private final PlayService playService = Factory.get(PlayService.class);
     private final ActionService actionService = Factory.get(ActionService.class);

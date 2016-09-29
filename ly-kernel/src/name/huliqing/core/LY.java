@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
 import name.huliqing.core.data.ActionData;
 import name.huliqing.core.data.ActorData;
-import name.huliqing.core.data.ActorLogicData;
+import name.huliqing.core.data.LogicData;
 import name.huliqing.core.data.AnimData;
 import name.huliqing.core.data.AttributeApply;
 import name.huliqing.core.data.AttributeData;
@@ -124,17 +124,17 @@ import name.huliqing.core.object.action.RunSimpleAction;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.loader.ActorDataLoader;
 import name.huliqing.core.object.actoranim.ActorCurveMove;
-import name.huliqing.core.loader.ActorLogicDataLoader;
-import name.huliqing.core.object.actorlogic.AttributeChangeActorLogic;
-import name.huliqing.core.object.actorlogic.DefendActorLogic;
-import name.huliqing.core.object.actorlogic.FightActorLogic;
-import name.huliqing.core.object.actorlogic.FollowActorLogic;
-import name.huliqing.core.object.actorlogic.IdleActorLogic;
-import name.huliqing.core.object.actorlogic.NotifyActorLogic;
-import name.huliqing.core.object.actorlogic.PlayerActorLogic;
-import name.huliqing.core.object.actorlogic.PositionActorLogic;
-import name.huliqing.core.object.actorlogic.SearchEnemyActorLogic;
-import name.huliqing.core.object.actorlogic.ShopActorLogic;
+import name.huliqing.core.loader.LogicDataLoader;
+import name.huliqing.core.object.logic.AttributeChangeLogic;
+import name.huliqing.core.object.logic.DefendLogic;
+import name.huliqing.core.object.logic.FightLogic;
+import name.huliqing.core.object.logic.FollowLogic;
+import name.huliqing.core.object.logic.IdleLogic;
+import name.huliqing.core.object.logic.NotifyLogic;
+import name.huliqing.core.object.logic.PlayerLogic;
+import name.huliqing.core.object.logic.PositionLogic;
+import name.huliqing.core.object.logic.SearchEnemyLogic;
+import name.huliqing.core.object.logic.ShopLogic;
 import name.huliqing.core.loader.AnimDataLoader;
 import name.huliqing.core.object.anim.ColorAnim;
 import name.huliqing.core.object.anim.CurveMoveAnim;
@@ -375,7 +375,6 @@ public class LY {
         
         Serializer.registerClass(ActionData.class);
         Serializer.registerClass(ActorData.class);
-        Serializer.registerClass(ActorLogicData.class);
         Serializer.registerClass(AnimData.class);
         Serializer.registerClass(AttributeData.class);
         Serializer.registerClass(BulletData.class);
@@ -392,6 +391,7 @@ public class LY {
         Serializer.registerClass(GameLogicData.class);
         Serializer.registerClass(HitCheckerData.class);
         Serializer.registerClass(ItemData.class);
+        Serializer.registerClass(LogicData.class);
         Serializer.registerClass(MagicData.class);
         Serializer.registerClass(ModuleData.class);
         Serializer.registerClass(PositionData.class);
@@ -427,16 +427,16 @@ public class LY {
         DataFactory.register("actorAnimCurveMove",  AnimData.class, AnimDataLoader.class, ActorCurveMove.class);
         
         // ActorLogic
-        DataFactory.register("actorLogicFight",  ActorLogicData.class, ActorLogicDataLoader.class, FightActorLogic.class);
-        DataFactory.register("actorLogicFollow",  ActorLogicData.class, ActorLogicDataLoader.class,  FollowActorLogic.class);
-        DataFactory.register("actorLogicNotify",  ActorLogicData.class, ActorLogicDataLoader.class,  NotifyActorLogic.class);
-        DataFactory.register("actorLogicPlayer",  ActorLogicData.class, ActorLogicDataLoader.class,  PlayerActorLogic.class);
-        DataFactory.register("actorLogicPosition",  ActorLogicData.class, ActorLogicDataLoader.class,  PositionActorLogic.class);
-        DataFactory.register("actorLogicSearchEnemy",  ActorLogicData.class, ActorLogicDataLoader.class,  SearchEnemyActorLogic.class);
-        DataFactory.register("actorLogicAttributeChange",  ActorLogicData.class, ActorLogicDataLoader.class,  AttributeChangeActorLogic.class);
-        DataFactory.register("actorLogicDefend",  ActorLogicData.class, ActorLogicDataLoader.class,  DefendActorLogic.class);
-        DataFactory.register("actorLogicIdle",  ActorLogicData.class, ActorLogicDataLoader.class,  IdleActorLogic.class);
-        DataFactory.register("actorLogicShop",  ActorLogicData.class, ActorLogicDataLoader.class,  ShopActorLogic.class);
+        DataFactory.register("logicFight",  LogicData.class, LogicDataLoader.class, FightLogic.class);
+        DataFactory.register("logicFollow",  LogicData.class, LogicDataLoader.class,  FollowLogic.class);
+        DataFactory.register("logicNotify",  LogicData.class, LogicDataLoader.class,  NotifyLogic.class);
+        DataFactory.register("logicPlayer",  LogicData.class, LogicDataLoader.class,  PlayerLogic.class);
+        DataFactory.register("logicPosition",  LogicData.class, LogicDataLoader.class,  PositionLogic.class);
+        DataFactory.register("logicSearchEnemy",  LogicData.class, LogicDataLoader.class,  SearchEnemyLogic.class);
+        DataFactory.register("logicAttributeChange",  LogicData.class, LogicDataLoader.class,  AttributeChangeLogic.class);
+        DataFactory.register("logicDefend",  LogicData.class, LogicDataLoader.class,  DefendLogic.class);
+        DataFactory.register("logicIdle",  LogicData.class, LogicDataLoader.class,  IdleLogic.class);
+        DataFactory.register("logicShop",  LogicData.class, LogicDataLoader.class,  ShopLogic.class);
         
         // Anim
         DataFactory.register("animMove",  AnimData.class, AnimDataLoader.class, MoveAnim.class); 
@@ -648,7 +648,6 @@ public class LY {
             DataFactory.loadDataFile("/data/object/action.xml");
             DataFactory.loadDataFile("/data/object/actor.xml");
             DataFactory.loadDataFile("/data/object/actorAnim.xml");
-            DataFactory.loadDataFile("/data/object/actorLogic.xml");
             DataFactory.loadDataFile("/data/object/anim.xml");
             DataFactory.loadDataFile("/data/object/attribute.xml");
             DataFactory.loadDataFile("/data/object/bullet.xml");
@@ -660,14 +659,15 @@ public class LY {
             DataFactory.loadDataFile("/data/object/effect.xml");
             DataFactory.loadDataFile("/data/object/el.xml");
             DataFactory.loadDataFile("/data/object/emitter.xml");
-            DataFactory.loadDataFile("/data/object/position.xml");
             DataFactory.loadDataFile("/data/object/env.xml");
             DataFactory.loadDataFile("/data/object/game.xml");
             DataFactory.loadDataFile("/data/object/gameLogic.xml");
             DataFactory.loadDataFile("/data/object/hitChecker.xml");
+            DataFactory.loadDataFile("/data/object/item.xml");
+            DataFactory.loadDataFile("/data/object/logic.xml");
             DataFactory.loadDataFile("/data/object/magic.xml");
             DataFactory.loadDataFile("/data/object/module.xml");
-            DataFactory.loadDataFile("/data/object/item.xml");
+            DataFactory.loadDataFile("/data/object/position.xml");
             DataFactory.loadDataFile("/data/object/resist.xml");
             DataFactory.loadDataFile("/data/object/scene.xml");
             DataFactory.loadDataFile("/data/object/shape.xml");
@@ -679,8 +679,8 @@ public class LY {
             
             // 装备、武器
             DataFactory.loadDataFile("/data/object/skin.xml");
-            DataFactory.loadDataFile("/data/object/skin_weapon.xml");
             DataFactory.loadDataFile("/data/object/skin_male.xml");
+            DataFactory.loadDataFile("/data/object/skin_weapon.xml");
             
             // 武器槽位配置
             DataFactory.loadDataFile("/data/object/slot.xml");

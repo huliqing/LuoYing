@@ -2,11 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.core.object.actorlogic;
+package name.huliqing.core.object.logic;
 
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.AttributeData;
-import name.huliqing.core.data.ActorLogicData;
+import name.huliqing.core.data.LogicData;
 import name.huliqing.core.mvc.network.AttributeNetwork;
 import name.huliqing.core.mvc.service.AttributeService;
 
@@ -15,7 +15,7 @@ import name.huliqing.core.mvc.service.AttributeService;
  * @author huliqing
  * @param <T>
  */
-public class AttributeChangeActorLogic<T extends ActorLogicData> extends ActorLogic<T> {
+public class AttributeChangeLogic<T extends LogicData> extends Logic<T> {
     private final AttributeService attributeService = Factory.get(AttributeService.class);
     private final AttributeNetwork attributeNetwork = Factory.get(AttributeNetwork.class);
     private float value = 1f;

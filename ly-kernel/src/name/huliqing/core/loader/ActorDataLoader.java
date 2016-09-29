@@ -11,7 +11,7 @@ import java.util.Comparator;
 import name.huliqing.core.data.ActorData;
 import name.huliqing.core.data.AttributeData;
 import name.huliqing.core.data.DropData;
-import name.huliqing.core.data.ActorLogicData;
+import name.huliqing.core.data.LogicData;
 import name.huliqing.core.data.ChannelData;
 import name.huliqing.core.data.ChatData;
 import name.huliqing.core.xml.Proto;
@@ -137,7 +137,7 @@ public class ActorDataLoader implements DataLoader<ActorData> {
         String[] logics = proto.getAsArray("logics");
         if (logics != null && logics.length > 0) {
             for (String logicId : logics) {
-                data.addObjectData((ActorLogicData) DataFactory.createData(logicId));
+                data.addObjectData((LogicData) DataFactory.createData(logicId));
             }
         }
         

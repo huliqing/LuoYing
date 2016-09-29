@@ -5,19 +5,18 @@
  */
 package name.huliqing.core.loader;
 
-import name.huliqing.core.data.ActorLogicData;
+import name.huliqing.core.data.LogicData;
 import name.huliqing.core.xml.Proto;
 import name.huliqing.core.xml.DataLoader;
 
 /**
- *
  * @author huliqing
  */
-public class ActorLogicDataLoader implements DataLoader<ActorLogicData> {
+public class LogicDataLoader implements DataLoader<LogicData> {
 
     @Override
-    public void load(Proto proto, ActorLogicData data) {
-        data.setInterval(proto.getAsFloat("interval", 1.0f));
+    public void load(Proto proto, LogicData data) {
+        // ignore
     }
     
 }

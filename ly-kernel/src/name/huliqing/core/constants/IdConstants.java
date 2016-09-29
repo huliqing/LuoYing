@@ -24,7 +24,8 @@ public class IdConstants {
     // =========================================================================
     
     /** 野兽召唤术 */
-    public final static String ITEM_BOOK_005 = "itemBook005";
+//    public final static String ITEM_BOOK_005 = "itemBook005";
+    
     /** 闪电箭 */
     public final static String ITEM_BOOK_006 = "itemBook006";
     /** 星光传送术 */

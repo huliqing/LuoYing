@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.core.object.actorlogic;
+package name.huliqing.core.object.logic;
 
 import com.jme3.math.FastMath;
 import java.util.Arrays;
@@ -13,7 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.core.Config;
 import name.huliqing.core.Factory;
-import name.huliqing.core.data.ActorLogicData;
+import name.huliqing.core.data.LogicData;
 import name.huliqing.core.mvc.network.ActorNetwork;
 import name.huliqing.core.mvc.network.SkillNetwork;
 import name.huliqing.core.mvc.service.ActorService;
@@ -35,8 +35,8 @@ import name.huliqing.core.object.skill.ShotSkill;
  * @author huliqing
  * @param <T>
  */
-public class DefendActorLogic<T extends ActorLogicData> extends ActorLogic<T> implements SkillListener, SkillPlayListener, ActorListener {
-    private static final Logger LOG = Logger.getLogger(DefendActorLogic.class.getName());
+public class DefendLogic<T extends LogicData> extends Logic<T> implements SkillListener, SkillPlayListener, ActorListener {
+    private static final Logger LOG = Logger.getLogger(DefendLogic.class.getName());
     
     private final ActorService actorService = Factory.get(ActorService.class);
     private final PlayService playService = Factory.get(PlayService.class);

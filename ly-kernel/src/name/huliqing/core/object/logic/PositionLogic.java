@@ -2,11 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.core.object.actorlogic;
+package name.huliqing.core.object.logic;
 
 import com.jme3.math.Vector3f;
 import name.huliqing.core.object.action.RunAction;
-import name.huliqing.core.data.ActorLogicData;
+import name.huliqing.core.data.LogicData;
 import name.huliqing.core.object.Loader;
 import name.huliqing.core.object.action.Action;
 import name.huliqing.core.object.action.FightAction;
@@ -21,7 +21,7 @@ import name.huliqing.core.object.module.ActionModule;
  * @author huliqing
  * @param <T>
  */
-public class PositionActorLogic<T extends ActorLogicData> extends ActorLogic<T> {
+public class PositionLogic<T extends LogicData> extends Logic<T> {
     private ActionModule actionModule;
     
     // 允许走到的最近距离

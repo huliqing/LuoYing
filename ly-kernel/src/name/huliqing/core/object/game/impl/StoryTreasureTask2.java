@@ -30,7 +30,7 @@ import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.mvc.service.StateService;
 import name.huliqing.core.mvc.service.ViewService;
 import name.huliqing.core.object.Loader;
-import name.huliqing.core.object.actorlogic.PositionActorLogic;
+import name.huliqing.core.object.logic.PositionLogic;
 import name.huliqing.core.logic.scene.ActorLoadHelper;
 import name.huliqing.core.logic.scene.ActorBuildLogic;
 import name.huliqing.core.logic.scene.ActorBuildLogic.Callback;
@@ -212,7 +212,7 @@ public class StoryTreasureTask2 extends GameTaskBase {
                 TempVars tv = TempVars.get();
                 tv.vect1.set(game.treasurePos);
                 tv.vect1.setY(playService.getTerrainHeight(tv.vect1.x, tv.vect1.z));
-                PositionActorLogic runLogic = (PositionActorLogic) Loader.loadLogic(IdConstants.LOGIC_POSITION);
+                PositionLogic runLogic = (PositionLogic) Loader.loadLogic(IdConstants.LOGIC_POSITION);
                 runLogic.setPosition(tv.vect1);
                 runLogic.setNearestDistance(nearestDistance);
                 logicService.addLogic(actor, runLogic);

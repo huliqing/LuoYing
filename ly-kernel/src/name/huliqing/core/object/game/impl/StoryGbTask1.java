@@ -24,13 +24,13 @@ import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.logic.scene.ActorMultLoadHelper;
 import name.huliqing.core.manager.ResourceManager;
+import name.huliqing.core.mvc.network.ItemNetwork;
 import name.huliqing.core.mvc.service.LogicService;
 import name.huliqing.core.ui.Button;
 import name.huliqing.core.ui.TextPanel;
 import name.huliqing.core.ui.UI;
 import name.huliqing.core.ui.UI.Corner;
 import name.huliqing.core.ui.UI.Listener;
-import name.huliqing.core.mvc.network.ObjectNetwork;
 
 /**
  * 寻找古柏
@@ -47,7 +47,7 @@ public class StoryGbTask1 extends GameTaskBase {
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
     private final StateNetwork stateNetwork = Factory.get(StateNetwork.class);
-    private final ObjectNetwork protoNetwork = Factory.get(ObjectNetwork.class);
+    private final ItemNetwork itemNetwork = Factory.get(ItemNetwork.class);
     
     // 开始任务面板:说明任务信息
     private TextPanel taskFind;
@@ -270,11 +270,7 @@ public class StoryGbTask1 extends GameTaskBase {
         talk6.addListener(new TalkListener() {
             @Override
             public void onTalkEnd() {
-                
-//                itemNetwork.addItem(player, IdConstants.ITEM_BOOK_006, 1);
-                
-                protoNetwork.addData(player, IdConstants.ITEM_BOOK_006, 1);
-                
+                itemNetwork.addItem(player, IdConstants.ITEM_BOOK_006, 1);
                 gotBook = true;
             }
         });

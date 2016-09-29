@@ -2,12 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.core.object.actorlogic;
+package name.huliqing.core.object.logic;
 
 import name.huliqing.core.Factory;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.action.FightAction;
-import name.huliqing.core.data.ActorLogicData;
+import name.huliqing.core.data.LogicData;
 import name.huliqing.core.mvc.service.ActionService;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.PlayService;
@@ -17,7 +17,7 @@ import name.huliqing.core.mvc.service.PlayService;
  * @author huliqing
  * @param <T>
  */
-public class FightActorLogic<T extends ActorLogicData> extends ActorLogic<T> {
+public class FightLogic<T extends LogicData> extends Logic<T> {
     private final PlayService playService = Factory.get(PlayService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final ActionService actionService = Factory.get(ActionService.class);
