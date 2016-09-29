@@ -11,6 +11,7 @@ import com.jme3.collision.CollisionResults;
 import com.jme3.math.FastMath;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
+import com.jme3.network.HostedConnection;
 import com.jme3.scene.Spatial;
 import com.jme3.util.TempVars;
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ import name.huliqing.core.state.StoryServerPlayState;
 import name.huliqing.core.object.shortcut.ShortcutManager;
 import name.huliqing.core.object.NetworkObject;
 import name.huliqing.core.object.PlayObject;
+import name.huliqing.core.object.SyncData;
 import name.huliqing.core.object.anim.Anim;
 import name.huliqing.core.object.bullet.Bullet;
 import name.huliqing.core.object.bullet.BulletManager;
@@ -186,22 +188,22 @@ public class PlayServiceImpl implements PlayService {
         return Collections.EMPTY_LIST;
     }
 
-    @Override
-    public List<Actor> findOrganismActors(int group, List<Actor> store) {
-        if (store == null) {
-            store = new ArrayList<Actor>();
-        }
-        List<Actor> all = LY.getPlayState().getActors();
-        for (Actor actor : all) {
-            if (actorService.getGroup(actor) == group) {
-                // 一般质量大于０(能移动)的都可视为有机生命
-                if (actorService.getMass(actor) > 0) {
-                    store.add(actor);
-                }
-            }
-        }
-        return store;
-    }
+//    @Override
+//    public List<Actor> findOrganismActors(int group, List<Actor> store) {
+//        if (store == null) {
+//            store = new ArrayList<Actor>();
+//        }
+//        List<Actor> all = LY.getPlayState().getActors();
+//        for (Actor actor : all) {
+//            if (actorService.getGroup(actor) == group) {
+//                // 一般质量大于０(能移动)的都可视为有机生命
+//                if (actorService.getMass(actor) > 0) {
+//                    store.add(actor);
+//                }
+//            }
+//        }
+//        return store;
+//    }
     
     @Override
     public Actor findActor(String id) {
@@ -280,24 +282,6 @@ public class PlayServiceImpl implements PlayService {
         if (terrain == null) {
             return height;
         }
-        
-        // remove20160705
-//        TempVars tv = TempVars.get();
-//        Temp tp = Temp.get();
-//        Vector3f start = tv.vect1.set(x, 0, z);
-//        Vector3f dir = tv.vect2.set(x, 1, z).subtractLocal(start).normalizeLocal();
-//        tp.ray.setOrigin(start);
-//        tp.ray.setDirection(dir);
-//        
-//        CollisionResults results = tp.results;
-//        results.clear();
-//        terrain.collideWith(tp.ray, results);
-//        if (results.size() > 0) {
-//            height = results.getFarthestCollision().getContactPoint().getY();
-//        }
-//        tv.release();
-//        tp.release();
-//        return height;
 
         TempVars tv = TempVars.get();
         Vector3f origin = tv.vect1.set(x, Float.MIN_VALUE, z);
@@ -461,6 +445,26 @@ public class PlayServiceImpl implements PlayService {
             return null;
         
         return gameState.getGame().getData().getId();
+    }
+
+    @Override
+    public void addMessageOnlyClients(String message, MessageType type) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void attack(Actor actor, Actor target) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void syncGameInitToClient(HostedConnection client) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void syncObject(NetworkObject object, SyncData syncData, boolean reliable) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     

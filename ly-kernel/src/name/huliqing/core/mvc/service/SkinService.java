@@ -5,7 +5,7 @@
 package name.huliqing.core.mvc.service;
 
 import java.util.List;
-import name.huliqing.core.Inject;
+import name.huliqing.core.mvc.network.SkinNetwork;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.module.SkinListener;
 import name.huliqing.core.object.skin.Skin;
@@ -14,61 +14,7 @@ import name.huliqing.core.object.skin.Skin;
  *
  * @author huliqing
  */
-public interface SkinService extends Inject {
-    
-    /**
-     * 给角色添加skin装备
-     * @param actor
-     * @param skinId
-     * @param amount 
-     */
-    void addSkin(Actor actor, String skinId, int amount);
-    
-    /**
-     * 移除角色身上的skin装备。
-     * @param actor
-     * @param skinId
-     * @param amount
-     */
-    void removeSkin(Actor actor, String skinId, int amount);
-    
-    /**
-     * 给角色换上装备,注：换装备的时候需要考虑冲突的装备，并把冲突的装备换
-     * 下来
-     * @param actor
-     * @param skin
-     */
-    void attachSkin(Actor actor, Skin skin);
-    
-    /**
-     * 脱下角色的装备，注：脱下装备时需要判断及补上缺失的装备
-     * @param actor
-     * @param skin
-     */
-    void detachSkin(Actor actor, Skin skin);
-    
-    // remove20160927
-//    /**
-//     * 判断当前状态下角色是否可以attach装备
-//     * @param actor
-//     * @param skin
-//     * @return 
-//     */
-//    boolean isCanAttach(Actor actor, Skin skin);
-//    
-//    /**
-//     * 判断目标角色是否可以取出武器
-//     * @param actor
-//     * @return 
-//     */
-//    boolean isCanTakeOnWeapon(Actor actor);
-//    
-//    /**
-//     * 判断目标角色是否可以取下武器
-//     * @param actor
-//     * @return 
-//     */
-//    boolean isCanTakeOffWeapon(Actor actor);
+public interface SkinService extends SkinNetwork {
     
     /**
      * 判断目标角色的武器是否拿在手上。
@@ -76,18 +22,6 @@ public interface SkinService extends Inject {
      * @return 
      */
     boolean isWeaponTakeOn(Actor actor);
-    
-    /**
-     * 让角色取出武器。
-     * @param actor 
-     */
-    void takeOnWeapon(Actor actor);
-    
-    /**
-     * 让角色取下武器
-     * @param actor 
-     */
-    void takeOffWeapon(Actor actor);
     
     /**
      * 获取角色身上指定ID的Skin

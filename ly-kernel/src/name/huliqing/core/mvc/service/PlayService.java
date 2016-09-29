@@ -9,11 +9,9 @@ import com.jme3.app.Application;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import java.util.List;
-import name.huliqing.core.Inject;
-import name.huliqing.core.data.GameData;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.data.ObjectData;
-import name.huliqing.core.enums.MessageType;
+import name.huliqing.core.mvc.network.PlayNetwork;
 import name.huliqing.core.state.PlayState;
 import name.huliqing.core.object.NetworkObject;
 import name.huliqing.core.object.PlayObject;
@@ -24,10 +22,9 @@ import name.huliqing.core.object.scene.Scene;
 import name.huliqing.core.object.view.View;
 
 /**
- *
  * @author huliqing
  */
-public interface PlayService extends Inject {
+public interface PlayService extends PlayNetwork {
     
     /**
      * 添加PlayObject到场景中。
@@ -40,19 +37,6 @@ public interface PlayService extends Inject {
      * @param playObject 
      */
     void removePlayObject(PlayObject playObject);
-    
-    /**
-     * 添加一个角色到战场
-     * //TODO 后续要重构并使用 addPlayObject代替 
-     * @param actor
-     */
-    void addActor(Actor actor);
-    
-    /**
-     * 把角色作为普通玩家角色类型载入（非Main player,即不一定是当前主场景中的角色。)
-     * @param actor 
-     */
-    void addSimplePlayer(Actor actor);
     
     /**
      * 添加一个效果到场景
@@ -74,13 +58,6 @@ public interface PlayService extends Inject {
      * @param data 
      */
     void addShortcut(Actor actor, ObjectData data);
-    
-    /**
-     * 添加视图组件到界面
-     * @deprecated 后续要重构并使用 addPlayObject代替 
-     * @param view 
-     */
-    void addView(View view);
     
     /**
      * 添加动画到场景中
@@ -117,45 +94,11 @@ public interface PlayService extends Inject {
     void addObjectGui(Object object);
     
     /**
-     * 从场景中移除物体
-     * @param object
-     */
-    void removeObject(Object object);
-    
-    /**
-     * 添加MESS
-     * @param message
-     * @param type 
-     */
-    void addMessage(String message, MessageType type);
-    
-    /**
-     * 添加信息到指定的客户端
-     * @param actor
-     * @param message
-     * @param type 
-     */
-    void addMessage(Actor actor, String message, MessageType type);
-    
-    /**
      * 获取当前场景中所有的角色,这些角色不分敌我、死活，只要是在场景中就算。
      * @see PlayState#getActors
      * @return 
      */
     List<Actor> findAllActor();
-    
-    /**
-     * 查找当前场景中指定分组的“有生命现象”的角色，这些角色必须是：
-     * 1.属于指定分组
-     * 2.必须是有机生命体（但不论是否已死亡）.有机生命是指角色必须拥有生命
-     * 现象，如动物、植物、人类、恶魔等。<br>
-     * 无机生命体是指如：防御塔、祭坛等不能移动，无生命迹象的角色。
-     * 如：防御塔、祭坛之类不能移动的建筑属于"非"活物。
-     * @param group
-     * @param store 存放结果
-     * @return 
-     */
-    List<Actor> findOrganismActors(int group, List<Actor> store);
     
     /**
      * 通过ID查找角色，注意，这里的id是角色类型id,场景中可能存在多个相同id
@@ -241,14 +184,6 @@ public interface PlayService extends Inject {
     Vector3f getRandomTerrainPoint(Vector3f store);
     
     /**
-     * 移动角色到指定的地点
-     * 也需要使用该方式进行移动。
-     * @param actor
-     * @param position 
-     */
-    void moveObject(Actor actor, Vector3f position);
-    
-    /**
      * 获取场景信息，如果不存在场景则返回null.
      * @return 
      */
@@ -308,6 +243,7 @@ public interface PlayService extends Inject {
     
     /**
      * 保存该关卡为完成状态,调用该方法则保存并标记当前关卡为“完成”
+     * @deprecated 
      * @param storyNum
      */
     void saveCompleteStage(int storyNum);
@@ -317,18 +253,6 @@ public interface PlayService extends Inject {
      * @return 
      */
     Application getApplication();
-    
-    /**
-     * 切换游戏
-     * @param gameId 
-     */
-    void changeGame(String gameId);
-    
-    /**
-     * 切换游戏
-     * @param gameData 
-     */
-    void changeGame(GameData gameData);
 
     /**
      * 获取当前游戏的gameId,如果不是正在游戏，则返回null.

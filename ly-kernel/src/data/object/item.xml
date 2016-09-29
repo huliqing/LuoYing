@@ -9,26 +9,37 @@
     <!--基本配置-->
     <!-- ========================================================================= -->
     
-    <!--药品: 补属性-->
-    <itemAttribute id="itemTonicBase" effects="effectRandomFire" />
+    <!--物品基类-->
+    <itemSimple id="itemBase" matchAttributes="attributeDead|0" />
     
-    <!--技能书：无限制 -->
-    <itemBook id="itemBookBase" effects="effectLearnSkill" />
+    <!--药水类-->
+    <itemAttribute id="itemTonicBase" extends="itemBase" effects="effectRandomFire" />
+    
+    <!--技能书 -->
+    <itemBook id="itemBookBase" extends="itemBase" effects="effectLearnSkill"/>
+    
+    <!--召唤卷轴-->
+    <itemSkill id="itemScrollBase" extends="itemBase" />
+    
+    <!-- ========================================================================= -->
+    <!--种族类限制物品-->
+    <!-- ========================================================================= -->
+    
     <!--技能书：人类种族 -->
-    <itemBook id="itemBookHumanBase" extends="itemBookBase" matchAttributes="attributeRace|1" />
+    <itemBook id="itemBookHumanBase" extends="itemBookBase" matchAttributes="attributeDead|0,attributeRace|1" />
     
     <!-- ========================================================================= -->
     <!--特殊物品-->
     <!-- ========================================================================= -->
     
     <!--for test-->
-    <itemTest id="item000" icon="Interface/item/book.png" /> 
+    <itemTest id="item000" extends="itemBase" icon="Interface/item/book.png" /> 
     
     <!--Gold-->
-    <itemSimple id="itemGold" icon="Interface/item/gold.png" cost="1" />
+    <itemSimple id="itemGold" extends="itemBase" icon="Interface/item/gold.png" cost="1" />
     
     <!--复活卷轴-->
-    <itemSkill id="itemScrollLife" icon="Interface/item/scroll_life.png" skill="skillShotReborn" cost="100" />
+    <itemSkill id="itemScrollLife" extends="itemBase" icon="Interface/item/scroll_life.png" skill="skillShotReborn" cost="100" />
     
     <!-- ========================================================================= -->
     <!--技能书籍-->
@@ -52,24 +63,24 @@
     <!-- ========================================================================= -->
     
     <!--召唤：狼-->
-    <itemSkill id="itemScrollWolf" icon="Interface/item/scroll_wolf.png" skill="skillSummonWolf" cost="200" />
+    <itemSkill id="itemScrollWolf" extends="itemScrollBase" icon="Interface/item/scroll_wolf.png" skill="skillSummonWolf" cost="200" />
     <!--召唤：熊-->
-    <itemSkill id="itemScrollBear"     icon="Interface/item/scroll_bear.png" skill="skillSummonBear" cost="200" />
+    <itemSkill id="itemScrollBear" extends="itemScrollBase" icon="Interface/item/scroll_bear.png" skill="skillSummonBear" cost="200" />
     <!--召唤：蝎子-->
-    <itemSkill id="itemScrollScorpion" icon="Interface/item/scroll_scorpion.png" skill="skillSummonScorpion" cost="200" />
+    <itemSkill id="itemScrollScorpion" extends="itemScrollBase" icon="Interface/item/scroll_scorpion.png" skill="skillSummonScorpion" cost="200" />
     <!--召唤：迅猛龙-->
-    <itemSkill id="itemScrollRaptor" icon="" skill="skillSummonRaptor" cost="400"  />
+    <itemSkill id="itemScrollRaptor" extends="itemScrollBase" icon="" skill="skillSummonRaptor" cost="400"  />
     <!--召唤：雷龙-->
-    <itemSkill id="itemScrollTrex" icon="" skill="skillSummonTrex" cost="600"  />
+    <itemSkill id="itemScrollTrex" extends="itemScrollBase" icon="" skill="skillSummonTrex" cost="600"  />
     <!--召唤：蜘蛛-->
-    <itemSkill id="itemSpiderSpawn" icon="Interface/item/spawn.png" skill="skillSummonSpider" cost="200" />
+    <itemSkill id="itemSpiderSpawn" extends="itemScrollBase" icon="Interface/item/spawn.png" skill="skillSummonSpider" cost="200" />
     <!--召唤：古柏树根-->
-    <itemSkill id="itemTreeStump" icon="Interface/item/treeStump.png" skill="skillSummonGb" cost="200" />
+    <itemSkill id="itemTreeStump" extends="itemScrollBase" icon="Interface/item/treeStump.png" skill="skillSummonGb" cost="200" />
     
     <!--召唤：防御塔-->
-    <itemSummon id="itemTower" icon="Interface/item/tower_fire.png" actorId="actorTower" total="1" cost="300" />
-    <itemSummon id="itemTowerStone" icon="Interface/item/tower_stone.png" actorId="actorTowerStone" total="1" cost="300" />
-    <itemSummon id="itemTowerSnow" icon="Interface/item/tower_snow.png" actorId="actorTowerSnow" total="1" cost="300" />
+    <itemSummon id="itemTower" extends="itemBase" icon="Interface/item/tower_fire.png" actorId="actorTower" total="1" cost="300" />
+    <itemSummon id="itemTowerStone" extends="itemBase" icon="Interface/item/tower_stone.png" actorId="actorTowerStone" total="1" cost="300" />
+    <itemSummon id="itemTowerSnow" extends="itemBase" icon="Interface/item/tower_snow.png" actorId="actorTowerSnow" total="1" cost="300" />
     
     <!-- ========================================================================= -->
     <!--药品类\增益类-->
@@ -86,21 +97,21 @@
     <itemState id="itemHerb" extends="itemTonicBase" icon="Interface/item/grass.png" states="stateWindWalk" cost="100" />
 
     <!--解除中毒状态: 解毒草用-->
-    <itemStateRemove id="itemDetoxifyGrass" icon="Interface/item/leaf.png" states="stateScorpionVenom" effects="effectTonic" cost="20" />
+    <itemStateRemove id="itemDetoxifyGrass" extends="itemBase"  icon="Interface/item/leaf.png" states="stateScorpionVenom" effects="effectTonic" cost="20" />
     
     <!--==========================================================================-->
     <!-- 任务物品 -->
     <!--==========================================================================-->
 
     <!--蜘蛛爪-->
-    <itemSimple id="itemSpiderClaw" icon="Interface/item/claw.png" cost="0" />
+    <itemSimple id="itemSpiderClaw" extends="itemBase" icon="Interface/item/claw.png" cost="0" />
     
     <!--==========================================================================-->
     <!-- 地图 -->
     <!--==========================================================================-->
     
     <!--落樱大陆地图-->
-    <itemMap id="itemMapWorld" icon="Interface/map/map_world_icon.jpg" deletable="0" localObject="1"
+    <itemMap id="itemMapWorld" extends="itemBase" icon="Interface/map/map_world_icon.jpg" deletable="0" localObject="1"
             image="Interface/map/map_world.jpg" locationSize="0.5" flipVertical="1"
                 baseIconPath="Interface/map/loc/"
                 locations="start|0.86|0.63|1|gameStoryTreasure|star.png

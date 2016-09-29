@@ -60,7 +60,7 @@ import name.huliqing.core.mvc.service.ObjectService;
  * @author huliqing
  */
 public class UserCommandNetworkImpl implements UserCommandNetwork {
-    private final static Network network = Network.getInstance();
+    private final static Network NETWORK = Network.getInstance();
     private LogicService logicService;
     private SkillService skillService;
     private ActorService actorService;
@@ -109,8 +109,8 @@ public class UserCommandNetworkImpl implements UserCommandNetwork {
     @Override
     public void selectPlayer(String actorId, String actorName) {
         
-        if (network.isClient()) {
-            network.sendToServer(new MessPlayActorSelect(actorId, actorName));
+        if (NETWORK.isClient()) {
+            NETWORK.sendToServer(new MessPlayActorSelect(actorId, actorName));
         } else {
             Actor actor = actorService.loadActor(actorId);
             
@@ -131,13 +131,13 @@ public class UserCommandNetworkImpl implements UserCommandNetwork {
             playNetwork.addActor(actor);
             
             // 通知
-            if (network.hasConnections()) {
+            if (NETWORK.hasConnections()) {
                 String message = ResourceManager.get("lan.enterGame", new Object[] {actorName});
                 MessageType type = MessageType.item;
                 MessMessage notice = new MessMessage();
                 notice.setMessage(message);
                 notice.setType(type);
-                network.broadcast(notice);              // 通知所有客户端
+                NETWORK.broadcast(notice);              // 通知所有客户端
                 playService.addMessage(message, type);  // 通知主机
             }
             
@@ -148,24 +148,21 @@ public class UserCommandNetworkImpl implements UserCommandNetwork {
     @Override
     public void addSimplePlayer(Actor actor) {
         ActorData data = actor.getData();
-         if (network.isClient()) {
-             
-            network.sendToServer(new MessPlayActorSelect(data.getId(), data.getName()));
-            
+         if (NETWORK.isClient()) {
+            NETWORK.sendToServer(new MessPlayActorSelect(data.getId(), data.getName()));
         } else {
             playNetwork.addSimplePlayer(actor);
             
             // 通知
-            if (network.hasConnections()) {
+            if (NETWORK.hasConnections()) {
                 String message = ResourceManager.get("lan.enterGame", new Object[] {actor.getData().getName()});
                 MessageType type = MessageType.item;
                 MessMessage notice = new MessMessage();
                 notice.setMessage(message);
                 notice.setType(type);
-                network.broadcast(notice);                          // 通知所有客户端
+                NETWORK.broadcast(notice);                          // 通知所有客户端
                 playService.addMessage(message, type);   // 通知主机
             }
-            
         }
     }
 
@@ -176,11 +173,11 @@ public class UserCommandNetworkImpl implements UserCommandNetwork {
             return;
         }
         
-        if (network.isClient()) {
+        if (NETWORK.isClient()) {
             MessActionRun runAction = new MessActionRun();
             runAction.setActorId(actor.getData().getUniqueId());
             runAction.setPos(worldPos);
-            network.sendToServer(runAction);
+            NETWORK.sendToServer(runAction);
         } else {
                 // for test
 //            actor.getModule(ActorModule.class).setWalkDirection(worldPos.subtract(actor.getSpatial().getWorldTranslation()).normalizeLocal());
@@ -194,10 +191,10 @@ public class UserCommandNetworkImpl implements UserCommandNetwork {
 
     @Override
     public void attack(Actor actor, Actor target) {
-        if (network.isClient()) {
+        if (NETWORK.isClient()) {
             MessAutoAttack mess = new MessAutoAttack();
             mess.setTargetId(target != null ? target.getData().getUniqueId() : -1);
-            network.sendToServer(mess);
+            NETWORK.sendToServer(mess);
         } else {
             playNetwork.attack(actor, target);
         }
@@ -215,11 +212,11 @@ public class UserCommandNetworkImpl implements UserCommandNetwork {
         // 界面的主目标,因为有很多物品在使用的时候都需要当前界面的主目标。
         Actor target = playService.getTarget();
         if (target != null) {
-            if (network.isClient()) {
+            if (NETWORK.isClient()) {
                 MessActorSetTarget mess = new MessActorSetTarget();
                 mess.setActorId(actor.getData().getUniqueId());
                 mess.setTargetId(target.getData().getUniqueId());
-                network.sendToServer(mess);
+                NETWORK.sendToServer(mess);
             } else {
                 actorNetwork.setTarget(actor, target);
             }
@@ -234,11 +231,11 @@ public class UserCommandNetworkImpl implements UserCommandNetwork {
         }
         
         // 使用物品
-        if (network.isClient()) {
+        if (NETWORK.isClient()) {
             MessProtoUse mess = new MessProtoUse();
             mess.setActorId(actor.getData().getUniqueId());
             mess.setObjectId(data.getId());
-            network.sendToServer(mess);
+            NETWORK.sendToServer(mess);
         } else {
             protoNetwork.useData(actor, data);
         }
@@ -246,23 +243,12 @@ public class UserCommandNetworkImpl implements UserCommandNetwork {
 
     @Override
     public void removeObject(Actor actor, String objectId, int amount) {
-        // remove20160821
-//        ObjectData data = protoService.getData(actor, objectId);
-//        if (data == null)
-//            return;
-        
-        if (network.isClient()) {
-            
-            // remove20160830 不再使用本地优先删除的方式
-//            // 客户端本地先删除 
-//            protoService.removeData(actor, objectId, amount);
-            
-            // 通知服务端
+        if (NETWORK.isClient()) {
             MessProtoRemove mess = new MessProtoRemove();
             mess.setActorId(actor.getData().getUniqueId());
             mess.setObjectId(objectId);
             mess.setAmount(amount);
-            network.sendToServer(mess);
+            NETWORK.sendToServer(mess);
         } else {
             protoNetwork.removeData(actor, objectId, amount);
         }
@@ -270,11 +256,11 @@ public class UserCommandNetworkImpl implements UserCommandNetwork {
 
     @Override
     public void follow(Actor actor, long targetId) {
-        if (network.isClient()) {
+        if (NETWORK.isClient()) {
             MessActorFollow mess = new MessActorFollow();
             mess.setActorId(actor.getData().getUniqueId());
             mess.setTargetId(targetId);
-            network.sendToServer(mess);
+            NETWORK.sendToServer(mess);
         } else {
             actorNetwork.setFollow(actor, targetId);
         }
@@ -282,12 +268,12 @@ public class UserCommandNetworkImpl implements UserCommandNetwork {
 
     @Override
     public void addTalentPoints(Actor actor, String talentId, int points) {
-        if (network.isClient()) {
+        if (NETWORK.isClient()) {
             MessTalentAddPoint mess = new MessTalentAddPoint();
             mess.setActorId(actor.getData().getUniqueId());
             mess.setTalentId(talentId);
             mess.setPoints(points);
-            network.sendToServer(mess);
+            NETWORK.sendToServer(mess);
         } else {
             talentNetwork.addTalentPoints(actor, talentId, points);
         }
@@ -296,14 +282,14 @@ public class UserCommandNetworkImpl implements UserCommandNetwork {
     @Override
     public void chatShop(Actor seller, Actor buyer, String itemId, int count, float discount) {
         // On client
-        if (network.isClient()) {
+        if (NETWORK.isClient()) {
             MessChatShop mess = new MessChatShop();
             mess.setSeller(seller.getData().getUniqueId());
             mess.setBuyer(buyer.getData().getUniqueId());
             mess.setItemId(itemId);
             mess.setCount(count);
             mess.setDiscount(discount);
-            network.sendToServer(mess);
+            NETWORK.sendToServer(mess);
             return;
         } 
         
@@ -314,14 +300,14 @@ public class UserCommandNetworkImpl implements UserCommandNetwork {
     @Override
     public void chatSell(Actor seller, Actor buyer, String[] items, int[] counts, float discount) {
         // On client
-        if (network.isClient()) {
+        if (NETWORK.isClient()) {
             MessChatSell mess = new MessChatSell();
             mess.setBuyer(buyer.getData().getUniqueId());
             mess.setCounts(counts);
             mess.setDiscount(discount);
             mess.setItems(items);
             mess.setSeller(seller.getData().getUniqueId());
-            network.sendToServer(mess);
+            NETWORK.sendToServer(mess);
             return;
         } 
         
@@ -332,13 +318,13 @@ public class UserCommandNetworkImpl implements UserCommandNetwork {
     @Override
     public void chatSend(Actor sender, Actor receiver, String[] items, int[] counts) {
         // on client
-        if (network.isClient()) {
+        if (NETWORK.isClient()) {
             MessChatSend mess = new MessChatSend();
             mess.setCounts(counts);
             mess.setItems(items);
             mess.setReceiver(receiver.getData().getUniqueId());
             mess.setSender(sender.getData().getUniqueId());
-            network.sendToServer(mess);
+            NETWORK.sendToServer(mess);
             return;
         }
         
@@ -348,25 +334,24 @@ public class UserCommandNetworkImpl implements UserCommandNetwork {
 
     @Override
     public void chatTaskAdd(Actor actor, Task task) {
-        if (network.isClient()) {
+        if (NETWORK.isClient()) {
             MessTaskAdd mess = new MessTaskAdd();
             mess.setActorId(actor.getData().getUniqueId());
             mess.setTaskData(task.getData());
-            network.sendToServer(mess);
+            NETWORK.sendToServer(mess);
             return;
         }
-        
         taskNetwork.addTask(actor, task);
     }
 
     @Override
     public void chatTaskComplete(Actor actor, Task task) {
         // 客户端向服务端提交“完成任务”的请求
-        if (network.isClient()) {
+        if (NETWORK.isClient()) {
             MessTaskComplete mess = new MessTaskComplete();
             mess.setActorId(actor.getData().getUniqueId());
             mess.setTaskId(task.getId());
-            network.sendToServer(mess);
+            NETWORK.sendToServer(mess);
             return;
         }
         
@@ -377,10 +362,10 @@ public class UserCommandNetworkImpl implements UserCommandNetwork {
     @Override
     public void changeGameState(String gameId) {
         GameData gameData = gameService.loadGameData(gameId);
-        if (network.isClient()) {
+        if (NETWORK.isClient()) {
             MessPlayChangeGameState mess = new MessPlayChangeGameState();
             mess.setGameData(gameData);
-            network.sendToServer(mess);
+            NETWORK.sendToServer(mess);
         } else {
             playNetwork.changeGame(gameData);
         }

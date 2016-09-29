@@ -444,8 +444,8 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
         }
         // 监听到健康值为0时，把角色标记为死亡
         if (attribute == healthAttribute) {
-            if (healthAttribute.floatValue() <= 0 && deadAttribute != null) {
-                deadAttribute.setValue(true);
+            if (deadAttribute != null) {
+                deadAttribute.setValue(healthAttribute.intValue() <= 0);
             }
         }
     }

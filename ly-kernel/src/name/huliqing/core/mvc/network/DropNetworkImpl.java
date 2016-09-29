@@ -6,7 +6,6 @@
 package name.huliqing.core.mvc.network;
 
 import name.huliqing.core.Factory;
-import name.huliqing.core.data.DropData;
 import name.huliqing.core.mvc.service.DropService;
 import name.huliqing.core.network.Network;
 import name.huliqing.core.object.actor.Actor;
@@ -22,16 +21,6 @@ public class DropNetworkImpl implements DropNetwork {
     @Override
     public void inject() {
         dropService = Factory.get(DropService.class);
-    }
-
-    @Override
-    public void addDrop(Actor actor, String dropId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public DropData createDrop(String objectId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

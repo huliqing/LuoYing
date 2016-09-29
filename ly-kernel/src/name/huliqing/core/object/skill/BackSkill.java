@@ -8,6 +8,7 @@ import com.jme3.math.Vector3f;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.mvc.network.PlayNetwork;
+import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.network.Network;
 
 /**
@@ -15,6 +16,7 @@ import name.huliqing.core.network.Network;
  * @author huliqing
  */
 public class BackSkill extends AbstractSkill {
+    private final PlayService playService = Factory.get(PlayService.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     
     // 人物消失的时间插值点
@@ -36,7 +38,7 @@ public class BackSkill extends AbstractSkill {
         if (!backed && time >= trueUseTime * backPoint) {
             // 注意：因为涉及到随机传送，所以必须统一由服务端处理。use Network
             Vector3f loc = actor.getSpatial().getLocalTranslation();
-            playNetwork.getRandomTerrainPoint(loc);
+            playService.getRandomTerrainPoint(loc);
             playNetwork.moveObject(actor, loc);
             backed = true;
         }

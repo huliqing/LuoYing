@@ -4,11 +4,10 @@
  */
 package name.huliqing.core.mvc.service;
 
-import com.jme3.math.Vector3f;
 import java.util.List;
-import name.huliqing.core.Inject;
 import name.huliqing.core.constants.SkillConstants;
 import name.huliqing.core.data.SkillData;
+import name.huliqing.core.mvc.network.SkillNetwork;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.module.SkillListener;
 import name.huliqing.core.object.module.SkillPlayListener;
@@ -20,7 +19,7 @@ import name.huliqing.core.object.skill.SkillTag;
  * 执行成功.
  * @author huliqing
  */
-public interface SkillService extends Inject {
+public interface SkillService extends SkillNetwork {
     
     /**
      * 载入技能。
@@ -35,13 +34,6 @@ public interface SkillService extends Inject {
      * @return 
      */
     Skill loadSkill(SkillData skillData);
-    
-    /**
-     * 给角色添加技能
-     * @param actor
-     * @param skillId 
-     */
-    void addSkill(Actor actor, String skillId);
     
     /**
      * 从角色身上移除一个技能
@@ -133,38 +125,6 @@ public interface SkillService extends Inject {
      * @return stateCode {@link SkillConstants#STATE_XXX}
      */
     int checkStateCode(Actor actor, Skill skill);
-    
-    /**
-     * 执行一个技能实例
-     * @param actor
-     * @param skill
-     * @param force 是否强制执行,注：如果强制执行则忽略<strong>所有</strong>
-     * 任何限制，直接执行技能即，该方法将保证返回true。
-     * @return 
-     */
-    boolean playSkill(Actor actor, Skill skill, boolean force);
-    
-    /**
-     * 执行技能,技能的执行会受角色属性状态的影响
-     * @param actor
-     * @param skillId
-     * @param force 是否强制执行,注：如果强制执行则忽略<strong>所有</strong>
-     * 任何限制，直接执行技能即，该方法将保证返回true。
-     * @return 
-     */
-    boolean playSkill(Actor actor, String skillId, boolean force);
-    
-    /**
-     * 执行“步行”技能，步行的速度等受角色属性的影响
-     * @param actor
-     * @param skillId
-     * @param dir
-     * @param faceToDir
-     * @param force 是否强制执行,注：如果强制执行则忽略<strong>所有</strong>
-     * 任何限制，直接执行技能即，该方法将保证返回true。
-     * @return 
-     */
-    boolean playWalk(Actor actor, String skillId, Vector3f dir, boolean faceToDir, boolean force);
     
     /**
      * 检查技能是否可以执行.

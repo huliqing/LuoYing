@@ -6,6 +6,7 @@ package name.huliqing.core.object.game.impl;
 
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,6 +33,7 @@ import name.huliqing.core.logic.scene.ActorBuildSimpleLogic.Callback;
 import name.huliqing.core.logic.scene.ActorMultLoadHelper;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.module.ActorModule;
 import name.huliqing.core.utils.MathUtils;
 
 /**
@@ -413,10 +415,26 @@ public class StoryGuardTask2 extends GameTaskBase {
         offensiveEnemy = true;
         // 当切换模式时需要将当前在场景中的所有敌人的逻辑改变为进攻性的
         // 让所有手下跟着sinbad，而sinbad跟着gb
-        List<Actor> enemys = playService.findOrganismActors(StoryGuardGame.GROUP_ENEMY, null);
+        List<Actor> enemys = findBiologyActors(StoryGuardGame.GROUP_ENEMY, null);
         for (Actor e : enemys) {
             createOffensiveLogic(e, gb);
         }
+    }
+    
+    // 找出生物类角色
+    private List<Actor> findBiologyActors(int group, List<Actor> store) {
+        if (store == null) {
+            store = new ArrayList<Actor>();
+        }
+        List<Actor> all = playService.findAllActor();
+        ActorModule am;
+        for (Actor actor : all) {
+            am = actor.getModule(ActorModule.class);
+            if (am != null && am.getGroup() == group && am.isBiology()) {
+                 store.add(actor);
+            }
+        }
+        return store;
     }
     
     /**

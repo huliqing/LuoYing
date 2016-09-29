@@ -5,8 +5,8 @@
 package name.huliqing.core.mvc.service;
 
 import java.util.List;
-import name.huliqing.core.Inject;
 import name.huliqing.core.data.TaskData;
+import name.huliqing.core.mvc.network.TaskNetwork;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.module.TaskListener;
 import name.huliqing.core.object.task.Task;
@@ -15,7 +15,7 @@ import name.huliqing.core.object.task.Task;
  *
  * @author huliqing
  */
-public interface TaskService extends Inject {
+public interface TaskService extends TaskNetwork {
 
     /**
      * 载入一个任务
@@ -30,13 +30,6 @@ public interface TaskService extends Inject {
      * @return 
      */
     Task loadTask(TaskData taskData);
-    
-    /**
-     * 添加一个任务给角色
-     * @param actor
-     * @param task
-     */
-    void addTask(Actor actor, Task task);
     
     /**
      * 从角色身上获取任务。如果角色没有接受过指定ID的任务，则该方法返回null.
@@ -68,23 +61,6 @@ public interface TaskService extends Inject {
      * @return 
      */
     boolean checkCompletion(Actor actor, Task task);
-    
-    /**
-     * 完成指定的任务
-     * @param actor
-     * @param task
-     */
-    void completeTask(Actor actor, Task task);
-    
-    /**
-     * 增加或减少任务物品的数量,任务物品并不作为普通物品一样存放在角色包裹上
-     * ,因为任务物品不能使用、删除
-     * @param actor 角色
-     * @param task 任务
-     * @param itemId 任务物品ID
-     * @param amount 要增加或减少的任务物品数量，可正可负 
-     */
-    void applyItem(Actor actor, Task task, String itemId, int amount);
     
     /**
      * 获取当前已经收集到的任务物品的数量

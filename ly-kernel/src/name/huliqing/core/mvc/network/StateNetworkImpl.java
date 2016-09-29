@@ -5,15 +5,11 @@
 package name.huliqing.core.mvc.network;
 
 import name.huliqing.core.network.Network;
-import java.util.List;
 import name.huliqing.core.Factory;
-import name.huliqing.core.data.StateData;
 import name.huliqing.core.mvc.service.StateService;
 import name.huliqing.core.mess.MessStateAdd;
 import name.huliqing.core.mess.MessStateRemove;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.module.StateListener;
-import name.huliqing.core.object.state.State;
 
 /**
  * 重要：对于客户端和服务端的同步，一般应先广播到所有客户端，然后再在服务端自
@@ -23,7 +19,7 @@ import name.huliqing.core.object.state.State;
  * @author huliqing
  */
 public class StateNetworkImpl implements StateNetwork {
-    private final static Network network = Network.getInstance(); 
+    private final static Network NETWORK = Network.getInstance(); 
     private StateService stateService;
 
     @Override
@@ -38,17 +34,17 @@ public class StateNetworkImpl implements StateNetwork {
     
     @Override
     public boolean addState(Actor actor, String stateId, Actor sourceActor) {
-        if (!network.isClient()) {
+        if (!NETWORK.isClient()) {
             float resist = stateService.checkAddState(actor, stateId);
             if (resist < 1) {
-                if (network.hasConnections()) {
+                if (NETWORK.hasConnections()) {
                     // 先广播
                     MessStateAdd mess = new MessStateAdd();
                     mess.setActorId(actor.getData().getUniqueId());
                     mess.setStateId(stateId);
                     mess.setResist(resist);
                     mess.setSourceActorId(sourceActor != null ? sourceActor.getData().getUniqueId() : -1);
-                    network.broadcast(mess);
+                    NETWORK.broadcast(mess);
                 }
                 
                 // 再执行服务端添加逻辑
@@ -62,15 +58,15 @@ public class StateNetworkImpl implements StateNetwork {
 
     @Override
     public void addStateForce(Actor actor, String stateId, float resist, Actor sourceActor) {
-        if (!network.isClient()) {
-            if (network.hasConnections()) {
+        if (!NETWORK.isClient()) {
+            if (NETWORK.hasConnections()) {
                 // 先广播
                 MessStateAdd mess = new MessStateAdd();
                 mess.setActorId(actor.getData().getUniqueId());
                 mess.setStateId(stateId);
                 mess.setResist(resist);
                 mess.setSourceActorId(sourceActor != null ? sourceActor.getData().getUniqueId() : -1);
-                network.broadcast(mess);
+                NETWORK.broadcast(mess);
             }
 
             // 再执行服务端添加逻辑
@@ -80,54 +76,18 @@ public class StateNetworkImpl implements StateNetwork {
 
     @Override
     public boolean removeState(Actor actor, String stateId) {
-        if (!network.isClient()) {
-            if (network.hasConnections()) {
+        if (!NETWORK.isClient()) {
+            if (NETWORK.hasConnections()) {
                 // 先广播
                 MessStateRemove mess = new MessStateRemove();
                 mess.setActorId(actor.getData().getUniqueId());
                 mess.setStateId(stateId);
-                network.broadcast(mess);
+                NETWORK.broadcast(mess);
             }
             stateService.removeState(actor, stateId);
             return true;
         }
         return false;
-    }
-
-    @Override
-    public State findState(Actor actor, String stateId) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void clearStates(Actor actor) {
-        throw new UnsupportedOperationException();
-    }
-
-    // remove20160803
-//    @Override
-//    public boolean existsState(String stateId) {
-//        throw new UnsupportedOperationException();
-//    }
-
-    @Override
-    public boolean existsState(Actor actor, String stateId) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public List<StateData> getStates(Actor actor) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void addListener(Actor actor, StateListener listener) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public boolean removeListener(Actor actor, StateListener listener) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 }

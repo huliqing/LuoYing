@@ -4,15 +4,53 @@
  */
 package name.huliqing.core.mvc.network;
 
-import name.huliqing.core.mvc.service.SkillService;
+import com.jme3.math.Vector3f;
+import name.huliqing.core.Inject;
+import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.skill.Skill;
 
 /**
- * 所有Network逻辑必须遵循如下规则：
- * 1.如果是client模式,不处理任何逻辑,除UserCommandNetwork外。
- * 2.如果是server或single模式，则所有命令被直接执行，然后广播到所有客户端。
  * @author huliqing
  */
-public interface SkillNetwork extends SkillService {
+public interface SkillNetwork extends Inject {
+
+    /**
+     * 给角色添加技能
+     * @param actor
+     * @param skillId 
+     */
+    void addSkill(Actor actor, String skillId);
     
+    /**
+     * 执行一个技能实例
+     * @param actor
+     * @param skill
+     * @param force 是否强制执行,注：如果强制执行则忽略<strong>所有</strong>
+     * 任何限制，直接执行技能即，该方法将保证返回true。
+     * @return 
+     */
+    boolean playSkill(Actor actor, Skill skill, boolean force);
+    
+    /**
+     * 执行技能,技能的执行会受角色属性状态的影响
+     * @param actor
+     * @param skillId
+     * @param force 是否强制执行,注：如果强制执行则忽略<strong>所有</strong>
+     * 任何限制，直接执行技能即，该方法将保证返回true。
+     * @return 
+     */
+    boolean playSkill(Actor actor, String skillId, boolean force);
+    
+    /**
+     * 执行“步行”技能，步行的速度等受角色属性的影响
+     * @param actor
+     * @param skillId
+     * @param dir
+     * @param faceToDir
+     * @param force 是否强制执行,注：如果强制执行则忽略<strong>所有</strong>
+     * 任何限制，直接执行技能即，该方法将保证返回true。
+     * @return 
+     */
+    boolean playWalk(Actor actor, String skillId, Vector3f dir, boolean faceToDir, boolean force);
     
 }

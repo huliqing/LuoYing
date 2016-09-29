@@ -5,9 +5,7 @@
 package name.huliqing.core.mvc.network;
 
 import name.huliqing.core.network.Network;
-import com.jme3.ai.navmesh.NavMeshPathfinder;
 import com.jme3.animation.LoopMode;
-import com.jme3.app.Application;
 import com.jme3.math.Vector3f;
 import com.jme3.network.HostedConnection;
 import com.jme3.scene.Spatial;
@@ -18,7 +16,6 @@ import name.huliqing.core.LY;
 import name.huliqing.core.Config;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.GameData;
-import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.enums.MessageType;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.PlayService;
@@ -34,14 +31,9 @@ import name.huliqing.core.mvc.service.GameService;
 import name.huliqing.core.mvc.service.LogicService;
 import name.huliqing.core.object.SyncData;
 import name.huliqing.core.object.NetworkObject;
-import name.huliqing.core.object.PlayObject;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.module.ChannelModule;
-import name.huliqing.core.object.anim.Anim;
-import name.huliqing.core.object.bullet.Bullet;
 import name.huliqing.core.object.channel.Channel;
-import name.huliqing.core.object.effect.Effect;
-import name.huliqing.core.object.scene.Scene;
 import name.huliqing.core.object.view.View;
 
 /**
@@ -69,16 +61,6 @@ public class PlayNetworkImpl implements PlayNetwork {
         logicService = Factory.get(LogicService.class);
         actionNetwork = Factory.get(ActionNetwork.class);
         skinNetwork = Factory.get(SkinNetwork.class);
-    }
-
-    @Override
-    public void addPlayObject(PlayObject playObject) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void removePlayObject(PlayObject playObject) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
     
     @Override
@@ -108,21 +90,6 @@ public class PlayNetworkImpl implements PlayNetwork {
             NETWORK.broadcast(mess);
         }
     }
- 
-    @Override
-    public void addEffect(Effect effect) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void addBullet(Bullet bullet) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-    
-    @Override
-    public void addShortcut(Actor actor, ObjectData data) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
 
     @Override
     public void addView(View view) {
@@ -137,31 +104,6 @@ public class PlayNetworkImpl implements PlayNetwork {
         }
     }
 
-    @Override
-    public void addAnimation(Anim animation) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void removeAnimation(Anim animation) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-    
-    @Override
-    public void addObject(Object object, boolean gui) {        
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void addObject(Object object) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void addObjectGui(Object object) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-    
     @Override
     public void removeObject(Object object) {
         if (!NETWORK.isClient()) {
@@ -246,78 +188,6 @@ public class PlayNetworkImpl implements PlayNetwork {
     }
 
     @Override
-    public List<Actor> findAllActor() {
-        // ignore客户端不需要
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public List<Actor> findOrganismActors(int group, List<Actor> store) {
-        // ignore客户端不需要
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public Actor findActor(String id) {
-        // ignore客户端不需要
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public Actor findActor(long actorUniqueId) {
-        // ignore客户端不需要
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public List<View> findAllViews() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public View findView(long uniqueId) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public NetworkObject findSyncObject(long objectId) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public NavMeshPathfinder createPathfinder() {
-//        return playService.createPathfinder();
-        
-        // ignore客户端不需要
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public Spatial getTerrain() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public float getTerrainHeight(float x, float z) {
-        return playService.getTerrainHeight(x, z);
-    }
-
-    @Override
-    public Vector3f getActorForwardPosition(Actor actor, float distance, Vector3f store) {
-        return playService.getActorForwardPosition(actor, distance, store);
-    }
-
-    @Override
-    public Actor getPlayer() {
-        return playService.getPlayer();
-    }
-
-    @Override
-    public Vector3f getRandomTerrainPoint(Vector3f store) {
-        return playService.getRandomTerrainPoint(store);
-    }
-
-    @Override
     public void moveObject(Actor actor, Vector3f position) {
         if (!NETWORK.isClient()) {
             // 先在服务端移动后再同步,因为移动后的位置可能最终被修正
@@ -330,57 +200,6 @@ public class PlayNetworkImpl implements PlayNetwork {
         }
     }
 
-    @Override
-    public Scene getScene() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean isInScene(Actor actor) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public Actor getTarget() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void setTarget(Actor target) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public Vector3f moveUpToTerrain(Vector3f position) {
-        return playService.moveUpToTerrain(position);
-    }
-
-    @Override
-    public float getScreenWidth() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public float getScreenHeight() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void setMainPlayer(Actor actor) {
-        // 这个命令不需要广播到客户端
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean isInScene(Spatial spatial) {
-        return playService.isInScene(spatial);
-    }
-
-    @Override
-    public void saveCompleteStage(int storyNum) {
-        playService.saveCompleteStage(storyNum);
-    }
-    
     @Override
     public void addMessageOnlyClients(String message, MessageType type) {
         if (!NETWORK.isClient()) {
@@ -498,11 +317,6 @@ public class PlayNetworkImpl implements PlayNetwork {
     }
 
     @Override
-    public Application getApplication() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
     public void changeGame(String gameId) {
         changeGame(gameService.loadGameData(gameId));
     }
@@ -519,10 +333,6 @@ public class PlayNetworkImpl implements PlayNetwork {
         playService.changeGame(gameData);
     }
 
-    @Override
-    public String getGameId() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
     
     
 }

@@ -11,10 +11,8 @@ import name.huliqing.core.mess.MessChatSell;
 import name.huliqing.core.mess.MessChatSend;
 import name.huliqing.core.mess.MessChatShop;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.chat.Chat;
 
 /**
- *
  * @author huliqing
  */
 public class ChatNetworkImpl implements ChatNetwork {
@@ -24,16 +22,6 @@ public class ChatNetworkImpl implements ChatNetwork {
     @Override
     public void inject() {
         chatService = Factory.get(ChatService.class);
-    }
-
-    @Override
-    public Chat loadChat(String chatId) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public Chat getChat(Actor actor) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override

@@ -5,18 +5,17 @@
 package name.huliqing.core.mvc.service;
 
 import java.util.List;
-import name.huliqing.core.Inject;
 import name.huliqing.core.data.AttributeData;
+import name.huliqing.core.mvc.network.AttributeNetwork;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.attribute.Attribute;
-import name.huliqing.core.object.attribute.NumberAttribute;
 import name.huliqing.core.object.module.AttributeListener;
 
 /**
  *
  * @author huliqing
  */
-public interface AttributeService extends Inject{
+public interface AttributeService extends AttributeNetwork {
     
     Attribute loadAttribute(String attributeId);
     
@@ -69,16 +68,6 @@ public interface AttributeService extends Inject{
      */
     boolean removeListener(Actor actor, AttributeListener attributeListener);
     
-    // remove20160909
-//    /**
-//     * 设置指定属性名称的值。
-//     * @param <V>
-//     * @param actor
-//     * @param attrName 属性“名称”
-//     * @param value 
-//     */
-//    <V extends Object> void setAttributeValue(Actor actor, String attrName, V value);
-    
     /**
      * 设置指定属性名称的值,属性类型必须是SimpleAttribute
      * @param <V>
@@ -87,15 +76,6 @@ public interface AttributeService extends Inject{
      * @param attrValue 
      */
     <V extends Object> void setSimpleAttributeValue(Actor actor, String attrName, V attrValue);
-    
-    /**
-     * 给指定“名称”的属性添加值。注:所指定的属性必须存在，并且必须是 {@link NumberAttribute}类型的属性，
-     * 否则什么也不做。
-     * @param actor
-     * @param attrName 属性名称
-     * @param value 
-     */
-    void addNumberAttributeValue(Actor actor, String attrName, float value);
     
     /**
      * 获取指定“名称“的NumberAttribute类型的属性的值，目标属性必须存在，并且必须是NubmerAttribute，

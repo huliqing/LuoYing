@@ -6,18 +6,13 @@ package name.huliqing.core.mvc.network;
 
 import name.huliqing.core.network.Network;
 import com.jme3.math.Vector3f;
-import java.util.List;
 import name.huliqing.core.Factory;
-import name.huliqing.core.data.SkillData;
 import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.mess.MessActorAddSkill;
 import name.huliqing.core.mess.MessSkillPlay;
 import name.huliqing.core.mess.MessSkillWalk;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.module.SkillListener;
-import name.huliqing.core.object.module.SkillPlayListener;
 import name.huliqing.core.object.skill.Skill;
-import name.huliqing.core.object.skill.SkillTag;
 
 /**
  *
@@ -30,16 +25,6 @@ public class SkillNetworkImpl implements SkillNetwork {
     @Override
     public void inject() {
         skillService = Factory.get(SkillService.class);
-    }
-
-    @Override
-    public Skill loadSkill(String skillId) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-    
-    @Override
-    public Skill loadSkill(SkillData skillData) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     @Override
@@ -148,130 +133,6 @@ public class SkillNetworkImpl implements SkillNetwork {
         return false;
     }
     
-    @Override
-    public boolean isPlayable(Actor actor, Skill skill) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public int checkStateCode(Actor actor, Skill skill) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public boolean isCooldown(Skill skill) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public boolean hasSkill(Actor actor, String skillId) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public boolean isPlayingSkill(Actor actor) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public long getPlayingSkillTags(Actor actor) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void addSkillListener(Actor actor, SkillListener skillListener) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    @Override
-    public void addSkillPlayListener(Actor actor, SkillPlayListener skillPlayListener) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean removeSkillListener(Actor actor, SkillListener skillListener) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean removeSkillPlayListener(Actor actor, SkillPlayListener skillPlayListener) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean removeSkill(Actor actor, String skillId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Skill getSkill(Actor actor, String skillId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Skill getSkillWaitDefault(Actor actor) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Skill getSkillHurtDefault(Actor actor) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Skill getSkillDeadDefault(Actor actor) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public List<Skill> getSkillWait(Actor actor) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public List<Skill> getSkillHurt(Actor actor) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public List<Skill> getSkillByTags(Actor actor, long skillTags) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public List<Skill> getSkillDead(Actor actor) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public List<Skill> getSkills(Actor actor) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void lockSkillTags(Actor actor, long skillTags) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void unlockSkillTags(Actor actor, long skillTags) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean isPlayingSkill(Actor actor, long skillTags) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public SkillTag getSkillTag(String skillTag) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public long convertSkillTags(String... tags) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
+   
     
 }

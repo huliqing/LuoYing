@@ -4,7 +4,6 @@
  */
 package name.huliqing.core.mvc.network;
 
-import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.mess.MessSkinAdd;
 import name.huliqing.core.mess.MessSkinAttach;
@@ -14,7 +13,6 @@ import name.huliqing.core.mvc.service.SkinService;
 import name.huliqing.core.network.Network;
 import name.huliqing.core.mess.MessSkinWeaponTakeOn;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.module.SkinListener;
 import name.huliqing.core.object.skin.Skin;
 
 /**
@@ -113,45 +111,5 @@ public class SkinNetworkImpl implements SkinNetwork {
             skinService.takeOffWeapon(actor);
         }
     }
-    
-    @Override
-    public Skin getSkin(Actor actor, String skinId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    @Override
-    public List<Skin> getSkins(Actor actor) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public List<Skin> getUsingSkins(Actor actor) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void addSkinListener(Actor actor, SkinListener skinListener) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean removeSkinListener(Actor actor, SkinListener skinListener) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public long getWeaponState(Actor actor) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean isWeaponTakeOn(Actor actor) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-
-
-
-
     
 }

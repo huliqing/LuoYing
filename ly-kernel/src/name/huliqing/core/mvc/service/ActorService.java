@@ -8,19 +8,17 @@ import com.jme3.animation.LoopMode;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import java.util.List;
-import name.huliqing.core.Inject;
 import name.huliqing.core.data.ActorData;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.enums.Sex;
-import name.huliqing.core.view.talk.Talk;
+import name.huliqing.core.mvc.network.ActorNetwork;
 import name.huliqing.core.object.module.ActorListener;
 import name.huliqing.core.object.module.ActorModule;
 
 /**
- *
  * @author huliqing
  */
-public interface ActorService extends Inject {
+public interface ActorService extends ActorNetwork {
     
     /**
      * 载入指定ID的角色
@@ -114,46 +112,10 @@ public interface ActorService extends Inject {
     void setPartner(Actor owner, Actor partner);
     
     /**
-     * 让角色立即说话。
-     * @param actor
-     * @param mess 
-     * @param useTime 说话内容的显示时间,单位秒,如果小于或等于0则自动计算显示时长
-     */
-    void speak(Actor actor, String mess, float useTime);
-    
-    /**
-     * 执行一个系列谈话内容,注意：该谈话内容将立即被执行。不需要调用start.
-     * @param talk 
-     */
-    void talk(Talk talk);
-    
-//    /**
-//     * 将角色本地坐标系中的点转换为世界坐标系中的点。
-//     * @param actor 目标角色
-//     * @param localPos 存在于角色坐标系中的位置
-//     * @param store 存放结果,store可与localPos是同一个实例
-//     * @return 返回localPos在世界坐标系中的位置
-//     */
-//    Vector3f getLocalToWorld(Actor actor, Vector3f localPos, Vector3f store);
-    
-    /**
-     * 杀死一个角色
-     * @param actor 
-     */
-    void kill(Actor actor);
-    
-    /**
      * 复活角色
      * @param actor 
      */
     void reborn(Actor actor);
-    
-    /**
-     * 设置角色的当前目标
-     * @param actor
-     * @param target 如果为null,则表示清除目标
-     */
-    void setTarget(Actor actor, Actor target);
     
     /**
      * 获得角色的当前目标，如果当前场景中不存在该目标，则返回null.
@@ -185,43 +147,11 @@ public interface ActorService extends Inject {
     void setColor(Actor actor, ColorRGBA color);
     
     /**
-     * 操作角色的某个属性.
-     * @param beHit 接受hit的目标角色,或者说是被击中的角色。
-     * @param hitter 攻击者，或者施放hit动作的角色。
-     * @param hitAttribute hit的目标属性名称,必须是NumberAttribute属性，否则什么也不做
-     * @param hitValue hit值,这个值将直接执行在target角色的属性上，也即不受角色
-     * 任何其它属性的影响。
-     */
-    void hitNumberAttribute(Actor beHit, Actor hitter, String hitAttribute, float hitValue);
-    
-    /**
      * 获取角色等级
      * @param actor
      * @return 
      */
     int getLevel(Actor actor);
-    
-    /**
-     * 设置角色的等级
-     * @param actor
-     * @param level 
-     */
-    void setLevel(Actor actor, int level);
-    
-    // remove20160928
-//    /**
-//     * 判断目标角色是否是可移动的
-//     * @param actor
-//     * @return 
-//     */
-//    boolean isMoveable(Actor actor);
-//    
-//    /**
-//     * 获取角色视力，如果没有配置则返回0.
-//     * @param actor
-//     * @return 
-//     */
-//    float getViewDistance(Actor actor);
     
     /**
      * 添加角色侦听器
@@ -260,25 +190,11 @@ public interface ActorService extends Inject {
     int getGroup(Actor actor);
     
     /**
-     * 设置角色的分组
-     * @param actor
-     * @param group 
-     */
-    void setGroup(Actor actor, int group);
-    
-    /**
      * 获取角色的队伍分组
      * @param actor
      * @return 
      */
     int getTeam(Actor actor);
-    
-    /**
-     * 设置角色的队伍分组
-     * @param actor
-     * @param team 
-     */
-    void setTeam(Actor actor, int team);
     
     /**
      * 判断角色是否为必要的，即不能被移除出场景的。"必要"的角色可以死亡，
@@ -317,13 +233,6 @@ public interface ActorService extends Inject {
      * @return 
      */
     long getOwner(Actor actor);
-    
-    /**
-     * 让角色actor跟随目标targetId所指定的角色
-     * @param actor
-     * @param targetId 目标角色ID 
-     */
-    void setFollow(Actor actor, long targetId);
     
     /**
      * 获取角色当前所跟随的目标的唯一ID,如果返回的值小于或等于0则表示无跟随目标.
@@ -366,13 +275,6 @@ public interface ActorService extends Inject {
     Vector3f getLocation(Actor actor);
     
     /**
-     * 打开或关闭角色的物理功能
-     * @param actor
-     * @param enabled 
-     */
-    void setPhysicsEnabled(Actor actor, boolean enabled);
-    
-    /**
      * 判断目标角色是否打开了物理功能
      * @param actor
      * @return 
@@ -380,25 +282,11 @@ public interface ActorService extends Inject {
     boolean isPhysicsEnabled(Actor actor);
     
     /**
-     * 设置角色视角方向
-     * @param actor
-     * @param viewDirection 
-     */
-    void setViewDirection(Actor actor, Vector3f viewDirection);
-    
-    /**
      * 获取角色视角方向
      * @param actor
      * @return 
      */
     Vector3f getViewDirection(Actor actor);
-    
-    /**
-     * 让角色看向指定<b>位置</b>(非方向)
-     * @param actor
-     * @param position 
-     */
-    void setLookAt(Actor actor, Vector3f position);
     
     /**
      * 设置角色步行方向

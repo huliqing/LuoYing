@@ -78,8 +78,6 @@ import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.mvc.service.SkillServiceImpl;
 import name.huliqing.core.mvc.service.SkinService;
 import name.huliqing.core.mvc.service.SkinServiceImpl;
-import name.huliqing.core.mvc.service.SoundService;
-import name.huliqing.core.mvc.service.SoundServiceImpl;
 import name.huliqing.core.mvc.service.StateService;
 import name.huliqing.core.mvc.service.StateServiceImpl;
 import name.huliqing.core.mvc.service.TalentService;
@@ -146,7 +144,6 @@ public class Factory {
         CLASS_MAP.put(SceneService.class, SceneServiceImpl.class);
         CLASS_MAP.put(SkillService.class, SkillServiceImpl.class);
         CLASS_MAP.put(SkinService.class, SkinServiceImpl.class);
-        CLASS_MAP.put(SoundService.class, SoundServiceImpl.class);
         CLASS_MAP.put(StateService.class, StateServiceImpl.class);      
         CLASS_MAP.put(SystemService.class, SystemServiceImpl.class);
         CLASS_MAP.put(TalentService.class, TalentServiceImpl.class);

@@ -4,19 +4,14 @@
  */
 package name.huliqing.core.mvc.network;
 
-import java.util.List;
 import name.huliqing.core.Factory;
-import name.huliqing.core.data.TalentData;
 import name.huliqing.core.mvc.service.TalentService;
 import name.huliqing.core.network.Network;
 import name.huliqing.core.mess.MessTalentAdd;
 import name.huliqing.core.mess.MessTalentAddPoint;
 import name.huliqing.core.object.actor.Actor;
-import name.huliqing.core.object.module.TalentListener;
-import name.huliqing.core.object.talent.Talent;
 
 /**
- *
  * @author huliqing
  */
 public class TalentNetworkImpl implements TalentNetwork {
@@ -43,31 +38,6 @@ public class TalentNetworkImpl implements TalentNetwork {
     }
 
     @Override
-    public void addTalent(Actor actor, TalentData talentData) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void addTalent(Actor actor, Talent talent) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void removeTalent(Actor actor, String talentId) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public List<Talent> getTalents(Actor actor) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public int getTalentPoints(Actor actor) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
     public void addTalentPoints(Actor actor, String talentId, int points) {
         if (NETWORK.isClient())
             return;
@@ -80,16 +50,5 @@ public class TalentNetworkImpl implements TalentNetwork {
         
         talentService.addTalentPoints(actor, talentId, points);
     }
-
-    @Override
-    public void addTalentListener(Actor actor, TalentListener talentListener) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void removeTalentListener(Actor actor, TalentListener talentListener) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
     
 }
