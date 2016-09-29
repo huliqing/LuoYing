@@ -2,8 +2,8 @@
 
 <root
     xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-    xmlns='http://fighter.huliqing.name'
-    xsi:schemaLocation='http://fighter.huliqing.name meta/sound.xsd'>
+    xmlns='http://luoying.huliqing.name'
+    xsi:schemaLocation='http://luoying.huliqing.name meta/sound.xsd'>
     
     <!-- 
     非常重要：将声音文件转换为ogg时，工程采样率不能低于44100， 否则可能在游

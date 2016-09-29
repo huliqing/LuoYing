@@ -2,8 +2,8 @@
 
 <root
     xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-    xmlns='http://fighter.huliqing.name'
-    xsi:schemaLocation='http://fighter.huliqing.name meta/game.xsd'>
+    xmlns='http://luoying.huliqing.name'
+    xsi:schemaLocation='http://luoying.huliqing.name meta/game.xsd'>
     
     <!-- ========================================================================= -->
     <!-- Common -->

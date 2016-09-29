@@ -2,8 +2,8 @@
 
 <root 
     xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-    xmlns='http://fighter.huliqing.name'
-    xsi:schemaLocation='http://fighter.huliqing.name meta/actorAnim.xsd' >
+    xmlns='http://luoying.huliqing.name'
+    xsi:schemaLocation='http://luoying.huliqing.name meta/actorAnim.xsd' >
     
     <!-- 落樱飞舞:角色动画 -->
     <actorAnimCurveMove id="actorAnimDanceSakura" points="0|4|-3, 0|0|-6" useSine="1" />

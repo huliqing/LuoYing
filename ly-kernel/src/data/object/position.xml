@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <root xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-    xmlns='http://fighter.huliqing.name'
-    xsi:schemaLocation='http://fighter.huliqing.name meta/position.xsd'>
+    xmlns='http://luoying.huliqing.name'
+    xsi:schemaLocation='http://luoying.huliqing.name meta/position.xsd'>
 
     <!--=====================================================================-->
     <!--通用配置-->

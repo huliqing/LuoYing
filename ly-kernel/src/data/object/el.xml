@@ -2,8 +2,8 @@
 
 <root
     xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-    xmlns='http://fighter.huliqing.name'
-    xsi:schemaLocation='http://fighter.huliqing.name meta/el.xsd'>
+    xmlns='http://luoying.huliqing.name'
+    xsi:schemaLocation='http://luoying.huliqing.name meta/el.xsd'>
     
     <!--=====================================================================-->
     <!--角色经验公式:配置给角色，计算角色在升到指定等级时需要的经验值。即表示从

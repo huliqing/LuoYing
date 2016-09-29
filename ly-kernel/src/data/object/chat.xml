@@ -2,8 +2,8 @@
 
 <root
     xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-    xmlns='http://fighter.huliqing.name'
-    xsi:schemaLocation='http://fighter.huliqing.name meta/chat.xsd'>
+    xmlns='http://luoying.huliqing.name'
+    xsi:schemaLocation='http://luoying.huliqing.name meta/chat.xsd'>
     
    <!-- ========================================================================= -->
    <!--基类，主要定义对话框大小、距离、动画等基本标准-->

@@ -6,8 +6,8 @@
 
 <root
     xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-    xmlns='http://fighter.huliqing.name'
-    xsi:schemaLocation='http://fighter.huliqing.name meta/skill.xsd'>
+    xmlns='http://luoying.huliqing.name'
+    xsi:schemaLocation='http://luoying.huliqing.name meta/skill.xsd'>
     
     <!-- ========================================================================= -->
     <!--基本配置: 配置技能的优先级(技能标记参考: define.xml)-->

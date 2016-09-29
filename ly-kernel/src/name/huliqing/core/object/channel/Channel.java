@@ -11,6 +11,7 @@ import name.huliqing.core.data.ChannelData;
 import name.huliqing.core.xml.DataProcessor;
 
 /**
+ * 角色动画通道
  * @author huliqing
  * @param <T>
  */
@@ -21,6 +22,12 @@ public interface Channel<T extends ChannelData> extends DataProcessor<T>{
 
     @Override
     public T getData();
+    
+    /**
+     * 获得通道ID标识
+     * @return 
+     */
+    String getId();
     
     /**
      * 设置AnimControl控制器
@@ -51,12 +58,6 @@ public interface Channel<T extends ChannelData> extends DataProcessor<T>{
      * @param speed 
      */
     void updateSpeed(float speed);
-    
-    /**
-     * 获得通道ID标识
-     * @return 
-     */
-    String getId();
     
     /**
      * 获取通道当前正在执行的动画,如果没有正在执行的动画则返回null.

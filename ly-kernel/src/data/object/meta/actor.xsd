@@ -10,8 +10,8 @@ xs:time
 
 <xs:schema version="1.0"
            xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           targetNamespace="http://fighter.huliqing.name"
-           xmlns="http://fighter.huliqing.name"
+           targetNamespace="http://luoying.huliqing.name"
+           xmlns="http://luoying.huliqing.name"
            elementFormDefault="qualified"
         >
     
