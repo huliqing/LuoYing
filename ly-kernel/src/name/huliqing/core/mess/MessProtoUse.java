@@ -8,13 +8,13 @@ import com.jme3.network.HostedConnection;
 import com.jme3.network.serializing.Serializable;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.ObjectData;
-import name.huliqing.core.mvc.network.ProtoNetwork;
 import name.huliqing.core.mvc.service.PlayService;
-import name.huliqing.core.mvc.service.ProtoService;
 import name.huliqing.core.data.ConnData;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.network.GameServer;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.mvc.service.ObjectService;
+import name.huliqing.core.mvc.network.ObjectNetwork;
 
 /**
  * 使用物品的指令
@@ -59,9 +59,9 @@ public class MessProtoUse extends MessBase {
     @Override
     public void applyOnServer(GameServer gameServer, HostedConnection source) {
         PlayService playService = Factory.get(PlayService.class);
-        ProtoService protoService = Factory.get(ProtoService.class);
+        ObjectService protoService = Factory.get(ObjectService.class);
         ActorService actorService = Factory.get(ActorService.class);
-        ProtoNetwork protoNetwork = Factory.get(ProtoNetwork.class);
+        ObjectNetwork protoNetwork = Factory.get(ObjectNetwork.class);
         
         ConnData cd = source.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
         long clientActorId = cd.getActorId();
@@ -82,7 +82,7 @@ public class MessProtoUse extends MessBase {
     @Override
     public void applyOnClient() {
         PlayService playService = Factory.get(PlayService.class);
-        ProtoService protoService = Factory.get(ProtoService.class);
+        ObjectService protoService = Factory.get(ObjectService.class);
         Actor actor = playService.findActor(actorId);
         if (actor != null) {
             ObjectData data = protoService.getData(actor, objectId);

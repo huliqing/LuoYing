@@ -11,7 +11,6 @@ import name.huliqing.core.Factory;
 import name.huliqing.core.constants.ResConstants;
 import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.TaskData;
-import name.huliqing.core.mvc.network.ProtoNetwork;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.view.IconLabel;
 import name.huliqing.core.manager.ResourceManager;
@@ -24,6 +23,7 @@ import name.huliqing.core.ui.UI;
 import name.huliqing.core.ui.UIFactory;
 import name.huliqing.core.ui.Window;
 import name.huliqing.core.utils.ConvertUtils;
+import name.huliqing.core.mvc.network.ObjectNetwork;
 
 /**
  *
@@ -32,7 +32,7 @@ import name.huliqing.core.utils.ConvertUtils;
  */
 public abstract class AbstractTask<T extends TaskData> implements Task<T> {
     private final PlayService playService = Factory.get(PlayService.class);
-    private final ProtoNetwork protoNetwork = Factory.get(ProtoNetwork.class);
+    private final ObjectNetwork protoNetwork = Factory.get(ObjectNetwork.class);
     private final AttributeNetwork attributeNetwork = Factory.get(AttributeNetwork.class);
 
     protected T data;

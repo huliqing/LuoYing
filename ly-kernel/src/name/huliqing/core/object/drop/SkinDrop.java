@@ -8,10 +8,10 @@ package name.huliqing.core.object.drop;
 import com.jme3.math.FastMath;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.DropData;
-import name.huliqing.core.mvc.network.ProtoNetwork;
 import name.huliqing.core.mvc.service.ConfigService;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.utils.MathUtils;
+import name.huliqing.core.mvc.network.ObjectNetwork;
 
 /**
  * 掉落武器装备设置
@@ -19,7 +19,7 @@ import name.huliqing.core.utils.MathUtils;
  */
 public class SkinDrop extends AbstractDrop {
     private final ConfigService configService = Factory.get(ConfigService.class);
-    private final ProtoNetwork protoNetwork = Factory.get(ProtoNetwork.class);
+    private final ObjectNetwork protoNetwork = Factory.get(ObjectNetwork.class);
     
     private String skin;
     private int count;

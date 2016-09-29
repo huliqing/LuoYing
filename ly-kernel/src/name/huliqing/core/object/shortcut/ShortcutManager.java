@@ -22,7 +22,6 @@ import name.huliqing.core.enums.MessageType;
 import name.huliqing.core.manager.AnimationManager;
 import name.huliqing.core.mvc.network.UserCommandNetwork;
 import name.huliqing.core.mvc.service.ConfigService;
-import name.huliqing.core.mvc.service.ProtoService;
 import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.object.animation.Animation;
 import name.huliqing.core.object.animation.BounceMotion;
@@ -34,6 +33,7 @@ import name.huliqing.core.ui.UIUtils;
 import name.huliqing.core.ui.UI;
 import name.huliqing.core.ui.UI.Corner;
 import name.huliqing.core.ui.state.UIState;
+import name.huliqing.core.mvc.service.ObjectService;
 
 /**
  * 关于“快捷方式”的管理
@@ -114,7 +114,7 @@ public class ShortcutManager {
             return;
         ConfigService configService = Factory.get(ConfigService.class);
         SkillService skillService = Factory.get(SkillService.class);
-        ProtoService protoService = Factory.get(ProtoService.class);
+        ObjectService protoService = Factory.get(ObjectService.class);
         
         float shortcutSize = configService.getShortcutSize();
         for (ShortcutSave s : ss) {

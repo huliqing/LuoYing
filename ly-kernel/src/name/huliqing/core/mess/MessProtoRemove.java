@@ -7,12 +7,12 @@ package name.huliqing.core.mess;
 import com.jme3.network.HostedConnection;
 import com.jme3.network.serializing.Serializable;
 import name.huliqing.core.Factory;
-import name.huliqing.core.mvc.network.ProtoNetwork;
 import name.huliqing.core.mvc.service.PlayService;
-import name.huliqing.core.mvc.service.ProtoService;
 import name.huliqing.core.data.ConnData;
 import name.huliqing.core.network.GameServer;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.mvc.service.ObjectService;
+import name.huliqing.core.mvc.network.ObjectNetwork;
 
 /**
  * 删除物品数量
@@ -55,8 +55,8 @@ public class MessProtoRemove extends MessBase {
     @Override
     public void applyOnServer(GameServer gameServer, HostedConnection source) {
         PlayService playService = Factory.get(PlayService.class);
-        ProtoService protoService = Factory.get(ProtoService.class);
-        ProtoNetwork protoNetwork = Factory.get(ProtoNetwork.class);
+        ObjectService protoService = Factory.get(ObjectService.class);
+        ObjectNetwork protoNetwork = Factory.get(ObjectNetwork.class);
         
         ConnData cd = source.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
         long clientActorId = cd.getActorId();
@@ -86,7 +86,7 @@ public class MessProtoRemove extends MessBase {
         super.applyOnClient();
         Actor actor = Factory.get(PlayService.class).findActor(actorId);
         if (actor != null) {
-            Factory.get(ProtoService.class).removeData(actor, objectId, amount);
+            Factory.get(ObjectService.class).removeData(actor, objectId, amount);
         }
     }
     

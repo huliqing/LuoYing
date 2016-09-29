@@ -18,7 +18,7 @@ import name.huliqing.core.object.actor.Actor;
  */
 public class ActionNetworkImpl implements ActionNetwork {
 
-    private final static Network network = Network.getInstance();
+    private final static Network NETWORK = Network.getInstance();
     private ActorNetwork actorNetwork;
     private ActionService actionService;
 
@@ -29,57 +29,26 @@ public class ActionNetworkImpl implements ActionNetwork {
     }
 
     @Override
-    public Action loadAction(String actionId) {
-        throw new UnsupportedOperationException("Not supported yet."); 
-    }
-
-    @Override
     public void playAction(Actor actor, Action action) {
-        if (!network.isClient()) {
+        if (!NETWORK.isClient()) {
             actionService.playAction(actor, action);
         }
     }
 
     @Override
     public void playRun(Actor actor, Vector3f pos) {
-        if (!network.isClient()) {
+        if (!NETWORK.isClient()) {
             actionService.playRun(actor, pos);
         }
     }
 
     @Override
     public void playFight(Actor actor, Actor target, String skillId) {
-        // remove20160328,不要在Network层写客户端代码
-//        // 如果攻击者是玩家，则更新targetFace
-//        if (Common.getPlayState().getPlayer() == actor) {
-//            Common.getPlayState().setTarget(target);
-//        }
-
         // 客户端是不能执行逻辑和行为的
-        if (!network.isClient()) {
+        if (!NETWORK.isClient()) {
             actorNetwork.setTarget(actor, target);
             actionService.playFight(actor, target, skillId);
         }
-    }
-
-    @Override
-    public boolean isPlayingFight(Actor actor) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public boolean isPlayingRun(Actor actor) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public boolean isPlayingFollow(Actor actor) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Action getPlayingAction(Actor actor) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

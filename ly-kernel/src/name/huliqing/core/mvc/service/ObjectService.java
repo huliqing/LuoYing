@@ -6,15 +6,15 @@
 package name.huliqing.core.mvc.service;
 
 import java.util.List;
-import name.huliqing.core.Inject;
 import name.huliqing.core.data.ObjectData;
+import name.huliqing.core.mvc.network.ObjectNetwork;
 import name.huliqing.core.object.actor.Actor;
 
 /**
  *
  * @author huliqing
  */
-public interface ProtoService extends Inject {
+public interface ObjectService extends ObjectNetwork {
     
     /**
      * 创建一个物体
@@ -22,29 +22,6 @@ public interface ProtoService extends Inject {
      * @return 
      */
     ObjectData createData(String id);
-    
-    /**
-     * 给指定角色添加物体
-     * @param actor
-     * @param id
-     * @param count 
-     */
-    void addData(Actor actor, String id, int count);
-    
-    /**
-     * 从角色身上移除指定的物体
-     * @param actor
-     * @param objectId
-     * @param count 
-     */
-    void removeData(Actor actor, String objectId, int count);
-
-    /**
-     * 让指定角色使用物体
-     * @param actor
-     * @param data 
-     */
-    void useData(Actor actor, ObjectData data);
     
     /**
      * 从角色身上获取物品,如果角色存上不存在该物品则返回null.

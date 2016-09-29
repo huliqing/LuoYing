@@ -8,8 +8,8 @@ import com.jme3.network.serializing.Serializable;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.mvc.service.PlayService;
-import name.huliqing.core.mvc.service.ProtoService;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.mvc.service.ObjectService;
 
 /**
  * 给角色添加物体
@@ -63,7 +63,7 @@ public class MessProtoAdd extends MessBase {
     @Override
     public void applyOnClient() {
         PlayService playService = Factory.get(PlayService.class);
-        ProtoService protoService = Factory.get(ProtoService.class);
+        ObjectService protoService = Factory.get(ObjectService.class);
         Actor actor = playService.findActor(actorId);
         if (actor == null) {
             return;

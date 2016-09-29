@@ -20,8 +20,7 @@ import name.huliqing.core.mvc.network.ItemNetwork;
 import name.huliqing.core.mvc.network.ItemNetworkImpl;
 import name.huliqing.core.mvc.network.PlayNetwork;
 import name.huliqing.core.mvc.network.PlayNetworkImpl;
-import name.huliqing.core.mvc.network.ProtoNetwork;
-import name.huliqing.core.mvc.network.ProtoNetworkImpl;
+import name.huliqing.core.mvc.network.ObjectNetworkImpl;
 import name.huliqing.core.mvc.network.SkillNetwork;
 import name.huliqing.core.mvc.network.SkillNetworkImpl;
 import name.huliqing.core.mvc.network.SkinNetwork;
@@ -68,8 +67,7 @@ import name.huliqing.core.mvc.service.MagicService;
 import name.huliqing.core.mvc.service.MagicServiceImpl;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.PlayServiceImpl;
-import name.huliqing.core.mvc.service.ProtoService;
-import name.huliqing.core.mvc.service.ProtoServiceImpl;
+import name.huliqing.core.mvc.service.ObjectServiceImpl;
 import name.huliqing.core.mvc.service.ResistService;
 import name.huliqing.core.mvc.service.ResistServiceImpl;
 import name.huliqing.core.mvc.service.SaveService;
@@ -94,6 +92,8 @@ import name.huliqing.core.mvc.service.SystemService;
 import name.huliqing.core.mvc.service.EnvService;
 import name.huliqing.core.mvc.service.GameLogicService;
 import name.huliqing.core.mvc.service.GameLogicServiceImpl;
+import name.huliqing.core.mvc.service.ObjectService;
+import name.huliqing.core.mvc.network.ObjectNetwork;
 
 /**
  *
@@ -113,7 +113,7 @@ public class Factory {
         CLASS_MAP.put(DropNetwork.class, DropNetworkImpl.class);
         CLASS_MAP.put(ItemNetwork.class, ItemNetworkImpl.class);
         CLASS_MAP.put(PlayNetwork.class, PlayNetworkImpl.class);
-        CLASS_MAP.put(ProtoNetwork.class, ProtoNetworkImpl.class);
+        CLASS_MAP.put(ObjectNetwork.class, ObjectNetworkImpl.class);
         CLASS_MAP.put(SkillNetwork.class, SkillNetworkImpl.class);
         CLASS_MAP.put(SkinNetwork.class, SkinNetworkImpl.class);
         CLASS_MAP.put(StateNetwork.class, StateNetworkImpl.class);
@@ -140,7 +140,7 @@ public class Factory {
         CLASS_MAP.put(LogicService.class, LogicServiceImpl.class);
         CLASS_MAP.put(MagicService.class, MagicServiceImpl.class);
         CLASS_MAP.put(PlayService.class, PlayServiceImpl.class);
-        CLASS_MAP.put(ProtoService.class, ProtoServiceImpl.class);
+        CLASS_MAP.put(ObjectService.class, ObjectServiceImpl.class);
         CLASS_MAP.put(ResistService.class, ResistServiceImpl.class);
         CLASS_MAP.put(SaveService.class, SaveServiceImpl.class);
         CLASS_MAP.put(SceneService.class, SceneServiceImpl.class);

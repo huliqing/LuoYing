@@ -628,7 +628,9 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
         // 通知攻击者，告诉攻击者：你已经击中一个目标。
         if (hitter != null) {
             ActorModule hitterActorModule = hitter.getModule(ActorModule.class);
-            hitterActorModule.notifyActorHitOtherListener(actor, hitAttribute, hitValue, killed);
+            if (hitterActorModule != null) {
+                hitterActorModule.notifyActorHitOtherListener(actor, hitAttribute, hitValue, killed);
+            }
         }
     }
     

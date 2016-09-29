@@ -5,34 +5,28 @@
  */
 package name.huliqing.core.mvc.network;
 
-import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.mess.MessProtoAdd;
 import name.huliqing.core.mess.MessProtoRemove;
 import name.huliqing.core.mess.MessProtoUse;
-import name.huliqing.core.mvc.service.ProtoService;
 import name.huliqing.core.network.Network;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.mvc.service.ObjectService;
 
 /**
  *
  * @author huliqing
  */
-public class ProtoNetworkImpl implements ProtoNetwork {
+public class ObjectNetworkImpl implements ObjectNetwork {
     private final Network network = Network.getInstance();
-    private ProtoService protoService;
+    private ObjectService protoService;
     
     @Override
     public void inject() {
-        protoService = Factory.get(ProtoService.class);
+        protoService = Factory.get(ObjectService.class);
     }
     
-    @Override
-    public ObjectData createData(String id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
     @Override
     public void addData(Actor actor, String id, int count) {
         if (network.isClient())
@@ -42,14 +36,10 @@ public class ProtoNetworkImpl implements ProtoNetwork {
         protoService.addData(actor, id, count);
 
         // 同步物品数量
-        ObjectData resultData = protoService.getData(actor, id);
         MessProtoAdd mess = new MessProtoAdd();
         mess.setActorId(actor.getData().getUniqueId());
         mess.setObjectId(id);
         mess.setAddCount(count);
-        
-        // remove20160830
-//        mess.setSyncTotal(resultData != null ? resultData.getTotal() : 0);
 
         network.broadcast(mess);
     }
@@ -70,16 +60,6 @@ public class ProtoNetworkImpl implements ProtoNetwork {
         
         // 服务端删除
         protoService.removeData(actor, id, count);
-   
-        // remove20160830
-//        if (network.hasConnections()) {
-//            ObjectData resultData = protoService.getData(actor, id);
-//            MessProtoSync messSync = new MessProtoSync();
-//            messSync.setActorId(actor.getData().getUniqueId());
-//            messSync.setObjectId(id);
-//            messSync.setTotal(resultData != null ? resultData.getTotal() : 0);
-//            network.broadcast(messSync);
-//        }
     }
 
     @Override
@@ -108,42 +88,6 @@ public class ProtoNetworkImpl implements ProtoNetwork {
         // 自身执行
         protoService.useData(actor, data);
 
-        // remove20160830
-//        // 同步物品数量
-//        if (network.hasConnections()) {
-//            ObjectData resultData = protoService.getData(actor, data.getId());
-//            MessProtoSync mess = new MessProtoSync();
-//            mess.setActorId(actor.getData().getUniqueId());
-//            mess.setObjectId(data.getId());
-//            mess.setTotal(resultData != null ? resultData.getTotal() : 0);
-//            network.broadcast(mess);
-//        }
-    }
-
-    @Override
-    public ObjectData getData(Actor actor, String id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public List<ObjectData> getDatas(Actor actor) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    // remove20160830
-//    @Override
-//    public void syncDataTotal(Actor actor, String objectId, int total) {
-//        throw new UnsupportedOperationException("Not supported yet.");
-//    }
-
-    @Override
-    public float getCost(ObjectData data) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean isSellable(ObjectData data) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

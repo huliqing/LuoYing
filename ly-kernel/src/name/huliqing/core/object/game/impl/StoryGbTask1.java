@@ -16,7 +16,6 @@ import name.huliqing.core.view.talk.TalkImpl;
 import name.huliqing.core.view.talk.TalkListener;
 import name.huliqing.core.mvc.network.ActorNetwork;
 import name.huliqing.core.mvc.network.PlayNetwork;
-import name.huliqing.core.mvc.network.ProtoNetwork;
 import name.huliqing.core.mvc.network.SkillNetwork;
 import name.huliqing.core.mvc.network.StateNetwork;
 import name.huliqing.core.mvc.service.ActionService;
@@ -31,6 +30,7 @@ import name.huliqing.core.ui.TextPanel;
 import name.huliqing.core.ui.UI;
 import name.huliqing.core.ui.UI.Corner;
 import name.huliqing.core.ui.UI.Listener;
+import name.huliqing.core.mvc.network.ObjectNetwork;
 
 /**
  * 寻找古柏
@@ -47,7 +47,7 @@ public class StoryGbTask1 extends GameTaskBase {
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
     private final StateNetwork stateNetwork = Factory.get(StateNetwork.class);
-    private final ProtoNetwork protoNetwork = Factory.get(ProtoNetwork.class);
+    private final ObjectNetwork protoNetwork = Factory.get(ObjectNetwork.class);
     
     // 开始任务面板:说明任务信息
     private TextPanel taskFind;

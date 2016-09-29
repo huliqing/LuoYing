@@ -18,19 +18,19 @@ import name.huliqing.core.view.talk.TalkImpl;
 import name.huliqing.core.view.talk.TalkListener;
 import name.huliqing.core.mvc.network.ActorNetwork;
 import name.huliqing.core.mvc.network.PlayNetwork;
-import name.huliqing.core.mvc.network.ProtoNetwork;
 import name.huliqing.core.mvc.network.SkillNetwork;
 import name.huliqing.core.mvc.network.StateNetwork;
 import name.huliqing.core.mvc.service.ActionService;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.PlayService;
-import name.huliqing.core.mvc.service.ProtoService;
 import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.mvc.service.ViewService;
 import name.huliqing.core.object.IntervalLogic;
 import name.huliqing.core.logic.scene.ActorMultLoadHelper;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.mvc.service.LogicService;
+import name.huliqing.core.mvc.service.ObjectService;
+import name.huliqing.core.mvc.network.ObjectNetwork;
 
 /**
  * task2中收集完树根之后，向古柏交任务。
@@ -42,14 +42,14 @@ public class StoryGbTask2End extends IntervalLogic {
     private final ActionService actionService = Factory.get(ActionService.class);
     private final ViewService viewService = Factory.get(ViewService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
-    private final ProtoService protoService = Factory.get(ProtoService.class);
+    private final ObjectService protoService = Factory.get(ObjectService.class);
     private final LogicService logicService = Factory.get(LogicService.class);
     
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final StateNetwork stateNetwork = Factory.get(StateNetwork.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
-    private final ProtoNetwork protoNetwork = Factory.get(ProtoNetwork.class);
+    private final ObjectNetwork protoNetwork = Factory.get(ObjectNetwork.class);
     private StoryGbGame game;
     private Actor player;
     // 任务面板

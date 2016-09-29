@@ -22,8 +22,8 @@ import name.huliqing.core.data.define.CostObject;
  *
  * @author huliqing
  */
-public class ProtoServiceImpl implements ProtoService {
-    private static final Logger LOG = Logger.getLogger(ProtoServiceImpl.class.getName());
+public class ObjectServiceImpl implements ObjectService {
+    private static final Logger LOG = Logger.getLogger(ObjectServiceImpl.class.getName());
     
     private ItemService itemService;
     private SkinService skinService;

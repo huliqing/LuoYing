@@ -21,12 +21,12 @@ import name.huliqing.core.object.sound.SoundManager;
  * @author huliqing
  */
 public class ChatServiceImpl implements ChatService {
-    private ProtoService protoService;
+    private ObjectService protoService;
     private PlayService playService;
     
     @Override
     public void inject() {
-        protoService = Factory.get(ProtoService.class);
+        protoService = Factory.get(ObjectService.class);
         playService = Factory.get(PlayService.class);
     }
     

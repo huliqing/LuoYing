@@ -36,11 +36,11 @@ import name.huliqing.core.mess.MessTalentAddPoint;
 import name.huliqing.core.mess.MessTaskAdd;
 import name.huliqing.core.mess.MessTaskComplete;
 import name.huliqing.core.mvc.service.GameService;
-import name.huliqing.core.mvc.service.ProtoService;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.skill.Skill;
 import name.huliqing.core.object.task.Task;
+import name.huliqing.core.mvc.service.ObjectService;
 
 /**
  * 这个类主要是用来专门处理用户命令事件的。所有用户命令统一经过这个接口，
@@ -70,7 +70,7 @@ public class UserCommandNetworkImpl implements UserCommandNetwork {
     private SkinService skinService;
     private TaskService taskService;
     private GameService gameService;
-    private ProtoService protoService;
+    private ObjectService protoService;
     
     private PlayNetwork playNetwork;
     private ActionNetwork actionNetwork;
@@ -80,7 +80,7 @@ public class UserCommandNetworkImpl implements UserCommandNetwork {
     private TalentNetwork talentNetwork;
     private ChatNetwork chatNetwork;
     private TaskNetwork taskNetwork;
-    private ProtoNetwork protoNetwork;
+    private ObjectNetwork protoNetwork;
     
     @Override
     public void inject() {
@@ -93,7 +93,7 @@ public class UserCommandNetworkImpl implements UserCommandNetwork {
         skinService = Factory.get(SkinService.class);
         taskService = Factory.get(TaskService.class);
         gameService = Factory.get(GameService.class);
-        protoService = Factory.get(ProtoService.class);
+        protoService = Factory.get(ObjectService.class);
         
         skillNetwork = Factory.get(SkillNetwork.class);
         playNetwork = Factory.get(PlayNetwork.class);
@@ -103,7 +103,7 @@ public class UserCommandNetworkImpl implements UserCommandNetwork {
         talentNetwork = Factory.get(TalentNetwork.class);
         chatNetwork = Factory.get(ChatNetwork.class);
         taskNetwork = Factory.get(TaskNetwork.class);
-        protoNetwork = Factory.get(ProtoNetwork.class);
+        protoNetwork = Factory.get(ObjectNetwork.class);
     }
 
     @Override

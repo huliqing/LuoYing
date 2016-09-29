@@ -10,9 +10,9 @@ import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.ActorLogicData;
 import name.huliqing.core.data.ObjectData;
-import name.huliqing.core.mvc.network.ProtoNetwork;
-import name.huliqing.core.mvc.service.ProtoService;
 import name.huliqing.core.utils.ConvertUtils;
+import name.huliqing.core.mvc.service.ObjectService;
+import name.huliqing.core.mvc.network.ObjectNetwork;
 
 /**
  * 商店逻辑，该逻辑会每隔一段时间给角色进货。以补充商店类角色的货源。
@@ -20,8 +20,8 @@ import name.huliqing.core.utils.ConvertUtils;
  * @param <T>
  */
 public class ShopActorLogic<T extends ActorLogicData> extends ActorLogic<T> {
-    private final ProtoNetwork protoNetwork = Factory.get(ProtoNetwork.class);
-    private final ProtoService protoService = Factory.get(ProtoService.class);
+    private final ObjectNetwork protoNetwork = Factory.get(ObjectNetwork.class);
+    private final ObjectService protoService = Factory.get(ObjectService.class);
     
     private List<Product> products;
     // 进货速度，如：1.0 表示每秒进货一件（每件未达到maxCount的商品各进货一件）
