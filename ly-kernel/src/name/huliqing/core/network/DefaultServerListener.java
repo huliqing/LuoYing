@@ -90,7 +90,7 @@ public class DefaultServerListener extends AbstractServerListener<Actor> {
         List<Actor> actors = playService.findAllActor();
         if (actors != null && !actors.isEmpty()) {
             for (Actor actor : actors) {
-                if (actorService.getOwner(actor) == clientPlayer.getData().getUniqueId() && actorService.isLiving(actor)) {
+                if (actorService.getOwner(actor) == clientPlayer.getData().getUniqueId() && actorService.isBiology(actor)) {
                     playNetwork.removeObject(actor);
                 }
             }

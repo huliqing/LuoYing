@@ -38,7 +38,8 @@
     
     <!--基本角色管理模块: 依赖moduleAttribute -->
     <moduleActor id="moduleActor" moduleOrder="10" 
-                bindLifeAttribute="attributeHealth" 
+                bindDeadAttribute="attributeDead"
+                bindHealthAttribute="attributeHealth" 
                 bindFollowTargetAttribute="attributeFollowTarget" 
                 bindGroupAttribute="attributeGroup"
                 bindOwnerAttribute="attributeOwner"
@@ -49,7 +50,7 @@
                 bindMovableAttribute="attributeMovable"
                 bindRotatableAttribute="attributeRotatable"
                 bindEssentialAttribute="attributeEssential" 
-                bindLivingAttribute="attributeLiving" />
+                bindBiologyAttribute="attributeBiology" />
 
     <!--技能管理模块: 间接依赖: moduleChannel -->
     <moduleSkill id="moduleSkill" moduleOrder="20" 

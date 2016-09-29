@@ -325,7 +325,7 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public void hitNumberAttribute(Actor beHit, Actor hitter, String hitAttribute, float hitValue) {
-        getActorModule(beHit).applyHitByTarget(hitter, hitAttribute, hitValue);
+        getActorModule(beHit).applyHit(hitter, hitAttribute, hitValue);
     }
 
     @Override
@@ -398,8 +398,8 @@ public class ActorServiceImpl implements ActorService {
     }
 
     @Override
-    public boolean isLiving(Actor actor) {
-        return actor.getModule(ActorModule.class).isLiving(); 
+    public boolean isBiology(Actor actor) {
+        return actor.getModule(ActorModule.class).isBiology(); 
     }
 
     @Override

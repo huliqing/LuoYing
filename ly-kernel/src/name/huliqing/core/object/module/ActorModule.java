@@ -40,7 +40,7 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     private List<ActorListener> actorListeners;
     
     // 生命值属性名称
-    private String bindLifeAttribute;
+    private String bindHealthAttribute;
     // 角色所在分组属性名称,分组决定了角色所在的派系
     private String bindGroupAttribute;
     // 角色所在队伍
@@ -58,13 +58,15 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     // 角色是否是“必要的”
     private String bindEssentialAttribute;
     // 角色是否是生物
-    private String bindLivingAttribute;
+    private String bindBiologyAttribute;
     // 绑定角色属性，这个属性定义角色是否是可移动的
     private String bindMovableAttribute;
     // 绑定一个角色属性，这个属性定义角色是否是可转动朝向的。
     private String bindRotatableAttribute;
+    // 判断角色属性，这个属性用于判断角色是否“死亡”
+    private String bindDeadAttribute;
     
-    private NumberAttribute lifeAttribute;
+    private NumberAttribute healthAttribute;
     private NumberAttribute groupAttribute;
     private NumberAttribute teamAttribute;
     private NumberAttribute viewAttribute;
@@ -72,11 +74,11 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     private NumberAttribute followTargetAttribute;
     private NumberAttribute ownerAttribute;
     private NumberAttribute massAttribute;
-    
+    private BooleanAttribute essentialAttribute;
+    private BooleanAttribute biologyAttribute;
     private BooleanAttribute movableAttribute;
     private BooleanAttribute rotatableAttribute;
-    private BooleanAttribute essentialAttribute;
-    private BooleanAttribute livingAttribute;
+    private BooleanAttribute deadAttribute;
     
     // ---- ext
     // 标记目标角色是否为“玩家”角色,这个参数为程序动态设置,不存档
@@ -115,7 +117,7 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
         super.setData(data);
         this.radius = data.getAsFloat("radius", radius);
         this.height = data.getAsFloat("height", height);
-        this.bindLifeAttribute = data.getAsString("bindLifeAttribute");
+        this.bindHealthAttribute = data.getAsString("bindHealthAttribute");
         this.bindGroupAttribute = data.getAsString("bindGroupAttribute");
         this.bindTeamAttribute = data.getAsString("bindTeamAttribute");
         this.bindViewAttribute = data.getAsString("bindViewAttribute");
@@ -126,7 +128,8 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
         this.bindMovableAttribute = data.getAsString("bindMovableAttribute");
         this.bindRotatableAttribute = data.getAsString("bindRotatableAttribute");
         this.bindEssentialAttribute = data.getAsString("bindEssentialAttribute");
-        this.bindLivingAttribute = data.getAsString("bindLivingAttribute");
+        this.bindBiologyAttribute = data.getAsString("bindBiologyAttribute");
+        this.bindDeadAttribute = data.getAsString("bindDeadAttribute");
     }
 
     @Override
@@ -134,30 +137,24 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
         super.initialize(actor);
         attributeModule = actor.getModule(AttributeModule.class);
         
-        lifeAttribute = attributeModule.getAttributeByName(bindLifeAttribute, NumberAttribute.class);
-        if (lifeAttribute == null) {
-            LOG.log(Level.WARNING, "Life attribute not found, by lifeAttributeName={0}, actorId={1}"
-                    , new Object[] {bindLifeAttribute, actor.getData().getId()});
-        }
+        healthAttribute = attributeModule.getAttributeByName(bindHealthAttribute, NumberAttribute.class);
         groupAttribute = attributeModule.getAttributeByName(bindGroupAttribute, NumberAttribute.class);
         teamAttribute = attributeModule.getAttributeByName(bindTeamAttribute, NumberAttribute.class);
         viewAttribute = attributeModule.getAttributeByName(bindViewAttribute, NumberAttribute.class);
-        // 角色的当前目标属性
-        // 注：这里要给targetAttribute加一个侦听器，以便targetAttribute在补外部改变的时候可以触发侦听器
         targetAttribute = attributeModule.getAttributeByName(bindTargetAttribute, NumberAttribute.class);
-        targetAttribute.addListener(this);
-        // 角色当前的跟随目标
         followTargetAttribute = attributeModule.getAttributeByName(bindFollowTargetAttribute, NumberAttribute.class);
         ownerAttribute = attributeModule.getAttributeByName(bindOwnerAttribute, NumberAttribute.class);
-        // 角色质量
-        // 注：角色质量可能被外部改变，所以要监听,当改变时要触发innerControl更新
         massAttribute = attributeModule.getAttributeByName(bindMassAttribute, NumberAttribute.class);
-        massAttribute.addListener(this);
         
         movableAttribute = attributeModule.getAttributeByName(bindMovableAttribute, BooleanAttribute.class);
         rotatableAttribute = attributeModule.getAttributeByName(bindRotatableAttribute, BooleanAttribute.class);
         essentialAttribute = attributeModule.getAttributeByName(bindEssentialAttribute, BooleanAttribute.class);
-        livingAttribute = attributeModule.getAttributeByName(bindLivingAttribute, BooleanAttribute.class);
+        biologyAttribute = attributeModule.getAttributeByName(bindBiologyAttribute, BooleanAttribute.class);
+        deadAttribute = attributeModule.getAttributeByName(bindDeadAttribute, BooleanAttribute.class);
+        
+        healthAttribute.addListener(this);  // 监听角色健康值属性，当健康值等于或小于0于，角色要标记为死亡。
+        targetAttribute.addListener(this);  //  监听目标变更属性，以便角色的当前目标发生变化时可以触发侦听器
+        massAttribute.addListener(this);    //  监听角色质量属性，当质量发生变化时要触发innerControl更新角色质量
         
         // 控制器
         this.innerControl = new BetterCharacterControlWrap(radius, height, getMass());
@@ -267,9 +264,9 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
      * 杀死角色
      */
     public void kill() {
-        if (lifeAttribute != null) {
+        if (healthAttribute != null) {
 //            lifeAttribute.setValue(0); // remove
-            applyHitByTarget(null, lifeAttribute.getName(), Float.MAX_VALUE);
+            applyHit(null, healthAttribute.getName(), Float.MAX_VALUE);
         }
     }
     
@@ -277,8 +274,11 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
      * 让角色复活
      */
     public void resurrect() {
-        if (lifeAttribute != null) {
-            lifeAttribute.setValue(1);
+        if (deadAttribute != null) {
+            deadAttribute.setValue(false);
+        }
+        if (healthAttribute != null) {
+            healthAttribute.setValue(1);
         }
     }
     
@@ -287,8 +287,8 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
      * @return 
      */
     public boolean isDead() {
-        if (lifeAttribute != null) {
-            return lifeAttribute.intValue() <= 0;
+        if (deadAttribute != null) {
+            return deadAttribute.booleanValue();
         }
         return false;
     }
@@ -353,23 +353,23 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     }
     
     /**
-     * 获取角色的生命值
+     * 获取角色的健康值
      * @return 
      */
-    public int getLife() {
-        if (lifeAttribute != null) {
-            return lifeAttribute.intValue();
+    public int getHealth() {
+        if (healthAttribute != null) {
+            return healthAttribute.intValue();
         }
         return 0;
     }
     
     /**
-     * 设置角色的生命值。
-     * @param life 
+     * 设置角色的健康值
+     * @param health 
      */
-    public void setLife(int life) {
-        if (lifeAttribute != null) {
-            lifeAttribute.setValue(life);
+    public void setHealth(int health) {
+        if (healthAttribute != null) {
+            healthAttribute.setValue(health);
         }
     }
     
@@ -440,6 +440,13 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
         // 角色质量属性在外部被改变时要更新innerControl.
         if (attribute == massAttribute) {
             innerControl.setMass(massAttribute.floatValue());
+            return;
+        }
+        // 监听到健康值为0时，把角色标记为死亡
+        if (attribute == healthAttribute) {
+            if (healthAttribute.floatValue() <= 0 && deadAttribute != null) {
+                deadAttribute.setValue(true);
+            }
         }
     }
     
@@ -489,17 +496,17 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
      * 判断角色是否为“生物”
      * @return 
      */
-    public boolean isLiving() {
-        return livingAttribute != null && livingAttribute.booleanValue();
+    public boolean isBiology() {
+        return biologyAttribute != null && biologyAttribute.booleanValue();
     }
     
     /**
      * 设置角色为是否为“生物”类型角色
-     * @param living 
+     * @param biology 
      */
-    public void setLiving(boolean living) {
-        if (livingAttribute != null) {
-            livingAttribute.setValue(living);
+    public void setBiology(boolean biology) {
+        if (biologyAttribute != null) {
+            biologyAttribute.setValue(biology);
         }
     }
     
@@ -604,7 +611,7 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
      * @param hitAttribute 属性名称
      * @param hitValue apply到指定属性的值，可正可负
      */
-    public void applyHitByTarget(Actor hitter, String hitAttribute, float hitValue) {
+    public void applyHit(Actor hitter, String hitAttribute, float hitValue) {
         NumberAttribute attr = attributeModule.getAttributeByName(hitAttribute, NumberAttribute.class);
         if (attr == null) {
             return;

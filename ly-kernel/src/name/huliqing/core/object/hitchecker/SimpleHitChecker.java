@@ -84,9 +84,9 @@ public class SimpleHitChecker<T extends HitCheckerData> extends AbstractHitCheck
         }
         
         // 判断是否符合生命体状态
-        if (living == Checker.y && !actorService.isLiving(target)) {
+        if (living == Checker.y && !actorService.isBiology(target)) {
             return false;
-        } else if (living == Checker.n && actorService.isLiving(target)) {
+        } else if (living == Checker.n && actorService.isBiology(target)) {
             return false;
         }
         

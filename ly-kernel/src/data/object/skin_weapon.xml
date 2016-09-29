@@ -13,8 +13,8 @@ skinPart => 0:ear;1:eyeL;2:eyeR;3:face;4:foot;5:hair;6:hand;7:lowerBody;8:upperB
     <!--基本定义-->
     <!-- =========================================================================-->
     
-    <!--人类武器装备-->
-    <skinOutfit id="weaponHumanBase" matchAttributes="attributeRace|1" />
+    <!--人类武器装备: 限制：活着、种族人类-->
+    <skinOutfit id="weaponHumanBase" matchAttributes="attributeDead|0,attributeRace|1" />
     
     <!-- =========================================================================-->
     <!--人类武器分类定义-->
@@ -28,7 +28,7 @@ skinPart => 0:ear;1:eyeL;2:eyeR;3:face;4:foot;5:hair;6:hand;7:lowerBody;8:upperB
     
     <!--左手剑-->
     <skinWeapon id="weaponHumanLeftSwordBase" extends="weaponHumanRightSwordBase" 
-                parts="leftHandWeapon" weaponType="leftSword"
+                parts="leftHandWeapon" weaponType="leftSword" mat="metal" 
                 bindBone="weapon.L" localRotation="0,3.14159265,0" localLocation="0,0,0" />
 
     <!--弓-->

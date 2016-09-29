@@ -57,45 +57,44 @@ xs:time
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="moduleBase">
-                    <xs:attribute name="bindLifeAttribute" type="xs:string" use="required">
-                        <xs:annotation>
-                            <xs:documentation>bind a IntegerAttribute. 生命属性的名称，绑定一个属性名称，
-                                这个属性将用于计算角色的生命值，当这个属性的值为0时，角色将被判定为死亡。
-                            </xs:documentation>
-                        </xs:annotation>
+                    <xs:attribute name="bindHealthAttribute" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>bind a IntegerAttribute, 绑定角色属性，这个属性用于存取角色的健康值。</xs:documentation></xs:annotation>
                     </xs:attribute>
                     <xs:attribute name="bindGroupAttribute" type="xs:string" use="required">
-                        <xs:annotation><xs:documentation>bind a IntegerAttribute</xs:documentation></xs:annotation>
+                        <xs:annotation><xs:documentation>bind a IntegerAttribute, 绑定角色属性,该属性用于存取角色所在的派系。</xs:documentation></xs:annotation>
                     </xs:attribute>
                     <xs:attribute name="bindTeamAttribute" type="xs:string" use="required">
-                        <xs:annotation><xs:documentation>bind a IntegerAttribute</xs:documentation></xs:annotation>
+                        <xs:annotation><xs:documentation>bind a IntegerAttribute, 绑定角色属性,该属性用于存取角色所在的队伍分组。</xs:documentation></xs:annotation>
                     </xs:attribute>
                     <xs:attribute name="bindViewAttribute" type="xs:string" use="required">
-                        <xs:annotation><xs:documentation>bind a IntegerAttribute</xs:documentation></xs:annotation>
+                        <xs:annotation><xs:documentation>bind a IntegerAttribute, 绑定角色属性,该属性用于存取角色的视力距离，即定义角色可以看到多远。</xs:documentation></xs:annotation>
                     </xs:attribute>
                     <xs:attribute name="bindTargetAttribute" type="xs:string" use="required">
-                        <xs:annotation><xs:documentation>bind a LongAttribute</xs:documentation></xs:annotation>
+                        <xs:annotation><xs:documentation>bind a LongAttribute, 绑定角色属性,该属性用于存取角色的当前目标。</xs:documentation></xs:annotation>
                     </xs:attribute>
                     <xs:attribute name="bindFollowTargetAttribute" type="xs:string" use="required">
-                        <xs:annotation><xs:documentation>bind a LongAttribute</xs:documentation></xs:annotation>
+                        <xs:annotation><xs:documentation>bind a LongAttribute, 绑定角色属性, 该属性用于存取角色的跟随目标。</xs:documentation></xs:annotation>
                     </xs:attribute>
                     <xs:attribute name="bindOwnerAttribute" type="xs:string" use="required">
-                        <xs:annotation><xs:documentation>bind a LongAttribute, 该属性用于存放角色的所有者</xs:documentation></xs:annotation>
+                        <xs:annotation><xs:documentation>bind a LongAttribute, 绑定角色属性,该属性用于存取角色的所有者(主人)</xs:documentation></xs:annotation>
                     </xs:attribute>
                     <xs:attribute name="bindMassAttribute" type="xs:string" use="required">
-                        <xs:annotation><xs:documentation>bind a FloatAttribute, 该属性用于存取角色的"质量"</xs:documentation></xs:annotation>
+                        <xs:annotation><xs:documentation>bind a FloatAttribute, 绑定角色属性, 该属性用于存取角色的"质量"</xs:documentation></xs:annotation>
                     </xs:attribute>
                     <xs:attribute name="bindMovableAttribute" type="xs:string" use="required">
-                        <xs:annotation><xs:documentation>bind a BooleanAttribute 绑定一个角色属性，这个属性定义角色是否是可移动的</xs:documentation></xs:annotation>
+                        <xs:annotation><xs:documentation>bind a BooleanAttribute, 绑定角色属性，这个属性定义角色是否是可移动的</xs:documentation></xs:annotation>
                     </xs:attribute>
                     <xs:attribute name="bindRotatableAttribute" type="xs:string" use="required">
-                        <xs:annotation><xs:documentation>bind a BooleanAttribute, 绑定一个角色属性，这个属性定义角色是否是可转动朝向的。</xs:documentation></xs:annotation>
+                        <xs:annotation><xs:documentation>bind a BooleanAttribute, 绑定角色属性，这个属性定义角色是否是可转动朝向的。</xs:documentation></xs:annotation>
                     </xs:attribute>
                     <xs:attribute name="bindEssentialAttribute" type="xs:string" use="required">
-                        <xs:annotation><xs:documentation>bind a BooleanAttribute</xs:documentation></xs:annotation>
+                        <xs:annotation><xs:documentation>bind a BooleanAttribute, 绑定角色属性，这个属性值如果为true,则说明角色是场景必要的，在死亡后不能移除出场景。</xs:documentation></xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="bindLivingAttribute" type="xs:string" use="required">
-                        <xs:annotation><xs:documentation>bind a BooleanAttribute</xs:documentation></xs:annotation>
+                    <xs:attribute name="bindBiologyAttribute" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>bind a BooleanAttribute, 绑定角色属性，这个属性用于判断角色是否为生物，true:生物; false:非生物</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="bindDeadAttribute" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>bind a BooleanAttribute, 判断角色属性，这个属性用于判断角色是否“死亡”</xs:documentation></xs:annotation>
                     </xs:attribute>
                 </xs:extension>
             </xs:complexContent>

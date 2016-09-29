@@ -8,15 +8,14 @@
     <!--==========================================================================-->
     <!--标准属性
     属性用于配置到角色身上，一个角色可以同时拥有多个属性，这些属性可以绑定任何其它模块或处理器上。
-    
-    说明1：给一个角色配置属性时，属性id和名称都不能重复，如果给角色配置的属性存在相同的id或名称，则先加上去的会被替换掉。
-    说明2：模块在绑定属性时应该使用“属性名称”而非属性id
-    说明3：带有等级的属性（attributeLevel***) 的值会随着等级的改变而变化，对这些属性设置初始值(value)可能会被替换。
+
+    说明1：当给角色配置多个具有"相同id或名称"的属性时，后载入的属性会替换掉先载入的属性。
+    说明2：给角色配置属性列表时要使用“属性id”, 其它所有模块或处理器在使用或绑定角色属性时要使用“属性名称”
     -->
     <!--==========================================================================-->
 
     <!--生物属性： 这个属性用来标记角色是否是生物，即有"生命迹象"的角色，1：表示生物; 0：表示非生物-->
-    <attributeBoolean id="attributeLiving" name="attributeLiving" value="1" />
+    <attributeBoolean id="attributeBiology" name="attributeBiology" value="1" />
 
     <!--角色种族: 这个属性用来存放角色的种族标识，用不同的数字来定义不同的种族,存放的值由具体实现去定义。--> 
     <attributeInteger id="attributeRace" name="attributeRace" value="0" />
@@ -39,48 +38,51 @@
     <!--角色所在队伍-->
     <attributeInteger id="attributeTeam" name="attributeTeam" />
     
-    <!--移动速度：1.0为原始速度,2.0为两倍速度,默认1.0-->
+    <!--移动速度倍率：1.0为原始速度,2.0为两倍速度,默认1.0-->
     <attributeFloat id="attributeMoveSpeed" name="attributeMoveSpeed" value="1.0" />
     
     <!--角色的质量:默认角色质量都是大于0的，即默认都为动态角色。 -->
     <attributeFloat id="attributeMass" name="attributeMass" value="60" />
 
+    <!--死亡属性标记：1 ： 死亡， 0：没死亡. 注：角色是否死亡由这个参数直接判断，与“生命值”属性有一定联系，但不是由生命值属性直接判断。 -->
+    <attributeBoolean id="attributeDead" name="attributeDead" value="0" />
+    
     <!--定义角色是否可移动的-->
     <attributeBoolean id="attributeMovable" name="attributeMovable" value="1" />
     
     <!--定义角色是否是可转动的-->
     <attributeBoolean id="attributeRotatable" name="attributeRotatable" value="1" />
     
-    <!--Essential这个属性用来标记一个角色是否是必要的，即使死亡后也不能移出场景的-->
+    <!--Essential属性: 这个属性用来标记角色是否是必要的，即使死亡后也不能移出场景, 一般任务角色要设置为true.-->
     <attributeBoolean id="attributeEssential" name="attributeEssential" />
 
     <!--是否自动AI,如果关闭AI功能，则角色将完全停止运行所有逻辑-->
     <attributeBoolean id="attributeAutoLogic" name="attributeAutoLogic" value="1" />
     
-    <!--是否自动侦察敌人，如果关闭该功能，则角色不会查找敌人。-->
+    <!--自动侦察敌人：这个属性值为1(true)时，角色打开自动侦察敌人的行为逻辑。-->
     <attributeBoolean id="attributeAutoDetect" name="attributeAutoDetect" value="1" />
     
-    <!--这个属性用来存放角色的当前目标-->
+    <!--目标属性： 这个属性用于存放角色的当前目标对象（角色的唯 一ID）-->
     <attributeLong id="attributeTarget" name="attributeTarget" />
     
     <!--这个属性用来存放角色当前跟随的目标-->
     <attributeLong id="attributeFollowTarget" name="attributeFollowTarget" />
     
-    <!--角色的主人(所有者)的ID(唯一ID) -->
+    <!--角色的拥有者属性：这个属性用于存放角色的所有者（主人）,存放的是唯一id -->
     <attributeLong id="attributeOwner" name="attributeOwner" />
     
-    <!--角色天赋点数容器-->
+    <!--天赋点数属性，这个属性用于存放角色的天赋点数-->
     <attributeInteger id="attributeTalentPoints" name="attributeTalentPoints" />
 
-    <!--最高健康值-->
-    <attributeLevelInteger id="attributeHealthMax" name="attributeHealthMax" levelEl="elLevelAttrHealth" />
     <!--实时健康值-->
     <attributeLimitInteger id="attributeHealth" name="attributeHealth" minValue="0" bindMaxLimitAttribute="attributeHealthMax" />
+    <!--最高健康值:用于限制实时健康值，这个属性值会随等级而变化-->
+    <attributeLevelInteger id="attributeHealthMax" name="attributeHealthMax" levelEl="elLevelAttrHealth" />
     
-    <!--最高魔法值-->
-    <attributeLevelInteger id="attributeManaMax" name="attributeManaMax" levelEl="elLevelAttrMana" />
     <!--实时魔法值-->
     <attributeLimitInteger id="attributeMana" name="attributeMana" minValue="0" bindMaxLimitAttribute="attributeManaMax" />
+    <!--最高魔法值: 用于限制实时魔法值，这个属性值会随等级而变化-->
+    <attributeLevelInteger id="attributeManaMax" name="attributeManaMax" levelEl="elLevelAttrMana" />
     
     <!--物理攻击力-->
     <attributeLevelInteger id="attributeAttack" name="attributeAttack" levelEl="elLevelAttrAttack" />
@@ -126,9 +128,9 @@
     <!--==========================================================================-->
     
     <attributeGroup id="attributeGroupBase" name="attributeGroupBase" 
-                    attributes="attributeLiving,attributeRace,attributeSex
+                    attributes="attributeBiology,attributeRace,attributeSex
     ,attributeLevel,attributeXp,attributeXpNext,attributeGroup,attributeTeam,attributeMoveSpeed,attributeMass
-    ,attributeMovable,attributeRotatable,attributeEssential,attributeAutoLogic,attributeAutoDetect
+    ,attributeDead,attributeMovable,attributeRotatable,attributeEssential,attributeAutoLogic,attributeAutoDetect
     ,attributeTarget,attributeFollowTarget,attributeOwner,attributeTalentPoints
     ,attributeHealthMax,attributeHealth,attributeManaMax,attributeMana
     ,attributeAttack,attributeMagicAttack,attributeDefence,attributeMagicDefence
@@ -146,8 +148,8 @@
     <!--生物定义：0：非生物；1：生物-->
     <!--生物：如人类兽人、狼、狗、野兽等可以活动的角色-->
     <!--非生物：如防御塔、宝箱、祭坛等非活动角色-->
-    <attributeBoolean id="attributeLivingNo" extends="attributeLiving" value="0" />
-    <attributeBoolean id="attributeLivingYes" extends="attributeLiving" value="1" />
+    <attributeBoolean id="attributeBiologyNo" extends="attributeBiology" value="0" />
+    <attributeBoolean id="attributeBiologyYes" extends="attributeBiology" value="1" />
     
     <!--角色种族定义: 0：未分类； 1：人类； 2：兽族 --> 
     <attributeInteger id="attributeRaceUnknow" extends="attributeRace" value="0" />
@@ -180,28 +182,28 @@
     <!--==========================================================================-->
     
     <!--配置给：非生物、种族未知、性别未知、可移动、可转向的角色。如：坦克、飞机、战车等可移动的等非生物类角色. -->
-    <attributeGroup id="attributeActorUnlivingMovableRotatable" name="attributeActorUnlivingMovableRotatable" 
-                       attributes="attributeGroupBase,attributeLivingNo,attributeRaceUnknow,attributeSexUnknow
+    <attributeGroup id="attributeActorUnbiologyMovableRotatable" name="attributeActorUnbiologyMovableRotatable" 
+                       attributes="attributeGroupBase,attributeBiologyNo,attributeRaceUnknow,attributeSexUnknow
 ,attributeMovableYes,attributeRotatableYes,attributeMassDynamic" />
 
     <!--配置给：非生物、种族未知、性别未知、不可移动、不可转向的角色。如：防御塔、堡垒、基地等静止角色-->
-    <attributeGroup id="attributeActorUnlivingUnmovableUnrotatable" name="attributeActorUnlivingUnmovableUnrotatable" 
-                       attributes="attributeGroupBase,attributeLivingNo,attributeRaceUnknow,attributeSexUnknow
+    <attributeGroup id="attributeActorUnbiologyUnmovableUnrotatable" name="attributeActorUnbiologyUnmovableUnrotatable" 
+                       attributes="attributeGroupBase,attributeBiologyNo,attributeRaceUnknow,attributeSexUnknow
 ,attributeMovableNo,attributeRotatableNo,attributeMassStatic" />
     
     <!--配置给：生物、种族未知、性别未知、可移动、可转向的角色。如：虫子、怪物、野兽、飞禽、未知生物等活动类角色.-->
-    <attributeGroup id="attributeActorLivingMovableRotatable" name="attributeActorLiving" 
-                       attributes="attributeGroupBase,attributeLivingYes,attributeRaceUnknow,attributeSexUnknow
+    <attributeGroup id="attributeActorBiologyMovableRotatable" name="attributeActorBiologyMovableRotatable" 
+                       attributes="attributeGroupBase,attributeBiologyYes,attributeRaceUnknow,attributeSexUnknow
 ,attributeMovableYes,attributeRotatableYes,attributeMassDynamic" />
 
     <!--配置给：人类女性角色-->
     <attributeGroup id="attributeHumanFemale" name="attributeHumanFemale" 
-                       attributes="attributeGroupBase,attributeLivingYes,attributeRaceHuman,attributeSexFemale
+                       attributes="attributeGroupBase,attributeBiologyYes,attributeRaceHuman,attributeSexFemale
 ,attributeMovableYes,attributeRotatableYes,attributeMassDynamic,attributeHumanFemaleWeaponSlot" />
     
     <!--配置给：人类男性角色-->
     <attributeGroup id="attributeHumanMale" name="attributeHumanMale" 
-                       attributes="attributeGroupBase,attributeLivingYes,attributeRaceHuman,attributeSexMale
+                       attributes="attributeGroupBase,attributeBiologyYes,attributeRaceHuman,attributeSexMale
 ,attributeMovableYes,attributeRotatableYes,attributeMassDynamic" />
     
     <!--==========================================================================-->

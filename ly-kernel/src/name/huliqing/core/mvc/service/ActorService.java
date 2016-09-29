@@ -302,7 +302,7 @@ public interface ActorService extends Inject {
      * @param actor
      * @return 
      */
-    boolean isLiving(Actor actor);
+    boolean isBiology(Actor actor);
     
     /**
      * 设置角色的目标拥有者
