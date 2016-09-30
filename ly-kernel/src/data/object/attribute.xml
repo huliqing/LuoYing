@@ -121,7 +121,7 @@
     <attributeLevelFloat id="attributeGhostRate" name="attributeGhostRate" levelEl="elLevelAttrGhostRate" />
         
     <!--抗技能中断属性: [0.0~1.0], 防止技能被中断的概率，当为技能绑定这个属性之后，技能有一定概率防止被高优先级的其它技能中断-->
-    <attributeFloat id="attributeResistInterruptRate" name="attributeResistInterruptRate" value="1.5"  />
+    <attributeFloat id="attributeResistInterruptRate" name="attributeResistInterruptRate" value="0.3"  />
     
     <!--武器槽位：这个参数定义角色默认支持的武器槽位,默认空，由不同的角色去配置。-->
     <attributeStringList id="attributeWeaponSlots" name="attributeWeaponSlots" />
