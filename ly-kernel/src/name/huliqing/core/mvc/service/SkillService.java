@@ -10,6 +10,7 @@ import name.huliqing.core.data.SkillData;
 import name.huliqing.core.mvc.network.SkillNetwork;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.module.SkillListener;
+import name.huliqing.core.object.module.SkillModule;
 import name.huliqing.core.object.module.SkillPlayListener;
 import name.huliqing.core.object.skill.Skill;
 import name.huliqing.core.object.skill.SkillTag;
@@ -34,6 +35,8 @@ public interface SkillService extends SkillNetwork {
      * @return 
      */
     Skill loadSkill(SkillData skillData);
+    
+    boolean playSkill(SkillModule skillModule, Skill skill, boolean force, List<Long> wantNotInterruptSkills);
     
     /**
      * 从角色身上移除一个技能
@@ -134,13 +137,6 @@ public interface SkillService extends SkillNetwork {
      */
     boolean isPlayable(Actor actor, Skill skill);
 
-    /**
-     * 判断技能是否处于冷却中
-     * @param skill
-     * @return 
-     */
-    boolean isCooldown(Skill skill);
-    
     /**
      * 判断角色是否拥有指定的技能
      * @param actor

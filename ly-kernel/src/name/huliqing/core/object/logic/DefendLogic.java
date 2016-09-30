@@ -39,7 +39,6 @@ public class DefendLogic<T extends LogicData> extends Logic<T> implements SkillL
     private static final Logger LOG = Logger.getLogger(DefendLogic.class.getName());
     
     private final ActorService actorService = Factory.get(ActorService.class);
-    private final PlayService playService = Factory.get(PlayService.class);
     private final AttributeService attributeService = Factory.get(AttributeService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
@@ -190,9 +189,9 @@ public class DefendLogic<T extends LogicData> extends Logic<T> implements SkillL
     @Override
     public void onSkillStart(Skill skill) {
         
-        if (Config.debug) {
-            LOG.log(Level.INFO, "defendActorLogic==> onSkillStart, actor={0}, skill={1}", new Object[] {skill.getActor().getData().getId(), skill.getData().getId()});
-        }
+//        if (Config.debug) {
+//            LOG.log(Level.INFO, "defendActorLogic==> onSkillStart, actor={0}, skill={1}", new Object[] {skill.getActor().getData().getId(), skill.getData().getId()});
+//        }
         
         if (!hasUsableSkill) 
             return;

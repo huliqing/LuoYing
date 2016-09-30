@@ -4,18 +4,15 @@
  */
 package name.huliqing.core.object.hitchecker;
 
-import name.huliqing.core.Factory;
 import name.huliqing.core.data.HitCheckerData;
-import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.module.ActorModule;
 
 /**
- *
  * @author huliqing
  * @param <T>
  */
 public class SimpleHitChecker<T extends HitCheckerData> extends AbstractHitChecker<T> {
-    private final ActorService actorService = Factory.get(ActorService.class);
     
     private enum Group {
         /** ignore不管分组 */
@@ -71,29 +68,33 @@ public class SimpleHitChecker<T extends HitCheckerData> extends AbstractHitCheck
     
     @Override
     public boolean canHit(Actor source, Actor target) {
+        ActorModule targetActorModule = target.getModule(ActorModule.class);
+        if (targetActorModule == null)
+            return false;
+        
         // 注意：因为source有可能为null,举例来说，比如：magic有可能是没有施放者的
         // 也就没有source
         if (source != null) {
-            int sourceGroup = actorService.getGroup(source);
+            int sourceGroup = source.getModule(ActorModule.class).getGroup();
             // 判断是否符合分组
-            if (group == Group.s && sourceGroup != actorService.getGroup(target)) {
+            if (group == Group.s && sourceGroup != targetActorModule.getGroup()) {
                 return false;
-            } else if (group == Group.d && sourceGroup == actorService.getGroup(target)) {
+            } else if (group == Group.d && sourceGroup == targetActorModule.getGroup()) {
                 return false;
             } 
         }
         
         // 判断是否符合生命体状态
-        if (living == Checker.y && !actorService.isBiology(target)) {
+        if (living == Checker.y && !targetActorModule.isBiology()) {
             return false;
-        } else if (living == Checker.n && actorService.isBiology(target)) {
+        } else if (living == Checker.n && targetActorModule.isBiology()) {
             return false;
         }
         
         // 判断生命值状态是否匹配
-        if (life == Checker.y && actorService.isDead(target)) {
+        if (life == Checker.y && targetActorModule.isDead()) {
             return false;
-        } else if (life == Checker.n && !actorService.isDead(target)) {
+        } else if (life == Checker.n && !targetActorModule.isDead()) {
             return false;
         }
         

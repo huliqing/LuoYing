@@ -110,10 +110,10 @@ public interface ChannelControl {
     
     /**
      * 锁定或解锁指定的动画通道，当一个动画通道被锁定之后将不能再执行任何动画，包
-     * 括reset，除非重新进行解锁
+     * 括reset，除非重新进行解锁。如果没有特别指定要锁定或解锁那些通道，则全部锁定或解锁。
      * @param locked true锁定通道，false解锁通道
-     * @param channelIds 指定的通道列表，如果为null或指定的通道不存在则什么也不做。
+     * @param channelIds 指定的通道列表，如果为null则默认对全部通道进行锁定或解锁。
      */
-    void setChannelLock(boolean locked, String... channelIds);
+    void setChannelLock(boolean locked, String[] channelIds);
 
 }

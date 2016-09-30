@@ -29,6 +29,7 @@ import name.huliqing.core.object.anim.Anim;
 import name.huliqing.core.object.anim.AnimationControl;
 import name.huliqing.core.object.anim.Listener;
 import name.huliqing.core.object.anim.MoveAnim;
+import name.huliqing.core.object.effect.Effect;
 import name.huliqing.core.utils.GeometryUtils;
 import name.huliqing.core.utils.ThreadHelper;
 
@@ -117,19 +118,19 @@ public class SummonSkill extends AbstractSkill {
         }
     }
     
-    @Override
-    protected void playEffect(String effectId) {
-        // 计算召唤点，注：召唤点的计算和效果的执行放在一起，以避免效果显示位置和
-        // 召唤点不一致的问题，因为召唤角色的时间和播放效果的时间点时不一致的。
-        // 当效果播放后角色可能转向，角色可能发生转向，如果后续再计算召唤点就会出
-        // 现召唤位置和效果位置不一致的奇怪现象
-        getLocalToWorld(actor, summonOffset, currentSummon.summonPos);
-        currentSummon.summonPos.setY(playService.getTerrainHeight(currentSummon.summonPos.x, currentSummon.summonPos.z));
-        currentSummon.summonPos.setY(currentSummon.summonPos.y + summonOffset.y);
-        currentSummon.setLocalTranslation(currentSummon.summonPos);
-        
-        super.playEffect(effectId);
-    }
+//    @Override
+//    protected void onPlayEffect(Effect effect) {
+//        // 计算召唤点，注：召唤点的计算和效果的执行放在一起，以避免效果显示位置和
+//        // 召唤点不一致的问题，因为召唤角色的时间和播放效果的时间点时不一致的。
+//        // 当效果播放后角色可能转向，角色可能发生转向，如果后续再计算召唤点就会出
+//        // 现召唤位置和效果位置不一致的奇怪现象
+//        getLocalToWorld(actor, summonOffset, currentSummon.summonPos);
+//        currentSummon.summonPos.setY(playService.getTerrainHeight(currentSummon.summonPos.x, currentSummon.summonPos.z));
+//        currentSummon.summonPos.setY(currentSummon.summonPos.y + summonOffset.y);
+//        currentSummon.setLocalTranslation(currentSummon.summonPos);
+//        
+//        super.onPlayEffect(effect);
+//    }
     
     private Vector3f getLocalToWorld(Actor actor, Vector3f localPos, Vector3f store) {
         if (store == null) {
@@ -146,41 +147,6 @@ public class SummonSkill extends AbstractSkill {
         // 会造成只要召唤一次后就可以无限召唤的BUG。
         summonId = null;
         super.cleanup();
-    }
-    
-    // ----
-    
-    /**
-     * @see #setSummonActorId(java.lang.String) 
-     * @return 
-     */
-    public String getSummonActorId() {
-        return summonId;
-    }
-    
-    /**
-     * 设置要召唤的角色的ID
-     * @param summonActorId 
-     */
-    public void setSummonActorId(String summonActorId) {
-        this.summonId = summonActorId;
-    }
-
-    /**
-     * @see #setSummonPoint(float) 
-     * @return 
-     */
-    public float getSummonPoint() {
-        return summonPoint;
-    }
-
-    /**
-     * 召唤的时间插值点，如果为0，则立即召唤。如果为0.5f则表示动作执行到一半时召唤 
-     * 该值定义了发起效果的时间
-     * @param summonPoint 
-     */
-    public void setSummonPoint(float summonPoint) {
-        this.summonPoint = summonPoint;
     }
     
     // 负责召唤的工具类，Node
@@ -254,6 +220,13 @@ public class SummonSkill extends AbstractSkill {
                 try {
                     summonActor = future.get();
                     future = null;
+                    
+                    // 根据当前角色的朝向计算召唤点
+                    getLocalToWorld(actor, summonOffset, summonPos);
+                    summonPos.setY(playService.getTerrainHeight(summonPos.x, summonPos.z));
+                    summonPos.setY(summonPos.y + summonOffset.y);
+                    setLocalTranslation(summonPos);
+                    
                 } catch (Exception ex) {
                     Logger.getLogger(SummonSkill.class.getName()).log(Level.SEVERE
                             , "Unload object, summonObjectId=" + summonObjectId, ex);
@@ -324,10 +297,6 @@ public class SummonSkill extends AbstractSkill {
 
         @Override
         public void onDone(Anim anim) {
-            // remove20160905
-//            MoveAnim ma = (MoveAnim) anim;
-//            Spatial summonModel = ma.getTarget();
-
             Spatial summonModel = animationControl.getSpatial();
             if (summonModel != null) {
                 // 让召唤到的目标获得物理碰撞

@@ -6,6 +6,7 @@
 package name.huliqing.core.object.item;
 
 import name.huliqing.core.Factory;
+import name.huliqing.core.mvc.network.PlayNetwork;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.EffectService;
 import name.huliqing.core.mvc.service.MagicService;
@@ -30,6 +31,7 @@ public class TestItem extends AbstractItem {
     private final EffectService effectService = Factory.get(EffectService.class);
     private final ViewService viewService = Factory.get(ViewService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
+    private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
 
     @Override
     public boolean canUse(Actor actor) {
@@ -40,12 +42,11 @@ public class TestItem extends AbstractItem {
     public void use(Actor actor) {
         super.use(actor);
         
-        Actor aa = actorService.loadActor("actorTreasure");
+        Actor aa = actorService.loadActor("actorHard");
         actorService.setGroup(aa, 10);
-        actorService.setLevel(aa, 20);
-        playService.addActor(aa);
+        actorService.setLevel(aa, 2);
+        playNetwork.addActor(aa);
         
-        actorService.setGroup(playService.getPlayer(), 10);
     }
     
 }

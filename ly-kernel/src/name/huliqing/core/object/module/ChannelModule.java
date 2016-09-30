@@ -57,7 +57,7 @@ public class ChannelModule extends AbstractModule implements ChannelControl {
                 }
             }
         }
-       
+        
     }
 
     @Override
@@ -213,10 +213,18 @@ public class ChannelModule extends AbstractModule implements ChannelControl {
     }
 
     @Override
-    public void setChannelLock(boolean locked, String... channelIds) {
-        if (channelIds == null) {
+    public void setChannelLock(boolean locked, String[] channelIds) {
+        if (channels == null) {
             return;
         }
+        // 如果没有指定要锁定那些通道，则默认为全部通道
+        if (channelIds == null) {
+            for (Channel c : channels) {
+                c.setLock(locked);
+            }
+            return;
+        }
+        
         Channel ch;
         for (String chId : channelIds) {
             ch = getChannel(chId);

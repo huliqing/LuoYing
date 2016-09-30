@@ -15,13 +15,14 @@ public class TestFactory {
     
     public static void preTest() {
         
-        testSkill("skillDanceSakura");
-        testSkill("skillLightningShot");
-        testSkill("skillIceShot");
-        testSkill("skillBack");
-        testSkill("skillDualSwordWave");
-        testSkill("skillShotCleanBuff");
+//        testSkill("skillDanceSakura");
+//        testSkill("skillLightningShot");
+//        testSkill("skillIceShot");
+//        testSkill("skillBack");
+//        testSkill("skillDualSwordWave");
+//        testSkill("skillShotCleanBuff");
         
+        testSkill("skillShotLight");
     }
     
     private static void testSkill(String skillId) {
@@ -30,5 +31,6 @@ public class TestFactory {
 //        proto.setAttribute("useAttributes", null);
 //        proto.setAttribute("hitDistance", 3000);
 //        proto.putAttribute("shotSpeed", "2");
+        proto.setAttribute("useTime", 2);
     }
 }

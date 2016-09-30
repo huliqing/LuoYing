@@ -294,10 +294,9 @@
     <!-- ========================================================================= -->
     <!--魔法特效:电光火石-->
     <!-- ========================================================================= -->
-    <!--蓄势:手中的闪电-->
-    <effectParticle id="effectFlowLightning"  useTime="0.62"  
-              tracePosition="always" traceRotation="always" initLocation="0.5,2.2,0.5"
-              emitter="emitterFlowLightning" />
+    <!--蓄势:手中的闪电:绑定在手骨上-->
+    <effectParticle id="effectFlowLightning" useTime="1.62" tracePosition="always" initLocation="0,0.15,-0.15" 
+                    emitter="emitterFlowLightning" endImmediate="1" />
     <!--子弹-->
     <effectParticle id="effectFlowLight"  useTime="10"  emitter="emitterFlowLight" 
                     tracePosition="always" traceRotation="always" />

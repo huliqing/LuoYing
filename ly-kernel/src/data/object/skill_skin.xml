@@ -23,19 +23,19 @@
     <!--切换武器用的技能-->
     <!-- =================================================================== -->
     
-    <skillSkin id="skillSkinHangWeaponBase" extends="skillSkinBase" useTime="0.75" channelLocked="1" hangTimePoint="0.5" />
-    <skillSkin id="skillSkin_LH_LS" extends="skillSkinHangWeaponBase" animation="hang_LH_LS" channels="channelLeftHand" sounds="soundDrawSword|0.5" />
-    <skillSkin id="skillSkin_LH_LW" extends="skillSkinHangWeaponBase" animation="hang_LH_LW" channels="channelLeftHand" sounds="soundDrawSword|0.5" />
-    <skillSkin id="skillSkin_LH_RS" extends="skillSkinHangWeaponBase" animation="hang_LH_RS" channels="channelLeftHand" sounds="soundDrawSword|0.5" />
+    <skillSkin id="skillSkinHangWeaponBase" extends="skillSkinBase" useTime="0.75" hangTimePoint="0.5" />
+    <skillSkin id="skillSkin_LH_LS"  extends="skillSkinHangWeaponBase" animation="hang_LH_LS" channels="channelLeftArm,channelLeftHand" channelLocks="channelLeftArm,channelLeftHand" sounds="soundDrawSword|0.5" />
+    <skillSkin id="skillSkin_LH_LW" extends="skillSkin_LH_LS" animation="hang_LH_LW" />
+    <skillSkin id="skillSkin_LH_RS"  extends="skillSkin_LH_LS" animation="hang_LH_RS"  />
     
-    <skillSkin id="skillSkin_RH_LS" extends="skillSkinHangWeaponBase" animation="hang_RH_LS" channels="channelRightHand" sounds="soundDrawSword|0.5" />
-    <skillSkin id="skillSkin_RH_LW" extends="skillSkinHangWeaponBase" animation="hang_RH_LW" channels="channelRightHand" sounds="soundDrawSword|0.5" />
-    <skillSkin id="skillSkin_RH_RS" extends="skillSkinHangWeaponBase" animation="hang_RH_RS" channels="channelRightHand" sounds="soundDrawSword|0.5" />
+    <skillSkin id="skillSkin_RH_LS"  extends="skillSkinHangWeaponBase" animation="hang_RH_LS" channels="channelRightArm,channelRightHand" channelLocks="channelRightArm,channelRightHand" sounds="soundDrawSword|0.5" />
+    <skillSkin id="skillSkin_RH_LW" extends="skillSkin_RH_LS" animation="hang_RH_LW" />
+    <skillSkin id="skillSkin_RH_RS"  extends="skillSkin_RH_LS" animation="hang_RH_RS"  />
     
-    <skillSkin id="skillSkinBow_LH_LS" extends="skillSkinHangWeaponBase" animation="hang_LH_LS" channels="channelLeftHand" sounds="soundDrawBow|0.5" />
+    <skillSkin id="skillSkinBow_LH_LS" extends="skillSkinHangWeaponBase" animation="hang_LH_LS" channels="channelLeftArm,channelLeftHand" channelLocks="channelLeftArm,channelLeftHand" sounds="soundDrawBow|0.5" />
     
-    <skillSkin id="skillSkinWand_LH_RS" extends="skillSkinHangWeaponBase" animation="hang_wand_LH_RS" channels="channelLeftHand" sounds="soundDressOutfit2|0.5" />
-    <skillSkin id="skillSkinWand_RH_LS" extends="skillSkinHangWeaponBase" animation="hang_wand_RH_LS" channels="channelRightHand" sounds="soundDressOutfit2|0.5" />
+    <skillSkin id="skillSkinWand_LH_RS" extends="skillSkinHangWeaponBase" animation="hang_wand_LH_RS" channels="channelLeftArm,channelLeftHand" channelLocks="channelLeftArm,channelLeftHand" sounds="soundDressOutfit2|0.5" />
+    <skillSkin id="skillSkinWand_RH_LS" extends="skillSkinHangWeaponBase" animation="hang_wand_RH_LS" channels="channelRightArm,channelRightHand" channelLocks="channelRightArm,channelRightHand" sounds="soundDressOutfit2|0.5" />
     
     
 </root>

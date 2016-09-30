@@ -60,7 +60,7 @@ public abstract class Effect<T extends EffectData> extends Node implements DataP
     
     @Override
     public final void updateLogicalState(float tpf) {
-        if (!isInitialized()) {
+        if (!initialized) {
             return;
         }
         effectUpdate(tpf);

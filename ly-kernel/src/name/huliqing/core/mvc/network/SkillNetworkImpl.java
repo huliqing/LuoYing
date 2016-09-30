@@ -6,12 +6,14 @@ package name.huliqing.core.mvc.network;
 
 import name.huliqing.core.network.Network;
 import com.jme3.math.Vector3f;
+import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.mess.MessActorAddSkill;
 import name.huliqing.core.mess.MessSkillPlay;
 import name.huliqing.core.mess.MessSkillWalk;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.module.SkillModule;
 import name.huliqing.core.object.skill.Skill;
 
 /**
@@ -94,8 +96,15 @@ public class SkillNetworkImpl implements SkillNetwork {
         // 端和客户端所有状态完全同步几乎是不可能的。
         // ============================20160504=============================
         if (force || skillService.isPlayable(actor, skill)) {
+            
+            // 找出一些不希望被中断的技能。
+            SkillModule skillModule = actor.getModule(SkillModule.class);
+            List<Long> notWantInterruptSkills = skillModule.checkNotWantInterruptSkills(skill);
+            
+            mess.setWantNotInterruptSkills(notWantInterruptSkills);
             NETWORK.broadcast(mess);
-            return skillService.playSkill(actor, skill, true);
+            
+            return skillService.playSkill(skillModule, skill, true, notWantInterruptSkills);
         }
         return false;
     }

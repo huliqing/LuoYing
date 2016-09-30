@@ -5,6 +5,7 @@
 package name.huliqing.core.mvc.network;
 
 import com.jme3.math.Vector3f;
+import java.util.List;
 import name.huliqing.core.Inject;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.skill.Skill;
@@ -32,6 +33,7 @@ public interface SkillNetwork extends Inject {
     boolean playSkill(Actor actor, Skill skill, boolean force);
     
     /**
+     * @deprecated 
      * 执行技能,技能的执行会受角色属性状态的影响
      * @param actor
      * @param skillId

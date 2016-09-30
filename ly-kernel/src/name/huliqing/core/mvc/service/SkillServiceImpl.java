@@ -8,7 +8,6 @@ import com.jme3.math.Vector3f;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import name.huliqing.core.LY;
 import name.huliqing.core.constants.SkillConstants;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.object.Loader;
@@ -180,25 +179,6 @@ public class SkillServiceImpl implements SkillService {
         SkillModule module = actor.getModule(SkillModule.class);
         return module != null && module.removeSkillPlayListener(skillPlayListener);
     }
-
-//    // 检查并升级技能
-//    private void skillLevelUp(Actor actor, SkillData data) {
-//        if (data.getLevel() >= data.getMaxLevel()) 
-//            return;
-//        if (data.getLevelUpEl() == null)
-//            return;
-//        int levelPoints = (int) elService.getLevelEl(data.getLevelUpEl(), data.getLevel() + 1);
-//        if (data.getSkillPoints() >= levelPoints) {
-//            data.setLevel(data.getLevel() + 1);
-//            data.setSkillPoints(data.getSkillPoints() - levelPoints);
-//            if (playService.getPlayer() == actor) {
-//                playService.addMessage(
-//                        ResourceManager.get(ResConstants.SKILL_LEVEL_UP, new Object[]{ResourceManager.getObjectName(data)})
-//                        , MessageType.item);
-//            }
-//            skillLevelUp(actor, data);
-//        }
-//    }
     
     @Override
     public boolean isPlayable(Actor actor, Skill skill) {
@@ -210,17 +190,11 @@ public class SkillServiceImpl implements SkillService {
         SkillModule module = actor.getModule(SkillModule.class);
         if (module != null) {
             int stateCode = module.checkStateCode(skill);
-            LOG.log(Level.INFO, "checkStateCode: actor={0}, skill={1}, stateCode={2}"
-                    , new Object[]{actor.getData().getId(), skill.getData().getId(), stateCode});
+//            LOG.log(Level.INFO, "checkStateCode: actor={0}, skill={1}, stateCode={2}"
+//                    , new Object[]{actor.getData().getId(), skill.getData().getId(), stateCode});
             return stateCode;
         }
         return SkillConstants.STATE_UNDEFINE;
-    }
-
-    @Override
-    public boolean isCooldown(Skill skill) {
-        return LY.getGameTime() - skill.getData().getLastPlayTime() 
-                < skill.getData().getCooldown() * 1000;
     }
 
     @Override
@@ -228,37 +202,42 @@ public class SkillServiceImpl implements SkillService {
         SkillModule module = actor.getModule(SkillModule.class);
         return module != null && module.getSkill(skillId) != null;
     }
-    
+
     @Override
-    public boolean playSkill(Actor actor, Skill skill, boolean force) {
+    public boolean playSkill(SkillModule skillModule, Skill skill, boolean force, List<Long> wantNotInterruptSkills) {
         if (skill == null) {
             return false;
         }
+        return skillModule.playSkill(skill, force, wantNotInterruptSkills);
+    }
+    
+    @Override
+    public boolean playSkill(Actor actor, Skill skill, boolean force) {
         SkillModule c = actor.getModule(SkillModule.class);
         if (c != null) {
-            return c.playSkill(skill, force);
+            return playSkill(c, skill, force, c.checkNotWantInterruptSkills(skill));
         }
         return false;
     }
 
     @Override
     public boolean playSkill(Actor actor, String skillId, boolean force) {
-        SkillModule c = actor.getModule(SkillModule.class);
-        if (c == null) {
+        SkillModule module = actor.getModule(SkillModule.class);
+        if (module == null) {
             return false;
         }
-        Skill skill = getSkill(actor, skillId);
-        return playSkill(actor, skill, force);
+        Skill skill = module.getSkill(skillId);
+        return playSkill(module, skill, force, module.checkNotWantInterruptSkills(skill));
     }
-
+    
     @Override
     public boolean playWalk(Actor actor, String skillId, Vector3f dir, boolean faceToDir, boolean force) {
-        SkillModule c = actor.getModule(SkillModule.class);
-        if (c == null) {
+        SkillModule module = actor.getModule(SkillModule.class);
+        if (module == null) {
             return false;
         }
         
-        Skill skill = c.getSkill(skillId);        
+        Skill skill = module.getSkill(skillId);        
         if (skill instanceof Walk) {
             Walk wSkill = (Walk) skill;
             wSkill.setWalkDirection(dir);
@@ -266,7 +245,7 @@ public class SkillServiceImpl implements SkillService {
                 wSkill.setViewDirection(dir);
             }
         }
-        return playSkill(actor, skill, force);
+        return playSkill(module, skill, force, null);
     }
     
     @Override

@@ -26,15 +26,16 @@ import name.huliqing.core.utils.GeometryUtils;
  */
 public abstract class AbstractEffect extends Effect {
     
-    /**
-     * 动画控制,所有动画控制器都作用在animRoot上。
-     */
+    /** 动画控制,所有动画控制器都作用在animRoot上。*/
     protected List<AnimationWrap> animations;
     
-    /**
-     * 特效声音
-     */
+    /** 特效声音 */
     protected List<SoundWrap> sounds;
+    
+    /** 是否允许特殊在请求结束的时候立即结束 */
+    protected boolean endImmediate;
+    
+    // ---- inner 
     
     /**
      * 本地根作点, 为了隔离Effect自身的变换和Anim所执行的动画变换，必须提供一个节点用于接受所有动画变换的节点。
@@ -90,6 +91,8 @@ public abstract class AbstractEffect extends Effect {
                 sounds.add(sw);
             }
         }
+        
+        endImmediate = data.getAsBoolean("endImmediate", endImmediate);
     }
     
     /**
@@ -170,35 +173,11 @@ public abstract class AbstractEffect extends Effect {
         updateAnimations(tpf, trueTimeUsed);
         
         // 检查是否需要结束特效
-        if (checkForEnd()) {
-            
-            // 执行特效结束侦听器
-            if (listeners != null) {
-                for (int i = 0; i < listeners.size(); i++) {
-                    listeners.get(i).onEffectEnd(this);
-                }
-            }
-            
-            // 清理特效
-            cleanup();
-            
-            // 如果特效设置了自动脱离场景则移除。
-            if (data.isAutoDetach()) {
-                removeFromParent();
-            }
+        if (trueTimeUsed >= trueTimeTotal) {
+            doEnd();
         }
     }
     
-    /**
-     * 检查是否需要结束特效，这个方法会在运行时持续调用，来检查是否应该结束特效，如果该方法返回true,
-     * 则特效将会立即被结束。
-     * 默认情况下该方法根据特效的已运行时间是否到达设置的特效时间允许运行的时间来判断是否应该结束特效。
-     * 子类可以覆盖这个方法来实现自定义的特效结束方式。
-     * @return 
-     */
-    protected boolean checkForEnd() {
-        return trueTimeUsed >= trueTimeTotal;
-    }
     
     @Override
     public void cleanup() {
@@ -227,9 +206,39 @@ public abstract class AbstractEffect extends Effect {
     
     @Override
     public void requestEnd() {
-        // 由特定子类实现
+        if (endImmediate) {
+            doEnd();
+        }
     }
-
+    
+//    /**
+//     * 检查是否需要结束特效，这个方法会在运行时持续调用，来检查是否应该结束特效，如果该方法返回true,
+//     * 则特效将会立即被结束。
+//     * 默认情况下该方法根据特效的已运行时间是否到达设置的特效时间允许运行的时间来判断是否应该结束特效。
+//     * 子类可以覆盖这个方法来实现自定义的特效结束方式。
+//     * @return 
+//     */
+//    protected boolean checkForEnd() {
+//        return trueTimeUsed >= trueTimeTotal;
+//    }
+    
+    protected void doEnd() {
+        // 执行特效结束侦听器
+        if (listeners != null) {
+            for (int i = 0; i < listeners.size(); i++) {
+                listeners.get(i).onEffectEnd(this);
+            }
+        }
+        
+        // 清理特效
+        cleanup();
+        
+        // 如果特效设置了自动脱离场景则移除。
+        if (data.isAutoDetach()) {
+            removeFromParent();
+        }
+    }
+    
     /**
      * update Animations
      * @param tpf 

@@ -5,8 +5,6 @@
  */
 package name.huliqing.core.object.effect;
 
-import java.util.ArrayList;
-import java.util.List;
 import name.huliqing.core.data.EffectData;
 import name.huliqing.core.object.Loader;
 
@@ -16,7 +14,7 @@ import name.huliqing.core.object.Loader;
  */
 public class GroupEffect extends AbstractEffect {
     
-    private List<EffectWrap> effects;
+    private EffectWrap[] effects;
     
     // 当该参数为true时需要检查并结束当前效果,并且不再启动新的子效果。
     private boolean endCheck;
@@ -28,14 +26,14 @@ public class GroupEffect extends AbstractEffect {
         super.setData(data);
         // effects的格式： "effect1,effect2|0.3, effect3..."
         String[] aArr = data.getAsArray("effects");
-        if (aArr != null) {
-            effects = new ArrayList<EffectWrap>(aArr.length);
-            for (String a : aArr) {
-                String[] bArr = a.split("\\|");
+        if (aArr != null && aArr.length > 0) {
+            effects = new EffectWrap[aArr.length];
+            for (int i = 0; i < aArr.length; i++) {
+                String[] bArr = aArr[i].split("\\|");
                 EffectWrap effect = new EffectWrap();
                 effect.effectId = bArr[0];
                 effect.startTime = bArr.length > 1 ? Float.parseFloat(bArr[1]) : 0;
-                effects.add(effect);
+                effects[i] = effect;
             }
         }
     }
@@ -44,12 +42,8 @@ public class GroupEffect extends AbstractEffect {
     public void initialize() {
         super.initialize();
         end = false;
-        
-        if (effects != null) {
-            for (int i = 0; i < effects.size(); i++) {
-                EffectWrap ew = effects.get(i);
-                ew.trueStartTime = ew.startTime / data.getSpeed();
-            }
+        for (EffectWrap ew : effects) {
+            ew.trueStartTime = ew.startTime / data.getSpeed();
         }
     }
 
@@ -57,52 +51,57 @@ public class GroupEffect extends AbstractEffect {
     protected void effectUpdate(float tpf) {
         super.effectUpdate(tpf);
         
+        // 结束特效
+        if (end) {
+            super.doEnd();
+            return;
+        }
+        
         // endCheck为true则检查是否可以结束当前效果组。注：当endCheck为true时未开始执行的子效果将不再执行。
         // 也就是不再去启动未开始的效果。当所有子效果都结束时则可以将当前效果组(GroupEffect)结束。
         if (endCheck) {
             int countEnd = 0;
-            EffectWrap ew;
-            for (int i = 0; i < effects.size(); i++) {
-                ew = effects.get(i);
+            for (EffectWrap ew : effects) {
                 if (!ew.started || (ew.started && ew.effect.isEnd())) {
                     countEnd++;
                 }
             }
             // 结束当前所有特效
-            end = countEnd >= effects.size();
+            end = countEnd >= effects.length;
             return;
         }
         
         // 检查并启动子效果。
-        EffectWrap ew;
         int countStarted = 0;
-        for (int i = 0; i < effects.size(); i++) {
-            ew = effects.get(i);
+        for (EffectWrap ew : effects) {
             ew.checkToStart(trueTimeUsed);
             countStarted += ew.started ? 1 : 0;
         }
         
         // 当所有子效果启动后开始检查是否可以结束当前效果。
-        endCheck = countStarted >= effects.size();
+        endCheck = countStarted >= effects.length;
     }
 
     @Override
-    protected boolean checkForEnd() {
-        // GroupEffect的结束时间不依赖于设置，而依赖于所有子特效是否结束。
-        return end;
+    protected void doEnd() {
+        // ignore, GroupEffect不能根据时间来着判断结束，需要自行控制结束。
     }
+
+    // remove20161001
+//    @Override
+//    protected boolean checkForEnd() {
+//        // GroupEffect的结束时间不依赖于设置，而依赖于所有子特效是否结束。
+//        return end;
+//    }
 
     @Override
     public void requestEnd() {
-        super.requestEnd();
-        
         // 请求让所有已经运行的子效果结束
         for (EffectWrap ew : effects) {
             if (ew.started) {
                 ew.effect.requestEnd();
             }
         }
-        
         // 标记endCheck,这可以让哪些还未开始执行的子效果不再检查是否要需要执行。
         endCheck = true;
     }
@@ -110,8 +109,8 @@ public class GroupEffect extends AbstractEffect {
     @Override
     public void cleanup() {
         if (effects != null) {
-            for (int i = 0; i < effects.size(); i++) {
-                effects.get(i).cleanup();
+            for (EffectWrap ew : effects) {
+                ew.cleanup();
             }
         }
         endCheck = false;
@@ -156,7 +155,7 @@ public class GroupEffect extends AbstractEffect {
         }
         
         public void cleanup() {
-            if (effect != null) {
+            if (effect != null && !effect.isEnd()) {
                 effect.cleanup();
             }
             started = false;

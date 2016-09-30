@@ -25,6 +25,7 @@ import name.huliqing.core.object.module.SkillListener;
 import name.huliqing.core.object.module.SkillModule;
 import name.huliqing.core.object.module.SkinListener;
 import name.huliqing.core.object.module.SkinModule;
+import name.huliqing.core.object.skill.HitSkill;
 import name.huliqing.core.object.skill.Skill;
 import name.huliqing.core.object.skin.Skin;
 import name.huliqing.core.object.skin.Weapon;
@@ -213,7 +214,7 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
         }
         
         // 判断是否在攻击范围内,或者跟随目标
-        if (!isPlayable(skill, enemy)) {
+        if (!isInHitRange(skill, enemy)) {
             
             // 如果不允许跟随敌人,则清空敌人（或许敌人已经走出攻击范围外。）
             // 清空目标及结束当前行为
@@ -300,13 +301,12 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
      * @param target
      * @return 
      */
-    protected boolean isPlayable(Skill attackSkill, Actor target) {
-        // remove20160926,不再需要这样搞特殊。
-//        // 正常攻击类技能都应该是HitSkill,使用hitSkill的isInHitDistance来判断以优化
-//        // 性能，
-//        if (attackSkill instanceof HitSkill) {
-//            return ((HitSkill) attackSkill).isInHitDistance(target);
-//        }
+    protected boolean isInHitRange(Skill attackSkill, Actor target) {
+        // 正常攻击类技能都应该是HitSkill,使用hitSkill的isInHitDistance来判断以优化
+        // 性能，
+        if (attackSkill instanceof HitSkill) {
+            return ((HitSkill) attackSkill).isInHitDistance(target);
+        }
         
         // 只有非HitSkill时才使用canPlay，这个方法稍微耗性能
         return attackSkill.checkState() == SkillConstants.STATE_OK;

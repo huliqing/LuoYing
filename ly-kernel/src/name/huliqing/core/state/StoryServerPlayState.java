@@ -225,6 +225,7 @@ public abstract class StoryServerPlayState extends NetworkServerPlayState {
             }
         } else {
             player = actorService.loadActor(Config.debug ? IdConstants.ACTOR_PLAYER_TEST : IdConstants.ACTOR_PLAYER);
+            actorService.setLevel(player, 10);
             logicService.resetPlayerLogic(player);
         }
         // 故事模式玩家始终队伍分组为1

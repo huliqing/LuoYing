@@ -160,6 +160,63 @@ public class SkillModule extends AbstractModule {
         super.cleanup();
     }
     
+    // bak20160930
+//    /**
+//     * 检查技能在当前状态下是否可以执行，如果返回值为 {@link SkillConstants#STATE_OK} 则表示可以执行，
+//     * 否则不能执行。
+//     * @param skill
+//     * @return 
+//     */
+//    public int checkStateCode(Skill skill) {
+//        if (skill == null) {
+//            return SkillConstants.STATE_UNDEFINE;
+//        }
+//        if (skill.getActor() == null) {
+//            skill.setActor(actor);
+//        }
+//        
+//        SkillData skillData = skill.getData();
+//        
+//        // 如果技能被锁定中，则不能执行
+//        if (isLockedSkillTags(skillData.getTags())) {
+//            return SkillConstants.STATE_SKILL_LOCKED;
+//        }
+//        
+//        // 如果新技能自身判断不能执行，例如加血技能或许就不可能给敌军执行。
+//        // 有很多特殊技能是不能对一些特定目标执行的，所以这里需要包含技能自身的判断
+//        int stateCode = skill.checkState();
+//        if (stateCode != SkillConstants.STATE_OK) {
+//            return stateCode;
+//        }
+//        
+//        // 通过钩子来判断是否可以执行, 如果有一个钩子返回不允许执行则后面不再需要判断。
+//        if (skillPlayListeners != null && !skillPlayListeners.isEmpty()) {
+//            for (SkillPlayListener sl : skillPlayListeners) {
+//                if (!sl.onSkillHookCheck(skill)) {
+//                    return SkillConstants.STATE_HOOK;
+//                }
+//            }
+//        }
+//        
+//        // 判断正在执行中的所有技能，如果“正在执行”中的所有技能都可以被覆盖或打断后执行，
+//        // 则不需要再判断技能优先级如果其中有任何一个即不能被覆盖，并且也不能被打断，
+//        // 则需要判断技能优先级
+//        boolean allCanOverlapOrInterrupt = true;
+//        long overlaps = skillData.getOverlapTags();
+//        long interrupts = skillData.getInterruptTags();
+//        for (Skill runSkill : playingSkills.getArray()) {
+//            if ((overlaps & runSkill.getData().getTags()) == 0 && (interrupts & runSkill.getData().getTags()) == 0) {
+//                allCanOverlapOrInterrupt = false;
+//                break;
+//            }
+//        }
+//        if (allCanOverlapOrInterrupt || skillData.getPrior() > playingPriorMax) {
+//            return SkillConstants.STATE_OK;
+//        }
+//        
+//        return SkillConstants.STATE_CAN_NOT_INTERRUPT;
+//    }
+    
     /**
      * 检查技能在当前状态下是否可以执行，如果返回值为 {@link SkillConstants#STATE_OK} 则表示可以执行，
      * 否则不能执行。
@@ -197,6 +254,11 @@ public class SkillModule extends AbstractModule {
             }
         }
         
+        // 技能优先级较高可以直接运行
+        if ( skillData.getPrior() > playingPriorMax) {
+            return SkillConstants.STATE_OK;
+        }
+        
         // 判断正在执行中的所有技能，如果“正在执行”中的所有技能都可以被覆盖或打断后执行，
         // 则不需要再判断技能优先级如果其中有任何一个即不能被覆盖，并且也不能被打断，
         // 则需要判断技能优先级
@@ -209,7 +271,7 @@ public class SkillModule extends AbstractModule {
                 break;
             }
         }
-        if (allCanOverlapOrInterrupt || skillData.getPrior() > playingPriorMax) {
+        if (allCanOverlapOrInterrupt) {
             return SkillConstants.STATE_OK;
         }
         
@@ -217,16 +279,40 @@ public class SkillModule extends AbstractModule {
     }
     
     /**
-     * 执行技能，如果成功执行则返回true,否则返回false, <br>
-     * 在执行技能之前可以通过 {@link #checkStateCode(Skill) }来查询当前状态下技能是否可以执行。<br>
-     * 如果需要强制执行技能，则可以将参数force设置为true,这可以保证技能始终执行。
+     * 从当前正在运行的技能中找出不希望被newSkill中断的技能id(唯一ID)， 如果没有找到则返回null或空列表
      * @param newSkill
-     * @param force
      * @return 
      */
-    public boolean playSkill(Skill newSkill, boolean force) {
+    public List<Long> checkNotWantInterruptSkills(Skill newSkill) {
+        // 如果执行中的技能不希望被newSkill中断则不中断。
+        if (playingSkills.isEmpty()) {
+            return null;
+        }
+        List<Long> result = null;
+        for (Skill s : playingSkills) {
+            if (!s.canInterruptBySkill(newSkill)) {
+                if (result == null) {
+                    result = new ArrayList<Long>(3);
+                }
+                result.add(s.getData().getUniqueId());
+            }
+        }
+        return result;   
+    }
+    
+    /**
+     * 执行技能，如果成功执行则返回true,否则返回false, <br>
+     * 在执行技能之前可以通过 {@link #checkStateCode(Skill) }来查询当前状态下技能是否可以执行。<br>
+     * 如果需要强制执行技能，则可以将参数force设置为true,这可以保证技能始终执行。notWantInterruptSkills参数用来指定
+     * 哪些特定的正在运行的技能不希望被中断。
+     * @param newSkill
+     * @param force
+     * @param notWantInterruptSkills 指定一些特定的技能不希望被中断，这是一个技能唯一ID列表，可为null.
+     * @return 
+     */
+    public boolean playSkill(Skill newSkill, boolean force, List<Long> notWantInterruptSkills) {
         if (force || checkStateCode(newSkill) == SkillConstants.STATE_OK) {
-            playSkillInner(newSkill);
+            playSkillInner(newSkill, notWantInterruptSkills);
             return true;
         }
         return false;
@@ -240,8 +326,9 @@ public class SkillModule extends AbstractModule {
      * 2.把当前正在执行的技能中所有可以重叠执行的进行保留，其余的强制打断。<br>
      * 3.执行新技能。<br>
      * @param newSkill 
+     * @param wantNotInterruptSkills 希望不被打断的技能id列表(正在运行中的技能)。
      */
-    private void playSkillInner(Skill newSkill) {
+    private void playSkillInner(Skill newSkill, List<Long> notWantInterruptSkills) {
         // 1.如果当前没有任何正在执行的技能则直接执行技能
         if (playingSkills.isEmpty()) {
             startNewSkill(newSkill);
@@ -250,11 +337,23 @@ public class SkillModule extends AbstractModule {
         
         // 这个方法是强制执行的
         long overlaps = newSkill.getData().getOverlapTags();
+        long interrupts = newSkill.getData().getInterruptTags();
         for (Skill playSkill : playingSkills.getArray()) {
+            // 由newSkill指定的要覆盖的，则优先使用覆盖，即不要中断。
             if ((overlaps & playSkill.getData().getTags()) != 0) {
                 continue;
             }
-            // 不能被覆盖的都要强制打断
+            // 由newSkill指定的要强制中断的，一定要中断
+            if ((interrupts & playSkill.getData().getTags()) != 0) {
+                playSkill.cleanup();
+                continue;
+            }
+            // 除了"要求强制中断(上面)"的技能之外，如果指定了一些不希望中断的技能，则这些技能不应该中断(doNotInterruptSkills)
+            if (notWantInterruptSkills != null && notWantInterruptSkills.contains(playSkill.getData().getUniqueId())) {
+                LOG.log(Level.INFO, "Donot interrupt skill {0}", playSkill.getData().getId());
+                continue;
+            }
+            // 其余一切都要中断
             playSkill.cleanup();
         }
         startNewSkill(newSkill);

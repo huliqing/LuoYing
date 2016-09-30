@@ -25,25 +25,25 @@
     <skillBase id="skillSkinTagBase" tags="skin" prior="0" overlapTags="idle,wait,walk,run,skin" />
 
     <!--战斗技能:普通攻击-->
-    <skillBase id="skillFightSimpleTagBase" tags="fight,attack" prior="10" />
-    <!--战斗技能:大招-->
-    <skillBase id="skillFightTrickTagBase" tags="fight,trick" prior="30" />
+    <skillBase id="skillFightSimpleTagBase" tags="fight,attack" prior="10" channelLocks="channelLeftArm,channelLeftHand,channelRightArm,channelRightHand" />
     <!--防守技能-->
     <skillBase id="skillDefendTagBase" tags="defend" prior="20" />
     <!--躲闪技能-->
     <skillBase id="skillDuckTagBase" tags="duck" prior="20" />
+    <!--战斗技能:大招-->
+    <skillBase id="skillFightTrickTagBase" tags="fight,trick" prior="30" channelLocks="channelLeftArm,channelLeftHand,channelRightArm,channelRightHand" />
     
      <!--普通魔法（非战斗类）-->
     <skillBase id="skillMagicTagBase" tags="magic" prior="30" />
     <!--受伤-->
     <skillBase id="skillHurtTagBase" tags="hurt" prior="40" />
-    <!--重置：主要用于没有配置死亡技能的角色-->
-    <skillBase id="skillResetTagBase" tags="reset" prior="50" />
+    <!--重置：主要用于没有配置死亡技能的角色以及被击晕时的状态: reset和dead技能优先级最高-->
+    <skillBase id="skillResetTagBase" tags="reset" prior="50" interruptTags="fight" />
     <!--死亡-->
-    <skillBase id="skillDeadTagBase" tags="dead" prior="60" />
+    <skillBase id="skillDeadTagBase" tags="dead" prior="60" interruptTags="fight" />
     
     <!-- ========================================================================= -->
-    <!--基本配置:-->
+    <!--基本配置: 对于各种类型技能的基本定义，所有带"base"后缀的按规范不能直接配置给角色，只能被用于继承。-->
     <!-- ========================================================================= -->
 
     <!--通用Reset技能-->
@@ -77,22 +77,28 @@
     <skillDead id="skillDeadBase" extends="skillDeadTagBase" />
     
     <!--魔法:基本(非战斗魔法)-->
-    <skillShot id="skillMagicBase"        extends="skillMagicTagBase" levelEl="elLevelSkill" maxLevel="5" levelUpEl="elLevelUpSkill" speedAttribute="attributeMagicSpeed" />
+    <skillShot id="skillMagicBase"        extends="skillMagicTagBase" levelEl="elLevelSkill" maxLevel="5" levelUpEl="elLevelUpSkill" speedAttribute="attributeMagicSpeed" resistInterruptRateAttribute="attributeResistInterruptRate" />
     <!--魔法:BUFF类-->
     <skillShot id="skillMagicBuffBase" extends="skillMagicBase" hitDistance="35" hitEl="elSkillBuff" hitChecker="hitCheckerBuff" bullets="bulletBuff" />
 
-    <!--普通物理攻击：配置给普通的物理攻击技能，一般可配置给冷兵器技能，如刀、剑、匕首、大刀、长枪、弓箭等普通攻击技-->
+    <!--普通物理攻击：普通，一般可配置给冷兵器技能，如：刀、剑、斧、匕首、大刀、长枪...-->
     <skillAttack id="skillFightSimpleAttackBase"            extends="skillFightSimpleTagBase" defendSkillTags="defend" hitAttribute="attributeHealth" levelEl="elLevelSkill" hitEl="elSkillAttack" speedAttribute="attributeAttackSpeed" cutTimeEndAttribute="attributeGhostRate" />
-    <skillShot    id="skillFightSimpleAttackShotBase"    extends="skillFightSimpleAttackBase" hitDistance="35" cooldown="2.5" shotSpeed="1" shotTimes="0" useTime="0" />
-    <!--普通魔法攻击：配置给普通的魔法攻击, shot为远程魔法技能-->
-    <skillAttack id="skillFightSimpleMagicBase"             extends="skillFightSimpleTagBase" hitAttribute="attributeHealth" levelEl="elLevelSkill" hitEl="elSkillMagicAttack" speedAttribute="attributeMagicSpeed"  cutTimeEndAttribute="attributeGhostRate" />
-    <skillShot    id="skillFightSimpleMagicShotBase"     extends="skillFightSimpleMagicBase" hitDistance="35" cooldown="2.5" shotSpeed="1" shotTimes="0" useTime="0" />
+    <!--普通物理攻击：远程，一般可配置给远程攻击兵器用的技能，如：弓箭、炮塔，枪械等远程攻击技能 -->
+    <skillShot    id="skillFightSimpleAttackShotBase"    extends="skillFightSimpleAttackBase" hitDistance="35" cooldown="2.5" shotSpeed="1" shotTimes="0" useTime="0" resistInterruptRateAttribute="attributeResistInterruptRate" />
     
-    <!--技能大招：物理攻击-->
-    <skillAttack id="skillFightTrickAttackBase"          extends="skillFightTrickTagBase"  hitAttribute="attributeHealth" levelEl="elLevelSkill" hitEl="elSkillAttack"           speedAttribute="attributeAttackSpeed" cutTimeEndAttribute="attributeGhostRate" maxLevel="5" levelUpEl="elLevelUpSkill" />
+    <!--普通魔法攻击：普通-->
+    <skillAttack id="skillFightSimpleMagicBase"             extends="skillFightSimpleTagBase" hitAttribute="attributeHealth" levelEl="elLevelSkill" hitEl="elSkillMagicAttack" speedAttribute="attributeMagicSpeed" cutTimeEndAttribute="attributeGhostRate" />
+    <!--普通魔法攻击：远程 -->
+    <skillShot    id="skillFightSimpleMagicShotBase"     extends="skillFightSimpleMagicBase" hitDistance="35" cooldown="2.5" shotSpeed="1" shotTimes="0" useTime="0" resistInterruptRateAttribute="attributeResistInterruptRate"/>
+    
+    <!--普通物理技能大招：近战大招-->
+    <skillAttack id="skillFightTrickAttackBase"          extends="skillFightTrickTagBase"  hitAttribute="attributeHealth" levelEl="elLevelSkill" hitEl="elSkillAttack"           speedAttribute="attributeAttackSpeed" cutTimeEndAttribute="attributeGhostRate" resistInterruptRateAttribute="attributeResistInterruptRate" maxLevel="5" levelUpEl="elLevelUpSkill" />
+    <!--普通物理技能大招：远程大招-->
     <skillShot    id="skillFightTrickAttackShotBase"  extends="skillFightTrickAttackBase"  hitDistance="35" cooldown="2.5" shotSpeed="1" shotTimes="0" useTime="0" />
-    <!--技能大招：魔法攻击-->
-    <skillAttack id="skillFightTrickMagicBase"          extends="skillFightTrickTagBase"  hitAttribute="attributeHealth" levelEl="elLevelSkill" hitEl="elSkillMagicAttack" speedAttribute="attributeMagicSpeed" cutTimeEndAttribute="attributeGhostRate" maxLevel="5" levelUpEl="elLevelUpSkill"   />
+
+    <!--魔法技能大招：普通-->
+    <skillAttack id="skillFightTrickMagicBase"          extends="skillFightTrickTagBase"  hitAttribute="attributeHealth" levelEl="elLevelSkill" hitEl="elSkillMagicAttack" speedAttribute="attributeMagicSpeed" cutTimeEndAttribute="attributeGhostRate" resistInterruptRateAttribute="attributeResistInterruptRate" maxLevel="5" levelUpEl="elLevelUpSkill"   />
+    <!--魔法技能大招：远程-->
     <skillShot    id="skillFightTrickMagicShotBase"  extends="skillFightTrickMagicBase" hitDistance="35" shotSpeed="3" shotTimes="0" useTime="0" />
     
     <!--弓箭普通攻击-->
@@ -207,7 +213,6 @@
                cutTimeStartMax="0.4" cutTimeEndMax="0.34" needLevel="7"
                bullets="bulletWave" shotTimes="0.61" shotSpeed="3" shotOffsets="0|2.1|2" />
     
-    
     <!-- =================================================================== -->
     <!--弓箭类技能-->
     <!-- =================================================================== -->
@@ -239,7 +244,7 @@
     
     <!--电光火石-->
     <skillShot id="skillShotLight" extends="skillFightSimpleMagicBase" icon="" useTime="1.5" hitDistance="25" animation="wand_spell" 
-               weaponStateLimit="wand" sounds="soundShot2|0.58" effects="effectFlowLightning|0.11" useAttributes="attributeMana|20" cooldown="1.5"
+               weaponStateLimit="wand" sounds="soundShot2|0.58" boneEffects="hand.L|effectFlowLightning|0.11" useAttributes="attributeMana|20" cooldown="1.5"
                hitValue="30" shotSpeed="1" shotTimes="0.58" shotOffsets="0.5|2.2|0.5" bullets="bulletFlowLight" />
     
     <!--Pastor buff Base-->

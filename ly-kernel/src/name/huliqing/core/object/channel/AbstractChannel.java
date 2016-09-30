@@ -17,6 +17,10 @@ import name.huliqing.core.data.ChannelData;
 public abstract class AbstractChannel <T extends ChannelData> implements Channel <T> {
     
     protected T data;
+    private String[] fromRootBones;
+    private String[] toRootBones;
+    private String[] bones;
+    
     // 动画通道是否被锁定
     protected boolean locked;
     // 动画控制器
@@ -27,6 +31,9 @@ public abstract class AbstractChannel <T extends ChannelData> implements Channel
     @Override
     public void setData(T data) {
         this.data = data;
+        fromRootBones = data.getAsArray("fromRootBones");
+        toRootBones = data.getAsArray("toRootBones");
+        bones = data.getAsArray("bones");
     }
 
     @Override
@@ -37,7 +44,7 @@ public abstract class AbstractChannel <T extends ChannelData> implements Channel
     @Override
     public void setAnimControl(AnimControl animControl) {
         this.animControl = animControl;
-        this.animChannel = createAnimChannel(this.data, this.animControl);
+        this.animChannel = createAnimChannel(this.animControl);
     }
 
     @Override
@@ -119,31 +126,27 @@ public abstract class AbstractChannel <T extends ChannelData> implements Channel
 
     /**
      * 创建一个AnimChannel
-     * @param channelData
      * @param ac
      * @return 
      */
-    protected final AnimChannel createAnimChannel(ChannelData channelData, AnimControl ac) {
+    protected final AnimChannel createAnimChannel(AnimControl ac) {
         AnimChannel channel = ac.createChannel();
-        String[] fromRoot = channelData.getFromRootBones();
-        String[] toRoot = channelData.getToRootBones();
-        String[] bones = channelData.getBones();
         
         // 如果未配置其它任何参数，则默认创建一个完全通道
-        if (fromRoot == null && toRoot == null && bones == null) {
+        if (fromRootBones == null && toRootBones == null && bones == null) {
             return channel;
         }
         
         // From root bones
-        if (fromRoot != null) {
-            for (String bone : fromRoot) {
+        if (fromRootBones != null) {
+            for (String bone : fromRootBones) {
                 channel.addFromRootBone(bone);
             }
         }
         
         // To root bones
-        if (toRoot != null) {
-            for (String bone : toRoot) {
+        if (toRootBones != null) {
+            for (String bone : toRootBones) {
                 channel.addToRootBone(bone);
             }
         }

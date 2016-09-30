@@ -19,32 +19,13 @@
                 <xs:element ref="effectSlideColorSpline" />
                 <xs:element ref="effectSlideColorIOSpline" />
                 <xs:element ref="effectProjection" />
+                
+                <!--OutDate-->
+<!--                <xs:element ref="effectHalo" />
+                <xs:element ref="effectEncircleHalo" />  环绕的星光 
+                <xs:element ref="effectSimpleGroup" />
+                <xs:element ref="effectTextureCylinder" />-->
             </xs:all>
-        </xs:complexType>
-    </xs:element>
-    
-    <xs:element name="effectGroup">
-        <xs:annotation>
-            <xs:documentation>
-效果组, effectGroup可以打包一组子效果一起执行.1.子效果会追随着当前效果; 2.对effectGroup设置动画同时也会影响到子效果;
-3.这种效果"不"需要设置时间，设置时间没有意义，当所有子效果都结束后effectGroup才会结束; 4.设置effectGroup的运行速度会直接影响到所有子效果。
-            </xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="effectBase">
-                    <xs:attribute name="effects" type="xs:string" use="required">
-                        <xs:annotation>
-                            <xs:documentation>
-                                注意：该参数中不能包含无限时的子效果，否则该效果可能永远不会结束。
-                                子效果组的id列表，用半角逗号分隔,如："effect1,effect2,effect3..."
-如果子效果需要延迟启动，则在效果id后面添加延迟时间，使用"|"号隔开。该时间设置使用
-单位秒, 如："effect1,effect2|0.3, effect3...", 其中effect2将在效果组启动后0.3秒的时候启动。
-                            </xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
-                </xs:extension>
-            </xs:complexContent>
         </xs:complexType>
     </xs:element>
     
@@ -276,6 +257,59 @@
         </xs:complexType>
     </xs:element>
     
+<!--    <xs:element name="effectTextureCylinder">
+        <xs:annotation>
+            <xs:documentation>
+                一个使用圆柱贴图的特效，特效图片会贴在圆柱体上。
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="effectBase">
+                    <xs:attribute name="texture" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>材质贴图</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="axis" use="required">
+                        <xs:annotation>
+                            <xs:documentation>指定圆柱在哪一个轴向上,取值x/y/z</xs:documentation>
+                        </xs:annotation>
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:enumeration value="x"/>
+                                <xs:enumeration value="y"/>
+                                <xs:enumeration value="z"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:attribute>
+                    <xs:attribute name="radius" type="xs:decimal" use="required">
+                        <xs:annotation>
+                            <xs:documentation>指定圆柱半径</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="height" type="xs:decimal" use="required">
+                        <xs:annotation>
+                            <xs:documentation>指定圆柱高度</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="offset" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>指定圆柱位置的偏移，格式："x,y,z"</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="color" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                贴图初始颜色
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>-->
+    
     <xs:element name="effectTexture">
         <xs:annotation>
             <xs:documentation>
@@ -316,7 +350,83 @@
         </xs:complexType>
     </xs:element>
     
+<!--    <xs:element name="effectEncircleHalo">
+        <xs:annotation>
+            <xs:documentation>
+                一个由几个星光环绕着目标旋转的特效。
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="effectBase">
+                    <xs:attribute name="texture" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>星光的材质贴图</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="size" type="xs:integer" use="required">
+                        <xs:annotation>
+                            <xs:documentation>星光的数量</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="radius" type="xs:decimal" use="required">
+                        <xs:annotation>
+                            <xs:documentation>星光环绕半径</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>-->
     
+    <xs:element name="effectGroup">
+        <xs:annotation>
+            <xs:documentation>
+效果组, effectGroup可以打包一组子效果一起执行.1.子效果会追随着当前效果; 2.对effectGroup设置动画同时也会影响到子效果;
+3.这种效果"不"需要设置时间，设置时间没有意义，当所有子效果都结束后effectGroup才会结束; 4.设置effectGroup的运行速度会直接影响到所有子效果。
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="effectBase">
+                    <xs:attribute name="effects" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>
+                                注意：该参数中不能包含无限时的子效果，否则该效果可能永远不会结束。
+                                子效果组的id列表，用半角逗号分隔,如："effect1,effect2,effect3..."
+如果子效果需要延迟启动，则在效果id后面添加延迟时间，使用"|"号隔开。该时间设置使用
+单位秒, 如："effect1,effect2|0.3, effect3...", 其中effect2将在效果组启动后0.3秒的时候启动。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+<!--    <xs:element name="effectSimpleGroup">
+        <xs:annotation>
+            <xs:documentation>
+ 简单的效果组，该组内的效果一个一个按顺序执行，当一个执行完之后才会执行
+ 另一个效果。直到所有效果结束后，当前效果才算结束。
+ 使用该效果组需要注意以下几点：
+ 1.当前效果不会执行任何实质内容，只会逐一执行各个子效果。
+ 2.不要把带循环的效果加入到组内，否则可能该循环效果会阻止后续子效果的执行。
+ 3.当前的效果各阶段的时间设置将不会影响到子效果的执行时间。
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="effectBase">
+                    <xs:attribute name="effects" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>子效果组的id列表，用半角逗号分隔，如："effect1,effect2,effect3..."</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>-->
     
     <xs:element name="effectParticle">
         <xs:annotation>
@@ -362,6 +472,156 @@
             </xs:complexContent>
         </xs:complexType>
     </xs:element>
+    
+<!--    <xs:element name="effectHalo">
+        <xs:annotation>
+            <xs:documentation>光晕效果</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="effectBase">
+                    <xs:attribute name="texture" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>光晕材质贴图</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="radius" type="xs:decimal" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>半径</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="haloTotal" type="xs:integer" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>光晕数量</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="haloSize" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>每个光晕的大小倍率如："1,1,1"</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="incline" type="xs:decimal" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>倾斜值,大于0则向上倾斜，小于0则向下倾斜</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="dynamicShow" type="bool" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>光晕是否一个一个出现，否则立即全部出现，默认true</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="dynamicInvert" type="bool" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>是否反方向呈现（need dynamicShow= true),</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="dynamicRandom" type="bool" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>是否随机出现,如果为true,则dynamicInvert无效(need dynamicShow=true)</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="haloScaleShow" type="bool" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>是否让每束光晕在出现时使用缩放动画，即让每束光晕从小到大出现。</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="haloScaleStart" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>开始缩放的大小</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="haloScaleEnd" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>结束缩放的大小</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="haloScaleSpeed" type="xs:decimal" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>缩放的速度</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="rotate" type="bool" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>是否旋转</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="rotateImmediate" type="bool" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>光晕是否立即旋转,默认false，即在光晕全部出现后再旋转(need rotate = true)</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="rotateInvert" type="bool" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>是否逆向旋转(need rotate = true);</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="rotateSpeed" type="xs:decimal" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>旋转速度,默认0.1</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="rotateLoop" type="loop" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>旋转动画类型</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="scale" type="bool" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>是否找开光晕缩放</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="scaleStart" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>缩放值</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="scaleEnd" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>缩放值</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="scaleSpeed" type="xs:decimal" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>缩放动画的速度</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    
+                    <xs:attribute name="scaleLoop" type="loop" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>缩放动画类型</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                     <xs:attribute name="color" type="bool" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>是否使用颜色动画
+                            ，如果同时打开了scale动画，则设置相同的动画速度scaleSpeed和colorSpeed会看起来比较协调
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="colorStart" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>开始的颜色,示例："1,1,1,1"</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="colorEnd" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>结束的颜色,示例："1,1,1,1"</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="colorSpeed" type="xs:decimal" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>动画速度</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="colorLoop" type="loop" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>颜色动画类型</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>-->
     
     <xs:attribute name="blendMode">
         <xs:simpleType>
@@ -480,12 +740,6 @@
                             内移除的，如果在此类情况下需要让特效自动从父节点中移除，则可以设置autoDetach为true.
                             这个参数的默认值为:false.
                         </xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="endImmediate" type="bool" use="optional">
-                    <xs:annotation>
-                        <xs:documentation>判断特效是否可以立即结束，默认false, 大部分情况下特效都应该”自然结束“，
-                            但是存在一些特殊特效，这些特效需要在被依赖的目标（如技能）结束的时候立即也一起结束。</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
             </xs:extension>

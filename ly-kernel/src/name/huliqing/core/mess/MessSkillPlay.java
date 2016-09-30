@@ -6,6 +6,7 @@ package name.huliqing.core.mess;
 
 import com.jme3.network.HostedConnection;
 import com.jme3.network.serializing.Serializable;
+import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.ConnData;
 import name.huliqing.core.data.SkillData;
@@ -14,18 +15,22 @@ import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.network.GameServer;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.module.SkillModule;
+import name.huliqing.core.object.skill.Skill;
 
 /**
  *
  * @author huliqing
  */
 @Serializable
-public class MessSkillPlay extends MessBase {
+public final class MessSkillPlay extends MessBase {
     
-    protected long actorId;
-    protected String skillId;
+    private long actorId;
+    private String skillId;
+    // 不希望被中断的技能
+    private List<Long> wantNotInterruptSkills;
     
-     public String getSkillId() {
+    public String getSkillId() {
         return skillId;
     }
 
@@ -47,6 +52,14 @@ public class MessSkillPlay extends MessBase {
         this.actorId = actorId;
     }
 
+    public List<Long> getWantNotInterruptSkills() {
+        return wantNotInterruptSkills;
+    }
+
+    public void setWantNotInterruptSkills(List<Long> wantNotInterruptSkills) {
+        this.wantNotInterruptSkills = wantNotInterruptSkills;
+    }
+
     @Override
     public void applyOnServer(GameServer gameServer, HostedConnection source) {
         ConnData cd = source.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
@@ -55,7 +68,7 @@ public class MessSkillPlay extends MessBase {
         if (actor == null) {
             return;
         }
-        // 角色必须是客户端所控制的。
+        // 角色必须是客户端所控制的。客户端角色不能强制执行技能，并且也不能自己指定wantNotInterruptSkills参数
         if (actor.getData().getUniqueId() == cd.getActorId()) {
             Factory.get(SkillNetwork.class).playSkill(actor, skillId, false);
         }
@@ -65,9 +78,11 @@ public class MessSkillPlay extends MessBase {
     public void applyOnClient() {
         Actor actor = Factory.get(PlayService.class).findActor(actorId);
         if (actor != null) {
-            Factory.get(SkillService.class).playSkill(actor, skillId, true);
+            SkillModule skillModule = actor.getModule(SkillModule.class);
+            Skill skill = skillModule.getSkill(skillId);
+            skillModule.playSkill(skill, true, wantNotInterruptSkills);
+//            Factory.get(SkillService.class).playSkill(skillModule, skill, true, wantNotInterruptSkills);
         }
     }
-    
   
 }

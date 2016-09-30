@@ -38,6 +38,9 @@
     <!--角色所在队伍-->
     <attributeInteger id="attributeTeam" name="attributeTeam" />
     
+    <!--视力:影响角色的侦察范围-->
+    <attributeInteger id="attributeVision" name="attributeVision" value="30" />
+    
     <!--移动速度倍率：1.0为原始速度,2.0为两倍速度,默认1.0-->
     <attributeFloat id="attributeMoveSpeed" name="attributeMoveSpeed" value="1.0" />
     
@@ -116,9 +119,9 @@
     
     <!--鬼魅能力:[0.0~1.0] -->
     <attributeLevelFloat id="attributeGhostRate" name="attributeGhostRate" levelEl="elLevelAttrGhostRate" />
-    
-    <!--视力:影响角色的侦察范围-->
-    <attributeInteger id="attributeVision" name="attributeVision" value="30" />
+        
+    <!--抗技能中断属性: [0.0~1.0], 防止技能被中断的概率，当为技能绑定这个属性之后，技能有一定概率防止被高优先级的其它技能中断-->
+    <attributeFloat id="attributeResistInterruptRate" name="attributeResistInterruptRate" value="1.5"  />
     
     <!--武器槽位：这个参数定义角色默认支持的武器槽位,默认空，由不同的角色去配置。-->
     <attributeStringList id="attributeWeaponSlots" name="attributeWeaponSlots" />
@@ -129,14 +132,14 @@
     
     <attributeGroup id="attributeGroupBase" name="attributeGroupBase" 
                     attributes="attributeBiology,attributeRace,attributeSex
-    ,attributeLevel,attributeXp,attributeXpNext,attributeGroup,attributeTeam,attributeMoveSpeed,attributeMass
+    ,attributeLevel,attributeXp,attributeXpNext,attributeGroup,attributeTeam,attributeVision,attributeMoveSpeed,attributeMass
     ,attributeDead,attributeMovable,attributeRotatable,attributeEssential,attributeAutoLogic,attributeAutoDetect
     ,attributeTarget,attributeFollowTarget,attributeOwner,attributeTalentPoints
     ,attributeHealthMax,attributeHealth,attributeManaMax,attributeMana
     ,attributeAttack,attributeMagicAttack,attributeDefence,attributeMagicDefence
     ,attributeHealthRestore,attributeManaRestore
     ,attributeAttackSpeed,attributeMagicSpeed
-    ,attributeDefenceRate,attributeDuckRate,attributeGhostRate,attributeVision
+    ,attributeDefenceRate,attributeDuckRate,attributeGhostRate,attributeResistInterruptRate
 " />
     
     <!--==========================================================================-->

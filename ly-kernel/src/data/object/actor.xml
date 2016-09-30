@@ -32,7 +32,7 @@
             modules="moduleActor,moduleAction,moduleAttribute,moduleChannel,moduleChat,moduleItem,moduleLogic
     ,moduleResist,moduleSkill,moduleSkin,moduleState,moduleTalent,moduleTask,moduleLevel,moduleDrop"
             logics="logicSearchEnemy,logicDynamicFight,logicPatrol,logicFollow,logicDefend"
-            channels="channelLowerBody,channelUpperBody,channelLeftHand,channelRightHand,channelHead"
+            channels="channelRoot,channelHips,channelWaist,channelHead,channelLeftLeg,channelRightLeg,channelLeftFoot,channelRightFoot,channelLeftArm,channelRightArm,channelLeftHand,channelRightHand"
             resist="resistHuman"
             file="Models/actor/ske.mesh.j3o"
             icon="Interface/face/female1.jpg"

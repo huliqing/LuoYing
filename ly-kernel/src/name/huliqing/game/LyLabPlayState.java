@@ -46,7 +46,6 @@ public class LyLabPlayState extends NetworkPlayState {
     
     private final String[] actorIds = new String[] {
         IdConstants.ACTOR_HARD
-        ,IdConstants.ACTOR_HARD
         ,IdConstants.ACTOR_SINBAD
     };
 

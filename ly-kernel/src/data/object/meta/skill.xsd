@@ -689,16 +689,6 @@ xs:time
                         <xs:documentation>技能的执行时间，单位秒</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-                
-                <xs:attribute name="prior" type="xs:integer" use="required" >
-                    <xs:annotation>
-                        <xs:documentation>
-                            技能的优先级,默认值0. 值越高优先级越高，默认情况下优先级高的技能执行时会打断优先级低的技能。
-                            对于一些特殊情况，当优先级高的技能不想直接打断优先级低的技能，或是优先级低的技能希望打断优先级高的
-                            技能时可以通过参数overlapTags，interruptTags来进行例外配置。
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
                 <xs:attribute name="tags" type="xs:string" use="required" >
                     <xs:annotation>
                         <xs:documentation>技能的自定义标记,格式: "tag1,tag2,...", 如："walk,run,idle,fight,buff,..."</xs:documentation>
@@ -706,12 +696,22 @@ xs:time
                 </xs:attribute>
                 <xs:attribute name="overlapTags" type="xs:string" use="optional" >
                     <xs:annotation>
-                        <xs:documentation>设置当前技能可以覆盖的其它技能的tags,格式 : "tag1,tag2,..."</xs:documentation>
+                        <xs:documentation>设置当前技能可以覆盖哪些技能进行执行,格式 : "tag1,tag2,...",
+                            overlapTags的优先级最高，当一个技能可以覆盖目标技能执行的时候，当前技能将直接执行，不会中断目标技能，忽略技能优先级(prior)设置。</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
                 <xs:attribute name="interruptTags" type="xs:string" use="optional" >
                     <xs:annotation>
-                        <xs:documentation>设置当前技能可以打断的其它技能的tags,格式 : "tag1,tag2,..."</xs:documentation>
+                        <xs:documentation>设置当前技能可以强制中断的其它技能,格式 : "tag1,tag2,...", 当设置这个参数后，逻辑是这样的：
+                        如果当前技能不能覆盖另一个技能进行执行，则强制中断目标技能后执行,忽略优先级(prior)的设置。</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="prior" type="xs:integer" use="required" >
+                    <xs:annotation>
+                        <xs:documentation>
+                            技能的优先级,默认值0. 值越高优先级越高，默认情况下优先级高的技能执行时会打断优先级低的技能。
+                            对于一些特殊情况，可以通过参数overlapTags，interruptTags来进行例外配置。
+                        </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
                 <xs:attribute name="animation" type="xs:string" use="required" >
@@ -723,26 +723,29 @@ xs:time
                     <xs:annotation>
                         <xs:documentation>
                             执行动画的通道名称，格式："animChannel1,animChannel2,..."
-                            注：拥有该技能的角色必须配置有这些动画通道名称才可以执行，否则可能报错。
-                            如果不设置该参数，则技能执行时将使用默认动画通道。
+                            注：拥有该技能的角色必须配置有这些动画通道才可以执行，配置不存在的通道会被忽略，如果不设置该参数，
+                            则技能执行时将使用默认全部可能存在的通道。
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-                <xs:attribute name="channelLocked" type="bool" use="optional" >
+                <xs:attribute name="channelLockAll" type="bool" use="optional" >
                     <xs:annotation>
                         <xs:documentation>
-                            执行动画时是否锁定动画通道，这可以避免当多个可交互重
-                            叠的技能同时执行时动画通道被覆盖的问题,在动画通道执行完之后
-                            再重新解锁，这个参数只有在
-                            技能及目标角色同时配置有channels时才有意义。默认false.
+                            执行动画时是否锁定全部动画通道，注：这个参数可以让技能在执行时锁定角色本身"所有"的动画通道，
+                            如果希望只锁定特定的通道可以设置:channelLocks参数。
+                            锁定动画通道可以避免当多个可交互重叠的技能同时执行时动画通道被覆盖的问题。
                             示例如：换武器技能和走路技能是互相兼容和可重叠的。
                             当在走路的情况下换武器时（先走路后换武器），“走路”技能
                             的部分动画通道会被“换武器”技能的部分通道覆盖，这很自然并且没有问题。
                             但是当在“换武器”的情况下“走路”时（先换武器再走路，换武器动作未结束的情况）。
                             “走路”技能的手部动画通道可能覆盖掉“换武器”技能的动画通道，这会出现换
                             武器技能的动画未完整执行完的问题。这个时候可以把“换武器”技能的动画通道锁定。
-                            换句话说即提高了“换武器”技能动画通道的优先级一样。
                         </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="channelLocks" type="xs:string" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>指定要锁定那些特定的动画通道, 如果指定了不存在的通道则该通道会被忽略。格式："channel1,channel2,..."</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
                 <xs:attribute name="cooldown" type="xs:decimal" use="optional" >
@@ -759,29 +762,6 @@ xs:time
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-                <xs:attribute name="useAttributes" type="xs:string" use="optional">
-                    <xs:annotation>
-                        <xs:documentation>指定使用该技能时需要消耗的属性值,格式, 
-                            "属性id|消耗量",多个属性消耗可以使用半角逗号分开,
-                            如：attribute1|50,attribute2|100
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="speedAttribute" type="xs:string" use="optional" >
-                    <xs:annotation>
-                        <xs:documentation>
-                            影响技能执行速度的角色属性，指向一个attribute id,默认技能的执行速度为1，当设置了
-                            这个值之后，目标角色的指定属性的值将会影响到技能的执行速度。
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="cutTimeEndAttribute" type="xs:string" use="optional" >
-                    <xs:annotation>
-                        <xs:documentation>
-                            角色技能剪裁时间的角色属性,指向一个attribute id,取值范围为[0.0~1.0]，超出范围将会被截取。
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
                 <xs:attribute name="loop" type="bool" use="optional">
                     <xs:annotation>
                         <xs:documentation>让技能循环执行</xs:documentation>
@@ -795,11 +775,24 @@ xs:time
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-                <xs:attribute name="effects" type="xs:string" use="required" >
+                <xs:attribute name="effects" type="xs:string" use="optional" >
                     <xs:annotation>
                         <xs:documentation>
-                            绑定特效,格式: effectId1|timePoint,effectId2|timePoint,effectId3|timePoint...
-                            timePoint为技能useTime的时间插值点,可忽略,默认为0.
+                            绑定特效,格式: "effectId1|timePoint,effectId2|timePoint,effectId3|timePoint,..."
+                            effectId为特效id;timePoint为技能useTime的时间插值点,是特效的开始执行的时间点，可忽略,默认为0. 
+                            这些特效是直接绑定在角色根节点上的，如果需要将
+                            特效绑定在角色某根骨骼上，可以设置boneEffects参数
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="boneEffects" type="xs:string" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>
+                            绑定骨骼特效,格式: "boneName1|effectId1|timePoint,boneName2|effectId2|timePoint,..."
+                            boneName为骨头名称，指定要把特效绑定在这根骨头上，如果角色的骨骼中不存在指定的骷头名称则特效不会执行;
+                            effectId为特效id;timePoint为技能useTime的时间插值点,是特效的开始执行的时间点，可忽略,默认为0. 
+                            注意格式与"effect"参数的差异，如果需要给特定的某一根骨头配置多个特效可以如
+                            示例：“hand.L|effectFire|0.1, hand.L|effectSmoke|0.1”
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
@@ -820,6 +813,13 @@ xs:time
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
+                <xs:attribute name="cutTimeEndAttribute" type="xs:string" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>
+                            角色技能剪裁时间的角色属性,指向一个attribute id,取值范围为[0.0~1.0]，超出范围将会被截取。
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
                 <xs:attribute name="cutTimeStartMax" type="xs:decimal" use="optional">
                     <xs:annotation>
                         <xs:documentation>
@@ -836,33 +836,6 @@ xs:time
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-                
-                
-<!--                <xs:attribute name="extOverlaps" type="xs:string" use="optional">
-                    <xs:annotation>
-                        <xs:documentation>
-                            扩展的技能覆盖设置。
-                            指定当前技能额外的可以与其它技能类型重叠播放的技能类型，格式："skillType1,skillType2,...".
-                            覆盖的意思是：在不停止其它正在执行的技能的情况下同时执行当前技能，优先级高于interrupts,
-                            即技能可覆盖其它技能的时候就不使用打断的情况。
-                            注：overlaps是单向的,当设置技能A可以覆盖技能B时，技能B却不一定可以覆盖A,除非设置B也可以覆盖A
-                            示例，假如当前技能为一个攻击技能，为了使当前技能在角色跑动(run(4))、跳跃(jump(5))的时候可以执行这个攻击技能，
-                            则可以为当前设置extOverlaps="4,5".
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>-->
-<!--                <xs:attribute name="extInterrupts" type="xs:string" use="optional">
-                    <xs:annotation>
-                        <xs:documentation>
-                            扩展的技能打断设置。
-                            指定当前技能在遇到另一个技能时是否可以打断它，格式："skillType1,skillType2,...".
-                            interrupts的优先级低于overlaps，即当技能可以相互覆盖时，就不进行打断。
-                            interrupts是单向的，当设置了一个技能A可以打断技能B时，并不表示B也可以打断A.
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>-->
-                
-                
                 <xs:attribute name="level" type="xs:integer" use="optional">
                     <xs:annotation>
                         <xs:documentation>
@@ -898,10 +871,33 @@ xs:time
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-                <xs:attribute name="handler" ref="handler" use="optional" />
                 <xs:attribute name="needLevel" type="xs:integer" use="optional" >
                     <xs:annotation>
                         <xs:documentation>设置一个等级,这个等级指定只有角色达到这个等级时才能使用该技能.</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="useAttributes" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>指定使用该技能时需要消耗的属性值,格式, 
+                            "属性id|消耗量",多个属性消耗可以使用半角逗号分开,
+                            如：attribute1|50,attribute2|100
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="speedAttribute" type="xs:string" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>
+                            影响技能执行速度的角色属性，指向一个attribute id,默认技能的执行速度为1，当设置了
+                            这个值之后，目标角色的指定属性的值将会影响到技能的执行速度。
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="resistInterruptRateAttribute" type="xs:string" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>绑定一个角色属性，作为当前技能抵抗被另一技能中断的概率，这个属性的取值为[0.0~1.0],
+                            默认情况下，高优先级的技能会打断低优先级的技能， 为了让当前技能有一定概率不被另一高优先级的技能中断，可以为技能设置这个参数，当值为1.0时表示100%防止中断。
+                           值为0.5时表示50%机率防止中断，依次类推。注: 这个设置只对优先级(prior)设置有效,如果另一技能设置了interruptTags参数强制打断当前技能，则这个设置将无效。
+                        </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
             </xs:extension>

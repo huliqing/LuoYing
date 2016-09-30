@@ -5,8 +5,12 @@
 package name.huliqing.core.object.skill;
 
 import com.jme3.animation.LoopMode;
+import com.jme3.animation.SkeletonControl;
 import com.jme3.math.FastMath;
+import com.jme3.scene.Spatial;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import name.huliqing.core.Factory;
 import name.huliqing.core.LY;
 import name.huliqing.core.constants.SkillConstants;
@@ -50,7 +54,7 @@ import name.huliqing.core.xml.DataFactory;
  * @author huliqing
  */
 public abstract class AbstractSkill implements Skill {
-//    private static final Logger logger = Logger.getLogger(AbstractSkill.class.getName());
+    private static final Logger LOG = Logger.getLogger(AbstractSkill.class.getName());
     private final ElService elService = Factory.get(ElService.class);
     private final PlayService playService = Factory.get(PlayService.class);
     private AttributeModule attributeModule;
@@ -63,8 +67,11 @@ public abstract class AbstractSkill implements Skill {
     /** 技能声效 */
     protected SoundWrap[] sounds;
     
-    /** 技能特效 */
+    /** 技能特效: 直接绑定在角色身上的特效 */
     protected EffectWrap[] effects;
+    
+    /** 技能特效：绑定在角色某根骨骼上的特效 */
+    protected EffectWrap[] boneEffects;
     
     /** 关联一些魔法物体，这些魔法物体会在角色施放技能的时候放置在角色所在的位置上,根据\魔法物体的设置*/
     protected MagicWrap[] magics;
@@ -83,7 +90,12 @@ public abstract class AbstractSkill implements Skill {
      * 比如在执行取武器的动画时，这时的手部通道的动画不能被重新执行的“跑路”动画的相关通道覆盖。
      * 被锁定的通道应该在退出技能时(cleanup时)重新解锁，避免其它技能无法使用。
      */
-    protected boolean channelLocked;
+    protected boolean channelLockAll;
+    
+    /**
+     * 指定要锁定那些特定的动画通道,如果指定了channelLockAll则这个参数会被忽略
+     */
+    protected String[] channelLocks;
     
     /** 让技能循环执行 */
     protected boolean loop;
@@ -93,6 +105,11 @@ public abstract class AbstractSkill implements Skill {
      * 目标角色的指定属性的值将会影响到技能的执行速度。
     */
     protected String speedAttribute;
+    
+    /**
+     * 绑定一个防止技能被中断的“概率”属性。
+     */
+    protected String resistInterruptRateAttribute;
 
     // 用于剪裁cutTimeEndMax的角色属性ID。
     protected String cutTimeEndAttribute;
@@ -136,7 +153,7 @@ public abstract class AbstractSkill implements Skill {
     public void setData(SkillData data) {
         this.data = data;
         
-        // Sounds 参数格式: soundId|timePoint,soundId|timePoint...
+        // Sounds 参数格式: "soundId|timePoint,soundId|timePoint..."
         String[] tempSounds = data.getAsArray("sounds");
         if (tempSounds != null) {
             sounds = new SoundWrap[tempSounds.length];
@@ -151,7 +168,7 @@ public abstract class AbstractSkill implements Skill {
             }
         }
         
-        // Effects, 格式:effectId|timePoint,effect|timePoint,effectId|timePoint...
+        // Effects, 格式: "effectId|timePoint,effect|timePoint,effectId|timePoint..."
         String[] tempEffects = data.getAsArray("effects");
         if (tempEffects != null) {
             effects = new EffectWrap[tempEffects.length];
@@ -159,6 +176,7 @@ public abstract class AbstractSkill implements Skill {
                 String[] effectArr = tempEffects[i].split("\\|");
                 EffectWrap ew = new EffectWrap();
                 ew.effectId = effectArr[0];
+                ew.boneName = null; // 绑定在骨骼上的特效才要设置这个参数
                 if (effectArr.length >= 2) {
                     ew.timePoint = ConvertUtils.toFloat(effectArr[1], 0f);
                 }
@@ -166,7 +184,23 @@ public abstract class AbstractSkill implements Skill {
             }
         }
         
-        // Magics, 格式:magicId|timePoint,magic|timePoint,magicId|timePoint...
+        // boneEffects, 格式: "boneName|effectId|timePoint,boneName|effectId|timePoint,boneName|effectId|timePoint..."
+        String[] tempBoneEffects = data.getAsArray("boneEffects");
+        if (tempBoneEffects != null) {
+            boneEffects = new EffectWrap[tempBoneEffects.length];
+            for (int i = 0; i < tempBoneEffects.length; i++) {
+                String[] boneEffectArr = tempBoneEffects[i].split("\\|");
+                EffectWrap ew = new EffectWrap();
+                ew.boneName = boneEffectArr[0];
+                ew.effectId = boneEffectArr[1];
+                if (boneEffectArr.length >= 3) {
+                    ew.timePoint = ConvertUtils.toFloat(boneEffectArr[2], 0f);
+                }
+                boneEffects[i] = ew;
+            }
+        }
+        
+        // Magics, 格式: "magicId|timePoint,magic|timePoint,magicId|timePoint..."
         String[] tempMagics = data.getAsArray("magics");
         if (tempMagics != null) {
             magics = new MagicWrap[tempMagics.length];
@@ -200,9 +234,11 @@ public abstract class AbstractSkill implements Skill {
         }
         animation = data.getAsString("animation");
         channels = data.getAsArray("channels");
-        channelLocked = data.getAsBoolean("channelLocked", false);
+        channelLockAll = data.getAsBoolean("channelLockAll", false);
+        channelLocks = data.getAsArray("channelLocks");
         loop = data.getAsBoolean("loop", false);
         speedAttribute = data.getAsString("speedAttribute");
+        resistInterruptRateAttribute = data.getAsString("resistInterruptRateAttribute");
         // CutTimeEnd的剪裁
         cutTimeEndAttribute = data.getAsString("cutTimeEndAttribute");
         // 时间\动画剪裁参数
@@ -240,28 +276,27 @@ public abstract class AbstractSkill implements Skill {
         trueUseTime = getTrueUseTime();
         trueSpeed = getSpeed();
         
-        // 计算实际的声效执行时间点，受cutTime影响
+        // 计算实际的执行时间点，受cutTime影响
         if (sounds != null) {
             for (SoundWrap sw : sounds) {
                 sw.trueTimePoint = fixTimePointByCutTime(sw.timePoint);
             }
         }
-        
-        // 计算实际的效果执行时间点
         if (effects != null) {
             for (EffectWrap ew : effects) {
                 ew.trueTimePoint = fixTimePointByCutTime(ew.timePoint);
             }
         }
-        
-        // 计算实际的魔法执行时间点
+        if (boneEffects != null) {
+            for (EffectWrap ew : boneEffects) {
+                ew.trueTimePoint = fixTimePointByCutTime(ew.timePoint);
+            }
+        }
         if (magics != null) {
             for (MagicWrap mw : magics) {
                 mw.trueTimePoint = fixTimePointByCutTime(mw.timePoint);
             }
         }
-        
-        // 计算实际的运动时间点
         if (actorAnims != null) {
             for (ActorAnimWrap aaw : actorAnims) {
                 aaw.trueTimePointStart = fixTimePointByCutTime(aaw.timePointStart);
@@ -353,6 +388,13 @@ public abstract class AbstractSkill implements Skill {
             }
         }
         
+        if (boneEffects != null) {
+            for (EffectWrap ew : boneEffects) {
+                if (ew.started) continue;
+                ew.update(interpolation);
+            }
+        }
+        
         // 4.update magics
         if (magics != null) {
             for (MagicWrap mw : magics) {
@@ -395,21 +437,19 @@ public abstract class AbstractSkill implements Skill {
                 , animFullTime
                 , animStartTime
         );
-        if (channelLocked) {
-            channelModule.setChannelLock(true, channels);
+        if (channelLockAll) {
+            channelModule.setChannelLock(true, null);
+        } else if (channelLocks != null) {
+            channelModule.setChannelLock(true, channelLocks);
         }
     }
     
     /**
-     * 覆盖该方法来handler特效的执行 
-     * @param effectId
+     * @deprecated 
+     * @param effect 
      */
-    protected void playEffect(String effectId) {
-        Effect effect = Loader.load(effectId);
-        // 同步与技能相同的执行速度
-        effect.getData().setSpeed(trueSpeed);
-        effect.setTraceObject(actor.getSpatial());
-        EffectManager.getInstance().addEffect(effect);
+    protected void onPlayEffect(Effect effect) {
+        // ignore
     }
     
     /**
@@ -446,6 +486,11 @@ public abstract class AbstractSkill implements Skill {
                 ew.cleanup();
             }
         }
+        if (boneEffects != null) {
+            for (EffectWrap ew : boneEffects) {
+                ew.cleanup();
+            }
+        }
         if (magics != null) {
             for (MagicWrap mw : magics) {
                 mw.cleanup();
@@ -458,8 +503,10 @@ public abstract class AbstractSkill implements Skill {
         }
         
         // 如果有锁定过动画通道则必须解锁，否则角色的动画通道将不能被其它技能使用。
-        if (channelLocked) {
-            channelModule.setChannelLock(false, channels);
+        if (channelLockAll) {
+            channelModule.setChannelLock(false, null);
+        } else if (channelLocks != null) {
+            channelModule.setChannelLock(false, channelLocks);
         }
         
         // 重置
@@ -564,6 +611,21 @@ public abstract class AbstractSkill implements Skill {
     }
     
     @Override
+    public boolean canInterruptBySkill(Skill newSkill) {
+        if (resistInterruptRateAttribute == null) {
+            return true;
+        }
+        float resistRate = attributeModule.getNumberAttributeValue(resistInterruptRateAttribute, 0);
+        if (resistRate <=0) { // 抵抗率为0
+            return true;
+        }
+        if (resistRate >= 1.0f) { // 抵抗率为100%
+            return false;
+        }
+        return FastMath.nextRandomFloat() > resistRate;
+    }
+    
+    @Override
     public boolean isPlayableByWeapon() {
         if (data.getWeaponStateLimit() == null)
             return true;
@@ -621,24 +683,52 @@ public abstract class AbstractSkill implements Skill {
     public class EffectWrap {
         // 效果ID
         String effectId;
+        // 效果要绑定的骨骼名称，如果不绑定到骨骼则这个参数可以为null.
+        String boneName;
         // 效果的开始播放时间点,这个时间是技能时间(trueUseTime)的插值点
         float timePoint;
+        
         // 实际的效果执行时间插值点，受cutTime影响
         float trueTimePoint;
         // 标记效果是否已经开始
         boolean started;
+        // 保持对特效实例的引用
+        Effect effect;
         
         void update(float interpolation) {
             if (started) return;
             if (interpolation >= trueTimePoint) {
-                playEffect(effectId);
-                // 标记效果已经开始
+                playEffect();
+                onPlayEffect(effect);
                 started = true;
             }
         }
+
+        void playEffect() {
+            Spatial traceObject = actor.getSpatial();
+            if (boneName != null) {
+                SkeletonControl sc = actor.getSpatial().getControl(SkeletonControl.class);
+                if (sc != null) {
+                    try {
+                        traceObject = sc.getAttachmentsNode(boneName);
+                    } catch (Exception e) {
+                        LOG.log(Level.WARNING, "Bone not found, bone name={0}, skill={1}, actor={2}", new Object[]{boneName, data.getId(), actor.getData().getId()});
+                        return;
+                    };
+                }
+            }
+            // 效果需要同步与技能相同的执行速度
+            effect = Loader.load(effectId);
+            effect.getData().setSpeed(trueSpeed);
+            effect.setTraceObject(traceObject);
+            EffectManager.getInstance().addEffect(effect);
+        }
         
         void cleanup() {
-            // 不要去手动调用效果的cleanup,效果只要开始后,就让它自动结束.
+            if (effect != null) {
+                effect.requestEnd();
+                effect = null;
+            }
             started = false;
         }
     }

@@ -56,19 +56,30 @@ public interface Skill extends DataProcessor<SkillData>{
     void restoreAnimation();
     
     /**
-     * 获取技能的实际执行时间,技能的实际执行时间受：技能总时间、技能执行速度、
-     * 技能的剪裁时间等影响
+     * 获取技能的实际执行时间.
      * @return 
      */
     float getTrueUseTime();
         
     /**
-     * 判断角色在当前状态下是否可以执行这个技能,该方法返回一个状态码{@link SkillConstants}，来判断当前技能是否可以执行.
+     * 判断角色在当前状态下是否可以执行这个技能,该方法返回一个状态码{@link SkillConstants}，<br>
+     * 来判断当前技能是否可以执行，当前技能是否可以执行会受到技能的各种约束限制，<br>
+     * 如：技能要求角色持有特定武器才可以执行或者技能处于冷却中，或者技能要求消耗一些属性值而角色当前的属性值不足等。
      * @return 
      * @see SkillConstants
      */
     int checkState();
-
+    
+    /**
+     * 判断当前状态下，技能是否可以被另一个技能打断.这个方法由SkillModule调用，
+     * 主要用于判断当前正在执行的技能，是否可以被另一个正准备执行的技能打断。
+     * 这个功能可以允许一些防守被强制打断的技能出现，比如对于一些特殊技能，
+     * 如魔法技能在施法的时候可以根据概率来计算是否允许被打断。
+     * @param newSkill
+     * @return 
+     */
+    boolean canInterruptBySkill(Skill newSkill);
+    
     /**
      * 判断技能是否正常结束或未启动
      * @return 
