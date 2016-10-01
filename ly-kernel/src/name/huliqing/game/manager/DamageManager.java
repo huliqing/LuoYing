@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.core.manager;
+package name.huliqing.game.manager;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.font.BitmapFont;
@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 import name.huliqing.core.LY;
 import name.huliqing.core.Config;
 import name.huliqing.core.data.EffectData;
+import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.object.AbstractPlayObject;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.effect.AbstractEffect;
@@ -25,7 +26,7 @@ import name.huliqing.core.ui.Text;
 import name.huliqing.core.ui.state.UIState;
 
 /**
- * 在目标角色上展示伤害数字或其它信息。
+ * @deprecated 不再使用在目标角色上展示伤害数字或其它信息。
  * @author huliqing
  */
 public class DamageManager extends AbstractPlayObject {

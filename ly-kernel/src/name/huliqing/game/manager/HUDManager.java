@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.core.manager;
+package name.huliqing.game.manager;
 
 import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Node;
@@ -15,6 +15,7 @@ import name.huliqing.core.ui.UI.Corner;
 import name.huliqing.core.ui.state.UIState;
 
 /**
+ * @deprecated 
  * 处理所有界面上的一切信息，UI,Message等,弹窗等。
  * @author huliqing
  */

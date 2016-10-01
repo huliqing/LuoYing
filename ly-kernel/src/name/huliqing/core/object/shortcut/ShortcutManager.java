@@ -4,7 +4,6 @@
  */
 package name.huliqing.core.object.shortcut;
 
-import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.util.SafeArrayList;
 import com.jme3.util.TempVars;
@@ -19,14 +18,8 @@ import name.huliqing.core.data.ObjectData;
 import name.huliqing.core.data.SkillData;
 import name.huliqing.core.data.SkinData;
 import name.huliqing.core.enums.MessageType;
-import name.huliqing.core.manager.AnimationManager;
-import name.huliqing.core.mvc.network.UserCommandNetwork;
 import name.huliqing.core.mvc.service.ConfigService;
 import name.huliqing.core.mvc.service.SkillService;
-import name.huliqing.core.object.animation.Animation;
-import name.huliqing.core.object.animation.BounceMotion;
-import name.huliqing.core.object.animation.CurveMove;
-import name.huliqing.core.object.animation.LinearGroup;
 import name.huliqing.core.xml.DataFactory;
 import name.huliqing.core.save.ShortcutSave;
 import name.huliqing.core.ui.UIUtils;
@@ -99,9 +92,10 @@ public class ShortcutManager {
                 , SHORTCUT_SIZE_HEIGHT * size
                 , true);
         SHORTCUT_ROOT.addShortcut(shortcut);
-        
-        Animation anim = createShortcutAddAnimation(shortcut);
-        AnimationManager.getInstance().startAnimation(anim);
+   
+        // remove20161001不再依赖于这个动画包
+//        Animation anim = createShortcutAddAnimation(shortcut);
+//        AnimationManager.getInstance().startAnimation(anim);
     }
     
     /**
@@ -328,47 +322,48 @@ public class ShortcutManager {
         return result;
     }
     
-    /**
-     * 为shortcut的添加功能创建一个动画效果
-     * @param shortcut
-     * @return 
-     */
-    private static Animation createShortcutAddAnimation(Shortcut shortcut) {
-        TempVars tv = TempVars.get();
-        Vector2f startPos = LY.getCursorPosition();
-        tv.vect1.set(startPos.x, startPos.y, shortcut.getLocation().z); // z值不能改变，否则setOnTop会不正确
-        tv.vect2.set(LY.getSettings().getWidth() - 64 - 20
-                , (LY.getSettings().getHeight() - 64) * 0.5f
-                , shortcut.getLocation().z);
-        
-        // 弧线移动效果
-        CurveMove cm = new CurveMove();
-        cm.setStartPosition(tv.vect1);
-        cm.setEndPosition(tv.vect2);
-        cm.setHeight(150);
-        cm.setAnimateTime(0.5f);
-        cm.setUseScale(true);
-        cm.setScale(0.3f, Factory.get(ConfigService.class).getShortcutSize());
-        tv.release();
-        
-        // 弹跳效果
-        BounceMotion bm = new BounceMotion();
-        bm.setHeight(100);
-        bm.setAnimateTime(0.5f);
-        
-        // 再弹跳效果
-        BounceMotion bm2 = new BounceMotion();
-        bm2.setHeight(30);
-        bm2.setAnimateTime(0.25f);
-        
-        LinearGroup lg = new LinearGroup();
-        lg.addAnimation(cm);
-        lg.addAnimation(bm);
-        lg.addAnimation(bm2);
-        lg.setTarget(shortcut.getView());
-        
-        return lg;
-    }
+    // remove20161001不再依赖于这个动画包
+//    /**
+//     * 为shortcut的添加功能创建一个动画效果
+//     * @param shortcut
+//     * @return 
+//     */
+//    private static Animation createShortcutAddAnimation(Shortcut shortcut) {
+//        TempVars tv = TempVars.get();
+//        Vector2f startPos = LY.getCursorPosition();
+//        tv.vect1.set(startPos.x, startPos.y, shortcut.getLocation().z); // z值不能改变，否则setOnTop会不正确
+//        tv.vect2.set(LY.getSettings().getWidth() - 64 - 20
+//                , (LY.getSettings().getHeight() - 64) * 0.5f
+//                , shortcut.getLocation().z);
+//        
+//        // 弧线移动效果
+//        CurveMove cm = new CurveMove();
+//        cm.setStartPosition(tv.vect1);
+//        cm.setEndPosition(tv.vect2);
+//        cm.setHeight(150);
+//        cm.setAnimateTime(0.5f);
+//        cm.setUseScale(true);
+//        cm.setScale(0.3f, Factory.get(ConfigService.class).getShortcutSize());
+//        tv.release();
+//        
+//        // 弹跳效果
+//        BounceMotion bm = new BounceMotion();
+//        bm.setHeight(100);
+//        bm.setAnimateTime(0.5f);
+//        
+//        // 再弹跳效果
+//        BounceMotion bm2 = new BounceMotion();
+//        bm2.setHeight(30);
+//        bm2.setAnimateTime(0.25f);
+//        
+//        LinearGroup lg = new LinearGroup();
+//        lg.addAnimation(cm);
+//        lg.addAnimation(bm);
+//        lg.addAnimation(bm2);
+//        lg.setTarget(shortcut.getView());
+//        
+//        return lg;
+//    }
     
     /**
      * 快捷方式的根节点<br>

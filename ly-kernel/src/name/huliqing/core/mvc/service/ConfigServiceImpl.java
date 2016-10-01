@@ -13,7 +13,7 @@ import name.huliqing.core.Config;
 import name.huliqing.core.Factory;
 import name.huliqing.core.constants.IdConstants;
 import name.huliqing.core.data.ConfigData;
-import name.huliqing.core.manager.HUDManager;
+import name.huliqing.game.manager.HUDManager;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.object.sound.SoundManager;
 import name.huliqing.core.object.shortcut.ShortcutManager;

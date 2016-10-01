@@ -2,15 +2,15 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.core.manager;
+package name.huliqing.game.manager;
 
 import com.jme3.app.Application;
 import com.jme3.util.SafeArrayList;
 import name.huliqing.core.object.AbstractPlayObject;
-import name.huliqing.core.object.animation.Animation;
+import name.huliqing.game.animation.Animation;
 
 /**
- *
+ * @deprecated 准备移除
  * @author huliqing
  */
 public class AnimationManager extends AbstractPlayObject {

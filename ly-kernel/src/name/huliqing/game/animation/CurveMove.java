@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.core.object.animation;
+package name.huliqing.game.animation;
 
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;

@@ -14,7 +14,7 @@ import name.huliqing.core.mvc.network.SkillNetwork;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.AttributeService;
 import name.huliqing.core.mvc.service.SkillService;
-import name.huliqing.core.manager.DamageManager;
+import name.huliqing.game.manager.DamageManager;
 import name.huliqing.core.manager.ResourceManager;
 import name.huliqing.core.mvc.network.DropNetwork;
 import name.huliqing.core.object.actor.Actor;
