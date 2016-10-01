@@ -75,7 +75,7 @@ public abstract class AbstractUI extends Node implements UI {
     
     // 是否开启UI声效
     protected boolean soundEnabled = true;
-    // 点击声效,如：Sounds/xxx.ogg
+    // 点击声效,如：Sounds/xyz.ogg
     protected String soundClick;
     
     // ---

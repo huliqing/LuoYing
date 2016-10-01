@@ -114,8 +114,7 @@ public abstract class GameState extends AbstractAppState {
         addObject(TalkManager.getInstance(), false);
         // 用于显示伤害数字
         addObject(DamageManager.getInstance(), false);
-        // 用于显示动画，这种方式可能在后续移除。
-        addObject(AnimationManager.getInstance(), false);
+        
     }
 
     @Override

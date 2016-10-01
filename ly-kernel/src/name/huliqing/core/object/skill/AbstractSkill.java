@@ -445,31 +445,12 @@ public abstract class AbstractSkill implements Skill {
     }
     
     /**
+     * xxx 要去掉onPlayEffect这个方法
      * @deprecated 
      * @param effect 
      */
     protected void onPlayEffect(Effect effect) {
         // ignore
-    }
-    
-    /**
-     * 覆盖该方法来handler魔法的执行
-     * @param magicId 
-     */
-    protected void playMagic(String magicId) {
-        MagicData magicData = DataFactory.createData(magicId);
-        magicData.setSourceActor(actor.getData().getUniqueId());
-        magicData.setTraceActor(actor.getData().getUniqueId());
-        Magic magic = Loader.load(magicData);
-        playService.addPlayObject(magic);
-    }
-    
-    /**
-     * 播放声音
-     * @param soundId 
-     */
-    protected void playSound(String soundId) {
-        SoundManager.getInstance().playSound(soundId, actor.getSpatial().getWorldTranslation());
     }
     
     @Override
@@ -669,7 +650,7 @@ public abstract class AbstractSkill implements Skill {
         void update(float interpolation) {
             if (started) return;
             if (interpolation >= trueTimePoint) {
-                playSound(soundId);
+                SoundManager.getInstance().playSound(soundId, actor.getSpatial().getWorldTranslation());
                 started = true;
             }
         }
@@ -747,7 +728,12 @@ public abstract class AbstractSkill implements Skill {
         void update(float interpolation) {
             if (started) return;
             if (interpolation >= trueTimePoint) {
-                playMagic(magicId);
+                MagicData magicData = DataFactory.createData(magicId);
+                magicData.setSourceActor(actor.getData().getUniqueId());
+                magicData.setTraceActor(actor.getData().getUniqueId());
+                Magic magic = Loader.load(magicData);
+                playService.addPlayObject(magic);
+                
                 // 标记效果已经开始
                 started = true;
             }

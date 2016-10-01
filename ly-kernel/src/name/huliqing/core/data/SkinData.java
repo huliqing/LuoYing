@@ -95,7 +95,7 @@ public class SkinData extends ObjectData implements MatObject, CostObject {
     }
     
     /**
-     * 获取模型文件路径如："Models/xxx.j3o";
+     * 获取模型文件路径如："Models/xyz.j3o";
      * @return 
      */
     public String getFile() {

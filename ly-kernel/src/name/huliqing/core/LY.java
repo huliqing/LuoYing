@@ -702,7 +702,7 @@ public class LY {
     private static void registerMessage() {
         // Serializer.registerClass(Enum.class, new MyEnumSerializer());
         // 注：EnumSerializer在处理Collection和Set、Map等包含Enum类的字段时会报错
-        // 所以一般字段不要使用如： Set<Enum>,Map<Enum,xxx>,List<Enum>作为字段。
+        // 所以一般字段不要使用如： Set<Enum>,Map<Enum,yxz>,List<Enum>作为字段。
         // throw new SerializerException("Class has no enum constants:" + c);
         
         // 对LinkedHashMap有序MAP的支持

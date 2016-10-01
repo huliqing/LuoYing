@@ -184,7 +184,6 @@ public class AttackSkill extends HitSkill {
         }
         String effectId = DefineFactory.getMatDefine().getCollisionEffect(mat1, mat2);
         if (effectId != null) {
-            // 播放碰撞特效: TODO: 要进行处理
             TempVars tv = TempVars.get();
             Vector3f collisionPos = tv.vect1.set(collisionOffset);
             tv.quat1.lookAt(actorModule.getViewDirection(), Vector3f.UNIT_Y);
@@ -195,9 +194,6 @@ public class AttackSkill extends HitSkill {
             effect.setLocalTranslation(collisionPos);
             effect.getLocalRotation().lookAt(actorModule.getViewDirection(), Vector3f.UNIT_Y);
             EffectManager.getInstance().addEffect(effect);
-            
-    //        Collision.playDefend(collisionPos, actor, target, null, null); // remove20160928
-    
             tv.release();
         }
     }

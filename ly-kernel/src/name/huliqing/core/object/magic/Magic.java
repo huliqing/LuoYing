@@ -29,8 +29,6 @@ import name.huliqing.core.utils.ConvertUtils;
 import name.huliqing.core.utils.MathUtils;
 
 /**
- * //TODO Magic功能需要重构.
- * 
  * @author huliqing
  * @param <T>
  */

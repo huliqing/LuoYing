@@ -114,8 +114,6 @@ public class UserCommandNetworkImpl implements UserCommandNetwork {
         } else {
             Actor actor = actorService.loadActor(actorId);
             
-            // TODO:这里有一部分重复的代码需要处理：一部分在上面的MessCSActorSelect中
-            // network.sendToServer(new MessPlayActorSelect(actorId, actorName));
             logicService.resetPlayerLogic(actor);
             actorService.setName(actor, actorName);
             // 暂时以1作为默认分组
@@ -134,14 +132,12 @@ public class UserCommandNetworkImpl implements UserCommandNetwork {
             if (NETWORK.hasConnections()) {
                 String message = ResourceManager.get("lan.enterGame", new Object[] {actorName});
                 MessageType type = MessageType.item;
-                MessMessage notice = new MessMessage();
-                notice.setMessage(message);
-                notice.setType(type);
-                NETWORK.broadcast(notice);              // 通知所有客户端
-                playService.addMessage(message, type);  // 通知主机
+                MessMessage mess = new MessMessage();
+                mess.setMessage(message);
+                mess.setType(type);
+                NETWORK.broadcast(mess); // 通知所有客户端
+                playService.addMessage(message, type); // 通知主机
             }
-            
-            // TODO:需要通知客户端,刷新角色名
         }
     }
 

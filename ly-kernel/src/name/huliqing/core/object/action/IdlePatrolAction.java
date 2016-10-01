@@ -74,6 +74,9 @@ public class IdlePatrolAction extends AbstractAction implements IdleAction, Skil
     private Skill runSkill;
     private Skill waitSkill;
     
+    // 记录角色的idle的中心位置点
+    private Vector3f bornPlace;
+    
     public IdlePatrolAction() {
         super();
     }
@@ -124,13 +127,10 @@ public class IdlePatrolAction extends AbstractAction implements IdleAction, Skil
         // 初始化巡逻点坐标,如果没有指别设置角色的出生地点则将当前世界位置作为巡逻
         // 的原点,并在这个原点上向四周生成几个巡逻坐标点。
         if (idlePositions == null) {
-            Vector3f bornPlace = actor.getData().getBornPlace();
-            if (bornPlace != null) {
-                patrolOrgin.set(bornPlace);
-            } else {
-                patrolOrgin.set(actor.getSpatial().getWorldTranslation());
+            if (bornPlace == null) {
+                bornPlace = new Vector3f(actor.getSpatial().getWorldTranslation());
             }
-
+            patrolOrgin.set(bornPlace);
             // 生成可用idle坐标点.
             // 逻辑:随机在角色原始坐标的周围生成几个idle坐标点.
             idlePositions = new ArrayList<Vector3f>(walkPosTotal);

@@ -24,10 +24,10 @@ public class MessBase extends AbstractMessage {
     }
 
     public void applyOnClient() {
-//        Logger.getLogger(getClass().getName()).log(Level.WARNING, "TODO applyOnClint, mess class={0}", getClass());
+        // 由子类覆盖
     }
     
     public void applyOnServer(GameServer gameServer, HostedConnection source) {
-//        Logger.getLogger(getClass().getName()).log(Level.WARNING, "TODO applyOnServer, mess class={0}", getClass());
+        // 由子类覆盖
     }
 }

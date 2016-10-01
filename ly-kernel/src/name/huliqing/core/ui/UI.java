@@ -206,7 +206,7 @@ public interface UI {
     String getSoundClick();
 
     /**
-     * 如: "Sounds/xxx.ogg"
+     * 如: "Sounds/aaa.ogg"
      * @param soundClick 
      */
     void setSoundClick(String soundClick);

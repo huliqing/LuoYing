@@ -126,7 +126,7 @@ public abstract class AbstractBullet<S> extends Bullet<BulletData, S> {
         if (effects == null && effectIds != null) {
             effects = new ArrayList<Effect>(effectIds.length);
             for (String eid : effectIds) {
-                Effect e = EffectManager.getInstance().loadEffect(eid);
+                Effect e = Loader.load(eid);
                 effects.add(e);
                 attachChild(e);
             }
@@ -198,7 +198,7 @@ public abstract class AbstractBullet<S> extends Bullet<BulletData, S> {
     protected void onFiredTaget() {
         if (hitEffects != null) {
             for (String eid : hitEffects) {
-                Effect effect = EffectManager.getInstance().loadEffect(eid);
+                Effect effect = Loader.load(eid);
                 effect.getData().setInitLocation(getWorldTranslation());
                 EffectManager.getInstance().addEffect(effect);
             }            

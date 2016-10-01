@@ -66,7 +66,7 @@ class DataStore {
     
     /**
      * 载入数据，这些数据将会添加到当前数据容器中,如果容器中存在重复ID的数据，则数据会被覆盖替换。
-     * @param dataFile e.g. "/data/xxx.xml"
+     * @param dataFile e.g. "/data/xyz.xml"
      * @throws ParserConfigurationException
      * @throws SAXException
      * @throws IOException 

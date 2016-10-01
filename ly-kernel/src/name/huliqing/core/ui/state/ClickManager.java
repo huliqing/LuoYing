@@ -9,7 +9,6 @@ import com.jme3.math.Vector2f;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.core.LY;
-import name.huliqing.core.state.PlayState;
 import name.huliqing.core.ui.UI;
 import name.huliqing.core.ui.UIEventListener;
 import name.huliqing.core.ui.UISound;
@@ -75,14 +74,6 @@ public class ClickManager implements ReleaseListener {
         if (!ui.hasClickEvent() && !ui.hasDBClickEvent()) {
             return;
         }
-        
-        // remove20160217
-//        // TODO:移出View包,不要依赖 PlayState
-//        // 防止镜头转动
-//        PlayState ps = Common.getPlayState();
-//        if (ps != null) {
-//            ps.setChaseEnabled(false);
-//        }
         
         // 按下事件应该直接执行
         if (isPressed) {

@@ -28,35 +28,30 @@ import name.huliqing.core.shape.QuadXYC;
 import name.huliqing.core.utils.GeometryUtils;
 
 /**
- *
  * @author huliqing
  */
 public class ProjectProcessor implements SceneProcessor {
     
     private RenderManager rm;
     private boolean initialized;
-    private Camera castCam;
-    private Material mat;
+    private final Camera castCam;
+    private final Material mat;
     
-    private Texture tex;
-    private float width = 100;
-    private float height = 100;
+    private final Texture tex;
+    private final float width = 100;
+    private final float height = 100;
     // project location
-    private Vector3f pos = new Vector3f(50, 50, -50);
+    private final Vector3f pos = new Vector3f(50, 50, -50);
 
-    private Vector3f projPos = new Vector3f(50, 0, -50);
+    private final Vector3f projPos = new Vector3f(50, 0, -50);
     
-    private List<Geometry> receives = new ArrayList<Geometry>();
+    private final List<Geometry> receives = new ArrayList<Geometry>();
     
-    private Geometry projGeo;
+    private final Geometry projGeo;
     private float tempTpf;
-    private boolean debug = false;
+    private final boolean debug = false;
     
-    private Quaternion rot = new Quaternion();
-    
-    // TODO:1.使用投影距离来cut,优化性能; 
-    // 2.允许调整Color强度; 3.允许设置投影地点、投影Dir
-    // 允许debug显示包围圈
+    private final Quaternion rot = new Quaternion();
     
     public ProjectProcessor(Node root, AssetManager assetManager) {
         castCam = new Camera((int)128, (int)128);

@@ -81,7 +81,7 @@ public class SystemServiceImpl implements SystemService {
 
     @Override
     public InetAddress getBroadcastAddress() {
-        // TODO: 正确的广播地址计算方法应该是由当前ip地址和子网掩码进行计算.
+        // 注: 正确的广播地址计算方法应该是由当前ip地址和子网掩码进行计算.
         // 1.当前做法：直接将当前IP的最后一段改为255在大部分情况也没有错。
         // 2.不要直接使用255.255.255.255,这在wifi网络下,其它客户端（如手机）可能无法接收到广播信息。
         InetAddress ipv4 = getLocalHostIPv4();

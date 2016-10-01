@@ -31,7 +31,7 @@ import com.jme3.util.TempVars;
  * <pre>
  * <code>
  * CollisionChaseCamera ccc = new CollisionChaseCamera(app.getCamera(), app.getInputManager());
- * ccc.setPhysicsSpace(xxx.getPhysicsSpace());
+ * ccc.setPhysicsSpace(xyz.getPhysicsSpace());
  * ccc.setChase(spatial);
  * </code>
  * </pre>

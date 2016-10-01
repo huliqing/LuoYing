@@ -24,10 +24,6 @@ public class ActorData extends ObjectData implements MatObject {
     // 角色名称
     private String name = "";
     private int mat;
-
-    // 角色出生地,坐标位置,暂时不同步到客户端
-    // TODO: sync to client
-    private transient Vector3f bornPlace;
     
     // 各种控制器的数据
     private List<ModuleData> moduleDatas;
@@ -39,9 +35,6 @@ public class ActorData extends ObjectData implements MatObject {
         OutputCapsule oc = ex.getCapsule(this);
         oc.write(name.getBytes(), "name", null);
         oc.write(mat, "mat", -1);
-        if (bornPlace != null) {
-            oc.write(bornPlace, "bornPlace", null);
-        }
         if (moduleDatas != null) {
             oc.writeSavableArrayList(new ArrayList<ModuleData>(moduleDatas), "moduleDatas", null);
         }
@@ -56,7 +49,6 @@ public class ActorData extends ObjectData implements MatObject {
         InputCapsule ic = im.getCapsule(this);
         name = new String(ic.readByteArray("name", "".getBytes()), "utf-8");
         mat = ic.readInt("mat", -1);
-        bornPlace = (Vector3f)ic.readSavable("bornPlace", null);
         moduleDatas = ic.readSavableArrayList("moduleDatas", null);
         objectDatas = ic.readSavableArrayList("objectDatas", null);
     }
@@ -70,25 +62,6 @@ public class ActorData extends ObjectData implements MatObject {
             return;
         this.name = name;
     }
-
-    /**
-     * @deprecated 
-     * 获取角色的出生位置
-     * @return 
-     */
-    public Vector3f getBornPlace() {
-        return bornPlace;
-    }
-
-    /**
-     * @deprecated 
-     * 设置角色的出生位置
-     * @param bornPlace 
-     */
-    public void setBornPlace(Vector3f bornPlace) {
-        this.bornPlace = bornPlace;
-    }
-    
 
     @Override
     public int getMat() {

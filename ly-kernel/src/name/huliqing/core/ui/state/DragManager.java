@@ -50,31 +50,12 @@ public class DragManager implements ReleaseListener {
         lastMousePos.set(LY.getInputManager().getCursorPosition());
         moving = ui;
         fireUIDragListener(ui, true);
-        
-        // remove20160217,代码已经移出
-//        // TODO:移出View包,View不要依赖PlayState
-//        // 当UI在拖动时要阻止摄像头转动，不阻止时鼠标位置会不正确。
-//        // 待拖动完成后再重新设置镜头跟随。
-//        PlayState ps = Common.getPlayState();
-//        if (ps != null) {
-//            ps.setChaseEnabled(false);
-//        }
-//        // TODO:解除对Common的耦合
-//        Common.getInputManager().setCursorVisible(true);
     }
     
     public void releaseMoving(UI ui) {
         if (moving == ui) {
             moving = null;
             fireUIDragListener(ui, false);
-  
-            // remove20160217,代码已经移出
-//            // 重新设置镜头跟随。
-//            PlayState ps = Common.getPlayState();
-//            if (ps != null) {
-//                ps.setChaseEnabled(true);
-//            }
-            
         }
     }
     

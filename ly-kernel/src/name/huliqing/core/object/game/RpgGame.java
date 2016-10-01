@@ -6,7 +6,6 @@
 package name.huliqing.core.object.game;
 
 /**
- * //TODO RPG GAME
  * @author huliqing
  */
 public class RpgGame extends Game {

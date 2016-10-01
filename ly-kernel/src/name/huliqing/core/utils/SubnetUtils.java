@@ -347,7 +347,7 @@ public class SubnetUtils {
         return x & 0x0000003F;
     }
 
-    /* Convert two dotted decimal addresses to a single xxx.xxx.xxx.xxx/yy format
+    /* Convert two dotted decimal addresses to a single yyy.yyy.yyy.yyy/yy format
      * by counting the 1-bit population in the mask address. (It may be better to count
      * NBITS-#trailing zeroes for this case)
      */

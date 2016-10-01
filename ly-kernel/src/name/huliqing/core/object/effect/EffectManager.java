@@ -13,7 +13,6 @@ import com.jme3.scene.Node;
 import com.jme3.util.SafeArrayList;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.core.object.Loader;
 
 /**
  * 特效管理器,对于添加到EffectManager中的特效可以进行自动管理,当特效结束的时候EffectManager会将特效从场景中移除。
@@ -173,12 +172,4 @@ public class EffectManager extends AbstractAppState {
         return false;
     }
     
-    /**
-     * 载入一个特效。TODO: 使用特效缓存
-     * @param effectId 
-     * @return  
-     */
-    public Effect loadEffect(String effectId) {
-        return Loader.load(effectId);
-    }
 }

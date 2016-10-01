@@ -22,8 +22,8 @@ public class StateDataLoader<T extends StateData> implements DataLoader<StateDat
         store.setRemoveOnDead(proto.getAsBoolean("removeOnDead", false));
         
         // 以下参数是在程序中动态设置的。
-//        store.setResist(xxxx);
-//        store.setSourceActor(xxx);
+//        store.setResist(aaa);
+//        store.setSourceActor(aaa);
     }
 
 

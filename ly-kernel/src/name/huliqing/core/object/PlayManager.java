@@ -69,10 +69,10 @@ public final class PlayManager<T extends PlayObject> {
      */
     public void update(float tpf){
     
-        // Cleanup any states pending
+        // Cleanup any states
         terminatePending();
 
-        // Initialize any states pending
+        // Initialize any states
         initializePending();
 
         // Update enabled states    

@@ -70,10 +70,10 @@ public class GameLogicManager <T extends GameLogic>{
      */
     public void update(float tpf){
     
-        // Cleanup any states pending
+        // Cleanup any states 
         terminatePending();
 
-        // Initialize any states pending
+        // Initialize any states
         initializePending();
 
         // Update enabled states    
