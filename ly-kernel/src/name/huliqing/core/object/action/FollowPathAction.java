@@ -195,7 +195,7 @@ public class FollowPathAction extends AbstractAction implements FollowAction {
             path = null;
             TempVars tv = TempVars.get();
             skillNetwork.playWalk(actor
-                    , runSkill.getData().getId()
+                    , runSkill
                     , target.getWorldTranslation().subtract(actor.getSpatial().getWorldTranslation(), tv.vect1), true, false);
             tv.release();
         }
@@ -207,12 +207,12 @@ public class FollowPathAction extends AbstractAction implements FollowAction {
             TempVars tv = TempVars.get();
             if (path != null && current != null) {
                 skillNetwork.playWalk(actor
-                        , runSkill.getData().getId()
+                        , runSkill
                         , current.getPosition().subtract(actor.getSpatial().getWorldTranslation(), tv.vect1)
                         , true, false);
             } else {
                 skillNetwork.playWalk(actor
-                        , runSkill.getData().getId()
+                        , runSkill
                         , target.getWorldTranslation().subtract(actor.getSpatial().getWorldTranslation(), tv.vect1)
                         , true, false);
             }
@@ -267,7 +267,7 @@ public class FollowPathAction extends AbstractAction implements FollowAction {
                 ) {
             current = tempPoint;
             skillNetwork.playWalk(actor
-                    , runSkill.getData().getId()
+                    , runSkill
                     , current.getPosition().subtract(actor.getSpatial().getWorldTranslation()), true, false);
         }
     }
@@ -297,19 +297,10 @@ public class FollowPathAction extends AbstractAction implements FollowAction {
     protected void runByStraight() {
         // 执行技能的过程很耗时，所以必须先作判断，以优化性能
         if (!skillModule.isRunning()) {
-            skillNetwork.playWalk(actor
-                    , runSkill.getData().getId()
+            skillNetwork.playWalk(actor, runSkill
                     , target.getWorldTranslation().subtract(actor.getSpatial().getWorldTranslation()), true, false);
         }
     }
-    
-//    /**
-//     * 是否在跟随过程中自动朝向目标,默认true.
-//     * @return 
-//     */
-//    public boolean isAutoFacing() {
-//        return autoFacing;
-//    }
 
     /**
      * 设置跟随时是否面向目标

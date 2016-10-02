@@ -203,14 +203,6 @@ public class LevelModule extends AbstractModule implements ValueChangeListener<N
                 levelUpEffect.setTraceObject(actor.getSpatial());
                 EffectManager.getInstance().addEffect(levelUpEffect);
             }
-
-            // remove20160828,暂时移除这个提示
-//            // 4.提示升级(mess)
-//            if (actor == playService.getPlayer()) {
-//                playService.addMessage(ResourceManager.get(ResConstants.COMMON_LEVEL_UP)
-//                        + "(" + actor.getData().getLevel() + ")", MessageType.levelUp);
-//
-//            }
         }
     }
             

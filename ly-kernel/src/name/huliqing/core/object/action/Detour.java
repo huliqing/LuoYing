@@ -111,15 +111,15 @@ public abstract class Detour {
     protected void detour(Vector3f dir) {
         if (useRun) {
             if (runSkill != null) {
-                skillNetwork.playWalk(actor, runSkill.getData().getId(), dir, autoFacing, false);
+                skillNetwork.playWalk(actor, runSkill, dir, autoFacing, false);
             } else if (walkSkill != null) {
-                skillNetwork.playWalk(actor, walkSkill.getData().getId(), dir, autoFacing, false);
+                skillNetwork.playWalk(actor, walkSkill, dir, autoFacing, false);
             }
         } else {
             if (walkSkill != null) {
-                skillNetwork.playWalk(actor, walkSkill.getData().getId(), dir, autoFacing, false);
+                skillNetwork.playWalk(actor, walkSkill, dir, autoFacing, false);
             } else if (runSkill != null) {
-                skillNetwork.playWalk(actor, runSkill.getData().getId(), dir, autoFacing, false);
+                skillNetwork.playWalk(actor, runSkill, dir, autoFacing, false);
             }
         }
     }

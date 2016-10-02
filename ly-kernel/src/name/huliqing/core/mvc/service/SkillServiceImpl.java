@@ -6,7 +6,6 @@ package name.huliqing.core.mvc.service;
 
 import com.jme3.math.Vector3f;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.core.constants.SkillConstants;
 import name.huliqing.core.data.SkillData;
@@ -189,10 +188,7 @@ public class SkillServiceImpl implements SkillService {
     public int checkStateCode(Actor actor, Skill skill) {
         SkillModule module = actor.getModule(SkillModule.class);
         if (module != null) {
-            int stateCode = module.checkStateCode(skill);
-//            LOG.log(Level.INFO, "checkStateCode: actor={0}, skill={1}, stateCode={2}"
-//                    , new Object[]{actor.getData().getId(), skill.getData().getId(), stateCode});
-            return stateCode;
+            return module.checkStateCode(skill);
         }
         return SkillConstants.STATE_UNDEFINE;
     }
@@ -220,32 +216,31 @@ public class SkillServiceImpl implements SkillService {
         return false;
     }
 
-    @Override
-    public boolean playSkill(Actor actor, String skillId, boolean force) {
-        SkillModule module = actor.getModule(SkillModule.class);
-        if (module == null) {
-            return false;
-        }
-        Skill skill = module.getSkill(skillId);
-        return playSkill(module, skill, force, module.checkNotWantInterruptSkills(skill));
-    }
+    // remove20161001
+//    @Override
+//    public boolean playSkill(Actor actor, String skillId, boolean force) {
+//        SkillModule module = actor.getModule(SkillModule.class);
+//        if (module == null) {
+//            return false;
+//        }
+//        Skill skill = module.getSkill(skillId);
+//        return playSkill(module, skill, force, module.checkNotWantInterruptSkills(skill));
+//    }
     
     @Override
-    public boolean playWalk(Actor actor, String skillId, Vector3f dir, boolean faceToDir, boolean force) {
+    public boolean playWalk(Actor actor, Skill walkSkill, Vector3f dir, boolean faceToDir, boolean force) {
         SkillModule module = actor.getModule(SkillModule.class);
         if (module == null) {
             return false;
         }
-        
-        Skill skill = module.getSkill(skillId);        
-        if (skill instanceof Walk) {
-            Walk wSkill = (Walk) skill;
+        if (walkSkill instanceof Walk) {
+            Walk wSkill = (Walk) walkSkill;
             wSkill.setWalkDirection(dir);
             if (faceToDir) {
                 wSkill.setViewDirection(dir);
             }
         }
-        return playSkill(module, skill, force, null);
+        return playSkill(module, walkSkill, force, null);
     }
     
     @Override

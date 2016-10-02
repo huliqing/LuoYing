@@ -444,15 +444,6 @@ public abstract class AbstractSkill implements Skill {
         }
     }
     
-    /**
-     * xxx 要去掉onPlayEffect这个方法
-     * @deprecated 
-     * @param effect 
-     */
-    protected void onPlayEffect(Effect effect) {
-        // ignore
-    }
-    
     @Override
     public void cleanup() {
         // 清理声效播放标记,让声效可以重新播放
@@ -680,7 +671,6 @@ public abstract class AbstractSkill implements Skill {
             if (started) return;
             if (interpolation >= trueTimePoint) {
                 playEffect();
-                onPlayEffect(effect);
                 started = true;
             }
         }

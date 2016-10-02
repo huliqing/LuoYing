@@ -5,6 +5,8 @@
  */
 package name.huliqing.core.object.item;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import name.huliqing.core.Factory;
 import name.huliqing.core.constants.ResConstants;
 import name.huliqing.core.constants.SkillConstants;
@@ -24,6 +26,7 @@ import name.huliqing.core.object.skill.Skill;
  * @author huliqing
  */
 public class SkillItem extends AbstractItem {
+    private static final Logger LOG = Logger.getLogger(SkillItem.class.getName());
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
@@ -118,15 +121,17 @@ public class SkillItem extends AbstractItem {
     @Override
     public void use(Actor actor) {
         super.use(actor);
-        
         if (skill == null) {
             skill = skillService.loadSkill(skillId);
-        }
-        if (skill != null) {
-            boolean result = skillService.playSkill(actor, skill, false);
-            if (result) {
-                itemService.removeItem(actor, data.getId(), 1);
+            if (skill == null) {
+                LOG.log(Level.WARNING, "Skill not found by SkillItem! skillId={0}, SkillItem={1}, actorId={2}"
+                        , new Object[]{skillId, data.getId(), actor.getData().getId()});
+                return;
             }
+        }
+        boolean result = skillService.playSkill(actor, skill, false);
+        if (result) {
+            itemService.removeItem(actor, data.getId(), 1);
         }
     }
     

@@ -29,7 +29,6 @@ import name.huliqing.core.object.anim.Anim;
 import name.huliqing.core.object.anim.AnimationControl;
 import name.huliqing.core.object.anim.Listener;
 import name.huliqing.core.object.anim.MoveAnim;
-import name.huliqing.core.object.effect.Effect;
 import name.huliqing.core.utils.GeometryUtils;
 import name.huliqing.core.utils.ThreadHelper;
 
@@ -38,7 +37,7 @@ import name.huliqing.core.utils.ThreadHelper;
  * @author huliqing
  */
 public class SummonSkill extends AbstractSkill {
-//    private final static Logger logger = Logger.getLogger(SummonSkill.class.getName());
+    private final static Logger LOG = Logger.getLogger(SummonSkill.class.getName());
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final PlayService playService = Factory.get(PlayService.class);
@@ -50,7 +49,6 @@ public class SummonSkill extends AbstractSkill {
     private String summonId;
     
     // 召唤的时间插值点，如果为0，则立即召唤。如果为0.5f则表示动作执行到一半时召唤 
-    // 该值定义了发起效果的时间
     private float summonPoint = 0.3f;
     // summon的偏移位置该位置是以角色自身坐标为依据
     private Vector3f summonOffset = new Vector3f(0,0,0);
@@ -91,7 +89,7 @@ public class SummonSkill extends AbstractSkill {
         super.initialize();
         
         if (summonId == null) {
-//            logger.log(Level.INFO, "No summonActorId set!");
+            LOG.log(Level.INFO, "No summonActorId set!");
             cleanup();
             return;
         }
@@ -118,20 +116,6 @@ public class SummonSkill extends AbstractSkill {
         }
     }
     
-//    @Override
-//    protected void onPlayEffect(Effect effect) {
-//        // 计算召唤点，注：召唤点的计算和效果的执行放在一起，以避免效果显示位置和
-//        // 召唤点不一致的问题，因为召唤角色的时间和播放效果的时间点时不一致的。
-//        // 当效果播放后角色可能转向，角色可能发生转向，如果后续再计算召唤点就会出
-//        // 现召唤位置和效果位置不一致的奇怪现象
-//        getLocalToWorld(actor, summonOffset, currentSummon.summonPos);
-//        currentSummon.summonPos.setY(playService.getTerrainHeight(currentSummon.summonPos.x, currentSummon.summonPos.z));
-//        currentSummon.summonPos.setY(currentSummon.summonPos.y + summonOffset.y);
-//        currentSummon.setLocalTranslation(currentSummon.summonPos);
-//        
-//        super.onPlayEffect(effect);
-//    }
-    
     private Vector3f getLocalToWorld(Actor actor, Vector3f localPos, Vector3f store) {
         if (store == null) {
             store = new Vector3f();
@@ -139,14 +123,6 @@ public class SummonSkill extends AbstractSkill {
         actor.getSpatial().getWorldRotation().mult(localPos, store);
         store.addLocal(actor.getSpatial().getWorldTranslation());
         return store;
-    }
-    
-    @Override
-    public void cleanup() {
-        // 召唤完成之后要清除掉summonId,否则下次点击该技能时又可以召唤
-        // 会造成只要召唤一次后就可以无限召唤的BUG。
-        summonId = null;
-        super.cleanup();
     }
     
     // 负责召唤的工具类，Node
@@ -173,8 +149,6 @@ public class SummonSkill extends AbstractSkill {
         AnimationControl animationControl = new AnimationControl(showAnim);
         
         SummonOper() {
-            // remove20160504,不要设置boundFactor，这会让角色往下掉
-//            showAnim.setBoundFactor(0.2f);
             showAnim.addListener(this);
         }
         
@@ -187,7 +161,6 @@ public class SummonSkill extends AbstractSkill {
          */
         void preload() {
             if (!loadStarted && summonObjectId != null) {
-//                ObjectData data = DataFactory.createData(summonObjectId);
                 loader.loadId = summonObjectId;
                 future = ThreadHelper.submit(loader);
                 loadStarted = true;
@@ -200,7 +173,7 @@ public class SummonSkill extends AbstractSkill {
 
         @Override
         public void updateLogicalState(float tpf) {
-            super.updateLogicalState(tpf);
+//            super.updateLogicalState(tpf);
             
             if (!started) {
                 return;
@@ -253,7 +226,6 @@ public class SummonSkill extends AbstractSkill {
                         0, GeometryUtils.getModelHeight(summonActor.getSpatial()), 0);
                 Vector3f end = tv.vect2.set(summonPos).addLocal(0, 0.5f, 0);
                 
-//                summonActor.setLocation(start);
                 actorService.setLocation(summonActor, start);
                 actorService.setLookAt(summonActor, tv.vect3.set(actor.getSpatial().getWorldTranslation()).setY(start.getY()));
                 

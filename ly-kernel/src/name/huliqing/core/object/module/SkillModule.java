@@ -225,8 +225,9 @@ public class SkillModule extends AbstractModule {
      */
     public int checkStateCode(Skill skill) {
         if (skill == null) {
-            return SkillConstants.STATE_UNDEFINE;
+            return SkillConstants.STATE_SKILL_NOT_FOUND;
         }
+
         if (skill.getActor() == null) {
             skill.setActor(actor);
         }
@@ -312,6 +313,12 @@ public class SkillModule extends AbstractModule {
      */
     public boolean playSkill(Skill newSkill, boolean force, List<Long> notWantInterruptSkills) {
         if (force || checkStateCode(newSkill) == SkillConstants.STATE_OK) {
+            
+            
+            if (newSkill.getData().getTagName().equals("skillSummon")) {
+                System.out.println("...test");
+            }
+            
             playSkillInner(newSkill, notWantInterruptSkills);
             return true;
         }

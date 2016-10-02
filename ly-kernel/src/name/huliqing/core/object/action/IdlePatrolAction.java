@@ -252,11 +252,11 @@ public class IdlePatrolAction extends AbstractAction implements IdleAction, Skil
         // 需要为平方形式，+10主要是判断在距离巡逻范围10码远时使用跑步方式走回来
         if (actor.getSpatial().getWorldTranslation().distanceSquared(targetPos) > walkDiameterSquared + 10) {
             skillNetwork.playWalk(actor
-                    , runSkill.getData().getId()
+                    , runSkill
                     , targetPos.subtract(actor.getSpatial().getWorldTranslation(), targetPos).normalizeLocal(), true, false);
         } else {
             skillNetwork.playWalk(actor
-                    , (walkSkill != null ? walkSkill.getData().getId() : runSkill.getData().getId())
+                    , (walkSkill != null ? walkSkill : runSkill)
                     , targetPos.subtract(actor.getSpatial().getWorldTranslation(), targetPos).normalizeLocal()
                     , true, false);
         }

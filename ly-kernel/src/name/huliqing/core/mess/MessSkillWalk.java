@@ -10,6 +10,7 @@ import name.huliqing.core.Factory;
 import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.object.actor.Actor;
+import name.huliqing.core.object.module.SkillModule;
 
 /**
  *
@@ -65,8 +66,7 @@ public class MessSkillWalk extends MessBase {
         SkillService skillService = Factory.get(SkillService.class);
         Actor actor = playService.findActor(actorId);
         if (actor == null) return;
-        
-        skillService.playWalk(actor, skillId, dir, face, true);
+        skillService.playWalk(actor, actor.getModule(SkillModule.class).getSkill(skillId), dir, face, true);
     }
     
     

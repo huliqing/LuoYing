@@ -8,6 +8,7 @@ import name.huliqing.core.network.Network;
 import com.jme3.math.Vector3f;
 import java.util.List;
 import name.huliqing.core.Factory;
+import name.huliqing.core.constants.SkillConstants;
 import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.mess.MessActorAddSkill;
 import name.huliqing.core.mess.MessSkillPlay;
@@ -95,12 +96,11 @@ public class SkillNetworkImpl implements SkillNetwork {
         // 关于服务端和客户端的状态同步，受各种不确定因素的影响太多,保证服务
         // 端和客户端所有状态完全同步几乎是不可能的。
         // ============================20160504=============================
-        if (force || skillService.isPlayable(actor, skill)) {
-            
-            // 找出一些不希望被中断的技能。
-            SkillModule skillModule = actor.getModule(SkillModule.class);
+        
+        SkillModule skillModule = actor.getModule(SkillModule.class);
+        if (force || skillModule.checkStateCode(skill) == SkillConstants.STATE_OK) {
+             // 找出一些不希望被中断的技能。
             List<Long> notWantInterruptSkills = skillModule.checkNotWantInterruptSkills(skill);
-            
             mess.setWantNotInterruptSkills(notWantInterruptSkills);
             NETWORK.broadcast(mess);
             
@@ -108,20 +108,21 @@ public class SkillNetworkImpl implements SkillNetwork {
         }
         return false;
     }
-    
-    @Override
-    public boolean playSkill(Actor actor, String skillId, boolean force) {
-        Skill skill = skillService.getSkill(actor, skillId);
-        return playSkill(actor, skill, force);
-    }
+   
+    // remove20161001
+//    @Override
+//    public boolean playSkill(Actor actor, String skillId, boolean force) {
+//        Skill skill = skillService.getSkill(actor, skillId);
+//        return playSkill(actor, skill, force);
+//    }
 
     @Override
-    public boolean playWalk(Actor actor, String skillId, Vector3f dir, boolean faceToDir, boolean force) {
+    public boolean playWalk(Actor actor, Skill walkSkill, Vector3f dir, boolean faceToDir, boolean force) {
         MessSkillWalk mess = new MessSkillWalk();
         mess.setActorId(actor.getData().getUniqueId());
         mess.setDir(dir);
         mess.setFace(faceToDir);
-        mess.setSkillId(skillId);
+        mess.setSkillId(walkSkill.getData().getId());
         
         if (NETWORK.isClient()) {
             NETWORK.sendToServer(mess);
@@ -131,12 +132,11 @@ public class SkillNetworkImpl implements SkillNetwork {
         // ============================20160504=============================
         // 重要：参考上面playSkill中的说明。
         // ============================20160504=============================
-        Skill skill = skillService.getSkill(actor, skillId);
-        if (force || skillService.isPlayable(actor, skill)) {
+        if (force || skillService.isPlayable(actor, walkSkill)) {
             if (NETWORK.hasConnections()) {
                 NETWORK.broadcast(mess);
             }
-            return skillService.playWalk(actor, skillId, dir, faceToDir, true);
+            return skillService.playWalk(actor, walkSkill, dir, faceToDir, true);
         }
         
         return false;

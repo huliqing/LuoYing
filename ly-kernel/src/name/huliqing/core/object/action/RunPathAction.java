@@ -183,12 +183,12 @@ public class RunPathAction extends AbstractAction implements RunAction{
             TempVars tv = TempVars.get();
             if (path != null && current != null) {
                 skillNetwork.playWalk(actor
-                        , runSkill.getData().getId()
+                        , runSkill
                         , current.getPosition().subtract(actor.getSpatial().getWorldTranslation(), tv.vect1), true, false);
                 
             } else {
                 skillNetwork.playWalk(actor
-                        , runSkill.getData().getId()
+                        , runSkill
                         , position.subtract(actor.getSpatial().getWorldTranslation(), tv.vect1), true, false);
             }
             tv.release();
@@ -199,7 +199,7 @@ public class RunPathAction extends AbstractAction implements RunAction{
     private void runByStraight() {
         if (!skillModule.isRunning()) {
             TempVars tv = TempVars.get();
-            skillNetwork.playWalk(actor, runSkill.getData().getId()
+            skillNetwork.playWalk(actor, runSkill
                     , position.subtract(actor.getSpatial().getWorldTranslation(), tv.vect1), true, false);
             tv.release();
         }
@@ -221,7 +221,7 @@ public class RunPathAction extends AbstractAction implements RunAction{
         if (tempPoint != current || !skillModule.isRunning()) {
             current = tempPoint;
             TempVars tv = TempVars.get();
-            skillNetwork.playWalk(actor, runSkill.getData().getId()
+            skillNetwork.playWalk(actor, runSkill
                     , current.getPosition().subtract(actor.getSpatial().getWorldTranslation(), tv.vect1), true, false);
             tv.release();
         }

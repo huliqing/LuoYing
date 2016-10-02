@@ -333,7 +333,7 @@ public class StoryTreasureTask2 extends GameTaskBase {
                                     }
                                 }
                             });
-                            skillNetwork.playSkill(companion, backSkill.getData().getId(), true);
+                            skillNetwork.playSkill(companion, backSkill, true);
                         }
                     }
                 });

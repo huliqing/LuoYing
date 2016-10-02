@@ -91,7 +91,7 @@ public class RunSimpleAction extends AbstractAction implements RunAction{
         
         if (resetDir) {
             TempVars tv = TempVars.get();
-            skillNetwork.playWalk(actor, runSkill.getData().getId()
+            skillNetwork.playWalk(actor, runSkill
                     , position.subtract(actor.getSpatial().getWorldTranslation(), tv.vect1), true, false);
             tv.release();
             resetDir = false;
@@ -126,7 +126,7 @@ public class RunSimpleAction extends AbstractAction implements RunAction{
     private void runByStraight() {
         if (!skillModule.isRunning()) {
             TempVars tv = TempVars.get();
-            skillNetwork.playWalk(actor, runSkill.getData().getId()
+            skillNetwork.playWalk(actor, runSkill
                     , position.subtract(actor.getSpatial().getWorldTranslation(), tv.vect1), true, false);
             tv.release();
         }

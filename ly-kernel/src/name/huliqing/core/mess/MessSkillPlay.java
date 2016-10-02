@@ -70,7 +70,8 @@ public final class MessSkillPlay extends MessBase {
         }
         // 角色必须是客户端所控制的。客户端角色不能强制执行技能，并且也不能自己指定wantNotInterruptSkills参数
         if (actor.getData().getUniqueId() == cd.getActorId()) {
-            Factory.get(SkillNetwork.class).playSkill(actor, skillId, false);
+            SkillModule skillModule = actor.getModule(SkillModule.class);
+            Factory.get(SkillNetwork.class).playSkill(actor, skillModule.getSkill(skillId), false);
         }
     }
 
