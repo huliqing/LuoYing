@@ -313,12 +313,6 @@ public class SkillModule extends AbstractModule {
      */
     public boolean playSkill(Skill newSkill, boolean force, List<Long> notWantInterruptSkills) {
         if (force || checkStateCode(newSkill) == SkillConstants.STATE_OK) {
-            
-            
-            if (newSkill.getData().getTagName().equals("skillSummon")) {
-                System.out.println("...test");
-            }
-            
             playSkillInner(newSkill, notWantInterruptSkills);
             return true;
         }

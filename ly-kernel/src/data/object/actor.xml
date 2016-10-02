@@ -63,7 +63,7 @@
 ,itemBook005,itemBook006,itemBook007,itemBook008,itemBook010
 " 
            talents="talentLifeRestore,talentManaRestore,talentDefence,talentMagicDefence,talentAttack,talentMagicAttack,talentVision,talentMoveSpeed"
-           skins="weaponSword000,weaponSword000L,weaponSword001,weaponSword001L,weaponSword002,weaponSword002L,weaponSword003,weaponSword003L
+           skins="weaponSword001,weaponSword001L,weaponSword002,weaponSword002L,weaponSword003,weaponSword003L
 ,weaponBow000,weaponBow001,weaponWand000
 ,skinHair001,skinHair006,skinHair010,skinHair011,skinBlinder001|12,skinMouthmask001|13,skinHorn001|14
 ,skinFoot001,skinLowerBody001,skinUpperBody001,skinHand001

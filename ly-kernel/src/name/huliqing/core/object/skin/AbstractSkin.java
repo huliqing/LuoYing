@@ -109,7 +109,7 @@ public abstract class AbstractSkin implements Skin {
      * 才需要覆盖这个方法。
      */
     @Override
-    public void endSkinning() {
+    public void forceEndSkinning() {
         // donothing
     }
     

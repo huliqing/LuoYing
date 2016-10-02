@@ -319,7 +319,7 @@ public class SkinModule extends AbstractModule {
             return;
         for (Skin s : skinUsed) {
             if (s.isSkinning()) {
-                s.endSkinning();
+                s.forceEndSkinning();
             }
         }
     }

@@ -6,6 +6,7 @@
 package name.huliqing.core.object.item;
 
 import name.huliqing.core.Factory;
+import name.huliqing.core.constants.ItemConstants;
 import name.huliqing.core.data.ItemData;
 import name.huliqing.core.mvc.service.ItemService;
 import name.huliqing.core.mvc.service.SkillService;
@@ -27,19 +28,31 @@ public class BookItem extends AbstractItem {
         super.setData(data);
         this.skill = data.getAsString("skill");
     }
+   
+    // remove20161002
+//    @Override
+//    public boolean canUse(Actor actor) {
+//        if (skill == null) {
+//            return false;
+//        }
+//        if (skillService.hasSkill(actor, skill)) {
+////            playNetwork.addMessage(actor, ResourceManager.get(ResConstants.SKILL_SKILL_LEARNED), MessageType.notice);
+//            return false;
+//        }
+//        return super.canUse(actor);
+//    }
     
     @Override
-    public boolean canUse(Actor actor) {
+    public int checkStateCode(Actor actor) {
         if (skill == null) {
-            return false;
+            return ItemConstants.STATE_UNDEFINE;
         }
         if (skillService.hasSkill(actor, skill)) {
-//            playNetwork.addMessage(actor, ResourceManager.get(ResConstants.SKILL_SKILL_LEARNED), MessageType.notice);
-            return false;
+            return ItemConstants.STATE_UNDEFINE;
         }
-        return super.canUse(actor);
+        return super.checkStateCode(actor); //To change body of generated methods, choose Tools | Templates.
     }
-
+    
     @Override
     public void use(Actor actor) {
         super.use(actor);

@@ -29,7 +29,7 @@ skinPart => 0:ear;1:eyeL;2:eyeR;3:face;4:foot;5:hair;6:hand;7:lowerBody;8:upperB
     <!--左手剑-->
     <skinWeapon id="weaponHumanLeftSwordBase" extends="weaponHumanRightSwordBase" 
                 parts="leftHandWeapon" weaponType="leftSword" mat="metal" 
-                bindBone="weapon.L" localRotation="0,3.14159265,0" localLocation="0,0,0" />
+                bindBone="weapon.L" localLocation="0,0,0" localRotation="0,3.14159265,0" />
 
     <!--弓-->
     <skinWeapon id="weaponHumanBowBase" extends="weaponHumanBase" 

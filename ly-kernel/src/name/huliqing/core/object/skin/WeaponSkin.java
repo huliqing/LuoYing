@@ -34,12 +34,15 @@ public class WeaponSkin extends AbstractSkin implements Weapon {
     private String weaponType;
     // 武器所有可支持的槽位
     private Slot[] slots;
+    
+    
+    // ---- inner
     // 标记当前武器所在的槽位
     private Slot slot;
     
     // 这个Control是用来处理武器的“取出”和“收起”这个装配过程。
     private final HangControl hangControl = new HangControl();
-
+    
     @Override
     public void setData(SkinData data) {
         super.setData(data);
@@ -81,7 +84,7 @@ public class WeaponSkin extends AbstractSkin implements Weapon {
     }
 
     @Override
-    public void endSkinning() {
+    public void forceEndSkinning() {
         // 调用hangControl来提前结束,由hangControl去自动判断。
         hangControl.cleanup();
     }
@@ -89,25 +92,22 @@ public class WeaponSkin extends AbstractSkin implements Weapon {
     @Override
     public void attach(Actor actor) {
         super.attach(actor);
+        this.slot = null; //取消槽位占用
         // 如果当前角色的武器状态是"挂起"的，则应该把武器放到指定的槽位上。
-        SkinModule sm = actor.getModule(SkinModule.class);
-        if (!sm.isWeaponTakeOn()) {
-            attachWeaponOff(actor);
+        if (!actor.getModule(SkinModule.class).isWeaponTakeOn()) {
+            attachWeaponOff(actor, getWeaponSlot(actor));
         }
     }
     
     /**
      * 武器收起
      */
-    private void attachWeaponOff(Actor actor) {
-        // 为武器找一个合适的槽位
-        slot = getWeaponSlot(actor);
-        
+    private void attachWeaponOff(Actor actor, Slot slot) {
         // 如果找不到合适的槽位或者武器不支持槽位,则不处理
-        if (slot == null) {
+        this.slot = slot;
+        if (this.slot == null) {
             return;
         }
-        
         attach(actor, slot.getBindBone(), skinNode, slot.getLocalTranslation(), slot.getLocalRotation(), slot.getLocalScale());
     }
     
@@ -119,31 +119,27 @@ public class WeaponSkin extends AbstractSkin implements Weapon {
     public void takeOn(Actor actor) {
         // 这里要直接清理一下，以避免上一次的takeOn执行过程还未结束的情况下导致冲突。
         hangControl.cleanup();
-        
+
         if (!data.isUsed()) {
             return;
         }
-        
         if (slot == null) {
             return;
         }
         
         // 根据武器类型从slot中获得“动画”技能.
-        // 如果没有技能则直接attach, 并取消槽位占用
         String hangSkill = slot.getHangSkill(weaponType);
         if (hangSkill == null) {
             super.attach(actor);
-            slot = null; 
+            slot = null; //取消槽位占用
             return;
         }
         
         // 标记装备正在”执行“,在武器实际取出之后才设置为false
         // hangTime：把武器节点添加到角色身上的时间点。
-        hangControl.initialize(actor, hangSkill, true);
+        hangControl.initialize(actor, hangSkill, true, null);
         actor.getSpatial().addControl(hangControl);
-        
-        // 武器取出后取消槽位占用
-        slot = null;
+        slot = null; //取消槽位占用
     }
     
     /**
@@ -169,7 +165,7 @@ public class WeaponSkin extends AbstractSkin implements Weapon {
         String hangSkill = slot.getHangSkill(weaponType);
         // 使用一个动画技能来"取下"武器
         if (hangSkill != null) {
-            hangControl.initialize(actor, hangSkill,  false);
+            hangControl.initialize(actor, hangSkill, false, slot);
             actor.getSpatial().addControl(hangControl);
         } else {
             attach(actor, slot.getBindBone(), skinNode, slot.getLocalTranslation(), slot.getLocalRotation(), slot.getLocalScale());
@@ -240,15 +236,15 @@ public class WeaponSkin extends AbstractSkin implements Weapon {
     private class HangControl extends AbstractControl {
 
         private Actor actor;
-        private float hangTime;
+        private SkinSkill skinSkill;
         private boolean takeOn;
+        private Slot takeOffSlot;
         
-        SkinSkill skinSkill;
-        
-        private float timeUsed;
+        private float hangTime;
         private boolean initialized;
+        private float timeUsed;
         
-        private void initialize(Actor actor, String hangSkill, boolean takeOn) {
+        private void initialize(Actor actor, String hangSkill, boolean takeOn, Slot takeOffSlot) {
             if (initialized) {
                 // 防止bug
                 throw new IllegalStateException("HangControl is already initialized!");
@@ -261,6 +257,7 @@ public class WeaponSkin extends AbstractSkin implements Weapon {
             this.actor = actor;
             this.hangTime = skinSkill.getTrueUseTime() * skinSkill.getHangTimePoint();
             this.takeOn = takeOn;
+            this.takeOffSlot = takeOffSlot;
             
             initialized = true;
             timeUsed = 0;
@@ -282,7 +279,7 @@ public class WeaponSkin extends AbstractSkin implements Weapon {
                 if (takeOn) {
                     WeaponSkin.super.attach(actor);
                 } else {
-                    attachWeaponOff(actor);
+                    attachWeaponOff(actor, takeOffSlot);
                 }
                 spatial.removeControl(this);
                 if (!skinSkill.isEnd()) {

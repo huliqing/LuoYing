@@ -8,6 +8,7 @@ package name.huliqing.core.object.item;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.core.Factory;
+import name.huliqing.core.constants.ItemConstants;
 import name.huliqing.core.data.AttributeMatch;
 import name.huliqing.core.data.ItemData;
 import name.huliqing.core.mvc.service.AttributeService;
@@ -25,7 +26,7 @@ import name.huliqing.core.object.sound.SoundManager;
 public abstract class AbstractItem implements Item {
     private static final Logger LOG = Logger.getLogger(AbstractItem.class.getName());
     private final AttributeService attributeService = Factory.get(AttributeService.class);
-
+    
     protected ItemData data;
     
     // 使用物品时的效果
@@ -40,7 +41,7 @@ public abstract class AbstractItem implements Item {
         effects = data.getAsArray("effects");
         sounds = data.getAsArray("sounds");
     }
-
+    
     @Override
     public ItemData getData() {
         return data;
@@ -61,9 +62,14 @@ public abstract class AbstractItem implements Item {
     
     @Override
     public boolean canUse(Actor actor) {
+        return checkStateCode(actor) == ItemConstants.STATE_OK;
+    }
+    
+    @Override
+    public int checkStateCode(Actor actor) {
         // 物品数量不够。
         if (data.getTotal() <= 0) {
-            return false;
+            return ItemConstants.STATE_ITEM_NOT_ENOUGH;
         }
         
         // 如果角色的属性中有一个不能和getMatchAttributes中要求的不匹配则视为不能使用。
@@ -77,17 +83,17 @@ public abstract class AbstractItem implements Item {
                                 + "，actorId={0}, itemId={1},  match attributeName={2}", 
                                 new Object[] {actor.getData().getId(), data.getId(), am.getAttributeName()});                        
                     }
-                    return false;
+                    return ItemConstants.STATE_ATTRIBUTE_NOT_MATCH;
                 }
                 if (!((MatchAttribute)attr).match(am.getValue())) {
                     LOG.log(Level.INFO, "Could not useItem, attribute not match,actorId={0}, itemId={1}"
                             + ", match attributeName={2}, match attributeValue={3}, actor attribute={4}"
                             , new Object[] {actor.getData().getId(), data.getId(), am.getAttributeName(), am.getValue(), attr});
-                    return false;
+                    return ItemConstants.STATE_ATTRIBUTE_NOT_MATCH;
                 }
             }
         }
-        return true;
+        return ItemConstants.STATE_OK;
     }
     
     /**
