@@ -11,8 +11,10 @@ import name.huliqing.core.Factory;
 import name.huliqing.core.constants.SkillConstants;
 import name.huliqing.core.mvc.service.SkillService;
 import name.huliqing.core.mess.MessActorAddSkill;
+import name.huliqing.core.mess.MessActorSetTarget;
 import name.huliqing.core.mess.MessSkillPlay;
 import name.huliqing.core.mess.MessSkillWalk;
+import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.module.SkillModule;
 import name.huliqing.core.object.skill.Skill;
@@ -24,10 +26,12 @@ import name.huliqing.core.object.skill.Skill;
 public class SkillNetworkImpl implements SkillNetwork {
     private final static Network NETWORK = Network.getInstance();
     private SkillService skillService;
+    private PlayService playService;
     
     @Override
     public void inject() {
         skillService = Factory.get(SkillService.class);
+        playService = Factory.get(PlayService.class);
     }
     
     @Override
@@ -60,6 +64,13 @@ public class SkillNetworkImpl implements SkillNetwork {
         mess.setSkillId(skill.getData().getId());
         
         if (NETWORK.isClient()) {
+            Actor target = playService.getTarget();
+            MessActorSetTarget messSetTarget = new MessActorSetTarget();
+            messSetTarget.setActorId(actor.getData().getUniqueId());
+            messSetTarget.setTargetId(target != null ? target.getData().getUniqueId() : -1);
+            // 如果是客户端，在发技能的时候需要先把客户端当前的主目标作为角色的当前目标一起发送到服务端,
+            // 否则服务端会找不到目标而不会发技能。
+            NETWORK.sendToServer(messSetTarget);
             NETWORK.sendToServer(mess);
             return false;
         }

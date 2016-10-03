@@ -119,7 +119,7 @@ public class SkillShortcut extends BaseUIShortcut<SkillData> {
             }
             // 一些技能在执行前必须设置目标对象。
             actorNetwork.setTarget(actor, playService.getTarget());
-        
+            
             // 执行技能
             Skill skill = skillService.getSkill(actor, objectData.getId());
             skillNetwork.playSkill(actor, skill, false);

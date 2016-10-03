@@ -86,6 +86,11 @@ public class SkinShortcut extends BaseUIShortcut<SkinData> implements SkinListen
         }
         Skin skin = skinModule.getSkin(objectData.getId());
         
+        // 有可能存在shortcut存在，但物品已经被从角色包裹删除的现象，所以skin有可能为null.
+        if (skin == null) {
+            return;
+        }
+        
         // Outfit
         if (!(skin instanceof Weapon)) {
             if (skin.isAttached()) {

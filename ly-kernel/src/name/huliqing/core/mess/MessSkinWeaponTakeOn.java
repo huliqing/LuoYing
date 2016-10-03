@@ -59,7 +59,7 @@ public class MessSkinWeaponTakeOn extends MessBase {
         if (actor == null) {
             return; // 找不到指定的角色
         }
-        ClientData cd = source.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
+        ConnData cd = source.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
         long clientActorId = cd != null ? cd.getActorId() : -1;
         
         // 使用物品的必须是客户端角色自身或者客户端角色的宠物

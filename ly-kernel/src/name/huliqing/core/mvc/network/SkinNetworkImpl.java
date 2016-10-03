@@ -101,15 +101,22 @@ public class SkinNetworkImpl implements SkinNetwork {
 
     @Override
     public void takeOffWeapon(Actor actor) {
-        if (!NETWORK.isClient()) {
-            if (NETWORK.hasConnections()) {
-                MessSkinWeaponTakeOn mess = new MessSkinWeaponTakeOn();
-                mess.setActorId(actor.getData().getUniqueId());
-                mess.setTakeOn(false);
-                NETWORK.broadcast(mess);
-            }
-            skinService.takeOffWeapon(actor);
+        MessSkinWeaponTakeOn mess = new MessSkinWeaponTakeOn();
+        mess.setActorId(actor.getData().getUniqueId());
+        mess.setTakeOn(false);
+        
+        // client
+        if (NETWORK.isClient()) {
+            NETWORK.sendToServer(mess);
+            return;
         }
+
+        // server
+        if (NETWORK.hasConnections()) {
+            NETWORK.broadcast(mess);
+        }
+        skinService.takeOffWeapon(actor);
+
     }
     
 }
