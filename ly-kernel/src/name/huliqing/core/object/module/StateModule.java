@@ -43,7 +43,11 @@ public class StateModule extends AbstractModule {
     
     private void stateUpdate(float tpf) {
         for (State s : states.getArray()) {
-            s.update(tpf);
+            if (s.isEnd()) {
+                removeState(s);
+            } else {
+                s.update(tpf);
+            }
         }
     }
 

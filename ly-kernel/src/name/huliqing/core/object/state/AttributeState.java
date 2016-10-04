@@ -13,7 +13,7 @@ import name.huliqing.core.mvc.service.AttributeService;
  * 改变，也可以在状态结束时恢复属性值。
  * @author huliqing
  */
-public class AttributeState extends State {
+public class AttributeState extends AbstractState {
     private final AttributeService attributeService = Factory.get(AttributeService.class);
     
     private String attributeName;

@@ -49,7 +49,7 @@ public interface StateService extends StateNetwork {
      * @param actor
      * @return 
      */
-    List<StateData> getStates(Actor actor);
+    List<State> getStates(Actor actor);
     
     /**
      * 添加状态侦听器

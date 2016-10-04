@@ -4,7 +4,7 @@
  */
 package name.huliqing.core.view;
 
-import name.huliqing.core.data.StateData;
+import name.huliqing.core.object.state.State;
 import name.huliqing.core.ui.FrameLayout;
 import name.huliqing.core.ui.Icon;
 
@@ -14,7 +14,7 @@ import name.huliqing.core.ui.Icon;
  */
 public class StateView extends FrameLayout {
     
-    private StateData state;
+    private State state;
     
     private Icon icon;
     
@@ -22,7 +22,7 @@ public class StateView extends FrameLayout {
         super(width, height);
     }
     
-    public final void setState(StateData state) {
+    public final void setState(State state) {
         // 如果是同一个state,则不需要重设
         if (state == this.state) {
             return;
@@ -32,7 +32,7 @@ public class StateView extends FrameLayout {
             icon = new Icon();
             addView(icon);
         }
-        icon.setImage(state.getIcon());
+        icon.setImage(state.getData().getIcon());
     }
 
     @Override

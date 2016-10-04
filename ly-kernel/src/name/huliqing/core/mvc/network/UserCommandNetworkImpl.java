@@ -64,19 +64,13 @@ public class UserCommandNetworkImpl implements UserCommandNetwork {
     private LogicService logicService;
     private SkillService skillService;
     private ActorService actorService;
-    private StateService stateService;
     private PlayService playService;
     private ActionService actionService;
-    private SkinService skinService;
-    private TaskService taskService;
     private GameService gameService;
     private ObjectService protoService;
     
     private PlayNetwork playNetwork;
-    private ActionNetwork actionNetwork;
     private ActorNetwork actorNetwork;
-    private SkinNetwork skinNetwork;
-    private SkillNetwork skillNetwork;
     private TalentNetwork talentNetwork;
     private ChatNetwork chatNetwork;
     private TaskNetwork taskNetwork;
@@ -87,19 +81,13 @@ public class UserCommandNetworkImpl implements UserCommandNetwork {
         logicService = Factory.get(LogicService.class);
         skillService = Factory.get(SkillService.class);
         actorService = Factory.get(ActorService.class);
-        stateService = Factory.get(StateService.class);
         playService = Factory.get(PlayService.class);
         actionService = Factory.get(ActionService.class);
-        skinService = Factory.get(SkinService.class);
-        taskService = Factory.get(TaskService.class);
         gameService = Factory.get(GameService.class);
         protoService = Factory.get(ObjectService.class);
         
-        skillNetwork = Factory.get(SkillNetwork.class);
         playNetwork = Factory.get(PlayNetwork.class);
-        actionNetwork = Factory.get(ActionNetwork.class);
         actorNetwork = Factory.get(ActorNetwork.class);
-        skinNetwork = Factory.get(SkinNetwork.class);
         talentNetwork = Factory.get(TalentNetwork.class);
         chatNetwork = Factory.get(ChatNetwork.class);
         taskNetwork = Factory.get(TaskNetwork.class);

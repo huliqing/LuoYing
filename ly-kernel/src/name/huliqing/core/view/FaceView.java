@@ -21,7 +21,6 @@ import name.huliqing.core.LY;
 import name.huliqing.core.Factory;
 import name.huliqing.core.constants.InterfaceConstants;
 import name.huliqing.core.constants.MaterialConstants;
-import name.huliqing.core.data.StateData;
 import name.huliqing.core.mvc.service.ActorService;
 import name.huliqing.core.mvc.service.AttributeService;
 import name.huliqing.core.mvc.service.ChatService;
@@ -32,6 +31,7 @@ import name.huliqing.core.object.anim.Loop;
 import name.huliqing.core.object.anim.ColorAnim;
 import name.huliqing.core.object.attribute.NumberAttribute;
 import name.huliqing.core.object.chat.Chat;
+import name.huliqing.core.object.state.State;
 import name.huliqing.core.ui.Icon;
 import name.huliqing.core.ui.LinearLayout;
 import name.huliqing.core.ui.LinearLayout.Layout;
@@ -265,7 +265,10 @@ public final class FaceView extends LinearLayout {
         }
         
         void update(float tpf) {
-            final List<StateData> states = stateService.getStates(actor);
+            final List<State> states = stateService.getStates(actor);
+            if (states ==null) {
+                return;
+            }
             // 确保生成足够的状态槽位
             if (states.size() > stateIconList.size()) {
                 for (int i = stateIconList.size(); i < states.size(); i++) {
@@ -295,9 +298,9 @@ public final class FaceView extends LinearLayout {
      */
     private class ProgressPanel extends LinearLayout {
         // 生命值\魔法值面板\经验槽面板
-        private ProgressView health;
-        private ProgressView magic;
-        private ProgressView xp;
+        private final ProgressView health;
+        private final ProgressView magic;
+        private final ProgressView xp;
         public ProgressPanel(float width, float height) {
             super(width, height);
             
@@ -357,11 +360,11 @@ public final class FaceView extends LinearLayout {
      */
     private class NamePanel extends LinearLayout {
         // 角色名称
-        private Text actorName;
+        private final Text actorName;
         // 骷髅图标,敌人大于等于10级时显示
-        private Icon skull;
+        private final Icon skull;
         // 角色坐标
-        private Text position;
+        private final Text position;
         public NamePanel(float width, float height) {
             super(width, height);
             

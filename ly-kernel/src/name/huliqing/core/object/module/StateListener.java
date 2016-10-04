@@ -4,7 +4,6 @@
  */
 package name.huliqing.core.object.module;
 
-import name.huliqing.core.data.StateData;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.state.State;
 

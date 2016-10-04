@@ -211,17 +211,6 @@ public abstract class AbstractEffect extends Effect {
         }
     }
     
-//    /**
-//     * 检查是否需要结束特效，这个方法会在运行时持续调用，来检查是否应该结束特效，如果该方法返回true,
-//     * 则特效将会立即被结束。
-//     * 默认情况下该方法根据特效的已运行时间是否到达设置的特效时间允许运行的时间来判断是否应该结束特效。
-//     * 子类可以覆盖这个方法来实现自定义的特效结束方式。
-//     * @return 
-//     */
-//    protected boolean checkForEnd() {
-//        return trueTimeUsed >= trueTimeTotal;
-//    }
-    
     protected void doEnd() {
         // 执行特效结束侦听器
         if (listeners != null) {

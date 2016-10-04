@@ -6,10 +6,12 @@
 package name.huliqing.core.mvc.network;
 
 import name.huliqing.core.Factory;
+import name.huliqing.core.mess.MessActorSetTarget;
 import name.huliqing.core.mess.MessItemAdd;
 import name.huliqing.core.mess.MessItemRemove;
 import name.huliqing.core.mess.MessItemUse;
 import name.huliqing.core.mvc.service.ItemService;
+import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.network.Network;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.item.Item;
@@ -20,10 +22,14 @@ import name.huliqing.core.object.item.Item;
 public class ItemNetworkImpl implements ItemNetwork {    
     private final static Network NETWORK = Network.getInstance();
     private ItemService itemService;
+    private PlayService playService;
+    private ActorNetwork actorNetwork;
     
     @Override
     public void inject() {
         itemService = Factory.get(ItemService.class);
+        playService = Factory.get(PlayService.class);
+        actorNetwork = Factory.get(ActorNetwork.class);
     }
     
     @Override
@@ -58,6 +64,11 @@ public class ItemNetworkImpl implements ItemNetwork {
     
     @Override
     public void useItem(Actor actor, String itemId) {
+        
+        // remove20161004,注：不能在这里将playService.getTarget的目标对象设置给actor,因为actor可能是游戏中的npc,
+        // 不能使用当前游戏的主目标当前游戏的主目标只适用于当前“玩家”
+//        actorNetwork.setTarget(actor, playService.getTarget());
+        
         MessItemUse mess = new MessItemUse();
         mess.setActorId(actor.getData().getUniqueId());
         mess.setItemId(itemId);

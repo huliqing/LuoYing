@@ -17,7 +17,7 @@
     <gameLogicPlayerDeadChecker id="gameLogicPlayerDeadChecker" interval="1" />
 
     <!--战场角色清理器-->
-    <gameLogicActorClean id="gameLogicActorClean" cleanInterval="5" />
+    <gameLogicActorClean id="gameLogicActorClean" cleanInterval="10" />
     
     <!--生命值恢复器-->
     <gameLogicAttributeChange id="gameLogicHealthRecover" interval="5" speed="1" applyAttribute="attributeHealth" useAttribute="attributeHealthRestore" baseValue="1" applyToDead="0"/>

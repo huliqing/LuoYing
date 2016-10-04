@@ -10,7 +10,6 @@ import java.util.List;
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.StateData;
 import name.huliqing.core.mvc.network.SkillNetwork;
-import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.define.DefineFactory;
 import name.huliqing.core.object.module.ActorModule;
 import name.huliqing.core.object.module.ChannelModule;
@@ -22,7 +21,7 @@ import name.huliqing.core.utils.MathUtils;
 /**
  * @author huliqing
  */
-public class SkillLockedState extends State implements SkillPlayListener {
+public class SkillLockedState extends AbstractState implements SkillPlayListener {
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
     private ActorModule actorModule;
     private SkillModule skillModule;
@@ -68,21 +67,6 @@ public class SkillLockedState extends State implements SkillPlayListener {
         channelModule = actor.getModule(ChannelModule.class);
         skillModule = actor.getModule(SkillModule.class);
         
-        // remove20160920
-//        // 根据锁定类型来确定要锁定在reset状态还是当前动画帧。
-//        if (lockType != null && !actorService.isDead(actor)) {
-//            if (lockType == LockType.reset) {
-//                Skill skill = skillService.getSkill(actor, SkillType.reset);
-//                if (skill != null) {
-//                    skillService.playSkill(actor, skill, true);
-//                }
-//            } else if (lockType == LockType.frame) {
-//                // SKILL_RESET_DEFAULT会把当前动画帧定格住
-//                Skill skill = skillService.loadSkill(IdConstants.SKILL_RESET_DEFAULT);
-//                skillService.playSkill(actor, skill, true);
-//            }
-//        }
-        
         // 锁定在特定标记的技能上
         if (lockAtSkillTags > 0) {
             List<Skill> lockedSkills = skillModule.getSkillByTags(lockAtSkillTags, null);
@@ -95,6 +79,7 @@ public class SkillLockedState extends State implements SkillPlayListener {
         // 锁定在当前动画侦上
         if (lockAtFrame) {
             channelModule.setSpeed(0);
+            actorModule.setWalkDirection(Vector3f.ZERO);
         }
         
         // 锁定所有技能或特定技能。
@@ -137,22 +122,15 @@ public class SkillLockedState extends State implements SkillPlayListener {
     }
     
     private boolean moved(Vector3f loc1, Vector3f loc2) {
-        if (MathUtils.abs(loc1.x - loc2.x) > 0.0001f 
-                ||  MathUtils.abs(loc1.y - loc2.y) > 0.0001f 
-                ||  MathUtils.abs(loc1.z - loc2.z) > 0.0001f 
-                ) {
-            return true;
-        }
-        return false;
+        return MathUtils.abs(loc1.x - loc2.x) > 0.0001f 
+                ||  MathUtils.abs(loc1.y - loc2.y) > 0.0001f
+                ||  MathUtils.abs(loc1.z - loc2.z) > 0.0001f;
     }
 
     @Override
     public boolean onSkillHookCheck(Skill skill) {
         // 如果要执行的技能刚才是被锁定的特定技能，则返回false,表示不能执行。
-        if (lockSkillIds != null && lockSkillIds.contains(skill.getData().getId())) {
-            return false;
-        }
-        return true;
+        return !(lockSkillIds != null && lockSkillIds.contains(skill.getData().getId()));
     }
 
     @Override
@@ -172,6 +150,18 @@ public class SkillLockedState extends State implements SkillPlayListener {
         if (lockChannels != null && channelModule != null) {
             channelModule.setChannelLock(false, lockChannels);
         }
+        
+        // 如果状态结束，目标已经死亡，而角色最后一个技能执行的不是”死亡“技能，则强制执行死亡技能。
+        // 这可以避免一些情况如：当角色在跑步时被”冰冻“状态冻住而死但却没有执行死亡技能（死亡技能被锁定），
+        // 在状态结束后角色仍然在一直移动的情况发生。
+        if (actorModule.isDead()) {
+            Skill lastSkill = skillModule.getLastSkill();
+            List<Skill> deadSkills = skillModule.getSkillDead(null);
+            if (deadSkills != null && !deadSkills.isEmpty() && !deadSkills.contains(lastSkill)) {
+                skillModule.playSkill(deadSkills.get(0), false, null);
+            }
+        }
+        
         super.cleanup();
     }
     

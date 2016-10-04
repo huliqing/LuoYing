@@ -216,9 +216,9 @@
                 sounds="soundIceFrozen"
                  effects="effectFrozenIce|0.15
                  ,effectFrozenDebris|0,effectFrozenSmoke|0
-                 ,effectFrozenDebris|5.5,effectFrozenSmoke|5.5" />
+                 ,effectFrozenDebris|6,effectFrozenSmoke|6" />
     <!--冰柱-->
-    <effectModel id="effectFrozenIce" useTime="6.3" animations="animFrozenIceScale,animFrozenIceRot"
+    <effectModel id="effectFrozenIce" useTime="5.8" animations="animFrozenIceScale,animFrozenIceRot"
                  file="Models/objects/ices.j3o" initScale="1" initLocation="0,-0.5,0" bucket="Translucent" />
     
     <!--碎冰块:冻结后碎裂-->

@@ -117,12 +117,16 @@ public class SkillShortcut extends BaseUIShortcut<SkillData> {
             if (objectData.getCooldown() > 0) {
                 needCheckAndUpdateMask = true;
             }
-            // 一些技能在执行前必须设置目标对象。
-            actorNetwork.setTarget(actor, playService.getTarget());
-            
-            // 执行技能
             Skill skill = skillService.getSkill(actor, objectData.getId());
-            skillNetwork.playSkill(actor, skill, false);
+            if (skill != null) {
+                
+                // 一些技能在执行前必须设置目标对象。
+                // 注意：这个方法必须放在这里，playService.getTarget()是获取当前游戏主目标，是“玩家行为”，不能把它
+                // 放到skillNetwork.playSkill中去。
+                actorNetwork.setTarget(actor, playService.getTarget());
+                
+                skillNetwork.playSkill(actor, skill, false);
+            }
         }
     }
 

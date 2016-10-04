@@ -136,13 +136,12 @@ public class StateServiceImpl implements StateService{
     }
     
     @Override
-    public List<StateData> getStates(Actor actor) {
-//        StateModule module = actor.getModule(StateModule.class);
-//        if (module != null) {
-//            return module.getStateDatas();
-//        }
-//        return null;
-        return actor.getData().getObjectDatas(StateData.class, null);
+    public List<State> getStates(Actor actor) {
+        StateModule module = actor.getModule(StateModule.class);
+        if (module != null) {
+            return module.getStates();
+        }
+        return null;
     }
 
     @Override

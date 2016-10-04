@@ -61,7 +61,7 @@ xs:time
             <xs:complexContent>
                 <xs:extension base="gameLogicBase">
                     <xs:attribute name="cleanInterval" type="xs:string" use="optional">
-                        <xs:annotation><xs:documentation>清理的时间间隔，单位秒，默认:"5"</xs:documentation></xs:annotation>
+                        <xs:annotation><xs:documentation>清理的时间间隔，单位秒</xs:documentation></xs:annotation>
                     </xs:attribute>
                 </xs:extension>
             </xs:complexContent>

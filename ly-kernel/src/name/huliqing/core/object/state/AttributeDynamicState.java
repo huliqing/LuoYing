@@ -11,7 +11,7 @@ import name.huliqing.core.object.skill.HitUtils;
  * 可以"持续"改变角色属性值的状态.
  * @author huliqing
  */
-public class AttributeDynamicState extends State {
+public class AttributeDynamicState extends AbstractState {
 
     // 影响的属性名称
     private String attributeName;

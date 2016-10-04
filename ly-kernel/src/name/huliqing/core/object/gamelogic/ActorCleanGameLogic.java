@@ -26,7 +26,7 @@ public class ActorCleanGameLogic<T extends GameLogicData> extends AbstractGameLo
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     
     // 默认角色死亡后被清理出战场的时间
-    private float cleanInterval = 5;
+    private float cleanInterval = 10;
     
     // ---- inner
     private final List<Actor> temps = new ArrayList<Actor>();

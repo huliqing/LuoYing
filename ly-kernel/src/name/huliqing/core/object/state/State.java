@@ -1,181 +1,80 @@
 /*
- * To change this template, choose Tools | Templates
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package name.huliqing.core.object.state;
 
-import java.util.ArrayList;
-import java.util.List;
-import name.huliqing.core.Factory;
-import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.data.StateData;
-import name.huliqing.core.mvc.service.ActorService;
-import name.huliqing.core.mvc.service.EffectService;
-import name.huliqing.core.mvc.service.PlayService;
-import name.huliqing.core.mvc.service.StateService;
+import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.xml.DataProcessor;
-import name.huliqing.core.object.effect.Effect;
 
 /**
- * 注意状态有一个更新频率
+ * 状态接口，一个角色可以拥有一个或多个状态。状态的特点如下：<br>
+ * 1.状态只作用于接受状态的角色自身
+ * 2.状态可以用来改变角色的各种属性或行为。
+ * 3.状态有一定的时间限制，当时间结束之后状态会从角色身上移除。
  * @author huliqing
  * @param <T>
  */
-public class State<T extends StateData> implements DataProcessor<T>{
-    private final PlayService playService = Factory.get(PlayService.class);
-    private final ActorService actorService = Factory.get(ActorService.class);
-    private final EffectService effectService = Factory.get(EffectService.class);
-    private final StateService stateService = Factory.get(StateService.class);
-    
-    protected T data;
-    
-    protected boolean initialized;
-    
-    /**
-     * 状态的执行时长，单位秒
-     */
-    protected float totalUseTime;
-    
-    /**
-     * 当前状态已经执行的时间，单位秒，这个时间是用来控制状态结束的。
-     * 当这个时间达到useTime设定的时间时，状态就结束。但是这个时间可以被重置
-     * 即重置为0，这时状态又会从头开始计算时间。
-     */
-    protected float timeUsed;
-    
-    // ---- inner
-    
-    /**
-     * 状态的持有者，即受状态影响的角色，不能为null
-     */
-    protected Actor actor;
-    
-    /**
-     * 状态的产生者，也就是说，这个状态是哪一个角色发出的, 如果一个状态没有发起源，则这个参数可能为null.
-     */
-    protected Actor sourceActor;
-    
-    
-    // ---- inner
-        
-    /**
-     * 角色获得状态时的效果,这些效果会在状态开始时附加在角色身上，在状态结束时停止．
-     * 注意：这些效果引用只是临时的，在结束时要清空。
-     */
-    protected List<Effect> tempEffects;
-    
-    @Override
-    public T getData() {
-        return data;
-    }
+public interface State<T extends StateData> extends  DataProcessor<T>{
 
     @Override
-    public void setData(T data) {
-        if (initialized) {
-            throw new IllegalStateException("State was initialized, could not reset data. origin state id=" + this.data.getId() 
-                    + ", new state id=" + data.getId() + ", actorId=" + actor.getData().getId());
-        }
-        this.data = data;
-        this.initialized = data.getAsBoolean("initialized", initialized);
-        this.timeUsed = data.getAsFloat("timeUsed", timeUsed);
-    }
+    public T getData();
     
-    protected void updateData() {
-        // ...
-    }
+    @Override
+    public void setData(T data);
     
-    public void initialize() {
-        if (initialized) {
-            throw new IllegalArgumentException("State already initialized");
-        }
-        initialized = true;
-        
-        if (data.getEffects() != null) {
-            if (tempEffects == null) {
-                tempEffects = new ArrayList<Effect>(data.getEffects().length);
-            }
-            for (String effectId : data.getEffects()) {
-                Effect effect = effectService.loadEffect(effectId);
-                effect.setTraceObject(actor.getSpatial());
-                playService.addEffect(effect);
-                tempEffects.add(effect);
-            }
-        }
-        totalUseTime = data.getUseTime();
-    }
+    /**
+     * 初始化状态。
+     */
+    void initialize();
     
-    public boolean isInitialized() {
-        return initialized;
-    }
+    /**
+     * 判断状态是否已经初始化
+     * @return 
+     */
+    boolean isInitialized();
     
-    public void cleanup() {
-        // 在结束时要清理特效,让特效都跳转到end阶段，然后然它们自动结束就可以。
-        // 不要用cleanup，这会导致特效突然消失，很不自然。
-        if (tempEffects != null) {
-            for (Effect effect : tempEffects) {
-                if (!effect.isEnd()) {
-                    effect.requestEnd();
-                }
-            }
-            tempEffects.clear();
-        }
-        
-        initialized = false;
-        timeUsed = 0;
-    }
+    /**
+     * 更新状态逻辑
+     * @param tpf 
+     */
+    void update(float tpf);
     
-    public void update(float tpf) {
-        timeUsed += tpf;
-        
-        // 时间到退出,cleanup由StateProcessor去调用。
-        if (timeUsed >= totalUseTime) {
-            doEnd();
-            return;
-        }
-        
-        if (data.isRemoveOnDead() && actorService.isDead(actor)) {
-            doEnd();
-        }
-    }
+    /**
+     * 清理状态产生的数据，这个方法会在状态被移除时调用,以清理并释放状态产生的资源。
+     */
+    void cleanup();
     
     /**
      * 让状态时间重置回原点,这意味着当前状态会继续运行一个useTime的周期时间。
      */
-    public void rewind() {
-        timeUsed = 0;
-    }
+    void rewind();
     
     /**
-     * 默认情况下，状态会在时间达到的情况下自动退出。但部分情况下，子类可能需要
-     * 主动退出。则可以使用这个方法来主动退出逻辑。
+     * 判断状态是否已经结束
+     * @return 
      */
-    protected void doEnd() {
-        stateService.removeState(actor, data.getId());
-    }
+    boolean isEnd();
+    
+    /**
+     * 状态的持有者，即受状态影响的角色
+     * @return 
+     */
+    Actor getActor();
     
     /**
      * 设置状态的持有者，即受状态影响的角色，不能为null
      * @param actor 
      */
-    public void setActor(Actor actor) {
-        this.actor = actor;
-    }
-
-    /**
-     * 状态的持有者，即受状态影响的角色
-     * @return 
-     */
-    public Actor getActor() {
-        return actor;
-    }
-
+    void setActor(Actor actor);
+    
     /**
      * 状态的产生者，也就是说，这个状态是哪一个角色发出的, 可能为null.
      * @return 
      */
-    public Actor getSourceActor() {
-        return sourceActor;
-    }
+    Actor getSourceActor();
 
     /**
      * 源角色，这个角色主要是指制造这个状态的源角色, 比如：角色A攻击了角色B, A的这个攻击技能对B产生
@@ -185,9 +84,5 @@ public class State<T extends StateData> implements DataProcessor<T>{
      * 要知道是谁产生了这些伤害。
      * @param sourceActor 
      */
-    public void setSourceActor(Actor sourceActor) {
-        this.sourceActor = sourceActor;
-    }
-    
-    
+    void setSourceActor(Actor sourceActor);
 }

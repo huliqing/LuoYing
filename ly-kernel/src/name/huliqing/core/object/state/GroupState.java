@@ -15,10 +15,10 @@ import name.huliqing.core.xml.DataFactory;
  * 状态组
  * @author huliqing
  */
-public class GroupState extends State {
+public class GroupState extends AbstractState {
 
     private List<StateData> childStateDatas;
-    private List<State> states;
+    private List<AbstractState> states;
 
     @Override
     public void setData(StateData data) {
@@ -42,9 +42,9 @@ public class GroupState extends State {
         super.initialize();
         
         if (childStateDatas != null) {
-            states = new ArrayList<State>(childStateDatas.size());
+            states = new ArrayList<AbstractState>(childStateDatas.size());
             for (StateData stateData : childStateDatas) {
-                State state = Loader.load(stateData);
+                AbstractState state = Loader.load(stateData);
                 state.setActor(actor);
                 state.setSourceActor(sourceActor);
                 state.initialize();

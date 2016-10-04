@@ -16,21 +16,24 @@ import name.huliqing.core.object.Loader;
 public class ModelEffect extends AbstractEffect {
 
     private boolean loaded;
+    private Spatial model;
 
     @Override
     public void setData(EffectData data) {
         super.setData(data);
-        if (!loaded) {
-            Spatial model = Loader.loadModel(data.getAsString("file"));
-            Bucket bucket = identifyBucket(data.getAsString("bucket"));
-            // 一些特效需要指定bucket,特别是一些半透明的物体。半透明的物体需要在阴影
-            // 渲染后才能渲染,否则会挡住阴影
-            if (bucket != null) {
-                model.setQueueBucket(bucket);
-            }
-            animRoot.attachChild(model);
-            loaded = true;
+        if (model != null) {
+            model.removeFromParent();
         }
+        model = Loader.loadModel(data.getAsString("file"));
+        // 一些特效需要指定bucket,特别是一些半透明的物体。半透明的物体需要在阴影
+        // 渲染后才能渲染,否则会挡住阴影
+        Bucket bucket = identifyBucket(data.getAsString("bucket"));
+        if (bucket != null) {
+            model.setQueueBucket(bucket);
+        }
+        animRoot.attachChild(model);
+        loaded = true;
+
     }
     
     private Bucket identifyBucket(String bucket) {
@@ -52,5 +55,22 @@ public class ModelEffect extends AbstractEffect {
         }
         return null;
     }
+
+    @Override
+    public void initialize() {
+        super.initialize(); 
+        if (model != null) {
+            model.setCullHint(CullHint.Inherit);
+        }
+    }
+
+    @Override
+    public void cleanup() {
+        if (model != null) {
+            model.setCullHint(CullHint.Always);
+        }
+        super.cleanup(); 
+    }
+    
     
 }

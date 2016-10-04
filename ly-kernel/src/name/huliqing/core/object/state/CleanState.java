@@ -5,22 +5,21 @@
 package name.huliqing.core.object.state;
 
 import java.util.List;
-import name.huliqing.core.Factory;
 import name.huliqing.core.data.StateData;
-import name.huliqing.core.mvc.service.StateService;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.module.StateListener;
+import name.huliqing.core.object.module.StateModule;
 
 /**
  * 这类状态可以用来清除角色身上的一些其它状态,当状态在运行时会不停的检查角色当前的状态
  * 列表，并偿试清除指定的状态，甚至清除自身状态。可用用来作为一些净化类的技能使用。
  * @author huliqing
  */
-public class CleanState extends State implements StateListener {
+public class CleanState extends AbstractState implements StateListener {
 //    private static final Logger LOG = Logger.getLogger(CleanState.class.getName());
+    private StateModule stateModule;
     
-    private final StateService stateService = Factory.get(StateService.class);
-
+    // 要清理的状态ID列表
     private List<String> states;
     
     @Override
@@ -30,10 +29,16 @@ public class CleanState extends State implements StateListener {
     }
 
     @Override
+    public void setActor(Actor actor) {
+        super.setActor(actor); 
+        stateModule = actor.getModule(StateModule.class);
+    }
+    
+    @Override
     public void initialize() {
         super.initialize();
         // 添加侦听器，以便侦听角色状态的变更。
-        stateService.addListener(actor, this);
+        stateModule.addStateListener(this);
         
         // 立即进行一次清理,如果states中包含当前状态的id,则可能也会把自身清理掉。
         // 那么状态所设置的时间就无意义了。不过这对于一些只要立即清理一次就可以的
@@ -48,16 +53,17 @@ public class CleanState extends State implements StateListener {
     @Override
     public void cleanup() {
         // 注意状态在销毁时要从角色身上移除当前侦听器。
-        stateService.removeListener(actor, this);
+        if (stateModule != null) {
+            stateModule.removeStateListener(this);
+        }
         super.cleanup(); 
     }
 
     @Override
     public void onStateAdded(Actor source, State stateAdded) {
         // 当检查到新添加的状态刚好是清除列表中的状态时，则立即清除掉。
-        String sid = stateAdded.getData().getId();
-        if (states != null && states.contains(sid)) {
-            stateService.removeState(actor, sid);
+        if (states != null && states.contains(stateAdded.getData().getId())) {
+            stateModule.removeState(stateAdded);
         }
     }
 
@@ -69,7 +75,10 @@ public class CleanState extends State implements StateListener {
     private void doCleanStates() {
         if (states != null) {
             for (String s : states) {
-                stateService.removeState(actor, s);
+                State state = stateModule.getState(s);
+                if (state != null) {
+                    stateModule.removeState(state);
+                }
             }
         }
     }

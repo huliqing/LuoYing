@@ -17,7 +17,7 @@ import name.huliqing.core.object.skill.Skill;
  * 让目标角色执行一个技能
  * @author huliqing
  */
-public class SkillState extends State {
+public class SkillState extends AbstractState {
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
     private SkillModule skillModule;
     

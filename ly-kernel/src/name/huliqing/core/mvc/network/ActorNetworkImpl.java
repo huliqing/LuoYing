@@ -68,13 +68,19 @@ public class ActorNetworkImpl implements ActorNetwork{
 
     @Override
     public void setTarget(Actor actor, Actor target) {
-        if (!NETWORK.isClient()) {
-            MessActorSetTarget mess = new MessActorSetTarget();
-            mess.setActorId(actor.getData().getUniqueId());
-            mess.setTargetId(target != null ? target.getData().getUniqueId() : -1);
-            NETWORK.broadcast(mess);
-            actorService.setTarget(actor, target); 
+        MessActorSetTarget mess = new MessActorSetTarget();
+        mess.setActorId(actor.getData().getUniqueId());
+        mess.setTargetId(target != null ? target.getData().getUniqueId() : -1);
+        
+        // client
+        if (NETWORK.isClient()) {
+            NETWORK.sendToServer(mess);
+            return;
         }
+        
+        // server
+        NETWORK.broadcast(mess);
+        actorService.setTarget(actor, target); 
     }
     
     @Override

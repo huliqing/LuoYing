@@ -7,8 +7,10 @@ package name.huliqing.core.object.shortcut;
 
 import name.huliqing.core.Factory;
 import name.huliqing.core.data.ItemData;
+import name.huliqing.core.mvc.network.ActorNetwork;
 import name.huliqing.core.mvc.network.ItemNetwork;
 import name.huliqing.core.mvc.service.ItemService;
+import name.huliqing.core.mvc.service.PlayService;
 import name.huliqing.core.object.actor.Actor;
 import name.huliqing.core.object.item.Item;
 import name.huliqing.core.object.module.ItemListener;
@@ -18,8 +20,10 @@ import name.huliqing.core.object.module.ItemListener;
  * @author huliqing
  */
 public class ItemShortcut extends BaseUIShortcut<ItemData> implements ItemListener {
+    private final PlayService playService = Factory.get(PlayService.class);
     private final ItemService itemService = Factory.get(ItemService.class);
     private final ItemNetwork itemNetwork = Factory.get(ItemNetwork.class);
+    private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
         
     @Override
     public void initialize() {
@@ -41,6 +45,11 @@ public class ItemShortcut extends BaseUIShortcut<ItemData> implements ItemListen
     @Override
     public void onShortcutClick(boolean pressed) {
         if (!pressed) {
+            // 一些物品在执行前必须设置目标对象。
+            // 注意：这个方法必须放在这里，playService.getTarget()是获取当前游戏主目标，是“玩家行为”，不能把它
+            // 放到skillNetwork.playSkill中去。
+            actorNetwork.setTarget(actor, playService.getTarget());
+            
             itemNetwork.useItem(actor, objectData.getId());
         }
     }

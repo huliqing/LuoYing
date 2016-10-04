@@ -5,6 +5,9 @@
  */
 package name.huliqing.core.object.effect;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import name.huliqing.core.Config;
 import name.huliqing.core.data.EffectData;
 import name.huliqing.core.object.Loader;
 
@@ -13,6 +16,7 @@ import name.huliqing.core.object.Loader;
  * @author huliqing
  */
 public class GroupEffect extends AbstractEffect {
+    private static final Logger LOG = Logger.getLogger(GroupEffect.class.getName());
     
     private EffectWrap[] effects;
     
@@ -87,18 +91,15 @@ public class GroupEffect extends AbstractEffect {
         // ignore, GroupEffect不能根据时间来着判断结束，需要自行控制结束。
     }
 
-    // remove20161001
-//    @Override
-//    protected boolean checkForEnd() {
-//        // GroupEffect的结束时间不依赖于设置，而依赖于所有子特效是否结束。
-//        return end;
-//    }
-
     @Override
     public void requestEnd() {
         // 请求让所有已经运行的子效果结束
         for (EffectWrap ew : effects) {
             if (ew.started) {
+                if (Config.debug) {
+                    LOG.log(Level.INFO, "GroupEffect requestEnd, effectTrueTimeUsed={0}, effectId={1}, effectTrueStartTime={2}"
+                            , new Object[] {trueTimeUsed, ew.effectId, ew.trueStartTime});
+                }
                 ew.effect.requestEnd();
             }
         }
@@ -134,15 +135,15 @@ public class GroupEffect extends AbstractEffect {
             if (effectTimeUsed >= trueStartTime) {
                 if (effect == null) {
                     effect = Loader.loadEffect(effectId);
-                    // 注意：子效果是直接放在GroupEffect下的，不要放在EffectManager中，
-                    // 这会依赖EffectManger,导致GroupEffect不能放在其它Node节点下, 
-                    // 所有类型的Effect都应该是可以单独放在任何Node下进行运行的。
-                    // 把子效果的跟踪目标设置为animRoot，这样当GroupEffect添加了动画控制时，可以同时影响到子效果的变换。
-                    animRoot.attachChild(effect);
-                    
+                }
+                // 注意：子效果是直接放在GroupEffect下的，不要放在EffectManager中，
+                // 这会依赖EffectManger,导致GroupEffect不能放在其它Node节点下, 
+                // 所有类型的Effect都应该是可以单独放在任何Node下进行运行的。
+                // 把子效果的跟踪目标设置为animRoot，这样当GroupEffect添加了动画控制时，可以同时影响到子效果的变换。
+                animRoot.attachChild(effect);
+
 //                // 不要再设置子效果的跟随
 //                effect.setTraceObject(animRoot);
-                }
                 
                 // 与group保持一致的速度,这样当设置GroupEffect的速度的时候可以同时影响子效果的速度
                 effect.getData().setSpeed(data.getSpeed());
@@ -151,6 +152,9 @@ public class GroupEffect extends AbstractEffect {
                 // 系，initialize也可以交由效果内部调用，但是会慢一帧, 这会造成一些视角稍微滞后。
                 effect.initialize();
                 started = true;
+//                if (Config.debug) {
+//                    LOG.log(Level.INFO, "GroupEffect start child effect, effectId={0}, effectTimeNow={1}", new Object[] {effect.getData().getId(), effectTimeUsed});
+//                }
             }
         }
         

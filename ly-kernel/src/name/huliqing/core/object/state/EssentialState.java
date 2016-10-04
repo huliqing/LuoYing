@@ -11,7 +11,7 @@ import name.huliqing.core.object.module.ActorModule;
  *
  * @author huliqing
  */
-public class EssentialState extends State {
+public class EssentialState extends AbstractState {
     private ActorModule actorModule;
     
     private boolean essential;

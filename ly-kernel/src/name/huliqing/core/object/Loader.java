@@ -49,7 +49,7 @@ import name.huliqing.core.object.scene.Scene;
 import name.huliqing.core.object.shape.Shape;
 import name.huliqing.core.object.skill.Skill;
 import name.huliqing.core.object.skin.Skin;
-import name.huliqing.core.object.state.State;
+import name.huliqing.core.object.state.AbstractState;
 import name.huliqing.core.object.task.Task;
 import name.huliqing.core.object.view.View;
 import name.huliqing.core.xml.DataProcessor;
@@ -232,12 +232,12 @@ public class Loader {
         return skin;
     }
     
-    public static State loadState(String id) {
+    public static AbstractState loadState(String id) {
         StateData data = DataFactory.createData(id);
         return loadState(data);
     }
     
-    public static State loadState(StateData data) {
+    public static AbstractState loadState(StateData data) {
         return DataFactory.createProcessor(data);
     }
     

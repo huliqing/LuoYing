@@ -27,11 +27,13 @@ public class SkillNetworkImpl implements SkillNetwork {
     private final static Network NETWORK = Network.getInstance();
     private SkillService skillService;
     private PlayService playService;
+    private ActorNetwork actorNetwork;
     
     @Override
     public void inject() {
         skillService = Factory.get(SkillService.class);
         playService = Factory.get(PlayService.class);
+        actorNetwork = Factory.get(ActorNetwork.class);
     }
     
     @Override
@@ -59,18 +61,15 @@ public class SkillNetworkImpl implements SkillNetwork {
         if (skill == null)
             return false;
         
+           // remove20161004,注：不能在这里将playService.getTarget的目标对象设置给actor,因为actor可能是游戏中的npc,不能使用当前游戏的主目标
+           // 当前游戏的主目标只适用于当前“玩家”
+//        actorNetwork.setTarget(actor, playService.getTarget());
+        
         MessSkillPlay mess = new MessSkillPlay();
         mess.setActorId(actor.getData().getUniqueId());
         mess.setSkillId(skill.getData().getId());
         
         if (NETWORK.isClient()) {
-            Actor target = playService.getTarget();
-            MessActorSetTarget messSetTarget = new MessActorSetTarget();
-            messSetTarget.setActorId(actor.getData().getUniqueId());
-            messSetTarget.setTargetId(target != null ? target.getData().getUniqueId() : -1);
-            // 如果是客户端，在发技能的时候需要先把客户端当前的主目标作为角色的当前目标一起发送到服务端,
-            // 否则服务端会找不到目标而不会发技能。
-            NETWORK.sendToServer(messSetTarget);
             NETWORK.sendToServer(mess);
             return false;
         }
@@ -110,6 +109,7 @@ public class SkillNetworkImpl implements SkillNetwork {
         
         SkillModule skillModule = actor.getModule(SkillModule.class);
         if (force || skillModule.checkStateCode(skill) == SkillConstants.STATE_OK) {
+            
              // 找出一些不希望被中断的技能。
             List<Long> notWantInterruptSkills = skillModule.checkNotWantInterruptSkills(skill);
             mess.setWantNotInterruptSkills(notWantInterruptSkills);

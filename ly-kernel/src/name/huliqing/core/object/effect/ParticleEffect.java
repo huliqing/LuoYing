@@ -67,7 +67,6 @@ public class ParticleEffect extends AbstractEffect {
         }
     }
 
-
     @Override
     public void cleanup() {
         if (pe != null) {
@@ -78,14 +77,14 @@ public class ParticleEffect extends AbstractEffect {
     
     //------------- get and set
     
-    public String getEmitter() {
-        return emitter;
-    }
+//    public String getEmitter() {
+//        return emitter;
+//    }
 
-    public void setEmitter(String emitter) {
-        this.emitter = emitter;
-        pe = null; // 需要重建
-    }
+//    public void setEmitter(String emitter) {
+//        this.emitter = emitter;
+//        pe = null; // 需要重建
+//    }
     
     // 主要是为了随机颜色。
     private class RandomColorEmitter extends ParticleEmitter {
