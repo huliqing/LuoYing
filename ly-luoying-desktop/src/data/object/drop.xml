@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--定义角色的可掉落物-->
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://luoying.huliqing.name'
+    xsi:schemaLocation='http://luoying.huliqing.name meta/drop.xsd'>
+
+    <!--==========================================================================-->
+    <dropItem id="dropItemGoldBase" item="itemGold" rate="0.99" sounds="soundCoin2" />
+    
+    <!--==========================================================================-->
+    
+    <!--==========================================================================-->
+    <!-- 基本配置, 主要配置各种物品的掉落机率
+    注：在定义一个DropGroup时要注意不要互相嵌套DropGroup，尽量保持简单清晰.避免造成无限循环异常（StackOverflowError）。
+    比如：dropGroupA -> dropGroupB -> ... -> dropGroupA. 
+    -->
+    <!--==========================================================================-->
+
+    <!--基本掉落: level1-->
+    <dropItem id="dropItemGold1" extends="dropItemGoldBase" count="20" />
+    <dropItem id="dropItemTonicRed1" item="itemTonicRed" count="2" rate="0.5" />
+    <dropItem id="dropItemTonicBlue1" item="itemTonicBlue" count="2" rate="0.5" />
+    <dropAttribute id="dropXp1" attributeName="attributeXp" attributeEl="elAttributeDropXp" fixedValue="0" />
+    <dropGroup id="dropBaseGroup1" drops="dropXp1, dropItemGold1,dropItemTonicRed1,dropItemTonicBlue1" />
+    
+    <!--基本掉落: level2-->
+    <dropItem id="dropItemGold2" extends="dropItemGoldBase" count="40"  />
+    <dropItem id="dropItemTonicRed2" item="itemTonicRed" count="4" rate="0.5" />
+    <dropItem id="dropItemTonicBlue2" item="itemTonicBlue" count="4" rate="0.5" />
+    <dropAttribute id="dropXp2" attributeName="attributeXp" attributeEl="elAttributeDropXp" fixedValue="100" />
+    <dropGroup id="dropBaseGroup2" drops="dropXp2, dropItemGold2,dropItemTonicRed2,dropItemTonicBlue2" />
+
+    <!--基本掉落: level3-->
+    <dropItem id="dropItemGold3" extends="dropItemGoldBase" count="80" />
+    <dropItem id="dropItemTonicRed3" item="itemTonicRed" count="8" rate="0.5" />
+    <dropItem id="dropItemTonicBlue3" item="itemTonicBlue" count="8" rate="0.5" />
+    <dropAttribute id="dropXp3" attributeName="attributeXp" attributeEl="elAttributeDropXp" fixedValue="200" />
+    <dropGroup id="dropBaseGroup3" drops="dropXp3, dropItemGold3,dropItemTonicRed3,dropItemTonicBlue3" />
+    
+    <!--防御塔-->
+    <dropItem id="dropItemTowers" item="itemTower" count="1" rate="0.3" />
+    <dropItem id="dropItemTowersStone" item="itemTowerStone" count="1" rate="0.3" />
+    <dropItem id="dropItemTowersSnow" item="itemTowerSnow" count="1" rate="0.3" />
+    <dropGroup id="dropItemTowersGroup" drops="dropItemTowers,dropItemTowersStone,dropItemTowersSnow" />
+
+    <!--药草：风中劲草-->
+    <dropItem id="dropItemHerb" item="itemHerb" count="1" rate="0.2" />
+    <!--解毒草--> 
+    <dropItem id="dropItemDetoxifyGrass" item="itemDetoxifyGrass" count="1" rate="0.3" />
+    <!--攻击、施法速度药水-->
+    <dropItem id="dropItemASTonic" item="itemASTonic" count="1" rate="0.1" />
+    
+    <!--蜘蛛卵-->
+    <dropItem id="dropItemSpiderSpawn" item="itemSpiderSpawn" count="1" rate="0.2" />
+    
+    <!--卷轴：狼、熊...-->
+    <dropItem id="dropItemScrollWolf" item="itemScrollWolf" count="1" rate="0.3" />
+    <dropItem id="dropItemScrollBear" item="itemScrollBear" count="1" rate="0.3" />
+    <dropItem id="dropItemScrollScorpion" item="itemScrollScorpion" count="1" rate="0.3" />
+    
+    <!--妖精套装掉落设置-->
+    <dropSkin id="dropSkin004Foot" skin="skinFoot004" count="1" rate="0.5" />
+    <dropSkin id="dropSkin004Hand" skin="skinHand004" count="1" rate="0.5" />
+    <dropSkin id="dropSkin004LowerBody" skin="skinLowerBody004" count="1" rate="0.5" />
+    <dropSkin id="dropSkin004UpperBody" skin="skinUpperBody004" count="1" rate="0.5" />
+    <dropGroup id="dropSkin004Group" drops="dropSkin004Foot,dropSkin004Hand,dropSkin004LowerBody,dropSkin004UpperBody" />
+    
+    <!--==========================================================================-->
+    <!-- 特殊配置: 配置给各种角色的掉落设置 -->
+    <!--==========================================================================-->
+    
+    <!--丛林蜘蛛掉落设置-->
+    <dropGroup id="dropSpider" drops="dropBaseGroup1,dropItemSpiderSpawn,dropItemHerb" />
+    
+    <!--丛林盗贼-->
+    <dropGroup id="dropNinja" drops="dropBaseGroup1,dropItemTowersGroup" />
+        
+    <!--狼-->
+    <dropGroup id="dropWolf" drops="dropBaseGroup1,dropItemScrollWolf" />
+    
+    <!--熊-->
+    <dropGroup id="dropBear" drops="dropBaseGroup1,dropItemScrollBear" />
+
+    <!--蝎子-->
+    <dropGroup id="dropScorpion" drops="dropBaseGroup1,dropItemScrollScorpion,dropItemDetoxifyGrass" />
+    
+    <!--古柏幼仔-->
+    <dropGroup id="dropGb" drops="dropBaseGroup1,dropItemHerb,dropItemDetoxifyGrass" />
+
+    <!--山老大－辛巴达-->
+    <dropGroup id="dropSinbad" drops="dropBaseGroup2,dropItemTowersGroup,dropItemHerb,dropItemASTonic" />
+    
+    <!--森林妖精-->
+    <dropGroup id="dropFairy" drops="dropBaseGroup3,dropItemHerb,dropItemASTonic,dropSkin004Group" />
+    
+    <!--trex-->
+    <dropGroup id="dropTrex" drops="dropBaseGroup2,dropItemHerb,dropItemASTonic" />
+    
+    <!--raptor-->
+    <dropGroup id="dropRaptor" drops="dropBaseGroup2,dropItemHerb,dropItemASTonic" />
+
+    <!--==========================================================================-->
+    <!-- 特殊任务物品掉落 -->
+    <!--==========================================================================-->
+
+    <!--第二关任务物品特殊掉落-->
+    <dropItem id="dropTreeStump" item="itemTreeStump" count="1" rate="1" />
+
+    <!--第二关祭坛死亡掉落：星光传送术-->
+    <dropItem id="dropBook007" item="itemBook007" count="1" rate="1" />
+</root>
+
+
+

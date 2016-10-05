@@ -1,0 +1,364 @@
+<?xml version="1.0"?>
+<!--
+xs:string
+xs:decimal
+xs:integer
+xs:boolean
+xs:date
+xs:time
+-->
+
+<xs:schema version="1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://luoying.huliqing.name"
+           xmlns="http://luoying.huliqing.name"
+           elementFormDefault="qualified" >
+    
+    <xs:include schemaLocation="base.xsd" />
+    
+    <xs:element name="root">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="moduleActor" />
+                <xs:element ref="moduleAction" />
+                <xs:element ref="moduleAttribute" />
+                <xs:element ref="moduleChannel" />
+                <xs:element ref="moduleChat" />
+                <xs:element ref="moduleDrop" />
+                <xs:element ref="moduleItem" />
+                <xs:element ref="moduleLevel" />
+                <xs:element ref="moduleLogic" />
+                <xs:element ref="moduleResist" />
+                <xs:element ref="moduleSkill" />
+                <xs:element ref="moduleSkin" />
+                <xs:element ref="moduleState" />
+                <xs:element ref="moduleTalent" />
+                <xs:element ref="moduleTask" />
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="moduleAction">
+        <xs:annotation>
+            <xs:documentation>角色行为模块， 必要的</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="moduleBase">
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+            
+    <xs:element name="moduleActor">
+        <xs:annotation>
+            <xs:documentation>基本角色控制器，每个角色都必要的</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="moduleBase">
+                    <xs:attribute name="bindHealthAttribute" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>bind a IntegerAttribute, 绑定角色属性，这个属性用于存取角色的健康值。</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="bindGroupAttribute" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>bind a IntegerAttribute, 绑定角色属性,该属性用于存取角色所在的派系。</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="bindTeamAttribute" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>bind a IntegerAttribute, 绑定角色属性,该属性用于存取角色所在的队伍分组。</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="bindViewAttribute" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>bind a IntegerAttribute, 绑定角色属性,该属性用于存取角色的视力距离，即定义角色可以看到多远。</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="bindTargetAttribute" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>bind a LongAttribute, 绑定角色属性,该属性用于存取角色的当前目标。</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="bindFollowTargetAttribute" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>bind a LongAttribute, 绑定角色属性, 该属性用于存取角色的跟随目标。</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="bindOwnerAttribute" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>bind a LongAttribute, 绑定角色属性,该属性用于存取角色的所有者(主人)</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="bindMassAttribute" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>bind a FloatAttribute, 绑定角色属性, 该属性用于存取角色的"质量"</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="bindMovableAttribute" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>bind a BooleanAttribute, 绑定角色属性，这个属性定义角色是否是可移动的</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="bindRotatableAttribute" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>bind a BooleanAttribute, 绑定角色属性，这个属性定义角色是否是可转动朝向的。</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="bindEssentialAttribute" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>bind a BooleanAttribute, 绑定角色属性，这个属性值如果为true,则说明角色是场景必要的，在死亡后不能移除出场景。</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="bindBiologyAttribute" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>bind a BooleanAttribute, 绑定角色属性，这个属性用于判断角色是否为生物，true:生物; false:非生物</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="bindDeadAttribute" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>bind a BooleanAttribute, 判断角色属性，这个属性用于判断角色是否“死亡”</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+        
+    <xs:element name="moduleAttribute">
+        <xs:annotation>
+            <xs:documentation>角色属性控制模块</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="moduleBase"></xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="moduleChannel">
+        <xs:annotation>
+            <xs:documentation>角色动画通道模块，用于支持角色的通道动画</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="moduleBase">
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+        
+    <xs:element name="moduleChat">
+        <xs:annotation>
+            <xs:documentation>角色对话模块</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="moduleBase"></xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="moduleDrop">
+        <xs:annotation>
+            <xs:documentation>角色物品掉落模块,给角色增加这个模块之后，当角色被某个目标打死之后可以从角色身上掉落物品给指定目标。</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="moduleBase">
+                    <xs:attribute name="sounds" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>默认的掉落声效，格式："sound1,sound2,sound3"</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+        
+    <xs:element name="moduleItem">
+        <xs:annotation>
+            <xs:documentation>角色包裹物品管理模块</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="moduleBase"></xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="moduleLevel">
+        <xs:annotation>
+            <xs:documentation>“等级”功能模块，给角色添加这个模块可以让角色具有升级功能。</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="moduleBase">
+                    <xs:attribute name="bindLevelAttribute" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>bind NumberAttribute, 角色的等级属性名称，这个属性用于存放角色的等级值,当角色的等级变化后会存取在这个属性中。</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="bindXpAttribute" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>bind NumberAttribute, 角色的经验值（xp）属性名称，模块通过这个属性的值变化来计算角色的等级值。</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="bindXpNextAttribute" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>bind NumberAttribute, 到达下一个等级角色需要的经验值（xp）属性名称，模块在运行时会自动把下一等级需要的经验值计算后放在这个属性上。</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="xpLevelEl" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>角色等级公式,关联一个Level El, 这个公式用来计算角色在升级到每一个等级时需要的经验值(xp)数量。</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="maxLevel" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>可升级的最高等级值，默认情况下无限制。</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="effect" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>升级时的特效</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+        
+    <xs:element name="moduleLogic">
+        <xs:annotation>
+            <xs:documentation>角色逻辑控制器</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="moduleBase">
+                    <xs:attribute name="bindAutoLogicAttribute" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>绑定一个BooleanAttribute属性,这个属性用于控制是否打开角色的逻辑AI功能。</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="bindAutoDetectAttribute" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>绑定一个BooleanAttribute属性,这个属性用于控制是否自动侦察敌人。</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+        
+    <xs:element name="moduleResist">
+        <xs:annotation>
+            <xs:documentation>角色抗性模块，用于计算角色对状态的抵抗值</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="moduleBase"></xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="moduleSkill">
+        <xs:annotation>
+            <xs:documentation>技能模块</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="moduleBase">
+                    <xs:attribute name="idleSkillTags" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>默认的“空闲”技能的标签, 格式: "skillTag1,skillTag2,..."</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="waitSkillTags" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>默认的“等待”技能的标签, 格式: "skillTag1,skillTag2,..."</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="walkSkillTags" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>默认的“步行”技能的标签, 格式: "skillTag1,skillTag2,..."</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="runSkillTags" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>默认的“跑步”技能的标签, 格式: "skillTag1,skillTag2,..."</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="hurtSkillTags" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>默认的“受伤”技能的标签, 格式: "skillTag1,skillTag2,..."</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="deadSkillTags" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>默认的“死亡”技能的标签, 格式: "skillTag1,skillTag2,..."</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+        
+    <xs:element name="moduleSkin">
+        <xs:annotation>
+            <xs:documentation>角色装备控制器</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="moduleBase">
+                    <xs:attribute name="bindWeaponSlotAttribute" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>
+                                bind CollectionAttribute&lt;String&gt; 绑定角色属性，这个属性中存放角色优先支持的武器槽位的id.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="moduleState">
+        <xs:annotation>
+            <xs:documentation>状态模块，buff,debuff模块</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="moduleBase"></xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="moduleTalent">
+        <xs:annotation>
+            <xs:documentation>角色“天赋”功能模块</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="moduleBase">
+                    <xs:attribute name="bindLevelAttribute" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>
+                                bind NumberAttribute, 绑定角色的等级属性的名称(Number类型），天赋模块用这个属性的值变化来判断角色是否升级。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="bindTalentPointsAttribute" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>
+                                bind NumberAttribute, 绑定一个属性名称，这个属性将作为天赋点数的容器，当角色升级时获得的天赋点数将累加在这个属性上。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="talentPointsValue" type="xs:integer" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                天赋点奖励数量，整数类型，这个参数表示当角色每升一级时可以获得的天赋点数,
+                                固定值，默认0. 注：如果设置了talentPointsLevelEl参数则忽略talentPointsValue设置。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="talentPointsLevelEl" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                绑定一个levelEl,这个LevelEl用于计算在角色升级到不同等级时角色可以获得的天赋点数.
+                                如果设置了这个值，则忽略talentPointsValue的设置。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="moduleTask">
+        <xs:annotation>
+            <xs:documentation>角色任务模块</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="moduleBase"></xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:complexType name="moduleBase">
+        <xs:complexContent>
+            <xs:extension base="base">
+                <xs:attribute name="moduleOrder" type="xs:integer" use="required">
+                    <xs:annotation>
+                        <xs:documentation>
+                            模块载入时的优先顺序,默认：0，值越小排越前，值越大排在越后面载入。
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+</xs:schema>

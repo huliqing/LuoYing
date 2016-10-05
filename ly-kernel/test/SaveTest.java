@@ -1,5 +1,5 @@
 
-import name.huliqing.core.LY;
+import name.huliqing.ly.LY;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
