@@ -12,7 +12,7 @@ import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.scene.Spatial;
 import com.jme3.texture.Texture;
 import com.jme3.texture.Texture.WrapMode;
-import name.huliqing.ly.LY;
+import name.huliqing.ly.Ly;
 import name.huliqing.ly.constants.MaterialConstants;
 import name.huliqing.ly.constants.ModelConstants;
 import name.huliqing.ly.constants.TextureConstants;
@@ -83,7 +83,7 @@ public class SlideColorEffect extends AbstractEffect {
     
     private void create() {
         if (mat == null) {
-            AssetManager am = LY.getAssetManager();
+            AssetManager am = Ly.getAssetManager();
             mat = new Material(am, MaterialConstants.MAT_SLIDE_COLOR);
             mat.setColor("StartColor", startColor);
             mat.setColor("EndColor", endColor);

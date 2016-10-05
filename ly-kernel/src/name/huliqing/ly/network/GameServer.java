@@ -20,7 +20,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import name.huliqing.ly.LY;
+import name.huliqing.ly.Ly;
 import name.huliqing.ly.Config;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.data.GameData;
@@ -391,7 +391,7 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
      */
     public List<ConnData> getClients() {
         // 需要判断游戏是否在运行,在游戏运行时可以获取到玩家角色名字
-        boolean gameInPlay = LY.getPlayState() != null;
+        boolean gameInPlay = Ly.getPlayState() != null;
         
         // 向客户端广播，告诉所有客户端有新的客户端连接进来，并把客户端列表
         // 发送给所有已经连接的客户端

@@ -13,7 +13,7 @@ import com.jme3.network.Message;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import name.huliqing.ly.LY;
+import name.huliqing.ly.Ly;
 import name.huliqing.ly.network.AbstractClientListener;
 import name.huliqing.ly.network.GameClient;
 import name.huliqing.ly.network.Network;
@@ -27,7 +27,7 @@ import name.huliqing.ly.view.HelpView;
 import name.huliqing.ly.ui.LinearLayout;
 import name.huliqing.ly.ui.UIFactory;
 import name.huliqing.ly.ui.state.UIState;
-import name.huliqing.luoying.Fighter;
+import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.LyClientPlayState;
 
 /**
@@ -36,7 +36,7 @@ import name.huliqing.luoying.LyClientPlayState;
  */
 public class RoomStateClientImpl extends AbstractAppState implements RoomState {
     private final static Logger LOG = Logger.getLogger(RoomStateClientImpl.class.getName());
-    private Fighter app; 
+    private LuoYing app; 
     
     // Client list
     private RoomStatePanel clientPanel;
@@ -69,9 +69,9 @@ public class RoomStateClientImpl extends AbstractAppState implements RoomState {
     @Override
     public void initialize(AppStateManager stateManager, Application _app) {
         super.initialize(stateManager, app); 
-        float width = LY.getSettings().getWidth();
-        float height = LY.getSettings().getHeight();
-        app = (Fighter) _app;
+        float width = Ly.getSettings().getWidth();
+        float height = Ly.getSettings().getHeight();
+        app = (LuoYing) _app;
         
         float btnHeight = UIFactory.getUIConfig().getButtonHeight() * 1.5f;
         float helpHeight = UIFactory.getUIConfig().getButtonHeight(); 

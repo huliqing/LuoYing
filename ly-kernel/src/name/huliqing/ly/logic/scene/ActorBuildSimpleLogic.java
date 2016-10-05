@@ -12,7 +12,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import name.huliqing.ly.LY;
+import name.huliqing.ly.Ly;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.layer.network.PlayNetwork;
 import name.huliqing.ly.layer.service.ActorService;
@@ -89,7 +89,7 @@ public class ActorBuildSimpleLogic extends IntervalLogic {
                     continue;
                 } else if (data.deadTime <= 0) {
                     // 如果不在场景中，并且未标记过角色死亡，则标记死亡时间
-                    data.deadTime = LY.getGameTime();
+                    data.deadTime = Ly.getGameTime();
                 }
             }
             
@@ -102,7 +102,7 @@ public class ActorBuildSimpleLogic extends IntervalLogic {
             // 1.角色未载入过;
             // 2.死亡时间已经超过刷新时间
             } else if (data.actor == null 
-                    || (data.deadTime > 0 && LY.getGameTime() - data.deadTime >= data.interval * 1000)){
+                    || (data.deadTime > 0 && Ly.getGameTime() - data.deadTime >= data.interval * 1000)){
                 
                 data.rebuild();
                 

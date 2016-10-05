@@ -17,7 +17,7 @@ import com.jme3.util.TempVars;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.ly.LY;
+import name.huliqing.ly.Ly;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.constants.InterfaceConstants;
 import name.huliqing.ly.constants.MaterialConstants;
@@ -212,8 +212,8 @@ public final class FaceView extends LinearLayout {
         public PicPanel(float width, float height) {
             super(width, height);
             
-            final Texture texture = LY.getAssetManager().loadTexture(InterfaceConstants.UI_MISS);
-            mat = new Material(LY.getAssetManager(), MaterialConstants.MAT_FACE_PANEL);
+            final Texture texture = Ly.getAssetManager().loadTexture(InterfaceConstants.UI_MISS);
+            mat = new Material(Ly.getAssetManager(), MaterialConstants.MAT_FACE_PANEL);
             mat.setTexture("Texture", texture);
             mat.setColor("Color", new ColorRGBA(1,1,1,1));
             mat.setColor("BorderColor", new ColorRGBA(0.7f, 0.7f, 0.7f, 0.95f));
@@ -244,9 +244,9 @@ public final class FaceView extends LinearLayout {
             }
             Texture tex;
             try {
-                tex = LY.getAssetManager().loadTexture(icon);
+                tex = Ly.getAssetManager().loadTexture(icon);
             } catch (AssetNotFoundException e) {
-                tex = LY.getAssetManager().loadTexture(InterfaceConstants.UI_MISS);
+                tex = Ly.getAssetManager().loadTexture(InterfaceConstants.UI_MISS);
             }
             mat.setTexture("Texture", tex);
         }

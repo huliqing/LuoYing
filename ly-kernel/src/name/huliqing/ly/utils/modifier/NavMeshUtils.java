@@ -13,7 +13,7 @@ import com.jme3.scene.Spatial;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jme3tools.optimize.GeometryBatchFactory;
-import name.huliqing.ly.LY;
+import name.huliqing.ly.Ly;
 import name.huliqing.ly.utils.ModelFileUtils;
 import name.huliqing.ly.utils.GeometryUtils;
 
@@ -34,7 +34,7 @@ public class NavMeshUtils {
     public static Node createNavMesh(String terrainJ3oFile, boolean replace) {
         long startTime = System.currentTimeMillis();
         Node terrain = null;
-        Spatial temp = LY.getAssetManager().loadModel(terrainJ3oFile);
+        Spatial temp = Ly.getAssetManager().loadModel(terrainJ3oFile);
         if (temp instanceof Geometry) {
             terrain = new Node();
             terrain.attachChild(temp);
@@ -60,7 +60,7 @@ public class NavMeshUtils {
         navMesh.setMesh(optiMesh);
         navMesh.setCullHint(Spatial.CullHint.Always);
         navMesh.setModelBound(new BoundingBox());
-        navMesh.setMaterial(new Material(LY.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md"));
+        navMesh.setMaterial(new Material(Ly.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md"));
         terrain.attachChild(navMesh);
         long useTime = System.currentTimeMillis() - startTime;
         Logger.getLogger(NavMeshUtils.class.getName()).log(Level.INFO, "Create nav mesh use time={0}", useTime);

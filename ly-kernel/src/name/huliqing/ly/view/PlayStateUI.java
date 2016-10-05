@@ -7,7 +7,7 @@ package name.huliqing.ly.view;
 import com.jme3.app.Application;
 import name.huliqing.ly.state.MenuTool;
 import name.huliqing.ly.state.PlayState;
-import name.huliqing.ly.LY;
+import name.huliqing.ly.Ly;
 import name.huliqing.ly.object.IntervalLogic;
 import name.huliqing.ly.ui.Icon;
 import name.huliqing.ly.ui.LinearLayout.Layout;
@@ -31,7 +31,7 @@ public abstract class PlayStateUI extends IntervalLogic {
     
     public PlayStateUI () {
         super(0);
-        playState = LY.getPlayState();
+        playState = Ly.getPlayState();
     }
     
     @Override
@@ -39,8 +39,8 @@ public abstract class PlayStateUI extends IntervalLogic {
         super.initialize(app);
         
         // 设置面板是公共必须有的
-        float sw = LY.getSettings().getWidth();
-        float sh = LY.getSettings().getHeight();
+        float sw = Ly.getSettings().getWidth();
+        float sh = Ly.getSettings().getHeight();
         
         // ==== 工具栏
         toolsView = new ToolsView();

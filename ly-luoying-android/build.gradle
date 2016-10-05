@@ -15,7 +15,10 @@ apply plugin: 'com.android.application'
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    // ly-luoying-desktop build for ly-luoying-android
     compile fileTree(dir: "$rootProject.projectDir$androidExtResourceDir/libs", include: ['*.jar'])
+    // ly-kernel build for ly-luoying-android
+    compile fileTree(dir: "$rootProject.projectDir$kernelResultDir", include: ['*.jar'])
     
     // see version => C:\home\lib\android-2.1_r01-windows\extras\android\m2repository\com\android\support\appcompat-v7\22.0.0
     compile 'com.android.support:appcompat-v7:23.4.0'
@@ -29,7 +32,7 @@ apply plugin: 'com.google.gms.google-services'
 class BuildConfig {
     // eg. "general", "play", ...
     String name
-    // eg. "name.huliqing.fighter"
+    // eg. "name.huliqing.luoying"
     String applicationId
     // eg. "AndroidManifest_play.xml", "AndroidManifest_general.xml"
     String manifest
@@ -70,6 +73,11 @@ android {
     lintOptions{
         checkReleaseBuilds false
         abortOnError false
+    }
+    
+    // 防止异常：com.android.dex.DexException: Cannot merge new index 66561 into a non-jumbo inst ruction!
+    dexOptions {
+        jumboMode true
     }
     
     compileSdkVersion androidCompileSdkVersion.toInteger()

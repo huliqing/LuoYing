@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import name.huliqing.ly.LY;
+import name.huliqing.ly.Ly;
 import name.huliqing.ly.Config;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.constants.MaterialConstants;
@@ -83,7 +83,7 @@ public class ProjectionEffect extends AbstractEffect {
     public void setData(EffectData data) {
         super.setData(data); 
         // TextureConstants.TEX_MAGIC default value for test.
-        texture = LY.getAssetManager().loadTexture(data.getAsString("texture", TextureConstants.TEX_MAGIC));
+        texture = Ly.getAssetManager().loadTexture(data.getAsString("texture", TextureConstants.TEX_MAGIC));
         color = data.getAsColor("color");
         projPos.set(data.getAsVector3f("projPos", projPos));
         projDir.set(data.getAsVector3f("projDir", projDir)).normalizeLocal();
@@ -95,7 +95,7 @@ public class ProjectionEffect extends AbstractEffect {
         castCam.setParallelProjection(true);
         castCam.setFrustum(-1, 1, -1, 1, 1, -1);
         
-        projMat = new Material(LY.getAssetManager(), MaterialConstants.MAT_PROJECTION);
+        projMat = new Material(Ly.getAssetManager(), MaterialConstants.MAT_PROJECTION);
         projMat.setTexture("Texture", texture);
         // 注：初始贴图颜色，如果效果包含有ColorAnim,则这个Color设置会受影响。
         if (color != null) {
@@ -172,7 +172,7 @@ public class ProjectionEffect extends AbstractEffect {
     }
     
     private Material getDebugMaterial() {
-        Material debugMat = new Material(LY.getAssetManager(), MaterialConstants.COMMON_UNSHADED);
+        Material debugMat = new Material(Ly.getAssetManager(), MaterialConstants.COMMON_UNSHADED);
         debugMat.getAdditionalRenderState().setFaceCullMode(RenderState.FaceCullMode.Off);
         debugMat.getAdditionalRenderState().setWireframe(true);
         return debugMat;

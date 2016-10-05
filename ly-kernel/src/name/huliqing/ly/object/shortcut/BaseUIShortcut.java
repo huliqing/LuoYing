@@ -9,7 +9,7 @@ import com.jme3.font.BitmapFont;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import name.huliqing.ly.Factory;
-import name.huliqing.ly.LY;
+import name.huliqing.ly.Ly;
 import name.huliqing.ly.constants.InterfaceConstants;
 import name.huliqing.ly.data.ObjectData;
 import name.huliqing.ly.layer.network.UserCommandNetwork;
@@ -183,7 +183,7 @@ public abstract class BaseUIShortcut<T extends ObjectData> extends AbstractShort
      * 当快捷方式开始被拖动时该方法被调用。
      */
     protected void onShortcutDragStart() {
-        startDragTime = LY.getGameTime();
+        startDragTime = Ly.getGameTime();
     }
     
     /**
@@ -194,7 +194,7 @@ public abstract class BaseUIShortcut<T extends ObjectData> extends AbstractShort
     protected void onShortcutDragMove(float xAmount, float yAmount) {
         // 拖动时间超过一定时间时才显示recycle,以避免在正常点击的时候也显示recycle图标。
         if (!bucketVisible) {
-            if (LY.getGameTime() - startDragTime > 100) {
+            if (Ly.getGameTime() - startDragTime > 100) {
                 ShortcutManager.setBucketVisible(true);
                 bucketVisible = true;
             }

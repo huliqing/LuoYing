@@ -7,7 +7,7 @@ package name.huliqing.ly.view;
 import com.jme3.app.Application;
 import com.jme3.scene.Spatial;
 import name.huliqing.ly.ui.UIUtils;
-import name.huliqing.ly.LY;
+import name.huliqing.ly.Ly;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.constants.IdConstants;
 import name.huliqing.ly.layer.service.PlayService;
@@ -55,13 +55,13 @@ public class LanPlayStateUI extends PlayStateUI {
         super.initialize(app);
         
         // UI size
-        float fullWidth = LY.getSettings().getWidth();
-        float fullHeight = LY.getSettings().getHeight();
+        float fullWidth = Ly.getSettings().getWidth();
+        float fullHeight = Ly.getSettings().getHeight();
         
         // ---- 玩家头像和目标头像
         
-        float faceWidth = LY.getSettings().getWidth() * 0.28f;
-        float faceHeight = LY.getSettings().getHeight() * 0.12f;
+        float faceWidth = Ly.getSettings().getWidth() * 0.28f;
+        float faceHeight = Ly.getSettings().getHeight() * 0.12f;
         
         teamView = new TeamView(faceWidth, faceHeight);
         teamView.setToCorner(name.huliqing.ly.ui.AbstractUI.Corner.LT);

@@ -14,9 +14,9 @@ import name.huliqing.ly.network.LanServerPlayState;
  */
 public class LyLanServerPlayState extends LanServerPlayState {
     
-    private Fighter app;
+    private LuoYing app;
     
-    public LyLanServerPlayState(Fighter app, GameServer gameServer) {
+    public LyLanServerPlayState(LuoYing app, GameServer gameServer) {
         super(app, gameServer);
         this.app = app;
     }

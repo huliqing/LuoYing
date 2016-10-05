@@ -5,7 +5,7 @@
 package name.huliqing.ly.ui;
 
 import com.jme3.math.Vector3f;
-import name.huliqing.ly.LY;
+import name.huliqing.ly.Ly;
 import name.huliqing.ly.ui.UI.Corner;
 import name.huliqing.ly.ui.UI.Listener;
 import name.huliqing.ly.ui.state.UIState;
@@ -22,7 +22,7 @@ public class UIUtils {
      * @return 
      */
     public static Icon createIcon(String pic) {
-        float size = LY.getSettings().getHeight() * 0.1f;
+        float size = Ly.getSettings().getHeight() * 0.1f;
         Icon icon = new Icon(pic);
         icon.setWidth(size);
         icon.setHeight(size);

@@ -6,7 +6,7 @@ package name.huliqing.ly.object.gamelogic;
 
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.ly.LY;
+import name.huliqing.ly.Ly;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.constants.ActorConstants;
@@ -53,9 +53,9 @@ public class ActorCleanGameLogic<T extends GameLogicData> extends AbstractGameLo
             }
             deadTime = (Long) a.getSpatial().getUserData(ActorConstants.USER_DATA_DEAD_TIME_FLAG);
             if (deadTime == null) {
-                a.getSpatial().setUserData(ActorConstants.USER_DATA_DEAD_TIME_FLAG, LY.getGameTime());
+                a.getSpatial().setUserData(ActorConstants.USER_DATA_DEAD_TIME_FLAG, Ly.getGameTime());
             } else {
-                if (LY.getGameTime() - deadTime > cleanInterval * 1000) {
+                if (Ly.getGameTime() - deadTime > cleanInterval * 1000) {
                     a.getSpatial().getUserDataKeys().remove(ActorConstants.USER_DATA_DEAD_TIME_FLAG);
                     temps.add(a);
                 }

@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.ly.Factory;
-import name.huliqing.ly.LY;
+import name.huliqing.ly.Ly;
 import name.huliqing.ly.constants.SkillConstants;
 import name.huliqing.ly.data.AttributeUse;
 import name.huliqing.ly.data.MagicData;
@@ -327,7 +327,7 @@ public abstract class AbstractSkill implements Skill {
         }
 
         // --记录技能执行时间及增加技能点数
-        data.setLastPlayTime(LY.getGameTime());
+        data.setLastPlayTime(Ly.getGameTime());
         data.setPlayCount(data.getPlayCount() + 1);
         
         // 检查技能等级提升
@@ -493,7 +493,7 @@ public abstract class AbstractSkill implements Skill {
 
     @Override
     public boolean isCooldown() {
-        return LY.getGameTime() - data.getLastPlayTime() < data.getCooldown() * 1000;
+        return Ly.getGameTime() - data.getLastPlayTime() < data.getCooldown() * 1000;
     }
 
     /**

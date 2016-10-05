@@ -6,7 +6,7 @@ package name.huliqing.ly.object;
 
 import com.jme3.scene.Spatial;
 import java.util.logging.Logger;
-import name.huliqing.ly.LY;
+import name.huliqing.ly.Ly;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.layer.service.ConfigService;
 import name.huliqing.ly.utils.GeometryUtils;
@@ -25,7 +25,7 @@ public class AssetLoader {
      */
     public static Spatial loadModel(String file) {
         ConfigService configService = Factory.get(ConfigService.class);
-        Spatial model = LY.getAssetManager().loadModel(file);
+        Spatial model = Ly.getAssetManager().loadModel(file);
         if (!configService.isUseLight()) {
             GeometryUtils.makeUnshaded(model);
         }
@@ -38,7 +38,7 @@ public class AssetLoader {
      * @return 
      */
     public static Spatial loadModelUnshaded(String file) {
-        Spatial model = LY.getAssetManager().loadModel(file);
+        Spatial model = Ly.getAssetManager().loadModel(file);
         GeometryUtils.makeUnshaded(model);
         return model;
     }
@@ -49,6 +49,6 @@ public class AssetLoader {
      * @return 
      */
     public static Spatial loadModelDirect(String file) {
-        return LY.getAssetManager().loadModel(file);
+        return Ly.getAssetManager().loadModel(file);
     }
 }

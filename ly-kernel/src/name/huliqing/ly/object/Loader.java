@@ -7,7 +7,7 @@ package name.huliqing.ly.object;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.scene.Spatial;
-import name.huliqing.ly.LY;
+import name.huliqing.ly.Ly;
 import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.data.ActionData;
 import name.huliqing.ly.data.ActorData;
@@ -72,7 +72,7 @@ public class Loader {
     
     public static Material loadMaterial(String j3mFile) {
 //        return MatLoader.loadMaterial(j3mFile);
-        AssetManager am = LY.getAssetManager();
+        AssetManager am = Ly.getAssetManager();
         return am.loadMaterial(j3mFile);
     }
     

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import name.huliqing.ly.LY;
+import name.huliqing.ly.Ly;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.data.GameData;
 import name.huliqing.ly.object.actor.Actor;
@@ -62,7 +62,7 @@ public abstract class GameState extends AbstractAppState {
     protected Application app;
     
     // 管理所有的PlayObject的运行
-    protected final PlayManager playManager = new PlayManager(LY.getApp(), PlayObject.class);
+    protected final PlayManager playManager = new PlayManager(Ly.getApp(), PlayObject.class);
     
     // 侦听器
     protected final List<PlayListener> listeners = new ArrayList<PlayListener>();

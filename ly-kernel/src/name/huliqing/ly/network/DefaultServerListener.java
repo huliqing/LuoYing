@@ -5,7 +5,7 @@
 package name.huliqing.ly.network;
 
 import name.huliqing.ly.data.ConnData;
-import name.huliqing.ly.LY;
+import name.huliqing.ly.Ly;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.constants.ResConstants;
 import name.huliqing.ly.enums.MessageType;
@@ -107,7 +107,7 @@ public class DefaultServerListener extends AbstractServerListener<Actor> {
         gameServer.broadcast(notice);
 
         // 4.通知主机
-        if (LY.getPlayState() != null) {
+        if (Ly.getPlayState() != null) {
             playService.addMessage(message, MessageType.notice);
         }
     }

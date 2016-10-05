@@ -125,7 +125,7 @@ public class LyLabPlayState extends NetworkPlayState {
     @Override
     public void exit() {
         super.exit();
-        ((Fighter)app).changeStartState();
+        ((LuoYing)app).changeStartState();
     }
     
 }

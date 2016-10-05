@@ -6,7 +6,7 @@ package name.huliqing.ly.view.talk;
 
 import com.jme3.math.ColorRGBA;
 import com.jme3.util.TempVars;
-import name.huliqing.ly.LY;
+import name.huliqing.ly.Ly;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.enums.MessageType;
@@ -90,7 +90,7 @@ public class SpeakImpl extends Speak {
         
         // 在HUD上添加谈话内容,只要求角色在场景内，并且距离允许即可。不需要摄像机剔除检测。
         float distanceSquared = actor.getSpatial().getWorldTranslation()
-                .distanceSquared(LY.getApp().getCamera().getLocation());
+                .distanceSquared(Ly.getApp().getCamera().getLocation());
         if (playService.isInScene(actor.getSpatial()) && checkDistance(distanceSquared)) {
             playService.addMessage(actor.getSpatial().getName() + ": " + mess, MessageType.talk);
         }
@@ -105,7 +105,7 @@ public class SpeakImpl extends Speak {
         }
         
         float distanceSquared = actor.getSpatial().getWorldTranslation()
-                .distanceSquared(LY.getApp().getCamera().getLocation());
+                .distanceSquared(Ly.getApp().getCamera().getLocation());
         
         // 2.如果距离太远则不显示
         if (!checkDistance(distanceSquared)) {

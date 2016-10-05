@@ -16,7 +16,7 @@ import com.jme3.scene.Spatial.CullHint;
 import com.jme3.util.SafeArrayList;
 import com.jme3.util.TempVars;
 import java.util.List;
-import name.huliqing.ly.LY;
+import name.huliqing.ly.Ly;
 import name.huliqing.ly.Config;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.constants.ResConstants;
@@ -513,11 +513,11 @@ public  class SimpleGameState extends GameState implements UIEventListener {
             }
             
             // 判断是否双击,如果是双击，则调用攻击
-            if (lastPicked == actor && LY.getGameTime() - lastPickTime <= 400) {
+            if (lastPicked == actor && Ly.getGameTime() - lastPickTime <= 400) {
                 attack();
             }
             lastPicked = actor;
-            lastPickTime = LY.getGameTime();
+            lastPickTime = Ly.getGameTime();
             
             return true;
         }

@@ -19,12 +19,12 @@ import name.huliqing.fighter.ad.AdManager.Ad;
 import name.huliqing.fighter.ad.AndroidAbstractAdController;
 import name.huliqing.fighter.android.AndroidSaveServiceImpl;
 import name.huliqing.fighter.android.AndroidSystemServiceImpl;
-import name.huliqing.fighter.game.service.ConfigService;
-import name.huliqing.fighter.game.service.SaveService;
-import name.huliqing.fighter.game.service.SystemService;
-import name.huliqing.fighter.utils.AdController;
-import name.huliqing.fighter.utils.AdType;
-import name.huliqing.fighter.utils.AdUtils;
+import name.huliqing.ly.layer.service.ConfigService;
+import name.huliqing.ly.layer.service.SaveService;
+import name.huliqing.ly.layer.service.SystemService;
+import name.huliqing.ly.utils.AdController;
+import name.huliqing.ly.utils.AdUtils;
+import name.huliqing.ly.Factory;
 import name.huliqing.vc.VersionChecker;
  
 public class MainActivity extends Activity {
@@ -133,7 +133,7 @@ public class MainActivity extends Activity {
     public static class JmeFragment extends AndroidHarnessFragment {
         public JmeFragment() {
             // Set main project class (fully qualified path)
-            appClass = "name.huliqing.fighter.Fighter";
+            appClass = "name.huliqing.luoying.LuoYing";
  
             // Set the desired EGL configuration
             eglBitsPerPixel = 24;

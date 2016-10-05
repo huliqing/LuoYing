@@ -15,7 +15,7 @@ import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.control.Control;
 import com.jme3.scene.shape.Quad;
 import name.huliqing.ly.Factory;
-import name.huliqing.ly.LY;
+import name.huliqing.ly.Ly;
 import name.huliqing.ly.data.SkillData;
 import name.huliqing.ly.layer.network.ActorNetwork;
 import name.huliqing.ly.layer.network.SkillNetwork;
@@ -138,7 +138,7 @@ public class SkillShortcut extends BaseUIShortcut<SkillData> {
     }
     
     private float getTimePercent() {
-        long lapse = LY.getGameTime() - objectData.getLastPlayTime();
+        long lapse = Ly.getGameTime() - objectData.getLastPlayTime();
         float percent = lapse / (objectData.getCooldown() * 1000);
         return percent;
     }

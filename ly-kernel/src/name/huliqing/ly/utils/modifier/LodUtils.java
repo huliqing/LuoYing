@@ -12,7 +12,7 @@ import com.jme3.scene.control.LodControl;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jme3tools.optimize.LodGenerator;
-import name.huliqing.ly.LY;
+import name.huliqing.ly.Ly;
 import name.huliqing.ly.utils.ModelFileUtils;
 
 /**
@@ -133,7 +133,7 @@ public class LodUtils {
     }
     
     public static void main(String[] args) {
-        AssetManager am = LY.getAssetManager();
+        AssetManager am = Ly.getAssetManager();
         makeTree(am);
         makeCharacter(am);
         makeEnv(am);

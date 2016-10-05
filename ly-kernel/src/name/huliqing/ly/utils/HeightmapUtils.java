@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
-import name.huliqing.ly.LY;
+import name.huliqing.ly.Ly;
 
 /**
  * 从模型中生成高度图
@@ -138,7 +138,7 @@ public class HeightmapUtils {
     }
     
     public static void main(String[] args) {
-        AssetManager am = LY.getAssetManager();
+        AssetManager am = Ly.getAssetManager();
 //        Spatial spatial = am.loadModel("Models/env/terrain/treasure.j3o");
         Spatial spatial = am.loadModel("Models/env/terrain/scene.j3o");
 //        Spatial spatial = am.loadModel("Models/env/rock/rock.j3o");

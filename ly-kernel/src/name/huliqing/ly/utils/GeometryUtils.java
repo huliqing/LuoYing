@@ -34,7 +34,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import name.huliqing.ly.LY;
+import name.huliqing.ly.Ly;
 
 /**
  *
@@ -101,7 +101,7 @@ public class GeometryUtils {
                 // 地形物体
                 if (tempGeom.getMaterial().getTextureParam("DiffuseMap_1") != null) {
 
-                    Material tat = new Material(LY.getAssetManager(), "Common/MatDefs/Terrain/Terrain.j3md");
+                    Material tat = new Material(Ly.getAssetManager(), "Common/MatDefs/Terrain/Terrain.j3md");
                     tat.setTexture("Alpha", tempGeom.getMaterial().getTextureParam("AlphaMap").getTextureValue());
                     if (tempGeom.getMaterial().getTextureParam("DiffuseMap") != null) {
                         tat.setTexture("Tex1", tempGeom.getMaterial().getTextureParam("DiffuseMap").getTextureValue());
@@ -124,7 +124,7 @@ public class GeometryUtils {
                 
                 // 普通物体
                 if (tempGeom.getMaterial().getTextureParam("DiffuseMap") != null) {
-                    Material mat = new Material(LY.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+                    Material mat = new Material(Ly.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
                     // 防止一些OBJECT被处理掉透明样式
                     RenderState rs = tempGeom.getMaterial().getAdditionalRenderState();
                     if (rs != null) {
@@ -326,7 +326,7 @@ public class GeometryUtils {
      * @return 
      */
     public static Vector3f convertWorldToScreen(Vector3f worldPos, Vector3f store) {
-        LY.getApp().getCamera().getScreenCoordinates(worldPos, store);
+        Ly.getApp().getCamera().getScreenCoordinates(worldPos, store);
         return store;
     }
     
@@ -366,7 +366,7 @@ public class GeometryUtils {
      * @return 
      */
     public static boolean intersectCamera(Spatial spatial) {
-        Camera cam = LY.getApp().getCamera();
+        Camera cam = Ly.getApp().getCamera();
         BoundingVolume bv = spatial.getWorldBound();
         int checkPlane = bv.getCheckPlane();
         bv.setCheckPlane(0);

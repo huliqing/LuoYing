@@ -4,7 +4,7 @@
  */
 package name.huliqing.ly.view;
 
-import name.huliqing.ly.LY;
+import name.huliqing.ly.Ly;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.ly.ui.UIFactory;
 import name.huliqing.ly.ui.Icon;
@@ -28,8 +28,8 @@ public class HelpView extends LinearLayout {
     // "更多"内容
     private Window moreWin;
     
-    private float winWidth = LY.getSettings().getWidth() * 0.5f;
-    private float winHeight = LY.getSettings().getHeight() * 0.5f;
+    private float winWidth = Ly.getSettings().getWidth() * 0.5f;
+    private float winHeight = Ly.getSettings().getHeight() * 0.5f;
     
     /**
      * @param guiNode

@@ -12,7 +12,7 @@ import com.jme3.network.Message;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import name.huliqing.ly.LY;
+import name.huliqing.ly.Ly;
 import name.huliqing.ly.network.AbstractServerListener;
 import name.huliqing.ly.network.Network;
 import name.huliqing.ly.network.GameServer;
@@ -24,7 +24,7 @@ import name.huliqing.ly.view.HelpView;
 import name.huliqing.ly.ui.LinearLayout;
 import name.huliqing.ly.ui.UIFactory;
 import name.huliqing.ly.ui.state.UIState;
-import name.huliqing.luoying.Fighter;
+import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.LyLanServerPlayState;
 
 /**
@@ -35,7 +35,7 @@ public class RoomStateServerImpl extends AbstractAppState implements RoomState {
     private final static Logger LOG = Logger.getLogger(RoomStateClientImpl.class.getName());
     // 客户端连接的机器名称属性名
     public final static String ATTR_MACHINE_NAME = "machineName";
-    private Fighter app;
+    private LuoYing app;
     
     // 客户端连接列表
     private RoomStatePanel clientPanel;
@@ -62,9 +62,9 @@ public class RoomStateServerImpl extends AbstractAppState implements RoomState {
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
-        float width = LY.getSettings().getWidth();
-        float height = LY.getSettings().getHeight();
-        this.app = (Fighter) app;
+        float width = Ly.getSettings().getWidth();
+        float height = Ly.getSettings().getHeight();
+        this.app = (LuoYing) app;
         
         try {
             // ---- 界面UI

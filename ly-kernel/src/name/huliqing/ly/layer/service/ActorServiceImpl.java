@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import name.huliqing.ly.LY;
+import name.huliqing.ly.Ly;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.utils.NpcNameUtils;
 import name.huliqing.ly.object.actor.Actor;
@@ -121,7 +121,7 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public Actor findNearestEnemyExcept(Actor actor, float maxDistance, Actor except) {
-        List<Actor> actors = LY.getPlayState().getActors();
+        List<Actor> actors = Ly.getPlayState().getActors();
         float minDistanceSquared = maxDistance * maxDistance;
         float distanceSquared;
         Actor enemy = null;
@@ -153,7 +153,7 @@ public class ActorServiceImpl implements ActorService {
         if (store == null) {
             store = new ArrayList<Actor>();
         }
-        List<Actor> actors = LY.getPlayState().getActors();
+        List<Actor> actors = Ly.getPlayState().getActors();
         float maxDistanceSquared = maxDistance * maxDistance;
         float distanceSquared;
         for (Actor target : actors) {
@@ -180,7 +180,7 @@ public class ActorServiceImpl implements ActorService {
         if (store == null) {
             store = new ArrayList<Actor>();
         }
-        List<Actor> actors = LY.getPlayState().getActors();
+        List<Actor> actors = Ly.getPlayState().getActors();
         for (Actor a : actors) {
             if (isDead(a) || isEnemy(a, actor) 
                     || a.getSpatial().getWorldTranslation().distance(actor.getSpatial().getWorldTranslation()) > maxDistance) {
@@ -206,7 +206,7 @@ public class ActorServiceImpl implements ActorService {
             store = new ArrayList<Actor>();
         }
         float maxDistanceSquared = FastMath.pow(maxDistance, 2);
-        List<Actor> actors = LY.getPlayState().getActors();
+        List<Actor> actors = Ly.getPlayState().getActors();
         float halfAngle = angle * 0.5f;
         for (Actor a : actors) {
             
@@ -384,7 +384,7 @@ public class ActorServiceImpl implements ActorService {
     @Override
     public void setTeam(Actor actor, int team) {
         actor.getModule(ActorModule.class).setTeam(team);
-        LY.getPlayState().getTeamView().checkAddOrRemove(actor);
+        Ly.getPlayState().getTeamView().checkAddOrRemove(actor);
     }
     
     @Override

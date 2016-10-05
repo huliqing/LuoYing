@@ -8,7 +8,7 @@ import com.jme3.math.FastMath;
 import com.jme3.math.Vector2f;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.ly.LY;
+import name.huliqing.ly.Ly;
 import name.huliqing.ly.ui.UI;
 import name.huliqing.ly.ui.UIEventListener;
 import name.huliqing.ly.ui.UISound;
@@ -77,8 +77,8 @@ public class ClickManager implements ReleaseListener {
         
         // 按下事件应该直接执行
         if (isPressed) {
-            clickPressTime = LY.getGameTime();
-            lastCursorPosition.set(LY.getCursorPosition());
+            clickPressTime = Ly.getGameTime();
+            lastCursorPosition.set(Ly.getCursorPosition());
             pressUI = ui;
             pressUI.fireClick(true);
             fireUIClickListener(pressUI, true, false);
@@ -94,12 +94,12 @@ public class ClickManager implements ReleaseListener {
         
         // 2.当鼠标按下太久时,不认为是点击或双击事件.
 //        Logger.get(UIClickManager.class).log(Level.INFO, "click time={0}", (Common.getCurrentTime() - clickPressTime));
-        if (LY.getGameTime() - clickPressTime > clickPressTimeLimit) {
+        if (Ly.getGameTime() - clickPressTime > clickPressTimeLimit) {
             return;
         }
         
         // 3.如果鼠标放开时的位置偏移过大，则忽略点击
-        Vector2f cursorPosition = LY.getCursorPosition();
+        Vector2f cursorPosition = Ly.getCursorPosition();
         float xMove = FastMath.abs(cursorPosition.x - lastCursorPosition.x);
         float yMove = FastMath.abs(cursorPosition.y - lastCursorPosition.y);
         if ((xMove > clickMoveLimit || yMove > clickMoveLimit)) {
@@ -107,7 +107,7 @@ public class ClickManager implements ReleaseListener {
         }
         
         // 4.如果是双击事件，则直接启动(单击事件需要延迟一定时间,以等待确认是否为双击，因为双击事件优先)
-        if (releaseUI == ui && LY.getGameTime() - clickReleaseTime <= dbclickLimit) {
+        if (releaseUI == ui && Ly.getGameTime() - clickReleaseTime <= dbclickLimit) {
             releaseUI.fireDBClick(isPressed);
             fireUIClickListener(releaseUI, isPressed, true);
             
@@ -126,7 +126,7 @@ public class ClickManager implements ReleaseListener {
             fireUIClickListener(ui, false, false);
         } else {
             releaseUI = ui;
-            clickReleaseTime = LY.getGameTime();
+            clickReleaseTime = Ly.getGameTime();
         }
 
     }
@@ -134,7 +134,7 @@ public class ClickManager implements ReleaseListener {
     void update(float tpf) {
         // 延迟执行的单击事件
         if (releaseUI != null 
-                && LY.getGameTime()- clickReleaseTime > dbclickLimit) {
+                && Ly.getGameTime()- clickReleaseTime > dbclickLimit) {
             
 //            Log.get(ClickManager.class).log(Level.INFO, "Fire single click!ui={0}", releaseUI);
             

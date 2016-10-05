@@ -17,7 +17,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.texture.Texture;
 import com.jme3.util.TempVars;
-import name.huliqing.ly.LY;
+import name.huliqing.ly.Ly;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.constants.MaterialConstants;
 import name.huliqing.ly.data.BulletData;
@@ -68,9 +68,9 @@ public class CurveTrailBullet<S> extends CurveBullet<S> {
         
         surface.detachAllChildren();
         
-        AssetManager am = LY.getAssetManager();
+        AssetManager am = Ly.getAssetManager();
         if (mat == null) {
-            mat = new Material(LY.getAssetManager(), MaterialConstants.MAT_SLIDE_TRAIL);
+            mat = new Material(Ly.getAssetManager(), MaterialConstants.MAT_SLIDE_TRAIL);
             mat.getAdditionalRenderState().setFaceCullMode(RenderState.FaceCullMode.Off); // Allow to see both sides of a face
             mat.getAdditionalRenderState().setBlendMode(RenderState.BlendMode.Additive);
             mat.getAdditionalRenderState().setDepthTest(true);

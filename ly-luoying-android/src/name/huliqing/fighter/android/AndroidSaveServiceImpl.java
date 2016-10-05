@@ -7,7 +7,7 @@ package name.huliqing.fighter.android;
 import android.content.Context;
 import java.io.File;
 import name.huliqing.fighter.Global;
-import name.huliqing.fighter.game.service.SaveServiceImpl;
+import name.huliqing.ly.layer.service.SaveServiceImpl;
 
 /**
  * Android平台的存档管理器，每一个key将被保存在一个单独的文件中。

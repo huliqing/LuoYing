@@ -17,7 +17,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.texture.Texture;
 import com.jme3.util.TempVars;
-import name.huliqing.ly.LY;
+import name.huliqing.ly.Ly;
 import name.huliqing.ly.constants.MaterialConstants;
 import name.huliqing.ly.constants.TextureConstants;
 import name.huliqing.ly.data.EffectData;
@@ -105,7 +105,7 @@ public class SlideColorIOSplineEffect extends AbstractEffect {
     
     private void create() {
         if (mat == null) {
-            AssetManager am = LY.getAssetManager();
+            AssetManager am = Ly.getAssetManager();
             mat = new Material(am, MaterialConstants.MAT_SLIDE_COLOR_IO);
             mat.setColor("StartColor", startColor);
             mat.setColor("EndColor", endColor);

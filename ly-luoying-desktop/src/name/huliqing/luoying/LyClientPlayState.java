@@ -14,9 +14,9 @@ import name.huliqing.ly.state.ClientPlayState;
  */
 public class LyClientPlayState extends ClientPlayState {
     
-    private final Fighter fighter;
+    private final LuoYing fighter;
 
-    public LyClientPlayState(Fighter app, GameClient gameClient) {
+    public LyClientPlayState(LuoYing app, GameClient gameClient) {
         super(app, gameClient);
         this.fighter = app;
     }

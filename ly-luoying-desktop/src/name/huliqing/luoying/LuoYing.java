@@ -12,7 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.BackingStoreException;
 import javax.imageio.ImageIO;
-import name.huliqing.ly.LY;
+import name.huliqing.ly.Ly;
 import name.huliqing.ly.Config;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.LyException;
@@ -34,7 +34,7 @@ import name.huliqing.luoying.state.start.StartState;
 /**
  * @author huliqing
  */
-public class Fighter extends SimpleApplication {
+public class LuoYing extends SimpleApplication {
 
     public static void main(String[] args) {
         final String SETTINGS_KEY = "luoying-settings";
@@ -44,7 +44,7 @@ public class Fighter extends SimpleApplication {
         try {
             settings.load(SETTINGS_KEY);
         } catch (BackingStoreException ex) {
-            Logger.getLogger(Fighter.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LuoYing.class.getName()).log(Level.SEVERE, null, ex);
         }
         
 //        settings.setResolution(960, 540);     // HUAWEI G6-U00
@@ -64,10 +64,10 @@ public class Fighter extends SimpleApplication {
         try {
             settings.save(SETTINGS_KEY);
         } catch (BackingStoreException ex) {
-            Logger.getLogger(Fighter.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LuoYing.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        Fighter app = new Fighter();
+        LuoYing app = new LuoYing();
         app.setSettings(settings);
         app.setShowSettings(true);
         app.setPauseOnLostFocus(false);
@@ -83,7 +83,7 @@ public class Fighter extends SimpleApplication {
             imgs[2] = ImageIO.read(FileUtils.readFile("/data/ly128.png"));
             return imgs;
         } catch (IOException e) {
-            Logger.getLogger(Fighter.class.getName()).log(Level.WARNING
+            Logger.getLogger(LuoYing.class.getName()).log(Level.WARNING
                     , "Could not load logo images! error={0}", e.getMessage());
         }
         return null;
@@ -127,53 +127,53 @@ public class Fighter extends SimpleApplication {
     }
     
     private void loadData() throws LyException {
-        LY.initialize(this, settings);
+        Ly.initialize(this, settings);
         
-        LY.loadData("/data/object/action.xml");
-        LY.loadData("/data/object/actor.xml");
-        LY.loadData("/data/object/actorAnim.xml");
-        LY.loadData("/data/object/anim.xml");
-        LY.loadData("/data/object/attribute.xml");
-        LY.loadData("/data/object/bullet.xml");
-        LY.loadData("/data/object/channel.xml");
-        LY.loadData("/data/object/chat.xml");
-        LY.loadData("/data/object/config.xml");
-        LY.loadData("/data/object/define.xml");
-        LY.loadData("/data/object/drop.xml");
-        LY.loadData("/data/object/effect.xml");
-        LY.loadData("/data/object/el.xml");
-        LY.loadData("/data/object/emitter.xml");
-        LY.loadData("/data/object/env.xml");
-        LY.loadData("/data/object/game.xml");
-        LY.loadData("/data/object/gameLogic.xml");
-        LY.loadData("/data/object/hitChecker.xml");
-        LY.loadData("/data/object/item.xml");
-        LY.loadData("/data/object/logic.xml");
-        LY.loadData("/data/object/magic.xml");
-        LY.loadData("/data/object/module.xml");
-        LY.loadData("/data/object/position.xml");
-        LY.loadData("/data/object/resist.xml");
-        LY.loadData("/data/object/scene.xml");
-        LY.loadData("/data/object/shape.xml");
+        Ly.loadData("/data/object/action.xml");
+        Ly.loadData("/data/object/actor.xml");
+        Ly.loadData("/data/object/actorAnim.xml");
+        Ly.loadData("/data/object/anim.xml");
+        Ly.loadData("/data/object/attribute.xml");
+        Ly.loadData("/data/object/bullet.xml");
+        Ly.loadData("/data/object/channel.xml");
+        Ly.loadData("/data/object/chat.xml");
+        Ly.loadData("/data/object/config.xml");
+        Ly.loadData("/data/object/define.xml");
+        Ly.loadData("/data/object/drop.xml");
+        Ly.loadData("/data/object/effect.xml");
+        Ly.loadData("/data/object/el.xml");
+        Ly.loadData("/data/object/emitter.xml");
+        Ly.loadData("/data/object/env.xml");
+        Ly.loadData("/data/object/game.xml");
+        Ly.loadData("/data/object/gameLogic.xml");
+        Ly.loadData("/data/object/hitChecker.xml");
+        Ly.loadData("/data/object/item.xml");
+        Ly.loadData("/data/object/logic.xml");
+        Ly.loadData("/data/object/magic.xml");
+        Ly.loadData("/data/object/module.xml");
+        Ly.loadData("/data/object/position.xml");
+        Ly.loadData("/data/object/resist.xml");
+        Ly.loadData("/data/object/scene.xml");
+        Ly.loadData("/data/object/shape.xml");
 
         // 技能
-        LY.loadData("/data/object/skill.xml");
-        LY.loadData("/data/object/skill_monster.xml");
-        LY.loadData("/data/object/skill_skin.xml");
+        Ly.loadData("/data/object/skill.xml");
+        Ly.loadData("/data/object/skill_monster.xml");
+        Ly.loadData("/data/object/skill_skin.xml");
 
         // 装备、武器
-        LY.loadData("/data/object/skin.xml");
-        LY.loadData("/data/object/skin_male.xml");
-        LY.loadData("/data/object/skin_weapon.xml");
+        Ly.loadData("/data/object/skin.xml");
+        Ly.loadData("/data/object/skin_male.xml");
+        Ly.loadData("/data/object/skin_weapon.xml");
 
         // 武器槽位配置
-        LY.loadData("/data/object/slot.xml");
+        Ly.loadData("/data/object/slot.xml");
 
-        LY.loadData("/data/object/sound.xml");
-        LY.loadData("/data/object/state.xml");
-        LY.loadData("/data/object/talent.xml");
-        LY.loadData("/data/object/task.xml");
-        LY.loadData("/data/object/view.xml");
+        Ly.loadData("/data/object/sound.xml");
+        Ly.loadData("/data/object/state.xml");
+        Ly.loadData("/data/object/talent.xml");
+        Ly.loadData("/data/object/task.xml");
+        Ly.loadData("/data/object/view.xml");
     }
     
     @Override

@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import name.huliqing.ly.LY;
+import name.huliqing.ly.Ly;
 import name.huliqing.ly.Config;
 import name.huliqing.ly.data.EffectData;
 import name.huliqing.ly.manager.ResourceManager;
@@ -121,7 +121,7 @@ public class DamageManager extends AbstractPlayObject {
      * @param text 
      */
     private void display(Actor target, String text, ColorRGBA color, int level) {
-        SimpleApplication app = (SimpleApplication) LY.getApp();
+        SimpleApplication app = (SimpleApplication) Ly.getApp();
         DynamicText dt = getFromCache();
         app.getGuiNode().attachChild(dt);
         Vector3f pos = dt.text.getLocalTranslation();
@@ -141,7 +141,7 @@ public class DamageManager extends AbstractPlayObject {
      */
     private boolean checkDisplay(Actor target) {
         // 在距离太远也不显示
-        Camera cam = LY.getApp().getCamera();
+        Camera cam = Ly.getApp().getCamera();
         if (cam.getLocation().distanceSquared(target.getSpatial().getWorldTranslation()) > MAX_DISTANCE_SQUARED) {
             if (Config.debug) {
                 Logger.getLogger(DamageManager.class.getName()).log(Level.INFO
@@ -162,7 +162,7 @@ public class DamageManager extends AbstractPlayObject {
     }
     
     private float getFontSize() {
-        return LY.getSettings().getHeight() * 0.15f;
+        return Ly.getSettings().getHeight() * 0.15f;
     }
     
     public void showDebugInfo() {

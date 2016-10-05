@@ -12,7 +12,7 @@ import com.jme3.scene.Spatial;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import name.huliqing.ly.LY;
+import name.huliqing.ly.Ly;
 import name.huliqing.ly.Config;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.data.GameData;
@@ -172,7 +172,7 @@ public class PlayNetworkImpl implements PlayNetwork {
         
         if (!NETWORK.isClient()) {
             // 服务端主机
-            if (LY.getPlayState().getPlayer() == actor) {
+            if (Ly.getPlayState().getPlayer() == actor) {
                 playService.addMessage(message, type);
                 
             // 发送到指定客户端

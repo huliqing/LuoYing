@@ -15,9 +15,9 @@ import name.huliqing.ly.state.StoryServerPlayState;
  */
 public class LyStoryServerPlayState extends StoryServerPlayState {
     
-    private Fighter app;
+    private LuoYing app;
     
-    public LyStoryServerPlayState(Fighter app, GameData gameData, SaveStory saveStory) {
+    public LyStoryServerPlayState(LuoYing app, GameData gameData, SaveStory saveStory) {
         super(app, gameData, saveStory);
         this.app = app;
     }

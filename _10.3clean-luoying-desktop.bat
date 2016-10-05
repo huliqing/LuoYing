@@ -1,0 +1,1 @@
+cmd /k gradlew :ly-luoying-desktop:clean

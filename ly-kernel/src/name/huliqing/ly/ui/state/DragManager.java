@@ -7,7 +7,7 @@ package name.huliqing.ly.ui.state;
 import com.jme3.math.Vector2f;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.ly.LY;
+import name.huliqing.ly.Ly;
 import name.huliqing.ly.state.PlayState;
 import name.huliqing.ly.ui.UI;
 import name.huliqing.ly.ui.UIEventListener;
@@ -47,7 +47,7 @@ public class DragManager implements ReleaseListener {
     }
     
     public void startMoving(UI ui) {
-        lastMousePos.set(LY.getInputManager().getCursorPosition());
+        lastMousePos.set(Ly.getInputManager().getCursorPosition());
         moving = ui;
         fireUIDragListener(ui, true);
     }
@@ -65,7 +65,7 @@ public class DragManager implements ReleaseListener {
      */
     void update(float tpf) {
         if (moving != null) {
-            Vector2f mousePos = LY.getInputManager().getCursorPosition();
+            Vector2f mousePos = Ly.getInputManager().getCursorPosition();
             if (mousePos.x != lastMousePos.x || mousePos.y != lastMousePos.y) {
                 
                 moving.fireDrag(mousePos.x - lastMousePos.x, mousePos.y - lastMousePos.y);

@@ -17,7 +17,7 @@ import com.jme3.util.TempVars;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import name.huliqing.ly.LY;
+import name.huliqing.ly.Ly;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.data.GameData;
 import name.huliqing.ly.object.actor.Actor;
@@ -63,12 +63,12 @@ public class PlayServiceImpl implements PlayService {
     
     @Override
     public void addPlayObject(PlayObject playObject) {
-        LY.getPlayState().addObject(playObject, false);
+        Ly.getPlayState().addObject(playObject, false);
     }
 
     @Override
     public void removePlayObject(PlayObject playObject) {
-        LY.getPlayState().removeObject(playObject);
+        Ly.getPlayState().removeObject(playObject);
     }
     
     @Override
@@ -102,7 +102,7 @@ public class PlayServiceImpl implements PlayService {
             }
         }
         
-        LY.getPlayState().addObject(object, gui);
+        Ly.getPlayState().addObject(object, gui);
     }
 
     @Override
@@ -117,7 +117,7 @@ public class PlayServiceImpl implements PlayService {
     
     @Override
     public void removeObject(Object object) {
-        PlayState ps = LY.getPlayState();
+        PlayState ps = Ly.getPlayState();
         if (ps == null)
             return;
         ps.removeObject(object);
@@ -125,7 +125,7 @@ public class PlayServiceImpl implements PlayService {
     
     @Override
     public void addActor(Actor actor) {
-        LY.getPlayState().addObject(actor, false);
+        Ly.getPlayState().addObject(actor, false);
     }
 
     @Override
@@ -150,28 +150,28 @@ public class PlayServiceImpl implements PlayService {
     
     @Override
     public void addView(View view) {
-        LY.getPlayState().addObject(view, true);
+        Ly.getPlayState().addObject(view, true);
     }
 
     @Override
     public void addAnimation(Anim animation) {
-        LY.getPlayState().addObject(animation, false);
+        Ly.getPlayState().addObject(animation, false);
         animation.start();
     }
 
     @Override
     public void removeAnimation(Anim animation) {
-        LY.getPlayState().removeObject(animation);
+        Ly.getPlayState().removeObject(animation);
     }
 
     @Override
     public void addMessage(String message, MessageType type) {
-        LY.getPlayState().addMessage(message, type);
+        Ly.getPlayState().addMessage(message, type);
     }
 
     @Override
     public void addMessage(Actor actor, String message, MessageType type) {
-        LY.getPlayState().addMessage(message, type);
+        Ly.getPlayState().addMessage(message, type);
     }
 
     @Override
@@ -181,7 +181,7 @@ public class PlayServiceImpl implements PlayService {
     
     @Override
     public List<Actor> findAllActor() {
-        PlayState ps = LY.getPlayState();
+        PlayState ps = Ly.getPlayState();
         if (ps != null) {
             return ps.getActors();
         }
@@ -207,7 +207,7 @@ public class PlayServiceImpl implements PlayService {
     
     @Override
     public Actor findActor(String id) {
-        List<Actor> actors = LY.getPlayState().getActors();
+        List<Actor> actors = Ly.getPlayState().getActors();
         if (actors == null || actors.isEmpty())
             return null;
         for (Actor actor : actors) {
@@ -223,7 +223,7 @@ public class PlayServiceImpl implements PlayService {
         if (actorUniqueId <= 0) {
             return null;
         }
-        List<Actor> actors = LY.getPlayState().getActors();
+        List<Actor> actors = Ly.getPlayState().getActors();
         if (actors == null || actors.isEmpty())
             return null;
         for (Actor actor : actors) {
@@ -236,12 +236,12 @@ public class PlayServiceImpl implements PlayService {
 
     @Override
     public List<View> findAllViews() {
-        return LY.getPlayState().getViews();
+        return Ly.getPlayState().getViews();
     }
 
     @Override
     public View findView(long uniqueId) {
-        List<View> views = LY.getPlayState().getViews();
+        List<View> views = Ly.getPlayState().getViews();
         for (int i = 0; i < views.size(); i++) {
             if (views.get(i).getData().getUniqueId() == uniqueId) {
                 return views.get(i);
@@ -252,7 +252,7 @@ public class PlayServiceImpl implements PlayService {
 
     @Override
     public NetworkObject findSyncObject(long objectId) {
-        return LY.getPlayState().getSyncObjects(objectId);
+        return Ly.getPlayState().getSyncObjects(objectId);
     }
     
     @Override
@@ -264,7 +264,7 @@ public class PlayServiceImpl implements PlayService {
 
     @Override
     public Spatial getTerrain() {
-        PlayState playState = LY.getPlayState();
+        PlayState playState = Ly.getPlayState();
         if (playState == null || playState.getGameState().getGame() == null) 
             return null;
         
@@ -313,7 +313,7 @@ public class PlayServiceImpl implements PlayService {
 
     @Override
     public Actor getPlayer() {
-        return LY.getPlayState().getPlayer();
+        return Ly.getPlayState().getPlayer();
     }
 
     @Override
@@ -349,7 +349,7 @@ public class PlayServiceImpl implements PlayService {
 
     @Override
     public Scene getScene() {
-        PlayState ps = LY.getPlayState();
+        PlayState ps = Ly.getPlayState();
         if (ps == null || ps.getGameState().getGame() == null) 
             return null;
         
@@ -358,17 +358,17 @@ public class PlayServiceImpl implements PlayService {
 
     @Override
     public boolean isInScene(Actor actor) {
-        return LY.getPlayState().isInScene(actor.getSpatial());
+        return Ly.getPlayState().isInScene(actor.getSpatial());
     }
 
     @Override
     public Actor getTarget() {
-        return LY.getPlayState().getTarget();
+        return Ly.getPlayState().getTarget();
     }
 
     @Override
     public void setTarget(Actor target) {
-        LY.getPlayState().setTarget(target);
+        Ly.getPlayState().setTarget(target);
     }
 
     @Override
@@ -383,27 +383,27 @@ public class PlayServiceImpl implements PlayService {
 
     @Override
     public float getScreenWidth() {
-        return LY.getSettings().getWidth();
+        return Ly.getSettings().getWidth();
     }
 
     @Override
     public float getScreenHeight() {
-        return LY.getSettings().getHeight();
+        return Ly.getSettings().getHeight();
     }
 
     @Override
     public void setMainPlayer(Actor actor) {
-        LY.getPlayState().setPlayer(actor);
+        Ly.getPlayState().setPlayer(actor);
     }
 
     @Override
     public boolean isInScene(Spatial spatial) {
-        return LY.getPlayState().isInScene(spatial);
+        return Ly.getPlayState().isInScene(spatial);
     }
 
     @Override
     public void saveCompleteStage(int stage) {
-        PlayState ps = LY.getPlayState();
+        PlayState ps = Ly.getPlayState();
         if (!(ps instanceof StoryServerPlayState)) {
             return;
         }
@@ -419,7 +419,7 @@ public class PlayServiceImpl implements PlayService {
 
     @Override
     public Application getApplication() {
-        return LY.getApp();
+        return Ly.getApp();
     }
 
     @Override
@@ -430,13 +430,13 @@ public class PlayServiceImpl implements PlayService {
     @Override
     public void changeGame(GameData gameData) {
         GameState gameState = new SimpleGameState(gameData);
-        LoadingState loadingState = new LoadingState(LY.getPlayState(), gameState);
-        LY.getApp().getStateManager().attach(loadingState);
+        LoadingState loadingState = new LoadingState(Ly.getPlayState(), gameState);
+        Ly.getApp().getStateManager().attach(loadingState);
     }
 
     @Override
     public String getGameId() {
-        PlayState ps = LY.getPlayState();
+        PlayState ps = Ly.getPlayState();
         if (ps == null)
             return null;
         

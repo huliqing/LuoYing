@@ -9,7 +9,7 @@ import com.jme3.font.BitmapFont.Align;
 import com.jme3.math.ColorRGBA;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.ly.LY;
+import name.huliqing.ly.Ly;
 import name.huliqing.ly.Config;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.constants.IdConstants;
@@ -23,7 +23,7 @@ import name.huliqing.ly.ui.Row;
 import name.huliqing.ly.ui.Text;
 import name.huliqing.ly.ui.UIFactory;
 import name.huliqing.ly.ui.UI;
-import name.huliqing.luoying.Fighter;
+import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.LyStoryServerPlayState;
 import name.huliqing.luoying.state.start.StoryView.StoryData;
 
@@ -126,7 +126,7 @@ public class StoryView extends ListView<StoryData> {
                     if (isPress || storyData.gameId == null) 
                         return;
                     GameData gameData = gameService.loadGameData(storyData.gameId);
-                    StoryServerPlayState sps = new LyStoryServerPlayState((Fighter) LY.getApp(), gameData, saveStory);
+                    StoryServerPlayState sps = new LyStoryServerPlayState((LuoYing) Ly.getApp(), gameData, saveStory);
                     startState.startState(sps);
                 }
             });

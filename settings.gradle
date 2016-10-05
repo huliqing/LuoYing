@@ -1,2 +1,4 @@
-include 'ly-core'
-include 'ly-android'
+include 'ly-editor'
+include 'ly-kernel'
+include 'ly-luoying-android'
+include 'ly-luoying-desktop'

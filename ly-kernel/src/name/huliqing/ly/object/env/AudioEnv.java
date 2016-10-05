@@ -13,7 +13,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Sphere;
-import name.huliqing.ly.LY;
+import name.huliqing.ly.Ly;
 import name.huliqing.ly.data.env.EnvData;
 import name.huliqing.ly.object.Loader;
 import name.huliqing.ly.object.scene.Scene;
@@ -75,7 +75,7 @@ public class AudioEnv <T extends EnvData> extends AbstractEnv<T> {
     }
     
     private Material createDebugMaterial(ColorRGBA color) {
-        Material mat = new Material(LY.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+        Material mat = new Material(Ly.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
         mat.getAdditionalRenderState().setWireframe(true);
         mat.getAdditionalRenderState().setFaceCullMode(RenderState.FaceCullMode.Off);
         mat.setColor("Color",  color);

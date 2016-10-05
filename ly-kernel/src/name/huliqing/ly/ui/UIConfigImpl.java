@@ -7,7 +7,7 @@ package name.huliqing.ly.ui;
 import com.jme3.asset.AssetManager;
 import com.jme3.font.BitmapFont;
 import com.jme3.math.ColorRGBA;
-import name.huliqing.ly.LY;
+import name.huliqing.ly.Ly;
 import name.huliqing.ly.constants.InterfaceConstants;
 
 /**
@@ -102,7 +102,7 @@ public class UIConfigImpl implements UIConfig {
      */
     @Override
     public BitmapFont getFont() {
-        return LY.getFont();
+        return Ly.getFont();
     }
     
     /**
@@ -193,12 +193,12 @@ public class UIConfigImpl implements UIConfig {
 
     @Override
     public float getScreenWidth() {
-        return LY.getSettings().getWidth();
+        return Ly.getSettings().getWidth();
     }
 
     @Override
     public float getScreenHeight() {
-        return LY.getSettings().getHeight();
+        return Ly.getSettings().getHeight();
     }
 
     @Override

@@ -1,1 +1,1 @@
-cmd /k gradlew :ly-android:clean :ly-core:clean
+cmd /k gradlew :ly-luoying-android:clean :ly-luoying-desktop:clean :ly-kernel:clean

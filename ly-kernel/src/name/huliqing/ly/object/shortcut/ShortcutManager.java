@@ -10,7 +10,7 @@ import com.jme3.util.TempVars;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.ly.manager.ResourceManager;
-import name.huliqing.ly.LY;
+import name.huliqing.ly.Ly;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.data.ItemData;
 import name.huliqing.ly.object.actor.Actor;
@@ -59,7 +59,7 @@ public class ShortcutManager {
     
     public final static void init() {
 
-        float marginTop = LY.getSettings().getHeight() * 0.1f;
+        float marginTop = Ly.getSettings().getHeight() * 0.1f;
         
         // setMargin后再setToCorner,因为setToCorner会立即计算位置
         DELETE.setMargin(0, marginTop, (DELETE.getWidth() + SPACE) * 0.5f, 0);
@@ -209,7 +209,7 @@ public class ShortcutManager {
         if (RECYCLE.isVisible() && isRecycle(shortcut)) {
             SHORTCUT_ROOT.removeShortcut(shortcut);
             String objectName = ResourceManager.getObjectName(shortcut.getObjectData());
-            LY.getPlayState().addMessage(ResourceManager.get("common.shortcutRecycle", new String[] {objectName})
+            Ly.getPlayState().addMessage(ResourceManager.get("common.shortcutRecycle", new String[] {objectName})
                     , MessageType.info);
             
         } else if (DELETE.isVisible() && isDelete(shortcut)) {

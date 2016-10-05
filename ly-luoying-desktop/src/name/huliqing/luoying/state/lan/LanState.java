@@ -16,7 +16,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import name.huliqing.ly.LY;
+import name.huliqing.ly.Ly;
 import name.huliqing.ly.network.GameClient;
 import name.huliqing.ly.network.Network;
 import name.huliqing.ly.Factory;
@@ -39,7 +39,7 @@ import name.huliqing.ly.ui.UI.Listener;
 import name.huliqing.ly.ui.UIUtils;
 import name.huliqing.ly.ui.state.UIState;
 import name.huliqing.ly.view.IpAddressPanel;
-import name.huliqing.luoying.Fighter;
+import name.huliqing.luoying.LuoYing;
 
 /**
  * 局域网络,这里主要显示房间列表，创建房间，加入房间，退出等按钮
@@ -47,7 +47,7 @@ import name.huliqing.luoying.Fighter;
  */
 public class LanState extends AbstractAppState {
     private final ConfigService configService = Factory.get(ConfigService.class);
-    private Fighter app;
+    private LuoYing app;
     
     // 房间列表
     private LanStateRoomListPanel roomPanel;
@@ -79,9 +79,9 @@ public class LanState extends AbstractAppState {
     @Override
     public void initialize(AppStateManager stateManager, Application _app) {
         super.initialize(stateManager, _app);
-        float width = LY.getSettings().getWidth();
-        float height = LY.getSettings().getHeight();
-        app = (Fighter) _app;
+        float width = Ly.getSettings().getWidth();
+        float height = Ly.getSettings().getHeight();
+        app = (LuoYing) _app;
         app.getInputManager().setCursorVisible(true);
         
         float btnHeight = UIFactory.getUIConfig().getButtonHeight() * 1.5f;

@@ -12,7 +12,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.util.TempVars;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.ly.LY;
+import name.huliqing.ly.Ly;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.data.MagicData;
 import name.huliqing.ly.object.effect.TraceType;
@@ -122,7 +122,7 @@ public class Magic<T extends MagicData> extends AbstractPlayObject implements Da
             }
         }
         // 首次时进行一次位置更新
-        if (traceObject != null && LY.getPlayState().isInScene(traceObject)) {
+        if (traceObject != null && Ly.getPlayState().isInScene(traceObject)) {
             if (data.getTracePosition() == TraceType.once 
                     || data.getTracePosition() == TraceType.always) {
                 doUpdateTracePosition();
@@ -148,7 +148,7 @@ public class Magic<T extends MagicData> extends AbstractPlayObject implements Da
         float inter = getInterpolation();
         
         // update position & rotation
-        if (traceObject != null && LY.getPlayState().isInScene(traceObject)) {
+        if (traceObject != null && Ly.getPlayState().isInScene(traceObject)) {
             if (data.getTracePosition() == TraceType.always) {
                 doUpdateTracePosition();
             }

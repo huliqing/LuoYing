@@ -9,7 +9,7 @@ import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import name.huliqing.ly.LY;
+import name.huliqing.ly.Ly;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.data.GameData;
 import name.huliqing.ly.layer.service.GameService;
@@ -18,7 +18,7 @@ import name.huliqing.ly.view.HelpView;
 import name.huliqing.ly.ui.LinearLayout;
 import name.huliqing.ly.ui.UIFactory;
 import name.huliqing.ly.ui.state.UIState;
-import name.huliqing.luoying.Fighter;
+import name.huliqing.luoying.LuoYing;
 
 /**
  * 创建房间的界面
@@ -27,7 +27,7 @@ import name.huliqing.luoying.Fighter;
 public class CreateRoomState extends AbstractAppState {
     private final GameService gameService = Factory.get(GameService.class);
 
-    private Fighter app;
+    private LuoYing app;
     
     // 可见的游戏列表
     private CreateRoomStateGameListPanel gameList;
@@ -41,9 +41,9 @@ public class CreateRoomState extends AbstractAppState {
     @Override
     public void initialize(AppStateManager stateManager, Application _app) {
         super.initialize(stateManager, _app); 
-        this.app = (Fighter) _app;
-        float width = LY.getSettings().getWidth();
-        float height = LY.getSettings().getHeight();
+        this.app = (LuoYing) _app;
+        float width = Ly.getSettings().getWidth();
+        float height = Ly.getSettings().getHeight();
 //        localUIRoot = new LinearLayout(width, height);
 //        app.getGuiNode().attachChild(localUIRoot);
         

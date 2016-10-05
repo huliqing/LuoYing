@@ -13,7 +13,7 @@ import com.jme3.app.Application;
 import com.jme3.network.Client;
 import com.jme3.network.ClientStateListener;
 import com.jme3.network.Message;
-import name.huliqing.ly.LY;
+import name.huliqing.ly.Ly;
 import name.huliqing.ly.Config;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.enums.MessageType;
@@ -49,7 +49,7 @@ public class LanClientListener extends AbstractClientListener {
             message += "(" + info.reason + ")";
         }
         // 注：如果不在游戏中，可能获取不到playState,这时是不能调用playService的
-        if (LY.getPlayState() != null) {
+        if (Ly.getPlayState() != null) {
             playService.addMessage(message, MessageType.notice);
         }
     }

@@ -10,7 +10,7 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.math.Vector3f;
 import java.util.List;
-import name.huliqing.ly.LY;
+import name.huliqing.ly.Ly;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.data.GameData;
 import name.huliqing.ly.layer.service.PlayService;
@@ -99,7 +99,7 @@ public abstract class NetworkPlayState extends PlayState implements LanGame {
         if (actorPanel == null) {
             SimpleApplication sapp = (SimpleApplication) app;
             
-            actorPanel = new ActorSelectView(LY.getSettings().getWidth(), LY.getSettings().getHeight(), sapp.getGuiNode());
+            actorPanel = new ActorSelectView(Ly.getSettings().getWidth(), Ly.getSettings().getHeight(), sapp.getGuiNode());
             actorPanel.setSelectedListener(new ActorSelectView.SelectedListener() {
                 @Override
                 public void onSelected(String actorId, String actorName) {
@@ -145,8 +145,8 @@ public abstract class NetworkPlayState extends PlayState implements LanGame {
 
     private void createLanUI() {
          // ---- 联网状态按钮,用于打开局域网客户端列表面板
-        float fullWidth = LY.getSettings().getWidth();
-        float fullHeight = LY.getSettings().getHeight();
+        float fullWidth = Ly.getSettings().getWidth();
+        float fullHeight = Ly.getSettings().getHeight();
         clientsWin = new ClientsWin(this, fullWidth * 0.75f, fullHeight * 0.8f);
         clientsWin.setToCorner(UI.Corner.CC);
         clientsWin.setCloseable(true);

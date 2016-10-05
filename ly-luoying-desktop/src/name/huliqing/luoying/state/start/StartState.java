@@ -17,7 +17,7 @@ import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import name.huliqing.ly.LY;
+import name.huliqing.ly.Ly;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.constants.IdConstants;
 import name.huliqing.ly.constants.InterfaceConstants;
@@ -32,7 +32,7 @@ import name.huliqing.ly.ui.UI;
 import name.huliqing.ly.ui.UI.Corner;
 import name.huliqing.ly.ui.UI.Listener;
 import name.huliqing.ly.ui.state.UIState;
-import name.huliqing.luoying.Fighter;
+import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.LyLabPlayState;
 import name.huliqing.luoying.state.lan.LanState;
 
@@ -51,7 +51,7 @@ public class StartState extends AbstractAppState {
         menu_settings,
     }
     
-    private final Fighter app;
+    private final LuoYing app;
     private Node localRoot;
     
     private StartView startPanel;
@@ -66,7 +66,7 @@ public class StartState extends AbstractAppState {
     private ParticleEmitter emitter;
     
     public StartState(SimpleApplication app) {
-        this.app = (Fighter) app;
+        this.app = (LuoYing) app;
     }
 
     @Override
@@ -78,10 +78,10 @@ public class StartState extends AbstractAppState {
         localRoot = new Node("StartState_localRoot");
         app.getRootNode().attachChild(localRoot);
         
-        float sw = LY.getSettings().getWidth();
-        float sh = LY.getSettings().getHeight();
-        float lw = LY.getSettings().getWidth() * 0.382f;
-        float rw = LY.getSettings().getWidth() * 0.618f;
+        float sw = Ly.getSettings().getWidth();
+        float sh = Ly.getSettings().getHeight();
+        float lw = Ly.getSettings().getWidth() * 0.382f;
+        float rw = Ly.getSettings().getWidth() * 0.618f;
         float topSpace = sh * 0.1f;
         
         // 落樱剑: ）
@@ -115,7 +115,7 @@ public class StartState extends AbstractAppState {
         
         // ==== for view ====
         viewBtn = new Icon("Interface/icon/lab.png");
-        viewBtn.setWidth(LY.getSettings().getHeight() * 0.12f);
+        viewBtn.setWidth(Ly.getSettings().getHeight() * 0.12f);
         viewBtn.setHeight(viewBtn.getWidth());
         viewBtn.setMargin(5, 0, 0, 5);
         viewBtn.setToCorner(Corner.LB);
@@ -123,7 +123,7 @@ public class StartState extends AbstractAppState {
             @Override
             public void onClick(UI ui, boolean isPress) {
                 if (!isPress) {
-                    startState(new LyLabPlayState(LY.getApp(), gameService.loadGameData(IdConstants.GAME_LAB)));
+                    startState(new LyLabPlayState(Ly.getApp(), gameService.loadGameData(IdConstants.GAME_LAB)));
                 }
             }
         });
@@ -202,7 +202,7 @@ public class StartState extends AbstractAppState {
         super.update(tpf);
     }
     
-    public Fighter getApp() {
+    public LuoYing getApp() {
         return this.app;
     }
     

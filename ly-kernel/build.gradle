@@ -1,0 +1,56 @@
+// Proguard
+// http://proguard.sourceforge.net/manual/gradle.html
+// http://proguard.sourceforge.net/manual/usage.html
+
+// Launch4j
+// https://github.com/TheBoegl/gradle-launch4j
+// http://launch4j.sourceforge.net/docs.html
+
+// MacAppBundle
+// https://github.com/crotwell/gradle-macappbundle
+// https://github.com/crotwell/gradle-macappbundle/wiki/Intro
+
+
+apply plugin:"java"
+
+buildscript{
+    repositories{
+        mavenCentral()
+        jcenter()
+        flatDir {
+            dirs 'libs-build'
+        }
+    }
+    dependencies{
+    }
+}
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+// 依赖的jar
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+}
+
+// Java项目的目录结构与默认的gradle定义不同，需要特别指定src、test等文件夹的路径
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+        }
+        resources {
+            srcDir 'src'
+        }
+    }
+}
+
+// 必须指定编码，否则可能会编译不过
+compileJava.options.encoding = 'UTF-8'
+sourceCompatibility = 1.6
+targetCompatibility = 1.6
+
+archivesBaseName = kernelArchivesBaseName
+version = kernelArchivesVersion

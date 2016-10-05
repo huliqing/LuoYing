@@ -7,7 +7,7 @@ package name.huliqing.luoying.manager;
 import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Node;
 import java.util.List;
-import name.huliqing.ly.LY;
+import name.huliqing.ly.Ly;
 import name.huliqing.ly.ui.LinearLayout;
 import name.huliqing.ly.ui.Text;
 import name.huliqing.ly.ui.UI;
@@ -25,7 +25,7 @@ public class HUDManager {
     
     // 初始化UI
     public static void init(Node appGuiRoot) {
-        messager = new Messager(LY.getSettings().getWidth(), LY.getSettings().getHeight() * 0.25f);
+        messager = new Messager(Ly.getSettings().getWidth(), Ly.getSettings().getHeight() * 0.25f);
         messager.initialize();
         // 把message放到gui中主要为了在updateLogicalState
         appGuiRoot.attachChild(messager); 
