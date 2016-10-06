@@ -21,7 +21,7 @@ import name.huliqing.ly.data.SkillData;
 import name.huliqing.ly.data.SkinData;
 import name.huliqing.ly.data.TalentData;
 import name.huliqing.ly.data.ModuleData;
-import name.huliqing.ly.manager.ResourceManager;
+import name.huliqing.ly.manager.ResManager;
 import name.huliqing.ly.object.define.DefineFactory;
 import name.huliqing.ly.xml.DataFactory;
 import name.huliqing.ly.xml.DataLoader;
@@ -34,7 +34,7 @@ public class ActorDataLoader implements DataLoader<ActorData> {
 
     @Override
     public void load(Proto proto, ActorData data) {
-        data.setName(ResourceManager.getObjectName(proto.getId()));
+        data.setName(ResManager.get(proto.getId() + ".name"));
         data.setMat(DefineFactory.getMatDefine().getMat(proto.getAsString("mat")));
         
         // ==== 2.items 

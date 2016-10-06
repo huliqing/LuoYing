@@ -60,6 +60,11 @@ public abstract class Bullet<T extends BulletData, S> extends Node implements Da
     public T getData() {
         return data;
     }
+
+    @Override
+    public void updateDatas() {
+        // ignore
+    }
     
     /**
      * 开始运行子弹

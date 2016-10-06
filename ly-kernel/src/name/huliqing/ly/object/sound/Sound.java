@@ -34,6 +34,11 @@ public class Sound<T extends SoundData> extends Node implements DataProcessor<T>
     public T getData() {
         return data;
     }
+
+    @Override
+    public void updateDatas() {
+        // ignore
+    }
     
     /**
      * 初始化声音

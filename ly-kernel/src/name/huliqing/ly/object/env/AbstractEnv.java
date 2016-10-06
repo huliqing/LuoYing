@@ -29,6 +29,11 @@ public class AbstractEnv<T extends EnvData> implements Env<T> {
     public T getData() {
         return data;
     }
+
+    @Override
+    public void updateDatas() {
+        // ignore
+    }
     
     /**
      * 初始化

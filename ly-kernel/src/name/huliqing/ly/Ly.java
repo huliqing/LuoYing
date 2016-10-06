@@ -196,6 +196,7 @@ import name.huliqing.ly.object.env.LightAmbientEnv;
 import name.huliqing.ly.object.env.LightDirectionalEnv;
 import name.huliqing.ly.object.env.ModelEnv;
 import name.huliqing.ly.data.env.ModelEnvData;
+import name.huliqing.ly.layer.service.ConfigService;
 import name.huliqing.ly.loader.DefineDataLoader;
 import name.huliqing.ly.loader.env.ModelEnvLoader;
 import name.huliqing.ly.object.env.PhysicsEnv;
@@ -278,6 +279,7 @@ import name.huliqing.ly.object.view.TextView;
 import name.huliqing.ly.object.view.TimerView;
 import name.huliqing.ly.loader.ViewDataLoader;
 import name.huliqing.ly.loader.ModuleDataLoader;
+import name.huliqing.ly.mess.MessActorSetLocation;
 import name.huliqing.ly.mess.MessAttributeNumberAddValue;
 import name.huliqing.ly.mess.MessAttributeNumberHit;
 import name.huliqing.ly.mess.MessItemAdd;
@@ -335,7 +337,7 @@ public class Ly {
     private static BitmapFont font;
     
     /**
-     * 初始化环境
+     * 初始化环境, 这个方法必须在
      * @param app
      * @param settings 
      * @throws name.huliqing.ly.LyException 
@@ -359,6 +361,10 @@ public class Ly {
         // 载入数据
         loadSysData();
         LOG.log(Level.INFO, "loadSysData ok.");
+        
+        // 2.载入语言环境及系统配置
+        Factory.get(ConfigService.class).loadGlobalConfig();
+        Factory.get(ConfigService.class).loadLocale();
     }
 
     private static void registerSerializer() {
@@ -643,6 +649,8 @@ public class Ly {
     }
     
     private static void loadSysData() throws LyException {
+        
+        // remove20161006,以后由其它实现去主动载入
 //        loadData("/data/object/action.xml");
 //        loadData("/data/object/actor.xml");
 //        loadData("/data/object/actorAnim.xml");
@@ -757,9 +765,12 @@ public class Ly {
         Serializer.registerClass(MessActorPhysics.class);
         Serializer.registerClass(MessActorSetGroup.class);
         Serializer.registerClass(MessActorSetLevel.class);
+        Serializer.registerClass(MessActorSetLocation.class);
         Serializer.registerClass(MessActorSetTarget.class);
         Serializer.registerClass(MessActorSpeak.class);
         Serializer.registerClass(MessActorTeam.class);
+        Serializer.registerClass(MessActorTransform.class);
+        Serializer.registerClass(MessActorTransformDirect.class);
         Serializer.registerClass(MessActorViewDir.class);
         
         // Attribute
@@ -808,9 +819,6 @@ public class Ly {
         Serializer.registerClass(MessViewAdd.class);
         Serializer.registerClass(MessViewRemove.class);
         
-        // Sync
-        Serializer.registerClass(MessActorTransform.class);
-        Serializer.registerClass(MessActorTransformDirect.class);
         
     }
     

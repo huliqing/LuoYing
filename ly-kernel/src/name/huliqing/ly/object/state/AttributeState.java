@@ -37,8 +37,8 @@ public class AttributeState extends AbstractState {
     }
     
     @Override
-    protected void updateData() {
-        super.updateData();
+    public void updateDatas() {
+        super.updateDatas();
         data.setAttribute("attributeApplied", attributeApplied);
     }
     
@@ -49,12 +49,11 @@ public class AttributeState extends AbstractState {
         if (attributeApplied) {
             return;
         }
-        
         // data.getResist()为抵抗率，取值 [0.0~1.0], 如果为1.0则说明完全抵抗. 
         applyValue = value * (1 - data.getResist());
         attributeService.addNumberAttributeValue(actor, attributeName, applyValue);
         attributeApplied = true;
-        updateData();
+        updateDatas();
     }
     
     @Override
@@ -62,7 +61,7 @@ public class AttributeState extends AbstractState {
         if (attributeApplied && restore) {
             attributeService.addNumberAttributeValue(actor, attributeName, -applyValue);
             attributeApplied = false;
-            updateData();
+            updateDatas();
         }
         super.cleanup();
     }

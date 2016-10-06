@@ -333,19 +333,13 @@ public class PlayServiceImpl implements PlayService {
         store.set(FastMath.nextRandomFloat() * xe * 2 - xe, 0, FastMath.nextRandomFloat() * ze * 2 - ze);
         store.setY(getTerrainHeight(store.x, store.z));
         return store;
-        
-        // remove20160203
-//        return getTerrainPoint(
-//                FastMath.nextRandomFloat() * xe * 2 - xe
-//                , FastMath.nextRandomFloat() * ze * 2 - ze
-//                , store);
-        
     }
 
-    @Override
-    public void moveObject(Actor actor, Vector3f position) {
-        actorService.setLocation(actor, position);
-    }
+    // remove20161006
+//    @Override
+//    public void moveObject(Actor actor, Vector3f position) {
+//        actorService.setLocation(actor, position);
+//    }
 
     @Override
     public Scene getScene() {
@@ -447,10 +441,11 @@ public class PlayServiceImpl implements PlayService {
         return gameState.getGame().getData().getId();
     }
 
-    @Override
-    public void addMessageOnlyClients(String message, MessageType type) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    // remove20161006
+//    @Override
+//    public void addMessageOnlyClients(String message, MessageType type) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
 
     @Override
     public void attack(Actor actor, Actor target) {

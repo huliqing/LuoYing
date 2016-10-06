@@ -80,6 +80,11 @@ public abstract class AbstractSkin implements Skin {
     }
 
     @Override
+    public void updateDatas() {
+        // ignore
+    }
+
+    @Override
     public long getParts() {
         return parts;
     }

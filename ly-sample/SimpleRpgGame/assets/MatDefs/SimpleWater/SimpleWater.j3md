@@ -1,0 +1,35 @@
+MaterialDef Simple Water {
+
+    MaterialParameters {
+        Texture2D water_reflection
+        Texture2D water_normalmap
+        Texture2D water_dudvmap
+        Texture2D foamMap
+        Vector2 foamScale
+        Texture2D foamMaskMap
+        Vector2 foamMaskScale
+        Vector4 waterColor
+        Float time
+        Float distortionScale
+        Float distortionMix
+        Float texScale
+    }
+
+    Technique {
+        VertexShader GLSL100:   MatDefs/SimpleWater/simple_water.vert
+        FragmentShader GLSL100: MatDefs/SimpleWater/simple_water.frag
+
+        WorldParameters {
+            WorldViewProjectionMatrix
+            WorldViewMatrix
+            Resolution
+            CameraPosition
+        }
+
+        Defines {
+            WATER_COLOR : waterColor
+            FOAM_MAP : foamMap
+            FOAM_MASK_MAP : foamMaskMap
+        }
+    }
+}

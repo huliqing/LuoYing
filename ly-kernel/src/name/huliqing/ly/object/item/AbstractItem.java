@@ -48,6 +48,11 @@ public abstract class AbstractItem implements Item {
     }
 
     @Override
+    public void updateDatas() {
+        // ignore
+    }
+
+    @Override
     public String getId() {
         return data.getId();
     }

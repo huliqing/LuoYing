@@ -19,6 +19,7 @@ import name.huliqing.ly.mess.MessActorSpeak;
 import name.huliqing.ly.mess.MessActorTeam;
 import name.huliqing.ly.mess.MessActorViewDir;
 import name.huliqing.ly.mess.MessActorLookAt;
+import name.huliqing.ly.mess.MessActorSetLocation;
 import name.huliqing.ly.mess.MessAttributeNumberHit;
 import name.huliqing.ly.object.actor.Actor;
 
@@ -151,7 +152,18 @@ public class ActorNetworkImpl implements ActorNetwork{
             actorService.setFollow(actor, targetId);
         }
     }
-
+    
+    @Override
+    public void setLocation(Actor actor, Vector3f location) {
+        if (!NETWORK.isClient()) {
+            MessActorSetLocation mess = new MessActorSetLocation();
+            mess.setActorId(actor.getData().getUniqueId());
+            mess.setLocation(location);
+            NETWORK.broadcast(mess);
+            actorService.setLocation(actor, location);
+        }
+    }
+    
     @Override
     public void setViewDirection(Actor actor, Vector3f viewDirection) {
         if (!NETWORK.isClient()) {

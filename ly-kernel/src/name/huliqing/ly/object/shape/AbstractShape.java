@@ -29,6 +29,11 @@ public abstract class AbstractShape<T extends ShapeData> implements Shape<T> {
     }
 
     @Override
+    public void updateDatas() {
+        // ignore
+    }
+
+    @Override
     public Geometry getGeometry() {
         if (geometry == null) {
             geometry = new Geometry("AbstractShape", getMesh());

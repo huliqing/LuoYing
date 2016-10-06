@@ -114,6 +114,11 @@ public abstract class AbstractView<T extends ViewData> extends AbstractPlayObjec
     }
     
     @Override
+    public void updateDatas() {
+        // ignore
+    }
+    
+    @Override
     public T getUpdateData() {
         data.setAttribute("enabled", enabled);
         data.setAttribute("timeUsed", timeUsed);

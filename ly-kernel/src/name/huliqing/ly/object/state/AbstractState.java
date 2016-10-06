@@ -59,11 +59,6 @@ public abstract class AbstractState<T extends StateData> implements State<T> {
      * 注意：这些效果引用只是临时的，在结束时要清空。
      */
     protected List<Effect> tempEffects;
-    
-    @Override
-    public T getData() {
-        return data;
-    }
 
     @Override
     public void setData(T data) {
@@ -76,8 +71,14 @@ public abstract class AbstractState<T extends StateData> implements State<T> {
         this.timeUsed = data.getAsFloat("timeUsed", timeUsed);
     }
     
-    protected void updateData() {
-        // ...
+    @Override
+    public T getData() {
+        return data;
+    }
+
+    @Override
+    public void updateDatas() {
+        // ignore
     }
     
     @Override

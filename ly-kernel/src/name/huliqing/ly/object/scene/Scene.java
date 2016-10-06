@@ -114,6 +114,11 @@ public class Scene<T extends SceneData> extends AbstractAppState implements Data
     public void setData(T data) {
         this.data = data;
     }
+
+    @Override
+    public void updateDatas() {
+        // ignore
+    }
     
     /**
      * 获取场景根节点

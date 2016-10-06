@@ -37,6 +37,11 @@ public abstract class AbstractAction<T extends ActionData> implements Action<T> 
     public T getData() {
         return data;
     }
+
+    @Override
+    public void updateDatas() {
+        // ignore
+    }
     
     /**
      * 启动行为，以下的任一情况会重启调用该方法。
@@ -121,11 +126,6 @@ public abstract class AbstractAction<T extends ActionData> implements Action<T> 
     protected void end() {
         started = false;
     }    
-    
-//    /**
-//     * 初始化action
-//     */
-//    protected abstract void doInit();
     
     /**
      * 执行行为逻辑

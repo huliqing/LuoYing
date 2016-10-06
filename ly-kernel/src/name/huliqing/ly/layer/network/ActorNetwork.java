@@ -85,6 +85,13 @@ public interface ActorNetwork extends Inject {
      * @param enabled 
      */
     void setPhysicsEnabled(Actor actor, boolean enabled);
+
+    /**
+     * 设置角色位置
+     * @param actor
+     * @param location
+     */
+    void setLocation(Actor actor, Vector3f location);
     
     /**
      * 设置角色视角方向

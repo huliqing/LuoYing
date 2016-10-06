@@ -25,6 +25,11 @@ public abstract class AbstractResist<T extends ResistData> implements Resist<T> 
         return data;
     }
 
+    @Override
+    public void updateDatas() {
+        // ignore
+    }
+
 //    @Override
 //    public Resist clone() {
 //        throw new UnsupportedOperationException("Not supported yet.");

@@ -259,14 +259,7 @@ public interface ActorService extends ActorNetwork {
      * @param times 
      */
     void syncAnimation(Actor actor, String[] channelIds, String[] animNames, byte[] loopModes, float[] speeds, float[] times);
-    
-    /**
-     * 设置角色位置
-     * @param actor
-     * @param location 
-     */
-    void setLocation(Actor actor, Vector3f location);
-    
+        
     /**
      * 获取角色当前位置
      * @param actor

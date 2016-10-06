@@ -27,10 +27,10 @@ public class LimitIntegerAttribute extends IntegerAttribute implements LimitAttr
         bindMinLimitAttribute = data.getAsString("bindMinLimitAttribute");
         bindMaxLimitAttribute = data.getAsString("bindMaxLimitAttribute");
     }
-
+    
     @Override
-    protected void updateData() {
-        super.updateData();
+    public void updateDatas() {
+        super.updateDatas();
         data.setAttribute("minValue", minValue);
         data.setAttribute("maxValue", maxValue);
         // bindMinLimitAttribute, bindMaxLimitAttribute不发生变化，所以不需要回设到data中去

@@ -34,6 +34,11 @@ public class Emitter<T extends EmitterData> implements DataProcessor<T> {
     public T getData() {
         return data;
     }
+
+    @Override
+    public void updateDatas() {
+        // ignore
+    }
     
     public ParticleEmitter getParticleEmitter() {
         if (emitter == null) {

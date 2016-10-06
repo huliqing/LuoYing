@@ -22,6 +22,9 @@ public interface Channel<T extends ChannelData> extends DataProcessor<T>{
 
     @Override
     public T getData();
+
+    @Override
+    public void updateDatas();
     
     /**
      * 获得通道ID标识

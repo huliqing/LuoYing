@@ -58,6 +58,11 @@ public class Slot implements DataProcessor<SlotData> {
     public SlotData getData() {
         return data;
     }
+
+    @Override
+    public void updateDatas() {
+        // ignore
+    }
     
      /**
      * 武器所绑定的骨头

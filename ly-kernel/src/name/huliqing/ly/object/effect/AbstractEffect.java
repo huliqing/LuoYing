@@ -94,6 +94,11 @@ public abstract class AbstractEffect extends Effect {
         
         endImmediate = data.getAsBoolean("endImmediate", endImmediate);
     }
+
+    @Override
+    public void updateDatas() {
+        // ignore
+    }
     
     /**
      * 初始化特效，该方法的调用分以下三种情况：<br>

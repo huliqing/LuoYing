@@ -38,6 +38,11 @@ public abstract class AbstractShortcut<T extends ObjectData> implements Shortcut
     public ShortcutData getData() {
         return data;
     }
+
+    @Override
+    public void updateDatas() {
+        // ignore
+    }
     
     @Override
     public void initialize() {

@@ -14,14 +14,14 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.ly.data.ModuleData;
 import name.huliqing.ly.object.Loader;
-import name.huliqing.ly.xml.DataProcessor;
 import name.huliqing.ly.object.module.Module;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * 角色，角色由数据(ObjectData)和模块处理器(Module)组成。
  * @author huliqing
  */
-public class Actor extends AbstractControl implements DataProcessor<ActorData> {
+public class Actor extends AbstractControl implements Entity<ActorData> {
  
     protected ActorData data;
     protected boolean initialized;
@@ -40,10 +40,21 @@ public class Actor extends AbstractControl implements DataProcessor<ActorData> {
     public ActorData getData() {
         return data;
     }
+
+    @Override
+    public void updateDatas() {
+        // ignore
+    }
+
+    @Override
+    public long getEntityId() {
+        return data.getUniqueId();
+    }
     
     /**
      * 初始化角色
      */
+    @Override
     public void initialize() {
         if (initialized) {
             throw new IllegalStateException("Actor already initialized! actorId=" + data.getId());
@@ -76,6 +87,7 @@ public class Actor extends AbstractControl implements DataProcessor<ActorData> {
      * 判断角色是否已经初始化。
      * @return 
      */
+    @Override
     public boolean isInitialized() {
         return initialized;
     }
@@ -83,6 +95,7 @@ public class Actor extends AbstractControl implements DataProcessor<ActorData> {
     /**
      * 清理角色
      */
+    @Override
     public void cleanup() {
         // 这里要注意反向清理，因为modules是有依赖顺序的,可能存在一些module，这些module在清理的时候会依赖于
         // 其它module.
@@ -151,5 +164,7 @@ public class Actor extends AbstractControl implements DataProcessor<ActorData> {
     // ignore
     @Override
     protected void controlRender(RenderManager rm, ViewPort vp) {}
+
+    
     
 }

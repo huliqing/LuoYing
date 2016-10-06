@@ -57,6 +57,11 @@ public abstract class Game<T extends GameData> extends AbstractAppState implemen
         return data;
     }
 
+    @Override
+    public void updateDatas() {
+        // ignore
+    }
+
     public Application getApp() {
         return app;
     }

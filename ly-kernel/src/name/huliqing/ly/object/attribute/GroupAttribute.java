@@ -33,7 +33,9 @@ public class GroupAttribute extends AbstractAttribute {
         this.attributesApplied = data.getAsBoolean("attributesApplied", false);
     }
     
-    protected void updateData() {
+    @Override
+    public void updateDatas() {
+        super.updateDatas();
         data.setAttribute("attributesApplied", attributesApplied);
     }
 
@@ -55,7 +57,7 @@ public class GroupAttribute extends AbstractAttribute {
             module.addAttribute(ad);
         }
         attributesApplied = true;
-        updateData();
+        updateDatas();
     }
     
     @Override
@@ -67,7 +69,7 @@ public class GroupAttribute extends AbstractAttribute {
             attributes.clear();
             attributes = null;
             attributesApplied = false;
-            updateData();
+            updateDatas();
         }
         super.cleanup();
     }

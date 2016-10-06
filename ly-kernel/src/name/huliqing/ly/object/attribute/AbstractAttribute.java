@@ -28,6 +28,11 @@ public abstract class AbstractAttribute implements Attribute {
     }
 
     @Override
+    public void updateDatas() {
+        // ignore
+    }
+
+    @Override
     public String getId() {
         return data.getId();
     }

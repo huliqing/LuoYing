@@ -81,6 +81,11 @@ public abstract class Chat<T extends ChatData> extends AbstractPlayObject implem
     public T getData() {
         return data;
     }
+
+    @Override
+    public void updateDatas() {
+        // ignore
+    }
     
     @Override
     public void initialize(Application app) {

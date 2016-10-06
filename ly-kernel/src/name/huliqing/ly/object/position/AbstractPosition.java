@@ -24,5 +24,9 @@ public abstract class AbstractPosition<T extends PositionData> implements Positi
     public T getData() {
         return data;
     }
-    
+
+    @Override
+    public void updateDatas() {
+        // ignore
+    }
 }

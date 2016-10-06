@@ -81,6 +81,11 @@ public abstract class AbstractTask<T extends TaskData> implements Task<T> {
     }
 
     @Override
+    public void updateDatas() {
+        // ignore
+    }
+
+    @Override
     public void setActor(Actor actor) {
         this.actor = actor;
     }

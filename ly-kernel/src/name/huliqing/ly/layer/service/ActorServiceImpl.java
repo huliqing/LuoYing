@@ -42,13 +42,11 @@ public class ActorServiceImpl implements ActorService {
 
     private static final Logger LOG = Logger.getLogger(ActorServiceImpl.class.getName());
 
-    private AttributeService attributeService;
     private PlayService playService;
     private SkillService skillService;
     
     @Override
     public void inject() {
-        attributeService = Factory.get(AttributeService.class);
         playService = Factory.get(PlayService.class);
         skillService = Factory.get(SkillService.class);
     }

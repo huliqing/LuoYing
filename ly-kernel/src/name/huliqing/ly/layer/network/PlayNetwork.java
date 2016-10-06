@@ -61,31 +61,18 @@ public interface PlayNetwork extends Inject {
     void addMessage(Actor actor, String message, MessageType type);
     
     /**
-     * 移动角色到指定的地点
-     * 也需要使用该方式进行移动。
-     * @param actor
-     * @param position 
-     */
-    void moveObject(Actor actor, Vector3f position);
-    
-    /**
+     * @deprecated 
      * 切换游戏
      * @param gameId 
      */
     void changeGame(String gameId);
     
     /**
+     * @deprecated 
      * 切换游戏
      * @param gameData 
      */
     void changeGame(GameData gameData);
-    
-    /**
-     * 广播信息到所有客户端(即除服务端主机外的所有客户端)
-     * @param message
-     * @param type 
-     */
-    void addMessageOnlyClients(String message, MessageType type);
     
     /**
      * 让目标进行攻击。

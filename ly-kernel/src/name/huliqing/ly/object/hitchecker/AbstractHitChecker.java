@@ -24,5 +24,10 @@ public abstract class AbstractHitChecker<T extends HitCheckerData> implements Hi
     public T getData() {
         return data;
     }
+
+    @Override
+    public void updateDatas() {
+        // ignore
+    }
     
 }

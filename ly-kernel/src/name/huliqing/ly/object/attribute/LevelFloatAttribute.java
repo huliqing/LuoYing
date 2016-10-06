@@ -44,10 +44,9 @@ public class LevelFloatAttribute extends FloatAttribute implements LevelAttribut
         levelEl = data.getAsString("levelEl", levelEl);
     }
     
-    // 更新data值，以避免在外部使用data时获取不到实时的数据
     @Override
-    protected void updateData() {
-        super.updateData();
+    public void updateDatas() {
+        super.updateDatas();
         data.setAttribute("levelValue", levelValue);
         data.setAttribute("dynamicValue", dynamicValue);
         data.setAttribute("level", level);

@@ -17,6 +17,7 @@ import name.huliqing.ly.data.ObjectData;
 import name.huliqing.ly.layer.service.ConfigService;
 
 /**
+ * @deprecated use ResManager instead
  * 资源文件读取类
  * @author huliqing
  */

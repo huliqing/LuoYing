@@ -25,6 +25,11 @@ public abstract class Define implements DataProcessor<DefineData> {
     public DefineData getData() {
         return data;
     }
+
+    @Override
+    public void updateDatas() {
+        // ignore
+    }
     
     
 }

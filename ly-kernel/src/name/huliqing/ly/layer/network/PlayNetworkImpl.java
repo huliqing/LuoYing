@@ -187,31 +187,33 @@ public class PlayNetworkImpl implements PlayNetwork {
         }
     }
 
-    @Override
-    public void moveObject(Actor actor, Vector3f position) {
-        if (!NETWORK.isClient()) {
-            // 先在服务端移动后再同步,因为移动后的位置可能最终被修正
-            playService.moveObject(actor, position);
-            
-            // 广播同步位置
-            if (actor != null) {
-                NETWORK.syncTransformDirect(actor);
-            }
-        }
-    }
+    // remove20161006
+//    @Override
+//    public void moveObject(Actor actor, Vector3f position) {
+//        if (!NETWORK.isClient()) {
+//            // 先在服务端移动后再同步,因为移动后的位置可能最终被修正
+//            playService.moveObject(actor, position);
+//            
+//            // 广播同步位置
+//            if (actor != null) {
+//                NETWORK.syncTransformDirect(actor);
+//            }
+//        }
+//    }
 
-    @Override
-    public void addMessageOnlyClients(String message, MessageType type) {
-        if (!NETWORK.isClient()) {
-            // 广播到客户端(主机不要)
-            if (NETWORK.hasConnections()) {
-                MessMessage mess = new MessMessage();
-                mess.setMessage(message);
-                mess.setType(type);
-                NETWORK.broadcast(mess);
-            }
-        }
-    }
+    // remove20161006
+//    @Override
+//    public void addMessageOnlyClients(String message, MessageType type) {
+//        if (!NETWORK.isClient()) {
+//            // 广播到客户端(主机不要)
+//            if (NETWORK.hasConnections()) {
+//                MessMessage mess = new MessMessage();
+//                mess.setMessage(message);
+//                mess.setType(type);
+//                NETWORK.broadcast(mess);
+//            }
+//        }
+//    }
 
     @Override
     public void attack(Actor actor, Actor target) {

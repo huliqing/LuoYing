@@ -123,6 +123,11 @@ public abstract class AbstractAnim<E> implements Anim<AnimData, E> {
     public AnimData getData() {
         return data;
     }
+
+    @Override
+    public void updateDatas() {
+        // ignore
+    }
     
     @Override
     public E getTarget() {

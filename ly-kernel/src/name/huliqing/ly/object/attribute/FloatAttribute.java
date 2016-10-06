@@ -13,16 +13,17 @@ import name.huliqing.ly.data.AttributeData;
  * @author huliqing
  */
 public class FloatAttribute extends NumberAttribute {
-    private static final Logger LOG = Logger.getLogger(FloatAttribute.class.getName());
+//    private static final Logger LOG = Logger.getLogger(FloatAttribute.class.getName());
 
     @Override
     public void setData(AttributeData data) {
         super.setData(data);
         value = data.getAsFloat("value", 0);
     }
-
+    
     @Override
-    protected void updateData() {
+    public void updateDatas() {
+        super.updateDatas();
         // 这里一定要转成float类型,否则下次从存档载入的时候data.getAsFloat("value", 0)获得的就不一定是Float,
         // 因为value是抽象的Number类型。
         data.setAttribute("value", value.floatValue());
@@ -32,7 +33,7 @@ public class FloatAttribute extends NumberAttribute {
     public void setValue(Number value) {
         // 转成float类型。
         super.setValue(value.floatValue());
-    }
+    } 
     
     @Override
     public void add(final int other) {

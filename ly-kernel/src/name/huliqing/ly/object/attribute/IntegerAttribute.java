@@ -20,9 +20,10 @@ public class IntegerAttribute extends NumberAttribute {
         super.setData(data);
         value = data.getAsInteger("value", 0);
     }
-
+    
     @Override
-    protected void updateData() {
+    public void updateDatas() {
+        super.updateDatas();
         // 这里一定要确保存的是int类型
         data.setAttribute("value", value.intValue()); 
     }

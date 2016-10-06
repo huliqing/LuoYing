@@ -20,6 +20,9 @@ public interface Attribute extends DataProcessor<AttributeData> {
 
     @Override
     public AttributeData getData();
+
+    @Override
+    public void updateDatas();
     
      /**
      * 初始化属性

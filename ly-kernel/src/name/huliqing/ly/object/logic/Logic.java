@@ -36,6 +36,11 @@ public abstract class Logic<T extends LogicData> implements DataProcessor<T>{
         return data;
     }
 
+    @Override
+    public void updateDatas() {
+        // ignore
+    }
+
     public void initialize() {
         initialized = true;
     }

@@ -121,14 +121,13 @@ public class LuoYing extends SimpleApplication {
             throw new RuntimeException(ex);
         }
         
-        // 2.载入语言环境及系统配置
-        Factory.get(ConfigService.class).loadGlobalConfig();
-        Factory.get(ConfigService.class).loadLocale();
+        // remove20161006,以后放在Ly.initialize方法中处理
+//        // 2.载入语言环境及系统配置
+//        Factory.get(ConfigService.class).loadGlobalConfig();
+//        Factory.get(ConfigService.class).loadLocale();
     }
     
     private void loadData() throws LyException {
-        Ly.initialize(this, settings);
-        
         Ly.loadData("/data/object/action.xml");
         Ly.loadData("/data/object/actor.xml");
         Ly.loadData("/data/object/actorAnim.xml");
@@ -174,6 +173,8 @@ public class LuoYing extends SimpleApplication {
         Ly.loadData("/data/object/talent.xml");
         Ly.loadData("/data/object/task.xml");
         Ly.loadData("/data/object/view.xml");
+        
+        Ly.initialize(this, settings);
     }
     
     @Override

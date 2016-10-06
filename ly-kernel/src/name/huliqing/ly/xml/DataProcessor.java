@@ -23,4 +23,8 @@ public interface DataProcessor<T extends ProtoData> {
      */
     T getData();
 
+    /**
+     * 更新实时状态数据到data中去,保持data的数据为当前的实时状态.
+     */
+    void updateDatas();
 }

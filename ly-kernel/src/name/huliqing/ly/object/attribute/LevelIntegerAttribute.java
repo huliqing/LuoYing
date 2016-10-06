@@ -44,14 +44,12 @@ public class LevelIntegerAttribute extends IntegerAttribute implements LevelAttr
         levelEl = data.getAsString("levelEl", levelEl);
     }
     
-    // 更新data值，以避免在外部使用data时获取不到实时的数据
     @Override
-    protected void updateData() {
-        super.updateData();
+    public void updateDatas() {
+        super.updateDatas();
         data.setAttribute("levelValue", levelValue);
         data.setAttribute("dynamicValue", dynamicValue);
         data.setAttribute("level", level);
-        
         // levelEl不会改变，所以不需要重新设置回去。
 //        data.setAttribute("levelEl", levelEl); 
     }

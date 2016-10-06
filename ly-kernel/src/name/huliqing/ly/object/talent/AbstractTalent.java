@@ -41,6 +41,11 @@ public abstract class AbstractTalent<T extends TalentData> implements Talent<T> 
     public T getData() {
         return data;
     }
+
+    @Override
+    public void updateDatas() {
+        // ignore
+    }
     
     /**
      * 更新天赋的实时数据到data中去。

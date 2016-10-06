@@ -252,6 +252,11 @@ public abstract class AbstractSkill implements Skill {
     public SkillData getData() {
         return data;
     }
+
+    @Override
+    public void updateDatas() {
+        // ignore
+    }
     
     @Override
     public void setActor(Actor actor) {

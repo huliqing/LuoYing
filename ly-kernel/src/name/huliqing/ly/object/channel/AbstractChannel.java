@@ -40,6 +40,11 @@ public abstract class AbstractChannel <T extends ChannelData> implements Channel
     public T getData() {
         return data;
     }
+
+    @Override
+    public void updateDatas() {
+        // ignore
+    }
     
     @Override
     public void setAnimControl(AnimControl animControl) {

@@ -55,15 +55,10 @@ public abstract class NumberAttribute extends AbstractSimpleAttribute<Number> {
     @Override
     protected void notifyValueChangeListeners(Number oldValue, Number newValue) {
         if (oldValue.doubleValue() != newValue.doubleValue()) {
-            updateData();
+            updateDatas();
             super.notifyValueChangeListeners(oldValue, newValue); 
         }
     }
-    
-    /**
-     * 更新数据到data中,这个方法在数据发生变化时被自动调用,子类实现这个方法来存档数据
-     */
-    protected abstract void updateData();
     
     public abstract void add(int other);
     public abstract void add(float other);

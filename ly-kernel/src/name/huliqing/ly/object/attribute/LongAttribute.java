@@ -19,7 +19,8 @@ public class LongAttribute extends NumberAttribute {
     }    
     
     @Override
-    protected void updateData() {
+    public void updateDatas() {
+        super.updateDatas();
         // 这里一定要确保存的是long类型
         data.setAttribute("value", value.longValue());
     }
