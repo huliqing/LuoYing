@@ -19,7 +19,7 @@ import name.huliqing.ly.data.define.MatObject;
  * @author huliqing
  */
 @Serializable
-public class ActorData extends ObjectData implements MatObject {
+public class ActorData extends SceneObjectData implements MatObject {
     
     // 角色名称
     private String name = "";
@@ -182,18 +182,18 @@ public class ActorData extends ObjectData implements MatObject {
     }
     
     /**
-     * 获取角色模型的初始缩放定义
-     * @return 
-     */
-    public Vector3f getScale() {
-        return getAsVector3f("scale");
-    }
-    
-    /**
      * 判断角色是否打开hardwareSkinning,默认true
      * @return 
      */
     public boolean isHardwareSkinning() {
         return getAsBoolean("hardwareSkinning", true);
+    }
+    
+    /**
+     * 获取角色质量
+     * @return 
+     */
+    public float getMass() {
+        return getAsFloat("mass", 0);
     }
 }

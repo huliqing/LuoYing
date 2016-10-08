@@ -57,6 +57,9 @@ public class ActorBuildSimpleLogic extends IntervalLogic {
     }
 
     /**
+     * @param position
+     * @param actorIds
+     * @param interval
      * @see #addBuilder(com.jme3.math.Vector3f, java.lang.String[]
      * , float, name.huliqing.fighter.logic.scene.ActorBuildSimpleLogic.Callback) 
      */

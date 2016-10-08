@@ -355,5 +355,21 @@ public class CollisionChaseCamera extends ChaseCamera
             }
         }
     }
+    
+    /**
+     * 获取相机
+     * @return 
+     */
+    public Camera getCamera() {
+        return this.cam;
+    }
+    
+    /**
+     * 获取被跟随的物体，如果目标不存在，则返回null.
+     * @return 
+     */
+    public Spatial getChase() {
+        return target;
+    }
 
 }

@@ -9,17 +9,22 @@ import com.jme3.app.Application;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.BulletAppState.ThreadingType;
 import com.jme3.bullet.PhysicsSpace.BroadphaseType;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
+import com.jme3.post.SceneProcessor;
 import com.jme3.scene.Spatial;
+import name.huliqing.ly.Ly;
 import name.huliqing.ly.data.env.EnvData;
+import name.huliqing.ly.object.SceneObject;
 import name.huliqing.ly.object.scene.Scene;
+import name.huliqing.ly.object.scene.SceneListener;
 
 /**
  * 物理环境，添加这个Env到场景后，场景中的所有绑定有RigidBodyControl的物体将受到物理影响。
  * @author huliqing
  * @param <T>
  */
-public class PhysicsEnv <T extends EnvData> extends AbstractEnv <T> implements Scene.SceneListener {
+public class PhysicsEnv <T extends EnvData> extends AbstractEnv <T> implements SceneListener {
 
     // 是否打开physics调试
     private boolean debug;
@@ -36,7 +41,6 @@ public class PhysicsEnv <T extends EnvData> extends AbstractEnv <T> implements S
     private int solverNumIterations = 10;
     
     // ---- inner
-    private Application app;
     private BulletAppState bulletAppState;
     
     @Override
@@ -55,9 +59,8 @@ public class PhysicsEnv <T extends EnvData> extends AbstractEnv <T> implements S
     }
 
     @Override
-    public void initialize(Application app, Scene scene) {
-        super.initialize(app, scene);
-        this.app = app;
+    public void initialize(Scene scene) {
+        super.initialize(scene);
         bulletAppState = new BulletAppState();
         
         BroadphaseType bt = getBroadphaseType(broadphaseType);
@@ -71,7 +74,7 @@ public class PhysicsEnv <T extends EnvData> extends AbstractEnv <T> implements S
             bulletAppState.setThreadingType(tt);
         }
         
-        app.getStateManager().attach(bulletAppState);
+        Ly.getApp().getStateManager().attach(bulletAppState);
         
         bulletAppState.setSpeed(speed);
         if (worldMax != null) {
@@ -88,7 +91,7 @@ public class PhysicsEnv <T extends EnvData> extends AbstractEnv <T> implements S
         bulletAppState.getPhysicsSpace().setSolverNumIterations(solverNumIterations);
         
         // 将当前场景中已经存在的所有物体添加到物理环境中
-        bulletAppState.getPhysicsSpace().addAll(scene.getSceneRoot());
+        bulletAppState.getPhysicsSpace().addAll(scene.getRoot());
         
         // 以监听动态添加的物体
         scene.addSceneListener(this);
@@ -97,27 +100,12 @@ public class PhysicsEnv <T extends EnvData> extends AbstractEnv <T> implements S
     @Override
     public void cleanup() {
         scene.removeSceneListener(this);
-        app.getStateManager().detach(bulletAppState);
+        Ly.getApp().getStateManager().detach(bulletAppState);
         super.cleanup();
     }
     
     public BulletAppState getBulletAppState() {
         return bulletAppState;
-    }
-
-    @Override
-    public void onSceneInitialized(Scene scene) {
-        // ignore
-    }
-    
-    @Override
-    public void onSceneObjectAdded(Scene scene, Spatial objectAdded) {
-        bulletAppState.getPhysicsSpace().addAll(objectAdded);
-    }
-
-    @Override
-    public void onSceneObjectRemoved(Scene scene, Spatial objectRemoved) {
-        bulletAppState.getPhysicsSpace().removeAll(objectRemoved);
     }
     
     private BroadphaseType getBroadphaseType(String name) {
@@ -143,6 +131,70 @@ public class PhysicsEnv <T extends EnvData> extends AbstractEnv <T> implements S
             }
         }
         return null;
+    }
+
+    @Override
+    public Vector3f getLocation() {
+        return data.getLocation();
+    }
+
+    @Override
+    public void setLocation(Vector3f location) {
+        // ignore,物理环境不需要位置
+    }
+
+    @Override
+    public Quaternion getRotation() {
+        return data.getRotation();
+    }
+
+    @Override
+    public void setRotation(Quaternion rotation) {
+        // ignore，物理环境不需要旋转
+    }
+
+    @Override
+    public Vector3f getScale() {
+        return data.getScale();
+    }
+
+    @Override
+    public void setScale(Vector3f scale) {
+        // ignore,物理环境不需要缩放
+    }
+    
+    // ---- listener
+    @Override
+    public void onSceneInitialized(Scene scene) {
+        // ignore
+    }
+    
+    @Override
+    public void onSceneObjectAdded(Scene scene, SceneObject objectAdded) {
+        // ignore
+    }
+
+    @Override
+    public void onSceneObjectRemoved(Scene scene, SceneObject objectRemoved) {
+        // ignore
+    }
+
+    @Override
+    public void onSpatialAdded(Scene scene, Spatial spatialAdded) {
+        bulletAppState.getPhysicsSpace().addAll(spatialAdded);
+    }
+
+    @Override
+    public void onSpatialRemoved(Scene scene, Spatial spatialRemoved) {
+        bulletAppState.getPhysicsSpace().removeAll(spatialRemoved);
+    }
+
+    @Override
+    public void onProcessorAdded(Scene scene, SceneProcessor processorAdded) {
+    }
+
+    @Override
+    public void onProcessorRemoved(Scene scene, SceneProcessor processorRemoved) {
     }
 
 }

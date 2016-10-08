@@ -4,64 +4,56 @@
  */
 package name.huliqing.ly.object.actor;
 
-import com.jme3.renderer.RenderManager;
-import com.jme3.renderer.ViewPort;
+import com.jme3.math.Quaternion;
+import com.jme3.math.Vector3f;
 import name.huliqing.ly.data.ActorData;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.control.AbstractControl;
 import com.jme3.util.SafeArrayList;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.ly.data.ModuleData;
+import name.huliqing.ly.object.AbstractSceneObject;
 import name.huliqing.ly.object.Loader;
+import name.huliqing.ly.object.module.ActorModule;
 import name.huliqing.ly.object.module.Module;
-import name.huliqing.ly.object.entity.Entity;
+import name.huliqing.ly.object.scene.Scene;
 
 /**
  * 角色，角色由数据(ObjectData)和模块处理器(Module)组成。
  * @author huliqing
  */
-public class Actor extends AbstractControl implements Entity<ActorData> {
+public class Actor extends AbstractSceneObject<ActorData> {
  
-    protected ActorData data;
-    protected boolean initialized;
+    protected Spatial model;
     
     /**
      * 所有的模块,这里面包含logicModules中的模块。
      */
     protected final SafeArrayList<Module> modules = new SafeArrayList<Module>(Module.class);
-    
-    @Override
-    public void setData(ActorData data) {
-        this.data = data;
-    }
-
-    @Override
-    public ActorData getData() {
-        return data;
-    }
 
     @Override
     public void updateDatas() {
-        // ignore
-    }
-
-    @Override
-    public long getEntityId() {
-        return data.getUniqueId();
+        super.updateDatas();
+        for (Module module : modules.getArray()) {
+            module.updateDatas();
+        }
+        if (initialized) {
+            data.setLocation(model.getLocalTranslation());
+            data.setRotation(model.getLocalRotation());
+            data.setScale(model.getLocalScale());
+        }
     }
     
     /**
      * 初始化角色
+     * @param scene
      */
     @Override
-    public void initialize() {
-        if (initialized) {
-            throw new IllegalStateException("Actor already initialized! actorId=" + data.getId());
-        }
+    public void initialize(Scene scene) {
+        super.initialize(scene);
         
         // 载入基本模型并添加当前控制器
-        loadModel().addControl(this);
+        model = loadModel();
         
         // 载入并初始化所有控制器，这里分两步处理:
         // 第一步先添加;
@@ -80,16 +72,9 @@ public class Actor extends AbstractControl implements Entity<ActorData> {
             }
         }
         
+        scene.addSpatial(model);
+        
         initialized = true;
-    }
-    
-    /**
-     * 判断角色是否已经初始化。
-     * @return 
-     */
-    @Override
-    public boolean isInitialized() {
-        return initialized;
     }
     
     /**
@@ -103,7 +88,7 @@ public class Actor extends AbstractControl implements Entity<ActorData> {
             modules.get(i).cleanup();
         }
         modules.clear();
-        initialized = false;
+        super.cleanup();
     }
     
     /**
@@ -157,14 +142,72 @@ public class Actor extends AbstractControl implements Entity<ActorData> {
         return ActorModelLoader.loadActorModel(this);
     }
     
-    // ignore
-    @Override
-    protected void controlUpdate(float tpf) {}
+    /**
+     * 获取角色模型
+     * @return 
+     */
+    public Spatial getSpatial() {
+        return model;
+    }
 
-    // ignore
     @Override
-    protected void controlRender(RenderManager rm, ViewPort vp) {}
+    public Vector3f getLocation() {
+        if (initialized) {
+            return model.getLocalTranslation();
+        } 
+        return data.getLocation();
+    }
 
-    
+    @Override
+    public void setLocation(Vector3f location) {
+        if (initialized) {
+            ActorModule am = getModule(ActorModule.class);
+            if (am != null) {
+                am.setLocation(location);
+                return;
+            }
+        }
+        data.setLocation(location);
+    }
+
+    @Override
+    public Quaternion getRotation() {
+        if (initialized) {
+            return model.getLocalRotation();
+        }
+        return data.getRotation();
+    }
+
+    @Override
+    public void setRotation(Quaternion rotation) {
+        if (initialized) {
+            ActorModule am = getModule(ActorModule.class);
+            if (am != null) {
+                am.setRotation(rotation);
+                return;
+            }
+        }
+        data.setRotation(rotation);
+    }
+
+    @Override
+    public Vector3f getScale() {
+        if (initialized) {
+            return model.getLocalScale();
+        }
+        return data.getScale();
+    }
+
+    @Override
+    public void setScale(Vector3f scale) {
+        if (initialized) {
+            ActorModule am = getModule(ActorModule.class);
+            if (am != null) {
+                am.setScale(scale);
+                return;
+            }
+        }
+        data.setScale(scale);
+    }
     
 }

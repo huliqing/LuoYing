@@ -12,6 +12,7 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
+import name.huliqing.ly.Ly;
 import name.huliqing.ly.data.env.EnvData;
 import name.huliqing.ly.object.scene.Scene;
 import name.huliqing.ly.processor.VerySimpleWaterProcessor;
@@ -41,7 +42,6 @@ public class WaterSimpleEnv<T extends EnvData> extends AbstractEnv<T> implements
     private Vector2f foamMaskScale;
     
     // ----
-    private Application app;
     private Spatial waterModel;
     private VerySimpleWaterProcessor water;
     
@@ -65,11 +65,10 @@ public class WaterSimpleEnv<T extends EnvData> extends AbstractEnv<T> implements
     }
     
     @Override
-    public void initialize(Application app, Scene scene) {
-        super.initialize(app, scene);
-        this.app = app;
+    public void initialize(Scene scene) {
+        super.initialize(scene);
         
-        waterModel = app.getAssetManager().loadModel(waterModelFile);
+        waterModel = Ly.getApp().getAssetManager().loadModel(waterModelFile);
         if (location != null) {
             waterModel.setLocalTranslation(location);
         }
@@ -82,8 +81,8 @@ public class WaterSimpleEnv<T extends EnvData> extends AbstractEnv<T> implements
             waterModel.setLocalScale(scale);
         }
         
-        water = new VerySimpleWaterProcessor(app.getAssetManager(), waterModel);
-        water.addReflectionScene(scene.getSceneRoot());
+        water = new VerySimpleWaterProcessor(Ly.getApp().getAssetManager(), waterModel);
+        water.addReflectionScene(scene.getRoot());
         water.setTexScale(texScale);
         water.setWaveSpeed(waveSpeed);
         water.setDistortionMix(distortionMix);
@@ -103,19 +102,19 @@ public class WaterSimpleEnv<T extends EnvData> extends AbstractEnv<T> implements
         if (foamMaskScale != null) {
             water.setFoamMaskScale(foamMaskScale.x, foamMaskScale.y);
         }
-        app.getViewPort().addProcessor(water);
+        Ly.getApp().getViewPort().addProcessor(water);
         
-        scene.addSceneObject(waterModel);
+        scene.addSpatial(waterModel);
     }
     
     @Override
     public void cleanup() {
         if (waterModel != null) {
-            scene.removeSceneObject(waterModel);
+            scene.removeSpatial(waterModel);
         }
-        if (water != null && app != null) {
-            if (app.getViewPort().getProcessors().contains(water)) {
-                app.getViewPort().removeProcessor(water);
+        if (water != null) {
+            if (Ly.getApp().getViewPort().getProcessors().contains(water)) {
+                Ly.getApp().getViewPort().removeProcessor(water);
             }
         }
         super.cleanup(); 
@@ -132,6 +131,11 @@ public class WaterSimpleEnv<T extends EnvData> extends AbstractEnv<T> implements
             return bb.contains(point);
         }
         return false;
+    }
+
+    @Override
+    public Spatial getSpatial() {
+        return null;
     }
     
     

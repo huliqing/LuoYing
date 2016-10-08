@@ -5,24 +5,27 @@
  */
 package name.huliqing.ly.object.env;
 
-import com.jme3.app.Application;
 import com.jme3.light.DirectionalLight;
 import com.jme3.light.Light;
 import com.jme3.light.LightList;
 import com.jme3.math.Vector3f;
+import com.jme3.post.SceneProcessor;
 import com.jme3.scene.Spatial;
 import com.jme3.texture.Texture2D;
 import com.jme3.water.WaterFilter;
 import com.jme3.water.WaterFilter.AreaShape;
+import name.huliqing.ly.Ly;
 import name.huliqing.ly.data.env.EnvData;
+import name.huliqing.ly.object.SceneObject;
 import name.huliqing.ly.object.scene.Scene;
+import name.huliqing.ly.object.scene.SceneListener;
 
 /**
  *
  * @author huliqing
  * @param <T>
  */
-public class WaterAdvanceEnv <T extends EnvData> extends AbstractEnv<T> implements WaterEnv<T>, Scene.SceneListener {
+public class WaterAdvanceEnv <T extends EnvData> extends AbstractEnv<T> implements WaterEnv<T>, SceneListener {
 
     private String causticsTexture;
     private String foamTexture;
@@ -92,29 +95,28 @@ public class WaterAdvanceEnv <T extends EnvData> extends AbstractEnv<T> implemen
         water.setWindDirection(data.getAsVector2f("windDirection", water.getWindDirection()));
         radiusSquared = water.getRadius() * water.getRadius();
         
-        
         // ---- custom 
         useSceneLight = data.getAsBoolean("useSceneLight", useSceneLight);
     }
 
     @Override
-    public void initialize(Application app, Scene scene) {
-        super.initialize(app, scene); 
+    public void initialize(Scene scene) {
+        super.initialize(scene); 
         scene.addSceneListener(this);
         
         if (causticsTexture != null) {
-            water.setCausticsTexture((Texture2D) app.getAssetManager().loadTexture(causticsTexture));
+            water.setCausticsTexture((Texture2D) Ly.getApp().getAssetManager().loadTexture(causticsTexture));
         }
         if (foamTexture != null) {
-            water.setFoamTexture((Texture2D) app.getAssetManager().loadTexture(foamTexture));
+            water.setFoamTexture((Texture2D) Ly.getApp().getAssetManager().loadTexture(foamTexture));
         }
         if (heightTexture != null) {
-            water.setHeightTexture((Texture2D) app.getAssetManager().loadTexture(heightTexture));
+            water.setHeightTexture((Texture2D) Ly.getApp().getAssetManager().loadTexture(heightTexture));
         }
         if (normalTexture != null) {
-            water.setNormalTexture((Texture2D) app.getAssetManager().loadTexture(normalTexture));
+            water.setNormalTexture((Texture2D) Ly.getApp().getAssetManager().loadTexture(normalTexture));
         }
-        water.setReflectionScene(scene.getSceneRoot());
+        water.setReflectionScene(scene.getRoot());
         
         // 控制水体渲染
         scene.addFilter(water);
@@ -155,21 +157,14 @@ public class WaterAdvanceEnv <T extends EnvData> extends AbstractEnv<T> implemen
             float maxZ = water.getCenter().z + water.getRadius();
             return point.x > minX && point.x < maxX && point.z > minZ && point.z < maxZ;
         }
-        
         return false;
     }
-    
-    @Override
-    public void onSceneObjectAdded(Scene scene, Spatial objectAdded) {}
-
-    @Override
-    public void onSceneObjectRemoved(Scene scene, Spatial objectRemoved) {}
 
     @Override
     public void onSceneInitialized(Scene scene) {
         // 从场景中找到第一个直射光源作为水体渲染光源用。
         if (useSceneLight) {
-            LightList lights = scene.getSceneRoot().getLocalLightList();
+            LightList lights = scene.getRoot().getLocalLightList();
             if (lights.size() > 0) {
                 for (int i = 0; i < lights.size(); i++) {
                     Light light = lights.get(i);
@@ -213,6 +208,35 @@ public class WaterAdvanceEnv <T extends EnvData> extends AbstractEnv<T> implemen
 //        protected void controlRender(RenderManager rm, ViewPort vp) {}
 //        
 //    }
+
+    @Override
+    public Spatial getSpatial() {
+        return null;
+    }
+
+    @Override
+    public void onSceneObjectAdded(Scene scene, SceneObject objectAdded) {
+    }
+
+    @Override
+    public void onSceneObjectRemoved(Scene scene, SceneObject objectRemoved) {
+    }
+
+    @Override
+    public void onSpatialAdded(Scene scene, Spatial spatialAdded) {
+    }
+
+    @Override
+    public void onSpatialRemoved(Scene scene, Spatial spatialRemoved) {
+    }
+
+    @Override
+    public void onProcessorAdded(Scene scene, SceneProcessor processorAdded) {
+    }
+
+    @Override
+    public void onProcessorRemoved(Scene scene, SceneProcessor processorRemoved) {
+    }
 
     
     

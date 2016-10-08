@@ -9,21 +9,25 @@ import com.jme3.app.Application;
 import com.jme3.light.DirectionalLight;
 import com.jme3.light.Light;
 import com.jme3.light.LightList;
+import com.jme3.post.SceneProcessor;
 import com.jme3.scene.Spatial;
 import com.jme3.shadow.CompareMode;
 import com.jme3.shadow.DirectionalLightShadowFilter;
 import com.jme3.shadow.EdgeFilteringMode;
 import name.huliqing.ly.Factory;
+import name.huliqing.ly.Ly;
 import name.huliqing.ly.data.env.EnvData;
 import name.huliqing.ly.layer.service.ConfigService;
+import name.huliqing.ly.object.SceneObject;
 import name.huliqing.ly.object.scene.Scene;
+import name.huliqing.ly.object.scene.SceneListener;
 
 /**
- * 阴影处理器,目前不支持移动设备.
+ * 阴影环境(目前不支持移动设备).
  * @author huliqing
  * @param <T>
  */
-public class ShadowEnv <T extends EnvData> extends AbstractEnv <T> implements Scene.SceneListener{
+public class ShadowEnv <T extends EnvData> extends AbstractEnv <T> implements SceneListener{
     private final ConfigService configService = Factory.get(ConfigService.class);
 
     private float shadowIntensity = 0.7f;
@@ -31,7 +35,6 @@ public class ShadowEnv <T extends EnvData> extends AbstractEnv <T> implements Sc
     private int shadowMaps = 1;
     
     // ---- inner
-    private Application app;
     private DirectionalLightShadowFilter filter;
     
     @Override
@@ -43,12 +46,11 @@ public class ShadowEnv <T extends EnvData> extends AbstractEnv <T> implements Sc
     }
 
     @Override
-    public void initialize(Application app, Scene scene) {
-        super.initialize(app, scene);
-        this.app = app;
+    public void initialize(Scene scene) {
+        super.initialize(scene);
         scene.addSceneListener(this);
     }
-
+    
     @Override
     public void cleanup() {
         scene.removeFilter(filter);
@@ -64,7 +66,7 @@ public class ShadowEnv <T extends EnvData> extends AbstractEnv <T> implements Sc
     public void onSceneInitialized(Scene scene) {
         // 影阴处理器
         if (configService.isUseShadow()) {
-            filter = new DirectionalLightShadowFilter(app.getAssetManager(), shadowMapSize, shadowMaps);
+            filter = new DirectionalLightShadowFilter(Ly.getApp().getAssetManager(), shadowMapSize, shadowMaps);
             filter.setLight(findLight());
             filter.setLambda(0.55f);
             filter.setShadowIntensity(shadowIntensity);
@@ -77,7 +79,7 @@ public class ShadowEnv <T extends EnvData> extends AbstractEnv <T> implements Sc
     private DirectionalLight findLight() {
         // 找出当前场景中的第一个直射光
         DirectionalLight light = null;
-        LightList lightList = scene.getSceneRoot().getLocalLightList();
+        LightList lightList = scene.getRoot().getLocalLightList();
         if (lightList.size() > 0) {
             for (int i = 0; i < lightList.size(); i++) {
                 Light l = lightList.get(i);
@@ -89,15 +91,31 @@ public class ShadowEnv <T extends EnvData> extends AbstractEnv <T> implements Sc
         }
         return light;
     }
-    
+
     @Override
-    public void onSceneObjectAdded(Scene scene, Spatial objectAdded) {
-        // ignore
+    public void onSceneObjectAdded(Scene scene, SceneObject objectAdded) {
     }
 
     @Override
-    public void onSceneObjectRemoved(Scene scene, Spatial objectRemoved) {
-        // ignore
+    public void onSceneObjectRemoved(Scene scene, SceneObject objectRemoved) {
     }
+
+    @Override
+    public void onSpatialAdded(Scene scene, Spatial spatialAdded) {
+    }
+
+    @Override
+    public void onSpatialRemoved(Scene scene, Spatial spatialRemoved) {
+    }
+
+    @Override
+    public void onProcessorAdded(Scene scene, SceneProcessor processorAdded) {
+    }
+
+    @Override
+    public void onProcessorRemoved(Scene scene, SceneProcessor processorRemoved) {
+    }
+    
+
     
 }

@@ -42,7 +42,7 @@ public class Main extends SimpleApplication {
         actor.initialize();
         actor.getModule(LogicModule.class).setAutoLogic(false);
         actor.getModule(ActorModule.class).setLocation(new Vector3f(0, 10, 0));
-        scene.addSceneObject(actor.getSpatial());
+        scene.addSpatial(actor.getSpatial());
         
         
         CameraChaseEnv camEvn = (CameraChaseEnv) scene.getEnv("envCameraThirdView");

@@ -1,412 +1,158 @@
 /*
- * To change this template, choose Tools | Templates
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package name.huliqing.ly.object.scene;
 
-import com.jme3.app.Application;
-import com.jme3.app.state.AbstractAppState;
-import com.jme3.app.state.AppStateManager;
-import com.jme3.bullet.control.RigidBodyControl;
-import com.jme3.light.Light;
+import com.jme3.math.Vector3f;
 import com.jme3.post.Filter;
-import com.jme3.post.FilterPostProcessor;
-import com.jme3.post.filters.TranslucentBucketFilter;
+import com.jme3.post.SceneProcessor;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import name.huliqing.ly.Factory;
-import name.huliqing.ly.data.env.EnvData;
 import name.huliqing.ly.data.SceneData;
 import name.huliqing.ly.xml.DataProcessor;
-import name.huliqing.ly.object.env.Env;
-import name.huliqing.ly.layer.service.EnvService;
+import name.huliqing.ly.object.SceneObject;
 
 /**
+ * 游戏场景，存取游戏场景中对象的容器。创场景场景之后需要通过{@link #getRoot() }获取场景的根节点，
+ * 并把场景根节点放到游戏根节点下才能进行渲染和显示。
  * @author huliqing
- * @param <T>
  */
-public class Scene<T extends SceneData> extends AbstractAppState implements DataProcessor<T>{
-    private final EnvService envService = Factory.get(EnvService.class);
+public interface Scene extends DataProcessor<SceneData> {
+
+    /**
+     * 设置场景数据，一般不要手动去调用。
+     * @param data 
+     */
+    @Override
+    public void setData(SceneData data);
+
+    /**
+     * 获取场景data，这个data包含了当前场景中的状态信息，如果需要获得场景的<b>实时</b>状态，应该先调用
+     * {@link #updateDatas() }来进行更新。
+     * @return 
+     */
+    @Override
+    public SceneData getData();
+
+    /**
+     * 更新当前场景中的所有物体的状态到data中.一般在需要对场景进行存档之前需要调用这个方法来更新状态到SceneData中去。
+     * @see #getData() 
+     */
+    @Override
+    public void updateDatas();
     
     /**
-     * 场景侦听器，用于侦听场景的初始化，场景中新增加物体、移除物体等。
+     * 初始化entity容器
      */
-    public interface SceneListener {
-        
-        /**
-         * 当场景刚初始化完毕后执行该方法, 这个方法会在场景中所有的Env都执行完initialize后被调用。
-         * @param scene 
-         */
-        void onSceneInitialized(Scene scene);
-        
-        /**
-         * 当场景新添加了物体后触发该方法。
-         * @param scene 
-         * @param objectAdded 
-         */
-        void onSceneObjectAdded(Scene scene, Spatial objectAdded);
-        
-        /**
-         * 当场景移除了物体之后触发该方法。
-         * @param scene 
-         * @param objectRemoved
-         */
-        void onSceneObjectRemoved(Scene scene, Spatial objectRemoved);
-        
-    }
+    void initialize();
     
-    public interface SceneEnvListener {
-        
-        /**
-         * 当场景中初始化完一个env后触发该方法。
-         * @param scene
-         * @param envInitialized 
-         */
-        void onSceneEnvInitialized(Scene scene, Env envInitialized);
-        
-        /**
-         * 当场景中新增加了Env时触发该方法。
-         * @param scene
-         * @param envAdded 
-         */
-        void onSceneEnvAdded(Scene scene, Env envAdded);
-        
-        /**
-         * 当场景移除了一个Env后触发该方法.
-         * @param scene 当前场景
-         * @param envRemoved 已经被移除的Env, 并且已经被清理(cleanup)
-         */
-        void onSceneEnvRemoved(Scene scene, Env envRemoved);
-    }
+    /**
+     * 判断容器是否已经初始化完毕
+     * @return 
+     */
+    boolean isInitialized();
     
-    // ---- inner
-    protected T data;
-    
-    protected List<SceneListener> sceneListeners;
-    protected List<SceneEnvListener> sceneEnvListeners;
-    
-    // 所有的环境物体列表，包含天空盒和地形
-    protected final List<Env> envs = new ArrayList<Env>();
-    
-    // 场景根节点
-    protected Node sceneRoot = new Node("SceneRoot");
-    
-    // 地型，允许多个地形
-    protected  Node terrainRoot;
-    
-    protected Application app;
-    // 场景默认的FilterPostProcessor，在某些情况下，不能同时存在多个FilterPostProcessor,比如当WaterFilter和ShadowFilter同时
-    // 存在于不同的FilterPostProcessor时会出现渲染异常。应该把它们放在同一个FilterPostProcessor下面。
-    // 这个fppDefault就是作为默认的FilterPostProcessor存在的。
-    protected FilterPostProcessor fppDefault;
-    
-    // 用于处理粒子效果被“PostWater"挡住的问题 
-    protected final TranslucentBucketFilter translucentBucketFilter = new TranslucentBucketFilter();
-    
-    @Override
-    public T getData() {
-        return data;
-    }
-
-    @Override
-    public void setData(T data) {
-        this.data = data;
-    }
-
-    @Override
-    public void updateDatas() {
-        // ignore
-    }
+    /**
+     * 清理释放资源
+     */
+    void cleanup();
     
     /**
      * 获取场景根节点
      * @return 
      */
-    public Spatial getSceneRoot() {
-        return sceneRoot;
-    }
+    Node getRoot();
     
     /**
-     * 设置场景根节点
-     * @param sceneRoot 
+     * 添加一个场景物体,在添加之前必须确保场景已经初始化。
+     * @param sceneObject 
      */
-    public void setSceneRoot(Node sceneRoot) {
-        this.sceneRoot = sceneRoot;
-    }
-    
-    @Override
-    public void initialize(AppStateManager stateManager, Application app) {
-        super.initialize(stateManager, app);
-        this.app = app;
-        
-        // 添加默认的FilterPostProcessor.
-        if (fppDefault != null) {
-            fppDefault.setAssetManager(app.getAssetManager());
-            app.getViewPort().addProcessor(fppDefault);
-        }
-        
-        // 建立场景节点。
-        terrainRoot = new Node("terrainRoot");
-        sceneRoot.attachChild(terrainRoot);
-        
-        // 初始化Env列表
-        // 把数据复制到temp中进行处理，以避免在列表初始化的过程影响到原始列表，这种情况可能发生在：当一个Env在初始化的
-        // 时候在initialize方法又向场景动态添加Env.这会造成在循环data.getEnvs()列表的时候同时又修改（增、删）列表数据。
-        List<EnvData> initEnvDatas = data.getEnvs();
-        if (initEnvDatas != null && !initEnvDatas.isEmpty()) {
-            List<EnvData> temp = new ArrayList<EnvData>(initEnvDatas);
-            for (EnvData ed : temp) {
-                Env env = envService.loadEnv(ed);
-                env.initialize(app, this);
-                envs.add(env);
-                notifySceneEnvListenerAdded(env);
-                notifySceneEnvListenerInitialized(env);
-            }
-        }
-        
-        // 触发侦听器
-        if (sceneListeners != null) {
-            for (SceneListener l : sceneListeners) {
-                l.onSceneInitialized(this);
-            }
-        }
-    }
-
-    @Override
-    public void cleanup() {
-        // 先清理listeners,避免在envs清理的时候又调用到listeners.
-        if (sceneListeners != null) {
-            sceneListeners.clear();
-        }
-        if (fppDefault != null) {
-            app.getViewPort().removeProcessor(fppDefault);
-            fppDefault = null;
-        }
-        if (sceneEnvListeners != null) {
-            sceneEnvListeners.clear();
-        }
-        for (Env env : envs) {
-            env.cleanup();
-        }
-        envs.clear();
-        if (sceneRoot != null) {
-            sceneRoot.detachAllChildren();
-            sceneRoot.removeFromParent();
-        }
-        super.cleanup();
-    }
+    void addSceneObject(SceneObject sceneObject);
     
     /**
-     * 获取当前场景的所有Env。
-     * 注：不要修改该返回列表，只允许只读。
+     * 从容器中移除指定场景物体，如果成功则返回true,移除失败或者物体不存在则返回false.
+     * @param sceneObject 
+     * @return  
+     */
+    boolean removeSceneObject(SceneObject sceneObject);
+    
+    /**
+     * 添加场景物体
+     * @param spatialAdded 
+     */
+    void addSpatial(Spatial spatialAdded);
+    
+    /**
+     * 移除场景物体
+     * @param spatialRemoved 
+     * @return  
+     */
+    boolean removeSpatial(Spatial spatialRemoved);
+    
+    /**
+     * 通过唯一id来查找场景物体,如果不存在则反回null.
+     * @param objectId
      * @return 
      */
-    public List<Env> getEnvs() {
-        return envs;
-    }
+    SceneObject getSceneObject(long objectId);
     
-    public Env getEnv(String envId) {
-        Env result = null;
-        for (Env env : envs) {
-            if (env.getData().getId().equals(envId)) {
-                return env;
-            }
-        }
-        return result;
-    }
-
     /**
-     * 获取场景的地形根节点
+     * 在某一个位置点上，向周围一定的范围内查找场景物体，在这个范围内的物体都将一起返回。
+     * @param location 指定的位置点
+     * @param radius 指定的范围
+     * @param store 存放结果
      * @return 
      */
-    public Spatial getTerrain() {
-        return terrainRoot;
-    }
+    Collection<SceneObject> getSceneObjects(Vector3f location, float radius, List<SceneObject> store);
     
     /**
-     * 添加物体到场景中
-     * @param spatial 
-     */
-    public void addSceneObject(Spatial spatial) {
-        if (spatial == null)
-            return;
-        
-        sceneRoot.attachChild(spatial);
-        // 触发侦听器
-        if (sceneListeners != null) {
-            for (SceneListener l : sceneListeners) {
-                l.onSceneObjectAdded(this, spatial);
-            }
-        }
-    }
-    
-    /**
-     * 从场景中移除节点，除了将节点从场景移除之外，该方法还会偿试把节点中的RigidBodyControl也从物理空间中移除。
-     * @param spatial 
-     */
-    public void removeSceneObject(Spatial spatial) {
-        if (spatial == null)
-            return;
-        
-        spatial.removeFromParent();
-        // 触发侦听器
-        if (sceneListeners != null) {
-            for (SceneListener l : sceneListeners) {
-                l.onSceneObjectRemoved(this, spatial);
-            }
-        }
-    }
-    
-    /**
-     * 把物体作为地型添加到场景中
-     * @param spatial 
-     */
-    public void addTerrainObject(Spatial spatial) {
-        terrainRoot.attachChild(spatial);
-        // 触发侦听器
-        if (sceneListeners != null) {
-            for (SceneListener l : sceneListeners) {
-                l.onSceneObjectAdded(this, spatial);
-            }
-        }
-    }
-    
-    /**
-     * 添加场景灯光。
-     * @param light 
-     */
-    public void addSceneLight(Light light) {
-        if (light == null) 
-            return;
-        sceneRoot.addLight(light);
-    }
-    
-    /**
-     * 移除场景灯光
-     * @param light 
-     */
-    public void removeSceneLight(Light light) {
-        if (light == null) 
-            return;
-        sceneRoot.removeLight(light);
-    }
-    
-    /**
-     * 添加一个Filter到场景默认的FilterPostProcessor.
-     * @param filter 
-     */
-    public void addFilter(Filter filter) {
-        if (fppDefault == null) {
-            fppDefault = new FilterPostProcessor();
-            if (app != null) {
-                fppDefault.setAssetManager(app.getAssetManager());
-                app.getViewPort().addProcessor(fppDefault);
-            }
-        }
-        if (!fppDefault.getFilterList().contains(filter)) {
-            fppDefault.addFilter(filter);
-            fppDefault.removeFilter(translucentBucketFilter);
-            fppDefault.addFilter(translucentBucketFilter);
-        }
-    }
-    
-    /**
-     * 从场景的默认FilterPostProcessor中移除Filter
-     * @param filter 
-     */
-    public void removeFilter(Filter filter) {
-        if (fppDefault != null && filter != null) {
-            fppDefault.removeFilter(filter);
-        }
-    }
-    
-    /**
-     * 判断一个位置是否为空白区域，即无树木等障碍物之类。
-     * @param x
-     * @param z
-     * @param radius
+     * 获取场景中的所有物体，这个方法会返回整个场景中的物体，如果只要查找一定范围内的物体可以使用
+     * {@link #getSceneObjects(com.jme3.math.Vector3f, float, java.util.List) }.
+     * 注：返回的列表不能直接修改。
      * @return 
+     * @see #removeSceneObject(name.huliqing.ly.object.SceneObject) 
+     * @see #addSceneObject(name.huliqing.ly.object.SceneObject) 
      */
-    public boolean checkIsEmptyZone(float x, float z, float radius) {
-        List<Spatial> children = sceneRoot.getChildren();
-        RigidBodyControl rbc;
-        float radiusSquare = radius * radius;
-        for (Spatial s : children) {
-            rbc = s.getControl(RigidBodyControl.class);
-            if (rbc == null) {
-                continue;
-            }
-            if (distanceSquare(x, z, rbc.getPhysicsLocation().x, rbc.getPhysicsLocation().z) < radiusSquare) {
-                return false;
-            }
-        }
-        return true;
-    }
-    
-    private double distanceSquare(float x, float z, float otherX, float otherZ) {
-        double dx = x - otherX;
-        double dz = z - otherZ;
-        return dx * dx + dz * dz;
-    }
+    Collection<SceneObject> getSceneObjects();
     
     /**
-     * 添加一个侦听器
+     * 添加容器侦听器
      * @param listener 
      */
-    public void addSceneListener(SceneListener listener) {
-        if (sceneListeners == null) 
-            sceneListeners = new ArrayList<SceneListener>();
-        
-        if (!sceneListeners.contains(listener)) {
-            sceneListeners.add(listener);
-        }
-    }
+    void addSceneListener(SceneListener listener);
     
     /**
-     * 删除场景侦听器
-     * @param listener
-     * @return 
+     * 移除容器侦听器
+     * @param listener 
+     * @return  
      */
-    public boolean removeSceneListener(SceneListener listener) {
-        return sceneListeners != null && sceneListeners.remove(listener);
-    }
+    boolean removeSceneListener(SceneListener listener);
     
-    public void addSceneEnvListener(SceneEnvListener sceneEnvListener) {
-        if (sceneEnvListeners == null) 
-            sceneEnvListeners = new ArrayList<SceneEnvListener>();
-        
-        if (!sceneEnvListeners.contains(sceneEnvListener)) {
-            sceneEnvListeners.add(sceneEnvListener);
-        }
-    }
+    /**
+     * 给场景添加Processor
+     * @param sceneProcessor 
+     */
+    void addProcessor(SceneProcessor sceneProcessor);
     
-    public boolean removeSceneEnvListener(SceneEnvListener sceneEnvListener) {
-        return sceneEnvListeners != null && sceneEnvListeners.remove(sceneEnvListener);
-    }
+    /**
+     * 从场景中移除Processor
+     * @param sceneProcessor
+     */
+    void removeProcessor(SceneProcessor sceneProcessor);
     
-    private void notifySceneEnvListenerInitialized(Env env) {
-        if (sceneEnvListeners != null) {
-            for (SceneEnvListener l : sceneEnvListeners) {
-                l.onSceneEnvInitialized(this, env);
-            }
-        }
-    }
-    
-    private void notifySceneEnvListenerAdded(Env env) {
-        if (sceneEnvListeners != null) {
-            for (SceneEnvListener l : sceneEnvListeners) {
-                l.onSceneEnvAdded(this, env);
-            }
-        }
-    }
-    
-    private void notifySceneEnvListenerRemoved(Env env) {
-        if (sceneEnvListeners != null) {
-            for (SceneEnvListener l : sceneEnvListeners) {
-                l.onSceneEnvRemoved(this, env);
-            }
-        }
-    }
+    /**
+     * 给场景添加一个Post Filter
+     * @param filter 
+     */
+    void addFilter(Filter filter);
+
+    /**
+     * 从场景中移除一个指定的Post Filter.
+     * @param filter
+     */
+    void removeFilter(Filter filter);
 }

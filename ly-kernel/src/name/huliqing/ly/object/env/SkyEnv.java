@@ -10,6 +10,7 @@ import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Spatial;
 import com.jme3.texture.Texture;
 import com.jme3.util.SkyFactory;
+import name.huliqing.ly.Ly;
 import name.huliqing.ly.data.env.EnvData;
 import name.huliqing.ly.object.scene.Scene;
 
@@ -47,10 +48,15 @@ public class SkyEnv <T extends EnvData> extends AbstractEnv<T> {
     }
 
     @Override
-    public void initialize(Application app, Scene scene) {
-        super.initialize(app, scene);
+    public Spatial getSpatial() {
+        return sky;
+    }
+
+    @Override
+    public void initialize(Scene scene) {
+        super.initialize(scene);
         if (sky == null) {
-            AssetManager am = app.getAssetManager();
+            AssetManager am = Ly.getApp().getAssetManager();
             Texture w = am.loadTexture(baseDir != null ? baseDir + west : west);
             Texture e = am.loadTexture(baseDir != null ? baseDir + east : east);
             Texture n = am.loadTexture(baseDir != null ? baseDir + north : north);
@@ -61,13 +67,13 @@ public class SkyEnv <T extends EnvData> extends AbstractEnv<T> {
             sky.setCullHint(Spatial.CullHint.Never);
             sky.setQueueBucket(RenderQueue.Bucket.Sky);
         }
-        scene.addSceneObject(sky);
+        scene.addSpatial(sky);
     }
 
     @Override
     public void cleanup() {
         if (scene != null) {
-            scene.removeSceneObject(sky);
+            scene.removeSpatial(sky);
         }
         super.cleanup(); 
     }

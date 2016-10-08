@@ -5,6 +5,7 @@
 package name.huliqing.ly.utils;
 
 import com.jme3.collision.CollisionResults;
+import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 
@@ -30,7 +31,6 @@ public class RayUtils {
         temp.ray.setOrigin(origin);
         temp.ray.setDirection(temp.vec1.normalizeLocal());
         root.collideWith(temp.ray, store);
-        
         temp.release();
         return store;
     }

@@ -4,13 +4,13 @@
  */
 package name.huliqing.ly.layer.network;
 
-import com.jme3.math.Vector3f;
 import com.jme3.network.HostedConnection;
 import name.huliqing.ly.Inject;
 import name.huliqing.ly.data.GameData;
 import name.huliqing.ly.enums.MessageType;
 import name.huliqing.ly.object.SyncData;
 import name.huliqing.ly.object.NetworkObject;
+import name.huliqing.ly.object.SceneObject;
 import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.object.view.View;
 
@@ -20,19 +20,28 @@ import name.huliqing.ly.object.view.View;
  */
 public interface PlayNetwork extends Inject {
     
+    
+    void addSceneObject(SceneObject sceneObject);
+    
+    
+    
+    
     /**
+     * @deprecated 
      * 添加一个角色到战场
      * @param actor
      */
     void addActor(Actor actor);
     
     /**
+     * @deprecated 
      * 把角色作为普通玩家角色类型载入（非Main player,即不一定是当前主场景中的角色。)
      * @param actor 
      */
     void addSimplePlayer(Actor actor);
     
     /**
+     * @deprecated 
      * 添加视图组件到界面
      * @deprecated 后续要重构并使用 addPlayObject代替 
      * @param view 
@@ -40,6 +49,7 @@ public interface PlayNetwork extends Inject {
     void addView(View view);
     
     /**
+     * @deprecated 
      * 从场景中移除物体
      * @param object
      */

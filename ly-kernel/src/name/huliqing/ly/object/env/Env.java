@@ -4,48 +4,13 @@
  */
 package name.huliqing.ly.object.env;
 
-import com.jme3.app.Application;
 import name.huliqing.ly.data.env.EnvData;
-import name.huliqing.ly.xml.DataProcessor;
-import name.huliqing.ly.object.scene.Scene;
+import name.huliqing.ly.object.SceneObject;
 
 /**
  * @author huliqing
  * @param <T>
  */
-public interface Env<T extends EnvData> extends DataProcessor<T>{
-    
-    /**
-     * 获取Data
-     * @return 
-     */
-    @Override
-    T getData();
-    
-    /**
-     * 初始化Data.该方法只允许DataFactory调用,而且一般应该只设置一次，运行
-     * 时不应该再调用。
-     * @param data 
-     */
-    @Override
-    void setData(T data);
-    
-    /**
-     * 初始化Env
-     * @param app
-     * @param scene 
-     */
-    void initialize(Application app, Scene scene);
-    
-    /**
-     * 判断Env是否已经初始化
-     * @return 
-     */
-    boolean isInitialized();
-    
-    /**
-     * 清理并释放Env资源
-     */
-    void cleanup();
+public interface Env<T extends EnvData> extends SceneObject<T>{
     
 }

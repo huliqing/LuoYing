@@ -84,8 +84,9 @@ public abstract class ActorLoadHelper<T extends GameLogicData> extends AbstractG
     }
     
     /**
-     * 实现角色的载入，注：该方法在多线程中运行，不建议在该方法在处理该场景
-     * 信息.处理场景物体添加需要使用 {@link #callback(name.huliqing.fighter.actor.Actor) }
+     * 实现角色的载入，注：该方法在非渲染线程中运行，不要在这个方法中处理场景物体添加或删除，
+     * 只实现角色载入并返回actor对象就可以，把角色添加到场景可以实现方法
+     * {@link #callback(name.huliqing.fighter.actor.Actor) }
      * @return 
      */
     protected Actor load() {

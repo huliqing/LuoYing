@@ -4,9 +4,9 @@
  */
 package name.huliqing.ly.loader;
 
-import com.jme3.math.Vector3f;
 import java.util.ArrayList;
 import java.util.List;
+import name.huliqing.ly.data.ObjectData;
 import name.huliqing.ly.data.env.EnvData;
 import name.huliqing.ly.xml.Proto;
 import name.huliqing.ly.data.SceneData;
@@ -25,13 +25,13 @@ public class SceneDataLoader<T extends SceneData> implements DataLoader<T> {
         // 环境物体
         String[] envIds = proto.getAsArray("envs");
         if (envIds != null && envIds.length > 0) {
-            List<EnvData> edStore = store.getEnvs();
+            List<ObjectData> edStore = store.getSceneObjectDatas();
             if (edStore == null) {
-                edStore = new ArrayList<EnvData>(envIds.length);
-                store.setEnvs(edStore);
+                edStore = new ArrayList<ObjectData>(envIds.length);
+                store.setSceneObjectDatas(edStore);
             }
             for (String eid : envIds) {
-                EnvData ed = DataFactory.createData(eid);
+                ObjectData ed = DataFactory.createData(eid);
                 edStore.add(ed);
             }
         }

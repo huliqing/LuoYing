@@ -79,7 +79,7 @@ public class LyLabPlayState extends NetworkPlayState {
                 gameState.getTeamView().setMainActor(npc1);
                 gameState.setTarget(npc2);
                 
-                CameraChaseEnv cce = SceneUtils.findEnv(gameState.getScene(), CameraChaseEnv.class);
+                CameraChaseEnv cce = SceneUtils.findSceneObject(gameState.getScene(), CameraChaseEnv.class);
                 if (cce != null) {
                     cce.setChase(npc1.getSpatial());
                 }

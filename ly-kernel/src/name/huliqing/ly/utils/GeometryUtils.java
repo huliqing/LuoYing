@@ -18,6 +18,7 @@ import com.jme3.material.MatParam;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Ray;
 import com.jme3.math.Transform;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
@@ -251,6 +252,7 @@ public class GeometryUtils {
     }
     
     /**
+     * @deprecated 不再使用这个方法，在position超出terrain的范围的时候可能会获得不正确的值。
      * 获得terrain的高位位置，并将结果存放到position返回
      * @param terrain
      * @param position 指定的地点
@@ -272,6 +274,25 @@ public class GeometryUtils {
         tv.release();
         tp.release();
         return position;
+    }
+    
+    /**
+     * 获取模型在指定x,z位置的最高处的位置点 ，如果指定x,z超出模型外部，则该方法返回null.
+     * @param spatial
+     * @param x
+     * @param z
+     * @return 
+     */
+    public static Vector3f getModelHeight(Spatial spatial, float x, float z) {
+        Ray ray = new Ray();
+        ray.setOrigin(new Vector3f(x, Float.MAX_VALUE, z));
+        ray.setDirection(new Vector3f(0,-1,0));
+        CollisionResults results = new CollisionResults();
+        spatial.collideWith(ray, results);
+        if (results.size() <= 0) {
+            return null;
+        }
+        return results.getClosestCollision().getContactPoint();
     }
     
     /**

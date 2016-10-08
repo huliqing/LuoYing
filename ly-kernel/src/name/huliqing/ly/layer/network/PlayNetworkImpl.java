@@ -6,7 +6,6 @@ package name.huliqing.ly.layer.network;
 
 import name.huliqing.ly.network.Network;
 import com.jme3.animation.LoopMode;
-import com.jme3.math.Vector3f;
 import com.jme3.network.HostedConnection;
 import com.jme3.scene.Spatial;
 import java.util.List;

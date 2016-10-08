@@ -48,6 +48,11 @@ public class AbstractEl<T extends ElData> implements El<T> {
         return data;
     }
     
+    @Override
+    public void updateDatas() {
+        // ignore
+    }
+    
     private void decode() {
         // 1.去除表达式中参数中的所有空格
         // 2.提取所有参数名

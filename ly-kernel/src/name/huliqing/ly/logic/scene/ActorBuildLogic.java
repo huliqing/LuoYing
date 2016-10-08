@@ -93,7 +93,6 @@ public class ActorBuildLogic<T extends GameLogicData> extends AbstractGameLogic<
     public ActorBuildLogic() {
         this.interval = 3;
     }
-    
 
     /**
      * 设置一个自定义的模型载入器，用于拦截处理模型的载入

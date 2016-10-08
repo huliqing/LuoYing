@@ -5,11 +5,10 @@
  */
 package name.huliqing.ly.object.scene;
 
-import java.util.List;
-import name.huliqing.ly.object.env.Env;
+import java.util.Collection;
+import name.huliqing.ly.object.SceneObject;
 
 /**
- *
  * @author huliqing
  */
 public class SceneUtils {
@@ -21,11 +20,11 @@ public class SceneUtils {
      * @param type
      * @return 
      */
-    public static <T extends Env> T findEnv(Scene scene, Class<T> type) {
-        List<Env> envs = scene.getEnvs();
-        for (Env env : envs) {
-            if (env.getClass().isAssignableFrom(type)) {
-                return (T) env;
+    public static <T extends SceneObject> T findSceneObject(Scene scene, Class<T> type) {
+        Collection<SceneObject> sceneObjects = scene.getSceneObjects();
+        for (SceneObject so : sceneObjects) {
+            if (so.getClass().isAssignableFrom(type)) {
+                return (T) so;
             }
         }
         return null;

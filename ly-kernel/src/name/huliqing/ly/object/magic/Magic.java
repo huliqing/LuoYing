@@ -99,6 +99,11 @@ public class Magic<T extends MagicData> extends AbstractPlayObject implements Da
             }
         }
     }
+
+    @Override
+    public void updateDatas() {
+        // ignore
+    }
     
     @Override
     public void initialize(Application app) {

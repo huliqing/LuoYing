@@ -2,13 +2,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.ly.object.scene;
+package name.huliqing.ly.loader;
 
 import name.huliqing.ly.loader.SceneDataLoader;
 import com.jme3.math.Vector3f;
 import com.jme3.util.TempVars;
 import java.util.ArrayList;
 import java.util.List;
+import name.huliqing.ly.data.ObjectData;
 import name.huliqing.ly.data.env.EnvData;
 import name.huliqing.ly.xml.Proto;
 import name.huliqing.ly.data.SceneData;
@@ -58,10 +59,10 @@ public class RandomSceneLoader<T extends SceneData> extends SceneDataLoader<T> {
         String[] tempArr;
         
         if (reArrs != null && reArrs.length > 0) {
-            List<EnvData> envList = store.getEnvs();
+            List<ObjectData> envList = store.getSceneObjectDatas();
             if (envList == null) {
-                envList = new ArrayList<EnvData>(reArrs.length);
-                store.setEnvs(envList);
+                envList = new ArrayList<ObjectData>(reArrs.length);
+                store.setSceneObjectDatas(envList);
             }
             
             for (String reArr : reArrs) {

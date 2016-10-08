@@ -259,7 +259,7 @@ public  class SimpleGameState extends GameState implements UIEventListener {
 //                return isInScene(p);
 //            }
 
-            if ((scene != null && p == scene.getSceneRoot()) || p == UIState.getInstance().getUIRoot()) {
+            if ((scene != null && p == scene.getRoot()) || p == UIState.getInstance().getUIRoot()) {
                 return true;
             } else {
                 return isInScene(p);
@@ -344,7 +344,7 @@ public  class SimpleGameState extends GameState implements UIEventListener {
             ui.getTeamView().removeActor(actor);
             
             // 移出场景
-            scene.removeSceneObject(actor.getSpatial());
+            scene.removeSpatial(actor.getSpatial());
 
             // 移出列表
             actors.remove(actor);
@@ -374,7 +374,7 @@ public  class SimpleGameState extends GameState implements UIEventListener {
         if (spatial != null && scene != null) {
             // 其它类型，如UI,effect,bullet,magic等,不需要处理其它额外逻辑。
 //            spatial.removeFromParent();
-            scene.removeSceneObject(spatial);
+            scene.removeSpatial(spatial);
         }
         
     }
@@ -384,7 +384,7 @@ public  class SimpleGameState extends GameState implements UIEventListener {
             UIState.getInstance().addUI((AbstractUI)ui);
         } else {
 //            this.localRoot.attachChild(ui.getDisplay());
-            scene.addSceneObject(ui.getDisplay());
+            scene.addSpatial(ui.getDisplay());
         }
     }
     
@@ -408,7 +408,7 @@ public  class SimpleGameState extends GameState implements UIEventListener {
         if (gui) {
             UIState.getInstance().addUI(actor.getSpatial());
         } 
-        scene.addSceneObject(actor.getSpatial());
+        scene.addSpatial(actor.getSpatial());
         
         // 如果角色有指定队伍，则应该处理是否在当前队伍列表中。
         if (actorService.getTeam(actor) > 0) {
@@ -425,7 +425,7 @@ public  class SimpleGameState extends GameState implements UIEventListener {
             UIState.getInstance().addUI(spatial);
         } else {
 //            localRoot.attachChild(spatial);
-            scene.addSceneObject(spatial);
+            scene.addSpatial(spatial);
         }
     }
     

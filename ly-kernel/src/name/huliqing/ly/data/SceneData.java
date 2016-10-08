@@ -4,8 +4,8 @@
  */
 package name.huliqing.ly.data;
 
-import name.huliqing.ly.data.env.EnvData;
 import com.jme3.network.serializing.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,18 +13,41 @@ import java.util.List;
  */
 @Serializable
 public class SceneData extends ObjectData {
-
+    
     // 环境物体
-    private List<EnvData> envs;
+    private List<ObjectData> sceneObjectDatas;
     
-    public SceneData() {}
-
-    public List<EnvData> getEnvs() {
-        return envs;
+    /**
+     * @return 
+     */
+    public List<ObjectData> getSceneObjectDatas() {
+        return sceneObjectDatas;
     }
 
-    public void setEnvs(List<EnvData> envs) {
-        this.envs = envs;
+    /**
+     * @param sceneObjectDatas 
+     */
+    public void setSceneObjectDatas(List<ObjectData> sceneObjectDatas) {
+        this.sceneObjectDatas = sceneObjectDatas;
     }
     
+    /**
+     * @param sceneObjectData 
+     */
+    public void addSceneObjectData(ObjectData sceneObjectData) {
+        if (sceneObjectDatas == null) {
+            sceneObjectDatas = new ArrayList<ObjectData>();
+        }
+        if (!sceneObjectDatas.contains(sceneObjectData)) {
+            sceneObjectDatas.add(sceneObjectData);
+        }
+    }
+    
+    /**
+     * @param sceneObjectData
+     * @return 
+     */
+    public boolean removeEntityData(ObjectData sceneObjectData) {
+        return sceneObjectDatas != null && sceneObjectDatas.remove(sceneObjectData);
+    }
 }

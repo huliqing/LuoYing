@@ -5,7 +5,8 @@
  */
 package name.huliqing.ly.object.env;
 
-import com.jme3.app.Application;
+import com.jme3.math.Quaternion;
+import com.jme3.math.Vector3f;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -14,7 +15,8 @@ import name.huliqing.ly.Factory;
 import name.huliqing.ly.data.env.EnvData;
 import name.huliqing.ly.object.scene.Scene;
 import name.huliqing.ly.layer.service.SystemService;
-import name.huliqing.ly.layer.service.EnvService;
+import name.huliqing.ly.object.Loader;
+import name.huliqing.ly.xml.DataFactory;
 
 /**
  * 依赖于平台的Env环境,根据平台的匹配关系来确定要使用哪一个环境。
@@ -23,13 +25,13 @@ import name.huliqing.ly.layer.service.EnvService;
  */
 public class ProxyPlatformEnv <T extends EnvData> extends AbstractEnv<T> implements ProxyEnv {
     private final SystemService systemService = Factory.get(SystemService.class);
-    private final EnvService envService = Factory.get(EnvService.class);
 
     // 默认的EnvId,如果找不到匹配当前平台的Env则使用这个id的Env作为代理Env
     private String defaultEnv;
     
     // ---- inner
     private List<EnvMatcher> matchers;
+    private EnvData proxyEnvData;
     private Env proxyEnv;
     
     @Override
@@ -53,16 +55,25 @@ public class ProxyPlatformEnv <T extends EnvData> extends AbstractEnv<T> impleme
                 matchers.add(new EnvMatcher(envId, platforms));
             }
         }
-    }
-
-    @Override
-    public void initialize(Application app, Scene scene) {
-        super.initialize(app, scene);
+        
         EnvMatcher matcher = findMatcher(systemService.getPlatformName());
         String proxyEnvId = matcher != null ? matcher.envId : defaultEnv;
-        EnvData envData = envService.loadEnvData(proxyEnvId);
-        proxyEnv = envService.loadEnv(envData);
-        proxyEnv.initialize(app, scene);
+        proxyEnvData = DataFactory.createData(proxyEnvId);
+    }
+    
+    @Override
+    public void updateDatas() {
+        super.updateDatas();
+        if (proxyEnv != null) {
+            proxyEnv.updateDatas();
+        }
+    }
+    
+    @Override
+    public void initialize(Scene scene) {
+        super.initialize(scene);
+        proxyEnv = Loader.load(proxyEnvData);
+        proxyEnv.initialize(scene);
     }
 
     @Override
@@ -105,4 +116,57 @@ public class ProxyPlatformEnv <T extends EnvData> extends AbstractEnv<T> impleme
             return platforms.contains(platform);
         }
     }
+
+    @Override
+    public Vector3f getLocation() {
+        if (initialized) {
+            return proxyEnv.getLocation();
+        }
+        return proxyEnvData.getLocation();
+    }
+
+    @Override
+    public void setLocation(Vector3f location) {
+        if (initialized) {
+            proxyEnv.setLocation(location);
+            return;
+        }
+        proxyEnvData.setLocation(location);
+    }
+
+    @Override
+    public Quaternion getRotation() {
+        if (initialized) {
+            return proxyEnv.getRotation();
+        }
+        return proxyEnvData.getRotation();
+    }
+
+    @Override
+    public void setRotation(Quaternion rotation) {
+        if (initialized) {
+            proxyEnv.setRotation(rotation);
+            return;
+        }
+        proxyEnvData.setRotation(rotation);
+    }
+
+    @Override
+    public Vector3f getScale() {
+        if (initialized) {
+            return proxyEnv.getScale();
+        }
+        return proxyEnvData.getScale();
+    }
+
+    @Override
+    public void setScale(Vector3f scale) {
+        if (initialized) {
+            proxyEnv.setScale(scale);
+            return;
+        }
+        proxyEnvData.setScale(scale);
+    }
+    
+    
 }

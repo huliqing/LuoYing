@@ -272,12 +272,11 @@ public class SummonSkill extends AbstractSkill {
             Spatial summonModel = animationControl.getSpatial();
             if (summonModel != null) {
                 // 让召唤到的目标获得物理碰撞
-                Actor ac = summonModel.getControl(Actor.class);
-                actorService.setLocation(ac, summonModel.getLocalTranslation());
-                logicService.setAutoLogic(ac, true);
-                actorNetwork.setPhysicsEnabled(ac, true);// 物理开需要同步
-                
-                // 释放showAnim以便重用
+//                Actor ac = summonModel.getControl(Actor.class);
+                actorService.setLocation(summonActor, summonModel.getLocalTranslation());
+                logicService.setAutoLogic(summonActor, true);
+                actorNetwork.setPhysicsEnabled(summonActor, true);// 物理开需要同步
+                // 移除control,animationControl不再有意义
                 summonModel.removeControl(animationControl);
             }
             cleanup();

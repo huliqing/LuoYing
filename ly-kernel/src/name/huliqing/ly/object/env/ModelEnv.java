@@ -6,10 +6,10 @@
 package name.huliqing.ly.object.env;
 
 import name.huliqing.ly.data.env.ModelEnvData;
-import com.jme3.app.Application;
 import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.math.Quaternion;
+import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
-import name.huliqing.ly.data.ObjectData;
 import name.huliqing.ly.object.AssetLoader;
 import name.huliqing.ly.object.scene.Scene;
 
@@ -24,38 +24,38 @@ public class ModelEnv<T extends ModelEnvData> extends AbstractEnv<T> {
     protected Spatial model;
 
     @Override
-    public void setData(T data) {
-        super.setData(data); 
+    public void initialize(Scene scene) {
+        super.initialize(scene);
+        model = loadModel();
+        if (model != null) {
+            scene.addSpatial(model);
+        }
     }
 
     @Override
-    public void initialize(Application app, Scene scene) {
-        super.initialize(app, scene);
-        model = loadModel();
+    public void updateDatas() {
+        super.updateDatas(); 
         if (model != null) {
-            // 添加到地形节点中，这样玩家可以点击这个模型，并让角色在这个模型上走动。
-            if (data.isTerrain()) {
-                scene.addTerrainObject(model);
-            } else {
-                scene.addSceneObject(model);
-            }            
+            data.setLocation(model.getLocalTranslation());
+            data.setRotation(model.getLocalRotation());
+            data.setScale(model.getLocalScale());
         }
     }
 
     @Override
     public void cleanup() {
         if (model != null) {
-            scene.removeSceneObject(model);
+            scene.removeSpatial(model);
             model = null;
         }
         super.cleanup(); 
     }
 
     /**
-     * 获取模型
+     * 获取模型物体的实体
      * @return 
      */
-    public Spatial getModel() {
+    public Spatial getSpatial() {
         return model;
     }
 
@@ -76,7 +76,7 @@ public class ModelEnv<T extends ModelEnvData> extends AbstractEnv<T> {
         } else {
             spatial = AssetLoader.loadModelDirect(data.getFile());
         }
-        spatial.setUserData(ObjectData.USER_DATA, data);
+//        spatial.setUserData(ObjectData.USER_DATA, data); // remove20161008,不再需要
         spatial.setLocalTranslation(data.getLocation());
         spatial.setLocalRotation(data.getRotation());
         spatial.setLocalScale(data.getScale());
@@ -110,4 +110,65 @@ public class ModelEnv<T extends ModelEnvData> extends AbstractEnv<T> {
         // 为简单和优化性能，一些参数暂不开放出来。
         rbc.setRestitution(0);
     }
+
+    @Override
+    public Vector3f getLocation() {
+        if (model != null) {
+            return model.getLocalTranslation();
+        }
+        return data.getLocation();
+    }
+    
+    @Override
+    public void setLocation(Vector3f location) {
+        if (model != null) {
+            model.setLocalTranslation(location);
+            RigidBodyControl rbc = model.getControl(RigidBodyControl.class);
+            if (rbc != null) {
+                rbc.setPhysicsLocation(location);
+            }
+            return;
+        }
+        data.setLocation(location);
+    }
+    
+    @Override
+    public Quaternion getRotation() {
+        if (model != null) {
+            return model.getLocalRotation();
+        }
+        return data.getRotation();
+    }
+
+    @Override
+    public void setRotation(Quaternion rotation) {
+        if (model != null) {
+            model.setLocalRotation(rotation);
+            RigidBodyControl rbc = model.getControl(RigidBodyControl.class);
+            if (rbc != null) {
+                rbc.setPhysicsRotation(rotation);
+            }
+            return;
+        }
+        data.setRotation(rotation);
+    }
+
+    @Override
+    public Vector3f getScale() {
+        if (model != null) {
+            return model.getLocalScale();
+        }
+        return data.getScale();
+    }
+
+    @Override
+    public void setScale(Vector3f scale) {
+        if (model != null) {
+            model.setLocalScale(scale);
+            return;
+        }
+        data.setScale(scale);
+    }
+    
+    
 }

@@ -6,6 +6,7 @@
 package name.huliqing.ly.object.module;
 
 import com.jme3.bullet.control.BetterCharacterControl;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.util.TempVars;
 import java.util.ArrayList;
@@ -105,10 +106,16 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
         public void setKinematic(boolean kinematic) {
             rigidBody.setKinematic(kinematic);
         }
+        
         public void setLocalForward(Vector3f localForward) {
             if (localForward != null) {
                 this.localForward.set(localForward);
             }
+        }
+        
+        @Override
+        public void setPhysicsRotation(Quaternion rotation) {
+            super.setPhysicsRotation(rotation);
         }
     }
     
@@ -132,6 +139,11 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
         this.bindDeadAttribute = data.getAsString("bindDeadAttribute");
     }
 
+    @Override
+    public void updateDatas() {
+        super.updateDatas();
+    }
+    
     @Override
     public void initialize(Actor actor) {
         super.initialize(actor);
@@ -175,12 +187,24 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     }
     
     public Vector3f getLocation() {
-        return actor.getSpatial().getWorldTranslation();
+        return actor.getSpatial().getLocalTranslation();
     }
     
     public void setLocation(Vector3f location) {
         actor.getSpatial().setLocalTranslation(location);
         innerControl.warp(location);
+    }
+    
+    public Quaternion getRotation() {
+        return actor.getSpatial().getLocalRotation();
+    }
+    
+    public void setRotation(Quaternion rotation) {
+        innerControl.setPhysicsRotation(rotation);
+    }
+    
+    public void setScale(Vector3f scale) {
+        actor.getSpatial().setLocalScale(scale);
     }
     
     public Vector3f getWalkDirection() {
