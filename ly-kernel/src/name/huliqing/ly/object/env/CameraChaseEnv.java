@@ -35,7 +35,6 @@ public class CameraChaseEnv <T extends EnvData> extends AbstractEnv <T> implemen
 
     @Override
     public void updateDatas() {
-        super.updateDatas(); 
         if (initialized) {
             data.setLocation(ccc.getCamera().getLocation());
             data.setRotation(ccc.getCamera().getRotation());

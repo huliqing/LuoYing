@@ -5,7 +5,6 @@
  */
 package name.huliqing.ly.object.env;
 
-import com.jme3.app.Application;
 import com.jme3.bounding.BoundingBox;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
@@ -26,9 +25,6 @@ public class WaterSimpleEnv<T extends EnvData> extends AbstractEnv<T> implements
 //    private final PlayService playService = Factory.get(PlayService.class);
     
     private String waterModelFile;
-    private Vector3f location;
-    private Vector3f rotation;
-    private Vector3f scale;
     
     private ColorRGBA waterColor;
     private float texScale = 1;
@@ -49,9 +45,6 @@ public class WaterSimpleEnv<T extends EnvData> extends AbstractEnv<T> implements
     public void setData(T data) {
         super.setData(data);
         waterModelFile = data.getAsString("waterModel");
-        location = data.getAsVector3f("location");
-        rotation = data.getAsVector3f("rotation");
-        scale = data.getAsVector3f("scale");
         waterColor = data.getAsColor("waterColor");
         texScale = data.getAsFloat("texScale", texScale);
         waveSpeed = data.getAsFloat("waveSpeed", waveSpeed);
@@ -63,23 +56,24 @@ public class WaterSimpleEnv<T extends EnvData> extends AbstractEnv<T> implements
         foamMaskMap = data.getAsString("foamMaskMap");
         foamMaskScale = data.getAsVector2f("foamMaskScale");
     }
+
+    @Override
+    public void updateDatas() {
+        if (initialized) {
+            data.setLocation(waterModel.getLocalTranslation());
+            data.setRotation(waterModel.getLocalRotation());
+            data.setScale(waterModel.getLocalScale());
+        }
+    }
     
     @Override
     public void initialize(Scene scene) {
         super.initialize(scene);
         
         waterModel = Ly.getApp().getAssetManager().loadModel(waterModelFile);
-        if (location != null) {
-            waterModel.setLocalTranslation(location);
-        }
-        if (rotation != null) {
-            Quaternion rot = waterModel.getLocalRotation();
-            rot.fromAngles(rotation.x, rotation.y, rotation.z);
-            waterModel.setLocalRotation(rot);
-        }
-        if (scale != null) {
-            waterModel.setLocalScale(scale);
-        }
+        waterModel.setLocalTranslation(data.getLocation());
+        waterModel.setLocalRotation(data.getRotation());
+        waterModel.setLocalScale(data.getScale());
         
         water = new VerySimpleWaterProcessor(Ly.getApp().getAssetManager(), waterModel);
         water.addReflectionScene(scene.getRoot());
@@ -102,27 +96,20 @@ public class WaterSimpleEnv<T extends EnvData> extends AbstractEnv<T> implements
         if (foamMaskScale != null) {
             water.setFoamMaskScale(foamMaskScale.x, foamMaskScale.y);
         }
-        Ly.getApp().getViewPort().addProcessor(water);
-        
+        scene.addProcessor(water);
         scene.addSpatial(waterModel);
     }
     
     @Override
     public void cleanup() {
-        if (waterModel != null) {
-            scene.removeSpatial(waterModel);
-        }
-        if (water != null) {
-            if (Ly.getApp().getViewPort().getProcessors().contains(water)) {
-                Ly.getApp().getViewPort().removeProcessor(water);
-            }
-        }
+        scene.removeSpatial(waterModel);
+        scene.removeProcessor(water);
         super.cleanup(); 
     }
     
     @Override
     public boolean isUnderWater(Vector3f point) {
-        if (!isInitialized()) {
+        if (!initialized) {
             return false;
         }
         if (point.y < waterModel.getWorldTranslation().y) {
@@ -132,10 +119,56 @@ public class WaterSimpleEnv<T extends EnvData> extends AbstractEnv<T> implements
         }
         return false;
     }
+    
+    @Override
+    public Vector3f getLocation() {
+        if (initialized) {
+            return waterModel.getLocalTranslation();
+        }
+        return data.getLocation();
+    }
+    
+    @Override
+    public void setLocation(Vector3f location) {
+        if (initialized) {
+            waterModel.setLocalTranslation(location);
+            return;
+        }
+        data.setLocation(location);
+    }
 
     @Override
-    public Spatial getSpatial() {
-        return null;
+    public Quaternion getRotation() {
+        if (initialized) {
+            return waterModel.getLocalRotation();
+        }
+        return data.getRotation();
+    }
+
+    @Override
+    public void setRotation(Quaternion rotation) {
+        if (initialized) {
+            waterModel.setLocalRotation(rotation);
+            return;
+        }
+        data.setRotation(rotation);
+    }
+
+    @Override
+    public Vector3f getScale() {
+        if (initialized) {
+            return waterModel.getLocalScale();
+        }
+        return data.getScale();
+    }
+
+    @Override
+    public void setScale(Vector3f scale) {
+        if (initialized) {
+            waterModel.setLocalScale(scale);
+            return;
+        }
+        data.setScale(scale);
     }
     
     

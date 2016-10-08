@@ -38,6 +38,11 @@ public class LightDirectionalEnv <T extends EnvData> extends AbstractEnv<T> {
     }
 
     @Override
+    public void updateDatas() {
+        // ignore
+    }
+
+    @Override
     public void initialize(Scene scene) {
         super.initialize(scene);
         

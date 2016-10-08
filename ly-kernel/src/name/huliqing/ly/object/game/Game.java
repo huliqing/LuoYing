@@ -13,6 +13,7 @@ import name.huliqing.ly.Factory;
 import name.huliqing.ly.data.GameData;
 import name.huliqing.ly.data.GameLogicData;
 import name.huliqing.ly.layer.service.GameLogicService;
+import name.huliqing.ly.object.Loader;
 import name.huliqing.ly.xml.DataProcessor;
 import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.object.gamelogic.GameLogic;
@@ -28,7 +29,6 @@ import name.huliqing.ly.object.task.Task;
  * @param <T>
  */
 public abstract class Game<T extends GameData> extends AbstractAppState implements DataProcessor<T> {
-    private final GameLogicService gameLogicService = Factory.get(GameLogicService.class);
     
     public interface GameListener {
         /**
@@ -96,7 +96,7 @@ public abstract class Game<T extends GameData> extends AbstractAppState implemen
         List<GameLogicData> logics = data.getGameLogics();
         if (logics != null) {
             for (GameLogicData gld : logics) {
-                GameLogic gl = gameLogicService.loadGameLogic(gld);
+                GameLogic gl = Loader.load(gld);
                 gameLogicManager.attach(gl);
             }
         }

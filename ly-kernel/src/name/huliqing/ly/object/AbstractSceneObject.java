@@ -20,6 +20,9 @@ public abstract class AbstractSceneObject<T extends ObjectData> implements Scene
     
     @Override
     public void setData(T data) {
+        if (this.data != null && this.data != data) {
+            throw new IllegalStateException("Data is already set! could not change the data!");
+        }
         this.data = data;
     }
     
@@ -28,14 +31,14 @@ public abstract class AbstractSceneObject<T extends ObjectData> implements Scene
         return data;
     }
 
-    /**
-     * 覆盖这个方法来更新状态数据到data
-     */
-    @Override
-    public void updateDatas() {
-        // ignore
-    }
-
+//    /**
+//     * 覆盖这个方法来更新状态数据到data
+//     */
+//    @Override
+//    public void updateDatas() {
+//        // ignore
+//    }
+    
     @Override
     public void initialize(Scene scene) {
         if (initialized) {

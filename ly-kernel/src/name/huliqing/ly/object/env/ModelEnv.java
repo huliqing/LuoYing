@@ -34,7 +34,6 @@ public class ModelEnv<T extends ModelEnvData> extends AbstractEnv<T> {
 
     @Override
     public void updateDatas() {
-        super.updateDatas(); 
         if (model != null) {
             data.setLocation(model.getLocalTranslation());
             data.setRotation(model.getLocalRotation());
@@ -84,7 +83,7 @@ public class ModelEnv<T extends ModelEnvData> extends AbstractEnv<T> {
         // 要进行transform后再设置物理特性，因为某些物理特性在设置后就不能再通过
         // 普通的setLocalTranslation,..Rotaion,..Scale来设置变换了。
         if (data.isPhysics()) {
-            addPhysicsControl(spatial, null, data);
+            addPhysicsControl(spatial, null);
         }
         
         if (data.getShadowMode() != null) {
@@ -99,9 +98,8 @@ public class ModelEnv<T extends ModelEnvData> extends AbstractEnv<T> {
      * 物理控制器。
      * @param spatial
      * @param rbc 默认的RigidBodyControl,如果为null则重新创建一个
-     * @param data 
      */
-    protected void addPhysicsControl(Spatial spatial, RigidBodyControl rbc, T data) {
+    protected void addPhysicsControl(Spatial spatial, RigidBodyControl rbc) {
         if (rbc == null) {
             rbc = new RigidBodyControl(data.getMass());
         }

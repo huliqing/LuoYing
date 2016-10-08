@@ -31,6 +31,9 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     private static final Logger LOG = Logger.getLogger(ActorModule.class.getName());
     private final PlayService playService = Factory.get(PlayService.class);
     
+    private final static String DATA_VIEW_DIRECTION = "viewDirection";
+    private final static String DATA_WALK_DIRECTION = "walkDirection";
+    
     private AttributeModule attributeModule;
 
     private BetterCharacterControlWrap innerControl;
@@ -142,6 +145,10 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     @Override
     public void updateDatas() {
         super.updateDatas();
+        if (initialized) {
+            data.setAttribute(DATA_VIEW_DIRECTION, getViewDirection());
+            data.setAttribute(DATA_WALK_DIRECTION, getWalkDirection());
+        }
     }
     
     @Override
@@ -173,6 +180,15 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
         this.innerControl.setLocalForward(actor.getData().getLocalForward());
         this.actor.getSpatial().addControl(innerControl);
         
+        // 
+        Vector3f viewDirection = data.getAsVector3f(DATA_VIEW_DIRECTION);
+        Vector3f walkDirection = data.getAsVector3f(DATA_WALK_DIRECTION);
+        if (viewDirection != null) {
+            setViewDirection(viewDirection);
+        }
+        if (walkDirection != null) {
+            setWalkDirection(walkDirection);
+        }
     }
     
     @Override

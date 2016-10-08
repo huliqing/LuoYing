@@ -5,7 +5,6 @@
 package name.huliqing.ly.object.actor;
 
 import com.jme3.animation.SkeletonControl;
-import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
@@ -66,27 +65,14 @@ public class ActorModelLoader {
             temp.setQueueBucket(RenderQueue.Bucket.Opaque);
         }
         actorModel.setName(data.getName());
-        actorModel.setUserData(ObjectData.USER_DATA, data);
+//        actorModel.setUserData(ObjectData.USER_DATA, data); // remove
         actorModel.setShadowMode(RenderQueue.ShadowMode.Cast);
-        
-        // 4.====create character control
-        
-        // remove20160927
         // 4.1 注缩放必须放在碰撞盒加入之前，因为碰撞盒不能跟着缩放
-//        int scaleLen = data.getProto().checkAttributeLength("scale");
-//        if (scaleLen >= 3) {
-//            actorModel.setLocalScale(data.getAsVector3f("scale"));
-//        } else if (scaleLen == 1) {
-//            float s = data.getAsFloat("scale");
-//            actorModel.setLocalScale(new Vector3f(s,s,s));
-//        }
-
-        // 4.1 注缩放必须放在碰撞盒加入之前，因为碰撞盒不能跟着缩放
-        Vector3f scale = data.getScale();
-        if (scale != null) {
-            actorModel.setLocalScale(scale);
-        }
+        actorModel.setLocalTranslation(data.getLocation());
+        actorModel.setLocalRotation(data.getRotation());
+        actorModel.setLocalScale(data.getScale());
         
+        // remove20161009，xxx 重构分离
         // 4.2 碰撞盒
 //        String collisionShape = data.getAttribute("collisionShape", "capsule");
 //        float collisionRadius = data.getAsFloat("collisionRadius", 0.4f);
@@ -122,17 +108,6 @@ public class ActorModelLoader {
 //            throw new UnsupportedOperationException("Unsupported collisionShape=" + collisionShape);
 //        }
 //        tv.release();
-//        
-//        // 4.3 视角和初始正视角方向
-//        Vector3f forward = data.getAsVector3f("localForward");
-//        if (forward != null) {
-//            actor.setLocalForward(forward);
-//        }
-//        
-//        Vector3f viewDirection = data.getAsVector3f("viewDirection");
-//        if (viewDirection != null) {
-//            actor.setViewDirection(viewDirection);
-//        }
         
         // 6.==== 绑定特效
         String[] effects = data.getAsArray("effects");
@@ -158,7 +133,6 @@ public class ActorModelLoader {
      * @return 
      */
     public static boolean loadExtAnim(Actor actor, String animName) {
-//        String animDir = actor.getData().getAsString("extAnim");
         String animDir = actor.getData().getExtAnim();
         if (animDir == null) {
             LOG.log(Level.WARNING, "Actor {0} no have a extAnim defined"

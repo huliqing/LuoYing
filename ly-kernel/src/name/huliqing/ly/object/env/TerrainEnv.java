@@ -8,7 +8,7 @@ import name.huliqing.ly.data.env.ModelEnvData;
 import com.jme3.scene.Spatial;
 
 /**
- * 地面环境模型。
+ * 地形环境。
  * @author huliqing
  * @param <T>
  */

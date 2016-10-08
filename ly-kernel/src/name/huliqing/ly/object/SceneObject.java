@@ -87,10 +87,4 @@ public interface SceneObject<T extends ObjectData> extends DataProcessor<T>{
      */
     void setScale(Vector3f scale);
     
-//    /**
-//     * 获取场景物体的节点,对于大部分有实体形态的物体来说都应该返回一个实体节点。
-//     * @return 
-//     */
-//    Spatial getSpatial();
-    
 }

@@ -42,7 +42,6 @@ public class AudioEnv extends AbstractEnv<EnvData> {
     
     @Override
     public void updateDatas() {
-        super.updateDatas();
         if (initialized) {
             data.setLocation(sound.getLocalTranslation());
             data.setRotation(sound.getLocalRotation());

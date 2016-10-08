@@ -8,24 +8,23 @@ package name.huliqing.ly.object.env;
 import com.jme3.light.DirectionalLight;
 import com.jme3.light.Light;
 import com.jme3.light.LightList;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
-import com.jme3.post.SceneProcessor;
-import com.jme3.scene.Spatial;
 import com.jme3.texture.Texture2D;
 import com.jme3.water.WaterFilter;
 import com.jme3.water.WaterFilter.AreaShape;
 import name.huliqing.ly.Ly;
 import name.huliqing.ly.data.env.EnvData;
-import name.huliqing.ly.object.SceneObject;
 import name.huliqing.ly.object.scene.Scene;
 import name.huliqing.ly.object.scene.SceneListener;
+import name.huliqing.ly.object.scene.SceneListenerAdapter;
 
 /**
  *
  * @author huliqing
  * @param <T>
  */
-public class WaterAdvanceEnv <T extends EnvData> extends AbstractEnv<T> implements WaterEnv<T>, SceneListener {
+public class WaterAdvanceEnv <T extends EnvData> extends AbstractEnv<T> implements WaterEnv<T> {
 
     private String causticsTexture;
     private String foamTexture;
@@ -41,6 +40,7 @@ public class WaterAdvanceEnv <T extends EnvData> extends AbstractEnv<T> implemen
     // 水体的半径平方,用于优化检测isUnderWater。
     private float radiusSquared;
     private final Vector3f tempCenter = new Vector3f();
+    private SceneListener sceneListener;
     
     @Override
     public void setData(T data) {
@@ -50,10 +50,14 @@ public class WaterAdvanceEnv <T extends EnvData> extends AbstractEnv<T> implemen
         this.heightTexture = data.getAsString("heightTexture");
         this.normalTexture = data.getAsString("normalTexture");
         water.setCausticsIntensity(data.getAsFloat("causticsIntensity", water.getCausticsIntensity()));
+        
         Vector3f center = data.getAsVector3f("center");
         if (center != null) {
             water.setCenter(center);
+        } else {
+            water.setCenter(data.getLocation());
         }
+
         water.setColorExtinction(data.getAsVector3f("colorExtinction", water.getColorExtinction()));
         water.setDeepWaterColor(data.getAsColor("deepWaterColor", water.getDeepWaterColor()));
         water.setFoamExistence(data.getAsVector3f("foamExistence", water.getFoamExistence()));
@@ -66,7 +70,6 @@ public class WaterAdvanceEnv <T extends EnvData> extends AbstractEnv<T> implemen
         water.setRadius(data.getAsFloat("radius", water.getRadius()));
         water.setReflectionDisplace(data.getAsFloat("reflectionDisplace", water.getReflectionDisplace()));
         water.setReflectionMapSize(data.getAsInteger("reflectionMapSize", water.getReflectionMapSize()));
-//        water.setReflectionScene(controlNode);
         water.setRefractionConstant(data.getAsFloat("refractionConstant", water.getRefractionConstant()));
         water.setRefractionStrength(data.getAsFloat("refractionStrength", water.getRefractionStrength()));
         
@@ -100,9 +103,17 @@ public class WaterAdvanceEnv <T extends EnvData> extends AbstractEnv<T> implemen
     }
 
     @Override
+    public void updateDatas() {
+        if (initialized) {
+            if (water.getCenter() != null) {
+                data.setLocation(water.getCenter());
+            }
+        }
+    }
+
+    @Override
     public void initialize(Scene scene) {
         super.initialize(scene); 
-        scene.addSceneListener(this);
         
         if (causticsTexture != null) {
             water.setCausticsTexture((Texture2D) Ly.getApp().getAssetManager().loadTexture(causticsTexture));
@@ -118,13 +129,21 @@ public class WaterAdvanceEnv <T extends EnvData> extends AbstractEnv<T> implemen
         }
         water.setReflectionScene(scene.getRoot());
         
+        sceneListener = new SceneListenerAdapter() {
+            @Override
+            public void onSceneInitialized(Scene scene) {
+                findAndSetLigght(scene);
+            }
+        };
+        
+        scene.addSceneListener(sceneListener);
         // 控制水体渲染
         scene.addFilter(water);
     }
 
     @Override
     public void cleanup() {
-        scene.removeSceneListener(this);
+        scene.removeSceneListener(sceneListener);
         scene.removeFilter(water);
         super.cleanup();
     }
@@ -160,8 +179,7 @@ public class WaterAdvanceEnv <T extends EnvData> extends AbstractEnv<T> implemen
         return false;
     }
 
-    @Override
-    public void onSceneInitialized(Scene scene) {
+    public void findAndSetLigght(Scene scene) {
         // 从场景中找到第一个直射光源作为水体渲染光源用。
         if (useSceneLight) {
             LightList lights = scene.getRoot().getLocalLightList();
@@ -178,6 +196,46 @@ public class WaterAdvanceEnv <T extends EnvData> extends AbstractEnv<T> implemen
             }            
         }
     }
+    
+    @Override
+    public Vector3f getLocation() {
+        if (initialized) {
+            if (water.getCenter() != null) {
+                return water.getCenter();
+            }
+        }
+        return data.getLocation();
+    }
+
+    @Override
+    public void setLocation(Vector3f location) {
+        if (initialized) {
+            water.setCenter(location);
+            return;
+        }
+        data.setLocation(location);
+    }
+
+    @Override
+    public Quaternion getRotation() {
+        return data.getRotation();
+    }
+
+    @Override
+    public void setRotation(Quaternion rotation) {
+        // ignore
+    }
+
+    @Override
+    public Vector3f getScale() {
+        return data.getScale();
+    }
+
+    @Override
+    public void setScale(Vector3f scale) {
+        // ignore
+    }
+    
     
     // 控制潮涨潮落
 //    private class WaterControl extends AbstractControl {
@@ -209,34 +267,7 @@ public class WaterAdvanceEnv <T extends EnvData> extends AbstractEnv<T> implemen
 //        
 //    }
 
-    @Override
-    public Spatial getSpatial() {
-        return null;
-    }
 
-    @Override
-    public void onSceneObjectAdded(Scene scene, SceneObject objectAdded) {
-    }
-
-    @Override
-    public void onSceneObjectRemoved(Scene scene, SceneObject objectRemoved) {
-    }
-
-    @Override
-    public void onSpatialAdded(Scene scene, Spatial spatialAdded) {
-    }
-
-    @Override
-    public void onSpatialRemoved(Scene scene, Spatial spatialRemoved) {
-    }
-
-    @Override
-    public void onProcessorAdded(Scene scene, SceneProcessor processorAdded) {
-    }
-
-    @Override
-    public void onProcessorRemoved(Scene scene, SceneProcessor processorRemoved) {
-    }
 
     
     

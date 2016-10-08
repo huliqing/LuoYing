@@ -33,7 +33,6 @@ public class Actor extends AbstractSceneObject<ActorData> {
 
     @Override
     public void updateDatas() {
-        super.updateDatas();
         for (Module module : modules.getArray()) {
             module.updateDatas();
         }

@@ -16,21 +16,11 @@ import name.huliqing.ly.shape.TreeCollisionMesh;
  * @author huliqing
  */
 public class TreeEnv extends PlantEnv<ModelEnvData> {
-
-//    @Override
-//    protected Spatial loadModel() {
-//        Spatial terrain = scene.getTerrain();
-//        if (terrain != null) {
-//            GeometryUtils.getTerrainHeight(terrain, data.getLocation());
-//            data.getLocation().subtractLocal(0, 0.5f, 0);
-//        }
-//        return super.loadModel(); 
-//    }
     
     @Override
-    protected void addPhysicsControl(Spatial spatial, RigidBodyControl control, ModelEnvData data) {
+    protected void addPhysicsControl(Spatial spatial, RigidBodyControl control) {
         RigidBodyControl rbc = new RigidBodyControl(new MeshCollisionShape(new TreeCollisionMesh()), data.getMass());
-        super.addPhysicsControl(spatial, rbc, data);
+        super.addPhysicsControl(spatial, rbc);
     }
     
 }

@@ -6,6 +6,7 @@ package name.huliqing.ly.object;
 
 /**
  * 需要在与客户端进行同步的物体
+ * @deprecated 
  * @author huliqing
  */
 public interface NetworkObject {

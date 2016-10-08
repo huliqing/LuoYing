@@ -35,7 +35,6 @@ public class BoundaryBoxEnv  extends AbstractEnv<EnvData>{
 
     @Override
     public void updateDatas() {
-        super.updateDatas(); 
         if (initialized) {
             data.setLocation(boundary.getLocalTranslation());
             data.setRotation(boundary.getLocalRotation());

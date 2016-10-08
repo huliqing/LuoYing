@@ -63,7 +63,6 @@ public class ProxyPlatformEnv <T extends EnvData> extends AbstractEnv<T> impleme
     
     @Override
     public void updateDatas() {
-        super.updateDatas();
         if (proxyEnv != null) {
             proxyEnv.updateDatas();
         }
