@@ -9,9 +9,9 @@ import com.jme3.math.FastMath;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.data.DropData;
 import name.huliqing.ly.layer.service.ConfigService;
-import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.utils.MathUtils;
 import name.huliqing.ly.layer.network.ObjectNetwork;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * 掉落普通物品设置 
@@ -36,7 +36,7 @@ public class ItemDrop extends AbstractDrop {
     // 注意：因为这里涉及到机率，所以要使用network版本（***Network.addData）
     // // 这里使用ProtoNetwork就可以，不需要直接使用ItemNetwork
     @Override
-    public boolean doDrop(Actor source, Actor target) {
+    public boolean doDrop(Entity source, Entity target) {
         if (item == null || count <= 0 || rate <= 0) {
             return false;
         }

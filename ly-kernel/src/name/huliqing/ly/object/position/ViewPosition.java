@@ -6,6 +6,7 @@ package name.huliqing.ly.object.position;
 
 import com.jme3.math.Vector3f;
 import name.huliqing.ly.Factory;
+import name.huliqing.ly.Ly;
 import name.huliqing.ly.data.PositionData;
 import name.huliqing.ly.layer.service.PlayService;
 import name.huliqing.ly.ui.UI.Corner;
@@ -38,8 +39,8 @@ public class ViewPosition<T extends PositionData> extends AbstractPosition<T> {
         
         float x = 0;
         float y = 0;
-        float sw = playService.getScreenWidth();
-        float sh = playService.getScreenHeight();
+        float sw = Ly.getSettings().getWidth();
+        float sh = Ly.getSettings().getHeight();
         
         float marginLeft = 0;
         float marginTop = 0;

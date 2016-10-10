@@ -13,7 +13,6 @@ import name.huliqing.ly.data.AnimData;
 /**
  * 直线移动的动画
  * @author huliqing
- * @param <T>
  */
 public final class MoveAnim extends AbstractAnim<Spatial> {
 //    private final static Logger LOG = Logger.getLogger(MoveAnim.class.getName());

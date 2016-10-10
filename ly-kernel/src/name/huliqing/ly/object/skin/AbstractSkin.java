@@ -31,6 +31,7 @@ import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.object.attribute.Attribute;
 import name.huliqing.ly.object.attribute.MatchAttribute;
 import name.huliqing.ly.object.define.DefineFactory;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.sound.SoundManager;
 
 /**
@@ -129,7 +130,7 @@ public abstract class AbstractSkin implements Skin {
     }
 
     @Override
-    public boolean canUse(Actor actor) {
+    public boolean canUse(Entity actor) {
         
         // 如果角色的属性中有一个不能和getMatchAttributes中要求的不匹配则视为不能使用。
         if (data.getMatchAttributes() != null) {
@@ -154,7 +155,7 @@ public abstract class AbstractSkin implements Skin {
     }
     
     @Override
-    public void attach(Actor actor) {
+    public void attach(Entity actor) {
         data.setUsed(true);
         
         // 执行装备声音
@@ -184,7 +185,7 @@ public abstract class AbstractSkin implements Skin {
      * @param localRotation 装备模型的旋转偏移。
      * @param localScale 装备模型的缩放。
      */
-    protected void attach(Actor actor, String bindBone, Spatial skinNode, Vector3f localLocation, Quaternion localRotation, Vector3f localScale) {
+    protected void attach(Entity actor, String bindBone, Spatial skinNode, Vector3f localLocation, Quaternion localRotation, Vector3f localScale) {
         if (skinNode == null) {
             return;
         }
@@ -267,7 +268,7 @@ public abstract class AbstractSkin implements Skin {
         
     }
     
-    private void playSounds(Actor actor, String[] sounds) {
+    private void playSounds(Entity actor, String[] sounds) {
         if (sounds != null) {
             for (String sid : sounds) {
                 SoundManager.getInstance().playSound(sid, actor.getSpatial().getWorldTranslation());
@@ -280,7 +281,7 @@ public abstract class AbstractSkin implements Skin {
      * @param actor
      * @param skinData 
      */
-    private void attachSkinAttributes(Actor actor) {
+    private void attachSkinAttributes(Entity actor) {
         if (data.isAttributeApplied()) {
             return;
         }
@@ -294,7 +295,7 @@ public abstract class AbstractSkin implements Skin {
     }
 
     @Override
-    public void detach(Actor actor) {
+    public void detach(Entity actor) {
         // 1.----标记Using=false
         data.setUsed(false);
         
@@ -315,7 +316,7 @@ public abstract class AbstractSkin implements Skin {
      * @param actor
      * @param skinData 
      */
-    private void detachSkinAttributes(Actor actor) {
+    private void detachSkinAttributes(Entity actor) {
         if (!data.isAttributeApplied()) {
             return;
         }
@@ -330,7 +331,7 @@ public abstract class AbstractSkin implements Skin {
     
     // --------------------------------------------------------------------------------------------------------------------------------
     // 打开skin的hws,如果角色actor主SkeletonControl已经打开该功能,则skinNode必须自已打开.
-    private void checkSwitchToHardware(Actor actor, Spatial skinNode) {
+    private void checkSwitchToHardware(Entity actor, Spatial skinNode) {
         // 如果hsw未打开,则不需要管,交由sc内部去一起处理就可以.
         SkeletonControl sc = actor.getSpatial().getControl(SkeletonControl.class);
         if (!sc.isHardwareSkinningUsed()) {

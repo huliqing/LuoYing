@@ -4,7 +4,7 @@
  */
 package name.huliqing.ly.view.talk;
 
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  *
@@ -62,7 +62,7 @@ public abstract class Speak {
      * 获得说话者
      * @return 
      */
-    public abstract Actor getActor();
+    public abstract Entity getActor();
     
     /**
      * 初始化

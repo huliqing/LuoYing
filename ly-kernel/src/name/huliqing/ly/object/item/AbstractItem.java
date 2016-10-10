@@ -13,11 +13,11 @@ import name.huliqing.ly.data.AttributeMatch;
 import name.huliqing.ly.data.ItemData;
 import name.huliqing.ly.layer.service.AttributeService;
 import name.huliqing.ly.object.Loader;
-import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.object.attribute.Attribute;
 import name.huliqing.ly.object.attribute.MatchAttribute;
 import name.huliqing.ly.object.effect.Effect;
 import name.huliqing.ly.object.effect.EffectManager;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.sound.SoundManager;
 
 /**
@@ -58,7 +58,7 @@ public abstract class AbstractItem implements Item {
     }
 
     @Override
-    public void use(Actor actor) {
+    public void use(Entity actor) {
         playEffects(actor, effects);
         playSounds(actor, sounds);
         // 子类逻辑
@@ -66,12 +66,12 @@ public abstract class AbstractItem implements Item {
     }
     
     @Override
-    public boolean canUse(Actor actor) {
+    public boolean canUse(Entity actor) {
         return checkStateCode(actor) == ItemConstants.STATE_OK;
     }
     
     @Override
-    public int checkStateCode(Actor actor) {
+    public int checkStateCode(Entity actor) {
         // 物品数量不够。
         if (data.getTotal() <= 0) {
             return ItemConstants.STATE_ITEM_NOT_ENOUGH;
@@ -106,7 +106,7 @@ public abstract class AbstractItem implements Item {
      * @param actor
      * @param effects 
      */
-    private void playEffects(Actor actor, String[] effects) {
+    private void playEffects(Entity actor, String[] effects) {
         if (effects != null) {
             Effect effect;
             for (String eid : effects) {
@@ -122,7 +122,7 @@ public abstract class AbstractItem implements Item {
      * @param actor
      * @param sounds 
      */
-    private void playSounds(Actor actor, String[] sounds) {
+    private void playSounds(Entity actor, String[] sounds) {
         if (sounds != null) {
             for (String sid : sounds) {
                 SoundManager.getInstance().playSound(sid, actor.getSpatial().getWorldTranslation());

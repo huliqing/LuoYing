@@ -5,7 +5,6 @@
  */
 package name.huliqing.ly.object.module;
 
-import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.object.skill.Skill;
 
 /**

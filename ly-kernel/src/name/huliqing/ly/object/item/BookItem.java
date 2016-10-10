@@ -10,7 +10,7 @@ import name.huliqing.ly.constants.ItemConstants;
 import name.huliqing.ly.data.ItemData;
 import name.huliqing.ly.layer.service.ItemService;
 import name.huliqing.ly.layer.service.SkillService;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * 技能书, 使用后消耗技能书,并获得一个指定的技能
@@ -31,7 +31,7 @@ public class BookItem extends AbstractItem {
    
     // remove20161002
 //    @Override
-//    public boolean canUse(Actor actor) {
+//    public boolean canUse(Entity actor) {
 //        if (skill == null) {
 //            return false;
 //        }
@@ -43,7 +43,7 @@ public class BookItem extends AbstractItem {
 //    }
     
     @Override
-    public int checkStateCode(Actor actor) {
+    public int checkStateCode(Entity actor) {
         if (skill == null) {
             return ItemConstants.STATE_UNDEFINE;
         }
@@ -54,7 +54,7 @@ public class BookItem extends AbstractItem {
     }
     
     @Override
-    public void use(Actor actor) {
+    public void use(Entity actor) {
         super.use(actor);
         
         // 学习技能

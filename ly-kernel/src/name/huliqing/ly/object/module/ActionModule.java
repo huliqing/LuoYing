@@ -9,11 +9,11 @@ import com.jme3.scene.control.Control;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.data.ModuleData;
 import name.huliqing.ly.layer.service.ActorService;
-import name.huliqing.ly.object.Loader;
 import name.huliqing.ly.object.action.Action;
 import name.huliqing.ly.object.action.FightAction;
 import name.huliqing.ly.object.action.RunAction;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
+import name.huliqing.ly.object.entity.ModelEntity;
 
 /**
  * 角色行为控制器
@@ -33,7 +33,7 @@ public class ActionModule extends AbstractModule<ModuleData> {
     private Control updateControl;
 
     @Override
-    public void initialize(Actor actor) {
+    public void initialize(Entity actor) {
         super.initialize(actor);
         
         updateControl = new AdapterControl() {
@@ -42,12 +42,12 @@ public class ActionModule extends AbstractModule<ModuleData> {
                 actionUpdate(tpf);
             }
         };
-        this.actor.getSpatial().addControl(updateControl);
+        this.entity.getScene().getRoot().addControl(updateControl);
     }
     
     // 更新action逻辑
     private void actionUpdate(float tpf) {
-        if (actorService.isDead(actor)) {
+        if (actorService.isDead(entity)) {
             return;
         }
         
@@ -71,7 +71,7 @@ public class ActionModule extends AbstractModule<ModuleData> {
         defFightAction = null;
 
         if (updateControl != null) {
-            actor.getSpatial().removeControl(updateControl);
+            entity.getScene().getRoot().removeControl(updateControl);
         }
         super.cleanup(); 
     }

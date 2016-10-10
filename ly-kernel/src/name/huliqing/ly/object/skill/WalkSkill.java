@@ -10,7 +10,7 @@ import name.huliqing.ly.Factory;
 import name.huliqing.ly.data.SkillData;
 import name.huliqing.ly.layer.service.ActorService;
 import name.huliqing.ly.network.Network;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.module.ChannelModule;
 
 /**
@@ -38,7 +38,7 @@ public class WalkSkill extends AbstractSkill implements Walk{
     }
 
     @Override
-    public void setActor(Actor actor) {
+    public void setActor(Entity actor) {
         super.setActor(actor);
         channelModule = actor.getModule(ChannelModule.class);
     }

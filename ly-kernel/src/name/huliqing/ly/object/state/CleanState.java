@@ -6,7 +6,7 @@ package name.huliqing.ly.object.state;
 
 import java.util.List;
 import name.huliqing.ly.data.StateData;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.module.StateListener;
 import name.huliqing.ly.object.module.StateModule;
 
@@ -29,7 +29,7 @@ public class CleanState extends AbstractState implements StateListener {
     }
 
     @Override
-    public void setActor(Actor actor) {
+    public void setActor(Entity actor) {
         super.setActor(actor); 
         stateModule = actor.getModule(StateModule.class);
     }
@@ -60,7 +60,7 @@ public class CleanState extends AbstractState implements StateListener {
     }
 
     @Override
-    public void onStateAdded(Actor source, State stateAdded) {
+    public void onStateAdded(Entity source, State stateAdded) {
         // 当检查到新添加的状态刚好是清除列表中的状态时，则立即清除掉。
         if (states != null && states.contains(stateAdded.getData().getId())) {
             stateModule.removeState(stateAdded);
@@ -68,7 +68,7 @@ public class CleanState extends AbstractState implements StateListener {
     }
 
     @Override
-    public void onStateRemoved(Actor source, State stateRemoved) {
+    public void onStateRemoved(Entity source, State stateRemoved) {
         // ignore
     }
     

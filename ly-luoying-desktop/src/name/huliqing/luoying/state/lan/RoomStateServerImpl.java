@@ -20,7 +20,7 @@ import name.huliqing.ly.data.GameData;
 import name.huliqing.ly.data.ConnData;
 import name.huliqing.ly.network.GameServer.ServerState;
 import name.huliqing.ly.manager.ResourceManager;
-import name.huliqing.ly.view.HelpView;
+import name.huliqing.luoying.view.HelpView;
 import name.huliqing.ly.ui.LinearLayout;
 import name.huliqing.ly.ui.UIFactory;
 import name.huliqing.ly.ui.state.UIState;

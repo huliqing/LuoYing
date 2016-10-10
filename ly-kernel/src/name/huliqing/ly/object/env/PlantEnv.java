@@ -7,10 +7,11 @@ package name.huliqing.ly.object.env;
 
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.math.Vector3f;
-import name.huliqing.ly.data.env.ModelEnvData;
 import com.jme3.scene.Spatial;
-import java.util.Collection;
-import name.huliqing.ly.object.SceneObject;
+import java.util.ArrayList;
+import java.util.List;
+import name.huliqing.ly.Ly;
+import name.huliqing.ly.object.entity.ModelEntity;
 import name.huliqing.ly.object.scene.Scene;
 import name.huliqing.ly.object.scene.SceneListener;
 import name.huliqing.ly.object.scene.SceneListenerAdapter;
@@ -19,11 +20,15 @@ import name.huliqing.ly.utils.GeometryUtils;
 /**
  * 植被环境物体，如：花草等物体
  * @author huliqing
- * @param <T>
  */
-public class PlantEnv<T extends ModelEnvData> extends ModelEnv<T> {
+public class PlantEnv extends ModelEntity {
 
     private SceneListener sceneListener;
+
+    @Override
+    protected Spatial loadModel() {
+        return Ly.getAssetManager().loadModel(data.getAsString("file"));
+    }
     
     @Override
     public void initialize(Scene scene) {
@@ -43,19 +48,16 @@ public class PlantEnv<T extends ModelEnvData> extends ModelEnv<T> {
     @Override
     public void cleanup() {
         scene.removeSceneListener(sceneListener);
-        super.cleanup(); 
+        super.cleanup();
     }
 
     private void makePlantOnTerrain(Scene scene) {
         // 在场景载入完毕之后将植皮位置移到terrain节点的上面。
-        Collection<SceneObject> sos = scene.getSceneObjects();
+        List<TerrainEnv> sos = scene.getEntities(TerrainEnv.class, new ArrayList<TerrainEnv>());
         Vector3f location = null;
-        for (SceneObject so : sos) {
-            if (!(so instanceof TerrainEnv)) {
-                continue;
-            }
-            Spatial terrain = ((TerrainEnv) so).getSpatial();
-            Vector3f terrainPoint = GeometryUtils.getModelHeight(terrain, data.getLocation().x, data.getLocation().z);
+        for (TerrainEnv so : sos) {
+            Spatial terrain = so.getSpatial();
+            Vector3f terrainPoint = GeometryUtils.getModelHeight(terrain, model.getWorldTranslation().x, model.getWorldTranslation().z);
             if (terrainPoint != null) {
                 if (location == null || terrainPoint.y > location.y) {
                     location = terrainPoint;
@@ -66,7 +68,6 @@ public class PlantEnv<T extends ModelEnvData> extends ModelEnv<T> {
         if (location != null) {
             // 下移一点
             location.subtractLocal(0, 0.5f, 0);
-
             RigidBodyControl rbc = model.getControl(RigidBodyControl.class);
             if (rbc != null) {
                 rbc.setPhysicsLocation(location);
@@ -75,7 +76,6 @@ public class PlantEnv<T extends ModelEnvData> extends ModelEnv<T> {
             }
         } 
     }
-
 
     
 }

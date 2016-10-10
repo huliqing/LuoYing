@@ -9,7 +9,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.util.TempVars;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.layer.service.ActorService;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.utils.MathUtils;
 
 /**
@@ -33,7 +33,7 @@ public class TimeDetour extends Detour{
     }
 
     @Override
-    public void setActor(Actor actor) {
+    public void setActor(Entity actor) {
         super.setActor(actor);
         lastPos.set(actor.getSpatial().getWorldTranslation());
     }

@@ -6,7 +6,7 @@
 package name.huliqing.ly.layer.network;
 
 import name.huliqing.ly.Inject;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * @author huliqing
@@ -18,6 +18,6 @@ public interface DropNetwork extends Inject {
      * @param source
      * @param target 
      */
-    void doDrop(Actor source, Actor target);
+    void doDrop(Entity source, Entity target);
 
 }

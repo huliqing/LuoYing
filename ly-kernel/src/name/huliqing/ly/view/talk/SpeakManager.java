@@ -6,7 +6,7 @@ package name.huliqing.ly.view.talk;
 
 import com.jme3.util.SafeArrayList;
 import name.huliqing.ly.object.AbstractPlayObject;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * 说话，谈话管理,该类主要管理谈话逻辑，每个逻辑都包装成Talk，每个Talk在执
@@ -58,7 +58,7 @@ public class SpeakManager extends AbstractPlayObject {
      * @param mess 
      * @param useTime 
      */
-    public void doSpeak(Actor actor, String mess, float useTime) {
+    public void doSpeak(Entity actor, String mess, float useTime) {
         if (!isInitialized()) {
             return;
         }

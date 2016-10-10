@@ -11,7 +11,8 @@ import name.huliqing.ly.data.ActorData;
 import name.huliqing.ly.layer.service.ActorService;
 import name.huliqing.ly.layer.service.LogicService;
 import name.huliqing.ly.layer.service.PlayService;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.Loader;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * 服务端发消息给客户端，告诉客户端载入一个新的角色
@@ -107,12 +108,12 @@ public class MessPlayActorLoaded extends MessBase {
         ActorService actorService = Factory.get(ActorService.class);
         LogicService logicService = Factory.get(LogicService.class);
         
-        Actor actor = actorService.loadActor(actorData);
+        Entity actor = Loader.load(actorData);
         actorService.syncTransform(actor, location, viewDirection);
         actorService.syncAnimation(actor, channels, anims, loopModes, speeds, times);
         // 对于客户端来说，角色永远都是无AI的
         logicService.setAutoLogic(actor, false);
-        playService.addObject(actor.getSpatial(), false);
+        playService.addEntity(actor);
         
     }
     

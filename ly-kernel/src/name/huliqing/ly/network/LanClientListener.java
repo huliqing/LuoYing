@@ -20,9 +20,7 @@ import name.huliqing.ly.enums.MessageType;
 import name.huliqing.ly.layer.service.PlayService;
 import name.huliqing.ly.mess.MessSCInitGameOK;
 import name.huliqing.ly.mess.MessBase;
-import name.huliqing.ly.network.AbstractClientListener;
 import name.huliqing.ly.network.GameClient.ClientState;
-import name.huliqing.ly.network.GameClient;
 import name.huliqing.ly.manager.ResourceManager;
 
 /**

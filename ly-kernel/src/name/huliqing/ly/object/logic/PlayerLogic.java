@@ -5,12 +5,12 @@
 package name.huliqing.ly.object.logic;
 
 import name.huliqing.ly.Factory;
-import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.object.action.FightAction;
 import name.huliqing.ly.data.LogicData;
 import name.huliqing.ly.layer.service.ActionService;
 import name.huliqing.ly.layer.service.ActorService;
 import name.huliqing.ly.object.Loader;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.module.ActorModule;
 
 /**
@@ -29,11 +29,11 @@ public class PlayerLogic<T extends LogicData> extends Logic<T> {
     @Override
     public void setData(T data) {
         super.setData(data); 
-        fightAction = (FightAction) Loader.loadAction(data.getAsString("fightAction"));
+        fightAction = (FightAction) Loader.load(data.getAsString("fightAction"));
     }
 
     @Override
-    public void setActor(Actor actor) {
+    public void setActor(Entity actor) {
         super.setActor(actor); 
         actorModule = actor.getModule(ActorModule.class);
     }
@@ -45,7 +45,7 @@ public class PlayerLogic<T extends LogicData> extends Logic<T> {
             return;
         }
         
-        Actor target = actorModule.getTarget();
+        Entity target = actorModule.getTarget();
         
         if (target != null && !actorService.isDead(target) 
                 && target.getSpatial().getWorldTranslation().distance(actor.getSpatial().getWorldTranslation()) < actorModule.getViewDistance()

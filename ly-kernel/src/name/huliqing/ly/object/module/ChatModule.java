@@ -9,8 +9,8 @@ import java.util.List;
 import name.huliqing.ly.data.ChatData;
 import name.huliqing.ly.data.ObjectData;
 import name.huliqing.ly.object.Loader;
-import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.object.chat.Chat;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * 角色对话模块
@@ -21,7 +21,7 @@ public class ChatModule extends AbstractModule {
     private Chat chat;
 
     @Override
-    public void initialize(Actor actor) {
+    public void initialize(Entity actor) {
         super.initialize(actor);
         
         // 目标只支持配置一个chat, 如果需要多个chat，则应该包装在GroupChat下面。
@@ -43,7 +43,7 @@ public class ChatModule extends AbstractModule {
     }
     
     private void setChat(Chat chat) {
-        chat.setActor(actor);
+        chat.setActor(entity);
         this.chat = chat;
     }
 

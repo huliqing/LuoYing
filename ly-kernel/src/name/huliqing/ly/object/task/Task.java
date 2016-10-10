@@ -6,8 +6,7 @@ package name.huliqing.ly.object.task;
 
 import name.huliqing.ly.data.TaskData;
 import name.huliqing.ly.xml.DataProcessor;
-import name.huliqing.ly.object.actor.Actor;
-import name.huliqing.ly.ui.UI;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * 任务
@@ -33,13 +32,13 @@ public interface Task<T extends TaskData> extends DataProcessor<T> {
      * 设置任务的执行角色
      * @param actor 
      */
-    void setActor(Actor actor);
+    void setActor(Entity actor);
     
     /**
      * 获取当前任务的执行者
      * @return 
      */
-    Actor getActor();
+    Entity getActor();
     
     /**
      * 获取任务ID
@@ -58,10 +57,11 @@ public interface Task<T extends TaskData> extends DataProcessor<T> {
      */
     void doCompletion();
     
-    /**
-     * 获取任务情报,返回一个UI内容包含任务详细信息，如任务说明，奖励情况，
-     * 任务进度等
-     * @return 
-     */
-    UI getTaskDetail();
+    // remove20161010
+//    /**
+//     * 获取任务情报,返回一个UI内容包含任务详细信息，如任务说明，奖励情况，
+//     * 任务进度等
+//     * @return 
+//     */
+//    UI getTaskDetail();
 }

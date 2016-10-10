@@ -16,7 +16,7 @@ import name.huliqing.ly.layer.service.ActorService;
 import name.huliqing.ly.layer.service.ChatService;
 import name.huliqing.ly.layer.service.PlayService;
 import name.huliqing.ly.manager.ResourceManager;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.ui.AbstractUI;
 import name.huliqing.ly.ui.Icon;
 import name.huliqing.ly.ui.LinearLayout;
@@ -26,7 +26,7 @@ import name.huliqing.ly.ui.Text;
 import name.huliqing.ly.ui.UI;
 import name.huliqing.ly.ui.UI.Listener;
 import name.huliqing.ly.ui.UIFactory;
-import name.huliqing.ly.view.SimpleRow;
+import name.huliqing.luoying.view.SimpleRow;
 
 /**
  * 对话组
@@ -111,7 +111,7 @@ public class GroupChat<T extends ChatData> extends Chat<T> {
     }
 
     @Override
-    public void setActor(Actor actor) {
+    public void setActor(Entity actor) {
         super.setActor(actor);
         if (!chats.isEmpty()) {
             for (Chat c : chats) {

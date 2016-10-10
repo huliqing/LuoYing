@@ -17,6 +17,7 @@ import name.huliqing.ly.layer.service.SkillService;
 import name.huliqing.ly.object.define.DefineFactory;
 import name.huliqing.ly.object.effect.Effect;
 import name.huliqing.ly.object.effect.EffectManager;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.module.ActorModule;
 import name.huliqing.ly.object.module.SkinModule;
 import name.huliqing.ly.object.skin.Skin;
@@ -67,7 +68,7 @@ public class AttackSkill extends HitSkill {
     }
 
     @Override
-    public void setActor(Actor actor) {
+    public void setActor(Entity actor) {
         super.setActor(actor);
         actorModule = actor.getModule(ActorModule.class);
         skinModule = actor.getModule(SkinModule.class);
@@ -110,7 +111,7 @@ public class AttackSkill extends HitSkill {
         // 如果允许多重目标攻击
         if (multHit) {
             List<Actor> targets = playService.findAllActor();
-            for (Actor target : targets) {
+            for (Entity target : targets) {
                 // 只有在技能作用范围内　及　在攻击角度内才视为可能被击中
                 if (!isInHitDistance(target) 
                         || !isInHitAngle(target)
@@ -128,7 +129,7 @@ public class AttackSkill extends HitSkill {
                 }
             }
         } else {
-            Actor target = actorModule.getTarget();
+            Entity target = actorModule.getTarget();
             
             // 只有在技能作用范围内　及　在攻击角度内才视为可能被击中
             if (!isInHitDistance(target) 
@@ -170,7 +171,7 @@ public class AttackSkill extends HitSkill {
      * 处理防守的声效，特效
      * @param target 
      */
-    protected void doDefendResult(Actor target) {
+    protected void doDefendResult(Entity target) {
         int mat1 = getWeaponMat(skinModule);
         int mat2 = getWeaponMat(target.getModule(SkinModule.class));
         if (mat1 < 0 || mat2 < 0) {
@@ -198,7 +199,7 @@ public class AttackSkill extends HitSkill {
         }
     }
     
-    protected void doHitResult(Actor target) {
+    protected void doHitResult(Entity target) {
         
         // remove20160928
 //        // 伤害声音

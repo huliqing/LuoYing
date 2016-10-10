@@ -6,10 +6,9 @@ package name.huliqing.ly.mess;
 
 import com.jme3.network.serializing.Serializable;
 import name.huliqing.ly.Factory;
-import name.huliqing.ly.data.ObjectData;
 import name.huliqing.ly.layer.service.PlayService;
-import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.layer.service.ObjectService;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * 给角色添加物体
@@ -51,20 +50,11 @@ public class MessProtoAdd extends MessBase {
         this.addCount = count;
     }
 
-    // remove20160830
-//    public int getSyncTotal() {
-//        return syncTotal;
-//    }
-//
-//    public void setSyncTotal(int syncTotal) {
-//        this.syncTotal = syncTotal;
-//    }
-
     @Override
     public void applyOnClient() {
         PlayService playService = Factory.get(PlayService.class);
         ObjectService protoService = Factory.get(ObjectService.class);
-        Actor actor = playService.findActor(actorId);
+        Entity actor = playService.getEntity(actorId);
         if (actor == null) {
             return;
         }
@@ -72,9 +62,6 @@ public class MessProtoAdd extends MessBase {
         if (addCount > 0) {
             protoService.addData(actor, objectId, addCount);
         }
-        
-        // remove20160830
-//        protoService.syncDataTotal(actor, objectId, syncTotal);
 
     }
 }

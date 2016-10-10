@@ -6,7 +6,6 @@ package name.huliqing.ly.logic.scene;
 
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
-import com.jme3.scene.Spatial;
 import com.jme3.util.SafeArrayList;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,7 +19,8 @@ import name.huliqing.ly.data.GameLogicData;
 import name.huliqing.ly.layer.network.PlayNetwork;
 import name.huliqing.ly.layer.service.ActorService;
 import name.huliqing.ly.layer.service.PlayService;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.Loader;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.gamelogic.AbstractGameLogic;
 import name.huliqing.ly.utils.MathUtils;
 import name.huliqing.ly.utils.ThreadHelper;
@@ -52,7 +52,7 @@ public class ActorBuildLogic<T extends GameLogicData> extends AbstractGameLogic<
          * @param actorId
          * @return 
          */
-        Actor load(String actorId);
+        Entity load(String actorId);
    
     }
     
@@ -64,7 +64,7 @@ public class ActorBuildLogic<T extends GameLogicData> extends AbstractGameLogic<
          * @param actor
          * @return 
          */
-        Actor onAddBefore(Actor actor);
+        Entity onAddBefore(Entity actor);
     }
     
     // 模型装载器
@@ -85,10 +85,10 @@ public class ActorBuildLogic<T extends GameLogicData> extends AbstractGameLogic<
     private int total = 10;
     
     // 已经生成的角色的列表
-    private final SafeArrayList<Spatial> models = new SafeArrayList<Spatial>(Spatial.class);
+    private final SafeArrayList<Entity> models = new SafeArrayList<Entity>(Entity.class);
     
     // 用于从其它线程载入角色
-    private Future<Actor> future;
+    private Future<Entity> future;
     
     public ActorBuildLogic() {
         this.interval = 3;
@@ -160,15 +160,15 @@ public class ActorBuildLogic<T extends GameLogicData> extends AbstractGameLogic<
         if (future != null && future.isDone()) {
             try {
                 // 将模型添加到场景和当前列表。
-                Actor actor = future.get();
+                Entity actor = future.get();
                 actorService.setLocation(actor, getRandomPosition());
                 if (callback != null) {
                     actor = callback.onAddBefore(actor);
                 }
                 // 注：如果callback存在，并onAddBefore返回null,则不载入场景
                 if (actor != null) {
-                    playNetwork.addActor(actor);
-                    models.add(actor.getSpatial());
+                    playNetwork.addEntity(actor);
+                    models.add(actor);
                 }
             } catch (Exception ex) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
@@ -179,8 +179,8 @@ public class ActorBuildLogic<T extends GameLogicData> extends AbstractGameLogic<
 //        Log.get(getClass()).log(Level.INFO, "ActorBuildLogic, actor size={0}", models.size());
         // 1.角色已经不存在战场，则清理出列表。
         if (models.size() >= total) {
-            for (Spatial s : models.getArray()) {
-                if (!playService.isInScene(s)) {
+            for (Entity s : models.getArray()) {
+                if (s.getScene() == null) {
                     models.remove(s);
                 }
             }
@@ -233,14 +233,14 @@ public class ActorBuildLogic<T extends GameLogicData> extends AbstractGameLogic<
      * @return 
      */
     private Future loadModel(final String id) {
-        Future tempFuture = ThreadHelper.submit(new Callable<Actor>() {
+        Future tempFuture = ThreadHelper.submit(new Callable<Entity>() {
             @Override
-            public Actor call() throws Exception {
+            public Entity call() throws Exception {
                 if (modelLoader != null) {
                     // 如果指定了特殊的模型载入器，则使用指定的
                     return modelLoader.load(id);
                 } else {
-                    return actorService.loadActor(id);
+                    return Loader.load(id);
                 }
             }
         });

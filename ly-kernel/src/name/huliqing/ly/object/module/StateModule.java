@@ -10,7 +10,7 @@ import com.jme3.util.SafeArrayList;
 import java.util.List;
 import name.huliqing.ly.data.StateData;
 import name.huliqing.ly.object.Loader;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.state.State;
 
 /**
@@ -24,13 +24,13 @@ public class StateModule extends AbstractModule {
     private Control updateControl;
     
     @Override
-    public void initialize(Actor actor) {
+    public void initialize(Entity actor) {
         super.initialize(actor); 
         updateControl = new AdapterControl() {
             @Override
             public void update(float tpf) {stateUpdate(tpf);}
         };
-        this.actor.getSpatial().addControl(updateControl);
+        this.entity.getSpatial().addControl(updateControl);
 
         List<StateData> stateDatas = actor.getData().getObjectDatas(StateData.class, null);
         if (stateDatas != null) {
@@ -58,7 +58,7 @@ public class StateModule extends AbstractModule {
         }
         states.clear();
         if (updateControl != null) {
-            actor.getSpatial().removeControl(updateControl);
+            entity.getSpatial().removeControl(updateControl);
         }
         super.cleanup();
     }
@@ -72,15 +72,15 @@ public class StateModule extends AbstractModule {
         
         // 加入data列表和处理器列表
         states.add(state);
-        actor.getData().addObjectData(state.getData());
+        entity.getData().addObjectData(state.getData());
         
-        state.setActor(actor);
+        state.setActor(entity);
         state.initialize();
         
         // 侦听器
         if (stateListeners != null && !stateListeners.isEmpty()) {
             for (StateListener sl : stateListeners) {
-                sl.onStateAdded(actor, state);
+                sl.onStateAdded(entity, state);
             }
         }
     }
@@ -90,12 +90,12 @@ public class StateModule extends AbstractModule {
             return false;
         
         states.remove(state);
-        actor.getData().removeObjectData(state.getData());
+        entity.getData().removeObjectData(state.getData());
         state.cleanup();
         // 侦听器
         if (stateListeners != null && !stateListeners.isEmpty()) {
             for (StateListener sl : stateListeners) {
-                sl.onStateRemoved(actor, state);
+                sl.onStateRemoved(entity, state);
             }
         }
         return true;

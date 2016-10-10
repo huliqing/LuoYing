@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.ly.data.TaskData;
 import name.huliqing.ly.object.Loader;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.task.Task;
 
 /**
@@ -23,7 +23,7 @@ public class TaskModule extends AbstractModule {
     private List<TaskListener> taskListeners;
 
     @Override
-    public void initialize(Actor actor) {
+    public void initialize(Entity actor) {
         super.initialize(actor); 
 
         List<TaskData> taskDatas = actor.getData().getObjectDatas(TaskData.class, null);
@@ -53,15 +53,15 @@ public class TaskModule extends AbstractModule {
         }
         
         tasks.add(task);
-        actor.getData().addObjectData(task.getData());
+        entity.getData().addObjectData(task.getData());
         
-        task.setActor(actor);
+        task.setActor(entity);
         task.initialize();
         
         // 侦听器
         if (taskListeners != null && !taskListeners.isEmpty()) {
             for (TaskListener tl : taskListeners) {
-                tl.onTaskAdded(actor, task);
+                tl.onTaskAdded(entity, task);
             }
         }
     }
@@ -76,13 +76,13 @@ public class TaskModule extends AbstractModule {
             return false;
         
         tasks.remove(task);
-        actor.getData().removeObjectData(task.getData());
+        entity.getData().removeObjectData(task.getData());
         task.cleanup();
         
         // 侦听器
         if (taskListeners != null && !taskListeners.isEmpty()) {
             for (TaskListener tl : taskListeners) {
-                tl.onTaskRemoved(actor, task);
+                tl.onTaskRemoved(entity, task);
             }
         }
         
@@ -124,7 +124,7 @@ public class TaskModule extends AbstractModule {
         // 侦听器
         if (taskListeners != null && !taskListeners.isEmpty()) {
             for (TaskListener tl : taskListeners) {
-                tl.onTaskCompleted(actor, task);
+                tl.onTaskCompleted(entity, task);
             }
         }
     }

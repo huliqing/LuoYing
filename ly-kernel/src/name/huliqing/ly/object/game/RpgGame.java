@@ -5,13 +5,15 @@
  */
 package name.huliqing.ly.object.game;
 
+import com.jme3.scene.Spatial;
+
 /**
  * @author huliqing
  */
-public class RpgGame extends Game {
+public class RpgGame extends AbstractGame {
 
-    @Override
-    protected void gameInitialize() {
-    }
+
+
+    
     
 }

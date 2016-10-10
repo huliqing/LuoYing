@@ -6,7 +6,7 @@
 package name.huliqing.ly.object.item;
 
 import name.huliqing.ly.data.ItemData;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.xml.DataProcessor;
 
 /**
@@ -23,12 +23,12 @@ public interface Item extends DataProcessor<ItemData> {
     
     /**
      * 让角色使用指定的物品。注：这个方法会强制使用物品，如果要判断当前状态下角色是否可以使用这件物品，
-     * 可以使用{@link #canUse(Actor) } 或 {@link #checkStateCode(Actor) }
+     * 可以使用{@link #canUse(Entity) } 或 {@link #checkStateCode(Entity) }
      * @param actor 
      * @see #canUse(name.huliqing.core.object.actor.Actor) 
      * @see #checkStateCode(name.huliqing.core.object.actor.Actor) 
      */
-    void use(Actor actor);
+    void use(Entity actor);
     
     /**
      * 判断角色是否可以使用当前物品, 也可以通过状态码来判断。
@@ -36,7 +36,7 @@ public interface Item extends DataProcessor<ItemData> {
      * @return 
      * @see #checkStateCode(name.huliqing.core.object.actor.Actor) 
      */
-    boolean canUse(Actor actor);
+    boolean canUse(Entity actor);
     
     /**
      * 这个方法返回一个状态码，用于判断指定角色是否可以使用这个物品。
@@ -44,6 +44,6 @@ public interface Item extends DataProcessor<ItemData> {
      * @return 
      * @see #canUse(name.huliqing.core.object.actor.Actor) 
      */
-    int checkStateCode(Actor actor);
+    int checkStateCode(Entity actor);
     
 }

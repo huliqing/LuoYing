@@ -15,7 +15,7 @@ import name.huliqing.ly.constants.IdConstants;
 import name.huliqing.ly.data.ConfigData;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.ly.object.sound.SoundManager;
-import name.huliqing.ly.object.shortcut.ShortcutManager;
+//import name.huliqing.luoying.view.shortcut.ShortcutManager;
 import name.huliqing.ly.xml.DataFactory;
 import name.huliqing.ly.save.SaveConfig;
 import name.huliqing.ly.save.SaveHelper;

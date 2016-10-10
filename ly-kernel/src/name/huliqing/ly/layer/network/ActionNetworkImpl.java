@@ -9,7 +9,7 @@ import name.huliqing.ly.network.Network;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.layer.service.ActionService;
 import name.huliqing.ly.object.action.Action;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * 注意：客户端是不能执行任何逻辑和行为的，服务端也不应该把逻辑和行为广播到 客户端。
@@ -29,21 +29,21 @@ public class ActionNetworkImpl implements ActionNetwork {
     }
 
     @Override
-    public void playAction(Actor actor, Action action) {
+    public void playAction(Entity actor, Action action) {
         if (!NETWORK.isClient()) {
             actionService.playAction(actor, action);
         }
     }
 
     @Override
-    public void playRun(Actor actor, Vector3f pos) {
+    public void playRun(Entity actor, Vector3f pos) {
         if (!NETWORK.isClient()) {
             actionService.playRun(actor, pos);
         }
     }
 
     @Override
-    public void playFight(Actor actor, Actor target, String skillId) {
+    public void playFight(Entity actor, Entity target, String skillId) {
         // 客户端是不能执行逻辑和行为的
         if (!NETWORK.isClient()) {
             actorNetwork.setTarget(actor, target);

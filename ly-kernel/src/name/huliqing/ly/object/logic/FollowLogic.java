@@ -6,7 +6,6 @@ package name.huliqing.ly.object.logic;
 
 import com.jme3.math.FastMath;
 import name.huliqing.ly.Factory;
-import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.object.action.FollowAction;
 import name.huliqing.ly.data.LogicData;
 import name.huliqing.ly.layer.service.ActionService;
@@ -14,6 +13,7 @@ import name.huliqing.ly.layer.service.AttributeService;
 import name.huliqing.ly.layer.service.PlayService;
 import name.huliqing.ly.object.action.Action;
 import name.huliqing.ly.object.attribute.NumberAttribute;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.utils.MathUtils;
 
 /**
@@ -32,7 +32,7 @@ public class FollowLogic<T extends LogicData> extends Logic<T> {
     private float maxFollow = 7f;
     
     private FollowAction followAction;
-    private Actor target;
+    private Entity target;
     // 最近一次跟随到最近的距离
     private float lastFollowUsed;
     
@@ -85,7 +85,7 @@ public class FollowLogic<T extends LogicData> extends Logic<T> {
         
         // 如果跟随的目标发生变化则重新查找目标进行跟随.找不到指定目标则不处理
         if (target == null || target.getData().getUniqueId() != ft) {
-            target = playService.findActor(ft);
+            target = actor.getScene().getEntity(ft);
             if (target == null || target == actor) {
                 return;
             }

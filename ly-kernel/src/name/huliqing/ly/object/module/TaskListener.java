@@ -4,7 +4,7 @@
  */
 package name.huliqing.ly.object.module;
 
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.task.Task;
 
 /**
@@ -18,19 +18,19 @@ public interface TaskListener {
      * @param actor 新添加了任务的角色
      * @param task 新添加的任务
      */
-    void onTaskAdded(Actor actor, Task task);
+    void onTaskAdded(Entity actor, Task task);
     
     /**
      * 当角色被移除了一个任务后触发该方法。
      * @param actor 被移除了任务的角色
      * @param taskRemoved 已被移除的任务
      */
-    void onTaskRemoved(Actor actor, Task taskRemoved);
+    void onTaskRemoved(Entity actor, Task taskRemoved);
     
     /**
      * 当角色完成了某个任务的时候触发该方法。
      * @param actor
      * @param task 
      */
-    void onTaskCompleted(Actor actor, Task task);
+    void onTaskCompleted(Entity actor, Task task);
 }

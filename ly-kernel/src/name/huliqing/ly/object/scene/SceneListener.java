@@ -5,10 +5,7 @@
  */
 package name.huliqing.ly.object.scene;
 
-import com.jme3.post.Filter;
-import com.jme3.post.SceneProcessor;
-import com.jme3.scene.Spatial;
-import name.huliqing.ly.object.SceneObject;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * 场景侦听器
@@ -25,45 +22,48 @@ public interface SceneListener {
     /**
      * 当容器添加了一个物体之后该方法被立即调用。
      * @param scene
-     * @param objectAdded 
+     * @param entityAdded 
      */
-    void onSceneObjectAdded(Scene scene, SceneObject objectAdded);
+    void onSceneEntityAdded(Scene scene, Entity entityAdded);
 
     /**
      * 当容器移除了一个物体之后该方法被立即调用
      * @param scene
-     * @param objectRemoved 
+     * @param entityRemoved 
      */
-    void onSceneObjectRemoved(Scene scene, SceneObject objectRemoved);
+    void onSceneEntityRemoved(Scene scene, Entity entityRemoved);
     
-    /**
-     * 当场景中新添加了物体后该方法被调用。
-     * @param scene
-     * @param spatialAdded 新添加的物体
-     */
-    void onSpatialAdded(Scene scene, Spatial spatialAdded);
+    // remove20161010
+//    /**
+//     * 当场景中新添加了物体后该方法被调用。
+//     * @param scene
+//     * @param spatialAdded 新添加的物体
+//     */
+//    void onSpatialAdded(Scene scene, Spatial spatialAdded);
+//    
+//    /**
+//     * 当场景中移除了物体后该方法被调用
+//     * @param scene
+//     * @param spatialRemoved 被移除的物体
+//     */
+//    void onSpatialRemoved(Scene scene, Spatial spatialRemoved);
     
-    /**
-     * 当场景中移除了物体后该方法被调用
-     * @param scene
-     * @param spatialRemoved 被移除的物体
-     */
-    void onSpatialRemoved(Scene scene, Spatial spatialRemoved);
+    // remove20161009
+//    /**
+//     * 当场景添加了一个Scene Processor之后该方法被调用
+//     * @param scene
+//     * @param processorAdded 新添加的Scene Processor
+//     */
+//    void onProcessorAdded(Scene scene, SceneProcessor processorAdded);
+//    
+//    /**
+//     * 当场景移除了一个Scene Processor之后该方法被调用。
+//     * @param scene
+//     * @param processorRemoved 已被移除的Scene Processor
+//     */
+//    void onProcessorRemoved(Scene scene, SceneProcessor processorRemoved);
     
-    /**
-     * 当场景添加了一个Scene Processor之后该方法被调用
-     * @param scene
-     * @param processorAdded 新添加的Scene Processor
-     */
-    void onProcessorAdded(Scene scene, SceneProcessor processorAdded);
-    
-    /**
-     * 当场景移除了一个Scene Processor之后该方法被调用。
-     * @param scene
-     * @param processorRemoved 已被移除的Scene Processor
-     */
-    void onProcessorRemoved(Scene scene, SceneProcessor processorRemoved);
-    
+    // remove20161009
 //    /**
 //     * 当场景添加了一个Filter之后该方法被调用
 //     * @param scene

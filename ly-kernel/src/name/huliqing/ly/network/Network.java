@@ -17,7 +17,7 @@ import name.huliqing.ly.network.GameServer.ServerListener;
 import name.huliqing.ly.mess.MessActorTransformDirect;
 import name.huliqing.ly.layer.service.ActorService;
 import name.huliqing.ly.object.AbstractPlayObject;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  *
@@ -159,7 +159,7 @@ public class Network extends AbstractPlayObject {
      * @param actor
      * @param message 
      */
-    public void sendToClient(Actor actor, Message message) {
+    public void sendToClient(Entity actor, Message message) {
         if (gameServer != null && gameServer.isRunning()) {
             gameServer.send(actor, message);
         }
@@ -170,7 +170,7 @@ public class Network extends AbstractPlayObject {
      * @param actor
      * @deprecated 不要使用这样直接同步位置,很导致客户端严重抖动
      */
-    public void syncTransformDirect(Actor actor) {
+    public void syncTransformDirect(Entity actor) {
         if (hasConnections()) {
             MessActorTransformDirect mess = new MessActorTransformDirect();
             mess.setActorId(actor.getData().getUniqueId());
@@ -191,7 +191,7 @@ public class Network extends AbstractPlayObject {
      * 为止。
      * @param actor 
      */
-    public void addAutoSyncTransform(Actor actor) {
+    public void addAutoSyncTransform(Entity actor) {
         if (hasConnections()) {
             ServerListener sl = gameServer.getListener();
             if (sl != null) {
@@ -200,7 +200,7 @@ public class Network extends AbstractPlayObject {
         }
     }
     
-    public void removeAutoSyncTransform(Actor actor) {
+    public void removeAutoSyncTransform(Entity actor) {
         if (gameServer != null) {
             ServerListener sl = gameServer.getListener();
             if (sl != null) {

@@ -16,16 +16,20 @@ import name.huliqing.ly.object.game.Game;
  */
 public interface GameLogic<T extends GameLogicData> extends DataProcessor<T> {
 
+    @Override
+    void setData(T data);
+
+    @Override
+    T getData();
+    
     /**
      * 初始化物体
-     *
      * @param game
      */
     public void initialize(Game game);
 
     /**
      * 判断是否已经初始化
-     *
      * @return
      */
     public boolean isInitialized();
@@ -44,14 +48,12 @@ public interface GameLogic<T extends GameLogicData> extends DataProcessor<T> {
 
     /**
      * 设置是否打开逻辑
-     *
      * @param enabled
      */
     void setEnabled(boolean enabled);
 
     /**
      * 判断逻辑是否打开
-     *
      * @return
      */
     boolean isEnabled();

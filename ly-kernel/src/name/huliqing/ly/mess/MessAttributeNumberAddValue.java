@@ -8,7 +8,7 @@ import com.jme3.network.serializing.Serializable;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.layer.service.AttributeService;
 import name.huliqing.ly.layer.service.PlayService;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * @author huliqing
@@ -50,7 +50,7 @@ public class MessAttributeNumberAddValue extends MessBase {
     public void applyOnClient() {
         PlayService playService = Factory.get(PlayService.class);
         AttributeService attributeService = Factory.get(AttributeService.class);
-        Actor actor = playService.findActor(actorId);
+        Entity actor = playService.getEntity(actorId);
         if (actor != null) {
             attributeService.addNumberAttributeValue(actor, attributeName, value);
         }

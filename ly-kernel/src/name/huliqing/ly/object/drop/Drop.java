@@ -6,7 +6,7 @@
 package name.huliqing.ly.object.drop;
 
 import name.huliqing.ly.data.DropData;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.xml.DataProcessor;
 
 /**
@@ -21,5 +21,5 @@ public interface Drop extends DataProcessor<DropData> {
      * @param target 接受掉落物品的角色
      * @return 
      */
-    boolean doDrop(Actor source, Actor target);
+    boolean doDrop(Entity source, Entity target);
 }

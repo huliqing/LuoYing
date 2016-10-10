@@ -8,7 +8,6 @@ import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.scene.Spatial;
 import name.huliqing.ly.Ly;
-import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.data.ActionData;
 import name.huliqing.ly.data.ActorData;
 import name.huliqing.ly.data.AnimData;
@@ -17,7 +16,6 @@ import name.huliqing.ly.data.ChatData;
 import name.huliqing.ly.data.ElData;
 import name.huliqing.ly.data.EmitterData;
 import name.huliqing.ly.data.PositionData;
-import name.huliqing.ly.data.env.EnvData;
 import name.huliqing.ly.data.GameData;
 import name.huliqing.ly.data.HitCheckerData;
 import name.huliqing.ly.data.LogicData;
@@ -37,11 +35,11 @@ import name.huliqing.ly.object.anim.Anim;
 import name.huliqing.ly.object.bullet.Bullet;
 import name.huliqing.ly.object.chat.Chat;
 import name.huliqing.ly.object.effect.Effect;
-import name.huliqing.ly.object.env.Env;
 import name.huliqing.ly.object.game.Game;
 import name.huliqing.ly.object.hitchecker.HitChecker;
 import name.huliqing.ly.object.el.El;
 import name.huliqing.ly.object.emitter.Emitter;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.magic.Magic;
 import name.huliqing.ly.object.position.Position;
 import name.huliqing.ly.object.resist.Resist;
@@ -54,7 +52,6 @@ import name.huliqing.ly.object.task.Task;
 import name.huliqing.ly.object.view.View;
 import name.huliqing.ly.xml.DataProcessor;
 import name.huliqing.ly.xml.ProtoData;
-
 
 public class Loader {
     
@@ -99,27 +96,27 @@ public class Loader {
      * @param data
      * @return 
      */
-    public static Actor loadActor(ActorData data) {
-        Actor actor = DataFactory.createProcessor(data);
+    public static Entity loadActor(ActorData data) {
+        Entity actor = DataFactory.createProcessor(data);
         return actor;
     }
     
-    /**
-     * @deprecated 
-     * @return 
-     */
-    public static Anim loadAnimation(String animationId) {
-        AnimData data = DataFactory.createData(animationId);
-        return loadAnimation(data);
-    }
-    
-    /**
-     * @deprecated 
-     * @return 
-     */
-    public static Anim loadAnimation(AnimData data) {
-        return DataFactory.createProcessor(data);
-    }
+//    /**
+//     * @deprecated 
+//     * @return 
+//     */
+//    public static Anim loadAnimation(String animationId) {
+//        AnimData data = DataFactory.createData(animationId);
+//        return loadAnimation(data);
+//    }
+//    
+//    /**
+//     * @deprecated 
+//     * @return 
+//     */
+//    public static Anim loadAnimation(AnimData data) {
+//        return DataFactory.createProcessor(data);
+//    }
     
     /**
      * @deprecated 
@@ -173,17 +170,6 @@ public class Loader {
     public static Position loadPosition(String id) {
         PositionData esd = DataFactory.createData(id);
         return loadPosition(esd);
-    }
-    
-    /** @deprecated */
-    public static Env loadEnv(String envId) {
-        EnvData data = DataFactory.createData(envId);
-        return loadEnv(data);
-    }
-    
-    /** @deprecated */
-    public static Env loadEnv(EnvData data) {
-        return DataFactory.createProcessor(data);
     }
         
     /** @deprecated */

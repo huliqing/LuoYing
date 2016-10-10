@@ -5,7 +5,6 @@
 package name.huliqing.ly.view.talk;
 
 import com.jme3.math.Vector3f;
-import name.huliqing.ly.object.actor.Actor;
 
 /**
  * 该功能主要让角色之间能够实现一个序列的谈话。示例：
@@ -50,7 +49,7 @@ public interface Talk {
      * @param delay 
      * @return 返回当前talk对象
      */
-    Talk speak(Actor actor, String mess);
+    Talk speak(Entity actor, String mess);
     
     /**
      * 延迟时间,单位秒
@@ -68,7 +67,7 @@ public interface Talk {
      * 强制朝向目标角色。
      * @return 返回当前talk对象
      */
-    Talk face(Actor actor, Actor target, boolean force);
+    Talk face(Entity actor, Entity target, boolean force);
     
     /**
      * 让角色面向目标位置，参考：{@link #face(name.huliqing.fighter.actor.Actor, name.huliqing.fighter.actor.Actor, boolean) }
@@ -78,7 +77,7 @@ public interface Talk {
      * @param force 
      * @return 返回当前talk对象
      */
-    Talk face(Actor actor, Vector3f position, boolean force);
+    Talk face(Entity actor, Vector3f position, boolean force);
     
     /**
      * 添加谈话侦听器

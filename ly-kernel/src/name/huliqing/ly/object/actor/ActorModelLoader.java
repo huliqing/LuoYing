@@ -14,11 +14,12 @@ import java.util.logging.Logger;
 import name.huliqing.ly.Config;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.data.ActorData;
-import name.huliqing.ly.data.ObjectData;
+import name.huliqing.ly.data.EntityData;
 import name.huliqing.ly.layer.service.ConfigService;
 import name.huliqing.ly.object.AssetLoader;
 import name.huliqing.ly.object.Loader;
 import name.huliqing.ly.object.effect.Effect;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.utils.GeometryUtils;
 
 /**
@@ -45,10 +46,11 @@ public class ActorModelLoader {
      * @param actor
      * @return 
      */
-    public static Spatial loadActorModel(Actor actor) {
+    public static Spatial loadActorModel(Entity actor) {
         // 0.==== Load base model : character
-        ActorData data = actor.getData();
-        String actorFile = data.getFile();
+        EntityData data = actor.getData();
+        // xxx 要移动到ActorModule中去
+        String actorFile = data.getAsString("file");
         
         if (Config.debug) {
             LOG.log(Level.INFO, "Load actor file={0}", actorFile);
@@ -67,10 +69,12 @@ public class ActorModelLoader {
         actorModel.setName(data.getName());
 //        actorModel.setUserData(ObjectData.USER_DATA, data); // remove
         actorModel.setShadowMode(RenderQueue.ShadowMode.Cast);
-        // 4.1 注缩放必须放在碰撞盒加入之前，因为碰撞盒不能跟着缩放
-        actorModel.setLocalTranslation(data.getLocation());
-        actorModel.setLocalRotation(data.getRotation());
-        actorModel.setLocalScale(data.getScale());
+        
+        
+//        // 4.1 注缩放必须放在碰撞盒加入之前，因为碰撞盒不能跟着缩放
+//        actorModel.setLocalTranslation(data.getLocation());
+//        actorModel.setLocalRotation(data.getRotation());
+//        actorModel.setLocalScale(data.getScale());
         
         // remove20161009，xxx 重构分离
         // 4.2 碰撞盒
@@ -120,10 +124,8 @@ public class ActorModelLoader {
 
         // 14.偿试激活HardwareSkining
         checkEnableHardwareSkining(actor, actorModel);
-        
         return actorModel;
     }
-    
     
     /**
      * 载入扩展的动画,该方法从角色所配置的extAnim目录中查找动画文件并进行加
@@ -132,10 +134,12 @@ public class ActorModelLoader {
      * @param animName
      * @return 
      */
-    public static boolean loadExtAnim(Actor actor, String animName) {
-        String animDir = actor.getData().getExtAnim();
+    public static boolean loadExtAnim(Entity actor, String animName) {
+        // xxx 要移动到ActorModule中去
+        String animDir = actor.getData().getAsString("extAnim");
+        
         if (animDir == null) {
-            LOG.log(Level.WARNING, "Actor {0} no have a extAnim defined"
+            LOG.log(Level.WARNING, "Entity {0} no have a extAnim defined"
                     + ", could not load anim {1}", new Object[] {actor.getData().getId(), animName});
             return false;
         }
@@ -155,8 +159,8 @@ public class ActorModelLoader {
      * 检测并判断是否打开或关闭该模型的硬件skining加速
      * @param actor 角色模型
      */
-    private static void checkEnableHardwareSkining(Actor actor, Spatial actorModel) {
-        ActorData data = actor.getData();
+    private static void checkEnableHardwareSkining(Entity actor, Spatial actorModel) {
+        EntityData data = actor.getData();
         SkeletonControl sc = actorModel.getControl(SkeletonControl.class);
         
         if (data == null || sc == null) {
@@ -168,10 +172,11 @@ public class ActorModelLoader {
             return;
         }
 
-        // 默认情冲下打开hardwareSkinning,除非在actor.xml中设置不打开。
-        if (!data.isHardwareSkinning()) {
-            return;
-        }
+        // remove20161010,以后默认开启
+//        // 默认情冲下打开hardwareSkinning,除非在actor.xml中设置不打开。
+//        if (!data.isHardwareSkinning()) {
+//            return;
+//        }
         
         // 代换自定义的SkeletonControl,因为默认的SkeletonControl会把带
         // SkeletonControl的子节点也进行处理。比如弓武器，当弓武器带有动画时可能

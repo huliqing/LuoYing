@@ -19,10 +19,8 @@ import name.huliqing.ly.Config;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.data.ActionData;
 import name.huliqing.ly.layer.network.SkillNetwork;
-import name.huliqing.ly.layer.service.ActorService;
 import name.huliqing.ly.layer.service.PlayService;
-import name.huliqing.ly.layer.service.SkillService;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.module.ActorModule;
 import name.huliqing.ly.object.module.SkillModule;
 import name.huliqing.ly.object.skill.Skill;
@@ -36,8 +34,8 @@ import name.huliqing.ly.utils.ThreadHelper;
 public class FollowPathAction extends AbstractAction implements FollowAction {
 //    private final static Logger logger = Logger.getLogger(FollowPathAction.class.getName());
     private final PlayService playService = Factory.get(PlayService.class);
-    private final ActorService actorService = Factory.get(ActorService.class);
-    private final SkillService skillService = Factory.get(SkillService.class);
+//    private final ActorService actorService = Factory.get(ActorService.class);
+//    private final SkillService skillService = Factory.get(SkillService.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
     
     private ActorModule actorModule;
@@ -90,7 +88,9 @@ public class FollowPathAction extends AbstractAction implements FollowAction {
     
     public FollowPathAction() {
         super();
-        finder = playService.createPathfinder();
+//        finder = playService.createPathfinder();
+
+        throw new UnsupportedOperationException("寻路功能暂不支持");
     }
     
     @Override
@@ -98,11 +98,11 @@ public class FollowPathAction extends AbstractAction implements FollowAction {
         super.setData(ad);
         this.autoFacing = ad.getAsBoolean("autoFacing", autoFacing);
         this.debug = ad.getAsBoolean("debug", debug);
-        finder = playService.createPathfinder();
+//        finder = playService.createPathfinder();
     }
 
     @Override
-    public void setActor(Actor actor) {
+    public void setActor(Entity actor) {
         super.setActor(actor);
         actorModule = actor.getModule(ActorModule.class);
         skillModule = actor.getModule(SkillModule.class);

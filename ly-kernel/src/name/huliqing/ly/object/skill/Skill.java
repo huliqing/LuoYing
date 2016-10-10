@@ -6,7 +6,7 @@ package name.huliqing.ly.object.skill;
 
 import name.huliqing.ly.constants.SkillConstants;
 import name.huliqing.ly.data.SkillData;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.xml.DataProcessor;
 
 /**
@@ -42,13 +42,13 @@ public interface Skill extends DataProcessor<SkillData>{
      * 设置发起技能的角色。
      * @param actor 
      */
-    void setActor(Actor actor);
+    void setActor(Entity actor);
     
     /**
      * 获取技能的执行角色
      * @return 
      */
-    Actor getActor();
+    Entity getActor();
     
     /**
      * 重新修复被其它技能重置的动画

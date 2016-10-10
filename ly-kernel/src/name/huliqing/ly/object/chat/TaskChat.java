@@ -10,16 +10,16 @@ import name.huliqing.ly.Factory;
 import name.huliqing.ly.constants.ResConstants;
 import name.huliqing.ly.data.ChatData;
 import name.huliqing.ly.enums.MessageType;
-import name.huliqing.ly.layer.network.UserCommandNetwork;
+import name.huliqing.luoying.network.UserCommandNetwork;
 import name.huliqing.ly.layer.service.ActorService;
 import name.huliqing.ly.layer.service.PlayService;
 import name.huliqing.ly.layer.service.TaskService;
-import name.huliqing.ly.view.ButtonPanel;
+import name.huliqing.luoying.view.ButtonPanel;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.ly.view.talk.Talk;
 import name.huliqing.ly.view.talk.TalkImpl;
 import name.huliqing.ly.view.talk.TalkListener;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.task.Task;
 import name.huliqing.ly.ui.Text;
 import name.huliqing.ly.ui.UI;
@@ -60,7 +60,7 @@ public class TaskChat<T extends ChatData> extends Chat<T> {
     
     // ---- inner
     private TaskRequestPanel requestPanel;
-    private Actor player;
+    private Entity player;
     private Task task;
 
     @Override

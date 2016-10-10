@@ -4,7 +4,7 @@
  */
 package name.huliqing.ly.layer.service;
 
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.module.ResistModule;
 import name.huliqing.ly.object.resist.Resist;
 
@@ -20,7 +20,7 @@ public class ResistServiceImpl implements ResistService {
     }
 
     @Override
-    public float getResist(Actor actor, String stateId) {
+    public float getResist(Entity actor, String stateId) {
         ResistModule module = actor.getModule(ResistModule.class);
         if (module != null) {
             Resist resist = module.getResist();

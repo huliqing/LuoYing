@@ -9,7 +9,7 @@ import com.jme3.network.serializing.Serializable;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.layer.service.ActorService;
 import name.huliqing.ly.layer.service.PlayService;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * 设置角色的视角方向
@@ -46,7 +46,7 @@ public class MessActorViewDir extends MessBase {
     public void applyOnClient() {
         PlayService playService = Factory.get(PlayService.class);
         ActorService actorService = Factory.get(ActorService.class);
-        Actor actor = playService.findActor(actorId);
+        Entity actor = playService.getEntity(actorId);
         if (actor != null) {
             actorService.setViewDirection(actor, viewDir);
         }

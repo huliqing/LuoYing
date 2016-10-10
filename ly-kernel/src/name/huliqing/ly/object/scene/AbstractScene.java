@@ -10,28 +10,30 @@ import com.jme3.post.Filter;
 import com.jme3.post.FilterPostProcessor;
 import com.jme3.post.SceneProcessor;
 import com.jme3.post.filters.TranslucentBucketFilter;
+import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import name.huliqing.ly.Ly;
 import name.huliqing.ly.data.ObjectData;
 import name.huliqing.ly.data.SceneData;
 import name.huliqing.ly.object.Loader;
 import name.huliqing.ly.xml.DataProcessor;
-import name.huliqing.ly.object.SceneObject;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * @author huliqing
  */
 public class AbstractScene implements Scene {
+    private static final Logger LOG = Logger.getLogger(AbstractScene.class.getName());
     
     protected SceneData data;
-    protected final Map<Long, SceneObject> entities = new LinkedHashMap<Long, SceneObject>();
+    protected final Map<Long, Entity> entities = new LinkedHashMap<Long, Entity>();
     protected List<SceneListener> listeners;
     
     protected boolean initialized;
@@ -50,6 +52,9 @@ public class AbstractScene implements Scene {
      */
     protected final TranslucentBucketFilter translucentBucketFilter = new TranslucentBucketFilter();
 
+    // 默认要作为SceneProcessor的ViewPort
+    protected ViewPort[] processorViewPorts;
+    
     @Override
     public void setData(SceneData data) {
         this.data = data;
@@ -63,7 +68,7 @@ public class AbstractScene implements Scene {
     @Override
     public void updateDatas() {
         // 更新所有实体
-        for (SceneObject entity : entities.values()) {
+        for (Entity entity : entities.values()) {
             entity.updateDatas();
         }
     }
@@ -73,15 +78,16 @@ public class AbstractScene implements Scene {
         if (initialized) {
             throw new IllegalStateException("Scene is already initialized! sceneId=" + data.getId());
         }
+        
         // 载入场景中的所有实体
-        List<ObjectData> entityDatas = data.getSceneObjectDatas();
+        List<ObjectData> entityDatas = data.getEntityDatas();
         if (entityDatas != null) {
             for (ObjectData od : entityDatas) {
                 DataProcessor dp = Loader.load(od);
-                if (!(dp instanceof SceneObject)) {
+                if (!(dp instanceof Entity)) {
                     continue; // Only entity object
                 }
-                addSceneObject((SceneObject) dp);
+                addEntity((Entity) dp);
             }
         }
         if (listeners != null) {
@@ -99,7 +105,7 @@ public class AbstractScene implements Scene {
     
     @Override
     public void cleanup() {
-        for (SceneObject entity : entities.values()) {
+        for (Entity entity : entities.values()) {
             entity.cleanup();
         }
         entities.clear();
@@ -116,82 +122,113 @@ public class AbstractScene implements Scene {
     }
     
     @Override
-    public void addSceneObject(SceneObject entity) {
-        data.addSceneObjectData(entity.getData());
-        entities.put(entity.getObjectId(), entity);
+    public void addEntity(Entity entity) {
+        if (entity == null)
+            throw new NullPointerException("Entity could not be null!");
+        // 如果entity已经存在于其它场景中则需要先从其它场景中移除
+        if (entity.isInitialized() && entity.getScene() != this) {
+            entity.getScene().removeEntity(entity);
+        }
+        data.addEntityData(entity.getData());
+        entities.put(entity.getEntityId(), entity);
+        // 初始化
         if (!entity.isInitialized()) {
             entity.initialize(this);
         }
+        // 添加到场景（放在entity.initialize之后，避免Spatial还没有创建的情况）
+        if (entity.getSpatial() != null) {
+            root.attachChild(entity.getSpatial());
+        }
         if (listeners != null) {
             for (SceneListener ecl : listeners) {
-                ecl.onSceneObjectAdded(this, entity);
+                ecl.onSceneEntityAdded(this, entity);
             }
         }
     }
     
     @Override
-    public boolean removeSceneObject(SceneObject entity) {
-        SceneObject removed = entities.remove(entity.getObjectId());
+    public boolean removeEntity(Entity entity) {
+        Entity removed = entities.remove(entity.getEntityId());
         if (removed == null) {
             return false;
         }
         data.removeEntityData(removed.getData());
+        if (entity.getSpatial() != null) {
+            entity.getSpatial().removeFromParent();
+        }
         if (removed.isInitialized()) {
             removed.cleanup();
         }
         if (listeners != null) {
             for (SceneListener ecl : listeners) {
-                ecl.onSceneObjectRemoved(this, removed);
+                ecl.onSceneEntityRemoved(this, removed);
             }
         }
         return true;
     }
     
     @Override
-    public SceneObject getSceneObject(long entityId) {
+    public Entity getEntity(long entityId) {
         return entities.get(entityId);
     }
-    
+
     @Override
-    public Collection<SceneObject> getSceneObjects(Vector3f location, float radius, List<SceneObject> store) {
+    public <T extends Entity> List<T> getEntities(Class<T> type, List<T> store) {
         if (store == null) {
-            store = new ArrayList<SceneObject>();
+            store = new ArrayList<T>();
         }
-        float sqRadius = radius * radius;
-        for (SceneObject so : entities.values()) {
-            if (so.getLocation().distanceSquared(location) <= sqRadius) {
-                store.add(so);
+        for (Entity so : entities.values()) {
+            if (type.isAssignableFrom(so.getClass())) {
+                store.add((T) so);
             }
         }
         return store;
     }
 
     @Override
-    public Collection<SceneObject> getSceneObjects() {
-        return Collections.unmodifiableCollection(entities.values());
-    }    
-    
-    @Override
-    public void addSpatial(Spatial objectAdded) {
-        root.attachChild(objectAdded);
-        if (listeners != null) {
-            for (SceneListener sl : listeners) {
-                sl.onSpatialAdded(this, objectAdded);
-            }
+    public <T extends Entity> List<T> getEntities(Class<T> type, Vector3f location, float radius, List<T> store) {
+        if (store == null) {
+            store = new ArrayList<T>();
         }
-    }
-    
-    @Override
-    public boolean removeSpatial(Spatial objectRemoved) {
-        if (root.detachChild(objectRemoved) != -1) {
-            if (listeners != null) {
-                for (SceneListener sl : listeners) {
-                    sl.onSpatialRemoved(this, objectRemoved);
+        float sqRadius = radius * radius;
+        T me;
+        for (Entity so : entities.values()) {
+            if (type.isAssignableFrom(so.getClass())) {
+                me = (T) so;
+                if (me.getSpatial().getWorldTranslation().distanceSquared(location) <= sqRadius) {
+                    store.add(me);
                 }
             }
-            return true;
         }
-        return false;
+        return store;
+    }
+    
+//    @Override
+//    public void addSpatial(Spatial objectAdded) {
+//        root.attachChild(objectAdded);
+//        if (listeners != null) {
+//            for (SceneListener sl : listeners) {
+//                sl.onSpatialAdded(this, objectAdded);
+//            }
+//        }
+//    }
+//    
+//    @Override
+//    public boolean removeSpatial(Spatial objectRemoved) {
+//        if (root.detachChild(objectRemoved) != -1) {
+//            if (listeners != null) {
+//                for (SceneListener sl : listeners) {
+//                    sl.onSpatialRemoved(this, objectRemoved);
+//                }
+//            }
+//            return true;
+//        }
+//        return false;
+//    }
+
+    @Override
+    public void setProcessorViewPorts(ViewPort... viewPorts) {
+        processorViewPorts = viewPorts;
     }
 
     /**
@@ -202,23 +239,24 @@ public class AbstractScene implements Scene {
      */
     @Override
     public void addProcessor(SceneProcessor sceneProcessor) {
-        if (!Ly.getApp().getViewPort().getProcessors().contains(sceneProcessor)) {
-            Ly.getApp().getViewPort().addProcessor(sceneProcessor);
-            if (listeners != null) {
-                for (SceneListener sl : listeners) {
-                    sl.onProcessorAdded(this, sceneProcessor);
-                }
+        if (processorViewPorts == null || processorViewPorts.length <= 0) {
+            LOG.log(Level.WARNING, "Could not addProcessor, because no any ViewPorts set to the scene. sceneId={0}"
+                    , data.getId());
+            return;
+        }
+        for (ViewPort viewPort : processorViewPorts) {
+            if (!viewPort.getProcessors().contains(sceneProcessor)) {
+                viewPort.addProcessor(sceneProcessor);
             }
         }
     }
-
+    
     @Override
     public void removeProcessor(SceneProcessor sceneProcessor) {
-        Ly.getApp().getViewPort().removeProcessor(sceneProcessor);
-        if (listeners != null) {
-            for (SceneListener sl : listeners) {
-                sl.onProcessorRemoved(this, sceneProcessor);
-            }
+        if (processorViewPorts == null) 
+            return;
+        for (ViewPort viewPort : processorViewPorts) {
+            viewPort.removeProcessor(sceneProcessor);
         }
     }
     

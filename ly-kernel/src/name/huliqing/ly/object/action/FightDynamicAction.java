@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.constants.SkillConstants;
-import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.data.ActionData;
 import name.huliqing.ly.layer.network.ActorNetwork;
 import name.huliqing.ly.layer.network.SkillNetwork;
@@ -19,6 +18,7 @@ import name.huliqing.ly.layer.service.AttributeService;
 import name.huliqing.ly.layer.service.PlayService;
 import name.huliqing.ly.layer.service.SkillService;
 import name.huliqing.ly.layer.service.SkinService;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.module.ActorModule;
 import name.huliqing.ly.object.module.LogicModule;
 import name.huliqing.ly.object.module.SkillListener;
@@ -76,7 +76,7 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
     
     // 当前准备使用于攻击的技能
     protected Skill skill;
-    protected Actor enemy;
+    protected Entity enemy;
     
     // 上一次使用技能后到当前所使用的时间，如果该值小于interval则不允许NPC发技能，
     // 避免连续发技能。
@@ -107,7 +107,7 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
     }
 
     @Override
-    public void setActor(Actor actor) {
+    public void setActor(Entity actor) {
         super.setActor(actor); 
         actorModule = actor.getModule(ActorModule.class);
         logicModule = actor.getModule(LogicModule.class);
@@ -116,7 +116,7 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
     }
     
     @Override
-    public void setEnemy(Actor enemy) {
+    public void setEnemy(Entity enemy) {
         this.enemy = enemy;
         this.enemyActorModule = enemy.getModule(ActorModule.class);
         super.setFollow(enemy.getSpatial());
@@ -168,15 +168,14 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
     @Override
     public void doLogic(float tpf) {
         timeUsed += tpf;
-
+        
         // 攻击间隔时间限制
         if (timeUsed < interval) {
             return;
         }
         
-        if (enemy == null 
+        if (enemy == null || enemy.getScene() == null 
                 || (enemyActorModule != null && enemyActorModule.isDead())
-                || !playService.isInScene(enemy) 
                 
                 // remove20160217,不再判断是否为敌人，是否可攻击目标以后交由hitChecker判断
                 // 放开这个判断可允许玩家控制角色攻击同伴，只要技能的hitChecker设置即可。
@@ -185,7 +184,7 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
                 ) {
             
             // 刻偿试为当前角色查找一次敌人，以避免SearchEnemyLogic的延迟
-            Actor newTarget = actorService.findNearestEnemyExcept(actor, actorModule.getViewDistance(), enemy);
+            Entity newTarget = actorService.findNearestEnemyExcept(actor, actorModule.getViewDistance(), enemy);
             if (newTarget != null) {
                 actorNetwork.setTarget(actor, newTarget);
                 setEnemy(newTarget);
@@ -221,7 +220,7 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
             if (!allowFollow || !actorModule.isMovable()) {
                 
                 // 刻偿试为当前角色查找一次敌人，以避免SearchEnemyLogic的延迟
-                Actor newTarget = actorService.findNearestEnemyExcept(actor, actorModule.getViewDistance(), enemy);
+                Entity newTarget = actorService.findNearestEnemyExcept(actor, actorModule.getViewDistance(), enemy);
                 if (newTarget != null) {
                     actorNetwork.setTarget(actor, newTarget);
                     setEnemy(newTarget);
@@ -240,7 +239,7 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
                     followTimeUsed = 0;
                     
                     // 刻偿试为当前角色查找一次敌人，以避免SearchEnemyLogic的延迟
-                    Actor newTarget = actorService.findNearestEnemyExcept(actor, actorModule.getViewDistance(), enemy);
+                    Entity newTarget = actorService.findNearestEnemyExcept(actor, actorModule.getViewDistance(), enemy);
                     if (newTarget != null) {
                         actorNetwork.setTarget(actor, newTarget);
                         setEnemy(newTarget);
@@ -301,7 +300,7 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
      * @param target
      * @return 
      */
-    protected boolean isInHitRange(Skill attackSkill, Actor target) {
+    protected boolean isInHitRange(Skill attackSkill, Entity target) {
         // 正常攻击类技能都应该是HitSkill,使用hitSkill的isInHitDistance来判断以优化
         // 性能，
         if (attackSkill instanceof HitSkill) {
@@ -341,23 +340,23 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
     }
     
     @Override
-    public void onSkillAdded(Actor actor, Skill skill) {
+    public void onSkillAdded(Entity actor, Skill skill) {
         recacheSkill();
     }
 
     @Override
-    public void onSkillRemoved(Actor actor, Skill skill) {
+    public void onSkillRemoved(Entity actor, Skill skill) {
         recacheSkill();
     }
     
     @Override
-    public void onSkinAdded(Actor actor, Skin skinAdded) {}
+    public void onSkinAdded(Entity actor, Skin skinAdded) {}
 
     @Override
-    public void onSkinRemoved(Actor actor, Skin skinRemoved) {}
+    public void onSkinRemoved(Entity actor, Skin skinRemoved) {}
 
     @Override
-    public void onSkinAttached(Actor actor, Skin skin) {
+    public void onSkinAttached(Entity actor, Skin skin) {
         // 当角色武器切换之后需要重新缓存技能，因为技能是有武器状态限制的。切换武器后当前的技能不一定能适应。
         if (skin instanceof Weapon) {
             recacheSkill();
@@ -365,7 +364,7 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
     }
 
     @Override
-    public void onSkinDetached(Actor actor, Skin skin) {
+    public void onSkinDetached(Entity actor, Skin skin) {
         if (skin instanceof Weapon) {
             recacheSkill();
         }

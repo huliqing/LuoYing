@@ -6,7 +6,7 @@ package name.huliqing.ly.layer.service;
 
 import name.huliqing.ly.Inject;
 import name.huliqing.ly.data.LogicData;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.logic.Logic;
 
 /**
@@ -27,21 +27,21 @@ public interface LogicService extends Inject {
      * @param actor
      * @param logicId
      */
-    void addLogic(Actor actor, String logicId);
+    void addLogic(Entity actor, String logicId);
     
     /**
      * 给角色添加一个逻辑
      * @param actor
      * @param logicData 
      */
-    void addLogic(Actor actor, LogicData logicData);
+    void addLogic(Entity actor, LogicData logicData);
         
     /**
      * 给角色添加逻辑
      * @param actor
      * @param logic 
      */
-    void addLogic(Actor actor, Logic logic);
+    void addLogic(Entity actor, Logic logic);
     
     /**
      * 移除指定的逻辑，如果移除成功则返回true.
@@ -49,13 +49,13 @@ public interface LogicService extends Inject {
      * @param logic
      * @return 
      */
-    boolean removeLogic(Actor actor, Logic logic);
+    boolean removeLogic(Entity actor, Logic logic);
     
     /**
      * 清除角色身上的所有逻辑
      * @param actor 
      */
-    void clearLogics(Actor actor);
+    void clearLogics(Entity actor);
     
     /**
      * 注：该方法会清理当前角色的逻辑，然后把角色的逻辑重置为玩家类的逻辑。
@@ -64,33 +64,33 @@ public interface LogicService extends Inject {
      * 法可能有些限制或区别.
      * @param actor 
      */
-    void resetPlayerLogic(Actor actor);
+    void resetPlayerLogic(Entity actor);
     
     /**
      * 判断角色的逻辑是否打开
      * @param actor
      * @return 
      */
-    boolean isAutoLogic(Actor actor);
+    boolean isAutoLogic(Entity actor);
     
     /**
      * 打开或关闭角色的自动逻辑
      * @param actor
      * @param enabled 
      */
-    void setAutoLogic(Actor actor, boolean enabled);
+    void setAutoLogic(Entity actor, boolean enabled);
     
     /**
      * 判断角色是否自动侦察敌人
      * @param actor
      * @return 
      */
-    boolean isAutoDetect(Actor actor);
+    boolean isAutoDetect(Entity actor);
     
     /**
      * 设置角色是否自动侦察敌人
      * @param actor 
      * @param autoDetect
      */
-    void setAutoDetect(Actor actor, boolean autoDetect);
+    void setAutoDetect(Entity actor, boolean autoDetect);
 }

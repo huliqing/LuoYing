@@ -7,11 +7,11 @@ package name.huliqing.ly.object.state;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.ly.Factory;
-import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.data.StateData;
 import name.huliqing.ly.layer.service.EffectService;
 import name.huliqing.ly.layer.service.PlayService;
 import name.huliqing.ly.object.effect.Effect;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.module.ActorModule;
 
 /**
@@ -44,12 +44,12 @@ public abstract class AbstractState<T extends StateData> implements State<T> {
     /**
      * 状态的持有者，即受状态影响的角色，不能为null
      */
-    protected Actor actor;
+    protected Entity actor;
     
     /**
      * 状态的产生者，也就是说，这个状态是哪一个角色发出的, 如果一个状态没有发起源，则这个参数可能为null.
      */
-    protected Actor sourceActor;
+    protected Entity sourceActor;
     
     
     // ---- inner
@@ -161,7 +161,7 @@ public abstract class AbstractState<T extends StateData> implements State<T> {
      * @param actor 
      */
     @Override
-    public void setActor(Actor actor) {
+    public void setActor(Entity actor) {
         this.actor = actor;
         actorModule = actor.getModule(ActorModule.class);
     }
@@ -171,7 +171,7 @@ public abstract class AbstractState<T extends StateData> implements State<T> {
      * @return 
      */
     @Override
-    public Actor getActor() {
+    public Entity getActor() {
         return actor;
     }
 
@@ -180,7 +180,7 @@ public abstract class AbstractState<T extends StateData> implements State<T> {
      * @return 
      */
     @Override
-    public Actor getSourceActor() {
+    public Entity getSourceActor() {
         return sourceActor;
     }
 
@@ -193,7 +193,7 @@ public abstract class AbstractState<T extends StateData> implements State<T> {
      * @param sourceActor 
      */
     @Override
-    public void setSourceActor(Actor sourceActor) {
+    public void setSourceActor(Entity sourceActor) {
         this.sourceActor = sourceActor;
     }
     

@@ -15,8 +15,8 @@ import java.util.List;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.data.AnimData;
 import name.huliqing.ly.layer.service.ActorService;
-import name.huliqing.ly.layer.service.PlayService;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.layer.service.SceneService;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.utils.ConvertUtils;
 import name.huliqing.ly.utils.DebugDynamicUtils;
 
@@ -25,8 +25,8 @@ import name.huliqing.ly.utils.DebugDynamicUtils;
  * @author huliqing
  */
 public class ActorCurveMove extends ActorAnim {
-    private final PlayService playService = Factory.get(PlayService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
+    private final SceneService sceneService = Factory.get(SceneService.class);
     
     public enum Facing {
         /** 不作朝向处理 */
@@ -113,7 +113,10 @@ public class ActorCurveMove extends ActorAnim {
                 localToWorld(points.get(i), tv.vect1);
                 // 把该点移动到地面上（有部分点可能在地面下），这可防止角色掉到地下。
                 if (upperGround) {
-                    playService.moveUpToTerrain(tv.vect1);
+                    Vector3f terrainHeight = sceneService.getSceneHeight(target.getScene(), tv.vect1.x, tv.vect1.z);
+                    if (terrainHeight != null) {
+                        tv.vect1.set(terrainHeight);
+                    }
                 }
                 
                 // 中间的路径点直接通过getControlPoints().add(..)就可以，这样
@@ -171,7 +174,7 @@ public class ActorCurveMove extends ActorAnim {
             actorService.setViewDirection(target, tv.vect2);
             
         } else if (facing == Facing.target) {
-            Actor other = actorService.getTarget(target);
+            Entity other = actorService.getTarget(target);
             
             if (other != null) {
                 other.getSpatial().getWorldTranslation()

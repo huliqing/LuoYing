@@ -11,7 +11,7 @@ import name.huliqing.ly.layer.network.ChatNetwork;
 import name.huliqing.ly.layer.service.ChatService;
 import name.huliqing.ly.layer.service.PlayService;
 import name.huliqing.ly.network.GameServer;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * 角色向另一个角色购买商品
@@ -72,8 +72,8 @@ public class MessChatShop extends MessBase {
     @Override
     public void applyOnServer(GameServer gameServer, HostedConnection source) {
         super.applyOnServer(gameServer, source);
-        Actor sellerActor = playService.findActor(seller);
-        Actor buyerActor = playService.findActor(buyer);
+        Entity sellerActor = playService.getEntity(seller);
+        Entity buyerActor = playService.getEntity(buyer);
         if (sellerActor == null || buyerActor == null) {
             return;
         }
@@ -83,8 +83,8 @@ public class MessChatShop extends MessBase {
     @Override
     public void applyOnClient() {
         super.applyOnClient();
-        Actor sellerActor = playService.findActor(seller);
-        Actor buyerActor = playService.findActor(buyer);
+        Entity sellerActor = playService.getEntity(seller);
+        Entity buyerActor = playService.getEntity(buyer);
         if (sellerActor == null || buyerActor == null) {
             return;
         }

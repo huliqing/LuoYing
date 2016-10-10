@@ -14,6 +14,7 @@ import name.huliqing.ly.data.GameLogicData;
 import name.huliqing.ly.layer.network.PlayNetwork;
 import name.huliqing.ly.layer.service.ActorService;
 import name.huliqing.ly.layer.service.PlayService;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * 场景清洁器,用于清理场景中已经死亡的角色之类的功能
@@ -29,7 +30,7 @@ public class ActorCleanGameLogic<T extends GameLogicData> extends AbstractGameLo
     private float cleanInterval = 10;
     
     // ---- inner
-    private final List<Actor> temps = new ArrayList<Actor>();
+    private final List<Entity> temps = new ArrayList<Entity>();
 
     @Override
     public void setData(T data) {
@@ -39,13 +40,13 @@ public class ActorCleanGameLogic<T extends GameLogicData> extends AbstractGameLo
     
     @Override
     protected void doLogic(float tpf) {
-        List<Actor> actors = playService.findAllActor();
+        List<Actor> actors = playService.getEntities(Actor.class, null);
         if (actors == null || actors.isEmpty())
             return;
         
         // 记录需要被清理的角色
         Long deadTime;
-        for (Actor a : actors) {
+        for (Entity a : actors) {
             // “Player”、“未死亡”、“必要”的角色都不能移除
             if (!actorService.isDead(a) || actorService.isPlayer(a) || actorService.isEssential(a)) {
                 a.getSpatial().getUserDataKeys().remove(ActorConstants.USER_DATA_DEAD_TIME_FLAG);
@@ -64,8 +65,8 @@ public class ActorCleanGameLogic<T extends GameLogicData> extends AbstractGameLo
         
         // 清理角色
         if (!temps.isEmpty()) {
-            for (Actor a : temps) {
-                playNetwork.removeObject(a.getSpatial());
+            for (Entity a : temps) {
+                playNetwork.removeEntity(a);
             }
             temps.clear();
         }
@@ -76,18 +77,4 @@ public class ActorCleanGameLogic<T extends GameLogicData> extends AbstractGameLo
         temps.clear();
         super.cleanup();
     }
-
-    // remove20160716
-//    public float getClearTime() {
-//        return cleanInterval;
-//    }
-//        
-//    /**
-//     * 设置角色死亡后经多少时间会被清理出场景，单位秒
-//     * @param clearTime 
-//     */
-//    public void setClearTime(float clearTime) {
-//        this.cleanInterval = clearTime;
-//    }
-
 }

@@ -10,7 +10,7 @@ import name.huliqing.ly.network.Network;
 import name.huliqing.ly.mess.MessTaskAdd;
 import name.huliqing.ly.mess.MessTaskApplyItem;
 import name.huliqing.ly.mess.MessTaskComplete;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.task.Task;
 
 /**
@@ -27,7 +27,7 @@ public class TaskNetworkImpl implements TaskNetwork {
     }
 
     @Override
-    public void addTask(Actor actor, Task task) {
+    public void addTask(Entity actor, Task task) {
         if (NETWORK.isClient())
             return;
         
@@ -41,7 +41,7 @@ public class TaskNetworkImpl implements TaskNetwork {
     }
 
     @Override
-    public void completeTask(Actor actor, Task task) {
+    public void completeTask(Entity actor, Task task) {
         if (NETWORK.isClient())
             return;
         
@@ -55,7 +55,7 @@ public class TaskNetworkImpl implements TaskNetwork {
     }
 
     @Override
-    public void applyItem(Actor actor, Task task, String itemId, int amount) {
+    public void applyItem(Entity actor, Task task, String itemId, int amount) {
         if (NETWORK.isClient())
             return;
         

@@ -9,18 +9,15 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-import name.huliqing.ly.Config;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.data.LogicData;
 import name.huliqing.ly.layer.network.ActorNetwork;
 import name.huliqing.ly.layer.network.SkillNetwork;
 import name.huliqing.ly.layer.service.ActorService;
 import name.huliqing.ly.layer.service.AttributeService;
-import name.huliqing.ly.layer.service.PlayService;
 import name.huliqing.ly.layer.service.SkillService;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.module.ActorListener;
 import name.huliqing.ly.object.module.ActorModule;
 import name.huliqing.ly.object.module.SkillListener;
@@ -53,7 +50,7 @@ public class DefendLogic<T extends LogicData> extends Logic<T> implements SkillL
     private List<String> listenAttributes;
     
     // 被当前侦听(skillListener)的其它角色
-    private Set<Actor> listenersActors;
+    private Set<Entity> listenersActors;
     // 指定要监听的目标角色所发出的技能,当目标角色发出这些技能时，当前角色会偿试进行防守或躲闪
     private long listenSkillTags;
     // 当前角色可以用来防守的技能类型
@@ -83,7 +80,7 @@ public class DefendLogic<T extends LogicData> extends Logic<T> implements SkillL
     }
 
     @Override
-    public void setActor(Actor self) {
+    public void setActor(Entity self) {
         super.setActor(self); 
         actorModule = actor.getModule(ActorModule.class);
         skillModule = actor.getModule(SkillModule.class);
@@ -105,7 +102,7 @@ public class DefendLogic<T extends LogicData> extends Logic<T> implements SkillL
         
         // 清理其它被当前逻辑侦听的角色
         if (listenersActors != null) {
-            for (Actor other : listenersActors) {
+            for (Entity other : listenersActors) {
                 skillService.removeSkillPlayListener(other, this);
             }
             listenersActors.clear();
@@ -114,7 +111,7 @@ public class DefendLogic<T extends LogicData> extends Logic<T> implements SkillL
     }
 
     @Override
-    public void onActorTargetLocked(Actor sourceBeLocked, Actor other) {
+    public void onActorTargetLocked(Entity sourceBeLocked, Entity other) {
         if (!hasUsableSkill) 
             return;
         
@@ -129,13 +126,13 @@ public class DefendLogic<T extends LogicData> extends Logic<T> implements SkillL
         
         // 记录被侦听的对象，以便在当前角色销毁或退出时清理
         if (listenersActors == null) {
-            listenersActors = new HashSet<Actor>();
+            listenersActors = new HashSet<Entity>();
         }
         listenersActors.add(other);
     }
 
     @Override
-    public void onActorTargetReleased(Actor sourceBeReleased, Actor other) {
+    public void onActorTargetReleased(Entity sourceBeReleased, Entity other) {
         if (!hasUsableSkill) 
             return;
         
@@ -149,13 +146,13 @@ public class DefendLogic<T extends LogicData> extends Logic<T> implements SkillL
     }
 
     @Override
-    public void onActorHitTarget(Actor sourceHitter, Actor beHit, String hitAttribute, float hitValue, boolean killedByHit) {
+    public void onActorHitTarget(Entity sourceHitter, Entity beHit, String hitAttribute, float hitValue, boolean killedByHit) {
         // ignore
     }
 
     // 受到攻击时将目标设为首要敌人
     @Override
-    public void onActorHitByTarget(Actor sourceBeHit, Actor hitter, String hitAttribute, float hitValue, boolean killedByHit) {
+    public void onActorHitByTarget(Entity sourceBeHit, Entity hitter, String hitAttribute, float hitValue, boolean killedByHit) {
         // hitValue>0为增益效果，不处理
         // 这里不作用于player，不要影响player控制的目标的设置
         if (actorModule.isDead() || actorModule.isPlayer() || hitValue > 0)
@@ -172,12 +169,12 @@ public class DefendLogic<T extends LogicData> extends Logic<T> implements SkillL
     }
 
     @Override
-    public void onSkillAdded(Actor actor, Skill skill) {
+    public void onSkillAdded(Entity actor, Skill skill) {
         needRecacheSkill = true;
     }
 
     @Override
-    public void onSkillRemoved(Actor actor, Skill skill) {
+    public void onSkillRemoved(Entity actor, Skill skill) {
         needRecacheSkill = true;
     }
 

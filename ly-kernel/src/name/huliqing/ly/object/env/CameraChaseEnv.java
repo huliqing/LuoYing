@@ -5,45 +5,30 @@
  */
 package name.huliqing.ly.object.env;
 
-import com.jme3.math.Quaternion;
-import com.jme3.math.Vector3f;
-import com.jme3.post.SceneProcessor;
 import com.jme3.scene.Spatial;
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
 import name.huliqing.ly.Ly;
-import name.huliqing.ly.data.env.EnvData;
-import name.huliqing.ly.object.SceneObject;
 import name.huliqing.ly.object.scene.Scene;
 import name.huliqing.ly.object.scene.SceneListener;
 import name.huliqing.ly.utils.CollisionChaseCamera;
+import name.huliqing.ly.object.entity.Entity;
+import name.huliqing.ly.object.entity.NoneModelEntity;
 
 /**
  * 镜头跟随Env,这个Env需要游戏中主动从Scene中获取，并使用setChase(Spatial) 来让镜头跟随某个目标。
  * @author huliqing
- * @param <T>
  */
-public class CameraChaseEnv <T extends EnvData> extends AbstractEnv <T> implements SceneListener {
+public class CameraChaseEnv extends NoneModelEntity  implements SceneListener {
 
     private CollisionChaseCamera ccc;
     // 关联的物理Env, ccc依赖于这个物理环境来检测镜头穿墙问题。
     private PhysicsEnv physicsEnv;
     
     @Override
-    public void setData(T data) {
-        super.setData(data);
-    }
-
-    @Override
     public void updateDatas() {
-        if (initialized) {
-            data.setLocation(ccc.getCamera().getLocation());
-            data.setRotation(ccc.getCamera().getRotation());
-//            data.setScale(xxx);// no scale for camera
-        }
+        // ignore
     }
-
-//    private void updateData() {
-//    }
     
     @Override
     public void initialize(Scene scene) {
@@ -68,18 +53,10 @@ public class CameraChaseEnv <T extends EnvData> extends AbstractEnv <T> implemen
         // 从当前场景中查找PhysicsEnv,使用它来处理碰撞检测
         // 注意必须确保PhysicsEnv已经初始化，否则可能会获取不到物理空间。
         // 在无法确定目标PhysicsEnv已经初始化的情况下需要添加监听。从被监视的Env中获取PhysicsEnv
-        Collection<SceneObject> envs = scene.getSceneObjects();
-        for (SceneObject env : envs) {
-            
-            // remove20161008,不再需要，getSceneObjects获得的都是已经初始化过了的
-//            if (!env.isInitialized()) {
-//                continue;
-//            }
-
-            if (env instanceof PhysicsEnv) {
-                updatePhysics((PhysicsEnv) env);
-                break;
-            }
+        List<PhysicsEnv> envs = scene.getEntities(PhysicsEnv.class, new ArrayList<PhysicsEnv>());
+        for (PhysicsEnv env : envs) {
+            updatePhysics(env);
+            break;
         }
         // 这里SceneListener用于监听获得物理空间
         scene.addSceneListener(this);
@@ -113,42 +90,6 @@ public class CameraChaseEnv <T extends EnvData> extends AbstractEnv <T> implemen
         ccc.setEnabledRotation(bool);
     }
     
-    @Override
-    public Vector3f getLocation() {
-        if (initialized) {
-            return ccc.getCamera().getLocation();
-        }
-        return data.getLocation();
-    }
-
-    @Override
-    public void setLocation(Vector3f location) {
-        data.setLocation(location);
-    }
-
-    @Override
-    public Quaternion getRotation() {
-        if (initialized) {
-            return ccc.getCamera().getRotation();
-        }
-        return data.getRotation();
-    }
-
-    @Override
-    public void setRotation(Quaternion rotation) {
-        data.setRotation(rotation);
-    }
-
-    @Override
-    public Vector3f getScale() {
-        return data.getScale();
-    }
-
-    @Override
-    public void setScale(Vector3f scale) {
-        data.setScale(scale);
-    }
-
     // ---- Listener-------------------------------------------------------------------------------------------------------------------
     
     @Override
@@ -157,7 +98,7 @@ public class CameraChaseEnv <T extends EnvData> extends AbstractEnv <T> implemen
     }
 
     @Override
-    public void onSceneObjectAdded(Scene scene, SceneObject entityAdded) {
+    public void onSceneEntityAdded(Scene scene, Entity entityAdded) {
         if (physicsEnv != null)
             return;
         if (entityAdded instanceof PhysicsEnv) {
@@ -166,7 +107,7 @@ public class CameraChaseEnv <T extends EnvData> extends AbstractEnv <T> implemen
     }
 
     @Override
-    public void onSceneObjectRemoved(Scene scene, SceneObject objectRemoved) {
+    public void onSceneEntityRemoved(Scene scene, Entity objectRemoved) {
         // 如果PhysicsEnv被移除，则镜头跟随要清除物理碰撞检测对象。
         if (physicsEnv != null && physicsEnv == objectRemoved) {
             ccc.setPhysicsSpace(null);
@@ -174,20 +115,5 @@ public class CameraChaseEnv <T extends EnvData> extends AbstractEnv <T> implemen
         }
     }
 
-    @Override
-    public void onSpatialAdded(Scene scene, Spatial spatialAdded) {
-    }
-
-    @Override
-    public void onSpatialRemoved(Scene scene, Spatial objectRemoved) {
-    }
-
-    @Override
-    public void onProcessorAdded(Scene scene, SceneProcessor processorAdded) {
-    }
-
-    @Override
-    public void onProcessorRemoved(Scene scene, SceneProcessor processorRemoved) {
-    }
 
 }

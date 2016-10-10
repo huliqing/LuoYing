@@ -9,11 +9,9 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import name.huliqing.ly.Factory;
-import name.huliqing.ly.layer.service.ActorService;
-import name.huliqing.ly.object.actor.Actor;
-import name.huliqing.ly.layer.service.PlayService;
 import name.huliqing.ly.object.IntervalLogic;
+import name.huliqing.ly.object.Loader;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.utils.ThreadHelper;
 
 /**
@@ -23,13 +21,13 @@ import name.huliqing.ly.utils.ThreadHelper;
  * @author huliqing
  */
 public abstract class ActorMultLoadHelper extends IntervalLogic {
-    private final PlayService playService = Factory.get(PlayService.class);
-    private final ActorService actorService = Factory.get(ActorService.class);
+//    private final PlayService playService = Factory.get(PlayService.class);
+//    private final ActorService actorService = Factory.get(ActorService.class);
     
     // 要载入的角色的id
     protected String[] actorIds;
     
-    private Future<Actor> future;
+    private Future<Entity> future;
     // 当前正在载入的角色id索引
     private int lastLoadIndex;
     // 是否已经处理结束
@@ -58,10 +56,10 @@ public abstract class ActorMultLoadHelper extends IntervalLogic {
         
         // load OK
         if (future == null && lastLoadIndex < actorIds.length) {
-            future = ThreadHelper.submit(new Callable<Actor>() {
+            future = ThreadHelper.submit(new Callable<Entity>() {
                 @Override
-                public Actor call() throws Exception {
-                    Actor actor = load(actorIds[lastLoadIndex]);
+                public Entity call() throws Exception {
+                    Entity actor = load(actorIds[lastLoadIndex]);
                     return actor;
                 }
             });
@@ -70,7 +68,7 @@ public abstract class ActorMultLoadHelper extends IntervalLogic {
         if (future != null) {
             if (future.isDone()) {
                 try {
-                    Actor result = future.get();
+                    Entity result = future.get();
                     callback(result, lastLoadIndex);
                     
 //                    Logger.getLogger(getClass().getName()).log(Level.INFO, "callBack ok, lastLoadIndex={0}", lastLoadIndex);
@@ -98,20 +96,21 @@ public abstract class ActorMultLoadHelper extends IntervalLogic {
     
     /**
      * 实现角色的载入，注：该方法在多线程中运行，不建议在该方法在处理该场景
-     * 信息.处理场景物体添加需要使用 {@link #callback(name.huliqing.fighter.actor.Actor) }
+     * 信息.处理场景物体添加需要使用
      * @param actorId 需要载入的角色id
      * @return 
      */
-    protected Actor load(String actorId) {
+    protected Entity load(String actorId) {
         if (actorId == null) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "The load actorId could not be null!");
         }
-        return actorService.loadActor(actorId);
+        return Loader.load(actorId);
     }
     
     /**
      * 处理已经载入的角色,负责将角色添加到场景中
      * @param actor 
+     * @param loadIndex 
      */
-    public abstract void callback(Actor actor, int loadIndex);
+    public abstract void callback(Entity actor, int loadIndex);
 }

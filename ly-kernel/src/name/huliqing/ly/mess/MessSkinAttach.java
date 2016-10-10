@@ -12,7 +12,7 @@ import name.huliqing.ly.layer.network.SkinNetwork;
 import name.huliqing.ly.layer.service.PlayService;
 import name.huliqing.ly.layer.service.SkinService;
 import name.huliqing.ly.network.GameServer;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.skin.Skin;
 
 /**
@@ -43,7 +43,7 @@ public class MessSkinAttach extends MessBase {
 
     @Override
     public void applyOnServer(GameServer gameServer, HostedConnection source) {
-        Actor actor = Factory.get(PlayService.class).findActor(actorId);
+        Entity actor = Factory.get(PlayService.class).getEntity(actorId);
         if (actor == null) {
             return;
         }
@@ -55,7 +55,7 @@ public class MessSkinAttach extends MessBase {
 
     @Override
     public void applyOnClient() {
-        Actor actor = Factory.get(PlayService.class).findActor(actorId);
+        Entity actor = Factory.get(PlayService.class).getEntity(actorId);
         if (actor == null) {
             return;
         }

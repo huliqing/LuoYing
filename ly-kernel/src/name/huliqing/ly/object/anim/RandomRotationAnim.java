@@ -62,9 +62,4 @@ public final class RandomRotationAnim extends AbstractAnim<Spatial> {
         }
     }
     
-    @Override
-    public void cleanup() {
-        super.cleanup();
-    }
-    
 }

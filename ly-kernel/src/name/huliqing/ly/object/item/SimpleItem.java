@@ -5,7 +5,7 @@
  */
 package name.huliqing.ly.object.item;
 
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * 没有任何属性的物品。
@@ -14,7 +14,7 @@ import name.huliqing.ly.object.actor.Actor;
 public class SimpleItem extends AbstractItem {
 
     @Override
-    public void use(Actor actor) {
+    public void use(Entity actor) {
         super.use(actor);
         
         // do nothing.

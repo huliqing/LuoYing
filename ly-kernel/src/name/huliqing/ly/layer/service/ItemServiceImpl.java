@@ -10,7 +10,7 @@ import name.huliqing.ly.constants.IdConstants;
 import name.huliqing.ly.constants.ResConstants;
 import name.huliqing.ly.enums.MessageType;
 import name.huliqing.ly.manager.ResourceManager;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.item.Item;
 import name.huliqing.ly.object.module.ItemListener;
 import name.huliqing.ly.object.module.ItemModule;
@@ -29,28 +29,31 @@ public class ItemServiceImpl implements ItemService {
     }
     
     @Override
-    public void addItem(Actor actor, String itemId, int count) {
+    public void addItem(Entity actor, String itemId, int count) {
         ItemModule module = actor.getModule(ItemModule.class);
         if (module != null) {
             module.addItem(itemId, count);
-            // 提示获得物品,只提示当前场景中的角色
-            if (actor == playService.getPlayer()) {
-                playService.addMessage(ResourceManager.get(ResConstants.COMMON_REWARD_ITEM
-                        , new Object[] {ResourceManager.getObjectName(itemId), count > 1 ? "(" + count + ")" : ""})
-                        , MessageType.item);
+            
+            // xxx 重构
+//            // 提示获得物品,只提示当前场景中的角色
+//            if (actor == playService.getPlayer()) {
+//                playService.addMessage(ResourceManager.get(ResConstants.COMMON_REWARD_ITEM
+//                        , new Object[] {ResourceManager.getObjectName(itemId), count > 1 ? "(" + count + ")" : ""})
+//                        , MessageType.item);
+//
+//                // 播放获得物品时的声效
+//                if (itemId.equals(IdConstants.ITEM_GOLD)) {
+//                    SoundManager.getInstance().playSound(IdConstants.SOUND_GET_COIN, actor.getSpatial().getWorldTranslation());
+//                } else {
+//                    SoundManager.getInstance().playSound(IdConstants.SOUND_GET_ITEM, actor.getSpatial().getWorldTranslation());
+//                }
+//            }
 
-                // 播放获得物品时的声效
-                if (itemId.equals(IdConstants.ITEM_GOLD)) {
-                    SoundManager.getInstance().playSound(IdConstants.SOUND_GET_COIN, actor.getSpatial().getWorldTranslation());
-                } else {
-                    SoundManager.getInstance().playSound(IdConstants.SOUND_GET_ITEM, actor.getSpatial().getWorldTranslation());
-                }
-            }
         }
     }
 
     @Override
-    public void removeItem(Actor actor, String itemId, int count) {
+    public void removeItem(Entity actor, String itemId, int count) {
         ItemModule module = actor.getModule(ItemModule.class);
         if (module != null) {
             module.removeItem(itemId, count);
@@ -58,7 +61,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Item getItem(Actor actor, String itemId) {
+    public Item getItem(Entity actor, String itemId) {
         ItemModule module = actor.getModule(ItemModule.class);
         if (module != null) {
             return module.getItem(itemId);
@@ -67,7 +70,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<Item> getItems(Actor actor) {
+    public List<Item> getItems(Entity actor) {
         ItemModule module = actor.getModule(ItemModule.class);
         if (module != null) {
             return module.getItems();
@@ -76,7 +79,7 @@ public class ItemServiceImpl implements ItemService {
     }
     
     @Override
-    public void addItemListener(Actor actor, ItemListener itemListener) {
+    public void addItemListener(Entity actor, ItemListener itemListener) {
         ItemModule module = actor.getModule(ItemModule.class);
         if (module != null) {
             module.addItemListener(itemListener);
@@ -84,7 +87,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public boolean removeItemListener(Actor actor, ItemListener itemListener) {
+    public boolean removeItemListener(Entity actor, ItemListener itemListener) {
         ItemModule module = actor.getModule(ItemModule.class);
         return module != null && module.removeItemListener(itemListener);
     }
@@ -96,7 +99,7 @@ public class ItemServiceImpl implements ItemService {
      * @param total 
      */
     @Override
-    public void syncItemTotal(Actor actor, String itemId, int total) {
+    public void syncItemTotal(Entity actor, String itemId, int total) {
         ItemModule module = actor.getModule(ItemModule.class);
         if (module == null)
             return;
@@ -117,7 +120,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public void useItem(Actor actor, String itemId) {
+    public void useItem(Entity actor, String itemId) {
         ItemModule module = actor.getModule(ItemModule.class);
         if (module != null) {
             Item item = module.getItem(itemId);

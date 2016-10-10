@@ -1,7 +1,7 @@
 package name.huliqing.ly.object.attribute;
 
 import name.huliqing.ly.data.AttributeData;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.module.AttributeListener;
 import name.huliqing.ly.object.module.AttributeModule;
 
@@ -125,7 +125,7 @@ public class LimitIntegerAttribute extends IntegerAttribute implements LimitAttr
     // 监听attributeModule是否添加了新的属性，如果新添加的属性刚好与当前属性需要用来限制值大小的属性名称一致，
     // 则需要重新绑定这些属性
     @Override
-    public void onAttributeAdded(Actor actor, Attribute attribute) {
+    public void onAttributeAdded(Entity actor, Attribute attribute) {
         if (attribute == this)
             return;
         
@@ -140,7 +140,7 @@ public class LimitIntegerAttribute extends IntegerAttribute implements LimitAttr
     // 监听attributeModule是否移除了属性，如果移除的属性刚好是当前需要用来限制值大小的属性，
     // 则需要移除对这些属性的侦听,因为这些属性已经移除，则不能再用它们来限制当前属性的值大小。
     @Override
-    public void onAttributeRemoved(Actor actor, Attribute otherAttribute) {
+    public void onAttributeRemoved(Entity actor, Attribute otherAttribute) {
         if (otherAttribute == this) {
             if (minLimitAttribute != null) {
                 minLimitAttribute.removeListener(this);

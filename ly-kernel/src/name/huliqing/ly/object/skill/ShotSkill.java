@@ -13,9 +13,9 @@ import name.huliqing.ly.data.SkillData;
 import name.huliqing.ly.layer.service.ActorService;
 import name.huliqing.ly.layer.service.BulletService;
 import name.huliqing.ly.layer.service.PlayService;
-import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.object.bullet.Bullet;
 import name.huliqing.ly.object.bullet.Bullet.Listener;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.utils.ConvertUtils;
 import name.huliqing.ly.utils.MathUtils;
 
@@ -77,7 +77,7 @@ public class ShotSkill extends HitSkill {
     
     // 在攻击技能范围内的目标，每次技能过后清空
     private int indexTarget;
-    private final List<Actor> tempTargets = new ArrayList<Actor>();
+    private final List<Entity> tempTargets = new ArrayList<Entity>();
     
     @Override
     public void setData(SkillData data) {
@@ -129,7 +129,7 @@ public class ShotSkill extends HitSkill {
     }
     
     // 获取下一个目标
-    protected Actor getShotTarget() {
+    protected Entity getShotTarget() {
         if (tempTargets.isEmpty()) 
             return null;
         if (indexTarget >= tempTargets.size())
@@ -158,7 +158,7 @@ public class ShotSkill extends HitSkill {
             getCanHitActors(tempTargets, true);
         } else {
             // 单目标攻击
-            Actor mainTarget = actorService.getTarget(actor);
+            Entity mainTarget = actorService.getTarget(actor);
             if (mainTarget != null && isInHitDistance(mainTarget)) {
                 tempTargets.add(mainTarget);
             }
@@ -180,7 +180,7 @@ public class ShotSkill extends HitSkill {
     }
     
     protected void doShotTarget() {
-        final Actor mainTarget = getShotTarget();
+        final Entity mainTarget = getShotTarget();
         
         if (mainTarget == null) {
             return;
@@ -215,7 +215,7 @@ public class ShotSkill extends HitSkill {
      * @param target
      * @return 
      */
-    private Vector3f getShotEndPoint(Actor target) {
+    private Vector3f getShotEndPoint(Entity target) {
         switch (shotTargetType) {
             case bound:
             case center:
@@ -240,7 +240,7 @@ public class ShotSkill extends HitSkill {
         return store;
     }
     
-    protected boolean shotHitCheck(Bullet bullet, Actor mainTarget) {
+    protected boolean shotHitCheck(Bullet bullet, Entity mainTarget) {
         // 注：这里是为了提高性能，只有在击中主目标之后才会进行伤害检测。
         // 即使打开了multHit也必须在击中主目标之后才开始全部检测。否则在子弹
         // 飞行过程中作全面检测会非常伤性能。
@@ -253,8 +253,8 @@ public class ShotSkill extends HitSkill {
 
         // 如果允许多重伤害时，则需要判断其他可能在攻击范围内的敌人
         if (multHit) {
-            List<Actor> targets = playService.findAllActor();
-            for (Actor t : targets) {
+            List<Entity> targets = playService.findAllActor();
+            for (Entity t : targets) {
                 if (t == mainTarget) {
                     continue;
                 }
@@ -267,7 +267,7 @@ public class ShotSkill extends HitSkill {
     }
     
     // 判断子弹是否击中指定角色。
-    private boolean isBulletHit(Bullet bullet, Actor target) {
+    private boolean isBulletHit(Bullet bullet, Entity target) {
         switch (shotTargetType) {
             case bound:
                 return bullet.isHit(target.getSpatial());

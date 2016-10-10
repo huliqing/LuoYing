@@ -9,7 +9,7 @@ import name.huliqing.ly.Factory;
 import name.huliqing.ly.layer.service.StateService;
 import name.huliqing.ly.mess.MessStateAdd;
 import name.huliqing.ly.mess.MessStateRemove;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * 重要：对于客户端和服务端的同步，一般应先广播到所有客户端，然后再在服务端自
@@ -28,12 +28,12 @@ public class StateNetworkImpl implements StateNetwork {
     }
     
     @Override
-    public float checkAddState(Actor actor, String stateId) {
+    public float checkAddState(Entity actor, String stateId) {
         return stateService.checkAddState(actor, stateId);
     }
     
     @Override
-    public boolean addState(Actor actor, String stateId, Actor sourceActor) {
+    public boolean addState(Entity actor, String stateId, Entity sourceActor) {
         if (!NETWORK.isClient()) {
             float resist = stateService.checkAddState(actor, stateId);
             if (resist < 1) {
@@ -57,7 +57,7 @@ public class StateNetworkImpl implements StateNetwork {
     }
 
     @Override
-    public void addStateForce(Actor actor, String stateId, float resist, Actor sourceActor) {
+    public void addStateForce(Entity actor, String stateId, float resist, Entity sourceActor) {
         if (!NETWORK.isClient()) {
             if (NETWORK.hasConnections()) {
                 // 先广播
@@ -75,7 +75,7 @@ public class StateNetworkImpl implements StateNetwork {
     }
 
     @Override
-    public boolean removeState(Actor actor, String stateId) {
+    public boolean removeState(Entity actor, String stateId) {
         if (!NETWORK.isClient()) {
             if (NETWORK.hasConnections()) {
                 // 先广播

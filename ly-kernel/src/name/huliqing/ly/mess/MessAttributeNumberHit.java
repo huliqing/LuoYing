@@ -9,7 +9,7 @@ import com.jme3.network.serializing.Serializable;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.layer.service.ActorService;
 import name.huliqing.ly.layer.service.PlayService;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  *
@@ -73,8 +73,8 @@ public class MessAttributeNumberHit extends MessBase {
         super.applyOnClient();
         PlayService playService = Factory.get(PlayService.class);
         ActorService actorService = Factory.get(ActorService.class);
-        Actor source = playService.findActor(sourceActor);
-        Actor target = playService.findActor(targetActor);
+        Entity source = playService.getEntity(sourceActor);
+        Entity target = playService.getEntity(targetActor);
         if (target != null && source != null) {
             actorService.hitNumberAttribute(target, source, attrName, value);
         }

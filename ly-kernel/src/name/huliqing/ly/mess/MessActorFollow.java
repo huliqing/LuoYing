@@ -11,7 +11,7 @@ import name.huliqing.ly.layer.network.ActorNetwork;
 import name.huliqing.ly.layer.service.ActorService;
 import name.huliqing.ly.layer.service.PlayService;
 import name.huliqing.ly.network.GameServer;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * 设置角色的队伍分组
@@ -43,7 +43,7 @@ public class MessActorFollow extends MessBase {
     @Override
     public void applyOnClient() {
         PlayService playService = Factory.get(PlayService.class);
-        Actor actor = playService.findActor(actorId);
+        Entity actor = playService.getEntity(actorId);
         if (actor != null) {
             ActorService actorService = Factory.get(ActorService.class);
             actorService.setFollow(actor, targetId);
@@ -54,7 +54,7 @@ public class MessActorFollow extends MessBase {
     public void applyOnServer(GameServer gameServer, HostedConnection source) {
         super.applyOnServer(gameServer, source);
         PlayService playService = Factory.get(PlayService.class);
-        Actor actor = playService.findActor(actorId);
+        Entity actor = playService.getEntity(actorId);
         if (actor != null) {
             ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
             actorNetwork.setFollow(actor, targetId);

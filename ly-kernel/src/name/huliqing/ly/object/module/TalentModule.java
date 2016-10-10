@@ -17,10 +17,10 @@ import name.huliqing.ly.data.ModuleData;
 import name.huliqing.ly.layer.service.AttributeService;
 import name.huliqing.ly.layer.service.ElService;
 import name.huliqing.ly.object.Loader;
-import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.object.attribute.Attribute;
 import name.huliqing.ly.object.attribute.NumberAttribute;
 import name.huliqing.ly.object.attribute.ValueChangeListener;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.talent.Talent;
 
 /**
@@ -75,7 +75,7 @@ public class TalentModule extends AbstractModule implements ValueChangeListener<
     }
     
     @Override
-    public void initialize(Actor actor) {
+    public void initialize(Entity actor) {
         super.initialize(actor); 
         
         // 绑定并监听角色等级变化
@@ -123,13 +123,13 @@ public class TalentModule extends AbstractModule implements ValueChangeListener<
         }
         
         talents.add(talent);
-        actor.getData().addObjectData(talent.getData());
-        talent.setActor(actor);
+        entity.getData().addObjectData(talent.getData());
+        talent.setActor(entity);
         talent.initialize();
         
         if (talentListeners != null) {
             for (TalentListener listener : talentListeners) {
-                listener.onTalentAdded(actor, talent);
+                listener.onTalentAdded(entity, talent);
             }
         }
     }
@@ -167,7 +167,7 @@ public class TalentModule extends AbstractModule implements ValueChangeListener<
         // 告诉侦听器
         if (talentListeners != null) {
             for (TalentListener tl : talentListeners) {
-                tl.onTalentPointsChange(actor, talent, trueAdd);
+                tl.onTalentPointsChange(entity, talent, trueAdd);
             }
         }
     }
@@ -182,12 +182,12 @@ public class TalentModule extends AbstractModule implements ValueChangeListener<
             return false;
         
         talents.remove(talent);
-        actor.getData().removeObjectData(talent.getData());
+        entity.getData().removeObjectData(talent.getData());
         talent.cleanup();
         
         if (talentListeners != null) {
             for (TalentListener tl : talentListeners) {
-                tl.onTalentRemoved(actor, talent);
+                tl.onTalentRemoved(entity, talent);
             }
         }
         return true;

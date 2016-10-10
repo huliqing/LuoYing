@@ -12,9 +12,8 @@ import name.huliqing.ly.data.ConnData;
 import name.huliqing.ly.data.SkillData;
 import name.huliqing.ly.layer.network.SkillNetwork;
 import name.huliqing.ly.layer.service.PlayService;
-import name.huliqing.ly.layer.service.SkillService;
 import name.huliqing.ly.network.GameServer;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.module.SkillModule;
 import name.huliqing.ly.object.skill.Skill;
 
@@ -63,13 +62,13 @@ public final class MessSkillPlay extends MessBase {
     @Override
     public void applyOnServer(GameServer gameServer, HostedConnection source) {
         ConnData cd = source.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
-        Actor actor = Factory.get(PlayService.class).findActor(actorId);
+        Entity actor = Factory.get(PlayService.class).getEntity(actorId);
          // 找不到指定的角色
         if (actor == null) {
             return;
         }
         // 角色必须是客户端所控制的。客户端角色不能强制执行技能，并且也不能自己指定wantNotInterruptSkills参数
-        if (actor.getData().getUniqueId() == cd.getActorId()) {
+        if (actor.getData().getUniqueId() == cd.getEntityId()) {
             SkillModule skillModule = actor.getModule(SkillModule.class);
             Factory.get(SkillNetwork.class).playSkill(actor, skillModule.getSkill(skillId), false);
         }
@@ -77,7 +76,7 @@ public final class MessSkillPlay extends MessBase {
 
     @Override
     public void applyOnClient() {
-        Actor actor = Factory.get(PlayService.class).findActor(actorId);
+        Entity actor = Factory.get(PlayService.class).getEntity(actorId);
         if (actor != null) {
             SkillModule skillModule = actor.getModule(SkillModule.class);
             Skill skill = skillModule.getSkill(skillId);

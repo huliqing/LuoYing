@@ -9,7 +9,7 @@ import name.huliqing.ly.Factory;
 import name.huliqing.ly.data.ItemData;
 import name.huliqing.ly.layer.network.StateNetwork;
 import name.huliqing.ly.layer.service.ItemService;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * 可让角色获得某些状态的物品
@@ -30,7 +30,7 @@ public class StateItem extends AbstractItem {
     }
 
     @Override
-    public void use(Actor actor) {
+    public void use(Entity actor) {
         super.use(actor);
         
         if (states == null)

@@ -21,7 +21,8 @@ import name.huliqing.ly.layer.service.ActorService;
 import name.huliqing.ly.layer.service.ConfigService;
 import name.huliqing.ly.layer.service.ItemService;
 import name.huliqing.ly.layer.service.PlayService;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.Loader;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.utils.GeometryUtils;
 import name.huliqing.ly.utils.Temp;
 
@@ -51,7 +52,7 @@ public class SummonItem extends AbstractItem {
     }
 
     @Override
-    public void use(Actor actor) {
+    public void use(Entity actor) {
         int count = 0;
         for (int i = 0; i < total; i++) {
             count += summon(actor, actorId) ? 1 : 0;
@@ -62,9 +63,9 @@ public class SummonItem extends AbstractItem {
         }
     }
     
-    private boolean summon(Actor actor, String actorId) {
+    private boolean summon(Entity actor, String actorId) {
         // -- 载入角色
-        Actor bcc = actorService.loadActor(actorId);
+        Entity bcc = Loader.load(actorId);
         int level = (int) (actorService.getLevel(actor) * configService.getSummonLevelFactor());
         actorService.setName(bcc, actorService.getName(bcc) + "-" + actorService.getName(actor));
         actorService.setLevel(bcc, level > 0 ? level : 1); // 至少1级
@@ -105,7 +106,7 @@ public class SummonItem extends AbstractItem {
         }
         // 设置地点并召唤
         actorService.setLocation(bcc, summonPos);
-        playNetwork.addActor(bcc);
+        playNetwork.addEntity(actor.getScene(), bcc);
         return true;
     }
     

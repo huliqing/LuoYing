@@ -6,7 +6,7 @@
 package name.huliqing.ly.object.module;
 
 import name.huliqing.ly.data.ModuleData;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.xml.DataProcessor;
 
 /**
@@ -25,9 +25,9 @@ public interface Module<T extends ModuleData> extends DataProcessor<T>{
     
     /**
      * 初始化模块
-     * @param actor
+     * @param entity
      */
-    void initialize(Actor actor);
+    void initialize(Entity entity);
     
     /**
      * 判断模块是否已经初始化
@@ -41,8 +41,8 @@ public interface Module<T extends ModuleData> extends DataProcessor<T>{
     void cleanup();
     
     /**
-     * 获取模块角色
+     * 获取模块关联的实体
      * @return 
      */
-    Actor getActor();
+    Entity getEntity();
 }

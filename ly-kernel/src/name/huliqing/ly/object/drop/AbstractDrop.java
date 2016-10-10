@@ -6,7 +6,7 @@
 package name.huliqing.ly.object.drop;
 
 import name.huliqing.ly.data.DropData;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.sound.SoundManager;
 
 /**
@@ -37,7 +37,7 @@ public abstract class AbstractDrop implements Drop {
      * 播放drop声效,这个方法由子类调用，当子类逻辑确认掉落物品时可调用这个方法来播放掉落声音。
      * @param source 
      */
-    protected void playDropSounds(Actor source) {
+    protected void playDropSounds(Entity source) {
         if (sounds != null) {
             for (String s : sounds) {
                 SoundManager.getInstance().playSound(s, source.getSpatial().getWorldTranslation());

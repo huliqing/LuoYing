@@ -9,7 +9,7 @@ import com.jme3.network.serializing.Serializable;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.layer.service.ActorService;
 import name.huliqing.ly.layer.service.PlayService;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * 直接同步角色的位置
@@ -39,7 +39,7 @@ public class MessActorSetLocation extends MessBase {
 
     @Override
     public void applyOnClient() {
-        Actor actor = Factory.get(PlayService.class).findActor(actorId);
+        Entity actor = Factory.get(PlayService.class).getEntity(actorId);
         if (actor == null) {
             return;
         }

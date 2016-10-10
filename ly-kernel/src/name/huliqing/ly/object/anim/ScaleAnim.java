@@ -30,10 +30,6 @@ public final class ScaleAnim extends AbstractAnim<Spatial> {
     private final Vector3f scaleStartPos = new Vector3f();
     private final Vector3f scaleEndPos = new Vector3f();
     
-    public ScaleAnim() {
-        super();
-    }
-    
     @Override
     public void setData(AnimData data) {
         super.setData(data);

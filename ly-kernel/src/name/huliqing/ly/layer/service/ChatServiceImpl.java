@@ -6,13 +6,10 @@ package name.huliqing.ly.layer.service;
 
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.constants.IdConstants;
-import name.huliqing.ly.constants.ResConstants;
 import name.huliqing.ly.data.ObjectData;
-import name.huliqing.ly.enums.MessageType;
 import name.huliqing.ly.object.Loader;
-import name.huliqing.ly.manager.ResourceManager;
-import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.object.chat.Chat;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.module.ChatModule;
 import name.huliqing.ly.object.sound.SoundManager;
 
@@ -36,7 +33,7 @@ public class ChatServiceImpl implements ChatService {
     }
     
     @Override
-    public Chat getChat(Actor actor) {
+    public Chat getChat(Entity actor) {
         ChatModule module = actor.getModule(ChatModule.class);
         if (module != null) {
             return module.getChat();
@@ -45,45 +42,46 @@ public class ChatServiceImpl implements ChatService {
     }
     
     @Override
-    public void chatShop(Actor seller, Actor buyer, String itemId, int count, float discount) {
-        ObjectData data = protoService.getData(seller, itemId);
-        if (data == null || data.getTotal() <= 0 || data.getTotal() < count) {
-            // 库存不足，如果是当前场景“主角”则显示提示
-            if (buyer == playService.getPlayer()) {
-                playService.addMessage(ResourceManager.get(ResConstants.CHAT_SHOP_WARN_PRODUCT_NOT_ENOUGH)
-                        , MessageType.notice);
-            }
-            return;
-        }
+    public void chatShop(Entity seller, Entity buyer, String itemId, int count, float discount) {
+//        ObjectData data = protoService.getData(seller, itemId);
+//        if (data == null || data.getTotal() <= 0 || data.getTotal() < count) {
+//            // 库存不足，如果是当前场景“主角”则显示提示
+//            if (buyer == playService.getPlayer()) {
+//                playService.addMessage(ResourceManager.get(ResConstants.CHAT_SHOP_WARN_PRODUCT_NOT_ENOUGH)
+//                        , MessageType.notice);
+//            }
+//            return;
+//        }
+//        
+//        // 非卖品
+//        if (!protoService.isSellable(data)) {
+//            return;
+//        }
+//        
+//        int needGold = (int) (protoService.getCost(data) * count * discount);
+//        ObjectData gold = protoService.getData(buyer, IdConstants.ITEM_GOLD);
+//        if (gold == null || gold.getTotal() < needGold) {
+//            // 金币不足
+//            if (buyer == playService.getPlayer()) {
+//                playService.addMessage(ResourceManager.get(ResConstants.CHAT_SHOP_WARN_GOLD_NOT_ENOUGH)
+//                        , MessageType.notice);
+//            }
+//            return;
+//        }
+//        
+//        protoService.addData(buyer, itemId, count);
+//        protoService.removeData(seller, itemId, count);
+//        
+//        protoService.addData(seller, IdConstants.ITEM_GOLD, needGold);
+//        protoService.removeData(buyer, IdConstants.ITEM_GOLD, needGold);
+//        
+//        SoundManager.getInstance().playSound(IdConstants.SOUND_COIN1, buyer.getSpatial().getWorldTranslation());
         
-        // 非卖品
-        if (!protoService.isSellable(data)) {
-            return;
-        }
-        
-        int needGold = (int) (protoService.getCost(data) * count * discount);
-        ObjectData gold = protoService.getData(buyer, IdConstants.ITEM_GOLD);
-        if (gold == null || gold.getTotal() < needGold) {
-            // 金币不足
-            if (buyer == playService.getPlayer()) {
-                playService.addMessage(ResourceManager.get(ResConstants.CHAT_SHOP_WARN_GOLD_NOT_ENOUGH)
-                        , MessageType.notice);
-            }
-            return;
-        }
-        
-        protoService.addData(buyer, itemId, count);
-        protoService.removeData(seller, itemId, count);
-        
-        protoService.addData(seller, IdConstants.ITEM_GOLD, needGold);
-        protoService.removeData(buyer, IdConstants.ITEM_GOLD, needGold);
-        
-        SoundManager.getInstance().playSound(IdConstants.SOUND_COIN1, buyer.getSpatial().getWorldTranslation());
-        
+        throw new UnsupportedOperationException();
     }
 
     @Override
-    public void chatSell(Actor seller, Actor buyer, String[] items, int[] counts, float discount) {
+    public void chatSell(Entity seller, Entity buyer, String[] items, int[] counts, float discount) {
         if (sellInner(seller, buyer, items, counts, discount)) {
             // 有卖出过东西则播放声音
             SoundManager.getInstance().playSound(IdConstants.SOUND_COIN2, seller.getSpatial().getWorldTranslation());
@@ -91,7 +89,7 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public void chatSend(Actor sender, Actor receiver, String[] items, int[] counts) {
+    public void chatSend(Entity sender, Entity receiver, String[] items, int[] counts) {
         sellInner(sender, receiver, items, counts, 0);
     }
     
@@ -103,11 +101,11 @@ public class ChatServiceImpl implements ChatService {
      * @param counts
      * @param discount 
      */
-    private boolean sellInner(Actor seller, Actor buyer, String[] items, int[] counts, float discount) {
+    private boolean sellInner(Entity seller, Entity buyer, String[] items, int[] counts, float discount) {
         String id;
         ObjectData data;
         int trueCount;
-        float amount;
+        float amount; 
         boolean result = false; // 标记是否有卖出过任何一件物品
         for (int i = 0; i < items.length; i++) {
             id = items[i];

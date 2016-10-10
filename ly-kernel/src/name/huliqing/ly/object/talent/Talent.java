@@ -6,7 +6,7 @@ package name.huliqing.ly.object.talent;
 
 import name.huliqing.ly.data.TalentData;
 import name.huliqing.ly.xml.DataProcessor;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * 天赋，注：天赋是不会结束的，一旦获得就一直存在，除非手动移除。
@@ -66,6 +66,6 @@ public interface Talent<T extends TalentData> extends DataProcessor<T> {
      * 设置天赋的作用目标。
      * @param actor 
      */
-    void setActor(Actor actor);
+    void setActor(Entity actor);
     
 }

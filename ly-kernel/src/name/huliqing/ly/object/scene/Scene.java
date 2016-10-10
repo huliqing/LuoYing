@@ -8,17 +8,28 @@ package name.huliqing.ly.object.scene;
 import com.jme3.math.Vector3f;
 import com.jme3.post.Filter;
 import com.jme3.post.SceneProcessor;
+import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
-import com.jme3.scene.Spatial;
-import java.util.Collection;
 import java.util.List;
 import name.huliqing.ly.data.SceneData;
 import name.huliqing.ly.xml.DataProcessor;
-import name.huliqing.ly.object.SceneObject;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * 游戏场景，存取游戏场景中对象的容器。创场景场景之后需要通过{@link #getRoot() }获取场景的根节点，
- * 并把场景根节点放到游戏根节点下才能进行渲染和显示。
+ * 并把场景根节点放到游戏根节点下才能进行渲染和显示。使用示例：
+ * <code>
+ * <pre>
+ *  // 创建一个场景实例 
+ *  Scene scene = new SceneXxx();
+ *  // 指定要让哪些ViewPort作为Processor的容器
+ *  scene.setProcessorViewPorts(getViewPort());
+ *  // 把场景根节点添加到游戏根节点
+ *  rootNode.attachChild(scene.getRoot());
+ *  // 初始化场景
+ *  scene.initialize();
+ * </pre>
+ * </code>
  * @author huliqing
  */
 public interface Scene extends DataProcessor<SceneData> {
@@ -69,55 +80,56 @@ public interface Scene extends DataProcessor<SceneData> {
     
     /**
      * 添加一个场景物体,在添加之前必须确保场景已经初始化。
-     * @param sceneObject 
+     * @param entity 
      */
-    void addSceneObject(SceneObject sceneObject);
+    void addEntity(Entity entity);
     
     /**
      * 从容器中移除指定场景物体，如果成功则返回true,移除失败或者物体不存在则返回false.
-     * @param sceneObject 
+     * @param entity 
      * @return  
      */
-    boolean removeSceneObject(SceneObject sceneObject);
+    boolean removeEntity(Entity entity);
     
-    /**
-     * 添加场景物体
-     * @param spatialAdded 
-     */
-    void addSpatial(Spatial spatialAdded);
-    
-    /**
-     * 移除场景物体
-     * @param spatialRemoved 
-     * @return  
-     */
-    boolean removeSpatial(Spatial spatialRemoved);
+//    /**
+//     * 添加场景物体
+//     * @param spatialAdded 
+//     */
+//    void addSpatial(Spatial spatialAdded);
+//    
+//    /**
+//     * 移除场景物体
+//     * @param spatialRemoved 
+//     * @return  
+//     */
+//    boolean removeSpatial(Spatial spatialRemoved);
     
     /**
      * 通过唯一id来查找场景物体,如果不存在则反回null.
-     * @param objectId
+     * @param entityId
      * @return 
      */
-    SceneObject getSceneObject(long objectId);
+    Entity getEntity(long entityId);
     
     /**
-     * 在某一个位置点上，向周围一定的范围内查找场景物体，在这个范围内的物体都将一起返回。
-     * @param location 指定的位置点
-     * @param radius 指定的范围
-     * @param store 存放结果
+     * 获取场景中指定类型的物体。
+     * @param <T>
+     * @param type
+     * @param store,存放结果,如果为null则会自动创建
      * @return 
      */
-    Collection<SceneObject> getSceneObjects(Vector3f location, float radius, List<SceneObject> store);
+    <T extends Entity> List<T> getEntities(Class<T> type, List<T> store);
     
     /**
-     * 获取场景中的所有物体，这个方法会返回整个场景中的物体，如果只要查找一定范围内的物体可以使用
-     * {@link #getSceneObjects(com.jme3.math.Vector3f, float, java.util.List) }.
-     * 注：返回的列表不能直接修改。
+     * 获取场景中指定位置范围内的物体。
+     * @param <T>
+     * @param type
+     * @param location
+     * @param radius
+     * @param store
      * @return 
-     * @see #removeSceneObject(name.huliqing.ly.object.SceneObject) 
-     * @see #addSceneObject(name.huliqing.ly.object.SceneObject) 
      */
-    Collection<SceneObject> getSceneObjects();
+    <T extends Entity> List<T> getEntities(Class<T> type, Vector3f location, float radius, List<T> store);
     
     /**
      * 添加容器侦听器
@@ -133,8 +145,10 @@ public interface Scene extends DataProcessor<SceneData> {
     boolean removeSceneListener(SceneListener listener);
     
     /**
-     * 给场景添加Processor
+     * 给场景添加Processor， 这些SceneProcessor会添加到{@link #setProcessorViewPorts(ViewPort...) }<br>
+     * 所指定的所有ViewPort中。如果没有设置setProcessorViewPorts则调用该方法不会有任何意义。
      * @param sceneProcessor 
+     * @see #setProcessorViewPorts(com.jme3.renderer.ViewPort...) 
      */
     void addProcessor(SceneProcessor sceneProcessor);
     
@@ -155,4 +169,12 @@ public interface Scene extends DataProcessor<SceneData> {
      * @param filter
      */
     void removeFilter(Filter filter);
+    
+    /**
+     * 设置一些ViewPort,这些ViewPort用于作为Processor的容器.
+     * 当向Scene添加SceneProcessor时将添加到这些ViewPort中。
+     * @param viewPorts
+     */
+    void setProcessorViewPorts(ViewPort... viewPorts);
+    
 }

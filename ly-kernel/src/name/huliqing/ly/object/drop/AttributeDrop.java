@@ -9,8 +9,8 @@ import name.huliqing.ly.Factory;
 import name.huliqing.ly.data.DropData;
 import name.huliqing.ly.layer.network.AttributeNetwork;
 import name.huliqing.ly.layer.service.ElService;
-import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.object.el.AttributeEl;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * 掉落属性值设置
@@ -37,7 +37,7 @@ public class AttributeDrop extends AbstractDrop {
     }
 
     @Override
-    public boolean doDrop(Actor source, Actor target) {
+    public boolean doDrop(Entity source, Entity target) {
         float value = fixedValue;
         if (attributeEl != null) {
             AttributeEl el = elService.getAttributeEl(attributeEl);

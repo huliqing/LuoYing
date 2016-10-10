@@ -17,9 +17,9 @@ import name.huliqing.ly.data.SkinData;
 import name.huliqing.ly.data.ModuleData;
 import name.huliqing.ly.object.Loader;
 import name.huliqing.ly.layer.service.AttributeService;
-import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.object.attribute.CollectionAttribute;
 import name.huliqing.ly.object.define.DefineFactory;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.skin.Skin;
 import name.huliqing.ly.object.skin.Weapon;
 import name.huliqing.ly.object.skin.WeaponSkin;
@@ -60,13 +60,13 @@ public class SkinModule extends AbstractModule {
         weaponTakeOn = data.getAsBoolean("weaponTakeOn", weaponTakeOn);
         bindWeaponSlotAttribute = data.getAsString("bindWeaponSlotAttribute");
     }
-    
+     
     protected void updateData() {
         data.setAttribute("weaponTakeOn", weaponTakeOn);
     }
     
     @Override
-    public void initialize(Actor actor) {
+    public void initialize(Entity actor) {
         super.initialize(actor); 
         
         if (bindWeaponSlotAttribute != null) {
@@ -108,12 +108,12 @@ public class SkinModule extends AbstractModule {
                 skinAll = new SafeArrayList<Skin>(Skin.class);
             }
             skinAll.add(skin);
-            actor.getData().addObjectData(skin.getData());
+            entity.getData().addObjectData(skin.getData());
         }
         
         if (skinListeners != null) {
             for (int i = 0; i < skinListeners.size(); i++) {
-                skinListeners.get(i).onSkinAdded(actor, skin);
+                skinListeners.get(i).onSkinAdded(entity, skin);
             }
         }
     }
@@ -137,13 +137,13 @@ public class SkinModule extends AbstractModule {
         
         skin.getData().setTotal(skin.getData().getTotal() - amount);
         if (skin.getData().getTotal() <= 0) {
-            actor.getData().removeObjectData(skin.getData());
+            entity.getData().removeObjectData(skin.getData());
             skinAll.remove(skin);
         }
         
         if (skinListeners != null) {
             for (int i = 0; i < skinListeners.size(); i++) {
-                skinListeners.get(i).onSkinRemoved(actor, skin);
+                skinListeners.get(i).onSkinRemoved(entity, skin);
             }
         }
         
@@ -233,27 +233,27 @@ public class SkinModule extends AbstractModule {
         if (!skinUsed.contains(skin)) {
             skinUsed.add(skin);
         }
-        skin.attach(actor);
+        skin.attach(entity);
         // 重新缓存武器状态
         if (skin instanceof Weapon) {
             cacheWeaponState();
         }
         if (skinListeners != null) {
             for (SkinListener sl : skinListeners) {
-                sl.onSkinAttached(actor, skin);
+                sl.onSkinAttached(entity, skin);
             }
         }
     }
     
     private void detachInner(Skin skin) {
         skinUsed.remove(skin);
-        skin.detach(actor);
+        skin.detach(entity);
         if (skin instanceof Weapon) {
             cacheWeaponState();
         }
         if (skinListeners != null) {
             for (SkinListener sl : skinListeners) {
-                sl.onSkinDetached(actor, skin);
+                sl.onSkinDetached(entity, skin);
             }
         }
     }
@@ -281,7 +281,7 @@ public class SkinModule extends AbstractModule {
         if (skinUsed != null) {
             for (Skin s : skinUsed.getArray()) {
                 if (s instanceof WeaponSkin) {
-                    ((WeaponSkin) s).takeOn(actor);
+                    ((WeaponSkin) s).takeOn(entity);
                 }
             }
         }
@@ -302,7 +302,7 @@ public class SkinModule extends AbstractModule {
         if (skinUsed != null) {
             for (Skin s : skinUsed.getArray()) {
                 if (s instanceof WeaponSkin) {
-                    ((WeaponSkin) s).takeOff(actor);
+                    ((WeaponSkin) s).takeOff(entity);
                 }
             }
         }
@@ -417,7 +417,7 @@ public class SkinModule extends AbstractModule {
         }
         if (Config.debug) {
             LOG.log(Level.INFO, "cacheWeaponState, actor={0}, weaponStateToBinary={1}, weaponsToString={2}"
-                    , new Object[] {actor.getData().getId()
+                    , new Object[] {entity.getData().getId()
                             , Long.toBinaryString(cacheWeaponState)
                             , DefineFactory.getWeaponTypeDefine().toString(cacheWeaponState)
                     });

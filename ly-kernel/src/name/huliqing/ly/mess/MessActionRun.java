@@ -14,6 +14,7 @@ import name.huliqing.ly.layer.service.PlayService;
 import name.huliqing.ly.data.ConnData;
 import name.huliqing.ly.network.GameServer;
 import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * 向目标位置移动
@@ -51,15 +52,12 @@ public class MessActionRun extends MessBase {
         ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
         ActionService actionService = Factory.get(ActionService.class);
         
-        Actor actor = playService.findActor(actorId);
+        Entity actor = (Actor) playService.getEntity(actorId);
         if (actor == null) 
             return;
 
-// remove20160615        
-//        Long uniqueActorId = source.getAttribute(GameServer.ATTR_ACTOR_UNIQUE_ID);
-
         ConnData cd = source.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
-        Long uniqueActorId = cd != null ? cd.getActorId() : null;
+        Long uniqueActorId = cd != null ? cd.getEntityId() : null;
         
         if (uniqueActorId != actor.getData().getUniqueId()) {
             return; // 不允许控制别人的角色

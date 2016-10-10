@@ -4,17 +4,14 @@
  */
 package name.huliqing.ly.loader;
 
-import name.huliqing.ly.loader.SceneDataLoader;
 import com.jme3.math.Vector3f;
 import com.jme3.util.TempVars;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.ly.data.ObjectData;
-import name.huliqing.ly.data.env.EnvData;
 import name.huliqing.ly.xml.Proto;
 import name.huliqing.ly.data.SceneData;
 import name.huliqing.ly.xml.DataFactory;
-import name.huliqing.ly.data.env.ModelEnvData;
 import name.huliqing.ly.utils.ConvertUtils;
 import name.huliqing.ly.utils.MathUtils;
 
@@ -59,10 +56,10 @@ public class RandomSceneLoader<T extends SceneData> extends SceneDataLoader<T> {
         String[] tempArr;
         
         if (reArrs != null && reArrs.length > 0) {
-            List<ObjectData> envList = store.getSceneObjectDatas();
+            List<ObjectData> envList = store.getEntityDatas();
             if (envList == null) {
                 envList = new ArrayList<ObjectData>(reArrs.length);
-                store.setSceneObjectDatas(envList);
+                store.setEntityDatas(envList);
             }
             
             for (String reArr : reArrs) {

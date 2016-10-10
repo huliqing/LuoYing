@@ -7,7 +7,7 @@ package name.huliqing.ly.mess;
 import com.jme3.network.serializing.Serializable;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.layer.service.PlayService;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * 服务端通知客户端，让客户端移除一个角色出场景。这可能发生在如：
@@ -31,9 +31,9 @@ public class MessSCActorRemove extends MessBase {
     @Override
     public void applyOnClient() {
         PlayService playService = Factory.get(PlayService.class);
-        Actor actorToRemove = playService.findActor(actorId);
+        Entity actorToRemove = playService.getEntity(actorId);
         if (actorToRemove != null) {
-            playService.removeObject(actorToRemove.getSpatial());
+            playService.removeEntity(actorToRemove);
         }
     }
     

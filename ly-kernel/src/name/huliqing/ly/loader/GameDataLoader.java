@@ -28,7 +28,7 @@ public class GameDataLoader<T extends GameData> implements DataLoader<T>{
         String[] gameLogicsArr = proto.getAsArray("gameLogics");
         if (gameLogicsArr != null && gameLogicsArr.length > 0) {
             List<GameLogicData> gameLogics = new ArrayList<GameLogicData>(gameLogicsArr.length);
-            store.setGameLogics(gameLogics);
+            store.setGameLogicDatas(gameLogics);
             for (String gla : gameLogicsArr) {
                 gameLogics.add((GameLogicData) DataFactory.createData(gla));
             }

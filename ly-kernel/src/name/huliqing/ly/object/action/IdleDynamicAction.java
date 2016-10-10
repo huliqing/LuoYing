@@ -9,10 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.data.ActionData;
-import name.huliqing.ly.layer.network.ActorNetwork;
 import name.huliqing.ly.layer.network.SkillNetwork;
 import name.huliqing.ly.layer.service.SkillService;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.module.SkillListener;
 import name.huliqing.ly.object.module.SkillModule;
 import name.huliqing.ly.object.skill.Skill;
@@ -23,7 +22,7 @@ import name.huliqing.ly.object.skill.Skill;
  * @author huliqing
  */
 public class IdleDynamicAction extends AbstractAction implements IdleAction, SkillListener{
-    private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
+//    private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
     private final SkillService skillService = Factory.get(SkillService.class);
     private SkillModule skillModule;
@@ -106,12 +105,12 @@ public class IdleDynamicAction extends AbstractAction implements IdleAction, Ski
     }
 
     @Override
-    public void onSkillAdded(Actor actor, Skill skill) {
+    public void onSkillAdded(Entity actor, Skill skill) {
         recacheIdleSkills();
     }
 
     @Override
-    public void onSkillRemoved(Actor actor, Skill skill) {
+    public void onSkillRemoved(Entity actor, Skill skill) {
         recacheIdleSkills();
     }
 

@@ -6,7 +6,7 @@
 package name.huliqing.luoying;
 
 import name.huliqing.ly.network.GameClient;
-import name.huliqing.ly.state.ClientPlayState;
+import name.huliqing.luoying.state.ClientPlayState;
 
 /**
  *

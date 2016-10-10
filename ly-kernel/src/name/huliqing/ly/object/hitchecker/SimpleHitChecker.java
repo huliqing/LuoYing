@@ -5,7 +5,7 @@
 package name.huliqing.ly.object.hitchecker;
 
 import name.huliqing.ly.data.HitCheckerData;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.module.ActorModule;
 
 /**
@@ -67,7 +67,7 @@ public class SimpleHitChecker<T extends HitCheckerData> extends AbstractHitCheck
     }
     
     @Override
-    public boolean canHit(Actor source, Actor target) {
+    public boolean canHit(Entity source, Entity target) {
         ActorModule targetActorModule = target.getModule(ActorModule.class);
         if (targetActorModule == null)
             return false;

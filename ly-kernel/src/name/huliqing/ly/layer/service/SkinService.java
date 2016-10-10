@@ -6,7 +6,7 @@ package name.huliqing.ly.layer.service;
 
 import java.util.List;
 import name.huliqing.ly.layer.network.SkinNetwork;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.module.SkinListener;
 import name.huliqing.ly.object.skin.Skin;
 
@@ -21,7 +21,7 @@ public interface SkinService extends SkinNetwork {
      * @param actor
      * @return 
      */
-    boolean isWeaponTakeOn(Actor actor);
+    boolean isWeaponTakeOn(Entity actor);
     
     /**
      * 获取角色身上指定ID的Skin
@@ -29,35 +29,35 @@ public interface SkinService extends SkinNetwork {
      * @param skinId 唯一ID
      * @return 
      */
-    Skin getSkin(Actor actor, String skinId);
+    Skin getSkin(Entity actor, String skinId);
     
     /**
      * 获取角色所有的皮肤
      * @param actor
      * @return 
      */
-    List<Skin> getSkins(Actor actor);
+    List<Skin> getSkins(Entity actor);
     
     /**
      * 获取角色当前正在使用的装备
      * @param actor
      * @return 
      */
-    List<Skin> getUsingSkins(Actor actor);
+    List<Skin> getUsingSkins(Entity actor);
     
     /**
      * 获取角色当前正在使用的武器类型状态
      * @param actor
      * @return 
      */
-    long getWeaponState(Actor actor);
+    long getWeaponState(Entity actor);
     
     /**
      * 添加皮肤侦听器
      * @param actor
      * @param skinListener 
      */
-    void addSkinListener(Actor actor, SkinListener skinListener);
+    void addSkinListener(Entity actor, SkinListener skinListener);
     
     /**
      * 移除皮肤侦听器
@@ -65,5 +65,5 @@ public interface SkinService extends SkinNetwork {
      * @param skinListener
      * @return 
      */
-    boolean removeSkinListener(Actor actor, SkinListener skinListener);
+    boolean removeSkinListener(Entity actor, SkinListener skinListener);
 }

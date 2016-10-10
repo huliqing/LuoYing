@@ -8,10 +8,9 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import name.huliqing.ly.Factory;
 import name.huliqing.ly.data.GameLogicData;
-import name.huliqing.ly.layer.service.ActorService;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.Loader;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.game.Game;
 import name.huliqing.ly.object.gamelogic.AbstractGameLogic;
 import name.huliqing.ly.utils.ThreadHelper;
@@ -23,11 +22,10 @@ import name.huliqing.ly.utils.ThreadHelper;
  * @param <T>
  */
 public abstract class ActorLoadHelper<T extends GameLogicData> extends AbstractGameLogic<T> {
-    private final ActorService actorService = Factory.get(ActorService.class);
     
     // 要载入的角色的id
     protected String actorId;
-    private Future<Actor> future;
+    private Future<Entity> future;
     private Game game;
     
     public ActorLoadHelper() {}
@@ -49,16 +47,16 @@ public abstract class ActorLoadHelper<T extends GameLogicData> extends AbstractG
     @Override
     protected void doLogic(float tpf) {
         if (future == null) {
-            future = ThreadHelper.submit(new Callable<Actor>() {
+            future = ThreadHelper.submit(new Callable<Entity>() {
                 @Override
-                public Actor call() throws Exception {
+                public Entity call() throws Exception {
                     return load();
                 }
             });
         }
         if (future != null && future.isDone()) {
             try {
-                Actor actor = future.get();
+                Entity actor = future.get();
                 callback(actor);
                 // 处理载入成功之后即停止运行，即只载入一次。
                 future = null;
@@ -86,19 +84,18 @@ public abstract class ActorLoadHelper<T extends GameLogicData> extends AbstractG
     /**
      * 实现角色的载入，注：该方法在非渲染线程中运行，不要在这个方法中处理场景物体添加或删除，
      * 只实现角色载入并返回actor对象就可以，把角色添加到场景可以实现方法
-     * {@link #callback(name.huliqing.fighter.actor.Actor) }
      * @return 
      */
-    protected Actor load() {
+    protected Entity load() {
         if (actorId == null) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "The load actorId could not be null!");
         }
-        return actorService.loadActor(actorId);
+        return Loader.load(actorId);
     }
     
     /**
      * 处理已经载入的角色,负责将角色添加到场景中
      * @param actor 
      */
-    public abstract void callback(Actor actor);
+    public abstract void callback(Entity actor);
 }

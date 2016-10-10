@@ -36,8 +36,8 @@ import name.huliqing.ly.network.discover.UDPListener;
 import name.huliqing.ly.mess.MessBase;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.ly.layer.service.ActorService;
-import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.layer.service.SystemService;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * 服务端程序，注：不要直接通过new GameServer创建服务端，而是通过 {@link Network#createGameServer(name.huliqing.fighter.data.GameData) }
@@ -298,7 +298,7 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
      * @param actor
      * @param message 
      */
-    public void send(Actor actor, Message message) {
+    public void send(Entity actor, Message message) {
         if (!server.isRunning() || actorService.isPlayer(actor))
             return;
         
@@ -307,7 +307,7 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
         ConnData cd;
         for (HostedConnection hc : conns) {
             cd = hc.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
-            if (cd != null && cd.getActorId() == actor.getData().getUniqueId()) {
+            if (cd != null && cd.getEntityId() == actor.getData().getUniqueId()) {
                 conn = hc;
                 break;
             }
@@ -355,7 +355,7 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
 //            // 客户端所选的角色名称,这里需要判断服务端游戏是否正在运行
 //            String actorName = null;
 //            if (actorId > 0 && gameInPlay) {
-//                Actor actor = playService.findActor(actorId);
+//                Entity actor = playService.findActor(actorId);
 //                if (actor != null) {
 //                    actorName = actor.getData().getName();
 //                }
@@ -376,7 +376,7 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
 //        serverMcd.setAddress(serverAddress);
 //        serverMcd.setClientName(serverMachineName);
 //        if (gameInPlay) {
-//            Actor serverPlayer = playService.getPlayer();
+//            Entity serverPlayer = playService.getPlayer();
 //            if (serverPlayer != null) {
 //                serverMcd.setActorName(serverPlayer.getData().getName());
 //            }
@@ -391,7 +391,7 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
      */
     public List<ConnData> getClients() {
         // 需要判断游戏是否在运行,在游戏运行时可以获取到玩家角色名字
-        boolean gameInPlay = Ly.getPlayState() != null;
+        boolean gameInPlay = playService.getGame() != null;
         
         // 向客户端广播，告诉所有客户端有新的客户端连接进来，并把客户端列表
         // 发送给所有已经连接的客户端
@@ -413,10 +413,10 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
         serverConnData.setConnId(-1);
         serverConnData.setAddress(serverAddress);
         if (gameInPlay) {
-            Actor serverPlayer = playService.getPlayer();
+            Entity serverPlayer = playService.getPlayer();
             if (serverPlayer != null) {
-                serverConnData.setActorId(serverPlayer.getData().getUniqueId());
-                serverConnData.setActorName(serverPlayer.getData().getName());
+                serverConnData.setEntityId(serverPlayer.getData().getUniqueId());
+                serverConnData.setEntityName(serverPlayer.getData().getName());
             }
         }
         clients.add(0, serverConnData);

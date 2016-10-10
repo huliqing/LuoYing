@@ -1,3 +1,5 @@
+package name.huliqing.ly.object.scene;
+
 ///*
 // * To change this template, choose Tools | Templates
 // * and open the template in the editor.

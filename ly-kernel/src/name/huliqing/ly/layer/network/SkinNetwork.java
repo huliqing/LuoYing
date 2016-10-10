@@ -5,7 +5,7 @@
 package name.huliqing.ly.layer.network;
 
 import name.huliqing.ly.Inject;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.skin.Skin;
 
 /**
@@ -19,7 +19,7 @@ public interface SkinNetwork extends Inject {
      * @param skinId
      * @param amount 
      */
-    void addSkin(Actor actor, String skinId, int amount);
+    void addSkin(Entity actor, String skinId, int amount);
     
     /**
      * 移除角色身上的skin装备。
@@ -27,7 +27,7 @@ public interface SkinNetwork extends Inject {
      * @param skinId
      * @param amount
      */
-    void removeSkin(Actor actor, String skinId, int amount);
+    void removeSkin(Entity actor, String skinId, int amount);
     
     /**
      * 给角色换上装备,注：换装备的时候需要考虑冲突的装备，并把冲突的装备换
@@ -35,25 +35,25 @@ public interface SkinNetwork extends Inject {
      * @param actor
      * @param skin
      */
-    void attachSkin(Actor actor, Skin skin);
+    void attachSkin(Entity actor, Skin skin);
     
     /**
      * 脱下角色的装备，注：脱下装备时需要判断及补上缺失的装备
      * @param actor
      * @param skin
      */
-    void detachSkin(Actor actor, Skin skin);
+    void detachSkin(Entity actor, Skin skin);
     
     /**
      * 让角色取出武器。
      * @param actor 
      */
-    void takeOnWeapon(Actor actor);
+    void takeOnWeapon(Entity actor);
     
     /**
      * 让角色收起武器
      * @param actor 
      */
-    void takeOffWeapon(Actor actor);
+    void takeOffWeapon(Entity actor);
     
 }

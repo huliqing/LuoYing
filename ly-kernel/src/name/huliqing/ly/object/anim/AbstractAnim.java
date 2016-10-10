@@ -262,8 +262,11 @@ public abstract class AbstractAnim<E> implements Anim<AnimData, E> {
      * 结束当前动画
      */
     protected final void doEnd() {
+        
         // 从场景中移除动画控制器
-        playService.removeAnimation(this);
+//        playService.removeAnimation(this);
+        throw new UnsupportedOperationException("....Debug test...这里要重构");
+
     }
     
     @Override

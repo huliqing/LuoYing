@@ -8,7 +8,7 @@ package name.huliqing.ly.layer.network;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.layer.service.DropService;
 import name.huliqing.ly.network.Network;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  *
@@ -24,7 +24,7 @@ public class DropNetworkImpl implements DropNetwork {
     }
 
     @Override
-    public void doDrop(Actor source, Actor target) {
+    public void doDrop(Entity source, Entity target) {
         if (NETWORK.isClient()) 
             return;
         

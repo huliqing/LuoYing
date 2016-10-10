@@ -4,6 +4,7 @@
  */
 package name.huliqing.ly.layer.service;
 
+import com.jme3.math.Vector3f;
 import name.huliqing.ly.Inject;
 import name.huliqing.ly.data.SceneData;
 import name.huliqing.ly.object.scene.Scene;
@@ -16,6 +17,7 @@ public interface SceneService extends Inject {
     
     /**
      * 载入场景
+     * @param sceneId
      * @return 
      */
     Scene loadScene(String sceneId);
@@ -27,4 +29,12 @@ public interface SceneService extends Inject {
      */
     Scene loadScene(SceneData sceneData);
 
+    /**
+     * 获取场景指定位置高度点，如果位置点超出地形外部，则该方法可能返回null.
+     * @param scene
+     * @param x
+     * @param z
+     * @return 
+     */
+    Vector3f getSceneHeight(Scene scene, float x, float z);
 }

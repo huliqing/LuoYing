@@ -5,8 +5,8 @@
 package name.huliqing.ly.layer.service;
 
 import name.huliqing.ly.layer.network.ChatNetwork;
-import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.object.chat.Chat;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  *
@@ -26,7 +26,7 @@ public interface ChatService extends ChatNetwork {
      * @param actor
      * @return 
      */
-    Chat getChat(Actor actor);
+    Chat getChat(Entity actor);
     
 
 }

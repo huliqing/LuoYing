@@ -8,7 +8,7 @@ import com.jme3.network.serializing.Serializable;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.layer.service.PlayService;
 import name.huliqing.ly.layer.service.StateService;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * SC,服务端通知客户端移除一个状态
@@ -42,7 +42,7 @@ public class MessStateRemove extends MessBase {
     public void applyOnClient() {
         PlayService playService = Factory.get(PlayService.class);
         StateService stateService = Factory.get(StateService.class);
-        Actor actor = playService.findActor(actorId);
+        Entity actor = playService.getEntity(actorId);
         if (actor != null) {
             stateService.removeState(actor, stateId);
         }

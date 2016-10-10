@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.logging.Logger;
 import name.huliqing.ly.data.AttributeData;
 import name.huliqing.ly.object.Loader;
-import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.object.attribute.AbstractSimpleAttribute;
 import name.huliqing.ly.object.attribute.Attribute;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.module.AttributeListener;
 import name.huliqing.ly.object.module.AttributeModule;
 
@@ -37,7 +37,7 @@ public class AttributeServiceImpl implements AttributeService {
     }
 
     @Override
-    public void addAttribute(Actor actor, Attribute attribute) {
+    public void addAttribute(Entity actor, Attribute attribute) {
         AttributeModule module = actor.getModule(AttributeModule.class);
         if (module != null) {
             module.addAttribute(attribute);
@@ -45,7 +45,7 @@ public class AttributeServiceImpl implements AttributeService {
     }
 
     @Override
-    public Attribute getAttributeById(Actor actor, String attrId) {
+    public Attribute getAttributeById(Entity actor, String attrId) {
         if (attrId == null)
             throw new NullPointerException("attrId could not be null, actorId=" + actor.getData().getId());
                 
@@ -57,7 +57,7 @@ public class AttributeServiceImpl implements AttributeService {
     }
 
     @Override
-    public Attribute getAttributeByName(Actor actor, String attrName) {
+    public Attribute getAttributeByName(Entity actor, String attrName) {
         if (attrName == null) {
             return null;
         }
@@ -69,7 +69,7 @@ public class AttributeServiceImpl implements AttributeService {
     }
 
     @Override
-    public List<Attribute> getAttributes(Actor actor) {
+    public List<Attribute> getAttributes(Entity actor) {
         AttributeModule module = actor.getModule(AttributeModule.class);
         if (module != null) {
             return module.getAttributes();
@@ -78,7 +78,7 @@ public class AttributeServiceImpl implements AttributeService {
     }
 
     @Override
-    public void addListener(Actor actor, AttributeListener attributeListener) {
+    public void addListener(Entity actor, AttributeListener attributeListener) {
         AttributeModule module = actor.getModule(AttributeModule.class);
         if (module != null) {
             module.addListener(attributeListener);
@@ -86,13 +86,13 @@ public class AttributeServiceImpl implements AttributeService {
     }
 
     @Override
-    public boolean removeListener(Actor actor, AttributeListener attributeListener) {
+    public boolean removeListener(Entity actor, AttributeListener attributeListener) {
         AttributeModule module = actor.getModule(AttributeModule.class);
         return module != null && module.removeListener(attributeListener);
     }
 
     @Override
-    public <V> void setSimpleAttributeValue(Actor actor, String attrName, V value) {
+    public <V> void setSimpleAttributeValue(Entity actor, String attrName, V value) {
         Attribute attr = getAttributeByName(actor, attrName);
         if (attr instanceof AbstractSimpleAttribute) {
             ((AbstractSimpleAttribute) attr).setValue(value);
@@ -100,7 +100,7 @@ public class AttributeServiceImpl implements AttributeService {
     }
 
     @Override
-    public void addNumberAttributeValue(Actor actor, String attrName, float value) {
+    public void addNumberAttributeValue(Entity actor, String attrName, float value) {
         AttributeModule module = actor.getModule(AttributeModule.class);
         if (module != null) {
             module.addNumberAttributeValue(attrName, value);
@@ -108,7 +108,7 @@ public class AttributeServiceImpl implements AttributeService {
     }
 
     @Override
-    public float getNumberAttributeValue(Actor actor, String attrName, float defValue) {
+    public float getNumberAttributeValue(Entity actor, String attrName, float defValue) {
         AttributeModule module = actor.getModule(AttributeModule.class);
         if (module != null) {
             return module.getNumberAttributeValue(attrName, defValue);

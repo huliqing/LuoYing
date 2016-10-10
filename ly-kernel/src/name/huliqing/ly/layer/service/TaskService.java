@@ -7,7 +7,7 @@ package name.huliqing.ly.layer.service;
 import java.util.List;
 import name.huliqing.ly.data.TaskData;
 import name.huliqing.ly.layer.network.TaskNetwork;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.module.TaskListener;
 import name.huliqing.ly.object.task.Task;
 
@@ -37,7 +37,7 @@ public interface TaskService extends TaskNetwork {
      * @param taskId
      * @return 
      */
-    Task getTask(Actor actor, String taskId);
+    Task getTask(Entity actor, String taskId);
     
     /**
      * 获取角色的所有任务，包含完成的和正在进行的。
@@ -45,14 +45,14 @@ public interface TaskService extends TaskNetwork {
      * @param actor
      * @return 
      */
-    List<Task> getTasks(Actor actor);
+    List<Task> getTasks(Entity actor);
     
     /**
      * 获得角色的所有任务data;返回的列表不允许修改。
      * @param actor
      * @return 
      */
-    List<TaskData> getTaskDatas(Actor actor);
+    List<TaskData> getTaskDatas(Entity actor);
     
     /**
      * 检查指定的任务是否完成。
@@ -60,7 +60,7 @@ public interface TaskService extends TaskNetwork {
      * @param task 任务
      * @return 
      */
-    boolean checkCompletion(Actor actor, Task task);
+    boolean checkCompletion(Entity actor, Task task);
     
     /**
      * 获取当前已经收集到的任务物品的数量
@@ -69,14 +69,14 @@ public interface TaskService extends TaskNetwork {
      * @param itemId
      * @return 
      */
-    int getItemTotal(Actor actor, Task task, String itemId);
+    int getItemTotal(Entity actor, Task task, String itemId);
     
     /**
      * 给角色添加一个任务侦听器
      * @param actor
      * @param taskListener 
      */
-    void addTaskListener(Actor actor, TaskListener taskListener);
+    void addTaskListener(Entity actor, TaskListener taskListener);
 
     /**
      * 从角色身上移除任务侦听器
@@ -84,5 +84,5 @@ public interface TaskService extends TaskNetwork {
      * @param taskListener
      * @return 
      */
-    boolean removeTaskListener(Actor actor, TaskListener taskListener);
+    boolean removeTaskListener(Entity actor, TaskListener taskListener);
 }

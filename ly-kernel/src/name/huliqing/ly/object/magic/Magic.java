@@ -20,9 +20,9 @@ import name.huliqing.ly.layer.service.PlayService;
 import name.huliqing.ly.object.Loader;
 import name.huliqing.ly.object.AbstractPlayObject;
 import name.huliqing.ly.xml.DataProcessor;
-import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.object.effect.Effect;
 import name.huliqing.ly.object.effect.EffectManager;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.hitchecker.HitChecker;
 import name.huliqing.ly.object.sound.SoundManager;
 import name.huliqing.ly.utils.ConvertUtils;
@@ -51,10 +51,10 @@ public class Magic<T extends MagicData> extends AbstractPlayObject implements Da
     protected Spatial traceObject;
     
     // 魔法的施放者，有可能为null.
-    protected Actor source;
+    protected Entity source;
     
     // 魔法针对的主目标,如果魔法没有特定的目标，则有可能为null
-    protected Actor target;
+    protected Entity target;
     
     protected HitChecker hitChecker;
     
@@ -121,7 +121,7 @@ public class Magic<T extends MagicData> extends AbstractPlayObject implements Da
         
         // 确定要跟随的目标对象
         if (data.getTraceActor() > 0) {
-            Actor traceActor = playService.findActor(data.getTraceActor());
+            Entity traceActor = playService.findActor(data.getTraceActor());
             if (traceActor != null) {
                 traceObject = traceActor.getSpatial();
             }

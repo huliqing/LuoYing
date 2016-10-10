@@ -8,7 +8,6 @@ import com.jme3.math.Vector2f;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.ly.Ly;
-import name.huliqing.ly.state.PlayState;
 import name.huliqing.ly.ui.UI;
 import name.huliqing.ly.ui.UIEventListener;
 
@@ -18,7 +17,7 @@ import name.huliqing.ly.ui.UIEventListener;
  */
 public class DragManager implements ReleaseListener {
     
-    private final static DragManager ins = new DragManager();
+    private final static DragManager INSTANCE = new DragManager();
     
     private UI moving; // 可移动的UI
     private final Vector2f lastMousePos = new Vector2f();
@@ -28,7 +27,7 @@ public class DragManager implements ReleaseListener {
     
     private DragManager() {}
     public static DragManager getInstance() {
-        return ins;
+        return INSTANCE;
     }
     
     public void addEventListener(UIEventListener listener) {

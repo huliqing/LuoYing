@@ -21,7 +21,8 @@ import name.huliqing.ly.data.SkillData;
 import name.huliqing.ly.data.ModuleData;
 import name.huliqing.ly.layer.service.SkillService;
 import name.huliqing.ly.object.Loader;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
+import name.huliqing.ly.object.entity.ModelEntity;
 import name.huliqing.ly.object.skill.Skill;
 
 /**
@@ -82,7 +83,7 @@ public class SkillModule extends AbstractModule {
     }
 
     @Override
-    public void initialize(Actor actor) {
+    public void initialize(Entity actor) {
         super.initialize(actor);
         
         // 技能的更新支持
@@ -90,7 +91,7 @@ public class SkillModule extends AbstractModule {
             @Override
             public void update(float tpf) {skillUpdate(tpf);}
         };
-        this.actor.getSpatial().addControl(updateControl);
+        this.entity.getScene().getRoot().addControl(updateControl);
         
         // 载入技能
         List<SkillData> skillDatas = actor.getData().getObjectDatas(SkillData.class, null);
@@ -155,7 +156,7 @@ public class SkillModule extends AbstractModule {
         skillMap.clear();
         playingSkillTags = 0;
         if (updateControl != null) {
-            actor.getSpatial().removeControl(updateControl);
+            entity.getScene().getRoot().removeControl(updateControl);
         }
         super.cleanup();
     }
@@ -229,7 +230,7 @@ public class SkillModule extends AbstractModule {
         }
 
         if (skill.getActor() == null) {
-            skill.setActor(actor);
+            skill.setActor(entity);
         }
         
         SkillData skillData = skill.getData();
@@ -364,7 +365,7 @@ public class SkillModule extends AbstractModule {
         // 执行技能
         lastSkill = newSkill;
         if (lastSkill.getActor() == null) {
-            lastSkill.setActor(actor);
+            lastSkill.setActor(entity);
         }
         lastSkill.initialize();
         
@@ -399,15 +400,15 @@ public class SkillModule extends AbstractModule {
         if (skills.contains(skill))
             return;
         
-        skill.setActor(actor);
+        skill.setActor(entity);
         skills.add(skill);
         skillMap.put(skill.getData().getId(), skill);
-        actor.getData().addObjectData(skill.getData());
+        entity.getData().addObjectData(skill.getData());
         
         // 通知侦听器
         if (skillListeners != null) {
             for (int i = 0; i < skillListeners.size(); i++) {
-                skillListeners.get(i).onSkillAdded(actor, skill);
+                skillListeners.get(i).onSkillAdded(entity, skill);
             }
         }
     }
@@ -425,13 +426,13 @@ public class SkillModule extends AbstractModule {
         
         skills.remove(skill);
         skillMap.remove(skill.getData().getId());
-        actor.getData().removeObjectData(skill.getData());
+        entity.getData().removeObjectData(skill.getData());
         skill.cleanup();
         
         // 通知侦听器
         if (skillListeners != null) {
             for (int i = 0; i < skillListeners.size(); i++) {
-                skillListeners.get(i).onSkillRemoved(actor, skill);
+                skillListeners.get(i).onSkillRemoved(entity, skill);
             }
         }
         return true;
@@ -559,7 +560,7 @@ public class SkillModule extends AbstractModule {
     public void addSkillPlayListener(SkillPlayListener skillPlayListener) {
         if (Config.debug) {
             LOG.log(Level.INFO, "addSkillPlayListener, actor={0}, skillPlayListener={1}"
-                    , new Object[] {actor.getData().getId(), skillPlayListener});
+                    , new Object[] {entity.getData().getId(), skillPlayListener});
         }
         if (skillPlayListeners == null) {
             skillPlayListeners = new ArrayList<SkillPlayListener>();

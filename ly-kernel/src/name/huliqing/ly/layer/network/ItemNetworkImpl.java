@@ -6,14 +6,13 @@
 package name.huliqing.ly.layer.network;
 
 import name.huliqing.ly.Factory;
-import name.huliqing.ly.mess.MessActorSetTarget;
 import name.huliqing.ly.mess.MessItemAdd;
 import name.huliqing.ly.mess.MessItemRemove;
 import name.huliqing.ly.mess.MessItemUse;
 import name.huliqing.ly.layer.service.ItemService;
 import name.huliqing.ly.layer.service.PlayService;
 import name.huliqing.ly.network.Network;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.item.Item;
 
 /**
@@ -33,7 +32,7 @@ public class ItemNetworkImpl implements ItemNetwork {
     }
     
     @Override
-    public void addItem(Actor actor, String itemId, int count) {
+    public void addItem(Entity actor, String itemId, int count) {
         if (NETWORK.isClient()) {
             // 客户端不允许直接给角色添加物品
             // ignore
@@ -49,7 +48,7 @@ public class ItemNetworkImpl implements ItemNetwork {
     }
 
     @Override
-    public void removeItem(Actor actor, String itemId, int count) {
+    public void removeItem(Entity actor, String itemId, int count) {
         MessItemRemove mess = new MessItemRemove();
         mess.setActorId(actor.getData().getUniqueId());
         mess.setItemId(itemId);
@@ -63,7 +62,7 @@ public class ItemNetworkImpl implements ItemNetwork {
     }
     
     @Override
-    public void useItem(Actor actor, String itemId) {
+    public void useItem(Entity actor, String itemId) {
         
         // remove20161004,注：不能在这里将playService.getTarget的目标对象设置给actor,因为actor可能是游戏中的npc,
         // 不能使用当前游戏的主目标当前游戏的主目标只适用于当前“玩家”

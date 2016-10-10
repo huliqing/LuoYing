@@ -21,7 +21,7 @@ import name.huliqing.ly.mess.MessActorViewDir;
 import name.huliqing.ly.mess.MessActorLookAt;
 import name.huliqing.ly.mess.MessActorSetLocation;
 import name.huliqing.ly.mess.MessAttributeNumberHit;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  *
@@ -37,7 +37,7 @@ public class ActorNetworkImpl implements ActorNetwork{
     }
 
     @Override
-    public void speak(Actor actor, String mess, float useTime) {
+    public void speak(Entity actor, String mess, float useTime) {
         if (!NETWORK.isClient()) {
             //broadcast
             MessActorSpeak mas = new MessActorSpeak();
@@ -56,7 +56,7 @@ public class ActorNetworkImpl implements ActorNetwork{
     }
 
     @Override
-    public void kill(Actor actor) {
+    public void kill(Entity actor) {
         if (!NETWORK.isClient()) {
             if (NETWORK.hasConnections()) {
                 MessActorKill mess = new MessActorKill();
@@ -68,7 +68,7 @@ public class ActorNetworkImpl implements ActorNetwork{
     }
 
     @Override
-    public void setTarget(Actor actor, Actor target) {
+    public void setTarget(Entity actor, Entity target) {
         MessActorSetTarget mess = new MessActorSetTarget();
         mess.setActorId(actor.getData().getUniqueId());
         mess.setTargetId(target != null ? target.getData().getUniqueId() : -1);
@@ -85,7 +85,7 @@ public class ActorNetworkImpl implements ActorNetwork{
     }
     
     @Override
-    public void hitNumberAttribute(Actor target, Actor source, String hitAttrName, float hitValue) {
+    public void hitNumberAttribute(Entity target, Entity source, String hitAttrName, float hitValue) {
         if (!NETWORK.isClient()) {
             actorService.hitNumberAttribute(target, source, hitAttrName, hitValue);
             
@@ -102,7 +102,7 @@ public class ActorNetworkImpl implements ActorNetwork{
     }
 
     @Override
-    public void setLevel(Actor actor, int level) {
+    public void setLevel(Entity actor, int level) {
         if (!NETWORK.isClient()) {
             if (NETWORK.hasConnections()) {
                 MessActorSetLevel mess = new MessActorSetLevel();
@@ -115,7 +115,7 @@ public class ActorNetworkImpl implements ActorNetwork{
     }
     
     @Override
-    public void setGroup(Actor actor, int group) {
+    public void setGroup(Entity actor, int group) {
         if (!NETWORK.isClient()) {
             if (NETWORK.hasConnections()) {
                 MessActorSetGroup mess = new MessActorSetGroup();
@@ -128,7 +128,7 @@ public class ActorNetworkImpl implements ActorNetwork{
     }
 
     @Override
-    public void setTeam(Actor actor, int team) {
+    public void setTeam(Entity actor, int team) {
         if (!NETWORK.isClient()) {
             if (NETWORK.hasConnections()) {
                 MessActorTeam mess = new MessActorTeam();
@@ -141,7 +141,7 @@ public class ActorNetworkImpl implements ActorNetwork{
     }
 
     @Override
-    public void setFollow(Actor actor, long targetId) {
+    public void setFollow(Entity actor, long targetId) {
         if (!NETWORK.isClient()) {
             if (NETWORK.hasConnections()) {
                 MessActorFollow mess = new MessActorFollow();
@@ -154,7 +154,7 @@ public class ActorNetworkImpl implements ActorNetwork{
     }
     
     @Override
-    public void setLocation(Actor actor, Vector3f location) {
+    public void setLocation(Entity actor, Vector3f location) {
         if (!NETWORK.isClient()) {
             MessActorSetLocation mess = new MessActorSetLocation();
             mess.setActorId(actor.getData().getUniqueId());
@@ -165,7 +165,7 @@ public class ActorNetworkImpl implements ActorNetwork{
     }
     
     @Override
-    public void setViewDirection(Actor actor, Vector3f viewDirection) {
+    public void setViewDirection(Entity actor, Vector3f viewDirection) {
         if (!NETWORK.isClient()) {
             MessActorViewDir mess = new MessActorViewDir();
             mess.setActorId(actor.getData().getUniqueId());
@@ -176,7 +176,7 @@ public class ActorNetworkImpl implements ActorNetwork{
     }
 
     @Override
-    public void setPhysicsEnabled(Actor actor, boolean enabled) {
+    public void setPhysicsEnabled(Entity actor, boolean enabled) {
          if (!NETWORK.isClient()) {
             MessActorPhysics mess = new MessActorPhysics();
             mess.setActorId(actor.getData().getUniqueId());
@@ -187,7 +187,7 @@ public class ActorNetworkImpl implements ActorNetwork{
     }
 
     @Override
-    public void setLookAt(Actor actor, Vector3f position) {
+    public void setLookAt(Entity actor, Vector3f position) {
         if (!NETWORK.isClient()) {
             if (NETWORK.hasConnections()) {
                 MessActorLookAt mess = new MessActorLookAt();

@@ -11,7 +11,7 @@ import name.huliqing.ly.layer.network.TalentNetwork;
 import name.huliqing.ly.layer.service.PlayService;
 import name.huliqing.ly.layer.service.TalentService;
 import name.huliqing.ly.network.GameServer;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * 给目标角色所指定的天赋增加点数
@@ -56,7 +56,7 @@ public class MessTalentAddPoint extends MessBase {
         super.applyOnServer(gameServer, source);
         TalentNetwork talentNetwork = Factory.get(TalentNetwork.class);
         PlayService playService = Factory.get(PlayService.class);
-        Actor actor = playService.findActor(actorId);
+        Entity actor = playService.getEntity(actorId);
         if (actor != null) {
             talentNetwork.addTalentPoints(actor, talentId, points);
         }
@@ -67,7 +67,7 @@ public class MessTalentAddPoint extends MessBase {
         super.applyOnClient();
         TalentService talentService = Factory.get(TalentService.class);
         PlayService playService = Factory.get(PlayService.class);
-        Actor actor = playService.findActor(actorId);
+        Entity actor = playService.getEntity(actorId);
         if (actor != null) {
             talentService.addTalentPoints(actor, talentId, points);
         }

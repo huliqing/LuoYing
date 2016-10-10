@@ -12,7 +12,7 @@ import name.huliqing.ly.mess.MessSkinRemove;
 import name.huliqing.ly.layer.service.SkinService;
 import name.huliqing.ly.network.Network;
 import name.huliqing.ly.mess.MessSkinWeaponTakeOn;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.skin.Skin;
 
 /**
@@ -30,7 +30,7 @@ public class SkinNetworkImpl implements SkinNetwork {
     }
     
     @Override
-    public void addSkin(Actor actor, String skinId, int amount) {
+    public void addSkin(Entity actor, String skinId, int amount) {
         if (NETWORK.isClient()) {
             // ignore 客户端不能主动添加物品
         } else {
@@ -43,7 +43,7 @@ public class SkinNetworkImpl implements SkinNetwork {
     }
 
     @Override
-    public void removeSkin(Actor actor, String skinId, int amount) {
+    public void removeSkin(Entity actor, String skinId, int amount) {
         MessSkinRemove mess = new MessSkinRemove();
         mess.setActorId(actor.getData().getUniqueId());
         mess.setSkinId(skinId);
@@ -57,7 +57,7 @@ public class SkinNetworkImpl implements SkinNetwork {
     }
     
     @Override
-    public void attachSkin(Actor actor, Skin skin) {
+    public void attachSkin(Entity actor, Skin skin) {
         if (!skin.canUse(actor)) {
             return;
         }
@@ -74,7 +74,7 @@ public class SkinNetworkImpl implements SkinNetwork {
     }
 
     @Override
-    public void detachSkin(Actor actor, Skin skin) {
+    public void detachSkin(Entity actor, Skin skin) {
         MessSkinDetach mess = new MessSkinDetach();
         mess.setActorId(actor.getData().getUniqueId());
         mess.setSkinId(skin.getData().getId());
@@ -87,7 +87,7 @@ public class SkinNetworkImpl implements SkinNetwork {
     }
 
     @Override
-    public void takeOnWeapon(Actor actor) {
+    public void takeOnWeapon(Entity actor) {
         if (!NETWORK.isClient()) {
             if (NETWORK.hasConnections()) {
                 MessSkinWeaponTakeOn mess = new MessSkinWeaponTakeOn();
@@ -100,7 +100,7 @@ public class SkinNetworkImpl implements SkinNetwork {
     }
 
     @Override
-    public void takeOffWeapon(Actor actor) {
+    public void takeOffWeapon(Entity actor) {
         MessSkinWeaponTakeOn mess = new MessSkinWeaponTakeOn();
         mess.setActorId(actor.getData().getUniqueId());
         mess.setTakeOn(false);

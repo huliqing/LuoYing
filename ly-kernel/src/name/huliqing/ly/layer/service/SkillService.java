@@ -8,7 +8,7 @@ import java.util.List;
 import name.huliqing.ly.constants.SkillConstants;
 import name.huliqing.ly.data.SkillData;
 import name.huliqing.ly.layer.network.SkillNetwork;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.module.SkillListener;
 import name.huliqing.ly.object.module.SkillModule;
 import name.huliqing.ly.object.module.SkillPlayListener;
@@ -44,7 +44,7 @@ public interface SkillService extends SkillNetwork {
      * @param skillId
      * @return 
      */
-    boolean removeSkill(Actor actor, String skillId);
+    boolean removeSkill(Entity actor, String skillId);
     
     /**
      * 获取角色的技能，如果角色身上不存在该技能则返回null
@@ -52,26 +52,26 @@ public interface SkillService extends SkillNetwork {
      * @param skillId
      * @return 
      */
-    Skill getSkill(Actor actor, String skillId);
+    Skill getSkill(Entity actor, String skillId);
     
-    Skill getSkillWaitDefault(Actor actor);
+    Skill getSkillWaitDefault(Entity actor);
     
-    Skill getSkillHurtDefault(Actor actor);
+    Skill getSkillHurtDefault(Entity actor);
     
-    Skill getSkillDeadDefault(Actor actor);
+    Skill getSkillDeadDefault(Entity actor);
             
     /**
      * 获取角色当前身上的所有技能，
      * @param actor
      * @return 
      */
-    List<Skill> getSkills(Actor actor);
+    List<Skill> getSkills(Entity actor);
     
-    List<Skill> getSkillWait(Actor actor);
+    List<Skill> getSkillWait(Entity actor);
     
-    List<Skill> getSkillHurt(Actor actor);
+    List<Skill> getSkillHurt(Entity actor);
     
-    List<Skill> getSkillDead(Actor actor);
+    List<Skill> getSkillDead(Entity actor);
     
     /**
      * 通过技能标记来获取角色身上的技能
@@ -80,7 +80,7 @@ public interface SkillService extends SkillNetwork {
      * @param skillTags
      * @return 
      */
-    List<Skill> getSkillByTags(Actor actor, long skillTags);
+    List<Skill> getSkillByTags(Entity actor, long skillTags);
     
     /**
      * 获取角色当前正在执行的技能状态，返回值中每一个二进制位表示一个技能类
@@ -88,21 +88,21 @@ public interface SkillService extends SkillNetwork {
      * @param actor
      * @return 
      */
-    long getPlayingSkillTags(Actor actor);
+    long getPlayingSkillTags(Entity actor);
     
     /**
      * 给角色添加一个技能侦听器
      * @param actor
      * @param skillListener 
      */
-    void addSkillListener(Actor actor, SkillListener skillListener);
+    void addSkillListener(Entity actor, SkillListener skillListener);
     
     /**
      * 给角色添加一个技能侦听器
      * @param actor
      * @param skillPlayListener 
      */
-    void addSkillPlayListener(Actor actor, SkillPlayListener skillPlayListener);
+    void addSkillPlayListener(Entity actor, SkillPlayListener skillPlayListener);
     
     /**
      * 移除角色身上的技能侦听器
@@ -110,7 +110,7 @@ public interface SkillService extends SkillNetwork {
      * @param skillListener
      * @return 
      */
-    boolean removeSkillListener(Actor actor, SkillListener skillListener);
+    boolean removeSkillListener(Entity actor, SkillListener skillListener);
     
     /**
      * 移除角色身上的技能侦听器
@@ -118,7 +118,7 @@ public interface SkillService extends SkillNetwork {
      * @param skillPlayListener
      * @return 
      */
-    boolean removeSkillPlayListener(Actor actor, SkillPlayListener skillPlayListener);
+    boolean removeSkillPlayListener(Entity actor, SkillPlayListener skillPlayListener);
     
     /**
      * 是否可以使用指定的技能，该方法返回一个状态码。使用该状态码来判断是否可以
@@ -127,7 +127,7 @@ public interface SkillService extends SkillNetwork {
      * @param skill
      * @return stateCode {@link SkillConstants#STATE_XXX}
      */
-    int checkStateCode(Actor actor, Skill skill);
+    int checkStateCode(Entity actor, Skill skill);
     
     /**
      * 检查技能是否可以执行.
@@ -135,7 +135,7 @@ public interface SkillService extends SkillNetwork {
      * @param skill
      * @return 
      */
-    boolean isPlayable(Actor actor, Skill skill);
+    boolean isPlayable(Entity actor, Skill skill);
 
     /**
      * 判断角色是否拥有指定的技能
@@ -143,7 +143,7 @@ public interface SkillService extends SkillNetwork {
      * @param skillId
      * @return 
      */
-    boolean hasSkill(Actor actor, String skillId);
+    boolean hasSkill(Entity actor, String skillId);
     
     /**
      * 判断当前角色是否正在执行任何技能,包含所有已经定义的技能。注：对于正在
@@ -153,7 +153,7 @@ public interface SkillService extends SkillNetwork {
      * @param actor 技能执行角色
      * @return 
      */
-    boolean isPlayingSkill(Actor actor);
+    boolean isPlayingSkill(Entity actor);
     
     /**
      * 判断目标角色是否正在执行的技能中是否包含有skillTags中所指定的技能。角色可能同时正在执行多个技能，
@@ -162,7 +162,7 @@ public interface SkillService extends SkillNetwork {
      * @param skillTags
      * @return 
      */
-    boolean isPlayingSkill(Actor actor, long skillTags);
+    boolean isPlayingSkill(Entity actor, long skillTags);
     
     /**
      * 锁定指定角色的技能类型,当这些技能类型被锁定后，属于这些类型的技能将不
@@ -170,14 +170,14 @@ public interface SkillService extends SkillNetwork {
      * @param actor 
      * @param skillTags 
      */
-    void lockSkillTags(Actor actor, long skillTags);
+    void lockSkillTags(Entity actor, long skillTags);
     
     /**
      * 解锁指定角色的技能类型。
      * @param actor
      * @param skillTags 
      */
-    void unlockSkillTags(Actor actor, long skillTags);
+    void unlockSkillTags(Entity actor, long skillTags);
 
     /**
      * 获取技能标记

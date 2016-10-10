@@ -5,6 +5,8 @@
  */
 package name.huliqing.ly.object.env;
 
+import name.huliqing.ly.object.entity.Entity;
+
 /**
  * Env代理接口
  * @author huliqing
@@ -15,5 +17,5 @@ public interface ProxyEnv {
      * 获取代理的实际Env
      * @return 
      */
-    Env getProxyEnv();
+    Entity getProxyEnv();
 }

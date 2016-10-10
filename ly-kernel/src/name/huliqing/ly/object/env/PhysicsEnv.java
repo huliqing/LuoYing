@@ -5,26 +5,22 @@
  */
 package name.huliqing.ly.object.env;
 
-import com.jme3.app.Application;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.BulletAppState.ThreadingType;
 import com.jme3.bullet.PhysicsSpace.BroadphaseType;
-import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
-import com.jme3.post.SceneProcessor;
-import com.jme3.scene.Spatial;
 import name.huliqing.ly.Ly;
-import name.huliqing.ly.data.env.EnvData;
-import name.huliqing.ly.object.SceneObject;
+import name.huliqing.ly.data.EntityData;
 import name.huliqing.ly.object.scene.Scene;
 import name.huliqing.ly.object.scene.SceneListener;
+import name.huliqing.ly.object.entity.Entity;
+import name.huliqing.ly.object.entity.NoneModelEntity;
 
 /**
  * 物理环境，添加这个Env到场景后，场景中的所有绑定有RigidBodyControl的物体将受到物理影响。
  * @author huliqing
- * @param <T>
  */
-public class PhysicsEnv <T extends EnvData> extends AbstractEnv <T> implements SceneListener {
+public class PhysicsEnv extends NoneModelEntity implements SceneListener {
 
     // 是否打开physics调试
     private boolean debug;
@@ -44,7 +40,7 @@ public class PhysicsEnv <T extends EnvData> extends AbstractEnv <T> implements S
     private BulletAppState bulletAppState;
     
     @Override
-    public void setData(T data) {
+    public void setData(EntityData data) {
         super.setData(data);
         debug = data.getAsBoolean("debug", debug);
         gravity = data.getAsVector3f("gravity", gravity);
@@ -138,68 +134,26 @@ public class PhysicsEnv <T extends EnvData> extends AbstractEnv <T> implements S
         return null;
     }
 
-    @Override
-    public Vector3f getLocation() {
-        return data.getLocation();
-    }
-
-    @Override
-    public void setLocation(Vector3f location) {
-        // ignore,物理环境不需要位置
-    }
-
-    @Override
-    public Quaternion getRotation() {
-        return data.getRotation();
-    }
-
-    @Override
-    public void setRotation(Quaternion rotation) {
-        // ignore，物理环境不需要旋转
-    }
-
-    @Override
-    public Vector3f getScale() {
-        return data.getScale();
-    }
-
-    @Override
-    public void setScale(Vector3f scale) {
-        // ignore,物理环境不需要缩放
-    }
-    
     // ---- listener
+    
     @Override
     public void onSceneInitialized(Scene scene) {
         // ignore
     }
     
     @Override
-    public void onSceneObjectAdded(Scene scene, SceneObject objectAdded) {
-        // ignore
+    public void onSceneEntityAdded(Scene scene, Entity objectAdded) {
+        if (objectAdded.getSpatial() != null) {
+            bulletAppState.getPhysicsSpace().addAll(objectAdded.getSpatial());
+        }
     }
 
     @Override
-    public void onSceneObjectRemoved(Scene scene, SceneObject objectRemoved) {
-        // ignore
+    public void onSceneEntityRemoved(Scene scene, Entity objectRemoved) {
+        if (objectRemoved.getSpatial() != null) {
+            bulletAppState.getPhysicsSpace().removeAll(objectRemoved.getSpatial());
+        }
     }
 
-    @Override
-    public void onSpatialAdded(Scene scene, Spatial spatialAdded) {
-        bulletAppState.getPhysicsSpace().addAll(spatialAdded);
-    }
-
-    @Override
-    public void onSpatialRemoved(Scene scene, Spatial spatialRemoved) {
-        bulletAppState.getPhysicsSpace().removeAll(spatialRemoved);
-    }
-
-    @Override
-    public void onProcessorAdded(Scene scene, SceneProcessor processorAdded) {
-    }
-
-    @Override
-    public void onProcessorRemoved(Scene scene, SceneProcessor processorRemoved) {
-    }
 
 }

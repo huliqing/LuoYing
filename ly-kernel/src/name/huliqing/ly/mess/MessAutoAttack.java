@@ -11,7 +11,7 @@ import name.huliqing.ly.layer.network.PlayNetwork;
 import name.huliqing.ly.layer.service.PlayService;
 import name.huliqing.ly.data.ConnData;
 import name.huliqing.ly.network.GameServer;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * 客户端向服务端发出自动攻击命令
@@ -50,10 +50,10 @@ public class MessAutoAttack extends MessBase {
 //        Long actorId = source.getAttribute(GameServer.ATTR_ACTOR_UNIQUE_ID);
 
         ConnData cd = source.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
-        Long actorId = cd != null ? cd.getActorId() : null;
+        Long actorId = cd != null ? cd.getEntityId() : null;
         
-        Actor actor = playService.findActor(actorId);
-        Actor target = playService.findActor(targetId);
+        Entity actor = playService.getEntity(actorId);
+        Entity target = playService.getEntity(targetId);
         playNetwork.attack(actor, target);
     }
 

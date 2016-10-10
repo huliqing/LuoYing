@@ -7,7 +7,6 @@ package name.huliqing.ly.view.talk;
 import com.jme3.math.Vector3f;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.ly.object.actor.Actor;
 
 /**
  *
@@ -80,7 +79,7 @@ public class TalkImpl implements Talk {
     // =============================
 
     @Override
-    public Talk speak(Actor actor, String mess) {
+    public Talk speak(Entity actor, String mess) {
         TalkLogicSpeak speak = new TalkLogicSpeak(actor, mess);
         logics.add(speak);
         return this;

@@ -8,7 +8,7 @@ package name.huliqing.ly.object.module;
 import java.util.List;
 import name.huliqing.ly.data.ResistData;
 import name.huliqing.ly.object.Loader;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.resist.Resist;
 
 /**
@@ -19,7 +19,7 @@ public class ResistModule extends AbstractModule {
     private Resist resist;
 
     @Override
-    public void initialize(Actor actor) {
+    public void initialize(Entity actor) {
         super.initialize(actor);
         List<ResistData> rds = actor.getData().getObjectDatas(ResistData.class, null);
         if (rds != null && !rds.isEmpty()) {
@@ -35,10 +35,10 @@ public class ResistModule extends AbstractModule {
     
     public void setResist(Resist resist) {
         if (this.resist != null) {
-            actor.getData().removeObjectData(this.resist.getData());
+            entity.getData().removeObjectData(this.resist.getData());
         }
         this.resist = resist;
-        this.actor.getData().addObjectData(this.resist.getData());
+        this.entity.getData().addObjectData(this.resist.getData());
     }
     
     /**

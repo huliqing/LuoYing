@@ -11,8 +11,8 @@ import java.util.List;
 import name.huliqing.ly.data.DropData;
 import name.huliqing.ly.data.ModuleData;
 import name.huliqing.ly.object.Loader;
-import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.object.drop.Drop;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.sound.SoundManager;
 
 /**
@@ -33,7 +33,7 @@ public class DropModule extends AbstractModule {
     }
     
     @Override
-    public void initialize(Actor actor) {
+    public void initialize(Entity actor) {
         super.initialize(actor); 
         
         List<DropData> dropDatas = actor.getData().getObjectDatas(DropData.class, null);
@@ -64,7 +64,7 @@ public class DropModule extends AbstractModule {
             return;
         
         drops.add(drop);
-        actor.getData().addObjectData(drop.getData());
+        entity.getData().addObjectData(drop.getData());
     }
     
     /**
@@ -77,7 +77,7 @@ public class DropModule extends AbstractModule {
             return false;
         
         drops.remove(drop);
-        actor.getData().removeObjectData(drop.getData());
+        entity.getData().removeObjectData(drop.getData());
         return true;
     }
     
@@ -96,13 +96,13 @@ public class DropModule extends AbstractModule {
      * 处理掉落物品给指定角色, 注：物品是从当前角色掉落到指定角色(target)身上。
      * @param target
      */
-    public void doDrop(Actor target) {
+    public void doDrop(Entity target) {
         if (drops == null) {
             return;
         }
         boolean hasDrop = false;
         for (int i = 0; i < drops.size(); i++) {
-            if (drops.get(i).doDrop(actor, target)) {
+            if (drops.get(i).doDrop(entity, target)) {
                 hasDrop = true;
             }
         }
@@ -117,7 +117,7 @@ public class DropModule extends AbstractModule {
             return;
         
         for (String s : sounds) {
-            SoundManager.getInstance().playSound(s, actor.getSpatial().getWorldTranslation());
+            SoundManager.getInstance().playSound(s, entity.getSpatial().getWorldTranslation());
         }
     }
 }

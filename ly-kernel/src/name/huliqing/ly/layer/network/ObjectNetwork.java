@@ -7,7 +7,7 @@ package name.huliqing.ly.layer.network;
 
 import name.huliqing.ly.Inject;
 import name.huliqing.ly.data.ObjectData;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  *
@@ -21,7 +21,7 @@ public interface ObjectNetwork extends Inject {
      * @param id
      * @param count 
      */
-    void addData(Actor actor, String id, int count);
+    void addData(Entity actor, String id, int count);
     
     /**
      * 从角色身上移除指定的物体
@@ -29,13 +29,13 @@ public interface ObjectNetwork extends Inject {
      * @param objectId
      * @param count 
      */
-    void removeData(Actor actor, String objectId, int count);
+    void removeData(Entity actor, String objectId, int count);
 
     /**
      * 让指定角色使用物体
      * @param actor
      * @param data 
      */
-    void useData(Actor actor, ObjectData data);
+    void useData(Entity actor, ObjectData data);
     
 }

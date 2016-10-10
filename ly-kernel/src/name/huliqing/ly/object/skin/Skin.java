@@ -7,7 +7,7 @@ package name.huliqing.ly.object.skin;
 import com.jme3.scene.Spatial;
 import name.huliqing.ly.data.SkinData;
 import name.huliqing.ly.xml.DataProcessor;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * @author huliqing
@@ -19,19 +19,19 @@ public interface Skin extends DataProcessor<SkinData> {
      * @param actor
      * @return 
      */
-    boolean canUse(Actor actor);
+    boolean canUse(Entity actor);
     
     /**
      * 把skin添加到角色身上
      * @param actor 
      */
-    void attach(Actor actor);
+    void attach(Entity actor);
     
     /**
      * 把当前skin从角色身上剥离
      * @param actor 
      */
-    void detach(Actor actor);
+    void detach(Entity actor);
     
     /**
      * 获取skin的部位类型，注：这里返回的整数使用的是二进制位来表示skin的部分，每一个位表示一个skin类型

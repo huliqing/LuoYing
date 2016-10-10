@@ -4,8 +4,8 @@
  */
 package name.huliqing.ly.object.logic;
 
-import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.data.LogicData;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.xml.DataProcessor;
 
 /**
@@ -23,7 +23,7 @@ public abstract class Logic<T extends LogicData> implements DataProcessor<T>{
     /**
      * 运行当前逻辑的角色.
      */
-    protected Actor actor;
+    protected Entity actor;
 
     @Override
     public void setData(T data) {
@@ -65,7 +65,7 @@ public abstract class Logic<T extends LogicData> implements DataProcessor<T>{
      * 设置执行逻辑的角色。
      * @param self 
      */
-    public void setActor(Actor self) {
+    public void setActor(Entity self) {
         this.actor = self;
     }
 

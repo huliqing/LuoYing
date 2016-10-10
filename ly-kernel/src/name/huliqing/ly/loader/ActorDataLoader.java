@@ -5,37 +5,33 @@
  */
 package name.huliqing.ly.loader;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import name.huliqing.ly.data.ActorData;
 import name.huliqing.ly.data.AttributeData;
 import name.huliqing.ly.data.DropData;
 import name.huliqing.ly.data.LogicData;
 import name.huliqing.ly.data.ChannelData;
 import name.huliqing.ly.data.ChatData;
+import name.huliqing.ly.data.EntityData;
 import name.huliqing.ly.xml.Proto;
 import name.huliqing.ly.data.ObjectData;
 import name.huliqing.ly.data.ResistData;
 import name.huliqing.ly.data.SkillData;
 import name.huliqing.ly.data.SkinData;
 import name.huliqing.ly.data.TalentData;
-import name.huliqing.ly.data.ModuleData;
 import name.huliqing.ly.manager.ResManager;
-import name.huliqing.ly.object.define.DefineFactory;
 import name.huliqing.ly.xml.DataFactory;
-import name.huliqing.ly.xml.DataLoader;
 
 /**
  *
  * @author huliqing
  */
-public class ActorDataLoader implements DataLoader<ActorData> {
+public class ActorDataLoader extends EntityDataLoader {
 
     @Override
-    public void load(Proto proto, ActorData data) {
-        data.setName(ResManager.get(proto.getId() + ".name"));
-        data.setMat(DefineFactory.getMatDefine().getMat(proto.getAsString("mat")));
+    public void load(Proto proto, EntityData data) {
+        super.load(proto, data);
+        
+        data.setAttribute("name", ResManager.get(proto.getId() + ".name"));
+        data.setAttribute("mat", proto.getAsString("mat"));
         
         // ==== 2.items 
         String[] itemsTemp = proto.getAsArray("items");
@@ -163,20 +159,21 @@ public class ActorDataLoader implements DataLoader<ActorData> {
             }
         }
         
-        // 载入模块配置,并根据ModuleOrder进行排序
-        String[] moduleArr = proto.getAsArray("modules");
-        if (moduleArr != null) {
-            data.setModuleDatas(new ArrayList<ModuleData>(moduleArr.length));
-            for (String mid : moduleArr) {
-                data.getModuleDatas().add((ModuleData) DataFactory.createData(mid));
-            }
-            Collections.sort(data.getModuleDatas(), new Comparator<ModuleData>() {
-                @Override
-                public int compare(ModuleData o1, ModuleData o2) {
-                    return o1.getModuleOrder() - o2.getModuleOrder();
-                }
-            });
-        }
+        // remove20161010,move to EntityDataLoader.class
+//        // 载入模块配置,并根据ModuleOrder进行排序
+//        String[] moduleArr = proto.getAsArray("modules");
+//        if (moduleArr != null) {
+//            data.setModuleDatas(new ArrayList<ModuleData>(moduleArr.length));
+//            for (String mid : moduleArr) {
+//                data.getModuleDatas().add((ModuleData) DataFactory.createData(mid));
+//            }
+//            Collections.sort(data.getModuleDatas(), new Comparator<ModuleData>() {
+//                @Override
+//                public int compare(ModuleData o1, ModuleData o2) {
+//                    return o1.getModuleOrder() - o2.getModuleOrder();
+//                }
+//            });
+//        }
         
         
     }

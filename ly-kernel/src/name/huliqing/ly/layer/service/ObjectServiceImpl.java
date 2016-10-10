@@ -15,15 +15,15 @@ import name.huliqing.ly.data.SkillData;
 import name.huliqing.ly.data.SkinData;
 import name.huliqing.ly.data.ObjectData;
 import name.huliqing.ly.xml.DataFactory;
-import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.data.define.CostObject;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  *
  * @author huliqing
  */
 public class ObjectServiceImpl implements ObjectService {
-    private static final Logger LOG = Logger.getLogger(ObjectServiceImpl.class.getName());
+//    private static final Logger LOG = Logger.getLogger(ObjectServiceImpl.class.getName());
     
     private ItemService itemService;
     private SkinService skinService;
@@ -43,7 +43,7 @@ public class ObjectServiceImpl implements ObjectService {
     }
 
     @Override
-    public void addData(Actor actor, String id, int count) {
+    public void addData(Entity actor, String id, int count) {
         Class<?> cc = DataFactory.getDataClassById(id);
         if (cc == null)
             return;
@@ -64,7 +64,7 @@ public class ObjectServiceImpl implements ObjectService {
     }
 
     @Override
-    public void removeData(Actor actor, String id, int count) {
+    public void removeData(Entity actor, String id, int count) {
 
         Class<?> cc = DataFactory.getDataClassById(id);
         if (cc == null)
@@ -75,14 +75,14 @@ public class ObjectServiceImpl implements ObjectService {
         } else if (SkinData.class.isAssignableFrom(cc)) {
             skinService.removeSkin(actor, id, count);            
         } else if (SkillData.class.isAssignableFrom(cc)) {
-            skillService.removeSkill(actor, id);
+            skillService.removeSkill(actor, id); 
         } else {
             throw new UnsupportedOperationException();
         }
     }
 
     @Override
-    public void useData(Actor actor, ObjectData data) {
+    public void useData(Entity actor, ObjectData data) {
         if (data == null)
             return;
         
@@ -90,12 +90,12 @@ public class ObjectServiceImpl implements ObjectService {
     }
 
     @Override
-    public ObjectData getData(Actor actor, String id) {
+    public ObjectData getData(Entity actor, String id) {
         return actor.getData().getObjectData(id);
     }
 
     @Override
-    public List<ObjectData> getDatas(Actor actor) {
+    public List<ObjectData> getDatas(Entity actor) {
         return Collections.unmodifiableList(actor.getData().getObjectDatas());
     }
 

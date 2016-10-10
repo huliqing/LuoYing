@@ -22,10 +22,10 @@ import name.huliqing.ly.constants.InterfaceConstants;
 import name.huliqing.ly.constants.ResConstants;
 import name.huliqing.ly.data.ItemData;
 import name.huliqing.ly.manager.ResourceManager;
-import name.huliqing.ly.layer.network.UserCommandNetwork;
+//import name.huliqing.luoying.network.UserCommandNetwork;
 import name.huliqing.ly.layer.service.ActorService;
 import name.huliqing.ly.layer.service.PlayService;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.ui.Button;
 import name.huliqing.ly.ui.FrameLayout;
 import name.huliqing.ly.ui.Icon;
@@ -43,7 +43,7 @@ import name.huliqing.ly.utils.ConvertUtils;
 public class MapItem extends AbstractItem {
     private final PlayService playService = Factory.get(PlayService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
-    private final UserCommandNetwork userCommandNetwork = Factory.get(UserCommandNetwork.class);
+//    private final UserCommandNetwork userCommandNetwork = Factory.get(UserCommandNetwork.class);
     
     private String image;
     // 地图倍率大小
@@ -96,7 +96,7 @@ public class MapItem extends AbstractItem {
     }
 
     @Override
-    public void use(Actor actor) {
+    public void use(Entity actor) {
         super.use(actor);
         
         // 创建一个map view用于显示地图
@@ -112,7 +112,7 @@ public class MapItem extends AbstractItem {
     }
     
     
-    private Flag createFlag(Actor actor, String gameId, boolean showDirection, boolean focus) {
+    private Flag createFlag(Entity actor, String gameId, boolean showDirection, boolean focus) {
         Flag flag = new Flag(actor.getData().getUniqueId(), InterfaceConstants.MAP_FLAG_PLAYER);
         
         // 计算位置

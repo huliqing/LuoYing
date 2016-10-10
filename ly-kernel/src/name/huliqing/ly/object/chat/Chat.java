@@ -14,8 +14,8 @@ import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.ly.layer.service.ActorService;
 import name.huliqing.ly.object.AbstractPlayObject;
 import name.huliqing.ly.xml.DataProcessor;
-import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.object.anim.Anim;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.hitchecker.HitChecker;
 import name.huliqing.ly.ui.UI;
 import name.huliqing.ly.ui.state.UIState;
@@ -46,7 +46,7 @@ public abstract class Chat<T extends ChatData> extends AbstractPlayObject implem
     
     // ---- inner
     protected T data;
-    protected Actor actor;
+    protected Entity actor;
     // 父Chat，如果当前为root chat则parent为null.
     protected Chat parent;
     
@@ -177,7 +177,7 @@ public abstract class Chat<T extends ChatData> extends AbstractPlayObject implem
      * @param target
      * @return 
      */
-    public boolean isVisible(Actor target) {
+    public boolean isVisible(Entity target) {
         if (target == null || target == actor || actorService.isDead(target))
             return false;
         
@@ -192,11 +192,11 @@ public abstract class Chat<T extends ChatData> extends AbstractPlayObject implem
         return true;
     }
 
-    public Actor getActor() {
+    public Entity getActor() {
         return actor;
     }
 
-    public void setActor(Actor actor) {
+    public void setActor(Entity actor) {
         this.actor = actor;
     }
     

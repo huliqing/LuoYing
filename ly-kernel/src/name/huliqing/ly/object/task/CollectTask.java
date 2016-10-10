@@ -4,29 +4,17 @@
  */
 package name.huliqing.ly.object.task;
 
-import com.jme3.font.BitmapFont;
 import com.jme3.math.FastMath;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.ly.Factory;
-import name.huliqing.ly.constants.ResConstants;
-import name.huliqing.ly.data.ObjectData;
 import name.huliqing.ly.data.TaskData;
-import name.huliqing.ly.enums.MessageType;
 import name.huliqing.ly.layer.network.PlayNetwork;
 import name.huliqing.ly.layer.network.TaskNetwork;
 import name.huliqing.ly.layer.service.ActorService;
 import name.huliqing.ly.layer.service.TaskService;
-import name.huliqing.ly.view.IconLabel;
-import name.huliqing.ly.manager.ResourceManager;
-import name.huliqing.ly.xml.DataFactory;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.module.ActorListener;
-import name.huliqing.ly.ui.LinearLayout;
-import name.huliqing.ly.ui.Text;
-import name.huliqing.ly.ui.UI;
-import name.huliqing.ly.ui.UIFactory;
-import name.huliqing.ly.ui.Window;
 import name.huliqing.ly.utils.ConvertUtils;
 import name.huliqing.ly.utils.MathUtils;
 
@@ -51,8 +39,11 @@ public class CollectTask<T extends TaskData> extends AbstractTask<T> implements 
     private float dropFactor = 0.5f;
     
     // ---- inner
-    // 显示任务目标
-    private GoldPanel goldPanel;
+
+// remove20161010    
+// 显示任务目标
+//    private GoldPanel goldPanel;
+    
     // 标记是否已经收集完毕
     private boolean collected;
 
@@ -109,44 +100,45 @@ public class CollectTask<T extends TaskData> extends AbstractTask<T> implements 
         actorService.removeActorListener(actor, this);
     }
 
-    @Override
-    public Window getTaskDetail() {
-        Window win = super.getTaskDetail();
-        // 如果是已经完成过的任务则不显示进度
-        if (data.isCompletion()) {
-            if (goldPanel != null) {
-                goldPanel.setVisible(false);
-                win.resize();
-            }
-            return win;
-        }
-        
-        // 展示任务进度
-        if (goldPanel == null) {
-            goldPanel = new GoldPanel(win.getContentWidth(), UIFactory.getUIConfig().getTitleHeight());
-            win.addView(goldPanel);
-            win.resize();
-            win.setToCorner(UI.Corner.CC);
-        }
-        goldPanel.update(actor);
-        
-        return win;
-    }
+    // remove20161010
+//    @Override
+//    public Window getTaskDetail() {
+//        Window win = super.getTaskDetail();
+//        // 如果是已经完成过的任务则不显示进度
+//        if (data.isCompletion()) {
+//            if (goldPanel != null) {
+//                goldPanel.setVisible(false);
+//                win.resize();
+//            }
+//            return win;
+//        }
+//        
+//        // 展示任务进度
+//        if (goldPanel == null) {
+//            goldPanel = new GoldPanel(win.getContentWidth(), UIFactory.getUIConfig().getTitleHeight());
+//            win.addView(goldPanel);
+//            win.resize();
+//            win.setToCorner(UI.Corner.CC);
+//        }
+//        goldPanel.update(actor);
+//        
+//        return win;
+//    }
 
     // ignore
     @Override
-    public void onActorTargetLocked(Actor source, Actor other) {}
+    public void onActorTargetLocked(Entity source, Entity other) {}
     
     // ignore
     @Override
-    public void onActorTargetReleased(Actor source, Actor other) {}
+    public void onActorTargetReleased(Entity source, Entity other) {}
 
     // ignore
     @Override
-    public void onActorHitByTarget(Actor source, Actor attacker, String hitAttribute, float hitValue, boolean killedByHit) {}
+    public void onActorHitByTarget(Entity source, Entity attacker, String hitAttribute, float hitValue, boolean killedByHit) {}
 
     @Override
-    public void onActorHitTarget(Actor sourceHitter, Actor beHit, String hitAttribute, float hitValue, boolean killedByHit) {
+    public void onActorHitTarget(Entity sourceHitter, Entity beHit, String hitAttribute, float hitValue, boolean killedByHit) {
         // 几种情况可以不再需要“收集任务物品”的逻辑
         // 1.如果任务已经完成并且已经提交
         // 2.如果任务已经收集完毕但未提交
@@ -170,18 +162,21 @@ public class CollectTask<T extends TaskData> extends AbstractTask<T> implements 
                 continue;
             }
             // 按机率掉落
-            StringBuilder sb = new StringBuilder(24);
             if (dropFactor >= FastMath.nextRandomFloat()) {
                 // 注:因为这里使用的是随机数，确定是否获得任务物品必须由服务端统一判断，
                 // 所以这里必须使用taskNetwork.applyItem(...)而不是taskService.applyItem(...)
                 taskNetwork.applyItem(actor, this, item.itemId, 1);
-                // 获得任务物品的提示,在本地提示就可以,因为只需要本地player知道获得物品就行,
-                // 不需要让其它角色的玩家知道
                 tempItemTotal++;
-                sb.append(ResourceManager.get(ResConstants.TASK_GET_TASK_ITEM))
-                        .append(":").append(ResourceManager.getObjectName(item.itemId))
-                        .append("(").append(tempItemTotal).append("/").append(item.total).append(")");
-                playNetwork.addMessage(actor, sb.toString(), MessageType.itemTask);
+   
+                // remove20161010,需要重构
+//                // 获得任务物品的提示,在本地提示就可以,因为只需要本地player知道获得物品就行,
+//                // 不需要让其它角色的玩家知道
+//                StringBuilder sb = new StringBuilder(24);
+//                sb.append(ResourceManager.get(ResConstants.TASK_GET_TASK_ITEM))
+//                        .append(":").append(ResourceManager.getObjectName(item.itemId))
+//                        .append("(").append(tempItemTotal).append("/").append(item.total).append(")");
+//                playNetwork.addMessage(actor, sb.toString(), MessageType.itemTask);
+                
             }
             
             // 只要有一类物品还没有收集完，则要标记为“未完成”
@@ -193,15 +188,19 @@ public class CollectTask<T extends TaskData> extends AbstractTask<T> implements 
         // 收集完毕给予提示
         collected = checkCollected;
         if (collected) {
-            playNetwork.addMessage(actor, ResourceManager.get(ResConstants.TASK_SUCCESS)
-                        + ": " + ResourceManager.getObjectName(data.getId())
-                        , MessageType.notice);
+            
+            // remove20161011
+//            playNetwork.addMessage(actor, ResourceManager.get(ResConstants.TASK_SUCCESS)
+//                        + ": " + ResourceManager.getObjectName(data.getId())
+//                        , MessageType.notice);
+
         }
-        
-        // 更新任务详情面板
-        if (goldPanel != null && goldPanel.isVisible()) {
-            goldPanel.update(actor);
-        }
+   
+        // remove20161010
+//        // 更新任务详情面板
+//        if (goldPanel != null && goldPanel.isVisible()) {
+//            goldPanel.update(actor);
+//        }
     }
     
     private class ItemWrap {
@@ -212,44 +211,45 @@ public class CollectTask<T extends TaskData> extends AbstractTask<T> implements 
         int total;
     }
     
-    // 任务目标，列出需要收集的物品列表和收集进度
-    private class GoldPanel extends LinearLayout {
-        // 任务说明
-        private Text label;
-        
-        public GoldPanel(float width, float height) {
-            super(width, height);
-            setLayout(Layout.horizontal);
-            setBackground(UIFactory.getUIConfig().getBackground(), true);
-            setBackgroundColor(UIFactory.getUIConfig().getDesColor(), true);
-            label = new Text(ResourceManager.get(ResConstants.TASK_PROGRESS) + ": ");
-            label.setHeight(height);
-            label.setVerticalAlignment(BitmapFont.VAlign.Center);
-            addView(label);
-            
-            // 目标：列出需要收集的物品及数量
-            float ilWidth = (width - label.getWidth()) / items.size();
-            for (ItemWrap iw : items) {
-                IconLabel<ItemWrap> il = new IconLabel<ItemWrap>(iw
-                        , ((ObjectData)DataFactory.createData(iw.itemId)).getIcon()
-                        , "0/" + iw.total);
-                il.setWidth(ilWidth);
-                il.setHeight(height);
-                addView(il);
-            }
-        }
-        
-        // 更新所收集物品的进度
-        void update(Actor actor) {
-            IconLabel<ItemWrap> temp;
-            for (UI ui : getViews()) {
-                if (ui instanceof IconLabel) {
-                    temp = (IconLabel) ui;
-                    temp.setLabel(taskService.getItemTotal(actor, CollectTask.this, temp.getId().itemId)
-                            + "/" + temp.getId().total);
-                }
-            }
-        }
-    }
+    // remove20161010
+//    // 任务目标，列出需要收集的物品列表和收集进度
+//    private class GoldPanel extends LinearLayout {
+//        // 任务说明
+//        private Text label;
+//        
+//        public GoldPanel(float width, float height) {
+//            super(width, height);
+//            setLayout(Layout.horizontal);
+//            setBackground(UIFactory.getUIConfig().getBackground(), true);
+//            setBackgroundColor(UIFactory.getUIConfig().getDesColor(), true);
+//            label = new Text(ResourceManager.get(ResConstants.TASK_PROGRESS) + ": ");
+//            label.setHeight(height);
+//            label.setVerticalAlignment(BitmapFont.VAlign.Center);
+//            addView(label);
+//            
+//            // 目标：列出需要收集的物品及数量
+//            float ilWidth = (width - label.getWidth()) / items.size();
+//            for (ItemWrap iw : items) {
+//                IconLabel<ItemWrap> il = new IconLabel<ItemWrap>(iw
+//                        , ((ObjectData)DataFactory.createData(iw.itemId)).getIcon()
+//                        , "0/" + iw.total);
+//                il.setWidth(ilWidth);
+//                il.setHeight(height);
+//                addView(il);
+//            }
+//        }
+//        
+//        // 更新所收集物品的进度
+//        void update(Entity actor) {
+//            IconLabel<ItemWrap> temp;
+//            for (UI ui : getViews()) {
+//                if (ui instanceof IconLabel) {
+//                    temp = (IconLabel) ui;
+//                    temp.setLabel(taskService.getItemTotal(actor, CollectTask.this, temp.getId().itemId)
+//                            + "/" + temp.getId().total);
+//                }
+//            }
+//        }
+//    }
    
 }

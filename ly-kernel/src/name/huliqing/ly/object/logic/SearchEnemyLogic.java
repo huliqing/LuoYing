@@ -5,11 +5,11 @@
 package name.huliqing.ly.object.logic;
 
 import name.huliqing.ly.Factory;
-import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.data.LogicData;
 import name.huliqing.ly.layer.network.ActorNetwork;
 import name.huliqing.ly.layer.service.ActorService;
 import name.huliqing.ly.layer.service.PlayService;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.module.ActorModule;
 import name.huliqing.ly.object.module.LogicModule;
 
@@ -42,7 +42,7 @@ public class SearchEnemyLogic<T extends LogicData> extends Logic<T> {
     }
     
     @Override
-    public void setActor(Actor actor) {
+    public void setActor(Entity actor) {
         super.setActor(actor); 
         actorModule = actor.getModule(ActorModule.class);
         logicModule = actor.getModule(LogicModule.class);
@@ -56,12 +56,11 @@ public class SearchEnemyLogic<T extends LogicData> extends Logic<T> {
         }
         
         // 增加自动频率的逻辑
-        Actor target = actorModule.getTarget();
+        Entity target = actorModule.getTarget();
         
-        if (target == null || actorService.isDead(target) || !actorModule.isEnemy(target) 
-                || !playService.isInScene(target)) {
+        if (target == null || target.getScene() == null || actorService.isDead(target) || !actorModule.isEnemy(target)) {
             
-            Actor enemy = actorService.findNearestEnemyExcept(actor, actorModule.getViewDistance(), null);
+            Entity enemy = actorService.findNearestEnemyExcept(actor, actorModule.getViewDistance(), null);
             if (enemy != null) {
                 actorNetwork.setTarget(actor, enemy);
             }

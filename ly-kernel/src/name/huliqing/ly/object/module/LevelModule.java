@@ -13,7 +13,6 @@ import name.huliqing.ly.data.ModuleData;
 import name.huliqing.ly.layer.service.AttributeService;
 import name.huliqing.ly.layer.service.ElService;
 import name.huliqing.ly.object.Loader;
-import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.object.attribute.Attribute;
 import name.huliqing.ly.object.attribute.LevelAttribute;
 import name.huliqing.ly.object.attribute.LimitAttribute;
@@ -22,6 +21,7 @@ import name.huliqing.ly.object.attribute.ValueChangeListener;
 import name.huliqing.ly.object.effect.Effect;
 import name.huliqing.ly.object.effect.EffectManager;
 import name.huliqing.ly.object.el.LevelEl;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * 可以让角色升级的模块
@@ -70,7 +70,7 @@ public class LevelModule extends AbstractModule implements ValueChangeListener<N
     }
     
     @Override
-    public void initialize(Actor actor) {
+    public void initialize(Entity actor) {
         super.initialize(actor);
         // 查找角色的等级属性
         levelAttribute = attributeService.getAttributeByName(actor, bindLevelAttribute);
@@ -129,7 +129,7 @@ public class LevelModule extends AbstractModule implements ValueChangeListener<N
         levelAttribute.setValue(newLevel);
         
         // 2.升级其它等级属性,注：只有等级属性(LevelAttribute)才可以升级
-        List<Attribute> attributes = attributeService.getAttributes(actor);
+        List<Attribute> attributes = attributeService.getAttributes(entity);
         for (Attribute attr : attributes) {
             if (attr == levelAttribute || attr == xpAttribute) {
                 continue;
@@ -200,7 +200,7 @@ public class LevelModule extends AbstractModule implements ValueChangeListener<N
             // 3.提示升级(效果）
             if (effect != null) {
                 Effect levelUpEffect = Loader.load(effect);
-                levelUpEffect.setTraceObject(actor.getSpatial());
+                levelUpEffect.setTraceObject(entity.getSpatial());
                 EffectManager.getInstance().addEffect(levelUpEffect);
             }
         }

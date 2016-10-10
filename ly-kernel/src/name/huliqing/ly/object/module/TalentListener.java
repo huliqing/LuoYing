@@ -4,8 +4,7 @@
  */
 package name.huliqing.ly.object.module;
 
-import name.huliqing.ly.data.TalentData;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.talent.Talent;
 
 /**
@@ -19,14 +18,14 @@ public interface TalentListener {
      * @param actor
      * @param talent 新添加的天赋
      */
-    void onTalentAdded(Actor actor, Talent talent);
+    void onTalentAdded(Entity actor, Talent talent);
     
     /**
      * 在从角色身上移除一个天赋后触发。
      * @param actor
      * @param talent 被移除的天赋
      */
-    void onTalentRemoved(Actor actor, Talent talent);
+    void onTalentRemoved(Entity actor, Talent talent);
     
     /**
      * 角色增加或减少了天赋点数后触发该方法。
@@ -34,5 +33,5 @@ public interface TalentListener {
      * @param talent 发生了点数变动的天赋的data.
      * @param pointsAmount 实际增加或减少的天赋点数
      */
-    void onTalentPointsChange(Actor actor, Talent talent, int pointsAmount);
+    void onTalentPointsChange(Entity actor, Talent talent, int pointsAmount);
 }

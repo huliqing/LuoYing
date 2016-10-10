@@ -16,8 +16,8 @@ import name.huliqing.ly.layer.service.AttributeService;
 import name.huliqing.ly.layer.service.SkillService;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.ly.layer.network.DropNetwork;
-import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.object.attribute.NumberAttribute;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  *
@@ -47,7 +47,7 @@ public class HitUtils {
      * @param hitAttrName hit的是哪一个属性ID
      * @param hitFinalValue 最终的hitValue
      */
-    public void applyHit(Actor attacker, Actor target, String hitAttrName, float hitFinalValue) {
+    public void applyHit(Entity attacker, Entity target, String hitAttrName, float hitFinalValue) {
         
         NumberAttribute attribute = attributeService.getAttributeByName(target, hitAttrName);
         if (attribute == null)
@@ -82,8 +82,8 @@ public class HitUtils {
             // 2.通知目标角色死亡
             if (actorService.isPlayer(target)) {
                 // 告诉所有玩家
-                String attackerName = attacker != null ? actorService.getName(attacker) : "";
-                String targetName = actorService.getName(target);
+                String attackerName = attacker != null ? attacker.getData().getName() : "";
+                String targetName = target.getData().getName();
                 String killedMess = ResourceManager.get(ResConstants.COMMON_KILLED, new Object[] {targetName, attackerName});
                 playNetwork.addMessage(killedMess, MessageType.notice);
                 // 告诉目标:"你已经死亡"

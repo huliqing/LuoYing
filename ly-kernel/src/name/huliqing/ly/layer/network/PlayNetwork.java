@@ -4,15 +4,9 @@
  */
 package name.huliqing.ly.layer.network;
 
-import com.jme3.network.HostedConnection;
 import name.huliqing.ly.Inject;
-import name.huliqing.ly.data.GameData;
-import name.huliqing.ly.enums.MessageType;
-import name.huliqing.ly.object.SyncData;
-import name.huliqing.ly.object.NetworkObject;
-import name.huliqing.ly.object.SceneObject;
-import name.huliqing.ly.object.actor.Actor;
-import name.huliqing.ly.object.view.View;
+import name.huliqing.ly.object.entity.Entity;
+import name.huliqing.ly.object.scene.Scene;
 
 /**
  *
@@ -20,90 +14,111 @@ import name.huliqing.ly.object.view.View;
  */
 public interface PlayNetwork extends Inject {
     
-    
-    void addSceneObject(SceneObject sceneObject);
-    
-    
-    
+    /**
+     * 向当前游戏主场景添加物体.(非GUI场景）
+     * @param entity 
+     */
+    void addEntity(Entity entity);
     
     /**
-     * @deprecated 
-     * 添加一个角色到战场
-     * @param actor
+     * 向当前游戏的Gui场景中添加物体
+     * @param entity 
      */
-    void addActor(Actor actor);
+    void addGuiEntity(Entity entity);
     
     /**
-     * @deprecated 
-     * 把角色作为普通玩家角色类型载入（非Main player,即不一定是当前主场景中的角色。)
-     * @param actor 
+     * 向指定的场景添加物体
+     * @param scene
+     * @param entity 
      */
-    void addSimplePlayer(Actor actor);
+    void addEntity(Scene scene, Entity entity);
     
     /**
-     * @deprecated 
-     * 添加视图组件到界面
-     * @deprecated 后续要重构并使用 addPlayObject代替 
-     * @param view 
+     * 从指定的场景中移除物体
+     * @param entity 
      */
-    void addView(View view);
+    void removeEntity(Entity entity);
     
-    /**
-     * @deprecated 
-     * 从场景中移除物体
-     * @param object
-     */
-    void removeObject(Object object);
-    
-    /**
-     * 添加MESS
-     * @param message
-     * @param type 
-     */
-    void addMessage(String message, MessageType type);
-    
-    /**
-     * 添加信息到指定的客户端
-     * @param actor
-     * @param message
-     * @param type 
-     */
-    void addMessage(Actor actor, String message, MessageType type);
-    
-    /**
-     * @deprecated 
-     * 切换游戏
-     * @param gameId 
-     */
-    void changeGame(String gameId);
-    
-    /**
-     * @deprecated 
-     * 切换游戏
-     * @param gameData 
-     */
-    void changeGame(GameData gameData);
+    // --------------------------------------------------------------------------------------------------------------------------------
+//    
+//    /**
+//     * @deprecated 
+//     * 添加一个角色到战场
+//     * @param actor
+//     */
+//    void addActor(Actor actor);
+//    
+//    /**
+//     * @deprecated 
+//     * 把角色作为普通玩家角色类型载入（非Main player,即不一定是当前主场景中的角色。)
+//     * @param actor 
+//     */
+//    void addSimplePlayer(Actor actor);
+//    
+//    /**
+//     * @deprecated 
+//     * 添加视图组件到界面
+//     * @deprecated 后续要重构并使用 addPlayObject代替 
+//     * @param view 
+//     */
+//    void addView(View view);
+//    
+//    /**
+//     * @deprecated 
+//     * 从场景中移除物体
+//     * @param object
+//     */
+//    void removeObject(Object object);
+//    
+//    /**
+//     * 添加MESS
+//     * @param message
+//     * @param type 
+//     */
+//    void addMessage(String message, MessageType type);
+//    
+//    /**
+//     * 添加信息到指定的客户端
+//     * @param actor
+//     * @param message
+//     * @param type 
+//     */
+//    void addMessage(Actor actor, String message, MessageType type);
+//    
+//    /**
+//     * @deprecated 
+//     * 切换游戏
+//     * @param gameId 
+//     */
+//    void changeGame(String gameId);
+//    
+//    /**
+//     * @deprecated 
+//     * 切换游戏
+//     * @param gameData 
+//     */
+//    void changeGame(GameData gameData);
     
     /**
      * 让目标进行攻击。
      * @param actor 源角色
      * @param target 攻击目标
      */
-    void attack(Actor actor, Actor target);
+    void attack(Entity actor, Entity target);
     
-    /**
-     * 将当前服务端状态初始化到客户端。 一般在客户端连接到服务端后调用初始化
-     * 状态。
-     * @param client
-     */
-    void syncGameInitToClient(HostedConnection client);
+//    /**
+//     * 将当前服务端状态初始化到客户端。 一般在客户端连接到服务端后调用初始化
+//     * 状态。
+//     * @param client
+//     */
+//    void syncGameInitToClient(HostedConnection client);
     
-    /**
-     * 同步“同步对象”
-     * @param object
-     * @param syncData
-     * @param reliable 
-     */
-    void syncObject(NetworkObject object, SyncData syncData, boolean reliable);
+//    /**
+//     * 同步“同步对象”
+//     * @param object
+//     * @param syncData
+//     * @param reliable 
+//     */
+//    void syncObject(NetworkObject object, SyncData syncData, boolean reliable);
     
 }

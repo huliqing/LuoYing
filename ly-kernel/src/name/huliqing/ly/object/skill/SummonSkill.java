@@ -16,7 +16,6 @@ import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.ly.Factory;
-import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.data.SkillData;
 import name.huliqing.ly.layer.network.ActorNetwork;
 import name.huliqing.ly.layer.network.PlayNetwork;
@@ -25,10 +24,12 @@ import name.huliqing.ly.layer.service.PlayService;
 import name.huliqing.ly.network.Network;
 import name.huliqing.ly.layer.service.ConfigService;
 import name.huliqing.ly.layer.service.LogicService;
+import name.huliqing.ly.object.Loader;
 import name.huliqing.ly.object.anim.Anim;
 import name.huliqing.ly.object.anim.AnimationControl;
 import name.huliqing.ly.object.anim.Listener;
 import name.huliqing.ly.object.anim.MoveAnim;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.utils.GeometryUtils;
 import name.huliqing.ly.utils.ThreadHelper;
 
@@ -99,7 +100,8 @@ public class SummonSkill extends AbstractSkill {
         currentSummon.summonObjectId = summonId;
         currentSummon.preload();
         
-        playService.addObject(currentSummon);
+        // 添加到角色所在场景
+        actor.getScene().getRoot().attachChild(currentSummon);
     }
 
     @Override
@@ -116,7 +118,7 @@ public class SummonSkill extends AbstractSkill {
         }
     }
     
-    private Vector3f getLocalToWorld(Actor actor, Vector3f localPos, Vector3f store) {
+    private Vector3f getLocalToWorld(Entity actor, Vector3f localPos, Vector3f store) {
         if (store == null) {
             store = new Vector3f();
         }
@@ -131,7 +133,7 @@ public class SummonSkill extends AbstractSkill {
         String summonObjectId;
         Vector3f summonPos = new Vector3f();
         HelpLoader loader = new HelpLoader();
-        Future<Actor> future;
+        Future<Entity> future;
         
         // -- state
         boolean started;
@@ -141,7 +143,7 @@ public class SummonSkill extends AbstractSkill {
         // 是否已经在载入角色
         boolean loadStarted;
         // 载入的角色，可能是actor或obj
-        Actor summonActor;
+        Entity summonActor;
         // 是否正在召出角色
         boolean showing;
         // 用于显示角色的动画处理器
@@ -218,7 +220,7 @@ public class SummonSkill extends AbstractSkill {
                 actorService.setPhysicsEnabled(summonActor, false);
                 actorService.setPartner(actor, summonActor);
                 actorService.setColor(summonActor, new ColorRGBA(1f, 1f, 2f, 1));
-                playNetwork.addActor(summonActor);
+                playNetwork.addEntity(summonActor);
                 
                 // 动画展示召唤角色，上升动画,end位置要向上加大一些，以避免召唤后角色在
                 // 开启物理特性后掉到地下。
@@ -272,7 +274,7 @@ public class SummonSkill extends AbstractSkill {
             Spatial summonModel = animationControl.getSpatial();
             if (summonModel != null) {
                 // 让召唤到的目标获得物理碰撞
-//                Actor ac = summonModel.getControl(Actor.class);
+//                Entity ac = summonModel.getControl(Actor.class);
                 actorService.setLocation(summonActor, summonModel.getLocalTranslation());
                 logicService.setAutoLogic(summonActor, true);
                 actorNetwork.setPhysicsEnabled(summonActor, true);// 物理开需要同步
@@ -284,18 +286,17 @@ public class SummonSkill extends AbstractSkill {
     }
     
     // help to call
-    private class HelpLoader implements Callable<Actor> {
+    private class HelpLoader implements Callable<Entity> {
 
         String loadId;
-        /**
-         * 是否正在载入中...
-         */
+        
+        /** 是否正在载入中...*/
         boolean calling;
         
         @Override
-        public Actor call() throws Exception {
+        public Entity call() throws Exception {
             calling = true;
-            Actor result = actorService.loadActor(loadId);
+            Entity result = Loader.load(loadId);
             calling = false;
             return result;
         }

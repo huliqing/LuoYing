@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.ly.data.DropData;
 import name.huliqing.ly.object.Loader;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * 掉落组，GroupDrop可以包含多个子掉落设置.
@@ -28,7 +28,7 @@ public class GroupDrop extends AbstractDrop {
     }
     
     @Override
-    public boolean doDrop(Actor source, Actor target) {
+    public boolean doDrop(Entity source, Entity target) {
         if (drops == null && dropIds != null) {
              if (dropIds != null && dropIds.length > 0) {
                 drops = new ArrayList<Drop>(dropIds.length);

@@ -9,7 +9,7 @@ import name.huliqing.ly.layer.service.TalentService;
 import name.huliqing.ly.network.Network;
 import name.huliqing.ly.mess.MessTalentAdd;
 import name.huliqing.ly.mess.MessTalentAddPoint;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * @author huliqing
@@ -25,7 +25,7 @@ public class TalentNetworkImpl implements TalentNetwork {
     }
     
     @Override
-    public void addTalent(Actor actor, String talentId) {
+    public void addTalent(Entity actor, String talentId) {
         if (NETWORK.isClient())
             return;
         
@@ -38,7 +38,7 @@ public class TalentNetworkImpl implements TalentNetwork {
     }
 
     @Override
-    public void addTalentPoints(Actor actor, String talentId, int points) {
+    public void addTalentPoints(Entity actor, String talentId, int points) {
         if (NETWORK.isClient())
             return;
         

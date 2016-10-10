@@ -7,8 +7,8 @@ package name.huliqing.ly.layer.service;
 import java.util.List;
 import name.huliqing.ly.data.AttributeData;
 import name.huliqing.ly.layer.network.AttributeNetwork;
-import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.object.attribute.Attribute;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.module.AttributeListener;
 
 /**
@@ -26,7 +26,7 @@ public interface AttributeService extends AttributeNetwork {
      * @param actor
      * @param attribute 
      */
-    void addAttribute(Actor actor, Attribute attribute);
+    void addAttribute(Entity actor, Attribute attribute);
     
     /**
      * 使用属性“ID”来查找属性,如果角色不存在指定属性则返回null.
@@ -35,7 +35,7 @@ public interface AttributeService extends AttributeNetwork {
      * @param attrId
      * @return 
      */
-    <T extends Attribute> T getAttributeById(Actor actor, String attrId);
+    <T extends Attribute> T getAttributeById(Entity actor, String attrId);
     
     /**
      * 使用属性“名称”来查找属性，如果角色不存在指定属性则返回null.
@@ -44,21 +44,21 @@ public interface AttributeService extends AttributeNetwork {
      * @param attrName
      * @return 
      */
-    <T extends Attribute> T getAttributeByName(Actor actor, String attrName);
+    <T extends Attribute> T getAttributeByName(Entity actor, String attrName);
     
     /**
      * 获取角色的所有属性
      * @param actor
      * @return 
      */
-    List<Attribute> getAttributes(Actor actor);
+    List<Attribute> getAttributes(Entity actor);
     
     /**
      * 给角色添加一个属性侦听器
      * @param actor
      * @param attributeListener 
      */    
-    void addListener(Actor actor, AttributeListener attributeListener);
+    void addListener(Entity actor, AttributeListener attributeListener);
     
     /**
      * 从角色身上移除一个属性侦听器
@@ -66,7 +66,7 @@ public interface AttributeService extends AttributeNetwork {
      * @param attributeListener
      * @return 
      */
-    boolean removeListener(Actor actor, AttributeListener attributeListener);
+    boolean removeListener(Entity actor, AttributeListener attributeListener);
     
     /**
      * 设置指定属性名称的值,属性类型必须是SimpleAttribute
@@ -75,7 +75,7 @@ public interface AttributeService extends AttributeNetwork {
      * @param attrName 属性名称
      * @param attrValue 
      */
-    <V extends Object> void setSimpleAttributeValue(Actor actor, String attrName, V attrValue);
+    <V extends Object> void setSimpleAttributeValue(Entity actor, String attrName, V attrValue);
     
     /**
      * 获取指定“名称“的NumberAttribute类型的属性的值，目标属性必须存在，并且必须是NubmerAttribute，
@@ -85,7 +85,7 @@ public interface AttributeService extends AttributeNetwork {
      * @param defValue 默认值，如果找不到指定的属性或属性不是NumberAttribute类型则返回这个默认值。
      * @return 
      */
-    float getNumberAttributeValue(Actor actor, String attrName, float defValue);
+    float getNumberAttributeValue(Entity actor, String attrName, float defValue);
     
     
 }

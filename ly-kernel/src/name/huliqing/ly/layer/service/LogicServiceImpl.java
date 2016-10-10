@@ -10,7 +10,7 @@ import name.huliqing.ly.constants.IdConstants;
 import name.huliqing.ly.data.LogicData;
 import name.huliqing.ly.object.Loader;
 import name.huliqing.ly.xml.DataFactory;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.logic.Logic;
 import name.huliqing.ly.object.module.LogicModule;
 
@@ -31,31 +31,31 @@ public class LogicServiceImpl implements LogicService {
     }
 
     @Override
-    public void addLogic(Actor actor, String logicId) {
+    public void addLogic(Entity actor, String logicId) {
         LogicData newLogic = DataFactory.createData(logicId);
         addLogic(actor, newLogic);
     }
 
     @Override
-    public void addLogic(Actor actor, LogicData logicData) {
+    public void addLogic(Entity actor, LogicData logicData) {
         Logic logic = Loader.loadLogic(logicData);
         addLogic(actor, logic);
     }
 
     @Override
-    public void addLogic(Actor actor, Logic logic) {
+    public void addLogic(Entity actor, Logic logic) {
         LogicModule module = actor.getModule(LogicModule.class);
         module.addLogic(logic);
     }
 
     @Override
-    public boolean removeLogic(Actor actor, Logic logic) {
+    public boolean removeLogic(Entity actor, Logic logic) {
         LogicModule module = actor.getModule(LogicModule.class);
         return module != null && module.removeLogic(logic);
     }
 
     @Override
-    public void clearLogics(Actor actor) {
+    public void clearLogics(Entity actor) {
         LogicModule module = actor.getModule(LogicModule.class);
         if (module == null)
             return;
@@ -70,7 +70,7 @@ public class LogicServiceImpl implements LogicService {
     }
 
     @Override
-    public void resetPlayerLogic(Actor actor) {
+    public void resetPlayerLogic(Entity actor) {
         clearLogics(actor);
         for (String logic : IdConstants.LOGIC_PLAYER) {
             addLogic(actor, logic);
@@ -78,13 +78,13 @@ public class LogicServiceImpl implements LogicService {
     }
 
     @Override
-    public boolean isAutoLogic(Actor actor) {
+    public boolean isAutoLogic(Entity actor) {
         LogicModule module = actor.getModule(LogicModule.class);
         return module != null && module.isAutoLogic();
     }
 
     @Override
-    public void setAutoLogic(Actor actor, boolean enabled) {
+    public void setAutoLogic(Entity actor, boolean enabled) {
         LogicModule module = actor.getModule(LogicModule.class);
         if (module != null) {
             module.setAutoLogic(enabled);
@@ -92,13 +92,13 @@ public class LogicServiceImpl implements LogicService {
     }
     
     @Override
-    public boolean isAutoDetect(Actor actor) {
+    public boolean isAutoDetect(Entity actor) {
         LogicModule module = actor.getModule(LogicModule.class);
         return module != null && module.isAutoDetect();
     }
     
     @Override
-    public void setAutoDetect(Actor actor, boolean autoDetect) {
+    public void setAutoDetect(Entity actor, boolean autoDetect) {
         LogicModule module = actor.getModule(LogicModule.class);
         if (module != null) {
             module.setAutoDetect(autoDetect);

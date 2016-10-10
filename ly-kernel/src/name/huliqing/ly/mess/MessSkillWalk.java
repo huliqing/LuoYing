@@ -9,7 +9,7 @@ import com.jme3.network.serializing.Serializable;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.layer.service.PlayService;
 import name.huliqing.ly.layer.service.SkillService;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.module.SkillModule;
 
 /**
@@ -64,7 +64,7 @@ public class MessSkillWalk extends MessBase {
     public void applyOnClient() {
         PlayService playService = Factory.get(PlayService.class);
         SkillService skillService = Factory.get(SkillService.class);
-        Actor actor = playService.findActor(actorId);
+        Entity actor = playService.getEntity(actorId);
         if (actor == null) return;
         skillService.playWalk(actor, actor.getModule(SkillModule.class).getSkill(skillId), dir, face, true);
     }

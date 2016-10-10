@@ -4,7 +4,7 @@
  */
 package name.huliqing.ly.object.module;
 
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * 角色监听器
@@ -18,7 +18,7 @@ public interface ActorListener {
      * @param sourceBeLocked 源角色
      * @param other 锁定目标的角色
      */
-    void onActorTargetLocked(Actor sourceBeLocked, Actor other);
+    void onActorTargetLocked(Entity sourceBeLocked, Entity other);
     
     /**
      * 当角色被从另一个角色的目标对象中释放时该方法被调用,
@@ -26,7 +26,7 @@ public interface ActorListener {
      * @param sourceBeReleased
      * @param other 
      */
-    void onActorTargetReleased(Actor sourceBeReleased, Actor other);
+    void onActorTargetReleased(Entity sourceBeReleased, Entity other);
     
     /**
      * 当角色对另一个目标进行了攻击时这个方法被调用, 这里要注意：攻击(hit)这里不一定是减益的，也可能是增益的hit,
@@ -39,7 +39,7 @@ public interface ActorListener {
      * @param killedByHit 目标(beHit)是否由于<b>这次攻击</b>而死亡, 如果角色已经死亡，
      * 但<b>不是</b>这次攻击造成的，则该参数为false.
      */
-    void onActorHitTarget(Actor sourceHitter, Actor beHit, String hitAttribute, float hitValue, boolean killedByHit);
+    void onActorHitTarget(Entity sourceHitter, Entity beHit, String hitAttribute, float hitValue, boolean killedByHit);
     
     /**
      * 当角色被击中时调用,即：当角色sourceBeHit受到hitter击中时触发该方法。
@@ -51,6 +51,6 @@ public interface ActorListener {
      * @param killedByHit 目标(beHit)是否由于<b>这次攻击</b>而死亡，如果角色已经死亡，
      * 但<b>不是</b>这次攻击造成的，则该参数为false.
      */
-    void onActorHitByTarget(Actor sourceBeHit, Actor hitter, String hitAttribute, float hitValue, boolean killedByHit);
+    void onActorHitByTarget(Entity sourceBeHit, Entity hitter, String hitAttribute, float hitValue, boolean killedByHit);
     
 }

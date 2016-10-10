@@ -6,7 +6,7 @@ package name.huliqing.ly.layer.network;
 
 import com.jme3.math.Vector3f;
 import name.huliqing.ly.Inject;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.skill.Skill;
 
 /**
@@ -19,7 +19,7 @@ public interface SkillNetwork extends Inject {
      * @param actor
      * @param skillId 
      */
-    void addSkill(Actor actor, String skillId);
+    void addSkill(Entity actor, String skillId);
     
     /**
      * 执行一个技能实例
@@ -29,7 +29,7 @@ public interface SkillNetwork extends Inject {
      * 任何限制，直接执行技能即，该方法将保证返回true。
      * @return 
      */
-    boolean playSkill(Actor actor, Skill skill, boolean force);
+    boolean playSkill(Entity actor, Skill skill, boolean force);
     
     // remove20161001
 //    /**
@@ -41,7 +41,7 @@ public interface SkillNetwork extends Inject {
 //     * 任何限制，直接执行技能即，该方法将保证返回true。
 //     * @return 
 //     */
-//    boolean playSkill(Actor actor, String skillId, boolean force);
+//    boolean playSkill(Entity actor, String skillId, boolean force);
     
     /**
      * 执行“步行”技能，步行的速度等受角色属性的影响
@@ -53,6 +53,6 @@ public interface SkillNetwork extends Inject {
      * 任何限制，直接执行技能即，该方法将保证返回true。
      * @return s
      */
-    boolean playWalk(Actor actor, Skill walkSkill, Vector3f dir, boolean faceToDir, boolean force);
+    boolean playWalk(Entity actor, Skill walkSkill, Vector3f dir, boolean faceToDir, boolean force);
     
 }

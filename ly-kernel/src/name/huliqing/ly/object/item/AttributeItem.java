@@ -9,7 +9,7 @@ import name.huliqing.ly.Factory;
 import name.huliqing.ly.data.ItemData;
 import name.huliqing.ly.layer.service.AttributeService;
 import name.huliqing.ly.layer.service.ItemService;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * 消耗品，用于为指定角色补充属性值的物品
@@ -33,7 +33,7 @@ public class AttributeItem extends AbstractItem {
     }
     
     @Override
-    public void use(Actor actor) {
+    public void use(Entity actor) {
         super.use(actor);
         
         // 补充属性值

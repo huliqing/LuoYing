@@ -11,7 +11,7 @@ import name.huliqing.ly.layer.network.TaskNetwork;
 import name.huliqing.ly.layer.service.PlayService;
 import name.huliqing.ly.layer.service.TaskService;
 import name.huliqing.ly.network.GameServer;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.task.Task;
 
 /**
@@ -45,7 +45,7 @@ public class MessTaskComplete extends MessBase {
         super.applyOnClient(); 
         TaskService taskService = Factory.get(TaskService.class);
         PlayService playService = Factory.get(PlayService.class);
-        Actor actor = playService.findActor(actorId);
+        Entity actor = playService.getEntity(actorId);
         if (actor == null)
             return;
         
@@ -60,7 +60,7 @@ public class MessTaskComplete extends MessBase {
     public void applyOnServer(GameServer gameServer, HostedConnection source) {
         super.applyOnServer(gameServer, source);
         PlayService playService = Factory.get(PlayService.class);
-        Actor actor = playService.findActor(actorId);
+        Entity actor = playService.getEntity(actorId);
         if (actor == null)
             return;
         

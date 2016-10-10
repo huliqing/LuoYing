@@ -15,7 +15,8 @@ import name.huliqing.ly.layer.service.SaveService;
 import name.huliqing.ly.layer.service.SkillService;
 import name.huliqing.ly.layer.service.StateService;
 import name.huliqing.ly.layer.service.ViewService;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.Loader;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  *
@@ -34,18 +35,18 @@ public class TestItem extends AbstractItem {
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
 
     @Override
-    public boolean canUse(Actor actor) {
+    public boolean canUse(Entity actor) {
         return true;
     }
     
     @Override
-    public void use(Actor actor) {
+    public void use(Entity actor) {
         super.use(actor);
         
-        Actor aa = actorService.loadActor("actorHard");
+        Entity aa = Loader.load("actorHard");
         actorService.setGroup(aa, 10);
         actorService.setLevel(aa, 2);
-        playNetwork.addActor(aa);
+        playNetwork.addEntity(actor.getScene(), aa);
         
     }
     

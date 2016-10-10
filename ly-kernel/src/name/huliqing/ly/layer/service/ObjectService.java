@@ -8,7 +8,7 @@ package name.huliqing.ly.layer.service;
 import java.util.List;
 import name.huliqing.ly.data.ObjectData;
 import name.huliqing.ly.layer.network.ObjectNetwork;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  *
@@ -29,7 +29,7 @@ public interface ObjectService extends ObjectNetwork {
      * @param id 
      * @return  
      */
-    ObjectData getData(Actor actor, String id);
+    ObjectData getData(Entity actor, String id);
     
     /**
      * 获取角色身上所有的物体,注：返回的列表不可以直接修改,只能作为只读使用。
@@ -37,7 +37,7 @@ public interface ObjectService extends ObjectNetwork {
      * @return 
      * @deprecated 
      */
-    List<ObjectData> getDatas(Actor actor);
+    List<ObjectData> getDatas(Entity actor);
     
     /**
      * 获取物体的价值

@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.ly.data.ObjectData;
 import name.huliqing.ly.object.Loader;
-import name.huliqing.ly.xml.DataFactory;
 import name.huliqing.ly.xml.DataProcessor;
 
 /**

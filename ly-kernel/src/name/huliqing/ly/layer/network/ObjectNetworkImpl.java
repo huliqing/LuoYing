@@ -11,8 +11,8 @@ import name.huliqing.ly.mess.MessProtoAdd;
 import name.huliqing.ly.mess.MessProtoRemove;
 import name.huliqing.ly.mess.MessProtoUse;
 import name.huliqing.ly.network.Network;
-import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.layer.service.ObjectService;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  *
@@ -28,7 +28,7 @@ public class ObjectNetworkImpl implements ObjectNetwork {
     }
     
     @Override
-    public void addData(Actor actor, String id, int count) {
+    public void addData(Entity actor, String id, int count) {
         if (network.isClient())
             return;
         
@@ -45,7 +45,7 @@ public class ObjectNetworkImpl implements ObjectNetwork {
     }
     
     @Override
-    public void removeData(Actor actor, String id, int count) {
+    public void removeData(Entity actor, String id, int count) {
         if (network.isClient())
             return;
         
@@ -63,7 +63,7 @@ public class ObjectNetworkImpl implements ObjectNetwork {
     }
 
     @Override
-    public void useData(Actor actor, ObjectData data) {
+    public void useData(Entity actor, ObjectData data) {
         if (network.isClient())
             return;
         if (data == null)

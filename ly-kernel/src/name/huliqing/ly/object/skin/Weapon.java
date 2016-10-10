@@ -5,7 +5,7 @@
  */
 package name.huliqing.ly.object.skin;
 
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.slot.Slot;
 
 /**
@@ -30,12 +30,12 @@ public interface Weapon extends Skin {
      * 抽出武器
      * @param actor 
      */
-    void takeOn(Actor actor);
+    void takeOn(Entity actor);
     
     /**
      * 收起武器,
      * @param actor 
      */
-    void takeOff(Actor actor);
+    void takeOff(Entity actor);
     
 }

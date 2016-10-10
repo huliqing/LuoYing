@@ -4,7 +4,7 @@
  */
 package name.huliqing.ly.object.skill;
 
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.module.ChannelModule;
 
 /**
@@ -15,7 +15,7 @@ public class HurtSkill extends AbstractSkill {
     private ChannelModule channelModule;
 
     @Override
-    public void setActor(Actor actor) {
+    public void setActor(Entity actor) {
         super.setActor(actor); 
         channelModule = actor.getModule(ChannelModule.class);
     }

@@ -8,15 +8,14 @@ package name.huliqing.ly.object.env;
 import com.jme3.light.DirectionalLight;
 import com.jme3.light.Light;
 import com.jme3.light.LightList;
-import com.jme3.math.Quaternion;
-import com.jme3.math.Vector3f;
 import com.jme3.shadow.CompareMode;
 import com.jme3.shadow.DirectionalLightShadowFilter;
 import com.jme3.shadow.EdgeFilteringMode;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.Ly;
-import name.huliqing.ly.data.env.EnvData;
+import name.huliqing.ly.data.EntityData;
 import name.huliqing.ly.layer.service.ConfigService;
+import name.huliqing.ly.object.entity.NoneModelEntity;
 import name.huliqing.ly.object.scene.Scene;
 import name.huliqing.ly.object.scene.SceneListener;
 import name.huliqing.ly.object.scene.SceneListenerAdapter;
@@ -24,9 +23,8 @@ import name.huliqing.ly.object.scene.SceneListenerAdapter;
 /**
  * 阴影环境(目前不支持移动设备), 给场景添加这个环境后，可以让场景中的物体有阴影效果
  * @author huliqing
- * @param <T>
  */
-public class ShadowEnv <T extends EnvData> extends AbstractEnv <T> {
+public class ShadowEnv extends NoneModelEntity {
     private final ConfigService configService = Factory.get(ConfigService.class);
 
     private float shadowIntensity = 0.7f;
@@ -38,7 +36,7 @@ public class ShadowEnv <T extends EnvData> extends AbstractEnv <T> {
     private SceneListener sceneListener;
     
     @Override
-    public void setData(T data) {
+    public void setData(EntityData data) {
         super.setData(data);
         shadowIntensity = data.getAsFloat("shadowIntensity", shadowIntensity);
         shadowMapSize = data.getAsInteger("shadowMapSize", shadowMapSize);
@@ -97,38 +95,5 @@ public class ShadowEnv <T extends EnvData> extends AbstractEnv <T> {
         // 如果找不到任何光源，则创建一个默认的
         filter.setLight(new DirectionalLight());
     }
-
-    @Override
-    public Vector3f getLocation() {
-        return data.getLocation();
-    }
-
-    @Override
-    public void setLocation(Vector3f location) {
-        data.setLocation(location);
-    }
-
-    @Override
-    public Quaternion getRotation() {
-        return data.getRotation();
-    }
-
-    @Override
-    public void setRotation(Quaternion rotation) {
-        data.setRotation(rotation);
-    }
-
-    @Override
-    public Vector3f getScale() {
-        return data.getScale();
-    }
-
-    @Override
-    public void setScale(Vector3f scale) {
-        data.setScale(scale);
-    }
-
-    
-
     
 }

@@ -15,7 +15,6 @@ import name.huliqing.ly.mess.MessMessage;
 import name.huliqing.ly.mess.MessActorTransform;
 import name.huliqing.ly.layer.network.PlayNetwork;
 import name.huliqing.ly.manager.ResourceManager;
-import name.huliqing.ly.object.actor.Actor;
 import com.jme3.app.Application;
 import com.jme3.network.HostedConnection;
 import com.jme3.network.Message;
@@ -24,17 +23,18 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.ly.layer.service.ActorService;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * 默认的服务端监听器,用于监听来自客户端连接的消息。
  * @author huliqing
  */
-public class DefaultServerListener extends AbstractServerListener<Actor> {
+public class DefaultServerListener extends AbstractServerListener<Entity> {
     private static final Logger LOG = Logger.getLogger(DefaultServerListener.class.getName());
     private final PlayService playService = Factory.get(PlayService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
-    private final List<Actor> syncObjects = new LinkedList<Actor>();
+    private final List<Entity> syncObjects = new LinkedList<Entity>();
     private float syncTimer = 0;
     private final float syncFrequency = 1f/5f;
     
@@ -49,7 +49,7 @@ public class DefaultServerListener extends AbstractServerListener<Actor> {
         syncTimer += tpf;
         if (syncTimer >= syncFrequency) {
             syncTimer = 0;
-            for (Actor actor : syncObjects) {
+            for (Entity actor : syncObjects) {
                 syncTempCache.setActorId(actor.getData().getUniqueId());
                 syncTempCache.setLocation(actor.getSpatial().getWorldTranslation());
                 syncTempCache.setWalkDirection(actorService.getWalkDirection(actor));
@@ -60,14 +60,14 @@ public class DefaultServerListener extends AbstractServerListener<Actor> {
     }
 
     @Override
-    public void addSyncObject(Actor syncObject) {
+    public void addSyncObject(Entity syncObject) {
         if (syncObject != null && !syncObjects.contains(syncObject)) {
             syncObjects.add(syncObject);
         }
     }
 
     @Override
-    public boolean removeSyncObject(Actor syncObject) {
+    public boolean removeSyncObject(Entity syncObject) {
         return syncObjects.remove(syncObject);
     }
 
@@ -82,22 +82,22 @@ public class DefaultServerListener extends AbstractServerListener<Actor> {
         if (cd == null)
             return;
         
-        Actor clientPlayer = playService.findActor(cd.getActorId());
+        Entity clientPlayer = playService.getEntity(cd.getEntityId());
         if (clientPlayer == null)
             return;
 
         // 1.将客户端角色的所有宠物移除出场景,注意是宠物，不要把非生命的（如防御塔）也一起移除
-        List<Actor> actors = playService.findAllActor();
+        List<Entity> actors = playService.getEntities(Entity.class, null);
         if (actors != null && !actors.isEmpty()) {
-            for (Actor actor : actors) {
+            for (Entity actor : actors) {
                 if (actorService.getOwner(actor) == clientPlayer.getData().getUniqueId() && actorService.isBiology(actor)) {
-                    playNetwork.removeObject(actor);
+                    playNetwork.removeEntity(actor);
                 }
             }
         }
 
         // 2.将客户端角色移除出场景
-        playNetwork.removeObject(clientPlayer);
+        playNetwork.removeEntity(clientPlayer);
 
         // 3.通知所有客户端（不含主机）
         String message = ResourceManager.get(ResConstants.LAN_CLIENT_EXISTS, new Object[] {clientPlayer.getData().getName()});

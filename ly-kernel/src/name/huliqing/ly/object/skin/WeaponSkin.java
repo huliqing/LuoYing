@@ -16,7 +16,7 @@ import name.huliqing.ly.Factory;
 import name.huliqing.ly.data.SkinData;
 import name.huliqing.ly.layer.service.SkillService;
 import name.huliqing.ly.object.Loader;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.module.SkinModule;
 import name.huliqing.ly.object.skill.SkinSkill;
 import name.huliqing.ly.object.slot.Slot;
@@ -90,7 +90,7 @@ public class WeaponSkin extends AbstractSkin implements Weapon {
     }
     
     @Override
-    public void attach(Actor actor) {
+    public void attach(Entity actor) {
         super.attach(actor);
         this.slot = null; //取消槽位占用
         // 如果当前角色的武器状态是"挂起"的，则应该把武器放到指定的槽位上。
@@ -102,7 +102,7 @@ public class WeaponSkin extends AbstractSkin implements Weapon {
     /**
      * 武器收起
      */
-    private void attachWeaponOff(Actor actor, Slot slot) {
+    private void attachWeaponOff(Entity actor, Slot slot) {
         // 如果找不到合适的槽位或者武器不支持槽位,则不处理
         this.slot = slot;
         if (this.slot == null) {
@@ -116,7 +116,7 @@ public class WeaponSkin extends AbstractSkin implements Weapon {
      * @param actor
      */
     @Override
-    public void takeOn(Actor actor) {
+    public void takeOn(Entity actor) {
         // 这里要直接清理一下，以避免上一次的takeOn执行过程还未结束的情况下导致冲突。
         hangControl.cleanup();
 
@@ -147,7 +147,7 @@ public class WeaponSkin extends AbstractSkin implements Weapon {
      * @param actor
      */
     @Override
-    public void takeOff(Actor actor) {
+    public void takeOff(Entity actor) {
         // 这里要直接清理一下，以防止上一次的执行过程还未结束的情况下导致冲突。
         hangControl.cleanup();
         
@@ -177,7 +177,7 @@ public class WeaponSkin extends AbstractSkin implements Weapon {
      * @param actor
      * @param skinData 
      */
-    private Slot getWeaponSlot(Actor actor) {
+    private Slot getWeaponSlot(Entity actor) {
         SkinModule sm = actor.getModule(SkinModule.class);
         // supportedSlots角色可以支持的武器槽位列表
         List<String> supportedSlots = sm.getSupportedSlots();
@@ -235,7 +235,7 @@ public class WeaponSkin extends AbstractSkin implements Weapon {
      */
     private class HangControl extends AbstractControl {
 
-        private Actor actor;
+        private Entity actor;
         private SkinSkill skinSkill;
         private boolean takeOn;
         private Slot takeOffSlot;
@@ -244,7 +244,7 @@ public class WeaponSkin extends AbstractSkin implements Weapon {
         private boolean initialized;
         private float timeUsed;
         
-        private void initialize(Actor actor, String hangSkill, boolean takeOn, Slot takeOffSlot) {
+        private void initialize(Entity actor, String hangSkill, boolean takeOn, Slot takeOffSlot) {
             if (initialized) {
                 // 防止bug
                 throw new IllegalStateException("HangControl is already initialized!");

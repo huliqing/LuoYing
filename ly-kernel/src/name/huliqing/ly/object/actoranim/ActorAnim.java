@@ -4,13 +4,13 @@
  */
 package name.huliqing.ly.object.actoranim;
 
-import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.object.anim.AbstractAnim;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * // xxx 
  * @author huliqing
  */
-public abstract class ActorAnim extends AbstractAnim<Actor> {
+public abstract class ActorAnim extends AbstractAnim<Entity> {
     
 }

@@ -10,9 +10,9 @@ import name.huliqing.ly.Factory;
 import name.huliqing.ly.layer.service.PlayService;
 import name.huliqing.ly.data.ConnData;
 import name.huliqing.ly.network.GameServer;
-import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.layer.service.ObjectService;
 import name.huliqing.ly.layer.network.ObjectNetwork;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * 删除物品数量
@@ -55,13 +55,12 @@ public class MessProtoRemove extends MessBase {
     @Override
     public void applyOnServer(GameServer gameServer, HostedConnection source) {
         PlayService playService = Factory.get(PlayService.class);
-        ObjectService protoService = Factory.get(ObjectService.class);
         ObjectNetwork protoNetwork = Factory.get(ObjectNetwork.class);
         
         ConnData cd = source.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
-        long clientActorId = cd.getActorId();
+        long clientActorId = cd.getEntityId();
 
-        Actor actor = playService.findActor(actorId);
+        Entity actor = playService.getEntity(actorId);
         if (actor != null) {
             if (actor.getData().getUniqueId() != clientActorId) {
                 
@@ -84,7 +83,7 @@ public class MessProtoRemove extends MessBase {
     @Override
     public void applyOnClient() {
         super.applyOnClient();
-        Actor actor = Factory.get(PlayService.class).findActor(actorId);
+        Entity actor = Factory.get(PlayService.class).getEntity(actorId);
         if (actor != null) {
             Factory.get(ObjectService.class).removeData(actor, objectId, amount);
         }

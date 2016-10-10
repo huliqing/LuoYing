@@ -7,9 +7,9 @@ package name.huliqing.ly.layer.service;
 import com.jme3.math.FastMath;
 import java.util.List;
 import name.huliqing.ly.Factory;
-import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.data.StateData;
 import name.huliqing.ly.object.Loader;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.xml.DataFactory;
 import name.huliqing.ly.object.module.StateListener;
 import name.huliqing.ly.object.module.StateModule;
@@ -30,7 +30,7 @@ public class StateServiceImpl implements StateService{
     }
     
     @Override
-    public float checkAddState(Actor actor, String stateId) {
+    public float checkAddState(Entity actor, String stateId) {
         // mark20160521,以后不要管是否是死亡都允许添加状态，能否添加状态由各自状态处理器去判断。
         // 角色死亡时不能再添加状态，
         // 1.因为角色在死亡时可能会全部清理身上的状态，这时候如果再允许添状态时可能会发生冲突.may NPE
@@ -76,7 +76,7 @@ public class StateServiceImpl implements StateService{
     }
     
     @Override
-    public boolean addState(Actor actor, String stateId, Actor sourceActor) {
+    public boolean addState(Entity actor, String stateId, Entity sourceActor) {
         // 如果resist >= 1.0则说明完全抵抗，则不添加
         float resist = checkAddState(actor, stateId);
         if (resist < 1.0f) {
@@ -87,7 +87,7 @@ public class StateServiceImpl implements StateService{
     }
     
     @Override
-    public void addStateForce(Actor actor, String stateId, float resist, Actor sourceActor) {
+    public void addStateForce(Entity actor, String stateId, float resist, Entity sourceActor) {
         // 创建Data
         StateData newStateData = DataFactory.createData(stateId);
         newStateData.setResist(resist);
@@ -101,7 +101,7 @@ public class StateServiceImpl implements StateService{
     }
 
     @Override
-    public final boolean removeState(Actor actor, String removeStateId) {
+    public final boolean removeState(Entity actor, String removeStateId) {
         StateModule module = actor.getModule(StateModule.class);
         if (module != null) {
             State state = module.getState(removeStateId);
@@ -111,7 +111,7 @@ public class StateServiceImpl implements StateService{
     }
 
     @Override
-    public State findState(Actor actor, String stateId) {
+    public State findState(Entity actor, String stateId) {
         StateModule module = actor.getModule(StateModule.class);
         if (module != null) {
             return module.getState(stateId);
@@ -120,7 +120,7 @@ public class StateServiceImpl implements StateService{
     }
 
     @Override
-    public void clearStates(Actor actor) {
+    public void clearStates(Entity actor) {
         StateModule module = actor.getModule(StateModule.class);
         if (module != null && module.getStates() != null) {
             for (State state : module.getStates()) {
@@ -130,13 +130,13 @@ public class StateServiceImpl implements StateService{
     }
     
     @Override
-    public boolean existsState(Actor actor, String stateId) {
+    public boolean existsState(Entity actor, String stateId) {
         StateModule module = actor.getModule(StateModule.class);
         return module != null && module.getState(stateId) != null;
     }
     
     @Override
-    public List<State> getStates(Actor actor) {
+    public List<State> getStates(Entity actor) {
         StateModule module = actor.getModule(StateModule.class);
         if (module != null) {
             return module.getStates();
@@ -145,7 +145,7 @@ public class StateServiceImpl implements StateService{
     }
 
     @Override
-    public void addListener(Actor actor, StateListener listener) {
+    public void addListener(Entity actor, StateListener listener) {
         StateModule module = actor.getModule(StateModule.class);
         if (module != null) {
             module.addStateListener(listener);
@@ -153,7 +153,7 @@ public class StateServiceImpl implements StateService{
     }
 
     @Override
-    public boolean removeListener(Actor actor, StateListener listener) {
+    public boolean removeListener(Entity actor, StateListener listener) {
         StateModule module = actor.getModule(StateModule.class);
         return module != null && module.removeStateListener(listener);
     }

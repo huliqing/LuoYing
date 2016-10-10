@@ -16,11 +16,12 @@ import java.util.logging.Logger;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.data.ModuleData;
 import name.huliqing.ly.layer.service.PlayService;
-import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.object.attribute.Attribute;
 import name.huliqing.ly.object.attribute.BooleanAttribute;
 import name.huliqing.ly.object.attribute.NumberAttribute;
 import name.huliqing.ly.object.attribute.ValueChangeListener;
+import name.huliqing.ly.object.entity.Entity;
+import name.huliqing.ly.object.entity.EntityFactory;
 
 /**
  * 角色的基本控制器
@@ -140,6 +141,7 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
         this.bindEssentialAttribute = data.getAsString("bindEssentialAttribute");
         this.bindBiologyAttribute = data.getAsString("bindBiologyAttribute");
         this.bindDeadAttribute = data.getAsString("bindDeadAttribute");
+        
     }
 
     @Override
@@ -152,9 +154,9 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     }
     
     @Override
-    public void initialize(Actor actor) {
+    public void initialize(Entity actor) {
         super.initialize(actor);
-        attributeModule = actor.getModule(AttributeModule.class);
+        attributeModule = (AttributeModule) actor.getModule(AttributeModule.class);
         
         healthAttribute = attributeModule.getAttributeByName(bindHealthAttribute, NumberAttribute.class);
         groupAttribute = attributeModule.getAttributeByName(bindGroupAttribute, NumberAttribute.class);
@@ -177,8 +179,11 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
         
         // 控制器
         this.innerControl = new BetterCharacterControlWrap(radius, height, getMass());
-        this.innerControl.setLocalForward(actor.getData().getLocalForward());
-        this.actor.getSpatial().addControl(innerControl);
+        Vector3f localForward = actor.getData().getAsVector3f("localForward");
+        if (localForward != null) {
+            this.innerControl.setLocalForward(localForward);
+        }
+        this.entity.getScene().getRoot().addControl(innerControl);
         
         // 
         Vector3f viewDirection = data.getAsVector3f(DATA_VIEW_DIRECTION);
@@ -194,7 +199,7 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     @Override
     public void cleanup() {
         if (innerControl != null) {
-            actor.getSpatial().removeControl(innerControl);
+            entity.getScene().getRoot().removeControl(innerControl);
         }
         if (targetAttribute != null) {
             targetAttribute.removeListener(this);
@@ -203,16 +208,16 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     }
     
     public Vector3f getLocation() {
-        return actor.getSpatial().getLocalTranslation();
+        return entity.getSpatial().getLocalTranslation();
     }
     
     public void setLocation(Vector3f location) {
-        actor.getSpatial().setLocalTranslation(location);
+        entity.getSpatial().setLocalTranslation(location);
         innerControl.warp(location);
     }
     
     public Quaternion getRotation() {
-        return actor.getSpatial().getLocalRotation();
+        return entity.getSpatial().getLocalRotation();
     }
     
     public void setRotation(Quaternion rotation) {
@@ -220,7 +225,7 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     }
     
     public void setScale(Vector3f scale) {
-        actor.getSpatial().setLocalScale(scale);
+        entity.getSpatial().setLocalScale(scale);
     }
     
     public Vector3f getWalkDirection() {
@@ -338,8 +343,8 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
      * @param target
      * @return 
      */
-    public boolean isEnemy(Actor target) {
-        if (target == null || target == actor) {
+    public boolean isEnemy(Entity target) {
+        if (target == null || target == entity) {
             return false;
         }
         // 如果目标分组值小于或等于0，则始终认为“不”是敌人，这样允许游戏添加一些无害的中立小动物
@@ -438,9 +443,12 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
      * 获取角色当前的目标,如果没有或者目标角色不存在则返回null.
      * @return 
      */
-    public Actor getTarget() {
+    public Entity getTarget() {
         if (targetAttribute != null) {
-            return playService.findActor(targetAttribute.longValue());
+            
+//            return playService.findActor(targetAttribute.longValue());
+            
+            return entity.getScene().getEntity(targetAttribute.longValue());
         }
         return null;
     }
@@ -449,7 +457,7 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
      * 设置当前角色的目标对象
      * @param target 目标对象的唯一ID
      */
-    public void setTarget(Actor target) {
+    public void setTarget(Entity target) {
         if (targetAttribute != null) {
             targetAttribute.setValue(target != null ? target.getData().getUniqueId() : -1L);
         }
@@ -460,19 +468,19 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
         // 当targetAttribute发生变化时触发侦听器
         if (attribute == targetAttribute) {
             // 释放旧目标的listener
-            Actor oldTarget = playService.findActor(oldValue.longValue());
+            Entity oldTarget = entity.getScene().getEntity(oldValue.longValue());
             if (oldTarget != null) {
                 ActorModule oldTargetActorModule = oldTarget.getModule(ActorModule.class);
                 if (oldTargetActorModule != null) {
-                    oldTargetActorModule.notifyActorTargetReleasedListener(actor);
+                    oldTargetActorModule.notifyActorTargetReleasedListener(entity);
                 }
             }
             // 锁定新目标的listener.
-            Actor newTarget = playService.findActor(newValue.longValue());
+            Entity newTarget = entity.getScene().getEntity(newValue.longValue());
             if (newTarget != null) {
                 ActorModule newTargetActorModule = newTarget.getModule(ActorModule.class);
                 if (newTargetActorModule != null) {
-                    newTargetActorModule.notifyActorTargetLockedListener(actor);
+                    newTargetActorModule.notifyActorTargetLockedListener(entity);
                 }
             }
             return;
@@ -651,7 +659,7 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
      * @param hitAttribute 属性名称
      * @param hitValue apply到指定属性的值，可正可负
      */
-    public void applyHit(Actor hitter, String hitAttribute, float hitValue) {
+    public void applyHit(Entity hitter, String hitAttribute, float hitValue) {
         NumberAttribute attr = attributeModule.getAttributeByName(hitAttribute, NumberAttribute.class);
         if (attr == null) {
             return;
@@ -667,9 +675,9 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
         
         // 通知攻击者，告诉攻击者：你已经击中一个目标。
         if (hitter != null) {
-            ActorModule hitterActorModule = hitter.getModule(ActorModule.class);
+            ActorModule hitterActorModule = EntityFactory.getModule(hitter, ActorModule.class);
             if (hitterActorModule != null) {
-                hitterActorModule.notifyActorHitOtherListener(actor, hitAttribute, hitValue, killed);
+                hitterActorModule.notifyActorHitOtherListener(entity, hitAttribute, hitValue, killed);
             }
         }
     }
@@ -678,12 +686,12 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
      * 通知侦听器，让侦听器知道当前角色(actor)已经被某一个目标(lockedByTarget)锁定。
      * @param lockedByTarget 
      */
-    private void notifyActorTargetLockedListener(Actor lockedByTarget) {
+    private void notifyActorTargetLockedListener(Entity lockedByTarget) {
         LOG.log(Level.INFO, "notifyActorTargetLockedListener, sourceBeLocked={0}, lockedByTarget={1}"
-                , new Object[] {actor.getData().getId(), lockedByTarget.getData().getId()});
+                , new Object[] {entity.getData().getId(), lockedByTarget.getData().getId()});
         if (actorListeners != null) {
             for (ActorListener lis : actorListeners) {
-                lis.onActorTargetLocked(actor, lockedByTarget);
+                lis.onActorTargetLocked(entity, lockedByTarget);
             }
         }
     }
@@ -692,12 +700,12 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
      * 通知侦听器，让侦听器知道当前角色(actor)已经被某一个目标(releasedByTarget)释放锁定。
      * @param releasedByTarget 
      */
-    private void notifyActorTargetReleasedListener(Actor releasedByTarget) {
+    private void notifyActorTargetReleasedListener(Entity releasedByTarget) {
         LOG.log(Level.INFO, "notifyActorTargetReleasedListener, sourceBeReleased={0}, releasedByTarget={1}"
-                , new Object[] {actor.getData().getId(), releasedByTarget.getData().getId()});
+                , new Object[] {entity.getData().getId(), releasedByTarget.getData().getId()});
         if (actorListeners != null) {
             for (ActorListener lis : actorListeners) {
-                lis.onActorTargetReleased(actor, releasedByTarget);
+                lis.onActorTargetReleased(entity, releasedByTarget);
             }
         }
     }
@@ -710,12 +718,12 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
      * @param hitValue
      * @param killedByHit
      */
-    private void notifyActorHitOtherListener(Actor actorBeHit, String hitAttribute, float hitValue, boolean killedByHit) {
+    private void notifyActorHitOtherListener(Entity actorBeHit, String hitAttribute, float hitValue, boolean killedByHit) {
         LOG.log(Level.INFO, "notifyActorHitOtherListener, actorBeHit={0}, hitAttribute={1}, hitValue={2}, killedByHit={3}"
                 , new Object[] {actorBeHit.getData().getId(), hitAttribute, hitValue, killedByHit});
         if (actorListeners != null) {
             for (ActorListener l : actorListeners) {
-                l.onActorHitTarget(actor, actorBeHit, hitAttribute, hitValue, killedByHit);
+                l.onActorHitTarget(entity, actorBeHit, hitAttribute, hitValue, killedByHit);
             }
         }
     }
@@ -727,12 +735,12 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
      * @param hitValue
      * @param killedByHit 
      */
-    private void notifyActorHitByTarget(Actor hitter, String hitAttribute, float hitValue, boolean killedByHit) {
+    private void notifyActorHitByTarget(Entity hitter, String hitAttribute, float hitValue, boolean killedByHit) {
         LOG.log(Level.INFO, "notifyActorHitByTarget, hitter={0}, hitAttribute={1}, hitValue={2}, killedByHit={3}"
                 , new Object[] {hitter != null ? hitter.getData().getId() : null, hitAttribute, hitValue, killedByHit});
         if (actorListeners != null) {
             for (ActorListener l : actorListeners) {
-                l.onActorHitByTarget(actor, hitter, hitAttribute, hitValue, killedByHit);
+                l.onActorHitByTarget(entity, hitter, hitAttribute, hitValue, killedByHit);
             }
         }
     }

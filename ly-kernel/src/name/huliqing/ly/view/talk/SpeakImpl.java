@@ -8,11 +8,11 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.util.TempVars;
 import name.huliqing.ly.Ly;
 import name.huliqing.ly.Factory;
-import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.enums.MessageType;
 import name.huliqing.ly.layer.service.ConfigService;
 import name.huliqing.ly.layer.service.PlayService;
 import name.huliqing.ly.manager.ResourceManager;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.ui.UIFactory;
 import name.huliqing.ly.utils.GeometryUtils;
 import name.huliqing.ly.utils.MathUtils;
@@ -29,7 +29,7 @@ public class SpeakImpl extends Speak {
     private final static ColorRGBA bgColor = new ColorRGBA(0,0,0,0.85f);
     
     // 说话的角色
-    private Actor actor;
+    private Entity actor;
     // 说话的内容
     private String mess;
     // 对话面板的最大宽度
@@ -48,14 +48,14 @@ public class SpeakImpl extends Speak {
      * @param mess 说话内容 
      * @param useTime 如果时间小于或等于0，则该时间会被重新自动计算 
      */
-    public SpeakImpl(Actor actor, String mess, float useTime) {
+    public SpeakImpl(Entity actor, String mess, float useTime) {
         this.actor = actor;
         this.mess = mess;
         this.useTime = useTime;
     }
 
     @Override
-    public Actor getActor() {
+    public Entity getActor() {
         return actor;
     }
     
@@ -86,12 +86,13 @@ public class SpeakImpl extends Speak {
         speakPanel.resize();
         maxDistanceSquared = configService.getSpeakMaxDistance() *  configService.getSpeakMaxDistance();
         
+        
         playService.addObject(speakPanel, true);
         
         // 在HUD上添加谈话内容,只要求角色在场景内，并且距离允许即可。不需要摄像机剔除检测。
         float distanceSquared = actor.getSpatial().getWorldTranslation()
                 .distanceSquared(Ly.getApp().getCamera().getLocation());
-        if (playService.isInScene(actor.getSpatial()) && checkDistance(distanceSquared)) {
+        if (actor.getScene() != null && checkDistance(distanceSquared)) {
             playService.addMessage(actor.getSpatial().getName() + ": " + mess, MessageType.talk);
         }
     }
@@ -99,7 +100,7 @@ public class SpeakImpl extends Speak {
     @Override
     protected void doLogic(float tpf) {
         // 1.角色已经不在场景中则直接结束
-        if (!playService.isInScene(actor)) {
+        if (actor.getScene() == null) {
             cleanup();
             return;
         }

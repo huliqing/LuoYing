@@ -5,11 +5,19 @@
 package name.huliqing.ly.object.action;
 
 import com.jme3.math.FastMath;
+import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
+import com.jme3.util.TempVars;
+import java.util.List;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.layer.service.ActorService;
 import name.huliqing.ly.layer.service.PlayService;
+import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
+import name.huliqing.ly.object.module.ActorModule;
+import name.huliqing.ly.utils.GeometryUtils;
 import name.huliqing.ly.utils.MathUtils;
+import name.huliqing.ly.utils.Temp;
 
 /**
  * 用射线检测方式避开障碍物
@@ -31,7 +39,7 @@ public class RayDetour extends Detour {
 
     @Override
     protected boolean isNeedDetour() {
-        if (actorService.hasObstacleActor(actor, playService.findAllActor())) {
+        if (hasObstacleActor(actor, playService.getEntities(Actor.class, null))) {
             return true;
         } else {
             return false;
@@ -53,5 +61,58 @@ public class RayDetour extends Detour {
         action.lock(lockTime);
     }
     
-    
+    private boolean hasObstacleActor(Entity self, List<Actor> actors) {
+        TempVars tv = TempVars.get();
+        Temp temp = Temp.get();
+        
+        ActorModule selfActorModule = self.getModule(ActorModule.class);
+        Vector3f viewDirection;
+        if (selfActorModule != null) {
+            viewDirection = selfActorModule.getViewDirection();
+        } else {
+            viewDirection = self.getSpatial().getWorldRotation().multLocal(new Vector3f(0,0,1));
+        }
+        
+        Vector3f origin = tv.vect1.set(self.getSpatial().getWorldBound().getCenter());
+        Vector3f dir = tv.vect2.set(viewDirection).normalizeLocal();
+        float zExtent = GeometryUtils.getBoundingVolumeZExtent(self.getSpatial());
+        origin.addLocal(dir.mult(zExtent, tv.vect3));
+        
+//        DebugDynamicUtils.debugArrow(self.toString(), origin, dir, zExtent);
+        
+        // 检查碰撞
+//        float checkDistance = zExtent;
+        float checkDistance = zExtent * 1.5f; // modify20160504, * 1.5f,稍微加大了一点距离
+        float checkDistanceSquare = checkDistance * checkDistance;
+        Vector3f targetOrigin = tv.vect4;
+        
+        boolean obstacle = false;
+        Ray ray = temp.ray;
+        ray.setOrigin(origin);
+        ray.setDirection(dir);
+        ray.setLimit(checkDistance);
+        for (Entity a : actors) {
+            if (a == self) {
+                continue;
+            }
+            
+            // 如果距离跳过checkDistance,则不视为障碍（该判断用于优化性能）
+            // 减少ray检测
+            targetOrigin.set(a.getSpatial().getWorldBound().getCenter());
+            if (targetOrigin.distanceSquared(origin) > checkDistanceSquare) {
+                continue;
+            }
+            
+            // 使用ray也可以，但是使用WorldBound可能性能更好一些。
+            if (a.getSpatial().getWorldBound().intersects(ray)) {
+                obstacle = true;
+                break;
+            }
+        }
+        
+        // 释放缓存
+        tv.release();
+        temp.release();
+        return obstacle;
+    }
 }

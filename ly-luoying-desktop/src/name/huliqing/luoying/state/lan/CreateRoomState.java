@@ -14,7 +14,7 @@ import name.huliqing.ly.Factory;
 import name.huliqing.ly.data.GameData;
 import name.huliqing.ly.layer.service.GameService;
 import name.huliqing.ly.manager.ResourceManager;
-import name.huliqing.ly.view.HelpView;
+import name.huliqing.luoying.view.HelpView;
 import name.huliqing.ly.ui.LinearLayout;
 import name.huliqing.ly.ui.UIFactory;
 import name.huliqing.ly.ui.state.UIState;

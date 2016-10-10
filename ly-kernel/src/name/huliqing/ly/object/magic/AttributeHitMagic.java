@@ -9,7 +9,7 @@ import java.util.List;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.data.MagicData;
 import name.huliqing.ly.layer.service.PlayService;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.skill.HitUtils;
 import name.huliqing.ly.utils.ConvertUtils;
 
@@ -71,11 +71,11 @@ public class AttributeHitMagic extends Magic {
     }
     
     private void applyHit() {
-        List<Actor> actors = playService.findAllActor();
+        List<Entity> actors = playService.findAllActor();
         if (actors.isEmpty()) 
             return;
         
-        for (Actor hitTarget : actors) {
+        for (Entity hitTarget : actors) {
             if (hitTarget.getSpatial().getWorldTranslation().distanceSquared(localRoot.getWorldTranslation()) <= distanceSquared) {
                 if (hitChecker == null || hitChecker.canHit(source, hitTarget)) {
                     for (AttributeWrap aw : attributes) {

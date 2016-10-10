@@ -16,9 +16,10 @@ import name.huliqing.ly.Ly;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.layer.network.PlayNetwork;
 import name.huliqing.ly.layer.service.ActorService;
-import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.layer.service.PlayService;
 import name.huliqing.ly.object.IntervalLogic;
+import name.huliqing.ly.object.Loader;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.utils.ThreadHelper;
 
 /**
@@ -38,7 +39,7 @@ public class ActorBuildSimpleLogic extends IntervalLogic {
          * 景之前。
          * @param actor 
          */
-        void onload(Actor actor);
+        void onload(Entity actor);
     }
     
     private List<ActorBuilder> datas = new ArrayList<ActorBuilder>();
@@ -86,8 +87,7 @@ public class ActorBuildSimpleLogic extends IntervalLogic {
         
         for (ActorBuilder data : datas) {
             if (data.actor != null) {
-                boolean inScene = playService.isInScene(data.actor);
-                if (inScene) {
+                if (data.actor.getScene() != null) {
                     // 角色还在场景中，不管是否死亡都不应该考虑刷新
                     continue;
                 } else if (data.deadTime <= 0) {
@@ -126,14 +126,14 @@ public class ActorBuildSimpleLogic extends IntervalLogic {
         public float interval;
         
         // 刷新的角色
-        public Actor actor;
+        public Entity actor;
         
         // 最近角色的死亡时间,0表示未死亡
         public long deadTime;
         
-        private Future<Actor> future;
+        private Future<Entity> future;
         
-        private Callback callback;
+        private final Callback callback;
         
         public ActorBuilder(Vector3f position, String[] actorIds, float interval, Callback callback) {
             this.position = position;
@@ -143,10 +143,10 @@ public class ActorBuildSimpleLogic extends IntervalLogic {
         }
         
         public void rebuild() {
-            future = ThreadHelper.submit(new Callable<Actor>() {
+            future = ThreadHelper.submit(new Callable<Entity>() {
                 @Override
-                public Actor call() throws Exception {
-                    return actorService.loadActor(actorIds[FastMath.nextRandomInt(0, actorIds.length - 1)]);
+                public Entity call() throws Exception {
+                    return Loader.load(actorIds[FastMath.nextRandomInt(0, actorIds.length - 1)]);
                 }
             });
         }
@@ -174,7 +174,7 @@ public class ActorBuildSimpleLogic extends IntervalLogic {
                     if (callback != null) {
                         callback.onload(actor);
                     }
-                    playNetwork.addActor(actor);
+                    playNetwork.addEntity(actor);
                     deadTime = 0;
                     future = null;
                 } catch (Exception e) {

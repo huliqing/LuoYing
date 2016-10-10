@@ -12,7 +12,7 @@ import name.huliqing.ly.object.action.Action;
 import name.huliqing.ly.object.action.FightAction;
 import name.huliqing.ly.object.action.FollowAction;
 import name.huliqing.ly.object.action.RunAction;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.module.ActionModule;
 
 /**
@@ -38,7 +38,7 @@ public class ActionServiceImpl implements ActionService {
     }
     
     @Override
-    public void playAction(Actor actor, Action action) {
+    public void playAction(Entity actor, Action action) {
         // action可能为null. 当action=null的时候会结束角色当前的行为
         if (action != null) {
             action.setActor(actor);
@@ -47,7 +47,7 @@ public class ActionServiceImpl implements ActionService {
     }
 
     @Override
-    public void playRun(Actor actor, Vector3f pos) {
+    public void playRun(Entity actor, Vector3f pos) {
         ActionModule module = getActionModule(actor);
         RunAction ra = module.getDefRunAction();
         // 如果角色没有指定默认“跑路”行为，则为角色创建一个。
@@ -67,7 +67,7 @@ public class ActionServiceImpl implements ActionService {
      * @param target 战斗目标
      */
     @Override
-    public void playFight(Actor actor, Actor target, String skillId) {
+    public void playFight(Entity actor, Entity target, String skillId) {
         ActionModule module = getActionModule(actor);
         FightAction fa = module.getDefFightAction();
         // 如果角色没有指定特定的战斗行为，则为角色创建一个。
@@ -89,30 +89,30 @@ public class ActionServiceImpl implements ActionService {
     }
 
     @Override
-    public boolean isPlayingFight(Actor actor) {
+    public boolean isPlayingFight(Entity actor) {
         ActionModule control = getActionModule(actor);
         Action current = control.getAction();
         return current instanceof FightAction;
     }
 
     @Override
-    public boolean isPlayingRun(Actor actor) {
+    public boolean isPlayingRun(Entity actor) {
         Action current = getActionModule(actor).getAction();
         return current instanceof RunAction;
     }
 
     @Override
-    public boolean isPlayingFollow(Actor actor) {
+    public boolean isPlayingFollow(Entity actor) {
         Action current = getActionModule(actor).getAction();
         return current instanceof FollowAction;
     }
 
     @Override
-    public Action getPlayingAction(Actor actor) {
+    public Action getPlayingAction(Entity actor) {
         return getActionModule(actor).getAction();
     }
     
-    private ActionModule getActionModule(Actor actor) {
+    private ActionModule getActionModule(Entity actor) {
         return actor.getModule(ActionModule.class);
     }
 }

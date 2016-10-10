@@ -11,11 +11,10 @@ import name.huliqing.ly.Factory;
 import name.huliqing.ly.constants.SkillConstants;
 import name.huliqing.ly.layer.service.SkillService;
 import name.huliqing.ly.mess.MessActorAddSkill;
-import name.huliqing.ly.mess.MessActorSetTarget;
 import name.huliqing.ly.mess.MessSkillPlay;
 import name.huliqing.ly.mess.MessSkillWalk;
 import name.huliqing.ly.layer.service.PlayService;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.module.SkillModule;
 import name.huliqing.ly.object.skill.Skill;
 
@@ -37,7 +36,7 @@ public class SkillNetworkImpl implements SkillNetwork {
     }
     
     @Override
-    public void addSkill(Actor actor, String skillId) {
+    public void addSkill(Entity actor, String skillId) {
         if (!NETWORK.isClient()) {
             // 1.broadcast to all client
             MessActorAddSkill mess = new MessActorAddSkill();
@@ -57,7 +56,7 @@ public class SkillNetworkImpl implements SkillNetwork {
      * @param force
      */
     @Override
-    public boolean playSkill(Actor actor, Skill skill, boolean force) {
+    public boolean playSkill(Entity actor, Skill skill, boolean force) {
         if (skill == null)
             return false;
         
@@ -122,13 +121,13 @@ public class SkillNetworkImpl implements SkillNetwork {
    
     // remove20161001
 //    @Override
-//    public boolean playSkill(Actor actor, String skillId, boolean force) {
+//    public boolean playSkill(Entity actor, String skillId, boolean force) {
 //        Skill skill = skillService.getSkill(actor, skillId);
 //        return playSkill(actor, skill, force);
 //    }
 
     @Override
-    public boolean playWalk(Actor actor, Skill walkSkill, Vector3f dir, boolean faceToDir, boolean force) {
+    public boolean playWalk(Entity actor, Skill walkSkill, Vector3f dir, boolean faceToDir, boolean force) {
         MessSkillWalk mess = new MessSkillWalk();
         mess.setActorId(actor.getData().getUniqueId());
         mess.setDir(dir);

@@ -16,15 +16,15 @@ import name.huliqing.ly.constants.ResConstants;
 import name.huliqing.ly.data.ChatData;
 import name.huliqing.ly.data.ObjectData;
 import name.huliqing.ly.data.define.CostObject;
-import name.huliqing.ly.layer.network.UserCommandNetwork;
+//import name.huliqing.luoying.network.UserCommandNetwork;
 import name.huliqing.ly.layer.service.ActorService;
 import name.huliqing.ly.layer.service.ItemService;
 import name.huliqing.ly.layer.service.PlayService;
 import name.huliqing.ly.layer.service.SkinService;
-import name.huliqing.ly.view.Footer;
-import name.huliqing.ly.view.transfer.SimpleTransferPanel;
-import name.huliqing.ly.view.transfer.TabTransferPanel;
-import name.huliqing.ly.view.transfer.TransferPanel;
+import name.huliqing.luoying.view.Footer;
+import name.huliqing.luoying.view.transfer.SimpleTransferPanel;
+import name.huliqing.luoying.view.transfer.TabTransferPanel;
+import name.huliqing.luoying.view.transfer.TransferPanel;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.ly.object.Loader;
 import name.huliqing.ly.xml.DataFactory;
@@ -53,7 +53,7 @@ public class SellChat<T extends ChatData> extends Chat<T> {
     private final ActorService actorService = Factory.get(ActorService.class);
     private final SkinService skinService = Factory.get(SkinService.class);
     private final PlayService playService = Factory.get(PlayService.class);
-    private final UserCommandNetwork userCommandNetwork = Factory.get(UserCommandNetwork.class);
+//    private final UserCommandNetwork userCommandNetwork = Factory.get(UserCommandNetwork.class);
 
     // 物品售出时的折扣,取值0.0~1.0, 当玩家卖给NPC时会打折扣
     private float discount = 1f;

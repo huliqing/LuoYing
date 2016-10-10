@@ -5,7 +5,7 @@
 package name.huliqing.ly.object.talent;
 
 import name.huliqing.ly.data.TalentData;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * @author huliqing
@@ -13,7 +13,7 @@ import name.huliqing.ly.object.actor.Actor;
  */
 public abstract class AbstractTalent<T extends TalentData> implements Talent<T> {
     protected T data;
-    protected Actor actor;
+    protected Entity actor;
 
     /**
      * 天赋的当前等级
@@ -74,7 +74,7 @@ public abstract class AbstractTalent<T extends TalentData> implements Talent<T> 
     }
     
     @Override
-    public void setActor(Actor actor) {
+    public void setActor(Entity actor) {
         this.actor = actor;
     }
     

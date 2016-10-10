@@ -15,10 +15,10 @@ import java.util.logging.Logger;
 import name.huliqing.ly.data.ChannelData;
 import name.huliqing.ly.data.ObjectData;
 import name.huliqing.ly.object.Loader;
-import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.object.actor.ActorModelLoader;
 import name.huliqing.ly.object.channel.Channel;
 import name.huliqing.ly.object.channel.ChannelControl;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.utils.Temp;
 
 /**
@@ -45,7 +45,7 @@ public class ChannelModule extends AbstractModule implements ChannelControl {
     private AnimControl animControl;
 
     @Override
-    public void initialize(Actor actor) {
+    public void initialize(Entity actor) {
         super.initialize(actor);
         animControl = actor.getSpatial().getControl(AnimControl.class);
         
@@ -75,7 +75,7 @@ public class ChannelModule extends AbstractModule implements ChannelControl {
         
         channel.setAnimControl(animControl);
         channels.add(channel);
-        actor.getData().addObjectData(channel.getData());
+        entity.getData().addObjectData(channel.getData());
 
         // 更新完整通道ID
         if (fullChannelsIds == null) {
@@ -152,7 +152,7 @@ public class ChannelModule extends AbstractModule implements ChannelControl {
         if (animControl.getAnim(animName) != null) {
             return true;
         } else {
-            return ActorModelLoader.loadExtAnim(actor, animName);
+            return ActorModelLoader.loadExtAnim(entity, animName);
         }
     }
     

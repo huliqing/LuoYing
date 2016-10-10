@@ -6,7 +6,7 @@ package name.huliqing.ly.object.action;
 
 import name.huliqing.ly.data.ActionData;
 import name.huliqing.ly.xml.DataProcessor;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  *
@@ -54,5 +54,5 @@ public interface Action<T extends ActionData> extends DataProcessor<T>{
      * 设置执行行为的角色。
      * @param actor 
      */
-    void setActor(Actor actor);
+    void setActor(Entity actor);
 }

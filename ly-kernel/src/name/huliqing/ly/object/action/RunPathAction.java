@@ -17,9 +17,8 @@ import java.util.logging.Logger;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.data.ActionData;
 import name.huliqing.ly.layer.network.SkillNetwork;
-import name.huliqing.ly.layer.service.ActorService;
 import name.huliqing.ly.layer.service.PlayService;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.module.ActorModule;
 import name.huliqing.ly.object.module.SkillModule;
 import name.huliqing.ly.object.skill.Skill;
@@ -32,7 +31,7 @@ import name.huliqing.ly.utils.ThreadHelper;
  */
 public class RunPathAction extends AbstractAction implements RunAction{
     private final PlayService playService = Factory.get(PlayService.class);
-    private final ActorService actorService = Factory.get(ActorService.class);
+//    private final ActorService actorService = Factory.get(ActorService.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
     private ActorModule actorModule;
     private SkillModule skillModule;
@@ -70,18 +69,22 @@ public class RunPathAction extends AbstractAction implements RunAction{
     
     public RunPathAction() {
         super();
-        finder = playService.createPathfinder();
+        
+        // remove,暂不支持寻路
+//        finder = playService.createPathfinder();
     }
     
     @Override
     public void setData(ActionData data) {
         super.setData(data);
         debug = data.getAsBoolean("debug", debug);
-        finder = playService.createPathfinder();
+
+        // remove,暂不支持寻路
+//        finder = playService.createPathfinder();
     }
 
     @Override
-    public void setActor(Actor actor) {
+    public void setActor(Entity actor) {
         super.setActor(actor);
         actorModule = actor.getModule(ActorModule.class);
         skillModule = actor.getModule(SkillModule.class);

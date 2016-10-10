@@ -7,7 +7,7 @@ package name.huliqing.ly.object.skill;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.data.SkillData;
 import name.huliqing.ly.layer.service.PlayService;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.module.ChannelModule;
 
 /**
@@ -28,7 +28,7 @@ public class DeadSkill extends AbstractSkill {
     }
 
     @Override
-    public void setActor(Actor actor) {
+    public void setActor(Entity actor) {
         super.setActor(actor); 
         channelModule = actor.getModule(ChannelModule.class);
     }
@@ -52,7 +52,10 @@ public class DeadSkill extends AbstractSkill {
     @Override
     public void cleanup() {
         if (remove) {
-            playService.removeObject(actor.getSpatial());
+            
+//            playService.removeObject(actor.getSpatial());
+
+            actor.removeFromScene();
         }
         super.cleanup(); 
     }

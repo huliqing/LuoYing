@@ -6,6 +6,7 @@ package name.huliqing.ly.layer.network;
 
 import name.huliqing.ly.Inject;
 import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  *
@@ -22,7 +23,7 @@ public interface StateNetwork extends Inject {
      * @param stateId
      * @return resist
      */
-    float checkAddState(Actor actor, String stateId);
+    float checkAddState(Entity actor, String stateId);
     
     /**
      * 给角色添加一个状态,注意：如果当前角色身上已经存在相同ID的状态，则旧的
@@ -33,7 +34,7 @@ public interface StateNetwork extends Inject {
      * @param sourceActor 产生这个状态的源角色，如果不存在，则设置为null。
      * @return 
      */
-    boolean addState(Actor actor, String stateId, Actor sourceActor);
+    boolean addState(Entity actor, String stateId, Entity sourceActor);
     
     /**
      * 强制添加状态到角色身上,注：这个方法不会检查角色的抵抗值以及其它。
@@ -45,7 +46,7 @@ public interface StateNetwork extends Inject {
      * 0表示无抵消作用，1.0表示完全抵消状态的作用。
      * @param sourceActor 产生这个状态的源角色，如果不存在，则设置为null。 
      */
-    void addStateForce(Actor actor, String stateId, float resist, Actor sourceActor);
+    void addStateForce(Entity actor, String stateId, float resist, Entity sourceActor);
 
     /**
      * 从角色身上删除指定ID的状态，如果存在多个相同ID的状态，则一并被移除。
@@ -53,6 +54,6 @@ public interface StateNetwork extends Inject {
      * @param stateId 
      * @return  
      */
-    boolean removeState(Actor actor, String stateId);
+    boolean removeState(Entity actor, String stateId);
     
 }

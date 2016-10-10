@@ -4,20 +4,11 @@
  */
 package name.huliqing.ly.object.game;
 
-import com.jme3.app.Application;
-import com.jme3.app.state.AbstractAppState;
-import com.jme3.app.state.AppStateManager;
-import java.util.ArrayList;
+import com.jme3.scene.Spatial;
 import java.util.List;
-import name.huliqing.ly.Factory;
 import name.huliqing.ly.data.GameData;
-import name.huliqing.ly.data.GameLogicData;
-import name.huliqing.ly.layer.service.GameLogicService;
-import name.huliqing.ly.object.Loader;
 import name.huliqing.ly.xml.DataProcessor;
-import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.object.gamelogic.GameLogic;
-import name.huliqing.ly.object.gamelogic.GameLogicManager;
 import name.huliqing.ly.object.scene.Scene;
 import name.huliqing.ly.object.task.Task;
 
@@ -28,157 +19,86 @@ import name.huliqing.ly.object.task.Task;
  * @author huliqing
  * @param <T>
  */
-public abstract class Game<T extends GameData> extends AbstractAppState implements DataProcessor<T> {
+public interface Game<T extends GameData> extends DataProcessor<T> {
+   
+    /**
+     * 初始化游戏
+     */
+    void initialize();
     
-    public interface GameListener {
-        /**
-         * 当游戏开始后
-         * @param game
-         */
-        void onGameStarted(Game game);
-    }
-    
-    protected T data;
-    protected Application app;
-    // 游戏侦听器
-    protected List<GameListener> listeners; 
-    // 扩展逻辑
-    protected GameLogicManager gameLogicManager;
-    // 场景
-    protected Scene scene;
-
-    @Override
-    public void setData(T data) {
-        this.data = data;
-    }
-
-    @Override
-    public T getData() {
-        return data;
-    }
-
-    @Override
-    public void updateDatas() {
-        // ignore
-    }
-
-    public Application getApp() {
-        return app;
-    }
-
-    public void setApp(Application app) {
-        this.app = app;
-    }
+    /**
+     * 判断游戏是否已经初始化
+     * @return 
+     */
+    boolean isInitialized();
 
     /**
-     * 设置场景
+     * 更新游戏逻辑
+     * @param tpf 
+     */
+    void update(float tpf);
+    
+    /**
+     * 清理并释放资源
+     */
+    void cleanup();
+    
+    /**
+     * 设置游戏场景
      * @param scene 
      */
-    public void setScene(Scene scene) {
-        this.scene = scene;
-    }
+    void setScene(Scene scene);
 
     /**
      * 获取当前游戏场景
      * @return 
      */
-    public Scene getScene() {
-        return scene;
-    }
+    Scene getScene();
     
-    @Override
-    public final void initialize(AppStateManager stateManager, Application app) {
-        super.initialize(stateManager, app); 
-        this.app = app;
-        
-        // 初始化游戏逻辑数据
-        gameLogicManager = new GameLogicManager(this, GameLogic.class);
-        List<GameLogicData> logics = data.getGameLogics();
-        if (logics != null) {
-            for (GameLogicData gld : logics) {
-                GameLogic gl = Loader.load(gld);
-                gameLogicManager.attach(gl);
-            }
-        }
-        
-        // 初始化游戏，由子类实现决定。
-        gameInitialize();
-        
-        // 执行侦听器。
-        if (listeners != null) {
-            for (GameListener gl : listeners) {
-                gl.onGameStarted(this);
-            }
-        }
-    }
-
-    @Override
-    public void update(float tpf) {
-        super.update(tpf);
-        gameLogicManager.update(tpf);
-    }
-        
     /**
-     * 清理并结束当前游戏
+     * 设置GUI场景
+     * @param scene 
      */
-    @Override
-    public void cleanup() {
-        if (listeners != null) {
-            listeners.clear();
-        }
-        gameLogicManager.cleanup();
-        super.cleanup();
-    }
+    void setGuiScene(Scene scene);
     
     /**
-     * 添加一个子游戏逻辑
+     * 获取GUI场景
+     * @return 
+     */
+    Scene getGuiScene();
+    
+    /**
+     * 添加一个游戏逻辑
      * @param logic 
      */
-    public void addLogic(GameLogic logic) {
-        gameLogicManager.attach(logic);
-    }
+    void addLogic(GameLogic logic);
     
     /**
-     * 移除一个子游戏逻辑
+     * 移除一个游戏逻辑
      * @param logic 
      * @return  
      */
-    public boolean removeLogic(GameLogic logic) {
-        return gameLogicManager.detach(logic);
-    }
+    boolean removeLogic(GameLogic logic);
+    
+    /**
+     * 获取当前游戏中运行的所有逻辑,返回的列表不能直接修改。增加或删除逻辑需要使用 <br>
+     * {@link #addLogic(name.huliqing.ly.object.gamelogic.GameLogic) }<br>
+     * {@link #removeLogic(name.huliqing.ly.object.gamelogic.GameLogic) }<br>
+     * @return 
+     */
+    List<GameLogic> getLogics();
     
     /**
      * 添加游戏侦听器
      * @param listener 
      */
-    public void addListener(GameListener listener) {
-        if (listeners == null) {
-            listeners = new ArrayList<GameListener>(2);
-        }
-        if (!listeners.contains(listener)) {
-            listeners.add(listener);
-        }
-    }
+    void addListener(GameListener listener);
     
     /**
      * 移除指定的游戏侦听器，如果不存在则返回false.
      * @param listener
      * @return 
      */
-    public boolean removeListener(GameListener listener) {
-        return listeners != null && listeners.remove(listener);
-    }
+    boolean removeListener(GameListener listener);
 
-    /**
-     * 当玩家选择一个角色时触发该方法,注意：这个player可能是来自客户端，也可能是来自服务端的。
-     * @param player 
-     */
-    public void onPlayerSelected(Actor player) {
-        // 由子类按需要覆盖
-    }
-        
-    /**
-     * 初始化游戏数据
-     */
-    protected abstract void gameInitialize();
 }

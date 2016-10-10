@@ -14,7 +14,7 @@ import name.huliqing.ly.Factory;
 import name.huliqing.ly.data.ActionData;
 import name.huliqing.ly.layer.network.SkillNetwork;
 import name.huliqing.ly.layer.service.ActorService;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.module.SkillListener;
 import name.huliqing.ly.object.module.SkillModule;
 import name.huliqing.ly.object.skill.Skill;
@@ -272,12 +272,12 @@ public class IdlePatrolAction extends AbstractAction implements IdleAction, Skil
     }
 
     @Override
-    public void onSkillAdded(Actor actor, Skill skill) {
+    public void onSkillAdded(Entity actor, Skill skill) {
         recacheIdleSkill();
     }
 
     @Override
-    public void onSkillRemoved(Actor actor, Skill skill) {
+    public void onSkillRemoved(Entity actor, Skill skill) {
         recacheIdleSkill();
     }
 

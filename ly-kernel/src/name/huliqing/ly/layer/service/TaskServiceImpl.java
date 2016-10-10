@@ -7,7 +7,7 @@ package name.huliqing.ly.layer.service;
 import java.util.List;
 import name.huliqing.ly.data.TaskData;
 import name.huliqing.ly.object.Loader;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.module.TaskListener;
 import name.huliqing.ly.object.module.TaskModule;
 import name.huliqing.ly.object.task.Task;
@@ -37,7 +37,7 @@ public class TaskServiceImpl implements TaskService {
     }
     
     @Override
-    public void addTask(Actor actor, Task task) {
+    public void addTask(Entity actor, Task task) {
         TaskModule control = actor.getModule(TaskModule.class);
         if (control != null) {
             control.addTask(task);
@@ -45,7 +45,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task getTask(Actor actor, String taskId) {
+    public Task getTask(Entity actor, String taskId) {
         TaskModule control = actor.getModule(TaskModule.class);
         if (control != null) {
             return control.getTask(taskId);
@@ -54,7 +54,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<Task> getTasks(Actor actor) {
+    public List<Task> getTasks(Entity actor) {
         TaskModule module = actor.getModule(TaskModule.class);
         if (module != null) {
             return module.getTasks();
@@ -63,7 +63,7 @@ public class TaskServiceImpl implements TaskService {
     }
     
     @Override
-    public List<TaskData> getTaskDatas(Actor actor) {
+    public List<TaskData> getTaskDatas(Entity actor) {
 //        TaskModule module = actor.getModule(TaskModule.class);
 //        if (module != null) {
 //            return module.getTaskDatas();
@@ -74,13 +74,13 @@ public class TaskServiceImpl implements TaskService {
     }
     
     @Override
-    public boolean checkCompletion(Actor actor, Task task) {
+    public boolean checkCompletion(Entity actor, Task task) {
         checkValidState(actor, task);
         return task.checkCompletion();
     }
     
     @Override
-    public void completeTask(Actor actor, Task task) {
+    public void completeTask(Entity actor, Task task) {
         TaskModule control = actor.getModule(TaskModule.class);
         if (control != null) {
             control.completeTask(task);
@@ -88,20 +88,20 @@ public class TaskServiceImpl implements TaskService {
     }
     
     @Override
-    public void applyItem(Actor actor, Task task, String itemId, int amount) {
+    public void applyItem(Entity actor, Task task, String itemId, int amount) {
         checkValidState(actor, task);
         TaskData data = task.getData();
         data.applyTaskItem(itemId, amount);
     }
 
     @Override
-    public int getItemTotal(Actor actor, Task task, String itemId) {
+    public int getItemTotal(Entity actor, Task task, String itemId) {
         checkValidState(actor, task);
         return task.getData().getTaskItemTotal(itemId);
     }
 
     @Override
-    public void addTaskListener(Actor actor, TaskListener taskListener) {
+    public void addTaskListener(Entity actor, TaskListener taskListener) {
         TaskModule control = actor.getModule(TaskModule.class);
         if (control != null) {
             control.addTaskListener(taskListener);
@@ -109,13 +109,13 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public boolean removeTaskListener(Actor actor, TaskListener taskListener) {
+    public boolean removeTaskListener(Entity actor, TaskListener taskListener) {
         TaskModule control = actor.getModule(TaskModule.class);
         return control != null && control.removeTaskListener(taskListener);
     }
     
     // 检查任务状态是否正常
-    private void checkValidState(Actor actor, Task task) {
+    private void checkValidState(Entity actor, Task task) {
         if (task.getActor() != actor) 
             throw new IllegalStateException("Task state error by execute actor, task=" + task.getId()
                     + ", actor=" + actor.getData().getId());

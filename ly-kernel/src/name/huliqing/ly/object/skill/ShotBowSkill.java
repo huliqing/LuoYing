@@ -20,7 +20,7 @@ import name.huliqing.ly.Factory;
 import name.huliqing.ly.data.SkillData;
 import name.huliqing.ly.layer.service.PlayService;
 import name.huliqing.ly.object.Loader;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.module.ActorModule;
 import name.huliqing.ly.object.module.SkinModule;
 import name.huliqing.ly.object.skin.Skin;
@@ -78,7 +78,7 @@ public class ShotBowSkill extends ShotSkill {
     }
 
     @Override
-    public void setActor(Actor actor) {
+    public void setActor(Entity actor) {
         super.setActor(actor);
         actorModule = actor.getModule(ActorModule.class);
         skinModule = actor.getModule(SkinModule.class);        
@@ -131,7 +131,7 @@ public class ShotBowSkill extends ShotSkill {
                 ) {
             
             // 目标角色
-            Actor target = actorModule.getTarget();
+            Entity target = actorModule.getTarget();
             
             TempVars tv = TempVars.get();
             Vector3f viewPos = tv.vect1;

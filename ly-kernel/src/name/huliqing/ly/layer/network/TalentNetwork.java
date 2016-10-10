@@ -5,7 +5,7 @@
 package name.huliqing.ly.layer.network;
 
 import name.huliqing.ly.Inject;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * @author huliqing
@@ -17,7 +17,7 @@ public interface TalentNetwork extends Inject {
      * @param actor
      * @param talentId 
      */
-    void addTalent(Actor actor, String talentId);
+    void addTalent(Entity actor, String talentId);
     
     /**
      * 增加角色某个天赋的点数,注：角色必须拥有足够的可用天赋点数才能增加。
@@ -26,6 +26,6 @@ public interface TalentNetwork extends Inject {
      * @param talentId 天赋ID
      * @param points 增加的点数，必须是正数
      */
-    void addTalentPoints(Actor actor, String talentId, int points);
+    void addTalentPoints(Entity actor, String talentId, int points);
     
 }

@@ -7,7 +7,7 @@ package name.huliqing.luoying;
 
 import name.huliqing.ly.data.GameData;
 import name.huliqing.ly.save.SaveStory;
-import name.huliqing.ly.state.StoryServerPlayState;
+import name.huliqing.luoying.state.StoryServerPlayState;
 
 /**
  *

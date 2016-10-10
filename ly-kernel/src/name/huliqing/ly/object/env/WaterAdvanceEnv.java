@@ -8,13 +8,13 @@ package name.huliqing.ly.object.env;
 import com.jme3.light.DirectionalLight;
 import com.jme3.light.Light;
 import com.jme3.light.LightList;
-import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.texture.Texture2D;
 import com.jme3.water.WaterFilter;
 import com.jme3.water.WaterFilter.AreaShape;
 import name.huliqing.ly.Ly;
-import name.huliqing.ly.data.env.EnvData;
+import name.huliqing.ly.data.EntityData;
+import name.huliqing.ly.object.entity.NoneModelEntity;
 import name.huliqing.ly.object.scene.Scene;
 import name.huliqing.ly.object.scene.SceneListener;
 import name.huliqing.ly.object.scene.SceneListenerAdapter;
@@ -22,9 +22,8 @@ import name.huliqing.ly.object.scene.SceneListenerAdapter;
 /**
  *
  * @author huliqing
- * @param <T>
  */
-public class WaterAdvanceEnv <T extends EnvData> extends AbstractEnv<T> implements WaterEnv<T> {
+public class WaterAdvanceEnv  extends NoneModelEntity implements WaterEnv {
 
     private String causticsTexture;
     private String foamTexture;
@@ -43,7 +42,7 @@ public class WaterAdvanceEnv <T extends EnvData> extends AbstractEnv<T> implemen
     private SceneListener sceneListener;
     
     @Override
-    public void setData(T data) {
+    public void setData(EntityData data) {
         super.setData(data); 
         this.causticsTexture = data.getAsString("causticsTexture");
         this.foamTexture = data.getAsString("foamTexture");
@@ -54,8 +53,6 @@ public class WaterAdvanceEnv <T extends EnvData> extends AbstractEnv<T> implemen
         Vector3f center = data.getAsVector3f("center");
         if (center != null) {
             water.setCenter(center);
-        } else {
-            water.setCenter(data.getLocation());
         }
 
         water.setColorExtinction(data.getAsVector3f("colorExtinction", water.getColorExtinction()));
@@ -104,11 +101,7 @@ public class WaterAdvanceEnv <T extends EnvData> extends AbstractEnv<T> implemen
 
     @Override
     public void updateDatas() {
-        if (initialized) {
-            if (water.getCenter() != null) {
-                data.setLocation(water.getCenter());
-            }
-        }
+        // ignore
     }
 
     @Override
@@ -196,46 +189,6 @@ public class WaterAdvanceEnv <T extends EnvData> extends AbstractEnv<T> implemen
             }            
         }
     }
-    
-    @Override
-    public Vector3f getLocation() {
-        if (initialized) {
-            if (water.getCenter() != null) {
-                return water.getCenter();
-            }
-        }
-        return data.getLocation();
-    }
-
-    @Override
-    public void setLocation(Vector3f location) {
-        if (initialized) {
-            water.setCenter(location);
-            return;
-        }
-        data.setLocation(location);
-    }
-
-    @Override
-    public Quaternion getRotation() {
-        return data.getRotation();
-    }
-
-    @Override
-    public void setRotation(Quaternion rotation) {
-        // ignore
-    }
-
-    @Override
-    public Vector3f getScale() {
-        return data.getScale();
-    }
-
-    @Override
-    public void setScale(Vector3f scale) {
-        // ignore
-    }
-    
     
     // 控制潮涨潮落
 //    private class WaterControl extends AbstractControl {

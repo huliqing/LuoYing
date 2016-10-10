@@ -13,6 +13,7 @@ import name.huliqing.ly.layer.service.ActorService;
 import name.huliqing.ly.layer.service.AttributeService;
 import name.huliqing.ly.layer.service.PlayService;
 import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * 用于修改场景中角色属性值的游戏逻辑，可用于如：为场景中所有角色提示生命值恢复，魔法值恢复，等。
@@ -57,7 +58,7 @@ public class AttributeChangeGameLogic<T extends GameLogicData> extends AbstractG
     
     @Override
     protected void doLogic(float tpf) {
-        List<Actor> actors = playService.findAllActor();
+        List<Actor> actors = playService.getEntities(Actor.class, null);
         if (actors == null || actors.isEmpty())
             return;
         
@@ -69,7 +70,7 @@ public class AttributeChangeGameLogic<T extends GameLogicData> extends AbstractG
         }
     }
     
-    private void updateAttribute(Actor actor) {
+    private void updateAttribute(Entity actor) {
         // useAttribute是角色的已有属性，这个属性的值将影响最终的apply值。
         // 比如角色的属性（生命恢复速度)将影响这个游戏逻辑最终要修改角色生命值的属性。
         float useAttributeValue = attributeService.getNumberAttributeValue(actor, useAttribute, 0);

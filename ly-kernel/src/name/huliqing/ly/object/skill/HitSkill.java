@@ -24,6 +24,7 @@ import name.huliqing.ly.layer.service.MagicService;
 import name.huliqing.ly.layer.service.PlayService;
 import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.object.el.HitEl;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.hitchecker.HitChecker;
 import name.huliqing.ly.object.magic.Magic;
 import name.huliqing.ly.object.module.ActorModule;
@@ -100,7 +101,7 @@ public abstract class HitSkill extends AbstractSkill {
     }
 
     @Override
-    public void setActor(Actor actor) {
+    public void setActor(Entity actor) {
         super.setActor(actor); 
         actorModule = actor.getModule(ActorModule.class);
     }
@@ -111,7 +112,7 @@ public abstract class HitSkill extends AbstractSkill {
         
         // 注：这里target必须不能是自己(actor),否则在faceTo时会导致在执行animation
         // 的时候模型的头发和武器错位,即不能faceTo自己，所以target != actor的判断必须的。
-        Actor target = actorService.getTarget(actor);
+        Entity target = actorService.getTarget(actor);
         if (target != null && target != actor) {
             actorService.setLookAt(actor, actorService.getLocation(target));
         }
@@ -136,9 +137,9 @@ public abstract class HitSkill extends AbstractSkill {
         actorService.findNearestActors(actor, hitDistance, hitAngle, store);
 
         // 移除不能作为目标的角色,注：mainTarget要单独处理
-        Actor mainTarget = actorService.getTarget(actor);
+        Entity mainTarget = actorService.getTarget(actor);
         Iterator<Actor> it = store.iterator();
-        Actor temp;
+        Entity temp;
         while (it.hasNext()) {
             temp = it.next();
             if (temp == mainTarget || !hitChecker.canHit(actor, temp)) {
@@ -170,7 +171,7 @@ public abstract class HitSkill extends AbstractSkill {
      * HIT目标角色。由子类调用
      * @param target 
      */
-    protected void applyHit(Actor target) {
+    protected void applyHit(Entity target) {
         // 角色刚好已经脱离场景，则什么也不做。
         if (!playService.isInScene(target)) {
             return;
@@ -195,7 +196,7 @@ public abstract class HitSkill extends AbstractSkill {
      * @param target
      * @param hitMagics 
      */
-    private void applyMagics(Actor target, String[] hitMagics) {
+    private void applyMagics(Entity target, String[] hitMagics) {
         if (hitMagics == null)
             return;
         for (String mId : hitMagics) {
@@ -208,7 +209,7 @@ public abstract class HitSkill extends AbstractSkill {
         }
     }
     
-    private void applyStates(Actor target, List<SkillStateWrap> stateWraps) {
+    private void applyStates(Entity target, List<SkillStateWrap> stateWraps) {
         if (stateWraps == null)
             return;
         
@@ -230,7 +231,7 @@ public abstract class HitSkill extends AbstractSkill {
      * @param hitEl 技能计算公式
      * @param attribute 指定攻击的是哪一个属性
      */
-    private void applyHit(Actor attacker, Actor target, float skillValue, String hitEl, String attribute) {
+    private void applyHit(Entity attacker, Entity target, float skillValue, String hitEl, String attribute) {
         if (hitEl == null) {
             return;
         }
@@ -247,7 +248,7 @@ public abstract class HitSkill extends AbstractSkill {
         if (actor == null || hitChecker == null)
             return SkillConstants.STATE_UNDEFINE;
         
-        Actor target = actorModule.getTarget();
+        Entity target = actorModule.getTarget();
         if (target == null) {
             return SkillConstants.STATE_TARGET_NOT_FOUND;
         }
@@ -266,7 +267,7 @@ public abstract class HitSkill extends AbstractSkill {
      * @param target
      * @return 
      */
-    public boolean isInHitDistance(Actor target) {
+    public boolean isInHitDistance(Entity target) {
         if (target == null) {
             return false;
         }
@@ -280,7 +281,7 @@ public abstract class HitSkill extends AbstractSkill {
      * @param target
      * @return 
      */
-    public boolean isInHitAngle(Actor target) {
+    public boolean isInHitAngle(Entity target) {
         // 如果在技能的攻击视角之外，则视为false(限制distance > 1是避免当距离太近时角度判断不正确。)
         return actorService.getViewAngle(actor, target.getSpatial().getWorldTranslation()) * 2 < hitAngle;
     }
@@ -288,9 +289,9 @@ public abstract class HitSkill extends AbstractSkill {
     /**
      * 用于来对目标进行排序，按距离当前角色从近到远
      */
-    private class TargetsComparator implements Comparator<Actor> {
+    private class TargetsComparator implements Comparator<Entity> {
         @Override
-        public int compare(Actor o1, Actor o2) {
+        public int compare(Entity o1, Entity o2) {
             Vector3f selfPos = actorService.getLocation(actor);
             float dis1 = o1.getSpatial().getWorldTranslation().distanceSquared(selfPos);
             float dis2 = o2.getSpatial().getWorldTranslation().distanceSquared(selfPos);

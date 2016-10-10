@@ -6,7 +6,7 @@
 package name.huliqing.ly.object.module;
 
 import name.huliqing.ly.data.ModuleData;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * Module的抽象类,所有角色模块可以直接继承自这个基类
@@ -18,7 +18,7 @@ public abstract class AbstractModule<T extends ModuleData> implements Module<T> 
     protected T data;
     protected boolean initialized;
     protected int moduleOrder;
-    protected Actor actor;
+    protected Entity entity;
 
     @Override
     public void setData(T data) {
@@ -37,11 +37,11 @@ public abstract class AbstractModule<T extends ModuleData> implements Module<T> 
     }
     
     @Override
-    public void initialize(Actor actor) {
+    public void initialize(Entity entity) {
         if (initialized) {
             throw new IllegalStateException("Module is already initialized! module=" + getClass());
         }
-        this.actor = actor;
+        this.entity = entity;
         initialized = true;
     }
 
@@ -56,8 +56,8 @@ public abstract class AbstractModule<T extends ModuleData> implements Module<T> 
     }
 
     @Override
-    public Actor getActor() {
-        return actor;
+    public Entity getEntity() {
+        return entity;
     }
     
 }

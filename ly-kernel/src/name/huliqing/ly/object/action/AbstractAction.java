@@ -4,8 +4,8 @@
  */
 package name.huliqing.ly.object.action;
 
-import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.data.ActionData;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * 行为逻辑基础
@@ -17,7 +17,7 @@ public abstract class AbstractAction<T extends ActionData> implements Action<T> 
     private boolean initialized;
     
     protected T data;
-    protected Actor actor;
+    protected Entity actor;
     // 行为是否正在执行
     protected boolean started;
     
@@ -116,7 +116,7 @@ public abstract class AbstractAction<T extends ActionData> implements Action<T> 
      * @param actor 
      */
     @Override
-    public void setActor(Actor actor) {
+    public void setActor(Entity actor) {
         this.actor = actor;
     }
     

@@ -8,7 +8,7 @@ import java.util.List;
 import name.huliqing.ly.data.TalentData;
 import name.huliqing.ly.object.Loader;
 import name.huliqing.ly.xml.DataFactory;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.module.TalentListener;
 import name.huliqing.ly.object.module.TalentModule;
 import name.huliqing.ly.object.talent.Talent;
@@ -25,13 +25,13 @@ public class TalentServiceImpl implements TalentService {
     }
 
     @Override
-    public void addTalent(Actor actor, String talentId) {
+    public void addTalent(Entity actor, String talentId) {
         TalentData data = DataFactory.createData(talentId);
         addTalent(actor, data);
     }
 
     @Override
-    public void addTalent(Actor actor, TalentData talentData) {
+    public void addTalent(Entity actor, TalentData talentData) {
         TalentModule module = actor.getModule(TalentModule.class);
         if (module != null) {
             module.addTalent((Talent) Loader.load(talentData));
@@ -39,7 +39,7 @@ public class TalentServiceImpl implements TalentService {
     }
 
     @Override
-    public void addTalent(Actor actor, Talent talent) {
+    public void addTalent(Entity actor, Talent talent) {
         TalentModule module = actor.getModule(TalentModule.class);
         if (module != null) {
             module.addTalent(talent);
@@ -47,7 +47,7 @@ public class TalentServiceImpl implements TalentService {
     }
 
     @Override
-    public void removeTalent(Actor actor, String talentId) {
+    public void removeTalent(Entity actor, String talentId) {
         TalentModule module = actor.getModule(TalentModule.class);
         if (module != null) {
             Talent talent = module.getTalent(talentId);
@@ -58,7 +58,7 @@ public class TalentServiceImpl implements TalentService {
     }
 
     @Override
-    public List<Talent> getTalents(Actor actor) {
+    public List<Talent> getTalents(Entity actor) {
         TalentModule module = actor.getModule(TalentModule.class);
         if (module != null) {
             return module.getTalents();
@@ -67,7 +67,7 @@ public class TalentServiceImpl implements TalentService {
     }
 
     @Override
-    public int getTalentPoints(Actor actor) {
+    public int getTalentPoints(Entity actor) {
         TalentModule module = actor.getModule(TalentModule.class);
         if (module != null) {
             return module.getTalentPoints();
@@ -77,7 +77,7 @@ public class TalentServiceImpl implements TalentService {
 
     // remove20160821
 //    @Override
-//    public void setTalentPoints(Actor actor, int talentPoints) {
+//    public void setTalentPoints(Entity actor, int talentPoints) {
 //        TalentModule module = actor.getModule(TalentModule.class);
 //        if (module != null) {
 //            module.setTalentPoints(talentPoints);
@@ -85,7 +85,7 @@ public class TalentServiceImpl implements TalentService {
 //    }
     
     @Override
-    public void addTalentPoints(Actor actor, String talentId, int points) {
+    public void addTalentPoints(Entity actor, String talentId, int points) {
         TalentModule module = actor.getModule(TalentModule.class);
         if (module != null) {
             module.addTalentPoints(talentId, points);
@@ -93,7 +93,7 @@ public class TalentServiceImpl implements TalentService {
     }
 
     @Override
-    public void addTalentListener(Actor actor, TalentListener talentListener) {
+    public void addTalentListener(Entity actor, TalentListener talentListener) {
         TalentModule module = actor.getModule(TalentModule.class);
         if (module != null) {
             module.addTalentListener(talentListener);
@@ -101,7 +101,7 @@ public class TalentServiceImpl implements TalentService {
     }
 
     @Override
-    public void removeTalentListener(Actor actor, TalentListener talentListener) {
+    public void removeTalentListener(Entity actor, TalentListener talentListener) {
         TalentModule module = actor.getModule(TalentModule.class);
         if (module != null) {
             module.removeTalentListener(talentListener);

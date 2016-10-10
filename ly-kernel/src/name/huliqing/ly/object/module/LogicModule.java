@@ -14,9 +14,9 @@ import name.huliqing.ly.data.ModuleData;
 import name.huliqing.ly.layer.service.ActorService;
 import name.huliqing.ly.layer.service.AttributeService;
 import name.huliqing.ly.object.Loader;
-import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.object.logic.Logic;
 import name.huliqing.ly.object.attribute.BooleanAttribute;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * 逻辑控制器，控制角色的所有逻辑的运行。
@@ -45,13 +45,13 @@ public class LogicModule extends AbstractModule {
     }
     
     @Override
-    public void initialize(Actor actor) {
+    public void initialize(Entity actor) {
         super.initialize(actor);
         updateControl = new AdapterControl() {
             @Override
             public void update(float tpf) {logicUpdate(tpf);}
         };
-        this.actor.getSpatial().addControl(updateControl);
+        this.entity.getSpatial().addControl(updateControl);
         
         // 绑定“自动AI”属性
         autoLogicAttribute = attributeService.getAttributeByName(actor, bindAutoLogicAttribute);
@@ -68,7 +68,7 @@ public class LogicModule extends AbstractModule {
     }
     
     private void logicUpdate(float tpf) {
-        if (actorService.isDead(actor)) {
+        if (actorService.isDead(entity)) {
             return;
         }
         if (!isAutoLogic()) {
@@ -86,7 +86,7 @@ public class LogicModule extends AbstractModule {
         }
         logics.clear();
         if (updateControl != null) {
-            actor.getSpatial().removeControl(updateControl);
+            entity.getSpatial().removeControl(updateControl);
         }
         super.cleanup(); 
     }
@@ -96,9 +96,9 @@ public class LogicModule extends AbstractModule {
             return;
         
         logics.add(logic);
-        actor.getData().addObjectData(logic.getData());
+        entity.getData().addObjectData(logic.getData());
         
-        logic.setActor(actor);
+        logic.setActor(entity);
         logic.initialize();
     }
 
@@ -106,7 +106,7 @@ public class LogicModule extends AbstractModule {
         if (!logics.contains(logic))
             return false;
         
-        actor.getData().removeObjectData(logic.getData());
+        entity.getData().removeObjectData(logic.getData());
         logics.remove(logic);
         logic.cleanup();
         return true;

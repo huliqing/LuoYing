@@ -5,9 +5,8 @@
  */
 package name.huliqing.ly.object.scene;
 
-import com.jme3.post.SceneProcessor;
 import com.jme3.scene.Spatial;
-import name.huliqing.ly.object.SceneObject;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * 场景侦听器的适配器
@@ -21,32 +20,12 @@ public class SceneListenerAdapter implements SceneListener {
     }
 
     @Override
-    public void onSceneObjectAdded(Scene scene, SceneObject objectAdded) {
+    public void onSceneEntityAdded(Scene scene, Entity objectAdded) {
         // 子类覆盖
     }
 
     @Override
-    public void onSceneObjectRemoved(Scene scene, SceneObject objectRemoved) {
-        // 子类覆盖
-    }
-
-    @Override
-    public void onSpatialAdded(Scene scene, Spatial spatialAdded) {
-        // 子类覆盖
-    }
-
-    @Override
-    public void onSpatialRemoved(Scene scene, Spatial spatialRemoved) {
-        // 子类覆盖
-    }
-
-    @Override
-    public void onProcessorAdded(Scene scene, SceneProcessor processorAdded) {
-        // 子类覆盖
-    }
-
-    @Override
-    public void onProcessorRemoved(Scene scene, SceneProcessor processorRemoved) {
+    public void onSceneEntityRemoved(Scene scene, Entity objectRemoved) {
         // 子类覆盖
     }
     

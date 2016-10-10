@@ -9,7 +9,7 @@ import java.util.Map;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.data.ElData;
 import name.huliqing.ly.layer.service.AttributeService;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.utils.ConvertUtils;
 
 /**
@@ -31,7 +31,7 @@ public class HitEl<T extends ElData> extends AbstractEl<T> {
      * @param target 技能目标角色
      * @return 
      */
-    public synchronized float getValue(Actor source, float sourceSkillValue, Actor target) {
+    public synchronized float getValue(Entity source, float sourceSkillValue, Entity target) {
         String strResult;
         
         // params中包含的是带有"{}"符号的参数，如果params为空，则说明没有表达式中没有特殊参数需要替换值,

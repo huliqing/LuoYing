@@ -10,7 +10,7 @@ import com.jme3.util.TempVars;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.layer.service.ActorService;
 import name.huliqing.ly.layer.service.PlayService;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * 用于动态同步角色的位置,使用各种方式来平滑同步客户端与服务端角色的位置
@@ -64,7 +64,7 @@ public class MessActorTransform extends MessBase {
     public void applyOnClient() {
         PlayService playService = Factory.get(PlayService.class);
         ActorService actorService = Factory.get(ActorService.class);
-        Actor actor = playService.findActor(actorId);
+        Entity actor = playService.getEntity(actorId);
         if (actor == null) {
             return;
         }
@@ -138,7 +138,7 @@ public class MessActorTransform extends MessBase {
 //    @Override
 //    public void applyOnClient() {
 //        PlayService playService = Factory.get(PlayService.class);
-//        Actor actor = playService.findActor(actorId);
+//        Entity actor = playService.findActor(actorId);
 //        if (actor == null) {
 //            return;
 //        }
@@ -203,7 +203,7 @@ public class MessActorTransform extends MessBase {
 //    @Override
 //    public void applyOnClient() {
 //        PlayService playService = Factory.get(PlayService.class);
-//        Actor actor = playService.findActor(actorId);
+//        Entity actor = playService.findActor(actorId);
 //        if (actor == null) {
 //            return;
 //        }
@@ -244,7 +244,7 @@ public class MessActorTransform extends MessBase {
 //    @Override
 //    public void applyOnClient() {
 //        PlayService playService = Factory.get(PlayService.class);
-//        Actor actor = playService.findActor(actorId);
+//        Entity actor = playService.findActor(actorId);
 //        if (actor == null) {
 //            return;
 //        }
@@ -284,7 +284,7 @@ public class MessActorTransform extends MessBase {
 //    @Override
 //    public void applyOnClient() {
 //        PlayService playService = Factory.get(PlayService.class);
-//        Actor actor = playService.findActor(actorId);
+//        Entity actor = playService.findActor(actorId);
 //        if (actor == null) {
 //            return;
 //        }

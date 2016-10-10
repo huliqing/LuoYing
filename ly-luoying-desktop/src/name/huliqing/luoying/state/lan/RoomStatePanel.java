@@ -8,7 +8,7 @@ import java.util.List;
 import name.huliqing.ly.data.GameData;
 import name.huliqing.ly.data.ConnData;
 import name.huliqing.ly.manager.ResourceManager;
-import name.huliqing.ly.view.ClientsView;
+import name.huliqing.luoying.view.ClientsView;
 import name.huliqing.ly.utils.MathUtils;
 import name.huliqing.ly.ui.Window;
 

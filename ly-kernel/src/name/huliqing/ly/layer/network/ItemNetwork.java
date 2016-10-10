@@ -6,7 +6,7 @@
 package name.huliqing.ly.layer.network;
 
 import name.huliqing.ly.Inject;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  *
@@ -20,7 +20,7 @@ public interface ItemNetwork extends Inject  {
      * @param itemId
      * @param count 
      */
-    void addItem(Actor actor, String itemId, int count);
+    void addItem(Entity actor, String itemId, int count);
 
     /**
      * 移除角色身上的物品
@@ -28,13 +28,13 @@ public interface ItemNetwork extends Inject  {
      * @param itemId
      * @param count 要移除的数量,可能比角色实际拥有的数量大
      */
-    void removeItem(Actor actor, String itemId, int count);
+    void removeItem(Entity actor, String itemId, int count);
     
     /**
      * 让角色使用物品
      * @param actor
      * @param itemId  
      */
-    void useItem(Actor actor, String itemId);
+    void useItem(Entity actor, String itemId);
     
 }

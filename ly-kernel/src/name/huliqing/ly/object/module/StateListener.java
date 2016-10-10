@@ -4,7 +4,7 @@
  */
 package name.huliqing.ly.object.module;
 
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.state.State;
 
 /**
@@ -19,7 +19,7 @@ public interface StateListener {
      * @param source 被添加了状态的角色
      * @param stateAdded 添加的状态
      */
-    void onStateAdded(Actor source, State stateAdded);
+    void onStateAdded(Entity source, State stateAdded);
     
     /**
      * 该方法在状态被成功从角色source身上移除时触发,即成功从角色成上移除后
@@ -27,5 +27,5 @@ public interface StateListener {
      * @param source
      * @param stateRemoved 
      */
-    void onStateRemoved(Actor source, State stateRemoved);
+    void onStateRemoved(Entity source, State stateRemoved);
 }

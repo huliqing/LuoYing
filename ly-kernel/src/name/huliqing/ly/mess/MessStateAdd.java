@@ -8,7 +8,7 @@ import com.jme3.network.serializing.Serializable;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.layer.service.PlayService;
 import name.huliqing.ly.layer.service.StateService;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  *
@@ -62,8 +62,8 @@ public class MessStateAdd extends MessBase {
     public void applyOnClient() {
         PlayService playService = Factory.get(PlayService.class);
         StateService stateService = Factory.get(StateService.class);
-        Actor actor = playService.findActor(actorId);
-        Actor sourceActor = playService.findActor(sourceActorId);
+        Entity actor = playService.getEntity(actorId);
+        Entity sourceActor = playService.getEntity(sourceActorId);
         if (actor != null) {
             stateService.addStateForce(actor, stateId, resist, sourceActor);
         }

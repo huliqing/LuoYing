@@ -5,7 +5,7 @@
 package name.huliqing.ly.layer.network;
 
 import name.huliqing.ly.Inject;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.task.Task;
 
 /**
@@ -19,14 +19,14 @@ public interface TaskNetwork extends Inject {
      * @param actor
      * @param task
      */
-    void addTask(Actor actor, Task task);
+    void addTask(Entity actor, Task task);
     
     /**
      * 完成指定的任务
      * @param actor
      * @param task
      */
-    void completeTask(Actor actor, Task task);
+    void completeTask(Entity actor, Task task);
     
     /**
      * 增加或减少任务物品的数量,任务物品并不作为普通物品一样存放在角色包裹上
@@ -36,7 +36,7 @@ public interface TaskNetwork extends Inject {
      * @param itemId 任务物品ID
      * @param amount 要增加或减少的任务物品数量，可正可负 
      */
-    void applyItem(Actor actor, Task task, String itemId, int amount);
+    void applyItem(Entity actor, Task task, String itemId, int amount);
     
     
 }

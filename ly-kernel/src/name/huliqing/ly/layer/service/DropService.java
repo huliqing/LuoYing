@@ -6,7 +6,7 @@ package name.huliqing.ly.layer.service;
 
 import name.huliqing.ly.data.DropData;
 import name.huliqing.ly.layer.network.DropNetwork;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * 角色物品掉落处理
@@ -26,7 +26,7 @@ public interface DropService extends DropNetwork {
      * @param actor
      * @param dropId 
      */
-    void addDrop(Actor actor, String dropId);
+    void addDrop(Entity actor, String dropId);
     
 
 }

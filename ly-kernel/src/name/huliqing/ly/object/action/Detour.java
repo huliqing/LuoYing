@@ -7,8 +7,8 @@ package name.huliqing.ly.object.action;
 import com.jme3.math.Vector3f;
 import java.util.List;
 import name.huliqing.ly.Factory;
-import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.layer.network.SkillNetwork;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.module.SkillModule;
 import name.huliqing.ly.object.skill.Skill;
 
@@ -22,7 +22,7 @@ public abstract class Detour {
     private SkillModule skillModule;
     
     protected Action action;
-    protected Actor actor;
+    protected Entity actor;
     
     // 避碍时是否朝向目标
     protected boolean autoFacing;
@@ -52,7 +52,7 @@ public abstract class Detour {
         this.autoFacing = autoFacing;
     }
     
-    public void setActor(Actor actor) {
+    public void setActor(Entity actor) {
         this.actor = actor;
         skillModule = actor.getModule(SkillModule.class);
 

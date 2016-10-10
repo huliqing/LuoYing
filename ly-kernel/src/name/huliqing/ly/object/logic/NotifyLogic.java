@@ -11,6 +11,7 @@ import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.data.LogicData;
 import name.huliqing.ly.layer.network.ActorNetwork;
 import name.huliqing.ly.layer.service.ActorService;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * 这是一个通知逻辑，若当角色存在目标敌人时，会通知周围一定范围内的友军单位进
@@ -48,12 +49,12 @@ public class NotifyLogic<T extends LogicData> extends Logic<T> {
     
     @Override
     protected void doLogic(float tpf) {
-        Actor target = actorService.getTarget(actor);
+        Entity target = actorService.getTarget(actor);
         if (target != null && actorService.isEnemy(target, actor) && !actorService.isDead(target)) {
             actorService.findNearestFriendly(actor, distance, tempStore);
             if (!tempStore.isEmpty()) {
-                Actor fTarget;
-                for (Actor friend : tempStore) {
+                Entity fTarget;
+                for (Entity friend : tempStore) {
                     fTarget = actorService.getTarget(friend);
                     if (force 
                             // 以下:如果友军单位没有存在为"敌人"的目标,则可重置它的目标.

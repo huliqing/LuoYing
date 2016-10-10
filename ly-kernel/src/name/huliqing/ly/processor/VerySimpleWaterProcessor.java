@@ -58,7 +58,6 @@ import com.jme3.water.ReflectionProcessor;
 import com.jme3.water.WaterUtils;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 import name.huliqing.ly.constants.MaterialConstants;
 import name.huliqing.ly.constants.TextureConstants;
 

@@ -11,7 +11,7 @@ import name.huliqing.ly.layer.network.ActorNetwork;
 import name.huliqing.ly.layer.service.ActorService;
 import name.huliqing.ly.layer.service.PlayService;
 import name.huliqing.ly.network.GameServer;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * 设置目标
@@ -44,8 +44,8 @@ public class MessActorSetTarget extends MessBase {
     public void applyOnServer(GameServer gameServer, HostedConnection source) {
         PlayService playService = Factory.get(PlayService.class);
         ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
-        Actor actor = playService.findActor(actorId);
-        Actor target = playService.findActor(targetId);
+        Entity actor = playService.getEntity(actorId);
+        Entity target = playService.getEntity(targetId);
         if (actor != null && target != null) {
             actorNetwork.setTarget(actor, target);
         }
@@ -56,8 +56,8 @@ public class MessActorSetTarget extends MessBase {
         PlayService playService = Factory.get(PlayService.class);
         ActorService actorService = Factory.get(ActorService.class);
         
-        Actor actor = playService.findActor(actorId);
-        Actor actorTarget = playService.findActor(targetId);
+        Entity actor = playService.getEntity(actorId);
+        Entity actorTarget = playService.getEntity(targetId);
         if (actor != null) {
             actorService.setTarget(actor, actorTarget);
         } 

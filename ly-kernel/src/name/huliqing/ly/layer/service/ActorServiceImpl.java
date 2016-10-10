@@ -5,10 +5,8 @@
 package name.huliqing.ly.layer.service;
 
 import com.jme3.animation.LoopMode;
-import com.jme3.bounding.BoundingBox;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
-import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
 import com.jme3.util.TempVars;
 import java.util.ArrayList;
@@ -17,19 +15,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.ly.Ly;
 import name.huliqing.ly.Factory;
-import name.huliqing.ly.utils.NpcNameUtils;
 import name.huliqing.ly.object.actor.Actor;
-import name.huliqing.ly.data.ActorData;
-import name.huliqing.ly.enums.Sex;
 import name.huliqing.ly.view.talk.Talk;
-import name.huliqing.ly.object.Loader;
 import name.huliqing.ly.view.talk.SpeakManager;
 import name.huliqing.ly.view.talk.TalkManager;
-import name.huliqing.ly.xml.DataFactory;
 import name.huliqing.ly.object.module.ActorListener;
 import name.huliqing.ly.object.channel.Channel;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.utils.GeometryUtils;
-import name.huliqing.ly.utils.Temp;
 import name.huliqing.ly.object.module.ActorModule;
 import name.huliqing.ly.object.module.ChannelModule;
 import name.huliqing.ly.object.module.LevelModule;
@@ -51,79 +44,78 @@ public class ActorServiceImpl implements ActorService {
         skillService = Factory.get(SkillService.class);
     }
 
-    @Override
-    public Actor loadActor(String actorId) {
-        ActorData data = DataFactory.createData(actorId);
-        return loadActor(data);
-    }
+//    @Override
+//    public Actor loadActor(String actorId) {
+//        ActorData data = DataFactory.createData(actorId);
+//        return loadActor(data);
+//    }
+//
+//    @Override
+//    public Actor loadActor(ActorData actorData) {
+//        Actor actor = Loader.load(actorData);
+//        return actor;
+//    }
+//    
+//    @Override
+//    public String createRandomName(Sex sex) {
+//        return NpcNameUtils.createRandomName(sex);
+//    }
+//    
+//    @Override
+//    public boolean hasObstacleActor(Entity self, List<Entity> actors) {
+//        TempVars tv = TempVars.get();
+//        Temp temp = Temp.get();
+//        
+//        Vector3f origin = tv.vect1.set(self.getSpatial().getWorldBound().getCenter());
+//        Vector3f dir = tv.vect2.set(getViewDirection(self)).normalizeLocal();
+//        float zExtent = GeometryUtils.getBoundingVolumeZExtent(self.getSpatial());
+//        origin.addLocal(dir.mult(zExtent, tv.vect3));
+//        
+////        DebugDynamicUtils.debugArrow(self.toString(), origin, dir, zExtent);
+//        
+//        // 检查碰撞
+////        float checkDistance = zExtent;
+//        float checkDistance = zExtent * 1.5f; // modify20160504, * 1.5f,稍微加大了一点距离
+//        float checkDistanceSquare = checkDistance * checkDistance;
+//        Vector3f targetOrigin = tv.vect4;
+//        
+//        boolean obstacle = false;
+//        Ray ray = temp.ray;
+//        ray.setOrigin(origin);
+//        ray.setDirection(dir);
+//        ray.setLimit(checkDistance);
+//        for (Entity a : actors) {
+//            if (a == self) {
+//                continue;
+//            }
+//            
+//            // 如果距离跳过checkDistance,则不视为障碍（该判断用于优化性能）
+//            // 减少ray检测
+//            targetOrigin.set(a.getSpatial().getWorldBound().getCenter());
+//            if (targetOrigin.distanceSquared(origin) > checkDistanceSquare) {
+//                continue;
+//            }
+//            
+//            // 使用ray也可以，但是使用WorldBound可能性能更好一些。
+//            if (a.getSpatial().getWorldBound().intersects(ray)) {
+//                obstacle = true;
+//                break;
+//            }
+//        }
+//        
+//        // 释放缓存
+//        tv.release();
+//        temp.release();
+//        return obstacle;
+//    }
 
     @Override
-    public Actor loadActor(ActorData actorData) {
-        Actor actor = Loader.loadActor(actorData);
-        actor.initialize();
-        return actor;
-    }
-    
-    @Override
-    public String createRandomName(Sex sex) {
-        return NpcNameUtils.createRandomName(sex);
-    }
-    
-    @Override
-    public boolean hasObstacleActor(Actor self, List<Actor> actors) {
-        TempVars tv = TempVars.get();
-        Temp temp = Temp.get();
-        
-        Vector3f origin = tv.vect1.set(self.getSpatial().getWorldBound().getCenter());
-        Vector3f dir = tv.vect2.set(getViewDirection(self)).normalizeLocal();
-        float zExtent = GeometryUtils.getBoundingVolumeZExtent(self.getSpatial());
-        origin.addLocal(dir.mult(zExtent, tv.vect3));
-        
-//        DebugDynamicUtils.debugArrow(self.toString(), origin, dir, zExtent);
-        
-        // 检查碰撞
-//        float checkDistance = zExtent;
-        float checkDistance = zExtent * 1.5f; // modify20160504, * 1.5f,稍微加大了一点距离
-        float checkDistanceSquare = checkDistance * checkDistance;
-        Vector3f targetOrigin = tv.vect4;
-        
-        boolean obstacle = false;
-        Ray ray = temp.ray;
-        ray.setOrigin(origin);
-        ray.setDirection(dir);
-        ray.setLimit(checkDistance);
-        for (Actor a : actors) {
-            if (a == self) {
-                continue;
-            }
-            
-            // 如果距离跳过checkDistance,则不视为障碍（该判断用于优化性能）
-            // 减少ray检测
-            targetOrigin.set(a.getSpatial().getWorldBound().getCenter());
-            if (targetOrigin.distanceSquared(origin) > checkDistanceSquare) {
-                continue;
-            }
-            
-            // 使用ray也可以，但是使用WorldBound可能性能更好一些。
-            if (a.getSpatial().getWorldBound().intersects(ray)) {
-                obstacle = true;
-                break;
-            }
-        }
-        
-        // 释放缓存
-        tv.release();
-        temp.release();
-        return obstacle;
-    }
-
-    @Override
-    public Actor findNearestEnemyExcept(Actor actor, float maxDistance, Actor except) {
-        List<Actor> actors = Ly.getPlayState().getActors();
+    public Entity findNearestEnemyExcept(Entity actor, float maxDistance, Entity except) {
+        List<Actor> actors = actor.getScene().getEntities(Actor.class, actor.getSpatial().getWorldTranslation(), maxDistance, null);
         float minDistanceSquared = maxDistance * maxDistance;
         float distanceSquared;
-        Actor enemy = null;
-        for (Actor target : actors) {
+        Entity enemy = null;
+        for (Entity target : actors) {
             if (target == except) { // 被排除的角色（同一实例）
                 continue;
             }
@@ -147,14 +139,12 @@ public class ActorServiceImpl implements ActorService {
     }
     
     @Override
-    public List<Actor> findNearestEnemies(Actor actor, float maxDistance, List<Actor> store) {
+    public List<Entity> findNearestEnemies(Entity actor, float maxDistance, List<Entity> store) {
         if (store == null) {
-            store = new ArrayList<Actor>();
+            store = new ArrayList<Entity>();
         }
-        List<Actor> actors = Ly.getPlayState().getActors();
-        float maxDistanceSquared = maxDistance * maxDistance;
-        float distanceSquared;
-        for (Actor target : actors) {
+        List<Actor> actors = actor.getScene().getEntities(Actor.class, actor.getSpatial().getWorldTranslation(), maxDistance, null);
+        for (Entity target : actors) {
             // 负值的派系不作为敌人搜寻
             if (getGroup(target) < 0) {
                 continue;
@@ -164,24 +154,19 @@ public class ActorServiceImpl implements ActorService {
                 continue;
             }
             // 找出范围内的敌人
-            distanceSquared = target.getSpatial().getWorldTranslation()
-                    .distanceSquared(actor.getSpatial().getWorldTranslation());
-            if (distanceSquared <= maxDistanceSquared) { 
-                store.add(target);
-            }
+            store.add(target);
         }
         return store;
     }
     
     @Override
-    public List<Actor> findNearestFriendly(Actor actor, float maxDistance, List<Actor> store) {
+    public List<Entity> findNearestFriendly(Entity actor, float maxDistance, List<Entity> store) {
         if (store == null) {
-            store = new ArrayList<Actor>();
+            store = new ArrayList<Entity>();
         }
-        List<Actor> actors = Ly.getPlayState().getActors();
-        for (Actor a : actors) {
-            if (isDead(a) || isEnemy(a, actor) 
-                    || a.getSpatial().getWorldTranslation().distance(actor.getSpatial().getWorldTranslation()) > maxDistance) {
+        List<Actor> actors = actor.getScene().getEntities(Actor.class, actor.getSpatial().getWorldTranslation(), maxDistance, null);
+        for (Entity a : actors) {
+            if (isDead(a) || isEnemy(a, actor)) {
                 continue;
             }
             if (getGroup(a) == getGroup(actor)) {
@@ -192,23 +177,22 @@ public class ActorServiceImpl implements ActorService {
     }
 
     @Override
-    public List<Actor> findNearestActors(Actor actor, float maxDistance, List<Actor> store) {
+    public List<Entity> findNearestActors(Entity actor, float maxDistance, List<Entity> store) {
         return findNearestActors(actor, maxDistance, 360, store);
     }
 
     @Override
-    public List<Actor> findNearestActors(Actor actor, float maxDistance, float angle, List<Actor> store) {
+    public List<Entity> findNearestActors(Entity actor, float maxDistance, float angle, List<Entity> store) {
+        if (store == null) {
+            store = new ArrayList<Entity>();
+        }
         if (angle <= 0)
             return store;
-        if (store == null) {
-            store = new ArrayList<Actor>();
-        }
-        float maxDistanceSquared = FastMath.pow(maxDistance, 2);
-        List<Actor> actors = Ly.getPlayState().getActors();
+        List<Actor> actors = actor.getScene().getEntities(Actor.class, actor.getSpatial().getWorldTranslation(), maxDistance, null);
         float halfAngle = angle * 0.5f;
-        for (Actor a : actors) {
+        for (Entity a : actors) {
             
-            if (a == actor || a.getSpatial().getWorldTranslation().distanceSquared(actor.getSpatial().getWorldTranslation()) > maxDistanceSquared) 
+            if (a == actor) 
                 continue;
             
             if (angle >= 360 || getViewAngle(actor, a.getSpatial().getWorldTranslation()) < halfAngle) {
@@ -218,14 +202,14 @@ public class ActorServiceImpl implements ActorService {
         return store;
     }
 
-    @Override
-    public float getHeight(Actor actor) {
-        BoundingBox bb = (BoundingBox) actor.getSpatial().getWorldBound();
-        return bb.getXExtent() * 2;
-    }
+//    @Override
+//    public float getHeight(Entity actor) {
+//        BoundingBox bb = (BoundingBox) actor.getSpatial().getWorldBound();
+//        return bb.getXExtent() * 2;
+//    }
 
     @Override
-    public void setPartner(Actor owner, Actor partner) {
+    public void setPartner(Entity owner, Entity partner) {
         // 设置为同一派别,及所有者
         setGroup(partner, getGroup(owner));
         setOwner(partner, owner.getData().getUniqueId());
@@ -233,7 +217,7 @@ public class ActorServiceImpl implements ActorService {
     }
 
     @Override
-    public void speak(Actor actor, String mess, float useTime) {
+    public void speak(Entity actor, String mess, float useTime) {
         SpeakManager.getInstance().doSpeak(actor, mess, useTime);
     }
 
@@ -248,7 +232,7 @@ public class ActorServiceImpl implements ActorService {
 
     // remove201609228
 //    @Override
-//    public Vector3f getLocalToWorld(Actor actor, Vector3f localPos, Vector3f store) {
+//    public Vector3f getLocalToWorld(Entity actor, Vector3f localPos, Vector3f store) {
 //        if (store == null) {
 //            store = new Vector3f();
 //        }
@@ -272,19 +256,19 @@ public class ActorServiceImpl implements ActorService {
 //    }
 
     @Override
-    public void kill(Actor actor) {
+    public void kill(Entity actor) {
         getActorModule(actor).kill();
         skillService.playSkill(actor, skillService.getSkillDeadDefault(actor), false);
     }
     
     @Override
-    public void reborn(Actor actor) {
+    public void reborn(Entity actor) {
         getActorModule(actor).resurrect();
         skillService.playSkill(actor, skillService.getSkillWaitDefault(actor), false);
     }
     
     @Override
-    public void setTarget(Actor actor, Actor target) {
+    public void setTarget(Entity actor, Entity target) {
         ActorModule actorModule = actor.getModule(ActorModule.class);
         if (actorModule == null)
             return;
@@ -293,7 +277,7 @@ public class ActorServiceImpl implements ActorService {
     }
 
     @Override
-    public Actor getTarget(Actor actor) {
+    public Entity getTarget(Entity actor) {
         ActorModule actorModule = actor.getModule(ActorModule.class);
         if (actorModule == null)
             return null;
@@ -302,7 +286,7 @@ public class ActorServiceImpl implements ActorService {
     }
 
     @Override
-    public boolean isDead(Actor actor) {
+    public boolean isDead(Entity actor) {
         if (!actor.isInitialized()) {
             return true;
         }
@@ -310,24 +294,24 @@ public class ActorServiceImpl implements ActorService {
     }
     
     @Override
-    public boolean isEnemy(Actor actor, Actor target) {
+    public boolean isEnemy(Entity actor, Entity target) {
         if (target == null)
             return false;
         return actor.getModule(ActorModule.class).isEnemy(target);
     }
 
     @Override
-    public void setColor(Actor actor, ColorRGBA color) {
+    public void setColor(Entity actor, ColorRGBA color) {
         GeometryUtils.setColor(actor.getSpatial(), color);
     }
 
     @Override
-    public void hitNumberAttribute(Actor beHit, Actor hitter, String hitAttribute, float hitValue) {
+    public void hitNumberAttribute(Entity beHit, Entity hitter, String hitAttribute, float hitValue) {
         getActorModule(beHit).applyHit(hitter, hitAttribute, hitValue);
     }
 
     @Override
-    public int getLevel(Actor actor) {
+    public int getLevel(Entity actor) {
         LevelModule module = actor.getModule(LevelModule.class);
         if (module != null) {
             return module.getLevel();
@@ -336,7 +320,7 @@ public class ActorServiceImpl implements ActorService {
     }
 
     @Override
-    public void setLevel(Actor actor, int level) {
+    public void setLevel(Entity actor, int level) {
         LevelModule module = actor.getModule(LevelModule.class);
         if (module != null) {
             module.setLevel(level);
@@ -344,84 +328,86 @@ public class ActorServiceImpl implements ActorService {
     }
     
     @Override
-    public void addActorListener(Actor actor, ActorListener actorListener) {
+    public void addActorListener(Entity actor, ActorListener actorListener) {
         getActorModule(actor).addActorListener(actorListener);
     }
 
     @Override
-    public boolean removeActorListener(Actor actor, ActorListener actorListener) {
+    public boolean removeActorListener(Entity actor, ActorListener actorListener) {
         return getActorModule(actor).removeActorListener(actorListener);
     }
     
-    @Override
-    public void setName(Actor actor, String name) {
-        actor.getData().setName(name);
-        actor.getSpatial().setName(name);
-    }
-
-    @Override
-    public String getName(Actor actor) {
-        return actor.getData().getName();
-    }
+//    @Override
+//    public void setName(Actor actor, String name) {
+//        actor.getData().setName(name);
+//        actor.getSpatial().setName(name);
+//    }
+//
+//    @Override
+//    public String getName(Actor actor) {
+//        return actor.getData().getName();
+//    }
     
     @Override
-    public int getGroup(Actor actor) {
+    public int getGroup(Entity actor) {
         return actor.getModule(ActorModule.class).getGroup();
     }
     
     @Override
-    public void setGroup(Actor actor, int group) {
+    public void setGroup(Entity actor, int group) {
         actor.getModule(ActorModule.class).setGroup(group);
     }
 
     @Override
-    public int getTeam(Actor actor) {
+    public int getTeam(Entity actor) {
         return actor.getModule(ActorModule.class).getTeam();
     }
     
     @Override
-    public void setTeam(Actor actor, int team) {
+    public void setTeam(Entity actor, int team) {
         actor.getModule(ActorModule.class).setTeam(team);
-        Ly.getPlayState().getTeamView().checkAddOrRemove(actor);
+//        Ly.getPlayState().getTeamView().checkAddOrRemove(actor);
+        
+        throw new UnsupportedOperationException();
     }
     
     @Override
-    public boolean isEssential(Actor actor) {
+    public boolean isEssential(Entity actor) {
         return actor.getModule(ActorModule.class).isEssential();
     }
 
     @Override
-    public void setEssential(Actor actor, boolean essential) {
+    public void setEssential(Entity actor, boolean essential) {
         actor.getModule(ActorModule.class).setEssential(essential);
     }
 
     @Override
-    public boolean isBiology(Actor actor) {
+    public boolean isBiology(Entity actor) {
         return actor.getModule(ActorModule.class).isBiology(); 
     }
 
     @Override
-    public void setOwner(Actor actor, long ownerId) {
+    public void setOwner(Entity actor, long ownerId) {
         actor.getModule(ActorModule.class).setOwner(ownerId);
     }
 
     @Override
-    public long getOwner(Actor actor) {
+    public long getOwner(Entity actor) {
         return actor.getModule(ActorModule.class).getOwner();
     }
 
     @Override
-    public void setFollow(Actor actor, long targetId) {
+    public void setFollow(Entity actor, long targetId) {
         actor.getModule(ActorModule.class).setFollowTarget(targetId);
     }
 
     @Override
-    public long getFollow(Actor actor) {
+    public long getFollow(Entity actor) {
         return actor.getModule(ActorModule.class).getFollowTarget();
     }
 
     @Override
-    public void syncTransform(Actor actor, Vector3f location, Vector3f viewDirection) {
+    public void syncTransform(Entity actor, Vector3f location, Vector3f viewDirection) {
         if (location != null)
             setLocation(actor, location);
         
@@ -430,7 +416,7 @@ public class ActorServiceImpl implements ActorService {
     }
 
     @Override
-    public void syncAnimation(Actor actor, String[] channelIds, String[] animNames, byte[] loopModes, float[] speeds, float[] times) {
+    public void syncAnimation(Entity actor, String[] channelIds, String[] animNames, byte[] loopModes, float[] speeds, float[] times) {
         if (channelIds == null) 
             return;
         
@@ -466,32 +452,32 @@ public class ActorServiceImpl implements ActorService {
     }
 
     @Override
-    public void setLocation(Actor actor, Vector3f location) {
+    public void setLocation(Entity actor, Vector3f location) {
         actor.getModule(ActorModule.class).setLocation(location);
     }
 
     @Override
-    public Vector3f getLocation(Actor actor) {
+    public Vector3f getLocation(Entity actor) {
         return actor.getSpatial().getWorldTranslation();
     }
 
     @Override
-    public void setPhysicsEnabled(Actor actor, boolean enabled) {
+    public void setPhysicsEnabled(Entity actor, boolean enabled) {
         actor.getModule(ActorModule.class).setEnabled(enabled);
     }
     
     @Override
-    public boolean isPhysicsEnabled(Actor actor) {
+    public boolean isPhysicsEnabled(Entity actor) {
         return actor.getModule(ActorModule.class).isEnabled();
     }
     
     @Override
-    public void setViewDirection(Actor actor, Vector3f viewDirection) {
+    public void setViewDirection(Entity actor, Vector3f viewDirection) {
         actor.getModule(ActorModule.class).setViewDirection(viewDirection);
     }
     
     @Override
-    public Vector3f getViewDirection(Actor actor) {
+    public Vector3f getViewDirection(Entity actor) {
         ActorModule module = actor.getModule(ActorModule.class);
         if (module != null) {
             return module.getViewDirection();
@@ -500,7 +486,7 @@ public class ActorServiceImpl implements ActorService {
     }
 
     @Override
-    public void setLookAt(Actor actor, Vector3f position) {
+    public void setLookAt(Entity actor, Vector3f position) {
         ActorModule module = actor.getModule(ActorModule.class);
         if (module != null) {
             module.setLookAt(position);
@@ -508,7 +494,7 @@ public class ActorServiceImpl implements ActorService {
     }
 
     @Override
-    public void setWalkDirection(Actor actor, Vector3f walkDirection) {
+    public void setWalkDirection(Entity actor, Vector3f walkDirection) {
         ActorModule module = actor.getModule(ActorModule.class);
         if (module != null) {
             module.setWalkDirection(walkDirection);
@@ -516,7 +502,7 @@ public class ActorServiceImpl implements ActorService {
     }
 
     @Override
-    public Vector3f getWalkDirection(Actor actor) {
+    public Vector3f getWalkDirection(Entity actor) {
         ActorModule module = actor.getModule(ActorModule.class);
         if (module != null) {
             return module.getWalkDirection();
@@ -534,7 +520,7 @@ public class ActorServiceImpl implements ActorService {
 //    }
     
     @Override
-    public void setChannelLock(Actor actor, boolean locked, String... channelIds) {
+    public void setChannelLock(Entity actor, boolean locked, String... channelIds) {
         ChannelModule module = actor.getModule(ChannelModule.class);
         if (module != null) {
             module.setChannelLock(locked, channelIds);
@@ -542,7 +528,7 @@ public class ActorServiceImpl implements ActorService {
     }
 
     @Override
-    public void restoreAnimation(Actor actor, String animName, LoopMode loop, float useTime, float startTime, String... channelIds) {
+    public void restoreAnimation(Entity actor, String animName, LoopMode loop, float useTime, float startTime, String... channelIds) {
         ChannelModule module = actor.getModule(ChannelModule.class);
         if (module != null) {
             module.restoreAnimation(animName, channelIds, loop, useTime, startTime);
@@ -550,7 +536,7 @@ public class ActorServiceImpl implements ActorService {
     }
 
     @Override
-    public boolean reset(Actor actor) {
+    public boolean reset(Entity actor) {
         ChannelModule module = actor.getModule(ChannelModule.class);
         if (module != null) {
             module.reset();
@@ -560,7 +546,7 @@ public class ActorServiceImpl implements ActorService {
     }
 
     @Override
-    public void resetToAnimationTime(Actor actor, String animation, float timePoint) {
+    public void resetToAnimationTime(Entity actor, String animation, float timePoint) {
         ChannelModule module = actor.getModule(ChannelModule.class);
         if (module != null) {
             module.resetToAnimationTime(animation, timePoint);
@@ -568,17 +554,17 @@ public class ActorServiceImpl implements ActorService {
     }
     
     @Override
-    public boolean isPlayer(Actor actor) {
+    public boolean isPlayer(Entity actor) {
         return actor.getModule(ActorModule.class).isPlayer();
     }
 
     @Override
-    public void setPlayer(Actor actor, boolean player) {
+    public void setPlayer(Entity actor, boolean player) {
         actor.getModule(ActorModule.class).setPlayer(player);
     }
     
     @Override
-    public float getViewAngle(Actor actor, Vector3f position) {
+    public float getViewAngle(Entity actor, Vector3f position) {
         // 优化性能
         TempVars tv = TempVars.get();
         Vector3f view = tv.vect1.set(getViewDirection(actor)).normalizeLocal();
@@ -597,26 +583,26 @@ public class ActorServiceImpl implements ActorService {
     }
 
     @Override
-    public float getMass(Actor actor) {
+    public float getMass(Entity actor) {
         ActorModule module = actor.getModule(ActorModule.class);
         return module != null ? module.getMass() : 0;
     }
 
     @Override
-    public boolean isKinematic(Actor actor) {
+    public boolean isKinematic(Entity actor) {
         ActorModule module = actor.getModule(ActorModule.class);
         return module != null ? module.isKinematic() : false;
     }
 
     @Override
-    public void setKinematic(Actor actor, boolean kinematic) {
+    public void setKinematic(Entity actor, boolean kinematic) {
         ActorModule module = actor.getModule(ActorModule.class);
         if (module != null) {
             module.setKinematic(kinematic);
         }
     }
     
-    private ActorModule getActorModule(Actor actor) {
+    private ActorModule getActorModule(Entity actor) {
         ActorModule module = actor.getModule(ActorModule.class);
         if (module == null) {
             LOG.log(Level.WARNING, "Actor need a ActorModule!!! actorId={0}", actor.getData().getId());
@@ -625,17 +611,17 @@ public class ActorServiceImpl implements ActorService {
     }
 
     @Override
-    public float distance(Actor actor, Actor target) {
+    public float distance(Entity actor, Entity target) {
         return actor.getSpatial().getWorldTranslation().distance(target.getSpatial().getWorldTranslation());
     }
 
     @Override
-    public float distanceSquared(Actor actor, Actor target) {
+    public float distanceSquared(Entity actor, Entity target) {
         return actor.getSpatial().getWorldTranslation().distanceSquared(target.getSpatial().getWorldTranslation());
     }
 
     @Override
-    public float distance(Actor actor, Vector3f position) {
+    public float distance(Entity actor, Vector3f position) {
         return actor.getSpatial().getWorldTranslation().distance(position);
     }
 
@@ -647,13 +633,16 @@ public class ActorServiceImpl implements ActorService {
         if (target.isDead()) {
             return false;
         }
-        if (!actor.isEnemy(target.getActor())) {
+        if (!actor.isEnemy(target.getEntity())) {
             return false;
         }
-        if (!playService.isInScene(target.getActor())) {
+        // 如果两个角色不在同一个场景。
+        if (actor.getEntity().getScene() != target.getEntity().getScene()) {
             return false;
         }
         return true;
     }
+
+    
 
 }

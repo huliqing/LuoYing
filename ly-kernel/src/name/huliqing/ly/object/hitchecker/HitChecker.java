@@ -6,7 +6,7 @@ package name.huliqing.ly.object.hitchecker;
 
 import name.huliqing.ly.data.HitCheckerData;
 import name.huliqing.ly.xml.DataProcessor;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * HitChecker主要用来检查一个角色source是否可以与另一个角色target进行交互,
@@ -20,10 +20,9 @@ import name.huliqing.ly.object.actor.Actor;
 public interface HitChecker<T extends HitCheckerData> extends DataProcessor<T> {
     
     /**
-     * 
      * @param source
      * @param target
      * @return 
      */
-    boolean canHit(Actor source, Actor target);
+    boolean canHit(Entity source, Entity target);
 }

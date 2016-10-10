@@ -12,11 +12,11 @@ import java.util.logging.Logger;
 import name.huliqing.ly.data.AttributeData;
 import name.huliqing.ly.data.ModuleData;
 import name.huliqing.ly.object.Loader;
-import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.object.attribute.Attribute;
 import name.huliqing.ly.object.attribute.AttributeStore;
 import name.huliqing.ly.object.attribute.AttributeStore.AttributeConflictException;
 import name.huliqing.ly.object.attribute.NumberAttribute;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * 属性模块
@@ -30,7 +30,7 @@ public class AttributeModule extends AbstractModule<ModuleData> {
     private List<AttributeListener> listeners;
     
     @Override
-    public void initialize(Actor actor) {
+    public void initialize(Entity actor) {
         super.initialize(actor);
         
         // 载入所有属性
@@ -66,13 +66,13 @@ public class AttributeModule extends AbstractModule<ModuleData> {
         
         try {
             store.addAttribute(attribute);
-            actor.getData().addObjectData(attribute.getData());
+            entity.getData().addObjectData(attribute.getData());
             if (!attribute.isInitialized()) {
                 attribute.initialize(this);
             }
             if (listeners != null) {
                 for (int i = 0; i < listeners.size(); i++) {
-                    listeners.get(i).onAttributeAdded(actor, attribute);
+                    listeners.get(i).onAttributeAdded(entity, attribute);
                 }
             }
         } catch (AttributeConflictException ex) {
@@ -90,7 +90,7 @@ public class AttributeModule extends AbstractModule<ModuleData> {
             attribute.cleanup();
             if (listeners != null) {
                 for (int i = 0; i < listeners.size(); i++) {
-                    listeners.get(i).onAttributeRemoved(actor, attribute);
+                    listeners.get(i).onAttributeRemoved(entity, attribute);
                 }
             }
             return true;
@@ -122,7 +122,7 @@ public class AttributeModule extends AbstractModule<ModuleData> {
         }
         if (type != null && !type.isAssignableFrom(attribute.getClass())) {
             LOG.log(Level.WARNING, "Attribute {0} is not type of {1}, actorId={2}"
-                    , new Object[] {attrName, type.getName(), actor.getData().getId()});
+                    , new Object[] {attrName, type.getName(), entity.getData().getId()});
             return null;
         }
         return (T) attribute;

@@ -7,6 +7,7 @@ package name.huliqing.ly.object.state;
 
 import name.huliqing.ly.data.StateData;
 import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.xml.DataProcessor;
 
 /**
@@ -62,19 +63,19 @@ public interface State<T extends StateData> extends  DataProcessor<T>{
      * 状态的持有者，即受状态影响的角色
      * @return 
      */
-    Actor getActor();
+    Entity getActor();
     
     /**
      * 设置状态的持有者，即受状态影响的角色，不能为null
      * @param actor 
      */
-    void setActor(Actor actor);
+    void setActor(Entity actor);
     
     /**
      * 状态的产生者，也就是说，这个状态是哪一个角色发出的, 可能为null.
      * @return 
      */
-    Actor getSourceActor();
+    Entity getSourceActor();
 
     /**
      * 源角色，这个角色主要是指制造这个状态的源角色, 比如：角色A攻击了角色B, A的这个攻击技能对B产生
@@ -84,5 +85,5 @@ public interface State<T extends StateData> extends  DataProcessor<T>{
      * 要知道是谁产生了这些伤害。
      * @param sourceActor 
      */
-    void setSourceActor(Actor sourceActor);
+    void setSourceActor(Entity sourceActor);
 }

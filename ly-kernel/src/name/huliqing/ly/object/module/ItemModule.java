@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.List;
 import name.huliqing.ly.data.ItemData;
 import name.huliqing.ly.object.Loader;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.item.Item;
 
 /**
@@ -24,7 +24,7 @@ public class ItemModule extends AbstractModule {
     private List<Item> items;
     
     @Override
-    public void initialize(Actor actor) {
+    public void initialize(Entity actor) {
         super.initialize(actor);
         
          // 载入技能
@@ -58,14 +58,14 @@ public class ItemModule extends AbstractModule {
                 items = new ArrayList<Item>();
             }
             items.add(item);
-            actor.getData().addObjectData(item.getData());
+            entity.getData().addObjectData(item.getData());
         } else {
             item.getData().setTotal(item.getData().getTotal() + amount);
         }
         
         if (itemListeners != null) {
             for (int i = 0; i < itemListeners.size(); i++) {
-                itemListeners.get(i).onItemAdded(actor, item, item.getData().getTotal());
+                itemListeners.get(i).onItemAdded(entity, item, item.getData().getTotal());
             }
         }
     }
@@ -88,7 +88,7 @@ public class ItemModule extends AbstractModule {
         int trueRemoved;
         item.getData().setTotal(item.getData().getTotal() - amount);
         if (item.getData().getTotal() <= 0) {
-            actor.getData().getObjectDatas().remove(item.getData());
+            entity.getData().getObjectDatas().remove(item.getData());
             items.remove(item);
             trueRemoved = oldTotal;
         } else {
@@ -98,7 +98,7 @@ public class ItemModule extends AbstractModule {
         // 触发侦听器
         if (itemListeners != null) {
             for (int i = 0; i < itemListeners.size(); i++) {
-                itemListeners.get(i).onItemRemoved(actor, item, trueRemoved);
+                itemListeners.get(i).onItemRemoved(entity, item, trueRemoved);
             }
         }
         
@@ -111,7 +111,7 @@ public class ItemModule extends AbstractModule {
      * @return 
      */
     public boolean canUse(Item item) {
-        return item.canUse(actor);
+        return item.canUse(entity);
     }
     
     /**
@@ -119,7 +119,7 @@ public class ItemModule extends AbstractModule {
      * @param item 
      */
     public void useItem(Item item) {
-        item.use(actor);
+        item.use(entity);
     }
     
     /**

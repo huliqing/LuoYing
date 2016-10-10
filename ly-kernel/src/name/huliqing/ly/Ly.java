@@ -41,7 +41,7 @@ import name.huliqing.ly.data.DropItem;
 import name.huliqing.ly.data.EffectData;
 import name.huliqing.ly.data.ElData;
 import name.huliqing.ly.data.EmitterData;
-import name.huliqing.ly.data.env.EnvData;
+import name.huliqing.ly.data.EntityData;
 import name.huliqing.ly.data.GameData;
 import name.huliqing.ly.data.GameLogicData;
 import name.huliqing.ly.data.HitCheckerData;
@@ -82,7 +82,7 @@ import name.huliqing.ly.mess.MessPing;
 import name.huliqing.ly.mess.MessPlayActorLoaded;
 import name.huliqing.ly.mess.MessPlayActorSelect;
 import name.huliqing.ly.mess.MessPlayActorSelectResult;
-import name.huliqing.ly.mess.MessPlayChangeGameState;
+//import name.huliqing.luoying.mess.MessPlayChangeGameState;
 import name.huliqing.ly.mess.MessPlayClientExit;
 import name.huliqing.ly.mess.MessPlayGetClients;
 import name.huliqing.ly.mess.MessPlayGetGameData;
@@ -191,17 +191,13 @@ import name.huliqing.ly.loader.EmitterDataLoader;
 import name.huliqing.ly.object.env.AudioEnv;
 import name.huliqing.ly.object.env.BoundaryBoxEnv;
 import name.huliqing.ly.object.env.CameraChaseEnv;
-import name.huliqing.ly.loader.env.EnvDataLoader;
 import name.huliqing.ly.object.env.LightAmbientEnv;
 import name.huliqing.ly.object.env.LightDirectionalEnv;
-import name.huliqing.ly.object.env.ModelEnv;
-import name.huliqing.ly.data.env.ModelEnvData;
 import name.huliqing.ly.layer.service.ConfigService;
 import name.huliqing.ly.loader.DefineDataLoader;
-import name.huliqing.ly.loader.env.ModelEnvLoader;
+import name.huliqing.ly.loader.EntityDataLoader;
 import name.huliqing.ly.object.env.PhysicsEnv;
 import name.huliqing.ly.object.env.PlantEnv;
-import name.huliqing.ly.loader.env.PlantEnvLoader;
 import name.huliqing.ly.object.env.ProxyPlatformEnv;
 import name.huliqing.ly.object.env.ShadowEnv;
 import name.huliqing.ly.object.env.SkyEnv;
@@ -211,14 +207,9 @@ import name.huliqing.ly.object.env.WaterAdvanceEnv;
 import name.huliqing.ly.object.env.WaterSimpleEnv;
 import name.huliqing.ly.loader.GameDataLoader;
 import name.huliqing.ly.object.game.RpgGame;
-import name.huliqing.ly.object.game.impl.StoryGbGame;
-import name.huliqing.ly.object.game.impl.StoryGuardGame;
-import name.huliqing.ly.object.game.impl.StoryTreasureGame;
-import name.huliqing.ly.object.game.impl.SurvivalGame;
 import name.huliqing.ly.object.gamelogic.ActorCleanGameLogic;
 import name.huliqing.ly.object.gamelogic.AttributeChangeGameLogic;
 import name.huliqing.ly.loader.GameLogicDataLoader;
-import name.huliqing.ly.object.gamelogic.PlayerDeadCheckerGameLogic;
 import name.huliqing.ly.loader.HitCheckerDataLoader;
 import name.huliqing.ly.object.hitchecker.SimpleHitChecker;
 import name.huliqing.ly.loader.ItemDataLoader;
@@ -321,7 +312,6 @@ import name.huliqing.ly.object.module.DropModule;
 import name.huliqing.ly.object.module.LevelModule;
 import name.huliqing.ly.object.slot.Slot;
 import name.huliqing.ly.object.state.GroupState;
-import name.huliqing.ly.state.PlayState;
 import name.huliqing.ly.xml.Data;
 import name.huliqing.ly.xml.DataFactory;
 import name.huliqing.ly.xml.Proto;
@@ -391,7 +381,6 @@ public class Ly {
         Serializer.registerClass(EffectData.class);
         Serializer.registerClass(ElData.class);
         Serializer.registerClass(EmitterData.class);
-        Serializer.registerClass(EnvData.class);
         Serializer.registerClass(GameData.class);
         Serializer.registerClass(GameLogicData.class);
         Serializer.registerClass(HitCheckerData.class);
@@ -411,7 +400,6 @@ public class Ly {
         Serializer.registerClass(TalentData.class);
         Serializer.registerClass(TaskData.class);
         Serializer.registerClass(ViewData.class);
-        Serializer.registerClass(ModelEnvData.class);
     }
     
     private static void registerProcessor() {
@@ -426,7 +414,7 @@ public class Ly {
         DataFactory.register("actionFightDynamic", ActionData.class, ActionDataLoader.class,  FightDynamicAction.class);
         
         // Actor
-        DataFactory.register("actor",  ActorData.class, ActorDataLoader.class, Actor.class);
+        DataFactory.register("actor",  EntityData.class, ActorDataLoader.class, Actor.class);
         
         //ActorAnim
         DataFactory.register("actorAnimCurveMove",  AnimData.class, AnimDataLoader.class, ActorCurveMove.class);
@@ -516,31 +504,33 @@ public class Ly {
         DataFactory.register("emitter",  EmitterData.class, EmitterDataLoader.class, Emitter.class);
         
         // Env
-        DataFactory.register("envSky", EnvData.class, EnvDataLoader.class, SkyEnv.class);
-        DataFactory.register("envWaterSimple", EnvData.class, EnvDataLoader.class, WaterSimpleEnv.class);
-        DataFactory.register("envWaterAdvance", EnvData.class, EnvDataLoader.class, WaterAdvanceEnv.class);
-        DataFactory.register("envBoundaryBox", EnvData.class, EnvDataLoader.class, BoundaryBoxEnv.class);
-        DataFactory.register("envAudio", EnvData.class, EnvDataLoader.class, AudioEnv.class);
-        DataFactory.register("envLightDirectional", EnvData.class, EnvDataLoader.class, LightDirectionalEnv.class);
-        DataFactory.register("envLightAmbient", EnvData.class, EnvDataLoader.class, LightAmbientEnv.class);
-        DataFactory.register("envShadow", EnvData.class, EnvDataLoader.class, ShadowEnv.class);
-        DataFactory.register("envProxyPlatform", EnvData.class, EnvDataLoader.class, ProxyPlatformEnv.class);
-        DataFactory.register("envPhysics", EnvData.class, EnvDataLoader.class, PhysicsEnv.class);
-        DataFactory.register("envCameraChase", EnvData.class, EnvDataLoader.class, CameraChaseEnv.class);
-        DataFactory.register("envModel", ModelEnvData.class, ModelEnvLoader.class, ModelEnv.class);
-        DataFactory.register("envTerrain", ModelEnvData.class, ModelEnvLoader.class, TerrainEnv.class);
-        DataFactory.register("envTree", ModelEnvData.class, PlantEnvLoader.class, TreeEnv.class);
-        DataFactory.register("envGrass", ModelEnvData.class, PlantEnvLoader.class, PlantEnv.class);
+        DataFactory.register("envSky", EntityData.class, EntityDataLoader.class, SkyEnv.class);
+        DataFactory.register("envWaterSimple", EntityData.class, EntityDataLoader.class, WaterSimpleEnv.class);
+        DataFactory.register("envWaterAdvance", EntityData.class, EntityDataLoader.class, WaterAdvanceEnv.class);
+        DataFactory.register("envBoundaryBox", EntityData.class, EntityDataLoader.class, BoundaryBoxEnv.class);
+        DataFactory.register("envAudio", EntityData.class, EntityDataLoader.class, AudioEnv.class);
+        DataFactory.register("envLightDirectional", EntityData.class, EntityDataLoader.class, LightDirectionalEnv.class);
+        DataFactory.register("envLightAmbient", EntityData.class, EntityDataLoader.class, LightAmbientEnv.class);
+        DataFactory.register("envShadow", EntityData.class, EntityDataLoader.class, ShadowEnv.class);
+        DataFactory.register("envProxyPlatform", EntityData.class, EntityDataLoader.class, ProxyPlatformEnv.class);
+        DataFactory.register("envPhysics", EntityData.class, EntityDataLoader.class, PhysicsEnv.class);
+        DataFactory.register("envCameraChase", EntityData.class, EntityDataLoader.class, CameraChaseEnv.class);
+//        DataFactory.register("envModel", ModelEnvData.class, ModelEnvLoader.class, ModelEnv.class);
+        DataFactory.register("envTerrain", EntityData.class, EntityDataLoader.class, TerrainEnv.class);
+        DataFactory.register("envTree", EntityData.class, EntityDataLoader.class, TreeEnv.class);
+        DataFactory.register("envGrass", EntityData.class, EntityDataLoader.class, PlantEnv.class);
         
         // Game
         DataFactory.register("gameRpg", GameData.class, GameDataLoader.class, RpgGame.class);
-        DataFactory.register("gameStoryTreasure", GameData.class, GameDataLoader.class, StoryTreasureGame.class);
-        DataFactory.register("gameStoryGb", GameData.class, GameDataLoader.class, StoryGbGame.class);
-        DataFactory.register("gameStoryGuard", GameData.class, GameDataLoader.class, StoryGuardGame.class);
-        DataFactory.register("gameSurvival", GameData.class, GameDataLoader.class, SurvivalGame.class);
+        
+        // remove20161009,移动到了ly-luoying-desktop
+//        DataFactory.register("gameStoryTreasure", GameData.class, GameDataLoader.class, StoryTreasureGame.class);
+//        DataFactory.register("gameStoryGb", GameData.class, GameDataLoader.class, StoryGbGame.class);
+//        DataFactory.register("gameStoryGuard", GameData.class, GameDataLoader.class, StoryGuardGame.class);
+//        DataFactory.register("gameSurvival", GameData.class, GameDataLoader.class, SurvivalGame.class);
         
         // GameLogic
-        DataFactory.register("gameLogicPlayerDeadChecker", GameLogicData.class, GameLogicDataLoader.class, PlayerDeadCheckerGameLogic.class);
+//        DataFactory.register("gameLogicPlayerDeadChecker", GameLogicData.class, GameLogicDataLoader.class, PlayerDeadCheckerGameLogic.class);
         DataFactory.register("gameLogicActorClean", GameLogicData.class, GameLogicDataLoader.class, ActorCleanGameLogic.class);
         DataFactory.register("gameLogicAttributeChange", GameLogicData.class, GameLogicDataLoader.class, AttributeChangeGameLogic.class);
         
@@ -753,7 +743,6 @@ public class Ly {
         Serializer.registerClass(MessPlayActorLoaded.class);
         Serializer.registerClass(MessSCActorRemove.class);
         Serializer.registerClass(MessPlayActorSelectResult.class);
-        Serializer.registerClass(MessPlayChangeGameState.class);
         
         // ---- Game play
         Serializer.registerClass(MessAutoAttack.class);
@@ -865,9 +854,10 @@ public class Ly {
         Ly.font = font;
     }
     
-    public static PlayState getPlayState() {
-        return app.getStateManager().getState(PlayState.class);
-    }
+    // xxx remove
+//    public static PlayState getPlayState() {
+//        return app.getStateManager().getState(PlayState.class);
+//    }
     
     /**
      * 获取当前光标位置

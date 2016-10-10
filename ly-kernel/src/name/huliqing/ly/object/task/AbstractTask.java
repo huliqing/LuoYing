@@ -12,11 +12,10 @@ import name.huliqing.ly.constants.ResConstants;
 import name.huliqing.ly.data.ObjectData;
 import name.huliqing.ly.data.TaskData;
 import name.huliqing.ly.layer.service.PlayService;
-import name.huliqing.ly.view.IconLabel;
+import name.huliqing.luoying.view.IconLabel;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.ly.layer.network.AttributeNetwork;
 import name.huliqing.ly.xml.DataFactory;
-import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.ui.LinearLayout;
 import name.huliqing.ly.ui.Text;
 import name.huliqing.ly.ui.UI;
@@ -24,6 +23,7 @@ import name.huliqing.ly.ui.UIFactory;
 import name.huliqing.ly.ui.Window;
 import name.huliqing.ly.utils.ConvertUtils;
 import name.huliqing.ly.layer.network.ObjectNetwork;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  *
@@ -36,7 +36,7 @@ public abstract class AbstractTask<T extends TaskData> implements Task<T> {
     private final AttributeNetwork attributeNetwork = Factory.get(AttributeNetwork.class);
 
     protected T data;
-    protected Actor actor;
+    protected Entity actor;
     
     protected List<RewardItem> rewardItems;
     protected List<RewardAttribute> rewardAttributes;
@@ -86,12 +86,12 @@ public abstract class AbstractTask<T extends TaskData> implements Task<T> {
     }
 
     @Override
-    public void setActor(Actor actor) {
+    public void setActor(Entity actor) {
         this.actor = actor;
     }
 
     @Override
-    public Actor getActor() {
+    public Entity getActor() {
         return actor;
     }
 
@@ -121,17 +121,18 @@ public abstract class AbstractTask<T extends TaskData> implements Task<T> {
         data.setCompletion(true);
     }
 
-    @Override
-    public Window getTaskDetail() {
-        if (detailWin == null) {
-            detailWin = new DetailWindow(playService.getScreenWidth() * 0.5f
-                    , playService.getScreenHeight() * 0.4f);
-            detailWin.setCloseable(true);
-            detailWin.resize();
-            detailWin.setToCorner(UI.Corner.CC);
-        }
-        return detailWin;
-    }
+    // remove20161010
+//    @Override
+//    public Window getTaskDetail() {
+//        if (detailWin == null) {
+//            detailWin = new DetailWindow(playService.getScreenWidth() * 0.5f
+//                    , playService.getScreenHeight() * 0.4f);
+//            detailWin.setCloseable(true);
+//            detailWin.resize();
+//            detailWin.setToCorner(UI.Corner.CC);
+//        }
+//        return detailWin;
+//    }
 
     // 奖励的物品及数量
     protected class RewardItem {
@@ -145,75 +146,76 @@ public abstract class AbstractTask<T extends TaskData> implements Task<T> {
         float value;
     }
     
-    private class DetailWindow extends Window {
-        // 任务说明
-        private final Text taskDetail;
-        // 任务奖励：列出任务完成后的奖励物品列表
-        private final LinearLayout taskRewardPanel;
-        private final Text rewardHead;
-        
-        public DetailWindow(float width, float height) {
-            super(width, height);
-            setTitle(ResourceManager.get(ResConstants.TASK_TASK) + "-" + ResourceManager.getObjectName(data.getId()));
-            setPadding(10, 10, 10, 10);
-            
-            float cw = getContentWidth();
-            float ch = getContentHeight();
-            float panelHeight = UIFactory.getUIConfig().getTitleHeight();
-            taskDetail = new Text(ResourceManager.getObjectDes(data.getId()));
-            taskDetail.setWidth(cw);
-//            taskDetail.setHeight(ch - panelHeight);// 不要固定高度
-            taskDetail.updateView();
-            taskDetail.resize(); // 缩小宽度
-            
-            // 列出要奖励的东西
-            taskRewardPanel = new LinearLayout(cw, panelHeight);
-            taskRewardPanel.setLayout(Layout.horizontal);
-            
-            rewardHead = new Text(ResourceManager.get(ResConstants.TASK_REWARD) + ":  ");
-            rewardHead.setHeight(panelHeight);
-            rewardHead.setVerticalAlignment(BitmapFont.VAlign.Center);
-            taskRewardPanel.addView(rewardHead);
-            
-            // remove20160829
-//            if (rewardExp > 0) {
-//                IconLabel il = new IconLabel("_EXP_", InterfaceConstants.ITEM_EXP, rewardExp + "");
-//                taskRewardPanel.addView(il);
+    // remove20161010
+//    private class DetailWindow extends Window {
+//        // 任务说明
+//        private final Text taskDetail;
+//        // 任务奖励：列出任务完成后的奖励物品列表
+//        private final LinearLayout taskRewardPanel;
+//        private final Text rewardHead;
+//        
+//        public DetailWindow(float width, float height) {
+//            super(width, height);
+//            setTitle(ResourceManager.get(ResConstants.TASK_TASK) + "-" + ResourceManager.getObjectName(data.getId()));
+//            setPadding(10, 10, 10, 10);
+//            
+//            float cw = getContentWidth();
+//            float ch = getContentHeight();
+//            float panelHeight = UIFactory.getUIConfig().getTitleHeight();
+//            taskDetail = new Text(ResourceManager.getObjectDes(data.getId()));
+//            taskDetail.setWidth(cw);
+////            taskDetail.setHeight(ch - panelHeight);// 不要固定高度
+//            taskDetail.updateView();
+//            taskDetail.resize(); // 缩小宽度
+//            
+//            // 列出要奖励的东西
+//            taskRewardPanel = new LinearLayout(cw, panelHeight);
+//            taskRewardPanel.setLayout(Layout.horizontal);
+//            
+//            rewardHead = new Text(ResourceManager.get(ResConstants.TASK_REWARD) + ":  ");
+//            rewardHead.setHeight(panelHeight);
+//            rewardHead.setVerticalAlignment(BitmapFont.VAlign.Center);
+//            taskRewardPanel.addView(rewardHead);
+//            
+//            // remove20160829
+////            if (rewardExp > 0) {
+////                IconLabel il = new IconLabel("_EXP_", InterfaceConstants.ITEM_EXP, rewardExp + "");
+////                taskRewardPanel.addView(il);
+////            }
+//
+//            if (rewardAttributes != null && !rewardAttributes.isEmpty()) {
+//                for (RewardAttribute ra : rewardAttributes) {
+//                    IconLabel label = new IconLabel(ra.attributeName
+//                            ,  ((ObjectData)DataFactory.createData(ra.attributeName)).getIcon()
+//                            , ra.value + "");
+//                    taskRewardPanel.addView(label);
+//                }
 //            }
-
-            if (rewardAttributes != null && !rewardAttributes.isEmpty()) {
-                for (RewardAttribute ra : rewardAttributes) {
-                    IconLabel label = new IconLabel(ra.attributeName
-                            ,  ((ObjectData)DataFactory.createData(ra.attributeName)).getIcon()
-                            , ra.value + "");
-                    taskRewardPanel.addView(label);
-                }
-            }
-            
-            if (rewardItems != null) {
-                for (RewardItem ri : rewardItems) {
-                    IconLabel label = new IconLabel(ri.itemId
-                            , ((ObjectData)DataFactory.createData(ri.itemId)).getIcon()
-                            , ri.count + "");
-                    taskRewardPanel.addView(label);
-                }
-            }
-            
-            List<UI> cuis = taskRewardPanel.getViews();
-            if (cuis.size() > 1) {
-                float iconLabelWidth = (cw - rewardHead.getWidth()) / (cuis.size() - 1);
-                IconLabel temp;
-                for (UI ui : cuis) {
-                    if (ui instanceof IconLabel) {
-                        temp = (IconLabel) ui;
-                        temp.setWidth(iconLabelWidth);
-                        temp.setHeight(panelHeight);
-                    }
-                }
-            }
-            
-            addView(taskDetail);
-            addView(taskRewardPanel);
-        }
-    }
+//            
+//            if (rewardItems != null) {
+//                for (RewardItem ri : rewardItems) {
+//                    IconLabel label = new IconLabel(ri.itemId
+//                            , ((ObjectData)DataFactory.createData(ri.itemId)).getIcon()
+//                            , ri.count + "");
+//                    taskRewardPanel.addView(label);
+//                }
+//            }
+//            
+//            List<UI> cuis = taskRewardPanel.getViews();
+//            if (cuis.size() > 1) {
+//                float iconLabelWidth = (cw - rewardHead.getWidth()) / (cuis.size() - 1);
+//                IconLabel temp;
+//                for (UI ui : cuis) {
+//                    if (ui instanceof IconLabel) {
+//                        temp = (IconLabel) ui;
+//                        temp.setWidth(iconLabelWidth);
+//                        temp.setHeight(panelHeight);
+//                    }
+//                }
+//            }
+//            
+//            addView(taskDetail);
+//            addView(taskRewardPanel);
+//        }
+//    }
 }

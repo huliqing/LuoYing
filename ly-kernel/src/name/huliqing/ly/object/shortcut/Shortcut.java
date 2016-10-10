@@ -9,7 +9,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import name.huliqing.ly.data.ObjectData;
 import name.huliqing.ly.data.ShortcutData;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.xml.DataProcessor;
 
 /**
@@ -45,13 +45,13 @@ public interface Shortcut<T extends ObjectData> extends DataProcessor<ShortcutDa
      * 获取快捷方式的操作角色
      * @return 
      */
-    Actor getActor();
+    Entity getActor();
     
     /**
      * 设置设置快捷方式的操作角色
      * @param actor 
      */
-    void setActor(Actor actor);
+    void setActor(Entity actor);
     
     /**
      * @return 

@@ -6,7 +6,7 @@ package name.huliqing.ly.layer.service;
 
 import name.huliqing.ly.layer.network.ActionNetwork;
 import name.huliqing.ly.object.action.Action;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * 
@@ -26,27 +26,27 @@ public interface ActionService extends ActionNetwork{
      * @param actor
      * @return 
      */
-    boolean isPlayingFight(Actor actor);
+    boolean isPlayingFight(Entity actor);
     
     /**
      * 是否正在执行跑路行为
      * @param actor
      * @return 
      */
-    boolean isPlayingRun(Actor actor);
+    boolean isPlayingRun(Entity actor);
     
     /**
      * 判断目标角色是否正在跟随
      * @param actor
      * @return 
      */
-    boolean isPlayingFollow(Actor actor);
+    boolean isPlayingFollow(Entity actor);
     
     /**
      * 获取当前角色正在执行的行为,如果没有任何行为则返回null.
      * @param actor
      * @return 
      */
-    Action getPlayingAction(Actor actor);
+    Action getPlayingAction(Entity actor);
 
 }

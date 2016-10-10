@@ -6,13 +6,12 @@
 package name.huliqing.ly.object.env;
 
 import com.jme3.math.Vector3f;
-import name.huliqing.ly.data.env.EnvData;
 
 /**
+ * 定义水体环境
  * @author huliqing
- * @param <T>
  */
-public interface WaterEnv<T extends EnvData> extends Env<T> {
+public interface WaterEnv {
     
     /**
      * 判断目标位置点是否位于水体下面。

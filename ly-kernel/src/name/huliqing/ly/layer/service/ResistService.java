@@ -5,7 +5,7 @@
 package name.huliqing.ly.layer.service;
 
 import name.huliqing.ly.Inject;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  *
@@ -19,5 +19,5 @@ public interface ResistService extends Inject {
      * @param stateId 指定的状态．
      * @return 
      */
-    float getResist(Actor actor, String stateId);
+    float getResist(Entity actor, String stateId);
 }

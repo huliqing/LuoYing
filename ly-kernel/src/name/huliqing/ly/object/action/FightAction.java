@@ -4,7 +4,7 @@
  */
 package name.huliqing.ly.object.action;
 
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.skill.Skill;
 
 /**
@@ -25,6 +25,6 @@ public interface FightAction extends Action {
      * 设置目标敌人
      * @param actor 
      */
-    public void setEnemy(Actor actor);
+    public void setEnemy(Entity actor);
     
 }

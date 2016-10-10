@@ -5,9 +5,8 @@
 package name.huliqing.ly.layer.service;
 
 import java.util.List;
-import name.huliqing.ly.data.StateData;
 import name.huliqing.ly.layer.network.StateNetwork;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.module.StateListener;
 import name.huliqing.ly.object.state.State;
 
@@ -25,13 +24,13 @@ public interface StateService extends StateNetwork {
      * @param stateId
      * @return 
      */
-    State findState(Actor actor, String stateId);
+    State findState(Entity actor, String stateId);
     
     /**
      * 清除角色当前身上的所有状态。
      * @param actor 
      */
-    void clearStates(Actor actor);
+    void clearStates(Entity actor);
     
     /**
      * 判断角色当前是否存在指定的状态。
@@ -39,7 +38,7 @@ public interface StateService extends StateNetwork {
      * @param stateId
      * @return 
      */
-    boolean existsState(Actor actor, String stateId);
+    boolean existsState(Entity actor, String stateId);
     
     /**
      * 获取角色当前身上的所有状态，注意，这个方法只允许只读，不要随便修改列
@@ -49,14 +48,14 @@ public interface StateService extends StateNetwork {
      * @param actor
      * @return 
      */
-    List<State> getStates(Actor actor);
+    List<State> getStates(Entity actor);
     
     /**
      * 添加状态侦听器
      * @param actor
      * @param listener 
      */
-    void addListener(Actor actor, StateListener listener);
+    void addListener(Entity actor, StateListener listener);
     
     /**
      * 移除指定的状态侦听器，如果成功移除则返回true
@@ -64,5 +63,5 @@ public interface StateService extends StateNetwork {
      * @param listener
      * @return 
      */
-    boolean removeListener(Actor actor, StateListener listener);
+    boolean removeListener(Entity actor, StateListener listener);
 }

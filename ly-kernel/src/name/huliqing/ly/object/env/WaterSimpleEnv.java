@@ -12,16 +12,16 @@ import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import name.huliqing.ly.Ly;
-import name.huliqing.ly.data.env.EnvData;
+import name.huliqing.ly.data.EntityData;
+import name.huliqing.ly.object.entity.AbstractEntity;
 import name.huliqing.ly.object.scene.Scene;
 import name.huliqing.ly.processor.VerySimpleWaterProcessor;
 
 /**
  * 轻量级的水体效果，可支持移动设置、手机等。特别针对Opengl es应用。
  * @author huliqing
- * @param <T>
  */
-public class WaterSimpleEnv<T extends EnvData> extends AbstractEnv<T> implements WaterEnv<T> {
+public class WaterSimpleEnv extends AbstractEntity implements WaterEnv {
 //    private final PlayService playService = Factory.get(PlayService.class);
     
     private String waterModelFile;
@@ -42,7 +42,7 @@ public class WaterSimpleEnv<T extends EnvData> extends AbstractEnv<T> implements
     private VerySimpleWaterProcessor water;
     
     @Override
-    public void setData(T data) {
+    public void setData(EntityData data) {
         super.setData(data);
         waterModelFile = data.getAsString("waterModel");
         waterColor = data.getAsColor("waterColor");
@@ -59,11 +59,7 @@ public class WaterSimpleEnv<T extends EnvData> extends AbstractEnv<T> implements
 
     @Override
     public void updateDatas() {
-        if (initialized) {
-            data.setLocation(waterModel.getLocalTranslation());
-            data.setRotation(waterModel.getLocalRotation());
-            data.setScale(waterModel.getLocalScale());
-        }
+        // ignore
     }
     
     @Override
@@ -71,9 +67,18 @@ public class WaterSimpleEnv<T extends EnvData> extends AbstractEnv<T> implements
         super.initialize(scene);
         
         waterModel = Ly.getApp().getAssetManager().loadModel(waterModelFile);
-        waterModel.setLocalTranslation(data.getLocation());
-        waterModel.setLocalRotation(data.getRotation());
-        waterModel.setLocalScale(data.getScale());
+        Vector3f location = data.getAsVector3f("location");
+        if (location != null) {
+            waterModel.setLocalTranslation(location);
+        }
+        Quaternion rot = data.getAsQuaternion("rotation");
+        if (rot != null) {
+            waterModel.setLocalRotation(rot);
+        }
+        Vector3f scale = data.getAsVector3f("scale");
+        if (scale != null) {
+            waterModel.setLocalScale(scale);
+        }
         
         water = new VerySimpleWaterProcessor(Ly.getApp().getAssetManager(), waterModel);
         water.addReflectionScene(scene.getRoot());
@@ -97,14 +102,17 @@ public class WaterSimpleEnv<T extends EnvData> extends AbstractEnv<T> implements
             water.setFoamMaskScale(foamMaskScale.x, foamMaskScale.y);
         }
         scene.addProcessor(water);
-        scene.addSpatial(waterModel);
     }
     
     @Override
     public void cleanup() {
-        scene.removeSpatial(waterModel);
         scene.removeProcessor(water);
         super.cleanup(); 
+    }
+
+    @Override
+    public Spatial getSpatial() {
+        return waterModel;
     }
     
     @Override
@@ -119,57 +127,5 @@ public class WaterSimpleEnv<T extends EnvData> extends AbstractEnv<T> implements
         }
         return false;
     }
-    
-    @Override
-    public Vector3f getLocation() {
-        if (initialized) {
-            return waterModel.getLocalTranslation();
-        }
-        return data.getLocation();
-    }
-    
-    @Override
-    public void setLocation(Vector3f location) {
-        if (initialized) {
-            waterModel.setLocalTranslation(location);
-            return;
-        }
-        data.setLocation(location);
-    }
-
-    @Override
-    public Quaternion getRotation() {
-        if (initialized) {
-            return waterModel.getLocalRotation();
-        }
-        return data.getRotation();
-    }
-
-    @Override
-    public void setRotation(Quaternion rotation) {
-        if (initialized) {
-            waterModel.setLocalRotation(rotation);
-            return;
-        }
-        data.setRotation(rotation);
-    }
-
-    @Override
-    public Vector3f getScale() {
-        if (initialized) {
-            return waterModel.getLocalScale();
-        }
-        return data.getScale();
-    }
-
-    @Override
-    public void setScale(Vector3f scale) {
-        if (initialized) {
-            waterModel.setLocalScale(scale);
-            return;
-        }
-        data.setScale(scale);
-    }
-    
     
 }

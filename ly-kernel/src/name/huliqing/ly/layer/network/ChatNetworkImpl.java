@@ -10,7 +10,7 @@ import name.huliqing.ly.network.Network;
 import name.huliqing.ly.mess.MessChatSell;
 import name.huliqing.ly.mess.MessChatSend;
 import name.huliqing.ly.mess.MessChatShop;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * @author huliqing
@@ -25,7 +25,7 @@ public class ChatNetworkImpl implements ChatNetwork {
     }
 
     @Override
-    public void chatShop(Actor seller, Actor buyer, String itemId, int count, float discount) {
+    public void chatShop(Entity seller, Entity buyer, String itemId, int count, float discount) {
         // 客户端不处理
         if (NETWORK.isClient()) {
             return;
@@ -46,7 +46,7 @@ public class ChatNetworkImpl implements ChatNetwork {
     }
 
     @Override
-    public void chatSell(Actor seller, Actor buyer, String[] items, int[] counts, float discount) {
+    public void chatSell(Entity seller, Entity buyer, String[] items, int[] counts, float discount) {
         if (NETWORK.isClient())
             return;
         
@@ -64,7 +64,7 @@ public class ChatNetworkImpl implements ChatNetwork {
     }
 
     @Override
-    public void chatSend(Actor sender, Actor receiver, String[] items, int[] counts) {
+    public void chatSend(Entity sender, Entity receiver, String[] items, int[] counts) {
         if (NETWORK.isClient())
             return;
         

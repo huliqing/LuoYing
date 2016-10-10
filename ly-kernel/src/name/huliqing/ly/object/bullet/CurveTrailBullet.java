@@ -26,7 +26,6 @@ import name.huliqing.ly.shape.SplineSurface;
 import name.huliqing.ly.utils.MathUtils;
 
 /**
- *
  * @author huliqing
  * @param <S>
  */

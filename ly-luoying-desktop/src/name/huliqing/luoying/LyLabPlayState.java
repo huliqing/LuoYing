@@ -22,8 +22,8 @@ import name.huliqing.ly.layer.service.SceneService;
 import name.huliqing.ly.object.env.CameraChaseEnv;
 import name.huliqing.ly.object.game.Game;
 import name.huliqing.ly.object.scene.SceneUtils;
-import name.huliqing.ly.state.GameState;
-import name.huliqing.ly.state.NetworkPlayState;
+import name.huliqing.luoying.state.GameState;
+import name.huliqing.luoying.state.NetworkPlayState;
 import name.huliqing.ly.utils.CollisionChaseCamera;
 
 /**

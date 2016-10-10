@@ -5,8 +5,8 @@
  */
 package name.huliqing.ly.object.module;
 
-import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.object.attribute.Attribute;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * 属性侦听器，主要用于监听角色的属性，当角色添加、修改或移除了属性时触这个侦听器。
@@ -19,12 +19,12 @@ public interface AttributeListener {
      * @param actor 角色
      * @param attribute 新添加的属性
      */
-    void onAttributeAdded(Actor actor, Attribute attribute);
+    void onAttributeAdded(Entity actor, Attribute attribute);
     
     /**
      * 当角色移除了一个属性后该方法被调用。
      * @param actor
      * @param attribute 
      */
-    void onAttributeRemoved(Actor actor, Attribute attribute);
+    void onAttributeRemoved(Entity actor, Attribute attribute);
 }

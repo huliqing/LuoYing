@@ -31,8 +31,6 @@ import name.huliqing.ly.layer.network.TalentNetwork;
 import name.huliqing.ly.layer.network.TalentNetworkImpl;
 import name.huliqing.ly.layer.network.TaskNetwork;
 import name.huliqing.ly.layer.network.TaskNetworkImpl;
-import name.huliqing.ly.layer.network.UserCommandNetwork;
-import name.huliqing.ly.layer.network.UserCommandNetworkImpl;
 import name.huliqing.ly.layer.service.ActionService;
 import name.huliqing.ly.layer.service.ActionServiceImpl;
 import name.huliqing.ly.layer.service.ActorAnimService;
@@ -54,7 +52,6 @@ import name.huliqing.ly.layer.service.EffectServiceImpl;
 import name.huliqing.ly.layer.service.SystemServiceImpl;
 import name.huliqing.ly.layer.service.ElService;
 import name.huliqing.ly.layer.service.ElServiceImpl;
-import name.huliqing.ly.layer.service.EnvServiceImpl;
 import name.huliqing.ly.layer.service.GameService;
 import name.huliqing.ly.layer.service.GameServiceImpl;
 import name.huliqing.ly.layer.service.HitCheckerService;
@@ -87,7 +84,6 @@ import name.huliqing.ly.layer.service.TaskServiceImpl;
 import name.huliqing.ly.layer.service.ViewService;
 import name.huliqing.ly.layer.service.ViewServiceImpl;
 import name.huliqing.ly.layer.service.SystemService;
-import name.huliqing.ly.layer.service.EnvService;
 import name.huliqing.ly.layer.service.GameLogicService;
 import name.huliqing.ly.layer.service.GameLogicServiceImpl;
 import name.huliqing.ly.layer.service.ObjectService;
@@ -117,7 +113,6 @@ public class Factory {
         CLASS_MAP.put(StateNetwork.class, StateNetworkImpl.class);
         CLASS_MAP.put(TalentNetwork.class, TalentNetworkImpl.class);
         CLASS_MAP.put(TaskNetwork.class, TaskNetworkImpl.class);
-        CLASS_MAP.put(UserCommandNetwork.class, UserCommandNetworkImpl.class);
         
         // service
         CLASS_MAP.put(ActionService.class, ActionServiceImpl.class);
@@ -130,7 +125,6 @@ public class Factory {
         CLASS_MAP.put(DropService.class, DropServiceImpl.class);
         CLASS_MAP.put(EffectService.class, EffectServiceImpl.class);
         CLASS_MAP.put(ElService.class, ElServiceImpl.class);
-        CLASS_MAP.put(EnvService.class, EnvServiceImpl.class);
         CLASS_MAP.put(GameService.class, GameServiceImpl.class);
         CLASS_MAP.put(GameLogicService.class, GameLogicServiceImpl.class);
         CLASS_MAP.put(HitCheckerService.class, HitCheckerServiceImpl.class);

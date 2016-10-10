@@ -4,19 +4,18 @@
  */
 package name.huliqing.ly.object.env;
 
-import name.huliqing.ly.data.env.ModelEnvData;
 import com.jme3.scene.Spatial;
+import name.huliqing.ly.Ly;
+import name.huliqing.ly.object.entity.ModelEntity;
 
 /**
  * 地形环境。
  * @author huliqing
- * @param <T>
  */
-public class TerrainEnv<T extends ModelEnvData> extends ModelEnv<T> {
+public class TerrainEnv extends ModelEntity {
     
     @Override
     public Spatial loadModel() {
-        Spatial spatial = super.loadModel();
         
         // remove20160602,JME3.1之后这个BUG已经修复
 //        // TerrainLodControl的性能问题很严重，会在内存中常驻一个守护线程。
@@ -30,7 +29,7 @@ public class TerrainEnv<T extends ModelEnvData> extends ModelEnv<T> {
 //            spatial.removeControl(lod);
 //        }
         
-        return spatial;
+        return Ly.getAssetManager().loadModel(data.getAsString("file"));
     }
     
 }

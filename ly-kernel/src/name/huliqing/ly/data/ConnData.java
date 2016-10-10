@@ -33,10 +33,10 @@ public class ConnData extends AbstractMessage {
     private String address;
     
     // 客户端所控制的角色的唯一ID
-    private long actorId;
+    private long entityId;
 
      // 角色名称
-    private String actorName;
+    private String entityName;
     
     /**
      * 获取客户端唯一标识，这个标识对于所有客户端或主机来说是唯一的。
@@ -74,16 +74,16 @@ public class ConnData extends AbstractMessage {
      * 客户端所控制的角色的唯一ID,如果为
      * @return 
      */
-    public long getActorId() {
-        return actorId;
+    public long getEntityId() {
+        return entityId;
     }
 
     /**
      * 设置客户端所控制的角色的唯一ID
      * @param actorId 
      */
-    public void setActorId(long actorId) {
-        this.actorId = actorId;
+    public void setEntityId(long actorId) {
+        this.entityId = actorId;
     }
 
     public int getConnId() {
@@ -102,12 +102,12 @@ public class ConnData extends AbstractMessage {
         this.address = address;
     }
 
-    public String getActorName() {
-        return actorName;
+    public String getEntityName() {
+        return entityName;
     }
 
-    public void setActorName(String actorName) {
-        this.actorName = actorName;
+    public void setEntityName(String actorName) {
+        this.entityName = actorName;
     }
     
     

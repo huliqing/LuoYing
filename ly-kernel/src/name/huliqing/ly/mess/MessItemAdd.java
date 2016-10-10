@@ -12,7 +12,7 @@ import name.huliqing.ly.layer.network.ItemNetwork;
 import name.huliqing.ly.layer.service.ItemService;
 import name.huliqing.ly.layer.service.PlayService;
 import name.huliqing.ly.network.GameServer;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  *
@@ -51,7 +51,7 @@ public class MessItemAdd extends MessBase {
     
     @Override
     public void applyOnServer(GameServer gameServer, HostedConnection source) {
-        Actor actor = Factory.get(PlayService.class).findActor(actorId);
+        Entity actor = Factory.get(PlayService.class).getEntity(actorId);
         if (actor == null) {
             return;
         }
@@ -60,7 +60,7 @@ public class MessItemAdd extends MessBase {
 
     @Override
     public void applyOnClient() {
-        Actor actor = Factory.get(PlayService.class).findActor(actorId);
+        Entity actor = Factory.get(PlayService.class).getEntity(actorId);
         if (actor == null) {
             return;
         }

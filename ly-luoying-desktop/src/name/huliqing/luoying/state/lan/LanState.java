@@ -29,7 +29,7 @@ import name.huliqing.ly.network.discover.MessSCStarted;
 import name.huliqing.ly.network.discover.MessSCClosed;
 import name.huliqing.ly.network.discover.UDPListener;
 import name.huliqing.ly.manager.ResourceManager;
-import name.huliqing.ly.view.HelpView;
+import name.huliqing.luoying.view.HelpView;
 import name.huliqing.ly.ui.UIFactory;
 import name.huliqing.ly.utils.ThreadHelper;
 import name.huliqing.ly.ui.LinearLayout;
@@ -38,7 +38,7 @@ import name.huliqing.ly.ui.UI.Corner;
 import name.huliqing.ly.ui.UI.Listener;
 import name.huliqing.ly.ui.UIUtils;
 import name.huliqing.ly.ui.state.UIState;
-import name.huliqing.ly.view.IpAddressPanel;
+import name.huliqing.luoying.view.IpAddressPanel;
 import name.huliqing.luoying.LuoYing;
 
 /**

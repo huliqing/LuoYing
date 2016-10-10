@@ -8,7 +8,7 @@ import com.jme3.network.serializing.Serializable;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.layer.service.PlayService;
 import name.huliqing.ly.layer.service.TaskService;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.task.Task;
 
 /**
@@ -62,7 +62,7 @@ public class MessTaskApplyItem extends MessBase {
     @Override
     public void applyOnClient() {
         super.applyOnClient(); 
-        Actor actor = playService.findActor(actorId);
+        Entity actor = playService.getEntity(actorId);
         if (actor != null) {
             Task task = taskService.getTask(actor, taskId);
             if (task != null) {

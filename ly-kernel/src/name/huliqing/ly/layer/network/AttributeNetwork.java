@@ -5,7 +5,8 @@
 package name.huliqing.ly.layer.network;
 
 import name.huliqing.ly.Inject;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.attribute.NumberAttribute;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  *
@@ -20,7 +21,7 @@ public interface AttributeNetwork extends Inject {
      * @param attrName 属性名称
      * @param value 
      */
-    void addNumberAttributeValue(Actor actor, String attrName, float value);
+    void addNumberAttributeValue(Entity actor, String attrName, float value);
     
     
 }

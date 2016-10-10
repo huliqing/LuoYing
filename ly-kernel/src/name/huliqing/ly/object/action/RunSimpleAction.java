@@ -9,7 +9,7 @@ import com.jme3.util.TempVars;
 import java.util.List;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.layer.network.SkillNetwork;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.module.ActorModule;
 import name.huliqing.ly.object.module.SkillModule;
 import name.huliqing.ly.object.skill.Skill;
@@ -46,7 +46,7 @@ public class RunSimpleAction extends AbstractAction implements RunAction{
     }
 
     @Override
-    public void setActor(Actor actor) {
+    public void setActor(Entity actor) {
         this.actor = actor;
         actorModule = actor.getModule(ActorModule.class);
         skillModule = actor.getModule(SkillModule.class);

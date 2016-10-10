@@ -17,7 +17,7 @@ import name.huliqing.ly.layer.network.PlayNetwork;
 import name.huliqing.ly.layer.service.ActorService;
 import name.huliqing.ly.layer.service.ItemService;
 import name.huliqing.ly.layer.service.SkillService;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.skill.Skill;
 
 /**
@@ -44,7 +44,7 @@ public class SkillItem extends AbstractItem {
     }
     
     @Override
-    public boolean canUse(Actor actor) {
+    public boolean canUse(Entity actor) {
         if (!super.canUse(actor))
             return false;
         
@@ -119,7 +119,7 @@ public class SkillItem extends AbstractItem {
     }
     
     @Override
-    public void use(Actor actor) {
+    public void use(Entity actor) {
         super.use(actor);
         if (skill == null) {
             skill = skillService.loadSkill(skillId);

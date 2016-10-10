@@ -16,7 +16,6 @@ import name.huliqing.ly.Ly;
 import name.huliqing.ly.constants.SkillConstants;
 import name.huliqing.ly.data.AttributeUse;
 import name.huliqing.ly.data.MagicData;
-import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.data.SkillData;
 import name.huliqing.ly.layer.service.ElService;
 import name.huliqing.ly.layer.service.PlayService;
@@ -24,6 +23,7 @@ import name.huliqing.ly.object.Loader;
 import name.huliqing.ly.object.actoranim.ActorAnim;
 import name.huliqing.ly.object.effect.Effect;
 import name.huliqing.ly.object.effect.EffectManager;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.magic.Magic;
 import name.huliqing.ly.object.module.AttributeModule;
 import name.huliqing.ly.object.module.ChannelModule;
@@ -133,7 +133,7 @@ public abstract class AbstractSkill implements Skill {
     // ---- 内部参数 ----
     
     // 当前执行技能的角色
-    protected Actor actor;
+    protected Entity actor;
     
     // 当前技能已经运行的时间。每一次执行该技能或循环时都重置为0
     protected float time;
@@ -259,7 +259,7 @@ public abstract class AbstractSkill implements Skill {
     }
     
     @Override
-    public void setActor(Actor actor) {
+    public void setActor(Entity actor) {
         this.actor = actor;
         attributeModule = actor.getModule(AttributeModule.class);
         channelModule = actor.getModule(ChannelModule.class);
@@ -268,7 +268,7 @@ public abstract class AbstractSkill implements Skill {
     }
     
     @Override
-    public Actor getActor() {
+    public Entity getActor() {
         return actor;
     }
     
@@ -683,7 +683,7 @@ public abstract class AbstractSkill implements Skill {
         void playEffect() {
             Spatial traceObject = actor.getSpatial();
             if (boneName != null) {
-                SkeletonControl sc = actor.getSpatial().getControl(SkeletonControl.class);
+                SkeletonControl sc = traceObject.getControl(SkeletonControl.class);
                 if (sc != null) {
                     try {
                         traceObject = sc.getAttachmentsNode(boneName);

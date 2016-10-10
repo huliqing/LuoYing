@@ -4,7 +4,7 @@
  */
 package name.huliqing.ly.object.module;
 
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.skill.Skill;
 
 /**
@@ -18,13 +18,13 @@ public interface SkillListener {
      * @param actor
      * @param skill 新添加的技能
      */
-    void onSkillAdded(Actor actor, Skill skill);
+    void onSkillAdded(Entity actor, Skill skill);
     
     /**
      * 当角色被移除了一个技能后该方法被调用。
      * @param actor
      * @param skill 被移除的技能
      */
-    void onSkillRemoved(Actor actor, Skill skill);
+    void onSkillRemoved(Entity actor, Skill skill);
     
 }

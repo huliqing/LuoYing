@@ -12,7 +12,7 @@ import name.huliqing.ly.layer.network.TaskNetwork;
 import name.huliqing.ly.layer.service.PlayService;
 import name.huliqing.ly.layer.service.TaskService;
 import name.huliqing.ly.network.GameServer;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * 添加任务给指定的角色
@@ -45,7 +45,7 @@ public class MessTaskAdd extends MessBase {
         super.applyOnClient();
         TaskService taskService = Factory.get(TaskService.class);
         PlayService playService = Factory.get(PlayService.class);
-        Actor actor = playService.findActor(actorId);
+        Entity actor = playService.getEntity(actorId);
         if (actor != null) {
             taskService.addTask(actor, taskService.loadTask(taskData));
         }
@@ -54,7 +54,7 @@ public class MessTaskAdd extends MessBase {
     @Override
     public void applyOnServer(GameServer gameServer, HostedConnection source) {
         super.applyOnServer(gameServer, source);
-        Actor actor = Factory.get(PlayService.class).findActor(actorId);
+        Entity actor = Factory.get(PlayService.class).getEntity(actorId);
         if (actor == null)
             return;
         TaskService taskService = Factory.get(TaskService.class);

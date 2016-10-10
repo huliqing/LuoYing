@@ -9,7 +9,7 @@ import java.util.Map;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.data.ElData;
 import name.huliqing.ly.layer.service.AttributeService;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.utils.ConvertUtils;
 
 /**
@@ -57,7 +57,7 @@ public class AttributeEl<T extends ElData> extends AbstractEl<T> {
      * @param target
      * @return 
      */
-    public synchronized float getValue(Actor source, Actor target) {
+    public synchronized float getValue(Entity source, Entity target) {
         String strResult;
         
         // params中包含的是带有"{}"符号的参数，如果params为空，则说明没有表达式中没有特殊参数需要替换值,
@@ -81,7 +81,7 @@ public class AttributeEl<T extends ElData> extends AbstractEl<T> {
         return ConvertUtils.toFloat(strResult, 0);
     }
     
-    private float getAttributeValue(Actor actor, String attributeName) {
+    private float getAttributeValue(Entity actor, String attributeName) {
         return attributeService.getNumberAttributeValue(actor, attributeName, 0);
     }
 }
