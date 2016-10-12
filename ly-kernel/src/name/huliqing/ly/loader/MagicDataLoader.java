@@ -4,12 +4,10 @@
  */
 package name.huliqing.ly.loader;
 
-import com.jme3.math.Quaternion;
-import name.huliqing.ly.data.HitCheckerData;
+import name.huliqing.ly.data.EffectData;
 import name.huliqing.ly.data.MagicData;
+import name.huliqing.ly.object.Loader;
 import name.huliqing.ly.xml.Proto;
-import name.huliqing.ly.object.effect.TraceType;
-import name.huliqing.ly.xml.DataFactory;
 import name.huliqing.ly.xml.DataLoader;
 
 /**
@@ -21,31 +19,41 @@ public class MagicDataLoader<T extends MagicData> implements DataLoader<T> {
 
     @Override
     public void load(Proto proto, T store) {
-        store.setLocation(proto.getAsVector3f("location"));
-        float[] rotationAngle = proto.getAsFloatArray("rotation");
-        if (rotationAngle != null) {
-            Quaternion rotation = new Quaternion();
-            rotation.fromAngles(rotationAngle);
-            store.setRotation(rotation);
-        }
-        store.setDebug(proto.getAsBoolean("debug", false));
-        store.setUseTime(proto.getAsFloat("useTime", 1.0f));
-        store.setTracePosition(TraceType.identity(proto.getAsString("tracePosition", TraceType.no.name())));
-        store.setTracePositionOffset(proto.getAsVector3f("tracePositionOffset"));
         
-        store.setTraceRotation(TraceType.identity(proto.getAsString("traceRotation", TraceType.no.name())));
-        float[] tempRotationOffset = proto.getAsFloatArray("traceRotationOffset");// xyz angle
-        if (tempRotationOffset != null) {
-            Quaternion traceRotationOffset = new Quaternion();
-            traceRotationOffset.fromAngles(tempRotationOffset);
-            store.setTraceRotationOffset(traceRotationOffset);
+        String[] effectIds = proto.getAsArray("effects");
+        if (effectIds != null && effectIds.length > 0) {
+            EffectData[] effectDatas = new EffectData[effectIds.length];
+            for (int i = 0; i < effectIds.length; i++) {
+                effectDatas[i] = Loader.createData(effectIds[i]);
+            }
+            store.setEffectDatas(effectDatas);
         }
         
-        String hitCheckerId = proto.getAsString("hitChecker");
-        if (hitCheckerId != null) {
-            HitCheckerData hd = DataFactory.createData(hitCheckerId);
-            store.setHitCheckerData(hd);
-        }
+//        store.setLocation(proto.getAsVector3f("location"));
+//        float[] rotationAngle = proto.getAsFloatArray("rotation");
+//        if (rotationAngle != null) {
+//            Quaternion rotation = new Quaternion();
+//            rotation.fromAngles(rotationAngle);
+//            store.setRotation(rotation);
+//        }
+//        store.setDebug(proto.getAsBoolean("debug", false));
+//        store.setUseTime(proto.getAsFloat("useTime", 1.0f));
+//        store.setTracePosition(TraceType.identity(proto.getAsString("tracePosition", TraceType.no.name())));
+//        store.setTracePositionOffset(proto.getAsVector3f("tracePositionOffset"));
+//        
+//        store.setTraceRotation(TraceType.identity(proto.getAsString("traceRotation", TraceType.no.name())));
+//        float[] tempRotationOffset = proto.getAsFloatArray("traceRotationOffset");// xyz angle
+//        if (tempRotationOffset != null) {
+//            Quaternion traceRotationOffset = new Quaternion();
+//            traceRotationOffset.fromAngles(tempRotationOffset);
+//            store.setTraceRotationOffset(traceRotationOffset);
+//        }
+//        
+//        String hitCheckerId = proto.getAsString("hitChecker");
+//        if (hitCheckerId != null) {
+//            HitCheckerData hd = DataFactory.createData(hitCheckerId);
+//            store.setHitCheckerData(hd);
+//        }
         
         // 以下三个参数一般作为动态在程序中设置,无法也不能作为静态设置存在。
         // sourceActor;

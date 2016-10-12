@@ -7,7 +7,7 @@ package name.huliqing.luoying.view;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.ly.Factory;
-import name.huliqing.luoying.network.UserCommandNetwork;
+import name.huliqing.luoying.layer.network.UserCommandNetwork;
 import name.huliqing.ly.layer.service.ActorService;
 import name.huliqing.ly.layer.service.PlayService;
 import name.huliqing.ly.object.actor.Actor;

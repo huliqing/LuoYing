@@ -16,7 +16,6 @@ import name.huliqing.ly.object.Loader;
 import name.huliqing.ly.object.attribute.Attribute;
 import name.huliqing.ly.object.attribute.MatchAttribute;
 import name.huliqing.ly.object.effect.Effect;
-import name.huliqing.ly.object.effect.EffectManager;
 import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.sound.SoundManager;
 
@@ -59,8 +58,20 @@ public abstract class AbstractItem implements Item {
 
     @Override
     public void use(Entity actor) {
-        playEffects(actor, effects);
-        playSounds(actor, sounds);
+         if (effects != null) {
+            for (String eid : effects) {
+                 Effect effect = Loader.load(eid);
+                 effect.setTraceObject(actor.getSpatial());
+                 // 注：这种方式添加特效时是不通过网络的,只是本地添加
+                 actor.getScene().getRoot().attachChild(effect);
+            }
+        }
+        if (sounds != null) {
+            for (String sid : sounds) {
+                SoundManager.getInstance().playSound(sid, actor.getSpatial().getWorldTranslation());
+            }
+        }
+        
         // 子类逻辑
         // do "use" logic in children.
     }
@@ -100,33 +111,5 @@ public abstract class AbstractItem implements Item {
         }
         return ItemConstants.STATE_OK;
     }
-    
-    /**
-     * 播放特效
-     * @param actor
-     * @param effects 
-     */
-    private void playEffects(Entity actor, String[] effects) {
-        if (effects != null) {
-            Effect effect;
-            for (String eid : effects) {
-                 effect = Loader.load(eid);
-                 effect.setTraceObject(actor.getSpatial());
-                 EffectManager.getInstance().addEffect(effect);
-            }
-        }
-    }
-    
-    /**
-     * 播放声效
-     * @param actor
-     * @param sounds 
-     */
-    private void playSounds(Entity actor, String[] sounds) {
-        if (sounds != null) {
-            for (String sid : sounds) {
-                SoundManager.getInstance().playSound(sid, actor.getSpatial().getWorldTranslation());
-            }
-        }
-    }
+
 }

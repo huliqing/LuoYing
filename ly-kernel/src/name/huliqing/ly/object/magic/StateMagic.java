@@ -11,6 +11,7 @@ import name.huliqing.ly.data.MagicData;
 import name.huliqing.ly.layer.service.ActorAnimService;
 import name.huliqing.ly.layer.service.StateService;
 import name.huliqing.ly.object.actoranim.ActorAnim;
+import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.utils.ConvertUtils;
 import name.huliqing.ly.utils.MathUtils;
 
@@ -19,7 +20,7 @@ import name.huliqing.ly.utils.MathUtils;
  * @deprecated 可能以后不再使用这类魔法
  * @author huliqing
  */
-public class StateMagic extends Magic {
+public class StateMagic extends AbstractMagic {
     private final StateService stateService = Factory.get(StateService.class);
     private final ActorAnimService actorAnimService = Factory.get(ActorAnimService.class);
     
@@ -64,10 +65,10 @@ public class StateMagic extends Magic {
     }
 
     @Override
-    public void update(float tpf) {
-        super.update(tpf); 
+    public void magicUpdate(float tpf) {
+        super.magicUpdate(tpf); 
         
-        float inter = getInterpolation();
+        float inter = timeUsed / useTime;
         
         // update states
         doUpdateStates(inter);
@@ -75,7 +76,7 @@ public class StateMagic extends Magic {
         // update actorAnims
         doUpdateActorAnims(tpf, inter);
     }
-
+    
     @Override
     public void cleanup() {
         if (states != null) {
@@ -107,23 +108,6 @@ public class StateMagic extends Magic {
         }
     }
     
-        // remove20160905
-//    protected void playState(String stateId) {
-//        if (target == null)
-//            return;
-//        stateService.addState(target, stateId, null);
-//    }
-
-        // remove20160905
-//    protected void playActorAnim(String actorAnimId) {
-//        if (target == null) 
-//            return;
-//        ActorAnim anim = actorAnimService.loadAnim(actorAnimId);
-//        anim.setTarget(target);
-//        target.getSpatial().addControl(anim);
-//        anim.start();
-//    }
-    
     // 状态更新控制
     protected class StateWrap {
         String stateId;
@@ -135,9 +119,14 @@ public class StateMagic extends Magic {
         void update(float interpolation) {
             if (started) return;
             if (interpolation >= timePoint) {
-                if (hitChecker == null || (target != null && hitChecker.canHit(source, target))) {
-                    stateService.addState(target, stateId, null);
+                if (targets != null) {
+                    for (Entity target : targets) {
+                        if (hitChecker == null || hitChecker.canHit(source, target)) {
+                            stateService.addState(target, stateId, null);
+                        }
+                    }
                 }
+                
                 started = true;
             }
         }
@@ -162,11 +151,13 @@ public class StateMagic extends Magic {
                 return;
             }
             if (interpolation >= timePoint) {
-                if (hitChecker == null || (target != null && hitChecker.canHit(source, target))) {
-                    if (target != null) {
-                        actorAnim = actorAnimService.loadAnim(actorAnimId);
-                        actorAnim.setTarget(target);
-                        actorAnim.start();
+                if (targets != null) {
+                    for (Entity target : targets) {
+                        if (hitChecker == null || hitChecker.canHit(source, target)) {
+                            actorAnim = actorAnimService.loadAnim(actorAnimId);
+                            actorAnim.setTarget(target);
+                            actorAnim.start();
+                        }
                     }
                 }
                 started = true;

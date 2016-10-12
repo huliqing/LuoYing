@@ -4,10 +4,13 @@
  */
 package name.huliqing.ly.layer.service;
 
+import com.jme3.math.Vector3f;
+import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.ly.Ly;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.object.entity.Entity;
+import name.huliqing.ly.object.entity.TerrainEntity;
 import name.huliqing.ly.object.game.Game;
 import name.huliqing.ly.object.scene.Scene;
 
@@ -85,6 +88,22 @@ public class PlayServiceImpl implements PlayService {
     @Override
     public float getScreenHeight() {
         return Ly.getSettings().getHeight();
+    }
+
+    @Override
+    public Vector3f getTerrainHeight(Scene scene, float x, float z) {
+        // 在场景载入完毕之后将植皮位置移到terrain节点的上面。
+        List<TerrainEntity> sos = scene.getEntities(TerrainEntity.class, new ArrayList<TerrainEntity>());
+        Vector3f result = null;
+        for (TerrainEntity terrain : sos) {
+            Vector3f tp = terrain.getHeight(x, z);
+            if (tp != null) {
+                if (result == null || tp.y > result.y) {
+                    result = tp;
+                }
+            }
+        }
+        return result;
     }
     
     // --------------------------------------------------------------------------------------------------------------------------------

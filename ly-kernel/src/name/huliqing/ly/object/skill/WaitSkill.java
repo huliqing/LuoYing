@@ -17,7 +17,7 @@ public class WaitSkill extends AbstractSkill {
     @Override
     public void setActor(Entity actor) {
         super.setActor(actor); 
-        channelModule = actor.getModule(ChannelModule.class);
+        channelModule = actor.getEntityModule().getModule(ChannelModule.class);
     }
 
     @Override

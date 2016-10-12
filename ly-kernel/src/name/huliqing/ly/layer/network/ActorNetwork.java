@@ -7,26 +7,25 @@ package name.huliqing.ly.layer.network;
 import com.jme3.math.Vector3f;
 import name.huliqing.ly.Inject;
 import name.huliqing.ly.object.entity.Entity;
-import name.huliqing.ly.view.talk.Talk;
 
 /**
  * @author huliqing
  */
 public interface ActorNetwork extends Inject {
     
-    /**
-     * 让角色立即说话。
-     * @param actor
-     * @param mess 
-     * @param useTime 说话内容的显示时间,单位秒,如果小于或等于0则自动计算显示时长
-     */
-    void speak(Entity actor, String mess, float useTime);
+//    /**
+//     * 让角色立即说话。
+//     * @param actor
+//     * @param mess 
+//     * @param useTime 说话内容的显示时间,单位秒,如果小于或等于0则自动计算显示时长
+//     */
+//    void speak(Entity actor, String mess, float useTime);
     
-    /**
-     * 执行一个系列谈话内容,注意：该谈话内容将立即被执行。不需要调用start.
-     * @param talk 
-     */
-    void talk(Talk talk);
+//    /**
+//     * 执行一个系列谈话内容,注意：该谈话内容将立即被执行。不需要调用start.
+//     * @param talk 
+//     */
+//    void talk(Talk talk);
     
     /**
      * 杀死一个角色

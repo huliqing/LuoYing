@@ -11,6 +11,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.util.TempVars;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
@@ -198,7 +199,10 @@ public class SummonSkill extends AbstractSkill {
                     
                     // 根据当前角色的朝向计算召唤点
                     getLocalToWorld(actor, summonOffset, summonPos);
-                    summonPos.setY(playService.getTerrainHeight(summonPos.x, summonPos.z));
+                    Vector3f terrainHeight = playService.getTerrainHeight(actor.getScene(), summonPos.x, summonPos.z);
+                    if (terrainHeight != null) {
+                        summonPos.set(terrainHeight);
+                    }
                     summonPos.setY(summonPos.y + summonOffset.y);
                     setLocalTranslation(summonPos);
                     

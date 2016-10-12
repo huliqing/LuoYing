@@ -11,17 +11,19 @@ import com.jme3.scene.Spatial;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.ly.Ly;
+import name.huliqing.ly.data.PlantEntityData;
 import name.huliqing.ly.object.entity.ModelEntity;
+import name.huliqing.ly.object.entity.TerrainEntity;
 import name.huliqing.ly.object.scene.Scene;
 import name.huliqing.ly.object.scene.SceneListener;
 import name.huliqing.ly.object.scene.SceneListenerAdapter;
-import name.huliqing.ly.utils.GeometryUtils;
 
 /**
  * 植被环境物体，如：花草等物体
  * @author huliqing
+ * @param <T>
  */
-public class PlantEnv extends ModelEntity {
+public class PlantEnv<T extends PlantEntityData> extends ModelEntity<T> {
 
     private SceneListener sceneListener;
 
@@ -53,11 +55,10 @@ public class PlantEnv extends ModelEntity {
 
     private void makePlantOnTerrain(Scene scene) {
         // 在场景载入完毕之后将植皮位置移到terrain节点的上面。
-        List<TerrainEnv> sos = scene.getEntities(TerrainEnv.class, new ArrayList<TerrainEnv>());
+        List<TerrainEntity> sos = scene.getEntities(TerrainEntity.class, new ArrayList<TerrainEntity>());
         Vector3f location = null;
-        for (TerrainEnv so : sos) {
-            Spatial terrain = so.getSpatial();
-            Vector3f terrainPoint = GeometryUtils.getModelHeight(terrain, model.getWorldTranslation().x, model.getWorldTranslation().z);
+        for (TerrainEntity terrain : sos) {
+            Vector3f terrainPoint = terrain.getHeight(model.getWorldTranslation().x, model.getWorldTranslation().z);
             if (terrainPoint != null) {
                 if (location == null || terrainPoint.y > location.y) {
                     location = terrainPoint;

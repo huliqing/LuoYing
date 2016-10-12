@@ -4,63 +4,16 @@
  */
 package name.huliqing.ly.data;
 
-import com.jme3.export.InputCapsule;
-import com.jme3.export.JmeExporter;
-import com.jme3.export.JmeImporter;
-import com.jme3.export.OutputCapsule;
 import com.jme3.math.Vector3f;
 import com.jme3.network.serializing.Serializable;
-import java.io.IOException;
 import name.huliqing.ly.data.define.MatObject;
 
 /**
- * @deprecated 20161010不再使用
  * @author huliqing
  */
 @Serializable
-public class ActorData extends EntityData implements MatObject {
+public class ActorData extends ModelEntityData implements MatObject {
     
-    // 角色名称
-    private String name = "";
-    private int mat;
-    
-    @Override
-    public void write(JmeExporter ex) throws IOException {
-        super.write(ex);
-        OutputCapsule oc = ex.getCapsule(this);
-        oc.write(name.getBytes(), "name", null);
-        oc.write(mat, "mat", -1);
-    }
-
-    @Override
-    public void read(JmeImporter im) throws IOException {
-        super.read(im);
-        InputCapsule ic = im.getCapsule(this);
-        name = new String(ic.readByteArray("name", "".getBytes()), "utf-8");
-        mat = ic.readInt("mat", -1);
-    }
-    
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        if (name == null)
-            return;
-        this.name = name;
-    }
-
-    @Override
-    public int getMat() {
-        return mat;
-    }
-    
-    @Override
-    public void setMat(int mat) {
-        this.mat = mat;
-    }
-
-
     /**
      * 获取文件模型
      * @return 

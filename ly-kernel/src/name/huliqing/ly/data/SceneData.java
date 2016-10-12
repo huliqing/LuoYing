@@ -21,13 +21,13 @@ import java.util.List;
 public class SceneData extends ObjectData {
     
     // 场景中的物体数据列表
-    private List<ObjectData> entityDatas;
+    private List<EntityData> entityDatas;
     
     /**
      * 获取场景中的物体数据列表，如果没有定义任何物体则返回null.
      * @return 
      */
-    public List<ObjectData> getEntityDatas() {
+    public List<EntityData> getEntityDatas() {
         return entityDatas;
     }
 
@@ -35,7 +35,7 @@ public class SceneData extends ObjectData {
      * 设置场景物体数据列表
      * @param entityDatas 
      */
-    public void setEntityDatas(List<ObjectData> entityDatas) {
+    public void setEntityDatas(List<EntityData> entityDatas) {
         this.entityDatas = entityDatas;
     }
     
@@ -43,9 +43,9 @@ public class SceneData extends ObjectData {
      * 添加一个场景物体数据
      * @param entityData 
      */
-    public void addEntityData(ObjectData entityData) {
+    public void addEntityData(EntityData entityData) {
         if (entityDatas == null) {
-            entityDatas = new ArrayList<ObjectData>();
+            entityDatas = new ArrayList<EntityData>();
         }
         if (!entityDatas.contains(entityData)) {
             entityDatas.add(entityData);
@@ -57,7 +57,7 @@ public class SceneData extends ObjectData {
      * @param entityData
      * @return 
      */
-    public boolean removeEntityData(ObjectData entityData) {
+    public boolean removeEntityData(EntityData entityData) {
         return entityDatas != null && entityDatas.remove(entityData);
     }
     
@@ -66,7 +66,7 @@ public class SceneData extends ObjectData {
         super.write(ex);
         OutputCapsule oc = ex.getCapsule(this);
         if (entityDatas != null) {
-            oc.writeSavableArrayList(new ArrayList<ObjectData>(entityDatas), "entityDatas", null);
+            oc.writeSavableArrayList(new ArrayList<EntityData>(entityDatas), "entityDatas", null);
         }
     }
     

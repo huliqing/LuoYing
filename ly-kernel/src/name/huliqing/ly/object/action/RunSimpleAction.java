@@ -48,8 +48,8 @@ public class RunSimpleAction extends AbstractAction implements RunAction{
     @Override
     public void setActor(Entity actor) {
         this.actor = actor;
-        actorModule = actor.getModule(ActorModule.class);
-        skillModule = actor.getModule(SkillModule.class);
+        actorModule = actor.getEntityModule().getModule(ActorModule.class);
+        skillModule = actor.getEntityModule().getModule(SkillModule.class);
     }
     
     @Override

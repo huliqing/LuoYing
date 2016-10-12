@@ -7,7 +7,6 @@ package name.huliqing.ly.layer.network;
 import name.huliqing.ly.network.Network;
 import com.jme3.math.Vector3f;
 import name.huliqing.ly.Factory;
-import name.huliqing.ly.view.talk.Talk;
 import name.huliqing.ly.layer.service.ActorService;
 import name.huliqing.ly.mess.MessActorFollow;
 import name.huliqing.ly.mess.MessActorKill;
@@ -15,7 +14,6 @@ import name.huliqing.ly.mess.MessActorPhysics;
 import name.huliqing.ly.mess.MessActorSetGroup;
 import name.huliqing.ly.mess.MessActorSetLevel;
 import name.huliqing.ly.mess.MessActorSetTarget;
-import name.huliqing.ly.mess.MessActorSpeak;
 import name.huliqing.ly.mess.MessActorTeam;
 import name.huliqing.ly.mess.MessActorViewDir;
 import name.huliqing.ly.mess.MessActorLookAt;
@@ -36,24 +34,24 @@ public class ActorNetworkImpl implements ActorNetwork{
         actorService = Factory.get(ActorService.class);
     }
 
-    @Override
-    public void speak(Entity actor, String mess, float useTime) {
-        if (!NETWORK.isClient()) {
-            //broadcast
-            MessActorSpeak mas = new MessActorSpeak();
-            mas.setActorId(actor.getData().getUniqueId());
-            mas.setMess(mess);
-            NETWORK.broadcast(mas);
-            // local speak
-            actorService.speak(actor, mess, useTime); 
-        }
-    }
-
-    @Override
-    public void talk(Talk talk) {
-        talk.setNetwork(true);
-        actorService.talk(talk); 
-    }
+//    @Override
+//    public void speak(Entity actor, String mess, float useTime) {
+//        if (!NETWORK.isClient()) {
+//            //broadcast
+//            MessActorSpeak mas = new MessActorSpeak();
+//            mas.setActorId(actor.getData().getUniqueId());
+//            mas.setMess(mess);
+//            NETWORK.broadcast(mas);
+//            // local speak
+//            actorService.speak(actor, mess, useTime); 
+//        }
+//    }
+//
+//    @Override
+//    public void talk(Talk talk) {
+//        talk.setNetwork(true);
+//        actorService.talk(talk); 
+//    }
 
     @Override
     public void kill(Entity actor) {

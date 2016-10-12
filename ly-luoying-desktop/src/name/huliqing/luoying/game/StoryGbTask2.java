@@ -22,7 +22,7 @@ import name.huliqing.ly.layer.service.DropService;
 import name.huliqing.ly.layer.service.PlayService;
 import name.huliqing.ly.layer.service.SkillService;
 import name.huliqing.ly.layer.service.StateService;
-import name.huliqing.ly.layer.service.ViewService;
+import name.huliqing.luoying.layer.service.ViewService;
 import name.huliqing.ly.object.IntervalLogic;
 import name.huliqing.ly.logic.scene.ActorBuildSimpleLogic;
 import name.huliqing.ly.logic.scene.ActorBuildSimpleLogic.Callback;

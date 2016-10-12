@@ -13,6 +13,8 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.util.TempVars;
 import name.huliqing.ly.data.EffectData;
+import name.huliqing.ly.data.EntityData;
+import name.huliqing.ly.object.scene.Scene;
 import name.huliqing.ly.shape.QuadXY;
 import name.huliqing.ly.utils.MatUtils;
 import name.huliqing.ly.utils.MathUtils;
@@ -22,7 +24,7 @@ import name.huliqing.ly.utils.MathUtils;
  * 光晕效果,在xz面上竖起多束光束。
  * @author huliqing
  */
-public class HaloEffect extends AbstractEffect {
+public class HaloEffect extends Effect {
     
     // 光晕材质贴图
     private String texture = "Textures/effect/spark_v.jpg";
@@ -50,8 +52,8 @@ public class HaloEffect extends AbstractEffect {
     }
     
     @Override
-    public void initialize() {
-        super.initialize();
+    public void initialize(Scene scene) {
+        super.initialize(scene);
         create();
     }
     

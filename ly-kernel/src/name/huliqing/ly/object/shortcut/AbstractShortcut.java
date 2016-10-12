@@ -9,6 +9,7 @@ import com.jme3.math.Vector3f;
 import name.huliqing.ly.data.ObjectData;
 import name.huliqing.ly.data.ShortcutData;
 import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.ly.object.entity.Entity;
 
 /**
  * @author huliqing
@@ -21,7 +22,7 @@ public abstract class AbstractShortcut<T extends ObjectData> implements Shortcut
     
     protected T objectData;
     
-    protected Actor actor;
+    protected Entity actor;
     protected float width;
     protected float height;
     protected final Vector3f location = new Vector3f();
@@ -73,12 +74,12 @@ public abstract class AbstractShortcut<T extends ObjectData> implements Shortcut
     }
     
     @Override
-    public Actor getActor() {
+    public Entity getActor() {
         return actor;
     }
 
     @Override
-    public void setActor(Actor actor) {
+    public void setActor(Entity actor) {
         this.actor = actor;
     }
 

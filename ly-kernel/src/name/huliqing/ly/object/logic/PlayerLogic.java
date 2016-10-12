@@ -35,7 +35,7 @@ public class PlayerLogic<T extends LogicData> extends Logic<T> {
     @Override
     public void setActor(Entity actor) {
         super.setActor(actor); 
-        actorModule = actor.getModule(ActorModule.class);
+        actorModule = actor.getEntityModule().getModule(ActorModule.class);
     }
     
     @Override

@@ -7,7 +7,6 @@ package name.huliqing.ly.object.entity;
 
 import com.jme3.scene.Spatial;
 import name.huliqing.ly.data.EntityData;
-import name.huliqing.ly.object.module.Module;
 import name.huliqing.ly.object.scene.Scene;
 import name.huliqing.ly.xml.DataProcessor;
 
@@ -15,9 +14,16 @@ import name.huliqing.ly.xml.DataProcessor;
  * Entity定义一种可以直接存放在Scene中的存在，这类<b>存在</b>包含任何可能性的有形物体或无形物体,
  * 如：水、天空、重力、阴影、模型、阳光、相机等...
  * @author huliqing
+ * @param <T>
  */
-public interface Entity extends DataProcessor<EntityData>{
+public interface Entity<T extends EntityData> extends DataProcessor<T>{
 
+    @Override
+    public void setData(T data);
+
+    @Override
+    public T getData();
+    
     /**
      * 初始化
      * @param scene 场景容器
@@ -72,25 +78,30 @@ public interface Entity extends DataProcessor<EntityData>{
      */
     boolean removeFromScene();
     
-    /**
-     * 给实体添加模块
-     * @param module 
-     */
-    void addModule(Module module);
+//    /**
+//     * 给实体添加模块
+//     * @param module 
+//     */
+//    void addModule(Module module);
+//    
+//    /**
+//     * 移除指定的角色模块
+//     * @param module 
+//     * @return  
+//     */
+//    boolean removeModule(Module module);
+//    
+//    /**
+//     * 从角色身上获取指定类型的模块, 这个方法返回第一个符合类型的实例，如果找不到符合类型的实例则返回null.
+//     * @param <T>
+//     * @param moduleType
+//     * @return 
+//     */
+////    <T extends Module> T getModule(Class<T> moduleType);
     
     /**
-     * 移除指定的角色模块
-     * @param module 
-     * @return  
-     */
-    boolean removeModule(Module module);
-    
-    /**
-     * 从角色身上获取指定类型的模块, 这个方法返回第一个符合类型的实例，如果找不到符合类型的实例则返回null.
-     * @param <T>
-     * @param moduleType
+     * 获取Entity模块
      * @return 
      */
-    <T extends Module> T getModule(Class<T> moduleType);
-    
+    EntityModule getEntityModule();
 }

@@ -14,6 +14,7 @@ import name.huliqing.ly.data.EffectData;
 import name.huliqing.ly.object.anim.AnimationControl;
 import name.huliqing.ly.object.anim.Loop;
 import name.huliqing.ly.object.anim.RandomRotationAnim;
+import name.huliqing.ly.object.scene.Scene;
 import name.huliqing.ly.utils.MathUtils;
 
 /**
@@ -21,7 +22,7 @@ import name.huliqing.ly.utils.MathUtils;
  * 一个由几个星光环绕着目标旋转的特效。
  * @author huliqing
  */
-public class EncircleHaloEffect extends AbstractEffect {
+public class EncircleHaloEffect extends Effect {
 
     // 星光图片
     private String texture = "Textures/effect/halo_s.jpg";
@@ -43,20 +44,20 @@ public class EncircleHaloEffect extends AbstractEffect {
     @Override
     public void setData(EffectData data) {
         super.setData(data);
-        texture = data.getProto().getAsString("texture", texture);
-        size = data.getProto().getAsInteger("size", size);
-        radius = data.getProto().getAsFloat("radius", radius);
-        haloSize = data.getProto().getAsVector3f("haloSize", haloSize);
-        haloColor = data.getProto().getAsColor("haloColor", haloColor);
-        showLine = data.getProto().getAsBoolean("showLine", showLine);
-        lineColor = data.getProto().getAsColor("lineColor", lineColor);
+        texture = data.getAsString("texture", texture);
+        size = data.getAsInteger("size", size);
+        radius = data.getAsFloat("radius", radius);
+        haloSize = data.getAsVector3f("haloSize", haloSize);
+        haloColor = data.getAsColor("haloColor", haloColor);
+        showLine = data.getAsBoolean("showLine", showLine);
+        lineColor = data.getAsColor("lineColor", lineColor);
         
         preCreate();
     }
 
     @Override
-    public void initialize() {
-        super.initialize();
+    public void initialize(Scene scene) {
+        super.initialize(scene);
         // 重置速度
         for (HaloCircle hc : circles) {
             hc.setRotateSpeed(FastMath.nextRandomFloat() * 0.5f + 0.5f);
@@ -95,7 +96,7 @@ public class EncircleHaloEffect extends AbstractEffect {
     protected void effectUpdate(float tpf) {
         super.effectUpdate(tpf);
         for (HaloCircle hc : circles) {
-            hc.setRotateSpeed(hc.getRotateSpeed() + trueTimeUsed * tpf);
+            hc.setRotateSpeed(hc.getRotateSpeed() + timeUsed * tpf);
         }
         
     }

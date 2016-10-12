@@ -10,10 +10,10 @@ import name.huliqing.ly.constants.ResConstants;
 import name.huliqing.ly.data.GameLogicData;
 import name.huliqing.ly.enums.MessageType;
 import name.huliqing.ly.layer.network.PlayNetwork;
-import name.huliqing.ly.layer.service.ViewService;
+import name.huliqing.luoying.layer.service.ViewService;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.ly.object.gamelogic.AbstractGameLogic;
-import name.huliqing.ly.object.view.TextView;
+import name.huliqing.luoying.object.view.TextView;
 
 /**
  * 用于按时间计算等级

@@ -21,7 +21,6 @@ import name.huliqing.ly.object.attribute.BooleanAttribute;
 import name.huliqing.ly.object.attribute.NumberAttribute;
 import name.huliqing.ly.object.attribute.ValueChangeListener;
 import name.huliqing.ly.object.entity.Entity;
-import name.huliqing.ly.object.entity.EntityFactory;
 
 /**
  * 角色的基本控制器
@@ -156,7 +155,7 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     @Override
     public void initialize(Entity actor) {
         super.initialize(actor);
-        attributeModule = (AttributeModule) actor.getModule(AttributeModule.class);
+        attributeModule = (AttributeModule) actor.getEntityModule().getModule(AttributeModule.class);
         
         healthAttribute = attributeModule.getAttributeByName(bindHealthAttribute, NumberAttribute.class);
         groupAttribute = attributeModule.getAttributeByName(bindGroupAttribute, NumberAttribute.class);
@@ -348,7 +347,7 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
             return false;
         }
         // 如果目标分组值小于或等于0，则始终认为“不”是敌人，这样允许游戏添加一些无害的中立小动物
-        ActorModule targetActorModule = target.getModule(ActorModule.class);
+        ActorModule targetActorModule = target.getEntityModule().getModule(ActorModule.class);
         if (targetActorModule.getGroup() <= 0) {
             return false;
         }
@@ -470,7 +469,7 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
             // 释放旧目标的listener
             Entity oldTarget = entity.getScene().getEntity(oldValue.longValue());
             if (oldTarget != null) {
-                ActorModule oldTargetActorModule = oldTarget.getModule(ActorModule.class);
+                ActorModule oldTargetActorModule = oldTarget.getEntityModule().getModule(ActorModule.class);
                 if (oldTargetActorModule != null) {
                     oldTargetActorModule.notifyActorTargetReleasedListener(entity);
                 }
@@ -478,7 +477,7 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
             // 锁定新目标的listener.
             Entity newTarget = entity.getScene().getEntity(newValue.longValue());
             if (newTarget != null) {
-                ActorModule newTargetActorModule = newTarget.getModule(ActorModule.class);
+                ActorModule newTargetActorModule = newTarget.getEntityModule().getModule(ActorModule.class);
                 if (newTargetActorModule != null) {
                     newTargetActorModule.notifyActorTargetLockedListener(entity);
                 }
@@ -675,7 +674,7 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
         
         // 通知攻击者，告诉攻击者：你已经击中一个目标。
         if (hitter != null) {
-            ActorModule hitterActorModule = EntityFactory.getModule(hitter, ActorModule.class);
+            ActorModule hitterActorModule = hitter.getEntityModule().getModule(ActorModule.class);
             if (hitterActorModule != null) {
                 hitterActorModule.notifyActorHitOtherListener(entity, hitAttribute, hitValue, killed);
             }

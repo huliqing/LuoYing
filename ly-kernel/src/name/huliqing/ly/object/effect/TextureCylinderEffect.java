@@ -13,6 +13,8 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Cylinder;
 import name.huliqing.ly.data.EffectData;
+import name.huliqing.ly.data.EntityData;
+import name.huliqing.ly.object.scene.Scene;
 import name.huliqing.ly.utils.MatUtils;
 
 /**
@@ -21,7 +23,7 @@ import name.huliqing.ly.utils.MatUtils;
  * 可设置圆柱的初始位置在不同的轴向上
  * @author huliqing
  */
-public class TextureCylinderEffect extends AbstractEffect {
+public class TextureCylinderEffect extends Effect {
     // 贴图路径
     private String texture = "Textures/tex/effect/vortex.jpg";
     // 圆柱所在轴向:x/y/z
@@ -76,8 +78,8 @@ public class TextureCylinderEffect extends AbstractEffect {
     }
     
     @Override
-    public void initialize() {
-        super.initialize();
+    public void initialize(Scene scene) {
+        super.initialize(scene);
         
         if (root == null) {
             create();

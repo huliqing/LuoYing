@@ -4,12 +4,11 @@
  */
 package name.huliqing.ly.object.magic;
 
-import com.jme3.app.Application;
+import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.ly.Factory;
 import name.huliqing.ly.data.MagicData;
-import name.huliqing.ly.layer.service.PlayService;
 import name.huliqing.ly.object.entity.Entity;
+import name.huliqing.ly.object.scene.Scene;
 import name.huliqing.ly.object.skill.HitUtils;
 import name.huliqing.ly.utils.ConvertUtils;
 
@@ -17,25 +16,18 @@ import name.huliqing.ly.utils.ConvertUtils;
  * 可以"持续"影响角色属性"动态值"的魔法，这个影响值可能是“增加”或“减少”
  * @author huliqing
  */
-public class AttributeHitMagic extends Magic {
-//    private final AttributeService attributeService = Factory.get(AttributeService.class);
-//    private final ActorService actorService = Factory.get(ActorService.class);
-    private final PlayService playService = Factory.get(PlayService.class);
+public class AttributeHitMagic extends AbstractMagic {
     
     // 影响的属性ID
     private AttributeWrap[] attributes;
     // 时间间隔,单位秒。
-    private float interval;
-    private float distance;
-    
-    // 暂不要使用范围限制
-//    // 注：这里是弧度
-//    private float angle;
+    private float interval = 1.0f;
+    private float distance = 1.0f;
     
     // ---- inner
     private float intervalUsed;
-    // distance的平方，用于优化判断
-    private float distanceSquared;
+    
+    private final List<Entity> tempStore = new ArrayList<Entity>();
     
     @Override
     public void setData(MagicData data) {
@@ -47,22 +39,25 @@ public class AttributeHitMagic extends Magic {
             String[] attr = attributesArr[i].split("\\|");
             attributes[i] = new AttributeWrap(attr[0], ConvertUtils.toFloat(attr[1], 0));
         }
-        interval = data.getAsFloat("interval", 1.0f);
-        distance = data.getAsFloat("distance", 1.0f);
-        
-//        // 注意：这里把角度转换成了弧度
-//        angle = FastMath.DEG_TO_RAD * data.getAsFloat("angle", 360);
+        distance = data.getAsFloat("distance", distance);
+        interval = data.getAsFloat("interval", interval);
+        intervalUsed = data.getAsFloat("intervalUsed", intervalUsed);
     }
 
     @Override
-    public void initialize(Application app) {
-        super.initialize(app);
-        distanceSquared = distance * distance;
+    public void updateDatas() {
+        super.updateDatas();
+        data.setAttribute("intervalUsed", intervalUsed);
     }
 
     @Override
-    public void update(float tpf) {
-        super.update(tpf); 
+    public void initialize(Scene scene) {
+        super.initialize(scene);
+    }
+
+    @Override
+    public void magicUpdate(float tpf) {
+        super.magicUpdate(tpf); 
         intervalUsed += tpf;
         if (intervalUsed >= interval) {
             intervalUsed = 0;
@@ -71,16 +66,15 @@ public class AttributeHitMagic extends Magic {
     }
     
     private void applyHit() {
-        List<Entity> actors = playService.findAllActor();
+        tempStore.clear();
+        List<Entity> actors = scene.getEntities(Entity.class, magicRoot.getWorldTranslation(), distance, tempStore);
         if (actors.isEmpty()) 
             return;
         
         for (Entity hitTarget : actors) {
-            if (hitTarget.getSpatial().getWorldTranslation().distanceSquared(localRoot.getWorldTranslation()) <= distanceSquared) {
-                if (hitChecker == null || hitChecker.canHit(source, hitTarget)) {
-                    for (AttributeWrap aw : attributes) {
-                        HitUtils.getInstance().applyHit(source, hitTarget, aw.attribute, aw.amount);
-                    }
+            if (hitChecker == null || hitChecker.canHit(source, hitTarget)) {
+                for (AttributeWrap aw : attributes) {
+                    HitUtils.getInstance().applyHit(source, hitTarget, aw.attribute, aw.amount);
                 }
             }
         }

@@ -20,7 +20,7 @@ import name.huliqing.ly.mess.MessBase;
 import name.huliqing.ly.mess.MessPlayActorSelectResult;
 import name.huliqing.ly.mess.MessPlayGetClients;
 import name.huliqing.ly.mess.MessPlayGetServerState;
-import name.huliqing.ly.mess.MessPlayInitGame;
+import name.huliqing.luoying.mess.MessPlayInitGame;
 import name.huliqing.ly.mess.MessPlayLoadSavedActor;
 import name.huliqing.ly.mess.MessPlayLoadSavedActorResult;
 import name.huliqing.ly.mess.MessPlayClientExit;
@@ -35,7 +35,7 @@ import name.huliqing.ly.save.ShortcutsSave;
 import name.huliqing.ly.ui.Text;
 import name.huliqing.ly.ui.UI.Corner;
 import name.huliqing.ly.ui.UIFactory;
-import name.huliqing.ly.network.LanClientListener;
+import name.huliqing.luoying.network.LanClientListener;
 
 /**
  *

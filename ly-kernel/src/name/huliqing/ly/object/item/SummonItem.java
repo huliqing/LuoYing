@@ -12,10 +12,10 @@ import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import com.jme3.util.TempVars;
+import java.util.ArrayList;
+import java.util.List;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.data.ItemData;
-import name.huliqing.ly.enums.MessageType;
-import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.ly.layer.network.PlayNetwork;
 import name.huliqing.ly.layer.service.ActorService;
 import name.huliqing.ly.layer.service.ConfigService;
@@ -23,6 +23,8 @@ import name.huliqing.ly.layer.service.ItemService;
 import name.huliqing.ly.layer.service.PlayService;
 import name.huliqing.ly.object.Loader;
 import name.huliqing.ly.object.entity.Entity;
+import name.huliqing.ly.object.entity.TerrainEntity;
+import name.huliqing.ly.object.scene.Scene;
 import name.huliqing.ly.utils.GeometryUtils;
 import name.huliqing.ly.utils.Temp;
 
@@ -67,7 +69,7 @@ public class SummonItem extends AbstractItem {
         // -- 载入角色
         Entity bcc = Loader.load(actorId);
         int level = (int) (actorService.getLevel(actor) * configService.getSummonLevelFactor());
-        actorService.setName(bcc, actorService.getName(bcc) + "-" + actorService.getName(actor));
+//        actorService.setName(bcc, actorService.getName(bcc) + "-" + actorService.getName(actor));
         actorService.setLevel(bcc, level > 0 ? level : 1); // 至少1级
         
         // -- 设置为同伴
@@ -90,7 +92,7 @@ public class SummonItem extends AbstractItem {
         tv.release();
         
         if (summonPos == null) {
-            playNetwork.addMessage(actor, ResourceManager.get("common.summonPosError"), MessageType.notice);
+//            playNetwork.addMessage(actor, ResourceManager.get("common.summonPosError"), MessageType.notice);
             return false;
         }
         
@@ -98,16 +100,36 @@ public class SummonItem extends AbstractItem {
         // 否则召唤出的角色可能重叠在一起(因为光线的跟踪计算可能已经在地面以下而导致
         // 碰撞检测已经不正确
         float y = summonPos.y;
-        summonPos.setY(playService.getTerrainHeight(summonPos.x, summonPos.z));
+        Vector3f terrainHeight = getTerrainHeight(actor.getScene(), summonPos.x, summonPos.z);
+        if (terrainHeight != null) {
+            summonPos.set(terrainHeight);
+        } else {
+            summonPos.setY(actor.getSpatial().getWorldTranslation().y);
+        }
         
         if (y < summonPos.y) {
-            playNetwork.addMessage(actor, ResourceManager.get("common.summonPosError"), MessageType.notice);
+//            playNetwork.addMessage(actor, ResourceManager.get("common.summonPosError"), MessageType.notice);
             return false;
         }
         // 设置地点并召唤
         actorService.setLocation(bcc, summonPos);
         playNetwork.addEntity(actor.getScene(), bcc);
         return true;
+    }
+    
+    private Vector3f getTerrainHeight(Scene scene, float x, float z) {
+        // 在场景载入完毕之后将植皮位置移到terrain节点的上面。
+        List<TerrainEntity> sos = scene.getEntities(TerrainEntity.class, new ArrayList<TerrainEntity>());
+        Vector3f heightPoint = null;
+        for (TerrainEntity terrain : sos) {
+            Vector3f terrainPoint = terrain.getHeight(x, z);
+            if (terrainPoint != null) {
+                if (heightPoint == null || terrainPoint.y > heightPoint.y) {
+                    heightPoint = terrainPoint;
+                }
+            }
+        }
+        return heightPoint;
     }
     
     // 计算用于召奂物体的位置

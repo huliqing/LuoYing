@@ -12,6 +12,7 @@ import name.huliqing.ly.data.LogicData;
 import name.huliqing.ly.layer.network.ActorNetwork;
 import name.huliqing.ly.layer.service.ActorService;
 import name.huliqing.ly.object.entity.Entity;
+import name.huliqing.ly.object.module.ActorModule;
 
 /**
  * 这是一个通知逻辑，若当角色存在目标敌人时，会通知周围一定范围内的友军单位进
@@ -29,6 +30,7 @@ import name.huliqing.ly.object.entity.Entity;
 public class NotifyLogic<T extends LogicData> extends Logic<T> {
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final ActorService actorService = Factory.get(ActorService.class);
+    private ActorModule actorModule;
     
     // 默认通知周围10码范围内的友军单位
     private float distance = 15;
@@ -46,12 +48,23 @@ public class NotifyLogic<T extends LogicData> extends Logic<T> {
         this.distance = data.getAsFloat("distance", distance);
         this.force = data.getAsBoolean("force", force);
     }
+
+    @Override
+    public void setActor(Entity self) {
+        super.setActor(self);
+        actorModule = self.getEntityModule().getModule(ActorModule.class);
+    }
     
     @Override
     protected void doLogic(float tpf) {
-        Entity target = actorService.getTarget(actor);
-        if (target != null && actorService.isEnemy(target, actor) && !actorService.isDead(target)) {
-            actorService.findNearestFriendly(actor, distance, tempStore);
+        Entity target = actorModule.getTarget();
+        if (target == null) {
+            return;
+        }
+        ActorModule targetActorModule = target.getEntityModule().getModule(ActorModule.class);
+        if (actorModule.isEnemy(target) && !targetActorModule.isDead()) {
+            tempStore.clear();
+            findNearestFriendly(actor, distance, tempStore);
             if (!tempStore.isEmpty()) {
                 Entity fTarget;
                 for (Entity friend : tempStore) {
@@ -69,6 +82,22 @@ public class NotifyLogic<T extends LogicData> extends Logic<T> {
             // 不要去维持这个列表
             tempStore.clear();
         }
+    }
+    
+    private List<Actor> findNearestFriendly(Entity actor, float maxDistance, List<Actor> store) {
+        List<Actor> actors = actor.getScene().getEntities(Actor.class, actor.getSpatial().getWorldTranslation(), maxDistance, tempStore);
+//        ActorModule actorModule = actor.getEntityModule().getModule(ActorModule.class);
+        ActorModule targetActorModule;
+        for (Actor a : actors) {
+            targetActorModule = a.getEntityModule().getModule(ActorModule.class);
+            if (targetActorModule.isDead() || targetActorModule.isEnemy(actor)) {
+                continue;
+            }
+            if (targetActorModule.getGroup() == actorModule.getGroup()) {
+                store.add(a);
+            }
+        }
+        return store;
     }
     
 }

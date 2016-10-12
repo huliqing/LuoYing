@@ -12,14 +12,16 @@ import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.FastMath;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
 import name.huliqing.ly.data.EffectData;
+import name.huliqing.ly.data.EntityData;
 import name.huliqing.ly.object.Loader;
 import name.huliqing.ly.object.emitter.Emitter;
+import name.huliqing.ly.object.scene.Scene;
 
 /**
  *
  * @author huliqing
  */
-public class ParticleEffect extends AbstractEffect {
+public class ParticleEffect extends Effect {
     private String emitter;
     // 是否立即执行所有粒子发射
     private boolean emitAll;
@@ -47,13 +49,13 @@ public class ParticleEffect extends AbstractEffect {
             blendMode = BlendMode.valueOf(tempBlendMode);
         }
     }
-
+    
     @Override
-    public void initialize() {
-        super.initialize();
+    public void initialize(Scene scene) {
+        super.initialize(scene);
         
         if (pe == null) {
-            Emitter em = Loader.loadEmitter(emitter);
+            Emitter em = Loader.load(emitter);
             if (randomColor) {
                 pe = em.getParticleEmitter(new RandomColorEmitter());
             } else {

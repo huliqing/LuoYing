@@ -25,7 +25,7 @@ public class SkinServiceImpl implements SkinService {
 
     @Override
     public void addSkin(Entity actor, String skinId, int amount) {
-        SkinModule module = actor.getModule(SkinModule.class);
+        SkinModule module = actor.getEntityModule().getModule(SkinModule.class);
         if (module != null) {
             module.addSkin(skinId, amount);
         }
@@ -33,7 +33,7 @@ public class SkinServiceImpl implements SkinService {
 
     @Override
     public void removeSkin(Entity actor, String skinId, int amount) {
-        SkinModule module = actor.getModule(SkinModule.class);
+        SkinModule module = actor.getEntityModule().getModule(SkinModule.class);
         if (module != null) {
             module.removeSkin(skinId, amount);
         }
@@ -47,7 +47,7 @@ public class SkinServiceImpl implements SkinService {
 //            return;
 //        }
 
-        SkinModule control = actor.getModule(SkinModule.class);
+        SkinModule control = actor.getEntityModule().getModule(SkinModule.class);
         if (control != null) {
             control.attachSkin(skin);
         }
@@ -61,7 +61,7 @@ public class SkinServiceImpl implements SkinService {
 //            return;
 //        }
 
-        SkinModule control = actor.getModule(SkinModule.class);
+        SkinModule control = actor.getEntityModule().getModule(SkinModule.class);
         if (control != null) {
             control.detachSkin(skin);
         }
@@ -85,13 +85,13 @@ public class SkinServiceImpl implements SkinService {
         
     @Override
     public boolean isWeaponTakeOn(Entity actor) {
-        SkinModule module = actor.getModule(SkinModule.class);
+        SkinModule module = actor.getEntityModule().getModule(SkinModule.class);
         return module != null && module.isWeaponTakeOn();
     }
 
     @Override
     public void takeOnWeapon(Entity actor) {
-        SkinModule control = actor.getModule(SkinModule.class);
+        SkinModule control = actor.getEntityModule().getModule(SkinModule.class);
         if (control != null) {
             control.takeOnWeapon();
         }
@@ -99,7 +99,7 @@ public class SkinServiceImpl implements SkinService {
     
     @Override
     public void takeOffWeapon(Entity actor) {
-        SkinModule module = actor.getModule(SkinModule.class);
+        SkinModule module = actor.getEntityModule().getModule(SkinModule.class);
         if (module != null) {
             module.takeOffWeapon();
         }
@@ -107,7 +107,7 @@ public class SkinServiceImpl implements SkinService {
 
     @Override
     public Skin getSkin(Entity actor, String skinId) {
-        SkinModule module = actor.getModule(SkinModule.class);
+        SkinModule module = actor.getEntityModule().getModule(SkinModule.class);
         if (module != null) {
             return module.getSkin(skinId);
         }
@@ -121,7 +121,7 @@ public class SkinServiceImpl implements SkinService {
      */
     @Override
     public List<Skin> getSkins(Entity actor) {
-        SkinModule module = actor.getModule(SkinModule.class);
+        SkinModule module = actor.getEntityModule().getModule(SkinModule.class);
         if (module != null) {
             return module.getSkins();
         }
@@ -135,7 +135,7 @@ public class SkinServiceImpl implements SkinService {
      */
     @Override
     public List<Skin> getUsingSkins(Entity actor) {
-        SkinModule module = actor.getModule(SkinModule.class);
+        SkinModule module = actor.getEntityModule().getModule(SkinModule.class);
         if (module != null) {
             return module.getUsingSkins();
         }
@@ -144,7 +144,7 @@ public class SkinServiceImpl implements SkinService {
     
     @Override
     public long getWeaponState(Entity actor) {
-        SkinModule module = actor.getModule(SkinModule.class);
+        SkinModule module = actor.getEntityModule().getModule(SkinModule.class);
         if (module != null) {
             return module.getWeaponState();
         }
@@ -153,7 +153,7 @@ public class SkinServiceImpl implements SkinService {
 
     @Override
     public void addSkinListener(Entity actor, SkinListener skinListener) {
-        SkinModule module = actor.getModule(SkinModule.class);
+        SkinModule module = actor.getEntityModule().getModule(SkinModule.class);
         if (module != null) {
             module.addSkinListener(skinListener);
         }
@@ -161,7 +161,7 @@ public class SkinServiceImpl implements SkinService {
 
     @Override
     public boolean removeSkinListener(Entity actor, SkinListener skinListener) {
-        SkinModule module = actor.getModule(SkinModule.class);
+        SkinModule module = actor.getEntityModule().getModule(SkinModule.class);
         if (module != null) {
             return module.removeSkinListener(skinListener);
         }

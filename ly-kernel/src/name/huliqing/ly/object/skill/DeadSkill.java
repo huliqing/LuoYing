@@ -30,7 +30,7 @@ public class DeadSkill extends AbstractSkill {
     @Override
     public void setActor(Entity actor) {
         super.setActor(actor); 
-        channelModule = actor.getModule(ChannelModule.class);
+        channelModule = actor.getEntityModule().getModule(ChannelModule.class);
     }
 
     @Override

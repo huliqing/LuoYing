@@ -6,11 +6,9 @@ package name.huliqing.ly.object.state;
 
 import com.jme3.scene.Spatial;
 import java.util.List;
-import name.huliqing.ly.Factory;
 import name.huliqing.ly.data.StateData;
-import name.huliqing.ly.layer.service.EffectService;
+import name.huliqing.ly.object.Loader;
 import name.huliqing.ly.object.effect.Effect;
-import name.huliqing.ly.object.effect.EffectManager;
 import name.huliqing.ly.object.module.SkillModule;
 import name.huliqing.ly.object.skill.Skill;
 
@@ -19,7 +17,6 @@ import name.huliqing.ly.object.skill.Skill;
  * @author huliqing
  */
 public class MoveSpeedState extends AttributeState {
-    private final EffectService effectService = Factory.get(EffectService.class);
     private SkillModule skillModule;
     
     private String moveEffectId;
@@ -37,7 +34,7 @@ public class MoveSpeedState extends AttributeState {
     @Override
     public void initialize() {
         super.initialize();
-        skillModule = actor.getModule(SkillModule.class);
+        skillModule = actor.getEntityModule().getModule(SkillModule.class);
         
         // 查找"run"技能
         List<Skill> runSkills = skillModule.getSkillRun(null);
@@ -51,9 +48,9 @@ public class MoveSpeedState extends AttributeState {
         }
         
         if (moveEffect == null && moveEffectId != null) {
-            moveEffect = effectService.loadEffect(moveEffectId);
+            moveEffect = Loader.load(moveEffectId);
             moveEffect.setTraceObject(actor.getSpatial());
-            EffectManager.getInstance().addEffect(moveEffect);
+            actor.getScene().getRoot().attachChild(moveEffect);
         }
         
         checkEffectTrace();
@@ -76,7 +73,7 @@ public class MoveSpeedState extends AttributeState {
         
         // 移除效果
         if (moveEffect != null) {
-            EffectManager.getInstance().removeEffect(moveEffect);
+            moveEffect.requestEnd();
         }
         super.cleanup();
     }
@@ -93,7 +90,7 @@ public class MoveSpeedState extends AttributeState {
     
     private void showMoveEffect() {
         if (moveEffect.isEnd()) {
-            moveEffect.initialize();
+            moveEffect.initialize(null);
         }
         moveEffect.setCullHint(Spatial.CullHint.Never);
     }

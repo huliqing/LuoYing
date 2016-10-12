@@ -137,16 +137,17 @@ public class AbstractEl<T extends ElData> implements El<T> {
     
     public static void main(String[] args) {
         ElData data = new ElData();
-        data.setExpression("{s_attributeHealth} + 5 + {t_attributeDefence}");
+        data.setExpression("{s1} + 5 + {t1}");
         AbstractEl ae = new AbstractEl();
         ae.setData(data);
         
+        long startTime = System.currentTimeMillis();
         Map<String, Object> vmap = new HashMap<String, Object>();
-        vmap.put("s_attributeHealth", 4);
-        vmap.put("t_attributeDefence", -2);
-        
-        String result = ae.eval(vmap);
-        
-        System.out.println("result=" + result);
+        for (int i = 0; i < 100000; i++) {
+            vmap.put("s1", i);
+            vmap.put("t1", 2);
+            String result = ae.eval(vmap);
+        }
+        System.out.println("useTime=" + (System.currentTimeMillis() - startTime));
     }
 }

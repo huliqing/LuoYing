@@ -7,13 +7,15 @@ package name.huliqing.ly.object.effect;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.scene.Spatial;
 import name.huliqing.ly.data.EffectData;
+import name.huliqing.ly.data.EntityData;
 import name.huliqing.ly.object.Loader;
+import name.huliqing.ly.object.scene.Scene;
 
 /**
  * 用一个模型作为一个效果
  * @author huliqing
  */
-public class ModelEffect extends AbstractEffect {
+public class ModelEffect extends Effect {
 
     private boolean loaded;
     private Spatial model;
@@ -57,8 +59,8 @@ public class ModelEffect extends AbstractEffect {
     }
 
     @Override
-    public void initialize() {
-        super.initialize(); 
+    public void initialize(Scene scene) {
+        super.initialize(scene);
         if (model != null) {
             model.setCullHint(CullHint.Inherit);
         }

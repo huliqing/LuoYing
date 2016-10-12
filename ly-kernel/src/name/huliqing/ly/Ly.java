@@ -38,7 +38,7 @@ import name.huliqing.ly.data.DefineData;
 import name.huliqing.ly.data.ModuleData;
 import name.huliqing.ly.data.DropData;
 import name.huliqing.ly.data.DropItem;
-import name.huliqing.ly.data.EffectData;
+//import name.huliqing.ly.data.EffectData;
 import name.huliqing.ly.data.ElData;
 import name.huliqing.ly.data.EmitterData;
 import name.huliqing.ly.data.EntityData;
@@ -67,17 +67,17 @@ import name.huliqing.ly.mess.MessActorPhysics;
 import name.huliqing.ly.mess.MessActorSetGroup;
 import name.huliqing.ly.mess.MessActorSetLevel;
 import name.huliqing.ly.mess.MessActorSetTarget;
-import name.huliqing.ly.mess.MessActorSpeak;
+//import name.huliqing.ly.mess.MessActorSpeak;
 import name.huliqing.ly.mess.MessActorTeam;
 import name.huliqing.ly.mess.MessActorTransform;
 import name.huliqing.ly.mess.MessActorTransformDirect;
 import name.huliqing.ly.mess.MessActorViewDir;
 import name.huliqing.ly.mess.MessAutoAttack;
-import name.huliqing.ly.mess.MessChatSell;
-import name.huliqing.ly.mess.MessChatSend;
-import name.huliqing.ly.mess.MessChatShop;
+//import name.huliqing.luoying.mess.MessChatSell;
+//import name.huliqing.luoying.mess.MessChatSend;
+//import name.huliqing.luoying.mess.MessChatShop;
 import name.huliqing.ly.mess.MessClient;
-import name.huliqing.ly.mess.MessMessage;
+//import name.huliqing.luoying.mess.MessMessage;
 import name.huliqing.ly.mess.MessPing;
 import name.huliqing.ly.mess.MessPlayActorLoaded;
 import name.huliqing.ly.mess.MessPlayActorSelect;
@@ -87,7 +87,7 @@ import name.huliqing.ly.mess.MessPlayClientExit;
 import name.huliqing.ly.mess.MessPlayGetClients;
 import name.huliqing.ly.mess.MessPlayGetGameData;
 import name.huliqing.ly.mess.MessPlayGetServerState;
-import name.huliqing.ly.mess.MessPlayInitGame;
+//import name.huliqing.luoying.mess.MessPlayInitGame;
 import name.huliqing.ly.mess.MessPlayLoadSavedActor;
 import name.huliqing.ly.mess.MessPlayLoadSavedActorResult;
 import name.huliqing.ly.mess.MessProtoAdd;
@@ -103,14 +103,14 @@ import name.huliqing.ly.mess.MessSkillWalk;
 import name.huliqing.ly.mess.MessSkinWeaponTakeOn;
 import name.huliqing.ly.mess.MessStateAdd;
 import name.huliqing.ly.mess.MessStateRemove;
-import name.huliqing.ly.mess.MessSyncObject;
+//import name.huliqing.luoying.mess.MessSyncObject;
 import name.huliqing.ly.mess.MessTalentAdd;
 import name.huliqing.ly.mess.MessTalentAddPoint;
 import name.huliqing.ly.mess.MessTaskAdd;
 import name.huliqing.ly.mess.MessTaskApplyItem;
 import name.huliqing.ly.mess.MessTaskComplete;
-import name.huliqing.ly.mess.MessViewAdd;
-import name.huliqing.ly.mess.MessViewRemove;
+//import name.huliqing.luoying.mess.MessViewAdd;
+//import name.huliqing.luoying.mess.MessViewRemove;
 import name.huliqing.ly.object.SyncData;
 import name.huliqing.ly.loader.ActionDataLoader;
 import name.huliqing.ly.object.action.FightDynamicAction;
@@ -150,17 +150,17 @@ import name.huliqing.ly.object.bullet.StraightBullet;
 import name.huliqing.ly.object.module.ChannelModule;
 import name.huliqing.ly.loader.ChannelDataLoader;
 import name.huliqing.ly.object.channel.SimpleChannel;
-import name.huliqing.ly.loader.ChatDataLoader;
-import name.huliqing.ly.object.chat.GroupChat;
-import name.huliqing.ly.object.chat.SellChat;
-import name.huliqing.ly.object.chat.SendChat;
-import name.huliqing.ly.object.chat.ShopItemChat;
-import name.huliqing.ly.object.chat.TaskChat;
+//import name.huliqing.ly.loader.ChatDataLoader;
+//import name.huliqing.luoying.object.chat.GroupChat;
+//import name.huliqing.luoying.object.chat.SellChat;
+//import name.huliqing.luoying.object.chat.SendChat;
+//import name.huliqing.luoying.object.chat.ShopItemChat;
+//import name.huliqing.luoying.object.chat.TaskChat;
 import name.huliqing.ly.loader.ConfigDataLoader;
 import name.huliqing.ly.object.module.ActionModule;
 import name.huliqing.ly.object.module.AttributeModule;
 import name.huliqing.ly.object.module.ActorModule;
-import name.huliqing.ly.object.module.ChatModule;
+//import name.huliqing.luoying.object.module.ChatModule;
 import name.huliqing.ly.object.module.ItemModule;
 import name.huliqing.ly.object.module.LogicModule;
 import name.huliqing.ly.object.module.SkinModule;
@@ -170,7 +170,7 @@ import name.huliqing.ly.object.module.StateModule;
 import name.huliqing.ly.object.module.TalentModule;
 import name.huliqing.ly.object.module.TaskModule;
 import name.huliqing.ly.loader.DropDataLoader;
-import name.huliqing.ly.loader.EffectDataLoader;
+//import name.huliqing.ly.loader.EffectDataLoader;
 import name.huliqing.ly.object.effect.EncircleHaloEffect;
 import name.huliqing.ly.object.effect.GroupEffect;
 import name.huliqing.ly.object.effect.HaloEffect;
@@ -225,7 +225,7 @@ import name.huliqing.ly.object.position.ViewPosition;
 import name.huliqing.ly.object.resist.AllResist;
 import name.huliqing.ly.loader.ResistDataLoader;
 import name.huliqing.ly.object.resist.SimpleResist;
-import name.huliqing.ly.loader.RandomSceneLoader;
+import name.huliqing.ly.loader.RandomSceneDataLoader;
 import name.huliqing.ly.object.scene.Scene;
 import name.huliqing.ly.loader.SceneDataLoader;
 import name.huliqing.ly.object.shape.BoxShape;
@@ -265,9 +265,9 @@ import name.huliqing.ly.object.talent.AttributeTalent;
 import name.huliqing.ly.loader.TalentDataLoader;
 import name.huliqing.ly.object.task.CollectTask;
 import name.huliqing.ly.loader.TaskDataLoader;
-import name.huliqing.ly.object.view.TextPanelView;
-import name.huliqing.ly.object.view.TextView;
-import name.huliqing.ly.object.view.TimerView;
+//import name.huliqing.luoying.object.view.TextPanelView;
+//import name.huliqing.luoying.object.view.TextView;
+//import name.huliqing.luoying.object.view.TimerView;
 import name.huliqing.ly.loader.ViewDataLoader;
 import name.huliqing.ly.loader.ModuleDataLoader;
 import name.huliqing.ly.mess.MessActorSetLocation;
@@ -301,7 +301,7 @@ import name.huliqing.ly.object.drop.ItemDrop;
 import name.huliqing.ly.object.drop.SkinDrop;
 import name.huliqing.ly.object.item.AttributeItem;
 import name.huliqing.ly.object.item.BookItem;
-import name.huliqing.ly.object.item.MapItem;
+//import name.huliqing.ly.object.item.MapItem;
 import name.huliqing.ly.object.item.SimpleItem;
 import name.huliqing.ly.object.item.SkillItem;
 import name.huliqing.ly.object.item.StateItem;
@@ -378,7 +378,7 @@ public class Ly {
         Serializer.registerClass(ConfigData.class);
         Serializer.registerClass(DefineData.class);
         Serializer.registerClass(DropData.class);
-        Serializer.registerClass(EffectData.class);
+//        Serializer.registerClass(EffectData.class);
         Serializer.registerClass(ElData.class);
         Serializer.registerClass(EmitterData.class);
         Serializer.registerClass(GameData.class);
@@ -414,7 +414,7 @@ public class Ly {
         DataFactory.register("actionFightDynamic", ActionData.class, ActionDataLoader.class,  FightDynamicAction.class);
         
         // Actor
-        DataFactory.register("actor",  EntityData.class, ActorDataLoader.class, Actor.class);
+        DataFactory.register("actor",  ActorData.class, ActorDataLoader.class, Actor.class);
         
         //ActorAnim
         DataFactory.register("actorAnimCurveMove",  AnimData.class, AnimDataLoader.class, ActorCurveMove.class);
@@ -460,12 +460,12 @@ public class Ly {
         // Channel
         DataFactory.register("channel",  ChannelData.class, ChannelDataLoader.class, SimpleChannel.class);
         
-        // Chat
-        DataFactory.register("chatGroup",  ChatData.class, ChatDataLoader.class, GroupChat.class);
-        DataFactory.register("chatSend",  ChatData.class, ChatDataLoader.class, SendChat.class);
-        DataFactory.register("chatShopItem",  ChatData.class, ChatDataLoader.class, ShopItemChat.class);
-        DataFactory.register("chatSell",  ChatData.class, ChatDataLoader.class, SellChat.class);
-        DataFactory.register("chatTask",  ChatData.class, ChatDataLoader.class, TaskChat.class);
+//        // Chat
+//        DataFactory.register("chatGroup",  ChatData.class, ChatDataLoader.class, GroupChat.class);
+//        DataFactory.register("chatSend",  ChatData.class, ChatDataLoader.class, SendChat.class);
+//        DataFactory.register("chatShopItem",  ChatData.class, ChatDataLoader.class, ShopItemChat.class);
+//        DataFactory.register("chatSell",  ChatData.class, ChatDataLoader.class, SellChat.class);
+//        DataFactory.register("chatTask",  ChatData.class, ChatDataLoader.class, TaskChat.class);
         
         // Config
         DataFactory.register("config",  ConfigData.class, ConfigDataLoader.class, null);
@@ -483,17 +483,17 @@ public class Ly {
         DataFactory.register("dropSkin",  DropData.class, DropDataLoader.class, SkinDrop.class);
         
         // Effect
-        DataFactory.register("effectHalo",  EffectData.class, EffectDataLoader.class, HaloEffect.class);
-        DataFactory.register("effectParticle", EffectData.class, EffectDataLoader.class, ParticleEffect.class);
-        DataFactory.register("effectGroup", EffectData.class, EffectDataLoader.class, GroupEffect.class);
-        DataFactory.register("effectEncircleHalo", EffectData.class, EffectDataLoader.class, EncircleHaloEffect.class);
-        DataFactory.register("effectTexture", EffectData.class, EffectDataLoader.class, TextureEffect.class);
-        DataFactory.register("effectTextureCylinder", EffectData.class, EffectDataLoader.class, TextureCylinderEffect.class);
-        DataFactory.register("effectModel", EffectData.class, EffectDataLoader.class, ModelEffect.class);
-        DataFactory.register("effectSlideColor", EffectData.class, EffectDataLoader.class, SlideColorEffect.class);
-        DataFactory.register("effectSlideColorSpline", EffectData.class, EffectDataLoader.class, SlideColorSplineEffect.class);
-        DataFactory.register("effectSlideColorIOSpline", EffectData.class, EffectDataLoader.class, SlideColorIOSplineEffect.class);
-        DataFactory.register("effectProjection", EffectData.class, EffectDataLoader.class, ProjectionEffect.class);
+        DataFactory.register("effectHalo",  EntityData.class, EntityDataLoader.class, HaloEffect.class);
+        DataFactory.register("effectParticle", EntityData.class, EntityDataLoader.class, ParticleEffect.class);
+        DataFactory.register("effectGroup", EntityData.class, EntityDataLoader.class, GroupEffect.class);
+        DataFactory.register("effectEncircleHalo", EntityData.class, EntityDataLoader.class, EncircleHaloEffect.class);
+        DataFactory.register("effectTexture", EntityData.class, EntityDataLoader.class, TextureEffect.class);
+        DataFactory.register("effectTextureCylinder", EntityData.class, EntityDataLoader.class, TextureCylinderEffect.class);
+        DataFactory.register("effectModel", EntityData.class, EntityDataLoader.class, ModelEffect.class);
+        DataFactory.register("effectSlideColor", EntityData.class, EntityDataLoader.class, SlideColorEffect.class);
+        DataFactory.register("effectSlideColorSpline", EntityData.class, EntityDataLoader.class, SlideColorSplineEffect.class);
+        DataFactory.register("effectSlideColorIOSpline", EntityData.class, EntityDataLoader.class, SlideColorIOSplineEffect.class);
+        DataFactory.register("effectProjection", EntityData.class, EntityDataLoader.class, ProjectionEffect.class);
         
         // El
         DataFactory.register("elLevel",  ElData.class, ElDataLoader.class, LevelEl.class);
@@ -541,7 +541,7 @@ public class Ly {
         DataFactory.register("itemTest",  ItemData.class, ItemDataLoader.class, TestItem.class);
         DataFactory.register("itemAttribute",  ItemData.class, ItemDataLoader.class, AttributeItem.class);
         DataFactory.register("itemBook",  ItemData.class, ItemDataLoader.class, BookItem.class);
-        DataFactory.register("itemMap",  ItemData.class, ItemDataLoader.class, MapItem.class);
+//        DataFactory.register("itemMap",  ItemData.class, ItemDataLoader.class, MapItem.class);
         DataFactory.register("itemSimple",  ItemData.class, ItemDataLoader.class, SimpleItem.class);
         DataFactory.register("itemSkill",  ItemData.class, ItemDataLoader.class, SkillItem.class);
         DataFactory.register("itemState",  ItemData.class, ItemDataLoader.class, StateItem.class);
@@ -557,7 +557,7 @@ public class Ly {
         DataFactory.register("moduleActor",  ModuleData.class, ModuleDataLoader.class, ActorModule.class);
         DataFactory.register("moduleAttribute",  ModuleData.class, ModuleDataLoader.class, AttributeModule.class);
         DataFactory.register("moduleChannel",  ModuleData.class, ModuleDataLoader.class, ChannelModule.class);
-        DataFactory.register("moduleChat",  ModuleData.class, ModuleDataLoader.class, ChatModule.class);
+//        DataFactory.register("moduleChat",  ModuleData.class, ModuleDataLoader.class, ChatModule.class);
         DataFactory.register("moduleDrop",  ModuleData.class, ModuleDataLoader.class, DropModule.class);
         DataFactory.register("moduleItem",  ModuleData.class, ModuleDataLoader.class, ItemModule.class);
         DataFactory.register("moduleLevel",  ModuleData.class, ModuleDataLoader.class, LevelModule.class);
@@ -582,7 +582,7 @@ public class Ly {
         
         // Scene
         DataFactory.register("scene", SceneData.class, SceneDataLoader.class, Scene.class);
-        DataFactory.register("sceneRandom", SceneData.class, RandomSceneLoader.class, Scene.class);
+        DataFactory.register("sceneRandom", SceneData.class, RandomSceneDataLoader.class, Scene.class);
 
         // Shape
         DataFactory.register("shapeBox",  ShapeData.class, ShapeDataLoader.class, BoxShape.class);
@@ -633,9 +633,9 @@ public class Ly {
         DataFactory.register("taskCollect",  TaskData.class, TaskDataLoader.class, CollectTask.class);
                 
         // View
-        DataFactory.register("viewText",  ViewData.class, ViewDataLoader.class, TextView.class);
-        DataFactory.register("viewTextPanel",  ViewData.class, ViewDataLoader.class, TextPanelView.class);
-        DataFactory.register("viewTimer",  ViewData.class, ViewDataLoader.class, TimerView.class);
+//        DataFactory.register("viewText",  ViewData.class, ViewDataLoader.class, TextView.class);
+//        DataFactory.register("viewTextPanel",  ViewData.class, ViewDataLoader.class, TextPanelView.class);
+//        DataFactory.register("viewTimer",  ViewData.class, ViewDataLoader.class, TimerView.class);
     }
     
     private static void loadSysData() throws LyException {
@@ -721,7 +721,7 @@ public class Ly {
         Serializer.registerClass(MessPlayGetClients.class);
         Serializer.registerClass(MessPlayGetGameData.class);
         Serializer.registerClass(MessPlayGetServerState.class);
-        Serializer.registerClass(MessPlayInitGame.class);
+//        Serializer.registerClass(MessPlayInitGame.class);
         Serializer.registerClass(MessPlayLoadSavedActor.class);
         Serializer.registerClass(MessPlayLoadSavedActorResult.class);
         Serializer.registerClass(MessPlayClientExit.class);
@@ -739,7 +739,7 @@ public class Ly {
         Serializer.registerClass(MessProtoRemove.class);
 
         Serializer.registerClass(MessProtoUse.class);
-        Serializer.registerClass(MessMessage.class);
+//        Serializer.registerClass(MessMessage.class);
         Serializer.registerClass(MessPlayActorLoaded.class);
         Serializer.registerClass(MessSCActorRemove.class);
         Serializer.registerClass(MessPlayActorSelectResult.class);
@@ -756,7 +756,7 @@ public class Ly {
         Serializer.registerClass(MessActorSetLevel.class);
         Serializer.registerClass(MessActorSetLocation.class);
         Serializer.registerClass(MessActorSetTarget.class);
-        Serializer.registerClass(MessActorSpeak.class);
+//        Serializer.registerClass(MessActorSpeak.class);
         Serializer.registerClass(MessActorTeam.class);
         Serializer.registerClass(MessActorTransform.class);
         Serializer.registerClass(MessActorTransformDirect.class);
@@ -767,9 +767,9 @@ public class Ly {
         Serializer.registerClass(MessAttributeNumberHit.class);
         
         // Chat
-        Serializer.registerClass(MessChatSell.class); 
-        Serializer.registerClass(MessChatSend.class); 
-        Serializer.registerClass(MessChatShop.class); 
+//        Serializer.registerClass(MessChatSell.class); 
+//        Serializer.registerClass(MessChatSend.class); 
+//        Serializer.registerClass(MessChatShop.class); 
         
         // Item
         Serializer.registerClass(MessItemAdd.class); 
@@ -792,7 +792,7 @@ public class Ly {
         Serializer.registerClass(MessStateRemove.class);
         
         // Sync object
-        Serializer.registerClass(MessSyncObject.class);
+//        Serializer.registerClass(MessSyncObject.class);
         Serializer.registerClass(SyncData.class);
         
         // Talents
@@ -805,8 +805,8 @@ public class Ly {
         Serializer.registerClass(MessTaskComplete.class);
         
         // View
-        Serializer.registerClass(MessViewAdd.class);
-        Serializer.registerClass(MessViewRemove.class);
+//        Serializer.registerClass(MessViewAdd.class);
+//        Serializer.registerClass(MessViewRemove.class);
         
         
     }

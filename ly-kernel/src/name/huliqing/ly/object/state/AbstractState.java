@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.data.StateData;
-import name.huliqing.ly.layer.service.EffectService;
 import name.huliqing.ly.layer.service.PlayService;
+import name.huliqing.ly.object.Loader;
 import name.huliqing.ly.object.effect.Effect;
 import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.module.ActorModule;
@@ -20,16 +20,11 @@ import name.huliqing.ly.object.module.ActorModule;
  */
 public abstract class AbstractState<T extends StateData> implements State<T> {
     private final PlayService playService = Factory.get(PlayService.class);
-    private final EffectService effectService = Factory.get(EffectService.class);
     private ActorModule actorModule;
     
     protected T data;
     
-    protected boolean initialized;
-    
-    /**
-     * 状态的执行时长，单位秒
-     */
+    /** 状态的执行时长，单位秒 */
     protected float totalUseTime;
     
     /**
@@ -41,16 +36,13 @@ public abstract class AbstractState<T extends StateData> implements State<T> {
     
     // ---- inner
     
-    /**
-     * 状态的持有者，即受状态影响的角色，不能为null
-     */
+    protected boolean initialized;
+    
+    /** 状态的持有者，即受状态影响的角色，不能为null */
     protected Entity actor;
     
-    /**
-     * 状态的产生者，也就是说，这个状态是哪一个角色发出的, 如果一个状态没有发起源，则这个参数可能为null.
-     */
+    /** 状态的产生者，也就是说，这个状态是哪一个角色发出的, 如果一个状态没有发起源，则这个参数可能为null. */
     protected Entity sourceActor;
-    
     
     // ---- inner
         
@@ -93,9 +85,9 @@ public abstract class AbstractState<T extends StateData> implements State<T> {
                 tempEffects = new ArrayList<Effect>(data.getEffects().length);
             }
             for (String effectId : data.getEffects()) {
-                Effect effect = effectService.loadEffect(effectId);
-                effect.setTraceObject(actor.getSpatial());
-                playService.addEffect(effect);
+                Effect effect = Loader.load(effectId);
+                effect.setTraceEntity(actor.getEntityId());
+                actor.getScene().addEntity(effect);
                 tempEffects.add(effect);
             }
         }
@@ -163,7 +155,7 @@ public abstract class AbstractState<T extends StateData> implements State<T> {
     @Override
     public void setActor(Entity actor) {
         this.actor = actor;
-        actorModule = actor.getModule(ActorModule.class);
+        actorModule = actor.getEntityModule().getModule(ActorModule.class);
     }
 
     /**

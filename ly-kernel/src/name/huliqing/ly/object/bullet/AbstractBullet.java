@@ -6,30 +6,37 @@ package name.huliqing.ly.object.bullet;
 
 import com.jme3.bounding.BoundingVolume;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.RenderManager;
+import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Geometry;
+import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.Spatial.CullHint;
+import com.jme3.scene.control.AbstractControl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
-import name.huliqing.ly.data.BulletData;
+import name.huliqing.ly.data.EntityData;
 import name.huliqing.ly.object.Loader;
 import name.huliqing.ly.object.effect.Effect;
-import name.huliqing.ly.object.effect.EffectManager;
+import name.huliqing.ly.object.entity.Entity;
+import name.huliqing.ly.object.entity.ModelEntity;
+import name.huliqing.ly.object.scene.Scene;
 import name.huliqing.ly.object.shape.Shape;
 import name.huliqing.ly.object.sound.SoundManager;
 
 /**
  * 子弹基类
  * @author huliqing
- * @param <S>
  */
-public abstract class AbstractBullet<S> extends Bullet<BulletData, S> {
+public abstract class AbstractBullet extends ModelEntity implements Bullet {
     private static final Logger LOG = Logger.getLogger(AbstractBullet.class.getName());
     
     // 调试
     protected boolean debug;
     // 碰撞图形，用于检查碰撞
     protected Shape shape;
+    protected Vector3f shapeOffset;
     // 是否自动朝向
     protected boolean facing;
     // 是否跟踪目标
@@ -54,57 +61,160 @@ public abstract class AbstractBullet<S> extends Bullet<BulletData, S> {
     // 当前已经使用的时间。
     protected float timeUsed;
     
+     /**
+     * 标记子弹是否已经耗尽。
+     */
+    protected boolean consumed;
+    
+    protected final Vector3f start = new Vector3f();
+    
+    protected final Vector3f end = new Vector3f();
+    
+    /**
+     * 发射子弹的目标源,可能是一个角色，也可能是其它
+     */
+    protected Entity source;
+    
+    protected List<Bullet.Listener> listeners;
+    
+    protected final Node bulletNode = new Node();
+    
     protected Geometry hitChecker;
     
-    // ---- inner
+    protected float speed = 1.0f;
     
-    // 这些是添加在子弹上的特效。
-    private List<Effect> effects;
+    public AbstractBullet() {
+        bulletNode.addControl(new AbstractControl() {
+            @Override
+            protected void controlUpdate(float tpf) {
+                bulletControlUpdate(tpf);
+            }
+            @Override
+            protected void controlRender(RenderManager rm, ViewPort vp) {}
+        });
+    }
     
     @Override
-    public void setData(BulletData data) {
+    public void setData(EntityData data) {
         this.data = data;
         this.debug = data.getAsBoolean("debug", debug);
-        this.shape = Loader.loadShape(data.getAsString("shape"));
+        this.shape = Loader.load(data.getAsString("shape"));
         this.baseSpeed = data.getAsFloat("baseSpeed", baseSpeed);
         this.facing = data.getAsBoolean("facing", false);
         this.trace = data.getAsBoolean("trace", false);
         this.timeout = data.getAsFloat("timeout", timeout);
-        this.effectIds = data.getAsArray("effects");
         this.sounds = data.getAsArray("sounds");
         this.hitEffects = data.getAsArray("hitEffects");
         this.hitSounds = data.getAsArray("hitSounds");
-        
-        // 用于碰撞
-        if (hitChecker == null) {
-            hitChecker = shape.getGeometry();
-            hitChecker.setCullHint(debug ? CullHint.Never : CullHint.Always);
-        }
-        attachChild(hitChecker);
-        
-        // shape的位置偏移
-        Vector3f shapeOffset = data.getAsVector3f("shapeOffset");
-        if (shapeOffset != null) {
-            hitChecker.setLocalTranslation(shapeOffset);
-        }
-        
+        this.shapeOffset = data.getAsVector3f("shapeOffset");
+        this.effectIds = data.getAsArray("effects");
     }
 
     @Override
-    public void initialize() {
-        super.initialize();
+    protected Spatial loadModel() {
+        return bulletNode;
+    }
+
+    @Override
+    public void initialize(Scene scene) {
+        super.initialize(scene);
         
-        // 初始化开始位置和结束位置
-        setLocalTranslation(data.getStartPoint());
+        // 用于碰撞
+        hitChecker = shape.getGeometry();
+        hitChecker.setCullHint(debug ? CullHint.Never : CullHint.Always);
+        if (shapeOffset != null) {
+            hitChecker.setLocalTranslation(shapeOffset);
+        }
+        bulletNode.attachChild(hitChecker);
+        bulletNode.setLocalTranslation(start);
         
         if (!trace) {
             // 在不能跟踪的情况下要把trueEndPoint固定下来，不能动态引用。
-            trueEndPoint.set(data.getEndPoint());
+            trueEndPoint.set(end);
         }
+        
         // 载入效果
-        playEffects();
+        if (effectIds != null) {
+            for (String eid : effectIds) {
+                Effect e = Loader.load(eid);
+                bulletNode.attachChild(e);
+                e.initialize(null); // effect直接放在bulletNode下面,不放在场景中
+            }
+        }
+        
         // 播放声效
-        playSounds();
+        if (sounds != null) {
+            for (String sid : sounds) {
+                SoundManager.getInstance().playSound(sid, bulletNode.getWorldTranslation());
+            }
+        }
+    }
+    
+    @Override
+    public void cleanup() {
+        consumed = false;
+        timeUsed = 0;
+        super.cleanup();
+    }
+    
+    private void bulletControlUpdate(float tpf) {
+        // 如果已经标记为销毁，则不再处理逻辑，由BulletManager去清理和移除子弹。
+        if (isConsumed()) {
+            scene.removeEntity(this);
+            return;
+        }
+        
+        // 让子类去更新飞行逻辑。 
+        bulletUpdate(tpf);
+        
+        // 触发子弹飞行时的侦听器，如果bulletFlying返回true,则说明击中了一个目标。
+        if (listeners != null) {
+            for (int i = 0; i < listeners.size(); i++) {
+                if (listeners.get(i).onBulletFlying(this)) {
+                    onFiredTaget();
+                }
+            }
+        }
+    }
+
+    @Override
+    public void setStart(Vector3f startPoint) {
+        this.start.set(startPoint);
+    }
+
+    @Override
+    public void setEnd(Vector3f endPoint) {
+        this.end.set(endPoint);
+    }
+
+    @Override
+    public void setSpeed(float speed) {
+        this.speed = speed;
+    }
+
+    @Override
+    public void consume() {
+        consumed = true;
+    }
+    
+    @Override
+    public boolean isConsumed() {
+        return consumed;
+    }
+    
+    @Override
+    public void addListener(Bullet.Listener listener) {
+        if (listeners == null) {
+            listeners = new ArrayList<Bullet.Listener>(1);
+        }
+        if (!listeners.contains(listener)) {
+            listeners.add(listener);
+        }
+    }
+    
+    @Override
+    public boolean removeListener(Bullet.Listener listener) {
+        return listeners != null && listeners.remove(listener);
     }
     
     /**
@@ -113,43 +223,25 @@ public abstract class AbstractBullet<S> extends Bullet<BulletData, S> {
      */
     protected Vector3f getCurrentEndPos() {
         if (trace) {
-            trueEndPoint.set(data.getEndPoint());
+            trueEndPoint.set(end);
         }
         return trueEndPoint;
     }
     
     /**
-     * 给子弹添加上特效
+     * 获取发射该子弹的源，比如一个角色？或是一个未知的存在？
+     * @return 
      */
-    private void playEffects() {
-        // 载入特效
-        if (effects == null && effectIds != null) {
-            effects = new ArrayList<Effect>(effectIds.length);
-            for (String eid : effectIds) {
-                Effect e = Loader.load(eid);
-                effects.add(e);
-                attachChild(e);
-            }
-        }
-        
-        if (effects == null) 
-            return;
-        
-        // 初始化特效
-        for (Effect e : effects) {
-            e.initialize();
-        }
-    }
-    
-    private void playSounds() {
-        if (sounds == null)
-            return;
-        for (String sid : sounds) {
-            SoundManager.getInstance().playSound(sid, getWorldTranslation());
-        }
+    @Override
+    public Entity getSource() {
+        return source;
     }
     
     @Override
+    public void setSource(Entity source) {
+        this.source = source;
+    }
+    
     protected void bulletUpdate(float tpf) {
         timeUsed += tpf;
         
@@ -167,18 +259,6 @@ public abstract class AbstractBullet<S> extends Bullet<BulletData, S> {
             consume();
         }
     }
-    
-    @Override
-    public void cleanup() {
-        timeUsed = 0;
-
-        if (effects != null) {
-            for (Effect e : effects) {
-                e.cleanup();
-            }
-        }
-        super.cleanup();
-    }
 
     @Override
     public boolean isHit(Spatial target) {
@@ -194,18 +274,17 @@ public abstract class AbstractBullet<S> extends Bullet<BulletData, S> {
         return hitChecker.getWorldBound().contains(target);
     }
 
-    @Override
     protected void onFiredTaget() {
         if (hitEffects != null) {
             for (String eid : hitEffects) {
                 Effect effect = Loader.load(eid);
-                effect.getData().setInitLocation(getWorldTranslation());
-                EffectManager.getInstance().addEffect(effect);
+                effect.initialize(scene);
+                effect.setLocalTranslation(bulletNode.getWorldTranslation());
             }            
         }
         if (hitSounds != null) {
             for (String sid : hitSounds) {
-                SoundManager.getInstance().playSound(sid, getWorldTranslation());
+                SoundManager.getInstance().playSound(sid, bulletNode.getWorldTranslation());
             }
         }
     }

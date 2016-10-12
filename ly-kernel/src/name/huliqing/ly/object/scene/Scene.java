@@ -87,9 +87,8 @@ public interface Scene extends DataProcessor<SceneData> {
     /**
      * 从容器中移除指定场景物体，如果成功则返回true,移除失败或者物体不存在则返回false.
      * @param entity 
-     * @return  
      */
-    boolean removeEntity(Entity entity);
+    void removeEntity(Entity entity);
     
 //    /**
 //     * 添加场景物体

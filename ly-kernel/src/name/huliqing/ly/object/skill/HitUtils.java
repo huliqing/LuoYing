@@ -85,9 +85,11 @@ public class HitUtils {
                 String attackerName = attacker != null ? attacker.getData().getName() : "";
                 String targetName = target.getData().getName();
                 String killedMess = ResourceManager.get(ResConstants.COMMON_KILLED, new Object[] {targetName, attackerName});
-                playNetwork.addMessage(killedMess, MessageType.notice);
-                // 告诉目标:"你已经死亡"
-                playNetwork.addMessage(target, ResourceManager.get(ResConstants.COMMON_DEAD), MessageType.notice);
+                
+                // bak20161012
+//                playNetwork.addMessage(killedMess, MessageType.notice);
+//                // 告诉目标:"你已经死亡"
+//                playNetwork.addMessage(target, ResourceManager.get(ResConstants.COMMON_DEAD), MessageType.notice);
             }
             
             // 3.对攻击者进行经验和物品奖励

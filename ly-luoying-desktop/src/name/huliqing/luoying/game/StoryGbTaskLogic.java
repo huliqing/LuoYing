@@ -12,13 +12,13 @@ import name.huliqing.ly.data.ObjectData;
 import name.huliqing.ly.layer.network.ActorNetwork;
 import name.huliqing.ly.layer.network.PlayNetwork;
 import name.huliqing.ly.layer.service.PlayService;
-import name.huliqing.ly.layer.service.ViewService;
+import name.huliqing.luoying.layer.service.ViewService;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.ly.layer.service.ItemService;
 import name.huliqing.ly.object.game.Game;
 import name.huliqing.ly.object.gamelogic.AbstractGameLogic;
 import name.huliqing.ly.object.item.Item;
-import name.huliqing.ly.object.view.TextPanelView;
+import name.huliqing.luoying.object.view.TextPanelView;
 
 /** 
  * 任务面板，显示已经获得的树根的数目

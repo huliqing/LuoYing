@@ -38,7 +38,7 @@ public class AttributeServiceImpl implements AttributeService {
 
     @Override
     public void addAttribute(Entity actor, Attribute attribute) {
-        AttributeModule module = actor.getModule(AttributeModule.class);
+        AttributeModule module = actor.getEntityModule().getModule(AttributeModule.class);
         if (module != null) {
             module.addAttribute(attribute);
         }
@@ -49,7 +49,7 @@ public class AttributeServiceImpl implements AttributeService {
         if (attrId == null)
             throw new NullPointerException("attrId could not be null, actorId=" + actor.getData().getId());
                 
-        AttributeModule module = actor.getModule(AttributeModule.class);
+        AttributeModule module = actor.getEntityModule().getModule(AttributeModule.class);
         if (module != null) {
             return module.getAttributeById(attrId);
         }
@@ -61,7 +61,7 @@ public class AttributeServiceImpl implements AttributeService {
         if (attrName == null) {
             return null;
         }
-        AttributeModule module = actor.getModule(AttributeModule.class);
+        AttributeModule module = actor.getEntityModule().getModule(AttributeModule.class);
         if (module != null) {
             return module.getAttributeByName(attrName, null);
         }
@@ -70,7 +70,7 @@ public class AttributeServiceImpl implements AttributeService {
 
     @Override
     public List<Attribute> getAttributes(Entity actor) {
-        AttributeModule module = actor.getModule(AttributeModule.class);
+        AttributeModule module = actor.getEntityModule().getModule(AttributeModule.class);
         if (module != null) {
             return module.getAttributes();
         }
@@ -79,7 +79,7 @@ public class AttributeServiceImpl implements AttributeService {
 
     @Override
     public void addListener(Entity actor, AttributeListener attributeListener) {
-        AttributeModule module = actor.getModule(AttributeModule.class);
+        AttributeModule module = actor.getEntityModule().getModule(AttributeModule.class);
         if (module != null) {
             module.addListener(attributeListener);
         }
@@ -87,7 +87,7 @@ public class AttributeServiceImpl implements AttributeService {
 
     @Override
     public boolean removeListener(Entity actor, AttributeListener attributeListener) {
-        AttributeModule module = actor.getModule(AttributeModule.class);
+        AttributeModule module = actor.getEntityModule().getModule(AttributeModule.class);
         return module != null && module.removeListener(attributeListener);
     }
 
@@ -101,7 +101,7 @@ public class AttributeServiceImpl implements AttributeService {
 
     @Override
     public void addNumberAttributeValue(Entity actor, String attrName, float value) {
-        AttributeModule module = actor.getModule(AttributeModule.class);
+        AttributeModule module = actor.getEntityModule().getModule(AttributeModule.class);
         if (module != null) {
             module.addNumberAttributeValue(attrName, value);
         }
@@ -109,7 +109,7 @@ public class AttributeServiceImpl implements AttributeService {
 
     @Override
     public float getNumberAttributeValue(Entity actor, String attrName, float defValue) {
-        AttributeModule module = actor.getModule(AttributeModule.class);
+        AttributeModule module = actor.getEntityModule().getModule(AttributeModule.class);
         if (module != null) {
             return module.getNumberAttributeValue(attrName, defValue);
         }

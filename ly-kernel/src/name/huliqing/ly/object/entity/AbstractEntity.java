@@ -5,31 +5,23 @@
  */
 package name.huliqing.ly.object.entity;
 
-import com.jme3.util.SafeArrayList;
-import java.util.ArrayList;
-import java.util.List;
 import name.huliqing.ly.data.EntityData;
-import name.huliqing.ly.data.ModuleData;
-import name.huliqing.ly.object.Loader;
-import name.huliqing.ly.object.module.Module;
 import name.huliqing.ly.object.scene.Scene;
 
 /**
  * @author huliqing
+ * @param <T>
  */
-public abstract class AbstractEntity implements Entity {
+public abstract class AbstractEntity<T extends EntityData> implements Entity<T> {
     
-    protected EntityData data;
+    protected final EntityModule entityModule = new EntityModule(this);
+    
+    protected T data;
     protected boolean initialized;
     protected Scene scene;
     
-    /**
-     * 所有的模块,这里面包含logicModules中的模块。
-     */
-    protected final SafeArrayList<Module> modules = new SafeArrayList<Module>(Module.class);
-    
     @Override
-    public void setData(EntityData data) {
+    public void setData(T data) {
         if (this.data != null && this.data != data) {
             throw new IllegalStateException("Data is already set! could not change the data!");
         }
@@ -37,17 +29,14 @@ public abstract class AbstractEntity implements Entity {
     }
     
     @Override
-    public EntityData getData() {
+    public T getData() {
         return data;
     }
     
     @Override
     public void updateDatas() {
-        if (initialized) {
-            for (Module module : modules.getArray()) {
-                module.updateDatas();
-            }
-        }
+        // 更新所有模块内容
+        entityModule.updateDatas();
     }
     
     @Override
@@ -58,22 +47,8 @@ public abstract class AbstractEntity implements Entity {
         this.scene = scene;
         initialized = true;
         
-        // 载入并初始化所有控制器，这里分两步处理:
-        // 第一步先添加;
-        // 第二步再初始化;
-        // 因为一些module在初始化的时候可能会引用到另一些module
-        if (data.getModuleDatas() != null) {
-            // 添加module
-            List<ModuleData> tempMDS= new ArrayList<ModuleData>(data.getModuleDatas());
-            for (ModuleData cd : tempMDS) {
-                modules.add((Module)Loader.load(cd));
-            }
-            
-            // 初始化module
-            for (Module module : modules) {
-                module.initialize(this);
-            }
-        }
+        // 初始化所有模块
+        entityModule.initialize();
     }
 
     @Override
@@ -83,12 +58,8 @@ public abstract class AbstractEntity implements Entity {
 
     @Override
     public void cleanup() {
-        // 这里要注意反向清理，因为modules是有依赖顺序的,可能存在一些module，这些module在清理的时候会依赖于
-        // 其它module.
-        for (int i = modules.size() - 1; i >= 0; i--) {
-            modules.get(i).cleanup();
-        }
-        modules.clear();
+        // 清理模块，因为modules是有依赖顺序的,可能存在一些module，这些module在清理的时候会依赖于
+        entityModule.cleanup();
         
         // 清理后要取消对场景的引用
         scene = null;
@@ -113,35 +84,10 @@ public abstract class AbstractEntity implements Entity {
         }
         return false;
     }
-    
-    @Override
-    public void addModule(Module module) {
-        if (modules.contains(module)) {
-            return;
-        }
-        modules.add(module);
-        data.addModuleData(module.getData());
-        module.initialize(this);
-    }
 
     @Override
-    public boolean removeModule(Module module) {
-        if (!modules.contains(module)) {
-            return false;
-        }
-        modules.remove(module);
-        data.removeModuleData(module.getData());
-        module.cleanup();
-        return true;
+    public EntityModule getEntityModule() {
+        return entityModule;
     }
     
-    @Override
-    public <T extends Module> T getModule(Class<T> moduleType) {
-        for (Module m : modules.getArray()) {
-            if (moduleType.isAssignableFrom(m.getClass())) {
-                return (T) m;
-            }
-        }
-        return null;
-    }
 }

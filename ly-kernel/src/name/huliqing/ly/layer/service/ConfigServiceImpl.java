@@ -102,37 +102,37 @@ public class ConfigServiceImpl implements ConfigService {
         notifyListtener();
     }
 
-    @Override
-    public boolean isShortcutLocked() {
-        return cd.isShortcutLocked();
-    }
-
-    @Override
-    public void setShortcutLocked(boolean locked) {
-        cd.setShortcutLocked(locked);
-        ShortcutManager.setShortcutLocked(locked);
-        notifyListtener();
-    }
-
-    @Override
-    public float getShortcutSize() {
-        return cd.getShortcutSize();
-    }
-
-    @Override
-    public void setShortcutSize(float size) {
-        if (size <= 0) {
-            return;
-        }
-        cd.setShortcutSize(size);
-        ShortcutManager.setShortcutSize(size);
-        notifyListtener();
-    }
-
-    @Override
-    public void clearShortcuts() {
-        ShortcutManager.cleanup();
-    }
+//    @Override
+//    public boolean isShortcutLocked() {
+//        return cd.isShortcutLocked();
+//    }
+//
+//    @Override
+//    public void setShortcutLocked(boolean locked) {
+//        cd.setShortcutLocked(locked);
+//        ShortcutManager.setShortcutLocked(locked);
+//        notifyListtener();
+//    }
+//
+//    @Override
+//    public float getShortcutSize() {
+//        return cd.getShortcutSize();
+//    }
+//
+//    @Override
+//    public void setShortcutSize(float size) {
+//        if (size <= 0) {
+//            return;
+//        }
+//        cd.setShortcutSize(size);
+//        ShortcutManager.setShortcutSize(size);
+//        notifyListtener();
+//    }
+//
+//    @Override
+//    public void clearShortcuts() {
+//        ShortcutManager.cleanup();
+//    }
 
     @Override
     public boolean isDebugEnabled() {

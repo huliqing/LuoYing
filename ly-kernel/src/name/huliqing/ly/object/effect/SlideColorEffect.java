@@ -17,13 +17,15 @@ import name.huliqing.ly.constants.MaterialConstants;
 import name.huliqing.ly.constants.ModelConstants;
 import name.huliqing.ly.constants.TextureConstants;
 import name.huliqing.ly.data.EffectData;
+import name.huliqing.ly.data.EntityData;
 import name.huliqing.ly.object.Loader;
+import name.huliqing.ly.object.scene.Scene;
 
 /**
  *
  * @author huliqing
  */
-public class SlideColorEffect extends AbstractEffect {
+public class SlideColorEffect extends Effect {
     
     private ColorRGBA startColor = new ColorRGBA(1, 1, 1, 1);
     private ColorRGBA endColor = new ColorRGBA(0, 0, 3, 1);
@@ -76,8 +78,8 @@ public class SlideColorEffect extends AbstractEffect {
     }
     
     @Override
-    public void initialize() {
-        super.initialize();
+    public void initialize(Scene scene) {
+        super.initialize(scene);
         create();
     }
     

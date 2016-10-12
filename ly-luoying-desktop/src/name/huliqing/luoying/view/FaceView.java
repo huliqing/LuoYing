@@ -30,7 +30,7 @@ import name.huliqing.ly.layer.service.StateService;
 import name.huliqing.ly.object.anim.Loop;
 import name.huliqing.ly.object.anim.ColorAnim;
 import name.huliqing.ly.object.attribute.NumberAttribute;
-import name.huliqing.ly.object.chat.Chat;
+import name.huliqing.luoying.object.chat.Chat;
 import name.huliqing.ly.object.state.State;
 import name.huliqing.ly.ui.Icon;
 import name.huliqing.ly.ui.LinearLayout;

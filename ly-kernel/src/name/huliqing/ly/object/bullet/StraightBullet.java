@@ -5,20 +5,20 @@
 package name.huliqing.ly.object.bullet;
 
 import com.jme3.math.Vector3f;
+import name.huliqing.ly.object.scene.Scene;
 
 /**
  * 直线型子弹
  * @author huliqing
- * @param <S>
  */
-public class StraightBullet<S> extends AbstractBullet<S> {
+public class StraightBullet extends AbstractBullet {
 
     private final Vector3f dir = new Vector3f();
     private final Vector3f temp = new Vector3f();
     
     @Override
-    public void initialize() {
-        super.initialize();
+    public void initialize(Scene scene) {
+        super.initialize(scene);
         updateDir(getCurrentEndPos());
     }
 
@@ -27,14 +27,15 @@ public class StraightBullet<S> extends AbstractBullet<S> {
         if (trace) {
             updateDir(endPos);
         }
-        temp.set(dir).multLocal(baseSpeed * data.getSpeed() * tpf);
-        move(temp);
+        temp.set(dir).multLocal(baseSpeed * speed * tpf);
+        bulletNode.move(temp);
     }
     
     private void updateDir(Vector3f endPos) {
-        endPos.subtract(getWorldTranslation(), dir).normalizeLocal();
+        endPos.subtract(bulletNode.getWorldTranslation(), dir).normalizeLocal();
         if (facing) {
-            lookAt(endPos, Vector3f.UNIT_Y);
+            bulletNode.lookAt(endPos, Vector3f.UNIT_Y);
         }
     }
+
 }

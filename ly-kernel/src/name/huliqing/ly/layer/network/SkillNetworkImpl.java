@@ -106,7 +106,7 @@ public class SkillNetworkImpl implements SkillNetwork {
         // 端和客户端所有状态完全同步几乎是不可能的。
         // ============================20160504=============================
         
-        SkillModule skillModule = actor.getModule(SkillModule.class);
+        SkillModule skillModule = actor.getEntityModule().getModule(SkillModule.class);
         if (force || skillModule.checkStateCode(skill) == SkillConstants.STATE_OK) {
             
              // 找出一些不希望被中断的技能。

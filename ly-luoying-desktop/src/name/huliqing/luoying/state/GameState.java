@@ -20,15 +20,15 @@ import name.huliqing.ly.enums.MessageType;
 import name.huliqing.ly.layer.service.GameService;
 import name.huliqing.ly.layer.service.SceneService;
 import name.huliqing.luoying.view.TeamView;
-import name.huliqing.ly.view.talk.SpeakManager;
-import name.huliqing.ly.view.talk.TalkManager;
+import name.huliqing.luoying.view.talk.SpeakManager;
+import name.huliqing.luoying.view.talk.TalkManager;
 import name.huliqing.ly.object.PlayManager;
 import name.huliqing.ly.object.PlayObject;
 import name.huliqing.ly.object.NetworkObject;
 import name.huliqing.ly.object.game.Game;
 import name.huliqing.ly.object.scene.Scene;
 import name.huliqing.ly.object.scene.Scene.SceneListener;
-import name.huliqing.ly.object.view.View;
+import name.huliqing.luoying.object.view.View;
 import name.huliqing.ly.ui.state.UIState;
 
 /**

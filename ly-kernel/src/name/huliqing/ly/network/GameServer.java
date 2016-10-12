@@ -413,11 +413,15 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
         serverConnData.setConnId(-1);
         serverConnData.setAddress(serverAddress);
         if (gameInPlay) {
-            Entity serverPlayer = playService.getPlayer();
-            if (serverPlayer != null) {
-                serverConnData.setEntityId(serverPlayer.getData().getUniqueId());
-                serverConnData.setEntityName(serverPlayer.getData().getName());
-            }
+//            Entity serverPlayer = playService.getPlayer();
+//            if (serverPlayer != null) {
+//                serverConnData.setEntityId(serverPlayer.getData().getUniqueId());
+//                serverConnData.setEntityName(serverPlayer.getData().getName());
+//            }
+
+            // xxx 重构
+            serverConnData.setEntityId(-1);
+            serverConnData.setEntityName("TODO: Player");
         }
         clients.add(0, serverConnData);
         return clients;

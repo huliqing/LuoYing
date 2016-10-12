@@ -4,7 +4,6 @@
  */
 package name.huliqing.ly.object.effect;
 
-import com.jme3.app.Application;
 import com.jme3.bounding.BoundingVolume;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState;
@@ -32,7 +31,10 @@ import name.huliqing.ly.Factory;
 import name.huliqing.ly.constants.MaterialConstants;
 import name.huliqing.ly.constants.TextureConstants;
 import name.huliqing.ly.data.EffectData;
+import name.huliqing.ly.data.EntityData;
 import name.huliqing.ly.layer.service.PlayService;
+import name.huliqing.ly.object.env.TerrainEnv;
+import name.huliqing.ly.object.scene.Scene;
 import name.huliqing.ly.utils.GeometryUtils;
 
 /**
@@ -40,7 +42,7 @@ import name.huliqing.ly.utils.GeometryUtils;
  * 结束后都需要重新添加接受投射的物体。
  * @author huliqing
  */
-public class ProjectionEffect extends AbstractEffect {
+public class ProjectionEffect extends Effect {
     private final PlayService playService = Factory.get(PlayService.class);
 
     // 需要投射的材质贴图
@@ -135,21 +137,26 @@ public class ProjectionEffect extends AbstractEffect {
             }
         }
     }
-
+    
     @Override
-    public void initialize() {
-        super.initialize();
-        // 把SceneProcessor加入场景处理器列表，注意在cleanup时要清理掉，避免浪费资源
-        Application app = playService.getApplication();
-        if (!app.getViewPort().getProcessors().contains(processor)) {
-            app.getViewPort().addProcessor(processor);
-        }
+    public void initialize(Scene scene) {
+        super.initialize(scene);
+        
+        // ProjectionEffect需要Scene来添加场景Processor
+        if (scene == null)
+            throw new NullPointerException("For ProjectionEffect, the scene could not be null, effect=" + data.getId());
+
+        scene.addProcessor(processor);
         
         // 判断是否有接受投射的物体，如果没有的话偿试把地形添加进来。
         if (receivers.isEmpty()) {
-            Spatial terrain = playService.getTerrain();
-            if (terrain != null) {
-                addReceiver(terrain);
+            List<TerrainEnv> tes = scene.getEntities(TerrainEnv.class, null);
+            if (tes != null && !tes.isEmpty()) {
+                for (TerrainEnv te : tes) {
+                    if (te.getSpatial() != null) {
+                        addReceiver(te.getSpatial());
+                    }
+                }
             }
         }
     }
@@ -183,7 +190,7 @@ public class ProjectionEffect extends AbstractEffect {
         // 注：这里要清理所有引用,所以每次重用这个效果时都需要重新添加接受投射的物体
         receivers.clear();
         // 移除处理器
-        playService.getApplication().getViewPort().removeProcessor(processor);
+        scene.removeProcessor(processor);
         super.cleanup();
     }
     

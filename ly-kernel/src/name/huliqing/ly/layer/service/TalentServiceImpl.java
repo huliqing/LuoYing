@@ -32,7 +32,7 @@ public class TalentServiceImpl implements TalentService {
 
     @Override
     public void addTalent(Entity actor, TalentData talentData) {
-        TalentModule module = actor.getModule(TalentModule.class);
+        TalentModule module = actor.getEntityModule().getModule(TalentModule.class);
         if (module != null) {
             module.addTalent((Talent) Loader.load(talentData));
         }
@@ -40,7 +40,7 @@ public class TalentServiceImpl implements TalentService {
 
     @Override
     public void addTalent(Entity actor, Talent talent) {
-        TalentModule module = actor.getModule(TalentModule.class);
+        TalentModule module = actor.getEntityModule().getModule(TalentModule.class);
         if (module != null) {
             module.addTalent(talent);
         }
@@ -48,7 +48,7 @@ public class TalentServiceImpl implements TalentService {
 
     @Override
     public void removeTalent(Entity actor, String talentId) {
-        TalentModule module = actor.getModule(TalentModule.class);
+        TalentModule module = actor.getEntityModule().getModule(TalentModule.class);
         if (module != null) {
             Talent talent = module.getTalent(talentId);
             if (talent != null) {
@@ -59,7 +59,7 @@ public class TalentServiceImpl implements TalentService {
 
     @Override
     public List<Talent> getTalents(Entity actor) {
-        TalentModule module = actor.getModule(TalentModule.class);
+        TalentModule module = actor.getEntityModule().getModule(TalentModule.class);
         if (module != null) {
             return module.getTalents();
         }
@@ -68,7 +68,7 @@ public class TalentServiceImpl implements TalentService {
 
     @Override
     public int getTalentPoints(Entity actor) {
-        TalentModule module = actor.getModule(TalentModule.class);
+        TalentModule module = actor.getEntityModule().getModule(TalentModule.class);
         if (module != null) {
             return module.getTalentPoints();
         }
@@ -78,7 +78,7 @@ public class TalentServiceImpl implements TalentService {
     // remove20160821
 //    @Override
 //    public void setTalentPoints(Entity actor, int talentPoints) {
-//        TalentModule module = actor.getModule(TalentModule.class);
+//        TalentModule module = actor.getEntityModule().getModule(TalentModule.class);
 //        if (module != null) {
 //            module.setTalentPoints(talentPoints);
 //        }
@@ -86,7 +86,7 @@ public class TalentServiceImpl implements TalentService {
     
     @Override
     public void addTalentPoints(Entity actor, String talentId, int points) {
-        TalentModule module = actor.getModule(TalentModule.class);
+        TalentModule module = actor.getEntityModule().getModule(TalentModule.class);
         if (module != null) {
             module.addTalentPoints(talentId, points);
         }
@@ -94,7 +94,7 @@ public class TalentServiceImpl implements TalentService {
 
     @Override
     public void addTalentListener(Entity actor, TalentListener talentListener) {
-        TalentModule module = actor.getModule(TalentModule.class);
+        TalentModule module = actor.getEntityModule().getModule(TalentModule.class);
         if (module != null) {
             module.addTalentListener(talentListener);
         }
@@ -102,7 +102,7 @@ public class TalentServiceImpl implements TalentService {
 
     @Override
     public void removeTalentListener(Entity actor, TalentListener talentListener) {
-        TalentModule module = actor.getModule(TalentModule.class);
+        TalentModule module = actor.getEntityModule().getModule(TalentModule.class);
         if (module != null) {
             module.removeTalentListener(talentListener);
         }

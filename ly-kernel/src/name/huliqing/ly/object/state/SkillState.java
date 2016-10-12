@@ -34,7 +34,7 @@ public class SkillState extends AbstractState {
     @Override
     public void initialize() {
         super.initialize();
-        skillModule = actor.getModule(SkillModule.class);
+        skillModule = actor.getEntityModule().getModule(SkillModule.class);
         
         if (skillModule == null)
             return;

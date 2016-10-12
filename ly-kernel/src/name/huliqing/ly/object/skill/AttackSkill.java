@@ -6,17 +6,17 @@ package name.huliqing.ly.object.skill;
 
 import com.jme3.math.Vector3f;
 import com.jme3.util.TempVars;
+import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.data.SkillData;
 import name.huliqing.ly.layer.service.ActorService;
-import name.huliqing.ly.layer.service.EffectService;
 import name.huliqing.ly.layer.service.PlayService;
 import name.huliqing.ly.layer.service.SkillService;
+import name.huliqing.ly.object.Loader;
 import name.huliqing.ly.object.define.DefineFactory;
 import name.huliqing.ly.object.effect.Effect;
-import name.huliqing.ly.object.effect.EffectManager;
 import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.module.ActorModule;
 import name.huliqing.ly.object.module.SkinModule;
@@ -32,7 +32,6 @@ public class AttackSkill extends HitSkill {
     private final PlayService playService = Factory.get(PlayService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
-    private final EffectService effectService = Factory.get(EffectService.class);
     private ActorModule actorModule;
     private SkinModule skinModule;
     
@@ -56,6 +55,8 @@ public class AttackSkill extends HitSkill {
     // 实际的攻击技能检测点，这个会受cutTime的影响，如果cutTime都为0,则该参数
     // 应该完全与checkPoint一致。
     protected float[] trueCheckPoint;
+    
+    protected List<Actor> tempStore = new ArrayList<Actor>();
 
     @Override
     public void setData(SkillData data) {
@@ -70,8 +71,8 @@ public class AttackSkill extends HitSkill {
     @Override
     public void setActor(Entity actor) {
         super.setActor(actor);
-        actorModule = actor.getModule(ActorModule.class);
-        skinModule = actor.getModule(SkinModule.class);
+        actorModule = actor.getEntityModule().getModule(ActorModule.class);
+        skinModule = actor.getEntityModule().getModule(SkinModule.class);
     }
 
     @Override
@@ -110,7 +111,8 @@ public class AttackSkill extends HitSkill {
         boolean skillDefendable = isDefendable();
         // 如果允许多重目标攻击
         if (multHit) {
-            List<Actor> targets = playService.findAllActor();
+            tempStore.clear();
+            List<Actor> targets = actor.getScene().getEntities(Actor.class, actor.getSpatial().getWorldTranslation(), this.hitDistance, tempStore);
             for (Entity target : targets) {
                 // 只有在技能作用范围内　及　在攻击角度内才视为可能被击中
                 if (!isInHitDistance(target) 
@@ -173,7 +175,7 @@ public class AttackSkill extends HitSkill {
      */
     protected void doDefendResult(Entity target) {
         int mat1 = getWeaponMat(skinModule);
-        int mat2 = getWeaponMat(target.getModule(SkinModule.class));
+        int mat2 = getWeaponMat(target.getEntityModule().getModule(SkinModule.class));
         if (mat1 < 0 || mat2 < 0) {
             return;
         }
@@ -191,10 +193,10 @@ public class AttackSkill extends HitSkill {
             tv.quat1.mult(collisionPos, collisionPos);
             collisionPos.addLocal(actor.getSpatial().getWorldTranslation());
             
-            Effect effect = effectService.loadEffect(effectId);
+            Effect effect = Loader.load(effectId);
             effect.setLocalTranslation(collisionPos);
             effect.getLocalRotation().lookAt(actorModule.getViewDirection(), Vector3f.UNIT_Y);
-            EffectManager.getInstance().addEffect(effect);
+            actor.getScene().addEntity(effect);
             tv.release();
         }
     }

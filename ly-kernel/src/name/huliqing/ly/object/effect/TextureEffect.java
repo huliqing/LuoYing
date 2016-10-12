@@ -12,6 +12,8 @@ import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
 import name.huliqing.ly.data.EffectData;
+import name.huliqing.ly.data.EntityData;
+import name.huliqing.ly.object.scene.Scene;
 import name.huliqing.ly.shape.QuadXYC;
 import name.huliqing.ly.utils.MatUtils;
 import name.huliqing.ly.utils.MathUtils;
@@ -21,7 +23,7 @@ import name.huliqing.ly.utils.MathUtils;
  * 片的中心点上。通过plane属性来指定不同的平面。
  * @author huliqing
  */
-public class TextureEffect extends AbstractEffect {
+public class TextureEffect extends Effect {
     // 贴图路径
     private String texture = "Textures/tex/effect/vortex.jpg";
     // 贴图的大小，只有xy有效。
@@ -36,7 +38,7 @@ public class TextureEffect extends AbstractEffect {
 
     @Override
     public void setData(EffectData data) {
-        super.setData(data); 
+        super.setData(data);
         this.texture = data.getAsString("texture", texture);
         this.size = data.getAsVector3f("size", size);
         this.plane = data.getAsString("plane", plane);
@@ -61,8 +63,8 @@ public class TextureEffect extends AbstractEffect {
     }
     
     @Override
-    public void initialize() {
-        super.initialize();
+    public void initialize(Scene scene) {
+        super.initialize(scene);
         if (root == null) {
             create();
         }

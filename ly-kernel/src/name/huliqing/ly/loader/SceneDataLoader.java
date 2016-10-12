@@ -6,6 +6,7 @@ package name.huliqing.ly.loader;
 
 import java.util.ArrayList;
 import java.util.List;
+import name.huliqing.ly.data.EntityData;
 import name.huliqing.ly.data.ObjectData;
 import name.huliqing.ly.xml.Proto;
 import name.huliqing.ly.data.SceneData;
@@ -24,13 +25,13 @@ public class SceneDataLoader<T extends SceneData> implements DataLoader<T> {
         // 环境物体
         String[] envIds = proto.getAsArray("envs");
         if (envIds != null && envIds.length > 0) {
-            List<ObjectData> edStore = store.getEntityDatas();
+            List<EntityData> edStore = store.getEntityDatas();
             if (edStore == null) {
-                edStore = new ArrayList<ObjectData>(envIds.length);
+                edStore = new ArrayList<EntityData>(envIds.length);
                 store.setEntityDatas(edStore);
             }
             for (String eid : envIds) {
-                ObjectData ed = DataFactory.createData(eid);
+                EntityData ed = DataFactory.createData(eid);
                 edStore.add(ed);
             }
         }

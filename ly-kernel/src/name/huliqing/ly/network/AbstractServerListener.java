@@ -4,7 +4,6 @@
  */
 package name.huliqing.ly.network;
 
-import name.huliqing.ly.network.GameServer;
 import name.huliqing.ly.mess.MessSCGameData;
 import name.huliqing.ly.mess.MessSCClientList;
 import name.huliqing.ly.mess.MessClient;

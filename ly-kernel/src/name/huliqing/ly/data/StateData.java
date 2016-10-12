@@ -45,8 +45,6 @@ public class StateData extends ObjectData {
      */
     private float resist;
     
-    public StateData() {}
-
     public float getUseTime() {
         return useTime;
     }

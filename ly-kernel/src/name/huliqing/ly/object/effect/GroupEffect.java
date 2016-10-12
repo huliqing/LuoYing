@@ -10,12 +10,13 @@ import java.util.logging.Logger;
 import name.huliqing.ly.Config;
 import name.huliqing.ly.data.EffectData;
 import name.huliqing.ly.object.Loader;
+import name.huliqing.ly.object.scene.Scene;
 
 /**
  * 效果组
  * @author huliqing
  */
-public class GroupEffect extends AbstractEffect {
+public class GroupEffect extends Effect {
     private static final Logger LOG = Logger.getLogger(GroupEffect.class.getName());
     
     private EffectWrap[] effects;
@@ -43,11 +44,11 @@ public class GroupEffect extends AbstractEffect {
     }
     
     @Override
-    public void initialize() {
-        super.initialize();
+    public void initialize(Scene scene) {
+        super.initialize(scene);
         end = false;
         for (EffectWrap ew : effects) {
-            ew.trueStartTime = ew.startTime / data.getSpeed();
+            ew.trueStartTime = ew.startTime / speed;
         }
     }
 
@@ -57,7 +58,6 @@ public class GroupEffect extends AbstractEffect {
         
         // 结束特效
         if (end) {
-            super.doEnd();
             return;
         }
         
@@ -78,17 +78,12 @@ public class GroupEffect extends AbstractEffect {
         // 检查并启动子效果。
         int countStarted = 0;
         for (EffectWrap ew : effects) {
-            ew.checkToStart(trueTimeUsed);
+            ew.checkToStart(timeUsed);
             countStarted += ew.started ? 1 : 0;
         }
         
         // 当所有子效果启动后开始检查是否可以结束当前效果。
         endCheck = countStarted >= effects.length;
-    }
-
-    @Override
-    protected void doEnd() {
-        // ignore, GroupEffect不能根据时间来着判断结束，需要自行控制结束。
     }
 
     @Override
@@ -98,7 +93,7 @@ public class GroupEffect extends AbstractEffect {
             if (ew.started) {
                 if (Config.debug) {
                     LOG.log(Level.INFO, "GroupEffect requestEnd, effectTrueTimeUsed={0}, effectId={1}, effectTrueStartTime={2}"
-                            , new Object[] {trueTimeUsed, ew.effectId, ew.trueStartTime});
+                            , new Object[] {timeUsed, ew.effectId, ew.trueStartTime});
                 }
                 ew.effect.requestEnd();
             }
@@ -106,16 +101,16 @@ public class GroupEffect extends AbstractEffect {
         // 标记endCheck,这可以让哪些还未开始执行的子效果不再检查是否要需要执行。
         endCheck = true;
     }
-
+        
     @Override
-    public void cleanup() {
+    public final void cleanup() {
         if (effects != null) {
             for (EffectWrap ew : effects) {
                 ew.cleanup();
             }
         }
         endCheck = false;
-        super.cleanup(); 
+        super.cleanup();
     }
     
     private class EffectWrap {
@@ -133,28 +128,19 @@ public class GroupEffect extends AbstractEffect {
         public void checkToStart(float effectTimeUsed) {
             if (started) return;
             if (effectTimeUsed >= trueStartTime) {
-                if (effect == null) {
-                    effect = Loader.loadEffect(effectId);
-                }
+                effect = Loader.load(effectId);
+                // 与group保持一致的速度,这样当设置GroupEffect的速度的时候可以同时影响子效果的速度
+                effect.setSpeed(speed);
+//                // 不要再设置子效果的跟随
+//                effect.setTraceObject(animRoot);
                 // 注意：子效果是直接放在GroupEffect下的，不要放在EffectManager中，
                 // 这会依赖EffectManger,导致GroupEffect不能放在其它Node节点下, 
                 // 所有类型的Effect都应该是可以单独放在任何Node下进行运行的。
                 // 把子效果的跟踪目标设置为animRoot，这样当GroupEffect添加了动画控制时，可以同时影响到子效果的变换。
                 animRoot.attachChild(effect);
-
-//                // 不要再设置子效果的跟随
-//                effect.setTraceObject(animRoot);
-                
-                // 与group保持一致的速度,这样当设置GroupEffect的速度的时候可以同时影响子效果的速度
-                effect.getData().setSpeed(data.getSpeed());
-
-                // 记得在所有设置完毕后才调用initialize,因为子效果是由GroupEffect特别管理的，这里隔离了与EffectManager的关
-                // 系，initialize也可以交由效果内部调用，但是会慢一帧, 这会造成一些视角稍微滞后。
-                effect.initialize();
+                // effect不放到场景中
+                effect.initialize(null);
                 started = true;
-//                if (Config.debug) {
-//                    LOG.log(Level.INFO, "GroupEffect start child effect, effectId={0}, effectTimeNow={1}", new Object[] {effect.getData().getId(), effectTimeUsed});
-//                }
             }
         }
         

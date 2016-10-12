@@ -4,10 +4,12 @@
  */
 package name.huliqing.ly.layer.service;
 
+import com.jme3.math.Vector3f;
 import java.util.List;
 import name.huliqing.ly.layer.network.PlayNetwork;
 import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.game.Game;
+import name.huliqing.ly.object.scene.Scene;
 
 /**
  * @author huliqing
@@ -52,6 +54,9 @@ public interface PlayService extends PlayNetwork {
      * @return 
      */
     float getScreenHeight();
+    
+    
+    Vector3f getTerrainHeight(Scene scene, float x, float z);
     
     // --------------------------------------------------------------------------------------------------------------------------------
     

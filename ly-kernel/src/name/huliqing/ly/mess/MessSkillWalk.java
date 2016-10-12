@@ -66,7 +66,7 @@ public class MessSkillWalk extends MessBase {
         SkillService skillService = Factory.get(SkillService.class);
         Entity actor = playService.getEntity(actorId);
         if (actor == null) return;
-        skillService.playWalk(actor, actor.getModule(SkillModule.class).getSkill(skillId), dir, face, true);
+        skillService.playWalk(actor, actor.getEntityModule().getModule(SkillModule.class).getSkill(skillId), dir, face, true);
     }
     
     

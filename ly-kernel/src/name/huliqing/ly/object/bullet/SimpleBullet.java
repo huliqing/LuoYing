@@ -9,13 +9,12 @@ import com.jme3.math.Vector3f;
 /**
  * 直接击中类型的子弹，不需要经过中间路径。
  * @author huliqing
- * @param <S>
  */
-public class SimpleBullet<S> extends AbstractBullet<S>{
+public class SimpleBullet extends AbstractBullet {
     
     @Override
     protected void doUpdatePosition(float tpf, Vector3f endPos) {
-        setLocalTranslation(endPos);
+        bulletNode.setLocalTranslation(endPos);
     }
 
     

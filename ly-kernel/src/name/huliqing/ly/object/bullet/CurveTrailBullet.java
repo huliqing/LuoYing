@@ -18,19 +18,16 @@ import com.jme3.scene.Node;
 import com.jme3.texture.Texture;
 import com.jme3.util.TempVars;
 import name.huliqing.ly.Ly;
-import name.huliqing.ly.Factory;
 import name.huliqing.ly.constants.MaterialConstants;
-import name.huliqing.ly.data.BulletData;
-import name.huliqing.ly.layer.service.PlayService;
+import name.huliqing.ly.data.EntityData;
+import name.huliqing.ly.object.scene.Scene;
 import name.huliqing.ly.shape.SplineSurface;
 import name.huliqing.ly.utils.MathUtils;
 
 /**
  * @author huliqing
- * @param <S>
  */
-public class CurveTrailBullet<S> extends CurveBullet<S> {
-    private final PlayService playService = Factory.get(PlayService.class);
+public class CurveTrailBullet extends CurveBullet {
     
     // 拖尾的宽度
     private float width = 0.3f;
@@ -50,7 +47,7 @@ public class CurveTrailBullet<S> extends CurveBullet<S> {
     private final Node surface = new Node();
 
     @Override
-    public void setData(BulletData data) {
+    public void setData(EntityData data) {
         super.setData(data);
         this.mask = data.getAsString("mask", null);
         this.tex = data.getAsString("tex", null);
@@ -62,8 +59,8 @@ public class CurveTrailBullet<S> extends CurveBullet<S> {
     }
 
     @Override
-    public void initialize() {
-        super.initialize();
+    public void initialize(Scene scene) {
+        super.initialize(scene);
         
         surface.detachAllChildren();
         
@@ -88,8 +85,8 @@ public class CurveTrailBullet<S> extends CurveBullet<S> {
         Spline spline = getSpline();
         if (spline == null) {
             spline = new Spline();
-            spline.getControlPoints().add(data.getStartPoint());
-            spline.addControlPoint(data.getEndPoint());
+            spline.getControlPoints().add(start);
+            spline.addControlPoint(end);
             spline.setCurveTension(0);
         }
         
@@ -115,7 +112,7 @@ public class CurveTrailBullet<S> extends CurveBullet<S> {
         tv.release();
         
         // 添加到场景
-        playService.addObject(surface);
+        scene.getRoot().attachChild(surface);
     }
 
     @Override

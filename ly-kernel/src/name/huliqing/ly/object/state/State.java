@@ -6,7 +6,6 @@
 package name.huliqing.ly.object.state;
 
 import name.huliqing.ly.data.StateData;
-import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.xml.DataProcessor;
 

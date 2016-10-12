@@ -109,16 +109,16 @@ public class FightDynamicAction extends FollowPathAction implements FightAction,
     @Override
     public void setActor(Entity actor) {
         super.setActor(actor); 
-        actorModule = actor.getModule(ActorModule.class);
-        logicModule = actor.getModule(LogicModule.class);
-        skillModule = actor.getModule(SkillModule.class);
-        skinModule = actor.getModule(SkinModule.class);
+        actorModule = actor.getEntityModule().getModule(ActorModule.class);
+        logicModule = actor.getEntityModule().getModule(LogicModule.class);
+        skillModule = actor.getEntityModule().getModule(SkillModule.class);
+        skinModule = actor.getEntityModule().getModule(SkinModule.class);
     }
     
     @Override
     public void setEnemy(Entity enemy) {
         this.enemy = enemy;
-        this.enemyActorModule = enemy.getModule(ActorModule.class);
+        this.enemyActorModule = enemy.getEntityModule().getModule(ActorModule.class);
         super.setFollow(enemy.getSpatial());
     }
     

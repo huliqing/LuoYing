@@ -86,14 +86,14 @@ public class RunPathAction extends AbstractAction implements RunAction{
     @Override
     public void setActor(Entity actor) {
         super.setActor(actor);
-        actorModule = actor.getModule(ActorModule.class);
-        skillModule = actor.getModule(SkillModule.class);
+        actorModule = actor.getEntityModule().getModule(ActorModule.class);
+        skillModule = actor.getEntityModule().getModule(SkillModule.class);
     }
 
     @Override
     public void initialize() {
         super.initialize();
-        skillModule = actor.getModule(SkillModule.class);
+        skillModule = actor.getEntityModule().getModule(SkillModule.class);
         
         path = null;
         future = null;

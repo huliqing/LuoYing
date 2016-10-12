@@ -11,7 +11,7 @@ import name.huliqing.ly.Factory;
 import name.huliqing.ly.constants.ResConstants;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.ly.object.actor.Actor;
-import name.huliqing.luoying.network.UserCommandNetwork;
+import name.huliqing.luoying.layer.network.UserCommandNetwork;
 import name.huliqing.ly.layer.service.ActorService;
 import name.huliqing.ly.layer.service.TalentService;
 import name.huliqing.ly.object.talent.Talent;

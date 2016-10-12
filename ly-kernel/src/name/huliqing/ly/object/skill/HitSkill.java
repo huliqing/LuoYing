@@ -22,6 +22,7 @@ import name.huliqing.ly.layer.service.ElService;
 import name.huliqing.ly.layer.service.HitCheckerService;
 import name.huliqing.ly.layer.service.MagicService;
 import name.huliqing.ly.layer.service.PlayService;
+import name.huliqing.ly.object.Loader;
 import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.object.el.HitEl;
 import name.huliqing.ly.object.entity.Entity;
@@ -103,7 +104,7 @@ public abstract class HitSkill extends AbstractSkill {
     @Override
     public void setActor(Entity actor) {
         super.setActor(actor); 
-        actorModule = actor.getModule(ActorModule.class);
+        actorModule = actor.getEntityModule().getModule(ActorModule.class);
     }
 
     @Override
@@ -132,13 +133,13 @@ public abstract class HitSkill extends AbstractSkill {
      * @param store
      * @param sort 是否进行排序（从离当前角色近到远进行排序）
      */
-    protected void getCanHitActors(List<Actor> store, boolean sort) {
+    protected void getCanHitActors(List<Entity> store, boolean sort) {
         // 查找角度限制范围内的敌人。
         actorService.findNearestActors(actor, hitDistance, hitAngle, store);
 
         // 移除不能作为目标的角色,注：mainTarget要单独处理
         Entity mainTarget = actorService.getTarget(actor);
-        Iterator<Actor> it = store.iterator();
+        Iterator<Entity> it = store.iterator();
         Entity temp;
         while (it.hasNext()) {
             temp = it.next();
@@ -173,7 +174,7 @@ public abstract class HitSkill extends AbstractSkill {
      */
     protected void applyHit(Entity target) {
         // 角色刚好已经脱离场景，则什么也不做。
-        if (!playService.isInScene(target)) {
+        if (target.getScene() == null) {
             return;
         }
         if (hitChecker.canHit(actor, target)) {
@@ -200,12 +201,14 @@ public abstract class HitSkill extends AbstractSkill {
         if (hitMagics == null)
             return;
         for (String mId : hitMagics) {
-            MagicData md = magicService.loadMagic(mId);
-            md.setSourceActor(actor.getData().getUniqueId());
-            md.setTargetActor(target.getData().getUniqueId());
-            md.setTraceActor(target.getData().getUniqueId());
-            Magic magic = magicService.loadMagic(md);
-            playService.addPlayObject(magic);
+            Magic magic = Loader.load(mId);
+            magic.setSource(actor);
+            magic.getSpatial().setLocalTranslation(target.getSpatial().getWorldTranslation());
+            target.getScene().addEntity(magic);
+            
+            // remove
+//            md.setTargetActor(target.getData().getUniqueId());
+//            md.setTraceActor(target.getData().getUniqueId());
         }
     }
     

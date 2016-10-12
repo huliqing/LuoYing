@@ -10,9 +10,7 @@ import com.jme3.scene.Spatial;
 import name.huliqing.ly.Ly;
 import name.huliqing.ly.data.ActionData;
 import name.huliqing.ly.data.ActorData;
-import name.huliqing.ly.data.AnimData;
 import name.huliqing.ly.data.BulletData;
-import name.huliqing.ly.data.ChatData;
 import name.huliqing.ly.data.ElData;
 import name.huliqing.ly.data.EmitterData;
 import name.huliqing.ly.data.PositionData;
@@ -27,13 +25,10 @@ import name.huliqing.ly.data.StateData;
 import name.huliqing.ly.data.MagicData;
 import name.huliqing.ly.data.ShapeData;
 import name.huliqing.ly.data.TaskData;
-import name.huliqing.ly.data.ViewData;
 import name.huliqing.ly.xml.DataFactory;
 import name.huliqing.ly.object.action.Action;
 import name.huliqing.ly.object.logic.Logic;
-import name.huliqing.ly.object.anim.Anim;
 import name.huliqing.ly.object.bullet.Bullet;
-import name.huliqing.ly.object.chat.Chat;
 import name.huliqing.ly.object.effect.Effect;
 import name.huliqing.ly.object.game.Game;
 import name.huliqing.ly.object.hitchecker.HitChecker;
@@ -49,11 +44,14 @@ import name.huliqing.ly.object.skill.Skill;
 import name.huliqing.ly.object.skin.Skin;
 import name.huliqing.ly.object.state.AbstractState;
 import name.huliqing.ly.object.task.Task;
-import name.huliqing.ly.object.view.View;
 import name.huliqing.ly.xml.DataProcessor;
 import name.huliqing.ly.xml.ProtoData;
 
 public class Loader {
+    
+    public static <T extends ProtoData> T createData(String id) {
+        return DataFactory.createData(id);
+    }
     
     public static <T extends DataProcessor> T load(String id) {
         return load(DataFactory.createData(id));
@@ -101,23 +99,6 @@ public class Loader {
         return actor;
     }
     
-//    /**
-//     * @deprecated 
-//     * @return 
-//     */
-//    public static Anim loadAnimation(String animationId) {
-//        AnimData data = DataFactory.createData(animationId);
-//        return loadAnimation(data);
-//    }
-//    
-//    /**
-//     * @deprecated 
-//     * @return 
-//     */
-//    public static Anim loadAnimation(AnimData data) {
-//        return DataFactory.createProcessor(data);
-//    }
-    
     /**
      * @deprecated 
      * @return 
@@ -129,12 +110,6 @@ public class Loader {
     
     /** @deprecated */
     public static Bullet loadBullet(BulletData data) {
-        return DataFactory.createProcessor(data);
-    }
-    
-    /** @deprecated */
-    public static Chat loadChat(String chatId) {
-        ChatData data = DataFactory.createData(chatId);
         return DataFactory.createProcessor(data);
     }
     
@@ -290,16 +265,6 @@ public class Loader {
     
     /** @deprecated */
     public static Task loadTask(TaskData data) {
-        return DataFactory.createProcessor(data);
-    }
-     
-    /** @deprecated */
-    public static View loadView(String viewId) {
-        return loadView((ViewData)DataFactory.createData(viewId));
-    }
-    
-    /** @deprecated */
-    public static View loadView(ViewData data) {
         return DataFactory.createProcessor(data);
     }
     

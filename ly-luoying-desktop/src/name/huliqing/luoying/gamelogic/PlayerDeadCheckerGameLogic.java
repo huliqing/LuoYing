@@ -11,7 +11,7 @@ import name.huliqing.ly.data.GameLogicData;
 import name.huliqing.ly.enums.MessageType;
 import name.huliqing.ly.layer.network.PlayNetwork;
 import name.huliqing.ly.layer.service.PlayService;
-import name.huliqing.ly.layer.service.ViewService;
+import name.huliqing.luoying.layer.service.ViewService;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.ly.layer.service.ActorService;
 import name.huliqing.ly.object.actor.Actor;

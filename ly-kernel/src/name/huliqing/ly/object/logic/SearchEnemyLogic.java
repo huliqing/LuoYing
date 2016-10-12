@@ -44,8 +44,8 @@ public class SearchEnemyLogic<T extends LogicData> extends Logic<T> {
     @Override
     public void setActor(Entity actor) {
         super.setActor(actor); 
-        actorModule = actor.getModule(ActorModule.class);
-        logicModule = actor.getModule(LogicModule.class);
+        actorModule = actor.getEntityModule().getModule(ActorModule.class);
+        logicModule = actor.getEntityModule().getModule(LogicModule.class);
     }
   
     @Override

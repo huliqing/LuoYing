@@ -60,34 +60,34 @@ public interface ConfigService extends Inject {
      */
     void setSoundVolume(float volume);
     
-    /**
-     * 快捷方式是否已经锁定
-     * @return 
-     */
-    boolean isShortcutLocked();
-    
-    /**
-     * 设置快捷方式锁定状态
-     * @param locked
-     */
-    void setShortcutLocked(boolean locked);
-    
-    /**
-     * 获取快捷方式缩放倍率
-     * @return 
-     */
-    float getShortcutSize();
-    
-    /**
-     * 设置快捷方式大小
-     * @param size
-     */
-    void setShortcutSize(float size);
-    
-    /**
-     * 清理界面所有快捷方式
-     */
-    void clearShortcuts();
+//    /**
+//     * 快捷方式是否已经锁定
+//     * @return 
+//     */
+//    boolean isShortcutLocked();
+//    
+//    /**
+//     * 设置快捷方式锁定状态
+//     * @param locked
+//     */
+//    void setShortcutLocked(boolean locked);
+//    
+//    /**
+//     * 获取快捷方式缩放倍率
+//     * @return 
+//     */
+//    float getShortcutSize();
+//    
+//    /**
+//     * 设置快捷方式大小
+//     * @param size
+//     */
+//    void setShortcutSize(float size);
+//    
+//    /**
+//     * 清理界面所有快捷方式
+//     */
+//    void clearShortcuts();
     
     /**
      * 判断debug是否处于打开状态

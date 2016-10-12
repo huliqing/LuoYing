@@ -33,7 +33,7 @@ import name.huliqing.ly.object.skill.ShotSkill;
  * @param <T>
  */
 public class DefendLogic<T extends LogicData> extends Logic<T> implements SkillListener, SkillPlayListener, ActorListener {
-    private static final Logger LOG = Logger.getLogger(DefendLogic.class.getName());
+//    private static final Logger LOG = Logger.getLogger(DefendLogic.class.getName());
     
     private final ActorService actorService = Factory.get(ActorService.class);
     private final AttributeService attributeService = Factory.get(AttributeService.class);
@@ -82,8 +82,8 @@ public class DefendLogic<T extends LogicData> extends Logic<T> implements SkillL
     @Override
     public void setActor(Entity self) {
         super.setActor(self); 
-        actorModule = actor.getModule(ActorModule.class);
-        skillModule = actor.getModule(SkillModule.class);
+        actorModule = actor.getEntityModule().getModule(ActorModule.class);
+        skillModule = actor.getEntityModule().getModule(SkillModule.class);
     }
     
     @Override
@@ -118,7 +118,8 @@ public class DefendLogic<T extends LogicData> extends Logic<T> implements SkillL
         if (sourceBeLocked.getData().getUniqueId() == other.getData().getUniqueId()) 
             return;
         
-        if (!actorService.isAvailableEnemy(other.getModule(ActorModule.class), sourceBeLocked.getModule(ActorModule.class)))
+        if (!actorService.isAvailableEnemy(other.getEntityModule().getModule(ActorModule.class)
+                , sourceBeLocked.getEntityModule().getModule(ActorModule.class)))
             return;
         
         // 当被other锁定时给other添加侦听器，以侦察other的攻击。以便进行防守和躲闪
@@ -286,7 +287,7 @@ public class DefendLogic<T extends LogicData> extends Logic<T> implements SkillL
 
     private SkillModule getSkillModule() {
         if (skillModule == null) {
-            skillModule = actor.getModule(SkillModule.class);
+            skillModule = actor.getEntityModule().getModule(SkillModule.class);
         }
         return skillModule;
     }

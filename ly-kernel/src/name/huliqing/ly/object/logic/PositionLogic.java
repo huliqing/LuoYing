@@ -44,7 +44,7 @@ public class PositionLogic<T extends LogicData> extends Logic<T> {
     @Override
     public void initialize() {
         super.initialize();
-        actionModule = actor.getModule(ActionModule.class);
+        actionModule = actor.getEntityModule().getModule(ActionModule.class);
         runAction.setActor(actor);
     }
     

@@ -4,22 +4,12 @@
  */
 package name.huliqing.ly.object.task;
 
-import com.jme3.font.BitmapFont;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.ly.Factory;
-import name.huliqing.ly.constants.ResConstants;
-import name.huliqing.ly.data.ObjectData;
 import name.huliqing.ly.data.TaskData;
 import name.huliqing.ly.layer.service.PlayService;
-import name.huliqing.luoying.view.IconLabel;
-import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.ly.layer.network.AttributeNetwork;
-import name.huliqing.ly.xml.DataFactory;
-import name.huliqing.ly.ui.LinearLayout;
-import name.huliqing.ly.ui.Text;
-import name.huliqing.ly.ui.UI;
-import name.huliqing.ly.ui.UIFactory;
 import name.huliqing.ly.ui.Window;
 import name.huliqing.ly.utils.ConvertUtils;
 import name.huliqing.ly.layer.network.ObjectNetwork;

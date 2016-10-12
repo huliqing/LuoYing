@@ -65,14 +65,14 @@ public interface ActorService extends ActorNetwork {
      */
     List<Entity> findNearestEnemies(Entity actor, float maxDistance, List<Entity> store);
     
-    /**
-     * 寻找actor周围指定范围内的所有友军单位,这些友军单位必须是活着的.
-     * @param actor 指定的角色.
-     * @param maxDistance 指定的范围
-     * @param store 存放结果
-     * @return 
-     */
-    List<Entity> findNearestFriendly(Entity actor, float maxDistance, List<Entity> store);
+//    /**
+//     * 寻找actor周围指定范围内的所有友军单位,这些友军单位必须是活着的.
+//     * @param actor 指定的角色.
+//     * @param maxDistance 指定的范围
+//     * @param store 存放结果
+//     * @return 
+//     */
+//    List<Entity> findNearestFriendly(Entity actor, float maxDistance, List<Entity> store);
     
     /**
      * 获取角色周围一定围围内的其它角色，包含死亡的角色，但不包含角色自身(actor).

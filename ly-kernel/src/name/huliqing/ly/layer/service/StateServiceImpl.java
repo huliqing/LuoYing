@@ -96,13 +96,13 @@ public class StateServiceImpl implements StateService{
         State state = Loader.load(newStateData);
         state.setSourceActor(sourceActor);
         
-        StateModule module = actor.getModule(StateModule.class);
+        StateModule module = actor.getEntityModule().getModule(StateModule.class);
         module.addState(state);
     }
 
     @Override
     public final boolean removeState(Entity actor, String removeStateId) {
-        StateModule module = actor.getModule(StateModule.class);
+        StateModule module = actor.getEntityModule().getModule(StateModule.class);
         if (module != null) {
             State state = module.getState(removeStateId);
             return state != null ? module.removeState(state) : false;
@@ -112,7 +112,7 @@ public class StateServiceImpl implements StateService{
 
     @Override
     public State findState(Entity actor, String stateId) {
-        StateModule module = actor.getModule(StateModule.class);
+        StateModule module = actor.getEntityModule().getModule(StateModule.class);
         if (module != null) {
             return module.getState(stateId);
         }
@@ -121,7 +121,7 @@ public class StateServiceImpl implements StateService{
 
     @Override
     public void clearStates(Entity actor) {
-        StateModule module = actor.getModule(StateModule.class);
+        StateModule module = actor.getEntityModule().getModule(StateModule.class);
         if (module != null && module.getStates() != null) {
             for (State state : module.getStates()) {
                 module.removeState(state);
@@ -131,13 +131,13 @@ public class StateServiceImpl implements StateService{
     
     @Override
     public boolean existsState(Entity actor, String stateId) {
-        StateModule module = actor.getModule(StateModule.class);
+        StateModule module = actor.getEntityModule().getModule(StateModule.class);
         return module != null && module.getState(stateId) != null;
     }
     
     @Override
     public List<State> getStates(Entity actor) {
-        StateModule module = actor.getModule(StateModule.class);
+        StateModule module = actor.getEntityModule().getModule(StateModule.class);
         if (module != null) {
             return module.getStates();
         }
@@ -146,7 +146,7 @@ public class StateServiceImpl implements StateService{
 
     @Override
     public void addListener(Entity actor, StateListener listener) {
-        StateModule module = actor.getModule(StateModule.class);
+        StateModule module = actor.getEntityModule().getModule(StateModule.class);
         if (module != null) {
             module.addStateListener(listener);
         }
@@ -154,7 +154,7 @@ public class StateServiceImpl implements StateService{
 
     @Override
     public boolean removeListener(Entity actor, StateListener listener) {
-        StateModule module = actor.getModule(StateModule.class);
+        StateModule module = actor.getEntityModule().getModule(StateModule.class);
         return module != null && module.removeStateListener(listener);
     }
     

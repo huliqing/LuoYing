@@ -15,7 +15,7 @@ import name.huliqing.ly.enums.MessageType;
 import name.huliqing.luoying.state.GameState.PlayListener;
 import name.huliqing.luoying.view.TeamView;
 import name.huliqing.ly.object.NetworkObject;
-import name.huliqing.ly.object.view.View;
+import name.huliqing.luoying.object.view.View;
 
 /**
  * @author huliqing

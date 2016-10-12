@@ -15,14 +15,12 @@ import name.huliqing.ly.Factory;
 import name.huliqing.ly.Ly;
 import name.huliqing.ly.constants.SkillConstants;
 import name.huliqing.ly.data.AttributeUse;
-import name.huliqing.ly.data.MagicData;
 import name.huliqing.ly.data.SkillData;
+import name.huliqing.ly.layer.network.PlayNetwork;
 import name.huliqing.ly.layer.service.ElService;
-import name.huliqing.ly.layer.service.PlayService;
 import name.huliqing.ly.object.Loader;
 import name.huliqing.ly.object.actoranim.ActorAnim;
 import name.huliqing.ly.object.effect.Effect;
-import name.huliqing.ly.object.effect.EffectManager;
 import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.magic.Magic;
 import name.huliqing.ly.object.module.AttributeModule;
@@ -32,7 +30,6 @@ import name.huliqing.ly.object.module.SkinModule;
 import name.huliqing.ly.object.sound.SoundManager;
 import name.huliqing.ly.utils.ConvertUtils;
 import name.huliqing.ly.utils.MathUtils;
-import name.huliqing.ly.xml.DataFactory;
  
 /**
  *
@@ -56,7 +53,8 @@ import name.huliqing.ly.xml.DataFactory;
 public abstract class AbstractSkill implements Skill {
     private static final Logger LOG = Logger.getLogger(AbstractSkill.class.getName());
     private final ElService elService = Factory.get(ElService.class);
-    private final PlayService playService = Factory.get(PlayService.class);
+//    private final PlayService playService = Factory.get(PlayService.class);
+    private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private AttributeModule attributeModule;
     private LevelModule levelModule;
     private ChannelModule channelModule;
@@ -261,10 +259,10 @@ public abstract class AbstractSkill implements Skill {
     @Override
     public void setActor(Entity actor) {
         this.actor = actor;
-        attributeModule = actor.getModule(AttributeModule.class);
-        channelModule = actor.getModule(ChannelModule.class);
-        levelModule = actor.getModule(LevelModule.class);
-        skinModule = actor.getModule(SkinModule.class);
+        attributeModule = actor.getEntityModule().getModule(AttributeModule.class);
+        channelModule = actor.getEntityModule().getModule(ChannelModule.class);
+        levelModule = actor.getEntityModule().getModule(LevelModule.class);
+        skinModule = actor.getEntityModule().getModule(SkinModule.class);
     }
     
     @Override
@@ -695,9 +693,9 @@ public abstract class AbstractSkill implements Skill {
             }
             // 效果需要同步与技能相同的执行速度
             effect = Loader.load(effectId);
-            effect.getData().setSpeed(trueSpeed);
+            effect.setSpeed(trueSpeed);
             effect.setTraceObject(traceObject);
-            EffectManager.getInstance().addEffect(effect);
+            actor.getScene().getRoot().attachChild(effect);
         }
         
         void cleanup() {
@@ -723,11 +721,10 @@ public abstract class AbstractSkill implements Skill {
         void update(float interpolation) {
             if (started) return;
             if (interpolation >= trueTimePoint) {
-                MagicData magicData = DataFactory.createData(magicId);
-                magicData.setSourceActor(actor.getData().getUniqueId());
-                magicData.setTraceActor(actor.getData().getUniqueId());
-                Magic magic = Loader.load(magicData);
-                playService.addPlayObject(magic);
+                Magic magic = Loader.load(magicId);
+                magic.setSource(actor);
+                magic.getSpatial().setLocalTranslation(actor.getSpatial().getWorldTranslation());
+                actor.getScene().addEntity(magic);
                 
                 // 标记效果已经开始
                 started = true;

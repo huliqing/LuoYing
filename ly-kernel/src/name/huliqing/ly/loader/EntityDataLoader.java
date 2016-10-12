@@ -38,6 +38,7 @@ public class EntityDataLoader implements DataLoader<EntityData>{
             });
         }
         
+        // xxx 载入objectDatas
     }
     
 }

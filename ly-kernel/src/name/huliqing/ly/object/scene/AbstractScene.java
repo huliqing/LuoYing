@@ -12,7 +12,6 @@ import com.jme3.post.SceneProcessor;
 import com.jme3.post.filters.TranslucentBucketFilter;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
-import com.jme3.scene.Spatial;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -20,10 +19,9 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.ly.Ly;
-import name.huliqing.ly.data.ObjectData;
+import name.huliqing.ly.data.EntityData;
 import name.huliqing.ly.data.SceneData;
 import name.huliqing.ly.object.Loader;
-import name.huliqing.ly.xml.DataProcessor;
 import name.huliqing.ly.object.entity.Entity;
 
 /**
@@ -80,14 +78,10 @@ public class AbstractScene implements Scene {
         }
         
         // 载入场景中的所有实体
-        List<ObjectData> entityDatas = data.getEntityDatas();
+        List<EntityData> entityDatas = data.getEntityDatas();
         if (entityDatas != null) {
-            for (ObjectData od : entityDatas) {
-                DataProcessor dp = Loader.load(od);
-                if (!(dp instanceof Entity)) {
-                    continue; // Only entity object
-                }
-                addEntity((Entity) dp);
+            for (EntityData ed : entityDatas) {
+                addEntity((Entity) Loader.load(ed));
             }
         }
         if (listeners != null) {
@@ -131,7 +125,8 @@ public class AbstractScene implements Scene {
         }
         data.addEntityData(entity.getData());
         entities.put(entity.getEntityId(), entity);
-        // 初始化
+        // 初始化,注意判断是否已经初始化过，因为Entity可能已经从外部代码进行了初始化.为减少BUG发生，大部分情况下重复
+        // 初始化(initialize)都会报错。
         if (!entity.isInitialized()) {
             entity.initialize(this);
         }
@@ -147,24 +142,20 @@ public class AbstractScene implements Scene {
     }
     
     @Override
-    public boolean removeEntity(Entity entity) {
-        Entity removed = entities.remove(entity.getEntityId());
-        if (removed == null) {
-            return false;
-        }
-        data.removeEntityData(removed.getData());
+    public void removeEntity(Entity entity) {
+        boolean removed = data.removeEntityData(entity.getData());
+        entities.remove(entity.getEntityId());
         if (entity.getSpatial() != null) {
             entity.getSpatial().removeFromParent();
         }
-        if (removed.isInitialized()) {
-            removed.cleanup();
+        if (entity.isInitialized()) {
+            entity.cleanup();
         }
-        if (listeners != null) {
+        if (listeners != null && removed) {
             for (SceneListener ecl : listeners) {
-                ecl.onSceneEntityRemoved(this, removed);
+                ecl.onSceneEntityRemoved(this, entity);
             }
         }
-        return true;
     }
     
     @Override
@@ -202,29 +193,6 @@ public class AbstractScene implements Scene {
         }
         return store;
     }
-    
-//    @Override
-//    public void addSpatial(Spatial objectAdded) {
-//        root.attachChild(objectAdded);
-//        if (listeners != null) {
-//            for (SceneListener sl : listeners) {
-//                sl.onSpatialAdded(this, objectAdded);
-//            }
-//        }
-//    }
-//    
-//    @Override
-//    public boolean removeSpatial(Spatial objectRemoved) {
-//        if (root.detachChild(objectRemoved) != -1) {
-//            if (listeners != null) {
-//                for (SceneListener sl : listeners) {
-//                    sl.onSpatialRemoved(this, objectRemoved);
-//                }
-//            }
-//            return true;
-//        }
-//        return false;
-//    }
 
     @Override
     public void setProcessorViewPorts(ViewPort... viewPorts) {

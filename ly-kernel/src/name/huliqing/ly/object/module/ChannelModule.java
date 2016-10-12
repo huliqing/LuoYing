@@ -8,22 +8,24 @@ import com.jme3.animation.AnimChannel;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.Animation;
 import com.jme3.animation.LoopMode;
+import com.jme3.scene.Spatial;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.ly.data.ChannelData;
 import name.huliqing.ly.data.ObjectData;
+import name.huliqing.ly.object.AssetLoader;
 import name.huliqing.ly.object.Loader;
-import name.huliqing.ly.object.actor.ActorModelLoader;
 import name.huliqing.ly.object.channel.Channel;
 import name.huliqing.ly.object.channel.ChannelControl;
 import name.huliqing.ly.object.entity.Entity;
+import name.huliqing.ly.utils.GeometryUtils;
 import name.huliqing.ly.utils.Temp;
 
 /**
  * 用于控制角色动画通道的“通道控制器”
- * @author huliqing
+ * @author huliqing 
  */
 public class ChannelModule extends AbstractModule implements ChannelControl {
     private static final Logger LOG = Logger.getLogger(ChannelModule.class.getName());
@@ -152,8 +154,36 @@ public class ChannelModule extends AbstractModule implements ChannelControl {
         if (animControl.getAnim(animName) != null) {
             return true;
         } else {
-            return ActorModelLoader.loadExtAnim(entity, animName);
+            return loadExtAnim(entity, animName);
         }
+    }
+    
+    /**
+     * 载入扩展的动画,该方法从角色所配置的extAnim目录中查找动画文件并进行加
+     * 载。
+     * @param actor
+     * @param animName
+     * @return 
+     */
+    private static boolean loadExtAnim(Entity actor, String animName) {
+        // xxx 要移动到ActorModule中去
+        String animDir = actor.getData().getAsString("extAnim");
+        
+        if (animDir == null) {
+            LOG.log(Level.WARNING, "Entity {0} no have a extAnim defined"
+                    + ", could not load anim {1}", new Object[] {actor.getData().getId(), animName});
+            return false;
+        }
+        String animFile = animDir + "/" + animName + ".mesh.j3o";
+        try {
+            Spatial animExtModel = AssetLoader.loadModelDirect(animFile);
+            GeometryUtils.addSkeletonAnim(animExtModel, actor.getSpatial());
+            return true;
+        } catch (Exception e) {
+            LOG.log(Level.WARNING, "Could not load extAnim, actor={0}, animName={1}, exception={2}"
+                    , new Object[] {actor.getData().getId(), animName, e.getMessage()});
+        }
+        return false;
     }
     
     /**

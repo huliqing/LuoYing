@@ -21,7 +21,9 @@ import name.huliqing.ly.Ly;
 import name.huliqing.ly.constants.MaterialConstants;
 import name.huliqing.ly.constants.TextureConstants;
 import name.huliqing.ly.data.EffectData;
+import name.huliqing.ly.data.EntityData;
 import name.huliqing.ly.object.Loader;
+import name.huliqing.ly.object.scene.Scene;
 import name.huliqing.ly.shape.MySpline;
 import name.huliqing.ly.shape.SplineSurface;
 
@@ -30,7 +32,7 @@ import name.huliqing.ly.shape.SplineSurface;
  * tex会在mask下不停的滑动，从Mesh的一端进入，然后从另一端出去。
  * @author huliqing
  */
-public class SlideColorIOSplineEffect extends AbstractEffect {
+public class SlideColorIOSplineEffect extends Effect {
     private ColorRGBA startColor = new ColorRGBA(1, 1, 1, 1);
     private ColorRGBA endColor = new ColorRGBA(1, 1, 1, 1);
     
@@ -85,8 +87,8 @@ public class SlideColorIOSplineEffect extends AbstractEffect {
     }
     
     @Override
-    public void initialize() {
-        super.initialize();
+    public void initialize(Scene scene) {
+        super.initialize(scene);
         create();
     }
     
@@ -95,10 +97,10 @@ public class SlideColorIOSplineEffect extends AbstractEffect {
         super.effectUpdate(tpf);
         float inter;
         if (repeatTimes > 1) {
-            inter = trueTimeUsed / trueTimeTotal * repeatTimes;
+            inter = timeUsed / trueTimeTotal * repeatTimes;
             inter %= 1.0f;
         } else {
-            inter = trueTimeUsed / trueTimeTotal;
+            inter = timeUsed / trueTimeTotal;
         }
         mat.setFloat("offsetY", FastMath.interpolateLinear(inter, -1f, 1f));
     }

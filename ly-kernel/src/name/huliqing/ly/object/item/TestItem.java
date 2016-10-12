@@ -8,13 +8,11 @@ package name.huliqing.ly.object.item;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.layer.network.PlayNetwork;
 import name.huliqing.ly.layer.service.ActorService;
-import name.huliqing.ly.layer.service.EffectService;
 import name.huliqing.ly.layer.service.MagicService;
 import name.huliqing.ly.layer.service.PlayService;
 import name.huliqing.ly.layer.service.SaveService;
 import name.huliqing.ly.layer.service.SkillService;
 import name.huliqing.ly.layer.service.StateService;
-import name.huliqing.ly.layer.service.ViewService;
 import name.huliqing.ly.object.Loader;
 import name.huliqing.ly.object.entity.Entity;
 
@@ -29,8 +27,6 @@ public class TestItem extends AbstractItem {
     private final ActorService actorService = Factory.get(ActorService.class);
     private final StateService stateService = Factory.get(StateService.class);
     private final MagicService magicService = Factory.get(MagicService.class);
-    private final EffectService effectService = Factory.get(EffectService.class);
-    private final ViewService viewService = Factory.get(ViewService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
 

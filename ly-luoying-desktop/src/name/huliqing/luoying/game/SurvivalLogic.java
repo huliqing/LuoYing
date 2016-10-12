@@ -20,14 +20,14 @@ import name.huliqing.ly.layer.service.LogicService;
 import name.huliqing.ly.layer.service.PlayService;
 import name.huliqing.ly.layer.service.SkillService;
 import name.huliqing.ly.layer.service.StateService;
-import name.huliqing.ly.layer.service.ViewService;
+import name.huliqing.luoying.layer.service.ViewService;
 import name.huliqing.ly.object.Loader;
 import name.huliqing.ly.object.logic.PositionLogic;
 import name.huliqing.ly.logic.scene.ActorBuildLogic;
 import name.huliqing.ly.logic.scene.ActorBuildLogic.Callback;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.ly.object.gamelogic.AbstractGameLogic;
-import name.huliqing.ly.object.view.TextView;
+import name.huliqing.luoying.object.view.TextView;
 
 /**
  * 宝箱任务第二阶段：守护宝箱

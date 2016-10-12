@@ -24,7 +24,7 @@ public class IdleStaticAction extends AbstractAction implements IdleAction {
     @Override
     public void initialize() {
         super.initialize();
-        skillModule = actor.getModule(SkillModule.class);
+        skillModule = actor.getEntityModule().getModule(SkillModule.class);
         
         List<Skill> waitSkills = skillModule.getSkillWait(null);
         if (waitSkills != null && !waitSkills.isEmpty()) {

@@ -13,6 +13,7 @@ import name.huliqing.ly.data.SkillData;
 import name.huliqing.ly.layer.service.ActorService;
 import name.huliqing.ly.layer.service.BulletService;
 import name.huliqing.ly.layer.service.PlayService;
+import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.object.bullet.Bullet;
 import name.huliqing.ly.object.bullet.Bullet.Listener;
 import name.huliqing.ly.object.entity.Entity;
@@ -189,12 +190,12 @@ public class ShotSkill extends HitSkill {
         // 在所有可用的Offset设置中轮循
         String bullet = getShotBullet();
         Vector3f offset = getShotOffset();
-    
+        
         Vector3f startPoint = new Vector3f(offset);
         Bullet bb = bulletService.loadBullet(bullet);
-        bb.getData().setStartPoint(convertToWorldPos(startPoint));
-        bb.getData().setEndPoint(getShotEndPoint(mainTarget));
-        bb.getData().setSpeed(shotSpeed);
+        bb.setStart(convertToWorldPos(startPoint));
+        bb.setEnd(getShotEndPoint(mainTarget));
+        bb.setSpeed(shotSpeed);
         
         bb.addListener(new Listener() {
             @Override
@@ -207,7 +208,7 @@ public class ShotSkill extends HitSkill {
                 return false;
             }
         });
-        playService.addBullet(bb);
+        actor.getScene().addEntity(bb);
     }
     
     /**
@@ -253,7 +254,7 @@ public class ShotSkill extends HitSkill {
 
         // 如果允许多重伤害时，则需要判断其他可能在攻击范围内的敌人
         if (multHit) {
-            List<Entity> targets = playService.findAllActor();
+            List<Actor> targets = actor.getScene().getEntities(Actor.class, actor.getSpatial().getWorldTranslation(), this.hitDistance, null);
             for (Entity t : targets) {
                 if (t == mainTarget) {
                     continue;

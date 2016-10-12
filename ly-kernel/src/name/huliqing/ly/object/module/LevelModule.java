@@ -19,7 +19,6 @@ import name.huliqing.ly.object.attribute.LimitAttribute;
 import name.huliqing.ly.object.attribute.NumberAttribute;
 import name.huliqing.ly.object.attribute.ValueChangeListener;
 import name.huliqing.ly.object.effect.Effect;
-import name.huliqing.ly.object.effect.EffectManager;
 import name.huliqing.ly.object.el.LevelEl;
 import name.huliqing.ly.object.entity.Entity;
 
@@ -200,8 +199,8 @@ public class LevelModule extends AbstractModule implements ValueChangeListener<N
             // 3.提示升级(效果）
             if (effect != null) {
                 Effect levelUpEffect = Loader.load(effect);
-                levelUpEffect.setTraceObject(entity.getSpatial());
-                EffectManager.getInstance().addEffect(levelUpEffect);
+                levelUpEffect.setTraceEntity(entity.getEntityId());
+                this.entity.getScene().addEntity(levelUpEffect);
             }
         }
     }

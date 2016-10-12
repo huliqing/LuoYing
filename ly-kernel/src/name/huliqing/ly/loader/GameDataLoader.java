@@ -34,7 +34,7 @@ public class GameDataLoader<T extends GameData> implements DataLoader<T>{
             }
         }
         
-        store.setAvailableActors(store.getAsStringList("availableActors"));
+//        store.setAvailableActors(store.getAsStringList("availableActors"));
     }
     
 }

@@ -65,7 +65,7 @@ public class RayDetour extends Detour {
         TempVars tv = TempVars.get();
         Temp temp = Temp.get();
         
-        ActorModule selfActorModule = self.getModule(ActorModule.class);
+        ActorModule selfActorModule = self.getEntityModule().getModule(ActorModule.class);
         Vector3f viewDirection;
         if (selfActorModule != null) {
             viewDirection = selfActorModule.getViewDirection();
