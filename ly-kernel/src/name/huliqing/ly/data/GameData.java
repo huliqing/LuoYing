@@ -22,6 +22,8 @@ public class GameData extends ObjectData {
     
     // 场景ID
     private SceneData sceneData;
+    // GUI场景
+    private SceneData guiSceneData;
     // 游戏的逻辑列表
     private List<GameLogicData> gameLogicDatas;
     
@@ -42,6 +44,14 @@ public class GameData extends ObjectData {
      */
     public void setSceneData(SceneData sceneData) {
         this.sceneData = sceneData;
+    }
+
+    public SceneData getGuiSceneData() {
+        return guiSceneData;
+    }
+
+    public void setGuiSceneData(SceneData guiSceneData) {
+        this.guiSceneData = guiSceneData;
     }
 
     /**
@@ -87,6 +97,7 @@ public class GameData extends ObjectData {
         super.write(ex);
         OutputCapsule oc = ex.getCapsule(this);
         oc.write(sceneData, "sceneData", null);
+        oc.write(guiSceneData, "guiSceneData", null);
         if (gameLogicDatas != null) {
             oc.writeSavableArrayList(new ArrayList<GameLogicData>(gameLogicDatas), "gameLogicDatas", null);
         }
@@ -97,18 +108,7 @@ public class GameData extends ObjectData {
         super.read(im);
         InputCapsule ic = im.getCapsule(this);
         sceneData = (SceneData) ic.readSavable("sceneData", null);
+        guiSceneData = (SceneData) ic.readSavable("guiSceneData", null);
         gameLogicDatas = ic.readSavableArrayList("gameLogicDatas", null);
     }
-
-//    public List<String> getAvailableActors() {
-//        if (availableActors == null) {
-//            availableActors = new ArrayList<String>();
-//        }
-//        return availableActors;
-//    }
-//
-//    public void setAvailableActors(List<String> availableActors) {
-//        this.availableActors = availableActors;
-//    }
-    
 }

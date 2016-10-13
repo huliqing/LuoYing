@@ -31,8 +31,6 @@ public class Actor<T extends ActorData> extends ModelEntity<T> {
      */
     @Override
     protected Spatial loadModel() {
-        
-        
         return ActorModelLoader.loadActorModel(this);
     }
     

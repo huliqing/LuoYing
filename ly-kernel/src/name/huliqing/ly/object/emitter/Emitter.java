@@ -9,11 +9,12 @@ import com.jme3.asset.AssetManager;
 import com.jme3.effect.ParticleEmitter;
 import com.jme3.effect.ParticleMesh;
 import com.jme3.material.Material;
-import name.huliqing.ly.Ly;
+import name.huliqing.ly.LuoYing;
 import name.huliqing.ly.data.EmitterData;
 import name.huliqing.ly.object.Loader;
 import name.huliqing.ly.xml.DataProcessor;
 import name.huliqing.ly.object.position.EmitterShapeWrap;
+import name.huliqing.ly.object.position.Position;
 
 /**
  *
@@ -112,9 +113,9 @@ public class Emitter<T extends EmitterData> implements DataProcessor<T> {
             pe.getParticleInfluencer().setVelocityVariation(data.getVelocityVariation());
         }
         if (data.getShape() != null) {
-            pe.setShape(new EmitterShapeWrap(Loader.loadPosition(data.getShape())));
+            pe.setShape(new EmitterShapeWrap((Position) Loader.load(data.getShape())));
         }
-        AssetManager am = Ly.getAssetManager();
+        AssetManager am = LuoYing.getAssetManager();
         Material mat = new Material(am, "Common/MatDefs/Misc/Particle.j3md");
         mat.setTexture("Texture", am.loadTexture(data.getTexture()));
         pe.setMaterial(mat);

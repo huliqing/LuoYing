@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://luoying.huliqing.name'
+    xsi:schemaLocation='http://luoying.huliqing.name meta/game.xsd'>
+    
+    <!--游戏-->
+    <gameSimple id="_sys_game" scene="_sys_scene" guiScene="_sys_sceneGui" />
+    
+</root>
+
+
+

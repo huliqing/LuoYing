@@ -14,16 +14,11 @@ import java.util.List;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.constants.IdConstants;
 import name.huliqing.ly.constants.SkillConstants;
-import name.huliqing.ly.data.MagicData;
 import name.huliqing.ly.data.SkillData;
 import name.huliqing.ly.layer.network.StateNetwork;
 import name.huliqing.ly.layer.service.ActorService;
 import name.huliqing.ly.layer.service.ElService;
-import name.huliqing.ly.layer.service.HitCheckerService;
-import name.huliqing.ly.layer.service.MagicService;
-import name.huliqing.ly.layer.service.PlayService;
 import name.huliqing.ly.object.Loader;
-import name.huliqing.ly.object.actor.Actor;
 import name.huliqing.ly.object.el.HitEl;
 import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.hitchecker.HitChecker;
@@ -37,10 +32,7 @@ import name.huliqing.ly.utils.ConvertUtils;
  */
 public abstract class HitSkill extends AbstractSkill {
     private final ActorService actorService = Factory.get(ActorService.class);
-    private final PlayService playService = Factory.get(PlayService.class);
-    private final MagicService magicService = Factory.get(MagicService.class);
     private final ElService elService = Factory.get(ElService.class);
-    private final HitCheckerService hitCheckerService = Factory.get(HitCheckerService.class);
     private final StateNetwork stateNetwork = Factory.get(StateNetwork.class);
     private ActorModule actorModule;
     
@@ -70,7 +62,7 @@ public abstract class HitSkill extends AbstractSkill {
     public void setData(SkillData data) {
         super.setData(data); 
         
-        this.hitChecker = hitCheckerService.loadHitChecker(data.getAsString("hitChecker", IdConstants.HIT_CHECKER_FIGHT_DEFAULT));
+        this.hitChecker = Loader.load(data.getAsString("hitChecker", IdConstants.SYS_HITCHECK_FIGHT_DEFAULT));
         this.hitAttribute = data.getAsString("hitAttribute");
         this.hitValue = data.getAsFloat("hitValue", 0);
         this.hitEl = data.getAsString("hitEl");

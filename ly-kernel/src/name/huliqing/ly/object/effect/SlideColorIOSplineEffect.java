@@ -17,12 +17,12 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.texture.Texture;
 import com.jme3.util.TempVars;
-import name.huliqing.ly.Ly;
+import name.huliqing.ly.LuoYing;
 import name.huliqing.ly.constants.MaterialConstants;
 import name.huliqing.ly.constants.TextureConstants;
 import name.huliqing.ly.data.EffectData;
-import name.huliqing.ly.data.EntityData;
 import name.huliqing.ly.object.Loader;
+import name.huliqing.ly.object.position.Position;
 import name.huliqing.ly.object.scene.Scene;
 import name.huliqing.ly.shape.MySpline;
 import name.huliqing.ly.shape.SplineSurface;
@@ -45,6 +45,7 @@ public class SlideColorIOSplineEffect extends Effect {
     // fixedPoints是固定点
     // randomPoints是动态点，指向的是Position.xml的id.
     private Vector3f[] fixedPoints;
+    // 绑定位置点Position
     private String[] randomPoints;
     private float width = 1;
     // 至少30个分段，否则转折太明显
@@ -107,7 +108,7 @@ public class SlideColorIOSplineEffect extends Effect {
     
     private void create() {
         if (mat == null) {
-            AssetManager am = Ly.getAssetManager();
+            AssetManager am = LuoYing.getAssetManager();
             mat = new Material(am, MaterialConstants.MAT_SLIDE_COLOR_IO);
             mat.setColor("StartColor", startColor);
             mat.setColor("EndColor", endColor);
@@ -149,7 +150,7 @@ public class SlideColorIOSplineEffect extends Effect {
             fixedPoints = new Vector3f[randomPoints.length];
             for (int i = 0; i < randomPoints.length; i++) {
                 Vector3f point = new Vector3f();
-                Loader.loadPosition(randomPoints[i]).getPoint(point);
+                ((Position)Loader.load(randomPoints[i])).getPoint(point);
                 fixedPoints[i] = point;
             }
         }

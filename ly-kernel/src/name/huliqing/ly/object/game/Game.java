@@ -4,7 +4,7 @@
  */
 package name.huliqing.ly.object.game;
 
-import com.jme3.scene.Spatial;
+import com.jme3.app.Application;
 import java.util.List;
 import name.huliqing.ly.data.GameData;
 import name.huliqing.ly.xml.DataProcessor;
@@ -20,11 +20,18 @@ import name.huliqing.ly.object.task.Task;
  * @param <T>
  */
 public interface Game<T extends GameData> extends DataProcessor<T> {
-   
+
+    @Override
+    public void setData(T data);
+
+    @Override
+    public T getData();
+    
     /**
      * 初始化游戏
+     * @param app
      */
-    void initialize();
+    void initialize(Application app);
     
     /**
      * 判断游戏是否已经初始化
@@ -44,7 +51,7 @@ public interface Game<T extends GameData> extends DataProcessor<T> {
     void cleanup();
     
     /**
-     * 设置游戏场景
+     * 游戏场景,
      * @param scene 
      */
     void setScene(Scene scene);

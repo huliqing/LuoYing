@@ -37,6 +37,24 @@ public interface ConfigService extends Inject {
     void loadGlobalConfig();
     
     /**
+     * 获取游戏名字
+     * @return 
+     */
+    String getGameName();
+    
+    /**
+     * 获取版本名称
+     * @return 
+     */
+    String getVersionName();
+    
+    /**
+     * 获取游戏版本号
+     * @return 
+     */
+    int getVersionCode();
+    
+    /**
      * 获取游戏全局声音的开关状态
      * @return 
      */
@@ -60,83 +78,6 @@ public interface ConfigService extends Inject {
      */
     void setSoundVolume(float volume);
     
-//    /**
-//     * 快捷方式是否已经锁定
-//     * @return 
-//     */
-//    boolean isShortcutLocked();
-//    
-//    /**
-//     * 设置快捷方式锁定状态
-//     * @param locked
-//     */
-//    void setShortcutLocked(boolean locked);
-//    
-//    /**
-//     * 获取快捷方式缩放倍率
-//     * @return 
-//     */
-//    float getShortcutSize();
-//    
-//    /**
-//     * 设置快捷方式大小
-//     * @param size
-//     */
-//    void setShortcutSize(float size);
-//    
-//    /**
-//     * 清理界面所有快捷方式
-//     */
-//    void clearShortcuts();
-    
-    /**
-     * 判断debug是否处于打开状态
-     * @return 
-     */
-    boolean isDebugEnabled();
-    
-    /**
-     * 显示或关闭调试信息
-     */
-    void setDebug(boolean enabled);
-    
-    /**
-     * 获得speak的每个字词的停留时间单位长度。该值越大，talk过程中文字的停
-     * 留时间越长,单位秒
-     * @return 
-     */
-    float getSpeakTimeWorld();
-    
-    /**
-     * 设置speak的每个字词的停留时间单位长度。该值越大，talk过程中文字的停
-     * 留时间越长,单位秒
-     * @param time 
-     */
-    void setSpeakTimeWorld(float time);
-    
-    float getSpeakTimeMin();
-    float getSpeakTimeMax();
-    
-    float getSpeakMaxDistance();
-    
-    /**
-     * 判断系统是否打开了全局hardwareSkinning.
-     * 注：这是全局设定,如果关闭这个功能则全游戏的hardwareSkinning都应该关闭。
-     * 但是打开这个功能并不意味着所有物体都会打开hardwareSkinning.部分物体可能有
-     * 自身的设定。
-     * @return 
-     */
-    boolean isUseHardwareSkinning();
-    
-    /**
-     * 设置是否打开hardwareSkinning加速，该功能可以大量减轻CPU负担，对提高FPS
-     * 有比较大的帮助.注：这是全局设定,如果关闭这个功能则全游戏的hardwareSkinning都
-     * 应该关闭。但是打开这个功能并不意味着所有物体都会打开hardwareSkinning.
-     * 部分物体可能有自身的设定。
-     * @param enabled 
-     */
-    void setUseHardwareSkining(boolean enabled);
-    
     /**
      * 载入语言环境，该方法返回的必须是一个当前游戏能够支持的语言设置。即
      * 必须是Config.locale_all中的其中任何一个。
@@ -159,14 +100,12 @@ public interface ConfigService extends Inject {
     String getLocale();
     
     float getDropFactor();
-    String[] getLanGames();
-    String getGameName();
-    String getVersionName();
-    int getVersionCode();
+    
     int getPort();
+    
     int getPortDiscoverServer();
+    
     int getPortDiscoverClient();
-    float getSummonLevelFactor();
     
     /**
      * 获取所有支持的语言环境，返回格式， “{en_US,zh_CN}”
@@ -174,11 +113,11 @@ public interface ConfigService extends Inject {
      */
     String[] getAllSupportedLocale();
     
-    /**
-     * 是否打开光源
-     * @return 
-     */
-    boolean isUseLight();
+//    /**
+//     * 是否打开光源
+//     * @return 
+//     */
+//    boolean isUseLight();
     
     /**
      * 获取系统定义的最高级别限制

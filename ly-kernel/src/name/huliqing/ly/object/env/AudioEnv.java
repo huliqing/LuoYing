@@ -11,7 +11,7 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Sphere;
-import name.huliqing.ly.Ly;
+import name.huliqing.ly.LuoYing;
 import name.huliqing.ly.data.EntityData;
 import name.huliqing.ly.object.Loader;
 import name.huliqing.ly.object.entity.ModelEntity;
@@ -61,7 +61,7 @@ public class AudioEnv extends ModelEntity {
     }
     
     private Material createDebugMaterial(ColorRGBA color) {
-        Material mat = new Material(Ly.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+        Material mat = new Material(LuoYing.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
         mat.getAdditionalRenderState().setWireframe(true);
         mat.getAdditionalRenderState().setFaceCullMode(RenderState.FaceCullMode.Off);
         mat.setColor("Color",  color);

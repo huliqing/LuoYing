@@ -5,12 +5,15 @@
  */
 package name.huliqing.ly.loader;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import name.huliqing.ly.data.AttributeData;
 import name.huliqing.ly.data.DropData;
 import name.huliqing.ly.data.LogicData;
 import name.huliqing.ly.data.ChannelData;
 import name.huliqing.ly.data.ChatData;
 import name.huliqing.ly.data.EntityData;
+import name.huliqing.ly.data.ItemData;
 import name.huliqing.ly.xml.Proto;
 import name.huliqing.ly.data.ObjectData;
 import name.huliqing.ly.data.ResistData;
@@ -25,6 +28,7 @@ import name.huliqing.ly.xml.DataFactory;
  * @author huliqing
  */
 public class ActorDataLoader extends EntityDataLoader {
+//    private static final Logger LOG = Logger.getLogger(ActorDataLoader.class.getName());
 
     @Override
     public void load(Proto proto, EntityData data) {
@@ -47,7 +51,11 @@ public class ActorDataLoader extends EntityDataLoader {
                     itemTotal = Integer.parseInt(itemArr[1]);
                 }
                 ObjectData itemData = DataFactory.createData(itemId);
-                itemData.setTotal(itemTotal);
+                if (itemData instanceof ItemData) {
+                    ((ItemData)itemData).setTotal(itemTotal);
+                } else {
+                    continue;
+                }
                 data.addObjectData(itemData);
             }
         }

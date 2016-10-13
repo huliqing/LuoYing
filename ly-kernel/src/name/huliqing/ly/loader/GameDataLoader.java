@@ -11,6 +11,7 @@ import name.huliqing.ly.data.GameData;
 import name.huliqing.ly.data.GameLogicData;
 import name.huliqing.ly.xml.Proto;
 import name.huliqing.ly.data.SceneData;
+import name.huliqing.ly.object.Loader;
 import name.huliqing.ly.xml.DataFactory;
 import name.huliqing.ly.xml.DataLoader;
 
@@ -22,9 +23,14 @@ public class GameDataLoader<T extends GameData> implements DataLoader<T>{
 
     @Override
     public void load(Proto proto, T store) {
-        SceneData sceneData = DataFactory.createData(store.getAsString("scene"));
-        store.setSceneData(sceneData);
-        
+        String scene = store.getAsString("scene");
+        if (scene != null) {
+            store.setSceneData((SceneData)Loader.loadData(scene));
+        }
+        String guiScene = proto.getAsString("guiScene");
+        if (guiScene != null) {
+            store.setGuiSceneData((SceneData) Loader.loadData(guiScene));
+        }
         String[] gameLogicsArr = proto.getAsArray("gameLogics");
         if (gameLogicsArr != null && gameLogicsArr.length > 0) {
             List<GameLogicData> gameLogics = new ArrayList<GameLogicData>(gameLogicsArr.length);

@@ -25,7 +25,7 @@ import com.jme3.scene.shape.Curve;
 import com.jme3.util.TempVars;
 import java.util.Iterator;
 import java.util.List;
-import name.huliqing.ly.Ly;
+import name.huliqing.ly.LuoYing;
 
 /**
  * 用于动态DEBUG的工具类，相关的方法需要在update中运行才有意义
@@ -123,7 +123,7 @@ public class DebugDynamicUtils {
     
     public static void debugSpline(String debugId, Spline spline, boolean inGui) {
         Node debugRoot = new Node();
-        Material m = Ly.getAssetManager().loadMaterial("Common/Materials/RedColor.j3m");
+        Material m = LuoYing.getAssetManager().loadMaterial("Common/Materials/RedColor.j3m");
         for (Iterator<Vector3f> it = spline.getControlPoints().iterator(); it.hasNext();) {
             Vector3f cp = it.next();
             Geometry geo = new Geometry("box", new Box(cp, 0.1f, 0.1f, 0.1f));
@@ -145,7 +145,7 @@ public class DebugDynamicUtils {
     }
     
     private static void addDebugObject(String debugId, Spatial spatial, boolean inGui) {
-        SimpleApplication sa = (SimpleApplication) Ly.getApp();
+        SimpleApplication sa = (SimpleApplication) LuoYing.getApp();
         
         Node root = inGui ? sa.getGuiNode() : sa.getRootNode();
         Spatial old = root.getChild(debugId);
@@ -157,7 +157,7 @@ public class DebugDynamicUtils {
     }
 
     private static Geometry CreateLinearPath(Spline spline) {
-        Material mat = new Material(Ly.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+        Material mat = new Material(LuoYing.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
         mat.getAdditionalRenderState().setWireframe(true);
         mat.setColor("Color", ColorRGBA.Blue);
         Geometry lineGeometry = new Geometry("line", new Curve(spline, 0));
@@ -166,7 +166,7 @@ public class DebugDynamicUtils {
     }
 
     private static Geometry CreateCatmullRomPath(Spline spline) {
-        Material mat = new Material(Ly.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+        Material mat = new Material(LuoYing.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
         mat.getAdditionalRenderState().setWireframe(true);
         mat.setColor("Color", ColorRGBA.Blue);
         Geometry lineGeometry = new Geometry("line", new Curve(spline, 10));

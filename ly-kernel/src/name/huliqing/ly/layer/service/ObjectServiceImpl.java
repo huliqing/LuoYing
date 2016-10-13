@@ -7,7 +7,6 @@ package name.huliqing.ly.layer.service;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Logger;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.constants.IdConstants;
 import name.huliqing.ly.data.ItemData;
@@ -86,7 +85,7 @@ public class ObjectServiceImpl implements ObjectService {
         if (data == null)
             return;
         
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("unsupported yet!");
     }
 
     @Override
@@ -107,10 +106,10 @@ public class ObjectServiceImpl implements ObjectService {
         return 0;
     }
     
-    @Override
-    public boolean isSellable(ObjectData data) {
-        // 金币不能卖
-        return !data.getId().equals(IdConstants.ITEM_GOLD);
-    }
+//    @Override
+//    public boolean isSellable(ObjectData data) {
+//        // 金币不能卖
+//        return !data.getId().equals(IdConstants.ITEM_GOLD);
+//    }
  
 }

@@ -49,6 +49,8 @@ public abstract class AbstractEntity<T extends EntityData> implements Entity<T> 
         
         // 初始化所有模块
         entityModule.initialize();
+        
+        setcontrols
     }
 
     @Override

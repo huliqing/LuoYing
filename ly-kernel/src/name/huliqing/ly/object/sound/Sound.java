@@ -9,7 +9,7 @@ import com.jme3.audio.AudioContext;
 import com.jme3.audio.AudioData;
 import com.jme3.audio.AudioNode;
 import com.jme3.scene.Node;
-import name.huliqing.ly.Ly;
+import name.huliqing.ly.LuoYing;
 import name.huliqing.ly.data.SoundData;
 import name.huliqing.ly.xml.DataProcessor;
 
@@ -130,7 +130,7 @@ public class Sound<T extends SoundData> extends Node implements DataProcessor<T>
     }
     
     private AudioNode loadAudio() {
-        AudioNode an = new AudioNode(Ly.getAssetManager(), data.getSoundFile(), AudioData.DataType.Buffer);
+        AudioNode an = new AudioNode(LuoYing.getAssetManager(), data.getSoundFile(), AudioData.DataType.Buffer);
         an.setVolume(data.getVolume());
         an.setTimeOffset(data.getTimeOffset());
         an.setLooping(data.isLooping());

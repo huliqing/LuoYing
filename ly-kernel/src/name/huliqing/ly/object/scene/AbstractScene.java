@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import name.huliqing.ly.Ly;
+import name.huliqing.ly.LuoYing;
 import name.huliqing.ly.data.EntityData;
 import name.huliqing.ly.data.SceneData;
 import name.huliqing.ly.object.Loader;
@@ -76,7 +76,6 @@ public class AbstractScene implements Scene {
         if (initialized) {
             throw new IllegalStateException("Scene is already initialized! sceneId=" + data.getId());
         }
-        
         // 载入场景中的所有实体
         List<EntityData> entityDatas = data.getEntityDatas();
         if (entityDatas != null) {
@@ -231,7 +230,7 @@ public class AbstractScene implements Scene {
     @Override
     public void addFilter(Filter filter) {
         if (defaultFilterPostProcessor == null) {
-            defaultFilterPostProcessor = new FilterPostProcessor(Ly.getAssetManager());
+            defaultFilterPostProcessor = new FilterPostProcessor(LuoYing.getAssetManager());
             addProcessor(defaultFilterPostProcessor);
         }
         // 需要保证translucentBucketFilter放在FilterPostProcessor的最后面。

@@ -10,7 +10,6 @@ import name.huliqing.ly.Factory;
 import name.huliqing.ly.layer.service.ActorService;
 import name.huliqing.ly.layer.service.PlayService;
 import name.huliqing.ly.layer.service.SkinService;
-import name.huliqing.ly.layer.service.GameService;
 import name.huliqing.ly.layer.service.LogicService;
 import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.scene.Scene;

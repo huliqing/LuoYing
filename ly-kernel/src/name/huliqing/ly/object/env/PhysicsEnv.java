@@ -9,7 +9,7 @@ import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.BulletAppState.ThreadingType;
 import com.jme3.bullet.PhysicsSpace.BroadphaseType;
 import com.jme3.math.Vector3f;
-import name.huliqing.ly.Ly;
+import name.huliqing.ly.LuoYing;
 import name.huliqing.ly.data.EntityData;
 import name.huliqing.ly.object.scene.Scene;
 import name.huliqing.ly.object.scene.SceneListener;
@@ -75,7 +75,7 @@ public class PhysicsEnv extends NoneModelEntity implements SceneListener {
             bulletAppState.setThreadingType(tt);
         }
         
-        Ly.getApp().getStateManager().attach(bulletAppState);
+        LuoYing.getApp().getStateManager().attach(bulletAppState);
         
         bulletAppState.setSpeed(speed);
         if (worldMax != null) {
@@ -101,7 +101,7 @@ public class PhysicsEnv extends NoneModelEntity implements SceneListener {
     @Override
     public void cleanup() {
         scene.removeSceneListener(this);
-        Ly.getApp().getStateManager().detach(bulletAppState);
+        LuoYing.getApp().getStateManager().detach(bulletAppState);
         super.cleanup();
     }
     
@@ -143,6 +143,9 @@ public class PhysicsEnv extends NoneModelEntity implements SceneListener {
     
     @Override
     public void onSceneEntityAdded(Scene scene, Entity objectAdded) {
+        if (objectAdded == this) 
+            return;
+        
         if (objectAdded.getSpatial() != null) {
             bulletAppState.getPhysicsSpace().addAll(objectAdded.getSpatial());
         }

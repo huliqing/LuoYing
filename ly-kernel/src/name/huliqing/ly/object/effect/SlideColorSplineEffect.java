@@ -12,6 +12,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.util.TempVars;
 import name.huliqing.ly.object.Loader;
+import name.huliqing.ly.object.position.Position;
 import name.huliqing.ly.shape.MySpline;
 import name.huliqing.ly.shape.SplineSurface;
 
@@ -51,7 +52,7 @@ public class SlideColorSplineEffect extends SlideColorEffect {
             fixedPoints = new Vector3f[randomPoints.length];
             for (int i = 0; i < randomPoints.length; i++) {
                 Vector3f point = new Vector3f();
-                Loader.loadPosition(randomPoints[i]).getPoint(point);
+                ((Position)Loader.load(randomPoints[i])).getPoint(point);
                 fixedPoints[i] = point;
             }
         }

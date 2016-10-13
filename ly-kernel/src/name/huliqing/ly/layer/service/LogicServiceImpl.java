@@ -27,7 +27,7 @@ public class LogicServiceImpl implements LogicService {
 
     @Override
     public Logic loadLogic(String logicId) {
-        return Loader.loadLogic(logicId);
+        return Loader.load(logicId);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class LogicServiceImpl implements LogicService {
 
     @Override
     public void addLogic(Entity actor, LogicData logicData) {
-        Logic logic = Loader.loadLogic(logicData);
+        Logic logic = Loader.load(logicData);
         addLogic(actor, logic);
     }
 
@@ -69,13 +69,13 @@ public class LogicServiceImpl implements LogicService {
         }
     }
 
-    @Override
-    public void resetPlayerLogic(Entity actor) {
-        clearLogics(actor);
-        for (String logic : IdConstants.LOGIC_PLAYER) {
-            addLogic(actor, logic);
-        }
-    }
+//    @Override
+//    public void resetPlayerLogic(Entity actor) {
+//        clearLogics(actor);
+//        for (String logic : IdConstants.LOGIC_PLAYER) {
+//            addLogic(actor, logic);
+//        }
+//    }
 
     @Override
     public boolean isAutoLogic(Entity actor) {

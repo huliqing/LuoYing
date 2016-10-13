@@ -24,7 +24,7 @@ public class MagicDataLoader<T extends MagicData> implements DataLoader<T> {
         if (effectIds != null && effectIds.length > 0) {
             EffectData[] effectDatas = new EffectData[effectIds.length];
             for (int i = 0; i < effectIds.length; i++) {
-                effectDatas[i] = Loader.createData(effectIds[i]);
+                effectDatas[i] = Loader.loadData(effectIds[i]);
             }
             store.setEffectDatas(effectDatas);
         }

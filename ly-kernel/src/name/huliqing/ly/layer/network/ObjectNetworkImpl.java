@@ -9,7 +9,6 @@ import name.huliqing.ly.Factory;
 import name.huliqing.ly.data.ObjectData;
 import name.huliqing.ly.mess.MessProtoAdd;
 import name.huliqing.ly.mess.MessProtoRemove;
-import name.huliqing.ly.mess.MessProtoUse;
 import name.huliqing.ly.network.Network;
 import name.huliqing.ly.layer.service.ObjectService;
 import name.huliqing.ly.object.entity.Entity;
@@ -64,29 +63,32 @@ public class ObjectNetworkImpl implements ObjectNetwork {
 
     @Override
     public void useData(Entity actor, ObjectData data) {
-        if (network.isClient())
-            return;
-        if (data == null)
-            return;
-        
-        // 对于本地物体不需要传递到服务端或客户端，比如“地图”的使用，当打开地图的时候是不需要广播到其它客户端。
-        // localObject这是一种特殊的物品，只通过本地handler执行，所以使用后物品数量不会实时同步到其它客户端。需要注意
-        // 这一点。
-        if (data.isLocalObject()) {
-            protoService.useData(actor, data);
-            return;
-        }
-        
-        // 广播到客户端
-        if (network.hasConnections()) {
-            MessProtoUse mess = new MessProtoUse();
-            mess.setActorId(actor.getData().getUniqueId());
-            mess.setObjectId(data.getId());
-            network.broadcast(mess);
-        }
+        // remove
+//        if (network.isClient())
+//            return;
+//        if (data == null)
+//            return;
+//        
+//        // 对于本地物体不需要传递到服务端或客户端，比如“地图”的使用，当打开地图的时候是不需要广播到其它客户端。
+//        // localObject这是一种特殊的物品，只通过本地handler执行，所以使用后物品数量不会实时同步到其它客户端。需要注意
+//        // 这一点。
+//        if (data.isLocalObject()) {
+//            protoService.useData(actor, data);
+//            return;
+//        }
+//        
+//        // 广播到客户端
+//        if (network.hasConnections()) {
+//            MessProtoUse mess = new MessProtoUse();
+//            mess.setActorId(actor.getData().getUniqueId());
+//            mess.setObjectId(data.getId());
+//            network.broadcast(mess);
+//        }
+//
+//        // 自身执行
+//        protoService.useData(actor, data);
 
-        // 自身执行
-        protoService.useData(actor, data);
+        throw new UnsupportedOperationException();
 
     }
 

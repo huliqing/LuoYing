@@ -24,7 +24,7 @@ import com.jme3.scene.debug.WireSphere;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Line;
 import java.util.List;
-import name.huliqing.ly.Ly;
+import name.huliqing.ly.LuoYing;
 
 /**
  *
@@ -61,7 +61,7 @@ public class DebugUtils {
 
     public static Geometry putShape(Mesh shape, ColorRGBA color) {
         Geometry g = new Geometry("coordinate axis", shape);
-        Material mat = new Material(Ly.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+        Material mat = new Material(LuoYing.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
         mat.getAdditionalRenderState().setWireframe(true);
         mat.getAdditionalRenderState().setFaceCullMode(RenderState.FaceCullMode.Off);
         mat.setColor("Color", color);
@@ -79,7 +79,7 @@ public class DebugUtils {
      */
     public static Geometry attachGrid(Vector3f pos, int size, ColorRGBA color) {
         Geometry g = new Geometry("wireframe grid", new Grid(size, size, 0.2f));
-        Material mat = new Material(Ly.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+        Material mat = new Material(LuoYing.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
         mat.getAdditionalRenderState().setWireframe(true);
         mat.setColor("Color", color);
         g.setMaterial(mat);
@@ -96,7 +96,7 @@ public class DebugUtils {
      */
     public static Geometry createWireBox(float xExt, float yExt, float zExt, ColorRGBA color) {
         Geometry g = new Geometry("wireframe cube", new WireBox(xExt, yExt, zExt));
-        Material mat = new Material(Ly.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+        Material mat = new Material(LuoYing.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
         mat.getAdditionalRenderState().setWireframe(true);
         mat.setColor("Color", color);
         g.setMaterial(mat);
@@ -112,7 +112,7 @@ public class DebugUtils {
      */
     public static Geometry createWireSphere(float size, ColorRGBA color) {
         Geometry g = new Geometry("wireframe sphere", new WireSphere(size));
-        Material mat = new Material(Ly.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+        Material mat = new Material(LuoYing.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
         mat.getAdditionalRenderState().setWireframe(true);
         mat.setColor("Color", color);
         g.setMaterial(mat);
@@ -126,7 +126,7 @@ public class DebugUtils {
      */
     public static void debugSkeleton(Skeleton skeleton, Node player) {
         SkeletonDebugger skeletonDebug = new SkeletonDebugger("skeleton", skeleton);
-        Material mat = new Material(Ly.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+        Material mat = new Material(LuoYing.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
         mat.setColor("Color", ColorRGBA.Green);
         mat.getAdditionalRenderState().setDepthTest(false);
         skeletonDebug.setMaterial(mat);
@@ -141,7 +141,7 @@ public class DebugUtils {
                     Geometry geo = (Geometry) spa;
                     Material mat = geo.getMaterial();
                     if (mat == null) {
-                        mat = new Material(Ly.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+                        mat = new Material(LuoYing.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
                     }
                     mat.getAdditionalRenderState().setWireframe(true);
                     geo.setMaterial(mat);
@@ -172,7 +172,7 @@ public class DebugUtils {
         }
 //        Logger.get(GeometryUtils.class).log(Level.INFO, "path={0}", sb.toString());
         if (points.size() > 0) { // size必须大于0，否则抛异常
-            motionPath.enableDebugShape(Ly.getAssetManager(), parentNode);
+            motionPath.enableDebugShape(LuoYing.getAssetManager(), parentNode);
         }
         return motionPath;
     }
@@ -188,12 +188,12 @@ public class DebugUtils {
         for (Vector3f pos : positions) {
             motionPath.addWayPoint(pos);
         }
-        motionPath.enableDebugShape(Ly.getAssetManager(), parentNode);
+        motionPath.enableDebugShape(LuoYing.getAssetManager(), parentNode);
     }
     
     public static Geometry createBox(float xExt, float yExt, float zExt, ColorRGBA color) {
         Geometry g = new Geometry("wireframe cube", new Box(xExt, yExt, zExt));
-        Material mat = new Material(Ly.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+        Material mat = new Material(LuoYing.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
         mat.setColor("Color", color);
         g.setMaterial(mat);
         return g;
@@ -201,7 +201,7 @@ public class DebugUtils {
     
     public static Geometry createLine(Vector3f start, Vector3f end, ColorRGBA color) {
         Geometry g = new Geometry("wireframe cube", new Line(start, end));
-        Material mat = new Material(Ly.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+        Material mat = new Material(LuoYing.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
         mat.setColor("Color", color);
         g.setMaterial(mat);
         return g;

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://luoying.huliqing.name'
+    xsi:schemaLocation='http://luoying.huliqing.name meta/chat.xsd'>
+    
+<!--    ========================================================================= 
+   基类，主要定义对话框大小、距离、动画等基本标准
+    ========================================================================= 
+   对话距离maxDistance不要设置太短，以避免在对话的时候由于角色移动而导致对话框自动关闭。
+   <chat id="chatBase" maxDistance="15" widthWeight="0.2" heightWeight="0.5" animations="animViewMove" /> 
+   <chat id="chatShopBase" extends="chatBase" widthWeight="0.75" heightWeight="0.75" /> 
+   <chat id="chatSellBase" extends="chatBase" widthWeight="0.75" heightWeight="0.75" /> 
+   <chat id="chatSendBase" extends="chatBase" widthWeight="0.75" heightWeight="0.75" /> 
+   <chat id="chatTaskBase" extends="chatBase" widthWeight="0.5" heightWeight="0.5" maxDistance="20" /> 
+   
+    ==================================================================== 
+   基本配置：一般不直接配置给角色，由其它ChatGroup引用
+    ==================================================================== 
+   
+   测试用
+   <chatTask id="chatTest" extends="chatTaskBase" task="taskCollectSpiderClaw" role="both" />
+   
+   发送东西:一般配置给同伴
+   <chatSend id="chatSend" extends="chatSendBase" />
+   
+   商店购买：一般配置给商店角色（一般需要配合商店逻辑Logic）
+   <chatShopItem id="chatShopItem" extends="chatShopBase" />
+   
+   商店出售：一般配置给商店角色(一般需要配合商店逻辑Logic) 
+   <chatSell id="chatSell" extends="chatSellBase" discount="0.5" />
+   
+    ==================================================================== 
+   通用配置
+    ==================================================================== 
+   
+   普通友军对话：可配置给所有角色，但只有友军才能对话 
+   <chatGroup id="chatSimple" extends="chatBase" chats="chatSend" hitChecker="hitCheckerChatFriend" />
+
+    ==================================================================== 
+   特定角色的对话配置
+    ==================================================================== 
+   
+   宝箱: 1.买东西; 2 卖东西
+   <chatGroup id="chatTreasure" extends="chatBase" chats="chatShopItem,chatSell" hitChecker="hitCheckerChatFriend" />
+   
+   杰米: 1.买东西; 2 卖东西；3 任务：杰米的烦恼 
+   <chatGroup id="chatJaime" extends="chatBase" chats="chatShopItem,chatSell,chatJaimeTask" />
+   <chatTask id="chatJaimeTask" extends="chatTaskBase" task="taskCollectSpiderClaw" role="both" hitChecker="hitCheckerChatTask" />-->
+
+</root>
+
+
+

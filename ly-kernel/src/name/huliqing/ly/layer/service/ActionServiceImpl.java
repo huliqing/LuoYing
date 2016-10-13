@@ -34,7 +34,7 @@ public class ActionServiceImpl implements ActionService {
 
     @Override
     public Action loadAction(String actionId) {
-        return Loader.loadAction(actionId);
+        return Loader.load(actionId);
     }
     
     @Override
@@ -52,7 +52,7 @@ public class ActionServiceImpl implements ActionService {
         RunAction ra = module.getDefRunAction();
         // 如果角色没有指定默认“跑路”行为，则为角色创建一个。
         if (ra == null) {
-            ra = (RunAction) Loader.loadAction(IdConstants.ACTION_RUN_SIMPLE);
+            ra = (RunAction) Loader.load(IdConstants.SYS_ACTION_SIMPLE_RUN);
             ra.setActor(actor);
             module.setDefRunAction(ra);
         }
@@ -72,11 +72,7 @@ public class ActionServiceImpl implements ActionService {
         FightAction fa = module.getDefFightAction();
         // 如果角色没有指定特定的战斗行为，则为角色创建一个。
         if (fa == null) {
-            if (actorService.getMass(actor) <= 0) {
-                fa = (FightAction) Loader.loadAction(IdConstants.ACTION_FIGHT_STATIC);
-            } else {
-                fa = (FightAction) Loader.loadAction(IdConstants.ACTION_FIGHT_FOR_PLAYER);
-            }
+            fa = (FightAction) Loader.load(IdConstants.SYS_ACTION_SIMPLE_FIGHT);
             fa.setActor(actor);
             module.setDefFightAction(fa);
         }

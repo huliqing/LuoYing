@@ -50,7 +50,7 @@ public class CurveBullet extends StraightBullet {
             positions = new ArrayList<Position>(tempES.length);
             tempCenterPositions = new ArrayList<Vector3f>(tempES.length);
             for (String eid : tempES) {
-                positions.add(Loader.loadPosition(eid));
+                positions.add((Position)Loader.load(eid));
                 tempCenterPositions.add(new Vector3f());
             }
             waypoints = new ArrayList<Vector3f>(positions.size() + 2); // waypoints包含startPoint和endPoint

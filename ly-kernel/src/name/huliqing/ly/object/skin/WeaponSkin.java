@@ -250,7 +250,7 @@ public class WeaponSkin extends AbstractSkin implements Weapon {
                 throw new IllegalStateException("HangControl is already initialized!");
             }
             // 这是一个动画执行过程，在执行前标记为true,在执行后才设置为false.
-            skinSkill = (SkinSkill) Loader.loadSkill(hangSkill);
+            skinSkill = Loader.load(hangSkill);
             skinSkill.setActor(actor);
             skillService.playSkill(actor, skinSkill, false);
             

@@ -10,8 +10,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.ly.Ly;
-import name.huliqing.ly.data.PlantEntityData;
+import name.huliqing.ly.LuoYing;
 import name.huliqing.ly.object.entity.ModelEntity;
 import name.huliqing.ly.object.entity.TerrainEntity;
 import name.huliqing.ly.object.scene.Scene;
@@ -21,15 +20,14 @@ import name.huliqing.ly.object.scene.SceneListenerAdapter;
 /**
  * 植被环境物体，如：花草等物体
  * @author huliqing
- * @param <T>
  */
-public class PlantEnv<T extends PlantEntityData> extends ModelEntity<T> {
+public class PlantEnv extends ModelEntity {
 
     private SceneListener sceneListener;
 
     @Override
     protected Spatial loadModel() {
-        return Ly.getAssetManager().loadModel(data.getAsString("file"));
+        return LuoYing.getAssetManager().loadModel(data.getAsString("file"));
     }
     
     @Override

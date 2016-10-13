@@ -5,6 +5,7 @@
  */
 package name.huliqing.ly.object.game;
 
+import com.jme3.app.Application;
 import com.jme3.util.SafeArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -22,7 +23,7 @@ import name.huliqing.ly.object.scene.Scene;
 public abstract class AbstractGame<T extends GameData> implements Game<T>{
 
     protected T data;
-    
+    protected Application app;
     /** 当前的游戏场景 */
     protected final SafeArrayList<GameLogic> logics = new SafeArrayList<GameLogic>(GameLogic.class);
     protected final SafeArrayList<GameListener> listeners = new SafeArrayList<GameListener>(GameListener.class);
@@ -53,14 +54,30 @@ public abstract class AbstractGame<T extends GameData> implements Game<T>{
     }
 
     @Override
-    public void initialize() {
+    public void initialize(Application app) {
         if (initialized) {
             throw new IllegalStateException("Game is already initialized! gameId=" + data.getId());
         }
+        this.app = app;
         
-        // Load scene
-        Scene initScene = Loader.load(data.getSceneData());
-        setScene(initScene);
+        if (scene != null) {
+            scene.setProcessorViewPorts(app.getViewPort());
+        } else {
+            // Load scene from data
+            if (data.getSceneData() != null) {
+                Scene initScene = Loader.load(data.getSceneData());
+                setScene(initScene);
+            }
+        }
+        
+        if (guiScene != null) {
+            guiScene.setProcessorViewPorts(app.getGuiViewPort());
+        } else {
+            if (data.getGuiSceneData() != null) {
+                Scene initGuiScene = Loader.load(data.getGuiSceneData());
+                setGuiScene(initGuiScene);
+            }
+        }
         
         // Load logics
         List<GameLogicData> initLogics = data.getGameLogicDatas();
@@ -70,12 +87,17 @@ public abstract class AbstractGame<T extends GameData> implements Game<T>{
             }
         }
         
-        initialized = true;
+        // 初始化游戏
+        gameInit();
         
-        // Notify 
-        for (GameListener gl : listeners) {
-            gl.onGameInitialized(this);
+        // 通知侦听器
+        if (listeners != null) {
+            for (GameListener gl : listeners) {
+                gl.onGameInitialized(this);
+            }
         }
+        
+        initialized = true;
     }
 
     @Override
@@ -122,6 +144,10 @@ public abstract class AbstractGame<T extends GameData> implements Game<T>{
         }
         scene = newScene;
         data.setSceneData(newScene.getData());
+        // 在game.initialize被调用之前app可能为null.
+        if (app != null) {
+            scene.setProcessorViewPorts(app.getViewPort());
+        }
         if (!scene.isInitialized()) {
             scene.initialize();
         }
@@ -139,6 +165,10 @@ public abstract class AbstractGame<T extends GameData> implements Game<T>{
             guiScene.cleanup();
         }
         guiScene = scene;
+        data.setGuiSceneData(scene.getData());
+        if (app != null) {
+            guiScene.setProcessorViewPorts(app.getGuiViewPort());
+        }
         if (!guiScene.isInitialized()) {
             guiScene.initialize();
         }
@@ -187,5 +217,9 @@ public abstract class AbstractGame<T extends GameData> implements Game<T>{
         return listeners.remove(listener);
     }
     
+    /**
+     * 初始化游戏
+     */
+    public abstract void gameInit();
     
 }

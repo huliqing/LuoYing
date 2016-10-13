@@ -13,6 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import name.huliqing.ly.constants.IdConstants;
 import name.huliqing.ly.data.ChannelData;
 import name.huliqing.ly.data.ObjectData;
 import name.huliqing.ly.object.AssetLoader;
@@ -58,8 +59,10 @@ public class ChannelModule extends AbstractModule implements ChannelControl {
                     addChannel((Channel) Loader.load(od));
                 }
             }
+        } else {
+            //  如果角色没有指定任何通道则自动创建一个默认的全通道
+            addChannel((Channel) Loader.load(IdConstants.SYS_CHANNEL_FULL));
         }
-        
     }
 
     @Override
@@ -176,7 +179,7 @@ public class ChannelModule extends AbstractModule implements ChannelControl {
         }
         String animFile = animDir + "/" + animName + ".mesh.j3o";
         try {
-            Spatial animExtModel = AssetLoader.loadModelDirect(animFile);
+            Spatial animExtModel = AssetLoader.loadModel(animFile);
             GeometryUtils.addSkeletonAnim(animExtModel, actor.getSpatial());
             return true;
         } catch (Exception e) {

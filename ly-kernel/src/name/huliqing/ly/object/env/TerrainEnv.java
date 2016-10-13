@@ -8,7 +8,7 @@ import com.jme3.collision.CollisionResults;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
-import name.huliqing.ly.Ly;
+import name.huliqing.ly.LuoYing;
 import name.huliqing.ly.object.entity.ModelEntity;
 import name.huliqing.ly.object.entity.TerrainEntity;
 
@@ -37,7 +37,7 @@ public class TerrainEnv extends ModelEntity implements TerrainEntity {
 //            spatial.removeControl(lod);
 //        }
         
-        return Ly.getAssetManager().loadModel(data.getAsString("file"));
+        return LuoYing.getAssetManager().loadModel(data.getAsString("file"));
     }
 
     @Override

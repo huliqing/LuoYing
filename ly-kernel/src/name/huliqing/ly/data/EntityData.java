@@ -16,15 +16,17 @@ import java.util.List;
 import name.huliqing.ly.object.define.MatDefine;
 
 /**
- *
  * @author huliqing
  */
 @Serializable
 public class EntityData extends ObjectData {
     
-    // 各种控制器的数据
+    // 模块控制器数据
     private List<ModuleData> moduleDatas;
+    // 数据，由模块控制
     private List<ObjectData> objectDatas;
+    // 物体控制器数据,兼容jme的控制器(与Module)作用一样用于控制Entity.
+    private List<ControlData> controlDatas;
     
     /**
      * 获取角色的所有模块
@@ -108,6 +110,27 @@ public class EntityData extends ObjectData {
         }
         return null;
     }
+
+    public List<ControlData> getControlDatas() {
+        return controlDatas;
+    }
+
+    public void setControlDatas(List<ControlData> controlDatas) {
+        this.controlDatas = controlDatas;
+    }
+    
+    public void addControlData(ControlData controlData) {
+        if (controlDatas == null) {
+            controlDatas = new ArrayList<ControlData>();
+        }
+        if (!controlDatas.contains(controlData)) {
+            controlDatas.add(controlData);
+        }
+    }
+    
+    public boolean removeControlData(ControlData controlData) {
+        return controlDatas != null && controlDatas.remove(controlData);
+    }
     
     @Override
     public void write(JmeExporter ex) throws IOException {
@@ -119,14 +142,18 @@ public class EntityData extends ObjectData {
         if (objectDatas != null) {
             oc.writeSavableArrayList(new ArrayList<ObjectData>(objectDatas), "objectDatas", null);
         }
+        if (controlDatas != null) {
+            oc.writeSavableArrayList(new ArrayList<ObjectData>(controlDatas), "controlDatas", null);
+        }
     }
-
+    
     @Override
     public void read(JmeImporter im) throws IOException {
         super.read(im);
         InputCapsule ic = im.getCapsule(this);
         moduleDatas = ic.readSavableArrayList("moduleDatas", null);
         objectDatas = ic.readSavableArrayList("objectDatas", null);
+        controlDatas = ic.readSavableArrayList("controlDatas", null);
     }
     
     /**

@@ -6,7 +6,7 @@ package name.huliqing.ly.object;
 
 import com.jme3.scene.Spatial;
 import java.util.logging.Logger;
-import name.huliqing.ly.Ly;
+import name.huliqing.ly.LuoYing;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.layer.service.ConfigService;
 import name.huliqing.ly.utils.GeometryUtils;
@@ -16,7 +16,7 @@ import name.huliqing.ly.utils.GeometryUtils;
  * @author huliqing
  */
 public class AssetLoader {
-    private static final Logger LOG = Logger.getLogger(AssetLoader.class.getName());
+//    private static final Logger LOG = Logger.getLogger(AssetLoader.class.getName());
     
     /**
      * 载入模型，但是会根据系统是否使用light进行makeUnshaded
@@ -24,12 +24,7 @@ public class AssetLoader {
      * @return 
      */
     public static Spatial loadModel(String file) {
-        ConfigService configService = Factory.get(ConfigService.class);
-        Spatial model = Ly.getAssetManager().loadModel(file);
-        if (!configService.isUseLight()) {
-            GeometryUtils.makeUnshaded(model);
-        }
-        return model;
+        return LuoYing.getAssetManager().loadModel(file);
     }
     
     /**
@@ -38,17 +33,9 @@ public class AssetLoader {
      * @return 
      */
     public static Spatial loadModelUnshaded(String file) {
-        Spatial model = Ly.getAssetManager().loadModel(file);
+        Spatial model = LuoYing.getAssetManager().loadModel(file);
         GeometryUtils.makeUnshaded(model);
         return model;
     }
     
-    /**
-     * 直接载入模型，不修改任何属性
-     * @param file
-     * @return 
-     */
-    public static Spatial loadModelDirect(String file) {
-        return Ly.getAssetManager().loadModel(file);
-    }
 }

@@ -11,7 +11,6 @@ import com.jme3.scene.Spatial;
 import com.jme3.util.TempVars;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
@@ -220,7 +219,7 @@ public class SummonSkill extends AbstractSkill {
                 TempVars tv = TempVars.get();
                 
                 // 设置同伴等级
-                actorService.setLevel(summonActor, (int) (actorService.getLevel(actor) * configService.getSummonLevelFactor()));
+                actorService.setLevel(summonActor, actorService.getLevel(actor));
                 actorService.setPhysicsEnabled(summonActor, false);
                 actorService.setPartner(actor, summonActor);
                 actorService.setColor(summonActor, new ColorRGBA(1f, 1f, 2f, 1));

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://luoying.huliqing.name'
+    xsi:schemaLocation='http://luoying.huliqing.name meta/actor.xsd'>
+    
+    <!--==========================================================================-->
+    <!--角色配置-->
+    <!--==========================================================================-->
+    
+    <!--<actor id="" file="" icon="" logics="" skills="" attributes="" />-->
+
+</root>

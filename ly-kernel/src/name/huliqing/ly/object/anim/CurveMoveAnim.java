@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 import name.huliqing.ly.data.AnimData;
 import name.huliqing.ly.object.Loader;
+import name.huliqing.ly.object.position.Position;
 import name.huliqing.ly.utils.DebugDynamicUtils;
 
 /**
@@ -43,7 +44,7 @@ public final class CurveMoveAnim extends AbstractAnim<Spatial> {
         String[] positions = data.getAsArray("waypoints");
         Vector3f[] waypoints = new Vector3f[positions.length];
         for (int i = 0; i < positions.length; i++) {
-            waypoints[i] = Loader.loadPosition(positions[i]).getPoint(null);
+            waypoints[i] = ((Position)Loader.load(positions[i])).getPoint(null);
         }
         setControlPoints(Arrays.asList(waypoints));
         

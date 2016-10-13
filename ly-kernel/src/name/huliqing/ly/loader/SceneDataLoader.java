@@ -23,7 +23,7 @@ public class SceneDataLoader<T extends SceneData> implements DataLoader<T> {
     @Override
     public void load(Proto proto, T store) {        
         // 环境物体
-        String[] envIds = proto.getAsArray("envs");
+        String[] envIds = proto.getAsArray("entities");
         if (envIds != null && envIds.length > 0) {
             List<EntityData> edStore = store.getEntityDatas();
             if (edStore == null) {

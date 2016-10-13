@@ -95,10 +95,11 @@ public class SkillData extends ObjectData {
         prior = ic.readInt("prior", 0);
     }
     
-    @Override
-    public int getTotal() {
-        return 1;
-    }
+    // remove
+//    @Override
+//    public int getTotal() {
+//        return 1;
+//    }
 
     public float getUseTime() {
         return useTime;
@@ -129,7 +130,7 @@ public class SkillData extends ObjectData {
     }
     
     /**
-     * 设置武器状态限制。
+     * 设置武器状态限制, 数组中的每个值代表一种武器组类型。
      * @param weaponStateLimit 
      */
     public void setWeaponStateLimit(long[] weaponStateLimit) {

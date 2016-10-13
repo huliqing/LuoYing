@@ -36,7 +36,7 @@ public class GameAppState extends AbstractAppState {
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
-        game.initialize();
+        game.initialize(app);
     }
 
     @Override

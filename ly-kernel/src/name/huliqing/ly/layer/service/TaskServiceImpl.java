@@ -24,12 +24,12 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task loadTask(String taskId) {
-        return Loader.loadTask(taskId);
+        return Loader.load(taskId);
     }
 
     @Override
     public Task loadTask(TaskData taskData) {
-        return Loader.loadTask(taskData);
+        return Loader.load(taskData);
     }
     
     @Override
@@ -57,17 +57,18 @@ public class TaskServiceImpl implements TaskService {
         }
         return null;
     }
-    
-    @Override
-    public List<TaskData> getTaskDatas(Entity actor) {
-//        TaskModule module = actor.getEntityModule().getModule(TaskModule.class);
-//        if (module != null) {
-//            return module.getTaskDatas();
-//        }
-//        return null;
-        
-        return actor.getData().getObjectDatas(TaskData.class, null);
-    }
+   
+    // remove
+//    @Override
+//    public List<TaskData> getTaskDatas(Entity actor) {
+////        TaskModule module = actor.getEntityModule().getModule(TaskModule.class);
+////        if (module != null) {
+////            return module.getTaskDatas();
+////        }
+////        return null;
+//        
+//        return actor.getData().getObjectDatas(TaskData.class, null);
+//    }
     
     @Override
     public boolean checkCompletion(Entity actor, Task task) {

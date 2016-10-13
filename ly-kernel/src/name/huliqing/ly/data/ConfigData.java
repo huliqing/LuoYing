@@ -19,14 +19,9 @@ import java.io.IOException;
 public class ConfigData extends ObjectData {
     
     /**
-     * 是否打开调试
-     */
-    private boolean debug;
-    
-    /**
      * 游戏名称
      */
-    private String gameName = "落樱3D"; 
+    private String gameName = "LuoYing"; 
     
     /**
      * 版本描述，保持与versionCode一致，如:1.5.1对应versionCode为151。
@@ -57,18 +52,13 @@ public class ConfigData extends ObjectData {
      * 物品掉落率百分比,取值[0.0~1.0]， 注：1.0表示100%掉落物品。设为0可关闭掉
      * 落设置
      */
-    private float dropFactor = 0.3f;// default 0.3f;
+    private float dropFactor = 1.0f;// default 0.3f;
     
     /**
      * 奖励的经验倍率
      */
     private float expFactor = 1.0f;
-    
-    /**
-     * 是否使用全局光源,不使用全局光源可提高运行性能.
-     */
-    private boolean useLight = false;
-    
+   
     /**
      * 游戏允许的最高等级限制
      */
@@ -82,28 +72,7 @@ public class ConfigData extends ObjectData {
     /**
      * 声音大小，0~1， 0为无声，1为最大声
      */
-    private float soundVolume = 0.5f;
-    
-    /**
-     * 是否锁定快捷方式
-     */
-    private boolean shortcutLocked = false;
-    
-    /**
-     * shortcut的缩放倍率,1为原始大小，大于1则放大,小于1则缩小。
-     * 注意不能等于0.
-     */
-    private float shortcutSize = 1.0f;
-    
-//    /**
-//     * 默认的基本"步行"速度:1.5
-//     */
-//    private float baseWalkSpeed = 1.5f;
-//    
-//    /**
-//     * 默认的基本"跑步"速度:6
-//     */
-//    private float baseRunSpeed = 6;
+    private float soundVolume = 1.0f;
     
     /**
      * 当前使用的语言,e.g. zh_CN, en_US
@@ -120,50 +89,6 @@ public class ConfigData extends ObjectData {
     private String localeAll = "en_US,zh_CN";
     
     /**
-     * 关于对话速度的限制，限制说话的最少停留时间
-     */
-    private float speakTimeMin = 0.1f;
-    
-    /**
-     * 限制说话的最长停留时间
-     */
-    private float speakTimeMax = 8.0f;
-    
-    /**
-     * 设置每个单位字词的停留时间(秒)。如3个中文单位则speak的停留时间为
-     * time = speakTimeWorld * 3; 增加这个值会延长每个speak谈话的停留时间。但
-     * speak的最终停留时间会限制在speakTimeMin和speakTimeMax的范围之内。
-     * 注：中文以每一个字作为一个单位，英文以每个单词作为一个单位。
-     * 这个值可根据普通人的阅读速度来设置，假如普通阅读速度为每分钟300个字。
-     * 则这个时间 speakTimeWorld = 60 / 300
-     */
-    private float speakTimeWorld = 0.25f;
-    
-    /**
-     * 允许显示谈话内容的最远距离。
-     */
-    private float speakMaxDistance = 60;
-    
-    /**
-     * 默认情况下暂不要打开该选项，这在某些老机型上会存在权重和贴图错误。
-     * 对于一些新机型的用户可以自己决定是否打开。
-     */
-    private boolean useHardwareSkinning = false;
-    
-    /**
-     * 召唤的等级限制因数，该参数是一具相对于召唤者的设定。 
-     * 召唤的角色等级这样计算： summonLevel = actor.level * SUMMON_LEVEL_FACTOR;
-     * 比如：0.5表示召唤出的角色的等级相当于召唤者等级的一半。当然summonLevel会
-     * 强制转换为整数
-     */
-    private float summonLevelFactor = 0.75f;
-    
-    /**
-     * 局域网游戏列表，格式"game1,game2,game3,..."
-     */
-    private String lanGames;
-    
-    /**
      * 是否打开全局投影功能,如果这个选项关闭，则场景中所有投影功能都要关闭。
      */
     private boolean useShadow;
@@ -172,72 +97,37 @@ public class ConfigData extends ObjectData {
     public void write(JmeExporter ex) throws IOException {
         super.write(ex);
         OutputCapsule oc = ex.getCapsule(this);
-        oc.write(debug, "debug", false);
-//        oc.write(gameName, "gameName", null);// 不保存
-//        oc.write(versionName, "versionName", null);
-//        oc.write(versionCode, "versionCode", 0);
-//        oc.write(port, "port", 32991);
-//        oc.write(portDiscoverServer, "portDiscoverServer", 32992);
-//        oc.write(portDiscoverClient, "portDiscoverClient", 32993);
-        oc.write(dropFactor, "dropFactor", 0.3f);
-        oc.write(expFactor, "expFactor", 1.0f);
-        oc.write(useLight, "useLight", false);
-        oc.write(maxLevel, "maxLevel", 60);
-        oc.write(soundEnabled, "soundEnabled", true);
-        oc.write(soundVolume, "soundVolume", 0.5f);
-        oc.write(shortcutLocked, "shortcutLocked", false);
-        oc.write(shortcutSize, "shortcutSize", 1.0f);
-//        oc.write(baseWalkSpeed, "baseWalkSpeed", 1.5f);
-//        oc.write(baseRunSpeed, "baseRunSpeed", 6f);
+        oc.write(gameName, "gameName", null);
+        oc.write(versionName, "versionName", null);
+        oc.write(versionCode, "versionCode", 0);
+        oc.write(port, "port", port);
+        oc.write(portDiscoverServer, "portDiscoverServer", portDiscoverServer);
+        oc.write(portDiscoverClient, "portDiscoverClient", portDiscoverClient);
+        oc.write(dropFactor, "dropFactor", dropFactor);
+        oc.write(expFactor, "expFactor", expFactor);
+        oc.write(maxLevel, "maxLevel", maxLevel);
+        oc.write(soundEnabled, "soundEnabled", soundEnabled);
+        oc.write(soundVolume, "soundVolume", soundVolume);
         oc.write(locale, "locale", "en_US");
-        oc.write(localeAll, "localeAll", "en_US,zh_CN");
-        oc.write(speakTimeMin, "speakTimeMin", 0.1f);
-        oc.write(speakTimeMax, "speakTimeMax", 8.0f);
-        oc.write(speakTimeWorld, "speakTimeWorld", 0.25f);
-        oc.write(speakMaxDistance, "speakMaxDistance", 60);
-        oc.write(useHardwareSkinning, "useHardwareSkinning", false);
-        oc.write(summonLevelFactor, "summonLevelFactor", 0.75f);
-        oc.write(lanGames, "lanGames", null);
-        oc.write(useShadow, "useShadow", false);
+        oc.write(localeAll, "localeAll", null);
+        oc.write(useShadow, "useShadow", useShadow);
     }
 
     @Override
     public void read(JmeImporter im) throws IOException {
         super.read(im);
         InputCapsule ic = im.getCapsule(this);
-        debug = ic.readBoolean("debug", false);
-        dropFactor = ic.readFloat("dropFactor", 0.3f);
-        expFactor = ic.readFloat("expFactor", 1.0f);
-        useLight = ic.readBoolean("useLight", false);
-        maxLevel = ic.readInt("maxLevel", 60);
-        soundEnabled = ic.readBoolean("soundEnabled", true);
-        soundVolume = ic.readFloat("soundVolume", 0.5f);
-        shortcutLocked = ic.readBoolean("shortcutLocked", false);
-        shortcutSize = ic.readFloat("shortcutSize", 1.0f);
-//        baseWalkSpeed = ic.readFloat("baseWalkSpeed", 1.5f);
-//        baseRunSpeed = ic.readFloat("baseRunSpeed", 6f);
+        // skip gameName,versionName,versionCode
+        dropFactor = ic.readFloat("dropFactor", dropFactor);
+        expFactor = ic.readFloat("expFactor", expFactor);
+        maxLevel = ic.readInt("maxLevel", maxLevel);
+        soundEnabled = ic.readBoolean("soundEnabled", soundEnabled);
+        soundVolume = ic.readFloat("soundVolume", soundVolume);
         locale = ic.readString("locale", "en_US");
-        localeAll = ic.readString("localeAll", "en_US,zh_CN");
-        speakTimeMin = ic.readFloat("speakTimeMin", 0.1f);
-        speakTimeMax = ic.readFloat("speakTimeMax", 8.0f);
-        speakTimeWorld = ic.readFloat("speakTimeWorld", 0.25f);
-        speakMaxDistance = ic.readFloat("speakMaxDistance", 60f);
-        useHardwareSkinning = ic.readBoolean("useHardwareSkinning", false);
-        summonLevelFactor = ic.readFloat("summonLevelFactor", 0.75f);
-        lanGames = ic.readString("lanGames", null);
-        useShadow = ic.readBoolean("useShadow", false);
+        localeAll = ic.readString("localeAll", null);
+        useShadow = ic.readBoolean("useShadow", useShadow);
     }
     
-    public ConfigData(){}
-
-    public boolean isDebug() {
-        return debug;
-    }
-
-    public void setDebug(boolean debug) {
-        this.debug = debug;
-    }
-
     public String getGameName() {
         return gameName;
     }
@@ -261,7 +151,7 @@ public class ConfigData extends ObjectData {
     public void setVersionCode(int versionCode) {
         this.versionCode = versionCode;
     }
-
+    
     public int getPort() {
         return port;
     }
@@ -302,14 +192,6 @@ public class ConfigData extends ObjectData {
         this.expFactor = expFactor;
     }
 
-    public boolean isUseLight() {
-        return useLight;
-    }
-
-    public void setUseLight(boolean useLight) {
-        this.useLight = useLight;
-    }
-
     public int getMaxLevel() {
         return maxLevel;
     }
@@ -334,22 +216,6 @@ public class ConfigData extends ObjectData {
         this.soundVolume = soundVolume;
     }
 
-    public boolean isShortcutLocked() {
-        return shortcutLocked;
-    }
-
-    public void setShortcutLocked(boolean shortcutLocked) {
-        this.shortcutLocked = shortcutLocked;
-    }
-
-    public float getShortcutSize() {
-        return shortcutSize;
-    }
-
-    public void setShortcutSize(float shortcutSize) {
-        this.shortcutSize = shortcutSize;
-    }
-
     public String getLocale() {
         return locale;
     }
@@ -366,62 +232,6 @@ public class ConfigData extends ObjectData {
     public void setLocaleAll(String localeAll) {
         if (localeAll != null)
             this.localeAll = localeAll;
-    }
-
-    public float getSpeakTimeMin() {
-        return speakTimeMin;
-    }
-
-    public void setSpeakTimeMin(float speakTimeMin) {
-        this.speakTimeMin = speakTimeMin;
-    }
-
-    public float getSpeakTimeMax() {
-        return speakTimeMax;
-    }
-
-    public void setSpeakTimeMax(float speakTimeMax) {
-        this.speakTimeMax = speakTimeMax;
-    }
-
-    public float getSpeakTimeWorld() {
-        return speakTimeWorld;
-    }
-
-    public void setSpeakTimeWorld(float speakTimeWorld) {
-        this.speakTimeWorld = speakTimeWorld;
-    }
-
-    public float getSpeakMaxDistance() {
-        return speakMaxDistance;
-    }
-
-    public void setSpeakMaxDistance(float speakMaxDistance) {
-        this.speakMaxDistance = speakMaxDistance;
-    }
-
-    public boolean isUseHardwareSkinning() {
-        return useHardwareSkinning;
-    }
-
-    public void setUseHardwareSkinning(boolean useHardwareSkinning) {
-        this.useHardwareSkinning = useHardwareSkinning;
-    }
-
-    public float getSummonLevelFactor() {
-        return summonLevelFactor;
-    }
-
-    public void setSummonLevelFactor(float summonLevelFactor) {
-        this.summonLevelFactor = summonLevelFactor;
-    }
-
-    public String getLanGames() {
-        return lanGames;
-    }
-
-    public void setLanGames(String lanGames) {
-        this.lanGames = lanGames;
     }
 
     /**

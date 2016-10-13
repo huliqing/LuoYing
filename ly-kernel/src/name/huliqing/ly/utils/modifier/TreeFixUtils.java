@@ -13,7 +13,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import name.huliqing.ly.Ly;
+import name.huliqing.ly.LuoYing;
 import name.huliqing.ly.utils.GeometryUtils;
 import name.huliqing.ly.utils.ModelFileUtils;
 
@@ -25,7 +25,7 @@ public class TreeFixUtils {
     private static float alphaFallOff = 0.5f;
     
     public static void fix(String file, String... childGeometryName) {
-        AssetManager am = Ly.getAssetManager();
+        AssetManager am = LuoYing.getAssetManager();
         
         // 1.重设material
         Spatial spatial = am.loadModel(file);

@@ -145,11 +145,13 @@ public class DataFactory {
             dp.setData(data);
             return (T) dp;
         } catch (InstantiationException ex) {
-            throw new RuntimeException("Could not create processor! tagName=" + data.getTagName() 
-                    + ", dataId=" + data.getId()
-                    + ", dataProcessor=" + dpClass.getName()
-                    + ", error=" + ex.getMessage()
-                    );
+            throw new RuntimeException("Could not create processor! tagName=" + data.getTagName(), ex);
+            
+//            throw new RuntimeException("Could not create processor! tagName=" + data.getTagName() 
+//                    + ", dataId=" + data.getId()
+//                    + ", dataProcessor=" + dpClass.getName()
+//                    + ", error=" + ex.getMessage()
+//                    );
         } catch (IllegalAccessException ex) {
             throw new RuntimeException("Could not create processor! tagName=" + data.getTagName()
                     + ", dataId=" + data.getId()

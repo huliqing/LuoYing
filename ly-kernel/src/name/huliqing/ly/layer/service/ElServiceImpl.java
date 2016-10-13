@@ -30,7 +30,7 @@ public class ElServiceImpl implements ElService {
         
         El el = EL_MAP.get(elId);
         if (el == null) {
-            el = Loader.loadEl(elId);
+            el = Loader.load(elId);
             if (el == null) {
                 throw new NullPointerException("Could not find el, elId=" + elId);
             }

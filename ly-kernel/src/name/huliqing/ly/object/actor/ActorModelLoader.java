@@ -162,10 +162,10 @@ public class ActorModelLoader {
             return;
         }
         
-        // 全局没有打开的情况下则不处理。
-        if (!Factory.get(ConfigService.class).isUseHardwareSkinning()) {
-            return;
-        }
+//        // 全局没有打开的情况下则不处理。
+//        if (!Factory.get(ConfigService.class).isUseHardwareSkinning()) {
+//            return;
+//        }
 
         // remove20161010,以后默认开启
 //        // 默认情冲下打开hardwareSkinning,除非在actor.xml中设置不打开。

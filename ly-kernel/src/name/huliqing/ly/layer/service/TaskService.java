@@ -46,13 +46,14 @@ public interface TaskService extends TaskNetwork {
      * @return 
      */
     List<Task> getTasks(Entity actor);
-    
-    /**
-     * 获得角色的所有任务data;返回的列表不允许修改。
-     * @param actor
-     * @return 
-     */
-    List<TaskData> getTaskDatas(Entity actor);
+   
+    // remove
+//    /**
+//     * 获得角色的所有任务data;返回的列表不允许修改。
+//     * @param actor
+//     * @return 
+//     */
+//    List<TaskData> getTaskDatas(Entity actor);
     
     /**
      * 检查指定的任务是否完成。

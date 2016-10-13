@@ -9,7 +9,7 @@ import com.jme3.material.Material;
 import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
 import com.jme3.texture.Texture;
-import name.huliqing.ly.Ly;
+import name.huliqing.ly.LuoYing;
 
 /**
  *
@@ -22,7 +22,7 @@ public class MatUtils {
     }
     
     public static Material createWireFrame(ColorRGBA color) {
-        Material mat = new Material(Ly.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+        Material mat = new Material(LuoYing.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
         mat.getAdditionalRenderState().setWireframe(true);
         mat.getAdditionalRenderState().setFaceCullMode(RenderState.FaceCullMode.Off);
         mat.setColor("Color", color);
@@ -35,7 +35,7 @@ public class MatUtils {
      * @see #createTransparent(com.jme3.texture.Texture) 
      */
     public static Material createTransparent(String tex) {
-        Texture texture = Ly.getAssetManager().loadTexture(tex);
+        Texture texture = LuoYing.getAssetManager().loadTexture(tex);
         return createTransparent(texture);
     }
     
@@ -49,7 +49,7 @@ public class MatUtils {
      * @return 
      */
     public static Material createTransparent(Texture tex) {
-        Material mat = new Material(Ly.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+        Material mat = new Material(LuoYing.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
         mat.getAdditionalRenderState().setAlphaTest(true);
         mat.getAdditionalRenderState().setBlendMode(RenderState.BlendMode.AlphaAdditive);
         mat.getAdditionalRenderState().setColorWrite(true);
@@ -68,21 +68,21 @@ public class MatUtils {
      * @return 
      */
     public static Material createParticle(String texture) {
-        AssetManager am = Ly.getAssetManager();
+        AssetManager am = LuoYing.getAssetManager();
         Material mat = new Material(am, "Common/MatDefs/Misc/Particle.j3md");
         mat.setTexture("Texture", am.loadTexture(texture));
         return mat;
     }
     
     public static Material createSkillCooldown(ColorRGBA maskColor) {
-        final Material mat = new Material(Ly.getAssetManager(),"MatDefs/Skill/Cooldown.j3md");
+        final Material mat = new Material(LuoYing.getAssetManager(),"MatDefs/Skill/Cooldown.j3md");
         mat.getAdditionalRenderState().setBlendMode(RenderState.BlendMode.Alpha);
         mat.setColor("Color", maskColor);
         return mat;
     }
     
     public static Material createUnshaded() {
-        Material mat = new Material(Ly.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+        Material mat = new Material(LuoYing.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
         return mat;
     }
 }

@@ -7,7 +7,7 @@ package name.huliqing.ly.layer.service;
 import com.jme3.math.Vector3f;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.ly.Ly;
+import name.huliqing.ly.LuoYing;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.object.entity.Entity;
 import name.huliqing.ly.object.entity.TerrainEntity;
@@ -25,13 +25,11 @@ public class PlayServiceImpl implements PlayService {
     
     private ActorService actorService;
     private SkillService skillService;
-    private GameService gameService;
     private LogicService logicService;
     
     @Override
     public void inject() {
         actorService = Factory.get(ActorService.class);
-        gameService = Factory.get(GameService.class);
         skillService = Factory.get(SkillService.class);
         logicService = Factory.get(LogicService.class);
     }
@@ -82,12 +80,12 @@ public class PlayServiceImpl implements PlayService {
     
     @Override
     public float getScreenWidth() {
-        return Ly.getSettings().getWidth();
+        return LuoYing.getSettings().getWidth();
     }
 
     @Override
     public float getScreenHeight() {
-        return Ly.getSettings().getHeight();
+        return LuoYing.getSettings().getHeight();
     }
 
     @Override

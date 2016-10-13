@@ -16,7 +16,7 @@ import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import name.huliqing.ly.Ly;
+import name.huliqing.ly.LuoYing;
 import name.huliqing.ly.utils.GeometryUtils;
 import name.huliqing.ly.utils.ModelFileUtils;
 
@@ -30,7 +30,7 @@ public class OutfitUtils {
     private final static String RIG_SKE_PATH = "Models/actor/ske.mesh.j3o";
     
     public static void redirectBoneIndex(String outfitFile, String rigSkeFile) {
-        AssetManager am = Ly.getAssetManager();
+        AssetManager am = LuoYing.getAssetManager();
         Spatial outfit = am.loadModel(outfitFile);
         if (outfit.getUserData(REDIRECT_BONE_INDEX_OK) != null) {
             logger.log(Level.WARNING, "Outfit name={0} has already Redirect bone index!", outfit.getName());

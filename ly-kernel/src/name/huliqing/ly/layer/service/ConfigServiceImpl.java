@@ -13,6 +13,7 @@ import name.huliqing.ly.Config;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.constants.IdConstants;
 import name.huliqing.ly.data.ConfigData;
+import name.huliqing.ly.manager.ResManager;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.ly.object.sound.SoundManager;
 //import name.huliqing.luoying.view.shortcut.ShortcutManager;
@@ -52,7 +53,7 @@ public class ConfigServiceImpl implements ConfigService {
     public void loadGlobalConfig() {
         // 载入系统配置
         cd = DataFactory.createData(IdConstants.CONFIG_GLOBAL);
-        Config.debug = cd.isDebug();
+//        Config.debug = cd.isDebug();
         
         // 载入用户保存的配置并整合到全局配置中，注：只处理部分保存的参数。
         SaveConfig sc = SaveHelper.loadConfig();
@@ -63,18 +64,26 @@ public class ConfigServiceImpl implements ConfigService {
             cd.setPort(scd.getPort());
             cd.setPortDiscoverClient(scd.getPortDiscoverClient());
             cd.setPortDiscoverServer(scd.getPortDiscoverServer());
-            cd.setShortcutLocked(scd.isShortcutLocked());
-            cd.setShortcutSize(scd.getShortcutSize());
             cd.setSoundEnabled(scd.isSoundEnabled());
             cd.setSoundVolume(scd.getSoundVolume());
-            cd.setSpeakTimeMax(scd.getSpeakTimeMax());
-            cd.setSpeakTimeMin(scd.getSpeakTimeMin());
-            cd.setSpeakTimeWorld(scd.getSpeakTimeWorld());
-            cd.setUseHardwareSkinning(scd.isUseHardwareSkinning());
-            
             SoundManager.getInstance().setSoundEnabled(cd.isSoundEnabled());
             SoundManager.getInstance().setVolume(cd.getSoundVolume());
         }
+    }
+    
+    @Override
+    public String getGameName() {
+        return cd.getGameName();
+    }
+
+    @Override
+    public String getVersionName() {
+        return cd.getVersionName();
+    }
+
+    @Override
+    public int getVersionCode() {
+        return cd.getVersionCode();
     }
     
     @Override
@@ -86,7 +95,6 @@ public class ConfigServiceImpl implements ConfigService {
     public void setSoundEnabled(boolean enabled) {
         cd.setSoundEnabled(enabled);
         SoundManager.getInstance().setSoundEnabled(enabled);
-        
         notifyListtener();
     }
 
@@ -102,99 +110,6 @@ public class ConfigServiceImpl implements ConfigService {
         notifyListtener();
     }
 
-//    @Override
-//    public boolean isShortcutLocked() {
-//        return cd.isShortcutLocked();
-//    }
-//
-//    @Override
-//    public void setShortcutLocked(boolean locked) {
-//        cd.setShortcutLocked(locked);
-//        ShortcutManager.setShortcutLocked(locked);
-//        notifyListtener();
-//    }
-//
-//    @Override
-//    public float getShortcutSize() {
-//        return cd.getShortcutSize();
-//    }
-//
-//    @Override
-//    public void setShortcutSize(float size) {
-//        if (size <= 0) {
-//            return;
-//        }
-//        cd.setShortcutSize(size);
-//        ShortcutManager.setShortcutSize(size);
-//        notifyListtener();
-//    }
-//
-//    @Override
-//    public void clearShortcuts() {
-//        ShortcutManager.cleanup();
-//    }
-
-    @Override
-    public boolean isDebugEnabled() {
-        return cd.isDebug();
-    }
-
-    @Override
-    public void setDebug(boolean enabled) {
-        cd.setDebug(enabled);
-        Config.debug = enabled;
-        notifyListtener();
-    }
-
-    @Override
-    public float getSpeakTimeWorld() {
-        return cd.getSpeakTimeWorld();
-    }
-
-    @Override
-    public void setSpeakTimeWorld(float time) {
-        cd.setSpeakTimeWorld(time);
-        notifyListtener();
-    }
-
-    @Override
-    public float getSpeakTimeMin() {
-        return cd.getSpeakTimeMin();
-    }
-
-    @Override
-    public float getSpeakTimeMax() {
-        return cd.getSpeakTimeMax();
-    }
-
-    @Override
-    public float getSpeakMaxDistance() {
-        return cd.getSpeakMaxDistance();
-    }
-
-    @Override
-    public boolean isUseHardwareSkinning() {
-        return cd.isUseHardwareSkinning();
-    }
-
-    @Override
-    public void setUseHardwareSkining(boolean enabled) {
-        cd.setUseHardwareSkinning(enabled);
-        notifyListtener();
-        
-        // remove20160209不要去动态开启角色的HardWareSkinning,目前有BUG
-//        // 如果改变了该设置，则需要重新检测激活或关闭当前已经载入场景中模型
-//        PlayState playState = Common.getPlayState();
-//        if (playState != null) {
-//            List<Actor> actors = playState.getActors();
-//            if (actors != null && !actors.isEmpty()) {
-//                for (Actor a : actors) {
-//                    ActorLoader.checkEnableHardwareSkining(a.getModel());
-//                }
-//            }
-//        }
-    }
-
     @Override
     public String loadLocale() {
         cd.setLocale(detectLocale());
@@ -204,6 +119,9 @@ public class ConfigServiceImpl implements ConfigService {
     @Override
     public void changeLocale(String locale) {
         cd.setLocale(locale);
+        ResManager.setLocale(locale);
+        
+        // outdate
         ResourceManager.clearResources();
         
         // 保存配置
@@ -226,26 +144,6 @@ public class ConfigServiceImpl implements ConfigService {
     @Override
     public float getDropFactor() {
         return cd.getDropFactor();
-    }
-
-    @Override
-    public String[] getLanGames() {
-        return cd.getLanGames().split(",");
-    }
-
-    @Override
-    public String getGameName() {
-        return cd.getGameName();
-    }
-
-    @Override
-    public String getVersionName() {
-        return cd.getVersionName();
-    }
-
-    @Override
-    public int getVersionCode() {
-        return cd.getVersionCode();
     }
 
     @Override
@@ -272,15 +170,10 @@ public class ConfigServiceImpl implements ConfigService {
         return null;
     }
 
-    @Override
-    public boolean isUseLight() {
-        return cd.isUseLight();
-    }
-
-    @Override
-    public float getSummonLevelFactor() {
-        return cd.getSummonLevelFactor();
-    }
+//    @Override
+//    public boolean isUseLight() {
+//        return cd.isUseLight();
+//    }
     
     // 检测及获取一个可用的语言环境。
     private String detectLocale() {
@@ -317,11 +210,7 @@ public class ConfigServiceImpl implements ConfigService {
                 , new Object[] {value});
         return defLocale;
     }
-
-    @Override
-    public int getMaxLevel() {
-        return cd.getMaxLevel();
-    }
+    
 
     @Override
     public boolean isUseShadow() {
@@ -371,6 +260,11 @@ public class ConfigServiceImpl implements ConfigService {
         for (ConfigListener cl : listeners) {
             cl.onConfigChanged();
         }
+    }
+
+    @Override
+    public int getMaxLevel() {
+        return cd.getMaxLevel();
     }
 
 }

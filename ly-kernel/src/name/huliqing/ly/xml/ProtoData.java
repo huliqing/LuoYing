@@ -32,6 +32,7 @@ public class ProtoData implements Savable {
     // 类型ID
     protected String id;
     
+    // TODO: id生成器
     // 全局唯一ID,当前游戏的全局唯一ID
     protected long uniqueId = generateUniqueId();
     
@@ -43,8 +44,7 @@ public class ProtoData implements Savable {
     private transient Proto proto;
 
     public Proto getProto() {
-        // 当在Network情况下，对象在网络传输过程中会丢失proto,所以需要重新从系统中获取。
-        // 因为proto为transient.
+        // Proto不会在网络中传输，当在网络情况下, 需要在客户端重新获取。
         if (proto == null && id != null) {
             proto = DataFactory.getProto(id);
         }
@@ -86,7 +86,7 @@ public class ProtoData implements Savable {
         oc.write(id, "id", null);
         oc.write(uniqueId, "uniqueId", 0);
         oc.writeStringSavableMap(localData, "localData", null);
-        // 不要保存proto
+        // 不需要要保存proto
     }
     
     @Override

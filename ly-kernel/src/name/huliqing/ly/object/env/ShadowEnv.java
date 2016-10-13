@@ -12,7 +12,7 @@ import com.jme3.shadow.CompareMode;
 import com.jme3.shadow.DirectionalLightShadowFilter;
 import com.jme3.shadow.EdgeFilteringMode;
 import name.huliqing.ly.Factory;
-import name.huliqing.ly.Ly;
+import name.huliqing.ly.LuoYing;
 import name.huliqing.ly.data.EntityData;
 import name.huliqing.ly.layer.service.ConfigService;
 import name.huliqing.ly.object.entity.NoneModelEntity;
@@ -56,7 +56,7 @@ public class ShadowEnv extends NoneModelEntity {
             public void onSceneInitialized(Scene scene) {
                 // 影阴处理器
                 if (configService.isUseShadow()) {
-                    filter = new DirectionalLightShadowFilter(Ly.getApp().getAssetManager(), shadowMapSize, shadowMaps);
+                    filter = new DirectionalLightShadowFilter(LuoYing.getApp().getAssetManager(), shadowMapSize, shadowMaps);
                     filter.setLambda(0.55f);
                     filter.setShadowIntensity(shadowIntensity);
                     filter.setShadowCompareMode(CompareMode.Hardware);

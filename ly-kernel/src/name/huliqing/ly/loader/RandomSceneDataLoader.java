@@ -9,7 +9,7 @@ import com.jme3.util.TempVars;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.ly.data.EntityData;
-import name.huliqing.ly.data.PlantEntityData;
+import name.huliqing.ly.data.ModelEntityData;
 import name.huliqing.ly.xml.Proto;
 import name.huliqing.ly.data.SceneData;
 import name.huliqing.ly.xml.DataFactory;
@@ -71,12 +71,13 @@ public class RandomSceneDataLoader<T extends SceneData> extends SceneDataLoader<
                     EntityData ed = DataFactory.createData(envId);
                     entityDatas.add(ed);
                     
-                    if (ed instanceof PlantEntityData) {
+                    if (ed instanceof ModelEntityData) {
                         // 生成随机位置（但需要防止生成的位置与空白区域冲突）
-                        PlantEntityData ped = (PlantEntityData) ed;
+                        ModelEntityData ped = (ModelEntityData) ed;
                         do {
                             MathUtils.getRandomPosition(xExt, zExt, tempPos);
                         } while (checkInEmptyZone(tempPos.x, tempPos.z, emptyZones));
+                        
                         ped.setLocation(tempPos);
                     } 
                 }

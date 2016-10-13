@@ -20,7 +20,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import name.huliqing.ly.Ly;
+import name.huliqing.ly.LuoYing;
 import name.huliqing.ly.Config;
 import name.huliqing.ly.Factory;
 import name.huliqing.ly.data.GameData;

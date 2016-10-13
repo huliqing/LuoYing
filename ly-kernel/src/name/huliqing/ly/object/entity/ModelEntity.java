@@ -20,16 +20,17 @@ public abstract class ModelEntity<T extends ModelEntityData> extends AbstractEnt
 
     @Override
     public void setData(T data) {
-        super.setData(data); //To change body of generated methods, choose Tools | Templates.
+        super.setData(data); 
     }
 
     @Override
     public T getData() {
-        return super.getData(); //To change body of generated methods, choose Tools | Templates.
+        return super.getData();
     }
     
     @Override
     public void updateDatas() {
+        super.updateDatas();
         if (model != null) {
             data.setLocation(model.getLocalTranslation());
             data.setRotation(model.getLocalRotation());

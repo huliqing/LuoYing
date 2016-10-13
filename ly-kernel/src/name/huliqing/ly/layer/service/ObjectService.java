@@ -46,10 +46,10 @@ public interface ObjectService extends ObjectNetwork {
      */
     float getCost(ObjectData data);
     
-    /**
-     * 判断物品在当前情况下是否可卖出，一些物品可能不能进行出售，如金币
-     * @param data
-     * @return 
-     */
-    boolean isSellable(ObjectData data);
+//    /**
+//     * 判断物品在当前情况下是否可卖出，一些物品可能不能进行出售，如金币
+//     * @param data
+//     * @return 
+//     */
+//    boolean isSellable(ObjectData data);
 }

@@ -24,11 +24,9 @@ public class ItemData extends ObjectData implements CostObject{
     // 属性限制
     private List<AttributeMatch> matchAttributes;
     
-    @Override
-    public float getCost() {
-        return getAsFloat("cost", 0);
-    }
-    
+    // 物品数量
+    protected int total = 1;
+
     /**
      * 获取属性限制
      * @return 
@@ -43,7 +41,37 @@ public class ItemData extends ObjectData implements CostObject{
      */
     public void setMatchAttributes(List<AttributeMatch> matchAttributes) {
         this.matchAttributes = matchAttributes;
+    } 
+    
+    /**
+     * 获取物品数量
+     * @return 
+     */
+    public int getTotal() {
+        return total;
     }
+    
+    public void setTotal(int total) {
+        this.total = total;
+    }
+    
+    @Override
+    public float getCost() {
+        return getAsFloat("cost", 0);
+    }
+    
+//    /**
+//     * 增加物品数量(amount<0为减少).
+//     * @param amount 
+//     * @return  
+//     */
+//    public int increaseTotal(int amount) {
+//        total += amount;
+//        if (total < 0) {
+//            total = 0;
+//        }
+//        return total;
+//    }
     
     /**
      * 判断物品是否是可删除的 
@@ -81,6 +109,7 @@ public class ItemData extends ObjectData implements CostObject{
     public void write(JmeExporter ex) throws IOException {
         super.write(ex);
         OutputCapsule oc = ex.getCapsule(this);
+        oc.write(total, "total", 0);
         if (matchAttributes != null) {
             oc.writeSavableArrayList(new ArrayList<AttributeMatch>(matchAttributes), "matchAttributes", null);
         }
@@ -90,6 +119,7 @@ public class ItemData extends ObjectData implements CostObject{
     public void read(JmeImporter im) throws IOException {
         super.read(im);
         InputCapsule ic = im.getCapsule(this);
+        total = ic.readInt("total", 0);
         matchAttributes = ic.readSavableArrayList("matchAttributes", null);
     }
 }

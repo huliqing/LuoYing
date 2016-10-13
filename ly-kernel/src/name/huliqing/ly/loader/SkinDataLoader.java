@@ -48,6 +48,8 @@ public class SkinDataLoader implements DataLoader<SkinData> {
         }
         // 设置质的
         data.setMat(DefineFactory.getMatDefine().getMat(proto.getAsString("mat")));
+        // 默认给一个数量
+        data.setTotal(proto.getAsInteger("total", 1));
     }
     
 }
