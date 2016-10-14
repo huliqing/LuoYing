@@ -188,9 +188,7 @@ public class Effect<T extends EffectData> extends Node implements Entity<T> {
         if (initialized) {
             throw new IllegalStateException("Effect already is initialized! EffectId=" + data.getId());
         }
-        initialized = true;
         this.scene = scene;
-        entityModule.initialize();
         
         trueTimeTotal = useTime / speed;
         
@@ -242,6 +240,11 @@ public class Effect<T extends EffectData> extends Node implements Entity<T> {
         // 动画一开始要update一次，因为一些动画是立即执行的,这些动画需要立即初始化，比如一些缩放显示的动画，
         // 在初始化时需要将目标先隐藏,否则会有一个闪现的不正常现象。这很重要
         updateAnimations(0, timeUsed);
+        
+        // 初始化模块控制器
+        entityModule.initialize();
+        
+        initialized = true;
     }
     
     /**

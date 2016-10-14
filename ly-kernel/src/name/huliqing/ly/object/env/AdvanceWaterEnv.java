@@ -18,12 +18,13 @@ import name.huliqing.ly.object.entity.NoneModelEntity;
 import name.huliqing.ly.object.scene.Scene;
 import name.huliqing.ly.object.scene.SceneListener;
 import name.huliqing.ly.object.scene.SceneListenerAdapter;
+import name.huliqing.ly.object.entity.WaterEntity;
 
 /**
  *
  * @author huliqing
  */
-public class AdvanceWaterEnv  extends NoneModelEntity implements WaterEnv {
+public class AdvanceWaterEnv extends NoneModelEntity implements WaterEntity {
 
     private String causticsTexture;
     private String foamTexture;
@@ -105,9 +106,7 @@ public class AdvanceWaterEnv  extends NoneModelEntity implements WaterEnv {
     }
 
     @Override
-    public void initialize(Scene scene) {
-        super.initialize(scene); 
-        
+    public void initialize() {
         if (causticsTexture != null) {
             water.setCausticsTexture((Texture2D) LuoYing.getApp().getAssetManager().loadTexture(causticsTexture));
         }

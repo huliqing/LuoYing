@@ -31,6 +31,11 @@ public class DropModule extends AbstractModule {
         super.setData(data); 
         sounds = data.getAsArray("sounds");
     }
+
+    @Override
+    public void updateDatas() {
+        // xxx updateDatas.
+    }
     
     @Override
     public void initialize(Entity actor) {

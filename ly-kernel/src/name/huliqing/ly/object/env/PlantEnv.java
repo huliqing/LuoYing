@@ -21,7 +21,7 @@ import name.huliqing.ly.object.scene.SceneListenerAdapter;
  * 植被环境物体，如：花草等物体
  * @author huliqing
  */
-public class PlantEnv extends ModelEntity {
+public abstract class PlantEnv extends ModelEntity {
 
     private SceneListener sceneListener;
 
@@ -31,8 +31,8 @@ public class PlantEnv extends ModelEntity {
     }
     
     @Override
-    public void initialize(Scene scene) {
-        super.initialize(scene);
+    public void initialize() {
+        super.initialize();
         sceneListener = new SceneListenerAdapter() {
             @Override
             public void onSceneInitialized(Scene scene) {
@@ -56,7 +56,7 @@ public class PlantEnv extends ModelEntity {
         List<TerrainEntity> sos = scene.getEntities(TerrainEntity.class, new ArrayList<TerrainEntity>());
         Vector3f location = null;
         for (TerrainEntity terrain : sos) {
-            Vector3f terrainPoint = terrain.getHeight(model.getWorldTranslation().x, model.getWorldTranslation().z);
+            Vector3f terrainPoint = terrain.getHeight(spatial.getWorldTranslation().x, spatial.getWorldTranslation().z);
             if (terrainPoint != null) {
                 if (location == null || terrainPoint.y > location.y) {
                     location = terrainPoint;
@@ -65,13 +65,12 @@ public class PlantEnv extends ModelEntity {
         }
         
         if (location != null) {
-            // 下移一点
-            location.subtractLocal(0, 0.5f, 0);
-            RigidBodyControl rbc = model.getControl(RigidBodyControl.class);
+            location.addLocal(0, -0.1f, 0); // 下移一点
+            RigidBodyControl rbc = spatial.getControl(RigidBodyControl.class);
             if (rbc != null) {
                 rbc.setPhysicsLocation(location);
             } else {
-                model.setLocalTranslation(location);
+                spatial.setLocalTranslation(location);
             }
         } 
     }

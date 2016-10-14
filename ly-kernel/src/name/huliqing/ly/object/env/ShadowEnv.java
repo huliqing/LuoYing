@@ -49,8 +49,7 @@ public class ShadowEnv extends NoneModelEntity {
     }
     
     @Override
-    public void initialize(Scene scene) {
-        super.initialize(scene);
+    public void initialize() {
         sceneListener = new SceneListenerAdapter() {
             @Override
             public void onSceneInitialized(Scene scene) {

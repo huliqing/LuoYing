@@ -33,6 +33,10 @@ public class ActionModule extends AbstractModule<ModuleData> {
     private Control updateControl;
 
     @Override
+    public void updateDatas() {
+    }
+
+    @Override
     public void initialize(Entity actor) {
         super.initialize(actor);
         

@@ -5,9 +5,12 @@
  */
 package name.huliqing.ly.object.entity;
 
+import com.jme3.math.Quaternion;
+import com.jme3.math.Vector3f;
+import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.Spatial.CullHint;
 import name.huliqing.ly.data.ModelEntityData;
-import name.huliqing.ly.object.scene.Scene;
 
 /**
  * 模型类的场景物体.
@@ -16,7 +19,7 @@ import name.huliqing.ly.object.scene.Scene;
  */
 public abstract class ModelEntity<T extends ModelEntityData> extends AbstractEntity<T> {
     
-    protected Spatial model;
+    protected Spatial spatial;
 
     @Override
     public void setData(T data) {
@@ -31,25 +34,43 @@ public abstract class ModelEntity<T extends ModelEntityData> extends AbstractEnt
     @Override
     public void updateDatas() {
         super.updateDatas();
-        if (model != null) {
-            data.setLocation(model.getLocalTranslation());
-            data.setRotation(model.getLocalRotation());
-            data.setScale(model.getLocalScale());
+        if (spatial != null) {
+            data.setLocation(spatial.getLocalTranslation());
+            data.setRotation(spatial.getLocalRotation());
+            data.setScale(spatial.getLocalScale());
+            data.setShadowMode(spatial.getShadowMode());
+            data.setCullHint(spatial.getCullHint());
         }
     }
     
     @Override
-    public void initialize(Scene scene) {
-        super.initialize(scene);
-        model = loadModel();
-        model.setLocalTranslation(data.getLocation());
-        model.setLocalRotation(data.getRotation());
-        model.setLocalScale(data.getScale());
+    public void initialize() {
+        spatial = loadModel();
+        Vector3f location = data.getLocation();
+        if (location != null) {
+            spatial.setLocalTranslation(location);
+        }
+        Quaternion rotation = data.getRotation();
+        if (rotation != null) {
+            spatial.setLocalRotation(data.getRotation());
+        }
+        Vector3f scale = data.getScale();
+        if (scale != null) {
+            spatial.setLocalScale(scale);
+        }
+        ShadowMode sm = data.getShadowMode();
+        if (sm != null) {
+            spatial.setShadowMode(sm);
+        }
+        CullHint ch = data.getCullHint();
+        if (ch != null) {
+            spatial.setCullHint(ch);
+        }
     }
     
     @Override
     public Spatial getSpatial() {
-        return model;
+        return spatial;
     }
     
     /**

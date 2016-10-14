@@ -116,8 +116,8 @@ public abstract class AbstractBullet extends ModelEntity implements Bullet {
     }
 
     @Override
-    public void initialize(Scene scene) {
-        super.initialize(scene);
+    public void initialize() {
+        super.initialize();
         
         // 用于碰撞
         hitChecker = shape.getGeometry();

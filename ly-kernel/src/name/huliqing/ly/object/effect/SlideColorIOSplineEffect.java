@@ -18,8 +18,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.texture.Texture;
 import com.jme3.util.TempVars;
 import name.huliqing.ly.LuoYing;
-import name.huliqing.ly.constants.MaterialConstants;
-import name.huliqing.ly.constants.TextureConstants;
+import name.huliqing.ly.constants.AssetConstants;
 import name.huliqing.ly.data.EffectData;
 import name.huliqing.ly.object.Loader;
 import name.huliqing.ly.object.position.Position;
@@ -36,9 +35,9 @@ public class SlideColorIOSplineEffect extends Effect {
     private ColorRGBA startColor = new ColorRGBA(1, 1, 1, 1);
     private ColorRGBA endColor = new ColorRGBA(1, 1, 1, 1);
     
-    private String mask = TextureConstants.TEX_MASK;
-    private String tex = TextureConstants.TEX_PARTICLES;
-    private boolean texAnimY = true;
+    private String mask = AssetConstants.TEXTURE_MASK;
+    private String tex = AssetConstants.TEXTURE_PARTICLES;
+    private final boolean texAnimY = true;
     private boolean texChangeDir;
     
     // 路径点，注：fixedPoints和randomPoints必须选择一个
@@ -61,7 +60,7 @@ public class SlideColorIOSplineEffect extends Effect {
     // ---- inner
     private Spatial animObj;
     private Material mat;
-    private float fullUseTime;
+//    private float fullUseTime;
 
     @Override
     public void setData(EffectData data) {
@@ -109,7 +108,7 @@ public class SlideColorIOSplineEffect extends Effect {
     private void create() {
         if (mat == null) {
             AssetManager am = LuoYing.getAssetManager();
-            mat = new Material(am, MaterialConstants.MAT_SLIDE_COLOR_IO);
+            mat = new Material(am, AssetConstants.MATERIAL_SLIDE_COLOR_IO);
             mat.setColor("StartColor", startColor);
             mat.setColor("EndColor", endColor);
 

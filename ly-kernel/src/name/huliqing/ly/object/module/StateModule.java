@@ -22,6 +22,11 @@ public class StateModule extends AbstractModule {
     private List<StateListener> stateListeners;
     
     private Control updateControl;
+
+    @Override
+    public void updateDatas() {
+        // xxx updateDatas.
+    }
     
     @Override
     public void initialize(Entity actor) {

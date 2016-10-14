@@ -78,8 +78,8 @@ public abstract class AbstractMagic<T extends MagicData> extends ModelEntity<T> 
     }
     
     @Override
-    public void initialize(Scene scene) {
-        super.initialize(scene);
+    public void initialize() {
+        super.initialize();
         
         if (data.getEffectDatas() != null) {
             if (effects == null) {

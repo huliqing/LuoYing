@@ -1,0 +1,19 @@
+MaterialDef Cooldown {
+ 
+    MaterialParameters {
+        Color Color
+        Float Percent : 0
+    }
+ 
+    Technique {
+        VertexShader GLSL100:   LuoYing/Assets/MatDefs/Skill/cooldown.vert
+        FragmentShader GLSL100: LuoYing/Assets/MatDefs/Skill/cooldown.frag
+ 
+        WorldParameters {
+            WorldViewProjectionMatrix
+        }
+ 
+        Defines {
+        }
+    }
+}

@@ -8,7 +8,6 @@ package name.huliqing.ly.loader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import name.huliqing.ly.data.ControlData;
 import name.huliqing.ly.data.EntityData;
 import name.huliqing.ly.data.ModuleData;
 import name.huliqing.ly.data.ObjectData;
@@ -49,15 +48,6 @@ public class EntityDataLoader<T extends EntityData> implements DataLoader<T>{
                 data.getObjectDatas().add((ObjectData) Loader.loadData(oid));
             }
         }
-        
-        String[] controlArr = proto.getAsArray("controls");
-        if (controlArr != null && controlArr.length > 0) {
-            data.setControlDatas(new ArrayList<ControlData>(controlArr.length));
-            for (String cid : controlArr) {
-                data.getControlDatas().add((ControlData) Loader.loadData(cid));
-            }
-        }
-        
         
     }
     

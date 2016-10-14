@@ -11,7 +11,6 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import name.huliqing.ly.data.EntityData;
 import name.huliqing.ly.object.entity.NoneModelEntity;
-import name.huliqing.ly.object.scene.Scene;
 import name.huliqing.ly.utils.DebugUtils;
 
 /**
@@ -40,9 +39,7 @@ public class DirectionalLightEnv extends NoneModelEntity {
     }
     
     @Override
-    public void initialize(Scene scene) {
-        super.initialize(scene);
-        
+    public void initialize() {
         light.setDirection(direction);
         scene.getRoot().addLight(light);
         

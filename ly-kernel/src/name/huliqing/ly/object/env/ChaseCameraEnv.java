@@ -31,8 +31,7 @@ public class ChaseCameraEnv extends NoneModelEntity  implements SceneListener {
     }
     
     @Override
-    public void initialize(Scene scene) {
-        super.initialize(scene);
+    public void initialize() {
         ccc = new CollisionChaseCamera(LuoYing.getApp().getCamera(), LuoYing.getApp().getInputManager());
          // 开启镜头跟随可能让部分人容易犯头晕
         ccc.setSmoothMotion(data.getAsBoolean("smoothMotion", ccc.isSmoothMotion()));

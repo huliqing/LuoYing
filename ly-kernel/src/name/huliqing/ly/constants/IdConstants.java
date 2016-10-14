@@ -10,32 +10,41 @@ package name.huliqing.ly.constants;
  */
 public class IdConstants {
     
+    /** 默认的关于技能标记定义的配置id */
+    public final static String SYS_DEFINE_SKILL_TAG = "sysDefineSkillTag";
+    /** 默认的关于装备部位定义的配置id */
+    public final static String SYS_DEFINE_SKIN_PART = "sysDefineSkinPart";
+    /** 默认的关于武器类型定义的配置id */
+    public final static String SYS_DEFINE_WEAPON_TYPE = "sysDefineWeaponType";
+    /** 默认的关于物体构成成分定义的配置id */
+    public final static String SYS_DEFINE_MAT = "sysDefineMat";
+    
     /** 内置的跑步行为 */
-    public final static String SYS_ACTION_SIMPLE_RUN = "_sys_actionSimpleRun";
-    
+    public final static String SYS_ACTION_SIMPLE_RUN = "sysActionSimpleRun";
     /** 内置的跟随行为 */
-    public final static String SYS_ACTION_SIMPLE_FOLLOW = "_sys_actionSimpleFollow";
-    
+    public final static String SYS_ACTION_SIMPLE_FOLLOW = "sysActionSimpleFollow";
     /** 内置的战斗行为 */
-    public final static String SYS_ACTION_SIMPLE_FIGHT = "_sys_actionSimpleFight";
+    public final static String SYS_ACTION_SIMPLE_FIGHT = "sysActionSimpleFight";
     
     /** 内置的骨骼通道，这个通道作为所有<b>未配置</b>分通道的角色的默认通道 */
-    public final static String SYS_CHANNEL_FULL = "_sys_channelFull";
+    public final static String SYS_CHANNEL_FULL = "sysChannelFull";
     
-    
-    public final static String SYS_HITCHECK_FIGHT_DEFAULT = "_sys_hitCheckerFightDefault";
+    public final static String SYS_HITCHECK_FIGHT_DEFAULT = "sysHitCheckerFightDefault";
     
     /** 内置的游戏 */
-    public final static String SYS_GAME = "_sys_game";
+    public final static String SYS_GAME = "sysGame";
     
     /** 内置的游戏场景 */
-    public final static String SYS_SCENE = "_sys_scene";
-    
+    public final static String SYS_SCENE = "sysScene";
     /** 内置的游戏GUI场景 */
-    public final static String SYS_SCENE_GUI = "_sys_sceneGui";
+    public final static String SYS_SCENE_GUI = "sysSceneGui";
     
-    /** 内置的天空盒场景物体 */
-    public final static String SYS_ENV_SKY = "_sys_envSky";
+    /** 内置的天空盒物体: sysEnvSky */
+    public final static String SYS_ENV_SKY = "sysEnvSky";
+    /** 内置直射光物体：sysEnvDirectionalLight */
+    public final static String SYS_ENV_DIRECTIONAL_LIGHT = "sysEnvDirectionalLight";
+    /** 内置环境光物体: sysEnvAmbientLight */
+    public final static String SYS_ENV_AMBIENT_LIGHT = "sysEnvAmbientLight";
     
     
     // =========================================================================
@@ -45,7 +54,7 @@ public class IdConstants {
     /**
      * 全局配置
      */
-    public final static String CONFIG_GLOBAL = "configGlobal";
+    public final static String SYS_CONFIG = "sysConfig";
     
     
 //    以下将删除

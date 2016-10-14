@@ -70,7 +70,8 @@ public class TalentModule extends AbstractModule implements ValueChangeListener<
         lastApplyTalentPointsLevel = data.getAsInteger("lastApplyTalentPointsLevel", 0);
     }
     
-    protected void updateData() {
+    @Override
+    public void updateDatas() {
         data.setAttribute("lastApplyTalentPointsLevel", lastApplyTalentPointsLevel);
     }
     
@@ -266,7 +267,7 @@ public class TalentModule extends AbstractModule implements ValueChangeListener<
         // 记住最近一次添加点数的等级，避免重复添加，注：updateData用于把数据写回talentModule的data中去,
         // 这样角色在存档并重新读回的时候可以还原这个值。
         lastApplyTalentPointsLevel = newValue.intValue();
-        updateData();
+        updateDatas();
         
         // remove20160828
 //        // 提示获得天赋点数
@@ -275,5 +276,6 @@ public class TalentModule extends AbstractModule implements ValueChangeListener<
 //        }
         
     }
+
 
 }

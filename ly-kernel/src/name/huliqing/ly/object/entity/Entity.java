@@ -78,27 +78,6 @@ public interface Entity<T extends EntityData> extends DataProcessor<T>{
      */
     boolean removeFromScene();
     
-//    /**
-//     * 给实体添加模块
-//     * @param module 
-//     */
-//    void addModule(Module module);
-//    
-//    /**
-//     * 移除指定的角色模块
-//     * @param module 
-//     * @return  
-//     */
-//    boolean removeModule(Module module);
-//    
-//    /**
-//     * 从角色身上获取指定类型的模块, 这个方法返回第一个符合类型的实例，如果找不到符合类型的实例则返回null.
-//     * @param <T>
-//     * @param moduleType
-//     * @return 
-//     */
-////    <T extends Module> T getModule(Class<T> moduleType);
-    
     /**
      * 获取Entity模块
      * @return 

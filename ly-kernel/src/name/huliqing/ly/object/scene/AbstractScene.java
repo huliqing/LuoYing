@@ -12,6 +12,7 @@ import com.jme3.post.SceneProcessor;
 import com.jme3.post.filters.TranslucentBucketFilter;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
+import com.jme3.util.SafeArrayList;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -32,7 +33,7 @@ public class AbstractScene implements Scene {
     
     protected SceneData data;
     protected final Map<Long, Entity> entities = new LinkedHashMap<Long, Entity>();
-    protected List<SceneListener> listeners;
+    protected SafeArrayList<SceneListener> listeners;
     
     protected boolean initialized;
     
@@ -250,7 +251,7 @@ public class AbstractScene implements Scene {
     @Override
     public void addSceneListener(SceneListener listener) {
         if (listeners == null) {
-            listeners = new ArrayList<SceneListener>();
+            listeners = new SafeArrayList<SceneListener>(SceneListener.class);
         }
         if (!listeners.contains(listener)) {
             listeners.add(listener);

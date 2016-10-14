@@ -17,8 +17,8 @@ public class StraightBullet extends AbstractBullet {
     private final Vector3f temp = new Vector3f();
     
     @Override
-    public void initialize(Scene scene) {
-        super.initialize(scene);
+    public void initialize() {
+        super.initialize();
         updateDir(getCurrentEndPos());
     }
 

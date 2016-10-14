@@ -13,11 +13,8 @@ import com.jme3.scene.Spatial;
 import com.jme3.texture.Texture;
 import com.jme3.texture.Texture.WrapMode;
 import name.huliqing.ly.LuoYing;
-import name.huliqing.ly.constants.MaterialConstants;
-import name.huliqing.ly.constants.ModelConstants;
-import name.huliqing.ly.constants.TextureConstants;
+import name.huliqing.ly.constants.AssetConstants;
 import name.huliqing.ly.data.EffectData;
-import name.huliqing.ly.data.EntityData;
 import name.huliqing.ly.object.Loader;
 import name.huliqing.ly.object.scene.Scene;
 
@@ -30,7 +27,7 @@ public class SlideColorEffect extends Effect {
     private ColorRGBA startColor = new ColorRGBA(1, 1, 1, 1);
     private ColorRGBA endColor = new ColorRGBA(0, 0, 3, 1);
     
-    private String mask = TextureConstants.TEX_MASK;
+    private String mask = AssetConstants.TEXTURE_MASK;
     private boolean maskAnimY;
     private boolean maskAnimX;
     private boolean maskChangeDir;
@@ -39,7 +36,7 @@ public class SlideColorEffect extends Effect {
     private float maskSpeed = 1;
     private WrapMode maskWrap = WrapMode.EdgeClamp;
     
-    private String tex = TextureConstants.TEX_PARTICLES;
+    private String tex = AssetConstants.TEXTURE_PARTICLES;
     private boolean texAnimY;
     private boolean texAnimX;
     private boolean texChangeDir;
@@ -86,7 +83,7 @@ public class SlideColorEffect extends Effect {
     private void create() {
         if (mat == null) {
             AssetManager am = LuoYing.getAssetManager();
-            mat = new Material(am, MaterialConstants.MAT_SLIDE_COLOR);
+            mat = new Material(am, AssetConstants.MATERIAL_SLIDE_COLOR);
             mat.setColor("StartColor", startColor);
             mat.setColor("EndColor", endColor);
 
@@ -129,7 +126,7 @@ public class SlideColorEffect extends Effect {
      * @return 
      */
     protected Spatial loadAnimModel() {
-        return Loader.loadModel(ModelConstants.MODEL_SLIDE_COLOR);
+        return Loader.loadModel(AssetConstants.MODEL_SLIDE_COLOR);
     }
     
     private WrapMode getWrapMode(String name, WrapMode defValue) {

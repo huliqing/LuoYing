@@ -60,8 +60,7 @@ public class PhysicsEnv extends NoneModelEntity implements SceneListener {
     }
 
     @Override
-    public void initialize(Scene scene) {
-        super.initialize(scene);
+    public void initialize() {
         bulletAppState = new BulletAppState();
         
         BroadphaseType bt = getBroadphaseType(broadphaseType);

@@ -13,7 +13,7 @@ import name.huliqing.ly.object.Loader;
 import name.huliqing.ly.object.module.Module;
 
 /**
- *
+ * 这个类用来代理管理Entity的模块
  * @author huliqing
  */
 public class EntityModule {

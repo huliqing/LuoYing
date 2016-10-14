@@ -12,7 +12,7 @@ import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Quad;
 import com.jme3.texture.Texture2D;
-import name.huliqing.ly.constants.MaterialConstants;
+import name.huliqing.ly.constants.AssetConstants;
 
 /**
  * Image
@@ -32,7 +32,7 @@ public class Image extends Geometry {
         setQueueBucket(Bucket.Gui);
         setCullHint(CullHint.Never);
         
-        Material mat = new Material(UIFactory.getUIConfig().getAssetManager(), MaterialConstants.MAT_VIEW);
+        Material mat = new Material(UIFactory.getUIConfig().getAssetManager(), AssetConstants.MATERIAL_VIEW);
         mat.setColor("Color", ColorRGBA.White);
         setMaterial(mat);
     }

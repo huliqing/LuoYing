@@ -19,6 +19,11 @@ public class ResistModule extends AbstractModule {
     private Resist resist;
 
     @Override
+    public void updateDatas() {
+        // xxx updateDatas.
+    }
+    
+    @Override
     public void initialize(Entity actor) {
         super.initialize(actor);
         List<ResistData> rds = actor.getData().getObjectDatas(ResistData.class, null);

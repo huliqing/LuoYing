@@ -40,8 +40,14 @@ public class AudioEnv extends ModelEntity {
     }
     
     @Override
-    public void initialize(Scene scene) {
-        super.initialize(scene);
+    protected Spatial loadModel() {
+        sound = Loader.load(soundId);
+        return sound;
+    }
+    
+    @Override
+    public void initialize() {
+        super.initialize();
         if (debug) {
             debugNode = new Geometry("debugAudioEnvDistance", new Sphere(20, 20, sound.getData().getMaxDistance()));
             debugNode.setMaterial(createDebugMaterial(ColorRGBA.Green));
@@ -52,12 +58,6 @@ public class AudioEnv extends ModelEntity {
             sound.attachChild(debugInnerNode);
         }
         SoundManager.getInstance().addAndPlay(sound);
-    }
-
-    @Override
-    protected Spatial loadModel() {
-        sound = Loader.load(soundId);
-        return sound;
     }
     
     private Material createDebugMaterial(ColorRGBA color) {

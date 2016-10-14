@@ -67,6 +67,11 @@ public class LevelModule extends AbstractModule implements ValueChangeListener<N
         maxLevel = data.getAsInteger("maxLevel", maxLevel);
         effect = data.getAsString("effect");
     }
+
+    @Override
+    public void updateDatas() {
+        // xxx updateDatas.
+    }
     
     @Override
     public void initialize(Entity actor) {

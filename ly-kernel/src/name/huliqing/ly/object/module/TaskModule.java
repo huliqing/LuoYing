@@ -35,6 +35,11 @@ public class TaskModule extends AbstractModule {
     }
 
     @Override
+    public void updateDatas() {
+        // xxx updateDatas.
+    }
+
+    @Override
     public void cleanup() {
         for (Task task : tasks) {
             task.cleanup();

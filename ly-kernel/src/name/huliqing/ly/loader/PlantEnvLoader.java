@@ -2,11 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.ly.loader.env;
+package name.huliqing.ly.loader;
 
 import com.jme3.math.Vector3f;
 import name.huliqing.ly.data.ModelEntityData;
-import name.huliqing.ly.loader.EntityDataLoader;
 import name.huliqing.ly.xml.Proto;
 import name.huliqing.ly.utils.MathUtils;
 
@@ -21,6 +20,7 @@ public class PlantEnvLoader<T extends ModelEntityData> extends EntityDataLoader<
     @Override
     public void load(Proto proto, T store) {
         super.load(proto, store);
+        
         boolean randomScale = proto.getAsBoolean("randomScale", false);
         if (randomScale) {
             float minScale = proto.getAsFloat("minScale", 1);

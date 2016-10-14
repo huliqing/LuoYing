@@ -1,0 +1,20 @@
+MaterialDef View {
+ 
+    MaterialParameters {
+        Texture2D Texture
+        Color Color
+    }
+ 
+    Technique {
+        VertexShader GLSL100:   LuoYing/Assets/MatDefs/View/view.vert
+        FragmentShader GLSL100: LuoYing/Assets/MatDefs/View/view.frag
+ 
+        WorldParameters {
+            WorldViewProjectionMatrix
+        }
+ 
+        Defines {
+            Texture : Texture
+        }
+    }
+}

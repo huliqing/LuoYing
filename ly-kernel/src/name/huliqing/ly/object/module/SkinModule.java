@@ -61,7 +61,8 @@ public class SkinModule extends AbstractModule {
         bindWeaponSlotAttribute = data.getAsString("bindWeaponSlotAttribute");
     }
      
-    protected void updateData() {
+    @Override
+    public void updateDatas() {
         data.setAttribute("weaponTakeOn", weaponTakeOn);
     }
     
@@ -277,7 +278,7 @@ public class SkinModule extends AbstractModule {
         doEndAllSkinning();
         
         weaponTakeOn = true;
-        updateData();
+        updateDatas();
         if (skinUsed != null) {
             for (Skin s : skinUsed.getArray()) {
                 if (s instanceof WeaponSkin) {
@@ -298,7 +299,7 @@ public class SkinModule extends AbstractModule {
         doEndAllSkinning();
         
         weaponTakeOn = false;
-        updateData();
+        updateDatas();
         if (skinUsed != null) {
             for (Skin s : skinUsed.getArray()) {
                 if (s instanceof WeaponSkin) {

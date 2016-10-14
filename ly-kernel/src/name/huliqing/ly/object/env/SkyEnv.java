@@ -52,8 +52,7 @@ public class SkyEnv extends AbstractEntity {
     }
     
     @Override
-    public void initialize(Scene scene) {
-        super.initialize(scene);
+    public void initialize() {
         AssetManager am = LuoYing.getApp().getAssetManager();
         Texture w = am.loadTexture(baseDir != null ? baseDir + west : west);
         Texture e = am.loadTexture(baseDir != null ? baseDir + east : east);

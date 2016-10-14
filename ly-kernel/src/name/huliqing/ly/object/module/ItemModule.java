@@ -22,6 +22,11 @@ public class ItemModule extends AbstractModule {
     private List<ItemListener> itemListeners;
     
     private List<Item> items;
+
+    @Override
+    public void updateDatas() {
+        // xxx updateDatas.
+    }
     
     @Override
     public void initialize(Entity actor) {

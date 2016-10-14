@@ -43,6 +43,11 @@ public class LogicModule extends AbstractModule {
         bindAutoLogicAttribute = data.getAsString("bindAutoLogicAttribute");
         bindAutoDetectAttribute = data.getAsString("bindAutoDetectAttribute");
     }
+
+    @Override
+    public void updateDatas() {
+        // xxx updateDatas.
+    }
     
     @Override
     public void initialize(Entity actor) {

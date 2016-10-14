@@ -4,19 +4,26 @@
  */
 package name.huliqing.ly.object.env;
 
+import com.jme3.bullet.collision.shapes.MeshCollisionShape;
+import com.jme3.bullet.control.RigidBodyControl;
+import name.huliqing.ly.shape.TreeCollisionMesh;
+
 /**
  * 环境物体树，这个处理器为树模型定制一个更简单的物理包围盒。来简化物体碰撞
  * 计算。
  * @author huliqing
  */
 public class TreeEnv extends PlantEnv {
-    
-    
-    // xxx addPhysicsControl这里要重构
-//    @Override
-//    protected void addPhysicsControl(Spatial spatial, RigidBodyControl control) {
-//        RigidBodyControl rbc = new RigidBodyControl(new MeshCollisionShape(new TreeCollisionMesh()), data.getMass());
-//        super.addPhysicsControl(spatial, rbc);
-//    }
+
+    @Override
+    public void initialize() {
+        super.initialize();
+        // 树体用了一个定制的MeshCollisionShape, 注：MeshCollisionShape类型必须要求mass=0
+        RigidBodyControl rbc = spatial.getControl(RigidBodyControl.class);
+        if (rbc != null) {
+            rbc.setMass(0);
+            rbc.setCollisionShape(new MeshCollisionShape(new TreeCollisionMesh()));
+        }
+    }
     
 }

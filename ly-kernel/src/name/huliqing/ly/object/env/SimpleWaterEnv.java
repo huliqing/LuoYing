@@ -16,12 +16,13 @@ import name.huliqing.ly.data.EntityData;
 import name.huliqing.ly.object.entity.AbstractEntity;
 import name.huliqing.ly.object.scene.Scene;
 import name.huliqing.ly.processor.VerySimpleWaterProcessor;
+import name.huliqing.ly.object.entity.WaterEntity;
 
 /**
  * 轻量级的水体效果，可支持移动设置、手机等。特别针对Opengl es应用。
  * @author huliqing
  */
-public class SimpleWaterEnv extends AbstractEntity implements WaterEnv {
+public class SimpleWaterEnv extends AbstractEntity implements WaterEntity {
 //    private final PlayService playService = Factory.get(PlayService.class);
     
     private String waterModelFile;
@@ -63,9 +64,7 @@ public class SimpleWaterEnv extends AbstractEntity implements WaterEnv {
     }
     
     @Override
-    public void initialize(Scene scene) {
-        super.initialize(scene);
-        
+    public void initialize() {
         waterModel = LuoYing.getApp().getAssetManager().loadModel(waterModelFile);
         Vector3f location = data.getAsVector3f("location");
         if (location != null) {

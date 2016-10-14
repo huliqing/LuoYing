@@ -90,19 +90,6 @@ public interface Scene extends DataProcessor<SceneData> {
      */
     void removeEntity(Entity entity);
     
-//    /**
-//     * 添加场景物体
-//     * @param spatialAdded 
-//     */
-//    void addSpatial(Spatial spatialAdded);
-//    
-//    /**
-//     * 移除场景物体
-//     * @param spatialRemoved 
-//     * @return  
-//     */
-//    boolean removeSpatial(Spatial spatialRemoved);
-    
     /**
      * 通过唯一id来查找场景物体,如果不存在则反回null.
      * @param entityId
@@ -171,7 +158,10 @@ public interface Scene extends DataProcessor<SceneData> {
     
     /**
      * 设置一些ViewPort,这些ViewPort用于作为Processor的容器.
-     * 当向Scene添加SceneProcessor时将添加到这些ViewPort中。
+     * 当向Scene添加SceneProcessor时将添加到这些ViewPort中。<br>
+     * 用于支持一些环境类的物体，如：高级水体、阴影效果等，这些物体需要向场景中添加Processor和Filter,
+     * 如果没有给场景设置ViewPort则可能这些环境物体会无效,或者异常。<br>
+     * 注：这个方法应该在场景初始化之前设置,一般在游戏开始时或切换游戏场景时设置, 然后才调用initialize初始化场景。
      * @param viewPorts
      */
     void setProcessorViewPorts(ViewPort... viewPorts);

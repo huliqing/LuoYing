@@ -78,7 +78,8 @@ public class SkillModule extends AbstractModule {
         deadSkillTags = skillService.convertSkillTags(data.getAsArray("deadSkillTags"));
     }
     
-    protected void updateData() {
+    @Override
+    public void updateDatas() {
         data.setAttribute("lockedSkillTags", lockedSkillTags);
     }
 
@@ -631,7 +632,7 @@ public class SkillModule extends AbstractModule {
      */
     public void lockSkillTags(long skillTags) {
         this.lockedSkillTags |= skillTags;
-        updateData();
+        updateDatas();
     }
     
     /**
@@ -640,7 +641,7 @@ public class SkillModule extends AbstractModule {
      */
     public void unlockSkillTags(long skillTags) {
         lockedSkillTags &= ~skillTags;
-        updateData();
+        updateDatas();
     }
         
     /**

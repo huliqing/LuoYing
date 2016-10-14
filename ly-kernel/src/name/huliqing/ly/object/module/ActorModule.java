@@ -145,7 +145,6 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
 
     @Override
     public void updateDatas() {
-        super.updateDatas();
         if (initialized) {
             data.setAttribute(DATA_VIEW_DIRECTION, getViewDirection());
             data.setAttribute(DATA_WALK_DIRECTION, getWalkDirection());

@@ -38,7 +38,6 @@ import name.huliqing.ly.data.DefineData;
 import name.huliqing.ly.data.ModuleData;
 import name.huliqing.ly.data.DropData;
 import name.huliqing.ly.data.DropItem;
-//import name.huliqing.ly.data.EffectData;
 import name.huliqing.ly.data.ElData;
 import name.huliqing.ly.data.EmitterData;
 import name.huliqing.ly.data.ControlData;
@@ -172,7 +171,6 @@ import name.huliqing.ly.object.module.StateModule;
 import name.huliqing.ly.object.module.TalentModule;
 import name.huliqing.ly.object.module.TaskModule;
 import name.huliqing.ly.loader.DropDataLoader;
-//import name.huliqing.ly.loader.EffectDataLoader;
 import name.huliqing.ly.object.effect.EncircleHaloEffect;
 import name.huliqing.ly.object.effect.GroupEffect;
 import name.huliqing.ly.object.effect.HaloEffect;
@@ -191,15 +189,15 @@ import name.huliqing.ly.object.el.AttributeEl;
 import name.huliqing.ly.object.emitter.Emitter;
 import name.huliqing.ly.loader.EmitterDataLoader;
 import name.huliqing.ly.object.env.AudioEnv;
-import name.huliqing.ly.object.env.BoundaryBoxEnv;
+//import name.huliqing.ly.object.env.BoundaryBoxEnv;
 import name.huliqing.ly.object.env.ChaseCameraEnv;
 import name.huliqing.ly.object.env.AmbientLightEnv;
 import name.huliqing.ly.object.env.DirectionalLightEnv;
 import name.huliqing.ly.layer.service.ConfigService;
 import name.huliqing.ly.loader.DefineDataLoader;
+import name.huliqing.ly.loader.EffectDataLoader;
 import name.huliqing.ly.loader.EntityDataLoader;
 import name.huliqing.ly.object.env.PhysicsEnv;
-import name.huliqing.ly.object.env.PlantEnv;
 import name.huliqing.ly.object.env.PlatformProxyEnv;
 import name.huliqing.ly.object.env.ShadowEnv;
 import name.huliqing.ly.object.env.SkyEnv;
@@ -269,7 +267,7 @@ import name.huliqing.ly.loader.TaskDataLoader;
 //import name.huliqing.luoying.object.view.TimerView;
 //import name.huliqing.ly.loader.ViewDataLoader;
 import name.huliqing.ly.loader.ModuleDataLoader;
-import name.huliqing.ly.loader.env.PlantEnvLoader;
+import name.huliqing.ly.loader.PlantEnvLoader;
 import name.huliqing.ly.mess.MessActorSetLocation;
 import name.huliqing.ly.mess.MessAttributeNumberAddValue;
 import name.huliqing.ly.mess.MessAttributeNumberHit;
@@ -299,6 +297,8 @@ import name.huliqing.ly.object.drop.AttributeDrop;
 import name.huliqing.ly.object.drop.GroupDrop;
 import name.huliqing.ly.object.drop.ItemDrop;
 import name.huliqing.ly.object.drop.SkinDrop;
+import name.huliqing.ly.object.env.GrassEnv;
+import name.huliqing.ly.object.env.ModelEnv;
 import name.huliqing.ly.object.game.SimpleGame;
 import name.huliqing.ly.object.item.AttributeItem;
 import name.huliqing.ly.object.item.BookItem;
@@ -311,6 +311,7 @@ import name.huliqing.ly.object.item.SummonItem;
 import name.huliqing.ly.object.item.TestItem;
 import name.huliqing.ly.object.module.DropModule;
 import name.huliqing.ly.object.module.LevelModule;
+import name.huliqing.ly.object.module.PhysicsModule;
 import name.huliqing.ly.object.scene.SimpleScene;
 import name.huliqing.ly.object.slot.Slot;
 import name.huliqing.ly.object.state.GroupState;
@@ -489,17 +490,17 @@ public class LuoYing {
         DataFactory.register("dropSkin",  DropData.class, DropDataLoader.class, SkinDrop.class);
         
         // Effect
-        DataFactory.register("effectHalo",  EntityData.class, EntityDataLoader.class, HaloEffect.class);
-        DataFactory.register("effectParticle", EntityData.class, EntityDataLoader.class, ParticleEffect.class);
-        DataFactory.register("effectGroup", EntityData.class, EntityDataLoader.class, GroupEffect.class);
-        DataFactory.register("effectEncircleHalo", EntityData.class, EntityDataLoader.class, EncircleHaloEffect.class);
-        DataFactory.register("effectTexture", EntityData.class, EntityDataLoader.class, TextureEffect.class);
-        DataFactory.register("effectTextureCylinder", EntityData.class, EntityDataLoader.class, TextureCylinderEffect.class);
-        DataFactory.register("effectModel", EntityData.class, EntityDataLoader.class, ModelEffect.class);
-        DataFactory.register("effectSlideColor", EntityData.class, EntityDataLoader.class, SlideColorEffect.class);
-        DataFactory.register("effectSlideColorSpline", EntityData.class, EntityDataLoader.class, SlideColorSplineEffect.class);
-        DataFactory.register("effectSlideColorIOSpline", EntityData.class, EntityDataLoader.class, SlideColorIOSplineEffect.class);
-        DataFactory.register("effectProjection", EntityData.class, EntityDataLoader.class, ProjectionEffect.class);
+        DataFactory.register("effectHalo",  EffectData.class, EffectDataLoader.class, HaloEffect.class);
+        DataFactory.register("effectParticle", EffectData.class, EffectDataLoader.class, ParticleEffect.class);
+        DataFactory.register("effectGroup", EffectData.class, EffectDataLoader.class, GroupEffect.class);
+        DataFactory.register("effectEncircleHalo", EffectData.class, EffectDataLoader.class, EncircleHaloEffect.class);
+        DataFactory.register("effectTexture", EffectData.class, EffectDataLoader.class, TextureEffect.class);
+        DataFactory.register("effectTextureCylinder", EffectData.class, EffectDataLoader.class, TextureCylinderEffect.class);
+        DataFactory.register("effectModel", EffectData.class, EffectDataLoader.class, ModelEffect.class);
+        DataFactory.register("effectSlideColor", EffectData.class, EffectDataLoader.class, SlideColorEffect.class);
+        DataFactory.register("effectSlideColorSpline", EffectData.class, EffectDataLoader.class, SlideColorSplineEffect.class);
+        DataFactory.register("effectSlideColorIOSpline", EffectData.class, EffectDataLoader.class, SlideColorIOSplineEffect.class);
+        DataFactory.register("effectProjection", EffectData.class, EffectDataLoader.class, ProjectionEffect.class);
         
         // El
         DataFactory.register("elLevel",  ElData.class, ElDataLoader.class, LevelEl.class);
@@ -510,20 +511,22 @@ public class LuoYing {
         DataFactory.register("emitter",  EmitterData.class, EmitterDataLoader.class, Emitter.class);
         
         // Env
-        DataFactory.register("envSky", EntityData.class, EntityDataLoader.class, SkyEnv.class);
-        DataFactory.register("envDirectionalLight", EntityData.class, EntityDataLoader.class, DirectionalLightEnv.class);
+        DataFactory.register("envAdvanceWater", EntityData.class, EntityDataLoader.class, AdvanceWaterEnv.class);
         DataFactory.register("envAmbientLight", EntityData.class, EntityDataLoader.class, AmbientLightEnv.class);
+        DataFactory.register("envAudio", EntityData.class, EntityDataLoader.class, AudioEnv.class);
+//        DataFactory.register("envBoundaryBox", ModelEntityData.class, EntityDataLoader.class, BoundaryBoxEnv.class); // remove
+        DataFactory.register("envChaseCamera", EntityData.class, EntityDataLoader.class, ChaseCameraEnv.class);
+        DataFactory.register("envDirectionalLight", EntityData.class, EntityDataLoader.class, DirectionalLightEnv.class);
+        DataFactory.register("envModel", ModelEntityData.class, EntityDataLoader.class, ModelEnv.class);
+        DataFactory.register("envPhysics", EntityData.class, EntityDataLoader.class, PhysicsEnv.class);
+        DataFactory.register("envPlatformProxy", EntityData.class, EntityDataLoader.class, PlatformProxyEnv.class);
         DataFactory.register("envShadow", EntityData.class, EntityDataLoader.class, ShadowEnv.class);
         DataFactory.register("envSimpleWater", EntityData.class, EntityDataLoader.class, SimpleWaterEnv.class);
-        DataFactory.register("envAdvanceWater", EntityData.class, EntityDataLoader.class, AdvanceWaterEnv.class);
-        DataFactory.register("envAudio", EntityData.class, EntityDataLoader.class, AudioEnv.class);
-        DataFactory.register("envPlatformProxy", EntityData.class, EntityDataLoader.class, PlatformProxyEnv.class);
-        DataFactory.register("envPhysics", EntityData.class, EntityDataLoader.class, PhysicsEnv.class);
-        DataFactory.register("envChaseCamera", EntityData.class, EntityDataLoader.class, ChaseCameraEnv.class);
-        DataFactory.register("envBoundaryBox", ModelEntityData.class, EntityDataLoader.class, BoundaryBoxEnv.class);
+        DataFactory.register("envSky", EntityData.class, EntityDataLoader.class, SkyEnv.class);
         DataFactory.register("envTerrain", ModelEntityData.class, EntityDataLoader.class, TerrainEnv.class);
         DataFactory.register("envTree", ModelEntityData.class, PlantEnvLoader.class, TreeEnv.class);
-        DataFactory.register("envGrass", ModelEntityData.class, PlantEnvLoader.class, PlantEnv.class);
+        DataFactory.register("envGrass", ModelEntityData.class, PlantEnvLoader.class, GrassEnv.class);
+        
         
         // Game
         DataFactory.register("gameSimple", GameData.class, GameDataLoader.class, SimpleGame.class);
@@ -567,6 +570,7 @@ public class LuoYing {
         DataFactory.register("moduleItem",  ModuleData.class, ModuleDataLoader.class, ItemModule.class);
         DataFactory.register("moduleLevel",  ModuleData.class, ModuleDataLoader.class, LevelModule.class);
         DataFactory.register("moduleLogic",  ModuleData.class, ModuleDataLoader.class, LogicModule.class);
+        DataFactory.register("modulePhysics",  ModuleData.class, ModuleDataLoader.class, PhysicsModule.class);
         DataFactory.register("moduleResist",  ModuleData.class, ModuleDataLoader.class, ResistModule.class);
         DataFactory.register("moduleSkill",  ModuleData.class, ModuleDataLoader.class, SkillModule.class);
         DataFactory.register("moduleSkin",  ModuleData.class, ModuleDataLoader.class, SkinModule.class);
@@ -645,50 +649,50 @@ public class LuoYing {
     private static void loadSysData() throws LyException {
         
         // remove20161006,以后由其它实现去主动载入
-        loadData("/luoying/data/action.xml");
-//        loadData("/luoying/data/actor.xml");
-//        loadData("/luoying/data/actorAnim.xml");
-//        loadData("/luoying/data/anim.xml");
-//        loadData("/luoying/data/attribute.xml");
-//        loadData("/luoying/data/bullet.xml");
-        loadData("/luoying/data/channel.xml");
-        loadData("/luoying/data/config.xml");
-//        loadData("/luoying/data/define.xml");
-//        loadData("/luoying/data/drop.xml");
-//        loadData("/luoying/data/effect.xml");
-//        loadData("/luoying/data/el.xml");
-//        loadData("/luoying/data/emitter.xml");
-        loadData("/luoying/data/env.xml");
-        loadData("/luoying/data/game.xml");
-//        loadData("/luoying/data/gameLogic.xml");
-//        loadData("/luoying/data/hitChecker.xml");
-//        loadData("/luoying/data/item.xml");
-//        loadData("/luoying/data/logic.xml");
-//        loadData("/luoying/data/magic.xml");
-//        loadData("/luoying/data/module.xml");
-//        loadData("/luoying/data/position.xml");
-//        loadData("/luoying/data/resist.xml");
-        loadData("/luoying/data/scene.xml");
-//        loadData("/luoying/data/shape.xml");
+        loadData("/LuoYing/Data/action.xml");
+//        loadData("/LuoYing/Data/actor.xml");
+//        loadData("/LuoYing/Data/actorAnim.xml");
+//        loadData("/LuoYing/Data/anim.xml");
+//        loadData("/LuoYing/Data/attribute.xml");
+//        loadData("/LuoYing/Data/bullet.xml");
+        loadData("/LuoYing/Data/channel.xml");
+        loadData("/LuoYing/Data/config.xml");
+//        loadData("/LuoYing/Data/define.xml");
+//        loadData("/LuoYing/Data/drop.xml");
+//        loadData("/LuoYing/Data/effect.xml");
+//        loadData("/LuoYing/Data/el.xml");
+//        loadData("/LuoYing/Data/emitter.xml");
+        loadData("/LuoYing/Data/env.xml");
+        loadData("/LuoYing/Data/game.xml");
+//        loadData("/LuoYing/Data/gameLogic.xml");
+//        loadData("/LuoYing/Data/hitChecker.xml");
+//        loadData("/LuoYing/Data/item.xml");
+//        loadData("/LuoYing/Data/logic.xml");
+//        loadData("/LuoYing/Data/magic.xml");
+        loadData("/LuoYing/Data/module.xml");
+//        loadData("/LuoYing/Data/position.xml");
+//        loadData("/LuoYing/Data/resist.xml");
+        loadData("/LuoYing/Data/scene.xml");
+//        loadData("/LuoYing/Data/shape.xml");
 //
 //        // 技能
-//        loadData("/luoying/data/skill.xml");
-//        loadData("/luoying/data/skill_monster.xml");
-//        loadData("/luoying/data/skill_skin.xml");
+//        loadData("/LuoYing/Data/skill.xml");
+//        loadData("/LuoYing/Data/skill_monster.xml");
+//        loadData("/LuoYing/Data/skill_skin.xml");
 //
 //        // 装备、武器
-//        loadData("/luoying/data/skin.xml");
-//        loadData("/luoying/data/skin_male.xml");
-//        loadData("/luoying/data/skin_weapon.xml");
+//        loadData("/LuoYing/Data/skin.xml");
+//        loadData("/LuoYing/Data/skin_male.xml");
+//        loadData("/LuoYing/Data/skin_weapon.xml");
 //
 //        // 武器槽位配置
-//        loadData("/luoying/data/slot.xml");
+//        loadData("/LuoYing/Data/slot.xml");
 //
-//        loadData("/luoying/data/sound.xml");
-//        loadData("/luoying/data/state.xml");
-//        loadData("/luoying/data/talent.xml");
-//        loadData("/luoying/data/task.xml");
-//        loadData("/luoying/data/view.xml");
+//        loadData("/LuoYing/Data/sound.xml");
+//        loadData("/LuoYing/Data/state.xml");
+//        loadData("/LuoYing/Data/talent.xml");
+//        loadData("/LuoYing/Data/task.xml");
+//        loadData("/LuoYing/Data/view.xml");
     }
     
     /**
@@ -855,11 +859,6 @@ public class LuoYing {
     public static void setFont(BitmapFont font) {
         LuoYing.font = font;
     }
-    
-    // xxx remove
-//    public static PlayState getPlayState() {
-//        return app.getStateManager().getState(PlayState.class);
-//    }
     
     /**
      * 获取当前光标位置

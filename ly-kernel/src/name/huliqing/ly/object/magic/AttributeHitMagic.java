@@ -51,11 +51,6 @@ public class AttributeHitMagic extends AbstractMagic {
     }
 
     @Override
-    public void initialize(Scene scene) {
-        super.initialize(scene);
-    }
-
-    @Override
     public void magicUpdate(float tpf) {
         super.magicUpdate(tpf); 
         intervalUsed += tpf;

@@ -5,10 +5,7 @@
 package name.huliqing.ly.object;
 
 import com.jme3.scene.Spatial;
-import java.util.logging.Logger;
 import name.huliqing.ly.LuoYing;
-import name.huliqing.ly.Factory;
-import name.huliqing.ly.layer.service.ConfigService;
 import name.huliqing.ly.utils.GeometryUtils;
 
 /**

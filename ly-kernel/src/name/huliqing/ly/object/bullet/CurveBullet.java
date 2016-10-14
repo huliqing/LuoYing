@@ -14,7 +14,6 @@ import name.huliqing.ly.data.EntityData;
 import name.huliqing.ly.object.Loader;
 import name.huliqing.ly.object.anim.CurveMoveAnim;
 import name.huliqing.ly.object.position.Position;
-import name.huliqing.ly.object.scene.Scene;
 
 /**
  * 曲线类型的子弹。
@@ -60,8 +59,8 @@ public class CurveBullet extends StraightBullet {
     }
 
     @Override
-    public void initialize(Scene scene) {
-        super.initialize(scene); 
+    public void initialize() {
+        super.initialize(); 
         if (waypoints != null) {
             // 添加开始和结束坐标点，以及生成中间坐标点。
             waypoints.add(start);

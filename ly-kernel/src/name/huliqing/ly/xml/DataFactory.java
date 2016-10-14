@@ -106,14 +106,21 @@ public class DataFactory {
                 throw new NullPointerException("No \"dataClass\"  set for proto, id=" + id + ", proto=" + proto);
             }
             ProtoData data = (ProtoData) Class.forName(dataClass).newInstance();
-            
-            String dataLoader = proto.getDataLoaderClass();
-            if (dataLoader == null) {
-                throw new NullPointerException("No \"dataLoader\" set for proto, id=" + id + ", proto=" + proto);
-            }
-            DataLoader dl = (DataLoader) Class.forName(dataLoader).newInstance();
             data.setProto(proto);
-            dl.load(proto, data);
+            
+            // remove20161014,以后允许不需要dataLoader.
+//            String dataLoader = proto.getDataLoaderClass();
+//            if (dataLoader == null) {
+//                throw new NullPointerException("No \"dataLoader\" set for proto, id=" + id + ", proto=" + proto);
+//            }
+//            DataLoader dl = (DataLoader) Class.forName(dataLoader).newInstance();
+//            dl.load(proto, data);
+
+            String dataLoader = proto.getDataLoaderClass();
+            if (dataLoader != null) {
+                DataLoader dl = (DataLoader) Class.forName(dataLoader).newInstance();
+                dl.load(proto, data);
+            }
             return (T) data;
             
         } catch (Exception ex) {

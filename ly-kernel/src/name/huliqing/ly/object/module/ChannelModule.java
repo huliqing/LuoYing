@@ -48,6 +48,11 @@ public class ChannelModule extends AbstractModule implements ChannelControl {
     private AnimControl animControl;
 
     @Override
+    public void updateDatas() {
+        // xxx updateDatas.
+    }
+
+    @Override
     public void initialize(Entity actor) {
         super.initialize(actor);
         animControl = actor.getSpatial().getControl(AnimControl.class);

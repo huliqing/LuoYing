@@ -30,11 +30,6 @@ public abstract class AbstractModule<T extends ModuleData> implements Module<T> 
     public T getData() {
         return data;
     }
-
-    @Override
-    public void updateDatas() {
-        // ignore
-    }
     
     @Override
     public void initialize(Entity entity) {

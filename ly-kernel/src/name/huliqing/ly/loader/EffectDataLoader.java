@@ -1,27 +1,26 @@
-///*
-// * To change this template, choose Tools | Templates
-// * and open the template in the editor.
-// */
-//package name.huliqing.ly.loader;
-//
-//import com.jme3.math.Quaternion;
-//import com.jme3.math.Vector3f;
-//import name.huliqing.ly.data.EffectData;
-//import name.huliqing.ly.object.effect.TracePositionType;
-//import name.huliqing.ly.object.effect.TraceType;
-//import name.huliqing.ly.xml.Proto;
-//import name.huliqing.ly.xml.DataLoader;
-//
-///**
-// *
-// * @author huliqing
-// * @param <T>
-// */
-//public class EffectDataLoader<T extends EffectData> implements DataLoader<T>{
-//
-//    @Override
-//    public void load(Proto proto, T store) {
-//
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package name.huliqing.ly.loader;
+
+import name.huliqing.ly.data.EffectData;
+import name.huliqing.ly.xml.Proto;
+
+/**
+ *
+ * @author huliqing
+ * @param <T>
+ */
+public class EffectDataLoader<T extends EffectData> extends EntityDataLoader <T>{
+
+    @Override
+    public void load(Proto proto, T store) {
+        super.load(proto, store);
+        
+        // ... do effect loader
+        
+        // remove20161014
 //        store.setUseTime(proto.getAsFloat("useTime", 1.0f));
 //        store.setTracePosition(TraceType.identity(proto.getAsString("tracePosition", TraceType.no.name())));
 //        store.setTraceRotation(TraceType.identity(proto.getAsString("traceRotation", TraceType.no.name())));
@@ -50,7 +49,7 @@
 //        
 //        // 以下参数暂不开放到xml中配置。
 ////        store.setSpeed(speed);
-//    }
-//    
-//    
-//}
+    }
+    
+    
+}

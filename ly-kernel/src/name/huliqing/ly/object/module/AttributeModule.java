@@ -28,6 +28,11 @@ public class AttributeModule extends AbstractModule<ModuleData> {
 
     private final AttributeStore store = new AttributeStore();
     private List<AttributeListener> listeners;
+
+    @Override
+    public void updateDatas() {
+        // xxx updateDatas.
+    }
     
     @Override
     public void initialize(Entity actor) {

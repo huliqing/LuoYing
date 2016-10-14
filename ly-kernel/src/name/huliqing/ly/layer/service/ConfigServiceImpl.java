@@ -52,7 +52,7 @@ public class ConfigServiceImpl implements ConfigService {
     @Override
     public void loadGlobalConfig() {
         // 载入系统配置
-        cd = DataFactory.createData(IdConstants.CONFIG_GLOBAL);
+        cd = DataFactory.createData(IdConstants.SYS_CONFIG);
 //        Config.debug = cd.isDebug();
         
         // 载入用户保存的配置并整合到全局配置中，注：只处理部分保存的参数。

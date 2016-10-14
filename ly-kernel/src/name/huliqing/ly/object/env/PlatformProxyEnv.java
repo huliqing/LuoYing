@@ -69,8 +69,7 @@ public class PlatformProxyEnv extends AbstractEntity implements ProxyEnv {
     }
     
     @Override
-    public void initialize(Scene scene) {
-        super.initialize(scene);
+    public void initialize() {
         proxyEnv = Loader.load(proxyEnvData);
         proxyEnv.initialize(scene);
     }

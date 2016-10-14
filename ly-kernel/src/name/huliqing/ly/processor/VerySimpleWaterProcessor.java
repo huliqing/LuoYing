@@ -58,7 +58,7 @@ import com.jme3.water.ReflectionProcessor;
 import com.jme3.water.WaterUtils;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.ly.constants.MaterialConstants;
+import name.huliqing.ly.constants.AssetConstants;
 import name.huliqing.ly.constants.TextureConstants;
 
 /**
@@ -145,7 +145,7 @@ public class VerySimpleWaterProcessor implements SceneProcessor {
         this.manager = manager;
         this.waterPlane = waterPlane;
         
-        material = new Material(manager, MaterialConstants.MAT_SIMPLE_WATER);
+        material = new Material(manager, AssetConstants.MATERIAL_SIMPLE_WATER);
         material.setFloat("distortionScale", distortionScale);
         material.setFloat("distortionMix", distortionMix);
         material.setFloat("texScale", texScale);
@@ -226,8 +226,8 @@ public class VerySimpleWaterProcessor implements SceneProcessor {
     }
 
     protected void loadTextures(AssetManager manager) {
-        normalTexture = (Texture2D) manager.loadTexture(TextureConstants.TEX_SIMPLE_WATER_NORMAL);
-        dudvTexture = (Texture2D) manager.loadTexture(TextureConstants.TEX_SIMPLE_WATER_DUDV);
+        normalTexture = (Texture2D) manager.loadTexture(AssetConstants.TEXTURE_SIMPLE_WATER_NORMAL);
+        dudvTexture = (Texture2D) manager.loadTexture(AssetConstants.TEXTURE_SIMPLE_WATER_DUDV);
         normalTexture.setWrap(WrapMode.Repeat);
         dudvTexture.setWrap(WrapMode.Repeat);
     }
