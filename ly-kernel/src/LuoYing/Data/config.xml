@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root xmlns="http://luoying.huliqing.name" 
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+      xsi:schemaLocation="http://luoying.huliqing.name meta/config.xsd">
+  
+    <!--系统配置，ID不能修改-->
+    
+  <config id="sysConfig" 
+          gameName="落樱之剑" 
+          versionName="2.5.1" 
+          versionCode="251"
+          maxLevel="60" 
+          port="32991"
+          portDiscoverServer="32992" 
+          portDiscoverClient="32993" 
+          useShadow="1" 
+          locale="" 
+          localeAll="en_US,zh_CN" 
+          soundVolume="1.0" 
+          soundEnabled="1" 
+          dropFactor="1.0" 
+          expFactor="1.0"/>
+  
+</root>

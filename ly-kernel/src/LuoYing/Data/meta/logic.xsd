@@ -1,0 +1,338 @@
+<?xml version="1.0"?>
+<!--
+xs:string
+xs:decimal
+xs:integer
+xs:boolean
+xs:date
+xs:time
+-->
+
+<xs:schema version="1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://luoying.huliqing.name"
+           xmlns="http://luoying.huliqing.name"
+           elementFormDefault="qualified">
+    
+    <xs:include schemaLocation="base.xsd" />
+    
+    <xs:element name="root">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="logicFight" />
+                <xs:element ref="logicFollow" />
+                <xs:element ref="logicNotify" />
+                <xs:element ref="logicPlayer" />
+                <xs:element ref="logicPosition" />
+                <xs:element ref="logicSearchEnemy" />
+                <xs:element ref="logicAttributeChange" />
+                <xs:element ref="logicDefend" />
+                <xs:element ref="logicIdle" />
+                <xs:element ref="logicShop" />
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="logicShop">
+        <xs:annotation>
+            <xs:documentation>
+                商店类逻辑，该逻辑会每隔一段时间给角色进货。以补充商店类角色的货源,
+                一般配置给商店类角色。这类逻辑不需要太频繁，默认频率20(interval)秒。
+                即interval定义了进货时间间隔。
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="logicBase">
+                    <xs:attribute name="items" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>format: "item|maxCount,item|maxCount,item|maxCount,..."</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="stockSpeed" type="xs:decimal" use="required">
+                        <xs:annotation>
+                            <xs:documentation>
+                                进货速度，如：1.0 表示每秒进货一件（每件未达到maxCount的商品各进货一件）
+                                如:0.1 则表示10秒进货一件，依此类推;
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="initStock" type="bool" use="required">
+                        <xs:annotation>
+                            <xs:documentation>
+                                是否初始化时把货物进满,默认true.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="logicDefend">
+        <xs:annotation>
+            <xs:documentation>
+                角色的防守及躲闪,一般频率不要太高。
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="logicBase">
+                    <xs:attribute name="defendRateAttribute" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>指定使用哪一个角色属性作为防守概率。概率值范围[0.0~1.0]</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="duckRateAttribute" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>指定使用哪一个角色属性作为躲闪概率。概率值范围[0.0~1.0]</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="listenAttributes" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>
+                                指定要监听哪些属性，即当这些属性被目标击中时会把目标角色列为敌人。
+                                格式，如: "attributeHealth,..."
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="listenSkillTags" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>
+                                指定要监听哪些战斗技能，当目标角色执行这些类型的技能时，当前角色会偿试进行防守或躲闪,格式: "skillTag1,skillTag2,..."
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="defendSkillTags" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>指定要使用哪些“防守”技能来防守敌人,格式: "skillTag1,skillTag2,..."</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="duckSkillTags" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>指定要使用哪些“躲闪”技能来躲闪敌人的攻击,格式: "skillTag1,skillTag2,..."</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="logicAttributeChange">
+        <xs:annotation>
+            <xs:documentation>
+                用于改变角色属性值的逻辑，计算公式：targetAttributeAddValue = value * useAttribute * interval
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="logicBase">
+                    <xs:attribute name="value" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>改变的值，该值表示每秒要改变的目标属性的值。</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="targetAttribute" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>指定要改变的是哪一个属性</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="useAttribute" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>使用另一个属性作为影响因数。</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="logicPosition">
+        <xs:annotation>
+            <xs:documentation>位置移动行为,让目标往一个位置移动.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="logicBase">
+                    <xs:attribute name="runAction" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>指定一个RunAction</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="position" type="xs:string" use="optional">
+                        <xs:annotation><xs:documentation>目标地点，如："0,0,0"</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="nearest" type="xs:decimal" use="optional">
+                        <xs:annotation><xs:documentation>跟随的最近距离</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="logicPlayer">
+        <xs:annotation>
+            <xs:documentation>
+                针对player类型的逻辑,特别去掉了idle行为。
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="logicBase">
+                    <xs:attribute name="fightAction" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>指定一个FightAction</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="logicNotify">
+        <xs:annotation>
+            <xs:documentation>
+                这是一个通知逻辑，若当角色存在目标敌人时，会通知周围一定范围内的友军单位进行攻击目标，
+比如当前角色受到攻击时，会通知同伴友军进行攻击目标。具体逻辑：
+ 1.当前角色存在目标, 该目标必须是敌方,该目标未死亡
+ 2.该逻辑会在当前角色周围一定范围内（可设置）查找还没有目标的友军单位。
+ 3.通过设置可强制周围友军将目标都锁定在与当前角色相同的目标上,即使友军已经存在目标。
+注意:该逻辑不应该随便滥用,一般只用在主角,或敌军主力,队长,侦察兵之类,随便滥用会造成循环调用和冲突,资源浪费.
+这个逻辑的频率可以不用太高.一般应该高于或等于1秒.如果需要在某一方使用多个当前逻辑,则建议最多只让其中一个逻辑的force属性
+设置为true就可以,避免logicNotify之间的冲突.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="logicBase">
+                    <xs:attribute name="distance" type="xs:decimal" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>设置要通知的范围,不应该小于或等于0,否则没有意义.默认15</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="force" type="bool" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                设置是否强制通知,默认情况下,force=false,即如果被通知的友军单位已经存在目标敌人,则不会被"通知"
+                                也就是只有没有目标敌人的友军单位会被通知.如果友军单位中存在多个使用该逻辑的角色,一般最多只设置
+                                其中一个的force属性为true即可.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="logicSearchEnemy">
+        <xs:annotation>
+            <xs:documentation>搜查敌人的逻辑</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="logicBase">
+                    <xs:attribute name="autoInterval" type="bool" use="required">
+                        <xs:annotation><xs:documentation>是否使用自动频率，默认打开，该功能会覆盖interval设置</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="maxInterval" type="xs:decimal" use="required">
+                        <xs:annotation><xs:documentation>最长的时间间隔，单位秒.</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="minInterval" type="xs:decimal" use="required">
+                        <xs:annotation>
+                            <xs:documentation>最短的时间间隔，单位秒,一般不要设置小于1秒，太频率的间隔会影响性能。</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="logicIdle">
+        <xs:annotation>
+            <xs:documentation>
+                空闲逻辑
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="logicBase">
+                    <xs:attribute name="idleSimpleAction" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>指定一个普通的idle行为</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="idlePatrolAction" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>指定一个巡逻idle行为</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="logicFollow">
+        <xs:annotation>
+            <xs:documentation>
+                跟随逻辑
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="logicBase">
+                    <xs:attribute name="bindFollowTargetAttribute" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>绑定角色的followTarget属性名称，这个属性用于查找被跟随角色。</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="followAction" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>指定一个跟随行为</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="minFollow" type="xs:decimal" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>跟随距离的近点,默认3, 该值小于maxFollow和distanceLimit</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="maxFollow" type="xs:decimal" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>跟随距离的远点,默认7,该值小于distanceLimit并大于minFollow</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="logicFight">
+        <xs:annotation>
+            <xs:documentation>
+                战斗类角色，包含各类NPC，怪物，炮塔等等
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="logicBase">
+                    <xs:attribute name="fightAction" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>关联一个FightAction</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:complexType name="logicBase">
+        <xs:complexContent>
+            <xs:extension base="base">
+                <xs:attribute name="interval" type="xs:decimal" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            指定逻辑执行时间间隔，单位秒，指定为0，表示该逻辑将尽可能快的执行。
+                            指定为1，表示每一秒执行一次逻辑,默认1.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+</xs:schema>

@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<!--
+xs:string
+xs:decimal
+xs:integer
+xs:boolean
+xs:date
+xs:time
+-->
+
+<xs:schema version="1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://luoying.huliqing.name"
+           xmlns="http://luoying.huliqing.name"
+           elementFormDefault="qualified">
+    
+    <xs:include schemaLocation="base.xsd" />
+    
+    <xs:element name="root">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="gameSimple" />
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="gameSimple">
+        <xs:annotation>
+            <xs:documentation>普通游戏</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="gameBase"></xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:complexType name="gameBase">
+        <xs:annotation>
+            <xs:documentation></xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="base">
+                <xs:attribute ref="icon" />
+                <xs:attribute name="scene" type="xs:string" use="required">
+                    <xs:annotation>
+                        <xs:documentation>连接到一个场景id，这个场景作为游戏的主场景</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="guiScene" type="xs:string" use="required">
+                    <xs:annotation>
+                        <xs:documentation>连接到一个场景id,这个场景将作为游戏的GUI场景</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="gameLogics" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>游戏逻辑列表，关联gameLogic.xml,格式："gameLogic1,gameLogic2,gameLogic3"</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+</xs:schema>

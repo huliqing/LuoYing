@@ -10,10 +10,9 @@ import name.huliqing.ly.data.ShapeData;
 import name.huliqing.ly.xml.DataProcessor;
 
 /**
- *
  * @author huliqing
  * @param <T>
- */
+ */ 
 public interface Shape<T extends ShapeData> extends DataProcessor<T> {
     
     /**

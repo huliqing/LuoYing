@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://luoying.huliqing.name'
+    xsi:schemaLocation='http://luoying.huliqing.name meta/scene.xsd'>
+
+    <!-- ========================================================================= -->
+    <!-- 规范约定：
+        1.id以"sys"开头的所有对象都为系统默认配置的"内置"对象，用户配置建议不要以这样的名称开头，以免冲突。
+        2.id以"Base"结尾的所有对象默认作为"被继承"的对象(类似Java的抽象类)，不要在程序中直接引用，只在xml配置文件中被继承。
+    -->
+    <!-- ========================================================================= -->
+    
+    <!-- ========================================================================= -->
+    <!-- 场景配置, id以"_sys_"开头的所有物体为系统内置 -->
+    <!-- ========================================================================= -->
+    
+    <!--作为基本场景-->
+    <scene id="sysScene" entities="sysEnvSky,sysEnvDirectionalLight,sysEnvTerrain,sysEnvTree,sysEnvPhysics,sysEnvShadow,sysEnvAdvanceWater
+,sysEnvBoundary" />
+
+    <!-- 作为默认GUI场景-->
+    <scene id="sysSceneGui" entities="" />
+    
+</root>
+
+
+

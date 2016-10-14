@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<!--
+xs:string
+xs:decimal
+xs:integer
+xs:boolean
+xs:date
+xs:time
+-->
+
+<xs:schema version="1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://luoying.huliqing.name"
+           xmlns="http://luoying.huliqing.name"
+           elementFormDefault="qualified" >
+    
+    <xs:include schemaLocation="animBase.xsd" />
+    
+    <xs:element name="root">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="actorAnimCurveMove" />
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="actorAnimCurveMove">
+        <xs:annotation>
+            <xs:documentation>
+                角色曲线移动动画
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="animBase">
+                    <xs:attribute name="points" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>位置,格式：x|y|z,x|y|z,x|y|z</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="facing" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                朝向方式，path:面朝路径方向; target面朝目标方向（必须当前有目标）;默认none
+                            </xs:documentation>
+                        </xs:annotation>
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:enumeration value="none" />
+                                <xs:enumeration value="path" />
+                                <xs:enumeration value="target" />
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:attribute>
+                    <xs:attribute name="upperGround" type="bool" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                始终保持生成点移动点在地面上，默认true,该参数可防止角色掉到地下。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="tension" type="xs:decimal" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                曲线的张力，取值 [0.0~1.0],默认0.5;
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="useSine" type="bool" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                使用正弦函数来增强运动效果，默认关。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

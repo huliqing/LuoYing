@@ -594,7 +594,7 @@ public class LuoYing {
 
         // Shape
         DataFactory.register("shapeBox",  ShapeData.class, ShapeDataLoader.class, BoxShape.class);
-        
+         
         // Skill
         DataFactory.register("skillWalk",  SkillData.class, SkillDataLoader.class, WalkSkill.class);
         DataFactory.register("skillRun",  SkillData.class, SkillDataLoader.class, RunSkill.class);

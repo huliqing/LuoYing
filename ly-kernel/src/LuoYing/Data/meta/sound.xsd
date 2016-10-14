@@ -1,0 +1,122 @@
+<?xml version="1.0"?>
+<!--
+xs:string
+xs:decimal
+xs:integer
+xs:boolean
+xs:date
+xs:time
+-->
+
+<xs:schema version="1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://luoying.huliqing.name"
+           xmlns="http://luoying.huliqing.name"
+           elementFormDefault="qualified">
+    
+    <xs:include schemaLocation="base.xsd" />
+    
+    <xs:element name="root">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="sound" />
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="sound" type="sound" />
+    
+    <xs:complexType name="sound">
+        <xs:complexContent>
+            <xs:extension base="base">
+                <xs:attribute name="file" type="xs:string" use="required" >
+                    <xs:annotation>
+                        <xs:documentation>指定声音文件路径</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="type" use="optional">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="Buffer" />
+                            <xs:enumeration value="Stream" />
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="direction" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>default:"0,0,1"</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="directional" type="bool" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>default: "0"</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="innerAngle" type="xs:decimal" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>[0,360], default: "360" </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="looping" type="bool" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>default: "0"</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="maxDistance" type="xs:decimal" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>default: "200"</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="outerAngle" type="xs:decimal" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>[0,360], default: "360" </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="pitch" type="xs:decimal" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>default: "1.0"</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="positional" type="bool" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>default: "1"</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="refDistance" type="xs:decimal" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>default: "10"</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="reverbEnabled" type="bool" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>default: "0"</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="timeOffset" type="xs:decimal" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>default: "0"</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="velocity" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>default: "0,0,0"</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="velocityFromTranslation" type="bool" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>default: "0"</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="volume" type="xs:decimal" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>default: "1.0"</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                
+                
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    
+</xs:schema>

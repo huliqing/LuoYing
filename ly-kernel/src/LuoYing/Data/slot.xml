@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://luoying.huliqing.name'
+    xsi:schemaLocation='http://luoying.huliqing.name meta/slot.xsd'>
+    
+<!--     =========================================================================
+    武器槽位：当武器收起时这把武器应该如何放在角色身上。
+     =========================================================================
+    
+    刀剑槽位: 左肩1,支持左右手刀剑
+    <slot id="slotSwordLeftBack"  bindBone="chest" localLocation="1,2.8,-0.3" localRotation="0.27,3.1415926,-2.8" 
+        hangSkills="leftSword|skillSkin_LH_LS,rightSword|skillSkin_RH_LS" />
+
+    刀剑槽位: 左肩2,支持左右手刀剑
+    <slot id="slotSwordLeftBack2"  bindBone="chest" localLocation="0.7,2.8,-0.5" localRotation="0.27,3.1415926,-3"
+        hangSkills="leftSword|skillSkin_LH_LS,rightSword|skillSkin_RH_LS" />
+    
+    刀剑槽位: 右肩1,支持左右手刀剑
+    <slot id="slotSwordRightBack" bindBone="chest" localLocation="-1,2.8,-0.5" localRotation="-0.27,0,-2.8" 
+        hangSkills="leftSword|skillSkin_LH_RS,rightSword|skillSkin_RH_RS" />
+
+    刀剑槽位: 右肩2,支持左右手刀剑
+    <slot id="slotSwordRightBack2" bindBone="chest" localLocation="-0.7,2.8,-0.3" localRotation="-0.27,0,-3" 
+        hangSkills="leftSword|skillSkin_LH_RS,rightSword|skillSkin_RH_RS" />
+    
+    刀剑槽位: 左腰1，支持左右手刀剑
+    <slot id="slotSwordLeftWaist" bindBone="hips" localLocation="0.95,1.5,1" localRotation="0.5,2.0,-2.5" 
+          hangSkills="leftSword|skillSkin_LH_LW,rightSword|skillSkin_RH_LW" />
+
+    刀剑槽位: 左腰2，支持左右手刀剑
+    <slot id="slotSwordLeftWaist2" bindBone="hips" localLocation="1.02,1.65,0.95" localRotation="0.5,2.0,-2.7" 
+          hangSkills="leftSword|skillSkin_LH_LW,rightSword|skillSkin_RH_LW" />
+    
+    弓槽位：左肩，支持左手弓 
+    <slot id="slotBowLeftBack" bindBone="chest" localLocation="0.5,0.5,-1.05" localRotation="-0.25,0.1,2.75" 
+        hangSkills="bow|skillSkinBow_LH_LS" />
+    
+    魔杖槽位: 左肩，支持右手魔杖
+    <slot id="slotWandLeftBack" bindBone="chest" localLocation="0,0,-1.2" localRotation="0.27,0,-0.35" 
+        hangSkills="wand|skillSkinWand_RH_LS" />
+    
+    魔杖槽位: 右肩，支持左手魔杖(暂不开放leftWand) 
+    <slot id="slotWandRightBack" bindBone="chest" localLocation="0,0,-1.2" localRotation="0.27,0,0.35" 
+        hangSkills="leftWand|skillSkinWand_LH_RS" />-->
+</root>
+
+
+
