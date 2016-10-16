@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<!--
+xs:string
+xs:decimal
+xs:integer
+xs:boolean
+xs:date
+xs:time
+-->
+
+<xs:schema version="1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://luoying.huliqing.name"
+           xmlns="http://luoying.huliqing.name"
+           elementFormDefault="qualified">
+    
+    <xs:include schemaLocation="base.xsd" />
+    
+    <xs:element name="root">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="elLevel" />
+                <xs:element ref="elHit" />
+                <xs:element ref="elAttribute" />
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="elAttribute" >
+        <xs:annotation>
+            <xs:documentation>
+                通过源角色和目标角色的属性来计算一个值。支持参数：{s_attributeName}源角色属性; {t_attributeName}目标角色属性
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="elBase">
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="elHit" >
+        <xs:annotation>
+            <xs:documentation>定义一个伤害设定,支持参数：
+                1.[s_xxx],[t_xxx], [sk_value]其中xxx表示目标角色的某个属性;具体参考attribute.xml的设置
+                2.s表示源角色，一般为攻击者
+                3.t表示目标角色，一般表示受攻击者.
+                4.sk_value表示源角色的技能伤害值
+                表达式示例： el="[s_attributeAttack] * 2 - [t_attributeDefence]" 
+                这表示最终的伤害输出=攻击者的物理攻击力剩以2倍之后再减去目标角色的物理防御力
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="elBase">
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="elLevel" >
+        <xs:annotation>
+            <xs:documentation>
+                普通的等级计算公式,支持参数：[level]
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="elBase">
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:complexType name="elBase">
+        <xs:complexContent>
+            <xs:extension base="base">
+                <xs:attribute name="expression" type="xs:string" use="required" >
+                    <xs:annotation>
+                        <xs:documentation>
+                            表达式,该表达式用于根据等级计算一个目标值。示例：
+                            "50 + 8 * Math.pow(1.1,  [xxx])" 其中"[xxx]"表示参数
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:schema>

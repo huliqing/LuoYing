@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root 
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://luoying.huliqing.name'
+    xsi:schemaLocation='http://luoying.huliqing.name meta/emitter.xsd' >
+    
+    <!-- ========== Test Start ========== -->
+    <emitter id="emitterTest" numParticles="8" startColor="1,1,1,0.5" endColor="1,1,1,0.1" startSize="2" endSize="2" highLife="1.5" 
+             lowLife="1" texture="Textures/effect/flame2.png" imagesX="8" imagesY="1" initialVelocity="0,0.5,0" velocityVariation="0.1"
+             particlesPerSec="3" shape="" selectRandomImage="0" randomAngle="0" rotateSpeed="0" />
+    <!-- ========== Test End ========== -->
+    
+    <!-- =================================================================== -->
+    <!--通用：材质碰撞-->
+    <!-- =================================================================== -->
+    <!--火花-->
+    <emitter id="emitterCollisionMM1" numParticles="10" 
+             startColor="1, 0.8, 0.36, 1" endColor="0.4, 0.22, 0.12, 0" 
+             startSize="1" endSize="0.5" highLife="0.5" lowLife="0.3" shape=""
+             texture="Textures/effect/spark.png" imagesX="1" imagesY="1" 
+             facingVelocity="1" particlesPerSec="0" gravity="0,0,-100" initialVelocity="0, 0, -30" velocityVariation="0.5" />
+    <!--闪光-->
+    <emitter id="emitterCollisionMM2"  numParticles="1" 
+             startColor="1, 0.8, 0.36, 5" endColor="0.4, 0.22, 0.12, 0" 
+             startSize="1" endSize="1" 
+             shape="" highLife="0.1" lowLife="0.1" 
+             texture="Textures/effect/flash.png" imagesX="2" imagesY="2" 
+             particlesPerSec="0" gravity="0,0,0" initialVelocity="0,0,0" velocityVariation="1" />
+    
+    <!-- =================================================================== -->
+    <!--通用：火焰爆炸-->
+    <!-- =================================================================== -->
+    <!--火焰-->
+    <emitter id="emitterFlame" name="flame" numParticles="5" 
+             startColor="1,0.4,0.05,1" endColor="0.4, 0.22, 0.12, 0" startSize="1.3" 
+             endSize="2" highLife="0.5" lowLife="0.4" texture="Textures/effect/flame.jpg" 
+             imagesX="2" imagesY="2" selectRandomImage="1" shape="esFlameShape" 
+             particlesPerSec="0" gravity="0, -5, 0" initialVelocity="0,7,0" velocityVariation="1" />
+    <!--闪光-->
+    <emitter id="emitterFlash" name="flash" numParticles="5" 
+             selectRandomImage="1" startColor="1,0.8,0.36,1" 
+             endColor="1,0.8,0.36,0" startSize="0.1" endSize="3.0" 
+             shape="esFlashShape" highLife="0.2" lowLife="0.2" 
+             texture="Textures/effect/flash.png" imagesX="2" imagesY="2" 
+             particlesPerSec="0" gravity="0,0,0" initialVelocity="0,5,0" velocityVariation="1" />
+    <!--火花-->
+    <emitter id="emitterSpark" name="spark" numParticles="5" 
+             startColor="1, 0.8, 0.36, 1" endColor="1, 0.8, 0.36, 0" 
+             startSize="1" endSize="0.5" highLife="1.5" lowLife="1.1" 
+             texture="Textures/effect/spark.png" imagesX="1" imagesY="1" 
+             facingVelocity="1" particlesPerSec="0" gravity="0,0,0" 
+             initialVelocity="0, 10, 0" velocityVariation="1" />
+    <!--向四周发散的冲击波-->
+    <emitter id="emitterShockwave" name="shockwave" 
+             numParticles="1" startColor="0.48, 0.17, 0.01, 0.8" endColor="0.48, 0.17, 0.01, 0" 
+             startSize="0" endSize="7" highLife="0.5" lowLife="0.5" 
+             texture="Textures/effect/shockwave.png" imagesX="1" imagesY="1" 
+             faceNormal="0,1,0" particlesPerSec="0" gravity="0,0,0" 
+             initialVelocity="0,0,0" velocityVariation="0" />
+    
+    <!-- =================================================================== -->
+    <!--通用：雪花爆炸-->
+    <!-- =================================================================== -->
+    <emitter id="emitterSnowFlame" numParticles="5" 
+             startColor="1,1,1,1" endColor="0.3, 0.3, 1, 0" startSize="1.3" 
+             endSize="2" highLife="0.5" lowLife="0.4" texture="Textures/effect/flame.jpg" 
+             imagesX="2" imagesY="2" selectRandomImage="0" shape="esFlameShape" 
+             particlesPerSec="0" gravity="0, -5, 0" initialVelocity="0,7,0" velocityVariation="1" />
+    <emitter id="emitterSnowSpark" numParticles="5" 
+             startColor="0.3,0.3,1,1" endColor="0.3,0.3,1,0" 
+             startSize="1" endSize="0.5" highLife="1.5" lowLife="1.1" 
+             texture="Textures/effect/spark.png" imagesX="1" imagesY="1" 
+             facingVelocity="1" particlesPerSec="0" gravity="0,0,0" 
+             initialVelocity="0, 10, 0" velocityVariation="1" />
+    
+    <!-- =================================================================== -->
+    <!--冰冻：冰冻效果的冰花爆炸，带碎片块和冰雾-->
+    <!-- =================================================================== -->
+    <emitter id="emitterIceDebris" numParticles="15" particlesPerSec="0" 
+             startColor="1,1,1,1" endColor="0.5,0.5,1,0" 
+             startSize="0.15" endSize="0.03" highLife="3" lowLife="2" 
+             texture="Textures/effect/debris.jpg" imagesX="3" imagesY="3" 
+             facingVelocity="0" gravity="0,10,0"
+             initialVelocity="0, 10, 0" velocityVariation="0.4" /> 
+    <emitter id="emitterIceSmoke" numParticles="10" 
+             startColor="1,1,1,1" endColor="0.3, 0.3, 1, 0" startSize="1" 
+             endSize="3" highLife="2" lowLife="1" texture="Textures/effect/flame.jpg" 
+             imagesX="2" imagesY="2" selectRandomImage="0" shape="esFlameShape" rotateSpeed="1"
+             particlesPerSec="0" gravity="0,8,0" initialVelocity="0,5,0" velocityVariation="0.5" />
+    
+    <!-- ====================================================================-->
+    <!--火塔尾焰-->
+    <!-- ====================================================================-->
+
+    <!--烟雾，火光，火球发射过程-->
+    <emitter id="emitterSmoketrail" name="smoketrail" 
+             numParticles="20" particlesPerSec="20" 
+             startColor="1,1,0,1" endColor="1,0,0,1" startSize="1.5" endSize="0.75" 
+             highLife="0.25" lowLife="0.25" 
+             texture="Textures/effect/smoketrail.png" imagesX="1" imagesY="3"
+             facingVelocity="1" initialVelocity="0,0,1" velocityVariation="0" gravity="0,0,0"
+    />
+    
+    <!--=====================================================================-->
+    <!--石塔:石块和尾烟-->
+    <!--=====================================================================-->
+    
+    <!--石块-->
+    <emitter id="emitterTowerRock" numParticles="1" randomAngle="1" selectRandomImage="1"
+             startColor="2,2,2,2" endColor="2,2,2,2" 
+             startSize="0.5" endSize="0.5" highLife="15" lowLife="15" 
+             texture="Textures/effect/debris_alpha.png" imagesX="3" imagesY="3" gravity="0,0,0"
+             initialVelocity="" velocityVariation="" />
+    <!--烟雾-->
+    <emitter id="emitterTowerSmoke"
+             numParticles="20" particlesPerSec="20" 
+             startColor="0.4,0.4,0.4,1" endColor="0.9,0.9,0.9,0.1" startSize="1.2" endSize="0.1" 
+             highLife="1.5" lowLife="0.1" 
+             texture="Textures/effect/smoke15.png" imagesX="15" imagesY="1"
+             facingVelocity="0" initialVelocity="0,0.1,0" velocityVariation="0.5" gravity="0,-2,0"
+            />
+
+    <!--=====================================================================-->
+    <!--雪花拖尾-->
+    <!--=====================================================================-->
+    
+    <!--雪花拖尾-->
+    <emitter id="emitterSnowTrail" numParticles="20" particlesPerSec="10" 
+             startColor="1,1,1,1" endColor="0.3,0.3,1,0.5" startSize="1.5" endSize="0.5" 
+             highLife="0.25" lowLife="0.25" 
+             texture="Textures/effect/smoketrail.png" imagesX="1" imagesY="3"
+             facingVelocity="1" initialVelocity="0,0,1" velocityVariation="0" gravity="0,0,0"
+    />
+    
+    <!--雪花粒-->
+    <emitter id="emitterSnowFlake" numParticles="30" particlesPerSec="20" 
+             startColor="1,1,1,1" endColor="0.3,0.3,1,0.1" startSize="0.5" endSize="0.1" 
+             highLife="0.5" lowLife="0.3" 
+             texture="Textures/effect/flame.jpg" imagesX="2" imagesY="2"
+             facingVelocity="0" initialVelocity="0,0,-5" velocityVariation="0.2" gravity="0,0,0"
+    />
+    
+    <!--=====================================================================-->
+    <!--补红补蓝-->
+    <!--=====================================================================-->
+    <emitter id="emitterRandomFire" numParticles="5" startColor="1, 1, 0, 0.5" endColor="1, 0, 0, 1" shape="esRandomFire"
+             startSize="1" endSize="0.3" highLife="0.3" lowLife="0.3" texture="Textures/effect/spark.png" 
+             imagesX="1" imagesY="1" gravity="0,0,0" velocityVariation="0" initialVelocity="0,3,0" facingVelocity="1" />
+
+    <!--=====================================================================-->
+    <!--级效果粒子-->
+    <!--=====================================================================-->
+
+    <!--用于升级效果，在一个圆柱的范围内随机产生粒子-->
+    <emitter id="emitterLevelUp" name="emitterLevelUp" numParticles="15" 
+             startColor="1, 1, 1, 0.5" endColor="1, 1, 1, 0.5" shape="esCylinder"
+             startSize="4" endSize="2" highLife="0.8" lowLife="0.4" texture="Textures/effect/spark.png" 
+             imagesX="1" imagesY="1" gravity="0,0,0" velocityVariation="0" initialVelocity="0,1,0" 
+             particlesPerSec="15" facingVelocity="1"/>
+    
+    <!--=====================================================================-->
+    <!--剑火花-->
+    <!--=====================================================================-->
+    <emitter id="emitterSwordSpark" name="spark" numParticles="10" 
+             startColor="1, 0.8, 0.36, 1" endColor="1, 0.8, 0.36, 1" 
+             startSize="1" endSize="0.3" highLife="0.6" lowLife="0.2" 
+             texture="Textures/effect/spark.png" imagesX="1" imagesY="1" 
+             facingVelocity="1" particlesPerSec="0" gravity="0,0,0" 
+             shape="esSwordSpark"
+             initialVelocity="0, 10, 0" velocityVariation="1" />
+    
+    <!--=====================================================================-->
+    <!--召唤野兽-->
+    <!--=====================================================================-->
+    <emitter id="emitterHalo" numParticles="15" startColor="0.5,0.5,0.5,1" endColor="1,1,1,1" startSize="0.1" 
+             endSize="0.2" highLife="1.5" lowLife="1" texture="Textures/effect/halo.jpg" imagesX="2" imagesY="2" 
+             initialVelocity="0,1,0" velocityVariation="0.3" gravity="0,0,0" particlesPerSec="5" shape="esHalo" />
+    
+    <!--=====================================================================-->
+    <!--樱花发射器:主界面-->
+    <!--=====================================================================-->
+    <emitter id="emitterSakura" numParticles="10" startColor="1,1,1,1" endColor="1,1,1,0.01" startSize="0.2" 
+             endSize="0.3" highLife="8" lowLife="5" texture="Textures/effect/sakura.jpg" imagesX="2" imagesY="2" 
+             randomAngle="1" facingVelocity="0" selectRandomImage="1" rotateSpeed="2" 
+             initialVelocity="0,-1,0" velocityVariation="1" gravity="0,0.1,0" particlesPerSec="4" />
+    
+    <!--=====================================================================-->
+    <!--星光传送-->
+    <!--=====================================================================-->
+    <emitter id="emitterHaloExp" numParticles="20" startColor="1,1,1,1" endColor="1,1,1,0.3" startSize="0.2" endSize="0.1" 
+             highLife="1.5" lowLife="0.5" texture="Textures/effect/halo.jpg" imagesX="2" imagesY="2" initialVelocity="0,12,0" 
+             velocityVariation="0.7" particlesPerSec="5" randomAngle="1" gravity="0, 0, 0" shape="esHaloExp" />
+
+    <!--=====================================================================-->
+    <!--黑暗祭坛-->
+    <!--=====================================================================-->
+    <emitter id="emitterAltar" numParticles="12" 
+             startColor="0, 0, 0, 0" endColor="2, 1, 2, 1" 
+             startSize="1" endSize="3" highLife="3.5" lowLife="2.5" texture="Textures/effect/spark.png" 
+             imagesX="1" imagesY="1" gravity="0,0,0" velocityVariation="0" initialVelocity="0,1,0" 
+             particlesPerSec="3" facingVelocity="1" shape="esAltar" />
+    <emitter id="emitterAltarSkull" numParticles="12" startColor="2, 1, 2, 0" endColor="2, 1, 2, 1" startSize="0.05" 
+             endSize="0.3" highLife="2" lowLife="1.5" texture="Textures/effect/skull.jpg" imagesX="1" imagesY="1" 
+             initialVelocity="0,1,0" velocityVariation="0.4" gravity="0,0,0" rotateSpeed="4" randomAngle="1" particlesPerSec="5" shape="esAltarHalo" />
+    
+    <!--=====================================================================-->
+    <!--闪电箭-->
+    <!--=====================================================================-->
+    <emitter id="emitterLightningShotBolt" numParticles="10" startColor="5,5,15,1" endColor="1,1,3,1" startSize="1" endSize="0.1" highLife="0.4" 
+             lowLife="0.2" texture="Textures/effect/lightning.jpg" imagesX="4" imagesY="1" initialVelocity="0,0,0" velocityVariation="1"
+             particlesPerSec="10" shape="esLightningShotBolt" selectRandomImage="1" randomAngle="1" rotateSpeed="0" />
+    <emitter id="emitterLightningShotBullet2" numParticles="7" particlesPerSec="0" startColor="2,2,6,1" 
+             endColor="0,0,0,0" startSize="1" endSize="1" highLife="1" lowLife="1" 
+             texture="Textures/effect/spark.png" imagesX="1" imagesY="1" 
+             initialVelocity="0,0,0.1" gravity="0,0,550" velocityVariation="0" facingVelocity="1" shape="esLightningShotBullet2" />
+    <emitter id="emitterLightningShotHit" numParticles="10" startColor="5,5,15,1" endColor="1,1,3,1" startSize="1" endSize="0.1" highLife="0.4" 
+             lowLife="0.2" texture="Textures/effect/lightning.jpg" imagesX="4" imagesY="1" initialVelocity="0,0,0" velocityVariation="1"
+             particlesPerSec="10" shape="esLightningShotHit" selectRandomImage="1" randomAngle="1" rotateSpeed="0" />
+    
+    <!--=====================================================================-->
+    <!--疾风步状态效果-->
+    <!--=====================================================================-->
+    <emitter id="emitterStateWindWalkStartParticle" numParticles="30" 
+             startColor="1,1,1,0.1" endColor="1,1,1,0.75" startSize="0.5" endSize="0.1" shape="esStateWindWalkStart"
+             highLife="0.25" lowLife="0.15" particlesPerSec="60" texture="Textures/effect/flame.jpg" imagesX="2" imagesY="2" />
+    <!--音障模拟-->
+    <emitter id="emitterStateWindWalkStartFlash" numParticles="10" 
+             selectRandomImage="1" startColor="0.5, 0.5, 0.5, 0.5" endColor="0.1, 0.1, 0.1, 0" 
+             startSize="0.1" endSize="3.0" shape="esStateWindWalk" highLife="0.3" lowLife="0.3" texture="Textures/effect/flash.png" 
+             imagesX="2" imagesY="2" particlesPerSec="0" gravity="0,0,20" initialVelocity="0,0,5" velocityVariation="1" />
+    <!--向后退散的粒子-->
+    <emitter id="emitterStateWindWalkStartSmoke" numParticles="30" 
+             startColor="0.8, 0.8, 0.8, 1" endColor="0.1, 0.1, 0.1, 0" 
+             startSize="1" endSize="0.5" highLife="0.5" lowLife="0.5" shape="esStateWindWalk"
+             texture="Textures/effect/spark.png" imagesX="1" imagesY="1" 
+             facingVelocity="1" particlesPerSec="0" gravity="0,0,100" initialVelocity="0, 0, 15" velocityVariation="0.5" />
+    <!--跑步时的效果-->
+    <emitter id="emitterStateWindWalkMoveSmoke" numParticles="30" startColor="0.5,0.5,0.5,0.5" endColor="0.1,0.1,0.1,0" 
+             startSize="0.2" endSize="2" highLife="0.5" lowLife="0.3" texture="Textures/effect/smoke15.png" 
+             imagesX="15" imagesY="1" initialVelocity="0,0.2,0" velocityVariation="0.5" 
+             particlesPerSec="20" shape="" />
+    
+    
+    <!--=====================================================================-->
+    <!--落樱飞舞-->
+    <!--=====================================================================-->
+    <emitter id="emitterDanceSakuraHit" name="flash" numParticles="1" selectRandomImage="1" 
+             startColor="3,3,3,3" endColor="0.5,0.5,0.5,0.1" startSize="0.1" 
+             endSize="2" shape="esFlashShape" highLife="0.5" lowLife="0.5" 
+             texture="Textures/effect/flash.png" imagesX="2" imagesY="2" 
+             particlesPerSec="0" gravity="0,0,0" initialVelocity="0,1,0" velocityVariation="1" />
+    <!--散乱的樱花-->
+    <emitter id="emitterDanceSakuraHalo" numParticles="30" particlesPerSec="30" 
+             startColor="0.9, 0.7, 1, 1" endColor="0.9, 0.7, 1, 0.1" startSize="0.2" 
+             endSize="0.05" highLife="1" lowLife="0.75" texture="Textures/effect/halo.jpg" imagesX="2" imagesY="2" 
+             initialVelocity="0,0,-30" velocityVariation="0.5" gravity="0,0,-100" shape="esDanceSakuraHalo" />
+    <!--跳起/落下时的扬尘-->
+    <emitter id="emitterDanceSakuraJump" numParticles="25" 
+              startColor="0.5,0.5,0.5,0.5" endColor="0.1,0.1,0.1,0"  
+              startSize="0.01" endSize="0.5" highLife="0.75" lowLife="0.75" particlesPerSec="0"
+              texture="Textures/effect/smoke15.png"  imagesX="15" imagesY="1" 
+              initialVelocity="0,0.2,0" velocityVariation="0.5" shape="esDanceSakuraJump" />
+    
+    <!--====晕眩状态粒子====-->
+    <emitter id="emitterStun" numParticles="10" startColor="1, 0.8, 0.36, 1" endColor="1, 0.8, 0.36, 3" 
+             startSize="0.02" endSize="0.12" highLife="0.1" lowLife="0.3" selectRandomImage="1" randomAngle="1" 
+             texture="Textures/effect/star.jpg" particlesPerSec="20"
+             imagesX="2" imagesY="2" initialVelocity="0,0,0" velocityVariation="0" shape="eShapeStun" />
+    
+    <!--=====================================================================-->
+    <!--电光火石-->
+    <!--=====================================================================-->
+    <!--手上的闪电-->
+    <emitter id="emitterFlowLightning" numParticles="15" particlesPerSec="30" startColor="5,5,15,1" endColor="1,1,3,1" startSize="0.2" endSize="0.1" highLife="0.2" 
+             lowLife="0.1" texture="Textures/effect/lightning.jpg" imagesX="4" imagesY="1" initialVelocity="0,0,0" velocityVariation="1"
+             shape="emitterShapeLightning" selectRandomImage="1" randomAngle="1" rotateSpeed="0" />
+    <!--子弹-->
+    <emitter id="emitterFlowLight"
+             numParticles="20" particlesPerSec="20" 
+             startColor="1,1,1,1" endColor="0,0,1,1" startSize="1.5" endSize="0.75" 
+             highLife="0.2" lowLife="0.2" 
+             texture="Textures/effect/smoketrail.png" imagesX="1" imagesY="3" 
+             facingVelocity="1" initialVelocity="0,0,1" velocityVariation="0" gravity="0,0,0"
+    />
+    <!--击中-->
+    <emitter id="emitterFlowLightHit" numParticles="1" selectRandomImage="1" 
+             startColor="3,3,3,3" endColor="0.5,0.5,0.5,0.1" startSize="2" 
+             endSize="2" shape="esFlashShape" highLife="0.5" lowLife="0.5" 
+             texture="Textures/effect/flash.png" imagesX="2" imagesY="2" 
+             particlesPerSec="0" gravity="0,0,0" initialVelocity="0,1,0" velocityVariation="1" />
+    
+    <!--=====================================================================-->
+    <!--增益魔法-->
+    <!--=====================================================================-->
+    <!--子弹-->
+    <emitter id="emitterBuffBullet"
+             numParticles="20" particlesPerSec="20" 
+             startColor="1,1,1,1" endColor="1,0,0,0.5" startSize="1" endSize="0.3" 
+             highLife="0.3" lowLife="0.3" facingVelocity="1" initialVelocity="0,0,1" velocityVariation="0" gravity="0,0,0"
+             texture="Textures/effect/spark.png" imagesX="1" imagesY="1" />
+    <!--击中-->
+    <emitter id="emitterBuff1" numParticles="20" 
+             startColor="1,1,1,1" endColor="1,1,1,0.5" 
+             startSize="0.1" endSize="0.1" highLife="1" lowLife="1" shape=""
+             texture="Textures/effect/halo.jpg" imagesX="2" imagesY="2" 
+             facingVelocity="1" particlesPerSec="0" gravity="0,0,0" initialVelocity="0, 5, 0" velocityVariation="1" />
+    <emitter id="emitterBuff2" numParticles="12" 
+             startColor="1,1,1,1" endColor="1,1,1,0.5" 
+             startSize="0.1" endSize="1" highLife="1" lowLife="1" shape=""
+             texture="Textures/effect/spark.png" imagesX="1" imagesY="1" 
+             facingVelocity="1" particlesPerSec="0" gravity="0,0,0" initialVelocity="0, 7, 0" velocityVariation="1" />
+    <emitter id="emitterBuff3"
+             numParticles="1" startColor="1,1,1,1" endColor="1,1,0,0" 
+             startSize="0" endSize="2" highLife="0.5" lowLife="0.5" 
+             texture="Textures/effect/shockwave.png" imagesX="1" imagesY="1" 
+             faceNormal="0,1,0" particlesPerSec="0" gravity="0,0,0" 
+             initialVelocity="0,0,0" velocityVariation="0" />
+    
+    <!--=====================================================================-->
+    <!--复活术-->
+    <!--=====================================================================-->
+    <emitter id="emitterRebornParticle1" numParticles="15" particlesPerSec="20" startColor="1, 0, 1, 1" endColor="1, 1, 1, 1" startSize="1" endSize="0.3" 
+             highLife="0.5" lowLife="0.2" texture="Textures/effect/spark.png" shape="emitterShapeReborn"
+             imagesX="1" imagesY="1" gravity="0,0,0" initialVelocity="0,4,0" velocityVariation="0" facingVelocity="1" />
+    <emitter id="emitterRebornParticle2" numParticles="15" particlesPerSec="20" startColor="1, 1, 1, 1" endColor="1, 1, 0, 1" startSize="0.3" endSize="0.1" 
+             highLife="0.4" lowLife="0.1" texture="Textures/effect/halo.jpg" shape="emitterShapeReborn"
+             imagesX="2" imagesY="2" gravity="0,0,0" initialVelocity="0,4,0" velocityVariation="0.5" facingVelocity="0" />
+    <emitter id="emitterRebornParticle3" numParticles="20" startColor="1,1,1,1" endColor="1,1,1,0.3" startSize="0.2" endSize="0.1" 
+             highLife="1" lowLife="0.5" texture="Textures/effect/halo.jpg" imagesX="2" imagesY="2" initialVelocity="0,12,0" 
+             velocityVariation="1" particlesPerSec="0" randomAngle="0" gravity="0, 0, 0" shape="" />
+    
+    <!--=====================================================================-->
+    <!--寒冰箭：蓄势时的冰花烟雾-->
+    <!--=====================================================================-->
+    <emitter id="emitterIceShot" numParticles="20" particlesPerSec="40" 
+             startColor="1,1,1,0.7" endColor="1,1,1,0.01" startSize="0.2" 
+             endSize="0.5" highLife="1" lowLife="0.5" texture="Textures/effect/flame.jpg" 
+             imagesX="2" imagesY="2" selectRandomImage="0" rotateSpeed="10"
+             gravity="0,0,7" initialVelocity="0,0,1" velocityVariation="1" />
+    
+    <!--=====================================================================-->
+    <!--二刀流冲击波-->
+    <!--=====================================================================-->
+    <emitter id="emitterWaveSmoke" numParticles="20" particlesPerSec="0" startColor="1,1,1,0.08" endColor="1,1,1,0" 
+             startSize="1.2" endSize="1.5" highLife="4" lowLife="4" 
+             texture="Textures/effect/flame.jpg" imagesX="2" imagesY="2" 
+             initialVelocity="0,1,0" velocityVariation="0" shape="positionWaveShape" />
+    
+    <!--==========================================================================-->
+    <!--蝎子毒状态效果粒子-->
+    <!--==========================================================================-->
+    <emitter id="emitterScorpionVenomSmoke" numParticles="15" particlesPerSec="15"
+             startColor="0.3,1,0.3,0.2" endColor="0.3,1,0.3,0" 
+             startSize="0.5" endSize="1.2" highLife="1" lowLife="0.5" 
+             texture="Textures/effect/flame.jpg" imagesX="2" imagesY="2" 
+             initialVelocity="0,1,0" velocityVariation="0.5" shape="positionCommonSp0_7" />
+    
+    <!--==========================================================================-->
+    <!--骷髅散架，死亡-->
+    <!--==========================================================================-->
+    <emitter id="emitterSkeletonExplosion" numParticles="12" particlesPerSec="0" startColor="1,1,1,1" endColor="1,1,1,0.1" 
+             startSize="0.2" endSize="0.1" highLife="2" lowLife="2" texture="Textures/effect/skeleton.png" imagesX="3" imagesY="3" 
+             initialVelocity="0,6,0" velocityVariation="0.5" randomAngle="1" selectRandomImage="1" gravity="0,10,0"
+        />
+    <emitter id="emitterSkeletonSmoke" numParticles="10" particlesPerSec="0" startColor="1,1,1,0.1" endColor="1,1,1,0" 
+             startSize="1.2" endSize="6" highLife="3" lowLife="3" 
+             texture="Textures/effect/flame.jpg" imagesX="2" imagesY="2" 
+             initialVelocity="0,4,0" velocityVariation="1"  />
+</root>
+
+
+

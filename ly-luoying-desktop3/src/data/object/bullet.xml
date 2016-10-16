@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- play group:0, enemyGroup :1 -->
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://luoying.huliqing.name'
+    xsi:schemaLocation='http://luoying.huliqing.name meta/bullet.xsd'>
+    
+    <!--=====================================================================-->
+    <!--基本配置-->
+    <!--=====================================================================-->
+    <!--子弹基本配置-->
+    <bulletStraight id="bulletBase" shape="shapeBulletBox" shapeOffset="0,0,-1.9" trace="0"
+                    baseSpeed="20" timeout="6" facing="1" debug="0" />
+    
+    <!--快速直线型子弹:不跟随-->
+    <bulletStraight id="bulletQuickBase" extends="bulletBase" shape="shapeBulletBoxMax" shapeOffset="0,0,-2.9" trace="0" />
+    
+    <!--曲线拖尾:不跟随（暂时对跟随效果不友好），但是加大shape -->
+    <bulletCurveTrail id="bulletTrailBase" extends="bulletBase" shape="shapeBulletBoxMax" shapeOffset="0,0,-2.9" trace="0"
+                      texScale="0.3" width="0.15" tex="Textures/effect/light.jpg" mask="Textures/effect/lightMask.jpg" tension="0.5" />
+    
+    <!--=====================================================================-->
+    <!--通用形子弹-->
+    <!--=====================================================================-->
+    
+    <!-- 默认子弹：直中,无路线 -->
+    <bulletSimple id="bulletDefault" extends="bulletBase" />
+    
+    <!--普通箭-->
+    <bulletStraight id="bulletArrow" extends="bulletBase" trace="1" 
+                    effects="effectBulletArrow" hitSounds="soundBowHit" />
+
+    <!--火弹-->
+    <bulletStraight id="bulletTowerFire" extends="bulletBase" trace="1" 
+                    effects="effectSmokeFire" hitEffects="effectExplosion" />
+    
+    <!--石弹-->
+    <bulletStraight id="bulletTowerStone" extends="bulletBase" trace="0" 
+                    effects="effectTowerStone" hitEffects="effectExplosion" />
+    
+    <!--雪弹-->
+    <bulletStraight id="bulletSnow" extends="bulletBase" trace="1" 
+                    effects="effectSnowBullet" hitEffects="effectSnowExplosion" />
+    
+    <!--增益: 加血，加魔，加状态，会跟随，保证不失手-->
+    <bulletCurve id="bulletBuff" extends="bulletBase" shape="shapeBulletBoxMin" shapeOffset="0,0,0"
+                 trace="1" effects="effectBuffBullet" hitEffects="effectBuffHit" positions="emitterShapeBuff"/>
+    
+    <!--=====================================================================-->
+    <!--特殊技能子弹-->
+    <!--=====================================================================-->
+    
+    <!--闪电箭: 直线型--> 
+    <bulletStraight id="bulletArrowQuick" extends="bulletQuickBase" effects="effectLightningShotBullet" 
+                    hitEffects="effectLightningShotHit" hitSounds="soundBowHit" />
+    
+     <!--落樱飞舞：曲线拖尾--> 
+     <bulletCurveTrail id="bulletCurve" extends="bulletTrailBase"  effects="effectDanceSakuraBullet"
+                       hitEffects="effectDanceSakuraHit" positions="esDanceSakuraWaypoint,esDanceSakuraWaypoint2" />
+    
+     <!--电光火石-->
+     <bulletCurve id="bulletFlowLight" extends="bulletBase" trace="1" effects="effectFlowLight" 
+                  hitEffects="effectFlowLightHit" positions="positionFlowLight"/>
+     
+     <!--寒冰箭：拖尾形子弹三连发-->
+     <bulletCurveTrail id="bulletIceTrailUp" extends="bulletTrailBase" effects="effectIceBullet" positions="positionDefShotUp"  />
+     <bulletCurveTrail id="bulletIceTrailLeft" extends="bulletIceTrailUp" positions="positionDefShotLeft" />
+     <bulletCurveTrail id="bulletIceTrailRight" extends="bulletIceTrailUp" positions="positionDefShotRight"  />
+
+    <!--=====================================================================-->
+    <!--二刀流冲击波-->
+    <!--=====================================================================-->
+     <bulletCurve id="bulletWave" extends="bulletBase" effects="effectWave" 
+                  trace="1" hitEffects="effectFlowLightHit" positions="emitterShapeWave" />
+</root>

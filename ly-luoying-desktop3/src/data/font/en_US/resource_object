@@ -1,0 +1,256 @@
+
+# ========== Game 
+gameStoryTreasure.name= Gold Chest
+gameStoryGb.name=Ancient Cypress
+gameStoryGuard.name=Defense And Attack
+
+gameSurvival.name=Survival(Defense)
+gameSurvival.des=Survival, this game is still in test state, the rules similar to the "Gold Chest" in the story mode, the gold chest can not be destroyed.the enemy will be automatically upgraded from time to time, players have kept upgrading, create more towers and summon more pets to defend against enemy until the boss is defeated.
+
+# ========== Basic Item
+itemGold.name=Gold
+itemGold.des=Gold
+itemSpiderSpawn.name=Spider Spawn
+itemSpiderSpawn.des=Summon a spider
+itemSpiderClaw.name=Spider's claw
+itemSpiderClaw.des=
+itemTower.name=Fire Tower
+itemTower.des=Bullets can follow up the target.
+itemTowerStone.name=Stone Tower
+itemTowerStone.des=Bullets can knock target out.
+itemTowerSnow.name=Ice Tower
+itemTowerSnow.des=Can slow down move speed of enemies
+itemTonicRed.name=Health Tonic
+itemTonicRed.des=Use to improve health.
+itemTonicBlue.name=Mana Tonic
+itemTonicBlue.des=Use to improve mana.
+itemTreeStump.name=Cypress's stump
+itemTreeStump.des=Can summon cypress's children
+itemHerb.name=Wind Supergrass
+itemHerb.des=Use to improve the speed of movement.
+itemScrollLife.name=Scroll of resurrection
+itemScrollLife.des=Can use to resurrect a frendly target
+itemASTonic.name=Attack Swiftness Potion
+itemASTonic.des=Can increase the swiftness of attack and spell
+itemDetoxifyGrass.name=Antidote Herb
+itemDetoxifyGrass.des=Can be used to detoxify.
+
+itemBook001.name=xxx
+itemBook001.des=xxx
+itemBook002.name=xxx
+itemBook002.des=xxx
+itemBook003.name=xxx
+itemBook003.des=xxx
+itemBook004.name=xxx
+itemBook004.des=xxx
+itemBook005.name=Summon Creature
+itemBook005.des=Use to learn skill - Summon Creature.
+itemBook006.name=Lightning Bolt
+itemBook006.des=Use to learn skill - Lightning Bolt
+itemBook007.name=Starlight Transfer
+itemBook007.des=Use to learn skill - Starlight Transfer
+itemBook008.name=Falling Sakura Dance
+itemBook008.des=use to learn skill - Falling Sakura Dance
+itemBook009.name=Ice Shooting
+itemBook009.des=Cold frost can freeze the enemies
+itemBook010.name=Sword Shock Wave
+itemBook010.des=Use to learn dual sword skill - Sword Shock Wave
+
+itemScrollWolf.name=Summon scroll - wolf
+itemScrollWolf.des=Use to summon a wolf
+itemScrollBear.name=Summon scroll - bear
+itemScrollBear.des=Use to summon a bear
+itemScrollScorpion.name=Summon scroll - Scorpion
+itemScrollScorpion.des=Use to summon a scorpion
+
+itemMapWorld.name=Sakura Mainland
+itemMapWorld.des=The whole map of the mainland
+
+# ========== Actor 
+actorPlayerTest.name=Test
+actorPlayer.name=
+actorPlayer.des =
+actorEasy.name=
+actorEasy.des=
+actorNormal.name =
+actorNormal.des=
+actorHard.name=
+actorHard.des=
+actorPlayer.name=Sakura
+actorAiLin.name=Aileen
+actorDiNa.name=Tina
+actorTower.name=Fire Tower
+actorTower.des=Bullets can follow up the target
+actorTowerStone.name=Stone Tower
+actorTowerStone.des=Bullets can knock target out
+actorTowerSnow.name=Ice Tower
+actorTowerSnow.des=Can slow down move speed of enemies
+actorSpider.name=Jungle Spider
+actorSpider.des=Creature
+actorSpiderMin.name=Spider pups
+actorSpiderMin.des=Creature
+actorNinja.name=Jungle Thief
+actorNinja.des=
+actorTreasure.name=Treasure Chest
+actorTreasure.des=Box with many treasures
+actorWolf.name=Wolf
+actorWolf.des=	
+actorBear.name=Bear
+actorBear.des=
+actorScorpion.name=Scorpion
+actorScorpion.des=
+actorGb.name=Ancient Cypress
+actorGb.des=Old tree
+actorGbSmall.name=Tree Stump
+actorGbSmall.des=
+actorAltar.name=Dark Altar
+actorAltar.des=
+actorSinbad.name=Sinbad
+actorSinbad.des=
+actorFairy.name=Jungle Fairy
+actorFairy.des=
+actorScorpionBig.name=Fairy's servant
+actorScorpionBig.des=
+actorTrex.name=Tex
+actorRaptor.name=Raptor
+actorJaime.name=Jaime
+
+# ========== skin
+skinEar000.name=Ear
+skinEar004.name=Fairy's ear
+
+skinEye000.name=Eye
+skinFace000.name=Face
+skinFoot000.name=Foot
+skinHand000.name=Hand
+skinLowerBody000.name=LowerBody
+skinUpperBody000.name=UpperBody
+
+skinHair000.name=Ponytail
+skinHair001.name=Hair001
+skinHair006.name=Hair006
+skinHair010.name=Hair010
+skinHair011.name=Hair011
+
+skinFoot001.name=Elf Boots
+skinHand001.name=Elf Gloves
+skinLowerBody001.name=Elf Pants
+skinUpperBody001.name=Elf Armor
+
+skinFoot002.name=Smart Boots
+skinHand002.name=Smart Gloves
+skinLowerBody002.name=Smart Pants
+skinUpperBody002.name=Smart Armor
+
+skinFoot003.name=Green Boots
+skinHand003.name=Green Gloves
+skinLowerBody003.name=Green Pants
+skinUpperBody003.name=Green Armor
+
+skinFoot004.name=Fairy Boots
+skinHand004.name=Fairy Gloves
+skinLowerBody004.name=Fairy Pants
+skinUpperBody004.name=Fairy Armor
+
+skinFoot005.name=Bronze Boots
+skinHand005.name=Bronze Gloves
+skinLowerBody005.name=Bronze Pants
+skinUpperBody005.name=Bronze Armor
+
+skinFoot006.name=Prophet Boots
+skinHand006.name=Prophet Gloves
+skinUpperBody006.name=Prophet Robe
+
+# ========== Eye mask,face mask, horn
+skinBlinder001.name=Eye mask
+skinMouthmask001.name=Thief's scarf
+skinHorn001.name=Monster's horn
+
+# ======== Weapon
+weaponSword000.name=Hunter's Sword
+weaponSword000L.name=Hunter's Sword(L)
+weaponSword001.name=Bronze sword
+weaponSword001L.name=Bronze sword(L)
+weaponSword002.name=Warrior sword
+weaponSword002L.name=Warrior sword(L)
+weaponSword003.name=Short sword
+weaponSword003L.name=Short sword(L)
+
+weaponBow000.name=Forest Bow
+weaponBow001.name=Clouds Bow
+
+weaponWand000.name=Fujiki Wand
+
+
+# ======== Skills
+skillCommonAttack.name=Fencing
+skillCommonAttack.des=Fight with swords.
+skillBowShot.name=Archery
+skillBowShot.des=Fight with bows and arrows.
+skillSummon.name=Summon Creature
+skillSummon.des=Passive skill for all items that which can summon creatures.
+skillLightningShot.name=Lightning Bolt
+skillLightningShot.des=With wind and lightning, a very fast shooting skill.
+skillBack.name=Starlight Transfer
+skillBack.des=Transfer to the nearest stronghold or random place.
+skillDanceSakura.name=Falling Sakura Dance
+skillDanceSakura.des=Ultimate sword make, ignore target's defense.
+skillShotAddLife.name=Health Recover
+skillShotAddLife.des=Recover Health.
+skillShotReborn.name=Resurrection
+skillShotReborn.des=Resurrect target.
+skillShotWindWalk.name=Wind Walk
+skillShotWindWalk.des=Improve walk speed.
+skillIceShot.name=Ice Shooting
+skillIceShot.des=Cold frost can freeze the enemies
+skillDualSwordWave.name=Sword Shock Wave
+skillDualSwordWave.des=Use the shock wave of sword to hit enemies,need dual wield
+skillShotCleanBuff.name=Dispel Magic
+skillShotCleanBuff.des=Disperse poisoning, curses, etc
+
+#====attribute
+attributeHealth.name=Health
+attributeMana.name=Mana
+attributeAttack.name=Attack
+attributeMagicAttack.name=Magic
+attributeDefence.name=Defence
+attributeMagicDefence.name=Magic Defence
+attributeVision.name=Vision
+attributeHealthRestore.name=Health Restore
+attributeManaRestore.name=Mana Restore
+attributeAttackSpeed.name=Attack Speed
+attributeMagicSpeed.name=Magic Speed
+attributeMoveSpeed.name=Move Speed
+attributeDefenceRate.name=Defence Rate
+attributeDuckRate.name=Duck Rate
+attributeGhostRate.name=Ghost
+
+#====talent
+talentLifeRestore.name=Source of life
+talentLifeRestore.des=Increase the health recovery rate
+talentManaRestore.name=Source of Mana
+talentManaRestore.des=Increase mana recovery speed
+talentDefence.name=Defense capabilities
+talentDefence.des=Enhance defense
+talentMagicDefence.name=Defensive magic
+talentMagicDefence.des=Increase magic defense
+talentAttack.name=Power
+talentAttack.des=Enhance attack power
+talentMagicAttack.name=Magic power
+talentMagicAttack.des=Increase magic attack power
+talentVision.name=Hawkeye
+talentVision.des=Vision Improvement
+talentMoveSpeed.name=Wind Walk
+talentMoveSpeed.des=Increase move speed
+
+#==== chat
+chatSend.name=Send Items
+chatShop.name=Buy Items
+chatSell.name=Sell Items
+
+#==== tasks
+taskCollectSpiderClaw.name=The Spider's Claws
+taskCollectSpiderClaw.des=Help Jaime to collect some spider's claws.
+taskCollectSpiderClaw.chatStart=Because of too many wild animals in this area recently, it becoming more and more sparsely populated.||Business is bad to do, I want to turn to do Medicine business||I heard that the spider's claws is good medicine materials||I will appreciate it if you can help me to collect some.
+taskCollectSpiderClaw.chatAsk=Have you collected some spider's claws?||I will give you the payment if you finished.||Go to help me get some spider's claws||Finished? Why you so lazy!
+taskCollectSpiderClaw.chatEnd=Very nice! Thanks to your help!
