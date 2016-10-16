@@ -8,6 +8,8 @@ package name.huliqing.luoying.object.game;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
+import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.layer.service.PlayService;
 
 /**
  * GameAppState,用来包装运行游戏。使用示例：
@@ -36,6 +38,7 @@ public class GameAppState extends AbstractAppState {
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
+        Factory.get(PlayService.class).registerGame(game);
         game.initialize(app);
     }
 

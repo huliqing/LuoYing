@@ -6,7 +6,6 @@
     xsi:schemaLocation='http://luoying.huliqing.name meta/game.xsd'>
     
     <!-- 黄金宝箱 -->
-    <gameSimple id="gameStoryTreasure" scene="sceneTreasure" />
     
     <!-- ========================================================================= -->
     <!-- Common -->

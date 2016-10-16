@@ -32,7 +32,7 @@ import name.huliqing.luoying.utils.ThreadHelper;
  * @author huliqing
  */
 public class PathFollowAction extends AbstractAction implements FollowAction {
-//    private final static Logger logger = Logger.getLogger(FollowPathAction.class.getName());
+    private final static Logger LOG = Logger.getLogger(PathFollowAction.class.getName());
     private final PlayService playService = Factory.get(PlayService.class);
 //    private final ActorService actorService = Factory.get(ActorService.class);
 //    private final SkillService skillService = Factory.get(SkillService.class);
@@ -90,7 +90,7 @@ public class PathFollowAction extends AbstractAction implements FollowAction {
         super();
 //        finder = playService.createPathfinder();
 
-        throw new UnsupportedOperationException("寻路功能暂不支持");
+        LOG.log(Level.INFO, "寻路功能暂不支持");
     }
     
     @Override

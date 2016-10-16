@@ -6,11 +6,14 @@
 package name.huliqing.luoying.game;
 
 import com.jme3.app.SimpleApplication;
+import com.jme3.math.Vector3f;
 import com.jme3.system.AppSettings;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.object.Loader;
+import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.game.Game;
 import name.huliqing.luoying.object.game.GameAppState;
+import name.huliqing.luoying.object.module.ActorModule;
 
 /**
  *
@@ -86,12 +89,12 @@ public class Start extends SimpleApplication {
         loadData();
         
         // 载入游戏
-        Game game = Loader.load("gameStoryTreasure");
+        LuoYingGame game = new LuoYingGame();
         GameAppState gameState = new GameAppState(game);
         
         this.stateManager.attach(gameState); 
         this.flyCam.setMoveSpeed(100);
-        
+      
         
     }
     

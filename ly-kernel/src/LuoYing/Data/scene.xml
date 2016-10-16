@@ -15,13 +15,17 @@
     <!-- ========================================================================= -->
     <!-- 场景配置, id以"_sys_"开头的所有物体为系统内置 -->
     <!-- ========================================================================= -->
+
+    <!-- 默认的游戏场景，无任何场景物体-->
+    <scene id="sysScene" entities="" />
     
-    <!--作为基本场景-->
-    <scene id="sysScene" entities="sysEnvSky,sysEnvDirectionalLight,sysEnvTerrain,sysEnvTree,sysEnvPhysics,sysEnvShadow,sysEnvAdvanceWater
+    <!-- 默认的GUI场景，无任何内容-->
+    <scene id="sysSceneGui" entities="" />
+    
+    <!-- 默认的测试场景 -->
+    <scene id="sysSceneTest" entities="sysEnvSky,sysEnvDirectionalLight,sysEnvTerrain,sysEnvTree,sysEnvPhysics,sysEnvShadow,sysEnvAdvanceWater
 ,sysEnvBoundary" />
 
-    <!-- 作为默认GUI场景-->
-    <scene id="sysSceneGui" entities="" />
     
 </root>
 

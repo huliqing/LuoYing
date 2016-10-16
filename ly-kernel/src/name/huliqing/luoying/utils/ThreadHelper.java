@@ -14,8 +14,6 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
  * /////////////////////
  * 关于Future在JME中的典型使用一定要注意，否则可能在android下出现一些问题,
  * 类似如线程挂起、卡住、始终没有返回的情况，正确代码参考以下示例：
-
- * 
  * @author huliqing
  */
 public class ThreadHelper {
@@ -25,26 +23,28 @@ public class ThreadHelper {
     
     /**
      * 创建一个需要在新线程中运行的任务。
-     * <br>
-     * if (future != null) {<br>
-     *      if (future.isDone()) {<br>
-     *          try {<br>
-     *              Object result = future.get();<br>
-     *              // ..doLogic<br>
-     *              future = null;<br>
-     *          } catch (Exception ex) {<br>
-     *              // 注意点1：当发生异常时，这里要偿试取消<br>
-     *              if (future != null) {<br>
-     *                  future.cancel(true);<br>
-     *              }<br>
-     *              future = null;<br>
-     *          }<br>
-     *          注意点2：这里要判断是否已经取消<br>
-     *      } else if (future.isCancelled()){<br>
-     *          future = null;<br>
-     *      }<br>
-     * }<br>
-     *<br>
+     * <code>
+     * <pre>
+     * if (future != null) {
+     *      if (future.isDone()) {
+     *          try {
+     *              Object result = future.get();
+     *              // ..doLogic
+     *              future = null;
+     *          } catch (Exception ex) {
+     *              // 注意点1：当发生异常时，这里要偿试取消
+     *              if (future != null) {
+     *                  future.cancel(true);
+     *              }
+     *              future = null;
+     *          }
+     *          注意点2：这里要判断是否已经取消
+     *      } else if (future.isCancelled()){
+     *          future = null;
+     *      }
+     * }
+     * </pre>
+     * </code>
      * @param <T>
      * @param callable
      * @return 

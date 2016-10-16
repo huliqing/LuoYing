@@ -651,7 +651,7 @@ public class LuoYing {
         loadData("/LuoYing/Data/env.xml");
         loadData("/LuoYing/Data/game.xml");
 //        loadData("/LuoYing/Data/gameLogic.xml");
-//        loadData("/LuoYing/Data/hitChecker.xml");
+        loadData("/LuoYing/Data/hitChecker.xml");
 //        loadData("/LuoYing/Data/item.xml");
 //        loadData("/LuoYing/Data/logic.xml");
 //        loadData("/LuoYing/Data/magic.xml");

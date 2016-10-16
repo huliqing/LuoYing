@@ -13,7 +13,6 @@ import name.huliqing.luoying.object.action.Action;
 import name.huliqing.luoying.object.action.FightAction;
 import name.huliqing.luoying.object.action.RunAction;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.entity.ModelEntity;
 
 /**
  * 角色行为控制器
@@ -46,7 +45,7 @@ public class ActionModule extends AbstractModule<ModuleData> {
                 actionUpdate(tpf);
             }
         };
-        this.entity.getScene().getRoot().addControl(updateControl);
+        this.entity.getSpatial().addControl(updateControl);
     }
     
     // 更新action逻辑
@@ -75,7 +74,7 @@ public class ActionModule extends AbstractModule<ModuleData> {
         defFightAction = null;
 
         if (updateControl != null) {
-            entity.getScene().getRoot().removeControl(updateControl);
+            entity.getSpatial().removeControl(updateControl);
         }
         super.cleanup(); 
     }

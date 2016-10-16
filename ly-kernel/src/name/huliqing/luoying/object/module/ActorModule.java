@@ -181,7 +181,7 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
         if (localForward != null) {
             this.innerControl.setLocalForward(localForward);
         }
-        this.entity.getScene().getRoot().addControl(innerControl);
+        this.entity.getSpatial().addControl(innerControl);
         
         // 
         Vector3f viewDirection = data.getAsVector3f(DATA_VIEW_DIRECTION);
@@ -197,7 +197,7 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     @Override
     public void cleanup() {
         if (innerControl != null) {
-            entity.getScene().getRoot().removeControl(innerControl);
+            entity.getSpatial().removeControl(innerControl);
         }
         if (targetAttribute != null) {
             targetAttribute.removeListener(this);

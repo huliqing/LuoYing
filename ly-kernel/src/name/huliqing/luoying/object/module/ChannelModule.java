@@ -64,8 +64,10 @@ public class ChannelModule extends AbstractModule implements ChannelControl {
                     addChannel((Channel) Loader.load(od));
                 }
             }
-        } else {
-            //  如果角色没有指定任何通道则自动创建一个默认的全通道
+        }
+        
+        //  如果角色没有指定任何通道则自动创建一个默认的全通道
+        if (channels.isEmpty()) {
             addChannel((Channel) Loader.load(IdConstants.SYS_CHANNEL_FULL));
         }
     }

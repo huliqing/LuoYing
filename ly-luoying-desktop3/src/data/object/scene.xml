@@ -11,7 +11,7 @@
 
     <scene id="sceneTreasure" entities="envSky,envDirectionalLight,envAmbientLight
 ,envSakuraIslandTerrain,envSakuraIslandBoundary,envSakuraIslandWater,envSakuraIslandSeaAudio
-,envShadow
+,envShadow,envPhysics,envCameraThirdView
 " />
     
     <!-- ========================================================================= -->

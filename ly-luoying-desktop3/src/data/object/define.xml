@@ -9,13 +9,13 @@
     <!--系统默认的技能标记定义(id不能改): 最多允许64个标记-->
     <!-- ========================================================================= -->
     
-    <defineSkillTag id="defineSkillTag" skillTags="wait,walk,run,jump,idle,hurt,dead,reset,defend,duck,fight,attack,trick,magic,skin" />
+    <defineSkillTag id="sysDefineSkillTag" skillTags="wait,walk,run,jump,idle,hurt,dead,reset,defend,duck,fight,attack,trick,magic,skin" />
     
     <!-- ========================================================================= -->
     <!--系统默认装备部位的定义(id不能改) : 最多允许64个部位定义-->
     <!-- ========================================================================= -->
     
-    <defineSkinPart id="defineSkinPart" skinParts="foot,lowerBody,upperBody,hand,face,eye,ear,hair
+    <defineSkinPart id="sysDefineSkinPart" skinParts="foot,lowerBody,upperBody,hand,face,eye,ear,hair
 ,blinder,mouthMask,faceMask,horn
 ,leftHandWeapon,rightHandWeapon" />
     
@@ -24,7 +24,7 @@
             leftSword: 左手剑; rightSword: 右手剑; bow : 弓; wand: 魔杖; leftClaw: 左手爪子; rightClaw: 右手爪子-->
     <!-- ========================================================================= -->
     
-    <defineWeaponType id="defineWeaponType" weaponTypes="leftSword,rightSword,bow,wand,leftClaw,rightClaw" />
+    <defineWeaponType id="sysDefineWeaponType" weaponTypes="leftSword,rightSword,bow,wand,leftClaw,rightClaw" />
     
     <!-- ========================================================================= -->
     <!--物体的质地定义：与网格的材质(material)不同，这里主要用于定义物体的构成成分以及不同质地的碰撞声效。
@@ -38,7 +38,7 @@
     -->
     <!-- ========================================================================= -->
     
-    <defineMat id="defineMat" mats="metal,wood,stone,derma,calcium,cloth" 
+    <defineMat id="sysDefineMat" mats="metal,wood,stone,derma,calcium,cloth" 
                collisionSounds="metal|metal|soundCollisionMM
 , metal|stone|soundCollisionMS
 , metal|wood|soundCollisionWM 

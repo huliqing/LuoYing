@@ -22,7 +22,6 @@ import name.huliqing.luoying.data.ModuleData;
 import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.entity.ModelEntity;
 import name.huliqing.luoying.object.skill.Skill;
 
 /**
@@ -92,7 +91,7 @@ public class SkillModule extends AbstractModule {
             @Override
             public void update(float tpf) {skillUpdate(tpf);}
         };
-        this.entity.getScene().getRoot().addControl(updateControl);
+        this.entity.getSpatial().addControl(updateControl);
         
         // 载入技能
         List<SkillData> skillDatas = actor.getData().getObjectDatas(SkillData.class, null);
@@ -157,7 +156,7 @@ public class SkillModule extends AbstractModule {
         skillMap.clear();
         playingSkillTags = 0;
         if (updateControl != null) {
-            entity.getScene().getRoot().removeControl(updateControl);
+            entity.getSpatial().removeControl(updateControl);
         }
         super.cleanup();
     }

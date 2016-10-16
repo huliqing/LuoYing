@@ -24,20 +24,6 @@ public class AttributeApply implements Savable {
 
     /** 使用的属性量 */
     private float amount;
-
-    @Override
-    public void write(JmeExporter ex) throws IOException {
-        OutputCapsule oc = ex.getCapsule(this);
-        oc.write(attribute, "attribute", null);
-        oc.write(amount, "amount", 0);
-    }
-
-    @Override
-    public void read(JmeImporter im) throws IOException {
-        InputCapsule ic = im.getCapsule(this);
-        attribute = ic.readString("attribute", null);
-        amount = ic.readFloat("amount", 0);
-    }
     
     public AttributeApply() {}
 
@@ -62,4 +48,17 @@ public class AttributeApply implements Savable {
         this.amount = amount;
     }
     
+    @Override
+    public void write(JmeExporter ex) throws IOException {
+        OutputCapsule oc = ex.getCapsule(this);
+        oc.write(attribute, "attribute", null);
+        oc.write(amount, "amount", 0);
+    }
+
+    @Override
+    public void read(JmeImporter im) throws IOException {
+        InputCapsule ic = im.getCapsule(this);
+        attribute = ic.readString("attribute", null);
+        amount = ic.readFloat("amount", 0);
+    }
 }

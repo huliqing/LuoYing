@@ -4,9 +4,12 @@
     xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
     xmlns='http://luoying.huliqing.name'
     xsi:schemaLocation='http://luoying.huliqing.name meta/game.xsd'>
-    
-    <!--游戏-->
+
+    <!--默认的空游戏-->
     <gameSimple id="sysGame" scene="sysScene" guiScene="sysSceneGui" />
+    
+    <!--测试用游戏-->
+    <gameSimple id="sysGameTest" scene="sysSceneTest" guiScene="sysSceneGui" />
     
 </root>
 

@@ -7,6 +7,8 @@ package name.huliqing.luoying.layer.service;
 import com.jme3.math.Vector3f;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.object.entity.Entity;
@@ -19,6 +21,7 @@ import name.huliqing.luoying.object.scene.Scene;
  * @author huliqing
  */
 public class PlayServiceImpl implements PlayService {
+    private static final Logger LOG = Logger.getLogger(PlayServiceImpl.class.getName());
     
     // 当前游戏实例
     private static Game game;
@@ -41,6 +44,10 @@ public class PlayServiceImpl implements PlayService {
     
     @Override
     public Game getGame() {
+        if (game == null) {
+            LOG.log(Level.WARNING, "Game not found or not registered! "
+                    + "Use playService to registerGame or use GameAppState to attach to StateManager.");
+        }
         return game;
     }
 

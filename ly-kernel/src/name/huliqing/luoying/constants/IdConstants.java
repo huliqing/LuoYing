@@ -58,17 +58,22 @@ public class IdConstants {
     // Game
     // =============================================================================
     
-    /** 内置的游戏 */
+    /** 默认的游戏及场景，无任何场景物体，需要自己添加 */
     public final static String SYS_GAME = "sysGame";
+    
+    /** 测试用的场景 */
+    public final static String SYS_GAME_TEST = "sysGameTest";
     
     // =============================================================================
     // Scene 
     // =============================================================================
     
-    /** 内置的游戏场景 */
+    /** 默认的游戏场景，无任何场景物体 */
     public final static String SYS_SCENE = "sysScene";
-    /** 内置的游戏GUI场景 */
+    /** 默认的GUI场景，无任何内容 */
     public final static String SYS_SCENE_GUI = "sysSceneGui";
+    /** 默认的测试场景 */
+    public final static String SYS_SCENE_TEST = "sysSceneTest";
     
     // =============================================================================
     // Entity: Env
