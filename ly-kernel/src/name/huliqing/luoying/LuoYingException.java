@@ -7,17 +7,17 @@ package name.huliqing.luoying;
 /**
  * @author huliqing
  */
-public class LyException extends Exception {
+public class LuoYingException extends RuntimeException {
     
-    public LyException(String message) {
+    public LuoYingException(String message) {
         super(message);
     }
    
-    public LyException(String message, Throwable cause) {
+    public LuoYingException(String message, Throwable cause) {
         super(message, cause);
     }
  
-    public LyException(Throwable cause) {
+    public LuoYingException(Throwable cause) {
         super(cause);
     }
     

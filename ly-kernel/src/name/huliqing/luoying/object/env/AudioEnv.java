@@ -13,9 +13,9 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Sphere;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.data.EntityData;
+import name.huliqing.luoying.data.ModelEntityData;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.ModelEntity;
-import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.object.sound.Sound;
 import name.huliqing.luoying.object.sound.SoundManager;
 
@@ -33,7 +33,7 @@ public class AudioEnv extends ModelEntity {
     private Spatial debugInnerNode;
 
     @Override
-    public void setData(EntityData data) {
+    public void setData(ModelEntityData data) {
         super.setData(data);
         debug = data.getAsBoolean("debug", false);
         soundId = data.getAsString("sound");

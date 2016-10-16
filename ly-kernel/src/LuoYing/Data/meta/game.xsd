@@ -47,7 +47,7 @@ xs:time
                         <xs:documentation>连接到一个场景id，这个场景作为游戏的主场景</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-                <xs:attribute name="guiScene" type="xs:string" use="required">
+                <xs:attribute name="guiScene" type="xs:string" use="optional">
                     <xs:annotation>
                         <xs:documentation>连接到一个场景id,这个场景将作为游戏的GUI场景</xs:documentation>
                     </xs:annotation>

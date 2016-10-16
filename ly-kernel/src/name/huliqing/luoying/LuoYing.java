@@ -499,7 +499,7 @@ public class LuoYing {
         // Env
         DataFactory.register("envAdvanceWater", EntityData.class, EntityDataLoader.class, AdvanceWaterEnv.class);
         DataFactory.register("envAmbientLight", EntityData.class, EntityDataLoader.class, AmbientLightEnv.class);
-        DataFactory.register("envAudio", EntityData.class, EntityDataLoader.class, AudioEnv.class);
+        DataFactory.register("envAudio", ModelEntityData.class, EntityDataLoader.class, AudioEnv.class);
 //        DataFactory.register("envBoundaryBox", ModelEntityData.class, EntityDataLoader.class, BoundaryBoxEnv.class); // remove
         DataFactory.register("envChaseCamera", EntityData.class, EntityDataLoader.class, ChaseCameraEnv.class);
         DataFactory.register("envDirectionalLight", EntityData.class, EntityDataLoader.class, DirectionalLightEnv.class);
@@ -632,7 +632,7 @@ public class LuoYing {
 //        DataFactory.register("viewTimer",  ViewData.class, ViewDataLoader.class, TimerView.class);
     }
     
-    private static void loadSysData() throws LyException {
+    private static void loadSysData() throws LuoYingException {
         
         // remove20161006,以后由其它实现去主动载入
         loadData("/LuoYing/Data/action.xml");
@@ -682,11 +682,18 @@ public class LuoYing {
     }
     
     /**
-     * 载入数据
+     * 载入数据, 如：
+     * <code>
+     * <pre>
+     * loadData("/data/game.xml");
+     * loadData("/data/scene.xml");
+     * ...
+     * </pre>
+     * </code>
      * @param dataFile
-     * @throws LyException 
+     * @throws LuoYingException 
      */
-    public static void loadData(String dataFile) throws LyException {
+    public static void loadData(String dataFile) throws LuoYingException {
         loadData(LuoYing.class.getResourceAsStream(dataFile), null);
     }
     
@@ -694,9 +701,9 @@ public class LuoYing {
      * 载入数据
      * @param inputStream
      * @param encoding
-     * @throws LyException 
+     * @throws LuoYingException 
      */
-    public static void loadData(InputStream inputStream, String encoding) throws LyException {
+    public static void loadData(InputStream inputStream, String encoding) throws LuoYingException {
         DataFactory.loadData(inputStream, encoding);
     }
     

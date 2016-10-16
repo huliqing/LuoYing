@@ -40,6 +40,7 @@ public class GameDataLoader<T extends GameData> implements DataLoader<T>{
             }
         }
         
+        // remove20161016
 //        store.setAvailableActors(store.getAsStringList("availableActors"));
     }
     

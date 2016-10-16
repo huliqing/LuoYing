@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
-import name.huliqing.luoying.LyException;
+import name.huliqing.luoying.LuoYingException;
 import org.xml.sax.SAXException;
 
 /**
@@ -93,7 +93,9 @@ public class DataFactory {
      * @param <T>
      * @param id
      * @return 
+     * @throws LuoYingException 如果无法为id创建Data
      */
+    @SuppressWarnings("UseSpecificCatch")
     public static <T extends ProtoData> T createData(String id) {
         Proto proto = ProtoUtils.getProto(DATA_STORE, id);
         if (proto == null) {
@@ -124,10 +126,8 @@ public class DataFactory {
             return (T) data;
             
         } catch (Exception ex) {
-            LOG.log(Level.SEVERE, "Could not createData by id={0}, error={1}",  new Object[]{id, ex.getMessage()});
-            ex.printStackTrace();
+            throw new LuoYingException("Could not createData for dataId=" + id, ex);
         }
-        return null;
     }
     
     /**
@@ -135,7 +135,9 @@ public class DataFactory {
      * @param <T>
      * @param data
      * @return 
+     * @throws LuoYingException 如果无法为data创建Processor
      */
+    @SuppressWarnings("UseSpecificCatch")
     public static <T extends DataProcessor> T createProcessor(ProtoData data) {
         if (data == null) {
             LOG.log(Level.WARNING, "Data could not be null");
@@ -151,20 +153,8 @@ public class DataFactory {
             DataProcessor dp = dpClass.newInstance();
             dp.setData(data);
             return (T) dp;
-        } catch (InstantiationException ex) {
-            throw new RuntimeException("Could not create processor! tagName=" + data.getTagName(), ex);
-            
-//            throw new RuntimeException("Could not create processor! tagName=" + data.getTagName() 
-//                    + ", dataId=" + data.getId()
-//                    + ", dataProcessor=" + dpClass.getName()
-//                    + ", error=" + ex.getMessage()
-//                    );
-        } catch (IllegalAccessException ex) {
-            throw new RuntimeException("Could not create processor! tagName=" + data.getTagName()
-                    + ", dataId=" + data.getId()
-                    + ", dataProcessor=" + dpClass.getName()
-                    + ", error=" + ex.getMessage()
-            );
+        } catch (Exception e) {
+            throw new RuntimeException("Could not createProcessor for dataId=" + data.getId(), e);
         }
     }
     
@@ -209,18 +199,18 @@ public class DataFactory {
      * 从数据流中载入数据
      * @param inputStream
      * @param encoding 如果为null则默认使用"utf-8"
-     * @throws name.huliqing.luoying.LyException
+     * @throws name.huliqing.luoying.LuoYingException
      * @see #loadDataFile(java.lang.String) 
      */
-    public static void loadData(InputStream inputStream, String encoding) throws LyException {
+    public static void loadData(InputStream inputStream, String encoding) throws LuoYingException {
         try {
             DATA_STORE.loadData(inputStream, encoding != null ? encoding : "utf-8");
         } catch (ParserConfigurationException ex) {
-            throw new LyException(ex);
+            throw new LuoYingException(ex);
         } catch (SAXException ex) {
-            throw new LyException(ex);
+            throw new LuoYingException(ex);
         } catch (IOException ex) {
-            throw new LyException(ex);
+            throw new LuoYingException(ex);
         }
     }
     
