@@ -113,7 +113,7 @@ public class LuoYing extends SimpleApplication {
         try {
             // 1.初始化数据
             loadData();
-        } catch (LyException ex) {
+        } catch (LuoYingException ex) {
             throw new RuntimeException(ex);
         }
         
@@ -123,7 +123,7 @@ public class LuoYing extends SimpleApplication {
 //        Factory.get(ConfigService.class).loadLocale();
     }
     
-    private void loadData() throws LyException {
+    private void loadData() throws LuoYingException {
         Ly.loadData("/data/object/action.xml");
         Ly.loadData("/data/object/actor.xml");
         Ly.loadData("/data/object/actorAnim.xml");
