@@ -25,12 +25,12 @@ public class UIConfigImpl implements UIConfig {
     private final ColorRGBA buttonBgColor = new ColorRGBA(0, 0.5f, 1, 1);
     private final ColorRGBA desColor = new ColorRGBA(0.5f, 0.5f, 0.5f, 1);
     
-    private final String background = "Interface/ui/background.png";
-    private final String buttonClose = "Interface/ui/button_close.png";
-    private final String buttonConfirmOk = "Interface/ui/button_ok.png";
-    private final String buttonConfirmCancel = "Interface/ui/button_cancel.png";
+    private final String background = "LuoYing/Assets/Interface/UI/background.png";
+    private final String buttonClose = "LuoYing/Assets/Interface/UI/button_close.png";
+    private final String buttonConfirmOk = "LuoYing/Assets/Interface/UI/button_ok.png";
+    private final String buttonConfirmCancel = "LuoYing/Assets/Interface/UI/button_cancel.png";
     
-    private final String soundClick = "Interface/ui/sound_click.ogg";
+    private final String soundClick = "LuoYing/Assets/Interface/UI/sound_click.ogg";
     
     public UIConfigImpl(AssetManager assetManager) {
         this.assetManager = assetManager;
