@@ -4,17 +4,15 @@
  */
 package name.huliqing.luoying.layer.service;
 
-import name.huliqing.ly.Factory;
-import name.huliqing.ly.constants.IdConstants;
-import name.huliqing.ly.data.ObjectData;
-import name.huliqing.ly.object.Loader;
+import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.constants.IdConstants;
+import name.huliqing.luoying.data.ObjectData;
+import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.chat.Chat;
-import name.huliqing.ly.object.entity.Entity;
+import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.module.ChatModule;
 import name.huliqing.ly.layer.service.ChatService;
-import name.huliqing.ly.layer.service.ObjectService;
-import name.huliqing.ly.layer.service.PlayService;
-import name.huliqing.ly.object.sound.SoundManager;
+import name.huliqing.luoying.object.sound.SoundManager;
 
 /**
  *

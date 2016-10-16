@@ -7,8 +7,8 @@ package name.huliqing.luoying.view.talk;
 import com.jme3.math.Vector3f;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.ly.object.actor.Actor;
-import name.huliqing.ly.object.entity.Entity;
+import name.huliqing.luoying.object.actor.Actor;
+import name.huliqing.luoying.object.entity.Entity;
 
 /**
  *

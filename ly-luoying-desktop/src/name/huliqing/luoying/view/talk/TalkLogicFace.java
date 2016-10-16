@@ -6,12 +6,12 @@ package name.huliqing.luoying.view.talk;
 
 import com.jme3.math.Vector3f;
 import com.jme3.util.TempVars;
-import name.huliqing.ly.Factory;
-import name.huliqing.ly.layer.network.ActorNetwork;
-import name.huliqing.ly.layer.service.ActorService;
-import name.huliqing.ly.layer.service.SkillService;
-import name.huliqing.ly.object.entity.Entity; 
-import name.huliqing.ly.object.skill.Skill;
+import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.layer.network.ActorNetwork;
+import name.huliqing.luoying.layer.service.ActorService;
+import name.huliqing.luoying.layer.service.SkillService;
+import name.huliqing.luoying.object.entity.Entity; 
+import name.huliqing.luoying.object.skill.Skill;
 
 /**
  * 处理谈话逻辑：朝向, 使用朝向角色或是朝向位置只能二选一。

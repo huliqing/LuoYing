@@ -6,10 +6,10 @@ package name.huliqing.luoying.object.view;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import name.huliqing.ly.data.ViewData;
-import name.huliqing.ly.object.SyncData;
-import name.huliqing.ly.ui.Text;
-import name.huliqing.ly.ui.Window;
+import name.huliqing.luoying.data.ViewData;
+import name.huliqing.luoying.object.SyncData;
+import name.huliqing.luoying.ui.Text;
+import name.huliqing.luoying.ui.Window;
 
 /**
  * @author huliqing

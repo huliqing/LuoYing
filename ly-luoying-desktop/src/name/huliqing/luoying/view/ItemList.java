@@ -5,12 +5,12 @@
 package name.huliqing.luoying.view;
 
 import java.util.List;
-import name.huliqing.ly.data.ObjectData;
-import name.huliqing.ly.ui.ListView;
-import name.huliqing.ly.ui.Row;
-import name.huliqing.ly.ui.UI;
-import name.huliqing.ly.ui.UI.Listener;
-import name.huliqing.ly.xml.DataProcessor;
+import name.huliqing.luoying.data.ObjectData;
+import name.huliqing.luoying.ui.ListView;
+import name.huliqing.luoying.ui.Row;
+import name.huliqing.luoying.ui.UI;
+import name.huliqing.luoying.ui.UI.Listener;
+import name.huliqing.luoying.xml.DataProcessor;
 
 /**
  * 显示物品列表

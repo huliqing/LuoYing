@@ -4,7 +4,7 @@
  */
 package name.huliqing.luoying.view.actor;
 
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.luoying.object.actor.Actor;
 
 /**
  *

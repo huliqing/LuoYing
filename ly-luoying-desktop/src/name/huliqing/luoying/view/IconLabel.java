@@ -5,9 +5,9 @@
 package name.huliqing.luoying.view;
 
 import com.jme3.font.BitmapFont;
-import name.huliqing.ly.ui.Icon;
-import name.huliqing.ly.ui.LinearLayout;
-import name.huliqing.ly.ui.Text;
+import name.huliqing.luoying.ui.Icon;
+import name.huliqing.luoying.ui.LinearLayout;
+import name.huliqing.luoying.ui.Text;
 
 /**
  * 图标和Label

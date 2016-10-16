@@ -6,7 +6,7 @@
 package mygame.object;
 
 import com.jme3.app.Application;
-import name.huliqing.ly.object.game.AbstractGame;
+import name.huliqing.luoying.object.game.AbstractGame;
 
 /**
  *

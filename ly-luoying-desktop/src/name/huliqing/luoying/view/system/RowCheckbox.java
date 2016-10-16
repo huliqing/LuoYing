@@ -6,13 +6,13 @@ package name.huliqing.luoying.view.system;
 
 import com.jme3.font.BitmapFont;
 import java.util.List;
-import name.huliqing.ly.ui.Checkbox;
-import name.huliqing.ly.ui.FrameLayout;
-import name.huliqing.ly.ui.LinearLayout;
-import name.huliqing.ly.ui.Row;
-import name.huliqing.ly.ui.Text;
-import name.huliqing.ly.ui.UIFactory;
-import name.huliqing.ly.ui.UI;
+import name.huliqing.luoying.ui.Checkbox;
+import name.huliqing.luoying.ui.FrameLayout;
+import name.huliqing.luoying.ui.LinearLayout;
+import name.huliqing.luoying.ui.Row;
+import name.huliqing.luoying.ui.Text;
+import name.huliqing.luoying.ui.UIFactory;
+import name.huliqing.luoying.ui.UI;
 
 /**
  *

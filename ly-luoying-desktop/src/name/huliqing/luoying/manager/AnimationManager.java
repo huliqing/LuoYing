@@ -6,7 +6,7 @@ package name.huliqing.luoying.manager;
 
 import com.jme3.app.Application;
 import com.jme3.util.SafeArrayList;
-import name.huliqing.ly.object.AbstractPlayObject;
+import name.huliqing.luoying.object.AbstractPlayObject;
 import name.huliqing.luoying.animation.Animation;
 
 /**

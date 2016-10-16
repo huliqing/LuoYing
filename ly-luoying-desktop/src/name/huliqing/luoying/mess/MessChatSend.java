@@ -6,13 +6,12 @@ package name.huliqing.luoying.mess;
 
 import com.jme3.network.HostedConnection;
 import com.jme3.network.serializing.Serializable;
-import name.huliqing.ly.Factory;
+import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.layer.network.ChatNetwork;
 import name.huliqing.ly.layer.service.ChatService;
-import name.huliqing.ly.layer.service.PlayService;
-import name.huliqing.ly.mess.MessBase;
-import name.huliqing.ly.network.GameServer;
-import name.huliqing.ly.object.entity.Entity;
+import name.huliqing.luoying.layer.service.PlayService;
+import name.huliqing.luoying.network.GameServer;
+import name.huliqing.luoying.object.entity.Entity;
 
 /**
  * 角色向另一个角色出售商品

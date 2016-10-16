@@ -5,12 +5,12 @@
 package name.huliqing.luoying.state.lan;
 
 import java.util.List;
-import name.huliqing.ly.data.GameData;
-import name.huliqing.ly.data.ConnData;
-import name.huliqing.ly.manager.ResourceManager;
+import name.huliqing.luoying.data.GameData;
+import name.huliqing.luoying.data.ConnData;
+import name.huliqing.luoying.manager.ResourceManager;
 import name.huliqing.luoying.view.ClientsView;
-import name.huliqing.ly.utils.MathUtils;
-import name.huliqing.ly.ui.Window;
+import name.huliqing.luoying.utils.MathUtils;
+import name.huliqing.luoying.ui.Window;
 
 /**
  * 用于显示进入房间的客户端列表及游戏信息，主机和客户端共用该UI

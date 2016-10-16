@@ -4,17 +4,17 @@
  */
 package name.huliqing.luoying.view;
 
-import name.huliqing.ly.constants.InterfaceConstants;
-import name.huliqing.ly.data.ObjectData;
-import name.huliqing.ly.data.SkinData;
-import name.huliqing.ly.manager.ResourceManager;
-import name.huliqing.ly.ui.ListView;
-import name.huliqing.ly.ui.Row;
-import name.huliqing.ly.ui.UIFactory;
-import name.huliqing.ly.ui.tiles.ColumnBody;
-import name.huliqing.ly.ui.tiles.ColumnIcon;
-import name.huliqing.ly.ui.tiles.ColumnText;
-import name.huliqing.ly.xml.DataProcessor;
+import name.huliqing.luoying.constants.InterfaceConstants;
+import name.huliqing.luoying.data.ObjectData;
+import name.huliqing.luoying.data.SkinData;
+import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.luoying.ui.ListView;
+import name.huliqing.luoying.ui.Row;
+import name.huliqing.luoying.ui.UIFactory;
+import name.huliqing.luoying.ui.tiles.ColumnBody;
+import name.huliqing.luoying.ui.tiles.ColumnIcon;
+import name.huliqing.luoying.ui.tiles.ColumnText;
+import name.huliqing.luoying.xml.DataProcessor;
 
 /**
  * 显示物品的数据行

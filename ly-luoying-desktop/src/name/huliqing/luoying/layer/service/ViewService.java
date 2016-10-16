@@ -4,8 +4,8 @@
  */
 package name.huliqing.luoying.layer.service;
 
-import name.huliqing.ly.Inject;
-import name.huliqing.ly.data.ViewData;
+import name.huliqing.luoying.Inject;
+import name.huliqing.luoying.data.ViewData;
 import name.huliqing.luoying.object.view.View;
 
 /**

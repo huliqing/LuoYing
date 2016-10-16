@@ -7,16 +7,16 @@ package name.huliqing.luoying.view;
 import com.jme3.font.BitmapFont;
 import com.jme3.math.ColorRGBA;
 import java.util.List;
-import name.huliqing.ly.constants.InterfaceConstants;
-import name.huliqing.ly.constants.ResConstants;
-import name.huliqing.ly.manager.ResourceManager;
-import name.huliqing.ly.ui.Button;
-import name.huliqing.ly.ui.Icon;
-import name.huliqing.ly.ui.LinearLayout;
-import name.huliqing.ly.ui.Text;
-import name.huliqing.ly.ui.UIFactory;
-import name.huliqing.ly.ui.UI;
-import name.huliqing.ly.ui.Window;
+import name.huliqing.luoying.constants.InterfaceConstants;
+import name.huliqing.luoying.constants.ResConstants;
+import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.luoying.ui.Button;
+import name.huliqing.luoying.ui.Icon;
+import name.huliqing.luoying.ui.LinearLayout;
+import name.huliqing.luoying.ui.Text;
+import name.huliqing.luoying.ui.UIFactory;
+import name.huliqing.luoying.ui.UI;
+import name.huliqing.luoying.ui.Window;
 
 /**
  * IP地址输入界面,用于手动连接服务器

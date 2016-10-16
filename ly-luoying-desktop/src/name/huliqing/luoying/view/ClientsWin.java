@@ -5,14 +5,14 @@
 package name.huliqing.luoying.view;
 
 import java.util.List;
-import name.huliqing.ly.network.LanGame;
-import name.huliqing.ly.data.ConnData;
-import name.huliqing.ly.manager.ResourceManager;
-import name.huliqing.ly.ui.Button;
-import name.huliqing.ly.ui.LinearLayout;
-import name.huliqing.ly.ui.UIFactory;
-import name.huliqing.ly.ui.UI;
-import name.huliqing.ly.ui.Window;
+import name.huliqing.luoying.network.LanGame;
+import name.huliqing.luoying.data.ConnData;
+import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.luoying.ui.Button;
+import name.huliqing.luoying.ui.LinearLayout;
+import name.huliqing.luoying.ui.UIFactory;
+import name.huliqing.luoying.ui.UI;
+import name.huliqing.luoying.ui.Window;
 
 /**
  * 封装客户端列表的window

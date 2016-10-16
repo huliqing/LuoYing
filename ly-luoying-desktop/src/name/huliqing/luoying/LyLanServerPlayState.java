@@ -5,7 +5,7 @@
  */
 package name.huliqing.luoying;
 
-import name.huliqing.ly.network.GameServer;
+import name.huliqing.luoying.network.GameServer;
 import name.huliqing.luoying.state.lan.LanServerPlayState;
 
 /**

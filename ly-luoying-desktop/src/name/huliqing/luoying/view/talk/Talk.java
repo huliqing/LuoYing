@@ -5,7 +5,7 @@
 package name.huliqing.luoying.view.talk;
 
 import com.jme3.math.Vector3f;
-import name.huliqing.ly.object.entity.Entity;
+import name.huliqing.luoying.object.entity.Entity;
 
 /**
  * 该功能主要让角色之间能够实现一个序列的谈话。示例：

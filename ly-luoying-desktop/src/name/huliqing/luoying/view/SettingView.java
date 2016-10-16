@@ -6,14 +6,14 @@ package name.huliqing.luoying.view;
 
 import name.huliqing.luoying.view.system.SystemMainPanel;
 import java.util.List;
-import name.huliqing.ly.Factory;
-import name.huliqing.ly.layer.service.PlayService;
+import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.sss.PlayState;
-import name.huliqing.ly.manager.ResourceManager;
-import name.huliqing.ly.ui.Button;
-import name.huliqing.ly.ui.UI;
-import name.huliqing.ly.ui.Window;
-import name.huliqing.ly.ui.state.UIState;
+import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.luoying.ui.Button;
+import name.huliqing.luoying.ui.UI;
+import name.huliqing.luoying.ui.Window;
+import name.huliqing.luoying.ui.state.UIState;
 
 /**
  * 设置面板

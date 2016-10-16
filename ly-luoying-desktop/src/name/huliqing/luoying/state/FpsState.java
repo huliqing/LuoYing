@@ -9,9 +9,9 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.scene.Node;
-import name.huliqing.ly.ui.Text;
-import name.huliqing.ly.ui.UI.Corner;
-import name.huliqing.ly.ui.UIFactory;
+import name.huliqing.luoying.ui.Text;
+import name.huliqing.luoying.ui.UI.Corner;
+import name.huliqing.luoying.ui.UIFactory;
 
 /**
  * 显示侦率

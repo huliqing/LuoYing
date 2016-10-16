@@ -6,15 +6,15 @@
 package name.huliqing.luoying.view.shortcut;
 
 import com.jme3.math.ColorRGBA;
-import name.huliqing.ly.Factory;
-import name.huliqing.ly.data.SkinData;
-import name.huliqing.ly.layer.network.SkinNetwork;
-import name.huliqing.ly.object.entity.Entity;
-import name.huliqing.ly.object.module.SkinListener;
-import name.huliqing.ly.object.module.SkinModule;
-import name.huliqing.ly.object.skin.Skin;
-import name.huliqing.ly.object.skin.Weapon;
-import name.huliqing.ly.ui.UIFactory;
+import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.data.SkinData;
+import name.huliqing.luoying.layer.network.SkinNetwork;
+import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.module.SkinListener;
+import name.huliqing.luoying.object.module.SkinModule;
+import name.huliqing.luoying.object.skin.Skin;
+import name.huliqing.luoying.object.skin.Weapon;
+import name.huliqing.luoying.ui.UIFactory;
 
 /**
  * 用于皮肤(Skin)的快捷方式

@@ -5,14 +5,14 @@
 package name.huliqing.luoying.view;
 
 import name.huliqing.ly.Ly;
-import name.huliqing.ly.manager.ResourceManager;
-import name.huliqing.ly.ui.UIFactory;
-import name.huliqing.ly.ui.Icon;
-import name.huliqing.ly.ui.LinearLayout;
-import name.huliqing.ly.ui.Text;
-import name.huliqing.ly.ui.UI;
-import name.huliqing.ly.ui.Window;
-import name.huliqing.ly.ui.state.UIState;
+import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.luoying.ui.UIFactory;
+import name.huliqing.luoying.ui.Icon;
+import name.huliqing.luoying.ui.LinearLayout;
+import name.huliqing.luoying.ui.Text;
+import name.huliqing.luoying.ui.UI;
+import name.huliqing.luoying.ui.Window;
+import name.huliqing.luoying.ui.state.UIState;
 
 /**
  *

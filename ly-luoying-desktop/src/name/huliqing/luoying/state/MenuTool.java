@@ -5,7 +5,7 @@
  */
 package name.huliqing.luoying.state;
 
-import name.huliqing.ly.ui.UI;
+import name.huliqing.luoying.ui.UI;
 
 /**
  * 界面上的工具栏，可用于添加按钮

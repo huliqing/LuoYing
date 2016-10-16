@@ -4,8 +4,8 @@
  */
 package name.huliqing.luoying.view;
 
-import name.huliqing.ly.ui.LinearLayout;
-import name.huliqing.ly.ui.UIFactory;
+import name.huliqing.luoying.ui.LinearLayout;
+import name.huliqing.luoying.ui.UIFactory;
 
 /**
  *

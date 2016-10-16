@@ -14,15 +14,15 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.control.Control;
 import com.jme3.scene.shape.Quad;
-import name.huliqing.ly.Factory;
+import name.huliqing.luoying.Factory;
 import name.huliqing.ly.Ly;
-import name.huliqing.ly.data.SkillData;
-import name.huliqing.ly.layer.network.ActorNetwork;
-import name.huliqing.ly.layer.network.SkillNetwork;
-import name.huliqing.ly.layer.service.PlayService;
-import name.huliqing.ly.layer.service.SkillService;
-import name.huliqing.ly.object.skill.Skill;
-import name.huliqing.ly.utils.MatUtils;
+import name.huliqing.luoying.data.SkillData;
+import name.huliqing.luoying.layer.network.ActorNetwork;
+import name.huliqing.luoying.layer.network.SkillNetwork;
+import name.huliqing.luoying.layer.service.PlayService;
+import name.huliqing.luoying.layer.service.SkillService;
+import name.huliqing.luoying.object.skill.Skill;
+import name.huliqing.luoying.utils.MatUtils;
 
 /**
  * 用于技能(skill)的快捷方式

@@ -4,17 +4,17 @@
  */
 package name.huliqing.luoying.view.actor;
 
-import name.huliqing.ly.ui.tiles.ColumnBody;
-import name.huliqing.ly.ui.tiles.ColumnText;
-import name.huliqing.ly.ui.tiles.ColumnIcon;
-import name.huliqing.ly.Factory;
-import name.huliqing.ly.constants.InterfaceConstants;
-import name.huliqing.ly.data.TalentData;
-import name.huliqing.ly.layer.service.PlayService;
+import name.huliqing.luoying.ui.tiles.ColumnBody;
+import name.huliqing.luoying.ui.tiles.ColumnText;
+import name.huliqing.luoying.ui.tiles.ColumnIcon;
+import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.constants.InterfaceConstants;
+import name.huliqing.luoying.data.TalentData;
+import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.view.SimpleRow;
-import name.huliqing.ly.manager.ResourceManager;
-import name.huliqing.ly.object.talent.Talent;
-import name.huliqing.ly.ui.ListView;
+import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.luoying.object.talent.Talent;
+import name.huliqing.luoying.ui.ListView;
 
 /**
  * 

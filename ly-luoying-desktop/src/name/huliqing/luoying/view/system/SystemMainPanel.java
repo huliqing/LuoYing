@@ -5,14 +5,14 @@
 package name.huliqing.luoying.view.system;
 
 import com.jme3.font.BitmapFont;
-import name.huliqing.ly.manager.ResourceManager;
-import name.huliqing.ly.ui.LinearLayout;
-import name.huliqing.ly.ui.LinearLayout.Layout;
-import name.huliqing.ly.ui.Text;
-import name.huliqing.ly.ui.UIFactory;
-import name.huliqing.ly.ui.UI;
-import name.huliqing.ly.ui.Window;
-import name.huliqing.ly.ui.tiles.Tab;
+import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.luoying.ui.LinearLayout;
+import name.huliqing.luoying.ui.LinearLayout.Layout;
+import name.huliqing.luoying.ui.Text;
+import name.huliqing.luoying.ui.UIFactory;
+import name.huliqing.luoying.ui.UI;
+import name.huliqing.luoying.ui.Window;
+import name.huliqing.luoying.ui.tiles.Tab;
 
 /**
  *

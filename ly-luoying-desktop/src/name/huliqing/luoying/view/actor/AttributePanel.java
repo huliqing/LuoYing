@@ -9,18 +9,18 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import name.huliqing.ly.Factory;
-import name.huliqing.ly.manager.ResourceManager;
-import name.huliqing.ly.layer.service.ActorService;
-import name.huliqing.ly.layer.service.AttributeService;
-import name.huliqing.ly.object.actor.Actor;
-import name.huliqing.ly.object.attribute.AbstractSimpleAttribute;
-import name.huliqing.ly.object.attribute.Attribute;
-import name.huliqing.ly.object.attribute.GroupAttribute;
-import name.huliqing.ly.object.attribute.LimitAttribute;
-import name.huliqing.ly.ui.ListView;
-import name.huliqing.ly.ui.Row;
-import name.huliqing.ly.ui.Text;
+import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.luoying.layer.service.ActorService;
+import name.huliqing.luoying.layer.service.AttributeService;
+import name.huliqing.luoying.object.actor.Actor;
+import name.huliqing.luoying.object.attribute.AbstractSimpleAttribute;
+import name.huliqing.luoying.object.attribute.Attribute;
+import name.huliqing.luoying.object.attribute.GroupAttribute;
+import name.huliqing.luoying.object.attribute.LimitAttribute;
+import name.huliqing.luoying.ui.ListView;
+import name.huliqing.luoying.ui.Row;
+import name.huliqing.luoying.ui.Text;
 
 /**
  * 角色属性面板

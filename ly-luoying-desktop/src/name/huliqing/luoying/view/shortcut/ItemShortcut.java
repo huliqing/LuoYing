@@ -5,15 +5,15 @@
  */
 package name.huliqing.luoying.view.shortcut;
 
-import name.huliqing.ly.Factory;
-import name.huliqing.ly.data.ItemData;
-import name.huliqing.ly.layer.network.ActorNetwork;
-import name.huliqing.ly.layer.network.ItemNetwork;
-import name.huliqing.ly.layer.service.ItemService;
-import name.huliqing.ly.layer.service.PlayService;
-import name.huliqing.ly.object.entity.Entity;
-import name.huliqing.ly.object.item.Item;
-import name.huliqing.ly.object.module.ItemListener;
+import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.data.ItemData;
+import name.huliqing.luoying.layer.network.ActorNetwork;
+import name.huliqing.luoying.layer.network.ItemNetwork;
+import name.huliqing.luoying.layer.service.ItemService;
+import name.huliqing.luoying.layer.service.PlayService;
+import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.item.Item;
+import name.huliqing.luoying.object.module.ItemListener;
 
 /**
  * 用于普通物品(Item)的快捷方式

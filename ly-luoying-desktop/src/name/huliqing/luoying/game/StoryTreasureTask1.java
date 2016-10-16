@@ -4,28 +4,28 @@
  */
 package name.huliqing.luoying.game;
 
-import name.huliqing.ly.Factory;
-import name.huliqing.ly.manager.ResourceManager;
-import name.huliqing.ly.object.actor.Actor;
-import name.huliqing.ly.constants.IdConstants;
-import name.huliqing.ly.enums.MessageType;
+import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.luoying.object.actor.Actor;
+import name.huliqing.luoying.constants.IdConstants;
+import name.huliqing.luoying.enums.MessageType;
 import name.huliqing.luoying.view.talk.Talk;
 import name.huliqing.luoying.view.talk.TalkImpl;
 import name.huliqing.luoying.view.talk.TalkListener;
-import name.huliqing.ly.layer.network.ActorNetwork;
-import name.huliqing.ly.layer.network.PlayNetwork;
-import name.huliqing.ly.layer.network.StateNetwork;
-import name.huliqing.ly.layer.service.ActorService;
-import name.huliqing.ly.layer.service.PlayService;
-import name.huliqing.ly.layer.service.SkillService;
-import name.huliqing.ly.layer.service.StateService;
-import name.huliqing.ly.logic.scene.ActorLoadHelper;
-import name.huliqing.ly.object.gamelogic.AbstractGameLogic;
-import name.huliqing.ly.ui.Button;
-import name.huliqing.ly.ui.TextPanel;
-import name.huliqing.ly.ui.UI;
-import name.huliqing.ly.ui.UI.Corner;
-import name.huliqing.ly.ui.UI.Listener;
+import name.huliqing.luoying.layer.network.ActorNetwork;
+import name.huliqing.luoying.layer.network.PlayNetwork;
+import name.huliqing.luoying.layer.network.StateNetwork;
+import name.huliqing.luoying.layer.service.ActorService;
+import name.huliqing.luoying.layer.service.PlayService;
+import name.huliqing.luoying.layer.service.SkillService;
+import name.huliqing.luoying.layer.service.StateService;
+import name.huliqing.luoying.logic.scene.ActorLoadHelper;
+import name.huliqing.luoying.object.gamelogic.AbstractGameLogic;
+import name.huliqing.luoying.ui.Button;
+import name.huliqing.luoying.ui.TextPanel;
+import name.huliqing.luoying.ui.UI;
+import name.huliqing.luoying.ui.UI.Corner;
+import name.huliqing.luoying.ui.UI.Listener;
 
 /**
  * 宝箱任务第一阶段:寻找宝箱

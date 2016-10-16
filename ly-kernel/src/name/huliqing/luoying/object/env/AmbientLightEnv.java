@@ -1,0 +1,41 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package name.huliqing.luoying.object.env;
+
+import com.jme3.light.AmbientLight;
+import name.huliqing.luoying.data.EntityData;
+import name.huliqing.luoying.object.entity.NoneModelEntity;
+
+/**
+ * @author huliqing
+ */
+public class AmbientLightEnv extends NoneModelEntity {
+
+    private final AmbientLight light = new AmbientLight();
+    
+    @Override
+    public void setData(EntityData data) {
+        super.setData(data);
+        light.setColor(data.getAsColor("color", light.getColor()));
+    }
+
+    @Override
+    public void updateDatas() {
+        // ignore
+    }
+    
+    @Override
+    public void initialize() {
+        scene.getRoot().addLight(light);
+    }
+    
+    @Override
+    public void cleanup() {
+        scene.getRoot().removeLight(light);
+        super.cleanup(); 
+    }
+    
+}

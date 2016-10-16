@@ -4,7 +4,7 @@
  */
 package name.huliqing.luoying.view.talk;
 
-import name.huliqing.ly.object.entity.Entity;
+import name.huliqing.luoying.object.entity.Entity;
 
 /**
  *

@@ -5,11 +5,11 @@
 package name.huliqing.luoying.game;
 
 import com.jme3.math.Vector3f;
-import name.huliqing.ly.Factory;
-import name.huliqing.ly.layer.network.ActorNetwork;
-import name.huliqing.ly.object.actor.Actor;
-import name.huliqing.ly.object.game.Game;
-import name.huliqing.ly.utils.MathUtils;
+import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.layer.network.ActorNetwork;
+import name.huliqing.luoying.object.actor.Actor;
+import name.huliqing.luoying.object.game.Game;
+import name.huliqing.luoying.utils.MathUtils;
 
 /**
  * @author huliqing

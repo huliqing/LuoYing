@@ -7,10 +7,10 @@ package game;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.system.AppSettings;
-import name.huliqing.ly.LuoYing;
-import name.huliqing.ly.constants.IdConstants;
-import name.huliqing.ly.object.Loader;
-import name.huliqing.ly.object.scene.Scene;
+import name.huliqing.luoying.LuoYing;
+import name.huliqing.luoying.constants.IdConstants;
+import name.huliqing.luoying.object.Loader;
+import name.huliqing.luoying.object.scene.Scene;
 
 /**
  * @author huliqing

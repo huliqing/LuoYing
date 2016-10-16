@@ -7,20 +7,20 @@ package name.huliqing.luoying.view.actor;
 import com.jme3.font.BitmapFont;
 import java.util.Collections;
 import java.util.List;
-import name.huliqing.ly.Factory;
-import name.huliqing.ly.constants.ResConstants;
-import name.huliqing.ly.manager.ResourceManager;
-import name.huliqing.ly.object.actor.Actor;
+import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.constants.ResConstants;
+import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.layer.network.UserCommandNetwork;
-import name.huliqing.ly.layer.service.ActorService;
-import name.huliqing.ly.layer.service.TalentService;
-import name.huliqing.ly.object.talent.Talent;
-import name.huliqing.ly.ui.UIFactory;
-import name.huliqing.ly.ui.LinearLayout;
-import name.huliqing.ly.ui.ListView;
-import name.huliqing.ly.ui.Row;
-import name.huliqing.ly.ui.Text;
-import name.huliqing.ly.ui.UI;
+import name.huliqing.luoying.layer.service.ActorService;
+import name.huliqing.luoying.layer.service.TalentService;
+import name.huliqing.luoying.object.talent.Talent;
+import name.huliqing.luoying.ui.UIFactory;
+import name.huliqing.luoying.ui.LinearLayout;
+import name.huliqing.luoying.ui.ListView;
+import name.huliqing.luoying.ui.Row;
+import name.huliqing.luoying.ui.Text;
+import name.huliqing.luoying.ui.UI;
 
 /**
  * 天赋面板

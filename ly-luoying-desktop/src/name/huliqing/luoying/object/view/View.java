@@ -4,8 +4,8 @@
  */
 package name.huliqing.luoying.object.view;
 
-import name.huliqing.ly.data.ViewData;
-import name.huliqing.ly.xml.DataProcessor;
+import name.huliqing.luoying.data.ViewData;
+import name.huliqing.luoying.xml.DataProcessor;
 
 /**
  *

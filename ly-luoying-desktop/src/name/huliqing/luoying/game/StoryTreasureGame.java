@@ -5,8 +5,8 @@
 package name.huliqing.luoying.game;
 
 import com.jme3.math.Vector3f;
-import name.huliqing.ly.Config;
-import name.huliqing.ly.utils.MathUtils;
+import name.huliqing.luoying.Config;
+import name.huliqing.luoying.utils.MathUtils;
 
 /**
  *

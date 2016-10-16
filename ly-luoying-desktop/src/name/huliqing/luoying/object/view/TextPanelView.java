@@ -4,10 +4,10 @@
  */
 package name.huliqing.luoying.object.view;
 
-import name.huliqing.ly.data.ViewData;
-import name.huliqing.ly.manager.ResourceManager;
-import name.huliqing.ly.object.SyncData;
-import name.huliqing.ly.ui.Window;
+import name.huliqing.luoying.data.ViewData;
+import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.luoying.object.SyncData;
+import name.huliqing.luoying.ui.Window;
 
 /**
  * 用于显示文字信息的界面组件

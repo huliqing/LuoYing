@@ -5,20 +5,20 @@
 package name.huliqing.luoying.object.chat;
 
 import com.jme3.app.Application;
-import name.huliqing.ly.Factory;
-import name.huliqing.ly.constants.ResConstants;
-import name.huliqing.ly.data.ChatData;
-import name.huliqing.ly.layer.service.PlayService;
-import name.huliqing.ly.object.Loader;
-import name.huliqing.ly.manager.ResourceManager;
-import name.huliqing.ly.layer.service.ActorService;
-import name.huliqing.ly.object.AbstractPlayObject;
-import name.huliqing.ly.xml.DataProcessor;
-import name.huliqing.ly.object.anim.Anim;
-import name.huliqing.ly.object.entity.Entity;
-import name.huliqing.ly.object.hitchecker.HitChecker;
-import name.huliqing.ly.ui.UI;
-import name.huliqing.ly.ui.state.UIState;
+import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.constants.ResConstants;
+import name.huliqing.luoying.data.ChatData;
+import name.huliqing.luoying.layer.service.PlayService;
+import name.huliqing.luoying.object.Loader;
+import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.luoying.layer.service.ActorService;
+import name.huliqing.luoying.object.AbstractPlayObject;
+import name.huliqing.luoying.xml.DataProcessor;
+import name.huliqing.luoying.object.anim.Anim;
+import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.hitchecker.HitChecker;
+import name.huliqing.luoying.ui.UI;
+import name.huliqing.luoying.ui.state.UIState;
 
 /**
  * 对话功能。

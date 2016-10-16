@@ -4,8 +4,8 @@
  */
 package name.huliqing.luoying.view;
 
-import name.huliqing.ly.ui.Button;
-import name.huliqing.ly.ui.UIFactory;
+import name.huliqing.luoying.ui.Button;
+import name.huliqing.luoying.ui.UIFactory;
 
 /**
  *

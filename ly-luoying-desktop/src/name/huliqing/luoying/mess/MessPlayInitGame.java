@@ -6,11 +6,9 @@ package name.huliqing.luoying.mess;
 
 import com.jme3.network.HostedConnection;
 import com.jme3.network.serializing.Serializable;
-import name.huliqing.ly.Factory;
-import name.huliqing.ly.layer.network.PlayNetwork;
-import name.huliqing.ly.mess.MessBase;
-import name.huliqing.ly.mess.MessSCInitGameOK;
-import name.huliqing.ly.network.GameServer;
+import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.layer.network.PlayNetwork;
+import name.huliqing.luoying.network.GameServer;
 
 /**
  * 向服务端获取游戏初始信息,主要用于初始化客户端场景物体,这个消息在发送之前

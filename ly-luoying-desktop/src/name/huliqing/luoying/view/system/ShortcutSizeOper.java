@@ -6,16 +6,16 @@ package name.huliqing.luoying.view.system;
 
 import com.jme3.font.BitmapFont;
 import java.text.DecimalFormat;
-import name.huliqing.ly.Factory;
-import name.huliqing.ly.constants.InterfaceConstants;
-import name.huliqing.ly.layer.service.ConfigService;
-import name.huliqing.ly.manager.ResourceManager;
-import name.huliqing.ly.ui.FrameLayout;
-import name.huliqing.ly.ui.Icon;
-import name.huliqing.ly.ui.Text;
-import name.huliqing.ly.ui.UIFactory;
-import name.huliqing.ly.ui.UI;
-import name.huliqing.ly.ui.Window;
+import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.constants.InterfaceConstants;
+import name.huliqing.luoying.layer.service.ConfigService;
+import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.luoying.ui.FrameLayout;
+import name.huliqing.luoying.ui.Icon;
+import name.huliqing.luoying.ui.Text;
+import name.huliqing.luoying.ui.UIFactory;
+import name.huliqing.luoying.ui.UI;
+import name.huliqing.luoying.ui.Window;
 
 /**
  * 游戏音量大小调整界面

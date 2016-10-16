@@ -4,9 +4,9 @@
  */
 package name.huliqing.luoying.view;
 
-import name.huliqing.ly.object.state.State;
-import name.huliqing.ly.ui.FrameLayout;
-import name.huliqing.ly.ui.Icon;
+import name.huliqing.luoying.object.state.State;
+import name.huliqing.luoying.ui.FrameLayout;
+import name.huliqing.luoying.ui.Icon;
 
 /**
  * 主要用于显示状态，让状态可视化。

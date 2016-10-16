@@ -6,11 +6,11 @@ package name.huliqing.luoying.view;
 
 import com.jme3.font.BitmapFont;
 import com.jme3.math.ColorRGBA;
-import name.huliqing.ly.ui.Checkbox;
-import name.huliqing.ly.ui.Checkbox.ChangeListener;
-import name.huliqing.ly.ui.LinearLayout;
-import name.huliqing.ly.ui.Text;
-import name.huliqing.ly.ui.UI;
+import name.huliqing.luoying.ui.Checkbox;
+import name.huliqing.luoying.ui.Checkbox.ChangeListener;
+import name.huliqing.luoying.ui.LinearLayout;
+import name.huliqing.luoying.ui.Text;
+import name.huliqing.luoying.ui.UI;
 
 /**
  *

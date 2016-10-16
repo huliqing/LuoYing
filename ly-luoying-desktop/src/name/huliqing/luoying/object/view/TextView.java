@@ -7,11 +7,11 @@ package name.huliqing.luoying.object.view;
 import com.jme3.font.BitmapFont.Align;
 import com.jme3.font.BitmapFont.VAlign;
 import com.jme3.math.ColorRGBA;
-import name.huliqing.ly.data.ViewData;
-import name.huliqing.ly.manager.ResourceManager;
-import name.huliqing.ly.object.SyncData;
-import name.huliqing.ly.ui.Text;
-import name.huliqing.ly.ui.UIFactory;
+import name.huliqing.luoying.data.ViewData;
+import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.luoying.object.SyncData;
+import name.huliqing.luoying.ui.Text;
+import name.huliqing.luoying.ui.UIFactory;
 
 /**
  * 用于显示文字信息的界面组件

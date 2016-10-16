@@ -6,25 +6,25 @@ package name.huliqing.luoying.object.chat;
 
 import com.jme3.app.Application;
 import com.jme3.math.FastMath;
-import name.huliqing.ly.Factory;
-import name.huliqing.ly.constants.ResConstants;
-import name.huliqing.ly.data.ChatData;
-import name.huliqing.ly.enums.MessageType;
+import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.constants.ResConstants;
+import name.huliqing.luoying.data.ChatData;
+import name.huliqing.luoying.enums.MessageType;
 import name.huliqing.luoying.layer.network.UserCommandNetwork;
-import name.huliqing.ly.layer.service.ActorService;
-import name.huliqing.ly.layer.service.PlayService;
-import name.huliqing.ly.layer.service.TaskService;
+import name.huliqing.luoying.layer.service.ActorService;
+import name.huliqing.luoying.layer.service.PlayService;
+import name.huliqing.luoying.layer.service.TaskService;
 import name.huliqing.luoying.view.ButtonPanel;
-import name.huliqing.ly.manager.ResourceManager;
+import name.huliqing.luoying.manager.ResourceManager;
 import name.huliqing.luoying.view.talk.Talk;
 import name.huliqing.luoying.view.talk.TalkImpl;
 import name.huliqing.luoying.view.talk.TalkListener;
-import name.huliqing.ly.object.entity.Entity;
-import name.huliqing.ly.object.task.Task;
-import name.huliqing.ly.ui.Text;
-import name.huliqing.ly.ui.UI;
-import name.huliqing.ly.ui.UIFactory;
-import name.huliqing.ly.ui.Window;
+import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.task.Task;
+import name.huliqing.luoying.ui.Text;
+import name.huliqing.luoying.ui.UI;
+import name.huliqing.luoying.ui.UIFactory;
+import name.huliqing.luoying.ui.Window;
 
 /**
  * 任务对话，用于玩家向NPC接任务或提交任务时的对话

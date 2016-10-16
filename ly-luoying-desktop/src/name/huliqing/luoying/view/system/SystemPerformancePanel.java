@@ -6,12 +6,12 @@ package name.huliqing.luoying.view.system;
 
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.ly.Factory;
-import name.huliqing.ly.layer.service.ConfigService;
-import name.huliqing.ly.manager.ResourceManager;
-import name.huliqing.ly.ui.ListView;
-import name.huliqing.ly.ui.Row;
-import name.huliqing.ly.ui.UI;
+import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.layer.service.ConfigService;
+import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.luoying.ui.ListView;
+import name.huliqing.luoying.ui.Row;
+import name.huliqing.luoying.ui.UI;
 import name.huliqing.luoying.view.system.RowCheckbox;
 import name.huliqing.luoying.view.system.RowSimple;
 import name.huliqing.luoying.view.system.SystemData;

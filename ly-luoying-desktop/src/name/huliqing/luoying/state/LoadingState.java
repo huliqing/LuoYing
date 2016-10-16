@@ -5,8 +5,8 @@
  */
 package name.huliqing.luoying.state;
 
-import name.huliqing.ly.ui.Text;
-import name.huliqing.ly.ui.UI.Corner;
+import name.huliqing.luoying.ui.Text;
+import name.huliqing.luoying.ui.UI.Corner;
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;

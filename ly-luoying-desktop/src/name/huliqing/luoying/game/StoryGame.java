@@ -6,12 +6,12 @@ package name.huliqing.luoying.game;
 
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.ly.Factory;
-import name.huliqing.ly.data.GameData;
-import name.huliqing.ly.layer.network.ActorNetwork;
-import name.huliqing.ly.layer.service.PlayService;
-import name.huliqing.ly.object.actor.Actor;
-import name.huliqing.ly.object.game.Game;
+import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.data.GameData;
+import name.huliqing.luoying.layer.network.ActorNetwork;
+import name.huliqing.luoying.layer.service.PlayService;
+import name.huliqing.luoying.object.actor.Actor;
+import name.huliqing.luoying.object.game.Game;
 
 /**
  * 故事模式的游戏方式，有一些特殊的游戏逻辑行为。并且一旦主角死亡也就是任务失败

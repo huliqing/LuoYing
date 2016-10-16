@@ -6,19 +6,19 @@ package name.huliqing.luoying.view;
 
 import com.jme3.app.Application;
 import com.jme3.scene.Spatial;
-import name.huliqing.ly.ui.UIUtils;
+import name.huliqing.luoying.ui.UIUtils;
 import name.huliqing.ly.Ly;
-import name.huliqing.ly.Factory;
-import name.huliqing.ly.constants.IdConstants;
-import name.huliqing.ly.layer.service.PlayService;
+import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.constants.IdConstants;
+import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.sss.GameState;
-import name.huliqing.ly.object.actor.Actor;
-import name.huliqing.ly.object.Loader;
-import name.huliqing.ly.object.anim.Anim;
-import name.huliqing.ly.ui.Icon;
-import name.huliqing.ly.ui.UI;
-import name.huliqing.ly.ui.UI.Corner;
-import name.huliqing.ly.ui.state.UIState;
+import name.huliqing.luoying.object.actor.Actor;
+import name.huliqing.luoying.object.Loader;
+import name.huliqing.luoying.object.anim.Anim;
+import name.huliqing.luoying.ui.Icon;
+import name.huliqing.luoying.ui.UI;
+import name.huliqing.luoying.ui.UI.Corner;
+import name.huliqing.luoying.ui.state.UIState;
 
 /**
  * 场景控制,包含设置,人物控制,UI等
@@ -64,10 +64,10 @@ public class LanPlayStateUI extends PlayStateUI {
         float faceHeight = Ly.getSettings().getHeight() * 0.12f;
         
         teamView = new TeamView(faceWidth, faceHeight);
-        teamView.setToCorner(name.huliqing.ly.ui.AbstractUI.Corner.LT);
+        teamView.setToCorner(name.huliqing.luoying.ui.AbstractUI.Corner.LT);
         
         targetFace = new FaceView(faceWidth, faceHeight);
-        targetFace.setToCorner(name.huliqing.ly.ui.AbstractUI.Corner.CT);
+        targetFace.setToCorner(name.huliqing.luoying.ui.AbstractUI.Corner.CT);
         targetFace.setVisible(false);
         
         // ---- 角色面板及动画控制
@@ -82,7 +82,7 @@ public class LanPlayStateUI extends PlayStateUI {
         // 按钮：人物面板,包含装甲、武器、技能、属性、任务等等
         Icon userBtn = new Icon("Interface/icon/bag.png");
         userBtn.setUseAlpha(true);
-        userBtn.addClickListener(new name.huliqing.ly.ui.UI.Listener() {
+        userBtn.addClickListener(new name.huliqing.luoying.ui.UI.Listener() {
             @Override
             public void onClick(UI ui, boolean isPress) {
                 if (isPress) return;

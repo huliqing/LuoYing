@@ -5,12 +5,11 @@
 package name.huliqing.luoying.view.transfer;
 
 import java.util.List;
-import name.huliqing.ly.data.ObjectData;
+import name.huliqing.luoying.data.ObjectData;
 import name.huliqing.luoying.view.ItemPanel;
-import name.huliqing.ly.ui.Row;
+import name.huliqing.luoying.ui.Row;
 import name.huliqing.luoying.view.ItemList.RowClickListener;
-import name.huliqing.ly.view.transfer.Transfer;
-import name.huliqing.ly.xml.DataProcessor;
+import name.huliqing.luoying.xml.DataProcessor;
 
 /**
  * @author huliqing

@@ -6,12 +6,11 @@ package name.huliqing.luoying.mess;
 
 import com.jme3.network.HostedConnection;
 import com.jme3.network.serializing.Serializable;
-import name.huliqing.ly.Factory;
-import name.huliqing.ly.data.GameData;
-import name.huliqing.ly.layer.network.PlayNetwork;
-import name.huliqing.ly.layer.service.PlayService;
-import name.huliqing.ly.mess.MessBase;
-import name.huliqing.ly.network.GameServer;
+import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.data.GameData;
+import name.huliqing.luoying.layer.network.PlayNetwork;
+import name.huliqing.luoying.layer.service.PlayService;
+import name.huliqing.luoying.network.GameServer;
 
 /**
  * 服务端向客户端，或者客户端向服务端发送“切换游戏”的消息。

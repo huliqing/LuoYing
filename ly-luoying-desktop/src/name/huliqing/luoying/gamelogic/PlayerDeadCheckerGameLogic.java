@@ -4,19 +4,19 @@
  */
 package name.huliqing.luoying.gamelogic;
 
-import name.huliqing.ly.Factory;
-import name.huliqing.ly.constants.IdConstants;
-import name.huliqing.ly.constants.ResConstants;
-import name.huliqing.ly.data.GameLogicData;
-import name.huliqing.ly.enums.MessageType;
-import name.huliqing.ly.layer.network.PlayNetwork;
-import name.huliqing.ly.layer.service.PlayService;
+import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.constants.IdConstants;
+import name.huliqing.luoying.constants.ResConstants;
+import name.huliqing.luoying.data.GameLogicData;
+import name.huliqing.luoying.enums.MessageType;
+import name.huliqing.luoying.layer.network.PlayNetwork;
+import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.layer.service.ViewService;
-import name.huliqing.ly.manager.ResourceManager;
-import name.huliqing.ly.layer.service.ActorService;
-import name.huliqing.ly.object.actor.Actor;
-import name.huliqing.ly.object.game.Game;
-import name.huliqing.ly.object.gamelogic.AbstractGameLogic;
+import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.luoying.layer.service.ActorService;
+import name.huliqing.luoying.object.actor.Actor;
+import name.huliqing.luoying.object.game.Game;
+import name.huliqing.luoying.object.gamelogic.AbstractGameLogic;
 
 /**
  * 用于检查主角是否已经死亡

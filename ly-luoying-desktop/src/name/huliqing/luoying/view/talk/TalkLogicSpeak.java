@@ -4,13 +4,13 @@
  */
 package name.huliqing.luoying.view.talk;
 
-import name.huliqing.ly.Factory;
-import name.huliqing.ly.layer.network.ActorNetwork;
-import name.huliqing.ly.layer.service.ActorService;
-import name.huliqing.ly.layer.service.ConfigService;
-import name.huliqing.ly.manager.ResourceManager;
-import name.huliqing.ly.object.entity.Entity;
-import name.huliqing.ly.utils.MathUtils;
+import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.layer.network.ActorNetwork;
+import name.huliqing.luoying.layer.service.ActorService;
+import name.huliqing.luoying.layer.service.ConfigService;
+import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.utils.MathUtils;
 
 /**
  *

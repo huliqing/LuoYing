@@ -4,8 +4,8 @@
  */
 package name.huliqing.luoying.layer.network;
 
-import name.huliqing.ly.Inject;
-import name.huliqing.ly.object.entity.Entity;
+import name.huliqing.luoying.Inject;
+import name.huliqing.luoying.object.entity.Entity;
 
 /**
  * @author huliqing

@@ -6,12 +6,11 @@
 package name.huliqing.luoying.object.module;
 
 import java.util.List;
-import name.huliqing.ly.data.ChatData;
-import name.huliqing.ly.data.ObjectData;
-import name.huliqing.ly.object.Loader;
+import name.huliqing.luoying.data.ChatData;
+import name.huliqing.luoying.data.ObjectData;
+import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.chat.Chat;
-import name.huliqing.ly.object.entity.Entity;
-import name.huliqing.ly.object.module.AbstractModule;
+import name.huliqing.luoying.object.entity.Entity;
 
 /**
  * 角色对话模块

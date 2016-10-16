@@ -4,13 +4,13 @@
  */
 package name.huliqing.luoying.layer.network;
 
-import name.huliqing.ly.Factory;
+import name.huliqing.luoying.Factory;
 import name.huliqing.ly.layer.service.ChatService;
-import name.huliqing.ly.network.Network;
+import name.huliqing.luoying.network.Network;
 import name.huliqing.luoying.mess.MessChatSell;
 import name.huliqing.luoying.mess.MessChatSend;
 import name.huliqing.luoying.mess.MessChatShop;
-import name.huliqing.ly.object.entity.Entity;
+import name.huliqing.luoying.object.entity.Entity;
 
 /**
  * @author huliqing

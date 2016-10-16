@@ -5,8 +5,8 @@
 package name.huliqing.luoying.view;
 
 import com.jme3.math.ColorRGBA;
-import name.huliqing.ly.ui.FrameLayout;
-import name.huliqing.ly.ui.Icon;
+import name.huliqing.luoying.ui.FrameLayout;
+import name.huliqing.luoying.ui.Icon;
 
 /**
  * 进度条

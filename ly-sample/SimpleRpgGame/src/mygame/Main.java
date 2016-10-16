@@ -3,11 +3,11 @@ package mygame;
 import com.jme3.app.SimpleApplication;
 import com.jme3.renderer.RenderManager;
 import mygame.object.RpgGame;
-import name.huliqing.ly.LuoYing;
-import name.huliqing.ly.data.GameData;
-import name.huliqing.ly.loader.GameDataLoader;
-import name.huliqing.ly.object.env.ChaseCameraEnv;
-import name.huliqing.ly.xml.DataFactory;
+import name.huliqing.luoying.LuoYing;
+import name.huliqing.luoying.data.GameData;
+import name.huliqing.luoying.loader.GameDataLoader;
+import name.huliqing.luoying.object.env.ChaseCameraEnv;
+import name.huliqing.luoying.xml.DataFactory;
 
 /**
  * This is the Main Class of your Game. You should only do initialization here.

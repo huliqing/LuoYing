@@ -4,19 +4,19 @@
  */
 package name.huliqing.luoying.view.actor;
 
-import name.huliqing.ly.Factory;
-import name.huliqing.ly.ui.tiles.ColumnBody;
-import name.huliqing.ly.ui.tiles.ColumnText;
-import name.huliqing.ly.ui.tiles.ColumnIcon;
-import name.huliqing.ly.constants.InterfaceConstants;
-import name.huliqing.ly.constants.ResConstants;
-import name.huliqing.ly.data.SkillData;
-import name.huliqing.ly.manager.ResourceManager;
-import name.huliqing.ly.layer.service.ActorService;
-import name.huliqing.ly.object.actor.Actor;
-import name.huliqing.ly.object.skill.Skill;
-import name.huliqing.ly.ui.UIFactory;
-import name.huliqing.ly.ui.Row;
+import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.ui.tiles.ColumnBody;
+import name.huliqing.luoying.ui.tiles.ColumnText;
+import name.huliqing.luoying.ui.tiles.ColumnIcon;
+import name.huliqing.luoying.constants.InterfaceConstants;
+import name.huliqing.luoying.constants.ResConstants;
+import name.huliqing.luoying.data.SkillData;
+import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.luoying.layer.service.ActorService;
+import name.huliqing.luoying.object.actor.Actor;
+import name.huliqing.luoying.object.skill.Skill;
+import name.huliqing.luoying.ui.UIFactory;
+import name.huliqing.luoying.ui.Row;
 
 /**
  *

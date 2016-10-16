@@ -4,9 +4,9 @@
  */
 package name.huliqing.luoying.state.start;
 
-import name.huliqing.ly.manager.ResourceManager;
-import name.huliqing.ly.ui.Button;
-import name.huliqing.ly.ui.UIFactory;
+import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.luoying.ui.Button;
+import name.huliqing.luoying.ui.UIFactory;
 
 /**
  *

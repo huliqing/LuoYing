@@ -17,7 +17,7 @@ import com.jme3.scene.Spatial.CullHint;
 import com.jme3.util.TempVars;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.ly.ui.Text;
+import name.huliqing.luoying.ui.Text;
 
 /**
  * 线性直线运动

@@ -5,14 +5,14 @@
 package name.huliqing.luoying.view;
 
 import java.util.List;
-import name.huliqing.ly.Factory;
-import name.huliqing.ly.layer.service.ConfigService;
-import name.huliqing.ly.manager.ResourceManager;
-import name.huliqing.ly.ui.UIFactory;
-import name.huliqing.ly.ui.Button;
-import name.huliqing.ly.ui.Text;
-import name.huliqing.ly.ui.UI;
-import name.huliqing.ly.ui.Window;
+import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.layer.service.ConfigService;
+import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.luoying.ui.UIFactory;
+import name.huliqing.luoying.ui.Button;
+import name.huliqing.luoying.ui.Text;
+import name.huliqing.luoying.ui.UI;
+import name.huliqing.luoying.ui.Window;
 
 /**
  *

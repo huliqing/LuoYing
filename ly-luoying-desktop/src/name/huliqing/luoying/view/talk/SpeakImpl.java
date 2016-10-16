@@ -7,17 +7,17 @@ package name.huliqing.luoying.view.talk;
 import com.jme3.math.ColorRGBA;
 import com.jme3.util.TempVars;
 import name.huliqing.ly.Ly;
-import name.huliqing.ly.Factory;
-import name.huliqing.ly.enums.MessageType;
-import name.huliqing.ly.layer.service.ConfigService;
-import name.huliqing.ly.layer.service.PlayService;
-import name.huliqing.ly.manager.ResourceManager;
-import name.huliqing.ly.object.entity.Entity;
-import name.huliqing.ly.ui.UIFactory;
-import name.huliqing.ly.utils.GeometryUtils;
-import name.huliqing.ly.utils.MathUtils;
-import name.huliqing.ly.ui.LinearLayout;
-import name.huliqing.ly.ui.Text;
+import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.enums.MessageType;
+import name.huliqing.luoying.layer.service.ConfigService;
+import name.huliqing.luoying.layer.service.PlayService;
+import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.ui.UIFactory;
+import name.huliqing.luoying.utils.GeometryUtils;
+import name.huliqing.luoying.utils.MathUtils;
+import name.huliqing.luoying.ui.LinearLayout;
+import name.huliqing.luoying.ui.Text;
 
 /**
  * 显示对话框

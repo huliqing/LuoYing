@@ -6,18 +6,17 @@ package name.huliqing.luoying.view.transfer;
 
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.ly.constants.InterfaceConstants;
-import name.huliqing.ly.data.ObjectData;
-import name.huliqing.ly.object.item.Item;
-import name.huliqing.ly.object.skin.Skin;
-import name.huliqing.ly.object.skin.Weapon;
+import name.huliqing.luoying.constants.InterfaceConstants;
+import name.huliqing.luoying.data.ObjectData;
+import name.huliqing.luoying.object.item.Item;
+import name.huliqing.luoying.object.skin.Skin;
+import name.huliqing.luoying.object.skin.Weapon;
 import name.huliqing.luoying.view.IconPanel;
 import name.huliqing.luoying.view.ItemList.RowClickListener;
 import name.huliqing.luoying.view.ItemPanel;
-import name.huliqing.ly.ui.Row;
-import name.huliqing.ly.ui.tiles.Tab;
-import name.huliqing.ly.view.transfer.Transfer;
-import name.huliqing.ly.xml.DataProcessor;
+import name.huliqing.luoying.ui.Row;
+import name.huliqing.luoying.ui.tiles.Tab;
+import name.huliqing.luoying.xml.DataProcessor;
 
 /**
  *

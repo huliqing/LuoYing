@@ -5,13 +5,13 @@
 package name.huliqing.luoying.state.lan;
 
 import com.jme3.math.ColorRGBA;
-import name.huliqing.ly.constants.InterfaceConstants;
-import name.huliqing.ly.data.GameData;
-import name.huliqing.ly.manager.ResourceManager;
-import name.huliqing.ly.ui.Icon;
-import name.huliqing.ly.ui.LinearLayout;
-import name.huliqing.ly.ui.Text;
-import name.huliqing.ly.ui.UIFactory;
+import name.huliqing.luoying.constants.InterfaceConstants;
+import name.huliqing.luoying.data.GameData;
+import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.luoying.ui.Icon;
+import name.huliqing.luoying.ui.LinearLayout;
+import name.huliqing.luoying.ui.Text;
+import name.huliqing.luoying.ui.UIFactory;
 
 /**
  * 游戏简介界面

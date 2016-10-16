@@ -5,10 +5,9 @@
 package name.huliqing.luoying.mess;
 
 import com.jme3.network.serializing.Serializable;
-import name.huliqing.ly.Factory;
-import name.huliqing.ly.enums.MessageType;
-import name.huliqing.ly.layer.service.PlayService;
-import name.huliqing.ly.mess.MessBase;
+import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.enums.MessageType;
+import name.huliqing.luoying.layer.service.PlayService;
 
 /**
  *

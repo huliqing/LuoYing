@@ -5,17 +5,15 @@
 package name.huliqing.luoying.view.transfer;
 
 import java.util.List;
-import name.huliqing.ly.constants.ResConstants;
-import name.huliqing.ly.data.ObjectData;
+import name.huliqing.luoying.constants.ResConstants;
+import name.huliqing.luoying.data.ObjectData;
 import name.huliqing.luoying.view.NumPanel;
 import name.huliqing.luoying.view.NumPanel.NumConfirmListener;
-import name.huliqing.ly.manager.ResourceManager;
-import name.huliqing.ly.ui.LinearLayout;
-import name.huliqing.ly.ui.UIFactory;
-import name.huliqing.ly.ui.state.UIState;
-import name.huliqing.ly.view.transfer.ItemTransfer;
-import name.huliqing.ly.view.transfer.TransferListener;
-import name.huliqing.ly.xml.DataProcessor;
+import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.luoying.ui.LinearLayout;
+import name.huliqing.luoying.ui.UIFactory;
+import name.huliqing.luoying.ui.state.UIState;
+import name.huliqing.luoying.xml.DataProcessor;
 
 /**
  * 数据传输界面
