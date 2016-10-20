@@ -15,13 +15,11 @@ import com.jme3.scene.Spatial.CullHint;
 import com.jme3.scene.control.AbstractControl;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.effect.Effect;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.entity.ModelEntity;
-import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.object.shape.Shape;
 import name.huliqing.luoying.object.sound.SoundManager;
 
@@ -30,7 +28,7 @@ import name.huliqing.luoying.object.sound.SoundManager;
  * @author huliqing
  */
 public abstract class AbstractBullet extends ModelEntity implements Bullet {
-    private static final Logger LOG = Logger.getLogger(AbstractBullet.class.getName());
+//    private static final Logger LOG = Logger.getLogger(AbstractBullet.class.getName());
     
     // 调试
     protected boolean debug;

@@ -61,7 +61,6 @@ public interface Entity<T extends EntityData> extends DataProcessor<T>{
      * <br>
      * 1.对于有形的Entity，这个方法必须返回一个代表物体在场景中的实际存在，如对于角色一般应该返回角色的模型节点.<br>
      * 2.对于无形的Entity，这个方法可以返回null, 但是建议返回一个无任何意义的Node(这可以减少一些引用上的判断和NullPointerException)<br>
-     * 3.当场景在载入一个Entity的时候会自动把这个节点添加到场景中，在Entity移除时会把这个Spatial一起移除。<br>
      * 
      * 注：一般这个Spatial只作为<b>只读</b>使用，外部在引用这个Spatial的时候不应该直接去<b>写操作</b>这个Spatial
      * 的各种属性，而是应该通过Entity(DataProcessor)所定义的各种接口API来改变Entity的各种行为，这可以避免状态的不同步，

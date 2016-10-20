@@ -7,7 +7,6 @@ package name.huliqing.luoying.object.skill;
 import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.constants.ResConstants;
-import name.huliqing.luoying.enums.MessageType;
 import name.huliqing.luoying.layer.network.ActorNetwork;
 import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.network.SkillNetwork;

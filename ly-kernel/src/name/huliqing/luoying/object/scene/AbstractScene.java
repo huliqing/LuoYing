@@ -130,10 +130,13 @@ public class AbstractScene implements Scene {
         if (!entity.isInitialized()) {
             entity.initialize(this);
         }
-        // 添加到场景（放在entity.initialize之后，避免Spatial还没有创建的情况）
-        if (entity.getSpatial() != null) {
-            root.attachChild(entity.getSpatial());
-        }
+        
+        // remove
+//        // 添加到场景（放在entity.initialize之后，避免Spatial还没有创建的情况）
+//        if (entity.getSpatial() != null) {
+//            root.attachChild(entity.getSpatial());
+//        }
+
         if (listeners != null) {
             for (SceneListener ecl : listeners) {
                 ecl.onSceneEntityAdded(this, entity);
@@ -145,9 +148,12 @@ public class AbstractScene implements Scene {
     public void removeEntity(Entity entity) {
         boolean removed = data.removeEntityData(entity.getData());
         entities.remove(entity.getEntityId());
-        if (entity.getSpatial() != null) {
-            entity.getSpatial().removeFromParent();
-        }
+        
+        // remove20161020
+//        if (entity.getSpatial() != null) {
+//            entity.getSpatial().removeFromParent();
+//        }
+
         if (entity.isInitialized()) {
             entity.cleanup();
         }

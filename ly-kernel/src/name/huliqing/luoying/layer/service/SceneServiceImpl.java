@@ -8,8 +8,6 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.luoying.data.SceneData;
-import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.env.TerrainEnv;
 import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.utils.GeometryUtils;
@@ -25,15 +23,15 @@ public class SceneServiceImpl implements SceneService {
         // 
     }
 
-    @Override
-    public Scene loadScene(String sceneId) {
-        return Loader.load(sceneId);
-    }
-
-    @Override
-    public Scene loadScene(SceneData sceneData) {
-        return Loader.load(sceneData);
-    }
+//    @Override
+//    public Scene loadScene(String sceneId) {
+//        return Loader.load(sceneId);
+//    }
+//
+//    @Override
+//    public Scene loadScene(SceneData sceneData) {
+//        return Loader.load(sceneData);
+//    }
 
     @Override
     public Vector3f getSceneHeight(Scene scene, float x, float z) {

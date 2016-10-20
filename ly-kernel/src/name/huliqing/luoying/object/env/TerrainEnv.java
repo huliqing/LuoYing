@@ -23,9 +23,12 @@ public class TerrainEnv extends ModelEntity implements TerrainEntity {
     private final Ray ray = new Ray();
     private final CollisionResults results = new CollisionResults();
     
+    private Spatial terrain;
+    
     @Override
     public Spatial loadModel() {
-        return LuoYing.getAssetManager().loadModel(data.getAsString("file"));
+        terrain = LuoYing.getAssetManager().loadModel(data.getAsString("file"));
+        return terrain;
     }
 
     @Override

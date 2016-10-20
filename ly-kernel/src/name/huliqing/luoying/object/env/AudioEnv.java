@@ -12,7 +12,6 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Sphere;
 import name.huliqing.luoying.LuoYing;
-import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.data.ModelEntityData;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.ModelEntity;

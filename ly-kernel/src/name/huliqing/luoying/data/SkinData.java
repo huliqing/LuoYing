@@ -12,10 +12,8 @@ import com.jme3.network.serializing.Serializable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.luoying.constants.ResConstants;
 import name.huliqing.luoying.data.define.CostObject;
 import name.huliqing.luoying.data.define.MatObject;
-import name.huliqing.luoying.manager.ResourceManager;
 
 /**
  * 皮肤，装甲，武器等.

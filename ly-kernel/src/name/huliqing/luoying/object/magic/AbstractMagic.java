@@ -17,7 +17,6 @@ import name.huliqing.luoying.object.effect.Effect;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.entity.ModelEntity;
 import name.huliqing.luoying.object.hitchecker.HitChecker;
-import name.huliqing.luoying.object.scene.Scene;
 
 /**
  * @author huliqing
@@ -92,6 +91,7 @@ public abstract class AbstractMagic<T extends MagicData> extends ModelEntity<T> 
                 effects.add(effect);
             }
         }
+        
     }
     
     public void magicUpdate(float tpf) {

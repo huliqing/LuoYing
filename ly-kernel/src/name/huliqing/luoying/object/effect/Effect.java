@@ -245,6 +245,12 @@ public class Effect<T extends EffectData> extends Node implements Entity<T> {
         entityModule.initialize();
         
         initialized = true;
+        
+        // 把特效添加到场景,注：scene是可能为null的，当特效作为普通Spatial放在其它Node下面时是这种情况。
+        if (scene != null) {
+            scene.getRoot().attachChild(this);
+        }
+        
     }
     
     /**

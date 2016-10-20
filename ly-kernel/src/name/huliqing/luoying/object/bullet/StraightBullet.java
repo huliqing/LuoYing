@@ -5,7 +5,6 @@
 package name.huliqing.luoying.object.bullet;
 
 import com.jme3.math.Vector3f;
-import name.huliqing.luoying.object.scene.Scene;
 
 /**
  * 直线型子弹

@@ -5,27 +5,20 @@
 package name.huliqing.luoying.layer.service;
 
 import java.util.List;
-import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.constants.IdConstants;
-import name.huliqing.luoying.constants.ResConstants;
-import name.huliqing.luoying.enums.MessageType;
-import name.huliqing.luoying.manager.ResourceManager;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.item.Item;
 import name.huliqing.luoying.object.module.ItemListener;
 import name.huliqing.luoying.object.module.ItemModule;
-import name.huliqing.luoying.object.sound.SoundManager;
 
 /**
  *
  * @author huliqing
  */
 public class ItemServiceImpl implements ItemService {
-    private PlayService playService;
     
     @Override
     public void inject() {
-        playService = Factory.get(PlayService.class);
+        // ignore
     }
     
     @Override

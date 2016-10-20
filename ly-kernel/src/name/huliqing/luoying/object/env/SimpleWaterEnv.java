@@ -14,7 +14,6 @@ import com.jme3.scene.Spatial;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.object.entity.AbstractEntity;
-import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.processor.VerySimpleWaterProcessor;
 import name.huliqing.luoying.object.entity.WaterEntity;
 
@@ -101,10 +100,12 @@ public class SimpleWaterEnv extends AbstractEntity implements WaterEntity {
             water.setFoamMaskScale(foamMaskScale.x, foamMaskScale.y);
         }
         scene.addProcessor(water);
+        scene.getRoot().attachChild(waterModel);
     }
     
     @Override
     public void cleanup() {
+        waterModel.removeFromParent();
         scene.removeProcessor(water);
         super.cleanup(); 
     }

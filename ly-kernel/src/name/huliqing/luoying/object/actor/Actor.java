@@ -14,15 +14,15 @@ import name.huliqing.luoying.object.entity.ModelEntity;
  * @param <T>
  */
 public class Actor<T extends ActorData> extends ModelEntity<T> {
-
+    
     @Override
     public void setData(T data) {
-        super.setData(data); //To change body of generated methods, choose Tools | Templates.
+        super.setData(data); 
     }
 
     @Override
     public T getData() {
-        return super.getData(); //To change body of generated methods, choose Tools | Templates.
+        return super.getData(); 
     }
     
     /**
@@ -33,5 +33,6 @@ public class Actor<T extends ActorData> extends ModelEntity<T> {
     protected Spatial loadModel() {
         return ActorModelLoader.loadActorModel(this);
     }
+    
     
 }

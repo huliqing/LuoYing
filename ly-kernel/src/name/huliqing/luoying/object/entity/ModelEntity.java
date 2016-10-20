@@ -66,6 +66,15 @@ public abstract class ModelEntity<T extends ModelEntityData> extends AbstractEnt
         if (ch != null) {
             spatial.setCullHint(ch);
         }
+        if (scene != null) {
+            scene.getRoot().attachChild(spatial);
+        }
+    }
+
+    @Override
+    public void cleanup() {
+        spatial.removeFromParent();
+        super.cleanup(); 
     }
     
     @Override

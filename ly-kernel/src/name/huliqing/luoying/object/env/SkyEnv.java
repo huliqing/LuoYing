@@ -12,7 +12,6 @@ import com.jme3.util.SkyFactory;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.object.entity.AbstractEntity;
-import name.huliqing.luoying.object.scene.Scene;
 
 /**
  * 天空盒模型,天空作为一类特别的物体不继承自ModelEntity
@@ -63,8 +62,15 @@ public class SkyEnv extends AbstractEntity {
         sky = SkyFactory.createSky(am, w, e, n, s, u, d);
         sky.setCullHint(Spatial.CullHint.Never);
         sky.setQueueBucket(RenderQueue.Bucket.Sky);
+        scene.getRoot().attachChild(sky);
     }
 
+    @Override
+    public void cleanup() {
+        sky.removeFromParent();
+        super.cleanup(); 
+    }
+    
     @Override
     public Spatial getSpatial() {
         return sky;

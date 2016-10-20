@@ -75,7 +75,18 @@ public class CurveBullet extends StraightBullet {
                 cma.debugPath();
             }
         }
-        
+    }
+
+    @Override
+    public void cleanup() {
+        if (waypoints != null) {
+            waypoints.clear();
+        }
+        tracing = false;
+        if (!cma.isEnd()) {
+            cma.cleanup();
+        }
+        super.cleanup();
     }
     
     /**
@@ -140,18 +151,6 @@ public class CurveBullet extends StraightBullet {
             // 转为直线跟踪
             super.doUpdatePosition(tpf, endPos);
         }
-    }
-
-    @Override
-    public void cleanup() {
-        if (waypoints != null) {
-            waypoints.clear();
-        }
-        tracing = false;
-        if (!cma.isEnd()) {
-            cma.cleanup();
-        }
-        super.cleanup();
     }
     
     private void createCenterWappoint(List<Vector3f> store) {
