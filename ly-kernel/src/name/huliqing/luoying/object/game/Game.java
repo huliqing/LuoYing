@@ -51,6 +51,18 @@ public interface Game<T extends GameData> extends DataProcessor<T> {
     void cleanup();
     
     /**
+     * 打开或关闭游戏逻辑
+     * @param enabled 
+     */
+    void setEnabled(boolean enabled);
+    
+    /**
+     * 判断游戏逻辑是否打开或关闭
+     * @return 
+     */
+    boolean isEnabled();
+    
+    /**
      * 游戏场景,
      * @param scene 
      */

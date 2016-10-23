@@ -20,7 +20,6 @@ xs:time
         <xs:complexType>
             <xs:all>
                 <xs:element ref="config" />
-                <xs:element ref="configSkillType" />
             </xs:all>
         </xs:complexType>
     </xs:element>
@@ -34,11 +33,11 @@ xs:time
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="configBase">
-                    <xs:attribute name="debug" type="bool" use="optional" >
+<!--                    <xs:attribute name="debug" type="bool" use="optional" >
                         <xs:annotation>
                             <xs:documentation>是否打开调试</xs:documentation>
                         </xs:annotation>
-                    </xs:attribute>
+                    </xs:attribute>-->
                     <xs:attribute name="gameName" type="xs:string" use="required" >
                         <xs:annotation>
                             <xs:documentation>游戏名称</xs:documentation>
@@ -80,16 +79,6 @@ xs:time
                             <xs:documentation>奖励的经验倍率</xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="enableRecord" type="bool" use="required" >
-                        <xs:annotation>
-                            <xs:documentation>是否打开视频录制功能,在android下无效</xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
-                    <xs:attribute name="useLight" type="bool" use="required" >
-                        <xs:annotation>
-                            <xs:documentation>是否使用全局光源,不使用全局光源可提高运行性能.</xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
                     <xs:attribute name="maxLevel" type="xs:integer" use="required" >
                         <xs:annotation>
                             <xs:documentation>游戏允许的最高等级限制</xs:documentation>
@@ -105,7 +94,27 @@ xs:time
                             <xs:documentation>声音大小，0~1， 0为无声，1为最大声</xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="shortcutLocked" type="bool" use="required" >
+                    <xs:attribute name="locale" type="xs:string" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>当前使用的语言,e.g. zh_CN</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="localeAll" type="xs:string" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>当前游戏能够支持的所有语言环境,使用半角逗号分隔。
+     * 注意1：这里与data.font中文件夹中的名字是对应的,不能随便修改。
+     * 注意2: 前后和中间都不要出现空格。
+     * 注意3: 排在第一个的为默认的语言环境，当目标系统找不到任何合适的语言环境时
+     * 就使该环境</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="useShadow" type="bool" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>是否打开投影功能，如果这个选项关闭则场景所有投影功能都应该关闭。</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    
+<!--                    <xs:attribute name="shortcutLocked" type="bool" use="required" >
                         <xs:annotation>
                             <xs:documentation>是否锁定快捷方式</xs:documentation>
                         </xs:annotation>
@@ -125,22 +134,8 @@ xs:time
                         <xs:annotation>
                             <xs:documentation>默认的基本"跑步"速度:6</xs:documentation>
                         </xs:annotation>
-                    </xs:attribute>
-                    <xs:attribute name="locale" type="xs:string" use="required" >
-                        <xs:annotation>
-                            <xs:documentation>当前使用的语言,e.g. zh_CN</xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
-                    <xs:attribute name="localeAll" type="xs:string" use="required" >
-                        <xs:annotation>
-                            <xs:documentation>当前游戏能够支持的所有语言环境,使用半角逗号分隔。
-     * 注意1：这里与data.font中文件夹中的名字是对应的,不能随便修改。
-     * 注意2: 前后和中间都不要出现空格。
-     * 注意3: 排在第一个的为默认的语言环境，当目标系统找不到任何合适的语言环境时
-     * 就使该环境</xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
-                    <xs:attribute name="speakTimeMin" type="xs:decimal" use="required" >
+                    </xs:attribute>-->
+<!--                    <xs:attribute name="speakTimeMin" type="xs:decimal" use="required" >
                         <xs:annotation>
                             <xs:documentation>关于对话速度的限制，限制说话的最少停留时间</xs:documentation>
                         </xs:annotation>
@@ -164,52 +159,30 @@ xs:time
                         <xs:annotation>
                             <xs:documentation>允许显示谈话内容的最远距离。</xs:documentation>
                         </xs:annotation>
-                    </xs:attribute>
-                    <xs:attribute name="useHardwareSkinning" type="bool" use="required" >
+                    </xs:attribute>-->
+<!--                    <xs:attribute name="useHardwareSkinning" type="bool" use="required" >
                         <xs:annotation>
                             <xs:documentation>默认情况下暂不要打开该选项，这在某些老机型上会存在权重和贴图错误。
      * 对于一些新机型的用户可以自己决定是否打开。</xs:documentation>
                         </xs:annotation>
-                    </xs:attribute>
-                    <xs:attribute name="summonLevelFactor" type="xs:decimal" use="required" >
+                    </xs:attribute>-->
+<!--                    <xs:attribute name="summonLevelFactor" type="xs:decimal" use="required" >
                         <xs:annotation>
                             <xs:documentation>召唤的等级限制因数，该参数是一具相对于召唤者的设定。 
      * 召唤的角色等级这样计算： summonLevel = actor.level * summonLevelFactor;
      * 比如：0.5表示召唤出的角色的等级相当于召唤者等级的一半。当然summonLevel会
      * 强制转换为整数</xs:documentation>
                         </xs:annotation>
-                    </xs:attribute>
-                    <xs:attribute name="lanGames" type="xs:string" use="required" >
+                    </xs:attribute>-->
+<!--                    <xs:attribute name="lanGames" type="xs:string" use="required" >
                         <xs:annotation>
                             <xs:documentation>局域网游戏列表，格式"game1,game2,game3,..."</xs:documentation>
                         </xs:annotation>
-                    </xs:attribute>
-                    <xs:attribute name="useShadow" type="bool" use="required" >
-                        <xs:annotation>
-                            <xs:documentation>是否打开投影功能，如果这个选项关闭则场景所有投影功能都应该关闭。</xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
+                    </xs:attribute>-->
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
     </xs:element>
-    
-<!--    <xs:element name="configSkillType" >
-        <xs:annotation>
-            <xs:documentation>技能类型的定义</xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="configBase">
-                    <xs:attribute name="types" type="xs:string" use="optional" >
-                        <xs:annotation>
-                            <xs:documentation>技能类型定义，格式: "type1, type2, type3", 如: "walk,run,idle,fight"</xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
-                </xs:extension>
-            </xs:complexContent>
-        </xs:complexType>
-    </xs:element>-->
     
     <xs:complexType name="configBase">
         <xs:complexContent>

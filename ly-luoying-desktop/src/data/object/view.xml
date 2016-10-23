@@ -3,7 +3,7 @@
 <root
     xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
     xmlns='http://luoying.huliqing.name'
-    xsi:schemaLocation='http://luoying.huliqing.name meta/view.xsd'>
+    xsi:schemaLocation='http://luoying.huliqing.name meta_custom/view.xsd'>
     
     <!--=====================================================================-->
     <!--通用View-->

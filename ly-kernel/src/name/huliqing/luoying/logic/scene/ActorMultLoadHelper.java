@@ -4,14 +4,14 @@
  */
 package name.huliqing.luoying.logic.scene;
 
-import com.jme3.app.Application;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import name.huliqing.luoying.object.IntervalLogic;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.game.Game;
+import name.huliqing.luoying.object.gamelogic.AbstractGameLogic;
 import name.huliqing.luoying.utils.ThreadHelper;
 
 /**
@@ -20,9 +20,7 @@ import name.huliqing.luoying.utils.ThreadHelper;
  * 一个的载入，直到全部载入完成。
  * @author huliqing
  */
-public abstract class ActorMultLoadHelper extends IntervalLogic {
-//    private final PlayService playService = Factory.get(PlayService.class);
-//    private final ActorService actorService = Factory.get(ActorService.class);
+public abstract class ActorMultLoadHelper extends AbstractGameLogic {
     
     // 要载入的角色的id
     protected String[] actorIds;
@@ -30,30 +28,26 @@ public abstract class ActorMultLoadHelper extends IntervalLogic {
     private Future<Entity> future;
     // 当前正在载入的角色id索引
     private int lastLoadIndex;
-    // 是否已经处理结束
-    private boolean end;
+    
+    private Game game;
     
     /**
      * 指定要载入的角色ID 
      * @param actorIds
      */
     public ActorMultLoadHelper(String... actorIds) {
-        super(0);
         this.actorIds = actorIds;
+        interval = 0;
     }
 
     @Override
-    public void initialize(Application app) {
-        super.initialize(app);
-        end = false;
+    public void initialize(Game game) {
+        super.initialize(game);
+        this.game = game;
     }
     
     @Override
     protected void doLogic(float tpf) {
-        if (end) {
-            return;
-        }
-        
         // load OK
         if (future == null && lastLoadIndex < actorIds.length) {
             future = ThreadHelper.submit(new Callable<Entity>() {
@@ -88,9 +82,9 @@ public abstract class ActorMultLoadHelper extends IntervalLogic {
             }
         }
         
-        // 全部载入完毕停止
+        // 全部载入完毕自动将当前游戏从游戏中移除。
         if (lastLoadIndex >= actorIds.length) {
-            this.end = true;
+            setEnabled(false);
         }
     }
     

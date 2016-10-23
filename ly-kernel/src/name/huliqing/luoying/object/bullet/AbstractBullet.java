@@ -15,7 +15,7 @@ import com.jme3.scene.Spatial.CullHint;
 import com.jme3.scene.control.AbstractControl;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.luoying.data.EntityData;
+import name.huliqing.luoying.data.BulletData;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.effect.Effect;
 import name.huliqing.luoying.object.entity.Entity;
@@ -26,8 +26,9 @@ import name.huliqing.luoying.object.sound.SoundManager;
 /**
  * 子弹基类
  * @author huliqing
+ * @param <T>
  */
-public abstract class AbstractBullet extends ModelEntity implements Bullet {
+public abstract class AbstractBullet<T extends BulletData> extends ModelEntity<T> implements Bullet<T> {
 //    private static final Logger LOG = Logger.getLogger(AbstractBullet.class.getName());
     
     // 调试
@@ -93,7 +94,7 @@ public abstract class AbstractBullet extends ModelEntity implements Bullet {
     }
     
     @Override
-    public void setData(EntityData data) {
+    public void setData(T data) {
         this.data = data;
         this.debug = data.getAsBoolean("debug", debug);
         this.shape = Loader.load(data.getAsString("shape"));

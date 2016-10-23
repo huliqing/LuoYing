@@ -27,7 +27,7 @@
         <xs:annotation>
             <xs:documentation>
 效果组, effectGroup可以打包一组子效果一起执行.1.子效果会追随着当前效果; 2.对effectGroup设置动画同时也会影响到子效果;
-3.这种效果"不"需要设置时间，设置时间没有意义，当所有子效果都结束后effectGroup才会结束; 4.设置effectGroup的运行速度会直接影响到所有子效果。
+3.设置effectGroup的运行速度会直接影响到所有子效果。
             </xs:documentation>
         </xs:annotation>
         <xs:complexType>
@@ -471,7 +471,7 @@
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-                <xs:attribute name="autoDetach" type="bool" use="optional">
+<!--                <xs:attribute name="autoDetach" type="bool" use="optional">
                     <xs:annotation>
                         <xs:documentation>
                             是否允许特效在结束的时候自动进行清理并自动从场景中脱离。默认情况下如果特效是添加在EffectManager
@@ -481,7 +481,7 @@
                             这个参数的默认值为:false.
                         </xs:documentation>
                     </xs:annotation>
-                </xs:attribute>
+                </xs:attribute>-->
                 <xs:attribute name="endImmediate" type="bool" use="optional">
                     <xs:annotation>
                         <xs:documentation>判断特效是否可以立即结束，默认false, 大部分情况下特效都应该”自然结束“，

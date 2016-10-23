@@ -8,6 +8,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import name.huliqing.luoying.LuoYingException;
 import name.huliqing.luoying.data.GameLogicData;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
@@ -62,7 +63,7 @@ public abstract class ActorLoadHelper<T extends GameLogicData> extends AbstractG
                 future = null;
                 game.removeLogic(this);
             } catch (Exception ex) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
+                throw new LuoYingException("Could not load actor, actorId=" + actorId, ex);
             }
         }
     }

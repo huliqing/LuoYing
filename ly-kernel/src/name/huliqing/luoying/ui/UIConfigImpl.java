@@ -130,7 +130,6 @@ public class UIConfigImpl implements UIConfig {
      */
     @Override
     public float getTitleSize() {
-//        return getTitleHeight() * 0.75f;
         return getScreenHeight() * 0.04f;
     }
     
@@ -140,13 +139,11 @@ public class UIConfigImpl implements UIConfig {
      */
     @Override
     public float getBodyFontSize() {
-//        return getTitleSize() * 0.85f;
         return getScreenHeight() * 0.04f;
     }
     
     @Override
     public float getDesSize() {
-//        return getBodyFontSize() * 0.75f;
         return getScreenHeight() * 0.035f;
     }
 
@@ -177,7 +174,6 @@ public class UIConfigImpl implements UIConfig {
     
     @Override
     public float getButtonFontSize() {
-//        return getButtonHeight() * 0.65f;
         return getScreenHeight() * 0.045f;
     }
 
@@ -208,7 +204,6 @@ public class UIConfigImpl implements UIConfig {
 
     @Override
     public float getListTitleHeight() {
-//        return getTitleHeight() * 0.75f;
         return getScreenHeight() * 0.05f;
     }
 

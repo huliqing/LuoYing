@@ -51,7 +51,7 @@ public class RandomSceneDataLoader<T extends SceneData> extends SceneDataLoader<
 
         // 随机环境物体ID，格式："envId|size, envId2|size, ..."
         // envId关联到环境物体(env.xml), size指定该随机物体的数量。
-        String[] reArrs = proto.getAsArray("randomEnvs");
+        String[] reArrs = proto.getAsArray("randomEntities");
         String envId;
         int size;
         String[] tempArr;

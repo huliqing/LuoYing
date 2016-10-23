@@ -79,7 +79,7 @@ public interface Scene extends DataProcessor<SceneData> {
     Node getRoot();
     
     /**
-     * 添加一个场景物体,在添加之前必须确保场景已经初始化。
+     * 添加一个场景物体.
      * @param entity 
      */
     void addEntity(Entity entity);

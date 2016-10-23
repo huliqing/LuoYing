@@ -16,15 +16,26 @@ import name.huliqing.luoying.object.game.Game;
 public abstract class AbstractGameLogic<T extends GameLogicData>  implements GameLogic<T> {
 
     protected T data;
+    
     protected boolean enabled = true;
+    
+    /** 游戏逻辑是否已经初始化 */
     protected boolean initialized;
     
-    /**
-     * 逻辑运行的时间间隔
-     */ 
+    /** 逻辑运行的时间间隔 */ 
     protected float interval;
     
     private float intervalTimeUsed;
+    
+    public AbstractGameLogic() {}
+    
+    /**
+     * 逻辑的执行频率，单位秒，默认1秒。
+     * @param interval 
+     */
+    public AbstractGameLogic(float interval) {
+        this.interval = interval;
+    }
 
     @Override
     public void setData(T data) {
@@ -37,13 +48,17 @@ public abstract class AbstractGameLogic<T extends GameLogicData>  implements Gam
         return data;
     }
 
+    /**
+     * 由覆盖这个方法来更新游戏数据到Data中, 以保证游戏在存档的时候能够获得实时的状态。
+     */
     @Override
-    public void updateDatas() {
-        // ignore
-    }
+    public void updateDatas() {}
     
     @Override
     public void initialize(Game game) {
+        if (initialized) {
+            throw new IllegalStateException("GameLogic already initialized! gameLogic=" + getClass().getName());
+        }
         initialized = true;
     }
 
@@ -64,8 +79,11 @@ public abstract class AbstractGameLogic<T extends GameLogicData>  implements Gam
 
     @Override
     public final void update(float tpf) {
+        if (!enabled) {
+            return;
+        }
         intervalTimeUsed += tpf;
-        if (intervalTimeUsed >= interval) {
+        if (intervalTimeUsed > interval) {
             intervalTimeUsed = 0;
             doLogic(tpf);
         }
@@ -76,5 +94,9 @@ public abstract class AbstractGameLogic<T extends GameLogicData>  implements Gam
         initialized = false;
     }
  
+    /**
+     * 执行游戏逻辑
+     * @param tpf 
+     */
     protected abstract void doLogic(float tpf);
 }

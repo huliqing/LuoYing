@@ -68,6 +68,7 @@ public class SummonItem extends AbstractItem {
     private boolean summon(Entity actor, String actorId) {
         // -- 载入角色
         Entity bcc = Loader.load(actorId);
+        
         int level = actorService.getLevel(actor);
 //        actorService.setName(bcc, actorService.getName(bcc) + "-" + actorService.getName(actor));
         actorService.setLevel(bcc, level > 0 ? level : 1); // 至少1级

@@ -32,12 +32,12 @@ public class AnimationControl extends AbstractControl {
     }
 
     @Override
-    protected void controlUpdate(float tpf) {
+    protected final void controlUpdate(float tpf) {
         anim.update(tpf);
     }
 
     @Override
-    protected void controlRender(RenderManager rm, ViewPort vp) {
+    protected final void controlRender(RenderManager rm, ViewPort vp) {
     }
     
 }

@@ -80,12 +80,11 @@ public class HitUtils {
 
             // 2.通知目标角色死亡
             if (actorService.isPlayer(target)) {
-                // 告诉所有玩家
-                String attackerName = attacker != null ? attacker.getData().getName() : "";
-                String targetName = target.getData().getName();
-                String killedMess = ResourceManager.get(ResConstants.COMMON_KILLED, new Object[] {targetName, attackerName});
-                
                 // bak20161012
+//                // 告诉所有玩家
+//                String attackerName = attacker != null ? attacker.getData().getName() : "";
+//                String targetName = target.getData().getName();
+//                String killedMess = ResourceManager.get(ResConstants.COMMON_KILLED, new Object[] {targetName, attackerName});
 //                playNetwork.addMessage(killedMess, MessageType.notice);
 //                // 告诉目标:"你已经死亡"
 //                playNetwork.addMessage(target, ResourceManager.get(ResConstants.COMMON_DEAD), MessageType.notice);

@@ -5,9 +5,6 @@
     xmlns='http://luoying.huliqing.name'
     xsi:schemaLocation='http://luoying.huliqing.name meta/channel.xsd'>
     
-    <!--全通道，包含全骨骨骼，这个通道主要用于所有未配置分通道的角色 -->
-    <channel id="channelFull" />
-    
     <!--系统默认骨架的动画通道配置，适应于使用系统默认骨架的角色 -->
     <channel id="channelRoot" bones="root" />
     <channel id="channelHips" bones="hips" />

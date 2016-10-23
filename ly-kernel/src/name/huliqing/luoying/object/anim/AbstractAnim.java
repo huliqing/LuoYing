@@ -10,9 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.AnimData;
-import name.huliqing.luoying.layer.service.PlayService;
 
 /**
  * 动画控制，V2
@@ -21,7 +19,6 @@ import name.huliqing.luoying.layer.service.PlayService;
  */
 public abstract class AbstractAnim<E> implements Anim<AnimData, E> {
     private final static Logger LOG = Logger.getLogger(AbstractAnim.class.getName());
-    private final PlayService playService = Factory.get(PlayService.class);
     
     // 默认的bezier参数: {p0,p1,p2,p3}
     private final static float[] DEFAULT_BEZIER_FACTOR = new float[] {0, 0, 0, 1};
@@ -257,16 +254,13 @@ public abstract class AbstractAnim<E> implements Anim<AnimData, E> {
     public boolean isEnd() {
         return !started;
     }
-
+    
     /**
      * 结束当前动画
      */
     protected final void doEnd() {
-        
         // 从场景中移除动画控制器
 //        playService.removeAnimation(this);
-        throw new UnsupportedOperationException("....Debug test...这里要重构");
-
     }
     
     @Override

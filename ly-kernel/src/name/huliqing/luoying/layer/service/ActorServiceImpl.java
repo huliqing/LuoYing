@@ -367,7 +367,7 @@ public class ActorServiceImpl implements ActorService {
         actor.getEntityModule().getModule(ActorModule.class).setTeam(team);
 //        Ly.getPlayState().getTeamView().checkAddOrRemove(actor);
         
-        throw new UnsupportedOperationException();
+        LOG.log(Level.INFO, "Unsupported!");
     }
     
     @Override

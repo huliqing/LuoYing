@@ -10,7 +10,7 @@
     <!--==========================================================================-->
     
     <!--所有角色基类-->
-    <actor id="actorBase" channels="channelFull" chat="chatSimple" />
+    <actor id="actorBase" chat="chatSimple" />
     
     <!--未分类生物：生物、种族未知、性别未知、可移动、可转向的角色。如：虫子、怪物、野兽、飞禽、未知生物等活动类角色. -->
     <actor id="actorLivingMovableRotatableBase" extends="actorBase" attributes="attributeActorBiologyMovableRotatable"

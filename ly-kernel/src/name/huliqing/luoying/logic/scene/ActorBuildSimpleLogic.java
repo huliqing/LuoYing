@@ -16,10 +16,9 @@ import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.service.ActorService;
-import name.huliqing.luoying.layer.service.PlayService;
-import name.huliqing.luoying.object.IntervalLogic;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.gamelogic.AbstractGameLogic;
 import name.huliqing.luoying.utils.ThreadHelper;
 
 /**
@@ -28,9 +27,8 @@ import name.huliqing.luoying.utils.ThreadHelper;
  * 地点刷新。
  * @author huliqing
  */
-public class ActorBuildSimpleLogic extends IntervalLogic {
+public class ActorBuildSimpleLogic extends AbstractGameLogic {
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
-    private final PlayService playService = Factory.get(PlayService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     
     public interface Callback {
@@ -42,19 +40,10 @@ public class ActorBuildSimpleLogic extends IntervalLogic {
         void onload(Entity actor);
     }
     
-    private List<ActorBuilder> datas = new ArrayList<ActorBuilder>();
-    private boolean enabled = true;
+    private final List<ActorBuilder> datas = new ArrayList<ActorBuilder>();
     
     public ActorBuildSimpleLogic() {
-        super(3);
-    }
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
+        interval = 3;
     }
 
     /**
@@ -81,33 +70,29 @@ public class ActorBuildSimpleLogic extends IntervalLogic {
 
     @Override
     protected void doLogic(float tpf) {
-        if (!enabled) {
-            return;
-        }
-        
-        for (ActorBuilder data : datas) {
-            if (data.actor != null) {
-                if (data.actor.getScene() != null) {
+        for (ActorBuilder abData : datas) {
+            if (abData.actor != null) {
+                if (abData.actor.getScene() != null) {
                     // 角色还在场景中，不管是否死亡都不应该考虑刷新
                     continue;
-                } else if (data.deadTime <= 0) {
+                } else if (abData.deadTime <= 0) {
                     // 如果不在场景中，并且未标记过角色死亡，则标记死亡时间
-                    data.deadTime = LuoYing.getGameTime();
+                    abData.deadTime = LuoYing.getGameTime();
                 }
             }
             
             // 如果正在载入角色(刷新),则检查并处理
-            if (data.isbuilding()) {
+            if (abData.isbuilding()) {
                 
-                data.waitAndCheckBuilding();
+                abData.waitAndCheckBuilding();
             
             // 以下两种情况需要刷新载入角色
             // 1.角色未载入过;
             // 2.死亡时间已经超过刷新时间
-            } else if (data.actor == null 
-                    || (data.deadTime > 0 && LuoYing.getGameTime() - data.deadTime >= data.interval * 1000)){
+            } else if (abData.actor == null 
+                    || (abData.deadTime > 0 && LuoYing.getGameTime() - abData.deadTime >= abData.interval * 1000)){
                 
-                data.rebuild();
+                abData.rebuild();
                 
             }
         }
@@ -167,8 +152,6 @@ public class ActorBuildSimpleLogic extends IntervalLogic {
                 try {
                     actor = future.get();
                     
-                    // remove0813
-//                    actor.setLocation(position);
                     actorService.setLocation(actor, position);
 
                     if (callback != null) {

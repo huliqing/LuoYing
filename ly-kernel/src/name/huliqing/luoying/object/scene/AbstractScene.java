@@ -26,9 +26,10 @@ import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
 
 /**
+ * 抽象场景类
  * @author huliqing
  */
-public class AbstractScene implements Scene {
+public abstract class AbstractScene implements Scene {
     private static final Logger LOG = Logger.getLogger(AbstractScene.class.getName());
     
     protected SceneData data;
@@ -119,24 +120,16 @@ public class AbstractScene implements Scene {
     public void addEntity(Entity entity) {
         if (entity == null)
             throw new NullPointerException("Entity could not be null!");
-        // 如果entity已经存在于其它场景中则需要先从其它场景中移除
-        if (entity.isInitialized() && entity.getScene() != this) {
-            entity.getScene().removeEntity(entity);
+        // 已经存在于场景中
+        if (entities.containsKey(entity.getEntityId())) {
+            return;
         }
-        data.addEntityData(entity.getData());
         entities.put(entity.getEntityId(), entity);
-        // 初始化,注意判断是否已经初始化过，因为Entity可能已经从外部代码进行了初始化.为减少BUG发生，大部分情况下重复
-        // 初始化(initialize)都会报错。
+        data.addEntityData(entity.getData());
+        // 初始化,注意判断是否已经初始化过，因为Entity可能已经从外部代码进行了初始化.为减少BUG发生.
         if (!entity.isInitialized()) {
             entity.initialize(this);
         }
-        
-        // remove
-//        // 添加到场景（放在entity.initialize之后，避免Spatial还没有创建的情况）
-//        if (entity.getSpatial() != null) {
-//            root.attachChild(entity.getSpatial());
-//        }
-
         if (listeners != null) {
             for (SceneListener ecl : listeners) {
                 ecl.onSceneEntityAdded(this, entity);
@@ -148,12 +141,6 @@ public class AbstractScene implements Scene {
     public void removeEntity(Entity entity) {
         boolean removed = data.removeEntityData(entity.getData());
         entities.remove(entity.getEntityId());
-        
-        // remove20161020
-//        if (entity.getSpatial() != null) {
-//            entity.getSpatial().removeFromParent();
-//        }
-
         if (entity.isInitialized()) {
             entity.cleanup();
         }
@@ -176,7 +163,7 @@ public class AbstractScene implements Scene {
         }
         for (Entity so : entities.values()) {
             if (type.isAssignableFrom(so.getClass())) {
-                store.add((T) so);
+                store.add((T)so);
             }
         }
         return store;

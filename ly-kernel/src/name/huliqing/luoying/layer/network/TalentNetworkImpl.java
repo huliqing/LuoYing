@@ -26,8 +26,10 @@ public class TalentNetworkImpl implements TalentNetwork {
     
     @Override
     public void addTalent(Entity actor, String talentId) {
-        if (NETWORK.isClient())
+        if (NETWORK.isClient()) {
+            // 客户端不能主动添加天赋
             return;
+        }
         
         MessTalentAdd mess = new MessTalentAdd();
         mess.setActorId(actor.getData().getUniqueId());
@@ -39,16 +41,17 @@ public class TalentNetworkImpl implements TalentNetwork {
 
     @Override
     public void addTalentPoints(Entity actor, String talentId, int points) {
-        if (NETWORK.isClient())
-            return;
-        
         MessTalentAddPoint mess = new MessTalentAddPoint();
         mess.setActorId(actor.getData().getUniqueId());
         mess.setTalentId(talentId);
         mess.setPoints(points);
-        NETWORK.broadcast(mess);
         
-        talentService.addTalentPoints(actor, talentId, points);
+        if (NETWORK.isClient()) {
+            NETWORK.sendToServer(mess);
+        } else {
+            NETWORK.broadcast(mess);
+            talentService.addTalentPoints(actor, talentId, points);
+        }
     }
     
 }

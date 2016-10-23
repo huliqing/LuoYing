@@ -36,10 +36,11 @@ public class SimpleGame<T extends GameData> implements Game<T> {
     protected Scene guiScene;
     protected boolean initialized;
     
-    private final List<GameLogic> unmodifiableLogics = Collections.unmodifiableList(logics);
+    protected final List<GameLogic> unmodifiableLogics = Collections.unmodifiableList(logics);
     
-    private Scene initScene;
-    private Scene initGuiScene;
+    protected Scene initScene;
+    protected Scene initGuiScene;
+    protected boolean enabled = true;
     
     @Override
     public void setData(T data) {
@@ -124,10 +125,25 @@ public class SimpleGame<T extends GameData> implements Game<T> {
     }
 
     @Override
-    public void update(float tpf) {
+    public final void update(float tpf) {
+        if (!enabled) 
+            return;
+        
+        // 更新游戏逻辑
         for (GameLogic gl : logics.getArray()) {
             gl.update(tpf);
         }
+        
+        // 更新子类游戏逻辑
+        simpleUpdate(tpf);
+    }
+    
+    /**
+     * 更新游戏逻辑
+     * @param tpf 
+     */
+    protected void simpleUpdate(float tpf) {
+        // 由子类实现
     }
 
     @Override
@@ -141,6 +157,16 @@ public class SimpleGame<T extends GameData> implements Game<T> {
             gl.cleanup();
         }
         initialized = false;
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
     }
 
     @Override

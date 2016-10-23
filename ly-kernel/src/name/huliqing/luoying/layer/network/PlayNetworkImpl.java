@@ -50,12 +50,12 @@ public class PlayNetworkImpl implements PlayNetwork {
     
     @Override
     public void addEntity(Scene scene, Entity entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        playService.addEntity(scene, entity);
     }
 
     @Override
     public void removeEntity(Entity entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        playService.removeEntity(entity);
     }
     
 //    @Override

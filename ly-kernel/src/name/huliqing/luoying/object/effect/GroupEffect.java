@@ -129,17 +129,25 @@ public class GroupEffect extends Effect {
             if (started) return;
             if (effectTimeUsed >= trueStartTime) {
                 effect = Loader.load(effectId);
+                // 1.----设置属性
                 // 与group保持一致的速度,这样当设置GroupEffect的速度的时候可以同时影响子效果的速度
                 effect.setSpeed(speed);
+                
+                // 2.----初始化,注：部分效果需要用到场景的引用，所以在这里进行初始化
+                effect.initialize(scene);
+                
+                // 3.----把子效果放到当前GroupEffect下面，注：因为effect.initialize(scene);的时候可能把子效果直接添加到了场景中.
+                // 所以这里要确保重新添加到当前效果子节点下。
+                
 //                // 不要再设置子效果的跟随
 //                effect.setTraceObject(animRoot);
-                // 注意：子效果是直接放在GroupEffect下的，不要放在EffectManager中，
-                // 这会依赖EffectManger,导致GroupEffect不能放在其它Node节点下, 
-                // 所有类型的Effect都应该是可以单独放在任何Node下进行运行的。
+
+                // 注意：子效果是放在GroupEffect下的，不要直接放在scene场景内，因为当前效果可能直接放在某些特殊节
+                // 点下，在这种情况下，所有的子效果也应该一起放在当前的效果内，受当前效果变换的影响。
+                
                 // 把子效果的跟踪目标设置为animRoot，这样当GroupEffect添加了动画控制时，可以同时影响到子效果的变换。
                 animRoot.attachChild(effect);
-                // effect不放到场景中
-                effect.initialize(null);
+                
                 started = true;
             }
         }

@@ -113,12 +113,6 @@ public interface ConfigService extends Inject {
      */
     String[] getAllSupportedLocale();
     
-//    /**
-//     * 是否打开光源
-//     * @return 
-//     */
-//    boolean isUseLight();
-    
     /**
      * 获取系统定义的最高级别限制
      * @return 

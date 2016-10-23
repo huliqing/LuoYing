@@ -30,7 +30,6 @@ import name.huliqing.luoying.data.AttributeMatch;
 import name.huliqing.luoying.data.AttributeUse;
 import name.huliqing.luoying.data.BulletData;
 import name.huliqing.luoying.data.ChannelData;
-import name.huliqing.luoying.data.ChatData;
 import name.huliqing.luoying.data.ConfigData;
 import name.huliqing.luoying.data.ConnData;
 import name.huliqing.luoying.data.CustomUserData;
@@ -60,7 +59,6 @@ import name.huliqing.luoying.data.SoundData;
 import name.huliqing.luoying.data.StateData;
 import name.huliqing.luoying.data.TalentData;
 import name.huliqing.luoying.data.TaskData;
-import name.huliqing.luoying.data.ViewData;
 import name.huliqing.luoying.mess.MessActionRun;
 import name.huliqing.luoying.mess.MessActorAddSkill;
 import name.huliqing.luoying.mess.MessActorFollow;
@@ -112,7 +110,6 @@ import name.huliqing.luoying.object.action.StaticIdleAction;
 import name.huliqing.luoying.object.action.PathRunAction;
 import name.huliqing.luoying.object.action.SimpleRunAction;
 import name.huliqing.luoying.object.actor.Actor;
-import name.huliqing.luoying.loader.ActorDataLoader;
 import name.huliqing.luoying.object.actoranim.ActorCurveMove;
 import name.huliqing.luoying.loader.LogicDataLoader;
 import name.huliqing.luoying.object.logic.AttributeChangeLogic;
@@ -184,6 +181,7 @@ import name.huliqing.luoying.object.env.ChaseCameraEnv;
 import name.huliqing.luoying.object.env.AmbientLightEnv;
 import name.huliqing.luoying.object.env.DirectionalLightEnv;
 import name.huliqing.luoying.layer.service.ConfigService;
+import name.huliqing.luoying.loader.ActorDataLoader;
 import name.huliqing.luoying.loader.DefineDataLoader;
 import name.huliqing.luoying.loader.EffectDataLoader;
 import name.huliqing.luoying.loader.EntityDataLoader;
@@ -254,6 +252,7 @@ import name.huliqing.luoying.object.task.CollectTask;
 import name.huliqing.luoying.loader.TaskDataLoader;
 import name.huliqing.luoying.loader.ModuleDataLoader;
 import name.huliqing.luoying.loader.PlantEnvLoader;
+import name.huliqing.luoying.loader.RandomSceneDataLoader;
 import name.huliqing.luoying.mess.MessActorSetLocation;
 import name.huliqing.luoying.mess.MessAttributeNumberAddValue;
 import name.huliqing.luoying.mess.MessAttributeNumberHit;
@@ -364,7 +363,6 @@ public class LuoYing {
         Serializer.registerClass(AttributeData.class);
         Serializer.registerClass(BulletData.class);
         Serializer.registerClass(ChannelData.class);
-        Serializer.registerClass(ChatData.class);
         Serializer.registerClass(ConfigData.class);
         Serializer.registerClass(ConnData.class);
         Serializer.registerClass(ControlData.class);
@@ -392,7 +390,6 @@ public class LuoYing {
         Serializer.registerClass(StateData.class);
         Serializer.registerClass(TalentData.class);
         Serializer.registerClass(TaskData.class);
-        Serializer.registerClass(ViewData.class);
     }
     
     private static void registerProcessor() {
@@ -452,13 +449,6 @@ public class LuoYing {
         
         // Channel
         DataFactory.register("channel",  ChannelData.class, ChannelDataLoader.class, SimpleChannel.class);
-        
-//        // Chat
-//        DataFactory.register("chatGroup",  ChatData.class, ChatDataLoader.class, GroupChat.class);
-//        DataFactory.register("chatSend",  ChatData.class, ChatDataLoader.class, SendChat.class);
-//        DataFactory.register("chatShopItem",  ChatData.class, ChatDataLoader.class, ShopItemChat.class);
-//        DataFactory.register("chatSell",  ChatData.class, ChatDataLoader.class, SellChat.class);
-//        DataFactory.register("chatTask",  ChatData.class, ChatDataLoader.class, TaskChat.class);
         
         // Config
         DataFactory.register("config",  ConfigData.class, ConfigDataLoader.class, null);
@@ -524,7 +514,6 @@ public class LuoYing {
 //        DataFactory.register("gameSurvival", GameData.class, GameDataLoader.class, SurvivalGame.class);
         
         // GameLogic
-//        DataFactory.register("gameLogicPlayerDeadChecker", GameLogicData.class, GameLogicDataLoader.class, PlayerDeadCheckerGameLogic.class);
         DataFactory.register("gameLogicActorClean", GameLogicData.class, GameLogicDataLoader.class, ActorCleanGameLogic.class);
         DataFactory.register("gameLogicAttributeChange", GameLogicData.class, GameLogicDataLoader.class, AttributeChangeGameLogic.class);
         
@@ -577,6 +566,7 @@ public class LuoYing {
         
         // Scene
         DataFactory.register("scene", SceneData.class, SceneDataLoader.class, SimpleScene.class);
+        DataFactory.register("sceneRandom", SceneData.class, RandomSceneDataLoader.class, SimpleScene.class);
 
         // Shape
         DataFactory.register("shapeBox",  ShapeData.class, ShapeDataLoader.class, BoxShape.class);
@@ -625,11 +615,6 @@ public class LuoYing {
         
         // Task
         DataFactory.register("taskCollect",  TaskData.class, TaskDataLoader.class, CollectTask.class);
-                
-        // View
-//        DataFactory.register("viewText",  ViewData.class, ViewDataLoader.class, TextView.class);
-//        DataFactory.register("viewTextPanel",  ViewData.class, ViewDataLoader.class, TextPanelView.class);
-//        DataFactory.register("viewTimer",  ViewData.class, ViewDataLoader.class, TimerView.class);
     }
     
     private static void loadSysData() throws LuoYingException {

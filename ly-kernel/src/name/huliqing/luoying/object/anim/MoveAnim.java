@@ -68,16 +68,12 @@ public final class MoveAnim extends AbstractAnim<Spatial> {
 
     @Override
     public void cleanup() {
-        // remove20160225,不需要再这样做
-//        if (target != null) {
-//            target.setLocalTranslation(endPos);
-//        }
-        super.cleanup(); 
+        super.cleanup();
     }
 
-    public Vector3f getStartPos() {
-        return startPos;
-    }
+//    public Vector3f getStartPos() {
+//        return startPos;
+//    }
 
     public void setStartPos(Vector3f startPos) {
         if (this.startPos == null) {
@@ -86,9 +82,9 @@ public final class MoveAnim extends AbstractAnim<Spatial> {
         this.startPos.set(startPos);
     }
 
-    public Vector3f getEndPos() {
-        return endPos;
-    }
+//    public Vector3f getEndPos() {
+//        return endPos;
+//    }
 
     public void setEndPos(Vector3f endPos) {
         if (this.endPos == null) {
@@ -97,13 +93,13 @@ public final class MoveAnim extends AbstractAnim<Spatial> {
         this.endPos.set(endPos);
     }
 
-    public boolean isFacing() {
-        return facing;
-    }
-
-    public void setFacing(boolean facing) {
-        this.facing = facing;
-    }
+//    public boolean isFacing() {
+//        return facing;
+//    }
+//
+//    public void setFacing(boolean facing) {
+//        this.facing = facing;
+//    }
 
     
 }

@@ -14,6 +14,61 @@ xs:time
            xmlns="http://luoying.huliqing.name"
            elementFormDefault="qualified">
     
+    <!--ModelEntity Object Base-->
+    <xs:complexType name="modelEntityBase" >
+        <xs:complexContent>
+            <xs:extension base="entityBase">
+                <xs:attribute ref="location" />
+                <xs:attribute ref="rotation" />
+                <xs:attribute ref="scale" />
+                <xs:attribute name="shadowMode" use="optional">
+                    <xs:annotation><xs:documentation>投影模式，默认值Inherit</xs:documentation></xs:annotation>
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="Off" />
+                            <xs:enumeration value="Cast" />
+                            <xs:enumeration value="Receive" />
+                            <xs:enumeration value="CastAndReceive" />
+                            <xs:enumeration value="Inherit" />
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="cullHint" use="optional">
+                    <xs:annotation><xs:documentation>投影模式，默认值Inherit</xs:documentation></xs:annotation>
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="Inherit" />
+                            <xs:enumeration value="Dynamic" />
+                            <xs:enumeration value="Always" />
+                            <xs:enumeration value="Never" />
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <!--Entity Object Base-->
+    <xs:complexType name="entityBase" >
+        <xs:complexContent>
+            <xs:extension base="base">
+                <xs:attribute name="name" type="xs:string" use="optional" />
+                <xs:attribute ref="mat" />
+                <xs:attribute name="modules" type="xs:string" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>物体功能模块列表，格式: "module1,module2,..."</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="objectDatas" type="xs:string" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>物体数据列表，格式: "objectData1,objectData2,..."</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <!--All Object Base-->
     <xs:complexType name="base" >
         <xs:attribute name="id" type="xs:string" use="required" >
             <xs:annotation>
@@ -54,15 +109,6 @@ xs:time
         </xs:restriction>
     </xs:simpleType>
     
-    <!-- 定义平面：xy,xz,yz: remove20160805 -->
-<!--    <xs:simpleType name="plane" >
-        <xs:restriction base="xs:string">
-            <xs:enumeration value="xy"/>
-            <xs:enumeration value="xz"/>
-            <xs:enumeration value="yz"/>
-        </xs:restriction>
-    </xs:simpleType>-->
-    
     <!-- Animation的循环模式 -->
     <xs:simpleType name="loop" >
         <xs:restriction base="xs:string">
@@ -72,11 +118,7 @@ xs:time
         </xs:restriction>
     </xs:simpleType>
     
-    <xs:attribute name="cost" type="xs:integer" use="optional" >
-        <xs:annotation>
-            <xs:documentation>物品的价值，当在商品中出售时值多少钱。</xs:documentation>
-        </xs:annotation>
-    </xs:attribute>
+    <!-- ==== Attribute ==== -->
     
     <xs:attribute name="file" type="xs:string">
         <xs:annotation>
@@ -92,39 +134,9 @@ xs:time
         </xs:annotation>
     </xs:attribute>
     
-    <xs:attribute name="pickable" type="bool" >
-        <xs:annotation>
-            <xs:documentation>
-                物体是否是可选择的，即可用鼠标在游戏中选中。默认为false(0),
-                一般地面应该设置为true,否则玩家将无法控制角色在地面上行走，因为
-                玩家需要选择地面上的某个点来让角色走动。
-            </xs:documentation>
-        </xs:annotation>
-    </xs:attribute>
-    
-    <xs:attribute name="collisionShape">
-        <xs:annotation>
-            <xs:documentation>
-                碰撞盒类型 =>
-                box:较优，性能最好，主要针对不需要太精确碰撞检测的模型;
-                mesh:较准确，性能差，主要针对静态，不能移动的物体,如：地形，房屋等;
-                dynamicMesh：较准确，性能最差，主要针对移动的物体;
-                capsule: 默认，主要针对移动角色，如：NPC、怪兽、野兽等;
-            </xs:documentation>
-        </xs:annotation>
-        <xs:simpleType>
-            <xs:restriction base="xs:string">
-                <xs:enumeration value="box"/>
-                <xs:enumeration value="mesh"/>
-                <xs:enumeration value="dynamicMesh"/>
-                <xs:enumeration value="capsule"/>
-            </xs:restriction>
-        </xs:simpleType>
-    </xs:attribute>
-        
     <xs:attribute name="location" type="xs:string">
         <xs:annotation>
-            <xs:documentation>位置点，格式："x,y,z"</xs:documentation>
+            <xs:documentation>位置，格式："x,y,z"</xs:documentation>
         </xs:annotation>
     </xs:attribute>
     
@@ -151,5 +163,51 @@ xs:time
             </xs:restriction>
         </xs:simpleType>
     </xs:attribute>
+    
+    <xs:attribute name="mat" type="xs:string" use="optional" >
+        <xs:annotation>
+            <xs:documentation>质地，参考：define.xml的定义</xs:documentation>
+        </xs:annotation>
+    </xs:attribute>
+    
+    <!-- ==== OutDate ==== -->
+    
+<!--    <xs:attribute name="pickable" type="bool" >
+        <xs:annotation>
+            <xs:documentation>
+                物体是否是可选择的，即可用鼠标在游戏中选中。默认为false(0),
+                一般地面应该设置为true,否则玩家将无法控制角色在地面上行走，因为
+                玩家需要选择地面上的某个点来让角色走动。
+            </xs:documentation>
+        </xs:annotation>
+    </xs:attribute>-->
+    
+<!--    <xs:attribute name="cost" type="xs:integer" use="optional" >
+        <xs:annotation>
+            <xs:documentation>物品的价值，当在商品中出售时值多少钱。</xs:documentation>
+        </xs:annotation>
+    </xs:attribute>-->
+    
+<!--    <xs:attribute name="collisionShape">
+        <xs:annotation>
+            <xs:documentation>
+                碰撞盒类型 =>
+                box:较优，性能最好，主要针对不需要太精确碰撞检测的模型;
+                mesh:较准确，性能差，主要针对静态，不能移动的物体,如：地形，房屋等;
+                dynamicMesh：较准确，性能最差，主要针对移动的物体;
+                capsule: 默认，主要针对移动角色，如：NPC、怪兽、野兽等;
+            </xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:enumeration value="box"/>
+                <xs:enumeration value="mesh"/>
+                <xs:enumeration value="dynamicMesh"/>
+                <xs:enumeration value="capsule"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:attribute>-->
+        
+    
     
 </xs:schema>

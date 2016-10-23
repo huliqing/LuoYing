@@ -695,7 +695,7 @@ public abstract class AbstractSkill implements Skill {
             effect = Loader.load(effectId);
             effect.setSpeed(trueSpeed);
             effect.setTraceObject(traceObject);
-            actor.getScene().getRoot().attachChild(effect);
+            actor.getScene().addEntity(effect);
         }
         
         void cleanup() {

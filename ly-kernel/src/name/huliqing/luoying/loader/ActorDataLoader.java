@@ -5,13 +5,10 @@
  */
 package name.huliqing.luoying.loader;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import name.huliqing.luoying.data.AttributeData;
 import name.huliqing.luoying.data.DropData;
 import name.huliqing.luoying.data.LogicData;
 import name.huliqing.luoying.data.ChannelData;
-import name.huliqing.luoying.data.ChatData;
 import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.data.ItemData;
 import name.huliqing.luoying.xml.Proto;
@@ -21,6 +18,7 @@ import name.huliqing.luoying.data.SkillData;
 import name.huliqing.luoying.data.SkinData;
 import name.huliqing.luoying.data.TalentData;
 import name.huliqing.luoying.manager.ResManager;
+import name.huliqing.luoying.object.define.DefineFactory;
 import name.huliqing.luoying.xml.DataFactory;
 
 /**
@@ -35,7 +33,10 @@ public class ActorDataLoader extends EntityDataLoader {
         super.load(proto, data);
         
         data.setAttribute("name", ResManager.get(proto.getId() + ".name"));
-        data.setAttribute("mat", proto.getAsString("mat"));
+        String matStr = proto.getAsString("mat");
+        if (matStr != null) {
+            data.setMat(DefineFactory.getMatDefine().getMat(matStr));
+        }
         
         // ==== 2.items 
         String[] itemsTemp = proto.getAsArray("items");
@@ -124,10 +125,11 @@ public class ActorDataLoader extends EntityDataLoader {
             }
         }
         
-        String chat = proto.getAsString("chat");
-        if (chat != null) {
-            data.addObjectData((ChatData) DataFactory.createData(chat));
-        }
+        // remove20161022,移动到了ly-luoying-desktop
+//        String chat = proto.getAsString("chat");
+//        if (chat != null) {
+//            data.addObjectData((ChatData) DataFactory.createData(chat));
+//        }
         
         // ==== 载入技能
         String[] skillIds = proto.getAsArray("skills");

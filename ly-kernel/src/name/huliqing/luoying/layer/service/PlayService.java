@@ -55,7 +55,13 @@ public interface PlayService extends PlayNetwork {
      */
     float getScreenHeight();
     
-    
+    /**
+     * 获取场景指定位置处的高度，如果指定位置超出地面范围，则返回null.
+     * @param scene
+     * @param x
+     * @param z
+     * @return 
+     */
     Vector3f getTerrainHeight(Scene scene, float x, float z);
     
     // --------------------------------------------------------------------------------------------------------------------------------

@@ -14,11 +14,7 @@
     <!-- ========================================================================= -->
     <!-- DEBUG -->
     <!-- ========================================================================= -->
-    <sceneRandom id="sceneDebug" envs="envSky,envTerrainDebug2" emptyZones="0|0|10" usePhysics="1" />
-    
-    <sceneRandom id="sceneExtendsA" file="a.j3o" icon="a.icon" logic="a.logic" />
-    <sceneRandom id="sceneExtendsB" extends="sceneExtendsA" file="b.j3o" />
-    <sceneRandom id="sceneExtendsC" extends="sceneExtendsB" file="c.j3o" />
+    <!--<sceneRandom id="sceneDebug" envs="envSky,envTerrainDebug2" emptyZones="0|0|10" />-->
     
     <!-- ========================================================================= -->
     <!-- 特殊场景 -->
@@ -26,10 +22,10 @@
     
     <!--黄金宝箱场景-->
     <sceneRandom id="sceneTreasure" 
-                 envs="envSky,envLightDirectional,envLightAmbient,envShadow,envPhysics,envCameraThirdView
-,envSakuraIslandTerrain,envSakuraIslandBoundary,envSakuraIslandWater,envSakuraIslandAudioSea" 
+                 entities="envSky,envDirectionalLight,envAmbientLight,envShadow,envPhysics,envCameraThirdView
+,envSakuraIslandTerrain,envSakuraIslandBoundary,envSakuraIslandWater,envSakuraIslandSeaAudio" 
                  emptyZones="0|0|10" 
-                 randomEnvs="envTree1|4,envTree2|4,envTree3|4,envTree4|4
+                 randomEntities="envTree1|4,envTree2|4,envTree3|4,envTree4|4
 ,envFir1|4,envFir2|4,envFir3|4
 ,envFlower0|4,envFlower1|4
 ,envGrass1|4,envGrass2|4,envGrass3|4,envGrass4|4"

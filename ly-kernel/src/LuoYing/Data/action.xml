@@ -10,13 +10,13 @@
     <!--==========================================================================-->
 
     <!--普通的跑步行为-->
-    <actionSimpleRun id="_sys_actionSimpleRun" />
+    <actionSimpleRun id="sysActionSimpleRun" />
     
     <!--简单的跟随行为-->
-    <actionPathFollow id="_sys_actionSimpleFollow" autoFacing="1" />
+    <actionPathFollow id="sysActionSimpleFollow" autoFacing="1" />
 
     <!--战斗行为基本配置-->
-    <actionDynamicFight id="_sys_actionSimpleFight" allowFollow="1" autoFacing="1" fightSkillTags="fight,attack,trick" autoTakeOffWeapon="1" />
+    <actionDynamicFight id="sysActionSimpleFight" allowFollow="1" autoFacing="1" fightSkillTags="fight,attack,trick" autoTakeOffWeapon="1" />
 </root>
 
 

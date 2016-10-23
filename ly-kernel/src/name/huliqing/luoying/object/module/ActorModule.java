@@ -120,6 +120,7 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
         public void setPhysicsRotation(Quaternion rotation) {
             super.setPhysicsRotation(rotation);
         }
+        
     }
     
     @Override

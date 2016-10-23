@@ -124,7 +124,7 @@ public class ActorNetworkImpl implements ActorNetwork{
             actorService.setGroup(actor, group);
         }
     }
-
+    
     @Override
     public void setTeam(Entity actor, int team) {
         if (!NETWORK.isClient()) {
@@ -137,16 +137,16 @@ public class ActorNetworkImpl implements ActorNetwork{
             actorService.setTeam(actor, team);
         }
     }
-
+    
     @Override
     public void setFollow(Entity actor, long targetId) {
-        if (!NETWORK.isClient()) {
-            if (NETWORK.hasConnections()) {
-                MessActorFollow mess = new MessActorFollow();
-                mess.setActorId(actor.getData().getUniqueId());
-                mess.setTargetId(targetId);
-                NETWORK.broadcast(mess);
-            }
+        MessActorFollow mess = new MessActorFollow();
+        mess.setActorId(actor.getData().getUniqueId());
+        mess.setTargetId(targetId);
+        if (NETWORK.isClient()) {
+            NETWORK.sendToServer(mess);
+        } else {
+            NETWORK.broadcast(mess);
             actorService.setFollow(actor, targetId);
         }
     }
