@@ -81,8 +81,8 @@ public class TaskChat extends Chat {
     }
 
     @Override
-    public void initialize() {
-        super.initialize();
+    public void initEntity() {
+        super.initEntity();
         // fix bug:如果requestPanel已经存在，即可能已经接过任务，则先移除，
         // 避免在接过任务后，在再次对话的时候仍然看到requestPanel
         if (requestPanel != null) {

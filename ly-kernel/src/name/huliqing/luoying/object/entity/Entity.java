@@ -26,10 +26,9 @@ public interface Entity<T extends EntityData> extends DataProcessor<T>{
     
     /**
      * 初始化
-     * @param scene 场景容器
      */
-    void initialize(Scene scene);
-    
+    void initialize();
+        
     /**
      * 判断是否已经初始化
      * @return 
@@ -40,6 +39,13 @@ public interface Entity<T extends EntityData> extends DataProcessor<T>{
      * 清理并释放资源
      */
     void cleanup();
+    
+    /**
+     * 这个方法会在物体被添加到场景的时候被调用, 如果一个物体没有被直接被放到场景中，则这个方法
+     * 可能不会被调用。
+     * @param scene 
+     */
+    void onInitScene(Scene scene);
     
     /**
      * 获取物体的唯一id, 通过这个id可以从scene中直接找到这个物体

@@ -60,7 +60,7 @@ public class PhysicsEnv extends NoneModelEntity implements SceneListener {
     }
 
     @Override
-    public void initialize() {
+    public void initEntity() {
         bulletAppState = new BulletAppState();
         
         BroadphaseType bt = getBroadphaseType(broadphaseType);
@@ -89,7 +89,11 @@ public class PhysicsEnv extends NoneModelEntity implements SceneListener {
         bulletAppState.getPhysicsSpace().setAccuracy(accuracy);
         bulletAppState.getPhysicsSpace().setMaxSubSteps(maxSubSteps);
         bulletAppState.getPhysicsSpace().setSolverNumIterations(solverNumIterations);
-        
+    }
+
+    @Override
+    public void onInitScene(Scene scene) {
+        super.onInitScene(scene); 
         // 将当前场景中已经存在的所有物体添加到物理环境中
         bulletAppState.getPhysicsSpace().addAll(scene.getRoot());
         

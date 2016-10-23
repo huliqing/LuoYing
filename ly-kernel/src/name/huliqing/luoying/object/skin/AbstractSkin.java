@@ -27,7 +27,6 @@ import name.huliqing.luoying.data.AttributeMatch;
 import name.huliqing.luoying.data.SkinData;
 import name.huliqing.luoying.layer.service.AttributeService;
 import name.huliqing.luoying.object.AssetLoader;
-import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.attribute.Attribute;
 import name.huliqing.luoying.object.attribute.MatchAttribute;
 import name.huliqing.luoying.object.define.DefineFactory;

@@ -8,6 +8,7 @@ import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.scene.Spatial;
 import name.huliqing.luoying.LuoYing;
+import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.xml.DataFactory;
 import name.huliqing.luoying.xml.DataProcessor;
 import name.huliqing.luoying.xml.ProtoData;
@@ -23,7 +24,11 @@ public class Loader {
     }
     
     public static <T extends DataProcessor> T load(ProtoData data) {
-        return DataFactory.createProcessor(data);
+        T dp = DataFactory.createProcessor(data);
+        if (dp instanceof Entity) {
+            ((Entity) dp).initialize();
+        }
+        return dp;
     }
     
     public static Spatial loadModel(String file) {

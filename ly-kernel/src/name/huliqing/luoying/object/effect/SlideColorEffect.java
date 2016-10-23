@@ -75,8 +75,8 @@ public class SlideColorEffect extends Effect {
     }
     
     @Override
-    public void initialize(Scene scene) {
-        super.initialize(scene);
+    public void initialize() {
+        super.initialize();
         create();
     }
     

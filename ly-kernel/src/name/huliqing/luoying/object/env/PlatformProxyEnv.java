@@ -12,11 +12,11 @@ import java.util.List;
 import java.util.Set;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.EntityData;
-import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.layer.service.SystemService;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.AbstractEntity;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.xml.DataFactory;
 
 /**
@@ -69,9 +69,14 @@ public class PlatformProxyEnv extends AbstractEntity implements ProxyEnv {
     }
     
     @Override
-    public void initialize() {
+    public void initEntity() {
         proxyEnv = Loader.load(proxyEnvData);
-        proxyEnv.initialize(scene);
+    }
+    
+    @Override
+    public void onInitScene(Scene scene) {
+        super.onInitScene(scene);
+        proxyEnv.onInitScene(scene);
     }
 
     @Override

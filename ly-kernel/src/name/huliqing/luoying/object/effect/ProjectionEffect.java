@@ -135,8 +135,13 @@ public class ProjectionEffect extends Effect {
     }
     
     @Override
-    public void initialize(Scene scene) {
-        super.initialize(scene);
+    public void initialize() {
+        super.initialize();
+    }
+
+    @Override
+    public void onInitScene(Scene scene) {
+        super.onInitScene(scene);
         
         // ProjectionEffect需要Scene来添加场景Processor
         if (scene == null)

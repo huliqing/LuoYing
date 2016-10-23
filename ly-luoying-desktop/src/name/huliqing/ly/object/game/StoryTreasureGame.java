@@ -14,7 +14,7 @@ import name.huliqing.luoying.utils.MathUtils;
  */
 public class StoryTreasureGame extends StoryGame {
     
-    public Vector3f treasurePos = new Vector3f(0, 10, 0);
+    public Vector3f treasurePos = new Vector3f(0, 0, 0);
     public int treasureLevel = 5;
     public int groupPlayer = 1;
     public int groupEnemy = 2;

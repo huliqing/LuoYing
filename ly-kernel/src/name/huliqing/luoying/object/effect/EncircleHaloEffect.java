@@ -56,8 +56,8 @@ public class EncircleHaloEffect extends Effect {
     }
 
     @Override
-    public void initialize(Scene scene) {
-        super.initialize(scene);
+    public void initialize() {
+        super.initialize();
         // 重置速度
         for (HaloCircle hc : circles) {
             hc.setRotateSpeed(FastMath.nextRandomFloat() * 0.5f + 0.5f);

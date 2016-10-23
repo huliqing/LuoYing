@@ -45,7 +45,6 @@ public class RandomSceneDataLoader<T extends SceneData> extends SceneDataLoader<
         
         // 载入随机的树木和花草
         TempVars tv = TempVars.get();
-        Vector3f tempPos = tv.vect1;
         float xExt = proto.getAsFloat("randomXExtent", 100);
         float zExt = proto.getAsFloat("randomZExtent", 100);
 
@@ -74,11 +73,12 @@ public class RandomSceneDataLoader<T extends SceneData> extends SceneDataLoader<
                     if (ed instanceof ModelEntityData) {
                         // 生成随机位置（但需要防止生成的位置与空白区域冲突）
                         ModelEntityData ped = (ModelEntityData) ed;
+                        Vector3f randomLoc = new Vector3f();
                         do {
-                            MathUtils.getRandomPosition(xExt, zExt, tempPos);
-                        } while (checkInEmptyZone(tempPos.x, tempPos.z, emptyZones));
+                            MathUtils.getRandomPosition(xExt, zExt, randomLoc);
+                        } while (checkInEmptyZone(randomLoc.x, randomLoc.z, emptyZones));
                         
-                        ped.setLocation(tempPos);
+                        ped.setLocation(randomLoc);
                     } 
                 }
             }

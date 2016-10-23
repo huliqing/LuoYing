@@ -8,6 +8,7 @@ package name.huliqing.luoying.object.env;
 import com.jme3.light.AmbientLight;
 import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.object.entity.NoneModelEntity;
+import name.huliqing.luoying.object.scene.Scene;
 
 /**
  * @author huliqing
@@ -28,7 +29,11 @@ public class AmbientLightEnv extends NoneModelEntity {
     }
     
     @Override
-    public void initialize() {
+    public void initEntity() {}
+
+    @Override
+    public void onInitScene(Scene scene) {
+        super.onInitScene(scene); 
         scene.getRoot().addLight(light);
     }
     

@@ -63,8 +63,8 @@ public class TextureEffect extends Effect {
     }
     
     @Override
-    public void initialize(Scene scene) {
-        super.initialize(scene);
+    public void initialize() {
+        super.initialize();
         if (root == null) {
             create();
         }

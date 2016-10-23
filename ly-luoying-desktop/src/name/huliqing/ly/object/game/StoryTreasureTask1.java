@@ -91,10 +91,10 @@ public class StoryTreasureTask1 extends AbstractTaskStep {
             @Override
             public void callback(Entity actor) {
                 treasure = actor;
+                actorService.setLocation(treasure, game.treasurePos);
+                actorService.setLevel(treasure, game.treasureLevel);
+                actorService.setGroup(treasure, game.groupPlayer);
                 playNetwork.addEntity(treasure);
-                actorNetwork.setLocation(treasure, game.treasurePos);
-                actorNetwork.setLevel(treasure, game.treasureLevel);
-                actorNetwork.setGroup(treasure, game.groupPlayer);
             }
         };
         
@@ -102,12 +102,12 @@ public class StoryTreasureTask1 extends AbstractTaskStep {
             @Override
             public void callback(Entity actor) {
                 victim = actor;
-                playNetwork.addEntity(victim);
-                actorNetwork.setLocation(victim, game.treasurePos.clone().addLocal(1, 0, 1));
-                actorNetwork.setGroup(victim, game.groupPlayer);
-                stateNetwork.addState(victim, IdConstants.STATE_SAFE, null);
+                actorService.setLocation(victim, game.treasurePos.clone().addLocal(1, 0, 1));
+                actorService.setGroup(victim, game.groupPlayer);
                 actorService.setEssential(victim, true);// 设置为"必要的",这样不会被移除出场景
+                stateService.addState(victim, IdConstants.STATE_SAFE, null);
 //                skillService.playSkill(actor, skillService.getSkill(actor, SkillType.wait), false);
+                playNetwork.addEntity(victim);
                 
                 // 救命
                 victimTalkHelp = new TalkImpl();
@@ -120,10 +120,10 @@ public class StoryTreasureTask1 extends AbstractTaskStep {
             public void callback(Entity actor) {
                 // 邪恶蜘蛛
                 spider = actor;
+                actorService.setLocation(spider, game.treasurePos.add(2, 0, 2));
+                actorService.setGroup(spider, game.groupEnemy);
+                stateService.addState(spider, IdConstants.STATE_SAFE, null);
                 playNetwork.addEntity(spider);
-                actorNetwork.setLocation(spider, game.treasurePos.add(2, 0, 2));
-                actorNetwork.setGroup(spider, game.groupEnemy);
-                stateNetwork.addState(spider, IdConstants.STATE_SAFE, null);
             }
         };
         

@@ -9,6 +9,7 @@ import com.jme3.light.DirectionalLight;
 import com.jme3.math.Vector3f;
 import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.object.entity.NoneModelEntity;
+import name.huliqing.luoying.object.scene.Scene;
 
 /**
  * @author huliqing
@@ -31,8 +32,13 @@ public class DirectionalLightEnv extends NoneModelEntity {
     }
     
     @Override
-    public void initialize() {
+    public void initEntity() {
         light.setDirection(direction);
+    }
+
+    @Override
+    public void onInitScene(Scene scene) {
+        super.onInitScene(scene); 
         scene.getRoot().addLight(light);
     }
 

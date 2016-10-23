@@ -100,8 +100,8 @@ public class SendChat<T extends ChatData> extends Chat<T> {
     }
 
     @Override
-    public void initialize() {
-        super.initialize();
+    public void initEntity() {
+        super.initEntity();
         
         // 记住卖者
         sender = gameService.getPlayer();

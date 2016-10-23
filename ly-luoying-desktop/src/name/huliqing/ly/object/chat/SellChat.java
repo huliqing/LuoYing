@@ -116,8 +116,8 @@ public class SellChat<T extends ChatData> extends Chat<T> {
     
 
     @Override
-    public void initialize() {
-        super.initialize();
+    public void initEntity() {
+        super.initEntity();
         
         // 记住卖者
         seller = gameService.getPlayer();

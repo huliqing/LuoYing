@@ -22,7 +22,6 @@ import name.huliqing.luoying.constants.AssetConstants;
 import name.huliqing.luoying.data.EffectData;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.position.Position;
-import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.shape.MySpline;
 import name.huliqing.luoying.shape.SplineSurface;
 
@@ -87,8 +86,8 @@ public class SlideColorIOSplineEffect extends Effect {
     }
     
     @Override
-    public void initialize(Scene scene) {
-        super.initialize(scene);
+    public void initialize() {
+        super.initialize();
         create();
     }
     

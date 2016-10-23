@@ -129,7 +129,7 @@ public abstract class AbstractView<T extends ViewData> extends AbstractEntity<T>
     }
     
     @Override
-    public final void initialize() {
+    public final void initEntity() {
         // 1.初始化View
         doViewInit();
         

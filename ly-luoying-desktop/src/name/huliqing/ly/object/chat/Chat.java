@@ -94,7 +94,7 @@ public abstract class Chat<T extends ChatData> extends AbstractEntity<T> {
     }
     
     @Override
-    public void initialize() {
+    public void initEntity() {
         // 检查是否可见
         if (!isVisibleForPlayer()) {
             scene.removeEntity(this);

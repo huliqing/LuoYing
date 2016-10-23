@@ -11,6 +11,7 @@ import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
 import name.huliqing.luoying.data.ModelEntityData;
+import name.huliqing.luoying.object.scene.Scene;
 
 /**
  * 模型类的场景物体.
@@ -44,7 +45,7 @@ public abstract class ModelEntity<T extends ModelEntityData> extends AbstractEnt
     }
     
     @Override
-    public void initialize() {
+    public void initEntity() {
         spatial = loadModel();
         Vector3f location = data.getLocation();
         if (location != null) {
@@ -69,6 +70,13 @@ public abstract class ModelEntity<T extends ModelEntityData> extends AbstractEnt
         if (scene != null) {
             scene.getRoot().attachChild(spatial);
         }
+    }
+
+    @Override
+    public void onInitScene(Scene scene) {
+        super.onInitScene(scene);
+        // 当Entity被添加到场景的时候把Spatial放到场景中。
+        scene.getRoot().attachChild(spatial);
     }
 
     @Override

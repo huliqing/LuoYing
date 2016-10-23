@@ -16,8 +16,8 @@ import name.huliqing.luoying.shape.TreeCollisionMesh;
 public class TreeEnv extends PlantEnv {
 
     @Override
-    public void initialize() {
-        super.initialize();
+    public void initEntity() {
+        super.initEntity();
         // 树体用了一个定制的MeshCollisionShape, 注：MeshCollisionShape类型必须要求mass=0
         RigidBodyControl rbc = spatial.getControl(RigidBodyControl.class);
         if (rbc != null) {

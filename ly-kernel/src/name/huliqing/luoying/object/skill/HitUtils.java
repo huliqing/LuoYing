@@ -6,14 +6,12 @@ package name.huliqing.luoying.object.skill;
 
 import java.util.List;
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.constants.ResConstants;
 import name.huliqing.luoying.layer.network.ActorNetwork;
 import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.network.SkillNetwork;
 import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.layer.service.AttributeService;
 import name.huliqing.luoying.layer.service.SkillService;
-import name.huliqing.luoying.manager.ResourceManager;
 import name.huliqing.luoying.layer.network.DropNetwork;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.entity.Entity;

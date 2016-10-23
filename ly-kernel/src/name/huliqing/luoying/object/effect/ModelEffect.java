@@ -59,8 +59,8 @@ public class ModelEffect extends Effect {
     }
 
     @Override
-    public void initialize(Scene scene) {
-        super.initialize(scene);
+    public void initialize() {
+        super.initialize();
         if (model != null) {
             model.setCullHint(CullHint.Inherit);
         }

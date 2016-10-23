@@ -58,8 +58,8 @@ public class CurveTrailBullet extends CurveBullet {
     }
 
     @Override
-    public void initialize() {
-        super.initialize();
+    public void initEntity() {
+        super.initEntity();
         
         surface.detachAllChildren();
         

@@ -49,7 +49,7 @@ public class ShadowEnv extends NoneModelEntity {
     }
     
     @Override
-    public void initialize() {
+    public void initEntity() {
         sceneListener = new SceneListenerAdapter() {
             @Override
             public void onSceneInitialized(Scene scene) {
@@ -65,6 +65,11 @@ public class ShadowEnv extends NoneModelEntity {
                 }
             }
         };
+    }
+
+    @Override
+    public void onInitScene(Scene scene) {
+        super.onInitScene(scene); 
         scene.addSceneListener(sceneListener);
     }
     

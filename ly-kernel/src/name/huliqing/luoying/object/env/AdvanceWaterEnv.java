@@ -106,7 +106,7 @@ public class AdvanceWaterEnv extends NoneModelEntity implements WaterEntity {
     }
 
     @Override
-    public void initialize() {
+    public void initEntity() {
         if (causticsTexture != null) {
             water.setCausticsTexture((Texture2D) LuoYing.getApp().getAssetManager().loadTexture(causticsTexture));
         }
@@ -119,15 +119,18 @@ public class AdvanceWaterEnv extends NoneModelEntity implements WaterEntity {
         if (normalTexture != null) {
             water.setNormalTexture((Texture2D) LuoYing.getApp().getAssetManager().loadTexture(normalTexture));
         }
+    }
+
+    @Override
+    public void onInitScene(Scene scene) {
+        super.onInitScene(scene);
         water.setReflectionScene(scene.getRoot());
-        
         sceneListener = new SceneListenerAdapter() {
             @Override
             public void onSceneInitialized(Scene scene) {
                 findAndSetLigght(scene);
             }
         };
-        
         scene.addSceneListener(sceneListener);
         // 控制水体渲染
         scene.addFilter(water);

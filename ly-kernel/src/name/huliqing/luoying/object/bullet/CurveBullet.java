@@ -59,8 +59,8 @@ public class CurveBullet extends StraightBullet {
     }
 
     @Override
-    public void initialize() {
-        super.initialize(); 
+    public void initEntity() {
+        super.initEntity(); 
         if (waypoints != null) {
             // 添加开始和结束坐标点，以及生成中间坐标点。
             waypoints.add(start);

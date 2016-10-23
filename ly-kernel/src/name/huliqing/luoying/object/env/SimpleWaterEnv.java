@@ -16,6 +16,7 @@ import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.object.entity.AbstractEntity;
 import name.huliqing.luoying.processor.VerySimpleWaterProcessor;
 import name.huliqing.luoying.object.entity.WaterEntity;
+import name.huliqing.luoying.object.scene.Scene;
 
 /**
  * 轻量级的水体效果，可支持移动设置、手机等。特别针对Opengl es应用。
@@ -63,7 +64,7 @@ public class SimpleWaterEnv extends AbstractEntity implements WaterEntity {
     }
     
     @Override
-    public void initialize() {
+    public void initEntity() {
         waterModel = LuoYing.getApp().getAssetManager().loadModel(waterModelFile);
         Vector3f location = data.getAsVector3f("location");
         if (location != null) {
@@ -79,7 +80,7 @@ public class SimpleWaterEnv extends AbstractEntity implements WaterEntity {
         }
         
         water = new VerySimpleWaterProcessor(LuoYing.getApp().getAssetManager(), waterModel);
-        water.addReflectionScene(scene.getRoot());
+
         water.setTexScale(texScale);
         water.setWaveSpeed(waveSpeed);
         water.setDistortionMix(distortionMix);
@@ -99,6 +100,13 @@ public class SimpleWaterEnv extends AbstractEntity implements WaterEntity {
         if (foamMaskScale != null) {
             water.setFoamMaskScale(foamMaskScale.x, foamMaskScale.y);
         }
+        
+    }
+
+    @Override
+    public void onInitScene(Scene scene) {
+        super.onInitScene(scene); 
+        water.addReflectionScene(scene.getRoot());
         scene.addProcessor(water);
         scene.getRoot().attachChild(waterModel);
     }

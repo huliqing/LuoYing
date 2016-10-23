@@ -31,7 +31,7 @@ public class ChaseCameraEnv extends NoneModelEntity  implements SceneListener {
     }
     
     @Override
-    public void initialize() {
+    public void initEntity() {
         ccc = new CollisionChaseCamera(LuoYing.getApp().getCamera(), LuoYing.getApp().getInputManager());
          // 开启镜头跟随可能让部分人容易犯头晕
         ccc.setSmoothMotion(data.getAsBoolean("smoothMotion", ccc.isSmoothMotion()));
@@ -48,7 +48,11 @@ public class ChaseCameraEnv extends NoneModelEntity  implements SceneListener {
         ccc.setDownRotateOnCloseViewOnly(data.getAsBoolean("downRotateOnCloseViewOnly", ccc.getDownRotateOnCloseViewOnly())); 
         ccc.setUpVector(data.getAsVector3f("upVector", ccc.getUpVector()));
         ccc.setHideCursorOnRotate(data.getAsBoolean("hideCursorOnRotate", ccc.isHideCursorOnRotate()));
-        
+    }
+
+    @Override
+    public void onInitScene(Scene scene) {
+        super.onInitScene(scene); 
         // 从当前场景中查找PhysicsEnv,使用它来处理碰撞检测
         // 注意必须确保PhysicsEnv已经初始化，否则可能会获取不到物理空间。
         // 在无法确定目标PhysicsEnv已经初始化的情况下需要添加监听。从被监视的Env中获取PhysicsEnv

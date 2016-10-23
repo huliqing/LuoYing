@@ -99,7 +99,7 @@ public abstract class StoryGame extends SimpleRpgGame {
         Vector3f loc = actorService.getLocation(actor);
         Vector3f terrainHeight = playService.getTerrainHeight(scene, loc.x, loc.z);
         if (terrainHeight != null) {
-            actorService.setLocation(actor, terrainHeight.addLocal(0, 10f, 0));
+            actorService.setLocation(actor, terrainHeight.addLocal(0, 0.5f, 0));
         }
         // 给玩家指定分组
         actorService.setGroup(actor, GROUP_PLAYER);

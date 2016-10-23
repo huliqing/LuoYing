@@ -31,8 +31,13 @@ public abstract class PlantEnv extends ModelEntity {
     }
     
     @Override
-    public void initialize() {
-        super.initialize();
+    public void initEntity() {
+        super.initEntity();
+    }
+
+    @Override
+    public void onInitScene(Scene scene) {
+        super.onInitScene(scene);
         sceneListener = new SceneListenerAdapter() {
             @Override
             public void onSceneInitialized(Scene scene) {

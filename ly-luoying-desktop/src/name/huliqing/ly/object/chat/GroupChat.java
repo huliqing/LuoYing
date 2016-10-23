@@ -91,8 +91,8 @@ public class GroupChat extends Chat {
    
 
     @Override
-    public void initialize() {
-        super.initialize();
+    public void initEntity() {
+        super.initEntity();
         
         // 更新title
         title.setTitle(getChatName() + "-" + actor.getData().getName());

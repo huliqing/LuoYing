@@ -136,8 +136,8 @@ public class ShopItemChat<T extends ChatData> extends Chat<T> implements ItemLis
     }
 
     @Override
-    public void initialize() {
-        super.initialize();
+    public void initEntity() {
+        super.initEntity();
 
         win.setTitle(getChatName() + "-" + actor.getData().getName());
         win.setToCorner(UI.Corner.CC);

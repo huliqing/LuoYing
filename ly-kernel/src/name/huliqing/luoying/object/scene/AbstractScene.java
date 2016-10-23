@@ -126,10 +126,12 @@ public abstract class AbstractScene implements Scene {
         }
         entities.put(entity.getEntityId(), entity);
         data.addEntityData(entity.getData());
-        // 初始化,注意判断是否已经初始化过，因为Entity可能已经从外部代码进行了初始化.为减少BUG发生.
+        // 1.初始化,注意判断是否已经初始化过，因为Entity可能已经从外部代码进行了初始化.
         if (!entity.isInitialized()) {
-            entity.initialize(this);
+            entity.initialize();
         }
+        // 2.设置对场景的引用
+        entity.onInitScene(this);
         if (listeners != null) {
             for (SceneListener ecl : listeners) {
                 ecl.onSceneEntityAdded(this, entity);

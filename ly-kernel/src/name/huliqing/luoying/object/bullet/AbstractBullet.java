@@ -115,8 +115,8 @@ public abstract class AbstractBullet<T extends BulletData> extends ModelEntity<T
     }
 
     @Override
-    public void initialize() {
-        super.initialize();
+    public void initEntity() {
+        super.initEntity();
         
         // 用于碰撞
         hitChecker = shape.getGeometry();
@@ -137,7 +137,6 @@ public abstract class AbstractBullet<T extends BulletData> extends ModelEntity<T
             for (String eid : effectIds) {
                 Effect e = Loader.load(eid);
                 bulletNode.attachChild(e);
-                e.initialize(null); // effect直接放在bulletNode下面,不放在场景中
             }
         }
         
@@ -277,8 +276,8 @@ public abstract class AbstractBullet<T extends BulletData> extends ModelEntity<T
         if (hitEffects != null) {
             for (String eid : hitEffects) {
                 Effect effect = Loader.load(eid);
-                effect.initialize(scene);
                 effect.setLocalTranslation(bulletNode.getWorldTranslation());
+                scene.addEntity(effect);
             }            
         }
         if (hitSounds != null) {

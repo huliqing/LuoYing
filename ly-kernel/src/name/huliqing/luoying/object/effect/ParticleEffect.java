@@ -51,8 +51,8 @@ public class ParticleEffect extends Effect {
     }
     
     @Override
-    public void initialize(Scene scene) {
-        super.initialize(scene);
+    public void initialize() {
+        super.initialize();
         
         if (pe == null) {
             Emitter em = Loader.load(emitter);

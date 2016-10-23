@@ -100,7 +100,7 @@ public class SlideColorSplineEffect extends SlideColorEffect {
         spline.setCurveTension(tension);
         spline.setCycle(cycle);
         return spline;
-    }
+    } 
 
     
 }

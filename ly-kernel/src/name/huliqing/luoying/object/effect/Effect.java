@@ -181,17 +181,45 @@ public class Effect<T extends EffectData> extends Node implements Entity<T> {
     
     /**
      * 初始化特效
-     * @param scene
      */
     @Override
-    public void initialize(Scene scene) {
+    public void initialize() {
         if (initialized) {
             throw new IllegalStateException("Effect already is initialized! EffectId=" + data.getId());
         }
-        this.scene = scene;
         
         trueTimeTotal = useTime / speed;
         
+        // 1.查找被跟随的对象，并初始化位置
+        initTrace();
+
+        // 2.初始化动画
+        initAnimations();
+        
+        // 初始化模块控制器
+        entityModule.initialize();
+        
+        initialized = true;
+    }
+    
+    /**
+     * 查找被跟随的对象，并初始化位置
+     */
+    private void initTrace() {
+        if (traceObject == null) {
+            traceObject = findTraceObject(traceEntityId);
+        }
+        if (traceObject != null) {
+            if (tracePosition == TraceType.once || tracePosition == TraceType.always) {
+                doUpdateTracePosition();
+            }
+            if (traceRotation == TraceType.once || traceRotation == TraceType.always) {
+                doUpdateTraceRotation();
+            }
+        }
+    }
+    
+    private void initAnimations() {
         // 计算Animation的实际开始时间和实际使用时间
         if (animations != null) {
             for (int i = 0; i < animations.size(); i++) {
@@ -200,57 +228,8 @@ public class Effect<T extends EffectData> extends Node implements Entity<T> {
                 aw.trueStartTime = aw.startTime / speed;
             }
         }
-        
-        // 用EntityId找回跟随的对象。
-        if (traceObject == null && traceEntityId > 0 && scene != null) {
-            Entity traceEntity = scene.getEntity(traceEntityId);
-            if (traceEntity != null) {
-                traceObject = traceEntity.getSpatial();
-            }
-        }
-        
-        // remove20161012
-//        if (animRoot.getParent() == null) {
-//            attachChild(animRoot);
-//        }
-   
-        // remove20161012,以后initXXX只作为跟随时的偏移设置
-//        // 1.初始化位置，注：initLocation,initRotation,initScale是允许为null的，在一些情况下程序可能需要在运行时动态设置
-//        // 特效的位置，因此允许这几个参数为null.
-//        if (initLocation != null) {
-//            setLocalTranslation(initLocation);
-//        }
-//        if (initRotation != null) {
-//            setLocalRotation(initRotation);
-//        }
-//        if (initScale != null) {
-//            setLocalScale(initScale);
-//        }
-        
-        // 2.初始化跟随
-        if (traceObject != null) {
-            if (tracePosition == TraceType.once  || tracePosition == TraceType.always) {
-                doUpdateTracePosition();
-            }
-            if (traceRotation == TraceType.once || traceRotation == TraceType.always) {
-                doUpdateTraceRotation();
-            }
-        }
-        
-        // 动画一开始要update一次，因为一些动画是立即执行的,这些动画需要立即初始化，比如一些缩放显示的动画，
-        // 在初始化时需要将目标先隐藏,否则会有一个闪现的不正常现象。这很重要
+        // 初始化时需要更新一次动画
         updateAnimations(0, timeUsed);
-        
-        // 初始化模块控制器
-        entityModule.initialize();
-        
-        initialized = true;
-        
-        // 把特效添加到场景,注：scene是可能为null的，当特效作为普通Spatial放在其它Node下面时是这种情况。
-        if (scene != null) {
-            scene.getRoot().attachChild(this);
-        }
-        
     }
     
     /**
@@ -268,7 +247,7 @@ public class Effect<T extends EffectData> extends Node implements Entity<T> {
         // 当Effect作为普通节点直接放在某个Node下面时，可能用户会忘记调用 initialize方法，所以这里特别判断调用一下，
         // 减少用户代码麻烦, (注：scene可以为null)
         if (!initialized) {
-            initialize(scene);
+            initialize();
         }
         effectUpdate(tpf);
     }
@@ -281,19 +260,12 @@ public class Effect<T extends EffectData> extends Node implements Entity<T> {
         timeUsed += tpf;
         
         // 更新位置
-        if (traceObject != null) {
-            if (tracePosition == TraceType.always) {
-                doUpdateTracePosition();
-            }
-            if (traceRotation == TraceType.always) {
-                doUpdateTraceRotation();
-            }
-        }
+        updateTrace();
         
-        // update Sound
+        // 更新声音
         updateSounds(tpf, timeUsed);
         
-        // update Animations
+        // 更新动画
         updateAnimations(tpf, timeUsed);
         
         // 检查是否需要结束特效
@@ -310,6 +282,7 @@ public class Effect<T extends EffectData> extends Node implements Entity<T> {
         // 如果特效设置了自动脱离场景则从场景中移除
         if (scene != null) {
             scene.removeEntity(this);
+            scene = null;
         } else {
             cleanup();
         }
@@ -378,6 +351,20 @@ public class Effect<T extends EffectData> extends Node implements Entity<T> {
     }
     
     /**
+     * 更新跟随位置
+     */
+    private void updateTrace() {
+        if (traceObject != null) {
+            if (tracePosition == TraceType.always) {
+                doUpdateTracePosition();
+            }
+            if (traceRotation == TraceType.always) {
+                doUpdateTraceRotation();
+            }
+        }
+    }
+    
+    /**
      * update Animations
      * @param tpf 
      */
@@ -399,6 +386,17 @@ public class Effect<T extends EffectData> extends Node implements Entity<T> {
                 sounds.get(i).update(tpf, trueTimeUsed);
             }
         }
+    }
+    
+    // 查找被跟随的节点
+    private Spatial findTraceObject(long entityId) {
+        if (entityId > 0 && scene != null) {
+            Entity traceEntity = scene.getEntity(entityId);
+            if (traceEntity != null) {
+                return traceEntity.getSpatial();
+            }
+        }
+        return null;
     }
     
     private void doUpdateTracePosition() {
@@ -454,6 +452,7 @@ public class Effect<T extends EffectData> extends Node implements Entity<T> {
      */
     public void setTraceEntity(long entityId) {
         this.traceEntityId = entityId;
+        setTraceObject(findTraceObject(traceEntityId));
     }
     
     /**
@@ -462,11 +461,11 @@ public class Effect<T extends EffectData> extends Node implements Entity<T> {
      */
     public void setTraceObject(Spatial traceObject) {
         this.traceObject = traceObject;
+        // 重新查找被跟随的节点并立即初始化位置
+        if (initialized) {
+            initTrace();
+        }
     }
-
-//    public Spatial getTraceObject() {
-//        return traceObject;
-//    }
     
     /**
      * 默认效果的执行速度，默认为1.0
@@ -482,6 +481,15 @@ public class Effect<T extends EffectData> extends Node implements Entity<T> {
      */
     public void setSpeed(float speed) {
         this.speed = speed;
+        if (this.speed <= 0) {
+            this.speed = 0.0001f;
+        }
+        // 更新时间
+        trueTimeTotal = useTime / this.speed;
+        // 更新动画时间
+        if (initialized) {
+            initAnimations();
+        }
     }
 
     @Override
@@ -496,6 +504,12 @@ public class Effect<T extends EffectData> extends Node implements Entity<T> {
     @Override
     public Scene getScene() {
         return scene;
+    }
+
+    @Override
+    public void onInitScene(Scene scene) {
+        this.scene = scene;
+        scene.getRoot().attachChild(this);
     }
 
     @Override
@@ -535,6 +549,13 @@ public class Effect<T extends EffectData> extends Node implements Entity<T> {
                 anim.setTarget(animRoot);
                 anim.start();
                 started = true;
+            }
+        }
+        
+        void updateSpeed(float speed) {
+            trueAnimSpeed = speed;
+            if (anim != null) {
+                anim.setSpeed(speed);
             }
         }
         
@@ -579,32 +600,5 @@ public class Effect<T extends EffectData> extends Node implements Entity<T> {
             started = false;
         }
     }
-    
-//    /**
-//     * 设置特效要跟随的目标对象，当设置了这个目标之后，特效在运行时可以跟随这个目标的"位置","朝向”等，视实现类的情况而定。
-//     * 设置为null来清除这个跟踪对象。
-//     * @param traceObject 
-//     */
-//    public abstract void setTraceObject(Spatial traceObject);
-//    
-//    /**
-//     * 获取特效的跟随目标，如果没有跟随目标则返回null.
-//     * @return 
-//     */
-//    public abstract Spatial getTraceObject();
-    
-//    /**
-//     * 添加特效监听器,注：特效监听器不会自动移除，所以添加了帧听器之后需要视情况自行移除，以避免内存涉漏.
-//     * @param listener 
-//     */
-//    public abstract void addListener(EffectListener listener);
-//    
-//    /**
-//     * 移除特效监听器.
-//     * @param listener 
-//     * @return  如果成功移除了特效则返回true,否则false.
-//     */
-//    public abstract boolean removeListener(EffectListener listener);
-    
     
 }

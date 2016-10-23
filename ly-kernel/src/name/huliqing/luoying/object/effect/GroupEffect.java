@@ -44,20 +44,42 @@ public class GroupEffect extends Effect {
     }
     
     @Override
-    public void initialize(Scene scene) {
-        super.initialize(scene);
+    public void initialize() {
+        super.initialize();
         end = false;
+        updateAnimSpeed();
+    }
+
+    @Override
+    public void setSpeed(float speed) {
+        super.setSpeed(speed);
+        updateAnimSpeed();
+    }
+    
+    private void updateAnimSpeed() {
         for (EffectWrap ew : effects) {
-            ew.trueStartTime = ew.startTime / speed;
+            ew.updateSpeed(speed);
         }
     }
 
+    @Override
+    public void onInitScene(Scene scene) {
+        super.onInitScene(scene);
+        for (EffectWrap ew : effects) {
+            if (ew.effect != null) {
+                ew.effect.onInitScene(scene);
+                animRoot.attachChild(ew.effect);
+            }
+        }
+    }
+    
     @Override
     protected void effectUpdate(float tpf) {
         super.effectUpdate(tpf);
         
         // 结束特效
         if (end) {
+            doEndEffect();
             return;
         }
         
@@ -133,8 +155,13 @@ public class GroupEffect extends Effect {
                 // 与group保持一致的速度,这样当设置GroupEffect的速度的时候可以同时影响子效果的速度
                 effect.setSpeed(speed);
                 
-                // 2.----初始化,注：部分效果需要用到场景的引用，所以在这里进行初始化
-                effect.initialize(scene);
+                // 部分效果需要场景引用
+                if (scene != null) {
+                    effect.onInitScene(scene);
+                }
+                
+//                // 2.----初始化,注：部分效果需要用到场景的引用，所以在这里进行初始化
+//                effect.initialize();
                 
                 // 3.----把子效果放到当前GroupEffect下面，注：因为effect.initialize(scene);的时候可能把子效果直接添加到了场景中.
                 // 所以这里要确保重新添加到当前效果子节点下。
@@ -149,6 +176,13 @@ public class GroupEffect extends Effect {
                 animRoot.attachChild(effect);
                 
                 started = true;
+            }
+        }
+        
+        public void updateSpeed(float speed) {
+            trueStartTime = startTime / speed;
+            if (effect != null) {
+                effect.setSpeed(speed);
             }
         }
         

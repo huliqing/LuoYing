@@ -40,15 +40,13 @@ public abstract class AbstractEntity<T extends EntityData> implements Entity<T> 
     }
     
     @Override
-    public final void initialize(Scene scene) {
+    public final void initialize() {
         if (initialized) {
             throw new IllegalStateException("Entity already is initialized! entityId=" + data.getId());
         }
-        // 0.设置对场景的引用, 这确保子类在自身初始化的时候可以引用到场景。
-        this.scene = scene;
         
         // 1.物体自身的"基本初始化"，这一步必须放在模块初始化之前。
-        initialize();
+        initEntity();
         
         // 2.物体附加模块的初始化, 注：模块的初始化需要放在”基本初始化“之后，
         // 因为模块是额外控制器，模块的初始化需要确保物体自身已经初始化完毕，是一个完整的物体。
@@ -56,12 +54,6 @@ public abstract class AbstractEntity<T extends EntityData> implements Entity<T> 
         
         initialized = true;
     }
-    
-    /**
-     * 初始化物体<br>
-     * 注：这个方法会在模块初始化<b>之前</b>被调用。
-     */
-    protected abstract void initialize();
     
     @Override
     public boolean isInitialized() {
@@ -89,6 +81,11 @@ public abstract class AbstractEntity<T extends EntityData> implements Entity<T> 
     }
     
     @Override
+    public void onInitScene(Scene scene) {
+        this.scene = scene;
+    }
+    
+    @Override
     public boolean removeFromScene() {
         if (scene != null) {
             scene.removeEntity(this);
@@ -101,5 +98,10 @@ public abstract class AbstractEntity<T extends EntityData> implements Entity<T> 
     public EntityModule getEntityModule() {
         return entityModule;
     }
-    
+        
+    /**
+     * 初始化物体, 这个方法会在物体载入后调用一次，对物体进行初始化, 
+     * 每个物体在载入系统后都应该立即调用这个方法来对物体进行初始化。
+     */
+    protected abstract void initEntity(); 
 }

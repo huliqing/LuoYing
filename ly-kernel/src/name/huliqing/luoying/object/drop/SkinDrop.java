@@ -16,7 +16,7 @@ import name.huliqing.luoying.object.entity.Entity;
 /**
  * 掉落武器装备设置
  * @author huliqing
- */
+ */ 
 public class SkinDrop extends AbstractDrop {
     private final ConfigService configService = Factory.get(ConfigService.class);
     private final ObjectNetwork protoNetwork = Factory.get(ObjectNetwork.class);

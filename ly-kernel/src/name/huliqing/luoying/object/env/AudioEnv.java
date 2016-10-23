@@ -45,8 +45,8 @@ public class AudioEnv extends ModelEntity {
     }
     
     @Override
-    public void initialize() {
-        super.initialize();
+    public void initEntity() {
+        super.initEntity();
         if (debug) {
             debugNode = new Geometry("debugAudioEnvDistance", new Sphere(20, 20, sound.getData().getMaxDistance()));
             debugNode.setMaterial(createDebugMaterial(ColorRGBA.Green));
