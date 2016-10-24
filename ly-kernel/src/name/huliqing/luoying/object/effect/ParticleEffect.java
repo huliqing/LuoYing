@@ -12,10 +12,8 @@ import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.FastMath;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
 import name.huliqing.luoying.data.EffectData;
-import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.emitter.Emitter;
-import name.huliqing.luoying.object.scene.Scene;
 
 /**
  *
@@ -51,8 +49,8 @@ public class ParticleEffect extends Effect {
     }
     
     @Override
-    public void initialize() {
-        super.initialize();
+    public void initEntity() {
+        super.initEntity();
         
         if (pe == null) {
             Emitter em = Loader.load(emitter);
@@ -63,7 +61,7 @@ public class ParticleEffect extends Effect {
             }
             pe.setInWorldSpace(inWorldSpace);
             pe.getMaterial().getAdditionalRenderState().setBlendMode(blendMode);
-            animRoot.attachChild(pe);
+            animNode.attachChild(pe);
             
             pe.setQueueBucket(Bucket.Translucent);
         }

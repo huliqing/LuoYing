@@ -65,7 +65,8 @@ public class Start extends SimpleApplication {
         
         Start app = new Start();
         app.setSettings(settings);
-        app.setShowSettings(true);
+//        app.setShowSettings(true);
+        app.setShowSettings(false);
         app.setPauseOnLostFocus(false);
         app.start();
         

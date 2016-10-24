@@ -16,7 +16,6 @@ import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.constants.AssetConstants;
 import name.huliqing.luoying.data.EffectData;
 import name.huliqing.luoying.object.Loader;
-import name.huliqing.luoying.object.scene.Scene;
 
 /**
  *
@@ -75,8 +74,8 @@ public class SlideColorEffect extends Effect {
     }
     
     @Override
-    public void initialize() {
-        super.initialize();
+    public void initEntity() {
+        super.initEntity();
         create();
     }
     
@@ -117,7 +116,7 @@ public class SlideColorEffect extends Effect {
             animObj = loadAnimModel();
             animObj.setMaterial(mat);
             animObj.setQueueBucket(Bucket.Transparent);
-            animRoot.attachChild(animObj);
+            animNode.attachChild(animObj);
         }
     }
     

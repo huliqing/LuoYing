@@ -15,24 +15,35 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.layer.network.PlayNetwork;
+import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.manager.PickManager;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.entity.TerrainEntity;
 import name.huliqing.luoying.object.env.ChaseCameraEnv;
 import name.huliqing.luoying.object.game.SimpleGame;
+import name.huliqing.luoying.object.module.ActorModule;
+import name.huliqing.luoying.ui.UI;
+import name.huliqing.luoying.ui.UIEventListener;
 import name.huliqing.luoying.ui.state.PickListener;
 import name.huliqing.luoying.ui.state.UIState;
 import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.ly.view.LanPlayStateUI;
+import name.huliqing.ly.view.shortcut.ShortcutManager;
 
 /**
  *
  * @author huliqing
  */
-public abstract class SimpleRpgGame extends SimpleGame {
+public abstract class SimpleRpgGame extends SimpleGame implements UIEventListener {
+    private static final Logger LOG = Logger.getLogger(SimpleRpgGame.class.getName());
+    private final ActorService actorService = Factory.get(ActorService.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
+    private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     
     // 基本界面
     protected LanPlayStateUI ui;
@@ -40,11 +51,11 @@ public abstract class SimpleRpgGame extends SimpleGame {
     /** 当前游戏主角 */
     protected Entity player;
     
-    /** 当前游戏主目标 */
-    protected Entity target;
-    
     private final List<Actor> tempActorsPicked = new ArrayList<Actor>();
     private final CollisionResults tempTerrainsPicked = new CollisionResults();
+    
+    // 场景相机
+    private ChaseCameraEnv chaseCamera;
     
     @Override
     public void initialize(Application app) {
@@ -53,8 +64,18 @@ public abstract class SimpleRpgGame extends SimpleGame {
         ui = new LanPlayStateUI();
         addLogic(ui);
         
-        // ==== 3.初始化事件绑定
+        // 初始化事件绑定
         bindPickListener();
+        
+        // UI全局事件监听器，主要处理当UI被点击或拖动时不要让镜头跟着转动。
+        UIState.getInstance().addEventListener(this);
+    }
+
+    @Override
+    public void cleanup() {
+        ShortcutManager.cleanup();
+        UIState.getInstance().clearUI();
+        super.cleanup(); 
     }
     
     /**
@@ -67,23 +88,71 @@ public abstract class SimpleRpgGame extends SimpleGame {
     
     public void setPlayer(Entity player) {
         this.player = player;
-        // 从场景中找到“跟随”相机
-        List<ChaseCameraEnv> cces = scene.getEntities(ChaseCameraEnv.class, null);
-        if (cces != null) {
-            cces.get(0).setChase(player.getSpatial());
-        } 
+        int teamId = actorService.getTeam(player);
+        ui.getTeamView().clearPartners();
+        ui.getTeamView().setMainActor(player);
+        ui.getTeamView().setTeamId(teamId);
+        if (teamId > 0) {
+            List<Actor> actors = scene.getEntities(Actor.class, null);
+            for (Actor a : actors) {
+                ui.getTeamView().checkAddOrRemove(a);
+            }
+        }
+        ChaseCameraEnv cce = getChaseCamera();
+        if (cce != null) {
+            cce.setChase(player.getSpatial());
+        }
     }
     
     public Entity getTarget() {
-        return target;
+         return ui.getTargetFace().getActor();
     }
     
     public void setTarget(Entity target) {
-        this.target = target;
+        if (target != null) {
+            ui.setTargetFace(target);
+        }
     }
     
     public void attack() {
-        throw new UnsupportedOperationException();
+         if (player == null) 
+            return;
+        
+        Entity temp = getTarget();
+        
+        // 没有目标，或者目标已经不在战场，则重新查找
+        if (temp == null 
+                || temp == player
+                || temp.getScene() == null // 有可能角色已经被移出场景并已经被cleanup,所以这里需要比isDead优先判断
+                || actorService.isDead(temp) 
+                || !actorService.isEnemy(temp, player)
+                ) {
+            float distance = player.getEntityModule().getModule(ActorModule.class).getViewDistance() * 2;
+            temp = actorService.findNearestEnemyExcept(player, distance, null);
+            
+            // 需要
+            setTarget(temp);
+        }
+        
+//        // 即使temp为null也可以攻击，这允许角色转入自动攻击（等待）状态
+//        if (temp == null) {
+//            addMessage(ResourceManager.get(ResConstants.COMMON_NO_TARGET), MessageType.notice);
+//        }
+        
+        playNetwork.attack(player, temp);
+    }
+    
+    private ChaseCameraEnv getChaseCamera() {
+        // 从场景中找到“跟随”相机
+        if (chaseCamera == null) {
+           List<ChaseCameraEnv> cces = scene.getEntities(ChaseCameraEnv.class, null);
+           if (cces != null) {
+               chaseCamera = cces.get(0);
+           } else {
+               LOG.log(Level.WARNING, "Could not found any ChaseCamera from sence! sceneId={0}", scene.getData().getId());
+           }
+        }
+        return chaseCamera;
     }
     
     /**
@@ -193,4 +262,44 @@ public abstract class SimpleRpgGame extends SimpleGame {
         }
         return false;
     }
+    
+    @Override
+    public void UIClick(UI ui, boolean isPressed, boolean dbclick) {
+        setChaseEnabled(false);
+    }
+
+    @Override
+    public void UIDragStart(UI ui) {
+        setChaseEnabled(false);
+    }
+    
+    @Override
+    public void UIDragEnd(UI ui) {
+        setChaseEnabled(true);
+    }
+
+    @Override
+    public void UIRelease(UI ui) {
+        setChaseEnabled(true);
+    }
+    
+    private void setChaseEnabled(boolean enabled) {
+        // 注意：这里只让相机停止旋转就可以,因为目前当UI打开时还不支持暂停(即打开
+        // 用户界面时角色可能还在走动,镜头也可能还在跟随和旋转).
+        // 为了避免在打开用户面板拖动一些UI组件时3D镜头跟着旋转的不舒服现象提供了这个方法．用于在打
+        // 开UI面板时可以暂时关闭镜头跟随和旋转,在关闭UI后再重新开启，目前只要关闭旋转就可以，
+        // 不能同时关闭跟随．
+        // 因为如果人在走动，这时候如果按下鼠标不放,在关闭跟随的情况下会发现人
+        // 一直远去(向前走动)，当相机重新跟随的时候，会突然移到角色旁边，过渡太过不自然．
+        // 如果只关闭旋转，而保持跟随，就不会出现该现象，也就是该功能只是为了避免
+        // 在按下鼠标拖动(UI)的时候同时出现3D镜头在旋转的问题．
+        ChaseCameraEnv cce = getChaseCamera();
+        if (cce != null) {
+            cce.setEnabledRotation(enabled);
+        }
+    }
+
+//    public MenuTool getMenuTool() {
+//        return ui.getMenuTool();
+//    }
 }

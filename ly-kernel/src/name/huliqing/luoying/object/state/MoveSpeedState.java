@@ -49,8 +49,8 @@ public class MoveSpeedState extends AttributeState {
         
         if (moveEffect == null && moveEffectId != null) {
             moveEffect = Loader.load(moveEffectId);
-            moveEffect.setTraceObject(actor.getSpatial());
-            actor.getScene().getRoot().attachChild(moveEffect);
+            moveEffect.setTraceEntity(actor.getEntityId());
+            actor.getScene().addEntity(moveEffect);
         }
         
         checkEffectTrace();
@@ -91,12 +91,13 @@ public class MoveSpeedState extends AttributeState {
     private void showMoveEffect() {
         if (moveEffect.isEnd()) {
             moveEffect.initialize();
+//            actor.getScene().addEntity(moveEffect);
         }
-        moveEffect.setCullHint(Spatial.CullHint.Never);
+        moveEffect.getSpatial().setCullHint(Spatial.CullHint.Never);
     }
     
     private void hideMoveEffect() {
-        moveEffect.setCullHint(Spatial.CullHint.Always);
+        moveEffect.getSpatial().setCullHint(Spatial.CullHint.Always);
     }
     
     

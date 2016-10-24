@@ -14,9 +14,7 @@ import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
 import com.jme3.util.SafeArrayList;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.LuoYing;
@@ -32,11 +30,14 @@ import name.huliqing.luoying.object.entity.Entity;
 public abstract class AbstractScene implements Scene {
     private static final Logger LOG = Logger.getLogger(AbstractScene.class.getName());
     
+    /** 场景数据 */
     protected SceneData data;
-    protected final Map<Long, Entity> entities = new LinkedHashMap<Long, Entity>();
-    protected SafeArrayList<SceneListener> listeners;
     
-    protected boolean initialized;
+    /** Entity列表，保存了当前场景中所有的物体 */
+    protected final SafeArrayList<Entity> entities = new SafeArrayList<Entity>(Entity.class);
+    
+    /** 场景侦听器 */
+    protected SafeArrayList<SceneListener> listeners;
     
     /** 场景根节点 */
     protected final Node root = new Node("AbstractScene-root");
@@ -52,8 +53,11 @@ public abstract class AbstractScene implements Scene {
      */
     protected final TranslucentBucketFilter translucentBucketFilter = new TranslucentBucketFilter();
 
-    // 默认要作为SceneProcessor的ViewPort
+    /** 默认要作为SceneProcessor的ViewPort */
     protected ViewPort[] processorViewPorts;
+    
+    /** 标记当前场景是否已经初始化 */
+    protected boolean initialized;
     
     @Override
     public void setData(SceneData data) {
@@ -68,7 +72,7 @@ public abstract class AbstractScene implements Scene {
     @Override
     public void updateDatas() {
         // 更新所有实体
-        for (Entity entity : entities.values()) {
+        for (Entity entity : entities.getArray()) {
             entity.updateDatas();
         }
     }
@@ -100,7 +104,7 @@ public abstract class AbstractScene implements Scene {
     
     @Override
     public void cleanup() {
-        for (Entity entity : entities.values()) {
+        for (Entity entity : entities.getArray()) {
             entity.cleanup();
         }
         entities.clear();
@@ -121,10 +125,10 @@ public abstract class AbstractScene implements Scene {
         if (entity == null)
             throw new NullPointerException("Entity could not be null!");
         // 已经存在于场景中
-        if (entities.containsKey(entity.getEntityId())) {
+        if (entities.contains(entity)) {
             return;
         }
-        entities.put(entity.getEntityId(), entity);
+        entities.add(entity);
         data.addEntityData(entity.getData());
         // 1.初始化,注意判断是否已经初始化过，因为Entity可能已经从外部代码进行了初始化.
         if (!entity.isInitialized()) {
@@ -141,8 +145,8 @@ public abstract class AbstractScene implements Scene {
     
     @Override
     public void removeEntity(Entity entity) {
-        boolean removed = data.removeEntityData(entity.getData());
-        entities.remove(entity.getEntityId());
+        boolean removed = entities.remove(entity);
+        data.removeEntityData(entity.getData());
         if (entity.isInitialized()) {
             entity.cleanup();
         }
@@ -155,7 +159,12 @@ public abstract class AbstractScene implements Scene {
     
     @Override
     public Entity getEntity(long entityId) {
-        return entities.get(entityId);
+        for (Entity e : entities.getArray()) {
+            if (e.getEntityId() == entityId) {
+                return e;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -163,7 +172,7 @@ public abstract class AbstractScene implements Scene {
         if (store == null) {
             store = new ArrayList<T>();
         }
-        for (Entity so : entities.values()) {
+        for (Entity so : entities.getArray()) {
             if (type.isAssignableFrom(so.getClass())) {
                 store.add((T)so);
             }
@@ -178,7 +187,7 @@ public abstract class AbstractScene implements Scene {
         }
         float sqRadius = radius * radius;
         T me;
-        for (Entity so : entities.values()) {
+        for (Entity so : entities.getArray()) {
             if (type.isAssignableFrom(so.getClass())) {
                 me = (T) so;
                 if (me.getSpatial().getWorldTranslation().distanceSquared(location) <= sqRadius) {

@@ -7,6 +7,7 @@ package name.huliqing.luoying.object.entity;
 
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
@@ -35,12 +36,13 @@ public abstract class ModelEntity<T extends ModelEntityData> extends AbstractEnt
     @Override
     public void updateDatas() {
         super.updateDatas();
-        if (spatial != null) {
+        if (initialized) {
             data.setLocation(spatial.getLocalTranslation());
             data.setRotation(spatial.getLocalRotation());
             data.setScale(spatial.getLocalScale());
             data.setShadowMode(spatial.getShadowMode());
             data.setCullHint(spatial.getCullHint());
+            data.setQueueBucket(spatial.getQueueBucket());
         }
     }
     
@@ -67,8 +69,9 @@ public abstract class ModelEntity<T extends ModelEntityData> extends AbstractEnt
         if (ch != null) {
             spatial.setCullHint(ch);
         }
-        if (scene != null) {
-            scene.getRoot().attachChild(spatial);
+        Bucket qb = data.getQueueBucket();
+        if (qb != null) {
+            spatial.setQueueBucket(qb);
         }
     }
 
@@ -91,7 +94,7 @@ public abstract class ModelEntity<T extends ModelEntityData> extends AbstractEnt
     }
     
     /**
-     * 载入模型
+     * 载入模型，这个方法需要返回一个代表当前ModelEntity的Spatial.
      * @return 
      */
     protected abstract Spatial loadModel();

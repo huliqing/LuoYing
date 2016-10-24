@@ -25,6 +25,7 @@ import name.huliqing.luoying.ui.UI;
 import name.huliqing.luoying.ui.UI.Corner;
 import name.huliqing.luoying.ui.state.UIState;
 import name.huliqing.luoying.layer.service.ObjectService;
+import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.shortcut.Shortcut;
 import name.huliqing.ly.Config;
 
@@ -80,8 +81,8 @@ public class ShortcutManager {
      * @param actor
      * @param data
      */
-    public static void addShortcut(Actor actor, ObjectData data) {
-        ConfigService configService = Factory.get(ConfigService.class);
+    public static void addShortcut(Entity actor, ObjectData data) {
+//        ConfigService configService = Factory.get(ConfigService.class);
         float size = Config.getShortcutSize();
         if (size < 0.1f) {
             size = 0.1f;
@@ -152,7 +153,7 @@ public class ShortcutManager {
         }
     }
     
-    private static Shortcut createShortcut(Actor actor, ObjectData data
+    private static Shortcut createShortcut(Entity actor, ObjectData data
             , Vector3f location, float width, float height, boolean dragEnabled) {
         Shortcut shortcut = null;
         if (data instanceof SkillData) {

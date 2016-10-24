@@ -13,8 +13,6 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.util.TempVars;
 import name.huliqing.luoying.data.EffectData;
-import name.huliqing.luoying.data.EntityData;
-import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.shape.QuadXY;
 import name.huliqing.luoying.utils.MatUtils;
 import name.huliqing.luoying.utils.MathUtils;
@@ -52,8 +50,8 @@ public class HaloEffect extends Effect {
     }
     
     @Override
-    public void initialize() {
-        super.initialize();
+    public void initEntity() {
+        super.initEntity();
         create();
     }
     
@@ -81,7 +79,7 @@ public class HaloEffect extends Effect {
             }
         }
         tv.release();
-        this.animRoot.attachChild(haloRoot);
+        this.animNode.attachChild(haloRoot);
     }
     
     private Spatial createHaloOne(String texture, Vector3f pos, Vector3f size, Vector3f lookAt) {

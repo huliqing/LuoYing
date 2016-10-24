@@ -18,6 +18,7 @@ import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.Spatial.CullHint;
 import com.jme3.scene.shape.Box;
 import com.jme3.texture.FrameBuffer;
 import com.jme3.texture.Texture;
@@ -115,7 +116,7 @@ public class ProjectionEffect extends Effect {
         // 注：材质必须设置到Geometry中去，如果是给节点(Node)添加设置材质,则必须
         // "先确认"节点下有子Geometry,否则setMaterial无效。
         projGeo.setMaterial(projMat);
-        animRoot.attachChild(projGeo);
+        animNode.attachChild(projGeo);
     }
     
     public void addReceiver(Spatial spatial) {
@@ -132,11 +133,6 @@ public class ProjectionEffect extends Effect {
                 }
             }
         }
-    }
-    
-    @Override
-    public void initialize() {
-        super.initialize();
     }
 
     @Override
@@ -227,7 +223,7 @@ public class ProjectionEffect extends Effect {
                     debugGeo = projGeo.clone();
                     debugGeo.setCullHint(CullHint.Never);
                     debugGeo.setMaterial(getDebugMaterial());
-                    animRoot.attachChild(debugGeo);
+                    animNode.attachChild(debugGeo);
                 }
                 debugGeo.setLocalTransform(projGeo.getLocalTransform());
             }

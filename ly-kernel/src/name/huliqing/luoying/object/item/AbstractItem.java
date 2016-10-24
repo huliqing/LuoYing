@@ -62,8 +62,7 @@ public abstract class AbstractItem implements Item {
             for (String eid : effects) {
                  Effect effect = Loader.load(eid);
                  effect.setTraceObject(actor.getSpatial());
-                 // 注：这种方式添加特效时是不通过网络的,只是本地添加
-                 actor.getScene().getRoot().attachChild(effect);
+                 actor.getScene().addEntity(effect);
             }
         }
         if (sounds != null) {

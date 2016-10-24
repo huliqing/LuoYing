@@ -44,8 +44,8 @@ public class GroupEffect extends Effect {
     }
     
     @Override
-    public void initialize() {
-        super.initialize();
+    public void initEntity() {
+        super.initEntity();
         end = false;
         updateAnimSpeed();
     }
@@ -67,8 +67,9 @@ public class GroupEffect extends Effect {
         super.onInitScene(scene);
         for (EffectWrap ew : effects) {
             if (ew.effect != null) {
+                // onInitScene会导致子特效被直接贴到场景，需要重新贴到animNode下面
                 ew.effect.onInitScene(scene);
-                animRoot.attachChild(ew.effect);
+                animNode.attachChild(ew.effect.getSpatial());
             }
         }
     }
@@ -123,7 +124,7 @@ public class GroupEffect extends Effect {
         // 标记endCheck,这可以让哪些还未开始执行的子效果不再检查是否要需要执行。
         endCheck = true;
     }
-        
+
     @Override
     public final void cleanup() {
         if (effects != null) {
@@ -151,7 +152,7 @@ public class GroupEffect extends Effect {
             if (started) return;
             if (effectTimeUsed >= trueStartTime) {
                 effect = Loader.load(effectId);
-                // 1.----设置属性
+                // 1.同步speed属性
                 // 与group保持一致的速度,这样当设置GroupEffect的速度的时候可以同时影响子效果的速度
                 effect.setSpeed(speed);
                 
@@ -160,12 +161,6 @@ public class GroupEffect extends Effect {
                     effect.onInitScene(scene);
                 }
                 
-//                // 2.----初始化,注：部分效果需要用到场景的引用，所以在这里进行初始化
-//                effect.initialize();
-                
-                // 3.----把子效果放到当前GroupEffect下面，注：因为effect.initialize(scene);的时候可能把子效果直接添加到了场景中.
-                // 所以这里要确保重新添加到当前效果子节点下。
-                
 //                // 不要再设置子效果的跟随
 //                effect.setTraceObject(animRoot);
 
@@ -173,7 +168,7 @@ public class GroupEffect extends Effect {
                 // 点下，在这种情况下，所有的子效果也应该一起放在当前的效果内，受当前效果变换的影响。
                 
                 // 把子效果的跟踪目标设置为animRoot，这样当GroupEffect添加了动画控制时，可以同时影响到子效果的变换。
-                animRoot.attachChild(effect);
+                animNode.attachChild(effect.getSpatial());
                 
                 started = true;
             }
@@ -187,7 +182,7 @@ public class GroupEffect extends Effect {
         }
         
         public void cleanup() {
-            if (effect != null && !effect.isEnd()) {
+            if (effect != null && effect.isInitialized()) {
                 effect.cleanup();
             }
             started = false;

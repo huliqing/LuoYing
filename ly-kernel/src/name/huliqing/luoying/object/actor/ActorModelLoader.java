@@ -12,15 +12,12 @@ import com.jme3.scene.Spatial;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.Config;
-import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.ActorData;
 import name.huliqing.luoying.data.EntityData;
-import name.huliqing.luoying.layer.service.ConfigService;
 import name.huliqing.luoying.object.AssetLoader;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.effect.Effect;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.utils.GeometryUtils;
 
 /**
  *
@@ -113,7 +110,7 @@ public class ActorModelLoader {
         if (effects != null) {
             for (String eid : effects) {
                 Effect ae = Loader.load(eid);
-                ((Node) actorModel).attachChild(ae);
+                ((Node) actorModel).attachChild(ae.getSpatial());
             }
         }
 

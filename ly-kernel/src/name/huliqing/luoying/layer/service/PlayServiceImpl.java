@@ -29,12 +29,16 @@ public class PlayServiceImpl implements PlayService {
     private ActorService actorService;
     private SkillService skillService;
     private LogicService logicService;
+    private ActionService actionService;
+    private SkinService skinService;
     
     @Override
     public void inject() {
         actorService = Factory.get(ActorService.class);
         skillService = Factory.get(SkillService.class);
         logicService = Factory.get(LogicService.class);
+        actionService = Factory.get(ActionService.class);
+        skinService = Factory.get(SkinService.class);
     }
 
     @Override
@@ -110,6 +114,26 @@ public class PlayServiceImpl implements PlayService {
         }
         return result;
     }
+    
+    @Override
+    public void attack(Entity actor, Entity target) {
+         // 如果角色已经死亡
+        if (actorService.isDead(actor)) {
+            return;
+        }
+        
+        // 执行战斗行为
+        if (target != null) {
+            actionService.playFight(actor, target, null);
+        }
+
+        // 打开或关闭侦察敌人的逻辑,autoDetect不需要广播到客户端，因为客户端不会有
+        // 逻辑
+        logicService.setAutoDetect(actor, skinService.isWeaponTakeOn(actor));
+    }
+    
+    
+    
     
     // --------------------------------------------------------------------------------------------------------------------------------
 //    @Override
@@ -488,10 +512,6 @@ public class PlayServiceImpl implements PlayService {
 //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 //    }
 
-    @Override
-    public void attack(Entity actor, Entity target) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
 //    @Override
 //    public void syncGameInitToClient(HostedConnection client) {

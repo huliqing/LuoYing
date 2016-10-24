@@ -86,8 +86,8 @@ public class SlideColorIOSplineEffect extends Effect {
     }
     
     @Override
-    public void initialize() {
-        super.initialize();
+    public void initEntity() {
+        super.initEntity();
         create();
     }
     
@@ -130,7 +130,7 @@ public class SlideColorIOSplineEffect extends Effect {
             animObj = loadAnimModel();
             animObj.setMaterial(mat);
             animObj.setQueueBucket(RenderQueue.Bucket.Transparent);
-            animRoot.attachChild(animObj);
+            animNode.attachChild(animObj);
             
 //            // for debug
 //            Material debugMat = new Material(Common.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");

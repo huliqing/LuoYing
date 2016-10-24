@@ -11,7 +11,7 @@ import com.jme3.network.serializing.Serializable;
  * @author huliqing
  */
 @Serializable
-public class EffectData extends EntityData {
+public class EffectData extends ModelEntityData {
     
 //    // 初始变换
 //    private Vector3f initLocation;

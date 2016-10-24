@@ -8,7 +8,7 @@ package name.huliqing.luoying.object.effect;
  * 跟随的位置类型
  * @author huliqing
  */
-public enum TracePositionType {
+public enum TraceOffsetType {
     
     /** 以原点作为跟随位置(默认方式) */
     origin,
@@ -29,9 +29,9 @@ public enum TracePositionType {
     /** 以包围盒的“顶部”中心点作为跟随位置  */
     bound_top;
 
-    public static TracePositionType identify(String name) {
-        TracePositionType[] types = values();
-        for (TracePositionType type : types) {
+    public static TraceOffsetType identify(String name) {
+        TraceOffsetType[] types = values();
+        for (TraceOffsetType type : types) {
             if (type.name().equals(name)) {
                 return type;
             }

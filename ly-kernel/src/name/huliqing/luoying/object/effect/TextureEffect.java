@@ -12,8 +12,6 @@ import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
 import name.huliqing.luoying.data.EffectData;
-import name.huliqing.luoying.data.EntityData;
-import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.shape.QuadXYC;
 import name.huliqing.luoying.utils.MatUtils;
 import name.huliqing.luoying.utils.MathUtils;
@@ -25,7 +23,7 @@ import name.huliqing.luoying.utils.MathUtils;
  */
 public class TextureEffect extends Effect {
     // 贴图路径
-    private String texture = "Textures/tex/effect/vortex.jpg";
+    private String texture;
     // 贴图的大小，只有xy有效。
     private Vector3f size = new Vector3f(5,5,1);
     // 指定贴图所在的原始平面：xy\xz\yz
@@ -34,7 +32,7 @@ public class TextureEffect extends Effect {
     private ColorRGBA color = ColorRGBA.White.clone();
     
     // ---- inner
-    private Spatial root;
+    private Spatial textureNode;
 
     @Override
     public void setData(EffectData data) {
@@ -45,29 +43,29 @@ public class TextureEffect extends Effect {
         this.color = data.getAsColor("color", color);
     }
     
-    private void create() {
+    @Override
+    public void initEntity() {
+        super.initEntity();
         Material mat = MatUtils.createTransparent(texture);
         mat.setColor("Color", color);
-        root = new Geometry("TextureEffect_root", new QuadXYC(size.x, size.y));
-        root.setMaterial(mat);
-        root.setQueueBucket(Bucket.Transparent);
+        textureNode = new Geometry("TextureEffect_root", new QuadXYC(size.x, size.y));
+        textureNode.setMaterial(mat);
+        textureNode.setQueueBucket(Bucket.Transparent);
         
         // 默认贴图在xy平面上，当指定了其它方向时需要进行旋转，默认以逆时针旋转到指定平面
         if ("xz".equals(plane)) {
-            root.setLocalRotation(MathUtils.createRotation(FastMath.HALF_PI, Vector3f.UNIT_X, root.getLocalRotation()));
+            textureNode.setLocalRotation(MathUtils.createRotation(FastMath.HALF_PI, Vector3f.UNIT_X, textureNode.getLocalRotation()));
         } else if ("yz".equals(plane)) {
-            root.setLocalRotation(MathUtils.createRotation(FastMath.HALF_PI, Vector3f.UNIT_Y, root.getLocalRotation()));
+            textureNode.setLocalRotation(MathUtils.createRotation(FastMath.HALF_PI, Vector3f.UNIT_Y, textureNode.getLocalRotation()));
         }
         
-        animRoot.attachChild(root);
+        animNode.attachChild(textureNode);
     }
-    
+
     @Override
-    public void initialize() {
-        super.initialize();
-        if (root == null) {
-            create();
-        }
+    public void cleanup() {
+        textureNode.removeFromParent();
+        super.cleanup();
     }
     
 }

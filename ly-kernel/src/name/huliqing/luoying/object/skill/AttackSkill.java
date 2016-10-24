@@ -194,8 +194,8 @@ public class AttackSkill extends HitSkill {
             collisionPos.addLocal(actor.getSpatial().getWorldTranslation());
             
             Effect effect = Loader.load(effectId);
-            effect.setLocalTranslation(collisionPos);
-            effect.getLocalRotation().lookAt(actorModule.getViewDirection(), Vector3f.UNIT_Y);
+            effect.getSpatial().setLocalTranslation(collisionPos);
+            effect.getSpatial().getLocalRotation().lookAt(actorModule.getViewDirection(), Vector3f.UNIT_Y);
             actor.getScene().addEntity(effect);
             tv.release();
         }

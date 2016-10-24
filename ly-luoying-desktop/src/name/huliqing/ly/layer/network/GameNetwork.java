@@ -64,4 +64,5 @@ public interface GameNetwork extends Inject {
      * @param worldPos 
      */
     void playRunToPos(Entity actor, Vector3f worldPos);
+    
 }

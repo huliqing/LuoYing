@@ -11,6 +11,7 @@ import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.layer.service.SkinService;
 import name.huliqing.luoying.layer.service.LogicService;
+import name.huliqing.luoying.mess.MessAutoAttack;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.scene.Scene;
 
@@ -212,27 +213,16 @@ public class PlayNetworkImpl implements PlayNetwork {
 
     @Override
     public void attack(Entity actor, Entity target) {
-        // 客户端不处理
+        // On client
         if (NETWORK.isClient()) {
+            MessAutoAttack mess = new MessAutoAttack();
+            mess.setTargetId(target != null ? target.getData().getUniqueId() : -1);
+            NETWORK.sendToServer(mess);
             return;
         }
-        
-        // 如果角色已经死亡
-        if (actorService.isDead(actor)) {
-            return;
-        }
-        
-        // 执行战斗行为
-        if (target != null) {
-            actionNetwork.playFight(actor, target, null);
-        }
-        
-        if (!skinService.isWeaponTakeOn(actor)) {
-            skinNetwork.takeOnWeapon(actor);
-        }
-        // 打开或关闭侦察敌人的逻辑,autoDetect不需要广播到客户端，因为客户端不会有
-        // 逻辑
-        logicService.setAutoDetect(actor, skinService.isWeaponTakeOn(actor));
+
+        // On Server，这个命令服务端不需要广播到客户端。
+        playService.attack(actor, target);
     }
 
 //    @Override

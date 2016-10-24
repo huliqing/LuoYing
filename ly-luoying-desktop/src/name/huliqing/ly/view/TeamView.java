@@ -9,15 +9,12 @@ import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.layer.network.ActorNetwork;
 import name.huliqing.luoying.layer.service.ActorService;
-import name.huliqing.luoying.layer.service.PlayService;
-import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.ui.LinearLayout;
 import name.huliqing.luoying.ui.ListView;
 import name.huliqing.luoying.ui.Row;
 import name.huliqing.luoying.ui.UI;
 import name.huliqing.luoying.ui.UI.Listener;
-import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.ly.layer.service.GameService;
 
 /**
@@ -25,10 +22,10 @@ import name.huliqing.ly.layer.service.GameService;
  * @author huliqing
  */
 public class TeamView extends LinearLayout {
-    private final PlayService playService = Factory.get(PlayService.class);
+//    private final PlayService playService = Factory.get(PlayService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final GameService gameService = Factory.get(GameService.class);
-    private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
+//    private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     
     // 组ID，所有匹配该ID的角色都将添加到当前面板中
@@ -82,7 +79,7 @@ public class TeamView extends LinearLayout {
      * 设置面板的主角色
      * @param actor 
      */
-    public void setMainActor(Actor actor) {
+    public void setMainActor(Entity actor) {
         mainFace.setActor(actor);
     }
     
@@ -90,7 +87,7 @@ public class TeamView extends LinearLayout {
      * 检查是否要将一个角色添加到队伍或从队伍中移除.
      * @param actor 
      */
-    public void checkAddOrRemove(Actor actor) {
+    public void checkAddOrRemove(Entity actor) {
         // teamId不匹配则移出队伍
         int team = actorService.getTeam(actor);
         if (team != teamId) {
@@ -109,7 +106,7 @@ public class TeamView extends LinearLayout {
         }
     }
     
-    public void removeActor(Actor actor) {
+    public void removeActor(Entity actor) {
         if (partnerPanel.removeActor(actor)) {
             partnerPanel.refreshPageData();
             if (partnerPanel.getRowTotal() <= 0) {
@@ -131,10 +128,10 @@ public class TeamView extends LinearLayout {
     }
     
     // 判断角色是否已经在team中
-    private boolean isAdded(Actor actor) {
+    private boolean isAdded(Entity actor) {
         if (actor == mainFace.getActor()) 
             return true;
-        for (Actor a : partnerPanel.getDatas()) {
+        for (Entity a : partnerPanel.getDatas()) {
             if (actor == a) {
                 return true;
             }
@@ -144,9 +141,9 @@ public class TeamView extends LinearLayout {
     
     // ---- Partner Panel ------------------------------------------------------
     
-    private class PartnerPanel extends ListView<Actor> {
+    private class PartnerPanel extends ListView<Entity> {
 
-        private final List<Actor> partners = new ArrayList<Actor>();
+        private final List<Entity> partners = new ArrayList<Entity>();
         
         public PartnerPanel(int pageSize, float width, float height) {
             super(width, height);
@@ -154,20 +151,20 @@ public class TeamView extends LinearLayout {
         }
 
         @Override
-        protected Row<Actor> createEmptyRow() {
+        protected Row<Entity> createEmptyRow() {
             return new PartnerRow();
         }
 
         @Override
-        public List<Actor> getDatas() {
+        public List<Entity> getDatas() {
             return partners;
         }
         
-        public void addActor(Actor actor) {
+        public void addActor(Entity actor) {
             partners.add(actor);
         }
         
-        public boolean removeActor(Actor actor) {
+        public boolean removeActor(Entity actor) {
             return partners.remove(actor);
         }
         
@@ -184,7 +181,7 @@ public class TeamView extends LinearLayout {
         
     }
     
-    private class PartnerRow extends Row<Actor> {
+    private class PartnerRow extends Row<Entity> {
         private final FaceView facePanel = new FaceView(facePanelWidth * partnerPanelFactor, facePanelHeight * partnerPanelFactor);
         
         public PartnerRow() {
@@ -205,7 +202,7 @@ public class TeamView extends LinearLayout {
                 public void onClick(UI ui, boolean isPress) {
                     if (isPress) return;
                     Entity player = gameService.getPlayer();
-                    Actor target = facePanel.getActor();
+                    Entity target = facePanel.getActor();
                     if (player != null && target != null && player != target) {
                         actorNetwork.setFollow(player, target.getData().getUniqueId()); 
                         
@@ -216,7 +213,7 @@ public class TeamView extends LinearLayout {
         }
         
         @Override
-        public void displayRow(Actor actor) {
+        public void displayRow(Entity actor) {
             facePanel.setActor(actor);
         }
 

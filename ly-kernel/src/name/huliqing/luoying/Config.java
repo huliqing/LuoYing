@@ -13,5 +13,5 @@ public class Config {
     /**
      * 是否打开调试
      */
-    public static boolean debug = false;
+    public static boolean debug = true;
 }

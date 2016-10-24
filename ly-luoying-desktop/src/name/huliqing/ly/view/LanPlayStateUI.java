@@ -12,6 +12,7 @@ import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.anim.Anim;
 import name.huliqing.luoying.object.anim.AnimNode;
+import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.game.Game;
 import name.huliqing.luoying.ui.Icon;
 import name.huliqing.luoying.ui.UI;
@@ -119,7 +120,7 @@ public class LanPlayStateUI extends PlayStateUI {
         return teamView;
     }
     
-    public void setTargetFace(Actor face) {
+    public void setTargetFace(Entity face) {
         this.targetFace.setActor(face);
         this.targetFace.setVisible(true);
     }

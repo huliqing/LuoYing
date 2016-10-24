@@ -5,10 +5,40 @@
  */
 package name.huliqing.luoying.object.scene;
 
+import java.util.HashMap;
+import java.util.Map;
+import name.huliqing.luoying.object.entity.Entity;
+
 /**
- * 简单的场景实例，只是把AbstractScene实例化, 定制场景可以直接继承AbstractScene或SimpleScene
+ * 简单的场景实例，实例化AbstractScene, 并优化查询。
  * @author huliqing
  */
 public class SimpleScene extends AbstractScene {
-   
+
+    // 用于优化查询
+    protected final Map<Long, Entity> entityMap = new HashMap<Long, Entity>();
+    
+    @Override
+    public void addEntity(Entity entity) {
+        entityMap.put(entity.getEntityId(), entity);
+        super.addEntity(entity); 
+    }
+
+    @Override
+    public void removeEntity(Entity entity) {
+        entityMap.remove(entity.getEntityId());
+        super.removeEntity(entity); 
+    }
+
+    @Override
+    public Entity getEntity(long entityId) {
+        return entityMap.get(entityId);
+    }
+
+    @Override
+    public void cleanup() {
+        entityMap.clear();
+        super.cleanup(); 
+    }
+    
 }

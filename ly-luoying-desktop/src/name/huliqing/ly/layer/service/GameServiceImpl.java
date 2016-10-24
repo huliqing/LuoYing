@@ -15,9 +15,11 @@ import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.object.SyncData;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.game.GameAppState;
+import name.huliqing.ly.Start;
 import name.huliqing.ly.enums.MessageType;
 import name.huliqing.ly.object.NetworkObject;
 import name.huliqing.ly.object.game.SimpleRpgGame;
+import name.huliqing.ly.view.shortcut.ShortcutManager;
 import name.huliqing.ly.view.talk.SpeakManager;
 import name.huliqing.ly.view.talk.Talk;
 import name.huliqing.ly.view.talk.TalkManager;
@@ -80,10 +82,8 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public void exitGame() {
-        GameAppState gameApp = LuoYing.getApp().getStateManager().getState(GameAppState.class);
-        if (gameApp != null) {
-            LuoYing.getApp().getStateManager().detach(gameApp);
-        }
+        Start start = (Start) LuoYing.getApp();
+        start.changeStartState();
     }
 
     @Override
@@ -103,7 +103,7 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public void addShortcut(Entity actor, ObjectData data) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ShortcutManager.addShortcut(actor, data);
     }
 
     @Override

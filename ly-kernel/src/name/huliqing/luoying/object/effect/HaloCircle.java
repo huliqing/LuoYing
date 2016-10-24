@@ -27,17 +27,17 @@ import name.huliqing.luoying.utils.MatUtils;
 public class HaloCircle extends Node {
     
     // 星光的半径
-    private float radius;
+    private final float radius;
     // 星光材质
-    private String texture;
+    private final String texture;
     // 星光大小
-    private Vector3f haloSize = new Vector3f(1, 1, 1);
+    private final Vector3f haloSize = new Vector3f(1, 1, 1);
     // 星光颜色
-    private ColorRGBA haloColor = ColorRGBA.White.clone();
+    private final ColorRGBA haloColor = ColorRGBA.White.clone();
     // 是否显示线条
-    private boolean showLine;
+    private final boolean showLine;
     // 线条颜色
-    private ColorRGBA lineColor = new ColorRGBA(0.8f, 0.8f, 1, 1f);
+    private final ColorRGBA lineColor = new ColorRGBA(0.8f, 0.8f, 1, 1f);
     
     // ---- 内部
     private Node localRoot;

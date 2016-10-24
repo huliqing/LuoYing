@@ -87,7 +87,7 @@ public abstract class AbstractMagic<T extends MagicData> extends ModelEntity<T> 
             effects.clear();
             for (EffectData ed : data.getEffectDatas()) {
                 Effect effect = Loader.load(ed);
-                magicRoot.attachChild(effect);
+                magicRoot.attachChild(effect.getSpatial());
                 effects.add(effect);
             }
         }

@@ -13,8 +13,6 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Cylinder;
 import name.huliqing.luoying.data.EffectData;
-import name.huliqing.luoying.data.EntityData;
-import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.utils.MatUtils;
 
 /**
@@ -51,6 +49,14 @@ public class TextureCylinderEffect extends Effect {
         this.offset = data.getAsVector3f("offset");
         this.color = data.getAsColor("color", color);
     }
+        
+    @Override
+    public void initEntity() {
+        super.initEntity();
+        if (root == null) {
+            create();
+        }
+    }
     
     private void create() {
         Material mat = MatUtils.createTransparent(texture);
@@ -74,17 +80,9 @@ public class TextureCylinderEffect extends Effect {
             root.setLocalTranslation(offset);
         }
         
-        animRoot.attachChild(root);
+        animNode.attachChild(root);
     }
-    
-    @Override
-    public void initialize() {
-        super.initialize();
-        
-        if (root == null) {
-            create();
-        }
-    }
+
 
     
     

@@ -14,7 +14,6 @@ import name.huliqing.luoying.data.EffectData;
 import name.huliqing.luoying.object.anim.AnimationControl;
 import name.huliqing.luoying.object.anim.Loop;
 import name.huliqing.luoying.object.anim.RandomRotationAnim;
-import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.utils.MathUtils;
 
 /**
@@ -56,8 +55,8 @@ public class EncircleHaloEffect extends Effect {
     }
 
     @Override
-    public void initialize() {
-        super.initialize();
+    public void initEntity() {
+        super.initEntity();
         // 重置速度
         for (HaloCircle hc : circles) {
             hc.setRotateSpeed(FastMath.nextRandomFloat() * 0.5f + 0.5f);
@@ -85,7 +84,7 @@ public class EncircleHaloEffect extends Effect {
             rra.setLoop(Loop.loop);
             rra.setSpeed(0.5f);
             hc.addControl(new AnimationControl(rra));
-            animRoot.attachChild(hc);
+            animNode.attachChild(hc);
             rra.start();
         }
         tv.release();

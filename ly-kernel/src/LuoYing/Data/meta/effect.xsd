@@ -259,18 +259,6 @@
                             <xs:documentation>模型路径，如：Models/weapon/bow/arrow000.mesh.j3o</xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="bucket" use="optional">
-                        <xs:simpleType>
-                            <xs:restriction base="xs:string" >
-                                <xs:enumeration value="Gui" />
-                                <xs:enumeration value="Inherit" />
-                                <xs:enumeration value="Opaque" />
-                                <xs:enumeration value="Sky" />
-                                <xs:enumeration value="Translucent" />
-                                <xs:enumeration value="Transparent" />
-                            </xs:restriction>
-                        </xs:simpleType>
-                    </xs:attribute>
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
@@ -315,8 +303,6 @@
             </xs:complexContent>
         </xs:complexType>
     </xs:element>
-    
-    
     
     <xs:element name="effectParticle">
         <xs:annotation>
@@ -374,87 +360,18 @@
     
     <xs:complexType name="effectBase">
         <xs:complexContent>
-            <xs:extension base="base">
+            <xs:extension base="modelEntityBase">
                 <xs:attribute name="useTime" type="xs:decimal" use="required">
                     <xs:annotation>
-                        <xs:documentation>特效运行时间，单位秒。默认"1.0"</xs:documentation>
+                        <xs:documentation>特效运行时间，单位秒。默认"1.0", 如果这个值小于0，则效果将永远不会结束。</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-                
                 <!--注：speed不开放到xml配置，speed会作为动态参数在程序运行时根据情况动态设置。-->
 <!--                <xs:attribute name="speed" type="xs:decimal" use="optional">
                     <xs:annotation>
                         <xs:documentation>特效运行速度。默认"1.0"</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>-->
-                
-                <xs:attribute name="initLocation" type="xs:string" use="optional">
-                    <xs:annotation>
-                        <xs:documentation>
-                            effect的初始位置(localTranslaction), 格式: "x,y,z", 当effect被添加到某个节点下时可以使用该参数来偏移位置，
-                            当设置这个参数之后，effect在初始化的时候会覆盖掉之前的setLocaleTranslation的设置。
-                            另外：当effect为“跟随”类型时这个参数将作为跟随时的偏移位置进行设置。
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="initRotation" type="xs:string" use="optional">
-                    <xs:annotation>
-                        <xs:documentation>
-                            effect的初始旋转(localRotation), 格式:"x,y,z", 当effect被添加到某个节点下时可以使用该参数来偏移旋转，
-                            当设置这个参数之后，effect在初始化的时候会覆盖掉之前的setLocaleRotation的设置。
-                            另外：当effect为“跟随”类型时这个参数将作为跟随时的偏移旋转进行设置。
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="initScale" type="xs:string" use="optional">
-                    <xs:annotation>
-                        <xs:documentation>
-                            effect的初始缩放(localScale), 格式, "x,y,z", 当设置这个参数之后，
-                            effect在初始化的时候会覆盖掉之前的setLocaleScale的设置。
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="tracePosition" use="required" >
-                    <xs:annotation>
-                        <xs:documentation>是否让效果跟踪目标，默认true,打开该参数后，必须在程序
-                            运行时设置traceObject才有意义，否则将不会跟踪.</xs:documentation>
-                    </xs:annotation>
-                    <xs:simpleType>
-                        <xs:restriction base="xs:string" >
-                            <xs:enumeration value="no" />
-                            <xs:enumeration value="once" />
-                            <xs:enumeration value="always" />
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:attribute>
-                <xs:attribute name="traceRotation" use="required" >
-                    <xs:annotation>
-                        <xs:documentation>是否跟随目标的旋转</xs:documentation>
-                    </xs:annotation>
-                    <xs:simpleType>
-                        <xs:restriction base="xs:string" >
-                            <xs:enumeration value="no" />
-                            <xs:enumeration value="once" />
-                            <xs:enumeration value="always" />
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:attribute>
-                <xs:attribute name="tracePositionType" use="optional">
-                    <xs:annotation>
-                        <xs:documentation>
-                            特效的跟随位置,默认origin,即以原点为跟随位置
-                        </xs:documentation>
-                    </xs:annotation>
-                    <xs:simpleType>
-                        <xs:restriction base="xs:string">
-                            <xs:enumeration value="origin" />
-                            <xs:enumeration value="origin_bound_center" />
-                            <xs:enumeration value="origin_bound_top" />
-                            <xs:enumeration value="bound_center" />
-                            <xs:enumeration value="bound_top" />
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:attribute>
                 <xs:attribute name="animations" type="xs:string" use="optional">
                     <xs:annotation>
                         <xs:documentation>
@@ -471,17 +388,61 @@
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-<!--                <xs:attribute name="autoDetach" type="bool" use="optional">
+                <xs:attribute name="traceLocation" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>是否让效果跟踪目标，默认true,打开该参数后，必须在程序
+                            运行时设置traceObject才有意义，否则将不会跟踪.</xs:documentation>
+                    </xs:annotation>
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string" >
+                            <xs:enumeration value="no" />
+                            <xs:enumeration value="once" />
+                            <xs:enumeration value="always" />
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="traceRotation" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>是否跟随目标的旋转</xs:documentation>
+                    </xs:annotation>
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string" >
+                            <xs:enumeration value="no" />
+                            <xs:enumeration value="once" />
+                            <xs:enumeration value="always" />
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="traceLocationType" use="optional">
                     <xs:annotation>
                         <xs:documentation>
-                            是否允许特效在结束的时候自动进行清理并自动从场景中脱离。默认情况下如果特效是添加在EffectManager
-                            下，则当特效在结束的时候会被EffectManager自动从场景中移除，不需要设置该参数。但是在其它情
-                            况下，比如将特效添加在某一个特别的节点内时（非EffectManager管理），当特效结束时是不会自动从节点
-                            内移除的，如果在此类情况下需要让特效自动从父节点中移除，则可以设置autoDetach为true.
-                            这个参数的默认值为:false.
+                            特效的跟随位置,默认origin,即以原点为跟随位置
                         </xs:documentation>
                     </xs:annotation>
-                </xs:attribute>-->
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="origin" />
+                            <xs:enumeration value="origin_bound_center" />
+                            <xs:enumeration value="origin_bound_top" />
+                            <xs:enumeration value="bound_center" />
+                            <xs:enumeration value="bound_top" />
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="traceLocationOffset" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            效果在跟随时的位置偏移，格式: "x,y,z"
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="traceRotationOffset" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                           效果在跟随时的旋转偏移, 格式:"x,y,z"
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
                 <xs:attribute name="endImmediate" type="bool" use="optional">
                     <xs:annotation>
                         <xs:documentation>判断特效是否可以立即结束，默认false, 大部分情况下特效都应该”自然结束“，

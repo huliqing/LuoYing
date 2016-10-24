@@ -56,7 +56,7 @@
     
     <!-- player test -->    
     <actor id="actorPlayerTest" extends="actorPlayer"
-           items="itemMapWorld,item000|100,itemGold|10000,itemTowerSnow|100,itemScrollLife|10
+           items="item000|100,itemGold|10000,itemTowerSnow|100,itemScrollLife|10
 ,itemDetoxifyGrass|100,itemTonicRed|5,itemTonicBlue|5,itemHerb|100,itemASTonic|100
 ,itemTowerStone|100,itemTower|100,itemSpiderSpawn|100
 ,itemScrollBear|100,itemScrollWolf|100,itemScrollScorpion|100,itemScrollRaptor|100,itemScrollTrex|100

@@ -54,7 +54,7 @@ public final class FaceView extends LinearLayout {
     private final GameService gameService = Factory.get(GameService.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     
-    private Actor actor;
+    private Entity actor;
     private NumberAttribute lifeAttribute;
     private NumberAttribute lifeAttributeMax;
     private NumberAttribute manaAttribute;
@@ -151,11 +151,11 @@ public final class FaceView extends LinearLayout {
      * 获取当前的目标,如果当前没有目标则返回null.
      * @return 
      */
-    public Actor getActor() {
+    public Entity getActor() {
         return actor;
     }
     
-    public void setActor(Actor actor) {
+    public void setActor(Entity actor) {
         this.actor = actor;
         
         lifeAttribute = attributeService.getAttributeByName(actor, "attributeHealth");
@@ -242,7 +242,7 @@ public final class FaceView extends LinearLayout {
             colorAnim.setTarget(faceGeo);
         }
         
-        public void setActor(Actor actor) {
+        public void setActor(Entity actor) {
             String icon = actor.getData().getIcon();
             if (icon == null) {
                 icon = InterfaceConstants.UI_MISS;
