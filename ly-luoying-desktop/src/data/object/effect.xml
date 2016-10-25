@@ -68,15 +68,15 @@
     <effectParticle id="effectSnowFlash"  useTime="3"  emitter="emitterSnowSpark" emitAll="1" />
     
     <!--通用“补血”效果-->
-    <effectParticle id="effectRandomFire"  useTime="1.5"  emitter="emitterRandomFire" sounds="soundRecover" 
-              traceLocation="always" traceLocationOffset="0,1,0" />
+    <effectParticle id="effectRandomFire" useTime="1.5" emitter="emitterRandomFire" sounds="soundRecover" 
+              traceLocation="always" location="0,1,0" />
     
     <!--通用“吃补药”效果-->
-    <effectGroup id="effectTonic" useTime="9999" traceLocation="always" traceRotation="no" traceLocationType="origin_bound_center"
+    <effectGroup id="effectTonic" useTime="5" traceLocation="always" traceRotation="no" traceLocationType="origin_bound_center"
                    sounds="soundRestore" effects="effectTonic1,effectTonic2,effectTonic3,effectRandomFire" />
-    <effectParticle id="effectTonic1"  useTime="3" emitAll="1"  traceLocation="once" emitter="emitterBuff1" />
-    <effectParticle id="effectTonic2"  useTime="3" emitAll="1"  traceLocation="once" emitter="emitterBuff2" />
-    <effectParticle id="effectTonic3"  useTime="3" emitAll="1"  traceLocation="once" emitter="emitterBuff3" />
+    <effectParticle id="effectTonic1"  useTime="3" emitAll="1" emitter="emitterBuff1" />
+    <effectParticle id="effectTonic2"  useTime="3" emitAll="1" emitter="emitterBuff2" />
+    <effectParticle id="effectTonic3"  useTime="3" emitAll="1" emitter="emitterBuff3" />
 
     <!-- ========================================================================= -->
     <!--升级效果-->
@@ -154,8 +154,8 @@
     <!-- ========================================================================= -->
     <!--黑暗祭坛的特效-->
     <!-- ========================================================================= -->
-    <effectParticle id="effectAltar"  useTime="999999999"  traceLocationOffset="0, 1.5, 0" emitter="emitterAltar" /> 
-    <effectParticle id="effectAltar2"  useTime="999999999"  traceLocationOffset="0, 2.5, 0" emitter="emitterAltarSkull" />
+    <effectParticle id="effectAltar"  useTime="-1"  traceLocationOffset="0, 1.5, 0" emitter="emitterAltar" /> 
+    <effectParticle id="effectAltar2"  useTime="-1"  traceLocationOffset="0, 2.5, 0" emitter="emitterAltarSkull" />
     
     <!-- ========================================================================= -->
     <!--闪电箭-->
@@ -311,20 +311,10 @@
               emitter="emitterBuffBullet" traceLocation="always" traceRotation="always" />
     <!--BUFF的击中效果-->
     <effectGroup id="effectBuffHit" useTime="4" traceLocation="always" traceRotation="no"  
-                   sounds="soundRestore" effects="effectBuff1,effectBuff2,effectBuff3" />
+                   sounds="soundRestore" effects="effectBuff1,effectBuff2,effectBuff3,effectRandomFire" />
     <effectParticle id="effectBuff1"  useTime="3" emitAll="1"  emitter="emitterBuff1" />
     <effectParticle id="effectBuff2"  useTime="3" emitAll="1"  emitter="emitterBuff2" />
     <effectParticle id="effectBuff3"  useTime="3" emitAll="1"  emitter="emitterBuff3" />
-    
-    <!--bak-->
-<!--    <effectParticle id="effectBuffBullet"  useTime="6"  
-              emitter="emitterBuffBullet" traceLocation="always" traceRotation="always" />
-    BUFF的击中效果
-    <effectGroup id="effectBuffHit" useTime="9999" traceLocation="always" traceRotation="no"  
-                   sounds="soundRestore" effects="effectBuff1,effectBuff2,effectBuff3,effectRandomFire" />
-    <effectParticle id="effectBuff1"  useTime="3" emitAll="1"  traceLocation="once" emitter="emitterBuff1" />
-    <effectParticle id="effectBuff2"  useTime="3" emitAll="1"  traceLocation="once" emitter="emitterBuff2" />
-    <effectParticle id="effectBuff3"  useTime="3" emitAll="1"  traceLocation="once" emitter="emitterBuff3" />-->
 
     <!-- ========================================================================= -->
     <!--魔法特效:复活术-->

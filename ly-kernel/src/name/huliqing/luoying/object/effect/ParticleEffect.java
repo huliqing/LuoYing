@@ -10,7 +10,7 @@ import com.jme3.effect.ParticleMesh;
 import com.jme3.effect.influencers.ParticleInfluencer;
 import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.FastMath;
-import com.jme3.renderer.queue.RenderQueue.Bucket;
+import com.jme3.renderer.queue.RenderQueue;
 import name.huliqing.luoying.data.EffectData;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.emitter.Emitter;
@@ -32,8 +32,9 @@ public class ParticleEffect extends Effect {
     // Alpha模式来代替。
     private BlendMode blendMode = BlendMode.AlphaAdditive;
     
-    // -- 内部
+    // -- Inner
     private ParticleEmitter pe;
+    private boolean emitted;
 
     @Override
     public void setData(EffectData data) {
@@ -51,7 +52,6 @@ public class ParticleEffect extends Effect {
     @Override
     public void initEntity() {
         super.initEntity();
-        
         if (pe == null) {
             Emitter em = Loader.load(emitter);
             if (randomColor) {
@@ -59,20 +59,25 @@ public class ParticleEffect extends Effect {
             } else {
                 pe = em.getParticleEmitter();
             }
+            pe.setQueueBucket(RenderQueue.Bucket.Translucent);
             pe.setInWorldSpace(inWorldSpace);
             pe.getMaterial().getAdditionalRenderState().setBlendMode(blendMode);
             animNode.attachChild(pe);
-            
-            pe.setQueueBucket(Bucket.Translucent);
-        }
-        if (emitAll) {
-            pe.emitAllParticles();
         }
     }
 
+    @Override
+    protected void effectUpdate(float tpf) {
+        super.effectUpdate(tpf);
+        if (emitAll && !emitted) {
+            pe.emitAllParticles();
+            emitted = true;
+        }
+    }
 
     @Override
     public void cleanup() {
+        emitted = false;
         if (pe != null) {
             pe.killAllParticles();
         }

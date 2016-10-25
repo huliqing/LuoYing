@@ -91,7 +91,7 @@ public class MoveSpeedState extends AttributeState {
     private void showMoveEffect() {
         if (moveEffect.isEnd()) {
             moveEffect.initialize();
-//            actor.getScene().addEntity(moveEffect);
+            actor.getScene().addEntity(moveEffect);
         }
         moveEffect.getSpatial().setCullHint(Spatial.CullHint.Never);
     }

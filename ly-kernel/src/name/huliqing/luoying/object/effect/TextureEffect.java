@@ -50,7 +50,6 @@ public class TextureEffect extends Effect {
         mat.setColor("Color", color);
         textureNode = new Geometry("TextureEffect_root", new QuadXYC(size.x, size.y));
         textureNode.setMaterial(mat);
-        textureNode.setQueueBucket(Bucket.Transparent);
         
         // 默认贴图在xy平面上，当指定了其它方向时需要进行旋转，默认以逆时针旋转到指定平面
         if ("xz".equals(plane)) {

@@ -22,8 +22,10 @@
     
     <!--黄金宝箱场景-->
     <sceneRandom id="sceneTreasure" 
-                 entities="envSky,envDirectionalLight,envAmbientLight,envShadow,envPhysics,envCameraThirdView
-,envSakuraIslandTerrain,envSakuraIslandBoundary,envSakuraIslandWater,envSakuraIslandSeaAudio" 
+                 entities="envSky,envDirectionalLight,envAmbientLight,envPhysics,envCameraThirdView
+,envSakuraIslandTerrain,envSakuraIslandBoundary,envSakuraIslandWater,envSakuraIslandSeaAudio
+,envShadow
+" 
                  emptyZones="0|0|10" 
                  randomEntities="envTree1|4,envTree2|4,envTree3|4,envTree4|4
 ,envFir1|4,envFir2|4,envFir3|4

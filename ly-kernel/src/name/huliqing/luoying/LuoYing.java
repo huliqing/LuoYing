@@ -282,6 +282,7 @@ import name.huliqing.luoying.object.drop.AttributeDrop;
 import name.huliqing.luoying.object.drop.GroupDrop;
 import name.huliqing.luoying.object.drop.ItemDrop;
 import name.huliqing.luoying.object.drop.SkinDrop;
+import name.huliqing.luoying.object.env.DirectionalLightShadowEnv;
 import name.huliqing.luoying.object.env.GrassEnv;
 import name.huliqing.luoying.object.env.ModelEnv;
 import name.huliqing.luoying.object.game.SimpleGame;
@@ -490,13 +491,15 @@ public class LuoYing {
         DataFactory.register("envAdvanceWater", EntityData.class, EntityDataLoader.class, AdvanceWaterEnv.class);
         DataFactory.register("envAmbientLight", EntityData.class, EntityDataLoader.class, AmbientLightEnv.class);
         DataFactory.register("envAudio", ModelEntityData.class, EntityDataLoader.class, AudioEnv.class);
-//        DataFactory.register("envBoundaryBox", ModelEntityData.class, EntityDataLoader.class, BoundaryBoxEnv.class); // remove
         DataFactory.register("envChaseCamera", EntityData.class, EntityDataLoader.class, ChaseCameraEnv.class);
         DataFactory.register("envDirectionalLight", EntityData.class, EntityDataLoader.class, DirectionalLightEnv.class);
         DataFactory.register("envModel", ModelEntityData.class, EntityDataLoader.class, ModelEnv.class);
         DataFactory.register("envPhysics", EntityData.class, EntityDataLoader.class, PhysicsEnv.class);
         DataFactory.register("envPlatformProxy", EntityData.class, EntityDataLoader.class, PlatformProxyEnv.class);
+        
         DataFactory.register("envShadow", EntityData.class, EntityDataLoader.class, ShadowEnv.class);
+        DataFactory.register("envDirectionalLightShadow", EntityData.class, EntityDataLoader.class, DirectionalLightShadowEnv.class);
+        
         DataFactory.register("envSimpleWater", EntityData.class, EntityDataLoader.class, SimpleWaterEnv.class);
         DataFactory.register("envSky", EntityData.class, EntityDataLoader.class, SkyEnv.class);
         DataFactory.register("envTerrain", ModelEntityData.class, EntityDataLoader.class, TerrainEnv.class);

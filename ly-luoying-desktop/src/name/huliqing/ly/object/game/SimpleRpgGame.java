@@ -146,7 +146,7 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
         // 从场景中找到“跟随”相机
         if (chaseCamera == null) {
            List<ChaseCameraEnv> cces = scene.getEntities(ChaseCameraEnv.class, null);
-           if (cces != null) {
+           if (cces != null && !cces.isEmpty()) {
                chaseCamera = cces.get(0);
            } else {
                LOG.log(Level.WARNING, "Could not found any ChaseCamera from sence! sceneId={0}", scene.getData().getId());

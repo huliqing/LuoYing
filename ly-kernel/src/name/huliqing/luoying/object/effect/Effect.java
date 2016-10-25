@@ -32,7 +32,6 @@ import name.huliqing.luoying.utils.GeometryUtils;
  * @since v1.2 20150421
  */
 public class Effect<T extends EffectData> extends ModelEntity<T> {
-    
     /** 动画控制,所有动画控制器都作用在animRoot上。*/
     protected List<AnimationWrap> animations;
     
@@ -91,8 +90,8 @@ public class Effect<T extends EffectData> extends ModelEntity<T> {
     };
     
     public Effect() {
-        effectNode.addControl(control);
         effectNode.attachChild(animNode);
+        effectNode.addControl(control);
     }
     
     @Override
@@ -132,11 +131,11 @@ public class Effect<T extends EffectData> extends ModelEntity<T> {
         
         // 跟随
         traceEntityId = data.getAsLong("traceEntityId", traceEntityId);
+        traceLocation = TraceType.identity(data.getAsString("traceLocation", TraceType.no.name()));
+        traceRotation = TraceType.identity(data.getAsString("traceRotation", TraceType.no.name()));
         traceLocationOffset = data.getAsVector3f("traceLocationOffset");
         traceRotationOffset = data.getAsQuaternion("traceRotationOffset");
         traceOffsetType = TraceOffsetType.identify(data.getAsString("traceOffsetType", TraceOffsetType.origin.name()));
-        traceLocation = TraceType.identity(data.getAsString("traceLocation", TraceType.no.name()));
-        traceRotation = TraceType.identity(data.getAsString("traceRotation", TraceType.no.name()));
     }
     
     @Override

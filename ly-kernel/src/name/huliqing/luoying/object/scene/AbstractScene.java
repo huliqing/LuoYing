@@ -9,9 +9,11 @@ import com.jme3.math.Vector3f;
 import com.jme3.post.Filter;
 import com.jme3.post.FilterPostProcessor;
 import com.jme3.post.SceneProcessor;
-import com.jme3.post.filters.TranslucentBucketFilter;
 import com.jme3.renderer.ViewPort;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
+import com.jme3.scene.shape.Box;
 import com.jme3.util.SafeArrayList;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +24,7 @@ import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.data.SceneData;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.utils.MatUtils;
 
 /**
  * 抽象场景类
@@ -42,16 +45,24 @@ public abstract class AbstractScene implements Scene {
     /** 场景根节点 */
     protected final Node root = new Node("AbstractScene-root");
     
+    // ---- 这个场景“原点”物体用于处理防止出现以下BUG现象：
+    // 现象：当执行粒子特效(bucket=Translucent)的时候，场景中的阴影会突然不见,粒子特效过后又恢复正常。
+    // 情景：当场景中第一个添加的物体是天空盒(bucket=sky)，然后再添加其它类型的有网格物体时会发生这种情况。
+    // 解决：在给场景添加阴影和天空盒功能时，确保先向场景中添加非天空盒类型的有网格的物体，或者给场景根节点添加一个隐藏的有网格物体（CullHint.Always）,
+    // 以阻止这种BUG出现。
+    private Geometry sceneOrigin;
+    
     /** 默认的FilterPostProcessor */
     protected FilterPostProcessor defaultFilterPostProcessor;
     
+    // remove20161025,这个现象好像现在不会再发生。
     /** 
      * TranslucentBucketFilter用于处理半透明物体被一些Filter挡住的BUG，比如当场景中添加了高级水体效果时,<br>
      * 一些半透明的粒子效果会被挡住。处理这个问题的方法是：<br>
      * 1.把半透明的物体的QueueBucket设置为Bucket.Translucent<br>
      * 2.把一个TranslucentBucketFilter实例添加到FilterPostProcessor的<b>最后面</b>
      */
-    protected final TranslucentBucketFilter translucentBucketFilter = new TranslucentBucketFilter();
+//    protected final TranslucentBucketFilter translucentBucketFilter = new TranslucentBucketFilter();
 
     /** 默认要作为SceneProcessor的ViewPort */
     protected ViewPort[] processorViewPorts;
@@ -82,6 +93,15 @@ public abstract class AbstractScene implements Scene {
         if (initialized) {
             throw new IllegalStateException("Scene is already initialized! sceneId=" + data.getId());
         }
+        
+        // 主要用于防止阴影、天空盒、特效粒子的BUG。查看上面说明:
+        if (sceneOrigin == null) {
+            sceneOrigin = new Geometry("sceneOrigin", new Box(1,1,1));
+            sceneOrigin.setMaterial(MatUtils.createUnshaded());
+            sceneOrigin.setCullHint(Spatial.CullHint.Always);
+        }
+        root.attachChildAt(sceneOrigin, 0);
+        
         // 载入场景中的所有实体
         List<EntityData> entityDatas = data.getEntityDatas();
         if (entityDatas != null) {
@@ -239,9 +259,9 @@ public abstract class AbstractScene implements Scene {
             addProcessor(defaultFilterPostProcessor);
         }
         // 需要保证translucentBucketFilter放在FilterPostProcessor的最后面。
-        defaultFilterPostProcessor.removeFilter(translucentBucketFilter);
+//        defaultFilterPostProcessor.removeFilter(translucentBucketFilter);
         defaultFilterPostProcessor.addFilter(filter);
-        defaultFilterPostProcessor.addFilter(translucentBucketFilter);
+//        defaultFilterPostProcessor.addFilter(translucentBucketFilter);
     }
 
     @Override

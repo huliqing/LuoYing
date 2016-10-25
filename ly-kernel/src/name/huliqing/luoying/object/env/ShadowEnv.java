@@ -25,7 +25,7 @@ import name.huliqing.luoying.object.scene.SceneListenerAdapter;
  * @author huliqing
  */
 public class ShadowEnv extends NoneModelEntity {
-    private final ConfigService configService = Factory.get(ConfigService.class);
+//    private final ConfigService configService = Factory.get(ConfigService.class);
 
     private float shadowIntensity = 0.7f;
     private int shadowMapSize = 1024;
@@ -33,7 +33,13 @@ public class ShadowEnv extends NoneModelEntity {
     
     // ---- inner
     private DirectionalLightShadowFilter filter;
-    private SceneListener sceneListener;
+    private final SceneListener sceneListener = new SceneListenerAdapter() {
+        @Override
+        public void onSceneInitialized(Scene scene) {
+            setupFilter();
+            scene.removeSceneListener(this);
+        }
+    };
     
     @Override
     public void setData(EntityData data) {
@@ -42,7 +48,7 @@ public class ShadowEnv extends NoneModelEntity {
         shadowMapSize = data.getAsInteger("shadowMapSize", shadowMapSize);
         shadowMaps = data.getAsInteger("shadowMaps", shadowMaps);
     }
-
+    
     @Override
     public void updateDatas() {
         // ignore
@@ -50,27 +56,27 @@ public class ShadowEnv extends NoneModelEntity {
     
     @Override
     public void initEntity() {
-        sceneListener = new SceneListenerAdapter() {
-            @Override
-            public void onSceneInitialized(Scene scene) {
-                // 影阴处理器
-                if (configService.isUseShadow()) {
-                    filter = new DirectionalLightShadowFilter(LuoYing.getApp().getAssetManager(), shadowMapSize, shadowMaps);
-                    filter.setLambda(0.55f);
-                    filter.setShadowIntensity(shadowIntensity);
-                    filter.setShadowCompareMode(CompareMode.Hardware);
-                    filter.setEdgeFilteringMode(EdgeFilteringMode.PCF4);
-                    findAndSetLight();
-                    scene.addFilter(filter);
-                }
-            }
-        };
+        filter = new DirectionalLightShadowFilter(LuoYing.getApp().getAssetManager(), shadowMapSize, shadowMaps);
+        filter.setLambda(0.55f);
+        filter.setShadowIntensity(shadowIntensity);
+        filter.setShadowCompareMode(CompareMode.Hardware);
+        filter.setEdgeFilteringMode(EdgeFilteringMode.PCF4);
+//        filter.setShadowZExtend(500);
     }
 
     @Override
     public void onInitScene(Scene scene) {
-        super.onInitScene(scene); 
-        scene.addSceneListener(sceneListener);
+        super.onInitScene(scene);
+        if (scene.isInitialized()) {
+            setupFilter();
+        } else {
+            scene.addSceneListener(sceneListener);
+        }
+    }
+    
+    private void setupFilter() {
+        filter.setLight(findDirectionalLight());
+        scene.addFilter(filter);
     }
     
     @Override
@@ -84,20 +90,19 @@ public class ShadowEnv extends NoneModelEntity {
         super.cleanup();
     }
     
-    private void findAndSetLight() {
+    private DirectionalLight findDirectionalLight() {
         // 找出当前场景中的第一个直射光
         LightList lightList = scene.getRoot().getLocalLightList();
         if (lightList.size() > 0) {
             for (int i = 0; i < lightList.size(); i++) {
                 Light l = lightList.get(i);
                 if (l instanceof DirectionalLight) {
-                    filter.setLight((DirectionalLight) l);
-                    return;
+                    return (DirectionalLight) l;
                 }
             }
         }
         // 如果找不到任何光源，则创建一个默认的
-        filter.setLight(new DirectionalLight());
+        return new DirectionalLight();
     }
     
 }

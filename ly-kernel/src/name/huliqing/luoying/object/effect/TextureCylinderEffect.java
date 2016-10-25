@@ -23,7 +23,7 @@ import name.huliqing.luoying.utils.MatUtils;
  */
 public class TextureCylinderEffect extends Effect {
     // 贴图路径
-    private String texture = "Textures/tex/effect/vortex.jpg";
+    private String texture;
     // 圆柱所在轴向:x/y/z
     private String axis = "y";
     // 圆柱半径
@@ -37,7 +37,7 @@ public class TextureCylinderEffect extends Effect {
     
     // ---- inner
     // 圆柱
-    private Spatial root;
+    private Spatial cylinderNode;
     
     @Override
     public void setData(EffectData data) {
@@ -53,37 +53,34 @@ public class TextureCylinderEffect extends Effect {
     @Override
     public void initEntity() {
         super.initEntity();
-        if (root == null) {
-            create();
-        }
-    }
-    
-    private void create() {
         Material mat = MatUtils.createTransparent(texture);
         mat.setColor("Color", color);
-        
+
         Cylinder cylinder = new Cylinder(2, 16, radius, height);
-        root = new Geometry("TextureCylinderEffect_root", cylinder);
-        root.setMaterial(mat);
-        root.setQueueBucket(Bucket.Transparent);
-        
+        cylinderNode = new Geometry("TextureCylinderEffect_root", cylinder);
+        cylinderNode.setMaterial(mat);
+
         // 默认贴图在xy平面上，当指定了其它方向时需要进行旋转，默认以逆时针旋转到指定平面
         if ("x".equals(axis)) {
-            root.rotate(0, FastMath.HALF_PI, 0);
+            cylinderNode.rotate(0, FastMath.HALF_PI, 0);
         } else if ("y".equals(axis)) {
-            root.rotate(FastMath.HALF_PI, FastMath.HALF_PI, 0);
+            cylinderNode.rotate(FastMath.HALF_PI, FastMath.HALF_PI, 0);
         } else if ("z".equals(axis)) {
-            root.rotate(0, 0, -FastMath.HALF_PI);
+            cylinderNode.rotate(0, 0, -FastMath.HALF_PI);
         }
-        
+
         if (offset != null) {
-            root.setLocalTranslation(offset);
+            cylinderNode.setLocalTranslation(offset);
         }
-        
-        animNode.attachChild(root);
+
+        animNode.attachChild(cylinderNode);
     }
 
-
+    @Override
+    public void cleanup() {
+        cylinderNode.removeFromParent();
+        super.cleanup(); 
+    }
     
     
 }

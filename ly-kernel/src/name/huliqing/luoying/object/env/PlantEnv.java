@@ -38,21 +38,28 @@ public abstract class PlantEnv extends ModelEntity {
     @Override
     public void onInitScene(Scene scene) {
         super.onInitScene(scene);
-        sceneListener = new SceneListenerAdapter() {
-            @Override
-            public void onSceneInitialized(Scene scene) {
-                // 把植皮移到地形上面
-                makePlantOnTerrain(scene);
-                // 在处理完位置点之后就可以不再需要侦听了
-                scene.removeSceneListener(this);
-            }
-        };
-        scene.addSceneListener(sceneListener);
+        if (scene.isInitialized()) {
+            // 把植皮移到地形上面
+            makePlantOnTerrain(scene);
+        } else {
+            sceneListener = new SceneListenerAdapter() {
+                @Override
+                public void onSceneInitialized(Scene scene) {
+                    // 把植皮移到地形上面
+                    makePlantOnTerrain(scene);
+                    // 在处理完位置点之后就可以不再需要侦听了
+                    scene.removeSceneListener(this);
+                }
+            };
+            scene.addSceneListener(sceneListener);
+        }
     }
 
     @Override
     public void cleanup() {
-        scene.removeSceneListener(sceneListener);
+        if (sceneListener != null) {
+            scene.removeSceneListener(sceneListener);
+        }
         super.cleanup();
     }
 
