@@ -213,7 +213,7 @@ xs:time
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="attributeBase">
-                    <xs:attribute name="values" type="xs:string" use="required" >
+                    <xs:attribute name="value" type="xs:string" use="required" >
                         <xs:annotation><xs:documentation>格式：“value1,value2,...”</xs:documentation></xs:annotation>
                     </xs:attribute>
                     <xs:attribute name="duplication" type="bool" use="optional" >

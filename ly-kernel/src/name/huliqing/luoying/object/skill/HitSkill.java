@@ -96,7 +96,7 @@ public abstract class HitSkill extends AbstractSkill {
     @Override
     public void setActor(Entity actor) {
         super.setActor(actor); 
-        actorModule = actor.getEntityModule().getModule(ActorModule.class);
+        actorModule = actor.getModuleManager().getModule(ActorModule.class);
     }
 
     @Override

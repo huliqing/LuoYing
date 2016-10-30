@@ -9,13 +9,12 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.LogicData;
 import name.huliqing.luoying.layer.network.ActorNetwork;
 import name.huliqing.luoying.layer.network.SkillNetwork;
 import name.huliqing.luoying.layer.service.ActorService;
-import name.huliqing.luoying.layer.service.AttributeService;
+import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.module.ActorListener;
@@ -36,8 +35,8 @@ public class DefendLogic<T extends LogicData> extends Logic<T> implements SkillL
 //    private static final Logger LOG = Logger.getLogger(DefendLogic.class.getName());
     
     private final ActorService actorService = Factory.get(ActorService.class);
-    private final AttributeService attributeService = Factory.get(AttributeService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
+    private final EntityService entityService = Factory.get(EntityService.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private ActorModule actorModule;
@@ -82,8 +81,8 @@ public class DefendLogic<T extends LogicData> extends Logic<T> implements SkillL
     @Override
     public void setActor(Entity self) {
         super.setActor(self); 
-        actorModule = actor.getEntityModule().getModule(ActorModule.class);
-        skillModule = actor.getEntityModule().getModule(SkillModule.class);
+        actorModule = actor.getModuleManager().getModule(ActorModule.class);
+        skillModule = actor.getModuleManager().getModule(SkillModule.class);
     }
     
     @Override
@@ -118,8 +117,8 @@ public class DefendLogic<T extends LogicData> extends Logic<T> implements SkillL
         if (sourceBeLocked.getData().getUniqueId() == other.getData().getUniqueId()) 
             return;
         
-        if (!actorService.isAvailableEnemy(other.getEntityModule().getModule(ActorModule.class)
-                , sourceBeLocked.getEntityModule().getModule(ActorModule.class)))
+        if (!actorService.isAvailableEnemy(other.getModuleManager().getModule(ActorModule.class)
+                , sourceBeLocked.getModuleManager().getModule(ActorModule.class)))
             return;
         
         // 当被other锁定时给other添加侦听器，以侦察other的攻击。以便进行防守和躲闪
@@ -236,7 +235,8 @@ public class DefendLogic<T extends LogicData> extends Logic<T> implements SkillL
 //        LOG.log(Level.INFO, "defendActorLogic==> doDefend actor={0} defendRateAttribute={1}, defendSkill size={2}"
 //                , new Object[] {actor.getData().getId(), defendRateAttribute, defendSkills.size()});
         if (defendRateAttribute != null && defendSkills.size() > 0) {
-            float defendRate = attributeService.getNumberAttributeValue(actor, defendRateAttribute, 0);
+//            float defendRate = actor.getAttributeManager().getNumberAttributeValue(defendRateAttribute, 0);
+            float defendRate = entityService.getNumberAttributeValue(actor, duckRateAttribute, 0);
             if(defendRate >= FastMath.nextRandomFloat()) {
                 Skill defendSkill = defendSkills.get(FastMath.nextRandomInt(0, defendSkills.size() - 1));
                 skillNetwork.playSkill(actor, defendSkill, false);
@@ -250,7 +250,8 @@ public class DefendLogic<T extends LogicData> extends Logic<T> implements SkillL
 //        LOG.log(Level.INFO, "defendActorLogic==> doDuck actor={0} duckRateAttribute={1}, duckSkill size={2}"
 //                , new Object[] {actor.getData().getId(), duckRateAttribute, duckSkills.size()});
         if (duckRateAttribute != null && duckSkills.size() > 0) {
-            float duckRate = attributeService.getNumberAttributeValue(actor, defendRateAttribute, 0);
+//            float duckRate = actor.getAttributeManager().getNumberAttributeValue(defendRateAttribute, 0);
+            float duckRate = entityService.getNumberAttributeValue(actor, defendRateAttribute, 0);
             if (duckRate >= FastMath.nextRandomFloat()) {
                 Skill duckSkill = duckSkills.get(FastMath.nextRandomInt(0, duckSkills.size() - 1));
                 skillNetwork.playSkill(actor, duckSkill, false);
@@ -287,7 +288,7 @@ public class DefendLogic<T extends LogicData> extends Logic<T> implements SkillL
 
     private SkillModule getSkillModule() {
         if (skillModule == null) {
-            skillModule = actor.getEntityModule().getModule(SkillModule.class);
+            skillModule = actor.getModuleManager().getModule(SkillModule.class);
         }
         return skillModule;
     }

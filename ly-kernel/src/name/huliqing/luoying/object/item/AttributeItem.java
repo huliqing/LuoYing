@@ -7,7 +7,7 @@ package name.huliqing.luoying.object.item;
 
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.ItemData;
-import name.huliqing.luoying.layer.service.AttributeService;
+import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.layer.service.ItemService;
 import name.huliqing.luoying.object.entity.Entity;
 
@@ -16,10 +16,10 @@ import name.huliqing.luoying.object.entity.Entity;
  * @author huliqing
  */
 public class AttributeItem extends AbstractItem {
-    private final AttributeService attributeService = Factory.get(AttributeService.class);
     private final ItemService itemService = Factory.get(ItemService.class);
+    private final EntityService entityService = Factory.get(EntityService.class);
 
-    // 指定要补充哪个属性
+    // 指定要补充哪个属性 
     private String attribute;
     
     // 补充的量可正，可负
@@ -37,7 +37,7 @@ public class AttributeItem extends AbstractItem {
         super.use(actor);
         
         // 补充属性值
-        attributeService.addNumberAttributeValue(actor, attribute, amount);
+        entityService.applyNumberAttributeValue(actor, attribute, amount, null);
         
         // 物品减少
         itemService.removeItem(actor, data.getId(), 1);

@@ -14,6 +14,8 @@ import name.huliqing.luoying.layer.network.AttributeNetwork;
 import name.huliqing.luoying.layer.network.AttributeNetworkImpl;
 import name.huliqing.luoying.layer.network.DropNetwork;
 import name.huliqing.luoying.layer.network.DropNetworkImpl;
+import name.huliqing.luoying.layer.network.EntityNetwork;
+import name.huliqing.luoying.layer.network.EntityNetworkImpl;
 import name.huliqing.luoying.layer.network.ItemNetwork;
 import name.huliqing.luoying.layer.network.ItemNetworkImpl;
 import name.huliqing.luoying.layer.network.PlayNetwork;
@@ -35,8 +37,6 @@ import name.huliqing.luoying.layer.service.ActorAnimService;
 import name.huliqing.luoying.layer.service.ActorAnimServiceImpl;
 import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.layer.service.ActorServiceImpl;
-import name.huliqing.luoying.layer.service.AttributeService;
-import name.huliqing.luoying.layer.service.AttributeServiceImpl;
 import name.huliqing.luoying.layer.service.BulletService;
 import name.huliqing.luoying.layer.service.BulletServiceImpl;
 import name.huliqing.luoying.layer.service.ConfigService;
@@ -76,6 +76,8 @@ import name.huliqing.luoying.layer.service.GameLogicService;
 import name.huliqing.luoying.layer.service.GameLogicServiceImpl;
 import name.huliqing.luoying.layer.service.ObjectService;
 import name.huliqing.luoying.layer.network.ObjectNetwork;
+import name.huliqing.luoying.layer.service.EntityService;
+import name.huliqing.luoying.layer.service.EntityServiceImpl;
 
 /**
  *
@@ -91,8 +93,8 @@ public class Factory {
         CLASS_MAP.put(ActionNetwork.class, ActionNetworkImpl.class);
         CLASS_MAP.put(ActorNetwork.class, ActorNetworkImpl.class);
         CLASS_MAP.put(AttributeNetwork.class, AttributeNetworkImpl.class);
-//        CLASS_MAP.put(ChatNetwork.class, ChatNetworkImpl.class);
         CLASS_MAP.put(DropNetwork.class, DropNetworkImpl.class);
+        CLASS_MAP.put(EntityNetwork.class, EntityNetworkImpl.class);
         CLASS_MAP.put(ItemNetwork.class, ItemNetworkImpl.class);
         CLASS_MAP.put(PlayNetwork.class, PlayNetworkImpl.class);
         CLASS_MAP.put(ObjectNetwork.class, ObjectNetworkImpl.class);
@@ -106,12 +108,11 @@ public class Factory {
         CLASS_MAP.put(ActionService.class, ActionServiceImpl.class);
         CLASS_MAP.put(ActorAnimService.class, ActorAnimServiceImpl.class);
         CLASS_MAP.put(ActorService.class, ActorServiceImpl.class);
-        CLASS_MAP.put(AttributeService.class, AttributeServiceImpl.class);
         CLASS_MAP.put(BulletService.class, BulletServiceImpl.class);
-//        CLASS_MAP.put(ChatService.class, ChatServiceImpl.class);
         CLASS_MAP.put(ConfigService.class, ConfigServiceImpl.class);
         CLASS_MAP.put(DropService.class, DropServiceImpl.class);
         CLASS_MAP.put(ElService.class, ElServiceImpl.class);
+        CLASS_MAP.put(EntityService.class, EntityServiceImpl.class);
         CLASS_MAP.put(GameLogicService.class, GameLogicServiceImpl.class);
         CLASS_MAP.put(ItemService.class, ItemServiceImpl.class);
         CLASS_MAP.put(LogicService.class, LogicServiceImpl.class);
@@ -127,7 +128,6 @@ public class Factory {
         CLASS_MAP.put(SystemService.class, SystemServiceImpl.class);
         CLASS_MAP.put(TalentService.class, TalentServiceImpl.class);
         CLASS_MAP.put(TaskService.class, TaskServiceImpl.class);
-//        CLASS_MAP.put(ViewService.class, ViewServiceImpl.class);
         
     }
     

@@ -18,7 +18,7 @@ import name.huliqing.luoying.mess.MessActorTeam;
 import name.huliqing.luoying.mess.MessActorViewDir;
 import name.huliqing.luoying.mess.MessActorLookAt;
 import name.huliqing.luoying.mess.MessActorSetLocation;
-import name.huliqing.luoying.mess.MessAttributeNumberHit;
+import name.huliqing.luoying.mess.MessEntityAttributeApply;
 import name.huliqing.luoying.object.entity.Entity;
 
 /**
@@ -89,11 +89,11 @@ public class ActorNetworkImpl implements ActorNetwork{
             
             // 同步属性值
             if (NETWORK.hasConnections()) {
-                MessAttributeNumberHit mess = new MessAttributeNumberHit();
-                mess.setTargetActor(target.getData().getUniqueId());
-                mess.setSourceActor(source.getData().getUniqueId());
-                mess.setAttrName(hitAttrName);
-                mess.setValue(hitValue);
+                MessEntityAttributeApply mess = new MessEntityAttributeApply();
+                mess.setTarget(target.getData().getUniqueId());
+                mess.setSource(source.getData().getUniqueId());
+                mess.setAttributeName(hitAttrName);
+                mess.setApplyValue(hitValue);
                 NETWORK.broadcast(mess);
             }
         }

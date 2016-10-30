@@ -9,8 +9,6 @@ import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.object.action.FollowAction;
 import name.huliqing.luoying.data.LogicData;
 import name.huliqing.luoying.layer.service.ActionService;
-import name.huliqing.luoying.layer.service.AttributeService;
-import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.object.action.Action;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.entity.Entity;
@@ -23,9 +21,7 @@ import name.huliqing.luoying.utils.MathUtils;
  */
 public class FollowLogic<T extends LogicData> extends Logic<T> {
 //    private final static Logger logger = Logger.getLogger(FollowLogic.class.getName());
-    private final PlayService playService = Factory.get(PlayService.class);
     private final ActionService actionService = Factory.get(ActionService.class);
-    private final AttributeService attributeService = Factory.get(AttributeService.class);
     
     // 距离的最近点和最远点
     private float minFollow = 3f;
@@ -55,13 +51,13 @@ public class FollowLogic<T extends LogicData> extends Logic<T> {
 //        distanceLimit = data.getAsFloat("distanceLimit", distanceLimit);
 //        distanceLimitSquared = distanceLimit * distanceLimit;
     }
-
+    
     @Override
     public void initialize() {
         super.initialize();
-        followTargetAttribute = attributeService.getAttributeByName(actor, bindFollowTargetAttribute);
+        followTargetAttribute = actor.getAttributeManager().getAttribute(bindFollowTargetAttribute);
     }
-
+    
     @Override
     public void cleanup() {
         super.cleanup();

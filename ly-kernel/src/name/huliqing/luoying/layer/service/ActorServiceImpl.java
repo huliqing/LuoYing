@@ -268,7 +268,7 @@ public class ActorServiceImpl implements ActorService {
     
     @Override
     public void setTarget(Entity actor, Entity target) {
-        ActorModule actorModule = actor.getEntityModule().getModule(ActorModule.class);
+        ActorModule actorModule = actor.getModuleManager().getModule(ActorModule.class);
         if (actorModule == null)
             return;
         
@@ -277,7 +277,7 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public Entity getTarget(Entity actor) {
-        ActorModule actorModule = actor.getEntityModule().getModule(ActorModule.class);
+        ActorModule actorModule = actor.getModuleManager().getModule(ActorModule.class);
         if (actorModule == null)
             return null;
         
@@ -296,7 +296,7 @@ public class ActorServiceImpl implements ActorService {
     public boolean isEnemy(Entity actor, Entity target) {
         if (target == null)
             return false;
-        return actor.getEntityModule().getModule(ActorModule.class).isEnemy(target);
+        return actor.getModuleManager().getModule(ActorModule.class).isEnemy(target);
     }
 
     @Override
@@ -311,7 +311,7 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public int getLevel(Entity actor) {
-        LevelModule module = actor.getEntityModule().getModule(LevelModule.class);
+        LevelModule module = actor.getModuleManager().getModule(LevelModule.class);
         if (module != null) {
             return module.getLevel();
         }
@@ -320,7 +320,7 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public void setLevel(Entity actor, int level) {
-        LevelModule module = actor.getEntityModule().getModule(LevelModule.class);
+        LevelModule module = actor.getModuleManager().getModule(LevelModule.class);
         if (module != null) {
             module.setLevel(level);
         }
@@ -349,22 +349,22 @@ public class ActorServiceImpl implements ActorService {
     
     @Override
     public int getGroup(Entity actor) {
-        return actor.getEntityModule().getModule(ActorModule.class).getGroup();
+        return actor.getModuleManager().getModule(ActorModule.class).getGroup();
     }
     
     @Override
     public void setGroup(Entity actor, int group) {
-        actor.getEntityModule().getModule(ActorModule.class).setGroup(group);
+        actor.getModuleManager().getModule(ActorModule.class).setGroup(group);
     }
 
     @Override
     public int getTeam(Entity actor) {
-        return actor.getEntityModule().getModule(ActorModule.class).getTeam();
+        return actor.getModuleManager().getModule(ActorModule.class).getTeam();
     }
     
     @Override
     public void setTeam(Entity actor, int team) {
-        actor.getEntityModule().getModule(ActorModule.class).setTeam(team);
+        actor.getModuleManager().getModule(ActorModule.class).setTeam(team);
 //        Ly.getPlayState().getTeamView().checkAddOrRemove(actor);
         
         LOG.log(Level.INFO, "Unsupported!");
@@ -372,37 +372,37 @@ public class ActorServiceImpl implements ActorService {
     
     @Override
     public boolean isEssential(Entity actor) {
-        return actor.getEntityModule().getModule(ActorModule.class).isEssential();
+        return actor.getModuleManager().getModule(ActorModule.class).isEssential();
     }
 
     @Override
     public void setEssential(Entity actor, boolean essential) {
-        actor.getEntityModule().getModule(ActorModule.class).setEssential(essential);
+        actor.getModuleManager().getModule(ActorModule.class).setEssential(essential);
     }
 
     @Override
     public boolean isBiology(Entity actor) {
-        return actor.getEntityModule().getModule(ActorModule.class).isBiology(); 
+        return actor.getModuleManager().getModule(ActorModule.class).isBiology(); 
     }
 
     @Override
     public void setOwner(Entity actor, long ownerId) {
-        actor.getEntityModule().getModule(ActorModule.class).setOwner(ownerId);
+        actor.getModuleManager().getModule(ActorModule.class).setOwner(ownerId);
     }
 
     @Override
     public long getOwner(Entity actor) {
-        return actor.getEntityModule().getModule(ActorModule.class).getOwner();
+        return actor.getModuleManager().getModule(ActorModule.class).getOwner();
     }
 
     @Override
     public void setFollow(Entity actor, long targetId) {
-        actor.getEntityModule().getModule(ActorModule.class).setFollowTarget(targetId);
+        actor.getModuleManager().getModule(ActorModule.class).setFollowTarget(targetId);
     }
 
     @Override
     public long getFollow(Entity actor) {
-        return actor.getEntityModule().getModule(ActorModule.class).getFollowTarget();
+        return actor.getModuleManager().getModule(ActorModule.class).getFollowTarget();
     }
 
     @Override
@@ -419,7 +419,7 @@ public class ActorServiceImpl implements ActorService {
         if (channelIds == null) 
             return;
         
-        ChannelModule module = actor.getEntityModule().getModule(ChannelModule.class);
+        ChannelModule module = actor.getModuleManager().getModule(ChannelModule.class);
         if (module == null)
             return;
         
@@ -452,7 +452,7 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public void setLocation(Entity actor, Vector3f location) {
-        actor.getEntityModule().getModule(ActorModule.class).setLocation(location);
+        actor.getModuleManager().getModule(ActorModule.class).setLocation(location);
     }
 
     @Override
@@ -462,22 +462,22 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public void setPhysicsEnabled(Entity actor, boolean enabled) {
-        actor.getEntityModule().getModule(ActorModule.class).setEnabled(enabled);
+        actor.getModuleManager().getModule(ActorModule.class).setEnabled(enabled);
     }
     
     @Override
     public boolean isPhysicsEnabled(Entity actor) {
-        return actor.getEntityModule().getModule(ActorModule.class).isEnabled();
+        return actor.getModuleManager().getModule(ActorModule.class).isEnabled();
     }
     
     @Override
     public void setViewDirection(Entity actor, Vector3f viewDirection) {
-        actor.getEntityModule().getModule(ActorModule.class).setViewDirection(viewDirection);
+        actor.getModuleManager().getModule(ActorModule.class).setViewDirection(viewDirection);
     }
     
     @Override
     public Vector3f getViewDirection(Entity actor) {
-        ActorModule module = actor.getEntityModule().getModule(ActorModule.class);
+        ActorModule module = actor.getModuleManager().getModule(ActorModule.class);
         if (module != null) {
             return module.getViewDirection();
         }
@@ -486,7 +486,7 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public void setLookAt(Entity actor, Vector3f position) {
-        ActorModule module = actor.getEntityModule().getModule(ActorModule.class);
+        ActorModule module = actor.getModuleManager().getModule(ActorModule.class);
         if (module != null) {
             module.setLookAt(position);
         }
@@ -494,7 +494,7 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public void setWalkDirection(Entity actor, Vector3f walkDirection) {
-        ActorModule module = actor.getEntityModule().getModule(ActorModule.class);
+        ActorModule module = actor.getModuleManager().getModule(ActorModule.class);
         if (module != null) {
             module.setWalkDirection(walkDirection);
         }
@@ -502,7 +502,7 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public Vector3f getWalkDirection(Entity actor) {
-        ActorModule module = actor.getEntityModule().getModule(ActorModule.class);
+        ActorModule module = actor.getModuleManager().getModule(ActorModule.class);
         if (module != null) {
             return module.getWalkDirection();
         }
@@ -520,7 +520,7 @@ public class ActorServiceImpl implements ActorService {
     
     @Override
     public void setChannelLock(Entity actor, boolean locked, String... channelIds) {
-        ChannelModule module = actor.getEntityModule().getModule(ChannelModule.class);
+        ChannelModule module = actor.getModuleManager().getModule(ChannelModule.class);
         if (module != null) {
             module.setChannelLock(locked, channelIds);
         }
@@ -528,7 +528,7 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public void restoreAnimation(Entity actor, String animName, LoopMode loop, float useTime, float startTime, String... channelIds) {
-        ChannelModule module = actor.getEntityModule().getModule(ChannelModule.class);
+        ChannelModule module = actor.getModuleManager().getModule(ChannelModule.class);
         if (module != null) {
             module.restoreAnimation(animName, channelIds, loop, useTime, startTime);
         }
@@ -536,7 +536,7 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public boolean reset(Entity actor) {
-        ChannelModule module = actor.getEntityModule().getModule(ChannelModule.class);
+        ChannelModule module = actor.getModuleManager().getModule(ChannelModule.class);
         if (module != null) {
             module.reset();
             return true;
@@ -546,7 +546,7 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public void resetToAnimationTime(Entity actor, String animation, float timePoint) {
-        ChannelModule module = actor.getEntityModule().getModule(ChannelModule.class);
+        ChannelModule module = actor.getModuleManager().getModule(ChannelModule.class);
         if (module != null) {
             module.resetToAnimationTime(animation, timePoint);
         }
@@ -554,12 +554,12 @@ public class ActorServiceImpl implements ActorService {
     
     @Override
     public boolean isPlayer(Entity actor) {
-        return actor.getEntityModule().getModule(ActorModule.class).isPlayer();
+        return actor.getModuleManager().getModule(ActorModule.class).isPlayer();
     }
 
     @Override
     public void setPlayer(Entity actor, boolean player) {
-        actor.getEntityModule().getModule(ActorModule.class).setPlayer(player);
+        actor.getModuleManager().getModule(ActorModule.class).setPlayer(player);
     }
     
     @Override
@@ -583,26 +583,26 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public float getMass(Entity actor) {
-        ActorModule module = actor.getEntityModule().getModule(ActorModule.class);
+        ActorModule module = actor.getModuleManager().getModule(ActorModule.class);
         return module != null ? module.getMass() : 0;
     }
 
     @Override
     public boolean isKinematic(Entity actor) {
-        ActorModule module = actor.getEntityModule().getModule(ActorModule.class);
+        ActorModule module = actor.getModuleManager().getModule(ActorModule.class);
         return module != null ? module.isKinematic() : false;
     }
 
     @Override
     public void setKinematic(Entity actor, boolean kinematic) {
-        ActorModule module = actor.getEntityModule().getModule(ActorModule.class);
+        ActorModule module = actor.getModuleManager().getModule(ActorModule.class);
         if (module != null) {
             module.setKinematic(kinematic);
         }
     }
     
     private ActorModule getActorModule(Entity actor) {
-        ActorModule module = actor.getEntityModule().getModule(ActorModule.class);
+        ActorModule module = actor.getModuleManager().getModule(ActorModule.class);
         if (module == null) {
             LOG.log(Level.WARNING, "Actor need a ActorModule!!! actorId={0}", actor.getData().getId());
         }

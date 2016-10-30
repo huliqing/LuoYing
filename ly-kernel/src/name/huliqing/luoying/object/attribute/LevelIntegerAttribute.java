@@ -5,11 +5,11 @@
  */
 package name.huliqing.luoying.object.attribute;
 
+import name.huliqing.luoying.object.entity.EntityAttributeManager;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.AttributeData;
 import name.huliqing.luoying.layer.service.ElService;
 import name.huliqing.luoying.object.el.LevelEl;
-import name.huliqing.luoying.object.module.AttributeModule;
 
 /**
  * LevelAttribute主要用于拥有等级功能的属性，这种属性会随着等级的提升,属性值也会随着改变。<br>
@@ -93,7 +93,7 @@ public class LevelIntegerAttribute extends IntegerAttribute implements LevelAttr
     }
 
     @Override
-    public void initialize(AttributeModule module) {
+    public void initialize(AttributeManager module) {
         super.initialize(module);
         // 初始化时只处理等级值，动态值由程序运行时去操作。
         if (levelEl != null) {

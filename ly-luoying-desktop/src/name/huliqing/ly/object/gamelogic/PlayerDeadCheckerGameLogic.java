@@ -52,7 +52,7 @@ public class PlayerDeadCheckerGameLogic extends AbstractGameLogic {
             player = gameService.getPlayer();
         }
         if (actorModule == null && player != null) {
-            actorModule = player.getEntityModule().getModule(ActorModule.class);
+            actorModule = player.getModuleManager().getModule(ActorModule.class);
             if (actorModule == null) {
                 setEnabled(false);
                 return;

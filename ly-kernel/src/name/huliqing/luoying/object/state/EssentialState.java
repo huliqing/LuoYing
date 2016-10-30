@@ -30,7 +30,7 @@ public class EssentialState extends AbstractState {
     @Override
     public void initialize() {
         super.initialize();
-        actorModule = actor.getEntityModule().getModule(ActorModule.class);
+        actorModule = actor.getModuleManager().getModule(ActorModule.class);
         
         oldEssential = actorModule.isEssential();
         actorModule.setEssential(essential);

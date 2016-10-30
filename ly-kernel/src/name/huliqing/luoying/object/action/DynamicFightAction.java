@@ -14,7 +14,7 @@ import name.huliqing.luoying.layer.network.ActorNetwork;
 import name.huliqing.luoying.layer.network.SkillNetwork;
 import name.huliqing.luoying.layer.network.SkinNetwork;
 import name.huliqing.luoying.layer.service.ActorService;
-import name.huliqing.luoying.layer.service.AttributeService;
+import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.layer.service.SkinService;
@@ -41,7 +41,7 @@ public class DynamicFightAction extends PathFollowAction implements FightAction,
     private final ActorService actorService = Factory.get(ActorService.class);
     private final SkinService skinService = Factory.get(SkinService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
-    private final AttributeService attributeService = Factory.get(AttributeService.class);
+    private final EntityService entityService = Factory.get(EntityService.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final SkinNetwork skinNetwork = Factory.get(SkinNetwork.class);
@@ -109,16 +109,16 @@ public class DynamicFightAction extends PathFollowAction implements FightAction,
     @Override
     public void setActor(Entity actor) {
         super.setActor(actor); 
-        actorModule = actor.getEntityModule().getModule(ActorModule.class);
-        logicModule = actor.getEntityModule().getModule(LogicModule.class);
-        skillModule = actor.getEntityModule().getModule(SkillModule.class);
-        skinModule = actor.getEntityModule().getModule(SkinModule.class);
+        actorModule = actor.getModuleManager().getModule(ActorModule.class);
+        logicModule = actor.getModuleManager().getModule(LogicModule.class);
+        skillModule = actor.getModuleManager().getModule(SkillModule.class);
+        skinModule = actor.getModuleManager().getModule(SkinModule.class);
     }
     
     @Override
     public void setEnemy(Entity enemy) {
         this.enemy = enemy;
-        this.enemyActorModule = enemy.getEntityModule().getModule(ActorModule.class);
+        this.enemyActorModule = enemy.getModuleManager().getModule(ActorModule.class);
         super.setFollow(enemy.getSpatial());
     }
     
@@ -265,7 +265,8 @@ public class DynamicFightAction extends PathFollowAction implements FightAction,
             // 也即可看到角色最平滑的连招
             float attackLimit = attackIntervalMax;
             if (attackIntervalAttribute != null) {
-                attackLimit = attackIntervalMax - attackIntervalMax * attributeService.getNumberAttributeValue(actor, attackIntervalAttribute, 0);
+//                attackLimit = attackIntervalMax - attackIntervalMax * actor.getAttributeManager().getNumberAttributeValue(attackIntervalAttribute, 0);
+                attackLimit = attackIntervalMax - attackIntervalMax * entityService.getNumberAttributeValue(actor, attackIntervalAttribute, 0);
                 attackLimit = MathUtils.clamp(attackLimit, 0, attackIntervalMax);
             }
             interval = skill.getTrueUseTime() + attackLimit;

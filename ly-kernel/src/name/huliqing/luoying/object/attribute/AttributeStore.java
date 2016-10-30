@@ -19,6 +19,8 @@ public class AttributeStore {
     
     private final List<Attribute> attributes = new ArrayList<Attribute>();
     
+    private final List<Attribute> unmodifiableAttributes = Collections.unmodifiableList(attributes);
+    
     // 使用attrId -> attribute方式存放属性列表
     private final Map<String, Attribute> attrIdMap = new HashMap<String, Attribute>();
     
@@ -29,7 +31,7 @@ public class AttributeStore {
      * 添加一个属性到属性列表，属性ID和属性名称必须唯一，如果指定的属性的id或名称已经存在于属性列表中，
      * 则抛出AttributeConflictException异常。
      * @param attribute 
-     * @throws name.huliqing.core.object.attribute.AttributeStore.AttributeConflictException
+     * @throws name.huliqing.luoying.object.attribute.AttributeStore.AttributeConflictException 
      */
     public void addAttribute(Attribute attribute) throws AttributeConflictException{
         if (attributes.contains(attribute) 
@@ -97,7 +99,7 @@ public class AttributeStore {
      * @return 
      */
     public List<Attribute> getAttributes() {
-        return Collections.unmodifiableList(attributes);
+        return unmodifiableAttributes;
     }
     
     public class AttributeConflictException extends Exception {

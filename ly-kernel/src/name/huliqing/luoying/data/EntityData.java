@@ -51,10 +51,15 @@ public class EntityData extends ObjectData {
         return moduleDatas != null && moduleDatas.remove(moduleData);
     }
     
+    /**
+     * 添加一个ObjectData
+     * @param objectData 
+     */
     public void addObjectData(ObjectData objectData) {
         if (objectDatas == null) {
             objectDatas = new ArrayList<ObjectData>();
         }
+        // 注：确保不要重复添加
         if (!objectDatas.contains(objectData)) {
             objectDatas.add(objectData);
         }

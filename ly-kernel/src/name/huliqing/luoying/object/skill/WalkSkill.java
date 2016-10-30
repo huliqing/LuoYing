@@ -40,7 +40,7 @@ public class WalkSkill extends AbstractSkill implements Walk{
     @Override
     public void setActor(Entity actor) {
         super.setActor(actor);
-        channelModule = actor.getEntityModule().getModule(ChannelModule.class);
+        channelModule = actor.getModuleManager().getModule(ChannelModule.class);
     }
 
     public Vector3f getWalkDirection() {

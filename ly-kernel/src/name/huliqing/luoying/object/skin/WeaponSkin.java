@@ -94,7 +94,7 @@ public class WeaponSkin extends AbstractSkin implements Weapon {
         super.attach(actor);
         this.slot = null; //取消槽位占用
         // 如果当前角色的武器状态是"挂起"的，则应该把武器放到指定的槽位上。
-        if (!actor.getEntityModule().getModule(SkinModule.class).isWeaponTakeOn()) {
+        if (!actor.getModuleManager().getModule(SkinModule.class).isWeaponTakeOn()) {
             attachWeaponOff(actor, getWeaponSlot(actor));
         }
     }
@@ -178,7 +178,7 @@ public class WeaponSkin extends AbstractSkin implements Weapon {
      * @param skinData 
      */
     private Slot getWeaponSlot(Entity actor) {
-        SkinModule sm = actor.getEntityModule().getModule(SkinModule.class);
+        SkinModule sm = actor.getModuleManager().getModule(SkinModule.class);
         // supportedSlots角色可以支持的武器槽位列表
         List<String> supportedSlots = sm.getSupportedSlots();
         if (supportedSlots == null || supportedSlots.isEmpty()) {

@@ -8,9 +8,7 @@ import com.jme3.font.BitmapFont;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.manager.ResourceManager;
-import name.huliqing.luoying.layer.service.AttributeService;
 import name.huliqing.luoying.object.attribute.AbstractSimpleAttribute;
 import name.huliqing.luoying.object.attribute.Attribute;
 import name.huliqing.luoying.object.attribute.GroupAttribute;
@@ -25,7 +23,6 @@ import name.huliqing.luoying.ui.Text;
  * @author huliqing
  */
 public class AttributePanel extends ListView<Attribute> implements ActorPanel {
-    private final AttributeService attributeService = Factory.get(AttributeService.class);
     
     // 临时性的用于过滤不想显示的属性名称，后续需要添加到xml配置中去。
     private final List<String> filterAttributeNames;
@@ -74,7 +71,7 @@ public class AttributePanel extends ListView<Attribute> implements ActorPanel {
     @Override
     public List<Attribute> getDatas() {
         if (actor != null) {
-            return attributeService.getAttributes(actor);
+            return actor.getAttributeManager().getAttributes();
         }
         return Collections.EMPTY_LIST;
     }

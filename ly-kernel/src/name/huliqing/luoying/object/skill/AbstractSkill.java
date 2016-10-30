@@ -16,14 +16,13 @@ import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.constants.SkillConstants;
 import name.huliqing.luoying.data.AttributeUse;
 import name.huliqing.luoying.data.SkillData;
-import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.service.ElService;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.actoranim.ActorAnim;
+import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.effect.Effect;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.magic.Magic;
-import name.huliqing.luoying.object.module.AttributeModule;
 import name.huliqing.luoying.object.module.ChannelModule;
 import name.huliqing.luoying.object.module.LevelModule;
 import name.huliqing.luoying.object.module.SkinModule;
@@ -54,8 +53,7 @@ public abstract class AbstractSkill implements Skill {
     private static final Logger LOG = Logger.getLogger(AbstractSkill.class.getName());
     private final ElService elService = Factory.get(ElService.class);
 //    private final PlayService playService = Factory.get(PlayService.class);
-    private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
-    private AttributeModule attributeModule;
+//    private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private LevelModule levelModule;
     private ChannelModule channelModule;
     private SkinModule skinModule;
@@ -259,10 +257,9 @@ public abstract class AbstractSkill implements Skill {
     @Override
     public void setActor(Entity actor) {
         this.actor = actor;
-        attributeModule = actor.getEntityModule().getModule(AttributeModule.class);
-        channelModule = actor.getEntityModule().getModule(ChannelModule.class);
-        levelModule = actor.getEntityModule().getModule(LevelModule.class);
-        skinModule = actor.getEntityModule().getModule(SkinModule.class);
+        channelModule = actor.getModuleManager().getModule(ChannelModule.class);
+        levelModule = actor.getModuleManager().getModule(LevelModule.class);
+        skinModule = actor.getModuleManager().getModule(SkinModule.class);
     }
     
     @Override
@@ -325,7 +322,7 @@ public abstract class AbstractSkill implements Skill {
         List<AttributeUse> uas = data.getUseAttributes();
         if (uas != null) {
             for (AttributeUse ua : uas) {
-                attributeModule.addNumberAttributeValue(ua.getAttribute(), -ua.getAmount());
+                addNumberAttributeValue(actor, ua.getAttribute(), -ua.getAmount());
             }
         }
 
@@ -590,7 +587,9 @@ public abstract class AbstractSkill implements Skill {
         if (resistInterruptRateAttribute == null) {
             return true;
         }
-        float resistRate = attributeModule.getNumberAttributeValue(resistInterruptRateAttribute, 0);
+        
+        NumberAttribute nAttr = actor.getAttributeManager().getAttribute(resistInterruptRateAttribute, NumberAttribute.class);
+        float resistRate = nAttr != null ? nAttr.floatValue() : 0;
         if (resistRate <=0) { // 抵抗率为0
             return true;
         }
@@ -624,7 +623,7 @@ public abstract class AbstractSkill implements Skill {
         List<AttributeUse> uas = data.getUseAttributes();
         if (uas != null) {
             for (AttributeUse ua : uas) {
-                if (attributeModule.getNumberAttributeValue(ua.getAttribute(), 0) < ua.getAmount()) {
+                if (getNumberAttributeValue(actor, ua.getAttribute(), 0) < ua.getAmount()) {
                     return false;
                 }
             }
@@ -781,7 +780,7 @@ public abstract class AbstractSkill implements Skill {
     private float getCutTimeEndRate() {
         float cutTime = 0;
         if (cutTimeEndAttribute != null) {
-            cutTime = (cutTimeEndMax * MathUtils.clamp(attributeModule.getNumberAttributeValue(cutTimeEndAttribute, 0), 0, 1.0f));
+            cutTime = (cutTimeEndMax * MathUtils.clamp(getNumberAttributeValue(actor, cutTimeEndAttribute, 0), 0, 1.0f));
         }
         return cutTime;
     }
@@ -795,7 +794,7 @@ public abstract class AbstractSkill implements Skill {
     public float getSpeed() {
         float speed = 1.0f;
         if (speedAttribute != null) {
-            speed = attributeModule.getNumberAttributeValue(speedAttribute, 1.0f);
+            speed = getNumberAttributeValue(actor, speedAttribute, 1.0f);
             if (speed <= 0) {
                 speed = 0.0001f;
             }
@@ -811,6 +810,31 @@ public abstract class AbstractSkill implements Skill {
         // 注：因为暂不开放cutTimeStart，所以cutTimeStart目前为0
 //        return tempTime - tempTime * (cutTimeStart + getCutTimeEndRate(actor, skillData));
         return tempTime - tempTime * (0 + getCutTimeEndRate());
+    }
+    
+    /**
+     * 获取指定Entity的Number属性的值，如果不存在指定的属性值，则返回defValue
+     * @param entity
+     * @param attributeName
+     * @param defValue
+     * @return 
+     */
+    protected final float getNumberAttributeValue(Entity entity, String attributeName, float defValue) {
+         NumberAttribute nattr = entity.getAttributeManager().getAttribute(attributeName, NumberAttribute.class);
+         return nattr != null ? nattr.floatValue() : defValue;
+    }
+    
+    /**
+     * 给指定Entity的Number属性添加值，如果不存在指定的属性值，则什么也不做。
+     * @param entity
+     * @param attributeName
+     * @param value 
+     */
+    protected final void addNumberAttributeValue(Entity entity, String attributeName, float value) {
+        NumberAttribute nattr = entity.getAttributeManager().getAttribute(attributeName, NumberAttribute.class);
+        if (nattr != null) {
+            nattr.add(value);
+        }
     }
     
     /**

@@ -14,7 +14,6 @@ import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.TalentData;
 import name.huliqing.luoying.data.ModuleData;
-import name.huliqing.luoying.layer.service.AttributeService;
 import name.huliqing.luoying.layer.service.ElService;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.attribute.Attribute;
@@ -28,7 +27,6 @@ import name.huliqing.luoying.object.talent.Talent;
  */
 public class TalentModule extends AbstractModule implements ValueChangeListener<Number>{
     private static final Logger LOG = Logger.getLogger(TalentModule.class.getName());
-    private final AttributeService attributeService = Factory.get(AttributeService.class);
     private final ElService elService = Factory.get(ElService.class);
     
     // 角色等级属性的名称，用于查找角色的“等级属性”并进行绑定监听等级变化
@@ -76,27 +74,27 @@ public class TalentModule extends AbstractModule implements ValueChangeListener<
     }
     
     @Override
-    public void initialize(Entity actor) {
-        super.initialize(actor); 
+    public void initialize(Entity entity) {
+        super.initialize(entity); 
         
         // 绑定并监听角色等级变化
-        levelAttribute = attributeService.getAttributeByName(actor, bindLevelAttribute);
+        levelAttribute = entity.getAttributeManager().getAttribute(bindLevelAttribute);
         if (levelAttribute != null) {
             levelAttribute.addListener(this);
         } else {
             LOG.log(Level.WARNING, "levelAttribute not found by levelAttributeName={0}, actorId={1}"
-                    , new Object[] {bindLevelAttribute, actor.getData().getId()});
+                    , new Object[] {bindLevelAttribute, entity.getData().getId()});
         }
         
         // 获取天赋点数容器属性
-        talentPointsAttribute = attributeService.getAttributeByName(actor, bindTalentPointsAttribute);
+        talentPointsAttribute = entity.getAttributeManager().getAttribute(bindTalentPointsAttribute);
         if (talentPointsAttribute == null) {
             LOG.log(Level.WARNING, "talentPointsAttribute not found, by talentPointsAttributeName={0}, actorId={1}"
-                    , new Object[] {bindTalentPointsAttribute, actor.getData().getId()});
+                    , new Object[] {bindTalentPointsAttribute, entity.getData().getId()});
         }
         
         // 初始化，载入天赋
-        List<TalentData> talentDatas = actor.getData().getObjectDatas(TalentData.class, null);
+        List<TalentData> talentDatas = entity.getData().getObjectDatas(TalentData.class, null);
         if (talentDatas != null) {
             for (TalentData td : talentDatas) {
                 addTalent((Talent) Loader.load(td));

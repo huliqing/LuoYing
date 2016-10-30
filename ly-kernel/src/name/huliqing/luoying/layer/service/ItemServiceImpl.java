@@ -23,7 +23,7 @@ public class ItemServiceImpl implements ItemService {
     
     @Override
     public void addItem(Entity actor, String itemId, int count) {
-        ItemModule module = actor.getEntityModule().getModule(ItemModule.class);
+        ItemModule module = actor.getModuleManager().getModule(ItemModule.class);
         if (module != null) {
             module.addItem(itemId, count);
             
@@ -47,7 +47,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public void removeItem(Entity actor, String itemId, int count) {
-        ItemModule module = actor.getEntityModule().getModule(ItemModule.class);
+        ItemModule module = actor.getModuleManager().getModule(ItemModule.class);
         if (module != null) {
             module.removeItem(itemId, count);
         }
@@ -55,7 +55,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public Item getItem(Entity actor, String itemId) {
-        ItemModule module = actor.getEntityModule().getModule(ItemModule.class);
+        ItemModule module = actor.getModuleManager().getModule(ItemModule.class);
         if (module != null) {
             return module.getItem(itemId);
         }
@@ -64,7 +64,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<Item> getItems(Entity actor) {
-        ItemModule module = actor.getEntityModule().getModule(ItemModule.class);
+        ItemModule module = actor.getModuleManager().getModule(ItemModule.class);
         if (module != null) {
             return module.getItems();
         }
@@ -73,7 +73,7 @@ public class ItemServiceImpl implements ItemService {
     
     @Override
     public void addItemListener(Entity actor, ItemListener itemListener) {
-        ItemModule module = actor.getEntityModule().getModule(ItemModule.class);
+        ItemModule module = actor.getModuleManager().getModule(ItemModule.class);
         if (module != null) {
             module.addItemListener(itemListener);
         }
@@ -81,7 +81,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public boolean removeItemListener(Entity actor, ItemListener itemListener) {
-        ItemModule module = actor.getEntityModule().getModule(ItemModule.class);
+        ItemModule module = actor.getModuleManager().getModule(ItemModule.class);
         return module != null && module.removeItemListener(itemListener);
     }
 
@@ -93,7 +93,7 @@ public class ItemServiceImpl implements ItemService {
      */
     @Override
     public void syncItemTotal(Entity actor, String itemId, int total) {
-        ItemModule module = actor.getEntityModule().getModule(ItemModule.class);
+        ItemModule module = actor.getModuleManager().getModule(ItemModule.class);
         if (module == null)
             return;
         
@@ -114,7 +114,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public void useItem(Entity actor, String itemId) {
-        ItemModule module = actor.getEntityModule().getModule(ItemModule.class);
+        ItemModule module = actor.getModuleManager().getModule(ItemModule.class);
         if (module != null) {
             Item item = module.getItem(itemId);
             if (item != null) {

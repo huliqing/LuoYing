@@ -52,7 +52,7 @@ public class NotifyLogic<T extends LogicData> extends Logic<T> {
     @Override
     public void setActor(Entity self) {
         super.setActor(self);
-        actorModule = self.getEntityModule().getModule(ActorModule.class);
+        actorModule = self.getModuleManager().getModule(ActorModule.class);
     }
     
     @Override
@@ -61,7 +61,7 @@ public class NotifyLogic<T extends LogicData> extends Logic<T> {
         if (target == null) {
             return;
         }
-        ActorModule targetActorModule = target.getEntityModule().getModule(ActorModule.class);
+        ActorModule targetActorModule = target.getModuleManager().getModule(ActorModule.class);
         if (actorModule.isEnemy(target) && !targetActorModule.isDead()) {
             tempStore.clear();
             findNearestFriendly(actor, distance, tempStore);
@@ -89,7 +89,7 @@ public class NotifyLogic<T extends LogicData> extends Logic<T> {
 //        ActorModule actorModule = actor.getEntityModule().getModule(ActorModule.class);
         ActorModule targetActorModule;
         for (Actor a : actors) {
-            targetActorModule = a.getEntityModule().getModule(ActorModule.class);
+            targetActorModule = a.getModuleManager().getModule(ActorModule.class);
             if (targetActorModule.isDead() || targetActorModule.isEnemy(actor)) {
                 continue;
             }

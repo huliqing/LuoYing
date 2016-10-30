@@ -34,7 +34,7 @@ public class TaskServiceImpl implements TaskService {
     
     @Override
     public void addTask(Entity actor, Task task) {
-        TaskModule control = actor.getEntityModule().getModule(TaskModule.class);
+        TaskModule control = actor.getModuleManager().getModule(TaskModule.class);
         if (control != null) {
             control.addTask(task);
         }
@@ -42,7 +42,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task getTask(Entity actor, String taskId) {
-        TaskModule control = actor.getEntityModule().getModule(TaskModule.class);
+        TaskModule control = actor.getModuleManager().getModule(TaskModule.class);
         if (control != null) {
             return control.getTask(taskId);
         }
@@ -51,7 +51,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<Task> getTasks(Entity actor) {
-        TaskModule module = actor.getEntityModule().getModule(TaskModule.class);
+        TaskModule module = actor.getModuleManager().getModule(TaskModule.class);
         if (module != null) {
             return module.getTasks();
         }
@@ -78,7 +78,7 @@ public class TaskServiceImpl implements TaskService {
     
     @Override
     public void completeTask(Entity actor, Task task) {
-        TaskModule control = actor.getEntityModule().getModule(TaskModule.class);
+        TaskModule control = actor.getModuleManager().getModule(TaskModule.class);
         if (control != null) {
             control.completeTask(task);
         }
@@ -99,7 +99,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public void addTaskListener(Entity actor, TaskListener taskListener) {
-        TaskModule control = actor.getEntityModule().getModule(TaskModule.class);
+        TaskModule control = actor.getModuleManager().getModule(TaskModule.class);
         if (control != null) {
             control.addTaskListener(taskListener);
         }
@@ -107,7 +107,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public boolean removeTaskListener(Entity actor, TaskListener taskListener) {
-        TaskModule control = actor.getEntityModule().getModule(TaskModule.class);
+        TaskModule control = actor.getModuleManager().getModule(TaskModule.class);
         return control != null && control.removeTaskListener(taskListener);
     }
     

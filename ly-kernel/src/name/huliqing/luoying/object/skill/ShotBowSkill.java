@@ -80,8 +80,8 @@ public class ShotBowSkill extends ShotSkill {
     @Override
     public void setActor(Entity actor) {
         super.setActor(actor);
-        actorModule = actor.getEntityModule().getModule(ActorModule.class);
-        skinModule = actor.getEntityModule().getModule(SkinModule.class);        
+        actorModule = actor.getModuleManager().getModule(ActorModule.class);
+        skinModule = actor.getModuleManager().getModule(SkinModule.class);        
     }
 
     @Override

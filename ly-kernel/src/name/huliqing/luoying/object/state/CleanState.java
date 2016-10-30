@@ -31,7 +31,7 @@ public class CleanState extends AbstractState implements StateListener {
     @Override
     public void setActor(Entity actor) {
         super.setActor(actor); 
-        stateModule = actor.getEntityModule().getModule(StateModule.class);
+        stateModule = actor.getModuleManager().getModule(StateModule.class);
     }
     
     @Override

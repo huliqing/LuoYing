@@ -8,8 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.TaskData;
-import name.huliqing.luoying.layer.service.PlayService;
-import name.huliqing.luoying.layer.network.AttributeNetwork;
+import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.luoying.ui.Window;
 import name.huliqing.luoying.utils.ConvertUtils;
 import name.huliqing.luoying.layer.network.ObjectNetwork;
@@ -21,9 +20,8 @@ import name.huliqing.luoying.object.entity.Entity;
  * @param <T>
  */
 public abstract class AbstractTask<T extends TaskData> implements Task<T> {
-    private final PlayService playService = Factory.get(PlayService.class);
     private final ObjectNetwork protoNetwork = Factory.get(ObjectNetwork.class);
-    private final AttributeNetwork attributeNetwork = Factory.get(AttributeNetwork.class);
+    private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
 
     protected T data;
     protected Entity actor;
@@ -98,7 +96,7 @@ public abstract class AbstractTask<T extends TaskData> implements Task<T> {
         // 奖励属性值
         if (rewardAttributes != null) {
             for (RewardAttribute ra : rewardAttributes) {
-                attributeNetwork.addNumberAttributeValue(actor, ra.attributeName, ra.value);
+                entityNetwork.applyNumberAttributeValue(actor, ra.attributeName, ra.value, null);
             }
         }
         // 奖励物品

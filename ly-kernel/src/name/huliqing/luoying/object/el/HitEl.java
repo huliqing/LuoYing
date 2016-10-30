@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Map;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.ElData;
-import name.huliqing.luoying.layer.service.AttributeService;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.utils.ConvertUtils;
 
@@ -19,7 +18,6 @@ import name.huliqing.luoying.utils.ConvertUtils;
  * @param <T>
  */
 public class HitEl<T extends ElData> extends AbstractEl<T> {
-    private final AttributeService attributeService = Factory.get(AttributeService.class);
     
     // key = param
     private Map<String, Object> valueMap;
@@ -48,13 +46,10 @@ public class HitEl<T extends ElData> extends AbstractEl<T> {
         for (String p : params) {
             float attributeValue = 0;
             if (p.startsWith("s_")) {
-                
-//                attributeValue = attributeService.getDynamicValue(source, p.substring(2));
-                attributeValue = attributeService.getNumberAttributeValue(source, p.substring(2), 0);
+                attributeValue = source.getAttributeManager().getNumberAttributeValue(p.substring(2), 0);
                 
             } else if (p.startsWith("t_")) {
-//                attributeValue = attributeService.getDynamicValue(target, p.substring(2));
-                attributeValue = attributeService.getNumberAttributeValue(target, p.substring(2), 0);
+                attributeValue = target.getAttributeManager().getNumberAttributeValue(p.substring(2), 0);
                 
             } else if (p.startsWith("sk_value")) {
                 attributeValue = sourceSkillValue;

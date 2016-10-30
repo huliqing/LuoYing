@@ -182,7 +182,7 @@
     
     武器槽位: 人类女性武器槽位
     <attributeStringList id="attributeHumanFemaleWeaponSlot" extends="attributeWeaponSlots" 
-                         values="slotSwordLeftWaist,slotSwordLeftWaist2,slotBowLeftBack,slotWandLeftBack" />
+                         value="slotSwordLeftWaist,slotSwordLeftWaist2,slotBowLeftBack,slotWandLeftBack" />
     
     ==========================================================================
     种族配置： 这些属性是直接配置给角色的。
@@ -218,7 +218,7 @@
     ==========================================================================
     
     蒂娜的武器槽位：挂在左腰间
-    <attributeStringList id="attributeWeaponSlotDiNa" extends="attributeWeaponSlots" values="slotSwordLeftWaist,slotSwordLeftWaist2" />
+    <attributeStringList id="attributeWeaponSlotDiNa" extends="attributeWeaponSlots" value="slotSwordLeftWaist,slotSwordLeftWaist2" />
     -->
     
 </root>

@@ -12,25 +12,24 @@ import name.huliqing.luoying.data.AttributeData;
  * @author huliqing
  */
 public class IntegerAttribute extends NumberAttribute {
-
-//    private static final Logger LOG = Logger.getLogger(IntegerAttribute.class.getName());
     
     @Override
     public void setData(AttributeData data) {
         super.setData(data);
-        value = data.getAsInteger("value", 0);
+        value = data.getAsInteger(ATTR_VALUE, 0);
     }
-    
-    @Override
-    public void updateDatas() {
-        super.updateDatas();
-        // 这里一定要确保存的是int类型
-        data.setAttribute("value", value.intValue()); 
-    }
+   
+    // remove20161029
+//    @Override
+//    public void updateDatas() {
+//        super.updateDatas();
+//        // 这里一定要确保存的是int类型
+//        data.setAttribute("value", value.intValue()); 
+//    }
 
     @Override
     public void setValue(Number newValue) {
-        // 转成int类型。
+        // 注意：这里一定要转成int类型,以确保保存在Data的时候是int类型。
         super.setValue(newValue.intValue()); 
     }
     

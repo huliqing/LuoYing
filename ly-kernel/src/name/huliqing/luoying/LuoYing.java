@@ -146,7 +146,7 @@ import name.huliqing.luoying.object.channel.SimpleChannel;
 //import name.huliqing.luoying.object.chat.TaskChat;
 import name.huliqing.luoying.loader.ConfigDataLoader;
 import name.huliqing.luoying.object.module.ActionModule;
-import name.huliqing.luoying.object.module.AttributeModule;
+//import name.huliqing.luoying.object.module.AttributeModule;
 import name.huliqing.luoying.object.module.ActorModule;
 //import name.huliqing.luoying.object.module.ChatModule;
 import name.huliqing.luoying.object.module.ItemModule;
@@ -254,8 +254,7 @@ import name.huliqing.luoying.loader.ModuleDataLoader;
 import name.huliqing.luoying.loader.PlantEnvLoader;
 import name.huliqing.luoying.loader.RandomSceneDataLoader;
 import name.huliqing.luoying.mess.MessActorSetLocation;
-import name.huliqing.luoying.mess.MessAttributeNumberAddValue;
-import name.huliqing.luoying.mess.MessAttributeNumberHit;
+import name.huliqing.luoying.mess.MessEntityAttributeApply;
 import name.huliqing.luoying.mess.MessItemAdd;
 import name.huliqing.luoying.mess.MessItemRemove;
 import name.huliqing.luoying.mess.MessItemUse;
@@ -541,9 +540,7 @@ public class LuoYing {
         // Module 
         DataFactory.register("moduleAction",  ModuleData.class, ModuleDataLoader.class, ActionModule.class);
         DataFactory.register("moduleActor",  ModuleData.class, ModuleDataLoader.class, ActorModule.class);
-        DataFactory.register("moduleAttribute",  ModuleData.class, ModuleDataLoader.class, AttributeModule.class);
         DataFactory.register("moduleChannel",  ModuleData.class, ModuleDataLoader.class, ChannelModule.class);
-//        DataFactory.register("moduleChat",  ModuleData.class, ModuleDataLoader.class, ChatModule.class);
         DataFactory.register("moduleDrop",  ModuleData.class, ModuleDataLoader.class, DropModule.class);
         DataFactory.register("moduleItem",  ModuleData.class, ModuleDataLoader.class, ItemModule.class);
         DataFactory.register("moduleLevel",  ModuleData.class, ModuleDataLoader.class, LevelModule.class);
@@ -555,6 +552,10 @@ public class LuoYing {
         DataFactory.register("moduleState",  ModuleData.class, ModuleDataLoader.class, StateModule.class);
         DataFactory.register("moduleTalent",  ModuleData.class, ModuleDataLoader.class, TalentModule.class);
         DataFactory.register("moduleTask",  ModuleData.class, ModuleDataLoader.class, TaskModule.class);
+        
+        // remove20161025
+//        DataFactory.register("moduleAttribute",  ModuleData.class, ModuleDataLoader.class, AttributeModule.class);
+//        DataFactory.register("moduleChat",  ModuleData.class, ModuleDataLoader.class, ChatModule.class);
         
         // Position
         DataFactory.register("positionRandomSphere",  PositionData.class, PositionDataLoader.class, RandomSpherePosition.class);
@@ -750,8 +751,7 @@ public class LuoYing {
         Serializer.registerClass(MessActorViewDir.class);
         
         // Attribute
-        Serializer.registerClass(MessAttributeNumberAddValue.class);
-        Serializer.registerClass(MessAttributeNumberHit.class);
+        Serializer.registerClass(MessEntityAttributeApply.class);
         
         // Chat
 //        Serializer.registerClass(MessChatSell.class); 
@@ -832,7 +832,8 @@ public class LuoYing {
     
     public static BitmapFont getFont() {
         if (font == null) {
-            font = getAssetManager().loadFont("data/font/chinese.fnt");
+//            font = getAssetManager().loadFont("data/font/chinese.fnt");
+            font = getAssetManager().loadFont("Interface/Fonts/Default.fnt");
         }
         return font;
     }

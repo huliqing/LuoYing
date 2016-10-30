@@ -25,10 +25,9 @@ import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.AttributeApply;
 import name.huliqing.luoying.data.AttributeMatch;
 import name.huliqing.luoying.data.SkinData;
-import name.huliqing.luoying.layer.service.AttributeService;
+import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.object.AssetLoader;
 import name.huliqing.luoying.object.attribute.Attribute;
-import name.huliqing.luoying.object.attribute.MatchAttribute;
 import name.huliqing.luoying.object.define.DefineFactory;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.sound.SoundManager;
@@ -38,7 +37,7 @@ import name.huliqing.luoying.object.sound.SoundManager;
  */
 public abstract class AbstractSkin implements Skin {
     private static final Logger LOG = Logger.getLogger(AbstractSkin.class.getName());
-    private final AttributeService attributeService = Factory.get(AttributeService.class);
+    private final EntityService entityService = Factory.get(EntityService.class);
     
     protected SkinData data;
     protected String[] sounds;
@@ -135,7 +134,7 @@ public abstract class AbstractSkin implements Skin {
         if (data.getMatchAttributes() != null) {
             Attribute attr;
             for (AttributeMatch am : data.getMatchAttributes()) {
-                attr = attributeService.getAttributeByName(actor, am.getAttributeName());
+                attr = actor.getAttributeManager().getAttribute(am.getAttributeName());
                 if (!(attr instanceof MatchAttribute)) {
                     LOG.log(Level.INFO, "指定的属性不是MatchAttribute类型，所以不能使用装备"
                             + "，actorId={0}, skinId={1},  match attributeName={2}", 
@@ -287,7 +286,7 @@ public abstract class AbstractSkin implements Skin {
         List<AttributeApply> aas = data.getApplyAttributes();
         if (aas != null) {
             for (AttributeApply aa : aas) {
-                attributeService.addNumberAttributeValue(actor, aa.getAttribute(), aa.getAmount());
+                entityService.applyNumberAttributeValue(actor, aa.getAttribute(), aa.getAmount(), null);
             }
         }
         data.setAttributeApplied(true);
@@ -322,7 +321,7 @@ public abstract class AbstractSkin implements Skin {
         List<AttributeApply> aas = data.getApplyAttributes();
         if (aas != null) {
             for (AttributeApply aa : aas) {
-                attributeService.addNumberAttributeValue(actor, aa.getAttribute(), -aa.getAmount());
+                entityService.applyNumberAttributeValue(actor, aa.getAttribute(), -aa.getAmount(), null);
             }
         }
         data.setAttributeApplied(false);

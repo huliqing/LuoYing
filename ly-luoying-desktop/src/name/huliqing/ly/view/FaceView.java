@@ -22,13 +22,12 @@ import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.constants.AssetConstants;
 import name.huliqing.luoying.constants.InterfaceConstants;
 import name.huliqing.luoying.layer.service.ActorService;
-import name.huliqing.luoying.layer.service.AttributeService;
 import name.huliqing.ly.layer.service.ChatService;
-import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.layer.service.StateService;
 import name.huliqing.luoying.object.anim.Loop;
 import name.huliqing.luoying.object.anim.ColorAnim;
+import name.huliqing.luoying.object.attribute.BooleanAttribute;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.ly.object.chat.Chat;
@@ -38,7 +37,6 @@ import name.huliqing.luoying.ui.LinearLayout;
 import name.huliqing.luoying.ui.LinearLayout.Layout;
 import name.huliqing.luoying.ui.Text;
 import name.huliqing.luoying.ui.UI;
-import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.ly.layer.service.GameService;
 
 /**
@@ -50,9 +48,7 @@ public final class FaceView extends LinearLayout {
     private final StateService stateService = Factory.get(StateService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final ChatService chatService = Factory.get(ChatService.class);
-    private final AttributeService attributeService = Factory.get(AttributeService.class);
     private final GameService gameService = Factory.get(GameService.class);
-    private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     
     private Entity actor;
     private NumberAttribute lifeAttribute;
@@ -158,14 +154,14 @@ public final class FaceView extends LinearLayout {
     public void setActor(Entity actor) {
         this.actor = actor;
         
-        lifeAttribute = attributeService.getAttributeByName(actor, "attributeHealth");
-         lifeAttributeMax = attributeService.getAttributeByName(actor, "attributeHealthMax");
+        lifeAttribute = actor.getAttributeManager().getAttribute("attributeHealth", NumberAttribute.class);
+        lifeAttributeMax = actor.getAttributeManager().getAttribute("attributeHealthMax", NumberAttribute.class);
         
-        manaAttribute = attributeService.getAttributeByName(actor, "attributeMana");
-        manaAttributeMax = attributeService.getAttributeByName(actor, "attributeManaMax");
+        manaAttribute = actor.getAttributeManager().getAttribute("attributeMana", NumberAttribute.class);
+        manaAttributeMax = actor.getAttributeManager().getAttribute("attributeManaMax", NumberAttribute.class);
         
-        xpAttribute = attributeService.getAttributeByName(actor, "attributeXp");
-        xpAttributeNext = attributeService.getAttributeByName(actor, "attributeXpNext");
+        xpAttribute = actor.getAttributeManager().getAttribute("attributeXp", NumberAttribute.class);
+        xpAttributeNext = actor.getAttributeManager().getAttribute("attributeXpNext", NumberAttribute.class);
         
         picPanel.setActor(actor);
         namePanel.setActor(actor);

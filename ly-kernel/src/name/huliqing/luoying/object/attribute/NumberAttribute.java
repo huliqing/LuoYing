@@ -10,7 +10,7 @@ package name.huliqing.luoying.object.attribute;
  * Number类型的属性。
  * @author huliqing
  */
-public abstract class NumberAttribute extends AbstractSimpleAttribute<Number> {
+public abstract class NumberAttribute extends AbstractAttribute<Number> {
 
     public byte byteValue() {
         return value.byteValue();
@@ -36,41 +36,35 @@ public abstract class NumberAttribute extends AbstractSimpleAttribute<Number> {
         return value.doubleValue();
     }
     
-    @Override
-    public final boolean match(Object other) {
-        if (other instanceof Number) {
-            return Double.compare(doubleValue(), ((Number) other).doubleValue()) == 0;
-        }
-        if (other instanceof String) {
-            return Double.compare(doubleValue(), Double.parseDouble((String) other)) == 0;
-        }
-        return value.equals(other);
-    }
-    
-    /**
-     * 通知提示值变侦听器
-     * @param oldValue
-     * @param newValue 
-     */
-    @Override
-    protected void notifyValueChangeListeners(Number oldValue, Number newValue) {
-        if (oldValue.doubleValue() != newValue.doubleValue()) {
-            updateDatas();
-            super.notifyValueChangeListeners(oldValue, newValue); 
-        }
-    }
+    // remove20161029
+//    @Override
+//    public final boolean match(Object other) {
+//        if (other instanceof Number) {
+//            return Double.compare(doubleValue(), ((Number) other).doubleValue()) == 0;
+//        }
+//        if (other instanceof String) {
+//            return Double.compare(doubleValue(), Double.parseDouble((String) other)) == 0;
+//        }
+//        return value.equals(other);
+//    }
+//    
+//    /**
+//     * 通知提示值变侦听器
+//     * @param oldValue
+//     * @param newValue 
+//     */
+//    @Override
+//    protected void notifyValueChangeListeners(Number oldValue, Number newValue) {
+//        if (oldValue.doubleValue() != newValue.doubleValue()) {
+//            updateDatas();
+//            super.notifyValueChangeListeners(oldValue, newValue); 
+//        }
+//    }
     
     public abstract void add(int other);
     public abstract void add(float other);
     
-//    public abstract boolean isEqualTo(int other);
-//    public abstract boolean isEqualTo(float other);
-//    
-//    public abstract boolean greaterThan(final int other);
-//    public abstract boolean greaterThan(final float other);
-//    
-//    public abstract boolean lessThan(final int other);
-//    public abstract boolean lessThan(final float other);
+
 
     
 }

@@ -155,7 +155,7 @@ public abstract class AbstractState<T extends StateData> implements State<T> {
     @Override
     public void setActor(Entity actor) {
         this.actor = actor;
-        actorModule = actor.getEntityModule().getModule(ActorModule.class);
+        actorModule = actor.getModuleManager().getModule(ActorModule.class);
     }
 
     /**

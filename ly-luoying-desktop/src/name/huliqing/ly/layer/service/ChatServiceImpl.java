@@ -36,7 +36,7 @@ public class ChatServiceImpl implements ChatService {
     
     @Override
     public Chat getChat(Entity actor) {
-        ChatModule module = actor.getEntityModule().getModule(ChatModule.class);
+        ChatModule module = actor.getModuleManager().getModule(ChatModule.class);
         if (module != null) {
             return module.getChat();
         }

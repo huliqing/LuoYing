@@ -430,7 +430,7 @@ public class StoryGuardTask2 extends AbstractTaskStep {
         List<Actor> all = game.getScene().getEntities(Actor.class, null);
         ActorModule am;
         for (Entity actor : all) {
-            am = actor.getEntityModule().getModule(ActorModule.class);
+            am = actor.getModuleManager().getModule(ActorModule.class);
             if (am != null && am.getGroup() == group && am.isBiology()) {
                  store.add(actor);
             }

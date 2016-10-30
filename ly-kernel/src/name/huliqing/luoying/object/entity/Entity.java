@@ -7,6 +7,7 @@ package name.huliqing.luoying.object.entity;
 
 import com.jme3.scene.Spatial;
 import name.huliqing.luoying.data.EntityData;
+import name.huliqing.luoying.object.attribute.AttributeManager;
 import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.xml.DataProcessor;
 
@@ -54,6 +55,18 @@ public interface Entity<T extends EntityData> extends DataProcessor<T>{
     long getEntityId();
     
     /**
+     * 获取属性管理器
+     * @return 
+     */
+    AttributeManager getAttributeManager();
+    
+    /**
+     * 获取模块管理器
+     * @return 
+     */
+    ModuleManager getModuleManager();
+    
+    /**
      * 获得当前物体所在的场景,当一个Entity存在于场景中时这个方法应该返回对当前角色所在场景的引用，
      * 如果Entity已经脱离场景，则该返回值应该为null. 即可以通过这个方法来判断Entity是否正在场景中。
      * @return 
@@ -82,10 +95,5 @@ public interface Entity<T extends EntityData> extends DataProcessor<T>{
      * @return 
      */
     boolean removeFromScene();
-    
-    /**
-     * 获取Entity模块
-     * @return 
-     */
-    EntityModule getEntityModule();
+
 }

@@ -13,9 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.ModuleData;
-import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.object.attribute.Attribute;
 import name.huliqing.luoying.object.attribute.BooleanAttribute;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
@@ -29,13 +27,10 @@ import name.huliqing.luoying.object.entity.Entity;
  */
 public class ActorModule<T extends ModuleData> extends AbstractModule<T> implements ValueChangeListener<Number> {
     private static final Logger LOG = Logger.getLogger(ActorModule.class.getName());
-    private final PlayService playService = Factory.get(PlayService.class);
     
     private final static String DATA_VIEW_DIRECTION = "viewDirection";
     private final static String DATA_WALK_DIRECTION = "walkDirection";
     
-    private AttributeModule attributeModule;
-
     private BetterCharacterControlWrap innerControl;
     private float radius = 0.4f;
     private float height = 3.2f;
@@ -153,24 +148,24 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     }
     
     @Override
-    public void initialize(Entity actor) {
-        super.initialize(actor);
-        attributeModule = (AttributeModule) actor.getEntityModule().getModule(AttributeModule.class);
+    public void initialize(Entity entity) {
+        super.initialize(entity);
+//        attributeModule = (AttributeModule) actor.getEntityModule().getModule(AttributeModule.class);
         
-        healthAttribute = attributeModule.getAttributeByName(bindHealthAttribute, NumberAttribute.class);
-        groupAttribute = attributeModule.getAttributeByName(bindGroupAttribute, NumberAttribute.class);
-        teamAttribute = attributeModule.getAttributeByName(bindTeamAttribute, NumberAttribute.class);
-        viewAttribute = attributeModule.getAttributeByName(bindViewAttribute, NumberAttribute.class);
-        targetAttribute = attributeModule.getAttributeByName(bindTargetAttribute, NumberAttribute.class);
-        followTargetAttribute = attributeModule.getAttributeByName(bindFollowTargetAttribute, NumberAttribute.class);
-        ownerAttribute = attributeModule.getAttributeByName(bindOwnerAttribute, NumberAttribute.class);
-        massAttribute = attributeModule.getAttributeByName(bindMassAttribute, NumberAttribute.class);
+        healthAttribute = entity.getAttributeManager().getAttribute(bindHealthAttribute, NumberAttribute.class);
+        groupAttribute = entity.getAttributeManager().getAttribute(bindGroupAttribute, NumberAttribute.class);
+        teamAttribute = entity.getAttributeManager().getAttribute(bindTeamAttribute, NumberAttribute.class);
+        viewAttribute = entity.getAttributeManager().getAttribute(bindViewAttribute, NumberAttribute.class);
+        targetAttribute = entity.getAttributeManager().getAttribute(bindTargetAttribute, NumberAttribute.class);
+        followTargetAttribute = entity.getAttributeManager().getAttribute(bindFollowTargetAttribute, NumberAttribute.class);
+        ownerAttribute = entity.getAttributeManager().getAttribute(bindOwnerAttribute, NumberAttribute.class);
+        massAttribute = entity.getAttributeManager().getAttribute(bindMassAttribute, NumberAttribute.class);
         
-        movableAttribute = attributeModule.getAttributeByName(bindMovableAttribute, BooleanAttribute.class);
-        rotatableAttribute = attributeModule.getAttributeByName(bindRotatableAttribute, BooleanAttribute.class);
-        essentialAttribute = attributeModule.getAttributeByName(bindEssentialAttribute, BooleanAttribute.class);
-        biologyAttribute = attributeModule.getAttributeByName(bindBiologyAttribute, BooleanAttribute.class);
-        deadAttribute = attributeModule.getAttributeByName(bindDeadAttribute, BooleanAttribute.class);
+        movableAttribute = entity.getAttributeManager().getAttribute(bindMovableAttribute, BooleanAttribute.class);
+        rotatableAttribute = entity.getAttributeManager().getAttribute(bindRotatableAttribute, BooleanAttribute.class);
+        essentialAttribute = entity.getAttributeManager().getAttribute(bindEssentialAttribute, BooleanAttribute.class);
+        biologyAttribute = entity.getAttributeManager().getAttribute(bindBiologyAttribute, BooleanAttribute.class);
+        deadAttribute = entity.getAttributeManager().getAttribute(bindDeadAttribute, BooleanAttribute.class);
         
         healthAttribute.addListener(this);  // 监听角色健康值属性，当健康值等于或小于0于，角色要标记为死亡。
         targetAttribute.addListener(this);  //  监听目标变更属性，以便角色的当前目标发生变化时可以触发侦听器
@@ -178,7 +173,7 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
         
         // 控制器
         this.innerControl = new BetterCharacterControlWrap(radius, height, getMass());
-        Vector3f localForward = actor.getData().getAsVector3f("localForward");
+        Vector3f localForward = entity.getData().getAsVector3f("localForward");
         if (localForward != null) {
             this.innerControl.setLocalForward(localForward);
         }
@@ -234,7 +229,7 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     public void setWalkDirection(Vector3f walkDirection) {
 //        LOG.log(Level.INFO, "setWalkDirection, actor={0}, walkDirection={1}"
 //                , new Object[] {actor.getData().getId(), walkDirection});
-        if (movableAttribute != null && movableAttribute.booleanValue()) {
+        if (movableAttribute != null && movableAttribute.getValue()) {
             innerControl.setWalkDirection(walkDirection);
         }
     }
@@ -244,7 +239,7 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     }
     
     public void setViewDirection(Vector3f viewDirection) {
-        if (rotatableAttribute != null && rotatableAttribute.booleanValue()) {
+        if (rotatableAttribute != null && rotatableAttribute.getValue()) {
             innerControl.setViewDirection(viewDirection);
         }
     }
@@ -332,7 +327,7 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
      */
     public boolean isDead() {
         if (deadAttribute != null) {
-            return deadAttribute.booleanValue();
+            return deadAttribute.getValue();
         }
         return false;
     }
@@ -347,7 +342,7 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
             return false;
         }
         // 如果目标分组值小于或等于0，则始终认为“不”是敌人，这样允许游戏添加一些无害的中立小动物
-        ActorModule targetActorModule = target.getEntityModule().getModule(ActorModule.class);
+        ActorModule targetActorModule = target.getModuleManager().getModule(ActorModule.class);
         if (targetActorModule.getGroup() <= 0) {
             return false;
         }
@@ -469,7 +464,7 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
             // 释放旧目标的listener
             Entity oldTarget = entity.getScene().getEntity(oldValue.longValue());
             if (oldTarget != null) {
-                ActorModule oldTargetActorModule = oldTarget.getEntityModule().getModule(ActorModule.class);
+                ActorModule oldTargetActorModule = oldTarget.getModuleManager().getModule(ActorModule.class);
                 if (oldTargetActorModule != null) {
                     oldTargetActorModule.notifyActorTargetReleasedListener(entity);
                 }
@@ -477,7 +472,7 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
             // 锁定新目标的listener.
             Entity newTarget = entity.getScene().getEntity(newValue.longValue());
             if (newTarget != null) {
-                ActorModule newTargetActorModule = newTarget.getEntityModule().getModule(ActorModule.class);
+                ActorModule newTargetActorModule = newTarget.getModuleManager().getModule(ActorModule.class);
                 if (newTargetActorModule != null) {
                     newTargetActorModule.notifyActorTargetLockedListener(entity);
                 }
@@ -524,7 +519,7 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
      */
     public boolean isEssential() {
         if (essentialAttribute != null) {
-            return essentialAttribute.booleanValue();
+            return essentialAttribute.getValue();
         }
         return false;
     }
@@ -544,7 +539,7 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
      * @return 
      */
     public boolean isBiology() {
-        return biologyAttribute != null && biologyAttribute.booleanValue();
+        return biologyAttribute != null && biologyAttribute.getValue();
     }
     
     /**
@@ -621,7 +616,7 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
      * @return 
      */
     public boolean isMovable() {
-        return movableAttribute != null && movableAttribute.booleanValue();
+        return movableAttribute != null && movableAttribute.getValue();
     }
     
     /**
@@ -639,7 +634,7 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
      * @return 
      */
     public boolean isRotatable() {
-        return rotatableAttribute != null && rotatableAttribute.booleanValue();
+        return rotatableAttribute != null && rotatableAttribute.getValue();
     }
     
     /**
@@ -659,7 +654,7 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
      * @param hitValue apply到指定属性的值，可正可负
      */
     public void applyHit(Entity hitter, String hitAttribute, float hitValue) {
-        NumberAttribute attr = attributeModule.getAttributeByName(hitAttribute, NumberAttribute.class);
+        NumberAttribute attr = entity.getAttributeManager().getAttribute(hitAttribute, NumberAttribute.class);
         if (attr == null) {
             return;
         }
@@ -674,7 +669,7 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
         
         // 通知攻击者，告诉攻击者：你已经击中一个目标。
         if (hitter != null) {
-            ActorModule hitterActorModule = hitter.getEntityModule().getModule(ActorModule.class);
+            ActorModule hitterActorModule = hitter.getModuleManager().getModule(ActorModule.class);
             if (hitterActorModule != null) {
                 hitterActorModule.notifyActorHitOtherListener(entity, hitAttribute, hitValue, killed);
             }

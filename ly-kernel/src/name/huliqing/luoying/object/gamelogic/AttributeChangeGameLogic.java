@@ -9,8 +9,9 @@ import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.GameLogicData;
 import name.huliqing.luoying.layer.network.AttributeNetwork;
+import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.luoying.layer.service.ActorService;
-import name.huliqing.luoying.layer.service.AttributeService;
+import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.entity.Entity;
@@ -23,9 +24,9 @@ import name.huliqing.luoying.object.entity.Entity;
  */
 public class AttributeChangeGameLogic<T extends GameLogicData> extends AbstractGameLogic<T> {
     private final PlayService playService = Factory.get(PlayService.class);
-    private final AttributeService attributeService = Factory.get(AttributeService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
-    private final AttributeNetwork attributeNetwork = Factory.get(AttributeNetwork.class);
+    private final EntityService entityService = Factory.get(EntityService.class);
+    private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
 
     // 指定要修改的角色的属性值,角色必须有这个属性，否则没有意义。
     private String applyAttribute;
@@ -73,20 +74,14 @@ public class AttributeChangeGameLogic<T extends GameLogicData> extends AbstractG
     private void updateAttribute(Entity actor) {
         // useAttribute是角色的已有属性，这个属性的值将影响最终的apply值。
         // 比如角色的属性（生命恢复速度)将影响这个游戏逻辑最终要修改角色生命值的属性。
-        float useAttributeValue = attributeService.getNumberAttributeValue(actor, useAttribute, 0);
+        float useAttributeValue = entityService.getNumberAttributeValue(actor, useAttribute, 0);
         
         float applyValue = (baseValue + useAttributeValue) * interval * speed;
         
         // 注意：applyValue 有可能大于0或小于0,只有等于0时才没有意义（这里用一个接近0的值代替）
         if (Math.abs(applyValue) > 0.0001f) {
-            
-            // remove20160827
-//            applyAttributeData.setDynamicValue(applyAttributeData.getDynamicValue() + applyValue);
-//            attributeService.clampDynamicValue(actor, applyAttributeData.getId());
-//            attributeNetwork.syncAttribute(actor, applyAttributeData.getId()
-//                    , applyAttributeData.getLevelValue(), applyAttributeData.getStaticValue(), applyAttributeData.getDynamicValue());
-         
-            attributeNetwork.addNumberAttributeValue(actor, applyAttribute, applyValue);
+//            attributeNetwork.addNumberAttributeValue(actor, applyAttribute, applyValue);
+            entityNetwork.applyNumberAttributeValue(actor, applyAttribute, applyValue, null);
         }
     }
 }

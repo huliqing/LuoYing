@@ -7,7 +7,7 @@ package name.huliqing.luoying.object.drop;
 
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.DropData;
-import name.huliqing.luoying.layer.network.AttributeNetwork;
+import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.luoying.layer.service.ElService;
 import name.huliqing.luoying.object.el.AttributeEl;
 import name.huliqing.luoying.object.entity.Entity;
@@ -18,8 +18,7 @@ import name.huliqing.luoying.object.entity.Entity;
  */
 public class AttributeDrop extends AbstractDrop {
     private final ElService elService = Factory.get(ElService.class);
-//    private final AttributeService attributeService = Factory.get(AttributeService.class);
-    private final AttributeNetwork attributeNetwork = Factory.get(AttributeNetwork.class);
+    private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
     
     // 属性名
     private String attributeName;
@@ -43,7 +42,9 @@ public class AttributeDrop extends AbstractDrop {
             AttributeEl el = elService.getAttributeEl(attributeEl);
             value += el.getValue(source, target);
         }
-        attributeNetwork.addNumberAttributeValue(target, attributeName, value);
+//        attributeNetwork.addNumberAttributeValue(target, attributeName, value);
+        entityNetwork.applyNumberAttributeValue(target, attributeName, value, source);
+        
         playDropSounds(source);
         return true;
     }

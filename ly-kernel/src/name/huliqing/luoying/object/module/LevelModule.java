@@ -10,7 +10,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.ModuleData;
-import name.huliqing.luoying.layer.service.AttributeService;
 import name.huliqing.luoying.layer.service.ElService;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.attribute.Attribute;
@@ -30,7 +29,6 @@ public class LevelModule extends AbstractModule implements ValueChangeListener<N
 
     private static final Logger LOG = Logger.getLogger(LevelModule.class.getName());
     
-    private final AttributeService attributeService = Factory.get(AttributeService.class);
     private final ElService elService = Factory.get(ElService.class);
 
     // 角色的等级属性名称，这个属性用于存放角色的等级值,当角色的等级变化后会存取在这个属性中。
@@ -74,26 +72,26 @@ public class LevelModule extends AbstractModule implements ValueChangeListener<N
     }
     
     @Override
-    public void initialize(Entity actor) {
-        super.initialize(actor);
+    public void initialize(Entity entity) {
+        super.initialize(entity);
         // 查找角色的等级属性
-        levelAttribute = attributeService.getAttributeByName(actor, bindLevelAttribute);
+        levelAttribute = entity.getAttributeManager().getAttribute(bindLevelAttribute);
         if (levelAttribute == null) {
             LOG.log(Level.WARNING, "levelAttribute not found by bindLevelAttribute={0}, actorId={1}"
-                    , new Object[] {bindLevelAttribute, actor.getData().getId()});
+                    , new Object[] {bindLevelAttribute, entity.getData().getId()});
         }
         
         // 角色的xp属性
-        xpAttribute = attributeService.getAttributeByName(actor, bindXpAttribute);
+        xpAttribute = entity.getAttributeManager().getAttribute(bindXpAttribute);
         if (xpAttribute != null) {
             xpAttribute.addListener(this);
         } else {
             LOG.log(Level.WARNING, "xpAttribute not found by bindXpAttribute={0}, actorId={1}"
-                    , new Object[] {bindXpAttribute, actor.getData().getId()});
+                    , new Object[] {bindXpAttribute, entity.getData().getId()});
         }
         
         // 这个属性用于存放要到达下一个等级所需要的经验值
-        xpNextAttribute = attributeService.getAttributeByName(actor, bindXpNextAttribute);
+        xpNextAttribute = entity.getAttributeManager().getAttribute(bindXpNextAttribute);
         
         // 经验值计算公式。
         xpLevelEl = (LevelEl) elService.getEl(xpLevelElId);
@@ -133,7 +131,7 @@ public class LevelModule extends AbstractModule implements ValueChangeListener<N
         levelAttribute.setValue(newLevel);
         
         // 2.升级其它等级属性,注：只有等级属性(LevelAttribute)才可以升级
-        List<Attribute> attributes = attributeService.getAttributes(entity);
+        List<Attribute> attributes = entity.getAttributeManager().getAttributes();
         for (Attribute attr : attributes) {
             if (attr == levelAttribute || attr == xpAttribute) {
                 continue;

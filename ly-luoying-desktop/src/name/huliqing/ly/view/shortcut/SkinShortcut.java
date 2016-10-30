@@ -27,7 +27,7 @@ public class SkinShortcut extends BaseUIShortcut<SkinData> implements SkinListen
     @Override
     public void initialize() {
         super.initialize();
-        skinModule = actor.getEntityModule().getModule(SkinModule.class);
+        skinModule = actor.getModuleManager().getModule(SkinModule.class);
         skinModule.addSkinListener(this);
     }
 

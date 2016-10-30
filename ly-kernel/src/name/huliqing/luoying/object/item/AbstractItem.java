@@ -7,14 +7,11 @@ package name.huliqing.luoying.object.item;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.constants.ItemConstants;
 import name.huliqing.luoying.data.AttributeMatch;
 import name.huliqing.luoying.data.ItemData;
-import name.huliqing.luoying.layer.service.AttributeService;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.attribute.Attribute;
-import name.huliqing.luoying.object.attribute.MatchAttribute;
 import name.huliqing.luoying.object.effect.Effect;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.sound.SoundManager;
@@ -24,7 +21,6 @@ import name.huliqing.luoying.object.sound.SoundManager;
  */
 public abstract class AbstractItem implements Item {
     private static final Logger LOG = Logger.getLogger(AbstractItem.class.getName());
-    private final AttributeService attributeService = Factory.get(AttributeService.class);
     
     protected ItemData data;
     
@@ -91,7 +87,7 @@ public abstract class AbstractItem implements Item {
         if (data.getMatchAttributes() != null) {
             Attribute attr;
             for (AttributeMatch am : data.getMatchAttributes()) {
-                attr = attributeService.getAttributeByName(actor, am.getAttributeName());
+                attr = actor.getAttributeManager().getAttribute(am.getAttributeName());
                 if (!(attr instanceof MatchAttribute)) {
                     if (LOG.isLoggable(Level.INFO)) {
                         LOG.log(Level.INFO, "Could not useItem, attribute not a MatchAttribute"

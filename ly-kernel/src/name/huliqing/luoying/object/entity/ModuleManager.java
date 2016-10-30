@@ -13,22 +13,22 @@ import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.module.Module;
 
 /**
- * 这个类用来代理管理Entity的模块
+ * Entity模块管理器
  * @author huliqing
  */
-public class EntityModule {
+public class ModuleManager {
     
-    /**
-     * 实体
-     */
+    /** 实体 */
     private final Entity entity;
+    
+    private boolean initialized;
     
     /**
      * Entity的模块列表
      */
     private final SafeArrayList<Module> modules = new SafeArrayList<Module>(Module.class);
     
-    public EntityModule(Entity entity) {
+    public ModuleManager(Entity entity) {
         this.entity = entity;
     }
     
@@ -44,6 +44,10 @@ public class EntityModule {
      * 初始化Entity的所有模块
      */
     public void initialize() {
+        if (initialized) {
+            throw new IllegalStateException("ModuleManager already is initialized! entityId=" + entity.getData().getId());
+        }
+        
         // 载入并初始化所有模块，这里分两步处理:
         // 第一步先添加;
         // 第二步再初始化;
@@ -60,6 +64,12 @@ public class EntityModule {
                 module.initialize(entity);
             }
         }
+        
+        initialized = true;
+    }
+    
+    public boolean isInitialized() {
+        return initialized;
     }
     
     /**
@@ -72,6 +82,7 @@ public class EntityModule {
             modules.get(i).cleanup();
         }
         modules.clear();
+        initialized = false;
     }
     
     /**

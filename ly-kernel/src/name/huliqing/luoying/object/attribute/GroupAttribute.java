@@ -9,15 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.data.AttributeData;
 import name.huliqing.luoying.object.Loader;
-import name.huliqing.luoying.object.module.AttributeModule;
 
 /**
  * 属性组，属性组允许将一系列的属性打包成一个属性。在属性组载入时会把这些子属性一个一个载入到角色中。
  * @author huliqing
  */
-public class GroupAttribute extends AbstractAttribute {
+public class GroupAttribute extends AbstractAttribute<Void> {
 
-    private AttributeModule module;
+    private AttributeManager module;
     
     // 初始配置的属性（id )
     private String[] attributeIds;
@@ -37,10 +36,15 @@ public class GroupAttribute extends AbstractAttribute {
     public void updateDatas() {
         super.updateDatas();
         data.setAttribute("attributesApplied", attributesApplied);
+    }  
+    
+    @Override
+    public Void getValue() {
+        return null;
     }
 
     @Override
-    public void initialize(AttributeModule module) {
+    public void initialize(AttributeManager module) {
         super.initialize(module);
         this.module = module;
         
@@ -87,5 +91,7 @@ public class GroupAttribute extends AbstractAttribute {
         }
         return tempList;
     }
+
+
     
 }

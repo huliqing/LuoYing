@@ -10,7 +10,6 @@ import name.huliqing.luoying.layer.network.ActorNetwork;
 import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.network.SkillNetwork;
 import name.huliqing.luoying.layer.service.ActorService;
-import name.huliqing.luoying.layer.service.AttributeService;
 import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.layer.network.DropNetwork;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
@@ -23,10 +22,9 @@ import name.huliqing.luoying.object.entity.Entity;
 public class HitUtils {
     private final ActorService actorService = Factory.get(ActorService.class);
     private final DropNetwork dropNetwork = Factory.get(DropNetwork.class);
-    private final AttributeService attributeService = Factory.get(AttributeService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
-    private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
+//    private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     
     private final static HitUtils INSTANCE = new HitUtils();
@@ -46,7 +44,7 @@ public class HitUtils {
      */
     public void applyHit(Entity attacker, Entity target, String hitAttrName, float hitFinalValue) {
         
-        NumberAttribute attribute = attributeService.getAttributeByName(target, hitAttrName);
+        NumberAttribute attribute = target.getAttributeManager().getAttribute(hitAttrName, NumberAttribute.class);
         if (attribute == null)
             return;
         

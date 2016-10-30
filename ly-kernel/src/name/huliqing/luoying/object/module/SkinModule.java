@@ -16,7 +16,6 @@ import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.SkinData;
 import name.huliqing.luoying.data.ModuleData;
 import name.huliqing.luoying.object.Loader;
-import name.huliqing.luoying.layer.service.AttributeService;
 import name.huliqing.luoying.object.attribute.CollectionAttribute;
 import name.huliqing.luoying.object.define.DefineFactory;
 import name.huliqing.luoying.object.entity.Entity;
@@ -30,8 +29,6 @@ import name.huliqing.luoying.object.skin.WeaponSkin;
  */
 public class SkinModule extends AbstractModule {
     private static final Logger LOG = Logger.getLogger(SkinModule.class.getName());
-    
-    private final AttributeService attributeService = Factory.get(AttributeService.class);
     
     // 监听角色装备、武器等的穿脱
     private List<SkinListener> skinListeners;
@@ -67,15 +64,15 @@ public class SkinModule extends AbstractModule {
     }
     
     @Override
-    public void initialize(Entity actor) {
-        super.initialize(actor); 
+    public void initialize(Entity entity) {
+        super.initialize(entity); 
         
         if (bindWeaponSlotAttribute != null) {
-            weaponSlotAttribute = attributeService.getAttributeByName(actor, bindWeaponSlotAttribute);
+            weaponSlotAttribute = entity.getAttributeManager().getAttribute(bindWeaponSlotAttribute);
         }
         
         // 穿上普通装备
-        List<SkinData> skinDatas =  actor.getData().getObjectDatas(SkinData.class, null);
+        List<SkinData> skinDatas =  entity.getData().getObjectDatas(SkinData.class, null);
         if (skinDatas != null && !skinDatas.isEmpty()) {
             skinAll = new SafeArrayList<Skin>(Skin.class);
             for (SkinData sd : skinDatas) {

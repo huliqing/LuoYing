@@ -109,6 +109,6 @@ public class ActionServiceImpl implements ActionService {
     }
     
     private ActionModule getActionModule(Entity actor) {
-        return actor.getEntityModule().getModule(ActionModule.class);
+        return actor.getModuleManager().getModule(ActionModule.class);
     }
 }

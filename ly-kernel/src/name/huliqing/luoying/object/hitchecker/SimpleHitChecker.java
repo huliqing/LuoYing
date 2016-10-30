@@ -68,14 +68,14 @@ public class SimpleHitChecker<T extends HitCheckerData> extends AbstractHitCheck
     
     @Override
     public boolean canHit(Entity source, Entity target) {
-        ActorModule targetActorModule = target.getEntityModule().getModule(ActorModule.class);
+        ActorModule targetActorModule = target.getModuleManager().getModule(ActorModule.class);
         if (targetActorModule == null)
             return false;
         
         // 注意：因为source有可能为null,举例来说，比如：magic有可能是没有施放者的
         // 也就没有source
         if (source != null) {
-            int sourceGroup = source.getEntityModule().getModule(ActorModule.class).getGroup();
+            int sourceGroup = source.getModuleManager().getModule(ActorModule.class).getGroup();
             // 判断是否符合分组
             if (group == Group.s && sourceGroup != targetActorModule.getGroup()) {
                 return false;

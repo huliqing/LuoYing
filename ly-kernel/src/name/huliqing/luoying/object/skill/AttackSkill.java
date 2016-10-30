@@ -71,8 +71,8 @@ public class AttackSkill extends HitSkill {
     @Override
     public void setActor(Entity actor) {
         super.setActor(actor);
-        actorModule = actor.getEntityModule().getModule(ActorModule.class);
-        skinModule = actor.getEntityModule().getModule(SkinModule.class);
+        actorModule = actor.getModuleManager().getModule(ActorModule.class);
+        skinModule = actor.getModuleManager().getModule(SkinModule.class);
     }
 
     @Override
@@ -175,7 +175,7 @@ public class AttackSkill extends HitSkill {
      */
     protected void doDefendResult(Entity target) {
         int mat1 = getWeaponMat(skinModule);
-        int mat2 = getWeaponMat(target.getEntityModule().getModule(SkinModule.class));
+        int mat2 = getWeaponMat(target.getModuleManager().getModule(SkinModule.class));
         if (mat1 < 0 || mat2 < 0) {
             return;
         }

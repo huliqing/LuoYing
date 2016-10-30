@@ -6,14 +6,14 @@
 package name.huliqing.luoying.object.attribute;
 
 import name.huliqing.luoying.data.AttributeData;
-import name.huliqing.luoying.object.module.AttributeModule;
 import name.huliqing.luoying.xml.DataProcessor;
 
 /**
  * 属性接口定义
  * @author huliqing
+ * @param <T>
  */
-public interface Attribute extends DataProcessor<AttributeData> {
+public interface Attribute<T> extends DataProcessor<AttributeData> {
 
     @Override
     public void setData(AttributeData data);
@@ -21,14 +21,17 @@ public interface Attribute extends DataProcessor<AttributeData> {
     @Override
     public AttributeData getData();
 
+    /**
+     * 更新属性值到Data中，以便存档
+     */
     @Override
     public void updateDatas();
     
      /**
      * 初始化属性
-     * @param module
+     * @param am
      */
-    void initialize(AttributeModule module);
+    void initialize(AttributeManager am);
     
     /**
      * 判断属性是否已经初始化
@@ -53,4 +56,22 @@ public interface Attribute extends DataProcessor<AttributeData> {
      */
     String getName();
     
+    /**
+     * 获取属性值
+     * @return 
+     */
+    T getValue();
+    
+    /**
+     * 添加值变侦听器
+     * @param listener 
+     */
+    void addListener(ValueChangeListener<T> listener);
+    
+    /**
+     * 移除值变侦听器
+     * @param listener
+     * @return 
+     */
+    boolean removeListener(ValueChangeListener<T> listener);
 }

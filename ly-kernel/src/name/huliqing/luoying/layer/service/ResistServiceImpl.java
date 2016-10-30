@@ -21,7 +21,7 @@ public class ResistServiceImpl implements ResistService {
 
     @Override
     public float getResist(Entity actor, String stateId) {
-        ResistModule module = actor.getEntityModule().getModule(ResistModule.class);
+        ResistModule module = actor.getModuleManager().getModule(ResistModule.class);
         if (module != null) {
             Resist resist = module.getResist();
             if (resist != null) {

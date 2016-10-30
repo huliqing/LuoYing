@@ -6,8 +6,8 @@ package name.huliqing.luoying.object.talent;
 
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.TalentData;
-import name.huliqing.luoying.layer.service.AttributeService;
 import name.huliqing.luoying.layer.service.ElService;
+import name.huliqing.luoying.layer.service.EntityService;
 
 /**
  * 属性类型的天赋，这种天赋可以增加或减少角色的属性值。
@@ -16,7 +16,7 @@ import name.huliqing.luoying.layer.service.ElService;
  */
 public class AttributeTalent<T extends TalentData> extends AbstractTalent<T> {
     private final ElService elService = Factory.get(ElService.class);
-    private final AttributeService attributeService = Factory.get(AttributeService.class);
+    private final EntityService entityService = Factory.get(EntityService.class);
 
     protected String applyAttribute;
     protected String levelEl;
@@ -50,7 +50,7 @@ public class AttributeTalent<T extends TalentData> extends AbstractTalent<T> {
         
         if (!attributeApplied) {
             applyValue = elService.getLevelEl(levelEl, level); 
-            attributeService.addNumberAttributeValue(actor, applyAttribute, applyValue);
+            entityService.applyNumberAttributeValue(actor, applyAttribute, applyValue, null);
             attributeApplied = true;
             updateData();
         }
@@ -59,7 +59,8 @@ public class AttributeTalent<T extends TalentData> extends AbstractTalent<T> {
     @Override
     public void cleanup() {
         if (attributeApplied) {
-            attributeService.addNumberAttributeValue(actor, applyAttribute, -applyValue);
+//            actor.getAttributeManager().addNumberAttributeValue(applyAttribute, -applyValue);
+            entityService.applyNumberAttributeValue(actor, applyAttribute, -applyValue, null);
             attributeApplied = false;
             updateData();
         }

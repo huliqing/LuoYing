@@ -29,7 +29,7 @@ public class ResetSkill extends AbstractSkill {
     @Override
     public void setActor(Entity actor) {
         super.setActor(actor); 
-        channelModule = actor.getEntityModule().getModule(ChannelModule.class);
+        channelModule = actor.getModuleManager().getModule(ChannelModule.class);
     }
 
     @Override

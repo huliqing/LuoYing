@@ -1,9 +1,6 @@
 package name.huliqing.luoying.object.attribute;
 
 import name.huliqing.luoying.data.AttributeData;
-import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.module.AttributeListener;
-import name.huliqing.luoying.object.module.AttributeModule;
 
 /**
  * 可限制取值范围的属性,可以通过设置minValue,maxValue来直接限制当前值的取值范围，
@@ -59,7 +56,7 @@ public class LimitIntegerAttribute extends IntegerAttribute implements LimitAttr
     }
 
     @Override
-    public void initialize(AttributeModule module) {
+    public void initialize(AttributeManager module) {
         super.initialize(module);
         // 监听attributeModule，当module添加或减少属性时要重新获取绑定minLimitAttribute，maxLimitAttribute属性。
         // 注：只有在minLimitAttributeName或maxLimitAttributeName存在的情况下才需要这么做。
@@ -74,12 +71,12 @@ public class LimitIntegerAttribute extends IntegerAttribute implements LimitAttr
         // 2.如果minLimitAttributeName所指定的属性已经在当前属性之前已经载入，
         // 则触发器不会触发到（onAttributeAdded）, 所以这里也不能省略。
         if (bindMinLimitAttribute != null) {
-            bindMinLimitAttribute(module.getAttributeByName(bindMinLimitAttribute, null));
+            bindMinLimitAttribute(module.getAttribute(bindMinLimitAttribute, null));
         }
         
         // 同上
         if (bindMaxLimitAttribute != null) {
-            bindMaxLimitAttribute(module.getAttributeByName(bindMaxLimitAttribute, null));
+            bindMaxLimitAttribute(module.getAttribute(bindMaxLimitAttribute, null));
         }
         
         // 初始化值并触发一次侦听器
@@ -125,7 +122,7 @@ public class LimitIntegerAttribute extends IntegerAttribute implements LimitAttr
     // 监听attributeModule是否添加了新的属性，如果新添加的属性刚好与当前属性需要用来限制值大小的属性名称一致，
     // 则需要重新绑定这些属性
     @Override
-    public void onAttributeAdded(Entity actor, Attribute attribute) {
+    public void onAttributeAdded(AttributeManager actor, Attribute attribute) {
         if (attribute == this)
             return;
         
@@ -140,7 +137,7 @@ public class LimitIntegerAttribute extends IntegerAttribute implements LimitAttr
     // 监听attributeModule是否移除了属性，如果移除的属性刚好是当前需要用来限制值大小的属性，
     // 则需要移除对这些属性的侦听,因为这些属性已经移除，则不能再用它们来限制当前属性的值大小。
     @Override
-    public void onAttributeRemoved(Entity actor, Attribute otherAttribute) {
+    public void onAttributeRemoved(AttributeManager actor, Attribute otherAttribute) {
         if (otherAttribute == this) {
             if (minLimitAttribute != null) {
                 minLimitAttribute.removeListener(this);

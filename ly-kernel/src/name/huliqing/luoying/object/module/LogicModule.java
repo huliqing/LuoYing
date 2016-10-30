@@ -12,7 +12,6 @@ import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.LogicData;
 import name.huliqing.luoying.data.ModuleData;
 import name.huliqing.luoying.layer.service.ActorService;
-import name.huliqing.luoying.layer.service.AttributeService;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.logic.Logic;
 import name.huliqing.luoying.object.attribute.BooleanAttribute;
@@ -24,7 +23,6 @@ import name.huliqing.luoying.object.entity.Entity;
  */
 public class LogicModule extends AbstractModule {
     private final ActorService actorService = Factory.get(ActorService.class);
-    private final AttributeService attributeService = Factory.get(AttributeService.class);
 
     private Control updateControl;
     private final SafeArrayList<Logic> logics = new SafeArrayList<Logic>(Logic.class);
@@ -50,8 +48,8 @@ public class LogicModule extends AbstractModule {
     }
     
     @Override
-    public void initialize(Entity actor) {
-        super.initialize(actor);
+    public void initialize(Entity entity) {
+        super.initialize(entity);
         updateControl = new AdapterControl() {
             @Override
             public void update(float tpf) {logicUpdate(tpf);}
@@ -59,12 +57,12 @@ public class LogicModule extends AbstractModule {
         this.entity.getSpatial().addControl(updateControl);
         
         // 绑定“自动AI”属性
-        autoLogicAttribute = attributeService.getAttributeByName(actor, bindAutoLogicAttribute);
+        autoLogicAttribute = entity.getAttributeManager().getAttribute(bindAutoLogicAttribute);
         // 自动侦察敌人
-        autoDetectAttribute = attributeService.getAttributeByName(actor, bindAutoDetectAttribute);
+        autoDetectAttribute = entity.getAttributeManager().getAttribute(bindAutoDetectAttribute);
         
         // 载入逻辑
-        List<LogicData> logicDatas = actor.getData().getObjectDatas(LogicData.class, null);
+        List<LogicData> logicDatas = entity.getData().getObjectDatas(LogicData.class, null);
         if (logicDatas != null) {
             for (LogicData ld : logicDatas) {
                 addLogic((Logic) Loader.load(ld));
@@ -127,7 +125,7 @@ public class LogicModule extends AbstractModule {
      */
     public boolean isAutoLogic() {
         if (autoLogicAttribute != null) {
-            return autoLogicAttribute.booleanValue();
+            return autoLogicAttribute.getValue();
         }
         return false;
     }
@@ -148,7 +146,7 @@ public class LogicModule extends AbstractModule {
      */
     public boolean isAutoDetect() {
         if (autoDetectAttribute != null) {
-            return autoDetectAttribute.booleanValue();
+            return autoDetectAttribute.getValue();
         }
         return false;
     }

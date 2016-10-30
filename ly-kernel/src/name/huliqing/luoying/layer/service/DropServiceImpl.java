@@ -29,7 +29,7 @@ public class DropServiceImpl implements DropService {
 
     @Override
     public void addDrop(Entity actor, String dropId) {
-        DropModule module = actor.getEntityModule().getModule(DropModule.class);
+        DropModule module = actor.getModuleManager().getModule(DropModule.class);
         if (module != null) {
             module.addDrop((Drop)Loader.load(dropId));
         }
@@ -37,7 +37,7 @@ public class DropServiceImpl implements DropService {
 
     @Override
     public void doDrop(Entity source, Entity target) {
-        DropModule module = source.getEntityModule().getModule(DropModule.class);
+        DropModule module = source.getModuleManager().getModule(DropModule.class);
         if (module != null) {
             module.doDrop(target);
         }

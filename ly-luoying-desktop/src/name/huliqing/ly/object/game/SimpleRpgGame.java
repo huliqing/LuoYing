@@ -127,7 +127,7 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
                 || actorService.isDead(temp) 
                 || !actorService.isEnemy(temp, player)
                 ) {
-            float distance = player.getEntityModule().getModule(ActorModule.class).getViewDistance() * 2;
+            float distance = player.getModuleManager().getModule(ActorModule.class).getViewDistance() * 2;
             temp = actorService.findNearestEnemyExcept(player, distance, null);
             
             // 需要
