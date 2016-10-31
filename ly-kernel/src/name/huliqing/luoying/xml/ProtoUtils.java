@@ -66,7 +66,8 @@ class ProtoUtils {
             throw new IllegalStateException("Proto could not extends self! proto=" + proto + ", extends parent=" + parent);
         }
             
-//        // 限制不同DataType类型的继承，以避免复杂性,以防止死继承
+        // remove201608xx, 以后不再有DataType.
+//        // 限制不同DataType类型的继承，以减少复杂性,以防止死继承
 //        if (proto.getDataType() != parent.getDataType()) {
 //            throw new UnsupportedOperationException("Unsupported difference DataType extends! proto={0}" + proto + ", parentProto=" + parent);
 //        }

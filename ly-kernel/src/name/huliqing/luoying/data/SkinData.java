@@ -4,6 +4,7 @@
  */
 package name.huliqing.luoying.data;
 
+import name.huliqing.luoying.xml.ObjectData;
 import com.jme3.export.InputCapsule;
 import com.jme3.export.JmeExporter;
 import com.jme3.export.JmeImporter;
@@ -25,18 +26,12 @@ public class SkinData extends ObjectData implements MatObject, CostObject {
     // 装备应用到目标身上时对目标属性的影响
     private List<AttributeApply> applyAttributes;
     
-    // 属性限制
-    private List<AttributeMatch> matchAttributes;
-    
     @Override
     public void write(JmeExporter ex) throws IOException {
         super.write(ex);
         OutputCapsule oc = ex.getCapsule(this);
         if (applyAttributes != null) {
             oc.writeSavableArrayList(new ArrayList<AttributeApply>(applyAttributes), "applyAttributes", null);
-        }
-        if (matchAttributes != null) {
-            oc.writeSavableArrayList(new ArrayList<AttributeMatch>(matchAttributes), "matchAttributes", null);
         }
     }
     
@@ -45,7 +40,6 @@ public class SkinData extends ObjectData implements MatObject, CostObject {
         super.read(im);
         InputCapsule ic = im.getCapsule(this);
         applyAttributes = ic.readSavableArrayList("applyAttributes", null);
-        matchAttributes = ic.readSavableArrayList("matchAttributes", null);
     }
     
     public List<AttributeApply> getApplyAttributes() {
@@ -78,22 +72,6 @@ public class SkinData extends ObjectData implements MatObject, CostObject {
 //        return ResourceManager.get(ResConstants.COMMON_UNKNOW);
 //    }
 
-    /**
-     * 获取属性限制
-     * @return 
-     */
-    public List<AttributeMatch> getMatchAttributes() {
-        return matchAttributes;
-    }
-
-    /**
-     * 设置使用物品时的属性限制。
-     * @param matchAttributes 
-     */
-    public void setMatchAttributes(List<AttributeMatch> matchAttributes) {
-        this.matchAttributes = matchAttributes;
-    }
-    
     /**
      * 获取模型文件路径如："Models/xyz.j3o";
      * @return 

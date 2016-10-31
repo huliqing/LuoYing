@@ -8,6 +8,7 @@ import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.TalentData;
 import name.huliqing.luoying.layer.service.ElService;
 import name.huliqing.luoying.layer.service.EntityService;
+import name.huliqing.luoying.object.el.LevelEl;
 
 /**
  * 属性类型的天赋，这种天赋可以增加或减少角色的属性值。
@@ -18,8 +19,9 @@ public class AttributeTalent<T extends TalentData> extends AbstractTalent<T> {
     private final ElService elService = Factory.get(ElService.class);
     private final EntityService entityService = Factory.get(EntityService.class);
 
-    protected String applyAttribute;
-    protected String levelEl;
+    protected String bindAttribute;
+    // valueLevelEl计算出的值会添加到bindAttribute上
+    protected LevelEl valueLevelEl;
     
     // ----
     private float applyValue;
@@ -31,8 +33,11 @@ public class AttributeTalent<T extends TalentData> extends AbstractTalent<T> {
     @Override
     public void setData(T data) {
         super.setData(data); 
-        this.applyAttribute = data.getAsString("applyAttribute");
-        this.levelEl = data.getAsString("levelEl");
+        this.bindAttribute = data.getAsString("bindAttribute");
+        String temp = data.getAsString("valueLevelEl");
+        if (temp != null) {
+            valueLevelEl = elService.createLevelEl(temp);
+        }
         this.attributeApplied = data.getAsBoolean("attributeApplied", attributeApplied);
     }
     
@@ -49,8 +54,8 @@ public class AttributeTalent<T extends TalentData> extends AbstractTalent<T> {
         super.initialize();
         
         if (!attributeApplied) {
-            applyValue = elService.getLevelEl(levelEl, level); 
-            entityService.applyNumberAttributeValue(actor, applyAttribute, applyValue, null);
+            applyValue = valueLevelEl.setLevel(level).getValue().floatValue();
+            entityService.applyNumberAttributeValue(actor, bindAttribute, applyValue, null);
             attributeApplied = true;
             updateData();
         }
@@ -59,8 +64,7 @@ public class AttributeTalent<T extends TalentData> extends AbstractTalent<T> {
     @Override
     public void cleanup() {
         if (attributeApplied) {
-//            actor.getAttributeManager().addNumberAttributeValue(applyAttribute, -applyValue);
-            entityService.applyNumberAttributeValue(actor, applyAttribute, -applyValue, null);
+            entityService.applyNumberAttributeValue(actor, bindAttribute, -applyValue, null);
             attributeApplied = false;
             updateData();
         }

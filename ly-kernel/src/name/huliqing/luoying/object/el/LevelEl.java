@@ -1,58 +1,46 @@
 /*
- * To change this template, choose Tools | Templates
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package name.huliqing.luoying.object.el;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import name.huliqing.luoying.data.ElData;
+import javax.el.ELContext;
 
 /**
- * 为等级生成相应的数值
+ * 用于计算等级值的表达式, 通过传递一个等级值，这个表达式将返回一个计算后的等级值(Number)。<br>
+ * 支持参数：level, 使用示例：<br>
+ * #{level * 2} <br>
+ * #{level * 2 + 3 * Math:pow(1.06, level)} <br>
+ * #{level}<br>
+ * 使用示例：
+ * <code>
+ * <pre>
+ * LevelEl el = elService.createLevelEl(xxx);
+ * el.setLevel(levelValue);
+ * Number result = el.getValue();
+ * </pre>
+ * </code>
+ * 
  * @author huliqing
- * @param <T>
  */
-public class LevelEl<T extends ElData> extends AbstractEl<T> {
+public class LevelEl extends AbstractEl<Number>{
+
+    private final SimpleElContext elContext = new SimpleElContext();
     
-    // key = 参数名
-    private final Map<String, Object> valueMap = new HashMap<String, Object>(1);
-    
-    // 因为表达式不会在运行过程中发生变化，所以对于levelEl来说是可以进行缓存的。
-    // 缓存的最高数量不会超过系统定义的最高等级数
-    private final Map<Integer, Float> cacheMap = new HashMap<Integer, Float>();
+    @Override
+    protected ELContext getELContext() {
+        return elContext;
+    }
     
     /**
-     * 获取等级值，如果找不到指定的等级值，则该方法始终返回0.
+     * 设置等级
      * @param level
      * @return 
      */
-    public synchronized float getValue(int level) {
-        // 先从缓存中获取
-        Float result = cacheMap.get(level);
-        if (result != null) {
-            return result;
-        }
-        
-        valueMap.put("level", level);
-        String strResult = eval(valueMap);
-        if (strResult != null) {
-            try {
-                
-                result = Float.parseFloat(strResult);
-                cacheMap.put(level, result);
-                return result;
-                
-            } catch (NumberFormatException nfe) {
-                Logger.getLogger(LevelEl.class.getName())
-                        .log(Level.WARNING
-                        , "Could not convert to float! el={0}, evalResult={1}"
-                        , new Object[] {data, strResult});
-            }
-        }
-        return 0;
+    public LevelEl setLevel(int level) {
+        elContext.setBaseValue("level", level);
+        return this;
     }
     
 }

@@ -5,7 +5,6 @@
  */
 package name.huliqing.luoying.object.attribute;
 
-import name.huliqing.luoying.object.entity.EntityAttributeManager;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.AttributeData;
 import name.huliqing.luoying.layer.service.ElService;
@@ -28,12 +27,10 @@ public class LevelIntegerAttribute extends IntegerAttribute implements LevelAttr
     // 动态值可以进行随时改变
     private int dynamicValue;
     
-    // 等级公式id,通过这个id来创建一条等级公式
-    private String levelEl;
+    // 等级公式,通过这个id来创建一条等级公式
+    private LevelEl levelEl;
     // 当前等级
     private int level;
-    // 用levelEl创建后的等级公式
-    private LevelEl el;
 
     @Override
     public void setData(AttributeData data) {
@@ -41,7 +38,7 @@ public class LevelIntegerAttribute extends IntegerAttribute implements LevelAttr
         levelValue = data.getAsInteger("levelValue", levelValue);
         dynamicValue = data.getAsInteger("dynamicValue", dynamicValue);
         level = data.getAsInteger("level", level);
-        levelEl = data.getAsString("levelEl", levelEl);
+        levelEl = elService.createLevelEl(data.getAsString("levelEl"));
     }
     
     @Override
@@ -50,8 +47,6 @@ public class LevelIntegerAttribute extends IntegerAttribute implements LevelAttr
         data.setAttribute("levelValue", levelValue);
         data.setAttribute("dynamicValue", dynamicValue);
         data.setAttribute("level", level);
-        // levelEl不会改变，所以不需要重新设置回去。
-//        data.setAttribute("levelEl", levelEl); 
     }
     
     @Override
@@ -66,9 +61,7 @@ public class LevelIntegerAttribute extends IntegerAttribute implements LevelAttr
     @Override
     public final void setLevel(int level) {
         this.level = level;
-        if (el != null) {
-            levelValue = (int) el.getValue(level);
-        }
+        levelValue =levelEl.setLevel(level).getValue().intValue();
         setValue(levelValue + dynamicValue);
     }
     
@@ -96,12 +89,7 @@ public class LevelIntegerAttribute extends IntegerAttribute implements LevelAttr
     public void initialize(AttributeManager module) {
         super.initialize(module);
         // 初始化时只处理等级值，动态值由程序运行时去操作。
-        if (levelEl != null) {
-            el = (LevelEl) elService.getEl(levelEl);
-        }
-        if (el != null) {
-            levelValue = (int) el.getValue(level);
-        }
+        levelValue = levelEl.setLevel(level).getValue().intValue();
         // 设置值并在可能值变的情况下触发侦听器,当有其它属性绑定了当前属性时，这个值变侦听很重要。
         setValue(levelValue + dynamicValue);
     }

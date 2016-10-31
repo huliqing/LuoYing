@@ -27,12 +27,11 @@ public class LevelFloatAttribute extends FloatAttribute implements LevelAttribut
     // 动态值可以进行随时改变
     private float dynamicValue;
     
-    // 等级公式id,通过这个id来创建一条等级公式
-    private String levelEl;
+    // 等级公式,通过这个id来创建一条等级公式
+    private LevelEl levelEl;
     // 当前等级
     private int level;
-    // 用levelEl创建后的等级公式
-    private LevelEl el;
+
 
     @Override
     public void setData(AttributeData data) {
@@ -40,7 +39,7 @@ public class LevelFloatAttribute extends FloatAttribute implements LevelAttribut
         levelValue = data.getAsFloat("levelValue", levelValue);
         dynamicValue = data.getAsFloat("dynamicValue", dynamicValue);
         level = data.getAsInteger("level", level);
-        levelEl = data.getAsString("levelEl", levelEl);
+        levelEl = elService.createLevelEl(data.getAsString("levelEl"));
     }
     
     @Override
@@ -49,7 +48,6 @@ public class LevelFloatAttribute extends FloatAttribute implements LevelAttribut
         data.setAttribute("levelValue", levelValue);
         data.setAttribute("dynamicValue", dynamicValue);
         data.setAttribute("level", level);
-//        data.setAttribute("levelEl", levelEl); // levelEl不会改变，所以不需要重新设置回去。
     }
     
     @Override
@@ -64,9 +62,7 @@ public class LevelFloatAttribute extends FloatAttribute implements LevelAttribut
     @Override
     public final void setLevel(int level) {
         this.level = level;
-        if (el != null) {
-            levelValue = (int) el.getValue(level);
-        }
+        levelValue = levelEl.setLevel(level).getValue().floatValue();
         setValue(levelValue + dynamicValue);
     }
     
@@ -94,13 +90,7 @@ public class LevelFloatAttribute extends FloatAttribute implements LevelAttribut
     public void initialize(AttributeManager module) {
         super.initialize(module);
         // 初始化时只处理等级值，动态值由程序运行时去操作。
-        if (levelEl != null) {
-            el = (LevelEl) elService.getEl(levelEl);
-        }
-        if (el != null) {
-            levelValue = el.getValue(level);
-        }
-        
+        levelValue = levelEl.setLevel(level).getValue().floatValue();
         // 设置值并在可能值变的情况下触发侦听器,当有其它属性绑定了当前属性时，这个值变侦听很重要。
         setValue(levelValue + dynamicValue);
     }

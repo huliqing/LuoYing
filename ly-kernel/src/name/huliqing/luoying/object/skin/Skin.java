@@ -10,6 +10,7 @@ import name.huliqing.luoying.xml.DataProcessor;
 import name.huliqing.luoying.object.entity.Entity;
 
 /**
+ * 皮肤、装备，可以是普通皮肤或者是武器。
  * @author huliqing
  */
 public interface Skin extends DataProcessor<SkinData> {

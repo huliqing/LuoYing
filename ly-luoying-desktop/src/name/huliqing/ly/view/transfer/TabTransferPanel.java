@@ -7,7 +7,7 @@ package name.huliqing.ly.view.transfer;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.constants.InterfaceConstants;
-import name.huliqing.luoying.data.ObjectData;
+import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.luoying.object.item.Item;
 import name.huliqing.luoying.object.skin.Skin;
 import name.huliqing.luoying.object.skin.Weapon;

@@ -9,7 +9,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.network.HostedConnection;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.LuoYing;
-import name.huliqing.luoying.data.ObjectData;
+import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.luoying.layer.service.ActionService;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.object.SyncData;

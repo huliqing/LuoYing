@@ -5,6 +5,15 @@
     xmlns='http://luoying.huliqing.name'
     xsi:schemaLocation='http://luoying.huliqing.name meta/el.xsd'>
     
+    <!--==========================================================================-->
+    <!--空的El,内置用于支持在程序中动态创建El时替换表达式-->
+    <!--==========================================================================-->
+    
+    <elCheck id="sysElCheckEmpty" expression="" />
+    <elHitCheck id="sysElHitCheckEmpty" expression="" />
+    <elHit id="sysElHitEmpty" expression="" />
+    <elLevel id="sysElLevelEmpty" expression=""/>
+    
 <!--    =====================================================================
     角色经验公式:配置给角色，计算角色在升到指定等级时需要的经验值。即表示从
     等级 leve - 1 升级到 level 时需要的经验值。

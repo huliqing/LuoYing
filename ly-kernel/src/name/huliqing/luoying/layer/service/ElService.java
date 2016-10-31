@@ -5,9 +5,10 @@
 package name.huliqing.luoying.layer.service;
 
 import name.huliqing.luoying.Inject;
-import name.huliqing.luoying.object.el.El;
+import name.huliqing.luoying.object.el.HitCheckEl;
 import name.huliqing.luoying.object.el.HitEl;
-import name.huliqing.luoying.object.el.AttributeEl;
+import name.huliqing.luoying.object.el.LevelEl;
+import name.huliqing.luoying.object.el.CheckEl;
 
 /**
  *
@@ -16,33 +17,31 @@ import name.huliqing.luoying.object.el.AttributeEl;
 public interface ElService extends Inject{
     
     /**
-     * 获取指定ID的EL
-     * @param elId
+     * 载入一条CheckEl，参数可能是elId或是一条CheckEl，如: #{!source.attributeDead}
+     * @param idOrExpression
      * @return 
      */
-    El getEl(String elId);
+    CheckEl createCheckEl(String idOrExpression);
     
     /**
-     * 给定一个levelEl的id及等级来获取等级值。注：levelElId就跟名字一样，必
-     * 须是一个elLevel类型的等级公式。
-     * @param levelElId
-     * @param level
+     * 载入一条HitCheckEl, 参数可以是elId或是一条HitCheckEl表达式, 如：#{source.attributeGroup != target.attributeGroup}
+     * @param idOrExpression
      * @return 
      */
-    float getLevelEl(String levelElId, int level);
+    HitCheckEl createHitCheckEl(String idOrExpression);
     
     /**
-     * 获取一个经验掉落公式
-     * @param id
+     * 载入一条HitEl, 参数可以是elId或是一条HitEl表达式, 如：#{source.attributeAttack - target.attributeDefense}
+     * @param idOrExpression
      * @return 
      */
-    AttributeEl getAttributeEl(String id);
-
+    HitEl createHitEl(String idOrExpression);
+    
     /**
-     * 获取一个HitEl.
-     * @param id
+     * 载入一条LevelEl, 参数可以是elId或是一条LevelEl表达式，如: #{level * 2}
+     * @param idOrExpression
      * @return 
      */
-    HitEl getHitEl(String id);
+    LevelEl createLevelEl(String idOrExpression);
     
 }

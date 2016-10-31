@@ -4,12 +4,13 @@
  */
 package name.huliqing.luoying.layer.service;
 
-import java.util.HashMap;
+import name.huliqing.luoying.constants.IdConstants;
 import name.huliqing.luoying.object.Loader;
-import name.huliqing.luoying.object.el.El;
+import name.huliqing.luoying.object.el.ElFactory;
+import name.huliqing.luoying.object.el.HitCheckEl;
 import name.huliqing.luoying.object.el.HitEl;
 import name.huliqing.luoying.object.el.LevelEl;
-import name.huliqing.luoying.object.el.AttributeEl;
+import name.huliqing.luoying.object.el.CheckEl;
 
 /**
  *
@@ -17,42 +18,53 @@ import name.huliqing.luoying.object.el.AttributeEl;
  */
 public class ElServiceImpl implements ElService {
     
-    // 缓存el处理器
-    private final static HashMap<String, El> EL_MAP = new HashMap<String, El>();
-    
     @Override
     public void inject() {
         // ignore
     }
-    
+
     @Override
-    public El getEl(String elId) {
-        
-        El el = EL_MAP.get(elId);
-        if (el == null) {
-            el = Loader.load(elId);
-            if (el == null) {
-                throw new NullPointerException("Could not find el, elId=" + elId);
-            }
-            EL_MAP.put(elId, el);
+    public CheckEl createCheckEl(String idOrExpression) {
+        if (ElFactory.isElExpression(idOrExpression)) {
+            CheckEl el = Loader.load(IdConstants.SYS_EL_CHECK);
+            el.setExpression(idOrExpression);
+            return el;
+        } else {
+            return Loader.load(idOrExpression);
         }
-        return el;
-    }
-
-    @Override
-    public float getLevelEl(String levelElId, int level) {
-        LevelEl el = (LevelEl) getEl(levelElId);
-        return (float) el.getValue(level);
-    }
-
-    @Override
-    public AttributeEl getAttributeEl(String id) {
-        return (AttributeEl) getEl(id);
     }
     
     @Override
-    public HitEl getHitEl(String id) {
-        return (HitEl) getEl(id);
+    public HitCheckEl createHitCheckEl(String idOrExpression) {
+        if (ElFactory.isElExpression(idOrExpression)) {
+            HitCheckEl el = Loader.load(IdConstants.SYS_EL_HIT_CHECK_EMPTY);
+            el.setExpression(idOrExpression);
+            return el;
+        } else {
+            return Loader.load(idOrExpression);
+        }
+    }
+
+    @Override
+    public HitEl createHitEl(String idOrExpression) {
+        if (ElFactory.isElExpression(idOrExpression)) {
+            HitEl el = Loader.load(IdConstants.SYS_EL_HIT_EMPTY);
+            el.setExpression(idOrExpression);
+            return el;
+        } else {
+            return Loader.load(idOrExpression);
+        }
+    }
+
+    @Override
+    public LevelEl createLevelEl(String idOrExpression) {
+        if (ElFactory.isElExpression(idOrExpression)) {
+            LevelEl el = Loader.load(IdConstants.SYS_EL_LEVEL_EMPTY);
+            el.setExpression(idOrExpression);
+            return el;
+        } else {
+            return Loader.load(idOrExpression);
+        }
     }
 
 }

@@ -16,14 +16,14 @@ import name.huliqing.luoying.LuoYingException;
 import org.xml.sax.SAXException;
 
 /**
- * 管理数据的各种加载和处理的工厂类
+ * 数据总管
  * @author huliqing
  */
 public class DataFactory {
     private static final Logger LOG = Logger.getLogger(DataFactory.class.getName());
     
-    // TagName -> ProtoData,用于注册自定义的数据容器
-    private final static Map<String, Class<? extends ProtoData>> TAG_DATAS = new HashMap<String, Class<? extends ProtoData>>();
+    // TagName -> ObjectData,用于注册自定义的数据容器
+    private final static Map<String, Class<? extends ObjectData>> TAG_DATAS = new HashMap<String, Class<? extends ObjectData>>();
     
     // TagName -> DataLoader, 自定义数据载入器
     private final static Map<String, Class<? extends DataLoader>> TAG_LOADERS = new HashMap<String, Class<? extends DataLoader>>();
@@ -38,7 +38,7 @@ public class DataFactory {
      * @param tagName 
      * @param dataClass 
      */
-    public static void registerData(String tagName, Class<? extends ProtoData> dataClass) {
+    public static void registerData(String tagName, Class<? extends ObjectData> dataClass) {
         TAG_DATAS.put(tagName, dataClass);
         LOG.log(Level.INFO, "registerData, {0} => {1}", new Object[] {tagName, dataClass});
     }
@@ -79,7 +79,7 @@ public class DataFactory {
      * @param dataProcessorClass 
      */
     public static void register(String tagName
-            , Class<? extends ProtoData> dataClass
+            , Class<? extends ObjectData> dataClass
             , Class<? extends DataLoader> dataLoaderClass
             , Class<? extends DataProcessor> dataProcessorClass
             ) {
@@ -96,28 +96,24 @@ public class DataFactory {
      * @throws LuoYingException 如果无法为id创建Data
      */
     @SuppressWarnings("UseSpecificCatch")
-    public static <T extends ProtoData> T createData(String id) {
+    public static <T extends ObjectData> T createData(String id) {
         Proto proto = ProtoUtils.getProto(DATA_STORE, id);
         if (proto == null) {
-            throw new NullPointerException("Could not find object, id=" + id);
+            throw new LuoYingException("Could not find object, id=" + id);
         }
         
         try {
+            // 这里如果指定了特殊的data类型，则使用指定的，否则默认使用ObjectData
             String dataClass = proto.getDataClass();
-            if (dataClass == null) {
-                throw new NullPointerException("No \"dataClass\"  set for proto, id=" + id + ", proto=" + proto);
+            ObjectData data;
+            if (dataClass != null) {
+                data = (ObjectData) Class.forName(dataClass).newInstance();
+            } else {
+                data = new ObjectData();
             }
-            ProtoData data = (ProtoData) Class.forName(dataClass).newInstance();
             data.setProto(proto);
-            
-            // remove20161014,以后允许不需要dataLoader.
-//            String dataLoader = proto.getDataLoaderClass();
-//            if (dataLoader == null) {
-//                throw new NullPointerException("No \"dataLoader\" set for proto, id=" + id + ", proto=" + proto);
-//            }
-//            DataLoader dl = (DataLoader) Class.forName(dataLoader).newInstance();
-//            dl.load(proto, data);
 
+            // 如果指定了Data载入器则使用这个载入器来载入数据，否则不理, 允许不注册指定的载入器及Data类型。
             String dataLoader = proto.getDataLoaderClass();
             if (dataLoader != null) {
                 DataLoader dl = (DataLoader) Class.forName(dataLoader).newInstance();
@@ -138,14 +134,14 @@ public class DataFactory {
      * @throws LuoYingException 如果无法为data创建Processor
      */
     @SuppressWarnings("UseSpecificCatch")
-    public static <T extends DataProcessor> T createProcessor(ProtoData data) {
+    public static <T extends DataProcessor> T createProcessor(ObjectData data) {
         if (data == null) {
             LOG.log(Level.WARNING, "Data could not be null");
             return null;
         }
         Class<? extends DataProcessor> dpClass = TAG_PROCESSORS.get(data.getTagName());
         if (dpClass == null) {
-            throw new NullPointerException("Could not find data processor to createProcessor"
+            throw new LuoYingException("Could not find data processor to createProcessor"
                     + ", tagName=" + data.getProto().getTagName() 
                     + ", dataId=" + data.getId());
         }
@@ -154,7 +150,7 @@ public class DataFactory {
             dp.setData(data);
             return (T) dp;
         } catch (Exception e) {
-            throw new RuntimeException("Could not createProcessor for dataId=" + data.getId(), e);
+            throw new LuoYingException("Could not createProcessor for dataId=" + data.getId(), e);
         }
     }
     
@@ -163,7 +159,7 @@ public class DataFactory {
      * @param id
      * @return 
      */
-    public static Class<? extends ProtoData> getDataClassById(String id) {
+    public static Class<? extends ObjectData> getDataClassById(String id) {
         Proto proto = getProto(id);
         return getDataClass(proto.getTagName());
     }
@@ -173,7 +169,7 @@ public class DataFactory {
      * @param tagName
      * @return 
      */
-    public static Class<? extends ProtoData> getDataClass(String tagName) {
+    public static Class<? extends ObjectData> getDataClass(String tagName) {
         return TAG_DATAS.get(tagName);
     }
     

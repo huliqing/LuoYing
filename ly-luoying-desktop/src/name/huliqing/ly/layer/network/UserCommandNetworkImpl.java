@@ -9,7 +9,7 @@ import com.jme3.math.Vector3f;
 import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.ActorData;
-import name.huliqing.luoying.data.ObjectData;
+import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.ly.enums.MessageType;
 import name.huliqing.luoying.layer.network.ActorNetwork;
 import name.huliqing.luoying.layer.network.ObjectNetwork;

@@ -11,11 +11,11 @@ import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.xml.DataFactory;
 import name.huliqing.luoying.xml.DataProcessor;
-import name.huliqing.luoying.xml.ProtoData;
+import name.huliqing.luoying.xml.ObjectData;
 
 public class Loader {
     
-    public static <T extends ProtoData> T loadData(String id) {
+    public static <T extends ObjectData> T loadData(String id) {
         return DataFactory.createData(id);
     }
     
@@ -23,7 +23,7 @@ public class Loader {
         return load(DataFactory.createData(id));
     }
     
-    public static <T extends DataProcessor> T load(ProtoData data) {
+    public static <T extends DataProcessor> T load(ObjectData data) {
         T dp = DataFactory.createProcessor(data);
         if (dp instanceof Entity) {
             ((Entity) dp).initialize();

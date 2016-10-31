@@ -21,6 +21,7 @@ import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.actoranim.ActorAnim;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.effect.Effect;
+import name.huliqing.luoying.object.el.LevelEl;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.magic.Magic;
 import name.huliqing.luoying.object.module.ChannelModule;
@@ -122,9 +123,9 @@ public abstract class AbstractSkill implements Skill {
     protected float cutTimeEndMax;
     
     /** 技能的等级公式，该公式与技能等级（level）可以计算出当前技能的一个等级值。*/
-    protected String levelEl;
-    /** 技能升级等级公式，该公式中的每一个等级值表示每次技能升级时需要的sp数（skillPoints)*/
-    protected String levelUpEl;
+    protected LevelEl levelEl;
+    /** 技能升级等级公式，该公式中的每一个等级值表示每次技能升级时需要的sp数(skillPoints)*/
+    protected LevelEl levelUpEl;
     
     // ---- 内部参数 ----
     
@@ -240,8 +241,14 @@ public abstract class AbstractSkill implements Skill {
         // 时间\动画剪裁参数
         cutTimeStartMax = data.getAsFloat("cutTimeStartMax", 0);
         cutTimeEndMax = data.getAsFloat("cutTimeEndMax", 0);
-        levelEl = data.getAsString("levelEl");
-        levelUpEl = data.getAsString("levelUpEl");
+        String levelElStr = data.getAsString("levelEl");
+        if (levelElStr != null) {
+            levelEl = elService.createLevelEl(levelElStr);
+        }
+        String levelUpElStr = data.getAsString("levelUpEl");
+        if (levelUpElStr != null) {
+            levelUpEl = elService.createLevelEl(levelUpElStr);
+        }
     }
 
     @Override
@@ -334,21 +341,17 @@ public abstract class AbstractSkill implements Skill {
         skillLevelUp();
     }
     
-        // 检查并升级技能
+    // 检查并升级技能
     private void skillLevelUp() {
         if (data.getLevel() >= data.getMaxLevel()) 
             return;
         if (levelUpEl == null)
             return;
-        int levelPoints = (int) elService.getLevelEl(levelUpEl, data.getLevel() + 1);
+//        int levelPoints = (int) elService.getLevelEl(levelUpEl, data.getLevel() + 1);
+        int levelPoints = levelUpEl.setLevel(data.getLevel() + 1).getValue().intValue();
         if (data.getPlayCount() >= levelPoints) {
             data.setLevel(data.getLevel() + 1);
             data.setPlayCount(data.getPlayCount() - levelPoints);
-//            if (playService.getPlayer() == actor) {
-//                playService.addMessage(
-//                        ResourceManager.get(ResConstants.SKILL_LEVEL_UP, new Object[]{ResourceManager.getObjectName(data)})
-//                        , MessageType.item);
-//            }
             skillLevelUp();
         }
     }
@@ -538,7 +541,7 @@ public abstract class AbstractSkill implements Skill {
         if (levelEl == null) {
             return -1;
         }
-        return elService.getLevelEl(levelEl, data.getLevel());
+        return levelEl.setLevel(data.getLevel()).getValue().floatValue();
     }
     
     /**

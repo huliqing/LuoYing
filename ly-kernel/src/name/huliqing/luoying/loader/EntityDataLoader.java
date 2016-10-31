@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.data.ModuleData;
-import name.huliqing.luoying.data.ObjectData;
+import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.xml.DataFactory;
 import name.huliqing.luoying.xml.DataLoader;

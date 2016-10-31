@@ -6,7 +6,7 @@ package name.huliqing.luoying.view.transfer;
 
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.luoying.data.ObjectData;
+import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.xml.DataProcessor;
 

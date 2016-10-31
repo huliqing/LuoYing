@@ -4,6 +4,7 @@
  */
 package name.huliqing.luoying.data;
 
+import name.huliqing.luoying.xml.ObjectData;
 import com.jme3.export.InputCapsule;
 import com.jme3.export.JmeExporter;
 import com.jme3.export.JmeImporter;

@@ -12,16 +12,15 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.constants.IdConstants;
 import name.huliqing.luoying.constants.SkillConstants;
 import name.huliqing.luoying.data.SkillData;
 import name.huliqing.luoying.layer.network.StateNetwork;
 import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.layer.service.ElService;
 import name.huliqing.luoying.object.Loader;
+import name.huliqing.luoying.object.el.HitCheckEl;
 import name.huliqing.luoying.object.el.HitEl;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.hitchecker.HitChecker;
 import name.huliqing.luoying.object.magic.Magic;
 import name.huliqing.luoying.object.module.ActorModule;
 import name.huliqing.luoying.utils.ConvertUtils;
@@ -36,13 +35,15 @@ public abstract class HitSkill extends AbstractSkill {
     private final StateNetwork stateNetwork = Factory.get(StateNetwork.class);
     private ActorModule actorModule;
     
-    protected HitChecker hitChecker;
+    // hitCheckEl用于检查当前角色的技能是否作为作用(hit)于一个目标角色。
+    protected HitCheckEl hitCheckEl;
     // 指定HIT目标的哪一个属性
     protected String hitAttribute;
     // HIT的属性值，可正，可负。
     protected float hitValue;
-    // Hit公式，这个公式用于计算当前技能对目标角色可以产生的影响值。
-    protected String hitEl;
+    // Hit公式，这个公式用于计算当前角色对目标角色可以产生的属性影响值，不包含hitValue.
+    // hitEl计算出的值会和hitValue一起加成，作为最终的hit结果值。
+    protected HitEl hitEl;
     // hit的距离限制，注：hitDistance和hitAngle决定了hit的面积,举例，
     // 如果 hitDistance = 3, hitAngle=360， 则在角色周围3码内的目标都在这个技能范围内
     protected float hitDistance = 3;
@@ -62,10 +63,14 @@ public abstract class HitSkill extends AbstractSkill {
     public void setData(SkillData data) {
         super.setData(data); 
         
-        this.hitChecker = Loader.load(data.getAsString("hitChecker", IdConstants.SYS_HITCHECK_FIGHT_DEFAULT));
+        hitCheckEl = elService.createHitCheckEl(data.getAsString("hitCheckEl", "#{true}")); // #{true} -> 除非设置了hitCheckEl否则默认任何目标都可以hit
+        
         this.hitAttribute = data.getAsString("hitAttribute");
         this.hitValue = data.getAsFloat("hitValue", 0);
-        this.hitEl = data.getAsString("hitEl");
+        String hitElStr = data.getAsString("hitEl");
+        if (hitElStr != null) {
+            hitEl = elService.createHitEl(hitElStr);
+        }
         this.hitDistance = data.getAsFloat("hitDistance", hitDistance);
         this.hitDistanceSquared = hitDistance * hitDistance;
         this.hitAngle = data.getAsFloat("hitAngle", hitAngle);
@@ -97,6 +102,7 @@ public abstract class HitSkill extends AbstractSkill {
     public void setActor(Entity actor) {
         super.setActor(actor); 
         actorModule = actor.getModuleManager().getModule(ActorModule.class);
+        hitCheckEl.setSource(actor.getAttributeManager());
     }
 
     @Override
@@ -109,6 +115,7 @@ public abstract class HitSkill extends AbstractSkill {
         if (target != null && target != actor) {
             actorService.setLookAt(actor, actorService.getLocation(target));
         }
+        hitCheckEl.setSource(actor.getAttributeManager());
     }
     
     @Override
@@ -135,7 +142,8 @@ public abstract class HitSkill extends AbstractSkill {
         Entity temp;
         while (it.hasNext()) {
             temp = it.next();
-            if (temp == mainTarget || !hitChecker.canHit(actor, temp)) {
+            hitCheckEl.setTarget(temp.getAttributeManager());
+            if (temp == mainTarget || !hitCheckEl.getValue()) {
                 it.remove();
             }
         }
@@ -149,13 +157,15 @@ public abstract class HitSkill extends AbstractSkill {
         }
         
         // 添加角色自身
-        if (hitChecker.canHit(actor, actor)) {
+        hitCheckEl.setTarget(actor.getAttributeManager());
+        if (hitCheckEl.getValue()) {
             store.add(0, actor);
         }
         
         // 添加主目标（注意避免重覆）
         // 主目标是放在最优先，然后是自身角色
-        if (mainTarget != actor && hitChecker.canHit(actor, mainTarget)) {
+        hitCheckEl.setTarget(mainTarget.getAttributeManager());
+        if (mainTarget != actor && hitCheckEl.getValue()) {
             store.add(0, mainTarget);
         }
     }
@@ -169,7 +179,8 @@ public abstract class HitSkill extends AbstractSkill {
         if (target.getScene() == null) {
             return;
         }
-        if (hitChecker.canHit(actor, target)) {
+        hitCheckEl.setTarget(target.getAttributeManager());
+        if (hitCheckEl.getValue()) {
             // 状态和魔法先添加，然后再添加applyHit.
             // 1.因为applyHit后角色可能死亡，这个时候如果再添加状态，可能会导致角色
             // 重新做出一些奇怪动作，因为状态和魔法可能会让角色重新执行一些技能,如reset,
@@ -222,25 +233,31 @@ public abstract class HitSkill extends AbstractSkill {
     /**
      * @param attacker 攻击者
      * @param target 被攻击者
-     * @param skillValue 技能值
+     * @param hitValue 技能值
      * @param hitEl 技能计算公式
      * @param attribute 指定攻击的是哪一个属性
      */
-    private void applyHit(Entity attacker, Entity target, float skillValue, String hitEl, String attribute) {
-        if (hitEl == null) {
-            return;
-        }
-        float finalValue = 0;
-        HitEl de = elService.getHitEl(hitEl);
-        if (de != null) {
-            finalValue = de.getValue(attacker, skillValue, target);
-        }
-        HitUtils.getInstance().applyHit(attacker, target, hitAttribute, finalValue);
+    private void applyHit(Entity attacker, Entity target, float hitValue, HitEl hitEl, String attribute) {
+        // remove20161031
+//        if (hitEl == null) {
+//            return;
+//        }
+//        float finalValue = 0;
+//        HitEl de = elService.getHitEl(hitEl);
+//        if (de != null) {
+//            finalValue = de.getValue(attacker, skillValue, target);
+//        }
+//        HitUtils.getInstance().applyHit(attacker, target, hitAttribute, finalValue);
+
+        hitEl.setSource(attacker.getAttributeManager());
+        hitEl.setTarget(target.getAttributeManager());
+        float finalHitValue = hitValue + hitEl.getValue().floatValue();
+        HitUtils.getInstance().applyHit(attacker, target, attribute, finalHitValue);
     }
 
     @Override
     public int checkState() {
-        if (actor == null || hitChecker == null)
+        if (actor == null)
             return SkillConstants.STATE_UNDEFINE;
         
         Entity target = actorModule.getTarget();
@@ -251,7 +268,8 @@ public abstract class HitSkill extends AbstractSkill {
         if (!isInHitDistance(target))
             return SkillConstants.STATE_TARGET_NOT_IN_RANGE;
         
-        if (!hitChecker.canHit(actor, target))
+        hitCheckEl.setTarget(target.getAttributeManager());
+        if (!hitCheckEl.getValue())
             return SkillConstants.STATE_TARGET_UNSUITABLE;
         
         return super.checkState();

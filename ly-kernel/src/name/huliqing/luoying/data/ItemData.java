@@ -4,14 +4,13 @@
  */
 package name.huliqing.luoying.data;
 
+import name.huliqing.luoying.xml.ObjectData;
 import com.jme3.export.InputCapsule;
 import com.jme3.export.JmeExporter;
 import com.jme3.export.JmeImporter;
 import com.jme3.export.OutputCapsule;
 import com.jme3.network.serializing.Serializable;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import name.huliqing.luoying.data.define.CostObject;
 
 /**
@@ -21,28 +20,9 @@ import name.huliqing.luoying.data.define.CostObject;
 @Serializable
 public class ItemData extends ObjectData implements CostObject{
     
-    // 属性限制
-    private List<AttributeMatch> matchAttributes;
-    
     // 物品数量
     protected int total = 1;
 
-    /**
-     * 获取属性限制
-     * @return 
-     */
-    public List<AttributeMatch> getMatchAttributes() {
-        return matchAttributes;
-    }
-
-    /**
-     * 设置使用物品时的属性限制。
-     * @param matchAttributes 
-     */
-    public void setMatchAttributes(List<AttributeMatch> matchAttributes) {
-        this.matchAttributes = matchAttributes;
-    } 
-    
     /**
      * 获取物品数量
      * @return 
@@ -59,19 +39,6 @@ public class ItemData extends ObjectData implements CostObject{
     public float getCost() {
         return getAsFloat("cost", 0);
     }
-    
-//    /**
-//     * 增加物品数量(amount<0为减少).
-//     * @param amount 
-//     * @return  
-//     */
-//    public int increaseTotal(int amount) {
-//        total += amount;
-//        if (total < 0) {
-//            total = 0;
-//        }
-//        return total;
-//    }
     
     /**
      * 判断物品是否是可删除的 
@@ -110,9 +77,6 @@ public class ItemData extends ObjectData implements CostObject{
         super.write(ex);
         OutputCapsule oc = ex.getCapsule(this);
         oc.write(total, "total", 0);
-        if (matchAttributes != null) {
-            oc.writeSavableArrayList(new ArrayList<AttributeMatch>(matchAttributes), "matchAttributes", null);
-        }
     }
     
     @Override
@@ -120,6 +84,5 @@ public class ItemData extends ObjectData implements CostObject{
         super.read(im);
         InputCapsule ic = im.getCapsule(this);
         total = ic.readInt("total", 0);
-        matchAttributes = ic.readSavableArrayList("matchAttributes", null);
     }
 }

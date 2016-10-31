@@ -29,7 +29,6 @@ import name.huliqing.luoying.object.sound.SoundManager;
  * @author huliqing
  */
 public class AttackSkill extends HitSkill {
-    private final PlayService playService = Factory.get(PlayService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
     private ActorModule actorModule;
@@ -117,7 +116,7 @@ public class AttackSkill extends HitSkill {
                 // 只有在技能作用范围内　及　在攻击角度内才视为可能被击中
                 if (!isInHitDistance(target) 
                         || !isInHitAngle(target)
-                        || !hitChecker.canHit(actor, target)
+                        || !hitCheckEl.setTarget(target.getAttributeManager()).getValue()
                         ) {
                     continue;
                 }
@@ -136,7 +135,7 @@ public class AttackSkill extends HitSkill {
             // 只有在技能作用范围内　及　在攻击角度内才视为可能被击中
             if (!isInHitDistance(target) 
                     || !isInHitAngle(target)
-                    || !hitChecker.canHit(actor, target)
+                    || !hitCheckEl.setTarget(target.getAttributeManager()).getValue()
                     ) {
                 return;
             }
@@ -202,23 +201,6 @@ public class AttackSkill extends HitSkill {
     }
     
     protected void doHitResult(Entity target) {
-        
-        // remove20160928
-//        // 伤害声音
-//        Skin weaponSkin = null;
-//        List<Skin> skins = skinService.getUsingSkins(actor);
-//        if (skins != null) {
-//            for (Skin s : skins) {
-//                if (s instanceof Weapon) {
-//                    weaponSkin = s;
-//                    break;
-//                }
-//            }
-//        }
-//        SkinData wd1 = weaponSkin != null ? weaponSkin.getData() : null;
-//        ObjectData od1 = wd1 != null ? wd1 : actor.getData();
-//        SoundManager.getInstance().playCollision(od1, target.getData(), actor.getSpatial().getWorldTranslation());
-
         // 播放击中声效
         int weaponMat = getWeaponMat(skinModule);
         int targetMat = target.getData().getMat();

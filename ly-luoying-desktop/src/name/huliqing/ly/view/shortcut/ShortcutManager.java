@@ -13,7 +13,7 @@ import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.data.ItemData;
 import name.huliqing.luoying.object.actor.Actor;
-import name.huliqing.luoying.data.ObjectData;
+import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.luoying.data.SkillData;
 import name.huliqing.luoying.data.SkinData;
 import name.huliqing.luoying.layer.service.ConfigService;

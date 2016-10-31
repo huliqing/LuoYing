@@ -6,7 +6,7 @@
 package name.huliqing.luoying.layer.service;
 
 import java.util.List;
-import name.huliqing.luoying.data.ObjectData;
+import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.luoying.layer.network.ObjectNetwork;
 import name.huliqing.luoying.object.entity.Entity;
 

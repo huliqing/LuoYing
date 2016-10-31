@@ -6,7 +6,7 @@
 package name.huliqing.ly.layer.service;
 
 import name.huliqing.ly.layer.network.GameNetwork;
-import name.huliqing.luoying.data.ObjectData;
+import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.ly.object.NetworkObject;
 

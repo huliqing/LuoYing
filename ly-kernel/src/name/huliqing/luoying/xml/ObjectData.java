@@ -2,10 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.luoying.data;
+package name.huliqing.luoying.xml;
 
 import com.jme3.network.serializing.Serializable;
-import name.huliqing.luoying.xml.ProtoData;
 
 /**
  * 物品基类,对于运行时，所有可动态改变的参数都需要封装在Data内。

@@ -13,7 +13,7 @@ import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.constants.InterfaceConstants;
 import name.huliqing.luoying.constants.ResConstants;
 import name.huliqing.ly.data.ChatData;
-import name.huliqing.luoying.data.ObjectData;
+import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.luoying.data.define.CostObject;
 import name.huliqing.luoying.layer.service.ItemService;
 import name.huliqing.luoying.layer.service.SkinService;

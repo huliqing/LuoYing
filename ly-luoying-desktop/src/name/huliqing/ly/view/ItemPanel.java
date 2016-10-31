@@ -5,7 +5,7 @@
 package name.huliqing.ly.view;
 
 import java.util.List;
-import name.huliqing.luoying.data.ObjectData;
+import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.luoying.ui.LinearLayout;
 import name.huliqing.luoying.ui.UIFactory;
 

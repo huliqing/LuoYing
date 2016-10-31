@@ -3,15 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.luoying.object.el2;
+package name.huliqing.luoying.object.el;
 
 import javax.el.ELContext;
 import javax.el.ELResolver;
 import javax.el.FunctionMapper;
 import javax.el.VariableMapper;
-import name.huliqing.luoying.el.SimpleELResolver;
-import name.huliqing.luoying.el.SimpleFunctionMapper;
-import name.huliqing.luoying.el.SimpleVariableMapper;
 import name.huliqing.luoying.object.attribute.Attribute;
 import name.huliqing.luoying.object.attribute.AttributeManager;
 
@@ -19,7 +16,7 @@ import name.huliqing.luoying.object.attribute.AttributeManager;
  * 这个ELContext用于处理实体(Entity)的属性值。
  * @author huliqing
  */
-public class AttributeELContext extends ELContext{
+public class AttributeElContext extends ELContext{
 
     private final AttributeELResolver elResolver = new AttributeELResolver();
     private final SimpleFunctionMapper functionMapper = new SimpleFunctionMapper();
@@ -49,7 +46,7 @@ public class AttributeELContext extends ELContext{
         elResolver.setBaseValue(key, value);
     }
     
-    private final class AttributeELResolver extends SimpleELResolver {
+    private final class AttributeELResolver extends SimpleElResolver {
         
         public AttributeELResolver() {
             super(2);

@@ -52,7 +52,8 @@ public class IdConstants {
     // HitChecker
     // =============================================================================
     
-    public final static String SYS_HITCHECK_FIGHT_DEFAULT = "sysHitCheckerFightDefault";
+    // remove20161031
+//    public final static String SYS_HITCHECK_FIGHT_DEFAULT = "sysHitCheckerFightDefault";
     
     // =============================================================================
     // Game
@@ -85,5 +86,18 @@ public class IdConstants {
     public final static String SYS_ENV_DIRECTIONAL_LIGHT = "sysEnvDirectionalLight";
     /** 内置环境光物体: sysEnvAmbientLight */
     public final static String SYS_ENV_AMBIENT_LIGHT = "sysEnvAmbientLight";
+    
+    // =============================================================================
+    // El
+    // =============================================================================
+    
+    /** sysElCheckEmpty, 空的CheckEl, 用于动态创建表达式用, 载入这个后必须设置expression才可以使用*/
+    public final static String SYS_EL_CHECK = "sysElCheckEmpty";
+    /** sysElHitCheckEmpty, 空的HitCheckEl, 用于动态创建表达式用, 载入这个后必须设置expression才可以使用 */
+    public final static String SYS_EL_HIT_CHECK_EMPTY = "sysElHitCheckEmpty";
+    /** sysElHitEmpty, 空的HitEl，用于动态创建表达式用, 载入这个后必须设置expression才可以使用 */
+    public final static String SYS_EL_HIT_EMPTY = "sysElHitEmpty";
+    /** sysElLevelEmpty, 空的LevelEl, 用于动态创建表达式用, 载入这个后必须设置expression才可以使用  */
+    public final static String SYS_EL_LEVEL_EMPTY = "sysElLevelEmpty";
     
 }

@@ -19,22 +19,54 @@ xs:time
     <xs:element name="root">
         <xs:complexType>
             <xs:all>
-                <xs:element ref="elLevel" />
+                <xs:element ref="elCheck" />
+                <xs:element ref="elHitCheck" />
                 <xs:element ref="elHit" />
-                <xs:element ref="elAttribute" />
+                <xs:element ref="elLevel" />
             </xs:all>
         </xs:complexType>
     </xs:element>
     
-    <xs:element name="elAttribute" >
+    <xs:element name="elCheck" >
         <xs:annotation>
             <xs:documentation>
-                通过源角色和目标角色的属性来计算一个值。支持参数：{s_attributeName}源角色属性; {t_attributeName}目标角色属性
+                Check表达式，通过对象source的属性来判断是否可以使用一件物品或一个对象...，这个表达式返回一个boolean值。
+                表达式要求：
+                1.参数: source;
+                2.返回值:boolean
             </xs:documentation>
         </xs:annotation>
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="elBase">
+                    <xs:attribute name="expression" type="xs:string" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>表达式示例，比如要求角色不能处于死亡状态才可以使用某物品：#{!source.attributeDead}</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="elHitCheck" >
+        <xs:annotation>
+            <xs:documentation>
+                HitCheck表达式通过对象的属性比较来检查一个对象source是否可以对另一个对象target产生作用,返回值是一个boolean值，用于判断
+                对象source是否可以作用于对象target.
+                表达式要求：
+                1.参数: source, target;
+                2.返回值: boolean;
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="elBase">
+                    <xs:attribute name="expression" type="xs:string" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>表达式示例，比如通过派系来判断角色source是否可以对target进行攻击：#{source.attributeGroup != target.attributeGroup}</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
@@ -42,18 +74,21 @@ xs:time
     
     <xs:element name="elHit" >
         <xs:annotation>
-            <xs:documentation>定义一个伤害设定,支持参数：
-                1.[s_xxx],[t_xxx], [sk_value]其中xxx表示目标角色的某个属性;具体参考attribute.xml的设置
-                2.s表示源角色，一般为攻击者
-                3.t表示目标角色，一般表示受攻击者.
-                4.sk_value表示源角色的技能伤害值
-                表达式示例： el="[s_attributeAttack] * 2 - [t_attributeDefence]" 
-                这表示最终的伤害输出=攻击者的物理攻击力剩以2倍之后再减去目标角色的物理防御力
+            <xs:documentation>
+                Hit表达式通过对象的属性计算一个作用值，用于计算一个对象source对另一个对象target的作用值，这个表达式返回一个number数值。
+                表达式要求：
+                1.参数：source, target;
+                2.返回值: number (如byte,short,float,int,long, double等)
             </xs:documentation>
         </xs:annotation>
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="elBase">
+                    <xs:attribute name="expression" type="xs:string" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>表达式示例，比如计算伤害值：#{source.attributeAttack - target.attributeDefense}</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
@@ -62,12 +97,21 @@ xs:time
     <xs:element name="elLevel" >
         <xs:annotation>
             <xs:documentation>
-                普通的等级计算公式,支持参数：[level]
+                Level表达式，这个表达式通过给定一个等级来计算一个等级值，比如用于计算在一个特定等级角色可以有多少攻击力等。
+                表达式返回一个number数值。
+                表达式要求：
+                1.参数: level;
+                2.返回值：number;
             </xs:documentation>
         </xs:annotation>
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="elBase">
+                    <xs:attribute name="expression" type="xs:string" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>表达式，示例：#{level * 2}</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
@@ -76,14 +120,6 @@ xs:time
     <xs:complexType name="elBase">
         <xs:complexContent>
             <xs:extension base="base">
-                <xs:attribute name="expression" type="xs:string" use="required" >
-                    <xs:annotation>
-                        <xs:documentation>
-                            表达式,该表达式用于根据等级计算一个目标值。示例：
-                            "50 + 8 * Math.pow(1.1,  [xxx])" 其中"[xxx]"表示参数
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>

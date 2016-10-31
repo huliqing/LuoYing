@@ -19,6 +19,7 @@ import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.attribute.Attribute;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.attribute.ValueChangeListener;
+import name.huliqing.luoying.object.el.LevelEl;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.talent.Talent;
 
@@ -36,11 +37,12 @@ public class TalentModule extends AbstractModule implements ValueChangeListener<
     // 当角色升级时获得的天赋点数将累加在这个属性上。
     private String bindTalentPointsAttribute;
 
-    // 默认的天赋奖励点数，如果没有设置talentPointsLevelEl则始终使用这个值作为天赋点数奖励。
-    private int talentPointsValue;
+    // remove20161031
+//    // 默认的天赋奖励点数，如果没有设置talentPointsLevelEl则始终使用这个值作为天赋点数奖励。
+//    private int talentPointsValue;
 
     // 天赋公式ID,如果用于为每个变化等级计算天赋点数的奖励
-    private String talentPointsLevelEl;
+    private LevelEl talentPointsLevelEl;
     
     // ---- inner
     // 天赋实例
@@ -63,8 +65,7 @@ public class TalentModule extends AbstractModule implements ValueChangeListener<
         super.setData(data); 
         bindLevelAttribute = data.getAsString("bindLevelAttribute");
         bindTalentPointsAttribute = data.getAsString("bindTalentPointsAttribute");
-        talentPointsValue = data.getAsInteger("talentPointsValue", 0);
-        talentPointsLevelEl = data.getAsString("talentPointsLevelEl");
+        talentPointsLevelEl = elService.createLevelEl(data.getAsString("talentPointsLevelEl", "#{0}"));
         lastApplyTalentPointsLevel = data.getAsInteger("lastApplyTalentPointsLevel", 0);
     }
     
@@ -257,22 +258,12 @@ public class TalentModule extends AbstractModule implements ValueChangeListener<
             return;
         }
         // 计算出可得的天赋点数并加到属性上
-        int addPoints = talentPointsValue;
-        if (talentPointsLevelEl != null) {
-            addPoints = (int) elService.getLevelEl(talentPointsLevelEl, newValue.intValue());
-        }
+        int addPoints = talentPointsLevelEl.setLevel(newValue.intValue()).getValue().intValue();
         talentPointsAttribute.add(addPoints);
         // 记住最近一次添加点数的等级，避免重复添加，注：updateData用于把数据写回talentModule的data中去,
         // 这样角色在存档并重新读回的时候可以还原这个值。
         lastApplyTalentPointsLevel = newValue.intValue();
         updateDatas();
-        
-        // remove20160828
-//        // 提示获得天赋点数
-//        if (actor == playService.getPlayer() && addPoints > 0) {
-//            playService.addMessage(ResourceManager.get(ResConstants.COMMON_GET_TALENT, new Object[]{rewardTP}), MessageType.levelUp);
-//        }
-        
     }
 
 

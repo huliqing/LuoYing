@@ -12,7 +12,7 @@ import name.huliqing.luoying.data.ChannelData;
 import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.data.ItemData;
 import name.huliqing.luoying.xml.Proto;
-import name.huliqing.luoying.data.ObjectData;
+import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.luoying.data.ResistData;
 import name.huliqing.luoying.data.SkillData;
 import name.huliqing.luoying.data.SkinData;

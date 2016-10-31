@@ -1,64 +1,50 @@
 /*
- * To change this template, choose Tools | Templates
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package name.huliqing.luoying.object.el;
 
-import java.util.HashMap;
-import java.util.Map;
-import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.data.ElData;
-import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.utils.ConvertUtils;
+import javax.el.ELContext;
+import name.huliqing.luoying.object.attribute.AttributeManager;
 
 /**
- * 用于计算技能影响值的公式，比如技能对目标角色产生的各种伤害输出，各种BUFF
- * 加成等。
+ * Hit EL,这个EL会计算并返回一个Number值，这个Number值定义了一个对象source对另一个对象target产生的作用值。
+ * 可以用来表示计算技能的伤害值、BUFF增益值、
+ * <br>表达式参数：
+ * 1.source: 这个参数表示源对象。<br>
+ * 2.target: 这个参数表示目标对象。<br>
+ * 表达式示例：#{source.attributeAttack - target.attributeDefence}, 这可以用来表示source角色对target角色的技能伤害
+ * 值。
  * @author huliqing
- * @param <T>
  */
-public class HitEl<T extends ElData> extends AbstractEl<T> {
-    
-    // key = param
-    private Map<String, Object> valueMap;
+public class HitEl extends AbstractEl<Number> {
 
+    private final AttributeElContext elContext = new AttributeElContext();
+
+    @Override
+    public ELContext getELContext() {
+        return elContext;
+    }
+    
     /**
-     * 计算技能所产生的作用值
-     * @param source 技能使用角色
-     * @param sourceSkillValue 技能使用角色所使用技能的值
-     * @param target 技能目标角色
-     * @return 
+     * 设置源对象
+     * @param source 
+     * @return  
      */
-    public synchronized float getValue(Entity source, float sourceSkillValue, Entity target) {
-        String strResult;
-        
-        // params中包含的是带有"{}"符号的参数，如果params为空，则说明没有表达式中没有特殊参数需要替换值,
-        // 则直接计算这个表达式就可以, 也就是允许表达式中直接使用javascript的普通表达式。
-        if (params.size() <= 0) {
-            strResult = eval(null);
-            return ConvertUtils.toFloat(strResult, 0);
-        }
-        
-        if (valueMap == null) {
-            valueMap = new HashMap<String, Object>(params.size());
-        }
-        valueMap.clear();
-        for (String p : params) {
-            float attributeValue = 0;
-            if (p.startsWith("s_")) {
-                attributeValue = source.getAttributeManager().getNumberAttributeValue(p.substring(2), 0);
-                
-            } else if (p.startsWith("t_")) {
-                attributeValue = target.getAttributeManager().getNumberAttributeValue(p.substring(2), 0);
-                
-            } else if (p.startsWith("sk_value")) {
-                attributeValue = sourceSkillValue;
-            }
-            valueMap.put(p, attributeValue);
-        }
-        
-        strResult = eval(valueMap);
-        return ConvertUtils.toFloat(strResult, 0);
+    public HitEl setSource(AttributeManager source) {
+        elContext.setAttributeManager("source", source);
+        return this;
+    }
+    
+    /**
+     * 设置目标对象
+     * @param target 
+     * @return  
+     */
+    public HitEl setTarget(AttributeManager target) {
+        elContext.setAttributeManager("target", target);
+        return this;
     }
     
 }

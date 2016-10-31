@@ -4,6 +4,7 @@
  */
 package name.huliqing.luoying.data;
 
+import name.huliqing.luoying.xml.ObjectData;
 import com.jme3.network.serializing.Serializable;
 
 /**

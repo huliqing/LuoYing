@@ -9,7 +9,7 @@ import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.DropData;
 import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.luoying.layer.service.ElService;
-import name.huliqing.luoying.object.el.AttributeEl;
+import name.huliqing.luoying.object.el.HitEl;
 import name.huliqing.luoying.object.entity.Entity;
 
 /**
@@ -20,30 +20,23 @@ public class AttributeDrop extends AbstractDrop {
     private final ElService elService = Factory.get(ElService.class);
     private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
     
-    // 属性名
-    private String attributeName;
-    // 绑定一条公式（ElAttribute类型）,用来计算要掉落的动态值.这个值在计算后会和fixedValue一起增加到属性上
-    private String attributeEl;
-    //固定的掉落值，设置了这个参数后，这个值会始终增加到属性上。
-    private float fixedValue;
-
+    // 属性名称
+    private String attribute;
+    // 这个公式定义角色source可以掉落多少属性值给target。
+    private HitEl valueHitEl;
+    
     @Override
     public void setData(DropData data) {
         super.setData(data);
-        attributeName = data.getAsString("attributeName");
-        attributeEl = data.getAsString("attributeEl");
-        fixedValue = data.getAsFloat("fixedValue", 0);
+        attribute = data.getAsString("attribute");
+        valueHitEl = elService.createHitEl(data.getAsString("valueHitEl", "#{0}"));
     }
 
     @Override
     public boolean doDrop(Entity source, Entity target) {
-        float value = fixedValue;
-        if (attributeEl != null) {
-            AttributeEl el = elService.getAttributeEl(attributeEl);
-            value += el.getValue(source, target);
-        }
-//        attributeNetwork.addNumberAttributeValue(target, attributeName, value);
-        entityNetwork.applyNumberAttributeValue(target, attributeName, value, source);
+        valueHitEl.setSource(source.getAttributeManager());
+        valueHitEl.setTarget(target.getAttributeManager());
+        entityNetwork.applyNumberAttributeValue(target, attribute, valueHitEl.getValue().floatValue(), source);
         
         playDropSounds(source);
         return true;

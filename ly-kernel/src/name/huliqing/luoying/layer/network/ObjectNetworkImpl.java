@@ -6,7 +6,7 @@
 package name.huliqing.luoying.layer.network;
 
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.data.ObjectData;
+import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.luoying.mess.MessProtoAdd;
 import name.huliqing.luoying.mess.MessProtoRemove;
 import name.huliqing.luoying.network.Network;

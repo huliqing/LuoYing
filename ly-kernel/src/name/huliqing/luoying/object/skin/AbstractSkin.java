@@ -23,12 +23,13 @@ import java.util.logging.Logger;
 import name.huliqing.luoying.Config;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.AttributeApply;
-import name.huliqing.luoying.data.AttributeMatch;
 import name.huliqing.luoying.data.SkinData;
+import name.huliqing.luoying.layer.service.ElService;
 import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.object.AssetLoader;
 import name.huliqing.luoying.object.attribute.Attribute;
 import name.huliqing.luoying.object.define.DefineFactory;
+import name.huliqing.luoying.object.el.CheckEl;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.sound.SoundManager;
 
@@ -38,9 +39,14 @@ import name.huliqing.luoying.object.sound.SoundManager;
 public abstract class AbstractSkin implements Skin {
     private static final Logger LOG = Logger.getLogger(AbstractSkin.class.getName());
     private final EntityService entityService = Factory.get(EntityService.class);
+    private final ElService elService = Factory.get(ElService.class);
     
     protected SkinData data;
+    
+    // 空上装备时的声音
     protected String[] sounds;
+    // 用于检查角色是否可以使用这件装备
+    protected CheckEl checkEl;
     
     //注：一件skin可属于多个type,如上下连身的套装，如法袍可属于 "7,8".
     //同时一件skin也可与多个其它skin进行排斥。这里的type和conflictType使用二
@@ -67,10 +73,13 @@ public abstract class AbstractSkin implements Skin {
         conflictParts = DefineFactory.getSkinPartDefine().convert(data.getAsArray("conflictParts"));
         
         sounds = data.getAsArray("sounds");
+        checkEl = elService.createCheckEl(data.getAsString("checkEl", "#{true}"));
+        
         bindBone = data.getAsString("bindBone");
         localLocation = data.getAsVector3f("localLocation");
         localRotation = data.getAsQuaternion("localRotation");
         localScale = data.getAsVector3f("localScale");
+        
     }
 
     @Override
@@ -126,30 +135,10 @@ public abstract class AbstractSkin implements Skin {
     public boolean isAttached() {
         return data.isUsed();
     }
-
+    
     @Override
     public boolean canUse(Entity actor) {
-        
-        // 如果角色的属性中有一个不能和getMatchAttributes中要求的不匹配则视为不能使用。
-        if (data.getMatchAttributes() != null) {
-            Attribute attr;
-            for (AttributeMatch am : data.getMatchAttributes()) {
-                attr = actor.getAttributeManager().getAttribute(am.getAttributeName());
-                if (!(attr instanceof MatchAttribute)) {
-                    LOG.log(Level.INFO, "指定的属性不是MatchAttribute类型，所以不能使用装备"
-                            + "，actorId={0}, skinId={1},  match attributeName={2}", 
-                            new Object[] {actor.getData().getId(), data.getId(), am.getAttributeName()});
-                    return false;
-                }
-                if (!((MatchAttribute)attr).match(am.getValue())) {
-                    LOG.log(Level.INFO, "属性值不匹配,所以不能使用装备,actorId={0}, skinId={1}"
-                            + ", match attributeName={2}, match attributeValue={3}, actor attribute={4}"
-                            , new Object[] {actor.getData().getId(), data.getId(), am.getAttributeName(), am.getValue(), attr});
-                    return false;
-                }
-            }            
-        }
-        return true;
+        return checkEl.setSource(actor.getAttributeManager()).getValue();
     }
     
     @Override

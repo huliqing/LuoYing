@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.luoying.el;
+package name.huliqing.luoying.object.el;
 
 import java.beans.FeatureDescriptor;
 import java.util.HashMap;
@@ -18,16 +18,16 @@ import javax.el.MapELResolver;
  * 简单的ELResolver
  * @author huliqing
  */
-public class SimpleELResolver extends ELResolver {
+public class SimpleElResolver extends ELResolver {
 
     private final ELResolver delegate = new MapELResolver();
     private final Map<String, Object> baseMap;
 
-    public SimpleELResolver() {
+    public SimpleElResolver() {
         this(4);
     }
     
-    public SimpleELResolver(int initialCapacity) {
+    public SimpleElResolver(int initialCapacity) {
         baseMap = new HashMap<String, Object>(initialCapacity);
     }
     

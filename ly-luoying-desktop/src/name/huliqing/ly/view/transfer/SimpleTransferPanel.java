@@ -5,7 +5,7 @@
 package name.huliqing.ly.view.transfer;
 
 import java.util.List;
-import name.huliqing.luoying.data.ObjectData;
+import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.ly.view.ItemPanel;
 import name.huliqing.luoying.ui.Row;
 import name.huliqing.ly.view.ItemList.RowClickListener;

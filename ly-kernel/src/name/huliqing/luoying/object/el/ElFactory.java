@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.luoying.el;
+package name.huliqing.luoying.object.el;
 
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
@@ -15,7 +15,7 @@ import org.apache.el.ExpressionFactoryImpl;
  * El表达式
  * @author huliqing
  */
-public final class ELFactory {
+public final class ElFactory {
     
     private final static ExpressionFactory EXPRESSION_FACTORY = new ExpressionFactoryImpl();
     
@@ -55,5 +55,17 @@ public final class ELFactory {
      */
     public static ValueExpression createValueExpression(Object instance, Class<?> expectedType) {
         return EXPRESSION_FACTORY.createValueExpression(instance, expectedType);
+    }
+    
+    /**
+     * 判断给定的字符串是不是可能为EL表达式。
+     * @param expression
+     * @return 
+     */
+    public static boolean isElExpression(String expression) {
+        if (expression == null) {
+            return false;
+        }
+        return expression.trim().startsWith("#{");
     }
 }

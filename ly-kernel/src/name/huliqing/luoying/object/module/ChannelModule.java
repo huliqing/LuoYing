@@ -15,7 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.constants.IdConstants;
 import name.huliqing.luoying.data.ChannelData;
-import name.huliqing.luoying.data.ObjectData;
+import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.luoying.object.AssetLoader;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.channel.Channel;

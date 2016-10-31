@@ -6,7 +6,7 @@ package name.huliqing.ly.layer.network;
 
 import com.jme3.math.Vector3f;
 import name.huliqing.luoying.Inject;
-import name.huliqing.luoying.data.ObjectData;
+import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.task.Task;
 

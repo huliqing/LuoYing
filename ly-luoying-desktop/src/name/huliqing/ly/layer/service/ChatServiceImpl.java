@@ -5,7 +5,7 @@
 package name.huliqing.ly.layer.service;
 
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.data.ObjectData;
+import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.luoying.layer.service.ObjectService;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.object.Loader;

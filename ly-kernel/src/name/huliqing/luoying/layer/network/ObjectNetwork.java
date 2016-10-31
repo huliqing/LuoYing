@@ -6,7 +6,7 @@
 package name.huliqing.luoying.layer.network;
 
 import name.huliqing.luoying.Inject;
-import name.huliqing.luoying.data.ObjectData;
+import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.luoying.object.entity.Entity;
 
 /**

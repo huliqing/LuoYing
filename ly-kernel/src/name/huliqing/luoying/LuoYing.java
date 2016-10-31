@@ -26,7 +26,6 @@ import name.huliqing.luoying.data.LogicData;
 import name.huliqing.luoying.data.AnimData;
 import name.huliqing.luoying.data.AttributeApply;
 import name.huliqing.luoying.data.AttributeData;
-import name.huliqing.luoying.data.AttributeMatch;
 import name.huliqing.luoying.data.AttributeUse;
 import name.huliqing.luoying.data.BulletData;
 import name.huliqing.luoying.data.ChannelData;
@@ -169,10 +168,6 @@ import name.huliqing.luoying.object.effect.SlideColorIOSplineEffect;
 import name.huliqing.luoying.object.effect.SlideColorSplineEffect;
 import name.huliqing.luoying.object.effect.TextureCylinderEffect;
 import name.huliqing.luoying.object.effect.TextureEffect;
-import name.huliqing.luoying.loader.ElDataLoader;
-import name.huliqing.luoying.object.el.HitEl;
-import name.huliqing.luoying.object.el.LevelEl;
-import name.huliqing.luoying.object.el.AttributeEl;
 import name.huliqing.luoying.object.emitter.Emitter;
 import name.huliqing.luoying.loader.EmitterDataLoader;
 import name.huliqing.luoying.object.env.AudioEnv;
@@ -281,6 +276,10 @@ import name.huliqing.luoying.object.drop.AttributeDrop;
 import name.huliqing.luoying.object.drop.GroupDrop;
 import name.huliqing.luoying.object.drop.ItemDrop;
 import name.huliqing.luoying.object.drop.SkinDrop;
+import name.huliqing.luoying.object.el.HitCheckEl;
+import name.huliqing.luoying.object.el.HitEl;
+import name.huliqing.luoying.object.el.LevelEl;
+import name.huliqing.luoying.object.el.CheckEl;
 import name.huliqing.luoying.object.env.DirectionalLightShadowEnv;
 import name.huliqing.luoying.object.env.GrassEnv;
 import name.huliqing.luoying.object.env.ModelEnv;
@@ -352,7 +351,6 @@ public class LuoYing {
 
         Serializer.registerClass(Proto.class);
         Serializer.registerClass(AttributeApply.class);
-        Serializer.registerClass(AttributeMatch.class);
         Serializer.registerClass(AttributeUse.class);
         Serializer.registerClass(Data.class);
         Serializer.registerClass(DropItem.class);
@@ -479,9 +477,10 @@ public class LuoYing {
         DataFactory.register("effectProjection", EffectData.class, EffectDataLoader.class, ProjectionEffect.class);
         
         // El
-        DataFactory.register("elLevel",  ElData.class, ElDataLoader.class, LevelEl.class);
-        DataFactory.register("elAttribute",  ElData.class, ElDataLoader.class, AttributeEl.class);
-        DataFactory.register("elHit",  ElData.class, ElDataLoader.class, HitEl.class);
+        DataFactory.registerDataProcessor("elCheck",  CheckEl.class);
+        DataFactory.registerDataProcessor("elHitCheck",  HitCheckEl.class);
+        DataFactory.registerDataProcessor("elHit",  HitEl.class);
+        DataFactory.registerDataProcessor("elLevel",  LevelEl.class);
         
         // Emitter
         DataFactory.register("emitter",  EmitterData.class, EmitterDataLoader.class, Emitter.class);

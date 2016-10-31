@@ -12,7 +12,7 @@ import name.huliqing.luoying.constants.IdConstants;
 import name.huliqing.luoying.data.ItemData;
 import name.huliqing.luoying.data.SkillData;
 import name.huliqing.luoying.data.SkinData;
-import name.huliqing.luoying.data.ObjectData;
+import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.luoying.xml.DataFactory;
 import name.huliqing.luoying.data.define.CostObject;
 import name.huliqing.luoying.object.entity.Entity;

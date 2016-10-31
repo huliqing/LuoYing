@@ -7,7 +7,7 @@ package name.huliqing.ly.object.module;
 
 import java.util.List;
 import name.huliqing.ly.data.ChatData;
-import name.huliqing.luoying.data.ObjectData;
+import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.ly.object.chat.Chat;
 import name.huliqing.luoying.object.entity.Entity;

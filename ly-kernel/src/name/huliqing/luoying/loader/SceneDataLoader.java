@@ -7,7 +7,7 @@ package name.huliqing.luoying.loader;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.data.EntityData;
-import name.huliqing.luoying.data.ObjectData;
+import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.luoying.xml.Proto;
 import name.huliqing.luoying.data.SceneData;
 import name.huliqing.luoying.xml.DataFactory;
