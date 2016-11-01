@@ -29,7 +29,7 @@
     <effectSlideColorIOSpline id="effectSwordShadow1B" extends="effectSwordShadow1A" width="0.25" up="0,0,1" /> 
     
     <!--从左下到右上斜挑约45度的剑光效果-->
-    <effectGroup id="effectSwordShadow2"  useTime="9999"
+    <effectGroup id="effectSwordShadow2"  useTime="1"
                  traceLocation="once" traceRotation="once"  
                  traceLocationOffset="0,2,0" traceRotationOffset="0,0,-0.5"
                  effects="effectSwordShadow2A,effectSwordShadow2B" />

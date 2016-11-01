@@ -9,6 +9,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.post.Filter;
 import com.jme3.post.FilterPostProcessor;
 import com.jme3.post.SceneProcessor;
+import com.jme3.post.filters.TranslucentBucketFilter;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
@@ -55,14 +56,13 @@ public abstract class AbstractScene implements Scene {
     /** 默认的FilterPostProcessor */
     protected FilterPostProcessor defaultFilterPostProcessor;
     
-    // remove20161025,这个现象好像现在不会再发生。
     /** 
      * TranslucentBucketFilter用于处理半透明物体被一些Filter挡住的BUG，比如当场景中添加了高级水体效果时,<br>
      * 一些半透明的粒子效果会被挡住。处理这个问题的方法是：<br>
      * 1.把半透明的物体的QueueBucket设置为Bucket.Translucent<br>
      * 2.把一个TranslucentBucketFilter实例添加到FilterPostProcessor的<b>最后面</b>
      */
-//    protected final TranslucentBucketFilter translucentBucketFilter = new TranslucentBucketFilter();
+    protected final TranslucentBucketFilter translucentBucketFilter = new TranslucentBucketFilter();
 
     /** 默认要作为SceneProcessor的ViewPort */
     protected ViewPort[] processorViewPorts;
@@ -259,9 +259,9 @@ public abstract class AbstractScene implements Scene {
             addProcessor(defaultFilterPostProcessor);
         }
         // 需要保证translucentBucketFilter放在FilterPostProcessor的最后面。
-//        defaultFilterPostProcessor.removeFilter(translucentBucketFilter);
+        defaultFilterPostProcessor.removeFilter(translucentBucketFilter);
         defaultFilterPostProcessor.addFilter(filter);
-//        defaultFilterPostProcessor.addFilter(translucentBucketFilter);
+        defaultFilterPostProcessor.addFilter(translucentBucketFilter);
     }
 
     @Override

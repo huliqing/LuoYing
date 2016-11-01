@@ -9,7 +9,6 @@ import com.jme3.asset.AssetManager;
 import com.jme3.effect.ParticleEmitter;
 import com.jme3.effect.ParticleMesh;
 import com.jme3.material.Material;
-import com.jme3.renderer.queue.RenderQueue;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.data.EmitterData;
 import name.huliqing.luoying.object.Loader;
