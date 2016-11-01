@@ -50,7 +50,7 @@ public class SkinData extends ObjectData implements MatObject, CostObject {
         this.applyAttributes = applyAttributes;
     }
 
-    // remove
+    // remove20161101
 //    /**
 //     * 获取描述说明
 //     * @return 

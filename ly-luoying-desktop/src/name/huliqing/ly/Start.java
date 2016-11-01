@@ -3,6 +3,7 @@ package name.huliqing.ly;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.StatsAppState;
 import com.jme3.app.state.AppState;
+import com.jme3.font.BitmapFont;
 import com.jme3.renderer.RenderManager;
 import com.jme3.system.AppSettings;
 import com.jme3.system.JmeContext;
@@ -13,6 +14,7 @@ import java.util.logging.Logger;
 import java.util.prefs.BackingStoreException;
 import javax.imageio.ImageIO;
 import name.huliqing.luoying.Config;
+import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.TestFactory;
 import name.huliqing.luoying.object.game.GameAppState;
 import name.huliqing.luoying.ui.UIConfig;
@@ -112,15 +114,13 @@ public class Start extends SimpleApplication {
         // 一些特殊设置,所以ConfigService必须在这里优先载入。
         // ----------
         Init.initialize(this, settings);
-        
-        // remove20161006,以后放在LuoYing.initialize方法中处理
-//        // 2.载入语言环境及系统配置
-//        Factory.get(ConfigService.class).loadGlobalConfig();
-//        Factory.get(ConfigService.class).loadLocale();
     }
     
     @Override
     public void simpleInitApp() {
+        
+        BitmapFont chFont = assetManager.loadFont("data/font/chinese.fnt");
+        LuoYing.setFont(chFont);
         
         // 2.UI配置
         UIConfig uiconfig = new UIConfigImpl(getAssetManager());

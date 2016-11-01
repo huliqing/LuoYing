@@ -36,18 +36,18 @@
    <!-- ==================================================================== -->
    
    <!--普通友军对话：可配置给所有角色，但只有友军才能对话 -->
-   <chatGroup id="chatSimple" extends="chatBase" chats="chatSend" hitChecker="hitCheckerChatFriend" />
+   <chatGroup id="chatSimple" extends="chatBase" chats="chatSend" hitCheckEl="elChatCheckFriendly" />
 
    <!-- ==================================================================== -->
    <!--特定角色的对话配置-->
    <!-- ==================================================================== -->
    
    <!--宝箱: 1.买东西; 2 卖东西-->
-   <chatGroup id="chatTreasure" extends="chatBase" chats="chatShopItem,chatSell" hitChecker="hitCheckerChatFriend" />
+   <chatGroup id="chatTreasure" extends="chatBase" chats="chatShopItem,chatSell" hitCheckEl="elChatCheckFriendly" />
    
    <!--杰米: 1.买东西; 2 卖东西；3 任务：杰米的烦恼 -->
    <chatGroup id="chatJaime" extends="chatBase" chats="chatShopItem,chatSell,chatJaimeTask" />
-   <chatTask id="chatJaimeTask" extends="chatTaskBase" task="taskCollectSpiderClaw" role="both" hitChecker="hitCheckerChatTask" />
+   <chatTask id="chatJaimeTask" extends="chatTaskBase" task="taskCollectSpiderClaw" role="both" hitCheckEl="elChatCheckTask" />
 
 </root>
 

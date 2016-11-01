@@ -179,9 +179,9 @@ xs:time
                         <xs:documentation>绑定动画，格式: "animation1,animation2,..." </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-                <xs:attribute name="hitChecker" type="xs:string" use="optional" >
+                <xs:attribute name="hitCheckEl" type="xs:string" use="optional" >
                     <xs:annotation>
-                        <xs:documentation>关联到一个hitChecker,用于判断当前Chat是否对目标角色可见。</xs:documentation>
+                        <xs:documentation>关联或者直接填写一条hitCheckEl,用于判断当前Chat是否对目标角色可见。</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
             </xs:extension>

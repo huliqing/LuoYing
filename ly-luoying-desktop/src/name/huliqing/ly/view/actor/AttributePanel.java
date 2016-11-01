@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import name.huliqing.luoying.manager.ResourceManager;
-import name.huliqing.luoying.object.attribute.AbstractSimpleAttribute;
 import name.huliqing.luoying.object.attribute.Attribute;
 import name.huliqing.luoying.object.attribute.GroupAttribute;
 import name.huliqing.luoying.object.attribute.LimitAttribute;
@@ -19,7 +18,7 @@ import name.huliqing.luoying.ui.Row;
 import name.huliqing.luoying.ui.Text;
 
 /**
- * 角色属性面板
+ * 角色属性面板 
  * @author huliqing
  */
 public class AttributePanel extends ListView<Attribute> implements ActorPanel {
@@ -107,10 +106,8 @@ public class AttributePanel extends ListView<Attribute> implements ActorPanel {
             
             if (attr instanceof LimitAttribute) {
                 value.setText(((LimitAttribute)attr).getValue() + "/" + ((LimitAttribute) attr).getMaxLimit());
-            } else if (attr instanceof AbstractSimpleAttribute) {
-                value.setText(String.valueOf(((AbstractSimpleAttribute)attr).getValue()));
             } else {
-                value.setText(attr.toString());
+                value.setText(attr.getValue().toString());
             }
         }
     }

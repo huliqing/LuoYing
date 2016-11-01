@@ -123,7 +123,7 @@ public class ModuleManager {
         for (Module m : modules.getArray()) {
             if (moduleType.isAssignableFrom(m.getClass())) {
                 return (T) m;
-            }
+            } 
         }
         return null;
     }

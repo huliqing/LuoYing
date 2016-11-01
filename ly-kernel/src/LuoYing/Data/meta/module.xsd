@@ -21,7 +21,6 @@ xs:time
             <xs:all>
                 <xs:element ref="moduleActor" />
                 <xs:element ref="moduleAction" />
-                <xs:element ref="moduleAttribute" />
                 <xs:element ref="moduleChannel" />
                 <xs:element ref="moduleChat" />
                 <xs:element ref="moduleDrop" />
@@ -98,17 +97,6 @@ xs:time
                         <xs:annotation><xs:documentation>bind a BooleanAttribute, 判断角色属性，这个属性用于判断角色是否“死亡”</xs:documentation></xs:annotation>
                     </xs:attribute>
                 </xs:extension>
-            </xs:complexContent>
-        </xs:complexType>
-    </xs:element>
-        
-    <xs:element name="moduleAttribute">
-        <xs:annotation>
-            <xs:documentation>角色属性控制模块</xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="moduleBase"></xs:extension>
             </xs:complexContent>
         </xs:complexType>
     </xs:element>

@@ -33,7 +33,6 @@ public class AttributeChangeLogic<T extends LogicData> extends Logic<T> {
 
     @Override
     protected void doLogic(float tpf) {
-//        float useFactor = actor.getAttributeManager().getNumberAttributeValue(useAttribute, 0);
         float useFactor = entityService.getNumberAttributeValue(actor, useAttribute, 0);
         float applyValue = value * useFactor * interval;
         

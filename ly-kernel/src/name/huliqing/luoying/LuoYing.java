@@ -43,7 +43,6 @@ import name.huliqing.luoying.data.EffectData;
 import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.data.GameData;
 import name.huliqing.luoying.data.GameLogicData;
-import name.huliqing.luoying.data.HitCheckerData;
 import name.huliqing.luoying.data.ItemData;
 import name.huliqing.luoying.data.MagicData;
 import name.huliqing.luoying.data.ModelEntityData;
@@ -192,8 +191,6 @@ import name.huliqing.luoying.loader.GameDataLoader;
 import name.huliqing.luoying.object.gamelogic.ActorCleanGameLogic;
 import name.huliqing.luoying.object.gamelogic.AttributeChangeGameLogic;
 import name.huliqing.luoying.loader.GameLogicDataLoader;
-import name.huliqing.luoying.loader.HitCheckerDataLoader;
-import name.huliqing.luoying.object.hitchecker.SimpleHitChecker;
 import name.huliqing.luoying.loader.ItemDataLoader;
 import name.huliqing.luoying.object.magic.AttributeHitMagic;
 import name.huliqing.luoying.loader.MagicDataLoader;
@@ -372,7 +369,6 @@ public class LuoYing {
         Serializer.registerClass(EmitterData.class);
         Serializer.registerClass(GameData.class);
         Serializer.registerClass(GameLogicData.class);
-        Serializer.registerClass(HitCheckerData.class);
         Serializer.registerClass(ItemData.class);
         Serializer.registerClass(LogicData.class);
         Serializer.registerClass(MagicData.class);
@@ -518,9 +514,6 @@ public class LuoYing {
         DataFactory.register("gameLogicActorClean", GameLogicData.class, GameLogicDataLoader.class, ActorCleanGameLogic.class);
         DataFactory.register("gameLogicAttributeChange", GameLogicData.class, GameLogicDataLoader.class, AttributeChangeGameLogic.class);
         
-        // HitChecker
-        DataFactory.register("hitChecker",  HitCheckerData.class, HitCheckerDataLoader.class, SimpleHitChecker.class);
-        
         // Item
         DataFactory.register("itemTest",  ItemData.class, ItemDataLoader.class, TestItem.class);
         DataFactory.register("itemAttribute",  ItemData.class, ItemDataLoader.class, AttributeItem.class);
@@ -634,7 +627,7 @@ public class LuoYing {
 //        loadData("/LuoYing/Data/define.xml");
 //        loadData("/LuoYing/Data/drop.xml");
 //        loadData("/LuoYing/Data/effect.xml");
-//        loadData("/LuoYing/Data/el.xml");
+        loadData("/LuoYing/Data/el.xml");
 //        loadData("/LuoYing/Data/emitter.xml");
         loadData("/LuoYing/Data/env.xml");
         loadData("/LuoYing/Data/game.xml");

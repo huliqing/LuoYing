@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
+import name.huliqing.luoying.LuoYingException;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -72,7 +73,11 @@ class DataStore {
      * @throws IOException 
      */
     public void loadData(InputStream dataStream, String encoding) throws ParserConfigurationException, SAXException, IOException {
-        Element root = XmlUtils.newDocument(dataStream, encoding).getDocumentElement();
+        String xmlStr = readFile(dataStream, encoding);
+        String xmlEscapsed = XmlElEscape.convert(xmlStr);
+        
+//        Element root = XmlUtils.newDocument(dataStream, encoding).getDocumentElement();
+        Element root = XmlUtils.newDocument(xmlEscapsed).getDocumentElement();
         NodeList children = root.getChildNodes();
         for (int i = 0; i < children.getLength(); i++) {
             Node node = children.item(i);
@@ -82,51 +87,47 @@ class DataStore {
             String tagName = ((Element) node).getTagName();
             Element ele = (Element) node;
             
-            // 提取脚本
-            if (tagName.equals("script")) {
-                SCRIPTS.add(ele.getTextContent());
-                continue;
-            }
+            // remove20161101
+//            // 提取脚本
+//            if (tagName.equals("script")) {
+//                SCRIPTS.add(ele.getTextContent());
+//                continue;
+//            }
             
             Proto proto = new Proto(XmlUtils.getAttributes(ele), tagName);
             PROTO_MAP.put(proto.getId(), proto);
         }
     }
     
-    // remove20161004不再需要这个方法
-//    /**
-//     * 将文件读取为字符串.
-//     * @param path
-//     * @return 
-//     */
-//    private String readFile(String path) {
-//        BufferedInputStream bis = null;
-//        String result = null;
-//        try {
-//            InputStream is = DataStore.class.getResourceAsStream(path);
-//            bis = new BufferedInputStream(is);
-//            byte[] buff = new byte[2048];
-//            int len;
-//            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//            while ((len = bis.read(buff)) != -1) {
-//                baos.write(buff, 0, len);
-//            }
-//            // 必须指定编码，否则在win下可能中文乱码
-//            result = baos.toString("utf-8");
-//        } catch (IOException ioe) {
-//            Logger.getLogger(DataStore.class.getName())
-//                    .log(Level.SEVERE, "Couldnot read file: {0}", path);
-//        } finally {
-//            if (bis != null) {
-//                try {
-//                    bis.close();
-//                } catch (IOException e) {
-//                    Logger.getLogger(DataStore.class.getName())
-//                            .log(Level.SEVERE, "Could not close stream!", e);
-//                }
-//            }
-//        }
-//        return result;
-//    }
+    /**
+     * 将文件读取为字符串.
+     * @param path
+     * @return 
+     */
+    private String readFile(InputStream is, String charset) {
+        BufferedInputStream bis = null;
+        try {
+            bis = new BufferedInputStream(is);
+            byte[] buff = new byte[2048];
+            int len;
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            while ((len = bis.read(buff)) != -1) {
+                baos.write(buff, 0, len);
+            }
+            return baos.toString(charset != null ? charset : "utf-8");
+            
+        } catch (Exception ioe) {
+            throw new LuoYingException(ioe);
+        } finally {
+            if (bis != null) {
+                try {
+                    bis.close();
+                } catch (IOException e) {
+                    Logger.getLogger(DataStore.class.getName())
+                            .log(Level.SEVERE, "Could not close stream!", e);
+                }
+            }
+        }
+    }
 
 }

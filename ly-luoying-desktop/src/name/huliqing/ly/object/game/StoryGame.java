@@ -91,7 +91,12 @@ public abstract class StoryGame extends SimpleRpgGame {
                 }
             }
         } else {
-            actor = Loader.load(Config.debug ? IdConstants.ACTOR_PLAYER_TEST : IdConstants.ACTOR_PLAYER);
+            if (Config.debug) {
+                actor = Loader.load(IdConstants.ACTOR_PLAYER_TEST);
+                actorService.setLevel(actor, 10);
+            } else {
+                actor = Loader.load(IdConstants.ACTOR_PLAYER);
+            }
 //            logicService.resetPlayerLogic(player);
         }
         getScene().addEntity(actor);

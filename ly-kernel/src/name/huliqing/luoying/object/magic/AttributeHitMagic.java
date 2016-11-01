@@ -65,8 +65,9 @@ public class AttributeHitMagic extends AbstractMagic {
         if (actors.isEmpty()) 
             return;
         
+        hitCheckEl.setSource(source.getAttributeManager());
         for (Entity hitTarget : actors) {
-            if (hitChecker == null || hitChecker.canHit(source, hitTarget)) {
+            if (hitCheckEl.setTarget(hitTarget.getAttributeManager()).getValue()) {
                 for (AttributeWrap aw : attributes) {
                     HitUtils.getInstance().applyHit(source, hitTarget, aw.attribute, aw.amount);
                 }

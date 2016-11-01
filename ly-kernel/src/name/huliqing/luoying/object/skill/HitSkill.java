@@ -64,16 +64,12 @@ public abstract class HitSkill extends AbstractSkill {
         super.setData(data); 
         
         hitCheckEl = elService.createHitCheckEl(data.getAsString("hitCheckEl", "#{true}")); // #{true} -> 除非设置了hitCheckEl否则默认任何目标都可以hit
-        
-        this.hitAttribute = data.getAsString("hitAttribute");
-        this.hitValue = data.getAsFloat("hitValue", 0);
-        String hitElStr = data.getAsString("hitEl");
-        if (hitElStr != null) {
-            hitEl = elService.createHitEl(hitElStr);
-        }
-        this.hitDistance = data.getAsFloat("hitDistance", hitDistance);
-        this.hitDistanceSquared = hitDistance * hitDistance;
-        this.hitAngle = data.getAsFloat("hitAngle", hitAngle);
+        hitAttribute = data.getAsString("hitAttribute");
+        hitValue = data.getAsFloat("hitValue", 0);
+        hitEl = elService.createHitEl(data.getAsString("hitEl", "#{0}"));
+        hitDistance = data.getAsFloat("hitDistance", hitDistance);
+        hitDistanceSquared = hitDistance * hitDistance;
+        hitAngle = data.getAsFloat("hitAngle", hitAngle);
         
         // 状态和机率，　格式："stateId1|factor, stateId2|factor"
         String[] tempHitStates = data.getAsArray("hitStates");

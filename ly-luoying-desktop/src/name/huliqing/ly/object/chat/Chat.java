@@ -7,15 +7,16 @@ package name.huliqing.ly.object.chat;
 import com.jme3.scene.Spatial;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.constants.ResConstants;
+import name.huliqing.luoying.layer.service.ElService;
 import name.huliqing.ly.data.ChatData;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.manager.ResourceManager;
 import name.huliqing.luoying.object.ControlAdapter;
 import name.huliqing.luoying.object.anim.Anim;
+import name.huliqing.luoying.object.el.HitCheckEl;
 import name.huliqing.luoying.object.entity.AbstractEntity;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.hitchecker.HitChecker;
 import name.huliqing.luoying.ui.UI;
 import name.huliqing.luoying.ui.state.UIState;
 import name.huliqing.ly.layer.service.GameService;
@@ -28,6 +29,7 @@ import name.huliqing.ly.layer.service.GameService;
 public abstract class Chat<T extends ChatData> extends AbstractEntity<T> {
     private final PlayService playService = Factory.get(PlayService.class);
     private final GameService gameService = Factory.get(GameService.class);
+    private final ElService elService = Factory.get(ElService.class);
     
     // Chat的宽度和高度限制
     protected float width;
@@ -42,7 +44,7 @@ public abstract class Chat<T extends ChatData> extends AbstractEntity<T> {
     // Chat动画
     protected Anim[] animations;
     // 用于判断当前Chat是否对目标角色可见
-    protected HitChecker hitChecker;
+    protected HitCheckEl hitCheckEl;
     
     // ---- inner
     protected Entity actor;
@@ -77,10 +79,7 @@ public abstract class Chat<T extends ChatData> extends AbstractEntity<T> {
                 this.animations[i] = Loader.load(tempAnims[i]);
             }
         }
-        String tempHitChecker = data.getAsString("hitChecker");
-        if (tempHitChecker != null) {
-            hitChecker = Loader.load(tempHitChecker);
-        }
+        hitCheckEl = elService.createHitCheckEl(data.getAsString("hitCheckEl", "#{true}"));
     }
 
     @Override
@@ -198,7 +197,7 @@ public abstract class Chat<T extends ChatData> extends AbstractEntity<T> {
                 || actor.getSpatial().getWorldTranslation().distanceSquared(target.getSpatial().getWorldTranslation()) > maxDistanceSquared) 
             return false;
         
-        if (hitChecker != null && !hitChecker.canHit(actor, target))
+        if (!hitCheckEl.setTarget(target.getAttributeManager()).getValue())
             return false;
         
         return true;
@@ -210,6 +209,7 @@ public abstract class Chat<T extends ChatData> extends AbstractEntity<T> {
 
     public void setActor(Entity actor) {
         this.actor = actor;
+        hitCheckEl.setSource(actor.getAttributeManager());
     }
     
     public float getMaxDistance() {

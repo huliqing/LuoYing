@@ -142,7 +142,7 @@ public class IdConstants {
     // =========================================================================
     
     /** 默认战斗的hitChecker */
-    public final static String HIT_CHECKER_FIGHT_DEFAULT = "hitCheckerFightDefault";
+//    public final static String HIT_CHECKER_FIGHT_DEFAULT = "hitCheckerFightDefault";
 
     // =========================================================================
     // Scene

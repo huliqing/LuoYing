@@ -31,7 +31,7 @@ public class EntityServiceImpl implements EntityService {
     public void applyNumberAttributeValue(Entity entity, String attributeName, float value, Entity source) {
         NumberAttribute nattr = entity.getAttributeManager().getAttribute(attributeName, NumberAttribute.class);
         if (nattr != null) {
-            nattr.setValue(value);
+            nattr.add(value);
         }
     }
 

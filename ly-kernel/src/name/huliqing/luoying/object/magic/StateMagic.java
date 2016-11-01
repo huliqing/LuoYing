@@ -120,8 +120,9 @@ public class StateMagic extends AbstractMagic {
             if (started) return;
             if (interpolation >= timePoint) {
                 if (targets != null) {
+                    hitCheckEl.setSource(source.getAttributeManager());
                     for (Entity target : targets) {
-                        if (hitChecker == null || hitChecker.canHit(source, target)) {
+                        if (hitCheckEl.setTarget(target.getAttributeManager()).getValue()) {
                             stateService.addState(target, stateId, null);
                         }
                     }
@@ -152,8 +153,9 @@ public class StateMagic extends AbstractMagic {
             }
             if (interpolation >= timePoint) {
                 if (targets != null) {
+                    hitCheckEl.setSource(source.getAttributeManager());
                     for (Entity target : targets) {
-                        if (hitChecker == null || hitChecker.canHit(source, target)) {
+                        if (hitCheckEl.setTarget(target.getAttributeManager()).getValue()) {
                             actorAnim = actorAnimService.loadAnim(actorAnimId);
                             actorAnim.setTarget(target);
                             actorAnim.start();

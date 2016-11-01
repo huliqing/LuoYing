@@ -10,13 +10,13 @@
     <!--=====================================================================-->
     
     <!--战斗类-->
-    <hitChecker id="hitCheckerFightDefault" group="d" living="i" life="y" />
+    <!--<hitChecker id="hitCheckerFightDefault" group="d" living="i" life="y" />-->
 
-    <!--增益状态:只对友军及自己有效-->
-    <hitChecker id="hitCheckerBuff" group="s" living="y" life="y" />
+<!--    增益状态:只对友军及自己有效
+    <hitChecker id="hitCheckerBuff" group="s" living="y" life="y" />-->
 
-    <!--用于复活术:必须是死亡状态才可以执行。-->
-    <hitChecker id="hitCheckerReborn" group="s" living="y" life="n" />
+<!--    用于复活术:必须是死亡状态才可以执行。
+    <hitChecker id="hitCheckerReborn" group="s" living="y" life="n" />-->
     
     <!--=====================================================================-->
     <!-- 用于对话(Chat): 用于检查一个对话是否对目标角色可见 -->

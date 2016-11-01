@@ -14,14 +14,14 @@
     
     <!--未分类生物：生物、种族未知、性别未知、可移动、可转向的角色。如：虫子、怪物、野兽、飞禽、未知生物等活动类角色. -->
     <actor id="actorLivingMovableRotatableBase" extends="actorBase" attributes="attributeActorBiologyMovableRotatable"
-           modules="moduleActor,moduleAction,moduleAttribute,moduleChannel,moduleChat,moduleItem,moduleLogic
+           modules="moduleActor,moduleAction,moduleChannel,moduleChat,moduleItem,moduleLogic
     ,moduleResist,moduleSkill,moduleSkin,moduleState,moduleTalent,moduleTask,moduleLevel,moduleDrop"
            logics="logicSearchEnemy,logicDynamicFight,logicPatrol,logicFollow,logicDefend"
            />
     
     <!--未分类静物：非生物、种族未知、性别未知、不可移动、不可转动的角色。如: 炮塔、宝箱、祭坛、房屋等-->
     <actor id="actorUnlivingUnmovableUnrotatableBase" extends="actorBase" attributes="attributeActorUnbiologyUnmovableUnrotatable"
-           modules="moduleActor,moduleAction,moduleAttribute,moduleChannel,moduleChat,moduleItem,moduleLogic
+           modules="moduleActor,moduleAction,moduleChannel,moduleChat,moduleItem,moduleLogic
     ,moduleResist,moduleSkill,moduleSkin,moduleState,moduleTask,moduleLevel,moduleDrop"
            logics="logicSearchEnemy,logicStaticFight"
            resist="resistNonLife"
@@ -29,7 +29,7 @@
 
     <!--种族配置： 人类女性-->
     <actor id="actorHumanFemaleBase" extends="actorBase" attributes="attributeHumanFemale"
-            modules="moduleActor,moduleAction,moduleAttribute,moduleChannel,moduleChat,moduleItem,moduleLogic
+            modules="moduleActor,moduleAction,moduleChannel,moduleChat,moduleItem,moduleLogic
     ,moduleResist,moduleSkill,moduleSkin,moduleState,moduleTalent,moduleTask,moduleLevel,moduleDrop"
             logics="logicSearchEnemy,logicDynamicFight,logicPatrol,logicFollow,logicDefend"
             channels="channelRoot,channelHips,channelWaist,channelHead,channelLeftLeg,channelRightLeg,channelLeftFoot,channelRightFoot,channelLeftArm,channelRightArm,channelLeftHand,channelRightHand"

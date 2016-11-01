@@ -9,22 +9,27 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import java.util.ArrayList;
 import java.util.List;
+import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.EffectData;
 import name.huliqing.luoying.data.MagicData;
+import name.huliqing.luoying.layer.service.ElService;
 import name.huliqing.luoying.object.ControlAdapter;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.effect.Effect;
+import name.huliqing.luoying.object.el.HitCheckEl;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.entity.ModelEntity;
-import name.huliqing.luoying.object.hitchecker.HitChecker;
 
 /**
  * @author huliqing
  * @param <T>
  */
 public abstract class AbstractMagic<T extends MagicData> extends ModelEntity<T> implements Magic<T> {
+    private final ElService elService = Factory.get(ElService.class);
     
     protected float useTime = 1.0f;
+    protected float timeUsed;
+    protected HitCheckEl hitCheckEl;
     
     //--------
     // 格式:effectId|timePoint,effectId|timePoint,effectId|timePoint...
@@ -36,12 +41,9 @@ public abstract class AbstractMagic<T extends MagicData> extends ModelEntity<T> 
     // 魔法针对的主目标,如果魔法没有特定的目标，则有可能为null
     protected Entity[] targets;
     
-    protected HitChecker hitChecker;
-    
     // 保持对效果的引用，在结束时清理
     protected List<Effect> effects;
     
-    protected float timeUsed;
      
     public AbstractMagic() {
         magicRoot.addControl(new ControlAdapter() {
@@ -57,6 +59,7 @@ public abstract class AbstractMagic<T extends MagicData> extends ModelEntity<T> 
         super.setData(data);
         useTime = data.getAsFloat("useTime", useTime);
         timeUsed = data.getAsFloat("timeUsed", timeUsed);
+        hitCheckEl = elService.createHitCheckEl(data.getAsString("hitCheckEl", "#{true}"));
     }
     
     @Override
@@ -123,6 +126,7 @@ public abstract class AbstractMagic<T extends MagicData> extends ModelEntity<T> 
     @Override
     public void setSource(Entity source) {
         this.source = source;
+        hitCheckEl.setSource(source.getAttributeManager());
     }
 
     @Override
@@ -133,8 +137,8 @@ public abstract class AbstractMagic<T extends MagicData> extends ModelEntity<T> 
     @Override
     public boolean canHit(Entity entity) {
         if (source != null) {
-            return hitChecker.canHit(source, entity);
+            return hitCheckEl.setTarget(entity.getAttributeManager()).getValue();
         }
-        return hitChecker.canHit(this, entity);
+        return true;
     }
 }

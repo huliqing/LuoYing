@@ -46,5 +46,10 @@ public class HitEl extends AbstractEl<Number> {
         elContext.setAttributeManager("target", target);
         return this;
     }
+
+    @Override
+    public Number getValue() {
+        return super.getValue(); 
+    }
     
 }

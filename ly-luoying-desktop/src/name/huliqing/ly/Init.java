@@ -6,6 +6,7 @@
 package name.huliqing.ly;
 
 import com.jme3.app.Application;
+import com.jme3.font.BitmapFont;
 import com.jme3.network.serializing.Serializer;
 import com.jme3.system.AppSettings;
 import name.huliqing.luoying.Factory;

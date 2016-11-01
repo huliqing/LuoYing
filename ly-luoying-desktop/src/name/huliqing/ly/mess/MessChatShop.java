@@ -29,7 +29,7 @@ public class MessChatShop extends MessBase {
     private String itemId;
     private int count;
     private float discount;
-
+ 
     public long getSeller() {
         return seller;
     }

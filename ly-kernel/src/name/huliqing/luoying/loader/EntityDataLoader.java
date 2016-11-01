@@ -8,6 +8,7 @@ package name.huliqing.luoying.loader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import name.huliqing.luoying.LuoYingException;
 import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.data.ModuleData;
 import name.huliqing.luoying.xml.ObjectData;
@@ -30,7 +31,11 @@ public class EntityDataLoader<T extends EntityData> implements DataLoader<T>{
         if (moduleArr != null) {
             data.setModuleDatas(new ArrayList<ModuleData>(moduleArr.length));
             for (String mid : moduleArr) {
-                data.getModuleDatas().add((ModuleData) DataFactory.createData(mid));
+                try {
+                    data.getModuleDatas().add((ModuleData) DataFactory.createData(mid));
+                } catch (Exception e) {
+                    throw new LuoYingException("Could not load moduleData, moduleId=" + mid + ", entityId=" + proto.getId(), e);
+                }
             }
             Collections.sort(data.getModuleDatas(), new Comparator<ModuleData>() {
                 @Override

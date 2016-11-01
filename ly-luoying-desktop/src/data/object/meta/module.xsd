@@ -340,19 +340,11 @@ xs:time
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="talentPointsValue" type="xs:integer" use="optional">
+                    <xs:attribute name="talentPointsLevelEl" type="xs:string" use="required">
                         <xs:annotation>
                             <xs:documentation>
-                                天赋点奖励数量，整数类型，这个参数表示当角色每升一级时可以获得的天赋点数,
-                                固定值，默认0. 注：如果设置了talentPointsLevelEl参数则忽略talentPointsValue设置。
-                            </xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
-                    <xs:attribute name="talentPointsLevelEl" type="xs:string" use="optional">
-                        <xs:annotation>
-                            <xs:documentation>
-                                绑定一个levelEl,这个LevelEl用于计算在角色升级到不同等级时角色可以获得的天赋点数.
-                                如果设置了这个值，则忽略talentPointsValue的设置。
+                                绑定或者直接填写一条levelEl,这个LevelEl用于计算在角色升级到不同等级时角色可以获得的天赋点数.
+                                示例：#{level}, level表示角色的等级。
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
