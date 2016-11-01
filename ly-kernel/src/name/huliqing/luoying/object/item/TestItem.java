@@ -42,14 +42,14 @@ public class TestItem extends AbstractItem {
     public void use(Entity actor) {
         super.use(actor);
         
-//        Entity aa = Loader.load("actorAltar");
-//        actorService.setGroup(aa, 10);
-//        actorService.setLevel(aa, 2);
-//        playNetwork.addEntity(actor.getScene(), aa);
+        Entity aa = Loader.load("actorAltar");
+        actorService.setGroup(aa, 10);
+        actorService.setLevel(aa, 60);
+        playNetwork.addEntity(actor.getScene(), aa);
 
 //        Effect eff = Loader.load("effectTonic");
-        Emitter eff = Loader.load("emitterRandomFire");
-        actor.getScene().getRoot().attachChild(eff.getParticleEmitter());
+//        Emitter eff = Loader.load("emitterRandomFire");
+//        actor.getScene().getRoot().attachChild(eff.getParticleEmitter());
   
 //        eff.getSpatial().setQueueBucket(RenderQueue.Bucket.Translucent);
 //        actor.getScene().getRoot().attachChild(eff.getSpatial());

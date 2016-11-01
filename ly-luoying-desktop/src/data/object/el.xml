@@ -6,22 +6,17 @@
     xsi:schemaLocation='http://luoying.huliqing.name meta/el.xsd'>
     
     <!--==========================================================================-->
-    <!--角色经验公式:配置给角色，计算角色在升到指定等级时需要的经验值。即表示从
-    等级 leve - 1 升级到 level 时需要的经验值。-->
+    <!--角色经验公式:配置给角色，计算角色在升级时，每个等级所需要的经验值。即表示从等级 leve - 1 升级到 level 时需要的经验值。-->
     <!--==========================================================================-->
-    
-    <!--默认升级公式-->
+
     <elLevel  id="elLevelUp" expression="#{0 + 50 * Math:pow(1.2, level)}" />
     
     <!--==========================================================================-->
-    <!--DropAttribute掉落公式, 配置给Drop，用于指定当角色死亡后可以掉落的属性值。
-    {s_level}为源角色等级（死亡的角色), {t_level}为目标角色，即获得获励的角色等级
-    一般为攻击者角色。-->
+    <!--经验值掉落公式, 配置给Drop，用于指定当角色(source)死亡后(target)可以从source身上获得的属性值。-->
     <!--==========================================================================-->
     
     <!--默认公式-->
-    <!--<elAttribute id="elAttributeDropXp" expression="(({s_attributeLevel} + 1) / ({t_attributeLevel} + 1)) * (0 + 12 * Math.pow(1.1, {s_attributeLevel}))" />-->
-    <elHit id="elAttributeDropXp" expression="#{(source.attributeLevel + 1) / (target.attributeLevel + 1) * (0 + 12 * Math:pow(1.1, source.attributeLevel))}" />
+    <elHit id="elDropXp" expression="#{(source.attributeLevel + 1) / (target.attributeLevel + 1) * (0 + 12 * Math:pow(1.1, source.attributeLevel))}" />
 
     <!--==========================================================================-->
     <!--属性值等级公式: 配置给属性，用于计算属性在指定等级时的属性值。-->
@@ -80,13 +75,13 @@
     <!--技能HitCheck: 用于技能Hit判断-->
     <!--==========================================================================-->
     
-        <!--增益状态:只对友军及自己有效-->
-    <!--<hitChecker id="hitCheckerBuff" group="s" living="y" life="y" />-->
-    <elHitCheck id="hitCheckerBuff" expression="#{source.attributeGroup == target.attributeGroup && target.attributeBiology && !target.attributeDead}" />
+    <elHitCheck id="elSkillFightHitCheck" expression="#{source.attributeGroup != target.attributeGroup}" />
+    
+    <!--增益状态:只对友军及自己有效-->
+    <elHitCheck id="elSkillBuffCheck" expression="#{source.attributeGroup == target.attributeGroup && target.attributeBiology && !target.attributeDead}" />
     
     <!--用于复活术:必须是死亡状态才可以执行。-->
-    <!--<hitChecker id="hitCheckerReborn" group="s" living="y" life="n" />-->
-    <elHitCheck id="hitCheckerReborn" expression="#{source.attributeGroup == target.attributeGroup && target.attributeBiology && target.attributeDead}" />
+    <elHitCheck id="elSkillRebornCheck" expression="#{source.attributeGroup == target.attributeGroup && target.attributeBiology && target.attributeDead}" />
     
     <!--==========================================================================-->
     <!--技能升级公式:配置给技能，计算技能在升到指定等级时需要的技能点数（熟练度）。
@@ -94,17 +89,14 @@
     <!--==========================================================================-->
     
     <!--默认公式-->
-    <elLevel  id="elLevelUpSkill" expression="#{10 * level}" />
+    <elLevel  id="elSkillLevelUp" expression="#{10 * level}" />
     
     <!--==========================================================================-->
-    <!-- 技能等级公式，为每个技能计算一个等级值。这个等级值由技能使用，根据不同类
-    型的技能可能应用情况不一样。-->
+    <!-- 技能等级公式，为每个技能计算一个等级值。这个等级值由技能使用，根据不同类型的技能可能应用情况不一样。-->
     <!--==========================================================================-->
-    <elLevel id="elLevelSkill" expression="#{1 + 0.2 * (level - 1)}" />
+    <elLevel id="elSkillLevel" expression="#{1 + 0.2 * (level - 1)}" />
     
-    <!--==========================================================================-->
     <!--技能伤害公式: 配置给技能，用于计算技能可以造成的伤害值。-->
-    <!--==========================================================================-->
     
     <!--默认物理伤害-->
     <elHit id="elSkillAttack" expression="#{-(source.attributeAttack - target.attributeDefence)}" />
@@ -120,11 +112,8 @@
     <!--==========================================================================-->
     
     <!--同伴、同分组-->
-    <!--<hitChecker id="elChatCheckFriendly" group="s" living="y" life="y" />-->
     <elHitCheck id="elChatCheckFriendly" expression="#{!source.attributeDead && !target.attributeDead && source.attributeGroup == target.attributeGroup && target.attributeBiology}" />
-    
     <!--用于任务角色对话-->
-    <!--<hitChecker id="elChatCheckTask" group="i" living="y" life="y" />-->
     <elHitCheck id="elChatCheckTask" expression="#{!source.attributeDead && !target.attributeDead && target.attributeBiology}" />
 </root>
 

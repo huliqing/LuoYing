@@ -80,7 +80,6 @@ public class AttributeChangeGameLogic<T extends GameLogicData> extends AbstractG
         
         // 注意：applyValue 有可能大于0或小于0,只有等于0时才没有意义（这里用一个接近0的值代替）
         if (Math.abs(applyValue) > 0.0001f) {
-//            attributeNetwork.addNumberAttributeValue(actor, applyAttribute, applyValue);
             entityNetwork.applyNumberAttributeValue(actor, applyAttribute, applyValue, null);
         }
     }

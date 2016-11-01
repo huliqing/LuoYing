@@ -69,11 +69,11 @@
     
     <!--通用“补血”效果-->
     <effectParticle id="effectRandomFire" useTime="1.5" emitter="emitterRandomFire" sounds="soundRecover" 
-              traceLocation="always" location="0,1,0" />
+              traceLocation="always" traceLocationOffset="0,1,0" />
     
     <!--通用“吃补药”效果-->
     <effectGroup id="effectTonic" useTime="5" traceLocation="always" traceRotation="no" traceLocationType="origin_bound_center"
-                   sounds="soundRestore" effects="effectTonic1,effectTonic2,effectTonic3,effectRandomFire" />
+                   sounds="soundRestore" effects="effectTonic1,effectTonic2,effectTonic3,effectRandomFire" traceLocationOffset="0,1.5,0" />
     <effectParticle id="effectTonic1"  useTime="3" emitAll="1" emitter="emitterBuff1" />
     <effectParticle id="effectTonic2"  useTime="3" emitAll="1" emitter="emitterBuff2" />
     <effectParticle id="effectTonic3"  useTime="3" emitAll="1" emitter="emitterBuff3" />

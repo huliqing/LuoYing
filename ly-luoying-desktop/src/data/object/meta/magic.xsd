@@ -98,60 +98,20 @@ xs:time
     
     <xs:complexType name="magicBase">
         <xs:complexContent>
-            <xs:extension base="base"> 
-                <xs:attribute name="location" type="xs:string" use="optional" >
-                    <xs:annotation>
-                        <xs:documentation>魔法的位置,格式："x,y,z"</xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="rotation" type="xs:string" use="optional" >
-                    <xs:annotation>
-                        <xs:documentation>魔法的旋转，格式："xAngle,yAngle,zAngle", 都是弧度</xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="debug" type="bool" use="optional" />
+            <xs:extension base="modelEntityBase"> 
                 <xs:attribute name="useTime" type="xs:decimal" use="required" >
                     <xs:annotation>
                         <xs:documentation>魔法的存在时间,单位秒,默认1.0秒</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-                <xs:attribute name="tracePosition" use="required" >
+                <xs:attribute name="hitCheckEl" type="xs:string" use="required">
                     <xs:annotation>
-                        <xs:documentation>是否跟随目标位置</xs:documentation>
-                    </xs:annotation>
-                    <xs:simpleType>
-                        <xs:restriction base="xs:string" >
-                            <xs:enumeration value="no" />
-                            <xs:enumeration value="once" />
-                            <xs:enumeration value="always" />
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:attribute>
-                <xs:attribute name="tracePositionOffset" type="xs:string" use="optional" >
-                    <xs:annotation>
-                        <xs:documentation>跟随目标的位置初始偏移,格式: "x,y,z"</xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="traceRotation" use="required" >
-                    <xs:annotation>
-                        <xs:documentation>是否跟随目标的旋转</xs:documentation>
-                    </xs:annotation>
-                    <xs:simpleType>
-                        <xs:restriction base="xs:string" >
-                            <xs:enumeration value="no" />
-                            <xs:enumeration value="once" />
-                            <xs:enumeration value="always" />
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:attribute>
-                <xs:attribute name="traceRotationOffset" type="xs:decimal" use="optional" >
-                    <xs:annotation>
-                        <xs:documentation>跟随目标旋转的初始旋转偏移，格式: "x,y,z"</xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="hitChecker" type="xs:string" use="required">
-                    <xs:annotation>
-                        <xs:documentation>指定一个hitChecker,如果没有指定，则表示魔法可对任何目标产生作用。</xs:documentation>
+                        <xs:documentation>
+                            指定或直接填写一条HitCheckEl,这条el用于判断当前魔法是否可以对目标产生作用。三个注意点：
+                            1.如果没有指定这个参数，则魔法可以对任何对象产生作用;
+                            2.如果魔法没有释放源(即魔法不是由特定目标释放的)，则这条HitCheckEl表达式中不能使用source参数。
+                            使用示例, #{target.attributeGroup > 0}
+                        </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
                 <xs:attribute name="effects" type="xs:string" use="optional" >

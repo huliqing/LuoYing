@@ -494,9 +494,9 @@ xs:time
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:attribute>
-                <xs:attribute name="hitChecker" type="xs:string" use="required">
+                <xs:attribute name="hitCheckEl" type="xs:string" use="required">
                     <xs:annotation>
-                        <xs:documentation>技能作用检查器</xs:documentation>
+                        <xs:documentation>绑定或直接填写一个HitCheckEl, 这个el用于判断当前技能是否可以作用于目标角色，示例：#{source.attributeGroup != target.attributeGroup}</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
                 <xs:attribute name="hitAttribute" type="xs:string" use="required">

@@ -7,6 +7,7 @@ package name.huliqing.luoying.object.magic;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.data.MagicData;
+import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.skill.HitUtils;
 import name.huliqing.luoying.utils.ConvertUtils;
@@ -26,7 +27,7 @@ public class AttributeHitMagic extends AbstractMagic {
     // ---- inner
     private float intervalUsed;
     
-    private final List<Entity> tempStore = new ArrayList<Entity>();
+    private final List<Actor> tempStore = new ArrayList<Actor>();
     
     @Override
     public void setData(MagicData data) {
@@ -61,7 +62,7 @@ public class AttributeHitMagic extends AbstractMagic {
     
     private void applyHit() {
         tempStore.clear();
-        List<Entity> actors = scene.getEntities(Entity.class, magicRoot.getWorldTranslation(), distance, tempStore);
+        List<Actor> actors = scene.getEntities(Actor.class, magicRoot.getWorldTranslation(), distance, tempStore);
         if (actors.isEmpty()) 
             return;
         

@@ -82,7 +82,6 @@ public abstract class AbstractMagic<T extends MagicData> extends ModelEntity<T> 
     @Override
     public void initEntity() {
         super.initEntity();
-        
         if (data.getEffectDatas() != null) {
             if (effects == null) {
                 effects = new ArrayList<Effect>(data.getEffectDatas().length);
@@ -94,7 +93,6 @@ public abstract class AbstractMagic<T extends MagicData> extends ModelEntity<T> 
                 effects.add(effect);
             }
         }
-        
     }
     
     public void magicUpdate(float tpf) {
