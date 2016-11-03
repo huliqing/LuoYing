@@ -19,12 +19,10 @@ import name.huliqing.luoying.object.entity.Entity;
 public class ActionNetworkImpl implements ActionNetwork {
 
     private final static Network NETWORK = Network.getInstance();
-    private ActorNetwork actorNetwork;
     private ActionService actionService;
 
     @Override
     public void inject() {
-        actorNetwork = Factory.get(ActorNetwork.class);
         actionService = Factory.get(ActionService.class);
     }
 
@@ -46,7 +44,10 @@ public class ActionNetworkImpl implements ActionNetwork {
     public void playFight(Entity actor, Entity target, String skillId) {
         // 客户端是不能执行逻辑和行为的
         if (!NETWORK.isClient()) {
-            actorNetwork.setTarget(actor, target);
+            
+            // remove20161103
+//            actorNetwork.setTarget(actor, target);
+
             actionService.playFight(actor, target, skillId);
         }
     }

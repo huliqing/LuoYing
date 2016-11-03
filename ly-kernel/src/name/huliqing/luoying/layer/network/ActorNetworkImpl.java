@@ -8,17 +8,17 @@ import name.huliqing.luoying.network.Network;
 import com.jme3.math.Vector3f;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.layer.service.ActorService;
-import name.huliqing.luoying.mess.MessActorFollow;
-import name.huliqing.luoying.mess.MessActorKill;
+//import name.huliqing.luoying.mess.MessActorFollow;
+//import name.huliqing.luoying.mess.MessActorKill;
 import name.huliqing.luoying.mess.MessActorPhysics;
-import name.huliqing.luoying.mess.MessActorSetGroup;
-import name.huliqing.luoying.mess.MessActorSetLevel;
-import name.huliqing.luoying.mess.MessActorSetTarget;
-import name.huliqing.luoying.mess.MessActorTeam;
+//import name.huliqing.luoying.mess.MessActorSetGroup;
+//import name.huliqing.luoying.mess.MessActorSetLevel;
+//import name.huliqing.luoying.mess.MessActorSetTarget;
+//import name.huliqing.luoying.mess.MessActorTeam;
 import name.huliqing.luoying.mess.MessActorViewDir;
 import name.huliqing.luoying.mess.MessActorLookAt;
 import name.huliqing.luoying.mess.MessActorSetLocation;
-import name.huliqing.luoying.mess.MessEntityAttributeApply;
+//import name.huliqing.luoying.mess.MessEntityAttributeApply;
 import name.huliqing.luoying.object.entity.Entity;
 
 /**
@@ -52,104 +52,104 @@ public class ActorNetworkImpl implements ActorNetwork{
 //        talk.setNetwork(true);
 //        actorService.talk(talk); 
 //    }
-
-    @Override
-    public void kill(Entity actor) {
-        if (!NETWORK.isClient()) {
-            if (NETWORK.hasConnections()) {
-                MessActorKill mess = new MessActorKill();
-                mess.setKillActorId(actor.getData().getUniqueId());
-                NETWORK.broadcast(mess);
-            }
-            actorService.kill(actor); 
-        }
-    }
-
-    @Override
-    public void setTarget(Entity actor, Entity target) {
-        MessActorSetTarget mess = new MessActorSetTarget();
-        mess.setActorId(actor.getData().getUniqueId());
-        mess.setTargetId(target != null ? target.getData().getUniqueId() : -1);
-        
-        // client
-        if (NETWORK.isClient()) {
-            NETWORK.sendToServer(mess);
-            return;
-        }
-        
-        // server
-        NETWORK.broadcast(mess);
-        actorService.setTarget(actor, target); 
-    }
-    
-    @Override
-    public void hitNumberAttribute(Entity target, Entity source, String hitAttrName, float hitValue) {
-        if (!NETWORK.isClient()) {
-            actorService.hitNumberAttribute(target, source, hitAttrName, hitValue);
-            
-            // 同步属性值
-            if (NETWORK.hasConnections()) {
-                MessEntityAttributeApply mess = new MessEntityAttributeApply();
-                mess.setTarget(target.getData().getUniqueId());
-                mess.setSource(source.getData().getUniqueId());
-                mess.setAttributeName(hitAttrName);
-                mess.setApplyValue(hitValue);
-                NETWORK.broadcast(mess);
-            }
-        }
-    }
-
-    @Override
-    public void setLevel(Entity actor, int level) {
-        if (!NETWORK.isClient()) {
-            if (NETWORK.hasConnections()) {
-                MessActorSetLevel mess = new MessActorSetLevel();
-                mess.setActorId(actor.getData().getUniqueId());
-                mess.setLevel(level);
-                NETWORK.broadcast(mess);
-            }
-            actorService.setLevel(actor, level);
-        }
-    }
-    
-    @Override
-    public void setGroup(Entity actor, int group) {
-        if (!NETWORK.isClient()) {
-            if (NETWORK.hasConnections()) {
-                MessActorSetGroup mess = new MessActorSetGroup();
-                mess.setActorId(actor.getData().getUniqueId());
-                mess.setGroup(group);
-                NETWORK.broadcast(mess);
-            }
-            actorService.setGroup(actor, group);
-        }
-    }
-    
-    @Override
-    public void setTeam(Entity actor, int team) {
-        if (!NETWORK.isClient()) {
-            if (NETWORK.hasConnections()) {
-                MessActorTeam mess = new MessActorTeam();
-                mess.setActorId(actor.getData().getUniqueId());
-                mess.setTeamId(team);
-                NETWORK.broadcast(mess);
-            }
-            actorService.setTeam(actor, team);
-        }
-    }
-    
-    @Override
-    public void setFollow(Entity actor, long targetId) {
-        MessActorFollow mess = new MessActorFollow();
-        mess.setActorId(actor.getData().getUniqueId());
-        mess.setTargetId(targetId);
-        if (NETWORK.isClient()) {
-            NETWORK.sendToServer(mess);
-        } else {
-            NETWORK.broadcast(mess);
-            actorService.setFollow(actor, targetId);
-        }
-    }
+//
+//    @Override
+//    public void kill(Entity actor) {
+//        if (!NETWORK.isClient()) {
+//            if (NETWORK.hasConnections()) {
+//                MessActorKill mess = new MessActorKill();
+//                mess.setKillActorId(actor.getData().getUniqueId());
+//                NETWORK.broadcast(mess);
+//            }
+//            actorService.kill(actor); 
+//        }
+//    }
+//
+//    @Override
+//    public void setTarget(Entity actor, Entity target) {
+//        MessActorSetTarget mess = new MessActorSetTarget();
+//        mess.setActorId(actor.getData().getUniqueId());
+//        mess.setTargetId(target != null ? target.getData().getUniqueId() : -1);
+//        
+//        // client
+//        if (NETWORK.isClient()) {
+//            NETWORK.sendToServer(mess);
+//            return;
+//        }
+//        
+//        // server
+//        NETWORK.broadcast(mess);
+//        actorService.setTarget(actor, target); 
+//    }
+//    
+//    @Override
+//    public void hitNumberAttribute(Entity target, Entity source, String hitAttrName, float hitValue) {
+//        if (!NETWORK.isClient()) {
+//            actorService.hitNumberAttribute(target, source, hitAttrName, hitValue);
+//            
+//            // 同步属性值
+//            if (NETWORK.hasConnections()) {
+//                MessEntityAttributeApply mess = new MessEntityAttributeApply();
+//                mess.setTarget(target.getData().getUniqueId());
+//                mess.setSource(source.getData().getUniqueId());
+//                mess.setAttributeName(hitAttrName);
+//                mess.setApplyValue(hitValue);
+//                NETWORK.broadcast(mess);
+//            }
+//        }
+//    }
+//
+//    @Override
+//    public void setLevel(Entity actor, int level) {
+//        if (!NETWORK.isClient()) {
+//            if (NETWORK.hasConnections()) {
+//                MessActorSetLevel mess = new MessActorSetLevel();
+//                mess.setActorId(actor.getData().getUniqueId());
+//                mess.setLevel(level);
+//                NETWORK.broadcast(mess);
+//            }
+//            actorService.setLevel(actor, level);
+//        }
+//    }
+//    
+//    @Override
+//    public void setGroup(Entity actor, int group) {
+//        if (!NETWORK.isClient()) {
+//            if (NETWORK.hasConnections()) {
+//                MessActorSetGroup mess = new MessActorSetGroup();
+//                mess.setActorId(actor.getData().getUniqueId());
+//                mess.setGroup(group);
+//                NETWORK.broadcast(mess);
+//            }
+//            actorService.setGroup(actor, group);
+//        }
+//    }
+//    
+//    @Override
+//    public void setTeam(Entity actor, int team) {
+//        if (!NETWORK.isClient()) {
+//            if (NETWORK.hasConnections()) {
+//                MessActorTeam mess = new MessActorTeam();
+//                mess.setActorId(actor.getData().getUniqueId());
+//                mess.setTeamId(team);
+//                NETWORK.broadcast(mess);
+//            }
+//            actorService.setTeam(actor, team);
+//        }
+//    }
+//    
+//    @Override
+//    public void setFollow(Entity actor, long targetId) {
+//        MessActorFollow mess = new MessActorFollow();
+//        mess.setActorId(actor.getData().getUniqueId());
+//        mess.setTargetId(targetId);
+//        if (NETWORK.isClient()) {
+//            NETWORK.sendToServer(mess);
+//        } else {
+//            NETWORK.broadcast(mess);
+//            actorService.setFollow(actor, targetId);
+//        }
+//    }
     
     @Override
     public void setLocation(Entity actor, Vector3f location) {

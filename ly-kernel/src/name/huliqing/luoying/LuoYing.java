@@ -59,13 +59,13 @@ import name.huliqing.luoying.data.TalentData;
 import name.huliqing.luoying.data.TaskData;
 import name.huliqing.luoying.mess.MessActionRun;
 import name.huliqing.luoying.mess.MessActorAddSkill;
-import name.huliqing.luoying.mess.MessActorFollow;
-import name.huliqing.luoying.mess.MessActorKill;
+//import name.huliqing.luoying.mess.MessActorFollow;
+//import name.huliqing.luoying.mess.MessActorKill;
 import name.huliqing.luoying.mess.MessActorPhysics;
-import name.huliqing.luoying.mess.MessActorSetGroup;
-import name.huliqing.luoying.mess.MessActorSetLevel;
-import name.huliqing.luoying.mess.MessActorSetTarget;
-import name.huliqing.luoying.mess.MessActorTeam;
+//import name.huliqing.luoying.mess.MessActorSetGroup;
+//import name.huliqing.luoying.mess.MessActorSetLevel;
+//import name.huliqing.luoying.mess.MessActorSetTarget;
+//import name.huliqing.luoying.mess.MessActorTeam;
 import name.huliqing.luoying.mess.MessActorTransform;
 import name.huliqing.luoying.mess.MessActorTransformDirect;
 import name.huliqing.luoying.mess.MessActorViewDir;
@@ -233,7 +233,6 @@ import name.huliqing.luoying.loader.SoundDataLoader;
 import name.huliqing.luoying.object.state.AttributeDynamicState;
 import name.huliqing.luoying.object.state.AttributeState;
 import name.huliqing.luoying.object.state.CleanState;
-import name.huliqing.luoying.object.state.EssentialState;
 import name.huliqing.luoying.object.state.MoveSpeedState;
 import name.huliqing.luoying.object.state.SkillLockedState;
 import name.huliqing.luoying.object.state.SkillState;
@@ -246,7 +245,10 @@ import name.huliqing.luoying.loader.ModuleDataLoader;
 import name.huliqing.luoying.loader.PlantEnvLoader;
 import name.huliqing.luoying.loader.RandomSceneDataLoader;
 import name.huliqing.luoying.mess.MessActorSetLocation;
+import name.huliqing.luoying.mess.MessEntityAdd;
 import name.huliqing.luoying.mess.MessEntityAttributeApply;
+import name.huliqing.luoying.mess.MessEntityAttributeSet;
+import name.huliqing.luoying.mess.MessEntityRemove;
 import name.huliqing.luoying.mess.MessItemAdd;
 import name.huliqing.luoying.mess.MessItemRemove;
 import name.huliqing.luoying.mess.MessItemUse;
@@ -273,10 +275,10 @@ import name.huliqing.luoying.object.drop.AttributeDrop;
 import name.huliqing.luoying.object.drop.GroupDrop;
 import name.huliqing.luoying.object.drop.ItemDrop;
 import name.huliqing.luoying.object.drop.SkinDrop;
-import name.huliqing.luoying.object.el.HitCheckEl;
-import name.huliqing.luoying.object.el.HitEl;
-import name.huliqing.luoying.object.el.LevelEl;
-import name.huliqing.luoying.object.el.CheckEl;
+import name.huliqing.luoying.object.el.STBooleanEl;
+import name.huliqing.luoying.object.el.STNumberEl;
+import name.huliqing.luoying.object.el.LNumberEl;
+import name.huliqing.luoying.object.el.SBooleanEl;
 import name.huliqing.luoying.object.env.DirectionalLightShadowEnv;
 import name.huliqing.luoying.object.env.GrassEnv;
 import name.huliqing.luoying.object.env.ModelEnv;
@@ -295,6 +297,7 @@ import name.huliqing.luoying.object.module.LevelModule;
 import name.huliqing.luoying.object.module.PhysicsModule;
 import name.huliqing.luoying.object.scene.SimpleScene;
 import name.huliqing.luoying.object.slot.Slot;
+import name.huliqing.luoying.object.state.BooleanAttributeState;
 import name.huliqing.luoying.object.state.GroupState;
 import name.huliqing.luoying.xml.Data;
 import name.huliqing.luoying.xml.DataFactory;
@@ -473,10 +476,10 @@ public class LuoYing {
         DataFactory.register("effectProjection", EffectData.class, EffectDataLoader.class, ProjectionEffect.class);
         
         // El
-        DataFactory.registerDataProcessor("elCheck",  CheckEl.class);
-        DataFactory.registerDataProcessor("elHitCheck",  HitCheckEl.class);
-        DataFactory.registerDataProcessor("elHit",  HitEl.class);
-        DataFactory.registerDataProcessor("elLevel",  LevelEl.class);
+        DataFactory.registerDataProcessor("elSBoolean",  SBooleanEl.class);
+        DataFactory.registerDataProcessor("elSTBoolean",  STBooleanEl.class);
+        DataFactory.registerDataProcessor("elSTNumber",  STNumberEl.class);
+        DataFactory.registerDataProcessor("elLNumber",  LNumberEl.class);
         
         // Emitter
         DataFactory.register("emitter",  EmitterData.class, EmitterDataLoader.class, Emitter.class);
@@ -601,10 +604,10 @@ public class LuoYing {
         DataFactory.register("stateAttributeMove", StateData.class, StateDataLoader.class, MoveSpeedState.class);
         DataFactory.register("stateAttributeDynamic", StateData.class, StateDataLoader.class, AttributeDynamicState.class);
         DataFactory.register("stateSkillLocked", StateData.class, StateDataLoader.class, SkillLockedState.class);
-        DataFactory.register("stateEssential", StateData.class, StateDataLoader.class, EssentialState.class);
         DataFactory.register("stateSkill", StateData.class, StateDataLoader.class, SkillState.class);
         DataFactory.register("stateClean", StateData.class, StateDataLoader.class, CleanState.class);
         DataFactory.register("stateGroup", StateData.class, StateDataLoader.class, GroupState.class);
+        DataFactory.register("stateBooleanAttribute", StateData.class, StateDataLoader.class, BooleanAttributeState.class);
         
         // Talent
         DataFactory.register("talentAttribute",  TalentData.class, TalentDataLoader.class, AttributeTalent.class);
@@ -728,22 +731,25 @@ public class LuoYing {
         Serializer.registerClass(MessAutoAttack.class);
         Serializer.registerClass(MessActionRun.class);
         Serializer.registerClass(MessActorAddSkill.class);
-        Serializer.registerClass(MessActorFollow.class);
-        Serializer.registerClass(MessActorKill.class);
+//        Serializer.registerClass(MessActorFollow.class);
+//        Serializer.registerClass(MessActorKill.class);
         Serializer.registerClass(MessActorLookAt.class);
         Serializer.registerClass(MessActorPhysics.class);
-        Serializer.registerClass(MessActorSetGroup.class);
-        Serializer.registerClass(MessActorSetLevel.class);
+//        Serializer.registerClass(MessActorSetGroup.class);
+//        Serializer.registerClass(MessActorSetLevel.class);
         Serializer.registerClass(MessActorSetLocation.class);
-        Serializer.registerClass(MessActorSetTarget.class);
+//        Serializer.registerClass(MessActorSetTarget.class);
 //        Serializer.registerClass(MessActorSpeak.class);
-        Serializer.registerClass(MessActorTeam.class);
+//        Serializer.registerClass(MessActorTeam.class);
         Serializer.registerClass(MessActorTransform.class);
         Serializer.registerClass(MessActorTransformDirect.class);
         Serializer.registerClass(MessActorViewDir.class);
         
-        // Attribute
+        // Entity
+        Serializer.registerClass(MessEntityAdd.class);
         Serializer.registerClass(MessEntityAttributeApply.class);
+        Serializer.registerClass(MessEntityAttributeSet.class);
+        Serializer.registerClass(MessEntityRemove.class);
         
         // Chat
 //        Serializer.registerClass(MessChatSell.class); 

@@ -12,7 +12,6 @@ import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.data.SkillData;
 import name.huliqing.luoying.layer.service.ActorService;
-import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.define.DefineFactory;
@@ -130,7 +129,7 @@ public class AttackSkill extends HitSkill {
                 }
             }
         } else {
-            Entity target = actorModule.getTarget();
+            Entity target = getTarget();
             
             // 只有在技能作用范围内　及　在攻击角度内才视为可能被击中
             if (!isInHitDistance(target) 

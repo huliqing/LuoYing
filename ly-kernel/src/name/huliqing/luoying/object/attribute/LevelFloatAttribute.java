@@ -8,7 +8,7 @@ package name.huliqing.luoying.object.attribute;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.AttributeData;
 import name.huliqing.luoying.layer.service.ElService;
-import name.huliqing.luoying.object.el.LevelEl;
+import name.huliqing.luoying.object.el.LNumberEl;
 
 /**
  * LevelAttribute主要用于拥有等级功能的属性，这种属性会随着等级的提升,属性值也会随着改变。<br>
@@ -28,7 +28,7 @@ public class LevelFloatAttribute extends FloatAttribute implements LevelAttribut
     private float dynamicValue;
     
     // 等级公式,通过这个id来创建一条等级公式
-    private LevelEl levelEl;
+    private LNumberEl levelEl;
     // 当前等级
     private int level;
 
@@ -39,7 +39,7 @@ public class LevelFloatAttribute extends FloatAttribute implements LevelAttribut
         levelValue = data.getAsFloat("levelValue", levelValue);
         dynamicValue = data.getAsFloat("dynamicValue", dynamicValue);
         level = data.getAsInteger("level", level);
-        levelEl = elService.createLevelEl(data.getAsString("levelEl"));
+        levelEl = elService.createLNumberEl(data.getAsString("levelEl"));
     }
     
     @Override

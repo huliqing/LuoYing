@@ -117,19 +117,21 @@ public class PlayServiceImpl implements PlayService {
     
     @Override
     public void attack(Entity actor, Entity target) {
-         // 如果角色已经死亡
-        if (actorService.isDead(actor)) {
-            return;
-        }
+        // remove20161102
+//         // 如果角色已经死亡
+//        if (actorService.isDead(actor)) {
+//            return;
+//        }
         
         // 执行战斗行为
         if (target != null) {
             actionService.playFight(actor, target, null);
         }
 
-        // 打开或关闭侦察敌人的逻辑,autoDetect不需要广播到客户端，因为客户端不会有
-        // 逻辑
-        logicService.setAutoDetect(actor, skinService.isWeaponTakeOn(actor));
+        // remove20161103
+//        // 打开或关闭侦察敌人的逻辑,autoDetect不需要广播到客户端，因为客户端不会有
+//        // 逻辑
+//        logicService.setAutoDetect(actor, skinService.isWeaponTakeOn(actor));
     }
     
     

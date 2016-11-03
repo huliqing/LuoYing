@@ -11,18 +11,21 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.constants.SkillConstants;
 import name.huliqing.luoying.data.SkillData;
+import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.luoying.layer.network.StateNetwork;
 import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.layer.service.ElService;
 import name.huliqing.luoying.object.Loader;
-import name.huliqing.luoying.object.el.HitCheckEl;
-import name.huliqing.luoying.object.el.HitEl;
+import name.huliqing.luoying.object.attribute.NumberAttribute;
+import name.huliqing.luoying.object.el.STBooleanEl;
+import name.huliqing.luoying.object.el.STNumberEl;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.magic.Magic;
-import name.huliqing.luoying.object.module.ActorModule;
 import name.huliqing.luoying.utils.ConvertUtils;
 
 /**
@@ -30,20 +33,22 @@ import name.huliqing.luoying.utils.ConvertUtils;
  * @author huliqing
  */
 public abstract class HitSkill extends AbstractSkill {
+    private static final Logger LOG = Logger.getLogger(HitSkill.class.getName());
+    
     private final ActorService actorService = Factory.get(ActorService.class);
     private final ElService elService = Factory.get(ElService.class);
     private final StateNetwork stateNetwork = Factory.get(StateNetwork.class);
-    private ActorModule actorModule;
+    private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
     
     // hitCheckEl用于检查当前角色的技能是否作为作用(hit)于一个目标角色。
-    protected HitCheckEl hitCheckEl;
+    protected STBooleanEl hitCheckEl;
     // 指定HIT目标的哪一个属性
     protected String hitAttribute;
     // HIT的属性值，可正，可负。
     protected float hitValue;
     // Hit公式，这个公式用于计算当前角色对目标角色可以产生的属性影响值，不包含hitValue.
     // hitEl计算出的值会和hitValue一起加成，作为最终的hit结果值。
-    protected HitEl hitEl;
+    protected STNumberEl hitEl;
     // hit的距离限制，注：hitDistance和hitAngle决定了hit的面积,举例，
     // 如果 hitDistance = 3, hitAngle=360， 则在角色周围3码内的目标都在这个技能范围内
     protected float hitDistance = 3;
@@ -53,20 +58,24 @@ public abstract class HitSkill extends AbstractSkill {
     protected List<SkillStateWrap> hitStates;
     // HIT后可添加到目标角色上的魔法
     protected String[] hitMagics;
+    // 绑定“目标”属性，这个属性的值用于查找当前角色的目标对象。
+    protected String bindTargetAttribute;
     
     // ---- inner
     private TargetsComparator sorter;
     // 缓存hitDistance,优化inHitDistance
     private float hitDistanceSquared;
+    // 角色的目标对象属性
+    private NumberAttribute targetAttribute;
     
     @Override
     public void setData(SkillData data) {
         super.setData(data); 
         
-        hitCheckEl = elService.createHitCheckEl(data.getAsString("hitCheckEl", "#{true}")); // #{true} -> 除非设置了hitCheckEl否则默认任何目标都可以hit
+        hitCheckEl = elService.createSTBooleanEl(data.getAsString("hitCheckEl", "#{true}")); // #{true} -> 除非设置了hitCheckEl否则默认任何目标都可以hit
         hitAttribute = data.getAsString("hitAttribute");
         hitValue = data.getAsFloat("hitValue", 0);
-        hitEl = elService.createHitEl(data.getAsString("hitEl", "#{0}"));
+        hitEl = elService.createSTNumberEl(data.getAsString("hitEl", "#{0}"));
         hitDistance = data.getAsFloat("hitDistance", hitDistance);
         hitDistanceSquared = hitDistance * hitDistance;
         hitAngle = data.getAsFloat("hitAngle", hitAngle);
@@ -92,26 +101,42 @@ public abstract class HitSkill extends AbstractSkill {
             }
         }
         hitMagics = data.getAsArray("hitMagics");
+        bindTargetAttribute = data.getAsString("bindTargetAttribute");
     }
 
     @Override
     public void setActor(Entity actor) {
         super.setActor(actor); 
-        actorModule = actor.getModuleManager().getModule(ActorModule.class);
         hitCheckEl.setSource(actor.getAttributeManager());
     }
 
     @Override
     public void initialize() {
         super.initialize();
+        targetAttribute = actor.getAttributeManager().getAttribute(bindTargetAttribute, NumberAttribute.class);
+        if (targetAttribute == null) {
+            LOG.log(Level.WARNING, "Could not found targetAttribute. HitSkill need to set bindTargetAttribute, "
+                    + " Entity={0}, Skill={1}, bindTargetAttribute={2}", new Object[] {actor.getData().getId(), data.getId(), bindTargetAttribute});
+        }
         
         // 注：这里target必须不能是自己(actor),否则在faceTo时会导致在执行animation
         // 的时候模型的头发和武器错位,即不能faceTo自己，所以target != actor的判断必须的。
-        Entity target = actorService.getTarget(actor);
+        Entity target = getTarget();
         if (target != null && target != actor) {
             actorService.setLookAt(actor, actorService.getLocation(target));
         }
         hitCheckEl.setSource(actor.getAttributeManager());
+    }
+    
+    /**
+     * 获取角色的当前目标对象, 如果不存在，或者没有指定任何targetAttribute则该方法返回null.
+     * @return 
+     */
+    protected Entity getTarget() {
+        if (targetAttribute == null) {
+            return null;
+        }
+        return actor.getScene().getEntity(targetAttribute.getValue().longValue());
     }
     
     @Override
@@ -133,7 +158,7 @@ public abstract class HitSkill extends AbstractSkill {
         actorService.findNearestActors(actor, hitDistance, hitAngle, store);
 
         // 移除不能作为目标的角色,注：mainTarget要单独处理
-        Entity mainTarget = actorService.getTarget(actor);
+        Entity mainTarget = getTarget();
         Iterator<Entity> it = store.iterator();
         Entity temp;
         while (it.hasNext()) {
@@ -205,7 +230,7 @@ public abstract class HitSkill extends AbstractSkill {
             magic.getSpatial().setLocalTranslation(target.getSpatial().getWorldTranslation());
             target.getScene().addEntity(magic);
             
-            // remove
+            // remove201610xx
 //            md.setTargetActor(target.getData().getUniqueId());
 //            md.setTraceActor(target.getData().getUniqueId());
         }
@@ -233,7 +258,7 @@ public abstract class HitSkill extends AbstractSkill {
      * @param hitEl 技能计算公式
      * @param attribute 指定攻击的是哪一个属性
      */
-    private void applyHit(Entity attacker, Entity target, float hitValue, HitEl hitEl, String attribute) {
+    private void applyHit(Entity attacker, Entity target, float hitValue, STNumberEl hitEl, String attribute) {
         // remove20161031
 //        if (hitEl == null) {
 //            return;
@@ -248,7 +273,7 @@ public abstract class HitSkill extends AbstractSkill {
         hitEl.setSource(attacker.getAttributeManager());
         hitEl.setTarget(target.getAttributeManager());
         float finalHitValue = hitValue + hitEl.getValue().floatValue();
-        HitUtils.getInstance().applyHit(attacker, target, attribute, finalHitValue);
+        entityNetwork.applyNumberAttributeValue(target, attribute, finalHitValue, attacker);
     }
 
     @Override
@@ -256,7 +281,7 @@ public abstract class HitSkill extends AbstractSkill {
         if (actor == null)
             return SkillConstants.STATE_UNDEFINE;
         
-        Entity target = actorModule.getTarget();
+        Entity target = getTarget();
         if (target == null) {
             return SkillConstants.STATE_TARGET_NOT_FOUND;
         }

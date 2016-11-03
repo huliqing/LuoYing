@@ -6,21 +6,18 @@ package name.huliqing.luoying.object.state;
 
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.StateData;
-import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.object.Loader;
+import name.huliqing.luoying.object.attribute.BooleanAttribute;
 import name.huliqing.luoying.object.effect.Effect;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.module.ActorModule;
 
 /**
  * @author huliqing
  * @param <T>
  */
 public abstract class AbstractState<T extends StateData> implements State<T> {
-    private final PlayService playService = Factory.get(PlayService.class);
-    private ActorModule actorModule;
+//    private final PlayService playService = Factory.get(PlayService.class);
     
     protected T data;
     
@@ -34,7 +31,17 @@ public abstract class AbstractState<T extends StateData> implements State<T> {
      */
     protected float timeUsed;
     
+    /**
+     * 用于判断角色是否死亡的属性
+     */
+    protected String bindDeadAttribute;
+    
     // ---- inner
+    /**
+     * 角色获得状态时的效果,这些效果会在状态开始时附加在角色身上，在状态结束时停止．
+     * 注意：这些效果引用只是临时的，在结束时要清空。
+     */
+    protected List<Effect> tempEffects;
     
     protected boolean initialized;
     
@@ -43,14 +50,8 @@ public abstract class AbstractState<T extends StateData> implements State<T> {
     
     /** 状态的产生者，也就是说，这个状态是哪一个角色发出的, 如果一个状态没有发起源，则这个参数可能为null. */
     protected Entity sourceActor;
-    
-    // ---- inner
         
-    /**
-     * 角色获得状态时的效果,这些效果会在状态开始时附加在角色身上，在状态结束时停止．
-     * 注意：这些效果引用只是临时的，在结束时要清空。
-     */
-    protected List<Effect> tempEffects;
+    protected BooleanAttribute deadAttribute;
 
     @Override
     public void setData(T data) {
@@ -61,6 +62,7 @@ public abstract class AbstractState<T extends StateData> implements State<T> {
         this.data = data;
         this.initialized = data.getAsBoolean("initialized", initialized);
         this.timeUsed = data.getAsFloat("timeUsed", timeUsed);
+        this.bindDeadAttribute = data.getAsString("bindDeadAttribute");
     }
     
     @Override
@@ -79,6 +81,10 @@ public abstract class AbstractState<T extends StateData> implements State<T> {
             throw new IllegalArgumentException("State already initialized");
         }
         initialized = true;
+        
+        if (bindDeadAttribute != null) {
+            deadAttribute = actor.getAttributeManager().getAttribute(bindDeadAttribute, BooleanAttribute.class);
+        }
         
         if (data.getEffects() != null) {
             if (tempEffects == null) {
@@ -109,7 +115,7 @@ public abstract class AbstractState<T extends StateData> implements State<T> {
             return;
         }
         
-        if (data.isRemoveOnDead() && actorModule.isDead()) {
+        if (data.isRemoveOnDead() && deadAttribute != null && deadAttribute.getValue()) {
             initialized = false;
         }
     }
@@ -155,7 +161,6 @@ public abstract class AbstractState<T extends StateData> implements State<T> {
     @Override
     public void setActor(Entity actor) {
         this.actor = actor;
-        actorModule = actor.getModuleManager().getModule(ActorModule.class);
     }
 
     /**

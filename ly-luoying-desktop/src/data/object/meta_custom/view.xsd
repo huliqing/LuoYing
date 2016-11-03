@@ -6,7 +6,7 @@
            xmlns="http://luoying.huliqing.name"
            elementFormDefault="qualified">
     
-    <xs:include schemaLocation="base.xsd" />
+    <xs:include schemaLocation="../../../../../ly-kernel/src/LuoYing/Data/meta/base.xsd" />
     
     <xs:element name="root">
         <xs:complexType>

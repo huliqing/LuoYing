@@ -19,9 +19,8 @@ import name.huliqing.luoying.object.module.ActionModule;
  * 1.受到敌人攻击时会和敌人战斗(不会主动查找敌人)
  * 2.没有敌人时就朝着目标前进,需要为逻辑指定一个目标地点，默认为Vector3f.ZERO
  * @author huliqing
- * @param <T>
  */
-public class PositionLogic<T extends LogicData> extends Logic<T> {
+public class PositionLogic extends AbstractLogic {
     private ActionModule actionModule;
     
     // 允许走到的最近距离
@@ -31,7 +30,7 @@ public class PositionLogic<T extends LogicData> extends Logic<T> {
     protected RunAction runAction;
     
     @Override
-    public void setData(T data) {
+    public void setData(LogicData data) {
         super.setData(data); 
         runAction = (RunAction) Loader.load(data.getAsString("runAction"));
         Vector3f position = data.getAsVector3f("position");

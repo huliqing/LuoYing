@@ -5,8 +5,6 @@
  */
 package name.huliqing.luoying.object.item;
 
-import com.jme3.renderer.queue.RenderQueue;
-import com.jme3.scene.Node;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.service.ActorService;
@@ -16,7 +14,6 @@ import name.huliqing.luoying.layer.service.SaveService;
 import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.layer.service.StateService;
 import name.huliqing.luoying.object.Loader;
-import name.huliqing.luoying.object.emitter.Emitter;
 import name.huliqing.luoying.object.entity.Entity;
 
 /**
@@ -43,8 +40,8 @@ public class TestItem extends AbstractItem {
         super.use(actor);
         
         Entity aa = Loader.load("actorAltar");
-        actorService.setGroup(aa, 10);
-        actorService.setLevel(aa, 60);
+//        actorService.setGroup(aa, 10);
+//        actorService.setLevel(aa, 60);
         playNetwork.addEntity(actor.getScene(), aa);
 
 //        Effect eff = Loader.load("effectTonic");

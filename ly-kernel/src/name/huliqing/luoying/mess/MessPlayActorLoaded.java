@@ -13,6 +13,7 @@ import name.huliqing.luoying.layer.service.LogicService;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.module.LogicModule;
 
 /**
  * 服务端发消息给客户端，告诉客户端载入一个新的角色
@@ -111,8 +112,13 @@ public class MessPlayActorLoaded extends MessBase {
         Entity actor = Loader.load(actorData);
         actorService.syncTransform(actor, location, viewDirection);
         actorService.syncAnimation(actor, channels, anims, loopModes, speeds, times);
+        
         // 对于客户端来说，角色永远都是无AI的
-        logicService.setAutoLogic(actor, false);
+        LogicModule lm = actor.getModuleManager().getModule(LogicModule.class);
+        if (lm != null) {
+            lm.setEnabled(false);
+        }
+        
         playService.addEntity(actor);
         
     }

@@ -8,10 +8,8 @@ package name.huliqing.luoying.object.module;
 import com.jme3.scene.control.Control;
 import com.jme3.util.SafeArrayList;
 import java.util.List;
-import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.LogicData;
 import name.huliqing.luoying.data.ModuleData;
-import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.logic.Logic;
 import name.huliqing.luoying.object.attribute.BooleanAttribute;
@@ -22,29 +20,45 @@ import name.huliqing.luoying.object.entity.Entity;
  * @author huliqing
  */
 public class LogicModule extends AbstractModule {
-    private final ActorService actorService = Factory.get(ActorService.class);
-
     private Control updateControl;
     private final SafeArrayList<Logic> logics = new SafeArrayList<Logic>(Logic.class);
-
-    // 属性：控制逻辑开关
-    private String bindAutoLogicAttribute;
-    // 控制 : 自动侦察敌人,这只是一个开关
-    private String bindAutoDetectAttribute;
     
-    private BooleanAttribute autoLogicAttribute;
-    private BooleanAttribute autoDetectAttribute;
-
+    // 控制逻辑的内部开关,这个参数可以作为”总开关“
+    private boolean enabled = true;
+    
+    // 可以额外绑定一个角色属性(Boolean)来作为逻辑开关， 如果绑定了这个属性，
+    // 那么只有enabled和bindEnabledAttribute同为true时逻辑才会运行。
+    private String bindEnabledAttribute;
+    
+    // ---- inner
+    private BooleanAttribute enabledAttribute;
+    
     @Override
     public void setData(ModuleData data) {
         super.setData(data);
-        bindAutoLogicAttribute = data.getAsString("bindAutoLogicAttribute");
-        bindAutoDetectAttribute = data.getAsString("bindAutoDetectAttribute");
+        enabled = data.getAsBoolean("enabled", enabled);
+        bindEnabledAttribute = data.getAsString("bindEnabledAttribute");
     }
-
+    
     @Override
     public void updateDatas() {
-        // xxx updateDatas.
+        data.setAttribute("enabled", enabled);
+    }
+
+    /**
+     * 判断是否打开所有逻辑功能
+     * @return 
+     */
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    /**
+     * 设置是否打开所有逻辑功能
+     * @param enabled 
+     */
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
     
     @Override
@@ -57,9 +71,7 @@ public class LogicModule extends AbstractModule {
         this.entity.getSpatial().addControl(updateControl);
         
         // 绑定“自动AI”属性
-        autoLogicAttribute = entity.getAttributeManager().getAttribute(bindAutoLogicAttribute);
-        // 自动侦察敌人
-        autoDetectAttribute = entity.getAttributeManager().getAttribute(bindAutoDetectAttribute);
+        enabledAttribute = entity.getAttributeManager().getAttribute(bindEnabledAttribute);
         
         // 载入逻辑
         List<LogicData> logicDatas = entity.getData().getObjectDatas(LogicData.class, null);
@@ -71,12 +83,14 @@ public class LogicModule extends AbstractModule {
     }
     
     private void logicUpdate(float tpf) {
-        if (actorService.isDead(entity)) {
+        if (!enabled) {
             return;
         }
-        if (!isAutoLogic()) {
+        
+        if (enabledAttribute != null && !enabledAttribute.getValue()) {
             return;
         }
+        
         for (Logic logic : logics.getArray()) {
             logic.update(tpf);
         }
@@ -109,7 +123,7 @@ public class LogicModule extends AbstractModule {
         if (!logics.contains(logic))
             return false;
         
-        entity.getData().removeObjectData(logic.getData());
+        entity.getData().removeObjectData(logic.getData()); 
         logics.remove(logic);
         logic.cleanup();
         return true;
@@ -118,48 +132,4 @@ public class LogicModule extends AbstractModule {
     public List<Logic> getLogics() {
         return logics;
     }
-    
-    /**
-     * 判断是否打开角色逻辑AI功能
-     * @return 
-     */
-    public boolean isAutoLogic() {
-        if (autoLogicAttribute != null) {
-            return autoLogicAttribute.getValue();
-        }
-        return false;
-    }
-    
-    /**
-     * 设置是否打开逻辑功能
-     * @param autoAi 
-     */
-    public void setAutoLogic(boolean autoAi) {
-        if (autoLogicAttribute != null) {
-            autoLogicAttribute.setValue(autoAi);
-        }
-    }
-    
-    /**
-     * 判断是否打开“自动侦察敌人”
-     * @return 
-     */
-    public boolean isAutoDetect() {
-        if (autoDetectAttribute != null) {
-            return autoDetectAttribute.getValue();
-        }
-        return false;
-    }
-    
-    /**
-     * 设置是否自动侦察敌人。
-     * @param autoDetect 
-     */
-    public void setAutoDetect(boolean autoDetect) {
-        if (autoDetectAttribute != null) {
-            autoDetectAttribute.setValue(autoDetect);
-        }
-    }
-    
-    
 }

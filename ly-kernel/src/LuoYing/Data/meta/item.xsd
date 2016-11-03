@@ -14,7 +14,7 @@ xs:time
            xmlns="http://luoying.huliqing.name"
            elementFormDefault="qualified">
     
-    <xs:include schemaLocation="base.xsd" />
+    <xs:include schemaLocation="./base.xsd" />
     
     <xs:element name="root">
         <xs:complexType>
@@ -228,6 +228,22 @@ xs:time
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
+                    <xs:attribute name="copyAttributesFromSource" type="xs:string" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                设置要从source（召唤者）同步的属性值，这是个属性名称列表，当召唤后，被召唤的角色的这些属性的值将从召唤者身上获取。
+                                比如等级属性，分组属性，以便被召唤后的角色与召唤者有一样的等级和分组, 示例："attributeGroup,attributeLevel"
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="linkAttributesToSource" type="xs:string" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                设置要将被召唤者的属性的值连接到召唤者的属性名称。当召唤后，被召唤的角色的这些属性将指向召唤者的entityId.所以这些属性必须是NumberAttribute类型。
+                                比如attributeFollow,attributeOwner属性，指向跟随者和拥有者，示例："attributeOwner,attributeFollow"
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
@@ -237,12 +253,9 @@ xs:time
         <xs:complexContent>
             <xs:extension base="base">
                 <xs:attribute name="icon" ref="icon" use="required" />
-                <xs:attribute name="matchAttributes" type="xs:string" use="optional" >
+                <xs:attribute name="checkEl" type="xs:string" use="optional" >
                     <xs:annotation>
-                        <xs:documentation>
-                            属性限制，这些限制定义了：只有角色的属性与这些限制完全匹配时才可以使用这件物品
-                            格式："attributeName|value,attributeName|value,..."
-                        </xs:documentation>
+                        <xs:documentation>绑定或直接填写一条CheckEl, 这条El用来判断source角色是否可以使用这件物品，示例：#{!source.attributeDead}</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
                 <xs:attribute name="effects" type="xs:string" use="optional" >

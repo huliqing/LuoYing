@@ -16,6 +16,7 @@ import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.AnimData;
 import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.layer.service.SceneService;
+import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.utils.ConvertUtils;
 import name.huliqing.luoying.utils.DebugDynamicUtils;
@@ -47,6 +48,9 @@ public class ActorCurveMove extends ActorAnim {
     // curveTension
     private float tension = 0.5f;
     
+    // 绑定角色的“目标”属性
+    private String bindTargetAttribute;
+    
     // ---- 内部参数 ----
     private final Spline spline = new Spline();
     // 曲线总长度
@@ -57,38 +61,39 @@ public class ActorCurveMove extends ActorAnim {
     private boolean useSine;
     // 记住原始kinematic状态,以便结束时还原
     private boolean oldKinematicState;
+    
+    private NumberAttribute targetAttribute;
 
     @Override
     public void setData(AnimData data) {
         super.setData(data);
-        if (data != null) {
-            // 1.points
-            String[] tempPoints = data.getAsArray("points");
-            if (tempPoints != null) {
-                points = new ArrayList<Vector3f>(tempPoints.length);
-                for (String tp : tempPoints) {
-                    if (tp.trim().equals("")) continue;
-                    String[] tpArr = tp.split("\\|");
-                    Vector3f point = new Vector3f(
-                            ConvertUtils.toFloat(tpArr[0], 0)
-                            ,ConvertUtils.toFloat(tpArr[1], 0)
-                            ,ConvertUtils.toFloat(tpArr[2], 0)
-                            );
-                    points.add(point);
-                }
+        // 1.points
+        String[] tempPoints = data.getAsArray("points");
+        if (tempPoints != null) {
+            points = new ArrayList<Vector3f>(tempPoints.length);
+            for (String tp : tempPoints) {
+                if (tp.trim().equals("")) continue;
+                String[] tpArr = tp.split("\\|");
+                Vector3f point = new Vector3f(
+                        ConvertUtils.toFloat(tpArr[0], 0)
+                        ,ConvertUtils.toFloat(tpArr[1], 0)
+                        ,ConvertUtils.toFloat(tpArr[2], 0)
+                        );
+                points.add(point);
             }
-            
-            String tempFacing = data.getAsString("facing", facing.name());
-            if (tempFacing.equals(Facing.path.name())) {
-                facing = Facing.path;
-            } else if (tempFacing.equals(Facing.target.name())) {
-                facing = Facing.target;
-            }
-            
-            upperGround = data.getAsBoolean("upperGround", upperGround);
-            tension = data.getAsFloat("tension", tension);
-            useSine = data.getAsBoolean("useSine", useSine);
         }
+
+        String tempFacing = data.getAsString("facing", facing.name());
+        if (tempFacing.equals(Facing.path.name())) {
+            facing = Facing.path;
+        } else if (tempFacing.equals(Facing.target.name())) {
+            facing = Facing.target;
+        }
+
+        upperGround = data.getAsBoolean("upperGround", upperGround);
+        tension = data.getAsFloat("tension", tension);
+        useSine = data.getAsBoolean("useSine", useSine);
+        bindTargetAttribute = data.getAsString("bindTargetAttribute");
     }
     
     public void setControlPoints(Vector3f[] controlPoints) {
@@ -142,6 +147,10 @@ public class ActorCurveMove extends ActorAnim {
         // 该设置可避免在运动过程中产生擅抖现象, 但是需要在cleanup的时候复原
         // 直接关闭物理效果也可以避免抖动，但是角色有可能掉入其它物体内部
         actorService.setKinematic(target, true);
+        
+        if (bindTargetAttribute != null) {
+            targetAttribute = target.getAttributeManager().getAttribute(bindTargetAttribute, NumberAttribute.class);
+        }
     }
     
     /**
@@ -173,8 +182,8 @@ public class ActorCurveMove extends ActorAnim {
             tv.vect1.subtract(target.getSpatial().getWorldTranslation(), tv.vect2).normalizeLocal();
             actorService.setViewDirection(target, tv.vect2);
             
-        } else if (facing == Facing.target) {
-            Entity other = actorService.getTarget(target);
+        } else if (facing == Facing.target && targetAttribute != null) {
+            Entity other = target.getScene().getEntity(targetAttribute.longValue());
             
             if (other != null) {
                 other.getSpatial().getWorldTranslation()

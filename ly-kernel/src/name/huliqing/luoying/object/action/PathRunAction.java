@@ -30,10 +30,9 @@ import name.huliqing.luoying.utils.ThreadHelper;
  * @author huliqing
  */
 public class PathRunAction extends AbstractAction implements RunAction{
-    private final PlayService playService = Factory.get(PlayService.class);
+//    private final PlayService playService = Factory.get(PlayService.class);
 //    private final ActorService actorService = Factory.get(ActorService.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
-    private ActorModule actorModule;
     private SkillModule skillModule;
 
     // 需要走到的目标地址
@@ -86,7 +85,6 @@ public class PathRunAction extends AbstractAction implements RunAction{
     @Override
     public void setActor(Entity actor) {
         super.setActor(actor);
-        actorModule = actor.getModuleManager().getModule(ActorModule.class);
         skillModule = actor.getModuleManager().getModule(SkillModule.class);
     }
 
@@ -132,7 +130,7 @@ public class PathRunAction extends AbstractAction implements RunAction{
     @Override
     public void doLogic(float tpf) {
         // 如果角色是不可移动的，则直接返回不处理逻辑
-        if (!actorModule.isMovable() || runSkill == null) {
+        if (runSkill == null) {
             end();
             return;
         }

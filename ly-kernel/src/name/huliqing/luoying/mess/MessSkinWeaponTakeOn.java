@@ -11,7 +11,6 @@ import name.huliqing.luoying.layer.network.SkinNetwork;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.layer.service.SkinService;
 import name.huliqing.luoying.data.ConnData;
-import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.network.GameServer;
 import name.huliqing.luoying.object.entity.Entity;
 
@@ -51,24 +50,36 @@ public class MessSkinWeaponTakeOn extends MessBase {
 
     @Override
     public void applyOnServer(GameServer gameServer, HostedConnection source) {
-        PlayService playService = Factory.get(PlayService.class);
-        ActorService actorService = Factory.get(ActorService.class);
-        SkinNetwork skinNetwork = Factory.get(SkinNetwork.class);
-        Entity actor = playService.getEntity(actorId);
+        // remove20161102,暂不进行安全判断
+//        PlayService playService = Factory.get(PlayService.class);
+//        ActorService actorService = Factory.get(ActorService.class);
+//        SkinNetwork skinNetwork = Factory.get(SkinNetwork.class);
+//        Entity actor = playService.getEntity(actorId);
+//        if (actor == null) {
+//            return; // 找不到指定的角色
+//        }
+//        ConnData cd = source.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
+//        long clientActorId = cd != null ? cd.getEntityId() : -1;
+//        // 使用物品的必须是客户端角色自身或者客户端角色的宠物
+//        if (actor.getData().getUniqueId() == clientActorId
+//                || actorService.getOwner(actor) == clientActorId) {
+//            if (takeOn) {
+//                skinNetwork.takeOnWeapon(actor);
+//            } else {
+//                skinNetwork.takeOffWeapon(actor);
+//            }
+//        }
+
+        Entity actor = Factory.get(PlayService.class).getEntity(actorId);
         if (actor == null) {
             return; // 找不到指定的角色
         }
         ConnData cd = source.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
-        long clientActorId = cd != null ? cd.getEntityId() : -1;
-        
-        // 使用物品的必须是客户端角色自身或者客户端角色的宠物
-        if (actor.getData().getUniqueId() == clientActorId
-                || actorService.getOwner(actor) == clientActorId) {
-            if (takeOn) {
-                skinNetwork.takeOnWeapon(actor);
-            } else {
-                skinNetwork.takeOffWeapon(actor);
-            }
+//        long clientActorId = cd != null ? cd.getEntityId() : -1;
+        if (takeOn) {
+            Factory.get(SkinNetwork.class).takeOnWeapon(actor);
+        } else {
+            Factory.get(SkinNetwork.class).takeOffWeapon(actor);
         }
     }
 

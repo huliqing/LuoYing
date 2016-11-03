@@ -3,7 +3,7 @@
 <root 
     xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
     xmlns='http://luoying.huliqing.name'
-    xsi:schemaLocation='http://luoying.huliqing.name meta/anim.xsd' >
+    xsi:schemaLocation='http://luoying.huliqing.name ../../../../ly-kernel/src/LuoYing/Data/meta/anim.xsd' >
     
     <!--test-->
     <animRotation id="animTest1" loop="loop" axis="0,1,0" degree="360" invert="0" />

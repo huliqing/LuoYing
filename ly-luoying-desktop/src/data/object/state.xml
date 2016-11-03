@@ -3,7 +3,7 @@
 <root
     xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
     xmlns='http://luoying.huliqing.name'
-    xsi:schemaLocation='http://luoying.huliqing.name meta/state.xsd'>
+    xsi:schemaLocation='http://luoying.huliqing.name ../../../../ly-kernel/src/LuoYing/Data/meta/state.xsd'>
     
     <!-- ====================================================================-->
     <!--状态: 
@@ -44,7 +44,8 @@
     <!--魔法：复活术相关状态-->
     <!--=====================================================================-->
     <!--保护角色在复活之前不被移出场景-->
-    <stateEssential id="stateRebornEssential" icon="Interface/skill/essential.png" useTime="5" essential="1" restore="1" />
+    <!--<stateEssential id="stateRebornEssential" icon="Interface/skill/essential.png" useTime="5" essential="1" restore="1" />-->
+    <stateBooleanAttribute id="stateRebornEssential" icon="Interface/skill/essential.png" useTime="5" bindAttribute="attributeEssential" value="1" restore="1" />
     
     <!--复活保护：让角色在刚复活的时候有几秒钟处于受保护状态-->
     <stateGroup id="stateRebornProtect" icon="Interface/skill/shield.jpg" useTime="5" states="stateRebornProtect1,stateRebornProtect2" />
@@ -79,8 +80,8 @@
     <!--=====================================================================-->
     <!--中毒状态:蝎子毒 -->
     <!--=====================================================================-->
-    <stateAttributeDynamic id="stateScorpionVenom" icon="Interface/skill/claw.jpg" 
-                           useTime="30" attributeName="attributeHealth" value="-10" interval="3" effects="effectScorpionVenom" removeOnDead="1" />
+    <stateAttributeDynamic id="stateScorpionVenom" icon="Interface/skill/claw.jpg" useTime="30" attributeName="attributeHealth" 
+                           value="-10" interval="3" effects="effectScorpionVenom" removeOnDead="1" bindDeadAttribute="attributeDead" />
     
     <!--=====================================================================-->
     <!--净化状态:牧师的净化技能所用，可以持续净化中毒、诅咒等-->

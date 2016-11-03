@@ -4,7 +4,6 @@
  */
 package name.huliqing.luoying.object.skill;
 
-import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
@@ -29,6 +28,8 @@ import name.huliqing.luoying.object.anim.Anim;
 import name.huliqing.luoying.object.anim.AnimationControl;
 import name.huliqing.luoying.object.anim.Listener;
 import name.huliqing.luoying.object.anim.MoveAnim;
+import name.huliqing.luoying.object.attribute.Attribute;
+import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.utils.GeometryUtils;
 import name.huliqing.luoying.utils.ThreadHelper;
@@ -56,6 +57,14 @@ public class SummonSkill extends AbstractSkill {
     // 调唤出角色的用时,单位秒
     private float summonTime = 4.0f;
     
+    // 设置要从source（召唤者）同步的属性值，这是个属性名称列表，当召唤后，被召唤的角色的这些属性的值将从召唤者身上获取。
+    // 比如等级属性，分组属性，以便被召唤后的角色与召唤者有一样的等级和分组
+    private String[] copyAttributesFromSource;
+    // 设置要将被召唤者的属性的值连接到召唤者的属性名称。当召唤后，被召唤的角色的这些属性将指向召唤者的entityId.所以
+    // 这些属性必须是NumberAttribute类型。
+    // 比如attributeFollow,attributeOwner属性，指向跟随者和拥有者
+    private String[] linkAttributesToSource;
+    
     // ---- 内部
     private final List<SummonOper> cache = new ArrayList<SummonOper>(1);
     private SummonOper currentSummon;
@@ -67,6 +76,8 @@ public class SummonSkill extends AbstractSkill {
         this.summonPoint = data.getAsFloat("summonPoint", summonPoint);
         this.summonOffset = data.getAsVector3f("summonOffset", summonOffset);
         this.summonTime = data.getAsFloat("summonTime", summonTime);
+        copyAttributesFromSource = data.getAsArray("copyAttributesFromSource");
+        linkAttributesToSource = data.getAsArray("linkAttributesToSource");
     }
     
     private SummonOper getOperFromCache() {
@@ -216,34 +227,48 @@ public class SummonSkill extends AbstractSkill {
 //            logger.log(Level.INFO, "summon time={0}, showTime={1}, showing={2}", new Object[] {time, showTime, showing});
             // 开始展示角色。
             if (!showing && summonActor != null) {
-                TempVars tv = TempVars.get();
                 
-                // 设置同伴等级
-                actorService.setLevel(summonActor, actorService.getLevel(actor));
+                // remove20161103
+//                actorService.setLevel(summonActor, actorService.getLevel(actor));
+//                actorService.setPhysicsEnabled(summonActor, false);
+//                actorService.setPartner(actor, summonActor);
+//                actorService.setColor(summonActor, new ColorRGBA(1f, 1f, 2f, 1));
+                
                 actorService.setPhysicsEnabled(summonActor, false);
-                actorService.setPartner(actor, summonActor);
-                actorService.setColor(summonActor, new ColorRGBA(1f, 1f, 2f, 1));
+                // 同步属性
+                if (copyAttributesFromSource != null) {
+                    for (String attr : copyAttributesFromSource) {
+                        Attribute summonAttr = summonActor.getAttributeManager().getAttribute(attr);
+                        Attribute sourceAttr = actor.getAttributeManager().getAttribute(attr);
+                        if (summonAttr != null && sourceAttr != null) {
+                            summonAttr.setValue(sourceAttr.getValue());
+                        }
+                    }
+                }
+                if (linkAttributesToSource != null) {
+                    for (String attr : linkAttributesToSource) {
+                        NumberAttribute summonAttr = summonActor.getAttributeManager().getAttribute(attr, NumberAttribute.class);
+                        if (summonAttr != null) {
+                            summonAttr.setValue(actor.getEntityId());
+                        }
+                    }
+                }
                 playNetwork.addEntity(summonActor);
                 
                 // 动画展示召唤角色，上升动画,end位置要向上加大一些，以避免召唤后角色在
                 // 开启物理特性后掉到地下。
+                TempVars tv = TempVars.get();
                 Vector3f start = tv.vect1.set(summonPos).subtractLocal(
                         0, GeometryUtils.getModelHeight(summonActor.getSpatial()), 0);
                 Vector3f end = tv.vect2.set(summonPos).addLocal(0, 0.5f, 0);
                 
                 actorService.setLocation(summonActor, start);
                 actorService.setLookAt(summonActor, tv.vect3.set(actor.getSpatial().getWorldTranslation()).setY(start.getY()));
-                
                 summonActor.getSpatial().addControl(animationControl);
                 showAnim.setTarget(summonActor.getSpatial());
                 showAnim.setStartPos(start);
                 showAnim.setEndPos(end);
                 showAnim.start();
-                
-//                if (Config.debug) {
-//                    logger.log(Level.INFO, "summon start to showing!");
-//                }
-                
                 showing = true;
                 tv.release();
             }
@@ -277,11 +302,8 @@ public class SummonSkill extends AbstractSkill {
             Spatial summonModel = animationControl.getSpatial();
             if (summonModel != null) {
                 // 让召唤到的目标获得物理碰撞
-//                Entity ac = summonModel.getControl(Actor.class);
                 actorService.setLocation(summonActor, summonModel.getLocalTranslation());
-                logicService.setAutoLogic(summonActor, true);
-                actorNetwork.setPhysicsEnabled(summonActor, true);// 物理开需要同步
-                // 移除control,animationControl不再有意义
+                actorNetwork.setPhysicsEnabled(summonActor, true);
                 summonModel.removeControl(animationControl);
             }
             cleanup();

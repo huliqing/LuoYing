@@ -8,7 +8,7 @@ import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.TalentData;
 import name.huliqing.luoying.layer.service.ElService;
 import name.huliqing.luoying.layer.service.EntityService;
-import name.huliqing.luoying.object.el.LevelEl;
+import name.huliqing.luoying.object.el.LNumberEl;
 
 /**
  * 属性类型的天赋，这种天赋可以增加或减少角色的属性值。
@@ -21,7 +21,7 @@ public class AttributeTalent<T extends TalentData> extends AbstractTalent<T> {
 
     protected String bindAttribute;
     // valueLevelEl计算出的值会添加到bindAttribute上
-    protected LevelEl valueLevelEl;
+    protected LNumberEl valueLevelEl;
     
     // ----
     private float applyValue;
@@ -36,7 +36,7 @@ public class AttributeTalent<T extends TalentData> extends AbstractTalent<T> {
         this.bindAttribute = data.getAsString("bindAttribute");
         String temp = data.getAsString("valueLevelEl");
         if (temp != null) {
-            valueLevelEl = elService.createLevelEl(temp);
+            valueLevelEl = elService.createLNumberEl(temp);
         }
         this.attributeApplied = data.getAsBoolean("attributeApplied", attributeApplied);
     }

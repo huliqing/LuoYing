@@ -63,15 +63,21 @@ public interface Attribute<T> extends DataProcessor<AttributeData> {
     T getValue();
     
     /**
+     * 设置属性的值
+     * @param value 
+     */
+    void setValue(T value);
+    
+    /**
      * 添加值变侦听器
      * @param listener 
      */
-    void addListener(ValueChangeListener<T> listener);
+    void addListener(ValueChangeListener<?> listener);
     
     /**
      * 移除值变侦听器
      * @param listener
      * @return 
      */
-    boolean removeListener(ValueChangeListener<T> listener);
+    boolean removeListener(ValueChangeListener<?> listener);
 }

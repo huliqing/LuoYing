@@ -22,6 +22,8 @@ import name.huliqing.luoying.layer.service.ConfigService;
 import name.huliqing.luoying.layer.service.ItemService;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.object.Loader;
+import name.huliqing.luoying.object.attribute.Attribute;
+import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.entity.TerrainEntity;
 import name.huliqing.luoying.object.scene.Scene;
@@ -34,8 +36,6 @@ import name.huliqing.luoying.utils.Temp;
  */
 public class SummonItem extends AbstractItem {
     private final ActorService actorService = Factory.get(ActorService.class);
-    private final ConfigService configService = Factory.get(ConfigService.class);
-    private final PlayService playService = Factory.get(PlayService.class);
     private final ItemService itemService = Factory.get(ItemService.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     
@@ -44,6 +44,15 @@ public class SummonItem extends AbstractItem {
     // 召换多少
     private int total = 1;
     
+    // 设置要从source（召唤者）同步的属性值，这是个属性名称列表，当召唤后，被召唤的角色的这些属性的值将从召唤者身上获取。
+    // 比如等级属性，分组属性，以便被召唤后的角色与召唤者有一样的等级和分组
+    private String[] copyAttributesFromSource;
+    // 设置要将被召唤者的属性的值连接到召唤者的属性名称。当召唤后，被召唤的角色的这些属性将指向召唤者的entityId.所以
+    // 这些属性必须是NumberAttribute类型。
+    // 比如attributeFollow,attributeOwner属性，指向跟随者和拥有者
+    private String[] linkAttributesToSource;
+    
+    // ---- inner
     private final Ray ray = new Ray();
     
     @Override
@@ -51,6 +60,8 @@ public class SummonItem extends AbstractItem {
         super.setData(data);
         this.actorId = data.getAsString("actorId");
         this.total = data.getAsInteger("total", total);
+        copyAttributesFromSource = data.getAsArray("copyAttributesFromSource");
+        linkAttributesToSource = data.getAsArray("linkAttributesToSource");
     }
 
     @Override
@@ -69,12 +80,29 @@ public class SummonItem extends AbstractItem {
         // -- 载入角色
         Entity bcc = Loader.load(actorId);
         
-        int level = actorService.getLevel(actor);
-//        actorService.setName(bcc, actorService.getName(bcc) + "-" + actorService.getName(actor));
-        actorService.setLevel(bcc, level > 0 ? level : 1); // 至少1级
-        
-        // -- 设置为同伴
-        actorService.setPartner(actor, bcc);
+        // remove20161103
+//        int level = actorService.getLevel(actor);
+//        actorService.setLevel(bcc, level > 0 ? level : 1); // 至少1级
+//        actorService.setPartner(actor, bcc);
+
+        // 同步属性
+        if (copyAttributesFromSource != null) {
+            for (String attr : copyAttributesFromSource) {
+                Attribute summonAttr = bcc.getAttributeManager().getAttribute(attr);
+                Attribute sourceAttr = actor.getAttributeManager().getAttribute(attr);
+                if (summonAttr != null && sourceAttr != null) {
+                    summonAttr.setValue(sourceAttr.getValue());
+                }
+            }
+        }
+        if (linkAttributesToSource != null) {
+            for (String attr : linkAttributesToSource) {
+                NumberAttribute summonAttr = bcc.getAttributeManager().getAttribute(attr, NumberAttribute.class);
+                if (summonAttr != null) {
+                    summonAttr.setValue(actor.getEntityId());
+                }
+            }
+        }
         
         // --添加角色到场景
         Spatial root = GeometryUtils.findRootNode(actor.getSpatial());

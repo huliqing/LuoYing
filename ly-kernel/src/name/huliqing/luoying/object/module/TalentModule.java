@@ -19,7 +19,7 @@ import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.attribute.Attribute;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.attribute.ValueChangeListener;
-import name.huliqing.luoying.object.el.LevelEl;
+import name.huliqing.luoying.object.el.LNumberEl;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.talent.Talent;
 
@@ -42,7 +42,7 @@ public class TalentModule extends AbstractModule implements ValueChangeListener<
 //    private int talentPointsValue;
 
     // 天赋公式ID,如果用于为每个变化等级计算天赋点数的奖励
-    private LevelEl talentPointsLevelEl;
+    private LNumberEl talentPointsLevelEl;
     
     // ---- inner
     // 天赋实例
@@ -65,7 +65,7 @@ public class TalentModule extends AbstractModule implements ValueChangeListener<
         super.setData(data); 
         bindLevelAttribute = data.getAsString("bindLevelAttribute");
         bindTalentPointsAttribute = data.getAsString("bindTalentPointsAttribute");
-        talentPointsLevelEl = elService.createLevelEl(data.getAsString("talentPointsLevelEl", "#{0}"));
+        talentPointsLevelEl = elService.createLNumberEl(data.getAsString("talentPointsLevelEl", "#{0}"));
         lastApplyTalentPointsLevel = data.getAsInteger("lastApplyTalentPointsLevel", 0);
     }
     

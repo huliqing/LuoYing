@@ -7,14 +7,14 @@ skinPart => 0:ear;1:eyeL;2:eyeR;3:face;4:foot;5:hair;6:hand;7:lowerBody;8:upperB
 <root
     xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
     xmlns='http://luoying.huliqing.name'
-    xsi:schemaLocation='http://luoying.huliqing.name meta/skin.xsd'>
+    xsi:schemaLocation='http://luoying.huliqing.name ../../../../ly-kernel/src/LuoYing/Data/meta/skin.xsd'>
     
     <!-- ========================================================================= -->
     <!--基本配置-->
     <!-- ========================================================================= -->
     
     <!--人类女性装备-->
-    <skinOutfit id="skinHumanFemaleBase" matchAttributes="attributeDead|0,attributeRace|1,attributeSex|1" />
+    <skinOutfit id="skinHumanFemaleBase" checkEl="#{!source.attributeDead && source.attributeRace == 1 && source.attributeSex == 1}" />
     
     <!-- ========================================================================= -->
     <!--头发-->

@@ -5,7 +5,7 @@
 <root
     xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
     xmlns='http://luoying.huliqing.name'
-    xsi:schemaLocation='http://luoying.huliqing.name meta/drop.xsd'>
+    xsi:schemaLocation='http://luoying.huliqing.name ../../../../ly-kernel/src/LuoYing/Data/meta/drop.xsd'>
 
     <!--==========================================================================-->
     <dropItem id="dropItemGoldBase" item="itemGold" rate="0.99" sounds="soundCoin2" />

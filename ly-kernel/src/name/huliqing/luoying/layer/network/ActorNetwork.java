@@ -27,56 +27,56 @@ public interface ActorNetwork extends Inject {
 //     */
 //    void talk(Talk talk);
     
-    /**
-     * 杀死一个角色
-     * @param actor 
-     */
-    void kill(Entity actor);
-    
-     /**
-     * 设置角色的当前目标
-     * @param actor
-     * @param target 如果为null,则表示清除目标
-     */
-    void setTarget(Entity actor, Entity target);
-    
-    /**
-     * 操作角色的某个属性.
-     * @param beHit 接受hit的目标角色,或者说是被击中的角色。
-     * @param hitter 攻击者，或者施放hit动作的角色。
-     * @param hitAttribute hit的目标属性名称,必须是NumberAttribute属性，否则什么也不做
-     * @param hitValue hit值,这个值将直接执行在target角色的属性上，也即不受角色
-     * 任何其它属性的影响。
-     */
-    void hitNumberAttribute(Entity beHit, Entity hitter, String hitAttribute, float hitValue);
-    
-    /**
-     * 设置角色的等级
-     * @param actor
-     * @param level 
-     */
-    void setLevel(Entity actor, int level);
-    
-    /**
-     * 设置角色的分组
-     * @param actor
-     * @param group 
-     */
-    void setGroup(Entity actor, int group);
-    
-    /**
-     * 设置角色的队伍分组
-     * @param actor
-     * @param team 
-     */
-    void setTeam(Entity actor, int team);
-    
-    /**
-     * 让角色actor跟随目标targetId所指定的角色
-     * @param actor
-     * @param targetId 目标角色ID 
-     */
-    void setFollow(Entity actor, long targetId);
+//    /**
+//     * 杀死一个角色
+//     * @param actor 
+//     */
+//    void kill(Entity actor);
+//    
+//     /**
+//     * 设置角色的当前目标
+//     * @param actor
+//     * @param target 如果为null,则表示清除目标
+//     */
+//    void setTarget(Entity actor, Entity target);
+//    
+//    /**
+//     * 操作角色的某个属性.
+//     * @param beHit 接受hit的目标角色,或者说是被击中的角色。
+//     * @param hitter 攻击者，或者施放hit动作的角色。
+//     * @param hitAttribute hit的目标属性名称,必须是NumberAttribute属性，否则什么也不做
+//     * @param hitValue hit值,这个值将直接执行在target角色的属性上，也即不受角色
+//     * 任何其它属性的影响。
+//     */
+//    void hitNumberAttribute(Entity beHit, Entity hitter, String hitAttribute, float hitValue);
+//    
+//    /**
+//     * 设置角色的等级
+//     * @param actor
+//     * @param level 
+//     */
+//    void setLevel(Entity actor, int level);
+//    
+//    /**
+//     * 设置角色的分组
+//     * @param actor
+//     * @param group 
+//     */
+//    void setGroup(Entity actor, int group);
+//    
+//    /**
+//     * 设置角色的队伍分组
+//     * @param actor
+//     * @param team 
+//     */
+//    void setTeam(Entity actor, int team);
+//    
+//    /**
+//     * 让角色actor跟随目标targetId所指定的角色
+//     * @param actor
+//     * @param targetId 目标角色ID 
+//     */
+//    void setFollow(Entity actor, long targetId);
     
     /**
      * 打开或关闭角色的物理功能

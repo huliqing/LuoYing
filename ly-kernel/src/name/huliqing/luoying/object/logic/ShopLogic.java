@@ -4,7 +4,6 @@
  */
 package name.huliqing.luoying.object.logic;
 
-import com.jme3.app.Application;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.Factory;
@@ -17,9 +16,8 @@ import name.huliqing.luoying.layer.network.ObjectNetwork;
 /**
  * 商店逻辑，该逻辑会每隔一段时间给角色进货。以补充商店类角色的货源。
  * @author huliqing
- * @param <T>
  */
-public class ShopLogic<T extends LogicData> extends Logic<T> {
+public class ShopLogic extends AbstractLogic {
     private final ObjectNetwork objectNetwork = Factory.get(ObjectNetwork.class);
     private final ObjectService objectService = Factory.get(ObjectService.class);
     
@@ -35,7 +33,7 @@ public class ShopLogic<T extends LogicData> extends Logic<T> {
     private float remainCount;
     
     @Override
-    public void setData(T data) {
+    public void setData(LogicData data) {
         super.setData(data); 
         // 这类逻辑不需要太频繁
         interval = data.getAsFloat("interval", 20);

@@ -3,11 +3,7 @@
 <root
     xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
     xmlns='http://luoying.huliqing.name'
-    xsi:schemaLocation='http://luoying.huliqing.name meta/gameLogic.xsd'>
-    
-    <!-- ========================================================================= -->
-    <!-- DEBUG -->
-    <!-- ========================================================================= -->
+    xsi:schemaLocation='http://luoying.huliqing.name ../../../../ly-kernel/src/LuoYing/Data/meta/gameLogic.xsd'>
     
     <!-- ========================================================================= -->
     <!-- Game Logics -->
@@ -15,15 +11,17 @@
     
     <!--判断玩家主角是否死亡-->
     <gameLogicPlayerDeadChecker id="gameLogicPlayerDeadChecker" interval="1" />
-
-    <!--战场角色清理器-->
-    <gameLogicActorClean id="gameLogicActorClean" cleanInterval="10" />
+    
+    <!--战场角色清理器: 只有“死亡”并且“非必要”的角色才会被清理-->
+    <gameLogicActorClean id="gameLogicActorClean" checkEl="elActorCleanCheck" cleanInterval="10" />
     
     <!--生命值恢复器-->
-    <gameLogicAttributeChange id="gameLogicHealthRecover" interval="5" speed="1" applyAttribute="attributeHealth" useAttribute="attributeHealthRestore" baseValue="1" applyToDead="0"/>
+    <gameLogicAttributeChange id="gameLogicHealthRecover" interval="5" speed="1" applyAttribute="attributeHealth" 
+                              useAttribute="attributeHealthRestore" baseValue="1" checkEl="elActorUndeadCheck" />
     
     <!--魔法值恢复器-->
-    <gameLogicAttributeChange id="gameLogicManaRecover" interval="5" speed="1" applyAttribute="attributeMana" useAttribute="attributeHealthRestore" baseValue="1" applyToDead="0" />
+    <gameLogicAttributeChange id="gameLogicManaRecover" interval="5" speed="1" applyAttribute="attributeMana" 
+                              useAttribute="attributeHealthRestore" baseValue="1" checkEl="elActorUndeadCheck" />
 </root>
 
 

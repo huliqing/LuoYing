@@ -12,6 +12,7 @@ import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.object.action.Action;
 import name.huliqing.luoying.object.action.FightAction;
 import name.huliqing.luoying.object.action.RunAction;
+import name.huliqing.luoying.object.attribute.BooleanAttribute;
 import name.huliqing.luoying.object.entity.Entity;
 
 /**
@@ -21,6 +22,10 @@ import name.huliqing.luoying.object.entity.Entity;
 public class ActionModule extends AbstractModule<ModuleData> {
     private final ActorService actorService = Factory.get(ActorService.class);
     
+    // 用于判断角色是否死亡的属性
+    private String bindDeadAttribute;
+    
+    // ---- inner
     // 两个默认行为,当角色接收玩家控制时需要这两个默认行为
     // see ActionServcice.playRun,playFight
     private RunAction defRunAction;
@@ -30,7 +35,15 @@ public class ActionModule extends AbstractModule<ModuleData> {
     private Action current;
     
     private Control updateControl;
+    
+    private BooleanAttribute deadAttribute;
 
+    @Override
+    public void setData(ModuleData data) {
+        super.setData(data); 
+        bindDeadAttribute = data.getAsString("bindDeadAttribute");
+    }
+    
     @Override
     public void updateDatas() {
     }
@@ -38,6 +51,9 @@ public class ActionModule extends AbstractModule<ModuleData> {
     @Override
     public void initialize(Entity actor) {
         super.initialize(actor);
+        if (bindDeadAttribute != null) {
+            deadAttribute = actor.getAttributeManager().getAttribute(bindDeadAttribute, BooleanAttribute.class);
+        }
         
         updateControl = new AdapterControl() {
             @Override
@@ -50,7 +66,7 @@ public class ActionModule extends AbstractModule<ModuleData> {
     
     // 更新action逻辑
     private void actionUpdate(float tpf) {
-        if (actorService.isDead(entity)) {
+        if (deadAttribute != null && deadAttribute.getValue()) {
             return;
         }
         

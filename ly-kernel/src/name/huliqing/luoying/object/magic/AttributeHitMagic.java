@@ -6,10 +6,11 @@ package name.huliqing.luoying.object.magic;
 
 import java.util.ArrayList;
 import java.util.List;
+import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.MagicData;
+import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.skill.HitUtils;
 import name.huliqing.luoying.utils.ConvertUtils;
 
 /**
@@ -17,6 +18,7 @@ import name.huliqing.luoying.utils.ConvertUtils;
  * @author huliqing
  */
 public class AttributeHitMagic extends AbstractMagic {
+    private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
     
     // 影响的属性ID
     private AttributeWrap[] attributes;
@@ -70,11 +72,10 @@ public class AttributeHitMagic extends AbstractMagic {
         for (Entity hitTarget : actors) {
             if (hitCheckEl.setTarget(hitTarget.getAttributeManager()).getValue()) {
                 for (AttributeWrap aw : attributes) {
-                    HitUtils.getInstance().applyHit(source, hitTarget, aw.attribute, aw.amount);
+                    entityNetwork.applyNumberAttributeValue(hitTarget, aw.attribute, aw.amount, source);
                 }
             }
         }
-
     }
     
     private class AttributeWrap {

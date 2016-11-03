@@ -8,11 +8,11 @@ package name.huliqing.luoying.object.el;
 import javax.el.ELContext;
 
 /**
- * 用于计算等级值的表达式, 通过传递一个等级值，这个表达式将返回一个计算后的等级值(Number)。<br>
- * 支持参数：level, 使用示例：<br>
- * #{level * 2} <br>
- * #{level * 2 + 3 * Math:pow(1.06, level)} <br>
- * #{level}<br>
+ * 等级值计算公式, 给定一个等级然后计算出一个等级值<br>
+ * 支持参数：l, 使用示例：<br>
+ * #{l * 2} <br>
+ * #{l * 2 + 3 * Math:pow(1.06, l)} <br>
+ * #{l}<br>
  * 使用示例：
  * <code>
  * <pre>
@@ -24,7 +24,7 @@ import javax.el.ELContext;
  * 
  * @author huliqing
  */
-public class LevelEl extends AbstractEl<Number>{
+public class LNumberEl extends AbstractEl<Number>{
 
     private final SimpleElContext elContext = new SimpleElContext();
     
@@ -38,8 +38,8 @@ public class LevelEl extends AbstractEl<Number>{
      * @param level
      * @return 
      */
-    public LevelEl setLevel(int level) {
-        elContext.setBaseValue("level", level);
+    public LNumberEl setLevel(int level) {
+        elContext.setBaseValue("l", level);
         return this;
     }
     

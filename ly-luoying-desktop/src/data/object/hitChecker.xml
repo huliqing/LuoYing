@@ -3,7 +3,7 @@
 <root
     xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
     xmlns='http://luoying.huliqing.name'
-    xsi:schemaLocation='http://luoying.huliqing.name meta/hitChecker.xsd'>
+    xsi:schemaLocation='http://luoying.huliqing.name ../../../../ly-kernel/src/LuoYing/Data/meta/hitChecker.xsd'>
     
     <!--=====================================================================-->
     <!-- 用于技能(Skill):用于检查一个技能是否可作用于目标角色 -->

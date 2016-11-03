@@ -14,7 +14,7 @@ xs:time
            xmlns="http://luoying.huliqing.name"
            elementFormDefault="qualified" >
     
-    <xs:include schemaLocation="animBase.xsd" />
+    <xs:include schemaLocation="./animBase.xsd" />
     
     <xs:element name="root">
         <xs:complexType>

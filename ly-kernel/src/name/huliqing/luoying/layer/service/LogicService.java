@@ -15,12 +15,12 @@ import name.huliqing.luoying.object.logic.Logic;
  */
 public interface LogicService extends Inject {
     
-    /**
-     * 载入一个角色逻辑
-     * @param logicId
-     * @return 
-     */
-    Logic loadLogic(String logicId);
+//    /**
+//     * 载入一个角色逻辑
+//     * @param logicId
+//     * @return 
+//     */
+//    Logic loadLogic(String logicId);
     
     /**
      * 给角色添加一个逻辑
@@ -65,32 +65,32 @@ public interface LogicService extends Inject {
 //     * @param actor 
 //     */
 //    void resetPlayerLogic(Entity actor);
-    
-    /**
-     * 判断角色的逻辑是否打开
-     * @param actor
-     * @return 
-     */
-    boolean isAutoLogic(Entity actor);
-    
-    /**
-     * 打开或关闭角色的自动逻辑
-     * @param actor
-     * @param enabled 
-     */
-    void setAutoLogic(Entity actor, boolean enabled);
-    
-    /**
-     * 判断角色是否自动侦察敌人
-     * @param actor
-     * @return 
-     */
-    boolean isAutoDetect(Entity actor);
-    
-    /**
-     * 设置角色是否自动侦察敌人
-     * @param actor 
-     * @param autoDetect
-     */
-    void setAutoDetect(Entity actor, boolean autoDetect);
+//    
+//    /**
+//     * 判断角色的逻辑是否打开
+//     * @param actor
+//     * @return 
+//     */
+//    boolean isAutoLogic(Entity actor);
+//    
+//    /**
+//     * 打开或关闭角色的自动逻辑
+//     * @param actor
+//     * @param enabled 
+//     */
+//    void setAutoLogic(Entity actor, boolean enabled);
+//    
+//    /**
+//     * 判断角色是否自动侦察敌人
+//     * @param actor
+//     * @return 
+//     */
+//    boolean isAutoDetect(Entity actor);
+//    
+//    /**
+//     * 设置角色是否自动侦察敌人
+//     * @param actor 
+//     * @param autoDetect
+//     */
+//    void setAutoDetect(Entity actor, boolean autoDetect);
 }

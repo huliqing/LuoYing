@@ -14,7 +14,7 @@ xs:time
            xmlns="http://luoying.huliqing.name"
            elementFormDefault="qualified" >
     
-    <xs:include schemaLocation="base.xsd" />
+    <xs:include schemaLocation="./base.xsd" />
     
     <xs:element name="root">
         <xs:complexType>
@@ -303,6 +303,22 @@ xs:time
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
+                    <xs:attribute name="copyAttributesFromSource" type="xs:string" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                设置要从source（召唤者）同步的属性值，这是个属性名称列表，当召唤后，被召唤的角色的这些属性的值将从召唤者身上获取。
+                                比如等级属性，分组属性，以便被召唤后的角色与召唤者有一样的等级和分组, 示例："attributeGroup,attributeLevel"
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="linkAttributesToSource" type="xs:string" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                设置要将被召唤者的属性的值连接到召唤者的属性名称。当召唤后，被召唤的角色的这些属性将指向召唤者的entityId.所以这些属性必须是NumberAttribute类型。
+                                比如attributeFollow,attributeOwner属性，指向跟随者和拥有者，示例："attributeOwner,attributeFollow"
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
                     <xs:attribute name="summonOffset" type="xs:string" use="optional" >
                         <xs:annotation>
                             <xs:documentation>
@@ -482,7 +498,7 @@ xs:time
     <xs:complexType name="skillHitBase" >
         <xs:complexContent>
             <xs:extension base="skillBase">
-                 <xs:attribute name="skillType" use="required">
+<!--                 <xs:attribute name="skillType" use="required">
                     <xs:annotation>
                         <xs:documentation>attack普通射击; trick特殊射击; magic魔法射击;</xs:documentation>
                     </xs:annotation>
@@ -493,6 +509,11 @@ xs:time
                             <xs:enumeration value="magic"  />
                         </xs:restriction>
                     </xs:simpleType>
+                </xs:attribute>-->
+                <xs:attribute name="bindTargetAttribute" type="xs:string" use="required">
+                    <xs:annotation>
+                        <xs:documentation>NumberAttribute,绑定角色的"目标"属性，这个属性存放的是角色的当前目标对象的唯一id，如: attributeTarget</xs:documentation>
+                    </xs:annotation>
                 </xs:attribute>
                 <xs:attribute name="hitCheckEl" type="xs:string" use="required">
                     <xs:annotation>

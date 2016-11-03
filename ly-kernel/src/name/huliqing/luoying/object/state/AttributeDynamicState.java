@@ -4,14 +4,16 @@
  */
 package name.huliqing.luoying.object.state;
 
+import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.StateData;
-import name.huliqing.luoying.object.skill.HitUtils;
+import name.huliqing.luoying.layer.network.EntityNetwork;
 
 /**
  * 可以"持续"改变角色属性值的状态.
  * @author huliqing
  */
 public class AttributeDynamicState extends AbstractState {
+    private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
 
     // 影响的属性名称
     private String attributeName;
@@ -37,7 +39,8 @@ public class AttributeDynamicState extends AbstractState {
         intervalUsed += tpf;
         if (intervalUsed >= interval && attributeName != null) {
             intervalUsed = 0;
-            HitUtils.getInstance().applyHit(sourceActor, actor, attributeName, value);
+//            HitUtils.getInstance().applyHit(sourceActor, actor, attributeName, value);
+            entityNetwork.applyNumberAttributeValue(actor, attributeName, value, sourceActor);
         }
     }
 

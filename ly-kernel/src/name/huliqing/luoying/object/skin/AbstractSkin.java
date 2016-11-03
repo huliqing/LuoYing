@@ -27,9 +27,8 @@ import name.huliqing.luoying.data.SkinData;
 import name.huliqing.luoying.layer.service.ElService;
 import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.object.AssetLoader;
-import name.huliqing.luoying.object.attribute.Attribute;
 import name.huliqing.luoying.object.define.DefineFactory;
-import name.huliqing.luoying.object.el.CheckEl;
+import name.huliqing.luoying.object.el.SBooleanEl;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.sound.SoundManager;
 
@@ -37,7 +36,7 @@ import name.huliqing.luoying.object.sound.SoundManager;
  * @author huliqing
  */
 public abstract class AbstractSkin implements Skin {
-    private static final Logger LOG = Logger.getLogger(AbstractSkin.class.getName());
+//    private static final Logger LOG = Logger.getLogger(AbstractSkin.class.getName());
     private final EntityService entityService = Factory.get(EntityService.class);
     private final ElService elService = Factory.get(ElService.class);
     
@@ -46,7 +45,7 @@ public abstract class AbstractSkin implements Skin {
     // 空上装备时的声音
     protected String[] sounds;
     // 用于检查角色是否可以使用这件装备
-    protected CheckEl checkEl;
+    protected SBooleanEl checkEl;
     
     //注：一件skin可属于多个type,如上下连身的套装，如法袍可属于 "7,8".
     //同时一件skin也可与多个其它skin进行排斥。这里的type和conflictType使用二
@@ -73,7 +72,7 @@ public abstract class AbstractSkin implements Skin {
         conflictParts = DefineFactory.getSkinPartDefine().convert(data.getAsArray("conflictParts"));
         
         sounds = data.getAsArray("sounds");
-        checkEl = elService.createCheckEl(data.getAsString("checkEl", "#{true}"));
+        checkEl = elService.createSBooleanEl(data.getAsString("checkEl", "#{true}"));
         
         bindBone = data.getAsString("bindBone");
         localLocation = data.getAsVector3f("localLocation");

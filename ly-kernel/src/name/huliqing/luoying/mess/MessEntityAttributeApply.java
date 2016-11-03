@@ -7,7 +7,7 @@ package name.huliqing.luoying.mess;
 
 import com.jme3.network.serializing.Serializable;
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.layer.service.ActorService;
+import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.object.entity.Entity;
 
@@ -100,7 +100,8 @@ public class MessEntityAttributeApply extends MessBase {
         Entity sourceEntity = playService.getEntity(this.source);
         Entity targetEntity = playService.getEntity(this.target);
         if (targetEntity != null && sourceEntity != null) {
-            Factory.get(ActorService.class).hitNumberAttribute(targetEntity, sourceEntity, attributeName, applyValue);
+            EntityService entityService = Factory.get(EntityService.class);
+            entityService.applyNumberAttributeValue(targetEntity, attributeName, applyValue, sourceEntity);
         }
     }
     

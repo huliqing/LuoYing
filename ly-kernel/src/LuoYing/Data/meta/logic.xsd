@@ -14,11 +14,12 @@ xs:time
            xmlns="http://luoying.huliqing.name"
            elementFormDefault="qualified">
     
-    <xs:include schemaLocation="base.xsd" />
+    <xs:include schemaLocation="./base.xsd" />
     
     <xs:element name="root">
         <xs:complexType>
             <xs:all>
+                <xs:element ref="logicBase" />
                 <xs:element ref="logicFight" />
                 <xs:element ref="logicFollow" />
                 <xs:element ref="logicNotify" />
@@ -132,7 +133,7 @@ xs:time
                             <xs:documentation>改变的值，该值表示每秒要改变的目标属性的值。</xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="targetAttribute" type="xs:string" use="required">
+                    <xs:attribute name="applyAttribute" type="xs:string" use="required">
                         <xs:annotation>
                             <xs:documentation>指定要改变的是哪一个属性</xs:documentation>
                         </xs:annotation>
@@ -208,15 +209,6 @@ xs:time
                             <xs:documentation>设置要通知的范围,不应该小于或等于0,否则没有意义.默认15</xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="force" type="bool" use="optional">
-                        <xs:annotation>
-                            <xs:documentation>
-                                设置是否强制通知,默认情况下,force=false,即如果被通知的友军单位已经存在目标敌人,则不会被"通知"
-                                也就是只有没有目标敌人的友军单位会被通知.如果友军单位中存在多个使用该逻辑的角色,一般最多只设置
-                                其中一个的force属性为true即可.
-                            </xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
@@ -264,6 +256,11 @@ xs:time
                             <xs:documentation>指定一个巡逻idle行为</xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
+                    <xs:attribute name="patrolCheckEl" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>SBooleanEl, 指定角色在什么状态下使用idlePatrolAction,默认情况下idleLogic只使用idleSimpleAction</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
@@ -278,9 +275,9 @@ xs:time
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="logicBase">
-                    <xs:attribute name="bindFollowTargetAttribute" type="xs:string" use="required">
+                    <xs:attribute name="bindFollowAttribute" type="xs:string" use="required">
                         <xs:annotation>
-                            <xs:documentation>绑定角色的followTarget属性名称，这个属性用于查找被跟随角色。</xs:documentation>
+                            <xs:documentation>NumberAttribute, 绑定角色的follow目标属性，这个属性存放当前需要跟随的目标对象的唯一ID。</xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
                     <xs:attribute name="followAction" type="xs:string" use="required">
@@ -320,6 +317,17 @@ xs:time
         </xs:complexType>
     </xs:element>
     
+    <xs:element name="logicBase">
+        <xs:annotation>
+            <xs:documentation>抽象基类,不要直接使用，只用于被继承。</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="logicBase"></xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
     <xs:complexType name="logicBase">
         <xs:complexContent>
             <xs:extension base="base">
@@ -329,6 +337,24 @@ xs:time
                             指定逻辑执行时间间隔，单位秒，指定为0，表示该逻辑将尽可能快的执行。
                             指定为1，表示每一秒执行一次逻辑,默认1.
                         </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="bindEnabledAttribute" type="xs:string" use="optional">
+                    <xs:annotation><xs:documentation>BooleanAttribute, 绑定一个角色属性，这个属性用于控制逻辑的开关。</xs:documentation></xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="bindTargetAttribute" type="xs:string" use="required">
+                    <xs:annotation>
+                        <xs:documentation>NumberAttribute, 绑定角色的“目标”属性，这个属性存放了角色的当前目标对象的唯一id.</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="bindViewAttribute" type="xs:string" use="required">
+                    <xs:annotation>
+                        <xs:documentation>NumberAttribute, 绑定角色的视角范围属性，这个属性的值定义了角色可以看多远，决定了寻敌范围。</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="enemyCheckEl" type="xs:string" use="required">
+                    <xs:annotation>
+                        <xs:documentation>STBooleanEl, 用于判断一个目标是否为敌人</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
             </xs:extension>

@@ -9,16 +9,16 @@ import javax.el.ELContext;
 import name.huliqing.luoying.object.attribute.AttributeManager;
 
 /**
- * Hit EL,这个EL会计算并返回一个Number值，这个Number值定义了一个对象source对另一个对象target产生的作用值。
+ * STNumberEl,这个EL会计算并返回一个Number值，这个Number值定义了一个对象source对另一个对象target产生的作用值。
  * 可以用来表示计算技能的伤害值、BUFF增益值、
  * <br>表达式参数：
- * 1.source: 这个参数表示源对象。<br>
- * 2.target: 这个参数表示目标对象。<br>
- * 表达式示例：#{source.attributeAttack - target.attributeDefence}, 这可以用来表示source角色对target角色的技能伤害
+ * 1.s: 这个参数表示源对象。<br>
+ * 2.t: 这个参数表示目标对象。<br>
+ * 表达式示例：#{s.attributeAttack - t.attributeDefence}, 这可以用来表示s角色对t角色的技能伤害
  * 值。
  * @author huliqing
  */
-public class HitEl extends AbstractEl<Number> {
+public class STNumberEl extends AbstractEl<Number> {
 
     private final AttributeElContext elContext = new AttributeElContext();
 
@@ -32,8 +32,8 @@ public class HitEl extends AbstractEl<Number> {
      * @param source 
      * @return  
      */
-    public HitEl setSource(AttributeManager source) {
-        elContext.setAttributeManager("source", source);
+    public STNumberEl setSource(AttributeManager source) {
+        elContext.setAttributeManager("s", source);
         return this;
     }
     
@@ -42,8 +42,8 @@ public class HitEl extends AbstractEl<Number> {
      * @param target 
      * @return  
      */
-    public HitEl setTarget(AttributeManager target) {
-        elContext.setAttributeManager("target", target);
+    public STNumberEl setTarget(AttributeManager target) {
+        elContext.setAttributeManager("t", target);
         return this;
     }
 

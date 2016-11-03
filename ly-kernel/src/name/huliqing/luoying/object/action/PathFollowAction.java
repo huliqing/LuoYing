@@ -19,9 +19,7 @@ import name.huliqing.luoying.Config;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.ActionData;
 import name.huliqing.luoying.layer.network.SkillNetwork;
-import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.module.ActorModule;
 import name.huliqing.luoying.object.module.SkillModule;
 import name.huliqing.luoying.object.skill.Skill;
 import name.huliqing.luoying.utils.DebugDynamicUtils;
@@ -33,12 +31,11 @@ import name.huliqing.luoying.utils.ThreadHelper;
  */
 public class PathFollowAction extends AbstractAction implements FollowAction {
     private final static Logger LOG = Logger.getLogger(PathFollowAction.class.getName());
-    private final PlayService playService = Factory.get(PlayService.class);
+//    private final PlayService playService = Factory.get(PlayService.class);
 //    private final ActorService actorService = Factory.get(ActorService.class);
 //    private final SkillService skillService = Factory.get(SkillService.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
     
-    private ActorModule actorModule;
     private SkillModule skillModule;
     
     // 被跟随的目标
@@ -104,7 +101,6 @@ public class PathFollowAction extends AbstractAction implements FollowAction {
     @Override
     public void setActor(Entity actor) {
         super.setActor(actor);
-        actorModule = actor.getModuleManager().getModule(ActorModule.class);
         skillModule = actor.getModuleManager().getModule(SkillModule.class);
     }
     
@@ -149,7 +145,7 @@ public class PathFollowAction extends AbstractAction implements FollowAction {
      */
     protected void doFollow(Spatial target, float tpf) {
         // 如果角色是不可移动的，则直接返回不处理逻辑
-        if (!actorModule.isMovable() || runSkill == null) {
+        if (runSkill == null) {
             end();
             return;
         }

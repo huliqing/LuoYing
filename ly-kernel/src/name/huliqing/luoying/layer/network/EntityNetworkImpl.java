@@ -8,6 +8,7 @@ package name.huliqing.luoying.layer.network;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.mess.MessEntityAttributeApply;
+import name.huliqing.luoying.mess.MessEntityAttributeSet;
 import name.huliqing.luoying.network.Network;
 import name.huliqing.luoying.object.entity.Entity;
 
@@ -22,6 +23,21 @@ public class EntityNetworkImpl implements EntityNetwork {
     @Override
     public void inject() {
         entityService = Factory.get(EntityService.class);
+    }
+
+    @Override
+    public void setAttribute(Entity entity, String attributeName, Object value) {
+        MessEntityAttributeSet mess = new MessEntityAttributeSet();
+        mess.setAttributeName(attributeName);
+        mess.setEntityId(entity.getEntityId());
+        mess.setValue(value);
+        
+        if (NETWORK.isClient()) {
+            NETWORK.sendToServer(mess);
+        } else {
+            NETWORK.broadcast(mess);
+            entityService.setAttribute(entity, attributeName, value);
+        }
     }
     
     @Override

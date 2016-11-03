@@ -7,10 +7,10 @@ package name.huliqing.luoying.layer.service;
 import name.huliqing.luoying.constants.IdConstants;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.el.ElFactory;
-import name.huliqing.luoying.object.el.HitCheckEl;
-import name.huliqing.luoying.object.el.HitEl;
-import name.huliqing.luoying.object.el.LevelEl;
-import name.huliqing.luoying.object.el.CheckEl;
+import name.huliqing.luoying.object.el.STBooleanEl;
+import name.huliqing.luoying.object.el.STNumberEl;
+import name.huliqing.luoying.object.el.LNumberEl;
+import name.huliqing.luoying.object.el.SBooleanEl;
 
 /**
  *
@@ -24,9 +24,9 @@ public class ElServiceImpl implements ElService {
     }
 
     @Override
-    public CheckEl createCheckEl(String idOrExpression) {
+    public SBooleanEl createSBooleanEl(String idOrExpression) {
         if (ElFactory.isElExpression(idOrExpression)) {
-            CheckEl el = Loader.load(IdConstants.SYS_EL_CHECK);
+            SBooleanEl el = Loader.load(IdConstants.SYS_EL_SBOOLEAN);
             el.setExpression(idOrExpression);
             return el;
         } else {
@@ -35,9 +35,9 @@ public class ElServiceImpl implements ElService {
     }
     
     @Override
-    public HitCheckEl createHitCheckEl(String idOrExpression) {
+    public STBooleanEl createSTBooleanEl(String idOrExpression) {
         if (ElFactory.isElExpression(idOrExpression)) {
-            HitCheckEl el = Loader.load(IdConstants.SYS_EL_HIT_CHECK_EMPTY);
+            STBooleanEl el = Loader.load(IdConstants.SYS_EL_STBOOLEAN);
             el.setExpression(idOrExpression);
             return el;
         } else {
@@ -46,9 +46,9 @@ public class ElServiceImpl implements ElService {
     }
 
     @Override
-    public HitEl createHitEl(String idOrExpression) {
+    public STNumberEl createSTNumberEl(String idOrExpression) {
         if (ElFactory.isElExpression(idOrExpression)) {
-            HitEl el = Loader.load(IdConstants.SYS_EL_HIT_EMPTY);
+            STNumberEl el = Loader.load(IdConstants.SYS_EL_STNUMBER);
             el.setExpression(idOrExpression);
             return el;
         } else {
@@ -57,9 +57,9 @@ public class ElServiceImpl implements ElService {
     }
 
     @Override
-    public LevelEl createLevelEl(String idOrExpression) {
+    public LNumberEl createLNumberEl(String idOrExpression) {
         if (ElFactory.isElExpression(idOrExpression)) {
-            LevelEl el = Loader.load(IdConstants.SYS_EL_LEVEL_EMPTY);
+            LNumberEl el = Loader.load(IdConstants.SYS_EL_LNUMBER);
             el.setExpression(idOrExpression);
             return el;
         } else {

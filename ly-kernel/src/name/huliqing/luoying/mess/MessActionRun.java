@@ -65,9 +65,10 @@ public class MessActionRun extends MessBase {
         
         // remove20151229服务端以后一直打开AI
 //        actorService.setAutoAi(actor, false);
-        
-        // 必须清除跟随
-        actorNetwork.setFollow(actor, -1);
+   
+        // remove20161103
+//        // 必须清除跟随
+//        actorNetwork.setFollow(actor, -1);
         
         // 走向目标,action不需要广播
         actionService.playRun(actor, pos);

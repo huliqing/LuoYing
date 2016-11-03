@@ -9,7 +9,7 @@ import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.DropData;
 import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.luoying.layer.service.ElService;
-import name.huliqing.luoying.object.el.HitEl;
+import name.huliqing.luoying.object.el.STNumberEl;
 import name.huliqing.luoying.object.entity.Entity;
 
 /**
@@ -23,13 +23,13 @@ public class AttributeDrop extends AbstractDrop {
     // 属性名称
     private String attribute;
     // 这个公式定义角色source可以掉落多少属性值给target。
-    private HitEl valueHitEl;
+    private STNumberEl valueHitEl;
     
     @Override
     public void setData(DropData data) {
         super.setData(data);
         attribute = data.getAsString("attribute");
-        valueHitEl = elService.createHitEl(data.getAsString("valueHitEl", "#{0}"));
+        valueHitEl = elService.createSTNumberEl(data.getAsString("valueHitEl", "#{0}"));
     }
 
     @Override

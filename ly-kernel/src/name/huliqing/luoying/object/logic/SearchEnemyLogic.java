@@ -6,68 +6,83 @@ package name.huliqing.luoying.object.logic;
 
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.LogicData;
-import name.huliqing.luoying.layer.network.ActorNetwork;
-import name.huliqing.luoying.layer.service.ActorService;
-import name.huliqing.luoying.layer.service.PlayService;
+import name.huliqing.luoying.layer.network.EntityNetwork;
+import name.huliqing.luoying.layer.service.ElService;
+import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.module.ActorModule;
-import name.huliqing.luoying.object.module.LogicModule;
 
 /**
  * 逻辑：
  * 1.每隔一定时间自动搜寻可视范围内的敌人
  * 该逻辑不会有战斗行为或IDLE行为，需要和其它逻辑配合才有意义。
  * @author huliqing
- * @param <T>
  */
-public class SearchEnemyLogic<T extends LogicData> extends Logic<T> {
-    private final PlayService playService = Factory.get(PlayService.class);
-    private final ActorService actorService = Factory.get(ActorService.class);
-    private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
-    
-    private ActorModule actorModule;
-    private LogicModule logicModule;
+public class SearchEnemyLogic extends AbstractLogic {
+    private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
     
     // 自动频率，
     private boolean autoInterval = true;
     private float maxInterval = 3;
     private float minInterval = 1;
+    
+    // ---- inner
+    private float viewDistanceSquared;
 
     @Override
-    public void setData(T data) {
+    public void setData(LogicData data) {
         super.setData(data); 
         this.autoInterval = data.getProto().getAsBoolean("autoInterval", autoInterval);
         this.maxInterval = data.getProto().getAsFloat("maxInterval", maxInterval);
         this.minInterval = data.getProto().getAsFloat("minInterval", minInterval);
+
     }
-    
+
     @Override
-    public void setActor(Entity actor) {
-        super.setActor(actor); 
-        actorModule = actor.getModuleManager().getModule(ActorModule.class);
-        logicModule = actor.getModuleManager().getModule(LogicModule.class);
+    public void initialize() {
+        super.initialize(); 
+        if (viewAttribute != null) {
+            viewDistanceSquared = viewAttribute.floatValue() * viewAttribute.floatValue();
+        }
     }
   
     @Override
     protected void doLogic(float tpf) {
-        // 只有打开了自动侦察功能才执行逻辑
-        if (!logicModule.isAutoDetect()) {
+        if (targetAttribute == null || viewAttribute == null) {
             return;
         }
         
         // 增加自动频率的逻辑
-        Entity target = actorModule.getTarget();
+        // 目标不是角色
+        Entity target = getTarget();
+        if (!(target instanceof Actor)) {
+            return;
+        }
         
-        if (target == null || target.getScene() == null || actorService.isDead(target) || !actorModule.isEnemy(target)) {
-            
-            Entity enemy = actorService.findNearestEnemyExcept(actor, actorModule.getViewDistance(), null);
-            if (enemy != null) {
-                actorNetwork.setTarget(actor, enemy);
-            }
-            // 如果是自动间隔，则在有敌人时频率降低，在没有敌人时频率加大 
-            if (autoInterval) {
-                setInterval(enemy != null ? maxInterval : minInterval);
-            }
+        // 已经从场景移除
+        if (target.getScene() == null) {
+            return;
+        }
+        
+        // 目标在视线之外
+        if (target.getSpatial().getWorldTranslation().distanceSquared(actor.getSpatial().getWorldTranslation()) > viewDistanceSquared) {
+            return;
+        }
+        
+        // 非敌人
+        if (!isEnemy(target)) {
+             // 自动间隔，在没有敌人时频率加快 
+             if (autoInterval) {
+                setInterval(minInterval);
+             }
+            return;
+        }
+        
+        // <<<<找到敌人>>>>
+        entityNetwork.setAttribute(actor, targetAttribute.getName(), target.getEntityId());
+        
+        // 自动间隔，在有敌人时频率降低
+        if (autoInterval) {
+            setInterval(maxInterval);
         }
     }
     

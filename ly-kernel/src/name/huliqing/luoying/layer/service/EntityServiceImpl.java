@@ -5,6 +5,7 @@
  */
 package name.huliqing.luoying.layer.service;
 
+import name.huliqing.luoying.object.attribute.Attribute;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.entity.Entity;
 
@@ -18,6 +19,14 @@ public class EntityServiceImpl implements EntityService {
     public void inject() {
     }
 
+    @Override
+    public void setAttribute(Entity entity, String attributeName, Object value) {
+        Attribute attribute = entity.getAttributeManager().getAttribute(attributeName);
+        if (attribute != null) {
+            attribute.setValue(value);
+        }
+    }
+    
     @Override
     public float getNumberAttributeValue(Entity entity, String attributeName, float defValue) {
         NumberAttribute nattr = entity.getAttributeManager().getAttribute(attributeName, NumberAttribute.class);

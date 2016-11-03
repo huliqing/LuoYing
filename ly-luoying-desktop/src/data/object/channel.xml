@@ -3,7 +3,7 @@
 <root
     xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
     xmlns='http://luoying.huliqing.name'
-    xsi:schemaLocation='http://luoying.huliqing.name meta/channel.xsd'>
+    xsi:schemaLocation='http://luoying.huliqing.name ../../../../ly-kernel/src/LuoYing/Data/meta/channel.xsd'>
     
     <!--系统默认骨架的动画通道配置，适应于使用系统默认骨架的角色 -->
     <channel id="channelRoot" bones="root" />

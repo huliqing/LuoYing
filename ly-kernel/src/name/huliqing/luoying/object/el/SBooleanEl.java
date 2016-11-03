@@ -9,10 +9,10 @@ import javax.el.ELContext;
 import name.huliqing.luoying.object.attribute.AttributeManager;
 
 /**
- * CheckEL, 这个EL返回一个Boolean值，如果值为true，则说明可以使用一个目标对象,否则不能。
+ * SBooleanEl, 这个EL返回一个Boolean值，如果值为true，则说明可以使用一个目标对象,否则不能。
  * 这个EL可以用于判断一个Entity是否可以使用一件装备、一件武器、一个技能或一件物品...等。
  * 比如, 当给一件装备配置如下表达式时：<br>
- * CheckEL="#{!source.attributeDead && source.attributeLevel >= 5}"<br>
+ * CheckEL="#{!s.attributeDead && s.attributeLevel >= 5}"<br>
  * 这可以表示为：只有活着、并且等级大于或等于5的角色才可以使用目标装备.
  * 
  *  * 代码使用示例：
@@ -25,7 +25,7 @@ import name.huliqing.luoying.object.attribute.AttributeManager;
  * </pre></code>
  * @author huliqing
  */
-public class CheckEl extends AbstractEl<Boolean>{
+public class SBooleanEl extends AbstractEl<Boolean>{
 
     private final AttributeElContext elContext = new AttributeElContext();
 
@@ -39,8 +39,8 @@ public class CheckEl extends AbstractEl<Boolean>{
      * @param source 
      * @return  
      */
-    public CheckEl setSource(AttributeManager source) {
-        elContext.setAttributeManager("source", source);
+    public SBooleanEl setSource(AttributeManager source) {
+        elContext.setAttributeManager("s", source);
         return this;
     }
     

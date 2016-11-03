@@ -31,7 +31,7 @@ import name.huliqing.luoying.object.skin.WeaponSkin;
  * @author huliqing
  */
 public class ShotBowSkill extends ShotSkill {
-    private final PlayService playService = Factory.get(PlayService.class);
+//    private final PlayService playService = Factory.get(PlayService.class);
     private ActorModule actorModule;
     private SkinModule skinModule;
     
@@ -126,13 +126,9 @@ public class ShotBowSkill extends ShotSkill {
     protected void doUpdateAnimation(String animation, boolean loop
             , float animFullTime, float animStartTime) {
         shotDir = 1; // horizontal
-        if ((this.animationShotDown != null || this.animationShotUp != null) 
-                && actorModule.getTarget() != null
-                ) {
-            
-            // 目标角色
-            Entity target = actorModule.getTarget();
-            
+        // 目标角色
+        Entity target = getTarget();
+        if ((this.animationShotDown != null || this.animationShotUp != null) && target != null) {
             TempVars tv = TempVars.get();
             Vector3f viewPos = tv.vect1;
             Vector3f targetPos = target.getSpatial().getWorldBound().getCenter();

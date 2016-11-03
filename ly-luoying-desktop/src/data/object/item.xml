@@ -3,14 +3,14 @@
 <root
     xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
     xmlns='http://luoying.huliqing.name'
-    xsi:schemaLocation='http://luoying.huliqing.name meta/item.xsd'>
+    xsi:schemaLocation='http://luoying.huliqing.name ../../../../ly-kernel/src/LuoYing/Data/meta/item.xsd'>
     
     <!-- ========================================================================= -->
     <!--基本配置-->
     <!-- ========================================================================= -->
     
     <!--物品基类-->
-    <itemSimple id="itemBase" matchAttributes="attributeDead|0" />
+    <itemSimple id="itemBase" checkEl="#{!source.attributeDead}" />
     
     <!--药水类-->
     <itemAttribute id="itemTonicBase" extends="itemBase" effects="effectRandomFire" />
@@ -21,12 +21,15 @@
     <!--召唤卷轴-->
     <itemSkill id="itemScrollBase" extends="itemBase" />
     
+    <!--召唤类物品的基本设置-->
+    <itemSummon id="itemSummonBase" extends="itemBase" copyAttributesFromSource="attributeGroup,attributeLevel" linkAttributesToSource="attributeOwner,attributeFollowTarget" />
+    
     <!-- ========================================================================= -->
     <!--种族类限制物品-->
     <!-- ========================================================================= -->
     
     <!--技能书：人类种族 -->
-    <itemBook id="itemBookHumanBase" extends="itemBookBase" matchAttributes="attributeDead|0,attributeRace|1" />
+    <itemBook id="itemBookHumanBase" extends="itemBookBase" checkEl="#{!source.attributeDead && source.attributeRace == 1}" />
     
     <!-- ========================================================================= -->
     <!--特殊物品-->
@@ -78,9 +81,9 @@
     <itemSkill id="itemTreeStump" extends="itemScrollBase" icon="Interface/item/treeStump.png" skill="skillSummonGb" cost="200" />
     
     <!--召唤：防御塔-->
-    <itemSummon id="itemTower" extends="itemBase" icon="Interface/item/tower_fire.png" actorId="actorTower" total="1" cost="300" />
-    <itemSummon id="itemTowerStone" extends="itemBase" icon="Interface/item/tower_stone.png" actorId="actorTowerStone" total="1" cost="300" />
-    <itemSummon id="itemTowerSnow" extends="itemBase" icon="Interface/item/tower_snow.png" actorId="actorTowerSnow" total="1" cost="300" />
+    <itemSummon id="itemTower" extends="itemSummonBase" icon="Interface/item/tower_fire.png" actorId="actorTower" total="1" cost="300" />
+    <itemSummon id="itemTowerStone" extends="itemSummonBase" icon="Interface/item/tower_stone.png" actorId="actorTowerStone" total="1" cost="300" />
+    <itemSummon id="itemTowerSnow" extends="itemSummonBase" icon="Interface/item/tower_snow.png" actorId="actorTowerSnow" total="1" cost="300" />
     
     <!-- ========================================================================= -->
     <!--药品类\增益类-->

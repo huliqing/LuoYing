@@ -15,7 +15,7 @@ xs:time
            elementFormDefault="qualified"
         >
     
-    <xs:include schemaLocation="base.xsd" />
+    <xs:include schemaLocation="./base.xsd" />
     
     <xs:element name="root">
         <xs:complexType>

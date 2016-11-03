@@ -5,10 +5,10 @@
 package name.huliqing.luoying.layer.service;
 
 import name.huliqing.luoying.Inject;
-import name.huliqing.luoying.object.el.HitCheckEl;
-import name.huliqing.luoying.object.el.HitEl;
-import name.huliqing.luoying.object.el.LevelEl;
-import name.huliqing.luoying.object.el.CheckEl;
+import name.huliqing.luoying.object.el.STBooleanEl;
+import name.huliqing.luoying.object.el.STNumberEl;
+import name.huliqing.luoying.object.el.LNumberEl;
+import name.huliqing.luoying.object.el.SBooleanEl;
 
 /**
  *
@@ -17,31 +17,31 @@ import name.huliqing.luoying.object.el.CheckEl;
 public interface ElService extends Inject{
     
     /**
-     * 载入一条CheckEl，参数可能是elId或是一条CheckEl，如: #{!source.attributeDead}
+     * 载入一条SBooleanEl，参数可能是elId或是一条SBoolean表达式，如: #{!source.attributeDead}
      * @param idOrExpression
      * @return 
      */
-    CheckEl createCheckEl(String idOrExpression);
+    SBooleanEl createSBooleanEl(String idOrExpression);
     
     /**
-     * 载入一条HitCheckEl, 参数可以是elId或是一条HitCheckEl表达式, 如：#{source.attributeGroup != target.attributeGroup}
+     * 载入一条STBooleanEl, 参数可以是elId或是一条STBoolean表达式, 如：#{s.attributeGroup != t.attributeGroup}
      * @param idOrExpression
      * @return 
      */
-    HitCheckEl createHitCheckEl(String idOrExpression);
+    STBooleanEl createSTBooleanEl(String idOrExpression);
     
     /**
-     * 载入一条HitEl, 参数可以是elId或是一条HitEl表达式, 如：#{source.attributeAttack - target.attributeDefense}
+     * 载入一条STNumberEl, 参数可以是elId或是一条STNumber表达式, 如：#{s.attributeAttack - t.attributeDefense}
      * @param idOrExpression
      * @return 
      */
-    HitEl createHitEl(String idOrExpression);
+    STNumberEl createSTNumberEl(String idOrExpression);
     
     /**
-     * 载入一条LevelEl, 参数可以是elId或是一条LevelEl表达式，如: #{level * 2}
+     * 载入一条LNumberEl, 参数可以是elId或是一条LNumber表达式，如: #{l * 2}
      * @param idOrExpression
      * @return 
      */
-    LevelEl createLevelEl(String idOrExpression);
+    LNumberEl createLNumberEl(String idOrExpression);
     
 }

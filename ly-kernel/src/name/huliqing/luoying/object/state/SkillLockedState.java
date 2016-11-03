@@ -10,6 +10,7 @@ import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.StateData;
 import name.huliqing.luoying.layer.network.SkillNetwork;
+import name.huliqing.luoying.object.attribute.BooleanAttribute;
 import name.huliqing.luoying.object.define.DefineFactory;
 import name.huliqing.luoying.object.module.ActorModule;
 import name.huliqing.luoying.object.module.ChannelModule;
@@ -150,18 +151,16 @@ public class SkillLockedState extends AbstractState implements SkillPlayListener
         if (lockChannels != null && channelModule != null) {
             channelModule.setChannelLock(false, lockChannels);
         }
-        
         // 如果状态结束，目标已经死亡，而角色最后一个技能执行的不是”死亡“技能，则强制执行死亡技能。
         // 这可以避免一些情况如：当角色在跑步时被”冰冻“状态冻住而死但却没有执行死亡技能（死亡技能被锁定），
         // 在状态结束后角色仍然在一直移动的情况发生。
-        if (actorModule.isDead()) {
+        if (deadAttribute != null && deadAttribute.getValue()) {
             Skill lastSkill = skillModule.getLastSkill();
             List<Skill> deadSkills = skillModule.getSkillDead(null);
             if (deadSkills != null && !deadSkills.isEmpty() && !deadSkills.contains(lastSkill)) {
                 skillModule.playSkill(deadSkills.get(0), false, null);
             }
         }
-        
         super.cleanup();
     }
     

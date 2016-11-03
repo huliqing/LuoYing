@@ -8,12 +8,12 @@ package name.huliqing.luoying.object.gamelogic;
 import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.GameLogicData;
-import name.huliqing.luoying.layer.network.AttributeNetwork;
 import name.huliqing.luoying.layer.network.EntityNetwork;
-import name.huliqing.luoying.layer.service.ActorService;
+import name.huliqing.luoying.layer.service.ElService;
 import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.object.actor.Actor;
+import name.huliqing.luoying.object.el.SBooleanEl;
 import name.huliqing.luoying.object.entity.Entity;
 
 /**
@@ -24,8 +24,9 @@ import name.huliqing.luoying.object.entity.Entity;
  */
 public class AttributeChangeGameLogic<T extends GameLogicData> extends AbstractGameLogic<T> {
     private final PlayService playService = Factory.get(PlayService.class);
-    private final ActorService actorService = Factory.get(ActorService.class);
+//    private final ActorService actorService = Factory.get(ActorService.class);
     private final EntityService entityService = Factory.get(EntityService.class);
+    private final ElService elService = Factory.get(ElService.class);
     private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
 
     // 指定要修改的角色的属性值,角色必须有这个属性，否则没有意义。
@@ -40,8 +41,10 @@ public class AttributeChangeGameLogic<T extends GameLogicData> extends AbstractG
     // 速度值，值越大，改变的量越大。
     private float speed = 1.0f;
     
-    // 是否作用到已经“死亡”的角色
-    private boolean applyToDead;
+    // 这个EL用于判断一个角色是否可以应用于当前的逻辑。
+    private SBooleanEl checkEl;
+    
+    // ---- inner
     
     @Override
     public void setData(T data) {
@@ -50,7 +53,9 @@ public class AttributeChangeGameLogic<T extends GameLogicData> extends AbstractG
         useAttribute = data.getAsString("useAttribute");
         baseValue = data.getAsFloat("baseValue", baseValue);
         speed = data.getAsFloat("speed", speed);
-        applyToDead = data.getAsBoolean("applyToDead", applyToDead);
+//        applyToDead = data.getAsBoolean("applyToDead", applyToDead);
+        checkEl = elService.createSBooleanEl(data.getAsString("checkEl", "#{true}"));
+
         // 不允许interval小于0
         if (interval <= 0) {
             interval = 1;
@@ -64,10 +69,9 @@ public class AttributeChangeGameLogic<T extends GameLogicData> extends AbstractG
             return;
         
         for (Actor actor : actors) {
-            if (!applyToDead && actorService.isDead(actor)) {
-                continue;
+            if (checkEl.setSource(actor.getAttributeManager()).getValue()) {
+                updateAttribute(actor);
             }
-            updateAttribute(actor);
         }
     }
     

@@ -1,5 +1,6 @@
 /*
- * To change this template, choose Tools | Templates
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package name.huliqing.luoying.object.logic;
@@ -9,77 +10,43 @@ import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.xml.DataProcessor;
 
 /**
- * 角色逻辑
  * @author huliqing
  * @param <T>
  */
-public abstract class Logic<T extends LogicData> implements DataProcessor<T>{
-    
-    protected T data;
-    protected boolean initialized;
-    protected float interval = 1.0f;
-    protected float timeUsed;
+public interface Logic<T extends LogicData> extends DataProcessor<T> {
+
+    @Override
+    public void setData(T data);
+
+    @Override
+    public T getData();
     
     /**
-     * 运行当前逻辑的角色.
+     * 初始化逻辑
      */
-    protected Entity actor;
+    void initialize();
 
-    @Override
-    public void setData(T data) {
-        this.data = data;
-        interval = data.getAsFloat("interval", interval);
-    }
-
-    @Override
-    public T getData() {
-        return data;
-    }
-
-    @Override
-    public void updateDatas() {
-        // ignore
-    }
-
-    public void initialize() {
-        initialized = true;
-    }
-
-    public boolean isInitialized() {
-        return initialized;
-    }
-    
-    public void update(float tpf) {
-        timeUsed += tpf;
-        if (timeUsed >= interval) {
-            doLogic(tpf);
-            timeUsed = 0;
-        }
-    }
-
-    public void cleanup() {
-        initialized = false;
-    }
-    
     /**
-     * 设置执行逻辑的角色。
-     * @param self 
+     * 判断逻辑是否已经初始化
+     * @return 
      */
-    public void setActor(Entity self) {
-        this.actor = self;
-    }
-
-    public void setInterval(float interval) {
-        this.interval = interval;
-    }
-
-    public float getInterval() {
-        return interval;
-    }
+    boolean isInitialized();
     
     /**
      * 更新逻辑
      * @param tpf 
      */
-    protected abstract void doLogic(float tpf);
+    void update(float tpf);
+
+    /**
+     * 清理并释放资源
+     */
+    void cleanup();
+    
+    /**
+     * 设置执行逻辑的角色。
+     * @param self 
+     */
+    void setActor(Entity self);
+
 }

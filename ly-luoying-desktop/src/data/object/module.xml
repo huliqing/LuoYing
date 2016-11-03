@@ -3,7 +3,7 @@
 <root
     xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
     xmlns='http://luoying.huliqing.name'
-    xsi:schemaLocation='http://luoying.huliqing.name meta/module.xsd'>
+    xsi:schemaLocation='http://luoying.huliqing.name ../../../../ly-kernel/src/LuoYing/Data/meta/module.xsd'>
     
     <!--
     角色模块：配置给角色，角色模块通过绑定角色的各种属性来控制角色的行为，当角色初始化的时候会自动初始化所有配置的
@@ -38,19 +38,11 @@
     
     <!--基本角色管理模块: 依赖moduleAttribute -->
     <moduleActor id="moduleActor" moduleOrder="10" 
-                bindDeadAttribute="attributeDead"
                 bindHealthAttribute="attributeHealth" 
-                bindFollowTargetAttribute="attributeFollowTarget" 
-                bindGroupAttribute="attributeGroup"
-                bindOwnerAttribute="attributeOwner"
-                bindTargetAttribute="attributeTarget" 
+                bindDeadAttribute="attributeDead"
                 bindMassAttribute="attributeMass"
-                bindTeamAttribute="attributeTeam"
-                bindViewAttribute="attributeVision"
                 bindMovableAttribute="attributeMovable"
-                bindRotatableAttribute="attributeRotatable"
-                bindEssentialAttribute="attributeEssential" 
-                bindBiologyAttribute="attributeBiology" />
+                bindRotatableAttribute="attributeRotatable" />
 
     <!--技能管理模块: 间接依赖: moduleChannel -->
     <moduleSkill id="moduleSkill" moduleOrder="20" 
@@ -66,12 +58,10 @@
     <moduleSkin id="moduleSkin" moduleOrder="30" bindWeaponSlotAttribute="attributeWeaponSlots" />    
     
     <!--角色行为模块：直接或间接依赖：moduleAttribute, moduleActor, moduleSkill, moduleSkin -->
-    <moduleAction id="moduleAction" moduleOrder="40" />
+    <moduleAction id="moduleAction" moduleOrder="40" bindDeadAttribute="attributeDead" />
 
     <!--角色的逻辑功能：直接或间接依赖：moduleAttribute, moduleActor, moduleSkill, moduleAction -->
-    <moduleLogic id="moduleLogic" moduleOrder="50" 
-                 bindAutoLogicAttribute="attributeAutoLogic" 
-                 bindAutoDetectAttribute="attributeAutoDetect" />
+    <moduleLogic id="moduleLogic" moduleOrder="50" bindEnabledAttribute="attributeAutoLogic" />
 
     <!--==========================================================================-->
     <!--其它模块-->

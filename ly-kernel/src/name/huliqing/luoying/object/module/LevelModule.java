@@ -18,7 +18,7 @@ import name.huliqing.luoying.object.attribute.LimitAttribute;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.attribute.ValueChangeListener;
 import name.huliqing.luoying.object.effect.Effect;
-import name.huliqing.luoying.object.el.LevelEl;
+import name.huliqing.luoying.object.el.LNumberEl;
 import name.huliqing.luoying.object.entity.Entity;
 
 /**
@@ -41,7 +41,7 @@ public class LevelModule extends AbstractModule implements ValueChangeListener<N
     private String bindXpNextAttribute;
 
     // 角色等级公式,关联一个Level El, 这个公式用来计算角色在升级到每一个等级时需要的经验值(xp)数量。
-    private LevelEl xpLevelEl;
+    private LNumberEl xpLevelEl;
 
     // 限制最高等级
     private int maxLevel = Integer.MAX_VALUE;
@@ -60,7 +60,7 @@ public class LevelModule extends AbstractModule implements ValueChangeListener<N
         bindLevelAttribute = data.getAsString("bindLevelAttribute");
         bindXpAttribute = data.getAsString("bindXpAttribute");
         bindXpNextAttribute = data.getAsString("bindXpNextAttribute");
-        xpLevelEl = elService.createLevelEl(data.getAsString("xpLevelEl", "#{100}")); // #{100}作为在不设置时的默认值
+        xpLevelEl = elService.createLNumberEl(data.getAsString("xpLevelEl", "#{100}")); // #{100}作为在不设置时的默认值
         maxLevel = data.getAsInteger("maxLevel", maxLevel);
         effect = data.getAsString("effect");
     }
@@ -212,7 +212,7 @@ public class LevelModule extends AbstractModule implements ValueChangeListener<N
      * @param currentXp 当前可用于换算等级的经验值
      * @param store 存放结果的数组，store[2] {upCount, needXp} upCount表示可以升多少级，needXp表示需要多少xp.
      */
-    private void countLevelUp(LevelEl xpEl, int currentLevel, int currentXp, int maxLevel, int[] store) {
+    private void countLevelUp(LNumberEl xpEl, int currentLevel, int currentXp, int maxLevel, int[] store) {
         if (currentLevel >= maxLevel) {
             return;
         }

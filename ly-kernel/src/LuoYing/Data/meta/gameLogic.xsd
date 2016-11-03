@@ -14,7 +14,7 @@ xs:time
            xmlns="http://luoying.huliqing.name"
            elementFormDefault="qualified">
     
-    <xs:include schemaLocation="base.xsd" />
+    <xs:include schemaLocation="./base.xsd" />
     
     <xs:element name="root">
         <xs:complexType>
@@ -33,6 +33,9 @@ xs:time
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="gameLogicBase">
+                    <xs:attribute name="checkEl" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>SBooleanEl, 这个EL用于判断一个角色是否可以应用于当前的逻辑。</xs:documentation></xs:annotation>
+                    </xs:attribute>
                     <xs:attribute name="applyAttribute" type="xs:string" use="required">
                         <xs:annotation><xs:documentation>指定一个角色属性ID，这表示最终作用值要应用到角色的哪一个属性上。</xs:documentation></xs:annotation>
                     </xs:attribute>
@@ -44,9 +47,6 @@ xs:time
                     </xs:attribute>
                     <xs:attribute name="speed" type="xs:decimal" use="optional">
                         <xs:annotation><xs:documentation>作用速度，默认：“1.0",参考计算公式：  applyAttributeValue = (baseValue + useAttributeValue) * speed * interval; </xs:documentation></xs:annotation>
-                    </xs:attribute>
-                    <xs:attribute name="applyToDead" type="bool" use="optional">
-                        <xs:annotation><xs:documentation>是否作用到已死亡的角色身上。</xs:documentation></xs:annotation>
                     </xs:attribute>
                 </xs:extension>
             </xs:complexContent>
@@ -60,6 +60,9 @@ xs:time
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="gameLogicBase">
+                    <xs:attribute name="checkEl" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>SBooleanEl, 这个EL用于判断一个角色是否可以被清理出场景。</xs:documentation></xs:annotation>
+                    </xs:attribute>
                     <xs:attribute name="cleanInterval" type="xs:string" use="optional">
                         <xs:annotation><xs:documentation>清理的时间间隔，单位秒</xs:documentation></xs:annotation>
                     </xs:attribute>

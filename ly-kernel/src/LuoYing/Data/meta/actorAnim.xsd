@@ -14,7 +14,7 @@ xs:time
            xmlns="http://luoying.huliqing.name"
            elementFormDefault="qualified" >
     
-    <xs:include schemaLocation="animBase.xsd" />
+    <xs:include schemaLocation="./animBase.xsd" />
     
     <xs:element name="root">
         <xs:complexType>
@@ -33,6 +33,11 @@ xs:time
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="animBase">
+                    <xs:attribute name="bindTargetAttribute" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>NumberAttribute, 绑定角色的“目标”属性，这个属性存放了角色的当前目标对象的唯一id.</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
                     <xs:attribute name="points" type="xs:string" use="required">
                         <xs:annotation>
                             <xs:documentation>位置,格式：x|y|z,x|y|z,x|y|z</xs:documentation>

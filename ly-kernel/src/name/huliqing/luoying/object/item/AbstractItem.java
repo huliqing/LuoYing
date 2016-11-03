@@ -12,7 +12,7 @@ import name.huliqing.luoying.data.ItemData;
 import name.huliqing.luoying.layer.service.ElService;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.effect.Effect;
-import name.huliqing.luoying.object.el.CheckEl;
+import name.huliqing.luoying.object.el.SBooleanEl;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.sound.SoundManager;
 
@@ -32,14 +32,14 @@ public abstract class AbstractItem implements Item {
     protected String[] sounds;
     
     // checkEl用于判断角色是否可以使用这件物品
-    protected CheckEl checkEl;
+    protected SBooleanEl checkEl;
     
     @Override
     public void setData(ItemData data) {
         this.data = data;
         effects = data.getAsArray("effects");
         sounds = data.getAsArray("sounds");
-        checkEl = elService.createCheckEl(data.getAsString("checkEl", "#{true}"));
+        checkEl = elService.createSBooleanEl(data.getAsString("checkEl", "#{true}"));
     }
     
     @Override

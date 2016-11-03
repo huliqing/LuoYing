@@ -14,7 +14,7 @@ import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.manager.ResourceManager;
 import name.huliqing.luoying.object.ControlAdapter;
 import name.huliqing.luoying.object.anim.Anim;
-import name.huliqing.luoying.object.el.HitCheckEl;
+import name.huliqing.luoying.object.el.STBooleanEl;
 import name.huliqing.luoying.object.entity.AbstractEntity;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.ui.UI;
@@ -44,7 +44,7 @@ public abstract class Chat<T extends ChatData> extends AbstractEntity<T> {
     // Chat动画
     protected Anim[] animations;
     // 用于判断当前Chat是否对目标角色可见
-    protected HitCheckEl hitCheckEl;
+    protected STBooleanEl hitCheckEl;
     
     // ---- inner
     protected Entity actor;
@@ -79,7 +79,7 @@ public abstract class Chat<T extends ChatData> extends AbstractEntity<T> {
                 this.animations[i] = Loader.load(tempAnims[i]);
             }
         }
-        hitCheckEl = elService.createHitCheckEl(data.getAsString("hitCheckEl", "#{true}"));
+        hitCheckEl = elService.createSTBooleanEl(data.getAsString("hitCheckEl", "#{true}"));
     }
 
     @Override

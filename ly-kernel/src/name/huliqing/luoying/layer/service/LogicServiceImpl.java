@@ -6,7 +6,6 @@ package name.huliqing.luoying.layer.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.luoying.constants.IdConstants;
 import name.huliqing.luoying.data.LogicData;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.xml.DataFactory;
@@ -23,11 +22,6 @@ public class LogicServiceImpl implements LogicService {
     @Override
     public void inject() {
         // 
-    }
-
-    @Override
-    public Logic loadLogic(String logicId) {
-        return Loader.load(logicId);
     }
 
     @Override
@@ -76,32 +70,32 @@ public class LogicServiceImpl implements LogicService {
 //            addLogic(actor, logic);
 //        }
 //    }
-
-    @Override
-    public boolean isAutoLogic(Entity actor) {
-        LogicModule module = actor.getModuleManager().getModule(LogicModule.class);
-        return module != null && module.isAutoLogic();
-    }
-
-    @Override
-    public void setAutoLogic(Entity actor, boolean enabled) {
-        LogicModule module = actor.getModuleManager().getModule(LogicModule.class);
-        if (module != null) {
-            module.setAutoLogic(enabled);
-        }
-    }
-    
-    @Override
-    public boolean isAutoDetect(Entity actor) {
-        LogicModule module = actor.getModuleManager().getModule(LogicModule.class);
-        return module != null && module.isAutoDetect();
-    }
-    
-    @Override
-    public void setAutoDetect(Entity actor, boolean autoDetect) {
-        LogicModule module = actor.getModuleManager().getModule(LogicModule.class);
-        if (module != null) {
-            module.setAutoDetect(autoDetect);
-        }
-    }
+//
+//    @Override
+//    public boolean isAutoLogic(Entity actor) {
+//        LogicModule module = actor.getModuleManager().getModule(LogicModule.class);
+//        return module != null && module.isAutoLogic();
+//    }
+//
+//    @Override
+//    public void setAutoLogic(Entity actor, boolean enabled) {
+//        LogicModule module = actor.getModuleManager().getModule(LogicModule.class);
+//        if (module != null) {
+//            module.setAutoLogic(enabled);
+//        }
+//    }
+//    
+//    @Override
+//    public boolean isAutoDetect(Entity actor) {
+//        LogicModule module = actor.getModuleManager().getModule(LogicModule.class);
+//        return module != null && module.isAutoDetect();
+//    }
+//    
+//    @Override
+//    public void setAutoDetect(Entity actor, boolean autoDetect) {
+//        LogicModule module = actor.getModuleManager().getModule(LogicModule.class);
+//        if (module != null) {
+//            module.setAutoDetect(autoDetect);
+//        }
+//    }
 }

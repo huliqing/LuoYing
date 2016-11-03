@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><root xmlns="http://luoying.huliqing.name" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://luoying.huliqing.name meta/config.xsd">
+<?xml version="1.0" encoding="UTF-8"?><root xmlns="http://luoying.huliqing.name" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://luoying.huliqing.name ../../../../ly-kernel/src/LuoYing/Data/meta/config.xsd">
   <notice readme="注：版本名称(versionName)及版本号(versionCode)会在构建时被重置,这个文件也会在构建时被自动重写。"/>
   <config extends="configGlobalRelease" id="configGlobal" versionName="2.5.1" versionCode="251"/>
   <config extends="configGlobalBase" id="configGlobalRelease"/>

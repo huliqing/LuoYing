@@ -5,20 +5,20 @@
 package name.huliqing.luoying.object.logic;
 
 import com.jme3.math.FastMath;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.LogicData;
-import name.huliqing.luoying.layer.network.ActorNetwork;
 import name.huliqing.luoying.layer.network.SkillNetwork;
-import name.huliqing.luoying.layer.service.ActorService;
+import name.huliqing.luoying.layer.service.ElService;
 import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.layer.service.SkillService;
+import name.huliqing.luoying.object.actor.Actor;
+import name.huliqing.luoying.object.attribute.NumberAttribute;
+import name.huliqing.luoying.object.el.STBooleanEl;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.module.ActorListener;
-import name.huliqing.luoying.object.module.ActorModule;
 import name.huliqing.luoying.object.module.SkillListener;
 import name.huliqing.luoying.object.module.SkillModule;
 import name.huliqing.luoying.object.module.SkillPlayListener;
@@ -29,17 +29,16 @@ import name.huliqing.luoying.object.skill.ShotSkill;
 /**
  * 防守逻辑
  * @author huliqing
- * @param <T>
  */
-public class DefendLogic<T extends LogicData> extends Logic<T> implements SkillListener, SkillPlayListener, ActorListener {
+public class DefendLogic extends AbstractLogic implements SkillListener, SkillPlayListener {
 //    private static final Logger LOG = Logger.getLogger(DefendLogic.class.getName());
     
-    private final ActorService actorService = Factory.get(ActorService.class);
+//    private final ActorService actorService = Factory.get(ActorService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
     private final EntityService entityService = Factory.get(EntityService.class);
+    private final ElService elService = Factory.get(ElService.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
-    private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
-    private ActorModule actorModule;
+//    private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private SkillModule skillModule;
     
     // 使用哪一个属性作为防守概率及躲闪概率
@@ -47,9 +46,6 @@ public class DefendLogic<T extends LogicData> extends Logic<T> implements SkillL
     private String duckRateAttribute;
     // 哪些属性会响应OnHit,即监听哪些属性被击中
     private List<String> listenAttributes;
-    
-    // 被当前侦听(skillListener)的其它角色
-    private Set<Entity> listenersActors;
     // 指定要监听的目标角色所发出的技能,当目标角色发出这些技能时，当前角色会偿试进行防守或躲闪
     private long listenSkillTags;
     // 当前角色可以用来防守的技能类型
@@ -57,17 +53,21 @@ public class DefendLogic<T extends LogicData> extends Logic<T> implements SkillL
     // 当前角色可以用来躲闪的技能类型。
     private long duckSkillTags;
     
-    // ---- 节能
+    // ---- inner
     // 判断是否有可用的技能进行防守
     private boolean hasUsableSkill = false;
     
     private boolean needRecacheSkill = true;
     
+    // 被当前侦听(skillListener)的其它角色
+    private Set<Entity> listenersActors;
     private List<Skill> defendSkills;
     private List<Skill> duckSkills;
+    // 扫描的时候临时存放角色
+    private final List<Actor> tempScanStore = new ArrayList<Actor>();
     
     @Override
-    public void setData(T data) {
+    public void setData(LogicData data) {
         super.setData(data); 
         interval = 5; 
         defendRateAttribute = data.getAsString("defendRateAttribute");
@@ -81,24 +81,42 @@ public class DefendLogic<T extends LogicData> extends Logic<T> implements SkillL
     @Override
     public void setActor(Entity self) {
         super.setActor(self); 
-        actorModule = actor.getModuleManager().getModule(ActorModule.class);
         skillModule = actor.getModuleManager().getModule(SkillModule.class);
     }
     
     @Override
     public void initialize() {
         super.initialize();
-        actorModule.addActorListener(this);
         skillModule.addSkillListener(this);
         recacheSkill();
     }
     
     @Override
-    public void cleanup() {
-        // 清理当前角色的侦听器
-        actorModule.removeActorListener(this);
-        skillModule.removeSkillListener(this);
-        
+    protected void doLogic(float tpf) {
+        // 技能重新缓存技能
+        if (needRecacheSkill) {
+            recacheSkill();
+        }
+        // 1.清理释放监听
+        releaseListener();
+        // 2.重新扫描周围一定范围内的敌人，并对这些敌人进行监听,当他们执行技能时可以判断是否需要防守。
+        scanEnemyAndAddListener();
+    }
+    
+    private void scanEnemyAndAddListener() {
+        tempScanStore.clear();
+        actor.getScene().getEntities(Actor.class, actor.getSpatial().getWorldTranslation(), 100, tempScanStore);
+        if (!tempScanStore.isEmpty()) {
+            for (Actor target : tempScanStore) {
+                if (isEnemy(target)) {
+                    skillService.addSkillPlayListener(target, this);
+                    listenersActors.add(target);
+                }
+            }
+        }
+    }
+    
+    private void releaseListener() {
         // 清理其它被当前逻辑侦听的角色
         if (listenersActors != null) {
             for (Entity other : listenersActors) {
@@ -106,97 +124,24 @@ public class DefendLogic<T extends LogicData> extends Logic<T> implements SkillL
             }
             listenersActors.clear();
         }
+    }
+    
+    @Override
+    public void cleanup() {
+        // 清理当前角色的侦听器
+        skillModule.removeSkillListener(this);
+        releaseListener();
         super.cleanup();
     }
 
     @Override
-    public void onActorTargetLocked(Entity sourceBeLocked, Entity other) {
-        if (!hasUsableSkill) 
-            return;
-        
-        if (sourceBeLocked.getData().getUniqueId() == other.getData().getUniqueId()) 
-            return;
-        
-        if (!actorService.isAvailableEnemy(other.getModuleManager().getModule(ActorModule.class)
-                , sourceBeLocked.getModuleManager().getModule(ActorModule.class)))
-            return;
-        
-        // 当被other锁定时给other添加侦听器，以侦察other的攻击。以便进行防守和躲闪
-        skillService.addSkillPlayListener(other, this);
-        
-        // 记录被侦听的对象，以便在当前角色销毁或退出时清理
-        if (listenersActors == null) {
-            listenersActors = new HashSet<Entity>();
-        }
-        listenersActors.add(other);
-    }
-
-    @Override
-    public void onActorTargetReleased(Entity sourceBeReleased, Entity other) {
-        if (!hasUsableSkill) 
-            return;
-        
-        // 当other不再把source当前目标时就不再需要侦听了。
-        skillService.removeSkillPlayListener(other, this);
-        
-        // 清理
-        if (listenersActors != null) {
-            listenersActors.remove(other);
-        }
-    }
-
-    @Override
-    public void onActorHitTarget(Entity sourceHitter, Entity beHit, String hitAttribute, float hitValue, boolean killedByHit) {
-        // ignore
-    }
-
-    // 受到攻击时将目标设为首要敌人
-    @Override
-    public void onActorHitByTarget(Entity sourceBeHit, Entity hitter, String hitAttribute, float hitValue, boolean killedByHit) {
-        // hitValue>0为增益效果，不处理
-        // 这里不作用于player，不要影响player控制的目标的设置
-        if (actorModule.isDead() || actorModule.isPlayer() || hitValue > 0)
-            return; 
-        
-        // 被击中的属性不在监听范围内则不处理。
-        if (!listenAttributes.contains(hitAttribute)) {
-            return;
-        }
-        
-        if (hitter != null) {
-            actorNetwork.setTarget(sourceBeHit, hitter);
-        }
-    }
-
-    @Override
-    public void onSkillAdded(Entity actor, Skill skill) {
-        needRecacheSkill = true;
-    }
-
-    @Override
-    public void onSkillRemoved(Entity actor, Skill skill) {
-        needRecacheSkill = true;
-    }
-
-    @Override
-    public boolean onSkillHookCheck(Skill skill) {
-        return true;
-    }
-    
-    @Override
     public void onSkillStart(Skill skill) {
-        
 //        if (Config.debug) {
 //            LOG.log(Level.INFO, "defendActorLogic==> onSkillStart, actor={0}, skill={1}", new Object[] {skill.getActor().getData().getId(), skill.getData().getId()});
 //        }
         
         if (!hasUsableSkill) 
             return;
-        
-        // 如果已经死亡就不需要处理防守了
-        if (actorModule.isDead()) {
-            return;
-        }
         
         // 暂不支持shot类技能的防守
         if (skill instanceof ShotSkill)
@@ -205,6 +150,12 @@ public class DefendLogic<T extends LogicData> extends Logic<T> implements SkillL
         // 不是所侦听的技能(只有listenSkillTags所指定的技能类型才需要防守或躲闪 )
         if ((listenSkillTags & skill.getData().getTags()) == 0) 
             return;
+        
+        // 如果target的目标不是当前角色，则不需要处理。
+        NumberAttribute enemyTargetAttribute =  skill.getActor().getAttributeManager().getAttribute(bindTargetAttribute, NumberAttribute.class);
+        if (enemyTargetAttribute == null || enemyTargetAttribute.longValue() != actor.getEntityId()) {
+            return;
+        }
         
         // 2.正常防守,只有普通攻击技能才允许防守
         if (skill instanceof AttackSkill) {
@@ -229,6 +180,11 @@ public class DefendLogic<T extends LogicData> extends Logic<T> implements SkillL
     @Override
     public void onSkillEnd(Skill skill) {
         // ignore
+    }
+    
+    @Override
+    public boolean onSkillHookCheck(Skill skill) {
+        return true;
     }
     
     private boolean doDefend() {
@@ -260,15 +216,77 @@ public class DefendLogic<T extends LogicData> extends Logic<T> implements SkillL
         }
         return false;
     }
+    
+//    remove20161104
+//    @Override
+//    public void onActorTargetLocked(Entity sourceBeLocked, Entity other) {
+//        if (!hasUsableSkill) 
+//            return;
+//        
+//        if (sourceBeLocked.getData().getUniqueId() == other.getData().getUniqueId()) 
+//            return;
+//        
+//        if (!actorService.isAvailableEnemy(other.getModuleManager().getModule(ActorModule.class)
+//                , sourceBeLocked.getModuleManager().getModule(ActorModule.class)))
+//            return;
+//        
+//        // 当被other锁定时给other添加侦听器，以侦察other的攻击。以便进行防守和躲闪
+//        skillService.addSkillPlayListener(other, this);
+//        
+//        // 记录被侦听的对象，以便在当前角色销毁或退出时清理
+//        if (listenersActors == null) {
+//            listenersActors = new HashSet<Entity>();
+//        }
+//        listenersActors.add(other);
+//    }
+//
+//    @Override
+//    public void onActorTargetReleased(Entity sourceBeReleased, Entity other) {
+//        if (!hasUsableSkill) 
+//            return;
+//        
+//        // 当other不再把source当前目标时就不再需要侦听了。
+//        skillService.removeSkillPlayListener(other, this);
+//        
+//        // 清理
+//        if (listenersActors != null) {
+//            listenersActors.remove(other);
+//        }
+//    }
+
+//    @Override
+//    public void onActorHitTarget(Entity sourceHitter, Entity beHit, String hitAttribute, float hitValue, boolean killedByHit) {
+//        // ignore
+//    }
+//
+//    // 受到攻击时将目标设为首要敌人
+//    @Override
+//    public void onActorHitByTarget(Entity sourceBeHit, Entity hitter, String hitAttribute, float hitValue, boolean killedByHit) {
+//        // hitValue>0为增益效果，不处理
+//        // 这里不作用于player，不要影响player控制的目标的设置
+//        if (actorModule.isDead() || actorModule.isPlayer() || hitValue > 0)
+//            return; 
+//        
+//        // 被击中的属性不在监听范围内则不处理。
+//        if (!listenAttributes.contains(hitAttribute)) {
+//            return;
+//        }
+//        
+//        if (hitter != null) {
+//            actorNetwork.setTarget(sourceBeHit, hitter);
+//        }
+//    }
 
     @Override
-    protected void doLogic(float tpf) {
-        // 技能重新缓存技能
-        if (needRecacheSkill) {
-            recacheSkill();
-        }
+    public void onSkillAdded(Entity actor, Skill skill) {
+        needRecacheSkill = true;
     }
-    
+
+    @Override
+    public void onSkillRemoved(Entity actor, Skill skill) {
+        needRecacheSkill = true;
+    }
+
     // 重装缓存技能
     private void recacheSkill() {
         if (defendSkills != null) {

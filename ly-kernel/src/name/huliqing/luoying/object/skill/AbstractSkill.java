@@ -21,7 +21,7 @@ import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.actoranim.ActorAnim;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.effect.Effect;
-import name.huliqing.luoying.object.el.LevelEl;
+import name.huliqing.luoying.object.el.LNumberEl;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.magic.Magic;
 import name.huliqing.luoying.object.module.ChannelModule;
@@ -123,9 +123,9 @@ public abstract class AbstractSkill implements Skill {
     protected float cutTimeEndMax;
     
     /** 技能的等级公式，该公式与技能等级（level）可以计算出当前技能的一个等级值。*/
-    protected LevelEl levelEl;
+    protected LNumberEl levelEl;
     /** 技能升级等级公式，该公式中的每一个等级值表示每次技能升级时需要的sp数(skillPoints)*/
-    protected LevelEl levelUpEl;
+    protected LNumberEl levelUpEl;
     
     // ---- 内部参数 ----
     
@@ -243,11 +243,11 @@ public abstract class AbstractSkill implements Skill {
         cutTimeEndMax = data.getAsFloat("cutTimeEndMax", 0);
         String levelElStr = data.getAsString("levelEl");
         if (levelElStr != null) {
-            levelEl = elService.createLevelEl(levelElStr);
+            levelEl = elService.createLNumberEl(levelElStr);
         }
         String levelUpElStr = data.getAsString("levelUpEl");
         if (levelUpElStr != null) {
-            levelUpEl = elService.createLevelEl(levelUpElStr);
+            levelUpEl = elService.createLNumberEl(levelUpElStr);
         }
     }
 

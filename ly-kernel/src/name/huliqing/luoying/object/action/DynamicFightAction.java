@@ -13,14 +13,10 @@ import name.huliqing.luoying.data.ActionData;
 import name.huliqing.luoying.layer.network.ActorNetwork;
 import name.huliqing.luoying.layer.network.SkillNetwork;
 import name.huliqing.luoying.layer.network.SkinNetwork;
-import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.layer.service.EntityService;
-import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.layer.service.SkinService;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.module.ActorModule;
-import name.huliqing.luoying.object.module.LogicModule;
 import name.huliqing.luoying.object.module.SkillListener;
 import name.huliqing.luoying.object.module.SkillModule;
 import name.huliqing.luoying.object.module.SkinListener;
@@ -37,26 +33,21 @@ import name.huliqing.luoying.utils.MathUtils;
  */
 public class DynamicFightAction extends PathFollowAction implements FightAction, SkillListener, SkinListener {
 //    private static final Logger LOG = Logger.getLogger(FightDynamicAction.class.getName());
-    private final PlayService playService = Factory.get(PlayService.class);
-    private final ActorService actorService = Factory.get(ActorService.class);
     private final SkinService skinService = Factory.get(SkinService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
     private final EntityService entityService = Factory.get(EntityService.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final SkinNetwork skinNetwork = Factory.get(SkinNetwork.class);
-    private ActorModule actorModule;
-    private LogicModule logicModule;
     private SkinModule skinModule;
     private SkillModule skillModule;
-    private ActorModule enemyActorModule;
     
     // 是否允许跟随敌人
-    protected boolean allowFollow = true;
+    private boolean allowFollow = true;
     // 允许跟随的时长限制,在该跟随时间内如果无法攻击目标,则停止跟随,这可以防止
     // monster一下跟随攻击目标.(单位秒)
-    protected float followTimeMax = 8;
-    protected float followTimeUsed;
+    private float followTimeMax = 8;
+    private float followTimeUsed;
     
     //  战斗技能tags
     private long fightSkillTags;
@@ -75,26 +66,22 @@ public class DynamicFightAction extends PathFollowAction implements FightAction,
     // ---- inner
     
     // 当前准备使用于攻击的技能
-    protected Skill skill;
-    protected Entity enemy;
+    private Skill skill;
+    private Entity enemy;
     
     // 上一次使用技能后到当前所使用的时间，如果该值小于interval则不允许NPC发技能，
     // 避免连续发技能。
-    protected float timeUsed;
+    private float timeUsed;
     // 出招延迟限制,避免NPC角色出招间隔太短
-    protected float interval;
+    private float interval;
     
     // 最近获取到的技能缓存,注：当武器类型发生变化或者角色的技能增或减少
     // 时都应该重新获取。
-    protected final List<Skill> fightSkills = new ArrayList<Skill>();
+    private final List<Skill> fightSkills = new ArrayList<Skill>();
     
     // 缓存技能
     private Skill waitSkill;
 
-    public DynamicFightAction() {
-        super();
-    }
-    
     @Override
     public void setData(ActionData data) {
         super.setData(data);
@@ -109,8 +96,6 @@ public class DynamicFightAction extends PathFollowAction implements FightAction,
     @Override
     public void setActor(Entity actor) {
         super.setActor(actor); 
-        actorModule = actor.getModuleManager().getModule(ActorModule.class);
-        logicModule = actor.getModuleManager().getModule(LogicModule.class);
         skillModule = actor.getModuleManager().getModule(SkillModule.class);
         skinModule = actor.getModuleManager().getModule(SkinModule.class);
     }
@@ -118,7 +103,6 @@ public class DynamicFightAction extends PathFollowAction implements FightAction,
     @Override
     public void setEnemy(Entity enemy) {
         this.enemy = enemy;
-        this.enemyActorModule = enemy.getModuleManager().getModule(ActorModule.class);
         super.setFollow(enemy.getSpatial());
     }
     
@@ -174,35 +158,15 @@ public class DynamicFightAction extends PathFollowAction implements FightAction,
             return;
         }
         
-        if (enemy == null || enemy.getScene() == null 
-                || (enemyActorModule != null && enemyActorModule.isDead())
-                
-                // remove20160217,不再判断是否为敌人，是否可攻击目标以后交由hitChecker判断
-                // 放开这个判断可允许玩家控制角色攻击同伴，只要技能的hitChecker设置即可。
-//                || !enemy.isEnemy(actor) 
-                
-                ) {
-            
-            // 刻偿试为当前角色查找一次敌人，以避免SearchEnemyLogic的延迟
-            Entity newTarget = actorService.findNearestEnemyExcept(actor, actorModule.getViewDistance(), enemy);
-            if (newTarget != null) {
-                actorNetwork.setTarget(actor, newTarget);
-                setEnemy(newTarget);
-            } else {
-                // 如果找不到下一个目标，则这里要释放目标。
-                actorNetwork.setTarget(actor, null);
-                if (waitSkill != null) {
-                    skillNetwork.playSkill(actor, waitSkill, false);
-                }
-                end();
+        // 没目标
+        if (enemy == null || enemy.getScene() == null) {
+            if (waitSkill != null) {
+                skillNetwork.playSkill(actor, waitSkill, false);
             }
-            
+            end();
             return;
         }
         
-//        if (actor.getData().getId().equals("sinbad")) {
-//            System.out.println("测试。。。");
-//        }
         
         if (skill == null) {
             skill = getSkill();
@@ -212,43 +176,16 @@ public class DynamicFightAction extends PathFollowAction implements FightAction,
             }
         }
         
-        // 判断是否在攻击范围内,或者跟随目标
+        // 判断是否在攻击范围内
+        // 如果不在攻击范围内则偿试跟随
         if (!isInHitRange(skill, enemy)) {
-            
-            // 如果不允许跟随敌人,则清空敌人（或许敌人已经走出攻击范围外。）
-            // 清空目标及结束当前行为
-            if (!allowFollow || !actorModule.isMovable()) {
-                
-                // 刻偿试为当前角色查找一次敌人，以避免SearchEnemyLogic的延迟
-                Entity newTarget = actorService.findNearestEnemyExcept(actor, actorModule.getViewDistance(), enemy);
-                if (newTarget != null) {
-                    actorNetwork.setTarget(actor, newTarget);
-                    setEnemy(newTarget);
-                } else {
-                    // 如果找不到下一个目标，则这里要释放目标。
-                    actorNetwork.setTarget(actor, null);
-                    skillNetwork.playSkill(actor, waitSkill, false);
-                    end();
-                }
-                
-            } else {
+            if (allowFollow) {
                 super.doFollow(enemy.getSpatial(), tpf);
-                // 如果跟随的时间达到允许的跟随限制,则不再跟随,并退出当前行为.
+                // 如果跟随的时间达到允许的跟随限制,则不再跟随,并释放目标
                 followTimeUsed += tpf;
                 if (followTimeUsed >= followTimeMax) {
                     followTimeUsed = 0;
-                    
-                    // 刻偿试为当前角色查找一次敌人，以避免SearchEnemyLogic的延迟
-                    Entity newTarget = actorService.findNearestEnemyExcept(actor, actorModule.getViewDistance(), enemy);
-                    if (newTarget != null) {
-                        actorNetwork.setTarget(actor, newTarget);
-                        setEnemy(newTarget);
-                    } else {
-                        // 如果找不到下一个目标，则这里要释放目标。
-                        actorNetwork.setTarget(actor, null);
-                        skillNetwork.playSkill(actor, waitSkill, false);
-                        end();
-                    }
+                    enemy = null;
                 }
             }
             return;
@@ -265,21 +202,14 @@ public class DynamicFightAction extends PathFollowAction implements FightAction,
             // 也即可看到角色最平滑的连招
             float attackLimit = attackIntervalMax;
             if (attackIntervalAttribute != null) {
-//                attackLimit = attackIntervalMax - attackIntervalMax * actor.getAttributeManager().getNumberAttributeValue(attackIntervalAttribute, 0);
                 attackLimit = attackIntervalMax - attackIntervalMax * entityService.getNumberAttributeValue(actor, attackIntervalAttribute, 0);
                 attackLimit = MathUtils.clamp(attackLimit, 0, attackIntervalMax);
             }
             interval = skill.getTrueUseTime() + attackLimit;
-            
         }
         
         // 不管攻击是否成功，都要清空技能，以便使用下一个技能。
         skill = null;
-   
-        // 如果不是自动AI，则应该退出。 
-        if (!logicModule.isAutoLogic() || actorModule.getTarget() == null) {
-            end();
-        }
     }
     
     /**

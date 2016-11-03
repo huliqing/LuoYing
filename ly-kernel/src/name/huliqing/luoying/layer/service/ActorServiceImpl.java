@@ -5,8 +5,6 @@
 package name.huliqing.luoying.layer.service;
 
 import com.jme3.animation.LoopMode;
-import com.jme3.math.ColorRGBA;
-import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.util.TempVars;
 import java.util.ArrayList;
@@ -18,13 +16,10 @@ import name.huliqing.luoying.object.actor.Actor;
 //import name.huliqing.luoying.view.talk.Talk;
 //import name.huliqing.luoying.view.talk.SpeakManager;
 //import name.huliqing.luoying.view.talk.TalkManager;
-import name.huliqing.luoying.object.module.ActorListener;
 import name.huliqing.luoying.object.channel.Channel;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.utils.GeometryUtils;
 import name.huliqing.luoying.object.module.ActorModule;
 import name.huliqing.luoying.object.module.ChannelModule;
-import name.huliqing.luoying.object.module.LevelModule;
 
 /**
  *
@@ -108,55 +103,55 @@ public class ActorServiceImpl implements ActorService {
 //        return obstacle;
 //    }
 
-    @Override
-    public Entity findNearestEnemyExcept(Entity actor, float maxDistance, Entity except) {
-        List<Actor> actors = actor.getScene().getEntities(Actor.class, actor.getSpatial().getWorldTranslation(), maxDistance, null);
-        float minDistanceSquared = maxDistance * maxDistance;
-        float distanceSquared;
-        Entity enemy = null;
-        for (Entity target : actors) {
-            if (target == except) { // 被排除的角色（同一实例）
-                continue;
-            }
-            // 负值的派系不作为敌人搜寻
-            if (getGroup(target) < 0) {
-                continue;
-            }
-            // 角色已经死亡或同一派别
-            if (isDead(target) || !isEnemy(target, actor)) {
-                continue;
-            }
-            // 判断可视范围内的敌人.
-            distanceSquared = target.getSpatial().getWorldTranslation()
-                    .distanceSquared(actor.getSpatial().getWorldTranslation());
-            if (distanceSquared < minDistanceSquared) { // 找出最近的敌人
-                minDistanceSquared = distanceSquared;
-                enemy = target;
-            }
-        }
-        return enemy;
-    }
-    
-    @Override
-    public List<Entity> findNearestEnemies(Entity actor, float maxDistance, List<Entity> store) {
-        if (store == null) {
-            store = new ArrayList<Entity>();
-        }
-        List<Actor> actors = actor.getScene().getEntities(Actor.class, actor.getSpatial().getWorldTranslation(), maxDistance, null);
-        for (Entity target : actors) {
-            // 负值的派系不作为敌人搜寻
-            if (getGroup(target) < 0) {
-                continue;
-            }
-            // 角色已经死亡或同一派别
-            if (isDead(target) || !isEnemy(target, actor)) {
-                continue;
-            }
-            // 找出范围内的敌人
-            store.add(target);
-        }
-        return store;
-    }
+//    @Override
+//    public Entity findNearestEnemyExcept(Entity actor, float maxDistance, Entity except) {
+//        List<Actor> actors = actor.getScene().getEntities(Actor.class, actor.getSpatial().getWorldTranslation(), maxDistance, null);
+//        float minDistanceSquared = maxDistance * maxDistance;
+//        float distanceSquared;
+//        Entity enemy = null;
+//        for (Entity target : actors) {
+//            if (target == except) { // 被排除的角色（同一实例）
+//                continue;
+//            }
+//            // 负值的派系不作为敌人搜寻
+//            if (getGroup(target) < 0) {
+//                continue;
+//            }
+//            // 角色已经死亡或同一派别
+//            if (isDead(target) || !isEnemy(target, actor)) {
+//                continue;
+//            }
+//            // 判断可视范围内的敌人.
+//            distanceSquared = target.getSpatial().getWorldTranslation()
+//                    .distanceSquared(actor.getSpatial().getWorldTranslation());
+//            if (distanceSquared < minDistanceSquared) { // 找出最近的敌人
+//                minDistanceSquared = distanceSquared;
+//                enemy = target;
+//            }
+//        }
+//        return enemy;
+//    }
+//    
+//    @Override
+//    public List<Entity> findNearestEnemies(Entity actor, float maxDistance, List<Entity> store) {
+//        if (store == null) {
+//            store = new ArrayList<Entity>();
+//        }
+//        List<Actor> actors = actor.getScene().getEntities(Actor.class, actor.getSpatial().getWorldTranslation(), maxDistance, null);
+//        for (Entity target : actors) {
+//            // 负值的派系不作为敌人搜寻
+//            if (getGroup(target) < 0) {
+//                continue;
+//            }
+//            // 角色已经死亡或同一派别
+//            if (isDead(target) || !isEnemy(target, actor)) {
+//                continue;
+//            }
+//            // 找出范围内的敌人
+//            store.add(target);
+//        }
+//        return store;
+//    }
     
 //    @Override
 //    public List<Entity> findNearestFriendly(Entity actor, float maxDistance, List<Entity> store) {
@@ -207,13 +202,13 @@ public class ActorServiceImpl implements ActorService {
 //        return bb.getXExtent() * 2;
 //    }
 
-    @Override
-    public void setPartner(Entity owner, Entity partner) {
-        // 设置为同一派别,及所有者
-        setGroup(partner, getGroup(owner));
-        setOwner(partner, owner.getData().getUniqueId());
-        setFollow(partner, owner.getData().getUniqueId());
-    }
+//    @Override
+//    public void setPartner(Entity owner, Entity partner) {
+//        // 设置为同一派别,及所有者
+//        setGroup(partner, getGroup(owner));
+//        setOwner(partner, owner.getData().getUniqueId());
+//        setFollow(partner, owner.getData().getUniqueId());
+//    }
 
 //    @Override
 //    public void speak(Entity actor, String mess, float useTime) {
@@ -254,87 +249,87 @@ public class ActorServiceImpl implements ActorService {
 //        }
 //    }
 
-    @Override
-    public void kill(Entity actor) {
-        getActorModule(actor).kill();
-        skillService.playSkill(actor, skillService.getSkillDeadDefault(actor), false);
-    }
+//    @Override
+//    public void kill(Entity actor) {
+//        getActorModule(actor).kill();
+//        skillService.playSkill(actor, skillService.getSkillDeadDefault(actor), false);
+//    }
+//    
+//    @Override
+//    public void reborn(Entity actor) {
+//        getActorModule(actor).resurrect();
+//        skillService.playSkill(actor, skillService.getSkillWaitDefault(actor), false);
+//    }
+//    
+//    @Override
+//    public void setTarget(Entity actor, Entity target) {
+//        ActorModule actorModule = actor.getModuleManager().getModule(ActorModule.class);
+//        if (actorModule == null)
+//            return;
+//        
+//        actorModule.setTarget(target);
+//    }
+//
+//    @Override
+//    public Entity getTarget(Entity actor) {
+//        ActorModule actorModule = actor.getModuleManager().getModule(ActorModule.class);
+//        if (actorModule == null)
+//            return null;
+//        
+//        return actorModule.getTarget();
+//    }
+//
+//    @Override
+//    public boolean isDead(Entity actor) {
+//        if (!actor.isInitialized()) {
+//            return true;
+//        }
+//        return getActorModule(actor).isDead();
+//    }
+//    
+//    @Override
+//    public boolean isEnemy(Entity actor, Entity target) {
+//        if (target == null)
+//            return false;
+//        return actor.getModuleManager().getModule(ActorModule.class).isEnemy(target);
+//    }
+//
+//    @Override
+//    public void setColor(Entity actor, ColorRGBA color) {
+//        GeometryUtils.setColor(actor.getSpatial(), color);
+//    }
+//
+//    @Override
+//    public void hitNumberAttribute(Entity beHit, Entity hitter, String hitAttribute, float hitValue) {
+//        getActorModule(beHit).applyHit(hitter, hitAttribute, hitValue);
+//    }
+
+//    @Override
+//    public int getLevel(Entity actor) {
+//        LevelModule module = actor.getModuleManager().getModule(LevelModule.class);
+//        if (module != null) {
+//            return module.getLevel();
+//        }
+//        return 0;
+//    }
+//
+//    @Override
+//    public void setLevel(Entity actor, int level) {
+//        LevelModule module = actor.getModuleManager().getModule(LevelModule.class);
+//        if (module != null) {
+//            module.setLevel(level);
+//        }
+//    }
     
-    @Override
-    public void reborn(Entity actor) {
-        getActorModule(actor).resurrect();
-        skillService.playSkill(actor, skillService.getSkillWaitDefault(actor), false);
-    }
-    
-    @Override
-    public void setTarget(Entity actor, Entity target) {
-        ActorModule actorModule = actor.getModuleManager().getModule(ActorModule.class);
-        if (actorModule == null)
-            return;
-        
-        actorModule.setTarget(target);
-    }
-
-    @Override
-    public Entity getTarget(Entity actor) {
-        ActorModule actorModule = actor.getModuleManager().getModule(ActorModule.class);
-        if (actorModule == null)
-            return null;
-        
-        return actorModule.getTarget();
-    }
-
-    @Override
-    public boolean isDead(Entity actor) {
-        if (!actor.isInitialized()) {
-            return true;
-        }
-        return getActorModule(actor).isDead();
-    }
-    
-    @Override
-    public boolean isEnemy(Entity actor, Entity target) {
-        if (target == null)
-            return false;
-        return actor.getModuleManager().getModule(ActorModule.class).isEnemy(target);
-    }
-
-    @Override
-    public void setColor(Entity actor, ColorRGBA color) {
-        GeometryUtils.setColor(actor.getSpatial(), color);
-    }
-
-    @Override
-    public void hitNumberAttribute(Entity beHit, Entity hitter, String hitAttribute, float hitValue) {
-        getActorModule(beHit).applyHit(hitter, hitAttribute, hitValue);
-    }
-
-    @Override
-    public int getLevel(Entity actor) {
-        LevelModule module = actor.getModuleManager().getModule(LevelModule.class);
-        if (module != null) {
-            return module.getLevel();
-        }
-        return 0;
-    }
-
-    @Override
-    public void setLevel(Entity actor, int level) {
-        LevelModule module = actor.getModuleManager().getModule(LevelModule.class);
-        if (module != null) {
-            module.setLevel(level);
-        }
-    }
-    
-    @Override
-    public void addActorListener(Entity actor, ActorListener actorListener) {
-        getActorModule(actor).addActorListener(actorListener);
-    }
-
-    @Override
-    public boolean removeActorListener(Entity actor, ActorListener actorListener) {
-        return getActorModule(actor).removeActorListener(actorListener);
-    }
+//    @Override
+//    public void addActorListener(Entity actor, ActorListener actorListener) {
+//        getActorModule(actor).addActorListener(actorListener);
+//    }
+//
+//    @Override
+//    public boolean removeActorListener(Entity actor, ActorListener actorListener) {
+//        return getActorModule(actor).removeActorListener(actorListener);
+//    }
     
 //    @Override
 //    public void setName(Actor actor, String name) {
@@ -347,63 +342,63 @@ public class ActorServiceImpl implements ActorService {
 //        return actor.getData().getName();
 //    }
     
-    @Override
-    public int getGroup(Entity actor) {
-        return actor.getModuleManager().getModule(ActorModule.class).getGroup();
-    }
-    
-    @Override
-    public void setGroup(Entity actor, int group) {
-        actor.getModuleManager().getModule(ActorModule.class).setGroup(group);
-    }
-
-    @Override
-    public int getTeam(Entity actor) {
-        return actor.getModuleManager().getModule(ActorModule.class).getTeam();
-    }
-    
-    @Override
-    public void setTeam(Entity actor, int team) {
-        actor.getModuleManager().getModule(ActorModule.class).setTeam(team);
-//        Ly.getPlayState().getTeamView().checkAddOrRemove(actor);
-        
-        LOG.log(Level.INFO, "Unsupported!");
-    }
-    
-    @Override
-    public boolean isEssential(Entity actor) {
-        return actor.getModuleManager().getModule(ActorModule.class).isEssential();
-    }
-
-    @Override
-    public void setEssential(Entity actor, boolean essential) {
-        actor.getModuleManager().getModule(ActorModule.class).setEssential(essential);
-    }
-
-    @Override
-    public boolean isBiology(Entity actor) {
-        return actor.getModuleManager().getModule(ActorModule.class).isBiology(); 
-    }
-
-    @Override
-    public void setOwner(Entity actor, long ownerId) {
-        actor.getModuleManager().getModule(ActorModule.class).setOwner(ownerId);
-    }
-
-    @Override
-    public long getOwner(Entity actor) {
-        return actor.getModuleManager().getModule(ActorModule.class).getOwner();
-    }
-
-    @Override
-    public void setFollow(Entity actor, long targetId) {
-        actor.getModuleManager().getModule(ActorModule.class).setFollowTarget(targetId);
-    }
-
-    @Override
-    public long getFollow(Entity actor) {
-        return actor.getModuleManager().getModule(ActorModule.class).getFollowTarget();
-    }
+//    @Override
+//    public int getGroup(Entity actor) {
+//        return actor.getModuleManager().getModule(ActorModule.class).getGroup();
+//    }
+//    
+//    @Override
+//    public void setGroup(Entity actor, int group) {
+//        actor.getModuleManager().getModule(ActorModule.class).setGroup(group);
+//    }
+//
+//    @Override
+//    public int getTeam(Entity actor) {
+//        return actor.getModuleManager().getModule(ActorModule.class).getTeam();
+//    }
+//    
+//    @Override
+//    public void setTeam(Entity actor, int team) {
+//        actor.getModuleManager().getModule(ActorModule.class).setTeam(team);
+////        Ly.getPlayState().getTeamView().checkAddOrRemove(actor);
+//        
+//        LOG.log(Level.INFO, "Unsupported!");
+//    }
+//    
+//    @Override
+//    public boolean isEssential(Entity actor) {
+//        return actor.getModuleManager().getModule(ActorModule.class).isEssential();
+//    }
+//
+//    @Override
+//    public void setEssential(Entity actor, boolean essential) {
+//        actor.getModuleManager().getModule(ActorModule.class).setEssential(essential);
+//    }
+//
+//    @Override
+//    public boolean isBiology(Entity actor) {
+//        return actor.getModuleManager().getModule(ActorModule.class).isBiology(); 
+//    }
+//
+//    @Override
+//    public void setOwner(Entity actor, long ownerId) {
+//        actor.getModuleManager().getModule(ActorModule.class).setOwner(ownerId);
+//    }
+//
+//    @Override
+//    public long getOwner(Entity actor) {
+//        return actor.getModuleManager().getModule(ActorModule.class).getOwner();
+//    }
+//
+//    @Override
+//    public void setFollow(Entity actor, long targetId) {
+//        actor.getModuleManager().getModule(ActorModule.class).setFollowTarget(targetId);
+//    }
+//
+//    @Override
+//    public long getFollow(Entity actor) {
+//        return actor.getModuleManager().getModule(ActorModule.class).getFollowTarget();
+//    }
 
     @Override
     public void syncTransform(Entity actor, Vector3f location, Vector3f viewDirection) {
@@ -508,15 +503,6 @@ public class ActorServiceImpl implements ActorService {
         }
         return null;
     }
-   
-    // remove20160926
-//    @Override
-//    public void playAnim(Actor actor, String animName, LoopMode loop, float useTime, float startTime, String... channelIds) {
-//        ChannelModule module = actor.getEntityModule().getModule(ChannelModule.class);
-//        if (module != null) {
-//            module.playAnim(animName, channelIds, loop, useTime, startTime);
-//        }
-//    }
     
     @Override
     public void setChannelLock(Entity actor, boolean locked, String... channelIds) {
@@ -552,15 +538,15 @@ public class ActorServiceImpl implements ActorService {
         }
     }
     
-    @Override
-    public boolean isPlayer(Entity actor) {
-        return actor.getModuleManager().getModule(ActorModule.class).isPlayer();
-    }
-
-    @Override
-    public void setPlayer(Entity actor, boolean player) {
-        actor.getModuleManager().getModule(ActorModule.class).setPlayer(player);
-    }
+//    @Override
+//    public boolean isPlayer(Entity actor) {
+//        return actor.getModuleManager().getModule(ActorModule.class).isPlayer();
+//    }
+//
+//    @Override
+//    public void setPlayer(Entity actor, boolean player) {
+//        actor.getModuleManager().getModule(ActorModule.class).setPlayer(player);
+//    }
     
     @Override
     public float getViewAngle(Entity actor, Vector3f position) {
@@ -581,11 +567,11 @@ public class ActorServiceImpl implements ActorService {
         return angle;
     }
 
-    @Override
-    public float getMass(Entity actor) {
-        ActorModule module = actor.getModuleManager().getModule(ActorModule.class);
-        return module != null ? module.getMass() : 0;
-    }
+//    @Override
+//    public float getMass(Entity actor) {
+//        ActorModule module = actor.getModuleManager().getModule(ActorModule.class);
+//        return module != null ? module.getMass() : 0;
+//    }
 
     @Override
     public boolean isKinematic(Entity actor) {
@@ -624,23 +610,23 @@ public class ActorServiceImpl implements ActorService {
         return actor.getSpatial().getWorldTranslation().distance(position);
     }
 
-    @Override
-    public boolean isAvailableEnemy(ActorModule actor, ActorModule target) {
-        if (target == null) {
-            return false;
-        }
-        if (target.isDead()) {
-            return false;
-        }
-        if (!actor.isEnemy(target.getEntity())) {
-            return false;
-        }
-        // 如果两个角色不在同一个场景。
-        if (actor.getEntity().getScene() != target.getEntity().getScene()) {
-            return false;
-        }
-        return true;
-    }
+//    @Override
+//    public boolean isAvailableEnemy(ActorModule actor, ActorModule target) {
+//        if (target == null) {
+//            return false;
+//        }
+//        if (target.isDead()) {
+//            return false;
+//        }
+//        if (!actor.isEnemy(target.getEntity())) {
+//            return false;
+//        }
+//        // 如果两个角色不在同一个场景。
+//        if (actor.getEntity().getScene() != target.getEntity().getScene()) {
+//            return false;
+//        }
+//        return true;
+//    }
 
     
 

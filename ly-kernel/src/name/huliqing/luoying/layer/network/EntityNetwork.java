@@ -15,6 +15,14 @@ import name.huliqing.luoying.object.entity.Entity;
 public interface EntityNetwork extends Inject {
     
     /**
+     * 设置目标Entity的某个属性的值。
+     * @param entity
+     * @param attributeName
+     * @param value 
+     */
+    void setAttribute(Entity entity, String attributeName, Object value);
+    
+    /**
      * 给Entity的提定属性应用数值，目标属性必须存在，并且必须是Number类型，否则没有意义。
      * @param entity 指定的目标Entity
      * @param attributeName 指定的属性名称，必须是NumberAttribute类型

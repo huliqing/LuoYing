@@ -53,6 +53,7 @@ public abstract class AbstractAttribute<T> implements Attribute<T> {
         return value;
     }
     
+    @Override
     public void setValue(T newValue) {
         T oldValue = this.value;
         this.value = newValue;
@@ -64,7 +65,7 @@ public abstract class AbstractAttribute<T> implements Attribute<T> {
      * @param listener 
      */
     @Override
-    public void addListener(ValueChangeListener<T> listener) {
+    public void addListener(ValueChangeListener<?> listener) {
         if (listeners == null) {
             listeners = new ArrayList<ValueChangeListener>();
         }
@@ -79,7 +80,7 @@ public abstract class AbstractAttribute<T> implements Attribute<T> {
      * @return 
      */
     @Override
-    public boolean removeListener(ValueChangeListener<T> listener) {
+    public boolean removeListener(ValueChangeListener<?> listener) {
         return listeners != null && listeners.remove(listener);
     }
     

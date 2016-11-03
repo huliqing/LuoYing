@@ -14,7 +14,7 @@ xs:time
            xmlns="http://luoying.huliqing.name"
            elementFormDefault="qualified">
     
-    <xs:include schemaLocation="base.xsd" />
+    <xs:include schemaLocation="./base.xsd" />
     
     <xs:element name="root">
         <xs:complexType>
@@ -28,11 +28,11 @@ xs:time
                 <!--可持续改变角色属性动态值的状态-->
                 <xs:element ref="stateAttributeDynamic" />
 
+                <!--可改变角色Boolean属性的状态-->
+                <xs:element ref="stateBooleanAttribute" />
+
                 <!--技能锁定-->
                 <xs:element ref="stateSkillLocked" />
-                
-                <!--不可或缺的，死亡后不会移出场景-->
-                <xs:element ref="stateEssential" />
                 
                 <!--执行技能-->
                 <xs:element ref="stateSkill" />
@@ -42,6 +42,7 @@ xs:time
 
                 <!--状态组-->
                 <xs:element ref="stateGroup" />
+                
             </xs:all>
         </xs:complexType>
     </xs:element>
@@ -168,21 +169,26 @@ xs:time
         </xs:complexType>
     </xs:element>
     
-    <xs:element name="stateEssential">
+    <xs:element name="stateBooleanAttribute">
         <xs:annotation>
             <xs:documentation>切换角色的essential状态</xs:documentation>
         </xs:annotation>
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="stateBase">
-                    <xs:attribute name="essential" type="bool" use="required">
+                    <xs:attribute name="bindAttribute" type="xs:string" use="required">
                         <xs:annotation>
-                            <xs:documentation>设置角色的essential状态。</xs:documentation>
+                            <xs:documentation>绑定一个角色的Boolean类型的属性</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="value" type="bool" use="required">
+                        <xs:annotation>
+                            <xs:documentation>对属性设置的值</xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
                     <xs:attribute name="restore" type="bool" use="required">
                         <xs:annotation>
-                            <xs:documentation>当状态结束后是否恢复角色的原始essential状态.</xs:documentation>
+                            <xs:documentation>当状态结束后是否恢复角色属性的初始值.</xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
                 </xs:extension>
@@ -295,8 +301,13 @@ xs:time
                 <xs:attribute name="removeOnDead" type="bool" use="optional">
                     <xs:annotation>
                         <xs:documentation>
-                            当角色死亡时是否自动移除这个状态,默认false.
+                            当角色死亡时是否自动移除这个状态,默认false, 这个参数必须设置bindDeadAttribute才有意义。
                         </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="bindDeadAttribute" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>绑定BooleanAttribute, 用于判断角色是否死亡。</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
             </xs:extension>

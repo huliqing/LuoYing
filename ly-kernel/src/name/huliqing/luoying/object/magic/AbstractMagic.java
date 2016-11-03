@@ -16,7 +16,7 @@ import name.huliqing.luoying.layer.service.ElService;
 import name.huliqing.luoying.object.ControlAdapter;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.effect.Effect;
-import name.huliqing.luoying.object.el.HitCheckEl;
+import name.huliqing.luoying.object.el.STBooleanEl;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.entity.ModelEntity;
 
@@ -29,7 +29,7 @@ public abstract class AbstractMagic<T extends MagicData> extends ModelEntity<T> 
     
     protected float useTime = 1.0f;
     protected float timeUsed;
-    protected HitCheckEl hitCheckEl;
+    protected STBooleanEl hitCheckEl;
     
     //--------
     // 格式:effectId|timePoint,effectId|timePoint,effectId|timePoint...
@@ -59,7 +59,7 @@ public abstract class AbstractMagic<T extends MagicData> extends ModelEntity<T> 
         super.setData(data);
         useTime = data.getAsFloat("useTime", useTime);
         timeUsed = data.getAsFloat("timeUsed", timeUsed);
-        hitCheckEl = elService.createHitCheckEl(data.getAsString("hitCheckEl", "#{true}"));
+        hitCheckEl = elService.createSTBooleanEl(data.getAsString("hitCheckEl", "#{true}"));
     }
     
     @Override

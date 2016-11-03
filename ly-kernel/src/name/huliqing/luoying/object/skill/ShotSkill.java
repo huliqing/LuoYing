@@ -159,7 +159,7 @@ public class ShotSkill extends HitSkill {
             getCanHitActors(tempTargets, true);
         } else {
             // 单目标攻击
-            Entity mainTarget = actorService.getTarget(actor);
+            Entity mainTarget = getTarget();
             if (mainTarget != null && isInHitDistance(mainTarget)) {
                 tempTargets.add(mainTarget);
             }

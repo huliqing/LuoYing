@@ -3,85 +3,103 @@
 <root
     xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
     xmlns='http://luoying.huliqing.name'
-    xsi:schemaLocation='http://luoying.huliqing.name meta/el.xsd'>
+    xsi:schemaLocation='http://luoying.huliqing.name ../../../../ly-kernel/src/LuoYing/Data/meta/el.xsd'>
     
+    <!--==========================================================================-->
+    <!--角色状态判断-->
+    <!--==========================================================================-->
+    
+    <!--判断角色死亡-->
+    <elSBoolean id="elActorDeadCheck" expression="#{s.attributeDead}" />
+    
+    <!--判断角色不死亡-->
+    <elSBoolean id="elActorUndeadCheck" expression="#{!s.attributeDead}" />
+    
+    <!--判断一个角色是否可以被清理出场景-->
+    <elSBoolean id="elActorCleanCheck" expression="#{s.attributeDead && !s.attributeEssential}" />
+    
+    <!--判断目标t是否为s的敌人-->
+    <elSTBoolean id="elActorEnemyCheck" expression="#{!t.attributeDead && t.attributeGrup != s.attributeGroup}" />
+
     <!--==========================================================================-->
     <!--角色经验公式:配置给角色，计算角色在升级时，每个等级所需要的经验值。即表示从等级 leve - 1 升级到 level 时需要的经验值。-->
     <!--==========================================================================-->
 
-    <elLevel  id="elLevelUp" expression="#{0 + 50 * Math:pow(1.2, level)}" />
+    <elLNumber  id="elLevelUp" expression="#{0 + 50 * Math:pow(1.2, l)}" />
     
     <!--==========================================================================-->
     <!--经验值掉落公式, 配置给Drop，用于指定当角色(source)死亡后(target)可以从source身上获得的属性值。-->
     <!--==========================================================================-->
     
     <!--默认公式-->
-    <elHit id="elDropXp" expression="#{(source.attributeLevel + 1) / (target.attributeLevel + 1) * (0 + 12 * Math:pow(1.1, source.attributeLevel))}" />
+    <elSTNumber id="elDropXp" expression="#{(s.attributeLevel + 1) / (t.attributeLevel + 1) * (0 + 12 * Math:pow(1.1, s.attributeLevel))}" />
 
     <!--==========================================================================-->
     <!--属性值等级公式: 配置给属性，用于计算属性在指定等级时的属性值。-->
     <!--==========================================================================-->
     
     <!--生命值和魔法值-->
-    <elLevel id="elLevelAttrHealth"             expression="#{-60 + 120 * Math:pow(1.1,  level)}" />
-    <elLevel id="elLevelAttrMana"               expression="#{-60 + 120  * Math:pow(1.05, level)}" />
+    <elLNumber id="elLevelAttrHealth"               expression="#{-60 + 120 * Math:pow(1.1,  l)}" />
+    <elLNumber id="elLevelAttrMana"                 expression="#{-60 + 120  * Math:pow(1.05, l)}" />
     <!--物理攻击-->
-    <elLevel id="elLevelAttrAttack"             expression="#{-45 + 50 * Math:pow(1.06, level)}" />
+    <elLNumber id="elLevelAttrAttack"               expression="#{-45 + 50 * Math:pow(1.06, l)}" />
     <!--魔法攻击力-->
-    <elLevel id="elLevelAttrMagicAttack"        expression="#{-45 + 50 * Math:pow(1.06, level)}" />
+    <elLNumber id="elLevelAttrMagicAttack"     expression="#{-45 + 50 * Math:pow(1.06, l)}" />
     <!--物理防御-->
-    <elLevel id="elLevelAttrDefence"            expression="#{-20 + 25 * Math:pow(1.05, level)}" />
+    <elLNumber id="elLevelAttrDefence"            expression="#{-20 + 25 * Math:pow(1.05, l)}" />
     <!--魔法防御-->
-    <elLevel id="elLevelAttrMagicDefence"       expression="#{-20 + 25 * Math:pow(1.05, level)}" />
+    <elLNumber id="elLevelAttrMagicDefence"  expression="#{-20 + 25 * Math:pow(1.05, l)}" />
     <!--角色视力，影响搜查敌人的范围-->
-    <elLevel id="elLevelAttrVision"             expression="#{30}" />
+    <elLNumber id="elLevelAttrVision"                   expression="#{30}" />
     <!--每秒生命/魔法恢复量公式-->
-    <elLevel id="elLevelAttrHealthRestore"      expression="#{1.5}" />
-    <elLevel id="elLevelAttrManaRestore"        expression="#{1.5}" />
+    <elLNumber id="elLevelAttrHealthRestore"     expression="#{1.5}" />
+    <elLNumber id="elLevelAttrManaRestore"       expression="#{1.5}" />
     <!--攻击速度,1为正常速度-->
-    <elLevel id="elLevelAttrAttackSpeed"        expression="#{1}" />
+    <elLNumber id="elLevelAttrAttackSpeed"        expression="#{1}" />
     <!--攻击速度,1为正常速度-->
-    <elLevel id="elLevelAttrMagicSpeed"         expression="#{1}" />
+    <elLNumber id="elLevelAttrMagicSpeed"        expression="#{1}" />
     <!--移动速度，1为正常速度-->
-    <elLevel id="elLevelAttrMoveSpeed"          expression="#{1}" />
+    <elLNumber id="elLevelAttrMoveSpeed"         expression="#{1}" />
     <!--防御率和躲闪率，取值[0.0~1.0],1为100防守-->
-    <elLevel id="elLevelAttrDefenceRate"        expression="#{level / 60}" />
-    <elLevel id="elLevelAttrDuckRate"           expression="#{level / 60}" />
+    <elLNumber id="elLevelAttrDefenceRate"        expression="#{l / 60}" />
+    <elLNumber id="elLevelAttrDuckRate"             expression="#{l / 60}" />
     <!--鬼魅能力,取值[0.0~1.0]-->
-    <elLevel id="elLevelAttrGhostRate"          expression="#{level / 60}" />
+    <elLNumber id="elLevelAttrGhostRate"            expression="#{l / 60}" />
     
     <!--==========================================================================-->
     <!--天赋等级公式：配置给角色，这表示每一个等级角色可以获得的天赋点数。-->
     <!--==========================================================================-->
     
     <!--默认公式-->
-    <elLevel id="elLevelTalentPoints" expression="#{1}" />
+    <elLNumber id="elLevelTalentPoints" expression="#{1}" />
     
     <!--==========================================================================-->
     <!--天赋属性公式:配置给天赋使用，配置各种天赋的等级值,指定各种天赋在达到指
     定等级时可产生的作用值。-->
     <!--==========================================================================-->
     
-    <elLevel id="elLevelTalentLifeRestore"  expression="#{level}" />
-    <elLevel id="elLevelTalentManaRestore"  expression="#{level * 2}" />
-    <elLevel id="elLevelTalentDefence"      expression="#{level * 2 + 2 * Math:pow(1.06, level)}" />
-    <elLevel id="elLevelTalentMagicDefence" expression="#{level * 2 + 2 * Math:pow(1.06, level)}" />
-    <elLevel id="elLevelTalentAttack"       expression="#{level * 2 + 3 * Math:pow(1.06, level)}" />
-    <elLevel id="elLevelTalentMagicAttack"  expression="#{level * 2 + 3 * Math:pow(1.06, level)}" />
-    <elLevel id="elLevelTalentVision"       expression="#{level}" />
-    <elLevel id="elLevelTalentMoveSpeed"    expression="#{level * 0.04}" />
-    
+    <elLNumber id="elLevelTalentLifeRestore"  expression="#{l}" />
+    <elLNumber id="elLevelTalentManaRestore"  expression="#{l * 2}" />
+    <elLNumber id="elLevelTalentDefence"      expression="#{l * 2 + 2 * Math:pow(1.06, l)}" />
+    <elLNumber id="elLevelTalentMagicDefence" expression="#{l * 2 + 2 * Math:pow(1.06, l)}" />
+    <elLNumber id="elLevelTalentAttack"       expression="#{l * 2 + 3 * Math:pow(1.06, l)}" />
+    <elLNumber id="elLevelTalentMagicAttack"  expression="#{l * 2 + 3 * Math:pow(1.06, l)}" />
+    <elLNumber id="elLevelTalentVision"       expression="#{l}" />
+    <elLNumber id="elLevelTalentMoveSpeed"    expression="#{l * 0.04}" />
+
+
+        
     <!--==========================================================================-->
     <!--技能HitCheck: 用于技能Hit判断-->
     <!--==========================================================================-->
     
-    <elHitCheck id="elSkillFightHitCheck" expression="#{source.attributeGroup != target.attributeGroup}" />
+    <elSTBoolean id="elSkillFightHitCheck" expression="#{s.attributeGroup != t.attributeGroup}" />
     
     <!--增益状态:只对友军及自己有效-->
-    <elHitCheck id="elSkillBuffCheck" expression="#{source.attributeGroup == target.attributeGroup && target.attributeBiology && !target.attributeDead}" />
+    <elSTBoolean id="elSkillBuffCheck" expression="#{s.attributeGroup == t.attributeGroup && t.attributeBiology && !t.attributeDead}" />
     
     <!--用于复活术:必须是死亡状态才可以执行。-->
-    <elHitCheck id="elSkillRebornCheck" expression="#{source.attributeGroup == target.attributeGroup && target.attributeBiology && target.attributeDead}" />
+    <elSTBoolean id="elSkillRebornCheck" expression="#{s.attributeGroup == t.attributeGroup && t.attributeBiology && t.attributeDead}" />
     
     <!--==========================================================================-->
     <!--技能升级公式:配置给技能，计算技能在升到指定等级时需要的技能点数（熟练度）。
@@ -89,32 +107,32 @@
     <!--==========================================================================-->
     
     <!--默认公式-->
-    <elLevel  id="elSkillLevelUp" expression="#{10 * level}" />
+    <elLNumber  id="elSkillLevelUp" expression="#{10 * l}" />
     
     <!--==========================================================================-->
     <!-- 技能等级公式，为每个技能计算一个等级值。这个等级值由技能使用，根据不同类型的技能可能应用情况不一样。-->
     <!--==========================================================================-->
-    <elLevel id="elSkillLevel" expression="#{1 + 0.2 * (level - 1)}" />
+    <elLNumber id="elSkillLevel" expression="#{1 + 0.2 * (l - 1)}" />
     
     <!--技能伤害公式: 配置给技能，用于计算技能可以造成的伤害值。-->
     
     <!--默认物理伤害-->
-    <elHit id="elSkillAttack" expression="#{-(source.attributeAttack - target.attributeDefence)}" />
+    <elSTNumber id="elSkillAttack" expression="#{-(s.attributeAttack - t.attributeDefence)}" />
     <!--默认魔法伤害-->
-    <elHit id="elSkillMagicAttack" expression="#{-(source.attributeMagicAttack - target.attributeMagicDefence)}" />
+    <elSTNumber id="elSkillMagicAttack" expression="#{-(s.attributeMagicAttack - t.attributeMagicDefence)}" />
     <!--绝对攻击（只计技能伤害）-->
-    <elHit id="elSkillAbsoluteAttack" expression="#{0}" />
+    <elSTNumber id="elSkillAbsoluteAttack" expression="#{0}" />
     <!--技能增加效果-->
-    <elHit id="elSkillBuff" expression="#{0}" />
+    <elSTNumber id="elSkillBuff" expression="#{0}" />
     
     <!--==========================================================================-->
     <!-- 用于对话(Chat): 用于检查一个对话是否对目标角色可见 -->
     <!--==========================================================================-->
     
     <!--同伴、同分组-->
-    <elHitCheck id="elChatCheckFriendly" expression="#{!source.attributeDead && !target.attributeDead && source.attributeGroup == target.attributeGroup && target.attributeBiology}" />
+    <elSTBoolean id="elChatCheckFriendly" expression="#{!s.attributeDead && !t.attributeDead && s.attributeGroup == t.attributeGroup && t.attributeBiology}" />
     <!--用于任务角色对话-->
-    <elHitCheck id="elChatCheckTask" expression="#{!source.attributeDead && !target.attributeDead && target.attributeBiology}" />
+    <elSTBoolean id="elChatCheckTask" expression="#{!s.attributeDead && !t.attributeDead && t.attributeBiology}" />
 </root>
 
 
