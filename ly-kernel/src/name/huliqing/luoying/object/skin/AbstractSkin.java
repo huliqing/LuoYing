@@ -274,7 +274,7 @@ public abstract class AbstractSkin implements Skin {
         List<AttributeApply> aas = data.getApplyAttributes();
         if (aas != null) {
             for (AttributeApply aa : aas) {
-                entityService.applyNumberAttributeValue(actor, aa.getAttribute(), aa.getAmount(), null);
+                entityService.hitNumberAttribute(actor, aa.getAttribute(), aa.getAmount(), null);
             }
         }
         data.setAttributeApplied(true);
@@ -309,7 +309,7 @@ public abstract class AbstractSkin implements Skin {
         List<AttributeApply> aas = data.getApplyAttributes();
         if (aas != null) {
             for (AttributeApply aa : aas) {
-                entityService.applyNumberAttributeValue(actor, aa.getAttribute(), -aa.getAmount(), null);
+                entityService.hitNumberAttribute(actor, aa.getAttribute(), -aa.getAmount(), null);
             }
         }
         data.setAttributeApplied(false);

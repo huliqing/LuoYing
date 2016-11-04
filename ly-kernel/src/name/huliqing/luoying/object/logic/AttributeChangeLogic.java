@@ -36,7 +36,7 @@ public class AttributeChangeLogic extends AbstractLogic {
         float applyValue = value * useFactor * interval;
         
         if (applyValue > 0.0001f) {
-            entityNetwork.applyNumberAttributeValue(actor, applyAttribute, applyValue, null);
+            entityNetwork.hitNumberAttribute(actor, applyAttribute, applyValue, null);
         }
     }
 }

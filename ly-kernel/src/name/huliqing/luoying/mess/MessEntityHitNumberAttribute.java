@@ -16,93 +16,96 @@ import name.huliqing.luoying.object.entity.Entity;
  * @author huliqing
  */
 @Serializable
-public class MessEntityAttributeApply extends MessBase {
+public class MessEntityHitNumberAttribute extends MessBase {
     
-    private long source = -1;
-    
-    private long target;
+    // 受攻击的对象
+    private long entityId;
     
     // 角色的属性名称
-    private String attributeName;
+    private String attribute;
     
     // 属性值
-    private float applyValue;
+    private float addValue;
 
+    // 攻击源的id
+    private Long hitterId;
+    
     /**
      * 获取作用值的源角色，如果源Entity不存在，则这个值返回-1。
      * @return 
      */
-    public long getSource() {
-        return source;
+    public Long getHitterId() {
+        return hitterId;
     }
 
     /**
      * 设置发起源的id(Entity id), 这个发起源表示是哪一个Entity对目标产生了属性作用值。比如,当角色A对角色B的属性造成了
-     * 3点伤害的时候，那么角色A就是发起源。如果没有特别的作用源，则这个参数可以设置为-1.
-     * @param source 
+     * 3点伤害的时候，那么角色A就是发起源。
+     * @param hitterId 
      */
-    public void setSource(long source) {
-        this.source = source;
+    public void setHitterId(Long hitterId) {
+        this.hitterId = hitterId;
     }
 
     /**
      * 获取接收属性值作用的目标角色。
      * @return 
      */
-    public long getTarget() {
-        return target;
+    public long getEntityId() {
+        return entityId;
     }
 
     /**
      * 设置接受属性值作用的目标角色,或者说是被击中的角色。
-     * @param target 
+     * @param entityId 
      */
-    public void setTarget(long target) {
-        this.target = target;
+    public void setEntityId(long entityId) {
+        this.entityId = entityId;
     }
 
     /**
      * 获取所作用的属性名称
      * @return 
      */
-    public String getAttributeName() {
-        return attributeName;
+    public String getAttribute() {
+        return attribute;
     }
 
     /**
      * 设置属性名称，目标（target）必须存在这个属性，并且必须是Number类型的，否则没有意义。
-     * @param attributeName 
+     * @param attribute 
      */
-    public void setAttributeName(String attributeName) {
-        this.attributeName = attributeName;
+    public void setAttribute(String attribute) {
+        this.attribute = attribute;
     }
 
     /**
      * 获取属性的作用值。
      * @return 
      */
-    public float getApplyValue() {
-        return applyValue;
+    public float getAddValue() {
+        return addValue;
     }
 
     /**
      * 设置属性的作用值, 这个作用值将直接添加到目标target指定的属性上, 这个值可正可负。
-     * @param value 
+     * @param addValue 
      */
-    public void setApplyValue(float value) {
-        this.applyValue = value;
+    public void setAddValue(float addValue) {
+        this.addValue = addValue;
     }
 
     @Override
     public void applyOnClient() {
         super.applyOnClient();
         PlayService playService = Factory.get(PlayService.class);
-        Entity sourceEntity = playService.getEntity(this.source);
-        Entity targetEntity = playService.getEntity(this.target);
-        if (targetEntity != null && sourceEntity != null) {
-            EntityService entityService = Factory.get(EntityService.class);
-            entityService.applyNumberAttributeValue(targetEntity, attributeName, applyValue, sourceEntity);
+        Entity hitter = null;
+        if (hitterId != null) {
+            hitter = playService.getEntity(hitterId);
+        }
+        Entity entity = playService.getEntity(entityId);
+        if (entity != null) {
+            Factory.get(EntityService.class).hitNumberAttribute(entity, attribute, addValue, hitter);
         }
     }
-    
 }

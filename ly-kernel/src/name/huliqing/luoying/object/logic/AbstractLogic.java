@@ -153,7 +153,7 @@ public abstract class AbstractLogic implements Logic<LogicData>{
      */
     protected void setTarget(Entity target) {
         if (targetAttribute != null) {
-            entityNetwork.setAttribute(actor, targetAttribute.getName(), target.getEntityId());
+            entityNetwork.hitAttribute(actor, targetAttribute.getName(), target.getEntityId(), null);
         }
     }
     
@@ -167,7 +167,7 @@ public abstract class AbstractLogic implements Logic<LogicData>{
         }
         return 0;
     }
-
+    
     /**
      * 判断一个目标是否为当前角色的敌人
      * @param target

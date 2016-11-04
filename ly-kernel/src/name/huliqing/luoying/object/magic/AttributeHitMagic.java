@@ -72,7 +72,7 @@ public class AttributeHitMagic extends AbstractMagic {
         for (Entity hitTarget : actors) {
             if (hitCheckEl.setTarget(hitTarget.getAttributeManager()).getValue()) {
                 for (AttributeWrap aw : attributes) {
-                    entityNetwork.applyNumberAttributeValue(hitTarget, aw.attribute, aw.amount, source);
+                    entityNetwork.hitNumberAttribute(hitTarget, aw.attribute, aw.amount, source);
                 }
             }
         }

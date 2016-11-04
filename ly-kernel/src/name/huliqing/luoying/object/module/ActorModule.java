@@ -18,6 +18,7 @@ import name.huliqing.luoying.object.attribute.BooleanAttribute;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.attribute.ValueChangeListener;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.entity.EntityListener;
 import name.huliqing.luoying.object.skill.Skill;
 
 /**
@@ -26,28 +27,28 @@ import name.huliqing.luoying.object.skill.Skill;
  * @param <T>
  */
 public class ActorModule<T extends ModuleData> extends AbstractModule<T> implements ValueChangeListener<Object> {
-//    private static final Logger LOG = Logger.getLogger(ActorModule.class.getName());
-    
+    private static final Logger LOG = Logger.getLogger(ActorModule.class.getName());
     private final static String DATA_VIEW_DIRECTION = "viewDirection";
     private final static String DATA_WALK_DIRECTION = "walkDirection";
     
-    private BetterCharacterControlWrap innerControl;
     private float radius = 0.4f;
     private float height = 3.2f;
     
-    // 监听角色被目标锁定/释放,被击中,被杀死或杀死目标的侦听器
-//    private List<ActorListener> actorListeners;
-    
-    // 生命值属性名称
+    // 判断角色属性，这个属性用于判断角色是否“死亡”
+    private String bindDeadAttribute;
+    // 健康值属性名称
     private String bindHealthAttribute;
     // 角色的质量
     private String bindMassAttribute;
-    // 绑定角色属性，这个属性定义角色是否是可移动的
+    // 绑定角色属性，这个属性用来控制角色是否是可移动的，默认都是可以移动的。
     private String bindMovableAttribute;
-    // 绑定一个角色属性，这个属性定义角色是否是可转动朝向的。
+    // 绑定一个角色属性，这个属性控制角色是否是可转动朝向的，默认都是可以转动的.
     private String bindRotatableAttribute;
-    // 判断角色属性，这个属性用于判断角色是否“死亡”
-    private String bindDeadAttribute;
+    
+    // ---- inner
+    private BetterCharacterControlWrap innerControl;
+    // 监听角色被目标锁定/释放,被击中,被杀死或杀死目标的侦听器
+    private List<ActorListener> actorListeners;
     
     private NumberAttribute healthAttribute;
     private NumberAttribute massAttribute;
@@ -55,51 +56,19 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     private BooleanAttribute rotatableAttribute;
     private BooleanAttribute deadAttribute;
     
-    private class BetterCharacterControlWrap extends BetterCharacterControl {
-
-        public BetterCharacterControlWrap(float radius, float height, float mass) {
-            super(radius, height, mass);
-        }
-        
-        public float getMass() {
-            return rigidBody.getMass();
-        }
-        
-        public void setMass(float mass) {
-            this.rigidBody.setMass(mass);
-        }
-        
-        public boolean isKinematic() {
-            return rigidBody.isKinematic();
-        }
-
-        public void setKinematic(boolean kinematic) {
-            rigidBody.setKinematic(kinematic);
-        }
-        
-        public void setLocalForward(Vector3f localForward) {
-            if (localForward != null) {
-                this.localForward.set(localForward);
-            }
-        }
-        
-        @Override
-        public void setPhysicsRotation(Quaternion rotation) {
-            super.setPhysicsRotation(rotation);
-        }
-        
-    }
+    // 用于监听Entity被击中某个属性时的侦听器
+    private final EntityListener actorEntityListener = new ActorEntityListener();
     
     @Override
     public void setData(T data) {
         super.setData(data);
         this.radius = data.getAsFloat("radius", radius);
         this.height = data.getAsFloat("height", height);
+        this.bindDeadAttribute = data.getAsString("bindDeadAttribute");
         this.bindHealthAttribute = data.getAsString("bindHealthAttribute");
         this.bindMassAttribute = data.getAsString("bindMassAttribute");
         this.bindMovableAttribute = data.getAsString("bindMovableAttribute");
         this.bindRotatableAttribute = data.getAsString("bindRotatableAttribute");
-        this.bindDeadAttribute = data.getAsString("bindDeadAttribute");
     }
 
     @Override
@@ -113,11 +82,13 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     @Override
     public void initialize(Entity entity) {
         super.initialize(entity);
+        entity.addListener(actorEntityListener);
+        
+        deadAttribute = entity.getAttributeManager().getAttribute(bindDeadAttribute, BooleanAttribute.class);
         healthAttribute = entity.getAttributeManager().getAttribute(bindHealthAttribute, NumberAttribute.class);
         massAttribute = entity.getAttributeManager().getAttribute(bindMassAttribute, NumberAttribute.class);
         movableAttribute = entity.getAttributeManager().getAttribute(bindMovableAttribute, BooleanAttribute.class);
         rotatableAttribute = entity.getAttributeManager().getAttribute(bindRotatableAttribute, BooleanAttribute.class);
-        deadAttribute = entity.getAttributeManager().getAttribute(bindDeadAttribute, BooleanAttribute.class);
         
          // 监听角色健康值属性，当健康值等于或小于0于，角色要标记为死亡。
         healthAttribute.addListener(this);
@@ -145,6 +116,7 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     
     @Override
     public void cleanup() {
+        entity.removeListener(actorEntityListener);
         if (innerControl != null) {
             entity.getSpatial().removeControl(innerControl);
         }
@@ -223,9 +195,10 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     public void setWalkDirection(Vector3f walkDirection) {
 //        LOG.log(Level.INFO, "setWalkDirection, actor={0}, walkDirection={1}"
 //                , new Object[] {actor.getData().getId(), walkDirection});
-        if (movableAttribute != null && movableAttribute.getValue()) {
-            innerControl.setWalkDirection(walkDirection);
+        if (movableAttribute != null && !movableAttribute.getValue()) {
+            return;
         }
+        innerControl.setWalkDirection(walkDirection);
     }
     
     public Vector3f getViewDirection() {
@@ -233,9 +206,10 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     }
     
     public void setViewDirection(Vector3f viewDirection) {
-        if (rotatableAttribute != null && rotatableAttribute.getValue()) {
-            innerControl.setViewDirection(viewDirection);
+        if (rotatableAttribute != null && !rotatableAttribute.getValue()) {
+            return;
         }
+        innerControl.setViewDirection(viewDirection);
     }
     
     /**
@@ -269,31 +243,223 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
         innerControl.setKinematic(kinematic);
     }
     
-    // remove20161103
-//     /**
-//     * 添加物品侦听器
-//     * @param actorListener 
+     /**
+     * 添加物品侦听器
+     * @param actorListener 
+     */
+    public void addActorListener(ActorListener actorListener) {
+        if (actorListener == null)
+            return;
+        if (actorListeners == null) {
+            actorListeners = new ArrayList<ActorListener>();
+        }
+        if (!actorListeners.contains(actorListener)) {
+            actorListeners.add(actorListener);
+        }
+    }
+    
+    /**
+     * 删除物品侦听器
+     * @param actorListener
+     * @return 
+     */
+    public boolean removeActorListener(ActorListener actorListener) {
+        return actorListeners != null && actorListeners.remove(actorListener);
+    }
+    
+    // 这个侦听器用于侦听Entity属性被击中, 并将普通的属性击中转换为更高级一点事件响应：ActorListener, 
+    private class ActorEntityListener implements EntityListener {
+        // 这个状态用于记住被击中之前角色的死亡状态。
+        private boolean deadStateBeforeHit;
+        
+        @Override
+        public void onHitAttributeBefore(String attribute, Object value, Entity hitter) {
+            deadStateBeforeHit = isDead();
+        }
+
+        @Override
+        public void onHitAttributeAfter(String attribute, Object newValue, Object oldValue, Entity hitter) {
+            // 判断是否因这次击中而导致角色死亡
+            boolean killed = !deadStateBeforeHit && isDead();
+            
+            // 通知当前entity, 已经被某一个目标击中
+            notifyHitByTarget(hitter, attribute, newValue, oldValue, killed);
+
+            // 通知hitter：你已经击中了一个目标
+            if (hitter != null) {
+                ActorModule hitterAM = hitter.getModuleManager().getModule(ActorModule.class);
+                if (hitterAM != null) {
+                    hitterAM.notifyHitTarget(entity, attribute, newValue, oldValue, killed);
+                }
+            }
+        }
+        
+        private boolean isDead() {
+            if (deadAttribute != null) {
+                return deadAttribute.getValue();
+            }
+            return false;
+        }
+    }
+    
+    /**
+     * 通知侦听器，让侦听器知道当前角色Hit了另一个目标角色.<br>
+     */
+    private void notifyHitByTarget(Entity hitter, String hitAttribute, Object newValue, Object oldValue, boolean killed) {
+        if (actorListeners != null) {
+            for (ActorListener lis : actorListeners) {
+                lis.onActorHitByTarget(entity, hitter, hitAttribute, newValue, oldValue, killed);
+            }
+        }
+    }
+    
+    /**
+     * 通知侦听器，让侦听器知道当前角色击中了一个目标角色。
+     * @param targetWhichBeHit 被击中的另一个目标角色
+     * @param hitAttribute 指定击中的是目标角色的哪一个属性
+     * @param newValue 击中后属性的值
+     * @param oldValue 击中前属性的值
+     */
+    private void notifyHitTarget(Entity targetWhichBeHit, String hitAttribute, Object newValue, Object oldValue, boolean killed) {
+        if (actorListeners != null) {
+            for (ActorListener lis : actorListeners) {
+                lis.onActorHitTarget(entity, targetWhichBeHit, hitAttribute, newValue, oldValue, killed);
+            }
+        }
+    }
+    
+    private class BetterCharacterControlWrap extends BetterCharacterControl {
+        public BetterCharacterControlWrap(float radius, float height, float mass) {
+            super(radius, height, mass);
+        }
+        
+        public float getMass() {
+            return rigidBody.getMass();
+        }
+        
+        public void setMass(float mass) {
+            this.rigidBody.setMass(mass);
+        }
+        
+        public boolean isKinematic() {
+            return rigidBody.isKinematic();
+        }
+
+        public void setKinematic(boolean kinematic) {
+            rigidBody.setKinematic(kinematic);
+        }
+        
+        public void setLocalForward(Vector3f localForward) {
+            if (localForward != null) {
+                this.localForward.set(localForward);
+            }
+        }
+        
+        @Override
+        public void setPhysicsRotation(Quaternion rotation) {
+            super.setPhysicsRotation(rotation);
+        }
+    }
+    
+      // remove20161104 -----------------------------------------------------------------------------------------------------------
+//    /**
+//     * 应用属性Hit, 让当前角色的指定属性“被击中”， 指定的属性必须存在，否则什么也不会做。
+//     * @param attribute 被击中的属性
+//     * @param value 属性值，这个值会应用到指定的属性,作为属性的新值。
+//     * @param hitter 攻击源，表示谁发起了攻击，注意这个参数可能为null(当攻击源不存在，或者非实体时)
 //     */
-//    public void addActorListener(ActorListener actorListener) {
-//        if (actorListener == null)
+//    public void hitAttribute(String attribute, Object value, Entity hitter) {
+//        Attribute attr = entity.getAttributeManager().getAttribute(attribute);
+//        if (attr == null) {
 //            return;
-//        if (actorListeners == null) {
-//            actorListeners = new ArrayList<ActorListener>();
 //        }
-//        if (!actorListeners.contains(actorListener)) {
-//            actorListeners.add(actorListener);
+//        boolean oldDead = isDead();
+//        Object oldValue = attr.getValue();
+//        attr.setValue(value);
+//        // 判断是否因属性被击中后而死亡
+//        boolean killed = !oldDead && isDead();
+//        // 注意：newValue必须重新获取，因为一些属性类型可能会限制value的值，所以以重新获得的newValue为准.
+//        Object newValue = attr.getValue();
+//        
+//        // 通知当前entity, 已经被击中
+//        notifyHitByTarget(hitter, attribute, newValue, oldValue, killed);
+//        
+//        // 通知hitter，已经击中了一个目标
+//        if (hitter != null) {
+//            ActorModule hitterAM = hitter.getModuleManager().getModule(ActorModule.class);
+//            if (hitterAM != null) {
+//                hitterAM.notifyHitTarget(entity, attribute, newValue, oldValue, killed);
+//            }
+//        }
+//    }
+    
+//    /**
+//     * 执行“让当前角色被另一个角色击中”的逻辑，注：属性必须是NumberAttribute类型，否则什么也不做
+//     * @param hitter 发起hit的角色, hitter可以为null
+//     * @param hitAttribute 属性名称
+//     * @param hitValue apply到指定属性的值，可正可负
+//     */
+//    public void applyHitNumberAttribute(Entity hitter, String hitAttribute, float hitValue) {
+//        NumberAttribute attr = entity.getAttributeManager().getAttribute(hitAttribute, NumberAttribute.class);
+//        if (attr == null) {
+//            return;
+//        }
+//        boolean deadBefore = isDead();
+//        attr.add(hitValue);
+//        boolean deadAfter = isDead();
+//        // 这个killed用来判断角色是否由于这次攻击而死亡。
+//        boolean killed = !deadBefore && deadAfter;
+//        
+//        // 通过侦听器：当前角色被另一个家伙击中
+//        notifyHitByTarget(hitter, hitAttribute, hitValue, killed);
+//        
+//        // 通知攻击者，告诉攻击者：你已经击中一个目标。
+//        if (hitter != null) {
+//            ActorModule hitterActorModule = hitter.getModuleManager().getModule(ActorModule.class);
+//            if (hitterActorModule != null) {
+//                hitterActorModule.notifyHitTarget(entity, hitAttribute, hitValue, killed);
+//            }
 //        }
 //    }
 //    
 //    /**
-//     * 删除物品侦听器
-//     * @param actorListener
-//     * @return 
+//     * 通知侦听器，让侦听器知道当前角色Hit了另一个目标角色.<br>
+//     * 注：这个方法只由ActorModule内部调用。
+//     * @param actorBeHit 被击中的角色
+//     * @param hitAttribute
+//     * @param hitValue
+//     * @param killedByHit
 //     */
-//    public boolean removeActorListener(ActorListener actorListener) {
-//        return actorListeners != null && actorListeners.remove(actorListener);
+//    private void notifyHitTarget(Entity actorBeHit, String hitAttribute, float hitValue, boolean killedByHit) {
+//        LOG.log(Level.INFO, "notifyActorHitOtherListener, actorBeHit={0}, hitAttribute={1}, hitValue={2}, killedByHit={3}"
+//                , new Object[] {actorBeHit.getData().getId(), hitAttribute, hitValue, killedByHit});
+//        if (actorListeners != null) {
+//            for (ActorListener l : actorListeners) {
+//                l.onActorHitTarget(entity, actorBeHit, hitAttribute, hitValue, killedByHit);
+//            }
+//        }
+//    }
+//    
+//    /**
+//     * 通知侦听器，让侦听器知道当前角色被某一个目标角色击中
+//     * @param hitter
+//     * @param hitAttribute
+//     * @param hitValue
+//     * @param killedByHit 
+//     */
+//    private void notifyHitByTarget(Entity hitter, String hitAttribute, float hitValue, boolean killedByHit) {
+//        LOG.log(Level.INFO, "notifyActorHitByTarget, hitter={0}, hitAttribute={1}, hitValue={2}, killedByHit={3}"
+//                , new Object[] {hitter != null ? hitter.getData().getId() : null, hitAttribute, hitValue, killedByHit});
+//        if (actorListeners != null) {
+//            for (ActorListener l : actorListeners) {
+//                l.onActorHitByTarget(entity, hitter, hitAttribute, hitValue, killedByHit);
+//            }
+//        }
 //    }
     
+    // --------------------------------------------------------------------------------------------------------------------------------
+    
+    // remove20161104
 //    /**
 //     * 杀死角色
 //     */
@@ -315,18 +481,7 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
 //            healthAttribute.setValue(1);
 //        }
 //    }
-//    
-//    /**
-//     * 判断角色是否已经死亡
-//     * @return 
-//     */
-//    public boolean isDead() {
-//        if (deadAttribute != null) {
-//            return deadAttribute.getValue();
-//        }
-//        return false;
-//    }
-//    
+    
 //    /**
 //     * 判断一个目标是否为敌人
 //     * @param target
@@ -641,36 +796,9 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
 //            rotatableAttribute.setValue(rotatable);
 //        }
 //    }
-//    
-//    /**
-//     * 执行“让当前角色被另一个角色击中的逻辑”，注：属性必须是NumberAttribute类型，否则什么也不做
-//     * @param hitter 发起hit的角色, hitter可以为null
-//     * @param hitAttribute 属性名称
-//     * @param hitValue apply到指定属性的值，可正可负
-//     */
-//    public void applyHit(Entity hitter, String hitAttribute, float hitValue) {
-//        NumberAttribute attr = entity.getAttributeManager().getAttribute(hitAttribute, NumberAttribute.class);
-//        if (attr == null) {
-//            return;
-//        }
-//        boolean deadBefore = isDead();
-//        attr.add(hitValue);
-//        boolean deadAfter = isDead();
-//        // 这个killed用来判断角色是否由于这次攻击而死亡。
-//        boolean killed = !deadBefore && deadAfter;
-//        
-//        // 通过侦听器：当前角色被另一个家伙击中
-//        notifyActorHitByTarget(hitter, hitAttribute, hitValue, killed);
-//        
-//        // 通知攻击者，告诉攻击者：你已经击中一个目标。
-//        if (hitter != null) {
-//            ActorModule hitterActorModule = hitter.getModuleManager().getModule(ActorModule.class);
-//            if (hitterActorModule != null) {
-//                hitterActorModule.notifyActorHitOtherListener(entity, hitAttribute, hitValue, killed);
-//            }
-//        }
-//    }
-//    
+    
+    
+    // remove20161104
 //    /**
 //     * 通知侦听器，让侦听器知道当前角色(actor)已经被某一个目标(lockedByTarget)锁定。
 //     * @param lockedByTarget 
@@ -698,40 +826,6 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
 //            }
 //        }
 //    }
-//    
-//    /**
-//     * 通知侦听器，让侦听器知道当前角色Hit了另一个目标角色.<br>
-//     * 注：这个方法只由ActorModule内部调用。
-//     * @param actorBeHit 被击中的角色
-//     * @param hitAttribute
-//     * @param hitValue
-//     * @param killedByHit
-//     */
-//    private void notifyActorHitOtherListener(Entity actorBeHit, String hitAttribute, float hitValue, boolean killedByHit) {
-//        LOG.log(Level.INFO, "notifyActorHitOtherListener, actorBeHit={0}, hitAttribute={1}, hitValue={2}, killedByHit={3}"
-//                , new Object[] {actorBeHit.getData().getId(), hitAttribute, hitValue, killedByHit});
-//        if (actorListeners != null) {
-//            for (ActorListener l : actorListeners) {
-//                l.onActorHitTarget(entity, actorBeHit, hitAttribute, hitValue, killedByHit);
-//            }
-//        }
-//    }
-//    
-//    /**
-//     * 通知侦听器，让侦听器知道当前角色被某一个目标角色击中
-//     * @param hitter
-//     * @param hitAttribute
-//     * @param hitValue
-//     * @param killedByHit 
-//     */
-//    private void notifyActorHitByTarget(Entity hitter, String hitAttribute, float hitValue, boolean killedByHit) {
-//        LOG.log(Level.INFO, "notifyActorHitByTarget, hitter={0}, hitAttribute={1}, hitValue={2}, killedByHit={3}"
-//                , new Object[] {hitter != null ? hitter.getData().getId() : null, hitAttribute, hitValue, killedByHit});
-//        if (actorListeners != null) {
-//            for (ActorListener l : actorListeners) {
-//                l.onActorHitByTarget(entity, hitter, hitAttribute, hitValue, killedByHit);
-//            }
-//        }
-//    }
+    
     
 }

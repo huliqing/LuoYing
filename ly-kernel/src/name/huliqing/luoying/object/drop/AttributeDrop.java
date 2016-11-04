@@ -36,7 +36,7 @@ public class AttributeDrop extends AbstractDrop {
     public boolean doDrop(Entity source, Entity target) {
         valueHitEl.setSource(source.getAttributeManager());
         valueHitEl.setTarget(target.getAttributeManager());
-        entityNetwork.applyNumberAttributeValue(target, attribute, valueHitEl.getValue().floatValue(), source);
+        entityNetwork.hitAttribute(target, attribute, valueHitEl.getValue().floatValue(), source);
         
         playDropSounds(source);
         return true;

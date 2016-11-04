@@ -78,7 +78,7 @@ public class SearchEnemyLogic extends AbstractLogic {
         }
         
         // <<<<找到敌人>>>>
-        entityNetwork.setAttribute(actor, targetAttribute.getName(), target.getEntityId());
+        entityNetwork.hitAttribute(actor, targetAttribute.getName(), target.getEntityId(), null);
         
         // 自动间隔，在有敌人时频率降低
         if (autoInterval) {

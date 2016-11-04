@@ -40,7 +40,7 @@ public class AttributeDynamicState extends AbstractState {
         if (intervalUsed >= interval && attributeName != null) {
             intervalUsed = 0;
 //            HitUtils.getInstance().applyHit(sourceActor, actor, attributeName, value);
-            entityNetwork.applyNumberAttributeValue(actor, attributeName, value, sourceActor);
+            entityNetwork.hitAttribute(actor, attributeName, value, sourceActor);
         }
     }
 

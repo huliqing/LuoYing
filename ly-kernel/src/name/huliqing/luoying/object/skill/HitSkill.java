@@ -273,7 +273,7 @@ public abstract class HitSkill extends AbstractSkill {
         hitEl.setSource(attacker.getAttributeManager());
         hitEl.setTarget(target.getAttributeManager());
         float finalHitValue = hitValue + hitEl.getValue().floatValue();
-        entityNetwork.applyNumberAttributeValue(target, attribute, finalHitValue, attacker);
+        entityNetwork.hitNumberAttribute(target, attribute, finalHitValue, attacker);
     }
 
     @Override

@@ -7,8 +7,8 @@ package name.huliqing.luoying.layer.network;
 
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.layer.service.EntityService;
-import name.huliqing.luoying.mess.MessEntityAttributeApply;
-import name.huliqing.luoying.mess.MessEntityAttributeSet;
+import name.huliqing.luoying.mess.MessEntityHitNumberAttribute;
+import name.huliqing.luoying.mess.MessEntityHitAttribute;
 import name.huliqing.luoying.network.Network;
 import name.huliqing.luoying.object.entity.Entity;
 
@@ -26,38 +26,36 @@ public class EntityNetworkImpl implements EntityNetwork {
     }
 
     @Override
-    public void setAttribute(Entity entity, String attributeName, Object value) {
-        MessEntityAttributeSet mess = new MessEntityAttributeSet();
-        mess.setAttributeName(attributeName);
-        mess.setEntityId(entity.getEntityId());
-        mess.setValue(value);
-        
+    public void hitAttribute(Entity entity, String attribute, Object value, Entity hitter) {
         if (NETWORK.isClient()) {
-            NETWORK.sendToServer(mess);
-        } else {
-            NETWORK.broadcast(mess);
-            entityService.setAttribute(entity, attributeName, value);
+            return;
         }
+        if (NETWORK.hasConnections()) {
+            MessEntityHitAttribute mess = new MessEntityHitAttribute();
+            mess.setHitterId(hitter != null ? hitter.getEntityId() : null);
+            mess.setEntityId(entity.getEntityId());
+            mess.setAttribute(attribute);
+            mess.setValue(value);
+            NETWORK.broadcast(mess);
+        }
+        entityService.hitAttribute(entity, attribute, value, hitter);
     }
     
     @Override
-    public void applyNumberAttributeValue(Entity entity, String attributeName, float value, Entity source) {
+    public void hitNumberAttribute(Entity entity, String attribute, float addValue, Entity hitter) {
          if (NETWORK.isClient()) {
             return;
         }
         
         if (NETWORK.hasConnections()) {
-            MessEntityAttributeApply mess = new MessEntityAttributeApply();
-            mess.setTarget(entity.getEntityId());
-            mess.setAttributeName(attributeName);
-            mess.setApplyValue(value);
-            if (source != null) {
-                mess.setSource(source.getEntityId());
-            }
+            MessEntityHitNumberAttribute mess = new MessEntityHitNumberAttribute();
+            mess.setHitterId(hitter != null ? hitter.getEntityId() : null);
+            mess.setTargetId(entity.getEntityId());
+            mess.setAttribute(attribute);
+            mess.setAddValue(addValue);
             NETWORK.broadcast(mess);
         }
-        
-        entityService.applyNumberAttributeValue(entity, attributeName, value, source);
+        entityService.hitNumberAttribute(entity, attribute, addValue, hitter);
     }
 
     

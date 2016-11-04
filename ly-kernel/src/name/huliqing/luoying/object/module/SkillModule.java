@@ -29,9 +29,26 @@ import name.huliqing.luoying.object.skill.Skill;
  */
 public class SkillModule extends AbstractModule {
     private static final Logger LOG = Logger.getLogger(SkillModule.class.getName());
-    
     private final SkillService skillService = Factory.get(SkillService.class);
-    private Control updateControl;
+    
+    // 被锁定的技能列表，二进制表示，其中每1个二进制位表示一个技能类型。
+    // 如果指定的位为1，则表示这个技能类型被锁定，则这类技能将不能执行。
+    // 默认值0表示没有任何锁定。
+    private long lockedSkillTags;
+    
+    // 默认的技能: “空闲”"等待"，“受伤”，“死亡”。。
+    private long idleSkillTags;
+    private long waitSkillTags;
+    private long walkSkillTags;
+    private long runSkillTags;
+    private long hurtSkillTags;
+    private long deadSkillTags;
+    
+    // ---- inner
+    private final Control updateControl = new AdapterControl() {
+        @Override
+        public void update(float tpf) {skillUpdate(tpf);}
+    };
     
     // 所有可用的技能处理器
     private final List<Skill> skills = new ArrayList<Skill>();
@@ -51,19 +68,6 @@ public class SkillModule extends AbstractModule {
     
     // 最近一个执行的技能,这个技能可能正在执行，也可能已经停止。
     private Skill lastSkill;
-    
-    // 被锁定的技能列表，二进制表示，其中每1个二进制位表示一个技能类型。
-    // 如果指定的位为1，则表示这个技能类型被锁定，则这类技能将不能执行。
-    // 默认值0表示没有任何锁定。
-    private long lockedSkillTags;
-    
-    // 默认的技能: “空闲”"等待"，“受伤”，“死亡”。。
-    private long idleSkillTags;
-    private long waitSkillTags;
-    private long walkSkillTags;
-    private long runSkillTags;
-    private long hurtSkillTags;
-    private long deadSkillTags;
 
     @Override
     public void setData(ModuleData data) {
@@ -87,10 +91,6 @@ public class SkillModule extends AbstractModule {
         super.initialize(actor);
         
         // 技能的更新支持
-        updateControl = new AdapterControl() {
-            @Override
-            public void update(float tpf) {skillUpdate(tpf);}
-        };
         this.entity.getSpatial().addControl(updateControl);
         
         // 载入技能
@@ -155,9 +155,7 @@ public class SkillModule extends AbstractModule {
         skills.clear();
         skillMap.clear();
         playingSkillTags = 0;
-        if (updateControl != null) {
-            entity.getSpatial().removeControl(updateControl);
-        }
+        entity.getSpatial().removeControl(updateControl);
         super.cleanup();
     }
     

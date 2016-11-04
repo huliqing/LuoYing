@@ -95,5 +95,26 @@ public interface Entity<T extends EntityData> extends DataProcessor<T>{
      * @return 
      */
     boolean removeFromScene();
-
+    
+    /**
+     * 添加EntityListener,用于侦听Entity被hit，或者hit目标属性
+     * @param listener 
+     */
+    void addListener(EntityListener listener);
+    
+    /**
+     * 移除EntityListener.
+     * @param listener
+     * @return 
+     * @see #addListener(name.huliqing.luoying.object.entity.EntityListener) 
+     */
+    boolean removeListener(EntityListener listener);
+    
+    /**
+     * 击中、设置当前Entity的指定的属性，属性必须存在，否则什么也不做。
+     * @param attribute 属性名称
+     * @param value 新的属性值
+     * @param hitter 发起攻击的源，这个参数可以为null,如果击中源不存在。
+     */
+    void hitAttribute(String attribute, Object value, Entity hitter);
 }

@@ -5,7 +5,6 @@
  */
 package name.huliqing.luoying.layer.service;
 
-import name.huliqing.luoying.object.attribute.Attribute;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.entity.Entity;
 
@@ -14,17 +13,10 @@ import name.huliqing.luoying.object.entity.Entity;
  * @author huliqing
  */
 public class EntityServiceImpl implements EntityService {
+//    private static final Logger LOG = Logger.getLogger(EntityServiceImpl.class.getName());
     
     @Override
     public void inject() {
-    }
-
-    @Override
-    public void setAttribute(Entity entity, String attributeName, Object value) {
-        Attribute attribute = entity.getAttributeManager().getAttribute(attributeName);
-        if (attribute != null) {
-            attribute.setValue(value);
-        }
     }
     
     @Override
@@ -35,14 +27,18 @@ public class EntityServiceImpl implements EntityService {
         }
         return defValue;
     }
-
+    
     @Override
-    public void applyNumberAttributeValue(Entity entity, String attributeName, float value, Entity source) {
-        NumberAttribute nattr = entity.getAttributeManager().getAttribute(attributeName, NumberAttribute.class);
-        if (nattr != null) {
-            nattr.add(value);
-        }
+    public void hitAttribute(Entity entity, String attribute, Object value, Entity hitter) {
+        entity.hitAttribute(attribute, value, hitter);
     }
-
+    
+    @Override
+    public void hitNumberAttribute(Entity entity, String attribute, float addValue, Entity hitter) {
+        NumberAttribute nattr = entity.getAttributeManager().getAttribute(attribute, NumberAttribute.class);
+        if (nattr != null) {
+            entity.hitAttribute(attribute, nattr.getValue().floatValue() + addValue, hitter);
+        } 
+    }
     
 }

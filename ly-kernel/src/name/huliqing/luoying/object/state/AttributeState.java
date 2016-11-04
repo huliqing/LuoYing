@@ -51,7 +51,7 @@ public class AttributeState extends AbstractState {
         }
         // data.getResist()为抵抗率，取值 [0.0~1.0], 如果为1.0则说明完全抵抗. 
         applyValue = value * (1 - data.getResist());
-        entityService.applyNumberAttributeValue(actor, attributeName, applyValue, sourceActor);
+        entityService.hitAttribute(actor, attributeName, applyValue, sourceActor);
         attributeApplied = true;
         updateDatas();
     }
@@ -59,7 +59,7 @@ public class AttributeState extends AbstractState {
     @Override
     public void cleanup() {
         if (attributeApplied && restore) {
-            entityService.applyNumberAttributeValue(actor, attributeName, -applyValue, sourceActor);
+            entityService.hitAttribute(actor, attributeName, -applyValue, sourceActor);
             attributeApplied = false;
             updateDatas();
         }

@@ -246,8 +246,8 @@ import name.huliqing.luoying.loader.PlantEnvLoader;
 import name.huliqing.luoying.loader.RandomSceneDataLoader;
 import name.huliqing.luoying.mess.MessActorSetLocation;
 import name.huliqing.luoying.mess.MessEntityAdd;
-import name.huliqing.luoying.mess.MessEntityAttributeApply;
-import name.huliqing.luoying.mess.MessEntityAttributeSet;
+import name.huliqing.luoying.mess.MessEntityHitNumberAttribute;
+import name.huliqing.luoying.mess.MessEntityHitAttribute;
 import name.huliqing.luoying.mess.MessEntityRemove;
 import name.huliqing.luoying.mess.MessItemAdd;
 import name.huliqing.luoying.mess.MessItemRemove;
@@ -747,8 +747,8 @@ public class LuoYing {
         
         // Entity
         Serializer.registerClass(MessEntityAdd.class);
-        Serializer.registerClass(MessEntityAttributeApply.class);
-        Serializer.registerClass(MessEntityAttributeSet.class);
+        Serializer.registerClass(MessEntityHitNumberAttribute.class);
+        Serializer.registerClass(MessEntityHitAttribute.class);
         Serializer.registerClass(MessEntityRemove.class);
         
         // Chat

@@ -1,18 +1,19 @@
-///*
-// * To change this template, choose Tools | Templates
-// * and open the template in the editor.
-// */
-//package name.huliqing.luoying.object.module;
-//
-//import name.huliqing.luoying.object.entity.Entity;
-//
-///**
-// * 角色监听器
-// * @author huliqing
-// */
-//public interface ActorListener {
-//    
-//    /**
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package name.huliqing.luoying.object.module;
+
+import name.huliqing.luoying.object.entity.Entity;
+
+/**
+ * 角色监听器
+ * @author huliqing
+ */
+public interface ActorListener {
+    
+    // remove20161104
+    /**
 //     * 当角色被另一个角色锁定为目标对象时该方法被调用.
 //     * 即表示当源角色(sourceBeLocked)被另一角色(other)当成目标对象的时候调用。
 //     * @param sourceBeLocked 源角色
@@ -27,7 +28,7 @@
 //     * @param other 
 //     */
 //    void onActorTargetReleased(Entity sourceBeReleased, Entity other);
-//    
+//   
 //    /**
 //     * 当角色对另一个目标进行了攻击时这个方法被调用, 这里要注意：攻击(hit)这里不一定是减益的，也可能是增益的hit,
 //     * 比如角色A对目标角色B的属性healthAttribute进行了+50(hitValue)的hit，
@@ -52,5 +53,26 @@
 //     * 但<b>不是</b>这次攻击造成的，则该参数为false.
 //     */
 //    void onActorHitByTarget(Entity sourceBeHit, Entity hitter, String hitAttribute, float hitValue, boolean killedByHit);
-//    
-//}
+   
+    /**
+     * 当角色对另一个目标(beHit)进行了攻击时这个方法被调用.
+     * @param hitter 源角色(被侦听的角色)
+     * @param beHit 这个参数表示攻击到了哪一个目标对象。
+     * @param hitAttribute 攻击所针对的属性名称
+     * @param newValue 击中后属性的值
+     * @param oldValue 击中前属性的值
+     * @param killed 目标(beHit)是否由于这次攻击而死亡,
+     */
+    void onActorHitTarget(Entity hitter, Entity beHit, String hitAttribute, Object newValue, Object oldValue, boolean killed);
+    
+    /**
+     * 当角色被某个目标(hitter)击中时调用
+     * @param beHit 被击中的角色（当前角色，即侦听的角色）
+     * @param hitter 实施hit的目标角色，注：hitter可能为null，因hitter有可能不是一个实际存在的角色
+     * @param hitAttribute 击中的是哪一个属性
+     * @param newValue 被击中后属性的值
+     * @param oldValue 被击中前属性的值
+     * @param killed 是否被目标对象伤害致死。
+     */
+    void onActorHitByTarget(Entity beHit, Entity hitter, String hitAttribute, Object newValue, Object oldValue, boolean killed);
+}

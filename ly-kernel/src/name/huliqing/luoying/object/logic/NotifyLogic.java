@@ -6,14 +6,10 @@ package name.huliqing.luoying.object.logic;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.data.LogicData;
 import name.huliqing.luoying.layer.network.EntityNetwork;
-import name.huliqing.luoying.layer.service.ElService;
-import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.entity.Entity;
 
 /**
@@ -85,7 +81,7 @@ public class NotifyLogic extends AbstractLogic {
                 continue; // 不是友军
             }
             // 设置友军单位的目标对象
-            entityNetwork.setAttribute(temp, targetAttribute.getName(), target.getEntityId());
+            entityNetwork.hitAttribute(temp, targetAttribute.getName(), target.getEntityId(), null);
         }
         // 清除列表
         tempStore.clear();

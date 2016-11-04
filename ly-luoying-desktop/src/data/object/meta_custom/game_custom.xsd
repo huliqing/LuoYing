@@ -14,7 +14,6 @@ xs:time
            xmlns="http://luoying.huliqing.name"
            elementFormDefault="qualified">
     
-    <xs:include schemaLocation="../../../../../ly-kernel/src/LuoYing/Data/meta/base.xsd" />
     <xs:include schemaLocation="../../../../../ly-kernel/src/LuoYing/Data/meta/game.xsd" />
     
     <xs:element name="root">
