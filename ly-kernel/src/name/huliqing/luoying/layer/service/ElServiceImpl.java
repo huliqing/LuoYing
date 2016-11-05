@@ -6,6 +6,7 @@ package name.huliqing.luoying.layer.service;
 
 import name.huliqing.luoying.constants.IdConstants;
 import name.huliqing.luoying.object.Loader;
+import name.huliqing.luoying.object.el.CustomEl;
 import name.huliqing.luoying.object.el.ElFactory;
 import name.huliqing.luoying.object.el.STBooleanEl;
 import name.huliqing.luoying.object.el.STNumberEl;
@@ -60,6 +61,17 @@ public class ElServiceImpl implements ElService {
     public LNumberEl createLNumberEl(String idOrExpression) {
         if (ElFactory.isElExpression(idOrExpression)) {
             LNumberEl el = Loader.load(IdConstants.SYS_EL_LNUMBER);
+            el.setExpression(idOrExpression);
+            return el;
+        } else {
+            return Loader.load(idOrExpression);
+        }
+    }
+    
+    @Override
+    public CustomEl createCustomEl(String idOrExpression) {
+        if (ElFactory.isElExpression(idOrExpression)) {
+            CustomEl el = Loader.load(IdConstants.SYS_EL_CUSTOM);
             el.setExpression(idOrExpression);
             return el;
         } else {

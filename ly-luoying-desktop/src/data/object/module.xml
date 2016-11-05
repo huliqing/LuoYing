@@ -11,16 +11,9 @@
     -->
 
     <!--==========================================================================-->
-    <!-- 核心模块 -->
-    <!--==========================================================================-->
-    
-    <!--角色属性管理模块：优先级最高-->
-    <moduleAttribute id="moduleAttribute" moduleOrder="0" />
-
-    <!--==========================================================================-->
     <!-- 基本模块 -->
     <!--==========================================================================-->
-        
+   
     <!--动画通道管理模块: 不直接依赖其它模块 -->
     <moduleChannel id="moduleChannel" moduleOrder="10" />
     
@@ -28,7 +21,7 @@
     <moduleItem id="moduleItem" moduleOrder="10" />
     
     <!--物品掉落管理模块: 不直接依赖其它模块-->
-    <moduleDrop id="moduleDrop" moduleOrder="10" sounds="soundNote" />
+    <moduleDrop id="moduleDrop" moduleOrder="10" bindDeadAttribute="attributeDead" sounds="soundNote" />
     
     <!--对话功能管理模块: 不直接依赖其它模块 -->
     <moduleChat id="moduleChat" moduleOrder="10" />
@@ -36,56 +29,55 @@
     <!--抗性设置管理模块：不直接依赖其它模块-->
     <moduleResist id="moduleResist" moduleOrder="10" />
     
-    <!--基本角色管理模块: 依赖moduleAttribute -->
+    <!--基本角色管理模块: 依赖 -->
     <moduleActor id="moduleActor" moduleOrder="10" 
-                bindHealthAttribute="attributeHealth" 
                 bindDeadAttribute="attributeDead"
+                bindTargetAttribute="attributeTarget" 
                 bindMassAttribute="attributeMass"
                 bindMovableAttribute="attributeMovable"
                 bindRotatableAttribute="attributeRotatable" />
 
     <!--技能管理模块: 间接依赖: moduleChannel -->
     <moduleSkill id="moduleSkill" moduleOrder="20" 
+                 bindDeadAttribute="attributeDead"
                  idleSkillTags="idle"
                  waitSkillTags="wait" 
                  walkSkillTags="walk" 
                  runSkillTags="run" 
                  hurtSkillTags="hurt" 
-                 deadSkillTags="dead" />
-
+                 deadSkillTags="dead" 
+    />
     
-    <!--皮肤管理模块(装备、武器)：直接或间接依赖：moduleAttribute, moduleActor, moduleSkill -->
+    <!--皮肤管理模块(装备、武器)：直接或间接依赖： moduleActor, moduleSkill -->
     <moduleSkin id="moduleSkin" moduleOrder="30" bindWeaponSlotAttribute="attributeWeaponSlots" />    
     
-    <!--角色行为模块：直接或间接依赖：moduleAttribute, moduleActor, moduleSkill, moduleSkin -->
+    <!--角色行为模块：直接或间接依赖： moduleActor, moduleSkill, moduleSkin -->
     <moduleAction id="moduleAction" moduleOrder="40" bindDeadAttribute="attributeDead" />
 
-    <!--角色的逻辑功能：直接或间接依赖：moduleAttribute, moduleActor, moduleSkill, moduleAction -->
+    <!--角色的逻辑功能：直接或间接依赖： moduleActor, moduleSkill, moduleAction -->
     <moduleLogic id="moduleLogic" moduleOrder="50" bindEnabledAttribute="attributeAutoLogic" />
 
     <!--==========================================================================-->
     <!--其它模块-->
     <!--==========================================================================-->
     
-    <!--任务管理模块：直接或间接依赖：moduleAttribute, moduleActor -->
+    <!--任务管理模块：直接或间接依赖： moduleActor -->
     <moduleTask id="moduleTask" moduleOrder="60" />
 
-    <!--状态管理模块: 直接或间接依赖：moduleAttribute, moduleActor, moduleSkill -->
+    <!--状态管理模块: 直接或间接依赖： moduleActor, moduleSkill -->
     <moduleState id="moduleState" moduleOrder="60" />
     
-    <!--天赋管理模块：直接或间接依赖：moduleAttribute, moduleActor-->
+    <!--天赋管理模块：直接或间接依赖： moduleActor-->
     <moduleTalent id="moduleTalent" moduleOrder="60" 
                   bindLevelAttribute="attributeLevel" 
                   bindTalentPointsAttribute="attributeTalentPoints" 
                   talentPointsLevelEl="elLevelTalentPoints" />
 
-    <!--等级控制模块: 直接或间接依赖：moduleAttribute -->
+    <!--等级控制模块 -->
     <moduleLevel id="moduleLevel" moduleOrder="60" 
                  bindLevelAttribute="attributeLevel" 
                  bindXpAttribute="attributeXp" 
                  bindXpNextAttribute="attributeXpNext" 
                  xpLevelEl="elLevelUp" maxLevel="60" effect="effectLevelUp" />
-    
-    
 
 </root>

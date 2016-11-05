@@ -5,6 +5,7 @@
 package name.huliqing.luoying.layer.service;
 
 import name.huliqing.luoying.Inject;
+import name.huliqing.luoying.object.el.CustomEl;
 import name.huliqing.luoying.object.el.STBooleanEl;
 import name.huliqing.luoying.object.el.STNumberEl;
 import name.huliqing.luoying.object.el.LNumberEl;
@@ -44,4 +45,11 @@ public interface ElService extends Inject{
      */
     LNumberEl createLNumberEl(String idOrExpression);
     
+    /**
+     * 自定义的表达式,返回类型根据表达式实际情况而定，类型为Object.
+     * 需要设置表达式及根据表达式设置参数值后才可以计算值。
+     * @param idOrExpression
+     * @return 
+     */
+    CustomEl createCustomEl(String idOrExpression);
 }

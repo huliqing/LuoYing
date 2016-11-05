@@ -19,7 +19,7 @@ import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.attribute.ValueChangeListener;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.entity.EntityListener;
-import name.huliqing.luoying.object.skill.Skill;
+//import name.huliqing.luoying.object.skill.Skill;
 
 /**
  * 角色的基本控制器
@@ -27,7 +27,7 @@ import name.huliqing.luoying.object.skill.Skill;
  * @param <T>
  */
 public class ActorModule<T extends ModuleData> extends AbstractModule<T> implements ValueChangeListener<Object> {
-    private static final Logger LOG = Logger.getLogger(ActorModule.class.getName());
+//    private static final Logger LOG = Logger.getLogger(ActorModule.class.getName());
     private final static String DATA_VIEW_DIRECTION = "viewDirection";
     private final static String DATA_WALK_DIRECTION = "walkDirection";
     
@@ -36,8 +36,8 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     
     // 判断角色属性，这个属性用于判断角色是否“死亡”
     private String bindDeadAttribute;
-    // 健康值属性名称
-    private String bindHealthAttribute;
+    // 绑定角色的目标属性
+    private String bindTargetAttribute;
     // 角色的质量
     private String bindMassAttribute;
     // 绑定角色属性，这个属性用来控制角色是否是可移动的，默认都是可以移动的。
@@ -50,11 +50,11 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     // 监听角色被目标锁定/释放,被击中,被杀死或杀死目标的侦听器
     private List<ActorListener> actorListeners;
     
-    private NumberAttribute healthAttribute;
+    private BooleanAttribute deadAttribute;
+    private NumberAttribute targetAttribute;
     private NumberAttribute massAttribute;
     private BooleanAttribute movableAttribute;
     private BooleanAttribute rotatableAttribute;
-    private BooleanAttribute deadAttribute;
     
     // 用于监听Entity被击中某个属性时的侦听器
     private final EntityListener actorEntityListener = new ActorEntityListener();
@@ -65,7 +65,7 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
         this.radius = data.getAsFloat("radius", radius);
         this.height = data.getAsFloat("height", height);
         this.bindDeadAttribute = data.getAsString("bindDeadAttribute");
-        this.bindHealthAttribute = data.getAsString("bindHealthAttribute");
+        this.bindTargetAttribute = data.getAsString("bindTargetAttribute");
         this.bindMassAttribute = data.getAsString("bindMassAttribute");
         this.bindMovableAttribute = data.getAsString("bindMovableAttribute");
         this.bindRotatableAttribute = data.getAsString("bindRotatableAttribute");
@@ -85,14 +85,14 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
         entity.addListener(actorEntityListener);
         
         deadAttribute = entity.getAttributeManager().getAttribute(bindDeadAttribute, BooleanAttribute.class);
-        healthAttribute = entity.getAttributeManager().getAttribute(bindHealthAttribute, NumberAttribute.class);
+        targetAttribute = entity.getAttributeManager().getAttribute(bindTargetAttribute, NumberAttribute.class);
         massAttribute = entity.getAttributeManager().getAttribute(bindMassAttribute, NumberAttribute.class);
         movableAttribute = entity.getAttributeManager().getAttribute(bindMovableAttribute, BooleanAttribute.class);
         rotatableAttribute = entity.getAttributeManager().getAttribute(bindRotatableAttribute, BooleanAttribute.class);
         
          // 监听角色健康值属性，当健康值等于或小于0于，角色要标记为死亡。
-        healthAttribute.addListener(this);
         deadAttribute.addListener(this);
+        targetAttribute.addListener(this);
         massAttribute.addListener(this);
         
         // 控制器
@@ -125,24 +125,24 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
 
     @Override
     public void onValueChanged(Attribute attribute, Object oldValue, Object newValue) {
-        // 监听healthAttribute，并操作deadAttribute，然后由deadAttribute去触发死亡或复活,注意：不要调用循环。
-        if (attribute == healthAttribute) {
-            float oldVal = ((Number) oldValue).floatValue();
-            float newVal = ((Number) newValue).floatValue();
-            if (oldVal > 0 && newVal <= 0) {
-                deadAttribute.setValue(true); // dead
-            } else if (oldVal <= 0 && newVal > 0) {
-                deadAttribute.setValue(false);
+        if (attribute == targetAttribute) {
+            // 通知旧目标被释放
+            Entity oldTarget = entity.getScene().getEntity(((Number) oldValue).longValue());
+            if (oldTarget != null) {
+                ActorModule oldTargetAM = oldTarget.getModuleManager().getModule(ActorModule.class);
+                if (oldTargetAM != null) {
+                    oldTargetAM.notifyActorReleased(entity);
+                }
+            }
+            // 通知新目标被锁定
+            Entity newTarget = entity.getScene().getEntity(targetAttribute.getValue().longValue());
+            if (newTarget != null) {
+                ActorModule newTargetAM = newTarget.getModuleManager().getModule(ActorModule.class);
+                if (newTargetAM != null) {
+                    newTargetAM.notifyActorLocked(entity);
+                }
             }
             return;
-        }
-        
-        if (attribute == deadAttribute) {
-            if (deadAttribute.getValue()) {
-                playDead();
-            } else {
-                playWait();
-            }
         }
         
         if (attribute == massAttribute) {
@@ -150,20 +150,25 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
         }
     }
     
-    private void playDead() {
-        SkillModule sm = entity.getModuleManager().getModule(SkillModule.class);
-        if (sm == null) return;
-        List<Skill> deadSkills = sm.getSkillDead(new ArrayList<Skill>(1));
-        if (!deadSkills.isEmpty()) {
-            sm.playSkill(deadSkills.get(0), false, null);
+    /**
+     * 通知侦听器，告知当前角色被某个对象（other)释放了锁定
+     */
+    private void notifyActorReleased(Entity other) {
+        if (actorListeners != null) {
+            for (ActorListener al : actorListeners) {
+                al.onActorTargetReleased(entity, other);
+            }
         }
     }
-    private void playWait() {
-        SkillModule sm = entity.getModuleManager().getModule(SkillModule.class);
-        if (sm == null) return;
-        List<Skill> waitSkills = sm.getSkillWait(new ArrayList<Skill>(1));
-        if (!waitSkills.isEmpty()) {
-            sm.playSkill(waitSkills.get(0), false, null);
+    
+    /**
+     * 通知侦听器，告知当前角色被某个对象（other)锁定了。
+     */
+    private void notifyActorLocked(Entity other) {
+        if (actorListeners != null) {
+            for (ActorListener al : actorListeners) {
+                al.onActorTargetLocked(entity, other);
+            }
         }
     }
     

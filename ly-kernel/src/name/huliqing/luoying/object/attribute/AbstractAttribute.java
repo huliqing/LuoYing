@@ -98,7 +98,7 @@ public abstract class AbstractAttribute<T> implements Attribute<T> {
     }
     
     @Override
-    public void initialize(AttributeManager module) {
+    public void initialize(AttributeManager attributeManager) {
         if (initialized) {
             throw new IllegalStateException("Attribute already initialized! attributeId=" + this.getId());
         }

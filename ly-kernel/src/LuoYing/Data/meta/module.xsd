@@ -60,14 +60,14 @@ xs:time
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="moduleBase">
-                    <xs:attribute name="bindHealthAttribute" type="xs:string" use="required">
-                        <xs:annotation><xs:documentation>IntegerAttribute, 绑定角色属性，这个属性用于存取角色的健康值。</xs:documentation></xs:annotation>
-                    </xs:attribute>
                     <xs:attribute name="bindDeadAttribute" type="xs:string" use="required">
                         <xs:annotation><xs:documentation>BooleanAttribute, 判断角色属性，这个属性用于判断角色是否“死亡”</xs:documentation></xs:annotation>
                     </xs:attribute>
+                    <xs:attribute name="bindTargetAttribute" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>LongAttribute, 绑定角色属性，这个属性用于存放角色的当前目标对象的唯一id,必须是LongAttribute。</xs:documentation></xs:annotation>
+                    </xs:attribute>
                     <xs:attribute name="bindMassAttribute" type="xs:string" use="required">
-                        <xs:annotation><xs:documentation>FloatAttribute, 绑定角色属性, 该属性用于存取角色的"质量"</xs:documentation></xs:annotation>
+                        <xs:annotation><xs:documentation>NumberAttribute, 绑定角色属性, 该属性用于存取角色的"质量"</xs:documentation></xs:annotation>
                     </xs:attribute>
                     <xs:attribute name="bindMovableAttribute" type="xs:string" use="required">
                         <xs:annotation><xs:documentation>BooleanAttribute, 绑定角色属性，这个属性定义角色是否是可移动的</xs:documentation></xs:annotation>
@@ -105,11 +105,19 @@ xs:time
     
     <xs:element name="moduleDrop">
         <xs:annotation>
-            <xs:documentation>角色物品掉落模块,给角色增加这个模块之后，当角色被某个目标打死之后可以从角色身上掉落物品给指定目标。</xs:documentation>
+            <xs:documentation>
+                角色物品掉落模块,给角色增加这个模块之后，当角色被某个目标打死之后可以从角色身上掉落物品给指定目标。一个角色死亡
+                后可以掉落什么物品由角色的DropData设置.
+            </xs:documentation>
         </xs:annotation>
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="moduleBase">
+                    <xs:attribute name="bindDeadAttribute" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>BooleanAttribute,绑定角色的“死亡"属性, 这个属性的值用于判断角色是否死亡。</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
                     <xs:attribute name="sounds" type="xs:string" use="optional">
                         <xs:annotation>
                             <xs:documentation>默认的掉落声效，格式："sound1,sound2,sound3"</xs:documentation>
@@ -230,6 +238,9 @@ xs:time
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="moduleBase">
+                    <xs:attribute name="bindDeadAttribute" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>BooleanAttribute,绑定角色的“死亡”属性，这个属性标记着角色是否死亡。</xs:documentation></xs:annotation>
+                    </xs:attribute>
                     <xs:attribute name="idleSkillTags" type="xs:string" use="required">
                         <xs:annotation><xs:documentation>默认的“空闲”技能的标签, 格式: "skillTag1,skillTag2,..."</xs:documentation></xs:annotation>
                     </xs:attribute>

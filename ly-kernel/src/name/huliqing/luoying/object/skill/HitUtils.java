@@ -4,15 +4,11 @@
  */
 package name.huliqing.luoying.object.skill;
 
-import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.layer.network.ActorNetwork;
 import name.huliqing.luoying.layer.network.SkillNetwork;
 import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.layer.service.SkillService;
-import name.huliqing.luoying.layer.network.DropNetwork;
-import name.huliqing.luoying.object.attribute.NumberAttribute;
-import name.huliqing.luoying.object.entity.Entity;
 
 /**
  * @deprecated 以后直接用EntityNetwork.applyNumberAttributeValue(...)代替
@@ -20,7 +16,7 @@ import name.huliqing.luoying.object.entity.Entity;
  */
 public class HitUtils {
     private final ActorService actorService = Factory.get(ActorService.class);
-    private final DropNetwork dropNetwork = Factory.get(DropNetwork.class);
+//    private final DropNetwork dropNetwork = Factory.get(DropNetwork.class);
     private final SkillService skillService = Factory.get(SkillService.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
 //    private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);

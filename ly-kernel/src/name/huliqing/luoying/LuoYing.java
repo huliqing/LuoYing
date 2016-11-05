@@ -275,6 +275,7 @@ import name.huliqing.luoying.object.drop.AttributeDrop;
 import name.huliqing.luoying.object.drop.GroupDrop;
 import name.huliqing.luoying.object.drop.ItemDrop;
 import name.huliqing.luoying.object.drop.SkinDrop;
+import name.huliqing.luoying.object.el.CustomEl;
 import name.huliqing.luoying.object.el.STBooleanEl;
 import name.huliqing.luoying.object.el.STNumberEl;
 import name.huliqing.luoying.object.el.LNumberEl;
@@ -476,10 +477,11 @@ public class LuoYing {
         DataFactory.register("effectProjection", EffectData.class, EffectDataLoader.class, ProjectionEffect.class);
         
         // El
+        DataFactory.registerDataProcessor("elCustom",  CustomEl.class);
+        DataFactory.registerDataProcessor("elLNumber",  LNumberEl.class);
         DataFactory.registerDataProcessor("elSBoolean",  SBooleanEl.class);
         DataFactory.registerDataProcessor("elSTBoolean",  STBooleanEl.class);
         DataFactory.registerDataProcessor("elSTNumber",  STNumberEl.class);
-        DataFactory.registerDataProcessor("elLNumber",  LNumberEl.class);
         
         // Emitter
         DataFactory.register("emitter",  EmitterData.class, EmitterDataLoader.class, Emitter.class);

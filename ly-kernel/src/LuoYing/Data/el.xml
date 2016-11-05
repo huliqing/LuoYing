@@ -9,8 +9,9 @@
     <!--空的El,内置用于支持在程序中动态创建El时替换表达式-->
     <!--==========================================================================-->
     
-    <elSBoolean id="sysElSBoolean" expression="" />
+    <elCustom id="sysElCustom" expression="" />
     <elLNumber id="sysElLNumber" expression=""/>
+    <elSBoolean id="sysElSBoolean" expression="" />
     <elSTBoolean id="sysElSTBoolean" expression="" />
     <elSTNumber id="sysElSTNumber" expression="" />
     

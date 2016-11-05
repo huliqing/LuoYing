@@ -32,10 +32,10 @@ public class EntityNetworkImpl implements EntityNetwork {
         }
         if (NETWORK.hasConnections()) {
             MessEntityHitAttribute mess = new MessEntityHitAttribute();
-            mess.setHitterId(hitter != null ? hitter.getEntityId() : null);
             mess.setEntityId(entity.getEntityId());
             mess.setAttribute(attribute);
             mess.setValue(value);
+            mess.setHitterId(hitter != null ? hitter.getEntityId() : null);
             NETWORK.broadcast(mess);
         }
         entityService.hitAttribute(entity, attribute, value, hitter);
@@ -49,10 +49,10 @@ public class EntityNetworkImpl implements EntityNetwork {
         
         if (NETWORK.hasConnections()) {
             MessEntityHitNumberAttribute mess = new MessEntityHitNumberAttribute();
-            mess.setHitterId(hitter != null ? hitter.getEntityId() : null);
-            mess.setTargetId(entity.getEntityId());
+            mess.setEntityId(entity.getEntityId());
             mess.setAttribute(attribute);
             mess.setAddValue(addValue);
+            mess.setHitterId(hitter != null ? hitter.getEntityId() : null);
             NETWORK.broadcast(mess);
         }
         entityService.hitNumberAttribute(entity, attribute, addValue, hitter);

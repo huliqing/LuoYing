@@ -21,13 +21,16 @@ import name.huliqing.luoying.data.SkillData;
 import name.huliqing.luoying.data.ModuleData;
 import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.object.Loader;
+import name.huliqing.luoying.object.attribute.Attribute;
+import name.huliqing.luoying.object.attribute.BooleanAttribute;
+import name.huliqing.luoying.object.attribute.ValueChangeListener;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.skill.Skill;
 
 /**
  * @author huliqing
  */
-public class SkillModule extends AbstractModule {
+public class SkillModule extends AbstractModule implements ValueChangeListener<Boolean>{
     private static final Logger LOG = Logger.getLogger(SkillModule.class.getName());
     private final SkillService skillService = Factory.get(SkillService.class);
     
@@ -43,6 +46,9 @@ public class SkillModule extends AbstractModule {
     private long runSkillTags;
     private long hurtSkillTags;
     private long deadSkillTags;
+    
+    // 绑定角色的“死亡”属性，当角色在死亡的时候自动执行死亡技能
+    private String bindDeadAttribute;
     
     // ---- inner
     private final Control updateControl = new AdapterControl() {
@@ -69,6 +75,8 @@ public class SkillModule extends AbstractModule {
     // 最近一个执行的技能,这个技能可能正在执行，也可能已经停止。
     private Skill lastSkill;
 
+    private BooleanAttribute deadAttribute;
+    
     @Override
     public void setData(ModuleData data) {
         super.setData(data);
@@ -79,6 +87,7 @@ public class SkillModule extends AbstractModule {
         runSkillTags = skillService.convertSkillTags(data.getAsArray("runSkillTags"));
         hurtSkillTags = skillService.convertSkillTags(data.getAsArray("hurtSkillTags"));
         deadSkillTags = skillService.convertSkillTags(data.getAsArray("deadSkillTags"));
+        bindDeadAttribute = data.getAsString("bindDeadAttribute");
     }
     
     @Override
@@ -98,6 +107,14 @@ public class SkillModule extends AbstractModule {
         if (skillDatas != null && !skillDatas.isEmpty()) {
             for (SkillData sd : skillDatas) {
                 addSkill((Skill) Loader.load(sd));
+            }
+        }
+        
+        // 监听角色是否死亡或复活
+        if (bindDeadAttribute != null) {
+            deadAttribute = entity.getAttributeManager().getAttribute(bindDeadAttribute, BooleanAttribute.class);
+            if (deadAttribute != null) {
+                deadAttribute.addListener(this);
             }
         }
     }
@@ -156,7 +173,25 @@ public class SkillModule extends AbstractModule {
         skillMap.clear();
         playingSkillTags = 0;
         entity.getSpatial().removeControl(updateControl);
+        if (deadAttribute != null) {
+            deadAttribute.removeListener(this);
+        }
         super.cleanup();
+    }
+
+    @Override
+    public void onValueChanged(Attribute attribute, Boolean oldValue, Boolean newValue) {
+        if (attribute == deadAttribute) {
+            Skill playSkill;
+            if (deadAttribute.getValue()) {
+                playSkill = getSkillByTags(deadSkillTags);
+            } else {
+                playSkill = getSkillByTags(waitSkillTags);
+            }
+            if (playSkill != null) {
+                playSkill(playSkill, false, null);
+            }
+        }
     }
     
     // bak20160930
@@ -452,6 +487,20 @@ public class SkillModule extends AbstractModule {
      */
     public List<Skill> getSkills() {
         return Collections.unmodifiableList(skills);
+    }
+    
+    /**
+     * 找出指定的标记的技能，第一个找到的将被直接返回。
+     * @param skillTags
+     * @return 
+     */
+    private Skill getSkillByTags(long skillTags) {
+        for (Skill s : skills) {
+            if ((s.getData().getTags() & skillTags) != 0) {
+                return s;
+            }
+        }
+        return null;
     }
     
     /**

@@ -7,12 +7,16 @@
     
     <!--==========================================================================-->
     <!--标准属性
-    属性用于配置到角色身上，一个角色可以同时拥有多个属性，这些属性可以绑定任何其它模块或处理器上。
+    属性用于配置到角色身上，一个角色可以同时拥有多个属性，这些属性可以绑定到任何其它模块或处理器上。
 
-    说明1：当给角色配置多个具有"相同id或名称"的属性时，后载入的属性会替换掉先载入的属性。
-    说明2：给角色配置属性列表时要使用“属性id”, 其它所有模块或处理器在使用或绑定角色属性时要使用“属性名称”
+    说明1：属性id和名称都不能重复，当给角色配置具有相同id或名称的属性时，后载入的属性会替换先载入的。
+    说明2：所有属性在绑定和引用的时候都是统一使用"属性名称"作为识别，只有在将属性配置给实体角色时才使用id。
     -->
     <!--==========================================================================-->
+    
+    <!--死亡属性标记：1 ： 死亡， 0：没死亡. 注：角色是否死亡由这个参数直接判断，与“健康值”属性有联系，但不是由健康值直接判断。 -->
+    <!--<attributeBoolean id="attributeDead" name="attributeDead" value="0" />-->
+    <attributeRelateBoolean id="attributeDead" name="attributeDead" refVars="h=attributeHealth" valueEl="#{h<=0}" />
 
     <!--生物属性： 这个属性用来标记角色是否是生物，即有"生命迹象"的角色，1：表示生物; 0：表示非生物-->
     <attributeBoolean id="attributeBiology" name="attributeBiology" value="1" />
@@ -47,9 +51,6 @@
     <!--角色的质量:默认角色质量都是大于0的，即默认都为动态角色。 -->
     <attributeFloat id="attributeMass" name="attributeMass" value="60" />
 
-    <!--死亡属性标记：1 ： 死亡， 0：没死亡. 注：角色是否死亡由这个参数直接判断，与“生命值”属性有一定联系，但不是由生命值属性直接判断。 -->
-    <attributeBoolean id="attributeDead" name="attributeDead" value="0" />
-    
     <!--定义角色是否可移动的-->
     <attributeBoolean id="attributeMovable" name="attributeMovable" value="1" />
     

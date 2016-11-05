@@ -5,8 +5,6 @@
  */
 package name.huliqing.editor;
 
-import javafx.beans.property.IntegerProperty;
-
 /**
  *
  * @author huliqing

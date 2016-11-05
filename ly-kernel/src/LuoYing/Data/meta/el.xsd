@@ -19,11 +19,52 @@ xs:time
     <xs:element name="root">
         <xs:complexType>
             <xs:all>
+                <xs:element ref="elCustom" />
+                <xs:element ref="elLNumber" />
                 <xs:element ref="elSBoolean" />
                 <xs:element ref="elSTBoolean" />
                 <xs:element ref="elSTNumber" />
-                <xs:element ref="elLNumber" />
             </xs:all>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="elCustom" >
+        <xs:annotation>
+            <xs:documentation>自定义表达式，参数随意，返回类型随意, 需要在程序中动态设置参数值。</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="elBase">
+                    <xs:attribute name="expression" type="xs:string" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>表达式，示例：#{s * 2}</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="elLNumber" >
+        <xs:annotation>
+            <xs:documentation>
+                elLNumber表达式，这个表达式通过给定一个等级来计算一个等级值，比如用于计算在一个特定等级角色可以有多少攻击力等。
+                表达式返回一个number数值。
+                表达式要求：
+                1.参数: l;
+                2.返回值：number;
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="elBase">
+                    <xs:attribute name="expression" type="xs:string" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>表达式，示例：#{l * 2}</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
         </xs:complexType>
     </xs:element>
     
@@ -87,29 +128,6 @@ xs:time
                     <xs:attribute name="expression" type="xs:string" use="required" >
                         <xs:annotation>
                             <xs:documentation>表达式示例，比如计算伤害值：#{s.attributeAttack - t.attributeDefense}</xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
-                </xs:extension>
-            </xs:complexContent>
-        </xs:complexType>
-    </xs:element>
-
-    <xs:element name="elLNumber" >
-        <xs:annotation>
-            <xs:documentation>
-                elLNumber表达式，这个表达式通过给定一个等级来计算一个等级值，比如用于计算在一个特定等级角色可以有多少攻击力等。
-                表达式返回一个number数值。
-                表达式要求：
-                1.参数: l;
-                2.返回值：number;
-            </xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="elBase">
-                    <xs:attribute name="expression" type="xs:string" use="required" >
-                        <xs:annotation>
-                            <xs:documentation>表达式，示例：#{l * 2}</xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
                 </xs:extension>

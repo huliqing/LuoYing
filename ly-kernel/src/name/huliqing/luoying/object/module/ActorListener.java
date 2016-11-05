@@ -12,23 +12,7 @@ import name.huliqing.luoying.object.entity.Entity;
  */
 public interface ActorListener {
     
-    // remove20161104
-    /**
-//     * 当角色被另一个角色锁定为目标对象时该方法被调用.
-//     * 即表示当源角色(sourceBeLocked)被另一角色(other)当成目标对象的时候调用。
-//     * @param sourceBeLocked 源角色
-//     * @param other 锁定目标的角色
-//     */
-//    void onActorTargetLocked(Entity sourceBeLocked, Entity other);
-//    
-//    /**
-//     * 当角色被从另一个角色的目标对象中释放时该方法被调用,
-//     * 即意思是：当源角色(sourceBeReleased)不再被另一角色(other)当成目标对象的时候调用。
-//     * @param sourceBeReleased
-//     * @param other 
-//     */
-//    void onActorTargetReleased(Entity sourceBeReleased, Entity other);
-//   
+    // remove20161105
 //    /**
 //     * 当角色对另一个目标进行了攻击时这个方法被调用, 这里要注意：攻击(hit)这里不一定是减益的，也可能是增益的hit,
 //     * 比如角色A对目标角色B的属性healthAttribute进行了+50(hitValue)的hit，
@@ -53,6 +37,22 @@ public interface ActorListener {
 //     * 但<b>不是</b>这次攻击造成的，则该参数为false.
 //     */
 //    void onActorHitByTarget(Entity sourceBeHit, Entity hitter, String hitAttribute, float hitValue, boolean killedByHit);
+    
+    /**
+     * 当角色被另一个角色锁定为目标对象时该方法被调用.
+     * 即表示当源角色(sourceBeLocked)被另一角色(other)当成目标对象的时候调用。
+     * @param sourceBeLocked 源角色
+     * @param other 锁定目标的角色
+     */
+    void onActorTargetLocked(Entity sourceBeLocked, Entity other);
+    
+    /**
+     * 当角色被释放锁定时该方法被调用。
+     * 即意思是：当源角色(sourceBeReleased)不再被另一角色(other)当成目标对象的时候调用。
+     * @param sourceBeReleased
+     * @param other 
+     */
+    void onActorTargetReleased(Entity sourceBeReleased, Entity other);
    
     /**
      * 当角色对另一个目标(beHit)进行了攻击时这个方法被调用.

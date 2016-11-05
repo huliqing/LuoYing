@@ -8,7 +8,7 @@ package name.huliqing.luoying.object.attribute;
 import java.util.List;
 
 /**
- *
+ * 属性管理器,管理属性的增、删、改、查
  * @author huliqing
  */
 public interface AttributeManager {

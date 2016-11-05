@@ -11,24 +11,53 @@ import java.util.List;
 import name.huliqing.luoying.data.DropData;
 import name.huliqing.luoying.data.ModuleData;
 import name.huliqing.luoying.object.Loader;
+import name.huliqing.luoying.object.attribute.BooleanAttribute;
 import name.huliqing.luoying.object.drop.Drop;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.entity.EntityListener;
 import name.huliqing.luoying.object.sound.SoundManager;
 
 /**
- *
+ * DropModule用于处理物品、经验掉落，给实体增加这个模块之后，当实体被攻击致死的时候，
+ * 会给目标攻击者掉落物品、属性
  * @author huliqing
  */
 public class DropModule extends AbstractModule {
 
-    private List<Drop> drops;
+    // 绑定角色的“死亡”属性
+    private String bindDeadAttribute;
     
     // 掉落物品时的默认提示声效
     private String[] sounds; 
+    
+    // ---- inner
+    private List<Drop> drops;
+    private BooleanAttribute deadAttribute;
+    
+    // 用于监听Entity受到攻击致死事件,并处理物品掉落
+    private final EntityListener hitDeadEntityListener = new EntityListener() {
+        private boolean deadStateBeforeHit;
+        @Override
+        public void onHitAttributeBefore(String attribute, Object value, Entity hitter) {
+            if (deadAttribute == null) 
+                return;
+            deadStateBeforeHit = deadAttribute.getValue();
+        }
+        @Override
+        public void onHitAttributeAfter(String attribute, Object newValue, Object oldValue, Entity hitter) {
+            if (deadAttribute == null)
+                return;
+            // killed
+            if (!deadStateBeforeHit && deadAttribute.getValue()) {
+                doDrop(hitter);
+            }
+        }
+    };
 
     @Override
     public void setData(ModuleData data) {
         super.setData(data); 
+        bindDeadAttribute = data.getAsString("bindDeadAttribute");
         sounds = data.getAsArray("sounds");
     }
 
@@ -40,6 +69,9 @@ public class DropModule extends AbstractModule {
     @Override
     public void initialize(Entity actor) {
         super.initialize(actor); 
+        if (bindDeadAttribute != null) {
+            deadAttribute = entity.getAttributeManager().getAttribute(bindDeadAttribute, BooleanAttribute.class);
+        }
         
         List<DropData> dropDatas = actor.getData().getObjectDatas(DropData.class, null);
         if (dropDatas != null) {
@@ -47,6 +79,7 @@ public class DropModule extends AbstractModule {
                 addDrop((Drop) Loader.load(id));
             }
         }
+        entity.addListener(hitDeadEntityListener);
     }
 
     @Override
@@ -54,6 +87,7 @@ public class DropModule extends AbstractModule {
         if (drops != null) {
             drops.clear();
         }
+        entity.removeListener(hitDeadEntityListener);
         super.cleanup(); 
     }
     

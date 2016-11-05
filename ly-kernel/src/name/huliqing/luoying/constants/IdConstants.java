@@ -91,6 +91,8 @@ public class IdConstants {
     // El
     // =============================================================================
     
+    /** sysElCustom, 空表达式, 用于动态创建表达式用, 载入这个后必须设置expression,并根据表达式设置参数值后才可以计算 */
+    public final static String SYS_EL_CUSTOM  = "sysElCustom";
     /** sysElSBoolean, 空表达式, 用于动态创建表达式用, 载入这个后必须设置expression才可以使用*/
     public final static String SYS_EL_SBOOLEAN  = "sysElSBoolean";
     /** sysElLNumber, 空表达式, 用于动态创建表达式用, 载入这个后必须设置expression才可以使用  */

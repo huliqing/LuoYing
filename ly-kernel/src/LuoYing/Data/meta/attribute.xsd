@@ -27,6 +27,7 @@ xs:time
                 <xs:element ref="attributeLevelInteger" />
                 <xs:element ref="attributeLimitInteger" />
                 <xs:element ref="attributeLong" />
+                <xs:element ref="attributeRelateBoolean" />
                 <xs:element ref="attributeString" />
                 <xs:element ref="attributeStringList" />
             </xs:all>
@@ -178,13 +179,42 @@ xs:time
     
     <xs:element name="attributeLong" >
         <xs:annotation>
-            <xs:documentation>整数类型的属性</xs:documentation>
+            <xs:documentation>Long类型的Number属性</xs:documentation>
         </xs:annotation>
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="attributeBase">
                     <xs:attribute name="value" type="xs:integer" use="optional" >
                         <xs:annotation><xs:documentation>属性初始值, long或int</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="attributeRelateBoolean" >
+        <xs:annotation>
+            <xs:documentation>具有联动功能的Boolean属性</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="attributeBase">
+                    <xs:attribute name="value" type="bool" use="optional" >
+                        <xs:annotation><xs:documentation>属性初始值,如果属性设置了valueEl则这个数值可能会在运行时重新计算。</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="refVars" type="bool" use="optional" >
+                        <xs:annotation><xs:documentation>
+                            关联要引用的属性（名称），只有关联后才可以在参数valueEl中使用，并且角色也必须配置有引用的属性才可以。
+                            格式："varName=attributeName,varName2=attributeName2,...", 示例："health=attributeHealth, mana=attributeMana"
+                        </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="valueEl" type="bool" use="optional" >
+                        <xs:annotation><xs:documentation>
+                                填写一条表达式, 表达式的值必须返回Boolean类型，示例: "#{health > 0 && mana > 0}", 表达式中的参数必须在refVars中设置了引用。
+                                并且需要确保角色同时配置有所引用的属性。
+                            </xs:documentation>
+                        </xs:annotation>
                     </xs:attribute>
                 </xs:extension>
             </xs:complexContent>
