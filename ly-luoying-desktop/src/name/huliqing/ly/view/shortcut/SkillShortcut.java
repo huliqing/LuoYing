@@ -21,6 +21,7 @@ import name.huliqing.luoying.layer.network.ActorNetwork;
 import name.huliqing.luoying.layer.network.SkillNetwork;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.layer.service.SkillService;
+import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.skill.Skill;
 import name.huliqing.luoying.utils.MatUtils;
 import name.huliqing.ly.layer.network.GameNetwork;
@@ -127,7 +128,10 @@ public class SkillShortcut extends BaseUIShortcut<SkillData> {
                 // 一些技能在执行前必须设置目标对象。
                 // 注意：这个方法必须放在这里，playService.getTarget()是获取当前游戏主目标，是“玩家行为”，不能把它
                 // 放到skillNetwork.playSkill中去。
-                actorNetwork.setTarget(actor, gameService.getTarget());
+                Entity target = gameService.getTarget();
+                if (target != null) {
+                    gameNetwork.setTarget(actor, target.getEntityId());
+                }
                 
                 skillNetwork.playSkill(actor, skill, false);
             }

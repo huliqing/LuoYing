@@ -70,7 +70,7 @@
     <attributeLong id="attributeTarget" name="attributeTarget" />
     
     <!--这个属性用来存放角色当前跟随的目标-->
-    <attributeLong id="attributeFollowTarget" name="attributeFollowTarget" />
+    <attributeLong id="attributeFollow" name="attributeFollow" />
     
     <!--角色的拥有者属性：这个属性用于存放角色的所有者（主人）,存放的是唯一id -->
     <attributeLong id="attributeOwner" name="attributeOwner" />
@@ -127,6 +127,9 @@
     <!--武器槽位：这个参数定义角色默认支持的武器槽位,默认空，由不同的角色去配置。-->
     <attributeStringList id="attributeWeaponSlots" name="attributeWeaponSlots" />
     
+    <!--角色颜色-->
+    <attributeVector4f id="attributeColor" name="attributeColor" value="1,1,1,1" />
+    
     <!--==========================================================================-->
     <!--基本属性打包-->
     <!--==========================================================================-->
@@ -135,12 +138,13 @@
                     attributes="attributeBiology,attributeRace,attributeSex
     ,attributeLevel,attributeXp,attributeXpNext,attributeGroup,attributeTeam,attributeVision,attributeMoveSpeed,attributeMass
     ,attributeDead,attributeMovable,attributeRotatable,attributeEssential,attributeAutoLogic,attributeAutoDetect
-    ,attributeTarget,attributeFollowTarget,attributeOwner,attributeTalentPoints
+    ,attributeTarget,attributeFollow,attributeOwner,attributeTalentPoints
     ,attributeHealthMax,attributeHealth,attributeManaMax,attributeMana
     ,attributeAttack,attributeMagicAttack,attributeDefence,attributeMagicDefence
     ,attributeHealthRestore,attributeManaRestore
     ,attributeAttackSpeed,attributeMagicSpeed
     ,attributeDefenceRate,attributeDuckRate,attributeGhostRate,attributeResistInterruptRate
+    ,attributeWeaponSlots,attributeColor
 " />
     
     <!--==========================================================================-->

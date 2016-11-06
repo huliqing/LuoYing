@@ -202,7 +202,7 @@ public class DynamicFightAction extends PathFollowAction implements FightAction,
             // 也即可看到角色最平滑的连招
             float attackLimit = attackIntervalMax;
             if (attackIntervalAttribute != null) {
-                attackLimit = attackIntervalMax - attackIntervalMax * entityService.getNumberAttributeValue(actor, attackIntervalAttribute, 0);
+                attackLimit = attackIntervalMax - attackIntervalMax * entityService.getNumberAttributeValue(actor, attackIntervalAttribute, 0).floatValue();
                 attackLimit = MathUtils.clamp(attackLimit, 0, attackIntervalMax);
             }
             interval = skill.getTrueUseTime() + attackLimit;

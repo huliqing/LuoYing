@@ -24,6 +24,8 @@ import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.network.AbstractServerListener;
 import name.huliqing.luoying.network.GameServer;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.ly.layer.network.GameNetwork;
+import name.huliqing.ly.layer.service.GameService;
 import name.huliqing.ly.mess.MessMessage;
 
 /**
@@ -34,6 +36,8 @@ public class DefaultServerListener extends AbstractServerListener<Entity> {
     private static final Logger LOG = Logger.getLogger(DefaultServerListener.class.getName());
     private final PlayService playService = Factory.get(PlayService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
+    private final GameService gameService = Factory.get(GameService.class);
+    private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final List<Entity> syncObjects = new LinkedList<Entity>();
     private float syncTimer = 0;
@@ -91,7 +95,7 @@ public class DefaultServerListener extends AbstractServerListener<Entity> {
         List<Entity> actors = playService.getEntities(Entity.class, null);
         if (actors != null && !actors.isEmpty()) {
             for (Entity actor : actors) {
-                if (actorService.getOwner(actor) == clientPlayer.getData().getUniqueId() && actorService.isBiology(actor)) {
+                if (gameService.getOwner(actor) == clientPlayer.getData().getUniqueId() && gameService.isBiology(actor)) {
                     playNetwork.removeEntity(actor);
                 }
             }

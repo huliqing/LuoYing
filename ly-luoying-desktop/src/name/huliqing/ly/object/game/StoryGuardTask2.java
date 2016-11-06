@@ -31,7 +31,7 @@ import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.gamelogic.AbstractGameLogic;
-import name.huliqing.luoying.object.module.ActorModule;
+import name.huliqing.luoying.object.logic.Logic;
 import name.huliqing.luoying.utils.MathUtils;
 import name.huliqing.ly.constants.IdConstants;
 import name.huliqing.ly.object.view.View;
@@ -154,7 +154,7 @@ public class StoryGuardTask2 extends AbstractTaskStep {
             maxLevel = (int) (levelRange[1] * levelFactor);
             footHoldLevel = maxLevel + footHoldLevelUp;
             gb = gtPrevious.getGb();
-            actorNetwork.setLevel(gb, footHoldLevel);
+            gameNetwork.setLevel(gb, footHoldLevel);
         } else {
             // for test
             level = Diffculty.normal;
@@ -165,8 +165,8 @@ public class StoryGuardTask2 extends AbstractTaskStep {
             
             gb = Loader.load(IdConstants.ACTOR_GB);
             
-            actorService.setLevel(gb, footHoldLevel);
-            actorService.setGroup(gb, actorService.getGroup(player));
+            gameService.setLevel(gb, footHoldLevel);
+            gameService.setGroup(gb, gameService.getGroup(player));
             actorService.setLocation(gb, new Vector3f(42, 0, -61));
             playNetwork.addEntity(gb);
         }
@@ -188,8 +188,8 @@ public class StoryGuardTask2 extends AbstractTaskStep {
         // 载入敌方祭坛
         altar = Loader.load(IdConstants.ACTOR_ALTAR);
         
-        actorService.setLevel(altar, footHoldLevel);
-        actorService.setGroup(altar, StoryGuardGame.GROUP_ENEMY);
+        gameService.setLevel(altar, footHoldLevel);
+        gameService.setGroup(altar, StoryGuardGame.GROUP_ENEMY);
         actorService.setLocation(altar, game.getEnemyPosition());
         playNetwork.addEntity(altar);
         
@@ -389,9 +389,9 @@ public class StoryGuardTask2 extends AbstractTaskStep {
     
     private void setSelfActor(Entity actor, boolean isTower) {
         actorService.setLocation(actor, getRandomPosition(game.getSelfPosition()));
-        actorNetwork.setGroup(actor, actorService.getGroup(player));
+        gameNetwork.setGroup(actor, gameService.getGroup(player));
         if (isTower) {
-            actorNetwork.setLevel(actor, maxLevel);
+            gameNetwork.setLevel(actor, maxLevel);
         } else {
             calculateLevel(actor);
             createOffensiveLogic(actor, altar);
@@ -400,9 +400,9 @@ public class StoryGuardTask2 extends AbstractTaskStep {
     
     private void setEnemyActor(Entity actor, boolean isTower) {
         actorService.setLocation(actor, getRandomPosition(game.getEnemyPosition()));
-        actorNetwork.setGroup(actor, StoryGuardGame.GROUP_ENEMY);
+        gameNetwork.setGroup(actor, StoryGuardGame.GROUP_ENEMY);
         if (isTower) {
-            actorNetwork.setLevel(actor, maxLevel);
+            gameNetwork.setLevel(actor, maxLevel);
         } else {
             calculateLevel(actor);
             if (offensiveEnemy) {
@@ -428,10 +428,8 @@ public class StoryGuardTask2 extends AbstractTaskStep {
             store = new ArrayList<Entity>();
         }
         List<Actor> all = game.getScene().getEntities(Actor.class, null);
-        ActorModule am;
         for (Entity actor : all) {
-            am = actor.getModuleManager().getModule(ActorModule.class);
-            if (am != null && am.getGroup() == group && am.isBiology()) {
+            if (gameService.getGroup(actor) == group && gameService.isBiology(actor)) {
                  store.add(actor);
             }
         }
@@ -445,10 +443,10 @@ public class StoryGuardTask2 extends AbstractTaskStep {
      */
     private void createOffensiveLogic(Entity actor, Entity fightTarget) {
         logicService.clearLogics(actor);
-        logicService.addLogic(actor, logicService.loadLogic(IdConstants.LOGIC_SEARCH_ENEMY));
-        logicService.addLogic(actor, logicService.loadLogic(IdConstants.LOGIC_FOLLOW));
-        logicService.addLogic(actor, logicService.loadLogic(IdConstants.LOGIC_FIGHT));
-        actorService.setFollow(actor, fightTarget.getData().getUniqueId());
+        logicService.addLogic(actor, (Logic) Loader.load(IdConstants.LOGIC_SEARCH_ENEMY));
+        logicService.addLogic(actor, (Logic) Loader.load(IdConstants.LOGIC_FOLLOW));
+        logicService.addLogic(actor, (Logic) Loader.load(IdConstants.LOGIC_FIGHT));
+        gameService.setFollow(actor, fightTarget.getData().getUniqueId());
     }
     
     // 为角色计算一个等级
@@ -460,9 +458,9 @@ public class StoryGuardTask2 extends AbstractTaskStep {
         }
         String actorId = actor.getData().getId();
         if (actorId.equals(IdConstants.ACTOR_SINBAD)) {
-            actorNetwork.setLevel(actor, currentLevel + bossLevelUp);
+            gameNetwork.setLevel(actor, currentLevel + bossLevelUp);
         } else {
-            actorNetwork.setLevel(actor, currentLevel);
+            gameNetwork.setLevel(actor, currentLevel);
         }
     }
     
@@ -483,9 +481,9 @@ public class StoryGuardTask2 extends AbstractTaskStep {
     private void killAllEnemies() {
         List<Actor> actors = game.getScene().getEntities(Actor.class, null);
         for (Entity actor : actors) {
-            if (actorService.getGroup(actor) == StoryGuardGame.GROUP_ENEMY
-                    && !actorService.isDead(actor)) {
-                actorNetwork.kill(actor);
+            if (gameService.getGroup(actor) == StoryGuardGame.GROUP_ENEMY
+                    && !gameService.isDead(actor)) {
+                gameNetwork.kill(actor);
             }
         }
     }
@@ -503,8 +501,8 @@ public class StoryGuardTask2 extends AbstractTaskStep {
             tempStore.clear();
             game.getScene().getEntities(Actor.class, tempStore);
             for (Actor a : tempStore) {
-                if (actorService.getGroup(a) == StoryGuardGame.GROUP_ENEMY) {
-                    if (actorService.getTarget(a) == player) {
+                if (gameService.getGroup(a) == StoryGuardGame.GROUP_ENEMY) {
+                    if (gameService.getTarget(a) == player.getEntityId()) {
                         result = true;
                         return;
                     }
@@ -525,9 +523,9 @@ public class StoryGuardTask2 extends AbstractTaskStep {
         
         @Override
         protected void doLogic(float tpf) {
-            if (actorService.isDead(gb)) {
+            if (gameService.isDead(gb)) {
                 result = 1;
-            } else if (actorService.isDead(altar)){
+            } else if (gameService.isDead(altar)){
                 result = 2;
             }
         }

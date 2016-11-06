@@ -61,7 +61,10 @@ public class SkillPanel extends ListView<Skill> implements ActorPanel {
                 if (!isPress) {
                     
                     // 一些技能在执行前必须设置目标对象。
-                    actorNetwork.setTarget(actor, gameService.getTarget());
+                    Entity target = gameService.getTarget();
+                    if (target != null) {
+                        gameNetwork.setTarget(actor, target.getEntityId());
+                    }
             
                     // 执行技能
                     skillNetwork.playSkill(actor, row.getData(), false);

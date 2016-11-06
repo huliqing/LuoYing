@@ -14,6 +14,7 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
+import com.jme3.math.Vector4f;
 import com.jme3.network.serializing.Serializable;
 import java.io.IOException;
 import java.util.HashMap;
@@ -32,7 +33,6 @@ public class ProtoData implements Savable {
     // 类型ID
     protected String id;
     
-    // TODO: id生成器
     // 全局唯一ID,当前游戏的全局唯一ID
     protected long uniqueId = generateUniqueId();
     
@@ -301,6 +301,22 @@ public class ProtoData implements Savable {
         return getProto().getAsStringList(key);
     }
     
+    public final Vector2f getAsVector2f(String key) {
+        Object value = getAttributeFromLocal(key);
+        if (value != null) {
+            return (Vector2f) value;
+        }
+        return getProto().getAsVector2f(key);
+    }
+    
+    public final Vector2f getAsVector2f(String key, Vector2f defValue) {
+        Object value = getAttributeFromLocal(key);
+        if (value != null) {
+            return (Vector2f) value;
+        }
+        return getProto().getAsVector2f(key, defValue);
+    }
+    
     /**
      * 获取参数值，并以Vector3f形式返回，原始格式必须如："x"或 "x,y" 或 "x,y,z"，
      * 如果参数不对，将返回null.<br>
@@ -338,20 +354,31 @@ public class ProtoData implements Savable {
         return getProto().getAsVector3fArray(key);
     }
     
-    public final Vector2f getAsVector2f(String key) {
+    /**
+     * 获取参数值，并以Vector4f形式返回，格式："x,y,z,w"
+     * @param key
+     * @return 
+     */
+    public final Vector4f getAsVector4f(String key) {
         Object value = getAttributeFromLocal(key);
         if (value != null) {
-            return (Vector2f) value;
+            return (Vector4f) value;
         }
-        return getProto().getAsVector2f(key);
+        return getProto().getAsVector4f(key);
     }
     
-    public final Vector2f getAsVector2f(String key, Vector2f defValue) {
+    /**
+     * 获取参数值，并以Vector4f形式返回，如果不存在指定参数则返回defValue
+     * @param key
+     * @param defValue
+     * @return 
+     */
+    public final Vector4f getAsVector4f(String key, Vector4f defValue) {
         Object value = getAttributeFromLocal(key);
         if (value != null) {
-            return (Vector2f) value;
+            return (Vector4f) value;
         }
-        return getProto().getAsVector2f(key, defValue);
+        return getProto().getAsVector4f(key, defValue);
     }
     
     /**

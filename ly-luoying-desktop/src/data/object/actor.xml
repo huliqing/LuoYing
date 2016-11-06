@@ -10,29 +10,30 @@
     <!--==========================================================================-->
     
     <!--所有角色基类-->
-    <actor id="actorBase" chat="chatSimple" />
+    <actor id="actorBase" chat="chatSimple" 
+        modules="moduleActor,moduleAction,moduleChannel,moduleChat,moduleItem,moduleLogic,moduleResist
+,moduleSkill,moduleSkin,moduleState,moduleTalent,moduleTask,moduleLevel,moduleDrop,moduleColor"
+    />
     
     <!--未分类生物：生物、种族未知、性别未知、可移动、可转向的角色。如：虫子、怪物、野兽、飞禽、未知生物等活动类角色. -->
-    <actor id="actorLivingMovableRotatableBase" extends="actorBase" attributes="attributeActorBiologyMovableRotatable"
-           modules="moduleActor,moduleAction,moduleChannel,moduleChat,moduleItem,moduleLogic
-    ,moduleResist,moduleSkill,moduleSkin,moduleState,moduleTalent,moduleTask,moduleLevel,moduleDrop"
+    <actor id="actorLivingMovableRotatableBase" extends="actorBase" 
+           attributes="attributeActorBiologyMovableRotatable"
            logics="logicSearchEnemy,logicDynamicFight,logicPatrol,logicFollow,logicDefend"
            />
     
     <!--未分类静物：非生物、种族未知、性别未知、不可移动、不可转动的角色。如: 炮塔、宝箱、祭坛、房屋等-->
-    <actor id="actorUnlivingUnmovableUnrotatableBase" extends="actorBase" attributes="attributeActorUnbiologyUnmovableUnrotatable"
-           modules="moduleActor,moduleAction,moduleChannel,moduleChat,moduleItem,moduleLogic
-    ,moduleResist,moduleSkill,moduleSkin,moduleState,moduleTask,moduleLevel,moduleDrop"
+    <actor id="actorUnlivingUnmovableUnrotatableBase" extends="actorBase" 
+           attributes="attributeActorUnbiologyUnmovableUnrotatable"
            logics="logicSearchEnemy,logicStaticFight"
            resist="resistNonLife"
            />
 
     <!--种族配置： 人类女性-->
-    <actor id="actorHumanFemaleBase" extends="actorBase" attributes="attributeHumanFemale"
-            modules="moduleActor,moduleAction,moduleChannel,moduleChat,moduleItem,moduleLogic
-    ,moduleResist,moduleSkill,moduleSkin,moduleState,moduleTalent,moduleTask,moduleLevel,moduleDrop"
+    <actor id="actorHumanFemaleBase" extends="actorBase" 
+           attributes="attributeHumanFemale"
             logics="logicSearchEnemy,logicDynamicFight,logicPatrol,logicFollow,logicDefend"
-            channels="channelRoot,channelHips,channelWaist,channelHead,channelLeftLeg,channelRightLeg,channelLeftFoot,channelRightFoot,channelLeftArm,channelRightArm,channelLeftHand,channelRightHand"
+            channels="channelRoot,channelHips,channelWaist,channelHead,channelLeftLeg,channelRightLeg
+,channelLeftFoot,channelRightFoot,channelLeftArm,channelRightArm,channelLeftHand,channelRightHand"
             resist="resistHuman"
             file="Models/actor/ske.mesh.j3o"
             icon="Interface/face/female1.jpg"
@@ -47,7 +48,7 @@
 ,skillAttack,skillAttack2,skillAttack3
 ,skillBowShot
 ,skillDualSwordAttack"
-            scale="0.2" mat="derma"
+            scale="0.2,0.2,0.2" mat="derma"
            />
     
     <!--==========================================================================-->
@@ -229,14 +230,14 @@
            icon="Interface/face/wolf.jpg"
            drops="dropWolf" skinWeapon="weaponMockAnimalClaw"
            skills="saWolfReset,saWolfWalk,saWolfRun,saWolfWait,saWolfAttack,saWolfDead,saWolfHurt,saWolfIdle,saWolfIdle2,saWolfIdle3,saWolfIdle4" 
-           mat="derma" scale="0.2" collisionRadius="0.6" resist="resistCreature" />
+           mat="derma" scale="0.2,0.2,0.2" collisionRadius="0.6" resist="resistCreature" />
     
     <!-- bear -->
     <actor id="actorBear" extends="actorLivingMovableRotatableBase" file="Models/monster/bear/bear.mesh.j3o"
            icon="Interface/face/bear.jpg"
            drops="dropBear" skinWeapon="weaponMockAnimalClaw"
            skills="saBearReset,saBearWalk,saBearRun,saBearWait,saBearAttack1,saBearAttack2,saBearDead,saBearHurt,saBearIdle1,saBearIdle2,saBearIdle3" 
-           mat="derma" scale="0.2" collisionRadius="0.6"  resist="resistCreature" />
+           mat="derma" scale="0.2,0.2,0.2" collisionRadius="0.6"  resist="resistCreature" />
     
     <!-- scorpion -->
     <actor id="actorScorpion" extends="actorLivingMovableRotatableBase" file="Models/monster/scorpion/scorpion.mesh.j3o"
@@ -254,7 +255,7 @@
            mat="wood" scale="0.5" skinWeapon="weaponMockRightWoodSword" resist="resistCreature" />
 
     <!-- 古柏幼仔 -->
-    <actor id="actorGbSmall" extends="actorGb" scale="0.2" drops="dropGb"
+    <actor id="actorGbSmall" extends="actorGb" scale="0.2,0.2,0.2" drops="dropGb"
            skills="skillGbReset,skillGbSmallWalk,skillGbSmallRun,skillGbIdle,skillGbIdle2,skillGbDead,skillGbAttack,skillGbWait,skillGbHurt" />
 
     <!-- 黑暗祭坛 -->
@@ -302,7 +303,7 @@
            items="" icon="Interface/face/skeleton.jpg" extAnim="Models/actor/ext_anim" 
            talents="" mat="calcium" resist="resistNonLife" drops="" 
            skinWeapon="weaponSword000" 
-           scale="0.2"
+           scale="0.2,0.2,0.2"
            skills="skillSkeletonWait,skillSkeletonAttack,skillSkeletonDead,skillSkeletonRun
 ,skillWalk,skillRun,skillReset,skillHurtFront,skillHurtBack,skillBowShot,skillDualSwordAttack," />
 

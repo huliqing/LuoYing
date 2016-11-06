@@ -7,6 +7,7 @@ package name.huliqing.luoying.object.attribute;
 
 import name.huliqing.luoying.data.AttributeData;
 
+
 /**
  * 以慗形int作为属性参数。
  * @author huliqing
@@ -17,6 +18,7 @@ public class IntegerAttribute extends NumberAttribute {
     public void setData(AttributeData data) {
         super.setData(data);
         value = data.getAsInteger(ATTR_VALUE, 0);
+        assert value instanceof Integer;
     }
    
     // remove20161029

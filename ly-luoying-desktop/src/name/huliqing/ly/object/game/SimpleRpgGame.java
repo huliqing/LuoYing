@@ -32,6 +32,7 @@ import name.huliqing.luoying.ui.UIEventListener;
 import name.huliqing.luoying.ui.state.PickListener;
 import name.huliqing.luoying.ui.state.UIState;
 import name.huliqing.ly.layer.network.GameNetwork;
+import name.huliqing.ly.layer.service.GameService;
 import name.huliqing.ly.view.LanPlayStateUI;
 import name.huliqing.ly.view.shortcut.ShortcutManager;
 
@@ -42,6 +43,7 @@ import name.huliqing.ly.view.shortcut.ShortcutManager;
 public abstract class SimpleRpgGame extends SimpleGame implements UIEventListener {
     private static final Logger LOG = Logger.getLogger(SimpleRpgGame.class.getName());
     private final ActorService actorService = Factory.get(ActorService.class);
+    private final GameService gameService = Factory.get(GameService.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     
@@ -88,7 +90,7 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
     
     public void setPlayer(Entity player) {
         this.player = player;
-        int teamId = actorService.getTeam(player);
+        int teamId = gameService.getTeam(player);
         ui.getTeamView().clearPartners();
         ui.getTeamView().setMainActor(player);
         ui.getTeamView().setTeamId(teamId);
@@ -124,11 +126,11 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
         if (temp == null 
                 || temp == player
                 || temp.getScene() == null // 有可能角色已经被移出场景并已经被cleanup,所以这里需要比isDead优先判断
-                || actorService.isDead(temp) 
-                || !actorService.isEnemy(temp, player)
+                || gameService.isDead(temp) 
+                || !gameService.isEnemy(temp, player)
                 ) {
-            float distance = player.getModuleManager().getModule(ActorModule.class).getViewDistance() * 2;
-            temp = actorService.findNearestEnemyExcept(player, distance, null);
+            float distance = gameService.getViewDistance(player) * 2;
+            temp = gameService.findNearestEnemyExcept(player, distance);
             
             // 需要
             setTarget(temp);

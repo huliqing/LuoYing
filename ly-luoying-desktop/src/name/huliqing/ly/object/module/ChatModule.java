@@ -7,7 +7,6 @@ package name.huliqing.ly.object.module;
 
 import java.util.List;
 import name.huliqing.ly.data.ChatData;
-import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.ly.object.chat.Chat;
 import name.huliqing.luoying.object.entity.Entity;
@@ -31,15 +30,12 @@ public class ChatModule extends AbstractModule {
         super.initialize(actor);
         
         // 目标只支持配置一个chat, 如果需要多个chat，则应该包装在GroupChat下面。
-        List<ObjectData> ods = actor.getData().getObjectDatas();
-        if (ods != null && !ods.isEmpty()) {
-            for (ObjectData od : ods) {
-                if (od instanceof ChatData) {
-                    setChat((Chat) Loader.load(od));
-                }
+        List<ChatData> chatDatas = actor.getData().getObjectDatas(ChatData.class, null);
+        if (chatDatas != null && !chatDatas.isEmpty()) {
+            for (ChatData cd : chatDatas) {
+                setChat((Chat) Loader.load(cd));
             }
         }
-        
     }
 
     @Override

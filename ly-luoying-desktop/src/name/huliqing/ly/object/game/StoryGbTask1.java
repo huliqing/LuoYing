@@ -33,6 +33,7 @@ import name.huliqing.luoying.ui.UI.Listener;
 import name.huliqing.luoying.ui.state.UIState;
 import name.huliqing.ly.constants.IdConstants;
 import name.huliqing.ly.layer.network.GameNetwork;
+import name.huliqing.ly.layer.service.GameService;
 
 /**
  * 寻找古柏
@@ -45,12 +46,13 @@ public class StoryGbTask1 extends AbstractTaskStep {
     private final SkillService skillService = Factory.get(SkillService.class);
     private final LogicService logicService = Factory.get(LogicService.class);
     
+    private final GameService gameService = Factory.get(GameService.class);
+    private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
     private final StateNetwork stateNetwork = Factory.get(StateNetwork.class);
     private final ItemNetwork itemNetwork = Factory.get(ItemNetwork.class);
-    private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     
     // 开始任务面板:说明任务信息
     private TextPanel taskFind;
@@ -132,23 +134,23 @@ public class StoryGbTask1 extends AbstractTaskStep {
             public void callback(Entity actor, int loadIndex) {
                 // 敌人
                 if (loadIndex >= 0 && loadIndex <= 2) {
-                    actorService.setLevel(actor, 6);
-                    actorService.setGroup(actor, game.groupEnemy);
+                    gameService.setLevel(actor, 6);
+                    gameService.setGroup(actor, game.groupEnemy);
                     enemies.add(actor);
-                    if (loadIndex == 0) {
-                        actorService.setColor(actor, new ColorRGBA(1, 1, 3f, 1));
-                    }
+//                    if (loadIndex == 0) {
+//                        gameService.setColor(actor, new ColorRGBA(1, 1, 3f, 1));
+//                    }
                 }
                 // gb
                 if (loadIndex == 3) {
                     gb = actor;
-                    actorService.setLevel(gb, 15);
-                    actorService.setGroup(gb, StoryGame.GROUP_PLAYER);
+                    gameService.setLevel(gb, 15);
+                    gameService.setGroup(gb, StoryGame.GROUP_PLAYER);
                 }
                 // gbsmall
                 if (loadIndex >= 4 && loadIndex <= 5) {
-                    actorService.setLevel(actor, 2);
-                    actorService.setGroup(actor, StoryGame.GROUP_PLAYER);
+                    gameService.setLevel(actor, 2);
+                    gameService.setGroup(actor, StoryGame.GROUP_PLAYER);
                     gbSmalls.add(actor);
                 }
                 actorService.setLocation(actor, game.getGbPosition());
@@ -208,7 +210,7 @@ public class StoryGbTask1 extends AbstractTaskStep {
         
         // 4.测试敌人是否全部已死
         if (stage == 4) {
-            if (checkAllEnemyDead() && !actorService.isDead(player)) {
+            if (checkAllEnemyDead() && !gameService.isDead(player)) {
                 stage = 5;
             }
             return;
@@ -217,7 +219,7 @@ public class StoryGbTask1 extends AbstractTaskStep {
         // 5.古柏与小樱的对话
         if (stage == 5) {
             // 不让乱动，不然在对话的时候会执行idle行为
-            logicService.setAutoLogic(gb, false);
+            gameService.setAutoLogic(gb, false);
             actionService.playAction(gb, null);
             skillNetwork.playSkill(gb, skillService.getSkillWaitDefault(gb), true);
             
@@ -248,7 +250,7 @@ public class StoryGbTask1 extends AbstractTaskStep {
         
         if (stage == 8) {
             if (gotBook) {
-                logicService.setAutoLogic(gb, true);
+                gameService.setAutoLogic(gb, true);
                 finished = true;
                 stage = 9;
             }
@@ -372,7 +374,7 @@ public class StoryGbTask1 extends AbstractTaskStep {
         Entity e1 = enemies.get(1);
         Entity e2 = enemies.get(2);
         
-        actorNetwork.setTarget(e0, gb);
+        gameNetwork.setTarget(e0, gb.getEntityId());
         
         talk1 = new TalkImpl();
         talk1.face(e0, gb, true);
@@ -420,16 +422,16 @@ public class StoryGbTask1 extends AbstractTaskStep {
     
     // 将actor的目标设置为enemy,如果each为true,则同时将enemy的目标设置为actor
     private void setTarget(Entity actor, Entity target, boolean each) {
-        actorNetwork.setTarget(actor, target);
+        gameNetwork.setTarget(actor, target.getEntityId());
         if (each) {
-            actorNetwork.setTarget(target, actor);
+            gameNetwork.setTarget(target, actor.getEntityId());
         }
     }
     
     // 检测是否所有敌人已死
     private boolean checkAllEnemyDead() {
         for (Entity a : enemies) {
-            if (!actorService.isDead(a)) {
+            if (!gameService.isDead(a)) {
                 return false;
             }
         }

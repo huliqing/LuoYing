@@ -5,6 +5,7 @@
  */
 package name.huliqing.ly.layer.network;
 
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.network.HostedConnection;
 import name.huliqing.luoying.Inject;
@@ -51,6 +52,7 @@ public interface GameNetwork extends Inject {
      */
     void talk(Talk talk);
     
+    // remove20161106
 //    /**
 //     * 让actor跟随目标target角色
 //     * @param actor
@@ -65,4 +67,24 @@ public interface GameNetwork extends Inject {
      */
     void playRunToPos(Entity actor, Vector3f worldPos);
     
+    void setLevel(Entity entity, int level);
+    void setGroup(Entity entity, int group);
+    void setTeam(Entity entity, int team);
+    void setAutoLogic(Entity entity, boolean autoLogic);
+    void setTarget(Entity entity, long target);
+    void setFollow(Entity entity, long target);
+    void setEssential(Entity entity, boolean essential);
+    void setColor(Entity entity, ColorRGBA color);
+    /**
+     * 把partner设置为entity的同伴
+     * @param entity
+     * @param partner 
+     */
+    void setPartner(Entity entity, Entity partner);
+    
+    /**
+     * 杀死一个角色
+     * @param entity 
+     */
+    void kill(Entity entity);
 }

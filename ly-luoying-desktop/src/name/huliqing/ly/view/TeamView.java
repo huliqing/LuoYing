@@ -15,6 +15,7 @@ import name.huliqing.luoying.ui.ListView;
 import name.huliqing.luoying.ui.Row;
 import name.huliqing.luoying.ui.UI;
 import name.huliqing.luoying.ui.UI.Listener;
+import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.ly.layer.service.GameService;
 
 /**
@@ -25,8 +26,8 @@ public class TeamView extends LinearLayout {
 //    private final PlayService playService = Factory.get(PlayService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final GameService gameService = Factory.get(GameService.class);
-//    private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
+    private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     
     // 组ID，所有匹配该ID的角色都将添加到当前面板中
     private int teamId;
@@ -89,7 +90,7 @@ public class TeamView extends LinearLayout {
      */
     public void checkAddOrRemove(Entity actor) {
         // teamId不匹配则移出队伍
-        int team = actorService.getTeam(actor);
+        int team = gameService.getTeam(actor);
         if (team != teamId) {
             removeActor(actor);
             return;
@@ -204,7 +205,7 @@ public class TeamView extends LinearLayout {
                     Entity player = gameService.getPlayer();
                     Entity target = facePanel.getActor();
                     if (player != null && target != null && player != target) {
-                        actorNetwork.setFollow(player, target.getData().getUniqueId()); 
+                        gameNetwork.setFollow(player, target.getData().getUniqueId()); 
                         
                     }
                 }

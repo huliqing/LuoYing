@@ -7,7 +7,6 @@ package name.huliqing.luoying.object.attribute;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.LuoYingException;
 import name.huliqing.luoying.data.AttributeData;
@@ -20,7 +19,7 @@ import name.huliqing.luoying.object.el.CustomEl;
  * @author huliqing
  */
 public class RelateBooleanAttribute extends BooleanAttribute implements AttributeListener, ValueChangeListener<Object>{
-    private static final Logger LOG = Logger.getLogger(RelateBooleanAttribute.class.getName());
+//    private static final Logger LOG = Logger.getLogger(RelateBooleanAttribute.class.getName());
     private final ElService elService = Factory.get(ElService.class);
     private AttributeManager attributeManager;
     

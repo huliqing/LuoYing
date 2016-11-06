@@ -52,7 +52,10 @@ public class ItemShortcut extends BaseUIShortcut<ItemData> implements ItemListen
             // 一些物品在执行前必须设置目标对象。
             // 注意：这个方法必须放在这里，playService.getTarget()是获取当前游戏主目标，是“玩家行为”，不能把它
             // 放到skillNetwork.playSkill中去。
-            actorNetwork.setTarget(actor, gameService.getTarget());
+            Entity target = gameService.getTarget();
+            if (target != null) {
+                gameNetwork.setTarget(actor, target.getEntityId());
+            }
             
             itemNetwork.useItem(actor, objectData.getId());
         }

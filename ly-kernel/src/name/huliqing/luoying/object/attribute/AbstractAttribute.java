@@ -15,9 +15,10 @@ import name.huliqing.luoying.data.AttributeData;
  */
 public abstract class AbstractAttribute<T> implements Attribute<T> {
     
-    /** return \"value\" */
+    /** return "value" */
     protected final static String ATTR_VALUE = "value";
-
+    
+    protected String name;
     protected AttributeData data;
     protected boolean initialized;
     protected T value;
@@ -31,6 +32,7 @@ public abstract class AbstractAttribute<T> implements Attribute<T> {
     @Override
     public void setData(AttributeData data) {
         this.data = data;
+        name = data.getAsString("name");
     }
     
     @Override
@@ -45,7 +47,7 @@ public abstract class AbstractAttribute<T> implements Attribute<T> {
 
     @Override
     public String getName() {
-        return data.getName();
+        return name;
     }
     
     @Override
@@ -55,9 +57,11 @@ public abstract class AbstractAttribute<T> implements Attribute<T> {
     
     @Override
     public void setValue(T newValue) {
-        T oldValue = this.value;
-        this.value = newValue;
-        notifyValueChangeListeners(oldValue, this.value);
+        T oldValue = value;
+        value = newValue;
+        if (oldValue != newValue) {
+            notifyValueChangeListeners(oldValue, value);
+        }
     }
     
     /**
@@ -90,7 +94,7 @@ public abstract class AbstractAttribute<T> implements Attribute<T> {
      * @param newValue 
      */
     protected void notifyValueChangeListeners(T oldValue, T newValue) {
-        if (listeners != null && oldValue != newValue) {
+        if (listeners != null) {
             for (int i = 0; i < listeners.size(); i++) {
                 listeners.get(i).onValueChanged(this, oldValue, newValue);
             }

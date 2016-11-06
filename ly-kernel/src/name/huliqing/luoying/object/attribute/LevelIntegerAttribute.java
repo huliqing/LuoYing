@@ -25,7 +25,7 @@ public class LevelIntegerAttribute extends IntegerAttribute implements LevelAttr
     // 等级值只能通过设置等级来设置
     private int levelValue;
     // 动态值可以进行随时改变
-    private int dynamicValue;
+    private int dynamicValue; 
     
     // 等级公式,通过这个id来创建一条等级公式
     private LNumberEl levelEl;

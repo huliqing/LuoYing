@@ -157,7 +157,7 @@ public class StoryTreasureTask2 extends AbstractTaskStep {
                     timerView.setStartTime(60 * mins[0]);
                     timerView.setUseTime(60 * mins[0]);
                     startPanel.removeFromParent();
-                    actorNetwork.setTeam(treasure, actorService.getTeam(player));
+                    gameNetwork.setTeam(treasure, gameService.getTeam(player));
                     playNetwork.addEntity(timerView);
                     stage = 1;
                 }
@@ -171,7 +171,7 @@ public class StoryTreasureTask2 extends AbstractTaskStep {
                     timerView.setStartTime(60 * mins[1]);
                     timerView.setUseTime(60 * mins[1]);
                     startPanel.removeFromParent();
-                    actorNetwork.setTeam(treasure, actorService.getTeam(player));
+                    gameNetwork.setTeam(treasure, gameService.getTeam(player));
                     playNetwork.addEntity(timerView);
                     stage = 1;
                 }
@@ -185,7 +185,7 @@ public class StoryTreasureTask2 extends AbstractTaskStep {
                     timerView.setStartTime(60 * mins[2]);
                     timerView.setUseTime(60 * mins[2]);
                     startPanel.removeFromParent();
-                    actorNetwork.setTeam(treasure, actorService.getTeam(player));
+                    gameNetwork.setTeam(treasure, gameService.getTeam(player));
                     playNetwork.addEntity(timerView);
                     stage = 1;
                 }
@@ -210,7 +210,7 @@ public class StoryTreasureTask2 extends AbstractTaskStep {
 
             @Override
             public Entity onAddBefore(Entity actor) {
-                actorService.setGroup(actor, game.groupEnemy);
+                gameService.setGroup(actor, game.groupEnemy);
                 skillService.playSkill(actor, skillService.getSkillWaitDefault(actor), false);
 
                 TempVars tv = TempVars.get();
@@ -227,7 +227,7 @@ public class StoryTreasureTask2 extends AbstractTaskStep {
                 tv.release();
                 
                 int level = (int) (timerView.getTimeUsed() / 60);
-                actorService.setLevel(actor, level > 15 ? 15 : level); // 限制最高15级
+                gameService.setLevel(actor, level > 15 ? 15 : level); // 限制最高15级
                 return actor;
             }
         });
@@ -270,7 +270,7 @@ public class StoryTreasureTask2 extends AbstractTaskStep {
             }
             
             // 任务失败检测
-            if (treasure != null && actorService.isDead(treasure)) {
+            if (treasure != null && gameService.isDead(treasure)) {
                 gameNetwork.addMessage(get(ResConstants.TASK_FAILURE), MessageType.notice);
                 gameNetwork.addMessage(get(ResConstants.COMMON_BACK_TO_TRY_AGAIN), MessageType.notice);
                 playNetwork.addEntity((View)Loader.load(IdConstants.VIEW_TEXT_FAILURE));
@@ -388,7 +388,7 @@ public class StoryTreasureTask2 extends AbstractTaskStep {
 //        int alive = 0;
 //        for (Entity a : actors) {
 //            if (actorService.getGroup(a) == game.groupEnemy 
-//                    && !actorService.isDead(a)
+//                    && !gameService.isDead(a)
 //                    && actorService.distance(a, player) < 20
 //                    ) {
 //                alive++;
@@ -404,8 +404,8 @@ public class StoryTreasureTask2 extends AbstractTaskStep {
     private void setAllEnemyTarget(Entity actor) {
         List<Actor> actors = game.getScene().getEntities(Actor.class, null);
         for (Entity a : actors) {
-            if (!actorService.isDead(a) && actorService.isEnemy(a, actor)) {
-                actorNetwork.setTarget(a, actor);
+            if (!gameService.isDead(a) && gameService.isEnemy(a, actor)) {
+                gameNetwork.setTarget(a, actor.getEntityId());
             }
         }
     }
@@ -422,9 +422,9 @@ public class StoryTreasureTask2 extends AbstractTaskStep {
         public void callback(Entity actor) {
             companion = actor;
             actorService.setLocation(companion, companionPosition[FastMath.nextRandomInt(0, companionPosition.length - 1)]);
-            actorService.setLevel(companion, 40);
-            actorService.setPartner(player, actor);
-            actorService.setTeam(companion, actorService.getTeam(player));
+            gameService.setLevel(companion, 40);
+            gameService.setPartner(player, actor);
+            gameService.setTeam(companion, gameService.getTeam(player));
             skillService.playSkill(companion, skillService.getSkillWaitDefault(companion), false);
             // 同伴进入战场后，刷新器不再刷怪。
             sceneBuilder.setEnabled(false);

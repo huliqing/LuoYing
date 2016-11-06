@@ -11,6 +11,7 @@ import com.jme3.asset.DesktopAssetManager;
 import com.jme3.font.BitmapFont;
 import com.jme3.input.InputManager;
 import com.jme3.math.Vector2f;
+import com.jme3.math.Vector4f;
 import com.jme3.network.serializing.Serializer;
 import com.jme3.network.serializing.serializers.MapSerializer;
 import com.jme3.renderer.RenderManager;
@@ -127,7 +128,6 @@ import name.huliqing.luoying.object.anim.MoveAnim;
 import name.huliqing.luoying.object.anim.RandomRotationAnim;
 import name.huliqing.luoying.object.anim.RotationAnim;
 import name.huliqing.luoying.object.anim.ScaleAnim;
-import name.huliqing.luoying.loader.AttributeDataLoader;
 import name.huliqing.luoying.loader.BulletDataLoader;
 import name.huliqing.luoying.object.bullet.CurveBullet;
 import name.huliqing.luoying.object.bullet.CurveTrailBullet;
@@ -241,7 +241,6 @@ import name.huliqing.luoying.object.talent.AttributeTalent;
 import name.huliqing.luoying.loader.TalentDataLoader;
 import name.huliqing.luoying.object.task.CollectTask;
 import name.huliqing.luoying.loader.TaskDataLoader;
-import name.huliqing.luoying.loader.ModuleDataLoader;
 import name.huliqing.luoying.loader.PlantEnvLoader;
 import name.huliqing.luoying.loader.RandomSceneDataLoader;
 import name.huliqing.luoying.mess.MessActorSetLocation;
@@ -267,6 +266,7 @@ import name.huliqing.luoying.object.attribute.LimitIntegerAttribute;
 import name.huliqing.luoying.object.attribute.LongAttribute;
 import name.huliqing.luoying.object.attribute.StringAttribute;
 import name.huliqing.luoying.object.attribute.StringListAttribute;
+import name.huliqing.luoying.object.attribute.Vector4fAttribute;
 import name.huliqing.luoying.object.define.MatDefine;
 import name.huliqing.luoying.object.define.SkillTagDefine;
 import name.huliqing.luoying.object.define.SkinPartDefine;
@@ -293,6 +293,7 @@ import name.huliqing.luoying.object.item.StateItem;
 import name.huliqing.luoying.object.item.StateRemoveItem;
 import name.huliqing.luoying.object.item.SummonItem;
 import name.huliqing.luoying.object.item.TestItem;
+import name.huliqing.luoying.object.module.ColorModule;
 import name.huliqing.luoying.object.module.DropModule;
 import name.huliqing.luoying.object.module.LevelModule;
 import name.huliqing.luoying.object.module.PhysicsModule;
@@ -300,6 +301,7 @@ import name.huliqing.luoying.object.scene.SimpleScene;
 import name.huliqing.luoying.object.slot.Slot;
 import name.huliqing.luoying.object.state.BooleanAttributeState;
 import name.huliqing.luoying.object.state.GroupState;
+import name.huliqing.luoying.serializer.Vector4Serializer;
 import name.huliqing.luoying.xml.Data;
 import name.huliqing.luoying.xml.DataFactory;
 import name.huliqing.luoying.xml.Proto;
@@ -349,6 +351,8 @@ public class LuoYing {
     }
 
     private static void registerSerializer() {
+        
+        Serializer.registerClass(Vector4f.class,  new Vector4Serializer());
 
         Serializer.registerClass(Proto.class);
         Serializer.registerClass(AttributeApply.class);
@@ -407,18 +411,6 @@ public class LuoYing {
         //ActorAnim
         DataFactory.register("actorAnimCurveMove",  AnimData.class, AnimDataLoader.class, ActorCurveMove.class);
         
-        // ActorLogic
-        DataFactory.register("logicFight",  LogicData.class, LogicDataLoader.class, FightLogic.class);
-        DataFactory.register("logicFollow",  LogicData.class, LogicDataLoader.class,  FollowLogic.class);
-        DataFactory.register("logicNotify",  LogicData.class, LogicDataLoader.class,  NotifyLogic.class);
-        DataFactory.register("logicPlayer",  LogicData.class, LogicDataLoader.class,  PlayerLogic.class);
-        DataFactory.register("logicPosition",  LogicData.class, LogicDataLoader.class,  PositionLogic.class);
-        DataFactory.register("logicSearchEnemy",  LogicData.class, LogicDataLoader.class,  SearchEnemyLogic.class);
-        DataFactory.register("logicAttributeChange",  LogicData.class, LogicDataLoader.class,  AttributeChangeLogic.class);
-        DataFactory.register("logicDefend",  LogicData.class, LogicDataLoader.class,  DefendLogic.class);
-        DataFactory.register("logicIdle",  LogicData.class, LogicDataLoader.class,  IdleLogic.class);
-        DataFactory.register("logicShop",  LogicData.class, LogicDataLoader.class,  ShopLogic.class);
-        
         // Anim
         DataFactory.register("animMove",  AnimData.class, AnimDataLoader.class, MoveAnim.class); 
         DataFactory.register("animCurveMove",  AnimData.class, AnimDataLoader.class, CurveMoveAnim.class);
@@ -428,16 +420,17 @@ public class LuoYing {
         DataFactory.register("animColor",  AnimData.class, AnimDataLoader.class, ColorAnim.class);
         
         // Attribute
-        DataFactory.register("attributeBoolean",  AttributeData.class, AttributeDataLoader.class, BooleanAttribute.class);
-        DataFactory.register("attributeFloat",  AttributeData.class, AttributeDataLoader.class, FloatAttribute.class);
-        DataFactory.register("attributeGroup",  AttributeData.class, AttributeDataLoader.class, GroupAttribute.class);
-        DataFactory.register("attributeInteger",  AttributeData.class, AttributeDataLoader.class, IntegerAttribute.class);
-        DataFactory.register("attributeLevelFloat",  AttributeData.class, AttributeDataLoader.class, LevelFloatAttribute.class);
-        DataFactory.register("attributeLevelInteger",  AttributeData.class, AttributeDataLoader.class, LevelIntegerAttribute.class);
-        DataFactory.register("attributeLimitInteger",  AttributeData.class, AttributeDataLoader.class, LimitIntegerAttribute.class);
-        DataFactory.register("attributeLong",  AttributeData.class, AttributeDataLoader.class, LongAttribute.class);
-        DataFactory.register("attributeString",  AttributeData.class, AttributeDataLoader.class, StringAttribute.class);
-        DataFactory.register("attributeStringList",  AttributeData.class, AttributeDataLoader.class, StringListAttribute.class);
+        DataFactory.register("attributeBoolean",  AttributeData.class, null, BooleanAttribute.class);
+        DataFactory.register("attributeFloat",  AttributeData.class, null, FloatAttribute.class);
+        DataFactory.register("attributeGroup",  AttributeData.class, null, GroupAttribute.class);
+        DataFactory.register("attributeInteger",  AttributeData.class, null, IntegerAttribute.class);
+        DataFactory.register("attributeLevelFloat",  AttributeData.class, null, LevelFloatAttribute.class);
+        DataFactory.register("attributeLevelInteger",  AttributeData.class, null, LevelIntegerAttribute.class);
+        DataFactory.register("attributeLimitInteger",  AttributeData.class, null, LimitIntegerAttribute.class);
+        DataFactory.register("attributeLong",  AttributeData.class, null, LongAttribute.class);
+        DataFactory.register("attributeString",  AttributeData.class, null, StringAttribute.class);
+        DataFactory.register("attributeStringList",  AttributeData.class, null, StringListAttribute.class);
+        DataFactory.register("attributeVector4f",  AttributeData.class, null, Vector4fAttribute.class);
         
         // Bullet
         DataFactory.register("bulletSimple",  BulletData.class, BulletDataLoader.class, SimpleBullet.class);
@@ -530,29 +523,38 @@ public class LuoYing {
         DataFactory.register("itemStateRemove",  ItemData.class, ItemDataLoader.class, StateRemoveItem.class);
         DataFactory.register("itemSummon",  ItemData.class, ItemDataLoader.class, SummonItem.class);
 
+        // Logic
+        DataFactory.register("logicFight",  LogicData.class, LogicDataLoader.class, FightLogic.class);
+        DataFactory.register("logicFollow",  LogicData.class, LogicDataLoader.class,  FollowLogic.class);
+        DataFactory.register("logicNotify",  LogicData.class, LogicDataLoader.class,  NotifyLogic.class);
+        DataFactory.register("logicPlayer",  LogicData.class, LogicDataLoader.class,  PlayerLogic.class);
+        DataFactory.register("logicPosition",  LogicData.class, LogicDataLoader.class,  PositionLogic.class);
+        DataFactory.register("logicSearchEnemy",  LogicData.class, LogicDataLoader.class,  SearchEnemyLogic.class);
+        DataFactory.register("logicAttributeChange",  LogicData.class, LogicDataLoader.class,  AttributeChangeLogic.class);
+        DataFactory.register("logicDefend",  LogicData.class, LogicDataLoader.class,  DefendLogic.class);
+        DataFactory.register("logicIdle",  LogicData.class, LogicDataLoader.class,  IdleLogic.class);
+        DataFactory.register("logicShop",  LogicData.class, LogicDataLoader.class,  ShopLogic.class);
+        
         // Magic
         DataFactory.register("magicState", MagicData.class, MagicDataLoader.class, StateMagic.class);
         DataFactory.register("magicAttributeHit", MagicData.class, MagicDataLoader.class, AttributeHitMagic.class);
 
         // Module 
-        DataFactory.register("moduleAction",  ModuleData.class, ModuleDataLoader.class, ActionModule.class);
-        DataFactory.register("moduleActor",  ModuleData.class, ModuleDataLoader.class, ActorModule.class);
-        DataFactory.register("moduleChannel",  ModuleData.class, ModuleDataLoader.class, ChannelModule.class);
-        DataFactory.register("moduleDrop",  ModuleData.class, ModuleDataLoader.class, DropModule.class);
-        DataFactory.register("moduleItem",  ModuleData.class, ModuleDataLoader.class, ItemModule.class);
-        DataFactory.register("moduleLevel",  ModuleData.class, ModuleDataLoader.class, LevelModule.class);
-        DataFactory.register("moduleLogic",  ModuleData.class, ModuleDataLoader.class, LogicModule.class);
-        DataFactory.register("modulePhysics",  ModuleData.class, ModuleDataLoader.class, PhysicsModule.class);
-        DataFactory.register("moduleResist",  ModuleData.class, ModuleDataLoader.class, ResistModule.class);
-        DataFactory.register("moduleSkill",  ModuleData.class, ModuleDataLoader.class, SkillModule.class);
-        DataFactory.register("moduleSkin",  ModuleData.class, ModuleDataLoader.class, SkinModule.class);
-        DataFactory.register("moduleState",  ModuleData.class, ModuleDataLoader.class, StateModule.class);
-        DataFactory.register("moduleTalent",  ModuleData.class, ModuleDataLoader.class, TalentModule.class);
-        DataFactory.register("moduleTask",  ModuleData.class, ModuleDataLoader.class, TaskModule.class);
-        
-        // remove20161025
-//        DataFactory.register("moduleAttribute",  ModuleData.class, ModuleDataLoader.class, AttributeModule.class);
-//        DataFactory.register("moduleChat",  ModuleData.class, ModuleDataLoader.class, ChatModule.class);
+        DataFactory.register("moduleAction",  ModuleData.class, null, ActionModule.class);
+        DataFactory.register("moduleActor",  ModuleData.class, null, ActorModule.class);
+        DataFactory.register("moduleChannel",  ModuleData.class, null, ChannelModule.class);
+        DataFactory.register("moduleColor",  ModuleData.class, null, ColorModule.class);
+        DataFactory.register("moduleDrop",  ModuleData.class, null, DropModule.class);
+        DataFactory.register("moduleItem",  ModuleData.class, null, ItemModule.class);
+        DataFactory.register("moduleLevel",  ModuleData.class, null, LevelModule.class);
+        DataFactory.register("moduleLogic",  ModuleData.class, null, LogicModule.class);
+        DataFactory.register("modulePhysics",  ModuleData.class, null, PhysicsModule.class);
+        DataFactory.register("moduleResist",  ModuleData.class, null, ResistModule.class);
+        DataFactory.register("moduleSkill",  ModuleData.class, null, SkillModule.class);
+        DataFactory.register("moduleSkin",  ModuleData.class, null, SkinModule.class);
+        DataFactory.register("moduleState",  ModuleData.class, null, StateModule.class);
+        DataFactory.register("moduleTalent",  ModuleData.class, null, TalentModule.class);
+        DataFactory.register("moduleTask",  ModuleData.class, null, TaskModule.class);
         
         // Position
         DataFactory.register("positionRandomSphere",  PositionData.class, PositionDataLoader.class, RandomSpherePosition.class);

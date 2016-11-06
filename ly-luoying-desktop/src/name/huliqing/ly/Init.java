@@ -17,7 +17,6 @@ import name.huliqing.luoying.data.GameLogicData;
 import name.huliqing.luoying.data.ModuleData;
 import name.huliqing.luoying.loader.GameDataLoader;
 import name.huliqing.luoying.loader.GameLogicDataLoader;
-import name.huliqing.luoying.loader.ModuleDataLoader;
 import name.huliqing.luoying.xml.DataFactory;
 import name.huliqing.ly.data.ChatData;
 import name.huliqing.ly.data.ViewData;
@@ -109,7 +108,7 @@ public class Init {
         DataFactory.register("chatTask",  ChatData.class, ChatDataLoader.class, TaskChat.class);
         
         // actor module
-        DataFactory.register("moduleChat", ModuleData.class, ModuleDataLoader.class, ChatModule.class);
+        DataFactory.register("moduleChat", ModuleData.class, null, ChatModule.class);
         
         // View
         DataFactory.register("viewText",  ViewData.class, ViewDataLoader.class, TextView.class);

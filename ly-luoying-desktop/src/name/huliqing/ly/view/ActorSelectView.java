@@ -23,6 +23,8 @@ import name.huliqing.luoying.ui.LinearLayout;
 import name.huliqing.luoying.ui.Text;
 import name.huliqing.luoying.ui.UIFactory;
 import name.huliqing.luoying.ui.UI;
+import name.huliqing.ly.layer.network.GameNetwork;
+import name.huliqing.ly.layer.service.GameService;
 
 /**
  *
@@ -33,6 +35,8 @@ public class ActorSelectView extends LinearLayout {
     private final ActorService actorService = Factory.get(ActorService.class);
     private final SkinService skinService = Factory.get(SkinService.class);
     private final LogicService logicService = Factory.get(LogicService.class);
+    private final GameService gameService = Factory.get(GameService.class);
+    private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     
     public interface SelectedListener {
         
@@ -217,7 +221,7 @@ public class ActorSelectView extends LinearLayout {
 //        actor.setLocation(new Vector3f(0, 0.75f, 0));
 //        actor.setViewDirection(new Vector3f(1, 0, 0));
 //        actor.setEnabled(false);
-        logicService.setAutoLogic(actor, false); // 必须去掉AI
+        gameService.setAutoLogic(actor, false); // 必须去掉AI
         actorService.setLocation(actor, new Vector3f(0, 0.75f, 0));
         actorService.setViewDirection(actor, new Vector3f(1, 0, 0));
         actorService.setPhysicsEnabled(actor, false);

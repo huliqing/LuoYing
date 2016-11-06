@@ -10,10 +10,12 @@ import name.huliqing.ly.enums.MessageType;
 import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.manager.ResourceManager;
 import name.huliqing.luoying.object.Loader;
+import name.huliqing.luoying.object.attribute.BooleanAttribute;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.game.Game;
 import name.huliqing.luoying.object.gamelogic.AbstractGameLogic;
 import name.huliqing.luoying.object.module.ActorModule;
+import name.huliqing.ly.constants.AttrConstants;
 import name.huliqing.ly.constants.IdConstants;
 import name.huliqing.ly.object.view.View;
 import name.huliqing.ly.layer.network.GameNetwork;
@@ -32,13 +34,12 @@ public class PlayerDeadCheckerGameLogic extends AbstractGameLogic {
     private Entity player;
     private boolean dead;
     private boolean displayed;
-    private ActorModule actorModule;
+    private BooleanAttribute deadAttribute;
 
     @Override
     public void initialize(Game game) {
         super.initialize(game); 
         this.game = game;
-        
     }
     
     public boolean isDead() {
@@ -47,22 +48,21 @@ public class PlayerDeadCheckerGameLogic extends AbstractGameLogic {
 
     @Override
     protected void doLogic(float tpf) {
-        
         if (player == null) {
             player = gameService.getPlayer();
         }
-        if (actorModule == null && player != null) {
-            actorModule = player.getModuleManager().getModule(ActorModule.class);
-            if (actorModule == null) {
+        if (player != null) {
+            deadAttribute = player.getAttributeManager().getAttribute(AttrConstants.DEAD, BooleanAttribute.class);
+            if (deadAttribute == null) {
                 setEnabled(false);
                 return;
             }
         }
         
-        if (actorModule == null) {
+        if (deadAttribute == null) {
             return;
         }
-        if (!displayed && actorModule.isDead()) {
+        if (!displayed && deadAttribute.getValue()) {
             dead = true;
             displayed = true;
             gameNetwork.addMessage(ResourceManager.get(ResConstants.TASK_FAILURE), MessageType.notice);

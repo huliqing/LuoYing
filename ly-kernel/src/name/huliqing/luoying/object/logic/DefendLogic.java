@@ -244,7 +244,7 @@ public class DefendLogic extends AbstractLogic implements SkillListener, SkillPl
 //                , new Object[] {actor.getData().getId(), defendRateAttribute, defendSkills.size()});
         if (defendRateAttribute != null && defendSkills.size() > 0) {
 //            float defendRate = actor.getAttributeManager().getNumberAttributeValue(defendRateAttribute, 0);
-            float defendRate = entityService.getNumberAttributeValue(actor, duckRateAttribute, 0);
+            float defendRate = entityService.getNumberAttributeValue(actor, duckRateAttribute, 0).floatValue();
             if(defendRate >= FastMath.nextRandomFloat()) {
                 Skill defendSkill = defendSkills.get(FastMath.nextRandomInt(0, defendSkills.size() - 1));
                 skillNetwork.playSkill(actor, defendSkill, false);
@@ -259,7 +259,7 @@ public class DefendLogic extends AbstractLogic implements SkillListener, SkillPl
 //                , new Object[] {actor.getData().getId(), duckRateAttribute, duckSkills.size()});
         if (duckRateAttribute != null && duckSkills.size() > 0) {
 //            float duckRate = actor.getAttributeManager().getNumberAttributeValue(defendRateAttribute, 0);
-            float duckRate = entityService.getNumberAttributeValue(actor, defendRateAttribute, 0);
+            float duckRate = entityService.getNumberAttributeValue(actor, defendRateAttribute, 0).floatValue();
             if (duckRate >= FastMath.nextRandomFloat()) {
                 Skill duckSkill = duckSkills.get(FastMath.nextRandomInt(0, duckSkills.size() - 1));
                 skillNetwork.playSkill(actor, duckSkill, false);

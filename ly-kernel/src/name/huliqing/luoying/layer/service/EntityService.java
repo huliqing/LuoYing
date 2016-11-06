@@ -15,11 +15,20 @@ import name.huliqing.luoying.object.entity.Entity;
 public interface EntityService extends EntityNetwork {
     
     /**
-     * 获取指定属性的数值，如果目标属性不是Number类型或
+     * 获取指定属性的数值，如果属性不存在或者不是Number类型，则返回defValue。
      * @param entity
      * @param attributeName
      * @param defValue
      * @return 
      */
-    float getNumberAttributeValue(Entity entity, String attributeName, float defValue);
+    Number getNumberAttributeValue(Entity entity, String attributeName, float defValue);
+    
+    /**
+     * 获取指定Boolean属性的值，如果属性不存在或者不是Boolean类型，则返回defValue。
+     * @param entity
+     * @param attributeName
+     * @param defValue
+     * @return 
+     */
+    boolean getBooleanAttributeValue(Entity entity, String attributeName, boolean defValue);
 }

@@ -12,6 +12,8 @@ import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.object.entity.Entity; 
 import name.huliqing.luoying.object.skill.Skill;
+import name.huliqing.ly.layer.network.GameNetwork;
+import name.huliqing.ly.layer.service.GameService;
 
 /**
  * 处理谈话逻辑：朝向, 使用朝向角色或是朝向位置只能二选一。
@@ -21,6 +23,8 @@ public class TalkLogicFace extends AbstractTalkLogic {
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
+    private final GameService gameService = Factory.get(GameService.class);
+    private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     
     // remove20160920
 //    // 当角色在执行这些技能的时候不能进行“朝向”，除非强制执行（force=true)
@@ -60,7 +64,7 @@ public class TalkLogicFace extends AbstractTalkLogic {
     @Override
     protected void doInit() {
         // 质量小于0的角色不能进行朝向，一般为静物
-        if (actorService.getMass(actor) <= 0 || actorService.isDead(actor))
+        if (gameService.isDead(actor))
             return;
         
         TempVars tv = TempVars.get();

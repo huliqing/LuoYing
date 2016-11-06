@@ -27,7 +27,6 @@ import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.layer.service.StateService;
 import name.huliqing.luoying.object.anim.Loop;
 import name.huliqing.luoying.object.anim.ColorAnim;
-import name.huliqing.luoying.object.attribute.BooleanAttribute;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.ly.object.chat.Chat;
@@ -37,6 +36,7 @@ import name.huliqing.luoying.ui.LinearLayout;
 import name.huliqing.luoying.ui.LinearLayout.Layout;
 import name.huliqing.luoying.ui.Text;
 import name.huliqing.luoying.ui.UI;
+import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.ly.layer.service.GameService;
 
 /**
@@ -49,6 +49,7 @@ public final class FaceView extends LinearLayout {
     private final ActorService actorService = Factory.get(ActorService.class);
     private final ChatService chatService = Factory.get(ChatService.class);
     private final GameService gameService = Factory.get(GameService.class);
+    private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     
     private Entity actor;
     private NumberAttribute lifeAttribute;
@@ -411,7 +412,7 @@ public final class FaceView extends LinearLayout {
             Entity player = gameService.getPlayer();
             if (player != null) {
                 // 显示骷髅头
-                int levelDis = actorService.getLevel(actor) - actorService.getLevel(player);
+                int levelDis = gameService.getLevel(actor) - gameService.getLevel(player);
                 skull.setVisible(levelDis >= 10);
 
                 // 根据级别差距显示目标颜色

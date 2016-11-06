@@ -16,7 +16,7 @@ public class BooleanAttribute extends AbstractAttribute<Boolean> {
     @Override
     public void setData(AttributeData data) {
         super.setData(data); 
-        value = data.getAsBoolean("value", false);
+        value = data.getAsBoolean(ATTR_VALUE, false);
     }
 
 }

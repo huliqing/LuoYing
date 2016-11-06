@@ -18,7 +18,7 @@ public class LimitIntegerAttribute extends IntegerAttribute implements LimitAttr
     
     @Override
     public void setData(AttributeData data) {
-        super.setData(data);
+        super.setData(data); 
         minValue = data.getAsInteger("minValue", minValue);
         maxValue = data.getAsInteger("maxValue", maxValue);
         bindMinLimitAttribute = data.getAsString("bindMinLimitAttribute");

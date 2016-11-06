@@ -85,15 +85,15 @@ public class StoryTreasureTask1 extends AbstractTaskStep {
         conditionTreasureFound = false;
         helper = new Helper();
         player = game.getPlayer();
-        actorNetwork.setGroup(player, game.groupPlayer);
+        gameNetwork.setGroup(player, game.groupPlayer);
         
         treasureLoader = new ActorLoadHelper(IdConstants.ACTOR_TREASURE){
             @Override
             public void callback(Entity actor) {
                 treasure = actor;
                 actorService.setLocation(treasure, game.treasurePos);
-                actorService.setLevel(treasure, game.treasureLevel);
-                actorService.setGroup(treasure, game.groupPlayer);
+                gameService.setLevel(treasure, game.treasureLevel);
+                gameService.setGroup(treasure, game.groupPlayer);
                 playNetwork.addEntity(treasure);
             }
         };
@@ -103,8 +103,8 @@ public class StoryTreasureTask1 extends AbstractTaskStep {
             public void callback(Entity actor) {
                 victim = actor;
                 actorService.setLocation(victim, game.treasurePos.clone().addLocal(1, 0, 1));
-                actorService.setGroup(victim, game.groupPlayer);
-                actorService.setEssential(victim, true);// 设置为"必要的",这样不会被移除出场景
+                gameService.setGroup(victim, game.groupPlayer);
+                gameService.setEssential(victim, true);// 设置为"必要的",这样不会被移除出场景
                 stateService.addState(victim, IdConstants.STATE_SAFE, null);
 //                skillService.playSkill(actor, skillService.getSkill(actor, SkillType.wait), false);
                 playNetwork.addEntity(victim);
@@ -121,7 +121,7 @@ public class StoryTreasureTask1 extends AbstractTaskStep {
                 // 邪恶蜘蛛
                 spider = actor;
                 actorService.setLocation(spider, game.treasurePos.add(2, 0, 2));
-                actorService.setGroup(spider, game.groupEnemy);
+                gameService.setGroup(spider, game.groupEnemy);
                 stateService.addState(spider, IdConstants.STATE_SAFE, null);
                 playNetwork.addEntity(spider);
             }
@@ -162,7 +162,7 @@ public class StoryTreasureTask1 extends AbstractTaskStep {
         if (stage == 3) {
             // 杀死蜘蛛、与艾琳的对话逻辑
             doSaveVictim();
-            if (actorService.isDead(victim) && actorService.isDead(spider) && actorService.distance(victim, player) < 15) {
+            if (gameService.isDead(victim) && gameService.isDead(spider) && actorService.distance(victim, player) < 15) {
                 stage = 4;
             }
             return;
@@ -236,21 +236,21 @@ public class StoryTreasureTask1 extends AbstractTaskStep {
         }
         
         // 1.目标始终
-        Entity target = actorService.isDead(victim) ? player : victim;
-        if (actorService.getTarget(spider) != target) {
-            actorNetwork.setTarget(spider, target);
+        Entity target = gameService.isDead(victim) ? player : victim;
+        if (gameService.getTarget(spider) != target.getEntityId()) {
+            gameNetwork.setTarget(spider, target.getEntityId());
         }
         
         // 2.玩家接近时修改victim防御值,让她受伤而死
-        if (!actorService.isDead(victim) && actorService.distance(victim, player) <= 25 && stateService.existsState(victim, IdConstants.STATE_SAFE)) {
+        if (!gameService.isDead(victim) && actorService.distance(victim, player) <= 25 && stateService.existsState(victim, IdConstants.STATE_SAFE)) {
             stateNetwork.removeState(victim, IdConstants.STATE_SAFE);
         }
         // 3.如果受害者已死，则降低蜘蛛防御。
-        if (!actorService.isDead(spider) && actorService.isDead(victim) && stateService.existsState(spider, IdConstants.STATE_SAFE)) {
+        if (!gameService.isDead(spider) && gameService.isDead(victim) && stateService.existsState(spider, IdConstants.STATE_SAFE)) {
             stateNetwork.removeState(spider, IdConstants.STATE_SAFE);
         }
         
-        if (!actorService.isDead(victim)) {
+        if (!gameService.isDead(victim)) {
             if (victimTalkHelp.isEnd()) {
                 victimTalkHelp.delay(3f);
                 gameNetwork.speak(victim, get("talk1.aiLin.help"), 0);
@@ -275,7 +275,7 @@ public class StoryTreasureTask1 extends AbstractTaskStep {
                 @Override
                 public void onTalkEnd() {
                     // 让victim允许被清理出场景
-                    actorService.setEssential(victim, false);
+                    gameService.setEssential(victim, false);
                     // 结束当前任务
                     finished = true;
                     stage = 4;

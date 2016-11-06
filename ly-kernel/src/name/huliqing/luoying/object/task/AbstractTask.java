@@ -30,7 +30,8 @@ public abstract class AbstractTask<T extends TaskData> implements Task<T> {
     protected List<RewardAttribute> rewardAttributes;
     
     // ---- inner
-    protected Window detailWin;
+//    protected Window detailWin;
+    protected boolean initialized;
 
     @Override
     public void setData(T data) {
@@ -71,6 +72,24 @@ public abstract class AbstractTask<T extends TaskData> implements Task<T> {
     @Override
     public void updateDatas() {
         // ignore
+    }
+
+    @Override
+    public void initialize() {
+        if (initialized) {
+            throw new IllegalStateException("Task already initialized! taskId=" + getId() + ", actorId=" + actor.getData().getId());
+        }
+        initialized = true;
+    }
+
+    @Override
+    public boolean isInitialized() {
+        return initialized;
+    }
+
+    @Override
+    public void cleanup() {
+        initialized = false;
     }
 
     @Override

@@ -13,6 +13,7 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
+import com.jme3.math.Vector4f;
 import com.jme3.network.serializing.Serializable;
 import com.jme3.scene.UserData;
 import java.io.IOException;
@@ -57,19 +58,20 @@ public class Data implements Savable {
         return data == null || data.isEmpty();
     }
     
-    /**
-     * 检查某个参数中有多少个项，每个项以半角逗号分隔,如果参数不存在或没有值
-     * ，则返回0
-     * @param key
-     * @return 
-     */
-    public final int checkAttributeLength(String key) {
-        String value = getAsString(key);
-        if (value == null || value.trim().isEmpty()) {
-            return 0;
-        }
-        return value.split(",").length;
-    }
+    // remove20161107
+//    /**
+//     * 检查某个参数中有多少个项，每个项以半角逗号分隔,如果参数不存在或没有值
+//     * ，则返回0
+//     * @param key
+//     * @return 
+//     */
+//    public final int checkAttributeLength(String key) {
+//        String value = getAsString(key);
+//        if (value == null || value.trim().isEmpty()) {
+//            return 0;
+//        }
+//        return value.split(",").length;
+//    }
     
     /**
      * 设置一个参数值，如果value为null则清除该值。
@@ -269,10 +271,31 @@ public class Data implements Savable {
     }
     
     /**
-     * 获取参数值，并以Vector3f形式返回，原始格式必须如："x"或 "x,y" 或 "x,y,z"，
-     * 如果参数不对，将返回null.<br>
-     * 当只有x值时，则y = z =x; <br>
-     * 当只有x,y值时，z = 1; <br>
+     * 获取参数值，并以Vector2f形式返回，格式："x,y"
+     * @param key
+     * @return 
+     */
+    public final Vector2f getAsVector2f(String key) {
+        String temp = getAsString(key);
+        if (temp == null) 
+            return null;
+        String[] arr = temp.split(",");
+        return new Vector2f(Float.parseFloat(arr[0]), Float.parseFloat(arr[1]));
+    }
+    
+    /**
+     * 获取参数值，并以Vector2f形式返回，如果不存在指定的参数则以defValue返回
+     * @param key
+     * @param defValue
+     * @return 
+     */
+    public final Vector2f getAsVector2f(String key, Vector2f defValue) {
+        Vector2f temp = getAsVector2f(key);
+        return temp != null ? temp : defValue;
+    }
+    
+    /**
+     * 获取参数值，并以Vector3f形式返回，格式："x,y,z"
      * @param key
      * @return 
      */
@@ -281,24 +304,15 @@ public class Data implements Savable {
         if (temp == null) 
             return null;
         String[] arr = temp.split(",");
-        
-        float x,y,z; 
-        if (arr.length == 1) {
-            x = Float.parseFloat(arr[0]);
-            y = x;
-            z = x;
-        } else if (arr.length == 2) {
-            x = Float.parseFloat(arr[0]);
-            y = Float.parseFloat(arr[1]);
-            z = 1;
-        } else {
-            x = Float.parseFloat(arr[0]);
-            y = Float.parseFloat(arr[1]);
-            z = Float.parseFloat(arr[2]);
-        }
-        return new Vector3f(x,y,z);
+        return new Vector3f(Float.parseFloat(arr[0]), Float.parseFloat(arr[1]), Float.parseFloat(arr[2]));
     }
     
+    /**
+     * 获取参数值，如果不存在指定的参数则返回defValue
+     * @param key
+     * @param defValue
+     * @return 
+     */
     public final Vector3f getAsVector3f(String key, Vector3f defValue) {
         Vector3f temp = getAsVector3f(key);
         return temp != null ? temp : defValue;
@@ -317,31 +331,35 @@ public class Data implements Savable {
         Vector3f[] result = new Vector3f[arrStr.length];
         for (int i = 0; i < arrStr.length; i++) {
             String[] xyz = arrStr[i].split("\\|");
-            Vector3f vec = new Vector3f();
-            vec.setX(Float.parseFloat(xyz[0]));
-            vec.setY(Float.parseFloat(xyz[1]));
-            vec.setZ(Float.parseFloat(xyz[2]));
-            result[i] = vec;
+            result[i] = new Vector3f(Float.parseFloat(xyz[0]), Float.parseFloat(xyz[1]), Float.parseFloat(xyz[2]));
         }
         return result;
     }
     
-    public final Vector2f getAsVector2f(String key) {
+    /**
+     * 获取参数值，并以Vector4f形式返回，格式："x,y,z,w"
+     * @param key
+     * @return 
+     */
+    public final Vector4f getAsVector4f(String key) {
         String temp = getAsString(key);
         if (temp == null) 
             return null;
         String[] arr = temp.split(",");
-        if (arr.length < 2) {
-            return null;
-        }
-        Vector2f vec = new Vector2f();
-        vec.setX(Float.parseFloat(arr[0]));
-        vec.setY(Float.parseFloat(arr[1]));
-        return vec;
+        return new Vector4f(Float.parseFloat(arr[0])
+                , Float.parseFloat(arr[1])
+                , Float.parseFloat(arr[2])
+                , Float.parseFloat(arr[3]));
     }
     
-    public final Vector2f getAsVector2f(String key, Vector2f defValue) {
-        Vector2f temp = getAsVector2f(key);
+    /**
+     * 获取参数值，并以Vector4f形式返回，如果不存在指定参数则返回defValue
+     * @param key
+     * @param defValue
+     * @return 
+     */
+    public final Vector4f getAsVector4f(String key, Vector4f defValue) {
+        Vector4f temp = getAsVector4f(key);
         return temp != null ? temp : defValue;
     }
     
@@ -386,20 +404,10 @@ public class Data implements Savable {
         if (temp == null) 
             return null;
         String[] arr = temp.split(",");
-        ColorRGBA color = new ColorRGBA();
-        if (arr.length > 0) {
-            color.r = Float.parseFloat(arr[0]);
-        }
-        if (arr.length > 1) {
-            color.g = Float.parseFloat(arr[1]);
-        }
-        if (arr.length > 2) {
-            color.b = Float.parseFloat(arr[2]);
-        }
-        if (arr.length > 3) {
-            color.a = Float.parseFloat(arr[3]);
-        }
-        return color;
+        return new ColorRGBA(Float.parseFloat(arr[0])
+                , Float.parseFloat(arr[1])
+                , Float.parseFloat(arr[2])
+                , Float.parseFloat(arr[3]));
     }
     
     /**
@@ -413,6 +421,13 @@ public class Data implements Savable {
         return temp != null ? temp : defValue;
     }
     
+    /**
+     * 获取参数并以Savable对象返回，获取前你必须确定你要的类型是匹配的，否则会报错。
+     * @param <T>
+     * @param key
+     * @param type
+     * @return 
+     */
     public final <T extends Savable> T getAsSavable(String key, Class<T> type) {
         if (!data.containsKey(key)) {
             return null;

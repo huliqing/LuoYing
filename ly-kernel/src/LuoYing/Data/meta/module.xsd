@@ -22,6 +22,7 @@ xs:time
                 <xs:element ref="moduleActor" />
                 <xs:element ref="moduleAction" />
                 <xs:element ref="moduleChannel" />
+                <xs:element ref="moduleColor" />
                 <xs:element ref="moduleChat" />
                 <xs:element ref="moduleDrop" />
                 <xs:element ref="moduleItem" />
@@ -87,6 +88,24 @@ xs:time
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="moduleBase">
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="moduleColor">
+        <xs:annotation>
+            <xs:documentation>颜色模块, 给Entity添加该模块，这样允许运行时改变角色的材质颜色,
+                主要适应用于使用了Unshaded.j3md和Lighting.j3md材质的物体</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="moduleBase">
+                    <xs:attribute name="bindColorAttribute" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>Vector4Attribute,绑定Entity的颜色属性,这个Vector4Attribute类型的属性指定Entity的颜色。</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>

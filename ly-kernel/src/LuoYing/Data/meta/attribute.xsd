@@ -30,6 +30,7 @@ xs:time
                 <xs:element ref="attributeRelateBoolean" />
                 <xs:element ref="attributeString" />
                 <xs:element ref="attributeStringList" />
+                <xs:element ref="attributeVector4f" />
             </xs:all>
         </xs:complexType>
     </xs:element>
@@ -252,6 +253,21 @@ xs:time
                                 是否允许重复,默认情况下不允许存放重复元素, 比如已经有元素："apple,banana", 当再次添加元素"apple"时将会被忽略。
                             </xs:documentation>
                         </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="attributeVector4f">
+        <xs:annotation>
+            <xs:documentation>字符串集合</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="attributeBase">
+                    <xs:attribute name="value" type="xs:string" use="required" >
+                        <xs:annotation><xs:documentation>Vector4Attribute类型，包含4个元素，格式：“x,y,z,w”</xs:documentation></xs:annotation>
                     </xs:attribute>
                 </xs:extension>
             </xs:complexContent>

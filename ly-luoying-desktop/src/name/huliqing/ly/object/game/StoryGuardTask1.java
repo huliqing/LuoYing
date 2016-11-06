@@ -37,6 +37,7 @@ import name.huliqing.luoying.ui.UI.Listener;
 import name.huliqing.luoying.ui.state.UIState;
 import name.huliqing.ly.constants.IdConstants;
 import name.huliqing.ly.layer.network.GameNetwork;
+import name.huliqing.ly.layer.service.GameService;
 
 /**
  * 守护古柏,与古柏交谈
@@ -49,6 +50,7 @@ public class StoryGuardTask1 extends AbstractTaskStep {
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
+    private final GameService gameService = Factory.get(GameService.class);
     private final StoryGuardGame game;
 
     // 开始任务面板
@@ -105,8 +107,8 @@ public class StoryGuardTask1 extends AbstractTaskStep {
             public void callback(Entity actor, int loadIndex) {
                 gb = actor;
                 actorService.setLocation(gb, game.getSelfPosition());
-                actorService.setLevel(gb, 30);
-                actorService.setGroup(gb, actorService.getGroup(player));
+                gameService.setLevel(gb, 30);
+                gameService.setGroup(gb, gameService.getGroup(player));
                 playNetwork.addEntity(gb);
             }
         };
@@ -115,9 +117,9 @@ public class StoryGuardTask1 extends AbstractTaskStep {
         towerLoader = new ActorMultLoadHelper(selfTowers) {
             @Override
             public void callback(Entity actor, int loadIndex) {
-                actorService.setLevel(actor, 20);
+                gameService.setLevel(actor, 20);
                 actorService.setLocation(actor, getRandomPosition(game.getSelfPosition()));
-                actorService.setGroup(actor, actorService.getGroup(player));
+                gameService.setGroup(actor, gameService.getGroup(player));
                 playNetwork.addEntity(actor);
             }
         };

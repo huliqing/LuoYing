@@ -10,7 +10,9 @@ import name.huliqing.luoying.object.action.FollowAction;
 import name.huliqing.luoying.data.LogicData;
 import name.huliqing.luoying.layer.service.ActionService;
 import name.huliqing.luoying.object.action.Action;
+import name.huliqing.luoying.object.attribute.Attribute;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
+import name.huliqing.luoying.object.attribute.ValueChangeListener;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.utils.MathUtils;
 
@@ -18,7 +20,7 @@ import name.huliqing.luoying.utils.MathUtils;
  * 跟随逻辑
  * @author huliqing
  */
-public class FollowLogic extends AbstractLogic {
+public class FollowLogic extends AbstractLogic implements ValueChangeListener<Object>{
 //    private final static Logger logger = Logger.getLogger(FollowLogic.class.getName());
     private final ActionService actionService = Factory.get(ActionService.class);
     
@@ -54,11 +56,26 @@ public class FollowLogic extends AbstractLogic {
     public void initialize() {
         super.initialize();
         followAttribute = actor.getAttributeManager().getAttribute(bindFollowAttribute);
+        // 不监听followAttribute也可以，但是因为逻辑功能可能会有间隔和延迟的可能，监听可以让跟随对象发生变化时立即
+        // 触发跟随行为的变化。
+        if (followAttribute != null) {
+            followAttribute.addListener(this);
+        }
     }
     
     @Override
     public void cleanup() {
+        if (followAttribute != null) {
+            followAttribute.removeListener(this);
+        }
         super.cleanup();
+    }
+
+    @Override
+    public void onValueChanged(Attribute attribute, Object oldValue, Object newValue) {
+        if (attribute == followAttribute) {
+            doLogic(0); // 直接调用doLogic去改变跟随对象。
+        }
     }
     
     @Override
@@ -95,7 +112,8 @@ public class FollowLogic extends AbstractLogic {
     }
     
     private void doFollow() {
-        if (followAction.isEnd() && actor.getSpatial().getWorldTranslation().distance(target.getSpatial().getWorldTranslation()) > maxFollow) {
+        if (followAction.isEnd() && actor.getSpatial().getWorldTranslation()
+                .distance(target.getSpatial().getWorldTranslation()) > maxFollow) {
             lastFollowUsed = FastMath.nextRandomFloat() * (maxFollow - minFollow) + minFollow;
             followAction.setFollow(target.getSpatial());
             followAction.setNearest(lastFollowUsed);

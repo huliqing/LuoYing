@@ -12,11 +12,12 @@ import name.huliqing.luoying.constants.InterfaceConstants;
 import name.huliqing.luoying.constants.ResConstants;
 import name.huliqing.luoying.manager.ResourceManager;
 import name.huliqing.luoying.layer.service.ActorService;
-import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.skill.Skill;
 import name.huliqing.luoying.ui.UIFactory;
 import name.huliqing.luoying.ui.Row;
+import name.huliqing.ly.layer.network.GameNetwork;
+import name.huliqing.ly.layer.service.GameService;
 
 /**
  *
@@ -24,6 +25,8 @@ import name.huliqing.luoying.ui.Row;
  */
 public class SkillRow extends Row<Skill> {
     private final ActorService actorService = Factory.get(ActorService.class);
+    private final GameService gameService = Factory.get(GameService.class);
+    private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     
     private final SkillPanel skillPanel;
     
@@ -111,7 +114,7 @@ public class SkillRow extends Row<Skill> {
         num.setText(data.getData().getLevel() + "/" + data.getData().getMaxLevel());
         
         Entity actor = skillPanel.getActor();
-        if (actor != null && actorService.getLevel(actor) < data.getData().getLevelLimit()) {
+        if (actor != null && gameService.getLevel(actor) < data.getData().getLevelLimit()) {
             body.setDisabled(true);
             body.setNameText(ResourceManager.getObjectName(data.getData()) 
                     + "(" + ResourceManager.get(ResConstants.COMMON_NEED_LEVEL, new Object[] {data.getData().getLevelLimit()}) + ")");

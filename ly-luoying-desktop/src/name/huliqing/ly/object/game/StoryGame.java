@@ -17,6 +17,8 @@ import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.save.SaveStory;
 import name.huliqing.ly.constants.IdConstants;
+import name.huliqing.ly.layer.network.GameNetwork;
+import name.huliqing.ly.layer.service.GameService;
 
 /**
  * 故事模式的游戏方式
@@ -26,7 +28,8 @@ public abstract class StoryGame extends SimpleRpgGame {
     private final ActorService actorService = Factory.get(ActorService.class);
     private final PlayService playService = Factory.get(PlayService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
-//    private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
+    private final GameService gameService = Factory.get(GameService.class);
+    private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
 
     private final TaskStepControl taskControl = new TaskStepControl();
     
@@ -86,14 +89,14 @@ public abstract class StoryGame extends SimpleRpgGame {
             ArrayList<ActorData> actors = saveStory.getActors();
             for (ActorData ad : actors) {
                 Actor tempActor = Loader.load(ad);
-                if  (actorService.getOwner(tempActor) == tempActor.getData().getUniqueId()) {
+                if  (gameService.getOwner(tempActor) == tempActor.getData().getUniqueId()) {
                     getScene().addEntity(tempActor);
                 }
             }
         } else {
             if (Config.debug) {
                 actor = Loader.load(IdConstants.ACTOR_PLAYER_TEST);
-                actorService.setLevel(actor, 10);
+                gameService.setLevel(actor, 10);
             } else {
                 actor = Loader.load(IdConstants.ACTOR_PLAYER);
             }
@@ -107,9 +110,9 @@ public abstract class StoryGame extends SimpleRpgGame {
             actorService.setLocation(actor, terrainHeight.addLocal(0, 0.5f, 0));
         }
         // 给玩家指定分组
-        actorService.setGroup(actor, GROUP_PLAYER);
+        gameService.setGroup(actor, GROUP_PLAYER);
         // 故事模式玩家始终队伍分组为1
-        actorService.setTeam(actor, 1);
+        gameService.setTeam(actor, 1);
         // 让角色处于“等待”
         skillService.playSkill(actor, skillService.getSkillWaitDefault(actor), false);
         setPlayer(actor);

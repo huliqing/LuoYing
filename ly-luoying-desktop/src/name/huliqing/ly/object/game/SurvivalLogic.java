@@ -29,6 +29,7 @@ import name.huliqing.luoying.object.gamelogic.AbstractGameLogic;
 import name.huliqing.ly.constants.IdConstants;
 import name.huliqing.ly.object.view.TextView;
 import name.huliqing.ly.layer.network.GameNetwork;
+import name.huliqing.ly.layer.service.GameService;
 
 /**
  * 宝箱任务第二阶段：守护宝箱
@@ -43,8 +44,9 @@ public class SurvivalLogic<T extends GameLogicData> extends AbstractGameLogic<T>
     private final ActorService actorService = Factory.get(ActorService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
     
-    private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
+    private final GameService gameService = Factory.get(GameService.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
+    private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     
     // 任务位置
     private final SurvivalGame game;
@@ -79,7 +81,7 @@ public class SurvivalLogic<T extends GameLogicData> extends AbstractGameLogic<T>
         
         // 任务逻辑
         if (stage == 1) {
-            if (treasure != null && actorService.isDead(treasure)) {
+            if (treasure != null && gameService.isDead(treasure)) {
                 gameNetwork.addMessage(get(ResConstants.TASK_FAILURE), MessageType.notice);
                 TextView textView = (TextView) Loader.load(IdConstants.VIEW_TEXT_FAILURE);
                 textView.setUseTime(-1);
@@ -100,15 +102,15 @@ public class SurvivalLogic<T extends GameLogicData> extends AbstractGameLogic<T>
     private void doInit() {
         treasure = Loader.load(IdConstants.ACTOR_TREASURE);
         actorService.setLocation(treasure, game.treasurePos);
-        actorService.setGroup(treasure, game.SELF_GROUP);
-        actorService.setTeam(treasure, actorService.getTeam(game.getPlayer()));
+        gameService.setGroup(treasure, game.SELF_GROUP);
+        gameService.setTeam(treasure, gameService.getTeam(game.getPlayer()));
         playNetwork.addEntity(treasure);
         
         builderLogic = new ActorBuildLogic();
         builderLogic.setCallback(new Callback() {
             @Override
             public Entity onAddBefore(Entity actor) {
-                actorService.setGroup(actor, game.GROUP_ENEMY);
+                gameService.setGroup(actor, game.GROUP_ENEMY);
                 skillService.playSkill(actor, skillService.getSkillWaitDefault(actor), false);
 
                 TempVars tv = TempVars.get();
@@ -118,7 +120,7 @@ public class SurvivalLogic<T extends GameLogicData> extends AbstractGameLogic<T>
                     tv.vect1.set(terrainHeight);
                 }
                 PositionLogic runLogic = (PositionLogic) Loader.load(IdConstants.LOGIC_POSITION);
-                runLogic.setInterval(3);
+//                runLogic.setInterval(3);
                 runLogic.setPosition(tv.vect1);
                 runLogic.setNearestDistance(game.nearestDistance);
                 logicService.addLogic(actor, runLogic);
@@ -126,7 +128,7 @@ public class SurvivalLogic<T extends GameLogicData> extends AbstractGameLogic<T>
                 
                 // 等级达到最高之后不再刷新敌人
                 int level = levelLogic.getLevel();
-                actorService.setLevel(actor, level < 1 ? 1 : level);
+                gameService.setLevel(actor, level < 1 ? 1 : level);
                 return actor;
             }
         });

@@ -78,7 +78,7 @@ public class AttributeChangeGameLogic<T extends GameLogicData> extends AbstractG
     private void updateAttribute(Entity actor) {
         // useAttribute是角色的已有属性，这个属性的值将影响最终的apply值。
         // 比如角色的属性（生命恢复速度)将影响这个游戏逻辑最终要修改角色生命值的属性。
-        float useAttributeValue = entityService.getNumberAttributeValue(actor, useAttribute, 0);
+        float useAttributeValue = entityService.getNumberAttributeValue(actor, useAttribute, 0).floatValue();
         
         float applyValue = (baseValue + useAttributeValue) * interval * speed;
         

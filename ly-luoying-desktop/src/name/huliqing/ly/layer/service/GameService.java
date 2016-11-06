@@ -59,4 +59,23 @@ public interface GameService extends GameNetwork {
      * @param data 
      */
     void addShortcut(Entity actor, ObjectData data);
+    
+    boolean isDead(Entity entity);
+    boolean isRotatable(Entity entity);
+    boolean isBiology(Entity entity);
+    long getOwner(Entity entity);
+    int getGroup(Entity entity);
+    int getTeam(Entity entity);
+    int getLevel(Entity entity);
+    long getTarget(Entity entity);
+    boolean isEnemy(Entity entity, Entity target);
+    int getViewDistance(Entity entity);
+    
+    /**
+     * 寻找角色周围指定范围内最近的敌人,该敌人必须是活着的，如果没有敌人，则返回null.
+     * @param actor
+     * @param maxDistance 
+     * @return 
+     */
+    Entity findNearestEnemyExcept(Entity actor, float maxDistance);
 }

@@ -9,13 +9,10 @@ import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
 import name.huliqing.ly.enums.MessageType;
-import name.huliqing.luoying.layer.network.ActorNetwork;
 import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.service.ActorService;
-import name.huliqing.luoying.layer.service.DropService;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.layer.service.StateService;
@@ -23,9 +20,12 @@ import name.huliqing.luoying.logic.scene.ActorBuildSimpleLogic;
 import name.huliqing.luoying.logic.scene.ActorBuildSimpleLogic.Callback;
 import name.huliqing.luoying.logic.scene.ActorMultLoadHelper;
 import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.actor.Actor;
+import name.huliqing.luoying.object.drop.Drop;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.gamelogic.AbstractGameLogic;
+import name.huliqing.luoying.object.module.DropModule;
 import name.huliqing.luoying.utils.MathUtils;
 import name.huliqing.ly.constants.IdConstants;
 import name.huliqing.ly.layer.service.GameService;
@@ -35,15 +35,15 @@ import name.huliqing.ly.layer.service.GameService;
  * @author huliqing
  */
 public class StoryGbTask2 extends AbstractTaskStep{
-    private final static Logger LOG = Logger.getLogger(StoryGbTask2.class.getName());
+//    private final static Logger LOG = Logger.getLogger(StoryGbTask2.class.getName());
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
-    private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
+//    private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final PlayService playService = Factory.get(PlayService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final StateService stateService = Factory.get(StateService.class);
-    private final DropService dropService = Factory.get(DropService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
     private final GameService gameService = Factory.get(GameService.class);
+//    private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     private final StoryGbGame game;
     private Entity player;
     private boolean finished;
@@ -119,17 +119,22 @@ public class StoryGbTask2 extends AbstractTaskStep{
             public void callback(Entity actor, int loadIndex) {
                 if (loadIndex == 0) {
                     altar = actor;
-                    actorService.setLevel(altar, altarLevel);
-                    actorService.setGroup(altar, game.groupEnemy);
+                    gameService.setLevel(altar, altarLevel);
+                    gameService.setGroup(altar, game.groupEnemy);
                     stateService.addStateForce(altar, IdConstants.STATE_SAFE, 0, null);                    
-                    dropService.addDrop(altar, IdConstants.DROP_BOOK_007); // // 意外的收获:星光传送术掉落
+                    
+                    // 意外的收获:星光传送术掉落
+//                    dropService.addDrop(altar, IdConstants.DROP_BOOK_007);  // remove
+                    DropModule dm = altar.getModuleManager().getModule(DropModule.class);
+                    dm.addDrop((Drop)Loader.load(IdConstants.DROP_BOOK_007));
+                    
                     actorService.setLocation(altar, game.getEnemyPosition());
                 }
                 if (loadIndex > 0) {
-                    actorService.setLevel(actor, towerLevel);
-                    actorService.setGroup(actor, game.groupEnemy);
+                    gameService.setLevel(actor, towerLevel);
+                    gameService.setGroup(actor, game.groupEnemy);
+                    gameService.setColor(actor, enemyColor);
                     actorService.setLocation(actor, getRandomEnemyPosition());
-                    actorService.setColor(actor, enemyColor);
                     towers.add(actor);
                 }
                 playNetwork.addEntity(actor);
@@ -141,13 +146,16 @@ public class StoryGbTask2 extends AbstractTaskStep{
         Callback cb = new Callback() {
             @Override
             public void onload(Entity actor) {
-                actorService.setLevel(actor, enemyBaseLevel);
-                actorService.setGroup(actor, game.groupEnemy);
+                gameService.setLevel(actor, enemyBaseLevel);
+                gameService.setGroup(actor, game.groupEnemy);
                 // 如果是古柏幼仔，则让它掉落任务物品：树根
                 if (actor.getData().getId().equals(IdConstants.ACTOR_GB_SMALL)) {
-                    dropService.addDrop(actor, IdConstants.DROP_TREE_STUMP);
+                    
+//                    dropService.addDrop(actor, IdConstants.DROP_TREE_STUMP);
+                    DropModule dm = actor.getModuleManager().getModule(DropModule.class);
+                    dm.addDrop((Drop)Loader.load(IdConstants.DROP_TREE_STUMP));
                 }
-                actorService.setColor(actor, enemyColor);
+                gameService.setColor(actor, enemyColor);
             }
         };
         actorBuilder = new ActorBuildSimpleLogic();
@@ -165,7 +173,7 @@ public class StoryGbTask2 extends AbstractTaskStep{
         jaimeLoader = new ActorMultLoadHelper(IdConstants.ACTOR_JAIME) {
             @Override
             public void callback(Entity actor, int loadIndex) {
-                actorService.setGroup(actor, -1);
+                gameService.setGroup(actor, -1);
                 skillService.playSkill(actor, skillService.getSkillWaitDefault(actor), false);
                 playNetwork.addEntity(actor);
             }
@@ -217,7 +225,7 @@ public class StoryGbTask2 extends AbstractTaskStep{
         
         if (stage == 3) {
             // 如果祭坛死亡，则角色刷新器将停止工作，不再刷新敌人
-            if (actorService.isDead(altar)) {
+            if (gameService.isDead(altar)) {
                 game.removeLogic(actorBuilder);
                 stage = 4;
             }
@@ -307,7 +315,7 @@ public class StoryGbTask2 extends AbstractTaskStep{
         @Override
         protected void doLogic(float tpf) {
             for (Entity tower : towers) {
-                if (!actorService.isDead(tower)) {
+                if (!gameService.isDead(tower)) {
                     allTowerDead = false;
                     return;
                 }

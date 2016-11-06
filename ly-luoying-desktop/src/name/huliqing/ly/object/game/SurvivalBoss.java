@@ -45,6 +45,7 @@ public class SurvivalBoss<T extends GameLogicData> extends AbstractGameLogic<T> 
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
+    private final GameService gameService = Factory.get(GameService.class);
     
     private final SurvivalGame game;
     private final SurvivalLevelLogic levelLogic;
@@ -85,7 +86,7 @@ public class SurvivalBoss<T extends GameLogicData> extends AbstractGameLogic<T> 
     protected void doLogic(float tpf) {
         
         if (bossAdded && !bossDead) {
-            if (actorService.isDead(boss)) {
+            if (gameService.isDead(boss)) {
                 killAllEnemy();
                 killAllLogic();
                 View successView = Loader.load(IdConstants.VIEW_TEXT_SUCCESS);
@@ -134,7 +135,7 @@ public class SurvivalBoss<T extends GameLogicData> extends AbstractGameLogic<T> 
         List<Actor> enemies = findNearestFriendly(boss, Float.MAX_VALUE);
         if (!enemies.isEmpty()) {
             for (Entity a : enemies) {
-                actorNetwork.kill(a);
+                gameNetwork.kill(a);
             }
         }
     }
@@ -148,8 +149,8 @@ public class SurvivalBoss<T extends GameLogicData> extends AbstractGameLogic<T> 
     private Entity loadBoss() {
         Entity locBoss = Loader.load(IdConstants.ACTOR_FAIRY);
         actorService.setLocation(locBoss, actorBuilder.getRandomPosition());
-        actorService.setLevel(locBoss, levelLogic.getMaxLevel() + 5);
-        actorService.setGroup(locBoss, game.GROUP_ENEMY);
+        gameService.setLevel(locBoss, levelLogic.getMaxLevel() + 5);
+        gameService.setGroup(locBoss, game.GROUP_ENEMY);
         skillService.playSkill(locBoss, skillService.getSkillWaitDefault(locBoss), false);
         
         // 添加逻辑
@@ -179,7 +180,7 @@ public class SurvivalBoss<T extends GameLogicData> extends AbstractGameLogic<T> 
         List<Actor> xd = findNearestFriendly(locBoss, interval);
         if (!xd.isEmpty()) {
             for (Entity a : xd) {
-                actorNetwork.setFollow(a, locBoss.getData().getUniqueId());
+                gameNetwork.setFollow(a, locBoss.getData().getUniqueId());
             }
         }
         
@@ -198,7 +199,7 @@ public class SurvivalBoss<T extends GameLogicData> extends AbstractGameLogic<T> 
             tv.vect1.set(terrainHeight);
         }
         PositionLogic runLogic = (PositionLogic) Loader.load(IdConstants.LOGIC_POSITION);
-        runLogic.setInterval(3);
+//        runLogic.setInterval(3);
         runLogic.setPosition(tv.vect1);
         runLogic.setNearestDistance(game.nearestDistance);
         logicService.addLogic(actor, runLogic);
@@ -210,10 +211,10 @@ public class SurvivalBoss<T extends GameLogicData> extends AbstractGameLogic<T> 
         List<Actor> store = new ArrayList<Actor>();
         List<Actor> actors = actor.getScene().getEntities(Actor.class, actor.getSpatial().getWorldTranslation(), maxDistance, store);
         for (Actor a : actors) {
-            if (actorService.isDead(a) || actorService.isEnemy(a, actor)) {
+            if (gameService.isDead(a) || gameService.isEnemy(a, actor)) {
                 continue;
             }
-            if (actorService.getGroup(a) == actorService.getGroup(actor)) {
+            if (gameService.getGroup(a) == gameService.getGroup(actor)) {
                 store.add(a);
             }
         }

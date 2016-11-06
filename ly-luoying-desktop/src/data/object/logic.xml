@@ -47,7 +47,7 @@
     <logicFight id="logicStaticFight" extends="logicFightBase" fightAction="actionFightStatic" />
 
     <!-- 跟随目标的逻辑 -->
-    <logicFollow id="logicFollow" extends="logicBase" bindFollowAttribute="attributeFollowTarget" followAction="actionFollow" />
+    <logicFollow id="logicFollow" extends="logicBase" bindFollowAttribute="attributeFollow" followAction="actionFollow" />
 
     <!--通知逻辑-->
     <logicNotify id="logicNotify" extends="logicNotifyBase" />

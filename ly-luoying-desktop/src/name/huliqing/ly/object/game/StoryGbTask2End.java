@@ -82,8 +82,8 @@ public class StoryGbTask2End extends AbstractGameLogic {
                 }
                 
                 gb = actor;
-                actorService.setLevel(gb, 15);
-                actorService.setGroup(gb, actorService.getGroup(player));
+                gameService.setLevel(gb, 15);
+                gameService.setGroup(gb, gameService.getGroup(player));
                 actorService.setLocation(gb, game.getGbPosition());
                 // 保护角色不死
                 setProtected(gb, true);
@@ -121,7 +121,7 @@ public class StoryGbTask2End extends AbstractGameLogic {
         
         if (stage == 2) {
             if (checkTaskOK()) {
-                logicService.setAutoLogic(gb, false);
+                gameService.setAutoLogic(gb, false);
                 actionService.playAction(gb, null);
                 skillNetwork.playSkill(gb, skillService.getSkillWaitDefault(gb), false);
                 createTalk();
@@ -171,7 +171,7 @@ public class StoryGbTask2End extends AbstractGameLogic {
     // 这要求树根数完成，player不能死，player在gb附近，并且附近没有敌人
     private boolean checkTaskOK() {
         return taskPanel.isOk() 
-                && !actorService.isDead(player)
+                && !gameService.isDead(player)
                 && actorService.distance(player, gb) < 10
                 && !isEnemyNear(25);
     }
@@ -184,7 +184,7 @@ public class StoryGbTask2End extends AbstractGameLogic {
         Entity gb = null;
         for (Entity e : entities) {
             if (e.getData().getId().equals(IdConstants.ACTOR_ALTAR)) {
-                return actorService.isDead(e);
+                return gameService.isDead(e);
             }
         }
         return true;
@@ -193,8 +193,8 @@ public class StoryGbTask2End extends AbstractGameLogic {
     private boolean isEnemyNear(float distance) {
         List<Actor> actors = game.getScene().getEntities(Actor.class, null);
         for (Actor a : actors) {
-            if (!actorService.isDead(a) 
-                    && actorService.isEnemy(a, player) 
+            if (!gameService.isDead(a) 
+                    && gameService.isEnemy(a, player) 
                     && actorService.distance(a, player) < distance) {
                 return true;
             }

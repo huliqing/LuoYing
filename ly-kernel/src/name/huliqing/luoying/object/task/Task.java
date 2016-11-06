@@ -16,12 +16,21 @@ import name.huliqing.luoying.object.entity.Entity;
 public interface Task<T extends TaskData> extends DataProcessor<T> {
 
     @Override
-    public T getData();
+    void setData(T data);
+
+    @Override
+    T getData();
     
     /**
      * 初始化任务
      */
     void initialize();
+    
+    /**
+     * 判断任务是否已经初始化
+     * @return 
+     */
+    boolean isInitialized();
     
     /**
      * 清理任务

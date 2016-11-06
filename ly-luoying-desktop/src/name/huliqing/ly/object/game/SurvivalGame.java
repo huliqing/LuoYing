@@ -10,12 +10,16 @@ import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.layer.network.ActorNetwork;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.utils.MathUtils;
+import name.huliqing.ly.layer.network.GameNetwork;
+import name.huliqing.ly.layer.service.GameService;
 
 /**
  * @author huliqing
  */
 public class SurvivalGame extends SimpleRpgGame {
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
+    private final GameService gameService = Factory.get(GameService.class);
+    private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     
     public Vector3f treasurePos = new Vector3f(0,0,-2f);
     // 友军单位的分组
@@ -58,8 +62,8 @@ public class SurvivalGame extends SimpleRpgGame {
     public void onPlayerSelected(Entity actor) {
 //        super.onPlayerSelected(actor);
         // 设置角色分组
-        actorNetwork.setGroup(actor, SELF_GROUP);
-        actorNetwork.setLevel(actor, 1);
+        gameNetwork.setGroup(actor, SELF_GROUP);
+        gameNetwork.setLevel(actor, 1);
     }
 
 
