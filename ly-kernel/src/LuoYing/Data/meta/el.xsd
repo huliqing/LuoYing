@@ -50,9 +50,10 @@ xs:time
             <xs:documentation>
                 elLNumber表达式，这个表达式通过给定一个等级来计算一个等级值，比如用于计算在一个特定等级角色可以有多少攻击力等。
                 表达式返回一个number数值。
-                表达式要求：
+                表达式要求：<br/>
                 1.参数: l;
                 2.返回值：number;
+                示例：expression="#{0 + 50 * Math:pow(1.2, l)}"，其中“l"(小写的L)表示目标等级，是一个int类型的数值。
             </xs:documentation>
         </xs:annotation>
         <xs:complexType>

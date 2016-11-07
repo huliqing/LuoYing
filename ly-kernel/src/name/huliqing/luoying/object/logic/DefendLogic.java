@@ -15,6 +15,7 @@ import name.huliqing.luoying.layer.network.SkillNetwork;
 import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.object.actor.Actor;
+import name.huliqing.luoying.object.attribute.Attribute;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.module.ActorListener;
 import name.huliqing.luoying.object.module.ActorModule;
@@ -148,20 +149,20 @@ public class DefendLogic extends AbstractLogic implements SkillListener, SkillPl
     }
 
     @Override
-    public void onActorHitTarget(Entity sourceHitter, Entity beHit, String hitAttribute, Object newValue, Object oldValue, boolean killed) {
+    public void onActorHitTarget(Entity sourceHitter, Entity beHit, Attribute hitAttribute, Object newValue, Object oldValue, boolean killed) {
         // ignore
     }
 
     // 受到攻击时将目标设为首要敌人
     @Override
-    public void onActorHitByTarget(Entity sourceBeHit, Entity hitter, String hitAttribute, Object newValue, Object oldValue, boolean killed) {
+    public void onActorHitByTarget(Entity sourceBeHit, Entity hitter, Attribute hitAttribute, Object newValue, Object oldValue, boolean killed) {
 //        // hitValue>0为增益效果，不处理
 //        // 这里不作用于player，不要影响player控制的目标的设置
 //        if (actorModule.isDead() || actorModule.isPlayer() || hitValue > 0)
 //            return; 
         
         // 被击中的属性不在监听范围内则不处理。
-        if (!listenAttributes.contains(hitAttribute)) {
+        if (!listenAttributes.contains(hitAttribute.getName())) {
             return;
         }
         

@@ -10,7 +10,7 @@
     <!-- ========================================================================= -->
     
     <gameSimple id="gameRpgBase" availableActors="actorWarrior,actorPastor,actorHunter,actorSinbad,actorNinja,actorSpider,actorBear,actorWolf,actorScorpion"
-        gameLogics="gameLogicActorClean,gameLogicPlayerDeadChecker,gameLogicHealthRecover,gameLogicManaRecover"
+        gameLogics=""
     />
 <!--    <gameSimple id="gameRpgBase" availableActors="actorWarrior,actorPastor,actorHunter,actorSinbad,actorNinja,actorSpider,actorBear,actorWolf,actorScorpion"
         gameLogics="gameLogicActorClean,gameLogicPlayerDeadChecker,gameLogicHealthRecover,gameLogicManaRecover"

@@ -14,7 +14,7 @@ import name.huliqing.luoying.data.AttributeData;
  */
 public class Vector4fAttribute extends AbstractAttribute<Vector4f> {
 
-    private final Vector4f oldValue = new Vector4f();
+    private final Vector4f temp = new Vector4f();
     
     @Override
     public void setData(AttributeData data) {
@@ -26,15 +26,53 @@ public class Vector4fAttribute extends AbstractAttribute<Vector4f> {
     }
 
     @Override
-    public void setValue(Vector4f newValue) {
-        oldValue.set(value);
+    protected boolean doSetValue(Vector4f newValue) {
+        boolean changed = (Float.compare(value.x, newValue.x) != 0 
+                || Float.compare(value.y, newValue.y) != 0
+                || Float.compare(value.z, newValue.z) != 0 
+                || Float.compare(value.w, newValue.w) != 0);
         value.set(newValue);
-        notifyValueChangeListeners(oldValue, value);
+        return changed;
     }
     
+    /**
+     * 设置Vector4f的值。
+     * @param x
+     * @param y
+     * @param z
+     * @param w 
+     */
     public void set(float x, float y, float z, float w) {
-        oldValue.set(value);
-        value.set(x, y, z, w);
-        notifyValueChangeListeners(oldValue, value);
+        temp.set(x, y, z, w);
+        setValue(temp);
+    }
+    
+    public void setX(float x) {
+        boolean changed = Float.compare(value.x, x) != 0;
+        value.setX(x);
+        if (changed) {
+            notifyValueChangeListeners();
+        }
+    }
+    public void setY(float y) {
+        boolean changed = Float.compare(value.y, y) != 0;
+        value.setY(y);
+        if (changed) {
+            notifyValueChangeListeners();
+        }
+    }
+    public void setZ(float z) {
+        boolean changed = Float.compare(value.z, z) != 0;
+        value.setZ(z);
+        if (changed) {
+            notifyValueChangeListeners();
+        }
+    }
+    public void setW(float w) {
+        boolean changed = Float.compare(value.w, w) != 0;
+        value.setW(w);
+        if (changed) {
+            notifyValueChangeListeners();
+        }
     }
 }

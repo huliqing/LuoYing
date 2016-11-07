@@ -40,7 +40,7 @@ public abstract class AbstractGameLogic<T extends GameLogicData>  implements Gam
     @Override
     public void setData(T data) {
         this.data = data;
-        interval = data.getInterval();
+        interval = data.getAsFloat("interval", interval);
     }
 
     @Override

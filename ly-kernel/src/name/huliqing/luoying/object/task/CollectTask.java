@@ -13,6 +13,7 @@ import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.network.TaskNetwork;
 import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.layer.service.TaskService;
+import name.huliqing.luoying.object.attribute.Attribute;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.module.ActorListener;
 import name.huliqing.luoying.object.module.ActorModule;
@@ -113,7 +114,7 @@ public class CollectTask<T extends TaskData> extends AbstractTask<T> implements 
     }
     
     @Override
-    public void onActorHitTarget(Entity sourceHitter, Entity beHit, String hitAttribute, Object newValue, Object oldValue, boolean killed) {
+    public void onActorHitTarget(Entity sourceHitter, Entity beHit, Attribute hitAttribute, Object hitValue, Object oldValue, boolean killed) {
         // 几种情况可以不再需要“收集任务物品”的逻辑
         // 1.如果任务已经完成并且已经提交
         // 2.如果任务已经收集完毕但未提交
@@ -155,7 +156,7 @@ public class CollectTask<T extends TaskData> extends AbstractTask<T> implements 
     
     // ignore
     @Override
-    public void onActorHitByTarget(Entity beHit, Entity hitter, String hitAttribute, Object newValue, Object oldValue, boolean killed) {}
+    public void onActorHitByTarget(Entity beHit, Entity hitter, Attribute hitAttribute, Object hitValue, Object oldValue, boolean killed) {}
     
     // ignore
     @Override

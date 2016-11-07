@@ -20,19 +20,14 @@ public class IntegerAttribute extends NumberAttribute {
         value = data.getAsInteger(ATTR_VALUE, 0);
         assert value instanceof Integer;
     }
-   
-    // remove20161029
-//    @Override
-//    public void updateDatas() {
-//        super.updateDatas();
-//        // 这里一定要确保存的是int类型
-//        data.setAttribute("value", value.intValue()); 
-//    }
-
+    
     @Override
-    public void setValue(Number newValue) {
-        // 注意：这里一定要转成int类型,以确保保存在Data的时候是int类型。
-        super.setValue(newValue.intValue()); 
+    protected boolean doSetSimpleValue(Number newValue) {
+        if (value.intValue() != newValue.intValue()) {
+            value = newValue.intValue(); // 注意：这里必须，一定要转化为int类型。
+            return true;
+        }
+        return false;
     }
     
     @Override

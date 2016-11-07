@@ -17,10 +17,16 @@ import name.huliqing.luoying.object.attribute.AttributeManager;
  * @author huliqing
  */
 public class AttributeElContext extends ELContext{
-
+    
     private final AttributeELResolver elResolver = new AttributeELResolver();
     private final SimpleFunctionMapper functionMapper = new SimpleFunctionMapper();
     private final SimpleVariableMapper variableMapper = new SimpleVariableMapper();
+
+    private El el;
+    
+    public AttributeElContext(El el) {
+        this.el = el;
+    }
     
     @Override
     public ELResolver getELResolver() {
@@ -59,11 +65,21 @@ public class AttributeElContext extends ELContext{
                 context.setPropertyResolved(true);
                 Attribute attribute = am.getAttribute(property.toString());
                 if (attribute == null) {
-                    throw new NullPointerException("Attribute not found from AttributeManager, AttributeManager=" + am + ", attribute=" + property);
+                    throw new NullPointerException("Attribute not found from AttributeManager, AttributeManager=" + am 
+                            + ", attribute=" + property 
+                            + ", expression=" + el.getExpression() 
+                            + ", el=" + el.getData().getId());
                 }
                 return attribute.getValue();
             }
-            return super.getValue(context, base, property);
+            Object value = super.getValue(context, base, property);
+            if (value == null) {
+                throw new NullPointerException("Could find property value from baseValue, check if the property exists"
+                        + ", base=" + base + ", property=" + property 
+                        + ", expression=" + el.getExpression() 
+                        + ", el=" + el.getData().getId());
+            }
+            return value;
         }
     }
     

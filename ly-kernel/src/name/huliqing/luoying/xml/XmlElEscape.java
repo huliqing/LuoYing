@@ -21,8 +21,12 @@ public class XmlElEscape {
         String temp;
         while(m.find()) {
             temp = xmlStr.substring(m.start(), m.end());
-            temp = temp.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;")
-            .replaceAll("'", "&apos;").replaceAll("\"", "&quot;");
+            temp = temp
+                    .replaceAll("&", "&amp;")
+                    .replaceAll("<", "&lt;")
+                    .replaceAll(">", "&gt;")
+                    .replaceAll("'", "&apos;")
+                    .replaceAll("\"", "&quot;");
             m.appendReplacement(sb, temp);
         }
         m.appendTail(sb);

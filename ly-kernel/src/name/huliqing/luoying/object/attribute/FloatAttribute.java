@@ -23,10 +23,13 @@ public class FloatAttribute extends NumberAttribute {
     }
     
     @Override
-    public void setValue(Number value) {
-        // 注意：这里一定要转成float类型,以确保保存在Data的时候是Float类型。
-        super.setValue(value.floatValue());
-    } 
+    protected boolean doSetSimpleValue(Number newValue) {
+        if (Float.compare(value.floatValue(), newValue.floatValue()) != 0) {
+            value = newValue.floatValue(); // 一定要转化为float类型。
+            return true;
+        }
+        return false;
+    }
     
     @Override
     public void add(final int other) {

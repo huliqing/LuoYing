@@ -11,6 +11,7 @@ import java.util.List;
 import name.huliqing.luoying.data.DropData;
 import name.huliqing.luoying.data.ModuleData;
 import name.huliqing.luoying.object.Loader;
+import name.huliqing.luoying.object.attribute.Attribute;
 import name.huliqing.luoying.object.attribute.BooleanAttribute;
 import name.huliqing.luoying.object.drop.Drop;
 import name.huliqing.luoying.object.entity.Entity;
@@ -36,15 +37,18 @@ public class DropModule extends AbstractModule {
     
     // 用于监听Entity受到攻击致死事件,并处理物品掉落
     private final EntityListener hitDeadEntityListener = new EntityListener() {
+        
         private boolean deadStateBeforeHit;
+        
         @Override
-        public void onHitAttributeBefore(String attribute, Object value, Entity hitter) {
+        public void onHitAttributeBefore(Attribute attribute, Object hitValue, Entity hitter) {
             if (deadAttribute == null) 
                 return;
             deadStateBeforeHit = deadAttribute.getValue();
         }
+        
         @Override
-        public void onHitAttributeAfter(String attribute, Object newValue, Object oldValue, Entity hitter) {
+        public void onHitAttributeAfter(Attribute attribute, Object hitValue, Entity hitter, Object oldValue) {
             if (deadAttribute == null)
                 return;
             // killed

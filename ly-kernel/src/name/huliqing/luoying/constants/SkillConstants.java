@@ -40,8 +40,8 @@ public class SkillConstants {
     /** 目标不在技能的射程范围内 */
     public final static int STATE_TARGET_NOT_IN_RANGE = 8;
     
-    /** 不能对指定目标使用该技能 */
-    public final static int STATE_TARGET_UNSUITABLE = 9;
+    /** 不能对指定目标使用该技能(通过El检查器） */
+    public final static int STATE_TARGET_UNSUITABLE_BY_ELCHECK = 9;
     
     /** 需要角色达到指定等级才能使用技能 */
     public final static int STATE_NEED_LEVEL = 10;

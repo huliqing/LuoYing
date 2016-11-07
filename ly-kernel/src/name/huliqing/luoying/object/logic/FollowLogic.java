@@ -72,7 +72,7 @@ public class FollowLogic extends AbstractLogic implements ValueChangeListener<Ob
     }
 
     @Override
-    public void onValueChanged(Attribute attribute, Object oldValue, Object newValue) {
+    public void onValueChanged(Attribute attribute) {
         if (attribute == followAttribute) {
             doLogic(0); // 直接调用doLogic去改变跟随对象。
         }

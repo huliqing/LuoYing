@@ -134,13 +134,16 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
             
             // 需要
             setTarget(temp);
+            
         }
         
 //        // 即使temp为null也可以攻击，这允许角色转入自动攻击（等待）状态
 //        if (temp == null) {
 //            addMessage(ResourceManager.get(ResConstants.COMMON_NO_TARGET), MessageType.notice);
 //        }
-        
+        if (temp != null) {
+            gameNetwork.setTarget(player, temp.getEntityId());
+        }
         playNetwork.attack(player, temp);
     }
     

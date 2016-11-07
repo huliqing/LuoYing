@@ -113,8 +113,9 @@ public interface Entity<T extends EntityData> extends DataProcessor<T>{
     /**
      * 击中、设置当前Entity的指定的属性，属性必须存在，否则什么也不做。
      * @param attribute 属性名称
-     * @param value 新的属性值
+     * @param hitValue 属性值，<b>偿试</b>应用到指定属性上的值,应用后属性的值应该以属性内部获得的为准，因为一些
+     * 属性类型可能会限制应用到属性上的值，比如限制取值范围的一些Number类型的值。
      * @param hitter 发起攻击的源，这个参数可以为null,如果击中源不存在。
      */
-    void hitAttribute(String attribute, Object value, Entity hitter);
+    void hitAttribute(String attribute, Object hitValue, Entity hitter);
 }

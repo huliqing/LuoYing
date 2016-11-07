@@ -14,8 +14,8 @@ import name.huliqing.luoying.layer.service.ElService;
 import name.huliqing.luoying.object.el.CustomEl;
 
 /**
- * 带有关联功能的Boolean属性，这种属性可以根据其它属性的变动而联动改变值。可以通过refs参数来关联其它属性，
- * 并通过valueEl来
+ * 带有关联功能的Boolean属性，这种属性可以根据其它属性的变动而联动改变当前属性值。可以通过refs参数来关联其它属性，
+ * 并通过valueEl来计算值,El必须返回一个Boolean类型的值。
  * @author huliqing
  */
 public class RelateBooleanAttribute extends BooleanAttribute implements AttributeListener, ValueChangeListener<Object>{
@@ -135,7 +135,7 @@ public class RelateBooleanAttribute extends BooleanAttribute implements Attribut
     }
     
     @Override
-    public void onValueChanged(Attribute attribute, Object oldValue, Object newValue) {
+    public void onValueChanged(Attribute attribute) {
         if (refs == null)
             return;
         for (RefAttribute ra : refs) {

@@ -10,7 +10,7 @@
     <!-- ========================================================================= -->
     
     <!--物品基类-->
-    <itemSimple id="itemBase" checkEl="#{!source.attributeDead}" />
+    <itemSimple id="itemBase" checkEl="elItemSimpleUse" />
     
     <!--药水类-->
     <itemAttribute id="itemTonicBase" extends="itemBase" effects="effectRandomFire" />
@@ -29,7 +29,7 @@
     <!-- ========================================================================= -->
     
     <!--技能书：人类种族 -->
-    <itemBook id="itemBookHumanBase" extends="itemBookBase" checkEl="#{!source.attributeDead && source.attributeRace == 1}" />
+    <itemBook id="itemBookHumanBase" extends="itemBookBase" checkEl="elItemBookHuman" />
     
     <!-- ========================================================================= -->
     <!--特殊物品-->

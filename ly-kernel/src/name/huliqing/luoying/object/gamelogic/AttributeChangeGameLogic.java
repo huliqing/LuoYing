@@ -24,7 +24,6 @@ import name.huliqing.luoying.object.entity.Entity;
  */
 public class AttributeChangeGameLogic<T extends GameLogicData> extends AbstractGameLogic<T> {
     private final PlayService playService = Factory.get(PlayService.class);
-//    private final ActorService actorService = Factory.get(ActorService.class);
     private final EntityService entityService = Factory.get(EntityService.class);
     private final ElService elService = Factory.get(ElService.class);
     private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
@@ -33,7 +32,7 @@ public class AttributeChangeGameLogic<T extends GameLogicData> extends AbstractG
     private String applyAttribute;
     
     // 指定要影响最终修改值的目标角色的属性值。
-    private String useAttribute;
+    private String bindFactorAttribute;
     
     // 基本的值，用于修改角色的属性
     private float baseValue;
@@ -50,10 +49,9 @@ public class AttributeChangeGameLogic<T extends GameLogicData> extends AbstractG
     public void setData(T data) {
         super.setData(data); 
         applyAttribute = data.getAsString("applyAttribute");
-        useAttribute = data.getAsString("useAttribute");
+        bindFactorAttribute = data.getAsString("bindFactorAttribute");
         baseValue = data.getAsFloat("baseValue", baseValue);
         speed = data.getAsFloat("speed", speed);
-//        applyToDead = data.getAsBoolean("applyToDead", applyToDead);
         checkEl = elService.createSBooleanEl(data.getAsString("checkEl", "#{true}"));
 
         // 不允许interval小于0
@@ -76,11 +74,11 @@ public class AttributeChangeGameLogic<T extends GameLogicData> extends AbstractG
     }
     
     private void updateAttribute(Entity actor) {
-        // useAttribute是角色的已有属性，这个属性的值将影响最终的apply值。
+        // bindFactorAttribute是角色的已有属性，这个属性的值将影响最终的apply值。
         // 比如角色的属性（生命恢复速度)将影响这个游戏逻辑最终要修改角色生命值的属性。
-        float useAttributeValue = entityService.getNumberAttributeValue(actor, useAttribute, 0).floatValue();
+        float factorValue = entityService.getNumberAttributeValue(actor, bindFactorAttribute, 0).floatValue();
         
-        float applyValue = (baseValue + useAttributeValue) * interval * speed;
+        float applyValue = (baseValue + factorValue) * interval * speed;
         
         // 注意：applyValue 有可能大于0或小于0,只有等于0时才没有意义（这里用一个接近0的值代替）
         if (Math.abs(applyValue) > 0.0001f) {

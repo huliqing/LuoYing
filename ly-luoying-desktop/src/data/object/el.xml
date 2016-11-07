@@ -19,7 +19,7 @@
     <elSBoolean id="elActorCleanCheck" expression="#{s.attributeDead && !s.attributeEssential}" />
     
     <!--判断目标t是否为s的敌人-->
-    <elSTBoolean id="elActorEnemyCheck" expression="#{!t.attributeDead && t.attributeGrup != s.attributeGroup}" />
+    <elSTBoolean id="elActorEnemyCheck" expression="#{!t.attributeDead && t.attributeGroup != s.attributeGroup}" />
 
     <!--==========================================================================-->
     <!--角色经验公式:配置给角色，计算角色在升级时，每个等级所需要的经验值。即表示从等级 leve - 1 升级到 level 时需要的经验值。-->
@@ -67,28 +67,25 @@
     <elLNumber id="elLevelAttrGhostRate"            expression="#{l / 60}" />
     
     <!--==========================================================================-->
-    <!--天赋等级公式：配置给角色，这表示每一个等级角色可以获得的天赋点数。-->
+    <!--Module: 天赋等级公式：配置给TalentModule，这表示每一个等级角色可以获得的天赋点数。-->
     <!--==========================================================================-->
     
-    <!--默认公式-->
-    <elLNumber id="elLevelTalentPoints" expression="#{1}" />
+    <!--默认公式: 每升一级奖励一点天赋-->
+    <elLNumber id="elTalentLevelPoints" expression="#{1}" />
     
     <!--==========================================================================-->
-    <!--天赋属性公式:配置给天赋使用，配置各种天赋的等级值,指定各种天赋在达到指
-    定等级时可产生的作用值。-->
+    <!--Talent: 天赋等级公式，配置给天赋使用，指定各种天赋在达到指定等级时可产生的作用值。-->
     <!--==========================================================================-->
     
-    <elLNumber id="elLevelTalentLifeRestore"  expression="#{l}" />
-    <elLNumber id="elLevelTalentManaRestore"  expression="#{l * 2}" />
-    <elLNumber id="elLevelTalentDefence"      expression="#{l * 2 + 2 * Math:pow(1.06, l)}" />
-    <elLNumber id="elLevelTalentMagicDefence" expression="#{l * 2 + 2 * Math:pow(1.06, l)}" />
-    <elLNumber id="elLevelTalentAttack"       expression="#{l * 2 + 3 * Math:pow(1.06, l)}" />
-    <elLNumber id="elLevelTalentMagicAttack"  expression="#{l * 2 + 3 * Math:pow(1.06, l)}" />
-    <elLNumber id="elLevelTalentVision"       expression="#{l}" />
-    <elLNumber id="elLevelTalentMoveSpeed"    expression="#{l * 0.04}" />
-
-
-        
+    <elLNumber id="elTalentLifeRestore"          expression="#{l}" />
+    <elLNumber id="elTalentManaRestore"      expression="#{l * 2}" />
+    <elLNumber id="elTalentDefence"               expression="#{l * 2 + 2 * Math:pow(1.06, l)}" />
+    <elLNumber id="elTalentMagicDefence"    expression="#{l * 2 + 2 * Math:pow(1.06, l)}" />
+    <elLNumber id="elTalentAttack"                  expression="#{l * 2 + 3 * Math:pow(1.06, l)}" />
+    <elLNumber id="elTalentMagicAttack"       expression="#{l * 2 + 3 * Math:pow(1.06, l)}" />
+    <elLNumber id="elTalentVision"                  expression="#{l}" />
+    <elLNumber id="elTalentMoveSpeed"        expression="#{l * 0.04}" />
+    
     <!--==========================================================================-->
     <!--技能HitCheck: 用于技能Hit判断-->
     <!--==========================================================================-->
@@ -126,11 +123,32 @@
     <elSTNumber id="elSkillBuff" expression="#{0}" />
     
     <!--==========================================================================-->
-    <!-- 用于对话(Chat): 用于检查一个对话是否对目标角色可见 -->
+    <!-- Item: 物品使用检查, 这些EL用于检查角色是否可以使用指定的物品 -->
+    <!--==========================================================================-->
+
+    <!--普通物品的使用：角色必须活着才可以使用-->
+    <elSBoolean id="elItemSimpleUse" expression="#{!s.attributeDead}" />
+
+    <!--人类种族书籍： 只有人类才可以使用的技能书-->
+    <elSBoolean id="elItemBookHuman" expression="#{!s.attributeDead && s.attributeRace == 1}" />
+    
+    <!--==========================================================================-->
+    <!-- Skin: 皮肤、装备、武器使用检查, 这些EL用于检查角色是否可以使用指定的装备、武器 -->
+    <!--==========================================================================-->
+
+    <!--人类装备: 定义只有人类才可以使用的装备-->
+    <elSBoolean id="elSkinHuman" expression="#{!s.attributeDead && s.attributeRace == 1}" />
+    
+    <!--人类女性装备: 定义只有人类女性才可以使用的装备-->
+    <elSBoolean id="elSkinHumanFemale" expression="#{!s.attributeDead && s.attributeRace == 1 && s.attributeSex == 1}" />
+    
+    <!--==========================================================================-->
+    <!-- Chat: 对话功能，这些El用于检查一个对话是否对目标角色可见 -->
     <!--==========================================================================-->
     
     <!--同伴、同分组-->
     <elSTBoolean id="elChatCheckFriendly" expression="#{!s.attributeDead && !t.attributeDead && s.attributeGroup == t.attributeGroup && t.attributeBiology}" />
+    
     <!--用于任务角色对话-->
     <elSTBoolean id="elChatCheckTask" expression="#{!s.attributeDead && !t.attributeDead && t.attributeBiology}" />
 </root>

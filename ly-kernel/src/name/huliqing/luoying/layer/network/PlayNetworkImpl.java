@@ -5,12 +5,8 @@
 package name.huliqing.luoying.layer.network;
 
 import name.huliqing.luoying.network.Network;
-import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.layer.service.PlayService;
-import name.huliqing.luoying.layer.service.SkinService;
-import name.huliqing.luoying.layer.service.LogicService;
 import name.huliqing.luoying.mess.MessAutoAttack;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.scene.Scene;
@@ -19,24 +15,13 @@ import name.huliqing.luoying.object.scene.Scene;
  * @author huliqing
  */
 public class PlayNetworkImpl implements PlayNetwork {
-    private static final Logger LOG = Logger.getLogger(PlayNetworkImpl.class.getName());
+//    private static final Logger LOG = Logger.getLogger(PlayNetworkImpl.class.getName());
     private final static Network NETWORK = Network.getInstance();
     private PlayService playService;
-    private ActorService actorService;
-    private SkinService skinService;
-    private LogicService logicService;
-    
-    private ActionNetwork actionNetwork;
-    private SkinNetwork skinNetwork;
     
     @Override
     public void inject() {
         playService = Factory.get(PlayService.class);
-        actorService = Factory.get(ActorService.class);
-        skinService = Factory.get(SkinService.class);
-        logicService = Factory.get(LogicService.class);
-        actionNetwork = Factory.get(ActionNetwork.class);
-        skinNetwork = Factory.get(SkinNetwork.class);
     }
 
     @Override
@@ -57,6 +42,21 @@ public class PlayNetworkImpl implements PlayNetwork {
     @Override
     public void removeEntity(Entity entity) {
         playService.removeEntity(entity);
+    }
+    
+    @Override
+    public void attack(Entity actor, Entity target) {
+        // On client
+        if (NETWORK.isClient()) {
+            MessAutoAttack mess = new MessAutoAttack();
+            mess.setTargetId(target != null ? target.getData().getUniqueId() : -1);
+            NETWORK.sendToServer(mess);
+            return;
+        }
+
+        // On Server，这个命令服务端不需要广播到客户端。
+        
+        playService.attack(actor, target);
     }
     
 //    @Override
@@ -210,20 +210,6 @@ public class PlayNetworkImpl implements PlayNetwork {
 //            }
 //        }
 //    }
-
-    @Override
-    public void attack(Entity actor, Entity target) {
-        // On client
-        if (NETWORK.isClient()) {
-            MessAutoAttack mess = new MessAutoAttack();
-            mess.setTargetId(target != null ? target.getData().getUniqueId() : -1);
-            NETWORK.sendToServer(mess);
-            return;
-        }
-
-        // On Server，这个命令服务端不需要广播到客户端。
-        playService.attack(actor, target);
-    }
 
 //    @Override
 //    public void syncGameInitToClient(HostedConnection client) {

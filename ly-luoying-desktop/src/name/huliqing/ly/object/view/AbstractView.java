@@ -18,6 +18,7 @@ import name.huliqing.luoying.object.SyncData;
 import name.huliqing.ly.object.NetworkObject;
 import name.huliqing.luoying.object.anim.Anim;
 import name.huliqing.luoying.object.entity.AbstractEntity;
+import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.ui.LinearLayout;
 import name.huliqing.luoying.ui.UI.Corner;
 import name.huliqing.luoying.ui.state.UIState;
@@ -136,7 +137,11 @@ public abstract class AbstractView<T extends ViewData> extends AbstractEntity<T>
         // 2.在初化View之后再开始Anim，顺序不要反了,因为部分anim可能需要在
         // View初始化完位置和大小之后才能初始化。
         doViewAnimation(0);
-        
+    }
+
+    @Override
+    public void onInitScene(Scene scene) {
+        super.onInitScene(scene); 
         // 把control加在sceneRoot上，注：因为UI是不执行UpdateLogicState的。
         scene.getRoot().addControl(control);
     }
@@ -249,7 +254,6 @@ public abstract class AbstractView<T extends ViewData> extends AbstractEntity<T>
     // 从服务端回来的同步数据
     @Override
     public void applySyncData(SyncData data) {
-//        enabled = data.getAsBoolean("enabled", enabled);// remove20160523
         useTime = data.getAsFloat("useTime", useTime);
         timeUsed = data.getAsFloat("timeUsed", timeUsed);
     }

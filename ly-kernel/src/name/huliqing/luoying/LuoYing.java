@@ -190,7 +190,6 @@ import name.huliqing.luoying.object.env.SimpleWaterEnv;
 import name.huliqing.luoying.loader.GameDataLoader;
 import name.huliqing.luoying.object.gamelogic.ActorCleanGameLogic;
 import name.huliqing.luoying.object.gamelogic.AttributeChangeGameLogic;
-import name.huliqing.luoying.loader.GameLogicDataLoader;
 import name.huliqing.luoying.loader.ItemDataLoader;
 import name.huliqing.luoying.object.magic.AttributeHitMagic;
 import name.huliqing.luoying.loader.MagicDataLoader;
@@ -264,6 +263,7 @@ import name.huliqing.luoying.object.attribute.LevelFloatAttribute;
 import name.huliqing.luoying.object.attribute.LevelIntegerAttribute;
 import name.huliqing.luoying.object.attribute.LimitIntegerAttribute;
 import name.huliqing.luoying.object.attribute.LongAttribute;
+import name.huliqing.luoying.object.attribute.RelateBooleanAttribute;
 import name.huliqing.luoying.object.attribute.StringAttribute;
 import name.huliqing.luoying.object.attribute.StringListAttribute;
 import name.huliqing.luoying.object.attribute.Vector4fAttribute;
@@ -428,6 +428,7 @@ public class LuoYing {
         DataFactory.register("attributeLevelInteger",  AttributeData.class, null, LevelIntegerAttribute.class);
         DataFactory.register("attributeLimitInteger",  AttributeData.class, null, LimitIntegerAttribute.class);
         DataFactory.register("attributeLong",  AttributeData.class, null, LongAttribute.class);
+        DataFactory.register("attributeRelateBoolean",  AttributeData.class, null, RelateBooleanAttribute.class);
         DataFactory.register("attributeString",  AttributeData.class, null, StringAttribute.class);
         DataFactory.register("attributeStringList",  AttributeData.class, null, StringListAttribute.class);
         DataFactory.register("attributeVector4f",  AttributeData.class, null, Vector4fAttribute.class);
@@ -509,8 +510,8 @@ public class LuoYing {
 //        DataFactory.register("gameSurvival", GameData.class, GameDataLoader.class, SurvivalGame.class);
         
         // GameLogic
-        DataFactory.register("gameLogicActorClean", GameLogicData.class, GameLogicDataLoader.class, ActorCleanGameLogic.class);
-        DataFactory.register("gameLogicAttributeChange", GameLogicData.class, GameLogicDataLoader.class, AttributeChangeGameLogic.class);
+        DataFactory.register("gameLogicActorClean", GameLogicData.class, null, ActorCleanGameLogic.class);
+        DataFactory.register("gameLogicAttributeChange", GameLogicData.class, null, AttributeChangeGameLogic.class);
         
         // Item
         DataFactory.register("itemTest",  ItemData.class, ItemDataLoader.class, TestItem.class);

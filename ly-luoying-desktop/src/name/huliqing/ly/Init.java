@@ -6,7 +6,6 @@
 package name.huliqing.ly;
 
 import com.jme3.app.Application;
-import com.jme3.font.BitmapFont;
 import com.jme3.network.serializing.Serializer;
 import com.jme3.system.AppSettings;
 import name.huliqing.luoying.Factory;
@@ -16,7 +15,6 @@ import name.huliqing.luoying.data.GameData;
 import name.huliqing.luoying.data.GameLogicData;
 import name.huliqing.luoying.data.ModuleData;
 import name.huliqing.luoying.loader.GameDataLoader;
-import name.huliqing.luoying.loader.GameLogicDataLoader;
 import name.huliqing.luoying.xml.DataFactory;
 import name.huliqing.ly.data.ChatData;
 import name.huliqing.ly.data.ViewData;
@@ -98,7 +96,7 @@ public class Init {
         DataFactory.register("gameSurvival", GameData.class, GameDataLoader.class, SurvivalGame.class);
         
         // 额外的游戏逻辑
-        DataFactory.register("gameLogicPlayerDeadChecker", GameLogicData.class, GameLogicDataLoader.class, PlayerDeadCheckerGameLogic.class);
+        DataFactory.register("gameLogicPlayerDeadChecker", GameLogicData.class, null, PlayerDeadCheckerGameLogic.class);
         
         // Chat
         DataFactory.register("chatGroup",  ChatData.class, ChatDataLoader.class, GroupChat.class);

@@ -108,16 +108,16 @@ public abstract class HitSkill extends AbstractSkill {
     public void setActor(Entity actor) {
         super.setActor(actor); 
         hitCheckEl.setSource(actor.getAttributeManager());
-    }
-
-    @Override
-    public void initialize() {
-        super.initialize();
         targetAttribute = actor.getAttributeManager().getAttribute(bindTargetAttribute, NumberAttribute.class);
         if (targetAttribute == null) {
             LOG.log(Level.WARNING, "Could not found targetAttribute. HitSkill need to set bindTargetAttribute, "
                     + " Entity={0}, Skill={1}, bindTargetAttribute={2}", new Object[] {actor.getData().getId(), data.getId(), bindTargetAttribute});
         }
+    }
+
+    @Override
+    public void initialize() {
+        super.initialize();
         
         // 注：这里target必须不能是自己(actor),否则在faceTo时会导致在执行animation
         // 的时候模型的头发和武器错位,即不能faceTo自己，所以target != actor的判断必须的。
@@ -278,8 +278,9 @@ public abstract class HitSkill extends AbstractSkill {
 
     @Override
     public int checkState() {
-        if (actor == null)
-            return SkillConstants.STATE_UNDEFINE;
+        if (actor == null) {
+            throw new NullPointerException("Actor could not be null! skillId=" + data.getId());
+        }
         
         Entity target = getTarget();
         if (target == null) {
@@ -291,7 +292,7 @@ public abstract class HitSkill extends AbstractSkill {
         
         hitCheckEl.setTarget(target.getAttributeManager());
         if (!hitCheckEl.getValue())
-            return SkillConstants.STATE_TARGET_UNSUITABLE;
+            return SkillConstants.STATE_TARGET_UNSUITABLE_BY_ELCHECK;
         
         return super.checkState();
     }

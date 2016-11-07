@@ -72,7 +72,7 @@ public class ColorModule extends AbstractModule implements ValueChangeListener<V
     }
 
     @Override
-    public void onValueChanged(Attribute attribute, Vector4f oldValue, Vector4f newValue) {
+    public void onValueChanged(Attribute attribute) {
         if (attribute == colorAttribute) {
             changeColor(colorAttribute.getValue());
         }

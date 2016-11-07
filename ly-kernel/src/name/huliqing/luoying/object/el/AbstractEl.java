@@ -5,8 +5,11 @@
  */
 package name.huliqing.luoying.object.el;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.el.ELContext;
 import javax.el.ValueExpression;
+import name.huliqing.luoying.Config;
 import name.huliqing.luoying.xml.ObjectData;
 
 /**
@@ -15,6 +18,8 @@ import name.huliqing.luoying.xml.ObjectData;
  * @param <T>
  */
 public abstract class AbstractEl<T> implements El<T>{
+    private static final Logger LOG = Logger.getLogger(AbstractEl.class.getName());
+    
     private final static String ATTR_EXPRESSION = "expression";
     
     protected ObjectData data;
@@ -58,7 +63,11 @@ public abstract class AbstractEl<T> implements El<T>{
             ve = ElFactory.createValueExpression(getELContext(), expression, Object.class);
             valid = true;
         }
-        return (T) ve.getValue(getELContext());
+        T result = (T) ve.getValue(getELContext());
+        if (Config.debug) {
+            LOG.log(Level.INFO, "El getValue, result={0}, expression={1}, el={2}", new Object[] {result, expression, getData().getId()});
+        }
+        return result;
     }
     
     /**

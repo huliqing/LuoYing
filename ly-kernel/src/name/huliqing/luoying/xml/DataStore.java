@@ -75,6 +75,10 @@ class DataStore {
     public void loadData(InputStream dataStream, String encoding) throws ParserConfigurationException, SAXException, IOException {
         String xmlStr = readFile(dataStream, encoding);
         String xmlEscapsed = XmlElEscape.convert(xmlStr);
+//        System.out.println("=====================");
+//        System.out.println("=====================");
+//        System.out.println("=====================");
+//        System.out.println(xmlEscapsed);
         
 //        Element root = XmlUtils.newDocument(dataStream, encoding).getDocumentElement();
         Element root = XmlUtils.newDocument(xmlEscapsed).getDocumentElement();
@@ -86,14 +90,6 @@ class DataStore {
             }
             String tagName = ((Element) node).getTagName();
             Element ele = (Element) node;
-            
-            // remove20161101
-//            // 提取脚本
-//            if (tagName.equals("script")) {
-//                SCRIPTS.add(ele.getTextContent());
-//                continue;
-//            }
-            
             Proto proto = new Proto(XmlUtils.getAttributes(ele), tagName);
             PROTO_MAP.put(proto.getId(), proto);
         }

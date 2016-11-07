@@ -27,7 +27,7 @@ import name.huliqing.luoying.object.attribute.AttributeManager;
  */
 public class SBooleanEl extends AbstractEl<Boolean>{
 
-    private final AttributeElContext elContext = new AttributeElContext();
+    private final AttributeElContext elContext = new AttributeElContext(this);
 
     @Override
     public ELContext getELContext() {

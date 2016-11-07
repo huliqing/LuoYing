@@ -71,7 +71,7 @@
     <moduleTalent id="moduleTalent" moduleOrder="60" 
                   bindLevelAttribute="attributeLevel" 
                   bindTalentPointsAttribute="attributeTalentPoints" 
-                  talentPointsLevelEl="elLevelTalentPoints" />
+                  talentPointsLevelEl="elTalentLevelPoints" />
 
     <!--等级控制模块 -->
     <moduleLevel id="moduleLevel" moduleOrder="60" 

@@ -180,7 +180,7 @@ public class SkillModule extends AbstractModule implements ValueChangeListener<B
     }
 
     @Override
-    public void onValueChanged(Attribute attribute, Boolean oldValue, Boolean newValue) {
+    public void onValueChanged(Attribute attribute) {
         if (attribute == deadAttribute) {
             Skill playSkill;
             if (deadAttribute.getValue()) {

@@ -11,36 +11,26 @@ import name.huliqing.luoying.data.AttributeData;
  * 字符串类型的属性
  * @author huliqing
  */
-public class StringAttribute extends AbstractAttribute<String> {
+public class StringAttribute extends SimpleAttribute<String> {
 
     @Override
     public void setData(AttributeData data) {
         super.setData(data); 
-        value = data.getAsString("value");
+        value = data.getAsString(ATTR_VALUE, "");
     }
-   
+    
+    /**
+     * 设置字符串的值
+     * @param newValue 不能为null.
+     * @return 
+     */
     @Override
-    public void setValue(String newValue) {
-        // 同对象，同null, 必要的，当值相同时避免触发值变侦听器
-        if (value == newValue) {
-            return;
+    protected boolean doSetSimpleValue(String newValue) {
+        if (newValue.equals(value)) {
+            return false;
         }
-        // 值相同
-        if (value != null && value.equals(newValue)) {
-            return;
-        }
-        super.setValue(newValue);
+        value = newValue;
+        return true;
     }
-    
-//    @Override
-//    public boolean match(final Object other) {
-//        if (other instanceof Number) {
-//            return value.equals(other.toString());
-//        }
-//        return value.equals(other);
-//    }
-
-
-    
     
 }

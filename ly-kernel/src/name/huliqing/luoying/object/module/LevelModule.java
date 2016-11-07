@@ -82,49 +82,77 @@ public class LevelModule extends AbstractModule implements ValueChangeListener<N
         
         // 角色的xp属性
         xpAttribute = entity.getAttributeManager().getAttribute(bindXpAttribute);
-        if (xpAttribute != null) {
-            xpAttribute.addListener(this);
-        } else {
+        if (xpAttribute == null) {
             LOG.log(Level.WARNING, "xpAttribute not found by bindXpAttribute={0}, actorId={1}"
                     , new Object[] {bindXpAttribute, entity.getData().getId()});
-        }
+        } 
         
         // 这个属性用于存放要到达下一个等级所需要的经验值
         xpNextAttribute = entity.getAttributeManager().getAttribute(bindXpNextAttribute);
         
+        
+        if (xpAttribute != null) {
+            xpAttribute.addListener(this);
+        }
         // 初始化等级
         if (levelAttribute != null) {
             setLevel(levelAttribute.intValue());
+            levelAttribute.addListener(this);
         }
     }
 
     @Override
     public void cleanup() {
+        if (xpAttribute != null) {
+            xpAttribute.removeListener(this);
+        }
+        if (levelAttribute != null) {
+            levelAttribute.removeListener(this);
+        }
         super.cleanup(); 
     }
 
-    /**
-     * 获取角色的等级，注：如果当前模块没有绑定角色的等级属性，则该方法将返回0.
-     * @return 
-     */
-    public int getLevel() {
-        if (levelAttribute != null) {
-            return levelAttribute.intValue();
+    // remove20161031
+//    /**
+//     * 获取指定等级需要的xp值, 如果模块没有配置任何等级公式，则该方法将始终返回0.
+//     * @param level 指定等级
+//     * @return 
+//     */
+//    public int getLevelXp(int level) {
+//        if (xpLevelEl != null) {
+//            return (int) xpLevelEl.getValue(level);
+//        }
+//        return 0;
+//    }
+    
+    // 1.当经验值属性发生变化时检查角色是否可以升级.
+    // 2.当等级值直接发生变化时，改变其它属性值。
+    @Override
+    public void onValueChanged(Attribute attribute) {
+        if (attribute == xpAttribute) {
+            if (xpLevelEl != null && levelAttribute != null) {
+                levelUpCheck();
+            }
+            return;
         }
-        return 0;
+        if (attribute == levelAttribute) {
+            setLevel(levelAttribute.getValue().intValue());
+        }
     }
     
     /**
      * 直接设置角色的等级
      * @param newLevel 
      */
-    public void setLevel(int newLevel) {
+    private void setLevel(int newLevel) {
         if (levelAttribute == null) {
             return;
         }
         
-        // 1.设置等级并
-        levelAttribute.setValue(newLevel);
+        // 确保等级一致。
+        if (levelAttribute.intValue() != newLevel) {
+            levelAttribute.setValue(newLevel);
+        }
         
         // 2.升级其它等级属性,注：只有等级属性(LevelAttribute)才可以升级
         List<Attribute> attributes = entity.getAttributeManager().getAttributes();
@@ -151,29 +179,6 @@ public class LevelModule extends AbstractModule implements ValueChangeListener<N
         // 更新下一个等级时角色需要的XP数量
         if (xpNextAttribute != null && xpLevelEl != null) {
             xpNextAttribute.setValue(xpLevelEl.setLevel(newLevel + 1).getValue());
-        }
-    }
-   
-    // remove20161031
-//    /**
-//     * 获取指定等级需要的xp值, 如果模块没有配置任何等级公式，则该方法将始终返回0.
-//     * @param level 指定等级
-//     * @return 
-//     */
-//    public int getLevelXp(int level) {
-//        if (xpLevelEl != null) {
-//            return (int) xpLevelEl.getValue(level);
-//        }
-//        return 0;
-//    }
-    
-    // 当角色的xp属性的值发生变化时检查角色是否可以升级
-    @Override
-    public void onValueChanged(Attribute attribute, Number oldValue, Number newValue) {
-        if (attribute == this.xpAttribute) {
-            if (xpLevelEl != null && levelAttribute != null) {
-                levelUpCheck();
-            }
         }
     }
     
@@ -203,6 +208,17 @@ public class LevelModule extends AbstractModule implements ValueChangeListener<N
                 this.entity.getScene().addEntity(levelUpEffect);
             }
         }
+    }
+    
+    /**
+     * 获取角色的等级，注：如果当前模块没有绑定角色的等级属性，则该方法将返回0.
+     * @return 
+     */
+    public int getLevel() {
+        if (levelAttribute != null) {
+            return levelAttribute.intValue();
+        }
+        return 0;
     }
             
     /**

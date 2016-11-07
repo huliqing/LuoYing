@@ -92,6 +92,11 @@ public class GroupAttribute extends AbstractAttribute<Void> {
         return tempList;
     }
 
+    @Override
+    protected boolean doSetValue(Void newValue) {
+        throw new UnsupportedOperationException("Not supported yet."); 
+    }
+
 
     
 }

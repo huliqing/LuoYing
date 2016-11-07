@@ -55,7 +55,7 @@ public class AttributeTalent<T extends TalentData> extends AbstractTalent<T> {
         
         if (!attributeApplied) {
             applyValue = valueLevelEl.setLevel(level).getValue().floatValue();
-            entityService.hitAttribute(actor, bindAttribute, applyValue, null);
+            entityService.hitNumberAttribute(actor, bindAttribute, applyValue, null);
             attributeApplied = true;
             updateData();
         }
@@ -64,7 +64,7 @@ public class AttributeTalent<T extends TalentData> extends AbstractTalent<T> {
     @Override
     public void cleanup() {
         if (attributeApplied) {
-            entityService.hitAttribute(actor, bindAttribute, -applyValue, null);
+            entityService.hitNumberAttribute(actor, bindAttribute, -applyValue, null);
             attributeApplied = false;
             updateData();
         }

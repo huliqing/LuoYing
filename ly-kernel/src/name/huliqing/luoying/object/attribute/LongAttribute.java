@@ -19,18 +19,14 @@ public class LongAttribute extends NumberAttribute {
         value = data.getAsLong(ATTR_VALUE, 0L); // 0L,确保无论如何返回的值都是Long类型
         assert value instanceof Long;
     }    
-    
-//    @Override
-//    public void updateDatas() {
-//        super.updateDatas();
-//        // 这里一定要确保存的是long类型
-//        data.setAttribute(ATTR_VALUE, value.longValue());
-//    }
 
     @Override
-    public void setValue(Number value) {
-        // 转成long类型。
-        super.setValue(value.longValue());
+    protected boolean doSetSimpleValue(Number newValue) {
+        if (value.longValue() != newValue.longValue()) {
+            value = newValue.longValue(); // 确保转化为long类型
+            return true;
+        }
+        return false;
     }
     
     @Override

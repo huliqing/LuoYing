@@ -16,6 +16,7 @@ import name.huliqing.luoying.layer.service.ElService;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.object.el.SBooleanEl;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.game.Game;
 
 /**
  * 场景清洁器,用于清理场景中已经死亡的角色之类的功能
@@ -28,73 +29,70 @@ public class ActorCleanGameLogic<T extends GameLogicData> extends AbstractGameLo
     private final ElService elService = Factory.get(ElService.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     
-    // 默认角色死亡后被清理出战场的时间
-    private float cleanInterval = 10;
-    
     // 这条表达式用于判断哪些角色可以清理
     private SBooleanEl checkEl;
+    // 默认角色死亡后被清理出战场的时间延迟
+    private float deathDelay = 60;
     
     // ---- inner
-    private final List<Entity> temps = new ArrayList<Entity>();
+    private final List<Actor> actorStore = new ArrayList<Actor>();
+    private final List<Entity> removeStore = new ArrayList<Entity>();
+    // 将deathDelay转为毫秒
+    private float deathDelayAsMS;
 
+    public ActorCleanGameLogic() {
+        super(10); // 默认每10秒检查一次战场景进行清理。
+    }
+    
     @Override
     public void setData(T data) {
         super.setData(data);
-        cleanInterval = data.getAsFloat("cleanInterval", cleanInterval);
         checkEl = elService.createSBooleanEl(data.getAsString("checkEl", "#{false}"));
+        deathDelay = data.getAsFloat("deathDelay", deathDelay);
+    }
+
+    @Override
+    public void initialize(Game game) {
+        super.initialize(game); 
+        deathDelayAsMS = deathDelay * 1000;
     }
     
     @Override
     protected void doLogic(float tpf) {
-        List<Actor> actors = playService.getEntities(Actor.class, null);
-        if (actors == null || actors.isEmpty())
+        playService.getEntities(Actor.class, actorStore);
+        if (actorStore.isEmpty())
             return;
         
         // 记录需要被清理的角色
         Long deadTime;
-        for (Entity a : actors) {
-            
-            // remove20161102
-//            // “Player”、“未死亡”、“必要”的角色都不能移除
-//            if (!actorService.isDead(a) || actorService.isPlayer(a) || actorService.isEssential(a)) {
-//                a.getSpatial().getUserDataKeys().remove(ActorConstants.USER_DATA_DEAD_TIME_FLAG);
-//                continue;
-//            }
-//            deadTime = (Long) a.getSpatial().getUserData(ActorConstants.USER_DATA_DEAD_TIME_FLAG);
-//            if (deadTime == null) {
-//                a.getSpatial().setUserData(ActorConstants.USER_DATA_DEAD_TIME_FLAG, LuoYing.getGameTime());
-//            } else {
-//                if (LuoYing.getGameTime() - deadTime > cleanInterval * 1000) {
-//                    a.getSpatial().getUserDataKeys().remove(ActorConstants.USER_DATA_DEAD_TIME_FLAG);
-//                    temps.add(a);
-//                }
-//            }
-
+        for (Entity a : actorStore) {
             if (checkEl.setSource(a.getAttributeManager()).getValue()) {
                 deadTime = (Long) a.getSpatial().getUserData(ActorConstants.USER_DATA_DEAD_TIME_FLAG);
                 if (deadTime == null) {
                     a.getSpatial().setUserData(ActorConstants.USER_DATA_DEAD_TIME_FLAG, LuoYing.getGameTime());
                 } else {
-                    if (LuoYing.getGameTime() - deadTime > cleanInterval * 1000) {
+                    if (LuoYing.getGameTime() - deadTime > deathDelayAsMS) {
                         a.getSpatial().getUserDataKeys().remove(ActorConstants.USER_DATA_DEAD_TIME_FLAG);
-                        temps.add(a);
+                        removeStore.add(a);
                     }
                 }
             }
         }
         
         // 清理角色
-        if (!temps.isEmpty()) {
-            for (Entity a : temps) {
+        if (!removeStore.isEmpty()) {
+            for (Entity a : removeStore) {
                 playNetwork.removeEntity(a);
             }
-            temps.clear();
+            removeStore.clear();
         }
+        actorStore.clear();
     }
     
     @Override
     public void cleanup() {
-        temps.clear();
+        actorStore.clear();
+        removeStore.clear();
         super.cleanup();
     }
 }

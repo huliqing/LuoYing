@@ -3,16 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.luoying.data;
-
-import name.huliqing.luoying.xml.ObjectData;
-import com.jme3.network.serializing.Serializable;
+package game;
 
 /**
  *
  * @author huliqing
  */
-@Serializable
-public class GameLogicData extends ObjectData {
-
+public class Test {
+    public static void main(String[] args) {
+    }
 }

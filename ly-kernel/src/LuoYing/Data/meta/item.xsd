@@ -255,7 +255,7 @@ xs:time
                 <xs:attribute name="icon" ref="icon" use="required" />
                 <xs:attribute name="checkEl" type="xs:string" use="optional" >
                     <xs:annotation>
-                        <xs:documentation>绑定或直接填写一条CheckEl, 这条El用来判断source角色是否可以使用这件物品，示例：#{!source.attributeDead}</xs:documentation>
+                        <xs:documentation>绑定或直接填写一条SBooleanEl, 这条El用来判断s角色是否可以使用这件物品，示例：#{!s.attributeDead}</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
                 <xs:attribute name="effects" type="xs:string" use="optional" >

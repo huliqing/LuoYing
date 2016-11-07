@@ -250,19 +250,19 @@ public class TalentModule extends AbstractModule implements ValueChangeListener<
 
     // 监听等级的变化，并当等级变化时为角色增加天赋点数。
     @Override
-    public void onValueChanged(Attribute attribute, Number oldValue, Number newValue) {
+    public void onValueChanged(Attribute attribute) {
         // 如果监听的属性不一致或者角色的等级没有变化，则不处理。
         // 注意：这里要以talentModule内部lastApplyTalentPointsLevel的值进行比较来判断是否需要再给角色添加天赋点数
-        // 因为onValueChanged的变化是不确定的。
-        if (attribute != this.levelAttribute || newValue.intValue() <= lastApplyTalentPointsLevel) {
+        // 因为onValueChanged的变化是不确定的,可能变多，也可能变少。
+        if (attribute != levelAttribute || levelAttribute.intValue() <= lastApplyTalentPointsLevel) {
             return;
         }
         // 计算出可得的天赋点数并加到属性上
-        int addPoints = talentPointsLevelEl.setLevel(newValue.intValue()).getValue().intValue();
+        int addPoints = talentPointsLevelEl.setLevel(levelAttribute.intValue()).getValue().intValue();
         talentPointsAttribute.add(addPoints);
         // 记住最近一次添加点数的等级，避免重复添加，注：updateData用于把数据写回talentModule的data中去,
         // 这样角色在存档并重新读回的时候可以还原这个值。
-        lastApplyTalentPointsLevel = newValue.intValue();
+        lastApplyTalentPointsLevel = levelAttribute.intValue();
         updateDatas();
     }
 

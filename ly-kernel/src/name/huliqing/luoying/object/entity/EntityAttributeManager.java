@@ -74,10 +74,10 @@ public class EntityAttributeManager extends AttributeManagerImpl implements Valu
     }
     
     @Override
-    public void onValueChanged(Attribute attribute, Object oldValue, Object newValue) {
+    public void onValueChanged(Attribute attribute) {
         // 临听所有属性的变动
-        LOG.log(Level.INFO, "Entity attribute value changed, entityId={0}, attributeName={1}, oldValue={2}, newValue={3}"
-                , new Object[] {entity.getData().getId(), attribute.getName(), oldValue, newValue});
+        LOG.log(Level.INFO, "Entity attribute value changed, entityId={0}, attributeName={1}, value={2}"
+                , new Object[] {entity.getData().getId(), attribute.getName(), attribute.getValue()});
     }
     
     @Override

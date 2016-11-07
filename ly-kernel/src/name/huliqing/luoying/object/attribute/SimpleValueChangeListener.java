@@ -6,16 +6,17 @@
 package name.huliqing.luoying.object.attribute;
 
 /**
- * 属性值变化侦听器。
+ *
  * @author huliqing
  * @param <T>
  */
-public interface ValueChangeListener<T> {
+public interface SimpleValueChangeListener<T> {
     
     /**
      * 当属性值发生变化后该方法被调用。
      * @param attribute 属性
+     * @param oldValue 旧的属性值
      */
-    void onValueChanged(Attribute attribute);
+    void onSimpleValueChanged(Attribute attribute, T oldValue);
     
 }

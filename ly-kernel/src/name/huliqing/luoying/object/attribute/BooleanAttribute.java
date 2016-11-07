@@ -11,12 +11,21 @@ import name.huliqing.luoying.data.AttributeData;
  *
  * @author huliqing
  */
-public class BooleanAttribute extends AbstractAttribute<Boolean> {
+public class BooleanAttribute extends SimpleAttribute<Boolean> {
 
     @Override
     public void setData(AttributeData data) {
         super.setData(data); 
         value = data.getAsBoolean(ATTR_VALUE, false);
+    }
+
+    @Override
+    protected boolean doSetSimpleValue(Boolean newValue) {
+        if (value.booleanValue() != newValue.booleanValue()) {
+            value = newValue;
+            return true;
+        }
+        return false;
     }
 
 }

@@ -93,22 +93,22 @@ public class LimitIntegerAttribute extends IntegerAttribute implements LimitAttr
         }
         super.cleanup(); 
     }
-    
+
     @Override
-    public void setValue(Number value) {
-        int newValue = value.intValue();
-        if (newValue < minValue) {
-            newValue = minValue;
+    protected boolean doSetSimpleValue(Number newValue) {
+        int valueSet = newValue.intValue();
+        if (valueSet < minValue) {
+            valueSet = minValue;
         }
-        if (newValue > maxValue) {
-            newValue = maxValue;
+        if (valueSet > maxValue) {
+            valueSet = maxValue;
         }
-        super.setValue(newValue);
+        return super.doSetSimpleValue(valueSet);
     }
     
     // 值变侦听，当绑定的minLimitAttribute或maxLimitAttribute的值发生变化时，当前属性的值会受影响。
     @Override
-    public void onValueChanged(Attribute attribute, Number oldValue, Number newValue) {
+    public void onValueChanged(Attribute attribute) {
         if (attribute == minLimitAttribute) {
             minValue = minLimitAttribute.intValue();
             setValue(intValue());

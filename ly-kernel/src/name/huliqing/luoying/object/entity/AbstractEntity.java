@@ -138,7 +138,7 @@ public abstract class AbstractEntity<T extends EntityData> implements Entity<T> 
     }
 
     @Override
-    public void hitAttribute(String attribute, Object value, Entity hitter) {
+    public void hitAttribute(String attribute, Object hitValue, Entity hitter) {
         Attribute attr = attributeManager.getAttribute(attribute);
         if (attr == null) {
             return;
@@ -146,16 +146,18 @@ public abstract class AbstractEntity<T extends EntityData> implements Entity<T> 
         // 在击中属性之前先通知侦听器
         if (listeners != null) {
             for (EntityListener lis : listeners.getArray()) {
-                lis.onHitAttributeBefore(attribute, value, hitter);
+                lis.onHitAttributeBefore(attr, hitValue, hitter);
             }
         }
-        // 击中、设置属性值之前先记住旧的属性值
+        
+        // 应用属性值。
         Object oldValue = attr.getValue();
-        attr.setValue(value);
+        attr.setValue(hitValue);
+        
         // 击中后再通知侦听器一次。
         if (listeners != null) {
             for (EntityListener lis : listeners.getArray()) {
-                lis.onHitAttributeAfter(attribute, attr.getValue(), oldValue, hitter);
+                lis.onHitAttributeAfter(attr, hitValue, hitter, oldValue);
             }
         }
         

@@ -40,7 +40,7 @@ xs:time
                         <xs:annotation>
                             <xs:documentation>
                                 指定一个或者直接填写一条LevelEl表达式，这条表达式为当前天赋计算一个等级值，这个值将会添加到所绑定的属性上。
-                                示例：#{level}, #{level + 2 * Math:pow(1.06, level)}, 其中level为天赋的当前等级.
+                                示例：#{l}, #{l + 2 * Math:pow(1.06, l)}, 其中"l"(小写的L)表示天赋的当前等级.
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>

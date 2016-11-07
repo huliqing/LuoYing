@@ -14,24 +14,6 @@ import java.util.Collection;
 public interface CollectionAttribute<E> {
     
     /**
-     * Collection监听接口,用于监听列表的变化
-     * @param <E> 
-     */
-    public interface CollectionChangeListener<E> {
-        /**
-         * 当列表中添加了一个新元素时该方法被调用。
-         * @param added 新添加的元素
-         */
-        void onAdded(E added);
-        
-        /**
-         * 当列表移除了一个元素时该方法被调用。
-         * @param removed 已被移除的元素
-         */
-        void onRemoved(E removed);
-    }
-    
-    /**
      * 判断当前元素数量
      * @return 
      */
@@ -68,14 +50,14 @@ public interface CollectionAttribute<E> {
      * 添加一个侦听器,用于监听元素的添加或删除
      * @param listener 
      */
-    void addListener(CollectionChangeListener listener);
+    void addCollectionChangeListener(CollectionChangeListener listener);
     
     /**
      * 移除一个侦听器。
      * @param listener
      * @return 
      */
-    boolean removeListener(CollectionChangeListener listener);
+    boolean removeCollectionChangeListener(CollectionChangeListener listener);
     
 
     

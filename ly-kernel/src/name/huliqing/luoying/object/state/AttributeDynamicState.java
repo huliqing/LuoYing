@@ -16,9 +16,9 @@ public class AttributeDynamicState extends AbstractState {
     private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
 
     // 影响的属性名称
-    private String attributeName;
-    // 每一次间隔要影响的数值
-    private float value;
+    private String bindNumberAttribute;
+    // 每一次间隔要添加的数值
+    private float addValue;
     // 时间间隔,单位秒。
     private float interval;
     
@@ -28,8 +28,8 @@ public class AttributeDynamicState extends AbstractState {
     @Override
     public void setData(StateData data) {
         super.setData(data);
-        attributeName = data.getAsString("attributeName");
-        value = data.getAsFloat("value");
+        bindNumberAttribute = data.getAsString("bindNumberAttribute");
+        addValue = data.getAsFloat("addValue");
         interval = data.getAsFloat("interval", 1.0f);
     }
     
@@ -37,10 +37,9 @@ public class AttributeDynamicState extends AbstractState {
     public void update(float tpf) {
         super.update(tpf);
         intervalUsed += tpf;
-        if (intervalUsed >= interval && attributeName != null) {
+        if (intervalUsed >= interval && bindNumberAttribute != null) {
             intervalUsed = 0;
-//            HitUtils.getInstance().applyHit(sourceActor, actor, attributeName, value);
-            entityNetwork.hitAttribute(actor, attributeName, value, sourceActor);
+            entityNetwork.hitNumberAttribute(actor, bindNumberAttribute, addValue, sourceActor);
         }
     }
 

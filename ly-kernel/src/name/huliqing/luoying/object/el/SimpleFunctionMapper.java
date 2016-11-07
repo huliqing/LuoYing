@@ -7,7 +7,9 @@ package name.huliqing.luoying.object.el;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,13 +28,20 @@ import javax.el.FunctionMapper;
 public class SimpleFunctionMapper extends FunctionMapper {
     private static final Logger LOG = Logger.getLogger(SimpleFunctionMapper.class.getName());
 
+    private final static Map<String, Method> MATH_METHOD_CACHE = new HashMap<String, Method>();
+    
     private final Map<String, Method> functionMap = new HashMap<String, Method>();
     
     public SimpleFunctionMapper() {
-        // 添加默认的Math方法
-        Method[] methods = Math.class.getMethods();
-        for (Method m : methods) {
-            addFunction("Math", m.getName(), m);
+        // 添加默认的Math方法,并缓存math方法。
+        if (MATH_METHOD_CACHE.isEmpty()) {
+            Method[] methods = Math.class.getMethods();
+            for (Method m : methods) {
+                addFunction("Math", m.getName(), m);
+            }
+            MATH_METHOD_CACHE.putAll(functionMap);
+        } else {
+            functionMap.putAll(MATH_METHOD_CACHE);
         }
     }
     

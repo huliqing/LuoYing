@@ -9,29 +9,29 @@ import name.huliqing.luoying.data.StateData;
 import name.huliqing.luoying.layer.service.EntityService;
 
 /**
- * 可以改变角色属性数值的状态,可指定改变动态值或静态值，或者两者都
- * 改变，也可以在状态结束时恢复属性值。
+ * 可以改变角色属性数值的状态.
  * @author huliqing
  */
 public class AttributeState extends AbstractState {
     private final EntityService entityService = Factory.get(EntityService.class);
     
-    private String attributeName;
-    private float value;
+    private String bindNumberAttribute;
+    private float addValue;
     // 是否在属性移除后恢复属性值
     private boolean restore;
     
+    // ---- inner
     // 被修改的指定属性
     // 实际操作的属性值
-    private float applyValue;
+    private float finalAddValue;
     // 标记属性是否已经作用到目标
     private boolean attributeApplied;
 
     @Override
     public void setData(StateData data) {
         super.setData(data); 
-        this.attributeName = data.getAsString("attributeName");
-        this.value = data.getAsFloat("value", value);
+        this.bindNumberAttribute = data.getAsString("bindNumberAttribute");
+        this.addValue = data.getAsFloat("addValue", addValue);
         this.restore = data.getAsBoolean("restore", restore);
         this.attributeApplied = data.getAsBoolean("attributeApplied", attributeApplied);
     }
@@ -50,8 +50,8 @@ public class AttributeState extends AbstractState {
             return;
         }
         // data.getResist()为抵抗率，取值 [0.0~1.0], 如果为1.0则说明完全抵抗. 
-        applyValue = value * (1 - data.getResist());
-        entityService.hitAttribute(actor, attributeName, applyValue, sourceActor);
+        finalAddValue = addValue * (1 - data.getResist());
+        entityService.hitNumberAttribute(actor, bindNumberAttribute, finalAddValue, sourceActor);
         attributeApplied = true;
         updateDatas();
     }
@@ -59,7 +59,7 @@ public class AttributeState extends AbstractState {
     @Override
     public void cleanup() {
         if (attributeApplied && restore) {
-            entityService.hitAttribute(actor, attributeName, -applyValue, sourceActor);
+            entityService.hitNumberAttribute(actor, bindNumberAttribute, -finalAddValue, sourceActor);
             attributeApplied = false;
             updateDatas();
         }

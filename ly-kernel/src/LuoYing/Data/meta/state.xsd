@@ -203,15 +203,15 @@ xs:time
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="stateBase">
-                    <xs:attribute name="attributeName" type="xs:string" use="required">
+                    <xs:attribute name="bindNumberAttribute" type="xs:string" use="required">
                         <xs:annotation>
-                            <xs:documentation>指定要改变的属性”名称“（不是id）</xs:documentation>
+                            <xs:documentation>NumberAttribute,绑定角色的属性, 状态将会持续对这个属性的值进行改变。</xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="value" type="xs:decimal" use="required">
+                    <xs:attribute name="addValue" type="xs:decimal" use="required">
                         <xs:annotation>
-                            <xs:documentation>指定每次要改变的属性值。
-                                示例，如：attrName="attributeHealth" value="10", interval="3", 则表示每3秒给角色的attributeHealth属性添加10点值。</xs:documentation>
+                            <xs:documentation>指定每次要增加的属性值,这个值可正可负
+                                示例，如：bindNumberAttribute="attributeHealth" addValue="10", interval="3", 则表示每3秒给角色的attributeHealth属性添加10点值。</xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
                     <xs:attribute name="interval" type="xs:decimal" use="required">
@@ -264,10 +264,10 @@ xs:time
     <xs:complexType name="stateAttributeBase">
         <xs:complexContent>
             <xs:extension base="stateBase">
-                <xs:attribute name="attributeName" type="xs:string" use="required">
-                    <xs:annotation><xs:documentation>属性名称（非ID)，这个名称指定了状态要改变的是哪一个属性</xs:documentation></xs:annotation>
+                <xs:attribute name="bindNumberAttribute" type="xs:string" use="required">
+                    <xs:annotation><xs:documentation>NumberAttribute,绑定角色的一个Number属性，指定状态要改变的是哪一个属性</xs:documentation></xs:annotation>
                 </xs:attribute>
-                <xs:attribute name="value" type="xs:decimal" use="required">
+                <xs:attribute name="addValue" type="xs:decimal" use="required">
                     <xs:annotation><xs:documentation>要改变的属性数值。可正，可负</xs:documentation></xs:annotation>
                 </xs:attribute>
                 <xs:attribute name="restore" type="bool" use="required">
