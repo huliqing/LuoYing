@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.luoying.view.transfer;
+package name.huliqing.luoying.transfer;
 
 /**
  * 交易侦听器

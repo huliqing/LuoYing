@@ -9,7 +9,7 @@ import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.ly.view.ItemPanel;
 import name.huliqing.luoying.ui.Row;
 import name.huliqing.ly.view.ItemList.RowClickListener;
-import name.huliqing.luoying.view.transfer.Transfer;
+import name.huliqing.luoying.transfer.Transfer;
 import name.huliqing.luoying.xml.DataProcessor;
 
 /**

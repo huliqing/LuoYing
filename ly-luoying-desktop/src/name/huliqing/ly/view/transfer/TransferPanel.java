@@ -13,8 +13,8 @@ import name.huliqing.luoying.manager.ResourceManager;
 import name.huliqing.luoying.ui.LinearLayout;
 import name.huliqing.luoying.ui.UIFactory;
 import name.huliqing.luoying.ui.state.UIState;
-import name.huliqing.luoying.view.transfer.TransferImpl;
-import name.huliqing.luoying.view.transfer.TransferListener;
+import name.huliqing.luoying.transfer.TransferImpl;
+import name.huliqing.luoying.transfer.TransferListener;
 import name.huliqing.luoying.xml.DataProcessor;
 
 /**
