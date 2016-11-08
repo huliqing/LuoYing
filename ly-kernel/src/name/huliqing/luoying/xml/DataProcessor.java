@@ -9,7 +9,7 @@ package name.huliqing.luoying.xml;
  * @author huliqing
  * @param <T>
  */
-public interface DataProcessor<T extends ProtoData> {
+public interface DataProcessor<T extends ObjectData> {
 
     /**
      * 设置Data，这个data包含了DataProcessor要使用的所有可能的数据，在创建DataProcessor的时候这个方法会被自

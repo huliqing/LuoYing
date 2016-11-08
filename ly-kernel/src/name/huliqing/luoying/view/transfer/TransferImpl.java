@@ -6,21 +6,18 @@ package name.huliqing.luoying.view.transfer;
 
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.luoying.xml.ObjectData;
-import name.huliqing.luoying.object.Loader;
-import name.huliqing.luoying.xml.DataProcessor;
 
 /**
- * 数据传输基类
+ * 数据传输基类.
  * @author huliqing
- * @param <T>
  */
-public class ItemTransfer<T extends DataProcessor<ObjectData>> implements Transfer<T> {
+public class TransferImpl implements Transfer {
 
     private List<TransferListener> listeners;
     // 需要传输的目标对象
     protected Transfer target;
-    protected final List<T> datas = new ArrayList<T>();
+    // 数据列表
+    protected final List<TransferData> datas = new ArrayList<TransferData>();
     
     @Override
     public void setTarget(Transfer target) {
@@ -33,25 +30,26 @@ public class ItemTransfer<T extends DataProcessor<ObjectData>> implements Transf
     }
 
     @Override
-    public List<T> getDatas() {
+    public List<TransferData> getDatas() {
         return datas;
     }
 
     @Override
-    public void setDatas(List<T> datas) {
+    public void setDatas(List<TransferData> datas) {
         this.datas.clear();
         this.datas.addAll(datas);
     }
 
     @Override
-    public void addData(T pd, int count) {
-        T data = findData(pd.getData().getId());
+    public void addData(TransferData pd, int count) {
+        TransferData data = findData(pd.getObject().getData().getId());
         if (data == null) {
-            data = Loader.load(pd.getData().getId());
-            data.getData().setTotal(count);
+            data = new TransferData();
+            data.setObject(pd.getObject());
+            data.setCount(count);
             datas.add(data);
         } else {
-            data.getData().setTotal(data.getData().getTotal() + count);
+            data.setCount(data.getCount() + count);
         }
         
         // fireListener
@@ -63,17 +61,17 @@ public class ItemTransfer<T extends DataProcessor<ObjectData>> implements Transf
     }
 
     @Override
-    public void removeData(T pd, int count) {
+    public void removeData(TransferData pd, int count) {
         if (count < 0) 
             throw new IllegalArgumentException("Count could not less than ZERO! count=" + count);
         
-        T data = findData(pd.getData().getId());
+        TransferData data = findData(pd.getObject().getData().getId());
         if (data == null) {
             return;
         }
         
-        data.getData().setTotal(data.getData().getTotal() - count);
-        if (data.getData().getTotal() <= 0) {
+        data.setCount(data.getCount() - count);
+        if (data.getCount() <= 0) {
             datas.remove(data);
         }
         
@@ -86,9 +84,9 @@ public class ItemTransfer<T extends DataProcessor<ObjectData>> implements Transf
     }
 
     @Override
-    public T findData(String id) {
-        for (T data : datas) {
-            if (data.getData().getId().equals(id)) {
+    public TransferData findData(String id) {
+        for (TransferData data : datas) {
+            if (data.getObject().getData().getId().equals(id)) {
                 return data;
             }
         }
@@ -96,7 +94,7 @@ public class ItemTransfer<T extends DataProcessor<ObjectData>> implements Transf
     }
 
     @Override
-    public final void transfer(T data, int count) {
+    public final void transfer(TransferData data, int count) {
         if (target == null)
             return;
         target.addData(data, count);

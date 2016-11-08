@@ -13,7 +13,7 @@ import name.huliqing.luoying.manager.ResourceManager;
 import name.huliqing.luoying.ui.LinearLayout;
 import name.huliqing.luoying.ui.UIFactory;
 import name.huliqing.luoying.ui.state.UIState;
-import name.huliqing.luoying.view.transfer.ItemTransfer;
+import name.huliqing.luoying.view.transfer.TransferImpl;
 import name.huliqing.luoying.view.transfer.TransferListener;
 import name.huliqing.luoying.xml.DataProcessor;
 
@@ -23,7 +23,7 @@ import name.huliqing.luoying.xml.DataProcessor;
  * @param <T>
  */
 public abstract class TransferPanel<T extends DataProcessor<ObjectData>> extends LinearLayout implements TransferListener<T>, NumConfirmListener {
-    private final ItemTransfer transfer = new ItemTransfer();
+    private final TransferImpl transfer = new TransferImpl();
     private static NumPanel numPanel; // 一个实例就行
     private T tempData;
 

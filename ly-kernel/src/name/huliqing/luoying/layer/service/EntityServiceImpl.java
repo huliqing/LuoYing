@@ -5,9 +5,12 @@
  */
 package name.huliqing.luoying.layer.service;
 
+import java.util.Collections;
+import java.util.List;
 import name.huliqing.luoying.object.attribute.BooleanAttribute;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.xml.ObjectData;
 
 /**
  *
@@ -51,5 +54,13 @@ public class EntityServiceImpl implements EntityService {
         return defValue;
     }
 
+    @Override
+    public ObjectData getData(Entity actor, String id) {
+        return actor.getData().getObjectData(id);
+    }
     
+    @Override
+    public List<ObjectData> getDatas(Entity entity) {
+        return Collections.unmodifiableList(entity.getData().getObjectDatas());
+    }
 }

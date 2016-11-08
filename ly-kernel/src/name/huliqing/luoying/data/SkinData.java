@@ -4,7 +4,6 @@
  */
 package name.huliqing.luoying.data;
 
-import name.huliqing.luoying.xml.ObjectData;
 import com.jme3.export.InputCapsule;
 import com.jme3.export.JmeExporter;
 import com.jme3.export.JmeImporter;
@@ -13,39 +12,24 @@ import com.jme3.network.serializing.Serializable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.luoying.data.define.CostObject;
+import name.huliqing.luoying.data.define.CountObjectImpl;
 import name.huliqing.luoying.data.define.MatObject;
+import name.huliqing.luoying.data.define.TradeObject;
 
 /**
  * 皮肤，装甲，武器等.
  * @author huliqing
  */
 @Serializable
-public class SkinData extends ObjectData implements MatObject, CostObject {
+public class SkinData extends CountObjectImpl implements MatObject, TradeObject {
     
     // 装备应用到目标身上时对目标属性的影响
     private List<AttributeApply> applyAttributes;
     
-    @Override
-    public void write(JmeExporter ex) throws IOException {
-        super.write(ex);
-        OutputCapsule oc = ex.getCapsule(this);
-        if (applyAttributes != null) {
-            oc.writeSavableArrayList(new ArrayList<AttributeApply>(applyAttributes), "applyAttributes", null);
-        }
-    }
-    
-    @Override
-    public void read(JmeImporter im) throws IOException {
-        super.read(im);
-        InputCapsule ic = im.getCapsule(this);
-        applyAttributes = ic.readSavableArrayList("applyAttributes", null);
-    }
-    
     public List<AttributeApply> getApplyAttributes() {
         return applyAttributes;
     }
-
+    
     public void setApplyAttributes(ArrayList<AttributeApply> applyAttributes) {
         this.applyAttributes = applyAttributes;
     }
@@ -144,5 +128,21 @@ public class SkinData extends ObjectData implements MatObject, CostObject {
      */
     public void setAttributeApplied(boolean attributeApplied) {
         setAttribute("attributeApplied", attributeApplied);
+    }
+    
+    @Override
+    public void write(JmeExporter ex) throws IOException {
+        super.write(ex);
+        OutputCapsule oc = ex.getCapsule(this);
+        if (applyAttributes != null) {
+            oc.writeSavableArrayList(new ArrayList<AttributeApply>(applyAttributes), "applyAttributes", null);
+        }
+    }
+    
+    @Override
+    public void read(JmeImporter im) throws IOException {
+        super.read(im);
+        InputCapsule ic = im.getCapsule(this);
+        applyAttributes = ic.readSavableArrayList("applyAttributes", null);
     }
 }

@@ -14,7 +14,6 @@ import name.huliqing.luoying.constants.InterfaceConstants;
 import name.huliqing.luoying.constants.ResConstants;
 import name.huliqing.ly.data.ChatData;
 import name.huliqing.luoying.xml.ObjectData;
-import name.huliqing.luoying.data.define.CostObject;
 import name.huliqing.luoying.layer.service.ItemService;
 import name.huliqing.luoying.layer.service.SkinService;
 import name.huliqing.ly.view.Footer;
@@ -40,6 +39,7 @@ import name.huliqing.luoying.xml.DataProcessor;
 import name.huliqing.ly.layer.network.ChatNetwork;
 import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.ly.layer.service.GameService;
+import name.huliqing.luoying.data.define.TradeObject;
 
 /**
  * 出售物品到商店类角色
@@ -192,10 +192,10 @@ public class SellChat<T extends ChatData> extends Chat<T> {
             return 0;
         float total = 0;
         for (DataProcessor<ObjectData> pd : datas) {
-            if (!(pd.getData() instanceof CostObject)) {
+            if (!(pd.getData() instanceof TradeObject)) {
                 continue;
             }
-            total += ((CostObject) pd.getData()).getCost() * pd.getData().getTotal();
+            total += ((TradeObject) pd.getData()).getCost() * pd.getData().getTotal();
         }
         total *= discount;
         return (int) total;

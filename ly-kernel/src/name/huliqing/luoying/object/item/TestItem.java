@@ -5,7 +5,9 @@
  */
 package name.huliqing.luoying.object.item;
 
+import com.jme3.math.ColorRGBA;
 import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.layer.service.MagicService;
@@ -13,7 +15,6 @@ import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.layer.service.SaveService;
 import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.layer.service.StateService;
-import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
 
 /**
@@ -29,6 +30,7 @@ public class TestItem extends AbstractItem {
     private final MagicService magicService = Factory.get(MagicService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
+    private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
 
     @Override
     public boolean canUse(Entity actor) {
@@ -39,10 +41,11 @@ public class TestItem extends AbstractItem {
     public void use(Entity actor) {
         super.use(actor);
         
-        Entity aa = Loader.load("actorAltar");
+//        Entity aa = Loader.load("actorAltar");
 //        actorService.setGroup(aa, 10);
 //        actorService.setLevel(aa, 60);
-        playNetwork.addEntity(actor.getScene(), aa);
+//        playNetwork.addEntity(actor.getScene(), aa);
+        
 
 //        Effect eff = Loader.load("effectTonic");
 //        Emitter eff = Loader.load("emitterRandomFire");
@@ -51,7 +54,8 @@ public class TestItem extends AbstractItem {
 //        eff.getSpatial().setQueueBucket(RenderQueue.Bucket.Translucent);
 //        actor.getScene().getRoot().attachChild(eff.getSpatial());
 //        ((Node)actor.getSpatial()).attachChild(eff.getSpatial());
-
+    
+        entityNetwork.hitAttribute(actor, "attributeColor", new ColorRGBA(1,1,1.5f,1), null);
     }
     
 }

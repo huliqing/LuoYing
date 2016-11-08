@@ -68,7 +68,7 @@ public class AttributeElContext extends ELContext{
                     throw new NullPointerException("Attribute not found from AttributeManager, AttributeManager=" + am 
                             + ", attribute=" + property 
                             + ", expression=" + el.getExpression() 
-                            + ", el=" + el.getData().getId());
+                            + ", el=" + el.getData().getId()); 
                 }
                 return attribute.getValue();
             }

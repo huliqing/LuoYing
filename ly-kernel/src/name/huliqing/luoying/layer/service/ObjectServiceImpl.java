@@ -5,16 +5,12 @@
  */
 package name.huliqing.luoying.layer.service;
 
-import java.util.Collections;
-import java.util.List;
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.constants.IdConstants;
 import name.huliqing.luoying.data.ItemData;
 import name.huliqing.luoying.data.SkillData;
 import name.huliqing.luoying.data.SkinData;
 import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.luoying.xml.DataFactory;
-import name.huliqing.luoying.data.define.CostObject;
 import name.huliqing.luoying.object.entity.Entity;
 
 /**
@@ -88,23 +84,24 @@ public class ObjectServiceImpl implements ObjectService {
         throw new UnsupportedOperationException("unsupported yet!");
     }
 
-    @Override
-    public ObjectData getData(Entity actor, String id) {
-        return actor.getData().getObjectData(id);
-    }
-
-    @Override
-    public List<ObjectData> getDatas(Entity actor) {
-        return Collections.unmodifiableList(actor.getData().getObjectDatas());
-    }
-
-    @Override
-    public float getCost(ObjectData data) {
-        if (data instanceof CostObject) {
-            return ((CostObject)data).getCost();
-        }
-        return 0;
-    }
+    // remove20161108
+//    @Override
+//    public ObjectData getData(Entity actor, String id) {
+//        return actor.getData().getObjectData(id);
+//    }
+//
+//    @Override
+//    public List<ObjectData> getDatas(Entity actor) {
+//        return Collections.unmodifiableList(actor.getData().getObjectDatas());
+//    }
+//
+//    @Override
+//    public float getCost(ObjectData data) {
+//        if (data instanceof TradeObject) {
+//            return ((TradeObject)data).getCost();
+//        }
+//        return 0;
+//    }
     
 //    @Override
 //    public boolean isSellable(ObjectData data) {

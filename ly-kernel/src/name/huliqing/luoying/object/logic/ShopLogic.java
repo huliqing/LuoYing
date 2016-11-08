@@ -6,20 +6,24 @@ package name.huliqing.luoying.object.logic;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.LogicData;
+import name.huliqing.luoying.data.define.CountObject;
 import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.luoying.utils.ConvertUtils;
-import name.huliqing.luoying.layer.service.ObjectService;
 import name.huliqing.luoying.layer.network.ObjectNetwork;
+import name.huliqing.luoying.layer.service.EntityService;
 
 /**
  * 商店逻辑，该逻辑会每隔一段时间给角色进货。以补充商店类角色的货源。
  * @author huliqing
  */
 public class ShopLogic extends AbstractLogic {
+    private static final Logger LOG = Logger.getLogger(ShopLogic.class.getName());
     private final ObjectNetwork objectNetwork = Factory.get(ObjectNetwork.class);
-    private final ObjectService objectService = Factory.get(ObjectService.class);
+    private final EntityService entityService = Factory.get(EntityService.class);
     
     private List<Product> products;
     // 进货速度，如：1.0 表示每秒进货一件（每件未达到maxCount的商品各进货一件）
@@ -76,8 +80,17 @@ public class ShopLogic extends AbstractLogic {
             if (p.maxCount <= 0) 
                 continue;
             
-            temp = objectService.getData(actor, p.itemId);
-            currentCount = temp != null ? temp.getTotal() : 0;
+            temp = entityService.getData(actor, p.itemId);
+            currentCount = 0;
+            if (temp instanceof CountObject) {
+                currentCount = ((CountObject) temp).getTotal();
+            } else {
+                if (temp != null) {
+                    LOG.log(Level.WARNING, "Unsupported object data, ShopLogic only supported CountObject."
+                            + " objectData={0}, actorId={1}, logicId={2} "
+                            , new Object[] {temp.getId(), actor.getData().getId(), data.getId()});
+                }
+            }
             actualStock = p.maxCount - currentCount;
             if (actualStock > 0) {
                 objectNetwork.addData(actor, p.itemId, actualStock);
@@ -104,8 +117,18 @@ public class ShopLogic extends AbstractLogic {
                 continue;
             
             actualStock = stockCount;
-            temp = objectService.getData(actor, p.itemId);
-            currentCount = temp != null ? temp.getTotal() : 0;
+            temp = entityService.getData(actor, p.itemId);
+
+            currentCount = 0;
+            if (temp instanceof CountObject) {
+                currentCount = ((CountObject) temp).getTotal();
+            } else {
+                if (temp != null) {
+                    LOG.log(Level.WARNING, "Unsupported object data, ShopLogic only supported CountObject."
+                            + " objectData={0}, actorId={1}, logicId={2} "
+                            , new Object[] {temp.getId(), actor.getData().getId(), data.getId()});
+                }
+            }
             
             if (currentCount + actualStock > p.maxCount) {
                 actualStock = p.maxCount - currentCount;
