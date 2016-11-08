@@ -5,17 +5,24 @@
  */
 package name.huliqing.luoying.data.define;
 
+import java.util.List;
+
 /**
  * TradeObject定义了一类可以进行交易的物品,这类物品存在相应的价值，可以通过另外一些物品进行交易获得。
- * 比如：一个角色可以通过一些金币来购买（交换）一件武器，那么金币和装备就必须是TradeObject类型的物品。
+ * 例如：一件武器需要一些其它物品（如金币）来交换获得，那么武器就可以定义为TradeObject.
  * @author huliqing
  */
 public interface TradeObject {
     
     /**
-     * 获得物体的价值。
+     * 获取物品的交易信息列表，返回的这个列表表示了物品的价值.如果返回null,则说明这件物品毫无价值.
      * @return 
      */
-    float getCost();
-
+    List<TradeInfo> getTradeInfos();
+    
+    /**
+     *  设置物品的交易信息列表.
+     * @param tradeInfos 
+     */
+    void setTradeInfos(List<TradeInfo> tradeInfos);
 }

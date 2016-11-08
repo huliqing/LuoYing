@@ -129,12 +129,10 @@ xs:time
                         <xs:documentation>声效,格式:"sound1,sound2,..."</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-                <xs:attribute name="mat" type="xs:string" use="optional" >
-                    <xs:annotation>
-                        <xs:documentation>装备的“质的”mat, 具体定义参考: "define.xml"</xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="cost" ref="cost" use="optional" />
+                <xs:attribute ref="mat" use="optional" />
+                <xs:attribute ref="total" use="optional" />
+                <xs:attribute ref="tradeInfos" use="optional" />
+                <!--<xs:attribute name="cost" ref="cost" use="optional" />-->
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>

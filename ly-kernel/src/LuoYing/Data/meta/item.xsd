@@ -272,6 +272,8 @@ xs:time
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
+                <xs:attribute ref="total" use="optional" />
+                <xs:attribute ref="tradeInfos" use="optional" />
                 <xs:attribute name="deletable" type="bool" use="optional">
                     <xs:annotation>
                         <xs:documentation>物品是否可删除</xs:documentation>
@@ -286,7 +288,6 @@ xs:time
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-                <xs:attribute name="cost" ref="cost" use="optional" />
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>

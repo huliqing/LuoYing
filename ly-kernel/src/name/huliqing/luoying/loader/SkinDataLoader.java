@@ -21,7 +21,9 @@ public class SkinDataLoader implements DataLoader<SkinData> {
 
     @Override
     public void load(Proto proto, SkinData data) {
-        data.setBaseSkin(proto.getAsBoolean("baseSkin", false));
+        // 交易信息
+        data.setTradeInfos(TradeObjectLoaderHelper.loadTradeInfos(proto));
+        // 装备属性
         String[] aaStr = proto.getAsArray("applyAttributes");
         if (aaStr != null) {
             ArrayList<AttributeApply> aas = new ArrayList<AttributeApply>(aaStr.length);
@@ -31,11 +33,8 @@ public class SkinDataLoader implements DataLoader<SkinData> {
             }
             data.setApplyAttributes(aas);
         }
-        
-        // 设置质的
+        // 设置质地,这里是必要的，因为需要将mat的字符串质地名称转化为int类型（索引）。
         data.setMat(DefineFactory.getMatDefine().getMat(proto.getAsString("mat")));
-        // 默认给一个数量
-        data.setTotal(proto.getAsInteger("total", 1));
     }
     
 }

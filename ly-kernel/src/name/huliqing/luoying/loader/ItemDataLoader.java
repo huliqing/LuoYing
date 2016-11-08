@@ -16,7 +16,7 @@ public class ItemDataLoader implements DataLoader<ItemData> {
 
     @Override
     public void load(Proto proto, ItemData data) {
-        // ignore
+        data.setTradeInfos(TradeObjectLoaderHelper.loadTradeInfos(proto));
     }
     
 }

@@ -58,6 +58,7 @@ import name.huliqing.luoying.data.SoundData;
 import name.huliqing.luoying.data.StateData;
 import name.huliqing.luoying.data.TalentData;
 import name.huliqing.luoying.data.TaskData;
+import name.huliqing.luoying.data.TradeObjectData;
 import name.huliqing.luoying.mess.MessActionRun;
 import name.huliqing.luoying.mess.MessActorAddSkill;
 //import name.huliqing.luoying.mess.MessActorFollow;
@@ -392,6 +393,7 @@ public class LuoYing {
         Serializer.registerClass(StateData.class);
         Serializer.registerClass(TalentData.class);
         Serializer.registerClass(TaskData.class);
+        Serializer.registerClass(TradeObjectData.class);
     }
     
     private static void registerProcessor() {

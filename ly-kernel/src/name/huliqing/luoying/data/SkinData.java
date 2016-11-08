@@ -12,26 +12,33 @@ import com.jme3.network.serializing.Serializable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.luoying.data.define.CountObjectImpl;
+import name.huliqing.luoying.data.define.CountObject;
 import name.huliqing.luoying.data.define.MatObject;
+import name.huliqing.luoying.data.define.TradeInfo;
 import name.huliqing.luoying.data.define.TradeObject;
+import name.huliqing.luoying.xml.ObjectData;
 
 /**
  * 皮肤，装甲，武器等.
  * @author huliqing
  */
 @Serializable
-public class SkinData extends CountObjectImpl implements MatObject, TradeObject {
+public class SkinData extends ObjectData implements CountObject, TradeObject, MatObject {
+    
+    // 物品的价值信息
+    private List<TradeInfo> tradeInfos;
     
     // 装备应用到目标身上时对目标属性的影响
     private List<AttributeApply> applyAttributes;
     
-    public List<AttributeApply> getApplyAttributes() {
-        return applyAttributes;
+    @Override
+    public int getTotal() {
+        return getAsInteger("total", 1);
     }
-    
-    public void setApplyAttributes(ArrayList<AttributeApply> applyAttributes) {
-        this.applyAttributes = applyAttributes;
+
+    @Override
+    public void setTotal(int total) {
+        setAttribute("total", total);
     }
 
     // remove20161101
@@ -74,11 +81,6 @@ public class SkinData extends CountObjectImpl implements MatObject, TradeObject 
         setAttribute("mat", mat);
     }
 
-    @Override
-    public float getCost() {
-        return getAsFloat("cost", 0);
-    }
-    
     /**
      * 判断当前装备是否正在使用中
      * @return 
@@ -131,9 +133,30 @@ public class SkinData extends CountObjectImpl implements MatObject, TradeObject 
     }
     
     @Override
+    public List<TradeInfo> getTradeInfos() {
+        return tradeInfos;
+    }
+
+    @Override
+    public void setTradeInfos(List<TradeInfo> tradeInfos) {
+        this.tradeInfos = tradeInfos;
+    }
+    
+    public List<AttributeApply> getApplyAttributes() {
+        return applyAttributes;
+    }
+    
+    public void setApplyAttributes(ArrayList<AttributeApply> applyAttributes) {
+        this.applyAttributes = applyAttributes;
+    }
+    
+    @Override
     public void write(JmeExporter ex) throws IOException {
         super.write(ex);
         OutputCapsule oc = ex.getCapsule(this);
+        if (tradeInfos != null) {
+            oc.writeSavableArrayList(new ArrayList<TradeInfo>(tradeInfos), "tradeInfos", null);
+        }
         if (applyAttributes != null) {
             oc.writeSavableArrayList(new ArrayList<AttributeApply>(applyAttributes), "applyAttributes", null);
         }
@@ -143,6 +166,7 @@ public class SkinData extends CountObjectImpl implements MatObject, TradeObject 
     public void read(JmeImporter im) throws IOException {
         super.read(im);
         InputCapsule ic = im.getCapsule(this);
+        tradeInfos = ic.readSavableArrayList("tradeInfos", null);
         applyAttributes = ic.readSavableArrayList("applyAttributes", null);
     }
 }

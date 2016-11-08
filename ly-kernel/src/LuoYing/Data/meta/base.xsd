@@ -177,29 +177,29 @@ xs:time
         </xs:simpleType>
     </xs:attribute>
     
+    <!--Mat用于定义一个物体的构成成份，参数Define.xml的定义: see Skin, Entity-->
     <xs:attribute name="mat" type="xs:string" use="optional" >
         <xs:annotation>
             <xs:documentation>质地，参考：define.xml的定义</xs:documentation>
         </xs:annotation>
     </xs:attribute>
     
-    <!-- ==== OutDate ==== -->
-    
-<!--    <xs:attribute name="pickable" type="bool" >
+    <!--total用于那些可量化的物体: see Skin, Item-->
+    <xs:attribute name="total" type="xs:integer" use="optional" >
+        <xs:annotation><xs:documentation>物品数量.</xs:documentation></xs:annotation>
+    </xs:attribute>
+                
+     <!--tradeInfos用于定义那些可交换、存在价值的物体: see Skin,Item-->
+    <xs:attribute name="tradeInfos" type="xs:string" use="optional" >
         <xs:annotation>
-            <xs:documentation>
-                物体是否是可选择的，即可用鼠标在游戏中选中。默认为false(0),
-                一般地面应该设置为true,否则玩家将无法控制角色在地面上行走，因为
-                玩家需要选择地面上的某个点来让角色走动。
+            <xs:documentation> 
+                物品的价值信息，可以理解为：要买这件物品时需要多少其它物品进行交换，参数格式："objectId|count,objectId|count,..."
+                示例: tradeInfos="itemGold|100", 这表示这件物品值100个金币。
             </xs:documentation>
         </xs:annotation>
-    </xs:attribute>-->
+    </xs:attribute>
     
-<!--    <xs:attribute name="cost" type="xs:integer" use="optional" >
-        <xs:annotation>
-            <xs:documentation>物品的价值，当在商品中出售时值多少钱。</xs:documentation>
-        </xs:annotation>
-    </xs:attribute>-->
+    <!-- ==== OutDate ==== -->
     
 <!--    <xs:attribute name="collisionShape">
         <xs:annotation>
