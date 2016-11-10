@@ -11,15 +11,14 @@ import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.constants.InterfaceConstants;
 import name.huliqing.luoying.constants.ResConstants;
+import name.huliqing.luoying.data.ItemData;
 import name.huliqing.ly.data.ChatData;
-import name.huliqing.luoying.layer.service.ItemService;
-import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.manager.ResourceManager;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.xml.DataFactory;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.entity.EntityDataListener;
 import name.huliqing.luoying.object.item.Item;
-import name.huliqing.luoying.object.module.ItemListener;
 import name.huliqing.luoying.ui.Button;
 import name.huliqing.luoying.ui.Icon;
 import name.huliqing.luoying.ui.LinearLayout;
@@ -35,9 +34,9 @@ import name.huliqing.luoying.ui.UIConfig;
 import name.huliqing.luoying.ui.UIFactory;
 import name.huliqing.luoying.ui.Window;
 import name.huliqing.luoying.ui.Window.CloseListener;
+import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.ly.constants.IdConstants;
 import name.huliqing.ly.layer.network.ChatNetwork;
-import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.ly.layer.service.GameService;
 
 /**
@@ -45,11 +44,10 @@ import name.huliqing.ly.layer.service.GameService;
  * @author huliqing
  * @param <T>
  */
-public class ShopItemChat<T extends ChatData> extends Chat<T> implements ItemListener {
-    private final ItemService itemService = Factory.get(ItemService.class);
-    private final PlayService playService = Factory.get(PlayService.class);
+public class ShopItemChat<T extends ChatData> extends Chat<T> implements EntityDataListener {
+//    private final PlayService playService = Factory.get(PlayService.class);
     private final GameService gameService = Factory.get(GameService.class);
-    private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
+//    private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     private final ChatNetwork chatNetwork = Factory.get(ChatNetwork.class);
 
     // 商品卖出时的折扣
@@ -98,29 +96,43 @@ public class ShopItemChat<T extends ChatData> extends Chat<T> implements ItemLis
     public void setActor(Entity actor) {
         // 移除旧的角色的侦听器（如果存在）
         if (this.actor != null) {
-            itemService.removeItemListener(actor, this);
+            this.actor.removeEntityDataListener(this);
         }
         
-        itemService.addItemListener(actor, this);
+        actor.addEntityDataListener(this);
         super.setActor(actor); 
     }
-
-    @Override
-    public void onItemAdded(Entity actor, Item item, int trueAdded) {
-         updateProductPanel(actor, item);
-    }
-
-    @Override
-    public void onItemRemoved(Entity actor, Item item, int trueRemoved) {
-         updateProductPanel(actor, item);
-    }
+    
     
     @Override
-    public void onItemUsed(Entity source, Item item) {
-         updateProductPanel(source, item);
+    public void cleanup() {
+        productPanel.datas.clear();
+        if (actor != null) {
+            actor.removeEntityDataListener(this);
+        }
+        super.cleanup(); 
     }
-    
-    private void updateProductPanel(Entity source, Item item) {
+
+    @Override
+    public void onDataAdded(ObjectData data, int amount) {
+        if (data instanceof ItemData) {
+            updateProductPanel(actor, (ItemData) data);
+        }
+    }
+
+    @Override
+    public void onDataRemoved(ObjectData data, int amount) {
+        if (data instanceof ItemData) {
+            updateProductPanel(actor, (ItemData) data);
+        }
+    }
+
+    @Override
+    public void onDataUsed(ObjectData data) {
+        // ignore
+    }
+
+    private void updateProductPanel(Entity source, ItemData item) {
          if (isInitialized()) {
             if (this.actor != actor) {
                 throw new IllegalStateException(); // 防止BUG
@@ -128,7 +140,7 @@ public class ShopItemChat<T extends ChatData> extends Chat<T> implements ItemLis
             // 不要直接updateShop，这会导致玩家在买东西的时候列表经验刷新，导致可能误点物品
 //            updateShop();
             // 如果指定物品已经卖完则从商品列表中移除。
-            productPanel.syncItem(item.getData().getId(), item.getData().getTotal());
+            productPanel.syncItem(item.getId(), item.getTotal());
             productPanel.refreshPageData();
             // 更新玩家剩余金币数
             footerPanel.update();
@@ -147,7 +159,7 @@ public class ShopItemChat<T extends ChatData> extends Chat<T> implements ItemLis
         
         // 载入产品信息
         productPanel.datas.clear();
-        productPanel.datas.addAll(itemService.getItems(actor));
+        productPanel.datas.addAll(actor.getData().getObjectDatas(ItemData.class, new ArrayList<ItemData>()));
         productPanel.refreshPageData();
         // 更新玩家剩余金币数
         footerPanel.update();
@@ -157,19 +169,10 @@ public class ShopItemChat<T extends ChatData> extends Chat<T> implements ItemLis
             scene.removeEntity(parent);
         }
     }
-
-    @Override
-    public void cleanup() {
-        productPanel.datas.clear();
-        if (actor != null) {
-            itemService.removeItemListener(actor, this);
-        }
-        super.cleanup(); 
-    }
     
-    private class ItemList extends ListView<Item> {
+    private class ItemList extends ListView<ItemData> {
 
-        final List<Item> datas = new ArrayList<Item>();
+        final List<ItemData> datas = new ArrayList<ItemData>();
         
         public ItemList(float width, float height) {
             super(width, height);
@@ -179,12 +182,12 @@ public class ShopItemChat<T extends ChatData> extends Chat<T> implements ItemLis
         }
 
         @Override
-        protected Row<Item> createEmptyRow() {
+        protected Row<ItemData> createEmptyRow() {
             return new ItemRow(this);
         }
 
         @Override
-        public List<Item> getDatas() {
+        public List<ItemData> getDatas() {
             return datas;
         }
         
@@ -192,27 +195,27 @@ public class ShopItemChat<T extends ChatData> extends Chat<T> implements ItemLis
         // 这可避免在角色快速购买物品时由于物品被移除导致列表刷新带来的错误点击
         public void syncItem(String itemId, int total) {
             // 如果存在列表中则同步total数
-            for (Item item : datas) {
+            for (ItemData item : datas) {
                 if (item.getId().equals(itemId)) {
-                    item.getData().setTotal(total);
+                    item.setTotal(total);
                     return;
                 }
             }
             // 如果列表中不存在，则把data添加进来
-            Item item = Loader.load(itemId);
-            item.getData().setTotal(total);
+            ItemData item = Loader.loadData(itemId);
+            item.setTotal(total);
             datas.add(item);
         }
         
         @Override
-        protected boolean filter(Item item) {
-            return !item.getData().isSellable();
+        protected boolean filter(ItemData item) {
+            return !item.isSellable();
         }
         
     }
     
-    private class ItemRow extends Row<Item> {
-        private Item data;
+    private class ItemRow extends Row<ItemData> {
+        private ItemData data;
 
         // 物品
         private ColumnIcon icon;
@@ -280,13 +283,14 @@ public class ShopItemChat<T extends ChatData> extends Chat<T> implements ItemLis
         }
 
         @Override
-        public final void displayRow(Item dd) {
+        public final void displayRow(ItemData dd) {
             this.data = dd;
-            icon.setIcon(data.getData().getIcon());
-            body.setNameText(ResourceManager.getObjectName(data.getData()));
+            icon.setIcon(data.getIcon());
+            body.setNameText(ResourceManager.getObjectName(data));
             body.setDesText(ResourceManager.getObjectDes(data.getId()));
-            cost.setText(data.getData().getCost() + "");
-            num.setText(data.getData().getTotal() + "");
+//            cost.setText(data.getData().getCost() + "");
+            cost.setText("Need to refactor........");
+            num.setText(data.getTotal() + "");
             setNeedUpdate();
         }
     }
@@ -373,14 +377,15 @@ public class ShopItemChat<T extends ChatData> extends Chat<T> implements ItemLis
         
         public void update() {
             // 注：这里显示的是当前玩家的剩余金币 ，不是卖家
-            Item gold =  itemService.getItem(gameService.getPlayer(), IdConstants.ITEM_GOLD);
+            ItemData gold = gameService.getPlayer().getData().getObjectData( IdConstants.ITEM_GOLD);
+            
             int golds = 0;
             if (gold != null) {
-                golds = gold.getData().getTotal();
-                goldsIcon.setImage(gold.getData().getIcon());
+                golds = gold.getTotal();
+                goldsIcon.setImage(gold.getIcon());
             } else {
                 gold = DataFactory.createData(IdConstants.ITEM_GOLD);
-                goldsIcon.setImage(gold.getData().getIcon());
+                goldsIcon.setImage(gold.getIcon());
             }
             goldsRemain.setText(ResourceManager.get(ResConstants.CHAT_SHOP_GOLDS_REMAIN) + ":" + golds);
             setNeedUpdate();

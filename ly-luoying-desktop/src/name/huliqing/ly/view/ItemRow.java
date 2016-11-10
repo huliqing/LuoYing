@@ -5,6 +5,7 @@
 package name.huliqing.ly.view;
 
 import name.huliqing.luoying.constants.InterfaceConstants;
+import name.huliqing.luoying.data.define.CountObject;
 import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.luoying.manager.ResourceManager;
 import name.huliqing.luoying.ui.ListView;
@@ -13,14 +14,13 @@ import name.huliqing.luoying.ui.UIFactory;
 import name.huliqing.luoying.ui.tiles.ColumnBody;
 import name.huliqing.luoying.ui.tiles.ColumnIcon;
 import name.huliqing.luoying.ui.tiles.ColumnText;
-import name.huliqing.luoying.xml.DataProcessor;
 
 /**
  * 显示物品的数据行
  * @author huliqing
  * @param <T>
  */
-public class ItemRow<T extends DataProcessor<ObjectData>> extends Row<T> {
+public class ItemRow<T extends ObjectData> extends Row<T> {
 
     protected T data;
     
@@ -76,11 +76,12 @@ public class ItemRow<T extends DataProcessor<ObjectData>> extends Row<T> {
     @Override
     public void displayRow(T dd) {
         data = dd;
-        icon.setIcon(data.getData().getIcon());
-        body.setNameText(ResourceManager.get(data.getData().getId() + ".name"));
-        body.setDesText(ResourceManager.getObjectDes(data.getData().getId()));
-        
-        num.setText(data.getData().getTotal() + "");
+        icon.setIcon(data.getAsString("icon"));
+        body.setNameText(ResourceManager.get(data.getId() + ".name"));
+        body.setDesText(ResourceManager.getObjectDes(data.getId()));
+        if (data instanceof CountObject) {
+            num.setText(((CountObject)data).getTotal() + "");
+        }
     }
     
     /**

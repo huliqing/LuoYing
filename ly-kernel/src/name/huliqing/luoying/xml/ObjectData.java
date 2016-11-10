@@ -69,15 +69,6 @@ public class ObjectData implements Savable {
         return id;
     }
     
-    // remove20161108
-//    /**
-//     * 获取图标，如果没有设置则返回null.
-//     * @return 
-//     */
-//    public String getIcon() {
-//        return getAsString("icon");
-//    }
-    
     /**
      * 获取物体的唯一id
      * @return 

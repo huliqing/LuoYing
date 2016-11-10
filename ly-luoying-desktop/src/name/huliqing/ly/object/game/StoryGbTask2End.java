@@ -9,7 +9,8 @@ import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.constants.ResConstants;
 import name.huliqing.luoying.constants.StoryConstants;
-import name.huliqing.luoying.xml.ObjectData;
+import name.huliqing.luoying.data.ItemData;
+import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.ly.enums.MessageType;
 import name.huliqing.ly.view.talk.Talk;
 import name.huliqing.ly.view.talk.TalkImpl;
@@ -51,6 +52,7 @@ public class StoryGbTask2End extends AbstractGameLogic {
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
     private final ObjectNetwork protoNetwork = Factory.get(ObjectNetwork.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
+    private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
     
     private StoryGbGame game;
     private Entity player;
@@ -149,8 +151,12 @@ public class StoryGbTask2End extends AbstractGameLogic {
             @Override
             public void onTalkEnd() {
                 // 移除主角身上的树根
-                ObjectData stumpData = protoService.getData(player, IdConstants.ITEM_GB_STUMP);
-                protoNetwork.removeData(player, stumpData.getId(), taskPanel.getTotal());
+//                ObjectData stumpData = protoService.getData(player, IdConstants.ITEM_GB_STUMP);
+//                protoNetwork.removeData(player, stumpData.getId(), taskPanel.getTotal());
+                
+                // 移除主角身上的树根
+                ItemData itemData = player.getData().getObjectData(IdConstants.ITEM_GB_STUMP);
+                entityNetwork.removeData(player, itemData, itemData.getTotal());
                 
                 // 移除古柏
                 playNetwork.removeEntity(gb);

@@ -30,6 +30,14 @@ public class GameData extends ObjectData {
     
 //    // 游戏可选的角色列表
 //    private List<String> availableActors;
+    
+    /**
+     * 获取游戏图标，如果没有设置则返回null.
+     * @return 
+     */
+    public String getIcon() {
+        return getAsString("icon");
+    }
 
     /**
      * 获取场景数据

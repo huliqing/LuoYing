@@ -7,10 +7,14 @@ package name.huliqing.luoying.layer.network;
 
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.layer.service.EntityService;
+import name.huliqing.luoying.mess.MessEntityAddData;
 import name.huliqing.luoying.mess.MessEntityHitNumberAttribute;
 import name.huliqing.luoying.mess.MessEntityHitAttribute;
+import name.huliqing.luoying.mess.MessEntityRemoveData;
+import name.huliqing.luoying.mess.MessEntityUseData;
 import name.huliqing.luoying.network.Network;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.xml.ObjectData;
 
 /**
  *
@@ -56,6 +60,50 @@ public class EntityNetworkImpl implements EntityNetwork {
             NETWORK.broadcast(mess);
         }
         entityService.hitNumberAttribute(entity, attribute, addValue, hitter);
+    }
+
+    @Override
+    public void addData(Entity entity, ObjectData data, int amount) {
+        if (NETWORK.isClient()) {
+            return;
+        }
+        if (NETWORK.hasConnections()) {
+            MessEntityAddData mess = new MessEntityAddData();
+            mess.setEntityId(entity.getEntityId());
+            mess.setObjectData(data);
+            mess.setAmount(amount);
+            NETWORK.broadcast(mess);
+        }
+        entityService.addData(entity, data, amount);
+    }
+
+    @Override
+    public void removeData(Entity entity, ObjectData data, int amount) {
+        if (NETWORK.isClient()) {
+            return;
+        }
+        if (NETWORK.hasConnections()) {
+            MessEntityRemoveData mess = new MessEntityRemoveData();
+            mess.setEntityId(entity.getEntityId());
+            mess.setObjectData(data);
+            mess.setAmount(amount);
+            NETWORK.broadcast(mess);
+        }
+        entityService.removeData(entity, data, amount);
+    }
+
+    @Override
+    public void useData(Entity entity, ObjectData data) {
+        if (NETWORK.isClient()) {
+            return;
+        }
+        if (NETWORK.hasConnections()) {
+            MessEntityUseData mess = new MessEntityUseData();
+            mess.setEntityId(entity.getEntityId());
+            mess.setObjectData(data);
+            NETWORK.broadcast(mess);
+        }
+        entityService.useData(entity, data);
     }
 
     

@@ -18,9 +18,6 @@ import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.ItemData;
 import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.service.ActorService;
-import name.huliqing.luoying.layer.service.ConfigService;
-import name.huliqing.luoying.layer.service.ItemService;
-import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.attribute.Attribute;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
@@ -36,7 +33,6 @@ import name.huliqing.luoying.utils.Temp;
  */
 public class SummonItem extends AbstractItem {
     private final ActorService actorService = Factory.get(ActorService.class);
-    private final ItemService itemService = Factory.get(ItemService.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     
     // 召换哪一个角色
@@ -72,7 +68,7 @@ public class SummonItem extends AbstractItem {
         }
         // 物品数减少
         if (count > 0) {
-            itemService.removeItem(actor, data.getId(), count);
+            actor.removeObjectData(data, count);
         }
     }
     
@@ -80,11 +76,6 @@ public class SummonItem extends AbstractItem {
         // -- 载入角色
         Entity bcc = Loader.load(actorId);
         
-        // remove20161103
-//        int level = actorService.getLevel(actor);
-//        actorService.setLevel(bcc, level > 0 ? level : 1); // 至少1级
-//        actorService.setPartner(actor, bcc);
-
         // 同步属性
         if (copyAttributesFromSource != null) {
             for (String attr : copyAttributesFromSource) {

@@ -7,7 +7,8 @@ package name.huliqing.ly.view.transfer;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.constants.InterfaceConstants;
-import name.huliqing.luoying.xml.ObjectData;
+import name.huliqing.luoying.data.ItemData;
+import name.huliqing.luoying.data.SkinData;
 import name.huliqing.luoying.object.item.Item;
 import name.huliqing.luoying.object.skin.Skin;
 import name.huliqing.luoying.object.skin.Weapon;
@@ -17,17 +18,18 @@ import name.huliqing.ly.view.ItemPanel;
 import name.huliqing.luoying.ui.Row;
 import name.huliqing.luoying.ui.tiles.Tab;
 import name.huliqing.luoying.transfer.Transfer;
-import name.huliqing.luoying.xml.DataProcessor;
+import name.huliqing.luoying.transfer.TransferData;
+import name.huliqing.luoying.xml.ObjectData;
 
 /**
  *
  * @author huliqing
  */
-public class TabTransferPanel extends TransferPanel<DataProcessor<ObjectData>> implements RowClickListener<DataProcessor<ObjectData>> {
+public class TabTransferPanel extends TransferPanel implements RowClickListener<TransferData> {
     
-    private final List<DataProcessor<ObjectData>> itemDatas = new ArrayList<DataProcessor<ObjectData>>();
-    private final List<DataProcessor<ObjectData>> armorDatas = new ArrayList<DataProcessor<ObjectData>>();
-    private final List<DataProcessor<ObjectData>> weaponDatas = new ArrayList<DataProcessor<ObjectData>>();
+    private final List<TransferData> itemDatas = new ArrayList<TransferData>();
+    private final List<TransferData> armorDatas = new ArrayList<TransferData>();
+    private final List<TransferData> weaponDatas = new ArrayList<TransferData>();
     
     private final Tab tab;
     private final IconPanel btnItem;      // 物品列表
@@ -61,71 +63,77 @@ public class TabTransferPanel extends TransferPanel<DataProcessor<ObjectData>> i
         addView(tab);
     }
     
-    public void setItemDatas(List<DataProcessor<ObjectData>> datas) {
+    public void setItemDatas(List<TransferData> datas) {
         itemDatas.clear();
         itemDatas.addAll(datas);
         refresh();
     }
     
-    public void setWeaponDatas(List<DataProcessor<ObjectData>> datas) {
+    public void setWeaponDatas(List<TransferData> datas) {
         weaponDatas.clear();
         weaponDatas.addAll(datas);
         refresh();
     }
     
-    public void setArmorDatas(List<DataProcessor<ObjectData>> datas) {
+    public void setArmorDatas(List<TransferData> datas) {
         armorDatas.clear();
         armorDatas.addAll(datas);
         refresh();
     }
 
     @Override
-    public void setDatas(List<DataProcessor<ObjectData>> datas) {
+    public void setDatas(List<TransferData> datas) {
         super.setDatas(datas);
         itemDatas.clear();
         armorDatas.clear();
         weaponDatas.clear();
         
         // 载入角色的数据，注意：不要直接使用获取到的data，因为这会影响原始数据
-        for (DataProcessor data : datas) {
-            if (data instanceof Item) {
+        for (TransferData data : datas) {
+            if (data.getObjectData() instanceof ItemData) {
                 itemDatas.add(data);
-            } else if (data instanceof Weapon) {
-                weaponDatas.add(data);
-            } else if (data instanceof Skin) {
-                armorDatas.add(data);
+            } else if (data.getObjectData() instanceof SkinData) {
+                SkinData sd = (SkinData) data.getObjectData();
+                if (sd.getWeaponType() != null) {
+                    weaponDatas.add(data);
+                } else {
+                    armorDatas.add(data);
+                }
             } else {
-                throw new UnsupportedOperationException("Unsupported data id=" + data.getData().getId());
+                throw new UnsupportedOperationException("Unsupported data id=" + data.getObjectData().getId());
             }
         }
         refresh();
     }
 
     @Override
-    public void onClick(Row row, boolean isPressed, DataProcessor<ObjectData> data) {
+    public void onClick(Row row, boolean isPressed, TransferData data) {
         if (isPressed) return;
         transfer(data);
     }
 
     @Override
-    public void onAdded(Transfer<DataProcessor<ObjectData>> transfer, DataProcessor<ObjectData> data, int count) {
-        DataProcessor<ObjectData> temp = findLocalData(itemDatas, data.getData().getId());
+    public void onAdded(Transfer transfer, TransferData data, int count) {
+        TransferData temp = findLocalData(itemDatas, data.getObjectData().getId());
         if (temp == null)
-            temp = findLocalData(armorDatas, data.getData().getId());
+            temp = findLocalData(armorDatas, data.getObjectData().getId());
         if (temp == null)
-            temp = findLocalData(weaponDatas, data.getData().getId());
+            temp = findLocalData(weaponDatas, data.getObjectData().getId());
         
         // temp=null说明是新增加的数据，则需要把它分类到指定列表中。
         if (temp == null) {
-            DataProcessor dp = data;
-            if (dp instanceof Item) {
+            ObjectData od = data.getObjectData();
+            if (od instanceof ItemData) {
                 itemDatas.add(data);
-            } else if (dp instanceof Weapon) {
-                weaponDatas.add(data);
-            } else if (dp instanceof Skin) {
-                armorDatas.add(data);
+            } else if (od instanceof SkinData) {
+                SkinData sd = (SkinData) od;
+                if (sd.getWeaponType() != null) {
+                    weaponDatas.add(data);
+                } else {
+                    armorDatas.add(data);
+                }
             } else {
-                throw new UnsupportedOperationException("Unsupported data id=" + data.getData().getId());
+                throw new UnsupportedOperationException("Unsupported data id=" + data.getObjectData().getId());
             }
         }
 
@@ -133,9 +141,9 @@ public class TabTransferPanel extends TransferPanel<DataProcessor<ObjectData>> i
     }
 
     @Override
-    public void onRemoved(Transfer<DataProcessor<ObjectData>> transfer, DataProcessor<ObjectData> data, int count) {
-        DataProcessor<ObjectData> temp = transfer.findData(data.getData().getId());
-        if (temp == null || temp.getData().getTotal() <= 0) {
+    public void onRemoved(Transfer transfer, TransferData data, int count) {
+        TransferData temp = transfer.findData(data.getObjectData().getId());
+        if (temp == null || temp.getAmount() <= 0) {
             itemDatas.remove(data);
             weaponDatas.remove(data);
             armorDatas.remove(data);
@@ -150,9 +158,9 @@ public class TabTransferPanel extends TransferPanel<DataProcessor<ObjectData>> i
         weaponPanel.refresh();
     }
     
-    private DataProcessor<ObjectData> findLocalData(List<DataProcessor<ObjectData>> datas, String id) {
-        for (DataProcessor<ObjectData> data : datas) {
-            if (data.getData().getId().equals(id)) {
+    private TransferData findLocalData(List<TransferData> datas, String id) {
+        for (TransferData data : datas) {
+            if (data.getObjectData().getId().equals(id)) {
                 return data;
             }
         }

@@ -4,15 +4,14 @@
  */
 package name.huliqing.ly.object.game;
 
-import com.jme3.math.ColorRGBA;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.Config;
 import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.ly.view.talk.Talk;
 import name.huliqing.ly.view.talk.TalkImpl;
 import name.huliqing.ly.view.talk.TalkListener;
-import name.huliqing.luoying.layer.network.ActorNetwork;
 import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.network.SkillNetwork;
 import name.huliqing.luoying.layer.network.StateNetwork;
@@ -22,8 +21,7 @@ import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.logic.scene.ActorMultLoadHelper;
 import name.huliqing.luoying.manager.ResourceManager;
-import name.huliqing.luoying.layer.network.ItemNetwork;
-import name.huliqing.luoying.layer.service.LogicService;
+import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.ui.Button;
 import name.huliqing.luoying.ui.TextPanel;
@@ -44,15 +42,15 @@ public class StoryGbTask1 extends AbstractTaskStep {
     private final PlayService playService = Factory.get(PlayService.class);
     private final ActionService actionService = Factory.get(ActionService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
-    private final LogicService logicService = Factory.get(LogicService.class);
+//    private final LogicService logicService = Factory.get(LogicService.class);
     
     private final GameService gameService = Factory.get(GameService.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
-    private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
+//    private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
     private final StateNetwork stateNetwork = Factory.get(StateNetwork.class);
-    private final ItemNetwork itemNetwork = Factory.get(ItemNetwork.class);
+    private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
     
     // 开始任务面板:说明任务信息
     private TextPanel taskFind;
@@ -277,7 +275,7 @@ public class StoryGbTask1 extends AbstractTaskStep {
         talk6.addListener(new TalkListener() {
             @Override
             public void onTalkEnd() {
-                itemNetwork.addItem(player, IdConstants.ITEM_BOOK_006, 1);
+                entityNetwork.addData(player, Loader.loadData(IdConstants.ITEM_BOOK_006), 1);
                 gotBook = true;
             }
         });

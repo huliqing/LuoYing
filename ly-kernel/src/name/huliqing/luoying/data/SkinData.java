@@ -16,6 +16,7 @@ import name.huliqing.luoying.data.define.CountObject;
 import name.huliqing.luoying.data.define.MatObject;
 import name.huliqing.luoying.data.define.TradeInfo;
 import name.huliqing.luoying.data.define.TradeObject;
+import name.huliqing.luoying.object.define.DefineFactory;
 import name.huliqing.luoying.xml.ObjectData;
 
 /**
@@ -41,28 +42,23 @@ public class SkinData extends ObjectData implements CountObject, TradeObject, Ma
         setAttribute("total", total);
     }
 
-    // remove20161101
-//    /**
-//     * 获取描述说明
-//     * @return 
-//     * @deprecated 以后不要再使用.
-//     */
-//    @Override
-//    public String getDes() {
-//        List<AttributeApply> aas = getApplyAttributes();
-//        if (aas != null) {
-//            StringBuilder sb = new StringBuilder();
-//            for (AttributeApply aa : aas) {
-//                sb.append(ResourceManager.getObjectName(aa.getAttribute()))
-//                        .append(":")
-//                        .append(aa.getAmount())
-//                        .append("  ");
-//            }
-//            return sb.toString();
-//        }
-//        return ResourceManager.get(ResConstants.COMMON_UNKNOW);
-//    }
-
+    /**
+     * 获取图标，如果没有设置则返回null.
+     * @return 
+     */
+    public String getIcon() {
+        return getAsString("icon");
+    }
+    
+    /**
+     * 获取武器类型，如果该方法返回不为null,则说明这是一把武器。
+     * @return 
+     * @see DefineFactory#getWeaponTypeDefine() 
+     */
+    public String getWeaponType() {
+        return getAsString("weaponType");
+    }
+    
     /**
      * 获取模型文件路径如："Models/xyz.j3o";
      * @return 
@@ -149,6 +145,28 @@ public class SkinData extends ObjectData implements CountObject, TradeObject, Ma
     public void setApplyAttributes(ArrayList<AttributeApply> applyAttributes) {
         this.applyAttributes = applyAttributes;
     }
+    
+    // remove20161101
+//    /**
+//     * 获取描述说明
+//     * @return 
+//     * @deprecated 以后不要再使用.
+//     */
+//    @Override
+//    public String getDes() {
+//        List<AttributeApply> aas = getApplyAttributes();
+//        if (aas != null) {
+//            StringBuilder sb = new StringBuilder();
+//            for (AttributeApply aa : aas) {
+//                sb.append(ResourceManager.getObjectName(aa.getAttribute()))
+//                        .append(":")
+//                        .append(aa.getAmount())
+//                        .append("  ");
+//            }
+//            return sb.toString();
+//        }
+//        return ResourceManager.get(ResConstants.COMMON_UNKNOW);
+//    }
     
     @Override
     public void write(JmeExporter ex) throws IOException {

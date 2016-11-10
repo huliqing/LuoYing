@@ -25,6 +25,20 @@ xs:time
         </xs:complexType>
     </xs:element>
     
+    <xs:element name="skinOutfit">
+        <xs:annotation>
+            <xs:documentation>
+                基本skin,如：皮肤，装备等
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="baseSkin">
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
     <xs:element name="skinWeapon">
         <xs:annotation>
             <xs:documentation>
@@ -48,20 +62,6 @@ xs:time
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                </xs:extension>
-            </xs:complexContent>
-        </xs:complexType>
-    </xs:element>
-    
-    <xs:element name="skinOutfit">
-        <xs:annotation>
-            <xs:documentation>
-                基本skin,如：皮肤，装备等
-            </xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="baseSkin">
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>

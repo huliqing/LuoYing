@@ -42,14 +42,14 @@ public class TransferImpl implements Transfer {
 
     @Override
     public void addData(TransferData pd, int count) {
-        TransferData data = findData(pd.getObject().getData().getId());
+        TransferData data = findData(pd.getObjectData().getId());
         if (data == null) {
             data = new TransferData();
-            data.setObject(pd.getObject());
-            data.setCount(count);
+            data.setObjectData(pd.getObjectData());
+            data.setAmount(count);
             datas.add(data);
         } else {
-            data.setCount(data.getCount() + count);
+            data.setAmount(data.getAmount() + count);
         }
         
         // fireListener
@@ -65,13 +65,13 @@ public class TransferImpl implements Transfer {
         if (count < 0) 
             throw new IllegalArgumentException("Count could not less than ZERO! count=" + count);
         
-        TransferData data = findData(pd.getObject().getData().getId());
+        TransferData data = findData(pd.getObjectData().getId());
         if (data == null) {
             return;
         }
         
-        data.setCount(data.getCount() - count);
-        if (data.getCount() <= 0) {
+        data.setAmount(data.getAmount() - count);
+        if (data.getAmount() <= 0) {
             datas.remove(data);
         }
         
@@ -86,7 +86,7 @@ public class TransferImpl implements Transfer {
     @Override
     public TransferData findData(String id) {
         for (TransferData data : datas) {
-            if (data.getObject().getData().getId().equals(id)) {
+            if (data.getObjectData().getId().equals(id)) {
                 return data;
             }
         }

@@ -248,9 +248,9 @@ import name.huliqing.luoying.mess.MessEntityAdd;
 import name.huliqing.luoying.mess.MessEntityHitNumberAttribute;
 import name.huliqing.luoying.mess.MessEntityHitAttribute;
 import name.huliqing.luoying.mess.MessEntityRemove;
-import name.huliqing.luoying.mess.MessItemAdd;
-import name.huliqing.luoying.mess.MessItemRemove;
-import name.huliqing.luoying.mess.MessItemUse;
+//import name.huliqing.luoying.mess.MessItemAdd;
+//import name.huliqing.luoying.mess.MessItemRemove;
+//import name.huliqing.luoying.mess.MessItemUse;
 import name.huliqing.luoying.mess.MessSkillPlay;
 import name.huliqing.luoying.mess.MessSkinAdd;
 import name.huliqing.luoying.mess.MessSkinAttach;
@@ -764,9 +764,9 @@ public class LuoYing {
 //        Serializer.registerClass(MessChatShop.class); 
         
         // Item
-        Serializer.registerClass(MessItemAdd.class); 
-        Serializer.registerClass(MessItemRemove.class); 
-        Serializer.registerClass(MessItemUse.class); 
+//        Serializer.registerClass(MessItemAdd.class); 
+//        Serializer.registerClass(MessItemRemove.class); 
+//        Serializer.registerClass(MessItemUse.class); 
         
         // Skill
         Serializer.registerClass(MessSkillPlay.class);

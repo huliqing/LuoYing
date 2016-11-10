@@ -10,21 +10,20 @@ import name.huliqing.luoying.ui.ListView;
 import name.huliqing.luoying.ui.Row;
 import name.huliqing.luoying.ui.UI;
 import name.huliqing.luoying.ui.UI.Listener;
-import name.huliqing.luoying.xml.DataProcessor;
 
 /**
  * 显示物品列表
  * @author huliqing
  * @param <T>
  */
-public class ItemList<T extends DataProcessor<ObjectData>> extends ListView<T> implements Listener {
+public class ItemList<T extends ObjectData> extends ListView<T> implements Listener {
     
     public interface RowClickListener<T> {
         void onClick(Row row, boolean isPressed, T data);
     }
     
     private final List<T> datas;
-    private RowClickListener<DataProcessor<ObjectData>> rowClickListener;
+    private RowClickListener<ObjectData> rowClickListener;
     
     public ItemList(float width, float height, List<T> datas) {
         super(width, height);

@@ -23,7 +23,7 @@ public class ChatModule extends AbstractModule {
     @Override
     public void updateDatas() {
         // ignore
-    }
+    }    
 
     @Override
     public void initialize(Entity actor) {
@@ -56,5 +56,7 @@ public class ChatModule extends AbstractModule {
     public Chat getChat() {
         return chat;
     }
+
+
     
 }

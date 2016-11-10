@@ -12,19 +12,18 @@ import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.constants.InterfaceConstants;
 import name.huliqing.luoying.constants.ResConstants;
+import name.huliqing.luoying.data.ItemData;
+import name.huliqing.luoying.data.SkinData;
+import name.huliqing.luoying.data.define.CountObject;
 import name.huliqing.ly.data.ChatData;
 import name.huliqing.luoying.xml.ObjectData;
-import name.huliqing.luoying.layer.service.ItemService;
 import name.huliqing.luoying.layer.service.SkinService;
 import name.huliqing.ly.view.Footer;
 import name.huliqing.ly.view.transfer.SimpleTransferPanel;
 import name.huliqing.ly.view.transfer.TabTransferPanel;
 import name.huliqing.ly.view.transfer.TransferPanel;
 import name.huliqing.luoying.manager.ResourceManager;
-import name.huliqing.luoying.object.Loader;
-import name.huliqing.luoying.xml.DataFactory;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.item.Item;
 import name.huliqing.luoying.object.skin.Skin;
 import name.huliqing.luoying.ui.Button;
 import name.huliqing.luoying.ui.FrameLayout;
@@ -37,9 +36,9 @@ import name.huliqing.luoying.ui.Window;
 import name.huliqing.luoying.utils.MathUtils;
 import name.huliqing.luoying.xml.DataProcessor;
 import name.huliqing.ly.layer.network.ChatNetwork;
-import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.ly.layer.service.GameService;
 import name.huliqing.luoying.data.define.TradeObject;
+import name.huliqing.luoying.transfer.TransferData;
 
 /**
  * 出售物品到商店类角色
@@ -47,10 +46,9 @@ import name.huliqing.luoying.data.define.TradeObject;
  * @param <T>
  */
 public class SellChat<T extends ChatData> extends Chat<T> {
-    private final ItemService itemService = Factory.get(ItemService.class);
     private final SkinService skinService = Factory.get(SkinService.class);
     private final GameService gameService = Factory.get(GameService.class);
-    private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
+//    private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     private final ChatNetwork chatNetwork = Factory.get(ChatNetwork.class);
 
     // 物品售出时的折扣,取值0.0~1.0, 当玩家卖给NPC时会打折扣
@@ -59,8 +57,8 @@ public class SellChat<T extends ChatData> extends Chat<T> {
     // ---- inner
     private Window win;
     private LinearLayout bodyPanel;
-    private TransferPanel<DataProcessor<ObjectData>> sourcePanel;  // 玩家物品面板,显示角色已经有的物品
-    private TransferPanel<DataProcessor<ObjectData>> distPanel;    // 出售面板，展示要出售的物品
+    private TransferPanel sourcePanel;  // 玩家物品面板,显示角色已经有的物品
+    private TransferPanel distPanel;    // 出售面板，展示要出售的物品
     private CenterPanel centerPanel;    // 分隔线
     private FooterPanel footerPanel;   // 显示售出的金额及确认按钮
     
@@ -123,22 +121,22 @@ public class SellChat<T extends ChatData> extends Chat<T> {
         seller = gameService.getPlayer();
         
         // 初始化, 数据要复制一份出来，不要去影响角色的包裹中的数据
-        List<DataProcessor> tempDatas = new ArrayList<DataProcessor>();
-        List<Item> items = itemService.getItems(seller);
+        List<ObjectData> tempDatas = new ArrayList<ObjectData>();
+        List<ItemData> items = seller.getData().getObjectDatas(ItemData.class, null);
         if (items != null) {
             tempDatas.addAll(items);
         }
-        List<Skin> skins = skinService.getSkins(seller);
+        List<SkinData> skins = seller.getData().getObjectDatas(SkinData.class, null);
         if (skins != null) {
             tempDatas.addAll(skins);
         }
         // 移除不能出售的物品
-        Iterator<DataProcessor> it = tempDatas.iterator();
+        Iterator<ObjectData> it = tempDatas.iterator();
         while (it.hasNext()) {
-            DataProcessor dp = it.next();
-            if (dp instanceof Item) {
-                Item item = (Item) dp;
-                if (!item.getData().isSellable()) {
+            ObjectData dp = it.next();
+            if (dp instanceof ItemData) {
+                ItemData item = (ItemData) dp;
+                if (!item.isSellable()) {
                     it.remove();
                     continue;
                 }
@@ -152,11 +150,16 @@ public class SellChat<T extends ChatData> extends Chat<T> {
             }
         }
         
-        List<DataProcessor<ObjectData>> transforDatas = new ArrayList<DataProcessor<ObjectData>>();
-        for (DataProcessor dp : tempDatas) {
-            ObjectData dataCopy = DataFactory.createData(dp.getData().getId());
-            dataCopy.setTotal(((ObjectData)dp.getData()).getTotal());
-            transforDatas.add(Loader.load(dataCopy));
+        List<TransferData> transforDatas = new ArrayList<TransferData>(tempDatas.size());
+        for (ObjectData objectData : tempDatas) {
+            TransferData td = new TransferData();
+            td.setObjectData(objectData);
+            if (objectData instanceof CountObject) {
+                td.setAmount(((CountObject) objectData).getTotal());
+            } else {
+                td.setAmount(1);
+            }
+            transforDatas.add(td);
         }
         sourcePanel.setDatas(transforDatas);
         
@@ -168,16 +171,16 @@ public class SellChat<T extends ChatData> extends Chat<T> {
     
     // 结算出售的金额
     private void billing() {
-        List<DataProcessor<ObjectData>> datas = distPanel.getDatas();
+        List<TransferData> datas = distPanel.getDatas();
         if (datas.isEmpty())
             return;
         String[] items = new String[datas.size()];
         int[] counts = new int[datas.size()];
-        DataProcessor<ObjectData> tempObj;
+        TransferData tempObj;
         for (int i = 0; i < datas.size(); i++) {
             tempObj = datas.get(i);
-            items[i] = tempObj.getData().getId();
-            counts[i] = tempObj.getData().getTotal();
+            items[i] = tempObj.getObjectData().getId();
+            counts[i] = tempObj.getAmount();
         }
         chatNetwork.chatSell(seller, actor, items, counts, discount);
         // 确认后退出窗口
@@ -187,15 +190,16 @@ public class SellChat<T extends ChatData> extends Chat<T> {
     // 估算价钱,最终价钱由接口计算决定。因为在确认“结算”之前玩家的包裹物品可能
     // 发生变化，并不能确保所有在"distPanel"窗口中的物品及数量都能准确售出。
     private int assess() {
-        List<DataProcessor<ObjectData>> datas = distPanel.getDatas();
+        List<TransferData> datas = distPanel.getDatas();
         if (datas.isEmpty())
             return 0;
         float total = 0;
-        for (DataProcessor<ObjectData> pd : datas) {
-            if (!(pd.getData() instanceof TradeObject)) {
+        for (TransferData pd : datas) {
+            if (!(pd.getObjectData() instanceof TradeObject)) {
                 continue;
             }
-            total += ((TradeObject) pd.getData()).getCost() * pd.getData().getTotal();
+//            total += ((TradeObject) pd.getObjectData()).getCost() * pd.getData().getTotal();
+            throw new UnsupportedOperationException("Unsupported");
         }
         total *= discount;
         return (int) total;

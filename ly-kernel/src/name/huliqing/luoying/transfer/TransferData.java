@@ -5,7 +5,6 @@
  */
 package name.huliqing.luoying.transfer;
 
-import name.huliqing.luoying.xml.DataProcessor;
 import name.huliqing.luoying.xml.ObjectData;
 
 /**
@@ -14,39 +13,39 @@ import name.huliqing.luoying.xml.ObjectData;
  */
 public class TransferData {
     
-    private DataProcessor<ObjectData> object;
-    private int count;
+    private ObjectData objectData;
+    private int amount;
     
     /**
      * 获取交换的物体
      * @return 
      */
-    public DataProcessor<ObjectData> getObject() {
-        return object;
+    public ObjectData getObjectData() {
+        return objectData;
     }
 
     /**
      * 设置交换的物体
      * @param object 
      */
-    public void setObject(DataProcessor<ObjectData> object) {
-        this.object = object;
+    public void setObjectData(ObjectData object) {
+        this.objectData = object;
     }
 
     /**
      * 获取物体的数量
      * @return 
      */
-    public int getCount() {
-        return count;
+    public int getAmount() {
+        return amount;
     }
 
     /**
      * 设置物体数量
-     * @param count 
+     * @param amount 
      */
-    public void setCount(int count) {
-        this.count = count;
+    public void setAmount(int amount) {
+        this.amount = amount;
     }
     
 }

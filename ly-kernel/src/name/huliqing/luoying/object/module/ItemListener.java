@@ -10,6 +10,7 @@ import name.huliqing.luoying.object.item.Item;
 /**
  * 监听角色物品的增加及删除
  * @author huliqing
+ * @deprecated Use EntityDataListener instead
  */
 public interface ItemListener {
     

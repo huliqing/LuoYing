@@ -8,12 +8,11 @@ package name.huliqing.ly.view.shortcut;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.ItemData;
 import name.huliqing.luoying.layer.network.ActorNetwork;
-import name.huliqing.luoying.layer.network.ItemNetwork;
-import name.huliqing.luoying.layer.service.ItemService;
+import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.item.Item;
-import name.huliqing.luoying.object.module.ItemListener;
+import name.huliqing.luoying.object.entity.EntityDataListener;
+import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.ly.layer.service.GameService;
 
@@ -21,29 +20,28 @@ import name.huliqing.ly.layer.service.GameService;
  * 用于普通物品(Item)的快捷方式
  * @author huliqing
  */
-public class ItemShortcut extends BaseUIShortcut<ItemData> implements ItemListener {
+public class ItemShortcut extends BaseUIShortcut<ItemData> implements EntityDataListener {
     private final PlayService playService = Factory.get(PlayService.class);
-    private final ItemService itemService = Factory.get(ItemService.class);
-    private final ItemNetwork itemNetwork = Factory.get(ItemNetwork.class);
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final GameService gameService = Factory.get(GameService.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
+    private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
         
     @Override
     public void initialize() {
         super.initialize();
-        itemService.addItemListener(actor, this);
+        actor.addEntityDataListener(this);
     }
 
     @Override
     public void cleanup() {
-        itemService.removeItemListener(actor, this);
+        actor.removeEntityDataListener(this);
         super.cleanup(); 
     }
-
+    
     @Override
     public void removeObject() {
-        itemNetwork.removeItem(actor, objectData.getId(), objectData.getTotal());
+        entityNetwork.removeData(actor, objectData, objectData.getTotal());
     }
     
     @Override
@@ -56,34 +54,30 @@ public class ItemShortcut extends BaseUIShortcut<ItemData> implements ItemListen
             if (target != null) {
                 gameNetwork.setTarget(actor, target.getEntityId());
             }
-            
-            itemNetwork.useItem(actor, objectData.getId());
+            entityNetwork.useData(actor, objectData);
         }
     }
     
     @Override
-    public void onItemAdded(Entity actor, Item item, int trueAdded) {
-        if (!item.getId().equals(objectData.getId()))
+    public void onDataAdded(ObjectData data, int amount) {
+        if (!data.getId().equals(objectData.getId()))
             return;
         
-        updateObjectData(item.getData());
+        updateObjectData(objectData);
     }
 
     @Override
-    public void onItemRemoved(Entity actor, Item item, int trueRemoved) {
-        if (!item.getId().equals(objectData.getId()))
+    public void onDataRemoved(ObjectData data, int amount) {
+        if (!data.getId().equals(objectData.getId()))
             return;
         
-        updateObjectData(item.getData());
+        updateObjectData(objectData);
     }
 
     @Override
-    public void onItemUsed(Entity source, Item item) {
-        if (!item.getId().equals(objectData.getId()))
-            return;
-        
-        updateObjectData(item.getData());
+    public void onDataUsed(ObjectData data) {
+        // ignore
     }
     
-
+    
 }

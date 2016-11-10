@@ -1,118 +1,57 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package name.huliqing.luoying.object.module;
-
-import java.util.ArrayList;
-import java.util.List;
-import name.huliqing.luoying.data.ItemData;
-import name.huliqing.luoying.object.Loader;
-import name.huliqing.luoying.object.entity.DataHandler;
-import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.item.Item;
-
-/**
- * @author huliqing
- */
-public class ItemModule extends AbstractModule implements DataHandler<ItemData> {
-    
-    // 监听角色物品的增删
+///*
+// * To change this license header, choose License Headers in Project Properties.
+// * To change this template file, choose Tools | Templates
+// * and open the template in the editor.
+// */
+//package name.huliqing.luoying.object.module;
+//
+//import java.util.ArrayList;
+//import java.util.Collections;
+//import java.util.List;
+//import name.huliqing.luoying.data.ItemData;
+//import name.huliqing.luoying.object.Loader;
+//import name.huliqing.luoying.object.entity.Entity;
+//import name.huliqing.luoying.object.item.Item;
+//
+///**
+// * @author huliqing
+// */
+//public class ItemModule extends AbstractModule {
+//    
+//    // 监听角色物品的增删
 //    private List<ItemListener> itemListeners;
+//    
 //    private List<Item> items;
-    
-    private List<ItemData> items;
-
-    @Override
-    public void updateDatas() {
-        // xxx updateDatas.
-    }
-    
-    @Override
-    public void initialize(Entity actor) {
-        super.initialize(actor);
-        
-         // 从角色身上取出ItemData类型数据（不取出也可以，但是把数据拿出来放在这里比较高效。）
-        List<ItemData> tempDatas = actor.getData().getObjectDatas(ItemData.class, null);
-        if (tempDatas != null && !tempDatas.isEmpty()) {
-            items = new ArrayList<ItemData>(tempDatas.size());
-            for (ItemData itemData : tempDatas) {
-                items.add(itemData);
-            }
-        }
-    }
-    
-    @Override
-    public void cleanup() {
-        if (items != null) {
-            items.clear();
-        }
-        super.cleanup();
-    }
-    
-    @Override
-    public final Class<ItemData> getHandleType() {
-        return ItemData.class;
-    }
-    
-    @Override
-    public void handleDataAdd(ItemData data, int count) {
-        if (count <= 0) 
-            return;
-        
-        ItemData item = find(data.getId());
-        if (item == null) {
-            item = data;
-            item.setTotal(count);
-            if (items == null) {
-                items = new ArrayList<ItemData>();
-            }
-            items.add(item);
-            entity.getData().addObjectData(item);
-        } else {
-            item.setTotal(item.getTotal() + count);
-        }
-    }
-    
-    @Override
-    public void handleDataRemove(ItemData data, int count) {
-        if (count <= 0)
-            return;
-        
-        ItemData item = find(data.getId());
-        
-        if (item == null)
-            return;
-        
-        if (!item.isDeletable())
-            return;
-        
-        item.setTotal(item.getTotal() - count);
-        if (item.getTotal() <= 0) {
-            items.remove(item);
-            entity.getData().getObjectDatas().remove(item);
-        }
-    }
-
-    @Override
-    public void handleDataUse(ItemData data) {
-        Item item = Loader.load(data);
-        item.use(entity);
-    }
-    
-    private ItemData find(String itemId) {
-        if (items == null) 
-            return null;
-        for (ItemData item : items) {
-            if (item.getId().equals(itemId)) {
-                return item;
-            }
-        }
-        return null;
-    }
-    
-    //    private void addItem(String itemId, int amount) {
+//
+//    @Override
+//    public void updateDatas() {
+//        // xxx updateDatas.
+//    }
+//    
+//    @Override
+//    public void initialize(Entity actor) {
+//        super.initialize(actor);
+//        
+//         // 载入技能
+//        List<ItemData> itemDatas = actor.getData().getObjectDatas(ItemData.class, null);
+//        if (itemDatas != null && !itemDatas.isEmpty()) {
+//            items = new ArrayList<Item>(itemDatas.size());
+//            for (ItemData itemData : itemDatas) {
+//                Item item = Loader.load(itemData);
+//                items.add(item);
+//            }
+//        }
+//    }
+//    
+//    @Override
+//    public void cleanup() {
+//        if (items != null) {
+//            items.clear();
+//        }
+//        super.cleanup();
+//    }
+//    
+//    public void addItem(String itemId, int amount) {
 //        if (amount <= 0) {
 //            return;
 //        }
@@ -214,8 +153,8 @@ public class ItemModule extends AbstractModule implements DataHandler<ItemData> 
 //        }
 //        return Collections.EMPTY_LIST;
 //    }
-//    
-//     /**
+//
+//    /**
 //     * 添加物品侦听器
 //     * @param itemListener 
 //     */
@@ -236,4 +175,6 @@ public class ItemModule extends AbstractModule implements DataHandler<ItemData> 
 //    public boolean removeItemListener(ItemListener itemListener) {
 //        return itemListeners != null && itemListeners.remove(itemListener);
 //    }
-}
+//    
+//    
+//}

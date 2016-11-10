@@ -10,6 +10,7 @@ import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.object.attribute.AttributeManager;
 import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.xml.DataProcessor;
+import name.huliqing.luoying.xml.ObjectData;
 
 /**
  * Entity定义一种可以直接存放在Scene中的存在，这类<b>存在</b>包含任何可能性的有形物体或无形物体,
@@ -97,20 +98,6 @@ public interface Entity<T extends EntityData> extends DataProcessor<T>{
     boolean removeFromScene();
     
     /**
-     * 添加EntityListener,用于侦听Entity被hit，或者hit目标属性
-     * @param listener 
-     */
-    void addListener(EntityListener listener);
-    
-    /**
-     * 移除EntityListener.
-     * @param listener
-     * @return 
-     * @see #addListener(name.huliqing.luoying.object.entity.EntityListener) 
-     */
-    boolean removeListener(EntityListener listener);
-    
-    /**
      * 击中、设置当前Entity的指定的属性，属性必须存在，否则什么也不做。
      * @param attribute 属性名称
      * @param hitValue 属性值，<b>偿试</b>应用到指定属性上的值,应用后属性的值应该以属性内部获得的为准，因为一些
@@ -118,4 +105,51 @@ public interface Entity<T extends EntityData> extends DataProcessor<T>{
      * @param hitter 发起攻击的源，这个参数可以为null,如果击中源不存在。
      */
     void hitAttribute(String attribute, Object hitValue, Entity hitter);
+    
+    /**
+     * 添加EntityListener,用于侦听Entity被hit，或者hit目标属性
+     * @param listener 
+     */
+    void addEntityAttributeListener(EntityAttributeListener listener);
+    
+    /**
+     * 移除EntityListener.
+     * @param listener
+     * @return 
+     * @see #addListener(name.huliqing.luoying.object.entity.EntityListener) 
+     */
+    boolean removeEntityAttributeListener(EntityAttributeListener listener);
+
+    /**
+     * 向Entity添加数据
+     * @param data
+     * @param amount 添加的数量
+     */
+    void addObjectData(ObjectData data, int amount);
+    
+    /**
+     * 从Entity中移除数据
+     * @param data
+     * @param amount 移除的数量
+     */
+    void removeObjectData(ObjectData data, int amount);
+    
+    /**
+     * 让Entity使用一个数据
+     * @param data 
+     */
+    void useObjectData(ObjectData data);
+    
+    /**
+     * 添加数据侦听器,用于侦听Entity中数据的流转.
+     * @param listener 
+     */
+    void addEntityDataListener(EntityDataListener listener);
+    
+    /**
+     * 从Entity中移除指定的数据侦听器。
+     * @param listener
+     * @return true如果成功移除。
+     */
+    boolean removeEntityDataListener(EntityDataListener listener);
 }

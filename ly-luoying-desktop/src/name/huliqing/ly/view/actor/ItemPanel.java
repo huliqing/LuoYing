@@ -7,11 +7,10 @@ package name.huliqing.ly.view.actor;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.data.ItemData;
+import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.luoying.manager.ResourceManager;
-import name.huliqing.luoying.layer.network.ItemNetwork;
-import name.huliqing.luoying.layer.service.ItemService;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.item.Item;
 import name.huliqing.luoying.ui.ListView;
 import name.huliqing.luoying.ui.Row;
 import name.huliqing.luoying.ui.UI;
@@ -21,13 +20,12 @@ import name.huliqing.ly.layer.service.GameService;
  * 
  * @author huliqing
  */
-public class ItemPanel extends ListView<Item> implements ActorPanel {
-    private final ItemService itemService = Factory.get(ItemService.class);
-    private final ItemNetwork itemNetwork = Factory.get(ItemNetwork.class);
+public class ItemPanel extends ListView<ItemData> implements ActorPanel {
     private final GameService gameService = Factory.get(GameService.class);
+    private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
     
     private Entity actor;
-    private final List<Item> datas = new ArrayList<Item>();
+    private final List<ItemData> datas = new ArrayList<ItemData>();
     
     public ItemPanel(float width, float height) {
         super(width, height);
@@ -37,19 +35,19 @@ public class ItemPanel extends ListView<Item> implements ActorPanel {
     public void refreshPageData() {
         if (actor != null) {
             datas.clear();
-            datas.addAll(itemService.getItems(actor));
+            actor.getData().getObjectDatas(ItemData.class, datas);
         }
         super.refreshPageData();
     }
     
     @Override
-    protected Row<Item> createEmptyRow() {
+    protected Row<ItemData> createEmptyRow() {
         final ItemRow row = new ItemRow();
         row.setRowClickListener(new Listener() {
             @Override
             public void onClick(UI ui, boolean isPress) {
                 if (!isPress) {
-                    itemNetwork.useItem(actor, row.getData().getId());
+                    entityNetwork.useData(actor, row.getData());
                     refreshPageData();
                 }
             }
@@ -58,7 +56,7 @@ public class ItemPanel extends ListView<Item> implements ActorPanel {
             @Override
             public void onClick(UI ui, boolean isPress) {
                 if (!isPress) {
-                    gameService.addShortcut(actor, row.getData().getData());
+                    gameService.addShortcut(actor, row.getData());
                 }
             }
         });
@@ -66,10 +64,10 @@ public class ItemPanel extends ListView<Item> implements ActorPanel {
     }
 
     @Override
-    public List<Item> getDatas() {
+    public List<ItemData> getDatas() {
         if (actor != null) {
             datas.clear();
-            datas.addAll(itemService.getItems(actor));
+            actor.getData().getObjectDatas(ItemData.class, datas);
         }
         return datas;
     }
@@ -85,18 +83,18 @@ public class ItemPanel extends ListView<Item> implements ActorPanel {
         refreshPageData();
     }
     
-    private class ItemRow extends name.huliqing.ly.view.actor.ItemRow<Item> {
+    private class ItemRow extends name.huliqing.ly.view.actor.ItemRow<ItemData> {
 
         public ItemRow() {
             super();
         }
         
         @Override
-        public void display(Item data) {
-            icon.setIcon(data.getData().getIcon());
+        public void display(ItemData data) {
+            icon.setIcon(data.getIcon());
             body.setNameText(ResourceManager.get(data.getId() + ".name"));
             body.setDesText(ResourceManager.get(data.getId() + ".des"));
-            num.setText(data.getData().getTotal() + "");
+            num.setText(data.getTotal() + "");
         }
     }
 }

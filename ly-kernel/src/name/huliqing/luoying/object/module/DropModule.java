@@ -15,15 +15,15 @@ import name.huliqing.luoying.object.attribute.Attribute;
 import name.huliqing.luoying.object.attribute.BooleanAttribute;
 import name.huliqing.luoying.object.drop.Drop;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.entity.EntityListener;
 import name.huliqing.luoying.object.sound.SoundManager;
+import name.huliqing.luoying.object.entity.EntityAttributeListener;
 
 /**
  * DropModule用于处理物品、经验掉落，给实体增加这个模块之后，当实体被攻击致死的时候，
  * 会给目标攻击者掉落物品、属性
  * @author huliqing
  */
-public class DropModule extends AbstractModule {
+public class DropModule extends AbstractModule { 
 
     // 绑定角色的“死亡”属性
     private String bindDeadAttribute;
@@ -36,7 +36,7 @@ public class DropModule extends AbstractModule {
     private BooleanAttribute deadAttribute;
     
     // 用于监听Entity受到攻击致死事件,并处理物品掉落
-    private final EntityListener hitDeadEntityListener = new EntityListener() {
+    private final EntityAttributeListener hitDeadEntityListener = new EntityAttributeListener() {
         
         private boolean deadStateBeforeHit;
         
@@ -83,7 +83,7 @@ public class DropModule extends AbstractModule {
                 addDrop((Drop) Loader.load(id));
             }
         }
-        entity.addListener(hitDeadEntityListener);
+        entity.addEntityAttributeListener(hitDeadEntityListener);
     }
 
     @Override
@@ -91,7 +91,7 @@ public class DropModule extends AbstractModule {
         if (drops != null) {
             drops.clear();
         }
-        entity.removeListener(hitDeadEntityListener);
+        entity.removeEntityAttributeListener(hitDeadEntityListener);
         super.cleanup(); 
     }
     

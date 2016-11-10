@@ -8,7 +8,6 @@ package name.huliqing.luoying.object.shortcut;
 import com.jme3.math.Vector3f;
 import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.luoying.data.ShortcutData;
-import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.entity.Entity;
 
 /**

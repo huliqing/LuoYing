@@ -37,6 +37,14 @@ public class ItemData extends ObjectData implements CountObject, TradeObject{
     }
     
     /**
+     * 获取图标，如果没有设置则返回null.
+     * @return 
+     */
+    public String getIcon() {
+        return getAsString("icon");
+    }
+    
+    /**
      * 判断物品是否是可删除的 
      * @return 
      */

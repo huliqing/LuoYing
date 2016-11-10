@@ -4,15 +4,15 @@
  */
 package name.huliqing.ly.object.game;
 
+import java.util.List;
 import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.data.ItemData;
 import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.manager.ResourceManager;
-import name.huliqing.luoying.layer.service.ItemService;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.game.Game;
 import name.huliqing.luoying.object.gamelogic.AbstractGameLogic;
-import name.huliqing.luoying.object.item.Item;
 import name.huliqing.ly.constants.IdConstants;
 import name.huliqing.ly.object.view.TextPanelView;
 
@@ -22,7 +22,6 @@ import name.huliqing.ly.object.view.TextPanelView;
  */
 public class StoryGbTaskLogic extends AbstractGameLogic {
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
-    private final ItemService itemService = Factory.get(ItemService.class);
 
     // 需要获得树根的数量
     private final int total;
@@ -48,9 +47,9 @@ public class StoryGbTaskLogic extends AbstractGameLogic {
     }
     
     @Override
-    protected void doLogic(float tpf) {
-        Item item = itemService.getItem(player, IdConstants.ITEM_GB_STUMP);
-        count = item != null ? item.getData().getTotal() : 0;
+    protected void doLogic(float tpf) { 
+        ItemData item = player.getData().getObjectData(IdConstants.ITEM_GB_STUMP);
+        count = item != null ? item.getTotal() : 0;
         tpv.setText(get("taskSave.saveCount", count, total));
     }
     

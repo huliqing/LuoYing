@@ -9,6 +9,7 @@ import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.ItemData;
 import name.huliqing.luoying.data.SkillData;
 import name.huliqing.luoying.data.SkinData;
+import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.luoying.xml.DataFactory;
 import name.huliqing.luoying.object.entity.Entity;
@@ -20,13 +21,11 @@ import name.huliqing.luoying.object.entity.Entity;
 public class ObjectServiceImpl implements ObjectService {
 //    private static final Logger LOG = Logger.getLogger(ObjectServiceImpl.class.getName());
     
-    private ItemService itemService;
     private SkinService skinService;
     private SkillService skillService;
 
     @Override
     public void inject() {
-        itemService = Factory.get(ItemService.class);
         skinService = Factory.get(SkinService.class);
         skillService = Factory.get(SkillService.class);
     }
@@ -44,8 +43,11 @@ public class ObjectServiceImpl implements ObjectService {
             return;
         
         if (ItemData.class.isAssignableFrom(cc)) {
-            itemService.addItem(actor, id, count);
-            
+//            itemService.addItem(actor, id, count);
+//             throw new UnsupportedOperationException("Could not addData, actor=" + actor + ", id" + id);
+            ItemData data = Loader.loadData(id);
+            actor.addObjectData(data, count);
+             
         } else if (SkinData.class.isAssignableFrom(cc)) {
             skinService.addSkin(actor, id, count);
             
@@ -55,7 +57,7 @@ public class ObjectServiceImpl implements ObjectService {
         } else {
             throw new UnsupportedOperationException("Could not addData, actor=" + actor + ", id" + id);
         }
-
+           
     }
 
     @Override
@@ -66,7 +68,10 @@ public class ObjectServiceImpl implements ObjectService {
             return;
         
         if (ItemData.class.isAssignableFrom(cc)) {
-            itemService.removeItem(actor, id, count);
+//            itemService.removeItem(actor, id, count);
+            
+            throw new UnsupportedOperationException("Could not addData, actor=" + actor + ", id" + id);
+            
         } else if (SkinData.class.isAssignableFrom(cc)) {
             skinService.removeSkin(actor, id, count);            
         } else if (SkillData.class.isAssignableFrom(cc)) {
@@ -83,30 +88,5 @@ public class ObjectServiceImpl implements ObjectService {
         
         throw new UnsupportedOperationException("unsupported yet!");
     }
-
-    // remove20161108
-//    @Override
-//    public ObjectData getData(Entity actor, String id) {
-//        return actor.getData().getObjectData(id);
-//    }
-//
-//    @Override
-//    public List<ObjectData> getDatas(Entity actor) {
-//        return Collections.unmodifiableList(actor.getData().getObjectDatas());
-//    }
-//
-//    @Override
-//    public float getCost(ObjectData data) {
-//        if (data instanceof TradeObject) {
-//            return ((TradeObject)data).getCost();
-//        }
-//        return 0;
-//    }
-    
-//    @Override
-//    public boolean isSellable(ObjectData data) {
-//        // 金币不能卖
-//        return !data.getId().equals(IdConstants.ITEM_GOLD);
-//    }
  
 }

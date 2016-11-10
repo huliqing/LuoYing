@@ -11,6 +11,8 @@ import java.util.List;
 import name.huliqing.luoying.data.ModuleData;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.module.Module;
+import name.huliqing.luoying.object.module.SkinModule;
+import name.huliqing.luoying.xml.ObjectData;
 
 /**
  * Entity模块管理器
@@ -27,6 +29,8 @@ public class ModuleManager {
      * Entity的模块列表
      */
     private final SafeArrayList<Module> modules = new SafeArrayList<Module>(Module.class);
+        
+    private final SafeArrayList<DataHandler> handlers = new SafeArrayList<DataHandler>(DataHandler.class);
     
     public ModuleManager(Entity entity) {
         this.entity = entity;
@@ -56,7 +60,11 @@ public class ModuleManager {
             // 添加module
             List<ModuleData> tempMDS= new ArrayList<ModuleData>(entity.getData().getModuleDatas());
             for (ModuleData cd : tempMDS) {
-                modules.add((Module)Loader.load(cd));
+                Module module = Loader.load(cd);
+                modules.add(module);
+                if (module instanceof DataHandler) {
+                    handlers.add((DataHandler) module);
+                }
             }
             
             // 初始化module
@@ -64,7 +72,6 @@ public class ModuleManager {
                 module.initialize(entity);
             }
         }
-        
         initialized = true;
     }
     
@@ -82,6 +89,7 @@ public class ModuleManager {
             modules.get(i).cleanup();
         }
         modules.clear();
+        handlers.clear();
         initialized = false;
     }
     
@@ -94,6 +102,9 @@ public class ModuleManager {
             return;
         }
         modules.add(module);
+        if (module instanceof DataHandler) {
+            handlers.add((DataHandler) module);
+        }
         entity.getData().addModuleData(module.getData());
         module.initialize(entity);
     }
@@ -108,6 +119,9 @@ public class ModuleManager {
             return false;
         }
         modules.remove(module);
+        if (module instanceof DataHandler) {
+            handlers.remove((DataHandler) module);
+        }
         entity.getData().removeModuleData(module.getData());
         module.cleanup();
         return true;
@@ -127,4 +141,29 @@ public class ModuleManager {
         }
         return null;
     }
+    
+    final void addData(ObjectData data, int count) {
+        for (DataHandler h : handlers.getArray()) {
+            if (h.getHandleType().isAssignableFrom(data.getClass())) {
+                h.handleDataAdd(data, count);
+            }
+        }
+    }
+    
+    final void removeData(ObjectData data, int count) {
+        for (DataHandler h : handlers.getArray()) {
+            if (h.getHandleType().isAssignableFrom(data.getClass())) {
+                h.handleDataRemove(data, count);
+            }
+        }
+    }
+    
+    final void useData(ObjectData data) {
+        for (DataHandler h : handlers.getArray()) {
+            if (h.getHandleType().isAssignableFrom(data.getClass())) {
+                h.handleDataUse(data);
+            }
+        }
+    }
+
 }

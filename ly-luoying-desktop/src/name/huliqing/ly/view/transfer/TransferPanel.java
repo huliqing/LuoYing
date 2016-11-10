@@ -6,26 +6,24 @@ package name.huliqing.ly.view.transfer;
 
 import java.util.List;
 import name.huliqing.luoying.constants.ResConstants;
-import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.ly.view.NumPanel;
 import name.huliqing.ly.view.NumPanel.NumConfirmListener;
 import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.luoying.transfer.TransferData;
 import name.huliqing.luoying.ui.LinearLayout;
 import name.huliqing.luoying.ui.UIFactory;
 import name.huliqing.luoying.ui.state.UIState;
 import name.huliqing.luoying.transfer.TransferImpl;
 import name.huliqing.luoying.transfer.TransferListener;
-import name.huliqing.luoying.xml.DataProcessor;
 
 /**
  * 数据传输界面
  * @author huliqing
- * @param <T>
  */
-public abstract class TransferPanel<T extends DataProcessor<ObjectData>> extends LinearLayout implements TransferListener<T>, NumConfirmListener {
+public abstract class TransferPanel extends LinearLayout implements TransferListener, NumConfirmListener {
     private final TransferImpl transfer = new TransferImpl();
     private static NumPanel numPanel; // 一个实例就行
-    private T tempData;
+    private TransferData tempData;
 
     public TransferPanel(float width, float height) {
         super(width, height);
@@ -44,7 +42,7 @@ public abstract class TransferPanel<T extends DataProcessor<ObjectData>> extends
      * 设置初始化数据
      * @param datas 
      */
-    public void setDatas(List<T> datas) {
+    public void setDatas(List<TransferData> datas) {
         transfer.setDatas(datas);
         setNeedUpdate();
     }
@@ -53,7 +51,7 @@ public abstract class TransferPanel<T extends DataProcessor<ObjectData>> extends
      * 获取传输数据
      * @return 
      */
-    public List<T> getDatas() {
+    public List<TransferData> getDatas() {
         return transfer.getDatas();
     }
     
@@ -61,8 +59,8 @@ public abstract class TransferPanel<T extends DataProcessor<ObjectData>> extends
      * 传输数据
      * @param data 
      */
-    public final void transfer(T data) {
-        if (data.getData().getTotal() == 1) {
+    public final void transfer(TransferData data) {
+        if (data.getAmount() == 1) {
             // 如果数量只有一个，则直接传输
             transferInner(data, 1);
         } else {
@@ -72,7 +70,7 @@ public abstract class TransferPanel<T extends DataProcessor<ObjectData>> extends
         }
     }
     
-    private void transferByNumPanel(T data, int count) {
+    private void transferByNumPanel(TransferData data, int count) {
         if (numPanel == null) {
             numPanel = new NumPanel(UIFactory.getUIConfig().getScreenWidth() * 0.5f
                     , UIFactory.getUIConfig().getScreenHeight() * 0.33f);
@@ -80,10 +78,10 @@ public abstract class TransferPanel<T extends DataProcessor<ObjectData>> extends
             numPanel.setDragEnabled(true);
         }
         numPanel.setTitle(ResourceManager.get(ResConstants.CHAT_SHOP_CONFIRM_COUNT)
-                + "-" + ResourceManager.getObjectName(data.getData()));
+                + "-" + ResourceManager.getObjectName(data.getObjectData()));
         numPanel.setNumConfirmListener(this);
         numPanel.setMinLimit(0);
-        numPanel.setMaxLimit(data.getData().getTotal());
+        numPanel.setMaxLimit(data.getAmount());
         numPanel.setValue(count);
         // 记录临时数据
         tempData = data;
@@ -112,7 +110,7 @@ public abstract class TransferPanel<T extends DataProcessor<ObjectData>> extends
      * @param data
      * @param count 
      */
-    private void transferInner(T data, int count) {
+    private void transferInner(TransferData data, int count) {
         transfer.transfer(data, count);
     }
     

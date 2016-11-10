@@ -8,14 +8,11 @@ import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.constants.InterfaceConstants;
 import name.huliqing.luoying.manager.ResourceManager;
-import name.huliqing.luoying.layer.service.ItemService;
 import name.huliqing.luoying.layer.service.SkinService;
 import name.huliqing.luoying.layer.service.TalentService;
 import name.huliqing.luoying.layer.service.TaskService;
-import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.item.Item;
-import name.huliqing.luoying.object.module.ItemListener;
+import name.huliqing.luoying.object.entity.EntityDataListener;
 import name.huliqing.luoying.object.module.SkinListener;
 import name.huliqing.luoying.object.module.TalentListener;
 import name.huliqing.luoying.object.module.TaskListener;
@@ -28,6 +25,7 @@ import name.huliqing.luoying.ui.Icon;
 import name.huliqing.luoying.ui.LinearLayout;
 import name.huliqing.luoying.ui.UI;
 import name.huliqing.luoying.ui.Window;
+import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.ly.view.actor.ActorPanel;
 import name.huliqing.ly.view.actor.ArmorPanel;
 import name.huliqing.ly.view.actor.AttributePanel;
@@ -41,8 +39,7 @@ import name.huliqing.ly.view.actor.WeaponPanel;
  * 角色主面板，这个面板包含角色所有的“属性","武器","装备","天赋"...等面板
  * @author huliqing
  */
-public class ActorMainPanel extends Window implements ItemListener, SkinListener, TalentListener, TaskListener {
-    private final ItemService itemService = Factory.get(ItemService.class);
+public class ActorMainPanel extends Window implements EntityDataListener, SkinListener, TalentListener, TaskListener {
     private final SkinService skinService = Factory.get(SkinService.class);
     private final TalentService talentService = Factory.get(TalentService.class);
     private final TaskService taskService = Factory.get(TaskService.class);
@@ -169,22 +166,23 @@ public class ActorMainPanel extends Window implements ItemListener, SkinListener
         }
     }
     
-    public void setActor(Entity actor) {
-        if (actor == null) {
+    public void setActor(Entity other) {
+        if (other == null) {
             return;
         }
         
         // 1.先清理上一个角色的侦听
         if (this.actor != null) {
-            itemService.removeItemListener(this.actor, this);
+            this.actor.removeEntityDataListener(this);
+            
             skinService.removeSkinListener(this.actor, this);
             talentService.removeTalentListener(this.actor, this);
             taskService.removeTaskListener(this.actor, this);
         }
         
         // 2.更新角色并更新面板内容
-        this.actor = actor;
-        this.setTitle(ResourceManager.get("common.characterPanel") + "-" + actor.getSpatial().getName());
+        this.actor = other;
+        this.setTitle(ResourceManager.get("common.characterPanel") + "-" + other.getSpatial().getName());
         
         // remove20160324,不需要一打开时把所有panel都update一次，按需update就可以
         // 3.即打开哪一个tab就更新哪一个就行，以避免panel太多，在手机上影响性能。
@@ -197,7 +195,7 @@ public class ActorMainPanel extends Window implements ItemListener, SkinListener
         showTab(index);
         
         // 5.为新的角色添加侦听器以便实时更新面板内容
-        itemService.addItemListener(this.actor, this);
+        this.actor.addEntityDataListener(this);
         skinService.addSkinListener(this.actor, this);
         talentService.addTalentListener(this.actor, this);
         taskService.addTaskListener(this.actor, this);
@@ -235,7 +233,7 @@ public class ActorMainPanel extends Window implements ItemListener, SkinListener
     
     public void cleanup() {
         if (actor != null) {
-            itemService.removeItemListener(actor, this);
+            actor.removeEntityDataListener(this);
             skinService.removeSkinListener(actor, this);
             talentService.removeTalentListener(actor, this);
             taskService.removeTaskListener(actor, this);
@@ -244,18 +242,18 @@ public class ActorMainPanel extends Window implements ItemListener, SkinListener
 
     // 物口添加或减少的时候要更新指定面板信息
     @Override
-    public void onItemAdded(Entity actor, Item itemId, int trueAdded) {
+    public void onDataAdded(ObjectData data, int amount) {
         updatePanel(this.itemPanel);
     }
 
     @Override
-    public void onItemRemoved(Entity actor, Item itemId, int trueRemoved) {
+    public void onDataRemoved(ObjectData data, int amount) {
         updatePanel(this.itemPanel);
     }
 
     @Override
-    public void onItemUsed(Entity source, Item item) {
-        updatePanel(this.itemPanel);
+    public void onDataUsed(ObjectData data) {
+        // ignore
     }
 
     @Override

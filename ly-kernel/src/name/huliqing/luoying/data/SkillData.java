@@ -56,52 +56,10 @@ public class SkillData extends ObjectData {
     /** 最近一次使用技能的时间,用于判断技能冷却限制 */
     private long lastPlayTime;
     
-    @Override
-    public void write(JmeExporter ex) throws IOException {
-        super.write(ex);
-        OutputCapsule oc = ex.getCapsule(this);
-        oc.write(useTime, "useTime", 1);
-        oc.write(cooldown, "cooldown", 0);
-        oc.write(weaponStateLimit, "weaponStateLimit", null);
-        if (useAttributes != null) {
-            oc.writeSavableArrayList(new ArrayList<AttributeUse>(useAttributes), "useAttributes", null);
-        }
-        oc.write(level, "level", 1);
-        oc.write(maxLevel, "maxLevel", 1);
-        oc.write(playCount, "playCount", 0);
-        oc.write(levelLimit, "levelLimit", 0);
-        oc.write(lastPlayTime, "lastPlayTime", 0);
-        oc.write(tags, "tags", 0);
-        oc.write(overlapTags, "overlapTags", 0);
-        oc.write(interruptTags, "interruptTags", 0);
-        oc.write(prior, "prior", 0);
-    }
-
-    @Override
-    public void read(JmeImporter im) throws IOException {
-        super.read(im);
-        InputCapsule ic = im.getCapsule(this);
-        useTime = ic.readFloat("useTime", 1);
-        cooldown = ic.readFloat("cooldown", 0);
-        weaponStateLimit = ic.readLongArray("weaponStateLimit", null);
-        useAttributes = ic.readSavableArrayList("useAttributes", null);
-        level = ic.readInt("level", 1);
-        maxLevel = ic.readInt("maxLevel", 1);
-        playCount = ic.readInt("playCount", 0);
-        levelLimit = ic.readInt("levelLimit", 0);
-        lastPlayTime = ic.readLong("lastPlayTime", 0);
-        tags = ic.readLong("tags", 0);
-        overlapTags = ic.readLong("overlapTags", 0);
-        interruptTags = ic.readLong("interruptTags", 0);
-        prior = ic.readInt("prior", 0);
+    public String getIcon() {
+        return getAsString("icon");
     }
     
-    // remove
-//    @Override
-//    public int getTotal() {
-//        return 1;
-//    }
-
     public float getUseTime() {
         return useTime;
     }
@@ -293,5 +251,43 @@ public class SkillData extends ObjectData {
         this.prior = prior;
     }
     
-    
+    @Override
+    public void write(JmeExporter ex) throws IOException {
+        super.write(ex);
+        OutputCapsule oc = ex.getCapsule(this);
+        oc.write(useTime, "useTime", 1);
+        oc.write(cooldown, "cooldown", 0);
+        oc.write(weaponStateLimit, "weaponStateLimit", null);
+        if (useAttributes != null) {
+            oc.writeSavableArrayList(new ArrayList<AttributeUse>(useAttributes), "useAttributes", null);
+        }
+        oc.write(level, "level", 1);
+        oc.write(maxLevel, "maxLevel", 1);
+        oc.write(playCount, "playCount", 0);
+        oc.write(levelLimit, "levelLimit", 0);
+        oc.write(lastPlayTime, "lastPlayTime", 0);
+        oc.write(tags, "tags", 0);
+        oc.write(overlapTags, "overlapTags", 0);
+        oc.write(interruptTags, "interruptTags", 0);
+        oc.write(prior, "prior", 0);
+    }
+
+    @Override
+    public void read(JmeImporter im) throws IOException {
+        super.read(im);
+        InputCapsule ic = im.getCapsule(this);
+        useTime = ic.readFloat("useTime", 1);
+        cooldown = ic.readFloat("cooldown", 0);
+        weaponStateLimit = ic.readLongArray("weaponStateLimit", null);
+        useAttributes = ic.readSavableArrayList("useAttributes", null);
+        level = ic.readInt("level", 1);
+        maxLevel = ic.readInt("maxLevel", 1);
+        playCount = ic.readInt("playCount", 0);
+        levelLimit = ic.readInt("levelLimit", 0);
+        lastPlayTime = ic.readLong("lastPlayTime", 0);
+        tags = ic.readLong("tags", 0);
+        overlapTags = ic.readLong("overlapTags", 0);
+        interruptTags = ic.readLong("interruptTags", 0);
+        prior = ic.readInt("prior", 0);
+    }
 }

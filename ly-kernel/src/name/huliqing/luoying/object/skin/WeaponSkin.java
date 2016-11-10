@@ -35,7 +35,6 @@ public class WeaponSkin extends AbstractSkin implements Weapon {
     // 武器所有可支持的槽位
     private Slot[] slots;
     
-    
     // ---- inner
     // 标记当前武器所在的槽位
     private Slot slot;
@@ -46,7 +45,7 @@ public class WeaponSkin extends AbstractSkin implements Weapon {
     @Override
     public void setData(SkinData data) {
         super.setData(data);
-        weaponType = data.getAsString("weaponType");
+        weaponType = data.getWeaponType();
         String[] tempSlots = data.getAsArray("slots");
         if (tempSlots != null) {
             slots = new Slot[tempSlots.length];

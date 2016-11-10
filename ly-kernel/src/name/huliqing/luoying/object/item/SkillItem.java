@@ -5,11 +5,7 @@
  */
 package name.huliqing.luoying.object.item;
 
-import java.util.logging.Logger;
-import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.ItemData;
-import name.huliqing.luoying.layer.service.ItemService;
-import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.module.SkillModule;

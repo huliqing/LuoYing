@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.Config;
-import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.SkinData;
 import name.huliqing.luoying.data.ModuleData;
 import name.huliqing.luoying.object.Loader;
@@ -26,8 +25,9 @@ import name.huliqing.luoying.object.skin.WeaponSkin;
 /**
  * 角色的换装控制器
  * @author huliqing
+ * @param <T>
  */
-public class SkinModule extends AbstractModule {
+public class SkinModule<T extends ModuleData> extends AbstractModule<T> {
     private static final Logger LOG = Logger.getLogger(SkinModule.class.getName());
     
     // 监听角色装备、武器等的穿脱
@@ -52,7 +52,7 @@ public class SkinModule extends AbstractModule {
     private CollectionAttribute<String> weaponSlotAttribute;
 
     @Override
-    public void setData(ModuleData data) {
+    public void setData(T data) {
         super.setData(data);
         weaponTakeOn = data.getAsBoolean("weaponTakeOn", weaponTakeOn);
         bindWeaponSlotAttribute = data.getAsString("bindWeaponSlotAttribute");

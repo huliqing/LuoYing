@@ -70,6 +70,10 @@ public class EntityData extends ObjectData {
         return objectDatas != null && objectDatas.remove(objectData);
     }
     
+    /**
+     * 设置objectDatas
+     * @param objectDatas 
+     */
     public void setObjectDatas(List<ObjectData> objectDatas) {
         this.objectDatas = objectDatas;
     }
@@ -103,13 +107,41 @@ public class EntityData extends ObjectData {
         return store;
     }
     
+    /**
+     * 获取所有指定id类型的物品。
+     * @param <T>
+     * @param id
+     * @param store
+     * @return 
+     */
+    public <T extends ObjectData> List<T> getObjectDatas(String id, List<T> store) {
+        if (store == null) {
+            store = new ArrayList<T>();
+        }
+        if (objectDatas != null && !objectDatas.isEmpty()) {
+            for (int i = 0; i < objectDatas.size(); i++) {
+                if (objectDatas.get(i).getId().equals(id)) {
+                    store.add((T) objectDatas.get(i));
+                }
+            }
+        }
+        return store;
+    }
+    
+    /**
+     * 获取指定的物品，如果不存在指定物品则返回null, <b>如果存在多个id相同的物品，则返回第一个找到的物品。</b>
+     * @param <T>
+     * @param id
+     * @return 
+     */
     public <T extends ObjectData> T getObjectData(String id) {
-        if (objectDatas == null)
+        if (objectDatas == null || objectDatas.isEmpty()) 
             return null;
-        
+        ObjectData od;
         for (int i = 0; i < objectDatas.size(); i++) {
-            if (objectDatas.get(i).getId().equals(id)) {
-                return (T) objectDatas.get(i);
+            od = objectDatas.get(i);
+            if (od.getId().equals(id)) {
+                return (T) od;
             }
         }
         return null;
@@ -149,6 +181,14 @@ public class EntityData extends ObjectData {
      */
     public void setName(String name) {
         setAttribute("name", name);
+    }
+    
+    /**
+     * 获取Entity图标。
+     * @return 
+     */
+    public String getIcon() {
+        return getAsString("icon");
     }
     
     /**

@@ -104,6 +104,14 @@ public class StateData extends ObjectData {
         this.removeOnDead = removeOnDead;
     }
     
+    /**
+     * 获取状态的图标。
+     * @return 
+     */
+    public String getIcon() {
+        return getAsString("icon");
+    }
+    
     @Override
     public void write(JmeExporter ex) throws IOException {
         super.write(ex);

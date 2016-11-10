@@ -14,6 +14,10 @@ import com.jme3.network.serializing.Serializable;
 @Serializable
 public class TalentData extends ObjectData {
     
+    public String getIcon() {
+        return getAsString("icon");
+    }
+    
 //    private int maxLevel;
 //    private int level;
 //    

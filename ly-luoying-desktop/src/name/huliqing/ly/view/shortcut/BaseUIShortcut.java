@@ -10,6 +10,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.constants.InterfaceConstants;
+import name.huliqing.luoying.data.define.CountObject;
 import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.luoying.object.shortcut.AbstractShortcut;
 import name.huliqing.luoying.ui.FrameLayout;
@@ -215,7 +216,7 @@ public abstract class BaseUIShortcut<T extends ObjectData> extends AbstractShort
      * @return 
      */
     protected UI createIconView() {
-        return new Icon(objectData.getIcon());
+        return new Icon(objectData.getAsString("icon"));
     }
     
     /**
@@ -233,17 +234,23 @@ public abstract class BaseUIShortcut<T extends ObjectData> extends AbstractShort
     }
     
     protected void updateObjectData(T newObjectData) {
-        if (objectData != newObjectData) {
-            objectData = newObjectData;
-        }
+        // remove20161109
+//        if (objectData != newObjectData) {
+//            objectData = newObjectData;
+//        }
         
-        if (objectData.getTotal() > 999) {
+        if (!(objectData instanceof CountObject)) {
+            count.setVisible(false);
+            return;
+        }
+        CountObject co = (CountObject) objectData;
+        if (co.getTotal() > 999) {
             count.setText("999+");
         } else {
-            count.setText(String.valueOf(objectData.getTotal()));
+            count.setText(String.valueOf(co.getTotal()));
         }
         // 只有刚好只有一件物品时不显示数量，提高UI美观度。
         // 剩0件时要显示，以告诉player没有该物品了
-        count.setVisible(objectData.getTotal() != 1);
+        count.setVisible(co.getTotal() != 1);
     }
 }

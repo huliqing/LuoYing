@@ -125,7 +125,7 @@ public class StoryGbTask2 extends AbstractTaskStep{
                     
                     // 意外的收获:星光传送术掉落
 //                    dropService.addDrop(altar, IdConstants.DROP_BOOK_007);  // remove
-                    DropModule dm = altar.getModuleManager().getModule(DropModule.class);
+                    DropModule dm = altar.getModuleManager().getModule(DropModule.class); 
                     dm.addDrop((Drop)Loader.load(IdConstants.DROP_BOOK_007));
                     
                     actorService.setLocation(altar, game.getEnemyPosition());

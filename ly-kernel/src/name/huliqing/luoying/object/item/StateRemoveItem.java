@@ -7,7 +7,6 @@ package name.huliqing.luoying.object.item;
 
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.ItemData;
-import name.huliqing.luoying.layer.service.ItemService;
 import name.huliqing.luoying.layer.service.StateService;
 import name.huliqing.luoying.object.entity.Entity;
 
@@ -17,7 +16,6 @@ import name.huliqing.luoying.object.entity.Entity;
  */
 public class StateRemoveItem extends AbstractItem {
     private final StateService stateService = Factory.get(StateService.class);
-    private final ItemService itemService = Factory.get(ItemService.class);
     
     private String[] states;
     
@@ -37,8 +35,9 @@ public class StateRemoveItem extends AbstractItem {
         for (String sid : states) {
             stateService.removeState(actor, sid);
         }
+        
         // 物品减少
-        itemService.removeItem(actor, data.getId(), 1);        
+        actor.removeObjectData(data, 1);    
     }
     
 }

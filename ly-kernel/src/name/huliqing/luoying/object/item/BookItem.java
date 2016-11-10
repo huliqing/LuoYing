@@ -8,7 +8,6 @@ package name.huliqing.luoying.object.item;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.constants.ItemConstants;
 import name.huliqing.luoying.data.ItemData;
-import name.huliqing.luoying.layer.service.ItemService;
 import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.object.entity.Entity;
 
@@ -18,7 +17,6 @@ import name.huliqing.luoying.object.entity.Entity;
  */
 public class BookItem extends AbstractItem {
     private final SkillService skillService = Factory.get(SkillService.class);
-    private final ItemService itemService = Factory.get(ItemService.class);
     
     // 要学习的技能ID
     private String skill;
@@ -60,12 +58,14 @@ public class BookItem extends AbstractItem {
         // 学习技能
         skillService.addSkill(actor, skill);
         
+        // remove
         // 学习后减少物品
-        itemService.removeItem(actor, data.getId(), 1);
-        
-        // 添加文字提示
+//        itemService.removeItem(actor, data.getId(), 1);
 //        String skillName = ResourceManager.getObjectName(skill);
         // playNetwork.addMessage(actor, ResourceManager.get(ResConstants.SKILL_LEARN_SKILL, new Object[] {skillName}), MessageType.info);
+
+        actor.removeObjectData(data, 1);
+        
     }
     
 }

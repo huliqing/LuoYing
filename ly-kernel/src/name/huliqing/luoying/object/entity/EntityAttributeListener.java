@@ -8,10 +8,10 @@ package name.huliqing.luoying.object.entity;
 import name.huliqing.luoying.object.attribute.Attribute;
 
 /**
- *
+ * EntityAttributeListener，用于监听实体的属性变化。
  * @author huliqing
  */
-public interface EntityListener {
+public interface EntityAttributeListener {
     
     /**
      * 当角色的某个属性被击中<b>之前</b>调用。

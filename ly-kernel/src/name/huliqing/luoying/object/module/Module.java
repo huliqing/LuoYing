@@ -16,7 +16,7 @@ import name.huliqing.luoying.xml.DataProcessor;
  * @param <T>
  */
 public interface Module<T extends ModuleData> extends DataProcessor<T>{
-
+    
     @Override
     public void setData(T data);
 

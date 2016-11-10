@@ -104,42 +104,47 @@ public class ChatServiceImpl implements ChatService {
      * @param discount 
      */
     private boolean sellInner(Entity seller, Entity buyer, String[] items, int[] counts, float discount) {
-        String id;
-        ObjectData data;
-        int trueCount;
-        float amount; 
-        boolean result = false; // 标记是否有卖出过任何一件物品
-        for (int i = 0; i < items.length; i++) {
-            id = items[i];
-            data = protoService.getData(seller, id);
-            
-            // 这里可能为null,因为“出售”或“发送”物品并不是与物品的使用动作同步的，有可能在点击“出售”或“发送”的时候
-            // 包裹中的物品已经被使用掉。
-            if (data == null) {
-                continue;
-            }
-            
-            // 非卖品
-            if (data.getId().equals(IdConstants.ITEM_GOLD)) {
-                continue;
-            }
-            
-            // 注意：一件商品一件商品的卖,避免items中ID重复而出现重复卖的问题。
-            if (data.getTotal() > 0) {
-                // 如果角色身上指定ID物品的数量不够卖，则卖出尽可能多。否则按指定数量卖出。
-                trueCount = data.getTotal() > counts[i] ? counts[i] : data.getTotal();
-                amount = protoService.getCost(data) * trueCount * discount;
-                
-                protoService.addData(buyer, id, trueCount);
-                protoService.removeData(seller, id, trueCount);
-                
-                if (amount > 0) {
-                    protoService.removeData(buyer, IdConstants.ITEM_GOLD, (int) amount);
-                    protoService.addData(seller, IdConstants.ITEM_GOLD, (int) amount);
-                }
-                result = true;
-            }
-        }
-        return result;
+        
+//        String id;
+//        ObjectData data;
+//        int trueCount;
+//        float amount; 
+//        boolean result = false; // 标记是否有卖出过任何一件物品
+//        for (int i = 0; i < items.length; i++) {
+//            id = items[i];
+//            data = protoService.getData(seller, id);
+//            
+//            // 这里可能为null,因为“出售”或“发送”物品并不是与物品的使用动作同步的，有可能在点击“出售”或“发送”的时候
+//            // 包裹中的物品已经被使用掉。
+//            if (data == null) {
+//                continue;
+//            }
+//            
+//            // 非卖品
+//            if (data.getId().equals(IdConstants.ITEM_GOLD)) {
+//                continue;
+//            }
+//            
+//            // 注意：一件商品一件商品的卖,避免items中ID重复而出现重复卖的问题。
+//            if (data.getTotal() > 0) {
+//                // 如果角色身上指定ID物品的数量不够卖，则卖出尽可能多。否则按指定数量卖出。
+//                trueCount = data.getTotal() > counts[i] ? counts[i] : data.getTotal();
+//                amount = protoService.getCost(data) * trueCount * discount;
+//                
+//                protoService.addData(buyer, id, trueCount);
+//                protoService.removeData(seller, id, trueCount);
+//                
+//                if (amount > 0) {
+//                    protoService.removeData(buyer, IdConstants.ITEM_GOLD, (int) amount);
+//                    protoService.addData(seller, IdConstants.ITEM_GOLD, (int) amount);
+//                }
+//                result = true;
+//            }
+//        }
+//        return result;
+
+            throw new UnsupportedOperationException("这个方法需要重构!!!");
     }
+    
+    
 }
