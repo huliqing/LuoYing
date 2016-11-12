@@ -44,8 +44,8 @@ public class AttributeTalent<T extends TalentData> extends AbstractTalent<T> {
     // 天赋data是存放在actorData.objectDatas上的，当角色存档时，天赋的一些参数也需要进行保存。
     // 以便下次载入时可以恢复
     @Override
-    protected void updateData() {
-        super.updateData();
+    public void updateDatas() {
+        super.updateDatas();
         data.setAttribute("attributeApplied", attributeApplied);
     }
 
@@ -57,7 +57,7 @@ public class AttributeTalent<T extends TalentData> extends AbstractTalent<T> {
             applyValue = valueLevelEl.setLevel(level).getValue().floatValue();
             entityService.hitNumberAttribute(actor, bindAttribute, applyValue, null);
             attributeApplied = true;
-            updateData();
+            updateDatas();
         }
     }
 
@@ -66,7 +66,7 @@ public class AttributeTalent<T extends TalentData> extends AbstractTalent<T> {
         if (attributeApplied) {
             entityService.hitNumberAttribute(actor, bindAttribute, -applyValue, null);
             attributeApplied = false;
-            updateData();
+            updateDatas();
         }
         super.cleanup();
     }

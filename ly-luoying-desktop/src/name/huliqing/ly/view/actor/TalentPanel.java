@@ -5,22 +5,21 @@
 package name.huliqing.ly.view.actor;
 
 import com.jme3.font.BitmapFont;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.constants.ResConstants;
+import name.huliqing.luoying.data.TalentData;
 import name.huliqing.luoying.layer.network.TalentNetwork;
 import name.huliqing.luoying.manager.ResourceManager;
 import name.huliqing.luoying.layer.service.TalentService;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.talent.Talent;
 import name.huliqing.luoying.ui.UIFactory;
 import name.huliqing.luoying.ui.LinearLayout;
 import name.huliqing.luoying.ui.ListView;
 import name.huliqing.luoying.ui.Row;
 import name.huliqing.luoying.ui.Text;
 import name.huliqing.luoying.ui.UI;
-import name.huliqing.ly.layer.network.GameNetwork;
 
 /**
  * 天赋面板
@@ -28,7 +27,7 @@ import name.huliqing.ly.layer.network.GameNetwork;
  */
 public class TalentPanel extends LinearLayout implements ActorPanel{
     private final TalentService talentService = Factory.get(TalentService.class);
-    private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
+//    private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     private final TalentNetwork talentNetwork = Factory.get(TalentNetwork.class);
     
     private Entity actor;
@@ -84,8 +83,8 @@ public class TalentPanel extends LinearLayout implements ActorPanel{
     
     // ---------------------------
     
-    private class TalentListPanel extends ListView<Talent>{
-        private List<Talent> datas;
+    private class TalentListPanel extends ListView<TalentData>{
+        private final List<TalentData> datas = new ArrayList<TalentData>();
         public TalentListPanel(float width, float height) {
             super(width, height);
         }
@@ -96,7 +95,7 @@ public class TalentPanel extends LinearLayout implements ActorPanel{
                 @Override
                 public void onClick(UI ui, boolean isPress) {
                     if (!isPress) {
-                        talentNetwork.addTalentPoints(actor, row.getData().getData().getId(), 1);
+                        talentNetwork.addTalentPoints(actor, row.getData().getId(), 1);
                         setPanelUpdate(actor);
                     }
                 }
@@ -105,19 +104,17 @@ public class TalentPanel extends LinearLayout implements ActorPanel{
         }
 
         @Override
-        public List<Talent> getDatas() {
+        public List<TalentData> getDatas() {
+            datas.clear();
             if (actor != null) {
-                datas = talentService.getTalents(actor);
-            }
-            if (datas == null) {
-                datas = Collections.EMPTY_LIST;
+                actor.getData().getObjectDatas(TalentData.class, datas);
             }
             return datas;
         }
 
         @Override
-        public boolean removeItem(Talent data) {
-            throw new UnsupportedOperationException();
+        public boolean removeItem(TalentData data) {
+            throw new UnsupportedOperationException("天赋不能删除！");
         }
     }
     

@@ -8,32 +8,24 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.SkinData;
+import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.luoying.manager.ResourceManager;
-import name.huliqing.luoying.layer.network.SkinNetwork;
-import name.huliqing.luoying.layer.service.PlayService;
-import name.huliqing.luoying.layer.service.SkinService;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.skin.Skin;
-import name.huliqing.luoying.object.skin.Weapon;
 import name.huliqing.luoying.ui.ListView;
 import name.huliqing.luoying.ui.Row;
 import name.huliqing.luoying.ui.UI;
-import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.ly.layer.service.GameService;
 
 /**
  * 武器面板列表
  * @author huliqing
  */
-public class WeaponPanel extends ListView<Skin> implements ActorPanel{
-    private final PlayService playService = Factory.get(PlayService.class);
-    private final SkinService skinService = Factory.get(SkinService.class);
-    private final SkinNetwork skinNetwork = Factory.get(SkinNetwork.class);
+public class WeaponPanel extends ListView<SkinData> implements ActorPanel{
     private final GameService gameService = Factory.get(GameService.class);
-    private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
+    private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
     
     private Entity actor;
-    private final List<Skin> datas = new ArrayList<Skin>();
+    private final List<SkinData> datas = new ArrayList<SkinData>();
     
     public WeaponPanel(float width, float height) {
         super(width, height);
@@ -46,16 +38,7 @@ public class WeaponPanel extends ListView<Skin> implements ActorPanel{
             @Override
             public void onClick(UI ui, boolean isPress) {
                 if (!isPress) {
-                    Skin skin = row.getData();
-                    if (skin.isAttached()) {
-                        if (skinService.isWeaponTakeOn(actor)) {
-                            skinNetwork.takeOffWeapon(actor);
-                        } else {
-                            skinNetwork.detachSkin(actor, skin);
-                        }
-                    } else {
-                        skinNetwork.attachSkin(actor, skin);
-                    }
+                    entityNetwork.useData(actor, row.getData());
                     refreshPageData();
                 }
             }
@@ -64,7 +47,7 @@ public class WeaponPanel extends ListView<Skin> implements ActorPanel{
             @Override
             public void onClick(UI ui, boolean isPress) {
                 if (!isPress) {
-                    gameService.addShortcut(actor, row.getData().getData());
+                    gameService.addShortcut(actor, row.getData());
                 }
             }
         });
@@ -84,12 +67,12 @@ public class WeaponPanel extends ListView<Skin> implements ActorPanel{
     }
 
     @Override
-    public List<Skin> getDatas() {
+    public List<SkinData> getDatas() {
         if (actor != null) {
             datas.clear();
-            List<Skin> skins = skinService.getSkins(actor);
+            List<SkinData> skins = actor.getData().getObjectDatas(SkinData.class, null);
             if (skins != null && !skins.isEmpty()) {
-                for (Skin s : skins) {
+                for (SkinData s : skins) {
                     if (filter(s)) {
                         continue;
                     }
@@ -101,46 +84,41 @@ public class WeaponPanel extends ListView<Skin> implements ActorPanel{
     }
 
     @Override
-    protected boolean filter(Skin data) {
+    protected boolean filter(SkinData data) {
         if (data.isBaseSkin()) {
             return true;
         }
-        if (data instanceof Weapon) {
+        if (data.isWeapon()) {
             return false;
         }
         return true;
     }
   
     @Override
-    public boolean removeItem(Skin data) {
+    public boolean removeItem(SkinData data) {
         throw new UnsupportedOperationException();
     }
     
-    private class WeaponRow extends ItemRow<Skin> {
-
-        public WeaponRow() {
-            super();
-        }
+    private class WeaponRow extends ItemRow<SkinData> {
         
         @Override
-        public void display(Skin skin) {
-            SkinData skinData = skin.getData();
+        public void display(SkinData skinData) {
             icon.setIcon(skinData.getIcon());
             body.setNameText(ResourceManager.getObjectName(skinData));
             body.setDesText("unknow");
             num.setText(String.valueOf(skinData.getTotal()));
-            setBackgroundVisible(data.isAttached());
+            setBackgroundVisible(data.isUsed());
         }
         
         @Override
         protected void clickEffect(boolean isPress) {
             super.clickEffect(isPress);
-            setBackgroundVisible(data.isAttached());
+            setBackgroundVisible(data.isUsed());
         }
         
         @Override
         public void onRelease() {
-            setBackgroundVisible(data.isAttached());
+            setBackgroundVisible(data.isUsed());
         }
     }
 }

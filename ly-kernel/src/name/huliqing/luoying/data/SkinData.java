@@ -110,6 +110,14 @@ public class SkinData extends ObjectData implements CountObject, TradeObject, Ma
     }
     
     /**
+     * 判断是否为武器
+     * @return 
+     */
+    public boolean isWeapon() {
+        return getWeaponType() != null;
+    }
+    
+    /**
      * 获取装备的属性是否已经应用到了角色身上，如果该参数返回true,则说明属性已经应用到角色身上，
      * 在这种情况下，当角色再穿上这件装备的时候就不再需要处理applyAttributes的问题,
      * 以避免重复给角色添加属性值。

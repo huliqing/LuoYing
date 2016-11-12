@@ -8,9 +8,9 @@ package name.huliqing.luoying.object.drop;
 import com.jme3.math.FastMath;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.DropData;
+import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.luoying.layer.service.ConfigService;
 import name.huliqing.luoying.utils.MathUtils;
-import name.huliqing.luoying.layer.network.ObjectNetwork;
 import name.huliqing.luoying.object.entity.Entity;
 
 /**
@@ -19,8 +19,7 @@ import name.huliqing.luoying.object.entity.Entity;
  */ 
 public class SkinDrop extends AbstractDrop {
     private final ConfigService configService = Factory.get(ConfigService.class);
-    private final ObjectNetwork protoNetwork = Factory.get(ObjectNetwork.class);
-    
+    private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);    
     private String skin;
     private int count;
     private float rate;
@@ -43,7 +42,7 @@ public class SkinDrop extends AbstractDrop {
         
         // 注：如果rate>=1.0, 则忽略configService全局掉落设置(dropFactor)的影响，把物品视为始终掉落的。
         if (rate >= 1.0f) {
-            protoNetwork.addData(target, skin, count);
+            entityNetwork.addData(target, skin, count);
             playDropSounds(source);
             return true;
         }
@@ -51,7 +50,7 @@ public class SkinDrop extends AbstractDrop {
         // 按机率掉落，这个机率受全局掉落设置影响
         float trueRate = configService.getDropFactor() * rate;
         if (trueRate >= FastMath.nextRandomFloat()) {
-            protoNetwork.addData(target, skin, count);
+            entityNetwork.addData(target, skin, count);
             playDropSounds(source);
             return true;
         }

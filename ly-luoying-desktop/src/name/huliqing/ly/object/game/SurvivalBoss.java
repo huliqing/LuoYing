@@ -11,6 +11,7 @@ import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.constants.ResConstants;
 import name.huliqing.luoying.data.GameLogicData;
+import name.huliqing.luoying.data.TalentData;
 import name.huliqing.ly.enums.MessageType;
 import name.huliqing.luoying.layer.network.ActorNetwork;
 import name.huliqing.luoying.layer.network.PlayNetwork;
@@ -157,11 +158,11 @@ public class SurvivalBoss<T extends GameLogicData> extends AbstractGameLogic<T> 
         addPositionLogic(locBoss);
                 
         // 为BOSS添加特殊天赋
-        Talent attack = Loader.load(IdConstants.TALENT_ATTACK);
-        Talent defence = Loader.load(IdConstants.TALENT_DEFENCE);
-        Talent defenceMagic = Loader.load(IdConstants.TALENT_DEFENCE_MAGIC);
-        Talent lifeRestore = Loader.load(IdConstants.TALENT_LIFE_RESTORE);
-        Talent moveSpeed = Loader.load(IdConstants.TALENT_MOVE_SPEED);
+        TalentData attack = Loader.loadData(IdConstants.TALENT_ATTACK);
+        TalentData defence = Loader.loadData(IdConstants.TALENT_DEFENCE);
+        TalentData defenceMagic = Loader.loadData(IdConstants.TALENT_DEFENCE_MAGIC);
+        TalentData lifeRestore = Loader.loadData(IdConstants.TALENT_LIFE_RESTORE);
+        TalentData moveSpeed = Loader.loadData(IdConstants.TALENT_MOVE_SPEED);
         attack.setLevel(attack.getMaxLevel());
         defence.setLevel(defence.getMaxLevel());
         defenceMagic.setLevel(defenceMagic.getMaxLevel());
@@ -169,11 +170,11 @@ public class SurvivalBoss<T extends GameLogicData> extends AbstractGameLogic<T> 
         lifeRestore.setMaxLevel(15);
         lifeRestore.setLevel(15);
         
-        talentService.addTalent(locBoss, attack);
-        talentService.addTalent(locBoss, defence);
-        talentService.addTalent(locBoss, defenceMagic);
-        talentService.addTalent(locBoss, lifeRestore);
-        talentService.addTalent(locBoss, moveSpeed);
+        locBoss.addObjectData(attack, 1);
+        locBoss.addObjectData(defence, 1);
+        locBoss.addObjectData(defenceMagic, 1);
+        locBoss.addObjectData(lifeRestore, 1);
+        locBoss.addObjectData(moveSpeed, 1);
         
         // 添加BOSS，并让所有小弟都跟随BOSS
         playNetwork.addEntity(locBoss);

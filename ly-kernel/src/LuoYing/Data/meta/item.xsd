@@ -221,10 +221,10 @@ xs:time
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="total" type="xs:integer" use="required" >
+                    <xs:attribute name="summonTotal" type="xs:integer" use="optional" >
                         <xs:annotation>
                             <xs:documentation>
-                                指定要召唤多少个角色
+                                指定要召唤多少个角色,默认：1
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>

@@ -28,21 +28,24 @@ public interface DataHandler<T extends ObjectData> {
      * 实体模块（Entity Module）通过实现这个方法来处理外部进入的数据。
      * @param data
      * @param amount 
+     * @return  返回true,如果成功添加
      */
-    void handleDataAdd(T data, int amount);
+    boolean handleDataAdd(T data, int amount);
     
     /**
      * 处理Entity数据的移除，当外部从Entity移除数据时这个方法会被调用，
      * 实体模块（Entity Module）通过实现这个方法来处理数据的移除。
      * @param data
      * @param amount 
+     * @return 返回true ,如果移除成功。
      */
-    void handleDataRemove(T data, int amount);
+    boolean handleDataRemove(T data, int amount);
     
     /**
      * 处理Entity数据的使用，当Entity使用数据时这个方法会被调用。
      * 实体模块（Entity Module）通过实现这个方法来确定要如何使用指定的数据。
      * @param data 
+     * @return 返回true,如果使用了物品。
      */
-    void handleDataUse(T data);
+    boolean handleDataUse(T data);
 }

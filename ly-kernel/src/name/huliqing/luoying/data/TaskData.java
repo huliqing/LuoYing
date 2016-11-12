@@ -24,40 +24,8 @@ public class TaskData extends ObjectData {
     // 物品应该在不同任务之间区分开来。
     private final static String TASK_ITEM_PREFIX = "_T_ITEM_";
     
-    // remove20160322
-//    // 任务的发起者ID
-//    private String startActorId;
-//    // 任务的结束者的ID
-//    private String endActorId;
-    
     // 判断任务是否执行完成
     private boolean completion;
-    
-    public TaskData(){super();}
-    
-    @Override
-    public void write(JmeExporter ex) throws IOException {
-        super.write(ex);
-        OutputCapsule oc = ex.getCapsule(this);
-        
-        // remove20160322
-//        oc.write(startActorId, "startActorId", null);
-//        oc.write(endActorId, "endActorId", null);
-        
-        oc.write(completion, "completion", false);
-    }
-
-    @Override
-    public void read(JmeImporter im) throws IOException {
-        super.read(im);
-        InputCapsule ic = im.getCapsule(this);
-        
-        // remove20160322
-//        startActorId = ic.readString("startActorId", null);
-//        endActorId = ic.readString("endActorId", null);
-        
-        completion = ic.readBoolean("completion", false);
-    }
     
     /**
      * 判断任务是否执行完成,完成即表示任务达成目标，中断或放弃不算完成。
@@ -98,5 +66,19 @@ public class TaskData extends ObjectData {
     
     private String makeId(String itemId) {
         return TASK_ITEM_PREFIX + itemId;
+    }
+    
+    @Override
+    public void write(JmeExporter ex) throws IOException {
+        super.write(ex);
+        OutputCapsule oc = ex.getCapsule(this);
+        oc.write(completion, "completion", false);
+    }
+
+    @Override
+    public void read(JmeImporter im) throws IOException {
+        super.read(im);
+        InputCapsule ic = im.getCapsule(this);
+        completion = ic.readBoolean("completion", false);
     }
 }

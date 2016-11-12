@@ -4,10 +4,13 @@
  */
 package name.huliqing.luoying.layer.network;
 
+import java.util.Random;
 import name.huliqing.luoying.network.Network;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.layer.service.PlayService;
+import name.huliqing.luoying.manager.RandomManager;
 import name.huliqing.luoying.mess.MessAutoAttack;
+import name.huliqing.luoying.mess.MessRandomSeed;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.scene.Scene;
 
@@ -57,6 +60,25 @@ public class PlayNetworkImpl implements PlayNetwork {
         // On Server，这个命令服务端不需要广播到客户端。
         
         playService.attack(actor, target);
+    }
+    
+    @Override
+    public void updateRandomSeed() {
+        if (NETWORK.isClient()) {
+            return;
+        }
+        int seed = new Random().nextInt();
+        
+        // 将种子发送到客户端，由客户端更新随机数
+        if (NETWORK.hasConnections()) {
+            MessRandomSeed mess = new MessRandomSeed();
+            mess.setRandomSeed(seed);
+            NETWORK.broadcast(mess);
+        }
+        
+        // 服务端更新随机种子。不要实现 PlayService.updateRandomSeed()方法。
+        RandomManager.setRandomSeed(seed);
+        
     }
     
 //    @Override

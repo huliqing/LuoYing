@@ -19,7 +19,7 @@ public abstract class AbstractModule<T extends ModuleData> implements Module<T> 
     protected boolean initialized;
     protected int moduleOrder;
     protected Entity entity;
-
+    
     @Override
     public void setData(T data) {
         this.data = data;

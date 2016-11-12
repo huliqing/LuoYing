@@ -38,7 +38,7 @@ public class SummonItem extends AbstractItem {
     // 召换哪一个角色
     private String actorId;
     // 召换多少
-    private int total = 1;
+    private int summonTotal = 1;
     
     // 设置要从source（召唤者）同步的属性值，这是个属性名称列表，当召唤后，被召唤的角色的这些属性的值将从召唤者身上获取。
     // 比如等级属性，分组属性，以便被召唤后的角色与召唤者有一样的等级和分组
@@ -55,7 +55,7 @@ public class SummonItem extends AbstractItem {
     public void setData(ItemData data) {
         super.setData(data);
         this.actorId = data.getAsString("actorId");
-        this.total = data.getAsInteger("total", total);
+        this.summonTotal = data.getAsInteger("summonTotal", summonTotal);
         copyAttributesFromSource = data.getAsArray("copyAttributesFromSource");
         linkAttributesToSource = data.getAsArray("linkAttributesToSource");
     }
@@ -63,7 +63,7 @@ public class SummonItem extends AbstractItem {
     @Override
     public void use(Entity actor) {
         int count = 0;
-        for (int i = 0; i < total; i++) {
+        for (int i = 0; i < summonTotal; i++) {
             count += summon(actor, actorId) ? 1 : 0;
         }
         // 物品数减少

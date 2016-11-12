@@ -5,8 +5,6 @@
 package name.huliqing.ly.layer.service;
 
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.xml.ObjectData;
-import name.huliqing.luoying.layer.service.ObjectService;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.ly.object.chat.Chat;
@@ -20,12 +18,10 @@ import name.huliqing.ly.constants.IdConstants;
  * @author huliqing
  */
 public class ChatServiceImpl implements ChatService {
-    private ObjectService protoService;
     private PlayService playService;
     
     @Override
     public void inject() {
-        protoService = Factory.get(ObjectService.class);
         playService = Factory.get(PlayService.class);
     }
     

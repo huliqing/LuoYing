@@ -8,8 +8,6 @@ import com.jme3.math.Vector3f;
 import java.util.List;
 import java.util.logging.Logger;
 import name.huliqing.luoying.constants.SkillConstants;
-import name.huliqing.luoying.data.SkillData;
-import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.define.DefineFactory;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.module.SkillListener;
@@ -30,25 +28,7 @@ public class SkillServiceImpl implements SkillService {
     public void inject() {
         // ignore
     }
-
-    @Override
-    public Skill loadSkill(String skillId) {
-        return Loader.load(skillId);
-    }
-
-    @Override
-    public Skill loadSkill(SkillData skillData) {
-        return Loader.load(skillData);
-    }
-
-    @Override
-    public void addSkill(Entity actor, String skillId) {
-        SkillModule module = actor.getModuleManager().getModule(SkillModule.class);
-        if (module != null) {
-            module.addSkill(loadSkill(skillId));
-        }
-    }
-
+    
     @Override
     public boolean removeSkill(Entity actor, String skillId) {
         SkillModule module = actor.getModuleManager().getModule(SkillModule.class);
@@ -200,18 +180,18 @@ public class SkillServiceImpl implements SkillService {
     }
 
     @Override
-    public boolean playSkill(SkillModule skillModule, Skill skill, boolean force, List<Long> wantNotInterruptSkills) {
+    public boolean playSkill(SkillModule skillModule, Skill skill, boolean force) {
         if (skill == null) {
             return false;
         }
-        return skillModule.playSkill(skill, force, wantNotInterruptSkills);
+        return skillModule.playSkill(skill, force);
     }
     
     @Override
     public boolean playSkill(Entity actor, Skill skill, boolean force) {
         SkillModule c = actor.getModuleManager().getModule(SkillModule.class);
         if (c != null) {
-            return playSkill(c, skill, force, c.checkNotWantInterruptSkills(skill));
+            return playSkill(c, skill, force);
         }
         return false;
     }
@@ -240,7 +220,7 @@ public class SkillServiceImpl implements SkillService {
                 wSkill.setViewDirection(dir);
             }
         }
-        return playSkill(module, walkSkill, force, null);
+        return playSkill(module, walkSkill, force);
     }
     
     @Override

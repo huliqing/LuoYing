@@ -4,12 +4,9 @@
  */
 package name.huliqing.luoying.layer.service;
 
-import java.util.List;
-import name.huliqing.luoying.data.TalentData;
 import name.huliqing.luoying.layer.network.TalentNetwork;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.module.TalentListener;
-import name.huliqing.luoying.object.talent.Talent;
 
 /**
  *
@@ -17,33 +14,34 @@ import name.huliqing.luoying.object.talent.Talent;
  */
 public interface TalentService extends TalentNetwork {
     
-    /**
-     * 给角色添加一个天赋
-     * @param actor
-     * @param talentData 
-     */
-    void addTalent(Entity actor, TalentData talentData);
-    
-    /**
-     * 添加天赋
-     * @param actor
-     * @param talent 
-     */
-    void addTalent(Entity actor, Talent talent);
-    
-    /**
-     * 移除角色身上指定的天赋
-     * @param actor
-     * @param talentId 
-     */
-    void removeTalent(Entity actor, String talentId);
-    
-    /**
-     * 获取角色身上所有的天赋,如果没有任何天赋则返回null.
-     * @param actor
-     * @return 
-     */
-    List<Talent> getTalents(Entity actor);
+    // remove20161111
+//    /**
+//     * 给角色添加一个天赋
+//     * @param actor
+//     * @param talentData 
+//     */
+//    void addTalent(Entity actor, TalentData talentData);
+//    
+//    /**
+//     * 添加天赋
+//     * @param actor
+//     * @param talent 
+//     */
+//    void addTalent(Entity actor, Talent talent);
+//    
+//    /**
+//     * 移除角色身上指定的天赋
+//     * @param actor
+//     * @param talentId 
+//     */
+//    void removeTalent(Entity actor, String talentId);
+//    
+//    /**
+//     * 获取角色身上所有的天赋,如果没有任何天赋则返回null.
+//     * @param actor
+//     * @return 
+//     */
+//    List<Talent> getTalents(Entity actor);
     
     /**
      * 获取角色当前可用的天赋点数

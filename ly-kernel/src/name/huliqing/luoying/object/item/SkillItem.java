@@ -34,7 +34,7 @@ public class SkillItem extends AbstractItem {
             SkillModule skillModule = actor.getModuleManager().getModule(SkillModule.class);
             if (skillModule != null) {
                 skill.setActor(actor);
-                skillModule.playSkill(skill, false, skillModule.checkNotWantInterruptSkills(skill));
+                skillModule.playSkill(skill, false);
             }
         }
     }

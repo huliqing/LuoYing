@@ -124,21 +124,24 @@ public interface Entity<T extends EntityData> extends DataProcessor<T>{
      * 向Entity添加数据
      * @param data
      * @param amount 添加的数量
+     * @return true 如果成功添加
      */
-    void addObjectData(ObjectData data, int amount);
+    boolean addObjectData(ObjectData data, int amount);
     
     /**
      * 从Entity中移除数据
      * @param data
      * @param amount 移除的数量
+     * @return true如果成功移除
      */
-    void removeObjectData(ObjectData data, int amount);
+    boolean removeObjectData(ObjectData data, int amount);
     
     /**
-     * 让Entity使用一个数据
+     * 让Entity使用一个数据.
      * @param data 
+     * @return true如果成功使用
      */
-    void useObjectData(ObjectData data);
+    boolean useObjectData(ObjectData data);
     
     /**
      * 添加数据侦听器,用于侦听Entity中数据的流转.

@@ -20,13 +20,14 @@ import name.huliqing.luoying.object.attribute.Attribute;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.attribute.ValueChangeListener;
 import name.huliqing.luoying.object.el.LNumberEl;
+import name.huliqing.luoying.object.entity.DataHandler;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.talent.Talent;
 
 /**
  * @author huliqing
  */
-public class TalentModule extends AbstractModule implements ValueChangeListener<Number>{
+public class TalentModule extends AbstractModule implements DataHandler<TalentData>, ValueChangeListener<Number>{
     private static final Logger LOG = Logger.getLogger(TalentModule.class.getName());
     private final ElService elService = Factory.get(ElService.class);
     
@@ -36,10 +37,6 @@ public class TalentModule extends AbstractModule implements ValueChangeListener<
     // 天赋属性名称，这个属性将作为天赋点数的容器，属性类型必须是Number类型。
     // 当角色升级时获得的天赋点数将累加在这个属性上。
     private String bindTalentPointsAttribute;
-
-    // remove20161031
-//    // 默认的天赋奖励点数，如果没有设置talentPointsLevelEl则始终使用这个值作为天赋点数奖励。
-//    private int talentPointsValue;
 
     // 天赋公式ID,如果用于为每个变化等级计算天赋点数的奖励
     private LNumberEl talentPointsLevelEl;
@@ -115,8 +112,9 @@ public class TalentModule extends AbstractModule implements ValueChangeListener<
     /**
      * 给角色添加一个新的天赋，如果天赋已经存在(天赋ID相同),则旧的天赋将会被新的天赋覆盖掉。
      * @param talent 
+     * @return  
      */
-    public void addTalent(Talent talent) {
+    public boolean addTalent(Talent talent) {
         Talent oldTalent = getTalent(talent.getData().getId());
         if (oldTalent != null) {
             removeTalent(oldTalent);
@@ -132,6 +130,7 @@ public class TalentModule extends AbstractModule implements ValueChangeListener<
                 listener.onTalentAdded(entity, talent);
             }
         }
+        return true;
     }
     
     /**
@@ -264,6 +263,35 @@ public class TalentModule extends AbstractModule implements ValueChangeListener<
         // 这样角色在存档并重新读回的时候可以还原这个值。
         lastApplyTalentPointsLevel = levelAttribute.intValue();
         updateDatas();
+    }
+
+    @Override
+    public Class<TalentData> getHandleType() {
+        return TalentData.class;
+    }
+
+    @Override
+    public boolean handleDataAdd(TalentData data, int amount) {
+        Talent talent = getTalent(data.getId());
+        if (talent != null) {
+            return false;
+        }
+        return addTalent((Talent) Loader.load(data));
+    }
+
+    @Override
+    public boolean handleDataRemove(TalentData data, int amount) {
+        Talent talent = getTalent(data.getId());
+        if (talent == null || talent.getData() != data)  {
+            return false;
+        }
+        return removeTalent(talent);
+    }
+
+    @Override
+    public boolean handleDataUse(TalentData data) {
+        // 天赋不能使用
+        return false;
     }
 
 

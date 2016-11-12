@@ -146,6 +146,26 @@ public class EntityData extends ObjectData {
         }
         return null;
     }
+    
+    /**
+     * 通过物品的唯一id来查找物品
+     * @param <T>
+     * @param id
+     * @return 
+     */
+    public <T extends ObjectData> T getObjectDataByUniqueId(long id) {
+        if (objectDatas == null || objectDatas.isEmpty()) 
+            return null;
+        
+        ObjectData od;
+        for (int i = 0; i < objectDatas.size(); i++) {
+            od = objectDatas.get(i);
+            if (od.getUniqueId() == id) {
+                return (T) od;
+            }
+        }
+        return null;
+    }
 
     @Override
     public void write(JmeExporter ex) throws IOException {

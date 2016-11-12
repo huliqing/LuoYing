@@ -6,8 +6,6 @@
 package name.huliqing.luoying.object.entity;
 
 import com.jme3.util.SafeArrayList;
-import java.util.Collections;
-import java.util.List;
 import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.object.attribute.Attribute;
 import name.huliqing.luoying.object.attribute.AttributeManager;
@@ -154,33 +152,36 @@ public abstract class AbstractEntity<T extends EntityData> implements Entity<T> 
     }    
 
     @Override
-    public void addObjectData(ObjectData data, int count) {
-        moduleManager.addData(data, count);
-        if (dataListeners != null && !dataListeners.isEmpty()) {
+    public boolean addObjectData(ObjectData data, int count) {
+        boolean added = moduleManager.addData(data, count);
+        if (added && dataListeners != null && !dataListeners.isEmpty()) {
             for (EntityDataListener lis : dataListeners.getArray()) {
                 lis.onDataAdded(data, count);
             }
         }
+        return added;
     }
-
+    
     @Override
-    public void removeObjectData(ObjectData data, int count) {
-        moduleManager.removeData(data, count);
-        if (dataListeners != null && !dataListeners.isEmpty()) {
+    public boolean removeObjectData(ObjectData data, int count) {
+        boolean removed = moduleManager.removeData(data, count);
+        if (removed && dataListeners != null && !dataListeners.isEmpty()) {
             for (EntityDataListener lis : dataListeners.getArray()) {
                 lis.onDataRemoved(data, count);
             }
         }
+        return removed;
     }
     
     @Override
-    public void useObjectData(ObjectData data) {
-        moduleManager.useData(data);
-        if (dataListeners != null && !dataListeners.isEmpty()) {
+    public boolean useObjectData(ObjectData data) {
+        boolean used = moduleManager.useData(data);
+        if (used && dataListeners != null && !dataListeners.isEmpty()) {
             for (EntityDataListener lis : dataListeners.getArray()) {
                 lis.onDataUsed(data);
             }
         }
+        return used;
     }
     
     @Override

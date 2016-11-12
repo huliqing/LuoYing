@@ -4,14 +4,9 @@
  */
 package name.huliqing.luoying.layer.service;
 
-import java.util.List;
-import name.huliqing.luoying.data.TalentData;
-import name.huliqing.luoying.object.Loader;
-import name.huliqing.luoying.xml.DataFactory;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.module.TalentListener;
 import name.huliqing.luoying.object.module.TalentModule;
-import name.huliqing.luoying.object.talent.Talent;
 
 /**
  *
@@ -24,47 +19,48 @@ public class TalentServiceImpl implements TalentService {
         // ignore
     }
 
-    @Override
-    public void addTalent(Entity actor, String talentId) {
-        TalentData data = DataFactory.createData(talentId);
-        addTalent(actor, data);
-    }
-
-    @Override
-    public void addTalent(Entity actor, TalentData talentData) {
-        TalentModule module = actor.getModuleManager().getModule(TalentModule.class);
-        if (module != null) {
-            module.addTalent((Talent) Loader.load(talentData));
-        }
-    }
-
-    @Override
-    public void addTalent(Entity actor, Talent talent) {
-        TalentModule module = actor.getModuleManager().getModule(TalentModule.class);
-        if (module != null) {
-            module.addTalent(talent);
-        }
-    }
-
-    @Override
-    public void removeTalent(Entity actor, String talentId) {
-        TalentModule module = actor.getModuleManager().getModule(TalentModule.class);
-        if (module != null) {
-            Talent talent = module.getTalent(talentId);
-            if (talent != null) {
-                module.removeTalent(talent);
-            }
-        }
-    }
-
-    @Override
-    public List<Talent> getTalents(Entity actor) {
-        TalentModule module = actor.getModuleManager().getModule(TalentModule.class);
-        if (module != null) {
-            return module.getTalents();
-        }
-        return null;
-    }
+    // remove20161112
+//    @Override
+//    public void addTalent(Entity actor, String talentId) {
+//        TalentData data = DataFactory.createData(talentId);
+//        addTalent(actor, data);
+//    }
+//
+//    @Override
+//    public void addTalent(Entity actor, TalentData talentData) {
+//        TalentModule module = actor.getModuleManager().getModule(TalentModule.class);
+//        if (module != null) {
+//            module.addTalent((Talent) Loader.load(talentData));
+//        }
+//    }
+//
+//    @Override
+//    public void addTalent(Entity actor, Talent talent) {
+//        TalentModule module = actor.getModuleManager().getModule(TalentModule.class);
+//        if (module != null) {
+//            module.addTalent(talent);
+//        }
+//    }
+//
+//    @Override
+//    public void removeTalent(Entity actor, String talentId) {
+//        TalentModule module = actor.getModuleManager().getModule(TalentModule.class);
+//        if (module != null) {
+//            Talent talent = module.getTalent(talentId);
+//            if (talent != null) {
+//                module.removeTalent(talent);
+//            }
+//        }
+//    }
+//
+//    @Override
+//    public List<Talent> getTalents(Entity actor) {
+//        TalentModule module = actor.getModuleManager().getModule(TalentModule.class);
+//        if (module != null) {
+//            return module.getTalents();
+//        }
+//        return null;
+//    }
 
     @Override
     public int getTalentPoints(Entity actor) {

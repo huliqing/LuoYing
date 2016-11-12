@@ -44,7 +44,7 @@ public class MoveSpeedState extends AttributeState {
         
         // 如果角色当前正在执行“跑路”技能，则强制重新执行，以适应速度的变化。
         if (skillModule.isRunning() && runSkill != null) {
-            skillModule.playSkill(runSkill, false, skillModule.checkNotWantInterruptSkills(runSkill));
+            skillModule.playSkill(runSkill, false);
         }
         
         if (moveEffect == null && moveEffectId != null) {
@@ -67,7 +67,7 @@ public class MoveSpeedState extends AttributeState {
         // 如果角色当前正在执行“跑路”技能，则强制重新执行，以适应速度的变化。
         if (skillModule != null && skillModule.isRunning()) {
             if (runSkill != null) {
-                skillModule.playSkill(runSkill, false, skillModule.checkNotWantInterruptSkills(runSkill));
+                skillModule.playSkill(runSkill, false);
             }
         }
         

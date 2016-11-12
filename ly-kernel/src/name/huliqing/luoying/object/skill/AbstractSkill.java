@@ -17,6 +17,7 @@ import name.huliqing.luoying.constants.SkillConstants;
 import name.huliqing.luoying.data.AttributeUse;
 import name.huliqing.luoying.data.SkillData;
 import name.huliqing.luoying.layer.service.ElService;
+import name.huliqing.luoying.manager.RandomManager;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.actoranim.ActorAnim;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
@@ -599,7 +600,9 @@ public abstract class AbstractSkill implements Skill {
         if (resistRate >= 1.0f) { // 抵抗率为100%
             return false;
         }
-        return FastMath.nextRandomFloat() > resistRate;
+        
+        float randomValue = RandomManager.getValue(data.getNextRandomIndex());
+        return randomValue > resistRate;
     }
     
     @Override

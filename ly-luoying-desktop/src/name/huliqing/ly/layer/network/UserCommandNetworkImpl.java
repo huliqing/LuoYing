@@ -7,7 +7,6 @@ package name.huliqing.ly.layer.network;
 import name.huliqing.luoying.network.Network;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.layer.network.ActorNetwork;
-import name.huliqing.luoying.layer.network.ObjectNetwork;
 import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.network.TalentNetwork;
 import name.huliqing.luoying.layer.network.TaskNetwork;
@@ -16,7 +15,6 @@ import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.layer.service.LogicService;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.layer.service.SkillService;
-import name.huliqing.luoying.layer.service.ObjectService;
 
 
 public class UserCommandNetworkImpl implements UserCommandNetwork {
@@ -26,14 +24,12 @@ public class UserCommandNetworkImpl implements UserCommandNetwork {
     private ActorService actorService;
     private PlayService playService;
     private ActionService actionService;
-    private ObjectService protoService;
     
     private PlayNetwork playNetwork;
     private ActorNetwork actorNetwork;
     private TalentNetwork talentNetwork;
     private ChatNetwork chatNetwork;
     private TaskNetwork taskNetwork;
-    private ObjectNetwork protoNetwork;
     
     @Override
     public void inject() {
@@ -42,14 +38,12 @@ public class UserCommandNetworkImpl implements UserCommandNetwork {
         actorService = Factory.get(ActorService.class);
         playService = Factory.get(PlayService.class);
         actionService = Factory.get(ActionService.class);
-        protoService = Factory.get(ObjectService.class);
         
         playNetwork = Factory.get(PlayNetwork.class);
         actorNetwork = Factory.get(ActorNetwork.class);
         talentNetwork = Factory.get(TalentNetwork.class);
         chatNetwork = Factory.get(ChatNetwork.class);
         taskNetwork = Factory.get(TaskNetwork.class);
-        protoNetwork = Factory.get(ObjectNetwork.class);
     }
 
 //    @Override

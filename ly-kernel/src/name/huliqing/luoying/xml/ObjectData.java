@@ -27,7 +27,6 @@ import name.huliqing.luoying.data.CustomUserData;
  */
 @Serializable
 public class ObjectData implements Savable {
-//    public final static String USER_DATA = "PROTO_USER_DATA";
     
     private static long idIndex = System.currentTimeMillis();
     
@@ -449,4 +448,5 @@ public class ObjectData implements Savable {
         }
         return getProto().getAsColor(key, defValue);
     }
+    
 }

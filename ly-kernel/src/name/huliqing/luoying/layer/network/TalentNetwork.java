@@ -12,12 +12,13 @@ import name.huliqing.luoying.object.entity.Entity;
  */
 public interface TalentNetwork extends Inject {
     
-    /**
-     * 给角色添加一个天赋
-     * @param actor
-     * @param talentId 
-     */
-    void addTalent(Entity actor, String talentId);
+    // remove20161111
+//    /**
+//     * 给角色添加一个天赋
+//     * @param actor
+//     * @param talentId 
+//     */
+//    void addTalent(Entity actor, String talentId);
     
     /**
      * 增加角色某个天赋的点数,注：角色必须拥有足够的可用天赋点数才能增加。

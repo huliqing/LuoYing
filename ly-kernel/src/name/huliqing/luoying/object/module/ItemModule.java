@@ -57,9 +57,9 @@ public class ItemModule extends AbstractModule implements DataHandler<ItemData> 
     }
     
     @Override
-    public void handleDataAdd(ItemData data, int count) {
+    public boolean handleDataAdd(ItemData data, int count) {
         if (count <= 0) 
-            return;
+            return false;
         
         ItemData item = find(data.getId());
         if (item == null) {
@@ -73,32 +73,35 @@ public class ItemModule extends AbstractModule implements DataHandler<ItemData> 
         } else {
             item.setTotal(item.getTotal() + count);
         }
+        return true;
     }
     
     @Override
-    public void handleDataRemove(ItemData data, int count) {
+    public boolean handleDataRemove(ItemData data, int count) {
         if (count <= 0)
-            return;
+            return false;
         
         ItemData item = find(data.getId());
         
         if (item == null)
-            return;
+            return false;
         
         if (!item.isDeletable())
-            return;
+            return false;
         
         item.setTotal(item.getTotal() - count);
         if (item.getTotal() <= 0) {
             items.remove(item);
             entity.getData().getObjectDatas().remove(item);
         }
+        return true;
     }
 
     @Override
-    public void handleDataUse(ItemData data) {
+    public boolean handleDataUse(ItemData data) {
         Item item = Loader.load(data);
         item.use(entity);
+        return true;
     }
     
     private ItemData find(String itemId) {

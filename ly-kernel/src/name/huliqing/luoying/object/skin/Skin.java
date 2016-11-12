@@ -69,16 +69,16 @@ public interface Skin extends DataProcessor<SkinData> {
      */
     boolean isSkinning();
     
-    /**
-     * 判断是否为“基本皮肤”
-     * @return 
-     */
-    boolean isBaseSkin();
-    
-    /**
-     * 判断当前Skin是否已经attach到角色身上.
-     * @return 
-     */
-    boolean isAttached();
+//    /**
+//     * 判断是否为“基本皮肤”
+//     * @return 
+//     */
+//    boolean isBaseSkin();
+//    
+//    /**
+//     * 判断当前Skin是否已经attach到角色身上.
+//     * @return 
+//     */
+//    boolean isAttached();
 
 }

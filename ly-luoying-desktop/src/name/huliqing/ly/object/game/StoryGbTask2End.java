@@ -24,8 +24,6 @@ import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.logic.scene.ActorMultLoadHelper;
 import name.huliqing.luoying.manager.ResourceManager;
 import name.huliqing.luoying.layer.service.LogicService;
-import name.huliqing.luoying.layer.service.ObjectService;
-import name.huliqing.luoying.layer.network.ObjectNetwork;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.entity.Entity;
@@ -43,14 +41,12 @@ public class StoryGbTask2End extends AbstractGameLogic {
     private final ActorService actorService = Factory.get(ActorService.class);
     private final ActionService actionService = Factory.get(ActionService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
-    private final ObjectService protoService = Factory.get(ObjectService.class);
-    private final LogicService logicService = Factory.get(LogicService.class);
+//    private final LogicService logicService = Factory.get(LogicService.class);
     private final GameService gameService = Factory.get(GameService.class);
     
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final StateNetwork stateNetwork = Factory.get(StateNetwork.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
-    private final ObjectNetwork protoNetwork = Factory.get(ObjectNetwork.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
     
@@ -183,11 +179,7 @@ public class StoryGbTask2End extends AbstractGameLogic {
     }
     
     private boolean isAltarDead() {
-//        Entity actor = playService.findActor(IdConstants.ACTOR_ALTAR);
-//        return actor == null || actorService.isDead(actor);
-        
         List<Entity> entities = game.getScene().getEntities(Entity.class, null);
-        Entity gb = null;
         for (Entity e : entities) {
             if (e.getData().getId().equals(IdConstants.ACTOR_ALTAR)) {
                 return gameService.isDead(e);

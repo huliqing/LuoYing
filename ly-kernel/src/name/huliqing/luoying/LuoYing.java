@@ -60,7 +60,6 @@ import name.huliqing.luoying.data.TalentData;
 import name.huliqing.luoying.data.TaskData;
 import name.huliqing.luoying.data.TradeObjectData;
 import name.huliqing.luoying.mess.MessActionRun;
-import name.huliqing.luoying.mess.MessActorAddSkill;
 //import name.huliqing.luoying.mess.MessActorFollow;
 //import name.huliqing.luoying.mess.MessActorKill;
 import name.huliqing.luoying.mess.MessActorPhysics;
@@ -83,8 +82,6 @@ import name.huliqing.luoying.mess.MessPlayGetGameData;
 import name.huliqing.luoying.mess.MessPlayGetServerState;
 import name.huliqing.luoying.mess.MessPlayLoadSavedActor;
 import name.huliqing.luoying.mess.MessPlayLoadSavedActorResult;
-import name.huliqing.luoying.mess.MessProtoAdd;
-import name.huliqing.luoying.mess.MessProtoRemove;
 import name.huliqing.luoying.mess.MessSCActorRemove;
 import name.huliqing.luoying.mess.MessSCClientList;
 import name.huliqing.luoying.mess.MessSCGameData;
@@ -95,9 +92,7 @@ import name.huliqing.luoying.mess.MessSkillWalk;
 import name.huliqing.luoying.mess.MessSkinWeaponTakeOn;
 import name.huliqing.luoying.mess.MessStateAdd;
 import name.huliqing.luoying.mess.MessStateRemove;
-import name.huliqing.luoying.mess.MessTalentAdd;
 import name.huliqing.luoying.mess.MessTalentAddPoint;
-import name.huliqing.luoying.mess.MessTaskAdd;
 import name.huliqing.luoying.mess.MessTaskApplyItem;
 import name.huliqing.luoying.mess.MessTaskComplete;
 import name.huliqing.luoying.object.SyncData;
@@ -245,17 +240,15 @@ import name.huliqing.luoying.loader.PlantEnvLoader;
 import name.huliqing.luoying.loader.RandomSceneDataLoader;
 import name.huliqing.luoying.mess.MessActorSetLocation;
 import name.huliqing.luoying.mess.MessEntityAdd;
+import name.huliqing.luoying.mess.MessEntityAddData;
+import name.huliqing.luoying.mess.MessEntityAddDataById;
 import name.huliqing.luoying.mess.MessEntityHitNumberAttribute;
 import name.huliqing.luoying.mess.MessEntityHitAttribute;
 import name.huliqing.luoying.mess.MessEntityRemove;
-//import name.huliqing.luoying.mess.MessItemAdd;
-//import name.huliqing.luoying.mess.MessItemRemove;
-//import name.huliqing.luoying.mess.MessItemUse;
+import name.huliqing.luoying.mess.MessEntityRemoveData;
+import name.huliqing.luoying.mess.MessEntityUseData;
+import name.huliqing.luoying.mess.MessEntityUseDataById;
 import name.huliqing.luoying.mess.MessSkillPlay;
-import name.huliqing.luoying.mess.MessSkinAdd;
-import name.huliqing.luoying.mess.MessSkinAttach;
-import name.huliqing.luoying.mess.MessSkinDetach;
-import name.huliqing.luoying.mess.MessSkinRemove;
 import name.huliqing.luoying.object.attribute.BooleanAttribute;
 import name.huliqing.luoying.object.attribute.FloatAttribute;
 import name.huliqing.luoying.object.attribute.GroupAttribute;
@@ -725,8 +718,6 @@ public class LuoYing {
         Serializer.registerClass(MessPing.class);
         Serializer.registerClass(MessPlayActorSelect.class);
         
-        Serializer.registerClass(MessProtoAdd.class);
-        Serializer.registerClass(MessProtoRemove.class);
 
 //        Serializer.registerClass(MessProtoUse.class);
 //        Serializer.registerClass(MessMessage.class);
@@ -737,7 +728,6 @@ public class LuoYing {
         // ---- Game play
         Serializer.registerClass(MessAutoAttack.class);
         Serializer.registerClass(MessActionRun.class);
-        Serializer.registerClass(MessActorAddSkill.class);
 //        Serializer.registerClass(MessActorFollow.class);
 //        Serializer.registerClass(MessActorKill.class);
         Serializer.registerClass(MessActorLookAt.class);
@@ -754,9 +744,14 @@ public class LuoYing {
         
         // Entity
         Serializer.registerClass(MessEntityAdd.class);
-        Serializer.registerClass(MessEntityHitNumberAttribute.class);
+        Serializer.registerClass(MessEntityAddData.class);
+        Serializer.registerClass(MessEntityAddDataById.class);
         Serializer.registerClass(MessEntityHitAttribute.class);
+        Serializer.registerClass(MessEntityHitNumberAttribute.class);
         Serializer.registerClass(MessEntityRemove.class);
+        Serializer.registerClass(MessEntityRemoveData.class);
+        Serializer.registerClass(MessEntityUseData.class);
+        Serializer.registerClass(MessEntityUseDataById.class);
         
         // Chat
 //        Serializer.registerClass(MessChatSell.class); 
@@ -773,10 +768,6 @@ public class LuoYing {
         Serializer.registerClass(MessSkillWalk.class);
         
         // Skin
-        Serializer.registerClass(MessSkinAdd.class);
-        Serializer.registerClass(MessSkinAttach.class);
-        Serializer.registerClass(MessSkinDetach.class);
-        Serializer.registerClass(MessSkinRemove.class);
         Serializer.registerClass(MessSkinWeaponTakeOn.class);
         
         // State
@@ -788,11 +779,9 @@ public class LuoYing {
         Serializer.registerClass(SyncData.class);
         
         // Talents
-        Serializer.registerClass(MessTalentAdd.class);
         Serializer.registerClass(MessTalentAddPoint.class);
         
         // Task
-        Serializer.registerClass(MessTaskAdd.class);
         Serializer.registerClass(MessTaskApplyItem.class);
         Serializer.registerClass(MessTaskComplete.class);
         

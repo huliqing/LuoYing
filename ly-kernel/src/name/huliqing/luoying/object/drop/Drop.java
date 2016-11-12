@@ -24,7 +24,7 @@ public interface Drop extends DataProcessor<DropData> {
      * 或者不掉落。
      * @param source 掉落源
      * @param target 接受掉落物品的角色,注意：这个目标有可能为null.
-     * @return 
+     * @return 如果有任何物品成功掉落则返回true,否则返回false.
      */
     boolean doDrop(Entity source, Entity target);
 }

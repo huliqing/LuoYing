@@ -5,8 +5,7 @@
  */
 package game;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Random;
 
 /**
  *
@@ -14,6 +13,5 @@ import java.util.List;
  */
 public class Test {
     public static void main(String[] args) {
-
     }
 }

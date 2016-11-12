@@ -165,7 +165,7 @@ public abstract class BaseUIShortcut<T extends ObjectData> extends AbstractShort
         icon.setHeight(height * 0.85f);
         count.setWidth(width);
         count.setHeight(height);
-        updateObjectData(objectData);
+        updateObjectData();
     }
     
     /**
@@ -233,7 +233,7 @@ public abstract class BaseUIShortcut<T extends ObjectData> extends AbstractShort
         return objectCount;
     }
     
-    protected void updateObjectData(T newObjectData) {
+    protected void updateObjectData() {
         // remove20161109
 //        if (objectData != newObjectData) {
 //            objectData = newObjectData;

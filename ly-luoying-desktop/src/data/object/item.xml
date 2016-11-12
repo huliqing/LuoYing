@@ -39,75 +39,75 @@
     <itemTest id="item000" extends="itemBase" icon="Interface/item/book.png" /> 
     
     <!--Gold-->
-    <itemSimple id="itemGold" extends="itemBase" icon="Interface/item/gold.png" cost="1" />
+    <itemSimple id="itemGold" extends="itemBase" icon="Interface/item/gold.png" />
     
     <!--复活卷轴-->
-    <itemSkill id="itemScrollLife" extends="itemBase" icon="Interface/item/scroll_life.png" skill="skillShotReborn" cost="100" />
+    <itemSkill id="itemScrollLife" extends="itemBase" icon="Interface/item/scroll_life.png" skill="skillShotReborn" />
     
     <!-- ========================================================================= -->
     <!--技能书籍-->
     <!-- ========================================================================= -->
     
     <!--书：野兽召唤术:不再使用--> 
-    <itemBook id="itemBook005" extends="itemBookBase" icon="Interface/item/book_blue.png" skill="skillSummon" cost="250" /> 
+    <itemBook id="itemBook005" extends="itemBookBase" icon="Interface/item/book_blue.png" skill="skillSummon" /> 
     <!--书：闪电箭-->
-    <itemBook id="itemBook006" extends="itemBookHumanBase" icon="Interface/item/book_green.png" skill="skillLightningShot" cost="0" /> 
+    <itemBook id="itemBook006" extends="itemBookHumanBase" icon="Interface/item/book_green.png" skill="skillLightningShot" /> 
     <!--书：星光传送术-->
-    <itemBook id="itemBook007" extends="itemBookHumanBase" icon="Interface/item/book_green.png" skill="skillBack" cost="250" /> 
+    <itemBook id="itemBook007" extends="itemBookHumanBase" icon="Interface/item/book_green.png" skill="skillBack" /> 
     <!--书：落樱飞舞-->
-    <itemBook id="itemBook008" extends="itemBookHumanBase" icon="Interface/item/book_green.png" skill="skillDanceSakura" cost="500" /> 
+    <itemBook id="itemBook008" extends="itemBookHumanBase" icon="Interface/item/book_green.png" skill="skillDanceSakura" /> 
     <!--书: 寒冰箭-->
-    <itemBook id="itemBook009" extends="itemBookHumanBase" icon="Interface/item/book_green.png" skill="skillIceShot" cost="800" /> 
+    <itemBook id="itemBook009" extends="itemBookHumanBase" icon="Interface/item/book_green.png" skill="skillIceShot" /> 
     <!--书: 二刀流冲击波-->
-    <itemBook id="itemBook010" extends="itemBookHumanBase" icon="Interface/item/book_green.png" skill="skillDualSwordWave" cost="800" /> 
+    <itemBook id="itemBook010" extends="itemBookHumanBase" icon="Interface/item/book_green.png" skill="skillDualSwordWave"  /> 
     
     <!-- ========================================================================= -->
     <!--召唤类物品-->
     <!-- ========================================================================= -->
     
     <!--召唤：狼-->
-    <itemSkill id="itemScrollWolf" extends="itemScrollBase" icon="Interface/item/scroll_wolf.png" skill="skillSummonWolf" cost="200" />
+    <itemSkill id="itemScrollWolf" extends="itemScrollBase" icon="Interface/item/scroll_wolf.png" skill="skillSummonWolf"  />
     <!--召唤：熊-->
-    <itemSkill id="itemScrollBear" extends="itemScrollBase" icon="Interface/item/scroll_bear.png" skill="skillSummonBear" cost="200" />
+    <itemSkill id="itemScrollBear" extends="itemScrollBase" icon="Interface/item/scroll_bear.png" skill="skillSummonBear"  />
     <!--召唤：蝎子-->
-    <itemSkill id="itemScrollScorpion" extends="itemScrollBase" icon="Interface/item/scroll_scorpion.png" skill="skillSummonScorpion" cost="200" />
+    <itemSkill id="itemScrollScorpion" extends="itemScrollBase" icon="Interface/item/scroll_scorpion.png" skill="skillSummonScorpion"  />
     <!--召唤：迅猛龙-->
-    <itemSkill id="itemScrollRaptor" extends="itemScrollBase" icon="" skill="skillSummonRaptor" cost="400"  />
+    <itemSkill id="itemScrollRaptor" extends="itemScrollBase" icon="" skill="skillSummonRaptor"   />
     <!--召唤：雷龙-->
-    <itemSkill id="itemScrollTrex" extends="itemScrollBase" icon="" skill="skillSummonTrex" cost="600"  />
+    <itemSkill id="itemScrollTrex" extends="itemScrollBase" icon="" skill="skillSummonTrex"   />
     <!--召唤：蜘蛛-->
-    <itemSkill id="itemSpiderSpawn" extends="itemScrollBase" icon="Interface/item/spawn.png" skill="skillSummonSpider" cost="200" />
+    <itemSkill id="itemSpiderSpawn" extends="itemScrollBase" icon="Interface/item/spawn.png" skill="skillSummonSpider"  />
     <!--召唤：古柏树根-->
-    <itemSkill id="itemTreeStump" extends="itemScrollBase" icon="Interface/item/treeStump.png" skill="skillSummonGb" cost="200" />
+    <itemSkill id="itemTreeStump" extends="itemScrollBase" icon="Interface/item/treeStump.png" skill="skillSummonGb"  />
     
     <!--召唤：防御塔-->
-    <itemSummon id="itemTower" extends="itemSummonBase" icon="Interface/item/tower_fire.png" actorId="actorTower" total="1" cost="300" />
-    <itemSummon id="itemTowerStone" extends="itemSummonBase" icon="Interface/item/tower_stone.png" actorId="actorTowerStone" total="1" cost="300" />
-    <itemSummon id="itemTowerSnow" extends="itemSummonBase" icon="Interface/item/tower_snow.png" actorId="actorTowerSnow" total="1" cost="300" />
+    <itemSummon id="itemTower" extends="itemSummonBase" icon="Interface/item/tower_fire.png" actorId="actorTower"  />
+    <itemSummon id="itemTowerStone" extends="itemSummonBase" icon="Interface/item/tower_stone.png" actorId="actorTowerStone"  />
+    <itemSummon id="itemTowerSnow" extends="itemSummonBase" icon="Interface/item/tower_snow.png" actorId="actorTowerSnow"  />
     
     <!-- ========================================================================= -->
     <!--药品类\增益类-->
     <!-- ========================================================================= -->
     
     <!--红瓶和蓝瓶-->
-    <itemAttribute id="itemTonicRed" extends="itemTonicBase"  icon="Interface/item/tonic_red.png" attribute="attributeHealth" amount="200" cost="50" />
-    <itemAttribute id="itemTonicBlue" extends="itemTonicBase" icon="Interface/item/tonic_blue.png" attribute="attributeMana" amount="200" cost="50" />
+    <itemAttribute id="itemTonicRed" extends="itemTonicBase"  icon="Interface/item/tonic_red.png" attribute="attributeHealth" amount="200"  />
+    <itemAttribute id="itemTonicBlue" extends="itemTonicBase" icon="Interface/item/tonic_blue.png" attribute="attributeMana" amount="200"  />
     
     <!--攻击、施法速度药水(attack speed)-->
-    <itemState id="itemASTonic" extends="itemTonicBase" icon="Interface/item/tonic_yellow.png" states="stateSpeedUpAS" cost="300" />
+    <itemState id="itemASTonic" extends="itemTonicBase" icon="Interface/item/tonic_yellow.png" states="stateSpeedUpAS"  />
     
     <!--风中劲草-->
-    <itemState id="itemHerb" extends="itemTonicBase" icon="Interface/item/grass.png" states="stateWindWalk" cost="100" />
+    <itemState id="itemHerb" extends="itemTonicBase" icon="Interface/item/grass.png" states="stateWindWalk"  />
 
     <!--解除中毒状态: 解毒草用-->
-    <itemStateRemove id="itemDetoxifyGrass" extends="itemBase"  icon="Interface/item/leaf.png" states="stateScorpionVenom" effects="effectTonic" cost="20" />
+    <itemStateRemove id="itemDetoxifyGrass" extends="itemBase"  icon="Interface/item/leaf.png" states="stateScorpionVenom" effects="effectTonic"  />
     
     <!--==========================================================================-->
     <!-- 任务物品 -->
     <!--==========================================================================-->
 
     <!--蜘蛛爪-->
-    <itemSimple id="itemSpiderClaw" extends="itemBase" icon="Interface/item/claw.png" cost="0" />
+    <itemSimple id="itemSpiderClaw" extends="itemBase" icon="Interface/item/claw.png"  />
     
     <!--==========================================================================-->
     <!-- 地图 -->

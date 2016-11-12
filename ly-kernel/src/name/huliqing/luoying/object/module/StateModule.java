@@ -10,13 +10,14 @@ import com.jme3.util.SafeArrayList;
 import java.util.List;
 import name.huliqing.luoying.data.StateData;
 import name.huliqing.luoying.object.Loader;
+import name.huliqing.luoying.object.entity.DataHandler;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.state.State;
 
 /**
  * @author huliqing
  */
-public class StateModule extends AbstractModule {
+public class StateModule extends AbstractModule implements DataHandler<StateData> {
 
     private final SafeArrayList<State> states = new SafeArrayList<State>(State.class);
     private List<StateListener> stateListeners;
@@ -68,7 +69,7 @@ public class StateModule extends AbstractModule {
         super.cleanup();
     }
 
-    public void addState(State state) {
+    public boolean addState(State state) {
         // 如果已经存在相同ID的状态，则要删除旧的，因状态不允许重复。
         State oldState = getState(state.getData().getId());
         if (oldState != null) {
@@ -88,6 +89,7 @@ public class StateModule extends AbstractModule {
                 sl.onStateAdded(entity, state);
             }
         }
+        return true;
     }
     
     public boolean removeState(State state) {
@@ -134,5 +136,30 @@ public class StateModule extends AbstractModule {
 
     public List<StateListener> getStateListeners() {
         return stateListeners;
+    }
+    
+    @Override
+    public Class<StateData> getHandleType() {
+        return StateData.class;
+    }
+    
+    @Override
+    public boolean handleDataAdd(StateData data, int amount) {
+        State state = Loader.load(data);
+        return addState(state);
+    }
+
+    @Override
+    public boolean handleDataRemove(StateData data, int amount) {
+        State state = getState(data.getId());
+        if (state != null) {
+            return removeState(state);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean handleDataUse(StateData data) {
+        return false; // ignore
     }
 }

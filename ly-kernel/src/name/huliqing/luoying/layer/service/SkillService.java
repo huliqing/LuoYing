@@ -22,21 +22,7 @@ import name.huliqing.luoying.object.skill.SkillTag;
  */
 public interface SkillService extends SkillNetwork {
     
-    /**
-     * 载入技能。
-     * @param skillId
-     * @return 
-     */
-    Skill loadSkill(String skillId);
-    
-    /**
-     * 载入技能
-     * @param skillData
-     * @return 
-     */
-    Skill loadSkill(SkillData skillData);
-    
-    boolean playSkill(SkillModule skillModule, Skill skill, boolean force, List<Long> wantNotInterruptSkills);
+    boolean playSkill(SkillModule skillModule, Skill skill, boolean force);
     
     /**
      * 从角色身上移除一个技能

@@ -6,7 +6,6 @@ package name.huliqing.luoying.mess;
 
 import com.jme3.network.HostedConnection;
 import com.jme3.network.serializing.Serializable;
-import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.ConnData;
 import name.huliqing.luoying.data.SkillData;
@@ -25,9 +24,10 @@ import name.huliqing.luoying.object.skill.Skill;
 public final class MessSkillPlay extends MessBase {
     
     private long actorId;
+    // 要执行的技能id
     private String skillId;
-    // 不希望被中断的技能
-    private List<Long> wantNotInterruptSkills;
+    // 同步随机索引
+    private byte syncRandomIndex;
     
     public String getSkillId() {
         return skillId;
@@ -51,14 +51,18 @@ public final class MessSkillPlay extends MessBase {
         this.actorId = actorId;
     }
 
-    public List<Long> getWantNotInterruptSkills() {
-        return wantNotInterruptSkills;
+    public byte getSyncRandomIndex() {
+        return syncRandomIndex;
     }
-
-    public void setWantNotInterruptSkills(List<Long> wantNotInterruptSkills) {
-        this.wantNotInterruptSkills = wantNotInterruptSkills;
+    
+    /**
+     * 设置随机数同步索引,当技能中使用到随机数时，需要在客户端和服务端中同步这个随机数索引、
+     * @param syncRandomIndex 
+     */
+    public void setSyncRandomIndex(byte syncRandomIndex) {
+        this.syncRandomIndex = syncRandomIndex;
     }
-
+    
     @Override
     public void applyOnServer(GameServer gameServer, HostedConnection source) {
         ConnData cd = source.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
@@ -73,15 +77,15 @@ public final class MessSkillPlay extends MessBase {
             Factory.get(SkillNetwork.class).playSkill(actor, skillModule.getSkill(skillId), false);
         }
     }
-
+    
     @Override
     public void applyOnClient() {
         Entity actor = Factory.get(PlayService.class).getEntity(actorId);
         if (actor != null) {
             SkillModule skillModule = actor.getModuleManager().getModule(SkillModule.class);
             Skill skill = skillModule.getSkill(skillId);
-            skillModule.playSkill(skill, true, wantNotInterruptSkills);
-//            Factory.get(SkillService.class).playSkill(skillModule, skill, true, wantNotInterruptSkills);
+            skill.getData().setRandomIndex(syncRandomIndex);
+            skillModule.playSkill(skill, true);
         }
     }
   

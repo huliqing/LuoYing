@@ -5,10 +5,6 @@
 package name.huliqing.luoying.layer.network;
 
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.mess.MessSkinAdd;
-import name.huliqing.luoying.mess.MessSkinAttach;
-import name.huliqing.luoying.mess.MessSkinDetach;
-import name.huliqing.luoying.mess.MessSkinRemove;
 import name.huliqing.luoying.layer.service.SkinService;
 import name.huliqing.luoying.network.Network;
 import name.huliqing.luoying.mess.MessSkinWeaponTakeOn;
@@ -29,62 +25,64 @@ public class SkinNetworkImpl implements SkinNetwork {
         skinService = Factory.get(SkinService.class);
     }
     
-    @Override
-    public void addSkin(Entity actor, String skinId, int amount) {
-        if (NETWORK.isClient()) {
-            // ignore 客户端不能主动添加物品
-        } else {
-            MessSkinAdd mess = new MessSkinAdd();
-            mess.setActorId(actor.getData().getUniqueId());
-            mess.setSkinId(skinId);
-            mess.setCount(amount);
-            NETWORK.broadcast(mess);
-        }
-    }
-
-    @Override
-    public void removeSkin(Entity actor, String skinId, int amount) {
-        MessSkinRemove mess = new MessSkinRemove();
-        mess.setActorId(actor.getData().getUniqueId());
-        mess.setSkinId(skinId);
-        mess.setCount(amount);
-        if (NETWORK.isClient()) {
-            NETWORK.sendToServer(mess);
-        } else {
-            NETWORK.broadcast(mess);
-            skinService.removeSkin(actor, skinId, amount);
-        }
-    }
+    // remove20161111
+//    @Override
+//    public void addSkin(Entity actor, String skinId, int amount) {
+//        if (NETWORK.isClient()) {
+//            // ignore 客户端不能主动添加物品
+//        } else {
+//            MessSkinAdd mess = new MessSkinAdd();
+//            mess.setActorId(actor.getData().getUniqueId());
+//            mess.setSkinId(skinId);
+//            mess.setCount(amount);
+//            NETWORK.broadcast(mess);
+//        }
+//    }
+//
+//    @Override
+//    public void removeSkin(Entity actor, String skinId, int amount) {
+//        MessSkinRemove mess = new MessSkinRemove();
+//        mess.setActorId(actor.getData().getUniqueId());
+//        mess.setSkinId(skinId);
+//        mess.setCount(amount);
+//        if (NETWORK.isClient()) {
+//            NETWORK.sendToServer(mess);
+//        } else {
+//            NETWORK.broadcast(mess);
+//            skinService.removeSkin(actor, skinId, amount);
+//        }
+//    }
     
-    @Override
-    public void attachSkin(Entity actor, Skin skin) {
-        if (!skin.canUse(actor)) {
-            return;
-        }
-        
-        MessSkinAttach mess = new MessSkinAttach();
-        mess.setActorId(actor.getData().getUniqueId());
-        mess.setSkinId(skin.getData().getId());
-        if (NETWORK.isClient()) {
-            NETWORK.sendToServer(mess);
-        } else {
-            NETWORK.broadcast(mess);
-            skinService.attachSkin(actor, skin);
-        }
-    }
-
-    @Override
-    public void detachSkin(Entity actor, Skin skin) {
-        MessSkinDetach mess = new MessSkinDetach();
-        mess.setActorId(actor.getData().getUniqueId());
-        mess.setSkinId(skin.getData().getId());
-        if (NETWORK.isClient()) {
-            NETWORK.sendToServer(mess);
-        } else {
-            NETWORK.broadcast(mess);
-            skinService.detachSkin(actor, skin);
-        }
-    }
+     // remove20161111
+//    @Override
+//    public void attachSkin(Entity actor, Skin skin) {
+//        if (!skin.canUse(actor)) {
+//            return;
+//        }
+//        
+//        MessSkinAttach mess = new MessSkinAttach();
+//        mess.setActorId(actor.getData().getUniqueId());
+//        mess.setSkinId(skin.getData().getId());
+//        if (NETWORK.isClient()) {
+//            NETWORK.sendToServer(mess);
+//        } else {
+//            NETWORK.broadcast(mess);
+//            skinService.attachSkin(actor, skin);
+//        }
+//    }
+//
+//    @Override
+//    public void detachSkin(Entity actor, Skin skin) {
+//        MessSkinDetach mess = new MessSkinDetach();
+//        mess.setActorId(actor.getData().getUniqueId());
+//        mess.setSkinId(skin.getData().getId());
+//        if (NETWORK.isClient()) {
+//            NETWORK.sendToServer(mess);
+//        } else {
+//            NETWORK.broadcast(mess);
+//            skinService.detachSkin(actor, skin);
+//        }
+//    }
 
     @Override
     public void takeOnWeapon(Entity actor) {

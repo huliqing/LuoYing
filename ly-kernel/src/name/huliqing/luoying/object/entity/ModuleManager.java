@@ -37,7 +37,7 @@ public class ModuleManager {
     }
     
     public void updateDatas() {
-        if (entity.isInitialized()) {
+        if (entity.isInitialized()) { 
             for (Module module : modules.getArray()) {
                 module.updateDatas();
             }
@@ -142,28 +142,36 @@ public class ModuleManager {
         return null;
     }
     
-    final void addData(ObjectData data, int count) {
+    final boolean addData(ObjectData data, int count) {
+        boolean added = false;
         for (DataHandler h : handlers.getArray()) {
             if (h.getHandleType().isAssignableFrom(data.getClass())) {
-                h.handleDataAdd(data, count);
+                added = added || h.handleDataAdd(data, count);
             }
         }
+        return added;
     }
     
-    final void removeData(ObjectData data, int count) {
+    final boolean removeData(ObjectData data, int count) {
+        // 如果有任何一个模块移除了物体，则认为物体是成功移除了的.
+        boolean removed = false;
         for (DataHandler h : handlers.getArray()) {
             if (h.getHandleType().isAssignableFrom(data.getClass())) {
-                h.handleDataRemove(data, count);
+                removed = removed || h.handleDataRemove(data, count);
             }
         }
+        return removed;
     }
     
-    final void useData(ObjectData data) {
+    final boolean useData(ObjectData data) {
+        // 如果有任何一个模块使用了物体，则认为物体是成功使用了的.
+        boolean used = false;
         for (DataHandler h : handlers.getArray()) {
             if (h.getHandleType().isAssignableFrom(data.getClass())) {
-                h.handleDataUse(data);
+                used = used || h.handleDataUse(data);
             }
         }
+        return used;
     }
 
 }

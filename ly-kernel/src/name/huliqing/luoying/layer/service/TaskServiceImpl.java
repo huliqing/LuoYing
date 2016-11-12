@@ -6,7 +6,6 @@ package name.huliqing.luoying.layer.service;
 
 import java.util.List;
 import name.huliqing.luoying.data.TaskData;
-import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.module.TaskListener;
 import name.huliqing.luoying.object.module.TaskModule;
@@ -20,24 +19,6 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public void inject() {
-    }
-
-    @Override
-    public Task loadTask(String taskId) {
-        return Loader.load(taskId);
-    }
-
-    @Override
-    public Task loadTask(TaskData taskData) {
-        return Loader.load(taskData);
-    }
-    
-    @Override
-    public void addTask(Entity actor, Task task) {
-        TaskModule control = actor.getModuleManager().getModule(TaskModule.class);
-        if (control != null) {
-            control.addTask(task);
-        }
     }
 
     @Override
@@ -57,18 +38,6 @@ public class TaskServiceImpl implements TaskService {
         }
         return null;
     }
-   
-    // remove
-//    @Override
-//    public List<TaskData> getTaskDatas(Entity actor) {
-////        TaskModule module = actor.getEntityModule().getModule(TaskModule.class);
-////        if (module != null) {
-////            return module.getTaskDatas();
-////        }
-////        return null;
-//        
-//        return actor.getData().getObjectDatas(TaskData.class, null);
-//    }
     
     @Override
     public boolean checkCompletion(Entity actor, Task task) {

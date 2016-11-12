@@ -8,10 +8,12 @@ package name.huliqing.luoying.layer.network;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.mess.MessEntityAddData;
+import name.huliqing.luoying.mess.MessEntityAddDataById;
 import name.huliqing.luoying.mess.MessEntityHitNumberAttribute;
 import name.huliqing.luoying.mess.MessEntityHitAttribute;
 import name.huliqing.luoying.mess.MessEntityRemoveData;
 import name.huliqing.luoying.mess.MessEntityUseData;
+import name.huliqing.luoying.mess.MessEntityUseDataById;
 import name.huliqing.luoying.network.Network;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.xml.ObjectData;
@@ -63,9 +65,9 @@ public class EntityNetworkImpl implements EntityNetwork {
     }
 
     @Override
-    public void addData(Entity entity, ObjectData data, int amount) {
+    public boolean addData(Entity entity, ObjectData data, int amount) {
         if (NETWORK.isClient()) {
-            return;
+            return false;
         }
         if (NETWORK.hasConnections()) {
             MessEntityAddData mess = new MessEntityAddData();
@@ -74,13 +76,28 @@ public class EntityNetworkImpl implements EntityNetwork {
             mess.setAmount(amount);
             NETWORK.broadcast(mess);
         }
-        entityService.addData(entity, data, amount);
+        return entityService.addData(entity, data, amount);
     }
 
     @Override
-    public void removeData(Entity entity, ObjectData data, int amount) {
+    public boolean addData(Entity entity, String objectId, int amount) {
         if (NETWORK.isClient()) {
-            return;
+            return false;
+        }
+        if (NETWORK.hasConnections()) {
+            MessEntityAddDataById mess = new MessEntityAddDataById();
+            mess.setEntityId(entity.getEntityId());
+            mess.setObjectId(objectId);
+            mess.setAmount(amount);
+            NETWORK.broadcast(mess);
+        }
+        return entityService.addData(entity, objectId, amount);
+    }
+
+    @Override
+    public boolean removeData(Entity entity, ObjectData data, int amount) {
+        if (NETWORK.isClient()) {
+            return false;
         }
         if (NETWORK.hasConnections()) {
             MessEntityRemoveData mess = new MessEntityRemoveData();
@@ -89,13 +106,13 @@ public class EntityNetworkImpl implements EntityNetwork {
             mess.setAmount(amount);
             NETWORK.broadcast(mess);
         }
-        entityService.removeData(entity, data, amount);
+        return entityService.removeData(entity, data, amount);
     }
 
     @Override
-    public void useData(Entity entity, ObjectData data) {
+    public boolean useData(Entity entity, ObjectData data) {
         if (NETWORK.isClient()) {
-            return;
+            return false;
         }
         if (NETWORK.hasConnections()) {
             MessEntityUseData mess = new MessEntityUseData();
@@ -103,8 +120,23 @@ public class EntityNetworkImpl implements EntityNetwork {
             mess.setObjectData(data);
             NETWORK.broadcast(mess);
         }
-        entityService.useData(entity, data);
+        return entityService.useData(entity, data);
     }
 
+    @Override
+    public boolean useData(Entity entity, long objectUniqueId) {
+        if (NETWORK.isClient()) {
+            return false;
+        }
+        if (NETWORK.hasConnections()) {
+            MessEntityUseDataById mess = new MessEntityUseDataById();
+            mess.setEntityId(entity.getEntityId());
+            mess.setObjectUniqueId(objectUniqueId);
+            NETWORK.broadcast(mess);
+        }
+        return entityService.useData(entity, objectUniqueId);
+    }
+
+    
     
 }

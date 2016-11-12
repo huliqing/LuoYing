@@ -14,6 +14,7 @@ import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.attribute.Attribute;
 import name.huliqing.luoying.object.attribute.BooleanAttribute;
 import name.huliqing.luoying.object.drop.Drop;
+import name.huliqing.luoying.object.entity.DataHandler;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.sound.SoundManager;
 import name.huliqing.luoying.object.entity.EntityAttributeListener;
@@ -23,7 +24,7 @@ import name.huliqing.luoying.object.entity.EntityAttributeListener;
  * 会给目标攻击者掉落物品、属性
  * @author huliqing
  */
-public class DropModule extends AbstractModule { 
+public class DropModule extends AbstractModule implements DataHandler<DropData> { 
 
     // 绑定角色的“死亡”属性
     private String bindDeadAttribute;
@@ -98,16 +99,18 @@ public class DropModule extends AbstractModule {
     /**
      * 添加一个掉落设置
      * @param drop 
+     * @return  
      */
-    public void addDrop(Drop drop) {
+    public boolean addDrop(Drop drop) {
         if (drops == null) {
             drops = new ArrayList<Drop>(5);
         }
         if (drops.contains(drop))
-            return;
+            return false;
         
         drops.add(drop);
         entity.getData().addObjectData(drop.getData());
+        return true;
     }
     
     /**
@@ -124,16 +127,16 @@ public class DropModule extends AbstractModule {
         return true;
     }
     
-    /**
-     * 获取掉落设置, 返回的列表只允许只读。
-     * @return 
-     */
-    public List<Drop> getDrops() {
-        if (drops != null) {
-            return Collections.unmodifiableList(drops);
-        }
-        return Collections.EMPTY_LIST;
-    }
+//    /**
+//     * 获取掉落设置, 返回的列表只允许只读。
+//     * @return 
+//     */
+//    public List<Drop> getDrops() {
+//        if (drops != null) {
+//            return Collections.unmodifiableList(drops);
+//        }
+//        return Collections.EMPTY_LIST;
+//    }
     
     /**
      * 处理掉落物品给指定角色, 注：物品是从当前角色掉落到指定角色(target)身上。
@@ -162,5 +165,46 @@ public class DropModule extends AbstractModule {
         for (String s : sounds) {
             SoundManager.getInstance().playSound(s, entity.getSpatial().getWorldTranslation());
         }
+    }
+
+    @Override
+    public Class<DropData> getHandleType() {
+        return DropData.class;
+    }
+
+    @Override
+    public boolean handleDataAdd(DropData data, int amount) {
+        if (drops != null) {
+            for (Drop d : drops) {
+                if (d.getData() == data) {
+                    return false; // 已经存在
+                }
+            }
+        }
+        return addDrop((Drop) Loader.load(data));
+    }
+
+    @Override
+    public boolean handleDataRemove(DropData data, int amount) {
+        if (drops == null) {
+            return false;
+        }
+        Drop found = null;
+        for (Drop d : drops) {
+            if (d.getData() == data) {
+                found = d;
+                break;
+            }
+        }
+        if (found == null) {
+            return false;
+        }
+        return removeDrop(found);
+    }
+
+    @Override
+    public boolean handleDataUse(DropData data) {
+        Drop drop = Loader.load(data);
+        return drop.doDrop(entity, null);
     }
 }

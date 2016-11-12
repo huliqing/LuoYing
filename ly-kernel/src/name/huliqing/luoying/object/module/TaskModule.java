@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.data.TaskData;
 import name.huliqing.luoying.object.Loader;
+import name.huliqing.luoying.object.entity.DataHandler;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.task.Task;
 
@@ -17,7 +18,7 @@ import name.huliqing.luoying.object.task.Task;
  * 任务管理
  * @author huliqing
  */
-public class TaskModule extends AbstractModule {
+public class TaskModule extends AbstractModule implements DataHandler<TaskData> {
 
     private final SafeArrayList<Task> tasks = new SafeArrayList<Task>(Task.class);
     private List<TaskListener> taskListeners;
@@ -51,10 +52,11 @@ public class TaskModule extends AbstractModule {
     /**
      * 添加任务
      * @param task 
+     * @return  
      */
-    public void addTask(Task task) {
+    public boolean addTask(Task task) {
         if (tasks.contains(task)) {
-            return;
+            return false;
         }
         
         tasks.add(task);
@@ -69,6 +71,7 @@ public class TaskModule extends AbstractModule {
                 tl.onTaskAdded(entity, task);
             }
         }
+        return true;
     }
     
     /**
@@ -77,7 +80,7 @@ public class TaskModule extends AbstractModule {
      * @return 
      */
     public boolean removeTask(Task task) {
-        if (tasks.isEmpty()) 
+        if (!tasks.contains(task)) 
             return false;
         
         tasks.remove(task);
@@ -90,7 +93,6 @@ public class TaskModule extends AbstractModule {
                 tl.onTaskRemoved(entity, task);
             }
         }
-        
         return true;
     }
     
@@ -149,5 +151,33 @@ public class TaskModule extends AbstractModule {
 
     public List<TaskListener> getTaskListeners() {
         return taskListeners;
+    }
+
+    @Override
+    public Class<TaskData> getHandleType() {
+        return TaskData.class;
+    }
+
+    @Override
+    public boolean handleDataAdd(TaskData data, int amount) {
+        Task task = getTask(data.getId());
+        if (task != null) {
+            return false;
+        }
+        return addTask((Task) Loader.load(data));
+    }
+
+    @Override
+    public boolean handleDataRemove(TaskData data, int amount) {
+        Task task = getTask(data.getId());
+        if (task == null) {
+            return false;
+        }
+        return removeTask(task);
+    }
+
+    @Override
+    public boolean handleDataUse(TaskData data) {
+        return false;// ignore
     }
 }

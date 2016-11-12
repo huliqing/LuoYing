@@ -13,13 +13,14 @@ import name.huliqing.luoying.data.ModuleData;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.logic.Logic;
 import name.huliqing.luoying.object.attribute.BooleanAttribute;
+import name.huliqing.luoying.object.entity.DataHandler;
 import name.huliqing.luoying.object.entity.Entity;
 
 /**
  * 逻辑控制器，控制角色的所有逻辑的运行。
  * @author huliqing
  */
-public class LogicModule extends AbstractModule {
+public class LogicModule extends AbstractModule implements DataHandler<LogicData>{
     private Control updateControl;
     private final SafeArrayList<Logic> logics = new SafeArrayList<Logic>(Logic.class);
     
@@ -108,15 +109,16 @@ public class LogicModule extends AbstractModule {
         super.cleanup(); 
     }
 
-    public void addLogic(Logic logic) {
+    public boolean addLogic(Logic logic) {
         if (logics.contains(logic))
-            return;
+            return false;
         
         logics.add(logic);
         entity.getData().addObjectData(logic.getData());
         
         logic.setActor(entity);
         logic.initialize();
+        return true;
     }
 
     public boolean removeLogic(Logic logic) {
@@ -131,5 +133,40 @@ public class LogicModule extends AbstractModule {
     
     public List<Logic> getLogics() {
         return logics;
+    }
+
+    @Override
+    public Class<LogicData> getHandleType() {
+        return LogicData.class;
+    }
+
+    @Override
+    public boolean handleDataAdd(LogicData data, int amount) {
+        for (Logic l : logics) {
+            if (l.getData().getId().equals(data.getId())) {
+                return false;
+            }
+        }
+        return addLogic((Logic) Loader.load(data));
+    }
+    
+    @Override
+    public boolean handleDataRemove(LogicData data, int amount) {
+        Logic result = null;
+        for (Logic l : logics) {
+            if (l.getData() == data) {
+                result = l;
+                break;
+            }
+        }
+        if (result != null) {
+            return removeLogic(result);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean handleDataUse(LogicData data) {
+        return false;
     }
 }

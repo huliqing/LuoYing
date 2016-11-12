@@ -8,17 +8,10 @@ import name.huliqing.luoying.network.Network;
 import com.jme3.math.Vector3f;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.layer.service.ActorService;
-//import name.huliqing.luoying.mess.MessActorFollow;
-//import name.huliqing.luoying.mess.MessActorKill;
 import name.huliqing.luoying.mess.MessActorPhysics;
-//import name.huliqing.luoying.mess.MessActorSetGroup;
-//import name.huliqing.luoying.mess.MessActorSetLevel;
-//import name.huliqing.luoying.mess.MessActorSetTarget;
-//import name.huliqing.luoying.mess.MessActorTeam;
 import name.huliqing.luoying.mess.MessActorViewDir;
 import name.huliqing.luoying.mess.MessActorLookAt;
 import name.huliqing.luoying.mess.MessActorSetLocation;
-//import name.huliqing.luoying.mess.MessEntityAttributeApply;
 import name.huliqing.luoying.object.entity.Entity;
 
 /**

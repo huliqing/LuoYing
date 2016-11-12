@@ -17,14 +17,12 @@ import name.huliqing.luoying.data.SkinData;
 import name.huliqing.luoying.data.define.CountObject;
 import name.huliqing.ly.data.ChatData;
 import name.huliqing.luoying.xml.ObjectData;
-import name.huliqing.luoying.layer.service.SkinService;
 import name.huliqing.ly.view.Footer;
 import name.huliqing.ly.view.transfer.SimpleTransferPanel;
 import name.huliqing.ly.view.transfer.TabTransferPanel;
 import name.huliqing.ly.view.transfer.TransferPanel;
 import name.huliqing.luoying.manager.ResourceManager;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.skin.Skin;
 import name.huliqing.luoying.ui.Button;
 import name.huliqing.luoying.ui.FrameLayout;
 import name.huliqing.luoying.ui.Icon;
@@ -34,7 +32,6 @@ import name.huliqing.luoying.ui.UI;
 import name.huliqing.luoying.ui.UIFactory;
 import name.huliqing.luoying.ui.Window;
 import name.huliqing.luoying.utils.MathUtils;
-import name.huliqing.luoying.xml.DataProcessor;
 import name.huliqing.ly.layer.network.ChatNetwork;
 import name.huliqing.ly.layer.service.GameService;
 import name.huliqing.luoying.data.define.TradeObject;
@@ -46,9 +43,7 @@ import name.huliqing.luoying.transfer.TransferData;
  * @param <T>
  */
 public class SellChat<T extends ChatData> extends Chat<T> {
-    private final SkinService skinService = Factory.get(SkinService.class);
     private final GameService gameService = Factory.get(GameService.class);
-//    private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     private final ChatNetwork chatNetwork = Factory.get(ChatNetwork.class);
 
     // 物品售出时的折扣,取值0.0~1.0, 当玩家卖给NPC时会打折扣
@@ -141,9 +136,9 @@ public class SellChat<T extends ChatData> extends Chat<T> {
                     continue;
                 }
             }
-            if (dp instanceof Skin) {
-                Skin skin = (Skin) dp;
-                if (skin.isAttached() || skin.isBaseSkin() || skin.isSkinning()) {
+            if (dp instanceof SkinData) {
+                SkinData skin = (SkinData) dp;
+                if (skin.isUsed() || skin.isBaseSkin()) {
                     it.remove();
                     continue;
                 }

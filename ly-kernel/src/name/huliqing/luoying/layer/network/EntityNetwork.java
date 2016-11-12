@@ -46,21 +46,41 @@ public interface EntityNetwork extends Inject {
      * @param entity 
      * @param data
      * @param amount 添加的数量，必须大于0
+     * @return 
      */
-    void addData(Entity entity, ObjectData data, int amount);
+    boolean addData(Entity entity, ObjectData data, int amount);
+    
+    /**
+     * 给Entity添加物品。
+     * @param entity
+     * @param objectId
+     * @param amount 
+     * @return  
+     */
+    boolean addData(Entity entity, String objectId, int amount);
     
     /**
      * 从Entity身上移除物品
      * @param entity
      * @param data 
      * @param amount 
+     * @return  
      */
-    void removeData(Entity entity, ObjectData data, int amount);
+    boolean removeData(Entity entity, ObjectData data, int amount);
     
     /**
      * 让Entity使用一个物品
      * @param entity
      * @param data 
+     * @return  
      */
-    void useData(Entity entity, ObjectData data);
+    boolean useData(Entity entity, ObjectData data);
+    
+    /**
+     * 让Entity使用一个指定id的物品，Entity必须存在这个物品才能使用。否则找不到这个物品时将什么也不会做。
+     * @param entity
+     * @param objectUniqueId 
+     * @return  
+     */
+    boolean useData(Entity entity, long objectUniqueId);
 }

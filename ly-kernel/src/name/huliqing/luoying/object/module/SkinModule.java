@@ -17,6 +17,7 @@ import name.huliqing.luoying.data.ModuleData;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.attribute.CollectionAttribute;
 import name.huliqing.luoying.object.define.DefineFactory;
+import name.huliqing.luoying.object.entity.DataHandler;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.skin.Skin;
 import name.huliqing.luoying.object.skin.Weapon;
@@ -25,9 +26,8 @@ import name.huliqing.luoying.object.skin.WeaponSkin;
 /**
  * 角色的换装控制器
  * @author huliqing
- * @param <T>
  */
-public class SkinModule<T extends ModuleData> extends AbstractModule<T> {
+public class SkinModule extends AbstractModule implements DataHandler<SkinData> {
     private static final Logger LOG = Logger.getLogger(SkinModule.class.getName());
     
     // 监听角色装备、武器等的穿脱
@@ -52,7 +52,7 @@ public class SkinModule<T extends ModuleData> extends AbstractModule<T> {
     private CollectionAttribute<String> weaponSlotAttribute;
 
     @Override
-    public void setData(T data) {
+    public void setData(ModuleData data) {
         super.setData(data);
         weaponTakeOn = data.getAsBoolean("weaponTakeOn", weaponTakeOn);
         bindWeaponSlotAttribute = data.getAsString("bindWeaponSlotAttribute");
@@ -89,18 +89,19 @@ public class SkinModule<T extends ModuleData> extends AbstractModule<T> {
     
     /**
      * 添加装备到角色包裹.
-     * @param skinId
+     * @param skinData
      * @param amount 数量，必须大于0
+     * @return true如果成功添加
      */
-    public void addSkin(String skinId, int amount) {
+    public boolean addSkin(SkinData skinData, int amount) {
         if (amount <= 0)
-            return;
+            return false;
 
-        Skin skin = getSkin(skinId);
+        Skin skin = getSkin(skinData);
         if (skin != null) {
             skin.getData().setTotal(skin.getData().getTotal() + amount);
         } else {
-            skin = Loader.load(skinId);
+            skin = Loader.load(skinData);
             skin.getData().setTotal(amount);
             if (skinAll == null) {
                 skinAll = new SafeArrayList<Skin>(Skin.class);
@@ -114,17 +115,18 @@ public class SkinModule<T extends ModuleData> extends AbstractModule<T> {
                 skinListeners.get(i).onSkinAdded(entity, skin);
             }
         }
+        return true;
     }
     
     /**
      * 从角色包裹上移除装备,
-     * @param skinId 唯一id
+     * @param skinData 唯一id
      * @param amount
      * @return  
      * @see #getSkin(Long) 
      */
-    public boolean removeSkin(String skinId, int amount) {
-        Skin skin = getSkin(skinId);
+    public boolean removeSkin(SkinData skinData, int amount) {
+        Skin skin = getSkin(skinData);
         if (skin == null) {
             return false;
         }
@@ -153,6 +155,10 @@ public class SkinModule<T extends ModuleData> extends AbstractModule<T> {
      * @param skin
      */
     public void attachSkin(Skin skin) {
+        if (!skin.canUse(entity)) {
+            return;
+        }
+        
         // 提前结束其它正在装备过程中的装备
         doEndAllSkinning();
         
@@ -213,7 +219,7 @@ public class SkinModule<T extends ModuleData> extends AbstractModule<T> {
                 if (skinUsed != null && skinUsed.contains(baseSkin)) {
                     continue;
                 }
-                if (!baseSkin.isBaseSkin()) {
+                if (!baseSkin.getData().isBaseSkin()) {
                     continue;
                 }
                 if ((typeUsed & baseSkin.getParts()) == 0) {
@@ -324,19 +330,30 @@ public class SkinModule<T extends ModuleData> extends AbstractModule<T> {
     
     /**
      * 从角色包裹中查找指定ID的Skin
-     * @param skinId
+     * @param sd
      * @return 
      */
-    public Skin getSkin(String skinId) {
+    public Skin getSkin(SkinData sd) {
         if (skinAll == null)
             return null;
         
         for (Skin s : skinAll) {
-            if (s.getData().getId().equals(skinId)) {
+            if (isSameSkin(s.getData(), sd)) {
                 return s;
             }
         }
         return null;
+    }
+    
+    /**
+     * 判断两件装备是否相同，目前两件ID（类型）相同的装备就认为是同一件。
+     * @param sd1
+     * @param sd2
+     * @return 
+     */
+    private boolean isSameSkin(SkinData sd1, SkinData sd2) {
+        // xxx 根据装备属性来区别不同的装备
+        return sd1.getId().equals(sd2.getId());
     }
     
     /**
@@ -422,4 +439,51 @@ public class SkinModule<T extends ModuleData> extends AbstractModule<T> {
         }
     }
     
+    @Override
+    public Class<SkinData> getHandleType() {
+        return SkinData.class;
+    }
+    
+    @Override
+    public boolean handleDataAdd(SkinData data, int amount) {
+        return addSkin(data, amount);
+    }
+
+    @Override
+    public boolean handleDataRemove(SkinData data, int amount) {
+        return removeSkin(data, amount);
+    }
+
+    @Override
+    public boolean handleDataUse(SkinData data) {
+        // 使用一件装备之前必须先拥有这件装备（use Entity.addObjectData()）
+        Skin skin = getSkin(data);
+        if (skin == null) {
+            return false;
+        }
+        
+        // Outfit
+        if (skin.getData().getWeaponType() == null) {
+            if (skin.getData().isUsed()) {
+                detachSkin(skin);
+            } else {
+                attachSkin(skin);
+            }
+            return true;
+        }
+        
+        // Weapon
+        if (skin.getData().isUsed()) {
+            if (isWeaponTakeOn()) {
+                takeOffWeapon();
+            } else {
+                detachSkin(skin);
+            }
+        } else {
+            attachSkin(skin);
+        }
+        return true;
+    }
+    
+
 }

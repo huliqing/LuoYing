@@ -11,9 +11,9 @@ import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.LogicData;
 import name.huliqing.luoying.data.define.CountObject;
+import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.luoying.utils.ConvertUtils;
-import name.huliqing.luoying.layer.network.ObjectNetwork;
 
 /**
  * 商店逻辑，该逻辑会每隔一段时间给角色进货。以补充商店类角色的货源。
@@ -21,7 +21,7 @@ import name.huliqing.luoying.layer.network.ObjectNetwork;
  */
 public class ShopLogic extends AbstractLogic {
     private static final Logger LOG = Logger.getLogger(ShopLogic.class.getName());
-    private final ObjectNetwork objectNetwork = Factory.get(ObjectNetwork.class);
+    private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
     
     private List<Product> products;
     // 进货速度，如：1.0 表示每秒进货一件（每件未达到maxCount的商品各进货一件）
@@ -91,7 +91,7 @@ public class ShopLogic extends AbstractLogic {
             }
             actualStock = p.maxCount - currentCount;
             if (actualStock > 0) {
-                objectNetwork.addData(actor, p.itemId, actualStock);
+                entityNetwork.addData(actor, p.itemId, actualStock);
             }
         }
     }
@@ -132,7 +132,7 @@ public class ShopLogic extends AbstractLogic {
                 actualStock = p.maxCount - currentCount;
             }
             if (actualStock > 0) {
-                objectNetwork.addData(actor, p.itemId, actualStock);
+                entityNetwork.addData(actor, p.itemId, actualStock);
             }
         }
     }

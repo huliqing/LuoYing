@@ -7,7 +7,7 @@ package name.huliqing.luoying.layer.service;
 
 import java.util.Collections;
 import java.util.List;
-import name.huliqing.luoying.data.ItemData;
+import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.attribute.BooleanAttribute;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.entity.Entity;
@@ -61,17 +61,29 @@ public class EntityServiceImpl implements EntityService {
     }
 
     @Override
-    public void addData(Entity entity, ObjectData data, int amount) {
-        entity.addObjectData(data, amount);
+    public boolean addData(Entity entity, ObjectData data, int amount) {
+        return entity.addObjectData(data, amount);
     }
 
     @Override
-    public void removeData(Entity entity, ObjectData data, int amount) {
-        entity.removeObjectData(data, amount);
+    public boolean addData(Entity entity, String objectId, int amount) {
+        return entity.addObjectData(Loader.loadData(objectId), amount);
     }
 
     @Override
-    public void useData(Entity entity, ObjectData data) {
-        entity.useObjectData(data);
+    public boolean removeData(Entity entity, ObjectData data, int amount) {
+        return entity.removeObjectData(data, amount);
     }
+
+    @Override
+    public boolean useData(Entity entity, ObjectData data) {
+        return entity.useObjectData(data);
+    }
+
+    @Override
+    public boolean useData(Entity entity, long objectUniqueId) {
+        ObjectData od = entity.getData().getObjectDataByUniqueId(objectUniqueId);
+        return od != null && entity.useObjectData(od);
+    }
+    
 }

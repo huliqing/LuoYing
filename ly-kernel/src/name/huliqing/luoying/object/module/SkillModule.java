@@ -24,13 +24,14 @@ import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.attribute.Attribute;
 import name.huliqing.luoying.object.attribute.BooleanAttribute;
 import name.huliqing.luoying.object.attribute.ValueChangeListener;
+import name.huliqing.luoying.object.entity.DataHandler;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.skill.Skill;
 
 /**
- * @author huliqing
+ * @author huliqing 
  */
-public class SkillModule extends AbstractModule implements ValueChangeListener<Boolean>{
+public class SkillModule extends AbstractModule implements DataHandler<SkillData>, ValueChangeListener<Boolean>{
     private static final Logger LOG = Logger.getLogger(SkillModule.class.getName());
     private final SkillService skillService = Factory.get(SkillService.class);
     
@@ -154,10 +155,6 @@ public class SkillModule extends AbstractModule implements ValueChangeListener<B
                     playSkill.restoreAnimation();
                 }
             }
-            
-//            if (Config.debug) {
-//                Log.get(getClass()).log(Level.INFO, "skillProcessor playingSkills.size={0}", playingSkills.size());
-//            }
         }
     }
     
@@ -189,67 +186,10 @@ public class SkillModule extends AbstractModule implements ValueChangeListener<B
                 playSkill = getSkillByTags(waitSkillTags);
             }
             if (playSkill != null) {
-                playSkill(playSkill, false, null);
+                playSkill(playSkill, false);
             }
         }
     }
-    
-    // bak20160930
-//    /**
-//     * 检查技能在当前状态下是否可以执行，如果返回值为 {@link SkillConstants#STATE_OK} 则表示可以执行，
-//     * 否则不能执行。
-//     * @param skill
-//     * @return 
-//     */
-//    public int checkStateCode(Skill skill) {
-//        if (skill == null) {
-//            return SkillConstants.STATE_UNDEFINE;
-//        }
-//        if (skill.getActor() == null) {
-//            skill.setActor(actor);
-//        }
-//        
-//        SkillData skillData = skill.getData();
-//        
-//        // 如果技能被锁定中，则不能执行
-//        if (isLockedSkillTags(skillData.getTags())) {
-//            return SkillConstants.STATE_SKILL_LOCKED;
-//        }
-//        
-//        // 如果新技能自身判断不能执行，例如加血技能或许就不可能给敌军执行。
-//        // 有很多特殊技能是不能对一些特定目标执行的，所以这里需要包含技能自身的判断
-//        int stateCode = skill.checkState();
-//        if (stateCode != SkillConstants.STATE_OK) {
-//            return stateCode;
-//        }
-//        
-//        // 通过钩子来判断是否可以执行, 如果有一个钩子返回不允许执行则后面不再需要判断。
-//        if (skillPlayListeners != null && !skillPlayListeners.isEmpty()) {
-//            for (SkillPlayListener sl : skillPlayListeners) {
-//                if (!sl.onSkillHookCheck(skill)) {
-//                    return SkillConstants.STATE_HOOK;
-//                }
-//            }
-//        }
-//        
-//        // 判断正在执行中的所有技能，如果“正在执行”中的所有技能都可以被覆盖或打断后执行，
-//        // 则不需要再判断技能优先级如果其中有任何一个即不能被覆盖，并且也不能被打断，
-//        // 则需要判断技能优先级
-//        boolean allCanOverlapOrInterrupt = true;
-//        long overlaps = skillData.getOverlapTags();
-//        long interrupts = skillData.getInterruptTags();
-//        for (Skill runSkill : playingSkills.getArray()) {
-//            if ((overlaps & runSkill.getData().getTags()) == 0 && (interrupts & runSkill.getData().getTags()) == 0) {
-//                allCanOverlapOrInterrupt = false;
-//                break;
-//            }
-//        }
-//        if (allCanOverlapOrInterrupt || skillData.getPrior() > playingPriorMax) {
-//            return SkillConstants.STATE_OK;
-//        }
-//        
-//        return SkillConstants.STATE_CAN_NOT_INTERRUPT;
-//    }
     
     /**
      * 检查技能在当前状态下是否可以执行，如果返回值为 {@link SkillConstants#STATE_OK} 则表示可以执行，
@@ -313,57 +253,50 @@ public class SkillModule extends AbstractModule implements ValueChangeListener<B
         return SkillConstants.STATE_CAN_NOT_INTERRUPT;
     }
     
-    /**
-     * 从当前正在运行的技能中找出不希望被newSkill中断的技能id(唯一ID)， 如果没有找到则返回null或空列表
-     * @param newSkill
-     * @return 
-     */
-    public List<Long> checkNotWantInterruptSkills(Skill newSkill) {
-        // 如果执行中的技能不希望被newSkill中断则不中断。
-        if (playingSkills.isEmpty()) {
-            return null;
-        }
-        List<Long> result = null;
-        for (Skill s : playingSkills) {
-            if (!s.canInterruptBySkill(newSkill)) {
-                if (result == null) {
-                    result = new ArrayList<Long>(3);
-                }
-                result.add(s.getData().getUniqueId());
-            }
-        }
-        return result;   
-    }
+//    /**
+//     * 从当前正在运行的技能中找出不希望被newSkill中断的技能id(唯一ID)， 如果没有找到则返回null或空列表
+//     * @param newSkill
+//     * @return 
+//     */
+//    public List<Long> checkNotWantInterruptSkills(Skill newSkill) {
+//        // 如果执行中的技能不希望被newSkill中断则不中断。
+//        if (playingSkills.isEmpty()) {
+//            return null;
+//        }
+//        List<Long> result = null;
+//        for (Skill s : playingSkills) {
+//            if (!s.canInterruptBySkill(newSkill)) {
+//                if (result == null) {
+//                    result = new ArrayList<Long>(3);
+//                }
+//                result.add(s.getData().getUniqueId());
+//            }
+//        }
+//        return result;   
+//    }
     
     /**
      * 执行技能，如果成功执行则返回true,否则返回false, <br>
      * 在执行技能之前可以通过 {@link #checkStateCode(Skill) }来查询当前状态下技能是否可以执行。<br>
-     * 如果需要强制执行技能，则可以将参数force设置为true,这可以保证技能始终执行。notWantInterruptSkills参数用来指定
-     * 哪些特定的正在运行的技能不希望被中断。
+     * 如果需要强制执行技能，则可以将参数force设置为true,这可以保证技能始终执行。
      * @param newSkill
      * @param force
-     * @param notWantInterruptSkills 指定一些特定的技能不希望被中断，这是一个技能唯一ID列表，可为null.
      * @return 
      */
-    public boolean playSkill(Skill newSkill, boolean force, List<Long> notWantInterruptSkills) {
+    public boolean playSkill(Skill newSkill, boolean force) {
         if (force || checkStateCode(newSkill) == SkillConstants.STATE_OK) {
-            playSkillInner(newSkill, notWantInterruptSkills);
+            playSkillInner(newSkill);
             return true;
         }
         return false;
     }
     
     /**
-     * 强制执行一个技能,这个方法是强制执行的，如果需要判断技能是否可以合理执行,可以调用 
-     * {@link #checkStateCode(Skill, boolean) }来进行判断。<br>
-     * 执行逻辑是这样的：<br>
-     * 1.如果当前没有任何正在执行的技能则直接执行新技能，否则继续步骤2.<br>
-     * 2.把当前正在执行的技能中所有可以重叠执行的进行保留，其余的强制打断。<br>
-     * 3.执行新技能。<br>
+     * 执行一个技能,这个方法是强制执行的，如果需要判断技能是否可以合理执行,可以调用 
+     * {@link #checkStateCode(Skill, boolean) }来进行判断。
      * @param newSkill 
-     * @param wantNotInterruptSkills 希望不被打断的技能id列表(正在运行中的技能)。
      */
-    private void playSkillInner(Skill newSkill, List<Long> notWantInterruptSkills) {
+    private void playSkillInner(Skill newSkill) {
         // 1.如果当前没有任何正在执行的技能则直接执行技能
         if (playingSkills.isEmpty()) {
             startNewSkill(newSkill);
@@ -374,21 +307,21 @@ public class SkillModule extends AbstractModule implements ValueChangeListener<B
         long overlaps = newSkill.getData().getOverlapTags();
         long interrupts = newSkill.getData().getInterruptTags();
         for (Skill playSkill : playingSkills.getArray()) {
-            // 由newSkill指定的要覆盖的，则优先使用覆盖，即不要中断。
+            // 1.由newSkill指定的要覆盖的，则优先使用覆盖，即不要中断。
             if ((overlaps & playSkill.getData().getTags()) != 0) {
                 continue;
             }
-            // 由newSkill指定的要强制中断的，一定要中断
+            // 2.由newSkill指定的要强制中断的，一定要中断
             if ((interrupts & playSkill.getData().getTags()) != 0) {
                 playSkill.cleanup();
                 continue;
             }
-            // 除了"要求强制中断(上面)"的技能之外，如果指定了一些不希望中断的技能，则这些技能不应该中断(doNotInterruptSkills)
-            if (notWantInterruptSkills != null && notWantInterruptSkills.contains(playSkill.getData().getUniqueId())) {
-                LOG.log(Level.INFO, "Donot interrupt skill {0}", playSkill.getData().getId());
+            // 除了"要求强制中断(上面)"的技能之外，交由playSkill当前正在执行的技能进行判断，如果当前的技能状态不允许中断，
+            // 则这些技能不应该中断
+            if (!playSkill.canInterruptBySkill(newSkill)) {
                 continue;
             }
-            // 其余一切都要中断
+            // 其余一切中断
             playSkill.cleanup();
         }
         startNewSkill(newSkill);
@@ -428,10 +361,11 @@ public class SkillModule extends AbstractModule implements ValueChangeListener<B
     /**
      * 添加一个新技能给角色,如果相同ID的技能已经存在，则该方法什么也不会处理。
      * @param skill 
+     * @return  true如果成功添加
      */
-    public void addSkill(Skill skill) {
+    public boolean addSkill(Skill skill) {
         if (skills.contains(skill))
-            return;
+            return false;
         
         skill.setActor(entity);
         skills.add(skill);
@@ -444,6 +378,7 @@ public class SkillModule extends AbstractModule implements ValueChangeListener<B
                 skillListeners.get(i).onSkillAdded(entity, skill);
             }
         }
+        return true;
     }
     
     /**
@@ -723,5 +658,36 @@ public class SkillModule extends AbstractModule implements ValueChangeListener<B
      */
     public boolean isRunning() {
         return (playingSkillTags & runSkillTags) != 0;
+    }
+
+    @Override
+    public Class<SkillData> getHandleType() {
+        return SkillData.class;
+    }
+
+    @Override
+    public boolean handleDataAdd(SkillData data, int amount) {
+        if (getSkill(data.getId()) != null) {
+            return false; // 技能不能重复
+        }
+        return addSkill((Skill) Loader.load(data));
+    }
+    
+    @Override
+    public boolean handleDataRemove(SkillData data, int amount) {
+        Skill skill = getSkill(data.getId());
+        if (skill == null || skill.getData() != data) {
+            return false;
+        }
+        return removeSkill(skill);
+    }
+    
+    @Override
+    public boolean handleDataUse(SkillData data) {
+        Skill skill = getSkill(data.getId());
+        if (skill == null || skill.getData() != data) {
+            skill = Loader.load(data);
+        }
+        return playSkill(skill, false);
     }
 }

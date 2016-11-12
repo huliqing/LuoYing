@@ -13,17 +13,16 @@ import name.huliqing.luoying.data.TalentData;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.ly.view.SimpleRow;
 import name.huliqing.luoying.manager.ResourceManager;
-import name.huliqing.luoying.object.talent.Talent;
 import name.huliqing.luoying.ui.ListView;
 
 /**
  * 
  * @author huliqing
  */
-public class TalentRow extends SimpleRow<Talent> {
+public class TalentRow extends SimpleRow<TalentData> {
     protected PlayService playService = Factory.get(PlayService.class);
     
-    protected Talent data;
+    protected TalentData data;
     
     // 物品
     protected ColumnIcon icon;
@@ -64,12 +63,12 @@ public class TalentRow extends SimpleRow<Talent> {
     }
 
     @Override
-    public final void displayRow(Talent data) {
+    public final void displayRow(TalentData data) {
         this.data = data;
         display(this.data);
     }
     
-    public Talent getData() {
+    public TalentData getData() {
         return this.data;
     }
     
@@ -81,11 +80,10 @@ public class TalentRow extends SimpleRow<Talent> {
         shortcut.addClickListener(listener);
     }
     
-    protected void display(Talent talent) {
-        TalentData td = talent.getData();
+    protected void display(TalentData td) {
         icon.setIcon(td.getIcon());
         body.setNameText(ResourceManager.getObjectName(td));
         body.setDesText(ResourceManager.getObjectDes(td.getId()));
-        num.setText(talent.getLevel() + "/" + talent.getMaxLevel());
+        num.setText(td.getLevel() + "/" + td.getMaxLevel());
     }
 }

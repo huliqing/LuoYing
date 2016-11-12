@@ -33,8 +33,8 @@ public abstract class AbstractTalent<T extends TalentData> implements Talent<T> 
     @Override
     public void setData(T data) {
         this.data = data;
-        level = data.getAsInteger("level", level);
-        maxLevel = data.getAsInteger("maxLevel", maxLevel);
+        level = data.getLevel();
+        maxLevel = data.getMaxLevel();
     }
     
     @Override
@@ -44,15 +44,8 @@ public abstract class AbstractTalent<T extends TalentData> implements Talent<T> 
 
     @Override
     public void updateDatas() {
-        // ignore
-    }
-    
-    /**
-     * 更新天赋的实时数据到data中去。
-     */
-    protected void updateData() {
-        data.setAttribute("level", level);
-        data.setAttribute("maxLevel", maxLevel);
+        data.setLevel(level);
+        data.setMaxLevel(maxLevel);
     }
 
     @Override
@@ -99,7 +92,7 @@ public abstract class AbstractTalent<T extends TalentData> implements Talent<T> 
         }
         
         // 更新一下data数据。
-        updateData();
+        data.setLevel(level);
     }
 
     @Override
@@ -110,7 +103,7 @@ public abstract class AbstractTalent<T extends TalentData> implements Talent<T> 
     @Override
     public void setMaxLevel(int maxLevel) {
         this.maxLevel = maxLevel;
-        updateData();
+        data.setMaxLevel(maxLevel);
     }
     
 }

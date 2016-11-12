@@ -124,16 +124,17 @@ public abstract class AbstractSkin implements Skin {
     public void forceEndSkinning() {
         // donothing
     }
-    
-    @Override
-    public boolean isBaseSkin() {
-        return data.isBaseSkin();
-    }
-
-    @Override
-    public boolean isAttached() {
-        return data.isUsed();
-    }
+   
+    // remove20161111
+//    @Override
+//    public boolean isBaseSkin() {
+//        return data.isBaseSkin();
+//    }
+//
+//    @Override
+//    public boolean isAttached() {
+//        return data.isUsed();
+//    }
     
     @Override
     public boolean canUse(Entity actor) {

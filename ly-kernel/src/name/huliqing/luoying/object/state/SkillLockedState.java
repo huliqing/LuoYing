@@ -10,7 +10,6 @@ import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.StateData;
 import name.huliqing.luoying.layer.network.SkillNetwork;
-import name.huliqing.luoying.object.attribute.BooleanAttribute;
 import name.huliqing.luoying.object.define.DefineFactory;
 import name.huliqing.luoying.object.module.ActorModule;
 import name.huliqing.luoying.object.module.ChannelModule;
@@ -158,7 +157,7 @@ public class SkillLockedState extends AbstractState implements SkillPlayListener
             Skill lastSkill = skillModule.getLastSkill();
             List<Skill> deadSkills = skillModule.getSkillDead(null);
             if (deadSkills != null && !deadSkills.isEmpty() && !deadSkills.contains(lastSkill)) {
-                skillModule.playSkill(deadSkills.get(0), false, null);
+                skillModule.playSkill(deadSkills.get(0), false);
             }
         }
         super.cleanup();

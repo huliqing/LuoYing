@@ -10,10 +10,8 @@ import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.constants.SkillConstants;
 import name.huliqing.luoying.layer.service.SkillService;
-import name.huliqing.luoying.mess.MessActorAddSkill;
 import name.huliqing.luoying.mess.MessSkillPlay;
 import name.huliqing.luoying.mess.MessSkillWalk;
-import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.module.SkillModule;
 import name.huliqing.luoying.object.skill.Skill;
@@ -25,28 +23,10 @@ import name.huliqing.luoying.object.skill.Skill;
 public class SkillNetworkImpl implements SkillNetwork {
     private final static Network NETWORK = Network.getInstance();
     private SkillService skillService;
-    private PlayService playService;
-    private ActorNetwork actorNetwork;
     
     @Override
     public void inject() {
         skillService = Factory.get(SkillService.class);
-        playService = Factory.get(PlayService.class);
-        actorNetwork = Factory.get(ActorNetwork.class);
-    }
-    
-    @Override
-    public void addSkill(Entity actor, String skillId) {
-        if (!NETWORK.isClient()) {
-            // 1.broadcast to all client
-            MessActorAddSkill mess = new MessActorAddSkill();
-            mess.setActorId(actor.getData().getUniqueId());
-            mess.setSkillId(skillId);
-            NETWORK.broadcast(mess);
-            
-            // 1.addskill
-            skillService.addSkill(actor, skillId);
-        }
     }
     
     /**
@@ -67,6 +47,7 @@ public class SkillNetworkImpl implements SkillNetwork {
         MessSkillPlay mess = new MessSkillPlay();
         mess.setActorId(actor.getData().getUniqueId());
         mess.setSkillId(skill.getData().getId());
+        mess.setSyncRandomIndex(skill.getData().getRandomIndex());
         
         if (NETWORK.isClient()) {
             NETWORK.sendToServer(mess);
@@ -109,22 +90,12 @@ public class SkillNetworkImpl implements SkillNetwork {
         SkillModule skillModule = actor.getModuleManager().getModule(SkillModule.class);
         if (force || skillModule.checkStateCode(skill) == SkillConstants.STATE_OK) {
             
-             // 找出一些不希望被中断的技能。
-            List<Long> notWantInterruptSkills = skillModule.checkNotWantInterruptSkills(skill);
-            mess.setWantNotInterruptSkills(notWantInterruptSkills);
             NETWORK.broadcast(mess);
             
-            return skillService.playSkill(skillModule, skill, true, notWantInterruptSkills);
+            return skillService.playSkill(skillModule, skill, true);
         }
         return false;
     }
-   
-    // remove20161001
-//    @Override
-//    public boolean playSkill(Entity actor, String skillId, boolean force) {
-//        Skill skill = skillService.getSkill(actor, skillId);
-//        return playSkill(actor, skill, force);
-//    }
 
     @Override
     public boolean playWalk(Entity actor, Skill walkSkill, Vector3f dir, boolean faceToDir, boolean force) {

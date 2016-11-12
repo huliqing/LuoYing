@@ -7,9 +7,7 @@ package name.huliqing.ly.view.shortcut;
 
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.ItemData;
-import name.huliqing.luoying.layer.network.ActorNetwork;
 import name.huliqing.luoying.layer.network.EntityNetwork;
-import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.entity.EntityDataListener;
 import name.huliqing.luoying.xml.ObjectData;
@@ -21,8 +19,8 @@ import name.huliqing.ly.layer.service.GameService;
  * @author huliqing
  */
 public class ItemShortcut extends BaseUIShortcut<ItemData> implements EntityDataListener {
-    private final PlayService playService = Factory.get(PlayService.class);
-    private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
+//    private final PlayService playService = Factory.get(PlayService.class);
+//    private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final GameService gameService = Factory.get(GameService.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
@@ -62,16 +60,14 @@ public class ItemShortcut extends BaseUIShortcut<ItemData> implements EntityData
     public void onDataAdded(ObjectData data, int amount) {
         if (!data.getId().equals(objectData.getId()))
             return;
-        
-        updateObjectData(objectData);
+        updateObjectData();
     }
 
     @Override
     public void onDataRemoved(ObjectData data, int amount) {
         if (!data.getId().equals(objectData.getId()))
             return;
-        
-        updateObjectData(objectData);
+        updateObjectData();
     }
 
     @Override

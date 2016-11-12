@@ -23,49 +23,38 @@ public class SkinServiceImpl implements SkinService {
         skillService = Factory.get(SkillService.class);
     }
 
-    @Override
-    public void addSkin(Entity actor, String skinId, int amount) {
-        SkinModule module = actor.getModuleManager().getModule(SkinModule.class);
-        if (module != null) {
-            module.addSkin(skinId, amount);
-        }
-    }
-
-    @Override
-    public void removeSkin(Entity actor, String skinId, int amount) {
-        SkinModule module = actor.getModuleManager().getModule(SkinModule.class);
-        if (module != null) {
-            module.removeSkin(skinId, amount);
-        }
-    }
-    
-    @Override
-    public void attachSkin(Entity actor, Skin skin) {
-//        // 为了防止与takeOnWeapon/takeOffWeapon在异步上的冲突，这里必须限制在取
-//        // 摘武器的时候换装备
-//        if (skillService.isPlayingSkill(actor, SkillType.skin)) {
-//            return;
+    // remove20161111
+//    @Override
+//    public void addSkin(Entity actor, String skinId, int amount) {
+//        SkinModule module = actor.getModuleManager().getModule(SkinModule.class);
+//        if (module != null) {
+//            module.addSkin(skinId, amount);
 //        }
-
-        SkinModule control = actor.getModuleManager().getModule(SkinModule.class);
-        if (control != null) {
-            control.attachSkin(skin);
-        }
-    }
-    
-    @Override
-    public void detachSkin(Entity actor, Skin skin) {
-//        // 为了防止与takeOnWeapon/takeOffWeapon在异步上的冲突，这里必须限制在取
-//        // 摘武器的时候换装备
-//        if (skillService.isPlayingSkill(actor, SkillType.skin)) {
-//            return;
+//    }
+//
+//    @Override
+//    public void removeSkin(Entity actor, String skinId, int amount) {
+//        SkinModule module = actor.getModuleManager().getModule(SkinModule.class);
+//        if (module != null) {
+//            module.removeSkin(skinId, amount);
 //        }
-
-        SkinModule control = actor.getModuleManager().getModule(SkinModule.class);
-        if (control != null) {
-            control.detachSkin(skin);
-        }
-    }
+//    }
+//    
+//    @Override
+//    public void attachSkin(Entity actor, Skin skin) {
+//        SkinModule skinMoudle = actor.getModuleManager().getModule(SkinModule.class);
+//        if (skinMoudle != null) {
+//            skinMoudle.attachSkin(skin);
+//        }
+//    }
+//    
+//    @Override
+//    public void detachSkin(Entity actor, Skin skin) {
+//        SkinModule control = actor.getModuleManager().getModule(SkinModule.class);
+//        if (control != null) {
+//            control.detachSkin(skin);
+//        }
+//    }
 
     // remove20160927
 //    @Override
@@ -105,14 +94,14 @@ public class SkinServiceImpl implements SkinService {
         }
     }
 
-    @Override
-    public Skin getSkin(Entity actor, String skinId) {
-        SkinModule module = actor.getModuleManager().getModule(SkinModule.class);
-        if (module != null) {
-            return module.getSkin(skinId);
-        }
-        return null;
-    }
+//    @Override
+//    public Skin getSkin(Entity actor, String skinId) {
+//        SkinModule module = actor.getModuleManager().getModule(SkinModule.class);
+//        if (module != null) {
+//            return module.getSkin(skinId);
+//        }
+//        return null;
+//    }
 
     /**
      * 获取角色的所有皮肤,返回的列表只能只读，如果角色没有皮肤则返回empty.

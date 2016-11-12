@@ -15,13 +15,6 @@ import name.huliqing.luoying.object.task.Task;
 public interface TaskNetwork extends Inject {
     
     /**
-     * 添加一个任务给角色
-     * @param actor
-     * @param task
-     */
-    void addTask(Entity actor, Task task);
-    
-    /**
      * 完成指定的任务
      * @param actor
      * @param task
