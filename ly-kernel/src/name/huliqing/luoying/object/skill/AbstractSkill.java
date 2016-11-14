@@ -54,8 +54,6 @@ import name.huliqing.luoying.utils.MathUtils;
 public abstract class AbstractSkill implements Skill {
     private static final Logger LOG = Logger.getLogger(AbstractSkill.class.getName());
     private final ElService elService = Factory.get(ElService.class);
-//    private final PlayService playService = Factory.get(PlayService.class);
-//    private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private LevelModule levelModule;
     private ChannelModule channelModule;
     private SkinModule skinModule;
@@ -102,15 +100,17 @@ public abstract class AbstractSkill implements Skill {
      * 影响技能执行速度的角色属性，指向一个attribute id,默认技能的执行速度为1，当设置了这个值之后，
      * 目标角色的指定属性的值将会影响到技能的执行速度。
     */
-    protected String speedAttribute;
+    protected String bindSpeedAttribute;
     
     /**
      * 绑定一个防止技能被中断的“概率”属性。
      */
-    protected String resistInterruptRateAttribute;
+    protected String bindInterruptRateAttribute;
 
-    // 用于剪裁cutTimeEndMax的角色属性ID。
-    protected String cutTimeEndAttribute;
+    /**
+     * 用于剪裁cutTimeEndMax的角色属性。
+     */
+    protected String bindCutTimeEndAttribute;
     
     // 这两个参数标记useTime中可以剔除掉的<b>最高</b>时间比率.
     // 分别标记可剔除的前面和后面的时间.比如: useTime=5秒,
@@ -235,10 +235,10 @@ public abstract class AbstractSkill implements Skill {
         channelLockAll = data.getAsBoolean("channelLockAll", false);
         channelLocks = data.getAsArray("channelLocks");
         loop = data.getAsBoolean("loop", false);
-        speedAttribute = data.getAsString("speedAttribute");
-        resistInterruptRateAttribute = data.getAsString("resistInterruptRateAttribute");
+        bindSpeedAttribute = data.getAsString("bindSpeedAttribute");
+        bindInterruptRateAttribute = data.getAsString("bindInterruptRateAttribute");
         // CutTimeEnd的剪裁
-        cutTimeEndAttribute = data.getAsString("cutTimeEndAttribute");
+        bindCutTimeEndAttribute = data.getAsString("bindCutTimeEndAttribute");
         // 时间\动画剪裁参数
         cutTimeStartMax = data.getAsFloat("cutTimeStartMax", 0);
         cutTimeEndMax = data.getAsFloat("cutTimeEndMax", 0);
@@ -588,11 +588,11 @@ public abstract class AbstractSkill implements Skill {
     
     @Override
     public boolean canInterruptBySkill(Skill newSkill) {
-        if (resistInterruptRateAttribute == null) {
+        if (bindInterruptRateAttribute == null) {
             return true;
         }
         
-        NumberAttribute nAttr = actor.getAttributeManager().getAttribute(resistInterruptRateAttribute, NumberAttribute.class);
+        NumberAttribute nAttr = actor.getAttributeManager().getAttribute(bindInterruptRateAttribute, NumberAttribute.class);
         float resistRate = nAttr != null ? nAttr.floatValue() : 0;
         if (resistRate <=0) { // 抵抗率为0
             return true;
@@ -785,8 +785,8 @@ public abstract class AbstractSkill implements Skill {
      */
     private float getCutTimeEndRate() {
         float cutTime = 0;
-        if (cutTimeEndAttribute != null) {
-            cutTime = (cutTimeEndMax * MathUtils.clamp(getNumberAttributeValue(actor, cutTimeEndAttribute, 0), 0, 1.0f));
+        if (bindCutTimeEndAttribute != null) {
+            cutTime = (cutTimeEndMax * MathUtils.clamp(getNumberAttributeValue(actor, bindCutTimeEndAttribute, 0), 0, 1.0f));
         }
         return cutTime;
     }
@@ -799,8 +799,8 @@ public abstract class AbstractSkill implements Skill {
      */
     public float getSpeed() {
         float speed = 1.0f;
-        if (speedAttribute != null) {
-            speed = getNumberAttributeValue(actor, speedAttribute, 1.0f);
+        if (bindSpeedAttribute != null) {
+            speed = getNumberAttributeValue(actor, bindSpeedAttribute, 1.0f);
             if (speed <= 0) {
                 speed = 0.0001f;
             }

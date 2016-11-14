@@ -5,7 +5,6 @@
 package name.huliqing.luoying.layer.service;
 
 import java.util.List;
-import name.huliqing.luoying.data.TaskData;
 import name.huliqing.luoying.layer.network.TaskNetwork;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.module.TaskListener;

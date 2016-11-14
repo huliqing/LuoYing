@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.MagicData;
-import name.huliqing.luoying.layer.service.ActorAnimService;
 import name.huliqing.luoying.layer.service.StateService;
+import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.actoranim.ActorAnim;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.utils.ConvertUtils;
@@ -22,7 +22,6 @@ import name.huliqing.luoying.utils.MathUtils;
  */
 public class StateMagic extends AbstractMagic {
     private final StateService stateService = Factory.get(StateService.class);
-    private final ActorAnimService actorAnimService = Factory.get(ActorAnimService.class);
     
     // 格式:stateId|timePoint,stateId|timePoint,stateId|timePoint...
     private List<StateWrap> states;
@@ -156,7 +155,7 @@ public class StateMagic extends AbstractMagic {
                     hitCheckEl.setSource(source.getAttributeManager());
                     for (Entity target : targets) {
                         if (hitCheckEl.setTarget(target.getAttributeManager()).getValue()) {
-                            actorAnim = actorAnimService.loadAnim(actorAnimId);
+                            actorAnim = Loader.load(actorAnimId);
                             actorAnim.setTarget(target);
                             actorAnim.start();
                         }

@@ -64,9 +64,9 @@ public abstract class AbstractEl<T> implements El<T>{
             valid = true;
         }
         T result = (T) ve.getValue(getELContext());
-        if (Config.debug) {
-            LOG.log(Level.INFO, "El getValue, result={0}, expression={1}, el={2}", new Object[] {result, expression, getData().getId()});
-        }
+//        if (Config.debug) {
+//            LOG.log(Level.INFO, "El getValue, result={0}, expression={1}, el={2}", new Object[] {result, expression, getData().getId()});
+//        }
         return result;
     }
     

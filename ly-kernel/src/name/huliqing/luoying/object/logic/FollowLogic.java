@@ -9,11 +9,13 @@ import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.object.action.FollowAction;
 import name.huliqing.luoying.data.LogicData;
 import name.huliqing.luoying.layer.service.ActionService;
+import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.action.Action;
 import name.huliqing.luoying.object.attribute.Attribute;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.attribute.ValueChangeListener;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.module.ActionModule;
 import name.huliqing.luoying.utils.MathUtils;
 
 /**
@@ -39,10 +41,13 @@ public class FollowLogic extends AbstractLogic implements ValueChangeListener<Ob
     // 最近一次跟随到最近的距离
     private float lastFollowUsed;
     
+    // ---- inner
+    private ActionModule actionModule;
+    
     @Override
     public void setData(LogicData data) {
         super.setData(data); 
-        followAction = (FollowAction) actionService.loadAction(data.getAsString("followAction"));
+        followAction = (FollowAction) Loader.load(data.getAsString("followAction"));
         maxFollow = data.getAsFloat("maxFollow", maxFollow);
         minFollow = data.getAsFloat("minFollow", minFollow);
         
@@ -55,6 +60,7 @@ public class FollowLogic extends AbstractLogic implements ValueChangeListener<Ob
     @Override
     public void initialize() {
         super.initialize();
+        actionModule = actor.getModuleManager().getModule(ActionModule.class);
         followAttribute = actor.getAttributeManager().getAttribute(bindFollowAttribute);
         // 不监听followAttribute也可以，但是因为逻辑功能可能会有间隔和延迟的可能，监听可以让跟随对象发生变化时立即
         // 触发跟随行为的变化。
@@ -89,7 +95,7 @@ public class FollowLogic extends AbstractLogic implements ValueChangeListener<Ob
             target = null;
             Action current = actionService.getPlayingAction(actor);
             if (current == followAction) {
-                actionService.playAction(actor, null);
+                actionModule.startAction(null);
             }
             return;
         }
@@ -117,7 +123,7 @@ public class FollowLogic extends AbstractLogic implements ValueChangeListener<Ob
             lastFollowUsed = FastMath.nextRandomFloat() * (maxFollow - minFollow) + minFollow;
             followAction.setFollow(target.getSpatial());
             followAction.setNearest(lastFollowUsed);
-            actionService.playAction(actor, followAction);
+            actionModule.startAction(followAction);
         }
     }
     

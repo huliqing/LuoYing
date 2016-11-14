@@ -17,14 +17,15 @@ import name.huliqing.luoying.object.state.State;
  */
 public interface StateService extends StateNetwork {
     
-    /**
-     * 从角色身上获得指定的状态,如果当前角色身上没有任何状态或找不到这个指
-     * 定ID的状态则返回null.
-     * @param actor
-     * @param stateId
-     * @return 
-     */
-    State findState(Entity actor, String stateId);
+    // remove201610xx
+//    /**
+//     * 从角色身上获得指定的状态,如果当前角色身上没有任何状态或找不到这个指
+//     * 定ID的状态则返回null.
+//     * @param actor
+//     * @param stateId
+//     * @return 
+//     */
+//    State findState(Entity actor, String stateId);
     
     /**
      * 清除角色当前身上的所有状态。
@@ -32,13 +33,14 @@ public interface StateService extends StateNetwork {
      */
     void clearStates(Entity actor);
     
-    /**
-     * 判断角色当前是否存在指定的状态。
-     * @param actor
-     * @param stateId
-     * @return 
-     */
-    boolean existsState(Entity actor, String stateId);
+    // remove201610xx
+//    /**
+//     * 判断角色当前是否存在指定的状态。
+//     * @param actor
+//     * @param stateId
+//     * @return 
+//     */
+//    boolean existsState(Entity actor, String stateId);
     
     /**
      * 获取角色当前身上的所有状态，注意，这个方法只允许只读，不要随便修改列

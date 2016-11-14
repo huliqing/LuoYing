@@ -28,8 +28,6 @@ import name.huliqing.luoying.layer.network.TaskNetwork;
 import name.huliqing.luoying.layer.network.TaskNetworkImpl;
 import name.huliqing.luoying.layer.service.ActionService;
 import name.huliqing.luoying.layer.service.ActionServiceImpl;
-import name.huliqing.luoying.layer.service.ActorAnimService;
-import name.huliqing.luoying.layer.service.ActorAnimServiceImpl;
 import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.layer.service.ActorServiceImpl;
 import name.huliqing.luoying.layer.service.BulletService;
@@ -64,8 +62,6 @@ import name.huliqing.luoying.layer.service.TalentServiceImpl;
 import name.huliqing.luoying.layer.service.TaskService;
 import name.huliqing.luoying.layer.service.TaskServiceImpl;
 import name.huliqing.luoying.layer.service.SystemService;
-import name.huliqing.luoying.layer.service.GameLogicService;
-import name.huliqing.luoying.layer.service.GameLogicServiceImpl;
 import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.layer.service.EntityServiceImpl;
 
@@ -93,13 +89,11 @@ public class Factory {
         
         // service
         CLASS_MAP.put(ActionService.class, ActionServiceImpl.class);
-        CLASS_MAP.put(ActorAnimService.class, ActorAnimServiceImpl.class);
         CLASS_MAP.put(ActorService.class, ActorServiceImpl.class);
         CLASS_MAP.put(BulletService.class, BulletServiceImpl.class);
         CLASS_MAP.put(ConfigService.class, ConfigServiceImpl.class);
         CLASS_MAP.put(ElService.class, ElServiceImpl.class);
         CLASS_MAP.put(EntityService.class, EntityServiceImpl.class);
-        CLASS_MAP.put(GameLogicService.class, GameLogicServiceImpl.class);
         CLASS_MAP.put(LogicService.class, LogicServiceImpl.class);
         CLASS_MAP.put(MagicService.class, MagicServiceImpl.class);
         CLASS_MAP.put(PlayService.class, PlayServiceImpl.class);

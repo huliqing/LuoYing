@@ -56,19 +56,19 @@
     <skillWait id="skillWaitBase" extends="skillWaitTagBase" />
     
     <!--步行-->
-    <skillWalk id="skillWalkBase" extends="skillWalkTagBase" useTime="1" loop="1" speedAttribute="attributeMoveSpeed" />
+    <skillWalk id="skillWalkBase" extends="skillWalkTagBase" useTime="1" loop="1" bindSpeedAttribute="attributeMoveSpeed" />
     
     <!--跑步-->
-    <skillRun id="skillRunBase" extends="skillRunTagBase" useTime="1" loop="1" speedAttribute="attributeMoveSpeed" />
+    <skillRun id="skillRunBase" extends="skillRunTagBase" useTime="1" loop="1" bindSpeedAttribute="attributeMoveSpeed" />
     
     <!--穿装备用-->
     <skillSkin id="skillSkinBase" extends="skillSkinTagBase" />
     
     <!--防守-->
-    <skillDefend id="skillDefendBase" extends="skillDefendTagBase" weaponStateLimit="leftSword|rightSword,rightSword" speedAttribute="attributeAttackSpeed" cutTimeEndAttribute="attributeGhostRate" />
+    <skillDefend id="skillDefendBase" extends="skillDefendTagBase" weaponStateLimit="leftSword|rightSword,rightSword" bindSpeedAttribute="attributeAttackSpeed" bindCutTimeEndAttribute="attributeGhostRate" />
     
     <!--及躲闪-->
-    <skillDuck   id="skillDuckBase"      extends="skillDuckTagBase"     weaponStateLimit="leftSword|rightSword,rightSword" speedAttribute="attributeAttackSpeed" cutTimeEndAttribute="attributeGhostRate" />
+    <skillDuck   id="skillDuckBase"      extends="skillDuckTagBase"     weaponStateLimit="leftSword|rightSword,rightSword" bindSpeedAttribute="attributeAttackSpeed" bindCutTimeEndAttribute="attributeGhostRate" />
     
     <!--受伤-->
     <skillHurt id="skillHurtBase" extends="skillHurtTagBase" />
@@ -77,27 +77,27 @@
     <skillDead id="skillDeadBase" extends="skillDeadTagBase" />
     
     <!--魔法:基本(非战斗魔法)-->
-    <skillShot id="skillMagicBase"        extends="skillMagicTagBase" levelEl="elSkillLevel" maxLevel="5" levelUpEl="elSkillLevelUp" bindTargetAttribute="attributeTarget" speedAttribute="attributeMagicSpeed" resistInterruptRateAttribute="attributeResistInterruptRate" />
+    <skillShot id="skillMagicBase"        extends="skillMagicTagBase" levelEl="elSkillLevel" maxLevel="5" levelUpEl="elSkillLevelUp" bindTargetAttribute="attributeTarget" bindSpeedAttribute="attributeMagicSpeed" bindAvoidInterruptAttribute="attributeResistInterruptRate" />
     <!--魔法:BUFF类-->
     <skillShot id="skillMagicBuffBase" extends="skillMagicBase" hitDistance="35" hitEl="elSkillBuff" hitCheckEl="elSkillBuffCheck" bullets="bulletBuff" />
 
     <!--普通物理攻击：普通，一般可配置给冷兵器技能，如：刀、剑、斧、匕首、大刀、长枪...-->
-    <skillAttack id="skillFightSimpleAttackBase"            extends="skillFightSimpleTagBase" defendSkillTags="defend" hitAttribute="attributeHealth" levelEl="elSkillLevel" hitCheckEl="elSkillFightHitCheck" hitEl="elSkillAttack" bindTargetAttribute="attributeTarget" speedAttribute="attributeAttackSpeed" cutTimeEndAttribute="attributeGhostRate" />
+    <skillAttack id="skillFightSimpleAttackBase"            extends="skillFightSimpleTagBase" defendSkillTags="defend" hitAttribute="attributeHealth" levelEl="elSkillLevel" hitCheckEl="elSkillFightHitCheck" hitEl="elSkillAttack" bindTargetAttribute="attributeTarget" bindSpeedAttribute="attributeAttackSpeed" bindCutTimeEndAttribute="attributeGhostRate" />
     <!--普通物理攻击：远程，一般可配置给远程攻击兵器用的技能，如：弓箭、炮塔，枪械等远程攻击技能 -->
-    <skillShot    id="skillFightSimpleAttackShotBase"    extends="skillFightSimpleAttackBase" hitDistance="35" cooldown="2.5" shotSpeed="1" shotTimes="0" useTime="0" resistInterruptRateAttribute="attributeResistInterruptRate" />
+    <skillShot    id="skillFightSimpleAttackShotBase"    extends="skillFightSimpleAttackBase" hitDistance="35" cooldown="2.5" shotSpeed="1" shotTimes="0" useTime="0" bindAvoidInterruptAttribute="attributeResistInterruptRate" />
     
     <!--普通魔法攻击：普通-->
-    <skillAttack id="skillFightSimpleMagicBase"             extends="skillFightSimpleTagBase" hitAttribute="attributeHealth" levelEl="elSkillLevel" hitCheckEl="elSkillFightHitCheck" hitEl="elSkillMagicAttack" bindTargetAttribute="attributeTarget" speedAttribute="attributeMagicSpeed" cutTimeEndAttribute="attributeGhostRate" />
+    <skillAttack id="skillFightSimpleMagicBase"             extends="skillFightSimpleTagBase" hitAttribute="attributeHealth" levelEl="elSkillLevel" hitCheckEl="elSkillFightHitCheck" hitEl="elSkillMagicAttack" bindTargetAttribute="attributeTarget" bindSpeedAttribute="attributeMagicSpeed" bindCutTimeEndAttribute="attributeGhostRate" />
     <!--普通魔法攻击：远程 -->
-    <skillShot    id="skillFightSimpleMagicShotBase"     extends="skillFightSimpleMagicBase" hitDistance="35" cooldown="2.5" shotSpeed="1" shotTimes="0" useTime="0" resistInterruptRateAttribute="attributeResistInterruptRate"/>
+    <skillShot    id="skillFightSimpleMagicShotBase"     extends="skillFightSimpleMagicBase" hitDistance="35" cooldown="2.5" shotSpeed="1" shotTimes="0" useTime="0" bindAvoidInterruptAttribute="attributeResistInterruptRate"/>
     
     <!--普通物理技能大招：近战大招-->
-    <skillAttack id="skillFightTrickAttackBase"          extends="skillFightTrickTagBase"  hitAttribute="attributeHealth" levelEl="elSkillLevel" hitCheckEl="elSkillFightHitCheck" hitEl="elSkillAttack" bindTargetAttribute="attributeTarget" speedAttribute="attributeAttackSpeed" cutTimeEndAttribute="attributeGhostRate" resistInterruptRateAttribute="attributeResistInterruptRate" maxLevel="5" levelUpEl="elSkillLevelUp" />
+    <skillAttack id="skillFightTrickAttackBase"          extends="skillFightTrickTagBase"  hitAttribute="attributeHealth" levelEl="elSkillLevel" hitCheckEl="elSkillFightHitCheck" hitEl="elSkillAttack" bindTargetAttribute="attributeTarget" bindSpeedAttribute="attributeAttackSpeed" bindCutTimeEndAttribute="attributeGhostRate" bindAvoidInterruptAttribute="attributeResistInterruptRate" maxLevel="5" levelUpEl="elSkillLevelUp" />
     <!--普通物理技能大招：远程大招-->
     <skillShot    id="skillFightTrickAttackShotBase"  extends="skillFightTrickAttackBase"  hitDistance="35" cooldown="2.5" shotSpeed="1" shotTimes="0" useTime="0" />
 
     <!--魔法技能大招：普通-->
-    <skillAttack id="skillFightTrickMagicBase"          extends="skillFightTrickTagBase"  hitAttribute="attributeHealth" levelEl="elSkillLevel" hitCheckEl="elSkillFightHitCheck" hitEl="elSkillMagicAttack" bindTargetAttribute="attributeTarget" speedAttribute="attributeMagicSpeed" cutTimeEndAttribute="attributeGhostRate" resistInterruptRateAttribute="attributeResistInterruptRate" maxLevel="5" levelUpEl="elSkillLevelUp"   />
+    <skillAttack id="skillFightTrickMagicBase"          extends="skillFightTrickTagBase"  hitAttribute="attributeHealth" levelEl="elSkillLevel" hitCheckEl="elSkillFightHitCheck" hitEl="elSkillMagicAttack" bindTargetAttribute="attributeTarget" bindSpeedAttribute="attributeMagicSpeed" bindCutTimeEndAttribute="attributeGhostRate" bindAvoidInterruptAttribute="attributeResistInterruptRate" maxLevel="5" levelUpEl="elSkillLevelUp"   />
     <!--魔法技能大招：远程-->
     <skillShot    id="skillFightTrickMagicShotBase"  extends="skillFightTrickMagicBase" hitDistance="35" shotSpeed="3" shotTimes="0" useTime="0" />
     

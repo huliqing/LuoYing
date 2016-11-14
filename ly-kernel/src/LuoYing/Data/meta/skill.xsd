@@ -834,10 +834,12 @@ xs:time
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-                <xs:attribute name="cutTimeEndAttribute" type="xs:string" use="optional" >
+                <xs:attribute name="bindCutTimeEndAttribute" type="xs:string" use="optional" >
                     <xs:annotation>
                         <xs:documentation>
-                            角色技能剪裁时间的角色属性,指向一个attribute id,取值范围为[0.0~1.0]，超出范围将会被截取。
+                            FloatAttribute, 绑定角色的属性,取值范围为[0.0~1.0]，超出范围将会被截取。
+                            这个属性的值将用于剪裁当前技能的结尾处的时间，0.1表示剪裁掉结束处10%的时间，0.5表示剪裁50%时间，
+                            依次类推。剪裁时间与直接设置技能的时间存在不同的地方，剪裁时间不影响技能动画的执行速度。
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
@@ -905,17 +907,18 @@ xs:time
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-                <xs:attribute name="speedAttribute" type="xs:string" use="optional" >
+                <xs:attribute name="bindSpeedAttribute" type="xs:string" use="optional" >
                     <xs:annotation>
                         <xs:documentation>
-                            影响技能执行速度的角色属性，指向一个attribute id,默认技能的执行速度为1，当设置了
-                            这个值之后，目标角色的指定属性的值将会影响到技能的执行速度。
+                            FloatAttribute, 绑定角色的一个属性，这个属性的值将作为技能的执行速度值，默认技能的执行速度为1，当设置了
+                            这个值之后，这个属性值将作为技能执行速度值。1.0为原始速度，2.0为2倍速度，依次类推。
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-                <xs:attribute name="resistInterruptRateAttribute" type="xs:string" use="optional" >
+                <xs:attribute name="bindAvoidInterruptAttribute" type="xs:string" use="optional" >
                     <xs:annotation>
-                        <xs:documentation>绑定一个角色属性，作为当前技能抵抗被另一技能中断的概率，这个属性的取值为[0.0~1.0],
+                        <xs:documentation>
+                            FloatAttribute, 绑定角色属性，作为当前技能抵抗被另一技能打断的概率，这个属性的取值为[0.0~1.0],
                             默认情况下，高优先级的技能会打断低优先级的技能， 为了让当前技能有一定概率不被另一高优先级的技能中断，可以为技能设置这个参数，当值为1.0时表示100%防止中断。
                            值为0.5时表示50%机率防止中断，依次类推。注: 这个设置只对优先级(prior)设置有效,如果另一技能设置了interruptTags参数强制打断当前技能，则这个设置将无效。
                         </xs:documentation>

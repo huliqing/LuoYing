@@ -110,14 +110,15 @@ public class StateServiceImpl implements StateService{
         return false;
     }
 
-    @Override
-    public State findState(Entity actor, String stateId) {
-        StateModule module = actor.getModuleManager().getModule(StateModule.class);
-        if (module != null) {
-            return module.getState(stateId);
-        }
-        return null;
-    }
+    // remove201610xx
+//    @Override
+//    public State findState(Entity actor, String stateId) {
+//        StateModule module = actor.getModuleManager().getModule(StateModule.class);
+//        if (module != null) {
+//            return module.getState(stateId);
+//        }
+//        return null;
+//    }
 
     @Override
     public void clearStates(Entity actor) {
@@ -129,11 +130,12 @@ public class StateServiceImpl implements StateService{
         }
     }
     
-    @Override
-    public boolean existsState(Entity actor, String stateId) {
-        StateModule module = actor.getModuleManager().getModule(StateModule.class);
-        return module != null && module.getState(stateId) != null;
-    }
+    // remove201610xx
+//    @Override
+//    public boolean existsState(Entity actor, String stateId) {
+//        StateModule module = actor.getModuleManager().getModule(StateModule.class);
+//        return module != null && module.getState(stateId) != null;
+//    }
     
     @Override
     public List<State> getStates(Entity actor) {

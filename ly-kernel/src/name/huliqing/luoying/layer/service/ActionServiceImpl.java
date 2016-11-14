@@ -21,28 +21,15 @@ import name.huliqing.luoying.object.module.ActionModule;
  */
 public class ActionServiceImpl implements ActionService {
 
-    private ActorService actorService;
-    private SkinService skinService;
     private SkillService skillService;
     
     @Override
     public void inject() {
-        actorService = Factory.get(ActorService.class);
-        skinService = Factory.get(SkinService.class);
         skillService = Factory.get(SkillService.class);
-    }
-
-    @Override
-    public Action loadAction(String actionId) {
-        return Loader.load(actionId);
     }
     
     @Override
     public void playAction(Entity actor, Action action) {
-        // action可能为null. 当action=null的时候会结束角色当前的行为
-        if (action != null) {
-            action.setActor(actor);
-        }
         getActionModule(actor).startAction(action);
     }
 

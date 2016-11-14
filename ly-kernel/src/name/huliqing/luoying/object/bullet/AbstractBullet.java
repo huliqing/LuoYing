@@ -20,6 +20,7 @@ import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.effect.Effect;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.entity.ModelEntity;
+import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.object.shape.Shape;
 import name.huliqing.luoying.object.sound.SoundManager;
 
@@ -117,7 +118,6 @@ public abstract class AbstractBullet<T extends BulletData> extends ModelEntity<T
     @Override
     public void initEntity() {
         super.initEntity();
-        
         // 用于碰撞
         hitChecker = shape.getGeometry();
         hitChecker.setCullHint(debug ? CullHint.Never : CullHint.Always);
@@ -125,6 +125,11 @@ public abstract class AbstractBullet<T extends BulletData> extends ModelEntity<T
             hitChecker.setLocalTranslation(shapeOffset);
         }
         bulletNode.attachChild(hitChecker);
+    }
+
+    @Override
+    public void onInitScene(Scene scene) {
+        super.onInitScene(scene);
         bulletNode.setLocalTranslation(start);
         
         if (!trace) {

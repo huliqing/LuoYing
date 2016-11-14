@@ -10,12 +10,10 @@ import name.huliqing.ly.enums.MessageType;
 import name.huliqing.ly.view.talk.Talk;
 import name.huliqing.ly.view.talk.TalkImpl;
 import name.huliqing.ly.view.talk.TalkListener;
-import name.huliqing.luoying.layer.network.ActorNetwork;
 import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.network.StateNetwork;
 import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.layer.service.PlayService;
-import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.layer.service.StateService;
 import name.huliqing.luoying.logic.scene.ActorLoadHelper;
 import name.huliqing.luoying.object.entity.Entity;
@@ -38,11 +36,9 @@ public class StoryTreasureTask1 extends AbstractTaskStep {
     private final PlayService playService = Factory.get(PlayService.class);
     private final StateService stateService = Factory.get(StateService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
-    private final SkillService skillService = Factory.get(SkillService.class);
     private final GameService gameService = Factory.get(GameService.class);
     
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
-    private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final StateNetwork stateNetwork = Factory.get(StateNetwork.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     
@@ -242,11 +238,13 @@ public class StoryTreasureTask1 extends AbstractTaskStep {
         }
         
         // 2.玩家接近时修改victim防御值,让她受伤而死
-        if (!gameService.isDead(victim) && actorService.distance(victim, player) <= 25 && stateService.existsState(victim, IdConstants.STATE_SAFE)) {
+        if (!gameService.isDead(victim) && actorService.distance(victim, player) <= 25 
+                && victim.getData().getObjectData(IdConstants.STATE_SAFE) != null) {
             stateNetwork.removeState(victim, IdConstants.STATE_SAFE);
         }
         // 3.如果受害者已死，则降低蜘蛛防御。
-        if (!gameService.isDead(spider) && gameService.isDead(victim) && stateService.existsState(spider, IdConstants.STATE_SAFE)) {
+        if (!gameService.isDead(spider) && gameService.isDead(victim) 
+                && spider.getData().getObjectData(IdConstants.STATE_SAFE) != null) {
             stateNetwork.removeState(spider, IdConstants.STATE_SAFE);
         }
         

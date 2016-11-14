@@ -4,16 +4,14 @@
  */
 package name.huliqing.luoying.object.logic;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.object.action.FightAction;
 import name.huliqing.luoying.data.LogicData;
 import name.huliqing.luoying.layer.service.ActionService;
-import name.huliqing.luoying.layer.service.ElService;
+import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.actor.Actor;
-import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.module.ActionModule;
 
 /**
  * 战斗逻辑
@@ -24,18 +22,20 @@ public class FightLogic extends AbstractLogic {
     
     private final ActionService actionService = Factory.get(ActionService.class);
     private  FightAction fightAction;
+    private ActionModule actionModule;
     
     // ---- inner
     
     @Override
     public void setData(LogicData data) {
         super.setData(data); 
-        fightAction = (FightAction) actionService.loadAction(data.getAsString("fightAction"));
+        fightAction = (FightAction) Loader.load(data.getAsString("fightAction"));
     }
 
     @Override
     public void initialize() {
         super.initialize();
+        actionModule = actor.getModuleManager().getModule(ActionModule.class);
     }
     
     @Override
@@ -61,7 +61,7 @@ public class FightLogic extends AbstractLogic {
         }
         if (isEnemy(target)) {
             fightAction.setEnemy(target);
-            actionService.playAction(actor, fightAction);
+            actionModule.startAction(fightAction);
         }
     }
     

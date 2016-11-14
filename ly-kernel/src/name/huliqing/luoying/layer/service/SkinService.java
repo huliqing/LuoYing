@@ -22,15 +22,6 @@ public interface SkinService extends SkinNetwork {
      * @return 
      */
     boolean isWeaponTakeOn(Entity actor);
-   
-    // remove20161111
-//    /**
-//     * 获取角色身上指定ID的Skin
-//     * @param actor
-//     * @param skinId 唯一ID
-//     * @return 
-//     */
-//    Skin getSkin(Entity actor, String skinId);
     
     /**
      * 获取角色所有的皮肤

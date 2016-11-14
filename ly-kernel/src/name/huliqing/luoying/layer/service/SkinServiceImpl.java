@@ -16,62 +16,12 @@ import name.huliqing.luoying.object.skin.Skin;
  * @author huliqing
  */
 public class SkinServiceImpl implements SkinService {
-    private SkillService skillService;
     
     @Override
     public void inject() {
-        skillService = Factory.get(SkillService.class);
+        // ignore
     }
 
-    // remove20161111
-//    @Override
-//    public void addSkin(Entity actor, String skinId, int amount) {
-//        SkinModule module = actor.getModuleManager().getModule(SkinModule.class);
-//        if (module != null) {
-//            module.addSkin(skinId, amount);
-//        }
-//    }
-//
-//    @Override
-//    public void removeSkin(Entity actor, String skinId, int amount) {
-//        SkinModule module = actor.getModuleManager().getModule(SkinModule.class);
-//        if (module != null) {
-//            module.removeSkin(skinId, amount);
-//        }
-//    }
-//    
-//    @Override
-//    public void attachSkin(Entity actor, Skin skin) {
-//        SkinModule skinMoudle = actor.getModuleManager().getModule(SkinModule.class);
-//        if (skinMoudle != null) {
-//            skinMoudle.attachSkin(skin);
-//        }
-//    }
-//    
-//    @Override
-//    public void detachSkin(Entity actor, Skin skin) {
-//        SkinModule control = actor.getModuleManager().getModule(SkinModule.class);
-//        if (control != null) {
-//            control.detachSkin(skin);
-//        }
-//    }
-
-    // remove20160927
-//    @Override
-//    public boolean isCanAttach(Entity actor, Skin skin) {
-//        
-//    }
-//    
-//    @Override
-//    public boolean isCanTakeOnWeapon(Entity actor) {
-//        return true;
-//    }
-//    
-//    @Override
-//    public boolean isCanTakeOffWeapon(Entity actor) {
-//        return true;
-//    }
-        
     @Override
     public boolean isWeaponTakeOn(Entity actor) {
         SkinModule module = actor.getModuleManager().getModule(SkinModule.class);
@@ -93,15 +43,6 @@ public class SkinServiceImpl implements SkinService {
             module.takeOffWeapon();
         }
     }
-
-//    @Override
-//    public Skin getSkin(Entity actor, String skinId) {
-//        SkinModule module = actor.getModuleManager().getModule(SkinModule.class);
-//        if (module != null) {
-//            return module.getSkin(skinId);
-//        }
-//        return null;
-//    }
 
     /**
      * 获取角色的所有皮肤,返回的列表只能只读，如果角色没有皮肤则返回empty.

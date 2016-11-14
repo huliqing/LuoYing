@@ -10,30 +10,11 @@ import java.util.List;
 import name.huliqing.luoying.layer.network.ActorNetwork;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.entity.Entity;
-//import name.huliqing.luoying.object.module.ActorListener;
 
 /**
  * @author huliqing
  */
 public interface ActorService extends ActorNetwork {
-    
-//    /**
-//     * 寻找角色周围指定范围内最近的敌人,该敌人必须是活着的，如果没有敌人，则返回null.
-//     * @param actor
-//     * @param maxDistance 
-//     * @param except 需要排除的角色，如果不为null,则排除掉该角色。
-//     * @return 
-//     */
-//    Entity findNearestEnemyExcept(Entity actor, float maxDistance, Entity except);
-//    
-//    /**
-//     * 寻找actor周围指定范围内的所有敌军单位,这些单位必须是活着的.即有生命值的。
-//     * @param actor
-//     * @param maxDistance
-//     * @param store
-//     * @return 
-//     */
-//    List<Entity> findNearestEnemies(Entity actor, float maxDistance, List<Entity> store);
     
     /**
      * 获取角色周围一定围围内的其它角色，包含死亡的角色，但不包含角色自身(actor).
@@ -55,129 +36,6 @@ public interface ActorService extends ActorNetwork {
      * @return 
      */
     List<Entity> findNearestActors(Entity actor, float maxDistance, float angle, List<Entity> store);
-    
-//    /**
-//     * 设置同伴
-//     * @param owner
-//     * @param partner 
-//     */
-//    void setPartner(Entity owner, Entity partner);
-//    
-//    /**
-//     * 复活角色
-//     * @param actor 
-//     */
-//    void reborn(Entity actor);
-//    
-//    /**
-//     * 获得角色的当前目标，如果当前场景中不存在该目标，则返回null.
-//     * @param actor
-//     * @return 
-//     */
-//    Entity getTarget(Entity actor);
-//    
-//    /**
-//     * 判断角色是否死亡
-//     * @param actor
-//     * @return 
-//     */
-//    boolean isDead(Entity actor);
-//
-//    /**
-//     * 判断目标是否为敌人
-//     * @param actor
-//     * @param target
-//     * @return 
-//     */
-//    boolean isEnemy(Entity actor, Entity target);
-//    
-//    /**
-//     * 给角色设置一个颜色
-//     * @param actor
-//     * @param color 
-//     */
-//    void setColor(Entity actor, ColorRGBA color);
-//    
-//    /**
-//     * 获取角色等级
-//     * @param actor
-//     * @return 
-//     */
-//    int getLevel(Entity actor);
-    
-//    /**
-//     * 添加角色侦听器
-//     * @param actor
-//     * @param actorListener 
-//     */
-//    void addActorListener(Entity actor, ActorListener actorListener);
-    
-//    /**
-//     * 移除角色侦听器
-//     * @param actor
-//     * @param actorListener
-//     * @return 
-//     */
-//    boolean removeActorListener(Entity actor, ActorListener actorListener);
-    
-//    /**
-//     * 获取角色的分组
-//     * @param actor
-//     * @return 
-//     */
-//    int getGroup(Entity actor);
-//    
-//    /**
-//     * 获取角色的队伍分组
-//     * @param actor
-//     * @return 
-//     */
-//    int getTeam(Entity actor);
-//    
-//    /**
-//     * 判断角色是否为必要的，即不能被移除出场景的。"必要"的角色可以死亡，
-//     * 但是不能被移除出场景。
-//     * @param actor
-//     * @return 
-//     */
-//    boolean isEssential(Entity actor);
-//    
-//    /**
-//     * 设置角色是否为“必要的”，“必要”是指角色可以死亡，但不能移除出场景。
-//     * 非必要的角色在死亡之后可能被场景的清理器移除出场景,部分比如任务
-//     * 需要的角色不能被移除出场景。
-//     * @param actor
-//     * @param essential 
-//     */
-//    void setEssential(Entity actor, boolean essential);
-//    
-//    /**
-//     * 判断角色是否是生物
-//     * @param actor
-//     * @return 
-//     */
-//    boolean isBiology(Entity actor);
-//    
-//    /**
-//     * 设置角色的目标拥有者
-//     * @param actor
-//     * @param ownerId 
-//     */
-//    void setOwner(Entity actor, long ownerId);
-//    
-//    /**
-//     * 获取角色的拥有者（主人）ID
-//     * @param actor
-//     * @return 
-//     */
-//    long getOwner(Entity actor);
-//    
-//    /**
-//     * 获取角色当前所跟随的目标的唯一ID,如果返回的值小于或等于0则表示无跟随目标.
-//     * @param actor
-//     * @return 
-//     */
-//    long getFollow(Entity actor);
     
     /**
      * 同步角色的变换信息
@@ -275,20 +133,6 @@ public interface ActorService extends ActorNetwork {
      */
     void resetToAnimationTime(Entity actor, String animation, float timePoint);
     
-//    /**
-//     * 判断角色是否为玩家角色，可能是客户端也可以是主机玩家
-//     * @param actor
-//     * @return 
-//     */
-//    boolean isPlayer(Entity actor);
-//    
-//    /**
-//     * 标记目标为玩家角色
-//     * @param actor
-//     * @param player 
-//     */
-//    void setPlayer(Entity actor, boolean player);
-    
     /**
      * 获取目标位置与当前角色的正前方的夹角度数.简单的说,即当前角色要转多少度才能正视
      * 到position位
@@ -297,9 +141,7 @@ public interface ActorService extends ActorNetwork {
      * @return 返回值为角度,不是弧度
      */
     float getViewAngle(Entity actor, Vector3f position);
-    
-//    float getMass(Entity actor);
-    
+        
     boolean isKinematic(Entity actor);
     
     void setKinematic(Entity actor, boolean kinematic);
@@ -329,12 +171,4 @@ public interface ActorService extends ActorNetwork {
      */
     float distanceSquared(Entity actor, Entity target);
     
-//    /**
-//     * 判断目标角色target是否是actor的<b>有效</b>敌人，这里的有效是指目标角色target存在于场景中、非死亡、并且是
-//     * 角色actor的有效敌人。
-//     * @param actor
-//     * @param target
-//     * @return 
-//     */
-//    boolean isAvailableEnemy(ActorModule actor, ActorModule target);
 }

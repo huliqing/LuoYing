@@ -15,13 +15,6 @@ import name.huliqing.luoying.object.entity.Entity;
 public interface ActionService extends ActionNetwork{
     
     /**
-     * 载入一个Action
-     * @param actionId
-     * @return 
-     */
-    Action loadAction(String actionId);
-    
-    /**
      * 判断角色当前是否正在执行战斗行为。
      * @param actor
      * @return 

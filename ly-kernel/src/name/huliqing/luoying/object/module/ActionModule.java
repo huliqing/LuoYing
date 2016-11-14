@@ -6,9 +6,7 @@
 package name.huliqing.luoying.object.module;
 
 import com.jme3.scene.control.Control;
-import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.ModuleData;
-import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.object.action.Action;
 import name.huliqing.luoying.object.action.FightAction;
 import name.huliqing.luoying.object.action.RunAction;
@@ -20,7 +18,6 @@ import name.huliqing.luoying.object.entity.Entity;
  * @author huliqing
  */
 public class ActionModule extends AbstractModule<ModuleData> {
-    private final ActorService actorService = Factory.get(ActorService.class);
     
     // 用于判断角色是否死亡的属性
     private String bindDeadAttribute;
@@ -111,6 +108,7 @@ public class ActionModule extends AbstractModule<ModuleData> {
         
         current = action;
         if (current != null) {
+            current.setActor(entity);
             current.initialize();
         }
     }

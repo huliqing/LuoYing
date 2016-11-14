@@ -23,16 +23,6 @@ public class SceneServiceImpl implements SceneService {
         // 
     }
 
-//    @Override
-//    public Scene loadScene(String sceneId) {
-//        return Loader.load(sceneId);
-//    }
-//
-//    @Override
-//    public Scene loadScene(SceneData sceneData) {
-//        return Loader.load(sceneData);
-//    }
-
     @Override
     public Vector3f getSceneHeight(Scene scene, float x, float z) {
         // 在场景载入完毕之后将植皮位置移到terrain节点的上面。
