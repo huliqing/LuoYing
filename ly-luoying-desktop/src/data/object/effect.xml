@@ -122,8 +122,8 @@
     <!-- ========================================================================= -->
     <effectGroup id="effectSnowBullet" useTime="9999" effects="effectSnowTrail,effectSnowFlake" 
                  traceLocation="always" traceRotation="always" />
-    <effectParticle id="effectSnowTrail"  useTime="6"  emitter="emitterSnowTrail" />
-    <effectParticle id="effectSnowFlake"  useTime="6"  emitter="emitterSnowFlake" />
+    <effectParticle id="effectSnowTrail"  useTime="6" emitter="emitterSnowTrail" />
+    <effectParticle id="effectSnowFlake"  useTime="6" emitter="emitterSnowFlake" />
     
     <!-- ========================================================================= -->
     <!--野兽召唤术--> 
@@ -271,8 +271,12 @@
 
     <!--子弹效果-->
     <effectSlideColor id="effectDanceSakuraBullet"  useTime="6"  scale="1,2,1"
+                texAnimY="1" texChangeDir="1" rotation="-1.57,0,0" />
+    
+    <!--breaked-->
+<!--    <effectSlideColor id="effectDanceSakuraBullet"  useTime="6"  scale="1,2,1"
                 texAnimY="1" texChangeDir="1"
-                traceLocation="always" traceRotation="always" traceRotationOffset="-1.57,0,0" />
+                traceLocation="always" traceRotation="always" traceRotationOffset="-1.57,0,0" />-->
     
     <!--击中效果-->
     <effectParticle id="effectDanceSakuraHit" useTime="3"  

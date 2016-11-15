@@ -5,6 +5,7 @@
 package name.huliqing.luoying.object.bullet;
 
 import com.jme3.math.Vector3f;
+import name.huliqing.luoying.object.scene.Scene;
 
 /**
  * 直线型子弹
@@ -16,8 +17,8 @@ public class StraightBullet extends AbstractBullet {
     private final Vector3f temp = new Vector3f();
     
     @Override
-    public void initEntity() {
-        super.initEntity();
+    public void onInitScene(Scene scene) {
+        super.onInitScene(scene);
         updateDir(getCurrentEndPos());
     }
 

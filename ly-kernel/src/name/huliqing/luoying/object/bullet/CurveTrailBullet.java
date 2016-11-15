@@ -19,7 +19,8 @@ import com.jme3.texture.Texture;
 import com.jme3.util.TempVars;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.constants.AssetConstants;
-import name.huliqing.luoying.data.EntityData;
+import name.huliqing.luoying.data.BulletData;
+import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.shape.SplineSurface;
 import name.huliqing.luoying.utils.MathUtils;
 
@@ -46,7 +47,7 @@ public class CurveTrailBullet extends CurveBullet {
     private final Node surface = new Node();
 
     @Override
-    public void setData(EntityData data) {
+    public void setData(BulletData data) {
         super.setData(data);
         this.mask = data.getAsString("mask", null);
         this.tex = data.getAsString("tex", null);
@@ -58,9 +59,8 @@ public class CurveTrailBullet extends CurveBullet {
     }
 
     @Override
-    public void initEntity() {
-        super.initEntity();
-        
+    public void onInitScene(Scene scene) {
+        super.onInitScene(scene);
         surface.detachAllChildren();
         
         AssetManager am = LuoYing.getAssetManager();

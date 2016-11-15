@@ -22,18 +22,24 @@ public abstract class AbstractLogic implements Logic<LogicData>{
     private final ElService elService = Factory.get(ElService.class);
     private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
     
+    /** 逻辑数据 */
     protected LogicData data;
     
-    /** 逻辑的执行频率,单位秒，默认1.0秒 */
-    protected float interval = 1.0f;
+    /** 逻辑的执行频率,单位秒，默认0秒 */
+    protected float interval;
     
     /** 当前逻辑已经运行的时间，单位秒 */
     protected float timeUsed;
     
-    // 绑定一个角色属性，这个属性的boolean值用来控制当前逻辑是否打开
+    /** 绑定一个角色属性，这个属性的boolean值用来控制当前逻辑是否打开*/
     protected String bindEnabledAttribute;
+    
+    /** 绑定角色的“目标”属性， */
     protected String bindTargetAttribute;
+    
+    /** 绑定角色的“视角”范围属性 */
     protected String bindViewAttribute;
+    
     /** 用于判断一个目标对象是否为当前角色的敌人的表达式 */
     protected STBooleanEl enemyCheckEl;
     
@@ -44,8 +50,10 @@ public abstract class AbstractLogic implements Logic<LogicData>{
     
     /** 控制逻辑开关的角色属性 */
     protected BooleanAttribute enabledAttribute;
+    
     /** 存放角色当前目标对象的属性 */
     protected NumberAttribute targetAttribute;
+    
     /** 存放角色视角范围的属性 */
     protected NumberAttribute viewAttribute;
     

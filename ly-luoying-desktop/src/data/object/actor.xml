@@ -61,7 +61,7 @@
 ,itemDetoxifyGrass|100,itemTonicRed|5,itemTonicBlue|5,itemHerb|100,itemASTonic|100
 ,itemTowerStone|100,itemTower|100,itemSpiderSpawn|100
 ,itemScrollBear|100,itemScrollWolf|100,itemScrollScorpion|100,itemScrollRaptor|100,itemScrollTrex|100
-,itemBook005,itemBook006,itemBook007,itemBook008,itemBook010
+,itemBook006,itemBook007,itemBook008,itemBook010
 " 
            talents="talentLifeRestore,talentManaRestore,talentDefence,talentMagicDefence,talentAttack,talentMagicAttack,talentVision,talentMoveSpeed"
            skins="weaponSword001,weaponSword001L,weaponSword002,weaponSword002L,weaponSword003,weaponSword003L

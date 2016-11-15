@@ -79,7 +79,8 @@ public class FollowLogic extends AbstractLogic implements ValueChangeListener<Ob
 
     @Override
     public void onValueChanged(Attribute attribute) {
-        if (attribute == followAttribute) {
+        // 注意：actor仍可能未进入场景
+        if (attribute == followAttribute && actor.getScene() != null) {
             doLogic(0); // 直接调用doLogic去改变跟随对象。
         }
     }

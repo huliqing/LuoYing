@@ -216,22 +216,11 @@ xs:time
     
     <xs:element name="logicSearchEnemy">
         <xs:annotation>
-            <xs:documentation>搜查敌人的逻辑</xs:documentation>
+            <xs:documentation>搜查敌人的逻辑,给角色添加这个逻辑来自动查找敌人。</xs:documentation>
         </xs:annotation>
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="logicBase">
-                    <xs:attribute name="autoInterval" type="bool" use="required">
-                        <xs:annotation><xs:documentation>是否使用自动频率，默认打开，该功能会覆盖interval设置</xs:documentation></xs:annotation>
-                    </xs:attribute>
-                    <xs:attribute name="maxInterval" type="xs:decimal" use="required">
-                        <xs:annotation><xs:documentation>最长的时间间隔，单位秒.</xs:documentation></xs:annotation>
-                    </xs:attribute>
-                    <xs:attribute name="minInterval" type="xs:decimal" use="required">
-                        <xs:annotation>
-                            <xs:documentation>最短的时间间隔，单位秒,一般不要设置小于1秒，太频率的间隔会影响性能。</xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>

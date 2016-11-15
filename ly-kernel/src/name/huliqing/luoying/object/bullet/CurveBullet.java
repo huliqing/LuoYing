@@ -10,10 +10,12 @@ import com.jme3.math.Vector3f;
 import com.jme3.util.TempVars;
 import java.util.ArrayList;
 import java.util.List;
+import name.huliqing.luoying.data.BulletData;
 import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.anim.CurveMoveAnim;
 import name.huliqing.luoying.object.position.Position;
+import name.huliqing.luoying.object.scene.Scene;
 
 /**
  * 曲线类型的子弹。
@@ -39,7 +41,7 @@ public class CurveBullet extends StraightBullet {
     private List<Vector3f> tempCenterPositions;
 
     @Override
-    public void setData(EntityData data) {
+    public void setData(BulletData data) {
         super.setData(data);
         tension = data.getAsFloat("tension", tension);
         
@@ -59,8 +61,8 @@ public class CurveBullet extends StraightBullet {
     }
 
     @Override
-    public void initEntity() {
-        super.initEntity(); 
+    public void onInitScene(Scene scene) {
+        super.onInitScene(scene);
         if (waypoints != null) {
             // 添加开始和结束坐标点，以及生成中间坐标点。
             waypoints.add(start);

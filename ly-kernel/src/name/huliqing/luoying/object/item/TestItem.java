@@ -5,7 +5,7 @@
  */
 package name.huliqing.luoying.object.item;
 
-import com.jme3.math.ColorRGBA;
+import com.jme3.math.Vector4f;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.luoying.layer.network.PlayNetwork;
@@ -15,6 +15,7 @@ import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.layer.service.SaveService;
 import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.layer.service.StateService;
+import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
 
 /**
@@ -41,11 +42,11 @@ public class TestItem extends AbstractItem {
     public void use(Entity actor) {
         super.use(actor);
         
-//        Entity aa = Loader.load("actorAltar");
-//        actorService.setGroup(aa, 10);
-//        actorService.setLevel(aa, 60);
-//        playNetwork.addEntity(actor.getScene(), aa);
-        
+        Entity aa = Loader.load("actorWolf");
+        entityNetwork.hitAttribute(aa, "attributeGroup", 9, null);
+        entityNetwork.hitAttribute(aa, "attributeLevel", 1, null);
+        entityNetwork.hitAttribute(actor, "attributeColor", new Vector4f(1,1,1.5f,1), null);
+        playNetwork.addEntity(actor.getScene(), aa);
 
 //        Effect eff = Loader.load("effectTonic");
 //        Emitter eff = Loader.load("emitterRandomFire");
@@ -55,7 +56,6 @@ public class TestItem extends AbstractItem {
 //        actor.getScene().getRoot().attachChild(eff.getSpatial());
 //        ((Node)actor.getSpatial()).attachChild(eff.getSpatial());
     
-        entityNetwork.hitAttribute(actor, "attributeColor", new ColorRGBA(1,1,1.5f,1), null);
     }
     
 }

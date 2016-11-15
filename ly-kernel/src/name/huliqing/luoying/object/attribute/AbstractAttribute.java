@@ -7,9 +7,7 @@ package name.huliqing.luoying.object.attribute;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-import name.huliqing.luoying.Config;
 import name.huliqing.luoying.data.AttributeData;
 
 /**
@@ -79,10 +77,10 @@ public abstract class AbstractAttribute<T> implements Attribute<T> {
     
     @Override
     public final void setValue(T newValue) {
-        if (Config.debug) {
-            LOG.log(Level.INFO, "setValue:  attributeId={0}, attributeName={1}, setNewValue={2}"
-                    , new Object[] {getId(), getName(), newValue});
-        }
+//        if (Config.debug) {
+//            LOG.log(Level.INFO, "setValue:  attributeId={0}, attributeName={1}, setNewValue={2}"
+//                    , new Object[] {getId(), getName(), newValue});
+//        }
         // 调用子类设置属性值，属性值是否变化由子类自己确定,
         // 这里是无法确定值是否发生变化的，不同的子类实现会有不同的情况，特别是属性值为复合类型的属性。
         if (doSetValue(newValue)) {

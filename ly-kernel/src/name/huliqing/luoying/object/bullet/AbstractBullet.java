@@ -27,9 +27,8 @@ import name.huliqing.luoying.object.sound.SoundManager;
 /**
  * 子弹基类
  * @author huliqing
- * @param <T>
  */
-public abstract class AbstractBullet<T extends BulletData> extends ModelEntity<T> implements Bullet<T> {
+public abstract class AbstractBullet extends ModelEntity<BulletData> implements Bullet<BulletData> {
 //    private static final Logger LOG = Logger.getLogger(AbstractBullet.class.getName());
     
     // 调试
@@ -95,7 +94,7 @@ public abstract class AbstractBullet<T extends BulletData> extends ModelEntity<T
     }
     
     @Override
-    public void setData(T data) {
+    public void setData(BulletData data) {
         this.data = data;
         this.debug = data.getAsBoolean("debug", debug);
         this.shape = Loader.load(data.getAsString("shape"));

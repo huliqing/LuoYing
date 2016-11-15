@@ -4,10 +4,11 @@
  */
 package name.huliqing.luoying.object.logic;
 
+import java.util.ArrayList;
+import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.LogicData;
 import name.huliqing.luoying.layer.network.EntityNetwork;
-import name.huliqing.luoying.layer.service.ElService;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.entity.Entity;
 
@@ -20,29 +21,28 @@ import name.huliqing.luoying.object.entity.Entity;
 public class SearchEnemyLogic extends AbstractLogic {
     private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
     
-    // 自动频率，
-    private boolean autoInterval = true;
-    private float maxInterval = 3;
-    private float minInterval = 1;
-    
     // ---- inner
-    private float viewDistanceSquared;
-
+    private final List<Actor> tempStore = new ArrayList<Actor>();
+    // 最近一个找到的敌人,避免频繁的去查找敌人。
+    private Entity lastFindEnemy;
+    
     @Override
     public void setData(LogicData data) {
         super.setData(data); 
-        this.autoInterval = data.getProto().getAsBoolean("autoInterval", autoInterval);
-        this.maxInterval = data.getProto().getAsFloat("maxInterval", maxInterval);
-        this.minInterval = data.getProto().getAsFloat("minInterval", minInterval);
-
     }
 
     @Override
     public void initialize() {
         super.initialize(); 
-        if (viewAttribute != null) {
-            viewDistanceSquared = viewAttribute.floatValue() * viewAttribute.floatValue();
+    }
+    
+    private boolean isAvailableEnemy(Entity target) {
+        if (target == null // 目标不存在
+                || target.getScene() == null // 目标已经移出场景
+                || !(target instanceof Actor)) {  // 目标不是角色
+            return false;
         }
+        return isEnemy(target);
     }
   
     @Override
@@ -51,39 +51,37 @@ public class SearchEnemyLogic extends AbstractLogic {
             return;
         }
         
-        // 增加自动频率的逻辑
-        // 目标不是角色
+        // 如果最近找到的敌人仍然有效，则不需要重新查找。
+        if (lastFindEnemy != null 
+                && lastFindEnemy.getEntityId() == targetAttribute.longValue()
+                && isAvailableEnemy(lastFindEnemy)) {
+            return;
+        }
+        
+        // 当前目标是有效的乱人, 记住就可以，不需要再去场景中查找
         Entity target = getTarget();
-        if (!(target instanceof Actor)) {
+        if (isAvailableEnemy(target)) {
+            lastFindEnemy = target;
             return;
         }
         
-        // 已经从场景移除
-        if (target.getScene() == null) {
-            return;
-        }
-        
-        // 目标在视线之外
-        if (target.getSpatial().getWorldTranslation().distanceSquared(actor.getSpatial().getWorldTranslation()) > viewDistanceSquared) {
-            return;
-        }
-        
-        // 非敌人
-        if (!isEnemy(target)) {
-             // 自动间隔，在没有敌人时频率加快 
-             if (autoInterval) {
-                setInterval(minInterval);
-             }
-            return;
+        // 需要偿试查找敌人
+        tempStore.clear();
+        actor.getScene().getEntities(Actor.class, actor.getSpatial().getWorldTranslation(), getViewDistance(), tempStore);
+        if (!tempStore.isEmpty()) {
+            for (Actor a : tempStore) {
+                if (isAvailableEnemy(a)) {
+                    lastFindEnemy = a;
+                    break;
+                }
+            }
         }
         
         // <<<<找到敌人>>>>
-        entityNetwork.hitAttribute(actor, targetAttribute.getName(), target.getEntityId(), null);
-        
-        // 自动间隔，在有敌人时频率降低
-        if (autoInterval) {
-            setInterval(maxInterval);
+        if (lastFindEnemy != null) {
+            entityNetwork.hitAttribute(actor, targetAttribute.getName(), lastFindEnemy.getEntityId(), null);
         }
+
     }
     
 }
