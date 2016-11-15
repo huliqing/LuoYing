@@ -20,14 +20,14 @@ public class MagicDataLoader<T extends MagicData> implements DataLoader<T> {
     @Override
     public void load(Proto proto, T store) {
         
-        String[] effectIds = proto.getAsArray("effects");
-        if (effectIds != null && effectIds.length > 0) {
-            EffectData[] effectDatas = new EffectData[effectIds.length];
-            for (int i = 0; i < effectIds.length; i++) {
-                effectDatas[i] = Loader.loadData(effectIds[i]);
-            }
-            store.setEffectDatas(effectDatas);
-        }
+//        String[] effectIds = proto.getAsArray("effects");
+//        if (effectIds != null && effectIds.length > 0) {
+//            EffectData[] effectDatas = new EffectData[effectIds.length];
+//            for (int i = 0; i < effectIds.length; i++) {
+//                effectDatas[i] = Loader.loadData(effectIds[i]);
+//            }
+//            store.setEffectDatas(effectDatas);
+//        }
         
 //        store.setLocation(proto.getAsVector3f("location"));
 //        float[] rotationAngle = proto.getAsFloatArray("rotation");

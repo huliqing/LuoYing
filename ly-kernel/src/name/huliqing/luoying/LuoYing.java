@@ -90,8 +90,6 @@ import name.huliqing.luoying.mess.MessSCServerState;
 import name.huliqing.luoying.mess.MessActorLookAt;
 import name.huliqing.luoying.mess.MessSkillWalk;
 import name.huliqing.luoying.mess.MessSkinWeaponTakeOn;
-import name.huliqing.luoying.mess.MessStateAdd;
-import name.huliqing.luoying.mess.MessStateRemove;
 import name.huliqing.luoying.mess.MessTalentAddPoint;
 import name.huliqing.luoying.mess.MessTaskApplyItem;
 import name.huliqing.luoying.mess.MessTaskComplete;
@@ -146,7 +144,6 @@ import name.huliqing.luoying.object.module.ActorModule;
 import name.huliqing.luoying.object.module.ItemModule;
 import name.huliqing.luoying.object.module.LogicModule;
 import name.huliqing.luoying.object.module.SkinModule;
-import name.huliqing.luoying.object.module.ResistModule;
 import name.huliqing.luoying.object.module.SkillModule;
 import name.huliqing.luoying.object.module.StateModule;
 import name.huliqing.luoying.object.module.TalentModule;
@@ -295,6 +292,7 @@ import name.huliqing.luoying.object.scene.SimpleScene;
 import name.huliqing.luoying.object.slot.Slot;
 import name.huliqing.luoying.object.state.BooleanAttributeState;
 import name.huliqing.luoying.object.state.GroupState;
+import name.huliqing.luoying.object.state.PrivateGroupState;
 import name.huliqing.luoying.serializer.Vector4Serializer;
 import name.huliqing.luoying.xml.Data;
 import name.huliqing.luoying.xml.DataFactory;
@@ -545,7 +543,6 @@ public class LuoYing {
         DataFactory.register("moduleLevel",  ModuleData.class, null, LevelModule.class);
         DataFactory.register("moduleLogic",  ModuleData.class, null, LogicModule.class);
         DataFactory.register("modulePhysics",  ModuleData.class, null, PhysicsModule.class);
-        DataFactory.register("moduleResist",  ModuleData.class, null, ResistModule.class);
         DataFactory.register("moduleSkill",  ModuleData.class, null, SkillModule.class);
         DataFactory.register("moduleSkin",  ModuleData.class, null, SkinModule.class);
         DataFactory.register("moduleState",  ModuleData.class, null, StateModule.class);
@@ -607,6 +604,7 @@ public class LuoYing {
         DataFactory.register("stateSkill", StateData.class, StateDataLoader.class, SkillState.class);
         DataFactory.register("stateClean", StateData.class, StateDataLoader.class, CleanState.class);
         DataFactory.register("stateGroup", StateData.class, StateDataLoader.class, GroupState.class);
+        DataFactory.register("statePrivateGroup", StateData.class, StateDataLoader.class, PrivateGroupState.class);
         DataFactory.register("stateBooleanAttribute", StateData.class, StateDataLoader.class, BooleanAttributeState.class);
         
         // Talent
@@ -770,12 +768,7 @@ public class LuoYing {
         // Skin
         Serializer.registerClass(MessSkinWeaponTakeOn.class);
         
-        // State
-        Serializer.registerClass(MessStateAdd.class);
-        Serializer.registerClass(MessStateRemove.class);
-        
         // Sync object
-//        Serializer.registerClass(MessSyncObject.class);
         Serializer.registerClass(SyncData.class);
         
         // Talents

@@ -6,9 +6,8 @@ package name.huliqing.luoying.object.magic;
 
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.MagicData;
-import name.huliqing.luoying.layer.service.StateService;
+import name.huliqing.luoying.data.StateData;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.actoranim.ActorAnim;
 import name.huliqing.luoying.object.entity.Entity;
@@ -21,7 +20,6 @@ import name.huliqing.luoying.utils.MathUtils;
  * @author huliqing
  */
 public class StateMagic extends AbstractMagic {
-    private final StateService stateService = Factory.get(StateService.class);
     
     // 格式:stateId|timePoint,stateId|timePoint,stateId|timePoint...
     private List<StateWrap> states;
@@ -119,14 +117,16 @@ public class StateMagic extends AbstractMagic {
             if (started) return;
             if (interpolation >= timePoint) {
                 if (targets != null) {
-                    hitCheckEl.setSource(source.getAttributeManager());
+                    if (source != null) {
+                        hitCheckEl.setSource(source.getAttributeManager());
+                    }
                     for (Entity target : targets) {
                         if (hitCheckEl.setTarget(target.getAttributeManager()).getValue()) {
-                            stateService.addState(target, stateId, null);
+                            StateData od = Loader.loadData(stateId);
+                            target.addObjectData(od, 1);
                         }
                     }
                 }
-                
                 started = true;
             }
         }

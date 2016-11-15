@@ -85,6 +85,7 @@ public class MessSkinWeaponTakeOn extends MessBase {
 
     @Override
     public void applyOnClient() {
+        super.applyOnClient();
         PlayService playService = Factory.get(PlayService.class);
         SkinService skinService = Factory.get(SkinService.class);
         Entity actor = playService.getEntity(actorId);

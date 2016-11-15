@@ -106,7 +106,7 @@ public class SkillLockedState extends AbstractState implements SkillPlayListener
         }
         
         // 削弱时间
-        totalUseTime = data.getUseTime() - data.getUseTime() * data.getResist();
+        useTime = useTime - useTime * getResist();
         
     }
 

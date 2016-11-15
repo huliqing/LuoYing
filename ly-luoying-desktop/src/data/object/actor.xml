@@ -11,7 +11,7 @@
     
     <!--所有角色基类-->
     <actor id="actorBase" chat="chatSimple" 
-        modules="moduleActor,moduleAction,moduleChannel,moduleChat,moduleItem,moduleLogic,moduleResist
+        modules="moduleActor,moduleAction,moduleChannel,moduleChat,moduleItem,moduleLogic
 ,moduleSkill,moduleSkin,moduleState,moduleTalent,moduleTask,moduleLevel,moduleDrop,moduleColor"
     />
     

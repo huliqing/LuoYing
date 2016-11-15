@@ -43,6 +43,7 @@ public class MessAutoAttack extends MessBase {
 
     @Override
     public void applyOnServer(GameServer gameServer, HostedConnection source) {
+        super.applyOnServer(gameServer, source);
         PlayService playService = Factory.get(PlayService.class);
         PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
         

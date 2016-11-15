@@ -20,7 +20,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.Config;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.GameData;
@@ -274,10 +273,8 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
      * 广播所有信息给客户端
      * @param message 
      */
-    public void broadcast(Message message) {
-        if (message instanceof MessBase) {
-            ((MessBase) message).time = time;
-        }
+    public void broadcast(MessBase message) {
+        message.setTime(time);
         server.broadcast(message);
     }
     
@@ -286,10 +283,8 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
      * @param conn
      * @param message 
      */
-    public void send(HostedConnection conn, Message message) {
-        if (message instanceof MessBase) {
-            ((MessBase) message).time = time;
-        }
+    public void send(HostedConnection conn, MessBase message) {
+        message.setTime(time);
         conn.send(message);
     }
     
@@ -298,7 +293,7 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
      * @param actor
      * @param message 
      */
-    public void send(Entity actor, Message message) {
+    public void send(Entity actor, MessBase message) {
         if (!server.isRunning())
             return;
         
@@ -316,9 +311,7 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
         if (conn == null)
             return;
         
-        if (message instanceof MessBase) {
-            ((MessBase) message).time = time;
-        }
+        message.setTime(time);
         conn.send(message);
         if (Config.debug) {
             Logger.getLogger(GameServer.class.getName()).log(Level.INFO

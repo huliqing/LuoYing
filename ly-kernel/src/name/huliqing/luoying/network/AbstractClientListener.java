@@ -4,7 +4,14 @@
  */
 package name.huliqing.luoying.network;
 
-import name.huliqing.luoying.network.GameClient;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.logging.Logger;
+import com.jme3.app.Application;
+import com.jme3.network.Client;
+import com.jme3.network.ClientStateListener.DisconnectInfo;
+import com.jme3.network.Message;
 import name.huliqing.luoying.mess.MessSCGameData;
 import name.huliqing.luoying.mess.MessSCClientList;
 import name.huliqing.luoying.mess.MessClient;
@@ -18,14 +25,6 @@ import name.huliqing.luoying.network.GameServer.ServerState;
 import name.huliqing.luoying.mess.MessPing;
 import name.huliqing.luoying.data.ConnData;
 import name.huliqing.luoying.layer.service.SystemService;
-import com.jme3.app.Application;
-import com.jme3.network.Client;
-import com.jme3.network.ClientStateListener.DisconnectInfo;
-import com.jme3.network.Message;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.logging.Logger;
 
 /**
  * 客户端帧听器,用于监听来自服务端的消息。
@@ -35,7 +34,7 @@ public abstract class AbstractClientListener implements ClientListener {
     private static final Logger LOG = Logger.getLogger(AbstractClientListener.class.getName());
     
     private final ConfigService configService = Factory.get(ConfigService.class);
-    private final SystemService envService = Factory.get(SystemService.class);
+    private final SystemService systemService = Factory.get(SystemService.class);
     
     private final Application app; 
     // 从服务端获得的所有客户端列表
@@ -128,7 +127,8 @@ public abstract class AbstractClientListener implements ClientListener {
         pingTimeUsed += tpf;
         if (pingTimeUsed > pingTimeInterval) {
             pingTimeUsed = 0;
-            messPing.time = System.nanoTime();
+//            messPing.time = System.nanoTime();
+            messPing.setTime(System.nanoTime());
             gameClient.send(messPing);
         }
     }
@@ -167,7 +167,7 @@ public abstract class AbstractClientListener implements ClientListener {
         if (pingListerners.size() > 0) {
             for (PingListener pl : pingListerners) {
                 // 注意要把纳秒转换为毫秒
-                long ping = (long) ((System.nanoTime() - (long) mess.time) * (1.0f / 1000000L));
+                long ping = (long) ((System.nanoTime() - (long) mess.getTime()) * (1.0f / 1000000L));
                 pl.onPingUpdate(ping);
             }
         }
@@ -210,7 +210,7 @@ public abstract class AbstractClientListener implements ClientListener {
      */
     protected void processClientConnected(GameClient gameClient, Client client) {
         // 1.连接上服务端后立即发送客户端标识
-        MessClient mess = new MessClient(configService.getClientId(), envService.getMachineName());
+        MessClient mess = new MessClient(configService.getClientId(), systemService.getMachineName());
         client.send(mess);
 
         // 2.从服务端获得当前游戏状态

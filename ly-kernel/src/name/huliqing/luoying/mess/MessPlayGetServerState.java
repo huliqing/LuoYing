@@ -17,6 +17,7 @@ public class MessPlayGetServerState extends MessBase {
 
     @Override
     public void applyOnServer(GameServer gameServer, HostedConnection source) {
+        super.applyOnServer(gameServer, source);
         gameServer.send(source, new MessSCServerState(gameServer.getServerState()));
 //        source.send(new MessSCServerState(gameServer.getServerState())); // remove0906以后统一使用gameServer发送消息
     }

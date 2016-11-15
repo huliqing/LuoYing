@@ -28,8 +28,6 @@ public class MessActionRun extends MessBase {
     // 目标位置
     private Vector3f pos;
 
-    public MessActionRun() {}
-
     public long getActorId() {
         return actorId;
     }
@@ -48,6 +46,7 @@ public class MessActionRun extends MessBase {
 
     @Override
     public void applyOnServer(GameServer gameServer, HostedConnection source) {
+        super.applyOnServer(gameServer, source);
         PlayService playService = Factory.get(PlayService.class);
         ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
         ActionService actionService = Factory.get(ActionService.class);

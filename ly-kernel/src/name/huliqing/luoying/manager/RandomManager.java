@@ -18,21 +18,21 @@ public class RandomManager {
     
     private static long seed;
     private static final float[] VALUES = new float[MAX_RANDOM];
+    private static byte index = 0;
     
     static {
         RandomManager.setRandomSeed(new Random().nextLong());
     }
     
     /**
-     * 从所有已经产生的127个随机数中获取指定索引处的数值， index必须是在[0~126]这个范围内（包含0和126）
-     * @param index
+     * 获取下一个随机值。
      * @return 
      */
-    public static float getValue(int index) {
-        if (index >= MAX_RANDOM) {
-            throw new ArrayIndexOutOfBoundsException("Random index only supported 0 to 126!!! index=" + index);
+    public static float getNextValue() {
+         if (index >= MAX_RANDOM) {
+            index = 0;
         }
-        return VALUES[index & 0xFF];
+        return VALUES[index++];
     }
     
     /**
@@ -55,9 +55,26 @@ public class RandomManager {
         return seed;
     }
     
+    /**
+     * 获取当前随机数的索引值。
+     * @return 
+     */
+    public static byte getIndex() {
+        return index;
+    }
+    
+    /**
+     * 设置随机数索引, 不要直接调用，这个方法只有在作为客户端与服务端同步随机数索引值时才会被调用。
+     * @param index 
+     */
+    public static void setIndex(byte index) {
+        RandomManager.index = index;
+    }
+    
     public static void main(String[] args) {
-        for (int i = 0; i < VALUES.length; i++) {
-            System.out.println(VALUES[i]);
+        for (int i = 0; i < 300; i++) {
+            System.out.println(i + "->" + getNextValue() + ", index=" + index);
         }
+        System.out.println("...");
     }
 }

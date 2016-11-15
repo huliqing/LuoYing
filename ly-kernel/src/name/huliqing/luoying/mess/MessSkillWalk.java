@@ -62,6 +62,7 @@ public class MessSkillWalk extends MessBase {
 
     @Override
     public void applyOnClient() {
+        super.applyOnClient();
         PlayService playService = Factory.get(PlayService.class);
         SkillService skillService = Factory.get(SkillService.class);
         Entity actor = playService.getEntity(actorId);

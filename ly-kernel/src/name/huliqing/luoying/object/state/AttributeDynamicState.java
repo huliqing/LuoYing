@@ -7,6 +7,7 @@ package name.huliqing.luoying.object.state;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.StateData;
 import name.huliqing.luoying.layer.network.EntityNetwork;
+import name.huliqing.luoying.object.entity.Entity;
 
 /**
  * 可以"持续"改变角色属性值的状态.
@@ -24,6 +25,7 @@ public class AttributeDynamicState extends AbstractState {
     
     // ---- inner
     private float intervalUsed;
+    private Entity sourceActor;
     
     @Override
     public void setData(StateData data) {
@@ -39,6 +41,9 @@ public class AttributeDynamicState extends AbstractState {
         intervalUsed += tpf;
         if (intervalUsed >= interval && bindNumberAttribute != null) {
             intervalUsed = 0;
+            if (sourceActor == null) {
+                sourceActor = actor.getScene().getEntity(data.getSourceActor());
+            }
             entityNetwork.hitNumberAttribute(actor, bindNumberAttribute, addValue, sourceActor);
         }
     }

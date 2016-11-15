@@ -14,7 +14,8 @@ loop => 0:dontLoop; 1:loop;
     <!--=====================================================================-->
     <!--魔法：获得疾风步效果-->
     <!--=====================================================================-->
-    <magicState id="magicStateWindWalk" useTime="2" effects="effectStateWindWalkStart" states="stateWindWalk|0.4"  />
+    <!--不再使用-->
+    <!--<magicState id="magicStateWindWalk" useTime="2" effects="effectStateWindWalkStart" states="stateWindWalk|0.4"  />-->
     
     <!--=====================================================================-->
     <!--魔法：复活术-->

@@ -147,7 +147,7 @@ public class ModuleManager {
         for (DataHandler h : handlers.getArray()) {
             if (h.getHandleType().isAssignableFrom(data.getClass())) {
                 added = added || h.handleDataAdd(data, count);
-            }
+            } 
         }
         return added;
     }

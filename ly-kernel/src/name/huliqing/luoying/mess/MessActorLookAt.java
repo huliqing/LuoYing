@@ -47,6 +47,7 @@ public class MessActorLookAt extends MessBase {
 
     @Override
     public void applyOnClient() {
+        super.applyOnClient();
         Entity actor = Factory.get(PlayService.class).getEntity(actorId);
         if (actor != null) {
             Factory.get(ActorService.class).setLookAt(actor, pos);

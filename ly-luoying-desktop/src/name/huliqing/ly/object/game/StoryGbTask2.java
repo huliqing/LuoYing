@@ -10,6 +10,7 @@ import com.jme3.math.Vector3f;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.data.StateData;
 import name.huliqing.ly.enums.MessageType;
 import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.service.ActorService;
@@ -26,6 +27,8 @@ import name.huliqing.luoying.object.drop.Drop;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.gamelogic.AbstractGameLogic;
 import name.huliqing.luoying.object.module.DropModule;
+import name.huliqing.luoying.object.module.StateModule;
+import name.huliqing.luoying.object.state.State;
 import name.huliqing.luoying.utils.MathUtils;
 import name.huliqing.ly.constants.IdConstants;
 import name.huliqing.ly.layer.service.GameService;
@@ -121,7 +124,10 @@ public class StoryGbTask2 extends AbstractTaskStep{
                     altar = actor;
                     gameService.setLevel(altar, altarLevel);
                     gameService.setGroup(altar, game.groupEnemy);
-                    stateService.addStateForce(altar, IdConstants.STATE_SAFE, 0, null);                    
+                    StateModule sm = altar.getModuleManager().getModule(StateModule.class);
+                    if (sm != null) {
+                        sm.addState((State) Loader.load(IdConstants.STATE_SAFE), true);
+                    }
                     
                     // 意外的收获:星光传送术掉落
 //                    dropService.addDrop(altar, IdConstants.DROP_BOOK_007);  // remove
@@ -217,7 +223,7 @@ public class StoryGbTask2 extends AbstractTaskStep{
             // 如果所有防御塔都已经死亡，则恢复祭坛的防御，让它可被击死
             if (towerChecker.allTowerDead) {
                 game.removeLogic(towerChecker);
-                stateService.removeState(altar, IdConstants.STATE_SAFE);
+                altar.removeObjectData(altar.getData().getObjectData(IdConstants.STATE_SAFE), 1);
                 stage = 3;
             }
             return;

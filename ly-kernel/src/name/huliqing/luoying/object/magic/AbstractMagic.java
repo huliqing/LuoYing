@@ -10,7 +10,6 @@ import com.jme3.scene.Spatial;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.data.EffectData;
 import name.huliqing.luoying.data.MagicData;
 import name.huliqing.luoying.layer.service.ElService;
 import name.huliqing.luoying.object.ControlAdapter;
@@ -19,32 +18,36 @@ import name.huliqing.luoying.object.effect.Effect;
 import name.huliqing.luoying.object.el.STBooleanEl;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.entity.ModelEntity;
+import name.huliqing.luoying.object.scene.Scene;
 
 /**
  * @author huliqing
- * @param <T>
  */
-public abstract class AbstractMagic<T extends MagicData> extends ModelEntity<T> implements Magic<T> {
+public abstract class AbstractMagic extends ModelEntity<MagicData> implements Magic<MagicData> {
     private final ElService elService = Factory.get(ElService.class);
     
     protected float useTime = 1.0f;
     protected float timeUsed;
+    protected String[] effects;
     protected STBooleanEl hitCheckEl;
     
     //--------
     // 格式:effectId|timePoint,effectId|timePoint,effectId|timePoint...
     protected final Node magicRoot = new Node("MagicRoot");
     
-    // 魔法的施放者，有可能为null.
+    /**
+     * 魔法的施放者，有可能为null.
+     */
     protected Entity source;
     
-    // 魔法针对的主目标,如果魔法没有特定的目标，则有可能为null
-    protected Entity[] targets;
+    /**
+     * 魔法针对的特定目标,如果没有特定的目标，则有可能为null
+     */
+    protected List<Entity> targets;
     
     // 保持对效果的引用，在结束时清理
-    protected List<Effect> effects;
+    protected List<Effect> tempEffects;
     
-     
     public AbstractMagic() {
         magicRoot.addControl(new ControlAdapter() {
             @Override
@@ -55,15 +58,16 @@ public abstract class AbstractMagic<T extends MagicData> extends ModelEntity<T> 
     }
     
     @Override
-    public void setData(T data) {
+    public void setData(MagicData data) {
         super.setData(data);
         useTime = data.getAsFloat("useTime", useTime);
         timeUsed = data.getAsFloat("timeUsed", timeUsed);
+        effects = data.getAsArray("effects");
         hitCheckEl = elService.createSTBooleanEl(data.getAsString("hitCheckEl", "#{true}"));
     }
     
     @Override
-    public T getData() {
+    public MagicData getData() {
         return super.getData(); 
     }
     
@@ -71,8 +75,8 @@ public abstract class AbstractMagic<T extends MagicData> extends ModelEntity<T> 
     public void updateDatas() {
         super.updateDatas();
         // 有可能发生状态变化的字段才需要更新到Data.
-        if (effects != null) {
-            for (Effect effect : effects) {
+        if (tempEffects != null) {
+            for (Effect effect : tempEffects) {
                 effect.updateDatas();
             }
         }
@@ -82,15 +86,33 @@ public abstract class AbstractMagic<T extends MagicData> extends ModelEntity<T> 
     @Override
     public void initEntity() {
         super.initEntity();
-        if (data.getEffectDatas() != null) {
-            if (effects == null) {
-                effects = new ArrayList<Effect>(data.getEffectDatas().length);
+        if (effects != null) {
+            if (tempEffects == null) {
+                tempEffects = new ArrayList<Effect>(effects.length);
             }
-            effects.clear();
-            for (EffectData ed : data.getEffectDatas()) {
-                Effect effect = Loader.load(ed);
+            for (String eid : effects) {
+                Effect effect = Loader.load(eid);
                 magicRoot.attachChild(effect.getSpatial());
-                effects.add(effect);
+                tempEffects.add(effect);
+            }
+        }
+    }
+
+    @Override
+    public void onInitScene(Scene scene) {
+        super.onInitScene(scene);
+        if (data.getSource() > 0) {
+            source = scene.getEntity(data.getSource());
+        }
+        if (data.getTargets() != null && data.getTargets().length > 0) {
+            if (targets == null) {
+                targets = new ArrayList<Entity>(data.getTargets().length);
+            }
+            for (long tid : data.getTargets()) {
+                Entity target = scene.getEntity(tid);
+                if (target != null) {
+                    targets.add(target);
+                }
             }
         }
     }
@@ -105,14 +127,17 @@ public abstract class AbstractMagic<T extends MagicData> extends ModelEntity<T> 
     
     @Override
     public void cleanup() {
-        if (effects != null) {
-            for (Effect e : effects) {
+        if (tempEffects != null) {
+            for (Effect e : tempEffects) {
                 e.requestEnd();
             }
+            tempEffects.clear();
+        }
+        if (targets != null) {
+            targets.clear();
         }
         timeUsed = 0;
         source = null;
-        targets = null;
         super.cleanup();
     }
     
@@ -121,22 +146,4 @@ public abstract class AbstractMagic<T extends MagicData> extends ModelEntity<T> 
         return magicRoot;
     }
 
-    @Override
-    public void setSource(Entity source) {
-        this.source = source;
-        hitCheckEl.setSource(source.getAttributeManager());
-    }
-
-    @Override
-    public void setTargets(Entity... targets) {
-        this.targets = targets;
-    }
-
-    @Override
-    public boolean canHit(Entity entity) {
-        if (source != null) {
-            return hitCheckEl.setTarget(entity.getAttributeManager()).getValue();
-        }
-        return true;
-    }
 }

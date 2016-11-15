@@ -15,6 +15,7 @@ import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.constants.SkillConstants;
 import name.huliqing.luoying.data.AttributeUse;
+import name.huliqing.luoying.data.MagicData;
 import name.huliqing.luoying.data.SkillData;
 import name.huliqing.luoying.layer.service.ElService;
 import name.huliqing.luoying.manager.RandomManager;
@@ -601,7 +602,7 @@ public abstract class AbstractSkill implements Skill {
             return false;
         }
         
-        float randomValue = RandomManager.getValue(data.getNextRandomIndex());
+        float randomValue = RandomManager.getNextValue();
         return randomValue > resistRate;
     }
     
@@ -726,9 +727,10 @@ public abstract class AbstractSkill implements Skill {
         void update(float interpolation) {
             if (started) return;
             if (interpolation >= trueTimePoint) {
-                Magic magic = Loader.load(magicId);
-                magic.setSource(actor);
-                magic.getSpatial().setLocalTranslation(actor.getSpatial().getWorldTranslation());
+                MagicData md = Loader.loadData(magicId);
+                md.setSource(actor.getEntityId());
+                md.setLocation(actor.getSpatial().getWorldTranslation());
+                Magic magic = Loader.load(md);
                 actor.getScene().addEntity(magic);
                 
                 // 标记效果已经开始

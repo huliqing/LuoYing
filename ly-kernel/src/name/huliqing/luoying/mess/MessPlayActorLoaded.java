@@ -105,9 +105,9 @@ public class MessPlayActorLoaded extends MessBase {
 
     @Override
     public void applyOnClient() {
+        super.applyOnClient();
         PlayService playService = Factory.get(PlayService.class);
         ActorService actorService = Factory.get(ActorService.class);
-        LogicService logicService = Factory.get(LogicService.class);
         
         Entity actor = Loader.load(actorData);
         actorService.syncTransform(actor, location, viewDirection);

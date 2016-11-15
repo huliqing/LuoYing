@@ -43,13 +43,38 @@ xs:time
                 <!--状态组-->
                 <xs:element ref="stateGroup" />
                 
+                <xs:element ref="statePrivateGroup" />
+                
             </xs:all>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="statePrivateGroup">
+        <xs:annotation>
+            <xs:documentation>
+                私有状态组，这个状态可以自己持有一些子状态，这些子状态由当前私自持有，并且和当前状态一起结束,
+                对外部不可见。和GroupState不同，GroupState所持有的子状态是独立存在的。
+                换句话说：statePrivateGroup会把所有子状态变成一个状态，而GroupState所持有的子状态是独立存在的。
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="stateBase">
+                    <xs:attribute name="states" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>状态组，格式："stateId,stateId,..."</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
         </xs:complexType>
     </xs:element>
     
     <xs:element name="stateGroup">
         <xs:annotation>
             <xs:documentation>
+                状态组, 这个状态可以用于打包子状态，当给角色添加这个状态之后，所有子状态都会一起添加到角色身上。
+                子状态是独立的，不受当前状态的设置影响。
             </xs:documentation>
         </xs:annotation>
         <xs:complexType>

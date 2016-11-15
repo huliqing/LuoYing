@@ -16,6 +16,8 @@ import name.huliqing.luoying.layer.service.ConfigService;
 import name.huliqing.luoying.network.GameServer.ServerListener;
 import name.huliqing.luoying.mess.MessActorTransformDirect;
 import name.huliqing.luoying.layer.service.ActorService;
+import name.huliqing.luoying.manager.RandomManager;
+import name.huliqing.luoying.mess.MessBase;
 import name.huliqing.luoying.object.AbstractPlayObject;
 import name.huliqing.luoying.object.entity.Entity;
 
@@ -117,22 +119,6 @@ public class Network extends AbstractPlayObject {
     }
     
     /**
-     * 发送消息给所有客户端,必须确保当前游戏为服务端，并且正在运行，否则该方
-     * 法将什么也不做。
-     * @param message 
-     */
-    public void broadcast(Message message) {
-        if (gameServer != null && gameServer.isRunning()) {
-            gameServer.broadcast(message);
-            return;
-        } 
-        
-        if (gameClient != null) {
-            throw new IllegalStateException("GameClient could not broadcast message, message=" + message);
-        }
-    }
-    
-    /**
      * 发送消息给服务端，必须确保当前游戏为客户端，并且已经连接到服务器，否
      * 则该方法将什么也不做
      * @param message 
@@ -148,8 +134,9 @@ public class Network extends AbstractPlayObject {
      * @param client
      * @param message 
      */
-    public void sendToClient(HostedConnection client, Message message) {
+    public void sendToClient(HostedConnection client, MessBase message) {
         if (gameServer != null && gameServer.isRunning()) {
+            message.setRandomIndex(RandomManager.getIndex());
             gameServer.send(client, message);
         }
     }
@@ -159,9 +146,27 @@ public class Network extends AbstractPlayObject {
      * @param actor
      * @param message 
      */
-    public void sendToClient(Entity actor, Message message) {
+    public void sendToClient(Entity actor, MessBase message) {
         if (gameServer != null && gameServer.isRunning()) {
+            message.setRandomIndex(RandomManager.getIndex());
             gameServer.send(actor, message);
+        }
+    }
+    
+     /**
+     * 发送消息给所有客户端,必须确保当前游戏为服务端，并且正在运行，否则该方
+     * 法将什么也不做。
+     * @param message 
+     */
+    public void broadcast(MessBase message) {
+        if (gameServer != null && gameServer.isRunning()) {
+            message.setRandomIndex(RandomManager.getIndex());
+            gameServer.broadcast(message);
+            return;
+        } 
+        
+        if (gameClient != null) {
+            throw new IllegalStateException("GameClient could not broadcast message, message=" + message);
         }
     }
     

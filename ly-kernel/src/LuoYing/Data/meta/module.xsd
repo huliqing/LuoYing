@@ -29,7 +29,6 @@ xs:time
                 <xs:element ref="moduleLevel" />
                 <xs:element ref="moduleLogic" />
                 <xs:element ref="modulePhysics" />
-                <xs:element ref="moduleResist" />
                 <xs:element ref="moduleSkill" />
                 <xs:element ref="moduleSkin" />
                 <xs:element ref="moduleState" />
@@ -239,17 +238,6 @@ xs:time
         </xs:complexType>
     </xs:element>
         
-    <xs:element name="moduleResist">
-        <xs:annotation>
-            <xs:documentation>角色抗性模块，用于计算角色对状态的抵抗值</xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="moduleBase"></xs:extension>
-            </xs:complexContent>
-        </xs:complexType>
-    </xs:element>
-    
     <xs:element name="moduleSkill">
         <xs:annotation>
             <xs:documentation>技能模块</xs:documentation>
@@ -304,7 +292,10 @@ xs:time
     
     <xs:element name="moduleState">
         <xs:annotation>
-            <xs:documentation>状态模块，buff,debuff模块</xs:documentation>
+            <xs:documentation>
+                状态模块, 处理StateData,ResistData数据，用于给角色添加、删除状态功能，通过给角色指定一个ResistData来配置
+                角色的对于各种状态的抵抗能力。
+            </xs:documentation>
         </xs:annotation>
         <xs:complexType>
             <xs:complexContent>

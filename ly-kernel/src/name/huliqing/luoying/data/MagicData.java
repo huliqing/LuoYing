@@ -13,22 +13,60 @@ import com.jme3.network.serializing.Serializable;
 @Serializable
 public class MagicData extends ModelEntityData {
     
+    // 释放魔法的源的id
+    private long source;
+    
+    // 魔法所针对的特定目标
+    private long[] targets;
+
     /**
-     * 获取魔法使用的效果组，如果没有设置则返回null.
+     * 获取魔法的释放源，这个方法返回的是一个entity的唯一id.
      * @return 
      */
-    public EffectData[] getEffectDatas() {
-        return (EffectData[]) getAttribute("effectDatas");
+    public long getSource() {
+        return source;
+    }
+
+    /**
+     * 设置魔法的释放源,如果要清除释放源，可以设置一个小于或等于0的值。
+     * @param source 
+     */
+    public void setSource(long source) {
+        this.source = source;
     }
     
     /**
-     * 设置魔法使用的效果组
-     * @param effectDatas 
+     * 获得魔法所针对的目标对象,如果不存在则返回null.
+     * @return 
      */
-    public void setEffectDatas(EffectData[] effectDatas) {
-        setAttribute("effectDatas", effectDatas);
+    public long[] getTargets() {
+        return targets;
+    }
+
+    /**
+     * 设置魔法的针对的目标对象, 当魔法是特别针对个别对象时，可以通过这个方法来设置目标对象。
+     * @param targets 
+     */
+    public void setTargets(long... targets) {
+        this.targets = targets;
     }
     
+//    /**
+//     * 获取魔法使用的效果组，如果没有设置则返回null.
+//     * @return 
+//     */
+//    public EffectData[] getEffectDatas() {
+//        return (EffectData[]) getAttribute("effectDatas");
+//    }
+//    
+//    /**
+//     * 设置魔法使用的效果组
+//     * @param effectDatas 
+//     */
+//    public void setEffectDatas(EffectData[] effectDatas) {
+//        setAttribute("effectDatas", effectDatas);
+//    }
+//    
     // ----------------------------- outdate 
 //    // 魔法的位置
 //    private Vector3f location;

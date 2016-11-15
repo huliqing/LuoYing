@@ -19,25 +19,26 @@ public interface Magic<T extends MagicData> extends Entity<T> {
     @Override
     public T getData();
     
-    /**
-     * 魔法的施放源，如果没有特别的施放源，则为null.
-     * @param source 
-     */
-    void setSource(Entity source);
-    
-    /**
-     * 设置魔法所针对的特别的目标对象列表，如果没有设置，则根据魔法的范围自己决定,在魔法范围内的对象都为目标对象。
-     * @param targets 
-     */
-    void setTargets(Entity... targets);
-    
-    /**
-     * 判断魔法是否可以作用于一个目标
-     * @param entity
-     * @return 
-     */
-    boolean canHit(Entity entity);
-    
+        // remove201611xx
+//    /**
+//     * 魔法的施放源，如果没有特别的施放源，则为null.
+//     * @param source 
+//     */
+//    void setSource(Entity source);
+//    
+//    /**
+//     * 设置魔法所针对的特别的目标对象列表，如果没有设置，则根据魔法的范围自己决定,在魔法范围内的对象都为目标对象。
+//     * @param targets 
+//     */
+//    void setTargets(Entity... targets);
+
+//    /**
+//     * 判断魔法是否可以作用于一个目标
+//     * @param entity
+//     * @return 
+//     */
+//    boolean canHit(Entity entity);
+//    
 //    private final PlayService playService = Factory.get(PlayService.class);
 //    
 //    protected T data;
@@ -65,9 +66,9 @@ public interface Magic<T extends MagicData> extends Entity<T> {
 //    
 //    // 标记是否已经开始运行
 //    protected boolean started;
-    
-    
-    
+//    
+//    
+//    
 //    @Override
 //    public T getData() {
 //        return data;

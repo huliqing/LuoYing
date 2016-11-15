@@ -30,6 +30,7 @@ public class MessSCActorRemove extends MessBase {
 
     @Override
     public void applyOnClient() {
+        super.applyOnClient();
         PlayService playService = Factory.get(PlayService.class);
         Entity actorToRemove = playService.getEntity(actorId);
         if (actorToRemove != null) {

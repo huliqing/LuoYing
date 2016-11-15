@@ -5,62 +5,57 @@
  */
 package name.huliqing.luoying.object.state;
 
-import java.util.ArrayList;
-import java.util.List;
 import name.huliqing.luoying.data.StateData;
 import name.huliqing.luoying.object.Loader;
-import name.huliqing.luoying.xml.DataFactory;
 
 /**
- * 状态组
+ * 状态组, 这个状态可以用于打包子状态，当给角色添加这个状态之后，所有子状态都会一起添加到角色身上。
+ * 子状态是独立的，不受当前状态的设置影响。
  * @author huliqing
  */
 public class GroupState extends AbstractState {
 
-    private List<StateData> childStateDatas;
-    private List<AbstractState> states;
-
+    private String[] states;
+    
+    // 标记子状态是否已经添加到角色,以避免重复添加。
+    // 当角色获得这个状态后，在状态未消失之前存档，然后再读档的情况下，这个值会为true,这时应避免重复载入状态。
+    private boolean childrenApplied;
+    
     @Override
     public void setData(StateData data) {
         super.setData(data);
-        // 必须先从data中获取childStateDatas，因为data有可能是从存档中读取的。
-        childStateDatas = (List<StateData>) data.getAttribute("childStateDatas");
-        if (childStateDatas == null) {
-            String[] stateArr = data.getAsArray("states");
-            if (stateArr != null) {
-                childStateDatas = new ArrayList<StateData>(stateArr.length);
-                for (int i = 0; i < stateArr.length; i++) {
-                    childStateDatas.add((StateData) DataFactory.createData(stateArr[i]));
-                }
-                data.setAttribute("childStateDatas", childStateDatas);
-            }
-        }
+        childrenApplied = data.getAsBoolean("childrenApplied", childrenApplied);
+        states = data.getAsArray("states");
+    }
+
+    @Override
+    public void updateDatas() {
+        super.updateDatas();
+        data.setAttribute("childrenApplied", childrenApplied);
     }
     
     @Override
     public void initialize() {
         super.initialize();
+        if (childrenApplied) {
+            return;
+        }
         
-        if (childStateDatas != null) {
-            states = new ArrayList<AbstractState>(childStateDatas.size());
-            for (StateData stateData : childStateDatas) {
-                AbstractState state = Loader.load(stateData);
-                state.setActor(actor);
-                state.setSourceActor(sourceActor);
-                state.initialize();
-                states.add(state);
+        if (states != null) {
+            for (String sid : states) {
+                StateData stateData = Loader.loadData(sid);
+                stateData.setSourceActor(data.getSourceActor());
+                actor.addObjectData(stateData, 1);
             }
         }
+        childrenApplied = true;
+        updateDatas();
     }
     
     @Override
     public void cleanup() {
-        if (states != null) {
-            for (int i = 0; i < states.size(); i++) {
-                states.get(i).cleanup();
-            }
-            states.clear();
-        }
+        // 不要去清理子状态，这些子状态由各子去清理,只标记childrenApplied=false就可以。
+        childrenApplied = false;
         super.cleanup();
     }
     

@@ -17,6 +17,7 @@ import name.huliqing.ly.view.talk.Talk;
 import name.huliqing.ly.view.talk.TalkImpl;
 import name.huliqing.ly.view.talk.TalkListener;
 import name.huliqing.luoying.layer.network.ActorNetwork;
+import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.network.SkillNetwork;
 import name.huliqing.luoying.layer.network.SkinNetwork;
@@ -37,8 +38,10 @@ import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.ly.view.talk.AbstractTalkLogic;
 import name.huliqing.luoying.object.module.SkillListenerAdapter;
+import name.huliqing.luoying.object.module.StateModule;
 import name.huliqing.luoying.object.skill.Skill;
 import name.huliqing.luoying.object.skill.BackSkill;
+import name.huliqing.luoying.object.state.State;
 import name.huliqing.ly.object.view.TimerView;
 import name.huliqing.luoying.ui.TextPanel;
 import name.huliqing.luoying.utils.MathUtils;
@@ -68,6 +71,7 @@ public class StoryTreasureTask2 extends AbstractTaskStep {
     private final StateNetwork stateNetwork = Factory.get(StateNetwork.class);
     private final GameService gameService = Factory.get(GameService.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
+    private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
     
     // ==== 任务位置
     private final StoryTreasureGame game;
@@ -430,7 +434,10 @@ public class StoryTreasureTask2 extends AbstractTaskStep {
             sceneBuilder.setEnabled(false);
             // 同伴进入战场后宝箱不死
             if (treasure != null) {
-                stateNetwork.addStateForce(treasure, IdConstants.STATE_SAFE, 0, null);
+                StateModule sm = treasure.getModuleManager().getModule(StateModule.class);
+                if (sm != null) {
+                    sm.addState((State)Loader.load(IdConstants.STATE_SAFE), true);
+                }
             }
             playNetwork.addEntity(companion);
         }

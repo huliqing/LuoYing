@@ -5,17 +5,15 @@
  */
 package name.huliqing.luoying.object.item;
 
-import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.ItemData;
-import name.huliqing.luoying.layer.service.StateService;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.xml.ObjectData;
 
 /**
  * 可用于删除角色身上某些状态的物品
  * @author huliqing
  */
 public class StateRemoveItem extends AbstractItem {
-    private final StateService stateService = Factory.get(StateService.class);
     
     private String[] states;
     
@@ -33,7 +31,10 @@ public class StateRemoveItem extends AbstractItem {
             return;
         
         for (String sid : states) {
-            stateService.removeState(actor, sid);
+            ObjectData od = actor.getData().getObjectData(sid);
+            if (od != null) {
+                actor.removeObjectData(od, 1);
+            }
         }
         
         // 物品减少

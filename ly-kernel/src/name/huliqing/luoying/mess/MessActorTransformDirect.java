@@ -59,6 +59,7 @@ public class MessActorTransformDirect extends MessBase {
 
     @Override
     public void applyOnClient() {
+        super.applyOnClient();
         PlayService playService = Factory.get(PlayService.class);
         Entity actor = playService.getEntity(actorId);
         if (actor == null) {

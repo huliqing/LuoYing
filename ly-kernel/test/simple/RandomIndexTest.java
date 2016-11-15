@@ -42,15 +42,9 @@ public class RandomIndexTest {
     @Test
     public void RandomIndexTest() {
         SkillData ss = new SkillData();
-        for (int i = 0; i < 300; i++) {
-            byte idx = ss.getNextRandomIndex();
-            assert idx >=0 && idx <= 126;
-        }
     }
     @Test
     public void RandomIndexTest2() {
-        float value = RandomManager.getValue(126);
-        byte idx = 126;
-        assert Float.compare(value, RandomManager.getValue(idx)) == 0;
+
     }
 }

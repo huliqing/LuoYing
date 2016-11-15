@@ -13,6 +13,4 @@ import com.jme3.network.serializing.Serializable;
 @Serializable
 public class MessPlayLoadSavedActor  extends MessBase {
 
-    public MessPlayLoadSavedActor() {}
-    
 }

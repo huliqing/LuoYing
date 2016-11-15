@@ -15,7 +15,6 @@ import com.jme3.network.ClientStateListener;
 import com.jme3.network.Message;
 import name.huliqing.luoying.Config;
 import name.huliqing.luoying.Factory;
-import name.huliqing.ly.enums.MessageType;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.mess.MessSCInitGameOK;
 import name.huliqing.luoying.mess.MessBase;
@@ -30,7 +29,7 @@ import name.huliqing.luoying.network.GameClient;
  */
 public class LanClientListener extends AbstractClientListener {
     private static final Logger LOG = Logger.getLogger(LanClientListener.class.getName());
-    private final PlayService playService = Factory.get(PlayService.class);
+//    private final PlayService playService = Factory.get(PlayService.class);
     
     private final List<MessBase> messageQueue = new LinkedList<MessBase>();
     private double offset = Double.MIN_VALUE;
@@ -78,9 +77,9 @@ public class LanClientListener extends AbstractClientListener {
         if (m instanceof MessBase) {
             MessBase message = (MessBase) m;
             if (offset == Double.MIN_VALUE) {
-                offset = gameClient.time - message.time;
+                offset = gameClient.time - message.getTime();
             }
-            double delayTime = (message.time + offset) - gameClient.time;
+            double delayTime = (message.getTime() + offset) - gameClient.time;
             if (delayTime > maxDelay) {
                 offset -= delayTime - maxDelay;
             } else if (delayTime < 0) {
@@ -95,7 +94,7 @@ public class LanClientListener extends AbstractClientListener {
         super.update(tpf, gameClient);
         for (Iterator<MessBase> it = messageQueue.iterator(); it.hasNext();) {
             MessBase message = it.next();
-            if (message.time >= gameClient.time + offset) {
+            if (message.getTime() >= gameClient.time + offset) {
                 applyMessage(gameClient, message);
                 it.remove();
             }

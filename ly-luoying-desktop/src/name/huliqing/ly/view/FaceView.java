@@ -21,6 +21,7 @@ import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.constants.AssetConstants;
 import name.huliqing.luoying.constants.InterfaceConstants;
+import name.huliqing.luoying.data.StateData;
 import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.ly.layer.service.ChatService;
 import name.huliqing.luoying.layer.service.PlayService;
@@ -29,6 +30,7 @@ import name.huliqing.luoying.object.anim.Loop;
 import name.huliqing.luoying.object.anim.ColorAnim;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.entity.EntityDataListener;
 import name.huliqing.ly.object.chat.Chat;
 import name.huliqing.luoying.object.state.State;
 import name.huliqing.luoying.ui.Icon;
@@ -36,6 +38,7 @@ import name.huliqing.luoying.ui.LinearLayout;
 import name.huliqing.luoying.ui.LinearLayout.Layout;
 import name.huliqing.luoying.ui.Text;
 import name.huliqing.luoying.ui.UI;
+import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.ly.layer.service.GameService;
 
@@ -43,13 +46,10 @@ import name.huliqing.ly.layer.service.GameService;
  * 显示角色头像
  * @author huliqing
  */
-public final class FaceView extends LinearLayout {
+public final class FaceView extends LinearLayout implements EntityDataListener{
     private final PlayService playService = Factory.get(PlayService.class);
-    private final StateService stateService = Factory.get(StateService.class);
-    private final ActorService actorService = Factory.get(ActorService.class);
     private final ChatService chatService = Factory.get(ChatService.class);
     private final GameService gameService = Factory.get(GameService.class);
-    private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     
     private Entity actor;
     private NumberAttribute lifeAttribute;
@@ -84,10 +84,6 @@ public final class FaceView extends LinearLayout {
     
     public FaceView(float width, float height) {
         super(width, height);
-        init();
-    }
-    
-    private void init() {
         
         float lw = height;
         float lh = lw;
@@ -116,20 +112,6 @@ public final class FaceView extends LinearLayout {
             public void onClick(UI view, boolean isPressed) {
                 if (isPressed) 
                     return;
-                
-                // remove20160311,只要判断chat是否存在就可以，关于chat是否可见则
-                // 统一由chat内部去判断即可，这里不要做多余的事。
-//                if (actor.getData().getChat() == null) 
-//                    return;
-//                if (actor.isDead())
-//                    return;
-//                if (!playService.isInScene(actor))
-//                    return;
-//                Chat chat = chatService.getChat(actor);
-//                if (chat != null) {
-//                    playService.addObject(chat);
-//                }
-                
                 // 添加chat,chat是否可见由chat内部判断处理。
                 Chat chat = chatService.getChat(actor);
                 if (chat == null)
@@ -143,7 +125,7 @@ public final class FaceView extends LinearLayout {
         addView(rightZone);
         addView(chatIcon);
     }
-
+    
     /**
      * 获取当前的目标,如果当前没有目标则返回null.
      * @return 
@@ -152,20 +134,25 @@ public final class FaceView extends LinearLayout {
         return actor;
     }
     
-    public void setActor(Entity actor) {
-        this.actor = actor;
+    public void setActor(Entity newActor) {
+        if (this.actor != null) {
+            this.actor.removeEntityDataListener(this);
+        }
         
-        lifeAttribute = actor.getAttributeManager().getAttribute("attributeHealth", NumberAttribute.class);
-        lifeAttributeMax = actor.getAttributeManager().getAttribute("attributeHealthMax", NumberAttribute.class);
+        this.actor = newActor;
+        this.actor.addEntityDataListener(this);
         
-        manaAttribute = actor.getAttributeManager().getAttribute("attributeMana", NumberAttribute.class);
-        manaAttributeMax = actor.getAttributeManager().getAttribute("attributeManaMax", NumberAttribute.class);
+        lifeAttribute = newActor.getAttributeManager().getAttribute("attributeHealth", NumberAttribute.class);
+        lifeAttributeMax = newActor.getAttributeManager().getAttribute("attributeHealthMax", NumberAttribute.class);
         
-        xpAttribute = actor.getAttributeManager().getAttribute("attributeXp", NumberAttribute.class);
-        xpAttributeNext = actor.getAttributeManager().getAttribute("attributeXpNext", NumberAttribute.class);
+        manaAttribute = newActor.getAttributeManager().getAttribute("attributeMana", NumberAttribute.class);
+        manaAttributeMax = newActor.getAttributeManager().getAttribute("attributeManaMax", NumberAttribute.class);
         
-        picPanel.setActor(actor);
-        namePanel.setActor(actor);
+        xpAttribute = newActor.getAttributeManager().getAttribute("attributeXp", NumberAttribute.class);
+        xpAttributeNext = newActor.getAttributeManager().getAttribute("attributeXpNext", NumberAttribute.class);
+        
+        picPanel.setActor(newActor);
+        namePanel.setActor(newActor);
         lastLife = lifeAttribute != null ? lifeAttribute.intValue() : 0;
         
         // 立即更新一次，必要的
@@ -202,6 +189,25 @@ public final class FaceView extends LinearLayout {
             Chat chat = chatService.getChat(actor);
             chatIcon.setVisible(chat != null && chat.isVisibleForPlayer());
         }
+    }
+    
+    @Override
+    public void onDataAdded(ObjectData data, int amount) {
+        if (data instanceof StateData) {
+            statePanel.needRefreshStates = true;
+        }
+    }
+    
+    @Override
+    public void onDataRemoved(ObjectData data, int amount) {
+        if (data instanceof StateData) {
+            statePanel.needRefreshStates = true;
+        }
+    }
+    
+    @Override
+    public void onDataUsed(ObjectData data) {
+        // ignore
     }
     
     /**
@@ -260,6 +266,8 @@ public final class FaceView extends LinearLayout {
     private class StatePanel extends LinearLayout {
         // 状态列表
         private final List<StateView> stateIconList = new ArrayList<StateView>(5);
+        private final List<StateData> stateDatas = new ArrayList<StateData>();
+        private boolean needRefreshStates = true;
         
         public StatePanel(float width, float height) {
             super(width, height);
@@ -267,13 +275,14 @@ public final class FaceView extends LinearLayout {
         }
         
         void update(float tpf) {
-            final List<State> states = stateService.getStates(actor);
-            if (states ==null) {
-                return;
+            if (needRefreshStates) {
+                stateDatas.clear();
+                actor.getData().getObjectDatas(StateData.class, stateDatas);
+                needRefreshStates = false;
             }
             // 确保生成足够的状态槽位
-            if (states.size() > stateIconList.size()) {
-                for (int i = stateIconList.size(); i < states.size(); i++) {
+            if (stateDatas.size() > stateIconList.size()) {
+                for (int i = stateIconList.size(); i < stateDatas.size(); i++) {
                     StateView stateIcon = new StateView(height, height);
                     stateIconList.add(stateIcon);
                     addView(stateIcon);
@@ -281,8 +290,8 @@ public final class FaceView extends LinearLayout {
             }
             for (int i = 0; i < stateIconList.size(); i++) {
                 StateView si = stateIconList.get(i);
-                if (i < states.size()) {
-                    si.setState(states.get(i));
+                if (i < stateDatas.size()) {
+                    si.setState(stateDatas.get(i));
                     if (si.getParent() == null) {
                         addView(si);
                     }

@@ -21,7 +21,7 @@ public class MessEntityAddData extends MessBase {
     private long entityId;
     private ObjectData objectData;
     private int amount;
-
+ 
     public long getEntityId() {
         return entityId;
     }

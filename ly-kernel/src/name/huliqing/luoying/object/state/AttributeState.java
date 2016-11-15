@@ -7,6 +7,7 @@ package name.huliqing.luoying.object.state;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.StateData;
 import name.huliqing.luoying.layer.service.EntityService;
+import name.huliqing.luoying.object.entity.Entity;
 
 /**
  * 可以改变角色属性数值的状态.
@@ -26,7 +27,8 @@ public class AttributeState extends AbstractState {
     private float finalAddValue;
     // 标记属性是否已经作用到目标
     private boolean attributeApplied;
-
+    private Entity sourceActor;
+    
     @Override
     public void setData(StateData data) {
         super.setData(data); 
@@ -45,12 +47,13 @@ public class AttributeState extends AbstractState {
     @Override
     public void initialize() {
         super.initialize();
-        
         if (attributeApplied) {
             return;
         }
+        sourceActor = getSourceActor();
+        
         // data.getResist()为抵抗率，取值 [0.0~1.0], 如果为1.0则说明完全抵抗. 
-        finalAddValue = addValue * (1 - data.getResist());
+        finalAddValue = addValue * (1 - getResist());
         entityService.hitNumberAttribute(actor, bindNumberAttribute, finalAddValue, sourceActor);
         attributeApplied = true;
         updateDatas();

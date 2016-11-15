@@ -23,7 +23,6 @@ import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.logic.scene.ActorMultLoadHelper;
 import name.huliqing.luoying.manager.ResourceManager;
-import name.huliqing.luoying.layer.service.LogicService;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.entity.Entity;
@@ -203,9 +202,9 @@ public class StoryGbTask2End extends AbstractGameLogic {
     // 设置角色为保护状态或非保护状态
     private void setProtected(Entity actor, boolean bool) {
         if (bool) {
-            stateNetwork.addState(actor, IdConstants.STATE_SAFE, null);
+            entityNetwork.addData(actor, IdConstants.STATE_SAFE, 1);
         } else {
-            stateNetwork.removeState(actor, IdConstants.STATE_SAFE);
+            entityNetwork.removeData(actor,  actor.getData().getObjectData(IdConstants.STATE_SAFE), 1);
         }
     }
     

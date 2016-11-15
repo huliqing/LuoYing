@@ -47,7 +47,6 @@ public class SkillNetworkImpl implements SkillNetwork {
         MessSkillPlay mess = new MessSkillPlay();
         mess.setActorId(actor.getData().getUniqueId());
         mess.setSkillId(skill.getData().getId());
-        mess.setSyncRandomIndex(skill.getData().getRandomIndex());
         
         if (NETWORK.isClient()) {
             NETWORK.sendToServer(mess);

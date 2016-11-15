@@ -20,8 +20,6 @@ public class MessPlayActorSelectResult extends MessBase {
     // 如果选择失败，则error中包含错误信息
     private String error;
     
-    public MessPlayActorSelectResult() {}
-
     public long getActorId() {
         return actorId;
     }

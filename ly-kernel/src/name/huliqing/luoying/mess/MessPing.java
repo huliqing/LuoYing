@@ -21,12 +21,10 @@ public class MessPing extends MessBase {
 
     @Override
     public void applyOnServer(GameServer gameServer, HostedConnection source) {
+        super.applyOnServer(gameServer, source);
         // 服务端接收到这个消息后直接返回就可以，不需要作任何其它处理，也不要更
         // 改任何MessPing中的数据。
         source.send(this);
     }
-
-    @Override
-    public void applyOnClient() {}
     
 }

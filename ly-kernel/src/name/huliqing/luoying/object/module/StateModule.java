@@ -8,10 +8,13 @@ package name.huliqing.luoying.object.module;
 import com.jme3.scene.control.Control;
 import com.jme3.util.SafeArrayList;
 import java.util.List;
+import name.huliqing.luoying.data.ResistData;
 import name.huliqing.luoying.data.StateData;
+import name.huliqing.luoying.manager.RandomManager;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.DataHandler;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.resist.Resist;
 import name.huliqing.luoying.object.state.State;
 
 /**
@@ -23,6 +26,9 @@ public class StateModule extends AbstractModule implements DataHandler<StateData
     private List<StateListener> stateListeners;
     
     private Control updateControl;
+    
+    /** 角色的抵抗设置 */
+    private Resist resist;
 
     @Override
     public void updateDatas() {
@@ -37,20 +43,27 @@ public class StateModule extends AbstractModule implements DataHandler<StateData
             public void update(float tpf) {stateUpdate(tpf);}
         };
         this.entity.getSpatial().addControl(updateControl);
-
+        
+        // 载入抵抗设置:
+        List<ResistData> rds = actor.getData().getObjectDatas(ResistData.class, null);
+        if (rds != null && !rds.isEmpty()) {
+            setResist((Resist)Loader.load(rds.get(0)));
+        }
+        
+        // 载入状态
         List<StateData> stateDatas = actor.getData().getObjectDatas(StateData.class, null);
         if (stateDatas != null) {
             for (StateData sd : stateDatas) {
-                addState((State)Loader.load(sd));
+                addState((State)Loader.load(sd), true);
             }
         }
-        
     }
     
     private void stateUpdate(float tpf) {
         for (State s : states.getArray()) {
             if (s.isEnd()) {
-                removeState(s);
+//                removeState(s);
+                entity.removeObjectData(s.getData(), 1); // 这样才会触发EntityDataListener
             } else {
                 s.update(tpf);
             }
@@ -68,8 +81,61 @@ public class StateModule extends AbstractModule implements DataHandler<StateData
         }
         super.cleanup();
     }
+    
+    /**
+     * 设置角色的抵抗设置。
+     * @param resist 
+     */
+    public void setResist(Resist resist) {
+        if (this.resist != null) {
+            entity.getData().removeObjectData(this.resist.getData());
+        }
+        this.resist = resist;
+        this.entity.getData().addObjectData(this.resist.getData());
+    }
 
-    public boolean addState(State state) {
+    /**
+     * 设置状态
+     * @param state
+     * @param force
+     * @return 
+     */
+    public boolean addState(State state, boolean force) {
+        float resistValue = getResistValue(state.getData().getId());
+        if (!force && resistValue >= 1.0f) {
+            return false;
+        }
+        state.setActor(entity);
+        state.setResist(resistValue);
+        addStateInner(state);
+        return true;
+    }
+    
+    // 根据角色的抵抗设置计算一个抵抗值。
+    private float getResistValue(String stateId) {
+        if (resist == null) {
+            return 0;
+        }
+        float resistValue = resist.getResist(stateId);
+        // 1.毫无抗性，直接添加
+        if (resistValue <= 0) {
+            return 0;
+        }
+        // 2.完全抗性
+        if (resistValue >= 1.0f) {
+            return 1;
+        }
+        // 3.给一个完全抵抗的机会
+        if (resistValue >= RandomManager.getNextValue()) {
+            return 1;
+        }
+        // 4.抵抗不成功仍有机会根据角色的最高抵抗值随机计算一个最终抵抗值，该
+        // 值最高不会超过角色的最高抵抗值．该最终抵抗值可削弱一部分状态的作用．
+        float resultResist = resistValue * RandomManager.getNextValue();
+        return resultResist;
+    }
+    
+    private void addStateInner(State state) {
         // 如果已经存在相同ID的状态，则要删除旧的，因状态不允许重复。
         State oldState = getState(state.getData().getId());
         if (oldState != null) {
@@ -89,10 +155,9 @@ public class StateModule extends AbstractModule implements DataHandler<StateData
                 sl.onStateAdded(entity, state);
             }
         }
-        return true;
     }
     
-    public boolean removeState(State state) {
+    private boolean removeState(State state) {
         if (!states.contains(state))
             return false;
         
@@ -146,7 +211,7 @@ public class StateModule extends AbstractModule implements DataHandler<StateData
     @Override
     public boolean handleDataAdd(StateData data, int amount) {
         State state = Loader.load(data);
-        return addState(state);
+        return addState(state, false);
     }
 
     @Override

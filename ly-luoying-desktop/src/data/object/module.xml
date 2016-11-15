@@ -26,9 +26,6 @@
     <!--对话功能管理模块: 不直接依赖其它模块 -->
     <moduleChat id="moduleChat" moduleOrder="10" />
     
-    <!--抗性设置管理模块：不直接依赖其它模块-->
-    <moduleResist id="moduleResist" moduleOrder="10" />
-    
     <!--基本角色管理模块: 依赖 -->
     <moduleActor id="moduleActor" moduleOrder="10" 
                 bindDeadAttribute="attributeDead"

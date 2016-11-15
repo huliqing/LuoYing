@@ -4,6 +4,7 @@
  */
 package name.huliqing.luoying.object.state;
 
+import com.jme3.math.FastMath;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.data.StateData;
@@ -17,12 +18,11 @@ import name.huliqing.luoying.object.entity.Entity;
  * @param <T>
  */
 public abstract class AbstractState<T extends StateData> implements State<T> {
-//    private final PlayService playService = Factory.get(PlayService.class);
     
     protected T data;
     
     /** 状态的执行时长，单位秒 */
-    protected float totalUseTime;
+    protected float useTime;
     
     /**
      * 当前状态已经执行的时间，单位秒，这个时间是用来控制状态结束的。
@@ -36,6 +36,20 @@ public abstract class AbstractState<T extends StateData> implements State<T> {
      */
     protected String bindDeadAttribute;
     
+    /**
+     * 角色获得状态时的效果,这些效果会在状态开始时附加在角色身上，在状态结束时停止．
+     */
+    protected String[] effects;
+    
+    /**
+     * 关闭抗性值，取值为0.0~1.0, 这个值会抵消状态的作用，值为0时无抵消作用，值为
+     * 1时，则全抵消。
+     */
+    protected float resist;
+    
+    // 当角色死亡时从角色身上移除这个状态.
+    protected boolean removeOnDead;
+    
     // ---- inner
     /**
      * 角色获得状态时的效果,这些效果会在状态开始时附加在角色身上，在状态结束时停止．
@@ -48,8 +62,8 @@ public abstract class AbstractState<T extends StateData> implements State<T> {
     /** 状态的持有者，即受状态影响的角色，不能为null */
     protected Entity actor;
     
-    /** 状态的产生者，也就是说，这个状态是哪一个角色发出的, 如果一个状态没有发起源，则这个参数可能为null. */
-    protected Entity sourceActor;
+//    /** 状态的产生者，也就是说，这个状态是哪一个角色发出的, 如果一个状态没有发起源，则这个参数可能为null. */
+//    protected Entity sourceActor;
         
     protected BooleanAttribute deadAttribute;
 
@@ -60,9 +74,12 @@ public abstract class AbstractState<T extends StateData> implements State<T> {
                     + ", new state id=" + data.getId() + ", actorId=" + actor.getData().getId());
         }
         this.data = data;
-        this.initialized = data.getAsBoolean("initialized", initialized);
-        this.timeUsed = data.getAsFloat("timeUsed", timeUsed);
-        this.bindDeadAttribute = data.getAsString("bindDeadAttribute");
+        useTime = data.getAsFloat("useTime", 30);
+        timeUsed = data.getAsFloat("timeUsed", timeUsed);
+        bindDeadAttribute = data.getAsString("bindDeadAttribute");
+        effects = data.getAsArray("effects");
+        resist = data.getAsFloat("resist", resist);
+        removeOnDead = data.getAsBoolean("removeOnDead", removeOnDead);
     }
     
     @Override
@@ -72,7 +89,7 @@ public abstract class AbstractState<T extends StateData> implements State<T> {
 
     @Override
     public void updateDatas() {
-        // ignore
+        data.setAttribute("resist", resist);
     }
     
     @Override
@@ -86,18 +103,19 @@ public abstract class AbstractState<T extends StateData> implements State<T> {
             deadAttribute = actor.getAttributeManager().getAttribute(bindDeadAttribute, BooleanAttribute.class);
         }
         
-        if (data.getEffects() != null) {
+        if (effects != null) {
             if (tempEffects == null) {
-                tempEffects = new ArrayList<Effect>(data.getEffects().length);
+                tempEffects = new ArrayList<Effect>(effects.length);
             }
-            for (String effectId : data.getEffects()) {
+            for (String effectId : effects) {
                 Effect effect = Loader.load(effectId);
                 effect.setTraceEntity(actor.getEntityId());
                 actor.getScene().addEntity(effect);
                 tempEffects.add(effect);
             }
         }
-        totalUseTime = data.getUseTime();
+//        // 获取状态的施放源
+//        sourceActor = actor.getScene().getEntity(data.getSourceActor());
     }
     
     @Override
@@ -110,12 +128,12 @@ public abstract class AbstractState<T extends StateData> implements State<T> {
         timeUsed += tpf;
         
         // 时间到退出,cleanup由StateProcessor去调用。
-        if (timeUsed >= totalUseTime) {
+        if (timeUsed >= useTime) {
             initialized = false;
             return;
         }
         
-        if (data.isRemoveOnDead() && deadAttribute != null && deadAttribute.getValue()) {
+        if (removeOnDead && deadAttribute != null && deadAttribute.getValue()) {
             initialized = false;
         }
     }
@@ -176,23 +194,20 @@ public abstract class AbstractState<T extends StateData> implements State<T> {
      * 状态的产生者，也就是说，这个状态是哪一个角色发出的, 可能为null.
      * @return 
      */
-    @Override
-    public Entity getSourceActor() {
-        return sourceActor;
+    protected Entity getSourceActor() {
+        if (data.getSourceActor() > 0 && actor.getScene() != null) {
+            return actor.getScene().getEntity(data.getSourceActor());
+        }
+        return null;
     }
 
-    /**
-     * 源角色，这个角色主要是指制造这个状态的源角色, 比如：角色A攻击了角色B, A的这个攻击技能对B产生
-     * 了一个“流血”状态。这时A即可以设置为这个“流血”状态的sourceActor。这样状
-     * 态在运行时就可以获得源角色的引用，以便知道谁产生了这个状态。对于一些状态
-     * 效果非常有用，比如“流血”这类伤害效果状态，这些状态在运行时要计算伤害，并
-     * 要知道是谁产生了这些伤害。
-     * @param sourceActor 
-     */
     @Override
-    public void setSourceActor(Entity sourceActor) {
-        this.sourceActor = sourceActor;
+    public float getResist() {
+        return resist;
     }
-    
-    
+
+    @Override
+    public void setResist(float resist) {
+        this.resist = FastMath.clamp(resist, 0f, 1.0f);
+    }
 }

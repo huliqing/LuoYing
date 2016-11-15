@@ -39,6 +39,7 @@ public class MessActorSetLocation extends MessBase {
 
     @Override
     public void applyOnClient() {
+        super.applyOnClient();
         Entity actor = Factory.get(PlayService.class).getEntity(actorId);
         if (actor == null) {
             return;

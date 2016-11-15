@@ -262,7 +262,7 @@
    
     <!--疾风步-->
     <skillShot id="skillShotWindWalk" extends="skillPastorBuffBase" icon="Interface/skill/rapidWind.jpg" 
-               useTime="1" cooldown="2" useAttributes="attributeMana|40" hitMagics="magicStateWindWalk" needLevel="3" />
+               useTime="1" cooldown="2" useAttributes="attributeMana|40" hitStates="stateWindWalk|1" needLevel="3" />
     
     <!--复活术-->
     <skillShot id="skillShotReborn" extends="skillPastorBuffBase" icon="Interface/skill/ysh_05.jpg" 

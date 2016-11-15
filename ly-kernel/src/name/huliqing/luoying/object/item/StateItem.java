@@ -5,9 +5,9 @@
  */
 package name.huliqing.luoying.object.item;
 
-import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.ItemData;
-import name.huliqing.luoying.layer.network.StateNetwork;
+import name.huliqing.luoying.data.StateData;
+import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
 
 /**
@@ -15,8 +15,6 @@ import name.huliqing.luoying.object.entity.Entity;
  * @author huliqing
  */
 public class StateItem extends AbstractItem {
-    private final StateNetwork stateNetwork = Factory.get(StateNetwork.class);
-    
     private String[] states;
 
     @Override
@@ -34,11 +32,9 @@ public class StateItem extends AbstractItem {
         
         // 因为添加状态涉及到概率，所以需要使用network方式
         for (String sid : states) {
-            stateNetwork.addState(actor, sid, null);
+            StateData sd = Loader.loadData(sid);
+            actor.addObjectData(sd, 1);
         }
-        // 物品减少
-//        itemService.removeItem(actor, data.getId(), 1);
-
         actor.removeObjectData(data, 1);        
     }
     

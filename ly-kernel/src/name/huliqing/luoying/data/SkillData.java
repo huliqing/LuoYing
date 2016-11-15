@@ -55,9 +55,10 @@ public class SkillData extends ObjectData {
     
     /** 最近一次使用技能的时间,用于判断技能冷却限制 */
     private long lastPlayTime;
-    
-    /** 当前的随机数索引,实际取值在0~126（包含0和126，这个参数不需要存档) */
-    private byte randomIndex = -1;
+   
+    // remove20161114
+//    /** 当前的随机数索引,实际取值在0~126（包含0和126，这个参数不需要存档) */
+//    private byte randomIndex = -1;
     
     public String getIcon() {
         return getAsString("icon");
@@ -293,42 +294,4 @@ public class SkillData extends ObjectData {
         interruptTags = ic.readLong("interruptTags", 0);
         prior = ic.readInt("prior", 0);
     }
-    
-    /**
-     * 获取当前的随机索引值。
-     * @return 
-     */
-    public byte getRandomIndex() {
-        return this.randomIndex;
-    }
-    
-    /**
-     * 同步当前的随机数索引, 当技能中使用到随机数时，客户端在执行技能之前需要和服务端同步随机索引值，
-     * 使用这个方法来同步从服务端而来的随机索引数。
-     * @param randomIndex 
-     */
-    public void setRandomIndex(byte randomIndex) {
-        this.randomIndex = randomIndex;
-    }
-    
-    /**
-     * 获取下一个随机数的索引值,返回的值在0~126（包含0和126).随机数的使用示例如下：
-     * <code><pre>
-     * SkillData skillData = ...;
-     * float randomValue = RandomManager.getValue(skillData.getNextRandomIndex());
-     * if (randomValue > xxx) {
-     *      do...
-     * }
-     * </pre></code>
-     * @return 
-     */
-    public byte getNextRandomIndex() {
-        // randonIndex 只能取 0~126才有意义.
-        // see RandomManager.java
-        if (randomIndex >= 126) {
-            randomIndex = -1;
-        }
-        return ++randomIndex;
-    }
-    
 }

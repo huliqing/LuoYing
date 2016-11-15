@@ -29,6 +29,7 @@ import name.huliqing.luoying.ui.UI;
 import name.huliqing.luoying.ui.UI.Corner;
 import name.huliqing.luoying.ui.UI.Listener;
 import name.huliqing.luoying.ui.state.UIState;
+import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.ly.constants.IdConstants;
 import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.ly.layer.service.GameService;
@@ -406,9 +407,10 @@ public class StoryGbTask1 extends AbstractTaskStep {
     // 设置角色为保护状态或非保护状态
     private void setProtected(Entity actor, boolean bool) {
         if (bool) {
-            stateNetwork.addState(actor, IdConstants.STATE_SAFE, null);
+            entityNetwork.addData(actor, IdConstants.STATE_SAFE, 1);
         } else {
-            stateNetwork.removeState(actor, IdConstants.STATE_SAFE);
+            ObjectData safeState = actor.getData().getObjectData(IdConstants.STATE_SAFE);
+            entityNetwork.removeData(actor, safeState, 1);
         }
     }
     

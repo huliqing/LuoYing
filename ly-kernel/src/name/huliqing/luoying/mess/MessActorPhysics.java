@@ -38,6 +38,7 @@ public class MessActorPhysics extends MessBase {
 
     @Override
     public void applyOnClient() {
+        super.applyOnClient();
         PlayService playService = Factory.get(PlayService.class);
         ActorService actorService = Factory.get(ActorService.class);
         Entity actor = playService.getEntity(actorId);

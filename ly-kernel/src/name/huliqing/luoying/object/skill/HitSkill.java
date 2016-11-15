@@ -4,7 +4,6 @@
  */
 package name.huliqing.luoying.object.skill;
 
-import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,11 +14,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.constants.SkillConstants;
+import name.huliqing.luoying.data.MagicData;
 import name.huliqing.luoying.data.SkillData;
+import name.huliqing.luoying.data.StateData;
 import name.huliqing.luoying.layer.network.EntityNetwork;
-import name.huliqing.luoying.layer.network.StateNetwork;
 import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.layer.service.ElService;
+import name.huliqing.luoying.manager.RandomManager;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.el.STBooleanEl;
@@ -37,7 +38,6 @@ public abstract class HitSkill extends AbstractSkill {
     
     private final ActorService actorService = Factory.get(ActorService.class);
     private final ElService elService = Factory.get(ElService.class);
-    private final StateNetwork stateNetwork = Factory.get(StateNetwork.class);
     private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
     
     // hitCheckEl用于检查当前角色的技能是否作为作用(hit)于一个目标角色。
@@ -225,14 +225,12 @@ public abstract class HitSkill extends AbstractSkill {
         if (hitMagics == null)
             return;
         for (String mId : hitMagics) {
-            Magic magic = Loader.load(mId);
-            magic.setSource(actor);
-            magic.getSpatial().setLocalTranslation(target.getSpatial().getWorldTranslation());
+            MagicData md = Loader.loadData(mId);
+            md.setSource(actor.getEntityId());
+            md.setTargets(target.getData().getUniqueId());
+            md.setLocation(target.getSpatial().getWorldTranslation());
+            Magic magic = Loader.load(md);
             target.getScene().addEntity(magic);
-            
-            // remove201610xx
-//            md.setTargetActor(target.getData().getUniqueId());
-//            md.setTraceActor(target.getData().getUniqueId());
         }
     }
     
@@ -244,9 +242,10 @@ public abstract class HitSkill extends AbstractSkill {
         // 如：当寒冰箭刚好射击"死"敌人后应允许添加状态，否则会看不到冰冻效果
         // 因为“冰冻效果”是在状态上的，只有冰冻状态运行的时候才能看到。
         for (SkillStateWrap sw : stateWraps) {
-            if (sw.factor >= FastMath.nextRandomFloat()) {
-                // 状态存在机率影响，为同步服务端与客户端状态所以统以服务端为准。
-                stateNetwork.addState(target, sw.stateId, actor);
+            if (sw.factor >= RandomManager.getNextValue()) {
+                StateData stateData = Loader.loadData(sw.stateId);
+                stateData.setSourceActor(actor.getEntityId());
+                target.addObjectData(stateData, 1);
             }
         }
     }
@@ -259,17 +258,6 @@ public abstract class HitSkill extends AbstractSkill {
      * @param attribute 指定攻击的是哪一个属性
      */
     private void applyHit(Entity attacker, Entity target, float hitValue, STNumberEl hitEl, String attribute) {
-        // remove20161031
-//        if (hitEl == null) {
-//            return;
-//        }
-//        float finalValue = 0;
-//        HitEl de = elService.getHitEl(hitEl);
-//        if (de != null) {
-//            finalValue = de.getValue(attacker, skillValue, target);
-//        }
-//        HitUtils.getInstance().applyHit(attacker, target, hitAttribute, finalValue);
-
         hitEl.setSource(attacker.getAttributeManager());
         hitEl.setTarget(target.getAttributeManager());
         float finalHitValue = hitValue + hitEl.getValue().floatValue();

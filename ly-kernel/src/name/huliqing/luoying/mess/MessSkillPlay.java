@@ -26,8 +26,6 @@ public final class MessSkillPlay extends MessBase {
     private long actorId;
     // 要执行的技能id
     private String skillId;
-    // 同步随机索引
-    private byte syncRandomIndex;
     
     public String getSkillId() {
         return skillId;
@@ -50,21 +48,10 @@ public final class MessSkillPlay extends MessBase {
     public void setActorId(long actorId) {
         this.actorId = actorId;
     }
-
-    public byte getSyncRandomIndex() {
-        return syncRandomIndex;
-    }
-    
-    /**
-     * 设置随机数同步索引,当技能中使用到随机数时，需要在客户端和服务端中同步这个随机数索引、
-     * @param syncRandomIndex 
-     */
-    public void setSyncRandomIndex(byte syncRandomIndex) {
-        this.syncRandomIndex = syncRandomIndex;
-    }
     
     @Override
     public void applyOnServer(GameServer gameServer, HostedConnection source) {
+        super.applyOnServer(gameServer, source);
         ConnData cd = source.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
         Entity actor = Factory.get(PlayService.class).getEntity(actorId);
          // 找不到指定的角色
@@ -80,11 +67,11 @@ public final class MessSkillPlay extends MessBase {
     
     @Override
     public void applyOnClient() {
+        super.applyOnClient();
         Entity actor = Factory.get(PlayService.class).getEntity(actorId);
         if (actor != null) {
             SkillModule skillModule = actor.getModuleManager().getModule(SkillModule.class);
             Skill skill = skillModule.getSkill(skillId);
-            skill.getData().setRandomIndex(syncRandomIndex);
             skillModule.playSkill(skill, true);
         }
     }
