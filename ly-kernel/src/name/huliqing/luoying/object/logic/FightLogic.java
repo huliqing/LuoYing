@@ -4,10 +4,8 @@
  */
 package name.huliqing.luoying.object.logic;
 
-import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.object.action.FightAction;
 import name.huliqing.luoying.data.LogicData;
-import name.huliqing.luoying.layer.service.ActionService;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.entity.Entity;
@@ -20,7 +18,6 @@ import name.huliqing.luoying.object.module.ActionModule;
 public class FightLogic extends AbstractLogic {
 //    private static final Logger LOG = Logger.getLogger(FightLogic.class.getName());
     
-    private final ActionService actionService = Factory.get(ActionService.class);
     private  FightAction fightAction;
     private ActionModule actionModule;
     
@@ -59,6 +56,7 @@ public class FightLogic extends AbstractLogic {
         if (target.getScene() == null) {
             return;
         }
+        
         if (isEnemy(target)) {
             fightAction.setEnemy(target);
             actionModule.startAction(fightAction);

@@ -9,6 +9,8 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.math.Vector4f;
 import com.jme3.network.HostedConnection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.layer.network.ActorNetwork;
 import name.huliqing.luoying.layer.network.EntityNetwork;
@@ -32,6 +34,9 @@ import name.huliqing.ly.view.talk.TalkManager;
  * @author huliqing
  */
 public class GameNetworkImpl implements GameNetwork {
+
+    private static final Logger LOG = Logger.getLogger(GameNetworkImpl.class.getName());
+    
     private GameService gameService;
     private EntityService entityService;
     private ActorService actorService;
@@ -62,7 +67,8 @@ public class GameNetworkImpl implements GameNetwork {
 
     @Override
     public void syncObject(NetworkObject object, SyncData syncData, boolean reliable) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        LOG.log(Level.WARNING, "不再支持这个方法！");
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

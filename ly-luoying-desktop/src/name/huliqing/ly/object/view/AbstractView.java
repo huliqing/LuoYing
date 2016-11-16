@@ -33,7 +33,7 @@ import name.huliqing.ly.layer.network.GameNetwork;
 public abstract class AbstractView<T extends ViewData> extends AbstractEntity<T> implements View<T>, NetworkObject {
 
     private final PlayService playService = Factory.get(PlayService.class);
-    private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
+//    private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     
     // View的展示时间,如果为小于或等于0的值则永不停止。

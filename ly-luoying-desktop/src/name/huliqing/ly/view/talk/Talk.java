@@ -46,8 +46,7 @@ public interface Talk {
     /**
      * 让目标说话
      * @param actor
-     * @param mess
-     * @param delay 
+     * @param mess 
      * @return 返回当前talk对象
      */
     Talk speak(Entity actor, String mess);

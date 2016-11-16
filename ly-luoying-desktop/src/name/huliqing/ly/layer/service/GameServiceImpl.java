@@ -10,6 +10,8 @@ import com.jme3.math.Vector3f;
 import com.jme3.math.Vector4f;
 import com.jme3.network.HostedConnection;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.xml.ObjectData;
@@ -33,6 +35,8 @@ import name.huliqing.ly.view.talk.TalkManager;
  * @author huliqing
  */
 public class GameServiceImpl implements GameService {
+
+    private static final Logger LOG = Logger.getLogger(GameServiceImpl.class.getName());
 
     private PlayService playService;
     private EntityService entityService;
@@ -94,7 +98,7 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public void saveCompleteStage(int storyNum) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        LOG.log(Level.WARNING, "需要重构");
     }
 
     @Override

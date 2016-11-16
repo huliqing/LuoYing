@@ -17,7 +17,6 @@ import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.save.SaveStory;
 import name.huliqing.ly.constants.IdConstants;
-import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.ly.layer.service.GameService;
 
 /**
@@ -29,7 +28,7 @@ public abstract class StoryGame extends SimpleRpgGame {
     private final PlayService playService = Factory.get(PlayService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
     private final GameService gameService = Factory.get(GameService.class);
-    private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
+//    private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
 
     private final TaskStepControl taskControl = new TaskStepControl();
     

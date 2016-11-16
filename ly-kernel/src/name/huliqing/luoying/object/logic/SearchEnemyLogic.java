@@ -7,7 +7,6 @@ package name.huliqing.luoying.object.logic;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.data.LogicData;
 import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.entity.Entity;
@@ -25,16 +24,6 @@ public class SearchEnemyLogic extends AbstractLogic {
     private final List<Actor> tempStore = new ArrayList<Actor>();
     // 最近一个找到的敌人,避免频繁的去查找敌人。
     private Entity lastFindEnemy;
-    
-    @Override
-    public void setData(LogicData data) {
-        super.setData(data); 
-    }
-
-    @Override
-    public void initialize() {
-        super.initialize(); 
-    }
     
     private boolean isAvailableEnemy(Entity target) {
         if (target == null // 目标不存在

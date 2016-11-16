@@ -5,8 +5,7 @@
 package name.huliqing.ly.view.talk;
 
 import com.jme3.util.SafeArrayList;
-import java.util.List;
-import name.huliqing.luoying.object.AbstractPlayObject;
+import name.huliqing.luoying.object.gamelogic.AbstractGameLogic;
 
 /**
  * 说话，谈话管理,该类主要管理谈话逻辑，每个逻辑都包装成Talk，每个Talk在执
@@ -15,23 +14,23 @@ import name.huliqing.luoying.object.AbstractPlayObject;
  * ,Talk不增加循环设置主要是为了避免无意的操作，在添加循环talk之后即忘记移除的情况发生，造成资源浪费。
  * @author huliqing
  */
-public class TalkManager extends AbstractPlayObject {
+public class TalkManager extends AbstractGameLogic {
     
     private final static TalkManager INSTANCE = new TalkManager();
-    private final List<Talk> talks = new SafeArrayList<Talk>(Talk.class);
+    private final SafeArrayList<Talk> talks = new SafeArrayList<Talk>(Talk.class);
     
     private TalkManager() {}
 
     public static TalkManager getInstance() {
         return INSTANCE;
     }
-
+    
     @Override
-    public void update(float tpf) {
+    protected void doLogic(float tpf) {
         if (talks.isEmpty())
             return;
         
-        for (Talk t : talks) {
+        for (Talk t : talks.getArray()) {
             if (t.isEnd()) {
                 talks.remove(t);
             } else {
@@ -63,5 +62,7 @@ public class TalkManager extends AbstractPlayObject {
         talk.start();
         talks.add(talk);
     }
+
+
     
 }

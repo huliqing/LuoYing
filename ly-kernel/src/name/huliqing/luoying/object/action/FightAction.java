@@ -27,4 +27,6 @@ public interface FightAction extends Action {
      */
     public void setEnemy(Entity actor);
     
+    
+    
 }

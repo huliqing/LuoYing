@@ -8,7 +8,6 @@ import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.object.action.FightAction;
 import name.huliqing.luoying.data.LogicData;
 import name.huliqing.luoying.layer.service.ActionService;
-import name.huliqing.luoying.layer.service.ElService;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.entity.Entity;
@@ -22,7 +21,6 @@ public class PlayerLogic extends AbstractLogic {
     private final ActionService actionService = Factory.get(ActionService.class);
     
     private FightAction fightAction;
-    
     
     // ---- inner
     private float viewDistanceSquared;

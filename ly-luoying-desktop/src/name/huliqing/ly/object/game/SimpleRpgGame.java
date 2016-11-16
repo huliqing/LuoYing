@@ -26,7 +26,6 @@ import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.entity.TerrainEntity;
 import name.huliqing.luoying.object.env.ChaseCameraEnv;
 import name.huliqing.luoying.object.game.SimpleGame;
-import name.huliqing.luoying.object.module.ActorModule;
 import name.huliqing.luoying.ui.UI;
 import name.huliqing.luoying.ui.UIEventListener;
 import name.huliqing.luoying.ui.state.PickListener;
@@ -35,6 +34,8 @@ import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.ly.layer.service.GameService;
 import name.huliqing.ly.view.LanPlayStateUI;
 import name.huliqing.ly.view.shortcut.ShortcutManager;
+import name.huliqing.ly.view.talk.SpeakManager;
+import name.huliqing.ly.view.talk.TalkManager;
 
 /**
  *
@@ -62,15 +63,20 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
     @Override
     public void initialize(Application app) {
         super.initialize(app);
-        // UI逻辑
-        ui = new LanPlayStateUI();
-        addLogic(ui);
         
         // 初始化事件绑定
         bindPickListener();
         
         // UI全局事件监听器，主要处理当UI被点击或拖动时不要让镜头跟着转动。
         UIState.getInstance().addEventListener(this);
+        
+        // UI逻辑
+        ui = new LanPlayStateUI();
+        addLogic(ui);
+        
+        // 用于支持角色“说话”、“谈话”的游戏逻辑
+        addLogic(SpeakManager.getInstance());
+        addLogic(TalkManager.getInstance());
     }
 
     @Override
