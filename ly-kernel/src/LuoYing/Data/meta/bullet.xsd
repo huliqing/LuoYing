@@ -11,6 +11,7 @@
     <xs:element name="root">
         <xs:complexType>
             <xs:all>
+                <xs:element ref="bulletBase" />
                 <xs:element ref="bulletSimple" />
                 <xs:element ref="bulletStraight" />
                 <xs:element ref="bulletCurve"  />
@@ -144,13 +145,23 @@
         </xs:complexType>
     </xs:element>
     
+    <xs:element name="bulletBase">
+        <xs:annotation>
+            <xs:documentation>不能直接使用，只作为统一配置用，被用于其它子弹的继承，不要直接在游戏中载入。</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="bulletBase"></xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
     <xs:complexType name="bulletPathBase">
         <xs:annotation>
             <xs:documentation>带有路径的子弹</xs:documentation>
         </xs:annotation>
         <xs:complexContent>
             <xs:extension base="bulletBase">
-                
                 <xs:attribute name="baseSpeed" type="xs:decimal" use="optional">
                     <xs:annotation>
                         <xs:documentation>基本速度,一般不需要设置这个值</xs:documentation>
@@ -174,7 +185,14 @@
         
     <xs:complexType name="bulletBase">
         <xs:complexContent>
-            <xs:extension base="base">
+            <xs:extension base="modelEntityBase">
+                <xs:attribute name="debug" type="bool" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            显示调试信息
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
                 <xs:attribute name="shape" type="xs:string" use="required">
                     <xs:annotation>
                         <xs:documentation>
@@ -228,13 +246,6 @@
                         <xs:documentation>
                             碰撞声效组，这些声效会在子弹检测到碰撞时播放。格式：
                             "sound1,sound2,..."
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="debug" type="bool" use="optional">
-                    <xs:annotation>
-                        <xs:documentation>
-                            显示调试信息
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>

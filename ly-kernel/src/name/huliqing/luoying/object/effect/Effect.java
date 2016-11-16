@@ -27,11 +27,8 @@ import name.huliqing.luoying.utils.GeometryUtils;
  * 特效, 特效可以添加到EffectManager上，也可以直接添加到一个Node下面,所有效果都有一个执行时间.
  * @author huliqing
  * @version v1.4 20161011
- * @version v1.3 20160806
- * @param <T>
- * @since v1.2 20150421
  */
-public class Effect<T extends EffectData> extends ModelEntity<T> {
+public class Effect extends ModelEntity<EffectData> {
     /** 动画控制,所有动画控制器都作用在animRoot上。*/
     protected List<AnimationWrap> animations;
     
@@ -95,7 +92,7 @@ public class Effect<T extends EffectData> extends ModelEntity<T> {
     }
     
     @Override
-    public void setData(T data) {
+    public void setData(EffectData data) {
         super.setData(data);
         
         // 格式： "animId1 | startTime, animId2 | startTime, ..."
@@ -139,7 +136,7 @@ public class Effect<T extends EffectData> extends ModelEntity<T> {
     }
     
     @Override
-    public T getData() {
+    public EffectData getData() {
         return data;
     }
     
@@ -169,12 +166,6 @@ public class Effect<T extends EffectData> extends ModelEntity<T> {
         
         // 计算实际时间
         trueTimeTotal = useTime / speed;
-        
-        // 1.查找被跟随的对象，并初始化位置
-        initTrace();
-        
-        // 2.初始化动画
-        initAnimations();
     }
 
     @Override
@@ -183,6 +174,12 @@ public class Effect<T extends EffectData> extends ModelEntity<T> {
         if (traceObject == null) {
             setTraceObject(findTraceObject(traceEntityId));
         }
+        
+        // 1.查找被跟随的对象，并初始化位置
+        initTrace();
+        
+        // 2.初始化动画
+        initAnimations();
     }
     
     /**

@@ -106,8 +106,6 @@ public class ActorCurveMove extends ActorAnim {
 
     @Override
     protected void doInit() {
-        
-        // --- 优化版
         // 清理后重新加载控制点
         spline.clearControlPoints();
         // 第一个点为角色的当前位置

@@ -129,7 +129,6 @@ public class SlideColorIOSplineEffect extends Effect {
         if (animObj == null) {
             animObj = loadAnimModel();
             animObj.setMaterial(mat);
-            animObj.setQueueBucket(RenderQueue.Bucket.Transparent);
             animNode.attachChild(animObj);
             
 //            // for debug

@@ -8,7 +8,7 @@ import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
-import com.jme3.renderer.queue.RenderQueue.Bucket;
+import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Spatial;
 import com.jme3.texture.Texture;
 import com.jme3.texture.Texture.WrapMode;
@@ -107,7 +107,7 @@ public class SlideColorEffect extends Effect {
             mat.setFloat("TexSpeed", texSpeed);
 
             mat.getAdditionalRenderState().setFaceCullMode(RenderState.FaceCullMode.Off); // Allow to see both sides of a face
-            mat.getAdditionalRenderState().setBlendMode(RenderState.BlendMode.Additive);
+            mat.getAdditionalRenderState().setBlendMode(RenderState.BlendMode.AlphaAdditive);
             mat.getAdditionalRenderState().setColorWrite(true);
             mat.getAdditionalRenderState().setDepthTest(true);
             mat.getAdditionalRenderState().setDepthWrite(false);
@@ -115,7 +115,9 @@ public class SlideColorEffect extends Effect {
         if (animObj == null) {
             animObj = loadAnimModel();
             animObj.setMaterial(mat);
-            animObj.setQueueBucket(Bucket.Transparent);
+            // animObj有可能是从模型(j3o)中载入的，bucket有可能不是Inherit, 这里要确保inherit,
+            // 以便交给effect父节点去统一设置Bucket,对于大部分效果来说，bucket应该都是Translucent.
+            animObj.setQueueBucket(RenderQueue.Bucket.Inherit);  
             animNode.attachChild(animObj);
         }
     }

@@ -4,6 +4,8 @@
  */
 package name.huliqing.luoying.layer.service;
 
+import com.jme3.collision.CollisionResults;
+import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import java.util.ArrayList;
@@ -13,24 +15,25 @@ import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.utils.GeometryUtils;
 
 /**
- * just for test
+ * 场景服务类
  * @author huliqing
  */
 public class SceneServiceImpl implements SceneService {
 
+    private final ThreadLocal<TempRay> tempRay = new ThreadLocal<TempRay>();
+    
     @Override
     public void inject() {
-        // 
+        // ignore
     }
 
     @Override
     public Vector3f getSceneHeight(Scene scene, float x, float z) {
-        // 在场景载入完毕之后将植皮位置移到terrain节点的上面。
         List<TerrainEnv> sos = scene.getEntities(TerrainEnv.class, new ArrayList<TerrainEnv>());
         Vector3f terrainHeight = null;
         for (TerrainEnv so : sos) {
             Spatial terrain = so.getSpatial();
-            Vector3f terrainPoint = GeometryUtils.getModelHeight(terrain, x, z);
+            Vector3f terrainPoint = getHeight(terrain, x, z);
             if (terrainPoint != null) {
                 if (terrainHeight == null || terrainPoint.y > terrainHeight.y) {
                     terrainHeight = terrainPoint;
@@ -39,5 +42,26 @@ public class SceneServiceImpl implements SceneService {
         }
         return terrainHeight;
     }
+    
+    private Vector3f getHeight(Spatial spatial, float x, float z) {
+        TempRay tr = tempRay.get();
+        if (tr == null) {
+            tr = new TempRay();
+            tempRay.set(tr);
+        }
+        float maxHeight = GeometryUtils.getModelHeight(spatial);
+        tr.ray.origin.set(x, maxHeight + 1, z);
+        tr.ray.direction.set(0,-1,0);
+        tr.collisionResults.clear(); // notice clear
+        spatial.collideWith(tr.ray, tr.collisionResults);
+        if (tr.collisionResults.size() <= 0) {
+            return null;
+        }
+        return tr.collisionResults.getClosestCollision().getContactPoint();
+    }
 
+    private class TempRay {
+        final Ray ray = new Ray();
+        final CollisionResults collisionResults = new CollisionResults();
+    }
 }

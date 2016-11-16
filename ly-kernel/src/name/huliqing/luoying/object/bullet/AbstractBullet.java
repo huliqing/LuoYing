@@ -41,7 +41,7 @@ public abstract class AbstractBullet extends ModelEntity<BulletData> implements 
     // 是否跟踪目标
     protected boolean trace;
     // 基本速度
-    protected float baseSpeed = 6;
+    protected float baseSpeed = 20;
     // 超时时间限制，单位秒
     protected float timeout = 30;
     // 子弹效果组

@@ -15,7 +15,7 @@ import name.huliqing.luoying.object.scene.Scene;
 public interface SceneService extends Inject {
 
     /**
-     * 获取场景指定位置高度点，如果位置点超出地形外部，则该方法可能返回null.
+     * 获取场景指定位置高度点，如果位置点超出地形外部，则该方法返回null.
      * @param scene
      * @param x
      * @param z

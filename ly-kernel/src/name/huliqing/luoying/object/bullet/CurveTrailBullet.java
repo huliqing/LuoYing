@@ -13,6 +13,7 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Spline;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue;
+import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.texture.Texture;
@@ -63,11 +64,19 @@ public class CurveTrailBullet extends CurveBullet {
         super.onInitScene(scene);
         surface.detachAllChildren();
         
+        // 因为surface是直接放在场景根节点的，bucket无法受到bullet父节点的影响,所以必须自己设置。
+        Bucket bucket = data.getQueueBucket();
+        if (bucket != null) {
+            surface.setQueueBucket(bucket);
+        } else {
+            surface.setQueueBucket(RenderQueue.Bucket.Translucent);
+        }
+        
         AssetManager am = LuoYing.getAssetManager();
         if (mat == null) {
             mat = new Material(LuoYing.getAssetManager(), AssetConstants.MATERIAL_SLIDE_TRAIL);
             mat.getAdditionalRenderState().setFaceCullMode(RenderState.FaceCullMode.Off); // Allow to see both sides of a face
-            mat.getAdditionalRenderState().setBlendMode(RenderState.BlendMode.Additive);
+            mat.getAdditionalRenderState().setBlendMode(RenderState.BlendMode.AlphaAdditive);
             mat.getAdditionalRenderState().setDepthTest(true);
             mat.getAdditionalRenderState().setDepthWrite(false);
             final Texture maskMap = am.loadTexture(mask);
@@ -138,7 +147,6 @@ public class CurveTrailBullet extends CurveBullet {
         SplineSurface ssShape = new SplineSurface(spline, width, segments, up);
         Geometry geometry = new Geometry("CTB", ssShape);
         geometry.setMaterial(mat);
-        geometry.setQueueBucket(RenderQueue.Bucket.Transparent);
         return geometry;
     }
 }

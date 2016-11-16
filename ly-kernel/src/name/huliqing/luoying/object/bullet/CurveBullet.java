@@ -11,7 +11,6 @@ import com.jme3.util.TempVars;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.data.BulletData;
-import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.anim.CurveMoveAnim;
 import name.huliqing.luoying.object.position.Position;

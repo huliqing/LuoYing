@@ -10,7 +10,7 @@ import com.jme3.effect.ParticleMesh;
 import com.jme3.effect.influencers.ParticleInfluencer;
 import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.FastMath;
-import com.jme3.renderer.queue.RenderQueue;
+import com.jme3.renderer.queue.RenderQueue.Bucket;
 import name.huliqing.luoying.data.EffectData;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.emitter.Emitter;
@@ -59,7 +59,12 @@ public class ParticleEffect extends Effect {
             } else {
                 pe = em.getParticleEmitter();
             }
-            pe.setQueueBucket(RenderQueue.Bucket.Translucent);
+            // 这里必须从data中偿试获取Bucket设置，因为粒子有可能是在“世界”空间产生的，即粒子可能不是放在animNode
+            // 下的，所以在父节点effect上的Bucket设置并不一定适应于这些粒子，这里必须直接把bucket的配置设置到粒子上。
+            Bucket bucket = data.getQueueBucket();
+            if (bucket != null) {
+                pe.setQueueBucket(bucket);
+            }
             pe.setInWorldSpace(inWorldSpace);
             pe.getMaterial().getAdditionalRenderState().setBlendMode(blendMode);
             animNode.attachChild(pe);

@@ -5,7 +5,7 @@
     xmlns='http://luoying.huliqing.name'
     xsi:schemaLocation='http://luoying.huliqing.name ../../../../ly-kernel/src/LuoYing/Data/meta/actorAnim.xsd' >
     
-    <actorAnimCurveMove id="actorAnimBase" bindTargetAttribute="bindTargetAttribute" />
+    <actorAnimCurveMove id="actorAnimBase" bindTargetAttribute="attributeTarget" />
     
     <!-- 落樱飞舞:角色动画 -->
     <actorAnimCurveMove id="actorAnimDanceSakura" extends="actorAnimBase" points="0|4|-3, 0|0|-6" useSine="1" />

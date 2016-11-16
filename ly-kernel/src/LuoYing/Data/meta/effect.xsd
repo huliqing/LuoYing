@@ -11,6 +11,7 @@
     <xs:element name="root">
         <xs:complexType>
             <xs:all>
+                <xs:element ref="effectBase" />
                 <xs:element ref="effectGroup" />
                 <xs:element ref="effectParticle" />
                 <xs:element ref="effectTexture" />
@@ -345,6 +346,18 @@
                         </xs:annotation>
                     </xs:attribute>
                 </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="effectBase">
+        <xs:annotation>
+            <xs:documentation>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="effectBase"></xs:extension>
             </xs:complexContent>
         </xs:complexType>
     </xs:element>

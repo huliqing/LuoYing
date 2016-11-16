@@ -276,24 +276,26 @@ public class GeometryUtils {
         return position;
     }
     
-    /**
-     * 获取模型在指定x,z位置的最高处的位置点 ，如果指定x,z超出模型外部，则该方法返回null.
-     * @param spatial
-     * @param x
-     * @param z
-     * @return 
-     */
-    public static Vector3f getModelHeight(Spatial spatial, float x, float z) {
-        Ray ray = new Ray();
-        ray.setOrigin(new Vector3f(x, Float.MAX_VALUE, z));
-        ray.setDirection(new Vector3f(0,-1,0));
-        CollisionResults results = new CollisionResults();
-        spatial.collideWith(ray, results);
-        if (results.size() <= 0) {
-            return null;
-        }
-        return results.getClosestCollision().getContactPoint();
-    }
+//    /**
+//     * 获取模型在指定x,z位置的最高处的位置点 ，如果指定x,z超出模型外部，则该方法返回null.
+//     * @param spatial
+//     * @param x
+//     * @param z
+//     * @return 
+//     */
+//    public static Vector3f getModelHeight(Spatial spatial, float x, float z) {
+//        float maxHeight = GeometryUtils.getModelHeight(spatial);
+//        Ray ray = new Ray();
+//        ray.origin.set(x, maxHeight + 1, z);
+//        ray.direction.set(0,-1,0);
+//        
+//        CollisionResults results = new CollisionResults();
+//        spatial.collideWith(ray, results);
+//        if (results.size() <= 0) {
+//            return null;
+//        }
+//        return results.getClosestCollision().getContactPoint();
+//    }
     
     /**
      * 获取Model的高度,主要是获取包围盒的高度

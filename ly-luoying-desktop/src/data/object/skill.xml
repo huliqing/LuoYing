@@ -129,8 +129,7 @@
     <!-- ========================================================================= -->
     <!--特殊配置-->
     <!-- ========================================================================= -->
-
-        
+    
     <skillWait id="skillWait" extends="skillWaitBase" useTime="0.5" animation="idle_wait"  />
     <skillWalk id="skillWalk" extends="skillWalkBase" animation="idle_walk" />
     <skillRun id="skillRun" extends="skillRunBase" animation="idle_run" animSpeed="1.5" sounds="" />

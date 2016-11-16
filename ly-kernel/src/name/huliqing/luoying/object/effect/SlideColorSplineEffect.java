@@ -72,14 +72,14 @@ public class SlideColorSplineEffect extends SlideColorEffect {
             Quaternion qua = new Quaternion();
             Vector3f tempUp = tv.vect5;
             float angle = FastMath.PI / dimension;
-            Node animNode = new Node();
+            Node animObject = new Node();
             for (int i = 0; i < dimension; i++) {
                 qua.fromAngleAxis(angle * i, rotAxis);
                 qua.mult(up, tempUp);
-                animNode.attachChild(createSurface(spline, tempUp));
+                animObject.attachChild(createSurface(spline, tempUp));
             }
             tv.release();
-            return animNode;
+            return animObject;
         } else {
             return createSurface(spline, up);
         }
