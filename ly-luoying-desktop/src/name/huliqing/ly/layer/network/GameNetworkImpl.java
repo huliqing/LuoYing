@@ -57,6 +57,7 @@ public class GameNetworkImpl implements GameNetwork {
 
     @Override
     public void addMessage(String message, MessageType type) {
+        LOG.log(Level.WARNING, "不再支持这个方法！");
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

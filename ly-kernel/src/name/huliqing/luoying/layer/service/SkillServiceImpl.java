@@ -7,7 +7,7 @@ package name.huliqing.luoying.layer.service;
 import com.jme3.math.Vector3f;
 import java.util.List;
 import java.util.logging.Logger;
-import name.huliqing.luoying.message.StateCode;
+import name.huliqing.luoying.log.StateCode;
 import name.huliqing.luoying.object.define.DefineFactory;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.module.SkillListener;

@@ -5,7 +5,7 @@
  */
 package name.huliqing.luoying.object.item;
 
-import name.huliqing.luoying.message.StateCode;
+import name.huliqing.luoying.log.StateCode;
 import name.huliqing.luoying.data.ItemData;
 import name.huliqing.luoying.data.SkillData;
 import name.huliqing.luoying.object.Loader;
@@ -37,21 +37,11 @@ public class BookItem extends AbstractItem {
     }
     
     @Override
-    public void use(Entity actor) {
-        super.use(actor);
-        
+    protected void doUse(Entity actor) {
         // 学习技能
         SkillData skillData = Loader.loadData(skill);
         actor.addObjectData(skillData, 1);
-        
-        // remove
-        // 学习后减少物品
-//        itemService.removeItem(actor, data.getId(), 1);
-//        String skillName = ResourceManager.getObjectName(skill);
-        // playNetwork.addMessage(actor, ResourceManager.get(ResConstants.SKILL_LEARN_SKILL, new Object[] {skillName}), MessageType.info);
-        
         actor.removeObjectData(data, 1);
-        
     }
     
 }

@@ -10,7 +10,8 @@
     <!--=====================================================================-->
 
     <!--所有子弹的统一配置-->
-    <bulletBase id="bulletBase" shape="shapeBulletBox" shapeOffset="0,0,-1.9" baseSpeed="20" timeout="6" debug="0" queueBucket="Translucent" />
+    <bulletBase id="bulletBase" shape="shapeBulletBox" shapeOffset="0,0,-1.9" baseSpeed="30" timeout="6" 
+                debug="0" queueBucket="Translucent" />
     
     <!--    子弹基本配置-->    
     <bulletStraight id="bulletStraightBase" extends="bulletBase" facing="1" />

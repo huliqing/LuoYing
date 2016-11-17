@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.luoying.message;
+package name.huliqing.luoying.log;
 
 /**
  *
@@ -63,7 +63,7 @@ public final class StateCode {
     public final static int SKILL_TARGET_NOT_FOUND = 108;
     
     /** 目标不在技能的射程范围内 */
-    public final static int SKILL_TARGET_NOT_IN_RANGE = 109;
+    public final static int SKILL_TARGET_OUT_OF_RANGE = 109;
     
     /** 不能对指定目标使用该技能(通过El检查器） */
     public final static int SKILL_TARGET_UNSUITABLE_BY_ELCHECK = 110;

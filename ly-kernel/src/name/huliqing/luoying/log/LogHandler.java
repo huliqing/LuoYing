@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.luoying.message;
+package name.huliqing.luoying.log;
 
 /**
  *
  * @author huliqing
  */
-public interface MessageHandler {
+public interface LogHandler {
     
     /**
      * 处理消息

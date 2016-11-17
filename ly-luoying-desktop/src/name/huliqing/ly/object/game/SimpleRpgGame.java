@@ -20,8 +20,8 @@ import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.manager.PickManager;
-import name.huliqing.luoying.message.ConsoleMessageHandler;
-import name.huliqing.luoying.message.MessageFactory;
+import name.huliqing.luoying.log.ConsoleLogHandler;
+import name.huliqing.luoying.log.LogFactory;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.entity.TerrainEntity;
@@ -80,7 +80,7 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
         addLogic(TalkManager.getInstance());
         
         // 添加一个控制台消息处理器
-        MessageFactory.addHandler(new ConsoleMessageHandler());
+        LogFactory.addHandler(new ConsoleLogHandler());
     }
 
     @Override

@@ -10,7 +10,7 @@ import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.mess.MessSkillPlay;
 import name.huliqing.luoying.mess.MessSkillWalk;
-import name.huliqing.luoying.message.StateCode;
+import name.huliqing.luoying.log.StateCode;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.module.SkillModule;
 import name.huliqing.luoying.object.skill.Skill;

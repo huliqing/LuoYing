@@ -5,9 +5,8 @@
  */
 package name.huliqing.luoying.object.item;
 
-import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.message.StateCode;
+import name.huliqing.luoying.log.StateCode;
 import name.huliqing.luoying.data.ItemData;
 import name.huliqing.luoying.layer.service.ElService;
 import name.huliqing.luoying.object.Loader;
@@ -20,7 +19,7 @@ import name.huliqing.luoying.object.sound.SoundManager;
  * @author huliqing
  */
 public abstract class AbstractItem implements Item {
-    private static final Logger LOG = Logger.getLogger(AbstractItem.class.getName());
+//    private static final Logger LOG = Logger.getLogger(AbstractItem.class.getName());
     private final ElService elService = Factory.get(ElService.class);
     
     protected ItemData data;
@@ -58,7 +57,15 @@ public abstract class AbstractItem implements Item {
     }
 
     @Override
-    public void use(Entity actor) {
+    public final boolean use(Entity actor) {
+        if (!canUse(actor)) {
+            return false;
+        }
+        
+        // 使用物品
+        doUse(actor);
+        
+        // 执行特效和声效
          if (effects != null) {
             for (String eid : effects) {
                  Effect effect = Loader.load(eid);
@@ -71,9 +78,7 @@ public abstract class AbstractItem implements Item {
                 SoundManager.getInstance().playSound(sid, actor.getSpatial().getWorldTranslation());
             }
         }
-        
-        // 子类逻辑
-        // do "use" logic in children.
+        return true;
     }
     
     @Override
@@ -96,4 +101,9 @@ public abstract class AbstractItem implements Item {
         return StateCode.OK;
     }
 
+    /**
+     * 实现使用物品的逻辑
+     * @param actor 
+     */
+    protected abstract void doUse(Entity actor);
 }

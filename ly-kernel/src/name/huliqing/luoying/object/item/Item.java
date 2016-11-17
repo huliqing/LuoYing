@@ -25,10 +25,11 @@ public interface Item extends DataProcessor<ItemData> {
      * 让角色使用指定的物品。注：这个方法会强制使用物品，如果要判断当前状态下角色是否可以使用这件物品，
      * 可以使用{@link #canUse(Entity) } 或 {@link #checkStateCode(Entity) }
      * @param actor 
+     * @return  
      * @see #canUse(name.huliqing.core.object.actor.Actor) 
      * @see #checkStateCode(name.huliqing.core.object.actor.Actor) 
      */
-    void use(Entity actor);
+    boolean use(Entity actor);
     
     /**
      * 判断角色是否可以使用当前物品, 也可以通过状态码来判断。
@@ -43,6 +44,7 @@ public interface Item extends DataProcessor<ItemData> {
      * @param actor
      * @return 
      * @see #canUse(name.huliqing.core.object.actor.Actor) 
+     * @see name.huliqing.luoying.log.StateCode
      */
     int checkStateCode(Entity actor);
     

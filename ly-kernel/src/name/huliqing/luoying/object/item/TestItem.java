@@ -39,7 +39,7 @@ public class TestItem extends AbstractItem {
     }
     
     @Override
-    public void use(Entity actor) {
+    protected void doUse(Entity actor) {
         super.use(actor);
         
         Entity aa = Loader.load("actorWolf");

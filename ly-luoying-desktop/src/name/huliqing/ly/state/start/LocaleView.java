@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.layer.service.ConfigService;
+import name.huliqing.luoying.manager.ResManager;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.ui.ListView;
 import name.huliqing.luoying.ui.Row;
@@ -22,7 +23,7 @@ import name.huliqing.ly.state.start.StartState.Menu;
  * @author huliqing
  */
 public class LocaleView extends ListView<String> {
-    private final ConfigService configService = Factory.get(ConfigService.class);
+//    private final ConfigService configService = Factory.get(ConfigService.class);
     private StartState startState;
     private List<String> locales;
     
@@ -35,7 +36,8 @@ public class LocaleView extends ListView<String> {
         super(width, height, "LocalePanel");
         this.startState = state;
         
-        String[] localeAll = configService.getAllSupportedLocale(); 
+//        String[] localeAll = configService.getAllSupportedLocale(); 
+        String[] localeAll = new String[]{"en_US", "zh_CN"};
         locales = Arrays.asList(localeAll);
         this.pageSize = 3;
     }
@@ -70,7 +72,8 @@ public class LocaleView extends ListView<String> {
                 @Override
                 public void onClick(UI ui, boolean isPress) {
                     if (isPress) return;
-                    Factory.get(ConfigService.class).changeLocale(locale);
+//                    Factory.get(ConfigService.class).changeLocale(locale);
+                    ResManager.setLocale(locale);
                     startState.refreshState(Menu.menu_settings);
                 }
             });

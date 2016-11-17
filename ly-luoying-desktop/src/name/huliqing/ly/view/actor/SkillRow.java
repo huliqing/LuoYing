@@ -9,7 +9,7 @@ import name.huliqing.luoying.ui.tiles.ColumnText;
 import name.huliqing.luoying.ui.tiles.ColumnIcon;
 import name.huliqing.luoying.constants.InterfaceConstants;
 import name.huliqing.ly.manager.ResourceManager;
-import name.huliqing.luoying.message.StateCode;
+import name.huliqing.luoying.log.StateCode;
 import name.huliqing.luoying.object.skill.Skill;
 import name.huliqing.luoying.ui.UIFactory;
 import name.huliqing.luoying.ui.Row;

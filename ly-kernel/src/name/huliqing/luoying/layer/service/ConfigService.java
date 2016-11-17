@@ -78,26 +78,28 @@ public interface ConfigService extends Inject {
      */
     void setSoundVolume(float volume);
     
-    /**
-     * 载入语言环境，该方法返回的必须是一个当前游戏能够支持的语言设置。即
-     * 必须是Config.locale_all中的其中任何一个。
-     * @return 
-     */
-    String loadLocale();
+    // remove20161117
+//    /**
+//     * 载入语言环境，该方法返回的必须是一个当前游戏能够支持的语言设置。即
+//     * 必须是Config.locale_all中的其中任何一个。
+//     * @return 
+//     */
+//    String loadLocale();
+//    
+//    /**
+//     * 设置语言环境，注意大小写必须一致，　如：en_US, zh_CN. <br/>
+//     * 注意：locale必须是Config.locale_all中支持的语言环境中已经存在的，否则将导
+//     * 致出错。
+//     * @param locale 
+//     */
+//    void changeLocale(String locale);
     
-    /**
-     * 设置语言环境，注意大小写必须一致，　如：en_US, zh_CN. <br/>
-     * 注意：locale必须是Config.locale_all中支持的语言环境中已经存在的，否则将导
-     * 致出错。
-     * @param locale 
-     */
-    void changeLocale(String locale);
-    
-    /**
-     * 获取当前正在使用的语言环境,返回如：zh_CN,en_US
-     * @return 
-     */
-    String getLocale();
+    // remove20161117
+//    /**
+//     * 获取当前正在使用的语言环境,返回如：zh_CN,en_US
+//     * @return 
+//     */
+//    String getLocale();
     
     float getDropFactor();
     
@@ -107,11 +109,11 @@ public interface ConfigService extends Inject {
     
     int getPortDiscoverClient();
     
-    /**
-     * 获取所有支持的语言环境，返回格式， “{en_US,zh_CN}”
-     * @return 
-     */
-    String[] getAllSupportedLocale();
+//    /**
+//     * 获取所有支持的语言环境，返回格式， “{en_US,zh_CN}”
+//     * @return 
+//     */
+//    String[] getAllSupportedLocale();
     
     /**
      * 获取系统定义的最高级别限制

@@ -14,9 +14,7 @@ import name.huliqing.luoying.object.entity.Entity;
 public class SimpleItem extends AbstractItem {
 
     @Override
-    public void use(Entity actor) {
-        super.use(actor);
-        
+    protected void doUse(Entity actor) {
         // do nothing.
     }
     

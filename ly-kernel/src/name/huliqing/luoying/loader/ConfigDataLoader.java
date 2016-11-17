@@ -28,8 +28,8 @@ public class ConfigDataLoader implements DataLoader<ConfigData> {
         data.setMaxLevel(proto.getAsInteger("maxLevel", 60));
         data.setSoundEnabled(proto.getAsBoolean("soundEnabled", false));
         data.setSoundVolume(proto.getAsFloat("soundVolume", 1.0f));
-        data.setLocale(proto.getAsString("locale"));
-        data.setLocaleAll(proto.getAsString("localeAll"));
+//        data.setLocale(proto.getAsString("locale"));
+//        data.setLocaleAll(proto.getAsString("localeAll"));
         data.setUseShadow(proto.getAsBoolean("useShadow", false));
         
 //        data.setShortcutLocked(proto.getAsBoolean("shortcutLocked", false));

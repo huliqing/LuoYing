@@ -32,9 +32,7 @@ public class AttributeItem extends AbstractItem {
     }
     
     @Override
-    public void use(Entity actor) {
-        super.use(actor);
-        
+    protected void doUse(Entity actor) {
         // 补充属性值
         entityService.hitNumberAttribute(actor, attribute, amount, null);
         

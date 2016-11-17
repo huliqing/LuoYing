@@ -18,7 +18,7 @@ import name.huliqing.luoying.data.MagicData;
 import name.huliqing.luoying.data.SkillData;
 import name.huliqing.luoying.layer.service.ElService;
 import name.huliqing.luoying.manager.RandomManager;
-import name.huliqing.luoying.message.StateCode;
+import name.huliqing.luoying.log.StateCode;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.actoranim.ActorAnim;
 import name.huliqing.luoying.object.attribute.NumberAttribute;

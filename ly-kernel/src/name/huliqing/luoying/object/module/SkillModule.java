@@ -19,7 +19,7 @@ import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.SkillData;
 import name.huliqing.luoying.data.ModuleData;
 import name.huliqing.luoying.layer.service.SkillService;
-import name.huliqing.luoying.message.StateCode;
+import name.huliqing.luoying.log.StateCode;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.attribute.Attribute;
 import name.huliqing.luoying.object.attribute.BooleanAttribute;

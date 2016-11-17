@@ -61,7 +61,7 @@ public class SummonItem extends AbstractItem {
     }
 
     @Override
-    public void use(Entity actor) {
+    protected void doUse(Entity actor) {
         int count = 0;
         for (int i = 0; i < summonTotal; i++) {
             count += summon(actor, actorId) ? 1 : 0;

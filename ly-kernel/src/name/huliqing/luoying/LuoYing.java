@@ -235,6 +235,7 @@ import name.huliqing.luoying.object.task.CollectTask;
 import name.huliqing.luoying.loader.TaskDataLoader;
 import name.huliqing.luoying.loader.PlantEnvLoader;
 import name.huliqing.luoying.loader.RandomSceneDataLoader;
+import name.huliqing.luoying.manager.ResManager;
 import name.huliqing.luoying.mess.MessActorSetLocation;
 import name.huliqing.luoying.mess.MessEntityAdd;
 import name.huliqing.luoying.mess.MessEntityAddData;
@@ -334,12 +335,15 @@ public class LuoYing {
             loadSysData();
             LOG.log(Level.INFO, "loadSysData ok.");
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new LuoYingException("Could not load SysData!", e);
         }
         
-        // 2.载入语言环境及系统配置
+        // 载入资源文件
+        ResManager.loadResource("/LuoYing/Resources/resource_en_US", "utf-8", "en_US");
+        ResManager.loadResource("/LuoYing/Resources/resource_zh_CN", "utf-8", "zh_CN");
+        
+        // 载入语言环境及系统配置
         Factory.get(ConfigService.class).loadGlobalConfig();
-        Factory.get(ConfigService.class).loadLocale();
     }
 
     private static void registerSerializer() {

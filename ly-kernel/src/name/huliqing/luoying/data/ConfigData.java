@@ -75,19 +75,20 @@ public class ConfigData extends ObjectData {
      */
     private float soundVolume = 1.0f;
     
-    /**
-     * 当前使用的语言,e.g. zh_CN, en_US
-     */
-    private String locale = "";
-    
-    /**
-     * 当前游戏能够支持的所有语言环境,使用半角逗号分隔。
-     * 注意1：这里与data.font中文件夹中的名字是对应的,不能随便修改。
-     * 注意2: 前后和中间都不要出现空格。
-     * 注意3: 排在第一个的为默认的语言环境，当目标系统找不到任何合适的语言环境时
-     * 就使该环境
-     */
-    private String localeAll = "en_US,zh_CN";
+    // remove20161117
+//    /**
+//     * 当前使用的语言,e.g. zh_CN, en_US
+//     */
+//    private String locale = "";
+//    
+//    /**
+//     * 当前游戏能够支持的所有语言环境,使用半角逗号分隔。
+//     * 注意1：这里与data.font中文件夹中的名字是对应的,不能随便修改。
+//     * 注意2: 前后和中间都不要出现空格。
+//     * 注意3: 排在第一个的为默认的语言环境，当目标系统找不到任何合适的语言环境时
+//     * 就使该环境
+//     */
+//    private String localeAll = "en_US,zh_CN";
     
     /**
      * 是否打开全局投影功能,如果这个选项关闭，则场景中所有投影功能都要关闭。
@@ -109,8 +110,8 @@ public class ConfigData extends ObjectData {
         oc.write(maxLevel, "maxLevel", maxLevel);
         oc.write(soundEnabled, "soundEnabled", soundEnabled);
         oc.write(soundVolume, "soundVolume", soundVolume);
-        oc.write(locale, "locale", "en_US");
-        oc.write(localeAll, "localeAll", null);
+//        oc.write(locale, "locale", "en_US");
+//        oc.write(localeAll, "localeAll", null);
         oc.write(useShadow, "useShadow", useShadow);
     }
 
@@ -124,8 +125,8 @@ public class ConfigData extends ObjectData {
         maxLevel = ic.readInt("maxLevel", maxLevel);
         soundEnabled = ic.readBoolean("soundEnabled", soundEnabled);
         soundVolume = ic.readFloat("soundVolume", soundVolume);
-        locale = ic.readString("locale", "en_US");
-        localeAll = ic.readString("localeAll", null);
+//        locale = ic.readString("locale", "en_US");
+//        localeAll = ic.readString("localeAll", null);
         useShadow = ic.readBoolean("useShadow", useShadow);
     }
     
@@ -217,23 +218,23 @@ public class ConfigData extends ObjectData {
         this.soundVolume = soundVolume;
     }
 
-    public String getLocale() {
-        return locale;
-    }
-
-    public void setLocale(String locale) {
-        if (locale != null)
-            this.locale = locale;
-    }
-
-    public String getLocaleAll() {
-        return localeAll;
-    }
-
-    public void setLocaleAll(String localeAll) {
-        if (localeAll != null)
-            this.localeAll = localeAll;
-    }
+//    public String getLocale() {
+//        return locale;
+//    }
+//
+//    public void setLocale(String locale) {
+//        if (locale != null)
+//            this.locale = locale;
+//    }
+//
+//    public String getLocaleAll() {
+//        return localeAll;
+//    }
+//
+//    public void setLocaleAll(String localeAll) {
+//        if (localeAll != null)
+//            this.localeAll = localeAll;
+//    }
 
     /**
      * 是否打开全局投影功能,如果这个选项关闭，则场景中所有投影功能都要关闭。

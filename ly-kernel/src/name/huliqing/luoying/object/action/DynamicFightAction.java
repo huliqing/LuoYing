@@ -15,7 +15,7 @@ import name.huliqing.luoying.layer.network.SkinNetwork;
 import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.layer.service.SkinService;
-import name.huliqing.luoying.message.StateCode;
+import name.huliqing.luoying.log.StateCode;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.module.SkillListener;
 import name.huliqing.luoying.object.module.SkillModule;

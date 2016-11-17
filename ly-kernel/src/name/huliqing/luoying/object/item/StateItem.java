@@ -24,9 +24,7 @@ public class StateItem extends AbstractItem {
     }
 
     @Override
-    public void use(Entity actor) {
-        super.use(actor);
-        
+    protected void doUse(Entity actor) {
         if (states == null)
             return;
         

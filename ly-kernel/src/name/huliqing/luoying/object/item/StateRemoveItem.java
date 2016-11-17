@@ -10,7 +10,7 @@ import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.xml.ObjectData;
 
 /**
- * 可用于删除角色身上某些状态的物品
+ * 可用于删除角色身上某些状态的物品。
  * @author huliqing
  */
 public class StateRemoveItem extends AbstractItem {
@@ -24,9 +24,7 @@ public class StateRemoveItem extends AbstractItem {
     }
 
     @Override
-    public void use(Entity actor) {
-        super.use(actor);
-        
+    protected void doUse(Entity actor) {
         if (states == null) 
             return;
         

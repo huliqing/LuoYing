@@ -68,20 +68,20 @@ public class Init {
         loadData();
         Serializer.setReadOnly(true);
         
-        // 载入资源
-        ResManager.loadResource("/data/font/en_US/resource",                "utf-8", "en_US");
-        ResManager.loadResource("/data/font/en_US/resource_object",    "utf-8", "en_US");
-        ResManager.loadResource("/data/font/en_US/story_gb",                "utf-8", "en_US");
-        ResManager.loadResource("/data/font/en_US/story_guard",          "utf-8", "en_US");
-        ResManager.loadResource("/data/font/en_US/story_treasure",      "utf-8", "en_US");
+        // 载入资源,作为默认
+        ResManager.loadResource("/data/font/en_US/resource",                "utf-8", null);
+        ResManager.loadResource("/data/font/en_US/resource_object",    "utf-8", null);
+        ResManager.loadResource("/data/font/en_US/story_gb",                "utf-8", null);
+        ResManager.loadResource("/data/font/en_US/story_guard",          "utf-8", null);
+        ResManager.loadResource("/data/font/en_US/story_treasure",      "utf-8", null);
         
+        // 载入资源,作为中文环境
         ResManager.loadResource("/data/font/zh_CN/resource",                "utf-8", "zh_CN");
         ResManager.loadResource("/data/font/zh_CN/resource_object",    "utf-8", "zh_CN");
         ResManager.loadResource("/data/font/zh_CN/story_gb",                "utf-8", "zh_CN");
         ResManager.loadResource("/data/font/zh_CN/story_guard",           "utf-8", "zh_CN");
         ResManager.loadResource("/data/font/zh_CN/story_treasure",       "utf-8", "zh_CN");
         
-        ResManager.setLocale("en_US");
     }
     
     private static void registerData() {

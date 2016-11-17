@@ -18,7 +18,7 @@ import name.huliqing.luoying.object.skill.Skill;
  */
 public class SkillItem extends AbstractItem {
     private String skillId;
-
+    
     @Override
     public void setData(ItemData data) {
         super.setData(data); 
@@ -26,15 +26,15 @@ public class SkillItem extends AbstractItem {
     }
     
     @Override
-    public void use(Entity actor) {
-        super.use(actor);
-        
+    protected void doUse(Entity actor) {
         Skill skill = Loader.load(skillId);
         if (skill != null) {
             SkillModule skillModule = actor.getModuleManager().getModule(SkillModule.class);
             if (skillModule != null) {
                 skill.setActor(actor);
-                skillModule.playSkill(skill, false);
+                if (skillModule.playSkill(skill, false)) {
+                    actor.removeObjectData(data, 1);
+                }
             }
         }
     }

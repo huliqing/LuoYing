@@ -3,17 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.luoying.message;
+package name.huliqing.luoying.log;
 
 import com.jme3.util.SafeArrayList;
 
 /**
- * MessageFactory用于统一处理系统的消息。
+ * LogFactory用于统一处理系统的日志。
  * @author huliqing
  */
-public class MessageFactory {
+public class LogFactory {
     
-    private final static SafeArrayList<MessageHandler> HANDLERS = new SafeArrayList<MessageHandler>(MessageHandler.class);
+    private final static SafeArrayList<LogHandler> HANDLERS = new SafeArrayList<LogHandler>(LogHandler.class);
     
     /**
      * 添加消息，这些消息将由当前已经注册的MessageHandler进行处理，如果没有添加过任何消息处理器, 
@@ -27,7 +27,7 @@ public class MessageFactory {
     public static void post(int code, String message, Object... params) {
         if (HANDLERS.isEmpty()) 
             return;
-        for (MessageHandler handler : HANDLERS.getArray()) {
+        for (LogHandler handler : HANDLERS.getArray()) {
             handler.handle(code, message, params);
         }
     }
@@ -36,7 +36,7 @@ public class MessageFactory {
      * 添加一个消息处理器.
      * @param handler 
      */
-    public static void addHandler(MessageHandler handler) {
+    public static void addHandler(LogHandler handler) {
         if (!HANDLERS.contains(handler)) {
             HANDLERS.add(handler);
         }
@@ -47,7 +47,7 @@ public class MessageFactory {
      * @param handler
      * @return 
      */
-    public static boolean removeHandler(MessageHandler handler) {
+    public static boolean removeHandler(LogHandler handler) {
         return HANDLERS.remove(handler);
     }
 }

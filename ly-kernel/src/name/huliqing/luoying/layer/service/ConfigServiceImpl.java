@@ -57,8 +57,8 @@ public class ConfigServiceImpl implements ConfigService {
         SaveConfig sc = SaveHelper.loadConfig();
         if (sc != null && sc.getConfig() != null) {
             ConfigData scd = sc.getConfig();
-            cd.setLocale(scd.getLocale());
-            cd.setLocaleAll(scd.getLocaleAll());
+//            cd.setLocale(scd.getLocale());
+//            cd.setLocaleAll(scd.getLocaleAll());
             cd.setPort(scd.getPort());
             cd.setPortDiscoverClient(scd.getPortDiscoverClient());
             cd.setPortDiscoverServer(scd.getPortDiscoverServer());
@@ -108,36 +108,36 @@ public class ConfigServiceImpl implements ConfigService {
         notifyListtener();
     }
 
-    @Override
-    public String loadLocale() {
-        cd.setLocale(detectLocale());
-        return cd.getLocale();
-    }
-
-    @Override
-    public void changeLocale(String locale) {
-        cd.setLocale(locale);
-        ResManager.setLocale(locale);
-        
-//        // outdate
-//        ResourceManager.clearResources();
-        
-        // 保存配置
-        SaveConfig saveConfig = new SaveConfig();
-        saveConfig.setConfig(cd);
-        SaveHelper.saveConfig(saveConfig);
-        
-        notifyListtener();
-    }
-    
-    @Override
-    public String getLocale() {
-        if (cd == null) {
-            loadGlobalConfig();
-        }
-        
-        return cd.getLocale();
-    }
+//    @Override
+//    public String loadLocale() {
+//        cd.setLocale(detectLocale());
+//        return cd.getLocale();
+//    }
+//
+//    @Override
+//    public void changeLocale(String locale) {
+//        cd.setLocale(locale);
+//        ResManager.setLocale(locale);
+//        
+////        // outdate
+////        ResourceManager.clearResources();
+//        
+//        // 保存配置
+//        SaveConfig saveConfig = new SaveConfig();
+//        saveConfig.setConfig(cd);
+//        SaveHelper.saveConfig(saveConfig);
+//        
+//        notifyListtener();
+////    }
+//    
+//    @Override
+//    public String getLocale() {
+//        if (cd == null) {
+//            loadGlobalConfig();
+//        }
+//        
+//        return cd.getLocale();
+//    }
 
     @Override
     public float getDropFactor() {
@@ -159,56 +159,52 @@ public class ConfigServiceImpl implements ConfigService {
         return cd.getPortDiscoverClient();
     }
 
-    @Override
-    public String[] getAllSupportedLocale() {
-        String localAll = cd.getLocaleAll();
-        if (localAll != null) {
-            return localAll.split(",");
-        }
-        return null;
-    }
-
+    // remove20161117
 //    @Override
-//    public boolean isUseLight() {
-//        return cd.isUseLight();
+//    public String[] getAllSupportedLocale() {
+//        String localAll = cd.getLocaleAll();
+//        if (localAll != null) {
+//            return localAll.split(",");
+//        }
+//        return null;
 //    }
     
-    // 检测及获取一个可用的语言环境。
-    private String detectLocale() {
-        String value = cd.getLocale();
-        String[] localeAll = cd.getLocaleAll().split(",");
-        String defLocale = localeAll[0];
-        
-        // 1.从配置和本地环境中查找，如果没有则使用默认配置
-        if (value == null || value.equals("")) {
-            value = Factory.get(SystemService.class).getLocale();
-            if (value == null || value.equals("")) {
-                return defLocale;
-            }
-        }
-        
-        // 2.优先从支持的语言环境中找出一个完全匹配的。
-        for (String locale : localeAll) {
-            if (value.equals(locale)) {
-                return value;
-            }
-        }
-        
-        // 3.到这里，如果没有完全匹配的语言环境，则根据前缀匹配来查找环境
-        String valuePrefix = value.split("_")[0];
-        for (String locale : localeAll) {
-            if (locale.startsWith(valuePrefix)) {
-                return locale;
-            }
-        }
-        
-        // 4.前缀匹配也没有找到，则使用默认
-        Logger.getLogger(ConfigServiceImpl.class.getName()).log(Level.WARNING
-                , "Sorry, the locale {0} unsupported yet!"
-                , new Object[] {value});
-        return defLocale;
-    }
-    
+    // remove20161117
+//    // 检测及获取一个可用的语言环境。
+//    private String detectLocale() {
+//        String value = cd.getLocale();
+//        String[] localeAll = cd.getLocaleAll().split(",");
+//        String defLocale = localeAll[0];
+//        
+//        // 1.从配置和本地环境中查找，如果没有则使用默认配置
+//        if (value == null || value.equals("")) {
+//            value = Factory.get(SystemService.class).getLocale();
+//            if (value == null || value.equals("")) {
+//                return defLocale;
+//            }
+//        }
+//        
+//        // 2.优先从支持的语言环境中找出一个完全匹配的。
+//        for (String locale : localeAll) {
+//            if (value.equals(locale)) {
+//                return value;
+//            }
+//        }
+//        
+//        // 3.到这里，如果没有完全匹配的语言环境，则根据前缀匹配来查找环境
+//        String valuePrefix = value.split("_")[0];
+//        for (String locale : localeAll) {
+//            if (locale.startsWith(valuePrefix)) {
+//                return locale;
+//            }
+//        }
+//        
+//        // 4.前缀匹配也没有找到，则使用默认
+//        Logger.getLogger(ConfigServiceImpl.class.getName()).log(Level.WARNING
+//                , "Sorry, the locale {0} unsupported yet!"
+//                , new Object[] {value});
+//        return defLocale;
+//    }
 
     @Override
     public boolean isUseShadow() {
@@ -264,5 +260,6 @@ public class ConfigServiceImpl implements ConfigService {
     public int getMaxLevel() {
         return cd.getMaxLevel();
     }
+
 
 }

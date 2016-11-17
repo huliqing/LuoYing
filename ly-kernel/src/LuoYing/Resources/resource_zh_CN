@@ -1,0 +1,17 @@
+#use notepad++ -> 格式 -> 转为UTF-8编码格式 -> AngelCode 导出bmp font
+name.huliqing.luoying.errorItemNotEnough=物品数量不足
+name.huliqing.luoying.errorItemSkillExists=技能已经存在
+name.huliqing.luoying.errorItemCheckEl=不能使用物品(ElCheck)
+
+name.huliqing.luoying.errorSkillNotFound=技能不存在或找不到指定技能
+name.huliqing.luoying.errorSkillLocked=角色的技能处于锁定状态
+name.huliqing.luoying.errorSkillCooldown=技能正处于冷却状态
+name.huliqing.luoying.errorSkillWeaponNotAllow=角色所使用的当前武器不能执行该技能
+name.huliqing.luoying.errorSkillWeaponNeedTakeOn=角色武器没有取出，必须先取出武器
+name.huliqing.luoying.errorSkillAttributeNotEnough=执行技能时，需要消耗角色的一些属性值，而角色的属性值不足
+name.huliqing.luoying.errorSkillElCheck=不能执行技能(ElCheck)
+name.huliqing.luoying.errorSkillTargetNotFound=没有目标，技能需要目标才能执行，而当前没有目标
+name.huliqing.luoying.errorSkillTargetOutOfRange=目标不在技能的射程范围内
+name.huliqing.luoying.errorSkillTargetUnsuitableByElCheck=不能对指定目标使用该技能(HitElCheck)
+name.huliqing.luoying.errorSkillCanNotInterrupt=不能中断正在执行的技能
+name.huliqing.luoying.errorSkillHook=不能执行技能.(Hook)
