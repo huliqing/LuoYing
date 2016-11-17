@@ -5,7 +5,7 @@
 package name.huliqing.ly.view.talk;
 
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.utils.MathUtils;
 import name.huliqing.ly.Config;

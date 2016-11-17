@@ -7,7 +7,7 @@ package name.huliqing.luoying.object.item;
 
 import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.constants.ItemConstants;
+import name.huliqing.luoying.message.StateCode;
 import name.huliqing.luoying.data.ItemData;
 import name.huliqing.luoying.layer.service.ElService;
 import name.huliqing.luoying.object.Loader;
@@ -78,22 +78,22 @@ public abstract class AbstractItem implements Item {
     
     @Override
     public boolean canUse(Entity actor) {
-        return checkStateCode(actor) == ItemConstants.STATE_OK;
+        return checkStateCode(actor) == StateCode.OK;
     }
     
     @Override
     public int checkStateCode(Entity actor) {
         // 物品数量不够。
         if (data.getTotal() <= 0) {
-            return ItemConstants.STATE_ITEM_NOT_ENOUGH;
+            return StateCode.ITEM_NOT_ENOUGH;
         }
         
         checkEl.setSource(actor.getAttributeManager());
         if (!checkEl.getValue()) {
-            return ItemConstants.STATE_CHECK_EL;
+            return StateCode.ITEM_CHECK_EL;
         }
         
-        return ItemConstants.STATE_OK;
+        return StateCode.OK;
     }
 
 }

@@ -28,7 +28,7 @@ import name.huliqing.luoying.network.discover.MessCSPing;
 import name.huliqing.luoying.network.discover.MessSCStarted;
 import name.huliqing.luoying.network.discover.MessSCClosed;
 import name.huliqing.luoying.network.discover.UDPListener;
-import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.ly.view.HelpView;
 import name.huliqing.luoying.ui.UIFactory;
 import name.huliqing.luoying.utils.ThreadHelper;

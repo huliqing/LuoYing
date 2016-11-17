@@ -8,7 +8,7 @@ import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.ItemData;
 import name.huliqing.luoying.layer.network.PlayNetwork;
-import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.game.Game;
@@ -76,6 +76,7 @@ public class StoryGbTaskLogic extends AbstractGameLogic {
     }
     
     private String get(String rid, Object... param) {
-        return ResourceManager.getOther("resource_gb", rid, param);
+//        return ResourceManager.getOther("resource_gb", rid, param);
+        return ResourceManager.get("storyGb." +  rid, param);
     }
 }

@@ -12,7 +12,6 @@ import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.mess.MessBase;
 import name.huliqing.luoying.mess.MessActorTransform;
 import name.huliqing.luoying.layer.network.PlayNetwork;
-import name.huliqing.luoying.manager.ResourceManager;
 import com.jme3.app.Application;
 import com.jme3.network.HostedConnection;
 import com.jme3.network.Message;
@@ -21,10 +20,10 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.layer.service.ActorService;
+import name.huliqing.luoying.manager.ResManager;
 import name.huliqing.luoying.network.AbstractServerListener;
 import name.huliqing.luoying.network.GameServer;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.ly.layer.service.GameService;
 import name.huliqing.ly.mess.MessMessage;
 
@@ -37,7 +36,7 @@ public class DefaultServerListener extends AbstractServerListener<Entity> {
     private final PlayService playService = Factory.get(PlayService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final GameService gameService = Factory.get(GameService.class);
-    private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
+//    private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final List<Entity> syncObjects = new LinkedList<Entity>();
     private float syncTimer = 0;
@@ -105,7 +104,7 @@ public class DefaultServerListener extends AbstractServerListener<Entity> {
         playNetwork.removeEntity(clientPlayer);
 
         // 3.通知所有客户端（不含主机）
-        String message = ResourceManager.get(ResConstants.LAN_CLIENT_EXISTS, new Object[] {clientPlayer.getData().getName()});
+        String message = ResManager.get(ResConstants.LAN_CLIENT_EXISTS, new Object[] {clientPlayer.getData().getName()});
         MessMessage notice = new MessMessage();
         notice.setMessage(message);
         notice.setType(MessageType.notice);

@@ -15,13 +15,14 @@ import com.jme3.network.ClientStateListener;
 import com.jme3.network.Message;
 import name.huliqing.luoying.Config;
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.layer.service.PlayService;
+import name.huliqing.luoying.manager.ResManager;
 import name.huliqing.luoying.mess.MessSCInitGameOK;
 import name.huliqing.luoying.mess.MessBase;
 import name.huliqing.luoying.network.GameClient.ClientState;
-import name.huliqing.luoying.manager.ResourceManager;
 import name.huliqing.luoying.network.AbstractClientListener;
 import name.huliqing.luoying.network.GameClient;
+import name.huliqing.ly.enums.MessageType;
+import name.huliqing.ly.layer.service.GameService;
 
 /**
  * 默认的局域网客户端监听来自服务端的消息的侦听器
@@ -29,7 +30,7 @@ import name.huliqing.luoying.network.GameClient;
  */
 public class LanClientListener extends AbstractClientListener {
     private static final Logger LOG = Logger.getLogger(LanClientListener.class.getName());
-//    private final PlayService playService = Factory.get(PlayService.class);
+    private final GameService gameService = Factory.get(GameService.class);
     
     private final List<MessBase> messageQueue = new LinkedList<MessBase>();
     private double offset = Double.MIN_VALUE;
@@ -42,14 +43,11 @@ public class LanClientListener extends AbstractClientListener {
     @Override
     protected void processClientDisconnected(GameClient gameClient, Client client, ClientStateListener.DisconnectInfo info) {
         // 断开、踢出、服务器关闭等提示
-        String message = ResourceManager.get("lan.disconnected");
+        String message = ResManager.get("lan.disconnected");
         if (info != null) {
             message += "(" + info.reason + ")";
         }
-//        // 注：如果不在游戏中，可能获取不到playState,这时是不能调用playService的
-//        if (Ly.getPlayState() != null) {
-//            playService.addMessage(message, MessageType.notice);
-//        }
+        gameService.addMessage(message, MessageType.notice);
     }
     
     @Override

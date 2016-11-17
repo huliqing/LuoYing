@@ -14,7 +14,7 @@ import name.huliqing.ly.enums.MessageType;
 import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.layer.service.TaskService;
 import name.huliqing.ly.view.ButtonPanel;
-import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.ly.view.talk.Talk;
 import name.huliqing.ly.view.talk.TalkImpl;

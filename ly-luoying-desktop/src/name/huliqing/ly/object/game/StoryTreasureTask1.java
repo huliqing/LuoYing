@@ -6,7 +6,7 @@ package name.huliqing.ly.object.game;
 
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.layer.network.EntityNetwork;
-import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.ly.enums.MessageType;
 import name.huliqing.ly.view.talk.Talk;
 import name.huliqing.ly.view.talk.TalkImpl;
@@ -36,12 +36,12 @@ import name.huliqing.ly.layer.service.GameService;
  */
 public class StoryTreasureTask1 extends AbstractTaskStep {
     private final PlayService playService = Factory.get(PlayService.class);
-    private final StateService stateService = Factory.get(StateService.class);
+//    private final StateService stateService = Factory.get(StateService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final GameService gameService = Factory.get(GameService.class);
     
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
-    private final StateNetwork stateNetwork = Factory.get(StateNetwork.class);
+//    private final StateNetwork stateNetwork = Factory.get(StateNetwork.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
     
@@ -196,7 +196,8 @@ public class StoryTreasureTask1 extends AbstractTaskStep {
     }
     
     private String get(String rid) {
-        return ResourceManager.getOther("resource_treasure", rid);
+//        return ResourceManager.getOther("resource_treasure", rid);
+        return ResourceManager.get("storyTreasure." +  rid);
     }
     
     private void doStartFindTreasure() {

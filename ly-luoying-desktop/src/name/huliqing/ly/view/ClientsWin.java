@@ -7,7 +7,7 @@ package name.huliqing.ly.view;
 import java.util.List;
 import name.huliqing.luoying.network.LanGame;
 import name.huliqing.luoying.data.ConnData;
-import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.ui.Button;
 import name.huliqing.luoying.ui.LinearLayout;
 import name.huliqing.luoying.ui.UIFactory;

@@ -1,0 +1,49 @@
+#
+
+storyGb.taskFind.title=Looking for Ancient Cypress
+storyGb.taskFind.content=In order to investigate the root causes of anomalies continent, perhaps already exists in this continent for thousands of years ancient cypress grandfather would know something!
+storyGb.taskFind.confirm=Looking for Ancient Cypress
+
+storyGb.taskSave.title=help Ancient Cypress
+storyGb.taskSave.content=Find stronghold of the thieves and help Ancient Cypress to save his tree stump.
+storyGb.taskSave.confirm=Reclaimed %s
+storyGb.taskSave.saveCount=Stump reclaimed:%s/%s
+storyGb.taskSave.saveOk=Task is completed, go back and find Ancient Cypress.
+
+storyGb.talk1.enemy1=Old geezer, take out all of your tree stumps!
+storyGb.talk1.gb1=I'm never going to believe what you say! get out of my life!
+storyGb.talk1.enemy2=Go to hell! Guys, come on! Kill it!
+
+storyGb.talk2.enemy1=The old geezer never pay protection fee for thousands of years!
+storyGb.talk3.enemy1=I want to break it into rotten wood!
+
+storyGb.talk4.enemy1=Shit!
+
+storyGb.talk5.gb1=Sakura, How nice of you to come!
+storyGb.talk5.gb2=I almost turned into a rotten wood!
+storyGb.talk5.xy1=Cypress, what happened?! 
+storyGb.talk5.gb3=Recently some thieves invaded the woods
+storyGb.talk5.gb4=They set up a stronghold in the woods, they seem to summon demons.
+storyGb.talk5.xy2=Why summon demons? What do they want to do?
+storyGb.talk5.gb5=Their aim was to cause turmoil, and with the power of the devil to control this continent!
+storyGb.talk5.gb6=Summon demons need a lot of sacrifice.
+storyGb.talk5.gb7=They not only using animal and human as sacrifices, also uses dark magic to make the beast mad!
+storyGb.talk5.gb8=They also use my roots to summon my sons to do evil.
+storyGb.talk5.xy3=How much roots you left?!
+storyGb.talk5.gb9=I've lost a lot of children, most of them have become crazy and out of control due to dark magic.
+storyGb.talk5.gb10=Can you help me to rescue them out of they!
+storyGb.talk5.xy4=How can I do! ?
+storyGb.talk5.gb11=Find the thief's stronghold, kill the Tree Stump can save it, it would be better if you can destroy they altar.
+
+storyGb.talk6.gb1=Great, and I have an ancient magic book, maybe can help you complete the mission!
+storyGb.talk6.gb2=It is said that only  the high elves or fairy with ancient wisdom can be able to comprehend!
+
+# End of the mission, the task assigned to find Cypress conversation
+storyGb.talk7.gb1=Sakura! What’s the result?
+storyGb.talk7.xy1=Cypress, I’ve saved your roots!
+storyGb.talk7.gb2=Great, you really helped me a lot!
+storyGb.talk7.gb3=I need to hurry back to repair these roots, you can come to me for a few days.
+storyGb.talk7.gb4=I will tell you something about this island!
+storyGb.talk7.gb5=Also, if you can destroy their altars with your own hands, maybe there is a pleasant surprise!
+
+

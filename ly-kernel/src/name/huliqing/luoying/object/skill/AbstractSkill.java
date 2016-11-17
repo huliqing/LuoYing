@@ -13,21 +13,21 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.LuoYing;
-import name.huliqing.luoying.constants.SkillConstants;
 import name.huliqing.luoying.data.AttributeUse;
 import name.huliqing.luoying.data.MagicData;
 import name.huliqing.luoying.data.SkillData;
 import name.huliqing.luoying.layer.service.ElService;
 import name.huliqing.luoying.manager.RandomManager;
+import name.huliqing.luoying.message.StateCode;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.actoranim.ActorAnim;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.effect.Effect;
 import name.huliqing.luoying.object.el.LNumberEl;
+import name.huliqing.luoying.object.el.SBooleanEl;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.magic.Magic;
 import name.huliqing.luoying.object.module.ChannelModule;
-import name.huliqing.luoying.object.module.LevelModule;
 import name.huliqing.luoying.object.module.SkinModule;
 import name.huliqing.luoying.object.sound.SoundManager;
 import name.huliqing.luoying.utils.ConvertUtils;
@@ -55,7 +55,6 @@ import name.huliqing.luoying.utils.MathUtils;
 public abstract class AbstractSkill implements Skill {
     private static final Logger LOG = Logger.getLogger(AbstractSkill.class.getName());
     private final ElService elService = Factory.get(ElService.class);
-    private LevelModule levelModule;
     private ChannelModule channelModule;
     private SkinModule skinModule;
     
@@ -128,6 +127,9 @@ public abstract class AbstractSkill implements Skill {
     protected LNumberEl levelEl;
     /** 技能升级等级公式，该公式中的每一个等级值表示每次技能升级时需要的sp数(skillPoints)*/
     protected LNumberEl levelUpEl;
+    
+    /** checkEl用于检查角色是否可以使用这个技能 */
+    protected SBooleanEl checkEl;
     
     // ---- 内部参数 ----
     
@@ -243,6 +245,7 @@ public abstract class AbstractSkill implements Skill {
         // 时间\动画剪裁参数
         cutTimeStartMax = data.getAsFloat("cutTimeStartMax", 0);
         cutTimeEndMax = data.getAsFloat("cutTimeEndMax", 0);
+        // 等级公式
         String levelElStr = data.getAsString("levelEl");
         if (levelElStr != null) {
             levelEl = elService.createLNumberEl(levelElStr);
@@ -251,13 +254,18 @@ public abstract class AbstractSkill implements Skill {
         if (levelUpElStr != null) {
             levelUpEl = elService.createLNumberEl(levelUpElStr);
         }
+        // el检查器
+        String tempCheckEl = data.getAsString("checkEl");
+        if (tempCheckEl != null) {
+            checkEl = elService.createSBooleanEl(tempCheckEl);
+        }
     }
 
     @Override
     public SkillData getData() {
         return data;
     }
-
+    
     @Override
     public void updateDatas() {
         // ignore
@@ -267,8 +275,10 @@ public abstract class AbstractSkill implements Skill {
     public void setActor(Entity actor) {
         this.actor = actor;
         channelModule = actor.getModuleManager().getModule(ChannelModule.class);
-        levelModule = actor.getModuleManager().getModule(LevelModule.class);
         skinModule = actor.getModuleManager().getModule(SkinModule.class);
+        if (checkEl != null) {
+            checkEl.setSource(actor.getAttributeManager());
+        }
     }
     
     @Override
@@ -561,30 +571,31 @@ public abstract class AbstractSkill implements Skill {
         // 武器必须取出
         if (data.getWeaponStateLimit() != null) {
             if (!skinModule.isWeaponTakeOn()) {
-                return SkillConstants.STATE_WEAPON_NEED_TAKE_ON;
+                return StateCode.SKILL_WEAPON_NEED_TAKE_ON;
             }            
         }
         
         // 冷却中
         if (isCooldown()) {
-            return SkillConstants.STATE_SKILL_COOLDOWN;
+            return StateCode.SKILL_COOLDOWN;
         }
         
         // 武器状态检查,有一些技能需要拿特定的武器才能执行。
         if (!isPlayableByWeapon()) {
-            return SkillConstants.STATE_WEAPON_NOT_ALLOW;
+            return StateCode.SKILL_WEAPON_NOT_ALLOW;
         }
         
-        // 角色需要达到指定等级才能使用技能
-        if (!isPlayableByLevelLimit()) {
-            return SkillConstants.STATE_NEED_LEVEL;
-        }
-        
-        // 属性值不够用
+        // 技能需要消耗一定的属性值，而角色属性值不足
         if (!isPlayableByAttributeLimit()) {
-            return SkillConstants.STATE_MANA_NOT_ENOUGH;
+            return StateCode.SKILL_ATTRIBUTE_NOT_ENOUGH;
         }
-        return SkillConstants.STATE_OK;
+        
+        // EL检查器，例如：属性值不足等
+        if (!isPlayableByElCheck()) {
+            return StateCode.SKILL_ELCHECK;
+        }
+        
+        return StateCode.OK;
     }
     
     @Override
@@ -619,12 +630,7 @@ public abstract class AbstractSkill implements Skill {
         }
         return false;
     }
-
-    @Override
-    public boolean isPlayableByLevelLimit() {
-        return levelModule.getLevel() >= data.getLevelLimit();
-    }
-
+    
     @Override
     public boolean isPlayableByAttributeLimit() {
         List<AttributeUse> uas = data.getUseAttributes();
@@ -636,6 +642,11 @@ public abstract class AbstractSkill implements Skill {
             }
         }
         return true;
+    }
+    
+    @Override
+    public boolean isPlayableByElCheck() {
+        return checkEl == null || checkEl.getValue();
     }
     
     // -------------------------------------------------------------------------

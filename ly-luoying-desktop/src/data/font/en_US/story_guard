@@ -1,0 +1,47 @@
+#Guardian Cooper and repel the enemy
+
+#Beginning task panel
+storyGuard.taskStart.title=Find Ancient Cypress
+storyGuard.taskStart.content=Few days elapsed since I helped him, I want to know what he is doing! 
+storyGuard.taskStart.confirm=Find Ancient Cypress
+
+#Player conversation with cypress
+storyGuard.talk1.gb1=Sakura, glad to see you, thank you for your help last time.
+storyGuard.talk1.gb2=I've fixed a lot of roots!
+storyGuard.talk1.gb3=Also, my elf noticed the thieves restored their stronghold.
+storyGuard.talk1.gb4=Their boss came back, very angry, very serious consequences.
+storyGuard.talk1.gb5=They say they will pull up my roots this time! When thought here I am trembling {{{(>_<)}}}
+storyGuard.talk1.player1=Oh, why do you have so much things...Orz!
+storyGuard.talk1.gb6=......
+storyGuard.talk1.gb7=It's nothing even if I am dead, but they say they will catch you, and make you as the mistress of a gangster.
+storyGuard.talk1.player2=╰_╯Where are they! ?
+
+#Accept panel
+storyGuard.taskGuard.title=Fight and defense
+storyGuard.taskGuard.content=Accepting request again from Ancient Cypress! You need to ensure that:
+storyGuard.taskGuard.content1=1. Ancient Cypress could not be dead.
+storyGuard.taskGuard.content2=2. Destroy the enemy’s stronghold.
+storyGuard.taskGuard.confirm=Accept
+
+storyGuard.task.easy=Easy
+storyGuard.task.normal=Normal
+
+storyGuard.talkGb.other=It is said that there are fairies in the woods, once someone saw.
+
+#Thieves dialogue
+storyGuard.talkDZ.boss1=Haha, it's my showing time!
+storyGuard.talkDZ.boyA1=Boss, don't be too happy. We are supporting, and the villain. We will die sooner or later.
+storyGuard.talkDZ.boss2=Shut up, I let you die now!
+storyGuard.talkDZ.boss3=You idiot, you lost to such a little girl!
+storyGuard.talkDZ.boyA2=Boss, because our stronghold not at a good place, there are nothing obstacles.
+storyGuard.talkDZ.bear=NPC also pitiful!
+storyGuard.talkDZ.boyB1=Boss, a storyGuard.talking donkey! Is this setting okay!?
+storyGuard.talkDZ.boyA3=That is bear!
+storyGuard.talkDZ.boss4=Who provides the only humans can speak, who! ? Who! ?
+storyGuard.talkDZ.boss5=It’s time for fight, follow me, guys!
+
+storyGuard.talkDZSneak.boss1=There is attack, shit!
+storyGuard.talkDZSneak.boss2=Follow me, guys!
+
+storyGuard.task.success=Mission accomplished
+storyGuard.task.failure=Mission failure! Return and try again!?

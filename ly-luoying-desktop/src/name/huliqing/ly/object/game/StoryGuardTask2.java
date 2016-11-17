@@ -12,7 +12,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.Config;
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.constants.StoryConstants;
 import name.huliqing.luoying.enums.Diffculty;
 import name.huliqing.ly.enums.MessageType;
 import name.huliqing.ly.view.talk.Talk;
@@ -26,7 +25,7 @@ import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.logic.scene.ActorBuildSimpleLogic;
 import name.huliqing.luoying.logic.scene.ActorBuildSimpleLogic.Callback;
 import name.huliqing.luoying.logic.scene.ActorMultLoadHelper;
-import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.entity.Entity;
@@ -34,6 +33,7 @@ import name.huliqing.luoying.object.gamelogic.AbstractGameLogic;
 import name.huliqing.luoying.object.logic.Logic;
 import name.huliqing.luoying.utils.MathUtils;
 import name.huliqing.ly.constants.IdConstants;
+import name.huliqing.ly.constants.StoryConstants;
 import name.huliqing.ly.object.view.View;
 import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.ly.layer.service.GameService;
@@ -384,7 +384,8 @@ public class StoryGuardTask2 extends AbstractTaskStep {
     }
     
     private String getOther(String rid, Object... param) {
-        return ResourceManager.getOther("resource_guard", rid, param);
+//        return ResourceManager.getOther("resource_guard", rid, param);
+        return ResourceManager.get("storyGuard." +  rid, param);
     }
     
     private void setSelfActor(Entity actor, boolean isTower) {

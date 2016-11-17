@@ -4,7 +4,6 @@
  */
 package name.huliqing.luoying.object.skill;
 
-import name.huliqing.luoying.constants.SkillConstants;
 import name.huliqing.luoying.data.SkillData;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.xml.DataProcessor;
@@ -87,7 +86,7 @@ public interface Skill extends DataProcessor<SkillData>{
     boolean isEnd();
     
     /**
-     * 技能是否处于冷却中
+     * 根据冷却限制来判断技能是否可以执行，如果技能处于冷却中，则不能执行。
      * @return 
      */
     boolean isCooldown();
@@ -98,14 +97,7 @@ public interface Skill extends DataProcessor<SkillData>{
      * @return 
      */
     boolean isPlayableByWeapon();
-
-    /**
-     * 判断角色在当前的等级下是否可以使用这个技能，一些技能在使用的时候会有等级限制，如果角色的当前等级不足以使用
-     * 这个技能，则该方法应该返回false, 否则返回true
-     * @return 
-     */
-    boolean isPlayableByLevelLimit();
-
+    
     /**
      * 判断角色当前的属性状态是否可以使用这个技能，有些技能在使用的时候会要求消耗角色的一些属性值，
      * 比如：魔法值、怒气值...等, 这个方法用于判断角色当前的各种属性的值是否满使用这个技能。
@@ -113,5 +105,12 @@ public interface Skill extends DataProcessor<SkillData>{
      * @return 
      */
     boolean isPlayableByAttributeLimit();
+    
+    /**
+     * 通过EL判断技能是否可以执行。
+     * @return 
+     */
+    boolean isPlayableByElCheck();
+    
 }
 

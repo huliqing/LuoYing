@@ -7,7 +7,7 @@ package name.huliqing.luoying.layer.service;
 import com.jme3.math.Vector3f;
 import java.util.List;
 import java.util.logging.Logger;
-import name.huliqing.luoying.constants.SkillConstants;
+import name.huliqing.luoying.message.StateCode;
 import name.huliqing.luoying.object.define.DefineFactory;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.module.SkillListener;
@@ -161,7 +161,7 @@ public class SkillServiceImpl implements SkillService {
     
     @Override
     public boolean isPlayable(Entity actor, Skill skill) {
-        return checkStateCode(actor, skill) == SkillConstants.STATE_OK;
+        return checkStateCode(actor, skill) == StateCode.OK;
     }
     
     @Override
@@ -170,7 +170,7 @@ public class SkillServiceImpl implements SkillService {
         if (module != null) {
             return module.checkStateCode(skill);
         }
-        return SkillConstants.STATE_UNDEFINE;
+        return StateCode.UNDEFINE;
     }
 
     @Override

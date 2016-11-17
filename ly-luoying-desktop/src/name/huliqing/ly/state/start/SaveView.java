@@ -8,7 +8,7 @@ import com.jme3.font.BitmapFont;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.save.SaveHelper;
 import name.huliqing.luoying.save.SaveStory;
 import name.huliqing.luoying.save.SaveStoryList;

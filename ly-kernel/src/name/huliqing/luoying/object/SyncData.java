@@ -14,5 +14,4 @@ import name.huliqing.luoying.xml.Data;
 @Serializable
 public final class SyncData extends Data{
     
-    
 }

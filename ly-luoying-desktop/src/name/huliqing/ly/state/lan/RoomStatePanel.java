@@ -7,7 +7,7 @@ package name.huliqing.ly.state.lan;
 import java.util.List;
 import name.huliqing.luoying.data.GameData;
 import name.huliqing.luoying.data.ConnData;
-import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.ly.view.ClientsView;
 import name.huliqing.luoying.utils.MathUtils;
 import name.huliqing.luoying.ui.Window;

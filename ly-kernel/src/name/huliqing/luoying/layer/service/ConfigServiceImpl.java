@@ -14,9 +14,7 @@ import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.constants.IdConstants;
 import name.huliqing.luoying.data.ConfigData;
 import name.huliqing.luoying.manager.ResManager;
-import name.huliqing.luoying.manager.ResourceManager;
 import name.huliqing.luoying.object.sound.SoundManager;
-//import name.huliqing.luoying.view.shortcut.ShortcutManager;
 import name.huliqing.luoying.xml.DataFactory;
 import name.huliqing.luoying.save.SaveConfig;
 import name.huliqing.luoying.save.SaveHelper;
@@ -121,8 +119,8 @@ public class ConfigServiceImpl implements ConfigService {
         cd.setLocale(locale);
         ResManager.setLocale(locale);
         
-        // outdate
-        ResourceManager.clearResources();
+//        // outdate
+//        ResourceManager.clearResources();
         
         // 保存配置
         SaveConfig saveConfig = new SaveConfig();

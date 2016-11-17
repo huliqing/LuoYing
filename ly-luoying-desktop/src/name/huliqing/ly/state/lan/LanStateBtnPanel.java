@@ -7,7 +7,7 @@ package name.huliqing.ly.state.lan;
 import com.jme3.math.ColorRGBA;
 import java.util.List;
 import name.huliqing.ly.view.SimpleBtn;
-import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.ui.LinearLayout;
 import name.huliqing.luoying.ui.UIFactory;
 import name.huliqing.luoying.ui.UI;

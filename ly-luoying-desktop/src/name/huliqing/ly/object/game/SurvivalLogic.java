@@ -23,7 +23,7 @@ import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.logic.PositionLogic;
 import name.huliqing.luoying.logic.scene.ActorBuildLogic;
 import name.huliqing.luoying.logic.scene.ActorBuildLogic.Callback;
-import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.gamelogic.AbstractGameLogic;
 import name.huliqing.ly.constants.IdConstants;

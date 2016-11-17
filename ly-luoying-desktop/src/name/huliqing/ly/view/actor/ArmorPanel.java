@@ -7,7 +7,7 @@ package name.huliqing.ly.view.actor;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.data.SkinData;
 import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.luoying.object.entity.Entity;

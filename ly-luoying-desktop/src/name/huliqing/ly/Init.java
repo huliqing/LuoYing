@@ -15,6 +15,7 @@ import name.huliqing.luoying.data.GameData;
 import name.huliqing.luoying.data.GameLogicData;
 import name.huliqing.luoying.data.ModuleData;
 import name.huliqing.luoying.loader.GameDataLoader;
+import name.huliqing.luoying.manager.ResManager;
 import name.huliqing.luoying.xml.DataFactory;
 import name.huliqing.ly.data.ChatData;
 import name.huliqing.ly.data.ViewData;
@@ -60,11 +61,27 @@ public class Init {
      */
     public static void initialize(Application app, AppSettings settings) {
         LuoYing.initialize(app, settings);
+        
         registerService();
         registerData();
         registerProcessor();
         loadData();
         Serializer.setReadOnly(true);
+        
+        // 载入资源
+        ResManager.loadResource("/data/font/en_US/resource",                "utf-8", "en_US");
+        ResManager.loadResource("/data/font/en_US/resource_object",    "utf-8", "en_US");
+        ResManager.loadResource("/data/font/en_US/story_gb",                "utf-8", "en_US");
+        ResManager.loadResource("/data/font/en_US/story_guard",          "utf-8", "en_US");
+        ResManager.loadResource("/data/font/en_US/story_treasure",      "utf-8", "en_US");
+        
+        ResManager.loadResource("/data/font/zh_CN/resource",                "utf-8", "zh_CN");
+        ResManager.loadResource("/data/font/zh_CN/resource_object",    "utf-8", "zh_CN");
+        ResManager.loadResource("/data/font/zh_CN/story_gb",                "utf-8", "zh_CN");
+        ResManager.loadResource("/data/font/zh_CN/story_guard",           "utf-8", "zh_CN");
+        ResManager.loadResource("/data/font/zh_CN/story_treasure",       "utf-8", "zh_CN");
+        
+        ResManager.setLocale("en_US");
     }
     
     private static void registerData() {

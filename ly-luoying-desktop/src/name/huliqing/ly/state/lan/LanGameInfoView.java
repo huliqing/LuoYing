@@ -7,7 +7,7 @@ package name.huliqing.ly.state.lan;
 import com.jme3.math.ColorRGBA;
 import name.huliqing.luoying.constants.InterfaceConstants;
 import name.huliqing.luoying.data.GameData;
-import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.ui.Icon;
 import name.huliqing.luoying.ui.LinearLayout;
 import name.huliqing.luoying.ui.Text;

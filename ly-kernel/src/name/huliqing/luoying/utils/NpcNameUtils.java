@@ -5,8 +5,8 @@
 package name.huliqing.luoying.utils;
 
 import com.jme3.math.FastMath;
-import name.huliqing.luoying.manager.ResourceManager;
 import name.huliqing.luoying.enums.Sex;
+import name.huliqing.luoying.manager.ResManager;
 
 /**
  * 随机生成NPC名字
@@ -30,8 +30,8 @@ public class NpcNameUtils {
      */
     public static String createFemale() {
         if (!init) {
-            prefixes = ResourceManager.get("npc.name.prefix").split(",");
-            suffixes = ResourceManager.get("npc.name.suffix").split(",");
+            prefixes = ResManager.get("npc.name.prefix").split(",");
+            suffixes = ResManager.get("npc.name.suffix").split(",");
             init = true;
         }
         String prefix = prefixes[FastMath.nextRandomInt(0, prefixes.length - 1)];

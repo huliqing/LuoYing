@@ -5,7 +5,7 @@
 package name.huliqing.ly.view;
 
 import name.huliqing.luoying.LuoYing;
-import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.ui.UIFactory;
 import name.huliqing.luoying.ui.Icon;
 import name.huliqing.luoying.ui.LinearLayout;

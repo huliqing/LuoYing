@@ -8,7 +8,7 @@ import com.jme3.font.BitmapFont;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.constants.InterfaceConstants;
 import name.huliqing.luoying.layer.service.ConfigService;
-import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.ui.FrameLayout;
 import name.huliqing.luoying.ui.Icon;
 import name.huliqing.luoying.ui.Text;

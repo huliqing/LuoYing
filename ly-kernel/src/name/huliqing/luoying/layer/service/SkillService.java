@@ -5,8 +5,6 @@
 package name.huliqing.luoying.layer.service;
 
 import java.util.List;
-import name.huliqing.luoying.constants.SkillConstants;
-import name.huliqing.luoying.data.SkillData;
 import name.huliqing.luoying.layer.network.SkillNetwork;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.module.SkillListener;

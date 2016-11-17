@@ -48,8 +48,7 @@ public class SkillDataLoader implements DataLoader<SkillData> {
         
         data.setLevel(proto.getAsInteger("level", 1));
         data.setMaxLevel(proto.getAsInteger("maxLevel", 1));
-        data.setPlayCount(proto.getAsInteger("skillPoints", 0));
-        data.setLevelLimit(proto.getAsInteger("needLevel", 0));
+        data.setPlayCount(proto.getAsInteger("playCount", 0));
         data.setTags(DefineFactory.getSkillTagDefine().convert(proto.getAsArray("tags")));
         data.setOverlapTags(DefineFactory.getSkillTagDefine().convert(proto.getAsArray("overlapTags")));
         data.setInterruptTags(DefineFactory.getSkillTagDefine().convert(proto.getAsArray("interruptTags")));

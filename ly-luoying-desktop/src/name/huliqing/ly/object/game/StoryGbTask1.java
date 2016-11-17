@@ -20,7 +20,7 @@ import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.logic.scene.ActorMultLoadHelper;
-import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.ui.Button;
@@ -401,7 +401,8 @@ public class StoryGbTask1 extends AbstractTaskStep {
     }
     
     private String get(String rid, Object... param) {
-        return ResourceManager.getOther("resource_gb", rid, param);
+//        return ResourceManager.getOther("resource_gb", rid, param);
+        return ResourceManager.get("storyGb." + rid, param);
     }
     
     // 设置角色为保护状态或非保护状态

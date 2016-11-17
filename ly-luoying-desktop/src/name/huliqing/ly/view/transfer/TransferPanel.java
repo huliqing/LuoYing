@@ -8,7 +8,7 @@ import java.util.List;
 import name.huliqing.luoying.constants.ResConstants;
 import name.huliqing.ly.view.NumPanel;
 import name.huliqing.ly.view.NumPanel.NumConfirmListener;
-import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.transfer.TransferData;
 import name.huliqing.luoying.ui.LinearLayout;
 import name.huliqing.luoying.ui.UIFactory;

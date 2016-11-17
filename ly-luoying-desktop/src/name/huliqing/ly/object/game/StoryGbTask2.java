@@ -10,7 +10,6 @@ import com.jme3.math.Vector3f;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.data.StateData;
 import name.huliqing.ly.enums.MessageType;
 import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.service.ActorService;
@@ -20,7 +19,7 @@ import name.huliqing.luoying.layer.service.StateService;
 import name.huliqing.luoying.logic.scene.ActorBuildSimpleLogic;
 import name.huliqing.luoying.logic.scene.ActorBuildSimpleLogic.Callback;
 import name.huliqing.luoying.logic.scene.ActorMultLoadHelper;
-import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.drop.Drop;
@@ -249,7 +248,8 @@ public class StoryGbTask2 extends AbstractTaskStep{
     
     // 获取资源文件中的信息
     private String getOther(String rid, Object... param) {
-        return ResourceManager.getOther("resource_gb", rid, param);
+//        return ResourceManager.getOther("resource_gb", rid, param);
+        return ResourceManager.get("storyGb." + rid, param);
     }
     
     /**

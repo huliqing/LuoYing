@@ -20,7 +20,7 @@ import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.logic.scene.ActorMultLoadHelper;
-import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.object.anim.Anim;
 import name.huliqing.luoying.object.anim.CurveMoveAnim;
 import name.huliqing.luoying.object.anim.ScaleAnim;
@@ -166,7 +166,8 @@ public class StoryGuardTask1 extends AbstractTaskStep {
     }
     
     private String get(String rid, Object... param) {
-        return ResourceManager.getOther("resource_guard", rid, param);
+//        return ResourceManager.getOther("resource_guard", rid, param);
+        return ResourceManager.get("storyGuard." +  rid, param);
     }
     
     private void setFinished() {

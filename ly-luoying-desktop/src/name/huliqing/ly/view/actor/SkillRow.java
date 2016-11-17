@@ -4,30 +4,24 @@
  */
 package name.huliqing.ly.view.actor;
 
-import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.ui.tiles.ColumnBody;
 import name.huliqing.luoying.ui.tiles.ColumnText;
 import name.huliqing.luoying.ui.tiles.ColumnIcon;
 import name.huliqing.luoying.constants.InterfaceConstants;
-import name.huliqing.luoying.constants.ResConstants;
-import name.huliqing.luoying.manager.ResourceManager;
-import name.huliqing.luoying.layer.service.ActorService;
-import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.ly.manager.ResourceManager;
+import name.huliqing.luoying.message.StateCode;
 import name.huliqing.luoying.object.skill.Skill;
 import name.huliqing.luoying.ui.UIFactory;
 import name.huliqing.luoying.ui.Row;
-import name.huliqing.ly.layer.network.GameNetwork;
-import name.huliqing.ly.layer.service.GameService;
 
 /**
  *
  * @author huliqing
  */
 public class SkillRow extends Row<Skill> {
-    private final ActorService actorService = Factory.get(ActorService.class);
-    private final GameService gameService = Factory.get(GameService.class);
-    private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
-    
+//    private final ActorService actorService = Factory.get(ActorService.class);
+//    private final GameService gameService = Factory.get(GameService.class);
+//    private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     private final SkillPanel skillPanel;
     
     private Skill data;
@@ -107,20 +101,21 @@ public class SkillRow extends Row<Skill> {
         setBackgroundVisible(false);
     }
     
-    protected void display(Skill data) {
-        icon.setIcon(data.getData().getIcon());
+    protected void display(Skill skill) {
+        icon.setIcon(skill.getData().getIcon());
         
-        body.setDesText(ResourceManager.getObjectDes(data.getData().getId()));
-        num.setText(data.getData().getLevel() + "/" + data.getData().getMaxLevel());
+        body.setDesText(ResourceManager.getObjectDes(skill.getData().getId()));
+        num.setText(skill.getData().getLevel() + "/" + skill.getData().getMaxLevel());
         
-        Entity actor = skillPanel.getActor();
-        if (actor != null && gameService.getLevel(actor) < data.getData().getLevelLimit()) {
+        if (skill.isCooldown() 
+                || !skill.isPlayableByElCheck() 
+//                || !skill.isPlayableByWeapon()
+//                || !skill.isPlayableByAttributeLimit() 
+                ) {
             body.setDisabled(true);
-            body.setNameText(ResourceManager.getObjectName(data.getData()) 
-                    + "(" + ResourceManager.get(ResConstants.COMMON_NEED_LEVEL, new Object[] {data.getData().getLevelLimit()}) + ")");
         } else {
             body.setDisabled(false);
-            body.setNameText(ResourceManager.getObjectName(data.getData()));
         }
+        body.setNameText(ResourceManager.getObjectName(skill.getData()));
     }
 }

@@ -8,7 +8,6 @@ import com.jme3.math.FastMath;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.constants.SkillConstants;
 import name.huliqing.luoying.data.ActionData;
 import name.huliqing.luoying.layer.network.ActorNetwork;
 import name.huliqing.luoying.layer.network.SkillNetwork;
@@ -16,6 +15,7 @@ import name.huliqing.luoying.layer.network.SkinNetwork;
 import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.layer.service.SkinService;
+import name.huliqing.luoying.message.StateCode;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.module.SkillListener;
 import name.huliqing.luoying.object.module.SkillModule;
@@ -239,7 +239,7 @@ public class DynamicFightAction extends PathFollowAction implements FightAction,
         }
         
         // 只有非HitSkill时才使用canPlay，这个方法稍微耗性能
-        return attackSkill.checkState() == SkillConstants.STATE_OK;
+        return attackSkill.checkState() == StateCode.OK;
     }
     
     /**
@@ -324,7 +324,7 @@ public class DynamicFightAction extends PathFollowAction implements FightAction,
         for (Skill fightSkill : allSkills) {
             if ((skillTags & fightSkill.getData().getTags()) != 0) {
                 // 武器类型的过滤,只有技能与当前武器相容才能添加
-                if (fightSkill.isPlayableByWeapon() && fightSkill.isPlayableByLevelLimit()) {
+                if (fightSkill.isPlayableByWeapon()) {
                     store.add(fightSkill);
                 }
             }

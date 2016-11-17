@@ -16,10 +16,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.Config;
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.constants.SkillConstants;
 import name.huliqing.luoying.data.SkillData;
 import name.huliqing.luoying.data.ModuleData;
 import name.huliqing.luoying.layer.service.SkillService;
+import name.huliqing.luoying.message.StateCode;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.attribute.Attribute;
 import name.huliqing.luoying.object.attribute.BooleanAttribute;
@@ -199,7 +199,7 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
      */
     public int checkStateCode(Skill skill) {
         if (skill == null) {
-            return SkillConstants.STATE_SKILL_NOT_FOUND;
+            return StateCode.SKILL_NOT_FOUND;
         }
 
         if (skill.getActor() == null) {
@@ -210,13 +210,13 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
         
         // 如果技能被锁定中，则不能执行
         if (isLockedSkillTags(skillData.getTags())) {
-            return SkillConstants.STATE_SKILL_LOCKED;
+            return StateCode.SKILL_LOCKED;
         }
         
         // 如果新技能自身判断不能执行，例如加血技能或许就不可能给敌军执行。
         // 有很多特殊技能是不能对一些特定目标执行的，所以这里需要包含技能自身的判断
         int stateCode = skill.checkState();
-        if (stateCode != SkillConstants.STATE_OK) {
+        if (stateCode != StateCode.OK) {
             return stateCode;
         }
         
@@ -224,14 +224,14 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
         if (skillPlayListeners != null && !skillPlayListeners.isEmpty()) {
             for (SkillPlayListener sl : skillPlayListeners) {
                 if (!sl.onSkillHookCheck(skill)) {
-                    return SkillConstants.STATE_HOOK;
+                    return StateCode.SKILL_HOOK;
                 }
             }
         }
         
         // 技能优先级较高可以直接运行
-        if ( skillData.getPrior() > playingPriorMax) {
-            return SkillConstants.STATE_OK;
+        if (skillData.getPrior() > playingPriorMax) {
+            return StateCode.OK;
         }
         
         // 判断正在执行中的所有技能，如果“正在执行”中的所有技能都可以被覆盖或打断后执行，
@@ -247,10 +247,10 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
             }
         }
         if (allCanOverlapOrInterrupt) {
-            return SkillConstants.STATE_OK;
+            return StateCode.OK;
         }
         
-        return SkillConstants.STATE_CAN_NOT_INTERRUPT;
+        return StateCode.SKILL_CAN_NOT_INTERRUPT;
     }
     
 //    /**
@@ -284,7 +284,7 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
      * @return 
      */
     public boolean playSkill(Skill newSkill, boolean force) {
-        if (force || checkStateCode(newSkill) == SkillConstants.STATE_OK) {
+        if (force || checkStateCode(newSkill) == StateCode.OK) {
             playSkillInner(newSkill);
             return true;
         }

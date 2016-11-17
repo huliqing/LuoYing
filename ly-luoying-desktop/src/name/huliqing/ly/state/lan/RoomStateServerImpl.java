@@ -19,7 +19,7 @@ import name.huliqing.luoying.network.GameServer;
 import name.huliqing.luoying.data.GameData;
 import name.huliqing.luoying.data.ConnData;
 import name.huliqing.luoying.network.GameServer.ServerState;
-import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.ly.view.HelpView;
 import name.huliqing.luoying.ui.LinearLayout;
 import name.huliqing.luoying.ui.UIFactory;

@@ -19,7 +19,7 @@ import name.huliqing.ly.view.Footer;
 import name.huliqing.ly.view.transfer.SimpleTransferPanel;
 import name.huliqing.ly.view.transfer.TabTransferPanel;
 import name.huliqing.ly.view.transfer.TransferPanel;
-import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.item.Item;
 import name.huliqing.luoying.transfer.TransferData;

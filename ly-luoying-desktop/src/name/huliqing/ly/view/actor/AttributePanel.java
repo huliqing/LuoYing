@@ -8,7 +8,7 @@ import com.jme3.font.BitmapFont;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.object.attribute.Attribute;
 import name.huliqing.luoying.object.attribute.GroupAttribute;
 import name.huliqing.luoying.object.attribute.LimitAttribute;

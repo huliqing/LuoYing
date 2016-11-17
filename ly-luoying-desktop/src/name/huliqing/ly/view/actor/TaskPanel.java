@@ -14,7 +14,7 @@ import name.huliqing.luoying.data.TaskData;
 import name.huliqing.luoying.layer.service.TaskService;
 import name.huliqing.ly.view.SimpleCheckbox;
 import name.huliqing.ly.view.SimpleRow;
-import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.task.Task;
 import name.huliqing.luoying.ui.Checkbox;

@@ -11,7 +11,7 @@ import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.constants.ResConstants;
 import name.huliqing.luoying.data.TalentData;
 import name.huliqing.luoying.layer.network.TalentNetwork;
-import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.layer.service.TalentService;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.ui.UIFactory;

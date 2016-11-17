@@ -33,9 +33,9 @@ import name.huliqing.luoying.network.discover.MessSCStarted;
 import name.huliqing.luoying.network.discover.MessSCClosed;
 import name.huliqing.luoying.network.discover.UDPListener;
 import name.huliqing.luoying.mess.MessBase;
-import name.huliqing.luoying.manager.ResourceManager;
 import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.layer.service.SystemService;
+import name.huliqing.luoying.manager.ResManager;
 import name.huliqing.luoying.object.entity.Entity;
 
 /**
@@ -46,7 +46,7 @@ import name.huliqing.luoying.object.entity.Entity;
 public class GameServer implements UDPListener, ConnectionListener, MessageListener<HostedConnection> {
     private final SystemService envService = Factory.get(SystemService.class);
     private final PlayService playService = Factory.get(PlayService.class);
-    private final ActorService actorService = Factory.get(ActorService.class);
+//    private final ActorService actorService = Factory.get(ActorService.class);
     private final ConfigService configService = Factory.get(ConfigService.class);
     
     public interface ServerListener<T> {
@@ -156,7 +156,6 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
         
         serverDiscover = new UDPDiscover(configService.getPortDiscoverServer());
         serverDiscover.setListener(this);
-        
     }
     
     /**
@@ -199,7 +198,7 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
         if (server.isRunning()) {
             Collection<HostedConnection> hcs = server.getConnections();
             for (HostedConnection hc : hcs) {
-                hc.close(ResourceManager.get("lan.serverClosed"));
+                hc.close(ResManager.get("lan.serverClosed"));
             }
             // 这里必须延迟一下，否则客户端收不到close的消息
             try {
@@ -371,7 +370,8 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
             Logger.getLogger(GameServer.class.getName()).log(Level.WARNING, "Could not getLocalHostIPv4 address");
             return null;
         }
-        String des = gameData != null ? ResourceManager.getObjectName(gameData) : "Unknow";
+//        String des = gameData != null ? ResourceManager.getObjectName(gameData) : "Unknow";
+        String des = gameData != null ? ResManager.get(gameData.getId() + ".name") : "Unknow";
         MessSCStarted mess = new MessSCStarted(inetAddress.getHostAddress()
                 , configService.getPort()
                 , configService.getVersionName()
@@ -388,7 +388,7 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
             Logger.getLogger(GameServer.class.getName()).log(Level.WARNING, "Could not getLocalHostIPv4 address");
             return null;
         }
-        String des = gameData != null ? ResourceManager.getObjectName(gameData) : "Unknow";
+        String des = gameData != null ? ResManager.get(gameData.getId() + ".name") : "Unknow";
         return new MessSCClosed(inetAddress.getHostAddress()
                 , configService.getPort()
                 , configService.getVersionName()

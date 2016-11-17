@@ -8,7 +8,6 @@ import com.jme3.math.Vector3f;
 import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.constants.ResConstants;
-import name.huliqing.luoying.constants.StoryConstants;
 import name.huliqing.luoying.data.ItemData;
 import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.ly.enums.MessageType;
@@ -22,12 +21,13 @@ import name.huliqing.luoying.layer.service.ActionService;
 import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.logic.scene.ActorMultLoadHelper;
-import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.gamelogic.AbstractGameLogic;
 import name.huliqing.ly.constants.IdConstants;
+import name.huliqing.ly.constants.StoryConstants;
 import name.huliqing.ly.object.view.View;
 import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.ly.layer.service.GameService;
@@ -44,7 +44,7 @@ public class StoryGbTask2End extends AbstractGameLogic {
     private final GameService gameService = Factory.get(GameService.class);
     
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
-    private final StateNetwork stateNetwork = Factory.get(StateNetwork.class);
+//    private final StateNetwork stateNetwork = Factory.get(StateNetwork.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
@@ -209,6 +209,7 @@ public class StoryGbTask2End extends AbstractGameLogic {
     }
     
     private String get(String rid, Object... param) {
-        return ResourceManager.getOther("resource_gb", rid, param);
+//        return ResourceManager.getOther("resource_gb", rid, param);
+        return ResourceManager.get("storyGb." +  rid, param);
     }
 }

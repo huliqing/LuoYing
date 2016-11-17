@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import name.huliqing.luoying.network.GameServer.ServerState;
-import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.ui.LinearLayout;
 import name.huliqing.luoying.ui.LinearLayout.Layout;
 import name.huliqing.luoying.ui.ListView;

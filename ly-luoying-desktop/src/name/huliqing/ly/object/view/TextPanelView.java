@@ -5,7 +5,7 @@
 package name.huliqing.ly.object.view;
 
 import name.huliqing.ly.data.ViewData;
-import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.object.SyncData;
 import name.huliqing.luoying.ui.Window;
 

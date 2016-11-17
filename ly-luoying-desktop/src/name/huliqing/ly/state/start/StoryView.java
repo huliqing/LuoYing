@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.Config;
 //import name.huliqing.ly.state.StoryServerPlayState;
-import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.game.Game;
 import name.huliqing.luoying.object.game.GameAppState;

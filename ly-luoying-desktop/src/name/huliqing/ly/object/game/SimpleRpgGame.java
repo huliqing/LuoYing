@@ -19,8 +19,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.layer.network.PlayNetwork;
-import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.manager.PickManager;
+import name.huliqing.luoying.message.ConsoleMessageHandler;
+import name.huliqing.luoying.message.MessageFactory;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.entity.TerrainEntity;
@@ -43,7 +44,7 @@ import name.huliqing.ly.view.talk.TalkManager;
  */
 public abstract class SimpleRpgGame extends SimpleGame implements UIEventListener {
     private static final Logger LOG = Logger.getLogger(SimpleRpgGame.class.getName());
-    private final ActorService actorService = Factory.get(ActorService.class);
+//    private final ActorService actorService = Factory.get(ActorService.class);
     private final GameService gameService = Factory.get(GameService.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
@@ -77,6 +78,9 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
         // 用于支持角色“说话”、“谈话”的游戏逻辑
         addLogic(SpeakManager.getInstance());
         addLogic(TalkManager.getInstance());
+        
+        // 添加一个控制台消息处理器
+        MessageFactory.addHandler(new ConsoleMessageHandler());
     }
 
     @Override

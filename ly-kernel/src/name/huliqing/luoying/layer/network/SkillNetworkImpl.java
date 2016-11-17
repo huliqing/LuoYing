@@ -6,12 +6,11 @@ package name.huliqing.luoying.layer.network;
 
 import name.huliqing.luoying.network.Network;
 import com.jme3.math.Vector3f;
-import java.util.List;
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.constants.SkillConstants;
 import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.mess.MessSkillPlay;
 import name.huliqing.luoying.mess.MessSkillWalk;
+import name.huliqing.luoying.message.StateCode;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.module.SkillModule;
 import name.huliqing.luoying.object.skill.Skill;
@@ -87,7 +86,7 @@ public class SkillNetworkImpl implements SkillNetwork {
         // ============================20160504=============================
         
         SkillModule skillModule = actor.getModuleManager().getModule(SkillModule.class);
-        if (force || skillModule.checkStateCode(skill) == SkillConstants.STATE_OK) {
+        if (force || skillModule.checkStateCode(skill) == StateCode.OK) {
             
             NETWORK.broadcast(mess);
             

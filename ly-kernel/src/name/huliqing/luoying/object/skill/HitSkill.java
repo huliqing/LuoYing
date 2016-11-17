@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.constants.SkillConstants;
 import name.huliqing.luoying.data.MagicData;
 import name.huliqing.luoying.data.SkillData;
 import name.huliqing.luoying.data.StateData;
@@ -21,6 +20,7 @@ import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.layer.service.ElService;
 import name.huliqing.luoying.manager.RandomManager;
+import name.huliqing.luoying.message.StateCode;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.el.STBooleanEl;
@@ -272,15 +272,17 @@ public abstract class HitSkill extends AbstractSkill {
         
         Entity target = getTarget();
         if (target == null) {
-            return SkillConstants.STATE_TARGET_NOT_FOUND;
+            return StateCode.SKILL_TARGET_NOT_FOUND;
         }
         
-        if (!isInHitDistance(target))
-            return SkillConstants.STATE_TARGET_NOT_IN_RANGE;
+        if (!isInHitDistance(target)) {
+            return StateCode.SKILL_TARGET_NOT_IN_RANGE;
+        }
         
         hitCheckEl.setTarget(target.getAttributeManager());
-        if (!hitCheckEl.getValue())
-            return SkillConstants.STATE_TARGET_UNSUITABLE_BY_ELCHECK;
+        if (!hitCheckEl.getValue()) {
+            return StateCode.SKILL_TARGET_UNSUITABLE_BY_ELCHECK;
+        }
         
         return super.checkState();
     }

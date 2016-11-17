@@ -8,7 +8,7 @@ import name.huliqing.ly.view.system.SystemMainPanel;
 import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.layer.service.PlayService;
-import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.ui.Button;
 import name.huliqing.luoying.ui.UI;
 import name.huliqing.luoying.ui.Window;

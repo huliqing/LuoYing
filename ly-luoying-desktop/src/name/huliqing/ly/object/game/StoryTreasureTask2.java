@@ -11,7 +11,6 @@ import java.util.List;
 import name.huliqing.luoying.Config;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.constants.ResConstants;
-import name.huliqing.luoying.constants.StoryConstants;
 import name.huliqing.ly.enums.MessageType;
 import name.huliqing.ly.view.talk.Talk;
 import name.huliqing.ly.view.talk.TalkImpl;
@@ -33,7 +32,7 @@ import name.huliqing.luoying.logic.scene.ActorLoadHelper;
 import name.huliqing.luoying.logic.scene.ActorBuildLogic;
 import name.huliqing.luoying.logic.scene.ActorBuildLogic.Callback;
 import name.huliqing.luoying.logic.scene.ActorBuildLogic.ModelLoader;
-import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.ly.view.talk.AbstractTalkLogic;
@@ -50,6 +49,7 @@ import name.huliqing.luoying.ui.UI.Corner;
 import name.huliqing.luoying.ui.UI.Listener;
 import name.huliqing.luoying.ui.state.UIState;
 import name.huliqing.ly.constants.IdConstants;
+import name.huliqing.ly.constants.StoryConstants;
 import name.huliqing.ly.object.view.View;
 import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.ly.layer.service.GameService;
@@ -372,9 +372,9 @@ public class StoryTreasureTask2 extends AbstractTaskStep {
     
     private String getOther(String rid, Object... params) {
         if (params == null) {
-            return ResourceManager.getOther("resource_treasure", rid);
+            return ResourceManager.get("storyTreasure." +  rid);
         } else {
-            return ResourceManager.getOther("resource_treasure", rid, params);
+            return ResourceManager.get("storyTreasure." +  rid, params);
         }
     }
     

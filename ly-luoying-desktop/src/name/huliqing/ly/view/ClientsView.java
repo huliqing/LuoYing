@@ -9,7 +9,7 @@ import java.util.List;
 import com.jme3.font.BitmapFont.VAlign;
 import com.jme3.math.ColorRGBA;
 import name.huliqing.luoying.data.ConnData;
-import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.ui.LinearLayout;
 import name.huliqing.luoying.ui.ListView;
 import name.huliqing.luoying.ui.Row;

@@ -26,9 +26,6 @@ public class SkillData extends ObjectData {
     // 技能的冷却时间,单位秒
     private float cooldown;
     
-    // 指定技能需要多少等级才能使用,只有角色达到指定等级时才能使用该技能.
-    private int levelLimit;
-    
     // 武器状态限制
     private long[] weaponStateLimit;
     
@@ -55,10 +52,6 @@ public class SkillData extends ObjectData {
     
     /** 最近一次使用技能的时间,用于判断技能冷却限制 */
     private long lastPlayTime;
-   
-    // remove20161114
-//    /** 当前的随机数索引,实际取值在0~126（包含0和126，这个参数不需要存档) */
-//    private byte randomIndex = -1;
     
     public String getIcon() {
         return getAsString("icon");
@@ -171,22 +164,6 @@ public class SkillData extends ObjectData {
     public void setPlayCount(int playCount) {
         this.playCount = playCount;
     }
-
-    /**
-     * 获取技能的等级限制，这个限制表示目标角色只有达到（大于或等于）这个等级时才可以使用这个技能。
-     * @return 
-     */
-    public int getLevelLimit() {
-        return levelLimit;
-    }
-
-    /**
-     * 设置技能的等级限制，这个限制表示目标角色只有达到（大于或等于）这个等级时才可以使用这个技能。
-     * @param levelLimit 
-     */
-    public void setLevelLimit(int levelLimit) {
-        this.levelLimit = levelLimit;
-    }
         
     /**
      * 获取技能标记
@@ -268,7 +245,6 @@ public class SkillData extends ObjectData {
         oc.write(level, "level", 1);
         oc.write(maxLevel, "maxLevel", 1);
         oc.write(playCount, "playCount", 0);
-        oc.write(levelLimit, "levelLimit", 0);
         oc.write(lastPlayTime, "lastPlayTime", 0);
         oc.write(tags, "tags", 0);
         oc.write(overlapTags, "overlapTags", 0);
@@ -287,7 +263,6 @@ public class SkillData extends ObjectData {
         level = ic.readInt("level", 1);
         maxLevel = ic.readInt("maxLevel", 1);
         playCount = ic.readInt("playCount", 0);
-        levelLimit = ic.readInt("levelLimit", 0);
         lastPlayTime = ic.readLong("lastPlayTime", 0);
         tags = ic.readLong("tags", 0);
         overlapTags = ic.readLong("overlapTags", 0);

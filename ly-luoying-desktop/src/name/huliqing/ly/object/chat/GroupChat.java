@@ -16,7 +16,7 @@ import name.huliqing.ly.data.ChatData;
 import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.ly.layer.service.ChatService;
 import name.huliqing.luoying.layer.service.PlayService;
-import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.ui.AbstractUI;
 import name.huliqing.luoying.ui.Icon;

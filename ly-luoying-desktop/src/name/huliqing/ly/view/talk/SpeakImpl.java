@@ -10,7 +10,7 @@ import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.ly.enums.MessageType;
 import name.huliqing.luoying.layer.service.PlayService;
-import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.ui.UIFactory;
 import name.huliqing.luoying.utils.GeometryUtils;

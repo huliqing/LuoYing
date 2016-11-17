@@ -5,7 +5,7 @@
 package name.huliqing.ly.view.system;
 
 import com.jme3.font.BitmapFont;
-import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.ui.LinearLayout;
 import name.huliqing.luoying.ui.LinearLayout.Layout;
 import name.huliqing.luoying.ui.Text;

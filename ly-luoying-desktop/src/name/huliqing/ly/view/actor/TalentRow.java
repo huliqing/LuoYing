@@ -12,7 +12,7 @@ import name.huliqing.luoying.constants.InterfaceConstants;
 import name.huliqing.luoying.data.TalentData;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.ly.view.SimpleRow;
-import name.huliqing.luoying.manager.ResourceManager;
+import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.ui.ListView;
 
 /**
