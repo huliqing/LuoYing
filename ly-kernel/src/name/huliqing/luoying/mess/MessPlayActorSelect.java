@@ -16,6 +16,13 @@ public class MessPlayActorSelect extends MessBase {
     private String actorId;
     // 玩家所使用的角色名称
     private String actorName;
+
+    public MessPlayActorSelect() {}
+    
+    public MessPlayActorSelect(String actorId, String actorName) {
+        this.actorId = actorId;
+        this.actorName = actorName;
+    }
     
     public String getActorId() {
         return actorId;

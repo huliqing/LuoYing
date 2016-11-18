@@ -6,11 +6,9 @@ package name.huliqing.ly.mess;
 
 import com.jme3.network.HostedConnection;
 import com.jme3.network.serializing.Serializable;
-import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.mess.MessBase;
 import name.huliqing.luoying.mess.MessSCInitGameOK;
 import name.huliqing.luoying.network.GameServer;
-import name.huliqing.ly.layer.network.GameNetwork;
 
 /**
  * 向服务端获取游戏初始信息,主要用于初始化客户端场景物体,这个消息在发送之前
@@ -27,9 +25,10 @@ public class MessPlayInitGame extends MessBase {
         MessSCInitGameOK initOK = new MessSCInitGameOK();
         server.send(client, initOK);
         
-        // 同步所有角色到客户端
-        GameNetwork playNetwork = Factory.get(GameNetwork.class);
-        playNetwork.syncGameInitToClient(client);
+        // remove20161119
+//        // 同步所有角色到客户端
+//        GameNetwork playNetwork = Factory.get(GameNetwork.class);
+//        playNetwork.syncGameInitToClient(client);
     }
     
 }

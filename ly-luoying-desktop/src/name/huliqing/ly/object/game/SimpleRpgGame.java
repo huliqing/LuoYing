@@ -10,6 +10,8 @@ import com.jme3.collision.CollisionResults;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Spatial;
+import com.jme3.scene.Spatial.CullHint;
 import com.jme3.util.TempVars;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,8 +33,11 @@ import name.huliqing.luoying.ui.UI;
 import name.huliqing.luoying.ui.UIEventListener;
 import name.huliqing.luoying.ui.state.PickListener;
 import name.huliqing.luoying.ui.state.UIState;
+import name.huliqing.ly.enums.MessageType;
 import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.ly.layer.service.GameService;
+import name.huliqing.ly.manager.HUDManager;
+import name.huliqing.ly.state.MenuTool;
 import name.huliqing.ly.view.LanPlayStateUI;
 import name.huliqing.ly.view.shortcut.ShortcutManager;
 import name.huliqing.ly.view.talk.SpeakManager;
@@ -59,7 +64,7 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
     private final CollisionResults tempTerrainsPicked = new CollisionResults();
     
     // 场景相机
-    private ChaseCameraEnv chaseCamera;
+    protected ChaseCameraEnv chaseCamera;
     
     @Override
     public void initialize(Application app) {
@@ -81,13 +86,26 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
         
         // 添加一个控制台消息处理器
         LogFactory.addHandler(new ConsoleLogHandler());
+        
+        // 消息管理器
+        HUDManager.init(this.app.getGuiNode());
     }
 
     @Override
     public void cleanup() {
         ShortcutManager.cleanup();
         UIState.getInstance().clearUI();
+        HUDManager.cleanup();
         super.cleanup(); 
+    }
+    
+    /**
+     * 添加消息
+     * @param message
+     * @param messageType 
+     */
+    public void addMessage(String message, MessageType messageType) {
+        HUDManager.showMessage(message, messageType.getColor());
     }
     
     /**
@@ -157,7 +175,7 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
         playNetwork.attack(player, temp);
     }
     
-    private ChaseCameraEnv getChaseCamera() {
+    protected ChaseCameraEnv getChaseCamera() {
         // 从场景中找到“跟随”相机
         if (chaseCamera == null) {
            List<ChaseCameraEnv> cces = scene.getEntities(ChaseCameraEnv.class, null);
@@ -313,8 +331,28 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
             cce.setEnabledRotation(enabled);
         }
     }
-
-//    public MenuTool getMenuTool() {
-//        return ui.getMenuTool();
-//    }
+    
+    /**
+     * 获取界面菜单栏
+     * @return 
+     */
+    public MenuTool getMenuTool() {
+        return ui.getMenuTool();
+    }
+    
+    /**
+     * 切换显示当前界面的所有UI.注意:该方法将只影响当前已经存在的UI,对后续
+     * 添加到场景中的UI不会有影响.也就是,如果想要只显示某个特殊UI,则先设置
+     * setUIVisiable(false),然后再把特定UI添加到UI根节点中
+     * @param visiable 
+     */
+    public void setUIVisiable(boolean visiable) {
+        CullHint ch = visiable ? CullHint.Never : CullHint.Always;
+        List<Spatial> children = UIState.getInstance().getUIRoot().getChildren();
+        for (Spatial child : children) {
+            child.setCullHint(ch);
+        }
+        // 快捷管理器中的“回收站”始终是关闭的，只有在拖动快捷方式时才可见
+        ShortcutManager.setBucketVisible(false);
+    }
 }

@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.ly.object.game;
+package name.huliqing.ly.object.game.story;
 
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;

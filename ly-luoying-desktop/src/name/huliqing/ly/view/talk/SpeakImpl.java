@@ -88,7 +88,6 @@ public class SpeakImpl extends Speak {
         maxDistanceSquared = Config.getSpeakMaxDistance() *  Config.getSpeakMaxDistance();
         
         playService.getGame().getGuiScene().getRoot().attachChild(speakPanel);
-//        playService.addObject(speakPanel, true);
         
         // 在HUD上添加谈话内容,只要求角色在场景内，并且距离允许即可。不需要摄像机剔除检测。
         float distanceSquared = actor.getSpatial().getWorldTranslation()

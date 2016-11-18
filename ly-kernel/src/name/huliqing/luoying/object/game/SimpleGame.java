@@ -22,12 +22,11 @@ import name.huliqing.luoying.object.scene.Scene;
 /**
  * 游戏基类
  * @author huliqing
- * @param <T>
  */
-public class SimpleGame<T extends GameData> implements Game<T> {
+public class SimpleGame implements Game<GameData> {
     private static final Logger LOG = Logger.getLogger(SimpleGame.class.getName());
 
-    protected T data;
+    protected GameData data;
     protected SimpleApplication app;
     /** 当前的游戏场景 */
     protected final SafeArrayList<GameLogic> logics = new SafeArrayList<GameLogic>(GameLogic.class);
@@ -43,12 +42,12 @@ public class SimpleGame<T extends GameData> implements Game<T> {
     protected boolean enabled = true;
     
     @Override
-    public void setData(T data) {
+    public void setData(GameData data) {
         this.data = data;
     }
     
     @Override
-    public T getData() {
+    public GameData getData() {
         return data;
     }
 

@@ -27,9 +27,8 @@ public class GameData extends ObjectData {
     private SceneData guiSceneData;
     // 游戏的逻辑列表
     private List<GameLogicData> gameLogicDatas;
-    
-//    // 游戏可选的角色列表
-//    private List<String> availableActors;
+    // 游戏可选的角色列表
+    private List<String> availableActors;
     
     /**
      * 获取游戏图标，如果没有设置则返回null.
@@ -87,7 +86,8 @@ public class GameData extends ObjectData {
         if (gameLogicDatas == null) {
             gameLogicDatas = new ArrayList<GameLogicData>();
         }
-        if (!gameLogicDatas.contains(gameLogicData)) {
+        // 这里要注意：不能把null添加到gameLogicData中，这会造成在网络序列化传送过程中报NPE
+        if (gameLogicData != null && !gameLogicDatas.contains(gameLogicData)) {
             gameLogicDatas.add(gameLogicData);
         }
     }
@@ -99,6 +99,22 @@ public class GameData extends ObjectData {
      */
     public boolean removeGameLogicData(GameLogicData gameLogicData) {
         return gameLogicDatas != null && gameLogicDatas.remove(gameLogicData);
+    }
+
+    /**
+     * 获取游戏可选的角色id列表
+     * @return 
+     */
+    public List<String> getAvailableActors() {
+        return availableActors;
+    }
+
+    /**
+     * 设置游戏可选的角色id列表
+     * @param availableActors 
+     */
+    public void setAvailableActors(List<String> availableActors) {
+        this.availableActors = availableActors;
     }
     
     @Override

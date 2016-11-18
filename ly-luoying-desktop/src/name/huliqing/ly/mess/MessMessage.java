@@ -38,6 +38,7 @@ public class MessMessage extends MessBase {
 
     @Override
     public void applyOnClient() {
+        super.applyOnClient();
         GameService gameService = Factory.get(GameService.class);
         gameService.addMessage(message, type);
     }

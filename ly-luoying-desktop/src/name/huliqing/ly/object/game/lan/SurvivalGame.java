@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.ly.object.game;
+package name.huliqing.ly.object.game.lan;
 
 import com.jme3.app.Application;
 import com.jme3.math.Vector3f;
@@ -12,6 +12,8 @@ import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.utils.MathUtils;
 import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.ly.layer.service.GameService;
+import name.huliqing.ly.object.game.SceneHelper;
+import name.huliqing.ly.object.game.SimpleRpgGame;
 
 /**
  * @author huliqing

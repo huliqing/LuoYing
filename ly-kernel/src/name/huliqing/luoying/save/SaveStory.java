@@ -11,11 +11,11 @@ import com.jme3.export.OutputCapsule;
 import com.jme3.export.Savable;
 import java.io.IOException;
 import java.util.ArrayList;
-import name.huliqing.luoying.data.ActorData;
+import name.huliqing.luoying.data.EntityData;
 
 /**
  * 关卡存档器
- * @author huliqing
+ * @author huliqing 
  */
 public class SaveStory implements Savable{
     
@@ -27,12 +27,12 @@ public class SaveStory implements Savable{
     private int storyCount;
     
     // 玩家数据
-    private ActorData player;
+    private EntityData player;
     // 主角玩家的快捷方式
     private ArrayList<ShortcutSave> shortcuts = new ArrayList<ShortcutSave>();
     
     // 其它角色,这些角色可能包含其它玩家，宠物等
-    private ArrayList<ActorData> actors = new ArrayList<ActorData>();
+    private ArrayList<EntityData> actors = new ArrayList<EntityData>();
     
     // 这个列表中包含了所有客户端（含主机）与角色及场景的关系
     private ArrayList<ClientData> clientDatas = new ArrayList<ClientData>();
@@ -61,15 +61,15 @@ public class SaveStory implements Savable{
         this.storyCount = storyCount;
     }
 
-    public ActorData getPlayer() {
+    public EntityData getPlayer() {
         return player;
     }
 
-    public void setPlayer(ActorData player) {
+    public void setPlayer(EntityData player) { 
         this.player = player;
     }
 
-    public ArrayList<ShortcutSave> getShortcuts() {
+    public ArrayList<ShortcutSave> getShortcuts() { 
         return shortcuts;
     }
 
@@ -81,11 +81,11 @@ public class SaveStory implements Savable{
      * 获取所有进行存档的角色
      * @return 
      */
-    public ArrayList<ActorData> getActors() {
+    public ArrayList<EntityData> getActors() {
         return actors;
     }
 
-    public void setActors(ArrayList<ActorData> actors) {
+    public void setActors(ArrayList<EntityData> actors) {
         this.actors = actors;
     }
 
@@ -115,13 +115,13 @@ public class SaveStory implements Savable{
         saveName = ic.readString("saveName", "unknow");
         saveTime = ic.readLong("saveTime", 0);
         storyCount = ic.readInt("storyCount", 0);
-        player = (ActorData) ic.readSavable("player", null);
+        player = (EntityData) ic.readSavable("player", null);
         ArrayList<ShortcutSave> tempShortcuts = ic.readSavableArrayList("shortcuts", null);
         shortcuts.clear();
         if (tempShortcuts != null) {
             shortcuts.addAll(tempShortcuts);
         }
-        ArrayList<ActorData> tempActors = ic.readSavableArrayList("actors", null);
+        ArrayList<EntityData> tempActors = ic.readSavableArrayList("actors", null);
         actors.clear();
         if (tempActors != null) {
             actors.addAll(tempActors);

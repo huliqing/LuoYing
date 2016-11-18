@@ -22,12 +22,14 @@ import name.huliqing.luoying.data.GameData;
 import name.huliqing.luoying.network.GameServer.ServerState;
 import name.huliqing.luoying.mess.MessPlayGetGameData;
 import name.huliqing.luoying.data.ConnData;
+import name.huliqing.luoying.object.game.GameAppState;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.ly.view.HelpView;
 import name.huliqing.luoying.ui.LinearLayout;
 import name.huliqing.luoying.ui.UIFactory;
 import name.huliqing.luoying.ui.state.UIState;
 import name.huliqing.ly.Start;
+import name.huliqing.ly.object.game.ClientNetworkRpgGame;
 //import name.huliqing.ly.LyClientPlayState;
 
 /**
@@ -118,11 +120,14 @@ public class RoomStateClientImpl extends AbstractAppState implements RoomState {
         super.update(tpf);
         if (startGame) {
             LOG.log(Level.INFO, "RoomStateClientImpl.startGame");
-            
+
+            // remove201611xx
 //            ClientPlayState clientPlayState = new LyClientPlayState(app, gameClient);
 //            app.changeState(clientPlayState);
-            
-            throw new UnsupportedOperationException();
+
+            ClientNetworkRpgGame clientRpgGame = new ClientNetworkRpgGame(gameClient);
+            GameAppState gameAppState = new GameAppState(clientRpgGame);
+            app.changeState(gameAppState);
         }
     }
 

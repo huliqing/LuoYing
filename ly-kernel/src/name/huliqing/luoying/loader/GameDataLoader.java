@@ -39,9 +39,7 @@ public class GameDataLoader<T extends GameData> implements DataLoader<T>{
                 gameLogics.add((GameLogicData) DataFactory.createData(gla));
             }
         }
-        
-        // remove20161016
-//        store.setAvailableActors(store.getAsStringList("availableActors"));
+        store.setAvailableActors(store.getAsStringList("availableActors"));
     }
     
 }

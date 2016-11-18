@@ -28,13 +28,13 @@ public class MessEntityHitAttribute extends MessBase {
     // 指定属性值。
     private Object value;
     // 攻击源，这个角色可以为null的
-    private Long hitterId;
+    private long hitterId = -1;
 
     /**
      * 获取攻击源，攻击源可能不存在，所以这个方法可能返回null.
      * @return 
      */
-    public Long getHitterId() {
+    public long getHitterId() {
         return hitterId;
     }
 
@@ -42,7 +42,7 @@ public class MessEntityHitAttribute extends MessBase {
      * 设置攻击发起源
      * @param hitterId 
      */
-    public void setHitterId(Long hitterId) {
+    public void setHitterId(long hitterId) {
         this.hitterId = hitterId;
     }
 
@@ -87,7 +87,7 @@ public class MessEntityHitAttribute extends MessBase {
         super.applyOnClient();
         PlayService playService = Factory.get(PlayService.class);
         Entity hitter = null;
-        if (hitterId != null) {
+        if (hitterId > 0) {
             hitter = playService.getEntity(hitterId);
         }
         Entity entity = playService.getEntity(entityId);
@@ -101,7 +101,7 @@ public class MessEntityHitAttribute extends MessBase {
         super.applyOnServer(gameServer, hc);
         PlayService playService = Factory.get(PlayService.class);
         Entity hitter = null;
-        if (hitterId != null) {
+        if (hitterId > 0) {
             hitter = playService.getEntity(hitterId);
         }
         Entity entity = playService.getEntity(entityId);

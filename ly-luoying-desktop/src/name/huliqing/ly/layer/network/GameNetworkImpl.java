@@ -12,13 +12,17 @@ import com.jme3.network.HostedConnection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.layer.network.ActorNetwork;
 import name.huliqing.luoying.layer.network.EntityNetwork;
+import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.service.ActionService;
 import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.mess.MessActionRun;
+import name.huliqing.luoying.mess.MessPlayActorSelect;
 import name.huliqing.luoying.network.Network;
+import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.SyncData;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.ly.constants.AttrConstants;
@@ -26,6 +30,8 @@ import name.huliqing.ly.enums.MessageType;
 import name.huliqing.ly.mess.MessActorSpeak;
 import name.huliqing.ly.object.NetworkObject;
 import name.huliqing.ly.layer.service.GameService;
+import name.huliqing.ly.manager.ResourceManager;
+import name.huliqing.ly.mess.MessMessage;
 import name.huliqing.ly.view.talk.Talk;
 import name.huliqing.ly.view.talk.TalkManager;
 
@@ -36,6 +42,7 @@ import name.huliqing.ly.view.talk.TalkManager;
 public class GameNetworkImpl implements GameNetwork {
 
     private static final Logger LOG = Logger.getLogger(GameNetworkImpl.class.getName());
+    private final static Network NETWORK = Network.getInstance();
     
     private GameService gameService;
     private EntityService entityService;
@@ -43,7 +50,7 @@ public class GameNetworkImpl implements GameNetwork {
     private ActionService actionService;
     private ActorNetwork actorNetwork;
     private EntityNetwork entityNetwork;
-    private final static Network NETWORK = Network.getInstance();
+    private PlayNetwork playNetwork;
     
     @Override
     public void inject() {
@@ -53,12 +60,21 @@ public class GameNetworkImpl implements GameNetwork {
         actionService = Factory.get(ActionService.class);
         actorNetwork = Factory.get(ActorNetwork.class);
         entityNetwork = Factory.get(EntityNetwork.class);
+        playNetwork = Factory.get(PlayNetwork.class);
     }
 
     @Override
     public void addMessage(String message, MessageType type) {
-        LOG.log(Level.WARNING, "不再支持这个方法！");
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (NETWORK.isClient()) {
+            return;
+        }
+        
+        MessMessage mess = new MessMessage();
+        mess.setMessage(message);
+        mess.setType(type);
+        NETWORK.broadcast(mess);
+        
+        gameService.addMessage(message, type);
     }
 
     @Override
@@ -167,6 +183,72 @@ public class GameNetworkImpl implements GameNetwork {
     @Override
     public void setColor(Entity entity, ColorRGBA color) {
         entityNetwork.hitAttribute(entity, AttrConstants.COLOR, new Vector4f(color.r, color.g, color.b, color.a), null);
+    }
+    
+    
+    // ---- from userCommand
+    
+    @Override
+    public void selectPlayer(String actorId, String actorName) {
+        
+        if (NETWORK.isClient()) {
+            NETWORK.sendToServer(new MessPlayActorSelect(actorId, actorName));
+        } else {
+            Entity actor = Loader.load(actorId);
+            
+//            logicService.resetPlayerLogic(actor);
+            actor.getData().setName(actorName);
+            // 暂时以1作为默认分组
+            gameService.setTeam(actor, 1);
+            
+            // xxx 这一段要重构
+//            List<Skill> waitSkills = skillService.getSkillWait(actor);
+//            if (waitSkills != null && !waitSkills.isEmpty()) {
+//                skillService.playSkill(actor, waitSkills.get(0), false);
+//            }
+            
+            // 这是主机,所以要设置为当前主场景玩家,与actor.setPlayer(true)不同
+            // 注:在设置名字之后再setAsPlayer,否则FacePanel中的player名字不会更新
+//            playService.setMainPlayer(actor);
+            gameService.setPlayer(actor);
+            playNetwork.addEntity(actor);
+            
+            // 通知所有客户端
+            String message = ResourceManager.get("lan.enterGame", new Object[] {actorName});
+            MessageType type = MessageType.item;
+            MessMessage mess = new MessMessage();
+            mess.setMessage(message);
+            mess.setType(type);
+            NETWORK.broadcast(mess); 
+            
+            // 通知主机
+            gameService.addMessage(message, type);
+        }
+    }
+
+    @Override
+    public void addSimplePlayer(Entity actor) {
+         if (NETWORK.isClient()) {
+            EntityData data = actor.getData();
+            NETWORK.sendToServer(new MessPlayActorSelect(data.getId(), data.getName()));
+        } else {
+             
+            // 广播到客户端进行载入角色
+            // XXX actor need to setAsSimplePlayer
+            playNetwork.addEntity(actor);
+            
+            // 通知所有客户端
+            String message = ResourceManager.get("lan.enterGame", new Object[] {actor.getData().getName()});
+            MessageType type = MessageType.item;
+            MessMessage notice = new MessMessage();
+            notice.setMessage(message);
+            notice.setType(type);
+            if (NETWORK.hasConnections()) {
+                NETWORK.broadcast(notice);                          
+            }
+            // 通知主机
+            gameService.addMessage(message, type);
+        }
     }
     
 }

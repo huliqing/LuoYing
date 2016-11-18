@@ -30,6 +30,12 @@ public interface GameService extends GameNetwork {
     Entity getPlayer();
     
     /**
+     * 把指定entity设置为当前游戏主玩家。
+     * @param entity 
+     */
+    void setPlayer(Entity entity);
+    
+    /**
      * 获取当前游戏的主目标,玩家界面上的主目标
      * @return 
      */

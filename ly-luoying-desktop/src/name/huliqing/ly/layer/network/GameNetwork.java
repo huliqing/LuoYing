@@ -87,4 +87,20 @@ public interface GameNetwork extends Inject {
      * @param entity 
      */
     void kill(Entity entity);
+    
+    // ------------------------- from userCommand
+    
+    /**
+     * 选择一个角色作为玩家角色
+     * @param actorId 
+     * @param actorName 玩家角色名称
+     * @deprecated 不再使用
+     */
+    void selectPlayer(String actorId, String actorName);
+
+    /**
+     * 添加普通的玩家类角色。
+     * @param actor 
+     */
+    void addSimplePlayer(Entity actor);
 }

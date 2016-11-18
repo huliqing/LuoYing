@@ -13,6 +13,7 @@ import name.huliqing.luoying.object.entity.Entity;
  */
 public interface ActorNetwork extends Inject {
     
+    // remove20161118
 //    /**
 //     * 让角色立即说话。
 //     * @param actor
@@ -20,13 +21,13 @@ public interface ActorNetwork extends Inject {
 //     * @param useTime 说话内容的显示时间,单位秒,如果小于或等于0则自动计算显示时长
 //     */
 //    void speak(Entity actor, String mess, float useTime);
-    
+//    
 //    /**
 //     * 执行一个系列谈话内容,注意：该谈话内容将立即被执行。不需要调用start.
 //     * @param talk 
 //     */
 //    void talk(Talk talk);
-    
+//    
 //    /**
 //     * 杀死一个角色
 //     * @param actor 

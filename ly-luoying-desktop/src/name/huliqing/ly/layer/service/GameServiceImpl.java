@@ -48,9 +48,11 @@ public class GameServiceImpl implements GameService {
         entityService = Factory.get(EntityService.class);
         actionService = Factory.get(ActionService.class);
     }
-
+    
     @Override
     public void addMessage(String message, MessageType type) {
+        SimpleRpgGame game = (SimpleRpgGame) playService.getGame();
+        game.addMessage(message, type);
     }
 
     @Override
@@ -76,6 +78,12 @@ public class GameServiceImpl implements GameService {
     public Entity getPlayer() {
         SimpleRpgGame game = (SimpleRpgGame) playService.getGame();
         return game.getPlayer();
+    }
+
+    @Override
+    public void setPlayer(Entity entity) {
+        SimpleRpgGame game = (SimpleRpgGame) playService.getGame();
+        game.setPlayer(entity);
     }
 
     @Override
@@ -150,7 +158,6 @@ public class GameServiceImpl implements GameService {
     public void setFollow(Entity entity, long target) {
         entityService.hitAttribute(entity, AttrConstants.FOLLOW, target, null);
     }
-    
     
     @Override
     public boolean isDead(Entity entity) {
@@ -252,5 +259,16 @@ public class GameServiceImpl implements GameService {
             }
         }
         return enemy;
+    }
+
+    @Override
+    public void selectPlayer(String actorId, String actorName) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void addSimplePlayer(Entity actor) {
+//        SimpleRpgGame game = (SimpleRpgGame) playService.getGame();
+        playService.addEntity(actor);
     }
 }

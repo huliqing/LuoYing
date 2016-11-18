@@ -10,6 +10,8 @@ import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.manager.RandomManager;
 import name.huliqing.luoying.mess.MessAutoAttack;
+import name.huliqing.luoying.mess.MessEntityAdd;
+import name.huliqing.luoying.mess.MessEntityRemove;
 import name.huliqing.luoying.mess.MessRandomSeed;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.scene.Scene;
@@ -39,11 +41,28 @@ public class PlayNetworkImpl implements PlayNetwork {
     
     @Override
     public void addEntity(Scene scene, Entity entity) {
+        if (NETWORK.isClient()) {
+            return;
+        }
+        
+        entity.updateDatas();
+        MessEntityAdd mess = new MessEntityAdd();
+        mess.setEntityData(entity.getData());
+        mess.setSceneId(scene.getData().getUniqueId());
+        NETWORK.broadcast(mess);
+        
         playService.addEntity(scene, entity);
     }
 
     @Override
     public void removeEntity(Entity entity) {
+        if (NETWORK.isClient()) {
+            return;
+        }
+        MessEntityRemove mess = new MessEntityRemove();
+        mess.setEntityId(entity.getEntityId());
+        NETWORK.broadcast(mess);
+
         playService.removeEntity(entity);
     }
     

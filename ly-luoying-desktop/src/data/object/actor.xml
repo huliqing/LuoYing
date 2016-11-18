@@ -136,7 +136,7 @@
            skinWeapon="weaponBow001" 
            skills="skillWait,skillWalk,skillRun,skillReset,skillDead,skillHurtFront,skillHurtBack
 ,skillAttack,skillAttack2,skillAttack3,skillDualSwordAttack,skillBowShot
-,skillSummon,skillLightningShot,skillIceShot
+,skillLightningShot,skillIceShot
 " />
     
     <!-- hard -->

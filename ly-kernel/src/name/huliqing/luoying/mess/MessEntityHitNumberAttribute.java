@@ -27,14 +27,14 @@ public class MessEntityHitNumberAttribute extends MessBase {
     // 属性值
     private float addValue;
 
-    // 攻击源的id
-    private Long hitterId;
+    // 攻击源的id，如果不存在则标记为-1
+    private long hitterId = -1;
     
     /**
      * 获取作用值的源角色，如果源Entity不存在，则这个值返回-1。
      * @return 
      */
-    public Long getHitterId() {
+    public long getHitterId() {
         return hitterId;
     }
 
@@ -43,7 +43,7 @@ public class MessEntityHitNumberAttribute extends MessBase {
      * 3点伤害的时候，那么角色A就是发起源。
      * @param hitterId 
      */
-    public void setHitterId(Long hitterId) {
+    public void setHitterId(long hitterId) { 
         this.hitterId = hitterId;
     }
 
@@ -100,7 +100,7 @@ public class MessEntityHitNumberAttribute extends MessBase {
         super.applyOnClient();
         PlayService playService = Factory.get(PlayService.class);
         Entity hitter = null;
-        if (hitterId != null) {
+        if (hitterId > 0) {
             hitter = playService.getEntity(hitterId);
         }
         Entity entity = playService.getEntity(entityId);

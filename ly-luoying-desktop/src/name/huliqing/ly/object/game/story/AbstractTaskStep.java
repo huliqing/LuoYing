@@ -2,7 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.ly.object.game;
+package name.huliqing.ly.object.game.story;
+
+import name.huliqing.ly.object.game.story.TaskStep;
 
 /**
  * 简单的游戏任务逻辑

@@ -41,7 +41,7 @@ public class EntityNetworkImpl implements EntityNetwork {
             mess.setEntityId(entity.getEntityId());
             mess.setAttribute(attribute);
             mess.setValue(value);
-            mess.setHitterId(hitter != null ? hitter.getEntityId() : null);
+            mess.setHitterId(hitter != null ? hitter.getEntityId() : -1);
             NETWORK.broadcast(mess);
         }
         entityService.hitAttribute(entity, attribute, value, hitter);
@@ -58,7 +58,7 @@ public class EntityNetworkImpl implements EntityNetwork {
             mess.setEntityId(entity.getEntityId());
             mess.setAttribute(attribute);
             mess.setAddValue(addValue);
-            mess.setHitterId(hitter != null ? hitter.getEntityId() : null);
+            mess.setHitterId(hitter != null ? hitter.getEntityId() : -1);
             NETWORK.broadcast(mess);
         }
         entityService.hitNumberAttribute(entity, attribute, addValue, hitter);

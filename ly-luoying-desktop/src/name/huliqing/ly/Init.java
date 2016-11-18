@@ -35,10 +35,10 @@ import name.huliqing.ly.object.chat.SellChat;
 import name.huliqing.ly.object.chat.SendChat;
 import name.huliqing.ly.object.chat.ShopItemChat;
 import name.huliqing.ly.object.chat.TaskChat;
-import name.huliqing.ly.object.game.StoryGbGame;
-import name.huliqing.ly.object.game.StoryGuardGame;
-import name.huliqing.ly.object.game.StoryTreasureGame;
-import name.huliqing.ly.object.game.SurvivalGame;
+import name.huliqing.ly.object.game.story.StoryGbGame;
+import name.huliqing.ly.object.game.story.StoryGuardGame;
+import name.huliqing.ly.object.game.story.StoryTreasureGame;
+import name.huliqing.ly.object.game.lan.SurvivalGame;
 import name.huliqing.ly.object.gamelogic.PlayerDeadCheckerGameLogic;
 import name.huliqing.ly.object.module.ChatModule;
 import name.huliqing.ly.object.view.TextPanelView;
@@ -66,7 +66,6 @@ public class Init {
         registerData();
         registerProcessor();
         loadData();
-        Serializer.setReadOnly(true);
         
         // 载入资源,作为默认
         ResManager.loadResource("/data/font/en_US/resource",                "utf-8", null);

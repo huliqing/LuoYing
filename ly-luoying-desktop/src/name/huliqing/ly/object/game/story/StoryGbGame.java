@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.ly.object.game;
+package name.huliqing.ly.object.game.story;
 
 import com.jme3.math.Vector3f;
 import name.huliqing.luoying.data.GameData;
@@ -49,6 +49,6 @@ public class StoryGbGame extends StoryGame {
 
     public String[] getEnemyActors() {
         return enemyActors;
-    }
+    } 
     
 }

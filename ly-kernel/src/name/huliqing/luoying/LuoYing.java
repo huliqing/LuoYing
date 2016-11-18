@@ -10,6 +10,7 @@ import com.jme3.asset.AssetManager;
 import com.jme3.asset.DesktopAssetManager;
 import com.jme3.font.BitmapFont;
 import com.jme3.input.InputManager;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector4f;
 import com.jme3.network.serializing.Serializer;
@@ -51,6 +52,7 @@ import name.huliqing.luoying.data.PositionData;
 import name.huliqing.luoying.data.ResistData;
 import name.huliqing.luoying.data.SceneData;
 import name.huliqing.luoying.data.ShapeData;
+import name.huliqing.luoying.data.ShortcutData;
 import name.huliqing.luoying.data.SkillData;
 import name.huliqing.luoying.data.SkinData;
 import name.huliqing.luoying.data.SlotData;
@@ -73,7 +75,6 @@ import name.huliqing.luoying.mess.MessActorViewDir;
 import name.huliqing.luoying.mess.MessAutoAttack;
 import name.huliqing.luoying.mess.MessClient;
 import name.huliqing.luoying.mess.MessPing;
-import name.huliqing.luoying.mess.MessPlayActorLoaded;
 import name.huliqing.luoying.mess.MessPlayActorSelect;
 import name.huliqing.luoying.mess.MessPlayActorSelectResult;
 import name.huliqing.luoying.mess.MessPlayClientExit;
@@ -294,6 +295,7 @@ import name.huliqing.luoying.object.slot.Slot;
 import name.huliqing.luoying.object.state.BooleanAttributeState;
 import name.huliqing.luoying.object.state.GroupState;
 import name.huliqing.luoying.object.state.PrivateGroupState;
+import name.huliqing.luoying.serializer.QuaternionSerializer;
 import name.huliqing.luoying.serializer.Vector4Serializer;
 import name.huliqing.luoying.xml.Data;
 import name.huliqing.luoying.xml.DataFactory;
@@ -349,6 +351,7 @@ public class LuoYing {
     private static void registerSerializer() {
         
         Serializer.registerClass(Vector4f.class,  new Vector4Serializer());
+        Serializer.registerClass(Quaternion.class,  new QuaternionSerializer());
 
         Serializer.registerClass(Proto.class);
         Serializer.registerClass(AttributeApply.class);
@@ -371,16 +374,19 @@ public class LuoYing {
         Serializer.registerClass(EffectData.class);
         Serializer.registerClass(ElData.class);
         Serializer.registerClass(EmitterData.class);
+        Serializer.registerClass(EntityData.class);
         Serializer.registerClass(GameData.class);
         Serializer.registerClass(GameLogicData.class);
         Serializer.registerClass(ItemData.class);
         Serializer.registerClass(LogicData.class);
         Serializer.registerClass(MagicData.class);
+        Serializer.registerClass(ModelEntityData.class);
         Serializer.registerClass(ModuleData.class);
         Serializer.registerClass(PositionData.class);
         Serializer.registerClass(ResistData.class);
         Serializer.registerClass(SceneData.class);
         Serializer.registerClass(ShapeData.class);
+        Serializer.registerClass(ShortcutData.class);
         Serializer.registerClass(SkillData.class);
         Serializer.registerClass(SkinData.class);
         Serializer.registerClass(SlotData.class);
@@ -716,33 +722,28 @@ public class LuoYing {
         Serializer.registerClass(MessSCInitGameOK.class);
         Serializer.registerClass(MessSCServerState.class);
         
-        // ---- Lan 
         Serializer.registerClass(MessPing.class);
         Serializer.registerClass(MessPlayActorSelect.class);
         
-
-//        Serializer.registerClass(MessProtoUse.class);
-//        Serializer.registerClass(MessMessage.class);
-        Serializer.registerClass(MessPlayActorLoaded.class);
         Serializer.registerClass(MessSCActorRemove.class);
         Serializer.registerClass(MessPlayActorSelectResult.class);
         
-        // ---- Game play
-        Serializer.registerClass(MessAutoAttack.class);
         Serializer.registerClass(MessActionRun.class);
-//        Serializer.registerClass(MessActorFollow.class);
-//        Serializer.registerClass(MessActorKill.class);
         Serializer.registerClass(MessActorLookAt.class);
         Serializer.registerClass(MessActorPhysics.class);
-//        Serializer.registerClass(MessActorSetGroup.class);
-//        Serializer.registerClass(MessActorSetLevel.class);
         Serializer.registerClass(MessActorSetLocation.class);
-//        Serializer.registerClass(MessActorSetTarget.class);
-//        Serializer.registerClass(MessActorSpeak.class);
-//        Serializer.registerClass(MessActorTeam.class);
         Serializer.registerClass(MessActorTransform.class);
         Serializer.registerClass(MessActorTransformDirect.class);
         Serializer.registerClass(MessActorViewDir.class);
+        Serializer.registerClass(MessAutoAttack.class);
+        
+//        Serializer.registerClass(MessActorFollow.class);
+//        Serializer.registerClass(MessActorKill.class);
+//        Serializer.registerClass(MessActorSetGroup.class);
+//        Serializer.registerClass(MessActorSetLevel.class);
+//        Serializer.registerClass(MessActorSetTarget.class);
+//        Serializer.registerClass(MessActorSpeak.class);
+//        Serializer.registerClass(MessActorTeam.class);
         
         // Entity
         Serializer.registerClass(MessEntityAdd.class);

@@ -2,11 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.ly.object.game;
+package name.huliqing.ly.object.game.story;
 
 import com.jme3.math.Vector3f;
 import name.huliqing.luoying.Config;
 import name.huliqing.luoying.utils.MathUtils;
+import name.huliqing.ly.object.game.SceneHelper;
 
 /**
  *
@@ -20,7 +21,7 @@ public class StoryTreasureGame extends StoryGame {
     public int groupEnemy = 2;
     
     private SceneHelper sceneHelper;
-    
+     
     @Override
     protected void doStoryInitialize() {
         

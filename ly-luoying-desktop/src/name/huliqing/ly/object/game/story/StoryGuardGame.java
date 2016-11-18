@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.ly.object.game;
+package name.huliqing.ly.object.game.story;
 
 import com.jme3.math.Vector3f;
 import name.huliqing.luoying.data.GameData;
@@ -21,7 +21,7 @@ public class StoryGuardGame extends StoryGame {
     
     // 古柏的位置
     private Vector3f selfPosition;
-    // 盗贼据点
+    // 盗贼据点 
     private Vector3f enemyPosition;
     // 妖精位置
     private Vector3f fairyPosition;

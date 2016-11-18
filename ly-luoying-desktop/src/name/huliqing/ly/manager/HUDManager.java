@@ -15,8 +15,7 @@ import name.huliqing.luoying.ui.UI.Corner;
 import name.huliqing.luoying.ui.state.UIState;
 
 /**
- * @deprecated 
- * 处理所有界面上的一切信息，UI,Message等,弹窗等。
+ * 消息界面管理器
  * @author huliqing
  */
 public class HUDManager {
@@ -28,7 +27,7 @@ public class HUDManager {
         messager = new Messager(LuoYing.getSettings().getWidth(), LuoYing.getSettings().getHeight() * 0.25f);
         messager.initialize();
         // 把message放到gui中主要为了在updateLogicalState
-        appGuiRoot.attachChild(messager); 
+        appGuiRoot.attachChild(messager);
     }
     
     public static void cleanup() {
