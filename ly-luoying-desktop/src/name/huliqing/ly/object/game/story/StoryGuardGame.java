@@ -6,12 +6,13 @@ package name.huliqing.ly.object.game.story;
 
 import com.jme3.math.Vector3f;
 import name.huliqing.luoying.data.GameData;
+import name.huliqing.ly.object.game.StoryServerNetworkRpgGame;
 
 /**
  *
  * @author huliqing
  */
-public class StoryGuardGame extends StoryGame {
+public class StoryGuardGame extends StoryServerNetworkRpgGame {
     
 //    public final static int GROUP_PLAYER = 1;
     /** 敌军分组 */

@@ -6,12 +6,13 @@ package name.huliqing.ly.object.game.story;
 
 import com.jme3.math.Vector3f;
 import name.huliqing.luoying.data.GameData;
+import name.huliqing.ly.object.game.StoryServerNetworkRpgGame;
 
 /**
  *
  * @author huliqing
  */
-public class StoryGbGame extends StoryGame {
+public class StoryGbGame extends StoryServerNetworkRpgGame {
     // 古柏的位置
     private Vector3f gbPosition;
     // 盗贼据点

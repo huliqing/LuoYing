@@ -12,6 +12,7 @@ import name.huliqing.luoying.Inject;
 import name.huliqing.ly.object.NetworkObject;
 import name.huliqing.luoying.object.SyncData;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.ly.enums.MessageType;
 import name.huliqing.ly.view.talk.Talk;
 
@@ -70,11 +71,49 @@ public interface GameNetwork extends Inject {
     void setLevel(Entity entity, int level);
     void setGroup(Entity entity, int group);
     void setTeam(Entity entity, int team);
+    
+    /**
+     * 设置是否打开角色的逻辑功能，这个范围比AutoAi要大。
+     * @param entity
+     * @param autoLogic 
+     */
     void setAutoLogic(Entity entity, boolean autoLogic);
+    
+    /**
+     * 打开角色的AI功能，
+     * @param entity
+     * @param autoAi 
+     */
+    void setAutoAi(Entity entity, boolean autoAi);
+    
+    /**
+     * 设置entity的目标对象
+     * @param entity
+     * @param target 
+     */
     void setTarget(Entity entity, long target);
+    
+    /**
+     * 设置entity的跟随目标
+     * @param entity
+     * @param target 
+     */
     void setFollow(Entity entity, long target);
+    
+    /**
+     * 设置角色是否为不可或缺的,即死亡后不会被移除出场景
+     * @param entity
+     * @param essential 
+     */
     void setEssential(Entity entity, boolean essential);
-    void setColor(Entity entity, ColorRGBA color);
+    
+//    /**
+//     * 设置角色是否为玩家类型的角色
+//     * @param entity
+//     * @param isPlayer 
+//     */
+//    void setPlayer(Entity entity, boolean isPlayer);
+    
     /**
      * 把partner设置为entity的同伴
      * @param entity
@@ -87,6 +126,30 @@ public interface GameNetwork extends Inject {
      * @param entity 
      */
     void kill(Entity entity);
+    
+    /**
+     * 设置角色的颜色
+     * @param entity
+     * @param color 
+     */
+    void setColor(Entity entity, ColorRGBA color);
+    
+    /**
+     * 让Entity使用一个物品
+     * @param entity
+     * @param objectUniqueId 
+     * @return  
+     */
+    boolean useObjectData(Entity entity, long objectUniqueId);
+    
+    /**
+     * 删除角色身上指定的物品
+     * @param entity
+     * @param objectUniqueId
+     * @param amount
+     * @return 
+     */
+    boolean removeObjectData(Entity entity, long objectUniqueId, int amount);
     
     // ------------------------- from userCommand
     

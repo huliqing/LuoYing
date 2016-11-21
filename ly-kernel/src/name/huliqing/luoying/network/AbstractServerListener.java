@@ -19,6 +19,7 @@ import com.jme3.network.Message;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import name.huliqing.luoying.data.GameData;
 
 /**
  * 服务端监听器,用于监听来自客户端连接的消息。
@@ -89,8 +90,17 @@ public abstract class AbstractServerListener<T> implements ServerListener<T> {
      * @param conn 
      */
     protected void onClientAdded(GameServer gameServer, HostedConnection conn) {
+        // remove20161121
         // 告诉客户端当前玩的游戏信息,gameData必须立即发送
-        gameServer.send(conn, new MessSCGameData(gameServer.getGameData()));
+//        gameServer.send(conn, new MessSCGameData(gameServer.getGameData()));
+
+        // 告诉客户端当前玩的游戏信息,gameData必须立即发送
+        // 注：这里向客户端发送的并不包含游戏逻辑数据及场景实体数据，这些数据是在客户端状态初始化后再从服务端获取并载入
+        GameData gd = gameServer.getGameData();
+        gd.getGameLogicDatas().clear();
+        gd.getSceneData().setEntityDatas(null);
+        gd.getGuiSceneData().setEntityDatas(null);
+        gameServer.send(conn, new MessSCGameData());
     }
     
     /**

@@ -61,7 +61,7 @@ import name.huliqing.luoying.data.StateData;
 import name.huliqing.luoying.data.TalentData;
 import name.huliqing.luoying.data.TaskData;
 import name.huliqing.luoying.data.TradeObjectData;
-import name.huliqing.luoying.mess.MessActionRun;
+//import name.huliqing.ly.mess.MessActionRun;
 //import name.huliqing.luoying.mess.MessActorFollow;
 //import name.huliqing.luoying.mess.MessActorKill;
 import name.huliqing.luoying.mess.MessActorPhysics;
@@ -112,7 +112,7 @@ import name.huliqing.luoying.object.logic.FightLogic;
 import name.huliqing.luoying.object.logic.FollowLogic;
 import name.huliqing.luoying.object.logic.IdleLogic;
 import name.huliqing.luoying.object.logic.NotifyLogic;
-import name.huliqing.luoying.object.logic.PlayerLogic;
+//import name.huliqing.luoying.object.logic.PlayerLogic;
 import name.huliqing.luoying.object.logic.PositionLogic;
 import name.huliqing.luoying.object.logic.SearchEnemyLogic;
 import name.huliqing.luoying.object.logic.ShopLogic;
@@ -531,7 +531,7 @@ public class LuoYing {
         DataFactory.register("logicFight",  LogicData.class, LogicDataLoader.class, FightLogic.class);
         DataFactory.register("logicFollow",  LogicData.class, LogicDataLoader.class,  FollowLogic.class);
         DataFactory.register("logicNotify",  LogicData.class, LogicDataLoader.class,  NotifyLogic.class);
-        DataFactory.register("logicPlayer",  LogicData.class, LogicDataLoader.class,  PlayerLogic.class);
+//        DataFactory.register("logicPlayer",  LogicData.class, LogicDataLoader.class,  PlayerLogic.class);
         DataFactory.register("logicPosition",  LogicData.class, LogicDataLoader.class,  PositionLogic.class);
         DataFactory.register("logicSearchEnemy",  LogicData.class, LogicDataLoader.class,  SearchEnemyLogic.class);
         DataFactory.register("logicAttributeChange",  LogicData.class, LogicDataLoader.class,  AttributeChangeLogic.class);
@@ -728,7 +728,6 @@ public class LuoYing {
         Serializer.registerClass(MessSCActorRemove.class);
         Serializer.registerClass(MessPlayActorSelectResult.class);
         
-        Serializer.registerClass(MessActionRun.class);
         Serializer.registerClass(MessActorLookAt.class);
         Serializer.registerClass(MessActorPhysics.class);
         Serializer.registerClass(MessActorSetLocation.class);

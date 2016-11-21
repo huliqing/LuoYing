@@ -49,7 +49,6 @@ import name.huliqing.ly.view.talk.TalkManager;
  */
 public abstract class SimpleRpgGame extends SimpleGame implements UIEventListener {
     private static final Logger LOG = Logger.getLogger(SimpleRpgGame.class.getName());
-//    private final ActorService actorService = Factory.get(ActorService.class);
     private final GameService gameService = Factory.get(GameService.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
@@ -60,11 +59,11 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
     /** 当前游戏主角 */
     protected Entity player;
     
-    private final List<Actor> tempActorsPicked = new ArrayList<Actor>();
-    private final CollisionResults tempTerrainsPicked = new CollisionResults();
-    
     // 场景相机
     protected ChaseCameraEnv chaseCamera;
+
+    private final List<Actor> tempActorsPicked = new ArrayList<Actor>();
+    private final CollisionResults tempTerrainsPicked = new CollisionResults();
     
     @Override
     public void initialize(Application app) {
@@ -170,6 +169,8 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
 //            addMessage(ResourceManager.get(ResConstants.COMMON_NO_TARGET), MessageType.notice);
 //        }
         if (temp != null) {
+            gameNetwork.setFollow(player, -1);
+            gameNetwork.setAutoAi(player, true);
             gameNetwork.setTarget(player, temp.getEntityId());
         }
         playNetwork.attack(player, temp);
@@ -290,6 +291,9 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
      */
     protected boolean onPickedTerrain(CollisionResults terrainsPicked) {
         if (player != null && terrainsPicked.size() > 0) {
+            // 当玩家点击走路时要去除跟随，并且去除自动AI
+            gameNetwork.setFollow(player, -1);
+            gameNetwork.setAutoAi(player, false);
             gameNetwork.playRunToPos(player, terrainsPicked.getClosestCollision().getContactPoint());
             return true;
         }
@@ -355,4 +359,5 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
         // 快捷管理器中的“回收站”始终是关闭的，只有在拖动快捷方式时才可见
         ShortcutManager.setBucketVisible(false);
     }
+    
 }

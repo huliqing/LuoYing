@@ -5,9 +5,13 @@
  */
 package name.huliqing.luoying.mess;
 
+import com.jme3.network.HostedConnection;
 import com.jme3.network.serializing.Serializable;
 import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.layer.network.EntityNetwork;
+import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.layer.service.PlayService;
+import name.huliqing.luoying.network.GameServer;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.xml.ObjectData;
 
@@ -50,7 +54,16 @@ public class MessEntityUseData extends MessBase {
         super.applyOnClient();
         Entity entity = Factory.get(PlayService.class).getEntity(entityId);
         if (entity != null) {
-            entity.useObjectData(objectData);
+            Factory.get(EntityService.class).useObjectData(entity, objectData);
+        }
+    }
+
+    @Override
+    public void applyOnServer(GameServer gameServer, HostedConnection source) {
+        super.applyOnServer(gameServer, source); 
+        Entity entity = Factory.get(PlayService.class).getEntity(entityId);
+        if (entity != null) {
+            Factory.get(EntityNetwork.class).useObjectData(entity, objectData);
         }
     }
     

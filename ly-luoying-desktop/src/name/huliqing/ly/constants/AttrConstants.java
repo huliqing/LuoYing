@@ -27,7 +27,7 @@ public class AttrConstants {
     public final static String ROTATABLE = "attributeRotatable";
     public final static String ESSENTIAL = "attributeEssential";
     public final static String AUTO_LOGIC = "attributeAutoLogic";
-    public final static String AUTO_DETECT = "attributeAutoDetect";
+    public final static String AUTO_AI = "attributeAutoAi";
     public final static String TARGET = "attributeTarget";
     public final static String FOLLOW = "attributeFollow";
     public final static String OWNER = "attributeOwner";

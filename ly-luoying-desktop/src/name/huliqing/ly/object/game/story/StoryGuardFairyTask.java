@@ -100,4 +100,4 @@ public class StoryGuardFairyTask extends AbstractGameLogic {
         return game.getFairyPosition().distanceSquared(
                 game.getPlayer().getSpatial().getWorldTranslation()) < distanceSquare;
     }
-}
+} 

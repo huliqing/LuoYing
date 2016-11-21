@@ -91,7 +91,7 @@ public class ShopLogic extends AbstractLogic {
             }
             actualStock = p.maxCount - currentCount;
             if (actualStock > 0) {
-                entityNetwork.addData(actor, p.itemId, actualStock);
+                entityNetwork.addObjectData(actor, p.itemId, actualStock);
             }
         }
     }
@@ -132,7 +132,7 @@ public class ShopLogic extends AbstractLogic {
                 actualStock = p.maxCount - currentCount;
             }
             if (actualStock > 0) {
-                entityNetwork.addData(actor, p.itemId, actualStock);
+                entityNetwork.addObjectData(actor, p.itemId, actualStock);
             }
         }
     }

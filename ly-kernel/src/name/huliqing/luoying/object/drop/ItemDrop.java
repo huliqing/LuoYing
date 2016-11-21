@@ -43,7 +43,7 @@ public class ItemDrop extends AbstractDrop {
         
         // 注：如果rate>=1.0, 则忽略configService全局掉落设置(dropFactor)的影响，把物品视为始终掉落的。
         if (rate >= 1.0f) {
-            entityNetwork.addData(target, item, count);
+            entityNetwork.addObjectData(target, item, count);
             playDropSounds(source);
             return true;
         }
@@ -51,7 +51,7 @@ public class ItemDrop extends AbstractDrop {
         // 按机率掉落，这个机率受全局掉落设置影响
         float trueRate = configService.getDropFactor() * rate;
         if (trueRate >= FastMath.nextRandomFloat()) {
-            entityNetwork.addData(target, item, count);
+            entityNetwork.addObjectData(target, item, count);
             playDropSounds(source);
             return true;
         }

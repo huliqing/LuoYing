@@ -18,7 +18,7 @@ import name.huliqing.ly.view.talk.TalkListener;
 import name.huliqing.luoying.layer.network.ActorNetwork;
 import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.service.ActorService;
-import name.huliqing.luoying.layer.service.PlayService;
+import name.huliqing.luoying.layer.service.PlayService;  
 import name.huliqing.luoying.logic.scene.ActorMultLoadHelper;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.object.anim.Anim;

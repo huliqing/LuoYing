@@ -48,6 +48,7 @@ import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.ly.layer.network.GameNetworkImpl;
 import name.huliqing.ly.layer.service.GameService;
 import name.huliqing.ly.layer.service.GameServiceImpl;
+import name.huliqing.ly.mess.MessActionRun;
 
 /**
  * @author huliqing
@@ -87,6 +88,7 @@ public class Init {
         Serializer.registerClass(ChatData.class);
         Serializer.registerClass(ViewData.class);
         
+        Serializer.registerClass(MessActionRun.class);
         Serializer.registerClass(MessActorSpeak.class);
         Serializer.registerClass(MessChatSell.class);
         Serializer.registerClass(MessChatSend.class);

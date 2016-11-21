@@ -8,18 +8,17 @@ package name.huliqing.ly.view.shortcut;
 import com.jme3.math.ColorRGBA;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.SkinData;
-import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.luoying.object.entity.EntityDataListener;
-import name.huliqing.luoying.object.module.SkinModule;
 import name.huliqing.luoying.ui.UIFactory;
 import name.huliqing.luoying.xml.ObjectData;
+import name.huliqing.ly.layer.network.GameNetwork;
 
 /**
  * 用于皮肤(Skin)的快捷方式
  * @author huliqing
  */
 public class SkinShortcut extends BaseUIShortcut<SkinData> implements EntityDataListener {
-    private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
+    private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
 
     @Override
     public void initialize() {
@@ -35,7 +34,7 @@ public class SkinShortcut extends BaseUIShortcut<SkinData> implements EntityData
 
     @Override
     public void removeObject() {
-        entityNetwork.removeData(actor, objectData, objectData.getTotal());
+        gameNetwork.removeObjectData(actor, objectData.getUniqueId(), objectData.getTotal());
     }
 
     @Override
@@ -43,7 +42,7 @@ public class SkinShortcut extends BaseUIShortcut<SkinData> implements EntityData
         if (pressed) {
             return;
         }
-        entityNetwork.useData(actor, objectData);
+        gameNetwork.useObjectData(actor, objectData.getUniqueId());
     }
 
     @Override

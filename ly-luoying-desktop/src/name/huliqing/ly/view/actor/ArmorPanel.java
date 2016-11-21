@@ -37,7 +37,7 @@ public class ArmorPanel extends ListView<SkinData> implements ActorPanel{
             @Override
             public void onClick(UI ui, boolean isPress) {
                 if (!isPress) {
-                    entityNetwork.useData(actor, row.getData());
+                    entityNetwork.useObjectData(actor, row.getData());
                     refreshPageData();
                 }
             }

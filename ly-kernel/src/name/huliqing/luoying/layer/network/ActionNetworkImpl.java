@@ -18,7 +18,7 @@ import name.huliqing.luoying.object.entity.Entity;
  */
 public class ActionNetworkImpl implements ActionNetwork {
 
-    private final static Network NETWORK = Network.getInstance();
+    private final Network network = Network.getInstance();
     private ActionService actionService;
 
     @Override
@@ -28,14 +28,14 @@ public class ActionNetworkImpl implements ActionNetwork {
 
     @Override
     public void playAction(Entity actor, Action action) {
-        if (!NETWORK.isClient()) {
+        if (!network.isClient()) {
             actionService.playAction(actor, action);
         }
     }
 
     @Override
     public void playRun(Entity actor, Vector3f pos) {
-        if (!NETWORK.isClient()) {
+        if (!network.isClient()) {
             actionService.playRun(actor, pos);
         }
     }
@@ -43,7 +43,7 @@ public class ActionNetworkImpl implements ActionNetwork {
     @Override
     public void playFight(Entity actor, Entity target, String skillId) {
         // 客户端是不能执行逻辑和行为的
-        if (!NETWORK.isClient()) {
+        if (!network.isClient()) {
             
             // remove20161103
 //            actorNetwork.setTarget(actor, target);

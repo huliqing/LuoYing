@@ -114,10 +114,10 @@ public class GroupEffect extends Effect {
         // 请求让所有已经运行的子效果结束
         for (EffectWrap ew : effects) {
             if (ew.started) {
-                if (Config.debug) {
-                    LOG.log(Level.INFO, "GroupEffect requestEnd, effectTrueTimeUsed={0}, effectId={1}, effectTrueStartTime={2}"
-                            , new Object[] {timeUsed, ew.effectId, ew.trueStartTime});
-                }
+//                if (Config.debug) {
+//                    LOG.log(Level.INFO, "GroupEffect requestEnd, effectTrueTimeUsed={0}, effectId={1}, effectTrueStartTime={2}"
+//                            , new Object[] {timeUsed, ew.effectId, ew.trueStartTime});
+//                }
                 ew.effect.requestEnd();
             }
         }

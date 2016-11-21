@@ -81,7 +81,7 @@ public class MessEntityHitAttribute extends MessBase {
     public void setValue(Object value) {
         this.value = value;
     }
-
+    
     @Override
     public void applyOnClient() {
         super.applyOnClient();
@@ -95,7 +95,7 @@ public class MessEntityHitAttribute extends MessBase {
             Factory.get(EntityService.class).hitAttribute(entity, attribute, value, hitter);
         }
     }
-
+    
     @Override
     public void applyOnServer(GameServer gameServer, HostedConnection hc) {
         super.applyOnServer(gameServer, hc);

@@ -14,13 +14,6 @@ import name.huliqing.luoying.object.skill.Skill;
  */
 public interface SkillNetwork extends Inject {
 
-//    /**
-//     * 给角色添加技能
-//     * @param actor
-//     * @param skillId 
-//     */
-//    void addSkill(Entity actor, String skillId);
-    
     /**
      * 执行一个技能实例
      * @param actor

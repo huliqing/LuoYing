@@ -15,6 +15,8 @@ import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.ConnData;
 import name.huliqing.luoying.data.GameData;
+import name.huliqing.luoying.mess.MessEntityHitAttribute;
+import name.huliqing.luoying.mess.MessEntityHitNumberAttribute;
 import name.huliqing.luoying.mess.MessPlayActorSelect;
 import name.huliqing.luoying.mess.MessPlayActorSelectResult;
 import name.huliqing.luoying.mess.MessPlayClientExit;
@@ -22,6 +24,7 @@ import name.huliqing.luoying.mess.MessSCClientList;
 import name.huliqing.luoying.network.GameServer;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.ly.constants.AttrConstants;
 import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.ly.layer.service.GameService;
 import name.huliqing.ly.network.DefaultServerListener;
@@ -37,7 +40,7 @@ public class ServerNetworkRpgGame extends NetworkRpgGame {
     protected GameServer gameServer;
  
     public ServerNetworkRpgGame() {}
-    
+     
     public ServerNetworkRpgGame(GameData gameData) {
         super(gameData);
     }
@@ -49,7 +52,7 @@ public class ServerNetworkRpgGame extends NetworkRpgGame {
 
     @Override
     public void initialize(Application app) {
-        super.initialize(app); //To change body of generated methods, choose Tools | Templates.
+        super.initialize(app);
         // 创建server
         if (gameServer == null) {
             try {
@@ -154,7 +157,7 @@ public class ServerNetworkRpgGame extends NetworkRpgGame {
         public NetworkServerListener(Application app) {
             super(app);
         }
-
+        
         @Override
         protected void onClientsUpdated(GameServer gameServer) {
             super.onClientsUpdated(gameServer);
@@ -164,9 +167,11 @@ public class ServerNetworkRpgGame extends NetworkRpgGame {
 
         @Override
         protected void processServerMessage(GameServer gameServer, HostedConnection source, Message m) {
+            // 本地处理
             if (processMessage(gameServer, source, m)) {
                 return;
             }
+            // 由父类处理
             super.processServerMessage(gameServer, source, m); 
         }
     }

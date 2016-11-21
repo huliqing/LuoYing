@@ -44,7 +44,7 @@ import name.huliqing.ly.view.shortcut.ShortcutManager;
  * @author huliqing
  */
 public class ClientNetworkRpgGame extends NetworkRpgGame implements AbstractClientListener.PingListener{
-
+ 
     private static final Logger LOG = Logger.getLogger(ClientNetworkRpgGame.class.getName());
     
     private final SaveService saveService = Factory.get(SaveService.class);

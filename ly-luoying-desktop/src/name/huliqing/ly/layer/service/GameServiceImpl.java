@@ -18,6 +18,8 @@ import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.luoying.layer.service.ActionService;
 import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.layer.service.PlayService;
+import name.huliqing.luoying.mess.MessEntityRemoveData;
+import name.huliqing.luoying.mess.MessEntityUseDataById;
 import name.huliqing.luoying.object.SyncData;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.entity.Entity;
@@ -148,7 +150,12 @@ public class GameServiceImpl implements GameService {
     public void setAutoLogic(Entity entity, boolean autoLogic) {
         entityService.hitAttribute(entity, AttrConstants.AUTO_LOGIC, autoLogic, null);
     }
-
+    
+    @Override
+    public void setAutoAi(Entity entity, boolean autoAi) {
+        entityService.hitAttribute(entity, AttrConstants.AUTO_AI, autoAi, null);
+    }
+    
     @Override
     public void setTarget(Entity entity, long target) {
         entityService.hitAttribute(entity, AttrConstants.TARGET, target, null);
@@ -214,12 +221,22 @@ public class GameServiceImpl implements GameService {
     public void setEssential(Entity entity, boolean essential) {
         entityService.hitAttribute(entity, AttrConstants.ESSENTIAL, essential, null);
     }
-
+    
     @Override
     public void setColor(Entity entity, ColorRGBA color) {
         entityService.hitAttribute(entity, AttrConstants.COLOR, new Vector4f(color.r, color.g, color.b, color.a), null);
     }
-
+    
+    @Override
+    public boolean useObjectData(Entity entity, long objectUniqueId) {
+        return entityService.useObjectData(entity, objectUniqueId);
+    }
+    
+    @Override
+    public boolean removeObjectData(Entity entity, long objectUniqueId, int amount) {
+        return entityService.removeObjectData(entity, objectUniqueId, amount);
+    }
+    
     @Override
     public boolean isEnemy(Entity entity, Entity target) {
         int group1 = entityService.getNumberAttributeValue(entity, AttrConstants.GROUP, -1).intValue();

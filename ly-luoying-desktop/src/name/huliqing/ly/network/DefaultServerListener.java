@@ -36,7 +36,6 @@ public class DefaultServerListener extends AbstractServerListener<Entity> {
     private final PlayService playService = Factory.get(PlayService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final GameService gameService = Factory.get(GameService.class);
-//    private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final List<Entity> syncObjects = new LinkedList<Entity>();
     private float syncTimer = 0;

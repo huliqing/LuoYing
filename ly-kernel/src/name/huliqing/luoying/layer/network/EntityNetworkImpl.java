@@ -19,124 +19,118 @@ import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.xml.ObjectData;
 
 /**
- *
+ * Entity的网络层，主要负责将对于Entity的属性修改及数据的添加广播到客户端.
  * @author huliqing
  */
 public class EntityNetworkImpl implements EntityNetwork {
-    private final static Network NETWORK = Network.getInstance();
+    private final Network network = Network.getInstance();
     private EntityService entityService;
-
+    
     @Override
     public void inject() {
         entityService = Factory.get(EntityService.class);
     }
-
+    
     @Override
     public void hitAttribute(Entity entity, String attribute, Object value, Entity hitter) {
-        if (NETWORK.isClient()) {
+        // 在客户端
+        if (network.isClient()) {
             return;
         }
-        if (NETWORK.hasConnections()) {
-            MessEntityHitAttribute mess = new MessEntityHitAttribute();
-            mess.setEntityId(entity.getEntityId());
-            mess.setAttribute(attribute);
-            mess.setValue(value);
-            mess.setHitterId(hitter != null ? hitter.getEntityId() : -1);
-            NETWORK.broadcast(mess);
-        }
+        
+        // 在服务端
+        MessEntityHitAttribute mess = new MessEntityHitAttribute();
+        mess.setEntityId(entity.getEntityId());
+        mess.setAttribute(attribute);
+        mess.setValue(value);
+        mess.setHitterId(hitter != null ? hitter.getEntityId() : -1);
+        network.broadcast(mess);
         entityService.hitAttribute(entity, attribute, value, hitter);
     }
     
     @Override
     public void hitNumberAttribute(Entity entity, String attribute, float addValue, Entity hitter) {
-         if (NETWORK.isClient()) {
+        // 客户端
+        if (network.isClient()) {
             return;
         }
         
-        if (NETWORK.hasConnections()) {
-            MessEntityHitNumberAttribute mess = new MessEntityHitNumberAttribute();
-            mess.setEntityId(entity.getEntityId());
-            mess.setAttribute(attribute);
-            mess.setAddValue(addValue);
-            mess.setHitterId(hitter != null ? hitter.getEntityId() : -1);
-            NETWORK.broadcast(mess);
-        }
+        // 服务端
+        MessEntityHitNumberAttribute mess = new MessEntityHitNumberAttribute();
+        mess.setEntityId(entity.getEntityId());
+        mess.setAttribute(attribute);
+        mess.setAddValue(addValue);
+        mess.setHitterId(hitter != null ? hitter.getEntityId() : -1);
+        network.broadcast(mess);
         entityService.hitNumberAttribute(entity, attribute, addValue, hitter);
     }
 
     @Override
-    public boolean addData(Entity entity, ObjectData data, int amount) {
-        if (NETWORK.isClient()) {
+    public boolean addObjectData(Entity entity, ObjectData data, int amount) {
+        if (network.isClient()) {
             return false;
         }
-        if (NETWORK.hasConnections()) {
-            MessEntityAddData mess = new MessEntityAddData();
-            mess.setEntityId(entity.getEntityId());
-            mess.setObjectData(data);
-            mess.setAmount(amount);
-            NETWORK.broadcast(mess);
-        }
-        return entityService.addData(entity, data, amount);
+        
+        MessEntityAddData mess = new MessEntityAddData();
+        mess.setEntityId(entity.getEntityId());
+        mess.setObjectData(data);
+        mess.setAmount(amount);
+        network.broadcast(mess);
+        return entityService.addObjectData(entity, data, amount);
     }
 
     @Override
-    public boolean addData(Entity entity, String objectId, int amount) {
-        if (NETWORK.isClient()) {
+    public boolean addObjectData(Entity entity, String objectId, int amount) {
+        if (network.isClient()) {
             return false;
         }
-        if (NETWORK.hasConnections()) {
-            MessEntityAddDataById mess = new MessEntityAddDataById();
-            mess.setEntityId(entity.getEntityId());
-            mess.setObjectId(objectId);
-            mess.setAmount(amount);
-            NETWORK.broadcast(mess);
-        }
-        return entityService.addData(entity, objectId, amount);
+        
+        MessEntityAddDataById mess = new MessEntityAddDataById();
+        mess.setEntityId(entity.getEntityId());
+        mess.setObjectId(objectId);
+        mess.setAmount(amount);
+        network.broadcast(mess);
+        return entityService.addObjectData(entity, objectId, amount);
     }
 
     @Override
-    public boolean removeData(Entity entity, ObjectData data, int amount) {
-        if (NETWORK.isClient()) {
+    public boolean removeObjectData(Entity entity, long objectUniqueId, int amount) {
+        if (network.isClient()) {
             return false;
         }
-        if (NETWORK.hasConnections()) {
-            MessEntityRemoveData mess = new MessEntityRemoveData();
-            mess.setEntityId(entity.getEntityId());
-            mess.setObjectData(data);
-            mess.setAmount(amount);
-            NETWORK.broadcast(mess);
-        }
-        return entityService.removeData(entity, data, amount);
+        
+        MessEntityRemoveData mess = new MessEntityRemoveData();
+        mess.setEntityId(entity.getEntityId());
+        mess.setObjectId(objectUniqueId);
+        mess.setAmount(amount);
+        network.broadcast(mess);
+        return entityService.removeObjectData(entity, objectUniqueId, amount);
     }
 
     @Override
-    public boolean useData(Entity entity, ObjectData data) {
-        if (NETWORK.isClient()) {
+    public boolean useObjectData(Entity entity, ObjectData data) {
+        if (network.isClient()) {
             return false;
         }
-        if (NETWORK.hasConnections()) {
-            MessEntityUseData mess = new MessEntityUseData();
-            mess.setEntityId(entity.getEntityId());
-            mess.setObjectData(data);
-            NETWORK.broadcast(mess);
-        }
-        return entityService.useData(entity, data);
+        
+        MessEntityUseData mess = new MessEntityUseData();
+        mess.setEntityId(entity.getEntityId());
+        mess.setObjectData(data);
+        network.broadcast(mess);
+        return entityService.useObjectData(entity, data);
     }
 
     @Override
-    public boolean useData(Entity entity, long objectUniqueId) {
-        if (NETWORK.isClient()) {
+    public boolean useObjectData(Entity entity, long objectUniqueId) {
+        if (network.isClient()) {
             return false;
         }
-        if (NETWORK.hasConnections()) {
-            MessEntityUseDataById mess = new MessEntityUseDataById();
-            mess.setEntityId(entity.getEntityId());
-            mess.setObjectUniqueId(objectUniqueId);
-            NETWORK.broadcast(mess);
-        }
-        return entityService.useData(entity, objectUniqueId);
+        
+        MessEntityUseDataById mess = new MessEntityUseDataById();
+        mess.setEntityId(entity.getEntityId());
+        mess.setObjectUniqueId(objectUniqueId);
+        network.broadcast(mess);
+        return entityService.useObjectData(entity, objectUniqueId);
     }
-
-    
     
 }

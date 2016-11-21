@@ -9,22 +9,25 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.math.Vector4f;
 import com.jme3.network.HostedConnection;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.EntityData;
-import name.huliqing.luoying.layer.network.ActorNetwork;
 import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.luoying.layer.network.PlayNetwork;
-import name.huliqing.luoying.layer.service.ActionService;
-import name.huliqing.luoying.layer.service.ActorService;
-import name.huliqing.luoying.layer.service.EntityService;
-import name.huliqing.luoying.mess.MessActionRun;
+import name.huliqing.luoying.layer.service.PlayService;
+import name.huliqing.ly.mess.MessActionRun;
+import name.huliqing.luoying.mess.MessEntityAdd;
+import name.huliqing.luoying.mess.MessEntityHitAttribute;
+import name.huliqing.luoying.mess.MessEntityRemoveData;
+import name.huliqing.luoying.mess.MessEntityUseDataById;
 import name.huliqing.luoying.mess.MessPlayActorSelect;
 import name.huliqing.luoying.network.Network;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.SyncData;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.ly.constants.AttrConstants;
 import name.huliqing.ly.enums.MessageType;
 import name.huliqing.ly.mess.MessActorSpeak;
@@ -32,6 +35,7 @@ import name.huliqing.ly.object.NetworkObject;
 import name.huliqing.ly.layer.service.GameService;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.ly.mess.MessMessage;
+import name.huliqing.ly.object.game.SimpleRpgGame;
 import name.huliqing.ly.view.talk.Talk;
 import name.huliqing.ly.view.talk.TalkManager;
 
@@ -42,44 +46,63 @@ import name.huliqing.ly.view.talk.TalkManager;
 public class GameNetworkImpl implements GameNetwork {
 
     private static final Logger LOG = Logger.getLogger(GameNetworkImpl.class.getName());
-    private final static Network NETWORK = Network.getInstance();
+    private final static Network network = Network.getInstance();
     
     private GameService gameService;
-    private EntityService entityService;
-    private ActorService actorService;
-    private ActionService actionService;
-    private ActorNetwork actorNetwork;
+//    private EntityService entityService;
+//    private ActorService actorService;
+//    private ActionService actionService;
+//    private ActorNetwork actorNetwork;
     private EntityNetwork entityNetwork;
     private PlayNetwork playNetwork;
+    private PlayService playService;
     
     @Override
     public void inject() {
-        entityService = Factory.get(EntityService.class);
+//        entityService = Factory.get(EntityService.class);
         gameService = Factory.get(GameService.class);
-        actorService = Factory.get(ActorService.class);
-        actionService = Factory.get(ActionService.class);
-        actorNetwork = Factory.get(ActorNetwork.class);
+//        actorService = Factory.get(ActorService.class);
+//        actionService = Factory.get(ActionService.class);
+//        actorNetwork = Factory.get(ActorNetwork.class);
         entityNetwork = Factory.get(EntityNetwork.class);
         playNetwork = Factory.get(PlayNetwork.class);
+        playService = Factory.get(PlayService.class);
     }
 
     @Override
     public void addMessage(String message, MessageType type) {
-        if (NETWORK.isClient()) {
+        if (network.isClient()) {
             return;
         }
         
         MessMessage mess = new MessMessage();
         mess.setMessage(message);
         mess.setType(type);
-        NETWORK.broadcast(mess);
+        network.broadcast(mess);
         
         gameService.addMessage(message, type);
     }
 
     @Override
     public void syncGameInitToClient(HostedConnection client) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+         if (network.isClient()) 
+            return;
+        
+        // 注意：同步当前场景中的对象时不要一起发送，
+        // 这会导致溢出异常（当场景中角色或物体太多时)
+        // 这些命令是有序的，不用担心角色同步问题
+        
+        // 同步所有角色
+        SimpleRpgGame rpgGame = (SimpleRpgGame) playService.getGame();
+        Scene scene = rpgGame.getScene();
+        List<Entity> entities = rpgGame.getScene().getEntities(Entity.class, null);
+        for (Entity entity : entities) {
+            entity.updateDatas();
+            MessEntityAdd mess = new MessEntityAdd();
+            mess.setEntityData(entity.getData());
+            mess.setSceneId(scene.getData().getUniqueId());
+            network.sendToClient(client, mess);
+        }
     }
 
     @Override
@@ -90,20 +113,20 @@ public class GameNetworkImpl implements GameNetwork {
 
     @Override
     public void speak(Entity actor, String mess, float useTime) {
-        if (NETWORK.isClient()) {
+        if (network.isClient()) {
             // ignore
         } else {
             MessActorSpeak mas = new MessActorSpeak();
             mas.setActorId(actor.getData().getUniqueId());
             mas.setMess(mess);
-            NETWORK.broadcast(mas);
+            network.broadcast(mas);
             gameService.speak(actor, mess, useTime);
         }
     }
     
     @Override
     public void talk(Talk talk) {
-        if (NETWORK.isClient()) {
+        if (network.isClient()) {
             // ignore
         } else {
             talk.setNetwork(true);
@@ -118,20 +141,25 @@ public class GameNetworkImpl implements GameNetwork {
             return;
         }
         
-        if (NETWORK.isClient()) {
+        if (network.isClient()) {
             MessActionRun runAction = new MessActionRun();
             runAction.setActorId(actor.getData().getUniqueId());
             runAction.setPos(worldPos);
-            NETWORK.sendToServer(runAction);
+            network.sendToServer(runAction);
         } else {
             
             // 不需要广播
-            // ...
-
-            // setFollow不使用Network也可以,因客户端无逻辑，但是这里尽量保持CS状态一致
-            setFollow(actor, -1);
             gameService.playRunToPos(actor, worldPos);
         }
+    }
+    
+    // 发送一个属性修改的命令到服务端
+    private void sendAttributeHitToServer(Entity entity, String attribute, Object value) {
+        MessEntityHitAttribute mess = new MessEntityHitAttribute();
+        mess.setEntityId(entity.getEntityId());
+        mess.setAttribute(attribute);
+        mess.setValue(value);
+        network.sendToServer(mess);
     }
 
     @Override
@@ -153,14 +181,31 @@ public class GameNetworkImpl implements GameNetwork {
     public void setAutoLogic(Entity entity, boolean autoLogic) {
         entityNetwork.hitAttribute(entity, AttrConstants.AUTO_LOGIC, autoLogic, null);
     }
+    
+    @Override
+    public void setAutoAi(Entity entity, boolean autoAi) {
+        if (network.isClient()) {
+            sendAttributeHitToServer(entity, AttrConstants.AUTO_AI, autoAi);
+            return;
+        }
+        entityNetwork.hitAttribute(entity, AttrConstants.AUTO_AI, autoAi, null);
+    }
 
     @Override
     public void setTarget(Entity entity, long target) {
+        if (network.isClient()) {
+            sendAttributeHitToServer(entity, AttrConstants.TARGET, target);
+            return;
+        }
         entityNetwork.hitAttribute(entity, AttrConstants.TARGET, target, null);
     }
 
     @Override
     public void setFollow(Entity entity, long target) {
+        if (network.isClient()) {
+            sendAttributeHitToServer(entity, AttrConstants.FOLLOW, target);
+            return;
+        }
         entityNetwork.hitAttribute(entity, AttrConstants.FOLLOW, target, null);
     }
     
@@ -184,19 +229,38 @@ public class GameNetworkImpl implements GameNetwork {
     public void setColor(Entity entity, ColorRGBA color) {
         entityNetwork.hitAttribute(entity, AttrConstants.COLOR, new Vector4f(color.r, color.g, color.b, color.a), null);
     }
-    
-    
-    // ---- from userCommand
+
+    @Override
+    public boolean useObjectData(Entity entity, long objectUniqueId) {
+        if (network.isClient()) {
+            MessEntityUseDataById mess = new MessEntityUseDataById();
+            mess.setEntityId(entity.getEntityId());
+            mess.setObjectUniqueId(objectUniqueId);
+            network.sendToServer(mess);
+            return false;
+        }
+        return entityNetwork.useObjectData(entity, objectUniqueId);
+    }
+
+    @Override
+    public boolean removeObjectData(Entity entity, long objectUniqueId, int amount) {
+        if (network.isClient()) {
+            MessEntityRemoveData  mess = new MessEntityRemoveData();
+            mess.setEntityId(entity.getEntityId());
+            mess.setObjectId(objectUniqueId);
+            mess.setAmount(amount);
+            network.sendToServer(mess);
+            return false;
+        }
+        return entityNetwork.removeObjectData(entity, objectUniqueId, amount);
+    }
     
     @Override
     public void selectPlayer(String actorId, String actorName) {
-        
-        if (NETWORK.isClient()) {
-            NETWORK.sendToServer(new MessPlayActorSelect(actorId, actorName));
+        if (network.isClient()) {
+            network.sendToServer(new MessPlayActorSelect(actorId, actorName));
         } else {
             Entity actor = Loader.load(actorId);
-            
-//            logicService.resetPlayerLogic(actor);
             actor.getData().setName(actorName);
             // 暂时以1作为默认分组
             gameService.setTeam(actor, 1);
@@ -219,7 +283,7 @@ public class GameNetworkImpl implements GameNetwork {
             MessMessage mess = new MessMessage();
             mess.setMessage(message);
             mess.setType(type);
-            NETWORK.broadcast(mess); 
+            network.broadcast(mess); 
             
             // 通知主机
             gameService.addMessage(message, type);
@@ -228,9 +292,9 @@ public class GameNetworkImpl implements GameNetwork {
 
     @Override
     public void addSimplePlayer(Entity actor) {
-         if (NETWORK.isClient()) {
+         if (network.isClient()) {
             EntityData data = actor.getData();
-            NETWORK.sendToServer(new MessPlayActorSelect(data.getId(), data.getName()));
+            network.sendToServer(new MessPlayActorSelect(data.getId(), data.getName()));
         } else {
              
             // 广播到客户端进行载入角色
@@ -243,8 +307,8 @@ public class GameNetworkImpl implements GameNetwork {
             MessMessage notice = new MessMessage();
             notice.setMessage(message);
             notice.setType(type);
-            if (NETWORK.hasConnections()) {
-                NETWORK.broadcast(notice);                          
+            if (network.hasConnections()) {
+                network.broadcast(notice);                          
             }
             // 通知主机
             gameService.addMessage(message, type);

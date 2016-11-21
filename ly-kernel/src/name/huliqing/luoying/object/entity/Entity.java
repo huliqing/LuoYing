@@ -119,7 +119,7 @@ public interface Entity<T extends EntityData> extends DataProcessor<T>{
      * @see #addListener(name.huliqing.luoying.object.entity.EntityListener) 
      */
     boolean removeEntityAttributeListener(EntityAttributeListener listener);
-
+    
     /**
      * 向Entity添加数据
      * @param data

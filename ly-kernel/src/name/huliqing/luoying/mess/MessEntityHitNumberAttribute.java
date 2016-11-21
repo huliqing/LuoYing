@@ -5,10 +5,13 @@
  */
 package name.huliqing.luoying.mess;
 
+import com.jme3.network.HostedConnection;
 import com.jme3.network.serializing.Serializable;
 import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.layer.service.PlayService;
+import name.huliqing.luoying.network.GameServer;
 import name.huliqing.luoying.object.entity.Entity;
 
 /**
@@ -108,4 +111,19 @@ public class MessEntityHitNumberAttribute extends MessBase {
             Factory.get(EntityService.class).hitNumberAttribute(entity, attribute, addValue, hitter);
         }
     }
+
+    @Override
+    public void applyOnServer(GameServer gameServer, HostedConnection source) {
+        super.applyOnServer(gameServer, source);
+        PlayService playService = Factory.get(PlayService.class);
+        Entity hitter = null;
+        if (hitterId > 0) {
+            hitter = playService.getEntity(hitterId);
+        }
+        Entity entity = playService.getEntity(entityId);
+        if (entity != null) {
+            Factory.get(EntityNetwork.class).hitNumberAttribute(entity, attribute, addValue, hitter);
+        }
+    }
+    
 }

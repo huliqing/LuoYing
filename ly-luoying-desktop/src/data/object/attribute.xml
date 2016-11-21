@@ -64,7 +64,7 @@
     <attributeBoolean id="attributeAutoLogic" name="attributeAutoLogic" value="1" />
     
     <!--自动侦察敌人：这个属性值为1(true)时，角色打开自动侦察敌人的行为逻辑。-->
-    <attributeBoolean id="attributeAutoDetect" name="attributeAutoDetect" value="1" />
+    <attributeBoolean id="attributeAutoAi" name="attributeAutoAi" value="1" />
     
     <!--目标属性： 这个属性用于存放角色的当前目标对象（角色的唯 一ID）-->
     <attributeLong id="attributeTarget" name="attributeTarget" />
@@ -137,7 +137,7 @@
     <attributeGroup id="attributeGroupBase" name="attributeGroupBase" 
                     attributes="attributeBiology,attributeRace,attributeSex
     ,attributeLevel,attributeXp,attributeXpNext,attributeGroup,attributeTeam,attributeVision,attributeMoveSpeed,attributeMass
-    ,attributeDead,attributeMovable,attributeRotatable,attributeEssential,attributeAutoLogic,attributeAutoDetect
+    ,attributeDead,attributeMovable,attributeRotatable,attributeEssential,attributeAutoLogic,attributeAutoAi
     ,attributeTarget,attributeFollow,attributeOwner,attributeTalentPoints
     ,attributeHealthMax,attributeHealth,attributeManaMax,attributeMana
     ,attributeAttack,attributeMagicAttack,attributeDefence,attributeMagicDefence

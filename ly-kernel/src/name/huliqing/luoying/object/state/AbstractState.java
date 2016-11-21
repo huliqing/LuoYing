@@ -107,11 +107,14 @@ public abstract class AbstractState<T extends StateData> implements State<T> {
             if (tempEffects == null) {
                 tempEffects = new ArrayList<Effect>(effects.length);
             }
-            for (String effectId : effects) {
-                Effect effect = Loader.load(effectId);
-                effect.setTraceEntity(actor.getEntityId());
-                actor.getScene().addEntity(effect);
-                tempEffects.add(effect);
+            // xxx: 这里要重构，因为状态在初始化的时候场景可能还不存在，这种情况发生在角色是从存档中载入的时候发生。
+            if (actor.getScene() != null) {
+                for (String effectId : effects) {
+                    Effect effect = Loader.load(effectId);
+                    effect.setTraceEntity(actor.getEntityId());
+                    actor.getScene().addEntity(effect);
+                    tempEffects.add(effect);
+                }
             }
         }
 //        // 获取状态的施放源

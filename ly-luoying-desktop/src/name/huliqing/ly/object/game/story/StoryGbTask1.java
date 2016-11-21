@@ -33,6 +33,7 @@ import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.ly.constants.IdConstants;
 import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.ly.layer.service.GameService;
+import name.huliqing.ly.object.game.StoryServerNetworkRpgGame;
 
 /**
  * 寻找古柏
@@ -144,12 +145,12 @@ public class StoryGbTask1 extends AbstractTaskStep {
                 if (loadIndex == 3) {
                     gb = actor;
                     gameService.setLevel(gb, 15);
-                    gameService.setGroup(gb, StoryGame.GROUP_PLAYER);
+                    gameService.setGroup(gb, StoryServerNetworkRpgGame.GROUP_PLAYER);
                 }
                 // gbsmall
                 if (loadIndex >= 4 && loadIndex <= 5) {
                     gameService.setLevel(actor, 2);
-                    gameService.setGroup(actor, StoryGame.GROUP_PLAYER);
+                    gameService.setGroup(actor, StoryServerNetworkRpgGame.GROUP_PLAYER);
                     gbSmalls.add(actor);
                 }
                 actorService.setLocation(actor, game.getGbPosition());
@@ -276,7 +277,7 @@ public class StoryGbTask1 extends AbstractTaskStep {
         talk6.addListener(new TalkListener() {
             @Override
             public void onTalkEnd() {
-                entityNetwork.addData(player, Loader.loadData(IdConstants.ITEM_BOOK_006), 1);
+                entityNetwork.addObjectData(player, Loader.loadData(IdConstants.ITEM_BOOK_006), 1);
                 gotBook = true;
             }
         });
@@ -408,10 +409,10 @@ public class StoryGbTask1 extends AbstractTaskStep {
     // 设置角色为保护状态或非保护状态
     private void setProtected(Entity actor, boolean bool) {
         if (bool) {
-            entityNetwork.addData(actor, IdConstants.STATE_SAFE, 1);
+            entityNetwork.addObjectData(actor, IdConstants.STATE_SAFE, 1);
         } else {
             ObjectData safeState = actor.getData().getObjectData(IdConstants.STATE_SAFE);
-            entityNetwork.removeData(actor, safeState, 1);
+            entityNetwork.removeObjectData(actor, safeState.getUniqueId(), 1);
         }
     }
     

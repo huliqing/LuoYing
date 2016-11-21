@@ -118,7 +118,7 @@ public abstract class AbstractTask<T extends TaskData> implements Task<T> {
         // 奖励物品
         if (rewardItems != null) {
             for (RewardItem ri : rewardItems) {
-                entityNetwork.addData(actor, ri.itemId, ri.count);
+                entityNetwork.addObjectData(actor, ri.itemId, ri.count);
             }
         }
         // 标记为“完结”

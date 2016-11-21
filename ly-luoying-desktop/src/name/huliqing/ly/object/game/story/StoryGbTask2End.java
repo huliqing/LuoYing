@@ -16,7 +16,6 @@ import name.huliqing.ly.view.talk.TalkImpl;
 import name.huliqing.ly.view.talk.TalkListener;
 import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.network.SkillNetwork;
-import name.huliqing.luoying.layer.network.StateNetwork;
 import name.huliqing.luoying.layer.service.ActionService;
 import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.layer.service.SkillService;
@@ -151,7 +150,7 @@ public class StoryGbTask2End extends AbstractGameLogic {
                 
                 // 移除主角身上的树根
                 ItemData itemData = player.getData().getObjectData(IdConstants.ITEM_GB_STUMP);
-                entityNetwork.removeData(player, itemData, itemData.getTotal());
+                entityNetwork.removeObjectData(player, itemData.getUniqueId(), itemData.getTotal());
                 
                 // 移除古柏
                 playNetwork.removeEntity(gb);
@@ -202,9 +201,9 @@ public class StoryGbTask2End extends AbstractGameLogic {
     // 设置角色为保护状态或非保护状态
     private void setProtected(Entity actor, boolean bool) {
         if (bool) {
-            entityNetwork.addData(actor, IdConstants.STATE_SAFE, 1);
+            entityNetwork.addObjectData(actor, IdConstants.STATE_SAFE, 1);
         } else {
-            entityNetwork.removeData(actor,  actor.getData().getObjectData(IdConstants.STATE_SAFE), 1);
+            entityNetwork.removeObjectData(actor,  actor.getData().getObjectData(IdConstants.STATE_SAFE).getUniqueId(), 1);
         }
     }
     

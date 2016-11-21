@@ -11,7 +11,6 @@ import java.util.List;
 import name.huliqing.luoying.data.ModuleData;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.module.Module;
-import name.huliqing.luoying.object.module.SkinModule;
 import name.huliqing.luoying.xml.ObjectData;
 
 /**

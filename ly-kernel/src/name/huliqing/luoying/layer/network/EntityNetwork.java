@@ -48,7 +48,7 @@ public interface EntityNetwork extends Inject {
      * @param amount 添加的数量，必须大于0
      * @return 
      */
-    boolean addData(Entity entity, ObjectData data, int amount);
+    boolean addObjectData(Entity entity, ObjectData data, int amount);
     
     /**
      * 给Entity添加物品。
@@ -57,16 +57,16 @@ public interface EntityNetwork extends Inject {
      * @param amount 
      * @return  
      */
-    boolean addData(Entity entity, String objectId, int amount);
+    boolean addObjectData(Entity entity, String objectId, int amount);
     
     /**
-     * 从Entity身上移除物品
-     * @param entity
-     * @param data 
-     * @param amount 
-     * @return  
+     * 从Entity身上移除指定id的物品。
+     * @param entity 角色
+     * @param objectUniqueId 物品的唯一id,角色必须拥有这个物品
+     * @param amount 移除的数量
+     * @return 
      */
-    boolean removeData(Entity entity, ObjectData data, int amount);
+    boolean removeObjectData(Entity entity, long objectUniqueId, int amount);
     
     /**
      * 让Entity使用一个物品
@@ -74,7 +74,7 @@ public interface EntityNetwork extends Inject {
      * @param data 
      * @return  
      */
-    boolean useData(Entity entity, ObjectData data);
+    boolean useObjectData(Entity entity, ObjectData data);
     
     /**
      * 让Entity使用一个指定id的物品，Entity必须存在这个物品才能使用。否则找不到这个物品时将什么也不会做。
@@ -82,5 +82,5 @@ public interface EntityNetwork extends Inject {
      * @param objectUniqueId 
      * @return  
      */
-    boolean useData(Entity entity, long objectUniqueId);
+    boolean useObjectData(Entity entity, long objectUniqueId);
 }

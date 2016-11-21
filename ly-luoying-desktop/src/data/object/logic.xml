@@ -15,8 +15,8 @@
                bindViewAttribute="attributeVision" 
                enemyCheckEl="elActorEnemyCheck" />
 
-    <!--战斗类逻辑-->
-    <logicFight id="logicFightBase" extends="logicBase"  />
+    <!--战斗类逻辑: bindAiAttribute用于作为AI逻辑开关-->
+    <logicFight id="logicFightBase" extends="logicBase" bindAiAttribute="attributeAutoAi" />
     
     <!--空闲类逻辑-->
     <logicIdle id="logicIdleBase" extends="logicBase" patrolCheckEl="#{s.attributeFollow <= 0}" />
@@ -27,8 +27,9 @@
     <!--侦察敌人的逻辑-->
     <logicSearchEnemy id="logicSearchEnemyBase" extends="logicBase" interval="2" />
     
+    <!--remove20161121-->
     <!--玩家类逻辑：特别针对玩家单机、局域网选择的玩家角色-->
-    <logicPlayer id="logicPlayerBase" extends="logicBase" />
+    <!--<logicPlayer id="logicPlayerBase" extends="logicBase" />-->
     
     <!-- ========================================================================== -->
     <!-- Common -->
@@ -48,8 +49,9 @@
     <!--空闲行为-->
     <logicIdle id="logicPatrol" extends="logicIdleBase" interval="5" idleSimpleAction="actionIdleDynamic" idlePatrolAction="actionIdlePatrol" />
     
-    <!-- 用于玩家类的逻辑. -->
-    <logicPlayer id="logicPlayer" extends="logicPlayerBase" fightAction="actionPlayerFight" />
+     <!--用于玩家类的逻辑.--> 
+    <!--<logicPlayer id="logicPlayer" extends="logicPlayerBase" fightAction="actionPlayerFight" />-->
+    <logicFight id="logicPlayer" extends="logicFightBase" fightAction="actionFightDynamic" />
     
     <!-- 动态战斗逻辑: 能够移动、战斗、跟随等的角色逻辑。如：人物，怪兽 -->
     <logicFight id="logicDynamicFight" extends="logicFightBase" fightAction="actionFightDynamic" />

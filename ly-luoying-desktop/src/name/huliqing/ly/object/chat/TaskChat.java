@@ -158,7 +158,7 @@ public class TaskChat extends Chat {
     
     // 接受任务
     private void taskAccept() {
-        entityNetwork.addData(actor, task.getData().getId(), 1);
+        entityNetwork.addObjectData(actor, task.getData().getId(), 1);
         
         requestPanel.close();
         gameService.addMessage(ResourceManager.get(ResConstants.TASK_ACCEPT)

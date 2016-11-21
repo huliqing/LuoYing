@@ -23,7 +23,6 @@ public class ItemShortcut extends BaseUIShortcut<ItemData> implements EntityData
 //    private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final GameService gameService = Factory.get(GameService.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
-    private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
         
     @Override
     public void initialize() {
@@ -39,7 +38,7 @@ public class ItemShortcut extends BaseUIShortcut<ItemData> implements EntityData
     
     @Override
     public void removeObject() {
-        entityNetwork.removeData(actor, objectData, objectData.getTotal());
+        gameNetwork.removeObjectData(actor, objectData.getUniqueId(), objectData.getTotal());
     }
     
     @Override
@@ -52,7 +51,7 @@ public class ItemShortcut extends BaseUIShortcut<ItemData> implements EntityData
             if (target != null) {
                 gameNetwork.setTarget(actor, target.getEntityId());
             }
-            entityNetwork.useData(actor, objectData);
+            gameNetwork.useObjectData(actor, objectData.getUniqueId());
         }
     }
     

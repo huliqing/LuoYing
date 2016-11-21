@@ -61,27 +61,28 @@ public class EntityServiceImpl implements EntityService {
     }
 
     @Override
-    public boolean addData(Entity entity, ObjectData data, int amount) {
+    public boolean addObjectData(Entity entity, ObjectData data, int amount) {
         return entity.addObjectData(data, amount);
     }
 
     @Override
-    public boolean addData(Entity entity, String objectId, int amount) {
+    public boolean addObjectData(Entity entity, String objectId, int amount) {
         return entity.addObjectData(Loader.loadData(objectId), amount);
     }
 
     @Override
-    public boolean removeData(Entity entity, ObjectData data, int amount) {
-        return entity.removeObjectData(data, amount);
+    public boolean removeObjectData(Entity entity, long objectUniqueId, int amount) {
+        ObjectData od = entity.getData().getObjectDataByUniqueId(objectUniqueId);
+        return od != null && entity.removeObjectData(od, amount);
     }
-
+    
     @Override
-    public boolean useData(Entity entity, ObjectData data) {
+    public boolean useObjectData(Entity entity, ObjectData data) {
         return entity.useObjectData(data);
     }
-
+    
     @Override
-    public boolean useData(Entity entity, long objectUniqueId) {
+    public boolean useObjectData(Entity entity, long objectUniqueId) {
         ObjectData od = entity.getData().getObjectDataByUniqueId(objectUniqueId);
         return od != null && entity.useObjectData(od);
     }

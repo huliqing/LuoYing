@@ -23,7 +23,10 @@ xs:time
                 <xs:element ref="logicFight" />
                 <xs:element ref="logicFollow" />
                 <xs:element ref="logicNotify" />
-                <xs:element ref="logicPlayer" />
+                
+                <!--remove20161121-->
+                <!--<xs:element ref="logicPlayer" />-->
+                
                 <xs:element ref="logicPosition" />
                 <xs:element ref="logicSearchEnemy" />
                 <xs:element ref="logicAttributeChange" />
@@ -169,7 +172,8 @@ xs:time
         </xs:complexType>
     </xs:element>
     
-    <xs:element name="logicPlayer">
+    <!--remove20161121-->
+<!--    <xs:element name="logicPlayer">
         <xs:annotation>
             <xs:documentation>
                 针对player类型的逻辑,特别去掉了idle行为。
@@ -186,7 +190,7 @@ xs:time
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
-    </xs:element>
+    </xs:element>-->
     
     <xs:element name="logicNotify">
         <xs:annotation>
@@ -300,6 +304,12 @@ xs:time
                 <xs:extension base="logicBase">
                     <xs:attribute name="fightAction" type="xs:string" use="required">
                         <xs:annotation><xs:documentation>关联一个FightAction</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="bindAiAttribute" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                BooleanAttribute, 绑定角色的Ai属性，这个属性将用于控制当前逻辑的打开或关闭，默认为开</xs:documentation>
+                        </xs:annotation>
                     </xs:attribute>
                 </xs:extension>
             </xs:complexContent>
