@@ -6,7 +6,7 @@ package name.huliqing.ly.object.chat;
 
 import com.jme3.scene.Spatial;
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.constants.ResConstants;
+import name.huliqing.ly.constants.ResConstants;
 import name.huliqing.luoying.layer.service.ElService;
 import name.huliqing.ly.data.ChatData;
 import name.huliqing.luoying.layer.service.PlayService;
@@ -17,6 +17,7 @@ import name.huliqing.luoying.object.anim.Anim;
 import name.huliqing.luoying.object.el.STBooleanEl;
 import name.huliqing.luoying.object.entity.AbstractEntity;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.ui.UI;
 import name.huliqing.luoying.ui.state.UIState;
 import name.huliqing.ly.layer.service.GameService;
@@ -93,7 +94,11 @@ public abstract class Chat<T extends ChatData> extends AbstractEntity<T> {
     }
     
     @Override
-    public void initEntity() {
+    public void initEntity() {}
+
+    @Override
+    public void onInitScene(Scene scene) {
+        super.onInitScene(scene); 
         // 检查是否可见
         if (!isVisibleForPlayer()) {
             scene.removeEntity(this);
@@ -114,7 +119,6 @@ public abstract class Chat<T extends ChatData> extends AbstractEntity<T> {
         if (closeParent && parent != null) {
             scene.removeEntity(parent);
         }
-        
         scene.getRoot().addControl(control);
     }
     

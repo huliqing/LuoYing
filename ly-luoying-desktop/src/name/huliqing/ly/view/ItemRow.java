@@ -6,6 +6,7 @@ package name.huliqing.ly.view;
 
 import name.huliqing.luoying.constants.InterfaceConstants;
 import name.huliqing.luoying.data.define.CountObject;
+import name.huliqing.luoying.transfer.TransferData;
 import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.ui.ListView;
@@ -18,11 +19,10 @@ import name.huliqing.luoying.ui.tiles.ColumnText;
 /**
  * 显示物品的数据行
  * @author huliqing
- * @param <T>
  */
-public class ItemRow<T extends ObjectData> extends Row<T> {
+public class ItemRow extends Row<TransferData> {
 
-    protected T data;
+    protected TransferData data;
     
     // 物品
     protected ColumnIcon icon;
@@ -74,11 +74,11 @@ public class ItemRow<T extends ObjectData> extends Row<T> {
     }
 
     @Override
-    public void displayRow(T dd) {
+    public void displayRow(TransferData dd) {
         data = dd;
-        icon.setIcon(data.getAsString("icon"));
-        body.setNameText(ResourceManager.get(data.getId() + ".name"));
-        body.setDesText(ResourceManager.getObjectDes(data.getId()));
+        icon.setIcon(data.getObjectData().getAsString("icon"));
+        body.setNameText(ResourceManager.get(data.getObjectData().getId() + ".name"));
+        body.setDesText(ResourceManager.getObjectDes(data.getObjectData().getId()));
         if (data instanceof CountObject) {
             num.setText(((CountObject)data).getTotal() + "");
         }
@@ -88,7 +88,7 @@ public class ItemRow<T extends ObjectData> extends Row<T> {
      * 获取当前行所显示的ProtoData
      * @return 
      */
-    public T getData() {
+    public TransferData getData() {
         return data;
     }
     

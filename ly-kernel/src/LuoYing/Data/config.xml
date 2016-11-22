@@ -16,8 +16,8 @@
           useShadow="1" 
           locale="" 
           localeAll="en_US,zh_CN" 
-          soundVolume="1.0" 
-          soundEnabled="1" 
+          soundVolume="0" 
+          soundEnabled="0" 
           dropFactor="1.0" 
           expFactor="1.0"/>
   

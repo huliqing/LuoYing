@@ -6,7 +6,7 @@ package name.huliqing.ly.view;
 
 import com.jme3.font.BitmapFont;
 import name.huliqing.luoying.constants.InterfaceConstants;
-import name.huliqing.luoying.constants.ResConstants;
+import name.huliqing.ly.constants.ResConstants;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.ui.AbstractUI;
 import name.huliqing.luoying.ui.Button;

@@ -64,9 +64,9 @@ public class ConfigServiceImpl implements ConfigService {
             cd.setPortDiscoverServer(scd.getPortDiscoverServer());
             cd.setSoundEnabled(scd.isSoundEnabled());
             cd.setSoundVolume(scd.getSoundVolume());
-            SoundManager.getInstance().setSoundEnabled(cd.isSoundEnabled());
-            SoundManager.getInstance().setVolume(cd.getSoundVolume());
         }
+        SoundManager.getInstance().setSoundEnabled(cd.isSoundEnabled());
+        SoundManager.getInstance().setVolume(cd.getSoundVolume());
     }
     
     @Override

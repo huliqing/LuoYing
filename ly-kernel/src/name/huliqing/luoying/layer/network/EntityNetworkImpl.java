@@ -8,7 +8,6 @@ package name.huliqing.luoying.layer.network;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.mess.MessEntityAddData;
-import name.huliqing.luoying.mess.MessEntityAddDataById;
 import name.huliqing.luoying.mess.MessEntityHitNumberAttribute;
 import name.huliqing.luoying.mess.MessEntityHitAttribute;
 import name.huliqing.luoying.mess.MessEntityRemoveData;
@@ -79,19 +78,20 @@ public class EntityNetworkImpl implements EntityNetwork {
         return entityService.addObjectData(entity, data, amount);
     }
 
-    @Override
-    public boolean addObjectData(Entity entity, String objectId, int amount) {
-        if (network.isClient()) {
-            return false;
-        }
-        
-        MessEntityAddDataById mess = new MessEntityAddDataById();
-        mess.setEntityId(entity.getEntityId());
-        mess.setObjectId(objectId);
-        mess.setAmount(amount);
-        network.broadcast(mess);
-        return entityService.addObjectData(entity, objectId, amount);
-    }
+    // remove20161122不使用直接id添加物品的方式，这会造成添加后的物品的唯一id(uniqueId)在客户端和服务端不一致的问题。
+//    @Override
+//    public boolean addObjectData(Entity entity, String objectId, int amount) {
+//        if (network.isClient()) {
+//            return false;
+//        }
+//        
+//        MessEntityAddDataById mess = new MessEntityAddDataById();
+//        mess.setEntityId(entity.getEntityId());
+//        mess.setObjectId(objectId);
+//        mess.setAmount(amount);
+//        network.broadcast(mess);
+//        return entityService.addObjectData(entity, objectId, amount);
+//    }
 
     @Override
     public boolean removeObjectData(Entity entity, long objectUniqueId, int amount) {

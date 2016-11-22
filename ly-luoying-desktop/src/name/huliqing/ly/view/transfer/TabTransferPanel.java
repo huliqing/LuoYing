@@ -9,9 +9,6 @@ import java.util.List;
 import name.huliqing.luoying.constants.InterfaceConstants;
 import name.huliqing.luoying.data.ItemData;
 import name.huliqing.luoying.data.SkinData;
-import name.huliqing.luoying.object.item.Item;
-import name.huliqing.luoying.object.skin.Skin;
-import name.huliqing.luoying.object.skin.Weapon;
 import name.huliqing.ly.view.IconPanel;
 import name.huliqing.ly.view.ItemList.RowClickListener;
 import name.huliqing.ly.view.ItemPanel;
@@ -25,7 +22,7 @@ import name.huliqing.luoying.xml.ObjectData;
  *
  * @author huliqing
  */
-public class TabTransferPanel extends TransferPanel implements RowClickListener<TransferData> {
+public class TabTransferPanel extends TransferPanel implements RowClickListener {
     
     private final List<TransferData> itemDatas = new ArrayList<TransferData>();
     private final List<TransferData> armorDatas = new ArrayList<TransferData>();

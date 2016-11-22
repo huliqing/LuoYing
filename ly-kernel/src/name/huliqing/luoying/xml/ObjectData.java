@@ -16,8 +16,10 @@ import com.jme3.math.Vector3f;
 import com.jme3.math.Vector4f;
 import com.jme3.network.serializing.Serializable;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 import name.huliqing.luoying.data.CustomUserData;
 
 /**
@@ -26,7 +28,7 @@ import name.huliqing.luoying.data.CustomUserData;
  * @author huliqing
  */
 @Serializable
-public class ObjectData implements Savable {
+public class ObjectData implements Savable, Cloneable {
     
     private static long idIndex = System.currentTimeMillis();
     
@@ -34,7 +36,7 @@ public class ObjectData implements Savable {
     protected String id;
     
     // 全局唯一ID,当前游戏的全局唯一ID
-    protected long uniqueId = generateUniqueId();
+    protected long uniqueId;
     
     // 本地数据,读取或设置数据时优先从本地localData中获取.
     protected HashMap<String, Savable> localData;
@@ -42,7 +44,11 @@ public class ObjectData implements Savable {
     // 原形数据,不在Network过程中进行序列化传输。
     // 因为proto可以直接从本地获取，不需要进行network传输，减少网络流量
     private transient Proto proto;
-
+    
+    public ObjectData() {
+        uniqueId = generateUniqueId();
+    }
+    
     public Proto getProto() {
         // Proto不会在网络中传输，当在网络情况下, 需要在客户端重新获取。
         if (proto == null && id != null) {
@@ -449,4 +455,45 @@ public class ObjectData implements Savable {
         return getProto().getAsColor(key, defValue);
     }
     
+    /**
+     * 克隆ObjectData。
+     * 注意：除物体的uniqueId之外，其它字段都尽量进行深度克隆。
+     * @return 
+     */
+    @Override
+    public ObjectData clone() {
+        try {
+            ObjectData newObject = (ObjectData) super.clone();
+            
+            // 唯一id必须变化
+            newObject.uniqueId = generateUniqueId();
+            
+            // 本地数据localData的深度克隆
+            if (localData != null && !localData.isEmpty()) {
+                newObject.localData = new HashMap<String, Savable>(localData.size());
+                for (Entry<String, Savable> e : localData.entrySet()) {
+                    if (e.getValue() instanceof Cloneable) {
+                        localData.put(e.getKey(), cloneObject(e.getValue()));
+                    } else {
+                        localData.put(e.getKey(), e.getValue());
+                    }
+                }
+            }
+            return newObject;
+        } catch( CloneNotSupportedException e ) {
+            throw new RuntimeException( "Can't clone control for spatial", e );
+        }
+    }
+    
+    private <T> T cloneObject(T object) {
+        if(object == null ) {
+            return null;
+        }
+        try {
+            Method m = object.getClass().getMethod("clone");
+            return (T) m.invoke(object);
+        } catch(Exception e) {
+            throw new RuntimeException("Could not cloneObject for Object=" + object);
+        }
+    }
 }

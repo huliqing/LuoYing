@@ -19,12 +19,13 @@ import name.huliqing.luoying.manager.ResManager;
 import name.huliqing.luoying.xml.DataFactory;
 import name.huliqing.ly.data.ChatData;
 import name.huliqing.ly.data.ViewData;
+import name.huliqing.ly.layer.network.ChatNetwork;
+import name.huliqing.ly.layer.network.ChatNetworkImpl;
 import name.huliqing.ly.layer.service.ChatService;
 import name.huliqing.ly.layer.service.ChatServiceImpl;
 import name.huliqing.ly.loader.ChatDataLoader;
 import name.huliqing.ly.loader.ViewDataLoader;
 import name.huliqing.ly.mess.MessActorSpeak;
-import name.huliqing.ly.mess.MessChatSell;
 import name.huliqing.ly.mess.MessChatSend;
 import name.huliqing.ly.mess.MessChatShop;
 import name.huliqing.ly.mess.MessMessage;
@@ -82,6 +83,7 @@ public class Init {
         ResManager.loadResource("/data/font/zh_CN/story_guard",           "utf-8", "zh_CN");
         ResManager.loadResource("/data/font/zh_CN/story_treasure",       "utf-8", "zh_CN");
         
+        
     }
     
     private static void registerData() {
@@ -90,7 +92,6 @@ public class Init {
         
         Serializer.registerClass(MessActionRun.class);
         Serializer.registerClass(MessActorSpeak.class);
-        Serializer.registerClass(MessChatSell.class);
         Serializer.registerClass(MessChatSend.class);
         Serializer.registerClass(MessChatShop.class);
         Serializer.registerClass(MessMessage.class);
@@ -102,6 +103,7 @@ public class Init {
     private static void registerService() {
         Factory.register(GameService.class, GameServiceImpl.class);
         Factory.register(ChatService.class, ChatServiceImpl.class);
+        Factory.register(ChatNetwork.class, ChatNetworkImpl.class);
         
         Factory.register(GameNetwork.class, GameNetworkImpl.class);
     }

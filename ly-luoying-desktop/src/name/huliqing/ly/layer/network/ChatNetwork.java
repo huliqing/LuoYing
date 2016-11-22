@@ -6,7 +6,6 @@ package name.huliqing.ly.layer.network;
 
 import name.huliqing.luoying.Inject;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.task.Task;
 
 /**
  * @author huliqing
@@ -14,32 +13,22 @@ import name.huliqing.luoying.object.task.Task;
 public interface ChatNetwork extends Inject {
 
     /**
-     * 购买物品
+     * 出售或购买物品,主要用于角色从商店购买物品或者从另一角色购买物品。
      * @param seller 商品出售者
      * @param buyer 购买者
-     * @param itemId 购买的物品ID
-     * @param count 购买的物品数量
+     * @param objectId 购买的物品ID
+     * @param amount 购买的物品数量
      * @param discount 单件商品的折扣，比如: discount=0.5，则每件商品以50%的价钱计算。
      */
-    void chatShop(Entity seller, Entity buyer, String itemId, int count, float discount);
-    
-    /**
-     * 出售物品
-     * @param seller
-     * @param buyer
-     * @param items
-     * @param counts 
-     * @param discount 物品折扣
-     */
-    void chatSell(Entity seller, Entity buyer, String[] items, int[] counts, float discount);
+    void chatShop(Entity seller, Entity buyer, long objectId, int amount, float discount);
     
     /**
      * 发送东西给指定目标
      * @param sender 发送者
      * @param receiver 接收者
-     * @param items 发送的物品ID列表
-     * @param counts 发送的数量，与items一一对应
+     * @param objectId 发送的物品
+     * @param amount 发送的数量
      */
-    void chatSend(Entity sender, Entity receiver, String[] items, int[] counts);
+    void chatSend(Entity sender, Entity receiver, long objectId, int amount);
     
 }

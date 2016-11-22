@@ -12,7 +12,7 @@ import java.util.List;
  * 例如：一件武器需要一些其它物品（如金币）来交换获得，那么武器就可以定义为TradeObject.
  * @author huliqing
  */
-public interface TradeObject {
+public interface TradeObject extends CountObject {
     
     /**
      * 获取物品的交易信息列表，返回的这个列表表示了物品的价值.如果返回null,则说明这件物品毫无价值.

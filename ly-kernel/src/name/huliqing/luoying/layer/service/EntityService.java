@@ -40,4 +40,28 @@ public interface EntityService extends EntityNetwork {
      * @return 
      */
     List<ObjectData> getObjectDatas(Entity entity);
+    
+    /**
+     * 获取角色身上指定id类型的所有物体
+     * @param entity
+     * @param id
+     * @return 
+     */
+    List<ObjectData> getObjectData(Entity entity, String id);
+    
+    /**
+     * 获取角色身上指定id类型的物体，如果存在多个相同类型的物体，则<b>只返回第一个找到的</b>。
+     * @param entity
+     * @param id
+     * @return 
+     */
+    ObjectData getObjectDataByTypeId(Entity entity, String id);
+    
+    /**
+     * 从entity身上获取指定id(唯一id)的物体.
+     * @param entity
+     * @param uniqueId
+     * @return 
+     */
+    ObjectData getObjectDataByUniqueId(Entity entity, long uniqueId);
 }

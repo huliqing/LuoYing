@@ -12,7 +12,6 @@ import com.jme3.network.serializing.Serializable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.luoying.data.define.CountObject;
 import name.huliqing.luoying.data.define.MatObject;
 import name.huliqing.luoying.data.define.TradeInfo;
 import name.huliqing.luoying.data.define.TradeObject;
@@ -24,7 +23,7 @@ import name.huliqing.luoying.xml.ObjectData;
  * @author huliqing
  */
 @Serializable
-public class SkinData extends ObjectData implements CountObject, TradeObject, MatObject {
+public class SkinData extends ObjectData implements TradeObject, MatObject {
     
     // 物品的价值信息
     private List<TradeInfo> tradeInfos;

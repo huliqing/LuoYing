@@ -51,7 +51,7 @@ public class StoryGbTask1 extends AbstractTaskStep {
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
 //    private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
-    private final StateNetwork stateNetwork = Factory.get(StateNetwork.class);
+//    private final StateNetwork stateNetwork = Factory.get(StateNetwork.class);
     private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
     
     // 开始任务面板:说明任务信息
@@ -402,14 +402,13 @@ public class StoryGbTask1 extends AbstractTaskStep {
     }
     
     private String get(String rid, Object... param) {
-//        return ResourceManager.getOther("resource_gb", rid, param);
         return ResourceManager.get("storyGb." + rid, param);
     }
     
     // 设置角色为保护状态或非保护状态
     private void setProtected(Entity actor, boolean bool) {
         if (bool) {
-            entityNetwork.addObjectData(actor, IdConstants.STATE_SAFE, 1);
+            entityNetwork.addObjectData(actor, Loader.loadData(IdConstants.STATE_SAFE), 1);
         } else {
             ObjectData safeState = actor.getData().getObjectData(IdConstants.STATE_SAFE);
             entityNetwork.removeObjectData(actor, safeState.getUniqueId(), 1);

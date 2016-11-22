@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.constants.ResConstants;
+import name.huliqing.ly.constants.ResConstants;
 import name.huliqing.luoying.data.ItemData;
 import name.huliqing.luoying.data.SkinData;
 import name.huliqing.luoying.data.define.CountObject;
@@ -22,6 +22,7 @@ import name.huliqing.ly.view.transfer.TransferPanel;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.item.Item;
+import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.transfer.TransferData;
 import name.huliqing.luoying.ui.Button;
 import name.huliqing.luoying.ui.FrameLayout;
@@ -97,6 +98,12 @@ public class SendChat<T extends ChatData> extends Chat<T> {
     public void initEntity() {
         super.initEntity();
         
+    }
+
+    @Override
+    public void onInitScene(Scene scene) {
+        super.onInitScene(scene); 
+        
         // 记住卖者
         sender = gameService.getPlayer();
         
@@ -156,15 +163,11 @@ public class SendChat<T extends ChatData> extends Chat<T> {
             scene.removeEntity(this);
             return;
         }
-        String[] objects = new String[datas.size()];
-        int[] counts = new int[datas.size()];
         TransferData pd;
         for (int i = 0; i < datas.size(); i++) {
             pd = datas.get(i);
-            objects[i] = pd.getObjectData().getId();
-            counts[i] = pd.getAmount();
+            chatNetwork.chatSend(sender, actor, pd.getObjectData().getUniqueId(), pd.getAmount());
         }
-        chatNetwork.chatSend(sender, actor, objects, counts);
         scene.removeEntity(this);
     }
     

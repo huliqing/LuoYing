@@ -26,7 +26,7 @@ public class MessChatShop extends MessBase {
         
     private long seller;
     private long buyer;
-    private String itemId;
+    private long objectId;
     private int count;
     private float discount;
  
@@ -46,12 +46,12 @@ public class MessChatShop extends MessBase {
         this.buyer = buyer;
     }
 
-    public String getItemId() {
-        return itemId;
+    public long getObjectId() {
+        return objectId;
     }
 
-    public void setItemId(String itemId) {
-        this.itemId = itemId;
+    public void setObjectId(long objectId) {
+        this.objectId = objectId;
     }
 
     public int getCount() {
@@ -78,7 +78,7 @@ public class MessChatShop extends MessBase {
         if (sellerActor == null || buyerActor == null) {
             return;
         }
-        chatNetwork.chatShop(sellerActor, buyerActor, itemId, count, discount);
+        chatNetwork.chatShop(sellerActor, buyerActor, objectId, count, discount);
     }
 
     @Override
@@ -89,7 +89,7 @@ public class MessChatShop extends MessBase {
         if (sellerActor == null || buyerActor == null) {
             return;
         }
-        chatService.chatShop(sellerActor, buyerActor, itemId, count, discount);
+        chatService.chatShop(sellerActor, buyerActor, objectId, count, discount);
     }
     
 }

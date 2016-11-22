@@ -21,7 +21,7 @@ public class SimpleTransferPanel extends TransferPanel {
         super(width, height);
         
         itemPanel = new ItemPanel(width, height, getDatas());
-        itemPanel.setRowClickListener(new RowClickListener<TransferData>() {
+        itemPanel.setRowClickListener(new RowClickListener() {
             @Override
             public void onClick(Row row, boolean isPressed, TransferData data) {
                 if (isPressed) return;

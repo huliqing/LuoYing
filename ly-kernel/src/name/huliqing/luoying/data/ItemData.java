@@ -12,7 +12,6 @@ import com.jme3.network.serializing.Serializable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.luoying.data.define.CountObject;
 import name.huliqing.luoying.data.define.TradeInfo;
 import name.huliqing.luoying.data.define.TradeObject;
 import name.huliqing.luoying.xml.ObjectData;
@@ -22,7 +21,7 @@ import name.huliqing.luoying.xml.ObjectData;
  * @author huliqing
  */
 @Serializable
-public class ItemData extends ObjectData implements CountObject, TradeObject{
+public class ItemData extends ObjectData implements TradeObject{
     
     private List<TradeInfo> tradeInfos;
     
@@ -99,4 +98,17 @@ public class ItemData extends ObjectData implements CountObject, TradeObject{
         InputCapsule ic = im.getCapsule(this);
         tradeInfos = ic.readSavableArrayList("tradeInfos", null);
     }
+
+    @Override
+    public ObjectData clone() {
+        ItemData newObject = (ItemData) super.clone(); 
+        if (tradeInfos != null && !tradeInfos.isEmpty()) {
+            newObject.tradeInfos = new ArrayList<TradeInfo>(tradeInfos.size());
+            for (TradeInfo ti : tradeInfos) {
+                newObject.tradeInfos.add(ti.clone());
+            }
+        }
+        return newObject;
+    }
+    
 }

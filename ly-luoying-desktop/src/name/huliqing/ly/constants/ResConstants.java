@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.luoying.constants;
+package name.huliqing.ly.constants;
 
 /**
  * Message的键值，对应资源文件resource的键值
@@ -158,6 +158,8 @@ public class ResConstants {
     public final static String CHAT_SHOP_WARN_GOLD_NOT_ENOUGH = "chat.shop.warn.goldNotEnough";
     /** 库存不足 */
     public final static String CHAT_SHOP_WARN_PRODUCT_NOT_ENOUGH = "chat.shop.warn.productNotEnough";
+    /** %s没有足够的资金来购买你的物品. */
+    public final static String CHAT_SHOP_WARN_BUYER_GOLD_NOT_ENOUGH = "chat.shop.warn.buyerGoldNotEnough";
     
     // -------------------------------------------------------------------------
     // Task

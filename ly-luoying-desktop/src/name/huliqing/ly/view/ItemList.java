@@ -5,6 +5,7 @@
 package name.huliqing.ly.view;
 
 import java.util.List;
+import name.huliqing.luoying.transfer.TransferData;
 import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.luoying.ui.ListView;
 import name.huliqing.luoying.ui.Row;
@@ -14,18 +15,17 @@ import name.huliqing.luoying.ui.UI.Listener;
 /**
  * 显示物品列表
  * @author huliqing
- * @param <T>
  */
-public class ItemList<T extends ObjectData> extends ListView<T> implements Listener {
+public class ItemList extends ListView<TransferData> implements Listener {
     
-    public interface RowClickListener<T> {
-        void onClick(Row row, boolean isPressed, T data);
+    public interface RowClickListener {
+        void onClick(Row row, boolean isPressed, TransferData data);
     }
     
-    private final List<T> datas;
-    private RowClickListener<ObjectData> rowClickListener;
+    private final List<TransferData> datas;
+    private RowClickListener rowClickListener;
     
-    public ItemList(float width, float height, List<T> datas) {
+    public ItemList(float width, float height, List<TransferData> datas) {
         super(width, height);
         this.datas = datas;
         setPageSize(6);
@@ -36,7 +36,7 @@ public class ItemList<T extends ObjectData> extends ListView<T> implements Liste
     }
     
     @Override
-    protected final Row<T> createEmptyRow() {
+    protected final Row<TransferData> createEmptyRow() {
         ItemRow row = new ItemRow(this);
         row.addClickListener(this);
         return row;
@@ -51,7 +51,7 @@ public class ItemList<T extends ObjectData> extends ListView<T> implements Liste
     }
     
     @Override
-    public List<T> getDatas() {
+    public List<TransferData> getDatas() {
         return datas;
     }
     

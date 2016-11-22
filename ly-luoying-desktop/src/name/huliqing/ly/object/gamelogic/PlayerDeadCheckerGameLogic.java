@@ -5,7 +5,7 @@
 package name.huliqing.ly.object.gamelogic;
 
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.constants.ResConstants;
+import name.huliqing.ly.constants.ResConstants;
 import name.huliqing.ly.enums.MessageType;
 import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.ly.manager.ResourceManager;

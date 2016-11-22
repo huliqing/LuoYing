@@ -4,30 +4,33 @@
  */
 package name.huliqing.ly.layer.service;
 
+import java.util.List;
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.layer.service.PlayService;
-import name.huliqing.luoying.object.Loader;
+import name.huliqing.ly.constants.ResConstants;
+import name.huliqing.luoying.data.define.TradeInfo;
+import name.huliqing.luoying.data.define.TradeObject;
+import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.ly.object.chat.Chat;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.ly.object.module.ChatModule;
 import name.huliqing.luoying.object.sound.SoundManager;
+import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.ly.constants.IdConstants;
+import name.huliqing.ly.enums.MessageType;
+import name.huliqing.ly.manager.ResourceManager;
 
 /**
  *
  * @author huliqing
  */
 public class ChatServiceImpl implements ChatService {
-    private PlayService playService;
+    private GameService gameService;
+    private EntityNetwork entityNetwork;
     
     @Override
     public void inject() {
-        playService = Factory.get(PlayService.class);
-    }
-    
-    @Override
-    public Chat loadChat(String chatId) {
-        return Loader.load(chatId);
+        gameService = Factory.get(GameService.class);
+        entityNetwork = Factory.get(EntityNetwork.class);
     }
     
     @Override
@@ -40,107 +43,75 @@ public class ChatServiceImpl implements ChatService {
     }
     
     @Override
-    public void chatShop(Entity seller, Entity buyer, String itemId, int count, float discount) {
-//        ObjectData data = protoService.getData(seller, itemId);
-//        if (data == null || data.getTotal() <= 0 || data.getTotal() < count) {
-//            // 库存不足，如果是当前场景“主角”则显示提示
-//            if (buyer == playService.getPlayer()) {
-//                playService.addMessage(ResourceManager.get(ResConstants.CHAT_SHOP_WARN_PRODUCT_NOT_ENOUGH)
-//                        , MessageType.notice);
-//            }
-//            return;
-//        }
-//        
-//        // 非卖品
-//        if (!protoService.isSellable(data)) {
-//            return;
-//        }
-//        
-//        int needGold = (int) (protoService.getCost(data) * count * discount);
-//        ObjectData gold = protoService.getData(buyer, IdConstants.ITEM_GOLD);
-//        if (gold == null || gold.getTotal() < needGold) {
-//            // 金币不足
-//            if (buyer == playService.getPlayer()) {
-//                playService.addMessage(ResourceManager.get(ResConstants.CHAT_SHOP_WARN_GOLD_NOT_ENOUGH)
-//                        , MessageType.notice);
-//            }
-//            return;
-//        }
-//        
-//        protoService.addData(buyer, itemId, count);
-//        protoService.removeData(seller, itemId, count);
-//        
-//        protoService.addData(seller, IdConstants.ITEM_GOLD, needGold);
-//        protoService.removeData(buyer, IdConstants.ITEM_GOLD, needGold);
-//        
-//        SoundManager.getInstance().playSound(IdConstants.SOUND_COIN1, buyer.getSpatial().getWorldTranslation());
-        
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void chatSell(Entity seller, Entity buyer, String[] items, int[] counts, float discount) {
-        if (sellInner(seller, buyer, items, counts, discount)) {
-            // 有卖出过东西则播放声音
-            SoundManager.getInstance().playSound(IdConstants.SOUND_COIN2, seller.getSpatial().getWorldTranslation());
+    public void chatShop(Entity seller, Entity buyer, long objectId, int amount, float discount) {
+        ObjectData objectData = seller.getData().getObjectDataByUniqueId(objectId);
+        if (!(objectData instanceof TradeObject)) {
+            return;
         }
-    }
-
-    @Override
-    public void chatSend(Entity sender, Entity receiver, String[] items, int[] counts) {
-        sellInner(sender, receiver, items, counts, 0);
-    }
-    
-    /**
-     * 发送物品
-     * @param seller
-     * @param buyer
-     * @param items
-     * @param counts
-     * @param discount 
-     */
-    private boolean sellInner(Entity seller, Entity buyer, String[] items, int[] counts, float discount) {
+        TradeObject data = (TradeObject) objectData;
+        if (data.getTotal() <= 0 || data.getTotal() < amount) {
+            // 库存不足，如果是当前场景“主角”则显示提示
+            if (buyer == gameService.getPlayer()) {
+                gameService.addMessage(ResourceManager.get(ResConstants.CHAT_SHOP_WARN_PRODUCT_NOT_ENOUGH)
+                        , MessageType.notice);
+            }
+            return;
+        }
         
-//        String id;
-//        ObjectData data;
-//        int trueCount;
-//        float amount; 
-//        boolean result = false; // 标记是否有卖出过任何一件物品
-//        for (int i = 0; i < items.length; i++) {
-//            id = items[i];
-//            data = protoService.getData(seller, id);
-//            
-//            // 这里可能为null,因为“出售”或“发送”物品并不是与物品的使用动作同步的，有可能在点击“出售”或“发送”的时候
-//            // 包裹中的物品已经被使用掉。
-//            if (data == null) {
-//                continue;
-//            }
-//            
-//            // 非卖品
-//            if (data.getId().equals(IdConstants.ITEM_GOLD)) {
-//                continue;
-//            }
-//            
-//            // 注意：一件商品一件商品的卖,避免items中ID重复而出现重复卖的问题。
-//            if (data.getTotal() > 0) {
-//                // 如果角色身上指定ID物品的数量不够卖，则卖出尽可能多。否则按指定数量卖出。
-//                trueCount = data.getTotal() > counts[i] ? counts[i] : data.getTotal();
-//                amount = protoService.getCost(data) * trueCount * discount;
-//                
-//                protoService.addData(buyer, id, trueCount);
-//                protoService.removeData(seller, id, trueCount);
-//                
-//                if (amount > 0) {
-//                    protoService.removeData(buyer, IdConstants.ITEM_GOLD, (int) amount);
-//                    protoService.addData(seller, IdConstants.ITEM_GOLD, (int) amount);
-//                }
-//                result = true;
-//            }
-//        }
-//        return result;
+        List<TradeInfo> tradeInfos = data.getTradeInfos();
+        
+        // 注：
+        // 1.如果拆扣为0则表示物品白卖。
+        // 2.如果物品不存在交易信息，也表示白卖，直接交换,
+        // 3.这里用Network是因为这样可以确保服务端和客户端物品的唯一id一致。
+        if (discount <= 0 || tradeInfos == null || tradeInfos.isEmpty()) {
+            entityNetwork.addObjectData(buyer, objectData.clone(), amount); // 注：这里用的是clone
+            entityNetwork.removeObjectData(seller, objectId, amount);
+            return;
+        }
+        
+        // 检查交易信息，检查买家是否有足够的物品来交换指定的货物，即比如需要多少金币.
+        // 只要有一件不够，则不允许进行交易。
+        for (TradeInfo ti : tradeInfos) {
 
-            throw new UnsupportedOperationException("这个方法需要重构!!!");
+            // 判断买家的交易物（如金币）是否足够。
+            ObjectData needObject = buyer.getData().getObjectData(ti.getObjectId());
+            if (needObject instanceof TradeObject) {
+                TradeObject needTradeObject = (TradeObject) needObject;
+                int needAmount = (int) (ti.getCount() * amount * discount);
+                if (needTradeObject.getTotal() >= needAmount) {
+                    continue;
+                }
+            }
+            
+            // 买家的交易物品不存在或不足，给一些提示,然后退出，不再执行其它。
+            if (buyer == gameService.getPlayer()) {
+                gameService.addMessage(ResourceManager.get(ResConstants.CHAT_SHOP_WARN_GOLD_NOT_ENOUGH)
+                    , MessageType.notice);
+            }
+            if (seller == gameService.getPlayer()) {
+                gameService.addMessage(ResourceManager.get(
+                        ResConstants.CHAT_SHOP_WARN_BUYER_GOLD_NOT_ENOUGH
+                        , new Object[] {ResourceManager.getObjectName(buyer.getData())})
+                        , MessageType.notice);
+            }
+            return;
+        }
+        
+        entityNetwork.addObjectData(buyer, objectData.clone(), amount); // 注：这里用的是clone
+        entityNetwork.removeObjectData(seller, objectId, amount);
+        for (TradeInfo ti : tradeInfos) {
+            int removeAmount = (int)(ti.getCount() * amount * discount);
+            ObjectData od = buyer.getData().getObjectData(ti.getObjectId());
+            entityNetwork.removeObjectData(buyer, od.getUniqueId(), removeAmount);
+            entityNetwork.addObjectData(seller, od.clone(), removeAmount);
+        }
+        SoundManager.getInstance().playSound(IdConstants.SOUND_COIN1, buyer.getSpatial().getWorldTranslation());
     }
     
+    @Override
+    public void chatSend(Entity sender, Entity receiver, long objectId, int amount) {
+        chatShop(sender, receiver, objectId, amount, 0);
+    }
     
 }

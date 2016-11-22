@@ -9,6 +9,7 @@ import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.TaskData;
 import name.huliqing.luoying.layer.network.EntityNetwork;
+import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.utils.ConvertUtils;
 import name.huliqing.luoying.object.entity.Entity;
 
@@ -118,7 +119,7 @@ public abstract class AbstractTask<T extends TaskData> implements Task<T> {
         // 奖励物品
         if (rewardItems != null) {
             for (RewardItem ri : rewardItems) {
-                entityNetwork.addObjectData(actor, ri.itemId, ri.count);
+                entityNetwork.addObjectData(actor, Loader.loadData(ri.itemId), ri.count);
             }
         }
         // 标记为“完结”

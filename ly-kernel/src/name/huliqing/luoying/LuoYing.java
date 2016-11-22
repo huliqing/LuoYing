@@ -61,6 +61,7 @@ import name.huliqing.luoying.data.StateData;
 import name.huliqing.luoying.data.TalentData;
 import name.huliqing.luoying.data.TaskData;
 import name.huliqing.luoying.data.TradeObjectData;
+import name.huliqing.luoying.data.define.TradeInfo;
 //import name.huliqing.ly.mess.MessActionRun;
 //import name.huliqing.luoying.mess.MessActorFollow;
 //import name.huliqing.luoying.mess.MessActorKill;
@@ -240,7 +241,6 @@ import name.huliqing.luoying.manager.ResManager;
 import name.huliqing.luoying.mess.MessActorSetLocation;
 import name.huliqing.luoying.mess.MessEntityAdd;
 import name.huliqing.luoying.mess.MessEntityAddData;
-import name.huliqing.luoying.mess.MessEntityAddDataById;
 import name.huliqing.luoying.mess.MessEntityHitNumberAttribute;
 import name.huliqing.luoying.mess.MessEntityHitAttribute;
 import name.huliqing.luoying.mess.MessEntityRemove;
@@ -353,6 +353,8 @@ public class LuoYing {
         Serializer.registerClass(Vector4f.class,  new Vector4Serializer());
         Serializer.registerClass(Quaternion.class,  new QuaternionSerializer());
 
+        Serializer.registerClass(TradeInfo.class);
+        
         Serializer.registerClass(Proto.class);
         Serializer.registerClass(AttributeApply.class);
         Serializer.registerClass(AttributeUse.class);
@@ -520,12 +522,12 @@ public class LuoYing {
         DataFactory.register("itemTest",  ItemData.class, ItemDataLoader.class, TestItem.class);
         DataFactory.register("itemAttribute",  ItemData.class, ItemDataLoader.class, AttributeItem.class);
         DataFactory.register("itemBook",  ItemData.class, ItemDataLoader.class, BookItem.class);
-//        DataFactory.register("itemMap",  ItemData.class, ItemDataLoader.class, MapItem.class);
         DataFactory.register("itemSimple",  ItemData.class, ItemDataLoader.class, SimpleItem.class);
         DataFactory.register("itemSkill",  ItemData.class, ItemDataLoader.class, SkillItem.class);
         DataFactory.register("itemState",  ItemData.class, ItemDataLoader.class, StateItem.class);
         DataFactory.register("itemStateRemove",  ItemData.class, ItemDataLoader.class, StateRemoveItem.class);
         DataFactory.register("itemSummon",  ItemData.class, ItemDataLoader.class, SummonItem.class);
+//        DataFactory.register("itemMap",  ItemData.class, ItemDataLoader.class, MapItem.class);
 
         // Logic
         DataFactory.register("logicFight",  LogicData.class, LogicDataLoader.class, FightLogic.class);
@@ -747,7 +749,6 @@ public class LuoYing {
         // Entity
         Serializer.registerClass(MessEntityAdd.class);
         Serializer.registerClass(MessEntityAddData.class);
-        Serializer.registerClass(MessEntityAddDataById.class);
         Serializer.registerClass(MessEntityHitAttribute.class);
         Serializer.registerClass(MessEntityHitNumberAttribute.class);
         Serializer.registerClass(MessEntityRemove.class);

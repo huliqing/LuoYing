@@ -194,6 +194,7 @@ chat.shop.confirmCount=确认数量
 chat.shop.confirmSell=确认售出
 chat.shop.warn.goldNotEnough=金币不足
 chat.shop.warn.productNotEnough=库存不足
+chat.shop.warn.buyerGoldNotEnough=%s没有足够的资金来购买你的物品.
 
 #==== task
 task.task=任务

@@ -18,7 +18,7 @@ import java.io.IOException;
  * @author huliqing
  */
 @Serializable
-public class TradeInfo implements Savable {
+public class TradeInfo implements Savable, Cloneable {
     
     // 指定的物品ID
     private String objectId;
@@ -70,5 +70,14 @@ public class TradeInfo implements Savable {
         InputCapsule ic = im.getCapsule(this);
         objectId = ic.readString("objectId", null);
         count = ic.readInt("count", 0);
+    }
+    
+    @Override
+    public TradeInfo clone() {
+        try {
+            return (TradeInfo) super.clone();
+        } catch (CloneNotSupportedException ex) {
+            throw new RuntimeException("Could not clone TradeInfo, tradeInfo=" + this);
+        }
     }
 }

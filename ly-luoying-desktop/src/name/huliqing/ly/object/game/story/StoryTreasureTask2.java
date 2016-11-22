@@ -10,7 +10,7 @@ import com.jme3.util.TempVars;
 import java.util.List;
 import name.huliqing.luoying.Config;
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.constants.ResConstants;
+import name.huliqing.ly.constants.ResConstants;
 import name.huliqing.ly.enums.MessageType;
 import name.huliqing.ly.view.talk.Talk;
 import name.huliqing.ly.view.talk.TalkImpl;

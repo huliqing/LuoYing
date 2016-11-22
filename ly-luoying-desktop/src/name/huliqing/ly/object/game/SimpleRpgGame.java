@@ -19,7 +19,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import name.huliqing.luoying.Config;
 import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.manager.PickManager;
 import name.huliqing.luoying.log.ConsoleLogHandler;
@@ -64,6 +66,10 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
 
     private final List<Actor> tempActorsPicked = new ArrayList<Actor>();
     private final CollisionResults tempTerrainsPicked = new CollisionResults();
+    
+    // 最近一个选中的角色和最近一次选择的时间，主要用于处理双击选择攻击目标。
+    private Actor lastPicked;
+    private long lastPickTime;
     
     @Override
     public void initialize(Application app) {
@@ -265,20 +271,22 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
      */
     protected boolean onPickedActor(List<Actor> actorsPicked) {
          if (!actorsPicked.isEmpty()) {
+            Actor actorPicked = actorsPicked.get(0);
             // 界面选择目标
-            setTarget(actorsPicked.get(0));
-//            // 允许角色面板显示宠物的包裹
-//            // 注：只有debug时才允许显示其它角色的面板，否则会导致可以控制他人使用物品的问题
-//            if (Config.debug || 
-//                    (player != null && actorService.getOwner(actor) == player.getData().getUniqueId())) {
-//                ui.getUserPanel().setActor(actor);
-//            }
-//            // 判断是否双击,如果是双击，则调用攻击
-//            if (lastPicked == actor && Ly.getGameTime() - lastPickTime <= 400) {
-//                attack();
-//            }
-//            lastPicked = actor;
-//            lastPickTime = Ly.getGameTime();
+            setTarget(actorPicked);
+            
+            // 允许角色面板显示宠物的包裹
+            // 注：只有debug时才允许显示其它角色的面板，否则会导致可以控制他人使用物品的问题
+            if (Config.debug || 
+                    (player != null && gameService.getOwner(actorPicked) == player.getData().getUniqueId())) {
+                ui.getUserPanel().setActor(actorPicked);
+            }
+            // 判断是否双击,如果是双击，则调用攻击
+            if (lastPicked == actorPicked && LuoYing.getGameTime() - lastPickTime <= 400) {
+                attack();
+            }
+            lastPicked = actorPicked;
+            lastPickTime = LuoYing.getGameTime();
             return true;
         }
         return false;

@@ -4,20 +4,18 @@
  */
 package name.huliqing.ly.object.chat;
 
-import com.jme3.app.Application;
 import com.jme3.font.BitmapFont;
 import com.jme3.math.ColorRGBA;
-import com.jme3.scene.Spatial;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.constants.InterfaceConstants;
+import name.huliqing.luoying.object.Loader;
 import name.huliqing.ly.data.ChatData;
-import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.ly.layer.service.ChatService;
-import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.ui.AbstractUI;
 import name.huliqing.luoying.ui.Icon;
 import name.huliqing.luoying.ui.LinearLayout;
@@ -50,7 +48,7 @@ public class GroupChat extends Chat {
         String[] tempChats = data.getAsArray("chats");
         chats = new ArrayList<Chat>(tempChats.length);
         for (int i = 0; i < tempChats.length; i++) {
-            Chat chat = chatService.loadChat(tempChats[i]);
+            Chat chat = Loader.load(tempChats[i]);
             chat.parent = this;
             chats.add(chat);
         }
@@ -93,7 +91,12 @@ public class GroupChat extends Chat {
     @Override
     public void initEntity() {
         super.initEntity();
-        
+    }
+
+    @Override
+    public void onInitScene(Scene scene) {
+        super.onInitScene(scene); 
+         
         // 更新title
         title.setTitle(getChatName() + "-" + actor.getData().getName());
         // 列表要刷新一下，因为一些Chat可能需要动态过滤以确定是否要对当前player显示
@@ -104,7 +107,11 @@ public class GroupChat extends Chat {
             if (chats.get(0).isVisibleForPlayer()) {
                 displayChat(chats.get(0));
             }
-            cleanup();
+            // 注：因为closeParent参数的存在，在displayChat(chats.get(0))的时候, 
+            // 子Chat可能已经关闭并清除了父Chat(当前Chat)。所以这里必须判断一下，避免重复调用cleanup造成异常
+            if (isInitialized()) {
+                cleanup();
+            }
         }
     }
 

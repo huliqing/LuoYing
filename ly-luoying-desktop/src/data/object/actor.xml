@@ -10,7 +10,7 @@
     <!--==========================================================================-->
     
     <!--所有角色基类-->
-    <actor id="actorBase" chat="chatSimple" 
+    <actor id="actorBase" objectDatas="chatSimple"
         modules="moduleActor,moduleAction,moduleChannel,moduleChat,moduleItem,moduleLogic
 ,moduleSkill,moduleSkin,moduleState,moduleTalent,moduleTask,moduleLevel,moduleDrop,moduleColor"
     />
@@ -182,11 +182,11 @@
     <actor id="actorTreasure" extends="actorUnlivingUnmovableUnrotatableBase" icon="Interface/face/treasure.jpg"
            file="Models/objects/treasure2/treasure2.j3o" mat="wood" logics="logicShopTreasure"
            skills="" scale="0.025,0.025,0.025" collisionShape="box" 
-           items="" chat="chatTreasure" />
+           items="" objectDatas="chatTreasure" />
     
     <!-- 防御塔－火 -->
     <actor id="actorTower" extends="actorUnlivingUnmovableUnrotatableBase" icon="Interface/face/tower_fire.jpg"
-           file="Models/objects/tower/tower_fire.j3o" chat=""
+           file="Models/objects/tower/tower_fire.j3o" objectDatas=""
            skills="skillTowerDead,skillTowerFireball" mat="stone"  scale="0.5,0.5,0.5"
            collisionShape="box" collisionBoxScale="0.6, 1, 0.6" resist="resistTower" />
     
@@ -260,7 +260,7 @@
 
     <!-- 黑暗祭坛 -->
     <actor id="actorAltar" extends="actorUnlivingUnmovableUnrotatableBase" file="Models/objects/altar/altar.j3o" icon="Interface/face/altar.jpg"
-           logics="logicNotifyForce,logicUpdateLife" skills="" mat="stone" scale="1,1,1" chat=""
+           logics="logicNotifyForce,logicUpdateLife" skills="" mat="stone" scale="1,1,1" objectDatas=""
            collisionShape="box" collisionBoxScale="0.8, 1, 0.8" effects="effectAltar,effectAltar2" />
     
     <!-- Sinbad:辛巴德 -->
@@ -296,7 +296,7 @@
            talents=""
            scale="1.5,1.5,1.5"
            skills="skillJaimeWait,skillJaimeIdle,skillJaimeRun" 
-           mat="derma" resist="resistCreature" drops="" chat="chatJaime" />
+           mat="derma" resist="resistCreature" drops="" objectDatas="chatJaime" />
 
     <!--Skeleton-->
     <actor id="actorSkeleton" extends="actorLivingMovableRotatableBase" file="Models/monster/skeleton/skeleton.mesh.j3o" 

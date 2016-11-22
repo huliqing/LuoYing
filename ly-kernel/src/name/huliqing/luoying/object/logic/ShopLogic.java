@@ -12,6 +12,7 @@ import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.LogicData;
 import name.huliqing.luoying.data.define.CountObject;
 import name.huliqing.luoying.layer.network.EntityNetwork;
+import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.luoying.utils.ConvertUtils;
 
@@ -37,9 +38,7 @@ public class ShopLogic extends AbstractLogic {
     @Override
     public void setData(LogicData data) {
         super.setData(data); 
-        // 这类逻辑不需要太频繁
-        interval = data.getAsFloat("interval", 20);
-        
+
         // format: "item|maxCount,item|maxCount,item|maxCount,..."
         String[] items = data.getAsArray("items");
         products = new ArrayList<Product>(items.length);
@@ -91,7 +90,7 @@ public class ShopLogic extends AbstractLogic {
             }
             actualStock = p.maxCount - currentCount;
             if (actualStock > 0) {
-                entityNetwork.addObjectData(actor, p.itemId, actualStock);
+                entityNetwork.addObjectData(actor, Loader.loadData(p.itemId), actualStock);
             }
         }
     }
@@ -132,7 +131,7 @@ public class ShopLogic extends AbstractLogic {
                 actualStock = p.maxCount - currentCount;
             }
             if (actualStock > 0) {
-                entityNetwork.addObjectData(actor, p.itemId, actualStock);
+                entityNetwork.addObjectData(actor, Loader.loadData(p.itemId), actualStock);
             }
         }
     }

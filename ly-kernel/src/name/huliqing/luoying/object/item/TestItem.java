@@ -5,8 +5,7 @@
  */
 package name.huliqing.luoying.object.item;
 
-import com.jme3.network.base.MessageProtocol;
-import java.nio.ByteBuffer;
+import com.jme3.math.Vector4f;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.ActorData;
 import name.huliqing.luoying.data.GameData;
@@ -18,8 +17,8 @@ import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.layer.service.SaveService;
 import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.layer.service.StateService;
-import name.huliqing.luoying.mess.MessSCGameData;
 import name.huliqing.luoying.object.Loader;
+import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.entity.Entity;
 
 /**
@@ -45,6 +44,8 @@ public class TestItem extends AbstractItem {
     @Override
     protected void doUse(Entity actor) {
         
+        
+        
 //        Entity aa = Loader.load("actorWolf");
 //        entityNetwork.hitAttribute(aa, "attributeGroup", 9, null);
 //        entityNetwork.hitAttribute(aa, "attributeLevel", 1, null);
@@ -59,18 +60,17 @@ public class TestItem extends AbstractItem {
 //        actor.getScene().getRoot().attachChild(eff.getSpatial());
 //        ((Node)actor.getSpatial()).attachChild(eff.getSpatial());
     
-        MessSCGameData mess = new MessSCGameData();
-        GameData gameData = Loader.loadData("gameStoryTreasure");
-
-        addActor(gameData, "actorAiLin");
-        addActor(gameData, "actorTreasure");
-        addActor(gameData, actor.getData().getId());
         
-        mess.setGameData(gameData);
-        ByteBuffer buffer = MessageProtocol.messageToBuffer(mess, null);
-        System.out.println("");
+        Entity aa = Loader.load("actorTreasure");
+        entityNetwork.hitAttribute(aa, "attributeGroup", actor.getAttributeManager().getAttribute("attributeGroup", NumberAttribute.class).intValue(), null);
+        playNetwork.addEntity(actor.getScene(), aa);
+        
+        
+//        Entity bb = Loader.load("actorJaime");
+//        entityNetwork.hitAttribute(bb, "attributeGroup", actor.getAttributeManager().getAttribute("attributeGroup", NumberAttribute.class).intValue(), null);
+//        playNetwork.addEntity(actor.getScene(), bb);
+        
     }
-    
         
     private void addActor(GameData gameData, String id) {
         ActorData actorData = Loader.loadData(id);

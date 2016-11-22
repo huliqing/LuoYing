@@ -39,20 +39,4 @@ public class ActorData extends ModelEntityData implements MatObject {
         return getAsVector3f("localForward");
     }
     
-    // remove20161108
-//    /**
-//     * 判断角色是否打开hardwareSkinning,默认true
-//     * @return 
-//     */
-//    public boolean isHardwareSkinning() {
-//        return getAsBoolean("hardwareSkinning", true);
-//    }
-//    
-//    /**
-//     * 获取角色质量
-//     * @return 
-//     */
-//    public float getMass() {
-//        return getAsFloat("mass", 0);
-//    }
 }

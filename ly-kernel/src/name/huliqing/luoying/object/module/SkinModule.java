@@ -93,7 +93,7 @@ public class SkinModule extends AbstractModule implements DataHandler<SkinData> 
      * @param amount 数量，必须大于0
      * @return true如果成功添加
      */
-    public boolean addSkin(SkinData skinData, int amount) {
+    private boolean addSkin(SkinData skinData, int amount) {
         if (amount <= 0)
             return false;
 
@@ -125,7 +125,7 @@ public class SkinModule extends AbstractModule implements DataHandler<SkinData> 
      * @return  
      * @see #getSkin(Long) 
      */
-    public boolean removeSkin(SkinData skinData, int amount) {
+    private boolean removeSkin(SkinData skinData, int amount) {
         Skin skin = getSkin(skinData);
         if (skin == null) {
             return false;
@@ -154,7 +154,7 @@ public class SkinModule extends AbstractModule implements DataHandler<SkinData> 
      * 给角色换上装备
      * @param skin
      */
-    public void attachSkin(Skin skin) {
+    private void attachSkin(Skin skin) {
         if (!skin.canUse(entity)) {
             return;
         }
@@ -176,7 +176,7 @@ public class SkinModule extends AbstractModule implements DataHandler<SkinData> 
      * 脱下某件装备
      * @param skin 
      */
-    public void detachSkin(Skin skin) {
+    private void detachSkin(Skin skin) {
         // 不需要doEndAllSkinning
 //        doEndAllSkinning();
         
@@ -354,17 +354,6 @@ public class SkinModule extends AbstractModule implements DataHandler<SkinData> 
     private boolean isSameSkin(SkinData sd1, SkinData sd2) {
         // xxx 根据装备属性来区别不同的装备
         return sd1.getId().equals(sd2.getId());
-    }
-    
-    /**
-     * 获取角色的所有皮肤,返回的列表只能只读，如果角色没有皮肤则返回empty.
-     * @return 
-     */
-    public List<Skin> getSkins() {
-        if (skinAll != null) {
-            return Collections.unmodifiableList(skinAll);
-        }
-        return Collections.EMPTY_LIST;
     }
     
     /**

@@ -279,6 +279,11 @@ xs:time
                         <xs:documentation>物品是否可删除</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
+                <xs:attribute name="sellable" type="bool" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>物品是否可以进行出售</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
                 <xs:attribute name="localObject" type="bool" use="optional" >
                     <xs:annotation>
                         <xs:documentation>

@@ -6,12 +6,11 @@ package name.huliqing.ly.object.chat;
 
 import com.jme3.math.FastMath;
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.constants.ResConstants;
+import name.huliqing.ly.constants.ResConstants;
 import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.ly.data.ChatData;
 import name.huliqing.luoying.layer.network.TaskNetwork;
 import name.huliqing.ly.enums.MessageType;
-import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.layer.service.TaskService;
 import name.huliqing.ly.view.ButtonPanel;
 import name.huliqing.ly.manager.ResourceManager;
@@ -20,12 +19,12 @@ import name.huliqing.ly.view.talk.Talk;
 import name.huliqing.ly.view.talk.TalkImpl;
 import name.huliqing.ly.view.talk.TalkListener;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.object.task.Task;
 import name.huliqing.luoying.ui.Text;
 import name.huliqing.luoying.ui.UI;
 import name.huliqing.luoying.ui.UIFactory;
 import name.huliqing.luoying.ui.Window;
-import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.ly.layer.service.GameService;
 
 /**
@@ -86,6 +85,11 @@ public class TaskChat extends Chat {
     @Override
     public void initEntity() {
         super.initEntity();
+    }
+
+    @Override
+    public void onInitScene(Scene scene) {
+        super.onInitScene(scene); 
         // fix bug:如果requestPanel已经存在，即可能已经接过任务，则先移除，
         // 避免在接过任务后，在再次对话的时候仍然看到requestPanel
         if (requestPanel != null) {
@@ -158,7 +162,7 @@ public class TaskChat extends Chat {
     
     // 接受任务
     private void taskAccept() {
-        entityNetwork.addObjectData(actor, task.getData().getId(), 1);
+        entityNetwork.addObjectData(actor, task.getData(), 1);
         
         requestPanel.close();
         gameService.addMessage(ResourceManager.get(ResConstants.TASK_ACCEPT)

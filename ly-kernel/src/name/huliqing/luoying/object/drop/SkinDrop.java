@@ -10,6 +10,7 @@ import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.DropData;
 import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.luoying.layer.service.ConfigService;
+import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.utils.MathUtils;
 import name.huliqing.luoying.object.entity.Entity;
 
@@ -42,7 +43,7 @@ public class SkinDrop extends AbstractDrop {
         
         // 注：如果rate>=1.0, 则忽略configService全局掉落设置(dropFactor)的影响，把物品视为始终掉落的。
         if (rate >= 1.0f) {
-            entityNetwork.addObjectData(target, skin, count);
+            entityNetwork.addObjectData(target, Loader.loadData(skin), count);
             playDropSounds(source);
             return true;
         }
@@ -50,7 +51,7 @@ public class SkinDrop extends AbstractDrop {
         // 按机率掉落，这个机率受全局掉落设置影响
         float trueRate = configService.getDropFactor() * rate;
         if (trueRate >= FastMath.nextRandomFloat()) {
-            entityNetwork.addObjectData(target, skin, count);
+            entityNetwork.addObjectData(target, Loader.loadData(skin), count);
             playDropSounds(source);
             return true;
         }

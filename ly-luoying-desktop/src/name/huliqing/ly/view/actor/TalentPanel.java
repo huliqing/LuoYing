@@ -8,7 +8,7 @@ import com.jme3.font.BitmapFont;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.constants.ResConstants;
+import name.huliqing.ly.constants.ResConstants;
 import name.huliqing.luoying.data.TalentData;
 import name.huliqing.luoying.layer.network.TalentNetwork;
 import name.huliqing.ly.manager.ResourceManager;

@@ -29,10 +29,11 @@ public class MessChatSend extends MessBase {
     // 购买者
     private long receiver;
     
-    // 出售的物品ID，与counts一一对应
-    private String[] items;
-    // 出售的物品数量,与items一一对应
-    private int[] counts;
+    // 发送的物品ID
+    private long objectId;
+    
+    // 发送的物品数量
+    private int amount;
 
     public long getSender() {
         return sender;
@@ -50,20 +51,20 @@ public class MessChatSend extends MessBase {
         this.receiver = receiver;
     }
 
-    public String[] getItems() {
-        return items;
+    public long getObjectId() {
+        return objectId;
     }
 
-    public void setItems(String[] items) {
-        this.items = items;
+    public void setObjectId(long objectId) {
+        this.objectId = objectId;
     }
 
-    public int[] getCounts() {
-        return counts;
+    public int getAmount() {
+        return amount;
     }
 
-    public void setCounts(int[] counts) {
-        this.counts = counts;
+    public void setAmount(int amount) {
+        this.amount = amount;
     }
 
     @Override
@@ -74,7 +75,7 @@ public class MessChatSend extends MessBase {
         if (sActor == null || rActor == null) {
             return;
         }
-        chatNetwork.chatSend(sActor, rActor, items, counts);
+        chatNetwork.chatSend(sActor, rActor, objectId, amount);
     }
 
     @Override
@@ -85,7 +86,7 @@ public class MessChatSend extends MessBase {
         if (sActor == null || rActor == null) {
             return;
         }
-        chatService.chatSend(sActor, rActor, items, counts);
+        chatService.chatSend(sActor, rActor, objectId, amount);
     }
     
 }

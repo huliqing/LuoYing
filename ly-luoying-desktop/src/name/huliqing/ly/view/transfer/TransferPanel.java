@@ -5,7 +5,7 @@
 package name.huliqing.ly.view.transfer;
 
 import java.util.List;
-import name.huliqing.luoying.constants.ResConstants;
+import name.huliqing.ly.constants.ResConstants;
 import name.huliqing.ly.view.NumPanel;
 import name.huliqing.ly.view.NumPanel.NumConfirmListener;
 import name.huliqing.ly.manager.ResourceManager;

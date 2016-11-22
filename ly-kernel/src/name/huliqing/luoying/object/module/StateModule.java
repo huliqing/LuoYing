@@ -83,6 +83,14 @@ public class StateModule extends AbstractModule implements DataHandler<StateData
     }
     
     /**
+     * 获取角色的抗性设置，如果角色没有配置这个设置，则该方法可能返回null.
+     * @return 
+     */
+    public Resist getResist() {
+        return this.resist;
+    }
+    
+    /**
      * 设置角色的抵抗设置。
      * @param resist 
      */

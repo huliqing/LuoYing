@@ -192,6 +192,7 @@ chat.shop.confirmCount=Confirm Amount
 chat.shop.confirmSell=Confirm Sell
 chat.shop.warn.goldNotEnough=Gold not enough
 chat.shop.warn.productNotEnough=Stocks are low
+chat.shop.warn.buyerGoldNotEnough=%s didn't have enough resource to buy your goods.
 
 #==== task
 task.task=Task

@@ -9,7 +9,7 @@ import com.jme3.math.ColorRGBA;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.constants.ResConstants;
+import name.huliqing.ly.constants.ResConstants;
 import name.huliqing.luoying.data.TaskData;
 import name.huliqing.luoying.layer.service.TaskService;
 import name.huliqing.ly.view.SimpleCheckbox;

@@ -6,7 +6,7 @@ package name.huliqing.ly.network;
 
 import name.huliqing.luoying.data.ConnData;
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.constants.ResConstants;
+import name.huliqing.ly.constants.ResConstants;
 import name.huliqing.ly.enums.MessageType;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.mess.MessBase;

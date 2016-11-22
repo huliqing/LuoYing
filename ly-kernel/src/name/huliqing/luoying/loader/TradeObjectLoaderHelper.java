@@ -36,6 +36,7 @@ public class TradeObjectLoaderHelper {
                 } else {
                     tradeInfo.setCount(1);
                 }
+                tradeInfos.add(tradeInfo);
             }
             return tradeInfos;
         }

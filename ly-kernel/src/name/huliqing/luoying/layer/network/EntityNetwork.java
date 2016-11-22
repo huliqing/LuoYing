@@ -6,6 +6,7 @@
 package name.huliqing.luoying.layer.network;
 
 import name.huliqing.luoying.Inject;
+import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.xml.ObjectData;
 
@@ -42,25 +43,31 @@ public interface EntityNetwork extends Inject {
     void hitNumberAttribute(Entity entity, String attribute, float addValue, Entity hitter);
     
     /**
-     * 给Entity添加物品
+     * 给Entity添加物品，注：对于一些可以量化的类型的物体，可能添加后的物体会被合并在已有的物体中,
+     * 而对于一些不可叠加的物体，新的物体可能被抛弃或者旧的物体可能会被替换，具体由各个实现模块去决定。
+     * 确定指定的物体是否成功添加到entity中可以通过 {@link EntityService#getObjectDataByUniqueId(Entity, long) }
      * @param entity 
      * @param data
      * @param amount 添加的数量，必须大于0
      * @return 
+     * @see EntityService#getObjectData(Entity, String);
+     * @see EntityService#getObjectDataByTypeId(Entity, String);
+     * @see EntityService#getObjectDataByUniqueId(Entity, long);
      */
     boolean addObjectData(Entity entity, ObjectData data, int amount);
+   
+    // remove20161122不使用直接id添加物品的方式，这会造成添加后的物品的唯一id(uniqueId)在客户端和服务端不一致的问题。
+//    /**
+//     * 给Entity添加物品。
+//     * @param entity
+//     * @param objectId
+//     * @param amount 
+//     * @return  
+//     */
+//    boolean addObjectData(Entity entity, String objectId, int amount);
     
     /**
-     * 给Entity添加物品。
-     * @param entity
-     * @param objectId
-     * @param amount 
-     * @return  
-     */
-    boolean addObjectData(Entity entity, String objectId, int amount);
-    
-    /**
-     * 从Entity身上移除指定id的物品。
+     * 从Entity身上移除指定id的物品, 如果角色身上不存在指定的物体，则该方法什么也不会做。
      * @param entity 角色
      * @param objectUniqueId 物品的唯一id,角色必须拥有这个物品
      * @param amount 移除的数量
@@ -69,7 +76,7 @@ public interface EntityNetwork extends Inject {
     boolean removeObjectData(Entity entity, long objectUniqueId, int amount);
     
     /**
-     * 让Entity使用一个物品
+     * 让Entity使用一个物品。注：这个物品可以是角色身上存在的，也可能不是角色身上拥有的。具体由特定的模块去实现。
      * @param entity
      * @param data 
      * @return  
@@ -77,7 +84,7 @@ public interface EntityNetwork extends Inject {
     boolean useObjectData(Entity entity, ObjectData data);
     
     /**
-     * 让Entity使用一个指定id的物品，Entity必须存在这个物品才能使用。否则找不到这个物品时将什么也不会做。
+     * 让Entity使用一个指定id的物品，Entity必须存在这个物品才能使用。如果找不到这个物品时将什么也不会做。
      * @param entity
      * @param objectUniqueId 
      * @return  

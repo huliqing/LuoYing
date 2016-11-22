@@ -5,20 +5,19 @@
 package name.huliqing.ly.view;
 
 import java.util.List;
-import name.huliqing.luoying.xml.ObjectData;
+import name.huliqing.luoying.transfer.TransferData;
 import name.huliqing.luoying.ui.LinearLayout;
 import name.huliqing.luoying.ui.UIFactory;
 
 /**
  *
  * @author huliqing
- * @param <T>
  */
-public class ItemPanel<T extends ObjectData> extends LinearLayout {
+public class ItemPanel extends LinearLayout {
     private ItemTitle title;
     private ItemList itemList;
         
-    public ItemPanel(float width, float height, List<T> datas) {
+    public ItemPanel(float width, float height, List<TransferData> datas) {
         super(width, height);
         float titleHeight = UIFactory.getUIConfig().getListTitleHeight();
         title = new ItemTitle(width, titleHeight);

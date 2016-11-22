@@ -7,18 +7,19 @@ package name.huliqing.ly.object.chat;
 import com.jme3.font.BitmapFont;
 import com.jme3.math.ColorRGBA;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.constants.InterfaceConstants;
-import name.huliqing.luoying.constants.ResConstants;
+import name.huliqing.ly.constants.ResConstants;
 import name.huliqing.luoying.data.ItemData;
+import name.huliqing.luoying.data.define.TradeInfo;
 import name.huliqing.ly.data.ChatData;
 import name.huliqing.ly.manager.ResourceManager;
-import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.xml.DataFactory;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.entity.EntityDataListener;
-import name.huliqing.luoying.object.item.Item;
+import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.ui.Button;
 import name.huliqing.luoying.ui.Icon;
 import name.huliqing.luoying.ui.LinearLayout;
@@ -75,6 +76,7 @@ public class ShopItemChat<T extends ChatData> extends Chat<T> implements EntityD
         float listHeight = win.getContentHeight() - titleHeight - footerHeight;
         titlePanel = new TitlePanel(win.getContentWidth(), titleHeight);
         productPanel = new ItemList(win.getContentWidth(), listHeight);
+        productPanel.setPageSize(7);
         footerPanel = new Footer(win.getContentWidth(), footerHeight);
         
         win.setCloseable(true);
@@ -98,11 +100,9 @@ public class ShopItemChat<T extends ChatData> extends Chat<T> implements EntityD
         if (this.actor != null) {
             this.actor.removeEntityDataListener(this);
         }
-        
         actor.addEntityDataListener(this);
         super.setActor(actor); 
     }
-    
     
     @Override
     public void cleanup() {
@@ -116,14 +116,14 @@ public class ShopItemChat<T extends ChatData> extends Chat<T> implements EntityD
     @Override
     public void onDataAdded(ObjectData data, int amount) {
         if (data instanceof ItemData) {
-            updateProductPanel(actor, (ItemData) data);
+            updateProductPanel((ItemData) data);
         }
     }
 
     @Override
     public void onDataRemoved(ObjectData data, int amount) {
         if (data instanceof ItemData) {
-            updateProductPanel(actor, (ItemData) data);
+            updateProductPanel((ItemData) data);
         }
     }
 
@@ -132,15 +132,18 @@ public class ShopItemChat<T extends ChatData> extends Chat<T> implements EntityD
         // ignore
     }
 
-    private void updateProductPanel(Entity source, ItemData item) {
-         if (isInitialized()) {
+    private void updateProductPanel(ItemData item) {
+         if (isInitialized() && scene != null) {
             if (this.actor != actor) {
                 throw new IllegalStateException(); // 防止BUG
             }
-            // 不要直接updateShop，这会导致玩家在买东西的时候列表经验刷新，导致可能误点物品
-//            updateShop();
-            // 如果指定物品已经卖完则从商品列表中移除。
-            productPanel.syncItem(item.getId(), item.getTotal());
+            
+            // remove20161122
+//            // 不要直接updateShop，这会导致玩家在买东西的时候列表刷新，导致可能误点物品
+////            updateShop();
+//            // 如果指定物品已经卖完则从商品列表中移除。
+//            productPanel.syncItem(item);
+
             productPanel.refreshPageData();
             // 更新玩家剩余金币数
             footerPanel.update();
@@ -150,7 +153,11 @@ public class ShopItemChat<T extends ChatData> extends Chat<T> implements EntityD
     @Override
     public void initEntity() {
         super.initEntity();
+    }
 
+    @Override
+    public void onInitScene(Scene scene) {
+        super.onInitScene(scene); 
         win.setTitle(getChatName() + "-" + actor.getData().getName());
         win.setToCorner(UI.Corner.CC);
         
@@ -158,8 +165,17 @@ public class ShopItemChat<T extends ChatData> extends Chat<T> implements EntityD
 //        updateShop();
         
         // 载入产品信息
+        List<ItemData> store = new ArrayList<ItemData>();
+        actor.getData().getObjectDatas(ItemData.class, store);
+        // 排除非卖品
+        Iterator<ItemData> it = store.iterator();
+        while (it.hasNext()) {
+            if (!it.next().isSellable()) {
+                it.remove();
+            }
+        }
         productPanel.datas.clear();
-        productPanel.datas.addAll(actor.getData().getObjectDatas(ItemData.class, new ArrayList<ItemData>()));
+        productPanel.datas.addAll(store);
         productPanel.refreshPageData();
         // 更新玩家剩余金币数
         footerPanel.update();
@@ -191,21 +207,22 @@ public class ShopItemChat<T extends ChatData> extends Chat<T> implements EntityD
             return datas;
         }
         
-        // 注意：这里只同步total数量，不要去移除列表datas中的数据，即使total是0.
-        // 这可避免在角色快速购买物品时由于物品被移除导致列表刷新带来的错误点击
-        public void syncItem(String itemId, int total) {
-            // 如果存在列表中则同步total数
-            for (ItemData item : datas) {
-                if (item.getId().equals(itemId)) {
-                    item.setTotal(total);
-                    return;
-                }
-            }
-            // 如果列表中不存在，则把data添加进来
-            ItemData item = Loader.loadData(itemId);
-            item.setTotal(total);
-            datas.add(item);
-        }
+        // remove20161122
+//        // 注意：这里只同步total数量，不要去移除列表datas中的数据，即使total是0.
+//        // 这可避免在角色快速购买物品时由于物品被移除导致列表刷新带来的错误点击
+//        public void syncItem(ItemData item) {
+//            // 如果存在列表中则同步total数
+//            for (ItemData item : datas) {
+//                if (item.getId().equals(itemId)) {
+//                    item.setTotal(total);
+//                    return;
+//                }
+//            }
+//            // 如果列表中不存在，则把data添加进来
+//            ItemData item = Loader.loadData(itemId);
+//            item.setTotal(total);
+//            datas.add(item);
+//        }
         
         @Override
         protected boolean filter(ItemData item) {
@@ -230,7 +247,7 @@ public class ShopItemChat<T extends ChatData> extends Chat<T> implements EntityD
             icon = new ColumnIcon(height, height, InterfaceConstants.UI_MISS);
             body = new ColumnBody(height, height, "", "");
             cost = new ColumnText(height, height, "");
-            cost.setAlignment(BitmapFont.Align.Right);
+            cost.setAlignment(BitmapFont.Align.Left);
             num = new ColumnText(height, height, "");
             num.setAlignment(BitmapFont.Align.Right);
             button = new Button(ResourceManager.get(ResConstants.CHAT_SHOP_BUY));
@@ -245,7 +262,7 @@ public class ShopItemChat<T extends ChatData> extends Chat<T> implements EntityD
                 @Override
                 public void onClick(UI view, boolean isPressed) {
                     if (isPressed) return;
-                    chatNetwork.chatShop(actor, gameService.getPlayer(), data.getId(), 1, discount);
+                    chatNetwork.chatShop(actor, gameService.getPlayer(), data.getUniqueId(), 1, discount);
                 }
             });
         }
@@ -288,8 +305,19 @@ public class ShopItemChat<T extends ChatData> extends Chat<T> implements EntityD
             icon.setIcon(data.getIcon());
             body.setNameText(ResourceManager.getObjectName(data));
             body.setDesText(ResourceManager.getObjectDes(data.getId()));
-//            cost.setText(data.getData().getCost() + "");
-            cost.setText("Need to refactor........");
+            List<TradeInfo> tis = data.getTradeInfos();
+            if (tis != null && !tis.isEmpty()) {
+                StringBuilder sb = new StringBuilder();
+                for (TradeInfo ti : tis) {
+                    sb.append("; ")
+                            .append(ResourceManager.getObjectName(ti.getObjectId()))
+                            .append(":")
+                            .append(ti.getCount());
+                }
+                cost.setText(sb.substring(1));
+            } else {
+                cost.setText("-");
+            }
             num.setText(data.getTotal() + "");
             setNeedUpdate();
         }

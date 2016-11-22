@@ -22,24 +22,20 @@ import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.constants.AssetConstants;
 import name.huliqing.luoying.constants.InterfaceConstants;
 import name.huliqing.luoying.data.StateData;
-import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.ly.layer.service.ChatService;
 import name.huliqing.luoying.layer.service.PlayService;
-import name.huliqing.luoying.layer.service.StateService;
 import name.huliqing.luoying.object.anim.Loop;
 import name.huliqing.luoying.object.anim.ColorAnim;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.entity.EntityDataListener;
 import name.huliqing.ly.object.chat.Chat;
-import name.huliqing.luoying.object.state.State;
 import name.huliqing.luoying.ui.Icon;
 import name.huliqing.luoying.ui.LinearLayout;
 import name.huliqing.luoying.ui.LinearLayout.Layout;
 import name.huliqing.luoying.ui.Text;
 import name.huliqing.luoying.ui.UI;
 import name.huliqing.luoying.xml.ObjectData;
-import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.ly.layer.service.GameService;
 
 /**

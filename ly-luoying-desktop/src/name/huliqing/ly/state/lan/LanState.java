@@ -20,7 +20,7 @@ import name.huliqing.luoying.network.GameClient;
 import name.huliqing.luoying.network.Network;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.LuoYing;
-import name.huliqing.luoying.constants.ResConstants;
+import name.huliqing.ly.constants.ResConstants;
 import name.huliqing.luoying.layer.service.ConfigService;
 import name.huliqing.luoying.network.discover.UDPDiscover;
 import name.huliqing.luoying.network.discover.MessCSFindServer;

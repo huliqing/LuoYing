@@ -11,10 +11,11 @@ import java.util.Iterator;
 import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.constants.InterfaceConstants;
-import name.huliqing.luoying.constants.ResConstants;
+import name.huliqing.ly.constants.ResConstants;
 import name.huliqing.luoying.data.ItemData;
 import name.huliqing.luoying.data.SkinData;
 import name.huliqing.luoying.data.define.CountObject;
+import name.huliqing.luoying.data.define.TradeInfo;
 import name.huliqing.ly.data.ChatData;
 import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.ly.view.Footer;
@@ -35,7 +36,9 @@ import name.huliqing.luoying.utils.MathUtils;
 import name.huliqing.ly.layer.network.ChatNetwork;
 import name.huliqing.ly.layer.service.GameService;
 import name.huliqing.luoying.data.define.TradeObject;
+import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.transfer.TransferData;
+import name.huliqing.ly.constants.IdConstants;
 
 /**
  * 出售物品到商店类角色
@@ -107,11 +110,14 @@ public class SellChat<T extends ChatData> extends Chat<T> {
         return win;
     }
     
-
     @Override
     public void initEntity() {
         super.initEntity();
-        
+    }
+
+    @Override
+    public void onInitScene(Scene scene) {
+        super.onInitScene(scene); 
         // 记住卖者
         seller = gameService.getPlayer();
         
@@ -169,15 +175,11 @@ public class SellChat<T extends ChatData> extends Chat<T> {
         List<TransferData> datas = distPanel.getDatas();
         if (datas.isEmpty())
             return;
-        String[] items = new String[datas.size()];
-        int[] counts = new int[datas.size()];
         TransferData tempObj;
         for (int i = 0; i < datas.size(); i++) {
             tempObj = datas.get(i);
-            items[i] = tempObj.getObjectData().getId();
-            counts[i] = tempObj.getAmount();
+            chatNetwork.chatShop(seller, actor, tempObj.getObjectData().getUniqueId(), tempObj.getAmount(), discount);
         }
-        chatNetwork.chatSell(seller, actor, items, counts, discount);
         // 确认后退出窗口
         scene.removeEntity(this);
     }
@@ -193,8 +195,17 @@ public class SellChat<T extends ChatData> extends Chat<T> {
             if (!(pd.getObjectData() instanceof TradeObject)) {
                 continue;
             }
-//            total += ((TradeObject) pd.getObjectData()).getCost() * pd.getData().getTotal();
-            throw new UnsupportedOperationException("Unsupported");
+            TradeObject tradeObject = (TradeObject) pd.getObjectData();
+            if (tradeObject.getTradeInfos() == null || tradeObject.getTradeInfos().isEmpty()) {
+                continue;
+            }
+            // 只估算金币
+            List<TradeInfo> tis = tradeObject.getTradeInfos();
+            for (TradeInfo ti : tis) {
+                if (ti.getObjectId().equals(IdConstants.ITEM_GOLD)) {
+                    total += ti.getCount() * pd.getAmount();
+                }
+            }
         }
         total *= discount;
         return (int) total;

@@ -27,9 +27,9 @@
     <!--侦察敌人的逻辑-->
     <logicSearchEnemy id="logicSearchEnemyBase" extends="logicBase" interval="2" />
     
-    <!--remove20161121-->
-    <!--玩家类逻辑：特别针对玩家单机、局域网选择的玩家角色-->
-    <!--<logicPlayer id="logicPlayerBase" extends="logicBase" />-->
+    <!--商店逻辑：频率不用太高-->
+    <logicShop id="logicShopBase" extends="logicBase" interval="30" />
+
     
     <!-- ========================================================================== -->
     <!-- Common -->
@@ -73,16 +73,22 @@
    <!-- 特定角色逻辑-->
    <!-- ==================================================================== -->
     
+    <!--注：给商店逻辑配置一定的金币，这样当出售东西给商店时，商店才有钱可以购买玩家的商品-->
+    
     <!--宝箱: 商店逻辑-->
-    <logicShop id="logicShopTreasure" extends="logicBase" items="itemTonicRed|10,itemTonicBlue|10,itemHerb|5,itemDetoxifyGrass|5
+    <logicShop id="logicShopTreasure" extends="logicShopBase" items="itemGold|10000,itemTonicRed|10,itemTonicBlue|10
+,itemHerb|5,itemDetoxifyGrass|5,itemScrollLife|5,itemBook007|1" stockSpeed="1" />
+    
+<!--    <logicShop id="logicShopTreasure" extends="logicBase" items="itemTonicRed|10,itemTonicBlue|10,itemHerb|5,itemDetoxifyGrass|5
+,itemGold|1000    
 ,itemScrollLife|5
 ,itemBook007|1
 ,skinEar004|1,skinBlinder001|1,skinMouthmask001|1,skinHorn001|1
 ,weaponSword001|1,weaponSword001L|1,weaponSword002,weaponSword002L,weaponSword003,weaponSword003L
-,weaponBow001,weaponWand000" stockSpeed="0.1" />
+,weaponBow001,weaponWand000" stockSpeed="0.1" />-->
 
     <!--杰米: 商店逻辑-->
-    <logicShop id="logicShopJaime" extends="logicBase" items="itemTonicRed|10,itemTonicBlue|10,itemHerb|5,itemBook009|1" stockSpeed="0.1" />
+    <logicShop id="logicShopJaime" extends="logicShopBase" items="itemGold|10000,itemTonicRed|10,itemTonicBlue|10,itemHerb|5,itemBook009|1" stockSpeed="1" />
     
     
 </root>

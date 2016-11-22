@@ -7,7 +7,7 @@ package name.huliqing.ly.object.game.story;
 import com.jme3.math.Vector3f;
 import java.util.List;
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.constants.ResConstants;
+import name.huliqing.ly.constants.ResConstants;
 import name.huliqing.luoying.data.ItemData;
 import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.ly.enums.MessageType;
@@ -201,14 +201,13 @@ public class StoryGbTask2End extends AbstractGameLogic {
     // 设置角色为保护状态或非保护状态
     private void setProtected(Entity actor, boolean bool) {
         if (bool) {
-            entityNetwork.addObjectData(actor, IdConstants.STATE_SAFE, 1);
+            entityNetwork.addObjectData(actor, Loader.loadData(IdConstants.STATE_SAFE), 1);
         } else {
             entityNetwork.removeObjectData(actor,  actor.getData().getObjectData(IdConstants.STATE_SAFE).getUniqueId(), 1);
         }
     }
     
     private String get(String rid, Object... param) {
-//        return ResourceManager.getOther("resource_gb", rid, param);
         return ResourceManager.get("storyGb." +  rid, param);
     }
 }

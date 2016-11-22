@@ -59,16 +59,32 @@ public class EntityServiceImpl implements EntityService {
     public List<ObjectData> getObjectDatas(Entity entity) {
         return Collections.unmodifiableList(entity.getData().getObjectDatas());
     }
+    
+    @Override
+    public List<ObjectData> getObjectData(Entity entity, String id) {
+        return entity.getData().getObjectDatas(id, null);
+    }
+    
+    @Override
+    public ObjectData getObjectDataByTypeId(Entity entity, String id) {
+        return entity.getData().getObjectData(id);
+    }
+
+    @Override
+    public ObjectData getObjectDataByUniqueId(Entity entity, long uniqueId) {
+        return entity.getData().getObjectDataByUniqueId(uniqueId);
+    }
 
     @Override
     public boolean addObjectData(Entity entity, ObjectData data, int amount) {
         return entity.addObjectData(data, amount);
     }
 
-    @Override
-    public boolean addObjectData(Entity entity, String objectId, int amount) {
-        return entity.addObjectData(Loader.loadData(objectId), amount);
-    }
+    // remove20161122不使用直接id添加物品的方式，这会造成添加后的物品的唯一id(uniqueId)在客户端和服务端不一致的问题。
+//    @Override
+//    public boolean addObjectData(Entity entity, String objectId, int amount) {
+//        return entity.addObjectData(Loader.loadData(objectId), amount);
+//    }
 
     @Override
     public boolean removeObjectData(Entity entity, long objectUniqueId, int amount) {
