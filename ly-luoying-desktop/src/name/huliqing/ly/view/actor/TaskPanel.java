@@ -8,22 +8,18 @@ import com.jme3.font.BitmapFont;
 import com.jme3.math.ColorRGBA;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.luoying.Factory;
 import name.huliqing.ly.constants.ResConstants;
 import name.huliqing.luoying.data.TaskData;
-import name.huliqing.luoying.layer.service.TaskService;
 import name.huliqing.ly.view.SimpleCheckbox;
 import name.huliqing.ly.view.SimpleRow;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.task.Task;
 import name.huliqing.luoying.ui.Checkbox;
 import name.huliqing.luoying.ui.Checkbox.ChangeListener;
 import name.huliqing.luoying.ui.LinearLayout;
 import name.huliqing.luoying.ui.ListView;
 import name.huliqing.luoying.ui.Row;
 import name.huliqing.luoying.ui.Text;
-import name.huliqing.luoying.ui.UI;
 import name.huliqing.luoying.ui.UIFactory;
 
 /**
@@ -31,7 +27,6 @@ import name.huliqing.luoying.ui.UIFactory;
  * @author huliqing
  */
 public class TaskPanel extends LinearLayout implements ActorPanel {
-    private final TaskService taskService = Factory.get(TaskService.class);
     
     private Entity actor;
     
@@ -40,8 +35,11 @@ public class TaskPanel extends LinearLayout implements ActorPanel {
     private final LinearLayout footerPanel;
     // 如果为true，则过滤掉已经完成的任务    
     private final SimpleCheckbox filter;
+    
+    // remove20161123,暂不支持弹出窗口显示任务详情
     // 点击任务查看详情
-    private final Text tipsDetail;
+//    private final Text tipsDetail;
+    
     private final Text tipsNoTasks;
 
     public TaskPanel(float width, float height) {
@@ -63,10 +61,11 @@ public class TaskPanel extends LinearLayout implements ActorPanel {
             }
         });
         
-        tipsDetail = new Text(ResourceManager.get(ResConstants.TASK_TIPS));
-        tipsDetail.setFontColor(UIFactory.getUIConfig().getDesColor());
-        tipsDetail.setFontSize(UIFactory.getUIConfig().getDesSize());
-        tipsDetail.setVerticalAlignment(BitmapFont.VAlign.Center);
+        // remove20161123
+//        tipsDetail = new Text(ResourceManager.get(ResConstants.TASK_TIPS));
+//        tipsDetail.setFontColor(UIFactory.getUIConfig().getDesColor());
+//        tipsDetail.setFontSize(UIFactory.getUIConfig().getDesSize());
+//        tipsDetail.setVerticalAlignment(BitmapFont.VAlign.Center);
         
         tipsNoTasks = new Text(ResourceManager.get(ResConstants.TASK_NO_TASKS));
         tipsNoTasks.setFontColor(UIFactory.getUIConfig().getDesColor());
@@ -77,7 +76,7 @@ public class TaskPanel extends LinearLayout implements ActorPanel {
         footerPanel.setLayout(Layout.horizontal);
         footerPanel.setBackground(UIFactory.getUIConfig().getBackground(), true);
         footerPanel.setBackgroundColor(UIFactory.getUIConfig().getTitleBgColor(), true);
-        footerPanel.addView(tipsDetail);
+//        footerPanel.addView(tipsDetail);
         footerPanel.addView(tipsNoTasks);
         footerPanel.addView(filter);
         addView(taskList);
@@ -95,16 +94,16 @@ public class TaskPanel extends LinearLayout implements ActorPanel {
         footerPanel.setWidth(width);
         footerPanel.setHeight(footerHeight);
         
-        tipsDetail.setHeight(footerHeight);
+//        tipsDetail.setHeight(footerHeight);
         tipsNoTasks.setHeight(footerHeight);
         filter.setHeight(fw);
         
         if (taskList.tasks.isEmpty()) {
-            tipsDetail.setVisible(false);
+//            tipsDetail.setVisible(false);
             filter.setVisible(false);
             tipsNoTasks.setVisible(true);
         } else {
-            tipsDetail.setVisible(true);
+//            tipsDetail.setVisible(true);
             filter.setVisible(true);
             tipsNoTasks.setVisible(false);
         }
@@ -126,10 +125,10 @@ public class TaskPanel extends LinearLayout implements ActorPanel {
         this.actor = actor;
         taskList.tasks.clear();
         if (actor != null) {
-            List<Task> tasks = taskService.getTasks(actor);
-            if  (tasks != null && !tasks.isEmpty()) {
-                for (Task t : tasks) {
-                    taskList.tasks.add(t.getData());
+            List<TaskData> taskDatas = actor.getData().getObjectDatas(TaskData.class, null);
+            if  (taskDatas != null && !taskDatas.isEmpty()) {
+                for (TaskData t : taskDatas) {
+                    taskList.tasks.add(t);
                 }
             }
             taskList.refreshPageData();
@@ -187,18 +186,17 @@ public class TaskPanel extends LinearLayout implements ActorPanel {
             des.setVerticalAlignment(BitmapFont.VAlign.Center);
             des.setFontSize(UIFactory.getUIConfig().getDesSize());
             des.setFontColor(UIFactory.getUIConfig().getDesColor());
-            
-            addClickListener(new Listener() { 
-                @Override
-                public void onClick(UI view, boolean isPressed) {
-                    if (isPressed || taskData == null) return;
-                    Task task = taskService.getTask(actor, taskData.getId());
-                    if (task == null)
-                        return;
-//                    UIState.getInstance().addUI(task.getTaskDetail().getDisplay());
-                    throw new UnsupportedOperationException("Unsupported");
-                }
-            });
+   
+            // remove20161123
+            // xxx: 重构任务显示
+//            addClickListener(new Listener() { 
+//                @Override
+//                public void onClick(UI view, boolean isPressed) {
+//                    if (isPressed || taskData == null) return;
+////                    UIState.getInstance().addUI(task.getTaskDetail().getDisplay());
+//                    throw new UnsupportedOperationException("Unsupported");
+//                }
+//            });
             
             addView(text);
             addView(des);

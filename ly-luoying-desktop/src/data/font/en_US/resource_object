@@ -250,7 +250,7 @@ chatSell.name=Sell Items
 
 #==== tasks
 taskCollectSpiderClaw.name=The Spider's Claws
-taskCollectSpiderClaw.des=Help Jaime to collect some spider's claws.
+taskCollectSpiderClaw.des=Collect 10 spider's claws, and then give it to Jaime.
 taskCollectSpiderClaw.chatStart=Because of too many wild animals in this area recently, it becoming more and more sparsely populated.||Business is bad to do, I want to turn to do Medicine business||I heard that the spider's claws is good medicine materials||I will appreciate it if you can help me to collect some.
 taskCollectSpiderClaw.chatAsk=Have you collected some spider's claws?||I will give you the payment if you finished.||Go to help me get some spider's claws||Finished? Why you so lazy!
 taskCollectSpiderClaw.chatEnd=Very nice! Thanks to your help!

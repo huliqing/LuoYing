@@ -6,6 +6,7 @@ package name.huliqing.ly.object.chat;
 
 import com.jme3.math.FastMath;
 import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.data.TaskData;
 import name.huliqing.ly.constants.ResConstants;
 import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.ly.data.ChatData;
@@ -20,7 +21,6 @@ import name.huliqing.ly.view.talk.TalkImpl;
 import name.huliqing.ly.view.talk.TalkListener;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.scene.Scene;
-import name.huliqing.luoying.object.task.Task;
 import name.huliqing.luoying.ui.Text;
 import name.huliqing.luoying.ui.UI;
 import name.huliqing.luoying.ui.UIFactory;
@@ -33,9 +33,7 @@ import name.huliqing.ly.layer.service.GameService;
  */
 public class TaskChat extends Chat {
     private final TaskService taskService = Factory.get(TaskService.class);
-//    private final ActorService actorService = Factory.get(ActorService.class);
     private final GameService gameService = Factory.get(GameService.class);
-//    private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     private final TaskNetwork taskNetwork = Factory.get(TaskNetwork.class);
     private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
 
@@ -63,7 +61,7 @@ public class TaskChat extends Chat {
     // ---- inner
     private TaskRequestPanel requestPanel;
     private Entity player;
-    private Task task;
+    private TaskData taskData;
 
     @Override
     public void setData(ChatData data) {
@@ -97,11 +95,11 @@ public class TaskChat extends Chat {
         }
         
         player = gameService.getPlayer();
-        task = taskService.getTask(player, taskId);
+        taskData = player.getData().getObjectData(taskId);
         
         // 玩家未接受过任务
-        if (task == null) {
-            task = Loader.load(taskId);
+        if (taskData == null) {
+            taskData = Loader.loadData(taskId);
             if (role == Role.start || role == Role.both) {
                 Talk talk = new TalkImpl();
                 for (String s : ResourceManager.getTaskChatStart(taskId)) {
@@ -120,7 +118,7 @@ public class TaskChat extends Chat {
         }
         
         // 玩家接过任务,并且任务已经完成过,则提示已经做过
-        if (task.getData().isCompletion()) {
+        if (taskData.isCompletion()) {
             gameService.addMessage(ResourceManager.get(ResConstants.TASK_COMPLETED), MessageType.notice);
             endChat();
             return;
@@ -128,8 +126,7 @@ public class TaskChat extends Chat {
         
         // 玩家接过任务
         if (role == Role.both || role == Role.end) {
-//            boolean completed = taskService.checkCompletion(player, task);
-            boolean completed = task.checkCompletion();
+            boolean completed = taskService.checkCompletion(player, taskId);
             if (completed) {
                 // 任务完成的对话
                 Talk talk = new TalkImpl();
@@ -140,7 +137,7 @@ public class TaskChat extends Chat {
                 talk.addListener(new TalkListener() {
                     @Override
                     public void onTalkEnd() {
-                        taskNetwork.completeTask(player, task);
+                        taskNetwork.completeTask(player, taskData.getId());
                         gameService.addMessage(ResourceManager.get(ResConstants.TASK_SUCCESS)
                                 + ":" + ResourceManager.getObjectName(taskId)
                                 , MessageType.notice);
@@ -162,7 +159,7 @@ public class TaskChat extends Chat {
     
     // 接受任务
     private void taskAccept() {
-        entityNetwork.addObjectData(actor, task.getData(), 1);
+        entityNetwork.addObjectData(player, taskData, 1);
         
         requestPanel.close();
         gameService.addMessage(ResourceManager.get(ResConstants.TASK_ACCEPT)

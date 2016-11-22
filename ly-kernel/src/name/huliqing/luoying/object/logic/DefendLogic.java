@@ -33,11 +33,9 @@ import name.huliqing.luoying.object.skill.ShotSkill;
 public class DefendLogic extends AbstractLogic implements SkillListener, SkillPlayListener, ActorListener {
 //    private static final Logger LOG = Logger.getLogger(DefendLogic.class.getName());
     
-//    private final ActorService actorService = Factory.get(ActorService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
     private final EntityService entityService = Factory.get(EntityService.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
-//    private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private ActorModule actorModule;
     private SkillModule skillModule;
     
@@ -194,18 +192,12 @@ public class DefendLogic extends AbstractLogic implements SkillListener, SkillPl
     
     @Override
     public void onSkillStart(Skill skill) {
-        
 //        if (Config.debug) {
 //            LOG.log(Level.INFO, "defendActorLogic==> onSkillStart, actor={0}, skill={1}", new Object[] {skill.getActor().getData().getId(), skill.getData().getId()});
 //        }
         
         if (!hasUsableSkill) 
             return;
-        
-//        // 如果已经死亡就不需要处理防守了
-//        if (actorModule.isDead()) {
-//            return;
-//        }
         
         // 暂不支持shot类技能的防守
         if (skill instanceof ShotSkill)
@@ -244,7 +236,6 @@ public class DefendLogic extends AbstractLogic implements SkillListener, SkillPl
 //        LOG.log(Level.INFO, "defendActorLogic==> doDefend actor={0} defendRateAttribute={1}, defendSkill size={2}"
 //                , new Object[] {actor.getData().getId(), defendRateAttribute, defendSkills.size()});
         if (defendRateAttribute != null && defendSkills.size() > 0) {
-//            float defendRate = actor.getAttributeManager().getNumberAttributeValue(defendRateAttribute, 0);
             float defendRate = entityService.getNumberAttributeValue(actor, duckRateAttribute, 0).floatValue();
             if(defendRate >= FastMath.nextRandomFloat()) {
                 Skill defendSkill = defendSkills.get(FastMath.nextRandomInt(0, defendSkills.size() - 1));
@@ -259,7 +250,6 @@ public class DefendLogic extends AbstractLogic implements SkillListener, SkillPl
 //        LOG.log(Level.INFO, "defendActorLogic==> doDuck actor={0} duckRateAttribute={1}, duckSkill size={2}"
 //                , new Object[] {actor.getData().getId(), duckRateAttribute, duckSkills.size()});
         if (duckRateAttribute != null && duckSkills.size() > 0) {
-//            float duckRate = actor.getAttributeManager().getNumberAttributeValue(defendRateAttribute, 0);
             float duckRate = entityService.getNumberAttributeValue(actor, defendRateAttribute, 0).floatValue();
             if (duckRate >= FastMath.nextRandomFloat()) {
                 Skill duckSkill = duckSkills.get(FastMath.nextRandomInt(0, duckSkills.size() - 1));

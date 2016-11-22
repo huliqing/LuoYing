@@ -12,7 +12,6 @@ import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.layer.service.TaskService;
 import name.huliqing.luoying.network.GameServer;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.task.Task;
 
 /**
  * 完成指定的任务
@@ -48,12 +47,7 @@ public class MessTaskComplete extends MessBase {
         Entity actor = playService.getEntity(actorId);
         if (actor == null)
             return;
-        
-        Task task = taskService.getTask(actor, taskId);
-        if (task == null)
-            return;
-        
-        taskService.completeTask(actor, task);
+        taskService.completeTask(actor, taskId);
     }
 
     @Override
@@ -63,12 +57,7 @@ public class MessTaskComplete extends MessBase {
         Entity actor = playService.getEntity(actorId);
         if (actor == null)
             return;
-        
-        Task task = Factory.get(TaskService.class).getTask(actor, taskId);
-        if (task == null)
-            return;
-        
-        Factory.get(TaskNetwork.class).completeTask(actor, task);
+        Factory.get(TaskNetwork.class).completeTask(actor, taskId);
     }
     
 }

@@ -93,7 +93,6 @@ import name.huliqing.luoying.mess.MessActorLookAt;
 import name.huliqing.luoying.mess.MessSkillWalk;
 import name.huliqing.luoying.mess.MessSkinWeaponTakeOn;
 import name.huliqing.luoying.mess.MessTalentAddPoint;
-import name.huliqing.luoying.mess.MessTaskApplyItem;
 import name.huliqing.luoying.mess.MessTaskComplete;
 import name.huliqing.luoying.object.SyncData;
 import name.huliqing.luoying.loader.ActionDataLoader;
@@ -780,7 +779,6 @@ public class LuoYing {
         Serializer.registerClass(MessTalentAddPoint.class);
         
         // Task
-        Serializer.registerClass(MessTaskApplyItem.class);
         Serializer.registerClass(MessTaskComplete.class);
         
         // View

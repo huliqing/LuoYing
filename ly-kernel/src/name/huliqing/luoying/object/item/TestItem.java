@@ -5,13 +5,13 @@
  */
 package name.huliqing.luoying.object.item;
 
-import com.jme3.math.Vector4f;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.ActorData;
 import name.huliqing.luoying.data.GameData;
 import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.service.ActorService;
+import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.layer.service.MagicService;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.layer.service.SaveService;
@@ -34,7 +34,10 @@ public class TestItem extends AbstractItem {
     private final MagicService magicService = Factory.get(MagicService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
+    private final EntityService entityService = Factory.get(EntityService.class);
     private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
+    
+    private static int count;
 
     @Override
     public boolean canUse(Entity actor) {
@@ -43,8 +46,7 @@ public class TestItem extends AbstractItem {
     
     @Override
     protected void doUse(Entity actor) {
-        
-        
+        count++;
         
 //        Entity aa = Loader.load("actorWolf");
 //        entityNetwork.hitAttribute(aa, "attributeGroup", 9, null);
@@ -59,16 +61,22 @@ public class TestItem extends AbstractItem {
 //        eff.getSpatial().setQueueBucket(RenderQueue.Bucket.Translucent);
 //        actor.getScene().getRoot().attachChild(eff.getSpatial());
 //        ((Node)actor.getSpatial()).attachChild(eff.getSpatial());
-    
         
-        Entity aa = Loader.load("actorTreasure");
-        entityNetwork.hitAttribute(aa, "attributeGroup", actor.getAttributeManager().getAttribute("attributeGroup", NumberAttribute.class).intValue(), null);
-        playNetwork.addEntity(actor.getScene(), aa);
+//        Entity aa = Loader.load("actorTreasure");
+//        entityNetwork.hitAttribute(aa, "attributeGroup", actor.getAttributeManager().getAttribute("attributeGroup", NumberAttribute.class).intValue(), null);
+//        playNetwork.addEntity(actor.getScene(), aa);
         
+        if (count <= 1) {
+            Entity bb = Loader.load("actorJaime");
+            entityService.hitAttribute(bb, "attributeGroup", actor.getAttributeManager().getAttribute("attributeGroup", NumberAttribute.class).intValue(), null);
+            playNetwork.addEntity(actor.getScene(), bb);
+        }
         
-//        Entity bb = Loader.load("actorJaime");
-//        entityNetwork.hitAttribute(bb, "attributeGroup", actor.getAttributeManager().getAttribute("attributeGroup", NumberAttribute.class).intValue(), null);
-//        playNetwork.addEntity(actor.getScene(), bb);
+        for (int i = 0; i < 1; i++) {
+            Entity cc = Loader.load("actorSpider");
+            entityService.hitAttribute(cc, "attributeGroup", 3, null);
+            playNetwork.addEntity(actor.getScene(), cc);
+        }
         
     }
         

@@ -48,13 +48,27 @@ public class TaskModule extends AbstractModule implements DataHandler<TaskData> 
         tasks.clear();
         super.cleanup();
     }
+        
+    /**
+     * 获取指定ID的任务，如果不存在则返回null.
+     * @param taskId
+     * @return 
+     */
+    public Task getTask(String taskId) {
+        for (Task t : tasks) {
+            if (t.getId().equals(taskId)) {
+                return t;
+            }
+        }
+        return null;
+    }
     
     /**
      * 添加任务
      * @param task 
      * @return  
      */
-    public boolean addTask(Task task) {
+    private boolean addTask(Task task) {
         if (tasks.contains(task)) {
             return false;
         }
@@ -79,7 +93,7 @@ public class TaskModule extends AbstractModule implements DataHandler<TaskData> 
      * @param task
      * @return 
      */
-    public boolean removeTask(Task task) {
+    private boolean removeTask(Task task) {
         if (!tasks.contains(task)) 
             return false;
         
@@ -97,32 +111,22 @@ public class TaskModule extends AbstractModule implements DataHandler<TaskData> 
     }
     
     /**
-     * 获取指定ID的任务，如果不存在则返回null.
-     * @param taskId
-     * @return 
-     */
-    public Task getTask(String taskId) {
-        for (Task t : tasks) {
-            if (t.getId().equals(taskId)) {
-                return t;
-            }
-        }
-        return null;
-    }
-    
-    /**
      * 获取角色的任务列表，如果不存在任务列表则返回null
      * @return 
      */
-    public List<Task> getTasks() {
+    private List<Task> getTasks() {
         return tasks;
     }
     
     /**
      * 完成一个指定的任务
-     * @param task 
+     * @param taskId 
      */
-    public void completeTask(Task task) {
+    public void completeTask(String taskId) {
+        Task task = getTask(taskId);
+        if (task == null) 
+            return;
+        
         // 执行“任务完成”如奖励经验、金钱、物品等。。。
         task.doCompletion();
         // 清理任务处理器，释放资源，当任务完成之后就不需要这些东西了，如各种侦听器等

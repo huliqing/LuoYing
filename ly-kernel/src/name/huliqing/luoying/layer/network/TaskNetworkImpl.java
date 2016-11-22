@@ -7,17 +7,15 @@ package name.huliqing.luoying.layer.network;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.layer.service.TaskService;
 import name.huliqing.luoying.network.Network;
-import name.huliqing.luoying.mess.MessTaskApplyItem;
 import name.huliqing.luoying.mess.MessTaskComplete;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.task.Task;
 
 /**
  * 任务
  * @author huliqing
  */
 public class TaskNetworkImpl implements TaskNetwork {
-    private final Network NETWORK = Network.getInstance();
+    private final Network network = Network.getInstance();
     private TaskService taskService;
     
     @Override
@@ -26,33 +24,34 @@ public class TaskNetworkImpl implements TaskNetwork {
     }
 
     @Override
-    public void completeTask(Entity actor, Task task) {
+    public void completeTask(Entity actor, String taskId) {
         MessTaskComplete mess = new MessTaskComplete();
         mess.setActorId(actor.getData().getUniqueId());
-        mess.setTaskId(task.getId());
+        mess.setTaskId(taskId);
         
         // 客户端向服务端提交“完成任务”的请求
-        if (NETWORK.isClient()) {
-            NETWORK.sendToServer(mess);
+        if (network.isClient()) {
+            network.sendToServer(mess);
         } else {
-            NETWORK.broadcast(mess);
-            taskService.completeTask(actor, task);
+            network.broadcast(mess);
+            taskService.completeTask(actor, taskId);
         }
     }
 
-    @Override
-    public void applyItem(Entity actor, Task task, String itemId, int amount) {
-        if (NETWORK.isClient()) {
-            // ignore
-        } else {
-            MessTaskApplyItem mess = new MessTaskApplyItem();
-            mess.setActorId(actor.getData().getUniqueId());
-            mess.setAmount(amount);
-            mess.setItemId(itemId);
-            mess.setTaskId(task.getId());
-            NETWORK.broadcast(mess);
-            taskService.applyItem(actor, task, itemId, amount);
-        }
-    }
+    // remove20161123
+//    @Override
+//    public void applyItem(Entity actor, String taskId, String itemId, int amount) {
+//        if (NETWORK.isClient()) {
+//            // ignore
+//        } else {
+//            MessTaskApplyItem mess = new MessTaskApplyItem();
+//            mess.setActorId(actor.getData().getUniqueId());
+//            mess.setAmount(amount);
+//            mess.setItemId(itemId);
+//            mess.setTaskId(taskId);
+//            NETWORK.broadcast(mess);
+//            taskService.applyItem(actor, taskId, itemId, amount);
+//        }
+//    }
     
 }

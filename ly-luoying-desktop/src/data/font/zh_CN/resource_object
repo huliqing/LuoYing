@@ -295,7 +295,7 @@ chatSell.name=出售物品
 
 #==== tasks
 taskCollectSpiderClaw.name=蜘蛛的爪子
-taskCollectSpiderClaw.des=帮杰米收集一些蜘蛛的爪子。
+taskCollectSpiderClaw.des=收集10个蜘蛛的爪子,然后把它交给杰米。
 taskCollectSpiderClaw.chatStart=最近这一带野兽出没，人烟变得越来越稀少||生意也不好做了, 想转行倒腾一下药材生意||听说蜘蛛的爪子是一种不错的药引材料||如果你能够帮我收集来一些，我会感激不尽的。
 taskCollectSpiderClaw.chatAsk=蜘蛛的爪子收集完了吗?||任务完成了我会给你报酬的||赶紧去帮我弄些蜘蛛的爪子来||收集完了吗？你真懒惰！
 taskCollectSpiderClaw.chatEnd=真是太好了，多亏了你的帮忙！

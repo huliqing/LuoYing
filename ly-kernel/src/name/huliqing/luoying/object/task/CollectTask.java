@@ -8,17 +8,20 @@ import com.jme3.math.FastMath;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.data.ItemData;
 import name.huliqing.luoying.data.TaskData;
-import name.huliqing.luoying.layer.network.PlayNetwork;
+import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.luoying.layer.network.TaskNetwork;
-import name.huliqing.luoying.layer.service.ActorService;
+import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.layer.service.TaskService;
+import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.attribute.Attribute;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.module.ActorListener;
 import name.huliqing.luoying.object.module.ActorModule;
 import name.huliqing.luoying.utils.ConvertUtils;
 import name.huliqing.luoying.utils.MathUtils;
+import name.huliqing.luoying.xml.ObjectData;
 
 /**
  * 收集类任务, 任务执行方式：
@@ -28,10 +31,12 @@ import name.huliqing.luoying.utils.MathUtils;
  * @param <T>
  */
 public class CollectTask<T extends TaskData> extends AbstractTask<T> implements ActorListener {
-    private final ActorService actorService = Factory.get(ActorService.class);
+//    private final ActorService actorService = Factory.get(ActorService.class);
     private final TaskService taskService = Factory.get(TaskService.class);
     private final TaskNetwork taskNetwork = Factory.get(TaskNetwork.class);
-    private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
+//    private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
+    private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
+    private final EntityService entityService = Factory.get(EntityService.class);
     private ActorModule actorModule;
     
     // 需要收集的物品
@@ -94,7 +99,11 @@ public class CollectTask<T extends TaskData> extends AbstractTask<T> implements 
     public boolean checkCompletion() {
         // 如果有任何一件任务物品收集未完，则判断任务为“未完成”
         for (ItemWrap item : items) {
-            if (taskService.getItemTotal(actor, this, item.itemId) < item.total) {
+            ObjectData od = actor.getData().getObjectData(item.itemId);
+            if (!(od instanceof ItemData)) {
+                return false;
+            }
+            if (((ItemData) od).getTotal() < item.total) {
                 return false;
             }
         }
@@ -105,7 +114,10 @@ public class CollectTask<T extends TaskData> extends AbstractTask<T> implements 
     public void doCompletion() {
         // 扣减任务物品数量
         for (ItemWrap item : items) {
-            taskService.applyItem(actor, this, item.itemId, -item.total);
+            ObjectData od = actor.getData().getObjectData(item.itemId);
+            if (od != null) {
+                entityService.removeObjectData(actor, od.getUniqueId(), item.total);
+            }
         }
         if (actorModule != null) {
             actorModule.removeActorListener(this);
@@ -131,17 +143,21 @@ public class CollectTask<T extends TaskData> extends AbstractTask<T> implements 
         // 根据机率掉落物品给当前任务执行者。
         boolean checkCollected = true; // 判断是否已经收集完
         int tempItemTotal;
+        ObjectData od;
         for (ItemWrap item : items) {
-            // 收集完了的物品不再掉落
-            tempItemTotal = taskService.getItemTotal(actor, this, item.itemId);
+            od = entityService.getObjectDataByTypeId(actor, item.itemId);
+            if (od instanceof ItemData) {
+                tempItemTotal = ((ItemData) od).getTotal();
+            } else {
+                tempItemTotal = 0;
+            }
+            // 如果本件物品收集完了则路过,不再掉落。
             if (tempItemTotal >= item.total) {
                 continue;
             }
             // 按机率掉落
             if (dropFactor >= FastMath.nextRandomFloat()) {
-                // 注:因为这里使用的是随机数，确定是否获得任务物品必须由服务端统一判断，
-                // 所以这里必须使用taskNetwork.applyItem(...)而不是taskService.applyItem(...)
-                taskNetwork.applyItem(actor, this, item.itemId, 1);
+                entityNetwork.addObjectData(actor, Loader.loadData(item.itemId), 1);
                 tempItemTotal++;
             }
             // 只要有一类物品还没有收集完，则要标记为“未完成”
