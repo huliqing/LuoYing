@@ -18,8 +18,9 @@ import name.huliqing.luoying.layer.service.SaveService;
 import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.layer.service.StateService;
 import name.huliqing.luoying.object.Loader;
-import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.save.SaveHelper;
+import name.huliqing.luoying.save.SaveStory;
 
 /**
  *
@@ -66,18 +67,27 @@ public class TestItem extends AbstractItem {
 //        entityNetwork.hitAttribute(aa, "attributeGroup", actor.getAttributeManager().getAttribute("attributeGroup", NumberAttribute.class).intValue(), null);
 //        playNetwork.addEntity(actor.getScene(), aa);
         
-        if (count <= 1) {
-            Entity bb = Loader.load("actorJaime");
-            entityService.hitAttribute(bb, "attributeGroup", actor.getAttributeManager().getAttribute("attributeGroup", NumberAttribute.class).intValue(), null);
-            playNetwork.addEntity(actor.getScene(), bb);
-        }
+//        if (count <= 1) {
+//            Entity bb = Loader.load("actorJaime");
+//            entityService.hitAttribute(bb, "attributeGroup", actor.getAttributeManager().getAttribute("attributeGroup", NumberAttribute.class).intValue(), null);
+//            playNetwork.addEntity(actor.getScene(), bb);
+//        }
+//        
+//        for (int i = 0; i < 1; i++) {
+//            Entity cc = Loader.load("actorSpider");
+//            entityService.hitAttribute(cc, "attributeGroup", 3, null);
+//            playNetwork.addEntity(actor.getScene(), cc);
+//        }
         
-        for (int i = 0; i < 1; i++) {
-            Entity cc = Loader.load("actorSpider");
-            entityService.hitAttribute(cc, "attributeGroup", 3, null);
-            playNetwork.addEntity(actor.getScene(), cc);
-        }
+        SaveStory saveStory = new SaveStory();
+        saveStory.setPlayer(actor.getData());
         
+        SaveHelper.saveStoryLast(saveStory);
+        
+        
+        SaveStory lastSave = SaveHelper.loadStoryLast();
+        System.out.println("lastSave...");
+
     }
         
     private void addActor(GameData gameData, String id) {

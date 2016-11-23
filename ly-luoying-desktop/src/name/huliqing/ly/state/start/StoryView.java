@@ -10,6 +10,7 @@ import com.jme3.math.ColorRGBA;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.Config;
+import name.huliqing.luoying.data.GameData;
 //import name.huliqing.ly.state.StoryServerPlayState;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.object.Loader;
@@ -23,6 +24,7 @@ import name.huliqing.luoying.ui.UIFactory;
 import name.huliqing.luoying.ui.UI;
 //import name.huliqing.ly.LyStoryServerPlayState;
 import name.huliqing.ly.constants.IdConstants;
+import name.huliqing.ly.object.game.StoryServerNetworkRpgGame;
 import name.huliqing.ly.state.start.StoryView.StoryData;
 
 /**
@@ -126,8 +128,12 @@ public class StoryView extends ListView<StoryData> {
 //                    GameData gameData = Loader.loadData(storyData.gameId);
 //                    StoryServerPlayState sps = new LyStoryServerPlayState((Start) LuoYing.getApp(), gameData, saveStory);
 //                    startState.startState(sps);
-
-                    Game game = Loader.load(storyData.gameId);
+                    
+                    GameData gameData = Loader.loadData(storyData.gameId);
+                    StoryServerNetworkRpgGame game = Loader.load(gameData);
+                    if (saveStory != null) {
+                        game.setSaveStory(saveStory);
+                    }
                     GameAppState gameApp = new GameAppState(game);
                     startState.startState(gameApp);
                     

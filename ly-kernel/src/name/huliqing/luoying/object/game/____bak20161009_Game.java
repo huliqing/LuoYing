@@ -1,11 +1,6 @@
-package name.huliqing.luoying.object.game;
+//package name.huliqing.luoying.object.game;
 
-///*
-// * To change this template, choose Tools | Templates
-// * and open the template in the editor.
-// */
-//package name.huliqing.ly.object.game;
-//
+
 //import com.jme3.app.Application;
 //import com.jme3.app.state.AbstractAppState;
 //import com.jme3.app.state.AppStateManager;

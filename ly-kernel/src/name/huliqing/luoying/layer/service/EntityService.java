@@ -23,7 +23,7 @@ public interface EntityService extends EntityNetwork {
      * @param defValue
      * @return 
      */
-    Number getNumberAttributeValue(Entity entity, String attributeName, float defValue);
+    Number getNumberAttributeValue(Entity entity, String attributeName, Number defValue);
     
     /**
      * 获取指定Boolean属性的值，如果属性不存在或者不是Boolean类型，则返回defValue。

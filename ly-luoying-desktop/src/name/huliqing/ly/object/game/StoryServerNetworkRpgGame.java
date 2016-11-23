@@ -64,17 +64,17 @@ public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
     
     public StoryServerNetworkRpgGame() {}
     
-    /**
-     * 故事模式，剧情模式
-     * @param gameData 游戏设置
-     * @param saveStory 存档，如果是新游戏则该参数设置为null.
-     */
-    public StoryServerNetworkRpgGame(GameData gameData, SaveStory saveStory) {
-        super(gameData);
-        if (saveStory != null) {
-            this.saveStory = saveStory;
-        }
-    }
+//    /**
+//     * 故事模式，剧情模式
+//     * @param gameData 游戏设置
+//     * @param saveStory 存档，如果是新游戏则该参数设置为null.
+//     */
+//    public StoryServerNetworkRpgGame(GameData gameData, SaveStory saveStory) {
+//        super(gameData);
+//        if (saveStory != null) {
+//            this.saveStory = saveStory;
+//        }
+//    }
     
     @Override
     public final void initialize(Application app) {
@@ -102,6 +102,9 @@ public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
     }
 
     public void setSaveStory(SaveStory saveStory) {
+        if (saveStory == null) {
+            throw new NullPointerException("SaveStory could not be null!");
+        }
         this.saveStory = saveStory;
     }
     
@@ -206,7 +209,7 @@ public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
             ArrayList<EntityData> actors = saveStory.getActors();
             for (EntityData ad : actors) {
                 Actor tempActor = Loader.load(ad);
-                if  (gameService.getOwner(tempActor) == tempActor.getData().getUniqueId()) {
+                if  (gameService.getOwner(tempActor) == actor.getEntityId()) {
                     getScene().addEntity(tempActor);
                 }
             }
@@ -217,7 +220,6 @@ public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
             } else {
                 actor = Loader.load(IdConstants.ACTOR_PLAYER);
             }
-//            logicService.resetPlayerLogic(player);
         }
         getScene().addEntity(actor);
         // 确保角色位置在地面上
@@ -272,8 +274,9 @@ public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
         List<Actor> actors = scene.getEntities(Actor.class, null);
         
         // 保存所有故事模式下的主角
-        Entity player = getPlayer();
-        storeClient(saveStory, actors, configService.getClientId(), player.getData().getUniqueId(), gameId);
+        Entity savePlayer = getPlayer();
+        savePlayer.updateDatas();
+        storeClient(saveStory, actors, configService.getClientId(), savePlayer.getEntityId(), gameId);
         
         // 保存当前所有客户端的资料
         Collection<HostedConnection> conns = gameServer.getServer().getConnections();
@@ -288,7 +291,7 @@ public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
         }
         
         // 单独保存主角，这是为了兼容v2.4及之前的版本,后续可能会取消这个特殊的保存方式.
-        saveStory.setPlayer(player.getData()); 
+        saveStory.setPlayer(savePlayer.getData());
         
         // 保存快捷方式
         saveStory.setShortcuts(ShortcutManager.getShortcutSaves());
@@ -345,13 +348,21 @@ public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
         // 1.属于当前玩家
         // 2.必须是活着的（生命值大于0）
         // 3.必须是生物类角色，不要保存防御塔或其它建筑之类
-        savedActors.add(findActor(actors, clientPlayerId).getData());
+        Actor clientPlayer = findActor(actors, clientPlayerId);
+        clientPlayer.updateDatas();
+        savedActors.add(clientPlayer.getData());
         for (Actor a : actors) {
-            if (gameService.getOwner(a) == clientPlayerId 
-                    && !gameService.isDead(a) 
-                    && gameService.isBiology(a)) {
-                savedActors.add(a.getData());
+            if(gameService.getOwner(a) != clientPlayerId) {
+                continue;
             }
+            if (gameService.isDead(a)) {
+                continue;
+            }
+            if (!gameService.isBiology(a)) {
+                continue;
+            }
+            a.updateDatas();
+            savedActors.add(a.getData());
         }
         // 添加客户端与角色及场景的对应关系
         ClientData clientData = new ClientData();

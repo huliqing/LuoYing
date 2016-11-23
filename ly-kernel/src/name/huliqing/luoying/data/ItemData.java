@@ -87,6 +87,7 @@ public class ItemData extends ObjectData implements TradeObject{
     
     @Override
     public void write(JmeExporter ex) throws IOException {
+        super.write(ex);
         OutputCapsule oc = ex.getCapsule(this);
         if (tradeInfos != null) {
             oc.writeSavableArrayList(new ArrayList<TradeInfo>(tradeInfos), "tradeInfos", null);
@@ -95,6 +96,7 @@ public class ItemData extends ObjectData implements TradeObject{
     
     @Override
     public void read(JmeImporter im) throws IOException {
+        super.read(im);
         InputCapsule ic = im.getCapsule(this);
         tradeInfos = ic.readSavableArrayList("tradeInfos", null);
     }

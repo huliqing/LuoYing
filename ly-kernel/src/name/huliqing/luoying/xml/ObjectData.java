@@ -20,6 +20,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
+import name.huliqing.luoying.LuoYingException;
 import name.huliqing.luoying.data.CustomUserData;
 
 /**
@@ -51,8 +52,13 @@ public class ObjectData implements Savable, Cloneable {
     
     public Proto getProto() {
         // Proto不会在网络中传输，当在网络情况下, 需要在客户端重新获取。
-        if (proto == null && id != null) {
-            proto = DataFactory.getProto(id);
+        if (proto == null) {
+            if (id != null) {
+                proto = DataFactory.getProto(id);
+            }
+            if (proto == null) {
+                throw new LuoYingException("Could not find proto, objectData=" + this + ", id=" + id);
+            }
         }
         return proto;
     }

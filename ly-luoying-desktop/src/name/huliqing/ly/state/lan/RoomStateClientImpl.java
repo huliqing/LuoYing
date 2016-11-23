@@ -158,9 +158,8 @@ public class RoomStateClientImpl extends AbstractAppState implements RoomState {
     }
     
     private void updateHelp() {
-        ServerState state = gameClient.getServerState();
         helpPanel.clearViews();
-        if (state == ServerState.waiting) {
+        if (gameClient.getServerState() == ServerState.waiting) {
             helpPanel.addView(helpWaitForStart);
         } else if (startGame) {
             helpPanel.addView(helpLoading);

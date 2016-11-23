@@ -7,7 +7,6 @@ package name.huliqing.luoying.layer.service;
 
 import java.util.Collections;
 import java.util.List;
-import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.attribute.BooleanAttribute;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.entity.Entity;
@@ -22,6 +21,7 @@ public class EntityServiceImpl implements EntityService {
     
     @Override
     public void inject() {
+        // ignore
     }
         
     @Override
@@ -33,15 +33,15 @@ public class EntityServiceImpl implements EntityService {
     public void hitNumberAttribute(Entity entity, String attribute, float addValue, Entity hitter) {
         NumberAttribute nattr = entity.getAttributeManager().getAttribute(attribute, NumberAttribute.class);
         if (nattr != null) {
-            entity.hitAttribute(attribute, nattr.getValue().floatValue() + addValue, hitter);
+            entity.hitAttribute(attribute, nattr.getValue().doubleValue() + addValue, hitter);
         } 
     }
     
     @Override
-    public Number getNumberAttributeValue(Entity entity, String attributeName, float defValue) {
+    public Number getNumberAttributeValue(Entity entity, String attributeName, Number defValue) {
         NumberAttribute nattr = entity.getAttributeManager().getAttribute(attributeName, NumberAttribute.class);
         if (nattr != null) {
-            return nattr.getValue().floatValue();
+            return nattr.getValue();
         }
         return defValue;
     }

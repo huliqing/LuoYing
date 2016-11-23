@@ -41,12 +41,12 @@ public class ServerNetworkRpgGame extends NetworkRpgGame {
  
     public ServerNetworkRpgGame() {}
      
-    public ServerNetworkRpgGame(GameData gameData) {
-        super(gameData);
-    }
+//    public ServerNetworkRpgGame(GameData gameData) {
+//        super(gameData);
+//    }
     
     public ServerNetworkRpgGame(GameServer gameServer) {
-        super(gameServer.getGameData());
+//        super(gameServer.getGameData());
         this.gameServer = gameServer;
     }
 

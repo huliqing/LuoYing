@@ -42,9 +42,9 @@ public abstract class NetworkRpgGame extends SimpleRpgGame implements LanGame {
     
     public NetworkRpgGame() {}
  
-    public NetworkRpgGame(GameData gameData) {
-        setData(gameData);
-    }
+//    public NetworkRpgGame(GameData gameData) {
+//        setData(gameData);
+//    }
     
     @Override
     public void initialize(Application app) {

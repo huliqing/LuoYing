@@ -66,14 +66,14 @@ public class ClientNetworkRpgGame extends NetworkRpgGame implements AbstractClie
     public ClientNetworkRpgGame() {}
     
     public ClientNetworkRpgGame(GameClient gameClient) {
-        super(gameClient.getGameData());
         this.gameClient = gameClient;
         // 这里清理掉gameLogic,是因为客户端不需要这些逻辑，这些逻辑只在服务端运行。
         // 如果同时在客户端运行有可能会冲突. 
         // 另外要注意：客户端是可以运行其它gameLogic的。
-        gameClient.getGameData().getGameLogicDatas().clear();
+        this.gameClient.getGameData().getGameLogicDatas().clear();
+        this.setData(gameClient.getGameData());
     }
-
+    
     @Override
     public void initialize(Application app) {
         super.initialize(app);
