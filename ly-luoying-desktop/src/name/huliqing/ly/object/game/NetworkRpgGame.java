@@ -9,7 +9,6 @@ import com.jme3.app.Application;
 import com.jme3.math.Vector3f;
 import java.util.List;
 import name.huliqing.luoying.LuoYing;
-import name.huliqing.luoying.data.GameData;
 import name.huliqing.luoying.network.LanGame;
 import name.huliqing.luoying.network.Network;
 import name.huliqing.luoying.object.anim.Anim;
@@ -41,10 +40,6 @@ public abstract class NetworkRpgGame extends SimpleRpgGame implements LanGame {
     protected Icon lanBtn;
     
     public NetworkRpgGame() {}
- 
-//    public NetworkRpgGame(GameData gameData) {
-//        setData(gameData);
-//    }
     
     @Override
     public void initialize(Application app) {

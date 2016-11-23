@@ -274,6 +274,7 @@ public class GameNetworkImpl implements GameNetwork {
             // 这是主机,所以要设置为当前主场景玩家,与actor.setPlayer(true)不同
             // 注:在设置名字之后再setAsPlayer,否则FacePanel中的player名字不会更新
 //            playService.setMainPlayer(actor);
+
             gameService.setPlayer(actor);
             playNetwork.addEntity(actor);
             

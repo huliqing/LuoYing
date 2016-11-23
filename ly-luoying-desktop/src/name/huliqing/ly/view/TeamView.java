@@ -72,6 +72,18 @@ public class TeamView extends LinearLayout {
 //        partnerPanel.setDebug(true);
     }
     
+    /**
+     * 获取队伍id
+     * @return 
+     */
+    public int getTeamId() {
+        return teamId;
+    }
+    
+    /**
+     * 设置队伍id
+     * @param teamId 
+     */
     public void setTeamId(int teamId) {
         this.teamId = teamId;
     }
@@ -107,6 +119,10 @@ public class TeamView extends LinearLayout {
         }
     }
     
+    /**
+     * 从队伍面板中移除指定角色，角色必须存在于队伍面板中，否则什么也不会做。
+     * @param actor 
+     */
     public void removeActor(Entity actor) {
         if (partnerPanel.removeActor(actor)) {
             partnerPanel.refreshPageData();

@@ -12,7 +12,6 @@ import name.huliqing.luoying.Inject;
 import name.huliqing.ly.object.NetworkObject;
 import name.huliqing.luoying.object.SyncData;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.ly.enums.MessageType;
 import name.huliqing.ly.view.talk.Talk;
 

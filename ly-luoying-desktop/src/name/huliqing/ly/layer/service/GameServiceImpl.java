@@ -18,8 +18,6 @@ import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.luoying.layer.service.ActionService;
 import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.layer.service.PlayService;
-import name.huliqing.luoying.mess.MessEntityRemoveData;
-import name.huliqing.luoying.mess.MessEntityUseDataById;
 import name.huliqing.luoying.object.SyncData;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.entity.Entity;
@@ -140,12 +138,12 @@ public class GameServiceImpl implements GameService {
     public void setGroup(Entity entity, int group) {
         entityService.hitAttribute(entity, AttrConstants.GROUP, group, null);
     }
-
+    
     @Override
     public void setTeam(Entity entity, int team) {
         entityService.hitAttribute(entity, AttrConstants.TEAM, team, null);
     }
-
+    
     @Override
     public void setAutoLogic(Entity entity, boolean autoLogic) {
         entityService.hitAttribute(entity, AttrConstants.AUTO_LOGIC, autoLogic, null);

@@ -85,7 +85,8 @@ public abstract class AbstractEntity<T extends EntityData> implements Entity<T> 
         // 清理模块，因为modules是有依赖顺序的,可能存在一些module，这些module在清理的时候会依赖于
         moduleManager.cleanup();
         
-        attributeManager.cleanup();
+//        // 属性功能不支持清理
+//        attributeManager.cleanup;
         
         // 清理后要取消对场景的引用
         scene = null;

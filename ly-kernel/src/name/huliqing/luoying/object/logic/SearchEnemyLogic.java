@@ -5,6 +5,8 @@
 package name.huliqing.luoying.object.logic;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.layer.network.EntityNetwork;
@@ -17,7 +19,7 @@ import name.huliqing.luoying.object.entity.Entity;
  * 该逻辑不会有战斗行为或IDLE行为，需要和其它逻辑配合才有意义。
  * @author huliqing
  */
-public class SearchEnemyLogic extends AbstractLogic {
+public class SearchEnemyLogic extends AbstractLogic implements Comparator<Entity>{
     private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
     
     // ---- inner
@@ -58,6 +60,7 @@ public class SearchEnemyLogic extends AbstractLogic {
         tempStore.clear();
         actor.getScene().getEntities(Actor.class, actor.getSpatial().getWorldTranslation(), getViewDistance(), tempStore);
         if (!tempStore.isEmpty()) {
+            Collections.sort(tempStore, this); // 按与当前角色从近到远排序
             for (Actor a : tempStore) {
                 if (isAvailableEnemy(a)) {
                     lastFindEnemy = a;
@@ -72,5 +75,13 @@ public class SearchEnemyLogic extends AbstractLogic {
         }
 
     }
+
+    @Override
+    public int compare(Entity o1, Entity o2) {
+        float val = actor.getSpatial().getWorldTranslation().distanceSquared(o1.getSpatial().getWorldTranslation()) 
+                - actor.getSpatial().getWorldTranslation().distanceSquared(o2.getSpatial().getWorldTranslation());
+        return val < 0 ? -1 : 1;
+    }
     
+           
 }

@@ -174,7 +174,8 @@ public final class FaceView extends LinearLayout implements EntityDataListener{
         progressPanel.update(tpf);
         statePanel.update(tpf);
         
-        if (actor != null) {
+        // 注：因为actor有可能已经死亡，并且已经被清理，所以需要判断isInitialized,否则可能会NullPointer
+        if (actor != null && actor.isInitialized()) {
             // 显示受伤动画,头像动画
             if (lifeAttribute.floatValue() < lastLife) {
                 picPanel.colorAnim.start();

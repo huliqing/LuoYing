@@ -120,7 +120,7 @@
              animation="bow_shotHeavy" animationShotDown="bow_shotDown" animationShotUp="bow_shotUp" weaponAnim="shot_heavy" />
 
     <!--召唤技能的基本设置-->
-    <skillSummon id="skillSummonBase" extends="skillMagicBase" copyAttributesFromSource="attributeGroup,attributeLevel" linkAttributesToSource="attributeOwner,attributeFollow" />
+    <skillSummon id="skillSummonBase" extends="skillMagicBase" copyAttributesFromSource="attributeGroup,attributeLevel,attributeTeam" linkAttributesToSource="attributeOwner,attributeFollow" />
     
     <!--野兽召唤术的基本设置-->
     <skillSummon id="skillSummonCreatureBase" extends="skillSummonBase" icon="Interface/skill/ysh_91.jpg" useTime="2" animation="summon" 

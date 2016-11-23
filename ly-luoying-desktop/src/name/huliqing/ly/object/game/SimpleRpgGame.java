@@ -27,14 +27,20 @@ import name.huliqing.luoying.manager.PickManager;
 import name.huliqing.luoying.log.ConsoleLogHandler;
 import name.huliqing.luoying.log.LogFactory;
 import name.huliqing.luoying.object.actor.Actor;
+import name.huliqing.luoying.object.attribute.Attribute;
+import name.huliqing.luoying.object.attribute.NumberAttribute;
+import name.huliqing.luoying.object.attribute.ValueChangeListener;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.entity.TerrainEntity;
 import name.huliqing.luoying.object.env.ChaseCameraEnv;
 import name.huliqing.luoying.object.game.SimpleGame;
+import name.huliqing.luoying.object.scene.Scene;
+import name.huliqing.luoying.object.scene.SceneListener;
 import name.huliqing.luoying.ui.UI;
 import name.huliqing.luoying.ui.UIEventListener;
 import name.huliqing.luoying.ui.state.PickListener;
 import name.huliqing.luoying.ui.state.UIState;
+import name.huliqing.ly.constants.AttrConstants;
 import name.huliqing.ly.enums.MessageType;
 import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.ly.layer.service.GameService;
@@ -49,11 +55,13 @@ import name.huliqing.ly.view.talk.TalkManager;
  *
  * @author huliqing
  */
-public abstract class SimpleRpgGame extends SimpleGame implements UIEventListener {
+public abstract class SimpleRpgGame extends SimpleGame implements UIEventListener, SceneListener, ValueChangeListener<Object>{
     private static final Logger LOG = Logger.getLogger(SimpleRpgGame.class.getName());
     private final GameService gameService = Factory.get(GameService.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
+    // 用于Team属性和Entity关联，通过这个键可以从角色的TeamAttribute在获取角色的EntityId
+    private final String KEY_ENTITY_ID = "_ENTITY_ID_";
     
     // 基本界面
     protected LanPlayStateUI ui;
@@ -121,11 +129,16 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
         return player;
     }
     
-    public void setPlayer(Entity player) {
-        this.player = player;
-        int teamId = gameService.getTeam(player);
+    public void setPlayer(Entity newPlayer) {
+        if (player != null) {
+            gameService.setEssential(player, false);
+        }
+        player = newPlayer;
+        // 把player设置为essential,否则可能在死亡后被移出场景
+        gameService.setEssential(player, true);
+        int teamId = gameService.getTeam(newPlayer);
         ui.getTeamView().clearPartners();
-        ui.getTeamView().setMainActor(player);
+        ui.getTeamView().setMainActor(newPlayer);
         ui.getTeamView().setTeamId(teamId);
         if (teamId > 0) {
             List<Actor> actors = scene.getEntities(Actor.class, null);
@@ -135,7 +148,7 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
         }
         ChaseCameraEnv cce = getChaseCamera();
         if (cce != null) {
-            cce.setChase(player.getSpatial());
+            cce.setChase(newPlayer.getSpatial());
         }
     }
     
@@ -366,6 +379,65 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
         }
         // 快捷管理器中的“回收站”始终是关闭的，只有在拖动快捷方式时才可见
         ShortcutManager.setBucketVisible(false);
+    }
+
+    @Override
+    public void setScene(Scene newScene) {
+        super.setScene(newScene);
+        newScene.addSceneListener(this);
+    }
+    
+    @Override
+    public void onSceneInitialized(Scene scene) {
+        // ignore
+    }
+
+    /**
+     * 当游戏场景中添加了实体时该方法被调用。
+     * @param scene
+     * @param entityAdded 
+     */
+    @Override
+    public void onSceneEntityAdded(Scene scene, Entity entityAdded) {
+        Attribute teamAttribute = entityAdded.getAttributeManager().getAttribute(AttrConstants.TEAM);
+        if (teamAttribute != null) {
+            teamAttribute.getData().setAttribute(KEY_ENTITY_ID, entityAdded.getEntityId());
+            teamAttribute.addListener(this);
+            ui.getTeamView().checkAddOrRemove(entityAdded);
+        }
+    }
+    
+    /**
+     * 当游戏场景中移除了实体时该方法被调用。
+     * @param scene
+     * @param entityRemoved 
+     */
+    @Override
+    public void onSceneEntityRemoved(Scene scene, Entity entityRemoved) {
+        NumberAttribute teamAttribute = (NumberAttribute) entityRemoved.getAttributeManager().getAttribute(AttrConstants.TEAM);
+        if (teamAttribute != null) {
+            if (teamAttribute.intValue() == ui.getTeamView().getTeamId()) {
+                ui.getTeamView().removeActor(entityRemoved);
+            }
+        }
+    }
+
+    /**
+     * 这个方法主要用于监听角色的team属性变化，并将角色添加或移到指定的分组（UI界面）<br>
+     * 不要直接调用这个方法
+     * @param attribute 
+     */
+    @Override
+    public void onValueChanged(Attribute attribute) {
+        if (AttrConstants.TEAM.equals(attribute.getName())) {
+            Long entityId = attribute.getData().getAsLong(KEY_ENTITY_ID);
+            if (entityId == null) 
+                return;
+            Entity entity = scene.getEntity(entityId);
+            if (entity == null)
+                return;
+            ui.getTeamView().checkAddOrRemove(entity);
+        }
     }
     
 }

@@ -55,11 +55,6 @@ public interface AttributeManager {
     boolean removeAttribute(Attribute attribute);
     
     /**
-     * 移除所有属性
-     */
-    void clear();
-    
-    /**
      * 添加属性侦听器
      * @param attributeListener 
      */

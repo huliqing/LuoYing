@@ -72,21 +72,14 @@ public class TestItem extends AbstractItem {
 //            entityService.hitAttribute(bb, "attributeGroup", actor.getAttributeManager().getAttribute("attributeGroup", NumberAttribute.class).intValue(), null);
 //            playNetwork.addEntity(actor.getScene(), bb);
 //        }
-//        
-//        for (int i = 0; i < 1; i++) {
-//            Entity cc = Loader.load("actorSpider");
-//            entityService.hitAttribute(cc, "attributeGroup", 3, null);
-//            playNetwork.addEntity(actor.getScene(), cc);
-//        }
         
-        SaveStory saveStory = new SaveStory();
-        saveStory.setPlayer(actor.getData());
-        
-        SaveHelper.saveStoryLast(saveStory);
-        
-        
-        SaveStory lastSave = SaveHelper.loadStoryLast();
-        System.out.println("lastSave...");
+        for (int i = 0; i < 1; i++) {
+            Entity cc = Loader.load("actorSpider");
+            entityService.hitAttribute(cc, "attributeGroup", 3, null);
+            entityService.hitAttribute(cc, "attributeLevel", 10, null);
+            playNetwork.addEntity(actor.getScene(), cc);
+        }
+
 
     }
         

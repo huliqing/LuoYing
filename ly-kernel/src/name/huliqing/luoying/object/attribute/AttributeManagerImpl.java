@@ -82,14 +82,6 @@ public class AttributeManagerImpl implements AttributeManager {
     }
 
     /**
-     * 清理掉当前所有属性
-     */
-    @Override
-    public void clear() {
-        store.clear();
-    }
-
-    /**
      * 通过属性名称获取指定的属性，如果属性不存在则返回null<br>
      * 注：返回值为泛型(Attribute)，如果使用了特定的属性类型来接收返回值，
      * 则当返回类型不能转换为指定类型时会导致转换异常。
