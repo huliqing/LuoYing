@@ -5,9 +5,13 @@
  */
 package name.huliqing.luoying.object.item;
 
+import java.util.List;
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.data.ActorData;
-import name.huliqing.luoying.data.GameData;
+import name.huliqing.luoying.data.EffectData;
+import name.huliqing.luoying.data.EntityData;
+import name.huliqing.luoying.data.ModuleData;
+import name.huliqing.luoying.data.SkinData;
+import name.huliqing.luoying.data.StateData;
 import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.service.ActorService;
@@ -19,8 +23,7 @@ import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.layer.service.StateService;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.save.SaveHelper;
-import name.huliqing.luoying.save.SaveStory;
+import name.huliqing.luoying.xml.ObjectData;
 
 /**
  *
@@ -48,43 +51,25 @@ public class TestItem extends AbstractItem {
     @Override
     protected void doUse(Entity actor) {
         count++;
-        
-//        Entity aa = Loader.load("actorWolf");
-//        entityNetwork.hitAttribute(aa, "attributeGroup", 9, null);
-//        entityNetwork.hitAttribute(aa, "attributeLevel", 1, null);
-//        entityNetwork.hitAttribute(actor, "attributeColor", new Vector4f(1,1,1.5f,1), null);
-//        playNetwork.addEntity(actor.getScene(), aa);
+      
+//        StateData stateData = Loader.loadData("stateSpeedUpAS");
+        StateData stateData = Loader.loadData("stateSafe");
+        actor.addObjectData(stateData, 1);
+        actor.updateDatas();
+        EntityData saved = actor.getData();        
 
-//        Effect eff = Loader.load("effectTonic");
-//        Emitter eff = Loader.load("emitterRandomFire");
-//        actor.getScene().getRoot().attachChild(eff.getParticleEmitter());
-  
-//        eff.getSpatial().setQueueBucket(RenderQueue.Bucket.Translucent);
-//        actor.getScene().getRoot().attachChild(eff.getSpatial());
-//        ((Node)actor.getSpatial()).attachChild(eff.getSpatial());
+        saveService.saveSavable("aabb", saved);
         
-//        Entity aa = Loader.load("actorTreasure");
-//        entityNetwork.hitAttribute(aa, "attributeGroup", actor.getAttributeManager().getAttribute("attributeGroup", NumberAttribute.class).intValue(), null);
-//        playNetwork.addEntity(actor.getScene(), aa);
-        
-//        if (count <= 1) {
-//            Entity bb = Loader.load("actorJaime");
-//            entityService.hitAttribute(bb, "attributeGroup", actor.getAttributeManager().getAttribute("attributeGroup", NumberAttribute.class).intValue(), null);
-//            playNetwork.addEntity(actor.getScene(), bb);
-//        }
-        
-        for (int i = 0; i < 1; i++) {
-            Entity cc = Loader.load("actorSpider");
-            entityService.hitAttribute(cc, "attributeGroup", 3, null);
-            entityService.hitAttribute(cc, "attributeLevel", 10, null);
-            playNetwork.addEntity(actor.getScene(), cc);
-        }
-
-
+        ObjectData loaded = saveService.loadSavable("aabb");
+        System.out.println("loaded=" + loaded);
+   
+        System.out.println("...");
     }
         
-    private void addActor(GameData gameData, String id) {
-        ActorData actorData = Loader.loadData(id);
-        gameData.getSceneData().addEntityData(actorData);
+    private <T extends ObjectData> void removeTypes(EntityData ed, Class<T> type) {
+        List<T> ods = ed.getObjectDatas(type, null);
+        for (ObjectData od : ods) {
+            ed.removeObjectData(od);
+        }
     }
 }

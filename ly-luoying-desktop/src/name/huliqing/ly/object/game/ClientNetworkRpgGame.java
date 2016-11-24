@@ -189,7 +189,7 @@ public class ClientNetworkRpgGame extends NetworkRpgGame implements AbstractClie
         
         public ClientListener(Application app) {
             super(app);
-        }
+        } 
 
         @Override
         protected void onClientsUpdated(GameClient gameClient, List<ConnData> clients) {
@@ -204,7 +204,6 @@ public class ClientNetworkRpgGame extends NetworkRpgGame implements AbstractClie
             if (m instanceof MessPlayLoadSavedActorResult) {
                 MessPlayLoadSavedActorResult mess = (MessPlayLoadSavedActorResult) m;
                 if (mess.isSuccess()) {
-//                    playService.setMainPlayer(playService.findActor(mess.getActorId()));
                     gameService.setPlayer(playService.getEntity(mess.getActorId()));
                     setUIVisiable(true);
                 } else {

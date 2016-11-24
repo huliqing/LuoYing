@@ -20,7 +20,7 @@ import java.io.IOException;
 public class StateData extends ObjectData {
     
     /** 状态的产生者，也就是说，这个状态是哪一个角色发出的, 如果一个状态没有发起源，则这个参数可能为null. */
-    public long sourceActor;
+    private long sourceActor;
 
     /**
      * 状态的产生者，也就是说，这个状态是哪一个角色发出的, 可能为null.

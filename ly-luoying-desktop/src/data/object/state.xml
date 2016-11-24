@@ -17,7 +17,7 @@
     <statePrivateGroup id="stateGhostTest" icon="" useTime="30" states="stateGhostTest1,stateGhostTest2,stateGhostTest3" />
     <stateAttribute id="stateGhostTest1" useTime="30" bindNumberAttribute="attributeGhostRate" addValue="1" restore="1" />
     <stateAttribute id="stateGhostTest2" useTime="30" bindNumberAttribute="attributeDuckRate" addValue="1" restore="1" />
-    <stateAttribute id="stateGhostTest2" useTime="30" bindNumberAttribute="attributeDefenceRate" addValue="1" restore="1" />
+    <stateAttribute id="stateGhostTest3" useTime="30" bindNumberAttribute="attributeDefenceRate" addValue="1" restore="1" />
     
     <!--保护: 用于在剧情过程中保护角色别死-->
     <statePrivateGroup id="stateSafe" icon="Interface/skill/shield.jpg" useTime="9999" states="stateSafe1,stateSafe2" />

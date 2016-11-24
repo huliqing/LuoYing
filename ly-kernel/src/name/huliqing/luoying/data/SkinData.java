@@ -153,28 +153,6 @@ public class SkinData extends ObjectData implements TradeObject, MatObject {
         this.applyAttributes = applyAttributes;
     }
     
-    // remove20161101
-//    /**
-//     * 获取描述说明
-//     * @return 
-//     * @deprecated 以后不要再使用.
-//     */
-//    @Override
-//    public String getDes() {
-//        List<AttributeApply> aas = getApplyAttributes();
-//        if (aas != null) {
-//            StringBuilder sb = new StringBuilder();
-//            for (AttributeApply aa : aas) {
-//                sb.append(ResourceManager.getObjectName(aa.getAttribute()))
-//                        .append(":")
-//                        .append(aa.getAmount())
-//                        .append("  ");
-//            }
-//            return sb.toString();
-//        }
-//        return ResourceManager.get(ResConstants.COMMON_UNKNOW);
-//    }
-    
     @Override
     public void write(JmeExporter ex) throws IOException {
         super.write(ex);

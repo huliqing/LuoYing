@@ -130,7 +130,7 @@ public class SaveServiceImpl implements SaveService {
      * @return 
      */
     protected byte[] encode(Savable data) {
-        ByteArrayOutputStream os = new ByteArrayOutputStream(1024);
+        ByteArrayOutputStream os = new ByteArrayOutputStream(10240);
         BinaryExporter exp = BinaryExporter.getInstance();
         try {
             exp.save(data, os);

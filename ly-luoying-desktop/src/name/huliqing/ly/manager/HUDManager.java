@@ -51,7 +51,9 @@ public class HUDManager {
         if (!enabled) {
             return;
         }
-        messager.addMessage(mess, color);
+        if (messager != null) {
+            messager.addMessage(mess, color);
+        }
     }
     
     public static void setDisplayTime(float displayTime) {

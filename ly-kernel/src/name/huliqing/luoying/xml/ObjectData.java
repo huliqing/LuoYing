@@ -30,6 +30,7 @@ import name.huliqing.luoying.data.CustomUserData;
  */
 @Serializable
 public class ObjectData implements Savable, Cloneable {
+//    private static final Logger LOG = Logger.getLogger(ObjectData.class.getName());
     
     private static long idIndex = System.currentTimeMillis();
     
@@ -120,7 +121,7 @@ public class ObjectData implements Savable, Cloneable {
         uniqueId = ic.readLong("uniqueId", generateUniqueId());
         localData = (HashMap<String, Savable>) ic.readStringSavableMap("localData", null);
     }
-
+    
     @Override
     public String toString() {
         return "ObjectData{" + "id=" + id + ", uniqueId=" + uniqueId + ", proto=" + proto + ", userData=" + localData + '}';

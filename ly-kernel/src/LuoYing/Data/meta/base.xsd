@@ -74,7 +74,10 @@ xs:time
                 </xs:attribute>
                 <xs:attribute name="objectDatas" type="xs:string" use="optional" >
                     <xs:annotation>
-                        <xs:documentation>物体数据列表，格式: "objectData1,objectData2,..."</xs:documentation>
+                        <xs:documentation>物体数据列表，格式: "objectData1|amount,objectData2|amount,...", 
+                            其中amount指物体数量，这个参数只有对可量化的物体(CountObject)有意义,  该参数可以省略，
+                            如："objectData1,objectData2"
+                        </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
             </xs:extension>

@@ -39,7 +39,7 @@ public class SkillPanel extends ListView<Skill> implements ActorPanel {
     
     @Override
     public List<Skill> getDatas() {
-        if (actor == null) {
+        if (actor == null || !actor.isInitialized()) {
             return datas;
         }
         datas.clear();
@@ -68,8 +68,9 @@ public class SkillPanel extends ListView<Skill> implements ActorPanel {
             
                     // 执行技能
                     skillNetwork.playSkill(actor, row.getData(), false);
-                    
-//                    refreshPageData();// skill不会删除
+                    // skill不会删除,所以不需要刷新
+//                    refreshPageData();
+
                 }
             }
         });

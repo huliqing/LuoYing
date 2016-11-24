@@ -22,31 +22,28 @@ import java.util.logging.Logger;
 import name.huliqing.luoying.Config;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.LuoYing;
+import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.manager.PickManager;
 import name.huliqing.luoying.log.ConsoleLogHandler;
 import name.huliqing.luoying.log.LogFactory;
+import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.actor.Actor;
-import name.huliqing.luoying.object.attribute.Attribute;
-import name.huliqing.luoying.object.attribute.NumberAttribute;
-import name.huliqing.luoying.object.attribute.ValueChangeListener;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.entity.TerrainEntity;
 import name.huliqing.luoying.object.env.ChaseCameraEnv;
 import name.huliqing.luoying.object.game.SimpleGame;
 import name.huliqing.luoying.object.scene.Scene;
-import name.huliqing.luoying.object.scene.SceneListener;
 import name.huliqing.luoying.ui.UI;
 import name.huliqing.luoying.ui.UIEventListener;
 import name.huliqing.luoying.ui.state.PickListener;
 import name.huliqing.luoying.ui.state.UIState;
-import name.huliqing.ly.constants.AttrConstants;
 import name.huliqing.ly.enums.MessageType;
 import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.ly.layer.service.GameService;
 import name.huliqing.ly.manager.HUDManager;
 import name.huliqing.ly.state.MenuTool;
-import name.huliqing.ly.view.LanPlayStateUI;
+import name.huliqing.ly.view.RpgMainUI;
 import name.huliqing.ly.view.shortcut.ShortcutManager;
 import name.huliqing.ly.view.talk.SpeakManager;
 import name.huliqing.ly.view.talk.TalkManager;
@@ -55,16 +52,14 @@ import name.huliqing.ly.view.talk.TalkManager;
  *
  * @author huliqing
  */
-public abstract class SimpleRpgGame extends SimpleGame implements UIEventListener, SceneListener, ValueChangeListener<Object>{
+public abstract class SimpleRpgGame extends SimpleGame implements UIEventListener{
     private static final Logger LOG = Logger.getLogger(SimpleRpgGame.class.getName());
     private final GameService gameService = Factory.get(GameService.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
-    // 用于Team属性和Entity关联，通过这个键可以从角色的TeamAttribute在获取角色的EntityId
-    private final String KEY_ENTITY_ID = "_ENTITY_ID_";
     
     // 基本界面
-    protected LanPlayStateUI ui;
+    protected RpgMainUI ui;
     
     /** 当前游戏主角 */
     protected Entity player;
@@ -90,7 +85,7 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
         UIState.getInstance().addEventListener(this);
         
         // UI逻辑
-        ui = new LanPlayStateUI();
+        ui = new RpgMainUI();
         addLogic(ui);
         
         // 用于支持角色“说话”、“谈话”的游戏逻辑
@@ -136,16 +131,7 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
         player = newPlayer;
         // 把player设置为essential,否则可能在死亡后被移出场景
         gameService.setEssential(player, true);
-        int teamId = gameService.getTeam(newPlayer);
-        ui.getTeamView().clearPartners();
         ui.getTeamView().setMainActor(newPlayer);
-        ui.getTeamView().setTeamId(teamId);
-        if (teamId > 0) {
-            List<Actor> actors = scene.getEntities(Actor.class, null);
-            for (Actor a : actors) {
-                ui.getTeamView().checkAddOrRemove(a);
-            }
-        }
         ChaseCameraEnv cce = getChaseCamera();
         if (cce != null) {
             cce.setChase(newPlayer.getSpatial());
@@ -187,6 +173,7 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
 //        if (temp == null) {
 //            addMessage(ResourceManager.get(ResConstants.COMMON_NO_TARGET), MessageType.notice);
 //        }
+
         if (temp != null) {
             gameNetwork.setFollow(player, -1);
             gameNetwork.setAutoAi(player, true);
@@ -383,61 +370,28 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
 
     @Override
     public void setScene(Scene newScene) {
-        super.setScene(newScene);
-        newScene.addSceneListener(this);
-    }
-    
-    @Override
-    public void onSceneInitialized(Scene scene) {
-        // ignore
-    }
-
-    /**
-     * 当游戏场景中添加了实体时该方法被调用。
-     * @param scene
-     * @param entityAdded 
-     */
-    @Override
-    public void onSceneEntityAdded(Scene scene, Entity entityAdded) {
-        Attribute teamAttribute = entityAdded.getAttributeManager().getAttribute(AttrConstants.TEAM);
-        if (teamAttribute != null) {
-            teamAttribute.getData().setAttribute(KEY_ENTITY_ID, entityAdded.getEntityId());
-            teamAttribute.addListener(this);
-            ui.getTeamView().checkAddOrRemove(entityAdded);
-        }
-    }
-    
-    /**
-     * 当游戏场景中移除了实体时该方法被调用。
-     * @param scene
-     * @param entityRemoved 
-     */
-    @Override
-    public void onSceneEntityRemoved(Scene scene, Entity entityRemoved) {
-        NumberAttribute teamAttribute = (NumberAttribute) entityRemoved.getAttributeManager().getAttribute(AttrConstants.TEAM);
-        if (teamAttribute != null) {
-            if (teamAttribute.intValue() == ui.getTeamView().getTeamId()) {
-                ui.getTeamView().removeActor(entityRemoved);
+        // 切换场景前保存玩家data
+        EntityData playerData = null;
+        if (newScene != this.scene) {
+            if (player != null) {
+                player.updateDatas();
+                playerData = player.getData();
+                this.scene.removeEntity(player);
             }
         }
-    }
-
-    /**
-     * 这个方法主要用于监听角色的team属性变化，并将角色添加或移到指定的分组（UI界面）<br>
-     * 不要直接调用这个方法
-     * @param attribute 
-     */
-    @Override
-    public void onValueChanged(Attribute attribute) {
-        if (AttrConstants.TEAM.equals(attribute.getName())) {
-            Long entityId = attribute.getData().getAsLong(KEY_ENTITY_ID);
-            if (entityId == null) 
-                return;
-            Entity entity = scene.getEntity(entityId);
-            if (entity == null)
-                return;
-            ui.getTeamView().checkAddOrRemove(entity);
+        
+        super.setScene(newScene);
+        
+        // chaseCamera需要重新获取
+        chaseCamera = null;
+        
+        // 重新载入data
+        if (playerData != null) {
+            Actor actor = Loader.load(playerData);
+            scene.addEntity(actor);
+            setPlayer(actor);
         }
+        
     }
     
 }

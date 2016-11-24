@@ -28,6 +28,7 @@
     <!-- ========================================================================= -->
     
     <!-- 黄金宝箱 -->
+    <!--<gameStoryTreasure id="gameStoryTreasure" extends="gameRpgBase" scene="sysSceneTest"  />-->
     <gameStoryTreasure id="gameStoryTreasure" extends="gameRpgBase" scene="sceneTreasure"  />
 
     <!--千年古柏-->

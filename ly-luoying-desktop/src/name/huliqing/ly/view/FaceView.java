@@ -36,6 +36,7 @@ import name.huliqing.luoying.ui.LinearLayout.Layout;
 import name.huliqing.luoying.ui.Text;
 import name.huliqing.luoying.ui.UI;
 import name.huliqing.luoying.xml.ObjectData;
+import name.huliqing.ly.constants.AttrConstants;
 import name.huliqing.ly.layer.service.GameService;
 
 /**
@@ -138,14 +139,14 @@ public final class FaceView extends LinearLayout implements EntityDataListener{
         this.actor = newActor;
         this.actor.addEntityDataListener(this);
         
-        lifeAttribute = newActor.getAttributeManager().getAttribute("attributeHealth", NumberAttribute.class);
-        lifeAttributeMax = newActor.getAttributeManager().getAttribute("attributeHealthMax", NumberAttribute.class);
+        lifeAttribute = newActor.getAttributeManager().getAttribute(AttrConstants.HEALTH, NumberAttribute.class);
+        lifeAttributeMax = newActor.getAttributeManager().getAttribute(AttrConstants.HEALTH_MAX, NumberAttribute.class);
         
-        manaAttribute = newActor.getAttributeManager().getAttribute("attributeMana", NumberAttribute.class);
-        manaAttributeMax = newActor.getAttributeManager().getAttribute("attributeManaMax", NumberAttribute.class);
+        manaAttribute = newActor.getAttributeManager().getAttribute(AttrConstants.MANA, NumberAttribute.class);
+        manaAttributeMax = newActor.getAttributeManager().getAttribute(AttrConstants.MANA_MAX, NumberAttribute.class);
         
-        xpAttribute = newActor.getAttributeManager().getAttribute("attributeXp", NumberAttribute.class);
-        xpAttributeNext = newActor.getAttributeManager().getAttribute("attributeXpNext", NumberAttribute.class);
+        xpAttribute = newActor.getAttributeManager().getAttribute(AttrConstants.XP, NumberAttribute.class);
+        xpAttributeNext = newActor.getAttributeManager().getAttribute(AttrConstants.XP_NEXT, NumberAttribute.class);
         
         picPanel.setActor(newActor);
         namePanel.setActor(newActor);
@@ -385,7 +386,7 @@ public final class FaceView extends LinearLayout implements EntityDataListener{
             position.setFontSize(height);
             
             skull = new Icon();
-            skull.setImage("Interface/icon/skull.png");
+            skull.setImage(InterfaceConstants.UI_ITEM_SKULL);
             skull.setUseAlpha(true);
             skull.setColor(ColorRGBA.Red);
             skull.setWidth(height);

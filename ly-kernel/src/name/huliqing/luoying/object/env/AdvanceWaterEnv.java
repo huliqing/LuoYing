@@ -21,7 +21,7 @@ import name.huliqing.luoying.object.scene.SceneListenerAdapter;
 import name.huliqing.luoying.object.entity.WaterEntity;
 
 /**
- *
+ * 高级水体环境
  * @author huliqing
  */
 public class AdvanceWaterEnv extends NoneModelEntity implements WaterEntity {

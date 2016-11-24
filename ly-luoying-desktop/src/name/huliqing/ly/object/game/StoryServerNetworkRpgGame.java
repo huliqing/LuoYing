@@ -17,7 +17,6 @@ import name.huliqing.luoying.Config;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.ConnData;
 import name.huliqing.luoying.data.EntityData;
-import name.huliqing.luoying.data.GameData;
 import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.layer.service.ConfigService;
@@ -57,24 +56,14 @@ public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
     /** 存档数据 */
     protected SaveStory saveStory = new SaveStory();
     
-    /** 主角的用户组id */
+    /** 主角的用户组 */
     public final static int GROUP_PLAYER = 1;
+    /** 主角的队伍分组 */
+    public final static int TEAM_PLAYER = 1;
     
     private final TaskStepControl taskControl = new TaskStepControl();
     
     public StoryServerNetworkRpgGame() {}
-    
-//    /**
-//     * 故事模式，剧情模式
-//     * @param gameData 游戏设置
-//     * @param saveStory 存档，如果是新游戏则该参数设置为null.
-//     */
-//    public StoryServerNetworkRpgGame(GameData gameData, SaveStory saveStory) {
-//        super(gameData);
-//        if (saveStory != null) {
-//            this.saveStory = saveStory;
-//        }
-//    }
     
     @Override
     public final void initialize(Application app) {
@@ -129,10 +118,11 @@ public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
     @Override
     protected void addPlayer(Entity actor) {
         super.addPlayer(actor);
-        // 让客户端玩家角色的group始终和当前故事模式中的主角色的分组一致。
+        // 让客户端玩家角色的group和分组始终和当前故事模式中的主角色的分组一致。
         Entity mainPlayer = getPlayer();
         if (mainPlayer != null) {
             gameNetwork.setGroup(actor, gameService.getGroup(mainPlayer));
+            gameNetwork.setTeam(actor, gameService.getTeam(mainPlayer));
         }
     }
     
@@ -231,7 +221,7 @@ public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
         // 给玩家指定分组
         gameService.setGroup(actor, GROUP_PLAYER);
         // 故事模式玩家始终队伍分组为1
-        gameService.setTeam(actor, 1);
+        gameService.setTeam(actor, TEAM_PLAYER);
         // 让角色处于“等待”
         skillService.playSkill(actor, skillService.getSkillWaitDefault(actor), false);
         setPlayer(actor);
@@ -241,9 +231,9 @@ public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
     private boolean loadClient(SaveStory saveStory, ClientData clientData) {
         List<EntityData> actors =  saveStory.getActors();
         EntityData clientPlayerData = null;
-        for (EntityData data : actors) {
-            if (data.getUniqueId() == clientData.getActorId()) {
-                clientPlayerData = data;
+        for (EntityData ed : actors) {
+            if (ed.getUniqueId() == clientData.getActorId()) {
+                clientPlayerData = ed;
                 break;
             }
         }

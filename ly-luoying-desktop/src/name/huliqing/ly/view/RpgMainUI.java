@@ -5,15 +5,15 @@
 package name.huliqing.ly.view;
 
 import name.huliqing.luoying.ui.UIUtils;
-import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.LuoYing;
-import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.anim.Anim;
 import name.huliqing.luoying.object.anim.AnimNode;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.game.Game;
+import name.huliqing.luoying.object.game.GameListener;
+import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.ui.Icon;
 import name.huliqing.luoying.ui.UI;
 import name.huliqing.luoying.ui.UI.Corner;
@@ -25,9 +25,8 @@ import name.huliqing.ly.object.game.SimpleRpgGame;
  * 场景控制,包含设置,人物控制,UI等
  * @author huliqing
  */
-public class LanPlayStateUI extends PlayStateUI {
-    private final PlayService playService = Factory.get(PlayService.class);
-    private SimpleRpgGame _game;
+public class RpgMainUI extends PlayStateUI implements GameListener {
+    private SimpleRpgGame rpgGame;
     
     // 队伍视图及目标视图
     private TeamView teamView;
@@ -41,14 +40,10 @@ public class LanPlayStateUI extends PlayStateUI {
     // UI:技能按钮
     private UI attack;
     
-    public LanPlayStateUI() {
-        super();
-    }
-
     @Override
     public void initialize(Game game) {
         super.initialize(game);
-        _game = (SimpleRpgGame) game;
+        rpgGame = (SimpleRpgGame) game;
         
         // UI size
         float fullWidth = LuoYing.getSettings().getWidth();
@@ -61,6 +56,7 @@ public class LanPlayStateUI extends PlayStateUI {
         
         teamView = new TeamView(faceWidth, faceHeight);
         teamView.setToCorner(name.huliqing.luoying.ui.AbstractUI.Corner.LT);
+        teamView.setScene(game.getScene());
         
         targetFace = new FaceView(faceWidth, faceHeight);
         targetFace.setToCorner(name.huliqing.luoying.ui.AbstractUI.Corner.CT);
@@ -74,7 +70,7 @@ public class LanPlayStateUI extends PlayStateUI {
         userPanelAnim = Loader.load(IdConstants.ANIM_VIEW_MOVE);
         userPanelAnim.setTarget(userPanel);
         animNode = new AnimNode(userPanelAnim);
-        _game.getScene().getRoot().attachChild(animNode);
+        rpgGame.getScene().getRoot().attachChild(animNode);
         
         // ---- 人物属性开关铵钮
         // 按钮：人物面板,包含装甲、武器、技能、属性、任务等等
@@ -98,7 +94,7 @@ public class LanPlayStateUI extends PlayStateUI {
             @Override
             public void onClick(UI ui, boolean isPressed) {
                 if (isPressed) return;
-                _game.attack();
+                rpgGame.attack();
             }
         });
         
@@ -108,6 +104,17 @@ public class LanPlayStateUI extends PlayStateUI {
         UIState.getInstance().addUI(attack.getDisplay());
         
         toolsView.addView(userBtn, 0);
+        
+        rpgGame.addListener(this);
+    }
+        
+    @Override
+    public void cleanup() {
+        rpgGame.removeListener(this);
+        teamView.removeFromParent();
+        targetFace.removeFromParent();
+        attack.getDisplay().removeFromParent();
+        super.cleanup();
     }
 
     @Override
@@ -135,20 +142,32 @@ public class LanPlayStateUI extends PlayStateUI {
     
     private void displayUserPanel(Actor actor) {
         if (userPanel.getParent() == null) {
-            userPanel.setActor(actor != null ? actor : _game.getPlayer());
+            userPanel.setActor(actor != null ? actor : rpgGame.getPlayer());
             UIState.getInstance().addUI(userPanel);
             userPanelAnim.start();
         } else {
             userPanel.removeFromParent();
         }
     }
-    
+
     @Override
-    public void cleanup() {
-        teamView.removeFromParent();
-        targetFace.removeFromParent();
-        attack.getDisplay().removeFromParent();
-        super.cleanup();
+    public void onGameInitialized(Game game) {
+        // ignore
+    }
+
+    @Override
+    public void onGameExit(Game game) {
+        // ignore
+    }
+
+    @Override
+    public void onGameSceneChangeBefore(Game game, Scene oldScene, Scene newScene) {
+        // ignore
+    }
+
+    @Override
+    public void onGameSceneChangeAfter(Game game, Scene oldScene, Scene newScene) {
+        teamView.setScene(newScene);
     }
 
 }

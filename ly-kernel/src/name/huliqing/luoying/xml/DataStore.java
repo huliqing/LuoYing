@@ -111,7 +111,6 @@ class DataStore {
                 baos.write(buff, 0, len);
             }
             return baos.toString(charset != null ? charset : "utf-8");
-            
         } catch (Exception ioe) {
             throw new LuoYingException(ioe);
         } finally {

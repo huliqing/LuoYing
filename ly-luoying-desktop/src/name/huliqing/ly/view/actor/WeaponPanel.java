@@ -8,12 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.SkinData;
-import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.ui.ListView;
 import name.huliqing.luoying.ui.Row;
 import name.huliqing.luoying.ui.UI;
+import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.ly.layer.service.GameService;
 
 /**
@@ -22,7 +22,7 @@ import name.huliqing.ly.layer.service.GameService;
  */
 public class WeaponPanel extends ListView<SkinData> implements ActorPanel{
     private final GameService gameService = Factory.get(GameService.class);
-    private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
+    private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     
     private Entity actor;
     private final List<SkinData> datas = new ArrayList<SkinData>();
@@ -38,7 +38,7 @@ public class WeaponPanel extends ListView<SkinData> implements ActorPanel{
             @Override
             public void onClick(UI ui, boolean isPress) {
                 if (!isPress) {
-                    entityNetwork.useObjectData(actor, row.getData());
+                    gameNetwork.useObjectData(actor, row.getData().getUniqueId());
                     refreshPageData();
                 }
             }
@@ -105,7 +105,7 @@ public class WeaponPanel extends ListView<SkinData> implements ActorPanel{
         public void display(SkinData skinData) {
             icon.setIcon(skinData.getIcon());
             body.setNameText(ResourceManager.getObjectName(skinData));
-            body.setDesText("unknow");
+            body.setDesText(SkinUtils.getSkinDes(skinData));
             num.setText(String.valueOf(skinData.getTotal()));
             setBackgroundVisible(data.isUsed());
         }

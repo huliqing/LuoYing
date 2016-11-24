@@ -57,6 +57,11 @@ public class InterfaceConstants {
     public final static String UI_ITEM_ATTR = "Interface/icon/userPanel/brain.png";
     /** 任务：Interface/icon/userPanel/task.png */
     public final static String UI_ITEM_TASK = "Interface/icon/userPanel/task.png";
+    /** 骷髅头: Interface/icon/skull.png */
+    public final static String UI_ITEM_SKULL = "Interface/icon/skull.png";
+    
+    
+    
     
     /** < */
     public final static String UI_ARROW_LEFT1 = "Interface/ui/arrow_left1.png";

@@ -205,13 +205,13 @@ public abstract class AbstractScene implements Scene {
         if (store == null) {
             store = new ArrayList<T>();
         }
-        float sqRadius = radius * radius;
-        T me;
+        float sqRadius = (float)Math.pow(radius, 2); // radius * radius;
+        Spatial spatial;
         for (Entity so : entities.getArray()) {
             if (type.isAssignableFrom(so.getClass())) {
-                me = (T) so;
-                if (me.getSpatial().getWorldTranslation().distanceSquared(location) <= sqRadius) {
-                    store.add(me);
+                spatial = so.getSpatial();
+                if (spatial != null && spatial.getWorldTranslation().distanceSquared(location) <= sqRadius) {
+                    store.add((T) so);
                 }
             }
         }

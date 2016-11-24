@@ -11,6 +11,7 @@ import java.util.Comparator;
 import name.huliqing.luoying.LuoYingException;
 import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.data.ModuleData;
+import name.huliqing.luoying.data.define.CountObject;
 import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.xml.DataFactory;
@@ -45,12 +46,23 @@ public class EntityDataLoader<T extends EntityData> implements DataLoader<T>{
             });
         }
         
-        // 载入数据
+        // 载入数据， 格式: objectDatas="objectData1|amount,objectData2|amount,..."
         String[] objectArr = proto.getAsArray("objectDatas");
         if (objectArr != null) {
             data.setObjectDatas(new ArrayList<ObjectData>(objectArr.length));
             for (String oid : objectArr) {
-                data.getObjectDatas().add((ObjectData) Loader.loadData(oid));
+                String[] tempArr = oid.split("\\|");
+                ObjectData od = Loader.loadData(tempArr[0]);
+                // 如果是可量化的物体，并且设置了数量。
+                if (od instanceof CountObject && tempArr.length > 1) {
+                    try {
+                        ((CountObject) od).setTotal(Integer.parseInt(tempArr[1]));
+                    } catch (NumberFormatException nfe) {
+                        throw new LuoYingException("Could not set amount for objectData, "
+                                + "please check the format of property of \"objectDatas\", entityId=" + data.getId(), nfe);
+                    }
+                }
+                data.getObjectDatas().add(od);
             }
         }
         

@@ -11,7 +11,8 @@ import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.xml.ObjectData;
 
 /**
- *
+ * EntityNetwork用于服务端将对于Entity的修改事件广播到所有客户端。
+ * 客户端对于EntityNetwork的调用会被忽略。
  * @author huliqing
  */
 public interface EntityNetwork extends Inject {

@@ -7,30 +7,35 @@ package name.huliqing.ly.view;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.layer.network.ActorNetwork;
-import name.huliqing.luoying.layer.service.ActorService;
+import name.huliqing.luoying.object.actor.Actor;
+import name.huliqing.luoying.object.attribute.Attribute;
+import name.huliqing.luoying.object.attribute.NumberAttribute;
+import name.huliqing.luoying.object.attribute.ValueChangeListener;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.scene.Scene;
+import name.huliqing.luoying.object.scene.SceneListener;
 import name.huliqing.luoying.ui.LinearLayout;
 import name.huliqing.luoying.ui.ListView;
 import name.huliqing.luoying.ui.Row;
 import name.huliqing.luoying.ui.UI;
 import name.huliqing.luoying.ui.UI.Listener;
+import name.huliqing.ly.constants.AttrConstants;
 import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.ly.layer.service.GameService;
 
 /**
- * 队伍面板
+ * 队伍面板, 注：角色的team分组必须大于0,并且必须与当前的teamId相同才会被添加到队伍面板中.
  * @author huliqing
  */
-public class TeamView extends LinearLayout {
+public class TeamView extends LinearLayout implements SceneListener, ValueChangeListener<Object>{
 //    private final PlayService playService = Factory.get(PlayService.class);
-    private final ActorService actorService = Factory.get(ActorService.class);
     private final GameService gameService = Factory.get(GameService.class);
-    private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     
-    // 组ID，所有匹配该ID的角色都将添加到当前面板中
-    private int teamId;
+    // 用于Team属性和Entity关联，通过这个键可以从角色的TeamAttribute在获取角色的EntityId
+    private final String KEY_ENTITY_ID = "_ENTITY_ID_";
+    
+    private Scene scene;
     
     private final float facePanelWidth;
     private final float facePanelHeight;
@@ -71,21 +76,13 @@ public class TeamView extends LinearLayout {
 //        mainFace.setDebug(true);
 //        partnerPanel.setDebug(true);
     }
-    
-    /**
-     * 获取队伍id
-     * @return 
-     */
-    public int getTeamId() {
-        return teamId;
-    }
-    
-    /**
-     * 设置队伍id
-     * @param teamId 
-     */
-    public void setTeamId(int teamId) {
-        this.teamId = teamId;
+
+    public void setScene(Scene newScene) {
+        if (scene != null) {
+            scene.removeSceneListener(this);
+        }
+        scene = newScene;
+        scene.addSceneListener(this);
     }
     
     /**
@@ -94,21 +91,26 @@ public class TeamView extends LinearLayout {
      */
     public void setMainActor(Entity actor) {
         mainFace.setActor(actor);
+        clearPartners();
+        // 添加队伍分组成员
+        List<Actor> actors = scene.getEntities(Actor.class, null);
+        for (Actor a : actors) {
+            checkAddOrRemove(a);
+        }
     }
     
     /**
      * 检查是否要将一个角色添加到队伍或从队伍中移除.
      * @param actor 
      */
-    public void checkAddOrRemove(Entity actor) {
-        // teamId不匹配则移出队伍
-        int team = gameService.getTeam(actor);
-        if (team != teamId) {
-            removeActor(actor);
+    private void checkAddOrRemove(Entity actor) {
+        // 是主角，则不需要添加到同伴面板
+        if (actor == mainFace.getActor()) {
             return;
         }
-        // 如果已经添加到列表中，则不处理
-        if (isAdded(actor)) {
+        // teamId不匹配则移出队伍
+        if (gameService.getTeam(actor) != gameService.getTeam(mainFace.getActor())) {
+            removeActor(actor);
             return;
         }
         // 添加到列表
@@ -123,7 +125,7 @@ public class TeamView extends LinearLayout {
      * 从队伍面板中移除指定角色，角色必须存在于队伍面板中，否则什么也不会做。
      * @param actor 
      */
-    public void removeActor(Entity actor) {
+    private void removeActor(Entity actor) {
         if (partnerPanel.removeActor(actor)) {
             partnerPanel.refreshPageData();
             if (partnerPanel.getRowTotal() <= 0) {
@@ -135,7 +137,7 @@ public class TeamView extends LinearLayout {
     /**
      * 清理队伍,不包含主角色
      */
-    public void clearPartners() {
+    private void clearPartners() {
         partnerPanel.clear();
     }
     
@@ -154,7 +156,68 @@ public class TeamView extends LinearLayout {
             }
         }
         return false;
-    } 
+    }
+    
+    @Override
+    public void onSceneInitialized(Scene scene) {
+        // ignore
+    }
+    
+    /**
+     * 当游戏场景中添加了实体时该方法被调用。
+     * @param scene
+     * @param entityAdded 
+     */
+    @Override
+    public void onSceneEntityAdded(Scene scene, Entity entityAdded) {
+        if (mainFace.getActor() == null || !(entityAdded instanceof Actor)) {
+            return;
+        }
+        Attribute teamAttribute = entityAdded.getAttributeManager().getAttribute(AttrConstants.TEAM);
+        if (teamAttribute != null) {
+            teamAttribute.getData().setAttribute(KEY_ENTITY_ID, entityAdded.getEntityId());
+            teamAttribute.addListener(this);
+            checkAddOrRemove(entityAdded);
+        }
+    }
+    
+    /**
+     * 当游戏场景中移除了实体时该方法被调用。
+     * @param scene
+     * @param entityRemoved 
+     */
+    @Override
+    public void onSceneEntityRemoved(Scene scene, Entity entityRemoved) {
+        if (mainFace.getActor() == null || !(entityRemoved instanceof Actor)) {
+            return;
+        }
+        removeActor(entityRemoved);
+    }
+
+    /**
+     * 这个方法主要用于监听角色的team属性变化，并将角色添加或移到指定的分组（UI界面）<br>
+     * 不要直接调用这个方法
+     * @param attribute 
+     */
+    @Override
+    public void onValueChanged(Attribute attribute) {
+        if (AttrConstants.TEAM.equals(attribute.getName())) {
+            Long entityId = attribute.getData().getAsLong(KEY_ENTITY_ID);
+            if (entityId == null) 
+                return;
+            Entity entity = scene.getEntity(entityId);
+            if (entity == null)
+                return;
+            
+            // 如果主角的队伍分组发生变化，则必须清理整个队伍面板，因为这表示当前主玩家脱离队伍。
+            // 否则如果队伍分组变化的是其它玩家，则检查是将该玩家添加到队伍面板还是移出。
+            if (entity == mainFace.getActor()) {
+                clearPartners();
+            } else {
+                checkAddOrRemove(entity);
+            }
+        }
+    }
     
     // ---- Partner Panel ------------------------------------------------------
     

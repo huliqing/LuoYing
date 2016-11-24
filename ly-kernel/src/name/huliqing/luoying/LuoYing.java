@@ -50,6 +50,7 @@ import name.huliqing.luoying.data.MagicData;
 import name.huliqing.luoying.data.ModelEntityData;
 import name.huliqing.luoying.data.PositionData;
 import name.huliqing.luoying.data.ResistData;
+import name.huliqing.luoying.data.SavableArrayList;
 import name.huliqing.luoying.data.SceneData;
 import name.huliqing.luoying.data.ShapeData;
 import name.huliqing.luoying.data.ShortcutData;
@@ -385,6 +386,7 @@ public class LuoYing {
         Serializer.registerClass(ModuleData.class);
         Serializer.registerClass(PositionData.class);
         Serializer.registerClass(ResistData.class);
+        Serializer.registerClass(SavableArrayList.class);
         Serializer.registerClass(SceneData.class);
         Serializer.registerClass(ShapeData.class);
         Serializer.registerClass(ShortcutData.class);

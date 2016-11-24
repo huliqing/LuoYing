@@ -6,15 +6,17 @@
 package name.huliqing.luoying.object.env;
 
 import com.jme3.light.DirectionalLight;
+import com.jme3.light.Light;
 import com.jme3.math.Vector3f;
 import name.huliqing.luoying.data.EntityData;
+import name.huliqing.luoying.object.entity.LightEntity;
 import name.huliqing.luoying.object.entity.NoneModelEntity;
 import name.huliqing.luoying.object.scene.Scene;
 
 /**
  * @author huliqing
  */
-public class DirectionalLightEnv extends NoneModelEntity {
+public class DirectionalLightEnv extends NoneModelEntity implements LightEntity{
 
     private final DirectionalLight light = new DirectionalLight();
     private Vector3f direction = new Vector3f(-1,-1,-1);
@@ -47,7 +49,12 @@ public class DirectionalLightEnv extends NoneModelEntity {
         scene.getRoot().removeLight(light);
         super.cleanup();
     }
-
+    
+    @Override
+    public Light getLight() {
+        return light;
+    }
+    
 //    private Spatial createDebugArrow(DirectionalLight light) {
 //        Node node = new Node();
 //        Spatial arrow1 = DebugUtils.createArrow(Vector3f.ZERO, Vector3f.ZERO.add(light.getDirection().normalize()), light.getColor());
@@ -61,6 +68,7 @@ public class DirectionalLightEnv extends NoneModelEntity {
 //        node.attachChild(arrow3);
 //        return node;
 //    }
+
 
     
 }

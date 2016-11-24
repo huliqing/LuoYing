@@ -6,8 +6,7 @@
 package name.huliqing.luoying.object.state;
 
 import com.jme3.util.SafeArrayList;
-import java.util.ArrayList;
-import java.util.List;
+import name.huliqing.luoying.data.SavableArrayList;
 import name.huliqing.luoying.data.StateData;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.xml.DataFactory;
@@ -20,7 +19,7 @@ import name.huliqing.luoying.xml.DataFactory;
  */
 public class PrivateGroupState extends AbstractState {
 
-    private List<StateData> childStateDatas;
+    private SavableArrayList<StateData> childStateDatas;
     
     private final SafeArrayList<State> states = new SafeArrayList<State>(State.class);
     
@@ -28,11 +27,11 @@ public class PrivateGroupState extends AbstractState {
     public void setData(StateData data) {
         super.setData(data);
         // 必须先从data中获取childStateDatas，因为data有可能是从存档中读取的。
-        childStateDatas = (List<StateData>) data.getAttribute("childStateDatas");
+        childStateDatas = (SavableArrayList) data.getAttribute("childStateDatas");
         if (childStateDatas == null) {
             String[] stateArr = data.getAsArray("states");
             if (stateArr != null) {
-                childStateDatas = new ArrayList<StateData>(stateArr.length);
+                childStateDatas = new SavableArrayList<StateData>(stateArr.length);
                 for (int i = 0; i < stateArr.length; i++) {
                     childStateDatas.add((StateData) DataFactory.createData(stateArr[i]));
                 }
@@ -44,13 +43,16 @@ public class PrivateGroupState extends AbstractState {
     @Override
     public void updateDatas() {
         super.updateDatas();
+        for (State s : states.getArray()) {
+            s.updateDatas();
+        }
     }
     
     @Override
     public void initialize() {
         super.initialize();
         if (childStateDatas != null) {
-            for (StateData stateData : childStateDatas) {
+            for (StateData stateData : childStateDatas.getList()) {
                 stateData.setSourceActor(data.getSourceActor());
                 State state = Loader.load(stateData);
                 state.setActor(actor);

@@ -7,13 +7,10 @@ package name.huliqing.luoying.layer.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import name.huliqing.luoying.Config;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.constants.IdConstants;
 import name.huliqing.luoying.data.ConfigData;
-import name.huliqing.luoying.manager.ResManager;
 import name.huliqing.luoying.object.sound.SoundManager;
 import name.huliqing.luoying.xml.DataFactory;
 import name.huliqing.luoying.save.SaveConfig;
@@ -57,8 +54,6 @@ public class ConfigServiceImpl implements ConfigService {
         SaveConfig sc = SaveHelper.loadConfig();
         if (sc != null && sc.getConfig() != null) {
             ConfigData scd = sc.getConfig();
-//            cd.setLocale(scd.getLocale());
-//            cd.setLocaleAll(scd.getLocaleAll());
             cd.setPort(scd.getPort());
             cd.setPortDiscoverClient(scd.getPortDiscoverClient());
             cd.setPortDiscoverServer(scd.getPortDiscoverServer());

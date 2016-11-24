@@ -5,6 +5,7 @@
  */
 package name.huliqing.luoying.object.env;
 
+import name.huliqing.luoying.object.entity.ProxyEntity;
 import com.jme3.scene.Spatial;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -23,7 +24,7 @@ import name.huliqing.luoying.xml.DataFactory;
  * 依赖于平台的Env环境,根据平台的匹配关系来确定要使用哪一个环境。
  * @author huliqing
  */
-public class PlatformProxyEnv extends AbstractEntity implements ProxyEnv {
+public class PlatformProxyEnv extends AbstractEntity implements ProxyEntity {
     private final SystemService systemService = Factory.get(SystemService.class);
 
     // 默认的EnvId,如果找不到匹配当前平台的Env则使用这个id的Env作为代理Env
