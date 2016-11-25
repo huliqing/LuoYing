@@ -30,7 +30,7 @@ import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.Config;
 import name.huliqing.luoying.constants.AssetConstants;
 import name.huliqing.luoying.data.EffectData;
-import name.huliqing.luoying.object.env.TerrainEnv;
+import name.huliqing.luoying.object.entity.impl.SimpleTerrainEntity;
 import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.utils.GeometryUtils;
 
@@ -147,9 +147,9 @@ public class ProjectionEffect extends Effect {
         
         // 判断是否有接受投射的物体，如果没有的话偿试把地形添加进来。
         if (receivers.isEmpty()) {
-            List<TerrainEnv> tes = scene.getEntities(TerrainEnv.class, null);
+            List<SimpleTerrainEntity> tes = scene.getEntities(SimpleTerrainEntity.class, null);
             if (tes != null && !tes.isEmpty()) {
-                for (TerrainEnv te : tes) {
+                for (SimpleTerrainEntity te : tes) {
                     if (te.getSpatial() != null) {
                         addReceiver(te.getSpatial());
                     }

@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.luoying.object.env;
+package name.huliqing.luoying.object.entity.impl;
 
 import com.jme3.bullet.collision.shapes.MeshCollisionShape;
 import com.jme3.bullet.control.RigidBodyControl;
@@ -13,7 +13,7 @@ import name.huliqing.luoying.shape.TreeCollisionMesh;
  * 计算。
  * @author huliqing
  */
-public class TreeEnv extends PlantEnv {
+public class TreeEntity extends PlantEntity {
 
     @Override
     public void initEntity() {

@@ -36,12 +36,15 @@ public class AttributeState extends AbstractState {
         this.addValue = data.getAsFloat("addValue", addValue);
         this.restore = data.getAsBoolean("restore", restore);
         this.attributeApplied = data.getAsBoolean("attributeApplied", attributeApplied);
+        this.finalAddValue = data.getAsFloat("finalAddValue", 0);
     }
     
     @Override
     public void updateDatas() {
         super.updateDatas();
         data.setAttribute("attributeApplied", attributeApplied);
+        // 这个参数要保存，因为如果是从存档恢复，则这个值不会重新计算。
+        data.setAttribute("finalAddValue", finalAddValue); 
     }
     
     @Override

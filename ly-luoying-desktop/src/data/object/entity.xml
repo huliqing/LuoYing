@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://luoying.huliqing.name'
+    xsi:schemaLocation='http://luoying.huliqing.name ../../../../ly-kernel/src/LuoYing/Data/meta/entity.xsd'>
+    
+    <!-- ========================================================================= -->
+    <!-- 环境物体的基本配置：有一部分直接继承自系统的基本配置. -->
+    <!-- ========================================================================= -->
+    
+    <!--天空盒-->
+    <entitySkyBox id="entitySkyBase" west="west.jpg" east="east.jpg" north="north.jpg" south="south.jpg" up="up.jpg" down="down.jpg" 
+            baseDir="Textures/tex/sky/default_min/" />
+
+    <!--地形：继承自系统配置-->
+    <entitySimpleTerrain id="entityTerrainBase" extends="sysEntityTerrainBase"  />
+
+    <!--植被：继承自系统配置-->
+    <entityTree id="entityTreeBase" extends="sysEntityTreeBase" />
+    
+    <!--植被：草丛、花朵,继承自系统配置-->
+    <entityGrass id="entityGrassBase" extends="sysEntityGrassBase" />
+    
+    <!--场景阴影基本配置-->
+    <entityDirectionalLightFilterShadow id="entityShadowBase" extends="sysEntityShadowBase" />
+
+    <!--直射光基本配置-->
+    <entityDirectionalLight id="entityDirectionalLightBase" direction="-1,-2,-1" color="0.8,0.8,0.8,0.8"  />
+
+    <!--基本的环境光-->
+    <entityAmbientLight id="entityAmbientLightBase" color="0.7,0.7,0.7,0.7" />
+    
+    <!--普通水体：对资源要求不高，支持移动设备-->
+    <entitySimpleWater id="entitySimpleWaterBase" extends="sysEntitySimpleWaterBase" />
+    
+    <!--高级水体：海水环境，对资源要求较高,目前不支持移动设备-->
+    <entityAdvanceWater id="entityAdvanceWaterBase" extends="sysEntityAdvanceWaterBase" />
+    
+    <!--物理环境-->
+    <entityPhysics id="entityPhysicsBase" extends="sysEntityPhysicsBase" />
+    
+    <!--第三人称镜头跟随视角-->
+    <entityChaseCamera id="entityChaseCameraBase" extends="sysEntityChaseCameraBase" />
+    
+    <!-- ========================================================================= -->
+    <!--通用、默认配置-->
+    <!-- ========================================================================= -->
+    
+    <!--默认的物理环境-->
+    <entityPhysics id="entityPhysics" extends="entityPhysicsBase" />
+    
+    <!--默认的天空盒-->
+    <entitySkyBox id="entitySky" extends="entitySkyBase" />
+
+    <!--默认的直射光-->
+    <entityDirectionalLight id="entityDirectionalLight" extends="entityDirectionalLightBase"  />
+    
+    <!--默认的环境光-->
+    <entityAmbientLight id="entityAmbientLight" extends="entityAmbientLightBase" />
+    
+    <!--默认的阴影处理器-->
+    <entityDirectionalLightFilterShadow id="entityShadow" extends="entityShadowBase" />
+    <entityDirectionalLightShadow id="entityDirectionalLightShadow" extends="entityShadowBase" shadowMapSize="1024" shadowMaps="1"  />
+    
+    <!--第三人称视角相机-->
+    <entityChaseCamera id="entityCameraThirdView" extends="entityChaseCameraBase" />
+    
+    <!--默认的各种树-->
+    <entityTree id="entityTree1" extends="entityTreeBase" file="Models/trees/tree/tree381.j3o" randomScale="1" minScale="4" maxScale="24" />
+    <entityTree id="entityTree2" extends="entityTree1" file="Models/trees/tree/tree431.j3o"  />
+    <entityTree id="entityTree3" extends="entityTree1" file="Models/trees/tree/tree613.j3o"  />
+    <entityTree id="entityTree4" extends="entityTree1" file="Models/trees/tree/tree978.j3o"  />
+    <entityTree id="entityFir1" extends="entityTree1" file="Models/trees/fir/fir473.j3o"   />
+    <entityTree id="entityFir2" extends="entityTree1" file="Models/trees/fir/fir483.j3o"  />
+    <entityTree id="entityFir3" extends="entityTree1" file="Models/trees/fir/fir527.j3o"  />
+    
+    <!--默认的各种花草-->
+    <entityGrass id="entityFlower0" extends="entityGrassBase" file="Models/plant/flower/camellia.j3o" randomScale="1" minScale="3" maxScale="5" />
+    <entityGrass id="entityFlower1" extends="entityGrassBase" file="Models/plant/flower/flower3.j3o" randomScale="1" minScale="0.5" maxScale="1.5" />
+    <entityGrass id="entityGrass1" extends="entityGrassBase" file="Models/plant/grass/fern.j3o" randomScale="1" minScale="2" maxScale="5" />
+    <entityGrass id="entityGrass2" extends="entityGrassBase" file="Models/plant/grass/fern2.j3o" randomScale="1" minScale="1" maxScale="2.5" />
+    <entityGrass id="entityGrass3" extends="entityGrassBase" file="Models/plant/grass/tussockA.j3o" randomScale="1" minScale="1.5" maxScale="3.0" />
+    <entityGrass id="entityGrass4" extends="entityGrassBase" file="Models/plant/grass/tussockB.j3o" randomScale="1" minScale="2.0" maxScale="5" />
+    
+    <!-- ========================================================================= -->
+    <!--特殊环境： 落樱小岛-->
+    <!-- ========================================================================= -->
+    
+    <!--地形：落樱小岛-->
+    <entitySimpleTerrain id="entitySakuraIslandTerrain" extends="entityTerrainBase" file="Models/env/terrain/scene.j3o" scale="5,5,5" />
+    <!--边界盒： 落樱小岛的边界盒-->
+    <entitySimpleModel id="entitySakuraIslandBoundary" extends="sysEntityBoundaryBase" scale="220,80,210" location="0,0,5" />
+    <!--简单水体:移动平台-->
+    <entitySimpleWater id="entitySakuraIslandSimpleWater" extends="entitySimpleWaterBase" />
+    <!--默认海水:桌面平台-->
+    <entityAdvanceWater id="entitySakuraIslandAdvanceWater" extends="entityAdvanceWaterBase" />
+    <!--海水环境代理：根据平台在桌面环境下使用高级水体效果，在其它平台（主要是移动平台）下使用简单水体效果-->
+    <entityPlatformProxy id="entitySakuraIslandWater" defaultEntity="entitySakuraIslandSimpleWater" mapping="entitySakuraIslandAdvanceWater|Windows32|Windows64|Linux32|Linux64|MacOSX32|MacOSX64|MacOSX_PPC32|MacOSX_PPC64" />
+    <!--海边环境音效-->
+    <entityAudio id="entitySakuraIslandSeaAudio" sound="soundOcean" debug="0" location="0, 0, 120" maxDistance="100" refDistance="20" looping="1" volume="1" />
+    
+</root>
+
+
+

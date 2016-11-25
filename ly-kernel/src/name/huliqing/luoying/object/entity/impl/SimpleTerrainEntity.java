@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.luoying.object.env;
+package name.huliqing.luoying.object.entity.impl;
 
 import com.jme3.collision.CollisionResults;
 import com.jme3.math.Ray;
@@ -17,7 +17,7 @@ import name.huliqing.luoying.utils.GeometryUtils;
  * 地形环境
  * @author huliqing
  */
-public class TerrainEnv extends ModelEntity implements TerrainEntity {
+public class SimpleTerrainEntity extends ModelEntity implements TerrainEntity {
     
     // 射线用于获取地面高度
     private final Ray ray = new Ray();

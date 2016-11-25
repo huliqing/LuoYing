@@ -36,14 +36,12 @@ public abstract class ModelEntity<T extends ModelEntityData> extends AbstractEnt
     @Override
     public void updateDatas() {
         super.updateDatas();
-        if (initialized) {
-            data.setLocation(spatial.getLocalTranslation());
-            data.setRotation(spatial.getLocalRotation());
-            data.setScale(spatial.getLocalScale());
-            data.setShadowMode(spatial.getShadowMode());
-            data.setCullHint(spatial.getCullHint());
-            data.setQueueBucket(spatial.getQueueBucket());
-        }
+        data.setLocation(spatial.getLocalTranslation());
+        data.setRotation(spatial.getLocalRotation());
+        data.setScale(spatial.getLocalScale());
+        data.setShadowMode(spatial.getShadowMode());
+        data.setCullHint(spatial.getCullHint());
+        data.setQueueBucket(spatial.getQueueBucket());
     }
     
     @Override

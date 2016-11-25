@@ -12,7 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.entity.ModelEntity;
-import name.huliqing.luoying.object.env.TreeEnv;
+import name.huliqing.luoying.object.entity.impl.TreeEntity;
 import name.huliqing.luoying.object.scene.Scene;
 
 /**
@@ -67,7 +67,7 @@ public class SceneHelper {
         Entity temp;
         while(it.hasNext()) {
             temp = it.next();
-            if (!(temp instanceof TreeEnv) || temp.getSpatial() == null || temp.getSpatial().getWorldBound() == null) {
+            if (!(temp instanceof TreeEntity) || temp.getSpatial() == null || temp.getSpatial().getWorldBound() == null) {
                 it.remove();
             }
         }

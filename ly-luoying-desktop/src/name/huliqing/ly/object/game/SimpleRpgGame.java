@@ -31,7 +31,7 @@ import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.entity.TerrainEntity;
-import name.huliqing.luoying.object.env.ChaseCameraEnv;
+import name.huliqing.luoying.object.entity.impl.ChaseCameraEntity;
 import name.huliqing.luoying.object.game.SimpleGame;
 import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.ui.UI;
@@ -65,7 +65,7 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
     protected Entity player;
     
     // 场景相机
-    protected ChaseCameraEnv chaseCamera;
+    protected ChaseCameraEntity chaseCamera;
 
     private final List<Actor> tempActorsPicked = new ArrayList<Actor>();
     private final CollisionResults tempTerrainsPicked = new CollisionResults();
@@ -132,7 +132,7 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
         // 把player设置为essential,否则可能在死亡后被移出场景
         gameService.setEssential(player, true);
         ui.getTeamView().setMainActor(newPlayer);
-        ChaseCameraEnv cce = getChaseCamera();
+        ChaseCameraEntity cce = getChaseCamera();
         if (cce != null) {
             cce.setChase(newPlayer.getSpatial());
         }
@@ -182,10 +182,10 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
         playNetwork.attack(player, temp);
     }
     
-    protected ChaseCameraEnv getChaseCamera() {
+    protected ChaseCameraEntity getChaseCamera() {
         // 从场景中找到“跟随”相机
         if (chaseCamera == null) {
-           List<ChaseCameraEnv> cces = scene.getEntities(ChaseCameraEnv.class, null);
+           List<ChaseCameraEntity> cces = scene.getEntities(ChaseCameraEntity.class, null);
            if (cces != null && !cces.isEmpty()) {
                chaseCamera = cces.get(0);
            } else {
@@ -338,7 +338,7 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
         // 一直远去(向前走动)，当相机重新跟随的时候，会突然移到角色旁边，过渡太过不自然．
         // 如果只关闭旋转，而保持跟随，就不会出现该现象，也就是该功能只是为了避免
         // 在按下鼠标拖动(UI)的时候同时出现3D镜头在旋转的问题．
-        ChaseCameraEnv cce = getChaseCamera();
+        ChaseCameraEntity cce = getChaseCamera();
         if (cce != null) {
             cce.setEnabledRotation(enabled);
         }

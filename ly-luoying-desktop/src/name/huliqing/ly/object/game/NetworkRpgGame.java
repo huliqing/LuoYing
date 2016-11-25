@@ -15,7 +15,7 @@ import name.huliqing.luoying.object.anim.Anim;
 import name.huliqing.luoying.object.anim.AnimationControl;
 import name.huliqing.luoying.object.anim.Listener;
 import name.huliqing.luoying.object.anim.ScaleAnim;
-import name.huliqing.luoying.object.env.ChaseCameraEnv;
+import name.huliqing.luoying.object.entity.impl.ChaseCameraEntity;
 import name.huliqing.luoying.ui.Icon;
 import name.huliqing.luoying.ui.UI;
 import name.huliqing.luoying.ui.state.UIState;
@@ -84,7 +84,7 @@ public abstract class NetworkRpgGame extends SimpleRpgGame implements LanGame {
         
         UIState.getInstance().addUI(actorPanel);
         
-        ChaseCameraEnv cc = getChaseCamera();  
+        ChaseCameraEntity cc = getChaseCamera();  
         if (cc != null) {
             cc.setChase(actorPanel.getActorView());
         }

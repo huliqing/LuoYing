@@ -1,4 +1,4 @@
-package name.huliqing.luoying.object.env;
+package name.huliqing.luoying.object.entity.impl;
 
 ///*
 // * To change this template, choose Tools | Templates

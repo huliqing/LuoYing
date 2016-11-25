@@ -14,7 +14,7 @@ import com.jme3.math.Vector3f;
 public interface TerrainEntity extends Entity {
     
     /**
-     * 获取地面的高度, 注：如果指定的位置范围超出，则该方法将返回null, 否则返回该位置处地面的最高点。
+     * 获取地面的高度, 注：如果指定的位置超出地面边界范围，则返回null, 否则返回该位置处地面的最高点。
      * @param x
      * @param z
      * @return 

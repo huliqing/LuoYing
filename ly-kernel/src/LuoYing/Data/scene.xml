@@ -23,8 +23,8 @@
     <scene id="sysSceneGui" entities="" />
     
     <!-- 默认的测试场景 -->
-    <scene id="sysSceneTest" entities="sysEnvSky,sysEnvDirectionalLight,sysEnvTerrain,sysEnvTree,sysEnvPhysics,sysEnvShadow,sysEnvAdvanceWater
-,sysEnvBoundary,sysEnvChaseCamera" />
+    <scene id="sysSceneTest" entities="sysEntitySky,sysEntityDirectionalLight,sysEntityTerrain,sysEntityTree,sysEntityPhysics,sysEntityShadow,sysEntityAdvanceWater
+,sysEntityBoundary,sysEntityChaseCamera" />
 
     
 </root>

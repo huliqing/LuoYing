@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.luoying.object.env;
+package name.huliqing.luoying.object.entity.impl;
 
 import com.jme3.light.DirectionalLight;
 import com.jme3.light.Light;
@@ -11,7 +11,6 @@ import com.jme3.light.LightList;
 import com.jme3.shadow.DirectionalLightShadowRenderer;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.data.EntityData;
-import name.huliqing.luoying.object.entity.NoneModelEntity;
 import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.object.scene.SceneListener;
 import name.huliqing.luoying.object.scene.SceneListenerAdapter;
@@ -20,8 +19,9 @@ import name.huliqing.luoying.object.scene.SceneListenerAdapter;
  *
  * @author huliqing
  */
-public class DirectionalLightShadowEnv extends NoneModelEntity{
+public class DirectionalLightShadowEntity extends ShadowEntity {
 
+    private float shadowIntensity = 0.7f;
     private int shadowMapSize = 1024;
     private int shadowMaps = 1;
     
@@ -31,16 +31,24 @@ public class DirectionalLightShadowEnv extends NoneModelEntity{
     @Override
     public void setData(EntityData data) {
         super.setData(data);
+        shadowIntensity = data.getAsFloat("shadowIntensity", shadowIntensity);
         shadowMapSize = data.getAsInteger("shadowMapSize", shadowMapSize);
         shadowMaps = data.getAsInteger("shadowMaps", shadowMaps);
+    }
+
+    @Override
+    public void updateDatas() {
+        super.updateDatas();
+        data.setAttribute("shadowIntensity", shadowProcessor.getShadowIntensity());
     }
     
     @Override
     protected void initEntity() {
         shadowProcessor = new DirectionalLightShadowRenderer(LuoYing.getAssetManager(), shadowMapSize, shadowMaps);
+        shadowProcessor.setShadowIntensity(shadowIntensity);
 //        shadowProcessor.setShadowZExtend(500f);
     }
-
+    
     @Override
     public void onInitScene(Scene scene) {
         super.onInitScene(scene);
@@ -64,6 +72,11 @@ public class DirectionalLightShadowEnv extends NoneModelEntity{
         scene.removeSceneListener(sceneListener);
         shadowProcessor = null;
         super.cleanup(); 
+    }
+
+    @Override
+    public void setShadowIntensity(float shadowIntensity) {
+        shadowProcessor.setShadowIntensity(shadowIntensity);
     }
     
     private DirectionalLight findDirectionalLight() {

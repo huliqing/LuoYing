@@ -14,7 +14,7 @@
     <!-- ========================================================================= -->
     <!-- DEBUG -->
     <!-- ========================================================================= -->
-    <!--<sceneRandom id="sceneDebug" envs="envSky,envTerrainDebug2" emptyZones="0|0|10" />-->
+    <!--<sceneRandom id="sceneDebug" entities="entitySky,entityTerrainDebug2" emptyZones="0|0|10" />-->
     
     <!-- ========================================================================= -->
     <!-- 特殊场景 -->
@@ -22,15 +22,15 @@
     
     <!--黄金宝箱场景-->
     <sceneRandom id="sceneTreasure" 
-                 entities="envSky,envDirectionalLight,envAmbientLight,envPhysics,envCameraThirdView
-,envSakuraIslandTerrain,envSakuraIslandBoundary,envSakuraIslandWater,envSakuraIslandSeaAudio
-,envShadow
+                 entities="entitySky,entityDirectionalLight,entityAmbientLight,entityPhysics,entityCameraThirdView
+,entitySakuraIslandTerrain,entitySakuraIslandBoundary,entitySakuraIslandWater,entitySakuraIslandSeaAudio
+,entityShadow
 " 
                  emptyZones="0|0|10" 
-                 randomEntities="envTree1|4,envTree2|4,envTree3|4,envTree4|4
-,envFir1|4,envFir2|4,envFir3|4
-,envFlower0|4,envFlower1|4
-,envGrass1|4,envGrass2|4,envGrass3|4,envGrass4|4"
+                 randomEntities="entityTree1|4,entityTree2|4,entityTree3|4,entityTree4|4
+,entityFir1|4,entityFir2|4,entityFir3|4
+,entityFlower0|4,entityFlower1|4
+,entityGrass1|4,entityGrass2|4,entityGrass3|4,entityGrass4|4"
 randomXExtent="100" randomZExtent="100"
 />
     

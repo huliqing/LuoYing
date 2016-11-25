@@ -3,17 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.luoying.object.env;
+package name.huliqing.luoying.object.entity.impl;
 
 import com.jme3.bounding.BoundingBox;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.data.EntityData;
-import name.huliqing.luoying.object.entity.AbstractEntity;
+import name.huliqing.luoying.object.entity.ModelEntity;
 import name.huliqing.luoying.processor.VerySimpleWaterProcessor;
 import name.huliqing.luoying.object.entity.WaterEntity;
 import name.huliqing.luoying.object.scene.Scene;
@@ -22,7 +21,7 @@ import name.huliqing.luoying.object.scene.Scene;
  * 轻量级的水体效果，可支持移动设置、手机等。特别针对Opengl es应用。
  * @author huliqing
  */
-public class SimpleWaterEnv extends AbstractEntity implements WaterEntity {
+public class SimpleWaterEntity extends ModelEntity implements WaterEntity {
 //    private final PlayService playService = Factory.get(PlayService.class);
     
     private String waterModelFile;
@@ -60,27 +59,20 @@ public class SimpleWaterEnv extends AbstractEntity implements WaterEntity {
 
     @Override
     public void updateDatas() {
-        // ignore
+        super.updateDatas();
+    }
+
+    @Override
+    protected Spatial loadModel() {
+        waterModel = LuoYing.getApp().getAssetManager().loadModel(waterModelFile);
+        return waterModel;
     }
     
     @Override
     public void initEntity() {
-        waterModel = LuoYing.getApp().getAssetManager().loadModel(waterModelFile);
-        Vector3f location = data.getAsVector3f("location");
-        if (location != null) {
-            waterModel.setLocalTranslation(location);
-        }
-        Quaternion rot = data.getAsQuaternion("rotation");
-        if (rot != null) {
-            waterModel.setLocalRotation(rot);
-        }
-        Vector3f scale = data.getAsVector3f("scale");
-        if (scale != null) {
-            waterModel.setLocalScale(scale);
-        }
+        super.initEntity();
         
         water = new VerySimpleWaterProcessor(LuoYing.getApp().getAssetManager(), waterModel);
-
         water.setTexScale(texScale);
         water.setWaveSpeed(waveSpeed);
         water.setDistortionMix(distortionMix);
@@ -116,11 +108,6 @@ public class SimpleWaterEnv extends AbstractEntity implements WaterEntity {
         waterModel.removeFromParent();
         scene.removeProcessor(water);
         super.cleanup(); 
-    }
-
-    @Override
-    public Spatial getSpatial() {
-        return waterModel;
     }
     
     @Override

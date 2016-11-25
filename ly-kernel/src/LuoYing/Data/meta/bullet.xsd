@@ -185,7 +185,7 @@
         
     <xs:complexType name="bulletBase">
         <xs:complexContent>
-            <xs:extension base="modelEntityBase">
+            <xs:extension base="entityModelBase">
                 <xs:attribute name="debug" type="bool" use="optional">
                     <xs:annotation>
                         <xs:documentation>

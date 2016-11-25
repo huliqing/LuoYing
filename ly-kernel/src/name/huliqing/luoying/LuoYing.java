@@ -10,6 +10,7 @@ import com.jme3.asset.AssetManager;
 import com.jme3.asset.DesktopAssetManager;
 import com.jme3.font.BitmapFont;
 import com.jme3.input.InputManager;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector4f;
@@ -17,6 +18,7 @@ import com.jme3.network.serializing.Serializer;
 import com.jme3.network.serializing.serializers.MapSerializer;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.UserData;
 import com.jme3.system.AppSettings;
 import java.io.InputStream;
 import java.util.LinkedHashMap;
@@ -33,7 +35,6 @@ import name.huliqing.luoying.data.BulletData;
 import name.huliqing.luoying.data.ChannelData;
 import name.huliqing.luoying.data.ConfigData;
 import name.huliqing.luoying.data.ConnData;
-import name.huliqing.luoying.data.CustomUserData;
 import name.huliqing.luoying.data.DefineData;
 import name.huliqing.luoying.data.ModuleData;
 import name.huliqing.luoying.data.DropData;
@@ -164,24 +165,23 @@ import name.huliqing.luoying.object.effect.TextureCylinderEffect;
 import name.huliqing.luoying.object.effect.TextureEffect;
 import name.huliqing.luoying.object.emitter.Emitter;
 import name.huliqing.luoying.loader.EmitterDataLoader;
-import name.huliqing.luoying.object.env.AudioEnv;
-//import name.huliqing.luoying.object.env.BoundaryBoxEnv;
-import name.huliqing.luoying.object.env.ChaseCameraEnv;
-import name.huliqing.luoying.object.env.AmbientLightEnv;
-import name.huliqing.luoying.object.env.DirectionalLightEnv;
+import name.huliqing.luoying.object.entity.impl.AudioEntity;
+import name.huliqing.luoying.object.entity.impl.ChaseCameraEntity;
+import name.huliqing.luoying.object.entity.impl.AmbientLightEntity;
+import name.huliqing.luoying.object.entity.impl.DirectionalLightEntity;
 import name.huliqing.luoying.layer.service.ConfigService;
 import name.huliqing.luoying.loader.ActorDataLoader;
 import name.huliqing.luoying.loader.DefineDataLoader;
 import name.huliqing.luoying.loader.EffectDataLoader;
 import name.huliqing.luoying.loader.EntityDataLoader;
-import name.huliqing.luoying.object.env.PhysicsEnv;
-import name.huliqing.luoying.object.env.PlatformProxyEnv;
-import name.huliqing.luoying.object.env.ShadowEnv;
-import name.huliqing.luoying.object.env.SkyEnv;
-import name.huliqing.luoying.object.env.TerrainEnv;
-import name.huliqing.luoying.object.env.TreeEnv;
-import name.huliqing.luoying.object.env.AdvanceWaterEnv;
-import name.huliqing.luoying.object.env.SimpleWaterEnv;
+import name.huliqing.luoying.object.entity.impl.PhysicsEntity;
+import name.huliqing.luoying.object.entity.impl.PlatformProxyEntity;
+import name.huliqing.luoying.object.entity.impl.DirectionalLightFilterShadowEntity;
+import name.huliqing.luoying.object.entity.impl.SkyBoxEntity;
+import name.huliqing.luoying.object.entity.impl.SimpleTerrainEntity;
+import name.huliqing.luoying.object.entity.impl.TreeEntity;
+import name.huliqing.luoying.object.entity.impl.AdvanceWaterEntity;
+import name.huliqing.luoying.object.entity.impl.SimpleWaterEntity;
 import name.huliqing.luoying.loader.GameDataLoader;
 import name.huliqing.luoying.object.gamelogic.ActorCleanGameLogic;
 import name.huliqing.luoying.object.gamelogic.AttributeChangeGameLogic;
@@ -273,9 +273,9 @@ import name.huliqing.luoying.object.el.STBooleanEl;
 import name.huliqing.luoying.object.el.STNumberEl;
 import name.huliqing.luoying.object.el.LNumberEl;
 import name.huliqing.luoying.object.el.SBooleanEl;
-import name.huliqing.luoying.object.env.DirectionalLightShadowEnv;
-import name.huliqing.luoying.object.env.GrassEnv;
-import name.huliqing.luoying.object.env.ModelEnv;
+import name.huliqing.luoying.object.entity.impl.DirectionalLightShadowEntity;
+import name.huliqing.luoying.object.entity.impl.GrassEntity;
+import name.huliqing.luoying.object.entity.impl.SimpleModelEntity;
 import name.huliqing.luoying.object.game.SimpleGame;
 import name.huliqing.luoying.object.item.AttributeItem;
 import name.huliqing.luoying.object.item.BookItem;
@@ -295,7 +295,9 @@ import name.huliqing.luoying.object.slot.Slot;
 import name.huliqing.luoying.object.state.BooleanAttributeState;
 import name.huliqing.luoying.object.state.GroupState;
 import name.huliqing.luoying.object.state.PrivateGroupState;
+import name.huliqing.luoying.serializer.ColorRGBASerializer;
 import name.huliqing.luoying.serializer.QuaternionSerializer;
+import name.huliqing.luoying.serializer.UserDataSerializer;
 import name.huliqing.luoying.serializer.Vector4Serializer;
 import name.huliqing.luoying.xml.Data;
 import name.huliqing.luoying.xml.DataFactory;
@@ -352,7 +354,9 @@ public class LuoYing {
         
         Serializer.registerClass(Vector4f.class,  new Vector4Serializer());
         Serializer.registerClass(Quaternion.class,  new QuaternionSerializer());
-
+        Serializer.registerClass(ColorRGBA.class,  new ColorRGBASerializer());
+        Serializer.registerClass(UserData.class,  new UserDataSerializer());
+        
         Serializer.registerClass(TradeInfo.class);
         
         Serializer.registerClass(Proto.class);
@@ -370,7 +374,7 @@ public class LuoYing {
         Serializer.registerClass(ConfigData.class);
         Serializer.registerClass(ConnData.class);
         Serializer.registerClass(ControlData.class);
-        Serializer.registerClass(CustomUserData.class);
+//        Serializer.registerClass(CustomUserData.class);
         Serializer.registerClass(DefineData.class);
         Serializer.registerClass(DropData.class);
         Serializer.registerClass(EffectData.class);
@@ -487,24 +491,23 @@ public class LuoYing {
         DataFactory.register("emitter",  EmitterData.class, EmitterDataLoader.class, Emitter.class);
         
         // Env
-        DataFactory.register("envAdvanceWater", EntityData.class, EntityDataLoader.class, AdvanceWaterEnv.class);
-        DataFactory.register("envAmbientLight", EntityData.class, EntityDataLoader.class, AmbientLightEnv.class);
-        DataFactory.register("envAudio", ModelEntityData.class, EntityDataLoader.class, AudioEnv.class);
-        DataFactory.register("envChaseCamera", EntityData.class, EntityDataLoader.class, ChaseCameraEnv.class);
-        DataFactory.register("envDirectionalLight", EntityData.class, EntityDataLoader.class, DirectionalLightEnv.class);
-        DataFactory.register("envModel", ModelEntityData.class, EntityDataLoader.class, ModelEnv.class);
-        DataFactory.register("envPhysics", EntityData.class, EntityDataLoader.class, PhysicsEnv.class);
-        DataFactory.register("envPlatformProxy", EntityData.class, EntityDataLoader.class, PlatformProxyEnv.class);
+        DataFactory.register("entityAdvanceWater", EntityData.class, EntityDataLoader.class, AdvanceWaterEntity.class);
+        DataFactory.register("entityAmbientLight", EntityData.class, EntityDataLoader.class, AmbientLightEntity.class);
+        DataFactory.register("entityAudio", ModelEntityData.class, EntityDataLoader.class, AudioEntity.class);
+        DataFactory.register("entityChaseCamera", EntityData.class, EntityDataLoader.class, ChaseCameraEntity.class);
+        DataFactory.register("entityDirectionalLight", EntityData.class, EntityDataLoader.class, DirectionalLightEntity.class);
+        DataFactory.register("entitySimpleModel", ModelEntityData.class, EntityDataLoader.class, SimpleModelEntity.class);
+        DataFactory.register("entityPhysics", EntityData.class, EntityDataLoader.class, PhysicsEntity.class);
+        DataFactory.register("entityPlatformProxy", EntityData.class, EntityDataLoader.class, PlatformProxyEntity.class);
         
-        DataFactory.register("envShadow", EntityData.class, EntityDataLoader.class, ShadowEnv.class);
-        DataFactory.register("envDirectionalLightShadow", EntityData.class, EntityDataLoader.class, DirectionalLightShadowEnv.class);
+        DataFactory.register("entityDirectionalLightFilterShadow", EntityData.class, EntityDataLoader.class, DirectionalLightFilterShadowEntity.class);
+        DataFactory.register("entityDirectionalLightShadow", EntityData.class, EntityDataLoader.class, DirectionalLightShadowEntity.class);
         
-        DataFactory.register("envSimpleWater", EntityData.class, EntityDataLoader.class, SimpleWaterEnv.class);
-        DataFactory.register("envSky", EntityData.class, EntityDataLoader.class, SkyEnv.class);
-        DataFactory.register("envTerrain", ModelEntityData.class, EntityDataLoader.class, TerrainEnv.class);
-        DataFactory.register("envTree", ModelEntityData.class, PlantEnvLoader.class, TreeEnv.class);
-        DataFactory.register("envGrass", ModelEntityData.class, PlantEnvLoader.class, GrassEnv.class);
-        
+        DataFactory.register("entitySimpleWater", ModelEntityData.class, EntityDataLoader.class, SimpleWaterEntity.class);
+        DataFactory.register("entitySkyBox", ModelEntityData.class, EntityDataLoader.class, SkyBoxEntity.class);
+        DataFactory.register("entitySimpleTerrain", ModelEntityData.class, EntityDataLoader.class, SimpleTerrainEntity.class);
+        DataFactory.register("entityTree", ModelEntityData.class, PlantEnvLoader.class, TreeEntity.class);
+        DataFactory.register("entityGrass", ModelEntityData.class, PlantEnvLoader.class, GrassEntity.class);
         
         // Game
         DataFactory.register("gameSimple", GameData.class, GameDataLoader.class, SimpleGame.class);
@@ -643,7 +646,7 @@ public class LuoYing {
 //        loadData("/LuoYing/Data/effect.xml");
         loadData("/LuoYing/Data/el.xml");
 //        loadData("/LuoYing/Data/emitter.xml");
-        loadData("/LuoYing/Data/env.xml");
+        loadData("/LuoYing/Data/entity.xml");
         loadData("/LuoYing/Data/game.xml");
 //        loadData("/LuoYing/Data/gameLogic.xml");
         loadData("/LuoYing/Data/hitChecker.xml");

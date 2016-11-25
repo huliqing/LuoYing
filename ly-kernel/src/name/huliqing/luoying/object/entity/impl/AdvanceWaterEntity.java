@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.luoying.object.env;
+package name.huliqing.luoying.object.entity.impl;
 
 import com.jme3.light.DirectionalLight;
 import com.jme3.light.Light;
@@ -14,7 +14,7 @@ import com.jme3.water.WaterFilter;
 import com.jme3.water.WaterFilter.AreaShape;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.data.EntityData;
-import name.huliqing.luoying.object.entity.NoneModelEntity;
+import name.huliqing.luoying.object.entity.NonModelEntity;
 import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.object.scene.SceneListener;
 import name.huliqing.luoying.object.scene.SceneListenerAdapter;
@@ -24,7 +24,7 @@ import name.huliqing.luoying.object.entity.WaterEntity;
  * 高级水体环境
  * @author huliqing
  */
-public class AdvanceWaterEnv extends NoneModelEntity implements WaterEntity {
+public class AdvanceWaterEntity extends NonModelEntity implements WaterEntity {
 
     private String causticsTexture;
     private String foamTexture;
@@ -102,7 +102,7 @@ public class AdvanceWaterEnv extends NoneModelEntity implements WaterEntity {
 
     @Override
     public void updateDatas() {
-        // ignore
+        super.updateDatas();
     }
 
     @Override

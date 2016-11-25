@@ -149,7 +149,7 @@ public class Init {
         LuoYing.loadData("/data/object/effect.xml");
         LuoYing.loadData("/data/object/el.xml");
         LuoYing.loadData("/data/object/emitter.xml");
-        LuoYing.loadData("/data/object/env.xml");
+        LuoYing.loadData("/data/object/entity.xml");
         LuoYing.loadData("/data/object/game.xml");
         LuoYing.loadData("/data/object/gameLogic.xml");
         LuoYing.loadData("/data/object/hitChecker.xml");

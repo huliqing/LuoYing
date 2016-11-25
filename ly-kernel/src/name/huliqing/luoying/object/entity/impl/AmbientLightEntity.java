@@ -3,19 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.luoying.object.env;
+package name.huliqing.luoying.object.entity.impl;
 
 import com.jme3.light.AmbientLight;
 import com.jme3.light.Light;
 import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.object.entity.LightEntity;
-import name.huliqing.luoying.object.entity.NoneModelEntity;
+import name.huliqing.luoying.object.entity.NonModelEntity;
 import name.huliqing.luoying.object.scene.Scene;
 
 /**
  * @author huliqing
  */
-public class AmbientLightEnv extends NoneModelEntity implements LightEntity {
+public class AmbientLightEntity extends NonModelEntity implements LightEntity {
 
     private final AmbientLight light = new AmbientLight();
     
@@ -24,10 +24,11 @@ public class AmbientLightEnv extends NoneModelEntity implements LightEntity {
         super.setData(data);
         light.setColor(data.getAsColor("color", light.getColor()));
     }
-
+    
     @Override
     public void updateDatas() {
-        // ignore
+        super.updateDatas();
+        data.setAttribute("color", light.getColor());
     }
     
     @Override

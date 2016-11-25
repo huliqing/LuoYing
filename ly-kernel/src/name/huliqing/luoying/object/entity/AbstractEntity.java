@@ -150,7 +150,7 @@ public abstract class AbstractEntity<T extends EntityData> implements Entity<T> 
                 lis.onHitAttributeAfter(attr, hitValue, hitter, oldValue);
             }
         }
-    }    
+    }
 
     @Override
     public boolean addObjectData(ObjectData data, int count) {

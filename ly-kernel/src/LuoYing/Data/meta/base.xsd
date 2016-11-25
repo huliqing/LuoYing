@@ -15,7 +15,7 @@ xs:time
            elementFormDefault="qualified">
     
     <!--ModelEntity Object Base-->
-    <xs:complexType name="modelEntityBase" >
+    <xs:complexType name="entityModelBase" >
         <xs:complexContent>
             <xs:extension base="entityBase">
                 <xs:attribute ref="location" />

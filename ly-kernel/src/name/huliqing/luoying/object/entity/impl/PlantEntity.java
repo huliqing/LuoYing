@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.luoying.object.env;
+package name.huliqing.luoying.object.entity.impl;
 
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.math.Vector3f;
@@ -21,18 +21,13 @@ import name.huliqing.luoying.object.scene.SceneListenerAdapter;
  * 植被环境物体，如：花草等物体
  * @author huliqing
  */
-public abstract class PlantEnv extends ModelEntity {
-
+public abstract class PlantEntity extends ModelEntity {
+    
     private SceneListener sceneListener;
-
+    
     @Override
     protected Spatial loadModel() {
         return LuoYing.getAssetManager().loadModel(data.getAsString("file"));
-    }
-    
-    @Override
-    public void initEntity() {
-        super.initEntity();
     }
 
     @Override

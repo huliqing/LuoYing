@@ -61,25 +61,18 @@ public abstract class AbstractState<T extends StateData> implements State<T> {
     
     /** 状态的持有者，即受状态影响的角色，不能为null */
     protected Entity actor;
-    
-//    /** 状态的产生者，也就是说，这个状态是哪一个角色发出的, 如果一个状态没有发起源，则这个参数可能为null. */
-//    protected Entity sourceActor;
         
     protected BooleanAttribute deadAttribute;
 
     @Override
     public void setData(T data) {
-        if (initialized) {
-            throw new IllegalStateException("State was initialized, could not reset data. origin state id=" + this.data.getId() 
-                    + ", new state id=" + data.getId() + ", actorId=" + actor.getData().getId());
-        }
         this.data = data;
         useTime = data.getAsFloat("useTime", 30);
         timeUsed = data.getAsFloat("timeUsed", timeUsed);
-        bindDeadAttribute = data.getAsString("bindDeadAttribute");
-        effects = data.getAsArray("effects");
         resist = data.getAsFloat("resist", resist);
+        effects = data.getAsArray("effects");
         removeOnDead = data.getAsBoolean("removeOnDead", removeOnDead);
+        bindDeadAttribute = data.getAsString("bindDeadAttribute");
     }
     
     @Override
@@ -89,6 +82,8 @@ public abstract class AbstractState<T extends StateData> implements State<T> {
 
     @Override
     public void updateDatas() {
+        data.setAttribute("useTime", useTime);
+        data.setAttribute("timeUsed", timeUsed);
         data.setAttribute("resist", resist);
     }
     

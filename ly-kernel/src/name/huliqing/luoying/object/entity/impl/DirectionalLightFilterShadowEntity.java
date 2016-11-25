@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.luoying.object.env;
+package name.huliqing.luoying.object.entity.impl;
 
 import com.jme3.light.DirectionalLight;
 import com.jme3.light.Light;
@@ -13,7 +13,6 @@ import com.jme3.shadow.DirectionalLightShadowFilter;
 import com.jme3.shadow.EdgeFilteringMode;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.data.EntityData;
-import name.huliqing.luoying.object.entity.NoneModelEntity;
 import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.object.scene.SceneListener;
 import name.huliqing.luoying.object.scene.SceneListenerAdapter;
@@ -22,7 +21,7 @@ import name.huliqing.luoying.object.scene.SceneListenerAdapter;
  * 阴影环境(目前不支持移动设备), 给场景添加这个环境后，可以让场景中的物体有阴影效果
  * @author huliqing
  */
-public class ShadowEnv extends NoneModelEntity {
+public class DirectionalLightFilterShadowEntity extends ShadowEntity {
 //    private final ConfigService configService = Factory.get(ConfigService.class);
 
     private float shadowIntensity = 0.7f;
@@ -49,7 +48,8 @@ public class ShadowEnv extends NoneModelEntity {
     
     @Override
     public void updateDatas() {
-        // ignore
+        super.updateDatas();
+        data.setAttribute("shadowIntensity", filter.getShadowIntensity());
     }
     
     @Override
@@ -61,7 +61,7 @@ public class ShadowEnv extends NoneModelEntity {
         filter.setEdgeFilteringMode(EdgeFilteringMode.PCF4);
 //        filter.setShadowZExtend(500);
     }
-
+    
     @Override
     public void onInitScene(Scene scene) {
         super.onInitScene(scene);
@@ -70,6 +70,11 @@ public class ShadowEnv extends NoneModelEntity {
         } else {
             scene.addSceneListener(sceneListener);
         }
+    }
+
+    @Override
+    public void setShadowIntensity(float shadowIntensity) {
+        filter.setShadowIntensity(shadowIntensity);
     }
     
     private void setupFilter() {

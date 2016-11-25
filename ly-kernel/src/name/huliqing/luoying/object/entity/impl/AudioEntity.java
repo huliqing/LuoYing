@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.luoying.object.env;
+package name.huliqing.luoying.object.entity.impl;
 
 import com.jme3.material.Material;
 import com.jme3.material.RenderState;
@@ -21,7 +21,7 @@ import name.huliqing.luoying.object.sound.SoundManager;
 /**
  * @author huliqing
  */
-public class AudioEnv extends ModelEntity {
+public class AudioEntity extends ModelEntity {
 
     private boolean debug;
     private String soundId;
@@ -36,6 +36,12 @@ public class AudioEnv extends ModelEntity {
         super.setData(data);
         debug = data.getAsBoolean("debug", false);
         soundId = data.getAsString("sound");
+    }
+
+    @Override
+    public void updateDatas() {
+        super.updateDatas();
+        sound.updateDatas();
     }
     
     @Override
@@ -82,5 +88,8 @@ public class AudioEnv extends ModelEntity {
         super.cleanup(); 
     }
 
+    public Sound getSound() {
+        return sound;
+    }
     
 }

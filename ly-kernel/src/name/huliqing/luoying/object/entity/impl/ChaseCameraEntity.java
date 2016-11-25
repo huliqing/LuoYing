@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.luoying.object.env;
+package name.huliqing.luoying.object.entity.impl;
 
 import com.jme3.scene.Spatial;
 import java.util.ArrayList;
@@ -13,21 +13,21 @@ import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.object.scene.SceneListener;
 import name.huliqing.luoying.utils.CollisionChaseCamera;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.entity.NoneModelEntity;
+import name.huliqing.luoying.object.entity.NonModelEntity;
 
 /**
  * 镜头跟随Env,这个Env需要游戏中主动从Scene中获取，并使用setChase(Spatial) 来让镜头跟随某个目标。
  * @author huliqing
  */
-public class ChaseCameraEnv extends NoneModelEntity  implements SceneListener {
+public class ChaseCameraEntity extends NonModelEntity  implements SceneListener {
 
     private CollisionChaseCamera ccc;
     // 关联的物理Env, ccc依赖于这个物理环境来检测镜头穿墙问题。
-    private PhysicsEnv physicsEnv;
+    private PhysicsEntity physicsEnv;
     
     @Override
     public void updateDatas() {
-        // ignore
+        super.updateDatas();
     }
     
     @Override
@@ -56,8 +56,8 @@ public class ChaseCameraEnv extends NoneModelEntity  implements SceneListener {
         // 从当前场景中查找PhysicsEnv,使用它来处理碰撞检测
         // 注意必须确保PhysicsEnv已经初始化，否则可能会获取不到物理空间。
         // 在无法确定目标PhysicsEnv已经初始化的情况下需要添加监听。从被监视的Env中获取PhysicsEnv
-        List<PhysicsEnv> envs = scene.getEntities(PhysicsEnv.class, new ArrayList<PhysicsEnv>());
-        for (PhysicsEnv env : envs) {
+        List<PhysicsEntity> envs = scene.getEntities(PhysicsEntity.class, new ArrayList<PhysicsEntity>());
+        for (PhysicsEntity env : envs) {
             updatePhysics(env);
             break;
         }
@@ -72,7 +72,7 @@ public class ChaseCameraEnv extends NoneModelEntity  implements SceneListener {
         super.cleanup();
     }
     
-    private void updatePhysics(PhysicsEnv pe) {
+    private void updatePhysics(PhysicsEntity pe) {
         physicsEnv = pe;
         ccc.setPhysicsSpace(physicsEnv.getBulletAppState().getPhysicsSpace());
     }
@@ -104,8 +104,8 @@ public class ChaseCameraEnv extends NoneModelEntity  implements SceneListener {
     public void onSceneEntityAdded(Scene scene, Entity entityAdded) {
         if (physicsEnv != null)
             return;
-        if (entityAdded instanceof PhysicsEnv) {
-            updatePhysics((PhysicsEnv) entityAdded);
+        if (entityAdded instanceof PhysicsEntity) {
+            updatePhysics((PhysicsEntity) entityAdded);
         }
     }
 

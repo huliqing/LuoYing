@@ -3,40 +3,42 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.luoying.object.env;
+package name.huliqing.luoying.object.entity.impl;
 
 import com.jme3.light.DirectionalLight;
 import com.jme3.light.Light;
 import com.jme3.math.Vector3f;
 import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.object.entity.LightEntity;
-import name.huliqing.luoying.object.entity.NoneModelEntity;
+import name.huliqing.luoying.object.entity.NonModelEntity;
 import name.huliqing.luoying.object.scene.Scene;
 
 /**
  * @author huliqing
  */
-public class DirectionalLightEnv extends NoneModelEntity implements LightEntity{
+public class DirectionalLightEntity extends NonModelEntity implements LightEntity{
 
     private final DirectionalLight light = new DirectionalLight();
-    private Vector3f direction = new Vector3f(-1,-1,-1);
     
     @Override
     public void setData(EntityData data) {
         super.setData(data);
-        direction = data.getAsVector3f("direction", direction);
         light.setColor(data.getAsColor("color", light.getColor()));
+        Vector3f direction = data.getAsVector3f("direction");
+        if (direction != null) {
+            light.setDirection(direction);
+        }
     }
     
     @Override
     public void updateDatas() {
-        // ignore
+        super.updateDatas();
+        data.setAttribute("color", light.getColor());
+        data.setAttribute("direction", light.getDirection());
     }
     
     @Override
-    public void initEntity() {
-        light.setDirection(direction);
-    }
+    public void initEntity() {}
 
     @Override
     public void onInitScene(Scene scene) {

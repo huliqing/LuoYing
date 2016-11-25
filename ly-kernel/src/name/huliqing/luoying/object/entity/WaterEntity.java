@@ -19,4 +19,5 @@ public interface WaterEntity extends Entity {
      * @return 
      */
     boolean isUnderWater(Vector3f point);
+    
 }

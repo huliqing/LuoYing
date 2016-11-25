@@ -15,13 +15,13 @@ import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.math.Vector4f;
 import com.jme3.network.serializing.Serializable;
+import com.jme3.scene.UserData;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 import name.huliqing.luoying.LuoYingException;
-import name.huliqing.luoying.data.CustomUserData;
 
 /**
  * 物品基类,对于运行时，所有可动态改变的参数都需要封装在Data内。
@@ -137,8 +137,8 @@ public class ObjectData implements Savable, Cloneable {
             return null;
         }
         Savable s = localData.get(key);
-        if (s instanceof CustomUserData) {
-            return ((CustomUserData) s).getValue();
+        if (s instanceof UserData) {
+            return ((UserData) s).getValue();
         } else {
             return s;
         }
@@ -164,7 +164,8 @@ public class ObjectData implements Savable, Cloneable {
             if (value instanceof Savable) {
                 localData.put(key, (Savable) value);
             } else {
-                localData.put(key, new CustomUserData(CustomUserData.getObjectType(value), value));
+//                localData.put(key, new CustomUserData(CustomUserData.getObjectType(value), value));
+                localData.put(key, new UserData(UserData.getObjectType(value), value));
             }
         }
     }

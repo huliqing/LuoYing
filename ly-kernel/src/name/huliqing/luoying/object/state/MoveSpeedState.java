@@ -6,9 +6,7 @@ package name.huliqing.luoying.object.state;
 
 import com.jme3.scene.Spatial;
 import java.util.List;
-import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.StateData;
-import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.effect.Effect;
 import name.huliqing.luoying.object.module.SkillModule;
@@ -19,7 +17,7 @@ import name.huliqing.luoying.object.skill.Skill;
  * @author huliqing
  */
 public class MoveSpeedState extends AttributeState {
-    private final PlayService playService = Factory.get(PlayService.class);
+//    private final PlayService playService = Factory.get(PlayService.class);
     private SkillModule skillModule;
     
     private String moveEffectId;

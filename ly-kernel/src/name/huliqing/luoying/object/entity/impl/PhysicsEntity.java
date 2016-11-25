@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.luoying.object.env;
+package name.huliqing.luoying.object.entity.impl;
 
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.BulletAppState.ThreadingType;
@@ -14,13 +14,13 @@ import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.object.scene.SceneListener;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.entity.NoneModelEntity;
+import name.huliqing.luoying.object.entity.NonModelEntity;
 
 /**
  * 物理环境，添加这个Env到场景后，场景中的所有绑定有RigidBodyControl的物体将受到物理影响。
  * @author huliqing
  */
-public class PhysicsEnv extends NoneModelEntity implements SceneListener {
+public class PhysicsEntity extends NonModelEntity implements SceneListener {
 
     // 是否打开physics调试
     private boolean debug;
@@ -56,7 +56,7 @@ public class PhysicsEnv extends NoneModelEntity implements SceneListener {
 
     @Override
     public void updateDatas() {
-        // ignore
+        super.updateDatas();
     }
 
     @Override

@@ -80,12 +80,12 @@ public class IdConstants {
     // Entity: Env
     // =============================================================================
     
-    /** 内置的天空盒物体: sysEnvSky */
-    public final static String SYS_ENV_SKY = "sysEnvSky";
-    /** 内置直射光物体：sysEnvDirectionalLight */
-    public final static String SYS_ENV_DIRECTIONAL_LIGHT = "sysEnvDirectionalLight";
-    /** 内置环境光物体: sysEnvAmbientLight */
-    public final static String SYS_ENV_AMBIENT_LIGHT = "sysEnvAmbientLight";
+    /** 内置的天空盒物体: sysEntitySky */
+    public final static String SYS_ENV_SKY = "sysEntitySky";
+    /** 内置直射光物体：sysEntityDirectionalLight */
+    public final static String SYS_ENV_DIRECTIONAL_LIGHT = "sysEntityDirectionalLight";
+    /** 内置环境光物体: sysEntityAmbientLight */
+    public final static String SYS_ENV_AMBIENT_LIGHT = "sysEntityAmbientLight";
     
     // =============================================================================
     // El

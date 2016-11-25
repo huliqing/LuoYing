@@ -2,135 +2,188 @@
 
 <ClassDiagram name="Entity">
   <ClassDiagramComponents>
-    <Interface name="DataProcessor" package="" visibility="public" xPosition="605.0" yPosition="44.0">
+    <Class name="ModelEntity" package="" visibility="public" xPosition="1655.0" yPosition="669.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="AbstractEntity" package="" visibility="public" xPosition="694.0" yPosition="390.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="NonModelEntity" package="" visibility="public" xPosition="511.0" yPosition="669.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="AdvanceWaterEntity" package="" visibility="public" xPosition="805.0" yPosition="913.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="Nothing" package="" visibility="public" xPosition="2181.0" yPosition="1399.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="AmbientLightEntity" package="" visibility="public" xPosition="268.0" yPosition="913.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="Nothing" package="" visibility="public" xPosition="-45.0" yPosition="1399.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="SimpleWaterEntity" package="" visibility="public" xPosition="1471.0" yPosition="1099.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="DirectionalLightEntity" package="" visibility="public" xPosition="327.0" yPosition="1013.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="PlantEntity" package="" visibility="public" xPosition="1655.0" yPosition="1150.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="GrassEntity" package="" visibility="public" xPosition="1536.0" yPosition="1384.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="TreeEntity" package="" visibility="public" xPosition="1799.0" yPosition="1384.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="Actor" package="" visibility="public" xPosition="2023.0" yPosition="1064.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="SimpleTerrainEntity" package="" visibility="public" xPosition="1231.0" yPosition="942.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="PhysicsEntity" package="" visibility="public" xPosition="708.0" yPosition="1013.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="ProxyEntity" package="" visibility="public" xPosition="1009.0" yPosition="669.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="SkyBoxEntity" package="" visibility="public" xPosition="1298.0" yPosition="1039.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="SimpleModelEntity" package="" visibility="public" xPosition="1184.0" yPosition="841.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="DirectionalLightFilterShadowEntity" package="" visibility="public" xPosition="632.0" yPosition="1298.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Interface name="DataProcessor" package="" visibility="public" xPosition="1009.0" yPosition="38.0">
       <Methods/>
     </Interface>
-    <Interface name="Entity" package="" visibility="public" xPosition="605.0" yPosition="182.0">
+    <Interface name="Entity" package="" visibility="public" xPosition="966.0" yPosition="197.0">
+      <Methods>
+        <Method name="getAttributeManager" returnType="AttributeManager" visibility="public"/>
+        <Method name="getModuleManager" returnType="ModuleManager" visibility="public"/>
+      </Methods>
+    </Interface>
+    <Interface name="TerrainEntity" package="" visibility="public" xPosition="1298.0" yPosition="390.0">
       <Methods/>
     </Interface>
-    <Class name="ModelEntity" package="" visibility="public" xPosition="1198.0" yPosition="598.0">
-      <Fields/>
-      <Constructors/>
-      <Methods/>
-    </Class>
-    <Class name="AbstractEntity" package="" visibility="public" xPosition="954.0" yPosition="395.0">
-      <Fields/>
-      <Constructors/>
-      <Methods/>
-    </Class>
-    <Class name="NoneModelEntity" package="" visibility="public" xPosition="695.0" yPosition="598.0">
-      <Fields/>
-      <Constructors/>
-      <Methods/>
-    </Class>
-    <Interface name="TerrainEntity" package="" visibility="public" xPosition="337.0" yPosition="395.0">
+    <Interface name="WaterEntity" package="" visibility="public" xPosition="1036.0" yPosition="390.0">
       <Methods/>
     </Interface>
-    <Interface name="WaterEntity" package="" visibility="public" xPosition="526.0" yPosition="395.0">
+    <Interface name="LightEntity" package="" visibility="public" xPosition="268.0" yPosition="390.0">
       <Methods/>
     </Interface>
-    <Class name="AdvanceWaterEnv" package="" visibility="public" xPosition="625.0" yPosition="790.0">
+    <Class name="ShadowEntity" package="" visibility="public" xPosition="526.0" yPosition="1064.0">
       <Fields/>
       <Constructors/>
       <Methods/>
     </Class>
-    <Class name="UntitledClass" package="" visibility="public" xPosition="1903.0" yPosition="1376.0">
+    <Class name="DirectionalLightShadowEntity" package="" visibility="public" xPosition="399.0" yPosition="1298.0">
       <Fields/>
       <Constructors/>
       <Methods/>
     </Class>
-    <Class name="AmbientLightEnv" package="" visibility="public" xPosition="352.0" yPosition="790.0">
+    <Class name="PlatformProxyEntity" package="" visibility="public" xPosition="1009.0" yPosition="913.0">
       <Fields/>
       <Constructors/>
       <Methods/>
     </Class>
-    <Interface name="LightEntity" package="" visibility="public" xPosition="101.0" yPosition="401.0">
+    <Class name="Effect" package="" visibility="public" xPosition="2116.0" yPosition="953.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Interface name="Bullet" package="" visibility="public" xPosition="1575.0" yPosition="390.0">
       <Methods/>
     </Interface>
-    <Class name="UntitledClass1" package="" visibility="public" xPosition="-8.0" yPosition="1324.0">
+    <Class name="AbstractBullet" package="" visibility="public" xPosition="2158.0" yPosition="827.0">
       <Fields/>
       <Constructors/>
       <Methods/>
     </Class>
-    <Class name="SimpleWaterEnv" package="" visibility="public" xPosition="954.0" yPosition="598.0">
-      <Fields/>
-      <Constructors/>
-      <Methods/>
-    </Class>
-    <Class name="DirectionalLightEnv" package="" visibility="public" xPosition="75.0" yPosition="790.0">
-      <Fields/>
-      <Constructors/>
-      <Methods/>
-    </Class>
-    <Class name="PlantEnv" package="" visibility="public" xPosition="1252.0" yPosition="790.0">
-      <Fields/>
-      <Constructors/>
-      <Methods/>
-    </Class>
-    <Class name="GrassEnv" package="" visibility="public" xPosition="1133.0" yPosition="976.0">
-      <Fields/>
-      <Constructors/>
-      <Methods/>
-    </Class>
-    <Class name="TreeEnv" package="" visibility="public" xPosition="1410.0" yPosition="976.0">
-      <Fields/>
-      <Constructors/>
-      <Methods/>
-    </Class>
-    <Class name="Actor" package="" visibility="public" xPosition="1473.0" yPosition="790.0">
-      <Fields/>
-      <Constructors/>
-      <Methods/>
-    </Class>
-    <Class name="TerrainEnv" package="" visibility="public" xPosition="1040.0" yPosition="790.0">
-      <Fields/>
-      <Constructors/>
-      <Methods/>
-    </Class>
-    <Class name="PhysicsEnv" package="" visibility="public" xPosition="816.0" yPosition="790.0">
-      <Fields/>
-      <Constructors/>
-      <Methods/>
-    </Class>
-    <Interface name="ProxyEnv" package="" visibility="public" xPosition="744.0" yPosition="395.0">
-      <Methods/>
-    </Interface>
-    <Class name="PlatformProxyEnv" package="" visibility="public" xPosition="405.0" yPosition="598.0">
-      <Fields/>
-      <Constructors/>
-      <Methods/>
-    </Class>
-    <Class name="SkyEnv" package="" visibility="public" xPosition="1473.0" yPosition="598.0">
+    <Class name="AudioEntity" package="" visibility="public" xPosition="1835.0" yPosition="1099.0">
       <Fields/>
       <Constructors/>
       <Methods/>
     </Class>
   </ClassDiagramComponents>
   <ClassDiagramRelations>
-    <IsRelation name="is" source="ModelEntity" target="AbstractEntity"/>
-    <IsRelation name="is" source="ProxyEnv" target="Entity"/>
-    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="PlatformProxyEnv" target="ProxyEnv"/>
-    <IsRelation name="is" source="TerrainEntity" target="Entity"/>
-    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="SimpleWaterEnv" target="WaterEntity"/>
     <IsRelation name="is" source="Actor" target="ModelEntity"/>
-    <IsRelation name="is" source="DirectionalLightEnv" target="NoneModelEntity"/>
-    <IsRelation name="is" source="LightEntity" target="Entity"/>
-    <IsRelation name="is" source="GrassEnv" target="PlantEnv"/>
-    <IsRelation name="is" source="AmbientLightEnv" target="NoneModelEntity"/>
-    <IsRelation name="is" source="PlatformProxyEnv" target="AbstractEntity"/>
-    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="AbstractEntity" target="Entity"/>
-    <IsRelation name="is" source="AdvanceWaterEnv" target="NoneModelEntity"/>
-    <IsRelation name="is" source="SkyEnv" target="AbstractEntity"/>
-    <IsRelation name="is" source="TreeEnv" target="PlantEnv"/>
-    <IsRelation name="is" source="TerrainEnv" target="ModelEntity"/>
-    <IsRelation name="is" source="Entity" target="DataProcessor"/>
-    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="AdvanceWaterEnv" target="WaterEntity"/>
-    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="DirectionalLightEnv" target="LightEntity"/>
-    <IsRelation name="is" source="NoneModelEntity" target="AbstractEntity"/>
-    <IsRelation name="is" source="PlantEnv" target="ModelEntity"/>
-    <IsRelation name="is" source="PhysicsEnv" target="NoneModelEntity"/>
-    <IsRelation name="is" source="SimpleWaterEnv" target="AbstractEntity"/>
-    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="AmbientLightEnv" target="LightEntity"/>
+    <IsRelation name="is" source="DirectionalLightShadowEntity" target="ShadowEntity"/>
+    <IsRelation name="is" source="Bullet" target="Entity"/>
+    <IsRelation name="is" source="PlatformProxyEntity" target="ProxyEntity"/>
+    <IsRelation name="is" source="TreeEntity" target="PlantEntity"/>
+    <IsRelation name="is" source="AdvanceWaterEntity" target="NonModelEntity"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="DirectionalLightEntity" target="LightEntity"/>
+    <IsRelation name="is" source="PlantEntity" target="ModelEntity"/>
+    <IsRelation name="is" source="SimpleModelEntity" target="ModelEntity"/>
+    <IsRelation name="is" source="Effect" target="ModelEntity"/>
+    <IsRelation name="is" source="TerrainEntity" target="Entity"/>
     <IsRelation name="is" source="WaterEntity" target="Entity"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="SimpleWaterEntity" target="WaterEntity"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="AbstractEntity" target="Entity"/>
+    <IsRelation name="is" source="NonModelEntity" target="AbstractEntity"/>
+    <IsRelation name="is" source="Entity" target="DataProcessor"/>
+    <IsRelation name="is" source="DirectionalLightEntity" target="NonModelEntity"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="SimpleTerrainEntity" target="TerrainEntity"/>
+    <IsRelation name="is" source="AudioEntity" target="ModelEntity"/>
+    <IsRelation name="is" source="AmbientLightEntity" target="NonModelEntity"/>
+    <IsRelation name="is" source="SkyBoxEntity" target="ModelEntity"/>
+    <IsRelation name="is" source="AbstractBullet" target="ModelEntity"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="AdvanceWaterEntity" target="WaterEntity"/>
+    <IsRelation name="is" source="SimpleTerrainEntity" target="ModelEntity"/>
+    <IsRelation name="is" source="PhysicsEntity" target="NonModelEntity"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="ProxyEntity" target="ProxyEnv"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="AbstractBullet" target="Bullet"/>
+    <IsRelation name="is" source="DirectionalLightFilterShadowEntity" target="ShadowEntity"/>
+    <IsRelation name="is" source="ProxyEntity" target="AbstractEntity"/>
+    <IsRelation name="is" source="GrassEntity" target="PlantEntity"/>
+    <IsRelation name="is" source="LightEntity" target="Entity"/>
+    <IsRelation name="is" source="SimpleWaterEntity" target="ModelEntity"/>
+    <IsRelation name="is" source="ModelEntity" target="AbstractEntity"/>
+    <IsRelation name="is" source="ShadowEntity" target="NonModelEntity"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="AmbientLightEntity" target="LightEntity"/>
   </ClassDiagramRelations>
 </ClassDiagram>

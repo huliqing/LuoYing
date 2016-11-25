@@ -11,27 +11,25 @@ import name.huliqing.luoying.layer.service.ElService;
 import name.huliqing.luoying.object.el.LNumberEl;
 
 /**
- * LevelAttribute主要用于拥有等级功能的属性，这种属性会随着等级的提升,属性值也会随着改变。<br>
- * 这种属性包含两个基本值：一个等级值和一个动态值。这两个基本值的“和”构成了当前属性的完整值，<br>
- * 即 fullValue = levelValue + dynamicValue <br>
- * 等级值只能通过设置等级来设置,而动态值可能通过普通的setValue, add, subtract等方式来操作。<br>
+ * LevelFloatAttribute，float类型，并带有等级的属性，这种属性的值由等级值(levelValue)和动态值(dynamicVaue)组成。
+ * 即: value = levelValue  + dynamic <br>
+ * 等级值只受等级的影响，不受属性值的影响，当设置属性值时只影响动态值, 只有设置等级时才影响等级值。
  * @author huliqing
+ * @see LevelIntegerAttribute
  */
 public class LevelFloatAttribute extends FloatAttribute implements LevelAttribute {
     private final ElService elService = Factory.get(ElService.class);
     
-    // 完整的value是由levelValue+dynamicValue
+    // 完整的value是由levelValue+dynamicValue构成的
 
-    // 等级值只能通过设置等级来设置
+    // 等级值,这个值只会随着等级值而变化，设置属性的值不会影响这个值,这个值只有设置等级时才会发生变化。
     private float levelValue;
-    // 动态值可以进行随时改变
+    // 动态值,当设置属性的值时会影响这个值，但不影响等级值。
     private float dynamicValue;
     
-    // 等级公式,通过这个id来创建一条等级公式
-    private LNumberEl levelEl;
-    // 当前等级
+    // 等级值和等级公式，等级值和等级公式将计算出一个等级值: levelValue
     private int level;
-
+    private LNumberEl levelEl;
 
     @Override
     public void setData(AttributeData data) {
@@ -65,27 +63,16 @@ public class LevelFloatAttribute extends FloatAttribute implements LevelAttribut
         levelValue = levelEl.setLevel(level).getValue().floatValue();
         setValue(levelValue + dynamicValue);
     }
+
+    @Override
+    protected boolean doSetSimpleValue(Number newValue) {
+        boolean changed = super.doSetSimpleValue(newValue);
+        // 注: value是由levelValue + dynamicValue相加而成的，为保持一致,这里要计算出dynamicValue，
+        // 以便在存档及恢复的时候能保持一致。
+        dynamicValue = value.floatValue() - levelValue;
+        return changed;
+    }
     
-    /**
-     * 添加值到动态值上
-     * @param other 
-     */
-    @Override
-    public void add(int other) {
-        dynamicValue += other;
-        setValue(levelValue + dynamicValue);
-    }
-
-    /**
-     * 添加值到动态值上.
-     * @param other 
-     */
-    @Override
-    public final void add(float other) {
-        dynamicValue += other;
-        setValue(levelValue + dynamicValue);
-    }
-
     @Override
     public void initialize(AttributeManager module) {
         super.initialize(module);

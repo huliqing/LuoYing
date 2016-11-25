@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.luoying.object.env;
+package name.huliqing.luoying.object.entity.impl;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.renderer.queue.RenderQueue;
@@ -11,14 +11,14 @@ import com.jme3.texture.Texture;
 import com.jme3.util.SkyFactory;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.data.EntityData;
-import name.huliqing.luoying.object.entity.AbstractEntity;
-import name.huliqing.luoying.object.scene.Scene;
+import name.huliqing.luoying.data.ModelEntityData;
+import name.huliqing.luoying.object.entity.ModelEntity;
 
 /**
  * 天空盒模型,天空作为一类特别的物体不继承自ModelEntity
  * @author huliqing
  */
-public class SkyEnv extends AbstractEntity {
+public class SkyBoxEntity extends ModelEntity {
 
     // 基本文件夹路径，如：“Textures/tex/sky/default_min/"
     // 如果指定了这个路径，则把它加在west,east,north,south,up,down前面
@@ -35,7 +35,7 @@ public class SkyEnv extends AbstractEntity {
     private Spatial sky;
 
     @Override
-    public void setData(EntityData data) {
+    public void setData(ModelEntityData data) {
         super.setData(data);
         baseDir = data.getAsString("baseDir");
         west = data.getAsString("west");
@@ -48,11 +48,11 @@ public class SkyEnv extends AbstractEntity {
 
     @Override
     public void updateDatas() {
-        // ignore
+        super.updateDatas();
     }
     
     @Override
-    public void initEntity() {
+    protected Spatial loadModel() {
         AssetManager am = LuoYing.getApp().getAssetManager();
         Texture w = am.loadTexture(baseDir != null ? baseDir + west : west);
         Texture e = am.loadTexture(baseDir != null ? baseDir + east : east);
@@ -61,25 +61,15 @@ public class SkyEnv extends AbstractEntity {
         Texture u = am.loadTexture(baseDir != null ? baseDir + up : up);
         Texture d = am.loadTexture(baseDir != null ? baseDir + down : down);
         sky = SkyFactory.createSky(am, w, e, n, s, u, d);
-        sky.setCullHint(Spatial.CullHint.Never);
-        sky.setQueueBucket(RenderQueue.Bucket.Sky);
-    }
-
-    @Override
-    public void onInitScene(Scene scene) {
-        super.onInitScene(scene);
-        scene.getRoot().attachChild(sky);
-    }
-
-    @Override
-    public void cleanup() {
-        sky.removeFromParent();
-        super.cleanup(); 
+        return sky;
     }
     
     @Override
-    public Spatial getSpatial() {
-        return sky;
+    public void initEntity() {
+        super.initEntity();
+        // 这是SKY必须覆盖掉的设置，
+        sky.setCullHint(Spatial.CullHint.Never);
+        sky.setQueueBucket(RenderQueue.Bucket.Sky);
     }
     
 }

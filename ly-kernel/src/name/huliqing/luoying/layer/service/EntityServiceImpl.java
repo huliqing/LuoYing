@@ -33,7 +33,7 @@ public class EntityServiceImpl implements EntityService {
     public void hitNumberAttribute(Entity entity, String attribute, float addValue, Entity hitter) {
         NumberAttribute nattr = entity.getAttributeManager().getAttribute(attribute, NumberAttribute.class);
         if (nattr != null) {
-            entity.hitAttribute(attribute, nattr.getValue().doubleValue() + addValue, hitter);
+            entity.hitAttribute(attribute, nattr.getValue().floatValue() + addValue, hitter);
         } 
     }
     
