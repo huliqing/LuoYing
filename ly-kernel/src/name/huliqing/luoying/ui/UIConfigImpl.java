@@ -8,7 +8,7 @@ import com.jme3.asset.AssetManager;
 import com.jme3.font.BitmapFont;
 import com.jme3.math.ColorRGBA;
 import name.huliqing.luoying.LuoYing;
-import name.huliqing.luoying.constants.InterfaceConstants;
+import name.huliqing.luoying.constants.AssetConstants;
 
 /**
  * UI的默认配置信息：统一UI的配置,如: border,button，font, size，sound
@@ -24,13 +24,6 @@ public class UIConfigImpl implements UIConfig {
     private final ColorRGBA borderColor = ColorRGBA.LightGray.clone();
     private final ColorRGBA buttonBgColor = new ColorRGBA(0, 0.5f, 1, 1);
     private final ColorRGBA desColor = new ColorRGBA(0.5f, 0.5f, 0.5f, 1);
-    
-    private final String background = "LuoYing/Assets/Interface/UI/background.png";
-    private final String buttonClose = "LuoYing/Assets/Interface/UI/button_close.png";
-    private final String buttonConfirmOk = "LuoYing/Assets/Interface/UI/button_ok.png";
-    private final String buttonConfirmCancel = "LuoYing/Assets/Interface/UI/button_cancel.png";
-    
-    private final String soundClick = "LuoYing/Assets/Interface/UI/sound_click.ogg";
     
     public UIConfigImpl(AssetManager assetManager) {
         this.assetManager = assetManager;
@@ -48,7 +41,7 @@ public class UIConfigImpl implements UIConfig {
     
     @Override
     public String getBackground() {
-        return background;
+        return AssetConstants.UI_BACKGROUND;
     }
     
     @Override
@@ -83,17 +76,17 @@ public class UIConfigImpl implements UIConfig {
 
     @Override
     public String getButtonClose() {
-        return buttonClose;
+        return AssetConstants.UI_BUTTON_CLOSE;
     }
 
     @Override
     public String getButtonConfirmOk() {
-        return buttonConfirmOk;
+        return AssetConstants.UI_BUTTON_OK;
     }
 
     @Override
     public String getButtonConfirmCancel() {
-        return buttonConfirmCancel;
+        return AssetConstants.UI_BUTTON_CANCEL;
     }
     
     /**
@@ -184,7 +177,7 @@ public class UIConfigImpl implements UIConfig {
 
     @Override
     public String getSoundClick() {
-        return soundClick;
+        return AssetConstants.SOUND_CLICK;
     }
 
     @Override
@@ -199,7 +192,7 @@ public class UIConfigImpl implements UIConfig {
 
     @Override
     public String getMissIcon() {
-        return InterfaceConstants.UI_MISS;
+        return AssetConstants.UI_MISS;
     }
 
     @Override

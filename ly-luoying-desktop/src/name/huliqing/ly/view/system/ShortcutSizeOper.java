@@ -7,7 +7,7 @@ package name.huliqing.ly.view.system;
 import com.jme3.font.BitmapFont;
 import java.text.DecimalFormat;
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.constants.InterfaceConstants;
+import name.huliqing.ly.constants.InterfaceConstants;
 import name.huliqing.luoying.layer.service.ConfigService;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.ui.FrameLayout;

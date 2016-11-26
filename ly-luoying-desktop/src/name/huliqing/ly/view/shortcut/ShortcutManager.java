@@ -26,6 +26,7 @@ import name.huliqing.luoying.ui.state.UIState;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.shortcut.Shortcut;
 import name.huliqing.ly.Config;
+import name.huliqing.ly.constants.InterfaceConstants;
 
 /**
  * 关于“快捷方式”的管理
@@ -38,11 +39,11 @@ public class ShortcutManager {
     
     // “删除”图标
     private final static UI DELETE = UIUtils.createMultView(
-            128, 128, "Interface/icon/skull.png", "Interface/icon/shortcut.png");
+            128, 128, InterfaceConstants.UI_ITEM_SKULL, InterfaceConstants.UI_SHORTCUT_BACKGROUND);
 
     // “回收”图标
     private final static UI RECYCLE = UIUtils.createMultView(
-            128, 128, "Interface/icon/recycle.png", "Interface/icon/shortcut.png");
+            128, 128, InterfaceConstants.UI_RECYCLE, InterfaceConstants.UI_SHORTCUT_BACKGROUND);
     
     private final static float SPACE = 40;
     
@@ -102,7 +103,7 @@ public class ShortcutManager {
      * @param ss
      * @param player 
      */
-    public static void loadShortcut(List<ShortcutSave> ss, Actor player) {
+    public static void loadShortcut(List<ShortcutSave> ss, Entity player) {
         if (ss == null || ss.isEmpty())
             return;
         SkillService skillService = Factory.get(SkillService.class);
@@ -222,10 +223,6 @@ public class ShortcutManager {
     public static void setBucketVisible(boolean visible) {
         RECYCLE.setVisible(visible);
         DELETE.setVisible(visible);
-        if (visible) {
-            RECYCLE.setOnTop();
-            DELETE.setOnTop();
-        }
     }
     
     /**

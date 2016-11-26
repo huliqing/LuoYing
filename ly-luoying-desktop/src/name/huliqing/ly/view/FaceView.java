@@ -20,7 +20,7 @@ import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.constants.AssetConstants;
-import name.huliqing.luoying.constants.InterfaceConstants;
+import name.huliqing.ly.constants.InterfaceConstants;
 import name.huliqing.luoying.data.StateData;
 import name.huliqing.ly.layer.service.ChatService;
 import name.huliqing.luoying.layer.service.PlayService;

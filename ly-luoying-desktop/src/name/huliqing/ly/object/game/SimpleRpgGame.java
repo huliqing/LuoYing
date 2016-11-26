@@ -78,13 +78,13 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
     public void initialize(Application app) {
         super.initialize(app);
         
-        // 初始化事件绑定
+        // 事件绑定初始化
         bindPickListener();
         
         // UI全局事件监听器，主要处理当UI被点击或拖动时不要让镜头跟着转动。
         UIState.getInstance().addEventListener(this);
         
-        // UI逻辑
+        // UI界面：头像、队伍、工具栏、攻击按钮
         ui = new RpgMainUI();
         addLogic(ui);
         
@@ -92,11 +92,14 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
         addLogic(SpeakManager.getInstance());
         addLogic(TalkManager.getInstance());
         
-        // 添加一个控制台消息处理器
-        LogFactory.addHandler(new ConsoleLogHandler());
-        
-        // 消息管理器
+        // UI消息管理器初始化
         HUDManager.init(this.app.getGuiNode());
+        
+        // 快捷方式功能初始化
+        ShortcutManager.init();
+        
+        // 控制台消息处理器
+        LogFactory.addHandler(new ConsoleLogHandler());
     }
 
     @Override

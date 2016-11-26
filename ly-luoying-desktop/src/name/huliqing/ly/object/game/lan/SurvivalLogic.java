@@ -102,7 +102,7 @@ public class SurvivalLogic<T extends GameLogicData> extends AbstractGameLogic<T>
     private void doInit() {
         treasure = Loader.load(IdConstants.ACTOR_TREASURE);
         actorService.setLocation(treasure, game.treasurePos);
-        gameService.setGroup(treasure, game.SELF_GROUP);
+        gameService.setGroup(treasure, game.PLAYER_GROUP);
         gameService.setTeam(treasure, gameService.getTeam(game.getPlayer()));
         playNetwork.addEntity(treasure);
         
@@ -110,7 +110,7 @@ public class SurvivalLogic<T extends GameLogicData> extends AbstractGameLogic<T>
         builderLogic.setCallback(new Callback() {
             @Override
             public Entity onAddBefore(Entity actor) {
-                gameService.setGroup(actor, game.GROUP_ENEMY);
+                gameService.setGroup(actor, game.ENEMY_GROUP);
                 skillService.playSkill(actor, skillService.getSkillWaitDefault(actor), false);
 
                 TempVars tv = TempVars.get();

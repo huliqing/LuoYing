@@ -281,9 +281,10 @@ public class GameServiceImpl implements GameService {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public void addSimplePlayer(Entity actor) {
-//        SimpleRpgGame game = (SimpleRpgGame) playService.getGame();
-        playService.addEntity(actor);
-    }
+    // remove20161126
+//    @Override
+//    public void addClientPlayer(Entity actor) {
+////        SimpleRpgGame game = (SimpleRpgGame) playService.getGame();
+//        playService.addEntity(actor);
+//    }
 }

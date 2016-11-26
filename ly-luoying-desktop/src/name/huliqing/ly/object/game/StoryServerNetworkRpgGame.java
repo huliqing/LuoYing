@@ -34,6 +34,7 @@ import name.huliqing.luoying.save.ClientData;
 import name.huliqing.luoying.save.SaveConfig;
 import name.huliqing.luoying.save.SaveHelper;
 import name.huliqing.luoying.save.SaveStory;
+import name.huliqing.luoying.save.ShortcutSave;
 import name.huliqing.ly.constants.IdConstants;
 import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.ly.layer.service.GameService;
@@ -116,14 +117,11 @@ public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
     }
     
     @Override
-    protected void addPlayer(Entity actor) {
-        super.addPlayer(actor);
+    protected void onAddClientPlayer(ConnData cd, Entity actor) {
         // 让客户端玩家角色的group和分组始终和当前故事模式中的主角色的分组一致。
-        Entity mainPlayer = getPlayer();
-        if (mainPlayer != null) {
-            gameNetwork.setGroup(actor, gameService.getGroup(mainPlayer));
-            gameNetwork.setTeam(actor, gameService.getTeam(mainPlayer));
-        }
+        gameService.setGroup(actor, gameService.getGroup(player));
+        gameService.setTeam(actor, gameService.getTeam(player));
+        super.onAddClientPlayer(cd, actor);
     }
     
     @Override
@@ -138,7 +136,7 @@ public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
                 for (ClientData clientData : clientDatas) {
                     if (clientData.getClientId().equals(cd.getClientId())) {
                         // 载入角色客户端角色的资料
-                        boolean result = loadClient(saveStory, clientData);
+                        boolean result = loadClient(saveStory, clientData, cd);
                         if (result) {
                             cd.setEntityId(clientData.getActorId());
                         }
@@ -173,9 +171,7 @@ public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
                 storeClient(saveStory, scene.getEntities(Actor.class, null), cd.getClientId(), cd.getEntityId(), data.getId());
                 SaveHelper.saveStoryLast(saveStory);
             }
-            return super.processMessage(gameServer, source, m);
         }
-
         return super.processMessage(gameServer, source, m);
     }
     
@@ -192,8 +188,9 @@ public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
         if (saveStory.getPlayer() != null) {
             // 载入玩家主角
             actor = Loader.load(saveStory.getPlayer());
-            //List<ShortcutSave> ss = saveStory.getShortcuts();
-            //ShortcutManager.loadShortcut(ss, player);
+            
+            // 载入快捷方式
+            ShortcutManager.loadShortcut(saveStory.getShortcuts(), actor);
             
             // 载入玩家主角的宠物(这里还不需要载入其他玩家的角色及宠物,由其他玩家重新连接的时候再载入)
             ArrayList<EntityData> actors = saveStory.getActors();
@@ -211,7 +208,6 @@ public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
                 actor = Loader.load(IdConstants.ACTOR_PLAYER);
             }
         }
-        getScene().addEntity(actor);
         // 确保角色位置在地面上
         Vector3f loc = actorService.getLocation(actor);
         Vector3f terrainHeight = playService.getTerrainHeight(scene, loc.x, loc.z);
@@ -224,11 +220,12 @@ public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
         gameService.setTeam(actor, TEAM_PLAYER);
         // 让角色处于“等待”
         skillService.playSkill(actor, skillService.getSkillWaitDefault(actor), false);
-        setPlayer(actor);
+        // 添加主玩家
+        onAddServerPlayer(actor);
     }
     
      // 从saveStory中载入指定clientId的角色
-    private boolean loadClient(SaveStory saveStory, ClientData clientData) {
+    private boolean loadClient(SaveStory saveStory, ClientData clientData, ConnData cd) {
         List<EntityData> actors =  saveStory.getActors();
         EntityData clientPlayerData = null;
         for (EntityData ed : actors) {
@@ -243,7 +240,7 @@ public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
         
         // 载入客户端玩家及其宠物，注：这里要用Network,因为服务端和客户端已经为running状态.
         Actor clientPlayer= Loader.load(clientPlayerData);
-        addPlayer(clientPlayer);
+        onAddClientPlayer(cd, clientPlayer);
         
         PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
         for (EntityData entityData : actors) {

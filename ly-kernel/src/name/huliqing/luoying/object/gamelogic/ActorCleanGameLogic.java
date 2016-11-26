@@ -9,7 +9,6 @@ import java.util.List;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.object.actor.Actor;
-import name.huliqing.luoying.constants.ActorConstants;
 import name.huliqing.luoying.data.GameLogicData;
 import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.service.ElService;
@@ -28,6 +27,11 @@ public class ActorCleanGameLogic<T extends GameLogicData> extends AbstractGameLo
     private final PlayService playService = Factory.get(PlayService.class);
     private final ElService elService = Factory.get(ElService.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
+    
+    /**
+     * USER_Data的死亡时间标记,角色死亡后会被标记.
+     */
+    private final static String USER_DATA_DEAD_TIME_FLAG = "DEAD_TIME_FLAG";
     
     // 这条表达式用于判断哪些角色可以清理
     private SBooleanEl checkEl;
@@ -67,12 +71,12 @@ public class ActorCleanGameLogic<T extends GameLogicData> extends AbstractGameLo
         Long deadTime;
         for (Entity a : actorStore) {
             if (checkEl.setSource(a.getAttributeManager()).getValue()) {
-                deadTime = (Long) a.getSpatial().getUserData(ActorConstants.USER_DATA_DEAD_TIME_FLAG);
+                deadTime = (Long) a.getSpatial().getUserData(USER_DATA_DEAD_TIME_FLAG);
                 if (deadTime == null) {
-                    a.getSpatial().setUserData(ActorConstants.USER_DATA_DEAD_TIME_FLAG, LuoYing.getGameTime());
+                    a.getSpatial().setUserData(USER_DATA_DEAD_TIME_FLAG, LuoYing.getGameTime());
                 } else {
                     if (LuoYing.getGameTime() - deadTime > deathDelayAsMS) {
-                        a.getSpatial().getUserDataKeys().remove(ActorConstants.USER_DATA_DEAD_TIME_FLAG);
+                        a.getSpatial().getUserDataKeys().remove(USER_DATA_DEAD_TIME_FLAG);
                         removeStore.add(a);
                     }
                 }

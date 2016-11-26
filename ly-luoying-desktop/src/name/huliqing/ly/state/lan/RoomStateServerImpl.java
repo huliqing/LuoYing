@@ -19,12 +19,17 @@ import name.huliqing.luoying.network.GameServer;
 import name.huliqing.luoying.data.GameData;
 import name.huliqing.luoying.data.ConnData;
 import name.huliqing.luoying.network.GameServer.ServerState;
+import name.huliqing.luoying.object.Loader;
+import name.huliqing.luoying.object.game.Game;
+import name.huliqing.luoying.object.game.GameAppState;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.ly.view.HelpView;
 import name.huliqing.luoying.ui.LinearLayout;
 import name.huliqing.luoying.ui.UIFactory;
 import name.huliqing.luoying.ui.state.UIState;
 import name.huliqing.ly.Start;
+import name.huliqing.ly.object.game.ServerNetworkRpgGame;
+import name.huliqing.ly.object.game.StoryServerNetworkRpgGame;
 //import name.huliqing.ly.LyLanServerPlayState;
 
 /**
@@ -111,8 +116,13 @@ public class RoomStateServerImpl extends AbstractAppState implements RoomState {
             gameServer.setServerListener(null);
             gameServer.setServerState(ServerState.loading);
             
+            // remove2016xxxx
 //            app.changeState(new LyLanServerPlayState(app, gameServer));
-            throw new UnsupportedOperationException();
+
+            ServerNetworkRpgGame game = Loader.load(gameData);
+            game.setGameServer(gameServer);
+            GameAppState gameApp = new GameAppState(game);
+            app.changeState(gameApp);
         }
     }
     

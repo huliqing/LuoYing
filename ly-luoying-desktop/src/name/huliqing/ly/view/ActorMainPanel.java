@@ -6,7 +6,7 @@ package name.huliqing.ly.view;
 
 import java.util.List;
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.constants.InterfaceConstants;
+import name.huliqing.ly.constants.InterfaceConstants;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.layer.service.SkinService;
 import name.huliqing.luoying.layer.service.TalentService;

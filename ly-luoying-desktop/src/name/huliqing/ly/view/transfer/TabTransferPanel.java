@@ -6,7 +6,7 @@ package name.huliqing.ly.view.transfer;
 
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.luoying.constants.InterfaceConstants;
+import name.huliqing.ly.constants.InterfaceConstants;
 import name.huliqing.luoying.data.ItemData;
 import name.huliqing.luoying.data.SkinData;
 import name.huliqing.ly.view.IconPanel;

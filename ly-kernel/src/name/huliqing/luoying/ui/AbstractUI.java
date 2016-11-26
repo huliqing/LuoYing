@@ -551,20 +551,20 @@ public abstract class AbstractUI extends Node implements UI {
         this.soundClick = soundClick;
     }
     
-    @Deprecated
-    @Override
-    public void setOnTop() {
-//        if (Config.debug) {
-//            Logger.getLogger(AbstractUI.class.getName()).log(Level.WARNING, "Do not use this method!");
-//        }
-        
-        // remove20160309以后不再使用这个方法，即让UI根据attach的顺序去排序。
-        // 后attach的UI自动放在上面。
-        // 如果开放这个功能可能会导致一些刚打开的UI反而放在旧UI的下面，被遮住。
-//        Vector3f pos = this.getLocalTranslation();
-//        pos.z = globalZIndex++;
-//        super.setLocalTranslation(pos);
-    }
+//    @Deprecated
+//    @Override
+//    public void setOnTop() {
+////        if (Config.debug) {
+////            Logger.getLogger(AbstractUI.class.getName()).log(Level.WARNING, "Do not use this method!");
+////        }
+//        
+//        // remove20160309以后不再使用这个方法，即让UI根据attach的顺序去排序。
+//        // 后attach的UI自动放在上面。
+//        // 如果开放这个功能可能会导致一些刚打开的UI反而放在旧UI的下面，被遮住。
+////        Vector3f pos = this.getLocalTranslation();
+////        pos.z = globalZIndex++;
+////        super.setLocalTranslation(pos);
+//    }
 
     @Override
     public void setToCorner(Corner cornerPosition) {

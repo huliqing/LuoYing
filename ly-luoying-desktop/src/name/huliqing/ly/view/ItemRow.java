@@ -4,7 +4,7 @@
  */
 package name.huliqing.ly.view;
 
-import name.huliqing.luoying.constants.InterfaceConstants;
+import name.huliqing.ly.constants.InterfaceConstants;
 import name.huliqing.luoying.data.define.CountObject;
 import name.huliqing.luoying.transfer.TransferData;
 import name.huliqing.luoying.xml.ObjectData;

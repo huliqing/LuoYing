@@ -160,9 +160,10 @@ public interface GameNetwork extends Inject {
      */
     void selectPlayer(String actorId, String actorName);
 
-    /**
-     * 添加普通的玩家类角色。
-     * @param actor 
-     */
-    void addSimplePlayer(Entity actor);
+    // remove20161126
+//    /**
+//     * 服务端上添加客户端玩家角色
+//     * @param actor 
+//     */
+//    void addClientPlayer(Entity actor);
 }

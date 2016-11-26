@@ -151,7 +151,7 @@ public class SurvivalBoss<T extends GameLogicData> extends AbstractGameLogic<T> 
         Entity locBoss = Loader.load(IdConstants.ACTOR_FAIRY);
         actorService.setLocation(locBoss, actorBuilder.getRandomPosition());
         gameService.setLevel(locBoss, levelLogic.getMaxLevel() + 5);
-        gameService.setGroup(locBoss, game.GROUP_ENEMY);
+        gameService.setGroup(locBoss, game.ENEMY_GROUP);
         skillService.playSkill(locBoss, skillService.getSkillWaitDefault(locBoss), false);
         
         // 添加逻辑

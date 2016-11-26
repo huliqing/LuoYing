@@ -6,8 +6,7 @@ package name.huliqing.luoying.ui;
 
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.luoying.constants.InterfaceConstants;
-
+import name.huliqing.luoying.constants.AssetConstants;
 
 /**
  *
@@ -26,8 +25,8 @@ public class Checkbox extends AbstractUI {
     private boolean checked;
     
     private Icon flag;
-    private String flagOff = InterfaceConstants.UI_CHECKBOX_OFF;
-    private String flagOn = InterfaceConstants.UI_CHECKBOX_ON;
+    private String flagOff = AssetConstants.UI_CHECKBOX_OFF;
+    private String flagOn = AssetConstants.UI_CHECKBOX_ON;
     private List<ChangeListener> listeners;
 
     public Checkbox() {

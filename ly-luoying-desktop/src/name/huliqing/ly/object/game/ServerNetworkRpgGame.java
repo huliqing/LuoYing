@@ -14,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.ConnData;
+import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.mess.MessPlayActorSelect;
 import name.huliqing.luoying.mess.MessPlayActorSelectResult;
 import name.huliqing.luoying.mess.MessPlayClientExit;
@@ -21,28 +22,32 @@ import name.huliqing.luoying.mess.MessSCClientList;
 import name.huliqing.luoying.network.GameServer;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.ly.constants.ResConstants;
+import name.huliqing.ly.enums.MessageType;
 import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.ly.layer.service.GameService;
+import name.huliqing.ly.manager.ResourceManager;
+import name.huliqing.ly.mess.MessMessage;
 import name.huliqing.ly.network.DefaultServerListener;
 
 /**
- * 服务端RpgGame
+ * 服务端RpgGame的抽象实现.
  * @author huliqing
  */
-public class ServerNetworkRpgGame extends NetworkRpgGame {
+public abstract class ServerNetworkRpgGame extends NetworkRpgGame {
     private final GameService gameService = Factory.get(GameService.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
+    private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
 
     protected GameServer gameServer;
  
     public ServerNetworkRpgGame() {}
      
-//    public ServerNetworkRpgGame(GameData gameData) {
-//        super(gameData);
-//    }
-    
-    public ServerNetworkRpgGame(GameServer gameServer) {
-//        super(gameServer.getGameData());
+    /**
+     * 设置服务端GameServer
+     * @param gameServer 
+     */
+    public void setGameServer(GameServer gameServer) {
         this.gameServer = gameServer;
     }
 
@@ -79,24 +84,52 @@ public class ServerNetworkRpgGame extends NetworkRpgGame {
     protected final void onSelectPlayer(String actorId, String actorName) {
         Entity actor = Loader.load(actorId);
         actor.getData().setName(actorName);
-        getScene().addEntity(actor);
+        onAddServerPlayer(actor);
+    }
+    
+    /**
+     * 当服务端添加主玩家时该方法被调用
+     * @param actor 
+     */
+    protected void onAddServerPlayer(Entity actor) {
         // 设置为当前场景主玩家
         setPlayer(actor);
+        
         // 打开UI
         setUIVisiable(true);
+        
+        // 添加客户端角色
+        playNetwork.addEntity(actor);
+        
         // 通知所有客户更新“客户端列表
         gameServer.broadcast(new MessSCClientList(gameServer.getClients()));
     }
     
     /**
-     * 添加普通类型的玩家角色到场景中（不是当前场景的主玩家）,该方法需要把actor设置为玩家类型的角色，并且在添加到场景
-     * 后要通知所有客户端。
-     * @param actor 
+     * 添加客户端玩家角色到场景中,该方法会把角色添加到服务端场景中，并广播到所有客户端。
+     * @param connData 客户端玩家连接信息
+     * @param actor 客户端玩家最终选择的角色
      */
-    protected void addPlayer(Entity actor) {
-        gameNetwork.addSimplePlayer(actor);
+    protected void onAddClientPlayer(ConnData connData, Entity actor) {
+        // 添加客户端角色
+        playNetwork.addEntity(actor);
+        
         // 更新本地（服务端）客户端列表
         onClientListUpdated();
+        
+        // 消息：通知所有客户端有新的玩家进入
+        String message = ResourceManager.get(ResConstants.LAN_ENTER_GAME, new Object[] {actor.getData().getName()});
+        MessageType type = MessageType.item;
+        MessMessage notice = new MessMessage();
+        notice.setMessage(message);
+        notice.setType(type);
+        if (network.hasConnections()) {
+            network.broadcast(notice);                          
+        }
+        
+        // 通知主机
+        gameService.addMessage(message, type);
+        
         // 通知所有客户更新“客户端列表
         gameServer.broadcast(new MessSCClientList(gameServer.getClients()));
     }
@@ -128,7 +161,7 @@ public class ServerNetworkRpgGame extends NetworkRpgGame {
             cd.setEntityName(actor.getData().getName());
             
             // 添加到场景
-            addPlayer(actor);
+            onAddClientPlayer(cd, actor);
             
             // 返回消息给客户端，让客户端知道所选择的角色成功。
             MessPlayActorSelectResult result = new MessPlayActorSelectResult();

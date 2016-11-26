@@ -8,7 +8,7 @@ import name.huliqing.luoying.ui.tiles.ColumnBody;
 import name.huliqing.luoying.ui.tiles.ColumnText;
 import name.huliqing.luoying.ui.tiles.ColumnIcon;
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.constants.InterfaceConstants;
+import name.huliqing.ly.constants.InterfaceConstants;
 import name.huliqing.luoying.data.TalentData;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.ly.view.SimpleRow;

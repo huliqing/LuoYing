@@ -14,6 +14,7 @@ import name.huliqing.luoying.data.ConnData;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.layer.service.SaveService;
 import name.huliqing.luoying.mess.MessBase;
+import name.huliqing.luoying.mess.MessPlayActorSelect;
 import name.huliqing.luoying.mess.MessPlayActorSelectResult;
 import name.huliqing.luoying.mess.MessPlayClientExit;
 import name.huliqing.luoying.mess.MessPlayGetClients;
@@ -24,7 +25,7 @@ import name.huliqing.luoying.network.AbstractClientListener;
 import name.huliqing.luoying.network.GameClient;
 import name.huliqing.luoying.network.GameClient.ClientState;
 import name.huliqing.luoying.network.GameServer.ServerState;
-import name.huliqing.luoying.object.Loader;
+import name.huliqing.luoying.network.Network;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.gamelogic.AbstractGameLogic;
 import name.huliqing.luoying.object.gamelogic.GameLogic;
@@ -33,7 +34,6 @@ import name.huliqing.luoying.ui.Text;
 import name.huliqing.luoying.ui.UI.Corner;
 import name.huliqing.luoying.ui.UIFactory;
 import name.huliqing.luoying.ui.state.UIState;
-import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.ly.layer.service.GameService;
 import name.huliqing.ly.mess.MessPlayInitGame;
 import name.huliqing.ly.network.LanClientListener;
@@ -44,13 +44,11 @@ import name.huliqing.ly.view.shortcut.ShortcutManager;
  * @author huliqing
  */
 public class ClientNetworkRpgGame extends NetworkRpgGame implements AbstractClientListener.PingListener{
- 
     private static final Logger LOG = Logger.getLogger(ClientNetworkRpgGame.class.getName());
     
     private final SaveService saveService = Factory.get(SaveService.class);
     private final PlayService playService = Factory.get(PlayService.class);
     private final GameService gameService = Factory.get(GameService.class);
-    private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     
     // 客户端快捷方式,保存键，格式: SHORTCUTS_KEY_PREFIX + actorId
     // 如： "Shortcuts_actorWolf", 注意，使用的是角色类型ID，不是唯一ID。
@@ -158,13 +156,10 @@ public class ClientNetworkRpgGame extends NetworkRpgGame implements AbstractClie
             gameClient.send(new MessPlayGetServerState());
         }
     }
-
+    
     @Override
     protected void onSelectPlayer(String actorId, String actorName) {
-        Entity actor = Loader.load(actorId);
-        actor.getData().setName(actorName);
-//        userCommandNetwork.addSimplePlayer(actor);
-        gameNetwork.addSimplePlayer(actor);
+        network.sendToServer(new MessPlayActorSelect(actorId, actorName));
     }
     
     @Override
@@ -208,7 +203,7 @@ public class ClientNetworkRpgGame extends NetworkRpgGame implements AbstractClie
                     setUIVisiable(true);
                 } else {
                     // 这是在服务端没有客户端的存档的情况下，客户端需要弹出角色选择面板，来选择一个角色进行游戏
-                    showSelectPanel(gameClient.getGameData().getAvailableActors());
+                    showSelectPanel();
                 }
                 return;
             }

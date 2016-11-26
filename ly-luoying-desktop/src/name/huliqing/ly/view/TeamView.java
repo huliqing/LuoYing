@@ -108,8 +108,13 @@ public class TeamView extends LinearLayout implements SceneListener, ValueChange
         if (actor == mainFace.getActor()) {
             return;
         }
+        // 约定：mainTeamId <= 0 表示当前无队伍。所以不需要添加任何角色到队伍中。
+        int mainTeamId = gameService.getTeam(mainFace.getActor());
+        if (mainTeamId <= 0) {
+            return;
+        }
         // teamId不匹配则移出队伍
-        if (gameService.getTeam(actor) != gameService.getTeam(mainFace.getActor())) {
+        if (gameService.getTeam(actor) != mainTeamId) {
             removeActor(actor);
             return;
         }
@@ -209,10 +214,10 @@ public class TeamView extends LinearLayout implements SceneListener, ValueChange
             if (entity == null)
                 return;
             
-            // 如果主角的队伍分组发生变化，则必须清理整个队伍面板，因为这表示当前主玩家脱离队伍。
+            // 如果主角的队伍分组发生变化，则必须刷新队伍面板，因为这表示当前主玩家可能脱离队伍，也可能加入其它队伍。
             // 否则如果队伍分组变化的是其它玩家，则检查是将该玩家添加到队伍面板还是移出。
             if (entity == mainFace.getActor()) {
-                clearPartners();
+                setMainActor(mainFace.getActor());
             } else {
                 checkAddOrRemove(entity);
             }

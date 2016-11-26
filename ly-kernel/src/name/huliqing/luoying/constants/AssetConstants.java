@@ -71,4 +71,36 @@ public class AssetConstants {
     
     /** LuoYing/Assets/Textures/particles.jpg */
     public final static String TEXTURE_PARTICLES = "LuoYing/Assets/Textures/particles.jpg";
+    
+    /** =========================================================================== */
+    // UI
+    /** =========================================================================== */
+    
+    /** LuoYing/Assets/Interface/UI/miss.png */
+    public final static String UI_MISS = "LuoYing/Assets/Interface/UI/miss.png";
+    
+    /** LuoYing/Assets/Interface/UI/background.png */
+    public final static String UI_BACKGROUND = "LuoYing/Assets/Interface/UI/background.png";
+    
+    /** LuoYing/Assets/Interface/UI/button_ok.png */
+    public final static String UI_BUTTON_OK = "LuoYing/Assets/Interface/UI/button_ok.png";
+    
+    /** LuoYing/Assets/Interface/UI/button_cancel.png */
+    public final static String UI_BUTTON_CANCEL = "LuoYing/Assets/Interface/UI/button_cancel.png";
+    
+    /** LuoYing/Assets/Interface/UI/button_close.png */
+    public final static String UI_BUTTON_CLOSE = "LuoYing/Assets/Interface/UI/button_close.png";
+    
+    /** LuoYing/Assets/Interface/UI/checkbox_on.jpg */
+    public final static String UI_CHECKBOX_ON = "LuoYing/Assets/Interface/UI/checkbox_on.jpg";
+    
+    /** LuoYing/Assets/Interface/UI/checkbox_off.jpg */
+    public final static String UI_CHECKBOX_OFF = "LuoYing/Assets/Interface/UI/checkbox_off.jpg";
+    
+    /** =========================================================================== */
+    // Sound
+    /** =========================================================================== */
+    
+    /** LuoYing/Assets/Interface/UI/sound_click.ogg */
+    public final static String SOUND_CLICK = "LuoYing/Assets/Sounds/uiClick.ogg";
 }

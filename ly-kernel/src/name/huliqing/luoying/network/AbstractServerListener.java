@@ -85,22 +85,22 @@ public abstract class AbstractServerListener<T> implements ServerListener<T> {
     }
     
     /**
-     * 当有一个客户端连接进来时。
+     * 当有一个客户端连接进来时该方法被立即调用，这个方法将立即向连接进来的客户端发送当前服务端的游戏基本信息：
+     * GameData, 其中<b>不包含</b>游戏逻辑信息及场景实体数据等信息，需要注意：<br>
+     * 1.客户端不会执行来自服务端的游戏逻辑。
+     * 2.游戏场景中的物体信息将由服务端和客户端都同时处于准备就绪的情况下，由客户端向服务端请求获得。
      * @param gameServer
      * @param conn 
      */
     protected void onClientAdded(GameServer gameServer, HostedConnection conn) {
-        // remove20161121
-        // 告诉客户端当前玩的游戏信息,gameData必须立即发送
-//        gameServer.send(conn, new MessSCGameData(gameServer.getGameData()));
-
         // 告诉客户端当前玩的游戏信息,gameData必须立即发送
         // 注：这里向客户端发送的并不包含游戏逻辑数据及场景实体数据，这些数据是在客户端状态初始化后再从服务端获取并载入
-        GameData gd = gameServer.getGameData();
-        gd.getGameLogicDatas().clear();
-        gd.getSceneData().setEntityDatas(null);
-        gd.getGuiSceneData().setEntityDatas(null);
-        gameServer.send(conn, new MessSCGameData());
+        // 当服务端和客户端状态就绪之后，
+        GameData gameData = gameServer.getGameData();
+        gameData.getGameLogicDatas().clear();
+        gameData.getSceneData().setEntityDatas(null);
+        gameData.getGuiSceneData().setEntityDatas(null);
+        gameServer.send(conn, new MessSCGameData(gameData));
     }
     
     /**

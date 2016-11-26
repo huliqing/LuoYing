@@ -18,7 +18,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import name.huliqing.luoying.LuoYing;
-import name.huliqing.luoying.constants.InterfaceConstants;
+import name.huliqing.ly.constants.InterfaceConstants;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.emitter.Emitter;
 import name.huliqing.luoying.save.SaveHelper;

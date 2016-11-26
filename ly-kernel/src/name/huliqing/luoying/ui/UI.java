@@ -218,11 +218,6 @@ public interface UI {
     void onRelease();
     
     /**
-     * 让当前UI在最上层显示
-     */
-    void setOnTop();
-    
-    /**
      * 把组件设置到一个角落
      * @param corner 
      */

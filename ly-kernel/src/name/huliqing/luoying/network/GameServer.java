@@ -100,9 +100,6 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
     }
     
     public enum ServerState {
-        
-        /** 服务器处于关闭状态 */
-        shutdown,
 
         /** 服务端正在等待连接中,游戏未开始运行,如在房间中等待 */
         waiting,
@@ -114,7 +111,10 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
         loading,
 
         /** 服务端游戏处在运行时 */
-        running
+        running,
+        
+        /** 服务器处于关闭、未开启状态 */
+        shutdown,
     }
     
     // 游戏状态

@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.luoying.constants;
+package name.huliqing.ly.constants;
 
 /**
  *
@@ -10,9 +10,7 @@ package name.huliqing.luoying.constants;
  */
 public class InterfaceConstants {
     
-    /**
-     * shortcut图标背景
-     */
+    /** shortcut图标背景 */
     public final static String UI_SHORTCUT_BACKGROUND = "Interface/icon/shortcut.png";
     public final static String UI_SHORTCUT_BACKGROUND2 = "Interface/icon/shortcut2.png";
     
@@ -43,6 +41,9 @@ public class InterfaceConstants {
     /** Chat.png */
     public final static String UI_CHAT = "Interface/ui/chat.png";
     
+    /** Interface/icon/recycle.png */
+    public final static String UI_RECYCLE = "Interface/icon/recycle.png";
+    
     /** 杂物：Interface/icon/userPanel/bag.png */
     public final static String UI_ITEM_ITEM = "Interface/icon/userPanel/bag.png";
     /** 装备: Interface/icon/userPanel/armor.png */
@@ -59,6 +60,7 @@ public class InterfaceConstants {
     public final static String UI_ITEM_TASK = "Interface/icon/userPanel/task.png";
     /** 骷髅头: Interface/icon/skull.png */
     public final static String UI_ITEM_SKULL = "Interface/icon/skull.png";
+    
     
     
     

@@ -65,9 +65,8 @@ public abstract class NetworkRpgGame extends SimpleRpgGame implements LanGame {
     
      /**
      * 显示角色选择面板
-     * @param selectableActors 
      */
-    public final void showSelectPanel(List<String> selectableActors) {
+    public final void showSelectPanel() {
         if (actorPanel == null) {
             actorPanel = new ActorSelectView(LuoYing.getSettings().getWidth(), LuoYing.getSettings().getHeight(), this.app.getGuiNode());
             actorPanel.setSelectedListener(new ActorSelectView.SelectedListener() {
@@ -75,12 +74,11 @@ public abstract class NetworkRpgGame extends SimpleRpgGame implements LanGame {
                 public void onSelected(String actorId, String actorName) {
                     actorPanel.removeFromParent();
                     actorPanel.getActorView().removeFromParent();
- 
                     onSelectPlayer(actorId, actorName);
                 }
             });
         }
-        actorPanel.setModels(selectableActors);
+        actorPanel.setModels(data.getAvailableActors());
         
         UIState.getInstance().addUI(actorPanel);
         
@@ -157,7 +155,10 @@ public abstract class NetworkRpgGame extends SimpleRpgGame implements LanGame {
     } 
     
     /**
-     * 当玩家在本地选择了一个角色进行游戏后进。
+     * 当玩家通过角色选择面板选择了一个角色后该方法被调用，该方法主要需要处理以下事情：<br>
+     * 1.对于服务端来说: 需要载入指定的角色，作为玩家的控制角色，并广播到所有客户端。<br>
+     * 2.对于客户端来说: 需要把指定的角色id及名称发送到服务端，由服务端确认，并载入角色, 然后把结束通知客户端，
+     * 让客户端知道选择的角色成功与否，如果成功则客户端将指定角色转为客户端玩家本地控制的角色。
      * @param actorId
      * @param actorName
      */

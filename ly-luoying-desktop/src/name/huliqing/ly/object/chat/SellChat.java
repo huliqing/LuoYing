@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.constants.InterfaceConstants;
+import name.huliqing.ly.constants.InterfaceConstants;
 import name.huliqing.ly.constants.ResConstants;
 import name.huliqing.luoying.data.ItemData;
 import name.huliqing.luoying.data.SkinData;

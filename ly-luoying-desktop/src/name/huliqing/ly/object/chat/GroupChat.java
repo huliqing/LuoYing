@@ -9,7 +9,7 @@ import com.jme3.math.ColorRGBA;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.constants.InterfaceConstants;
+import name.huliqing.ly.constants.InterfaceConstants;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.ly.data.ChatData;
 import name.huliqing.ly.layer.service.ChatService;

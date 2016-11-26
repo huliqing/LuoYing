@@ -291,29 +291,28 @@ public class GameNetworkImpl implements GameNetwork {
         }
     }
 
-    @Override
-    public void addSimplePlayer(Entity actor) {
-         if (network.isClient()) {
-            EntityData data = actor.getData();
-            network.sendToServer(new MessPlayActorSelect(data.getId(), data.getName()));
-        } else {
-             
-            // 广播到客户端进行载入角色
-            // XXX actor need to setAsSimplePlayer
-            playNetwork.addEntity(actor);
-            
-            // 通知所有客户端
-            String message = ResourceManager.get("lan.enterGame", new Object[] {actor.getData().getName()});
-            MessageType type = MessageType.item;
-            MessMessage notice = new MessMessage();
-            notice.setMessage(message);
-            notice.setType(type);
-            if (network.hasConnections()) {
-                network.broadcast(notice);                          
-            }
-            // 通知主机
-            gameService.addMessage(message, type);
-        }
-    }
+    // remove20161126
+//    @Override
+//    public void addClientPlayer(Entity actor) {
+//         if (network.isClient()) {
+//            return;
+//        }
+//             
+//        // 广播到客户端进行载入角色
+//        playNetwork.addEntity(actor);
+//
+//        // 通知所有客户端
+//        String message = ResourceManager.get("lan.enterGame", new Object[] {actor.getData().getName()});
+//        MessageType type = MessageType.item;
+//        MessMessage notice = new MessMessage();
+//        notice.setMessage(message);
+//        notice.setType(type);
+//        if (network.hasConnections()) {
+//            network.broadcast(notice);                          
+//        }
+//        
+//        // 通知主机
+//        gameService.addMessage(message, type);
+//    }
     
 }
