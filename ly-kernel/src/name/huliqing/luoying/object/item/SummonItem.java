@@ -133,7 +133,7 @@ public class SummonItem extends AbstractItem {
         }
         // 设置地点并召唤
         actorService.setLocation(bcc, summonPos);
-        playNetwork.addEntity(actor.getScene(), bcc);
+        playNetwork.addEntity(bcc);
         return true;
     }
     

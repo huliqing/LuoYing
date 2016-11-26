@@ -27,6 +27,7 @@ public class GameData extends ObjectData {
     private SceneData guiSceneData;
     // 游戏的逻辑列表
     private List<GameLogicData> gameLogicDatas;
+    
     // 游戏可选的角色列表
     private List<String> availableActors;
     
@@ -115,6 +116,28 @@ public class GameData extends ObjectData {
      */
     public void setAvailableActors(List<String> availableActors) {
         this.availableActors = availableActors;
+    }
+
+    @Override
+    public ObjectData clone() {
+        GameData clone = (GameData) super.clone(); 
+        if (sceneData != null) {
+            clone.sceneData = (SceneData) sceneData.clone();
+        }
+        if (guiSceneData != null) {
+            clone.guiSceneData = (SceneData) guiSceneData.clone();
+        }
+        if (gameLogicDatas != null) {
+            clone.gameLogicDatas = new ArrayList<GameLogicData>(gameLogicDatas.size());
+            for (GameLogicData gld : gameLogicDatas) {
+                clone.gameLogicDatas.add((GameLogicData) gld.clone());
+            }
+        }
+        if (availableActors != null) {
+            clone.availableActors = new ArrayList<String>(availableActors.size());
+            clone.availableActors.addAll(availableActors);
+        }
+        return clone;
     }
     
     @Override

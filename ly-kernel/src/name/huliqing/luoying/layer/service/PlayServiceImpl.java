@@ -5,6 +5,7 @@
 package name.huliqing.luoying.layer.service;
 
 import com.jme3.math.Vector3f;
+import com.jme3.network.HostedConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -56,9 +57,20 @@ public class PlayServiceImpl implements PlayService {
         game.getGuiScene().addEntity(entity);
     }
     
+    // remove20161126
+//    @Override
+//    public void addEntity(Scene scene, Entity entity) {
+//        scene.addEntity(entity);
+//    }
+
+    /**
+     * 不要直接调用这个方法。
+     * @param conn
+     * @param entity 
+     */
     @Override
-    public void addEntity(Scene scene, Entity entity) {
-        scene.addEntity(entity);
+    public void addEntityToClient(HostedConnection conn, Entity entity) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

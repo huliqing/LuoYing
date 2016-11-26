@@ -4,6 +4,7 @@
  */
 package name.huliqing.luoying.layer.network;
 
+import com.jme3.network.HostedConnection;
 import java.util.Random;
 import name.huliqing.luoying.network.Network;
 import name.huliqing.luoying.Factory;
@@ -21,7 +22,7 @@ import name.huliqing.luoying.object.scene.Scene;
  */
 public class PlayNetworkImpl implements PlayNetwork {
 //    private static final Logger LOG = Logger.getLogger(PlayNetworkImpl.class.getName());
-    private final static Network NETWORK = Network.getInstance();
+    private final Network network = Network.getInstance();
     private PlayService playService;
     
     @Override
@@ -31,37 +32,58 @@ public class PlayNetworkImpl implements PlayNetwork {
 
     @Override
     public void addEntity(Entity entity) {
-        addEntity(playService.getGame().getScene(), entity);
-    }
-    
-    @Override
-    public void addGuiEntity(Entity entity) {
-        addEntity(playService.getGame().getGuiScene(), entity);
-    }
-    
-    @Override
-    public void addEntity(Scene scene, Entity entity) {
-        if (NETWORK.isClient()) {
+        if (network.isClient()) {
             return;
         }
         
         entity.updateDatas();
         MessEntityAdd mess = new MessEntityAdd();
         mess.setEntityData(entity.getData());
-        mess.setSceneId(scene.getData().getUniqueId());
-        NETWORK.broadcast(mess);
+        mess.setGuiScene(false);
+        network.broadcast(mess);
         
-        playService.addEntity(scene, entity);
+        playService.addEntity(entity);
+    }
+    
+    @Override
+    public void addGuiEntity(Entity entity) {
+        if (network.isClient()) {
+            return;
+        }
+        
+        entity.updateDatas();
+        MessEntityAdd mess = new MessEntityAdd();
+        mess.setEntityData(entity.getData());
+        mess.setGuiScene(true);
+        network.broadcast(mess);
+        
+        playService.addEntity(entity);
+    }
+
+    @Override
+    public void addEntityToClient(HostedConnection conn, Entity entity) {
+        if (network.isClient()) {
+            return;
+        }
+        // 该方法只向指定的客户端发送添加场景实体的消息，不进行广播，
+        // 也不在本地服务端中添加,一般用于向客户端初始化场景时使用
+        Scene guiScene = playService.getGame().getGuiScene();
+        
+        entity.updateDatas();
+        MessEntityAdd mess = new MessEntityAdd();
+        mess.setEntityData(entity.getData());
+        mess.setGuiScene(entity.getScene() != null && entity.getScene() == guiScene);
+        network.sendToClient(conn, mess);
     }
 
     @Override
     public void removeEntity(Entity entity) {
-        if (NETWORK.isClient()) {
+        if (network.isClient()) {
             return;
         }
         MessEntityRemove mess = new MessEntityRemove();
         mess.setEntityId(entity.getEntityId());
-        NETWORK.broadcast(mess);
+        network.broadcast(mess);
 
         playService.removeEntity(entity);
     }
@@ -69,10 +91,10 @@ public class PlayNetworkImpl implements PlayNetwork {
     @Override
     public void attack(Entity actor, Entity target) {
         // On client
-        if (NETWORK.isClient()) {
+        if (network.isClient()) {
             MessAutoAttack mess = new MessAutoAttack();
             mess.setTargetId(target != null ? target.getData().getUniqueId() : -1);
-            NETWORK.sendToServer(mess);
+            network.sendToServer(mess);
             return;
         }
 
@@ -83,16 +105,16 @@ public class PlayNetworkImpl implements PlayNetwork {
     
     @Override
     public void updateRandomSeed() {
-        if (NETWORK.isClient()) {
+        if (network.isClient()) {
             return;
         }
         int seed = new Random().nextInt();
         
         // 将种子发送到客户端，由客户端更新随机数
-        if (NETWORK.hasConnections()) {
+        if (network.hasConnections()) {
             MessRandomSeed mess = new MessRandomSeed();
             mess.setRandomSeed(seed);
-            NETWORK.broadcast(mess);
+            network.broadcast(mess);
         }
         
         // 服务端更新随机种子。不要实现 PlayService.updateRandomSeed()方法。

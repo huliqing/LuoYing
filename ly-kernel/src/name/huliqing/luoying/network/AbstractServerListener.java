@@ -4,15 +4,15 @@
  */
 package name.huliqing.luoying.network;
 
-import name.huliqing.luoying.mess.MessSCGameData;
-import name.huliqing.luoying.mess.MessSCClientList;
-import name.huliqing.luoying.mess.MessClient;
-import name.huliqing.luoying.mess.MessPlayGetServerState;
-import name.huliqing.luoying.mess.MessSCServerState;
+import name.huliqing.luoying.mess.network.MessGameData;
+import name.huliqing.luoying.mess.network.MessClients;
+import name.huliqing.luoying.mess.network.MessClient;
+import name.huliqing.luoying.mess.network.MessGetServerState;
+import name.huliqing.luoying.mess.network.MessServerState;
 import name.huliqing.luoying.data.ConnData;
 import name.huliqing.luoying.network.GameServer.ServerListener;
-import name.huliqing.luoying.mess.MessPlayGetClients;
-import name.huliqing.luoying.mess.MessPlayGetGameData;
+import name.huliqing.luoying.mess.network.MessGetClients;
+import name.huliqing.luoying.mess.network.MessGetGameData;
 import com.jme3.app.Application;
 import com.jme3.network.HostedConnection;
 import com.jme3.network.Message;
@@ -20,13 +20,15 @@ import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.data.GameData;
+import name.huliqing.luoying.mess.network.MessRequestGameInit;
+import name.huliqing.luoying.mess.network.MessRequestGameInitOk;
+import name.huliqing.luoying.network.GameServer.ServerState;
 
 /**
  * 服务端监听器,用于监听来自客户端连接的消息。
  * @author huliqing
- * @param <T>
  */
-public abstract class AbstractServerListener<T> implements ServerListener<T> {
+public abstract class AbstractServerListener implements ServerListener {
 
     private static final Logger LOG = Logger.getLogger(AbstractServerListener.class.getName());
 
@@ -37,7 +39,7 @@ public abstract class AbstractServerListener<T> implements ServerListener<T> {
     }
     
     @Override
-    public void clientAdded(final GameServer gameServer, final HostedConnection conn) {
+    public final void clientAdded(final GameServer gameServer, final HostedConnection conn) {
         app.enqueue(new Callable() {
             @Override
             public Object call() throws Exception {
@@ -48,59 +50,54 @@ public abstract class AbstractServerListener<T> implements ServerListener<T> {
     }
 
     @Override
-    public void clientRemoved(final GameServer gameServer, final HostedConnection conn) {
+    public final void clientRemoved(final GameServer gameServer, final HostedConnection conn) {
         app.enqueue(new Callable() {
             @Override
             public Object call() throws Exception {
                 onClientRemoved(gameServer, conn);
-                onClientsUpdated(gameServer);
                 return null;
             }
         });
     }
 
     @Override
-    public void serverMessage(final GameServer gameServer, final HostedConnection source, final Message m) {
-        LOG.log(Level.INFO, "Receive from client, class={0}, message={1}", new Object[] {m.getClass().getName(), m.toString()});
-        
+    public final void serverMessage(final GameServer gameServer, final HostedConnection source, final Message m) {
         app.enqueue(new Callable() {
             @Override
             public Object call() throws Exception {
-                if (m instanceof MessClient) {
-                   onReceiveClientId(gameServer, source, (MessClient) m);
-                   onClientsUpdated(gameServer);
-                } else if (m instanceof MessPlayGetServerState) {
-                    onReceiveGetServerState(gameServer, source, (MessPlayGetServerState) m);
-                } else if (m instanceof MessPlayGetGameData) {
-                    onReceiveGetGameData(gameServer, source, (MessPlayGetGameData) m);
-                } else if (m instanceof MessPlayGetClients) {
-                    onClientsUpdated(gameServer);
-                } else {
-                    // other message
-                    processServerMessage(gameServer, source, m);
-                }
+                clientMessage(gameServer, source, m);
                 return null;
             }
         });
     }
     
-    /**
-     * 当有一个客户端连接进来时该方法被立即调用，这个方法将立即向连接进来的客户端发送当前服务端的游戏基本信息：
-     * GameData, 其中<b>不包含</b>游戏逻辑信息及场景实体数据等信息，需要注意：<br>
-     * 1.客户端不会执行来自服务端的游戏逻辑。
-     * 2.游戏场景中的物体信息将由服务端和客户端都同时处于准备就绪的情况下，由客户端向服务端请求获得。
-     * @param gameServer
-     * @param conn 
-     */
-    protected void onClientAdded(GameServer gameServer, HostedConnection conn) {
-        // 告诉客户端当前玩的游戏信息,gameData必须立即发送
-        // 注：这里向客户端发送的并不包含游戏逻辑数据及场景实体数据，这些数据是在客户端状态初始化后再从服务端获取并载入
-        // 当服务端和客户端状态就绪之后，
-        GameData gameData = gameServer.getGameData();
-        gameData.getGameLogicDatas().clear();
-        gameData.getSceneData().setEntityDatas(null);
-        gameData.getGuiSceneData().setEntityDatas(null);
-        gameServer.send(conn, new MessSCGameData(gameData));
+    private void clientMessage(GameServer gameServer, HostedConnection source, final Message m) {
+//        LOG.log(Level.INFO, "Receive from client, class={0}, message={1}", new Object[] {m.getClass().getName(), m.toString()});
+
+        if (m instanceof MessClient) {
+            onReceiveMessClient(gameServer, source, (MessClient) m);
+
+        } else if (m instanceof MessGetServerState) {
+            onReceiveMessGetServerState(gameServer, source, (MessGetServerState) m);
+
+        } else if (m instanceof MessGetGameData) {
+            onReceiveMessGetGameData(gameServer, source, (MessGetGameData) m);
+
+        } else if (m instanceof MessGetClients) {
+            onReceiveMessGetClients(gameServer, source, (MessGetClients) m);
+
+        } else if (m instanceof MessRequestGameInit) {
+            if (gameServer.getServerState() != ServerState.running) {
+                LOG.log(Level.WARNING, "Server state is not ready to process game init request! "
+                        + "clientAddress={0}, clientId={1}, message={2}", new Object[] {source.getAddress(), source.getId(), m});
+                return;
+            }
+            onReceiveMessRequestGameInit(gameServer, source, (MessRequestGameInit) m);
+
+        } else {
+            // other message
+            onReceiveMessage(gameServer, source, m);
+        }
     }
     
     /**
@@ -110,20 +107,13 @@ public abstract class AbstractServerListener<T> implements ServerListener<T> {
      * @param conn
      * @param m 
      */
-    protected void onReceiveClientId(GameServer gameServer, HostedConnection conn, MessClient m) {
+    protected void onReceiveMessClient(GameServer gameServer, HostedConnection conn, MessClient m) {
+        // 登记、更新客户端资料
         ConnData cd = conn.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
         cd.setClientId(m.getClientId());
         cd.setClientName(m.getClientName());
-    }
-    
-    /**
-     * 当客户端列表更新时,其中更新包含如：新客户端添加，断开，客户端标识变化
-     * 等
-     * @param gameServer 
-     */
-    protected void onClientsUpdated(GameServer gameServer) {
-        // 2.刷新客户端
-        gameServer.broadcast(new MessSCClientList(gameServer.getClients()));
+        // 更新客户端列表
+        onClientsUpdated(gameServer);
     }
     
     /**
@@ -133,28 +123,127 @@ public abstract class AbstractServerListener<T> implements ServerListener<T> {
      * @param conn
      * @param m 
      */
-    protected void onReceiveGetServerState(GameServer gameServer, HostedConnection conn, MessPlayGetServerState m) {
-        MessSCServerState mess = new MessSCServerState();
-        mess.setServerState(gameServer.getServerState());
-        gameServer.send(conn, mess);
+    protected void onReceiveMessGetServerState(GameServer gameServer, HostedConnection conn, MessGetServerState m) {
+        gameServer.send(conn, new MessServerState(gameServer.getServerState()));
     }
     
     /**
-     * 当服务端接收到客户端发出的请求游戏数据的命令时。
+     * 当接收到客户端发送的请求游戏数据的消息时该方法被自动调用，这个方法主要实现向客户端返回游戏数据的消息：
+     * {@link  GameData}, 默认情况下服务端仅向客户端发送游戏的基本数据。
+     * 详情参考{@link #onSendGameData(GameServer, HostedConnection) }
      * @param gameServer
      * @param conn
      * @param m 
+     * @see #onSendGameData(GameServer, HostedConnection) 
      */
-    protected void onReceiveGetGameData(GameServer gameServer, HostedConnection conn, MessPlayGetGameData m) {
-        gameServer.send(conn, new MessSCGameData(gameServer.getGameData()));
+    protected void onReceiveMessGetGameData(GameServer gameServer, HostedConnection conn, MessGetGameData m) {
+        onSendGameData(gameServer, conn);
     }
     
     /**
-     * 当有一个客户端从服务端断开时。
+     * 当接收到客户端发送的请求所有的客户端列表时该方法被自动调用，这个方法主要实现向客户端返回当前连接的所有客户端
+     * 列表的基本信息. {@link 
+     * 信息。
+     * @param gameServer
+     * @param conn
+     * @param mess 
+     */
+    protected void onReceiveMessGetClients(GameServer gameServer, HostedConnection conn, MessGetClients mess) {
+        gameServer.broadcast(new MessClients(gameServer.getClients()));
+    }
+    
+    /**
+     * 服务端向客户端发送游戏数据，当服务端接收到客户端连接或者客户端向服务端请求游戏数据时，
+     * 该方法会被自动调用，主要实现向客户端发送当前的游戏数据GameData。<br>
+     * 注：默认情况下，服务端只向客户端发送游戏基本数据，不发送场景实体数据，也不发送游戏逻辑。
+     * 因为客户端不应该执行来自服务端的游戏逻辑，另一个，游戏场景实体数据的不确定性，当场景实体非常多时，
+     * 如果一次性发送可能导致问题，因此这些数据应该在客户端和服务端连接和初始化完成后再从服务端获取。
+     * @param gameServer
+     * @param coon 
+     */
+    protected void onSendGameData(GameServer gameServer, HostedConnection coon) {
+        // 注1：这里向客户端发送的并不包含游戏逻辑数据及场景实体数据，
+        // 这些数据是在客户端状态初始化后再从服务端获取并载入,当服务端和客户端状态就绪之后，服务端可以依次有序的向
+        // 客户端一个一个发送所有实体数据。
+        
+        // 注2：gameData必须克隆后，再清除逻辑和场景实体，否则会影响服务端的游戏数据。
+        GameData gameData = gameServer.getGameData();
+        
+        GameData clone = (GameData) gameServer.getGameData().clone(); 
+        // 因为克隆的时候会导致唯一ID不同，这里特别同步一下，使用客户端和服务端使用相同的唯一ID。
+        clone.setUniqueId(gameData.getUniqueId());
+        
+        if (clone.getSceneData() != null) {
+            clone.getSceneData().setEntityDatas(null);
+            clone.getSceneData().setUniqueId(gameData.getUniqueId());
+        }
+        
+        if (clone.getGuiSceneData() != null) {
+            clone.getGuiSceneData().setEntityDatas(null);
+            clone.getGuiSceneData().setUniqueId(gameData.getGuiSceneData().getUniqueId());
+        }
+        
+        // 清理掉逻辑
+        clone.getGameLogicDatas().clear();
+        
+        gameServer.send(coon, new MessGameData(clone));
+    }
+    
+    /**
+     * 当一个新的客户端连接到服务端时该方法被自动调用，默认情况下，
+     * 该方法将立即向客户端发送游戏数据{@link GameData}作为响应.
+     * 注：默认情况下，服务端只向客户端发送游戏的基本数据,不包含场景数据及游戏逻辑。
+     * @param gameServer
+     * @param conn 
+     * @see #onSendGameData(GameServer, HostedConnection) 
+     */
+    protected void onClientAdded(GameServer gameServer, HostedConnection conn) {
+        // 初始化一个用于存放数据的容器,选择在这里初始化以便后续使用的时候不再需要判断null
+        ConnData cd = conn.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
+        if (cd == null) {
+            cd = new ConnData();
+            cd.setConnId(conn.getId());
+            cd.setAddress(conn.getAddress());
+            conn.setAttribute(ConnData.CONN_ATTRIBUTE_KEY, cd);
+        }
+        // 当客户端连接时向客户端发送游戏数据
+        onSendGameData(gameServer, conn);
+        // 更新客户端列表
+        onClientsUpdated(gameServer);
+    }
+    
+    /**
+     * 当一个客户端断开与服务端的连接时该方法被自动调用，默认情况下，该方法会向所有客户端广播更新客户端列表的信息。
+     * 子类可以覆盖该方法来作进一步处理该事件，例如：将客户端控制的游戏角色移除场景，向客户端发送广播通知消息。
      * @param gameServer
      * @param conn 
      */
-    protected abstract void onClientRemoved(GameServer gameServer, HostedConnection conn);
+    protected void onClientRemoved(GameServer gameServer, HostedConnection conn) {
+        // 更新客户端列表
+        onClientsUpdated(gameServer);
+    }
+    
+    /**
+     * 当客户端列表发生变化时该方法被自动调用,其中包含如：新客户端添加，断开，客户端信息发生变化时该方法都会被调用。
+     * 默认情况下，该方法会向所有客户端广播更新客户端列表的信息。
+     * @param gameServer
+     */
+    protected void onClientsUpdated(GameServer gameServer) {
+        gameServer.broadcast(new MessClients(gameServer.getClients()));
+    }
+    
+    /**
+     * 当服务端接收到来自客户端的初始化游戏的请求时，该方法被调用。子类实现这个方法需要<b>按顺序</b>做两件事：<br>
+     * 1.向客户端发送{@link MessRequestGameInit}消息进行响应，并指明要向客户端初始化多少场景实体。
+     * 2.接着步骤1，立即向客户端发送初始化场景的实体数据。
+     * @param gameServer
+     * @param conn
+     * @param mess 
+     * @see MessRequestGameInit
+     * @see MessRequestGameInitOk
+     */
+    protected abstract void onReceiveMessRequestGameInit(GameServer gameServer, HostedConnection conn, 
+            MessRequestGameInit mess);
     
     /**
      * 在服务端处理接收到的来自客户端的消息
@@ -162,5 +251,5 @@ public abstract class AbstractServerListener<T> implements ServerListener<T> {
      * @param source
      * @param m 
      */
-    protected abstract void processServerMessage(GameServer gameServer, HostedConnection source, Message m);
+    protected abstract void onReceiveMessage(GameServer gameServer, HostedConnection source, Message m);
 }

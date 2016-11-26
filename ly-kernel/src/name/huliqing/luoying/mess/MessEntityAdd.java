@@ -11,24 +11,30 @@ import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.game.Game;
 
 /**
- *
+ * 向指定的场景添加实体
  * @author huliqing
  */
 @Serializable
 public class MessEntityAdd extends MessBase {
     
-    private long sceneId;
+    // 向指定的场景ID添加实体
+    private boolean guiScene;
+    
+    // 实体数据
     private EntityData entityData;
 
-    public long getSceneId() {
-        return sceneId;
+    public boolean isGuiScene() {
+        return guiScene;
     }
 
-    public void setSceneId(long sceneId) {
-        this.sceneId = sceneId;
+    /**
+     * 是否添加到GUI场景，默认情况下Entity将添加到主场景。
+     * @param guiScene 
+     */
+    public void setGuiScene(boolean guiScene) {
+        this.guiScene = guiScene;
     }
 
     public EntityData getEntityData() {
@@ -43,11 +49,10 @@ public class MessEntityAdd extends MessBase {
     public void applyOnClient() {
         super.applyOnClient();
         PlayService playService = Factory.get(PlayService.class);
-        Game game = playService.getGame();
-        if (game.getScene().getData().getUniqueId() == sceneId) {
-            playService.addEntity(game.getScene(), (Entity) Loader.load(entityData));
-        } else if (game.getGuiScene().getData().getUniqueId() == sceneId) {
-            playService.addEntity(game.getGuiScene(), (Entity) Loader.load(entityData));
+        if (guiScene) {
+            playService.addGuiEntity((Entity) Loader.load(entityData));
+        } else {
+            playService.addEntity((Entity) Loader.load(entityData));
         }
     }
     

@@ -7,7 +7,6 @@ package name.huliqing.ly.object.game;
 
 import com.jme3.app.Application;
 import com.jme3.math.Vector3f;
-import java.util.List;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.network.LanGame;
 import name.huliqing.luoying.network.Network;

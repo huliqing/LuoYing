@@ -27,6 +27,7 @@ public interface UDPListener {
      * @param object
      * @param discover
      * @param packet 
+     * @throws java.lang.Exception 
      */
     void receive(Object object, UDPDiscover discover, DatagramPacket packet) throws Exception;
 }

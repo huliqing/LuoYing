@@ -9,6 +9,7 @@ import com.jme3.app.Application;
 import com.jme3.network.HostedConnection;
 import com.jme3.network.Message;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,8 +18,10 @@ import name.huliqing.luoying.data.ConnData;
 import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.mess.MessPlayActorSelect;
 import name.huliqing.luoying.mess.MessPlayActorSelectResult;
-import name.huliqing.luoying.mess.MessPlayClientExit;
-import name.huliqing.luoying.mess.MessSCClientList;
+import name.huliqing.luoying.mess.network.MessClientExit;
+import name.huliqing.luoying.mess.network.MessClients;
+import name.huliqing.luoying.mess.network.MessRequestGameInit;
+import name.huliqing.luoying.mess.network.MessRequestGameInitOk;
 import name.huliqing.luoying.network.GameServer;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
@@ -102,7 +105,7 @@ public abstract class ServerNetworkRpgGame extends NetworkRpgGame {
         playNetwork.addEntity(actor);
         
         // 通知所有客户更新“客户端列表
-        gameServer.broadcast(new MessSCClientList(gameServer.getClients()));
+        gameServer.broadcast(new MessClients(gameServer.getClients()));
     }
     
     /**
@@ -131,7 +134,7 @@ public abstract class ServerNetworkRpgGame extends NetworkRpgGame {
         gameService.addMessage(message, type);
         
         // 通知所有客户更新“客户端列表
-        gameServer.broadcast(new MessSCClientList(gameServer.getClients()));
+        gameServer.broadcast(new MessClients(gameServer.getClients()));
     }
     
     /**
@@ -174,7 +177,7 @@ public abstract class ServerNetworkRpgGame extends NetworkRpgGame {
 
         // 当服务端接收到客户端退出游戏的消息时，这里什么也不处理。与故事模式不同。故事模式要保存客户端资料.
         // 服务端暂时不需要处理任何逻辑
-        if (m instanceof MessPlayClientExit) {
+        if (m instanceof MessClientExit) {
             return true;
         }
         
@@ -188,6 +191,20 @@ public abstract class ServerNetworkRpgGame extends NetworkRpgGame {
         }
         
         @Override
+        protected void onReceiveMessRequestGameInit(GameServer gameServer, HostedConnection conn, MessRequestGameInit mess) {
+            List<Entity> initEntities = scene.getEntities(Entity.class, new ArrayList<Entity>());
+            
+            // 向客户端返回初始化OK的消息
+            MessRequestGameInitOk result = new MessRequestGameInitOk(initEntities.size());
+            gameServer.send(conn, result);
+            
+            // 立
+            for (Entity e : initEntities) {
+                playNetwork.addEntityToClient(conn, e);
+            }
+        }
+        
+        @Override
         protected void onClientsUpdated(GameServer gameServer) {
             super.onClientsUpdated(gameServer);
             // 通知客户端列表更新，注：这里只响应新连接或断开连接。不包含客户端资料的更新。
@@ -195,13 +212,15 @@ public abstract class ServerNetworkRpgGame extends NetworkRpgGame {
         }
 
         @Override
-        protected void processServerMessage(GameServer gameServer, HostedConnection source, Message m) {
+        protected void onReceiveMessage(GameServer gameServer, HostedConnection source, Message m) {
             // 本地处理
             if (processMessage(gameServer, source, m)) {
                 return;
             }
             // 由父类处理
-            super.processServerMessage(gameServer, source, m); 
+            super.onReceiveMessage(gameServer, source, m); 
         }
+
+
     }
 }

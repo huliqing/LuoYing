@@ -2,10 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.luoying.mess;
+package name.huliqing.luoying.mess.network;
 
 import com.jme3.network.HostedConnection;
 import com.jme3.network.serializing.Serializable;
+import name.huliqing.luoying.mess.MessBase;
 import name.huliqing.luoying.network.GameServer;
 
 /**

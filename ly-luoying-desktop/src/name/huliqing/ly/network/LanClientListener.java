@@ -7,18 +7,13 @@ package name.huliqing.ly.network;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.jme3.app.Application;
-import com.jme3.network.Client;
 import com.jme3.network.ClientStateListener;
 import com.jme3.network.Message;
-import name.huliqing.luoying.Config;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.manager.ResManager;
-import name.huliqing.luoying.mess.MessSCInitGameOK;
 import name.huliqing.luoying.mess.MessBase;
-import name.huliqing.luoying.network.GameClient.ClientState;
 import name.huliqing.luoying.network.AbstractClientListener;
 import name.huliqing.luoying.network.GameClient;
 import name.huliqing.ly.enums.MessageType;
@@ -28,7 +23,7 @@ import name.huliqing.ly.layer.service.GameService;
  * 默认的局域网客户端监听来自服务端的消息的侦听器
  * @author huliqing 
  */
-public class LanClientListener extends AbstractClientListener {
+public abstract class LanClientListener extends AbstractClientListener {
     private static final Logger LOG = Logger.getLogger(LanClientListener.class.getName());
     private final GameService gameService = Factory.get(GameService.class);
     
@@ -41,7 +36,7 @@ public class LanClientListener extends AbstractClientListener {
     }
     
     @Override
-    protected void processClientDisconnected(GameClient gameClient, Client client, ClientStateListener.DisconnectInfo info) {
+    protected void onClientDisconnected(GameClient gameClient, ClientStateListener.DisconnectInfo info) {
         // 断开、踢出、服务器关闭等提示
         String message = ResManager.get("lan.disconnected");
         if (info != null) {
@@ -49,27 +44,35 @@ public class LanClientListener extends AbstractClientListener {
         }
         gameService.addMessage(message, MessageType.notice);
     }
+
+    // remove
+//    @Override
+//    protected void onReady(GameClient gameClient) {
+//        gameClient.send(new MessRequestInitGame());
+//    }
     
     @Override
-    protected final void processClientMessage(GameClient gameClient, Client source, Message m) {
-        // 客户端只有在接到InitGameOK消息后才允许处理游戏命令消息.
-        // 只有在客户端接收到InitGameOK后客户端才开始进入running状态
-        if (m instanceof MessSCInitGameOK) {
-            gameClient.setClientState(ClientState.running);
-            if (Config.debug) {
-                LOG.log(Level.INFO, "客户端初始化OK,可开始接收消息, ClientState={0}"
-                        , gameClient.getClientState());
-            }
-            return;
-        }
+    protected final void onClientGameRunning(GameClient gameClient, Message m) {
         
-        // 客户端在状态变更为running这前不会处理游戏命令
-        if (gameClient.getClientState() != ClientState.running) {
-            if (Config.debug) {
-                LOG.log(Level.INFO, "客户端未准备好,ClientState={0}", gameClient.getClientState());
-            }
-            return;
-        }
+        // remove20161126
+//        // 客户端只有在接到InitGameOK消息后才允许处理游戏命令消息.
+//        // 只有在客户端接收到InitGameOK后客户端才开始进入running状态
+//        if (m instanceof MessSCInitGameOK) {
+//            gameClient.setClientState(ClientState.running);
+//            if (Config.debug) {
+//                LOG.log(Level.INFO, "客户端初始化OK,可开始接收消息, ClientState={0}"
+//                        , gameClient.getClientState());
+//            }
+//            return;
+//        }
+//        
+//        // 客户端在状态变更为running这前不会处理游戏命令
+//        if (gameClient.getClientState() != ClientState.running) {
+//            if (Config.debug) {
+//                LOG.log(Level.INFO, "客户端未准备好,ClientState={0}", gameClient.getClientState());
+//            }
+//            return;
+//        }
         
         // 统一把接收到的消息放到队列中
         if (m instanceof MessBase) {
@@ -112,5 +115,6 @@ public class LanClientListener extends AbstractClientListener {
     protected void applyMessage(GameClient gameClient, MessBase m) {
         ((MessBase)m).applyOnClient();
     }
+
    
 }

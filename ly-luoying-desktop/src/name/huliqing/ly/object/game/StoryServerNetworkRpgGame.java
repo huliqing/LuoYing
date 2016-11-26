@@ -22,10 +22,10 @@ import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.layer.service.ConfigService;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.layer.service.SkillService;
-import name.huliqing.luoying.mess.MessPlayClientExit;
+import name.huliqing.luoying.mess.network.MessClientExit;
 import name.huliqing.luoying.mess.MessPlayLoadSavedActor;
 import name.huliqing.luoying.mess.MessPlayLoadSavedActorResult;
-import name.huliqing.luoying.mess.MessSCClientList;
+import name.huliqing.luoying.mess.network.MessClients;
 import name.huliqing.luoying.network.GameServer;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.actor.Actor;
@@ -154,7 +154,7 @@ public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
                         // 更新本地（服务端）客户端列表
                         onClientListUpdated();
                         // 通知所有客户更新“客户端列表”
-                        gameServer.broadcast(new MessSCClientList(gameServer.getClients()));
+                        gameServer.broadcast(new MessClients(gameServer.getClients()));
                         
                         return true;
                     }
@@ -165,7 +165,7 @@ public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
         }
 
         // 当服务端（故事模式）接收到客户端退出游戏的消息时，服务端要保存客户端的资料,以便下次客户端连接时能够继续
-        if (m instanceof MessPlayClientExit) {
+        if (m instanceof MessClientExit) {
             ConnData cd = source.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
             if (cd.getClientId() != null && cd.getEntityId() > 0) {
                 storeClient(saveStory, scene.getEntities(Actor.class, null), cd.getClientId(), cd.getEntityId(), data.getId());

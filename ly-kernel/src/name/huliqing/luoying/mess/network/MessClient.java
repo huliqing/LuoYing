@@ -2,13 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.luoying.mess;
+package name.huliqing.luoying.mess.network;
 
 import com.jme3.network.serializing.Serializable;
+import name.huliqing.luoying.mess.MessBase;
 
 /**
- * client to server, 客户端首次连接到服务端时发送的第一个信息，主要用于交
- * 待当前连接的客户端的身份信息。
+ * 客户端首次连接到服务端时发送的第一个信息，主要用于向服务端交待当前连接的客户端的身份信息。
  * @author huliqing
  */
 @Serializable

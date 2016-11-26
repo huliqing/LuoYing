@@ -76,21 +76,19 @@ import name.huliqing.luoying.mess.MessActorTransform;
 import name.huliqing.luoying.mess.MessActorTransformDirect;
 import name.huliqing.luoying.mess.MessActorViewDir;
 import name.huliqing.luoying.mess.MessAutoAttack;
-import name.huliqing.luoying.mess.MessClient;
-import name.huliqing.luoying.mess.MessPing;
+import name.huliqing.luoying.mess.network.MessClient;
+import name.huliqing.luoying.mess.network.MessPing;
 import name.huliqing.luoying.mess.MessPlayActorSelect;
 import name.huliqing.luoying.mess.MessPlayActorSelectResult;
-import name.huliqing.luoying.mess.MessPlayClientExit;
-import name.huliqing.luoying.mess.MessPlayGetClients;
-import name.huliqing.luoying.mess.MessPlayGetGameData;
-import name.huliqing.luoying.mess.MessPlayGetServerState;
+import name.huliqing.luoying.mess.network.MessClientExit;
+import name.huliqing.luoying.mess.network.MessGetClients;
+import name.huliqing.luoying.mess.network.MessGetGameData;
+import name.huliqing.luoying.mess.network.MessGetServerState;
 import name.huliqing.luoying.mess.MessPlayLoadSavedActor;
 import name.huliqing.luoying.mess.MessPlayLoadSavedActorResult;
-import name.huliqing.luoying.mess.MessSCActorRemove;
-import name.huliqing.luoying.mess.MessSCClientList;
-import name.huliqing.luoying.mess.MessSCGameData;
-import name.huliqing.luoying.mess.MessSCInitGameOK;
-import name.huliqing.luoying.mess.MessSCServerState;
+import name.huliqing.luoying.mess.network.MessClients;
+import name.huliqing.luoying.mess.network.MessGameData;
+import name.huliqing.luoying.mess.network.MessServerState;
 import name.huliqing.luoying.mess.MessActorLookAt;
 import name.huliqing.luoying.mess.MessSkillWalk;
 import name.huliqing.luoying.mess.MessSkinWeaponTakeOn;
@@ -248,6 +246,8 @@ import name.huliqing.luoying.mess.MessEntityRemoveData;
 import name.huliqing.luoying.mess.MessEntityUseData;
 import name.huliqing.luoying.mess.MessEntityUseDataById;
 import name.huliqing.luoying.mess.MessSkillPlay;
+import name.huliqing.luoying.mess.network.MessRequestGameInit;
+import name.huliqing.luoying.mess.network.MessRequestGameInitOk;
 import name.huliqing.luoying.object.attribute.BooleanAttribute;
 import name.huliqing.luoying.object.attribute.FloatAttribute;
 import name.huliqing.luoying.object.attribute.GroupAttribute;
@@ -714,24 +714,25 @@ public class LuoYing {
         // 对LinkedHashMap有序MAP的支持
         Serializer.registerClass(LinkedHashMap.class, new MapSerializer());
         
+        
+        
+        
         // Lan 
         Serializer.registerClass(MessClient.class);
-        Serializer.registerClass(MessPlayGetClients.class);
-        Serializer.registerClass(MessPlayGetGameData.class);
-        Serializer.registerClass(MessPlayGetServerState.class);
-//        Serializer.registerClass(MessPlayInitGame.class);
+        Serializer.registerClass(MessClientExit.class);
+        Serializer.registerClass(MessClients.class);
+        Serializer.registerClass(MessGameData.class);
+        Serializer.registerClass(MessGetClients.class);
+        Serializer.registerClass(MessGetGameData.class);
+        Serializer.registerClass(MessGetServerState.class);
+        Serializer.registerClass(MessPing.class);
+        Serializer.registerClass(MessRequestGameInit.class);
+        Serializer.registerClass(MessRequestGameInitOk.class);
+        Serializer.registerClass(MessServerState.class);
+        
         Serializer.registerClass(MessPlayLoadSavedActor.class);
         Serializer.registerClass(MessPlayLoadSavedActorResult.class);
-        Serializer.registerClass(MessPlayClientExit.class);
-        Serializer.registerClass(MessSCClientList.class);
-        Serializer.registerClass(MessSCGameData.class);
-        Serializer.registerClass(MessSCInitGameOK.class);
-        Serializer.registerClass(MessSCServerState.class);
-        
-        Serializer.registerClass(MessPing.class);
         Serializer.registerClass(MessPlayActorSelect.class);
-        
-        Serializer.registerClass(MessSCActorRemove.class);
         Serializer.registerClass(MessPlayActorSelectResult.class);
         
         Serializer.registerClass(MessActorLookAt.class);

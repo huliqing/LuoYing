@@ -22,13 +22,14 @@ import name.huliqing.ly.view.talk.Talk;
 public interface GameNetwork extends Inject {
     
     void addMessage(String message, MessageType type);
-    
-    /**
-     * 将当前服务端状态初始化到客户端。 一般在客户端连接到服务端后调用初始化
-     * 状态。
-     * @param client
-     */
-    void syncGameInitToClient(HostedConnection client);
+   
+    // remove20161126
+//    /**
+//     * 将当前服务端状态初始化到客户端。 一般在客户端连接到服务端后调用初始化
+//     * 状态。
+//     * @param client
+//     */
+//    void syncGameInitToClient(HostedConnection client);
     
     /**
      * 同步“同步对象”
@@ -106,6 +107,7 @@ public interface GameNetwork extends Inject {
      */
     void setEssential(Entity entity, boolean essential);
     
+    // remove20161126
 //    /**
 //     * 设置角色是否为玩家类型的角色
 //     * @param entity

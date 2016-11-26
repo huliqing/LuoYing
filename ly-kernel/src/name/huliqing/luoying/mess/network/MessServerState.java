@@ -2,9 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.luoying.mess;
+package name.huliqing.luoying.mess.network;
 
 import com.jme3.network.serializing.Serializable;
+import name.huliqing.luoying.mess.MessBase;
 import name.huliqing.luoying.network.GameServer.ServerState;
 
 /**
@@ -12,13 +13,13 @@ import name.huliqing.luoying.network.GameServer.ServerState;
  * @author huliqing
  */
 @Serializable
-public class MessSCServerState extends MessBase {
+public class MessServerState extends MessBase {
     
     private ServerState serverState;
 
-    public MessSCServerState() {}
+    public MessServerState() {}
     
-    public MessSCServerState(ServerState serverState) {
+    public MessServerState(ServerState serverState) {
         this.serverState = serverState;
     }
     

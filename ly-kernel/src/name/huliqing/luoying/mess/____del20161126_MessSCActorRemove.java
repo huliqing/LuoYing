@@ -6,19 +6,19 @@
 //
 //import com.jme3.network.serializing.Serializable;
 //import name.huliqing.luoying.Factory;
-//import name.huliqing.luoying.layer.service.ActorService;
 //import name.huliqing.luoying.layer.service.PlayService;
 //import name.huliqing.luoying.object.entity.Entity;
 //
 ///**
-// * SC,设置角色的分组
+// * 服务端通知客户端，让客户端移除一个角色出场景。这可能发生在如：
+// * 踢出一个角色、一个死亡回收、客户端离开游戏等情况
 // * @author huliqing
 // */
 //@Serializable
-//public class MessActorSetGroup extends MessBase {
+//public class MessSCActorRemove extends MessBase {
 //    
-//    private long actorId;
-//    private int group;
+//    // 指定要移出场景的角色ID
+//    private long actorId = -1;
 //
 //    public long getActorId() {
 //        return actorId;
@@ -28,22 +28,14 @@
 //        this.actorId = actorId;
 //    }
 //
-//    public int getGroup() {
-//        return group;
-//    }
-//
-//    public void setGroup(int group) {
-//        this.group = group;
-//    }
-//
 //    @Override
 //    public void applyOnClient() {
+//        super.applyOnClient();
 //        PlayService playService = Factory.get(PlayService.class);
-//        ActorService actorService = Factory.get(ActorService.class);
-//        Entity actor = playService.getEntity(actorId);
-//        if (actor != null) {
-//            actorService.setGroup(actor, group);
+//        Entity actorToRemove = playService.getEntity(actorId);
+//        if (actorToRemove != null) {
+//            playService.removeEntity(actorToRemove);
 //        }
 //    }
-//
+//    
 //}

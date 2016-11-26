@@ -141,17 +141,17 @@ public class Network extends AbstractPlayObject {
         }
     }
     
-    /**
-     * 发送消息到指定角色所在的客户端。
-     * @param actor
-     * @param message 
-     */
-    public void sendToClient(Entity actor, MessBase message) {
-        if (gameServer != null && gameServer.isRunning()) {
-            message.setRandomIndex(RandomManager.getIndex());
-            gameServer.send(actor, message);
-        }
-    }
+//    /**
+//     * 发送消息到指定角色所在的客户端。
+//     * @param actor
+//     * @param message 
+//     */
+//    public void sendToClient(Entity actor, MessBase message) {
+//        if (gameServer != null && gameServer.isRunning()) {
+//            message.setRandomIndex(RandomManager.getIndex());
+//            gameServer.send(actor, message);
+//        }
+//    }
     
      /**
      * 发送消息给所有客户端,必须确保当前游戏为服务端，并且正在运行，否则该方
@@ -190,28 +190,28 @@ public class Network extends AbstractPlayObject {
         }
     }
 
-    /**
-     * 添加需要动态自动同步变换状态的角色，添加后该角色的变换将自动持续的同
-     * 步变换状态到所有客户端，直到调用 {@link #removeAutoSyncTransform(name.huliqing.fighter.object.actor.Actor) }
-     * 为止。
-     * @param actor 
-     */
-    public void addAutoSyncTransform(Entity actor) {
-        if (hasConnections()) {
-            ServerListener sl = gameServer.getListener();
-            if (sl != null) {
-                sl.addSyncObject(actor);
-            }
-        }
-    }
-    
-    public void removeAutoSyncTransform(Entity actor) {
-        if (gameServer != null) {
-            ServerListener sl = gameServer.getListener();
-            if (sl != null) {
-                sl.removeSyncObject(actor);
-            }
-        }
-    }
+//    /**
+//     * 添加需要动态自动同步变换状态的角色，添加后该角色的变换将自动持续的同
+//     * 步变换状态到所有客户端，直到调用 {@link #removeAutoSyncTransform(name.huliqing.fighter.object.actor.Actor) }
+//     * 为止。
+//     * @param actor 
+//     */
+//    public void addAutoSyncTransform(Entity actor) {
+//        if (hasConnections()) {
+//            ServerListener sl = gameServer.getListener();
+//            if (sl != null) {
+//                sl.addSyncObject(actor);
+//            }
+//        }
+//    }
+//    
+//    public void removeAutoSyncTransform(Entity actor) {
+//        if (gameServer != null) {
+//            ServerListener sl = gameServer.getListener();
+//            if (sl != null) {
+//                sl.removeSyncObject(actor);
+//            }
+//        }
+//    }
 
 }

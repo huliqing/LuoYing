@@ -81,7 +81,7 @@ public class WalkSkill extends AbstractSkill implements Walk{
         }
         
         // 添加角色自动位置同步
-        Network.getInstance().addAutoSyncTransform(actor);
+//        Network.getInstance().addAutoSyncTransform(actor);
     }
     
     @Override
@@ -107,8 +107,10 @@ public class WalkSkill extends AbstractSkill implements Walk{
     @Override
     public void cleanup() {
         actorService.setWalkDirection(actor, Vector3f.ZERO.clone());
-        // 移除角色位置自动同步(平滑同步)
-        Network.getInstance().removeAutoSyncTransform(actor);
+        
+        // xxx 暂不处理
+//        // 移除角色位置自动同步(平滑同步)
+//        Network.getInstance().removeAutoSyncTransform(actor);
         
         super.cleanup();
     }

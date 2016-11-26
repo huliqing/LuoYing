@@ -31,7 +31,7 @@ import name.huliqing.ly.mess.MessMessage;
  * 默认的服务端监听器,用于监听来自客户端连接的消息。
  * @author huliqing
  */
-public class DefaultServerListener extends AbstractServerListener<Entity> {
+public abstract class DefaultServerListener extends AbstractServerListener {
     private static final Logger LOG = Logger.getLogger(DefaultServerListener.class.getName());
     private final PlayService playService = Factory.get(PlayService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
@@ -62,17 +62,17 @@ public class DefaultServerListener extends AbstractServerListener<Entity> {
         }
     }
 
-    @Override
-    public void addSyncObject(Entity syncObject) {
-        if (syncObject != null && !syncObjects.contains(syncObject)) {
-            syncObjects.add(syncObject);
-        }
-    }
-
-    @Override
-    public boolean removeSyncObject(Entity syncObject) {
-        return syncObjects.remove(syncObject);
-    }
+//    @Override
+//    public void addSyncObject(Entity syncObject) {
+//        if (syncObject != null && !syncObjects.contains(syncObject)) {
+//            syncObjects.add(syncObject);
+//        }
+//    }
+//
+//    @Override
+//    public boolean removeSyncObject(Entity syncObject) {
+//        return syncObjects.remove(syncObject);
+//    }
 
     @Override
     public void cleanup() {
@@ -81,6 +81,7 @@ public class DefaultServerListener extends AbstractServerListener<Entity> {
 
     @Override
     protected void onClientRemoved(GameServer gameServer, HostedConnection conn) {
+        super.onClientRemoved(gameServer, conn);
         ConnData cd = conn.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
         if (cd == null)
             return;
@@ -116,7 +117,7 @@ public class DefaultServerListener extends AbstractServerListener<Entity> {
     }
 
     @Override
-    protected void processServerMessage(GameServer gameServer, HostedConnection source, Message m) {
+    protected void onReceiveMessage(GameServer gameServer, HostedConnection source, Message m) {
         if (m instanceof MessBase) {
             ((MessBase)m).applyOnServer(gameServer, source);
         } else {
@@ -125,4 +126,5 @@ public class DefaultServerListener extends AbstractServerListener<Entity> {
                     , new Object[] {cd.getClientId(), cd.getClientName(), m.getClass().getName()});
         }
     }
+
 }

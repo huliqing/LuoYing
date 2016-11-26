@@ -110,11 +110,6 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public void syncGameInitToClient(HostedConnection client) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
     public void syncObject(NetworkObject object, SyncData syncData, boolean reliable) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }

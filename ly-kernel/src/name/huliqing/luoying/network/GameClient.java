@@ -27,76 +27,90 @@ public class GameClient implements ClientStateListener, MessageListener<Client>{
     public interface ClientListener {
     
         /**
-         * 客户端连接时
+         * 客户端连接到服务端时该方法被调用。
          * @param gameClient
-         * @param client 
          */
-        void clientConnected(GameClient gameClient, Client client);
+        void clientConnected(GameClient gameClient);
 
         /**
-         * 客户端断开
+         * 当客户端断开连接时该方法被调用。
          * @param gameClient
-         * @param client
          * @param info 
          */
-        void clientDisconnected(GameClient gameClient, Client client, DisconnectInfo info);
+        void clientDisconnected(GameClient gameClient, DisconnectInfo info);
 
         /**
          * 客户端处理从服务端传递过来的消息
          * @param gameClient
-         * @param client
          * @param m 
          */
-        void clientMessage(GameClient gameClient, Client client, Message m);
+        void clientMessage(GameClient gameClient, Message m);
         
+        /**
+         * 更新逻辑
+         * @param tpf
+         * @param gameClient 
+         */
         void update(float tpf, GameClient gameClient);
     }
     
     public enum ClientState {
+        
         /**
-         * 客户端处于等待状态,比如在房间中等待服务端开始游戏，这个状态表示还未开始游戏，未初始化数据等，基本上只表明客户端
-         * 连接到了服务端。
+         * 客户端处于等待状态, 这个状态表示客户端刚刚连接上服务端，未开始游戏，未准备就绪。这个状态下服务端向客户端
+         * 发送游戏行为的命令都不会被客户端接受。
          */
         waitting,
         
-        /**
-         * 客户端处于载入初始化数据状态，如初始化一些设定，载入本地基本数据，静态场景等，该状态表明客户端还未就绪 ，
-         * 还不能正常处理来自服务端的游戏数据。
-         */
-        loading,
+//        /**
+//         * 客户端处于载入初始化数据状态，如初始化一些设定，载入本地基本数据，静态场景等，该状态表明客户端还未就绪 ，
+//         * 还不能正常处理来自服务端的游戏数据。
+//         */
+//        loading,
         
         /**
-         * 客户端处于准备就绪状态，这个状态表示客户端已经完成loading阶段的基本资源的初始化，如基本场景已经载入完毕，
-         * 开始等待服务端就绪。注：这个状态只能表明客户端已经就绪，但服务端状态还未确定是否就绪，
-         * 这个时候向服务端发送游戏指令可能无法处理。
+         * 客户端处于准备就绪状态，这个状态表示客户端已经可以开始准备接受初始化游戏场景的命令。
          */
         ready,
         
-        /**
-         * 等待初始化游戏状态，这个状态表明客户端和服务端已经同时处于就绪状态。客户端向服务端发送初始化场景的指令，正在
-         * 向服务端请求初始化游戏场景的状态，如：初始化场景角色等。
-         */
-        waitting_init_game,
+        // remove20161126
+//        /**
+//         * 等待初始化游戏状态，这个状态表明客户端和服务端已经同时处于就绪状态。客户端向服务端发送初始化场景的指令，正在
+//         * 向服务端请求初始化游戏场景的状态，如：初始化场景角色等。
+//         */
+//        waitting_init_game,
         
         /**
-         * 客户端处于正常的运行游戏状态，这个状态表明客户端和服务端已经完成了所有的初始化，处于正常互动的游戏状态。
+         * 客户端处于正常的游戏运行状态.
          */
         running;
     }
     
     private Client client;
+    
+    // 客户端监听器，用于监听从服务端来的消息，并对消息进行处理。
     private ClientListener listener;
+    
+    // 服务端的状态
     private ServerState serverState = ServerState.waiting;
+    
     // 客户端状态
     private ClientState clientState = ClientState.waitting;
+    
     // 游戏数据
     private GameData gameData;
+    
     // 客户端的已经运行时间，单位秒.
     public double time;
     
+    // 游戏名称
     private final String gameName;
+    
+    // 游戏版本
     private final int version;
+    // 主机地址
     private final String host;
+    // 主机端口
     private final int hostPort;
     
     GameClient(String gameName, int version, String host, int hostPort)
@@ -111,16 +125,14 @@ public class GameClient implements ClientStateListener, MessageListener<Client>{
         if (client != null && client.isConnected()) {
             return;
         }
-        
         client = Network.connectToServer(gameName, version, host, hostPort);
         client.addClientStateListener(this);
         client.addMessageListener(this);
-        
         client.start();
     }
     
     /**
-     * 清理客户端，清理后客户端将不再可用。
+     * 关闭、断开客户端连接，并清理和释放资源
      */
     public void cleanup() {
         if (client == null)
@@ -134,10 +146,25 @@ public class GameClient implements ClientStateListener, MessageListener<Client>{
         clientState = ClientState.waitting;
     }
     
+    public void update(float tpf) {
+        time += tpf;
+        if (listener != null) {
+            listener.update(tpf, this);
+        }
+    }
+    
+    /**
+     * 判断当前客户端是否正连接着服务端。
+     * @return 
+     */
     public boolean isConnected() {
         return client.isConnected();
     }
     
+    /**
+     * 向服务端发送消息,如果客户端处于断开状态，则该方法什么也不会做。
+     * @param message 
+     */
     public void send(Message message) {
         // 发送消息之前必须判断是否还连接着，否则可能发生异常 
         if (!client.isConnected()) 
@@ -200,36 +227,31 @@ public class GameClient implements ClientStateListener, MessageListener<Client>{
     @Override
     public void clientConnected(Client c) {
         if (listener != null) {
-            listener.clientConnected(this, c);
+            listener.clientConnected(this);
         }
     }
 
     @Override
     public void clientDisconnected(Client c, final DisconnectInfo info) {
         if (listener != null) {
-            listener.clientDisconnected(this, c, info);
-        }
-    }
-
-    @Override
-    public void messageReceived(Client source, Message m) {
-//        if (Config.debug) {
-//            LOG.log(Level.INFO, "Receive From Server, class={0}, message={1}"
-//                    , new Object[] {m.getClass().getName(), m.toString()});
-//            if (listener == null) {
-//                LOG.log(Level.WARNING, "No ClientListener for GameClient, gameClient={0}, messageClass={1}, message={2}"
-//                , new Object[]{toString(), m.getClass().getName(), m.toString()});
-//            }
-//        }
-        if (listener != null) {
-            listener.clientMessage(this, source, m);
+            listener.clientDisconnected(this, info);
         }
     }
     
-    public void update(float tpf) {
-        time += tpf;
+    @Override
+    public void messageReceived(Client source, Message m) {
         if (listener != null) {
-            listener.update(tpf, this);
+            listener.clientMessage(this, m);
         }
     }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
+    
 }

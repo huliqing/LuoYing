@@ -7,21 +7,20 @@ package name.huliqing.ly.state.lan;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
-import com.jme3.network.Client;
 import com.jme3.network.ClientStateListener;
 import com.jme3.network.Message;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.network.AbstractClientListener;
 import name.huliqing.luoying.network.GameClient;
 import name.huliqing.luoying.network.Network;
-import name.huliqing.luoying.data.GameData;
 //import name.huliqing.ly.state.ClientPlayState;
 import name.huliqing.luoying.network.GameServer.ServerState;
-import name.huliqing.luoying.mess.MessPlayGetGameData;
-import name.huliqing.luoying.data.ConnData;
+import name.huliqing.luoying.mess.network.MessGetGameData;
+import name.huliqing.luoying.mess.network.MessClients;
+import name.huliqing.luoying.mess.network.MessGameData;
+import name.huliqing.luoying.mess.network.MessServerState;
 import name.huliqing.luoying.object.game.GameAppState;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.ly.view.HelpView;
@@ -108,7 +107,6 @@ public class RoomStateClientImpl extends AbstractAppState implements RoomState {
             }
             gameClient.setGameClientListener(new RoomClientListener(app));
             gameClient.start();
-            
         } catch (Exception ex) {
             back();
             Logger.getLogger(RoomStateClientImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -118,6 +116,8 @@ public class RoomStateClientImpl extends AbstractAppState implements RoomState {
     @Override
     public void update(float tpf) {
         super.update(tpf);
+        Network.getInstance().update(tpf);
+        
         if (startGame) {
             LOG.log(Level.INFO, "RoomStateClientImpl.startGame");
 
@@ -175,32 +175,23 @@ public class RoomStateClientImpl extends AbstractAppState implements RoomState {
         }
 
         @Override
-        protected void onGameDataLoaded(GameClient gameClient, GameData gameData) {
-            super.onGameDataLoaded(gameClient, gameData);
-            clientPanel.setGameData(gameData);
+        protected void onReceiveMessGameData(GameClient gameClient, MessGameData mess) {
+            super.onReceiveMessGameData(gameClient, mess);
+            clientPanel.setGameData(mess.getGameData());
             checkToStart(gameClient);
         }
         
         @Override
-        protected void processClientDisconnected(GameClient gameClient, Client client, ClientStateListener.DisconnectInfo info) {
-            back();
-        }
-
-        @Override
-        protected void processClientMessage(GameClient gameClient, Client source, Message m) {
-            // ignore
-        }
-
-        @Override
-        public void update(float tpf, GameClient gameClient) {
-            // ignore
-        }
-
-        @Override
-        protected void onServerStateChange(final GameClient gameClient, final ServerState newState) {
-            super.onServerStateChange(gameClient, newState);
+        protected void onReceiveMessServerState(final GameClient gameClient, MessServerState mess) {
+            super.onReceiveMessServerState(gameClient, mess);
             updateHelp();
             checkToStart(gameClient);
+        }
+
+        @Override
+        protected void onReceiveMessClients(GameClient gameClient, MessClients mess) {
+            super.onReceiveMessClients(gameClient, mess); 
+            clientPanel.setClients(mess.getClients());
         }
         
         // 检查是否应该开始游戏，当客户端连接到服务端时，这个时候服务端存在三种可能
@@ -210,24 +201,34 @@ public class RoomStateClientImpl extends AbstractAppState implements RoomState {
         // 3.已经在玩游戏
         // 根据这三种状态应该确定如何开始游戏,不要出现bug.
         private void checkToStart(GameClient gameClient) {
-            ServerState state = gameClient.getServerState();
-            if (state == ServerState.loading || state == ServerState.running) {
+            ServerState serverState = gameClient.getServerState();
+            if (serverState == ServerState.loading || serverState == ServerState.running) {
                 // 这种情况发生在当服务端正阻塞在loading时，客户端刚好请求连接，这时服务端无法响应客户端的连接
                 // 可能发送不了gameData,就会造成gameData==null, 这种情况需要重新请求GameData,然后
                 // 交由onGameDataLoaded接收数据时再开始(startGame)
                 if (gameClient.getGameData() == null) {
-                    gameClient.send(new MessPlayGetGameData());
+                    gameClient.send(new MessGetGameData());
                 } else {
                     startGame = true;
                     updateHelp();
                 }
             }
         }
-
+        
         @Override
-        protected void onClientsUpdated(GameClient gameClient, List<ConnData> clients) {
-            super.onClientsUpdated(gameClient, clients); 
-            clientPanel.setClients(clients);
+        protected void onClientDisconnected(GameClient gameClient, ClientStateListener.DisconnectInfo info) {
+            back();
         }
+        
+        @Override
+        protected void onClientGameInit() {
+        }
+        
+        @Override
+        protected void onClientGameRunning(GameClient gameClient, Message m) {
+            // ignore
+        }
+
+
     }
 }

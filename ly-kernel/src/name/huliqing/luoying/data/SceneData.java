@@ -21,7 +21,8 @@ import java.util.List;
 @Serializable
 public class SceneData extends ObjectData {
     
-    // 场景中的物体数据列表
+    // 场景中的物体数据列表.
+    // 注：场景中的实体数据不会
     private List<EntityData> entityDatas;
     
     /**

@@ -4,7 +4,6 @@
  */
 package name.huliqing.luoying.network;
 
-import name.huliqing.luoying.mess.MessSCServerState;
 import com.jme3.network.ConnectionListener;
 import com.jme3.network.HostedConnection;
 import com.jme3.network.Message;
@@ -26,6 +25,7 @@ import name.huliqing.luoying.data.GameData;
 import name.huliqing.luoying.layer.service.ConfigService;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.data.ConnData;
+import name.huliqing.luoying.mess.network.MessServerState;
 import name.huliqing.luoying.network.discover.MessCSFindServer;
 import name.huliqing.luoying.network.discover.MessCSPing;
 import name.huliqing.luoying.network.discover.UDPDiscover;
@@ -33,10 +33,8 @@ import name.huliqing.luoying.network.discover.MessSCStarted;
 import name.huliqing.luoying.network.discover.MessSCClosed;
 import name.huliqing.luoying.network.discover.UDPListener;
 import name.huliqing.luoying.mess.MessBase;
-import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.layer.service.SystemService;
 import name.huliqing.luoying.manager.ResManager;
-import name.huliqing.luoying.object.entity.Entity;
 
 /**
  * 服务端程序，注：不要直接通过new GameServer创建服务端，而是通过 {@link Network#createGameServer(name.huliqing.fighter.data.GameData) }
@@ -46,10 +44,9 @@ import name.huliqing.luoying.object.entity.Entity;
 public class GameServer implements UDPListener, ConnectionListener, MessageListener<HostedConnection> {
     private final SystemService envService = Factory.get(SystemService.class);
     private final PlayService playService = Factory.get(PlayService.class);
-//    private final ActorService actorService = Factory.get(ActorService.class);
     private final ConfigService configService = Factory.get(ConfigService.class);
     
-    public interface ServerListener<T> {
+    public interface ServerListener {
         
         /**
          * 客户端添加时
@@ -73,18 +70,18 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
          */
         void serverMessage(GameServer gameServer, HostedConnection source, Message mess);
         
-        /**
-         * 添加一个同步OBJECT
-         * @param syncObject 
-         */
-        void addSyncObject(T syncObject);
-        
-        /**
-         * 移除一个自动同步的object
-         * @param syncObject
-         * @return 
-         */
-        boolean removeSyncObject(T syncObject);
+//        /**
+//         * 添加一个同步OBJECT
+//         * @param syncObject 
+//         */
+//        void addSyncObject(T syncObject);
+//        
+//        /**
+//         * 移除一个自动同步的object
+//         * @param syncObject
+//         * @return 
+//         */
+//        boolean removeSyncObject(T syncObject);
         
         /**
          * 更新逻辑
@@ -127,8 +124,6 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
     private final UDPDiscover serverDiscover;
     // 当前游戏状态
     private ServerState serverState = ServerState.waiting;
-    // 游戏数据
-    private GameData gameData;
     // 侦听器
     private ServerListener listener;
     // 服务端已经运行的时间长度，单位秒.
@@ -139,21 +134,48 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
     // 客户端(GameClient.time)的运行时间.
     private double time = 60 * 60 * 24 * 7; // 这里是一周的时间
     
-    GameServer(GameData gameData) throws IOException {
-        this.gameData = gameData;
-        
+    // 游戏数据
+    private GameData gameData;
+    private final String gameName;
+    private final int gameVersion;
+    private final int serverPort;
+    
+    /**
+     * @deprecated 
+     * @param gameData
+     * @throws IOException 
+     */
+    public GameServer(GameData gameData) throws IOException {
         // 不要设置为true,这会导致在Network.createServer创建Server后，第二次再创建时报异常：
         // java.lang.RuntimeException: Serializer registry locked trying to register class:class com.jme3.network.message.SerializerRegistrationsMessage
         // 这个问题在JME3.1发生，在3.0时没有问题。
         Serializer.setReadOnly(false);
         
-        server = Network.createServer(configService.getGameName()
-                , configService.getVersionCode()
-                , configService.getPort()
-                , configService.getPort());
+        this.gameData = gameData;
+        this.gameName = configService.getGameName();
+        this.gameVersion = configService.getVersionCode();
+        this.serverPort = configService.getPort();
+        
+        server = Network.createServer(gameName, gameVersion, serverPort, serverPort);
         server.addConnectionListener(this);
         server.addMessageListener(this);
+        serverDiscover = new UDPDiscover(configService.getPortDiscoverServer());
+        serverDiscover.setListener(this);
+    }
+    
+    public GameServer(GameData gameData, String gameName, int gameVersion, int serverPort) throws IOException {
+        // 不要设置为true,这会导致在Network.createServer创建Server后，第二次再创建时报异常：
+        // java.lang.RuntimeException: Serializer registry locked trying to register class:class com.jme3.network.message.SerializerRegistrationsMessage
+        // 这个问题在JME3.1发生，在3.0时没有问题。
+        Serializer.setReadOnly(false);
         
+        this.gameData = gameData;
+        this.gameName = gameName;
+        this.gameVersion = gameVersion;
+        this.serverPort = serverPort;
+        server = Network.createServer(gameName, gameVersion , serverPort, serverPort);
+        server.addConnectionListener(this);
+        server.addMessageListener(this);
         serverDiscover = new UDPDiscover(configService.getPortDiscoverServer());
         serverDiscover.setListener(this);
     }
@@ -162,7 +184,7 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
      * 判断是否有客户端连接
      * @return 
      */
-    public boolean hasConnections() {
+    public final boolean hasConnections() {
         return server.hasConnections();
     }
     
@@ -226,7 +248,7 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
     public void setServerState(ServerState state) {
         this.serverState = state;
         // 通知所有已经连接到当前Server的客户端
-        broadcast(new MessSCServerState(state));
+        broadcast(new MessServerState(state));
         // 向局域网广播消息，这是向所有未连接到当前server的广播。因为状态发生变化，所以也广播
         // 让局域网知道
         serverDiscover.broadcast(createServerRunMess(), configService.getPortDiscoverClient());
@@ -272,7 +294,7 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
      * 广播所有信息给客户端
      * @param message 
      */
-    public void broadcast(MessBase message) {
+    public final void broadcast(MessBase message) {
         message.setTime(time);
         server.broadcast(message);
     }
@@ -282,44 +304,46 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
      * @param conn
      * @param message 
      */
-    public void send(HostedConnection conn, MessBase message) {
+    public final void send(HostedConnection conn, MessBase message) {
         message.setTime(time);
         conn.send(message);
     }
     
-    /**
-     * 发送信息给特定角色所在的客户端,如果找不到指定的客户端则什么也不做。
-     * @param actor
-     * @param message 
-     */
-    public void send(Entity actor, MessBase message) {
-        if (!server.isRunning())
-            return;
-        
-        Collection<HostedConnection> conns = server.getConnections();
-        HostedConnection conn = null;
-        ConnData cd;
-        for (HostedConnection hc : conns) {
-            cd = hc.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
-            if (cd != null && cd.getEntityId() == actor.getData().getUniqueId()) {
-                conn = hc;
-                break;
-            }
-        }
-        
-        if (conn == null)
-            return;
-        
-        message.setTime(time);
-        conn.send(message);
-        if (Config.debug) {
-            Logger.getLogger(GameServer.class.getName()).log(Level.INFO
-                    , "send custom message to client,actor={0}, message={1}"
-                    , new Object[] {actor.getData().getId(), message});
-        }
-    }
+    // remove20161126,不要依赖Entity
+//    /**
+//     * 发送信息给特定角色所在的客户端,如果找不到指定的客户端则什么也不做。
+//     * @param actor
+//     * @param message 
+//     */
+//    public void send(Entity actor, MessBase message) {
+//        if (!server.isRunning())
+//            return;
+//        
+//        Collection<HostedConnection> conns = server.getConnections();
+//        HostedConnection conn = null;
+//        ConnData cd;
+//        for (HostedConnection hc : conns) {
+//            cd = hc.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
+//            if (cd != null && cd.getEntityId() == actor.getData().getUniqueId()) {
+//                conn = hc;
+//                break;
+//            }
+//        }
+//        
+//        if (conn == null)
+//            return;
+//        
+//        message.setTime(time);
+//        conn.send(message);
+//        if (Config.debug) {
+//            Logger.getLogger(GameServer.class.getName()).log(Level.INFO
+//                    , "send custom message to client,actor={0}, message={1}"
+//                    , new Object[] {actor.getData().getId(), message});
+//        }
+//    }
     
     /**
+     * xxx 这个方法要移动到其它地方:AbstractServerListener。
      * 获取当前已经连接的所有客户端,其中包含主机
      * @return 
      */
@@ -361,6 +385,57 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
         return clients;
     }
     
+    
+    @Override
+    public void receive(Object object, UDPDiscover discover, DatagramPacket packet) throws Exception {
+        if (object instanceof MessCSFindServer) {
+            // 客户端在查找服务端,如果主机在运行，则响应该信息，告诉客户端，当前服务器打开着
+            MessSCStarted mess = createServerRunMess();
+            discover.send(mess, packet.getAddress().getHostAddress(), packet.getPort());
+            
+        } else if (object instanceof MessCSPing) {
+            // 如果接收到客户端的Ping消息，则直接返回该消息，什么也不操作
+            discover.send((MessCSPing) object, packet.getAddress().getHostAddress(), packet.getPort());
+        }
+    }
+
+    @Override
+    public void connectionAdded(Server server, HostedConnection conn) {
+        // remove20161126, moveto AbstractServerListener
+//        // 初始化一个用于存放数据的容器,选择在这里初始化以便后续使用的时候不再需要判断null
+//        ConnData cd = conn.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
+//        if (cd == null) {
+//            cd = new ConnData();
+//            cd.setConnId(conn.getId());
+//            cd.setAddress(conn.getAddress());
+//            conn.setAttribute(ConnData.CONN_ATTRIBUTE_KEY, cd);
+//        }
+        if (listener != null) {
+            listener.clientAdded(this, conn);
+        }
+    }
+
+    @Override
+    public void connectionRemoved(Server server, HostedConnection conn) {
+        if (listener != null) {
+            listener.clientRemoved(this, conn);
+        }
+    }
+
+    @Override
+    public void messageReceived(HostedConnection source, Message m) {
+        if (listener != null) {
+            listener.serverMessage(this, source, m);
+        }
+    }
+    
+    public void update(float tpf) {
+        time += tpf;
+        if (listener != null) {
+            listener.update(tpf, this);
+        }
+    }
+    
     // -------------------------------------------------------------------------
     
     // 创建“服务端开启”的通知消息
@@ -396,55 +471,4 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
                 , des
                 , serverState);
     }
-    
-    @Override
-    public void receive(Object object, UDPDiscover discover, DatagramPacket packet) throws Exception {
-        if (object instanceof MessCSFindServer) {
-            // 客户端在查找服务端,如果主机在运行，则响应该信息，告诉客户端，当前服务器打开着
-            MessSCStarted mess = createServerRunMess();
-            discover.send(mess, packet.getAddress().getHostAddress(), packet.getPort());
-            
-        } else if (object instanceof MessCSPing) {
-            // 如果接收到客户端的Ping消息，则直接返回该消息，什么也不操作
-            discover.send((MessCSPing) object, packet.getAddress().getHostAddress(), packet.getPort());
-        }
-        
-    }
-
-    @Override
-    public void connectionAdded(Server server, HostedConnection conn) {
-        // 初始化一个用于存放数据的容器,选择在这里初始化以便后续使用的时候不再需要判断null
-        ConnData cd = conn.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
-        if (cd == null) {
-            cd = new ConnData();
-            cd.setConnId(conn.getId());
-            cd.setAddress(conn.getAddress());
-            conn.setAttribute(ConnData.CONN_ATTRIBUTE_KEY, cd);
-        }
-        if (listener != null) {
-            listener.clientAdded(this, conn);
-        }
-    }
-
-    @Override
-    public void connectionRemoved(Server server, HostedConnection conn) {
-        if (listener != null) {
-            listener.clientRemoved(this, conn);
-        }
-    }
-
-    @Override
-    public void messageReceived(HostedConnection source, Message m) {
-        if (listener != null) {
-            listener.serverMessage(this, source, m);
-        }
-    }
-    
-    public void update(float tpf) {
-        time += tpf;
-        if (listener != null) {
-            listener.update(tpf, this);
-        }
-    }
-    
 }

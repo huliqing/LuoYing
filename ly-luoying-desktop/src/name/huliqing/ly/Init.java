@@ -29,7 +29,6 @@ import name.huliqing.ly.mess.MessActorSpeak;
 import name.huliqing.ly.mess.MessChatSend;
 import name.huliqing.ly.mess.MessChatShop;
 import name.huliqing.ly.mess.MessMessage;
-import name.huliqing.ly.mess.MessPlayInitGame;
 import name.huliqing.ly.mess.MessSyncObject;
 import name.huliqing.ly.object.chat.GroupChat;
 import name.huliqing.ly.object.chat.SellChat;
@@ -95,7 +94,6 @@ public class Init {
         Serializer.registerClass(MessChatSend.class);
         Serializer.registerClass(MessChatShop.class);
         Serializer.registerClass(MessMessage.class);
-        Serializer.registerClass(MessPlayInitGame.class);
         Serializer.registerClass(MessSyncObject.class);
 //        Serializer.registerClass(xxxxxxx.class);
     }

@@ -2,23 +2,24 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.luoying.mess;
+package name.huliqing.luoying.mess.network;
 
 import com.jme3.network.serializing.Serializable;
 import name.huliqing.luoying.data.GameData;
+import name.huliqing.luoying.mess.MessBase;
 
 /**
- * server to client, 告诉客户端当前正在或正要玩的游戏
+ * 服务端向客户端发送当前的游戏数据
  * @author huliqing
  */
 @Serializable
-public class MessSCGameData extends MessBase {
+public class MessGameData extends MessBase {
     
     private GameData gameData;
     
-    public MessSCGameData() {}
+    public MessGameData() {}
     
-    public MessSCGameData(GameData gameData) {
+    public MessGameData(GameData gameData) {
         this.gameData = gameData;
     }
 

@@ -18,9 +18,9 @@ import name.huliqing.luoying.network.Network;
 import name.huliqing.luoying.network.GameServer;
 import name.huliqing.luoying.data.GameData;
 import name.huliqing.luoying.data.ConnData;
+import name.huliqing.luoying.mess.network.MessRequestGameInit;
 import name.huliqing.luoying.network.GameServer.ServerState;
 import name.huliqing.luoying.object.Loader;
-import name.huliqing.luoying.object.game.Game;
 import name.huliqing.luoying.object.game.GameAppState;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.ly.view.HelpView;
@@ -29,7 +29,6 @@ import name.huliqing.luoying.ui.UIFactory;
 import name.huliqing.luoying.ui.state.UIState;
 import name.huliqing.ly.Start;
 import name.huliqing.ly.object.game.ServerNetworkRpgGame;
-import name.huliqing.ly.object.game.StoryServerNetworkRpgGame;
 //import name.huliqing.ly.LyLanServerPlayState;
 
 /**
@@ -187,22 +186,19 @@ public class RoomStateServerImpl extends AbstractAppState implements RoomState {
         }
 
         @Override
-        protected void processServerMessage(GameServer gameServer, HostedConnection source, Message m) {}
-
-        @Override
-        protected void onClientRemoved(GameServer gameServer, HostedConnection conn) {}
+        protected void onReceiveMessage(GameServer gameServer, HostedConnection source, Message m) {}
 
         @Override
         public void update(float tpf, GameServer gameServer) {}
 
         @Override
-        public void addSyncObject(Object syncObject) {}
-
-        @Override
-        public boolean removeSyncObject(Object syncObject) {return false;}
-
-        @Override
         public void cleanup() {}
+
+        @Override
+        protected void onReceiveMessRequestGameInit(GameServer gameServer, HostedConnection conn
+                , MessRequestGameInit mess) {
+            // 游戏未开始，不需要处理
+        }
         
     }
     
