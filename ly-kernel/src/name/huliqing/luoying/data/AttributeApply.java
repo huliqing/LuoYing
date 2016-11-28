@@ -11,13 +11,14 @@ import com.jme3.export.OutputCapsule;
 import com.jme3.export.Savable;
 import com.jme3.network.serializing.Serializable;
 import java.io.IOException;
+import name.huliqing.luoying.LuoYingException;
 
 /**
  * 用于SkinData，定义装备应用到目标身上时影响的属性
  * @author huliqing
  */
 @Serializable
-public class AttributeApply implements Savable {
+public class AttributeApply implements Savable, Cloneable {
     
     /** 使用的属性ID */
     private String attribute;
@@ -46,6 +47,15 @@ public class AttributeApply implements Savable {
 
     public void setAmount(float amount) {
         this.amount = amount;
+    }
+    
+    @Override
+    public AttributeApply clone() {
+        try {
+            return (AttributeApply) super.clone(); 
+        } catch (CloneNotSupportedException e) {
+            throw new LuoYingException(e);
+        }
     }
     
     @Override

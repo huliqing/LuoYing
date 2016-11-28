@@ -41,7 +41,6 @@ import name.huliqing.luoying.data.DropData;
 import name.huliqing.luoying.data.DropItem;
 import name.huliqing.luoying.data.ElData;
 import name.huliqing.luoying.data.EmitterData;
-import name.huliqing.luoying.data.ControlData;
 import name.huliqing.luoying.data.EffectData;
 import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.data.GameData;
@@ -366,7 +365,6 @@ public class LuoYing {
         Serializer.registerClass(ChannelData.class);
         Serializer.registerClass(ConfigData.class);
         Serializer.registerClass(ConnData.class);
-        Serializer.registerClass(ControlData.class);
         Serializer.registerClass(DefineData.class);
         Serializer.registerClass(DropData.class);
         Serializer.registerClass(EffectData.class);

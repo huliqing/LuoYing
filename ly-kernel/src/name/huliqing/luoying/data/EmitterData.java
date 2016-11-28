@@ -15,188 +15,167 @@ import com.jme3.network.serializing.Serializable;
  */
 @Serializable
 public class EmitterData extends ObjectData {
-    private Integer numParticles;
-    private ColorRGBA startColor;
-    private ColorRGBA endColor;
-    private Float startSize;
-    private Float endSize;
-    private Vector3f gravity;
-    private Float highLife;
-    private Float lowLife;
-    private String texture;
-    private Integer imagesX;
-    private Integer imagesY;
-    private Integer particlesPerSec;
-    private Boolean randomAngle;
-    private Float rotateSpeed;
-    private Boolean selectRandomImage;
-    private Vector3f faceNormal;
-    private Boolean facingVelocity;
-    private Vector3f initialVelocity;
-    private Float velocityVariation;
-    private String shape;
-                                
+ 
     public EmitterData() {}
 
     public Integer getNumParticles() {
-        return numParticles;
+        return getAsInteger("numParticles");
     }
 
     public void setNumParticles(Integer numParticles) {
-        this.numParticles = numParticles;
+        setAttribute("numParticles", numParticles);
     }
 
     public ColorRGBA getStartColor() {
-        return startColor;
+        return getAsColor("startColor");
     }
 
     public void setStartColor(ColorRGBA startColor) {
-        this.startColor = startColor;
+        setAttribute("startColor", startColor);
     }
 
     public ColorRGBA getEndColor() {
-        return endColor;
+        return getAsColor("endColor");
     }
 
     public void setEndColor(ColorRGBA endColor) {
-        this.endColor = endColor;
+        setAttribute("endColor", endColor);
     }
 
     public Float getStartSize() {
-        return startSize;
+        return getAsFloat("startSize");
     }
 
     public void setStartSize(Float startSize) {
-        this.startSize = startSize;
+        setAttribute("startSize", startSize);
     }
 
     public Float getEndSize() {
-        return endSize;
+        return getAsFloat("endSize");
     }
 
     public void setEndSize(Float endSize) {
-        this.endSize = endSize;
+        setAttribute("endSize", endSize);
     }
 
     public Vector3f getGravity() {
-        return gravity;
+        return getAsVector3f("gravity");
     }
 
     public void setGravity(Vector3f gravity) {
-        this.gravity = gravity;
+        setAttribute("gravity", gravity);
     }
 
     public Float getHighLife() {
-        return highLife;
+        return getAsFloat("highLife");
     }
 
     public void setHighLife(Float highLife) {
-        this.highLife = highLife;
+        setAttribute("highLife", highLife);
     }
 
     public Float getLowLife() {
-        return lowLife;
+        return getAsFloat("lowLife");
     }
 
     public void setLowLife(Float lowLife) {
-        this.lowLife = lowLife;
+        setAttribute("lowLife", lowLife);
     }
 
     public String getTexture() {
-        return texture;
+        return getAsString("texture");
     }
 
     public void setTexture(String texture) {
-        this.texture = texture;
+        setAttribute("texture", texture);
     }
 
     public Integer getImagesX() {
-        return imagesX;
+        return getAsInteger("imagesX");
     }
 
     public void setImagesX(Integer imagesX) {
-        this.imagesX = imagesX;
+        setAttribute("imagesX", imagesX);
     }
 
     public Integer getImagesY() {
-        return imagesY;
+        return getAsInteger("imagesY");
     }
 
     public void setImagesY(Integer imagesY) {
-        this.imagesY = imagesY;
+        setAttribute("imagesY", imagesY);
     }
 
     public Integer getParticlesPerSec() {
-        return particlesPerSec;
+        return getAsInteger("particlesPerSec");
     }
 
     public void setParticlesPerSec(Integer particlesPerSec) {
-        this.particlesPerSec = particlesPerSec;
+        setAttribute("particlesPerSec", particlesPerSec);
     }
 
     public Boolean getRandomAngle() {
-        return randomAngle;
+        return getAsBoolean("randomAngle");
     }
 
     public void setRandomAngle(Boolean randomAngle) {
-        this.randomAngle = randomAngle;
+        setAttribute("randomAngle", randomAngle);
     }
 
     public Float getRotateSpeed() {
-        return rotateSpeed;
+        return getAsFloat("rotateSpeed");
     }
 
     public void setRotateSpeed(Float rotateSpeed) {
-        this.rotateSpeed = rotateSpeed;
+        setAttribute("rotateSpeed", rotateSpeed);
     }
 
     public Boolean getSelectRandomImage() {
-        return selectRandomImage;
+        return getAsBoolean("selectRandomImage");
     }
 
     public void setSelectRandomImage(Boolean selectRandomImage) {
-        this.selectRandomImage = selectRandomImage;
+        setAttribute("selectRandomImage", selectRandomImage);
     }
 
     public Vector3f getFaceNormal() {
-        return faceNormal;
+        return getAsVector3f("faceNormal");
     }
 
     public void setFaceNormal(Vector3f faceNormal) {
-        this.faceNormal = faceNormal;
+        setAttribute("faceNormal", faceNormal);
     }
 
     public Boolean getFacingVelocity() {
-        return facingVelocity;
+        return getAsBoolean("facingVelocity");
     }
 
     public void setFacingVelocity(Boolean facingVelocity) {
-        this.facingVelocity = facingVelocity;
+        setAttribute("facingVelocity", facingVelocity);
     }
 
     public Vector3f getInitialVelocity() {
-        return initialVelocity;
+        return getAsVector3f("initialVelocity");
     }
 
     public void setInitialVelocity(Vector3f initialVelocity) {
-        this.initialVelocity = initialVelocity;
+        setAttribute("initialVelocity", initialVelocity);
     }
 
     public Float getVelocityVariation() {
-        return velocityVariation;
+        return getAsFloat("velocityVariation");
     }
 
     public void setVelocityVariation(Float velocityVariation) {
-        this.velocityVariation = velocityVariation;
+        setAttribute("velocityVariation", velocityVariation);
     }
 
     public String getShape() {
-        return shape;
+        return getAsString("shape");
     }
 
     public void setShape(String shape) {
-        this.shape = shape;
+        setAttribute("shape", shape);
     }
-
-   
+    
 }

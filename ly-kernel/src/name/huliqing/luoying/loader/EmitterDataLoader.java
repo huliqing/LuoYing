@@ -17,26 +17,28 @@ public class EmitterDataLoader implements DataLoader<EmitterData> {
 
     @Override
     public void load(Proto proto, EmitterData data) {
-        data.setNumParticles(proto.getAsInteger("numParticles"));
-        data.setStartColor(proto.getAsColor("startColor"));
-        data.setEndColor(proto.getAsColor("endColor"));
-        data.setStartSize(proto.getAsFloat("startSize"));
-        data.setEndSize(proto.getAsFloat("endSize"));
-        data.setGravity(proto.getAsVector3f("gravity"));
-        data.setHighLife(proto.getAsFloat("highLife"));
-        data.setLowLife(proto.getAsFloat("lowLife"));
-        data.setTexture(proto.getAsString("texture"));
-        data.setImagesX(proto.getAsInteger("imagesX"));
-        data.setImagesY(proto.getAsInteger("imagesY"));
-        data.setParticlesPerSec(proto.getAsInteger("particlesPerSec"));
-        data.setRandomAngle(proto.getAsBoolean("randomAngle", false));
-        data.setRotateSpeed(proto.getAsFloat("rotateSpeed"));
-        data.setSelectRandomImage(proto.getAsBoolean("selectRandomImage", false));
-        data.setFaceNormal(proto.getAsVector3f("faceNormal"));
-        data.setFacingVelocity(proto.getAsBoolean("facingVelocity", false));
-        data.setInitialVelocity(proto.getAsVector3f("initialVelocity"));
-        data.setVelocityVariation(proto.getAsFloat("velocityVariation"));
-        data.setShape(proto.getAsString("shape"));
+        
+        // remove20161128,不再需要，以后直接放在EmitterData内部。
+//        data.setNumParticles(proto.getAsInteger("numParticles"));
+//        data.setStartColor(proto.getAsColor("startColor"));
+//        data.setEndColor(proto.getAsColor("endColor"));
+//        data.setStartSize(proto.getAsFloat("startSize"));
+//        data.setEndSize(proto.getAsFloat("endSize"));
+//        data.setGravity(proto.getAsVector3f("gravity"));
+//        data.setHighLife(proto.getAsFloat("highLife"));
+//        data.setLowLife(proto.getAsFloat("lowLife"));
+//        data.setTexture(proto.getAsString("texture"));
+//        data.setImagesX(proto.getAsInteger("imagesX"));
+//        data.setImagesY(proto.getAsInteger("imagesY"));
+//        data.setParticlesPerSec(proto.getAsInteger("particlesPerSec"));
+//        data.setRandomAngle(proto.getAsBoolean("randomAngle", false));
+//        data.setRotateSpeed(proto.getAsFloat("rotateSpeed"));
+//        data.setSelectRandomImage(proto.getAsBoolean("selectRandomImage", false));
+//        data.setFaceNormal(proto.getAsVector3f("faceNormal"));
+//        data.setFacingVelocity(proto.getAsBoolean("facingVelocity", false));
+//        data.setInitialVelocity(proto.getAsVector3f("initialVelocity"));
+//        data.setVelocityVariation(proto.getAsFloat("velocityVariation"));
+//        data.setShape(proto.getAsString("shape"));
     }
     
 }

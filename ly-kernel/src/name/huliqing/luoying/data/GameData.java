@@ -120,19 +120,10 @@ public class GameData extends ObjectData {
 
     @Override
     public ObjectData clone() {
-        GameData clone = (GameData) super.clone(); 
-        if (sceneData != null) {
-            clone.sceneData = (SceneData) sceneData.clone();
-        }
-        if (guiSceneData != null) {
-            clone.guiSceneData = (SceneData) guiSceneData.clone();
-        }
-        if (gameLogicDatas != null) {
-            clone.gameLogicDatas = new ArrayList<GameLogicData>(gameLogicDatas.size());
-            for (GameLogicData gld : gameLogicDatas) {
-                clone.gameLogicDatas.add((GameLogicData) gld.clone());
-            }
-        }
+        GameData clone = (GameData) super.clone();
+        clone.sceneData = cloneObjectData(sceneData);
+        clone.guiSceneData = cloneObjectData(guiSceneData);
+        clone.gameLogicDatas = cloneObjectDataList(gameLogicDatas);
         if (availableActors != null) {
             clone.availableActors = new ArrayList<String>(availableActors.size());
             clone.availableActors.addAll(availableActors);

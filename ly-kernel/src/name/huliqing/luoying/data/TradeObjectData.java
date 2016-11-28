@@ -46,11 +46,25 @@ public class TradeObjectData extends ObjectData implements TradeObject, CountObj
     public void setTradeInfos(List<TradeInfo> tradeInfos) {
         this.tradeInfos = tradeInfos;
     }
+
+    @Override
+    public TradeObjectData clone() {
+        TradeObjectData clone = (TradeObjectData) super.clone(); 
+        if (tradeInfos != null) {
+            clone.tradeInfos = new ArrayList<TradeInfo>(tradeInfos.size());
+            for (TradeInfo ti : tradeInfos) {
+                clone.tradeInfos.add(ti.clone());
+            }
+        }
+        return clone;
+    }
     
     @Override
     public void write(JmeExporter ex) throws IOException {
         OutputCapsule oc = ex.getCapsule(this);
-        oc.writeSavableArrayList(new ArrayList<TradeInfo>(tradeInfos), "tradeInfos", null);
+        if (tradeInfos != null) {
+            oc.writeSavableArrayList(new ArrayList<TradeInfo>(tradeInfos), "tradeInfos", null);
+        }
     }
     
     @Override

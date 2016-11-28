@@ -14,6 +14,4 @@ import com.jme3.network.serializing.Serializable;
 @Serializable
 public class PositionData extends ObjectData {
 
-    public PositionData(){}
-
 }

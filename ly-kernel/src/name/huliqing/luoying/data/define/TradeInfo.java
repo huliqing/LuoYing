@@ -12,6 +12,7 @@ import com.jme3.export.OutputCapsule;
 import com.jme3.export.Savable;
 import com.jme3.network.serializing.Serializable;
 import java.io.IOException;
+import name.huliqing.luoying.LuoYingException;
 
 /**
  * TradeInfo定义物品的交易信息，相当于定义物品的价值，一件物品需要多少指定的物品进行交换才可以获得。
@@ -59,6 +60,15 @@ public class TradeInfo implements Savable, Cloneable {
     }
     
     @Override
+    public TradeInfo clone() {
+        try {
+            return (TradeInfo) super.clone();
+        } catch (CloneNotSupportedException ex) {
+            throw new LuoYingException(ex);
+        }
+    }
+    
+    @Override
     public void write(JmeExporter ex) throws IOException {
         OutputCapsule oc = ex.getCapsule(this);
         oc.write(objectId, "objectId", null);
@@ -70,14 +80,5 @@ public class TradeInfo implements Savable, Cloneable {
         InputCapsule ic = im.getCapsule(this);
         objectId = ic.readString("objectId", null);
         count = ic.readInt("count", 0);
-    }
-    
-    @Override
-    public TradeInfo clone() {
-        try {
-            return (TradeInfo) super.clone();
-        } catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Could not clone TradeInfo, tradeInfo=" + this);
-        }
     }
 }

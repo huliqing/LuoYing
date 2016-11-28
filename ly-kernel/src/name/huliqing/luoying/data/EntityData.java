@@ -166,26 +166,6 @@ public class EntityData extends ObjectData {
         }
         return null;
     }
-
-    @Override
-    public void write(JmeExporter ex) throws IOException {
-        super.write(ex);
-        OutputCapsule oc = ex.getCapsule(this);
-        if (moduleDatas != null) {
-            oc.writeSavableArrayList(new ArrayList<ModuleData>(moduleDatas), "moduleDatas", null);
-        }
-        if (objectDatas != null) {
-            oc.writeSavableArrayList(new ArrayList<ObjectData>(objectDatas), "objectDatas", null);
-        }
-    }
-    
-    @Override
-    public void read(JmeImporter im) throws IOException {
-        super.read(im);
-        InputCapsule ic = im.getCapsule(this);
-        moduleDatas = ic.readSavableArrayList("moduleDatas", null);
-        objectDatas = ic.readSavableArrayList("objectDatas", null);
-    }
     
     /**
      * 获取物全的名称
@@ -232,4 +212,33 @@ public class EntityData extends ObjectData {
     public void setMat(int mat) {
         setAttribute("mat", mat);
     }
+    
+    @Override
+    public void write(JmeExporter ex) throws IOException {
+        super.write(ex);
+        OutputCapsule oc = ex.getCapsule(this);
+        if (moduleDatas != null) {
+            oc.writeSavableArrayList(new ArrayList<ModuleData>(moduleDatas), "moduleDatas", null);
+        }
+        if (objectDatas != null) {
+            oc.writeSavableArrayList(new ArrayList<ObjectData>(objectDatas), "objectDatas", null);
+        }
+    }
+    
+    @Override
+    public void read(JmeImporter im) throws IOException {
+        super.read(im);
+        InputCapsule ic = im.getCapsule(this);
+        moduleDatas = ic.readSavableArrayList("moduleDatas", null);
+        objectDatas = ic.readSavableArrayList("objectDatas", null);
+    }
+    
+    @Override
+    public EntityData clone() {
+        EntityData clone = (EntityData) super.clone();
+        clone.moduleDatas = cloneObjectDataList(moduleDatas);
+        clone.objectDatas = cloneObjectDataList(objectDatas);
+        return clone;
+    }
+    
 }

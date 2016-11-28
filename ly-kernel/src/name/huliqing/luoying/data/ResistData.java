@@ -21,32 +21,11 @@ import java.io.IOException;
 public class ResistData extends ObjectData {
     
     /**
-     * 抵抗率[0.0~1.0]
-     */
-    private float factor;
-    
-    @Override
-    public void write(JmeExporter ex) throws IOException {
-        super.write(ex);
-        OutputCapsule oc = ex.getCapsule(this);
-        oc.write(factor, "factor", 0);
-    }
-
-    @Override
-    public void read(JmeImporter im) throws IOException {
-        super.read(im);
-        InputCapsule ic = im.getCapsule(this);
-        factor = ic.readFloat("factor", 0);
-    }
-    
-    public ResistData() {}
-
-    /**
      * 获取抵抗率，[0.0~1.0]
      * @return 
      */
     public float getFactor() {
-        return factor;
+        return getAsFloat("factor", 0);
     }
 
     /**
@@ -54,7 +33,7 @@ public class ResistData extends ObjectData {
      * @param factor 
      */
     public void setFactor(float factor) {
-        this.factor = FastMath.clamp(factor, .0f, 1.0f);
+        setAttribute("factor", FastMath.clamp(factor, .0f, 1.0f));
     }
-    
+
 }

@@ -14,8 +14,4 @@ import com.jme3.network.serializing.Serializable;
 @Serializable
 public class ActionData extends ObjectData {
     
-    public ActionData(){
-        super();
-    }
-
 }

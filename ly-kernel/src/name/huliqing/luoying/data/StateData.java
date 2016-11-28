@@ -4,13 +4,8 @@
  */
 package name.huliqing.luoying.data;
 
-import com.jme3.export.InputCapsule;
-import com.jme3.export.JmeExporter;
-import com.jme3.export.JmeImporter;
-import com.jme3.export.OutputCapsule;
 import name.huliqing.luoying.xml.ObjectData;
 import com.jme3.network.serializing.Serializable;
-import java.io.IOException;
 
 /**
  * 状态
@@ -19,15 +14,20 @@ import java.io.IOException;
 @Serializable
 public class StateData extends ObjectData {
     
-    /** 状态的产生者，也就是说，这个状态是哪一个角色发出的, 如果一个状态没有发起源，则这个参数可能为null. */
-    private long sourceActor;
-
+    /**
+     * 获取状态的图标。
+     * @return 
+     */
+    public String getIcon() {
+        return getAsString("icon");
+    }
+    
     /**
      * 状态的产生者，也就是说，这个状态是哪一个角色发出的, 可能为null.
      * @return 
      */
     public long getSourceActor() {
-        return sourceActor;
+        return getAsLong("sourceActor", 0);
     }
 
     /**
@@ -39,29 +39,7 @@ public class StateData extends ObjectData {
     * @param sourceActor 
     */
     public void setSourceActor(long sourceActor) {
-        this.sourceActor = sourceActor;
-    }
-    
-    /**
-     * 获取状态的图标。
-     * @return 
-     */
-    public String getIcon() {
-        return getAsString("icon");
-    }
-    
-    @Override
-    public void write(JmeExporter ex) throws IOException {
-        super.write(ex);
-        OutputCapsule oc = ex.getCapsule(this);
-        oc.write(sourceActor, "sourceActor", -1);
-    }
-
-    @Override
-    public void read(JmeImporter im) throws IOException {
-        super.read(im);
-        InputCapsule ic = im.getCapsule(this);
-        sourceActor = ic.readLong("sourceActor", -1);
+        setAttribute("sourceActor", sourceActor);
     }
     
     // -------------------del-------------------------------------------

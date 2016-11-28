@@ -15,9 +15,6 @@ import com.jme3.network.serializing.Serializable;
 @Serializable
 public class SoundData extends ObjectData {
     
-    // 声音参数基本上直接从attribute中获取，一般很少甚至基本不需要动态改变，直接使用即可，减少本地变量。
-    // 以减少内存及带宽的占用
-    
     /**
      * 获取声音文件，如："Sounds/xx.ogg"
      * @return 

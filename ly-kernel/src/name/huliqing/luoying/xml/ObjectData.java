@@ -18,9 +18,11 @@ import com.jme3.network.serializing.Serializable;
 import com.jme3.scene.UserData;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.logging.Logger;
 import name.huliqing.luoying.LuoYingException;
 
 /**
@@ -30,7 +32,7 @@ import name.huliqing.luoying.LuoYingException;
  */
 @Serializable
 public class ObjectData implements Savable, Cloneable {
-//    private static final Logger LOG = Logger.getLogger(ObjectData.class.getName());
+    private static final Logger LOG = Logger.getLogger(ObjectData.class.getName());
     
     private static long idIndex = System.currentTimeMillis();
     
@@ -103,28 +105,6 @@ public class ObjectData implements Savable, Cloneable {
      */
     private synchronized static long generateUniqueId() {
         return idIndex++;
-    }
-   
-    @Override
-    public void write(JmeExporter ex) throws IOException {
-        OutputCapsule oc = ex.getCapsule(this);
-        oc.write(id, "id", null);
-        oc.write(uniqueId, "uniqueId", 0);
-        oc.writeStringSavableMap(localData, "localData", null);
-        // 不需要要保存proto
-    }
-    
-    @Override
-    public void read(JmeImporter im) throws IOException {
-        InputCapsule ic = im.getCapsule(this);
-        id = ic.readString("id", null);
-        uniqueId = ic.readLong("uniqueId", generateUniqueId());
-        localData = (HashMap<String, Savable>) ic.readStringSavableMap("localData", null);
-    }
-    
-    @Override
-    public String toString() {
-        return "ObjectData{" + "id=" + id + ", uniqueId=" + uniqueId + ", proto=" + proto + ", userData=" + localData + '}';
     }
     
     /**
@@ -468,17 +448,13 @@ public class ObjectData implements Savable, Cloneable {
      * 注意：除物体的uniqueId之外，其它字段都尽量进行深度克隆。
      * @return 
      */
-    @Override
     public ObjectData clone() {
         try {
-            ObjectData newObject = (ObjectData) super.clone();
-            
-            // 唯一id必须变化
-            newObject.uniqueId = generateUniqueId();
+            ObjectData clone = (ObjectData) super.clone();
             
             // 本地数据localData的深度克隆
             if (localData != null && !localData.isEmpty()) {
-                newObject.localData = new HashMap<String, Savable>(localData.size());
+                clone.localData = new HashMap<String, Savable>(localData.size());
                 for (Entry<String, Savable> e : localData.entrySet()) {
                     if (e.getValue() instanceof Cloneable) {
                         localData.put(e.getKey(), cloneObject(e.getValue()));
@@ -487,9 +463,10 @@ public class ObjectData implements Savable, Cloneable {
                     }
                 }
             }
-            return newObject;
-        } catch( CloneNotSupportedException e ) {
-            throw new RuntimeException( "Can't clone control for spatial", e );
+            return clone;
+            
+        } catch(CloneNotSupportedException e ) {
+            throw new LuoYingException(e);
         }
     }
     
@@ -503,5 +480,61 @@ public class ObjectData implements Savable, Cloneable {
         } catch(Exception e) {
             throw new RuntimeException("Could not cloneObject for Object=" + object);
         }
+    }
+    
+    /**
+     * 直接克隆一个ObjectData. 如果给定的objectData为null则返回null. 否则克隆该对象并返回。
+     * 这个方法为方便子类直接克隆一个ObjectData而不需要判断是否为null.
+     * @param <T>
+     * @param objectData
+     * @return 
+     */
+    protected <T extends ObjectData> T cloneObjectData(T objectData) {
+        if (objectData == null)
+            return null;
+        return (T) objectData.clone();
+    }
+    
+    /**
+     * 深度克隆一个ObjectData列表，如果给定的列表为null,则返回null, 否则将列表中的ObjectData一个一个的克隆，
+     * 并最终返回一个新的列表。这个方法为方便子类在克隆列表的时候不需要判断列表或者列表中对象是否为null。
+     * @param <T>
+     * @param list
+     * @return 
+     */
+    protected <T extends ObjectData> List<T> cloneObjectDataList(List<T> list) {
+        if (list == null)
+            return null;
+        List<T> clones = new ArrayList<T>(list.size());
+        for (T t : list) {
+            if (t == null) {
+                clones.add(null);
+            } else {
+                clones.add((T) t.clone());
+            }
+        }
+        return clones;
+    }
+    
+    @Override
+    public void write(JmeExporter ex) throws IOException {
+        OutputCapsule oc = ex.getCapsule(this);
+        oc.write(id, "id", null);
+        oc.write(uniqueId, "uniqueId", 0);
+        oc.writeStringSavableMap(localData, "localData", null);
+        // 不需要要保存proto
+    }
+    
+    @Override
+    public void read(JmeImporter im) throws IOException {
+        InputCapsule ic = im.getCapsule(this);
+        id = ic.readString("id", null);
+        uniqueId = ic.readLong("uniqueId", generateUniqueId());
+        localData = (HashMap<String, Savable>) ic.readStringSavableMap("localData", null);
+    }
+    
+    @Override
+    public String toString() {
+        return "ObjectData{" + "id=" + id + ", uniqueId=" + uniqueId + ", proto=" + proto + ", userData=" + localData + '}';
     }
 }

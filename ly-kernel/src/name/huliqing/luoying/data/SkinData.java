@@ -152,6 +152,24 @@ public class SkinData extends ObjectData implements TradeObject, MatObject {
     public void setApplyAttributes(ArrayList<AttributeApply> applyAttributes) {
         this.applyAttributes = applyAttributes;
     }
+
+    @Override
+    public SkinData clone() {
+        SkinData clone = (SkinData) super.clone(); 
+        if (tradeInfos != null) {
+            clone.tradeInfos = new ArrayList<TradeInfo>(tradeInfos.size());
+            for (TradeInfo ti : tradeInfos) {
+                clone.tradeInfos.add(ti.clone());
+            }
+        }
+        if (applyAttributes != null) {
+            clone.applyAttributes = new ArrayList<AttributeApply>(applyAttributes.size());
+            for (AttributeApply ti : applyAttributes) {
+                clone.applyAttributes.add(ti.clone());
+            }
+        }
+        return clone;
+    }
     
     @Override
     public void write(JmeExporter ex) throws IOException {

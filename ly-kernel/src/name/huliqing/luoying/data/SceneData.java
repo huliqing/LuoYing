@@ -64,6 +64,13 @@ public class SceneData extends ObjectData {
     }
     
     @Override
+    public SceneData clone() {
+        SceneData clone = (SceneData) super.clone(); 
+        clone.entityDatas = cloneObjectDataList(entityDatas);
+        return clone;
+    }
+    
+    @Override
     public void write(JmeExporter ex) throws IOException {
         super.write(ex);
         OutputCapsule oc = ex.getCapsule(this);
@@ -78,4 +85,6 @@ public class SceneData extends ObjectData {
         InputCapsule ic = im.getCapsule(this);
         entityDatas = ic.readSavableArrayList("entityDatas", null);
     }
+
+    
 }

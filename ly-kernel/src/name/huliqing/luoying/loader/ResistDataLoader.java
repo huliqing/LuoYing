@@ -17,8 +17,7 @@ public class ResistDataLoader implements DataLoader<ResistData> {
 
     @Override
     public void load(Proto proto, ResistData data) {
-        // 默认抵抗率为0,也就是如果没有设置，也就没有抵抗
-        data.setFactor(proto.getAsFloat("factor", 0));
+        
     }
     
 }
