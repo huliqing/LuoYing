@@ -6,7 +6,6 @@ package name.huliqing.ly.object.view;
 
 import name.huliqing.ly.data.ViewData;
 import name.huliqing.ly.manager.ResourceManager;
-import name.huliqing.luoying.object.SyncData;
 import name.huliqing.luoying.ui.Window;
 
 /**
@@ -44,12 +43,6 @@ public class TextPanelView<T extends ViewData> extends TextView<T> {
     }
     
     @Override
-    public void applySyncData(SyncData data) {
-        super.applySyncData(data);
-        win.setTitle(data.getAsString("title"));
-    }
-    
-    @Override
     protected void doViewInit() {
         super.doViewInit();
         textUI.setWidth(win.getContentWidth());
@@ -70,7 +63,7 @@ public class TextPanelView<T extends ViewData> extends TextView<T> {
     public void setTitle(String title) {
         this.title = title;
         win.setTitle(title);
-        putSyncData("title", title);
+        data.setAttribute("title", title);
     }
     
    

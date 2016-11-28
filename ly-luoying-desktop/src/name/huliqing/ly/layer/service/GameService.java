@@ -8,20 +8,12 @@ package name.huliqing.ly.layer.service;
 import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.ly.object.NetworkObject;
 
 /**
  *
  * @author huliqing
  */
 public interface GameService extends GameNetwork {
-    
-    /**
-     * 从场景中获取同步物体
-     * @param objectId
-     * @return 
-     */
-    NetworkObject findSyncObject(long objectId);
     
     /**
      * 获取当前游戏主角

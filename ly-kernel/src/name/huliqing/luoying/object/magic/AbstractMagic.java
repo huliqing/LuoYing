@@ -123,6 +123,8 @@ public abstract class AbstractMagic extends ModelEntity<MagicData> implements Ma
         // 更新魔法逻辑
         updateMagicLogic(tpf);
         
+        // 时间到则将魔法节点从场景清理出，注：这会导致scene被清理为null.
+        // 不应该在这代码后面再给子类实现逻辑，这容易引起NPE.
         if (timeUsed > useTime) {
             removeFromScene();
         }

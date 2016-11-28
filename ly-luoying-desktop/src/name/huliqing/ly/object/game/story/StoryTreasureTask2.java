@@ -60,18 +60,18 @@ import name.huliqing.ly.layer.service.GameService;
  */
 public class StoryTreasureTask2 extends AbstractTaskStep {
     private final PlayService playService = Factory.get(PlayService.class);
-    private final StateService stateService = Factory.get(StateService.class);
+//    private final StateService stateService = Factory.get(StateService.class);
     private final LogicService logicService = Factory.get(LogicService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
-    private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
+//    private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final SkinNetwork skinNetwork = Factory.get(SkinNetwork.class);
-    private final StateNetwork stateNetwork = Factory.get(StateNetwork.class);
+//    private final StateNetwork stateNetwork = Factory.get(StateNetwork.class);
     private final GameService gameService = Factory.get(GameService.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
-    private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
+//    private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
     
     // ==== 任务位置
     private final StoryTreasureGame game;

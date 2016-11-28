@@ -7,10 +7,7 @@ package name.huliqing.ly.layer.network;
 
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
-import com.jme3.network.HostedConnection;
 import name.huliqing.luoying.Inject;
-import name.huliqing.ly.object.NetworkObject;
-import name.huliqing.luoying.object.SyncData;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.ly.enums.MessageType;
 import name.huliqing.ly.view.talk.Talk;
@@ -31,13 +28,14 @@ public interface GameNetwork extends Inject {
 //     */
 //    void syncGameInitToClient(HostedConnection client);
     
-    /**
-     * 同步“同步对象”
-     * @param object
-     * @param syncData
-     * @param reliable 
-     */
-    void syncObject(NetworkObject object, SyncData syncData, boolean reliable);
+    // remove201611xx
+//    /**
+//     * 同步“同步对象”
+//     * @param object
+//     * @param syncData
+//     * @param reliable 
+//     */
+//    void syncObject(NetworkObject object, SyncData syncData, boolean reliable);
     
     /**
      * 让角色说话

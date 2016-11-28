@@ -50,20 +50,6 @@
                             <xs:documentation>时间格式,如 "yyyy-MM-dd HH:mm:ss"</xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="syncAuto" type="bool" use="optional" >
-                        <xs:annotation>
-                            <xs:documentation>
-                                是否开启自动同步，定时同步到客户端,只有在开启了syncEnabled之后才有效
-                            </xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
-                    <xs:attribute name="syncInterval" type="xs:decimal" use="optional" >
-                        <xs:annotation>
-                            <xs:documentation>
-                                当开启syncAuto时，与客户端同步的时间间隔,即与客户端对时同步.单位秒，默认10秒.值不要太小。
-                            </xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
@@ -156,11 +142,6 @@
                 <xs:attribute name="enabled" type="bool" use="optional" >
                     <xs:annotation>
                         <xs:documentation>是否开启逻辑行为,默认true</xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="syncEnabled" type="bool" use="optional" >
-                    <xs:annotation>
-                        <xs:documentation>是否需要开启与客户端的同步功能,默认false.</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
                 <xs:attribute name="widthWeight" type="xs:decimal" use="required" >

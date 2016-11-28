@@ -9,7 +9,6 @@ import com.jme3.font.BitmapFont.VAlign;
 import com.jme3.math.ColorRGBA;
 import name.huliqing.ly.data.ViewData;
 import name.huliqing.ly.manager.ResourceManager;
-import name.huliqing.luoying.object.SyncData;
 import name.huliqing.luoying.ui.Text;
 import name.huliqing.luoying.ui.UIFactory;
 
@@ -60,12 +59,6 @@ public class TextView<T extends ViewData> extends AbstractView<T> {
     }
     
     @Override
-    public void applySyncData(SyncData data) {
-        super.applySyncData(data);
-        textUI.setText(data.getAsString("text"));
-    }
-    
-    @Override
     protected void doViewInit() {
         super.doViewInit();
         textUI.setWidth(viewRoot.getWidth());
@@ -106,7 +99,6 @@ public class TextView<T extends ViewData> extends AbstractView<T> {
     
     public void setText(String text) {
         textUI.setText(text);
-        putSyncData("text", text);
     }
 
     

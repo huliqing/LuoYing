@@ -7,7 +7,6 @@ package name.huliqing.ly.object.view;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import name.huliqing.ly.data.ViewData;
-import name.huliqing.luoying.object.SyncData;
 import name.huliqing.luoying.ui.Text;
 import name.huliqing.luoying.ui.Window;
 
@@ -21,8 +20,7 @@ public class TimerView<T extends ViewData> extends AbstractView<T> {
     private float startTime;
     private boolean up;
     private String format = "yyyy-MM-dd HH:mm:ss";
-    // 是否开启与客户端的同步
-    protected boolean syncAuto;
+    
     // 同步时间间隔，单位秒
     protected float syncInterval = 10;
     
@@ -40,8 +38,6 @@ public class TimerView<T extends ViewData> extends AbstractView<T> {
         startTime = data.getAsFloat("startTime", 0);
         up = data.getAsBoolean("up", true);
         format = data.getAsString("format", format);
-        syncAuto = data.getAsBoolean("syncAuto", false);
-        syncInterval = data.getAsFloat("syncInterval", 10);
         
         win = new Window(viewRoot.getWidth(), viewRoot.getHeight());
         win.setTitle(title);
@@ -54,6 +50,14 @@ public class TimerView<T extends ViewData> extends AbstractView<T> {
         win.addView(timeText);
         
         viewRoot.addView(win);
+    }
+    
+    @Override
+    public void updateDatas() {
+        super.updateDatas();
+        data.setAttribute("title", title);
+        data.setAttribute("startTime", startTime);
+        data.setAttribute("up", up);
     }
 
     @Override
@@ -75,17 +79,7 @@ public class TimerView<T extends ViewData> extends AbstractView<T> {
     @Override
     protected final void doViewLogic(float tpf) {
         super.doViewLogic(tpf);
-        
         updateTime();
-        
-        // 自动同步
-        if (syncAuto) {
-            syncTimeUsed += tpf;
-            if (syncTimeUsed >= syncInterval) {
-                putSyncData("timeUsed", timeUsed);
-                syncTimeUsed = 0;
-            }
-        }
     }
 
     /**
@@ -107,7 +101,6 @@ public class TimerView<T extends ViewData> extends AbstractView<T> {
     public void setTitle(String title) {
         this.title = title;
         win.setTitle(title);
-        putSyncData("title", title);
     }
 
     /**
@@ -124,7 +117,6 @@ public class TimerView<T extends ViewData> extends AbstractView<T> {
      */
     public void setStartTime(float startTime) {
         this.startTime = startTime;
-        putSyncData("startTime", startTime);
     }
 
     /**
@@ -133,23 +125,5 @@ public class TimerView<T extends ViewData> extends AbstractView<T> {
      */
     public void setUp(boolean up) {
         this.up = up;
-        putSyncData("up", up);
     }
-
-    @Override
-    public void updateDatas() {
-        super.updateDatas();
-        data.setAttribute("title", title);
-        data.setAttribute("startTime", startTime);
-        data.setAttribute("up", up);
-    }
-    
-    @Override
-    public void applySyncData(SyncData data) {
-        super.applySyncData(data);
-        setTitle(data.getAsString("title", title));
-        startTime = data.getAsFloat("startTime", startTime);
-        up = data.getAsBoolean("up", up);
-    }
-    
 }

@@ -8,7 +8,6 @@ package name.huliqing.ly.layer.service;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.math.Vector4f;
-import com.jme3.network.HostedConnection;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,13 +17,11 @@ import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.luoying.layer.service.ActionService;
 import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.layer.service.PlayService;
-import name.huliqing.luoying.object.SyncData;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.ly.Start;
 import name.huliqing.ly.constants.AttrConstants;
 import name.huliqing.ly.enums.MessageType;
-import name.huliqing.ly.object.NetworkObject;
 import name.huliqing.ly.object.game.SimpleRpgGame;
 import name.huliqing.ly.view.shortcut.ShortcutManager;
 import name.huliqing.ly.view.talk.SpeakManager;
@@ -70,11 +67,6 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public NetworkObject findSyncObject(long objectId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
     public Entity getPlayer() {
         SimpleRpgGame game = (SimpleRpgGame) playService.getGame();
         return game.getPlayer();
@@ -107,11 +99,6 @@ public class GameServiceImpl implements GameService {
     @Override
     public void saveCompleteStage(int storyNum) {
         LOG.log(Level.WARNING, "需要重构");
-    }
-
-    @Override
-    public void syncObject(NetworkObject object, SyncData syncData, boolean reliable) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

@@ -10,12 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.ly.data.ViewData;
-import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.object.ControlAdapter;
 import name.huliqing.luoying.object.Loader;
-import name.huliqing.luoying.object.SyncData;
-import name.huliqing.ly.object.NetworkObject;
 import name.huliqing.luoying.object.anim.Anim;
 import name.huliqing.luoying.object.entity.AbstractEntity;
 import name.huliqing.luoying.object.scene.Scene;
@@ -23,23 +20,17 @@ import name.huliqing.luoying.ui.LinearLayout;
 import name.huliqing.luoying.ui.UI.Corner;
 import name.huliqing.luoying.ui.state.UIState;
 import name.huliqing.luoying.utils.ConvertUtils;
-import name.huliqing.ly.layer.network.GameNetwork;
 
 /**
  * View的基类
  * @author huliqing
  * @param <T>
  */
-public abstract class AbstractView<T extends ViewData> extends AbstractEntity<T> implements View<T>, NetworkObject {
-
+public abstract class AbstractView<T extends ViewData> extends AbstractEntity<T> implements View<T> {
     private final PlayService playService = Factory.get(PlayService.class);
-//    private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
-    private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     
     // View的展示时间,如果为小于或等于0的值则永不停止。
     protected float useTime;
-    // 是否开启同步及同步数据
-    protected boolean syncEnabled;
     // 是否可拖动
     protected boolean dragEnabled;
     // 是否自适应宽度高度
@@ -54,8 +45,9 @@ public abstract class AbstractView<T extends ViewData> extends AbstractEntity<T>
     // ---- inner
     protected LinearLayout viewRoot;
     protected float timeUsed;
-    protected final SyncData syncData = new SyncData();
+    
     protected boolean enabled = true;
+    
     protected final ControlAdapter control = new ControlAdapter() {
         @Override
         public void update(float tpf) {
@@ -72,7 +64,7 @@ public abstract class AbstractView<T extends ViewData> extends AbstractEntity<T>
         enabled = data.getAsBoolean("enabled", enabled);
         useTime = data.getAsFloat("useTime", 0);
         timeUsed = data.getAsFloat("timeUsed", timeUsed);
-        syncEnabled = data.getAsBoolean("syncEnabled", false);
+        
         dragEnabled = data.getAsBoolean("dragEnabled", false);
         resize = data.getAsBoolean("resize", false);
         
@@ -124,7 +116,6 @@ public abstract class AbstractView<T extends ViewData> extends AbstractEntity<T>
     @Override
     public void updateDatas() {
         super.updateDatas();
-        data.setAttribute("enabled", enabled);
         data.setAttribute("timeUsed", timeUsed);
         data.setAttribute("useTime", useTime);
     }
@@ -191,12 +182,6 @@ public abstract class AbstractView<T extends ViewData> extends AbstractEntity<T>
         
         doViewLogic(tpf);
         
-        // 同步数据
-        if (syncEnabled && !syncData.isEmpty()) {
-            gameNetwork.syncObject(this, syncData, true);
-            syncData.clear();
-        }
-        
         if (useTime > 0 && timeUsed > useTime) {
             doExit();
         }
@@ -214,59 +199,14 @@ public abstract class AbstractView<T extends ViewData> extends AbstractEntity<T>
     @Override
     public void setUseTime(float useTime) {
         this.useTime = useTime;
-        putSyncData("useTime", useTime);
     }
-    
+   
     public boolean isEnabled() {
         return enabled;
     }
     
     public void setEnabled(boolean enabled) {
-        // 开关不发生变化则不处理。主要避免频繁触发同步
-        if (this.enabled == enabled) 
-            return;
-
         this.enabled = enabled;
-        putSyncData("enabled", enabled);
-        // 在关闭逻辑的情况下，这个必须立即发送同步，否则syncData不会在下次发送
-        // 因为逻辑已经停止运行。
-        if (!enabled) {
-            gameNetwork.syncObject(this, syncData, true);
-            syncData.clear();
-        }
-    }
-    
-    @Override
-    public final long getSyncId() {
-        return data.getUniqueId();
-    }
-
-    @Override
-    public final boolean isSyncEnabled() {
-        return syncEnabled;
-    }
-
-    @Override
-    public final void setSyncEnabled(boolean enabled) {
-        syncEnabled = enabled;
-    }
-    
-    // 从服务端回来的同步数据
-    @Override
-    public void applySyncData(SyncData data) {
-        useTime = data.getAsFloat("useTime", useTime);
-        timeUsed = data.getAsFloat("timeUsed", timeUsed);
-    }
-
-    /**
-     * 添加同步数据,等待同步
-     * @param key
-     * @param value
-     */
-    protected final void putSyncData(String key, Object value) {
-        if (!isSyncEnabled()) 
-            return;
-        syncData.setAttribute(key, value);
     }
 
     /**

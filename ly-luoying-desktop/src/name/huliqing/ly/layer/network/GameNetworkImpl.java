@@ -8,8 +8,6 @@ package name.huliqing.ly.layer.network;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.math.Vector4f;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.luoying.layer.network.PlayNetwork;
@@ -21,12 +19,10 @@ import name.huliqing.luoying.mess.EntityUseDataByIdMess;
 import name.huliqing.luoying.mess.ActorSelectMess;
 import name.huliqing.luoying.network.Network;
 import name.huliqing.luoying.object.Loader;
-import name.huliqing.luoying.object.SyncData;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.ly.constants.AttrConstants;
 import name.huliqing.ly.enums.MessageType;
 import name.huliqing.ly.mess.MessActorSpeak;
-import name.huliqing.ly.object.NetworkObject;
 import name.huliqing.ly.layer.service.GameService;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.ly.mess.MessMessage;
@@ -38,7 +34,7 @@ import name.huliqing.ly.view.talk.TalkManager;
  * @author huliqing
  */
 public class GameNetworkImpl implements GameNetwork {
-    private static final Logger LOG = Logger.getLogger(GameNetworkImpl.class.getName());
+//    private static final Logger LOG = Logger.getLogger(GameNetworkImpl.class.getName());
     private final Network network = Network.getInstance();
     
     private GameService gameService;
@@ -48,7 +44,7 @@ public class GameNetworkImpl implements GameNetwork {
 //    private ActorNetwork actorNetwork;
     private EntityNetwork entityNetwork;
     private PlayNetwork playNetwork;
-    private PlayService playService;
+//    private PlayService playService;
     
     @Override
     public void inject() {
@@ -59,7 +55,7 @@ public class GameNetworkImpl implements GameNetwork {
 //        actorNetwork = Factory.get(ActorNetwork.class);
         entityNetwork = Factory.get(EntityNetwork.class);
         playNetwork = Factory.get(PlayNetwork.class);
-        playService = Factory.get(PlayService.class);
+//        playService = Factory.get(PlayService.class);
     }
 
     @Override
@@ -99,11 +95,12 @@ public class GameNetworkImpl implements GameNetwork {
 //        }
 //    }
 
-    @Override
-    public void syncObject(NetworkObject object, SyncData syncData, boolean reliable) {
-        LOG.log(Level.WARNING, "不再支持这个方法！");
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    // remove201611xx
+//    @Override
+//    public void syncObject(NetworkObject object, SyncData syncData, boolean reliable) {
+//        LOG.log(Level.WARNING, "不再支持这个方法！");
+////        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
 
     @Override
     public void speak(Entity actor, String mess, float useTime) {
