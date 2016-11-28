@@ -37,12 +37,12 @@
     <!--技能管理模块: 间接依赖: moduleChannel -->
     <moduleSkill id="moduleSkill" moduleOrder="20" 
                  bindDeadAttribute="attributeDead"
-                 idleSkillTags="idle"
-                 waitSkillTags="wait" 
-                 walkSkillTags="walk" 
-                 runSkillTags="run" 
-                 hurtSkillTags="hurt" 
-                 deadSkillTags="dead" 
+                 idleSkillTypes="idle"
+                 waitSkillTypes="wait" 
+                 walkSkillTypes="walk" 
+                 runSkillTypes="run" 
+                 hurtSkillTypes="hurt" 
+                 deadSkillTypes="dead" 
     />
     
     <!--皮肤管理模块(装备、武器)：直接或间接依赖： moduleActor, moduleSkill -->

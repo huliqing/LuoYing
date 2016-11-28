@@ -11,7 +11,7 @@ import name.huliqing.luoying.object.module.SkillListener;
 import name.huliqing.luoying.object.module.SkillModule;
 import name.huliqing.luoying.object.module.SkillPlayListener;
 import name.huliqing.luoying.object.skill.Skill;
-import name.huliqing.luoying.object.skill.SkillTag;
+import name.huliqing.luoying.object.skill.SkillType;
 
 /**
  * 执行技能，如果没有特别说明，如果返回false则说明执行失败。返回true则说明
@@ -58,13 +58,13 @@ public interface SkillService extends SkillNetwork {
     List<Skill> getSkillDead(Entity actor);
     
     /**
-     * 通过技能标记来获取角色身上的技能
+     * 通过技能类型来获取角色身上的技能
      * 的就可以。
      * @param actor
-     * @param skillTags
+     * @param skillTypes
      * @return 
      */
-    List<Skill> getSkillByTags(Entity actor, long skillTags);
+    List<Skill> getSkillByTypes(Entity actor, long skillTypes);
     
     /**
      * 获取角色当前正在执行的技能状态，返回值中每一个二进制位表示一个技能类
@@ -72,7 +72,7 @@ public interface SkillService extends SkillNetwork {
      * @param actor
      * @return 
      */
-    long getPlayingSkillTags(Entity actor);
+    long getPlayingSkillTypes(Entity actor);
     
     /**
      * 给角色添加一个技能侦听器
@@ -140,42 +140,42 @@ public interface SkillService extends SkillNetwork {
     boolean isPlayingSkill(Entity actor);
     
     /**
-     * 判断目标角色是否正在执行的技能中是否包含有skillTags中所指定的技能。角色可能同时正在执行多个技能，
-     * 如果其中有任何一个技能标记包含于skillTags中所指定的技能,则该方法返回true.
+     * 判断目标角色是否正在执行的技能中是否包含有skillTypes中所指定的技能。角色可能同时正在执行多个技能，
+     * 如果其中有任何一个技能类型包含于skillTypes中所指定的技能,则该方法返回true.
      * @param actor
-     * @param skillTags
+     * @param skillTypes
      * @return 
      */
-    boolean isPlayingSkill(Entity actor, long skillTags);
+    boolean isPlayingSkill(Entity actor, long skillTypes);
     
     /**
      * 锁定指定角色的技能类型,当这些技能类型被锁定后，属于这些类型的技能将不
      * 能再执行，直到进行unlockSkill
      * @param actor 
-     * @param skillTags 
+     * @param skillTypes 
      */
-    void lockSkillTags(Entity actor, long skillTags);
+    void lockSkillTypes(Entity actor, long skillTypes);
     
     /**
      * 解锁指定角色的技能类型。
      * @param actor
-     * @param skillTags 
+     * @param skillTypes 
      */
-    void unlockSkillTags(Entity actor, long skillTags);
+    void unlockSkillTypes(Entity actor, long skillTypes);
 
     /**
-     * 获取技能标记
-     * @param skillTag
+     * 获取技能类型
+     * @param skillType
      * @return 
      */
-    SkillTag getSkillTag(String skillTag);
+    SkillType getSkillTypes(String skillType);
     
     /**
-     * 将技能标记转换为使用二进制位表示的整数值，返回的数值中每个"1"位表示一个技能标记。
-     * @param tags
+     * 将技能类型转换为使用二进制位表示的整数值，返回的数值中每个"1"位表示一个技能类型。
+     * @param types
      * @return 
      */
-    long convertSkillTags(String... tags);
+    long convertSkillTypes(String... types);
     
     
 }

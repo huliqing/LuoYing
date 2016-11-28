@@ -15,6 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.ConnData;
+import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.manager.ResManager;
@@ -88,9 +89,8 @@ public abstract class ServerNetworkRpgGame extends NetworkRpgGame {
     }
     
     @Override
-    protected final void onSelectPlayer(String actorId, String actorName) {
-        Entity actor = Loader.load(actorId);
-        actor.getData().setName(actorName);
+    protected final void onSelectPlayer(EntityData entityData) {
+        Entity actor = Loader.load(entityData);
         onAddServerPlayer(actor);
     }
     
@@ -149,13 +149,15 @@ public abstract class ServerNetworkRpgGame extends NetworkRpgGame {
      * @return 
      */
     protected boolean processMessage(GameServer gameServer, HostedConnection source, Message m) {
-        // 客户端告诉服务端，要选择哪一个角色进行游戏
+        // 客户端告诉服务端，要选择哪一个角色进行游戏.
+        // 在必要时可以对接收到的ActorSelectMess进行一些验证,比如确保选择的角色数据没有异常。
+        // 名称不会重复等。
         if (m instanceof ActorSelectMess) {
 
             // 选择玩家角色
             ActorSelectMess mess = (ActorSelectMess) m;
-            Entity actor = Loader.load(mess.getActorId());
-            actor.getData().setName(mess.getActorName());
+            Entity actor = Loader.load(mess.getEntityData());
+
             // 默认情况下，不管是在Story模式或是在Lan模式，玩家选择后的角色都为1级.但是在某些情况下会有一些不同，比如：
             // 1.在Lan模式下玩家的初始属性可能会受Game逻辑的影响.参考：gameState.getGame().onPlayerSelected(actor);
             // 2.在Story模式下，如果客户端的资料已经存档在服务端，则连接时直接使用存档进行游戏，而不需要重新选择角色。

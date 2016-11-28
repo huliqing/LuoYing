@@ -5,6 +5,7 @@
  */
 package name.huliqing.luoying.loader;
 
+import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.AttributeData;
 import name.huliqing.luoying.data.DropData;
 import name.huliqing.luoying.data.LogicData;
@@ -17,8 +18,8 @@ import name.huliqing.luoying.data.ResistData;
 import name.huliqing.luoying.data.SkillData;
 import name.huliqing.luoying.data.SkinData;
 import name.huliqing.luoying.data.TalentData;
+import name.huliqing.luoying.layer.service.DefineService;
 import name.huliqing.luoying.manager.ResManager;
-import name.huliqing.luoying.object.define.DefineFactory;
 import name.huliqing.luoying.xml.DataFactory;
 
 /**
@@ -27,15 +28,15 @@ import name.huliqing.luoying.xml.DataFactory;
  */
 public class ActorDataLoader extends EntityDataLoader {
 //    private static final Logger LOG = Logger.getLogger(ActorDataLoader.class.getName());
+    private final DefineService defineService = Factory.get(DefineService.class);
 
     @Override
     public void load(Proto proto, EntityData data) {
         super.load(proto, data);
-        
-        data.setAttribute("name", ResManager.get(proto.getId() + ".name"));
+        data.setName(ResManager.get(proto.getId() + ".name"));
         String matStr = proto.getAsString("mat");
         if (matStr != null) {
-            data.setMat(DefineFactory.getMatDefine().getMat(matStr));
+            data.setMat(defineService.getMatDefine().getMat(matStr));
         }
         
         // ==== 2.items 
@@ -125,12 +126,6 @@ public class ActorDataLoader extends EntityDataLoader {
             }
         }
         
-        // remove20161022,移动到了ly-luoying-desktop
-//        String chat = proto.getAsString("chat");
-//        if (chat != null) {
-//            data.addObjectData((ChatData) DataFactory.createData(chat));
-//        }
-        
         // ==== 载入技能
         String[] skillIds = proto.getAsArray("skills");
         if (skillIds != null && skillIds.length > 0) {
@@ -168,23 +163,6 @@ public class ActorDataLoader extends EntityDataLoader {
                 data.addObjectData((TalentData)DataFactory.createData(talent));
             }
         }
-        
-        // remove20161010,move to EntityDataLoader.class
-//        // 载入模块配置,并根据ModuleOrder进行排序
-//        String[] moduleArr = proto.getAsArray("modules");
-//        if (moduleArr != null) {
-//            data.setModuleDatas(new ArrayList<ModuleData>(moduleArr.length));
-//            for (String mid : moduleArr) {
-//                data.getModuleDatas().add((ModuleData) DataFactory.createData(mid));
-//            }
-//            Collections.sort(data.getModuleDatas(), new Comparator<ModuleData>() {
-//                @Override
-//                public int compare(ModuleData o1, ModuleData o2) {
-//                    return o1.getModuleOrder() - o2.getModuleOrder();
-//                }
-//            });
-//        }
-        
         
     }
     

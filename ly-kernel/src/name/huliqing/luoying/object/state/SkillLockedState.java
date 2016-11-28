@@ -10,7 +10,7 @@ import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.StateData;
 import name.huliqing.luoying.layer.network.SkillNetwork;
-import name.huliqing.luoying.object.define.DefineFactory;
+import name.huliqing.luoying.layer.service.DefineService;
 import name.huliqing.luoying.object.module.ActorModule;
 import name.huliqing.luoying.object.module.ChannelModule;
 import name.huliqing.luoying.object.module.SkillModule;
@@ -23,19 +23,20 @@ import name.huliqing.luoying.utils.MathUtils;
  */
 public class SkillLockedState extends AbstractState implements SkillPlayListener {
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
+    private final DefineService defineService = Factory.get(DefineService.class);
     private ActorModule actorModule;
     private SkillModule skillModule;
     private ChannelModule channelModule;
     
-    // 把角色锁定在特定标记的技能上
-    private long lockAtSkillTags;
+    // 把角色锁定在特定类型的技能上
+    private long lockAtSkillTypes;
     // 把角色锁定在当前动画帧上。
     private boolean lockAtFrame;
     
     // 是否锁定全部技能，如果为true,则忽略lockSkills.
-    private boolean lockAllSkillTags;
+    private boolean lockAllSkillTypes;
     // 要锁定的技能tags
-    private long lockSkillTags;
+    private long lockSkillTypes;
     // 要锁定的特定的技能列表.
     private List<String> lockSkillIds;
     // 要锁定的技能通道
@@ -51,10 +52,10 @@ public class SkillLockedState extends AbstractState implements SkillPlayListener
     @Override
     public void setData(StateData data) {
         super.setData(data); 
-        lockAtSkillTags = DefineFactory.getSkillTagDefine().convert(data.getAsArray("lockAtSkillTags"));
+        lockAtSkillTypes = defineService.getSkillTypeDefine().convert(data.getAsArray("lockAtSkillTypes"));
         lockAtFrame = data.getAsBoolean("lockAtFrame", false);
-        lockAllSkillTags = data.getAsBoolean("lockAllSkillTags", false);
-        lockSkillTags = DefineFactory.getSkillTagDefine().convert(data.getAsArray("lockSkillTags"));
+        lockAllSkillTypes = data.getAsBoolean("lockAllSkillTypes", false);
+        lockSkillTypes = defineService.getSkillTypeDefine().convert(data.getAsArray("lockSkillTypes"));
         lockSkillIds = data.getAsStringList("lockSkillIds");
         lockChannels = data.getAsArray("lockChannels");
         lockLocation = data.getAsBoolean("lockLocation", false);
@@ -68,8 +69,8 @@ public class SkillLockedState extends AbstractState implements SkillPlayListener
         skillModule = actor.getModuleManager().getModule(SkillModule.class);
         
         // 锁定在特定标记的技能上
-        if (lockAtSkillTags > 0) {
-            List<Skill> lockedSkills = skillModule.getSkillByTags(lockAtSkillTags, null);
+        if (lockAtSkillTypes > 0) {
+            List<Skill> lockedSkills = skillModule.getSkillByTypes(lockAtSkillTypes, null);
             if (lockedSkills != null && !lockedSkills.isEmpty()) {
                 // 用到随机数时要使用Network.
                 skillNetwork.playSkill(actor, lockedSkills.get(FastMath.nextRandomInt(0, lockedSkills.size() - 1)), false);
@@ -83,11 +84,11 @@ public class SkillLockedState extends AbstractState implements SkillPlayListener
         }
         
         // 锁定所有技能或特定技能。
-        if (lockAllSkillTags) {
-            skillModule.lockSkillTags(SKILL_ALL);
+        if (lockAllSkillTypes) {
+            skillModule.lockSkillTypes(SKILL_ALL);
         } else {
             // 锁定特殊技能类型
-            skillModule.lockSkillTags(lockSkillTags);
+            skillModule.lockSkillTypes(lockSkillTypes);
             // 对于特定的技能ID需要通过技能侦听器来监听,在状态消失时要移除侦听器
             if (lockSkillIds != null) {
                 skillModule.addSkillPlayListener(this);
@@ -141,10 +142,10 @@ public class SkillLockedState extends AbstractState implements SkillPlayListener
 
     @Override
     public void cleanup() {
-        if (lockAllSkillTags) {
-            skillModule.unlockSkillTags(SKILL_ALL);
+        if (lockAllSkillTypes) {
+            skillModule.unlockSkillTypes(SKILL_ALL);
         } else {
-            skillModule.unlockSkillTags(lockSkillTags);
+            skillModule.unlockSkillTypes(lockSkillTypes);
             skillModule.removeSkillPlayListener(this);
         }
         if (lockChannels != null && channelModule != null) {

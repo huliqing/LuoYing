@@ -12,9 +12,9 @@ import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.data.SkillData;
 import name.huliqing.luoying.layer.service.ActorService;
+import name.huliqing.luoying.layer.service.DefineService;
 import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.object.Loader;
-import name.huliqing.luoying.object.define.DefineFactory;
 import name.huliqing.luoying.object.effect.Effect;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.module.ActorModule;
@@ -28,6 +28,7 @@ import name.huliqing.luoying.object.sound.SoundManager;
  * @author huliqing
  */
 public class AttackSkill extends HitSkill {
+    private final DefineService defineService = Factory.get(DefineService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
     private ActorModule actorModule;
@@ -62,7 +63,7 @@ public class AttackSkill extends HitSkill {
         multHit = data.getAsBoolean("multHit", multHit);
         checkPoint = data.getAsFloatArray("checkPoint");
         defendable = data.getAsBoolean("defendable", defendable);
-        defendSkillTags = skillService.convertSkillTags(data.getAsArray("defendSkillTags"));
+        defendSkillTags = skillService.convertSkillTypes(data.getAsArray("defendSkillTags"));
         collisionOffset = data.getAsVector3f("collisionOffset", collisionOffset);
     }
 
@@ -179,11 +180,11 @@ public class AttackSkill extends HitSkill {
         }
         
         // 播放碰撞声效
-        String soundId = DefineFactory.getMatDefine().getCollisionSound(mat1, mat2);
+        String soundId = defineService.getMatDefine().getCollisionSound(mat1, mat2);
         if (soundId != null) {
             SoundManager.getInstance().playSound(soundId, actor.getSpatial().getWorldTranslation());
         }
-        String effectId = DefineFactory.getMatDefine().getCollisionEffect(mat1, mat2);
+        String effectId = defineService.getMatDefine().getCollisionEffect(mat1, mat2);
         if (effectId != null) {
             TempVars tv = TempVars.get();
             Vector3f collisionPos = tv.vect1.set(collisionOffset);
@@ -203,7 +204,7 @@ public class AttackSkill extends HitSkill {
         // 播放击中声效
         int weaponMat = getWeaponMat(skinModule);
         int targetMat = target.getData().getMat();
-        String collisionSound = DefineFactory.getMatDefine().getCollisionSound(weaponMat, targetMat);
+        String collisionSound = defineService.getMatDefine().getCollisionSound(weaponMat, targetMat);
         if (collisionSound != null) {
             SoundManager.getInstance().playSound(collisionSound, actor.getSpatial().getWorldTranslation());
         }

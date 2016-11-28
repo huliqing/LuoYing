@@ -100,19 +100,19 @@ xs:time
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="listenSkillTags" type="xs:string" use="required">
+                    <xs:attribute name="listenSkillTypes" type="xs:string" use="required">
                         <xs:annotation>
                             <xs:documentation>
                                 指定要监听哪些战斗技能，当目标角色执行这些类型的技能时，当前角色会偿试进行防守或躲闪,格式: "skillTag1,skillTag2,..."
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="defendSkillTags" type="xs:string" use="required">
+                    <xs:attribute name="defendSkillTypes" type="xs:string" use="required">
                         <xs:annotation>
                             <xs:documentation>指定要使用哪些“防守”技能来防守敌人,格式: "skillTag1,skillTag2,..."</xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="duckSkillTags" type="xs:string" use="required">
+                    <xs:attribute name="duckSkillTypes" type="xs:string" use="required">
                         <xs:annotation>
                             <xs:documentation>指定要使用哪些“躲闪”技能来躲闪敌人的攻击,格式: "skillTag1,skillTag2,..."</xs:documentation>
                         </xs:annotation>

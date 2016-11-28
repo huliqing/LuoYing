@@ -45,7 +45,7 @@
     
     <!--默认的防守及躲闪逻辑-->
     <logicDefend id="logicDefend" interval="5" extends="logicBase" defendRateAttribute="attributeDefenceRate" duckRateAttribute="attributeDuckRate" 
-                      listenAttributes="attributeHealth" listenSkillTags="fight" defendSkillTags="defend" duckSkillTags="duck" />
+                      listenAttributes="attributeHealth" listenSkillTypes="fight" defendSkillTypes="defend" duckSkillTypes="duck" />
     <!--空闲行为-->
     <logicIdle id="logicPatrol" extends="logicIdleBase" interval="5" idleSimpleAction="actionIdleDynamic" idlePatrolAction="actionIdlePatrol" />
     

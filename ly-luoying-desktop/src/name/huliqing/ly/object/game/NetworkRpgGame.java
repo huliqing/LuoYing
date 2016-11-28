@@ -8,11 +8,10 @@ package name.huliqing.ly.object.game;
 import com.jme3.app.Application;
 import com.jme3.math.Vector3f;
 import name.huliqing.luoying.LuoYing;
+import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.network.LanGame;
 import name.huliqing.luoying.network.Network;
-import name.huliqing.luoying.object.anim.Anim;
 import name.huliqing.luoying.object.anim.AnimationControl;
-import name.huliqing.luoying.object.anim.Listener;
 import name.huliqing.luoying.object.anim.ScaleAnim;
 import name.huliqing.luoying.object.entity.impl.ChaseCameraEntity;
 import name.huliqing.luoying.ui.Icon;
@@ -67,13 +66,11 @@ public abstract class NetworkRpgGame extends SimpleRpgGame implements LanGame {
      */
     public final void showSelectPanel() {
         if (actorPanel == null) {
-            actorPanel = new ActorSelectView(LuoYing.getSettings().getWidth(), LuoYing.getSettings().getHeight(), this.app.getGuiNode());
+            actorPanel = new ActorSelectView(LuoYing.getSettings().getWidth(), LuoYing.getSettings().getHeight(), this.app.getRootNode());
             actorPanel.setSelectedListener(new ActorSelectView.SelectedListener() {
                 @Override
-                public void onSelected(String actorId, String actorName) {
-                    actorPanel.removeFromParent();
-                    actorPanel.getActorView().removeFromParent();
-                    onSelectPlayer(actorId, actorName);
+                public void onSelected(EntityData entityData) {
+                    onSelectPlayer(entityData);
                 }
             });
         }
@@ -119,15 +116,9 @@ public abstract class NetworkRpgGame extends SimpleRpgGame implements LanGame {
                     , clientsWin.getHeight() * 0.5f
                     , 0));
         clientsWinAnim.setTarget(clientsWin);
-        clientsWinAnim.addListener(new Listener() {
-            @Override
-            public void onDone(Anim anim) {
-                winAnimControl.setEnabled(false);
-            }
-        });
         
         winAnimControl = new AnimationControl(clientsWinAnim);
-        clientsWin.addControl(winAnimControl);
+        app.getGuiNode().addControl(winAnimControl);
                 
         lanBtn = new Icon("Interface/icon/link.png");
         lanBtn.setUseAlpha(true);
@@ -146,7 +137,6 @@ public abstract class NetworkRpgGame extends SimpleRpgGame implements LanGame {
         if (clientsWin.getParent() == null) {
             UIState.getInstance().addUI(clientsWin);
             clientsWin.setClients(getClients());
-            winAnimControl.setEnabled(true);
             clientsWinAnim.start();
         } else {
             clientsWin.removeFromParent();
@@ -158,8 +148,7 @@ public abstract class NetworkRpgGame extends SimpleRpgGame implements LanGame {
      * 1.对于服务端来说: 需要载入指定的角色，作为玩家的控制角色，并广播到所有客户端。<br>
      * 2.对于客户端来说: 需要把指定的角色id及名称发送到服务端，由服务端确认，并载入角色, 然后把结束通知客户端，
      * 让客户端知道选择的角色成功与否，如果成功则客户端将指定角色转为客户端玩家本地控制的角色。
-     * @param actorId
-     * @param actorName
+     * @param entityData
      */
-    protected abstract void onSelectPlayer(String actorId, String actorName);
+    protected abstract void onSelectPlayer(EntityData entityData);
 }

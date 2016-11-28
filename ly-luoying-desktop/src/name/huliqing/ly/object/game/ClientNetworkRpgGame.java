@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.ConnData;
+import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.layer.service.SaveService;
 import name.huliqing.luoying.manager.ResManager;
@@ -77,23 +78,6 @@ public class ClientNetworkRpgGame extends NetworkRpgGame implements PingListener
         clientListener.addPingListener(this);
         gameClient.setGameClientListener(clientListener);
         gameClient.setClientState(ClientState.ready);
-        
-        // remove20161126
-//        // 添加一个用于检查服务端状态的逻辑
-//        GameLogic stateCheck = new AbstractGameLogic(0.2f) {
-//            @Override
-//            protected void doLogic(float tpf) {
-//                if (gameClient.getClientState() != ClientState.running) {
-//                    checkToStartClientInit();
-//                } else {
-//                    // 在状态任务完成后移除
-//                    removeLogic(this);
-//                }
-//            }
-//        };
-//        addLogic(stateCheck);
-        // 先隐藏所有UI,这样不会妨碍角色选择界面
-//        setUIVisiable(false);
          
         // 添加Ping UI
         pingLabel = new Text("PING:00");
@@ -128,36 +112,9 @@ public class ClientNetworkRpgGame extends NetworkRpgGame implements PingListener
         saveService.saveSavable(SHORTCUTS_KEY_PREFIX + tempPlayer.getData().getId(), ss);
     }
     
-//    /**
-//     * 开始向服务端发起初始化游戏数据的请求。注：该方法会检查客户端和服务端
-//     * 的状态，只有在确认客户端处于ClientState.ready和服务端处于ServerState.running
-//     * 时才发起请求，在发起请求后，客户端将转入waiting_init_game状态，以避免重复发送请
-//     * 求。
-//     */
-//    private void checkToStartClientInit() {
-//        if (gameClient.getClientState() == ClientState.ready && gameClient.getServerState() == ServerState.running) {
-//            // 获取初始场景信息,注：确保这个命令只发送一次。
-//            gameClient.setClientState(ClientState.waitting_init_game);
-//            gameClient.send(new MessRequestInitGame());
-//            
-//            // 从服务端重新获取所有客户端联接信息，因为gameClient重新设置了listener,
-//            // 并且clientsWin需要初始化这部分信息，否则客户端进入后打开看不到列表，除非有新客户端连接。
-//            // 所以这里应该主动获取一次，进行初始化
-//            gameClient.send(new MessGetClients());
-//
-//            // 偿试发送消息给服务端，看看有没有客户端的存档资料，如果存在资料就不需要选择新角色进行游戏了。
-//            // （在故事模式下即可能存在客户端的存档资料）
-//            gameClient.send(new MessPlayLoadSavedActor());
-//            
-//        } else {
-//            // 请求服务端状态
-//            gameClient.send(new MessGetServerState());
-//        }
-//    }
-    
     @Override
-    protected void onSelectPlayer(String actorId, String actorName) {
-        network.sendToServer(new ActorSelectMess(actorId, actorName));
+    protected void onSelectPlayer(EntityData entityData) {
+        network.sendToServer(new ActorSelectMess(entityData));
     }
     
     @Override

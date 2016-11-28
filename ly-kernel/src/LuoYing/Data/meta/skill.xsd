@@ -595,11 +595,11 @@ xs:time
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="defendSkillTags" type="xs:string" use="required">
+                    <xs:attribute name="defendSkillTypes" type="xs:string" use="required">
                         <xs:annotation>
                             <xs:documentation>
-                                指定防守技能的标记，格式 : "skillTag1,skillTag2,...", 这表示当这个技能在执行时，如果目标角色正在执行属
-                                于这些技能标记的技能时，目标可以视为“正在防守”
+                                指定防守技能的类型，格式 : "skillType1,skillType2,...", 这表示当这个技能在执行时，如果目标角色正在执行属
+                                于这些技能类型的技能时，目标可以视为“正在防守”
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
@@ -698,20 +698,20 @@ xs:time
                         <xs:documentation>技能的执行时间，单位秒</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-                <xs:attribute name="tags" type="xs:string" use="required" >
+                <xs:attribute name="types" type="xs:string" use="required" >
                     <xs:annotation>
-                        <xs:documentation>技能的自定义标记,格式: "tag1,tag2,...", 如："walk,run,idle,fight,buff,..."</xs:documentation>
+                        <xs:documentation>技能类型,格式: "skillType1,skillType2,...", 如："walk,run,idle,fight,buff,..."</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-                <xs:attribute name="overlapTags" type="xs:string" use="optional" >
+                <xs:attribute name="overlapTypes" type="xs:string" use="optional" >
                     <xs:annotation>
-                        <xs:documentation>设置当前技能可以覆盖哪些技能进行执行,格式 : "tag1,tag2,...",
-                            overlapTags的优先级最高，当一个技能可以覆盖目标技能执行的时候，当前技能将直接执行，不会中断目标技能，忽略技能优先级(prior)设置。</xs:documentation>
+                        <xs:documentation>设置当前技能可以覆盖哪些技能进行执行,格式 : "skillType1,skillType2,...",
+                            overlapTypes的优先级最高，当一个技能可以覆盖目标技能执行的时候，当前技能将直接执行，不会中断目标技能，忽略技能优先级(prior)设置。</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-                <xs:attribute name="interruptTags" type="xs:string" use="optional" >
+                <xs:attribute name="interruptTypes" type="xs:string" use="optional" >
                     <xs:annotation>
-                        <xs:documentation>设置当前技能可以强制中断的其它技能,格式 : "tag1,tag2,...", 当设置这个参数后，逻辑是这样的：
+                        <xs:documentation>设置当前技能可以强制中断的其它技能,格式 : "skillType1,skillType2,...", 当设置这个参数后，逻辑是这样的：
                         如果当前技能不能覆盖另一个技能进行执行，则强制中断目标技能后执行,忽略优先级(prior)的设置。</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
@@ -719,7 +719,7 @@ xs:time
                     <xs:annotation>
                         <xs:documentation>
                             技能的优先级,默认值0. 值越高优先级越高，默认情况下优先级高的技能执行时会打断优先级低的技能。
-                            对于一些特殊情况，可以通过参数overlapTags，interruptTags来进行例外配置。
+                            对于一些特殊情况，可以通过参数overlapTypes，interruptTypes来进行例外配置。
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
@@ -908,7 +908,7 @@ xs:time
                         <xs:documentation>
                             FloatAttribute, 绑定角色属性，作为当前技能抵抗被另一技能打断的概率，这个属性的取值为[0.0~1.0],
                             默认情况下，高优先级的技能会打断低优先级的技能， 为了让当前技能有一定概率不被另一高优先级的技能中断，可以为技能设置这个参数，当值为1.0时表示100%防止中断。
-                           值为0.5时表示50%机率防止中断，依次类推。注: 这个设置只对优先级(prior)设置有效,如果另一技能设置了interruptTags参数强制打断当前技能，则这个设置将无效。
+                           值为0.5时表示50%机率防止中断，依次类推。注: 这个设置只对优先级(prior)设置有效,如果另一技能设置了interruptTypes参数强制打断当前技能，则这个设置将无效。
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>

@@ -11,7 +11,7 @@
     <!--==========================================================================-->
     
     <!--战斗行为基本配置-->
-    <actionDynamicFight id="actionFightBase" allowFollow="1" autoFacing="1" fightSkillTags="fight,attack" attackIntervalAttribute="attributeGhostRate" />
+    <actionDynamicFight id="actionFightBase" allowFollow="1" autoFacing="1" fightSkillTypes="fight,attack" attackIntervalAttribute="attributeGhostRate" />
     
     <!--==========================================================================-->
     <!-- Action配置 -->

@@ -15,7 +15,7 @@ import java.util.List;
 import name.huliqing.luoying.data.define.MatObject;
 import name.huliqing.luoying.data.define.TradeInfo;
 import name.huliqing.luoying.data.define.TradeObject;
-import name.huliqing.luoying.object.define.DefineFactory;
+import name.huliqing.luoying.xml.CloneHelper;
 import name.huliqing.luoying.xml.ObjectData;
 
 /**
@@ -156,18 +156,8 @@ public class SkinData extends ObjectData implements TradeObject, MatObject {
     @Override
     public SkinData clone() {
         SkinData clone = (SkinData) super.clone(); 
-        if (tradeInfos != null) {
-            clone.tradeInfos = new ArrayList<TradeInfo>(tradeInfos.size());
-            for (TradeInfo ti : tradeInfos) {
-                clone.tradeInfos.add(ti.clone());
-            }
-        }
-        if (applyAttributes != null) {
-            clone.applyAttributes = new ArrayList<AttributeApply>(applyAttributes.size());
-            for (AttributeApply ti : applyAttributes) {
-                clone.applyAttributes.add(ti.clone());
-            }
-        }
+        clone.tradeInfos = CloneHelper.cloneList(tradeInfos);
+        clone.applyAttributes  = CloneHelper.cloneList(applyAttributes);
         return clone;
     }
     

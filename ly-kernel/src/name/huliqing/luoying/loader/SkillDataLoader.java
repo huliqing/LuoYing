@@ -6,10 +6,11 @@
 package name.huliqing.luoying.loader;
 
 import java.util.ArrayList;
+import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.AttributeUse;
 import name.huliqing.luoying.xml.Proto;
 import name.huliqing.luoying.data.SkillData;
-import name.huliqing.luoying.object.define.DefineFactory;
+import name.huliqing.luoying.layer.service.DefineService;
 import name.huliqing.luoying.object.define.WeaponTypeDefine;
 import name.huliqing.luoying.xml.DataLoader;
 import name.huliqing.luoying.utils.ConvertUtils;
@@ -18,7 +19,8 @@ import name.huliqing.luoying.utils.ConvertUtils;
  * @author huliqing
  */
 public class SkillDataLoader implements DataLoader<SkillData> {
-
+    private final DefineService defineService = Factory.get(DefineService.class);
+    
     @Override
     public void load(Proto proto, SkillData data) {
         data.setUseTime(proto.getAsFloat("useTime", 1));
@@ -28,7 +30,7 @@ public class SkillDataLoader implements DataLoader<SkillData> {
         String[] wslArr = proto.getAsArray("weaponStateLimit");
         if (wslArr != null && wslArr.length > 0) {
             long[] weaponStates = new long[wslArr.length];
-            WeaponTypeDefine wtDefine = DefineFactory.getWeaponTypeDefine();
+            WeaponTypeDefine wtDefine = defineService.getWeaponTypeDefine();
             for (int i = 0; i < wslArr.length; i++) {
                 weaponStates[i] = wtDefine.convert(wslArr[i].split("\\|"));
             }
@@ -49,9 +51,9 @@ public class SkillDataLoader implements DataLoader<SkillData> {
         data.setLevel(proto.getAsInteger("level", 1));
         data.setMaxLevel(proto.getAsInteger("maxLevel", 1));
         data.setPlayCount(proto.getAsInteger("playCount", 0));
-        data.setTags(DefineFactory.getSkillTagDefine().convert(proto.getAsArray("tags")));
-        data.setOverlapTags(DefineFactory.getSkillTagDefine().convert(proto.getAsArray("overlapTags")));
-        data.setInterruptTags(DefineFactory.getSkillTagDefine().convert(proto.getAsArray("interruptTags")));
+        data.setTypes(defineService.getSkillTypeDefine().convert(proto.getAsArray("types")));
+        data.setOverlapTypes(defineService.getSkillTypeDefine().convert(proto.getAsArray("overlapTypes")));
+        data.setInterruptTypes(defineService.getSkillTypeDefine().convert(proto.getAsArray("interruptTypes")));
         data.setPrior(proto.getAsInteger("prior", 0));
         
     }

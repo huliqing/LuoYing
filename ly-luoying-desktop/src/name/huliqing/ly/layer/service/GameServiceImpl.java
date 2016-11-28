@@ -258,11 +258,6 @@ public class GameServiceImpl implements GameService {
         return enemy;
     }
 
-    @Override
-    public void selectPlayer(String actorId, String actorName) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
     // remove20161126
 //    @Override
 //    public void addClientPlayer(Entity actor) {

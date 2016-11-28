@@ -19,7 +19,7 @@ xs:time
     <xs:element name="root">
         <xs:complexType>
             <xs:all>
-                <xs:element ref="defineSkillTag" />
+                <xs:element ref="defineSkillType" />
                 <xs:element ref="defineSkinPart" />
                 <xs:element ref="defineWeaponType" />
                 <xs:element ref="defineMat" />
@@ -27,7 +27,7 @@ xs:time
         </xs:complexType>
     </xs:element>
     
-    <xs:element name="defineSkillTag" >
+    <xs:element name="defineSkillType" >
         <xs:annotation>
             <xs:documentation>
             </xs:documentation>
@@ -35,8 +35,8 @@ xs:time
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="defineBase">
-                    <xs:attribute name="skillTags" type="xs:string" use="required">
-                        <xs:annotation><xs:documentation>定义技能标记，格式："skillTag,skillTag,..." 目前限制最多64个类型.</xs:documentation></xs:annotation>
+                    <xs:attribute name="skillTypes" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>定义技能标记，格式："skillType1,skillType2,..." 目前限制最多64个类型.</xs:documentation></xs:annotation>
                     </xs:attribute>
                 </xs:extension>
             </xs:complexContent>

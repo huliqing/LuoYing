@@ -14,7 +14,6 @@ import name.huliqing.luoying.layer.network.SkillNetwork;
 import name.huliqing.luoying.layer.network.SkinNetwork;
 import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.layer.service.SkillService;
-import name.huliqing.luoying.layer.service.SkinService;
 import name.huliqing.luoying.log.StateCode;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.module.SkillListener;
@@ -33,7 +32,7 @@ import name.huliqing.luoying.utils.MathUtils;
  */
 public class DynamicFightAction extends PathFollowAction implements FightAction, SkillListener, SkinListener {
 //    private static final Logger LOG = Logger.getLogger(FightDynamicAction.class.getName());
-    private final SkinService skinService = Factory.get(SkinService.class);
+//    private final SkinService skinService = Factory.get(SkinService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
     private final EntityService entityService = Factory.get(EntityService.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
@@ -49,8 +48,8 @@ public class DynamicFightAction extends PathFollowAction implements FightAction,
     private float followTimeMax = 8;
     private float followTimeUsed;
     
-    //  战斗技能tags
-    private long fightSkillTags;
+    //  战斗技能类型
+    private long fightSkillTypes;
     
     // 战斗结束后自动摘下武器
     private boolean autoTakeOffWeapon = true;
@@ -90,7 +89,7 @@ public class DynamicFightAction extends PathFollowAction implements FightAction,
         autoTakeOffWeapon = data.getAsBoolean("autoTakeOffWeapon", autoTakeOffWeapon);
         attackIntervalAttribute = data.getAsString("attackIntervalAttribute");
         attackIntervalMax = data.getAsFloat("attackIntervalMax", attackIntervalMax);
-        fightSkillTags = skillService.convertSkillTags(data.getAsArray("fightSkillTags"));
+        fightSkillTypes = skillService.convertSkillTypes(data.getAsArray("fightSkillTypes"));
     }
 
     @Override
@@ -306,7 +305,7 @@ public class DynamicFightAction extends PathFollowAction implements FightAction,
     
     private void recacheSkill() {
         fightSkills.clear();
-        loadFightSkill(fightSkillTags, fightSkills);
+        loadFightSkill(fightSkillTypes, fightSkills);
         // 重新缓存技能后，检查一次当前正在使用的技能是否适合当前的武器，如果不行则清除它，让它
         // 重新获取一个可用的。否则不应该清除当前的技能。
         if (skill != null) {
@@ -318,14 +317,14 @@ public class DynamicFightAction extends PathFollowAction implements FightAction,
     
     /**
      * 载入战斗技能
-     * @param skillTags 指定的技能类型限制
+     * @param skillTypes 指定的技能类型限制
      * @param store
      * @return "攻击"技能列表,可能包含：attack.common/shot/trick/magic
      */
-    private List<Skill> loadFightSkill(long skillTags, List<Skill> store) {
+    private List<Skill> loadFightSkill(long skillTypes, List<Skill> store) {
         List<Skill> allSkills = skillModule.getSkills();
         for (Skill fightSkill : allSkills) {
-            if ((skillTags & fightSkill.getData().getTags()) != 0) {
+            if ((skillTypes & fightSkill.getData().getTypes()) != 0) {
                 // 武器类型的过滤,只有技能与当前武器相容才能添加
                 if (fightSkill.isPlayableByWeapon()) {
                     store.add(fightSkill);

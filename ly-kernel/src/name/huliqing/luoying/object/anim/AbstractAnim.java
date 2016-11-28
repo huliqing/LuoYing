@@ -216,16 +216,22 @@ public abstract class AbstractAnim<E> implements Anim<AnimData, E> {
         
         if (stepEnd) {
             if (loop == Loop.dontLoop) {
+                
                 doListenerDone();
-                doEnd();
+                cleanup();
+                
             } else if (loop == Loop.loop) {
+                
                 doListenerDone();
                 timeInterpolation = 0;
+                
             } else if (loop == Loop.cycle) {
+                
                 if (isInverse()) {
                     doListenerDone();
                 }
                 dir = -dir;
+                
             }
         }
         
@@ -253,14 +259,6 @@ public abstract class AbstractAnim<E> implements Anim<AnimData, E> {
     @Override
     public boolean isEnd() {
         return !started;
-    }
-    
-    /**
-     * 结束当前动画
-     */
-    protected final void doEnd() {
-        // 从场景中移除动画控制器
-//        playService.removeAnimation(this);
     }
     
     @Override

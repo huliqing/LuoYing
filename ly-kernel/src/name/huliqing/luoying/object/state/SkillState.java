@@ -9,7 +9,7 @@ import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.StateData;
 import name.huliqing.luoying.layer.network.SkillNetwork;
-import name.huliqing.luoying.object.define.DefineFactory;
+import name.huliqing.luoying.layer.service.DefineService;
 import name.huliqing.luoying.object.module.SkillModule;
 import name.huliqing.luoying.object.skill.Skill;
 
@@ -18,16 +18,17 @@ import name.huliqing.luoying.object.skill.Skill;
  * @author huliqing
  */
 public class SkillState extends AbstractState {
+    private final DefineService defineService = Factory.get(DefineService.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
     private SkillModule skillModule;
     
-    private long skillTags;
+    private long skillTypes;
     private boolean force;
 
     @Override
     public void setData(StateData data) {
         super.setData(data);
-        skillTags = DefineFactory.getSkillTagDefine().convert(data.getAsArray("skillTags"));
+        skillTypes = defineService.getSkillTypeDefine().convert(data.getAsArray("skillTypes"));
         force = data.getAsBoolean("force", force);
     }
     
@@ -39,7 +40,7 @@ public class SkillState extends AbstractState {
         if (skillModule == null)
             return;
         
-        List<Skill> tagSkills = skillModule.getSkillByTags(skillTags, null);
+        List<Skill> tagSkills = skillModule.getSkillByTypes(skillTypes, null);
         if (tagSkills == null || tagSkills.isEmpty())
             return;
         

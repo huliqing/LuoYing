@@ -30,8 +30,6 @@ xs:time
         </xs:complexType>
     </xs:element>
     
-    
-    
     <xs:element name="actionDynamicFight">
         <xs:annotation>
             <xs:documentation></xs:documentation>
@@ -62,9 +60,9 @@ xs:time
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="fightSkillTags" type="xs:string" use="required">
+                    <xs:attribute name="fightSkillTypes" type="xs:string" use="required">
                         <xs:annotation>
-                            <xs:documentation>指定可用于战斗的技能类型的标记, 格式: "tag1,tag2,..."</xs:documentation>
+                            <xs:documentation>指定可用于战斗的技能类型的标记, 格式: "skillType1,skillType2,..."</xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
                     <xs:attribute name="attackIntervalAttribute" type="xs:string" use="optional" >
@@ -87,26 +85,6 @@ xs:time
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    
-                    <!--remove20160920-->
-<!--                    <xs:attribute name="attackSkillTypes" use="optional">
-                        <xs:annotation>
-                            <xs:documentation>
-                                该参数指定在AI战斗过程中允许使用的攻击技能类型，
-                                攻击技能类型，attack/trick， 示例: "attack"、"trick"、"attack,trick"
-                                如果该值为null,则允许所有类型的战斗技能.否则只使用给定的攻击技能。
-                                该参数主要是为了让玩家角色在战斗过程中能够自行控制一些技能，如魔法技能，
-                                可能玩家角色不希望AI自动使用这些技能以消耗魔法。技能类型以SkillType.java为基准
-                            </xs:documentation>
-                        </xs:annotation>
-                        <xs:simpleType>
-                            <xs:restriction base="xs:string">
-                                <xs:enumeration value="attack"/>
-                                <xs:enumeration value="trick"/>
-                            </xs:restriction>
-                        </xs:simpleType>
-                    </xs:attribute>-->
-                    
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>

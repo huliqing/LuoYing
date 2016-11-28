@@ -34,6 +34,8 @@ import name.huliqing.luoying.layer.service.BulletService;
 import name.huliqing.luoying.layer.service.BulletServiceImpl;
 import name.huliqing.luoying.layer.service.ConfigService;
 import name.huliqing.luoying.layer.service.ConfigServiceImpl;
+import name.huliqing.luoying.layer.service.DefineService;
+import name.huliqing.luoying.layer.service.DefineServiceImpl;
 import name.huliqing.luoying.layer.service.SystemServiceImpl;
 import name.huliqing.luoying.layer.service.ElService;
 import name.huliqing.luoying.layer.service.ElServiceImpl;
@@ -88,6 +90,7 @@ public class Factory {
         CLASS_MAP.put(ActorService.class, ActorServiceImpl.class);
         CLASS_MAP.put(BulletService.class, BulletServiceImpl.class);
         CLASS_MAP.put(ConfigService.class, ConfigServiceImpl.class);
+        CLASS_MAP.put(DefineService.class, DefineServiceImpl.class);
         CLASS_MAP.put(ElService.class, ElServiceImpl.class);
         CLASS_MAP.put(EntityService.class, EntityServiceImpl.class);
         CLASS_MAP.put(LogicService.class, LogicServiceImpl.class);

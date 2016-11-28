@@ -9,12 +9,12 @@ package name.huliqing.luoying.object.skill;
  * 包装技能标记。
  * @author huliqing
  */
-public class SkillTag {
+public class SkillType {
     
     private final int index;
     private final String name;
     
-    public SkillTag(int index, String tag) {
+    public SkillType(int index, String tag) {
         this.index = index;
         this.name = tag;
     }

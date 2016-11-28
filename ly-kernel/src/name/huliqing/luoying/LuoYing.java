@@ -252,7 +252,7 @@ import name.huliqing.luoying.object.attribute.StringAttribute;
 import name.huliqing.luoying.object.attribute.StringListAttribute;
 import name.huliqing.luoying.object.attribute.Vector4fAttribute;
 import name.huliqing.luoying.object.define.MatDefine;
-import name.huliqing.luoying.object.define.SkillTagDefine;
+import name.huliqing.luoying.object.define.SkillTypeDefine;
 import name.huliqing.luoying.object.define.SkinPartDefine;
 import name.huliqing.luoying.object.define.WeaponTypeDefine;
 import name.huliqing.luoying.object.drop.AttributeDrop;
@@ -446,7 +446,7 @@ public class LuoYing {
         DataFactory.register("config",  ConfigData.class, ConfigDataLoader.class, null);
         
         // Define
-        DataFactory.register("defineSkillTag", DefineData.class, DefineDataLoader.class, SkillTagDefine.class);
+        DataFactory.register("defineSkillType", DefineData.class, DefineDataLoader.class, SkillTypeDefine.class);
         DataFactory.register("defineSkinPart", DefineData.class, DefineDataLoader.class, SkinPartDefine.class);
         DataFactory.register("defineWeaponType", DefineData.class, DefineDataLoader.class, WeaponTypeDefine.class);
         DataFactory.register("defineMat", DefineData.class, DefineDataLoader.class, MatDefine.class);

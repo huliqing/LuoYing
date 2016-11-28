@@ -38,15 +38,15 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
     // 被锁定的技能列表，二进制表示，其中每1个二进制位表示一个技能类型。
     // 如果指定的位为1，则表示这个技能类型被锁定，则这类技能将不能执行。
     // 默认值0表示没有任何锁定。
-    private long lockedSkillTags;
+    private long lockedSkillTypes;
     
     // 默认的技能: “空闲”"等待"，“受伤”，“死亡”。。
-    private long idleSkillTags;
-    private long waitSkillTags;
-    private long walkSkillTags;
-    private long runSkillTags;
-    private long hurtSkillTags;
-    private long deadSkillTags;
+    private long idleSkillTypes;
+    private long waitSkillTypes;
+    private long walkSkillTypes;
+    private long runSkillTypes;
+    private long hurtSkillTypes;
+    private long deadSkillTypes;
     
     // 绑定角色的“死亡”属性，当角色在死亡的时候自动执行死亡技能
     private String bindDeadAttribute;
@@ -68,8 +68,8 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
     // 当前正在执行的技能列表,
     // 如果runningSkills都执行完毕,则清空.但是lastSkill仍保持最近刚刚执行的技能的引用.
     private final SafeArrayList<Skill> playingSkills = new SafeArrayList<Skill>(Skill.class);
-    // 当前正在运行的所有技能的类型，其中每一个二进制位表示一个技能标记。
-    private long playingSkillTags;
+    // 当前正在运行的所有技能的类型，其中每一个二进制位表示一个技能类型。
+    private long playingSkillTypes;
     // 当前正在执行中的技能中优先级最高的值。
     private int playingPriorMax = Integer.MIN_VALUE;
     
@@ -81,19 +81,19 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
     @Override
     public void setData(ModuleData data) {
         super.setData(data);
-        lockedSkillTags = data.getAsLong("lockedSkillTags", 0);
-        idleSkillTags = skillService.convertSkillTags(data.getAsArray("idleSkillTags"));
-        waitSkillTags = skillService.convertSkillTags(data.getAsArray("waitSkillTags"));
-        walkSkillTags = skillService.convertSkillTags(data.getAsArray("walkSkillTags"));
-        runSkillTags = skillService.convertSkillTags(data.getAsArray("runSkillTags"));
-        hurtSkillTags = skillService.convertSkillTags(data.getAsArray("hurtSkillTags"));
-        deadSkillTags = skillService.convertSkillTags(data.getAsArray("deadSkillTags"));
+        lockedSkillTypes = data.getAsLong("lockedSkillTypes", 0);
+        idleSkillTypes = skillService.convertSkillTypes(data.getAsArray("idleSkillTypes"));
+        waitSkillTypes = skillService.convertSkillTypes(data.getAsArray("waitSkillTypes"));
+        walkSkillTypes = skillService.convertSkillTypes(data.getAsArray("walkSkillTypes"));
+        runSkillTypes = skillService.convertSkillTypes(data.getAsArray("runSkillTypes"));
+        hurtSkillTypes = skillService.convertSkillTypes(data.getAsArray("hurtSkillTypes"));
+        deadSkillTypes = skillService.convertSkillTypes(data.getAsArray("deadSkillTypes"));
         bindDeadAttribute = data.getAsString("bindDeadAttribute");
     }
     
     @Override
     public void updateDatas() {
-        data.setAttribute("lockedSkillTags", lockedSkillTags);
+        data.setAttribute("lockedSkillTypes", lockedSkillTypes);
     }
 
     @Override
@@ -141,14 +141,14 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
             }
             
             // 如果有技能执行完了，并被移除了.
-            // 1.重新缓存runningSkillTags
+            // 1.重新缓存runningSkillTypes
             // 2.重新缓存技能中最高优先级的值。
             // 3.修复、重启部分被覆盖的动画通道的动画，比如在走动时取武器后双手应该重新回到走动时的协调运动。
             if (playingSkills.size() != oldSize) {
-                playingSkillTags = 0;
+                playingSkillTypes = 0;
                 playingPriorMax = Integer.MIN_VALUE;
                 for (Skill playSkill : playingSkills.getArray()) {
-                    playingSkillTags |= playSkill.getData().getTags();
+                    playingSkillTypes |= playSkill.getData().getTypes();
                     if (playSkill.getData().getPrior() > playingPriorMax) {
                         playingPriorMax = playSkill.getData().getPrior();
                     }
@@ -168,7 +168,7 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
         playingSkills.clear();
         skills.clear();
         skillMap.clear();
-        playingSkillTags = 0;
+        playingSkillTypes = 0;
         entity.getSpatial().removeControl(updateControl);
         if (deadAttribute != null) {
             deadAttribute.removeListener(this);
@@ -181,9 +181,9 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
         if (attribute == deadAttribute) {
             Skill playSkill;
             if (deadAttribute.getValue()) {
-                playSkill = getSkillByTags(deadSkillTags);
+                playSkill = getSkillByTypes(deadSkillTypes);
             } else {
-                playSkill = getSkillByTags(waitSkillTags);
+                playSkill = getSkillByTypes(waitSkillTypes);
             }
             if (playSkill != null) {
                 playSkill(playSkill, false);
@@ -209,7 +209,7 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
         SkillData skillData = skill.getData();
         
         // 如果技能被锁定中，则不能执行
-        if (isLockedSkillTags(skillData.getTags())) {
+        if (isLockedSkillTypes(skillData.getTypes())) {
             return StateCode.SKILL_LOCKED;
         }
         
@@ -238,10 +238,10 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
         // 则不需要再判断技能优先级如果其中有任何一个即不能被覆盖，并且也不能被打断，
         // 则需要判断技能优先级
         boolean allCanOverlapOrInterrupt = true;
-        long overlaps = skillData.getOverlapTags();
-        long interrupts = skillData.getInterruptTags();
+        long overlaps = skillData.getOverlapTypes();
+        long interrupts = skillData.getInterruptTypes();
         for (Skill runSkill : playingSkills.getArray()) {
-            if ((overlaps & runSkill.getData().getTags()) == 0 && (interrupts & runSkill.getData().getTags()) == 0) {
+            if ((overlaps & runSkill.getData().getTypes()) == 0 && (interrupts & runSkill.getData().getTypes()) == 0) {
                 allCanOverlapOrInterrupt = false;
                 break;
             }
@@ -252,28 +252,6 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
         
         return StateCode.SKILL_CAN_NOT_INTERRUPT;
     }
-    
-//    /**
-//     * 从当前正在运行的技能中找出不希望被newSkill中断的技能id(唯一ID)， 如果没有找到则返回null或空列表
-//     * @param newSkill
-//     * @return 
-//     */
-//    public List<Long> checkNotWantInterruptSkills(Skill newSkill) {
-//        // 如果执行中的技能不希望被newSkill中断则不中断。
-//        if (playingSkills.isEmpty()) {
-//            return null;
-//        }
-//        List<Long> result = null;
-//        for (Skill s : playingSkills) {
-//            if (!s.canInterruptBySkill(newSkill)) {
-//                if (result == null) {
-//                    result = new ArrayList<Long>(3);
-//                }
-//                result.add(s.getData().getUniqueId());
-//            }
-//        }
-//        return result;   
-//    }
     
     /**
      * 执行技能，如果成功执行则返回true,否则返回false, <br>
@@ -304,15 +282,15 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
         }
         
         // 这个方法是强制执行的
-        long overlaps = newSkill.getData().getOverlapTags();
-        long interrupts = newSkill.getData().getInterruptTags();
+        long overlaps = newSkill.getData().getOverlapTypes();
+        long interrupts = newSkill.getData().getInterruptTypes();
         for (Skill playSkill : playingSkills.getArray()) {
             // 1.由newSkill指定的要覆盖的，则优先使用覆盖，即不要中断。
-            if ((overlaps & playSkill.getData().getTags()) != 0) {
+            if ((overlaps & playSkill.getData().getTypes()) != 0) {
                 continue;
             }
             // 2.由newSkill指定的要强制中断的，一定要中断
-            if ((interrupts & playSkill.getData().getTags()) != 0) {
+            if ((interrupts & playSkill.getData().getTypes()) != 0) {
                 playSkill.cleanup();
                 continue;
             }
@@ -343,7 +321,7 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
         // 记录当前正在运行的所有技能类型
         if (!playingSkills.contains(lastSkill)) {
             playingSkills.add(lastSkill);
-            playingSkillTags |= lastSkill.getData().getTags();
+            playingSkillTypes |= lastSkill.getData().getTypes();
             // 更新当前playing中所有技能的最高优先级的值。
             if (newSkill.getData().getPrior() > playingPriorMax) {
                 playingPriorMax = newSkill.getData().getPrior();
@@ -425,13 +403,13 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
     }
     
     /**
-     * 找出指定的标记的技能，第一个找到的将被直接返回。
-     * @param skillTags
+     * 找出指定的类型的技能，第一个找到的将被直接返回。
+     * @param skillTypes
      * @return 
      */
-    private Skill getSkillByTags(long skillTags) {
+    private Skill getSkillByTypes(long skillTypes) {
         for (Skill s : skills) {
-            if ((s.getData().getTags() & skillTags) != 0) {
+            if ((s.getData().getTypes() & skillTypes) != 0) {
                 return s;
             }
         }
@@ -439,12 +417,12 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
     }
     
     /**
-     * 查找拥有指定tags的所有技能。
-     * @param skillTags
+     * 查找拥有指定types的所有技能。
+     * @param skillTypes
      * @param store 存放结果
      * @return 
      */
-    public List<Skill> getSkillByTags(long skillTags, List<Skill> store) {
+    public List<Skill> getSkillByTypes(long skillTypes, List<Skill> store) {
         if (store == null) {
             store = new ArrayList<Skill>();
         }
@@ -452,7 +430,7 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
             return store;
         }
         for (Skill s : skills) {
-            if ((s.getData().getTags() & skillTags) != 0) {
+            if ((s.getData().getTypes() & skillTypes) != 0) {
                 store.add(s);
             }
         }
@@ -465,7 +443,7 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
      * @return 
      */
     public List<Skill> getSkillIdle(List<Skill> store) {
-        return getSkillByTags(idleSkillTags, store);
+        return getSkillByTypes(idleSkillTypes, store);
     }
     
     /**
@@ -474,7 +452,7 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
      * @return 
      */
     public List<Skill> getSkillWait(List<Skill> store) {
-        return getSkillByTags(waitSkillTags, store);
+        return getSkillByTypes(waitSkillTypes, store);
     }
     
     /**
@@ -483,7 +461,7 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
      * @return 
      */
     public List<Skill> getSkillWalk(List<Skill> store) {
-        return getSkillByTags(walkSkillTags, store);
+        return getSkillByTypes(walkSkillTypes, store);
     }
     
     /**
@@ -492,7 +470,7 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
      * @return 
      */
     public List<Skill> getSkillRun(List<Skill> store) {
-        return getSkillByTags(runSkillTags, store);
+        return getSkillByTypes(runSkillTypes, store);
     }
     
     /**
@@ -501,7 +479,7 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
      * @return 
      */
     public List<Skill> getSkillHurt(List<Skill> store) {
-        return getSkillByTags(hurtSkillTags, store);
+        return getSkillByTypes(hurtSkillTypes, store);
     }
     
     /**
@@ -510,7 +488,7 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
      * @return 
      */
     public List<Skill> getSkillDead(List<Skill> store) {
-        return getSkillByTags(deadSkillTags, store);
+        return getSkillByTypes(deadSkillTypes, store);
     }
     
     /**
@@ -579,59 +557,57 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
     }
     
     /**
-     * 获取当前正在执行的技能标记(tags)，返回值中每个二进制位表示一个技能(标记),<br>
+     * 获取当前正在执行的技能类型(type)，返回值中每个二进制位表示一个技能(类型),<br>
      * 如果没有正在执行的任何技能则该值会返回 0. <br>
-     * 通过 {@link SkillTagFactory#toStringTags(long) } 来查看tag的字符串描述
      * @return 
-     * @see SkillTagFactory#toStringTags(long) 
      */
-    public long getPlayingSkillTags() {
-        return playingSkillTags;
+    public long getPlayingSkillTypes() {
+        return playingSkillTypes;
     }
 
     /**
-     * 获取技能的锁定状态，返回的整数中每一个二进制位表示一个被锁定的技能标记(tag)
+     * 获取技能的锁定状态，返回的整数中每一个二进制位表示一个被锁定的技能类型
      * @return 
      */
-    public long getLockedSkillTags() {
-        return lockedSkillTags;
+    public long getLockedSkillTypes() {
+        return lockedSkillTypes;
     }
     
     /**
-     * 判断技能标记是否被锁定, 如果skillTags中存在<b>任何一个</b>标记被锁定则该方法将返回true.
-     * @param skillTags
+     * 判断技能类型是否被锁定, 如果skillTypes中存在<b>任何一个</b>类型被锁定则该方法将返回true.
+     * @param skillTypes
      * @return 
      */
-    public boolean isLockedSkillTags(long skillTags) {
-        return (lockedSkillTags & skillTags) != 0;
+    public boolean isLockedSkillTypes(long skillTypes) {
+        return (lockedSkillTypes & skillTypes) != 0;
     }
 
     /**
-     * 锁定指定技能标记的技能, 被锁定后的技能将不能执行。
-     * @param skillTags 
-     * @see #getLockedSkillTags() 
+     * 锁定指定技能类型的技能, 被锁定后的技能将不能执行。
+     * @param skillTypes 
+     * @see #getLockedSkillTypes() 
      */
-    public void lockSkillTags(long skillTags) {
-        this.lockedSkillTags |= skillTags;
+    public void lockSkillTypes(long skillTypes) {
+        this.lockedSkillTypes |= skillTypes;
         updateDatas();
     }
     
     /**
-     * 解锁指定技能标记的技能。 
-     * @param skillTags 
+     * 解锁指定技能类型的技能。 
+     * @param skillTypes 
      */
-    public void unlockSkillTags(long skillTags) {
-        lockedSkillTags &= ~skillTags;
+    public void unlockSkillTypes(long skillTypes) {
+        lockedSkillTypes &= ~skillTypes;
         updateDatas();
     }
         
     /**
-     * 判断skillTags标记的技能是否正在执行。如果skillTags标记的技能中有<b>任何一个</b>正在执行则该方法返回true.
-     * @param skillTags
+     * 判断skillTypes类型的技能是否正在执行。如果skillTypes类型的技能中有<b>任何一个</b>正在执行则该方法返回true.
+     * @param skillTypes
      * @return 
      */
-    public boolean isPlayingSkill(long skillTags) {
-        return (playingSkillTags & skillTags) != 0;
+    public boolean isPlayingSkill(long skillTypes) {
+        return (playingSkillTypes & skillTypes) != 0;
     }
     
     /**
@@ -640,8 +616,8 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
      */
     public boolean isWaiting() {
         return lastSkill == null
-                || (lastSkill.getData().getTags() & waitSkillTags) != 0
-                || (playingSkillTags & waitSkillTags) != 0;
+                || (lastSkill.getData().getTypes() & waitSkillTypes) != 0
+                || (playingSkillTypes & waitSkillTypes) != 0;
     }
     
     /**
@@ -649,7 +625,7 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
      * @return 
      */
     public boolean isWalking() {
-        return (playingSkillTags & walkSkillTags) != 0;
+        return (playingSkillTypes & walkSkillTypes) != 0;
     }
     
     /**
@@ -657,7 +633,7 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
      * @return 
      */
     public boolean isRunning() {
-        return (playingSkillTags & runSkillTags) != 0;
+        return (playingSkillTypes & runSkillTypes) != 0;
     }
 
     @Override

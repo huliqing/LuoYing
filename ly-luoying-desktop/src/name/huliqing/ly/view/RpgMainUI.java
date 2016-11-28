@@ -10,6 +10,7 @@ import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.anim.Anim;
 import name.huliqing.luoying.object.anim.AnimNode;
+import name.huliqing.luoying.object.anim.AnimationControl;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.game.Game;
 import name.huliqing.luoying.object.game.GameListener;
@@ -35,7 +36,7 @@ public class RpgMainUI extends PlayStateUI implements GameListener {
     // 角色面板
     private ActorMainPanel userPanel;
     private Anim userPanelAnim;
-    private AnimNode animNode;
+    private AnimationControl animationControl;
     
     // UI:技能按钮
     private UI attack;
@@ -69,8 +70,8 @@ public class RpgMainUI extends PlayStateUI implements GameListener {
         userPanel.setDragEnabled(true);
         userPanelAnim = Loader.load(IdConstants.ANIM_VIEW_MOVE);
         userPanelAnim.setTarget(userPanel);
-        animNode = new AnimNode(userPanelAnim);
-        rpgGame.getScene().getRoot().attachChild(animNode);
+        animationControl = new AnimationControl(userPanelAnim);
+        rpgGame.getScene().getRoot().addControl(animationControl);
         
         // ---- 人物属性开关铵钮
         // 按钮：人物面板,包含装甲、武器、技能、属性、任务等等

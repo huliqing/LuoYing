@@ -6,10 +6,10 @@
     xsi:schemaLocation='http://luoying.huliqing.name ../../../../ly-kernel/src/LuoYing/Data/meta/define.xsd'>
     
     <!-- ========================================================================= -->
-    <!--系统默认的技能标记定义(id不能改): 最多允许64个标记-->
+    <!--系统默认的技能类型定义(id不能改): 最多允许64个类型-->
     <!-- ========================================================================= -->
     
-    <defineSkillTag id="sysDefineSkillTag" skillTags="wait,walk,run,jump,idle,hurt,dead,reset,defend,duck,fight,attack,trick,magic,skin" />
+    <defineSkillType id="sysDefineSkillType" skillTypes="wait,walk,run,jump,idle,hurt,dead,reset,defend,duck,fight,attack,trick,magic,skin" />
     
     <!-- ========================================================================= -->
     <!--系统默认装备部位的定义(id不能改) : 最多允许64个部位定义-->

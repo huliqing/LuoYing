@@ -14,33 +14,33 @@
     <!-- ========================================================================= -->
     
     <!--普通的idle技能-->
-    <skillBase id="skillIdleTagBase" tags="idle" prior="0" overlapTags="skin" interruptTags="idle,wait,walk,run" />
+    <skillBase id="skillIdleTagBase" types="idle" prior="0" overlapTypes="skin" interruptTypes="idle,wait,walk,run" />
     <!--等待、待机-->
-    <skillBase id="skillWaitTagBase" tags="wait" prior="0" overlapTags="skin" interruptTags="idle,wait,walk,run" />
+    <skillBase id="skillWaitTagBase" types="wait" prior="0" overlapTypes="skin" interruptTypes="idle,wait,walk,run" />
     <!--走路、步行-->
-    <skillBase id="skillWalkTagBase" tags="walk" prior="0" overlapTags="skin" interruptTags="idle,wait,walk,run" />
+    <skillBase id="skillWalkTagBase" types="walk" prior="0" overlapTypes="skin" interruptTypes="idle,wait,walk,run" />
     <!--跑步-->
-    <skillBase id="skillRunTagBase" tags="run" prior="0" overlapTags="skin" interruptTags="idle,wait,walk,run" />
+    <skillBase id="skillRunTagBase" types="run" prior="0" overlapTypes="skin" interruptTypes="idle,wait,walk,run" />
     <!--穿装备-->
-    <skillBase id="skillSkinTagBase" tags="skin" prior="0" overlapTags="idle,wait,walk,run,skin" />
+    <skillBase id="skillSkinTagBase" types="skin" prior="0" overlapTypes="idle,wait,walk,run,skin" />
 
     <!--战斗技能:普通攻击-->
-    <skillBase id="skillFightSimpleTagBase" tags="fight,attack" prior="10" channelLocks="channelLeftArm,channelLeftHand,channelRightArm,channelRightHand" />
+    <skillBase id="skillFightSimpleTagBase" types="fight,attack" prior="10" channelLocks="channelLeftArm,channelLeftHand,channelRightArm,channelRightHand" />
     <!--防守技能-->
-    <skillBase id="skillDefendTagBase" tags="defend" prior="20" />
+    <skillBase id="skillDefendTagBase" types="defend" prior="20" />
     <!--躲闪技能-->
-    <skillBase id="skillDuckTagBase" tags="duck" prior="20" />
+    <skillBase id="skillDuckTagBase" types="duck" prior="20" />
     <!--战斗技能:大招-->
-    <skillBase id="skillFightTrickTagBase" tags="fight,trick" prior="30" channelLocks="channelLeftArm,channelLeftHand,channelRightArm,channelRightHand" />
+    <skillBase id="skillFightTrickTagBase" types="fight,trick" prior="30" channelLocks="channelLeftArm,channelLeftHand,channelRightArm,channelRightHand" />
     
      <!--普通魔法（非战斗类）-->
-    <skillBase id="skillMagicTagBase" tags="magic" prior="30" />
+    <skillBase id="skillMagicTagBase" types="magic" prior="30" />
     <!--受伤-->
-    <skillBase id="skillHurtTagBase" tags="hurt" prior="40" />
+    <skillBase id="skillHurtTagBase" types="hurt" prior="40" />
     <!--重置：主要用于没有配置死亡技能的角色以及被击晕时的状态: reset和dead技能优先级最高-->
-    <skillBase id="skillResetTagBase" tags="reset" prior="50" interruptTags="fight" />
+    <skillBase id="skillResetTagBase" types="reset" prior="50" interruptTypes="fight" />
     <!--死亡-->
-    <skillBase id="skillDeadTagBase" tags="dead" prior="60" interruptTags="fight" />
+    <skillBase id="skillDeadTagBase" types="dead" prior="60" interruptTypes="fight" />
     
     <!-- ========================================================================= -->
     <!--基本配置: 对于各种类型技能的基本定义，所有带"base"后缀的按规范不能直接配置给角色，只能被用于继承。-->
@@ -82,7 +82,7 @@
     <skillShot id="skillMagicBuffBase" extends="skillMagicBase" hitDistance="35" hitEl="elSkillBuff" hitCheckEl="elSkillBuffCheck" bullets="bulletBuff" />
 
     <!--普通物理攻击：普通，一般可配置给冷兵器技能，如：刀、剑、斧、匕首、大刀、长枪...-->
-    <skillAttack id="skillFightSimpleAttackBase"            extends="skillFightSimpleTagBase" defendSkillTags="defend" hitAttribute="attributeHealth" levelEl="elSkillLevel" hitCheckEl="elSkillFightHitCheck" hitEl="elSkillAttack" bindTargetAttribute="attributeTarget" bindSpeedAttribute="attributeAttackSpeed" bindCutTimeEndAttribute="attributeGhostRate" />
+    <skillAttack id="skillFightSimpleAttackBase"            extends="skillFightSimpleTagBase" defendSkillTypes="defend" hitAttribute="attributeHealth" levelEl="elSkillLevel" hitCheckEl="elSkillFightHitCheck" hitEl="elSkillAttack" bindTargetAttribute="attributeTarget" bindSpeedAttribute="attributeAttackSpeed" bindCutTimeEndAttribute="attributeGhostRate" />
     <!--普通物理攻击：远程，一般可配置给远程攻击兵器用的技能，如：弓箭、炮塔，枪械等远程攻击技能 -->
     <skillShot    id="skillFightSimpleAttackShotBase"    extends="skillFightSimpleAttackBase" hitDistance="35" cooldown="2.5" shotSpeed="1" shotTimes="0" useTime="0" bindAvoidInterruptAttribute="attributeResistInterruptRate" />
     

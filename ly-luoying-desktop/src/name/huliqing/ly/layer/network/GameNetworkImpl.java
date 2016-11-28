@@ -9,9 +9,9 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.math.Vector4f;
 import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.luoying.layer.network.PlayNetwork;
-import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.ly.mess.MessActionRun;
 import name.huliqing.luoying.mess.EntityHitAttributeMess;
 import name.huliqing.luoying.mess.EntityRemoveDataMess;
@@ -246,35 +246,38 @@ public class GameNetworkImpl implements GameNetwork {
         return entityNetwork.removeObjectData(entity, objectUniqueId, amount);
     }
     
-    @Override
-    public void selectPlayer(String actorId, String actorName) {
-        if (network.isClient()) {
-            network.sendToServer(new ActorSelectMess(actorId, actorName));
-        } else {
-            Entity actor = Loader.load(actorId);
-            actor.getData().setName(actorName);
-            // 暂时以1作为默认分组
-            gameService.setTeam(actor, 1);
-            
-            // xxx 这一段要重构
-//            List<Skill> waitSkills = skillService.getSkillWait(actor);
-//            if (waitSkills != null && !waitSkills.isEmpty()) {
-//                skillService.playSkill(actor, waitSkills.get(0), false);
-//            }
-
-            gameService.setPlayer(actor);
-            playNetwork.addEntity(actor);
-            
-            // 通知所有客户端
-            String message = ResourceManager.get("lan.enterGame", new Object[] {actorName});
-            MessageType type = MessageType.item;
-            MessMessage mess = new MessMessage();
-            mess.setMessage(message);
-            mess.setType(type);
-            network.broadcast(mess); 
-            
-            // 通知主机
-            gameService.addMessage(message, type);
-        }
-    }
+    // remove20161128
+//    @Override
+//    public void selectPlayer(EntityData entityData) {
+//        if (network.isClient()) {
+//            network.sendToServer(new ActorSelectMess(entityData));
+//        } else {
+//            
+//            Entity actor = Loader.load(entityData);
+//            
+//            // 暂时以1作为默认分组
+////            gameService.setTeam(actor, 1);
+//            // xxx 这一段要重构
+////            List<Skill> waitSkills = skillService.getSkillWait(actor);
+////            if (waitSkills != null && !waitSkills.isEmpty()) {
+////                skillService.playSkill(actor, waitSkills.get(0), false);
+////            }
+//
+//            playNetwork.addEntity(actor);
+//            gameService.setPlayer(actor);
+//            
+//            // 通知所有客户端
+//            String message = ResourceManager.get("lan.enterGame", new Object[] {actorName});
+//            MessageType type = MessageType.item;
+//            MessMessage mess = new MessMessage();
+//            mess.setMessage(message);
+//            mess.setType(type);
+//            network.broadcast(mess); 
+//            
+//            // 通知主机
+//            gameService.addMessage(message, type);
+//        }
+//    }
+    
+    
 }

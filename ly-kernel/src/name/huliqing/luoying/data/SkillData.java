@@ -13,6 +13,7 @@ import com.jme3.network.serializing.Serializable;
 import java.io.IOException; 
 import java.util.ArrayList;
 import java.util.List;
+import name.huliqing.luoying.xml.CloneHelper;
 
 /**
  * @author huliqing
@@ -41,12 +42,12 @@ public class SkillData extends ObjectData {
     // 技能点数（技能熟练度），每次执行技能该值会递增，并经验公式来判断是否升级技能。
     private int playCount;
     
-    // 技能标记
-    private long tags;
+    // 技能类型
+    private long types;
     // 例外的，在排除优先级比较的前提下，如果一个技能可以覆盖另一个技能，则不需要比较优先级。
-    private long overlapTags;
+    private long overlapTypes;
     // 例外的，在排除优先级比较的前提下，如果一个技能可以打断另一个技能，则不需要比较优先级。
-    private long interruptTags;
+    private long interruptTypes;
     // 技能的优先级,优先级高的可以打断优先级低的技能
     private int prior;
     
@@ -169,33 +170,33 @@ public class SkillData extends ObjectData {
      * 获取技能标记
      * @return 
      */
-    public long getTags() {
-        return tags;
+    public long getTypes() {
+        return types;
     }
     
     /**
      * 设置技能标记
-     * @param tags 
+     * @param types 
      */
-    public void setTags(long tags) {
-        this.tags = tags;
+    public void setTypes(long types) {
+        this.types = types;
     }
     
     /**
      * 获取当前技能类型可以覆盖的其它技能的类型，以二进制位表示，返回的整形中每个位代表一个技能类型。
      * @return 
      */
-    public long getOverlapTags() {
-        return overlapTags;
+    public long getOverlapTypes() {
+        return overlapTypes;
     }
     
     /**
      * 设置当前技能类型可以覆盖的其它技能类型列表，以二进制位表示，整形中
      * 每个位代表一个技能类型。
-     * @param overlapTags 技能类型
+     * @param overlapTypes 技能类型
      */
-    public void setOverlapTags(long overlapTags) {
-        this.overlapTags = overlapTags;
+    public void setOverlapTypes(long overlapTypes) {
+        this.overlapTypes = overlapTypes;
     }
 
     /**
@@ -203,17 +204,17 @@ public class SkillData extends ObjectData {
      * 每个位代表一个技能类型。
      * @return 
      */
-    public long getInterruptTags() {
-        return interruptTags;
+    public long getInterruptTypes() {
+        return interruptTypes;
     }
 
     /**
      * 设置当前技能类型可以打断的其它技能类型列表，以二进制位表示，整形中
      * 每个位代表一个技能类型。
-     * @param interruptTags
+     * @param interruptTypes
      */
-    public void setInterruptTags(long interruptTags) {
-        this.interruptTags = interruptTags;
+    public void setInterruptTypes(long interruptTypes) {
+        this.interruptTypes = interruptTypes;
     }
 
     /**
@@ -233,6 +234,14 @@ public class SkillData extends ObjectData {
     }
     
     @Override
+    public SkillData clone() {
+        SkillData clone = (SkillData) super.clone();
+        clone.weaponStateLimit = CloneHelper.cloneLongArray(weaponStateLimit);
+        clone.useAttributes = CloneHelper.cloneList(useAttributes);
+        return clone;
+    }
+    
+    @Override
     public void write(JmeExporter ex) throws IOException {
         super.write(ex);
         OutputCapsule oc = ex.getCapsule(this);
@@ -246,9 +255,9 @@ public class SkillData extends ObjectData {
         oc.write(maxLevel, "maxLevel", 1);
         oc.write(playCount, "playCount", 0);
         oc.write(lastPlayTime, "lastPlayTime", 0);
-        oc.write(tags, "tags", 0);
-        oc.write(overlapTags, "overlapTags", 0);
-        oc.write(interruptTags, "interruptTags", 0);
+        oc.write(types, "types", 0);
+        oc.write(overlapTypes, "overlapTypes", 0);
+        oc.write(interruptTypes, "interruptTypes", 0);
         oc.write(prior, "prior", 0);
     }
 
@@ -264,9 +273,9 @@ public class SkillData extends ObjectData {
         maxLevel = ic.readInt("maxLevel", 1);
         playCount = ic.readInt("playCount", 0);
         lastPlayTime = ic.readLong("lastPlayTime", 0);
-        tags = ic.readLong("tags", 0);
-        overlapTags = ic.readLong("overlapTags", 0);
-        interruptTags = ic.readLong("interruptTags", 0);
+        types = ic.readLong("types", 0);
+        overlapTypes = ic.readLong("overlapTypes", 0);
+        interruptTypes = ic.readLong("interruptTypes", 0);
         prior = ic.readInt("prior", 0);
     }
 }

@@ -13,6 +13,7 @@ import com.jme3.network.serializing.Serializable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import name.huliqing.luoying.xml.CloneHelper;
 
 /**
  * 定义游戏的数据
@@ -121,9 +122,10 @@ public class GameData extends ObjectData {
     @Override
     public ObjectData clone() {
         GameData clone = (GameData) super.clone();
-        clone.sceneData = cloneObjectData(sceneData);
-        clone.guiSceneData = cloneObjectData(guiSceneData);
-        clone.gameLogicDatas = cloneObjectDataList(gameLogicDatas);
+        clone.sceneData = CloneHelper.cloneObjectData(sceneData);
+        clone.guiSceneData = CloneHelper.cloneObjectData(guiSceneData);
+        clone.gameLogicDatas = CloneHelper.cloneObjectDataList(gameLogicDatas);
+        
         if (availableActors != null) {
             clone.availableActors = new ArrayList<String>(availableActors.size());
             clone.availableActors.addAll(availableActors);

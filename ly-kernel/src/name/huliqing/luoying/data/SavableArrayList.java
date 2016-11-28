@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import name.huliqing.luoying.LuoYingException;
+import name.huliqing.luoying.xml.CloneHelper;
 
 /**
  * SavableArrayList主要用于封装集合类型的数据为一个<b>单独的</b>Savable对象，
@@ -34,9 +36,9 @@ import java.util.List;
  * @param <T>
  */
 @Serializable
-public class SavableArrayList<T extends Savable> implements Savable {
+public class SavableArrayList<T extends Savable> implements Savable, Cloneable{
     
-    private ArrayList<T> list;
+    private List<T> list;
     
     public SavableArrayList() {}
     
@@ -95,12 +97,23 @@ public class SavableArrayList<T extends Savable> implements Savable {
     public boolean isEmpty() {
         return list == null || list.isEmpty();
     }
+
+    @Override
+    public SavableArrayList clone() {
+        try {
+            SavableArrayList clone = (SavableArrayList) super.clone();
+            clone.list = CloneHelper.cloneList(list);
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new LuoYingException(e);
+        }
+    }
     
     @Override
     public void write(JmeExporter ex) throws IOException {
         OutputCapsule oc = ex.getCapsule(this);
         if (list != null) {
-            oc.writeSavableArrayList(list, "list", null);
+            oc.writeSavableArrayList(new ArrayList<T>(list), "list", null);
         }
     }
     

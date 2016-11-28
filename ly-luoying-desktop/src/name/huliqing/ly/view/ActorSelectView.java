@@ -4,6 +4,7 @@
  */
 package name.huliqing.ly.view;
 
+import com.jme3.light.AmbientLight;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
@@ -11,6 +12,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import java.util.List;
 import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.layer.service.SkinService;
@@ -42,10 +44,9 @@ public class ActorSelectView extends LinearLayout {
         
         /**
          * 当选择角色时
-         * @param actorId 角色id
-         * @param name 角色名字
+         * @param playerData 角色id
          */
-        void onSelected(String actorId, String name);
+        void onSelected(EntityData playerData);
     }
     
     // 可选的角色id列表
@@ -67,18 +68,22 @@ public class ActorSelectView extends LinearLayout {
     
     // 当前显示的model角色的索引
     private int current = 0;
+    private Entity currentEntity;
     
     // 随机名称
     private String[] randomNames;
     
     private SelectedListener selectedListener;
     
-    public ActorSelectView(float width, float height, Node guiRoot) {
+    public ActorSelectView(float width, float height, Node actorPanelRoot) {
         super();
         this.width = width;
         this.height = height;
         this.actorView = new Node("actorView");
         this.actorView.setLocalTranslation(0, 10, 0);
+        this.actorView.addLight(new AmbientLight());
+        actorPanelRoot.attachChild(this.actorView);
+        
         float btnW = width * 0.2f;
         float btnH = btnW * 0.5f;
         
@@ -122,10 +127,11 @@ public class ActorSelectView extends LinearLayout {
             @Override
             public void onClick(UI ui, boolean isPress) {
                 if (isPress) return;
-                if (selectedListener != null 
-                        && models != null
-                        && models.size() > 0) {
-                    selectedListener.onSelected(models.get(current), nameView.getText());
+                actorView.removeFromParent();
+                ActorSelectView.this.removeFromParent();
+                if (selectedListener != null && models != null && models.size() > 0) {
+                    currentEntity.getData().setName(nameView.getText());
+                    selectedListener.onSelected(currentEntity.getData());
                 }
             }
         });
@@ -214,22 +220,16 @@ public class ActorSelectView extends LinearLayout {
         if (models == null || index < 0 || index > models.size() - 1) {
             return;
         }
-        // Actor actor = Loader.loadActor(models.get(index));
-        Entity actor = Loader.load(models.get(index));
         
-        
-//        actor.setLocation(new Vector3f(0, 0.75f, 0));
-//        actor.setViewDirection(new Vector3f(1, 0, 0));
-//        actor.setEnabled(false);
-        gameService.setAutoLogic(actor, false); // 必须去掉AI
-        actorService.setLocation(actor, new Vector3f(0, 0.75f, 0));
-        actorService.setViewDirection(actor, new Vector3f(1, 0, 0));
-        actorService.setPhysicsEnabled(actor, false);
-        
-        skillService.playSkill(actor, skillService.getSkillWaitDefault(actor), false);
-        skinService.takeOnWeapon(actor);
+        currentEntity = Loader.load(models.get(index));
+        gameService.setAutoLogic(currentEntity, false);
+        actorService.setLocation(currentEntity, new Vector3f(0, 0.75f, 0));
+        actorService.setViewDirection(currentEntity, new Vector3f(1, 0, 0));
+        actorService.setPhysicsEnabled(currentEntity, false);
+        skillService.playSkill(currentEntity, skillService.getSkillWaitDefault(currentEntity), false);
+        skinService.takeOnWeapon(currentEntity);
         actorView.detachAllChildren();
-        actorView.attachChild(actor.getSpatial());
+        actorView.attachChild(currentEntity.getSpatial());
         current = index;
     }
     

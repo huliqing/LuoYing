@@ -24,10 +24,10 @@ import name.huliqing.luoying.Config;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.AttributeApply;
 import name.huliqing.luoying.data.SkinData;
+import name.huliqing.luoying.layer.service.DefineService;
 import name.huliqing.luoying.layer.service.ElService;
 import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.object.AssetLoader;
-import name.huliqing.luoying.object.define.DefineFactory;
 import name.huliqing.luoying.object.el.SBooleanEl;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.sound.SoundManager;
@@ -37,6 +37,7 @@ import name.huliqing.luoying.object.sound.SoundManager;
  */
 public abstract class AbstractSkin implements Skin {
 //    private static final Logger LOG = Logger.getLogger(AbstractSkin.class.getName());
+    private final DefineService defineService = Factory.get(DefineService.class);
     private final EntityService entityService = Factory.get(EntityService.class);
     private final ElService elService = Factory.get(ElService.class);
     
@@ -68,8 +69,8 @@ public abstract class AbstractSkin implements Skin {
     @Override
     public void setData(SkinData data) {
         this.data = data;
-        parts = DefineFactory.getSkinPartDefine().convert(data.getAsArray("parts"));
-        conflictParts = DefineFactory.getSkinPartDefine().convert(data.getAsArray("conflictParts"));
+        parts = defineService.getSkinPartDefine().convert(data.getAsArray("parts"));
+        conflictParts = defineService.getSkinPartDefine().convert(data.getAsArray("conflictParts"));
         
         sounds = data.getAsArray("sounds");
         checkEl = elService.createSBooleanEl(data.getAsString("checkEl", "#{true}"));

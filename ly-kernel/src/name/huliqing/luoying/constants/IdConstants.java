@@ -21,8 +21,8 @@ public class IdConstants {
     // Define
     // =============================================================================
     
-    /** 默认的关于技能标记定义的配置id */
-    public final static String SYS_DEFINE_SKILL_TAG = "sysDefineSkillTag";
+    /** 默认的关于技能类型定义的配置id */
+    public final static String SYS_DEFINE_SKILL_TYPE = "sysDefineSkillType";
     /** 默认的关于装备部位定义的配置id */
     public final static String SYS_DEFINE_SKIN_PART = "sysDefineSkinPart";
     /** 默认的关于武器类型定义的配置id */

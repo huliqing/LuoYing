@@ -16,7 +16,7 @@
     <actionPathFollow id="sysActionSimpleFollow" autoFacing="1" />
 
     <!--战斗行为基本配置-->
-    <actionDynamicFight id="sysActionSimpleFight" allowFollow="1" autoFacing="1" fightSkillTags="fight,attack,trick" autoTakeOffWeapon="1" />
+    <actionDynamicFight id="sysActionSimpleFight" allowFollow="1" autoFacing="1" fightSkillTypes="fight,attack,trick" autoTakeOffWeapon="1" />
 </root>
 
 

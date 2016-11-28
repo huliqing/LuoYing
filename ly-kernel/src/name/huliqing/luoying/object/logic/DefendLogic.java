@@ -48,11 +48,11 @@ public class DefendLogic extends AbstractLogic implements SkillListener, SkillPl
     // 被当前侦听(skillListener)的其它角色
     private Set<Entity> listenersActors;
     // 指定要监听的目标角色所发出的技能,当目标角色发出这些技能时，当前角色会偿试进行防守或躲闪
-    private long listenSkillTags;
+    private long listenSkillTypes;
     // 当前角色可以用来防守的技能类型
-    private long defendSkillTags;
+    private long defendSkillTypes;
     // 当前角色可以用来躲闪的技能类型。
-    private long duckSkillTags;
+    private long duckSkillTypes;
     
     // ---- 节能
     // 判断是否有可用的技能进行防守
@@ -70,9 +70,9 @@ public class DefendLogic extends AbstractLogic implements SkillListener, SkillPl
         defendRateAttribute = data.getAsString("defendRateAttribute");
         duckRateAttribute = data.getAsString("duckRateAttribute");
         listenAttributes = Arrays.asList(data.getAsArray("listenAttributes"));
-        listenSkillTags = skillService.convertSkillTags(data.getAsArray("listenSkillTags"));
-        defendSkillTags = skillService.convertSkillTags(data.getAsArray("defendSkillTags"));
-        duckSkillTags = skillService.convertSkillTags(data.getAsArray("duckSkillTags"));
+        listenSkillTypes = skillService.convertSkillTypes(data.getAsArray("listenSkillTypes"));
+        defendSkillTypes = skillService.convertSkillTypes(data.getAsArray("defendSkillTypes"));
+        duckSkillTypes = skillService.convertSkillTypes(data.getAsArray("duckSkillTypes"));
     }
 
     @Override
@@ -203,8 +203,8 @@ public class DefendLogic extends AbstractLogic implements SkillListener, SkillPl
         if (skill instanceof ShotSkill)
             return;
         
-        // 不是所侦听的技能(只有listenSkillTags所指定的技能类型才需要防守或躲闪 )
-        if ((listenSkillTags & skill.getData().getTags()) == 0) 
+        // 不是所侦听的技能(只有listenSkillTypes所指定的技能类型才需要防守或躲闪 )
+        if ((listenSkillTypes & skill.getData().getTypes()) == 0) 
             return;
         
         // 2.正常防守,只有普通攻击技能才允许防守
@@ -221,7 +221,7 @@ public class DefendLogic extends AbstractLogic implements SkillListener, SkillPl
         }
         
         // 3.闪避防守
-        if (getSkillModule().isPlayingSkill(duckSkillTags)) {
+        if (getSkillModule().isPlayingSkill(duckSkillTypes)) {
             return;
         }
         doDuck();
@@ -276,8 +276,8 @@ public class DefendLogic extends AbstractLogic implements SkillListener, SkillPl
         if (duckSkills != null) {
             duckSkills.clear();
         }
-        defendSkills = getSkillModule().getSkillByTags(defendSkillTags, defendSkills);
-        duckSkills = getSkillModule().getSkillByTags(duckSkillTags, duckSkills);
+        defendSkills = getSkillModule().getSkillByTypes(defendSkillTypes, defendSkills);
+        duckSkills = getSkillModule().getSkillByTypes(duckSkillTypes, duckSkills);
         hasUsableSkill = (defendSkills != null && defendSkills.size() > 0) || (duckSkills != null && duckSkills.size() > 0);
         needRecacheSkill = false;
 

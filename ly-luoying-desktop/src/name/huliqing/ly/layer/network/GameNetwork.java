@@ -152,14 +152,14 @@ public interface GameNetwork extends Inject {
     
     // ------------------------- from userCommand
     
-    /**
-     * 选择一个角色作为玩家角色
-     * @param actorId 
-     * @param actorName 玩家角色名称
-     * @deprecated 不再使用
-     */
-    void selectPlayer(String actorId, String actorName);
-
+//    /**
+//     * 选择一个角色作为玩家角色
+//     * @param actorId 
+//     * @param actorName 玩家角色名称
+//     * @deprecated 不再使用
+//     */
+//    void selectPlayer(String actorId, String actorName);
+//
     // remove20161126
 //    /**
 //     * 服务端上添加客户端玩家角色

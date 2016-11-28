@@ -59,7 +59,7 @@ public interface Skill extends DataProcessor<SkillData>{
      * @return 
      */
     float getTrueUseTime();
-        
+
     /**
      * 判断角色在当前状态下是否可以执行这个技能,该方法返回一个状态码{@link SkillConstants}，<br>
      * 来判断当前技能是否可以执行，当前技能是否可以执行会受到技能的各种约束限制，<br>

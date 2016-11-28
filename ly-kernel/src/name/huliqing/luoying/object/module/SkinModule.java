@@ -12,11 +12,12 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.Config;
+import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.SkinData;
 import name.huliqing.luoying.data.ModuleData;
+import name.huliqing.luoying.layer.service.DefineService;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.attribute.CollectionAttribute;
-import name.huliqing.luoying.object.define.DefineFactory;
 import name.huliqing.luoying.object.entity.DataHandler;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.skin.Skin;
@@ -29,6 +30,7 @@ import name.huliqing.luoying.object.skin.WeaponSkin;
  */
 public class SkinModule extends AbstractModule implements DataHandler<SkinData> {
     private static final Logger LOG = Logger.getLogger(SkinModule.class.getName());
+    private final DefineService defineService = Factory.get(DefineService.class);
     
     // 监听角色装备、武器等的穿脱
     private List<SkinListener> skinListeners;
@@ -415,7 +417,7 @@ public class SkinModule extends AbstractModule implements DataHandler<SkinData> 
         if (skinUsed != null) {
             for (Skin s : skinUsed) {
                 if (s instanceof Weapon) {
-                    cacheWeaponState |= DefineFactory.getWeaponTypeDefine().convert(((Weapon)s).getWeaponType());
+                    cacheWeaponState |= defineService.getWeaponTypeDefine().convert(((Weapon)s).getWeaponType());
                 }
             }
         }
@@ -423,7 +425,7 @@ public class SkinModule extends AbstractModule implements DataHandler<SkinData> 
             LOG.log(Level.INFO, "cacheWeaponState, actor={0}, weaponStateToBinary={1}, weaponsToString={2}"
                     , new Object[] {entity.getData().getId()
                             , Long.toBinaryString(cacheWeaponState)
-                            , DefineFactory.getWeaponTypeDefine().toString(cacheWeaponState)
+                            , defineService.getWeaponTypeDefine().toString(cacheWeaponState)
                     });
         }
     }

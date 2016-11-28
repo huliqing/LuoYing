@@ -17,12 +17,9 @@ import com.jme3.math.Vector4f;
 import com.jme3.network.serializing.Serializable;
 import com.jme3.scene.UserData;
 import java.io.IOException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.logging.Logger;
 import name.huliqing.luoying.LuoYingException;
 
 /**
@@ -32,7 +29,7 @@ import name.huliqing.luoying.LuoYingException;
  */
 @Serializable
 public class ObjectData implements Savable, Cloneable {
-    private static final Logger LOG = Logger.getLogger(ObjectData.class.getName());
+//    private static final Logger LOG = Logger.getLogger(ObjectData.class.getName());
     
     private static long idIndex = System.currentTimeMillis();
     
@@ -103,7 +100,7 @@ public class ObjectData implements Savable, Cloneable {
      * 给物体产生一个唯一ID
      * @return 
      */
-    private synchronized static long generateUniqueId() {
+    public synchronized static long generateUniqueId() {
         return idIndex++;
     }
     
@@ -457,7 +454,7 @@ public class ObjectData implements Savable, Cloneable {
                 clone.localData = new HashMap<String, Savable>(localData.size());
                 for (Entry<String, Savable> e : localData.entrySet()) {
                     if (e.getValue() instanceof Cloneable) {
-                        localData.put(e.getKey(), cloneObject(e.getValue()));
+                        localData.put(e.getKey(), CloneHelper.cloneObject(e.getValue()));
                     } else {
                         localData.put(e.getKey(), e.getValue());
                     }
@@ -468,52 +465,6 @@ public class ObjectData implements Savable, Cloneable {
         } catch(CloneNotSupportedException e ) {
             throw new LuoYingException(e);
         }
-    }
-    
-    private <T> T cloneObject(T object) {
-        if(object == null ) {
-            return null;
-        }
-        try {
-            Method m = object.getClass().getMethod("clone");
-            return (T) m.invoke(object);
-        } catch(Exception e) {
-            throw new RuntimeException("Could not cloneObject for Object=" + object);
-        }
-    }
-    
-    /**
-     * 直接克隆一个ObjectData. 如果给定的objectData为null则返回null. 否则克隆该对象并返回。
-     * 这个方法为方便子类直接克隆一个ObjectData而不需要判断是否为null.
-     * @param <T>
-     * @param objectData
-     * @return 
-     */
-    protected <T extends ObjectData> T cloneObjectData(T objectData) {
-        if (objectData == null)
-            return null;
-        return (T) objectData.clone();
-    }
-    
-    /**
-     * 深度克隆一个ObjectData列表，如果给定的列表为null,则返回null, 否则将列表中的ObjectData一个一个的克隆，
-     * 并最终返回一个新的列表。这个方法为方便子类在克隆列表的时候不需要判断列表或者列表中对象是否为null。
-     * @param <T>
-     * @param list
-     * @return 
-     */
-    protected <T extends ObjectData> List<T> cloneObjectDataList(List<T> list) {
-        if (list == null)
-            return null;
-        List<T> clones = new ArrayList<T>(list.size());
-        for (T t : list) {
-            if (t == null) {
-                clones.add(null);
-            } else {
-                clones.add((T) t.clone());
-            }
-        }
-        return clones;
     }
     
     @Override

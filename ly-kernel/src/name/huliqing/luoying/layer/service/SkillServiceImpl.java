@@ -6,15 +6,14 @@ package name.huliqing.luoying.layer.service;
 
 import com.jme3.math.Vector3f;
 import java.util.List;
-import java.util.logging.Logger;
+import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.log.StateCode;
-import name.huliqing.luoying.object.define.DefineFactory;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.module.SkillListener;
 import name.huliqing.luoying.object.module.SkillModule;
 import name.huliqing.luoying.object.module.SkillPlayListener;
 import name.huliqing.luoying.object.skill.Skill;
-import name.huliqing.luoying.object.skill.SkillTag;
+import name.huliqing.luoying.object.skill.SkillType;
 import name.huliqing.luoying.object.skill.Walk;
 
 /**
@@ -22,7 +21,8 @@ import name.huliqing.luoying.object.skill.Walk;
  * @author huliqing
  */
 public class SkillServiceImpl implements SkillService {
-    private final static Logger LOG = Logger.getLogger(SkillServiceImpl.class.getName());
+//    private final static Logger LOG = Logger.getLogger(SkillServiceImpl.class.getName());
+    private final DefineService defineService = Factory.get(DefineService.class);
 
     @Override
     public void inject() {
@@ -114,10 +114,10 @@ public class SkillServiceImpl implements SkillService {
     }
     
     @Override
-    public List<Skill> getSkillByTags(Entity actor, long skillTags) {
+    public List<Skill> getSkillByTypes(Entity actor, long skillTypes) {
         SkillModule module = actor.getModuleManager().getModule(SkillModule.class);
         if (module != null) {
-            return module.getSkillByTags(skillTags, null);
+            return module.getSkillByTypes(skillTypes, null);
         }
         return null;
     }
@@ -195,17 +195,6 @@ public class SkillServiceImpl implements SkillService {
         }
         return false;
     }
-
-    // remove20161001
-//    @Override
-//    public boolean playSkill(Entity actor, String skillId, boolean force) {
-//        SkillModule module = actor.getEntityModule().getModule(SkillModule.class);
-//        if (module == null) {
-//            return false;
-//        }
-//        Skill skill = module.getSkill(skillId);
-//        return playSkill(module, skill, force, module.checkNotWantInterruptSkills(skill));
-//    }
     
     @Override
     public boolean playWalk(Entity actor, Skill walkSkill, Vector3f dir, boolean faceToDir, boolean force) {
@@ -233,47 +222,47 @@ public class SkillServiceImpl implements SkillService {
     }
     
     @Override
-    public boolean isPlayingSkill(Entity actor, long skillTags) {
+    public boolean isPlayingSkill(Entity actor, long skillTypes) {
         SkillModule module = actor.getModuleManager().getModule(SkillModule.class);
         if (module != null) {
-            return (module.getPlayingSkillTags() & skillTags) != 0;
+            return (module.getPlayingSkillTypes() & skillTypes) != 0;
         }
         return false;
     }
     
     @Override
-    public long getPlayingSkillTags(Entity actor) {
+    public long getPlayingSkillTypes(Entity actor) {
         SkillModule module = actor.getModuleManager().getModule(SkillModule.class);
         if (module != null) {
-            return module.getPlayingSkillTags();
+            return module.getPlayingSkillTypes();
         }
         return -1;
     }
     
     @Override
-    public void lockSkillTags(Entity actor, long skillTags) {
+    public void lockSkillTypes(Entity actor, long skillTypes) {
         SkillModule module = actor.getModuleManager().getModule(SkillModule.class);
         if (module != null) {
-            module.lockSkillTags(skillTags);
+            module.lockSkillTypes(skillTypes);
         }
     }
 
     @Override
-    public void unlockSkillTags(Entity actor, long skillTags) {
+    public void unlockSkillTypes(Entity actor, long skillTypes) {
         SkillModule module = actor.getModuleManager().getModule(SkillModule.class);
         if (module != null) {
-            module.unlockSkillTags(skillTags);
+            module.unlockSkillTypes(skillTypes);
         }
     }
 
     @Override
-    public SkillTag getSkillTag(String skillTag) {
-        return DefineFactory.getSkillTagDefine().getSkillTag(skillTag);
+    public SkillType getSkillTypes(String skillType) {
+        return defineService.getSkillTypeDefine().getSkillType(skillType);
     }
 
     @Override
-    public long convertSkillTags(String... tags) {
-        return DefineFactory.getSkillTagDefine().convert(tags);
+    public long convertSkillTypes(String... skillTypes) {
+        return defineService.getSkillTypeDefine().convert(skillTypes);
     }
     
 

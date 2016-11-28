@@ -117,10 +117,10 @@ xs:time
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="stateBase">
-                    <xs:attribute name="skillTags" type="xs:string" use="required">
+                    <xs:attribute name="skillTypes" type="xs:string" use="required">
                         <xs:annotation>
                             <xs:documentation>
-                                指定要执行的是哪些标记的技能，如果角色不存在该类型的技能则什么也不做， 如果存在多个则随机选择一个。
+                                指定要执行的是哪些类型的技能，如果角色不存在该类型的技能则什么也不做， 如果存在多个则随机选择一个。
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
@@ -141,9 +141,9 @@ xs:time
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="stateBase">
-                    <xs:attribute name="lockAtSkillTags" type="xs:string" use="optional">
+                    <xs:attribute name="lockAtSkillTypes" type="xs:string" use="optional">
                         <xs:annotation>
-                            <xs:documentation>把角色锁定在特定标记的技能上, 格式 : "skillTag1,skillTag2,..."</xs:documentation>
+                            <xs:documentation>把角色锁定在特定类型的技能上, 格式 : "skillType1,skillType2,..."</xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
                     <xs:attribute name="lockAtFrame" type="bool" use="optional">
@@ -151,17 +151,17 @@ xs:time
                             <xs:documentation>把角色锁定在当前动画帧上</xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="lockAllSkillTags" type="bool" use="optional">
+                    <xs:attribute name="lockAllSkillTypes" type="bool" use="optional">
                         <xs:annotation>
                             <xs:documentation>
-                                强制锁定所有技能,如果该值设置为true, 则忽略参数:lockSkillTags、lockSkillIds的设置。
+                                强制锁定所有技能,如果该值设置为true, 则忽略参数:lockSkillTypes、lockSkillIds的设置。
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="lockSkillTags" type="skillType" use="optional">
+                    <xs:attribute name="lockSkillTypes" type="skillType" use="optional">
                         <xs:annotation>
                             <xs:documentation>
-                                指定要锁定的特定的技能标记列表,可以设置多个，使用半角逗号分隔，
+                                指定要锁定的特定的技能类型列表,可以设置多个，使用半角逗号分隔，
                                 如："wait,walk,run,fight..."
                             </xs:documentation>
                         </xs:annotation>

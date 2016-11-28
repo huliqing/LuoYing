@@ -11,13 +11,14 @@ import com.jme3.export.OutputCapsule;
 import com.jme3.export.Savable;
 import com.jme3.network.serializing.Serializable;
 import java.io.IOException;
+import name.huliqing.luoying.LuoYingException;
 
 /**
  *
  * @author huliqing
  */
 @Serializable
-public class DropItem implements Savable {
+public class DropItem implements Savable,Cloneable{
     // 物品ID
     private String itemId;
     // 掉落数量,默认为1，小于1的话没有意义
@@ -65,7 +66,17 @@ public class DropItem implements Savable {
     public void setCount(int count) {
         this.count = count;
     }
-        
+    
+    @Override
+    public DropItem clone() {
+        try {
+            DropItem clone = (DropItem) super.clone();
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new LuoYingException(e);
+        }
+    }
+    
     @Override
     public void write(JmeExporter ex) throws IOException {
         OutputCapsule oc = ex.getCapsule(this);

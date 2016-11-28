@@ -89,7 +89,7 @@ public class TalkLogicFace extends AbstractTalkLogic {
 //                );
 
         Skill waitSkill = skillService.getSkillWaitDefault(actor);
-        boolean canFace = force || (waitSkill != null && skillService.isPlayingSkill(actor, waitSkill.getData().getTags()));
+        boolean canFace = force || (waitSkill != null && skillService.isPlayingSkill(actor, waitSkill.getData().getTypes()));
         
         if (canFace) {
             Vector3f viewDirection = targetPos.subtract(actor.getSpatial().getWorldTranslation());

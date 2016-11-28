@@ -16,6 +16,7 @@ import java.util.List;
 import name.huliqing.luoying.data.define.CountObject;
 import name.huliqing.luoying.data.define.TradeInfo;
 import name.huliqing.luoying.data.define.TradeObject;
+import name.huliqing.luoying.xml.CloneHelper;
 import name.huliqing.luoying.xml.ObjectData;
 
 /**
@@ -50,12 +51,7 @@ public class TradeObjectData extends ObjectData implements TradeObject, CountObj
     @Override
     public TradeObjectData clone() {
         TradeObjectData clone = (TradeObjectData) super.clone(); 
-        if (tradeInfos != null) {
-            clone.tradeInfos = new ArrayList<TradeInfo>(tradeInfos.size());
-            for (TradeInfo ti : tradeInfos) {
-                clone.tradeInfos.add(ti.clone());
-            }
-        }
+        clone.tradeInfos = CloneHelper.cloneList(tradeInfos);
         return clone;
     }
     
