@@ -8,8 +8,8 @@ import name.huliqing.luoying.network.Network;
 import com.jme3.math.Vector3f;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.layer.service.SkillService;
-import name.huliqing.luoying.mess.MessSkillPlay;
-import name.huliqing.luoying.mess.MessSkillWalk;
+import name.huliqing.luoying.mess.SkillPlayMess;
+import name.huliqing.luoying.mess.SkillWalkMess;
 import name.huliqing.luoying.log.StateCode;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.module.SkillModule;
@@ -39,11 +39,12 @@ public class SkillNetworkImpl implements SkillNetwork {
         if (skill == null)
             return false;
         
-           // remove20161004,注：不能在这里将playService.getTarget的目标对象设置给actor,因为actor可能是游戏中的npc,不能使用当前游戏的主目标
+           // remove20161004,注：不能在这里将playService.getTarget的目标对象设置给actor,
+           // 因为actor可能是游戏中的npc,不能使用当前游戏的主目标.
            // 当前游戏的主目标只适用于当前“玩家”
 //        actorNetwork.setTarget(actor, playService.getTarget());
         
-        MessSkillPlay mess = new MessSkillPlay();
+        SkillPlayMess mess = new SkillPlayMess();
         mess.setActorId(actor.getData().getUniqueId());
         mess.setSkillId(skill.getData().getId());
         
@@ -97,7 +98,7 @@ public class SkillNetworkImpl implements SkillNetwork {
 
     @Override
     public boolean playWalk(Entity actor, Skill walkSkill, Vector3f dir, boolean faceToDir, boolean force) {
-        MessSkillWalk mess = new MessSkillWalk();
+        SkillWalkMess mess = new SkillWalkMess();
         mess.setActorId(actor.getData().getUniqueId());
         mess.setDir(dir);
         mess.setFace(faceToDir);

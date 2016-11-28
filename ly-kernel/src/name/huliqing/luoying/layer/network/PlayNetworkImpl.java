@@ -10,10 +10,10 @@ import name.huliqing.luoying.network.Network;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.manager.RandomManager;
-import name.huliqing.luoying.mess.MessAutoAttack;
-import name.huliqing.luoying.mess.MessEntityAdd;
-import name.huliqing.luoying.mess.MessEntityRemove;
-import name.huliqing.luoying.mess.MessRandomSeed;
+import name.huliqing.luoying.mess.ActorFightMess;
+import name.huliqing.luoying.mess.EntityAddMess;
+import name.huliqing.luoying.mess.EntityRemoveMess;
+import name.huliqing.luoying.mess.RandomSeedMess;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.scene.Scene;
 
@@ -37,7 +37,7 @@ public class PlayNetworkImpl implements PlayNetwork {
         }
         
         entity.updateDatas();
-        MessEntityAdd mess = new MessEntityAdd();
+        EntityAddMess mess = new EntityAddMess();
         mess.setEntityData(entity.getData());
         mess.setGuiScene(false);
         network.broadcast(mess);
@@ -52,7 +52,7 @@ public class PlayNetworkImpl implements PlayNetwork {
         }
         
         entity.updateDatas();
-        MessEntityAdd mess = new MessEntityAdd();
+        EntityAddMess mess = new EntityAddMess();
         mess.setEntityData(entity.getData());
         mess.setGuiScene(true);
         network.broadcast(mess);
@@ -70,7 +70,7 @@ public class PlayNetworkImpl implements PlayNetwork {
         Scene guiScene = playService.getGame().getGuiScene();
         
         entity.updateDatas();
-        MessEntityAdd mess = new MessEntityAdd();
+        EntityAddMess mess = new EntityAddMess();
         mess.setEntityData(entity.getData());
         mess.setGuiScene(entity.getScene() != null && entity.getScene() == guiScene);
         network.sendToClient(conn, mess);
@@ -81,7 +81,7 @@ public class PlayNetworkImpl implements PlayNetwork {
         if (network.isClient()) {
             return;
         }
-        MessEntityRemove mess = new MessEntityRemove();
+        EntityRemoveMess mess = new EntityRemoveMess();
         mess.setEntityId(entity.getEntityId());
         network.broadcast(mess);
 
@@ -92,14 +92,13 @@ public class PlayNetworkImpl implements PlayNetwork {
     public void attack(Entity actor, Entity target) {
         // On client
         if (network.isClient()) {
-            MessAutoAttack mess = new MessAutoAttack();
+            ActorFightMess mess = new ActorFightMess();
             mess.setTargetId(target != null ? target.getData().getUniqueId() : -1);
             network.sendToServer(mess);
             return;
         }
 
         // On Server，这个命令服务端不需要广播到客户端。
-        
         playService.attack(actor, target);
     }
     
@@ -112,7 +111,7 @@ public class PlayNetworkImpl implements PlayNetwork {
         
         // 将种子发送到客户端，由客户端更新随机数
         if (network.hasConnections()) {
-            MessRandomSeed mess = new MessRandomSeed();
+            RandomSeedMess mess = new RandomSeedMess();
             mess.setRandomSeed(seed);
             network.broadcast(mess);
         }

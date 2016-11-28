@@ -15,10 +15,10 @@ import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.ly.mess.MessActionRun;
-import name.huliqing.luoying.mess.MessEntityHitAttribute;
-import name.huliqing.luoying.mess.MessEntityRemoveData;
-import name.huliqing.luoying.mess.MessEntityUseDataById;
-import name.huliqing.luoying.mess.MessPlayActorSelect;
+import name.huliqing.luoying.mess.EntityHitAttributeMess;
+import name.huliqing.luoying.mess.EntityRemoveDataMess;
+import name.huliqing.luoying.mess.EntityUseDataByIdMess;
+import name.huliqing.luoying.mess.ActorSelectMess;
 import name.huliqing.luoying.network.Network;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.SyncData;
@@ -149,7 +149,7 @@ public class GameNetworkImpl implements GameNetwork {
     
     // 发送一个属性修改的命令到服务端
     private void sendAttributeHitToServer(Entity entity, String attribute, Object value) {
-        MessEntityHitAttribute mess = new MessEntityHitAttribute();
+        EntityHitAttributeMess mess = new EntityHitAttributeMess();
         mess.setEntityId(entity.getEntityId());
         mess.setAttribute(attribute);
         mess.setValue(value);
@@ -227,7 +227,7 @@ public class GameNetworkImpl implements GameNetwork {
     @Override
     public boolean useObjectData(Entity entity, long objectUniqueId) {
         if (network.isClient()) {
-            MessEntityUseDataById mess = new MessEntityUseDataById();
+            EntityUseDataByIdMess mess = new EntityUseDataByIdMess();
             mess.setEntityId(entity.getEntityId());
             mess.setObjectUniqueId(objectUniqueId);
             network.sendToServer(mess);
@@ -239,7 +239,7 @@ public class GameNetworkImpl implements GameNetwork {
     @Override
     public boolean removeObjectData(Entity entity, long objectUniqueId, int amount) {
         if (network.isClient()) {
-            MessEntityRemoveData  mess = new MessEntityRemoveData();
+            EntityRemoveDataMess  mess = new EntityRemoveDataMess();
             mess.setEntityId(entity.getEntityId());
             mess.setObjectId(objectUniqueId);
             mess.setAmount(amount);
@@ -252,7 +252,7 @@ public class GameNetworkImpl implements GameNetwork {
     @Override
     public void selectPlayer(String actorId, String actorName) {
         if (network.isClient()) {
-            network.sendToServer(new MessPlayActorSelect(actorId, actorName));
+            network.sendToServer(new ActorSelectMess(actorId, actorName));
         } else {
             Entity actor = Loader.load(actorId);
             actor.getData().setName(actorName);

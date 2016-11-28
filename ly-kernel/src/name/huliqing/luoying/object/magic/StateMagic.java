@@ -62,8 +62,8 @@ public class StateMagic extends AbstractMagic {
     }
 
     @Override
-    public void magicUpdate(float tpf) {
-        super.magicUpdate(tpf); 
+    public void updateMagicLogic(float tpf) {
+        super.updateMagicLogic(tpf); 
         
         float inter = timeUsed / useTime;
         

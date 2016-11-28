@@ -7,12 +7,12 @@ package name.huliqing.luoying.layer.network;
 
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.layer.service.EntityService;
-import name.huliqing.luoying.mess.MessEntityAddData;
-import name.huliqing.luoying.mess.MessEntityHitNumberAttribute;
-import name.huliqing.luoying.mess.MessEntityHitAttribute;
-import name.huliqing.luoying.mess.MessEntityRemoveData;
-import name.huliqing.luoying.mess.MessEntityUseData;
-import name.huliqing.luoying.mess.MessEntityUseDataById;
+import name.huliqing.luoying.mess.EntityAddDataMess;
+import name.huliqing.luoying.mess.EntityHitNumberAttributeMess;
+import name.huliqing.luoying.mess.EntityHitAttributeMess;
+import name.huliqing.luoying.mess.EntityRemoveDataMess;
+import name.huliqing.luoying.mess.EntityUseDataMess;
+import name.huliqing.luoying.mess.EntityUseDataByIdMess;
 import name.huliqing.luoying.network.Network;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.xml.ObjectData;
@@ -38,7 +38,7 @@ public class EntityNetworkImpl implements EntityNetwork {
         }
         
         // 在服务端
-        MessEntityHitAttribute mess = new MessEntityHitAttribute();
+        EntityHitAttributeMess mess = new EntityHitAttributeMess();
         mess.setEntityId(entity.getEntityId());
         mess.setAttribute(attribute);
         mess.setValue(value);
@@ -55,7 +55,7 @@ public class EntityNetworkImpl implements EntityNetwork {
         }
         
         // 服务端
-        MessEntityHitNumberAttribute mess = new MessEntityHitNumberAttribute();
+        EntityHitNumberAttributeMess mess = new EntityHitNumberAttributeMess();
         mess.setEntityId(entity.getEntityId());
         mess.setAttribute(attribute);
         mess.setAddValue(addValue);
@@ -70,7 +70,7 @@ public class EntityNetworkImpl implements EntityNetwork {
             return false;
         }
         
-        MessEntityAddData mess = new MessEntityAddData();
+        EntityAddDataMess mess = new EntityAddDataMess();
         mess.setEntityId(entity.getEntityId());
         mess.setObjectData(data);
         mess.setAmount(amount);
@@ -99,7 +99,7 @@ public class EntityNetworkImpl implements EntityNetwork {
             return false;
         }
         
-        MessEntityRemoveData mess = new MessEntityRemoveData();
+        EntityRemoveDataMess mess = new EntityRemoveDataMess();
         mess.setEntityId(entity.getEntityId());
         mess.setObjectId(objectUniqueId);
         mess.setAmount(amount);
@@ -113,7 +113,7 @@ public class EntityNetworkImpl implements EntityNetwork {
             return false;
         }
         
-        MessEntityUseData mess = new MessEntityUseData();
+        EntityUseDataMess mess = new EntityUseDataMess();
         mess.setEntityId(entity.getEntityId());
         mess.setObjectData(data);
         network.broadcast(mess);
@@ -126,7 +126,7 @@ public class EntityNetworkImpl implements EntityNetwork {
             return false;
         }
         
-        MessEntityUseDataById mess = new MessEntityUseDataById();
+        EntityUseDataByIdMess mess = new EntityUseDataByIdMess();
         mess.setEntityId(entity.getEntityId());
         mess.setObjectUniqueId(objectUniqueId);
         network.broadcast(mess);

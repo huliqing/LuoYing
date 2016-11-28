@@ -52,7 +52,7 @@ public abstract class AbstractMagic extends ModelEntity<MagicData> implements Ma
         magicRoot.addControl(new ControlAdapter() {
             @Override
             public void update(float tpf) {
-                magicUpdate(tpf);
+                updateMaigc(tpf);
             }
         });
     }
@@ -117,11 +117,22 @@ public abstract class AbstractMagic extends ModelEntity<MagicData> implements Ma
         }
     }
     
-    public void magicUpdate(float tpf) {
+    private void updateMaigc(float tpf) {
         timeUsed += tpf;
+        
+        // 更新魔法逻辑
+        updateMagicLogic(tpf);
+        
         if (timeUsed > useTime) {
             removeFromScene();
         }
+    }
+    
+    /**
+     * 实现魔法逻辑
+     * @param tpf 
+     */
+    public void updateMagicLogic(float tpf) {
         // 子类逻辑
     }
     

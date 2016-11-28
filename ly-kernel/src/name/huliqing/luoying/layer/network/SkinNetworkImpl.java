@@ -7,7 +7,7 @@ package name.huliqing.luoying.layer.network;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.layer.service.SkinService;
 import name.huliqing.luoying.network.Network;
-import name.huliqing.luoying.mess.MessSkinWeaponTakeOn;
+import name.huliqing.luoying.mess.SkinWeaponTakeOnMess;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.skin.Skin;
 
@@ -88,7 +88,7 @@ public class SkinNetworkImpl implements SkinNetwork {
     public void takeOnWeapon(Entity actor) {
         if (!NETWORK.isClient()) {
             if (NETWORK.hasConnections()) {
-                MessSkinWeaponTakeOn mess = new MessSkinWeaponTakeOn();
+                SkinWeaponTakeOnMess mess = new SkinWeaponTakeOnMess();
                 mess.setActorId(actor.getData().getUniqueId());
                 mess.setTakeOn(true);
                 NETWORK.broadcast(mess);
@@ -99,7 +99,7 @@ public class SkinNetworkImpl implements SkinNetwork {
 
     @Override
     public void takeOffWeapon(Entity actor) {
-        MessSkinWeaponTakeOn mess = new MessSkinWeaponTakeOn();
+        SkinWeaponTakeOnMess mess = new SkinWeaponTakeOnMess();
         mess.setActorId(actor.getData().getUniqueId());
         mess.setTakeOn(false);
         

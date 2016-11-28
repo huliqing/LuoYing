@@ -4,24 +4,26 @@
  */
 package name.huliqing.luoying.network;
 
-import name.huliqing.luoying.mess.network.MessGameData;
-import name.huliqing.luoying.mess.network.MessClients;
-import name.huliqing.luoying.mess.network.MessClient;
-import name.huliqing.luoying.mess.network.MessGetServerState;
-import name.huliqing.luoying.mess.network.MessServerState;
-import name.huliqing.luoying.data.ConnData;
-import name.huliqing.luoying.network.GameServer.ServerListener;
-import name.huliqing.luoying.mess.network.MessGetClients;
-import name.huliqing.luoying.mess.network.MessGetGameData;
 import com.jme3.app.Application;
 import com.jme3.network.HostedConnection;
 import com.jme3.network.Message;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import name.huliqing.luoying.mess.network.GameDataMess;
+import name.huliqing.luoying.mess.network.ClientsMess;
+import name.huliqing.luoying.mess.network.ClientMess;
+import name.huliqing.luoying.mess.network.GetServerStateMess;
+import name.huliqing.luoying.mess.network.ServerStateMess;
+import name.huliqing.luoying.data.ConnData;
+import name.huliqing.luoying.network.GameServer.ServerListener;
+import name.huliqing.luoying.mess.network.GetClientsMess;
+import name.huliqing.luoying.mess.network.GetGameDataMess;
 import name.huliqing.luoying.data.GameData;
-import name.huliqing.luoying.mess.network.MessRequestGameInit;
-import name.huliqing.luoying.mess.network.MessRequestGameInitOk;
+import name.huliqing.luoying.mess.GameMess;
+import name.huliqing.luoying.mess.network.PingMess;
+import name.huliqing.luoying.mess.network.RequestGameInitMess;
+import name.huliqing.luoying.mess.network.RequestGameInitOkMess;
 import name.huliqing.luoying.network.GameServer.ServerState;
 
 /**
@@ -61,43 +63,52 @@ public abstract class AbstractServerListener implements ServerListener {
     }
 
     @Override
-    public final void serverMessage(final GameServer gameServer, final HostedConnection source, final Message m) {
+    public final void messageReceived(final GameServer gameServer, final HostedConnection source, final Message m) {
         app.enqueue(new Callable() {
             @Override
             public Object call() throws Exception {
-                clientMessage(gameServer, source, m);
+                processMessageFromClient(gameServer, source, m);
                 return null;
             }
         });
     }
     
-    private void clientMessage(GameServer gameServer, HostedConnection source, final Message m) {
+    private void processMessageFromClient(GameServer gameServer, HostedConnection source, final Message m) {
 //        LOG.log(Level.INFO, "Receive from client, class={0}, message={1}", new Object[] {m.getClass().getName(), m.toString()});
 
-        if (m instanceof MessClient) {
-            onReceiveMessClient(gameServer, source, (MessClient) m);
+        // 这是游戏运行时的消息
+        if (m instanceof GameMess) {
+            onReceiveGameMess(gameServer, source, (GameMess) m);
+            return;
+        }
 
-        } else if (m instanceof MessGetServerState) {
-            onReceiveMessGetServerState(gameServer, source, (MessGetServerState) m);
+        // 这些消息主要用于客户端和服务端状态初始化时处理, 当客户端和服务端正式进入游戏交互之后，
+        // 这些消息的频率会非常少，甚至不需要.
+        if (m instanceof ClientMess) {
+            onReceiveMessClient(gameServer, source, (ClientMess) m);
 
-        } else if (m instanceof MessGetGameData) {
-            onReceiveMessGetGameData(gameServer, source, (MessGetGameData) m);
+        } else if (m instanceof GetServerStateMess) {
+            onReceiveMessGetServerState(gameServer, source, (GetServerStateMess) m);
+            
+        } else if (m instanceof GetGameDataMess) {
+            onReceiveMessGetGameData(gameServer, source, (GetGameDataMess) m);
 
-        } else if (m instanceof MessGetClients) {
-            onReceiveMessGetClients(gameServer, source, (MessGetClients) m);
+        } else if (m instanceof GetClientsMess) {
+            onReceiveMessGetClients(gameServer, source, (GetClientsMess) m);
 
-        } else if (m instanceof MessRequestGameInit) {
+        } else if (m instanceof PingMess) {
+            onReceiveMessPing(gameServer, source, (PingMess) m);
+            
+        } else if (m instanceof RequestGameInitMess) {
             if (gameServer.getServerState() != ServerState.running) {
                 LOG.log(Level.WARNING, "Server state is not ready to process game init request! "
                         + "clientAddress={0}, clientId={1}, message={2}", new Object[] {source.getAddress(), source.getId(), m});
                 return;
             }
-            onReceiveMessRequestGameInit(gameServer, source, (MessRequestGameInit) m);
-
-        } else {
-            // other message
-            onReceiveMessage(gameServer, source, m);
+            onReceiveMessRequestGameInit(gameServer, source, (RequestGameInitMess) m);
         }
+        
+        
     }
     
     /**
@@ -107,7 +118,7 @@ public abstract class AbstractServerListener implements ServerListener {
      * @param conn
      * @param m 
      */
-    protected void onReceiveMessClient(GameServer gameServer, HostedConnection conn, MessClient m) {
+    protected void onReceiveMessClient(GameServer gameServer, HostedConnection conn, ClientMess m) {
         // 登记、更新客户端资料
         ConnData cd = conn.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
         cd.setClientId(m.getClientId());
@@ -123,8 +134,8 @@ public abstract class AbstractServerListener implements ServerListener {
      * @param conn
      * @param m 
      */
-    protected void onReceiveMessGetServerState(GameServer gameServer, HostedConnection conn, MessGetServerState m) {
-        gameServer.send(conn, new MessServerState(gameServer.getServerState()));
+    protected void onReceiveMessGetServerState(GameServer gameServer, HostedConnection conn, GetServerStateMess m) {
+        gameServer.send(conn, new ServerStateMess(gameServer.getServerState()));
     }
     
     /**
@@ -136,7 +147,7 @@ public abstract class AbstractServerListener implements ServerListener {
      * @param m 
      * @see #onSendGameData(GameServer, HostedConnection) 
      */
-    protected void onReceiveMessGetGameData(GameServer gameServer, HostedConnection conn, MessGetGameData m) {
+    protected void onReceiveMessGetGameData(GameServer gameServer, HostedConnection conn, GetGameDataMess m) {
         onSendGameData(gameServer, conn);
     }
     
@@ -148,8 +159,19 @@ public abstract class AbstractServerListener implements ServerListener {
      * @param conn
      * @param mess 
      */
-    protected void onReceiveMessGetClients(GameServer gameServer, HostedConnection conn, MessGetClients mess) {
-        gameServer.broadcast(new MessClients(gameServer.getClients()));
+    protected void onReceiveMessGetClients(GameServer gameServer, HostedConnection conn, GetClientsMess mess) {
+        gameServer.broadcast(new ClientsMess(gameServer.getClients()));
+    }
+    
+    /**
+     * 当服务端接收到来自客户端的Ping消息时，该方法被自动调用，默认情况下服务端接收到这个消息后将直接返回这个消息
+     * 不作任何其它处理.
+     * @param gameServer
+     * @param conn
+     * @param mess 
+     */
+    protected void onReceiveMessPing(GameServer gameServer, HostedConnection conn, PingMess mess) {
+        gameServer.send(conn, mess);
     }
     
     /**
@@ -186,7 +208,7 @@ public abstract class AbstractServerListener implements ServerListener {
         // 清理掉逻辑
         clone.getGameLogicDatas().clear();
         
-        gameServer.send(coon, new MessGameData(clone));
+        gameServer.send(coon, new GameDataMess(clone));
     }
     
     /**
@@ -229,21 +251,21 @@ public abstract class AbstractServerListener implements ServerListener {
      * @param gameServer
      */
     protected void onClientsUpdated(GameServer gameServer) {
-        gameServer.broadcast(new MessClients(gameServer.getClients()));
+        gameServer.broadcast(new ClientsMess(gameServer.getClients()));
     }
     
     /**
      * 当服务端接收到来自客户端的初始化游戏的请求时，该方法被调用。子类实现这个方法需要<b>按顺序</b>做两件事：<br>
-     * 1.向客户端发送{@link MessRequestGameInit}消息进行响应，并指明要向客户端初始化多少场景实体。
+     * 1.向客户端发送{@link RequestGameInitMess}消息进行响应，并指明要向客户端初始化多少场景实体。
      * 2.接着步骤1，立即向客户端发送初始化场景的实体数据。
      * @param gameServer
      * @param conn
      * @param mess 
-     * @see MessRequestGameInit
-     * @see MessRequestGameInitOk
+     * @see RequestGameInitMess
+     * @see RequestGameInitOkMess
      */
     protected abstract void onReceiveMessRequestGameInit(GameServer gameServer, HostedConnection conn, 
-            MessRequestGameInit mess);
+            RequestGameInitMess mess);
     
     /**
      * 在服务端处理接收到的来自客户端的消息
@@ -251,5 +273,5 @@ public abstract class AbstractServerListener implements ServerListener {
      * @param source
      * @param m 
      */
-    protected abstract void onReceiveMessage(GameServer gameServer, HostedConnection source, Message m);
+    protected abstract void onReceiveGameMess(GameServer gameServer, HostedConnection source, GameMess m);
 }

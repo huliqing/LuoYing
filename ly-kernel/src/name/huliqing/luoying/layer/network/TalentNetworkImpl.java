@@ -7,7 +7,7 @@ package name.huliqing.luoying.layer.network;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.layer.service.TalentService;
 import name.huliqing.luoying.network.Network;
-import name.huliqing.luoying.mess.MessTalentAddPoint;
+import name.huliqing.luoying.mess.TalentAddPointMess;
 import name.huliqing.luoying.object.entity.Entity;
 
 /**
@@ -41,7 +41,7 @@ public class TalentNetworkImpl implements TalentNetwork {
 
     @Override
     public void addTalentPoints(Entity actor, String talentId, int points) {
-        MessTalentAddPoint mess = new MessTalentAddPoint();
+        TalentAddPointMess mess = new TalentAddPointMess();
         mess.setActorId(actor.getData().getUniqueId());
         mess.setTalentId(talentId);
         mess.setPoints(points);

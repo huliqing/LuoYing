@@ -5,7 +5,8 @@ import com.jme3.network.HostedConnection;
 import com.jme3.network.serializing.Serializable;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.layer.service.PlayService;
-import name.huliqing.luoying.mess.MessBase;
+import name.huliqing.luoying.mess.GameMess;
+import name.huliqing.luoying.network.GameClient;
 import name.huliqing.luoying.network.GameServer;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.ly.layer.service.GameService;
@@ -15,7 +16,7 @@ import name.huliqing.ly.layer.service.GameService;
  * @author huliqing
  */
 @Serializable
-public class MessActorSpeak extends MessBase {
+public class MessActorSpeak extends GameMess {
     
     private long actorId;
     // 说话的内容
@@ -48,7 +49,7 @@ public class MessActorSpeak extends MessBase {
     }
 
     @Override
-    public void applyOnClient() {
+    public void applyOnClient(GameClient gameClient) {
         PlayService playService = Factory.get(PlayService.class);
         GameService gameService = Factory.get(GameService.class);
         Entity actor = playService.getEntity(actorId);

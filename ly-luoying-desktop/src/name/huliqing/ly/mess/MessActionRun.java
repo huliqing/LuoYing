@@ -10,7 +10,7 @@ import com.jme3.network.serializing.Serializable;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.data.ConnData;
-import name.huliqing.luoying.mess.MessBase;
+import name.huliqing.luoying.mess.GameMess;
 import name.huliqing.luoying.network.GameServer;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.entity.Entity;
@@ -21,7 +21,7 @@ import name.huliqing.ly.layer.network.GameNetwork;
  * @author huliqing
  */
 @Serializable
-public class MessActionRun extends MessBase {
+public class MessActionRun extends GameMess {
     
     // 角色唯一id
     private long actorId;

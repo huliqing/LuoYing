@@ -8,8 +8,8 @@ package name.huliqing.ly.object.game;
 import com.jme3.app.Application;
 import com.jme3.network.HostedConnection;
 import com.jme3.network.Message;
-import name.huliqing.luoying.mess.MessPlayLoadSavedActor;
-import name.huliqing.luoying.mess.MessPlayLoadSavedActorResult;
+import name.huliqing.luoying.mess.ActorLoadSavedMess;
+import name.huliqing.luoying.mess.ActorLoadSavedResultMess;
 import name.huliqing.luoying.network.GameServer;
 
 /**
@@ -32,8 +32,8 @@ public class LanServerNetworkRpgGame extends ServerNetworkRpgGame {
         // 客户端会优先偿试从服务端中载入客户端所存档的资源。
         // 但是局域网模式下的服务端不保存客户端资料，所以这里直接返回false，
         // 以便让客户端去弹出角色选择窗口，选择一个角色进行游戏
-        if (m instanceof MessPlayLoadSavedActor) {
-            gameServer.send(source, new MessPlayLoadSavedActorResult(false));
+        if (m instanceof ActorLoadSavedMess) {
+            gameServer.send(source, new ActorLoadSavedResultMess(false));
             return true;
         }
         

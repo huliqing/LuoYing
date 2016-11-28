@@ -8,10 +8,10 @@ import name.huliqing.luoying.network.Network;
 import com.jme3.math.Vector3f;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.layer.service.ActorService;
-import name.huliqing.luoying.mess.MessActorPhysics;
-import name.huliqing.luoying.mess.MessActorViewDir;
-import name.huliqing.luoying.mess.MessActorLookAt;
-import name.huliqing.luoying.mess.MessActorSetLocation;
+import name.huliqing.luoying.mess.ActorPhysicsMess;
+import name.huliqing.luoying.mess.ActorViewDirMess;
+import name.huliqing.luoying.mess.ActorLookAtMess;
+import name.huliqing.luoying.mess.ActorSetLocationMess;
 import name.huliqing.luoying.object.entity.Entity;
 
 /**
@@ -147,7 +147,7 @@ public class ActorNetworkImpl implements ActorNetwork{
     @Override
     public void setLocation(Entity actor, Vector3f location) {
         if (!NETWORK.isClient()) {
-            MessActorSetLocation mess = new MessActorSetLocation();
+            ActorSetLocationMess mess = new ActorSetLocationMess();
             mess.setActorId(actor.getData().getUniqueId());
             mess.setLocation(location);
             NETWORK.broadcast(mess);
@@ -158,7 +158,7 @@ public class ActorNetworkImpl implements ActorNetwork{
     @Override
     public void setViewDirection(Entity actor, Vector3f viewDirection) {
         if (!NETWORK.isClient()) {
-            MessActorViewDir mess = new MessActorViewDir();
+            ActorViewDirMess mess = new ActorViewDirMess();
             mess.setActorId(actor.getData().getUniqueId());
             mess.setViewDir(viewDirection);
             NETWORK.broadcast(mess);
@@ -169,7 +169,7 @@ public class ActorNetworkImpl implements ActorNetwork{
     @Override
     public void setPhysicsEnabled(Entity actor, boolean enabled) {
          if (!NETWORK.isClient()) {
-            MessActorPhysics mess = new MessActorPhysics();
+            ActorPhysicsMess mess = new ActorPhysicsMess();
             mess.setActorId(actor.getData().getUniqueId());
             mess.setEnabled(enabled);
             NETWORK.broadcast(mess);
@@ -181,7 +181,7 @@ public class ActorNetworkImpl implements ActorNetwork{
     public void setLookAt(Entity actor, Vector3f position) {
         if (!NETWORK.isClient()) {
             if (NETWORK.hasConnections()) {
-                MessActorLookAt mess = new MessActorLookAt();
+                ActorLookAtMess mess = new ActorLookAtMess();
                 mess.setActorId(actor.getData().getUniqueId());
                 mess.setPos(position);
                 NETWORK.broadcast(mess);

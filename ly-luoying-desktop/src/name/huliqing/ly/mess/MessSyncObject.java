@@ -6,7 +6,8 @@ package name.huliqing.ly.mess;
 
 import com.jme3.network.serializing.Serializable;
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.mess.MessBase;
+import name.huliqing.luoying.mess.GameMess;
+import name.huliqing.luoying.network.GameClient;
 import name.huliqing.luoying.object.SyncData;
 import name.huliqing.ly.object.NetworkObject;
 import name.huliqing.ly.layer.service.GameService;
@@ -16,7 +17,7 @@ import name.huliqing.ly.layer.service.GameService;
  * @author huliqing
  */
 @Serializable
-public class MessSyncObject extends MessBase{
+public class MessSyncObject extends GameMess{
 
     // 同步的物品ID
     private long objectId;
@@ -33,8 +34,8 @@ public class MessSyncObject extends MessBase{
     }
     
     @Override
-    public void applyOnClient() {
-        super.applyOnClient();
+    public void applyOnClient(GameClient gameClient) {
+        super.applyOnClient(null);
         NetworkObject syncObject = Factory.get(GameService.class).findSyncObject(objectId);
         if (syncObject != null) {
             syncObject.applySyncData(syncData);

@@ -25,16 +25,17 @@ import name.huliqing.luoying.data.GameData;
 import name.huliqing.luoying.layer.service.ConfigService;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.data.ConnData;
-import name.huliqing.luoying.mess.network.MessServerState;
+import name.huliqing.luoying.mess.network.ServerStateMess;
 import name.huliqing.luoying.network.discover.MessCSFindServer;
 import name.huliqing.luoying.network.discover.MessCSPing;
 import name.huliqing.luoying.network.discover.UDPDiscover;
 import name.huliqing.luoying.network.discover.MessSCStarted;
 import name.huliqing.luoying.network.discover.MessSCClosed;
 import name.huliqing.luoying.network.discover.UDPListener;
-import name.huliqing.luoying.mess.MessBase;
 import name.huliqing.luoying.layer.service.SystemService;
 import name.huliqing.luoying.manager.ResManager;
+import name.huliqing.luoying.mess.BaseMess;
+import name.huliqing.luoying.object.entity.Entity;
 
 /**
  * 服务端程序，注：不要直接通过new GameServer创建服务端，而是通过 {@link Network#createGameServer(name.huliqing.fighter.data.GameData) }
@@ -49,14 +50,14 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
     public interface ServerListener {
         
         /**
-         * 客户端添加时
+         * 当一个客户端成功连接到服务端时该方法被调用。
          * @param gameServer 
          * @param conn 
          */
         void clientAdded(GameServer gameServer, HostedConnection conn);
         
         /**
-         * 客户端离开时
+         * 当客户端断开与服务端的连接时该方法被调用。
          * @param gameServer 
          * @param conn 
          */
@@ -68,20 +69,23 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
          * @param source 客户端连接
          * @param mess 
          */
-        void serverMessage(GameServer gameServer, HostedConnection source, Message mess);
+        void messageReceived(GameServer gameServer, HostedConnection source, Message mess);
         
-//        /**
-//         * 添加一个同步OBJECT
-//         * @param syncObject 
-//         */
-//        void addSyncObject(T syncObject);
-//        
-//        /**
-//         * 移除一个自动同步的object
-//         * @param syncObject
-//         * @return 
-//         */
-//        boolean removeSyncObject(T syncObject);
+        /**
+         * 添加一个同步实体，当添加后，这个实体将在运行时持续保持与客户端的同步，如：位移、旋转、缩放等.
+         * 具体同步的频率、同步的方式由子类实现决定。
+         * 直到主动将实体移除 {@link #removeSyncEntity(Entity) }
+         * @param syncObject 
+         */
+        void addSyncEntity(Entity syncObject);
+        
+        /**
+         * 移除一个自动同步的实体,移除后，这个物体将不再与客户端保持同步。
+         * @param syncObject
+         * @return 
+         * @see #addSyncEntity(Entity) 
+         */
+        boolean removeSyncEntity(Entity syncObject);
         
         /**
          * 更新逻辑
@@ -248,7 +252,7 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
     public void setServerState(ServerState state) {
         this.serverState = state;
         // 通知所有已经连接到当前Server的客户端
-        broadcast(new MessServerState(state));
+        broadcast(new ServerStateMess(state));
         // 向局域网广播消息，这是向所有未连接到当前server的广播。因为状态发生变化，所以也广播
         // 让局域网知道
         serverDiscover.broadcast(createServerRunMess(), configService.getPortDiscoverClient());
@@ -294,7 +298,7 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
      * 广播所有信息给客户端
      * @param message 
      */
-    public final void broadcast(MessBase message) {
+    public final void broadcast(BaseMess message) {
         message.setTime(time);
         server.broadcast(message);
     }
@@ -304,7 +308,7 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
      * @param conn
      * @param message 
      */
-    public final void send(HostedConnection conn, MessBase message) {
+    public final void send(HostedConnection conn, BaseMess message) {
         message.setTime(time);
         conn.send(message);
     }
@@ -425,7 +429,7 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
     @Override
     public void messageReceived(HostedConnection source, Message m) {
         if (listener != null) {
-            listener.serverMessage(this, source, m);
+            listener.messageReceived(this, source, m);
         }
     }
     

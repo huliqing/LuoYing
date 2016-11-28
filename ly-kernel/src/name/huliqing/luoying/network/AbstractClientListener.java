@@ -12,20 +12,21 @@ import com.jme3.network.ClientStateListener.DisconnectInfo;
 import com.jme3.network.Message;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import name.huliqing.luoying.mess.network.MessGameData;
-import name.huliqing.luoying.mess.network.MessClients;
-import name.huliqing.luoying.mess.network.MessClient;
-import name.huliqing.luoying.mess.network.MessGetServerState;
-import name.huliqing.luoying.mess.network.MessServerState;
+import name.huliqing.luoying.mess.network.GameDataMess;
+import name.huliqing.luoying.mess.network.ClientsMess;
+import name.huliqing.luoying.mess.network.ClientMess;
+import name.huliqing.luoying.mess.network.GetServerStateMess;
+import name.huliqing.luoying.mess.network.ServerStateMess;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.layer.service.ConfigService;
 import name.huliqing.luoying.network.GameClient.ClientListener;
 import name.huliqing.luoying.network.GameServer.ServerState;
-import name.huliqing.luoying.mess.network.MessPing;
+import name.huliqing.luoying.mess.network.PingMess;
 import name.huliqing.luoying.data.ConnData;
 import name.huliqing.luoying.layer.service.SystemService;
-import name.huliqing.luoying.mess.network.MessRequestGameInit;
-import name.huliqing.luoying.mess.network.MessRequestGameInitOk;
+import name.huliqing.luoying.mess.GameMess;
+import name.huliqing.luoying.mess.network.RequestGameInitMess;
+import name.huliqing.luoying.mess.network.RequestGameInitOkMess;
 import name.huliqing.luoying.network.GameClient.ClientState;
 
 /**
@@ -69,7 +70,7 @@ public abstract class AbstractClientListener implements ClientListener {
     private final List<PingListener> pingListerners = new ArrayList<PingListener>(1);
     
     // 用于向服务端发送的Ping消息
-    private final MessPing messPing = new MessPing();
+    private final PingMess messPing = new PingMess();
     
     public AbstractClientListener(Application app) {
         this.app = app;
@@ -137,7 +138,7 @@ public abstract class AbstractClientListener implements ClientListener {
         if (!hasRequestGameInit) {
             if (gameClient.getClientState() == ClientState.ready && gameClient.getServerState() == ServerState.running) {
                 // 请求初始化游戏数据
-                gameClient.send(new MessRequestGameInit());
+                gameClient.send(new RequestGameInitMess());
                 hasRequestGameInit = true;
                 
             } else if (gameClient.getServerState() != ServerState.running) {
@@ -169,31 +170,39 @@ public abstract class AbstractClientListener implements ClientListener {
     }
     
     private void receiveMessage(GameClient gameClient, Message m) {
-        if (m instanceof MessGameData) {
-            onReceiveMessGameData(gameClient, (MessGameData) m);
-            
-        } else if (m instanceof MessServerState) {
-            onReceiveMessServerState(gameClient, (MessServerState) m);
-
-        } else if (m instanceof MessClients) {
-            onReceiveMessClients(gameClient,  (MessClients) m);
-
-        }  else if (m instanceof MessRequestGameInitOk) {
-            onReceiveGameInitOk(gameClient, (MessRequestGameInitOk) m);
-            
-        } else if (m instanceof MessPing) {
-            onUpdatePing(gameClient, (MessPing) m);
-            
-        } else {
-            
-            // 在客户端状态进入running之后才接收其它消息。
+        
+        // 注：只有在客户端状态进入running之后才接收GameMess, 这很重要，因为在客户端处理游戏消息之前需要确保
+        // 客户端已经初始化完成，一切准备就绪才可以。如果在这之前处理游戏命令消息可能会导致客户端和服务端的状态不同步。
+        if (m instanceof GameMess) {
             if (gameClient.getClientState() == ClientState.running) {
-                onClientGameRunning(gameClient, m);
+                onReceiveGameMess(gameClient, m);
             } else {
-                LOG.log(Level.WARNING, "ClientListener is not ready to process other message"
+                LOG.log(Level.WARNING, "ClientListener is not ready to process \"GameMess\""
                         + ", because the GameClient is not in \"running\" state! ClientState={0}, message={1}"
                         , new Object[] {gameClient.getServerState(), m});
             }
+            return;
+        }
+        
+        // 游戏初始化消息。
+        if (m instanceof GameDataMess) {
+            onReceiveMessGameData(gameClient, (GameDataMess) m);
+            
+        } else if (m instanceof ServerStateMess) {
+            onReceiveMessServerState(gameClient, (ServerStateMess) m);
+
+        } else if (m instanceof ClientsMess) {
+            onReceiveMessClients(gameClient,  (ClientsMess) m);
+
+        }  else if (m instanceof RequestGameInitOkMess) {
+            onReceiveGameInitOk(gameClient, (RequestGameInitOkMess) m);
+            
+        } else if (m instanceof PingMess) {
+            onUpdatePing(gameClient, (PingMess) m);
+            
+        } else {
+            
+            LOG.log(Level.WARNING, "Unknow message type. message={0}", m.getClass().getName());
             
         }
     }
@@ -204,7 +213,7 @@ public abstract class AbstractClientListener implements ClientListener {
      * @param gameClient
      * @param mess 
      */
-    protected void onReceiveMessGameData(GameClient gameClient, MessGameData mess) {
+    protected void onReceiveMessGameData(GameClient gameClient, GameDataMess mess) {
         gameClient.setGameData(mess.getGameData());
     }
     
@@ -213,7 +222,7 @@ public abstract class AbstractClientListener implements ClientListener {
      * @param gameClient
      * @param mess 
      */
-    protected void onReceiveMessServerState(GameClient gameClient, MessServerState mess) {
+    protected void onReceiveMessServerState(GameClient gameClient, ServerStateMess mess) {
         gameClient.setServerState(mess.getServerState());
     }
     
@@ -223,7 +232,7 @@ public abstract class AbstractClientListener implements ClientListener {
      * @param gameClient
      * @param mess 
      */
-    protected void onReceiveMessClients(GameClient gameClient, MessClients mess) {
+    protected void onReceiveMessClients(GameClient gameClient, ClientsMess mess) {
         this.clients.clear();
         this.clients.addAll(mess.getClients());
     }
@@ -234,7 +243,7 @@ public abstract class AbstractClientListener implements ClientListener {
      */
     protected void onConnected(GameClient gameClient) {
         // 1.连接上服务端后立即发送客户端标识
-        MessClient mess = new MessClient(configService.getClientId(), systemService.getMachineName());
+        ClientMess mess = new ClientMess(configService.getClientId(), systemService.getMachineName());
         gameClient.send(mess);
     }
     
@@ -246,13 +255,13 @@ public abstract class AbstractClientListener implements ClientListener {
             intervalUsed += tpf;
             if (intervalUsed > interval) {
                 intervalUsed = 0;
-                gameClient.send(new MessGetServerState());
+                gameClient.send(new GetServerStateMess());
             }
         }
     }
     
     // Ping值测试
-    protected void onUpdatePing(GameClient gameClient, MessPing mess) {
+    protected void onUpdatePing(GameClient gameClient, PingMess mess) {
         if (pingListerners.size() > 0) {
             for (PingListener pl : pingListerners) {
                 // 注意要把纳秒转换为毫秒
@@ -263,16 +272,16 @@ public abstract class AbstractClientListener implements ClientListener {
     }
     
     /**
-     * 当客户端接收到服务端对于初始化请求{@link MessRequestGameInit}的响应时该方法被调用，该方法会将客户端状态从
+     * 当客户端接收到服务端对于初始化请求{@link RequestGameInitMess}的响应时该方法被调用，该方法会将客户端状态从
      * ready转变化running。<br>
      * 当客户端接收到这个消息后，接下来将立即接收到来自服务端的用于初始化场景的实体数据，
-     * 连续接收到的实体数量由{@link MessRequestGameInitOk#getInitEntityCount() }中指定。
+     * 连续接收到的实体数量由{@link RequestGameInitOkMess#getInitEntityCount() }中指定。
      * @param gameClient
      * @param mess 
      */
-    protected void onReceiveGameInitOk(GameClient gameClient, MessRequestGameInitOk mess) {
+    protected void onReceiveGameInitOk(GameClient gameClient, RequestGameInitOkMess mess) {
         gameClient.setClientState(ClientState.running);
-        onClientGameInit();
+        onGameInitialized();
     }
     
     /**
@@ -283,17 +292,17 @@ public abstract class AbstractClientListener implements ClientListener {
     protected abstract void onClientDisconnected(GameClient gameClient, DisconnectInfo info);
     
     /**
-     * 当客户端从ready转入Running状态时该方法被自动调用(一次)，这表明客户端已经可以与服务端正常交互游戏指令了。
-     * 子类实现这个方法来开始实现与服务端的游戏交互。
+     * 当客户端从ready转入Running状态时该方法被自动调用(一次)，这表明客户端已经完成与服务端的初始化（例如场景实体的
+     * 初始化). 可以开始正常交互游戏指令了。子类实现这个方法来开始实现与服务端的游戏交互(例如弹出角色选择界面来).
      */
-    protected abstract void onClientGameInit();
+    protected abstract void onGameInitialized();
     
     /**
      * 运行时处理来自服务端传来的消息, 注：这个方法只有在客户端状态进入running之后才会被调用。
      * @param gameClient
      * @param m 
      */
-    protected abstract void onClientGameRunning(GameClient gameClient, Message m);
+    protected abstract void onReceiveGameMess(GameClient gameClient, Message m);
     
 
 }

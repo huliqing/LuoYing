@@ -143,9 +143,12 @@ public class DynamicFightAction extends PathFollowAction implements FightAction,
     public void cleanup() {
         skillModule.removeSkillListener(this);
         skinModule.removeSkinListener(this);
-        if (autoTakeOffWeapon && skinService.isWeaponTakeOn(actor)) {
-            skinNetwork.takeOffWeapon(actor);
-        }
+        
+        // 效果不是太好，不再使用自动收刀。
+//        if (autoTakeOffWeapon && skinService.isWeaponTakeOn(actor)) {
+//            skinNetwork.takeOffWeapon(actor);
+//        }
+
         super.cleanup();
     }
     

@@ -22,10 +22,10 @@ import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.layer.service.ConfigService;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.layer.service.SkillService;
-import name.huliqing.luoying.mess.network.MessClientExit;
-import name.huliqing.luoying.mess.MessPlayLoadSavedActor;
-import name.huliqing.luoying.mess.MessPlayLoadSavedActorResult;
-import name.huliqing.luoying.mess.network.MessClients;
+import name.huliqing.luoying.mess.network.ClientExitMess;
+import name.huliqing.luoying.mess.ActorLoadSavedMess;
+import name.huliqing.luoying.mess.ActorLoadSavedResultMess;
+import name.huliqing.luoying.mess.network.ClientsMess;
 import name.huliqing.luoying.network.GameServer;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.actor.Actor;
@@ -128,7 +128,7 @@ public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
     protected boolean processMessage(GameServer gameServer, HostedConnection source, Message m) {
         // 如果客户端偿试要求载入存档，则从存档中载入，如果不存在存档（新游戏）或存档中没有指定客户端的资料则返回false
         // 以通知客户端自己去选择一个角色来进行游戏
-        if (m instanceof MessPlayLoadSavedActor) {
+        if (m instanceof ActorLoadSavedMess) {
             // 找出客户端的存档资料，注意saveStory可能为null（在“新游戏"情况下）
             if (saveStory != null) {
                 List<ClientData> clientDatas = saveStory.getClientDatas();
@@ -142,7 +142,7 @@ public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
                         }
 
                         // 通知客户端,这样客户端可以确定是否需要弹出“角色选择面板”来重新选择一个角色进行游戏
-                        MessPlayLoadSavedActorResult messResult = new MessPlayLoadSavedActorResult(result);
+                        ActorLoadSavedResultMess messResult = new ActorLoadSavedResultMess(result);
                         messResult.setActorId(clientData.getActorId());
                         gameServer.send(source, messResult);
 
@@ -154,18 +154,18 @@ public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
                         // 更新本地（服务端）客户端列表
                         onClientListUpdated();
                         // 通知所有客户更新“客户端列表”
-                        gameServer.broadcast(new MessClients(gameServer.getClients()));
+                        gameServer.broadcast(new ClientsMess(gameServer.getClients()));
                         
                         return true;
                     }
                 }
             }
-            gameServer.send(source, new MessPlayLoadSavedActorResult(false));
+            gameServer.send(source, new ActorLoadSavedResultMess(false));
             return true;
         }
 
         // 当服务端（故事模式）接收到客户端退出游戏的消息时，服务端要保存客户端的资料,以便下次客户端连接时能够继续
-        if (m instanceof MessClientExit) {
+        if (m instanceof ClientExitMess) {
             ConnData cd = source.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
             if (cd.getClientId() != null && cd.getEntityId() > 0) {
                 storeClient(saveStory, scene.getEntities(Actor.class, null), cd.getClientId(), cd.getEntityId(), data.getId());
@@ -174,11 +174,6 @@ public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
         }
         return super.processMessage(gameServer, source, m);
     }
-    
-    // ---- private -------------------------------------------------------------------------------------------------------------------
-    // ---- private -------------------------------------------------------------------------------------------------------------------
-    // ---- private -------------------------------------------------------------------------------------------------------------------
-    // ---- private -------------------------------------------------------------------------------------------------------------------
     
     /**
      * 载入当前主角玩家存档，如果没有存档则新开游戏

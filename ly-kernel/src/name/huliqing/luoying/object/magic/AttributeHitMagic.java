@@ -53,8 +53,8 @@ public class AttributeHitMagic extends AbstractMagic {
     }
 
     @Override
-    public void magicUpdate(float tpf) {
-        super.magicUpdate(tpf); 
+    public void updateMagicLogic(float tpf) {
+        super.updateMagicLogic(tpf); 
         intervalUsed += tpf;
         if (intervalUsed >= interval) {
             intervalUsed = 0;
@@ -64,6 +64,7 @@ public class AttributeHitMagic extends AbstractMagic {
     
     private void applyHit() {
         tempStore.clear();
+        
         List<Actor> actors = scene.getEntities(Actor.class, magicRoot.getWorldTranslation(), distance, tempStore);
         if (actors.isEmpty()) 
             return;

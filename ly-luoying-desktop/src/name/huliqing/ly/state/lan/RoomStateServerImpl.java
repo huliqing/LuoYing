@@ -8,17 +8,16 @@ import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.network.HostedConnection;
-import com.jme3.network.Message;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.LuoYing;
-import name.huliqing.luoying.network.AbstractServerListener;
 import name.huliqing.luoying.network.Network;
 import name.huliqing.luoying.network.GameServer;
 import name.huliqing.luoying.data.GameData;
 import name.huliqing.luoying.data.ConnData;
-import name.huliqing.luoying.mess.network.MessRequestGameInit;
+import name.huliqing.luoying.mess.GameMess;
+import name.huliqing.luoying.mess.network.RequestGameInitMess;
 import name.huliqing.luoying.network.GameServer.ServerState;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.game.GameAppState;
@@ -28,6 +27,7 @@ import name.huliqing.luoying.ui.LinearLayout;
 import name.huliqing.luoying.ui.UIFactory;
 import name.huliqing.luoying.ui.state.UIState;
 import name.huliqing.ly.Start;
+import name.huliqing.luoying.network.DefaultServerListener;
 import name.huliqing.ly.object.game.ServerNetworkRpgGame;
 //import name.huliqing.ly.LyLanServerPlayState;
 
@@ -173,20 +173,11 @@ public class RoomStateServerImpl extends AbstractAppState implements RoomState {
         clientPanel.setClients(clients);
     }
     
-    private class LanRoomServerListener extends AbstractServerListener {
+    private class LanRoomServerListener extends DefaultServerListener {
 
         public LanRoomServerListener(Application app) {
             super(app);
         }
-
-        @Override
-        protected void onClientsUpdated(GameServer gameServer) {
-            super.onClientsUpdated(gameServer);
-            refreshClients();
-        }
-
-        @Override
-        protected void onReceiveMessage(GameServer gameServer, HostedConnection source, Message m) {}
 
         @Override
         public void update(float tpf, GameServer gameServer) {}
@@ -196,9 +187,18 @@ public class RoomStateServerImpl extends AbstractAppState implements RoomState {
 
         @Override
         protected void onReceiveMessRequestGameInit(GameServer gameServer, HostedConnection conn
-                , MessRequestGameInit mess) {
+                , RequestGameInitMess mess) {
             // 游戏未开始，不需要处理
         }
+        
+        @Override
+        protected void onClientsUpdated(GameServer gameServer) {
+            super.onClientsUpdated(gameServer);
+            refreshClients();
+        }
+
+        @Override
+        protected void onReceiveGameMess(GameServer gameServer, HostedConnection source, GameMess m) {}
         
     }
     

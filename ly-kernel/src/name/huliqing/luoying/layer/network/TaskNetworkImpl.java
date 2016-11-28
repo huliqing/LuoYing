@@ -7,7 +7,7 @@ package name.huliqing.luoying.layer.network;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.layer.service.TaskService;
 import name.huliqing.luoying.network.Network;
-import name.huliqing.luoying.mess.MessTaskComplete;
+import name.huliqing.luoying.mess.TaskCompleteMess;
 import name.huliqing.luoying.object.entity.Entity;
 
 /**
@@ -25,7 +25,7 @@ public class TaskNetworkImpl implements TaskNetwork {
 
     @Override
     public void completeTask(Entity actor, String taskId) {
-        MessTaskComplete mess = new MessTaskComplete();
+        TaskCompleteMess mess = new TaskCompleteMess();
         mess.setActorId(actor.getData().getUniqueId());
         mess.setTaskId(taskId);
         

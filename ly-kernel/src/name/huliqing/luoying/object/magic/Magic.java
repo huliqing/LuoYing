@@ -8,6 +8,7 @@ import name.huliqing.luoying.data.MagicData;
 import name.huliqing.luoying.object.entity.Entity;
 
 /**
+ * xxx 重新定义魔法
  * @author huliqing
  * @param <T>
  */

@@ -14,10 +14,10 @@ import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.GameData;
 import name.huliqing.luoying.layer.service.ConfigService;
 import name.huliqing.luoying.network.GameServer.ServerListener;
-import name.huliqing.luoying.mess.MessActorTransformDirect;
+import name.huliqing.luoying.mess.ActorTransformDirectMess;
 import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.manager.RandomManager;
-import name.huliqing.luoying.mess.MessBase;
+import name.huliqing.luoying.mess.GameMess;
 import name.huliqing.luoying.object.AbstractPlayObject;
 import name.huliqing.luoying.object.entity.Entity;
 
@@ -134,7 +134,7 @@ public class Network extends AbstractPlayObject {
      * @param client
      * @param message 
      */
-    public void sendToClient(HostedConnection client, MessBase message) {
+    public void sendToClient(HostedConnection client, GameMess message) {
         if (gameServer != null && gameServer.isRunning()) {
             message.setRandomIndex(RandomManager.getIndex());
             gameServer.send(client, message);
@@ -158,7 +158,7 @@ public class Network extends AbstractPlayObject {
      * 法将什么也不做。
      * @param message 
      */
-    public void broadcast(MessBase message) {
+    public void broadcast(GameMess message) {
         if (gameServer != null && gameServer.isRunning()) {
             message.setRandomIndex(RandomManager.getIndex());
             gameServer.broadcast(message);
@@ -177,7 +177,7 @@ public class Network extends AbstractPlayObject {
      */
     public void syncTransformDirect(Entity actor) {
         if (hasConnections()) {
-            MessActorTransformDirect mess = new MessActorTransformDirect();
+            ActorTransformDirectMess mess = new ActorTransformDirectMess();
             mess.setActorId(actor.getData().getUniqueId());
             mess.setLocation(actor.getSpatial().getWorldTranslation());
             mess.setWalkDirection(actorService.getWalkDirection(actor));
@@ -190,28 +190,28 @@ public class Network extends AbstractPlayObject {
         }
     }
 
-//    /**
-//     * 添加需要动态自动同步变换状态的角色，添加后该角色的变换将自动持续的同
-//     * 步变换状态到所有客户端，直到调用 {@link #removeAutoSyncTransform(name.huliqing.fighter.object.actor.Actor) }
-//     * 为止。
-//     * @param actor 
-//     */
-//    public void addAutoSyncTransform(Entity actor) {
-//        if (hasConnections()) {
-//            ServerListener sl = gameServer.getListener();
-//            if (sl != null) {
-//                sl.addSyncObject(actor);
-//            }
-//        }
-//    }
-//    
-//    public void removeAutoSyncTransform(Entity actor) {
-//        if (gameServer != null) {
-//            ServerListener sl = gameServer.getListener();
-//            if (sl != null) {
-//                sl.removeSyncObject(actor);
-//            }
-//        }
-//    }
+    /**
+     * 添加需要动态自动同步变换状态的角色，添加后该角色的变换将自动持续的同
+     * 步变换状态到所有客户端，直到调用 {@link #removeAutoSyncTransform(name.huliqing.fighter.object.actor.Actor) }
+     * 为止。
+     * @param actor 
+     */
+    public void addSyncEntity(Entity actor) {
+        if (hasConnections()) {
+            ServerListener sl = gameServer.getListener();
+            if (sl != null) {
+                sl.addSyncEntity(actor);
+            }
+        }
+    }
+    
+    public void removeSyncEntity(Entity actor) {
+        if (gameServer != null) {
+            ServerListener sl = gameServer.getListener();
+            if (sl != null) {
+                sl.removeSyncEntity(actor);
+            }
+        }
+    }
 
 }

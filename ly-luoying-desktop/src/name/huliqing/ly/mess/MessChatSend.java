@@ -10,7 +10,8 @@ import name.huliqing.luoying.Factory;
 import name.huliqing.ly.layer.network.ChatNetwork;
 import name.huliqing.ly.layer.service.ChatService;
 import name.huliqing.luoying.layer.service.PlayService;
-import name.huliqing.luoying.mess.MessBase;
+import name.huliqing.luoying.mess.GameMess;
+import name.huliqing.luoying.network.GameClient;
 import name.huliqing.luoying.network.GameServer;
 import name.huliqing.luoying.object.entity.Entity;
 
@@ -19,7 +20,7 @@ import name.huliqing.luoying.object.entity.Entity;
  * @author huliqing
  */
 @Serializable
-public class MessChatSend extends MessBase {
+public class MessChatSend extends GameMess {
     private final transient PlayService playService = Factory.get(PlayService.class);
     private final transient ChatNetwork chatNetwork = Factory.get(ChatNetwork.class);
     private final transient ChatService chatService = Factory.get(ChatService.class);
@@ -79,8 +80,8 @@ public class MessChatSend extends MessBase {
     }
 
     @Override
-    public void applyOnClient() {
-        super.applyOnClient();
+    public void applyOnClient(GameClient gameClient) {
+        super.applyOnClient(null);
         Entity sActor = playService.getEntity(sender);
         Entity rActor = playService.getEntity(receiver);
         if (sActor == null || rActor == null) {

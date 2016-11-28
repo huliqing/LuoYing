@@ -17,10 +17,10 @@ import name.huliqing.luoying.network.GameClient;
 import name.huliqing.luoying.network.Network;
 //import name.huliqing.ly.state.ClientPlayState;
 import name.huliqing.luoying.network.GameServer.ServerState;
-import name.huliqing.luoying.mess.network.MessGetGameData;
-import name.huliqing.luoying.mess.network.MessClients;
-import name.huliqing.luoying.mess.network.MessGameData;
-import name.huliqing.luoying.mess.network.MessServerState;
+import name.huliqing.luoying.mess.network.GetGameDataMess;
+import name.huliqing.luoying.mess.network.ClientsMess;
+import name.huliqing.luoying.mess.network.GameDataMess;
+import name.huliqing.luoying.mess.network.ServerStateMess;
 import name.huliqing.luoying.object.game.GameAppState;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.ly.view.HelpView;
@@ -175,21 +175,21 @@ public class RoomStateClientImpl extends AbstractAppState implements RoomState {
         }
 
         @Override
-        protected void onReceiveMessGameData(GameClient gameClient, MessGameData mess) {
+        protected void onReceiveMessGameData(GameClient gameClient, GameDataMess mess) {
             super.onReceiveMessGameData(gameClient, mess);
             clientPanel.setGameData(mess.getGameData());
             checkToStart(gameClient);
         }
         
         @Override
-        protected void onReceiveMessServerState(final GameClient gameClient, MessServerState mess) {
+        protected void onReceiveMessServerState(final GameClient gameClient, ServerStateMess mess) {
             super.onReceiveMessServerState(gameClient, mess);
             updateHelp();
             checkToStart(gameClient);
         }
 
         @Override
-        protected void onReceiveMessClients(GameClient gameClient, MessClients mess) {
+        protected void onReceiveMessClients(GameClient gameClient, ClientsMess mess) {
             super.onReceiveMessClients(gameClient, mess); 
             clientPanel.setClients(mess.getClients());
         }
@@ -207,7 +207,7 @@ public class RoomStateClientImpl extends AbstractAppState implements RoomState {
                 // 可能发送不了gameData,就会造成gameData==null, 这种情况需要重新请求GameData,然后
                 // 交由onGameDataLoaded接收数据时再开始(startGame)
                 if (gameClient.getGameData() == null) {
-                    gameClient.send(new MessGetGameData());
+                    gameClient.send(new GetGameDataMess());
                 } else {
                     startGame = true;
                     updateHelp();
@@ -221,11 +221,11 @@ public class RoomStateClientImpl extends AbstractAppState implements RoomState {
         }
         
         @Override
-        protected void onClientGameInit() {
+        protected void onGameInitialized() {
         }
         
         @Override
-        protected void onClientGameRunning(GameClient gameClient, Message m) {
+        protected void onReceiveGameMess(GameClient gameClient, Message m) {
             // ignore
         }
 

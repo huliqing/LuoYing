@@ -16,12 +16,15 @@ import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.ConnData;
 import name.huliqing.luoying.layer.network.PlayNetwork;
-import name.huliqing.luoying.mess.MessPlayActorSelect;
-import name.huliqing.luoying.mess.MessPlayActorSelectResult;
-import name.huliqing.luoying.mess.network.MessClientExit;
-import name.huliqing.luoying.mess.network.MessClients;
-import name.huliqing.luoying.mess.network.MessRequestGameInit;
-import name.huliqing.luoying.mess.network.MessRequestGameInitOk;
+import name.huliqing.luoying.layer.service.PlayService;
+import name.huliqing.luoying.manager.ResManager;
+import name.huliqing.luoying.mess.GameMess;
+import name.huliqing.luoying.mess.ActorSelectMess;
+import name.huliqing.luoying.mess.ActorSelectResultMess;
+import name.huliqing.luoying.mess.network.ClientExitMess;
+import name.huliqing.luoying.mess.network.ClientsMess;
+import name.huliqing.luoying.mess.network.RequestGameInitMess;
+import name.huliqing.luoying.mess.network.RequestGameInitOkMess;
 import name.huliqing.luoying.network.GameServer;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
@@ -31,7 +34,7 @@ import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.ly.layer.service.GameService;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.ly.mess.MessMessage;
-import name.huliqing.ly.network.DefaultServerListener;
+import name.huliqing.luoying.network.DefaultServerListener;
 
 /**
  * 服务端RpgGame的抽象实现.
@@ -41,6 +44,7 @@ public abstract class ServerNetworkRpgGame extends NetworkRpgGame {
     private final GameService gameService = Factory.get(GameService.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
+    private final PlayService playService = Factory.get(PlayService.class);
 
     protected GameServer gameServer;
  
@@ -105,7 +109,7 @@ public abstract class ServerNetworkRpgGame extends NetworkRpgGame {
         playNetwork.addEntity(actor);
         
         // 通知所有客户更新“客户端列表
-        gameServer.broadcast(new MessClients(gameServer.getClients()));
+        gameServer.broadcast(new ClientsMess(gameServer.getClients()));
     }
     
     /**
@@ -134,7 +138,7 @@ public abstract class ServerNetworkRpgGame extends NetworkRpgGame {
         gameService.addMessage(message, type);
         
         // 通知所有客户更新“客户端列表
-        gameServer.broadcast(new MessClients(gameServer.getClients()));
+        gameServer.broadcast(new ClientsMess(gameServer.getClients()));
     }
     
     /**
@@ -146,10 +150,10 @@ public abstract class ServerNetworkRpgGame extends NetworkRpgGame {
      */
     protected boolean processMessage(GameServer gameServer, HostedConnection source, Message m) {
         // 客户端告诉服务端，要选择哪一个角色进行游戏
-        if (m instanceof MessPlayActorSelect) {
+        if (m instanceof ActorSelectMess) {
 
             // 选择玩家角色
-            MessPlayActorSelect mess = (MessPlayActorSelect) m;
+            ActorSelectMess mess = (ActorSelectMess) m;
             Entity actor = Loader.load(mess.getActorId());
             actor.getData().setName(mess.getActorName());
             // 默认情况下，不管是在Story模式或是在Lan模式，玩家选择后的角色都为1级.但是在某些情况下会有一些不同，比如：
@@ -167,7 +171,7 @@ public abstract class ServerNetworkRpgGame extends NetworkRpgGame {
             onAddClientPlayer(cd, actor);
             
             // 返回消息给客户端，让客户端知道所选择的角色成功。
-            MessPlayActorSelectResult result = new MessPlayActorSelectResult();
+            ActorSelectResultMess result = new ActorSelectResultMess();
             result.setActorId(actor.getData().getUniqueId());
             result.setSuccess(true);
             gameServer.send(source, result);
@@ -177,7 +181,7 @@ public abstract class ServerNetworkRpgGame extends NetworkRpgGame {
 
         // 当服务端接收到客户端退出游戏的消息时，这里什么也不处理。与故事模式不同。故事模式要保存客户端资料.
         // 服务端暂时不需要处理任何逻辑
-        if (m instanceof MessClientExit) {
+        if (m instanceof ClientExitMess) {
             return true;
         }
         
@@ -191,14 +195,14 @@ public abstract class ServerNetworkRpgGame extends NetworkRpgGame {
         }
         
         @Override
-        protected void onReceiveMessRequestGameInit(GameServer gameServer, HostedConnection conn, MessRequestGameInit mess) {
+        protected void onReceiveMessRequestGameInit(GameServer gameServer, HostedConnection conn, RequestGameInitMess mess) {
             List<Entity> initEntities = scene.getEntities(Entity.class, new ArrayList<Entity>());
             
             // 向客户端返回初始化OK的消息
-            MessRequestGameInitOk result = new MessRequestGameInitOk(initEntities.size());
+            RequestGameInitOkMess result = new RequestGameInitOkMess(initEntities.size());
             gameServer.send(conn, result);
             
-            // 立
+            // 立即向客户端初始化场景实体
             for (Entity e : initEntities) {
                 playNetwork.addEntityToClient(conn, e);
             }
@@ -212,15 +216,50 @@ public abstract class ServerNetworkRpgGame extends NetworkRpgGame {
         }
 
         @Override
-        protected void onReceiveMessage(GameServer gameServer, HostedConnection source, Message m) {
+        protected void onReceiveGameMess(GameServer gameServer, HostedConnection source, GameMess m) {
             // 本地处理
             if (processMessage(gameServer, source, m)) {
                 return;
             }
             // 由父类处理
-            super.onReceiveMessage(gameServer, source, m); 
+            super.onReceiveGameMess(gameServer, source, m); 
         }
 
+        @Override
+        protected void onClientRemoved(GameServer gameServer, HostedConnection conn) {
+            super.onClientRemoved(gameServer, conn); 
+            ConnData cd = conn.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
+            if (cd == null)
+                return;
 
+            Entity clientPlayer = playService.getEntity(cd.getEntityId());
+            if (clientPlayer == null)
+                return;
+            
+            // 1.将客户端角色的所有宠物移除出场景,注意是宠物，不要把非生命的（如防御塔）也一起移除
+            List<Entity> actors = playService.getEntities(Entity.class, null);
+            if (actors != null && !actors.isEmpty()) {
+                for (Entity actor : actors) {
+                    if (gameService.getOwner(actor) == clientPlayer.getData().getUniqueId() && gameService.isBiology(actor)) {
+                        playNetwork.removeEntity(actor);
+                    }
+                }
+            }
+
+            // 2.将客户端角色移除出场景
+            playNetwork.removeEntity(clientPlayer);
+
+            // 3.通知所有客户端（不含主机）
+            String message = ResManager.get(ResConstants.LAN_CLIENT_EXISTS, new Object[] {clientPlayer.getData().getName()});
+            MessMessage notice = new MessMessage();
+            notice.setMessage(message);
+            notice.setType(MessageType.notice);
+            gameServer.broadcast(notice);
+
+            // 4.通知主机
+            addMessage(message, MessageType.notice);
+        }
+
+        
     }
 }

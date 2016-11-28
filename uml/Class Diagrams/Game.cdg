@@ -2,89 +2,161 @@
 
 <ClassDiagram name="Game">
   <ClassDiagramComponents>
-    <Interface name="Game" package="" visibility="public" xPosition="736.0" yPosition="66.0">
+    <Class name="SimpleGame" package="" visibility="public" xPosition="929.0" yPosition="283.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="SimpleRpgGame" package="" visibility="public" xPosition="929.0" yPosition="410.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="NetworkRpgGame" package="" visibility="public" xPosition="929.0" yPosition="555.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="ServerNetworkRpgGame" package="" visibility="public" xPosition="532.0" yPosition="732.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="StoryServerNetworkRpgGame" package="" visibility="public" xPosition="265.0" yPosition="1166.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="LanServerNetworkRpgGame" package="" visibility="public" xPosition="727.0" yPosition="1166.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="ClientNetworkRpgGame" package="" visibility="public" xPosition="1234.0" yPosition="732.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="SurvivalGame" package="" visibility="public" xPosition="749.0" yPosition="1348.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="StoryGbGame" package="" visibility="public" xPosition="291.0" yPosition="1348.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="StoryGuardGame" package="" visibility="public" xPosition="507.0" yPosition="1348.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="StoryTreasureGame" package="" visibility="public" xPosition="78.0" yPosition="1348.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="UntitledClass" package="" visibility="public" xPosition="1647.0" yPosition="1644.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Interface name="Game" package="" visibility="public" xPosition="929.0" yPosition="157.0">
       <Methods/>
     </Interface>
-    <Class name="SimpleGame" package="" visibility="public" xPosition="736.0" yPosition="204.0">
-      <Fields/>
-      <Constructors/>
-      <Methods/>
-    </Class>
-    <Class name="SimpleRpgGame" package="" visibility="public" xPosition="736.0" yPosition="349.0">
-      <Fields/>
-      <Constructors/>
-      <Methods/>
-    </Class>
-    <Class name="NetworkRpgGame" package="" visibility="public" xPosition="736.0" yPosition="496.0">
-      <Fields/>
-      <Constructors/>
-      <Methods/>
-    </Class>
-    <Class name="ServerNetworkRpgGame" package="" visibility="public" xPosition="555.0" yPosition="658.0">
-      <Fields/>
-      <Constructors/>
-      <Methods/>
-    </Class>
-    <Class name="StoryServerNetworkRpgGame" package="" visibility="public" xPosition="332.0" yPosition="855.0">
-      <Fields/>
-      <Constructors/>
-      <Methods/>
-    </Class>
-    <Class name="LanServerNetworkRpgGame" package="" visibility="public" xPosition="806.0" yPosition="855.0">
-      <Fields/>
-      <Constructors/>
-      <Methods/>
-    </Class>
-    <Class name="ClientNetworkRpgGame" package="" visibility="public" xPosition="933.0" yPosition="658.0">
-      <Fields/>
-      <Constructors/>
-      <Methods/>
-    </Class>
-    <Class name="SurvivalGame" package="" visibility="public" xPosition="828.0" yPosition="1031.0">
-      <Fields/>
-      <Constructors/>
-      <Methods/>
-    </Class>
-    <Class name="StoryGbGame" package="" visibility="public" xPosition="358.0" yPosition="1031.0">
-      <Fields/>
-      <Constructors/>
-      <Methods/>
-    </Class>
-    <Class name="StoryGuardGame" package="" visibility="public" xPosition="585.0" yPosition="1031.0">
-      <Fields/>
-      <Constructors/>
-      <Methods/>
-    </Class>
-    <Class name="StoryTreasureGame" package="" visibility="public" xPosition="145.0" yPosition="1031.0">
-      <Fields/>
-      <Constructors/>
-      <Methods/>
-    </Class>
-    <Interface name="LanGame" package="" visibility="public" xPosition="358.0" yPosition="496.0">
+    <Interface name="LanGame" package="" visibility="public" xPosition="591.0" yPosition="555.0">
       <Methods/>
     </Interface>
-    <Interface name="UIEventListener" package="" visibility="public" xPosition="358.0" yPosition="355.0">
+    <Interface name="UIEventListener" package="" visibility="public" xPosition="591.0" yPosition="410.0">
       <Methods/>
     </Interface>
-    <Class name="UntitledClass" package="" visibility="public" xPosition="1084.0" yPosition="1162.0">
+    <Class name="Network" package="" visibility="public" xPosition="929.0" yPosition="732.0">
       <Fields/>
       <Constructors/>
       <Methods/>
     </Class>
+    <Class name="GameClient" package="" visibility="public" xPosition="1064.0" yPosition="951.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="GameServer" package="" visibility="public" xPosition="815.0" yPosition="951.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="NetworkServerListener" package="" visibility="public" xPosition="166.0" yPosition="534.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="DefaultServerListener" package="" visibility="public" xPosition="171.0" yPosition="398.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="AbstractServerListener" package="" visibility="public" xPosition="166.0" yPosition="263.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Interface name="ServerListener" package="" visibility="public" xPosition="174.0" yPosition="141.0">
+      <Methods/>
+    </Interface>
+    <Class name="NetworkClientListener" package="" visibility="public" xPosition="1368.0" yPosition="555.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="LanClientListener" package="" visibility="public" xPosition="1372.0" yPosition="398.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="AbstractClientListener" package="" visibility="public" xPosition="1367.0" yPosition="250.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Interface name="ClientListener" package="" visibility="public" xPosition="1371.0" yPosition="102.0">
+      <Methods/>
+    </Interface>
+    <Interface name="PingListener" package="" visibility="public" xPosition="1562.0" yPosition="732.0">
+      <Methods/>
+    </Interface>
+    <Interface name="DataProcessor" package="" visibility="public" xPosition="929.0" yPosition="27.0">
+      <Methods/>
+    </Interface>
   </ClassDiagramComponents>
   <ClassDiagramRelations>
-    <IsRelation name="is" source="StoryGuardGame" target="StoryServerNetworkRpgGame"/>
-    <IsRelation name="is" source="StoryTreasureGame" target="StoryServerNetworkRpgGame"/>
-    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="NetworkRpgGame" target="LanGame"/>
     <IsRelation name="is" source="ServerNetworkRpgGame" target="NetworkRpgGame"/>
+    <IsRelation name="is" source="DefaultServerListener" target="AbstractServerListener"/>
+    <HasRelation name="gameServer" source="Network" target="GameServer" type="Default" sourceCardinality="0..1" targetCardinality="1..1"/>
+    <IsRelation name="is" source="LanClientListener" target="AbstractClientListener"/>
+    <IsRelation name="is" source="StoryTreasureGame" target="StoryServerNetworkRpgGame"/>
+    <HasRelation name="gameClient" source="Network" target="GameClient" type="Default" sourceCardinality="0..1" targetCardinality="1..1"/>
+    <IsRelation name="is" source="LanServerNetworkRpgGame" target="ServerNetworkRpgGame"/>
+    <IsRelation name="is" source="StoryGbGame" target="StoryServerNetworkRpgGame"/>
+    <HasRelation name="(inner)" source="ClientNetworkRpgGame" target="NetworkClientListener" type="Default" sourceCardinality="0..1" targetCardinality="1..1"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="ClientNetworkRpgGame" target="PingListener"/>
+    <IsRelation name="is" source="Game" target="DataProcessor"/>
     <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="SimpleRpgGame" target="UIEventListener"/>
     <IsRelation name="is" source="StoryServerNetworkRpgGame" target="ServerNetworkRpgGame"/>
-    <IsRelation name="is" source="SurvivalGame" target="LanServerNetworkRpgGame"/>
-    <IsRelation name="is" source="LanServerNetworkRpgGame" target="ServerNetworkRpgGame"/>
-    <IsRelation name="is" source="SimpleRpgGame" target="SimpleGame"/>
-    <IsRelation name="is" source="ClientNetworkRpgGame" target="NetworkRpgGame"/>
+    <IsRelation name="is" source="NetworkClientListener" target="LanClientListener"/>
+    <UseRelation name="gameClient" source="ClientNetworkRpgGame" target="GameClient" sourceCardinality="1..1" targetCardinality="1..1"/>
     <IsRelation name="is" source="NetworkRpgGame" target="SimpleRpgGame"/>
+    <UseRelation name="gameServer" source="ServerNetworkRpgGame" target="GameServer" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="(inner)" source="ServerNetworkRpgGame" target="NetworkServerListener" type="Default" sourceCardinality="0..1" targetCardinality="1..1"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="NetworkRpgGame" target="LanGame"/>
+    <IsRelation name="is" source="SurvivalGame" target="LanServerNetworkRpgGame"/>
+    <IsRelation name="is" source="ClientNetworkRpgGame" target="NetworkRpgGame"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="AbstractClientListener" target="ClientListener"/>
+    <IsRelation name="is" source="StoryGuardGame" target="StoryServerNetworkRpgGame"/>
     <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="SimpleGame" target="Game"/>
-    <IsRelation name="is" source="StoryGbGame" target="StoryServerNetworkRpgGame"/>
+    <IsRelation name="is" source="NetworkServerListener" target="DefaultServerListener"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="AbstractServerListener" target="ServerListener"/>
+    <UseRelation name="network" source="NetworkRpgGame" target="Network" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <IsRelation name="is" source="SimpleRpgGame" target="SimpleGame"/>
   </ClassDiagramRelations>
 </ClassDiagram>
