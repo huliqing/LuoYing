@@ -8,16 +8,13 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
-import name.huliqing.luoying.LuoYingException;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -31,7 +28,9 @@ class DataStore {
     private final static Logger LOG = Logger.getLogger(DataStore.class.getName());
     
     private final static Map<String, Proto> PROTO_MAP = new HashMap<String, Proto>();
-    private final static List<String> SCRIPTS = new ArrayList<String>();
+    
+    // remove20161129,以后不再用javascript
+//    private final static List<String> SCRIPTS = new ArrayList<String>();
     
     /**
      * 直接获取原形数据，这是最原始的数据，不会处理继承关系，作为内部方法调用，不要直接使用。外部调用应该使用
@@ -49,13 +48,14 @@ class DataStore {
         return null;
     }
     
-    /**
-     * Get all javascripts, this method will return an unmodifiableList, so don't try to modify the list.
-     * @return 
-     */
-    public List<String> getJavaScripts() {
-        return Collections.unmodifiableList(SCRIPTS);
-    }
+    // remove20161129,以后不再用javascript
+//    /**
+//     * Get all javascripts, this method will return an unmodifiableList, so don't try to modify the list.
+//     * @return 
+//     */
+//    public List<String> getJavaScripts() {
+//        return Collections.unmodifiableList(SCRIPTS);
+//    }
     
     /**
      * Get all proto data, this will return an unmodifiable collection.
@@ -75,8 +75,6 @@ class DataStore {
     public void loadData(InputStream dataStream, String encoding) throws ParserConfigurationException, SAXException, IOException {
         String xmlStr = readFile(dataStream, encoding);
         String xmlEscapsed = XmlElEscape.convert(xmlStr);
-//        System.out.println("=====================");
-//        System.out.println("=====================");
 //        System.out.println("=====================");
 //        System.out.println(xmlEscapsed);
         
@@ -112,7 +110,7 @@ class DataStore {
             }
             return baos.toString(charset != null ? charset : "utf-8");
         } catch (Exception ioe) {
-            throw new LuoYingException(ioe);
+            throw new RuntimeException(ioe);
         } finally {
             if (bis != null) {
                 try {

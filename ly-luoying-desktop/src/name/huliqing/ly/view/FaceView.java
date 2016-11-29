@@ -135,6 +135,7 @@ public final class FaceView extends LinearLayout implements EntityDataListener{
         if (this.actor != null) {
             this.actor.removeEntityDataListener(this);
         }
+        statePanel.needRefreshStates = newActor != this.actor;
         
         this.actor = newActor;
         this.actor.addEntityDataListener(this);

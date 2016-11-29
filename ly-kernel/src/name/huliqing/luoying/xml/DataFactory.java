@@ -7,7 +7,6 @@ package name.huliqing.luoying.xml;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,6 +21,8 @@ import org.xml.sax.SAXException;
 public class DataFactory {
     private static final Logger LOG = Logger.getLogger(DataFactory.class.getName());
     
+    private static IdGenerator idGenerator = new SimpleIdGenerator();
+    
     // TagName -> ObjectData,用于注册自定义的数据容器
     private final static Map<String, Class<? extends ObjectData>> TAG_DATAS = new HashMap<String, Class<? extends ObjectData>>();
     
@@ -32,6 +33,14 @@ public class DataFactory {
     private final static Map<String, Class<? extends DataProcessor>> TAG_PROCESSORS = new HashMap<String, Class<? extends DataProcessor>>();
     
     private final static DataStore DATA_STORE = new DataStore();
+    
+    /**
+     * 注册一个ID生成器，该ID生成器将用于为所有Data生成唯一id.
+     * @param generator 
+     */
+    public static void registerIdGenerator(IdGenerator generator) {
+        idGenerator = generator;
+    }
     
     /**
      * 注册一个数据类型
@@ -111,7 +120,9 @@ public class DataFactory {
             } else {
                 data = new ObjectData();
             }
+            
             data.setProto(proto);
+            data.setUniqueId(generateUniqueId());
 
             // 如果指定了Data载入器则使用这个载入器来载入数据，否则不理, 允许不注册指定的载入器及Data类型。
             String dataLoader = proto.getDataLoaderClass();
@@ -220,11 +231,20 @@ public class DataFactory {
     }
     
     /**
-     * 获取所有的JavaScript代码内容，返回的列表是不可修改的 unmodifiableList
+     * 生成一个唯一id, 每次调用该方法都将产生一个唯一的id.
      * @return 
      */
-    public static List<String> getJavaScripts() {
-        return DATA_STORE.getJavaScripts();
+    public static long generateUniqueId() {
+        return idGenerator.generateUniqueId();
     }
+    
+    // remove20161129以后不再使用javascript
+//    /**
+//     * 获取所有的JavaScript代码内容，返回的列表是不可修改的 unmodifiableList
+//     * @return 
+//     */
+//    public static List<String> getJavaScripts() {
+//        return DATA_STORE.getJavaScripts();
+//    }
     
 }

@@ -31,8 +31,6 @@ import name.huliqing.luoying.LuoYingException;
 public class ObjectData implements Savable, Cloneable {
 //    private static final Logger LOG = Logger.getLogger(ObjectData.class.getName());
     
-    private static long idIndex = System.currentTimeMillis();
-    
     // 类型ID
     protected String id;
     
@@ -46,9 +44,7 @@ public class ObjectData implements Savable, Cloneable {
     // 因为proto可以直接从本地获取，不需要进行network传输，减少网络流量
     private transient Proto proto;
     
-    public ObjectData() {
-        uniqueId = generateUniqueId();
-    }
+    public ObjectData() {}
     
     public Proto getProto() {
         // Proto不会在网络中传输，当在网络情况下, 需要在客户端重新获取。
@@ -94,14 +90,6 @@ public class ObjectData implements Savable, Cloneable {
      */
     public void setUniqueId(long uniqueId) {
         this.uniqueId = uniqueId;
-    }
-    
-    /**
-     * 给物体产生一个唯一ID
-     * @return 
-     */
-    public synchronized static long generateUniqueId() {
-        return idIndex++;
     }
     
     /**
@@ -454,9 +442,9 @@ public class ObjectData implements Savable, Cloneable {
                 clone.localData = new HashMap<String, Savable>(localData.size());
                 for (Entry<String, Savable> e : localData.entrySet()) {
                     if (e.getValue() instanceof Cloneable) {
-                        localData.put(e.getKey(), CloneHelper.cloneObject(e.getValue()));
+                        clone.localData.put(e.getKey(), CloneHelper.cloneObject(e.getValue()));
                     } else {
-                        localData.put(e.getKey(), e.getValue());
+                        clone.localData.put(e.getKey(), e.getValue());
                     }
                 }
             }
@@ -480,7 +468,7 @@ public class ObjectData implements Savable, Cloneable {
     public void read(JmeImporter im) throws IOException {
         InputCapsule ic = im.getCapsule(this);
         id = ic.readString("id", null);
-        uniqueId = ic.readLong("uniqueId", generateUniqueId());
+        uniqueId = ic.readLong("uniqueId", 0);
         localData = (HashMap<String, Savable>) ic.readStringSavableMap("localData", null);
     }
     

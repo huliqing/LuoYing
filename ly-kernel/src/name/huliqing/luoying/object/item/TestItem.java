@@ -7,10 +7,7 @@ package name.huliqing.luoying.object.item;
 
 import java.util.List;
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.data.EffectData;
 import name.huliqing.luoying.data.EntityData;
-import name.huliqing.luoying.data.ModuleData;
-import name.huliqing.luoying.data.SkinData;
 import name.huliqing.luoying.data.StateData;
 import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.luoying.layer.network.PlayNetwork;
@@ -23,6 +20,7 @@ import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.layer.service.StateService;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.xml.DataFactory;
 import name.huliqing.luoying.xml.ObjectData;
 
 /**
@@ -52,18 +50,13 @@ public class TestItem extends AbstractItem {
     protected void doUse(Entity actor) {
         count++;
       
-//        StateData stateData = Loader.loadData("stateSpeedUpAS");
-        StateData stateData = Loader.loadData("stateSafe");
-        actor.addObjectData(stateData, 1);
         actor.updateDatas();
-        EntityData saved = actor.getData();        
-
-        saveService.saveSavable("aabb", saved);
+        EntityData ed = actor.getData().clone();
+        ed.setUniqueId(DataFactory.generateUniqueId());
         
-        ObjectData loaded = saveService.loadSavable("aabb");
-        System.out.println("loaded=" + loaded);
-   
-        System.out.println("...");
+        Entity other = Loader.load(ed);
+        
+        playNetwork.addEntity(other);
     }
         
     private <T extends ObjectData> void removeTypes(EntityData ed, Class<T> type) {

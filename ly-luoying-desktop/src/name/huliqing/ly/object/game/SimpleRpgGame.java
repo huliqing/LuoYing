@@ -6,6 +6,7 @@
 package name.huliqing.ly.object.game;
 
 import com.jme3.app.Application;
+import com.jme3.bounding.BoundingVolume;
 import com.jme3.collision.CollisionResults;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
@@ -243,8 +244,13 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
         
         List<Actor> temps = new ArrayList<Actor>();
         scene.getEntities(Actor.class, temps);
+       BoundingVolume bv;
         for (Actor a : temps) {
-            if (a.getSpatial().getWorldBound().intersects(ray)) {
+            bv = a.getSpatial().getWorldBound();
+            if (bv == null) {
+                continue;
+            }
+            if (bv.intersects(ray)) {
                 store.add(a);
             }
         }
