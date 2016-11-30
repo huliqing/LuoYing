@@ -14,7 +14,7 @@ import name.huliqing.luoying.ui.Text;
 import name.huliqing.luoying.ui.UIFactory;
 import name.huliqing.luoying.ui.UI;
 import name.huliqing.luoying.ui.Window;
-import name.huliqing.ly.Config;
+import name.huliqing.ly.LyConfig;
 
 /**
  * 游戏音量大小调整界面
@@ -69,7 +69,7 @@ public class TalkSpeedOper extends Window {
         this.setDragEnabled(true);
         
         // 初始化
-        this.setSpeed((int) (1 / Config.getSpeakTimeWorld()));
+        this.setSpeed((int) (1 / LyConfig.getSpeakTimeWorld()));
     } 
     
     @Override
@@ -98,7 +98,7 @@ public class TalkSpeedOper extends Window {
     public final void setSpeed(int speed) {
         this.speed = MathUtils.clamp(speed, speedMin, speedMax);
         this.speedText.setText(this.speed + "");
-        Config.setSpeakTimeWorld(1.0f / this.speed);
+        LyConfig.setSpeakTimeWorld(1.0f / this.speed);
         talkSpeed.setRowDes(ResourceManager.get("system.ui.talkSpeed.des", new Object[] {speedText.getText()}));
     }
     

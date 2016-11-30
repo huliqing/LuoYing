@@ -27,7 +27,6 @@ import name.huliqing.luoying.object.entity.Entity;
  */
 public class Network extends AbstractPlayObject {
     private final static Logger LOG = Logger.getLogger(Network.class.getName());
-    private final ConfigService configService = Factory.get(ConfigService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     
     private final static Network INSTANCE = new Network();
@@ -50,6 +49,45 @@ public class Network extends AbstractPlayObject {
     }
     
     /**
+     * 创建服务器端程序，注意：如果当前已经创建过客户端或服务端，则它们会被
+     * 关闭和清理.游戏中同时只能存在一个服务端或者是客户端，否则可能引起端口冲突
+     * 或资源浪费问题。
+     * @param gameData 游戏数据
+     * @param gameName 游戏名称
+     * @param versionName 游戏版本名称
+     * @param versionCode 游戏版本代码
+     * @param serverPort 服务端端口，这个端口同时用于tcp和udp
+     * @return
+     * @throws IOException 
+     */
+    public  GameServer createGameServer(GameData gameData
+            , String gameName, String versionName, int versionCode, int serverPort) throws IOException {
+        cleanup();
+        gameServer = new GameServer(gameData, gameName, versionName, versionCode, serverPort);
+        return gameServer;
+    }
+    
+    /**
+     * 创建客户端程序，注意：如果当前已经创建过客户端或服务端，则它们会被
+     * 关闭和清理.游戏中只能存在一个服务端或者是客户端，否则可能引起端口冲突
+     * 或资源浪费问题。
+     * @param gameName
+     * @param versionCode
+     * @param serverHost
+     * @param serverPort
+     * @return
+     * @throws IOException 
+     */
+    public GameClient createGameClient(String gameName, int versionCode, String serverHost, int serverPort) throws Exception {
+        cleanup();
+        gameClient = new GameClient(gameName
+                , versionCode
+                , serverHost
+                , serverPort);
+        return gameClient;
+    }
+
+    /**
      * 清理Network创建的server或client,释放资源和端口占用。
      */
     @Override
@@ -62,38 +100,6 @@ public class Network extends AbstractPlayObject {
             gameClient.cleanup();
             gameClient = null;
         }
-    }
-    
-    /**
-     * 创建服务器端程序，注意：如果当前已经创建过客户端或服务端，则它们会被
-     * 关闭和清理.游戏中只能存在一个服务端或者是客户端，否则可能引起端口冲突
-     * 或资源浪费问题。
-     * @param gameData
-     * @return
-     * @throws IOException 
-     */
-    public  GameServer createGameServer(GameData gameData) throws IOException {
-        cleanup();
-        gameServer = new GameServer(gameData);
-        return gameServer;
-    }
-    
-    /**
-     * 创建客户端程序，注意：如果当前已经创建过客户端或服务端，则它们会被
-     * 关闭和清理.游戏中只能存在一个服务端或者是客户端，否则可能引起端口冲突
-     * 或资源浪费问题。
-     * @param serverHost
-     * @param serverPort
-     * @return
-     * @throws IOException 
-     */
-    public GameClient createGameClient(String serverHost, int serverPort) throws Exception {
-        cleanup();
-        gameClient = new GameClient(configService.getGameName()
-                , configService.getVersionCode()
-                , serverHost
-                , serverPort);
-        return gameClient;
     }
     
     public boolean isServer() {

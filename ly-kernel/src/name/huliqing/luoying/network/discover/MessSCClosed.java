@@ -16,7 +16,7 @@ public class MessSCClosed extends MessServerState {
     public MessSCClosed() {
     }
     
-    public MessSCClosed(String host, int port, String version, String hostName, String des, ServerState state) {
-        super(host, port, version, hostName, des, state);
+    public MessSCClosed(String host, int port, String versionName, int versionCode, String hostName, String des, ServerState state) {
+        super(host, port, versionName, versionCode, hostName, des, state);
     }
 }

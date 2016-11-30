@@ -17,7 +17,6 @@ import name.huliqing.ly.enums.MessageType;
 import name.huliqing.ly.view.talk.Talk;
 import name.huliqing.ly.view.talk.TalkImpl;
 import name.huliqing.ly.view.talk.TalkListener;
-import name.huliqing.luoying.layer.network.ActorNetwork;
 import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.layer.service.LogicService;
@@ -49,7 +48,7 @@ public class StoryGuardTask2 extends AbstractTaskStep {
     private final LogicService logicService = Factory.get(LogicService.class);
     private final GameService gameService = Factory.get(GameService.class);
     
-    private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
+//    private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     private final StoryGuardGame game;
@@ -447,7 +446,7 @@ public class StoryGuardTask2 extends AbstractTaskStep {
         logicService.addLogic(actor, (Logic) Loader.load(IdConstants.LOGIC_SEARCH_ENEMY));
         logicService.addLogic(actor, (Logic) Loader.load(IdConstants.LOGIC_FOLLOW));
         logicService.addLogic(actor, (Logic) Loader.load(IdConstants.LOGIC_FIGHT));
-        gameService.setFollow(actor, fightTarget.getData().getUniqueId());
+        gameService.setFollow(actor, fightTarget.getData().getUniqueId()); 
     }
     
     // 为角色计算一个等级

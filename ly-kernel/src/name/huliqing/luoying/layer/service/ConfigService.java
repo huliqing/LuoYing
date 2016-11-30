@@ -5,7 +5,6 @@
 package name.huliqing.luoying.layer.service;
 
 import name.huliqing.luoying.Inject;
-import name.huliqing.luoying.data.ConfigData;
 
 /**
  *
@@ -13,47 +12,47 @@ import name.huliqing.luoying.data.ConfigData;
  */
 public interface ConfigService extends Inject {
     
-    /**
-     * 用于监听配置变更.
-     */
-    public interface ConfigListener {
-        
-        /**
-         * 当配置发生变化时调用该方法。
-         */
-        void onConfigChanged();
-        
-    }
+//    /**
+//     * 用于监听配置变更.
+//     */
+//    public interface ConfigListener {
+//        
+//        /**
+//         * 当配置发生变化时调用该方法。
+//         */
+//        void onConfigChanged();
+//        
+//    }
     
-    /**
-     * 返回系统配置
-     * @return 
-     */
-    ConfigData getConfig();
+//    /**
+//     * 返回系统配置
+//     * @return 
+//     */
+//    ConfigData getConfig();
     
-    /**
-     * 载入全局配置
-     */
-    void loadGlobalConfig();
+//    /**
+//     * 载入全局配置
+//     */
+//    void loadGlobalConfig();
     
-    /**
-     * 获取游戏名字
-     * @return 
-     */
-    String getGameName();
-    
-    /**
-     * 获取版本名称
-     * @return 
-     */
-    String getVersionName();
-    
-    /**
-     * 获取游戏版本号
-     * @return 
-     */
-    int getVersionCode();
-    
+//    /**
+//     * 获取游戏名字
+//     * @return 
+//     */
+//    String getGameName();
+//    
+//    /**
+//     * 获取版本名称
+//     * @return 
+//     */
+//    String getVersionName();
+//    
+//    /**
+//     * 获取游戏版本号
+//     * @return 
+//     */
+//    int getVersionCode();
+//    
     /**
      * 获取游戏全局声音的开关状态
      * @return 
@@ -100,14 +99,14 @@ public interface ConfigService extends Inject {
 //     * @return 
 //     */
 //    String getLocale();
-    
-    float getDropFactor();
-    
-    int getPort();
-    
-    int getPortDiscoverServer();
-    
-    int getPortDiscoverClient();
+//    
+//    float getDropFactor();
+//    
+//    int getPort();
+//    
+//    int getPortDiscoverServer();
+//    
+//    int getPortDiscoverClient();
     
 //    /**
 //     * 获取所有支持的语言环境，返回格式， “{en_US,zh_CN}”
@@ -115,23 +114,23 @@ public interface ConfigService extends Inject {
 //     */
 //    String[] getAllSupportedLocale();
     
-    /**
-     * 获取系统定义的最高级别限制
-     * @return 
-     */
-    int getMaxLevel();
+//    /**
+//     * 获取系统定义的最高级别限制
+//     * @return 
+//     */
+//    int getMaxLevel();
     
-    /**
-     * 是否打开全局阴影选项
-     * @return 
-     */
-    boolean isUseShadow();
-    
-    /**
-     * 是否打开阴影功能
-     * @param useShadow 
-     */
-    void setUseShadow(boolean useShadow);
+//    /**
+//     * 是否打开全局阴影选项
+//     * @return 
+//     */
+//    boolean isUseShadow();
+//    
+//    /**
+//     * 是否打开阴影功能
+//     * @param useShadow 
+//     */
+//    void setUseShadow(boolean useShadow);
     
     /**
      * 获取客户端唯一ID，这个ID用来识别不同的客户端，每台安装了游戏的机器都会自动生成一个唯一的全局ID来识别这台机器。
@@ -143,16 +142,16 @@ public interface ConfigService extends Inject {
      */
     String getClientId();
     
-    /**
-     * 添加配置侦听器
-     * @param listener 
-     */
-    void addConfigListener(ConfigListener listener);
+//    /**
+//     * 添加配置侦听器
+//     * @param listener 
+//     */
+//    void addConfigListener(ConfigListener listener);
     
-    /**
-     * 移除配置侦听器
-     * @param listener 
-     * @return  
-     */
-    boolean removeConfigListener(ConfigListener listener);
+//    /**
+//     * 移除配置侦听器
+//     * @param listener 
+//     * @return  
+//     */
+//    boolean removeConfigListener(ConfigListener listener);
 }

@@ -13,6 +13,7 @@ import name.huliqing.luoying.ui.Button;
 import name.huliqing.luoying.ui.Text;
 import name.huliqing.luoying.ui.UI;
 import name.huliqing.luoying.ui.Window;
+import name.huliqing.ly.LyConfig;
 
 /**
  *
@@ -34,7 +35,7 @@ public class AboutView extends Window {
         setTitle(ResourceManager.get("setting.title"));
         setBackgroundColor(UIFactory.getUIConfig().getBodyBgColor(), true);
         
-        version = new Text(ResourceManager.get("about.version", new Object[] {configService.getVersionName()}));
+        version = new Text(ResourceManager.get("about.version", new Object[] {LyConfig.getVersionName()}));
         home = new Text(ResourceManager.get("about.home"));
         email = new Text(ResourceManager.get("about.email"));
         engine = new Text(ResourceManager.get("about.engine"));

@@ -38,6 +38,7 @@ import name.huliqing.luoying.ui.UI.Corner;
 import name.huliqing.luoying.ui.UI.Listener;
 import name.huliqing.luoying.ui.UIUtils;
 import name.huliqing.luoying.ui.state.UIState;
+import name.huliqing.ly.LyConfig;
 import name.huliqing.ly.view.IpAddressPanel;
 import name.huliqing.ly.Start;
 
@@ -118,14 +119,14 @@ public class LanState extends AbstractAppState {
                 , ResourceManager.get("lan.help.noGame"));
         helpHaveGame = new HelpView(helpPanelWidth, helpHeight
                 , ResourceManager.get("lan.help.haveGame"
-                , new Object[] {configService.getVersionName()}));
+                , new Object[] {LyConfig.getVersionName()}));
         helpPanel.addView(helpNoGame);
         
         // 房间监听器,broadcast messCS1000进行服务端查找。
-        clientDiscover = new UDPDiscover(configService.getPortDiscoverClient());
+        clientDiscover = new UDPDiscover(LyConfig.getDiscoverClientPort());
         clientDiscover.setListener(new ClientDiscoverListener());
         clientDiscover.start();
-        clientDiscover.broadcast(new MessCSFindServer(), configService.getPortDiscoverServer());
+        clientDiscover.broadcast(new MessCSFindServer(), LyConfig.getDiscoverServerPort());
         
         LinearLayout localUIRoot = new LinearLayout(width, height);
         localUIRoot.addView(roomPanel);
@@ -182,7 +183,7 @@ public class LanState extends AbstractAppState {
         
         // 检查目标主机端口是否打开,可避免在主机无法识别时一直阻塞UI
         try {
-            Socket client = new Socket(ipAddress, configService.getPort());
+            Socket client = new Socket(ipAddress, LyConfig.getServerPort());
             client.close();
         } catch (Exception e) {
             UIUtils.showAlert(ResourceManager.get(ResConstants.COMMON_TIP)
@@ -197,7 +198,9 @@ public class LanState extends AbstractAppState {
             public GameClient call() {
                 try {
                     GameClient gameClient = Network.getInstance()
-                            .createGameClient(ipAddress, configService.getPort());
+                            .createGameClient(LyConfig.getGameName()
+                                    , LyConfig.getVersionCode()
+                                    , ipAddress, LyConfig.getServerPort());
                     return gameClient;
                 } catch (Exception e) {
                     UIUtils.showAlert(ResourceManager.get(ResConstants.COMMON_TIP)
@@ -265,7 +268,7 @@ public class LanState extends AbstractAppState {
                         MessSCStarted mess = (MessSCStarted) object;
                         RoomData roomData = new RoomData(mess.getHost()
                                 , mess.getPort()
-                                , mess.getVersion()
+                                , mess.getVersionName()
                                 , mess.getHostName()
                                 , mess.getDes()
                                 , mess.getState());
@@ -283,7 +286,7 @@ public class LanState extends AbstractAppState {
                         MessSCClosed mess = (MessSCClosed) object;
                         RoomData roomData = new RoomData(mess.getHost()
                                 , mess.getPort()
-                                , mess.getVersion(), mess.getHostName(), mess.getDes(), mess.getState());
+                                , mess.getVersionName(), mess.getHostName(), mess.getDes(), mess.getState());
                         roomPanel.removeRoom(roomData);
                         // 当服务器关闭后从Ping列表中移除，这样就不需要再去Ping这个服务端
                         removePingRoom(roomData);

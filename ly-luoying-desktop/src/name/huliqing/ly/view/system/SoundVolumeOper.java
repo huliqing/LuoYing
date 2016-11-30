@@ -100,6 +100,7 @@ public class SoundVolumeOper extends Window {
         this.volumeValue = volume;
         this.volume.setText(this.volumeValue + "");
         configService.setSoundVolume(this.volumeValue * 0.1f);
+        
         soundVolume.setRowDes(ResourceManager.get("system.soundVolume.des", new Object[] {this.volumeValue + "/10"}));
     }
     

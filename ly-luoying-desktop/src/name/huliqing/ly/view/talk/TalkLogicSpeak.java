@@ -8,7 +8,7 @@ import name.huliqing.luoying.Factory;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.utils.MathUtils;
-import name.huliqing.ly.Config;
+import name.huliqing.ly.LyConfig;
 import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.ly.layer.service.GameService;
 
@@ -35,9 +35,9 @@ public class TalkLogicSpeak extends AbstractTalkLogic {
         // 如果没有指定内容显示时间，自动计算useTime
         if (useTime <= 0) {
             int worldLen = ResourceManager.getWorldLength(mess);
-            useTime = MathUtils.clamp(Config.getSpeakTimeWorld() * worldLen
-                    , Config.getSpeakTimeMin()
-                    , Config.getSpeakTimeMax());
+            useTime = MathUtils.clamp(LyConfig.getSpeakTimeWorld() * worldLen
+                    , LyConfig.getSpeakTimeMin()
+                    , LyConfig.getSpeakTimeMax());
         }
         // 委托给speak.
         // 注：该类没有做任何逻辑,只给speak计算一个时间，然后等待时间到即结束当前speak.

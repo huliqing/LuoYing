@@ -180,6 +180,22 @@ public class ObjectData implements Savable, Cloneable {
         return getProto().getAsArray(key);
     }
     
+    public final Byte getAsByte(String key) {
+        Object value = getAttributeFromLocal(key);
+        if (value != null) {
+            return (Byte) value;
+        }
+        return getProto().getAsByte(key);
+    }
+    
+    public final byte getAsByte(String key, byte defValue) {
+        Object value = getAttributeFromLocal(key);
+        if (value != null) {
+            return (Byte) value;
+        }
+        return getProto().getAsByte(key, defValue);
+    }
+    
     public final Integer getAsInteger(String key) {
         Object value = getAttributeFromLocal(key);
         if (value != null) {

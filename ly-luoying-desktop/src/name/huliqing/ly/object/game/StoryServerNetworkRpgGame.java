@@ -34,9 +34,8 @@ import name.huliqing.luoying.save.ClientData;
 import name.huliqing.luoying.save.SaveConfig;
 import name.huliqing.luoying.save.SaveHelper;
 import name.huliqing.luoying.save.SaveStory;
-import name.huliqing.luoying.save.ShortcutSave;
+import name.huliqing.ly.LyConfig;
 import name.huliqing.ly.constants.IdConstants;
-import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.ly.layer.service.GameService;
 import name.huliqing.ly.object.game.story.TaskStep;
 import name.huliqing.ly.object.game.story.TaskStepControl;
@@ -52,7 +51,7 @@ public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
     private final PlayService playService = Factory.get(PlayService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
     private final GameService gameService = Factory.get(GameService.class);
-    private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
+//    private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     
     /** 存档数据 */
     protected SaveStory saveStory = new SaveStory();
@@ -211,10 +210,8 @@ public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
         }
         // 给玩家指定分组
         gameService.setGroup(actor, GROUP_PLAYER);
-        // 故事模式玩家始终队伍分组为1
+        // 故事模式玩家队伍固定分组
         gameService.setTeam(actor, TEAM_PLAYER);
-        // 让角色处于“等待”
-        skillService.playSkill(actor, skillService.getSkillWaitDefault(actor), false);
         // 添加主玩家
         onAddServerPlayer(actor);
     }
@@ -283,7 +280,7 @@ public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
         
         // 保存全局配置
         SaveConfig saveConfig = new SaveConfig();
-        saveConfig.setConfig(configService.getConfig());
+        saveConfig.setConfig(LyConfig.getConfigData());
         SaveHelper.saveConfig(saveConfig);
     }
     

@@ -28,6 +28,7 @@ import name.huliqing.luoying.ui.UIFactory;
 import name.huliqing.luoying.ui.state.UIState;
 import name.huliqing.ly.Start;
 import name.huliqing.luoying.network.DefaultServerListener;
+import name.huliqing.ly.LyConfig;
 import name.huliqing.ly.object.game.ServerNetworkRpgGame;
 //import name.huliqing.ly.LyLanServerPlayState;
 
@@ -93,9 +94,13 @@ public class RoomStateServerImpl extends AbstractAppState implements RoomState {
             localUIRoot.addView(btnPanel);
             UIState.getInstance().addUI(localUIRoot);
             
-            // 开始Server
-            gameServer = Network.getInstance().createGameServer(gameData);
+            // 创建服务端
+            gameServer = Network.getInstance().createGameServer(gameData, LyConfig.getGameName()
+                    , LyConfig.getVersionName(), LyConfig.getVersionCode(), LyConfig.getServerPort());
             gameServer.setServerListener(new LanRoomServerListener(app));
+            // 打开局域网广播功能
+            gameServer.setLanDiscoverEnabled(true);
+            // 开启服务端
             gameServer.start();
             
             // 刷新客户端列表

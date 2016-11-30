@@ -8,6 +8,7 @@ import com.jme3.animation.AnimChannel;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.LoopMode;
 import name.huliqing.luoying.data.ChannelData;
+import name.huliqing.luoying.object.module.ChannelModule;
 import name.huliqing.luoying.xml.DataProcessor;
 
 /**
@@ -23,20 +24,18 @@ public interface Channel<T extends ChannelData> extends DataProcessor<T>{
     @Override
     public T getData();
 
-    @Override
-    public void updateDatas();
+    /**
+     * 初始化通道
+     * @param cm
+     * @param animControl
+     */
+    void initialize(ChannelModule cm, AnimControl animControl);
     
     /**
      * 获得通道ID标识
      * @return 
      */
     String getId();
-    
-    /**
-     * 设置AnimControl控制器
-     * @param animControl 
-     */
-    void setAnimControl(AnimControl animControl);
     
     /**
      * 执行动画。
@@ -82,6 +81,12 @@ public interface Channel<T extends ChannelData> extends DataProcessor<T>{
      * @param timeInter 
      */
     void resetToAnimationTime(String anim, float timeInter);
+    
+    /**
+     * 判断动画通道是否被锁定。
+     * @return 
+     */
+    boolean isLocked();
 
     /**
      * 锁定动画通道，使它不能执行动画
@@ -89,11 +94,6 @@ public interface Channel<T extends ChannelData> extends DataProcessor<T>{
      */
     void setLock(boolean locked);
     
-    /**
-     * 判断动画通道是否被锁定。
-     * @return 
-     */
-    boolean isLocked();
     
     /**
      * 获取内部channel

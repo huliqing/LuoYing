@@ -74,6 +74,8 @@ public class ClientNetworkRpgGame extends NetworkRpgGame implements PingListener
     @Override
     public void initialize(Application app) {
         super.initialize(app);
+        setUIVisiable(false);
+        
         clientListener = new NetworkClientListener(app);
         clientListener.addPingListener(this);
         gameClient.setGameClientListener(clientListener);

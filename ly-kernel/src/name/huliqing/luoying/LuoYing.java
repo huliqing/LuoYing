@@ -110,7 +110,6 @@ import name.huliqing.luoying.object.logic.FightLogic;
 import name.huliqing.luoying.object.logic.FollowLogic;
 import name.huliqing.luoying.object.logic.IdleLogic;
 import name.huliqing.luoying.object.logic.NotifyLogic;
-//import name.huliqing.luoying.object.logic.PlayerLogic;
 import name.huliqing.luoying.object.logic.PositionLogic;
 import name.huliqing.luoying.object.logic.SearchEnemyLogic;
 import name.huliqing.luoying.object.logic.ShopLogic;
@@ -129,7 +128,6 @@ import name.huliqing.luoying.object.bullet.StraightBullet;
 import name.huliqing.luoying.object.module.ChannelModule;
 import name.huliqing.luoying.loader.ChannelDataLoader;
 import name.huliqing.luoying.object.channel.SimpleChannel;
-import name.huliqing.luoying.loader.ConfigDataLoader;
 import name.huliqing.luoying.object.module.ActionModule;
 import name.huliqing.luoying.object.module.ActorModule;
 import name.huliqing.luoying.object.module.ItemModule;
@@ -157,7 +155,6 @@ import name.huliqing.luoying.object.entity.impl.AudioEntity;
 import name.huliqing.luoying.object.entity.impl.ChaseCameraEntity;
 import name.huliqing.luoying.object.entity.impl.AmbientLightEntity;
 import name.huliqing.luoying.object.entity.impl.DirectionalLightEntity;
-import name.huliqing.luoying.layer.service.ConfigService;
 import name.huliqing.luoying.loader.ActorDataLoader;
 import name.huliqing.luoying.loader.DefineDataLoader;
 import name.huliqing.luoying.loader.EffectDataLoader;
@@ -338,8 +335,6 @@ public class LuoYing {
         ResManager.loadResource("/LuoYing/Resources/resource_en_US", "utf-8", "en_US");
         ResManager.loadResource("/LuoYing/Resources/resource_zh_CN", "utf-8", "zh_CN");
         
-        // 载入语言环境及系统配置
-        Factory.get(ConfigService.class).loadGlobalConfig();
     }
 
     private static void registerSerializer() {
@@ -444,7 +439,7 @@ public class LuoYing {
         DataFactory.register("channel",  ChannelData.class, ChannelDataLoader.class, SimpleChannel.class);
         
         // Config
-        DataFactory.register("config",  ConfigData.class, ConfigDataLoader.class, null);
+        DataFactory.register("config",  ConfigData.class, null, null);
         
         // Define
         DataFactory.register("defineSkillType", DefineData.class, DefineDataLoader.class, SkillTypeDefine.class);
@@ -615,31 +610,30 @@ public class LuoYing {
     
     private static void loadSysData() throws LuoYingException {
         
-        // remove20161006,以后由其它实现去主动载入
         loadData("/LuoYing/Data/action.xml");
+        loadData("/LuoYing/Data/channel.xml");
+        loadData("/LuoYing/Data/config.xml");
+        loadData("/LuoYing/Data/el.xml");
+        loadData("/LuoYing/Data/entity.xml");
+        loadData("/LuoYing/Data/game.xml");
+        loadData("/LuoYing/Data/module.xml");
+        loadData("/LuoYing/Data/scene.xml");
+        
 //        loadData("/LuoYing/Data/actor.xml");
 //        loadData("/LuoYing/Data/actorAnim.xml");
 //        loadData("/LuoYing/Data/anim.xml");
 //        loadData("/LuoYing/Data/attribute.xml");
 //        loadData("/LuoYing/Data/bullet.xml");
-        loadData("/LuoYing/Data/channel.xml");
-        loadData("/LuoYing/Data/config.xml");
 //        loadData("/LuoYing/Data/define.xml");
 //        loadData("/LuoYing/Data/drop.xml");
 //        loadData("/LuoYing/Data/effect.xml");
-        loadData("/LuoYing/Data/el.xml");
 //        loadData("/LuoYing/Data/emitter.xml");
-        loadData("/LuoYing/Data/entity.xml");
-        loadData("/LuoYing/Data/game.xml");
 //        loadData("/LuoYing/Data/gameLogic.xml");
-        loadData("/LuoYing/Data/hitChecker.xml");
 //        loadData("/LuoYing/Data/item.xml");
 //        loadData("/LuoYing/Data/logic.xml");
 //        loadData("/LuoYing/Data/magic.xml");
-        loadData("/LuoYing/Data/module.xml");
 //        loadData("/LuoYing/Data/position.xml");
 //        loadData("/LuoYing/Data/resist.xml");
-        loadData("/LuoYing/Data/scene.xml");
 //        loadData("/LuoYing/Data/shape.xml");
 //
 //        // 技能

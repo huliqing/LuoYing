@@ -15,7 +15,6 @@ import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.network.AbstractClientListener;
 import name.huliqing.luoying.network.GameClient;
 import name.huliqing.luoying.network.Network;
-//import name.huliqing.ly.state.ClientPlayState;
 import name.huliqing.luoying.network.GameServer.ServerState;
 import name.huliqing.luoying.mess.network.GetGameDataMess;
 import name.huliqing.luoying.mess.network.ClientsMess;
@@ -27,6 +26,7 @@ import name.huliqing.ly.view.HelpView;
 import name.huliqing.luoying.ui.LinearLayout;
 import name.huliqing.luoying.ui.UIFactory;
 import name.huliqing.luoying.ui.state.UIState;
+import name.huliqing.ly.LyConfig;
 import name.huliqing.ly.Start;
 import name.huliqing.ly.object.game.ClientNetworkRpgGame;
 //import name.huliqing.ly.LyClientPlayState;
@@ -103,7 +103,10 @@ public class RoomStateClientImpl extends AbstractAppState implements RoomState {
             
             // 客户端连接开始
             if (gameClient == null) {
-                gameClient = Network.getInstance().createGameClient(roomData.getHost(), roomData.getPort());
+                gameClient = Network.getInstance().createGameClient(
+                        LyConfig.getGameName()
+                        , LyConfig.getVersionCode()
+                        , roomData.getHost(), roomData.getPort());
             }
             gameClient.setGameClientListener(new RoomClientListener(app));
             gameClient.start();

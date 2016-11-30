@@ -136,6 +136,9 @@ public class DynamicFightAction extends PathFollowAction implements FightAction,
         
         // 载入战斗技能
         recacheSkill();
+        
+        // add20150611,处理player在点了“攻击”图标后会不定时长的延迟一段时间的问题
+        timeUsed = interval;
     }
     
     @Override

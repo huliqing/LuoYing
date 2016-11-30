@@ -20,7 +20,7 @@ import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.layer.service.SystemService;
 
 /**
- * 用于查找主机，或者通知客户端。这个类可以在客户端运行也可以在服务端运行。
+ * UDPDiscover用于在局域网中查找主机，或者向客户端广播消息。这个类可以在客户端运行也可以在服务端运行。
  * 当在服务端运行时可以作为服务端监听来自客户端的消息。
  * 当作为客户端运行时可以向服务端发送查询消息。
  * 这个类使用UDP方式接收和发送数据.
@@ -30,10 +30,9 @@ public class UDPDiscover {
 //    private final static Logger logger = Logger.getLogger(UDPDiscover.class.getName());
     
     // 本地监听端口
-    private int localListenPort;
+    private final int localListenPort;
     private DatagramSocket socket;
-//    private byte[] buffer = new byte[65535];
-    private byte[] buffer = new byte[10240]; // 可尽量比需要的大一些
+    private final byte[] buffer = new byte[10240]; // 可尽量比需要的大一些
     private UDPListener listener; // 接收到消息时的侦听器
     private boolean started;
     // 消息接收线程
@@ -86,15 +85,15 @@ public class UDPDiscover {
     }
     
     /**
-     * 向局域网广播消息,调用该方法前需要确保已经启动（start）
-     * @param message 要向本地网络广播的消息,如果为null则什么也不做
-     * @param boradcastPort 指定要向本地网络中目标机器上哪一个端口进行广播
+     * 向局域网指定的端口发送广播消息,调用该方法前需要确保已经启动（start）
+     * @param mess 广播的消息
+     * @param broadcastPort 指定的端口
      */
     public void broadcast(AbstractMess mess, int broadcastPort) {
         if (!isRunning() || mess == null) {
             return;
         }
-        try {            
+        try {
             byte[] data = serializeMess(mess);
             DatagramPacket packet = new DatagramPacket(data, data.length, getBroadcastAddress(), broadcastPort);
             socket.send(packet);
@@ -117,7 +116,7 @@ public class UDPDiscover {
         return Factory.get(SystemService.class).getBroadcastAddress();
     }
     
-    private boolean isRunning() {
+    public boolean isRunning() {
         return started;
     }
     

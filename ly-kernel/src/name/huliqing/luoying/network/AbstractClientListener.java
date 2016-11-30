@@ -153,7 +153,7 @@ public abstract class AbstractClientListener implements ClientListener {
         pingTimeUsed += tpf;
         if (pingTimeUsed > pingTimeInterval) {
             pingTimeUsed = 0;
-            messPing.setTime(System.nanoTime());
+            messPing.sendTime = System.currentTimeMillis();
             gameClient.send(messPing);
         }
     }
@@ -264,8 +264,7 @@ public abstract class AbstractClientListener implements ClientListener {
     protected void onUpdatePing(GameClient gameClient, PingMess mess) {
         if (pingListerners.size() > 0) {
             for (PingListener pl : pingListerners) {
-                // 注意要把纳秒转换为毫秒
-                long ping = (long) ((System.nanoTime() - (long) mess.getTime()) * (1.0f / 1000000L));
+                long ping = System.currentTimeMillis() - mess.sendTime;
                 pl.onPingUpdate(ping);
             }
         }

@@ -62,23 +62,10 @@ public class GameClient implements ClientStateListener, MessageListener<Client>{
          */
         waitting,
         
-//        /**
-//         * 客户端处于载入初始化数据状态，如初始化一些设定，载入本地基本数据，静态场景等，该状态表明客户端还未就绪 ，
-//         * 还不能正常处理来自服务端的游戏数据。
-//         */
-//        loading,
-        
         /**
          * 客户端处于准备就绪状态，这个状态表示客户端已经可以开始准备接受初始化游戏场景的命令。
          */
         ready,
-        
-        // remove20161126
-//        /**
-//         * 等待初始化游戏状态，这个状态表明客户端和服务端已经同时处于就绪状态。客户端向服务端发送初始化场景的指令，正在
-//         * 向服务端请求初始化游戏场景的状态，如：初始化场景角色等。
-//         */
-//        waitting_init_game,
         
         /**
          * 客户端处于正常的游戏运行状态.
@@ -111,21 +98,21 @@ public class GameClient implements ClientStateListener, MessageListener<Client>{
     // 主机地址
     private final String host;
     // 主机端口
-    private final int hostPort;
+    private final int port;
     
-    GameClient(String gameName, int version, String host, int hostPort)
+    GameClient(String gameName, int versionCode, String host, int port)
         throws Exception {
         this.gameName = gameName;
-        this.version = version;
+        this.version = versionCode;
         this.host = host;
-        this.hostPort = hostPort;
+        this.port = port;
     }
     
     public void start() throws IOException {
         if (client != null && client.isConnected()) {
             return;
         }
-        client = Network.connectToServer(gameName, version, host, hostPort);
+        client = Network.connectToServer(gameName, version, host, port);
         client.addClientStateListener(this);
         client.addMessageListener(this);
         client.start();

@@ -3,9 +3,7 @@
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
       xsi:schemaLocation="http://luoying.huliqing.name meta/config.xsd">
   
-    <!--系统配置，ID不能修改-->
-    
-  <config id="sysConfig" 
+<!--  <config id="sysConfig" 
           gameName="落樱之剑" 
           versionName="2.5.1" 
           versionCode="251"
@@ -19,6 +17,6 @@
           soundVolume="0" 
           soundEnabled="0" 
           dropFactor="1.0" 
-          expFactor="1.0"/>
+          expFactor="1.0"/>-->
   
 </root>

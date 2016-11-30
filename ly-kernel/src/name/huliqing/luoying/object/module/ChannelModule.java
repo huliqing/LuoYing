@@ -15,6 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.constants.IdConstants;
 import name.huliqing.luoying.data.ChannelData;
+import name.huliqing.luoying.data.ModuleData;
 import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.luoying.object.AssetLoader;
 import name.huliqing.luoying.object.Loader;
@@ -48,8 +49,17 @@ public class ChannelModule extends AbstractModule implements ChannelControl {
     private AnimControl animControl;
 
     @Override
+    public void setData(ModuleData data) {
+        super.setData(data);
+    }
+
+    @Override
     public void updateDatas() {
-        // xxx updateDatas.
+        if (isInitialized()) {
+            for (Channel c : channels) {
+                c.updateDatas();
+            }
+        }
     }
 
     @Override
@@ -85,9 +95,9 @@ public class ChannelModule extends AbstractModule implements ChannelControl {
         if (animControl == null || channels.contains(channel))
             return;
         
-        channel.setAnimControl(animControl);
         channels.add(channel);
         entity.getData().addObjectData(channel.getData());
+        channel.initialize(this, animControl);
 
         // 更新完整通道ID
         if (fullChannelsIds == null) {
@@ -176,7 +186,7 @@ public class ChannelModule extends AbstractModule implements ChannelControl {
      * @return 
      */
     private static boolean loadExtAnim(Entity actor, String animName) {
-        // xxx 要移动到ActorModule中去
+        // xxx 需要转换为角色属性
         String animDir = actor.getData().getAsString("extAnim");
         
         if (animDir == null) {

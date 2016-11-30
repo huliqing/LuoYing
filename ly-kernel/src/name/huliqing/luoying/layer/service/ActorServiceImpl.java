@@ -29,32 +29,10 @@ public class ActorServiceImpl implements ActorService {
 
     private static final Logger LOG = Logger.getLogger(ActorServiceImpl.class.getName());
 
-    private PlayService playService;
-    private SkillService skillService;
-    
     @Override
     public void inject() {
-        playService = Factory.get(PlayService.class);
-        skillService = Factory.get(SkillService.class);
     }
-
-//    @Override
-//    public Actor loadActor(String actorId) {
-//        ActorData data = DataFactory.createData(actorId);
-//        return loadActor(data);
-//    }
-//
-//    @Override
-//    public Actor loadActor(ActorData actorData) {
-//        Actor actor = Loader.load(actorData);
-//        return actor;
-//    }
-//    
-//    @Override
-//    public String createRandomName(Sex sex) {
-//        return NpcNameUtils.createRandomName(sex);
-//    }
-//    
+    
 //    @Override
 //    public boolean hasObstacleActor(Entity self, List<Entity> actors) {
 //        TempVars tv = TempVars.get();
@@ -512,13 +490,14 @@ public class ActorServiceImpl implements ActorService {
         }
     }
 
-    @Override
-    public void restoreAnimation(Entity actor, String animName, LoopMode loop, float useTime, float startTime, String... channelIds) {
-        ChannelModule module = actor.getModuleManager().getModule(ChannelModule.class);
-        if (module != null) {
-            module.restoreAnimation(animName, channelIds, loop, useTime, startTime);
-        }
-    }
+    // remove20161130
+//    @Override
+//    public void restoreAnimation(Entity actor, String animName, LoopMode loop, float useTime, float startTime, String... channelIds) {
+//        ChannelModule module = actor.getModuleManager().getModule(ChannelModule.class);
+//        if (module != null) {
+//            module.restoreAnimation(animName, channelIds, loop, useTime, startTime);
+//        }
+//    }
 
     @Override
     public boolean reset(Entity actor) {
@@ -530,13 +509,14 @@ public class ActorServiceImpl implements ActorService {
         return false;
     }
 
-    @Override
-    public void resetToAnimationTime(Entity actor, String animation, float timePoint) {
-        ChannelModule module = actor.getModuleManager().getModule(ChannelModule.class);
-        if (module != null) {
-            module.resetToAnimationTime(animation, timePoint);
-        }
-    }
+    // remove20161130
+//    @Override
+//    public void resetToAnimationTime(Entity actor, String animation, float timePoint) {
+//        ChannelModule module = actor.getModuleManager().getModule(ChannelModule.class);
+//        if (module != null) {
+//            module.resetToAnimationTime(animation, timePoint);
+//        }
+//    }
     
 //    @Override
 //    public boolean isPlayer(Entity actor) {
@@ -567,12 +547,6 @@ public class ActorServiceImpl implements ActorService {
         return angle;
     }
 
-//    @Override
-//    public float getMass(Entity actor) {
-//        ActorModule module = actor.getModuleManager().getModule(ActorModule.class);
-//        return module != null ? module.getMass() : 0;
-//    }
-
     @Override
     public boolean isKinematic(Entity actor) {
         ActorModule module = actor.getModuleManager().getModule(ActorModule.class);
@@ -587,13 +561,13 @@ public class ActorServiceImpl implements ActorService {
         }
     }
     
-    private ActorModule getActorModule(Entity actor) {
-        ActorModule module = actor.getModuleManager().getModule(ActorModule.class);
-        if (module == null) {
-            LOG.log(Level.WARNING, "Actor need a ActorModule!!! actorId={0}", actor.getData().getId());
-        }
-        return module;
-    }
+//    private ActorModule getActorModule(Entity actor) {
+//        ActorModule module = actor.getModuleManager().getModule(ActorModule.class);
+//        if (module == null) {
+//            LOG.log(Level.WARNING, "Actor need a ActorModule!!! actorId={0}", actor.getData().getId());
+//        }
+//        return module;
+//    }
 
     @Override
     public float distance(Entity actor, Entity target) {
@@ -609,25 +583,5 @@ public class ActorServiceImpl implements ActorService {
     public float distance(Entity actor, Vector3f position) {
         return actor.getSpatial().getWorldTranslation().distance(position);
     }
-
-//    @Override
-//    public boolean isAvailableEnemy(ActorModule actor, ActorModule target) {
-//        if (target == null) {
-//            return false;
-//        }
-//        if (target.isDead()) {
-//            return false;
-//        }
-//        if (!actor.isEnemy(target.getEntity())) {
-//            return false;
-//        }
-//        // 如果两个角色不在同一个场景。
-//        if (actor.getEntity().getScene() != target.getEntity().getScene()) {
-//            return false;
-//        }
-//        return true;
-//    }
-
-    
 
 }

@@ -18,6 +18,7 @@ import name.huliqing.luoying.data.ConnData;
 import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.service.PlayService;
+import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.manager.ResManager;
 import name.huliqing.luoying.mess.GameMess;
 import name.huliqing.luoying.mess.ActorSelectMess;
@@ -36,6 +37,7 @@ import name.huliqing.ly.layer.service.GameService;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.ly.mess.MessMessage;
 import name.huliqing.luoying.network.DefaultServerListener;
+import name.huliqing.ly.LyConfig;
 
 /**
  * 服务端RpgGame的抽象实现.
@@ -46,6 +48,7 @@ public abstract class ServerNetworkRpgGame extends NetworkRpgGame {
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final PlayService playService = Factory.get(PlayService.class);
+    private final SkillService skillService = Factory.get(SkillService.class);
 
     protected GameServer gameServer;
  
@@ -65,7 +68,13 @@ public abstract class ServerNetworkRpgGame extends NetworkRpgGame {
         // 创建server
         if (gameServer == null) {
             try {
-                gameServer = network.createGameServer(data);
+                gameServer = network.createGameServer(data
+                        , LyConfig.getGameName()
+                        , LyConfig.getVersionName()
+                        , LyConfig.getVersionCode()
+                        , LyConfig.getServerPort());
+                // 打开局域网广播功能
+                gameServer.setLanDiscoverEnabled(true);
                 gameServer.start();
             } catch (IOException ex) {
                 Logger.getLogger(ServerNetworkRpgGame.class.getName()).log(Level.SEVERE, null, ex);
@@ -105,6 +114,9 @@ public abstract class ServerNetworkRpgGame extends NetworkRpgGame {
         // 打开UI
         setUIVisiable(true);
         
+        // 让角色处于“等待”
+        skillService.playSkill(actor, skillService.getSkillWaitDefault(actor), false);
+        
         // 添加客户端角色
         playNetwork.addEntity(actor);
         
@@ -118,6 +130,9 @@ public abstract class ServerNetworkRpgGame extends NetworkRpgGame {
      * @param actor 客户端玩家最终选择的角色
      */
     protected void onAddClientPlayer(ConnData connData, Entity actor) {
+        // 让角色处于“等待”
+        skillService.playSkill(actor, skillService.getSkillWaitDefault(actor), false);
+        
         // 添加客户端角色
         playNetwork.addEntity(actor);
         

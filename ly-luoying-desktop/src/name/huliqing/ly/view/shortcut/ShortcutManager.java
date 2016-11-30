@@ -25,7 +25,7 @@ import name.huliqing.luoying.ui.UI.Corner;
 import name.huliqing.luoying.ui.state.UIState;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.shortcut.Shortcut;
-import name.huliqing.ly.Config;
+import name.huliqing.ly.LyConfig;
 import name.huliqing.ly.constants.InterfaceConstants;
 
 /**
@@ -82,7 +82,7 @@ public class ShortcutManager {
      */
     public static void addShortcut(Entity actor, ObjectData data) {
 //        ConfigService configService = Factory.get(ConfigService.class);
-        float size = Config.getShortcutSize();
+        float size = LyConfig.getShortcutSize();
         if (size < 0.1f) {
             size = 0.1f;
         }
@@ -107,7 +107,7 @@ public class ShortcutManager {
         if (ss == null || ss.isEmpty())
             return;
         SkillService skillService = Factory.get(SkillService.class);
-        float shortcutSize = Config.getShortcutSize();
+        float shortcutSize = LyConfig.getShortcutSize();
         for (ShortcutSave s : ss) {
             String objectId = s.getObjectId();
             ObjectData data = player.getData().getObjectData(objectId);
@@ -144,7 +144,7 @@ public class ShortcutManager {
         }
         
         // 如果系统设置锁定快捷方式，则锁定它
-        if (Config.isShortcutLocked()) {
+        if (LyConfig.isShortcutLocked()) {
             ShortcutManager.setShortcutLocked(true);
         }
     }

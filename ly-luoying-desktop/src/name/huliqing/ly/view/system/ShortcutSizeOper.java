@@ -16,7 +16,7 @@ import name.huliqing.luoying.ui.Text;
 import name.huliqing.luoying.ui.UIFactory;
 import name.huliqing.luoying.ui.UI;
 import name.huliqing.luoying.ui.Window;
-import name.huliqing.ly.Config;
+import name.huliqing.ly.LyConfig;
 
 /**
  * 游戏音量大小调整界面
@@ -72,7 +72,7 @@ public class ShortcutSizeOper extends Window {
         this.setDragEnabled(true);
         
         // 初始化
-        this.setSize(Config.getShortcutSize());
+        this.setSize(LyConfig.getShortcutSize());
     } 
     
     @Override
@@ -100,7 +100,7 @@ public class ShortcutSizeOper extends Window {
         if (size > maxSize) size = maxSize;
         this.size = size;
         this.sizeText.setText(format(this.size));
-        Config.setShortcutSize(this.size);
+        LyConfig.setShortcutSize(this.size);
         shortcutSize.setRowDes(ResourceManager.get("system.ui.shortcutSize.des", new Object[] {sizeText.getText()}));
     }
     

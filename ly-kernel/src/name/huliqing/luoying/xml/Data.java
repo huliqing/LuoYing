@@ -143,6 +143,22 @@ public class Data implements Savable {
         }
         return result;
     }
+
+    public final Byte getAsByte(String key) {
+        Object value = getAttribute(key);
+        if (value instanceof Byte) {
+            return (Byte) value;
+        }
+        return value != null ? Byte.parseByte(value.toString()) : null;
+    }
+    
+    public final byte getAsByte(String key, byte defValue) {
+        Byte value = getAsByte(key);
+        if (value != null) {
+            return value;
+        }
+        return defValue;
+    }
     
     public final Integer getAsInteger(String key) {
         Object value = getAttribute(key);

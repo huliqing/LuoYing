@@ -8,9 +8,11 @@ package name.huliqing.ly.object.game;
 import com.jme3.app.Application;
 import com.jme3.network.HostedConnection;
 import com.jme3.network.Message;
+import name.huliqing.luoying.data.ConnData;
 import name.huliqing.luoying.mess.ActorLoadSavedMess;
 import name.huliqing.luoying.mess.ActorLoadSavedResultMess;
 import name.huliqing.luoying.network.GameServer;
+import name.huliqing.luoying.object.entity.Entity;
 
 /**
  * 局域网服务端，每个玩家包括服务端玩家和客户端玩家都需要通过角色选择界面来选择角色进行游戏。
@@ -25,6 +27,16 @@ public class LanServerNetworkRpgGame extends ServerNetworkRpgGame {
         setUIVisiable(false);
         // 显示角色选择面板
         showSelectPanel();
+    }
+
+    @Override
+    protected void onAddServerPlayer(Entity actor) {
+        super.onAddServerPlayer(actor); 
+    }
+
+    @Override
+    protected void onAddClientPlayer(ConnData connData, Entity actor) {
+        super.onAddClientPlayer(connData, actor); //To change body of generated methods, choose Tools | Templates.
     }
     
     @Override

@@ -43,6 +43,9 @@ import name.huliqing.luoying.object.entity.Entity;
  * @author huliqing
  */
 public class GameServer implements UDPListener, ConnectionListener, MessageListener<HostedConnection> {
+
+    private static final Logger LOG = Logger.getLogger(GameServer.class.getName());
+    
     private final SystemService envService = Factory.get(SystemService.class);
     private final PlayService playService = Factory.get(PlayService.class);
     private final ConfigService configService = Factory.get(ConfigService.class);
@@ -123,9 +126,6 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
     public final static int GAME_STATE_RUN = 1;
     
     private final Server server;
-    // 这个discover允许服务端在开始游戏之后仍然能让客户端知道服务器在运行，
-    // 这允许游戏运行以后仍能让客户端连接进来
-    private final UDPDiscover serverDiscover;
     // 当前游戏状态
     private ServerState serverState = ServerState.waiting;
     // 侦听器
@@ -137,37 +137,38 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
     // 正常初始化场景角色.所以这里预设一个初始值,以确保服务端的运行时间始终大于
     // 客户端(GameClient.time)的运行时间.
     private double time = 60 * 60 * 24 * 7; // 这里是一周的时间
+    // 判断GameServer是否已经运行
+    private boolean started;
     
     // 游戏数据
     private GameData gameData;
+    // 游戏名称
     private final String gameName;
-    private final int gameVersion;
+    // 游戏版本，如: "落樱2.0"
+    private final String versionName;
+    // 游戏版本代码，如: 251
+    private final int versionCode;
+    // 游戏服务端运行端口
     private final int serverPort;
     
+    // 是否打开局域网"发现"功能，打开这个功能可以让局域网中客户端查找到主机。
+    private boolean lanDiscoverEnabled;
+    // Discover运行端口，一个是服务端的discover端口，一个是客户端的discover端口，
+    // 服务端与客户端必须保持一致的设置否则可能找不到主机。
+    private int lanDiscoverServerPort = 32992;
+    private int lanDiscoverClientPort = 32993;
+    // 这个discover运行后允许局域网中的客户端查找到服务端, 客户端同样需要一个UDPDiscover,以便双向通知。
+    private UDPDiscover serverDiscover;
+    
     /**
-     * @deprecated 
-     * @param gameData
+     * @param gameData 游戏数据
+     * @param gameName 游戏名称
+     * @param versionName 游戏的版本
+     * @param versionCode 游戏版本代码
+     * @param serverPort 端服端运行端口
      * @throws IOException 
      */
-    public GameServer(GameData gameData) throws IOException {
-        // 不要设置为true,这会导致在Network.createServer创建Server后，第二次再创建时报异常：
-        // java.lang.RuntimeException: Serializer registry locked trying to register class:class com.jme3.network.message.SerializerRegistrationsMessage
-        // 这个问题在JME3.1发生，在3.0时没有问题。
-        Serializer.setReadOnly(false);
-        
-        this.gameData = gameData;
-        this.gameName = configService.getGameName();
-        this.gameVersion = configService.getVersionCode();
-        this.serverPort = configService.getPort();
-        
-        server = Network.createServer(gameName, gameVersion, serverPort, serverPort);
-        server.addConnectionListener(this);
-        server.addMessageListener(this);
-        serverDiscover = new UDPDiscover(configService.getPortDiscoverServer());
-        serverDiscover.setListener(this);
-    }
-    
-    public GameServer(GameData gameData, String gameName, int gameVersion, int serverPort) throws IOException {
+    public GameServer(GameData gameData, String gameName, String versionName, int versionCode, int serverPort) throws IOException {
         // 不要设置为true,这会导致在Network.createServer创建Server后，第二次再创建时报异常：
         // java.lang.RuntimeException: Serializer registry locked trying to register class:class com.jme3.network.message.SerializerRegistrationsMessage
         // 这个问题在JME3.1发生，在3.0时没有问题。
@@ -175,13 +176,56 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
         
         this.gameData = gameData;
         this.gameName = gameName;
-        this.gameVersion = gameVersion;
+        this.versionName = versionName;
+        this.versionCode = versionCode;
         this.serverPort = serverPort;
-        server = Network.createServer(gameName, gameVersion , serverPort, serverPort);
+        server = Network.createServer(gameName, versionCode , serverPort, serverPort);
         server.addConnectionListener(this);
         server.addMessageListener(this);
-        serverDiscover = new UDPDiscover(configService.getPortDiscoverServer());
-        serverDiscover.setListener(this);
+    }
+    
+    /**
+     * 打开或关闭"局域网发现"功能。
+     * @param enabled 
+     */
+    public void setLanDiscoverEnabled(boolean enabled) {
+        lanDiscoverEnabled = enabled;
+        if (enabled && started && serverDiscover == null) {
+            serverDiscover = new UDPDiscover(lanDiscoverServerPort);
+            serverDiscover.setListener(this);
+            serverDiscover.start();
+            serverDiscover.broadcast(createServerRunMess(), lanDiscoverClientPort);
+        }
+    }
+    
+    /**
+     * 设置”局域网发现“的服务端端口,默认32992，服务端Discover运行时会监听这个端口，
+     * 以便获取来自客户端Discover的广播消息，通过向客户端Discover响应消息来回复当前服务端的运行状态。
+     * 注：必须打开局域网发现功能。<br>
+     * 注2: 在GameServer运行之前设置这个端口
+     * @param serverDiscoverPort 
+     * @see #setLanDiscoverEnabled(boolean) 
+     */
+    public void setLanDiscoverServerPort(int serverDiscoverPort) {
+        if (started) {
+            throw new IllegalStateException("Server discover is running! could not change the discoverPort!");
+        }
+        lanDiscoverServerPort = serverDiscoverPort;
+    }
+    
+    /**
+     * 设置”局域网发现“的客户端端口,默认32993。 服务端Discover将向局域网的这个端口发送广播消息，
+     * 以告知局域网中的主机，当前服务端正在运行的消息。这个端口必须与客户端设置的一致。
+     * 注：必须打开局域网发现功能。<br>
+     * 注2: 在GameServer运行之前设置这个端口
+     * @param clientDiscoverPort 
+     * @see #setLanDiscoverEnabled(boolean) 
+     */
+    public void setLanDiscoverClientPort(int clientDiscoverPort) {
+        if (started) {
+            throw new IllegalStateException("Server discover is running! could not change the discoverPort!");
+        }
+        lanDiscoverClientPort = clientDiscoverPort;
     }
     
     /**
@@ -193,22 +237,28 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
     }
     
     public void start() {
-        if (server.isRunning()) {
+        if (started) {
+            LOG.log(Level.WARNING, "GameServer is running...");
             return;
         }
         serverState = ServerState.waiting;
         server.start();
+        started = true;
         // 服务端发出广播，这样局域内的其它客户端可以看到服务器启动
-        serverDiscover.start();
-        serverDiscover.broadcast(createServerRunMess(), configService.getPortDiscoverClient());
+        if (lanDiscoverEnabled) {
+            serverDiscover = new UDPDiscover(lanDiscoverServerPort);
+            serverDiscover.setListener(this);
+            serverDiscover.start();
+            serverDiscover.broadcast(createServerRunMess(), lanDiscoverClientPort);
+        }
         
         if (Config.debug) {
             Logger.getLogger(GameServer.class.getName()).log(Level.INFO
                     , "Server created: game={0}, version={1}, tcpPort={2}, udpPort={3}, running={4}"
                     , new Object[] {server.getGameName()
                             , server.getVersion()
-                            , configService.getPort()
-                            , configService.getPort()
+                            , serverPort
+                            , serverPort
                             , server.isRunning()});
         }
     }
@@ -226,7 +276,7 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
             for (HostedConnection hc : hcs) {
                 hc.close(ResManager.get("lan.serverClosed"));
             }
-            // 这里必须延迟一下，否则客户端收不到close的消息
+            // 这里必须延迟一下，否则客户端收不到close的消息, 可能是由于Server线程导致的延迟。
             try {
                 Thread.sleep(50);
             } catch (InterruptedException ex) {
@@ -237,8 +287,16 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
         serverState = ServerState.shutdown;
         server.removeConnectionListener(this);
         server.removeMessageListener(this);
-        serverDiscover.broadcast(createServerStopMess(), configService.getPortDiscoverClient());
-        serverDiscover.close();
+        if (serverDiscover != null && serverDiscover.isRunning()) {
+            serverDiscover.broadcast(createServerStopMess(), lanDiscoverClientPort);
+            serverDiscover.close();
+            serverDiscover = null;
+        }
+        started = false;
+    }
+        
+    public boolean isRunning() {
+        return started;
     }
 
     public Server getServer() {
@@ -255,7 +313,9 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
         broadcast(new ServerStateMess(state));
         // 向局域网广播消息，这是向所有未连接到当前server的广播。因为状态发生变化，所以也广播
         // 让局域网知道
-        serverDiscover.broadcast(createServerRunMess(), configService.getPortDiscoverClient());
+        if (lanDiscoverEnabled && serverDiscover != null && serverDiscover.isRunning()) {
+            serverDiscover.broadcast(createServerRunMess(), lanDiscoverClientPort);
+        }
     }
 
     public ServerState getServerState() {
@@ -288,10 +348,6 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
         if (hc != null) {
             hc.close(message);
         }
-    }
-    
-    public boolean isRunning() {
-        return server.isRunning();
     }
     
     /**
@@ -375,15 +431,9 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
         serverConnData.setConnId(-1);
         serverConnData.setAddress(serverAddress);
         if (gameInPlay) {
-//            Entity serverPlayer = playService.getPlayer();
-//            if (serverPlayer != null) {
-//                serverConnData.setEntityId(serverPlayer.getData().getUniqueId());
-//                serverConnData.setEntityName(serverPlayer.getData().getName());
-//            }
-
             // xxx 重构
             serverConnData.setEntityId(-1);
-            serverConnData.setEntityName("TODO: Player");
+            serverConnData.setEntityName("HOST");
         }
         clients.add(0, serverConnData);
         return clients;
@@ -449,13 +499,12 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
             Logger.getLogger(GameServer.class.getName()).log(Level.WARNING, "Could not getLocalHostIPv4 address");
             return null;
         }
-//        String des = gameData != null ? ResourceManager.getObjectName(gameData) : "Unknow";
-        String des = gameData != null ? ResManager.get(gameData.getId() + ".name") : "Unknow";
         MessSCStarted mess = new MessSCStarted(inetAddress.getHostAddress()
-                , configService.getPort()
-                , configService.getVersionName()
+                , serverPort
+                , versionName
+                , versionCode
                 , envService.getMachineName()
-                , des
+                , gameName
                 , serverState);
         return mess;
     }
@@ -469,8 +518,9 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
         }
         String des = gameData != null ? ResManager.get(gameData.getId() + ".name") : "Unknow";
         return new MessSCClosed(inetAddress.getHostAddress()
-                , configService.getPort()
-                , configService.getVersionName()
+                , serverPort
+                , versionName
+                , versionCode
                 , envService.getMachineName()
                 , des
                 , serverState);

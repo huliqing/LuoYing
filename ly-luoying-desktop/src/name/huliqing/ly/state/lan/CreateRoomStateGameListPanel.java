@@ -19,7 +19,7 @@ import name.huliqing.luoying.ui.SimpleRow;
 import name.huliqing.luoying.ui.UIFactory;
 import name.huliqing.luoying.ui.UI;
 import name.huliqing.luoying.ui.Window;
-import name.huliqing.ly.Config;
+import name.huliqing.ly.LyConfig;
 
 /**
  * 用于选择游戏的列表界面
@@ -81,7 +81,7 @@ public class CreateRoomStateGameListPanel extends Window {
         public GameList(float width, float height) {
             super(width, height);
             games = new ArrayList<String>();
-            String[] lanGames = Config.getLanGames();
+            String[] lanGames = LyConfig.getLanGames();
             for (String gameName : lanGames) {
                 if (gameName != null && !gameName.trim().isEmpty()) {
                     games.add(gameName);

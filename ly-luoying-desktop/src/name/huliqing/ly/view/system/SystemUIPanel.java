@@ -14,7 +14,7 @@ import name.huliqing.luoying.ui.ListView;
 import name.huliqing.luoying.ui.Row;
 import name.huliqing.luoying.ui.UI;
 import name.huliqing.luoying.ui.state.UIState;
-import name.huliqing.ly.Config;
+import name.huliqing.ly.LyConfig;
 import name.huliqing.ly.view.shortcut.ShortcutManager;
 
 /**
@@ -48,12 +48,12 @@ public class SystemUIPanel extends ListView<SystemData> {
         datas.add(new SystemData(get("system.ui.talkSpeed"), get("system.ui.talkSpeed.des")));
         
         // 快捷方式锁定
-        shortcutLock = new RowCheckbox(datas.get(0).getName(), datas.get(0).getDes(), Config.isShortcutLocked());
+        shortcutLock = new RowCheckbox(datas.get(0).getName(), datas.get(0).getDes(), LyConfig.isShortcutLocked());
         shortcutLock.addClickListener(new Listener() {
             @Override
             public void onClick(UI ui, boolean isPress) {
                 if (isPress) return;
-                Config.setShortcutLocked(shortcutLock.isChecked());
+                LyConfig.setShortcutLocked(shortcutLock.isChecked());
             }
         });
         

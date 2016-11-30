@@ -17,7 +17,7 @@ import name.huliqing.luoying.utils.GeometryUtils;
 import name.huliqing.luoying.utils.MathUtils;
 import name.huliqing.luoying.ui.LinearLayout;
 import name.huliqing.luoying.ui.Text;
-import name.huliqing.ly.Config;
+import name.huliqing.ly.LyConfig;
 import name.huliqing.ly.layer.service.GameService;
 
 /**
@@ -66,9 +66,9 @@ public class SpeakImpl extends Speak {
         int worldLen = 0;
         if (useTime <= 0) {
             worldLen = ResourceManager.getWorldLength(mess);
-            useTime = MathUtils.clamp(Config.getSpeakTimeWorld() * worldLen
-                    , Config.getSpeakTimeMin()
-                    , Config.getSpeakTimeMax());
+            useTime = MathUtils.clamp(LyConfig.getSpeakTimeWorld() * worldLen
+                    , LyConfig.getSpeakTimeMin()
+                    , LyConfig.getSpeakTimeMax());
         }
 //        if (Config.debug) {
 //            System.out.println("speak useTime=" + useTime 
@@ -85,7 +85,7 @@ public class SpeakImpl extends Speak {
             speakPanel = new SpeakPanel(mess);
         }
         speakPanel.resize();
-        maxDistanceSquared = Config.getSpeakMaxDistance() *  Config.getSpeakMaxDistance();
+        maxDistanceSquared = LyConfig.getSpeakMaxDistance() *  LyConfig.getSpeakMaxDistance();
         
         playService.getGame().getGuiScene().getRoot().attachChild(speakPanel);
         

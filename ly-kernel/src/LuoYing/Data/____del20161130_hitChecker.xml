@@ -9,7 +9,7 @@
     <!-- 用于技能(Skill):用于检查一个技能是否可作用于目标角色 -->
     <!--=====================================================================-->
     
-    <hitChecker id="sysHitCheckerFightDefault" group="d" living="i" life="y" />
+    <!--<hitChecker id="sysHitCheckerFightDefault" group="d" living="i" life="y" />-->
     
     <!--====以下为参考示例============================================================-->
     

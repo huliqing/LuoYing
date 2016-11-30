@@ -27,18 +27,13 @@ xs:time
     <xs:element name="config" >
         <xs:annotation>
             <xs:documentation>
-                全局配置信息
+                配置信息
             </xs:documentation>
         </xs:annotation>
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="configBase">
-<!--                    <xs:attribute name="debug" type="bool" use="optional" >
-                        <xs:annotation>
-                            <xs:documentation>是否打开调试</xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>-->
-                    <xs:attribute name="gameName" type="xs:string" use="required" >
+<!--                    <xs:attribute name="gameName" type="xs:string" use="required" >
                         <xs:annotation>
                             <xs:documentation>游戏名称</xs:documentation>
                         </xs:annotation>
@@ -112,7 +107,7 @@ xs:time
                         <xs:annotation>
                             <xs:documentation>是否打开投影功能，如果这个选项关闭则场景所有投影功能都应该关闭。</xs:documentation>
                         </xs:annotation>
-                    </xs:attribute>
+                    </xs:attribute>-->
                     
 <!--                    <xs:attribute name="shortcutLocked" type="bool" use="required" >
                         <xs:annotation>

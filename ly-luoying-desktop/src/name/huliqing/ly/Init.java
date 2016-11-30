@@ -8,14 +8,17 @@ package name.huliqing.ly;
 import com.jme3.app.Application;
 import com.jme3.network.serializing.Serializer;
 import com.jme3.system.AppSettings;
+import name.huliqing.luoying.Config;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.LuoYingException;
+import name.huliqing.luoying.data.ConfigData;
 import name.huliqing.luoying.data.GameData;
 import name.huliqing.luoying.data.GameLogicData;
 import name.huliqing.luoying.data.ModuleData;
 import name.huliqing.luoying.loader.GameDataLoader;
 import name.huliqing.luoying.manager.ResManager;
+import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.xml.DataFactory;
 import name.huliqing.ly.data.ChatData;
 import name.huliqing.ly.data.ViewData;
@@ -66,6 +69,11 @@ public class Init {
         registerData();
         registerProcessor();
         loadData();
+        
+        // 载入配置
+        LyConfig.setConfigData((ConfigData) Loader.loadData("configRelease"));
+//        name.huliqing.luoying.Config.debug = LyConfig.isDebug();
+        Config.debug = true;
         
         // 载入资源,作为默认
         ResManager.loadResource("/data/font/en_US/resource",                "utf-8", null);

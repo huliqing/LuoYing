@@ -8,6 +8,7 @@ import com.jme3.animation.AnimChannel;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.LoopMode;
 import name.huliqing.luoying.data.ChannelData;
+import name.huliqing.luoying.object.module.ChannelModule;
 
 /**
  * 用于封装JME3的动画通道
@@ -17,9 +18,9 @@ import name.huliqing.luoying.data.ChannelData;
 public abstract class AbstractChannel <T extends ChannelData> implements Channel <T> {
     
     protected T data;
-    private String[] fromRootBones;
-    private String[] toRootBones;
-    private String[] bones;
+    protected String[] fromRootBones;
+    protected String[] toRootBones;
+    protected String[] bones;
     
     // 动画通道是否被锁定
     protected boolean locked;
@@ -34,6 +35,7 @@ public abstract class AbstractChannel <T extends ChannelData> implements Channel
         fromRootBones = data.getAsArray("fromRootBones");
         toRootBones = data.getAsArray("toRootBones");
         bones = data.getAsArray("bones");
+        locked = data.getAsBoolean("locked", locked);
     }
 
     @Override
@@ -43,13 +45,43 @@ public abstract class AbstractChannel <T extends ChannelData> implements Channel
 
     @Override
     public void updateDatas() {
-        // ignore
+        String animName = animChannel.getAnimationName();
+        // 如果animName不存在，则角色可能刚载入，loop,speed,time等都不需要再获取.
+        if (animName == null) 
+            return;
+        
+        LoopMode loop = animChannel.getLoopMode();
+        float speed = animChannel.getSpeed();
+        float time = animChannel.getTime();
+        data.setAttribute("animName", animName);
+        data.setAttribute("loop", loopModeToInt(loop));
+        data.setAttribute("speed", speed);
+        data.setAttribute("time", time);
+        data.setAttribute("locked", locked);
     }
     
     @Override
-    public void setAnimControl(AnimControl animControl) {
+    public void initialize(ChannelModule cm, AnimControl animControl) {
         this.animControl = animControl;
         this.animChannel = createAnimChannel(this.animControl);
+        
+        // 恢复动画
+        String animName = data.getAsString("animName");
+        if (animName != null) {
+            // 有可能animName为扩展动画。
+            cm.checkAndLoadAnim(animName);
+            
+            LoopMode loop = intToLoopMode(data.getAsInteger("loop", 1));
+            float speed = data.getAsFloat("speed", 1.0f);
+            float time = data.getAsFloat("time", 0);
+            // 恢复动画时如果角色已经锁住则应该临时解开。
+            boolean tempLocked = locked;
+            if (locked) {
+                locked = false;
+            }
+            playAnim(animName, loop, speed, time, 0);
+            locked = tempLocked;
+        }
     }
 
     @Override
@@ -134,7 +166,7 @@ public abstract class AbstractChannel <T extends ChannelData> implements Channel
      * @param ac
      * @return 
      */
-    protected final AnimChannel createAnimChannel(AnimControl ac) {
+    private AnimChannel createAnimChannel(AnimControl ac) {
         AnimChannel channel = ac.createChannel();
         
         // 如果未配置其它任何参数，则默认创建一个完全通道
@@ -164,5 +196,29 @@ public abstract class AbstractChannel <T extends ChannelData> implements Channel
         }
         
         return channel;
+    }
+    
+    private int loopModeToInt(LoopMode lm) {
+        switch (lm) {
+            case Cycle:
+                return 0;
+            case DontLoop:
+                return 1;
+            case Loop:
+                return 2;
+        }
+        throw new RuntimeException("Unsupported LoomMode: lm=" + lm);
+    }
+    
+    private LoopMode intToLoopMode(int lm) {
+        switch (lm) {
+            case 0:
+                return LoopMode.Cycle;
+            case 1:
+                return LoopMode.DontLoop;
+            case 2:
+                return LoopMode.Loop;
+        }
+        throw new RuntimeException("Unsupported int to LoopMode,lm=" + lm);
     }
 }

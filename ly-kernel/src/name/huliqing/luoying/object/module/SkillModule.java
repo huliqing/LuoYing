@@ -94,6 +94,9 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
     @Override
     public void updateDatas() {
         data.setAttribute("lockedSkillTypes", lockedSkillTypes);
+        for (Skill s : playingSkills.getArray()) {
+            s.updateDatas();
+        }
     }
 
     @Override
@@ -186,7 +189,7 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
                 playSkill = getSkillByTypes(waitSkillTypes);
             }
             if (playSkill != null) {
-                playSkill(playSkill, false);
+                playSkill(playSkill, true);
             }
         }
     }

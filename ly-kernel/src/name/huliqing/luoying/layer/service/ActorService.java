@@ -4,7 +4,6 @@
  */
 package name.huliqing.luoying.layer.service;
 
-import com.jme3.animation.LoopMode;
 import com.jme3.math.Vector3f;
 import java.util.List;
 import name.huliqing.luoying.layer.network.ActorNetwork;
@@ -99,21 +98,22 @@ public interface ActorService extends ActorNetwork {
      * @param channelIds 指定的通道列表，如果为null或指定的通道不存在则什么也不做。
      */
     void setChannelLock(Entity actor, boolean locked, String... channelIds);
-    
-    /**
-     * 恢复动画，有时候当部分通道被打断执行了其它动画之后需要重新回到原来的
-     * 动画上。如当角色在走路的时候所有通道都在执行“走路”动画，这时如果执
-     * 行抽取武器的动画时，可能手部通道会打断走路所需要的一些通道动画。当抽取
-     * 武器完毕之后，手部通道需要重新回到“走路”的动画中以便协调角色走路时的
-     * 动画。
-     * @param actor
-     * @param animName
-     * @param loop
-     * @param useTime
-     * @param startTime
-     * @param channelIds 
-     */
-    void restoreAnimation(Entity actor, String animName, LoopMode loop, float useTime, float startTime, String... channelIds);
+   
+    // remove20161130
+//    /**
+//     * 恢复动画，有时候当部分通道被打断执行了其它动画之后需要重新回到原来的
+//     * 动画上。如当角色在走路的时候所有通道都在执行“走路”动画，这时如果执
+//     * 行抽取武器的动画时，可能手部通道会打断走路所需要的一些通道动画。当抽取
+//     * 武器完毕之后，手部通道需要重新回到“走路”的动画中以便协调角色走路时的
+//     * 动画。
+//     * @param actor
+//     * @param animName
+//     * @param loop
+//     * @param useTime
+//     * @param startTime
+//     * @param channelIds 
+//     */
+//    void restoreAnimation(Entity actor, String animName, LoopMode loop, float useTime, float startTime, String... channelIds);
     
     /**
      * 把骨骼动画定位在当前所播放动画的第一帧处．
@@ -124,14 +124,15 @@ public interface ActorService extends ActorNetwork {
      * @see #resetToAnimationTime(Actor, String, float) 
      */
     boolean reset(Entity actor);
-    
-    /**
-     * 把骨骼动画定位在某一个动画中的某一个时间点(帧)．
-     * @param actor
-     * @param animation 动画名称
-     * @param timePoint 定位的时间插值点，取值[0.0~1.0] 
-     */
-    void resetToAnimationTime(Entity actor, String animation, float timePoint);
+   
+    // remove20161130
+//    /**
+//     * 把骨骼动画定位在某一个动画中的某一个时间点(帧)．
+//     * @param actor
+//     * @param animation 动画名称
+//     * @param timePoint 定位的时间插值点，取值[0.0~1.0] 
+//     */
+//    void resetToAnimationTime(Entity actor, String animation, float timePoint);
     
     /**
      * 获取目标位置与当前角色的正前方的夹角度数.简单的说,即当前角色要转多少度才能正视

@@ -9,7 +9,6 @@ import com.jme3.math.FastMath;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.DropData;
 import name.huliqing.luoying.layer.network.EntityNetwork;
-import name.huliqing.luoying.layer.service.ConfigService;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.utils.MathUtils;
 import name.huliqing.luoying.object.entity.Entity;
@@ -19,11 +18,14 @@ import name.huliqing.luoying.object.entity.Entity;
  * @author huliqing
  */
 public class ItemDrop extends AbstractDrop {
-    private final ConfigService configService = Factory.get(ConfigService.class);
+//    private final ConfigService configService = Factory.get(ConfigService.class);
     private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
     
     private String item;
     private int count;
+    /** 基本的掉落率，取值：0.0~1.0,这个值会剩以rate,可以用来作为全局掉落机率控制。 */
+    protected float baseRate;
+    /** 掉落率: 取值0.0~1.0 */
     private float rate;
     
     @Override
@@ -31,6 +33,7 @@ public class ItemDrop extends AbstractDrop {
         super.setData(data);
         item = data.getAsString("item");
         count = data.getAsInteger("count", 1);
+        baseRate = MathUtils.clamp(data.getAsFloat("baseRate", 1.0f), 0f, 1.0f);
         rate = MathUtils.clamp(data.getAsFloat("rate", 1.0f), 0f, 1.0f);
     }
     
@@ -42,15 +45,15 @@ public class ItemDrop extends AbstractDrop {
             return false;
         }
         
-        // 注：如果rate>=1.0, 则忽略configService全局掉落设置(dropFactor)的影响，把物品视为始终掉落的。
+        // 注：如果rate>=1.0, 则忽略其它设置(dropFactor)的影响，把物品视为始终掉落的。
         if (rate >= 1.0f) {
             entityNetwork.addObjectData(target, Loader.loadData(item), count);
             playDropSounds(source);
             return true;
         }
         
-        // 按机率掉落，这个机率受全局掉落设置影响
-        float trueRate = configService.getDropFactor() * rate;
+        // 按机率掉落
+        float trueRate = baseRate * rate;
         if (trueRate >= FastMath.nextRandomFloat()) {
             entityNetwork.addObjectData(target, Loader.loadData(item), count);
             playDropSounds(source);
