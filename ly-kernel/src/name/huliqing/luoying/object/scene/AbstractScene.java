@@ -17,6 +17,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 import com.jme3.util.SafeArrayList;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,6 +40,9 @@ public abstract class AbstractScene implements Scene {
     
     /** Entity列表，保存了当前场景中所有的物体 */
     protected final SafeArrayList<Entity> entities = new SafeArrayList<Entity>(Entity.class);
+    
+    /** 一直不可直接修改的列表，这个列表主要用于外部直接读取当前场景中的所有实体。但是不允许外部直接写操作这个列表 */
+    protected final List<Entity> unmodifiedEntities = Collections.unmodifiableList(entities);
     
     /** 场景侦听器 */
     protected SafeArrayList<SceneListener> listeners;
@@ -186,7 +190,12 @@ public abstract class AbstractScene implements Scene {
         }
         return null;
     }
-
+    
+    @Override
+    public List<Entity> getEntities() {
+        return unmodifiedEntities;
+    }
+    
     @Override
     public <T extends Entity> List<T> getEntities(Class<T> type, List<T> store) {
         if (store == null) {

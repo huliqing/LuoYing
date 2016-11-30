@@ -25,6 +25,7 @@ public class ModelEntityData extends EntityData {
     private final static String ATTR_SHADOW_MODE = "shadowMode";
     private final static String ATTR_CULL_HINT = "cullHint";
     private final static String ATTR_QUEUE_BUCKET = "queueBucket";
+    private final static String ATTR_PREFER_UNSHADED = "preferUnshaded";
     
     /**
      * 获取模型的位置，如果没有设置这个参数，则返回null.
@@ -147,4 +148,20 @@ public class ModelEntityData extends EntityData {
         setAttribute(ATTR_QUEUE_BUCKET, bucket.name());
     }
     
+    /**
+     * 是否更希望模型以unshaded的方式展示。
+     * @return 
+     */
+    public boolean isPreferUnshaded() {
+        return getAsBoolean(ATTR_PREFER_UNSHADED, false);
+    }
+    
+    /**
+     * 设置preferUnshaded,以表明该Entity模型更希望以unshaded的方式来展示，该参数只表示期望，
+     * 具体方式由实现自行决定.
+     * @param preferUnshaded 
+     */
+    public void setPreferUnshaded(boolean preferUnshaded) {
+        setAttribute(ATTR_PREFER_UNSHADED, preferUnshaded);
+    }
 }

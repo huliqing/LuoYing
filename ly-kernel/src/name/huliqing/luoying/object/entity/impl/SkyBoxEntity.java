@@ -10,7 +10,6 @@ import com.jme3.scene.Spatial;
 import com.jme3.texture.Texture;
 import com.jme3.util.SkyFactory;
 import name.huliqing.luoying.LuoYing;
-import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.data.ModelEntityData;
 import name.huliqing.luoying.object.entity.ModelEntity;
 

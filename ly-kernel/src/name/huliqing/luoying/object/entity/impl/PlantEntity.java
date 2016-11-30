@@ -27,9 +27,10 @@ public abstract class PlantEntity extends ModelEntity {
     
     @Override
     protected Spatial loadModel() {
-        return LuoYing.getAssetManager().loadModel(data.getAsString("file"));
+        Spatial temp = LuoYing.getAssetManager().loadModel(data.getAsString("file"));
+        return temp;
     }
-
+    
     @Override
     public void onInitScene(Scene scene) {
         super.onInitScene(scene);

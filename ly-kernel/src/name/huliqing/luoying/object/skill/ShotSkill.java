@@ -27,7 +27,7 @@ import name.huliqing.luoying.utils.MathUtils;
 public class ShotSkill extends HitSkill {
 
     private final ActorService actorService = Factory.get(ActorService.class);
-    private final PlayService playService = Factory.get(PlayService.class);
+//    private final PlayService playService = Factory.get(PlayService.class);
     private final BulletService bulletService = Factory.get(BulletService.class);
     
     // 靶点类型

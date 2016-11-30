@@ -19,24 +19,53 @@ xs:time
     <xs:element name="root">
         <xs:complexType>
             <xs:all>
-                <xs:element ref="entitySkyBox" />
                 <xs:element ref="entityAdvanceWater" />
-                <xs:element ref="entityDirectionalLight" />
                 <xs:element ref="entityAmbientLight" />
-                <xs:element ref="entitySimpleWater" />
-                <xs:element ref="entityPlatformProxy" />
-                <xs:element ref="entityChaseCamera" />
-
-                <xs:element ref="entitySimpleModel" />
-                <xs:element ref="entitySimpleTerrain" />
-                <xs:element ref="entityTree" />
-                <xs:element ref="entityGrass" />
-                
                 <xs:element ref="entityAudio" />
+                <xs:element ref="entityChaseCamera" />
+                <xs:element ref="entityDirectionalLight" />
                 <xs:element ref="entityDirectionalLightFilterShadow" />
                 <xs:element ref="entityDirectionalLightShadow" />
+                <xs:element ref="entityGrass" />
                 <xs:element ref="entityPhysics" />
+                <xs:element ref="entityPlatformProxy" />
+                <xs:element ref="entitySimpleModel" />
+                <xs:element ref="entitySimpleTerrain" />
+                <xs:element ref="entitySimpleWater" />
+                <xs:element ref="entitySkyBox" />
+                <xs:element ref="entityTree" />
+                <xs:element ref="entityUnshaded" />
             </xs:all>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="entityUnshaded">
+        <xs:annotation>
+            <xs:documentation>
+                这个实体用于将场景中的其它一些指定的实体转化为Unshaded模式的。
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="entityBase">
+                    <xs:attribute name="unshadedTerrain" type="bool" use="optional" >
+                        <xs:annotation><xs:documentation>是否将场景中的地形转化为Unshaded材质,默认false</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="unshadedPlant" type="bool" use="optional" >
+                        <xs:annotation><xs:documentation>是否将场景中的植被转化为Unshaded材质,默认false</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="unshadedActor" type="bool" use="optional" >
+                        <xs:annotation><xs:documentation>是否将场景中的角色转化为Unshaded材质,默认false</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="onlyPlatforms" type="xs:string" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>默认打开preferEnabled，但是可以指定只有在特定的平台上时才使用unshaded,在其它平台上不使用。
+                                格式："platform1,platform2,..."
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
         </xs:complexType>
     </xs:element>
     
@@ -197,6 +226,11 @@ xs:time
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="entityBase">
+                    <xs:attribute name="disabledOnPlatforms" type="xs:string" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>在指定的平台上关闭阴影功能，格式: "platform1,platform2,...", 如: "iOS_X86,iOS_ARM,Android_ARM5,Android_ARM6,Android_ARM7,Android_ARM8,Android_X86,Android_Other,..."</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
                     <xs:attribute name="shadowIntensity" type="xs:decimal" use="optional" >
                         <xs:annotation>
                             <xs:documentation>阴影强度，取值[0.0,1.0], 默认: "0.7"</xs:documentation>
@@ -222,6 +256,11 @@ xs:time
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="entityBase">
+                    <xs:attribute name="disabledOnPlatforms" type="xs:string" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>在指定的平台上关闭阴影功能，格式: "platform1,platform2,...", 如: "iOS_X86,iOS_ARM,Android_ARM5,Android_ARM6,Android_ARM7,Android_ARM8,Android_X86,Android_Other,..."</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
                     <xs:attribute name="shadowMapSize" type="xs:decimal" use="optional" >
                         <xs:annotation><xs:documentation>The size of the rendered shadow maps (512,1024,2048, etc...). 默认: "1024"</xs:documentation></xs:annotation>
                     </xs:attribute>

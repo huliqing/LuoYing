@@ -25,7 +25,7 @@ public abstract class ModelEntity<T extends ModelEntityData> extends AbstractEnt
 
     @Override
     public void setData(T data) {
-        super.setData(data); 
+        super.setData(data);
     }
 
     @Override
@@ -96,4 +96,5 @@ public abstract class ModelEntity<T extends ModelEntityData> extends AbstractEnt
      * @return 
      */
     protected abstract Spatial loadModel();
+    
 }

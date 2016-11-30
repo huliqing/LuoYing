@@ -6,6 +6,7 @@ package name.huliqing.luoying.object.entity.impl;
 
 import com.jme3.bullet.collision.shapes.MeshCollisionShape;
 import com.jme3.bullet.control.RigidBodyControl;
+import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.shape.TreeCollisionMesh;
 
 /**
@@ -16,8 +17,8 @@ import name.huliqing.luoying.shape.TreeCollisionMesh;
 public class TreeEntity extends PlantEntity {
 
     @Override
-    public void initEntity() {
-        super.initEntity();
+    public void onInitScene(Scene scene) {
+        super.onInitScene(scene);
         // 树体用了一个定制的MeshCollisionShape, 注：MeshCollisionShape类型必须要求mass=0
         RigidBodyControl rbc = spatial.getControl(RigidBodyControl.class);
         if (rbc != null) {

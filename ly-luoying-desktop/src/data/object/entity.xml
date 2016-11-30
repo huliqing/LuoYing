@@ -22,8 +22,8 @@
     <!--植被：草丛、花朵,继承自系统配置-->
     <entityGrass id="entityGrassBase" extends="sysEntityGrassBase" />
     
-    <!--场景阴影基本配置-->
-    <entityDirectionalLightFilterShadow id="entityShadowBase" extends="sysEntityShadowBase" />
+    <!--场景阴影基本配置:在移动平台关闭阴影功能-->
+    <entityDirectionalLightFilterShadow id="entityShadowBase" extends="sysEntityShadowBase" disabledOnPlatforms="iOS_X86,iOS_ARM,Android_ARM5,Android_ARM6,Android_ARM7,Android_ARM8,Android_X86,Android_Other" />
 
     <!--直射光基本配置-->
     <entityDirectionalLight id="entityDirectionalLightBase" direction="-1,-2,-1" color="0.8,0.8,0.8,0.8"  />
@@ -65,6 +65,10 @@
     
     <!--第三人称视角相机-->
     <entityChaseCamera id="entityCameraThirdView" extends="entityChaseCameraBase" />
+    
+    <!--用于将场景中的物体转化为Unshaded-->
+    <entityUnshaded id="entityUnshaded" unshadedTerrain="1" unshadedPlant="1" unshadedActor="1"
+                    onlyPlatforms="iOS_X86,iOS_ARM,Android_ARM5,Android_ARM6,Android_ARM7,Android_ARM8,Android_X86,Android_Other" />
     
     <!--默认的各种树-->
     <entityTree id="entityTree1" extends="entityTreeBase" file="Models/trees/tree/tree381.j3o" randomScale="1" minScale="4" maxScale="24" />

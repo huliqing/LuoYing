@@ -22,7 +22,6 @@ public class SimpleTerrainEntity extends ModelEntity implements TerrainEntity {
     // 射线用于获取地面高度
     private final Ray ray = new Ray();
     private final CollisionResults results = new CollisionResults();
-    
     private Spatial terrain;
     
     @Override

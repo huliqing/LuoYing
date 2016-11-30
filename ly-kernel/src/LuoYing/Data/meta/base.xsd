@@ -57,6 +57,11 @@ xs:time
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:attribute>
+                <xs:attribute name="preferUnshaded" type="bool" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>是否更希望模型以unshaded的方式来展示，该参数只是表示一个期望值，具体以实现为准。</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>

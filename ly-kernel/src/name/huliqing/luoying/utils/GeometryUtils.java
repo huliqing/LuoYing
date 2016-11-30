@@ -8,6 +8,7 @@ import com.jme3.animation.AnimControl;
 import com.jme3.animation.Animation;
 import com.jme3.animation.Bone;
 import com.jme3.animation.Skeleton;
+import com.jme3.animation.SkeletonControl;
 import com.jme3.bounding.BoundingBox;
 import com.jme3.bounding.BoundingSphere;
 import com.jme3.bounding.BoundingVolume;
@@ -24,18 +25,24 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.Camera.FrustumIntersect;
 import com.jme3.scene.Geometry;
+import com.jme3.scene.Mesh;
+import com.jme3.scene.Node;
 import com.jme3.scene.SceneGraphVisitor;
 import com.jme3.scene.SceneGraphVisitorAdapter;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.UserData;
 import com.jme3.shader.VarType;
 import com.jme3.texture.Texture;
 import com.jme3.util.TempVars;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.LuoYing;
+import name.huliqing.luoying.object.entity.Entity;
 
 /**
  *
@@ -81,7 +88,9 @@ public class GeometryUtils {
      * @param node
      */
     public static void makeUnshaded(Spatial node) {
-
+        if (node == null) {
+            return;
+        }
         SceneGraphVisitor sgv = new SceneGraphVisitor() {
             private Geometry tempGeom;
             private Material tempMat;
@@ -454,6 +463,77 @@ public class GeometryUtils {
         return store;
     }
     
+    /**
+     * 打开skin的hws,如果角色actor主SkeletonControl已经打开该功能,则该方法将偿试打开skinNode的hws以配合角色骨骼.
+     * @param actor
+     * @param skinNode 
+     */
+    public static void trySwitchToHardware(Entity actor, Spatial skinNode) {
+        // 如果hsw未打开,则不需要管,交由sc内部去一起处理就可以.
+        SkeletonControl sc = actor.getSpatial().getControl(SkeletonControl.class);
+        if (!sc.isHardwareSkinningUsed()) {
+            return;
+        }
+        
+        // 如果hsw已经开启过了,则需要把skinNode处理后再添加到actor中,否则skinNode将无法启用hsw
+        final Set<Mesh> targets = new HashSet<Mesh>();
+        final Set<Material> materials = new HashSet<Material>();
+        Node tempNode = new Node();
+        tempNode.attachChild(skinNode);
+        findTargets(tempNode, targets, materials);
+        
+        // Next full 10 bones (e.g. 30 on 24 bones)
+        Skeleton skeleton = sc.getSkeleton();
+        int numBones = ((skeleton.getBoneCount() / 10) + 1) * 10;
+        for (Material m : materials) {
+            m.setInt("NumberOfBones", numBones);
+        }
+        for (Mesh mesh : targets) {
+            if (mesh.isAnimated()) {
+                mesh.prepareForAnim(false);
+            }
+        }
+        sc.setSpatial(actor.getSpatial());
+    }
+    
+    private static void findTargets(Node node, Set<Mesh> targets, Set<Material> materials) {
+        Mesh sharedMesh = null;        
+
+        for (Spatial child : node.getChildren()) {
+            if (child instanceof Geometry) {
+                Geometry geom = (Geometry) child;
+
+                // is this geometry using a shared mesh?
+                Mesh childSharedMesh = geom.getUserData(UserData.JME_SHAREDMESH);
+
+                if (childSharedMesh != null) {
+                    // Don���t bother with non-animated shared meshes
+                    if (childSharedMesh.isAnimated()) {
+                        // child is using shared mesh,
+                        // so animate the shared mesh but ignore child
+                        if (sharedMesh == null) {
+                            sharedMesh = childSharedMesh;
+                        } else if (sharedMesh != childSharedMesh) {
+                            throw new IllegalStateException("Two conflicting shared meshes for " + node);
+                        }
+                        materials.add(geom.getMaterial());
+                    }
+                } else {
+                    Mesh mesh = geom.getMesh();
+                    if (mesh.isAnimated()) {
+                        targets.add(mesh);
+                        materials.add(geom.getMaterial());
+                    }
+                }
+            } else if (child instanceof Node) {
+                findTargets((Node) child, targets, materials);
+            }
+        }
+
+        if (sharedMesh != null) {
+            targets.add(sharedMesh);
+        }
+    }
 }
 
 

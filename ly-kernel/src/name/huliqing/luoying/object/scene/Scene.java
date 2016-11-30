@@ -98,6 +98,15 @@ public interface Scene extends DataProcessor<SceneData> {
     Entity getEntity(long entityId);
     
     /**
+     * 获取当前场景中的所有实体，返回的实体只能只读使用。不应该直接操作该列表，比如直接删除或添加元素是不允许的。
+     * 删除实体或添加实体需要通过指定接口。
+     * @return 
+     * @see #removeEntity(name.huliqing.luoying.object.entity.Entity) 
+     * @see #addEntity(name.huliqing.luoying.object.entity.Entity) 
+     */
+    List<Entity> getEntities();
+    
+    /**
      * 获取场景中指定类型的物体。
      * @param <T>
      * @param type

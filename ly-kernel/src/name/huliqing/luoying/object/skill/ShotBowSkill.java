@@ -16,15 +16,14 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.util.TempVars;
 import java.util.List;
-import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.SkillData;
-import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.module.ActorModule;
+import name.huliqing.luoying.object.entity.ModelEntity;
 import name.huliqing.luoying.object.module.SkinModule;
 import name.huliqing.luoying.object.skin.Skin;
 import name.huliqing.luoying.object.skin.WeaponSkin;
+import name.huliqing.luoying.utils.GeometryUtils;
 
 /**
  * 弓箭的射击技能
@@ -32,7 +31,7 @@ import name.huliqing.luoying.object.skin.WeaponSkin;
  */
 public class ShotBowSkill extends ShotSkill {
 //    private final PlayService playService = Factory.get(PlayService.class);
-    private ActorModule actorModule;
+//    private ActorModule actorModule;
     private SkinModule skinModule;
     
     private String weaponAnim;
@@ -41,7 +40,6 @@ public class ShotBowSkill extends ShotSkill {
     
     // ---- 内部参数
     private int shotState; // 0:取箭; 1:上弦; 2: other
-    private Spatial arrow; // 取出的箭,可复用，不会射出
     // 取箭的时候，用于绑定“箭”的角色的某一块骨头
     private String arrowBindBone;
     
@@ -51,9 +49,13 @@ public class ShotBowSkill extends ShotSkill {
     // 向上和向下射击时bullet的初始位置偏移。
     private Vector3f shotDownOffset;
     private Vector3f shotUpOffset;
+    private String arrow;
     
     // ---- inner
-    private int shotDir; // 0 : down; 1: horizontal; 2:up
+    // 0 : down; 1: horizontal; 2:up
+    private int shotDir;
+    // 取出的箭,可复用，不会射出
+    private Spatial arrowNode;
     
     @Override
     public void setData(SkillData data) {
@@ -65,13 +67,7 @@ public class ShotBowSkill extends ShotSkill {
         this.animationShotUp = data.getAsString("animationShotUp");
         this.shotDownOffset = data.getAsVector3f("shotDownOffset");
         this.shotUpOffset = data.getAsVector3f("shotUpOffset");
-        
-        // 载入箭模型, 该箭模型(arrow)主要用于“取箭”及“拉弓上弦”动画。
-        String tempArrow = data.getAsString("arrow");
-        if (tempArrow != null) {
-            arrow = Loader.loadModel(tempArrow);
-        }
-        
+        this.arrow = data.getAsString("arrow");
         // 取箭的时候，用于绑定“箭”模型的角色骨架上的某一块骨头,如果没有指定，
         // 则默认以角色的右手武器的骨头作为该骨头.
         this.arrowBindBone = data.getAsString("arrowBindBone", "weapon.R");
@@ -80,7 +76,7 @@ public class ShotBowSkill extends ShotSkill {
     @Override
     public void setActor(Entity actor) {
         super.setActor(actor);
-        actorModule = actor.getModuleManager().getModule(ActorModule.class);
+//        actorModule = actor.getModuleManager().getModule(ActorModule.class);
         skinModule = actor.getModuleManager().getModule(SkinModule.class);        
     }
 
@@ -90,6 +86,14 @@ public class ShotBowSkill extends ShotSkill {
         
         // -- 重置state
         shotState = 0;
+        
+        // 载入箭模型, 该箭模型(arrow)主要用于“取箭”及“拉弓上弦”动画。
+        if (arrowNode == null && arrow != null) {
+            arrowNode = Loader.loadModel(arrow);
+            if (actor instanceof ModelEntity && ((ModelEntity) actor).getData().isPreferUnshaded()) {
+                GeometryUtils.makeUnshaded(arrowNode);
+            }
+        }
         
         // 偿试查找出弓模型，用于执行拉弓动画
         Spatial weapon = null;
@@ -168,7 +172,7 @@ public class ShotBowSkill extends ShotSkill {
     @Override
     protected void doUpdateLogic(float tpf) {
         super.doUpdateLogic(tpf);
-        if (shotState == 0 && arrow != null && time >= timeBulletTake * trueUseTime) {
+        if (shotState == 0 && arrowNode != null && time >= timeBulletTake * trueUseTime) {
             takeArrow(); // 取箭
             shotState = 1;
         }
@@ -187,26 +191,26 @@ public class ShotBowSkill extends ShotSkill {
     // 取箭
     private void takeArrow() {
         SkeletonControl sc = actor.getSpatial().getControl(SkeletonControl.class);
-        if (sc != null && arrow != null) {
+        if (sc != null && arrowNode != null) {
             Bone abb = sc.getSkeleton().getBone(arrowBindBone);
             if (abb != null) {
                 Node abbNode = sc.getAttachmentsNode(arrowBindBone);
-                abbNode.attachChild(arrow);
+                abbNode.attachChild(arrowNode);
             }
         }
     }
     
     // 隐藏“取箭”时的“箭”，实际上取箭动作中的箭与射出的“箭”是不同的对象。
     private void hideArrow() {
-        if (arrow != null) {
-            arrow.removeFromParent();
+        if (arrowNode != null) {
+            arrowNode.removeFromParent();
         }
     }
     
     @Override
     public void cleanup() {
-        if (arrow != null) {
-            arrow.removeFromParent();
+        if (arrowNode != null) {
+            arrowNode.removeFromParent();
         }
         super.cleanup();
     }

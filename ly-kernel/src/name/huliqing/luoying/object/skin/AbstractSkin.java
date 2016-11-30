@@ -5,19 +5,12 @@
 package name.huliqing.luoying.object.skin;
 
 import com.jme3.animation.Bone;
-import com.jme3.animation.Skeleton;
 import com.jme3.animation.SkeletonControl;
-import com.jme3.material.Material;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.UserData;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.Config;
@@ -30,7 +23,9 @@ import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.object.AssetLoader;
 import name.huliqing.luoying.object.el.SBooleanEl;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.entity.ModelEntity;
 import name.huliqing.luoying.object.sound.SoundManager;
+import name.huliqing.luoying.utils.GeometryUtils;
 
 /**
  * @author huliqing
@@ -79,7 +74,6 @@ public abstract class AbstractSkin implements Skin {
         localLocation = data.getAsVector3f("localLocation");
         localRotation = data.getAsQuaternion("localRotation");
         localScale = data.getAsVector3f("localScale");
-        
     }
 
     @Override
@@ -125,17 +119,6 @@ public abstract class AbstractSkin implements Skin {
     public void forceEndSkinning() {
         // donothing
     }
-   
-    // remove20161111
-//    @Override
-//    public boolean isBaseSkin() {
-//        return data.isBaseSkin();
-//    }
-//
-//    @Override
-//    public boolean isAttached() {
-//        return data.isUsed();
-//    }
     
     @Override
     public boolean canUse(Entity actor) {
@@ -159,6 +142,10 @@ public abstract class AbstractSkin implements Skin {
         
         if (skinNode == null) {
             skinNode = AssetLoader.loadModel(data.getFile());
+            // 如果模型希望以unshaded的方式展示，则需要在attach之前转化模型为unshaded
+            if (actor instanceof ModelEntity && ((ModelEntity)actor).getData().isPreferUnshaded()) {
+                GeometryUtils.makeUnshaded(skinNode);
+            }
         }
         
         attach(actor, bindBone, skinNode, localLocation, localRotation, localScale);
@@ -237,7 +224,7 @@ public abstract class AbstractSkin implements Skin {
             }
             
             // 检查是否需要为skin打开HardWareSkinning
-            checkSwitchToHardware(actor, skinNode);
+            GeometryUtils.trySwitchToHardware(actor, skinNode);
             
             // 添加到角色身上
             ((Node) actor.getSpatial()).attachChild(skinNode);
@@ -293,9 +280,10 @@ public abstract class AbstractSkin implements Skin {
         // 2.----移除装备属性
         detachSkinAttributes(actor);
         
-        // 3.----移除装备节点
+        // 3.----移除装备节点,并释放资源
         if (skinNode != null) {
             skinNode.removeFromParent();
+            skinNode = null;
         }
     }
     
@@ -317,72 +305,73 @@ public abstract class AbstractSkin implements Skin {
         data.setAttributeApplied(false);
     }
     
+    // remove20161130,moveto GeometryUtils.
     // --------------------------------------------------------------------------------------------------------------------------------
-    // 打开skin的hws,如果角色actor主SkeletonControl已经打开该功能,则skinNode必须自已打开.
-    private void checkSwitchToHardware(Entity actor, Spatial skinNode) {
-        // 如果hsw未打开,则不需要管,交由sc内部去一起处理就可以.
-        SkeletonControl sc = actor.getSpatial().getControl(SkeletonControl.class);
-        if (!sc.isHardwareSkinningUsed()) {
-            return;
-        }
-        
-        // 如果hsw已经开启过了,则需要把skinNode处理后再添加到actor中,否则skinNode将无法启用hsw
-        final Set<Mesh> targets = new HashSet<Mesh>();
-        final Set<Material> materials = new HashSet<Material>();
-        Node tempNode = new Node();
-        tempNode.attachChild(skinNode);
-        findTargets(tempNode, targets, materials);
-        
-        // Next full 10 bones (e.g. 30 on 24 bones)
-        Skeleton skeleton = sc.getSkeleton();
-        int numBones = ((skeleton.getBoneCount() / 10) + 1) * 10;
-        for (Material m : materials) {
-            m.setInt("NumberOfBones", numBones);
-        }
-        for (Mesh mesh : targets) {
-            if (mesh.isAnimated()) {
-                mesh.prepareForAnim(false);
-            }
-        }
-        sc.setSpatial(actor.getSpatial());
-    }
-    
-    private void findTargets(Node node, Set<Mesh> targets, Set<Material> materials) {
-        Mesh sharedMesh = null;        
-
-        for (Spatial child : node.getChildren()) {
-            if (child instanceof Geometry) {
-                Geometry geom = (Geometry) child;
-
-                // is this geometry using a shared mesh?
-                Mesh childSharedMesh = geom.getUserData(UserData.JME_SHAREDMESH);
-
-                if (childSharedMesh != null) {
-                    // Don���t bother with non-animated shared meshes
-                    if (childSharedMesh.isAnimated()) {
-                        // child is using shared mesh,
-                        // so animate the shared mesh but ignore child
-                        if (sharedMesh == null) {
-                            sharedMesh = childSharedMesh;
-                        } else if (sharedMesh != childSharedMesh) {
-                            throw new IllegalStateException("Two conflicting shared meshes for " + node);
-                        }
-                        materials.add(geom.getMaterial());
-                    }
-                } else {
-                    Mesh mesh = geom.getMesh();
-                    if (mesh.isAnimated()) {
-                        targets.add(mesh);
-                        materials.add(geom.getMaterial());
-                    }
-                }
-            } else if (child instanceof Node) {
-                findTargets((Node) child, targets, materials);
-            }
-        }
-
-        if (sharedMesh != null) {
-            targets.add(sharedMesh);
-        }
-    }
+//    // 打开skin的hws,如果角色actor主SkeletonControl已经打开该功能,则skinNode必须自已打开.
+//    private void checkSwitchToHardware(Entity actor, Spatial skinNode) {
+//        // 如果hsw未打开,则不需要管,交由sc内部去一起处理就可以.
+//        SkeletonControl sc = actor.getSpatial().getControl(SkeletonControl.class);
+//        if (!sc.isHardwareSkinningUsed()) {
+//            return;
+//        }
+//        
+//        // 如果hsw已经开启过了,则需要把skinNode处理后再添加到actor中,否则skinNode将无法启用hsw
+//        final Set<Mesh> targets = new HashSet<Mesh>();
+//        final Set<Material> materials = new HashSet<Material>();
+//        Node tempNode = new Node();
+//        tempNode.attachChild(skinNode);
+//        findTargets(tempNode, targets, materials);
+//        
+//        // Next full 10 bones (e.g. 30 on 24 bones)
+//        Skeleton skeleton = sc.getSkeleton();
+//        int numBones = ((skeleton.getBoneCount() / 10) + 1) * 10;
+//        for (Material m : materials) {
+//            m.setInt("NumberOfBones", numBones);
+//        }
+//        for (Mesh mesh : targets) {
+//            if (mesh.isAnimated()) {
+//                mesh.prepareForAnim(false);
+//            }
+//        }
+//        sc.setSpatial(actor.getSpatial());
+//    }
+//    
+//    private void findTargets(Node node, Set<Mesh> targets, Set<Material> materials) {
+//        Mesh sharedMesh = null;        
+//
+//        for (Spatial child : node.getChildren()) {
+//            if (child instanceof Geometry) {
+//                Geometry geom = (Geometry) child;
+//
+//                // is this geometry using a shared mesh?
+//                Mesh childSharedMesh = geom.getUserData(UserData.JME_SHAREDMESH);
+//
+//                if (childSharedMesh != null) {
+//                    // Don���t bother with non-animated shared meshes
+//                    if (childSharedMesh.isAnimated()) {
+//                        // child is using shared mesh,
+//                        // so animate the shared mesh but ignore child
+//                        if (sharedMesh == null) {
+//                            sharedMesh = childSharedMesh;
+//                        } else if (sharedMesh != childSharedMesh) {
+//                            throw new IllegalStateException("Two conflicting shared meshes for " + node);
+//                        }
+//                        materials.add(geom.getMaterial());
+//                    }
+//                } else {
+//                    Mesh mesh = geom.getMesh();
+//                    if (mesh.isAnimated()) {
+//                        targets.add(mesh);
+//                        materials.add(geom.getMaterial());
+//                    }
+//                }
+//            } else if (child instanceof Node) {
+//                findTargets((Node) child, targets, materials);
+//            }
+//        }
+//
+//        if (sharedMesh != null) {
+//            targets.add(sharedMesh);
+//        }
+//    }
 }
