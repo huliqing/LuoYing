@@ -10,23 +10,19 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.ly.constants.ResConstants;
-import name.huliqing.luoying.data.GameLogicData;
 import name.huliqing.luoying.data.TalentData;
 import name.huliqing.ly.enums.MessageType;
-import name.huliqing.luoying.layer.network.ActorNetwork;
 import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.layer.service.LogicService;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.layer.service.SkillService;
-import name.huliqing.luoying.layer.service.TalentService;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.logic.scene.ActorBuildLogic;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.logic.PositionLogic;
 import name.huliqing.luoying.object.gamelogic.AbstractGameLogic;
-import name.huliqing.luoying.object.talent.Talent;
 import name.huliqing.ly.constants.IdConstants;
 import name.huliqing.ly.object.view.TextView;
 import name.huliqing.ly.object.view.View;
@@ -35,16 +31,13 @@ import name.huliqing.ly.layer.service.GameService;
 
 /**
  * @author huliqing
- * @param <T>
  */
-public class SurvivalBoss<T extends GameLogicData> extends AbstractGameLogic<T> {
+public class SurvivalBoss extends AbstractGameLogic {
     private final ActorService actorService = Factory.get(ActorService.class);
-    private final TalentService talentService = Factory.get(TalentService.class);
     private final LogicService logicService = Factory.get(LogicService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
     private final PlayService playService = Factory.get(PlayService.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
-    private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     private final GameService gameService = Factory.get(GameService.class);
     
@@ -84,7 +77,7 @@ public class SurvivalBoss<T extends GameLogicData> extends AbstractGameLogic<T> 
     }
 
     @Override
-    protected void doLogic(float tpf) {
+    protected void doLogicUpdate(float tpf) {
         
         if (bossAdded && !bossDead) {
             if (gameService.isDead(boss)) {

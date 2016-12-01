@@ -48,7 +48,7 @@ public class StoryGbTask2End extends AbstractGameLogic {
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
     
-    private StoryGbGame game;
+    private StoryGbGame _game;
     private Entity player;
     // 任务面板
     private StoryGbTaskLogic taskPanel;
@@ -60,9 +60,9 @@ public class StoryGbTask2End extends AbstractGameLogic {
     private final ActorMultLoadHelper gbLoader;
     private int stage;
     
-    public StoryGbTask2End(StoryGbGame _game, final Entity player, Vector3f gbPos, StoryGbTaskLogic taskPanel) {
+    public StoryGbTask2End(StoryGbGame game, final Entity player, Vector3f gbPos, StoryGbTaskLogic taskPanel) {
         interval = 0;
-        this.game = _game;
+        this._game = game;
         this.player = player;
         this.taskPanel = taskPanel;
         
@@ -80,7 +80,7 @@ public class StoryGbTask2End extends AbstractGameLogic {
                 gb = actor;
                 gameService.setLevel(gb, 15);
                 gameService.setGroup(gb, gameService.getGroup(player));
-                actorService.setLocation(gb, game.getGbPosition());
+                actorService.setLocation(gb, _game.getGbPosition());
                 // 保护角色不死
                 setProtected(gb, true);
                 playNetwork.addEntity(gb);
@@ -89,7 +89,7 @@ public class StoryGbTask2End extends AbstractGameLogic {
     }
     
     private Entity findGbOnScene() {
-        List<Entity> entities = game.getScene().getEntities(Entity.class, null);
+        List<Entity> entities = _game.getScene().getEntities(Entity.class, null);
         for (Entity e : entities) {
             if (e.getData().getId().equals(IdConstants.ACTOR_GB)) {
                 return e;
@@ -99,17 +99,17 @@ public class StoryGbTask2End extends AbstractGameLogic {
     }
 
     @Override
-    protected void doLogic(float tpf) {
+    protected void doLogicUpdate(float tpf) {
         // 载入gb
         if (stage == 0) {
-            game.addLogic(gbLoader);
+            _game.addLogic(gbLoader);
             stage = 1;
             return;
         }
         
         if (stage == 1) {
             if (gb != null) {
-                game.removeLogic(gbLoader);
+                _game.removeLogic(gbLoader);
                 stage = 2;
             }
             return;
@@ -156,7 +156,7 @@ public class StoryGbTask2End extends AbstractGameLogic {
                 playNetwork.removeEntity(gb);
                 
                 // 停止任务面板的更新及移除提示面板
-                game.removeLogic(taskPanel);
+                _game.removeLogic(taskPanel);
                 // 保存关卡完成状态
                 gameService.saveCompleteStage(StoryConstants.STORY_NUM_GB);
                 // 提示
@@ -177,7 +177,7 @@ public class StoryGbTask2End extends AbstractGameLogic {
     }
     
     private boolean isAltarDead() {
-        List<Entity> entities = game.getScene().getEntities(Entity.class, null);
+        List<Entity> entities = _game.getScene().getEntities(Entity.class, null);
         for (Entity e : entities) {
             if (e.getData().getId().equals(IdConstants.ACTOR_ALTAR)) {
                 return gameService.isDead(e);
@@ -187,7 +187,7 @@ public class StoryGbTask2End extends AbstractGameLogic {
     }
     
     private boolean isEnemyNear(float distance) {
-        List<Actor> actors = game.getScene().getEntities(Actor.class, null);
+        List<Actor> actors = _game.getScene().getEntities(Actor.class, null);
         for (Actor a : actors) {
             if (!gameService.isDead(a) 
                     && gameService.isEnemy(a, player) 

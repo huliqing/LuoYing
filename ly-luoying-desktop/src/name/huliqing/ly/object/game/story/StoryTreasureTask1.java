@@ -44,7 +44,7 @@ public class StoryTreasureTask1 extends AbstractTaskStep {
     private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
     
     // 宝箱
-    private final StoryTreasureGame game;
+    private final StoryTreasureGame _game;
     private Entity player;
     private Entity spider;
     private Entity victim;
@@ -66,12 +66,12 @@ public class StoryTreasureTask1 extends AbstractTaskStep {
     private boolean finished;
     
     private boolean paused;
-    private float stage;
+    private int stage;
     
     private Helper helper;
     
     public StoryTreasureTask1(StoryTreasureGame game) {
-        this.game = game;
+        this._game = game;
     }
 
     @Override
@@ -81,16 +81,16 @@ public class StoryTreasureTask1 extends AbstractTaskStep {
         paused = false;
         conditionTreasureFound = false;
         helper = new Helper();
-        player = game.getPlayer();
-        gameNetwork.setGroup(player, game.groupPlayer);
+        player = _game.getPlayer();
+        gameNetwork.setGroup(player, _game.groupPlayer);
         
         treasureLoader = new ActorLoadHelper(IdConstants.ACTOR_TREASURE){
             @Override
             public void callback(Entity actor) {
                 treasure = actor;
-                actorService.setLocation(treasure, game.treasurePos);
-                gameService.setLevel(treasure, game.treasureLevel);
-                gameService.setGroup(treasure, game.groupPlayer);
+                actorService.setLocation(treasure, _game.treasurePos);
+                gameService.setLevel(treasure, _game.treasureLevel);
+                gameService.setGroup(treasure, _game.groupPlayer);
                 playNetwork.addEntity(treasure);
             }
         };
@@ -99,8 +99,8 @@ public class StoryTreasureTask1 extends AbstractTaskStep {
             @Override
             public void callback(Entity actor) {
                 victim = actor;
-                actorService.setLocation(victim, game.treasurePos.clone().addLocal(1, 0, 1));
-                gameService.setGroup(victim, game.groupPlayer);
+                actorService.setLocation(victim, _game.treasurePos.clone().addLocal(1, 0, 1));
+                gameService.setGroup(victim, _game.groupPlayer);
                 gameService.setEssential(victim, true);// 设置为"必要的",这样不会被移除出场景
                 victim.addObjectData(Loader.loadData(IdConstants.STATE_SAFE), 1);
                 
@@ -118,15 +118,15 @@ public class StoryTreasureTask1 extends AbstractTaskStep {
             public void callback(Entity actor) {
                 // 邪恶蜘蛛
                 spider = actor;
-                actorService.setLocation(spider, game.treasurePos.add(2, 0, 2));
-                gameService.setGroup(spider, game.groupEnemy);
+                actorService.setLocation(spider, _game.treasurePos.add(2, 0, 2));
+                gameService.setGroup(spider, _game.groupEnemy);
 //                stateService.addState(spider, IdConstants.STATE_SAFE, null);
                 spider.addObjectData(Loader.loadData(IdConstants.STATE_SAFE), 1);
                 playNetwork.addEntity(spider);
             }
         };
         
-        game.addLogic(helper);
+        _game.addLogic(helper);
     }
 
     @Override
@@ -143,9 +143,9 @@ public class StoryTreasureTask1 extends AbstractTaskStep {
         
         if (stage == 1) {
             // 载入“艾琳”、“蜘蛛”
-            game.addLogic(treasureLoader);
-            game.addLogic(victimLoader);
-            game.addLogic(spiderLoader);
+            _game.addLogic(treasureLoader);
+            _game.addLogic(victimLoader);
+            _game.addLogic(spiderLoader);
             stage = 2;
             return;
         } 
@@ -295,7 +295,7 @@ public class StoryTreasureTask1 extends AbstractTaskStep {
         }
 
         @Override
-        protected void doLogic(float tpf) {
+        protected void doLogicUpdate(float tpf) {
             if (index == 0) {
                 gameService.addMessage(get("help.run"), MessageType.info);
                 index++;

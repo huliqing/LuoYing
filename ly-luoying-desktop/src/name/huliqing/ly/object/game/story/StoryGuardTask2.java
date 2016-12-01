@@ -497,7 +497,7 @@ public class StoryGuardTask2 extends AbstractTaskStep {
         }
         
         @Override
-        protected void doLogic(float tpf) {
+        protected void doLogicUpdate(float tpf) {
             tempStore.clear();
             game.getScene().getEntities(Actor.class, tempStore);
             for (Actor a : tempStore) {
@@ -522,7 +522,7 @@ public class StoryGuardTask2 extends AbstractTaskStep {
         }
         
         @Override
-        protected void doLogic(float tpf) {
+        protected void doLogicUpdate(float tpf) {
             if (gameService.isDead(gb)) {
                 result = 1;
             } else if (gameService.isDead(altar)){

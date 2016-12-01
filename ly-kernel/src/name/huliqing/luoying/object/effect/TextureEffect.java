@@ -13,7 +13,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
 import name.huliqing.luoying.data.EffectData;
 import name.huliqing.luoying.shape.QuadXYC;
-import name.huliqing.luoying.utils.MatUtils;
+import name.huliqing.luoying.utils.MaterialUtils;
 import name.huliqing.luoying.utils.MathUtils;
 
 /**
@@ -46,7 +46,7 @@ public class TextureEffect extends Effect {
     @Override
     public void initEntity() {
         super.initEntity();
-        Material mat = MatUtils.createTransparent(texture);
+        Material mat = MaterialUtils.createTransparent(texture);
         mat.setColor("Color", color);
         textureNode = new Geometry("TextureEffect_root", new QuadXYC(size.x, size.y));
         textureNode.setMaterial(mat);

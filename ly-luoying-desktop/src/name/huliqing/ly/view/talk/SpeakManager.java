@@ -30,7 +30,7 @@ public class SpeakManager extends AbstractGameLogic {
     }
 
     @Override
-    protected void doLogic(float tpf) {
+    protected void doLogicUpdate(float tpf) {
         if (speaks.isEmpty())
             return;
         

@@ -127,7 +127,7 @@ public class CollisionChaseCamera extends ChaseCamera
         
         // 重建新的碰撞检测
         collisionChecker = new Geometry("camCollisionChecker", box);
-        collisionChecker.setMaterial(MatUtils.createWireFrame());
+        collisionChecker.setMaterial(MaterialUtils.createWireFrame());
         collisionChecker.setCullHint(Spatial.CullHint.Always);
         
         // GhostControl

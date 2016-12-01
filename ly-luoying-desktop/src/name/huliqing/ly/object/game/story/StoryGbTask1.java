@@ -4,6 +4,7 @@
  */
 package name.huliqing.ly.object.game.story;
 
+import com.jme3.math.ColorRGBA;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.Config;
@@ -14,7 +15,6 @@ import name.huliqing.ly.view.talk.TalkImpl;
 import name.huliqing.ly.view.talk.TalkListener;
 import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.network.SkillNetwork;
-import name.huliqing.luoying.layer.network.StateNetwork;
 import name.huliqing.luoying.layer.service.ActionService;
 import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.layer.service.PlayService;
@@ -91,15 +91,15 @@ public class StoryGbTask1 extends AbstractTaskStep {
     // 选择回收多少个
     private int saveTotal;
     
-    private final StoryGbGame game;
+    private final StoryGbGame _game;
     
     public StoryGbTask1(StoryGbGame game) {
-        this.game = game;
+        this._game = game;
     }
 
     @Override
     protected void doInit(TaskStep previous) {
-        player = game.getPlayer();
+        player = _game.getPlayer();
 
         // 任务开始提示面板
         taskFind = new TextPanel(get("taskFind.title"), playService.getScreenWidth() * 0.75f, playService.getScreenHeight() * 0f);
@@ -113,13 +113,12 @@ public class StoryGbTask1 extends AbstractTaskStep {
             public void onClick(UI ui, boolean isPress) {
                 if (!isPress) {
                     stage = 1;
-//                    game.getScene().removeObject(taskFind);
                     taskFind.removeFromParent();
+                    _game.addLogic(loader);
                 }
             }
         });
         taskFind.addButton(startBtn);
-//        playService.addObject(taskFind, true);
         UIState.getInstance().addUI(taskFind);
         
         // 古柏和敌人载入器
@@ -135,11 +134,9 @@ public class StoryGbTask1 extends AbstractTaskStep {
                 // 敌人
                 if (loadIndex >= 0 && loadIndex <= 2) {
                     gameService.setLevel(actor, 6);
-                    gameService.setGroup(actor, game.groupEnemy);
+                    gameService.setGroup(actor, _game.groupEnemy);
+                    gameService.setColor(actor, new ColorRGBA(1, 1, 3f, 1));
                     enemies.add(actor);
-//                    if (loadIndex == 0) {
-//                        gameService.setColor(actor, new ColorRGBA(1, 1, 3f, 1));
-//                    }
                 }
                 // gb
                 if (loadIndex == 3) {
@@ -153,7 +150,7 @@ public class StoryGbTask1 extends AbstractTaskStep {
                     gameService.setGroup(actor, StoryServerNetworkRpgGame.GROUP_PLAYER);
                     gbSmalls.add(actor);
                 }
-                actorService.setLocation(actor, game.getGbPosition());
+                actorService.setLocation(actor, _game.getGbPosition());
                 // 保护角色不死
                 setProtected(actor, true);
                 playNetwork.addEntity(actor);
@@ -175,7 +172,6 @@ public class StoryGbTask1 extends AbstractTaskStep {
         
         // 1.载入敌我角色,并初始化对话
         if (stage == 1) {
-            loader.update(tpf);
             if (gb != null && gbSmalls.size() >= 2 && enemies.size() >= 3) {
                 // 分配不同的敌对方
                 createFightTarget();
@@ -265,7 +261,7 @@ public class StoryGbTask1 extends AbstractTaskStep {
     private void displayTaskPanel() {
         storyGbTaskLogic = new StoryGbTaskLogic(saveTotal, player);
 
-        game.addLogic(storyGbTaskLogic);
+        _game.addLogic(storyGbTaskLogic);
     }
     
     // 古柏赚书对话

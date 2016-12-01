@@ -37,7 +37,6 @@
             resist="resistHuman"
             file="Models/actor/ske.mesh.j3o"
             icon="Interface/face/female1.jpg"
-            extAnim="Models/actor/ext_anim" 
             skinBase="skinEar000,skinEye000,skinFace000,skinFoot000,skinHair010,skinHand000,skinLowerBody000,skinUpperBody000"
             skins="skinLowerBody002|1,weaponSword000"
             skinOutfit="skinFoot003,skinHand003,skinLowerBody003,skinUpperBody003"
@@ -300,7 +299,7 @@
 
     <!--Skeleton-->
     <actor id="actorSkeleton" extends="actorLivingMovableRotatableBase" file="Models/monster/skeleton/skeleton.mesh.j3o" 
-           items="" icon="Interface/face/skeleton.jpg" extAnim="Models/actor/ext_anim" 
+           items="" icon="Interface/face/skeleton.jpg" 
            talents="" mat="calcium" resist="resistNonLife" drops="" 
            skinWeapon="weaponSword000" 
            scale="0.2,0.2,0.2"

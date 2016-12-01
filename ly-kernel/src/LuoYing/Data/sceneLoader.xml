@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--定义角色的可掉落物-->
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://luoying.huliqing.name'
+    xsi:schemaLocation='http://luoying.huliqing.name meta/sceneLoader.xsd'>
+   
+    <!--使用阻塞方式的场景载入器:没有任何提示,直到载入完成。-->
+    <sceneLoaderBlock id="sysSceneLoaderBlock" />
+
+    <!--使用简单进度条的场景载入器-->
+    <sceneLoaderSimple id="sysSceneLoaderSimple" />
+    
+</root>
+
+
+

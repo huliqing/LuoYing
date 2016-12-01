@@ -57,11 +57,10 @@ public class PlayServiceImpl implements PlayService {
         game.getGuiScene().addEntity(entity);
     }
     
-    // remove20161126
-//    @Override
-//    public void addEntity(Scene scene, Entity entity) {
-//        scene.addEntity(entity);
-//    }
+    @Override
+    public void addEntity(Scene scene, Entity entity) {
+        scene.addEntity(entity);
+    }
 
     /**
      * 不要直接调用这个方法。

@@ -15,7 +15,7 @@
     <!--==========================================================================-->
    
     <!--动画通道管理模块: 不直接依赖其它模块 -->
-    <moduleChannel id="moduleChannel" moduleOrder="10" />
+    <moduleChannel id="moduleChannel" moduleOrder="10" extAnimDir="Models/actor/ext_anim" />
     
     <!--包裹物品管理模块: 不直接依赖其它模块-->
     <moduleItem id="moduleItem" moduleOrder="10" />

@@ -6,7 +6,6 @@ package name.huliqing.ly.object.game.lan;
 
 import name.huliqing.luoying.Factory;
 import name.huliqing.ly.constants.ResConstants;
-import name.huliqing.luoying.data.GameLogicData;
 import name.huliqing.ly.enums.MessageType;
 import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.ly.manager.ResourceManager;
@@ -19,9 +18,8 @@ import name.huliqing.ly.layer.network.GameNetwork;
 /**
  * 用于按时间计算等级
  * @author huliqing
- * @param <T>
  */
-public class SurvivalLevelLogic<T extends GameLogicData> extends AbstractGameLogic<T> {
+public class SurvivalLevelLogic extends AbstractGameLogic {
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
 
@@ -51,7 +49,7 @@ public class SurvivalLevelLogic<T extends GameLogicData> extends AbstractGameLog
     }
     
     @Override
-    protected void doLogic(float tpf) {
+    protected void doLogicUpdate(float tpf) {
         if (level >= maxLevel) {
             return;
         }

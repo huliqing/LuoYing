@@ -15,7 +15,7 @@ import name.huliqing.luoying.LuoYing;
  *
  * @author huliqing
  */
-public class MatUtils {
+public class MaterialUtils {
     
     public static Material createWireFrame() {
         return createWireFrame(ColorRGBA.White);

@@ -21,23 +21,8 @@ import name.huliqing.luoying.object.module.LogicModule;
 @Serializable
 public class EntityAddMess extends GameMess {
     
-    // 向指定的场景ID添加实体
-    private boolean guiScene;
-    
     // 实体数据
     private EntityData entityData;
-
-    public boolean isGuiScene() {
-        return guiScene;
-    }
-
-    /**
-     * 是否添加到GUI场景，默认情况下Entity将添加到主场景。
-     * @param guiScene 
-     */
-    public void setGuiScene(boolean guiScene) {
-        this.guiScene = guiScene;
-    }
 
     public EntityData getEntityData() {
         return entityData;
@@ -57,11 +42,7 @@ public class EntityAddMess extends GameMess {
         if (lm != null) {
             lm.setEnabled(false);
         }
-        if (guiScene) {
-            playService.addGuiEntity(entity);
-        } else {
-            playService.addEntity(entity);
-        }
+        playService.addEntity(entity);
     }
     
 }

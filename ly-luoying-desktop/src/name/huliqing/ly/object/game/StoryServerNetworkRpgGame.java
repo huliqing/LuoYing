@@ -30,6 +30,7 @@ import name.huliqing.luoying.network.GameServer;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.save.ClientData;
 import name.huliqing.luoying.save.SaveConfig;
 import name.huliqing.luoying.save.SaveHelper;
@@ -62,20 +63,25 @@ public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
     public final static int TEAM_PLAYER = 1;
     
     private final TaskStepControl taskControl = new TaskStepControl();
+    private boolean started;
     
     public StoryServerNetworkRpgGame() {}
-    
+
     @Override
-    public final void initialize(Application app) {
-        super.initialize(app);
+    public void onSceneLoaded(Scene scene) {
+        super.onSceneLoaded(scene);
         loadPlayer();
         doStoryInitialize();
         taskControl.doNext();
+        started = true;
     }
     
     @Override
     protected void simpleUpdate(float tpf) {
         super.simpleUpdate(tpf);
+        if (!started) {
+            return;
+        }
         taskControl.update(tpf);
     }
     

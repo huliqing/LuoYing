@@ -69,7 +69,7 @@ public class ActorBuildSimpleLogic extends AbstractGameLogic {
     }
 
     @Override
-    protected void doLogic(float tpf) {
+    protected void doLogicUpdate(float tpf) {
         for (ActorBuilder abData : datas) {
             if (abData.actor != null) {
                 if (abData.actor.getScene() != null) {

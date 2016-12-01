@@ -6,7 +6,7 @@ package name.huliqing.luoying.object.shape;
 
 import com.jme3.scene.Geometry;
 import name.huliqing.luoying.data.ShapeData;
-import name.huliqing.luoying.utils.MatUtils;
+import name.huliqing.luoying.utils.MaterialUtils;
 
 /**
  *
@@ -37,7 +37,7 @@ public abstract class AbstractShape<T extends ShapeData> implements Shape<T> {
     public Geometry getGeometry() {
         if (geometry == null) {
             geometry = new Geometry("AbstractShape", getMesh());
-            geometry.setMaterial(MatUtils.createWireFrame());
+            geometry.setMaterial(MaterialUtils.createWireFrame());
         }
         return geometry;
     }

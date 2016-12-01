@@ -10,7 +10,7 @@ import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.scene.Scene;
 
 /**
- *
+ * 
  * @author huliqing
  */
 public interface PlayNetwork extends Inject {
@@ -27,12 +27,12 @@ public interface PlayNetwork extends Inject {
      */
     void addGuiEntity(Entity entity);
     
-//    /**
-//     * 向指定的场景添加物体
-//     * @param scene
-//     * @param entity 
-//     */
-//    void addEntity(Scene scene, Entity entity);
+    /**
+     * 向指定的场景添加物体。
+     * @param scene
+     * @param entity 
+     */
+    void addEntity(Scene scene, Entity entity);
     
     /**
      * 向指定的客户端添加场景实体，不进行广播，也不在本地服务端中添加,一般用于向客户端初始化场景时使用.

@@ -17,7 +17,7 @@ import name.huliqing.luoying.object.anim.AnimationControl;
 import name.huliqing.luoying.object.anim.Loop;
 import name.huliqing.luoying.object.anim.RotationAnim;
 import name.huliqing.luoying.shape.QuadXYC;
-import name.huliqing.luoying.utils.MatUtils;
+import name.huliqing.luoying.utils.MaterialUtils;
 
 /**
  * 渲染一个在XZ平面上的圆环及附着在该环上的一个星光
@@ -125,7 +125,7 @@ public class HaloCircle extends Node {
     private Spatial createHalo(String texture, float radius, Vector3f size, ColorRGBA color) {
         QuadXYC quad = new QuadXYC(size.x, size.y);
         Geometry geo = new Geometry("HaloCircle_halo", quad);
-        Material mat = MatUtils.createTransparent(texture);
+        Material mat = MaterialUtils.createTransparent(texture);
         mat.setColor("Color", color);
         geo.setMaterial(mat);
         geo.setQueueBucket(Bucket.Transparent);
@@ -147,7 +147,7 @@ public class HaloCircle extends Node {
         sp.addControlPoint(new Vector3f(0, 0, radius));
         sp.setCurveTension(0.83f);
         Geometry geo = new Geometry("HaloCircle_circle", new Curve(sp, 10));
-        Material mat = MatUtils.createWireFrame(lineColor);
+        Material mat = MaterialUtils.createWireFrame(lineColor);
         geo.setMaterial(mat);
         return geo;
     }

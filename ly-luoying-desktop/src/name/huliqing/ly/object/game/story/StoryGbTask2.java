@@ -15,7 +15,6 @@ import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.layer.service.SkillService;
-import name.huliqing.luoying.layer.service.StateService;
 import name.huliqing.luoying.logic.scene.ActorBuildSimpleLogic;
 import name.huliqing.luoying.logic.scene.ActorBuildSimpleLogic.Callback;
 import name.huliqing.luoying.logic.scene.ActorMultLoadHelper;
@@ -39,14 +38,11 @@ import name.huliqing.ly.layer.service.GameService;
 public class StoryGbTask2 extends AbstractTaskStep{
 //    private final static Logger LOG = Logger.getLogger(StoryGbTask2.class.getName());
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
-//    private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final PlayService playService = Factory.get(PlayService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
-    private final StateService stateService = Factory.get(StateService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
     private final GameService gameService = Factory.get(GameService.class);
-//    private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
-    private final StoryGbGame game;
+    private final StoryGbGame _game;
     private Entity player;
     private boolean finished;
     
@@ -94,12 +90,12 @@ public class StoryGbTask2 extends AbstractTaskStep{
     private int stage;
     
     public StoryGbTask2(StoryGbGame game) {
-        this.game = game;
+        this._game = game;
     }
 
     @Override
     protected void doInit(TaskStep previous) {
-        player = game.getPlayer();
+        player = _game.getPlayer();
         towers = new ArrayList<Entity>(maxTower);
         
         // 1.任务面板
@@ -122,7 +118,7 @@ public class StoryGbTask2 extends AbstractTaskStep{
                 if (loadIndex == 0) {
                     altar = actor;
                     gameService.setLevel(altar, altarLevel);
-                    gameService.setGroup(altar, game.groupEnemy);
+                    gameService.setGroup(altar, _game.groupEnemy);
                     StateModule sm = altar.getModuleManager().getModule(StateModule.class);
                     if (sm != null) {
                         sm.addState((State) Loader.load(IdConstants.STATE_SAFE), true);
@@ -133,11 +129,11 @@ public class StoryGbTask2 extends AbstractTaskStep{
                     DropModule dm = altar.getModuleManager().getModule(DropModule.class); 
                     dm.addDrop((Drop)Loader.load(IdConstants.DROP_BOOK_007));
                     
-                    actorService.setLocation(altar, game.getEnemyPosition());
+                    actorService.setLocation(altar, _game.getEnemyPosition());
                 }
                 if (loadIndex > 0) {
                     gameService.setLevel(actor, towerLevel);
-                    gameService.setGroup(actor, game.groupEnemy);
+                    gameService.setGroup(actor, _game.groupEnemy);
                     gameService.setColor(actor, enemyColor);
                     actorService.setLocation(actor, getRandomEnemyPosition());
                     towers.add(actor);
@@ -152,7 +148,7 @@ public class StoryGbTask2 extends AbstractTaskStep{
             @Override
             public void onload(Entity actor) {
                 gameService.setLevel(actor, enemyBaseLevel);
-                gameService.setGroup(actor, game.groupEnemy);
+                gameService.setGroup(actor, _game.groupEnemy);
                 // 如果是古柏幼仔，则让它掉落任务物品：树根
                 if (actor.getData().getId().equals(IdConstants.ACTOR_GB_SMALL)) {
                     
@@ -167,12 +163,12 @@ public class StoryGbTask2 extends AbstractTaskStep{
         actorBuilder.addBuilder(getRandomEnemyPosition(), new String[] {IdConstants.ACTOR_NINJA}, refreshInterval, cb);
         actorBuilder.addBuilder(getRandomEnemyPosition(), new String[] {IdConstants.ACTOR_NINJA}, refreshInterval, cb);
         
-        actorBuilder.addBuilder(getRandomEnemyPosition(), game.getEnemyActors(), refreshInterval, cb);
-        actorBuilder.addBuilder(getRandomEnemyPosition(), game.getEnemyActors(), refreshInterval, cb);
-        actorBuilder.addBuilder(getRandomEnemyPosition(), game.getEnemyActors(), refreshInterval, cb);
-        actorBuilder.addBuilder(getRandomEnemyPosition(), game.getEnemyActors(), refreshInterval, cb);
+        actorBuilder.addBuilder(getRandomEnemyPosition(), _game.getEnemyActors(), refreshInterval, cb);
+        actorBuilder.addBuilder(getRandomEnemyPosition(), _game.getEnemyActors(), refreshInterval, cb);
+        actorBuilder.addBuilder(getRandomEnemyPosition(), _game.getEnemyActors(), refreshInterval, cb);
+        actorBuilder.addBuilder(getRandomEnemyPosition(), _game.getEnemyActors(), refreshInterval, cb);
         
-        taskEndLogic = new StoryGbTask2End(game, player, findGbPosition(), taskPanel);
+        taskEndLogic = new StoryGbTask2End(_game, player, findGbPosition(), taskPanel);
         
         // 载入jaime
         jaimeLoader = new ActorMultLoadHelper(IdConstants.ACTOR_JAIME) {
@@ -184,24 +180,24 @@ public class StoryGbTask2 extends AbstractTaskStep{
             }
         };
    
-        game.addLogic(gbRemoveChecker); // 用于移除古柏
-        game.addLogic(taskPanel);
-        game.addLogic(taskChecker);
+        _game.addLogic(gbRemoveChecker); // 用于移除古柏
+        _game.addLogic(taskPanel);
+        _game.addLogic(taskChecker);
     }
 
     @Override
     protected void doLogic(float tpf) {
         // 任务完成后开始载入“提交任务阶段的逻辑”
         if (!taskSuccess && taskChecker.ok) {
-            game.removeLogic(gbRemoveChecker);
-            game.addLogic(taskEndLogic);
+            _game.removeLogic(gbRemoveChecker);
+            _game.addLogic(taskEndLogic);
             taskSuccess = true;
         }
         
         // 0.载入祭坛及防御塔
         if (stage == 0) {
-            game.addLogic(altarLoader);
-            game.addLogic(jaimeLoader);
+            _game.addLogic(altarLoader);
+            _game.addLogic(jaimeLoader);
             stage = 1;
             return;
         }
@@ -209,9 +205,9 @@ public class StoryGbTask2 extends AbstractTaskStep{
         // 载入角色刷新器
         if (stage == 1) {
             if (altar != null && towers.size() >= maxTower) {
-                game.removeLogic(altarLoader);
-                game.addLogic(actorBuilder);
-                game.addLogic(towerChecker);
+                _game.removeLogic(altarLoader);
+                _game.addLogic(actorBuilder);
+                _game.addLogic(towerChecker);
                 stage = 2;
             }
             return;
@@ -221,7 +217,7 @@ public class StoryGbTask2 extends AbstractTaskStep{
         if (stage == 2) {
             // 如果所有防御塔都已经死亡，则恢复祭坛的防御，让它可被击死
             if (towerChecker.allTowerDead) {
-                game.removeLogic(towerChecker);
+                _game.removeLogic(towerChecker);
                 altar.removeObjectData(altar.getData().getObjectData(IdConstants.STATE_SAFE), 1);
                 stage = 3;
             }
@@ -231,7 +227,7 @@ public class StoryGbTask2 extends AbstractTaskStep{
         if (stage == 3) {
             // 如果祭坛死亡，则角色刷新器将停止工作，不再刷新敌人
             if (gameService.isDead(altar)) {
-                game.removeLogic(actorBuilder);
+                _game.removeLogic(actorBuilder);
                 stage = 4;
             }
             return;
@@ -248,7 +244,6 @@ public class StoryGbTask2 extends AbstractTaskStep{
     
     // 获取资源文件中的信息
     private String getOther(String rid, Object... param) {
-//        return ResourceManager.getOther("resource_gb", rid, param);
         return ResourceManager.get("storyGb." + rid, param);
     }
     
@@ -257,8 +252,8 @@ public class StoryGbTask2 extends AbstractTaskStep{
      * @return 
      */
     private Vector3f getRandomEnemyPosition() {
-        Vector3f pos = MathUtils.getRandomPosition(game.getEnemyPosition(), 4, 10, null);
-        Vector3f terrainHeight = playService.getTerrainHeight(game.getScene(), pos.x, pos.z);
+        Vector3f pos = MathUtils.getRandomPosition(_game.getEnemyPosition(), 4, 10, null);
+        Vector3f terrainHeight = playService.getTerrainHeight(_game.getScene(), pos.x, pos.z);
         if (terrainHeight != null) {
             pos.set(terrainHeight).addLocal(0, 0.2f, 0);
         }
@@ -266,7 +261,7 @@ public class StoryGbTask2 extends AbstractTaskStep{
     }
     
     private Actor findActorById(String id) {
-        List<Actor> entities = game.getScene().getEntities(Actor.class, null);
+        List<Actor> entities = _game.getScene().getEntities(Actor.class, null);
         Actor result = null;
         for (Actor e : entities) {
             if (e.getData().getId().equals(id)) {
@@ -295,7 +290,7 @@ public class StoryGbTask2 extends AbstractTaskStep{
         private Entity gb;
         
         @Override
-        protected void doLogic(float tpf) {
+        protected void doLogicUpdate(float tpf) {
             if (gb == null) {
                 gb = findActorById(IdConstants.ACTOR_GB);
                 if (gb == null) {
@@ -319,7 +314,7 @@ public class StoryGbTask2 extends AbstractTaskStep{
             interval = 1;
         }
         @Override
-        protected void doLogic(float tpf) {
+        protected void doLogicUpdate(float tpf) {
             for (Entity tower : towers) {
                 if (!gameService.isDead(tower)) {
                     allTowerDead = false;
@@ -338,7 +333,7 @@ public class StoryGbTask2 extends AbstractTaskStep{
             interval = 3;// 3秒检测一次
         }
         @Override
-        protected void doLogic(float tpf) {
+        protected void doLogicUpdate(float tpf) {
             ok = taskPanel.isOk();
             
             // 如果任务完成，则弹出提示,并转到下一阶段

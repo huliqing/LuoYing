@@ -190,23 +190,23 @@ public abstract class AbstractServerListener implements ServerListener {
         
         // 注2：gameData必须克隆后，再清除逻辑和场景实体，否则会影响服务端的游戏数据。
         GameData gameData = gameServer.getGameData();
-        
         GameData clone = (GameData) gameServer.getGameData().clone(); 
-        // 因为克隆的时候会导致唯一ID不同，这里特别同步一下，使用客户端和服务端使用相同的唯一ID。
-        clone.setUniqueId(gameData.getUniqueId());
         
+        // 清理掉逻辑
+        clone.getGameLogicDatas().clear();
+        
+        // 清理场景实体数据
         if (clone.getSceneData() != null) {
             clone.getSceneData().setEntityDatas(null);
             clone.getSceneData().setUniqueId(gameData.getUniqueId());
         }
         
-        if (clone.getGuiSceneData() != null) {
-            clone.getGuiSceneData().setEntityDatas(null);
-            clone.getGuiSceneData().setUniqueId(gameData.getGuiSceneData().getUniqueId());
-        }
+        // GUI场景不清理,这个必须是固定的
+//        if (clone.getGuiSceneData() != null) {
+//            clone.getGuiSceneData().setEntityDatas(null);
+//            clone.getGuiSceneData().setUniqueId(gameData.getGuiSceneData().getUniqueId());
+//        }
         
-        // 清理掉逻辑
-        clone.getGameLogicDatas().clear();
         
         gameServer.send(coon, new GameDataMess(clone));
     }

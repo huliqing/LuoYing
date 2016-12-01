@@ -14,7 +14,6 @@ import name.huliqing.luoying.object.attribute.BooleanAttribute;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.game.Game;
 import name.huliqing.luoying.object.gamelogic.AbstractGameLogic;
-import name.huliqing.luoying.object.module.ActorModule;
 import name.huliqing.ly.constants.AttrConstants;
 import name.huliqing.ly.constants.IdConstants;
 import name.huliqing.ly.object.view.View;
@@ -30,28 +29,21 @@ public class PlayerDeadCheckerGameLogic extends AbstractGameLogic {
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
 
-    private Game game;
     private Entity player;
     private boolean dead;
     private boolean displayed;
     private BooleanAttribute deadAttribute;
-
-    @Override
-    public void initialize(Game game) {
-        super.initialize(game); 
-        this.game = game;
-    }
     
     public boolean isDead() {
         return dead;
     }
 
     @Override
-    protected void doLogic(float tpf) {
+    protected void doLogicUpdate(float tpf) {
         if (player == null) {
             player = gameService.getPlayer();
         }
-        if (player != null) {
+        if (player != null && deadAttribute == null) {
             deadAttribute = player.getAttributeManager().getAttribute(AttrConstants.DEAD, BooleanAttribute.class);
             if (deadAttribute == null) {
                 setEnabled(false);
@@ -76,7 +68,6 @@ public class PlayerDeadCheckerGameLogic extends AbstractGameLogic {
 
     @Override
     public void cleanup() {
-        game = null;
         player = null;
         dead = false;
         displayed = false;

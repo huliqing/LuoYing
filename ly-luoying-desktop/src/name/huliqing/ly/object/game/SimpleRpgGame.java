@@ -74,6 +74,9 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
     // 最近一个选中的角色和最近一次选择的时间，主要用于处理双击选择攻击目标。
     private Actor lastPicked;
     private long lastPickTime;
+
+    public SimpleRpgGame() {
+    }
     
     @Override
     public void initialize(Application app) {
@@ -84,10 +87,6 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
         
         // UI全局事件监听器，主要处理当UI被点击或拖动时不要让镜头跟着转动。
         UIState.getInstance().addEventListener(this);
-        
-        // UI界面：头像、队伍、工具栏、攻击按钮
-        ui = new RpgMainUI();
-        addLogic(ui);
         
         // 用于支持角色“说话”、“谈话”的游戏逻辑
         addLogic(SpeakManager.getInstance());
@@ -101,6 +100,17 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
         
         // 控制台消息处理器
         LogFactory.addHandler(new ConsoleLogHandler());
+    }
+
+    @Override
+    public void onSceneLoaded(Scene scene) {
+        super.onSceneLoaded(scene);
+        // UI界面：头像、队伍、工具栏、攻击按钮
+        // 这个UI需要依赖场景，所以放在这里初始化
+        if (ui == null) {
+            ui = new RpgMainUI();
+        }
+        addLogic(ui);
     }
 
     @Override

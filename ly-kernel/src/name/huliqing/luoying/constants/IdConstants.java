@@ -77,6 +77,15 @@ public class IdConstants {
     public final static String SYS_SCENE_TEST = "sysSceneTest";
     
     // =============================================================================
+    // Scene Loader
+    // =============================================================================
+    
+    /** 使用阻塞方式的场景载入器  */
+    public final static String SYS_SCENE_LOADER_BLOCK = "sysSceneLoaderBlock";
+    /** 简单的场景载入器 */
+    public final static String SYS_SCENE_LOADER_SIMPLE = "sysSceneLoaderSimple";
+    
+    // =============================================================================
     // Entity: Env
     // =============================================================================
     

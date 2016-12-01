@@ -9,10 +9,8 @@ import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.LuoYingException;
-import name.huliqing.luoying.data.GameLogicData;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.game.Game;
 import name.huliqing.luoying.object.gamelogic.AbstractGameLogic;
 import name.huliqing.luoying.utils.ThreadHelper;
 
@@ -20,14 +18,12 @@ import name.huliqing.luoying.utils.ThreadHelper;
  * 用于多线程载入一个角色,当角色载入完成之后，当前逻辑将停止更新。
  * 即isEnabled为false.
  * @author huliqing
- * @param <T>
  */
-public abstract class ActorLoadHelper<T extends GameLogicData> extends AbstractGameLogic<T> {
+public abstract class ActorLoadHelper extends AbstractGameLogic {
     
     // 要载入的角色的id
-    protected String actorId;
+    private String actorId;
     private Future<Entity> future;
-    private Game game;
     
     public ActorLoadHelper() {}
     
@@ -38,15 +34,9 @@ public abstract class ActorLoadHelper<T extends GameLogicData> extends AbstractG
     public ActorLoadHelper(String actorId) {
         this.actorId = actorId;
     }
-
-    @Override
-    public void initialize(Game game) {
-        super.initialize(game); 
-        this.game = game;
-    }
     
     @Override
-    protected void doLogic(float tpf) {
+    protected void doLogicUpdate(float tpf) {
         if (future == null) {
             future = ThreadHelper.submit(new Callable<Entity>() {
                 @Override
@@ -94,7 +84,7 @@ public abstract class ActorLoadHelper<T extends GameLogicData> extends AbstractG
         return Loader.load(actorId);
     }
     
-    /**
+    /** 
      * 处理已经载入的角色,负责将角色添加到场景中
      * @param actor 
      */

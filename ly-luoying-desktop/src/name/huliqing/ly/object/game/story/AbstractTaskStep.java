@@ -4,8 +4,6 @@
  */
 package name.huliqing.ly.object.game.story;
 
-import name.huliqing.ly.object.game.story.TaskStep;
-
 /**
  * 简单的游戏任务逻辑
  * @author huliqing

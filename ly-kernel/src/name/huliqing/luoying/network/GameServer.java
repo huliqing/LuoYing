@@ -433,7 +433,7 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
         if (gameInPlay) {
             // xxx 重构
             serverConnData.setEntityId(-1);
-            serverConnData.setEntityName("HOST");
+            serverConnData.setEntityName("--");
         }
         clients.add(0, serverConnData);
         return clients;
@@ -455,15 +455,6 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
 
     @Override
     public void connectionAdded(Server server, HostedConnection conn) {
-        // remove20161126, moveto AbstractServerListener
-//        // 初始化一个用于存放数据的容器,选择在这里初始化以便后续使用的时候不再需要判断null
-//        ConnData cd = conn.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
-//        if (cd == null) {
-//            cd = new ConnData();
-//            cd.setConnId(conn.getId());
-//            cd.setAddress(conn.getAddress());
-//            conn.setAttribute(ConnData.CONN_ATTRIBUTE_KEY, cd);
-//        }
         if (listener != null) {
             listener.clientAdded(this, conn);
         }
@@ -483,6 +474,10 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
         }
     }
     
+    /**
+     * 更新GameServer逻辑
+     * @param tpf 
+     */
     public void update(float tpf) {
         time += tpf;
         if (listener != null) {

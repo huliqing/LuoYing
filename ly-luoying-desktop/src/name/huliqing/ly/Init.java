@@ -88,8 +88,6 @@ public class Init {
         ResManager.loadResource("/data/font/zh_CN/story_gb",                "utf-8", "zh_CN");
         ResManager.loadResource("/data/font/zh_CN/story_guard",           "utf-8", "zh_CN");
         ResManager.loadResource("/data/font/zh_CN/story_treasure",       "utf-8", "zh_CN");
-        
-        
     }
     
     private static void registerData() {

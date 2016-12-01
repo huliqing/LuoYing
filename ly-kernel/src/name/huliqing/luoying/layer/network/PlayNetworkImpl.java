@@ -39,7 +39,6 @@ public class PlayNetworkImpl implements PlayNetwork {
         entity.updateDatas();
         EntityAddMess mess = new EntityAddMess();
         mess.setEntityData(entity.getData());
-        mess.setGuiScene(false);
         network.broadcast(mess);
         
         playService.addEntity(entity);
@@ -50,14 +49,38 @@ public class PlayNetworkImpl implements PlayNetwork {
         if (network.isClient()) {
             return;
         }
-        
-        entity.updateDatas();
-        EntityAddMess mess = new EntityAddMess();
-        mess.setEntityData(entity.getData());
-        mess.setGuiScene(true);
-        network.broadcast(mess);
+   
+        // GUI场景实体只作为本地端实体，不共享到客户端。
+//        entity.updateDatas();
+//        EntityAddMess mess = new EntityAddMess();
+//        mess.setEntityData(entity.getData());
+//        mess.setGuiScene(true);
+//        network.broadcast(mess);
         
         playService.addEntity(entity);
+    }
+
+    /**
+     * 向指定的场景添加实体，注：如果指定场景是主场景，则entity会被添加到本地场景，并广播到所有客户端。
+     * 如果是GUI场景，则entity只添加到本地，不进行广播。
+     * @param scene
+     * @param entity 
+     */
+    @Override
+    public void addEntity(Scene scene, Entity entity) {
+        if (network.isClient())
+            return;
+        
+        Scene mainScene = playService.getGame().getScene();
+        Scene guiScene = playService.getGame().getGuiScene();
+        if (mainScene == scene) {
+            addEntity(entity);
+        } else if (guiScene == scene) {
+            addGuiEntity(entity);
+        } else {
+            throw new IllegalStateException("Unknow scene, the scene must be the main scene or GUI scene of the game, "
+                    + "scene=" + scene + ", mainScene=" + mainScene + ", guiScene=" + guiScene);
+        }
     }
 
     @Override
@@ -65,14 +88,9 @@ public class PlayNetworkImpl implements PlayNetwork {
         if (network.isClient()) {
             return;
         }
-        // 该方法只向指定的客户端发送添加场景实体的消息，不进行广播，
-        // 也不在本地服务端中添加,一般用于向客户端初始化场景时使用
-        Scene guiScene = playService.getGame().getGuiScene();
-        
         entity.updateDatas();
         EntityAddMess mess = new EntityAddMess();
         mess.setEntityData(entity.getData());
-        mess.setGuiScene(entity.getScene() != null && entity.getScene() == guiScene);
         network.sendToClient(conn, mess);
     }
 
@@ -84,7 +102,7 @@ public class PlayNetworkImpl implements PlayNetwork {
         EntityRemoveMess mess = new EntityRemoveMess();
         mess.setEntityId(entity.getEntityId());
         network.broadcast(mess);
-
+        
         playService.removeEntity(entity);
     }
     

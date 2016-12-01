@@ -127,7 +127,7 @@ public class AdvanceWaterEntity extends NonModelEntity implements WaterEntity {
         water.setReflectionScene(scene.getRoot());
         sceneListener = new SceneListenerAdapter() {
             @Override
-            public void onSceneInitialized(Scene scene) {
+            public void onSceneLoaded(Scene scene) {
                 findAndSetLigght(scene);
             }
         };

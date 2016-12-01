@@ -14,7 +14,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.util.TempVars;
 import name.huliqing.luoying.data.EffectData;
 import name.huliqing.luoying.shape.QuadXY;
-import name.huliqing.luoying.utils.MatUtils;
+import name.huliqing.luoying.utils.MaterialUtils;
 import name.huliqing.luoying.utils.MathUtils;
 
 /**
@@ -85,7 +85,7 @@ public class HaloEffect extends Effect {
     private Spatial createHaloOne(String texture, Vector3f pos, Vector3f size, Vector3f lookAt) {
         QuadXY shape = new QuadXY(size.x, size.y);
         Geometry geo = new Geometry("QuadShape_halo", shape);
-        geo.setMaterial(MatUtils.createTransparent(texture));
+        geo.setMaterial(MaterialUtils.createTransparent(texture));
         geo.setLocalTranslation(pos);
         geo.lookAt(lookAt, Vector3f.UNIT_Y);
 //        geo.setQueueBucket(Bucket.Transparent); // remove20161004

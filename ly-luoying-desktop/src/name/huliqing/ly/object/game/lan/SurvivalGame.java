@@ -9,6 +9,7 @@ import com.jme3.math.Vector3f;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.ConnData;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.utils.MathUtils;
 import name.huliqing.ly.layer.service.GameService;
 import name.huliqing.ly.object.game.LanServerNetworkRpgGame;
@@ -47,7 +48,13 @@ public class SurvivalGame extends LanServerNetworkRpgGame {
     @Override
     public void initialize(Application application) {
         super.initialize(application);
-        
+        // 主逻辑
+        addLogic(new SurvivalLogic(this));
+    }
+
+    @Override
+    public void onSceneLoaded(Scene scene) {
+        super.onSceneLoaded(scene); 
         sceneHelper = new SceneHelper(scene);
         
         // 生成敌人的刷新地点
@@ -59,9 +66,6 @@ public class SurvivalGame extends LanServerNetworkRpgGame {
                 
             } while (!sceneHelper.isInEmptyZone(enemyPositions[i], nearestDistance, Float.MAX_VALUE, nearestDistance));
         }
-        
-        // 主逻辑
-        addLogic(new SurvivalLogic(this));
     }
 
     @Override

@@ -24,7 +24,7 @@ import name.huliqing.luoying.object.emitter.Emitter;
 import name.huliqing.luoying.save.SaveHelper;
 import name.huliqing.luoying.save.SaveStory;
 import name.huliqing.luoying.shape.QuadXY;
-import name.huliqing.luoying.utils.MatUtils;
+import name.huliqing.luoying.utils.MaterialUtils;
 import name.huliqing.luoying.ui.Icon;
 import name.huliqing.luoying.ui.UI;
 import name.huliqing.luoying.ui.UI.Corner;
@@ -136,7 +136,7 @@ public class StartState extends AbstractAppState {
         //----
         
         // ---- 分割线
-        Material mat = MatUtils.createTransparent(InterfaceConstants.UI_LINE_V);
+        Material mat = MaterialUtils.createTransparent(InterfaceConstants.UI_LINE_V);
         mat.setColor("Color", new ColorRGBA(1,1,1,0.75f));
         QuadXY qv = new QuadXY(2, sh * 0.8f);
         Spatial separate = new Geometry("separate", qv);

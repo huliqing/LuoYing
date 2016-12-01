@@ -73,7 +73,7 @@ public class UnshadedEntity extends NonModelEntity<EntityData> implements SceneL
     }
     
     @Override
-    public void onSceneInitialized(Scene scene) {
+    public void onSceneLoaded(Scene scene) {
         List<Entity> entities = scene.getEntities();
         for (Entity e : entities) {
             unshadedEntity(e);

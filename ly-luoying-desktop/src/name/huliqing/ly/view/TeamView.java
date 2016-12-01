@@ -164,7 +164,7 @@ public class TeamView extends LinearLayout implements SceneListener, ValueChange
     }
     
     @Override
-    public void onSceneInitialized(Scene scene) {
+    public void onSceneLoaded(Scene scene) {
         // ignore
     }
     

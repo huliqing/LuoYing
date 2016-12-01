@@ -87,6 +87,15 @@ xs:time
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="moduleBase">
+                    <xs:attribute name="extAnimDir" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>角色的扩展动画目录，如："Models/actor/ext_anim"，
+                                当moduleChannel在执行动画时，如果角色本身不存在指定动画，模块会偿试去这个指定的目录下查找动
+                                画，extAnimDir目录下的动画名称格式示例："Models/actor/ext_anim/wait.mesh.j3o"，其中wait为动画名称，mesh.j3o为固定
+                                后缀，不能改。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>

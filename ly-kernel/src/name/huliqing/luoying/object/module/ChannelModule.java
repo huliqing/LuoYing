@@ -32,6 +32,10 @@ import name.huliqing.luoying.utils.Temp;
 public class ChannelModule extends AbstractModule implements ChannelControl {
     private static final Logger LOG = Logger.getLogger(ChannelModule.class.getName());
 
+    // 角色的扩展动画的目录,如：Models/actor/ext_anim
+    private String extAnimDir;
+    
+    // ---- inner
     // 通道处理器列表
     private final List<Channel> channels = new LinkedList<Channel>();
     // 保存一个完整的id引用
@@ -51,6 +55,7 @@ public class ChannelModule extends AbstractModule implements ChannelControl {
     @Override
     public void setData(ModuleData data) {
         super.setData(data);
+        extAnimDir = data.getAsString("extAnimDir");
     }
 
     @Override
@@ -185,16 +190,13 @@ public class ChannelModule extends AbstractModule implements ChannelControl {
      * @param animName
      * @return 
      */
-    private static boolean loadExtAnim(Entity actor, String animName) {
-        // xxx 需要转换为角色属性
-        String animDir = actor.getData().getAsString("extAnim");
-        
-        if (animDir == null) {
+    private boolean loadExtAnim(Entity actor, String animName) {
+        if (extAnimDir == null) {
             LOG.log(Level.WARNING, "Entity {0} no have a extAnim defined"
                     + ", could not load anim {1}", new Object[] {actor.getData().getId(), animName});
             return false;
         }
-        String animFile = animDir + "/" + animName + ".mesh.j3o";
+        String animFile = extAnimDir + "/" + animName + ".mesh.j3o";
         try {
             Spatial animExtModel = AssetLoader.loadModel(animFile);
             GeometryUtils.addSkeletonAnim(animExtModel, actor.getSpatial());

@@ -15,15 +15,12 @@ import name.huliqing.luoying.layer.service.ElService;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.object.el.SBooleanEl;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.game.Game;
 
 /**
  * 场景清洁器,用于清理场景中已经死亡的角色之类的功能
  * @author huliqing
- * @param <T>
  */
-public class ActorCleanGameLogic<T extends GameLogicData> extends AbstractGameLogic<T> {
-//    private final ActorService actorService = Factory.get(ActorService.class);
+public class ActorCleanGameLogic extends AbstractGameLogic {
     private final PlayService playService = Factory.get(PlayService.class);
     private final ElService elService = Factory.get(ElService.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
@@ -49,20 +46,15 @@ public class ActorCleanGameLogic<T extends GameLogicData> extends AbstractGameLo
     }
     
     @Override
-    public void setData(T data) {
-        super.setData(data);
+    public void setData(GameLogicData data) {
+        super.setData(data); 
         checkEl = elService.createSBooleanEl(data.getAsString("checkEl", "#{false}"));
         deathDelay = data.getAsFloat("deathDelay", deathDelay);
-    }
-
-    @Override
-    public void initialize(Game game) {
-        super.initialize(game); 
         deathDelayAsMS = deathDelay * 1000;
     }
     
     @Override
-    protected void doLogic(float tpf) {
+    protected void doLogicUpdate(float tpf) {
         playService.getEntities(Actor.class, actorStore);
         if (actorStore.isEmpty())
             return;

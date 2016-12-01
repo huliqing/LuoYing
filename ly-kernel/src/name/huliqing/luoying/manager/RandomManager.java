@@ -8,8 +8,9 @@ package name.huliqing.luoying.manager;
 import java.util.Random;
 
 /**
- * 随机数管理器, 随机数是预先产生的。这个管理器会预先生成127个随机数。
- * 通过设置随机种子可以重新产生随机数。通过随机种子的共享可以在客户端和服务端之间产生相同的随机数。
+ * 随机数管理器, 随机数是预先产生的。这个管理器会预先生成127个固定的随机数。
+ * 通过设置随机种子可以重新产生随机数。
+ * 游戏过程中可以通过定时从服务端向客户端发送种子以同步更新随机数。
  * @author huliqing
  */
 public class RandomManager {
@@ -21,7 +22,7 @@ public class RandomManager {
     private static byte index = 0;
     
     static {
-        RandomManager.setRandomSeed(new Random().nextLong());
+        RandomManager.setRandomSeed(9999L);
     }
     
     /**
@@ -72,7 +73,7 @@ public class RandomManager {
     }
     
     public static void main(String[] args) {
-        for (int i = 0; i < 300; i++) {
+        for (int i = 0; i < 127; i++) {
             System.out.println(i + "->" + getNextValue() + ", index=" + index);
         }
         System.out.println("...");

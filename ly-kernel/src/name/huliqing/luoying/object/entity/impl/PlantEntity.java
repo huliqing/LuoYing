@@ -40,7 +40,7 @@ public abstract class PlantEntity extends ModelEntity {
         } else {
             sceneListener = new SceneListenerAdapter() {
                 @Override
-                public void onSceneInitialized(Scene scene) {
+                public void onSceneLoaded(Scene scene) {
                     // 把植皮移到地形上面
                     makePlantOnTerrain(scene);
                     // 在处理完位置点之后就可以不再需要侦听了

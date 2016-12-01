@@ -10,7 +10,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.game.Game;
 import name.huliqing.luoying.object.gamelogic.AbstractGameLogic;
 import name.huliqing.luoying.utils.ThreadHelper;
 
@@ -29,8 +28,6 @@ public abstract class ActorMultLoadHelper extends AbstractGameLogic {
     // 当前正在载入的角色id索引
     private int lastLoadIndex;
     
-    private Game game;
-    
     /**
      * 指定要载入的角色ID 
      * @param actorIds
@@ -39,15 +36,9 @@ public abstract class ActorMultLoadHelper extends AbstractGameLogic {
         this.actorIds = actorIds;
         interval = 0;
     }
-
-    @Override
-    public void initialize(Game game) {
-        super.initialize(game);
-        this.game = game;
-    }
     
     @Override
-    protected void doLogic(float tpf) {
+    protected void doLogicUpdate(float tpf) {
         // load OK
         if (future == null && lastLoadIndex < actorIds.length) {
             future = ThreadHelper.submit(new Callable<Entity>() {

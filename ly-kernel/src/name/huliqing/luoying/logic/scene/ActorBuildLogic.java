@@ -15,10 +15,8 @@ import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.data.GameLogicData;
 import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.service.ActorService;
-import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.gamelogic.AbstractGameLogic;
@@ -32,12 +30,10 @@ import name.huliqing.luoying.utils.ThreadHelper;
  * 2.刷新的角色坐标位置随机，通过坐标列表指定。
  * 3.可指定最多刷新多少个角色,当角色达到指定数量时，刷新器将暂停刷新
  * @author huliqing
- * @param <T>
  */
-public class ActorBuildLogic<T extends GameLogicData> extends AbstractGameLogic<T> {
+public class ActorBuildLogic extends AbstractGameLogic {
     
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
-    private final PlayService playService = Factory.get(PlayService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     
     /**
@@ -142,7 +138,7 @@ public class ActorBuildLogic<T extends GameLogicData> extends AbstractGameLogic<
     public void setRadius(float radius) {
         this.radius = radius;
     }
-
+    
     /**
      * 设置最多可同时存在的角色数量
      * @param total 
@@ -152,11 +148,7 @@ public class ActorBuildLogic<T extends GameLogicData> extends AbstractGameLogic<
     }
     
     @Override
-    protected void doLogic(float tpf) {
-        if (!enabled) {
-            return;
-        }
-        
+    protected void doLogicUpdate(float tpf) {
         if (future != null && future.isDone()) {
             try {
                 // 将模型添加到场景和当前列表。

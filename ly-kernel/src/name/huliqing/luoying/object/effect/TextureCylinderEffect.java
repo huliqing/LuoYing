@@ -13,7 +13,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Cylinder;
 import name.huliqing.luoying.data.EffectData;
-import name.huliqing.luoying.utils.MatUtils;
+import name.huliqing.luoying.utils.MaterialUtils;
 
 /**
  * 贴图材质特效，支持用一幅图像作为特效,贴图是贴在一个圆筒状的柱体上的。
@@ -53,7 +53,7 @@ public class TextureCylinderEffect extends Effect {
     @Override
     public void initEntity() {
         super.initEntity();
-        Material mat = MatUtils.createTransparent(texture);
+        Material mat = MaterialUtils.createTransparent(texture);
         mat.setColor("Color", color);
 
         Cylinder cylinder = new Cylinder(2, 16, radius, height);

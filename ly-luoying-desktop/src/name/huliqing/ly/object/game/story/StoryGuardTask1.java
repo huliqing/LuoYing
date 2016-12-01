@@ -15,7 +15,6 @@ import name.huliqing.luoying.enums.Diffculty;
 import name.huliqing.ly.view.talk.Talk;
 import name.huliqing.ly.view.talk.TalkImpl;
 import name.huliqing.ly.view.talk.TalkListener;
-import name.huliqing.luoying.layer.network.ActorNetwork;
 import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.layer.service.PlayService;  
@@ -47,11 +46,11 @@ public class StoryGuardTask1 extends AbstractTaskStep {
     private final PlayService playService = Factory.get(PlayService.class);
 //    private final StateService stateService = Factory.get(StateService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
-    private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
+//    private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     private final GameService gameService = Factory.get(GameService.class);
-    private final StoryGuardGame game;
+    private final StoryGuardGame _game;
 
     // 开始任务面板
     private TextPanel startPanel;
@@ -90,13 +89,13 @@ public class StoryGuardTask1 extends AbstractTaskStep {
     private int stage;
 
     public StoryGuardTask1(StoryGuardGame game) {
-        this.game = game;
+        this._game = game;
     }
     
     @Override
     protected void doInit(TaskStep previous) {
         
-        player = game.getPlayer();
+        player = _game.getPlayer();
         
         // ----开始任何面板
         createStartPanel();
@@ -106,7 +105,7 @@ public class StoryGuardTask1 extends AbstractTaskStep {
             @Override
             public void callback(Entity actor, int loadIndex) {
                 gb = actor;
-                actorService.setLocation(gb, game.getSelfPosition());
+                actorService.setLocation(gb, _game.getSelfPosition());
                 gameService.setLevel(gb, 30);
                 gameService.setGroup(gb, gameService.getGroup(player));
                 playNetwork.addEntity(gb);
@@ -118,16 +117,14 @@ public class StoryGuardTask1 extends AbstractTaskStep {
             @Override
             public void callback(Entity actor, int loadIndex) {
                 gameService.setLevel(actor, 20);
-                actorService.setLocation(actor, getRandomPosition(game.getSelfPosition()));
+                actorService.setLocation(actor, getRandomPosition(_game.getSelfPosition()));
                 gameService.setGroup(actor, gameService.getGroup(player));
                 playNetwork.addEntity(actor);
             }
         };
         
-//        playService.addObject(towerLoader, false);
-//        playService.addObject(gbLoader, false);
-        game.addLogic(towerLoader);
-        game.addLogic(gbLoader);
+        _game.addLogic(towerLoader);
+        _game.addLogic(gbLoader);
     }
 
     @Override
@@ -166,7 +163,6 @@ public class StoryGuardTask1 extends AbstractTaskStep {
     }
     
     private String get(String rid, Object... param) {
-//        return ResourceManager.getOther("resource_guard", rid, param);
         return ResourceManager.get("storyGuard." +  rid, param);
     }
     
@@ -379,7 +375,7 @@ public class StoryGuardTask1 extends AbstractTaskStep {
     private Vector3f getRandomPosition(Vector3f center) {
         Vector3f pos = MathUtils.getRandomPosition(center, 7, 12, null);
         
-        Vector3f terrainPos = playService.getTerrainHeight(game.getScene(), pos.x, pos.z);
+        Vector3f terrainPos = playService.getTerrainHeight(_game.getScene(), pos.x, pos.z);
         if (terrainPos != null) {
             pos.set(terrainPos).addLocal(0, 0.2f, 0);
         }

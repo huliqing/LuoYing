@@ -33,7 +33,7 @@ public class DirectionalLightFilterShadowEntity extends ShadowEntity {
     private DirectionalLightShadowFilter filter;
     private final SceneListener sceneListener = new SceneListenerAdapter() {
         @Override
-        public void onSceneInitialized(Scene scene) {
+        public void onSceneLoaded(Scene scene) {
             if (enabled) {
                 filter.setLight(findDirectionalLight());
             }

@@ -26,7 +26,7 @@ public class TalkManager extends AbstractGameLogic {
     }
     
     @Override
-    protected void doLogic(float tpf) {
+    protected void doLogicUpdate(float tpf) {
         if (talks.isEmpty())
             return;
         

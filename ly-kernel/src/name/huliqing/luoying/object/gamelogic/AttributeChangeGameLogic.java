@@ -5,6 +5,7 @@
  */
 package name.huliqing.luoying.object.gamelogic;
 
+import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.GameLogicData;
@@ -20,9 +21,8 @@ import name.huliqing.luoying.object.entity.Entity;
  * 用于修改场景中角色属性值的游戏逻辑，可用于如：为场景中所有角色提示生命值恢复，魔法值恢复，等。
  * 但是并不局限于恢复，还可用于减少。
  * @author huliqing
- * @param <T>
  */
-public class AttributeChangeGameLogic<T extends GameLogicData> extends AbstractGameLogic<T> {
+public class AttributeChangeGameLogic extends AbstractGameLogic {
     private final PlayService playService = Factory.get(PlayService.class);
     private final EntityService entityService = Factory.get(EntityService.class);
     private final ElService elService = Factory.get(ElService.class);
@@ -44,9 +44,10 @@ public class AttributeChangeGameLogic<T extends GameLogicData> extends AbstractG
     private SBooleanEl checkEl;
     
     // ---- inner
+    private final List<Actor> tempStore = new ArrayList<Actor>();
     
     @Override
-    public void setData(T data) {
+    public void setData(GameLogicData data) {
         super.setData(data); 
         applyAttribute = data.getAsString("applyAttribute");
         bindFactorAttribute = data.getAsString("bindFactorAttribute");
@@ -61,12 +62,13 @@ public class AttributeChangeGameLogic<T extends GameLogicData> extends AbstractG
     }
     
     @Override
-    protected void doLogic(float tpf) {
-        List<Actor> actors = playService.getEntities(Actor.class, null);
-        if (actors == null || actors.isEmpty())
+    protected void doLogicUpdate(float tpf) {
+        tempStore.clear();
+        playService.getEntities(Actor.class, tempStore);
+        if (tempStore.isEmpty())
             return;
         
-        for (Actor actor : actors) {
+        for (Actor actor : tempStore) {
             if (checkEl.setSource(actor.getAttributeManager()).getValue()) {
                 updateAttribute(actor);
             }

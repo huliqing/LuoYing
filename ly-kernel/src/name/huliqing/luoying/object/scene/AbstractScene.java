@@ -22,17 +22,19 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.LuoYing;
-import name.huliqing.luoying.data.EntityData;
+import name.huliqing.luoying.constants.IdConstants;
 import name.huliqing.luoying.data.SceneData;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.utils.MatUtils;
+import name.huliqing.luoying.object.sceneloader.SceneLoader;
+import name.huliqing.luoying.object.sceneloader.SceneLoaderListener;
+import name.huliqing.luoying.utils.MaterialUtils;
 
 /**
  * 抽象场景类
  * @author huliqing
  */
-public abstract class AbstractScene implements Scene {
+public abstract class AbstractScene implements Scene, SceneLoaderListener {
     private static final Logger LOG = Logger.getLogger(AbstractScene.class.getName());
     
     /** 场景数据 */
@@ -101,24 +103,29 @@ public abstract class AbstractScene implements Scene {
         // 主要用于防止阴影、天空盒、特效粒子的BUG。查看上面说明:
         if (sceneOrigin == null) {
             sceneOrigin = new Geometry("sceneOrigin", new Box(1,1,1));
-            sceneOrigin.setMaterial(MatUtils.createUnshaded());
+            sceneOrigin.setMaterial(MaterialUtils.createUnshaded());
             sceneOrigin.setCullHint(Spatial.CullHint.Always);
         }
         root.attachChildAt(sceneOrigin, 0);
         
-        // 载入场景中的所有实体
-        List<EntityData> entityDatas = data.getEntityDatas();
-        if (entityDatas != null) {
-            for (EntityData ed : entityDatas) {
-                addEntity((Entity) Loader.load(ed));
-            }
+        // 载入器载入场景,如果没有指定任何载入器，则默认使用一个阻塞形的载入器
+        String sceneLoaderId = data.getSceneLoader();
+        if (sceneLoaderId == null) {
+            sceneLoaderId = IdConstants.SYS_SCENE_LOADER_BLOCK;
         }
+        SceneLoader sceneLoader = Loader.load(sceneLoaderId);
+        sceneLoader.addListener(this);
+        sceneLoader.loadScene(this);
+    }
+    
+    @Override
+    public void onSceneLoaded() {
+        initialized = true;
         if (listeners != null) {
             for (SceneListener sl : listeners) {
-                sl.onSceneInitialized(this);
+                sl.onSceneLoaded(this);
             }
         }
-        initialized = true;
     }
     
     @Override

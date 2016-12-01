@@ -64,6 +64,14 @@ public class SceneData extends ObjectData {
         return entityDatas != null && entityDatas.remove(entityData);
     }
     
+    /**
+     * 获取场景载入器，如果没有指定，则返回null.
+     * @return 
+     */
+    public String getSceneLoader() {
+        return getAsString("sceneLoader");
+    }
+    
     @Override
     public SceneData clone() {
         SceneData clone = (SceneData) super.clone(); 

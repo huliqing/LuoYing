@@ -12,6 +12,6 @@ package game;
 public class Test {
     
     public static void main(String[] args) {
-        System.out.println("...");
+        System.out.println((float)1/2);
     }
 }

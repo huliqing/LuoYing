@@ -23,7 +23,7 @@ import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.skill.Skill;
-import name.huliqing.luoying.utils.MatUtils;
+import name.huliqing.luoying.utils.MaterialUtils;
 import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.ly.layer.service.GameService;
 
@@ -42,7 +42,7 @@ public class SkillShortcut extends BaseUIShortcut<SkillData> {
      // 技能CD遮罩颜色
     private final ColorRGBA maskColor = new ColorRGBA(1.0f, 0, 0.5f, 0.5f);
     // 材质
-    private final Material maskMat = MatUtils.createSkillCooldown(maskColor);
+    private final Material maskMat = MaterialUtils.createSkillCooldown(maskColor);
     // 遮罩实体
     private final Geometry maskObj = new Geometry("mask");
      // 遮罩的缩放,比skillUI边框小一点就行。

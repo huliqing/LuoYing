@@ -9,12 +9,10 @@ import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.anim.Anim;
-import name.huliqing.luoying.object.anim.AnimNode;
 import name.huliqing.luoying.object.anim.AnimationControl;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.game.Game;
 import name.huliqing.luoying.object.game.GameListener;
-import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.ui.Icon;
 import name.huliqing.luoying.ui.UI;
 import name.huliqing.luoying.ui.UI.Corner;
@@ -33,17 +31,18 @@ public class RpgMainUI extends PlayStateUI implements GameListener {
     private TeamView teamView;
     private FaceView targetFace;
     
-    // 角色面板
+    // 角色面板 
     private ActorMainPanel userPanel;
     private Anim userPanelAnim;
     private AnimationControl animationControl;
     
     // UI:技能按钮
     private UI attack;
-    
+
     @Override
-    public void initialize(Game game) {
-        super.initialize(game);
+    protected void doLogicInit(Game game) {
+        super.doLogicInit(game); 
+        
         rpgGame = (SimpleRpgGame) game;
         
         // UI size
@@ -119,7 +118,7 @@ public class RpgMainUI extends PlayStateUI implements GameListener {
     }
 
     @Override
-    public void doLogic(float tpf) {
+    public void doLogicUpdate(float tpf) {
         teamView.update(tpf);
         targetFace.update(tpf);
     }
@@ -152,23 +151,9 @@ public class RpgMainUI extends PlayStateUI implements GameListener {
     }
 
     @Override
-    public void onGameInitialized(Game game) {
-        // ignore
-    }
-
-    @Override
-    public void onGameExit(Game game) {
-        // ignore
-    }
-
-    @Override
-    public void onGameSceneChangeBefore(Game game, Scene oldScene, Scene newScene) {
-        // ignore
-    }
-
-    @Override
-    public void onGameSceneChangeAfter(Game game, Scene oldScene, Scene newScene) {
-        teamView.setScene(newScene);
+    public void onGameSceneLoaded(Game game) {
+        super.onGameSceneLoaded(game);
+        teamView.setScene(game.getScene());
     }
 
 }

@@ -32,11 +32,11 @@ import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.ly.constants.ResConstants;
 import name.huliqing.ly.enums.MessageType;
-import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.ly.layer.service.GameService;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.ly.mess.MessMessage;
 import name.huliqing.luoying.network.DefaultServerListener;
+import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.ly.LyConfig;
 
 /**
@@ -45,7 +45,7 @@ import name.huliqing.ly.LyConfig;
  */
 public abstract class ServerNetworkRpgGame extends NetworkRpgGame {
     private final GameService gameService = Factory.get(GameService.class);
-    private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
+//    private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final PlayService playService = Factory.get(PlayService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
@@ -63,8 +63,8 @@ public abstract class ServerNetworkRpgGame extends NetworkRpgGame {
     }
 
     @Override
-    public void initialize(Application app) {
-        super.initialize(app);
+    public void onSceneLoaded(Scene scene) {
+        super.onSceneLoaded(scene); 
         // 创建server
         if (gameServer == null) {
             try {
@@ -84,9 +84,8 @@ public abstract class ServerNetworkRpgGame extends NetworkRpgGame {
         gameServer.setServerListener(new NetworkServerListener(app));
         // 将服务端标记为"running"状态
         gameServer.setServerState(GameServer.ServerState.running);
-        
     }
-
+    
     @Override
     public List<ConnData> getClients() {
         return gameServer.getClients();

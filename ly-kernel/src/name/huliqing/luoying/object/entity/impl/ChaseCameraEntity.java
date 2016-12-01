@@ -96,7 +96,7 @@ public class ChaseCameraEntity extends NonModelEntity  implements SceneListener 
     // ---- Listener-------------------------------------------------------------------------------------------------------------------
     
     @Override
-    public void onSceneInitialized(Scene scene) {
+    public void onSceneLoaded(Scene scene) {
         // ignore
     }
 

@@ -15,7 +15,7 @@ import name.huliqing.luoying.object.entity.Entity;
 public class SceneListenerAdapter implements SceneListener {
 
     @Override
-    public void onSceneInitialized(Scene scene) {
+    public void onSceneLoaded(Scene scene) {
         // 子类覆盖
     }
 

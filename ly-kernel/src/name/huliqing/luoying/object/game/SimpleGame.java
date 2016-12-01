@@ -16,21 +16,25 @@ import name.huliqing.luoying.constants.IdConstants;
 import name.huliqing.luoying.data.GameData;
 import name.huliqing.luoying.data.GameLogicData;
 import name.huliqing.luoying.object.Loader;
+import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.gamelogic.GameLogic;
 import name.huliqing.luoying.object.scene.Scene;
+import name.huliqing.luoying.object.scene.SceneListener;
 
 /**
  * 游戏基类
  * @author huliqing
  */
-public class SimpleGame implements Game<GameData> {
+public class SimpleGame implements Game<GameData>, SceneListener {
     private static final Logger LOG = Logger.getLogger(SimpleGame.class.getName());
 
     protected GameData data;
     protected SimpleApplication app;
     /** 当前的游戏场景 */
     protected final SafeArrayList<GameLogic> logics = new SafeArrayList<GameLogic>(GameLogic.class);
+    
     protected final SafeArrayList<GameListener> listeners = new SafeArrayList<GameListener>(GameListener.class);
+    
     protected Scene scene;
     protected Scene guiScene;
     protected boolean initialized;
@@ -73,22 +77,7 @@ public class SimpleGame implements Game<GameData> {
         this.app = (SimpleApplication) app;
         initialized = true;
         
-        // load mainScene
-        Scene _scene;
-        if (initScene != null) {
-            _scene = initScene;
-        } else {
-            if (data.getSceneData() != null) {
-                _scene = Loader.load(data.getSceneData());
-            } else {
-                LOG.log(Level.WARNING, "Scene not found! You must specify a scene for the game, now use a default scene "
-                        + "instead! gameId={0}", data.getId());
-                _scene = Loader.load(IdConstants.SYS_SCENE);
-            }
-        }
-        setScene(_scene);
-        
-        // load main gui scene
+        // GUI场景要优先载入，因为SceneLoader可能依赖这个场景。
         Scene _GuiScene;
         if (initGuiScene != null) {
             _GuiScene = initGuiScene;
@@ -102,20 +91,50 @@ public class SimpleGame implements Game<GameData> {
         }
         setGuiScene(_GuiScene);
         
-        // Load logics
+        // 载入主场景
+        Scene tempScene;
+        if (initScene != null) {
+            tempScene = initScene;
+        } else {
+            if (data.getSceneData() != null) {
+                tempScene = Loader.load(data.getSceneData());
+            } else {
+                LOG.log(Level.WARNING, "Scene not found! You must specify a scene for the game, now use a default scene "
+                        + "instead! gameId={0}", data.getId());
+                tempScene = Loader.load(IdConstants.SYS_SCENE);
+            }
+        }
+        setScene(tempScene);
+        
+        // 初始化逻辑
         List<GameLogicData> initLogics = data.getGameLogicDatas();
         if (initLogics != null) {
             for (GameLogicData gld : initLogics) {
                 addLogic((GameLogic) Loader.load(gld));
             }
         }
-        
-        // 通知侦听器
-        if (listeners != null) {
-            for (GameListener gl : listeners) {
-                gl.onGameInitialized(this);
-            }
+    }
+    
+    /**
+     * 当场景物体初始化载入完毕时该方法将被调用，注意：如果游戏过程中切换场景，则该方法将会再次被调用。
+     * 只要切换并重新载入场景，则该方法都会被重新调用。
+     * @param scene 
+     */
+    @Override
+    public void onSceneLoaded(Scene scene) {
+        for (GameListener gl : listeners) {
+            gl.onGameSceneLoaded(this);
         }
+    }
+    
+    @Override
+    public void onSceneEntityAdded(Scene scene, Entity entityAdded) {
+        // ignore
+    }
+
+    @Override
+    public void onSceneEntityRemoved(Scene scene, Entity entityRemoved) {
+        // ignore
     }
 
     @Override
@@ -152,6 +171,7 @@ public class SimpleGame implements Game<GameData> {
             gl.onGameExit(this);
         }
         scene.cleanup();
+        guiScene.cleanup();
         for (GameLogic gl : logics.getArray()) {
             gl.cleanup();
         }
@@ -179,24 +199,25 @@ public class SimpleGame implements Game<GameData> {
             this.initScene = newScene;
             return;
         }
+        // 新旧场景切换之前，触发侦听器,然后清理旧场景
         Scene oldScene = scene;
-        for (GameListener gl : listeners.getArray()) {
-            gl.onGameSceneChangeBefore(this, oldScene, newScene);
-        }
-        if (oldScene != null && oldScene.isInitialized()) {
-            oldScene.getRoot().removeFromParent();
-            oldScene.cleanup();
+        if (oldScene != null) {
+            if (listeners != null) {
+                for (GameListener gl : listeners) {
+                    gl.onGameSceneChangeBefore(this, oldScene, newScene);
+                }
+            }
+            if (oldScene.isInitialized()) {
+                oldScene.getRoot().removeFromParent();
+                oldScene.cleanup();
+            }
         }
         data.setSceneData(newScene.getData());
         scene = newScene;
         scene.setProcessorViewPorts(app.getViewPort());
-        if (!scene.isInitialized()) {
-            scene.initialize();
-        }
+        scene.addSceneListener(this);
+        scene.initialize();
         app.getRootNode().attachChild(scene.getRoot());
-        for (GameListener gl : listeners.getArray()) {
-            gl.onGameSceneChangeAfter(this, oldScene, newScene);
-        }
     }
 
     @Override

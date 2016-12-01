@@ -183,7 +183,7 @@
     
     <!--武器槽位: 人类女性武器槽位-->
     <attributeStringList id="attributeHumanFemaleWeaponSlot" extends="attributeWeaponSlots" 
-                         value="slotSwordLeftWaist,slotSwordLeftWaist2,slotBowLeftBack,slotWandLeftBack" />
+                         value="slotSwordRightBack,slotSwordRightBack2,slotBowLeftBack,slotWandLeftBack" />
     
     <!--==========================================================================-->
     <!--种族配置： 这些属性是直接配置给角色的。-->

@@ -74,6 +74,11 @@ xs:time
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
+                <xs:attribute name="sceneLoader" type="xs:string" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>指定一个场景载入器</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>

@@ -4,7 +4,6 @@
  */
 package name.huliqing.ly.object.game.story;
 
-import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.ItemData;
 import name.huliqing.luoying.layer.network.PlayNetwork;
@@ -39,18 +38,26 @@ public class StoryGbTaskLogic extends AbstractGameLogic {
     }
 
     @Override
-    public void initialize(Game game) {
-        super.initialize(game);
-        tpv = (TextPanelView) Loader.load(IdConstants.VIEW_TEXT_PANEL_VIEW_GB);
-        tpv.setTitle(ResourceManager.getObjectName(IdConstants.GAME_STORY_GB));
+    protected void doLogicInit(Game game) {
+        super.doLogicInit(game);
+        if (tpv == null) {
+            tpv = (TextPanelView) Loader.load(IdConstants.VIEW_TEXT_PANEL_VIEW_GB);
+            tpv.setTitle(ResourceManager.getObjectName(IdConstants.GAME_STORY_GB));
+        }
         playNetwork.addEntity(tpv);
     }
     
     @Override
-    protected void doLogic(float tpf) { 
+    protected void doLogicUpdate(float tpf) { 
         ItemData item = player.getData().getObjectData(IdConstants.ITEM_GB_STUMP);
         count = item != null ? item.getTotal() : 0;
         tpv.setText(get("taskSave.saveCount", count, total));
+    }
+
+    @Override
+    public void cleanup() {
+        playNetwork.removeEntity(tpv);
+        super.cleanup(); 
     }
     
     /**
@@ -69,14 +76,7 @@ public class StoryGbTaskLogic extends AbstractGameLogic {
         return total;
     }
     
-    @Override
-    public void cleanup() {
-        playNetwork.removeEntity(tpv);
-        super.cleanup(); 
-    }
-    
     private String get(String rid, Object... param) {
-//        return ResourceManager.getOther("resource_gb", rid, param);
         return ResourceManager.get("storyGb." +  rid, param);
     }
 }

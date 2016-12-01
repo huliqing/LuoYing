@@ -140,7 +140,7 @@ public class PhysicsEntity extends NonModelEntity implements SceneListener {
     // ---- listener
     
     @Override
-    public void onSceneInitialized(Scene scene) {
+    public void onSceneLoaded(Scene scene) {
         // ignore
     }
     

@@ -13,6 +13,7 @@ import name.huliqing.luoying.mess.ActorLoadSavedMess;
 import name.huliqing.luoying.mess.ActorLoadSavedResultMess;
 import name.huliqing.luoying.network.GameServer;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.scene.Scene;
 
 /**
  * 局域网服务端，每个玩家包括服务端玩家和客户端玩家都需要通过角色选择界面来选择角色进行游戏。
@@ -25,6 +26,11 @@ public class LanServerNetworkRpgGame extends ServerNetworkRpgGame {
         super.initialize(app);
          // 隐藏其它UI界面
         setUIVisiable(false);
+    }
+
+    @Override
+    public void onSceneLoaded(Scene scene) {
+        super.onSceneLoaded(scene);
         // 显示角色选择面板
         showSelectPanel();
     }

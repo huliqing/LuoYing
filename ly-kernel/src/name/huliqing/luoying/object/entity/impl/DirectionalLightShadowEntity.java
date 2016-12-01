@@ -29,7 +29,7 @@ public class DirectionalLightShadowEntity extends ShadowEntity {
     private DirectionalLightShadowRenderer shadowProcessor;
     private final SceneListener sceneListener = new SceneListenerAdapter() {
         @Override
-        public void onSceneInitialized(Scene scene) {
+        public void onSceneLoaded(Scene scene) {
             if (enabled) {
                 shadowProcessor.setLight(findDirectionalLight());
             }

@@ -91,7 +91,7 @@ xs:time
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="extAnim" type="xs:string" use="optional">
+<!--                    <xs:attribute name="extAnim" type="xs:string" use="optional">
                         <xs:annotation>
                             <xs:documentation>
                                 扩展的骨骼动画包，这个参数指向一个asset中的目录,如：Models/actor/anim
@@ -99,7 +99,7 @@ xs:time
                                 动画名称要与文件名一致，比如：动画名称duck_left_roll,则动画文件名为：duck_left_roll.j3o
                             </xs:documentation>
                         </xs:annotation>
-                    </xs:attribute>
+                    </xs:attribute>-->
                     <xs:attribute name="logics" type="xs:string" use="required">
                         <xs:annotation>
                             <xs:documentation>关联逻辑,多个逻辑使用半角逗号分开，如：logic1,logic2,logic3</xs:documentation>

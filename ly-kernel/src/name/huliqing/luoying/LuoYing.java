@@ -52,6 +52,7 @@ import name.huliqing.luoying.data.PositionData;
 import name.huliqing.luoying.data.ResistData;
 import name.huliqing.luoying.data.SavableArrayList;
 import name.huliqing.luoying.data.SceneData;
+import name.huliqing.luoying.data.SceneLoaderData;
 import name.huliqing.luoying.data.ShapeData;
 import name.huliqing.luoying.data.ShortcutData;
 import name.huliqing.luoying.data.SkillData;
@@ -63,14 +64,7 @@ import name.huliqing.luoying.data.TalentData;
 import name.huliqing.luoying.data.TaskData;
 import name.huliqing.luoying.data.TradeObjectData;
 import name.huliqing.luoying.data.define.TradeInfo;
-//import name.huliqing.ly.mess.MessActionRun;
-//import name.huliqing.luoying.mess.MessActorFollow;
-//import name.huliqing.luoying.mess.MessActorKill;
 import name.huliqing.luoying.mess.ActorPhysicsMess;
-//import name.huliqing.luoying.mess.MessActorSetGroup;
-//import name.huliqing.luoying.mess.MessActorSetLevel;
-//import name.huliqing.luoying.mess.MessActorSetTarget;
-//import name.huliqing.luoying.mess.MessActorTeam;
 import name.huliqing.luoying.mess.ActorTransformMess;
 import name.huliqing.luoying.mess.ActorTransformDirectMess;
 import name.huliqing.luoying.mess.ActorViewDirMess;
@@ -280,6 +274,8 @@ import name.huliqing.luoying.object.module.DropModule;
 import name.huliqing.luoying.object.module.LevelModule;
 import name.huliqing.luoying.object.module.PhysicsModule;
 import name.huliqing.luoying.object.scene.SimpleScene;
+import name.huliqing.luoying.object.sceneloader.BlockSceneLoader;
+import name.huliqing.luoying.object.sceneloader.SimpleSceneLoader;
 import name.huliqing.luoying.object.slot.Slot;
 import name.huliqing.luoying.object.state.BooleanAttributeState;
 import name.huliqing.luoying.object.state.GroupState;
@@ -557,7 +553,11 @@ public class LuoYing {
         // Scene
         DataFactory.register("scene", SceneData.class, SceneDataLoader.class, SimpleScene.class);
         DataFactory.register("sceneRandom", SceneData.class, RandomSceneDataLoader.class, SimpleScene.class);
-
+        
+        // SceneLoader
+        DataFactory.register("sceneLoaderBlock", SceneLoaderData.class, null, BlockSceneLoader.class);
+        DataFactory.register("sceneLoaderSimple", SceneLoaderData.class, null, SimpleSceneLoader.class);
+        
         // Shape
         DataFactory.register("shapeBox",  ShapeData.class, ShapeDataLoader.class, BoxShape.class);
          
@@ -618,6 +618,7 @@ public class LuoYing {
         loadData("/LuoYing/Data/game.xml");
         loadData("/LuoYing/Data/module.xml");
         loadData("/LuoYing/Data/scene.xml");
+        loadData("/LuoYing/Data/sceneLoader.xml");
         
 //        loadData("/LuoYing/Data/actor.xml");
 //        loadData("/LuoYing/Data/actorAnim.xml");
