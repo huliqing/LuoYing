@@ -28,9 +28,6 @@ public abstract class AbstractGameLogic  implements GameLogic<GameLogicData>, Ga
     protected boolean initialized;
     protected float intervalUsed;
     
-    /** 判断场景是否有效,只有场景载入完毕后，场景才有效。*/
-    protected boolean sceneValid;
-    
     public AbstractGameLogic() {}
     
     /**
@@ -56,20 +53,28 @@ public abstract class AbstractGameLogic  implements GameLogic<GameLogicData>, Ga
      * 由覆盖这个方法来更新游戏数据到Data中, 以保证游戏在存档的时候能够获得实时的状态。
      */
     @Override
-    public void updateDatas() {}
+    public void updateDatas() {
+        // 由子类视情况覆盖
+    }
     
     @Override
     public final void initialize(Game game) {
         if (initialized) {
             throw new IllegalStateException("GameLogic already initialized! gameLogic=" + getClass().getName());
         }
+        initialized = true;
         this.game = game;
         this.game.addListener(this);
         
-        sceneValid = game.getScene() != null && game.getScene().isInitialized();
-        if (sceneValid) {
-            doLogicInit(game);
-            initialized = true;
+        // 调用子类的游戏逻辑初始化，这个方法只调用一次，并且必须在场景完成载入之前初始化。
+        // 避免NPE
+        logicInit(game);
+        
+        // Game逻辑有可能是在游戏过程中动态添加，这个时候场景可能是已经完成了初始化的，
+        // 则需要触发一次OnGameSceneLoaded, 这确保所有游戏逻辑在添加的时候，
+        // 不管是否是在场景载入之前还是载入之后，都会触发一次游戏逻辑的onGameSceneLoaded.
+        if (game.getScene() != null && game.getScene().isInitialized()) {
+            onGameSceneLoaded(game);
         }
     }
 
@@ -86,13 +91,13 @@ public abstract class AbstractGameLogic  implements GameLogic<GameLogicData>, Ga
 
     @Override
     public final void update(float tpf) {
-        if (!enabled || !sceneValid) {
+        if (!enabled) {
             return;
         }
         intervalUsed += tpf;
         if (intervalUsed > interval) {
             intervalUsed = 0;
-            doLogicUpdate(tpf);
+            logicUpdate(tpf);
         }
     }
     
@@ -106,45 +111,47 @@ public abstract class AbstractGameLogic  implements GameLogic<GameLogicData>, Ga
         return enabled;
     }
     
-    /**
-     * 判断当前游戏场景是否有效，即判断场景是否已经初始化完毕。
-     * @return 
-     */
-    protected boolean isSceneValid() {
-        return sceneValid;
-    }
-
-    @Override
-    public void onGameSceneLoaded(Game game) {
-        sceneValid = true;
-        if (!initialized) {
-            doLogicInit(game);
-            initialized = true;
-        }
-    }
-
-    @Override
-    public void onGameExit(Game game) {
-        // 由子类视情况覆盖调用
-    }
-
-    @Override
-    public void onGameSceneChangeBefore(Game game, Scene oldScene, Scene newScene) {
-        sceneValid = false;
-    }
+//    /**
+//     * 判断当前游戏场景是否有效，即判断场景是否已经初始化完毕。
+//     * @return 
+//     */
+//    protected boolean isSceneValid() {
+//        return sceneValid;
+//    }
     
     /**
-     * 初始化逻辑，该方法在整个游戏逻辑的生命周期中只调用一次，并且是在首个场景初始化载入完毕之后被调用。
-     * 之后切换场景再不再调用。
+     * 当游戏场景切换<b>并完成载入后</b>该方法会被立即调用一次,以通知场景完成载入。
+     * @param game 
+     */
+    @Override
+    public void onGameSceneLoaded(Game game) {}
+
+    /**
+     * 当游戏场景切换之前该方法会被调用，每次切换场景之前该方法都会调用一次，默认情况下该方法不会处理任何逻辑，
+     * 由子类视情况覆盖实现。
+     * @param game
+     * @param oldScene
+     * @param newScene 
+     */
+    @Override
+    public void onGameSceneChange(Game game, Scene oldScene, Scene newScene) {}
+    
+    /**
+     * 当游戏退出之前该方法会被调用一次，默认情况下该方法不会处理任何逻辑，由子类视情况覆盖实现。
+     * @param game 
+     */
+    @Override
+    public void onGameExit(Game game) {}
+    
+    /**
+     * 初始化逻辑，该方法在游戏逻辑整个生命周期中只执行一次。
      * @param game
      */
-    protected void doLogicInit(Game game) {
-        // 由子类实现
-    }
+    protected abstract void logicInit(Game game);
     
     /**
      * 执行游戏逻辑
      * @param tpf 
      */
-    protected abstract void doLogicUpdate(float tpf);
+    protected abstract void logicUpdate(float tpf);
 }

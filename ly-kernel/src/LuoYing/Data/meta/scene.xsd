@@ -74,9 +74,9 @@ xs:time
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-                <xs:attribute name="sceneLoader" type="xs:string" use="optional" >
+                <xs:attribute name="progress" type="xs:string" use="optional" >
                     <xs:annotation>
-                        <xs:documentation>指定一个场景载入器</xs:documentation>
+                        <xs:documentation>指定一个进度条指示器，当场景载入时用于显示载入进度。</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
             </xs:extension>

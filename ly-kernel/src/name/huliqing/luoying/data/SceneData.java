@@ -65,11 +65,11 @@ public class SceneData extends ObjectData {
     }
     
     /**
-     * 获取场景载入器，如果没有指定，则返回null.
+     * 获取场景载入时的进度指示器id，如果没有指定，则返回null.
      * @return 
      */
-    public String getSceneLoader() {
-        return getAsString("sceneLoader");
+    public String getProgress() {
+        return getAsString("progress");
     }
     
     @Override

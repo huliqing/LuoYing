@@ -4,10 +4,8 @@
  */
 package name.huliqing.luoying.network;
 
-import com.jme3.app.Application;
 import com.jme3.network.HostedConnection;
 import com.jme3.network.Message;
-import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.mess.network.GameDataMess;
@@ -33,49 +31,20 @@ import name.huliqing.luoying.network.GameServer.ServerState;
 public abstract class AbstractServerListener implements ServerListener {
 
     private static final Logger LOG = Logger.getLogger(AbstractServerListener.class.getName());
-
-    private final Application app;
-    
-    public AbstractServerListener(Application app) {
-        this.app = app;
-    }
     
     @Override
     public final void clientAdded(final GameServer gameServer, final HostedConnection conn) {
-        app.enqueue(new Callable() {
-            @Override
-            public Object call() throws Exception {
-                onClientAdded(gameServer, conn);
-                return null;
-            }
-        });
-    }
-
-    @Override
-    public final void clientRemoved(final GameServer gameServer, final HostedConnection conn) {
-        app.enqueue(new Callable() {
-            @Override
-            public Object call() throws Exception {
-                onClientRemoved(gameServer, conn);
-                return null;
-            }
-        });
-    }
-
-    @Override
-    public final void messageReceived(final GameServer gameServer, final HostedConnection source, final Message m) {
-        app.enqueue(new Callable() {
-            @Override
-            public Object call() throws Exception {
-                processMessageFromClient(gameServer, source, m);
-                return null;
-            }
-        });
+        onClientAdded(gameServer, conn);
     }
     
-    private void processMessageFromClient(GameServer gameServer, HostedConnection source, final Message m) {
+    @Override
+    public final void clientRemoved(final GameServer gameServer, final HostedConnection conn) {
+        onClientRemoved(gameServer, conn);
+    }
+    
+    @Override
+    public final void messageReceived(GameServer gameServer, HostedConnection source, Message m) {
 //        LOG.log(Level.INFO, "Receive from client, class={0}, message={1}", new Object[] {m.getClass().getName(), m.toString()});
-
         // 这是游戏运行时的消息
         if (m instanceof GameMess) {
             onReceiveGameMess(gameServer, source, (GameMess) m);
@@ -107,8 +76,6 @@ public abstract class AbstractServerListener implements ServerListener {
             }
             onReceiveMessRequestGameInit(gameServer, source, (RequestGameInitMess) m);
         }
-        
-        
     }
     
     /**
@@ -206,7 +173,6 @@ public abstract class AbstractServerListener implements ServerListener {
 //            clone.getGuiSceneData().setEntityDatas(null);
 //            clone.getGuiSceneData().setUniqueId(gameData.getGuiSceneData().getUniqueId());
 //        }
-        
         
         gameServer.send(coon, new GameDataMess(clone));
     }

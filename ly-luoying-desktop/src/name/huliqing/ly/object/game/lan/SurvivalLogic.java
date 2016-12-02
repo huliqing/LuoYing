@@ -20,6 +20,7 @@ import name.huliqing.luoying.logic.scene.ActorBuildLogic;
 import name.huliqing.luoying.logic.scene.ActorBuildLogic.Callback;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.game.Game;
 import name.huliqing.luoying.object.gamelogic.AbstractGameLogic;
 import name.huliqing.ly.constants.IdConstants;
 import name.huliqing.ly.object.view.TextView;
@@ -63,7 +64,10 @@ public class SurvivalLogic extends AbstractGameLogic {
     }
 
     @Override
-    protected void doLogicUpdate(float tpf) {
+    protected void logicInit(Game game) {}
+
+    @Override
+    protected void logicUpdate(float tpf) {
         if (stage == 0) {
             Entity player = _game.getPlayer();
             if (player != null) {
@@ -152,6 +156,6 @@ public class SurvivalLogic extends AbstractGameLogic {
         } else {
             return ResourceManager.get(rid, params);
         }
-    }
+    } 
 
 }

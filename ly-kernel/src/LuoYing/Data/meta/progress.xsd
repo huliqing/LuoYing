@@ -19,37 +19,24 @@ xs:time
     <xs:element name="root">
         <xs:complexType>
             <xs:all>
-                <xs:element ref="sceneLoaderBlock" />
-                <xs:element ref="sceneLoaderSimple" />
+                <xs:element ref="progressSimple" />
             </xs:all>
         </xs:complexType>
     </xs:element>
     
-    <xs:element name="sceneLoaderBlock">
+    <xs:element name="progressSimple">
         <xs:annotation>
-            <xs:documentation>阻塞方式的场景载入器，当该载入器在载入场景时会阻塞所有渲染线程的运行,直到场景载入完成。</xs:documentation>
+            <xs:documentation>普通的进度条指示器</xs:documentation>
         </xs:annotation>
         <xs:complexType>
             <xs:complexContent>
-                <xs:extension base="sceneLoaderBase">
-                </xs:extension>
-            </xs:complexContent>
-        </xs:complexType>
-    </xs:element>
-    
-    <xs:element name="sceneLoaderSimple">
-        <xs:annotation>
-            <xs:documentation>简单的场景载入器，该载入器通过简单的进度条方式来提示场景载入过程。</xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="sceneLoaderBase">
+                <xs:extension base="progressBase">
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
     </xs:element>
 
-    <xs:complexType name="sceneLoaderBase">
+    <xs:complexType name="progressBase">
         <xs:complexContent>
             <xs:extension base="base">
             </xs:extension>

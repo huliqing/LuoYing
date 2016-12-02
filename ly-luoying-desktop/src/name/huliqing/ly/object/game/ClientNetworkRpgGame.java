@@ -23,6 +23,7 @@ import name.huliqing.luoying.mess.network.ClientExitMess;
 import name.huliqing.luoying.mess.network.GetClientsMess;
 import name.huliqing.luoying.mess.ActorLoadSavedMess;
 import name.huliqing.luoying.mess.ActorLoadSavedResultMess;
+import name.huliqing.luoying.mess.SceneLoadedMess;
 import name.huliqing.luoying.mess.network.ClientsMess;
 import name.huliqing.luoying.network.AbstractClientListener.PingListener;
 import name.huliqing.luoying.network.GameClient;
@@ -35,6 +36,9 @@ import name.huliqing.luoying.ui.UIFactory;
 import name.huliqing.luoying.ui.state.UIState;
 import name.huliqing.ly.layer.service.GameService;
 import name.huliqing.luoying.network.DefaultClientListener;
+import name.huliqing.luoying.object.Loader;
+import name.huliqing.luoying.object.scene.Scene;
+import name.huliqing.luoying.object.progress.Progress;
 import name.huliqing.ly.enums.MessageType;
 import name.huliqing.ly.view.shortcut.ShortcutManager;
 
@@ -60,6 +64,12 @@ public class ClientNetworkRpgGame extends NetworkRpgGame implements PingListener
     // 用于显示与服务端的Ping值信息
     private Text pingLabel;
     
+    private boolean loadingScene = true;
+    private int needInitEntities;
+    private int initEntitiesCount;
+    private Progress progress;
+    private boolean clientStarted;
+    
     public ClientNetworkRpgGame() {}
     
     public ClientNetworkRpgGame(GameClient gameClient) {
@@ -76,7 +86,7 @@ public class ClientNetworkRpgGame extends NetworkRpgGame implements PingListener
         super.initialize(app);
         setUIVisiable(false);
         
-        clientListener = new NetworkClientListener(app);
+        clientListener = new NetworkClientListener();
         clientListener.addPingListener(this);
         gameClient.setGameClientListener(clientListener);
         gameClient.setClientState(ClientState.ready);
@@ -88,6 +98,11 @@ public class ClientNetworkRpgGame extends NetworkRpgGame implements PingListener
         pingLabel.setToCorner(Corner.RB);
         UIState.getInstance().addUI(pingLabel);
         
+        String progressId = scene.getData().getProgress();
+        if (progressId != null) {
+            progress = Loader.load(progressId);
+            progress.initialize(guiScene.getRoot());
+        }
     }
     
     @Override
@@ -136,27 +151,53 @@ public class ClientNetworkRpgGame extends NetworkRpgGame implements PingListener
     public void onPingUpdate(long ping) {
         pingLabel.setText("PING:" + ping);
     }
+
+    @Override
+    public void onSceneEntityAdded(Scene scene, Entity entityAdded) {
+        super.onSceneEntityAdded(scene, entityAdded);
+        if (loadingScene) {
+            initEntitiesCount++;
+            LOG.log(Level.INFO, "GameInit...initEntitiesCount={0}, need={1}", new Object[] {initEntitiesCount, needInitEntities});
+            if (progress != null) {
+                progress.display((float)initEntitiesCount/ needInitEntities);
+            }
+            if (initEntitiesCount >= needInitEntities) {
+                startClientGame();
+            }
+        }
+    }
+    
+    protected void startClientGame() {
+        if (clientStarted) {
+            return;
+        }
+        clientStarted = true;
+        loadingScene = false;
+
+        if (progress != null) {
+            progress.cleanup();
+        }
+
+        // 从服务端重新获取所有客户端联接信息，因为gameClient重新设置了listener,
+        // 并且clientsWin需要初始化这部分信息，否则客户端进入后打开看不到列表，除非有新客户端连接。
+        // 所以这里应该主动获取一次，进行初始化
+        gameClient.send(new GetClientsMess());
+
+        // 偿试发送消息给服务端，看看有没有客户端的存档资料，如果存在资料就不需要选择新角色进行游戏了。
+        // （在故事模式下即可能存在客户端的存档资料）
+        gameClient.send(new ActorLoadSavedMess());
+    }
     
     private class NetworkClientListener extends DefaultClientListener {
-        
-        public NetworkClientListener(Application app) {
-            super(app);
-        }
 
         @Override
-        protected void onGameInitialized() {
-            // 从服务端重新获取所有客户端联接信息，因为gameClient重新设置了listener,
-            // 并且clientsWin需要初始化这部分信息，否则客户端进入后打开看不到列表，除非有新客户端连接。
-            // 所以这里应该主动获取一次，进行初始化
-            gameClient.send(new GetClientsMess());
-
-            // 偿试发送消息给服务端，看看有没有客户端的存档资料，如果存在资料就不需要选择新角色进行游戏了。
-            // （在故事模式下即可能存在客户端的存档资料）
-            gameClient.send(new ActorLoadSavedMess());
+        protected void onGameInitialize(int initEntityTotal) {
+            LOG.log(Level.INFO, "GameInit...needInitEntityTotal={0}", initEntityTotal);
+            needInitEntities = initEntityTotal;
         }
         
         @Override
-        protected void onReceiveGameMess(GameClient gameClient, GameMess m) {
+        protected void processGameMess(GameClient gameClient, GameMess m) {
             // 服务端成功载入客户端的存档资料
             if (m instanceof ActorLoadSavedResultMess) {
                 ActorLoadSavedResultMess mess = (ActorLoadSavedResultMess) m;
@@ -182,7 +223,7 @@ public class ClientNetworkRpgGame extends NetworkRpgGame implements PingListener
                 return;
             }
             
-            super.onReceiveGameMess(gameClient, m);
+            super.processGameMess(gameClient, m);
         }
         
         @Override
@@ -203,5 +244,7 @@ public class ClientNetworkRpgGame extends NetworkRpgGame implements PingListener
         }
         
     }
+    
+    
     
 }

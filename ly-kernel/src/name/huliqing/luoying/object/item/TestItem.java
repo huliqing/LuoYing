@@ -21,6 +21,7 @@ import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.entity.impl.ShadowEntity;
 import name.huliqing.luoying.xml.ObjectData;
 
 /**
@@ -50,10 +51,11 @@ public class TestItem extends AbstractItem {
     protected void doUse(Entity actor) {
         count++;
       
-        Actor test = Loader.load("actorAltar");
-        test.getAttributeManager().getAttribute("attributeGroup", NumberAttribute.class).setValue(2);
-        test.getAttributeManager().getAttribute("attributeLevel", NumberAttribute.class).setValue(60);
-        playNetwork.addEntity(test);
+//        Actor test = Loader.load("actorAltar");
+//        actorService.setLocation(test, actorService.getLocation(actor));
+//        test.getAttributeManager().getAttribute("attributeGroup", NumberAttribute.class).setValue(2);
+//        test.getAttributeManager().getAttribute("attributeLevel", NumberAttribute.class).setValue(60);
+//        playNetwork.addEntity(test);
         
 //        actor.updateDatas();
 //        EntityData ed = actor.getData().clone();
@@ -62,6 +64,10 @@ public class TestItem extends AbstractItem {
 //        Entity other = Loader.load(ed);
 //        
 //        playNetwork.addEntity(other);
+
+        ShadowEntity ss = actor.getScene().getEntities(ShadowEntity.class, null).get(0);
+//        ss.setShadowIntensity(ss.getShadowIntensity() + 0.1f);
+        ss.setEnabled(!ss.isEnabled());
     }
         
     private <T extends ObjectData> void removeTypes(EntityData ed, Class<T> type) {

@@ -39,7 +39,10 @@ public class PlayerDeadCheckerGameLogic extends AbstractGameLogic {
     }
 
     @Override
-    protected void doLogicUpdate(float tpf) {
+    protected void logicInit(Game game) {}
+
+    @Override
+    protected void logicUpdate(float tpf) {
         if (player == null) {
             player = gameService.getPlayer();
         }

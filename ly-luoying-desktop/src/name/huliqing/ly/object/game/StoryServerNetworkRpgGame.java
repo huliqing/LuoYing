@@ -8,7 +8,6 @@ package name.huliqing.ly.object.game;
 import com.jme3.app.Application;
 import com.jme3.math.Vector3f;
 import com.jme3.network.HostedConnection;
-import com.jme3.network.Message;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -25,6 +24,7 @@ import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.mess.network.ClientExitMess;
 import name.huliqing.luoying.mess.ActorLoadSavedMess;
 import name.huliqing.luoying.mess.ActorLoadSavedResultMess;
+import name.huliqing.luoying.mess.GameMess;
 import name.huliqing.luoying.mess.network.ClientsMess;
 import name.huliqing.luoying.network.GameServer;
 import name.huliqing.luoying.object.Loader;
@@ -52,6 +52,7 @@ public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
     private final PlayService playService = Factory.get(PlayService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
     private final GameService gameService = Factory.get(GameService.class);
+    private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
 //    private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     
     /** 存档数据 */
@@ -68,12 +69,19 @@ public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
     public StoryServerNetworkRpgGame() {}
 
     @Override
+    public void initialize(Application app) {
+        super.initialize(app);
+        setUIVisiable(false);
+    }
+    
+    @Override
     public void onSceneLoaded(Scene scene) {
         super.onSceneLoaded(scene);
         loadPlayer();
         doStoryInitialize();
         taskControl.doNext();
         started = true;
+        setUIVisiable(true);
     }
     
     @Override
@@ -123,14 +131,14 @@ public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
     
     @Override
     protected void onAddClientPlayer(ConnData cd, Entity actor) {
-        // 让客户端玩家角色的group和分组始终和当前故事模式中的主角色的分组一致。
-        gameService.setGroup(actor, gameService.getGroup(player));
-        gameService.setTeam(actor, gameService.getTeam(player));
+        // 改变客户端角色分组及队伍，注：这里不要依赖于player,因为客户端可能比服务端玩家还先载入。
+        gameService.setGroup(actor, GROUP_PLAYER);
+        gameService.setTeam(actor, TEAM_PLAYER);
         super.onAddClientPlayer(cd, actor);
     }
     
     @Override
-    protected boolean processMessage(GameServer gameServer, HostedConnection source, Message m) {
+    protected void processGameMess(GameServer gameServer, HostedConnection source, GameMess m) {
         // 如果客户端偿试要求载入存档，则从存档中载入，如果不存在存档（新游戏）或存档中没有指定客户端的资料则返回false
         // 以通知客户端自己去选择一个角色来进行游戏
         if (m instanceof ActorLoadSavedMess) {
@@ -161,12 +169,12 @@ public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
                         // 通知所有客户更新“客户端列表”
                         gameServer.broadcast(new ClientsMess(gameServer.getClients()));
                         
-                        return true;
+                        return;
                     }
                 }
             }
             gameServer.send(source, new ActorLoadSavedResultMess(false));
-            return true;
+            return;
         }
 
         // 当服务端（故事模式）接收到客户端退出游戏的消息时，服务端要保存客户端的资料,以便下次客户端连接时能够继续
@@ -177,7 +185,8 @@ public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
                 SaveHelper.saveStoryLast(saveStory);
             }
         }
-        return super.processMessage(gameServer, source, m);
+        
+        super.processGameMess(gameServer, source, m);
     }
     
     /**
@@ -197,7 +206,7 @@ public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
             for (EntityData ad : actors) {
                 Actor tempActor = Loader.load(ad);
                 if  (gameService.getOwner(tempActor) == actor.getEntityId()) {
-                    getScene().addEntity(tempActor);
+                    playNetwork.addEntity(tempActor);
                 }
             }
         } else {
@@ -240,7 +249,6 @@ public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
         Actor clientPlayer= Loader.load(clientPlayerData);
         onAddClientPlayer(cd, clientPlayer);
         
-        PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
         for (EntityData entityData : actors) {
             Actor actor = Loader.load(entityData);
             if (gameService.getOwner(actor) == clientPlayerData.getUniqueId()) {

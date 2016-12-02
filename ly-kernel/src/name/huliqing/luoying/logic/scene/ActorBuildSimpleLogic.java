@@ -18,6 +18,7 @@ import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.game.Game;
 import name.huliqing.luoying.object.gamelogic.AbstractGameLogic;
 import name.huliqing.luoying.utils.ThreadHelper;
 
@@ -69,7 +70,10 @@ public class ActorBuildSimpleLogic extends AbstractGameLogic {
     }
 
     @Override
-    protected void doLogicUpdate(float tpf) {
+    protected void logicInit(Game game) {}
+
+    @Override
+    protected void logicUpdate(float tpf) {
         for (ActorBuilder abData : datas) {
             if (abData.actor != null) {
                 if (abData.actor.getScene() != null) {

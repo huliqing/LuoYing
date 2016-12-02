@@ -23,6 +23,7 @@ import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.drop.Drop;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.game.Game;
 import name.huliqing.luoying.object.gamelogic.AbstractGameLogic;
 import name.huliqing.luoying.object.module.DropModule;
 import name.huliqing.luoying.object.module.StateModule;
@@ -288,9 +289,12 @@ public class StoryGbTask2 extends AbstractTaskStep{
     private class GbRemoveChecker extends AbstractGameLogic {
         
         private Entity gb;
+
+        @Override
+        protected void logicInit(Game game) {}
         
         @Override
-        protected void doLogicUpdate(float tpf) {
+        protected void logicUpdate(float tpf) {
             if (gb == null) {
                 gb = findActorById(IdConstants.ACTOR_GB);
                 if (gb == null) {
@@ -313,8 +317,12 @@ public class StoryGbTask2 extends AbstractTaskStep{
         public TowerChecker() {
             interval = 1;
         }
+
         @Override
-        protected void doLogicUpdate(float tpf) {
+        protected void logicInit(Game game) {}
+    
+        @Override
+        protected void logicUpdate(float tpf) {
             for (Entity tower : towers) {
                 if (!gameService.isDead(tower)) {
                     allTowerDead = false;
@@ -332,8 +340,12 @@ public class StoryGbTask2 extends AbstractTaskStep{
         public TaskOkChecker() {
             interval = 3;// 3秒检测一次
         }
+        
         @Override
-        protected void doLogicUpdate(float tpf) {
+        protected void logicInit(Game game) {}
+        
+        @Override
+        protected void logicUpdate(float tpf) {
             ok = taskPanel.isOk();
             
             // 如果任务完成，则弹出提示,并转到下一阶段

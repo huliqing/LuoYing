@@ -97,7 +97,7 @@ public class RoomStateServerImpl extends AbstractAppState implements RoomState {
             // 创建服务端
             gameServer = Network.getInstance().createGameServer(gameData, LyConfig.getGameName()
                     , LyConfig.getVersionName(), LyConfig.getVersionCode(), LyConfig.getServerPort());
-            gameServer.setServerListener(new LanRoomServerListener(app));
+            gameServer.setServerListener(new LanRoomServerListener());
             // 打开局域网广播功能
             gameServer.setLanDiscoverEnabled(true);
             // 开启服务端
@@ -180,10 +180,6 @@ public class RoomStateServerImpl extends AbstractAppState implements RoomState {
     
     private class LanRoomServerListener extends DefaultServerListener {
 
-        public LanRoomServerListener(Application app) {
-            super(app);
-        }
-
         @Override
         public void update(float tpf, GameServer gameServer) {}
 
@@ -203,7 +199,11 @@ public class RoomStateServerImpl extends AbstractAppState implements RoomState {
         }
 
         @Override
-        protected void onReceiveGameMess(GameServer gameServer, HostedConnection source, GameMess m) {}
+        protected void onReceiveGameMess(GameServer gameServer, HostedConnection source, GameMess m) {
+            // ignore
+        }
+        
+        
         
     }
     

@@ -59,7 +59,7 @@ class ProtoUtils {
      * @return 
      */
     private static Proto extendsProto(DataStore dataStore, Proto proto, Proto parent, List<String> checker) {
-        LOG.log(Level.INFO, "====processor extends: {0} extends {1}", new Object[] {proto, parent});
+//        LOG.log(Level.INFO, "====processor extends: {0} extends {1}", new Object[] {proto, parent});
         
         // 防止自继承
         if (proto == parent) {
@@ -104,7 +104,7 @@ class ProtoUtils {
         // 检查dataLoader和dataProcessor,如果没有的话则应该动态确定一个。
         checkLoaderAndProcessor(proto);
         
-        LOG.log(Level.INFO, "processor extends result => {0}", proto);
+//        LOG.log(Level.INFO, "processor extends result => {0}", proto);
         return proto;
         
     }

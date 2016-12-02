@@ -8,11 +8,10 @@ import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.network.ClientStateListener;
-import com.jme3.network.Message;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.LuoYing;
-import name.huliqing.luoying.network.AbstractClientListener;
+import name.huliqing.luoying.mess.GameMess;
 import name.huliqing.luoying.network.GameClient;
 import name.huliqing.luoying.network.Network;
 import name.huliqing.luoying.network.GameServer.ServerState;
@@ -20,6 +19,7 @@ import name.huliqing.luoying.mess.network.GetGameDataMess;
 import name.huliqing.luoying.mess.network.ClientsMess;
 import name.huliqing.luoying.mess.network.GameDataMess;
 import name.huliqing.luoying.mess.network.ServerStateMess;
+import name.huliqing.luoying.network.DefaultClientListener;
 import name.huliqing.luoying.object.game.GameAppState;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.ly.view.HelpView;
@@ -108,7 +108,7 @@ public class RoomStateClientImpl extends AbstractAppState implements RoomState {
                         , LyConfig.getVersionCode()
                         , roomData.getHost(), roomData.getPort());
             }
-            gameClient.setGameClientListener(new RoomClientListener(app));
+            gameClient.setGameClientListener(new RoomClientListener());
             gameClient.start();
         } catch (Exception ex) {
             back();
@@ -171,11 +171,7 @@ public class RoomStateClientImpl extends AbstractAppState implements RoomState {
         }
     }
 
-    private class RoomClientListener extends AbstractClientListener {
-
-        public RoomClientListener(Application app) {
-            super(app);
-        }
+    private class RoomClientListener extends DefaultClientListener {
 
         @Override
         protected void onReceiveMessGameData(GameClient gameClient, GameDataMess mess) {
@@ -224,12 +220,11 @@ public class RoomStateClientImpl extends AbstractAppState implements RoomState {
         }
         
         @Override
-        protected void onGameInitialized() {
-        }
+        protected void onGameInitialize(int initEntityTotal) {}
         
         @Override
-        protected void onReceiveGameMess(GameClient gameClient, Message m) {
-            // ignore
+        protected void processGameMess(GameClient gameClient, GameMess m) {
+            // ignore 
         }
 
 

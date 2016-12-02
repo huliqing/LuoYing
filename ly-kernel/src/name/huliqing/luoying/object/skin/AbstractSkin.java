@@ -204,12 +204,12 @@ public abstract class AbstractSkin implements Skin {
                 localLocation.negateLocal();
             }
             
-            if (Config.debug) {
-                Logger.getLogger(getClass().getName())
-                        .log(Level.INFO, "Skin model attach Transform => localRotation={0}, localScale={1}, localTranslation={2}"
-                        , new Object[] {localRotation.toString(), localScale.toString(), localLocation.toString()});
-                
-            }
+//            if (Config.debug) {
+//                Logger.getLogger(getClass().getName())
+//                        .log(Level.INFO, "Skin model attach Transform => localRotation={0}, localScale={1}, localTranslation={2}"
+//                        , new Object[] {localRotation.toString(), localScale.toString(), localLocation.toString()});
+//                
+//            }
             
             boneNode.attachChild(skinNode);
             

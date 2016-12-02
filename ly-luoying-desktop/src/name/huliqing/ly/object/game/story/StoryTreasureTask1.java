@@ -17,6 +17,7 @@ import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.logic.scene.ActorLoadHelper;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.game.Game;
 import name.huliqing.luoying.object.gamelogic.AbstractGameLogic;
 import name.huliqing.luoying.ui.Button;
 import name.huliqing.luoying.ui.TextPanel;
@@ -85,7 +86,7 @@ public class StoryTreasureTask1 extends AbstractTaskStep {
         gameNetwork.setGroup(player, _game.groupPlayer);
         
         treasureLoader = new ActorLoadHelper(IdConstants.ACTOR_TREASURE){
-            @Override
+            @Override 
             public void callback(Entity actor) {
                 treasure = actor;
                 actorService.setLocation(treasure, _game.treasurePos);
@@ -295,7 +296,10 @@ public class StoryTreasureTask1 extends AbstractTaskStep {
         }
 
         @Override
-        protected void doLogicUpdate(float tpf) {
+        protected void logicInit(Game game) {}
+
+        @Override
+        protected void logicUpdate(float tpf) {
             if (index == 0) {
                 gameService.addMessage(get("help.run"), MessageType.info);
                 index++;

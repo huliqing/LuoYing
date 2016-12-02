@@ -204,7 +204,7 @@ public class SimpleGame implements Game<GameData>, SceneListener {
         if (oldScene != null) {
             if (listeners != null) {
                 for (GameListener gl : listeners) {
-                    gl.onGameSceneChangeBefore(this, oldScene, newScene);
+                    gl.onGameSceneChange(this, oldScene, newScene);
                 }
             }
             if (oldScene.isInitialized()) {
@@ -233,9 +233,7 @@ public class SimpleGame implements Game<GameData>, SceneListener {
         data.setGuiSceneData(newGuiScene.getData());
         guiScene = newGuiScene;
         guiScene.setProcessorViewPorts(app.getGuiViewPort());
-        if (!guiScene.isInitialized()) {
-            guiScene.initialize();
-        }
+        guiScene.initialize();
         app.getGuiNode().attachChild(guiScene.getRoot());
     }
 

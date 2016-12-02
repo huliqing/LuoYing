@@ -22,19 +22,17 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.LuoYing;
-import name.huliqing.luoying.constants.IdConstants;
 import name.huliqing.luoying.data.SceneData;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.sceneloader.SceneLoader;
-import name.huliqing.luoying.object.sceneloader.SceneLoaderListener;
 import name.huliqing.luoying.utils.MaterialUtils;
+import name.huliqing.luoying.object.progress.Progress;
 
 /**
  * 抽象场景类
  * @author huliqing
  */
-public abstract class AbstractScene implements Scene, SceneLoaderListener {
+public abstract class AbstractScene implements Scene, SceneLoader.Listener {
     private static final Logger LOG = Logger.getLogger(AbstractScene.class.getName());
     
     /** 场景数据 */
@@ -68,7 +66,7 @@ public abstract class AbstractScene implements Scene, SceneLoaderListener {
      * 1.把半透明的物体的QueueBucket设置为Bucket.Translucent<br>
      * 2.把一个TranslucentBucketFilter实例添加到FilterPostProcessor的<b>最后面</b>
      */
-    protected final TranslucentBucketFilter translucentBucketFilter = new TranslucentBucketFilter();
+    protected TranslucentBucketFilter translucentBucketFilter;
 
     /** 默认要作为SceneProcessor的ViewPort */
     protected ViewPort[] processorViewPorts;
@@ -99,6 +97,7 @@ public abstract class AbstractScene implements Scene, SceneLoaderListener {
         if (initialized) {
             throw new IllegalStateException("Scene is already initialized! sceneId=" + data.getId());
         }
+        translucentBucketFilter = new TranslucentBucketFilter();
         
         // 主要用于防止阴影、天空盒、特效粒子的BUG。查看上面说明:
         if (sceneOrigin == null) {
@@ -108,14 +107,14 @@ public abstract class AbstractScene implements Scene, SceneLoaderListener {
         }
         root.attachChildAt(sceneOrigin, 0);
         
-        // 载入器载入场景,如果没有指定任何载入器，则默认使用一个阻塞形的载入器
-        String sceneLoaderId = data.getSceneLoader();
-        if (sceneLoaderId == null) {
-            sceneLoaderId = IdConstants.SYS_SCENE_LOADER_BLOCK;
+        // 载入场景
+        SceneLoader sl = new SceneLoader();
+        sl.addListener(this);
+        String progressId = data.getProgress();
+        if (progressId != null) {
+            sl.setProgress((Progress) Loader.load(progressId));
         }
-        SceneLoader sceneLoader = Loader.load(sceneLoaderId);
-        sceneLoader.addListener(this);
-        sceneLoader.loadScene(this);
+        sl.load(this);
     }
     
     @Override
@@ -135,14 +134,30 @@ public abstract class AbstractScene implements Scene, SceneLoaderListener {
     
     @Override
     public void cleanup() {
+        if (listeners != null) {
+            listeners.clear();
+        }
         for (Entity entity : entities.getArray()) {
             entity.cleanup();
         }
         entities.clear();
-        root.detachAllChildren();
-        if (listeners != null) {
-            listeners.clear();
+        
+        // 这里要清理掉Processor和Filter否则这些东西会常驻内存，并导致FrameBuffer越来越多，越来越慢。
+        // 并且导致QueueBucket渲染存在一些问题，比如一些半透明的物体始终挡在不透明物体前面。
+        if (defaultFilterPostProcessor != null) {
+            if (translucentBucketFilter != null) {
+                defaultFilterPostProcessor.removeFilter(translucentBucketFilter);
+                translucentBucketFilter = null;
+            }
+            if (processorViewPorts != null) {
+                for (ViewPort viewPort : processorViewPorts) {
+                    viewPort.removeProcessor(defaultFilterPostProcessor);
+                }
+            }
+            defaultFilterPostProcessor = null;
         }
+        
+        root.detachAllChildren();
         initialized = false;
     }    
     

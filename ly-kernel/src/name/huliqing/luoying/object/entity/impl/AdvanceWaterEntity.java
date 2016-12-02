@@ -6,25 +6,25 @@
 package name.huliqing.luoying.object.entity.impl;
 
 import com.jme3.light.DirectionalLight;
-import com.jme3.light.Light;
-import com.jme3.light.LightList;
 import com.jme3.math.Vector3f;
 import com.jme3.texture.Texture2D;
 import com.jme3.water.WaterFilter;
 import com.jme3.water.WaterFilter.AreaShape;
+import java.util.List;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.data.EntityData;
+import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.entity.LightEntity;
 import name.huliqing.luoying.object.entity.NonModelEntity;
 import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.object.scene.SceneListener;
-import name.huliqing.luoying.object.scene.SceneListenerAdapter;
 import name.huliqing.luoying.object.entity.WaterEntity;
 
 /**
  * 高级水体环境
  * @author huliqing
  */
-public class AdvanceWaterEntity extends NonModelEntity implements WaterEntity {
+public class AdvanceWaterEntity extends NonModelEntity implements WaterEntity, SceneListener {
 
     private String causticsTexture;
     private String foamTexture;
@@ -36,11 +36,10 @@ public class AdvanceWaterEntity extends NonModelEntity implements WaterEntity {
     private boolean useSceneLight = true;
     
     // ---- inner
-    private final WaterFilter water = new WaterFilter();
+    private WaterFilter water;
     // 水体的半径平方,用于优化检测isUnderWater。
     private float radiusSquared;
     private final Vector3f tempCenter = new Vector3f();
-    private SceneListener sceneListener;
     
     @Override
     public void setData(EntityData data) {
@@ -49,13 +48,23 @@ public class AdvanceWaterEntity extends NonModelEntity implements WaterEntity {
         this.foamTexture = data.getAsString("foamTexture");
         this.heightTexture = data.getAsString("heightTexture");
         this.normalTexture = data.getAsString("normalTexture");
+        // ---- custom 
+        useSceneLight = data.getAsBoolean("useSceneLight", useSceneLight);
+    }
+
+    @Override
+    public void updateDatas() {
+        super.updateDatas();
+    }
+
+    @Override
+    public void initEntity() {
+        water = new WaterFilter();
         water.setCausticsIntensity(data.getAsFloat("causticsIntensity", water.getCausticsIntensity()));
-        
         Vector3f center = data.getAsVector3f("center");
         if (center != null) {
             water.setCenter(center);
         }
-
         water.setColorExtinction(data.getAsVector3f("colorExtinction", water.getColorExtinction()));
         water.setDeepWaterColor(data.getAsColor("deepWaterColor", water.getDeepWaterColor()));
         water.setFoamExistence(data.getAsVector3f("foamExistence", water.getFoamExistence()));
@@ -96,17 +105,6 @@ public class AdvanceWaterEntity extends NonModelEntity implements WaterEntity {
         water.setWindDirection(data.getAsVector2f("windDirection", water.getWindDirection()));
         radiusSquared = water.getRadius() * water.getRadius();
         
-        // ---- custom 
-        useSceneLight = data.getAsBoolean("useSceneLight", useSceneLight);
-    }
-
-    @Override
-    public void updateDatas() {
-        super.updateDatas();
-    }
-
-    @Override
-    public void initEntity() {
         if (causticsTexture != null) {
             water.setCausticsTexture((Texture2D) LuoYing.getApp().getAssetManager().loadTexture(causticsTexture));
         }
@@ -125,21 +123,20 @@ public class AdvanceWaterEntity extends NonModelEntity implements WaterEntity {
     public void onInitScene(Scene scene) {
         super.onInitScene(scene);
         water.setReflectionScene(scene.getRoot());
-        sceneListener = new SceneListenerAdapter() {
-            @Override
-            public void onSceneLoaded(Scene scene) {
-                findAndSetLigght(scene);
-            }
-        };
-        scene.addSceneListener(sceneListener);
+        scene.addSceneListener(this);
         // 控制水体渲染
         scene.addFilter(water);
+        if (scene.isInitialized()) {
+            findAndSetLight();
+        }
     }
 
     @Override
     public void cleanup() {
-        scene.removeSceneListener(sceneListener);
+        scene.removeSceneListener(this);
+        // 清理Filter,注意：清理后尽量把Filter设置为null,避免让FrameBuffer存在于内存中。
         scene.removeFilter(water);
+        water = null;
         super.cleanup();
     }
     
@@ -173,23 +170,47 @@ public class AdvanceWaterEntity extends NonModelEntity implements WaterEntity {
         }
         return false;
     }
+    
+    @Override
+    public void onSceneLoaded(Scene scene) {
+        findAndSetLight();
+    }
 
-    public void findAndSetLigght(Scene scene) {
-        // 从场景中找到第一个直射光源作为水体渲染光源用。
-        if (useSceneLight) {
-            LightList lights = scene.getRoot().getLocalLightList();
-            if (lights.size() > 0) {
-                for (int i = 0; i < lights.size(); i++) {
-                    Light light = lights.get(i);
-                    if (light instanceof DirectionalLight) {
-                        DirectionalLight dl = (DirectionalLight) light;
-                        water.setLightDirection(dl.getDirection());
-                        water.setLightColor(dl.getColor());
-                        break;
-                    }
-                }
-            }            
+    @Override
+    public void onSceneEntityAdded(Scene scene, Entity entityAdded) {
+        if (entityAdded instanceof LightEntity) {
+            LightEntity le = (LightEntity) entityAdded;
+            if (le.getLight() instanceof DirectionalLight) {
+                setWaterLight((DirectionalLight) le.getLight());
+            }
         }
+    }
+
+    @Override
+    public void onSceneEntityRemoved(Scene scene, Entity entityRemoved) {
+        // 当场景中移除了灯光时重新查找新的灯光。
+        if (entityRemoved instanceof LightEntity) {
+            findAndSetLight();
+        }
+    }
+    
+    private void findAndSetLight() {
+        List<Entity> es = scene.getEntities();
+        LightEntity le;
+        for (Entity e : es) {
+            if (e instanceof LightEntity) {
+                le = (LightEntity) e;
+                if (le.getLight() instanceof DirectionalLight) {
+                    setWaterLight((DirectionalLight) le.getLight());
+                    return;
+                }
+            }
+        }
+    }
+    
+    private void setWaterLight(DirectionalLight light) {
+        water.setLightDirection(light.getDirection());
+        water.setLightColor(light.getColor());
     }
     
     // 控制潮涨潮落
@@ -221,6 +242,8 @@ public class AdvanceWaterEntity extends NonModelEntity implements WaterEntity {
 //        protected void controlRender(RenderManager rm, ViewPort vp) {}
 //        
 //    }
+
+
 
 
 

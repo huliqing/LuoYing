@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.luoying.object.sceneloader;
+package name.huliqing.luoying.object.progress;
 
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
@@ -11,26 +11,22 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Quad;
-import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.LuoYing;
-import name.huliqing.luoying.layer.service.PlayService;
-import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.utils.MaterialUtils;
 
 /**
  *
  * @author huliqing
  */
-public class SimpleSceneLoader extends ProgressSceneLoader {
-
-    private final PlayService playService = Factory.get(PlayService.class);
+public class SimpleProgress extends AbstractProgress {
     
     private Node progress;
     private Spatial background;
     private Spatial foreground;
 
     @Override
-    protected void initProgress(Scene scene) {
+    public void initialize(Node viewRoot) {
+        super.initialize(viewRoot);
         float sw = LuoYing.getSettings().getWidth();
         float sh = LuoYing.getSettings().getHeight();
         
@@ -50,19 +46,18 @@ public class SimpleSceneLoader extends ProgressSceneLoader {
         progress.setLocalScale(pWidth, pHeight, 1);
         progress.setLocalTranslation(leftMargin, sh * 0.5f, 0);
         
-        Node guiRoot = playService.getGame().getGuiScene().getRoot();
-        guiRoot.attachChild(progress);
-    }
-
-    @Override
-    protected void cleanup() {
-        progress.removeFromParent();
-        super.cleanup(); 
+        viewRoot.attachChild(progress);
     }
     
     @Override
-    protected void displayProgress(float progress) {
+    public void display(float progress) {
         foreground.setLocalScale(progress, 1, 1);
+    }
+    
+    @Override
+    public void cleanup() {
+        progress.removeFromParent();
+        super.cleanup();
     }
     
     private Geometry createBox(String name, ColorRGBA color) {

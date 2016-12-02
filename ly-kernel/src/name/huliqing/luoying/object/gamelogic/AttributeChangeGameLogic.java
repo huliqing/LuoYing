@@ -16,6 +16,7 @@ import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.el.SBooleanEl;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.game.Game;
 
 /**
  * 用于修改场景中角色属性值的游戏逻辑，可用于如：为场景中所有角色提示生命值恢复，魔法值恢复，等。
@@ -60,9 +61,12 @@ public class AttributeChangeGameLogic extends AbstractGameLogic {
             interval = 1;
         }
     }
+
+    @Override
+    protected void logicInit(Game game) {}
     
     @Override
-    protected void doLogicUpdate(float tpf) {
+    protected void logicUpdate(float tpf) {
         tempStore.clear();
         playService.getEntities(Actor.class, tempStore);
         if (tempStore.isEmpty())

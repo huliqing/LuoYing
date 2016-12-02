@@ -28,8 +28,7 @@ public abstract class PlayStateUI extends AbstractGameLogic {
     protected SettingView settingPanel;
 
     @Override
-    protected void doLogicInit(Game game) {
-        super.doLogicInit(game);
+    protected void logicInit(Game game) {
         // 设置面板是公共必须有的
         float sw = LuoYing.getSettings().getWidth();
         float sh = LuoYing.getSettings().getHeight();

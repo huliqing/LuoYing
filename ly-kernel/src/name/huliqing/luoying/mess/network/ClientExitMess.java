@@ -6,13 +6,13 @@
 package name.huliqing.luoying.mess.network;
 
 import com.jme3.network.serializing.Serializable;
-import name.huliqing.luoying.mess.BaseMess;
+import name.huliqing.luoying.mess.GameMess;
 
 /**
  * 客户端向服务端发送退出游戏的消息，即告诉服务端客户端正在退出游戏.
  * @author huliqing
  */
 @Serializable
-public class ClientExitMess extends BaseMess {
+public class ClientExitMess extends GameMess {
     
 }

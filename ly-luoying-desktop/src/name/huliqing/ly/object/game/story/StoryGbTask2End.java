@@ -24,6 +24,7 @@ import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.game.Game;
 import name.huliqing.luoying.object.gamelogic.AbstractGameLogic;
 import name.huliqing.ly.constants.IdConstants;
 import name.huliqing.ly.constants.StoryConstants;
@@ -99,7 +100,10 @@ public class StoryGbTask2End extends AbstractGameLogic {
     }
 
     @Override
-    protected void doLogicUpdate(float tpf) {
+    protected void logicInit(Game game) {}
+
+    @Override
+    protected void logicUpdate(float tpf) {
         // 载入gb
         if (stage == 0) {
             _game.addLogic(gbLoader);

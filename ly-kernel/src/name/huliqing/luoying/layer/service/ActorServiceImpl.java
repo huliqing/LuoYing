@@ -147,11 +147,11 @@ public class ActorServiceImpl implements ActorService {
 //        }
 //        return store;
 //    }
-
-    @Override
-    public List<Entity> findNearestActors(Entity actor, float maxDistance, List<Entity> store) {
-        return findNearestActors(actor, maxDistance, 360, store);
-    }
+//
+//    @Override
+//    public List<Entity> findNearestActors(Entity actor, float maxDistance, List<Entity> store) {
+//        return findNearestActors(actor, maxDistance, 360, store);
+//    }
 
     @Override
     public List<Entity> findNearestActors(Entity actor, float maxDistance, float angle, List<Entity> store) {

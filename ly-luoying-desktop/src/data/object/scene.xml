@@ -21,7 +21,7 @@
     <!-- ========================================================================= -->
     
     <!--黄金宝箱场景-->
-    <sceneRandom id="sceneTreasure" sceneLoader="sysSceneLoaderSimple"
+    <sceneRandom id="sceneTreasure" progress="sysProgressSimple"
                  entities="entitySky,entityDirectionalLight,entityAmbientLight,entityPhysics,entityCameraThirdView
 ,entitySakuraIslandTerrain,entitySakuraIslandBoundary,entitySakuraIslandWater,entitySakuraIslandSeaAudio
 ,entityShadow
@@ -33,19 +33,6 @@
 ,entityGrass1|4,entityGrass2|4,entityGrass3|4,entityGrass4|4"
 randomXExtent="100" randomZExtent="100"
 />
-    
-<!--    <sceneRandom id="sceneTreasure" 
-                 entities="entitySky,entityDirectionalLight,entityAmbientLight,entityPhysics,entityCameraThirdView
-,entitySakuraIslandTerrain,entitySakuraIslandBoundary,entitySakuraIslandWater,entitySakuraIslandSeaAudio
-,entityShadow
-" 
-                 emptyZones="0|0|10" 
-                 randomEntities="entityTree1|4,entityTree2|4,entityTree3|4,entityTree4|4
-,entityFir1|4,entityFir2|4,entityFir3|4
-,entityFlower0|4,entityFlower1|4
-,entityGrass1|4,entityGrass2|4,entityGrass3|4,entityGrass4|4"
-randomXExtent="100" randomZExtent="100"
-/>-->
     
     <!--千年古柏场景-->
     <sceneRandom id="sceneGb" extends="sceneTreasure"  emptyZones="0|0|5,44|-61|12,-14|65|12" />

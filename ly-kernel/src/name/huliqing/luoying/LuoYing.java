@@ -52,7 +52,7 @@ import name.huliqing.luoying.data.PositionData;
 import name.huliqing.luoying.data.ResistData;
 import name.huliqing.luoying.data.SavableArrayList;
 import name.huliqing.luoying.data.SceneData;
-import name.huliqing.luoying.data.SceneLoaderData;
+import name.huliqing.luoying.data.ProgressData;
 import name.huliqing.luoying.data.ShapeData;
 import name.huliqing.luoying.data.ShortcutData;
 import name.huliqing.luoying.data.SkillData;
@@ -227,6 +227,7 @@ import name.huliqing.luoying.mess.EntityRemoveDataMess;
 import name.huliqing.luoying.mess.EntityUseDataMess;
 import name.huliqing.luoying.mess.EntityUseDataByIdMess;
 import name.huliqing.luoying.mess.RandomSeedMess;
+import name.huliqing.luoying.mess.SceneLoadedMess;
 import name.huliqing.luoying.mess.SkillPlayMess;
 import name.huliqing.luoying.mess.network.RequestGameInitMess;
 import name.huliqing.luoying.mess.network.RequestGameInitOkMess;
@@ -274,8 +275,7 @@ import name.huliqing.luoying.object.module.DropModule;
 import name.huliqing.luoying.object.module.LevelModule;
 import name.huliqing.luoying.object.module.PhysicsModule;
 import name.huliqing.luoying.object.scene.SimpleScene;
-import name.huliqing.luoying.object.sceneloader.BlockSceneLoader;
-import name.huliqing.luoying.object.sceneloader.SimpleSceneLoader;
+import name.huliqing.luoying.object.progress.SimpleProgress;
 import name.huliqing.luoying.object.slot.Slot;
 import name.huliqing.luoying.object.state.BooleanAttributeState;
 import name.huliqing.luoying.object.state.GroupState;
@@ -371,6 +371,7 @@ public class LuoYing {
         Serializer.registerClass(ModelEntityData.class);
         Serializer.registerClass(ModuleData.class);
         Serializer.registerClass(PositionData.class);
+        Serializer.registerClass(ProgressData.class);
         Serializer.registerClass(ResistData.class);
         Serializer.registerClass(SavableArrayList.class);
         Serializer.registerClass(SceneData.class);
@@ -546,6 +547,9 @@ public class LuoYing {
         DataFactory.register("positionFixedPoint",  PositionData.class, PositionDataLoader.class, FixedPosition.class);
         DataFactory.register("positionView",  PositionData.class, PositionDataLoader.class, ViewPosition.class);
         
+        // Progress
+        DataFactory.register("progressSimple", ProgressData.class, null, SimpleProgress.class);
+        
         // Resist
         DataFactory.register("resistSimple",  ResistData.class, ResistDataLoader.class, SimpleResist.class);
         DataFactory.register("resistAll",  ResistData.class, ResistDataLoader.class, AllResist.class);
@@ -553,10 +557,6 @@ public class LuoYing {
         // Scene
         DataFactory.register("scene", SceneData.class, SceneDataLoader.class, SimpleScene.class);
         DataFactory.register("sceneRandom", SceneData.class, RandomSceneDataLoader.class, SimpleScene.class);
-        
-        // SceneLoader
-        DataFactory.register("sceneLoaderBlock", SceneLoaderData.class, null, BlockSceneLoader.class);
-        DataFactory.register("sceneLoaderSimple", SceneLoaderData.class, null, SimpleSceneLoader.class);
         
         // Shape
         DataFactory.register("shapeBox",  ShapeData.class, ShapeDataLoader.class, BoxShape.class);
@@ -618,7 +618,7 @@ public class LuoYing {
         loadData("/LuoYing/Data/game.xml");
         loadData("/LuoYing/Data/module.xml");
         loadData("/LuoYing/Data/scene.xml");
-        loadData("/LuoYing/Data/sceneLoader.xml");
+        loadData("/LuoYing/Data/progress.xml");
         
 //        loadData("/LuoYing/Data/actor.xml");
 //        loadData("/LuoYing/Data/actorAnim.xml");
@@ -723,6 +723,9 @@ public class LuoYing {
         // 随机种子
         Serializer.registerClass(RandomSeedMess.class);
         
+        // Scene
+        Serializer.registerClass(SceneLoadedMess.class);
+        
         // Skill
         Serializer.registerClass(SkillPlayMess.class);
         Serializer.registerClass(SkillWalkMess.class);
@@ -742,7 +745,7 @@ public class LuoYing {
      * 获取Application
      * @return 
      */
-    public static Application getApp() {
+    public final static Application getApp() {
         return app;
     }
 

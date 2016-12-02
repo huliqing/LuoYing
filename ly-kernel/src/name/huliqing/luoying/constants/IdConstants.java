@@ -80,10 +80,9 @@ public class IdConstants {
     // Scene Loader
     // =============================================================================
     
-    /** 使用阻塞方式的场景载入器  */
-    public final static String SYS_SCENE_LOADER_BLOCK = "sysSceneLoaderBlock";
+
     /** 简单的场景载入器 */
-    public final static String SYS_SCENE_LOADER_SIMPLE = "sysSceneLoaderSimple";
+    public final static String SYS_PROGRESS_SIMPLE = "sysProgressSimple";
     
     // =============================================================================
     // Entity: Env

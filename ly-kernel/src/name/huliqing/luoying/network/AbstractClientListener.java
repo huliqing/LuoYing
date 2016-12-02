@@ -39,8 +39,6 @@ public abstract class AbstractClientListener implements ClientListener {
     private final ConfigService configService = Factory.get(ConfigService.class);
     private final SystemService systemService = Factory.get(SystemService.class);
     
-    private final Application app; 
-    
     // 用于检查服务端状态
     private final Detector detector = new Detector();
     
@@ -72,9 +70,7 @@ public abstract class AbstractClientListener implements ClientListener {
     // 用于向服务端发送的Ping消息
     private final PingMess messPing = new PingMess();
     
-    public AbstractClientListener(Application app) {
-        this.app = app;
-    }
+    public AbstractClientListener() {}
 
     /**
      * 获取所有客户端,注：该列表只能用于只读操作,不要手动修改该列表
@@ -112,24 +108,12 @@ public abstract class AbstractClientListener implements ClientListener {
     
     @Override
     public final  void clientConnected(final GameClient gameClient) {
-        app.enqueue(new Callable() {
-            @Override
-            public Object call() throws Exception {
-                onConnected(gameClient);
-                return null;
-            }
-        });
+        onConnected(gameClient);
     }
 
     @Override
     public final void clientDisconnected(final GameClient gameClient,  final DisconnectInfo info) {
-        app.enqueue(new Callable() {
-            @Override
-            public Object call() throws Exception {
-                onClientDisconnected(gameClient, info);
-                return null;
-            }
-        });
+        onClientDisconnected(gameClient, info);
     }
     
     @Override
@@ -160,13 +144,7 @@ public abstract class AbstractClientListener implements ClientListener {
     
     @Override
     public final void clientMessage(final GameClient gameClient, final Message m) {
-        app.enqueue(new Callable() {
-            @Override
-            public Object call() throws Exception {
-                receiveMessage(gameClient, m);
-                return null;
-            }
-        });
+        receiveMessage(gameClient, m);
     }
     
     private void receiveMessage(GameClient gameClient, Message m) {
@@ -175,7 +153,7 @@ public abstract class AbstractClientListener implements ClientListener {
         // 客户端已经初始化完成，一切准备就绪才可以。如果在这之前处理游戏命令消息可能会导致客户端和服务端的状态不同步。
         if (m instanceof GameMess) {
             if (gameClient.getClientState() == ClientState.running) {
-                onReceiveGameMess(gameClient, m);
+                onReceiveGameMess(gameClient, (GameMess) m);
             } else {
                 LOG.log(Level.WARNING, "ClientListener is not ready to process \"GameMess\""
                         + ", because the GameClient is not in \"running\" state! ClientState={0}, message={1}"
@@ -280,7 +258,7 @@ public abstract class AbstractClientListener implements ClientListener {
      */
     protected void onReceiveGameInitOk(GameClient gameClient, RequestGameInitOkMess mess) {
         gameClient.setClientState(ClientState.running);
-        onGameInitialized();
+        onGameInitialize(mess.getInitEntityCount());
     }
     
     /**
@@ -291,17 +269,19 @@ public abstract class AbstractClientListener implements ClientListener {
     protected abstract void onClientDisconnected(GameClient gameClient, DisconnectInfo info);
     
     /**
-     * 当客户端从ready转入Running状态时该方法被自动调用(一次)，这表明客户端已经完成与服务端的初始化（例如场景实体的
-     * 初始化). 可以开始正常交互游戏指令了。子类实现这个方法来开始实现与服务端的游戏交互(例如弹出角色选择界面来).
+     * 当客户端从ready转入Running状态时该方法被自动调用(一次)，这表明客户端已经完成与服务端的初始化,
+     * 接下来会接收到来自服务端的初始化场景的实体，数量为initEntityTotal所指定的实体数,这些实体数据是连续发送的，
+     * 用于初始化客户端场景。
+     * @param initEntityTotal
      */
-    protected abstract void onGameInitialized();
+    protected abstract void onGameInitialize(int initEntityTotal);
     
     /**
      * 运行时处理来自服务端传来的消息, 注：这个方法只有在客户端状态进入running之后才会被调用。
      * @param gameClient
      * @param m 
      */
-    protected abstract void onReceiveGameMess(GameClient gameClient, Message m);
+    protected abstract void onReceiveGameMess(GameClient gameClient, GameMess m);
     
 
 }

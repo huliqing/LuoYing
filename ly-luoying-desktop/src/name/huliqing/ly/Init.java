@@ -19,6 +19,7 @@ import name.huliqing.luoying.data.ModuleData;
 import name.huliqing.luoying.loader.GameDataLoader;
 import name.huliqing.luoying.manager.ResManager;
 import name.huliqing.luoying.object.Loader;
+import name.huliqing.luoying.object.sound.SoundManager;
 import name.huliqing.luoying.xml.DataFactory;
 import name.huliqing.ly.data.ChatData;
 import name.huliqing.ly.data.ViewData;
@@ -74,6 +75,7 @@ public class Init {
         LyConfig.setConfigData((ConfigData) Loader.loadData("configRelease"));
 //        name.huliqing.luoying.Config.debug = LyConfig.isDebug();
         Config.debug = true;
+        SoundManager.getInstance().setVolume(0.1f);
         
         // 载入资源,作为默认
         ResManager.loadResource("/data/font/en_US/resource",                "utf-8", null);

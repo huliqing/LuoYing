@@ -28,6 +28,7 @@ import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.game.Game;
 import name.huliqing.luoying.object.gamelogic.AbstractGameLogic;
 import name.huliqing.luoying.object.logic.Logic;
 import name.huliqing.luoying.utils.MathUtils;
@@ -225,7 +226,7 @@ public class StoryGuardTask2 extends AbstractTaskStep {
         enemyActorBuilder0.addBuilder(getRandomPosition(game.getEnemyPosition())
                 , new String[]{IdConstants.ACTOR_BEAR},  resurrectInterval, enemyCallback);
         // towers
-        enemyTowerLoader = new ActorMultLoadHelper(enemyTowers) {
+        enemyTowerLoader = new ActorMultLoadHelper(enemyTowers) { 
             @Override
             public void callback(Entity actor, int loadIndex) {
                 setEnemyActor(actor, true);
@@ -495,9 +496,12 @@ public class StoryGuardTask2 extends AbstractTaskStep {
         public PlayerChecker() {
             super(1);
         }
+
+        @Override
+        protected void logicInit(Game game) {}
         
         @Override
-        protected void doLogicUpdate(float tpf) {
+        protected void logicUpdate(float tpf) {
             tempStore.clear();
             game.getScene().getEntities(Actor.class, tempStore);
             for (Actor a : tempStore) {
@@ -520,9 +524,12 @@ public class StoryGuardTask2 extends AbstractTaskStep {
         public EndChecker() {
             super(1);
         }
-        
+
+        @Override 
+        protected void logicInit(Game game) {} 
+    
         @Override
-        protected void doLogicUpdate(float tpf) {
+        protected void logicUpdate(float tpf) {
             if (gameService.isDead(gb)) {
                 result = 1;
             } else if (gameService.isDead(altar)){

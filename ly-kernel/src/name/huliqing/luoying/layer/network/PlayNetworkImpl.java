@@ -57,6 +57,7 @@ public class PlayNetworkImpl implements PlayNetwork {
 //        mess.setGuiScene(true);
 //        network.broadcast(mess);
         
+        entity.updateDatas();
         playService.addEntity(entity);
     }
 

@@ -15,6 +15,7 @@ import name.huliqing.luoying.layer.service.ElService;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.object.el.SBooleanEl;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.game.Game;
 
 /**
  * 场景清洁器,用于清理场景中已经死亡的角色之类的功能
@@ -52,9 +53,12 @@ public class ActorCleanGameLogic extends AbstractGameLogic {
         deathDelay = data.getAsFloat("deathDelay", deathDelay);
         deathDelayAsMS = deathDelay * 1000;
     }
+
+    @Override
+    protected void logicInit(Game game) {}
     
     @Override
-    protected void doLogicUpdate(float tpf) {
+    protected void logicUpdate(float tpf) {
         playService.getEntities(Actor.class, actorStore);
         if (actorStore.isEmpty())
             return;

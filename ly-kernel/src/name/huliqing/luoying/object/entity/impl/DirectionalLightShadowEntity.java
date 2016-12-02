@@ -15,6 +15,7 @@ import name.huliqing.luoying.object.entity.LightEntity;
 import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.object.scene.SceneListener;
 import name.huliqing.luoying.object.scene.SceneListenerAdapter;
+import name.huliqing.luoying.utils.MathUtils;
 
 /**
  *
@@ -90,8 +91,13 @@ public class DirectionalLightShadowEntity extends ShadowEntity {
     }
     
     @Override
+    public float getShadowIntensity() {
+        return shadowProcessor.getShadowIntensity();
+    }
+    
+    @Override
     public void setShadowIntensity(float shadowIntensity) {
-        shadowProcessor.setShadowIntensity(shadowIntensity);
+        shadowProcessor.setShadowIntensity(MathUtils.clamp(shadowIntensity, 0f, 1.0f));
     }
     
     private DirectionalLight findDirectionalLight() {
@@ -109,18 +115,4 @@ public class DirectionalLightShadowEntity extends ShadowEntity {
         return new DirectionalLight();
     }
     
-//    private DirectionalLight findDirectionalLight() {
-//        // 找出当前场景中的第一个直射光
-//        LightList lightList = scene.getRoot().getLocalLightList();
-//        if (lightList.size() > 0) {
-//            for (int i = 0; i < lightList.size(); i++) {
-//                Light l = lightList.get(i);
-//                if (l instanceof DirectionalLight) {
-//                    return (DirectionalLight) l;
-//                }
-//            }
-//        }
-//        // 如果找不到任何光源，则创建一个默认的
-//        return new DirectionalLight();
-//    }
 }

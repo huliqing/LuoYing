@@ -47,6 +47,10 @@ public class RequestGameInitOkMess extends BaseMess {
     public void setInitEntityCount(int initEntityCount) {
         this.initEntityCount = initEntityCount;
     }
-    
+
+    @Override
+    public String toString() {
+        return "RequestGameInitOkMess{" + "initEntityCount=" + initEntityCount + '}';
+    }
     
 }

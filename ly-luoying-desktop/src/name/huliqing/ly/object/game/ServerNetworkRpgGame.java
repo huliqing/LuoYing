@@ -7,9 +7,7 @@ package name.huliqing.ly.object.game;
 
 import com.jme3.app.Application;
 import com.jme3.network.HostedConnection;
-import com.jme3.network.Message;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,6 +21,7 @@ import name.huliqing.luoying.manager.ResManager;
 import name.huliqing.luoying.mess.GameMess;
 import name.huliqing.luoying.mess.ActorSelectMess;
 import name.huliqing.luoying.mess.ActorSelectResultMess;
+import name.huliqing.luoying.mess.SceneLoadedMess;
 import name.huliqing.luoying.mess.network.ClientExitMess;
 import name.huliqing.luoying.mess.network.ClientsMess;
 import name.huliqing.luoying.mess.network.RequestGameInitMess;
@@ -63,8 +62,8 @@ public abstract class ServerNetworkRpgGame extends NetworkRpgGame {
     }
 
     @Override
-    public void onSceneLoaded(Scene scene) {
-        super.onSceneLoaded(scene); 
+    public void initialize(Application app) {
+        super.initialize(app);
         // 创建server
         if (gameServer == null) {
             try {
@@ -81,9 +80,17 @@ public abstract class ServerNetworkRpgGame extends NetworkRpgGame {
                 return;
             }
         }
-        gameServer.setServerListener(new NetworkServerListener(app));
+        gameServer.setServerListener(new NetworkServerListener());
         // 将服务端标记为"running"状态
         gameServer.setServerState(GameServer.ServerState.running);
+    }
+    
+    @Override
+    public void onSceneLoaded(Scene scene) {
+        super.onSceneLoaded(scene); 
+        // 场景载入完成时发一个广播通知所有客户端。
+        SceneLoadedMess mess = new SceneLoadedMess(scene.getData().getId());
+        gameServer.broadcast(mess);
     }
     
     @Override
@@ -160,9 +167,8 @@ public abstract class ServerNetworkRpgGame extends NetworkRpgGame {
      * @param gameServer
      * @param source
      * @param m
-     * @return 
      */
-    protected boolean processMessage(GameServer gameServer, HostedConnection source, Message m) {
+    protected void processGameMess(GameServer gameServer, HostedConnection source, GameMess m) {
         // 客户端告诉服务端，要选择哪一个角色进行游戏.
         // 在必要时可以对接收到的ActorSelectMess进行一些验证,比如确保选择的角色数据没有异常。
         // 名称不会重复等。
@@ -192,33 +198,31 @@ public abstract class ServerNetworkRpgGame extends NetworkRpgGame {
             result.setSuccess(true);
             gameServer.send(source, result);
             
-            return true;
+            return;
         } 
 
         // 当服务端接收到客户端退出游戏的消息时，这里什么也不处理。与故事模式不同。故事模式要保存客户端资料.
         // 服务端暂时不需要处理任何逻辑
         if (m instanceof ClientExitMess) {
-            return true;
+            return;
         }
         
-        return false;
+        m.applyOnServer(gameServer, source);
     }
     
-    private class NetworkServerListener extends DefaultServerListener {
-        
-        public NetworkServerListener(Application app) {
-            super(app);
-        }
+    private final class NetworkServerListener extends DefaultServerListener {
         
         @Override
         protected void onReceiveMessRequestGameInit(GameServer gameServer, HostedConnection conn, RequestGameInitMess mess) {
-            List<Entity> initEntities = scene.getEntities(Entity.class, new ArrayList<Entity>());
+            
+            int needInitEntities = scene.getData().getEntityDatas() != null ? scene.getData().getEntityDatas().size() : 0;
             
             // 向客户端返回初始化OK的消息
-            RequestGameInitOkMess result = new RequestGameInitOkMess(initEntities.size());
+            RequestGameInitOkMess result = new RequestGameInitOkMess(needInitEntities);
             gameServer.send(conn, result);
             
-            // 立即向客户端初始化场景实体
+            // 立即向客户端初始化当前场景中已经载入的实体。
+            List<Entity> initEntities = scene.getEntities();
             for (Entity e : initEntities) {
                 playNetwork.addEntityToClient(conn, e);
             }
@@ -233,12 +237,7 @@ public abstract class ServerNetworkRpgGame extends NetworkRpgGame {
 
         @Override
         protected void onReceiveGameMess(GameServer gameServer, HostedConnection source, GameMess m) {
-            // 本地处理
-            if (processMessage(gameServer, source, m)) {
-                return;
-            }
-            // 由父类处理
-            super.onReceiveGameMess(gameServer, source, m); 
+            processGameMess(gameServer, source, m);
         }
 
         @Override

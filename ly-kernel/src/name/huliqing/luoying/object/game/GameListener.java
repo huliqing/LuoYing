@@ -26,7 +26,7 @@ public interface GameListener {
      * @param oldScene 旧场景
      * @param newScene 新场景
      */
-    void onGameSceneChangeBefore(Game game, Scene oldScene, Scene newScene);
+    void onGameSceneChange(Game game, Scene oldScene, Scene newScene);
         
     /**
      * 当游戏退出时该方法会被调用，在这个方法被调用的时候当前游戏资源还未被清理，

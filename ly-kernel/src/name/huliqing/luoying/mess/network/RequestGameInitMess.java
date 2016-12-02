@@ -16,5 +16,10 @@ import name.huliqing.luoying.mess.BaseMess;
  */
 @Serializable
 public class RequestGameInitMess extends BaseMess {
+
+    @Override
+    public String toString() {
+        return "RequestGameInitMess{" + '}';
+    }
     
 }

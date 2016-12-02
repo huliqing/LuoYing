@@ -58,6 +58,12 @@ public abstract class ShadowEntity extends NonModelEntity {
     protected abstract void setShadowEnabled(boolean enabled);
     
     /**
+     * 获取阴影的强度,返回值为0.0~1.0f
+     * @return 
+     */
+    public abstract float getShadowIntensity();
+    
+    /**
      * 设置阴影的强度，值[0.0, 1.0]
      * @param shadowIntensity 
      */

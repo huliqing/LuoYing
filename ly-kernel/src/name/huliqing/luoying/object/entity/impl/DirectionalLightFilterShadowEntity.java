@@ -17,6 +17,7 @@ import name.huliqing.luoying.object.entity.LightEntity;
 import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.object.scene.SceneListener;
 import name.huliqing.luoying.object.scene.SceneListenerAdapter;
+import name.huliqing.luoying.utils.MathUtils;
 
 /**
  * 阴影环境(目前不支持移动设备), 给场景添加这个环境后，可以让场景中的物体有阴影效果
@@ -68,6 +69,9 @@ public class DirectionalLightFilterShadowEntity extends ShadowEntity {
     @Override
     public void onInitScene(Scene scene) {
         super.onInitScene(scene);
+        if (scene.isInitialized()) {
+            filter.setLight(findDirectionalLight());
+        }
         scene.addSceneListener(sceneListener);
     }
     
@@ -86,11 +90,6 @@ public class DirectionalLightFilterShadowEntity extends ShadowEntity {
             }
         }
     }
-
-    @Override
-    public void setShadowIntensity(float shadowIntensity) {
-        filter.setShadowIntensity(shadowIntensity);
-    }
     
     @Override
     public void cleanup() {
@@ -102,6 +101,16 @@ public class DirectionalLightFilterShadowEntity extends ShadowEntity {
         filter = null;
         filterAdded = false;
         super.cleanup();
+    }
+    
+    @Override
+    public float getShadowIntensity() {
+        return filter.getShadowIntensity();
+    }
+    
+    @Override
+    public void setShadowIntensity(float shadowIntensity) {
+        filter.setShadowIntensity(MathUtils.clamp(shadowIntensity, 0f, 1.0f));
     }
     
     private DirectionalLight findDirectionalLight() {
@@ -119,19 +128,5 @@ public class DirectionalLightFilterShadowEntity extends ShadowEntity {
         return new DirectionalLight();
     }
     
-//    private DirectionalLight findDirectionalLight() {
-//        // 找出当前场景中的第一个直射光
-//        LightList lightList = scene.getRoot().getLocalLightList();
-//        if (lightList.size() > 0) {
-//            for (int i = 0; i < lightList.size(); i++) {
-//                Light l = lightList.get(i);
-//                if (l instanceof DirectionalLight) {
-//                    return (DirectionalLight) l;
-//                }
-//            }
-//        }
-//        // 如果找不到任何光源，则创建一个默认的
-//        return new DirectionalLight();
-//    }
     
 }

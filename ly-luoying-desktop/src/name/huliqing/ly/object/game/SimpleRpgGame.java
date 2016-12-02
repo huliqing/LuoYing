@@ -100,16 +100,10 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
         
         // 控制台消息处理器
         LogFactory.addHandler(new ConsoleLogHandler());
-    }
-
-    @Override
-    public void onSceneLoaded(Scene scene) {
-        super.onSceneLoaded(scene);
+        
         // UI界面：头像、队伍、工具栏、攻击按钮
         // 这个UI需要依赖场景，所以放在这里初始化
-        if (ui == null) {
-            ui = new RpgMainUI();
-        }
+        ui = new RpgMainUI();
         addLogic(ui);
     }
 

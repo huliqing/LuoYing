@@ -7,7 +7,6 @@ package name.huliqing.luoying.network;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.mess.GameMess;
 import name.huliqing.luoying.mess.ActorTransformMess;
-import com.jme3.app.Application;
 import com.jme3.network.HostedConnection;
 import java.util.LinkedList;
 import java.util.List;
@@ -26,10 +25,6 @@ public abstract class DefaultServerListener extends AbstractServerListener {
     private final float syncFrequency = 1f/5f;
     
     private final ActorTransformMess syncTempCache = new ActorTransformMess();
-    
-    public DefaultServerListener(Application app) {
-        super(app);
-    }
 
     @Override
     public void update(float tpf, GameServer gameServer) {
@@ -71,48 +66,9 @@ public abstract class DefaultServerListener extends AbstractServerListener {
         }
     }
     
-    @Override
-    protected void onClientRemoved(GameServer gameServer, HostedConnection conn) {
-        super.onClientRemoved(gameServer, conn);
-        
-        // remove20161128
-//        ConnData cd = conn.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
-//        if (cd == null)
-//            return;
-//        
-//        Entity clientPlayer = playService.getEntity(cd.getEntityId());
-//        if (clientPlayer == null)
-//            return;
-//
-//        // 1.将客户端角色的所有宠物移除出场景,注意是宠物，不要把非生命的（如防御塔）也一起移除
-//        List<Entity> actors = playService.getEntities(Entity.class, null);
-//        if (actors != null && !actors.isEmpty()) {
-//            for (Entity actor : actors) {
-//                if (gameService.getOwner(actor) == clientPlayer.getData().getUniqueId() && gameService.isBiology(actor)) {
-//                    playNetwork.removeEntity(actor);
-//                }
-//            }
-//        }
-//
-//        // 2.将客户端角色移除出场景
-//        playNetwork.removeEntity(clientPlayer);
-//
-//        // 3.通知所有客户端（不含主机）
-//        String message = ResManager.get(ResConstants.LAN_CLIENT_EXISTS, new Object[] {clientPlayer.getData().getName()});
-//        MessMessage notice = new MessMessage();
-//        notice.setMessage(message);
-//        notice.setType(MessageType.notice);
-//        gameServer.broadcast(notice);
-//
-//        // 4.通知主机
-//        if (Ly.getPlayState() != null) {
-//            playService.addMessage(message, MessageType.notice);
-//        }
-    }
-    
-    @Override
-    protected void onReceiveGameMess(GameServer gameServer, HostedConnection source, GameMess gameMess) {
-        gameMess.applyOnServer(gameServer, source);
-    }
+//    @Override
+//    protected void onReceiveGameMess(GameServer gameServer, HostedConnection source, GameMess gameMess) {
+//        gameMess.applyOnServer(gameServer, source);
+//    }
 
 }

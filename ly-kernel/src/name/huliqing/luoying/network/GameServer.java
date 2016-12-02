@@ -17,10 +17,12 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.Config;
 import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.data.GameData;
 import name.huliqing.luoying.layer.service.ConfigService;
 import name.huliqing.luoying.layer.service.PlayService;
@@ -454,24 +456,47 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
     }
 
     @Override
-    public void connectionAdded(Server server, HostedConnection conn) {
-        if (listener != null) {
-            listener.clientAdded(this, conn);
-        }
+    public void connectionAdded(Server server, final HostedConnection conn) {
+        if (listener == null)
+            return;
+        
+        LuoYing.getApp().enqueue(new Callable() {
+            @Override
+            public Object call() throws Exception {
+                listener.clientAdded(GameServer.this, conn);
+                return null;
+            }
+        });
     }
 
     @Override
-    public void connectionRemoved(Server server, HostedConnection conn) {
-        if (listener != null) {
-            listener.clientRemoved(this, conn);
-        }
+    public void connectionRemoved(Server server, final HostedConnection conn) {
+        if (listener == null)
+            return;
+        
+        LuoYing.getApp().enqueue(new Callable() {
+            @Override
+            public Object call() throws Exception {
+                listener.clientRemoved(GameServer.this, conn);
+                return null;
+            }
+        });
     }
 
     @Override
-    public void messageReceived(HostedConnection source, Message m) {
-        if (listener != null) {
-            listener.messageReceived(this, source, m);
-        }
+    public void messageReceived(final HostedConnection source, final Message m) {
+//        LOG.log(Level.INFO, "GameServer receive message={0}", m.getClass().getSimpleName());
+        
+        if (listener == null)
+            return;
+        
+        LuoYing.getApp().enqueue(new Callable() {
+            @Override
+            public Object call() throws Exception {
+                listener.messageReceived(GameServer.this, source, m);
+                return null;
+            }
+        });
     }
     
     /**

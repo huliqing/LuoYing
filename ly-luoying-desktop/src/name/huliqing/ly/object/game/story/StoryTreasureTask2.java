@@ -436,7 +436,7 @@ public class StoryTreasureTask2 extends AbstractTaskStep {
                 }
             }
             playNetwork.addEntity(companion);
-        }
+        } 
         
     }
 }

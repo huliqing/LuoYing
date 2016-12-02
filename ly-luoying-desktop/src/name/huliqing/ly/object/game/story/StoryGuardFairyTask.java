@@ -9,9 +9,9 @@ import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.logic.scene.ActorMultLoadHelper;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.game.Game;
 import name.huliqing.luoying.object.gamelogic.AbstractGameLogic;
 import name.huliqing.ly.constants.IdConstants;
-import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.ly.layer.service.GameService;
 
 /**
@@ -43,9 +43,12 @@ public class StoryGuardFairyTask extends AbstractGameLogic {
         super(1.0f);
         this._game = game;
     }
+
+    @Override
+    protected void logicInit(Game game) {}
     
     @Override
-    protected void doLogicUpdate(float tpf) {
+    protected void logicUpdate(float tpf) {
         // 检查是否触发任务
         if (stage == 0) {
             if (checkToEnableFairTask()) {

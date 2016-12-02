@@ -10,6 +10,7 @@ import name.huliqing.ly.enums.MessageType;
 import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.object.Loader;
+import name.huliqing.luoying.object.game.Game;
 import name.huliqing.luoying.object.gamelogic.AbstractGameLogic;
 import name.huliqing.ly.constants.IdConstants;
 import name.huliqing.ly.object.view.TextView;
@@ -47,9 +48,12 @@ public class SurvivalLevelLogic extends AbstractGameLogic {
     public int getMaxLevel() {
         return maxLevel;
     }
+
+    @Override
+    protected void logicInit(Game game) {}
     
     @Override
-    protected void doLogicUpdate(float tpf) {
+    protected void logicUpdate(float tpf) {
         if (level >= maxLevel) {
             return;
         }
@@ -70,7 +74,7 @@ public class SurvivalLevelLogic extends AbstractGameLogic {
     public void cleanup() {
         level = 0;
         timeIntervalUsed = 0;
-        super.cleanup();
+        super.cleanup(); 
     }
     
 }

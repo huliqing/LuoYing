@@ -40,8 +40,8 @@ public class RpgMainUI extends PlayStateUI implements GameListener {
     private UI attack;
 
     @Override
-    protected void doLogicInit(Game game) {
-        super.doLogicInit(game); 
+    protected void logicInit(Game game) {
+        super.logicInit(game); 
         
         rpgGame = (SimpleRpgGame) game;
         
@@ -102,12 +102,17 @@ public class RpgMainUI extends PlayStateUI implements GameListener {
         UIState.getInstance().addUI(teamView);
         UIState.getInstance().addUI(targetFace);
         UIState.getInstance().addUI(attack.getDisplay());
-        
         toolsView.addView(userBtn, 0);
         
         rpgGame.addListener(this);
     }
-        
+    
+    @Override
+    public void onGameSceneLoaded(Game game) {
+        super.onGameSceneLoaded(game);
+        teamView.setScene(game.getScene());
+    }
+
     @Override
     public void cleanup() {
         rpgGame.removeListener(this);
@@ -118,7 +123,7 @@ public class RpgMainUI extends PlayStateUI implements GameListener {
     }
 
     @Override
-    public void doLogicUpdate(float tpf) {
+    public void logicUpdate(float tpf) {
         teamView.update(tpf);
         targetFace.update(tpf);
     }
@@ -150,10 +155,6 @@ public class RpgMainUI extends PlayStateUI implements GameListener {
         }
     }
 
-    @Override
-    public void onGameSceneLoaded(Game game) {
-        super.onGameSceneLoaded(game);
-        teamView.setScene(game.getScene());
-    }
+
 
 }

@@ -5,6 +5,7 @@
 package name.huliqing.ly.view.talk;
 
 import com.jme3.util.SafeArrayList;
+import name.huliqing.luoying.object.game.Game;
 import name.huliqing.luoying.object.gamelogic.AbstractGameLogic;
 
 /**
@@ -24,9 +25,12 @@ public class TalkManager extends AbstractGameLogic {
     public static TalkManager getInstance() {
         return INSTANCE;
     }
+
+    @Override
+    protected void logicInit(Game game) {}
     
     @Override
-    protected void doLogicUpdate(float tpf) {
+    protected void logicUpdate(float tpf) {
         if (talks.isEmpty())
             return;
         

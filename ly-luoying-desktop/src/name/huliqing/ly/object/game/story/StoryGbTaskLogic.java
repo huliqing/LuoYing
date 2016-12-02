@@ -36,10 +36,9 @@ public class StoryGbTaskLogic extends AbstractGameLogic {
         this.player = player;
         this.interval = 1.0f;  // 频率：每秒计算一次
     }
-
+    
     @Override
-    protected void doLogicInit(Game game) {
-        super.doLogicInit(game);
+    protected void logicInit(Game game) {
         if (tpv == null) {
             tpv = (TextPanelView) Loader.load(IdConstants.VIEW_TEXT_PANEL_VIEW_GB);
             tpv.setTitle(ResourceManager.getObjectName(IdConstants.GAME_STORY_GB));
@@ -48,7 +47,7 @@ public class StoryGbTaskLogic extends AbstractGameLogic {
     }
     
     @Override
-    protected void doLogicUpdate(float tpf) { 
+    protected void logicUpdate(float tpf) { 
         ItemData item = player.getData().getObjectData(IdConstants.ITEM_GB_STUMP);
         count = item != null ? item.getTotal() : 0;
         tpv.setText(get("taskSave.saveCount", count, total));

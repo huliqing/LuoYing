@@ -4,15 +4,18 @@
  */
 package name.huliqing.luoying.network;
 
+import com.jme3.app.Application;
 import com.jme3.network.Client;
 import com.jme3.network.ClientStateListener;
 import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
 import com.jme3.network.Network;
 import java.io.IOException;
+import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.Config;
+import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.data.GameData;
 import name.huliqing.luoying.network.GameServer.ServerState;
 
@@ -213,23 +216,45 @@ public class GameClient implements ClientStateListener, MessageListener<Client>{
     
     @Override
     public void clientConnected(Client c) {
-        if (listener != null) {
-            listener.clientConnected(this);
-        }
+        if (listener == null)
+            return;
+        
+        LuoYing.getApp().enqueue(new Callable() {
+            @Override
+            public Object call() throws Exception {
+                listener.clientConnected(GameClient.this);
+                return null;
+            }
+        });
     }
 
     @Override
-    public void clientDisconnected(Client c, final DisconnectInfo info) {
-        if (listener != null) {
-            listener.clientDisconnected(this, info);
-        }
+    public void clientDisconnected(final Client c, final DisconnectInfo info) {
+        if (listener == null)
+            return;
+        
+        LuoYing.getApp().enqueue(new Callable() {
+            @Override
+            public Object call() throws Exception {
+                listener.clientDisconnected(GameClient.this, info);
+                return null;
+            }
+        });
     }
     
     @Override
-    public void messageReceived(Client source, Message m) {
-        if (listener != null) {
-            listener.clientMessage(this, m);
-        }
+    public void messageReceived(final Client source, final Message m) {
+//        LOG.log(Level.INFO, "GameClient receive message={0}", m.getClass().getSimpleName());
+        if (listener == null)
+            return;
+        
+        LuoYing.getApp().enqueue(new Callable() {
+            @Override
+            public Object call() throws Exception {
+                listener.clientMessage(GameClient.this, m);
+                return null;
+            }
+        });
     }
 
     public Client getClient() {

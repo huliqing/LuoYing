@@ -13,6 +13,6 @@ import name.huliqing.luoying.xml.ObjectData;
  * @author huliqing
  */
 @Serializable
-public class SceneLoaderData extends ObjectData {
+public class ProgressData extends ObjectData {
     
 }

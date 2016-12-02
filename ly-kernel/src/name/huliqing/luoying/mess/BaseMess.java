@@ -39,4 +39,5 @@ public class BaseMess extends AbstractMessage{
         this.time = time;
     }
     
+    
 }
