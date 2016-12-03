@@ -18,7 +18,7 @@ import name.huliqing.luoying.object.el.CustomEl;
  * 并通过valueEl来计算值,El必须返回一个Boolean类型的值。
  * @author huliqing
  */
-public class RelateBooleanAttribute extends BooleanAttribute implements AttributeListener, ValueChangeListener<Object>{
+public class RelateBooleanAttribute extends BooleanAttribute implements AttributeListener, ValueChangeListener {
 //    private static final Logger LOG = Logger.getLogger(RelateBooleanAttribute.class.getName());
     private final ElService elService = Factory.get(ElService.class);
     private AttributeManager attributeManager;

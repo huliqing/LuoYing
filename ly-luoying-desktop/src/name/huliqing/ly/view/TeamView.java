@@ -27,7 +27,7 @@ import name.huliqing.ly.layer.service.GameService;
  * 队伍面板, 注：角色的team分组必须大于0,并且必须与当前的teamId相同才会被添加到队伍面板中.
  * @author huliqing
  */
-public class TeamView extends LinearLayout implements SceneListener, ValueChangeListener<Object>{
+public class TeamView extends LinearLayout implements SceneListener, ValueChangeListener{
 //    private final PlayService playService = Factory.get(PlayService.class);
     private final GameService gameService = Factory.get(GameService.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);

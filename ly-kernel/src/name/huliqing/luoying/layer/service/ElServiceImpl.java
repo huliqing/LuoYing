@@ -12,6 +12,7 @@ import name.huliqing.luoying.object.el.STBooleanEl;
 import name.huliqing.luoying.object.el.STNumberEl;
 import name.huliqing.luoying.object.el.LNumberEl;
 import name.huliqing.luoying.object.el.SBooleanEl;
+import name.huliqing.luoying.object.el.SkillHitNumberEl;
 
 /**
  *
@@ -78,5 +79,15 @@ public class ElServiceImpl implements ElService {
             return Loader.load(idOrExpression);
         }
     }
-
+    
+    @Override
+    public SkillHitNumberEl createSkillHitNumberEl(String idOrExpression) {
+        if (ElFactory.isElExpression(idOrExpression)) {
+            SkillHitNumberEl el = Loader.load(IdConstants.SYS_EL_SKILLHITNUMBER);
+            el.setExpression(idOrExpression);
+            return el;
+        } else {
+            return Loader.load(idOrExpression);
+        }
+    }
 }

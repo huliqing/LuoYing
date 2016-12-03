@@ -510,8 +510,6 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
         }
     }
     
-    // -------------------------------------------------------------------------
-    
     // 创建“服务端开启”的通知消息
     private MessSCStarted createServerRunMess() {
         InetAddress inetAddress = envService.getLocalHostIPv4();

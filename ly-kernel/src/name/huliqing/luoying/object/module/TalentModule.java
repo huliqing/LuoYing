@@ -27,7 +27,7 @@ import name.huliqing.luoying.object.talent.Talent;
 /**
  * @author huliqing
  */
-public class TalentModule extends AbstractModule implements DataHandler<TalentData>, ValueChangeListener<Number>{
+public class TalentModule extends AbstractModule implements DataHandler<TalentData>, ValueChangeListener{
     private static final Logger LOG = Logger.getLogger(TalentModule.class.getName());
     private final ElService elService = Factory.get(ElService.class);
     

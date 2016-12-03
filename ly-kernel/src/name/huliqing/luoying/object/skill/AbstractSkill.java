@@ -34,7 +34,8 @@ import name.huliqing.luoying.utils.ConvertUtils;
 import name.huliqing.luoying.utils.MathUtils;
  
 /**
- *
+ * 技能的基类。
+ * 
  * 注意：影响技能执行时间和速度的三个重要因素：
  * 1.useTime
  * 2.speed;
@@ -49,7 +50,6 @@ import name.huliqing.luoying.utils.MathUtils;
  * 关于useTime：会影响技能时间、技能速度、动画时间、动画速度
  * 关于speed: 会影响技能时间、技能速度、动画时间、动画速度
  * 关于cutTime: 影响技能时间、动画时间,但不影响技能速度和动画速度
- * 
  * @author huliqing
  */
 public abstract class AbstractSkill implements Skill {
@@ -350,21 +350,20 @@ public abstract class AbstractSkill implements Skill {
         data.setPlayCount(data.getPlayCount() + 1);
         
         // 检查技能等级提升
-        skillLevelUp();
+        levelUpCheck();
     }
     
     // 检查并升级技能
-    private void skillLevelUp() {
+    private void levelUpCheck() {
         if (data.getLevel() >= data.getMaxLevel()) 
             return;
         if (levelUpEl == null)
             return;
-//        int levelPoints = (int) elService.getLevelEl(levelUpEl, data.getLevel() + 1);
         int levelPoints = levelUpEl.setLevel(data.getLevel() + 1).getValue().intValue();
         if (data.getPlayCount() >= levelPoints) {
             data.setLevel(data.getLevel() + 1);
             data.setPlayCount(data.getPlayCount() - levelPoints);
-            skillLevelUp();
+            levelUpCheck();
         }
     }
     
@@ -546,24 +545,15 @@ public abstract class AbstractSkill implements Skill {
     }
     
     /**
-     * 获取当前等级下技能的等级值,由等级公式计算出来，如果不存在则返回-1.
+     * 获取技能的等级值,由等级公式计算出来，这个方法返回的是当前等级下技能的等级值，
+     * 如果技能没有配置等级公式 ，则该方法将返回null.
      * @return 
      */
-    protected float getLevelValue() {
+    protected Number getLevelValue() {
         if (levelEl == null) {
-            return -1;
+            return null;
         }
-        return levelEl.setLevel(data.getLevel()).getValue().floatValue();
-    }
-    
-    /**
-     * 获取当前等级下技能的值，默认返回等级值。
-     * @return 
-     * @see #getLevelValue() 
-     */
-    protected float getSkillValue() {
-        // 由子类覆盖
-        return getLevelValue();
+        return levelEl.setLevel(data.getLevel()).getValue();
     }
     
     @Override

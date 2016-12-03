@@ -12,7 +12,6 @@ import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.SkillData;
 import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.layer.service.BulletService;
-import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.bullet.Bullet;
 import name.huliqing.luoying.object.bullet.Bullet.Listener;

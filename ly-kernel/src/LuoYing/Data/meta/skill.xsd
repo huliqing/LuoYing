@@ -516,7 +516,10 @@ xs:time
                 </xs:attribute>
                 <xs:attribute name="hitValue" type="xs:decimal" use="required">
                     <xs:annotation>
-                        <xs:documentation>目标属性值,可正可负</xs:documentation>
+                        <xs:documentation>
+                            技能自身的输出值，最终的输出值由公式计算得到, hitValue会作为计算公式的一个参数，
+                            具体参考:hitEl参数公式说明,需要注意的是：如果技能设置了等级公式，则这个参数可能会受技能等级的影响。
+                        </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
                 <xs:attribute name="hitDistance" type="xs:decimal" use="required">
@@ -534,10 +537,10 @@ xs:time
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-                <xs:attribute name="hitEl" type="xs:string" use="optional">
+                <xs:attribute name="hitEl" type="xs:string" use="required">
                     <xs:annotation>
                         <xs:documentation>
-                            绑定或填写一条SBooleanEl公式，该公式用于为技能对目标产生的各种影响计算出最终值。如技能对目标的伤害值，BUFF加成等。
+                            绑定或填写一条elSkillHitNumber公式，该公式用于计算技能对目标产生的输出值，如技能对目标的伤害值，BUFF加成等。
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>

@@ -24,6 +24,7 @@ xs:time
                 <xs:element ref="elSBoolean" />
                 <xs:element ref="elSTBoolean" />
                 <xs:element ref="elSTNumber" />
+                <xs:element ref="elSkillHitNumber" />
             </xs:all>
         </xs:complexType>
     </xs:element>
@@ -129,6 +130,30 @@ xs:time
                     <xs:attribute name="expression" type="xs:string" use="required" >
                         <xs:annotation>
                             <xs:documentation>表达式示例，比如计算伤害值：#{s.attributeAttack - t.attributeDefense}</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="elSkillHitNumber" >
+        <xs:annotation>
+            <xs:documentation>
+                技能输出值计算公式, 这个公式用于为技能计算一个最终的输出值。例如，当角色A使用技能B攻击角色C时，
+                这个公式将为这样的攻击输出计算出一个输出值，用于作用到受攻击者身上(目标C).表达式参数：
+                s: 这个参数表示源对象,即攻击者;
+                t: 这个参数表示目标对象,即受攻击者.
+                skillHitValue: 技能的自身输出值,这是一个特殊参数值，来自于技能自身, 这个值的大小可能受技能自身等级的影响.
+                返回值: number
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="elBase">
+                    <xs:attribute name="expression" type="xs:string" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>表达式示例，比如计算伤害值：#{s.attributeAttack + skillHitValue - t.attributeDefense}</xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
                 </xs:extension>

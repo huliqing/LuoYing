@@ -63,7 +63,7 @@
     <!--防御率和躲闪率，取值[0.0~1.0],1为100防守-->
     <elLNumber id="elLevelAttrDefenceRate"        expression="#{l / 60}" />
     <elLNumber id="elLevelAttrDuckRate"             expression="#{l / 60}" />
-    <!--鬼魅能力,取值[0.0~1.0]-->
+    <!--连招反应能力,取值[0.0~1.0]-->
     <elLNumber id="elLevelAttrGhostRate"            expression="#{l / 60}" />
     
     <!--==========================================================================-->
@@ -87,7 +87,7 @@
     <elLNumber id="elTalentMoveSpeed"        expression="#{l * 0.04}" />
     
     <!--==========================================================================-->
-    <!--技能HitCheck: 用于技能Hit判断-->
+    <!--Skill Hit: 用于技能Hit判断-->
     <!--==========================================================================-->
     
     <elSTBoolean id="elSkillFightHitCheck" expression="#{s.attributeGroup != t.attributeGroup}" />
@@ -99,7 +99,7 @@
     <elSTBoolean id="elSkillRebornCheck" expression="#{s.attributeGroup == t.attributeGroup && t.attributeBiology && t.attributeDead}" />
     
     <!--==========================================================================-->
-    <!--技能升级公式:配置给技能，计算技能在升到指定等级时需要的技能点数（熟练度）。
+    <!--Skill LevelUP: 技能升级公式:配置给技能，计算技能在升到指定等级时需要的技能点数（熟练度）。
     即表示从等级 leve - 1 升级到 level 时需要的技能点数-->
     <!--==========================================================================-->
     
@@ -107,20 +107,24 @@
     <elLNumber  id="elSkillLevelUp" expression="#{10 * l}" />
     
     <!--==========================================================================-->
-    <!-- 技能等级公式，为每个技能计算一个等级值。这个等级值由技能使用，根据不同类型的技能可能应用情况不一样。-->
+    <!-- Skill Level: 技能等级公式，为每个技能计算一个等级值。这个等级值由技能使用，根据不同类型的技能可能应用情况不一样。-->
     <!--==========================================================================-->
     <elLNumber id="elSkillLevel" expression="#{1 + 0.2 * (l - 1)}" />
     
-    <!--技能伤害公式: 配置给技能，用于计算技能可以造成的伤害值。-->
+    <!--==========================================================================-->
+    <!-- Skill Hit: 技能输出公式， 配置给技能，用于计算技能可以造成的输出,技能的输出可以是正负值，负值一般视为伤害输出，
+    如：普通攻击、魔法攻击; 正值一般为增益输出，如一些加血、加魔、加属性值等技能。
+    -->
+    <!--==========================================================================-->
     
-    <!--默认物理伤害-->
-    <elSTNumber id="elSkillAttack" expression="#{-(s.attributeAttack - t.attributeDefence)}" />
-    <!--默认魔法伤害-->
-    <elSTNumber id="elSkillMagicAttack" expression="#{-(s.attributeMagicAttack - t.attributeMagicDefence)}" />
-    <!--绝对攻击（只计技能伤害）-->
-    <elSTNumber id="elSkillAbsoluteAttack" expression="#{0}" />
-    <!--技能增加效果-->
-    <elSTNumber id="elSkillBuff" expression="#{0}" />
+    <!-- 默认物理伤害: 配置给攻击技能-->
+    <elSkillHitNumber id="elSkillAttack" expression="#{-(s.attributeAttack + skillValue  > t.attributeDefence ? s.attributeAttack + skillValue - t.attributeDefence : 1)}" />
+    <!-- 默认魔法伤害: 配置给魔法技能-->
+    <elSkillHitNumber id="elSkillMagicAttack" expression="#{-(s.attributeMagicAttack + skillValue > t.attributeMagicDefence ? s.attributeMagicAttack + skillValue - t.attributeMagicDefence : 1)}" />
+    <!-- 绝对攻击, 配置给攻击技能，不考虑角色攻击力及目标的防御。-->
+    <elSkillHitNumber id="elSkillAbsoluteAttack" expression="#{-skillValue}" />
+    <!-- 技能增加效果: 配置给增益技能，默认只使用技能的自身输出值.-->
+    <elSkillHitNumber id="elSkillBuff" expression="#{skillValue}" />
     
     <!--==========================================================================-->
     <!-- Item: 物品使用检查, 这些EL用于检查角色是否可以使用指定的物品 -->

@@ -109,5 +109,7 @@ public class IdConstants {
     public final static String SYS_EL_STBOOLEAN = "sysElSTBoolean";
     /** sysElSTNumber, 空表达式，用于动态创建表达式用, 载入这个后必须设置expression才可以使用 */
     public final static String SYS_EL_STNUMBER  = "sysElSTNumber";
+    /** sysElSkillHitNumber,  空表达式，用于动态创建表达式用, 载入这个后必须设置expression才可以使用*/
+    public final static String SYS_EL_SKILLHITNUMBER  = "sysElSkillHitNumber";
     
 }

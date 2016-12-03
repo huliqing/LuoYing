@@ -28,13 +28,13 @@
           effects="effectTowerExplosion|0.4,effectTowerExplosion2|0.7,effectTowerExplosion3|0.9" remove="1" />
     <!--防御塔：火-->
     <skillShot id="skillTowerFireball" extends="skillFightSimpleAttackShotBase"
-               shotOffsets="0|3.3|0" bullets="bulletTowerFire" hitValue="-40" />
+               shotOffsets="0|3.3|0" bullets="bulletTowerFire" hitValue="40" />
     <!--防御塔：石-->
     <skillShot id="skillTowerStone" extends="skillTowerFireball" bullets="bulletTowerStone" 
-               hitValue="-30" hitStates="stateStun|0.3" />
+               hitValue="30" hitStates="stateStun|0.3" />
     <!--防御塔：冰-->
     <skillShot id="skillTowerSnow"  extends="skillTowerFireball" bullets="bulletSnow" 
-               hitValue="-20" hitStates="stateSnowFrost|0.6" />
+               hitValue="20" hitStates="stateSnowFrost|0.6" />
     
     <!-- spider -->
     <skillWait id="skillSpiderWait" extends="skillWaitBase" useTime="1" animation=""  animSpeed="0.0001" />
@@ -43,7 +43,7 @@
     <skillReset id="skillSpiderReset" extends="skillResetBase" useTime="0" animation="Run" timePoint="0" />
     <skillAttack id="skillSpiderAttack" extends="skillFightSimpleAttackBase" useTime="1" 
                  hitDistance="3" animation="Strike" cooldown="0.5" sounds="soundSpiderAttack1" 
-                 hitValue="-25" checkPoint="0.5" />
+                 hitValue="25" checkPoint="0.5" />
     <skillShot id="skillSpiderWeb" extends="skillFightSimpleAttackShotBase" icon="Interface/skill/ysh_48.jpg" 
                useTime="0.5" animation="Strike" cooldown="3" hitValue="0"
                sounds="soundSpiderAttack1" hitDistance="10" bullets="bulletDefault" shotTimes="0.5" 
@@ -57,12 +57,12 @@
     <skillWalk id="saNinjaWalk" extends="skillWalkBase" animation="Walk" animSpeed="0.7" baseSpeed="2"/>
     <skillRun id="saNinjaRun" extends="skillRunBase" animation="Walk"  animSpeed="2.1" />
     <skillHurt id="saNinjaHurt" extends="skillHurtBase" useTime="0.2"  animation="Block"  hurtFace="front" />
-    <skillAttack id="saNinjaAttack1" extends="skillFightSimpleAttackBase" useTime="0.5" hitDistance="3" animation="Kick"     cooldown="1" sounds="soundSwordAttack2" hitValue="-25" checkPoint="0.5" />
-    <skillAttack id="saNinjaAttack2" extends="skillFightSimpleAttackBase" useTime="0.5" hitDistance="3" animation="Spin"     cooldown="1" sounds="soundSwordAttack2" hitValue="-25" checkPoint="0.75" />
-    <skillAttack id="saNinjaAttack3" extends="skillFightSimpleAttackBase" useTime="0.5" hitDistance="3" animation="Attack1"  cooldown="1" sounds="soundSwordAttack3" hitValue="-20" checkPoint="0.3,0.6" />
-    <skillAttack id="saNinjaAttack4" extends="skillFightSimpleAttackBase" useTime="0.5" hitDistance="3" animation="Attack2"  cooldown="1" sounds="soundSwordAttack3" hitValue="-20" checkPoint="0.5" />
-    <skillAttack id="saNinjaAttack5" extends="skillFightSimpleAttackBase" useTime="0.5" hitDistance="3" animation="Attack3"  cooldown="1" sounds="soundSwordAttack1" hitValue="-20" checkPoint="0.5" />
-    <skillAttack id="saNinjaAttack6" extends="skillFightSimpleAttackBase" useTime="0.5" hitDistance="3" animation="SideKick" cooldown="1" sounds="soundSwordAttack2" hitValue="-30" checkPoint="0.5" />
+    <skillAttack id="saNinjaAttack1" extends="skillFightSimpleAttackBase" useTime="0.5" hitDistance="3" animation="Kick"     cooldown="1" sounds="soundSwordAttack2" hitValue="25" checkPoint="0.5" />
+    <skillAttack id="saNinjaAttack2" extends="skillFightSimpleAttackBase" useTime="0.5" hitDistance="3" animation="Spin"     cooldown="1" sounds="soundSwordAttack2" hitValue="25" checkPoint="0.75" />
+    <skillAttack id="saNinjaAttack3" extends="skillFightSimpleAttackBase" useTime="0.5" hitDistance="3" animation="Attack1"  cooldown="1" sounds="soundSwordAttack3" hitValue="20" checkPoint="0.3,0.6" />
+    <skillAttack id="saNinjaAttack4" extends="skillFightSimpleAttackBase" useTime="0.5" hitDistance="3" animation="Attack2"  cooldown="1" sounds="soundSwordAttack3" hitValue="20" checkPoint="0.5" />
+    <skillAttack id="saNinjaAttack5" extends="skillFightSimpleAttackBase" useTime="0.5" hitDistance="3" animation="Attack3"  cooldown="1" sounds="soundSwordAttack1" hitValue="20" checkPoint="0.5" />
+    <skillAttack id="saNinjaAttack6" extends="skillFightSimpleAttackBase" useTime="0.5" hitDistance="3" animation="SideKick" cooldown="1" sounds="soundSwordAttack2" hitValue="30" checkPoint="0.5" />
     <skillDead id="saNinjaDead1" extends="skillDeadBase" animation="Death1"  bones="" bonesHit="Joint2" useTime="0.6" deadAnimPoint="0" sounds="soundManDead1" useRagdoll="0" 
                  lastWords="speak.lw1,speak.lw2,speak.lw3,speak.lw4,speak.lw5,speak.lw6,speak.lw7,speak.lw8" />
     <skillReset id="saNinjaReset" extends="skillResetBase" useTime="0" animation="Kick" timePoint="0" />
@@ -79,7 +79,7 @@
     <skillIdle id="saWolfIdle2" extends="skillIdleBase" useTime="2"  animation="idle2" />
     <skillIdle id="saWolfIdle3" extends="skillIdleBase" useTime="4"  animation="idle3" />
     <skillIdle id="saWolfIdle4" extends="skillIdleBase" useTime="4"  animation="idle4" />
-    <skillAttack id="saWolfAttack" extends="skillFightSimpleAttackBase" useTime="1" hitDistance="3" animation="attack" cooldown="1.5" sounds="soundWolfAttack" hitValue="-30" checkPoint="0.5" />
+    <skillAttack id="saWolfAttack" extends="skillFightSimpleAttackBase" useTime="1" hitDistance="3" animation="attack" cooldown="1.5" sounds="soundWolfAttack" hitValue="30" checkPoint="0.5" />
     <skillHurt id="saWolfHurt" extends="skillHurtBase" useTime="0.3" animation="hurt"  hurtFace="front" sounds="soundWolfHurt" />
     <skillDead id="saWolfDead" extends="skillDeadBase" bonesHit="hips" animation="dead" useTime="1" deadAnimPoint="0" sounds="soundWolfDead" useRagdoll="0" />
     <skillReset id="saWolfReset" extends="skillResetBase" useTime="0" animation="wait" timePoint="0" />
@@ -91,8 +91,8 @@
     <skillIdle id="saBearIdle1" extends="skillIdleBase" useTime="3"  animation="idle1" />
     <skillIdle id="saBearIdle2" extends="skillIdleBase" useTime="4"  animation="idle2" sounds="soundBearIdle" />
     <skillIdle id="saBearIdle3" extends="skillIdleBase" useTime="3"  animation="idle3" />
-    <skillAttack id="saBearAttack1" extends="skillFightSimpleAttackBase" useTime="1.6" hitDistance="3" animation="attack"  cooldown="2" hitValue="-30" checkPoint="0.33" />
-    <skillAttack id="saBearAttack2" extends="skillFightSimpleAttackBase" useTime="1.5" hitDistance="3" animation="attack2" cooldown="4" sounds="soundBearAttack" hitValue="-40" checkPoint="0.4" />
+    <skillAttack id="saBearAttack1" extends="skillFightSimpleAttackBase" useTime="1.6" hitDistance="3" animation="attack"  cooldown="2" hitValue="30" checkPoint="0.33" />
+    <skillAttack id="saBearAttack2" extends="skillFightSimpleAttackBase" useTime="1.5" hitDistance="3" animation="attack2" cooldown="4" sounds="soundBearAttack" hitValue="40" checkPoint="0.4" />
     <skillHurt id="saBearHurt" extends="skillHurtBase" useTime="0.5" animation="hurt"  hurtFace="front" />
     <skillDead id="saBearDead" extends="skillDeadBase" bonesHit="hips" animation="dead" useTime="2" deadAnimPoint="0" sounds="soundBearDead" useRagdoll="0" />
     <skillReset id="saBearReset" extends="skillResetBase" useTime="0" animation="wait" timePoint="0" />
@@ -104,7 +104,7 @@
     <skillIdle id="saScorpionIdle"   extends="skillIdleBase" useTime="4" animation="idle"  />
     <skillIdle id="saScorpionIdle2" extends="skillIdleBase" useTime="4" animation="idle2"  />
     <skillAttack id="saScorpionAttack" extends="skillFightSimpleAttackBase" useTime="0.5" hitDistance="3" 
-                 animation="attack" cooldown="2" sounds="soundScorpionAttack" hitValue="-20" hitStates="stateScorpionVenom|0.2" checkPoint="0.45" />
+                 animation="attack" cooldown="2" sounds="soundScorpionAttack" hitValue="20" hitStates="stateScorpionVenom|0.2" checkPoint="0.45" />
     <skillHurt id="saScorpionHurt" extends="skillHurtBase" useTime="0.5" animation="hurt" hurtFace="front" />
     <skillDead id="saScorpionDead" extends="skillDeadBase" forceOnly="1" bonesHit="Bone,Bone.001" animation="dead" useTime="1" deadAnimPoint="0" sounds="soundScorpionDead" useRagdoll="0" />
     <skillReset id="saScorpionReset" extends="skillResetBase" useTime="0" animation="wait" timePoint="0" />
@@ -113,7 +113,7 @@
     <skillWait id="skillGbWait" extends="skillWaitBase" useTime="0.5" animation="wait" />
     <skillIdle id="skillGbIdle"   extends="skillIdleBase" useTime="4" animation="idle"   />
     <skillIdle id="skillGbIdle2" extends="skillIdleBase" useTime="4" animation="idle2"   />
-    <skillAttack id="skillGbAttack" extends="skillFightSimpleAttackBase" useTime="1" hitDistance="3" animation="attack" cooldown="1" hitValue="-20" checkPoint="0.5,0.7" />
+    <skillAttack id="skillGbAttack" extends="skillFightSimpleAttackBase" useTime="1" hitDistance="3" animation="attack" cooldown="1" hitValue="20" checkPoint="0.5,0.7" />
     <skillHurt id="skillGbHurt" extends="skillHurtBase" useTime="0.3" animation="hurt" hurtFace="front" />
     <skillDead id="skillGbDead" extends="skillDeadBase" bonesHit="root" animation="dead" useTime="3" deadAnimPoint="0.5" useRagdoll="1" />
     <skillWalk id="skillGbWalk" extends="skillWalkBase" useTime="2" animation="walk" baseSpeed="0.75" animSpeed="0.5" />
@@ -132,15 +132,15 @@
     <skillDead id="skillSinbadDead" extends="skillDeadBase" useTime="2" animation="n_dead" useRagdoll="0" />
     <skillAttack id="skillSinbadAttack" extends="skillFightSimpleAttackBase" weaponStateLimit="rightSword" 
             effects="effectSwordShadow1|0.5"
-            useTime="1.2" hitDistance="4" animation="n_attack"  cooldown="1" hitValue="-70" checkPoint="0.41" 
+            useTime="1.2" hitDistance="4" animation="n_attack"  cooldown="1" hitValue="70" checkPoint="0.41" 
             defendable="0" cutTimeStartMax="0.32" cutTimeEndMax="0.44" hitStates="stateStun|0.5" />
     <skillAttack id="skillSinbadAttack2" extends="skillFightSimpleAttackBase" weaponStateLimit="rightSword" 
             effects="effectSwordShadow3|0.3"
-            useTime="1.1" hitDistance="4" animation="n_attack2" cooldown="1" hitValue="-50" checkPoint="0.3" 
+            useTime="1.1" hitDistance="4" animation="n_attack2" cooldown="1" hitValue="50" checkPoint="0.3" 
             cutTimeStartMax="0.2" cutTimeEndMax="0.29" hitStates="stateStun|0.2"  />
     <skillAttack id="skillSinbadAttack3" extends="skillFightSimpleAttackBase" weaponStateLimit="rightSword" 
             effects="effectSwordShadow2|0.4"
-            useTime="1.0" hitDistance="4" animation="n_attack3" cooldown="1" hitValue="-50" checkPoint="0.3" 
+            useTime="1.0" hitDistance="4" animation="n_attack3" cooldown="1" hitValue="50" checkPoint="0.3" 
             cutTimeStartMax="0.25" cutTimeEndMax="0.58" hitStates="stateStun|0.2" />
     <skillDefend id="skillSinbadDefence"   extends="skillDefendBase" animation="n_defence"   weaponStateLimit="rightSword" useTime="0.75" />
     <skillDefend id="skillSinbadDefence2" extends="skillDefendBase" animation="n_defence2" weaponStateLimit="rightSword" useTime="0.75" />
@@ -154,7 +154,7 @@
     <skillHurt id="skillTrexHurt1" extends="skillHurtBase" useTime="0.5" animation="hurt_front1" hurtFace="front" sounds="soundDinosaurHurt" />
     <skillHurt id="skillTrexHurt2" extends="skillTrexHurt1" animation="hurt_front2" />
     <skillDead id="skillTrexDead" extends="skillDeadBase" useTime="3" animation="dead" useRagdoll="0" sounds="soundDinosaurDead,soundDinosaurDeadDown|0.25" />
-    <skillAttack id="skillTrexAttack" extends="skillFightSimpleAttackBase" useTime="0.75" hitDistance="4" animation="attack" cooldown="1.5" hitValue="-50" checkPoint="0.5" 
+    <skillAttack id="skillTrexAttack" extends="skillFightSimpleAttackBase" useTime="0.75" hitDistance="4" animation="attack" cooldown="1.5" hitValue="50" checkPoint="0.5" 
             cutTimeStartMax="0" cutTimeEndMax="0" sounds="soundDinosaurAttack2" />
     <skillIdle id="skillTrexIdle1" extends="skillIdleBase" useTime="4" animation="idle1" />
     
@@ -165,7 +165,7 @@
     <skillHurt id="skillRaptorHurt1" extends="skillHurtBase" useTime="0.5" animation="hurt_left" hurtFace="front" sounds="soundDinosaurHurt" />
     <skillHurt id="skillRaptorHurt2" extends="skillRaptorHurt1" animation="hurt_right" />
     <skillDead id="skillRaptorDead" extends="skillDeadBase" useTime="3" animation="dead" useRagdoll="0" sounds="soundDinosaurDead" />
-    <skillAttack id="skillRaptorAttack" extends="skillFightSimpleAttackBase" useTime="0.75" hitDistance="4" animation="attack" cooldown="1.5" hitValue="-50" checkPoint="0.5" 
+    <skillAttack id="skillRaptorAttack" extends="skillFightSimpleAttackBase" useTime="0.75" hitDistance="4" animation="attack" cooldown="1.5" hitValue="50" checkPoint="0.5" 
             cutTimeStartMax="0" cutTimeEndMax="0" sounds="soundDinosaurAttack" />
     <skillIdle id="skillRaptorIdle" extends="skillIdleBase" useTime="4" animation="idle" />
     
@@ -176,7 +176,7 @@
     
     <!--skeleton-->
     <skillAttack id="skillSkeletonAttack" extends="skillFightSimpleAttackBase" icon="" useTime="0.75" animation="ske_attack" cooldown="1"
-                 weaponStateLimit="rightSword" hitValue="-50" checkPoint="0.68" cutTimeStartMax="0.4" cutTimeEndMax="0.24"  />
+                 weaponStateLimit="rightSword" hitValue="50" checkPoint="0.68" cutTimeStartMax="0.4" cutTimeEndMax="0.24"  />
     <skillWait id="skillSkeletonWait" extends="skillWaitBase"  useTime="4" animation="ske_wait" loop="1" />
     <skillDead id="skillSkeletonDead" extends="skillDeadBase" remove="1" useTime="0.0001" effects="effectSkeletonDead" />
     <skillRun id="skillSkeletonRun" extends="skillRunBase" animation="idle_run" animSpeed="1.5" sounds="soundSkeletonStep1,soundSkeletonStep2|0.4" />

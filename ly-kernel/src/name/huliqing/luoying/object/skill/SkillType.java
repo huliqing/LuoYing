@@ -6,7 +6,7 @@
 package name.huliqing.luoying.object.skill;
 
 /**
- * 包装技能标记。
+ * 包装技能类型。
  * @author huliqing
  */
 public class SkillType {
@@ -14,9 +14,9 @@ public class SkillType {
     private final int index;
     private final String name;
     
-    public SkillType(int index, String tag) {
+    public SkillType(int index, String type) {
         this.index = index;
-        this.name = tag;
+        this.name = type;
     }
     
     /**
@@ -48,7 +48,7 @@ public class SkillType {
 
     @Override
     public String toString() {
-        return "skillTagIndex=" + index + ", skillTagName=" + name; 
+        return "SkillType=" + index + ", skillTagName=" + name; 
     }
     
     

@@ -36,13 +36,14 @@
 
     <!--技能管理模块: 间接依赖: moduleChannel -->
     <moduleSkill id="moduleSkill" moduleOrder="20" 
-                 bindDeadAttribute="attributeDead"
                  idleSkillTypes="idle"
                  waitSkillTypes="wait" 
                  walkSkillTypes="walk" 
                  runSkillTypes="run" 
                  hurtSkillTypes="hurt" 
                  deadSkillTypes="dead" 
+                 bindDeadAttribute="attributeDead"
+                 bindHurtAttributes="attributeHealth"
     />
     
     <!--皮肤管理模块(装备、武器)：直接或间接依赖： moduleActor, moduleSkill -->

@@ -14,7 +14,7 @@
     <elSBoolean id="sysElSBoolean" expression="" />
     <elSTBoolean id="sysElSTBoolean" expression="" />
     <elSTNumber id="sysElSTNumber" expression="" />
-    
+    <elSkillHitNumber id="sysElSkillHitNumber" expression="" />
 </root>
 
 

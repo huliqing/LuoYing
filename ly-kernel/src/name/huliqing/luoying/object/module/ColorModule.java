@@ -22,7 +22,7 @@ import name.huliqing.luoying.object.entity.Entity;
  * 然后通过运行时动态改变属性的值来改变Entity颜色。
  * @author huliqing
  */
-public class ColorModule extends AbstractModule implements ValueChangeListener<Vector4f>{
+public class ColorModule extends AbstractModule implements ValueChangeListener{
     private static final Logger LOG = Logger.getLogger(ColorModule.class.getName());
 
     // 绑定一个Vector4Attribute类型的属性，这个属性用于控制角色的颜色

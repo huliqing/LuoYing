@@ -5,11 +5,9 @@
  */
 package name.huliqing.luoying.object.el;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.el.ELContext;
 import javax.el.ValueExpression;
-import name.huliqing.luoying.Config;
 import name.huliqing.luoying.xml.ObjectData;
 
 /**

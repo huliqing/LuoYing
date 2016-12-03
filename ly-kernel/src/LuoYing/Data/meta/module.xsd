@@ -254,9 +254,6 @@ xs:time
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="moduleBase">
-                    <xs:attribute name="bindDeadAttribute" type="xs:string" use="required">
-                        <xs:annotation><xs:documentation>BooleanAttribute,绑定角色的“死亡”属性，这个属性标记着角色是否死亡。</xs:documentation></xs:annotation>
-                    </xs:attribute>
                     <xs:attribute name="idleSkillTypes" type="xs:string" use="required">
                         <xs:annotation><xs:documentation>默认的“空闲”技能的类型, 格式: "skillType1,skillType2,..."</xs:documentation></xs:annotation>
                     </xs:attribute>
@@ -274,6 +271,17 @@ xs:time
                     </xs:attribute>
                     <xs:attribute name="deadSkillTypes" type="xs:string" use="required">
                         <xs:annotation><xs:documentation>默认的“死亡”技能的类型, 格式: "skillType1,skillType2,..."</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="bindDeadAttribute" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>BooleanAttribute,绑定角色的“死亡”属性，这个属性标记着角色是否死亡。</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="bindHurtAttributes" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>
+                                NumberAttribute,绑定角色的“受伤”属性，当角色的这些属性值受到降低时，角色会执行“受伤”技能,该属性允许绑定多个值，格式：
+                                "attributeName1,attributeName2,...", 使用示例：bindHurtAttributes="attributeHealth", 表示当角色的健康值降低时角色将会执行受伤动画技能。
+                            </xs:documentation>
+                        </xs:annotation>
                     </xs:attribute>
                 </xs:extension>
             </xs:complexContent>

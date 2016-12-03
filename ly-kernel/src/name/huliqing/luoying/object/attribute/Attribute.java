@@ -72,12 +72,12 @@ public interface Attribute<T> extends DataProcessor<AttributeData> {
      * 添加值变侦听器
      * @param listener 
      */
-    void addListener(ValueChangeListener<?> listener);
+    void addListener(ValueChangeListener listener);
     
     /**
      * 移除值变侦听器
      * @param listener
      * @return 
      */
-    boolean removeListener(ValueChangeListener<?> listener);
+    boolean removeListener(ValueChangeListener listener);
 }

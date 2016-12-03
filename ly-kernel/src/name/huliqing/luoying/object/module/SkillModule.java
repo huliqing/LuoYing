@@ -23,6 +23,8 @@ import name.huliqing.luoying.log.StateCode;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.attribute.Attribute;
 import name.huliqing.luoying.object.attribute.BooleanAttribute;
+import name.huliqing.luoying.object.attribute.NumberAttribute;
+import name.huliqing.luoying.object.attribute.SimpleValueChangeListener;
 import name.huliqing.luoying.object.attribute.ValueChangeListener;
 import name.huliqing.luoying.object.entity.DataHandler;
 import name.huliqing.luoying.object.entity.Entity;
@@ -31,7 +33,7 @@ import name.huliqing.luoying.object.skill.Skill;
 /**
  * @author huliqing 
  */
-public class SkillModule extends AbstractModule implements DataHandler<SkillData>, ValueChangeListener<Boolean>{
+public class SkillModule extends AbstractModule implements DataHandler<SkillData>, ValueChangeListener, SimpleValueChangeListener<Number> {
     private static final Logger LOG = Logger.getLogger(SkillModule.class.getName());
     private final SkillService skillService = Factory.get(SkillService.class);
     
@@ -50,6 +52,9 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
     
     // 绑定角色的“死亡”属性，当角色在死亡的时候自动执行死亡技能
     private String bindDeadAttribute;
+    // 绑定“会受伤”的属性，当角色的这些属性被降低时，角色会自动执行“受伤”技能,这些属性必须是NumberAttribute类型。
+    // 一般为“生命值”属性，允许绑定多个不同的属性，格式： "attributeName1,attributeName2"
+    private String[] bindHurtAttributes;
     
     // ---- inner
     private final Control updateControl = new AdapterControl() {
@@ -77,6 +82,7 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
     private Skill lastSkill;
 
     private BooleanAttribute deadAttribute;
+    private NumberAttribute[] hurtAttributes;
     
     @Override
     public void setData(ModuleData data) {
@@ -89,6 +95,7 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
         hurtSkillTypes = skillService.convertSkillTypes(data.getAsArray("hurtSkillTypes"));
         deadSkillTypes = skillService.convertSkillTypes(data.getAsArray("deadSkillTypes"));
         bindDeadAttribute = data.getAsString("bindDeadAttribute");
+        bindHurtAttributes = data.getAsArray("bindHurtAttributes");
     }
     
     @Override
@@ -119,6 +126,22 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
             deadAttribute = entity.getAttributeManager().getAttribute(bindDeadAttribute, BooleanAttribute.class);
             if (deadAttribute != null) {
                 deadAttribute.addListener(this);
+            }
+        }
+        
+        if (bindHurtAttributes != null) {
+            List<NumberAttribute> temp = new ArrayList<NumberAttribute>(bindHurtAttributes.length);
+            for (String attr : bindHurtAttributes) {
+                NumberAttribute hurtAttr = entity.getAttributeManager().getAttribute(attr, NumberAttribute.class);
+                if (hurtAttr != null) {
+                    temp.add(hurtAttr);
+                } else {
+                    LOG.log(Level.WARNING, "HurtAttribute not found, attributeName={0}, entity={1}", new Object[] {attr, entity.getData().getId()});
+                }
+            }
+            hurtAttributes = temp.toArray(new NumberAttribute[0]);
+            for (NumberAttribute hurtAttr : hurtAttributes) {
+                hurtAttr.addSimpleValueChangeListener(this);
             }
         }
     }
@@ -190,6 +213,26 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
             }
             if (playSkill != null) {
                 playSkill(playSkill, true);
+            }
+            return;
+        }
+    }
+
+    @Override
+    public void onSimpleValueChanged(Attribute attribute, Number oldValue) {
+        if (hurtAttributes == null || hurtAttributes.length <= 0) 
+            return;
+        for (NumberAttribute na : hurtAttributes) {
+            if (attribute == na) {
+                if (na.floatValue() < oldValue.floatValue()) {
+                    Skill hurtSkill = getSkillByTypes(hurtSkillTypes);
+                    LOG.log(Level.INFO, "Entity hurted, entity={0}, attributeName={1}, oldValue={2}, newValue={3}", 
+                            new Object[] {entity.getData().getId(), na.getName(), oldValue, na.getValue()});
+                    if (hurtSkill != null) {
+                        playSkill(hurtSkill, false);
+                    }
+                    return;
+                }
             }
         }
     }

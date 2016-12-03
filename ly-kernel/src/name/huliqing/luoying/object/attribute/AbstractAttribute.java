@@ -93,7 +93,7 @@ public abstract class AbstractAttribute<T> implements Attribute<T> {
      * @param listener 
      */
     @Override
-    public void addListener(ValueChangeListener<?> listener) {
+    public void addListener(ValueChangeListener listener) {
         if (listeners == null) {
             listeners = new ArrayList<ValueChangeListener>();
         }
@@ -108,7 +108,7 @@ public abstract class AbstractAttribute<T> implements Attribute<T> {
      * @return 
      */
     @Override
-    public boolean removeListener(ValueChangeListener<?> listener) {
+    public boolean removeListener(ValueChangeListener listener) {
         return listeners != null && listeners.remove(listener);
     }
     

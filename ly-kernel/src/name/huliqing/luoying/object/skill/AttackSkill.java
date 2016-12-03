@@ -209,7 +209,6 @@ public class AttackSkill extends HitSkill {
             SoundManager.getInstance().playSound(collisionSound, actor.getSpatial().getWorldTranslation());
         }
         
-        // 伤害计算
         applyHit(target);
     }
     

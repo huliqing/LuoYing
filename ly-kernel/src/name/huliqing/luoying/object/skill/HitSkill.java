@@ -24,7 +24,7 @@ import name.huliqing.luoying.log.StateCode;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.el.STBooleanEl;
-import name.huliqing.luoying.object.el.STNumberEl;
+import name.huliqing.luoying.object.el.SkillHitNumberEl;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.magic.Magic;
 import name.huliqing.luoying.utils.ConvertUtils;
@@ -48,7 +48,8 @@ public abstract class HitSkill extends AbstractSkill {
     protected float hitValue;
     // Hit公式，这个公式用于计算当前角色对目标角色可以产生的属性影响值，不包含hitValue.
     // hitEl计算出的值会和hitValue一起加成，作为最终的hit结果值。
-    protected STNumberEl hitEl;
+    protected SkillHitNumberEl hitEl;
+    
     // hit的距离限制，注：hitDistance和hitAngle决定了hit的面积,举例，
     // 如果 hitDistance = 3, hitAngle=360， 则在角色周围3码内的目标都在这个技能范围内
     protected float hitDistance = 3;
@@ -75,7 +76,7 @@ public abstract class HitSkill extends AbstractSkill {
         hitCheckEl = elService.createSTBooleanEl(data.getAsString("hitCheckEl", "#{true}")); // #{true} -> 除非设置了hitCheckEl否则默认任何目标都可以hit
         hitAttribute = data.getAsString("hitAttribute");
         hitValue = data.getAsFloat("hitValue", 0);
-        hitEl = elService.createSTNumberEl(data.getAsString("hitEl", "#{0}"));
+        hitEl = elService.createSkillHitNumberEl(data.getAsString("hitEl", "#{0}"));
         hitDistance = data.getAsFloat("hitDistance", hitDistance);
         hitDistanceSquared = hitDistance * hitDistance;
         hitAngle = data.getAsFloat("hitAngle", hitAngle);
@@ -139,13 +140,21 @@ public abstract class HitSkill extends AbstractSkill {
         return actor.getScene().getEntity(targetAttribute.getValue().longValue());
     }
     
-    @Override
-    protected float getSkillValue() {
-        float lv = getLevelValue();
-        if (lv != -1) {
-            return lv * hitValue;
+    /**
+     * 获取技能可以对目标造成的最终输出值，这个值是通过技能输出公式计算得到的。
+     * @param target 目标角色
+     * @return 
+     */
+    protected Number getFinalHitValue(Entity target) {
+        float skillHitValue = hitValue;
+        Number lv = getLevelValue();
+        if (lv != null) {
+            skillHitValue = skillHitValue * lv.floatValue();
         }
-        return hitValue;
+        hitEl.setSource(actor.getAttributeManager());
+        hitEl.setTarget(target.getAttributeManager());
+        hitEl.setSkillValue(skillHitValue);
+        return hitEl.getValue();
     }
     
     /**
@@ -190,9 +199,9 @@ public abstract class HitSkill extends AbstractSkill {
             store.add(0, mainTarget);
         }
     }
-    
+
     /**
-     * HIT目标角色。由子类调用
+     * HIT目标角色, 由子类调用, 这个方法将自动通过技能的输出公式计算出一个最终输出值。
      * @param target 
      */
     protected void applyHit(Entity target) {
@@ -211,7 +220,8 @@ public abstract class HitSkill extends AbstractSkill {
             applyStates(target, hitStates);
             applyMagics(target, hitMagics);
             if (hitAttribute != null) {
-                applyHit(actor, target, getSkillValue(), hitEl, hitAttribute);
+                float finalHitValue = getFinalHitValue(target).floatValue();
+                entityNetwork.hitNumberAttribute(target, hitAttribute, finalHitValue, actor);
             }
         }
     }
@@ -250,20 +260,6 @@ public abstract class HitSkill extends AbstractSkill {
         }
     }
     
-    /**
-     * @param attacker 攻击者
-     * @param target 被攻击者
-     * @param hitValue 技能值
-     * @param hitEl 技能计算公式
-     * @param attribute 指定攻击的是哪一个属性
-     */
-    private void applyHit(Entity attacker, Entity target, float hitValue, STNumberEl hitEl, String attribute) {
-        hitEl.setSource(attacker.getAttributeManager());
-        hitEl.setTarget(target.getAttributeManager());
-        float finalHitValue = hitValue + hitEl.getValue().floatValue();
-        entityNetwork.hitNumberAttribute(target, attribute, finalHitValue, attacker);
-    }
-
     @Override
     public int checkState() {
         if (actor == null) {

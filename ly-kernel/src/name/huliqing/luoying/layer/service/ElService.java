@@ -10,6 +10,7 @@ import name.huliqing.luoying.object.el.STBooleanEl;
 import name.huliqing.luoying.object.el.STNumberEl;
 import name.huliqing.luoying.object.el.LNumberEl;
 import name.huliqing.luoying.object.el.SBooleanEl;
+import name.huliqing.luoying.object.el.SkillHitNumberEl;
 
 /**
  *
@@ -45,6 +46,7 @@ public interface ElService extends Inject{
      */
     LNumberEl createLNumberEl(String idOrExpression);
     
+    
     /**
      * 自定义的表达式,返回类型根据表达式实际情况而定，类型为Object.
      * 需要设置表达式及根据表达式设置参数值后才可以计算值。
@@ -52,4 +54,11 @@ public interface ElService extends Inject{
      * @return 
      */
     CustomEl createCustomEl(String idOrExpression);
+    
+    /**
+     * 载入一条技能输出公式， 参数可以是一条公式id或者是表达式字段串形式。#{s.attributeXXX + skillValue - t.attributeXXX}
+     * @param idOrExpression
+     * @return 
+     */
+    SkillHitNumberEl createSkillHitNumberEl(String idOrExpression);
 }

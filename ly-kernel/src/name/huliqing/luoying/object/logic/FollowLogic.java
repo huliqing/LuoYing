@@ -22,7 +22,7 @@ import name.huliqing.luoying.utils.MathUtils;
  * 跟随逻辑
  * @author huliqing
  */
-public class FollowLogic extends AbstractLogic implements ValueChangeListener<Object>{
+public class FollowLogic extends AbstractLogic implements ValueChangeListener {
 //    private final static Logger logger = Logger.getLogger(FollowLogic.class.getName());
     private final ActionService actionService = Factory.get(ActionService.class);
     

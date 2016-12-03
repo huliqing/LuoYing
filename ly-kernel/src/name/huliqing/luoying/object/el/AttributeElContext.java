@@ -52,6 +52,15 @@ public class AttributeElContext extends ELContext{
         elResolver.setBaseValue(key, value);
     }
     
+    /**
+     * 给ELContext设置基本变量
+     * @param key
+     * @param value 
+     */
+    public void setBaseValue(String key, Object value) {
+        elResolver.setBaseValue(key, value);
+    }
+    
     private final class AttributeELResolver extends SimpleElResolver {
         
         public AttributeELResolver() {

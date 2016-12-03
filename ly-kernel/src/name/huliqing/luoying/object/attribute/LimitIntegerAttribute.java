@@ -7,7 +7,7 @@ import name.huliqing.luoying.data.AttributeData;
  * 或者通过绑定其它属性来限制当前属性的取值范围。
  * @author huliqing
  */
-public class LimitIntegerAttribute extends IntegerAttribute implements LimitAttribute, AttributeListener, ValueChangeListener<Number>{
+public class LimitIntegerAttribute extends IntegerAttribute implements LimitAttribute, AttributeListener, ValueChangeListener{
 
     private int minValue = Integer.MIN_VALUE;
     private int maxValue = Integer.MAX_VALUE;

@@ -256,6 +256,7 @@ import name.huliqing.luoying.object.el.STBooleanEl;
 import name.huliqing.luoying.object.el.STNumberEl;
 import name.huliqing.luoying.object.el.LNumberEl;
 import name.huliqing.luoying.object.el.SBooleanEl;
+import name.huliqing.luoying.object.el.SkillHitNumberEl;
 import name.huliqing.luoying.object.entity.impl.DirectionalLightShadowEntity;
 import name.huliqing.luoying.object.entity.impl.GrassEntity;
 import name.huliqing.luoying.object.entity.impl.SimpleModelEntity;
@@ -469,6 +470,7 @@ public class LuoYing {
         DataFactory.registerDataProcessor("elSBoolean",  SBooleanEl.class);
         DataFactory.registerDataProcessor("elSTBoolean",  STBooleanEl.class);
         DataFactory.registerDataProcessor("elSTNumber",  STNumberEl.class);
+        DataFactory.registerDataProcessor("elSkillHitNumber",  SkillHitNumberEl.class);
         
         // Emitter
         DataFactory.register("emitter",  EmitterData.class, EmitterDataLoader.class, Emitter.class);

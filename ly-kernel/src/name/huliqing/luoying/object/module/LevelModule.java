@@ -25,7 +25,7 @@ import name.huliqing.luoying.object.entity.Entity;
  * 可以让角色升级的模块,这个模块的作用是监听角色的经验值属性，并在角色的经验值达到一定程度时改变角色的等级值。
  * @author huliqing
  */
-public class LevelModule extends AbstractModule implements ValueChangeListener<Number>{
+public class LevelModule extends AbstractModule implements ValueChangeListener{
 
     private static final Logger LOG = Logger.getLogger(LevelModule.class.getName());
     
