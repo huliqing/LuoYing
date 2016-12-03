@@ -74,4 +74,7 @@ public final class StateCode {
     /** 某些侦听器钩子不允许执行技能，比如一些状态效果会侦听角色技能的执行，并限制技能的执行。*/
     public final static int SKILL_HOOK = 112;
     
+    /** 角色自身已经死亡 */
+    public final static int SKILL_DEAD = 113;
+    
 }

@@ -5,6 +5,7 @@
  */
 package name.huliqing.luoying.object.module;
 
+import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.scene.Spatial;
 import java.util.logging.Level;
@@ -59,6 +60,10 @@ public class PhysicsModule extends AbstractModule {
     @Override
     public void cleanup() {
         if (control != null) {
+            PhysicsSpace ps = control.getPhysicsSpace();
+            if (ps != null) {
+                ps.remove(entity.getSpatial());
+            }
             entity.getSpatial().removeControl(control);
         }
         super.cleanup(); 

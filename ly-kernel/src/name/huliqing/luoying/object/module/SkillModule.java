@@ -226,7 +226,7 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
             if (attribute == na) {
                 if (na.floatValue() < oldValue.floatValue()) {
                     Skill hurtSkill = getSkillByTypes(hurtSkillTypes);
-                    LOG.log(Level.INFO, "Entity hurted, entity={0}, attributeName={1}, oldValue={2}, newValue={3}", 
+                    LOG.log(Level.INFO, "Entity hurt, entity={0}, attributeName={1}, oldValue={2}, newValue={3}", 
                             new Object[] {entity.getData().getId(), na.getName(), oldValue, na.getValue()});
                     if (hurtSkill != null) {
                         playSkill(hurtSkill, false);
@@ -246,6 +246,11 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
     public int checkStateCode(Skill skill) {
         if (skill == null) {
             return StateCode.SKILL_NOT_FOUND;
+        }
+        
+        // 角色自己已经死亡。
+        if (deadAttribute != null && deadAttribute.getValue()) {
+            return StateCode.SKILL_DEAD;
         }
 
         if (skill.getActor() == null) {

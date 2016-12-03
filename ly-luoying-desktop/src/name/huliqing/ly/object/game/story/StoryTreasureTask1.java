@@ -14,11 +14,13 @@ import name.huliqing.ly.view.talk.TalkListener;
 import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.layer.service.PlayService;
+import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.logic.scene.ActorLoadHelper;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.game.Game;
 import name.huliqing.luoying.object.gamelogic.AbstractGameLogic;
+import name.huliqing.luoying.object.skill.SkillType;
 import name.huliqing.luoying.ui.Button;
 import name.huliqing.luoying.ui.TextPanel;
 import name.huliqing.luoying.ui.UI;
@@ -35,12 +37,11 @@ import name.huliqing.ly.layer.service.GameService;
  */
 public class StoryTreasureTask1 extends AbstractTaskStep {
     private final PlayService playService = Factory.get(PlayService.class);
-//    private final StateService stateService = Factory.get(StateService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final GameService gameService = Factory.get(GameService.class);
+    private final SkillService skillService = Factory.get(SkillService.class);
     
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
-//    private final StateNetwork stateNetwork = Factory.get(StateNetwork.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
     
@@ -102,10 +103,9 @@ public class StoryTreasureTask1 extends AbstractTaskStep {
                 victim = actor;
                 actorService.setLocation(victim, _game.treasurePos.clone().addLocal(1, 0, 1));
                 gameService.setGroup(victim, _game.groupPlayer);
-                gameService.setEssential(victim, true);// 设置为"必要的",这样不会被移除出场景
+                gameService.setEssential(victim, true); // 设置为"必要的",这样不会被移除出场景
+                skillService.playSkill(victim, skillService.getSkillWaitDefault(victim), false);
                 victim.addObjectData(Loader.loadData(IdConstants.STATE_SAFE), 1);
-                
-//                skillService.playSkill(actor, skillService.getSkill(actor, SkillType.wait), false);
                 playNetwork.addEntity(victim);
                 
                 // 救命

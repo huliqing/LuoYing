@@ -5,6 +5,7 @@
  */
 package name.huliqing.luoying.object.module;
 
+import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
@@ -117,6 +118,12 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     public void cleanup() {
         entity.removeEntityAttributeListener(actorEntityListener);
         if (innerControl != null) {
+            // 注意要从PhysicsSpace中清理掉，否则角色看起来移除了，但是实际上物理物体还在场景中占资源。
+            // 使用PhysicsSpace中的debug可以看到。
+            PhysicsSpace ps = innerControl.getPhysicsSpace();
+            if (ps != null) {
+                ps.remove(entity.getSpatial());
+            }
             entity.getSpatial().removeControl(innerControl);
         }
         super.cleanup(); 

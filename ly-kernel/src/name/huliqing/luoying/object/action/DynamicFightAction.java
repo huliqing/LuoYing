@@ -237,11 +237,11 @@ public class DynamicFightAction extends PathFollowAction implements FightAction,
      * @return 
      */
     protected boolean isInHitRange(Skill attackSkill, Entity target) {
-        // 正常攻击类技能都应该是HitSkill,使用hitSkill的isInHitDistance来判断以优化
-        // 性能，
-        if (attackSkill instanceof HitSkill) {
-            return ((HitSkill) attackSkill).isInHitDistance(target);
-        }
+//        // 正常攻击类技能都应该是HitSkill,使用hitSkill的isInHitDistance来判断以优化
+//        // 性能，
+//        if (attackSkill instanceof HitSkill) {
+//            return ((HitSkill) attackSkill).isInHitDistance(target);
+//        }
         
         // 只有非HitSkill时才使用canPlay，这个方法稍微耗性能
         return attackSkill.checkState() == StateCode.OK;

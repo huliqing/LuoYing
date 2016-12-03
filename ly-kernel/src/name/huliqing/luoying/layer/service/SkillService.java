@@ -177,5 +177,4 @@ public interface SkillService extends SkillNetwork {
      */
     long convertSkillTypes(String... types);
     
-    
 }

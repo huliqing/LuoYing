@@ -50,7 +50,7 @@ public abstract class PlantEntity extends ModelEntity {
             scene.addSceneListener(sceneListener);
         }
     }
-
+    
     @Override
     public void cleanup() {
         if (sceneListener != null) {

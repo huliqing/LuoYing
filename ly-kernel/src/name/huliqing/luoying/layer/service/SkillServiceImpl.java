@@ -6,6 +6,7 @@ package name.huliqing.luoying.layer.service;
 
 import com.jme3.math.Vector3f;
 import java.util.List;
+import name.huliqing.luoying.Config;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.log.StateCode;
 import name.huliqing.luoying.object.entity.Entity;
@@ -264,6 +265,5 @@ public class SkillServiceImpl implements SkillService {
     public long convertSkillTypes(String... skillTypes) {
         return defineService.getSkillTypeDefine().convert(skillTypes);
     }
-    
 
 }

@@ -216,10 +216,7 @@ public class PatrolIdleAction extends AbstractAction implements IdleAction, Skil
             // 走动过程判断，防止角色走出圈外。
             // 该情况发生在当角色走出idle范围外后返回的情况(如追踪攻击敌人后返回)
             float angle = actorService.getViewAngle(actor, currentPos);
-            if (angle < 90 
-                    //&& actor.getDistance(patrolOrgin) > walkRadius
-                    && actor.getSpatial().getWorldTranslation().distanceSquared(patrolOrgin) > walkRadiusSquared
-                    ) {
+            if (angle < 90 && actor.getSpatial().getWorldTranslation().distanceSquared(patrolOrgin) > walkRadiusSquared) {
                 
                 // ignore:不能切换到"等待"或“空闲”状态,这时候角色还在圈外，需要
                 // 等它一直走到巡逻点范围内.

@@ -54,7 +54,7 @@ public class ActionModule extends AbstractModule<ModuleData> {
         
         updateControl = new AdapterControl() {
             @Override
-            public void update(float tpf) {
+            public final void update(float tpf) {
                 actionUpdate(tpf);
             }
         };
