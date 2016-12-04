@@ -15,15 +15,6 @@ import name.huliqing.luoying.object.entity.Entity;
  */
 public interface ActorService extends ActorNetwork {
     
-//    /**
-//     * 获取角色周围一定围围内的其它角色，包含死亡的角色，但不包含角色自身(actor).
-//     * @param actor
-//     * @param maxDistance
-//     * @param store
-//     * @return 
-//     */
-//    List<Entity> findNearestActors(Entity actor, float maxDistance, List<Entity> store);
-    
     /**
      * 获取角色周围一定围围内的其它角色，包含死亡的角色，但不包含角色自身(actor).
      * 可以使用angle来限制角度，即表示在actor前方的一定角度范围内的角色。如果
@@ -43,17 +34,6 @@ public interface ActorService extends ActorNetwork {
      * @param viewDirection 同步视角方向
      */
     void syncTransform(Entity actor, Vector3f location, Vector3f viewDirection);
-    
-    /**
-     * 同步角色动画。这个方法在同步服务端与客户端首次载入角色时的角色动画有用。注：数组长度都是一一对应的。
-     * @param actor
-     * @param channelIds
-     * @param animNames
-     * @param loopModes
-     * @param speeds
-     * @param times 
-     */
-    void syncAnimation(Entity actor, String[] channelIds, String[] animNames, byte[] loopModes, float[] speeds, float[] times);
         
     /**
      * 获取角色当前位置

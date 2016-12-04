@@ -38,7 +38,7 @@
     <entityAdvanceWater id="entityAdvanceWaterBase" extends="sysEntityAdvanceWaterBase" />
     
     <!--物理环境-->
-    <entityPhysics id="entityPhysicsBase" extends="sysEntityPhysicsBase" debug="1" />
+    <entityPhysics id="entityPhysicsBase" extends="sysEntityPhysicsBase" debug="0" />
     
     <!--第三人称镜头跟随视角-->
     <entityChaseCamera id="entityChaseCameraBase" extends="sysEntityChaseCameraBase" />

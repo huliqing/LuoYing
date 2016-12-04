@@ -6,7 +6,7 @@ package name.huliqing.ly.object.game.story;
 
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.layer.network.PlayNetwork;
-import name.huliqing.luoying.layer.service.ActorService;
+import name.huliqing.luoying.layer.service.SceneService;
 import name.huliqing.luoying.logic.scene.ActorMultLoadHelper;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.game.Game;
@@ -19,10 +19,10 @@ import name.huliqing.ly.layer.service.GameService;
  * @author huliqing
  */
 public class StoryGuardFairyTask extends AbstractGameLogic {
-    private final ActorService actorService = Factory.get(ActorService.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final GameService gameService = Factory.get(GameService.class);
 //    private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
+    private final SceneService sceneService = Factory.get(SceneService.class);
     private final StoryGuardGame _game;
     
     // 这个距离定义了当player离妖精地点多近时就触发妖精任务 － 载入妖精角色
@@ -82,7 +82,8 @@ public class StoryGuardFairyTask extends AbstractGameLogic {
             public void callback(Entity actor, int loadIndex) {
                 String id = actor.getData().getId();
                 gameService.setGroup(actor, StoryGuardGame.GROUP_FAIRY);
-                actorService.setLocation(actor, _game.getFairyPosition());
+                gameService.setLocation(actor, _game.getFairyPosition());
+                gameService.setOnTerrain(actor);
                 if (id.equals(IdConstants.ACTOR_FAIRY)) {
                     fairy = actor;
                     gameService.setLevel(fairy, _game.getFairyLevel());

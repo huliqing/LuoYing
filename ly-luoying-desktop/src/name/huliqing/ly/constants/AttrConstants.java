@@ -49,5 +49,6 @@ public class AttrConstants {
     public final static String GHOST_RATE = "attributeGhostRate";
     public final static String RESIST_INTERRUPT_RATE = "attributeResistInterruptRate";
     public final static String WEAPON_SLOTS = "attributeWeaponSlots";
+    public final static String LOCATION = "attributeLocation";
     public final static String COLOR = "attributeColor";
 }

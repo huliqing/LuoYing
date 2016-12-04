@@ -19,23 +19,6 @@ import name.huliqing.ly.view.talk.Talk;
 public interface GameNetwork extends Inject {
     
     void addMessage(String message, MessageType type);
-   
-    // remove20161126
-//    /**
-//     * 将当前服务端状态初始化到客户端。 一般在客户端连接到服务端后调用初始化
-//     * 状态。
-//     * @param client
-//     */
-//    void syncGameInitToClient(HostedConnection client);
-    
-    // remove201611xx
-//    /**
-//     * 同步“同步对象”
-//     * @param object
-//     * @param syncData
-//     * @param reliable 
-//     */
-//    void syncObject(NetworkObject object, SyncData syncData, boolean reliable);
     
     /**
      * 让角色说话
@@ -125,6 +108,19 @@ public interface GameNetwork extends Inject {
      * @param entity 
      */
     void kill(Entity entity);
+    
+    /**
+     * 设置角色的位置
+     * @param entity
+     * @param location
+     */
+    void setLocation(Entity entity, Vector3f location);
+    
+    /**
+     * 把角色移动到地面上。
+     * @param entity 
+     */
+    void setOnTerrain(Entity entity);
     
     /**
      * 设置角色的颜色

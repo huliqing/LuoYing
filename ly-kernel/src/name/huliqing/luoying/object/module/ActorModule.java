@@ -12,19 +12,23 @@ import com.jme3.math.Vector3f;
 import com.jme3.util.TempVars;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 import name.huliqing.luoying.data.ModuleData;
 import name.huliqing.luoying.object.attribute.Attribute;
 import name.huliqing.luoying.object.attribute.BooleanAttribute;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.attribute.SimpleValueChangeListener;
+import name.huliqing.luoying.object.attribute.ValueChangeListener;
+import name.huliqing.luoying.object.attribute.Vector3fAttribute;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.entity.EntityAttributeListener;
+import name.huliqing.luoying.utils.FastStack;
 /**
  * 角色的基本控制器
  * @author huliqing
  * @param <T>
  */
-public class ActorModule<T extends ModuleData> extends AbstractModule<T> implements SimpleValueChangeListener<Object> {
+public class ActorModule<T extends ModuleData> extends AbstractModule<T> implements SimpleValueChangeListener<Object>, ValueChangeListener {
 //    private static final Logger LOG = Logger.getLogger(ActorModule.class.getName());
     private final static String DATA_VIEW_DIRECTION = "viewDirection";
     private final static String DATA_WALK_DIRECTION = "walkDirection";
@@ -40,8 +44,10 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     private String bindMassAttribute;
     // 绑定角色属性，这个属性用来控制角色是否是可移动的，默认都是可以移动的。
     private String bindMovableAttribute;
-    // 绑定一个角色属性，这个属性控制角色是否是可转动朝向的，默认都是可以转动的.
+    // 绑定角色属性，这个属性控制角色是否是可转动朝向的，默认都是可以转动的.
     private String bindRotatableAttribute;
+    // 绑定角色的位置属性，可以用这个值来控制角色的位置。
+    private String bindLocationAttribute;
     
     // ---- inner
     private BetterCharacterControlWrap innerControl;
@@ -53,6 +59,10 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     private NumberAttribute massAttribute;
     private BooleanAttribute movableAttribute;
     private BooleanAttribute rotatableAttribute;
+    private Vector3fAttribute locationAttribute;
+    // 这个参数用于避免LocationAttribute位置变化时触发事件的循环调用，因为ActorModule自身会改变角色的位置值，
+    // 这可能会导致内部循环触发LocationAttribute的变化事件。
+    private boolean locationChangedEventEnabled = true;
     
     // 用于监听Entity被击中某个属性时的侦听器
     private final EntityAttributeListener actorEntityListener = new ActorEntityListener();
@@ -67,12 +77,18 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
         this.bindMassAttribute = data.getAsString("bindMassAttribute");
         this.bindMovableAttribute = data.getAsString("bindMovableAttribute");
         this.bindRotatableAttribute = data.getAsString("bindRotatableAttribute");
+        this.bindLocationAttribute = data.getAsString("bindLocationAttribute");
     }
 
     @Override
     public void updateDatas() {
         if (initialized) {
             data.setAttribute(DATA_VIEW_DIRECTION, getViewDirection());
+            if (locationAttribute != null) {
+                locationChangedEventEnabled = false;
+                locationAttribute.setValue(getLocation());
+                locationChangedEventEnabled = true;
+            }
             // 不保存这个状态，由skill去恢复走路就行。避免移动与动画不同步，
             // 这发生在当角色在走路过程中存档后，再恢复时会导致角色“不走路”但却在一直移动。
 //            data.setAttribute(DATA_WALK_DIRECTION, getWalkDirection());
@@ -89,11 +105,17 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
         massAttribute = entity.getAttributeManager().getAttribute(bindMassAttribute, NumberAttribute.class);
         movableAttribute = entity.getAttributeManager().getAttribute(bindMovableAttribute, BooleanAttribute.class);
         rotatableAttribute = entity.getAttributeManager().getAttribute(bindRotatableAttribute, BooleanAttribute.class);
+        locationAttribute = entity.getAttributeManager().getAttribute(bindLocationAttribute, Vector3fAttribute.class);
         
          // 监听角色健康值属性，当健康值等于或小于0于，角色要标记为死亡。
         deadAttribute.addSimpleValueChangeListener(this);
         targetAttribute.addSimpleValueChangeListener(this);
-        massAttribute.addSimpleValueChangeListener(this);
+        if (massAttribute != null) {
+            massAttribute.addSimpleValueChangeListener(this);
+        }
+        if (locationAttribute != null) {
+            locationAttribute.addListener(this);
+        }
         
         // 控制器
         this.innerControl = new BetterCharacterControlWrap(radius, height, massAttribute != null ? massAttribute.floatValue() : 60);
@@ -103,7 +125,6 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
         }
         this.entity.getSpatial().addControl(innerControl);
         
-        // 
         Vector3f viewDirection = data.getAsVector3f(DATA_VIEW_DIRECTION);
         Vector3f walkDirection = data.getAsVector3f(DATA_WALK_DIRECTION);
         if (viewDirection != null) {
@@ -151,8 +172,18 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
             return;
         }
         
+        // 当角色质量发生变化
         if (attribute == massAttribute) {
             innerControl.setMass(massAttribute.getValue().floatValue());
+        }
+    }
+    
+    @Override
+    public void onValueChanged(Attribute attribute) {
+        // locationChangedEventEnabled这个参数用于避免LocationAttribute位置变化时触发事件的循环调用，
+        // 因为ActorModule自身会改变角色的位置值，这可能会导致内部循环触发LocationAttribute的变化事件。
+        if (locationChangedEventEnabled && attribute == locationAttribute) {
+            setLocation(locationAttribute.getValue());
         }
     }
     
@@ -280,12 +311,15 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     
     // 这个侦听器用于侦听Entity属性被击中, 并将普通的属性击中转换为更高级一点事件响应：ActorListener, 
     private class ActorEntityListener implements EntityAttributeListener {
+        
         // 这个状态用于记住被击中之前角色的死亡状态。
-        private boolean deadStateBeforeHit;
+        // 这里必须用Stack方式，因为onHitAttributeBefore，onHitAttributeAfter随然是成对出现的，
+        // 但是不能保证他们是连续调用的。
+        private final FastStack<Boolean> deadStack = new FastStack<Boolean>(2);
         
         @Override
         public void onHitAttributeBefore(Attribute attribute, Object hitValue, Entity hitter) {
-            deadStateBeforeHit = isDead();
+            deadStack.push(isDead());
         }
 
         @Override
@@ -298,8 +332,9 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
 //                        + ", hitValue=" + hitValue + ", hitterId=" + (hitter != null ? hitter.getData().getId() : null));
 //            }
             
+            boolean oldDeadState = deadStack.pop();
             // 判断是否因这次击中而导致角色死亡
-            boolean killed = !deadStateBeforeHit && isDead();
+            boolean killed = !oldDeadState && isDead();
             
             // 通知当前entity, 已经被某一个目标击中
             notifyHitByTarget(hitter, attribute, hitValue, oldValue, killed);
@@ -350,6 +385,20 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     private class BetterCharacterControlWrap extends BetterCharacterControl {
         public BetterCharacterControlWrap(float radius, float height, float mass) {
             super(radius, height, mass);
+        }
+
+        @Override
+        public void update(float tpf) {
+            super.update(tpf);
+            if (enabled && locationAttribute != null) {
+                // 把位置更新回LocationAttribute属性
+                // 注：locationChangedEventEnabled用于避免位置变化时引起的循环调用, 虽然这不太可能真的引起循环调用，
+                // 由于第二次设置value时值是相同的，所以不会引起ValueChange事件，但是会多出一些比较和执行操作。
+                // locationChangedEventEnabled可以减少这些多余的执行操作和避免可能存在的BUG隐患。
+                locationChangedEventEnabled = false;
+                locationAttribute.setValue(getLocation());
+                locationChangedEventEnabled = true;
+            }
         }
         
         public float getMass() {

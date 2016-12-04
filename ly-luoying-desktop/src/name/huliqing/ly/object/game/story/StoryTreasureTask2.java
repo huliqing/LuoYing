@@ -21,6 +21,7 @@ import name.huliqing.luoying.layer.network.SkinNetwork;
 import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.layer.service.LogicService;
 import name.huliqing.luoying.layer.service.PlayService;
+import name.huliqing.luoying.layer.service.SceneService;
 import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.logic.PositionLogic;
@@ -56,18 +57,15 @@ import name.huliqing.ly.layer.service.GameService;
  */
 public class StoryTreasureTask2 extends AbstractTaskStep {
     private final PlayService playService = Factory.get(PlayService.class);
-//    private final StateService stateService = Factory.get(StateService.class);
     private final LogicService logicService = Factory.get(LogicService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
-//    private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final SkinNetwork skinNetwork = Factory.get(SkinNetwork.class);
-//    private final StateNetwork stateNetwork = Factory.get(StateNetwork.class);
     private final GameService gameService = Factory.get(GameService.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
-//    private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
+    private final SceneService sceneService = Factory.get(SceneService.class);
     
     // ==== 任务位置
     private final StoryTreasureGame game;
@@ -103,7 +101,7 @@ public class StoryTreasureTask2 extends AbstractTaskStep {
     // 怪物刷新点
     private Vector3f[] enemyPositions;
     // 同伴的随机生成位置
-    private final Vector3f[] companionPosition = new Vector3f[] {new Vector3f(0, 0, 0)};
+    private final Vector3f companionPosition = new Vector3f(0, 0, 0);
     
     private boolean enabled = true;
     
@@ -421,7 +419,12 @@ public class StoryTreasureTask2 extends AbstractTaskStep {
         @Override
         public void callback(Entity actor) {
             companion = actor;
-            actorService.setLocation(companion, companionPosition[FastMath.nextRandomInt(0, companionPosition.length - 1)]);
+            Vector3f locWithFixedHeight = sceneService.getSceneHeight(companionPosition.x, companionPosition.z);
+            if (locWithFixedHeight != null) {
+                actorService.setLocation(companion, locWithFixedHeight);
+            } else {
+                actorService.setLocation(companion, companionPosition);
+            }
             gameService.setLevel(companion, 40);
             gameService.setPartner(player, actor);
             gameService.setTeam(companion, gameService.getTeam(player));

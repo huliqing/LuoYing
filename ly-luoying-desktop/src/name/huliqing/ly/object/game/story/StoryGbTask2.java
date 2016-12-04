@@ -13,7 +13,9 @@ import name.huliqing.luoying.Factory;
 import name.huliqing.ly.enums.MessageType;
 import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.service.ActorService;
+import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.layer.service.PlayService;
+import name.huliqing.luoying.layer.service.SceneService;
 import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.logic.scene.ActorBuildSimpleLogic;
 import name.huliqing.luoying.logic.scene.ActorBuildSimpleLogic.Callback;
@@ -21,14 +23,13 @@ import name.huliqing.luoying.logic.scene.ActorMultLoadHelper;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.actor.Actor;
-import name.huliqing.luoying.object.drop.Drop;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.game.Game;
 import name.huliqing.luoying.object.gamelogic.AbstractGameLogic;
-import name.huliqing.luoying.object.module.DropModule;
 import name.huliqing.luoying.object.module.StateModule;
 import name.huliqing.luoying.object.state.State;
 import name.huliqing.luoying.utils.MathUtils;
+import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.ly.constants.IdConstants;
 import name.huliqing.ly.layer.service.GameService;
 
@@ -43,6 +44,8 @@ public class StoryGbTask2 extends AbstractTaskStep{
     private final ActorService actorService = Factory.get(ActorService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
     private final GameService gameService = Factory.get(GameService.class);
+    private final SceneService sceneService = Factory.get(SceneService.class);
+    private final EntityService entityService = Factory.get(EntityService.class);
     private final StoryGbGame _game;
     private Entity player;
     private boolean finished;
@@ -124,19 +127,17 @@ public class StoryGbTask2 extends AbstractTaskStep{
                     if (sm != null) {
                         sm.addState((State) Loader.load(IdConstants.STATE_SAFE), true);
                     }
-                    
+                    gameService.setLocation(altar, _game.getEnemyPosition());
+                    gameService.setOnTerrain(altar);
                     // 意外的收获:星光传送术掉落
-//                    dropService.addDrop(altar, IdConstants.DROP_BOOK_007);  // remove
-                    DropModule dm = altar.getModuleManager().getModule(DropModule.class); 
-                    dm.addDrop((Drop)Loader.load(IdConstants.DROP_BOOK_007));
-                    
-                    actorService.setLocation(altar, _game.getEnemyPosition());
+                    entityService.addObjectData(altar, Loader.loadData(IdConstants.DROP_BOOK_007), 1);
                 }
                 if (loadIndex > 0) {
                     gameService.setLevel(actor, towerLevel);
                     gameService.setGroup(actor, _game.groupEnemy);
                     gameService.setColor(actor, enemyColor);
-                    actorService.setLocation(actor, getRandomEnemyPosition());
+                    gameService.setLocation(actor, getRandomEnemyPosition());
+                    gameService.setOnTerrain(actor);
                     towers.add(actor);
                 }
                 playNetwork.addEntity(actor);
@@ -152,10 +153,7 @@ public class StoryGbTask2 extends AbstractTaskStep{
                 gameService.setGroup(actor, _game.groupEnemy);
                 // 如果是古柏幼仔，则让它掉落任务物品：树根
                 if (actor.getData().getId().equals(IdConstants.ACTOR_GB_SMALL)) {
-                    
-//                    dropService.addDrop(actor, IdConstants.DROP_TREE_STUMP);
-                    DropModule dm = actor.getModuleManager().getModule(DropModule.class);
-                    dm.addDrop((Drop)Loader.load(IdConstants.DROP_TREE_STUMP));
+                    entityService.addObjectData(actor, Loader.loadData(IdConstants.DROP_TREE_STUMP), 1);
                 }
                 gameService.setColor(actor, enemyColor);
             }

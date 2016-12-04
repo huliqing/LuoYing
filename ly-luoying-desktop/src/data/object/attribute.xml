@@ -127,6 +127,9 @@
     <!--武器槽位：这个参数定义角色默认支持的武器槽位,默认空，由不同的角色去配置。-->
     <attributeStringList id="attributeWeaponSlots" name="attributeWeaponSlots" />
     
+    <!--角色的位置-->
+    <attributeVector3f id="attributeLocation" name="attributeLocation" value="0,0,0" />
+
     <!--角色颜色-->
     <attributeVector4f id="attributeColor" name="attributeColor" value="1,1,1,1" />
     
@@ -144,7 +147,7 @@
     ,attributeHealthRestore,attributeManaRestore
     ,attributeAttackSpeed,attributeMagicSpeed
     ,attributeDefenceRate,attributeDuckRate,attributeGhostRate,attributeResistInterruptRate
-    ,attributeWeaponSlots,attributeColor
+    ,attributeWeaponSlots,attributeLocation,attributeColor
 " />
     
     <!--==========================================================================-->

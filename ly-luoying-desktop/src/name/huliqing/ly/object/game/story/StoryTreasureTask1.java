@@ -4,6 +4,7 @@
  */
 package name.huliqing.ly.object.game.story;
 
+import com.jme3.math.Vector3f;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.ly.manager.ResourceManager;
@@ -14,13 +15,13 @@ import name.huliqing.ly.view.talk.TalkListener;
 import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.layer.service.PlayService;
+import name.huliqing.luoying.layer.service.SceneService;
 import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.logic.scene.ActorLoadHelper;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.game.Game;
 import name.huliqing.luoying.object.gamelogic.AbstractGameLogic;
-import name.huliqing.luoying.object.skill.SkillType;
 import name.huliqing.luoying.ui.Button;
 import name.huliqing.luoying.ui.TextPanel;
 import name.huliqing.luoying.ui.UI;
@@ -40,6 +41,7 @@ public class StoryTreasureTask1 extends AbstractTaskStep {
     private final ActorService actorService = Factory.get(ActorService.class);
     private final GameService gameService = Factory.get(GameService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
+    private final SceneService sceneService = Factory.get(SceneService.class);
     
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
@@ -90,9 +92,9 @@ public class StoryTreasureTask1 extends AbstractTaskStep {
             @Override 
             public void callback(Entity actor) {
                 treasure = actor;
-                actorService.setLocation(treasure, _game.treasurePos);
                 gameService.setLevel(treasure, _game.treasureLevel);
                 gameService.setGroup(treasure, _game.groupPlayer);
+                gameService.setLocation(treasure, sceneService.getSceneHeight(_game.treasurePos.x, _game.treasurePos.z, _game.treasurePos));
                 playNetwork.addEntity(treasure);
             }
         };
@@ -101,7 +103,9 @@ public class StoryTreasureTask1 extends AbstractTaskStep {
             @Override
             public void callback(Entity actor) {
                 victim = actor;
-                actorService.setLocation(victim, _game.treasurePos.clone().addLocal(1, 0, 1));
+//                actorService.setLocation(victim, _game.treasurePos.clone().addLocal(1, 0, 1));
+                Vector3f location = new Vector3f().set(_game.treasurePos).addLocal(1,0,1);
+                gameService.setLocation(victim, sceneService.getSceneHeight(location.x, location.z, location));
                 gameService.setGroup(victim, _game.groupPlayer);
                 gameService.setEssential(victim, true); // 设置为"必要的",这样不会被移除出场景
                 skillService.playSkill(victim, skillService.getSkillWaitDefault(victim), false);
@@ -119,14 +123,14 @@ public class StoryTreasureTask1 extends AbstractTaskStep {
             public void callback(Entity actor) {
                 // 邪恶蜘蛛
                 spider = actor;
-                actorService.setLocation(spider, _game.treasurePos.add(2, 0, 2));
+//                actorService.setLocation(spider, _game.treasurePos.add(2, 0, 2));
+                Vector3f location = new Vector3f().set(_game.treasurePos).addLocal(2,0,2);
+                gameService.setLocation(spider, sceneService.getSceneHeight(location.x, location.z, location));
                 gameService.setGroup(spider, _game.groupEnemy);
-//                stateService.addState(spider, IdConstants.STATE_SAFE, null);
                 spider.addObjectData(Loader.loadData(IdConstants.STATE_SAFE), 1);
                 playNetwork.addEntity(spider);
             }
         };
-        
         _game.addLogic(helper);
     }
 

@@ -13,7 +13,7 @@ import java.nio.ByteBuffer;
 /**
  * @author huliqing
  */
-public class Vector4Serializer extends Serializer{
+public class Vector4fSerializer extends Serializer{
 
     @Override
     public Vector4f readObject(ByteBuffer data, Class c) throws IOException {

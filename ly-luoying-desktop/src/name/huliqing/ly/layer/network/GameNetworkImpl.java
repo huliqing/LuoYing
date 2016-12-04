@@ -9,22 +9,19 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.math.Vector4f;
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.luoying.layer.network.PlayNetwork;
+import name.huliqing.luoying.layer.service.SceneService;
 import name.huliqing.ly.mess.MessActionRun;
 import name.huliqing.luoying.mess.EntityHitAttributeMess;
 import name.huliqing.luoying.mess.EntityRemoveDataMess;
 import name.huliqing.luoying.mess.EntityUseDataByIdMess;
-import name.huliqing.luoying.mess.ActorSelectMess;
 import name.huliqing.luoying.network.Network;
-import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.ly.constants.AttrConstants;
 import name.huliqing.ly.enums.MessageType;
 import name.huliqing.ly.mess.MessActorSpeak;
 import name.huliqing.ly.layer.service.GameService;
-import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.ly.mess.MessMessage;
 import name.huliqing.ly.view.talk.Talk;
 import name.huliqing.ly.view.talk.TalkManager;
@@ -38,24 +35,16 @@ public class GameNetworkImpl implements GameNetwork {
     private final Network network = Network.getInstance();
     
     private GameService gameService;
-//    private EntityService entityService;
-//    private ActorService actorService;
-//    private ActionService actionService;
-//    private ActorNetwork actorNetwork;
+    private SceneService sceneService;
     private EntityNetwork entityNetwork;
     private PlayNetwork playNetwork;
-//    private PlayService playService;
     
     @Override
     public void inject() {
-//        entityService = Factory.get(EntityService.class);
         gameService = Factory.get(GameService.class);
-//        actorService = Factory.get(ActorService.class);
-//        actionService = Factory.get(ActionService.class);
-//        actorNetwork = Factory.get(ActorNetwork.class);
+        sceneService = Factory.get(SceneService.class);
         entityNetwork = Factory.get(EntityNetwork.class);
         playNetwork = Factory.get(PlayNetwork.class);
-//        playService = Factory.get(PlayService.class);
     }
 
     @Override
@@ -205,17 +194,29 @@ public class GameNetworkImpl implements GameNetwork {
         setGroup(partner, gameService.getGroup(entity));
         setFollow(partner, entity.getEntityId());
     }
-    
-    @Override
-    public void kill(Entity entity) {
-        entityNetwork.hitAttribute(entity, AttrConstants.HEALTH, 0, null);
-    }
 
     @Override
     public void setEssential(Entity entity, boolean essential) {
         entityNetwork.hitAttribute(entity, AttrConstants.ESSENTIAL, essential, null);
     }
+    
+    @Override
+    public void kill(Entity entity) {
+        entityNetwork.hitAttribute(entity, AttrConstants.HEALTH, 0, null);
+    }
+    
+    @Override
+    public void setLocation(Entity entity, Vector3f location) {
+        entityNetwork.hitAttribute(entity, AttrConstants.LOCATION, location, null);
+    }
 
+    @Override
+    public void setOnTerrain(Entity entity) {
+        Vector3f loc = entity.getSpatial().getWorldTranslation();
+        sceneService.getSceneHeight(loc.x, loc.z, loc);
+        setLocation(entity, loc);
+    }
+    
     @Override
     public void setColor(Entity entity, ColorRGBA color) {
         entityNetwork.hitAttribute(entity, AttrConstants.COLOR, new Vector4f(color.r, color.g, color.b, color.a), null);

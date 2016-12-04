@@ -17,6 +17,7 @@ import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.luoying.layer.service.ActionService;
 import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.layer.service.PlayService;
+import name.huliqing.luoying.layer.service.SceneService;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.ly.Start;
@@ -38,12 +39,14 @@ public class GameServiceImpl implements GameService {
     private PlayService playService;
     private EntityService entityService;
     private ActionService actionService;
+    private SceneService sceneService;
     
     @Override
     public void inject() {
         playService = Factory.get(PlayService.class);
         entityService = Factory.get(EntityService.class);
         actionService = Factory.get(ActionService.class);
+        sceneService = Factory.get(SceneService.class);
     }
     
     @Override
@@ -257,11 +260,18 @@ public class GameServiceImpl implements GameService {
         }
         return enemy;
     }
+    
+    @Override
+    public void setLocation(Entity entity, Vector3f location) {
+        entityService.hitAttribute(entity, AttrConstants.LOCATION, location, null);
+    }
 
-    // remove20161126
-//    @Override
-//    public void addClientPlayer(Entity actor) {
-////        SimpleRpgGame game = (SimpleRpgGame) playService.getGame();
-//        playService.addEntity(actor);
-//    }
+    @Override
+    public void setOnTerrain(Entity entity) {
+        Vector3f loc = entity.getSpatial().getWorldTranslation();
+        sceneService.getSceneHeight(loc.x, loc.z, loc);
+        setLocation(entity, loc);
+    }
+
+    
 }

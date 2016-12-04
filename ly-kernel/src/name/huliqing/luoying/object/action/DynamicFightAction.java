@@ -20,7 +20,6 @@ import name.huliqing.luoying.object.module.SkillListener;
 import name.huliqing.luoying.object.module.SkillModule;
 import name.huliqing.luoying.object.module.SkinListener;
 import name.huliqing.luoying.object.module.SkinModule;
-import name.huliqing.luoying.object.skill.HitSkill;
 import name.huliqing.luoying.object.skill.Skill;
 import name.huliqing.luoying.object.skin.Skin;
 import name.huliqing.luoying.object.skin.Weapon;

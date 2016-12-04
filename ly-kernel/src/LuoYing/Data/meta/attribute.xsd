@@ -30,6 +30,8 @@ xs:time
                 <xs:element ref="attributeRelateBoolean" />
                 <xs:element ref="attributeString" />
                 <xs:element ref="attributeStringList" />
+                <xs:element ref="attributeVector2f" />
+                <xs:element ref="attributeVector3f" />
                 <xs:element ref="attributeVector4f" />
             </xs:all>
         </xs:complexType>
@@ -259,15 +261,45 @@ xs:time
         </xs:complexType>
     </xs:element>
     
-    <xs:element name="attributeVector4f">
+    <xs:element name="attributeVector2f">
         <xs:annotation>
-            <xs:documentation>字符串集合</xs:documentation>
+            <xs:documentation>vector2f类型的属性</xs:documentation>
         </xs:annotation>
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="attributeBase">
                     <xs:attribute name="value" type="xs:string" use="required" >
-                        <xs:annotation><xs:documentation>Vector4Attribute类型，包含4个元素，格式：“x,y,z,w”</xs:documentation></xs:annotation>
+                        <xs:annotation><xs:documentation>Vector2fAttribute类型，包含2个元素，格式：“x,y”</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="attributeVector3f">
+        <xs:annotation>
+            <xs:documentation>vector3f类型的属性</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="attributeBase">
+                    <xs:attribute name="value" type="xs:string" use="required" >
+                        <xs:annotation><xs:documentation>Vector3fAttribute类型，包含3个元素，格式：“x,y,z”</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="attributeVector4f">
+        <xs:annotation>
+            <xs:documentation>vector4f类型的属性</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="attributeBase">
+                    <xs:attribute name="value" type="xs:string" use="required" >
+                        <xs:annotation><xs:documentation>Vector4fAttribute类型，包含4个元素，格式：“x,y,z,w”</xs:documentation></xs:annotation>
                     </xs:attribute>
                 </xs:extension>
             </xs:complexContent>

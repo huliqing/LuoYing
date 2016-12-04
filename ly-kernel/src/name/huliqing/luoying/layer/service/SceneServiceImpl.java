@@ -10,6 +10,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import java.util.ArrayList;
 import java.util.List;
+import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.object.entity.impl.SimpleTerrainEntity;
 import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.utils.GeometryUtils;
@@ -19,12 +20,31 @@ import name.huliqing.luoying.utils.GeometryUtils;
  * @author huliqing
  */
 public class SceneServiceImpl implements SceneService {
+    private PlayService playService;
 
     private final ThreadLocal<TempRay> tempRay = new ThreadLocal<TempRay>();
     
     @Override
     public void inject() {
-        // ignore
+        playService = Factory.get(PlayService.class);
+    }
+
+    @Override
+    public Vector3f getSceneHeight(float x, float z) {
+        Scene scene = playService.getGame().getScene();
+        return getSceneHeight(scene, x, z);
+    }
+
+    @Override
+    public Vector3f getSceneHeight(float x, float z, Vector3f store) {
+        if (store == null) {
+            store = new Vector3f();
+        }
+        Vector3f result = getSceneHeight(playService.getGame().getScene(), x, z);
+        if (result != null) {
+            store.set(result);
+        }
+        return store;
     }
 
     @Override

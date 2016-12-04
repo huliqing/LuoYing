@@ -242,6 +242,8 @@ import name.huliqing.luoying.object.attribute.LongAttribute;
 import name.huliqing.luoying.object.attribute.RelateBooleanAttribute;
 import name.huliqing.luoying.object.attribute.StringAttribute;
 import name.huliqing.luoying.object.attribute.StringListAttribute;
+import name.huliqing.luoying.object.attribute.Vector2fAttribute;
+import name.huliqing.luoying.object.attribute.Vector3fAttribute;
 import name.huliqing.luoying.object.attribute.Vector4fAttribute;
 import name.huliqing.luoying.object.define.MatDefine;
 import name.huliqing.luoying.object.define.SkillTypeDefine;
@@ -284,7 +286,8 @@ import name.huliqing.luoying.object.state.PrivateGroupState;
 import name.huliqing.luoying.serializer.ColorRGBASerializer;
 import name.huliqing.luoying.serializer.QuaternionSerializer;
 import name.huliqing.luoying.serializer.UserDataSerializer;
-import name.huliqing.luoying.serializer.Vector4Serializer;
+import name.huliqing.luoying.serializer.Vector2fSerializer;
+import name.huliqing.luoying.serializer.Vector4fSerializer;
 import name.huliqing.luoying.xml.Data;
 import name.huliqing.luoying.xml.DataFactory;
 import name.huliqing.luoying.xml.Proto;
@@ -336,7 +339,9 @@ public class LuoYing {
 
     private static void registerSerializer() {
         
-        Serializer.registerClass(Vector4f.class,  new Vector4Serializer());
+        Serializer.registerClass(Vector2f.class,  new Vector2fSerializer());
+//        Serializer.registerClass(Vector3f.class,  new Vector3fSerializer()); // Serializer已经内置
+        Serializer.registerClass(Vector4f.class,  new Vector4fSerializer());
         Serializer.registerClass(Quaternion.class,  new QuaternionSerializer());
         Serializer.registerClass(ColorRGBA.class,  new ColorRGBASerializer());
         Serializer.registerClass(UserData.class,  new UserDataSerializer());
@@ -425,6 +430,8 @@ public class LuoYing {
         DataFactory.register("attributeRelateBoolean",  AttributeData.class, null, RelateBooleanAttribute.class);
         DataFactory.register("attributeString",  AttributeData.class, null, StringAttribute.class);
         DataFactory.register("attributeStringList",  AttributeData.class, null, StringListAttribute.class);
+        DataFactory.register("attributeVector2f",  AttributeData.class, null, Vector2fAttribute.class);
+        DataFactory.register("attributeVector3f",  AttributeData.class, null, Vector3fAttribute.class);
         DataFactory.register("attributeVector4f",  AttributeData.class, null, Vector4fAttribute.class);
         
         // Bullet

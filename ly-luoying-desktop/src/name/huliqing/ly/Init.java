@@ -76,6 +76,9 @@ public class Init {
 //        name.huliqing.luoying.Config.debug = LyConfig.isDebug();
         Config.debug = true;
         SoundManager.getInstance().setVolume(0.1f);
+        LyConfig.setSpeakTimeWorld(0.02f);
+        LyConfig.setSpeakTimeMin(0.02f);
+        LyConfig.setSpeakTimeMax(0.02f);
         
         // 载入资源,作为默认
         ResManager.loadResource("/data/font/en_US/resource",                "utf-8", null);

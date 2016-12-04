@@ -51,11 +51,12 @@ public class TestItem extends AbstractItem {
     protected void doUse(Entity actor) {
         count++;
       
-//        Actor test = Loader.load("actorAltar");
-//        actorService.setLocation(test, actorService.getLocation(actor));
-//        test.getAttributeManager().getAttribute("attributeGroup", NumberAttribute.class).setValue(2);
+        Actor test = Loader.load("actorGbSmall");
+        actorService.setLocation(test, actorService.getLocation(actor));
+        test.getAttributeManager().getAttribute("attributeGroup", NumberAttribute.class).setValue(2);
 //        test.getAttributeManager().getAttribute("attributeLevel", NumberAttribute.class).setValue(60);
-//        playNetwork.addEntity(test);
+        entityService.addObjectData(test, Loader.loadData("dropTreeStump"),  1);
+        playNetwork.addEntity(test);
         
 //        actor.updateDatas();
 //        EntityData ed = actor.getData().clone();
@@ -65,9 +66,7 @@ public class TestItem extends AbstractItem {
 //        
 //        playNetwork.addEntity(other);
 
-        ShadowEntity ss = actor.getScene().getEntities(ShadowEntity.class, null).get(0);
-//        ss.setShadowIntensity(ss.getShadowIntensity() + 0.1f);
-        ss.setEnabled(!ss.isEnabled());
+
     }
         
     private <T extends ObjectData> void removeTypes(EntityData ed, Class<T> type) {

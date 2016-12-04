@@ -16,6 +16,7 @@ import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.service.ActorService;
+import name.huliqing.luoying.layer.service.SceneService;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.game.Game;
@@ -31,6 +32,7 @@ import name.huliqing.luoying.utils.ThreadHelper;
 public class ActorBuildSimpleLogic extends AbstractGameLogic {
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final ActorService actorService = Factory.get(ActorService.class);
+    private final SceneService sceneService = Factory.get(SceneService.class);
     
     public interface Callback {
         /**
@@ -155,9 +157,12 @@ public class ActorBuildSimpleLogic extends AbstractGameLogic {
             if (future.isDone()) {
                 try {
                     actor = future.get();
-                    
-                    actorService.setLocation(actor, position);
-
+                    Vector3f locWithFixedHeight = sceneService.getSceneHeight(position.x, position.z);
+                    if (locWithFixedHeight != null) {
+                        actorService.setLocation(actor, locWithFixedHeight);
+                    } else {
+                        actorService.setLocation(actor, position);
+                    }
                     if (callback != null) {
                         callback.onload(actor);
                     }

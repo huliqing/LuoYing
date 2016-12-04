@@ -40,11 +40,9 @@ public class StoryGbTask2End extends AbstractGameLogic {
     private final ActorService actorService = Factory.get(ActorService.class);
     private final ActionService actionService = Factory.get(ActionService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
-//    private final LogicService logicService = Factory.get(LogicService.class);
     private final GameService gameService = Factory.get(GameService.class);
     
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
-//    private final StateNetwork stateNetwork = Factory.get(StateNetwork.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);

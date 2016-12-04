@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.service.ActorService;
+import name.huliqing.luoying.layer.service.SceneService;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.game.Game;
@@ -36,6 +37,7 @@ public class ActorBuildLogic extends AbstractGameLogic {
     
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final ActorService actorService = Factory.get(ActorService.class);
+    private final SceneService sceneService = Factory.get(SceneService.class);
     
     /**
      * 实现模型的载入功能。
@@ -157,7 +159,13 @@ public class ActorBuildLogic extends AbstractGameLogic {
             try {
                 // 将模型添加到场景和当前列表。
                 Entity actor = future.get();
-                actorService.setLocation(actor, getRandomPosition());
+                Vector3f location = getRandomPosition();
+                Vector3f locWithFixedHeight = sceneService.getSceneHeight(location.x, location.z);
+                if (locWithFixedHeight != null) {
+                    actorService.setLocation(actor, locWithFixedHeight);
+                } else {
+                    actorService.setLocation(actor, location);
+                }
                 if (callback != null) {
                     actor = callback.onAddBefore(actor);
                 }

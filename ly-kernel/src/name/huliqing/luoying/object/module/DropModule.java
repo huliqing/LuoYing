@@ -6,8 +6,8 @@
 package name.huliqing.luoying.object.module;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Stack;
 import name.huliqing.luoying.data.DropData;
 import name.huliqing.luoying.data.ModuleData;
 import name.huliqing.luoying.object.Loader;
@@ -18,6 +18,7 @@ import name.huliqing.luoying.object.entity.DataHandler;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.sound.SoundManager;
 import name.huliqing.luoying.object.entity.EntityAttributeListener;
+import name.huliqing.luoying.utils.FastStack;
 
 /**
  * DropModule用于处理物品、经验掉落，给实体增加这个模块之后，当实体被攻击致死的时候，
@@ -37,27 +38,7 @@ public class DropModule extends AbstractModule implements DataHandler<DropData> 
     private BooleanAttribute deadAttribute;
     
     // 用于监听Entity受到攻击致死事件,并处理物品掉落
-    private final EntityAttributeListener hitDeadEntityListener = new EntityAttributeListener() {
-        
-        private boolean deadStateBeforeHit;
-        
-        @Override
-        public void onHitAttributeBefore(Attribute attribute, Object hitValue, Entity hitter) {
-            if (deadAttribute == null) 
-                return;
-            deadStateBeforeHit = deadAttribute.getValue();
-        }
-        
-        @Override
-        public void onHitAttributeAfter(Attribute attribute, Object hitValue, Entity hitter, Object oldValue) {
-            if (deadAttribute == null)
-                return;
-            // killed
-            if (!deadStateBeforeHit && deadAttribute.getValue()) {
-                doDrop(hitter);
-            }
-        }
-    };
+    private final EntityAttributeListener hitDeadEntityListener = new KilledEntityAttributeListener();
 
     @Override
     public void setData(ModuleData data) {
@@ -101,7 +82,7 @@ public class DropModule extends AbstractModule implements DataHandler<DropData> 
      * @param drop 
      * @return  
      */
-    public boolean addDrop(Drop drop) {
+    private boolean addDrop(Drop drop) {
         if (drops == null) {
             drops = new ArrayList<Drop>(5);
         }
@@ -118,7 +99,7 @@ public class DropModule extends AbstractModule implements DataHandler<DropData> 
      * @param drop
      * @return 
      */
-    public boolean removeDrop(Drop drop) {
+    private boolean removeDrop(Drop drop) {
         if (drops == null || !drops.contains(drop)) 
             return false;
         
@@ -126,17 +107,6 @@ public class DropModule extends AbstractModule implements DataHandler<DropData> 
         entity.getData().removeObjectData(drop.getData());
         return true;
     }
-    
-//    /**
-//     * 获取掉落设置, 返回的列表只允许只读。
-//     * @return 
-//     */
-//    public List<Drop> getDrops() {
-//        if (drops != null) {
-//            return Collections.unmodifiableList(drops);
-//        }
-//        return Collections.EMPTY_LIST;
-//    }
     
     /**
      * 处理掉落物品给指定角色, 注：物品是从当前角色掉落到指定角色(target)身上。
@@ -176,7 +146,7 @@ public class DropModule extends AbstractModule implements DataHandler<DropData> 
     public boolean handleDataAdd(DropData data, int amount) {
         if (drops != null) {
             for (Drop d : drops) {
-                if (d.getData() == data) {
+                if (d.getData() == data || d.getData().getId().equals(data.getId())) {
                     return false; // 已经存在
                 }
             }
@@ -206,5 +176,37 @@ public class DropModule extends AbstractModule implements DataHandler<DropData> 
     public boolean handleDataUse(DropData data) {
         Drop drop = Loader.load(data);
         return drop.doDrop(entity, null);
+    }
+    
+    private class KilledEntityAttributeListener implements EntityAttributeListener{
+        // 这里必须用Stack方式，因为onHitAttributeBefore，onHitAttributeAfter随然是成对出现的，
+        // 但是不能保证他们是连续调用的。
+        private final FastStack<Boolean> deadStack = new FastStack<Boolean>(2);
+        
+        @Override
+        public void onHitAttributeBefore(Attribute attribute, Object hitValue, Entity hitter) {
+            if (deadAttribute == null) 
+                return;
+            
+            deadStack.push(deadAttribute.getValue());
+            
+            if (entity.getData().getId().equals("actorGbSmall")) {
+                System.out.println("-------------" + deadStack.size());
+                for (int i = deadStack.size() - 1; i >= 0; i--) {
+                    System.out.println(deadStack.get(i));
+                }
+            }
+        }
+        
+        @Override
+        public void onHitAttributeAfter(Attribute attribute, Object hitValue, Entity hitter, Object oldValue) {
+            if (deadAttribute == null)
+                return;
+            // killed
+            boolean oldDeadState = deadStack.pop();
+            if (!oldDeadState && deadAttribute.getValue()) {
+                doDrop(hitter);
+            }
+        }
     }
 }

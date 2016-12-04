@@ -12,6 +12,8 @@ package game;
 public class Test {
     
     public static void main(String[] args) {
-        System.out.println((float)1/2);
+        float v1 = 10.22222225f;
+        float v2 = 10.22222229f;
+        System.out.println(Float.compare(v1, v2));
     }
 }

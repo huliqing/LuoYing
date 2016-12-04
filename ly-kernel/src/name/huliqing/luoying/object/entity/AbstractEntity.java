@@ -133,6 +133,7 @@ public abstract class AbstractEntity<T extends EntityData> implements Entity<T> 
         if (attr == null) {
             return;
         }
+        
         // 在击中属性之前先通知侦听器
         if (attributeListeners != null && !attributeListeners.isEmpty()) {
             for (EntityAttributeListener lis : attributeListeners.getArray()) {
@@ -150,6 +151,7 @@ public abstract class AbstractEntity<T extends EntityData> implements Entity<T> 
                 lis.onHitAttributeAfter(attr, hitValue, hitter, oldValue);
             }
         }
+
     }
 
     @Override
