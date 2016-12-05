@@ -5,10 +5,13 @@
 package name.huliqing.luoying.object.logic;
 
 import com.jme3.math.FastMath;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.object.action.FollowAction;
 import name.huliqing.luoying.data.LogicData;
 import name.huliqing.luoying.layer.service.ActionService;
+import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.action.Action;
 import name.huliqing.luoying.object.attribute.Attribute;
@@ -23,8 +26,9 @@ import name.huliqing.luoying.utils.MathUtils;
  * @author huliqing
  */
 public class FollowLogic extends AbstractLogic implements ValueChangeListener {
-//    private final static Logger logger = Logger.getLogger(FollowLogic.class.getName());
+    private final static Logger LOG = Logger.getLogger(FollowLogic.class.getName());
     private final ActionService actionService = Factory.get(ActionService.class);
+    private final PlayService playService = Factory.get(PlayService.class);
     
     private FollowAction followAction;
     // 距离的最近点和最远点
@@ -37,11 +41,11 @@ public class FollowLogic extends AbstractLogic implements ValueChangeListener {
     // ---- inner
     private NumberAttribute followAttribute;
     
-    private Entity target;
+    // 最近一个跟随的目标对象
+    private Entity lastFollow;
     // 最近一次跟随到最近的距离
-    private float lastFollowUsed;
+    private float lastFollowDistance;
     
-    // ---- inner
     private ActionModule actionModule;
     
     @Override
@@ -67,6 +71,7 @@ public class FollowLogic extends AbstractLogic implements ValueChangeListener {
         if (followAttribute != null) {
             followAttribute.addListener(this);
         }
+        checkToFollow();
     }
     
     @Override
@@ -79,9 +84,21 @@ public class FollowLogic extends AbstractLogic implements ValueChangeListener {
 
     @Override
     public void onValueChanged(Attribute attribute) {
-        // 注意：actor仍可能未进入场景
-        if (attribute == followAttribute && actor.getScene() != null) {
-            doLogic(0); // 直接调用doLogic去改变跟随对象。
+        checkToFollow();
+    }
+    
+    private void checkToFollow() {
+        if (followAttribute == null) 
+            return;
+        
+        // 获取跟随对象。
+        Entity newTarget = playService.getEntity(followAttribute.longValue());
+        
+        // 如果跟随目标不存在或者目标是自己，则清除跟随
+        if (newTarget == null || newTarget == actor) {
+            endFollow();
+        } else {
+            startFollow(newTarget);
         }
     }
     
@@ -90,43 +107,33 @@ public class FollowLogic extends AbstractLogic implements ValueChangeListener {
         if (followAttribute == null) 
             return;
         
-        // 如果角色没有设置跟随的目标,则停止当前的跟随行为(注:只停止当前逻辑启动的followAction).
-        long ft = followAttribute.longValue();
-        if (ft <= 0) {
-            target = null;
-            Action current = actionService.getPlayingAction(actor);
-            if (current == followAction) {
-                actionModule.startAction(null);
-            }
+        if (lastFollow == null) 
             return;
-        }
-        
-        // 如果跟随的目标发生变化则重新查找目标进行跟随.找不到指定目标则不处理
-        if (target == null || target.getData().getUniqueId() != ft) {
-            target = actor.getScene().getEntity(ft);
-            if (target == null || target == actor) {
-                return;
-            }
-        }
-        
-        // 如果距离超过MaxFollowDistance则直接转到跟随,不管是否在战斗
-        if (actionService.isPlayingFight(actor)) {
-            return;
-        }
         
         // 跟随
-        doFollow();
-    }
-    
-    private void doFollow() {
-        if (followAction.isEnd() && actor.getSpatial().getWorldTranslation()
-                .distance(target.getSpatial().getWorldTranslation()) > maxFollow) {
-            lastFollowUsed = FastMath.nextRandomFloat() * (maxFollow - minFollow) + minFollow;
-            followAction.setFollow(target.getSpatial());
-            followAction.setNearest(lastFollowUsed);
-            actionModule.startAction(followAction);
+        if (followAction.isEnd() && actor.getSpatial().getWorldTranslation().distance(lastFollow.getSpatial().getWorldTranslation()) > maxFollow) {
+           startFollow(lastFollow);
         }
     }
     
+    private void startFollow(Entity target) {
+        LOG.log(Level.INFO, "Start follow, follower={0}, target={1}"
+                , new Object[] {actor.getData().getId(), target.getData().getId()});
+        lastFollow = target;
+        lastFollowDistance = FastMath.nextRandomFloat() * (maxFollow - minFollow) + minFollow;
+        followAction.setFollow(lastFollow.getSpatial());
+        followAction.setNearest(lastFollowDistance);
+        actionModule.startAction(followAction);
+    }
+    
+    private void endFollow() {
+        LOG.log(Level.INFO, "End follow, follower={0}, target={1}"
+                , new Object[] {actor.getData().getId(), lastFollow != null ? lastFollow.getData().getId() : null});
+        lastFollow = null;
+        Action current = actionService.getPlayingAction(actor);
+        if (current == followAction) {
+            actionModule.startAction(null);
+        }
+    }
     
 }

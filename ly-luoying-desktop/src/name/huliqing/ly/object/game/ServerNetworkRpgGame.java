@@ -138,8 +138,12 @@ public abstract class ServerNetworkRpgGame extends NetworkRpgGame {
     protected void onAddClientPlayer(ConnData connData, Entity actor) {
         // 让角色处于“等待”
         skillService.playSkill(actor, skillService.getSkillWaitDefault(actor), false);
+        // 确保处于”死亡后不被清理“
         gameService.setEssential(actor, true);
+        // 标记为玩家
         gameService.setPlayer(actor, true);
+        // 在服务端上角色的逻辑都必须是始终打开的，这个参数可能会在客户端选择角色的时候被关闭，这里必须打开。
+        gameService.setAutoLogic(actor, true);
         
         // 添加客户端角色
         playNetwork.addEntity(actor);

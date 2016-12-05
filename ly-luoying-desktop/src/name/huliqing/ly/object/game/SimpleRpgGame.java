@@ -140,6 +140,7 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
         player = newPlayer;
         gameService.setEssential(player, true);
         gameService.setPlayer(player, true);
+        gameService.setAutoLogic(player, true);
         ui.getTeamView().setMainActor(newPlayer);
         ChaseCameraEntity cce = getChaseCamera();
         if (cce != null) {

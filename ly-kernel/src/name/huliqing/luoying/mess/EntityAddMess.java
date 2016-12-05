@@ -37,10 +37,13 @@ public class EntityAddMess extends GameMess {
         super.applyOnClient(gameClient);
         PlayService playService = Factory.get(PlayService.class);
         Entity entity = (Entity) Loader.load(entityData);
-        // 注：这里要关闭客户端的逻辑功能，否则会和服务端的逻辑冲突, 客户端是不需要逻辑的。
+        // 注1：这里要关闭客户端的逻辑功能，否则会和服务端的逻辑冲突, 客户端是不需要逻辑的。
+        // 注2：因为关闭逻辑只能确保逻辑中的update功能不执行，但是如果逻辑中存在一些对于属性的监听，则这些监听仍然
+        // 会有影应，这里直接把整个逻辑模块都进行清理，这样确保所有逻辑完全不会执行。
         LogicModule lm =  entity.getModuleManager().getModule(LogicModule.class);
         if (lm != null) {
             lm.setEnabled(false);
+            lm.cleanup();
         }
         playService.addEntity(entity);
     }

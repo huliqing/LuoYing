@@ -168,22 +168,6 @@ public class EntityData extends ObjectData {
         return null;
     }
     
-//    /**
-//     * 获取物全的名称
-//     * @return 
-//     */
-//    public String getName() {
-//        return getAsString("name");
-//    }
-//
-//    /**
-//     * 设置物体的名称
-//     * @param name 
-//     */
-//    public void setName(String name) {
-//        setAttribute("name", name);
-//    }
-    
     /**
      * 获取Entity图标。
      * @return 
