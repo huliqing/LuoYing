@@ -7,7 +7,8 @@ package name.huliqing.luoying.object.module;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import name.huliqing.luoying.data.DropData;
 import name.huliqing.luoying.data.ModuleData;
 import name.huliqing.luoying.object.Loader;
@@ -25,7 +26,9 @@ import name.huliqing.luoying.utils.FastStack;
  * 会给目标攻击者掉落物品、属性
  * @author huliqing
  */
-public class DropModule extends AbstractModule implements DataHandler<DropData> { 
+public class DropModule extends AbstractModule implements DataHandler<DropData> {
+
+    private static final Logger LOG = Logger.getLogger(DropModule.class.getName());
 
     // 绑定角色的“死亡”属性
     private String bindDeadAttribute;
@@ -190,11 +193,8 @@ public class DropModule extends AbstractModule implements DataHandler<DropData> 
             
             deadStack.push(deadAttribute.getValue());
             
-            if (entity.getData().getId().equals("actorGbSmall")) {
+            if (entity.getData().getId().equals("actorAltar")) {
                 System.out.println("-------------" + deadStack.size());
-                for (int i = deadStack.size() - 1; i >= 0; i--) {
-                    System.out.println(deadStack.get(i));
-                }
             }
         }
         
@@ -204,7 +204,14 @@ public class DropModule extends AbstractModule implements DataHandler<DropData> 
                 return;
             // killed
             boolean oldDeadState = deadStack.pop();
+            
+             if (entity.getData().getId().equals("actorAltar")) {
+                 System.out.println("...");
+             }
+            
             if (!oldDeadState && deadAttribute.getValue()) {
+                LOG.log(Level.INFO, "{0} hit by {1} with hitValue={2}, oldValue={3}, dead doDrop now.", 
+                        new Object[] {entity.getData().getId(), hitter != null ? hitter.getData().getId() : null, hitValue, oldValue});
                 doDrop(hitter);
             }
         }

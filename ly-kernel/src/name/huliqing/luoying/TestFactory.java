@@ -27,7 +27,7 @@ public class TestFactory {
     
     private static void testSkill(String skillId) {
         Proto proto = DataFactory.getProto(skillId);
-        proto.setAttribute("cooldown", 1);
+        proto.setAttribute("cooldown", 5);
         proto.setAttribute("useAttributes", null);
         proto.setAttribute("hitDistance", 3000);
 //        proto.putAttribute("shotSpeed", "2");

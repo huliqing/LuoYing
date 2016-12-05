@@ -11,6 +11,7 @@ import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.luoying.layer.service.ElService;
 import name.huliqing.luoying.object.attribute.BooleanAttribute;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
+import name.huliqing.luoying.object.el.SBooleanEl;
 import name.huliqing.luoying.object.el.STBooleanEl;
 import name.huliqing.luoying.object.entity.Entity;
 
@@ -31,8 +32,8 @@ public abstract class AbstractLogic implements Logic<LogicData>{
     /** 当前逻辑已经运行的时间，单位秒 */
     protected float timeUsed;
     
-    /** 绑定一个角色属性，这个属性的boolean值用来控制当前逻辑是否打开*/
-    protected String bindEnabledAttribute;
+    /** 默认情况下逻辑始终是打开的，除些可以绑定一个EL表达式来判断是否要打开该逻辑功能。*/
+    protected SBooleanEl enabledCheckEl;
     
     /** 绑定角色的“目标”属性， */
     protected String bindTargetAttribute;
@@ -48,9 +49,6 @@ public abstract class AbstractLogic implements Logic<LogicData>{
     /** 运行当前逻辑的角色. */
     protected Entity actor;
     
-    /** 控制逻辑开关的角色属性 */
-    protected BooleanAttribute enabledAttribute;
-    
     /** 存放角色当前目标对象的属性 */
     protected NumberAttribute targetAttribute;
     
@@ -65,7 +63,10 @@ public abstract class AbstractLogic implements Logic<LogicData>{
         this.data = data;
         interval = data.getAsFloat("interval", interval);
         timeUsed = data.getAsFloat("timeUsed", 0);
-        bindEnabledAttribute = data.getAsString("bindEnabledAttribute");
+        String tempEnabledCheckEl = data.getAsString("enabledCheckEl");
+        if (tempEnabledCheckEl != null) {
+            enabledCheckEl = elService.createSBooleanEl(tempEnabledCheckEl);
+        }
         bindTargetAttribute = data.getAsString("bindTargetAttribute");
         bindViewAttribute = data.getAsString("bindViewAttribute");
         String tempEnemyCheckEl = data.getAsString("enemyCheckEl");
@@ -91,9 +92,8 @@ public abstract class AbstractLogic implements Logic<LogicData>{
             throw new IllegalStateException("Logic already initialized, logic id=" + data.getId() + ", actorId=" + actor.getData().getId());
         }
         initialized = true;
-
-        if (bindEnabledAttribute != null) {
-            enabledAttribute = actor.getAttributeManager().getAttribute(bindEnabledAttribute, BooleanAttribute.class);
+        if (enabledCheckEl != null) {
+            enabledCheckEl.setSource(actor.getAttributeManager());
         }
         if (bindTargetAttribute != null) {
             targetAttribute = actor.getAttributeManager().getAttribute(bindTargetAttribute, NumberAttribute.class);
@@ -111,10 +111,9 @@ public abstract class AbstractLogic implements Logic<LogicData>{
     
     @Override
     public final void update(float tpf) {
-        if (enabledAttribute != null && !enabledAttribute.getValue()) {
+        if (enabledCheckEl != null && !enabledCheckEl.getValue()) {
             return;
         }
-        
         timeUsed += tpf;
         if (timeUsed >= interval) {
             doLogic(tpf);

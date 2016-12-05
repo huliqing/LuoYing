@@ -10,7 +10,13 @@
     <!-- ========================================================================= -->
 
     <!--逻辑基类，所有逻辑都继承这个设置, 默认逻辑频率1.0秒，子设置根据实际情况设置-->
+    
+    <!--注：enabledCheckEl属性很重要，这个作为逻辑的开关，大部分情况下，角色必须是“活着的”才可以执行逻辑, 特别是
+        一些特殊的可以改变角色属性的逻辑, 例如：可以改变角色健康值的逻辑，如果在角色死亡之后还运行，则可能让角色重新
+        活起来。
+    -->
     <logicBase id="logicBase" interval="1.0"
+               enabledCheckEl="elActorUndeadCheck"
                bindTargetAttribute="attributeTarget" 
                bindViewAttribute="attributeVision" 
                enemyCheckEl="elActorEnemyCheck" />
@@ -30,7 +36,6 @@
     <!--商店逻辑：频率不用太高-->
     <logicShop id="logicShopBase" extends="logicBase" interval="30" />
 
-    
     <!-- ========================================================================== -->
     <!-- Common -->
     <!-- ========================================================================= -->
@@ -38,10 +43,6 @@
     <!--默认的搜寻敌人的逻辑-->
     <logicSearchEnemy id="logicSearchEnemy" extends="logicSearchEnemyBase" />
     <logicSearchEnemy id="logicSearchEnemyForPlayer" extends="logicSearchEnemyBase" interval="1" />
-
-    <!--默认的更新生命值和魔法值的逻辑: remove20160716-->
-    <logicAttributeChange id="logicUpdateLife" extends="logicBase" value="1" applyAttribute="attributeHealth" useAttribute="attributeHealthRestore" interval="3" />
-    <logicAttributeChange id="logicUpdateMana" extends="logicBase" value="1" applyAttribute="attributeMana" useAttribute="attributeManaRestore" interval="3" />
     
     <!--默认的防守及躲闪逻辑-->
     <logicDefend id="logicDefend" interval="5" extends="logicBase" defendRateAttribute="attributeDefenceRate" duckRateAttribute="attributeDuckRate" 
@@ -90,6 +91,8 @@
     <!--杰米: 商店逻辑-->
     <logicShop id="logicShopJaime" extends="logicShopBase" items="itemGold|10000,itemTonicRed|10,itemTonicBlue|10,itemHerb|5,itemBook009|1" stockSpeed="1" />
     
+    <!--用于黑暗祭坛,让角色生命恢复及魔法恢复更快-->
+    <logicAttributeChange id="logicIncreaseAltarLife" extends="logicBase" value="10" applyAttribute="attributeHealth" bindFactorAttribute="attributeHealthRestore" interval="3" />
     
 </root>
 

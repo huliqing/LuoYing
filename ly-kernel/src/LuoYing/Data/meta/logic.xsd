@@ -29,10 +29,10 @@ xs:time
                 
                 <xs:element ref="logicPosition" />
                 <xs:element ref="logicSearchEnemy" />
-                <xs:element ref="logicAttributeChange" />
                 <xs:element ref="logicDefend" />
                 <xs:element ref="logicIdle" />
                 <xs:element ref="logicShop" />
+                <xs:element ref="logicAttributeChange" />
             </xs:all>
         </xs:complexType>
     </xs:element>
@@ -125,7 +125,7 @@ xs:time
     <xs:element name="logicAttributeChange">
         <xs:annotation>
             <xs:documentation>
-                用于改变角色属性值的逻辑，计算公式：targetAttributeAddValue = value * useAttribute * interval
+                用于改变角色属性值的逻辑，计算公式：targetAttributeAddValue = value * bindFactorAttribute * interval
             </xs:documentation>
         </xs:annotation>
         <xs:complexType>
@@ -141,7 +141,7 @@ xs:time
                             <xs:documentation>指定要改变的是哪一个属性</xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="useAttribute" type="xs:string" use="required">
+                    <xs:attribute name="bindFactorAttribute" type="xs:string" use="required">
                         <xs:annotation>
                             <xs:documentation>使用另一个属性作为影响因数。</xs:documentation>
                         </xs:annotation>
@@ -338,8 +338,8 @@ xs:time
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-                <xs:attribute name="bindEnabledAttribute" type="xs:string" use="optional">
-                    <xs:annotation><xs:documentation>BooleanAttribute, 绑定一个角色属性，这个属性用于控制逻辑的开关。</xs:documentation></xs:annotation>
+                <xs:attribute name="enabledCheckEl" type="xs:string" use="required">
+                    <xs:annotation><xs:documentation>STBooleanEl, 绑定一个el用来判断是否打开当前逻辑。</xs:documentation></xs:annotation>
                 </xs:attribute>
                 <xs:attribute name="bindTargetAttribute" type="xs:string" use="required">
                     <xs:annotation>

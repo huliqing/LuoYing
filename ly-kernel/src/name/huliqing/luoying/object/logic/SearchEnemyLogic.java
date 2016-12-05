@@ -49,6 +49,9 @@ public class SearchEnemyLogic extends AbstractLogic implements Comparator<Entity
             return;
         }
         
+        // 清理掉,因为这说明lastFindEnemy已经不再是有效的敌人，以重新获取。
+        lastFindEnemy = null;
+        
         // 当前目标是有效的乱人, 记住就可以，不需要再去场景中查找
         Entity target = getTarget();
         if (isAvailableEnemy(target)) {

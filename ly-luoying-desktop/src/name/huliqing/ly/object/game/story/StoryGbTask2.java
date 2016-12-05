@@ -29,7 +29,6 @@ import name.huliqing.luoying.object.gamelogic.AbstractGameLogic;
 import name.huliqing.luoying.object.module.StateModule;
 import name.huliqing.luoying.object.state.State;
 import name.huliqing.luoying.utils.MathUtils;
-import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.ly.constants.IdConstants;
 import name.huliqing.ly.layer.service.GameService;
 

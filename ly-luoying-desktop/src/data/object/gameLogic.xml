@@ -13,7 +13,8 @@
     <gameLogicPlayerDeadChecker id="gameLogicPlayerDeadChecker" interval="1" />
     
     <!--战场角色清理器: 只有“死亡”并且“非必要”的角色才会被清理-->
-    <gameLogicActorClean id="gameLogicActorClean" checkEl="elActorCleanCheck" interval="10" deathDelay="10" />
+    <gameLogicActorClean id="gameLogicActorClean" checkEl="elActorCleanCheck" interval="10" deathDelay="5" />
+    <!--<gameLogicActorClean id="gameLogicActorClean" checkEl="elActorCleanCheck" interval="10" deathDelay="10" />-->
     
     <!--生命值恢复器-->
     <gameLogicAttributeChange id="gameLogicHealthRecover" interval="5" speed="0.5" applyAttribute="attributeHealth" 

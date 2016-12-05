@@ -4,10 +4,10 @@
  */
 package name.huliqing.luoying.object.logic;
 
+import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.LogicData;
 import name.huliqing.luoying.layer.network.EntityNetwork;
-import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
 
 /**
@@ -15,7 +15,7 @@ import name.huliqing.luoying.object.attribute.NumberAttribute;
  * @author huliqing
  */
 public class AttributeChangeLogic extends AbstractLogic {
-    private final EntityService entityService = Factory.get(EntityService.class);
+    
     private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
     private float value = 1f;
     // 影响的目标属性的id
@@ -31,7 +31,7 @@ public class AttributeChangeLogic extends AbstractLogic {
         super.setData(data); 
         this.value = data.getAsFloat("value");
         this.applyAttribute = data.getAsString("applyAttribute");
-        this.bindFactorAttribute = data.getAsString("useAttribute");
+        this.bindFactorAttribute = data.getAsString("bindFactorAttribute");
     }
 
     @Override
@@ -39,15 +39,11 @@ public class AttributeChangeLogic extends AbstractLogic {
         super.initialize();
         factorAttribute = actor.getAttributeManager().getAttribute(bindFactorAttribute, NumberAttribute.class);
     }
-
+    
     @Override
     protected void doLogic(float tpf) {
-//        float useFactor = entityService.getNumberAttributeValue(actor, bindFactorAttribute, 0).floatValue();
         float useFactor = factorAttribute != null ? factorAttribute.floatValue() : 0;
         float applyValue = value * useFactor * interval;
-        
-        if (applyValue > 0.0001f) {
-            entityNetwork.hitNumberAttribute(actor, applyAttribute, applyValue, null);
-        }
+        entityNetwork.hitNumberAttribute(actor, applyAttribute, applyValue, null);
     }
 }
