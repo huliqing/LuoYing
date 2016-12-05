@@ -69,7 +69,7 @@ public class TestItem extends AbstractItem {
 
 
     }
-        
+    
     private <T extends ObjectData> void removeTypes(EntityData ed, Class<T> type) {
         List<T> ods = ed.getObjectDatas(type, null);
         for (ObjectData od : ods) {

@@ -226,8 +226,10 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
             if (attribute == na) {
                 if (na.floatValue() < oldValue.floatValue()) {
                     Skill hurtSkill = getSkillByTypes(hurtSkillTypes);
-                    LOG.log(Level.INFO, "Entity hurt, entity={0}, attributeName={1}, oldValue={2}, newValue={3}", 
-                            new Object[] {entity.getData().getId(), na.getName(), oldValue, na.getValue()});
+                    if (Config.debug) {
+                        LOG.log(Level.INFO, "Entity hurt, entity={0}, attributeName={1}, oldValue={2}, newValue={3}", 
+                                new Object[] {entity.getData().getId(), na.getName(), oldValue, na.getValue()});
+                    }
                     if (hurtSkill != null) {
                         playSkill(hurtSkill, false);
                     }

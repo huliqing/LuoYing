@@ -74,7 +74,7 @@ public class Init {
         // 载入配置
         LyConfig.setConfigData((ConfigData) Loader.loadData("configRelease"));
 //        name.huliqing.luoying.Config.debug = LyConfig.isDebug();
-        Config.debug = true;
+        Config.debug = false;
         SoundManager.getInstance().setVolume(0.1f);
         LyConfig.setSpeakTimeWorld(0.02f);
         LyConfig.setSpeakTimeMin(0.02f);

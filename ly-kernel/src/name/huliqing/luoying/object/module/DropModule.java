@@ -201,7 +201,7 @@ public class DropModule extends AbstractModule implements DataHandler<DropData> 
             // killed
             boolean oldDeadState = deadStack.pop();
             if (!oldDeadState && deadAttribute.getValue()) {
-                if (LOG.isLoggable(Level.INFO)) {
+                if (Config.debug) {
                     LOG.log(Level.INFO, "{0} hit by {1} with hitValue={2}, oldValue={3}, dead doDrop now.", 
                             new Object[] {entity.getData().getId(), hitter != null ? hitter.getData().getId() : null, hitValue, oldValue});
                 }

@@ -40,7 +40,7 @@ public class SurvivalGame extends LanServerNetworkRpgGame {
     // 每隔多长时间提升敌军等级,单位秒
     public float levelUpBySec = 120;
 //    public float levelUpBySec = 15; // for test
-    // 最高20级
+    // 最高等级
     public int maxLevel = 15;
     
     private SceneHelper sceneHelper;

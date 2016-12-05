@@ -161,7 +161,7 @@ public class ShopItemChat<T extends ChatData> extends Chat<T> implements EntityD
         win.setTitle(getChatName() + "-" + gameService.getName(actor));
         win.setToCorner(UI.Corner.CC);
         
-        // remove20160312,不要直接updateShop，这会导致玩家在买东西的时候列表经验刷新，导致可能误点物品
+        // remove20160312,不要直接updateShop，这会导致玩家在买东西的时候列表刷新，导致可能误点物品
 //        updateShop();
         
         // 载入产品信息

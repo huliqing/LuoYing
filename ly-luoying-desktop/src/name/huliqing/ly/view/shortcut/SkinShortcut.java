@@ -57,22 +57,30 @@ public class SkinShortcut extends BaseUIShortcut<SkinData> implements EntityData
 
     @Override
     public void onDataAdded(ObjectData data, int amount) {
-        if (!(data instanceof SkinData)) {
+        if (!data.getId().equals(objectData.getId())) {
             return;
         }
-        if (data.getId().equals(objectData.getId())) {
-            updateObjectData();
+        SkinData temp = actor.getData().getObjectData(objectData.getId());
+        if (temp == null) {
+            this.objectData.setTotal(0);
+        } else if (temp != this.objectData) {
+            this.objectData = temp;
         }
+        updateObjectData();
     }
 
     @Override
     public void onDataRemoved(ObjectData data, int amount) {
-        if (!(data instanceof SkinData)) {
+        if (!data.getId().equals(objectData.getId())) {
             return;
         }
-        if (data.getId().equals(objectData.getId())) {
-            updateObjectData();
+        SkinData temp = actor.getData().getObjectData(objectData.getId());
+        if (temp == null) {
+            this.objectData.setTotal(0);
+        } else if (temp != this.objectData) {
+            this.objectData = temp;
         }
+        updateObjectData();
     }
 
     @Override

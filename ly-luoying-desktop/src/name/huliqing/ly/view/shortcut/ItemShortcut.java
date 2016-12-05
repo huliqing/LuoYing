@@ -56,6 +56,12 @@ public class ItemShortcut extends BaseUIShortcut<ItemData> implements EntityData
     public void onDataAdded(ObjectData data, int amount) {
         if (!data.getId().equals(objectData.getId()))
             return;
+        ItemData temp = actor.getData().getObjectData(objectData.getId());
+        if (temp == null) {
+            this.objectData.setTotal(0);
+        } else if (temp != this.objectData) {
+            this.objectData = temp;
+        }
         updateObjectData();
     }
 
@@ -63,6 +69,13 @@ public class ItemShortcut extends BaseUIShortcut<ItemData> implements EntityData
     public void onDataRemoved(ObjectData data, int amount) {
         if (!data.getId().equals(objectData.getId()))
             return;
+        
+        ItemData temp = actor.getData().getObjectData(objectData.getId());
+        if (temp == null) {
+            this.objectData.setTotal(0);
+        } else if (temp != this.objectData) {
+            this.objectData = temp;
+        }
         updateObjectData();
     }
 

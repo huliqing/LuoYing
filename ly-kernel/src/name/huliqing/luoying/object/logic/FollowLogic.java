@@ -5,7 +5,6 @@
 package name.huliqing.luoying.object.logic;
 
 import com.jme3.math.FastMath;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.object.action.FollowAction;
@@ -117,8 +116,8 @@ public class FollowLogic extends AbstractLogic implements ValueChangeListener {
     }
     
     private void startFollow(Entity target) {
-        LOG.log(Level.INFO, "Start follow, follower={0}, target={1}"
-                , new Object[] {actor.getData().getId(), target.getData().getId()});
+//        LOG.log(Level.INFO, "Start follow, follower={0}, target={1}"
+//                , new Object[] {actor.getData().getId(), target.getData().getId()});
         lastFollow = target;
         lastFollowDistance = FastMath.nextRandomFloat() * (maxFollow - minFollow) + minFollow;
         followAction.setFollow(lastFollow.getSpatial());
@@ -127,8 +126,8 @@ public class FollowLogic extends AbstractLogic implements ValueChangeListener {
     }
     
     private void endFollow() {
-        LOG.log(Level.INFO, "End follow, follower={0}, target={1}"
-                , new Object[] {actor.getData().getId(), lastFollow != null ? lastFollow.getData().getId() : null});
+//        LOG.log(Level.INFO, "End follow, follower={0}, target={1}"
+//                , new Object[] {actor.getData().getId(), lastFollow != null ? lastFollow.getData().getId() : null});
         lastFollow = null;
         Action current = actionService.getPlayingAction(actor);
         if (current == followAction) {
