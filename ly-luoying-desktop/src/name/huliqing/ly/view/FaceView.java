@@ -27,6 +27,7 @@ import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.object.anim.Loop;
 import name.huliqing.luoying.object.anim.ColorAnim;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
+import name.huliqing.luoying.object.attribute.StringAttribute;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.entity.EntityDataListener;
 import name.huliqing.ly.object.chat.Chat;
@@ -55,6 +56,7 @@ public final class FaceView extends LinearLayout implements EntityDataListener{
     private NumberAttribute manaAttributeMax;
     private NumberAttribute xpAttribute;
     private NumberAttribute xpAttributeNext;
+    private StringAttribute nameAttribute;
     
     // 左区：角色头像
     private LinearLayout leftZone;
@@ -139,6 +141,8 @@ public final class FaceView extends LinearLayout implements EntityDataListener{
         
         this.actor = newActor;
         this.actor.addEntityDataListener(this);
+        
+        nameAttribute = newActor.getAttributeManager().getAttribute(AttrConstants.NAME, StringAttribute.class);
         
         lifeAttribute = newActor.getAttributeManager().getAttribute(AttrConstants.HEALTH, NumberAttribute.class);
         lifeAttributeMax = newActor.getAttributeManager().getAttribute(AttrConstants.HEALTH_MAX, NumberAttribute.class);
@@ -401,7 +405,10 @@ public final class FaceView extends LinearLayout implements EntityDataListener{
         }
 
         public void setActor(Entity actor) {
-            actorName.setText(actor.getData().getName());
+            if (nameAttribute != null) {
+//                actorName.setText(actor.getData().getName());
+                actorName.setText(nameAttribute.getValue());
+            }
             actorName.resize();
         }
         

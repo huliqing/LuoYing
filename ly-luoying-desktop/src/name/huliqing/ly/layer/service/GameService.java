@@ -115,6 +115,13 @@ public interface GameService extends GameNetwork {
     long getTarget(Entity entity);
     
     /**
+     * 获取角色名字
+     * @param entity
+     * @return 
+     */
+    String getName(Entity entity);
+    
+    /**
      * 判断一个目标target是否是entity的敌人
      * @param entity
      * @param target

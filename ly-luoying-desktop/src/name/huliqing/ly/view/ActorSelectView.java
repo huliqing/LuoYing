@@ -130,7 +130,8 @@ public class ActorSelectView extends LinearLayout {
                 actorView.removeFromParent();
                 ActorSelectView.this.removeFromParent();
                 if (selectedListener != null && models != null && models.size() > 0) {
-                    currentEntity.getData().setName(nameView.getText());
+                    gameService.setName(currentEntity, nameView.getText());
+                    currentEntity.updateDatas();
                     selectedListener.onSelected(currentEntity.getData());
                 }
             }

@@ -33,7 +33,10 @@ public class ActorDataLoader extends EntityDataLoader {
     @Override
     public void load(Proto proto, EntityData data) {
         super.load(proto, data);
-        data.setName(ResManager.get(proto.getId() + ".name"));
+        
+        // remove20161205
+//        data.setName(ResManager.get(proto.getId() + ".name"));
+
         String matStr = proto.getAsString("mat");
         if (matStr != null) {
             data.setMat(defineService.getMatDefine().getMat(matStr));

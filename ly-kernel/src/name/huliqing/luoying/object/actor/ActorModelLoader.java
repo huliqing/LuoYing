@@ -63,9 +63,8 @@ public class ActorModelLoader {
             // 否则添加的效果可能会被角色model挡住在后面。(JME3.0存在该问题)
             temp.setQueueBucket(RenderQueue.Bucket.Opaque);
         }
-        actorModel.setName(data.getName());
-//        actorModel.setUserData(ObjectData.USER_DATA, data); // remove
-        actorModel.setShadowMode(RenderQueue.ShadowMode.Cast);
+        
+//        actorModel.setShadowMode(RenderQueue.ShadowMode.Cast);
         
         
         // remove20161009，xxx 重构分离

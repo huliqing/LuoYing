@@ -21,7 +21,6 @@ public class SkillRow extends Row<Skill> {
 //    private final ActorService actorService = Factory.get(ActorService.class);
 //    private final GameService gameService = Factory.get(GameService.class);
 //    private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
-    private final SkillPanel skillPanel;
     
     private Skill data;
     
@@ -31,15 +30,13 @@ public class SkillRow extends Row<Skill> {
     private final ColumnText num;
     private final ColumnIcon shortcut;
     
-    public SkillRow(SkillPanel skillPanel) {
+    public SkillRow() {
         super();
-        this.skillPanel = skillPanel;
         this.setLayout(Layout.horizontal);
         icon = new ColumnIcon(height, height, InterfaceConstants.UI_MISS);
         body = new ColumnBody(height, height, "", "");
         num = new ColumnText(height, height, "");
-        shortcut = new ColumnIcon(height, height, "Interface/icon/oper.png");
-//        shortcut.setOnTop();
+        shortcut = new ColumnIcon(height, height, InterfaceConstants.UI_OPER);
         addView(icon);
         addView(body);
         addView(num);

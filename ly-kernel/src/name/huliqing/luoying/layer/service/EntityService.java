@@ -35,6 +35,16 @@ public interface EntityService extends EntityNetwork {
     boolean getBooleanAttributeValue(Entity entity, String attributeName, boolean defValue);
     
     /**
+     * 获取指定属性的值, 如果指定的属性不存在，则返回defValue.
+     * @param <T>
+     * @param entity
+     * @param attributeName
+     * @param defValue
+     * @return 
+     */
+    <T> T getAttributeValue(Entity entity, String attributeName, T defValue);
+    
+    /**
      * 获取角色身上所有的物体,注：返回的列表不可以直接修改,只能作为只读使用。
      * @param entity
      * @return 

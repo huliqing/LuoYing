@@ -138,6 +138,8 @@ public abstract class ServerNetworkRpgGame extends NetworkRpgGame {
     protected void onAddClientPlayer(ConnData connData, Entity actor) {
         // 让角色处于“等待”
         skillService.playSkill(actor, skillService.getSkillWaitDefault(actor), false);
+        gameService.setEssential(actor, true);
+        gameService.setPlayer(actor, true);
         
         // 添加客户端角色
         playNetwork.addEntity(actor);
@@ -146,7 +148,7 @@ public abstract class ServerNetworkRpgGame extends NetworkRpgGame {
         onClientListUpdated();
         
         // 消息：通知所有客户端有新的玩家进入
-        String message = ResourceManager.get(ResConstants.LAN_ENTER_GAME, new Object[] {actor.getData().getName()});
+        String message = ResourceManager.get(ResConstants.LAN_ENTER_GAME, new Object[] {gameService.getName(actor)});
         MessageType type = MessageType.item;
         MessMessage notice = new MessMessage();
         notice.setMessage(message);
@@ -187,7 +189,7 @@ public abstract class ServerNetworkRpgGame extends NetworkRpgGame {
             // 之前要先更新ConnData,否则gameServer.getClients()获取不到实时的角色资料更新
             ConnData cd = source.getAttribute(ConnData.CONN_ATTRIBUTE_KEY);
             cd.setEntityId(actor.getData().getUniqueId());
-            cd.setEntityName(actor.getData().getName());
+            cd.setEntityName(gameService.getName(actor));
             
             // 添加到场景
             onAddClientPlayer(cd, actor);
@@ -265,7 +267,7 @@ public abstract class ServerNetworkRpgGame extends NetworkRpgGame {
             playNetwork.removeEntity(clientPlayer);
 
             // 3.通知所有客户端（不含主机）
-            String message = ResManager.get(ResConstants.LAN_CLIENT_EXISTS, new Object[] {clientPlayer.getData().getName()});
+            String message = ResManager.get(ResConstants.LAN_CLIENT_EXISTS, new Object[] {gameService.getName(clientPlayer)});
             MessMessage notice = new MessMessage();
             notice.setMessage(message);
             notice.setType(MessageType.notice);

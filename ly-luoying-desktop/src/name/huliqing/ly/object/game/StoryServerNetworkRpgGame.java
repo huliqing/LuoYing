@@ -6,7 +6,6 @@
 package name.huliqing.ly.object.game;
 
 import com.jme3.app.Application;
-import com.jme3.math.Vector3f;
 import com.jme3.network.HostedConnection;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -162,7 +161,7 @@ public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
                         // 记住客户端所选择的角色
                         Entity actor = scene.getEntity(cd.getEntityId());
                         cd.setEntityId(actor.getData().getUniqueId());
-                        cd.setEntityName(actor.getData().getName());
+                        cd.setEntityName(gameService.getName(actor));
                         
                         // 更新本地（服务端）客户端列表
                         onClientListUpdated();

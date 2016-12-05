@@ -7,6 +7,7 @@ package name.huliqing.luoying.layer.service;
 
 import java.util.Collections;
 import java.util.List;
+import name.huliqing.luoying.object.attribute.Attribute;
 import name.huliqing.luoying.object.attribute.BooleanAttribute;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.entity.Entity;
@@ -51,6 +52,15 @@ public class EntityServiceImpl implements EntityService {
         BooleanAttribute attr = entity.getAttributeManager().getAttribute(attributeName, BooleanAttribute.class);
         if (attr != null) {
             return attr.getValue();
+        }
+        return defValue;
+    }
+
+    @Override
+    public <T> T getAttributeValue(Entity entity, String attributeName, T defValue) {
+        Attribute attribute = entity.getAttributeManager().getAttribute(attributeName);
+        if (attribute != null) {
+            return (T) attribute.getValue();
         }
         return defValue;
     }

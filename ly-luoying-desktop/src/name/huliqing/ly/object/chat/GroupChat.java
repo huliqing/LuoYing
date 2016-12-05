@@ -12,7 +12,6 @@ import name.huliqing.luoying.Factory;
 import name.huliqing.ly.constants.InterfaceConstants;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.ly.data.ChatData;
-import name.huliqing.ly.layer.service.ChatService;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.scene.Scene;
@@ -25,6 +24,7 @@ import name.huliqing.luoying.ui.Text;
 import name.huliqing.luoying.ui.UI;
 import name.huliqing.luoying.ui.UI.Listener;
 import name.huliqing.luoying.ui.UIFactory;
+import name.huliqing.ly.layer.service.GameService;
 import name.huliqing.ly.view.SimpleRow;
 
 /**
@@ -32,7 +32,7 @@ import name.huliqing.ly.view.SimpleRow;
  * @author huliqing
  */
 public class GroupChat extends Chat {
-    private final ChatService chatService = Factory.get(ChatService.class);
+    private final GameService gameService = Factory.get(GameService.class);
     
     private List<Chat> chats; 
     
@@ -98,7 +98,7 @@ public class GroupChat extends Chat {
         super.onInitScene(scene); 
          
         // 更新title
-        title.setTitle(getChatName() + "-" + actor.getData().getName());
+        title.setTitle(getChatName() + "-" + gameService.getName(actor));
         // 列表要刷新一下，因为一些Chat可能需要动态过滤以确定是否要对当前player显示
         chatList.refreshPageData();
         

@@ -9,32 +9,47 @@ import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.layer.network.ActorNetwork;
 import name.huliqing.luoying.layer.network.SkillNetwork;
+import name.huliqing.luoying.layer.service.DefineService;
 import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.skill.Skill;
 import name.huliqing.luoying.ui.ListView;
 import name.huliqing.luoying.ui.Row;
 import name.huliqing.luoying.ui.UI;
+import name.huliqing.ly.constants.SkillConstants;
 import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.ly.layer.service.GameService;
 
 /**
- *
+ * 技能面板，用于显示角色的技能列表。
  * @author huliqing
  */
 public class SkillPanel extends ListView<Skill> implements ActorPanel {
     private final SkillService skillService = Factory.get(SkillService.class);
+    private final DefineService defineService = Factory.get(DefineService.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final GameService gameService = Factory.get(GameService.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
 
     private Entity actor;
-    // 最近一次获取技能列表的时间,当角色切换或者技能列表发生变化时应该重新载入
     private final List<Skill> datas = new ArrayList<Skill>();
+    private final long filterSkillTypes;
     
     public SkillPanel(float width, float height) {
         super(width, height);
+        filterSkillTypes = defineService.getSkillTypeDefine().convert(
+                SkillConstants.SKILL_TYPE_WAIT
+                , SkillConstants.SKILL_TYPE_WALK
+                , SkillConstants.SKILL_TYPE_RUN
+                , SkillConstants.SKILL_TYPE_HURT
+                , SkillConstants.SKILL_TYPE_DEAD
+                , SkillConstants.SKILL_TYPE_RESET
+                , SkillConstants.SKILL_TYPE_SKIN
+                , SkillConstants.SKILL_TYPE_DEFEND
+                , SkillConstants.SKILL_TYPE_DUCK
+                , SkillConstants.SKILL_TYPE_ATTACK
+        );
     }
     
     @Override
@@ -43,7 +58,17 @@ public class SkillPanel extends ListView<Skill> implements ActorPanel {
             return datas;
         }
         datas.clear();
-        datas.addAll(skillService.getSkills(actor));
+        
+        List<Skill> allSkills = skillService.getSkills(actor);
+        if (allSkills != null && !allSkills.isEmpty()) {
+            for (Skill s : allSkills) {
+                if ((s.getData().getTypes() & filterSkillTypes) != 0) {
+                    continue;
+                }
+                datas.add(s);
+            }
+        }
+        
         return datas;
     }
 
@@ -54,7 +79,7 @@ public class SkillPanel extends ListView<Skill> implements ActorPanel {
     
     @Override
     protected Row createEmptyRow() {
-        final SkillRow row = new SkillRow(this);
+        final SkillRow row = new SkillRow();
         row.setRowClickListener(new Listener() {
             @Override
             public void onClick(UI ui, boolean isPress) {

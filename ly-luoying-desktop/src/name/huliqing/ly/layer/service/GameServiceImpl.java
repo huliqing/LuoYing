@@ -196,6 +196,11 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
+    public String getName(Entity entity) {
+        return entityService.getAttributeValue(entity, AttrConstants.NAME, "No Name");
+    }
+
+    @Override
     public void setPartner(Entity entity, Entity partner) {
         setGroup(partner, getGroup(entity));
         setFollow(partner, entity.getEntityId());

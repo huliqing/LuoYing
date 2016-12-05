@@ -153,7 +153,7 @@ public class SendChat<T extends ChatData> extends Chat<T> {
         // 清空dist面板
         distPanel.setDatas(Collections.EMPTY_LIST);
         
-        win.setTitle(getChatName() + "-" + actor.getData().getName());
+        win.setTitle(getChatName() + "-" + gameService.getName(actor));
     }
     
     // 给目标发送物品
