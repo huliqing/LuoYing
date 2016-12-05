@@ -33,7 +33,9 @@
                 bindMassAttribute="attributeMass"
                 bindMovableAttribute="attributeMovable"
                 bindRotatableAttribute="attributeRotatable"
-                bindLocationAttribute="attributeLocation" />
+                bindLocationAttribute="attributeLocation"
+                bindNameAttribute="attributeName"
+    />
 
     <!--技能管理模块: 间接依赖: moduleChannel -->
     <moduleSkill id="moduleSkill" moduleOrder="20" 

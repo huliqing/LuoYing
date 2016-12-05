@@ -65,7 +65,7 @@ public class PlayerDeadCheckerGameLogic extends AbstractGameLogic {
             playNetwork.addEntity((View) Loader.load(IdConstants.VIEW_TEXT_FAILURE));
 
             // 如果主角死亡，则停止游戏逻辑 
-            game.setEnabled(false);
+//            game.setEnabled(false);
         }
     }
 

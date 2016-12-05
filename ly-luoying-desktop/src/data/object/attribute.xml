@@ -133,6 +133,12 @@
     <!--角色颜色-->
     <attributeVector4f id="attributeColor" name="attributeColor" value="1,1,1,1" />
     
+    <!--角色名字-->
+    <attributeString id="attributeName" name="attributeName" />
+    
+    <!--判断一个角色是否为玩家-->
+    <attributeBoolean id="attributePlayer" name="attributePlayer" />
+    
     <!--==========================================================================-->
     <!--基本属性打包-->
     <!--==========================================================================-->
@@ -147,7 +153,7 @@
     ,attributeHealthRestore,attributeManaRestore
     ,attributeAttackSpeed,attributeMagicSpeed
     ,attributeDefenceRate,attributeDuckRate,attributeGhostRate,attributeResistInterruptRate
-    ,attributeWeaponSlots,attributeLocation,attributeColor
+    ,attributeWeaponSlots,attributeLocation,attributeColor,attributeName,attributePlayer
 " />
     
     <!--==========================================================================-->

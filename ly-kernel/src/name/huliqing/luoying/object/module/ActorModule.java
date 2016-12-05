@@ -12,12 +12,15 @@ import com.jme3.math.Vector3f;
 import com.jme3.util.TempVars;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import name.huliqing.luoying.data.ModuleData;
+import name.huliqing.luoying.manager.ResManager;
 import name.huliqing.luoying.object.attribute.Attribute;
 import name.huliqing.luoying.object.attribute.BooleanAttribute;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.attribute.SimpleValueChangeListener;
+import name.huliqing.luoying.object.attribute.StringAttribute;
 import name.huliqing.luoying.object.attribute.ValueChangeListener;
 import name.huliqing.luoying.object.attribute.Vector3fAttribute;
 import name.huliqing.luoying.object.entity.Entity;
@@ -29,7 +32,7 @@ import name.huliqing.luoying.utils.FastStack;
  * @param <T>
  */
 public class ActorModule<T extends ModuleData> extends AbstractModule<T> implements SimpleValueChangeListener<Object>, ValueChangeListener {
-//    private static final Logger LOG = Logger.getLogger(ActorModule.class.getName());
+    private static final Logger LOG = Logger.getLogger(ActorModule.class.getName());
     private final static String DATA_VIEW_DIRECTION = "viewDirection";
     private final static String DATA_WALK_DIRECTION = "walkDirection";
     
@@ -48,6 +51,8 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     private String bindRotatableAttribute;
     // 绑定角色的位置属性，可以用这个值来控制角色的位置。
     private String bindLocationAttribute;
+    // 绑定角色的名称属性
+    private String bindNameAttribute;
     
     // ---- inner
     private BetterCharacterControlWrap innerControl;
@@ -60,6 +65,8 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     private BooleanAttribute movableAttribute;
     private BooleanAttribute rotatableAttribute;
     private Vector3fAttribute locationAttribute;
+    private StringAttribute nameAttribute;
+    
     // 这个参数用于避免LocationAttribute位置变化时触发事件的循环调用，因为ActorModule自身会改变角色的位置值，
     // 这可能会导致内部循环触发LocationAttribute的变化事件。
     private boolean locationChangedEventEnabled = true;
@@ -78,6 +85,7 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
         this.bindMovableAttribute = data.getAsString("bindMovableAttribute");
         this.bindRotatableAttribute = data.getAsString("bindRotatableAttribute");
         this.bindLocationAttribute = data.getAsString("bindLocationAttribute");
+        this.bindNameAttribute = data.getAsString("bindNameAttribute");
     }
 
     @Override
@@ -95,19 +103,32 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
         }
     }
     
+    private <T extends Attribute> T getAttribute(String attributeName, Class<T> type) {
+        if (attributeName == null) {
+            return null;
+        }
+        T attribute = entity.getAttributeManager().getAttribute(attributeName, type);
+        if (attribute == null) {
+            LOG.log(Level.WARNING, "Attribute not found by attributeName={0}, attributeType={1}, entity={2}"
+                    , new Object[] {attributeName, type.getName(), entity.getData().getId()});
+        }
+        return attribute;
+    }
+    
     @Override
     public void initialize(Entity entity) {
         super.initialize(entity);
         entity.addEntityAttributeListener(actorEntityListener);
         
-        deadAttribute = entity.getAttributeManager().getAttribute(bindDeadAttribute, BooleanAttribute.class);
-        targetAttribute = entity.getAttributeManager().getAttribute(bindTargetAttribute, NumberAttribute.class);
-        massAttribute = entity.getAttributeManager().getAttribute(bindMassAttribute, NumberAttribute.class);
-        movableAttribute = entity.getAttributeManager().getAttribute(bindMovableAttribute, BooleanAttribute.class);
-        rotatableAttribute = entity.getAttributeManager().getAttribute(bindRotatableAttribute, BooleanAttribute.class);
-        locationAttribute = entity.getAttributeManager().getAttribute(bindLocationAttribute, Vector3fAttribute.class);
+        deadAttribute = getAttribute(bindDeadAttribute, BooleanAttribute.class);
+        targetAttribute = getAttribute(bindTargetAttribute, NumberAttribute.class);
+        massAttribute = getAttribute(bindMassAttribute, NumberAttribute.class);
+        movableAttribute = getAttribute(bindMovableAttribute, BooleanAttribute.class);
+        rotatableAttribute = getAttribute(bindRotatableAttribute, BooleanAttribute.class);
+        locationAttribute = getAttribute(bindLocationAttribute, Vector3fAttribute.class);
+        nameAttribute = getAttribute(bindNameAttribute, StringAttribute.class);
         
-         // 监听角色健康值属性，当健康值等于或小于0于，角色要标记为死亡。
+        // 监听角色健康值属性，当健康值等于或小于0于，角色要标记为死亡。
         deadAttribute.addSimpleValueChangeListener(this);
         targetAttribute.addSimpleValueChangeListener(this);
         if (massAttribute != null) {
@@ -115,6 +136,12 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
         }
         if (locationAttribute != null) {
             locationAttribute.addListener(this);
+        }
+        // 首次载入的角色可能没有指定名字，则从资源文件中获取角色名字。
+        if (nameAttribute != null) {
+            if (nameAttribute.getValue() == null || nameAttribute.getValue().equals("")) {
+                nameAttribute.setValue(ResManager.get(entity.getData().getId() + ".name"));
+            }
         }
         
         // 控制器

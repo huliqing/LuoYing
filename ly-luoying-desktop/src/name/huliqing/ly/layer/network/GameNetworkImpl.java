@@ -61,36 +61,6 @@ public class GameNetworkImpl implements GameNetwork {
         gameService.addMessage(message, type);
     }
 
-    // remove20161126
-//    @Override
-//    public void syncGameInitToClient(HostedConnection client) {
-//         if (network.isClient()) 
-//            return;
-//        
-//        // 注意：同步当前场景中的对象时不要一起发送，
-//        // 这会导致溢出异常（当场景中角色或物体太多时)
-//        // 这些命令是有序的，不用担心角色同步问题
-//        
-//        // 同步所有角色
-//        SimpleRpgGame rpgGame = (SimpleRpgGame) playService.getGame();
-//        Scene scene = rpgGame.getScene();
-//        List<Entity> entities = rpgGame.getScene().getEntities(Entity.class, null);
-//        for (Entity entity : entities) {
-//            entity.updateDatas();
-//            MessEntityAdd mess = new MessEntityAdd();
-//            mess.setEntityData(entity.getData());
-//            mess.setSceneId(scene.getData().getUniqueId());
-//            network.sendToClient(client, mess);
-//        }
-//    }
-
-    // remove201611xx
-//    @Override
-//    public void syncObject(NetworkObject object, SyncData syncData, boolean reliable) {
-//        LOG.log(Level.WARNING, "不再支持这个方法！");
-////        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-//    }
-
     @Override
     public void speak(Entity actor, String mess, float useTime) {
         if (network.isClient()) {
@@ -199,6 +169,16 @@ public class GameNetworkImpl implements GameNetwork {
     public void setEssential(Entity entity, boolean essential) {
         entityNetwork.hitAttribute(entity, AttrConstants.ESSENTIAL, essential, null);
     }
+
+    @Override
+    public void setName(Entity entity, String name) {
+        entityNetwork.hitAttribute(entity, AttrConstants.NAME, name, null);
+    }
+
+    @Override
+    public void setPlayer(Entity entity, boolean isPlayer) {
+        entityNetwork.hitAttribute(entity, AttrConstants.PLAYER, isPlayer, null);
+    }
     
     @Override
     public void kill(Entity entity) {
@@ -246,39 +226,5 @@ public class GameNetworkImpl implements GameNetwork {
         }
         return entityNetwork.removeObjectData(entity, objectUniqueId, amount);
     }
-    
-    // remove20161128
-//    @Override
-//    public void selectPlayer(EntityData entityData) {
-//        if (network.isClient()) {
-//            network.sendToServer(new ActorSelectMess(entityData));
-//        } else {
-//            
-//            Entity actor = Loader.load(entityData);
-//            
-//            // 暂时以1作为默认分组
-////            gameService.setTeam(actor, 1);
-//            // xxx 这一段要重构
-////            List<Skill> waitSkills = skillService.getSkillWait(actor);
-////            if (waitSkills != null && !waitSkills.isEmpty()) {
-////                skillService.playSkill(actor, waitSkills.get(0), false);
-////            }
-//
-//            playNetwork.addEntity(actor);
-//            gameService.setPlayer(actor);
-//            
-//            // 通知所有客户端
-//            String message = ResourceManager.get("lan.enterGame", new Object[] {actorName});
-//            MessageType type = MessageType.item;
-//            MessMessage mess = new MessMessage();
-//            mess.setMessage(message);
-//            mess.setType(type);
-//            network.broadcast(mess); 
-//            
-//            // 通知主机
-//            gameService.addMessage(message, type);
-//        }
-//    }
-    
     
 }

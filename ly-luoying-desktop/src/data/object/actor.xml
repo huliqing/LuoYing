@@ -91,14 +91,12 @@
     
     <!-- player-->
     <actor id="actorPlayer" extends="actorHumanFemaleBase" skinWeapon="weaponBow000" 
-           logics="logicSearchEnemyForPlayer,logicPlayer" 
            talents="talentLifeRestore,talentDefence,talentAttack"
            items="itemTonicRed|5,itemTonicBlue|5,itemSpiderSpawn|1,itemTower|1" 
     />
     
     <!--战士-->
     <actor id="actorWarrior" extends="actorHumanFemaleBase" icon="Interface/face/female1.jpg"
-           logics="logicSearchEnemyForPlayer,logicPlayer"
            talents="talentLifeRestore,talentDefence,talentAttack"
            skinOutfit="skinFoot005,skinHand005,skinLowerBody005,skinUpperBody005"
            items="itemTonicRed|10,itemTonicBlue|5,itemTower|1" 
@@ -113,7 +111,6 @@
     
     <!--牧师-->
     <actor id="actorPastor" extends="actorHumanFemaleBase" icon="Interface/face/female2.jpg"
-           logics="logicSearchEnemyForPlayer,logicPlayer"
            talents="talentManaRestore,talentMagicDefence,talentMagicAttack"
            items="itemTonicRed|5,itemTonicBlue|10" 
            skinBase="skinEar000,skinEye000,skinFace000,skinFoot000,skinHair006,skinHand000,skinLowerBody000,skinUpperBody000"
@@ -126,7 +123,6 @@
     
     <!--猎人-->
     <actor id="actorHunter" extends="actorHumanFemaleBase" icon="Interface/face/female3.jpg"
-           logics="logicSearchEnemyForPlayer,logicPlayer"
            talents="talentAttack,talentDefence,talentVision,talentMoveSpeed"
            items="itemTonicRed|10,itemTonicBlue|5,itemHerb|5,itemTowerStone|1" 
            skinBase="skinEar000,skinEye000,skinFace000,skinFoot000,skinHair011,skinHand000,skinLowerBody000,skinUpperBody000"
@@ -295,7 +291,7 @@
            talents=""
            scale="1.5,1.5,1.5"
            skills="skillJaimeWait,skillJaimeIdle,skillJaimeRun" 
-           mat="derma" resist="resistCreature" drops="" objectDatas="chatJaime" />
+           mat="derma" resist="resistCreature" drops="" objectDatas="chatJaime,stateSafe" />
 
     <!--Skeleton-->
     <actor id="actorSkeleton" extends="actorLivingMovableRotatableBase" file="Models/monster/skeleton/skeleton.mesh.j3o" 

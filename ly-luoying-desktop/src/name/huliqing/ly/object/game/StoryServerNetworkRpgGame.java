@@ -212,21 +212,24 @@ public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
         } else {
             if (Config.debug) {
                 actor = Loader.load(IdConstants.ACTOR_PLAYER_TEST);
-                gameService.setLevel(actor, 10);
+                gameService.setLevel(actor, 1);
             } else {
                 actor = Loader.load(IdConstants.ACTOR_PLAYER);
             }
         }
         // 确保角色位置在地面上
-        Vector3f loc = actorService.getLocation(actor);
-        Vector3f terrainHeight = playService.getTerrainHeight(scene, loc.x, loc.z);
-        if (terrainHeight != null) {
-            actorService.setLocation(actor, terrainHeight.addLocal(0, 0.5f, 0));
-        }
+//        Vector3f loc = actorService.getLocation(actor);
+//        Vector3f terrainHeight = playService.getTerrainHeight(scene, loc.x, loc.z);
+//        if (terrainHeight != null) {
+//            actorService.setLocation(actor, terrainHeight.addLocal(0, 0.5f, 0));
+//        }
+
         // 给玩家指定分组
         gameService.setGroup(actor, GROUP_PLAYER);
         // 故事模式玩家队伍固定分组
         gameService.setTeam(actor, TEAM_PLAYER);
+        // 确保角色位置在地面上
+        gameService.setOnTerrain(actor);
         // 添加主玩家
         onAddServerPlayer(actor);
     }

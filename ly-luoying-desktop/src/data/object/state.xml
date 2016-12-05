@@ -20,9 +20,9 @@
     <stateAttribute id="stateGhostTest3" useTime="30" bindNumberAttribute="attributeDefenceRate" addValue="1" restore="1" />
     
     <!--保护: 用于在剧情过程中保护角色别死-->
-    <statePrivateGroup id="stateSafe" icon="Interface/skill/shield.jpg" useTime="9999" states="stateSafe1,stateSafe2" />
-    <stateAttribute id="stateSafe1" useTime="9999" bindNumberAttribute="attributeDefence" addValue="99999" restore="1" />
-    <stateAttribute id="stateSafe2" useTime="9999" bindNumberAttribute="attributeMagicDefence" addValue="99999" restore="1" />
+    <statePrivateGroup id="stateSafe" icon="Interface/skill/shield.jpg" useTime="99999" states="stateSafe1,stateSafe2" />
+    <stateAttribute id="stateSafe1" useTime="99999" bindNumberAttribute="attributeDefence" addValue="99999" restore="1" />
+    <stateAttribute id="stateSafe2" useTime="99999" bindNumberAttribute="attributeMagicDefence" addValue="99999" restore="1" />
     
     <!--晕眩: 让目标不能动也不能执行任何技能-->
     <stateSkillLocked id="stateStun" icon="Interface/skill/stun.png" useTime="3" lockAtSkillTypes="reset"

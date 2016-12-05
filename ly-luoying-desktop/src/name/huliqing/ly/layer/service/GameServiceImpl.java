@@ -20,10 +20,13 @@ import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.layer.service.SceneService;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.save.SaveHelper;
+import name.huliqing.luoying.save.SaveStory;
 import name.huliqing.ly.Start;
 import name.huliqing.ly.constants.AttrConstants;
 import name.huliqing.ly.enums.MessageType;
 import name.huliqing.ly.object.game.SimpleRpgGame;
+import name.huliqing.ly.object.game.StoryServerNetworkRpgGame;
 import name.huliqing.ly.view.shortcut.ShortcutManager;
 import name.huliqing.ly.view.talk.SpeakManager;
 import name.huliqing.ly.view.talk.Talk;
@@ -34,7 +37,7 @@ import name.huliqing.ly.view.talk.TalkManager;
  */
 public class GameServiceImpl implements GameService {
 
-    private static final Logger LOG = Logger.getLogger(GameServiceImpl.class.getName());
+//    private static final Logger LOG = Logger.getLogger(GameServiceImpl.class.getName());
 
     private PlayService playService;
     private EntityService entityService;
@@ -101,7 +104,10 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public void saveCompleteStage(int storyNum) {
-        LOG.log(Level.WARNING, "需要重构");
+        StoryServerNetworkRpgGame game = (StoryServerNetworkRpgGame) playService.getGame();
+        SaveStory saveStory = game.getSaveStory();
+        saveStory.setStoryCount(storyNum);
+        SaveHelper.saveStoryLast(saveStory);
     }
 
     @Override
@@ -233,7 +239,7 @@ public class GameServiceImpl implements GameService {
     }
     
     @Override
-    public Entity findNearestEnemyExcept(Entity actor, float maxDistance) {
+    public Entity findNearestEnemies(Entity actor, float maxDistance) {
         List<Actor> actors = actor.getScene().getEntities(Actor.class, actor.getSpatial().getWorldTranslation(), maxDistance, null);
         float minDistanceSquared = maxDistance * maxDistance;
         float distanceSquared;
@@ -271,6 +277,16 @@ public class GameServiceImpl implements GameService {
         Vector3f loc = entity.getSpatial().getWorldTranslation();
         sceneService.getSceneHeight(loc.x, loc.z, loc);
         setLocation(entity, loc);
+    }
+
+    @Override
+    public void setName(Entity entity, String name) {
+        entityService.hitAttribute(entity, AttrConstants.NAME, name, null);
+    }
+
+    @Override
+    public void setPlayer(Entity entity, boolean isPlayer) {
+        entityService.hitAttribute(entity, AttrConstants.PLAYER, isPlayer, null);
     }
 
     

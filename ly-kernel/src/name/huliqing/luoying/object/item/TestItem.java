@@ -55,8 +55,8 @@ public class TestItem extends AbstractItem {
 //        Actor test = Loader.load("actorGbSmall");
         actorService.setLocation(test, new Vector3f(0,0,0));
         test.getAttributeManager().getAttribute("attributeGroup", NumberAttribute.class).setValue(2);
-        test.getAttributeManager().getAttribute("attributeLevel", NumberAttribute.class).setValue(20);
-entityService.addObjectData(test, Loader.loadData("dropBook007"), 1);
+        test.getAttributeManager().getAttribute("attributeLevel", NumberAttribute.class).setValue(5);
+        entityService.addObjectData(test, Loader.loadData("dropBook007"), 1);
         playNetwork.addEntity(test);
         
 //        actor.updateDatas();

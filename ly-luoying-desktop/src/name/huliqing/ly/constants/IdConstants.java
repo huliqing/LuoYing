@@ -84,16 +84,14 @@ public class IdConstants {
     // =========================================================================
     
     /** 简单的走路行为,无寻路 */
-    public final static String ACTION_RUN_SIMPLE = "actionRunSimple";
+    public final static String ACTION_RUN_SIMPLE = "actionSimpleRun";
     /** 带有寻路功能的“走路”行为 */
     public final static String ACTION_RUN_BY_PATH = "actionRun";
     /** 动态的战斗行为 */
-    public final static String ACTION_FIGHT_DYNAMIC = "actionFightDynamic";
+    public final static String ACTION_FIGHT_DYNAMIC = "actionDynamicFight";
     /** 静态的战斗行为 */
-    public final static String ACTION_FIGHT_STATIC = "actionFightStatic";
-    /** 玩家角色的战斗行为 */
-    public final static String ACTION_FIGHT_FOR_PLAYER = "actionPlayerFight";
- 
+    public final static String ACTION_FIGHT_STATIC = "actionStaticFight";
+    
     // =========================================================================
     // Sound
     // =========================================================================
@@ -128,22 +126,7 @@ public class IdConstants {
     public final static String LOGIC_DEFEND = "logicDefend";
     /** 打架逻辑 */
     public final static String LOGIC_FIGHT = "logicDynamicFight";
-    /**
-     * 玩家类的逻辑
-     */
-    public final static String[] LOGIC_PLAYER = new String[] {
-              "logicPlayer"
-            , "logicSearchEnemyForPlayer"
-            , "logicFollow"
-            , "logicDefend"};
     
-    // =========================================================================
-    // HitChecker
-    // =========================================================================
-    
-    /** 默认战斗的hitChecker */
-//    public final static String HIT_CHECKER_FIGHT_DEFAULT = "hitCheckerFightDefault";
-
     // =========================================================================
     // Scene
     // =========================================================================

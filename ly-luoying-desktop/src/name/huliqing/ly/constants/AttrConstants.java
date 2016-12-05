@@ -51,4 +51,6 @@ public class AttrConstants {
     public final static String WEAPON_SLOTS = "attributeWeaponSlots";
     public final static String LOCATION = "attributeLocation";
     public final static String COLOR = "attributeColor";
+    public final static String NAME = "attributeName";
+    public final static String PLAYER = "attributePlayer";
 }

@@ -60,7 +60,7 @@ public class Effect extends ModelEntity<EffectData> {
     /** 特效的初始偏移旋转（跟随时用） */
     protected Quaternion traceRotationOffset;
     /** 特效跟随位置时的偏移类型 */
-    protected TraceOffsetType traceOffsetType;
+    protected TraceOffsetType traceLocationType;
     
     // ---------- inner
     
@@ -132,7 +132,7 @@ public class Effect extends ModelEntity<EffectData> {
         traceRotation = TraceType.identity(data.getAsString("traceRotation", TraceType.no.name()));
         traceLocationOffset = data.getAsVector3f("traceLocationOffset");
         traceRotationOffset = data.getAsQuaternion("traceRotationOffset");
-        traceOffsetType = TraceOffsetType.identify(data.getAsString("traceOffsetType", TraceOffsetType.origin.name()));
+        traceLocationType = TraceOffsetType.identify(data.getAsString("traceLocationType", TraceOffsetType.origin.name()));
     }
     
     @Override
@@ -143,13 +143,11 @@ public class Effect extends ModelEntity<EffectData> {
     @Override
     public void updateDatas() {
         super.updateDatas();
-        if (initialized) {
-//            data.setAttribute("useTime", useTime); // 不可能改变的数据不需要更新
-            data.setAttribute("timeUsed", timeUsed);
-            data.setAttribute("speed", speed);
-            data.setAttribute("traceEntityId", traceEntityId);
-            // xxx to save Anim\Sounds data
-        }
+//     data.setAttribute("useTime", useTime); // 不改变的数据不需要更新
+        data.setAttribute("timeUsed", timeUsed);
+        data.setAttribute("speed", speed);
+        data.setAttribute("traceEntityId", traceEntityId);
+        // xxx to save Anim\Sounds data
     }
 
     @Override
@@ -389,25 +387,25 @@ public class Effect extends ModelEntity<EffectData> {
         // add type offset
         Vector3f pos = effectNode.getLocalTranslation();
         
-        if (traceOffsetType == TraceOffsetType.origin) {
+        if (traceLocationType == TraceOffsetType.origin) {
             pos.set(traceObject.getWorldTranslation());
             
-        } else if (traceOffsetType == TraceOffsetType.origin_bound_center) {
+        } else if (traceLocationType == TraceOffsetType.origin_bound_center) {
             pos.set(traceObject.getWorldTranslation());
             BoundingVolume bv = traceObject.getWorldBound();
             if (bv != null) {
                 pos.setY(bv.getCenter().getY());
             }
             
-        } else if (traceOffsetType == TraceOffsetType.origin_bound_top) {
+        } else if (traceLocationType == TraceOffsetType.origin_bound_top) {
             GeometryUtils.getBoundTopPosition(traceObject, pos);
             pos.setX(traceObject.getWorldTranslation().x);
             pos.setZ(traceObject.getWorldTranslation().z);
             
-        } else if (traceOffsetType == TraceOffsetType.bound_center) {
+        } else if (traceLocationType == TraceOffsetType.bound_center) {
             pos.set(traceObject.getWorldBound().getCenter());
             
-        } else if (traceOffsetType == TraceOffsetType.bound_top) {
+        } else if (traceLocationType == TraceOffsetType.bound_top) {
             GeometryUtils.getBoundTopPosition(traceObject, pos);
             
         }

@@ -22,7 +22,7 @@ public class StoryGuardFairyTask extends AbstractGameLogic {
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final GameService gameService = Factory.get(GameService.class);
 //    private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
-    private final SceneService sceneService = Factory.get(SceneService.class);
+//    private final SceneService sceneService = Factory.get(SceneService.class);
     private final StoryGuardGame _game;
     
     // 这个距离定义了当player离妖精地点多近时就触发妖精任务 － 载入妖精角色

@@ -80,6 +80,13 @@ xs:time
                             <xs:documentation>Vector3fAttribute, 绑定角色的位置属性，当绑定了这个属性之后可以用这个属性来控制角色的位置.</xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
+                    <xs:attribute name="bindNameAttribute" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>StringAttribute, 绑定角色的名称属性，当角色首次载入时，模块会为角色设置一个名字到这个属性上，这个名字是从资源文件中获取的，
+                                格式："actorId.name" 
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>

@@ -182,7 +182,12 @@ public class DynamicFightAction extends PathFollowAction implements FightAction,
         
         // 判断是否在攻击范围内
         // 如果不在攻击范围内则偿试跟随
-        if (!isInHitRange(skill, enemy)) {
+        if (!isPlayable(skill, enemy)) {
+            
+            // 清除skill, 以便重新获取技能，因为当一个技能不能执行时，该技能可能是由于等级或属性限制而不能执行。
+            // 而等级或属性不是一时能涨满的，并且也无法直接判断, 因一些检测是从el计算得来的。
+            skill = null;
+            
             if (allowFollow) {
                 super.doFollow(enemy.getSpatial(), tpf);
                 // 如果跟随的时间达到允许的跟随限制,则不再跟随,并释放目标
@@ -235,7 +240,7 @@ public class DynamicFightAction extends PathFollowAction implements FightAction,
      * @param target
      * @return 
      */
-    protected boolean isInHitRange(Skill attackSkill, Entity target) {
+    protected boolean isPlayable(Skill attackSkill, Entity target) {
 //        // 正常攻击类技能都应该是HitSkill,使用hitSkill的isInHitDistance来判断以优化
 //        // 性能，
 //        if (attackSkill instanceof HitSkill) {

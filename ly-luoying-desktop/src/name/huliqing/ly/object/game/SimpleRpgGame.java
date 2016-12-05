@@ -135,10 +135,11 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
     public void setPlayer(Entity newPlayer) {
         if (player != null) {
             gameService.setEssential(player, false);
+            gameService.setPlayer(player, false);
         }
         player = newPlayer;
-        // 把player设置为essential,否则可能在死亡后被移出场景
         gameService.setEssential(player, true);
+        gameService.setPlayer(player, true);
         ui.getTeamView().setMainActor(newPlayer);
         ChaseCameraEntity cce = getChaseCamera();
         if (cce != null) {
@@ -170,11 +171,10 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
                 || !gameService.isEnemy(temp, player)
                 ) {
             float distance = gameService.getViewDistance(player) * 2;
-            temp = gameService.findNearestEnemyExcept(player, distance);
+            temp = gameService.findNearestEnemies(player, distance);
             
             // 需要
             setTarget(temp);
-            
         }
 
         if (temp != null) {

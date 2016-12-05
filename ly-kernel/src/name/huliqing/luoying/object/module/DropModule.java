@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import name.huliqing.luoying.Config;
 import name.huliqing.luoying.data.DropData;
 import name.huliqing.luoying.data.ModuleData;
 import name.huliqing.luoying.object.Loader;
@@ -190,12 +191,7 @@ public class DropModule extends AbstractModule implements DataHandler<DropData> 
         public void onHitAttributeBefore(Attribute attribute, Object hitValue, Entity hitter) {
             if (deadAttribute == null) 
                 return;
-            
             deadStack.push(deadAttribute.getValue());
-            
-            if (entity.getData().getId().equals("actorAltar")) {
-                System.out.println("-------------" + deadStack.size());
-            }
         }
         
         @Override
@@ -204,14 +200,11 @@ public class DropModule extends AbstractModule implements DataHandler<DropData> 
                 return;
             // killed
             boolean oldDeadState = deadStack.pop();
-            
-             if (entity.getData().getId().equals("actorAltar")) {
-                 System.out.println("...");
-             }
-            
             if (!oldDeadState && deadAttribute.getValue()) {
-                LOG.log(Level.INFO, "{0} hit by {1} with hitValue={2}, oldValue={3}, dead doDrop now.", 
-                        new Object[] {entity.getData().getId(), hitter != null ? hitter.getData().getId() : null, hitValue, oldValue});
+                if (LOG.isLoggable(Level.INFO)) {
+                    LOG.log(Level.INFO, "{0} hit by {1} with hitValue={2}, oldValue={3}, dead doDrop now.", 
+                            new Object[] {entity.getData().getId(), hitter != null ? hitter.getData().getId() : null, hitValue, oldValue});
+                }
                 doDrop(hitter);
             }
         }

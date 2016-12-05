@@ -6,9 +6,7 @@ package name.huliqing.luoying.object.state;
 
 import java.util.List;
 import name.huliqing.luoying.data.StateData;
-import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.entity.EntityDataListener;
-import name.huliqing.luoying.object.module.StateListener;
 import name.huliqing.luoying.xml.ObjectData;
 
 /**
@@ -35,10 +33,6 @@ public class CleanState extends AbstractState implements EntityDataListener {
         // 立即进行一次清理,如果states中包含当前状态的id,则可能也会把自身清理掉。
         // 那么状态所设置的时间就无意义了。不过这对于一些只要立即清理一次就可以的
         // 状态效果来说是有意义的,即不需要持续的清理。
-        
-        // 注：如果doCleanStates中包含清理当前状态，则要注意并避免：
-        // java.util.ConcurrentModificationException异常,因这会导致当前方法又回调
-        // 到cleanup方法,引起StateListener的ConcurrentModification问题。这个问题应该在StateService处避免。
         doCleanStates();
         
         actor.addEntityDataListener(this);
@@ -53,9 +47,9 @@ public class CleanState extends AbstractState implements EntityDataListener {
     private void doCleanStates() {
         if (states != null) {
             for (String s : states) {
-                State state = actor.getData().getObjectData(s);
+                StateData state = actor.getData().getObjectData(s);
                 if (state != null) {
-                    actor.removeObjectData(state.getData(), 1);
+                    actor.removeObjectData(state, 1);
                 }
             }
         }

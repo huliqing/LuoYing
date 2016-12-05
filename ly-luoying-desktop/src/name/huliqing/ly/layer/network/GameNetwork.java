@@ -33,14 +33,6 @@ public interface GameNetwork extends Inject {
      * @param talk 
      */
     void talk(Talk talk);
-    
-    // remove20161106
-//    /**
-//     * 让actor跟随目标target角色
-//     * @param actor
-//     * @param targetId 目标ID,如果为小于或等于0的值则表示清除跟随
-//     */
-//    void follow(Entity actor, long targetId);
 
     /**
      * 让角色走到目标位置
@@ -88,13 +80,19 @@ public interface GameNetwork extends Inject {
      */
     void setEssential(Entity entity, boolean essential);
     
-    // remove20161126
-//    /**
-//     * 设置角色是否为玩家类型的角色
-//     * @param entity
-//     * @param isPlayer 
-//     */
-//    void setPlayer(Entity entity, boolean isPlayer);
+    /**
+     * 设置角色名字
+     * @param entity
+     * @param name 
+     */
+    void setName(Entity entity, String name);
+    
+    /**
+     * 把角色标记为”玩家“,这个方法只是简单将角色属性标记为”玩家“，并不会改变玩家控制的角色。
+     * @param entity
+     * @param isPlayer 
+     */
+    void setPlayer(Entity entity, boolean isPlayer);
     
     /**
      * 把partner设置为entity的同伴

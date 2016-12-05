@@ -11,10 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.Config;
 import name.huliqing.luoying.data.GameData;
-//import name.huliqing.ly.state.StoryServerPlayState;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.object.Loader;
-import name.huliqing.luoying.object.game.Game;
 import name.huliqing.luoying.object.game.GameAppState;
 import name.huliqing.luoying.save.SaveStory;
 import name.huliqing.luoying.ui.ListView;
@@ -22,7 +20,6 @@ import name.huliqing.luoying.ui.Row;
 import name.huliqing.luoying.ui.Text;
 import name.huliqing.luoying.ui.UIFactory;
 import name.huliqing.luoying.ui.UI;
-//import name.huliqing.ly.LyStoryServerPlayState;
 import name.huliqing.ly.constants.IdConstants;
 import name.huliqing.ly.object.game.StoryServerNetworkRpgGame;
 import name.huliqing.ly.state.start.StoryView.StoryData;
@@ -83,7 +80,7 @@ public class StoryView extends ListView<StoryData> {
             completeStage = saveStory.getStoryCount();
         }
         if (Config.debug) {
-            completeStage = 999;
+            //completeStage = 999;
         }
         for (int i = 0; i < datas.size() - 1; i++) {
             datas.get(i).enabled = (i <= completeStage);

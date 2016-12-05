@@ -290,7 +290,6 @@ public class TeamView extends LinearLayout implements SceneListener, ValueChange
                     Entity target = facePanel.getActor();
                     if (player != null && target != null && player != target) {
                         gameNetwork.setFollow(player, target.getData().getUniqueId()); 
-                        
                     }
                 }
             });

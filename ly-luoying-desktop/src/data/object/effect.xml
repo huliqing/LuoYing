@@ -373,7 +373,7 @@
     <!--状态：毒素缠身-->
     <!-- ========================================================================= -->
     <effectParticle id="effectScorpionVenom" extends="effectBase" useTime="60" traceLocation="always" traceRotation="no" 
-                    emitter="emitterScorpionVenomSmoke" traceLocationType="origin_bound_center" />
+                    emitter="emitterScorpionVenomSmoke" traceLocationType="origin_bound_center" endImmediate="1" />
     
     <!-- ========================================================================= -->
     <!--骷髅死亡效果-->

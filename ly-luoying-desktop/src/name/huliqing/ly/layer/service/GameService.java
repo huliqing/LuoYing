@@ -58,15 +58,75 @@ public interface GameService extends GameNetwork {
      */
     void addShortcut(Entity actor, ObjectData data);
     
+    /**
+     * 判断角色是否死亡
+     * @param entity
+     * @return 
+     */
     boolean isDead(Entity entity);
+    
+    /**
+     * 判断目标是否是可“转向的"
+     * @param entity
+     * @return 
+     */
     boolean isRotatable(Entity entity);
+    
+    /**
+     * 判断目标是否是生物
+     * @param entity
+     * @return 
+     */
     boolean isBiology(Entity entity);
+    
+    /**
+     * 获取目标的”所有者“，即主人。
+     * @param entity
+     * @return 
+     */
     long getOwner(Entity entity);
+    
+    /**
+     * 获取目标的分组,不同的分组通常意味着战斗
+     * @param entity
+     * @return 
+     */
     int getGroup(Entity entity);
+    
+    /**
+     * 获取目标所在的队伍
+     * @param entity
+     * @return 
+     */
     int getTeam(Entity entity);
+    
+    /**
+     * 获取目标的等级
+     * @param entity
+     * @return 
+     */
     int getLevel(Entity entity);
+    
+    /**
+     * 获取entity的当前目标对象
+     * @param entity
+     * @return 
+     */
     long getTarget(Entity entity);
+    
+    /**
+     * 判断一个目标target是否是entity的敌人
+     * @param entity
+     * @param target
+     * @return 
+     */
     boolean isEnemy(Entity entity, Entity target);
+    
+    /**
+     * 获取目标的视角范围
+     * @param entity
+     * @return 
+     */
     int getViewDistance(Entity entity);
     
     /**
@@ -75,5 +135,5 @@ public interface GameService extends GameNetwork {
      * @param maxDistance 
      * @return 
      */
-    Entity findNearestEnemyExcept(Entity actor, float maxDistance);
+    Entity findNearestEnemies(Entity actor, float maxDistance);
 }

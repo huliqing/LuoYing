@@ -41,6 +41,9 @@ public class ItemDrop extends AbstractDrop {
     // // 这里使用ProtoNetwork就可以，不需要直接使用ItemNetwork
     @Override
     public boolean doDrop(Entity source, Entity target) {
+        if (target == null) {
+            return false;
+        }
         if (item == null || count <= 0 || rate <= 0) {
             return false;
         }

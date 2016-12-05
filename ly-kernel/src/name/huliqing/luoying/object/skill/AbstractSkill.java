@@ -11,6 +11,7 @@ import com.jme3.scene.Spatial;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import name.huliqing.luoying.Config;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.data.AttributeUse;
@@ -636,7 +637,14 @@ public abstract class AbstractSkill implements Skill {
     
     @Override
     public boolean isPlayableByElCheck() {
-        return checkEl == null || checkEl.getValue();
+        boolean result = checkEl == null || checkEl.getValue();
+        if (Config.debug) {
+            String el = checkEl != null ? checkEl.getData().getId() : null;
+            String expression = checkEl != null ? checkEl.getExpression() : null;
+            LOG.log(Level.INFO, "Playable check by el, result={0}, el={1}, expression={2}, skillId={3}, entity={4}"
+                    , new Object[] {result, el, expression, data.getId(), actor.getData().getId()});
+        }
+        return result;
     }
     
     // -------------------------------------------------------------------------

@@ -28,6 +28,7 @@ import name.huliqing.luoying.ui.UI;
 import name.huliqing.luoying.ui.UI.Corner;
 import name.huliqing.luoying.ui.UI.Listener;
 import name.huliqing.luoying.ui.state.UIState;
+import name.huliqing.ly.constants.AttrConstants;
 import name.huliqing.ly.constants.IdConstants;
 import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.ly.layer.service.GameService;
@@ -103,7 +104,6 @@ public class StoryTreasureTask1 extends AbstractTaskStep {
             @Override
             public void callback(Entity actor) {
                 victim = actor;
-//                actorService.setLocation(victim, _game.treasurePos.clone().addLocal(1, 0, 1));
                 Vector3f location = new Vector3f().set(_game.treasurePos).addLocal(1,0,1);
                 gameService.setLocation(victim, sceneService.getSceneHeight(location.x, location.z, location));
                 gameService.setGroup(victim, _game.groupPlayer);
@@ -123,10 +123,10 @@ public class StoryTreasureTask1 extends AbstractTaskStep {
             public void callback(Entity actor) {
                 // 邪恶蜘蛛
                 spider = actor;
-//                actorService.setLocation(spider, _game.treasurePos.add(2, 0, 2));
                 Vector3f location = new Vector3f().set(_game.treasurePos).addLocal(2,0,2);
                 gameService.setLocation(spider, sceneService.getSceneHeight(location.x, location.z, location));
                 gameService.setGroup(spider, _game.groupEnemy);
+                gameService.setLevel(spider, 1);
                 spider.addObjectData(Loader.loadData(IdConstants.STATE_SAFE), 1);
                 playNetwork.addEntity(spider);
             }
@@ -225,8 +225,6 @@ public class StoryTreasureTask1 extends AbstractTaskStep {
         task1Start.setDragEnabled(true);
         task1Start.resize();
         task1Start.setToCorner(Corner.CC);
-        
-//        playService.addObject(task1Start, true);
         UIState.getInstance().addUI(task1Start);
         
         paused = true;
@@ -249,6 +247,7 @@ public class StoryTreasureTask1 extends AbstractTaskStep {
         if (!gameService.isDead(victim) && actorService.distance(victim, player) <= 25 
                 && victim.getData().getObjectData(IdConstants.STATE_SAFE) != null) {
             entityNetwork.removeObjectData(victim, victim.getData().getObjectData(IdConstants.STATE_SAFE).getUniqueId(), 1);
+            entityNetwork.hitAttribute(victim, AttrConstants.HEALTH, 5, spider);
         }
         // 3.如果受害者已死，则降低蜘蛛防御。
         if (!gameService.isDead(spider) && gameService.isDead(victim) 
