@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.ly.state.start;
+package name.huliqing.ly.view.start;
 
 import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapFont.Align;
@@ -17,15 +17,16 @@ import name.huliqing.luoying.ui.Row;
 import name.huliqing.luoying.ui.Text;
 import name.huliqing.luoying.ui.UIFactory;
 import name.huliqing.luoying.ui.UI;
-import name.huliqing.ly.state.start.StartState.Menu;
+import name.huliqing.ly.LyConfig;
+import name.huliqing.ly.view.start.StartState.Menu;
 
 /**
  * @author huliqing
  */
 public class LocaleView extends ListView<String> {
 //    private final ConfigService configService = Factory.get(ConfigService.class);
-    private StartState startState;
-    private List<String> locales;
+    private final StartState startState;
+    private final List<String> locales;
     
     /**
      * @param width
@@ -36,8 +37,7 @@ public class LocaleView extends ListView<String> {
         super(width, height, "LocalePanel");
         this.startState = state;
         
-//        String[] localeAll = configService.getAllSupportedLocale(); 
-        String[] localeAll = new String[]{"en_US", "zh_CN"};
+        String[] localeAll = LyConfig.getLocaleSupported();
         locales = Arrays.asList(localeAll);
         this.pageSize = 3;
     }
@@ -72,7 +72,7 @@ public class LocaleView extends ListView<String> {
                 @Override
                 public void onClick(UI ui, boolean isPress) {
                     if (isPress) return;
-//                    Factory.get(ConfigService.class).changeLocale(locale);
+                    LyConfig.setLocale(locale);
                     ResManager.setLocale(locale);
                     startState.refreshState(Menu.menu_settings);
                 }

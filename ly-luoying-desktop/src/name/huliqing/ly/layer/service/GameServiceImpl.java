@@ -9,14 +9,14 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.math.Vector4f;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.LuoYing;
+import name.huliqing.luoying.data.ConfigData;
 import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.luoying.layer.service.ActionService;
 import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.layer.service.PlayService;
+import name.huliqing.luoying.layer.service.SaveService;
 import name.huliqing.luoying.layer.service.SceneService;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.entity.Entity;
@@ -24,6 +24,7 @@ import name.huliqing.luoying.save.SaveHelper;
 import name.huliqing.luoying.save.SaveStory;
 import name.huliqing.ly.Start;
 import name.huliqing.ly.constants.AttrConstants;
+import name.huliqing.ly.constants.SaveConstants;
 import name.huliqing.ly.enums.MessageType;
 import name.huliqing.ly.object.game.SimpleRpgGame;
 import name.huliqing.ly.object.game.StoryServerNetworkRpgGame;
@@ -43,6 +44,7 @@ public class GameServiceImpl implements GameService {
     private EntityService entityService;
     private ActionService actionService;
     private SceneService sceneService;
+    private SaveService saveService;
     
     @Override
     public void inject() {
@@ -50,6 +52,7 @@ public class GameServiceImpl implements GameService {
         entityService = Factory.get(EntityService.class);
         actionService = Factory.get(ActionService.class);
         sceneService = Factory.get(SceneService.class);
+        saveService = Factory.get(SaveService.class);
     }
     
     @Override
@@ -292,6 +295,16 @@ public class GameServiceImpl implements GameService {
     @Override
     public void setPlayer(Entity entity, boolean isPlayer) {
         entityService.hitAttribute(entity, AttrConstants.PLAYER, isPlayer, null);
+    }
+
+    @Override
+    public void saveConfig(ConfigData configData) {
+        saveService.saveSavable(SaveConstants.SAVE_CONFIG_KEY, configData);
+    }
+
+    @Override
+    public ConfigData loadConfig() {
+        return saveService.loadSavable(SaveConstants.SAVE_CONFIG_KEY);
     }
 
     

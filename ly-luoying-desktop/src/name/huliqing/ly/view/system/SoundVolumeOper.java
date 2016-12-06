@@ -5,9 +5,7 @@
 package name.huliqing.ly.view.system;
 
 import com.jme3.font.BitmapFont;
-import name.huliqing.luoying.Factory;
 import name.huliqing.ly.constants.InterfaceConstants;
-import name.huliqing.luoying.layer.service.ConfigService;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.ui.FrameLayout;
 import name.huliqing.luoying.ui.Icon;
@@ -15,6 +13,7 @@ import name.huliqing.luoying.ui.Text;
 import name.huliqing.luoying.ui.UIFactory;
 import name.huliqing.luoying.ui.UI;
 import name.huliqing.luoying.ui.Window;
+import name.huliqing.ly.LyConfig;
 
 /**
  * 游戏音量大小调整界面
@@ -22,8 +21,6 @@ import name.huliqing.luoying.ui.Window;
  * @since 1.3
  */
 public class SoundVolumeOper extends Window {
-    private ConfigService configService = Factory.get(ConfigService.class);
-            
     private RowSimple soundVolume;
     private int volumeValue; // 0 ~ 10
     
@@ -67,7 +64,7 @@ public class SoundVolumeOper extends Window {
         this.setDragEnabled(true);
         
         // 初始化
-        this.setVolume((int) (configService.getSoundVolume() * 10));
+        this.setVolume((int) (LyConfig.getSoundVolume() * 10));
     } 
     
     @Override
@@ -99,8 +96,7 @@ public class SoundVolumeOper extends Window {
         if (volume > 10) volume = 10;
         this.volumeValue = volume;
         this.volume.setText(this.volumeValue + "");
-        configService.setSoundVolume(this.volumeValue * 0.1f);
-        
+        LyConfig.setSoundVolume(this.volumeValue * 0.1f);
         soundVolume.setRowDes(ResourceManager.get("system.soundVolume.des", new Object[] {this.volumeValue + "/10"}));
     }
     

@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.ly.state.start;
+package name.huliqing.ly.view.start;
 
 import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapFont.Align;
@@ -22,7 +22,7 @@ import name.huliqing.luoying.ui.UIFactory;
 import name.huliqing.luoying.ui.UI;
 import name.huliqing.ly.constants.IdConstants;
 import name.huliqing.ly.object.game.StoryServerNetworkRpgGame;
-import name.huliqing.ly.state.start.StoryView.StoryData;
+import name.huliqing.ly.view.start.StoryView.StoryData;
 
 /**
  * @author huliqing

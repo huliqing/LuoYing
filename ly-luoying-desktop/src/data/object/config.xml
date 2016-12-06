@@ -9,17 +9,15 @@
           discoverClientPort="32993" 
           soundVolume="0" 
           shortcutLocked="0" 
-          locale="" 
-          localeAll="en_US,zh_CN" 
           id="configGlobalBase" 
           soundEnabled="0" 
           shortcutSize="0.8" 
           lanGames="gameSurvival" 
-          
           speakTimeWorld="0.22" 
           speakTimeMin="0.25" 
           speakTimeMax="8.0" 
           speakMaxDistance="80" 
+          localeSupported="en_US,zh_CN"
   />
   
   <config id="configRelease" extends="configGlobalBase" versionName="2.5.1" versionCode="251"/>

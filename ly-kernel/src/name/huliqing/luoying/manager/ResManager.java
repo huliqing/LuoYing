@@ -24,11 +24,11 @@ public class ResManager {
     
     // KEY -> locale, Value = ResourceMap
     private final static Map<String, Map<String, String>> LOCALE_RES = new HashMap<String, Map<String, String>>();
-    private final static Map<String, String> DEFAULT_RES = new HashMap<String, String>();
     
-    /**
-     * 当前要使用哪一个本地环境
-     */
+    /** 默认的本地环境 */
+    private static String locale_default;
+    
+    /** 当前要使用哪一个本地环境 */
     private static String locale;
     
     /**
@@ -51,21 +51,107 @@ public class ResManager {
      * 载入资源文件, 可以指定语言环境，如果没有指定，则载入到默认资源环境。
      * @param is 资源流
      * @param encoding 字符集编码，如果没有指定则默认使用"utf-8"
-     * @param locale 指定一个语言环境, 如：en, en_US, zh, zh_CN, h_HK, zh_TW, ... 如果没有指定则载入到默认资源环境。
+     * @param locale 指定一个语言环境, 如：en, en_US, zh, zh_CN, zh_HK, zh_TW
      * @see #loadResource(java.lang.String, java.lang.String, java.lang.String) 
      */
     public static void loadResource(InputStream is, String encoding, String locale) {
         Map<String, String> resLoaded = loadResource(is, encoding != null ? encoding : "utf-8");
-        if (locale != null) {
-            Map<String, String> resLocale = LOCALE_RES.get(locale);
-            if (resLocale == null) {
-                resLocale = new HashMap<String, String>();
-                LOCALE_RES.put(locale, resLocale);
-            }
-            resLocale.putAll(resLoaded);
-        } else {
-            DEFAULT_RES.putAll(resLoaded);
+        Map<String, String> resLocale = LOCALE_RES.get(locale);
+        if (resLocale == null) {
+            resLocale = new HashMap<String, String>();
+            LOCALE_RES.put(locale, resLocale);
         }
+        resLocale.putAll(resLoaded);
+    }
+    
+    /**
+     * 设置要特别使用的本地环境，如：en, en_US, zh, zh_CN, h_HK, zh_TW, ... 当设置这个本地环境之后，
+     * 将一直使用，除非进行重新设置或清除，当资源文件不支持这个环境时，将使用默认的环境设置. <br>
+     * {@link #setLocaleDefault(java.lang.String) }.
+     * @param locale 
+     * @see #setLocaleDefault(java.lang.String) 
+     */
+    public static void setLocale(String locale) {
+        ResManager.locale = locale;
+    }
+    
+    /**
+     * 设置一个默认的本地环境, 当资源环境设置不支持{@link #setLocale(java.lang.String) }所指定的环境时，
+     * 将默认使用这个环境。通常情况下都应该为资源指定一个默认的环境。
+     * @param localeDefault 
+     */
+    public static void setLocaleDefault(String localeDefault) {
+        ResManager.locale_default = localeDefault;
+    }
+    
+    /**
+     * 获取当前使用的本地环境
+     * @return 
+     */
+    public static String getLocale() {
+        if (locale == null) {
+            locale = Locale.getDefault().getLanguage() + "_" + Locale.getDefault().getCountry();
+        }
+        return locale;
+    }
+    
+   /**
+     * 清理所有已经载入的资源信息
+     */
+    public static void clearResources() {
+        LOCALE_RES.clear();
+    }
+    
+   /**
+     * 从默认资源文件中获取资源
+     * @param key
+     * @return 
+     * @see #get(java.lang.String, java.lang.Object[]) 
+     * 
+     */
+    public static String get(String key) {
+        return get(key, null, getLocale());
+    }
+    
+    /**
+     * 从默认资源文件中获取资源
+     * @param key
+     * @param params 参数
+     * @return 
+     * @see #get(java.lang.String) 
+     */
+    public static String get(String key, Object[] params) {
+        return get(key, params, getLocale());
+    }
+    
+    /**
+     * 从默认资源文件中获取资源
+     * @param key
+     * @param params
+     * @param locale
+     * @return 
+     */
+    private static String get(String key, Object[] params, String locale) {
+        if (locale == null || !LOCALE_RES.containsKey(locale)) {
+            return getString(LOCALE_RES.get(locale_default), key, params);
+        }
+        return getString(LOCALE_RES.get(locale), key, params);
+    }
+    
+    private static String getString(Map<String, String> resource, String key, Object[] params) {
+        String value = resource.get(key);
+        if (value == null) {
+            value = "<" + key + ">";
+        }
+        if (params != null) {
+            try {
+                value = String.format(value, params);
+            } catch (FormatterClosedException fce) {
+                LOG.log(Level.WARNING, fce.getMessage(), fce);
+                value = "<" + key + ">";
+            }
+        }
+        return value;
     }
     
     /**
@@ -107,85 +193,4 @@ public class ResManager {
         }
         return result;
     }
-    
-    /**
-     * 设置要特别使用的本地环境，如：en, en_US, zh, zh_CN, h_HK, zh_TW, ... 当设置这个本地环境之后，
-     * 将一直使用，除非进行重新设置或清除. 
-     * @param locale 
-     */
-    public static void setLocale(String locale) {
-        ResManager.locale = locale;
-    }
-    
-    /**
-     * 获取当前使用的本地环境
-     * @return 
-     */
-    public static String getLocale() {
-        if (locale == null) {
-            locale = Locale.getDefault().getLanguage() + "_" + Locale.getDefault().getCountry();
-        }
-        return locale;
-    }
-    
-   /**
-     * 清理所有已经载入的资源信息
-     */
-    public static void clearResources() {
-        LOCALE_RES.clear();
-        DEFAULT_RES.clear();
-    }
-    
-   /**
-     * 从默认资源文件中获取资源
-     * @param key
-     * @return 
-     * @see #get(java.lang.String, java.lang.Object[]) 
-     * 
-     */
-    public static String get(String key) {
-        return get(key, null, getLocale());
-    }
-    
-    /**
-     * 从默认资源文件中获取资源
-     * @param key
-     * @param params 参数
-     * @return 
-     * @see #get(java.lang.String) 
-     */
-    public static String get(String key, Object[] params) {
-        return get(key, params, getLocale());
-    }
-    
-    /**
-     * 从默认资源文件中获取资源
-     * @param key
-     * @param params
-     * @param locale
-     * @return 
-     */
-    private static String get(String key, Object[] params, String locale) {
-        if (locale == null || !LOCALE_RES.containsKey(locale)) {
-            return getString(DEFAULT_RES, key, params);
-        }
-        return getString(LOCALE_RES.get(locale), key, params);
-    }
-    
-    private static String getString(Map<String, String> resource, String key, Object[] params) {
-        String value = resource.get(key);
-        if (value == null) {
-            value = "<" + key + ">";
-        }
-        if (params != null) {
-            try {
-                value = String.format(value, params);
-            } catch (FormatterClosedException fce) {
-                LOG.log(Level.WARNING, fce.getMessage(), fce);
-                value = "<" + key + ">";
-            }
-        }
-        return value;
-    }
-    
 }

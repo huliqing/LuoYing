@@ -8,29 +8,31 @@ gameSurvival.name=生存挑战(塔防)
 gameSurvival.des=生存挑战，这个小游戏仍处于测试中，规则与故事模式中的“黄金宝箱”相似，宝箱不能被破坏，敌人每隔一段时间会自动升级，玩家也要不断升级，创建更多的防御塔和召唤更多的宠物来防御敌人的进攻，直到打完最后BOSS！
 
 # ========== Attribute
-attributeLiving.name=生物
+attributeDead.name=死亡
+attributeBiology.name=生物
 attributeRace.name=种族
 attributeSex.name=性别
-attributeLevel.name=当前等级
+attributeLevel.name=等级
 attributeXp.name=当前经验
 attributeXpNext.name=下一级需要的经验
-attributeGroup.name=角色所在分组
-attributeTeam.name=角色所在队伍
+attributeGroup.name=分组
+attributeTeam.name=队伍
+attributeVision.name=视力
 attributeMoveSpeed.name=移动速度
-attributeMass.name=角色质量
+attributeMass.name=体重
 attributeMovable.name=可移动
 attributeRotatable.name=可转向
 attributeEssential.name=必要的角色
-attributeAutoLogic.name=逻辑功能开启
-attributeAutoDetect.name=自动寻敌
-attributeTarget.name=当前目标
-attributeFollowTarget.name=跟随目标
+attributeAutoLogic.name=逻辑
+attributeAutoAi.name=战斗AI
+attributeTarget.name=目标
+attributeFollow.name=跟随
 attributeOwner.name=主人
-attributeTalentPoints.name=可用天赋点数
-attributeHealthMax.name=最高生命值
+attributeTalentPoints.name=天赋点数
 attributeHealth.name=生命值
-attributeManaMax.name=最高魔法值
+attributeHealthMax.name=最高生命值
 attributeMana.name=魔法值
+attributeManaMax.name=最高魔法值
 attributeAttack.name=物理攻击力
 attributeMagicAttack.name=魔法攻击力
 attributeDefence.name=物理防御力
@@ -42,8 +44,12 @@ attributeMagicSpeed.name=施法速度
 attributeDefenceRate.name=防守
 attributeDuckRate.name=躲闪
 attributeGhostRate.name=鬼魅
-attributeVision.name=视力
+attributeResistInterruptRate.name=韧性
 attributeWeaponSlots.name=武器槽位
+attributeLocation.name=位置
+attributeColor.name=肤色
+attributeName.name=名字
+attributePlayer.name=玩家
 
 # ========== Basic item
 itemGold.name=金币
@@ -103,13 +109,6 @@ itemScrollScorpion.des=召唤蝎子
 
 itemMapWorld.name=落樱大陆
 itemMapWorld.des=落樱大陆地图
-
-#Map Locations
-handlerMapWorld.name=
-handlerMapWorld.loc.start=落樱小岛
-handlerMapWorld.loc.city1=城镇1
-handlerMapWorld.loc.city2=城镇2
-handlerMapWorld.loc.city3=城镇3
 
 # ========== Actor 
 actorPlayerTest.name=Test

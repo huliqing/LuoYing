@@ -5,6 +5,7 @@
  */
 package name.huliqing.ly.layer.service;
 
+import name.huliqing.luoying.data.ConfigData;
 import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.luoying.object.entity.Entity;
@@ -143,4 +144,16 @@ public interface GameService extends GameNetwork {
      * @return 
      */
     Entity findNearestEnemies(Entity actor, float maxDistance);
+    
+    /**
+     * 保存配置
+     * @param configData
+     */
+    void saveConfig(ConfigData configData);
+    
+    /**
+     * 载入配置
+     * @return 
+     */
+    ConfigData loadConfig();
 }

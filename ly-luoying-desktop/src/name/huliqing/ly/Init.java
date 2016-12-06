@@ -6,8 +6,11 @@
 package name.huliqing.ly;
 
 import com.jme3.app.Application;
+import com.jme3.export.Savable;
 import com.jme3.network.serializing.Serializer;
 import com.jme3.system.AppSettings;
+import java.util.Map;
+import java.util.Map.Entry;
 import name.huliqing.luoying.Config;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.LuoYing;
@@ -64,28 +67,38 @@ public class Init {
      * @param settings 
      */
     public static void initialize(Application app, AppSettings settings) {
+        // 落樱初始化
         LuoYing.initialize(app, settings);
         
+        // 本地初始化
         registerService();
         registerData();
         registerProcessor();
         loadData();
         
         // 载入配置
-        LyConfig.setConfigData((ConfigData) Loader.loadData("configRelease"));
-//        name.huliqing.luoying.Config.debug = LyConfig.isDebug();
-        Config.debug = false;
+        ConfigData config = (ConfigData) Loader.loadData("configRelease");
+        ConfigData configSaved = Factory.get(GameService.class).loadConfig();
+        if (configSaved != null && configSaved.getLocalData() != null) {
+            Map<String, Savable> saveData = configSaved.getLocalData();
+            for (Entry<String, Savable> es : saveData.entrySet()) {
+                config.setAttribute(es.getKey(), es.getValue());
+            }
+        }
+        LyConfig.setConfigData(config);
+        
+        Config.debug = true;
         SoundManager.getInstance().setVolume(0.1f);
         LyConfig.setSpeakTimeWorld(0.02f);
         LyConfig.setSpeakTimeMin(0.02f);
         LyConfig.setSpeakTimeMax(0.02f);
         
-        // 载入资源,作为默认
-        ResManager.loadResource("/data/font/en_US/resource",                "utf-8", null);
-        ResManager.loadResource("/data/font/en_US/resource_object",    "utf-8", null);
-        ResManager.loadResource("/data/font/en_US/story_gb",                "utf-8", null);
-        ResManager.loadResource("/data/font/en_US/story_guard",          "utf-8", null);
-        ResManager.loadResource("/data/font/en_US/story_treasure",      "utf-8", null);
+        // 载入资源
+        ResManager.loadResource("/data/font/en_US/resource",               "utf-8", "en_US");
+        ResManager.loadResource("/data/font/en_US/resource_object",   "utf-8", "en_US");
+        ResManager.loadResource("/data/font/en_US/story_gb",               "utf-8", "en_US");
+        ResManager.loadResource("/data/font/en_US/story_guard",          "utf-8", "en_US");
+        ResManager.loadResource("/data/font/en_US/story_treasure",      "utf-8", "en_US");
         
         // 载入资源,作为中文环境
         ResManager.loadResource("/data/font/zh_CN/resource",                "utf-8", "zh_CN");
@@ -93,6 +106,10 @@ public class Init {
         ResManager.loadResource("/data/font/zh_CN/story_gb",                "utf-8", "zh_CN");
         ResManager.loadResource("/data/font/zh_CN/story_guard",           "utf-8", "zh_CN");
         ResManager.loadResource("/data/font/zh_CN/story_treasure",       "utf-8", "zh_CN");
+        
+        // 设置默认环境
+        ResManager.setLocale(LyConfig.getLocale());
+        ResManager.setLocaleDefault("en_US");
     }
     
     private static void registerData() {
@@ -104,7 +121,6 @@ public class Init {
         Serializer.registerClass(MessChatSend.class);
         Serializer.registerClass(MessChatShop.class);
         Serializer.registerClass(MessMessage.class);
-//        Serializer.registerClass(xxxxxxx.class);
     }
     
     private static void registerService() {

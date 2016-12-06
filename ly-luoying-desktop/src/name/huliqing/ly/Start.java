@@ -27,7 +27,7 @@ import name.huliqing.luoying.ui.state.UIState;
 import name.huliqing.luoying.utils.FileUtils;
 import name.huliqing.ly.state.FpsState;
 import name.huliqing.ly.state.lan.LanState;
-import name.huliqing.ly.state.start.StartState;
+import name.huliqing.ly.view.start.StartState;
 
 /**
  * @author huliqing

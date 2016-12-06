@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.ly.state.start;
+package name.huliqing.ly.view.start;
 
 import java.util.List;
 import name.huliqing.luoying.save.SaveHelper;

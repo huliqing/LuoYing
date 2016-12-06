@@ -6,9 +6,6 @@ package name.huliqing.ly.view.system;
 
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.layer.service.ConfigService;
-import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.ui.ListView;
 import name.huliqing.luoying.ui.Row;
@@ -22,8 +19,6 @@ import name.huliqing.ly.view.shortcut.ShortcutManager;
  * @author huliqing
  */
 public class SystemUIPanel extends ListView<SystemData> {
-    private final ConfigService configService = Factory.get(ConfigService.class);
-    private final PlayService playService = Factory.get(PlayService.class);
     private final List<SystemData> datas = new ArrayList<SystemData>(2); 
     
     // 快捷方式锁定
@@ -39,7 +34,6 @@ public class SystemUIPanel extends ListView<SystemData> {
     
 
     public SystemUIPanel(float width, float height) {
-//        super(width, height, ResourceManager.get("system.ui"));
         super(width, height);
         
         datas.add(new SystemData(get("system.ui.shortcutLock"), get("system.ui.shortcutLock.des")));
@@ -63,7 +57,6 @@ public class SystemUIPanel extends ListView<SystemData> {
             @Override
             public void onClick(UI ui, boolean isPress) {
                 if (isPress) return;
-//                playService.addObject(shortcutSizeOper, true);
                 UIState.getInstance().addUI(shortcutSizeOper);
             }
         });

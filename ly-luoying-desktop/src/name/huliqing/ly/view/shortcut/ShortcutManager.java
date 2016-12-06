@@ -12,7 +12,6 @@ import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.data.ItemData;
-import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.luoying.data.SkillData;
 import name.huliqing.luoying.data.SkinData;
@@ -81,7 +80,6 @@ public class ShortcutManager {
      * @param data
      */
     public static void addShortcut(Entity actor, ObjectData data) {
-//        ConfigService configService = Factory.get(ConfigService.class);
         float size = LyConfig.getShortcutSize();
         if (size < 0.1f) {
             size = 0.1f;
@@ -92,10 +90,6 @@ public class ShortcutManager {
                 , SHORTCUT_SIZE_HEIGHT * size
                 , true);
         SHORTCUT_ROOT.addShortcut(shortcut);
-   
-        // remove20161001不再依赖于这个动画包
-//        Animation anim = createShortcutAddAnimation(shortcut);
-//        AnimationManager.getInstance().startAnimation(anim);
     }
     
     /**

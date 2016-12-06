@@ -6,22 +6,18 @@ package name.huliqing.ly.view.system;
 
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.layer.service.ConfigService;
-import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.ui.ListView;
 import name.huliqing.luoying.ui.Row;
 import name.huliqing.luoying.ui.UI;
 import name.huliqing.luoying.ui.state.UIState;
+import name.huliqing.ly.LyConfig;
 
 /**
  *
  * @author huliqing
  */
 public class SystemSoundPanel extends ListView<SystemData> {
-    private ConfigService configService = Factory.get(ConfigService.class);
-    private PlayService playService = Factory.get(PlayService.class);
     private List<SystemData> datas = new ArrayList<SystemData>(2); 
     
     private RowCheckbox soundEnable;
@@ -33,12 +29,12 @@ public class SystemSoundPanel extends ListView<SystemData> {
         datas.add(new SystemData(get("system.soundEnable"), get("system.soundEnable.des")));
         datas.add(new SystemData(get("system.soundVolume"), get("system.soundVolume.des")));
         
-        soundEnable = new RowCheckbox(datas.get(0).getName(), datas.get(0).getDes(), configService.isSoundEnabled());
+        soundEnable = new RowCheckbox(datas.get(0).getName(), datas.get(0).getDes(), LyConfig.isSoundEnabled());
         soundEnable.addClickListener(new Listener() {
             @Override
             public void onClick(UI ui, boolean isPress) {
                 if (isPress) return;
-                configService.setSoundEnabled(soundEnable.isChecked());
+                LyConfig.setSoundEnabled(soundEnable.isChecked());
             }
         });
         

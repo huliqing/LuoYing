@@ -25,7 +25,7 @@ public class SaveHelper {
     // 最近一次自动存档
     private final static String KEY_SAVE_LAST = "SaveLast";
     // 存档名称格式
-    private final static SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd-HHmmss");
+    private final static SimpleDateFormat FORMAT = new SimpleDateFormat("yyyyMMdd-HHmmss");
     
     /**
      * 获取存档列表
@@ -63,7 +63,7 @@ public class SaveHelper {
             SaveService saveService = Factory.get(SaveService.class);
             SaveStory newSave = (SaveStory) saveService.loadSavable(KEY_SAVE_LAST);
             if (newSave != null) {
-                newSave.setSaveName("Save" + sdf.format(new Date()));
+                newSave.setSaveName("Save" + FORMAT.format(new Date()));
                 saveStory(newSave);
             }
         } catch (Exception e) {
@@ -77,8 +77,7 @@ public class SaveHelper {
             SaveStory saveStory = (SaveStory) saveService.loadSavable(key);
             return saveStory;
         } catch (Exception e) {
-//            LOG.log(Level.SEVERE, "Could not loadStory, e={0}", e.getMessage());
-            e.printStackTrace();
+            LOG.log(Level.SEVERE, "Could not loadStory, e={0}", e.getMessage());
         }
         return null;
     }
@@ -117,6 +116,7 @@ public class SaveHelper {
     }
     
     /**
+     * @deprecated 不再使用
      * 保存全局配置
      * @param saveConfig 
      */
@@ -130,6 +130,7 @@ public class SaveHelper {
     }
     
     /**
+     * @deprecated 不再使用
      * 载入全局配置
      * @return 
      */

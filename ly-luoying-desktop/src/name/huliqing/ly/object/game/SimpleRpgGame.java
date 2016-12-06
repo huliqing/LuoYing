@@ -39,6 +39,7 @@ import name.huliqing.luoying.ui.UI;
 import name.huliqing.luoying.ui.UIEventListener;
 import name.huliqing.luoying.ui.state.PickListener;
 import name.huliqing.luoying.ui.state.UIState;
+import name.huliqing.ly.LyConfig;
 import name.huliqing.ly.enums.MessageType;
 import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.ly.layer.service.GameService;
@@ -112,6 +113,7 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
         ShortcutManager.cleanup();
         UIState.getInstance().clearUI();
         HUDManager.cleanup();
+        gameService.saveConfig(LyConfig.getConfigData());
         super.cleanup(); 
     }
     

@@ -20,7 +20,7 @@ public class SaveConfig implements Savable {
     
     // 全局配置
     private ConfigData config;
-
+    
     public ConfigData getConfig() {
         return config;
     }

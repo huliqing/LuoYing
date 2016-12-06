@@ -85,11 +85,19 @@ public class ObjectData implements Savable, Cloneable {
     }
 
     /**
-     * 设置唯一id.
+     * 设置唯一id, 这个ID是物体在创建的时候自动生成的，不要直接在运行时改变。
      * @param uniqueId 
      */
     public void setUniqueId(long uniqueId) {
         this.uniqueId = uniqueId;
+    }
+
+    /**
+     * 获取本地变量
+     * @return 
+     */
+    public HashMap<String, Savable> getLocalData() {
+        return localData;
     }
     
     /**

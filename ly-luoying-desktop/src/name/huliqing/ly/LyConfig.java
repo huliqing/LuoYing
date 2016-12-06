@@ -5,7 +5,11 @@
  */
 package name.huliqing.ly;
 
+import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.ConfigData;
+import name.huliqing.luoying.layer.service.ConfigService;
+import name.huliqing.luoying.layer.service.SystemService;
+import name.huliqing.ly.view.shortcut.ShortcutManager;
 
 /**
  *
@@ -17,6 +21,8 @@ public class LyConfig {
     
     public static void setConfigData(ConfigData configData) {
         cd = configData;
+        setSoundEnabled(isSoundEnabled());
+        setSoundVolume(getSoundVolume());
     }
     
     public static ConfigData getConfigData() {
@@ -61,6 +67,7 @@ public class LyConfig {
     
     public static void setShortcutSize(float shortcutSize) {
         cd.setAttribute("shortcutSize", shortcutSize);
+        ShortcutManager.setShortcutSize(shortcutSize);
     }
     
     public static boolean isShortcutLocked() {
@@ -69,6 +76,7 @@ public class LyConfig {
 
     public static void setShortcutLocked(boolean shortcutLocked) {
         cd.setAttribute("shortcutLocked", shortcutLocked);
+        ShortcutManager.setShortcutLocked(shortcutLocked);
     }
 
     public static float getSpeakTimeWorld() {
@@ -107,4 +115,54 @@ public class LyConfig {
         return cd.getAsArray("lanGames");
     }
 
+    public static String getLocale() {
+        String locale = cd.getAsString("locale"); // from saved
+        if (locale == null) {
+            locale = Factory.get(SystemService.class).getLocale(); // Auto detect from system.
+        }
+        return locale;
+    }
+    
+    public static void setLocale(String locale) {
+        cd.setAttribute("locale", locale);
+    }
+    
+    public static String[] getLocaleSupported() {
+        return cd.getAsArray("localeSupported");
+    }
+    
+    /**
+     * 获取游戏全局声音的开关状态
+     * @return 
+     */
+    public static boolean isSoundEnabled() {
+        return cd.getAsBoolean("soundEnabled", true);
+    }
+    
+    /**
+     * 设置是否开关全局声音。
+     * @param soundEnabled 
+     */
+    public static void setSoundEnabled(boolean soundEnabled) {
+        cd.setAttribute("soundEnabled", soundEnabled);
+        Factory.get(ConfigService.class).setSoundEnabled(soundEnabled);
+    }
+    
+    /**
+     * 获取声效音量大小
+     * @return 返回 [0.0, 1.0]， 1.0表示声音最大
+     */
+    public static float getSoundVolume() {
+        return cd.getAsFloat("soundVolume", 1.0f);
+    }
+    
+    /**
+     * 设置音量，取值[0.0, 1.0], 0表示声音最小，1.0表示声音最大,但是并不关闭声音 
+     * @param soundVolume
+     */
+    public static void setSoundVolume(float soundVolume) {
+        cd.setAttribute("soundVolume", soundVolume);
+        Factory.get(ConfigService.class).setSoundVolume(soundVolume);
+    }
+    
 }

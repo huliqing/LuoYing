@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.ly.state.start;
+package name.huliqing.ly.view.start;
 
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;

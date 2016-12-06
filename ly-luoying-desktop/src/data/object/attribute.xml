@@ -15,7 +15,6 @@
     <!--==========================================================================-->
     
     <!--死亡属性标记：1 ： 死亡， 0：没死亡. 注：角色是否死亡由这个参数直接判断，与“健康值”属性有联系，但不是由健康值直接判断。 -->
-    <!--<attributeBoolean id="attributeDead" name="attributeDead" value="0" />-->
     <attributeRelateBoolean id="attributeDead" name="attributeDead" refVars="h=attributeHealth" valueEl="#{h<=0}" />
 
     <!--生物属性： 这个属性用来标记角色是否是生物，即有"生命迹象"的角色，1：表示生物; 0：表示非生物-->
