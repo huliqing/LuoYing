@@ -231,7 +231,7 @@ import name.huliqing.luoying.mess.RandomSeedMess;
 import name.huliqing.luoying.mess.SceneLoadedMess;
 import name.huliqing.luoying.mess.SkillPlayMess;
 import name.huliqing.luoying.mess.network.RequestGameInitMess;
-import name.huliqing.luoying.mess.network.RequestGameInitOkMess;
+import name.huliqing.luoying.mess.network.RequestGameInitStartMess;
 import name.huliqing.luoying.object.attribute.BooleanAttribute;
 import name.huliqing.luoying.object.attribute.FloatAttribute;
 import name.huliqing.luoying.object.attribute.GroupAttribute;
@@ -704,7 +704,7 @@ public class LuoYing {
         Serializer.registerClass(GetServerStateMess.class);
         Serializer.registerClass(PingMess.class);
         Serializer.registerClass(RequestGameInitMess.class);
-        Serializer.registerClass(RequestGameInitOkMess.class);
+        Serializer.registerClass(RequestGameInitStartMess.class);
         Serializer.registerClass(ServerStateMess.class);
         
         Serializer.registerClass(ActorFightMess.class);

@@ -16,19 +16,19 @@ import name.huliqing.luoying.mess.BaseMess;
  * @author huliqing
  */
 @Serializable
-public class RequestGameInitOkMess extends BaseMess {
+public class RequestGameInitStartMess extends BaseMess {
     
     // Will init entity count, 这个参数表示服务端将会向客户端初始化多少个场景实体。
     // 当客户端接收到这个消息后，
     private int initEntityCount;
     
-    public RequestGameInitOkMess() {}
+    public RequestGameInitStartMess() {}
 
     /**
      * 设置需要向客户端初始化的场景实体数。
      * @param initEntityCount 
      */
-    public RequestGameInitOkMess(int initEntityCount) {
+    public RequestGameInitStartMess(int initEntityCount) {
         this.initEntityCount = initEntityCount;
     }
 

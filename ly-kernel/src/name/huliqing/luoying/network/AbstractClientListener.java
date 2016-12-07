@@ -26,7 +26,7 @@ import name.huliqing.luoying.data.ConnData;
 import name.huliqing.luoying.layer.service.SystemService;
 import name.huliqing.luoying.mess.GameMess;
 import name.huliqing.luoying.mess.network.RequestGameInitMess;
-import name.huliqing.luoying.mess.network.RequestGameInitOkMess;
+import name.huliqing.luoying.mess.network.RequestGameInitStartMess;
 import name.huliqing.luoying.network.GameClient.ClientState;
 
 /**
@@ -172,8 +172,8 @@ public abstract class AbstractClientListener implements ClientListener {
         } else if (m instanceof ClientsMess) {
             onReceiveMessClients(gameClient,  (ClientsMess) m);
 
-        }  else if (m instanceof RequestGameInitOkMess) {
-            onReceiveGameInitOk(gameClient, (RequestGameInitOkMess) m);
+        }  else if (m instanceof RequestGameInitStartMess) {
+            onReceiveGameInitStart(gameClient, (RequestGameInitStartMess) m);
             
         } else if (m instanceof PingMess) {
             onUpdatePing(gameClient, (PingMess) m);
@@ -252,11 +252,11 @@ public abstract class AbstractClientListener implements ClientListener {
      * 当客户端接收到服务端对于初始化请求{@link RequestGameInitMess}的响应时该方法被调用，该方法会将客户端状态从
      * ready转变化running。<br>
      * 当客户端接收到这个消息后，接下来将立即接收到来自服务端的用于初始化场景的实体数据，
-     * 连续接收到的实体数量由{@link RequestGameInitOkMess#getInitEntityCount() }中指定。
+     * 连续接收到的实体数量由{@link RequestGameInitStartMess#getInitEntityCount() }中指定。
      * @param gameClient
      * @param mess 
      */
-    protected void onReceiveGameInitOk(GameClient gameClient, RequestGameInitOkMess mess) {
+    protected void onReceiveGameInitStart(GameClient gameClient, RequestGameInitStartMess mess) {
         gameClient.setClientState(ClientState.running);
         onGameInitialize(mess.getInitEntityCount());
     }
@@ -269,9 +269,9 @@ public abstract class AbstractClientListener implements ClientListener {
     protected abstract void onClientDisconnected(GameClient gameClient, DisconnectInfo info);
     
     /**
-     * 当客户端从ready转入Running状态时该方法被自动调用(一次)，这表明客户端已经完成与服务端的初始化,
+     * 当客户端从ready转入Running状态时该方法被自动调用(一次)，这表明客户端已经完成与服务端的<b>状态初始化</b>,
      * 接下来会接收到来自服务端的初始化场景的实体，数量为initEntityTotal所指定的实体数,这些实体数据是连续发送的，
-     * 用于初始化客户端场景。
+     * 用于初始化客户端场景，客户端只有在完成了场景实体的初始化之后才可以正式开始游戏。
      * @param initEntityTotal
      */
     protected abstract void onGameInitialize(int initEntityTotal);

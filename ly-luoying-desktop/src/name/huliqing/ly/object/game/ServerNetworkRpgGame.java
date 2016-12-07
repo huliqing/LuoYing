@@ -25,7 +25,7 @@ import name.huliqing.luoying.mess.SceneLoadedMess;
 import name.huliqing.luoying.mess.network.ClientExitMess;
 import name.huliqing.luoying.mess.network.ClientsMess;
 import name.huliqing.luoying.mess.network.RequestGameInitMess;
-import name.huliqing.luoying.mess.network.RequestGameInitOkMess;
+import name.huliqing.luoying.mess.network.RequestGameInitStartMess;
 import name.huliqing.luoying.network.GameServer;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
@@ -224,7 +224,7 @@ public abstract class ServerNetworkRpgGame extends NetworkRpgGame {
             int needInitEntities = scene.getData().getEntityDatas() != null ? scene.getData().getEntityDatas().size() : 0;
             
             // 向客户端返回初始化OK的消息
-            RequestGameInitOkMess result = new RequestGameInitOkMess(needInitEntities);
+            RequestGameInitStartMess result = new RequestGameInitStartMess(needInitEntities);
             gameServer.send(conn, result);
             
             // 立即向客户端初始化当前场景中已经载入的实体。

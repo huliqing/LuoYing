@@ -21,7 +21,7 @@ import name.huliqing.luoying.data.GameData;
 import name.huliqing.luoying.mess.GameMess;
 import name.huliqing.luoying.mess.network.PingMess;
 import name.huliqing.luoying.mess.network.RequestGameInitMess;
-import name.huliqing.luoying.mess.network.RequestGameInitOkMess;
+import name.huliqing.luoying.mess.network.RequestGameInitStartMess;
 import name.huliqing.luoying.network.GameServer.ServerState;
 
 /**
@@ -222,13 +222,13 @@ public abstract class AbstractServerListener implements ServerListener {
     
     /**
      * 当服务端接收到来自客户端的初始化游戏的请求时，该方法被调用。子类实现这个方法需要<b>按顺序</b>做两件事：<br>
-     * 1.向客户端发送{@link RequestGameInitMess}消息进行响应，并指明要向客户端初始化多少场景实体。
+     * 1.向客户端发送{@link RequestGameInitStartMess}消息进行响应，并指明要向客户端初始化多少场景实体。
      * 2.接着步骤1，立即向客户端发送初始化场景的实体数据。
      * @param gameServer
      * @param conn
      * @param mess 
      * @see RequestGameInitMess
-     * @see RequestGameInitOkMess
+     * @see RequestGameInitStartMess
      */
     protected abstract void onReceiveMessRequestGameInit(GameServer gameServer, HostedConnection conn, 
             RequestGameInitMess mess);

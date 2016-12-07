@@ -47,5 +47,9 @@ public class EntityAddMess extends GameMess {
         }
         playService.addEntity(entity);
     }
-    
+
+    @Override
+    public String toString() {
+        return "entity=" + entityData.getId();
+    }
 }

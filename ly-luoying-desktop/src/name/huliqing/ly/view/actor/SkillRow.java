@@ -18,9 +18,6 @@ import name.huliqing.luoying.ui.Row;
  * @author huliqing
  */
 public class SkillRow extends Row<Skill> {
-//    private final ActorService actorService = Factory.get(ActorService.class);
-//    private final GameService gameService = Factory.get(GameService.class);
-//    private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     
     private Skill data;
     

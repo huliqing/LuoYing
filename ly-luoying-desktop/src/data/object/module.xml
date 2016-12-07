@@ -79,7 +79,7 @@
                  bindLevelAttribute="attributeLevel" 
                  bindXpAttribute="attributeXp" 
                  bindXpNextAttribute="attributeXpNext" 
-                 bindLevelUpEnabledAttribute="attributeLevelUpEnabled"
+                 bindLevelUpEnabledAttribute="attributeLevelUp"
                  xpLevelEl="elLevelUp" maxLevel="60" effect="effectLevelUp" />
 
     <!--颜色模块，这个模块允许动态改变角色的材质颜色。-->

@@ -8,6 +8,8 @@ name.huliqing.ly.LyConfig -> name.huliqing.ly.b:
     name.huliqing.luoying.data.ConfigData cd -> a
     void setConfigData(name.huliqing.luoying.data.ConfigData) -> a
     name.huliqing.luoying.data.ConfigData getConfigData() -> a
+    boolean isDebug() -> s
+    void setDebug(boolean) -> c
     java.lang.String getGameName() -> b
     java.lang.String getVersionName() -> c
     int getVersionCode() -> d
@@ -102,12 +104,15 @@ name.huliqing.ly.layer.network.GameNetwork -> name.huliqing.ly.c.a.c:
     void setColor(name.huliqing.luoying.object.entity.Entity,com.jme3.math.ColorRGBA) -> a
     boolean useObjectData(name.huliqing.luoying.object.entity.Entity,long) -> c
     boolean removeObjectData(name.huliqing.luoying.object.entity.Entity,long,int) -> a
+    void playSkill(name.huliqing.luoying.object.entity.Entity,java.lang.String) -> b
 name.huliqing.ly.layer.network.GameNetworkImpl -> name.huliqing.ly.c.a.d:
     name.huliqing.luoying.network.Network network -> a
     name.huliqing.ly.layer.service.GameService gameService -> b
     name.huliqing.luoying.layer.service.SceneService sceneService -> c
     name.huliqing.luoying.layer.network.EntityNetwork entityNetwork -> d
     name.huliqing.luoying.layer.network.PlayNetwork playNetwork -> e
+    name.huliqing.luoying.layer.service.SkillService skillService -> f
+    name.huliqing.luoying.layer.network.SkillNetwork skillNetwork -> g
     void <init>() -> <init>
     void inject() -> inject
     void addMessage(java.lang.String,name.huliqing.ly.enums.MessageType) -> a
@@ -132,6 +137,7 @@ name.huliqing.ly.layer.network.GameNetworkImpl -> name.huliqing.ly.c.a.d:
     void setColor(name.huliqing.luoying.object.entity.Entity,com.jme3.math.ColorRGBA) -> a
     boolean useObjectData(name.huliqing.luoying.object.entity.Entity,long) -> c
     boolean removeObjectData(name.huliqing.luoying.object.entity.Entity,long,int) -> a
+    void playSkill(name.huliqing.luoying.object.entity.Entity,java.lang.String) -> b
 name.huliqing.ly.layer.service.ChatService -> name.huliqing.ly.c.b.a:
     name.huliqing.ly.object.chat.Chat getChat(name.huliqing.luoying.object.entity.Entity) -> a
 name.huliqing.ly.layer.service.ChatServiceImpl -> name.huliqing.ly.c.b.b:
@@ -164,11 +170,13 @@ name.huliqing.ly.layer.service.GameService -> name.huliqing.ly.c.b.c:
     void saveConfig(name.huliqing.luoying.data.ConfigData) -> a
     name.huliqing.luoying.data.ConfigData loadConfig() -> d
 name.huliqing.ly.layer.service.GameServiceImpl -> name.huliqing.ly.c.b.d:
+    java.util.logging.Logger LOG -> f
     name.huliqing.luoying.layer.service.PlayService playService -> a
     name.huliqing.luoying.layer.service.EntityService entityService -> b
     name.huliqing.luoying.layer.service.ActionService actionService -> c
     name.huliqing.luoying.layer.service.SceneService sceneService -> d
     name.huliqing.luoying.layer.service.SaveService saveService -> e
+    name.huliqing.luoying.layer.service.SkillService skillService -> g
     void <init>() -> <init>
     void inject() -> inject
     void addMessage(java.lang.String,name.huliqing.ly.enums.MessageType) -> a
@@ -212,6 +220,9 @@ name.huliqing.ly.layer.service.GameServiceImpl -> name.huliqing.ly.c.b.d:
     void setPlayer(name.huliqing.luoying.object.entity.Entity,boolean) -> d
     void saveConfig(name.huliqing.luoying.data.ConfigData) -> a
     name.huliqing.luoying.data.ConfigData loadConfig() -> d
+    void playSkill(name.huliqing.luoying.object.entity.Entity,java.lang.String) -> b
+    boolean isSkillPlayable(name.huliqing.luoying.object.entity.Entity,name.huliqing.luoying.object.skill.Skill) -> a
+    void <clinit>() -> <clinit>
 name.huliqing.ly.loader.ChatDataLoader -> name.huliqing.ly.d.a:
     void <init>() -> <init>
     void load(name.huliqing.luoying.xml.Proto,name.huliqing.ly.data.ChatData) -> a
@@ -254,14 +265,14 @@ name.huliqing.ly.manager.ResourceManager -> name.huliqing.ly.e.c:
     java.lang.String[] getTaskChatAsk(java.lang.String) -> e
     java.lang.String[] getTaskChatEnd(java.lang.String) -> f
     int getWorldLength(java.lang.String) -> g
-name.huliqing.ly.mess.MessActionRun -> name.huliqing.ly.f.a:
+name.huliqing.ly.mess.ActionRunMess -> name.huliqing.ly.f.a:
     long actorId -> a
     com.jme3.math.Vector3f pos -> b
     void <init>() -> <init>
     void setActorId(long) -> a
     void setPos(com.jme3.math.Vector3f) -> a
     void applyOnServer(name.huliqing.luoying.network.GameServer,com.jme3.network.HostedConnection) -> applyOnServer
-name.huliqing.ly.mess.MessActorSpeak -> name.huliqing.ly.f.b:
+name.huliqing.ly.mess.ActorSpeakMess -> name.huliqing.ly.f.b:
     long actorId -> a
     java.lang.String mess -> b
     float useTime -> c
@@ -270,7 +281,7 @@ name.huliqing.ly.mess.MessActorSpeak -> name.huliqing.ly.f.b:
     void setMess(java.lang.String) -> a
     void applyOnClient(name.huliqing.luoying.network.GameClient) -> applyOnClient
     void applyOnServer(name.huliqing.luoying.network.GameServer,com.jme3.network.HostedConnection) -> applyOnServer
-name.huliqing.ly.mess.MessChatSend -> name.huliqing.ly.f.c:
+name.huliqing.ly.mess.ChatSendMess -> name.huliqing.ly.f.c:
     name.huliqing.luoying.layer.service.PlayService playService -> a
     name.huliqing.ly.layer.network.ChatNetwork chatNetwork -> b
     name.huliqing.ly.layer.service.ChatService chatService -> c
@@ -285,7 +296,7 @@ name.huliqing.ly.mess.MessChatSend -> name.huliqing.ly.f.c:
     void setAmount(int) -> a
     void applyOnServer(name.huliqing.luoying.network.GameServer,com.jme3.network.HostedConnection) -> applyOnServer
     void applyOnClient(name.huliqing.luoying.network.GameClient) -> applyOnClient
-name.huliqing.ly.mess.MessChatShop -> name.huliqing.ly.f.d:
+name.huliqing.ly.mess.ChatShopMess -> name.huliqing.ly.f.d:
     name.huliqing.luoying.layer.service.PlayService playService -> a
     name.huliqing.ly.layer.network.ChatNetwork chatNetwork -> b
     name.huliqing.ly.layer.service.ChatService chatService -> c
@@ -302,13 +313,21 @@ name.huliqing.ly.mess.MessChatShop -> name.huliqing.ly.f.d:
     void setDiscount(float) -> a
     void applyOnServer(name.huliqing.luoying.network.GameServer,com.jme3.network.HostedConnection) -> applyOnServer
     void applyOnClient(name.huliqing.luoying.network.GameClient) -> applyOnClient
-name.huliqing.ly.mess.MessMessage -> name.huliqing.ly.f.e:
+name.huliqing.ly.mess.MessageMess -> name.huliqing.ly.f.e:
     java.lang.String message -> a
     name.huliqing.ly.enums.MessageType type -> b
     void <init>() -> <init>
     void setMessage(java.lang.String) -> a
     void setType(name.huliqing.ly.enums.MessageType) -> a
     void applyOnClient(name.huliqing.luoying.network.GameClient) -> applyOnClient
+name.huliqing.ly.mess.PlaySkillMess -> name.huliqing.ly.f.f:
+    long entityId -> a
+    java.lang.String skillId -> b
+    void <init>() -> <init>
+    void setEntityId(long) -> a
+    void setSkillId(java.lang.String) -> a
+    void applyOnClient(name.huliqing.luoying.network.GameClient) -> applyOnClient
+    void applyOnServer(name.huliqing.luoying.network.GameServer,com.jme3.network.HostedConnection) -> applyOnServer
 name.huliqing.ly.object.chat.Chat -> name.huliqing.ly.g.a.a:
     name.huliqing.luoying.layer.service.PlayService playService -> m
     name.huliqing.ly.layer.service.GameService gameService -> n
@@ -2049,11 +2068,8 @@ name.huliqing.ly.state.lan.RoomStateServerImpl$LanRoomServerListener -> name.hul
     void onReceiveGameMess(name.huliqing.luoying.network.GameServer,com.jme3.network.HostedConnection,name.huliqing.luoying.mess.GameMess) -> onReceiveGameMess
     void <init>(name.huliqing.ly.state.lan.RoomStateServerImpl,name.huliqing.ly.state.lan.RoomStateServerImpl$1) -> <init>
 name.huliqing.ly.view.AboutView -> name.huliqing.ly.i.a:
-    name.huliqing.luoying.layer.service.ConfigService configService -> a
     name.huliqing.luoying.ui.Text version -> b
     name.huliqing.luoying.ui.Text home -> c
-    name.huliqing.luoying.ui.Text email -> d
-    name.huliqing.luoying.ui.Text engine -> e
     name.huliqing.luoying.ui.Text more -> f
     name.huliqing.luoying.ui.Button close -> g
     void <init>(float,float) -> <init>
@@ -2062,66 +2078,6 @@ name.huliqing.ly.view.AboutView -> name.huliqing.ly.i.a:
 name.huliqing.ly.view.AboutView$1 -> name.huliqing.ly.i.b:
     name.huliqing.ly.view.AboutView this$0 -> a
     void <init>(name.huliqing.ly.view.AboutView) -> <init>
-    void onClick(name.huliqing.luoying.ui.UI,boolean) -> onClick
-name.huliqing.ly.view.ActorMainPanel -> name.huliqing.ly.i.c:
-    name.huliqing.luoying.layer.service.SkinService skinService -> a
-    name.huliqing.luoying.layer.service.TalentService talentService -> b
-    name.huliqing.luoying.layer.service.TaskService taskService -> c
-    name.huliqing.luoying.object.entity.Entity actor -> d
-    name.huliqing.luoying.ui.LinearLayout tabPanel -> e
-    name.huliqing.ly.view.ActorMainPanel$TabButton btnAttr -> f
-    name.huliqing.ly.view.ActorMainPanel$TabButton btnTalent -> g
-    name.huliqing.ly.view.ActorMainPanel$TabButton btnWeapon -> h
-    name.huliqing.ly.view.ActorMainPanel$TabButton btnArmor -> i
-    name.huliqing.ly.view.ActorMainPanel$TabButton btnSkill -> j
-    name.huliqing.ly.view.ActorMainPanel$TabButton btnItem -> k
-    name.huliqing.ly.view.ActorMainPanel$TabButton btnTask -> l
-    name.huliqing.luoying.ui.LinearLayout bodyPanel -> m
-    name.huliqing.ly.view.actor.AttributePanel attrPanel -> n
-    name.huliqing.ly.view.actor.TalentPanel talentPanel -> o
-    name.huliqing.ly.view.actor.WeaponPanel weaponPanel -> p
-    name.huliqing.ly.view.actor.ArmorPanel armorPanel -> q
-    name.huliqing.ly.view.actor.SkillPanel skillPanel -> r
-    name.huliqing.ly.view.actor.ItemPanel itemPanel -> s
-    name.huliqing.ly.view.actor.TaskPanel taskPanel -> t
-    int globalPageSize -> u
-    int index -> v
-    name.huliqing.ly.view.actor.ActorPanel indexPanel -> w
-    void <init>(float,float) -> <init>
-    void updateViewChildren() -> updateViewChildren
-    void setActor(name.huliqing.luoying.object.entity.Entity) -> a
-    void showTab(int) -> a
-    void showTab(name.huliqing.ly.view.ActorMainPanel$TabButton) -> a
-    void updatePanel(name.huliqing.ly.view.actor.ActorPanel[]) -> a
-    void onDataAdded(name.huliqing.luoying.xml.ObjectData,int) -> onDataAdded
-    void onDataRemoved(name.huliqing.luoying.xml.ObjectData,int) -> onDataRemoved
-    void onDataUsed(name.huliqing.luoying.xml.ObjectData) -> onDataUsed
-    void onSkinAttached(name.huliqing.luoying.object.entity.Entity,name.huliqing.luoying.object.skin.Skin) -> onSkinAttached
-    void onSkinDetached(name.huliqing.luoying.object.entity.Entity,name.huliqing.luoying.object.skin.Skin) -> onSkinDetached
-    void onSkinAdded(name.huliqing.luoying.object.entity.Entity,name.huliqing.luoying.object.skin.Skin) -> onSkinAdded
-    void onSkinRemoved(name.huliqing.luoying.object.entity.Entity,name.huliqing.luoying.object.skin.Skin) -> onSkinRemoved
-    void onTalentAdded(name.huliqing.luoying.object.entity.Entity,name.huliqing.luoying.object.talent.Talent) -> onTalentAdded
-    void onTalentPointsChange(name.huliqing.luoying.object.entity.Entity,name.huliqing.luoying.object.talent.Talent,int) -> onTalentPointsChange
-    void onTalentRemoved(name.huliqing.luoying.object.entity.Entity,name.huliqing.luoying.object.talent.Talent) -> onTalentRemoved
-    void onTaskAdded(name.huliqing.luoying.object.entity.Entity,name.huliqing.luoying.object.task.Task) -> onTaskAdded
-    void onTaskRemoved(name.huliqing.luoying.object.entity.Entity,name.huliqing.luoying.object.task.Task) -> onTaskRemoved
-    void onTaskCompleted(name.huliqing.luoying.object.entity.Entity,name.huliqing.luoying.object.task.Task) -> onTaskCompleted
-    void access$100(name.huliqing.ly.view.ActorMainPanel,name.huliqing.ly.view.ActorMainPanel$TabButton) -> a
-    name.huliqing.luoying.object.entity.Entity access$200(name.huliqing.ly.view.ActorMainPanel) -> a
-name.huliqing.ly.view.ActorMainPanel$TabButton -> name.huliqing.ly.i.d:
-    name.huliqing.luoying.ui.Icon tabIcon -> b
-    name.huliqing.ly.view.actor.ActorPanel actorPanel -> c
-    name.huliqing.ly.view.ActorMainPanel this$0 -> a
-    void <init>(name.huliqing.ly.view.ActorMainPanel,java.lang.String,name.huliqing.ly.view.actor.ActorPanel) -> <init>
-    void updateViewChildren() -> updateViewChildren
-    void updateViewLayout() -> updateViewLayout
-    void setActive(boolean) -> a
-    void clickEffect(boolean) -> clickEffect
-    name.huliqing.ly.view.actor.ActorPanel access$000(name.huliqing.ly.view.ActorMainPanel$TabButton) -> a
-name.huliqing.ly.view.ActorMainPanel$TabButton$1 -> name.huliqing.ly.i.e:
-    name.huliqing.ly.view.ActorMainPanel val$this$0 -> a
-    name.huliqing.ly.view.ActorMainPanel$TabButton this$1 -> b
-    void <init>(name.huliqing.ly.view.ActorMainPanel$TabButton,name.huliqing.ly.view.ActorMainPanel) -> <init>
     void onClick(name.huliqing.luoying.ui.UI,boolean) -> onClick
 name.huliqing.ly.view.ActorSelectView -> name.huliqing.ly.i.f:
     name.huliqing.luoying.layer.service.SkillService skillService -> a
@@ -2471,8 +2427,6 @@ name.huliqing.ly.view.PlayStateUI$1 -> name.huliqing.ly.i.ar:
     void <init>(name.huliqing.ly.view.PlayStateUI) -> <init>
     void onClick(name.huliqing.luoying.ui.UI,boolean) -> onClick
 name.huliqing.ly.view.ProgressView -> name.huliqing.ly.i.as:
-    java.lang.String pathProgress -> a
-    java.lang.String pathCore -> b
     name.huliqing.luoying.ui.Icon progress -> c
     name.huliqing.luoying.ui.Icon core -> d
     float maxValue -> e
@@ -2488,7 +2442,7 @@ name.huliqing.ly.view.RpgMainUI -> name.huliqing.ly.i.at:
     name.huliqing.ly.object.game.SimpleRpgGame rpgGame -> c
     name.huliqing.ly.view.TeamView teamView -> d
     name.huliqing.ly.view.FaceView targetFace -> e
-    name.huliqing.ly.view.ActorMainPanel userPanel -> f
+    name.huliqing.ly.view.actor.ActorMainPanel userPanel -> f
     name.huliqing.luoying.object.anim.Anim userPanelAnim -> g
     name.huliqing.luoying.object.anim.AnimationControl animationControl -> h
     name.huliqing.luoying.ui.UI attack -> i
@@ -2500,7 +2454,7 @@ name.huliqing.ly.view.RpgMainUI -> name.huliqing.ly.i.at:
     name.huliqing.ly.view.TeamView getTeamView() -> b
     void setTargetFace(name.huliqing.luoying.object.entity.Entity) -> a
     name.huliqing.ly.view.FaceView getTargetFace() -> c
-    name.huliqing.ly.view.ActorMainPanel getUserPanel() -> d
+    name.huliqing.ly.view.actor.ActorMainPanel getUserPanel() -> d
     void displayUserPanel(name.huliqing.luoying.object.actor.Actor) -> a
     void access$000(name.huliqing.ly.view.RpgMainUI,name.huliqing.luoying.object.actor.Actor) -> a
     name.huliqing.ly.object.game.SimpleRpgGame access$100(name.huliqing.ly.view.RpgMainUI) -> a
@@ -2635,6 +2589,67 @@ name.huliqing.ly.view.ToolsView -> name.huliqing.ly.i.bm:
     void updateViewChildren() -> updateViewChildren
     void addView(name.huliqing.luoying.ui.UI,int) -> addView
     void addMenu(name.huliqing.luoying.ui.UI,int) -> a
+name.huliqing.ly.view.actor.ActorMainPanel -> name.huliqing.ly.i.a.ad:
+    name.huliqing.luoying.layer.service.SkinService skinService -> a
+    name.huliqing.luoying.layer.service.TalentService talentService -> b
+    name.huliqing.luoying.layer.service.TaskService taskService -> c
+    name.huliqing.ly.layer.service.GameService gameService -> d
+    name.huliqing.luoying.object.entity.Entity actor -> e
+    name.huliqing.luoying.ui.LinearLayout tabPanel -> f
+    name.huliqing.ly.view.actor.ActorMainPanel$TabButton btnAttr -> g
+    name.huliqing.ly.view.actor.ActorMainPanel$TabButton btnTalent -> h
+    name.huliqing.ly.view.actor.ActorMainPanel$TabButton btnWeapon -> i
+    name.huliqing.ly.view.actor.ActorMainPanel$TabButton btnArmor -> j
+    name.huliqing.ly.view.actor.ActorMainPanel$TabButton btnSkill -> k
+    name.huliqing.ly.view.actor.ActorMainPanel$TabButton btnItem -> l
+    name.huliqing.ly.view.actor.ActorMainPanel$TabButton btnTask -> m
+    name.huliqing.luoying.ui.LinearLayout bodyPanel -> n
+    name.huliqing.ly.view.actor.AttributePanel attrPanel -> o
+    name.huliqing.ly.view.actor.TalentPanel talentPanel -> p
+    name.huliqing.ly.view.actor.WeaponPanel weaponPanel -> q
+    name.huliqing.ly.view.actor.ArmorPanel armorPanel -> r
+    name.huliqing.ly.view.actor.SkillPanel skillPanel -> s
+    name.huliqing.ly.view.actor.ItemPanel itemPanel -> t
+    name.huliqing.ly.view.actor.TaskPanel taskPanel -> u
+    int globalPageSize -> v
+    int index -> w
+    name.huliqing.ly.view.actor.ActorPanel indexPanel -> x
+    void <init>(float,float) -> <init>
+    void updateViewChildren() -> updateViewChildren
+    void setActor(name.huliqing.luoying.object.entity.Entity) -> a
+    void showTab(int) -> a
+    void showTab(name.huliqing.ly.view.actor.ActorMainPanel$TabButton) -> a
+    void updatePanel(name.huliqing.ly.view.actor.ActorPanel[]) -> a
+    void onDataAdded(name.huliqing.luoying.xml.ObjectData,int) -> onDataAdded
+    void onDataRemoved(name.huliqing.luoying.xml.ObjectData,int) -> onDataRemoved
+    void onDataUsed(name.huliqing.luoying.xml.ObjectData) -> onDataUsed
+    void onSkinAttached(name.huliqing.luoying.object.entity.Entity,name.huliqing.luoying.object.skin.Skin) -> onSkinAttached
+    void onSkinDetached(name.huliqing.luoying.object.entity.Entity,name.huliqing.luoying.object.skin.Skin) -> onSkinDetached
+    void onSkinAdded(name.huliqing.luoying.object.entity.Entity,name.huliqing.luoying.object.skin.Skin) -> onSkinAdded
+    void onSkinRemoved(name.huliqing.luoying.object.entity.Entity,name.huliqing.luoying.object.skin.Skin) -> onSkinRemoved
+    void onTalentAdded(name.huliqing.luoying.object.entity.Entity,name.huliqing.luoying.object.talent.Talent) -> onTalentAdded
+    void onTalentPointsChange(name.huliqing.luoying.object.entity.Entity,name.huliqing.luoying.object.talent.Talent,int) -> onTalentPointsChange
+    void onTalentRemoved(name.huliqing.luoying.object.entity.Entity,name.huliqing.luoying.object.talent.Talent) -> onTalentRemoved
+    void onTaskAdded(name.huliqing.luoying.object.entity.Entity,name.huliqing.luoying.object.task.Task) -> onTaskAdded
+    void onTaskRemoved(name.huliqing.luoying.object.entity.Entity,name.huliqing.luoying.object.task.Task) -> onTaskRemoved
+    void onTaskCompleted(name.huliqing.luoying.object.entity.Entity,name.huliqing.luoying.object.task.Task) -> onTaskCompleted
+    void access$100(name.huliqing.ly.view.actor.ActorMainPanel,name.huliqing.ly.view.actor.ActorMainPanel$TabButton) -> a
+    name.huliqing.luoying.object.entity.Entity access$200(name.huliqing.ly.view.actor.ActorMainPanel) -> a
+name.huliqing.ly.view.actor.ActorMainPanel$TabButton -> name.huliqing.ly.i.a.ae:
+    name.huliqing.luoying.ui.Icon tabIcon -> b
+    name.huliqing.ly.view.actor.ActorPanel actorPanel -> c
+    name.huliqing.ly.view.actor.ActorMainPanel this$0 -> a
+    void <init>(name.huliqing.ly.view.actor.ActorMainPanel,java.lang.String,name.huliqing.ly.view.actor.ActorPanel) -> <init>
+    void updateViewChildren() -> updateViewChildren
+    void updateViewLayout() -> updateViewLayout
+    void setActive(boolean) -> a
+    void clickEffect(boolean) -> clickEffect
+    name.huliqing.ly.view.actor.ActorPanel access$000(name.huliqing.ly.view.actor.ActorMainPanel$TabButton) -> a
+name.huliqing.ly.view.actor.ActorMainPanel$TabButton$1 -> name.huliqing.ly.i.a.af:
+    name.huliqing.ly.view.actor.ActorMainPanel val$this$0 -> a
+    name.huliqing.ly.view.actor.ActorMainPanel$TabButton this$1 -> b
+    void <init>(name.huliqing.ly.view.actor.ActorMainPanel$TabButton,name.huliqing.ly.view.actor.ActorMainPanel) -> <init>
+    void onClick(name.huliqing.luoying.ui.UI,boolean) -> onClick
 name.huliqing.ly.view.actor.ActorPanel -> name.huliqing.ly.i.a.a:
     void setPanelVisible(boolean) -> a
     void setPanelUpdate(name.huliqing.luoying.object.entity.Entity) -> a
@@ -2756,7 +2771,6 @@ name.huliqing.ly.view.actor.SkillPanel -> name.huliqing.ly.i.a.m:
     name.huliqing.ly.layer.service.GameService access$000(name.huliqing.ly.view.actor.SkillPanel) -> a
     name.huliqing.luoying.object.entity.Entity access$100(name.huliqing.ly.view.actor.SkillPanel) -> b
     name.huliqing.ly.layer.network.GameNetwork access$200(name.huliqing.ly.view.actor.SkillPanel) -> c
-    name.huliqing.luoying.layer.network.SkillNetwork access$300(name.huliqing.ly.view.actor.SkillPanel) -> d
 name.huliqing.ly.view.actor.SkillPanel$1 -> name.huliqing.ly.i.a.n:
     name.huliqing.ly.view.actor.SkillRow val$row -> a
     name.huliqing.ly.view.actor.SkillPanel this$0 -> b
@@ -2970,10 +2984,8 @@ name.huliqing.ly.view.shortcut.ShortcutManager$ShortcutRoot -> name.huliqing.ly.
     void clearShortcuts() -> b
     void <init>(name.huliqing.ly.view.shortcut.ShortcutManager$1) -> <init>
 name.huliqing.ly.view.shortcut.SkillShortcut -> name.huliqing.ly.i.b.h:
-    name.huliqing.luoying.layer.service.PlayService playService -> d
     name.huliqing.luoying.layer.service.SkillService skillService -> e
     name.huliqing.luoying.layer.network.SkillNetwork skillNetwork -> f
-    name.huliqing.luoying.layer.network.ActorNetwork actorNetwork -> g
     name.huliqing.ly.layer.service.GameService gameService -> h
     name.huliqing.ly.layer.network.GameNetwork gameNetwork -> i
     com.jme3.math.ColorRGBA maskColor -> j

@@ -23,7 +23,6 @@ import name.huliqing.luoying.mess.network.ClientExitMess;
 import name.huliqing.luoying.mess.network.GetClientsMess;
 import name.huliqing.luoying.mess.ActorLoadSavedMess;
 import name.huliqing.luoying.mess.ActorLoadSavedResultMess;
-import name.huliqing.luoying.mess.SceneLoadedMess;
 import name.huliqing.luoying.mess.network.ClientsMess;
 import name.huliqing.luoying.network.AbstractClientListener.PingListener;
 import name.huliqing.luoying.network.GameClient;
@@ -37,7 +36,6 @@ import name.huliqing.luoying.ui.state.UIState;
 import name.huliqing.ly.layer.service.GameService;
 import name.huliqing.luoying.network.DefaultClientListener;
 import name.huliqing.luoying.object.Loader;
-import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.object.progress.Progress;
 import name.huliqing.ly.enums.MessageType;
 import name.huliqing.ly.view.shortcut.ShortcutManager;
@@ -64,11 +62,7 @@ public class ClientNetworkRpgGame extends NetworkRpgGame implements PingListener
     // 用于显示与服务端的Ping值信息
     private Text pingLabel;
     
-    private boolean loadingScene = true;
-    private int needInitEntities;
-    private int initEntitiesCount;
     private Progress progress;
-    private boolean clientStarted;
     
     public ClientNetworkRpgGame() {}
     
@@ -151,29 +145,8 @@ public class ClientNetworkRpgGame extends NetworkRpgGame implements PingListener
     public void onPingUpdate(long ping) {
         pingLabel.setText("PING:" + ping);
     }
-
-    @Override
-    public void onSceneEntityAdded(Scene scene, Entity entityAdded) {
-        super.onSceneEntityAdded(scene, entityAdded);
-        if (loadingScene) {
-            initEntitiesCount++;
-            LOG.log(Level.INFO, "GameInit...initEntitiesCount={0}, need={1}", new Object[] {initEntitiesCount, needInitEntities});
-            if (progress != null) {
-                progress.display((float)initEntitiesCount/ needInitEntities);
-            }
-            if (initEntitiesCount >= needInitEntities) {
-                startClientGame();
-            }
-        }
-    }
     
     protected void startClientGame() {
-        if (clientStarted) {
-            return;
-        }
-        clientStarted = true;
-        loadingScene = false;
-
         if (progress != null) {
             progress.cleanup();
         }
@@ -189,11 +162,19 @@ public class ClientNetworkRpgGame extends NetworkRpgGame implements PingListener
     }
     
     private class NetworkClientListener extends DefaultClientListener {
-
         @Override
-        protected void onGameInitialize(int initEntityTotal) {
-            LOG.log(Level.INFO, "GameInit...needInitEntityTotal={0}", initEntityTotal);
-            needInitEntities = initEntityTotal;
+        protected void onEntityInitializeCount(int count, int total) {
+            super.onEntityInitializeCount(count, total);
+            // 小心除0
+            if (total > 0) {
+                progress.display((float)count / total);
+            }
+        }
+        
+        @Override
+        protected void onEntityInitialized() {
+            // 载入ENTITY完毕，开始游戏。
+            startClientGame();
         }
         
         @Override

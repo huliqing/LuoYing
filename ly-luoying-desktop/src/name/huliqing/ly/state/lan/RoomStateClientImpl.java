@@ -218,15 +218,11 @@ public class RoomStateClientImpl extends AbstractAppState implements RoomState {
         protected void onClientDisconnected(GameClient gameClient, ClientStateListener.DisconnectInfo info) {
             back();
         }
-        
-        @Override
-        protected void onGameInitialize(int initEntityTotal) {}
-        
-        @Override
-        protected void processGameMess(GameClient gameClient, GameMess m) {
-            // ignore 
-        }
 
+        @Override
+        protected void onEntityInitialized() {
+            // ignore
+        }
 
     }
 }
