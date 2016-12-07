@@ -375,6 +375,9 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
         for (Spatial child : children) {
             child.setCullHint(ch);
         }
+        if (ui.getTargetFace().getActor() == null) {
+            ui.getTargetFace().setVisible(false);
+        }
         // 快捷管理器中的“回收站”始终是关闭的，只有在拖动快捷方式时才可见
         ShortcutManager.setBucketVisible(false);
     }

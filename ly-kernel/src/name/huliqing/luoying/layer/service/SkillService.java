@@ -6,6 +6,7 @@ package name.huliqing.luoying.layer.service;
 
 import java.util.List;
 import name.huliqing.luoying.layer.network.SkillNetwork;
+import name.huliqing.luoying.log.StateCode;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.module.SkillListener;
 import name.huliqing.luoying.object.module.SkillModule;
@@ -109,7 +110,7 @@ public interface SkillService extends SkillNetwork {
      * 执行该技能。
      * @param actor
      * @param skill
-     * @return stateCode {@link SkillConstants#STATE_XXX}
+     * @return stateCode {@link StateCode}
      */
     int checkStateCode(Entity actor, Skill skill);
     

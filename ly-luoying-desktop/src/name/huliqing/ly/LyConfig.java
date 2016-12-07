@@ -5,6 +5,7 @@
  */
 package name.huliqing.ly;
 
+import name.huliqing.luoying.Config;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.ConfigData;
 import name.huliqing.luoying.layer.service.ConfigService;
@@ -23,6 +24,7 @@ public class LyConfig {
         cd = configData;
         setSoundEnabled(isSoundEnabled());
         setSoundVolume(getSoundVolume());
+        setDebug(isDebug());
     }
     
     public static ConfigData getConfigData() {
@@ -35,6 +37,11 @@ public class LyConfig {
     
     public static boolean isDebug() {
         return cd.getAsBoolean("debug", false);
+    }
+    
+    public static void setDebug(boolean debug) {
+//        cd.setAttribute("debug", debug); // DEBUG不要存档。
+        Config.debug = debug;
     }
     
     public static String getGameName() {

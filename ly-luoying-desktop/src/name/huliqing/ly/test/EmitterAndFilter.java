@@ -45,7 +45,7 @@ public class EmitterAndFilter extends SimpleApplication {
     
     @Override
     public void simpleInitApp() {
-        Init.initialize(this, settings);
+        Init.initialize(this);
         this.flyCam.setMoveSpeed(20);
         inputManager.addMapping("do", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
         inputManager.addListener(actionListener, "do");

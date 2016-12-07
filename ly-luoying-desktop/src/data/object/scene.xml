@@ -22,7 +22,7 @@
     
     <!--黄金宝箱场景-->
     <sceneRandom id="sceneTreasure" progress="sysProgressSimple"
-                 entities="entitySky,entityDirectionalLight,entityAmbientLight,entityPhysics,entityCameraThirdView
+                 entities="entityUnshaded,entitySky,entityDirectionalLight,entityAmbientLight,entityPhysics,entityCameraThirdView
 ,entitySakuraIslandTerrain,entitySakuraIslandBoundary,entitySakuraIslandWater,entitySakuraIslandSeaAudio
 ,entityShadow
 " 

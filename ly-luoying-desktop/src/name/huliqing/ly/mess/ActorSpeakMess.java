@@ -16,7 +16,7 @@ import name.huliqing.ly.layer.service.GameService;
  * @author huliqing
  */
 @Serializable
-public class MessActorSpeak extends GameMess {
+public class ActorSpeakMess extends GameMess {
     
     private long actorId;
     // 说话的内容

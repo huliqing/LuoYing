@@ -11,7 +11,6 @@ import com.jme3.math.Vector3f;
 import com.jme3.util.TempVars;
 import java.text.DecimalFormat;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -19,14 +18,14 @@ import java.util.logging.Logger;
  * @author huliqing
  */
 public class MathUtils {
-    private final static Logger logger = Logger.getLogger(MathUtils.class.getName());
-    private final static int[] positive_or_negative = new int[]{-1, 1};
+    private final static Logger LOG = Logger.getLogger(MathUtils.class.getName());
+    private final static int[] POSITIVE_OR_NEGATIVE = new int[]{-1, 1};
     
-    private final static DecimalFormat format = new DecimalFormat("#.##");
+    private final static DecimalFormat FORMAT = new DecimalFormat("#.##");
 
     public static String format(float value, String pattern) {
-        format.applyPattern(pattern);
-        return format.format(value);
+        FORMAT.applyPattern(pattern);
+        return FORMAT.format(value);
     }
     
     /**
@@ -207,7 +206,7 @@ public class MathUtils {
      * @return 
      */
     public static int randomPON() {
-        return positive_or_negative[FastMath.nextRandomInt(0, 1)];
+        return POSITIVE_OR_NEGATIVE[FastMath.nextRandomInt(0, 1)];
     }
     
     /**
@@ -269,25 +268,6 @@ public class MathUtils {
      * @return 
      */
     public static Quaternion createRandomRotation(float minAngle, float maxAngle, Quaternion store) {
-        // remove20160408
-//        if (minAngle < 0 || maxAngle < minAngle) {
-//            throw new IllegalArgumentException("minAngle could not less than zero, and maxAngle must more than minAngle.minAngle=" 
-//                    + minAngle + ", maxAngle=" + maxAngle);
-//        } 
-//        if (store == null ) {
-//            store = new Quaternion();
-//        }
-//        float angle = FastMath.nextRandomFloat() * (maxAngle - minAngle) + minAngle;
-//        TempVars tv = TempVars.get();
-//        Vector3f axis = tv.vect1.set(
-//                FastMath.nextRandomFloat() + 0.01f
-//                ,FastMath.nextRandomFloat() + 0.01f
-//                ,FastMath.nextRandomFloat() + 0.01f
-//                ).normalizeLocal();
-//        store.fromAngleAxis(angle, axis);
-//        tv.release();
-//        return store;
-        
         return createRandomRotationAxis(minAngle, maxAngle, null, store);
     }
     
@@ -348,5 +328,28 @@ public class MathUtils {
         List<Vector3f> cps = spline.getControlPoints();
         store.set(cps.get(cps.size() - 1));
         return store;
+    }
+    
+    /**
+     * 比较两个向量是否相等
+     * @param v1
+     * @param v2
+     * @return 
+     */
+    public static boolean compare(Vector3f v1, Vector3f v2) {
+        return Float.compare(v1.x, v2.x) == 0 && Float.compare(v1.y, v2.y) == 0 && Float.compare(v1.z, v2.z) == 0;
+    }
+    
+    /**
+     * 比较两个Quaternion是否相等
+     * @param q1
+     * @param q2
+     * @return 
+     */
+    public static boolean compare(Quaternion q1, Quaternion q2) {
+        return     Float.compare(q1.getX(), q2.getX()) == 0 
+                && Float.compare(q1.getY(), q2.getY()) == 0 
+                && Float.compare(q1.getZ(), q2.getZ()) == 0
+                && Float.compare(q1.getW(), q2.getW()) == 0;
     }
 }

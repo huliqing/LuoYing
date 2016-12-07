@@ -12,7 +12,7 @@ import android.util.Log;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import name.huliqing.fighter.Global;
-import name.huliqing.ly.layer.service.SystemServiceImpl;
+import name.huliqing.luoying.layer.service.SystemServiceImpl;
 
 /**
  * Android下一些与环境相关的信息。

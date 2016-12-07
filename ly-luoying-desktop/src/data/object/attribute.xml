@@ -29,6 +29,9 @@
     <!--角色的等级, 这个属性在运行时存放角色的等级值。-->
     <attributeInteger id="attributeLevel" name="attributeLevel" value="1" />
 
+    <!--角色升级功能开关, 只有属性为true时，角色才可以动态升级 -->
+    <attributeBoolean id="attributeLevelUp" name="attributeLevelUp" value="1" />
+
     <!--当前角色可用的经验值-->
     <attributeInteger id="attributeXp" name="attributeXp" />
     
@@ -137,6 +140,7 @@
     
     <!--判断一个角色是否为玩家-->
     <attributeBoolean id="attributePlayer" name="attributePlayer" />
+
     
     <!--==========================================================================-->
     <!--基本属性打包-->
@@ -144,7 +148,7 @@
     
     <attributeGroup id="attributeGroupBase" name="attributeGroupBase" 
                     attributes="attributeBiology,attributeRace,attributeSex
-    ,attributeLevel,attributeXp,attributeXpNext,attributeGroup,attributeTeam,attributeVision,attributeMoveSpeed,attributeMass
+    ,attributeLevel,attributeLevelUp,attributeXp,attributeXpNext,attributeGroup,attributeTeam,attributeVision,attributeMoveSpeed,attributeMass
     ,attributeDead,attributeMovable,attributeRotatable,attributeEssential,attributeAutoLogic,attributeAutoAi
     ,attributeTarget,attributeFollow,attributeOwner,attributeTalentPoints
     ,attributeHealthMax,attributeHealth,attributeManaMax,attributeMana
@@ -193,6 +197,10 @@
     <attributeStringList id="attributeHumanFemaleWeaponSlot" extends="attributeWeaponSlots" 
                          value="slotSwordRightBack,slotSwordRightBack2,slotBowLeftBack,slotWandLeftBack" />
     
+    <!--定义角色是否可动态升级-->
+    <attributeBoolean id="attributeLevelUpYes" extends="attributeLevelUp" value="1" />
+    <attributeBoolean id="attributeLevelUpNo" extends="attributeLevelUp"  value="0" />
+    
     <!--==========================================================================-->
     <!--种族配置： 这些属性是直接配置给角色的。-->
     <!--==========================================================================-->
@@ -200,27 +208,27 @@
     <!--配置给：非生物、种族未知、性别未知、可移动、可转向的角色。如：坦克、飞机、战车等可移动的等非生物类角色. -->
     <attributeGroup id="attributeActorUnbiologyMovableRotatable" name="attributeActorUnbiologyMovableRotatable" 
                        attributes="attributeGroupBase,attributeBiologyNo,attributeRaceUnknow,attributeSexUnknow
-,attributeMovableYes,attributeRotatableYes,attributeMassDynamic" />
+,attributeMovableYes,attributeRotatableYes,attributeMassDynamic,attributeLevelUpNo" />
 
     <!--配置给：非生物、种族未知、性别未知、不可移动、不可转向的角色。如：防御塔、堡垒、基地等静止角色-->
     <attributeGroup id="attributeActorUnbiologyUnmovableUnrotatable" name="attributeActorUnbiologyUnmovableUnrotatable" 
                        attributes="attributeGroupBase,attributeBiologyNo,attributeRaceUnknow,attributeSexUnknow
-,attributeMovableNo,attributeRotatableNo,attributeMassStatic" />
+,attributeMovableNo,attributeRotatableNo,attributeMassStatic,attributeLevelUpNo" />
     
     <!--配置给：生物、种族未知、性别未知、可移动、可转向的角色。如：虫子、怪物、野兽、飞禽、未知生物等活动类角色.-->
     <attributeGroup id="attributeActorBiologyMovableRotatable" name="attributeActorBiologyMovableRotatable" 
                        attributes="attributeGroupBase,attributeBiologyYes,attributeRaceUnknow,attributeSexUnknow
-,attributeMovableYes,attributeRotatableYes,attributeMassDynamic" />
+,attributeMovableYes,attributeRotatableYes,attributeMassDynamic,attributeLevelUpYes" />
 
     <!--配置给：人类女性角色-->
     <attributeGroup id="attributeHumanFemale" name="attributeHumanFemale" 
                        attributes="attributeGroupBase,attributeBiologyYes,attributeRaceHuman,attributeSexFemale
-,attributeMovableYes,attributeRotatableYes,attributeMassDynamic,attributeHumanFemaleWeaponSlot" />
+,attributeMovableYes,attributeRotatableYes,attributeMassDynamic,attributeHumanFemaleWeaponSlot,attributeLevelUpYes" />
     
     <!--配置给：人类男性角色-->
     <attributeGroup id="attributeHumanMale" name="attributeHumanMale" 
                        attributes="attributeGroupBase,attributeBiologyYes,attributeRaceHuman,attributeSexMale
-,attributeMovableYes,attributeRotatableYes,attributeMassDynamic" />
+,attributeMovableYes,attributeRotatableYes,attributeMassDynamic,attributeLevelUpYes" />
     
     <!--==========================================================================-->
     <!-- 特殊角色的属性 -->

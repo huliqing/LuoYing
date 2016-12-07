@@ -9,7 +9,6 @@ import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.attribute.Attribute;
-import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.attribute.ValueChangeListener;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.scene.Scene;

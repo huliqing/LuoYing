@@ -13,6 +13,7 @@ attributeBiology.name=Biology
 attributeRace.name=Race
 attributeSex.name=Sex
 attributeLevel.name=Level
+attributeLevelUp.name=Level Up
 attributeXp.name=XP
 attributeXpNext.name=XP of Next Leve
 attributeGroup.name=Group
@@ -112,14 +113,9 @@ itemMapWorld.des=The whole map of the mainland
 
 # ========== Actor 
 actorPlayerTest.name=Test
-actorPlayer.name=
-actorPlayer.des =
-actorEasy.name=
-actorEasy.des=
-actorNormal.name =
-actorNormal.des=
-actorHard.name=
-actorHard.des=
+actorEasy.name=Easy
+actorNormal.name =Normal
+actorHard.name=Hard
 actorPlayer.name=Sakura
 actorAiLin.name=Aileen
 actorDiNa.name=Tina

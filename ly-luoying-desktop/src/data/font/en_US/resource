@@ -137,7 +137,7 @@ lan.help.inServerRoom=You are in the game room, you can wait for other players t
 lan.help.running=This is the list shown all players currently play the game with you. You can invite others into the game from the LAN interface.
 
 #==== Skill name
-skill.undefine=Undefined
+skill.undefine=Could not play skill.
 skill.notFound=Skill not found
 skill.locked=Skill locked
 skill.cooldown=Skill cold down.
@@ -212,6 +212,4 @@ task.noTasks=No tasks.
 #====About 
 about.version=Current Version: %s
 about.home=My Blog - http://www.huliqing.name/
-about.email=My Email - 31703299@qq.com
-about.engine=Game Engine: JMonkeyEngine3.0
 about.more=This game still in development, if you found any errors or have any good idea in the game, please email me, thanks! You can also download other versions from my home page, include platforms: Windows,MacOSX,Linux,Android...etc.

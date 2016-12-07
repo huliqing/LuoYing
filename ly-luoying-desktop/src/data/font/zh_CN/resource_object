@@ -1,4 +1,4 @@
-﻿#
+#
 # ========== Game 
 gameStoryTreasure.name=黄金宝箱
 gameStoryGb.name=千年古柏
@@ -13,6 +13,7 @@ attributeBiology.name=生物
 attributeRace.name=种族
 attributeSex.name=性别
 attributeLevel.name=等级
+attributeLevelUp.name=可升级
 attributeXp.name=当前经验
 attributeXpNext.name=下一级需要的经验
 attributeGroup.name=分组
@@ -111,15 +112,10 @@ itemMapWorld.name=落樱大陆
 itemMapWorld.des=落樱大陆地图
 
 # ========== Actor 
-actorPlayerTest.name=Test
-actorPlayer.name=
-actorPlayer.des =
-actorEasy.name=
-actorEasy.des=
-actorNormal.name =
-actorNormal.des=
-actorHard.name=
-actorHard.des=
+actorPlayerTest.name=测试
+actorEasy.name=简单
+actorNormal.name =普通
+actorHard.name=困难
 actorPlayer.name=樱
 actorAiLin.name=艾琳
 actorDiNa.name=蒂娜

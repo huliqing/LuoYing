@@ -13,6 +13,8 @@ import name.huliqing.luoying.ui.Text;
 import name.huliqing.luoying.ui.UI;
 import name.huliqing.luoying.ui.Window;
 import name.huliqing.luoying.ui.state.UIState;
+import name.huliqing.ly.constants.InterfaceConstants;
+import name.huliqing.ly.constants.ResConstants;
 
 /**
  *
@@ -57,7 +59,7 @@ public class HelpView extends LinearLayout {
             textLabel.setHeight(height);
             
             // 帮助图标 
-            moreIcon = new Icon("Interface/icon/help.png");
+            moreIcon = new Icon(InterfaceConstants.UI_HELP);
             moreIcon.setWidth(helpWidth);
             moreIcon.setHeight(helpWidth);
             moreIcon.setMargin(0, 0, 0, height * 0.1f);
@@ -90,7 +92,7 @@ public class HelpView extends LinearLayout {
     
     private Window createMoreWin() {
         Window win = new Window(winWidth, winHeight);
-        win.setTitle(ResourceManager.get("common.tip"));
+        win.setTitle(ResourceManager.get(ResConstants.COMMON_TIP));
         win.setPadding(10, 10, 10, 10);
         win.setDragEnabled(true);
         win.setCloseable(true);

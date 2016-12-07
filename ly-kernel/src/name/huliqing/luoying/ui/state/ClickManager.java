@@ -18,9 +18,9 @@ import name.huliqing.luoying.ui.UISound;
  * @author huliqing
  */
 public class ClickManager implements ReleaseListener {
-//    private final static Logger logger = Logger.getLogger(ClickManager.class.getName());
+//    private final static Logger LOG = Logger.getLogger(ClickManager.class.getName());
     
-    private final static ClickManager ins = new ClickManager();
+    private final static ClickManager INSTANCE = new ClickManager();
     
     // 双击时间限制(毫秒）即两次单击的时间间隔在这个时间之内时视为双击
     // 应该处理双击事件
@@ -51,7 +51,7 @@ public class ClickManager implements ReleaseListener {
     
     private ClickManager() {}
     public static ClickManager getInstance() {
-        return ins;
+        return INSTANCE;
     }
     
     public void addEventListener(UIEventListener listener) {
@@ -136,8 +136,6 @@ public class ClickManager implements ReleaseListener {
         if (releaseUI != null 
                 && LuoYing.getGameTime()- clickReleaseTime > dbclickLimit) {
             
-//            Log.get(ClickManager.class).log(Level.INFO, "Fire single click!ui={0}", releaseUI);
-            
             releaseUI.fireClick(false);
             fireUIClickListener(releaseUI, false, false);
             
@@ -159,13 +157,6 @@ public class ClickManager implements ReleaseListener {
             pressUI.onRelease();
             fireUIReleaseListener(pressUI);
         }
-        
-        // remove20160217,代码已经移出
-//        // 恢复镜头转动
-//        PlayState ps = Common.getPlayState();
-//        if (ps != null) {
-//            ps.setChaseEnabled(true);
-//        }
     }
     
     public void cleanup() {

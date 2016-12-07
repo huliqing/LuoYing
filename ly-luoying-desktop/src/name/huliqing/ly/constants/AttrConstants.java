@@ -16,6 +16,7 @@ public class AttrConstants {
     public final static String RACE = "attributeRace";
     public final static String SEX = "attributeSex";
     public final static String LEVEL = "attributeLevel";
+    public final static String LEVEL_UP = "attributeLevelUp";
     public final static String XP = "attributeXp";
     public final static String XP_NEXT = "attributeXpNext";
     public final static String GROUP = "attributeGroup";

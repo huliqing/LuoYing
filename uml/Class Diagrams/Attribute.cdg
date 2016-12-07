@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ClassDiagram name="Attribute">
+  <ClassDiagramComponents>
+    <Interface name="Attribute" package="" visibility="public" xPosition="757.0" yPosition="206.0">
+      <Methods/>
+    </Interface>
+    <Class name="AbstractAttribute" package="" visibility="public" xPosition="731.0" yPosition="399.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Interface name="AttributeManager" package="" visibility="public" xPosition="173.0" yPosition="43.0">
+      <Methods/>
+    </Interface>
+    <Class name="AttributeManagerImpl" package="" visibility="public" xPosition="143.0" yPosition="200.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Interface name="AttributeListener" package="" visibility="public" xPosition="148.0" yPosition="399.0">
+      <Methods/>
+    </Interface>
+    <Class name="AttributeStore" package="" visibility="public" xPosition="447.0" yPosition="200.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="BooleanAttribute" package="" visibility="public" xPosition="523.0" yPosition="835.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Interface name="CollectionChangeListener" package="" visibility="public" xPosition="1267.0" yPosition="835.0">
+      <Methods/>
+    </Interface>
+    <Class name="FloatAttribute" package="" visibility="public" xPosition="1017.0" yPosition="1042.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="GroupAttribute" package="" visibility="public" xPosition="474.0" yPosition="637.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="IntegerAttribute" package="" visibility="public" xPosition="499.0" yPosition="1042.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="SimpleAttribute" package="" visibility="public" xPosition="757.0" yPosition="637.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="NumberAttribute" package="" visibility="public" xPosition="757.0" yPosition="835.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="UntitledClass" package="" visibility="public" xPosition="1530.0" yPosition="1559.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Interface name="CollectionAttribute" package="" visibility="public" xPosition="1567.0" yPosition="637.0">
+      <Methods/>
+    </Interface>
+    <Interface name="LevelAttribute" package="" visibility="public" xPosition="824.0" yPosition="1416.0">
+      <Methods/>
+    </Interface>
+    <Class name="LevelFloatAttribute" package="" visibility="public" xPosition="1017.0" yPosition="1247.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="LimitIntegerAttribute" package="" visibility="public" xPosition="341.0" yPosition="1247.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Interface name="LimitAttribute" package="" visibility="public" xPosition="341.0" yPosition="1416.0">
+      <Methods/>
+    </Interface>
+    <Interface name="ValueChangeListener" package="" visibility="public" xPosition="361.0" yPosition="399.0">
+      <Methods/>
+    </Interface>
+    <Interface name="SimpleValueChangeListener" package="" visibility="public" xPosition="996.0" yPosition="637.0">
+      <Methods/>
+    </Interface>
+    <Class name="LongAttribute" package="" visibility="public" xPosition="757.0" yPosition="1042.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="LevelIntegerAttribute" package="" visibility="public" xPosition="613.0" yPosition="1247.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="RelateBooleanAttribute" package="" visibility="public" xPosition="148.0" yPosition="1042.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="StringAttribute" package="" visibility="public" xPosition="996.0" yPosition="835.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="StringListAttribute" package="" visibility="public" xPosition="1291.0" yPosition="637.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="Vector2fAttribute" package="" visibility="public" xPosition="1267.0" yPosition="288.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="Vector3fAttribute" package="" visibility="public" xPosition="1267.0" yPosition="388.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="Vector4fAttribute" package="" visibility="public" xPosition="1267.0" yPosition="498.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+  </ClassDiagramComponents>
+  <ClassDiagramRelations>
+    <IsRelation name="is" source="LevelIntegerAttribute" target="IntegerAttribute"/>
+    <IsRelation name="is" source="IntegerAttribute" target="NumberAttribute"/>
+    <IsRelation name="is" source="StringListAttribute" target="AbstractAttribute"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="LevelFloatAttribute" target="LevelAttribute"/>
+    <IsRelation name="is" source="GroupAttribute" target="AbstractAttribute"/>
+    <HasRelation name="listeners" source="AbstractAttribute" target="ValueChangeListener" type="Default" sourceCardinality="0..1" targetCardinality="1..*" collectionType="List"/>
+    <IsRelation name="is" source="Vector3fAttribute" target="AbstractAttribute"/>
+    <IsRelation name="is" source="FloatAttribute" target="NumberAttribute"/>
+    <HasRelation name="listeners" source="AttributeManagerImpl" target="AttributeListener" type="Default" sourceCardinality="0..1" targetCardinality="1..*" collectionType="List"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="RelateBooleanAttribute" target="ValueChangeListener"/>
+    <HasRelation name="store" source="AttributeManagerImpl" target="AttributeStore" type="Default" sourceCardinality="0..1" targetCardinality="1..1"/>
+    <IsRelation name="is" source="BooleanAttribute" target="SimpleAttribute"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="AttributeManagerImpl" target="AttributeManager"/>
+    <IsRelation name="is" source="Vector4fAttribute" target="AbstractAttribute"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="LimitIntegerAttribute" target="ValueChangeListener"/>
+    <IsRelation name="is" source="Vector2fAttribute" target="AbstractAttribute"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="AbstractAttribute" target="Attribute"/>
+    <IsRelation name="is" source="RelateBooleanAttribute" target="BooleanAttribute"/>
+    <IsRelation name="is" source="LevelFloatAttribute" target="FloatAttribute"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="StringListAttribute" target="CollectionAttribute"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="LevelIntegerAttribute" target="LevelAttribute"/>
+    <IsRelation name="is" source="LongAttribute" target="NumberAttribute"/>
+    <IsRelation name="is" source="SimpleAttribute" target="AbstractAttribute"/>
+    <HasRelation name="simpleListeners" source="SimpleAttribute" target="SimpleValueChangeListener" type="Default" sourceCardinality="0..1" targetCardinality="1..*" collectionType="List"/>
+    <IsRelation name="is" source="StringAttribute" target="SimpleAttribute"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="RelateBooleanAttribute" target="AttributeListener"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="LimitIntegerAttribute" target="LimitAttribute"/>
+    <IsRelation name="is" source="LimitIntegerAttribute" target="IntegerAttribute"/>
+    <HasRelation name="collectionChangeListeners" source="StringListAttribute" target="CollectionChangeListener" type="Default" sourceCardinality="0..1" targetCardinality="1..*" collectionType="List"/>
+    <HasRelation name="attributes" source="AttributeStore" target="Attribute" type="Default" sourceCardinality="0..1" targetCardinality="1..*" collectionType="List"/>
+    <IsRelation name="is" source="NumberAttribute" target="SimpleAttribute"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="LimitIntegerAttribute" target="AttributeListener"/>
+  </ClassDiagramRelations>
+</ClassDiagram>

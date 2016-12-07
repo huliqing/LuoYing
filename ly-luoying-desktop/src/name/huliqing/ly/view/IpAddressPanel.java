@@ -24,16 +24,16 @@ import name.huliqing.luoying.ui.Window;
  */
 public class IpAddressPanel extends Window {
     
-    private IpPanel ipPanel;
+    private final IpPanel ipPanel;
     // 分隔线
-    private Icon line;
+    private final Icon line;
     // 用于输入IP的数字面板
-    private NumPanel numPanel;
+    private final NumPanel numPanel;
     // 连接
-    private Button confirm;
+    private final Button confirm;
     
     public IpAddressPanel(float width, float height) {
-        super(ResourceManager.get("lan.serverIp"), width, height);
+        super(ResourceManager.get(ResConstants.LAN_SERVER_IP), width, height);
         ipPanel = new IpPanel();
         line = new Icon(InterfaceConstants.UI_LINE_H);
         numPanel = new NumPanel();

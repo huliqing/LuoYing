@@ -16,9 +16,9 @@ import name.huliqing.luoying.ui.UIFactory;
  */
 public class ItemTitle extends Title {
 
-    private Text icon;
-    private Text name;
-    private Text total;
+    private final Text icon;
+    private final Text name;
+    private final Text total;
     
     public ItemTitle(float width, float height) {
         super(width, height);

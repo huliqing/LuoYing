@@ -11,6 +11,7 @@ import com.jme3.scene.Spatial;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.LuoYing;
+import name.huliqing.luoying.data.ModelEntityData;
 import name.huliqing.luoying.object.entity.ModelEntity;
 import name.huliqing.luoying.object.entity.TerrainEntity;
 import name.huliqing.luoying.object.scene.Scene;
@@ -24,7 +25,7 @@ import name.huliqing.luoying.object.scene.SceneListenerAdapter;
 public abstract class PlantEntity extends ModelEntity {
     
     private SceneListener sceneListener;
-    
+
     @Override
     protected Spatial loadModel() {
         Spatial temp = LuoYing.getAssetManager().loadModel(data.getAsString("file"));

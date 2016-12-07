@@ -8,10 +8,8 @@ package name.huliqing.ly;
 import com.jme3.app.Application;
 import com.jme3.export.Savable;
 import com.jme3.network.serializing.Serializer;
-import com.jme3.system.AppSettings;
 import java.util.Map;
 import java.util.Map.Entry;
-import name.huliqing.luoying.Config;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.LuoYingException;
@@ -22,7 +20,6 @@ import name.huliqing.luoying.data.ModuleData;
 import name.huliqing.luoying.loader.GameDataLoader;
 import name.huliqing.luoying.manager.ResManager;
 import name.huliqing.luoying.object.Loader;
-import name.huliqing.luoying.object.sound.SoundManager;
 import name.huliqing.luoying.xml.DataFactory;
 import name.huliqing.ly.data.ChatData;
 import name.huliqing.ly.data.ViewData;
@@ -32,10 +29,10 @@ import name.huliqing.ly.layer.service.ChatService;
 import name.huliqing.ly.layer.service.ChatServiceImpl;
 import name.huliqing.ly.loader.ChatDataLoader;
 import name.huliqing.ly.loader.ViewDataLoader;
-import name.huliqing.ly.mess.MessActorSpeak;
-import name.huliqing.ly.mess.MessChatSend;
-import name.huliqing.ly.mess.MessChatShop;
-import name.huliqing.ly.mess.MessMessage;
+import name.huliqing.ly.mess.ActorSpeakMess;
+import name.huliqing.ly.mess.ChatSendMess;
+import name.huliqing.ly.mess.ChatShopMess;
+import name.huliqing.ly.mess.MessageMess;
 import name.huliqing.ly.object.chat.GroupChat;
 import name.huliqing.ly.object.chat.SellChat;
 import name.huliqing.ly.object.chat.SendChat;
@@ -54,7 +51,8 @@ import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.ly.layer.network.GameNetworkImpl;
 import name.huliqing.ly.layer.service.GameService;
 import name.huliqing.ly.layer.service.GameServiceImpl;
-import name.huliqing.ly.mess.MessActionRun;
+import name.huliqing.ly.mess.ActionRunMess;
+import name.huliqing.ly.mess.PlaySkillMess;
 
 /**
  * @author huliqing
@@ -64,11 +62,10 @@ public class Init {
     /**
      * 初始化数据
      * @param app
-     * @param settings 
      */
-    public static void initialize(Application app, AppSettings settings) {
+    public static void initialize(Application app) {
         // 落樱初始化
-        LuoYing.initialize(app, settings);
+        LuoYing.initialize(app);
         
         // 本地初始化
         registerService();
@@ -77,7 +74,7 @@ public class Init {
         loadData();
         
         // 载入配置
-        ConfigData config = (ConfigData) Loader.loadData("configRelease");
+        ConfigData config = (ConfigData) Loader.loadData("config");
         ConfigData configSaved = Factory.get(GameService.class).loadConfig();
         if (configSaved != null && configSaved.getLocalData() != null) {
             Map<String, Savable> saveData = configSaved.getLocalData();
@@ -86,12 +83,6 @@ public class Init {
             }
         }
         LyConfig.setConfigData(config);
-        
-        Config.debug = true;
-        SoundManager.getInstance().setVolume(0.1f);
-        LyConfig.setSpeakTimeWorld(0.02f);
-        LyConfig.setSpeakTimeMin(0.02f);
-        LyConfig.setSpeakTimeMax(0.02f);
         
         // 载入资源
         ResManager.loadResource("/data/font/en_US/resource",               "utf-8", "en_US");
@@ -116,11 +107,12 @@ public class Init {
         Serializer.registerClass(ChatData.class);
         Serializer.registerClass(ViewData.class);
         
-        Serializer.registerClass(MessActionRun.class);
-        Serializer.registerClass(MessActorSpeak.class);
-        Serializer.registerClass(MessChatSend.class);
-        Serializer.registerClass(MessChatShop.class);
-        Serializer.registerClass(MessMessage.class);
+        Serializer.registerClass(ActionRunMess.class);
+        Serializer.registerClass(ActorSpeakMess.class);
+        Serializer.registerClass(ChatSendMess.class);
+        Serializer.registerClass(ChatShopMess.class);
+        Serializer.registerClass(MessageMess.class);
+        Serializer.registerClass(PlaySkillMess.class);
     }
     
     private static void registerService() {

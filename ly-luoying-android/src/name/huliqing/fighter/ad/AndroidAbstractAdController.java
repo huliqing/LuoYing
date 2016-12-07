@@ -9,8 +9,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-import name.huliqing.ly.utils.AdController;
-import name.huliqing.ly.utils.AdType;
+import name.huliqing.luoying.utils.AdController;
+import name.huliqing.luoying.utils.AdType;
 
 /**
  *

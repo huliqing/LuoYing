@@ -1,4 +1,4 @@
-﻿#use notepad++ -> 格式 -> 转为UTF-8编码格式 -> AngelCode 导出bmp font
+#use notepad++ -> 格式 -> 转为UTF-8编码格式 -> AngelCode 导出bmp font
 base=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ`1234567890-=[]\;',./~!@#$%^&*()_+{}|:"<>?
 
 #common
@@ -139,7 +139,7 @@ lan.help.inServerRoom=当前正在游戏房间中，你可以等待其他玩家�
 lan.help.running=这里显示的是当前正在与你联机的玩家，你可以邀请其他人从局域网中进入游戏，不管是故事模式还是局域网模式创建的游戏都可以联机。提示：联机时需要所有参与游戏的手机在同一个网络,一个最简单的组网方式就是打开其中一台手机的wifi热点，让其它手机都连接上这个热点，这样就可以联局域网游戏了，不需要连接互联网，也不需要消耗数据流量(打开手机wifi热点时，把“数据流量”关闭可防止其它人消耗你的流量)。
 
 #==== 技能检查
-skill.undefine=技能未定义错误
+skill.undefine=不能执行技能
 skill.notFound=技能不存在
 skill.locked=技能锁定中
 skill.cooldown=技能冷却中
@@ -214,6 +214,4 @@ task.noTasks=没有接过任务
 #====About 
 about.version=当前版本：%s
 about.home=个人博客：http://www.huliqing.name/
-about.email=个人邮箱：31703299@qq.com
-about.engine=游戏引擎：jMonkeyEngine3.0
 about.more=本游戏还在持续构思和开发中，如果您有好的建议或者发现游戏中的BUG、异常，欢迎给我发送邮件！您还可以到我的个人博客中下载到当前游戏的其它平台版本，包含：Windows、MacOSX、Linux、Android等

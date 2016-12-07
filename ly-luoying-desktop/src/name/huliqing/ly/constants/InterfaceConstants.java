@@ -60,10 +60,10 @@ public class InterfaceConstants {
     public final static String UI_ITEM_TASK = "Interface/icon/userPanel/task.png";
     /** 骷髅头: Interface/icon/skull.png */
     public final static String UI_ITEM_SKULL = "Interface/icon/skull.png";
-    
-    
-    
-    
+    /** 帮助图标Interface/icon/help.png */
+    public final static String UI_HELP = "Interface/icon/help.png";
+    /** Interface/icon/setting.png */
+    public final static String UI_SETTING = "Interface/icon/setting.png";
     
     /** < */
     public final static String UI_ARROW_LEFT1 = "Interface/ui/arrow_left1.png";
@@ -82,7 +82,10 @@ public class InterfaceConstants {
     /** Close图标 */
     public final static String UI_CLOSE = "Interface/map/close.png";
     
-    
+    /** Interface/ui/progress/progress.png */ 
+    public final static String UI_PROGRESS_BAR = "Interface/ui/progress/progress.png";
+    /** Interface/ui/progress/progressCore.png */
+    public final static String UI_PROGRESS_CORE = "Interface/ui/progress/progressCore.png";
     
     /** 金币图标 */
     public final static String ITEM_GOLD = "Interface/item/gold.png";

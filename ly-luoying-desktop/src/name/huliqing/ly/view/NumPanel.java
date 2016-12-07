@@ -28,14 +28,14 @@ public class NumPanel extends Window implements Listener {
         void onConfirm(NumPanel numPanel);
     }
     
-    private LinearLayout bodyPanel;
-    private IconPanel min;
-    private IconPanel sub;
-    private Text text;
-    private IconPanel add;
-    private IconPanel max;
+    private final LinearLayout bodyPanel;
+    private final IconPanel min;
+    private final IconPanel sub;
+    private final Text text;
+    private final IconPanel add;
+    private final IconPanel max;
     
-    private Button button;
+    private final Button button;
     
     // 数值范围限制
     private int minLimit = 0;

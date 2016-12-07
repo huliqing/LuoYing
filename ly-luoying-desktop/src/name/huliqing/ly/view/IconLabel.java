@@ -12,13 +12,14 @@ import name.huliqing.luoying.ui.Text;
 /**
  * 图标和Label
  * @author huliqing
+ * @param <T>
  */
 public class IconLabel<T> extends LinearLayout {
     // 标识
     private T id;
     
-    private Icon icon;
-    private Text label;
+    private final Icon icon;
+    private final Text label;
     
     public IconLabel(T id, String picFile, String text) {
         super(32, 32);

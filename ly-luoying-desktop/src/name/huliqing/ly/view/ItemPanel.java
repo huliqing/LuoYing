@@ -14,8 +14,8 @@ import name.huliqing.luoying.ui.UIFactory;
  * @author huliqing
  */
 public class ItemPanel extends LinearLayout {
-    private ItemTitle title;
-    private ItemList itemList;
+    private final ItemTitle title;
+    private final ItemList itemList;
         
     public ItemPanel(float width, float height, List<TransferData> datas) {
         super(width, height);

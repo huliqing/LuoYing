@@ -94,7 +94,7 @@ public class SpeakImpl extends Speak {
                 .distanceSquared(LuoYing.getApp().getCamera().getLocation());
         if (actor.getScene() != null && checkDistance(distanceSquared)) {
             
-            gameService.addMessage(actor.getSpatial().getName() + ": " + mess, MessageType.talk);
+            gameService.addMessage(gameService.getName(actor) + ": " + mess, MessageType.talk);
             
         }
     }

@@ -127,7 +127,7 @@
     <!--复活术-->
     <!--==========================================================================-->
     <animScale id="animRebornScaleS" extends="animCommonScaleS" useTime="0.5" />
-    <animScale id="animRebornRot" extends="animCommonRotY" useTime="0.5" />
+    <animRotation id="animRebornRot" extends="animCommonRotY" useTime="0.5" />
     <animScale id="animRebornScaleH" extends="animCommonScaleH" useTime="0.3" />
     
     <!--==========================================================================-->

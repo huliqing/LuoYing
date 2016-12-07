@@ -7,8 +7,8 @@ package name.huliqing.ly.layer.network;
 import name.huliqing.luoying.Factory;
 import name.huliqing.ly.layer.service.ChatService;
 import name.huliqing.luoying.network.Network;
-import name.huliqing.ly.mess.MessChatSend;
-import name.huliqing.ly.mess.MessChatShop;
+import name.huliqing.ly.mess.ChatSendMess;
+import name.huliqing.ly.mess.ChatShopMess;
 import name.huliqing.luoying.object.entity.Entity;
 
 /**
@@ -25,7 +25,7 @@ public class ChatNetworkImpl implements ChatNetwork {
 
     @Override
     public void chatShop(Entity seller, Entity buyer, long objectId, int count, float discount) {
-        MessChatShop mess = new MessChatShop();
+        ChatShopMess mess = new ChatShopMess();
         mess.setSeller(seller.getData().getUniqueId());
         mess.setBuyer(buyer.getData().getUniqueId());
         mess.setObjectId(objectId);
@@ -63,7 +63,7 @@ public class ChatNetworkImpl implements ChatNetwork {
 
     @Override
     public void chatSend(Entity sender, Entity receiver, long objectId, int amount) {
-        MessChatSend mess = new MessChatSend();
+        ChatSendMess mess = new ChatSendMess();
         mess.setAmount(amount);
         mess.setObjectId(objectId);
         mess.setReceiver(receiver.getEntityId());

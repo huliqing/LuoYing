@@ -172,7 +172,8 @@ public class UIConfigImpl implements UIConfig {
 
     @Override
     public boolean isSoundEnabled() {
-        return true;
+        // 暂不使用UI音效，在Android下获取ogg音效路径时还需要另外设置。
+        return false;
     }
 
     @Override

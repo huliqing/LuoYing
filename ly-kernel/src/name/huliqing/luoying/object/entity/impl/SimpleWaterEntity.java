@@ -11,7 +11,7 @@ import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import name.huliqing.luoying.LuoYing;
-import name.huliqing.luoying.data.EntityData;
+import name.huliqing.luoying.data.ModelEntityData;
 import name.huliqing.luoying.object.entity.ModelEntity;
 import name.huliqing.luoying.processor.VerySimpleWaterProcessor;
 import name.huliqing.luoying.object.entity.WaterEntity;
@@ -42,8 +42,8 @@ public class SimpleWaterEntity extends ModelEntity implements WaterEntity {
     private VerySimpleWaterProcessor water;
     
     @Override
-    public void setData(EntityData data) {
-        super.setData(data);
+    public void setData(ModelEntityData data) {
+        super.setData(data); 
         waterModelFile = data.getAsString("waterModel");
         waterColor = data.getAsColor("waterColor");
         texScale = data.getAsFloat("texScale", texScale);

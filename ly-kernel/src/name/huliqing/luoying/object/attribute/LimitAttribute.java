@@ -6,7 +6,7 @@
 package name.huliqing.luoying.object.attribute;
 
 /**
- *
+ * LimitAttribute主要用于定义一些可以限制值大小的属性类型。
  * @author huliqing
  * @param <T>
  */

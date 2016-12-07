@@ -12,6 +12,8 @@ import com.jme3.util.TempVars;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.AnimData;
 import name.huliqing.luoying.layer.service.ActorService;
@@ -26,6 +28,9 @@ import name.huliqing.luoying.utils.DebugDynamicUtils;
  * @author huliqing
  */
 public class ActorCurveMove extends ActorAnim {
+
+    private static final Logger LOG = Logger.getLogger(ActorCurveMove.class.getName());
+    
     private final ActorService actorService = Factory.get(ActorService.class);
     private final SceneService sceneService = Factory.get(SceneService.class);
     
@@ -64,6 +69,7 @@ public class ActorCurveMove extends ActorAnim {
     
     private NumberAttribute targetAttribute;
 
+    
     @Override
     public void setData(AnimData data) {
         super.setData(data);
@@ -117,7 +123,7 @@ public class ActorCurveMove extends ActorAnim {
                 // 把该点移动到地面上（有部分点可能在地面下），这可防止角色掉到地下。
                 if (upperGround) {
                     Vector3f terrainHeight = sceneService.getSceneHeight(target.getScene(), tv.vect1.x, tv.vect1.z);
-                    if (terrainHeight != null) {
+                    if (terrainHeight != null && tv.vect1.y < terrainHeight.y) {
                         tv.vect1.set(terrainHeight);
                     }
                 }
@@ -193,11 +199,9 @@ public class ActorCurveMove extends ActorAnim {
         if (interpolation >= 1) {
             // end
             actorService.setLocation(target, spline.getControlPoints().get(spline.getControlPoints().size() - 1));
-            
         } else {
             // local必须在计算出facing后再设置
             actorService.setLocation(target, tv.vect1);
-            
         }
         tv.release();
     }

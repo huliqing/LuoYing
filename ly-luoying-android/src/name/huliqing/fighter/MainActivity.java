@@ -19,12 +19,12 @@ import name.huliqing.fighter.ad.AdManager.Ad;
 import name.huliqing.fighter.ad.AndroidAbstractAdController;
 import name.huliqing.fighter.android.AndroidSaveServiceImpl;
 import name.huliqing.fighter.android.AndroidSystemServiceImpl;
-import name.huliqing.ly.layer.service.ConfigService;
-import name.huliqing.ly.layer.service.SaveService;
-import name.huliqing.ly.layer.service.SystemService;
-import name.huliqing.ly.utils.AdController;
-import name.huliqing.ly.utils.AdUtils;
-import name.huliqing.ly.Factory;
+import name.huliqing.luoying.layer.service.ConfigService;
+import name.huliqing.luoying.layer.service.SaveService;
+import name.huliqing.luoying.layer.service.SystemService;
+import name.huliqing.luoying.utils.AdController;
+import name.huliqing.luoying.utils.AdUtils;
+import name.huliqing.luoying.Factory;
 import name.huliqing.vc.VersionChecker;
  
 public class MainActivity extends Activity {
@@ -67,11 +67,6 @@ public class MainActivity extends Activity {
     }
     
     private void afterStart() {
-         // ==== 配置信息更改
-        ConfigService cs = (ConfigService) Factory.get(ConfigService.class);
-        // 当前版本Android下不能支持Shadow
-        cs.setUseShadow(false);
-        
         // ==== 检查并载入广告
         loadAd();
     }
@@ -133,7 +128,7 @@ public class MainActivity extends Activity {
     public static class JmeFragment extends AndroidHarnessFragment {
         public JmeFragment() {
             // Set main project class (fully qualified path)
-            appClass = "name.huliqing.luoying.LuoYing";
+            appClass = "name.huliqing.ly.Start";
  
             // Set the desired EGL configuration
             eglBitsPerPixel = 24;

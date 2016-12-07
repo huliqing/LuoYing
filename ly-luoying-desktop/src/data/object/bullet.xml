@@ -43,7 +43,7 @@
     <bulletStraight id="bulletSnow" extends="bulletStraightBase" trace="1" effects="effectSnowBullet" hitEffects="effectSnowExplosion" />
     
     <!--增益: 加血，加魔，加状态，会跟随，保证不失手-->
-    <bulletCurve id="bulletBuff" extends="bulletStraightBase" shape="shapeBulletBoxMin" shapeOffset="0,0,0" trace="1" effects="effectBuffBullet" hitEffects="effectBuffHit" positions="emitterShapeBuff"/>
+    <bulletCurve id="bulletBuff" extends="bulletStraightBase" shape="shapeBulletBoxMin" shapeOffset="0,0,0" trace="1" effects="effectBuffBullet" hitEffects="effectBuffHit" positions="positionShapeBuff"/>
     
     <!--=====================================================================-->
     <!--特殊技能子弹-->
@@ -70,5 +70,5 @@
     <!--二刀流冲击波-->
     <!--=====================================================================-->
      <bulletCurve id="bulletWave" extends="bulletStraightBase" effects="effectWave" 
-                  trace="1" hitEffects="effectFlowLightHit" positions="emitterShapeWave" />
+                  trace="1" hitEffects="effectFlowLightHit" positions="positionShapeWave" />
 </root>

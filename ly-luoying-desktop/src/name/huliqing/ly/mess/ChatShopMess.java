@@ -16,40 +16,35 @@ import name.huliqing.luoying.network.GameServer;
 import name.huliqing.luoying.object.entity.Entity;
 
 /**
- * 角色向另一个角色出售商品
+ * 角色向另一个角色购买商品
  * @author huliqing
  */
 @Serializable
-public class MessChatSend extends GameMess {
+public class ChatShopMess extends GameMess {
     private final transient PlayService playService = Factory.get(PlayService.class);
     private final transient ChatNetwork chatNetwork = Factory.get(ChatNetwork.class);
     private final transient ChatService chatService = Factory.get(ChatService.class);
-    
-    // 出售者
-    private long sender;
-    // 购买者
-    private long receiver;
-    
-    // 发送的物品ID
+        
+    private long seller;
+    private long buyer;
     private long objectId;
-    
-    // 发送的物品数量
-    private int amount;
-
-    public long getSender() {
-        return sender;
+    private int count;
+    private float discount;
+ 
+    public long getSeller() {
+        return seller;
     }
 
-    public void setSender(long sender) {
-        this.sender = sender;
+    public void setSeller(long seller) {
+        this.seller = seller;
     }
 
-    public long getReceiver() {
-        return receiver;
+    public long getBuyer() {
+        return buyer;
     }
 
-    public void setReceiver(long receiver) {
-        this.receiver = receiver;
+    public void setBuyer(long buyer) {
+        this.buyer = buyer;
     }
 
     public long getObjectId() {
@@ -60,34 +55,42 @@ public class MessChatSend extends GameMess {
         this.objectId = objectId;
     }
 
-    public int getAmount() {
-        return amount;
+    public int getCount() {
+        return count;
     }
 
-    public void setAmount(int amount) {
-        this.amount = amount;
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public float getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(float discount) {
+        this.discount = discount;
     }
 
     @Override
     public void applyOnServer(GameServer gameServer, HostedConnection source) {
         super.applyOnServer(gameServer, source);
-        Entity sActor = playService.getEntity(sender);
-        Entity rActor = playService.getEntity(receiver);
-        if (sActor == null || rActor == null) {
+        Entity sellerActor = playService.getEntity(seller);
+        Entity buyerActor = playService.getEntity(buyer);
+        if (sellerActor == null || buyerActor == null) {
             return;
         }
-        chatNetwork.chatSend(sActor, rActor, objectId, amount);
+        chatNetwork.chatShop(sellerActor, buyerActor, objectId, count, discount);
     }
 
     @Override
     public void applyOnClient(GameClient gameClient) {
         super.applyOnClient(null);
-        Entity sActor = playService.getEntity(sender);
-        Entity rActor = playService.getEntity(receiver);
-        if (sActor == null || rActor == null) {
+        Entity sellerActor = playService.getEntity(seller);
+        Entity buyerActor = playService.getEntity(buyer);
+        if (sellerActor == null || buyerActor == null) {
             return;
         }
-        chatService.chatSend(sActor, rActor, objectId, amount);
+        chatService.chatShop(sellerActor, buyerActor, objectId, count, discount);
     }
     
 }

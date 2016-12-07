@@ -9,6 +9,7 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.math.Vector4f;
 import java.util.List;
+import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.data.ConfigData;
@@ -18,12 +19,17 @@ import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.layer.service.SaveService;
 import name.huliqing.luoying.layer.service.SceneService;
+import name.huliqing.luoying.layer.service.SkillService;
+import name.huliqing.luoying.log.StateCode;
+import name.huliqing.luoying.manager.ResManager;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.skill.Skill;
 import name.huliqing.luoying.save.SaveHelper;
 import name.huliqing.luoying.save.SaveStory;
 import name.huliqing.ly.Start;
 import name.huliqing.ly.constants.AttrConstants;
+import name.huliqing.ly.constants.ResConstants;
 import name.huliqing.ly.constants.SaveConstants;
 import name.huliqing.ly.enums.MessageType;
 import name.huliqing.ly.object.game.SimpleRpgGame;
@@ -37,14 +43,14 @@ import name.huliqing.ly.view.talk.TalkManager;
  * @author huliqing
  */
 public class GameServiceImpl implements GameService {
-
-//    private static final Logger LOG = Logger.getLogger(GameServiceImpl.class.getName());
+    private static final Logger LOG = Logger.getLogger(GameServiceImpl.class.getName());
 
     private PlayService playService;
     private EntityService entityService;
     private ActionService actionService;
     private SceneService sceneService;
     private SaveService saveService;
+    private SkillService skillService;
     
     @Override
     public void inject() {
@@ -53,6 +59,7 @@ public class GameServiceImpl implements GameService {
         actionService = Factory.get(ActionService.class);
         sceneService = Factory.get(SceneService.class);
         saveService = Factory.get(SaveService.class);
+        skillService = Factory.get(SkillService.class);
     }
     
     @Override
@@ -306,6 +313,58 @@ public class GameServiceImpl implements GameService {
     public ConfigData loadConfig() {
         return saveService.loadSavable(SaveConstants.SAVE_CONFIG_KEY);
     }
+    
+    @Override
+    public void playSkill(Entity entity, String skillId) {
+        Skill skill = skillService.getSkill(entity, skillId);
+        if (!isSkillPlayable(entity, skill)) {
+            return;
+        }
+        skillService.playSkill(entity, skill, true);
+    }
 
+    private boolean isSkillPlayable(Entity entity, Skill skill) {
+        int stateCode = skillService.checkStateCode(entity, skill);
+        if (stateCode != StateCode.OK) {
+            switch (stateCode) {
+                case StateCode.SKILL_ATTRIBUTE_NOT_ENOUGH:
+                    addMessage(ResManager.get(ResConstants.SKILL_MANA_NOT_ENOUGH), MessageType.notice);
+                    break;
+                case StateCode.SKILL_COOLDOWN:
+                    addMessage(ResManager.get(ResConstants.SKILL_COOLDOWN), MessageType.notice);
+                    break;
+                case StateCode.SKILL_LOCKED:
+                    addMessage(ResManager.get(ResConstants.SKILL_LOCKED), MessageType.notice);
+                    break;
+                case StateCode.SKILL_NOT_FOUND:
+                    addMessage(ResManager.get(ResConstants.SKILL_NOT_FOUND), MessageType.notice);
+                    break;
+                case StateCode.SKILL_TARGET_NOT_FOUND:
+                    addMessage(ResManager.get(ResConstants.SKILL_TARGET_NOT_FOUND), MessageType.notice);
+                    break;
+                case StateCode.SKILL_TARGET_OUT_OF_RANGE:
+                    addMessage(ResManager.get(ResConstants.SKILL_TARGET_NOT_IN_RANGE), MessageType.notice);
+                    break;
+                case StateCode.SKILL_TARGET_UNSUITABLE_BY_ELCHECK:
+                    addMessage(ResManager.get(ResConstants.SKILL_TARGET_UNSUITABLE), MessageType.notice);
+                    break;
+                case StateCode.SKILL_WEAPON_NEED_TAKE_ON:
+                    addMessage(ResManager.get(ResConstants.SKILL_WEAPON_NEED_TAKE_ON), MessageType.notice);
+                    break;
+                case StateCode.SKILL_WEAPON_NOT_ALLOW:
+                    addMessage(ResManager.get(ResConstants.SKILL_WEAPON_NOT_ALLOW), MessageType.notice);
+                    break;
+                case StateCode.SKILL_CAN_NOT_INTERRUPT:
+                case StateCode.SKILL_DEAD:
+                case StateCode.SKILL_ELCHECK:
+                case StateCode.SKILL_HOOK:
+                case StateCode.UNDEFINE:
+                default :
+                    addMessage(ResManager.get(ResConstants.SKILL_UNDEFINE), MessageType.notice);
+            }
+            return false;
+        }
+        return true;
+    }
     
 }

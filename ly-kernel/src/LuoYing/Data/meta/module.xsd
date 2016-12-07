@@ -187,17 +187,23 @@ xs:time
                 <xs:extension base="moduleBase">
                     <xs:attribute name="bindLevelAttribute" type="xs:string" use="required">
                         <xs:annotation>
-                            <xs:documentation>bind NumberAttribute, 角色的等级属性名称，这个属性用于存放角色的等级值,当角色的等级变化后会存取在这个属性中。</xs:documentation>
+                            <xs:documentation>NumberAttribute, 角色的等级属性名称，这个属性用于存放角色的等级值,当角色的等级变化后会存取在这个属性中。</xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
                     <xs:attribute name="bindXpAttribute" type="xs:string" use="required">
                         <xs:annotation>
-                            <xs:documentation>bind NumberAttribute, 角色的经验值（xp）属性名称，模块通过这个属性的值变化来计算角色的等级值。</xs:documentation>
+                            <xs:documentation>NumberAttribute, 角色的经验值（xp）属性名称，模块通过这个属性的值变化来计算角色的等级值。</xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
                     <xs:attribute name="bindXpNextAttribute" type="xs:string" use="required">
                         <xs:annotation>
-                            <xs:documentation>bind NumberAttribute, 到达下一个等级角色需要的经验值（xp）属性名称，模块在运行时会自动把下一等级需要的经验值计算后放在这个属性上。</xs:documentation>
+                            <xs:documentation>NumberAttribute, 到达下一个等级角色需要的经验值（xp）属性名称，模块在运行时会自动把下一等级需要的经验值计算后放在这个属性上。</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="bindLevelUpEnabledAttribute" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>BooleanAttribute, 该属性用于控制是否允许角色在游戏过程中动态升级，即通过xp的累积来升级角色等级，
+                                角色初始化、或者直接设置角色的等级属性则不受这个参数的影响。</xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
                     <xs:attribute name="xpLevelEl" type="xs:string" use="required">

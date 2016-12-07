@@ -11,18 +11,25 @@ import com.jme3.math.Vector4f;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.luoying.layer.network.PlayNetwork;
+import name.huliqing.luoying.layer.network.SkillNetwork;
 import name.huliqing.luoying.layer.service.SceneService;
-import name.huliqing.ly.mess.MessActionRun;
+import name.huliqing.luoying.layer.service.SkillService;
+import name.huliqing.luoying.log.StateCode;
+import name.huliqing.luoying.manager.ResManager;
+import name.huliqing.ly.mess.ActionRunMess;
 import name.huliqing.luoying.mess.EntityHitAttributeMess;
 import name.huliqing.luoying.mess.EntityRemoveDataMess;
 import name.huliqing.luoying.mess.EntityUseDataByIdMess;
 import name.huliqing.luoying.network.Network;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.skill.Skill;
 import name.huliqing.ly.constants.AttrConstants;
+import name.huliqing.ly.constants.ResConstants;
 import name.huliqing.ly.enums.MessageType;
-import name.huliqing.ly.mess.MessActorSpeak;
+import name.huliqing.ly.mess.ActorSpeakMess;
 import name.huliqing.ly.layer.service.GameService;
-import name.huliqing.ly.mess.MessMessage;
+import name.huliqing.ly.mess.MessageMess;
+import name.huliqing.ly.mess.PlaySkillMess;
 import name.huliqing.ly.view.talk.Talk;
 import name.huliqing.ly.view.talk.TalkManager;
 
@@ -38,6 +45,8 @@ public class GameNetworkImpl implements GameNetwork {
     private SceneService sceneService;
     private EntityNetwork entityNetwork;
     private PlayNetwork playNetwork;
+    private SkillService skillService;
+    private SkillNetwork skillNetwork;
     
     @Override
     public void inject() {
@@ -45,6 +54,8 @@ public class GameNetworkImpl implements GameNetwork {
         sceneService = Factory.get(SceneService.class);
         entityNetwork = Factory.get(EntityNetwork.class);
         playNetwork = Factory.get(PlayNetwork.class);
+        skillService = Factory.get(SkillService.class);
+        skillNetwork = Factory.get(SkillNetwork.class);
     }
 
     @Override
@@ -53,7 +64,7 @@ public class GameNetworkImpl implements GameNetwork {
             return;
         }
         
-        MessMessage mess = new MessMessage();
+        MessageMess mess = new MessageMess();
         mess.setMessage(message);
         mess.setType(type);
         network.broadcast(mess);
@@ -66,7 +77,7 @@ public class GameNetworkImpl implements GameNetwork {
         if (network.isClient()) {
             // ignore
         } else {
-            MessActorSpeak mas = new MessActorSpeak();
+            ActorSpeakMess mas = new ActorSpeakMess();
             mas.setActorId(actor.getData().getUniqueId());
             mas.setMess(mess);
             network.broadcast(mas);
@@ -92,7 +103,7 @@ public class GameNetworkImpl implements GameNetwork {
         }
         
         if (network.isClient()) {
-            MessActionRun runAction = new MessActionRun();
+            ActionRunMess runAction = new ActionRunMess();
             runAction.setActorId(actor.getData().getUniqueId());
             runAction.setPos(worldPos);
             network.sendToServer(runAction);
@@ -226,5 +237,23 @@ public class GameNetworkImpl implements GameNetwork {
         }
         return entityNetwork.removeObjectData(entity, objectUniqueId, amount);
     }
+    
+    @Override
+    public void playSkill(Entity entity, String skill) {
+        PlaySkillMess mess = new PlaySkillMess();
+        mess.setEntityId(entity.getEntityId());
+        mess.setSkillId(skill);
+        
+        // on client
+        if (network.isClient()) {
+            network.sendToServer(mess);
+            return;
+        }
+        
+        // on server
+        network.broadcast(mess);
+        gameService.playSkill(entity, skill);
+    }
+    
     
 }

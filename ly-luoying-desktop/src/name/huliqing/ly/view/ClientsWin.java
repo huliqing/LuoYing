@@ -13,6 +13,7 @@ import name.huliqing.luoying.ui.LinearLayout;
 import name.huliqing.luoying.ui.UIFactory;
 import name.huliqing.luoying.ui.UI;
 import name.huliqing.luoying.ui.Window;
+import name.huliqing.ly.constants.ResConstants;
 
 /**
  * 封装客户端列表的window
@@ -38,20 +39,20 @@ public class ClientsWin extends Window {
     public ClientsWin(final LanGame lanGame, float width, float height) {
         super(width, height);
         this.lanGame = lanGame;
-        setTitle(ResourceManager.get("lan.clients"));
+        setTitle(ResourceManager.get(ResConstants.LAN_CLIENTS));
         
         clientsView = new ClientsView();
         
         help = new HelpView(width - 20
                 , UIFactory.getUIConfig().getButtonHeight()
-                , ResourceManager.get("lan.help.running"));
+                , ResourceManager.get(ResConstants.LAN_HELP_RUNNING));
 //        help.setDebug(true);
         
         help.setMargin(10, 0, 0, 0);
         helpPanel = new LinearLayout();
         helpPanel.addView(help);
         
-        btnKick = new Button(ResourceManager.get("lan.kick"));
+        btnKick = new Button(ResourceManager.get(ResConstants.LAN_KICK));
         btnKick.addClickListener(new Listener() {
             @Override
             public void onClick(UI ui, boolean isPress) {

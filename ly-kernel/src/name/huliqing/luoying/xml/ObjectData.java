@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 import name.huliqing.luoying.LuoYingException;
+import name.huliqing.luoying.data.SavableString;
 
 /**
  * 物品基类,对于运行时，所有可动态改变的参数都需要封装在Data内。
@@ -112,6 +113,8 @@ public class ObjectData implements Savable, Cloneable {
         Savable s = localData.get(key);
         if (s instanceof UserData) {
             return ((UserData) s).getValue();
+        } else if (s instanceof SavableString) {
+            return ((SavableString)s).getValue();
         } else {
             return s;
         }
@@ -134,10 +137,11 @@ public class ObjectData implements Savable, Cloneable {
             if (localData == null) {
                 localData = new HashMap<String, Savable>();
             }
-            if (value instanceof Savable) {
+            if (value instanceof String) {
+                localData.put(key, new SavableString((String) value));
+            } else if (value instanceof Savable) {
                 localData.put(key, (Savable) value);
             } else {
-//                localData.put(key, new CustomUserData(CustomUserData.getObjectType(value), value));
                 localData.put(key, new UserData(UserData.getObjectType(value), value));
             }
         }

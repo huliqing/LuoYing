@@ -18,7 +18,7 @@
     <actorAnimCurveMove id="actorAnimDuckRollRight" extends="actorAnimBase" points="-3|0|3" facing="target" useSine="1" />
     
     <!--复活术：让死亡角色轻飘飘向上浮动-->
-    <actorAnimCurveMove id="actorAnimMoveUp" extends="actorAnimBase" speed="0.25" loop="" points="0|3|0" tension="0" />
+    <actorAnimCurveMove id="actorAnimMoveUp" extends="actorAnimBase" speed="0.25" loop="dontLoop" points="0|2.5|0" tension="0" />
 </root>
 
 

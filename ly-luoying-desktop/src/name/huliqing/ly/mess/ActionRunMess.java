@@ -21,7 +21,7 @@ import name.huliqing.ly.layer.network.GameNetwork;
  * @author huliqing
  */
 @Serializable
-public class MessActionRun extends GameMess {
+public class ActionRunMess extends GameMess {
     
     // 角色唯一id
     private long actorId;

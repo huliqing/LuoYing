@@ -7,7 +7,6 @@ package name.huliqing.luoying.object.attribute;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 import name.huliqing.luoying.data.AttributeData;
 
 /**
@@ -15,7 +14,7 @@ import name.huliqing.luoying.data.AttributeData;
  * @param <T> 
  */
 public abstract class AbstractAttribute<T> implements Attribute<T> {
-    private static final Logger LOG = Logger.getLogger(SimpleAttribute.class.getName());
+//    private static final Logger LOG = Logger.getLogger(SimpleAttribute.class.getName());
     
     /** return "value" */
     protected final static String ATTR_VALUE = "value";

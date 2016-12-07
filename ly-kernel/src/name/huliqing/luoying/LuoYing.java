@@ -53,6 +53,7 @@ import name.huliqing.luoying.data.ResistData;
 import name.huliqing.luoying.data.SavableArrayList;
 import name.huliqing.luoying.data.SceneData;
 import name.huliqing.luoying.data.ProgressData;
+import name.huliqing.luoying.data.SavableString;
 import name.huliqing.luoying.data.ShapeData;
 import name.huliqing.luoying.data.ShortcutData;
 import name.huliqing.luoying.data.SkillData;
@@ -299,17 +300,16 @@ public class LuoYing {
     private static final Logger LOG = Logger.getLogger(LuoYing.class.getName());
     
     private static Application app;
-    private static AppSettings settings; 
+//    private static AppSettings settings; 
     private static BitmapFont font;
     
     /**
      * 初始化环境, 这个方法必须在
      * @param app
-     * @param settings 
      */
-    public static void initialize(Application app, AppSettings settings) {
+    public static void initialize(Application app) {
         LuoYing.app = app;
-        LuoYing.settings = settings;
+//        LuoYing.settings = settings;
         
         // 注册需要序列化的数据，对于网络版进行序列化时需要用到。
         registerSerializer();
@@ -380,6 +380,7 @@ public class LuoYing {
         Serializer.registerClass(ProgressData.class);
         Serializer.registerClass(ResistData.class);
         Serializer.registerClass(SavableArrayList.class);
+        Serializer.registerClass(SavableString.class);
         Serializer.registerClass(SceneData.class);
         Serializer.registerClass(ShapeData.class);
         Serializer.registerClass(ShortcutData.class);
@@ -621,7 +622,6 @@ public class LuoYing {
         
         loadData("/LuoYing/Data/action.xml");
         loadData("/LuoYing/Data/channel.xml");
-        loadData("/LuoYing/Data/config.xml");
         loadData("/LuoYing/Data/el.xml");
         loadData("/LuoYing/Data/entity.xml");
         loadData("/LuoYing/Data/game.xml");
@@ -629,6 +629,7 @@ public class LuoYing {
         loadData("/LuoYing/Data/scene.xml");
         loadData("/LuoYing/Data/progress.xml");
         
+//        loadData("/LuoYing/Data/config.xml");
 //        loadData("/LuoYing/Data/actor.xml");
 //        loadData("/LuoYing/Data/actorAnim.xml");
 //        loadData("/LuoYing/Data/anim.xml");
@@ -779,12 +780,11 @@ public class LuoYing {
     }
 
     public static AppSettings getSettings() {
-        return settings;
+        return app.getContext().getSettings();
     }
     
     public static BitmapFont getFont() {
         if (font == null) {
-//            font = getAssetManager().loadFont("data/font/chinese.fnt");
             font = getAssetManager().loadFont("Interface/Fonts/Default.fnt");
         }
         return font;

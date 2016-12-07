@@ -4,6 +4,7 @@
  */
 package name.huliqing.luoying.ui;
 
+import com.jme3.audio.AudioData.DataType;
 import com.jme3.audio.AudioNode;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,23 +43,25 @@ public class UISound {
         audio.play();
     }
     
-    /**
-     * 播放双击时的音效
-     */
-    public static void playDoubleClick(UI ui) {
-        throw new UnsupportedOperationException();
-    }
-    
-    /**
-     * 播放移动时的音效
-     */
-    public static void playMoving(UI ui) {
-        throw new UnsupportedOperationException();
-    }
+//    /**
+//     * 播放双击时的音效
+//     * @param ui
+//     */
+//    public static void playDoubleClick(UI ui) {
+//        //throw new UnsupportedOperationException();
+//    }
+//    
+//    /**
+//     * 播放移动时的音效
+//     * @param ui
+//     */
+//    public static void playMoving(UI ui) {
+//        //throw new UnsupportedOperationException();
+//    }
     
     private static AudioNode createAudio(String file) {
         // 需要缓存
-        AudioNode audio = new AudioNode(UIFactory.getUIConfig().getAssetManager(), file);
+        AudioNode audio = new AudioNode(UIFactory.getUIConfig().getAssetManager(), file, DataType.Buffer);
         audio.setName(file);
         audio.setPositional(false);
         audio.setReverbEnabled(false);

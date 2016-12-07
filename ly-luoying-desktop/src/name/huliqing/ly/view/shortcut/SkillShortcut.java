@@ -21,9 +21,13 @@ import name.huliqing.luoying.layer.network.ActorNetwork;
 import name.huliqing.luoying.layer.network.SkillNetwork;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.layer.service.SkillService;
+import name.huliqing.luoying.log.StateCode;
+import name.huliqing.luoying.manager.ResManager;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.skill.Skill;
 import name.huliqing.luoying.utils.MaterialUtils;
+import name.huliqing.ly.constants.ResConstants;
+import name.huliqing.ly.enums.MessageType;
 import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.ly.layer.service.GameService;
 
@@ -32,10 +36,8 @@ import name.huliqing.ly.layer.service.GameService;
  * @author huliqing
  */
 public class SkillShortcut extends BaseUIShortcut<SkillData> {
-    private final PlayService playService = Factory.get(PlayService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
-    private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final GameService gameService = Factory.get(GameService.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     
@@ -123,18 +125,17 @@ public class SkillShortcut extends BaseUIShortcut<SkillData> {
                 needCheckAndUpdateMask = true;
             }
             Skill skill = skillService.getSkill(actor, objectData.getId());
-            if (skill != null) {
-                
-                // 一些技能在执行前必须设置目标对象。
-                // 注意：这个方法必须放在这里，playService.getTarget()是获取当前游戏主目标，是“玩家行为”，不能把它
-                // 放到skillNetwork.playSkill中去。
-                Entity target = gameService.getTarget();
-                if (target != null) {
-                    gameNetwork.setTarget(actor, target.getEntityId());
-                }
-                
-                skillNetwork.playSkill(actor, skill, false);
+            if (skill == null) 
+                return;
+
+            // 一些技能在执行前必须设置目标对象。
+            // 注意：gameService.getTarget()是获取当前游戏主目标，是“玩家行为”，不能把它
+            // 放到skillNetwork.playSkill中去。
+            Entity target = gameService.getTarget();
+            if (target != null) {
+                gameNetwork.setTarget(actor, target.getEntityId());
             }
+            gameNetwork.playSkill(actor, skill.getData().getId());
         }
     }
 

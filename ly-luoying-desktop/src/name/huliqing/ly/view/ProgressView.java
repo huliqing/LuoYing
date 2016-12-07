@@ -7,14 +7,13 @@ package name.huliqing.ly.view;
 import com.jme3.math.ColorRGBA;
 import name.huliqing.luoying.ui.FrameLayout;
 import name.huliqing.luoying.ui.Icon;
+import name.huliqing.ly.constants.InterfaceConstants;
 
 /**
  * 进度条
  * @author huliqing
  */
 public class ProgressView extends FrameLayout {
-    private String pathProgress = "Interface/ui/progress/progress.png";
-    private String pathCore = "Interface/ui/progress/progressCore.png";
     
     // 进度条外框
     private Icon progress;
@@ -39,9 +38,9 @@ public class ProgressView extends FrameLayout {
     private void init() {
         progress = new Icon();
         core = new Icon();
-        progress.setImage(pathProgress);
+        progress.setImage(InterfaceConstants.UI_PROGRESS_BAR);
         progress.setUseAlpha(true);
-        core.setImage(pathCore);
+        core.setImage(InterfaceConstants.UI_PROGRESS_CORE);
         core.setUseAlpha(true);
         addView(progress);
         addView(core);
@@ -85,7 +84,8 @@ public class ProgressView extends FrameLayout {
         if (maxValue <= 0) {
             core.setWidth(0);
         } else {
-            core.setWidth(value / maxValue * width);
+            float coreWidth = value / maxValue * width;
+            core.setWidth(coreWidth > width ? width : coreWidth);
         }
         
     }

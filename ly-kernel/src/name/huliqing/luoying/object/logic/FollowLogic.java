@@ -13,6 +13,7 @@ import name.huliqing.luoying.layer.service.ActionService;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.action.Action;
+import name.huliqing.luoying.object.action.FightAction;
 import name.huliqing.luoying.object.attribute.Attribute;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.attribute.ValueChangeListener;
@@ -69,8 +70,8 @@ public class FollowLogic extends AbstractLogic implements ValueChangeListener {
         // 触发跟随行为的变化。
         if (followAttribute != null) {
             followAttribute.addListener(this);
+            checkToFollow();
         }
-        checkToFollow();
     }
     
     @Override
@@ -87,9 +88,6 @@ public class FollowLogic extends AbstractLogic implements ValueChangeListener {
     }
     
     private void checkToFollow() {
-        if (followAttribute == null) 
-            return;
-        
         // 获取跟随对象。
         Entity newTarget = playService.getEntity(followAttribute.longValue());
         
@@ -106,8 +104,16 @@ public class FollowLogic extends AbstractLogic implements ValueChangeListener {
         if (followAttribute == null) 
             return;
         
-        if (lastFollow == null) 
+        if (lastFollow == null) {
+            if (followAttribute.longValue() > 0) {
+                checkToFollow();
+            }
             return;
+        }
+        
+        if (isFighting()) {
+            return;
+        }
         
         // 跟随
         if (followAction.isEnd() && actor.getSpatial().getWorldTranslation().distance(lastFollow.getSpatial().getWorldTranslation()) > maxFollow) {
@@ -119,6 +125,10 @@ public class FollowLogic extends AbstractLogic implements ValueChangeListener {
 //        LOG.log(Level.INFO, "Start follow, follower={0}, target={1}"
 //                , new Object[] {actor.getData().getId(), target.getData().getId()});
         lastFollow = target;
+        
+        if (isFighting()) {
+            return;
+        }
         lastFollowDistance = FastMath.nextRandomFloat() * (maxFollow - minFollow) + minFollow;
         followAction.setFollow(lastFollow.getSpatial());
         followAction.setNearest(lastFollowDistance);
@@ -135,4 +145,7 @@ public class FollowLogic extends AbstractLogic implements ValueChangeListener {
         }
     }
     
+    private boolean isFighting() {
+        return actionModule.getAction() instanceof FightAction;
+    }
 }

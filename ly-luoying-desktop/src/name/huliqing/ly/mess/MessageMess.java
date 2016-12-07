@@ -16,7 +16,7 @@ import name.huliqing.ly.layer.service.GameService;
  * @author huliqing
  */
 @Serializable
-public class MessMessage extends GameMess {
+public class MessageMess extends GameMess {
     
     private String message;
     private MessageType type = MessageType.notice;

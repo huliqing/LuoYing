@@ -59,13 +59,12 @@ public class ActorModelLoader {
             Spatial temp = actorModel;
             actorModel = new Node();
             ((Node) actorModel).attachChild(temp);
-            // 当actor附带有effect时，必须把角色原始model设置为不透明的
-            // 否则添加的效果可能会被角色model挡住在后面。(JME3.0存在该问题)
-            temp.setQueueBucket(RenderQueue.Bucket.Opaque);
+            
+            // remove20161207
+//            // 当actor附带有effect时，必须把角色原始model设置为不透明的
+//            // 否则添加的效果可能会被角色model挡住在后面。(JME3.0存在该问题)
+//            temp.setQueueBucket(RenderQueue.Bucket.Opaque);
         }
-        
-//        actorModel.setShadowMode(RenderQueue.ShadowMode.Cast);
-        
         
         // remove20161009，xxx 重构分离
         // 4.2 碰撞盒
@@ -118,57 +117,15 @@ public class ActorModelLoader {
         return actorModel;
     }
     
-//    /**
-//     * 载入扩展的动画,该方法从角色所配置的extAnim目录中查找动画文件并进行加
-//     * 载。
-//     * @param actor
-//     * @param animName
-//     * @return 
-//     */
-//    public static boolean loadExtAnim(Actor actor, String animName) {
-//        // xxx 要移动到ActorModule中去
-//        String animDir = actor.getData().getExtAnim();
-//        
-//        if (animDir == null) {
-//            LOG.log(Level.WARNING, "Entity {0} no have a extAnim defined"
-//                    + ", could not load anim {1}", new Object[] {actor.getData().getId(), animName});
-//            return false;
-//        }
-//        String animFile = animDir + "/" + animName + ".mesh.j3o";
-//        try {
-//            Spatial animExtModel = AssetLoader.loadModelDirect(animFile);
-//            GeometryUtils.addSkeletonAnim(animExtModel, actor.getSpatial());
-//            return true;
-//        } catch (Exception e) {
-//            LOG.log(Level.WARNING, "Could not load extAnim, actor={0}, animName={1}, exception={2}"
-//                    , new Object[] {actor.getData().getId(), animName, e.getMessage()});
-//        }
-//        return false;
-//    }
-    
     /**
      * 检测并判断是否打开或关闭该模型的硬件skining加速
      * @param actor 角色模型
      */
     private static void checkEnableHardwareSkining(Entity actor, Spatial actorModel) {
-        EntityData data = actor.getData();
         SkeletonControl sc = actorModel.getControl(SkeletonControl.class);
-        
-        if (data == null || sc == null) {
+        if (sc == null) {
             return;
         }
-        
-//        // 全局没有打开的情况下则不处理。
-//        if (!Factory.get(ConfigService.class).isUseHardwareSkinning()) {
-//            return;
-//        }
-
-        // remove20161010,以后默认开启
-//        // 默认情冲下打开hardwareSkinning,除非在actor.xml中设置不打开。
-//        if (!data.isHardwareSkinning()) {
-//            return;
-//        }
-        
         // 代换自定义的SkeletonControl,因为默认的SkeletonControl会把带
         // SkeletonControl的子节点也进行处理。比如弓武器，当弓武器带有动画时可能
         // 导致角色的SkeletonControl和弓的SkeletonControl存在冲突导致弓模型变形
@@ -177,5 +134,4 @@ public class ActorModelLoader {
         actorModel.addControl(csc);
         csc.setHardwareSkinningPreferred(true);
     }
-    
 }

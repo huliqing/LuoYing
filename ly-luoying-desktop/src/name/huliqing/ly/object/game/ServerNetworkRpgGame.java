@@ -33,7 +33,7 @@ import name.huliqing.ly.constants.ResConstants;
 import name.huliqing.ly.enums.MessageType;
 import name.huliqing.ly.layer.service.GameService;
 import name.huliqing.ly.manager.ResourceManager;
-import name.huliqing.ly.mess.MessMessage;
+import name.huliqing.ly.mess.MessageMess;
 import name.huliqing.luoying.network.DefaultServerListener;
 import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.ly.LyConfig;
@@ -154,7 +154,7 @@ public abstract class ServerNetworkRpgGame extends NetworkRpgGame {
         // 消息：通知所有客户端有新的玩家进入
         String message = ResourceManager.get(ResConstants.LAN_ENTER_GAME, new Object[] {gameService.getName(actor)});
         MessageType type = MessageType.item;
-        MessMessage notice = new MessMessage();
+        MessageMess notice = new MessageMess();
         notice.setMessage(message);
         notice.setType(type);
         if (network.hasConnections()) {
@@ -272,7 +272,7 @@ public abstract class ServerNetworkRpgGame extends NetworkRpgGame {
 
             // 3.通知所有客户端（不含主机）
             String message = ResManager.get(ResConstants.LAN_CLIENT_EXISTS, new Object[] {gameService.getName(clientPlayer)});
-            MessMessage notice = new MessMessage();
+            MessageMess notice = new MessageMess();
             notice.setMessage(message);
             notice.setType(MessageType.notice);
             gameServer.broadcast(notice);

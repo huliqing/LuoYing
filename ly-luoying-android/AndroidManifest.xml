@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" 
           android:versionCode="" android:versionName="" 
-          package="name.huliqing.fighter">
+          package="name.huliqing.fighter" android:installLocation="preferExternal" >
     
     <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="19"  />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />

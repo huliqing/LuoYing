@@ -4,6 +4,7 @@
  */
 package name.huliqing.ly.view;
 
+import name.huliqing.ly.view.actor.ActorMainPanel;
 import name.huliqing.luoying.ui.UIUtils;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.object.actor.Actor;

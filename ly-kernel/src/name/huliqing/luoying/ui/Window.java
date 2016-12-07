@@ -40,7 +40,6 @@ public class Window extends LinearLayout {
         titleHeight = UIFactory.getUIConfig().getTitleHeight();
         footerHeight = UIFactory.getUIConfig().getFooterHeight();
         setTitle(title);
-        setDragEnabled(true);
         setBackgroundColor(UIFactory.getUIConfig().getBodyBgColor(), true);
         // 添加一个空的事件，以阻止事件向win背后穿透
         addClickListener(AbstractUI.EMPTY_LISTENER);

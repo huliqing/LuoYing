@@ -16,6 +16,7 @@ import name.huliqing.luoying.ui.Row;
 import name.huliqing.luoying.ui.Text;
 import name.huliqing.luoying.ui.UIFactory;
 import name.huliqing.luoying.ui.UI;
+import name.huliqing.ly.constants.ResConstants;
 
 /**
  * 客户端列表界面,用于显示连接到服务器的所有客户端
@@ -24,27 +25,27 @@ import name.huliqing.luoying.ui.UI;
 public class ClientsView extends LinearLayout {
     
     // 客户端面板 - 标题
-    private LinearLayout titlePanel;
-    private Text titleName; // 客户端名称
-    private Text titleHost; // 客户端地址
-    private Text titleActorName;// 玩家控制的角色名
+    private final LinearLayout titlePanel;
+    private final Text titleName; // 客户端名称
+    private final Text titleHost; // 客户端地址
+    private final Text titleActorName;// 玩家控制的角色名
     
     // 客户端面板－玩家列表
-    private ClientList clientList;
+    private final ClientList clientList;
     
     public ClientsView() {
         super();
         ColorRGBA tColor = UIFactory.getUIConfig().getDesColor();
         titlePanel = new LinearLayout();
-        titleName = new Text(ResourceManager.get("lan.client.name"));
+        titleName = new Text(ResourceManager.get(ResConstants.LAN_CLIENT_NAME));
         titleName.setFontSize(UIFactory.getUIConfig().getTitleSize());
         titleName.setFontColor(tColor);
         
-        titleHost = new Text(ResourceManager.get("lan.client.host"));
+        titleHost = new Text(ResourceManager.get(ResConstants.LAN_CLIENT_HOST));
         titleHost.setFontSize(UIFactory.getUIConfig().getTitleSize());
         titleHost.setFontColor(tColor);
         
-        titleActorName = new Text(ResourceManager.get("lan.client.actorName"));
+        titleActorName = new Text(ResourceManager.get(ResConstants.LAN_CLIENT_ACTOR_NAME));
         titleActorName.setFontSize(UIFactory.getUIConfig().getTitleSize());
         titleActorName.setFontColor(tColor);
         

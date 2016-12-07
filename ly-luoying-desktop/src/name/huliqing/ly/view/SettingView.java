@@ -13,6 +13,7 @@ import name.huliqing.luoying.ui.Button;
 import name.huliqing.luoying.ui.UI;
 import name.huliqing.luoying.ui.Window;
 import name.huliqing.luoying.ui.state.UIState;
+import name.huliqing.ly.constants.ResConstants;
 import name.huliqing.ly.layer.service.GameService;
 
 /**
@@ -34,7 +35,7 @@ public class SettingView extends Window {
     
     public SettingView(float width, float height) {
         super(width, height);
-        setTitle(ResourceManager.get("setting.title"));
+        setTitle(ResourceManager.get(ResConstants.SETTING_TITLE));
         init();
     }
     
@@ -45,9 +46,9 @@ public class SettingView extends Window {
         float psh = sh * 1f;
         
         // ==== button
-        system = new Button(ResourceManager.get("setting.system"));
-        about = new Button(ResourceManager.get("setting.about"));
-        back = new Button(ResourceManager.get("setting.return"));
+        system = new Button(ResourceManager.get(ResConstants.SETTING_SYSTEM));
+        about = new Button(ResourceManager.get(ResConstants.SETTING_ABOUT));
+        back = new Button(ResourceManager.get(ResConstants.SETTING_RETURN));
         
         this.addView(system);
         this.addView(about);

@@ -1,1 +1,1 @@
-cmd /k gradlew buildLuoYingDesktop
+cmd /k gradlew buildLuoYingDesktop --stacktrace --info

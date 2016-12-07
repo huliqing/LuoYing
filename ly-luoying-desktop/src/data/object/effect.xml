@@ -320,8 +320,8 @@
     <!-- ========================================================================= -->
     <!--魔法特效:复活术-->
     <!-- ========================================================================= -->
-    <effectGroup id="effectReborn" extends="effectBase" traceLocation="once" traceLocationOffset="0,1,0"
-                   effects="effectRebornMagic,effectRebornParticle1|0.4,effectRebornParticle2|0.4,effectRebornParticle3|5" />
+    <effectGroup id="effectReborn" extends="effectBase" useTime="5" traceLocation="once" traceLocationOffset="0,1,0"
+                   effects="effectRebornMagic,effectRebornParticle1|0.4,effectRebornParticle2|0.4,effectRebornParticle3|4.5" />
     <effectTexture id="effectRebornMagic" extends="effectBase" useTime="4.8" 
              animations="animRebornScaleS,animRebornRot|0.5,animRebornScaleH|4.5" 
              location="0,3.5,0" texture="Textures/tex/magic/magic9.jpg" size="10,10,10" plane="xz" />

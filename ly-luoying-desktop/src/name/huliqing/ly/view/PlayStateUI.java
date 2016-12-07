@@ -13,6 +13,7 @@ import name.huliqing.luoying.ui.UI;
 import name.huliqing.luoying.ui.UI.Corner;
 import name.huliqing.luoying.ui.UI.Listener;
 import name.huliqing.luoying.ui.state.UIState;
+import name.huliqing.ly.constants.InterfaceConstants;
 import name.huliqing.ly.state.MenuTool;
 
 /**
@@ -40,7 +41,7 @@ public abstract class PlayStateUI extends AbstractGameLogic {
         toolsView.setToolSpace(sw * 0.02f);
         
         // ==== “设置”按钮
-        Icon setting = new Icon("Interface/icon/setting.png");
+        Icon setting = new Icon(InterfaceConstants.UI_SETTING);
         setting.setUseAlpha(true);
         setting.addClickListener(new Listener() {
             @Override

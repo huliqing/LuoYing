@@ -94,14 +94,14 @@ compileJava {
         // 否则输出后的xml会在节点前缀加上多余的"tag0", 如: <tag0root: ...
         def root = new XmlSlurper(false, false).parseText(configXml)
         def config = root.'*'.find { config ->
-            config.@id == 'configGlobal'
+            config.@id == 'config'
         }
 
         // 不要在这里修改名称，保持名称在Config.xml的配置不改
         // config.@gameName = "XXX"
         config.@versionName = appVersionName
         config.@versionCode = appVersionCode
-        config["@extends"] = appDebug == '1' ? 'configGlobalDebug' : 'configGlobalRelease'
+        config["@extends"] = appDebug == '1' ? 'configDebug' : 'configRelease'
 
         // 保存config.xml配置
         XmlUtil.serialize(root, new FileOutputStream(configPath))
@@ -126,7 +126,7 @@ task proguard(type: proguard.gradle.ProGuardTask, dependsOn:jar) {
     libraryjars  "${System.getProperty('java.home')}/lib/rt.jar"  
     // JME 依赖包
     libraryjars file("$project.projectDir/libs")
-    // ly-kernel核心包
+    // luoying-kernel核心包
     libraryjars file("$rootProject.projectDir$kernelResultDir")
 
     injars jar.archivePath

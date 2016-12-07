@@ -20,6 +20,7 @@ public interface ActorPanel {
     
     /**
      * 更新面板信息
+     * @param actor
      */
     public void setPanelUpdate(Entity actor);
     

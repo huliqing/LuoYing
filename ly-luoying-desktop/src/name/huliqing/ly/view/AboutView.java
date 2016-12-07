@@ -5,8 +5,6 @@
 package name.huliqing.ly.view;
 
 import java.util.List;
-import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.layer.service.ConfigService;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.ui.UIFactory;
 import name.huliqing.luoying.ui.Button;
@@ -20,12 +18,11 @@ import name.huliqing.ly.LyConfig;
  * @author huliqing
  */
 public class AboutView extends Window {
-    private final ConfigService configService = Factory.get(ConfigService.class);
     
     private Text version;
     private Text home;
-    private Text email;
-    private Text engine;
+//    private Text email;
+//    private Text engine;
     private Text more;
     
     private Button close;
@@ -37,15 +34,15 @@ public class AboutView extends Window {
         
         version = new Text(ResourceManager.get("about.version", new Object[] {LyConfig.getVersionName()}));
         home = new Text(ResourceManager.get("about.home"));
-        email = new Text(ResourceManager.get("about.email"));
-        engine = new Text(ResourceManager.get("about.engine"));
+//        email = new Text(ResourceManager.get("about.email"));
+//        engine = new Text(ResourceManager.get("about.engine"));
         more = new Text(ResourceManager.get("about.more"));
         close = new Button(ResourceManager.get("common.close"));
         
         addView(version);
         addView(home);
-        addView(email);
-        addView(engine);
+//        addView(email);
+//        addView(engine);
         addView(more);
         addView(close);
         

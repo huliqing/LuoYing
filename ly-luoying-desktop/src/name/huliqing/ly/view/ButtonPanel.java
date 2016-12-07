@@ -14,7 +14,7 @@ import name.huliqing.luoying.ui.LinearLayout;
  */
 public class ButtonPanel extends LinearLayout {
 
-    private ArrayList<Button> btns;
+    private final ArrayList<Button> btns;
     
     public ButtonPanel(float width, float height, String[] buttons) {
         super(width, height);

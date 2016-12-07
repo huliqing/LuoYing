@@ -29,7 +29,7 @@ public class SceneLoadTest extends SimpleApplication {
     @Override
     public void simpleInitApp() {
         this.flyCam.setMoveSpeed(100);
-        LuoYing.initialize(this, settings);
+        LuoYing.initialize(this);
         
         Scene scene = Loader.load(IdConstants.SYS_SCENE_TEST);
         scene.setProcessorViewPorts(getViewPort());

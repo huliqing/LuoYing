@@ -1,26 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><root xmlns="http://luoying.huliqing.name" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://luoying.huliqing.name ../../../../ly-kernel/src/LuoYing/Data/meta/config.xsd">
   <notice readme="注：版本名称(versionName)及版本号(versionCode)会在构建时被重置,这个文件也会在构建时被自动重写。"/>
-  <config 
-          gameName="落樱之剑" 
-          versionName="2.4-a1" 
-          versionCode="240" 
-          serverPort="32991"
-          discoverServerPort="32992" 
-          discoverClientPort="32993" 
-          soundVolume="0" 
-          shortcutLocked="0" 
-          id="configGlobalBase" 
-          soundEnabled="0" 
-          shortcutSize="0.8" 
-          lanGames="gameSurvival" 
-          speakTimeWorld="0.22" 
-          speakTimeMin="0.25" 
-          speakTimeMax="8.0" 
-          speakMaxDistance="80" 
-          localeSupported="en_US,zh_CN"
-  />
-  
-  <config id="configRelease" extends="configGlobalBase" versionName="2.5.1" versionCode="251"/>
-  <config id="configDebug" extends="configRelease" speakTimeWorld="0.1" soundVolume="0.5" debug="1" />
-  
+  <config shortcutLocked="0" speakTimeWorld="0.22" versionName="2.4-a1" serverPort="32991" discoverServerPort="32992" speakTimeMax="8.0" versionCode="240" shortcutSize="0.8" lanGames="gameSurvival" speakMaxDistance="80" soundVolume="0.5" gameName="落樱之剑" discoverClientPort="32993" id="configBase" speakTimeMin="0.25" localeSupported="en_US,zh_CN" soundEnabled="1"/>
+  <config extends="configBase" id="configRelease" versionName="2.5.1" versionCode="251"/>
+  <config extends="configRelease" id="configDebug" speakTimeWorld="0.1" soundVolume="0.5" debug="1" />
+  <config id="config" extends="configDebug" notice="系统配置" />
 </root>

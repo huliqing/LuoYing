@@ -13,6 +13,7 @@ import name.huliqing.luoying.data.ModuleData;
 import name.huliqing.luoying.layer.service.ElService;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.attribute.Attribute;
+import name.huliqing.luoying.object.attribute.BooleanAttribute;
 import name.huliqing.luoying.object.attribute.LevelAttribute;
 import name.huliqing.luoying.object.attribute.LimitAttribute;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
@@ -31,15 +32,6 @@ public class LevelModule extends AbstractModule implements ValueChangeListener{
     
     private final ElService elService = Factory.get(ElService.class);
 
-    // 角色的等级属性名称，这个属性用于存放角色的等级值,当角色的等级变化后会存取在这个属性中。
-    private String bindLevelAttribute;
-    
-    // 角色的xp属性名称，用于查找角色的xp属性，模块通过监听这个属性的值变来操作角色的等级。
-    private String bindXpAttribute;
-    
-    // 到达下一个等级角色需要的经验值（xp）属性名称，模块在运行时会自动把下一等级需要的经验值计算后放在这个属性上。
-    private String bindXpNextAttribute;
-
     // 角色等级公式,关联一个Level El, 这个公式用来计算角色在升级到每一个等级时需要的经验值(xp)数量。
     private LNumberEl xpLevelEl;
 
@@ -48,21 +40,33 @@ public class LevelModule extends AbstractModule implements ValueChangeListener{
     
     // 升级时的特效
     private String effect;
+
+    // 绑定角色的等级属性，这个属性用于存放角色的等级值,当角色的等级变化后会存取在这个属性中。
+    private String bindLevelAttribute;
+    // 绑定角色的经验值属性
+    private String bindXpAttribute;
+    // 到达下一个等级角色需要的经验值（xp）属性名称，模块在运行时会自动把下一等级需要的经验值计算后放在这个属性上。
+    private String bindXpNextAttribute;
+    // 绑定角色的一个Boolean属性，该属性用于控制是否允许角色在游戏过程中动态升级，即通过xp的累积来升级角色等级，
+    // 角色初始化、或者直接设置角色的等级属性则不受这个参数的影响。
+    private String bindLevelUpEnabledAttribute;
     
     // ---- inner
     private NumberAttribute levelAttribute;
     private NumberAttribute xpAttribute;
     private NumberAttribute xpNextAttribute;
+    private BooleanAttribute levelUpEnabledAttribute;
 
     @Override
     public void setData(ModuleData data) {
         super.setData(data);
-        bindLevelAttribute = data.getAsString("bindLevelAttribute");
-        bindXpAttribute = data.getAsString("bindXpAttribute");
-        bindXpNextAttribute = data.getAsString("bindXpNextAttribute");
         xpLevelEl = elService.createLNumberEl(data.getAsString("xpLevelEl", "#{100}")); // #{100}作为在不设置时的默认值
         maxLevel = data.getAsInteger("maxLevel", maxLevel);
         effect = data.getAsString("effect");
+        bindLevelAttribute = data.getAsString("bindLevelAttribute");
+        bindXpAttribute = data.getAsString("bindXpAttribute");
+        bindXpNextAttribute = data.getAsString("bindXpNextAttribute");
+        bindLevelUpEnabledAttribute = data.getAsString("bindLevelUpEnabledAttribute");
     }
 
     @Override
@@ -70,26 +74,32 @@ public class LevelModule extends AbstractModule implements ValueChangeListener{
         // xxx updateDatas.
     }
     
+    private <T extends Attribute> T getAttribute(String attributeName, Class<T> type) {
+        if (attributeName == null) {
+            return null;
+        }
+        T attribute = entity.getAttributeManager().getAttribute(attributeName, type);
+        if (attribute == null) {
+            LOG.log(Level.WARNING, "Attribute not found by attributeName={0}, attributeType={1}, entity={2}"
+                    , new Object[] {attributeName, type.getName(), entity.getData().getId()});
+        }
+        return attribute;
+    }
+    
     @Override
     public void initialize(Entity entity) {
         super.initialize(entity);
-        // 查找角色的等级属性
-        levelAttribute = entity.getAttributeManager().getAttribute(bindLevelAttribute);
-        if (levelAttribute == null) {
-            LOG.log(Level.WARNING, "levelAttribute not found by bindLevelAttribute={0}, actorId={1}"
-                    , new Object[] {bindLevelAttribute, entity.getData().getId()});
-        }
+        // 角色的等级属性
+        levelAttribute = getAttribute(bindLevelAttribute, NumberAttribute.class);
         
         // 角色的xp属性
-        xpAttribute = entity.getAttributeManager().getAttribute(bindXpAttribute);
-        if (xpAttribute == null) {
-            LOG.log(Level.WARNING, "xpAttribute not found by bindXpAttribute={0}, actorId={1}"
-                    , new Object[] {bindXpAttribute, entity.getData().getId()});
-        } 
+        xpAttribute = getAttribute(bindXpAttribute, NumberAttribute.class);
         
         // 这个属性用于存放要到达下一个等级所需要的经验值
         xpNextAttribute = entity.getAttributeManager().getAttribute(bindXpNextAttribute);
         
+        // 等级功能开关属性
+        levelUpEnabledAttribute = getAttribute(bindLevelUpEnabledAttribute, BooleanAttribute.class);
         
         if (xpAttribute != null) {
             xpAttribute.addListener(this);
@@ -112,25 +122,12 @@ public class LevelModule extends AbstractModule implements ValueChangeListener{
         super.cleanup(); 
     }
 
-    // remove20161031
-//    /**
-//     * 获取指定等级需要的xp值, 如果模块没有配置任何等级公式，则该方法将始终返回0.
-//     * @param level 指定等级
-//     * @return 
-//     */
-//    public int getLevelXp(int level) {
-//        if (xpLevelEl != null) {
-//            return (int) xpLevelEl.getValue(level);
-//        }
-//        return 0;
-//    }
-    
     // 1.当经验值属性发生变化时检查角色是否可以升级.
     // 2.当等级值直接发生变化时，改变其它属性值。
     @Override
     public void onValueChanged(Attribute attribute) {
         if (attribute == xpAttribute) {
-            if (xpLevelEl != null && levelAttribute != null) {
+            if (xpLevelEl != null && levelAttribute != null && isLevelUpEnabled()) {
                 levelUpCheck();
             }
             return;
@@ -242,4 +239,11 @@ public class LevelModule extends AbstractModule implements ValueChangeListener{
         }
     }
 
+    /**
+     * 判断等级功能是否打开。
+     * @return 
+     */
+    private boolean isLevelUpEnabled() {
+        return levelUpEnabledAttribute == null || levelUpEnabledAttribute.getValue();
+    }
 }

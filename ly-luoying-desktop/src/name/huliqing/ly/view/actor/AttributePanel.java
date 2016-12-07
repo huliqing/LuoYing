@@ -32,7 +32,7 @@ public class AttributePanel extends ListView<Attribute> implements ActorPanel {
         super(width, height);
         
         filterAttributeNames = new ArrayList<String>(1);
-        filterAttributeNames.add("attributeWeaponSlots");
+//        filterAttributeNames.add("attributeWeaponSlots");
     }
     
     /**
@@ -93,9 +93,9 @@ public class AttributePanel extends ListView<Attribute> implements ActorPanel {
         @Override
         protected void updateViewChildren() {
             super.updateViewChildren();
-            label.setWidth(width * 0.5f);
+            label.setWidth(width * 0.3f);
             label.setHeight(height);
-            value.setWidth(width * 0.5f);
+            value.setWidth(width * 0.7f);
             value.setHeight(height);
         }
         

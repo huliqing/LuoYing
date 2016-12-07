@@ -7,7 +7,6 @@ package name.huliqing.ly.view;
 import name.huliqing.ly.constants.InterfaceConstants;
 import name.huliqing.luoying.data.define.CountObject;
 import name.huliqing.luoying.transfer.TransferData;
-import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.ui.ListView;
 import name.huliqing.luoying.ui.Row;

@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.ly.view;
+package name.huliqing.ly.view.actor;
 
 import java.util.List;
 import name.huliqing.luoying.Factory;
@@ -26,14 +26,7 @@ import name.huliqing.luoying.ui.LinearLayout;
 import name.huliqing.luoying.ui.UI;
 import name.huliqing.luoying.ui.Window;
 import name.huliqing.luoying.xml.ObjectData;
-import name.huliqing.ly.view.actor.ActorPanel;
-import name.huliqing.ly.view.actor.ArmorPanel;
-import name.huliqing.ly.view.actor.AttributePanel;
-import name.huliqing.ly.view.actor.ItemPanel;
-import name.huliqing.ly.view.actor.SkillPanel;
-import name.huliqing.ly.view.actor.TalentPanel;
-import name.huliqing.ly.view.actor.TaskPanel;
-import name.huliqing.ly.view.actor.WeaponPanel;
+import name.huliqing.ly.layer.service.GameService;
 
 /**
  * 角色主面板，这个面板包含角色所有的“属性","武器","装备","天赋"...等面板
@@ -43,6 +36,7 @@ public class ActorMainPanel extends Window implements EntityDataListener, SkinLi
     private final SkinService skinService = Factory.get(SkinService.class);
     private final TalentService talentService = Factory.get(TalentService.class);
     private final TaskService taskService = Factory.get(TaskService.class);
+    private final GameService gameService = Factory.get(GameService.class);
     
     private Entity actor;
     
@@ -182,7 +176,7 @@ public class ActorMainPanel extends Window implements EntityDataListener, SkinLi
         
         // 2.更新角色并更新面板内容
         this.actor = other;
-        this.setTitle(ResourceManager.get("common.characterPanel") + "-" + other.getSpatial().getName());
+        this.setTitle(ResourceManager.get("common.characterPanel") + "-" + gameService.getName(other));
         
         // remove20160324,不需要一打开时把所有panel都update一次，按需update就可以
         // 3.即打开哪一个tab就更新哪一个就行，以避免panel太多，在手机上影响性能。

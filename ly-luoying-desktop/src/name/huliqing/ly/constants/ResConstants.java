@@ -65,6 +65,15 @@ public class ResConstants {
     /** common.noTarget */
     public final static String COMMON_NO_TARGET = "common.noTarget";
     
+    /** setting.title */
+    public final static String SETTING_TITLE = "setting.title";
+    /** setting.system */
+    public final static String SETTING_SYSTEM = "setting.system";
+    /** setting.about */
+    public final static String SETTING_ABOUT = "setting.about";
+    /** setting.return */
+    public final static String SETTING_RETURN = "setting.return";
+    
     // -------------------------------------------------------------------------
     // Lan
     // -------------------------------------------------------------------------
@@ -75,6 +84,18 @@ public class ResConstants {
     public final static String LAN_ENTER_GAME="lan.enterGame";
     /** 客户端退出 */
     public final static String LAN_CLIENT_EXISTS="lan.leaveGame";
+    
+    public final static String LAN_CLIENT_NAME = "lan.client.name";
+    public final static String LAN_CLIENT_HOST = "lan.client.host";
+    public final static String LAN_CLIENT_ACTOR_NAME = "lan.client.actorName";
+    
+    public final static String LAN_CLIENTS = "lan.clients";
+    public final static String LAN_HELP_RUNNING = "lan.help.running";
+    public final static String LAN_KICK = "lan.kick";
+    public final static String LAN_SERVER_IP = "lan.serverIp";
+    
+    
+    
     
     // -------------------------------------------------------------------------
     // Talent
