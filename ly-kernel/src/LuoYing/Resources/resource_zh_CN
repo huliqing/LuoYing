@@ -10,9 +10,6 @@ name.huliqing.luoying.dataUseFailure=不能使用: %s
 name.huliqing.luoying.levelUp=等级提升: %s
 name.huliqing.luoying.talentPointsAdded=获得天赋点数: %s
 
-
-
-
 name.huliqing.luoying.errorItemNotEnough=Item not enough
 name.huliqing.luoying.errorItemSkillExists=Skill exists
 name.huliqing.luoying.errorItemCheckEl=Could not use item(ElCheck)

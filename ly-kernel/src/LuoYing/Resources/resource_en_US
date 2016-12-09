@@ -1,15 +1,21 @@
 #use notepad++ -> 格式 -> 转为UTF-8编码格式 -> AngelCode 导出bmp font
 
-name.huliqing.luoying.itemUseSuccess=Use item.
-name.huliqing.luoying.itemUseFailure=Could not use item.
+name.huliqing.luoying.dataAdd=Add : %s
+name.huliqing.luoying.dataAddFailure=Could not add : %s
+name.huliqing.luoying.dataRemove=Remove: %s
+name.huliqing.luoying.dataRemoveFailure=Could not remove: %s
+name.huliqing.luoying.dataUse=Use: %s
+name.huliqing.luoying.dataUseFailure=Could not use: %s
+
+name.huliqing.luoying.levelUp=Level up to: %s
+name.huliqing.luoying.talentPointsAdded=Talent points add: %s
 
 name.huliqing.luoying.errorItemNotEnough=Item not enough
 name.huliqing.luoying.errorItemSkillExists=Skill exists
 name.huliqing.luoying.errorItemCheckEl=Could not use item(ElCheck)
-
 name.huliqing.luoying.errorSkillNotFound=Skill not found
 name.huliqing.luoying.errorSkillLocked=Skill locked
-name.huliqing.luoying.errorSkillCooldown=Skill is cooldown.技能正处于冷却状态
+name.huliqing.luoying.errorSkillCooldown=Skill is cooldown.
 name.huliqing.luoying.errorSkillWeaponNotAllow=Could not use skill by current's weapon.
 name.huliqing.luoying.errorSkillWeaponNeedTakeOn=Weaon need to take on.
 name.huliqing.luoying.errorSkillAttributeNotEnough=Attribute not enough.
