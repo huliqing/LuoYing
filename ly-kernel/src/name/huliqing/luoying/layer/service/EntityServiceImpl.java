@@ -7,10 +7,13 @@ package name.huliqing.luoying.layer.service;
 
 import java.util.Collections;
 import java.util.List;
+import name.huliqing.luoying.data.EntityData;
+import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.attribute.Attribute;
 import name.huliqing.luoying.object.attribute.BooleanAttribute;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.xml.DataFactory;
 import name.huliqing.luoying.xml.ObjectData;
 
 /**
@@ -112,5 +115,20 @@ public class EntityServiceImpl implements EntityService {
         ObjectData od = entity.getData().getObjectDataByUniqueId(objectUniqueId);
         return od != null && entity.useObjectData(od);
     }
+
+    @Override
+    public Entity cloneEntity(Entity entity) {
+        if (!entity.isInitialized()) {
+            entity.initialize();
+        }
+        // 注：克隆后的实体的唯一ID必须改变，否则放到场景的时候会冲突。
+        // 实体内的其它物体则没有关系.
+        entity.updateDatas();
+        EntityData cloneData = entity.getData().clone();
+        cloneData.setUniqueId(DataFactory.generateUniqueId());
+        Entity clone = Loader.load(cloneData);
+        return clone;
+    }
+    
     
 }

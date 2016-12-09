@@ -48,7 +48,7 @@ public class SkillType {
 
     @Override
     public String toString() {
-        return "SkillType=" + index + ", skillTagName=" + name; 
+        return "SkillType=" + index + ", skillTypeName=" + name; 
     }
     
     

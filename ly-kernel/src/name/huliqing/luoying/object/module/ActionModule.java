@@ -17,7 +17,7 @@ import name.huliqing.luoying.object.entity.Entity;
  * 角色行为控制器
  * @author huliqing
  */
-public class ActionModule extends AbstractModule<ModuleData> {
+public class ActionModule extends AbstractModule {
     
     // 用于判断角色是否死亡的属性
     private String bindDeadAttribute;
@@ -29,7 +29,7 @@ public class ActionModule extends AbstractModule<ModuleData> {
     private FightAction defFightAction;
     
     // 当前正在执行的行为逻辑
-    private Action current;
+    private Action currentAction;
     
     private Control updateControl;
     
@@ -46,11 +46,9 @@ public class ActionModule extends AbstractModule<ModuleData> {
     }
 
     @Override
-    public void initialize(Entity actor) {
-        super.initialize(actor);
-        if (bindDeadAttribute != null) {
-            deadAttribute = actor.getAttributeManager().getAttribute(bindDeadAttribute, BooleanAttribute.class);
-        }
+    public void initialize(Entity entity) {
+        super.initialize(entity);
+        deadAttribute = getAttribute(bindDeadAttribute, BooleanAttribute.class);
         
         updateControl = new AdapterControl() {
             @Override
@@ -67,21 +65,21 @@ public class ActionModule extends AbstractModule<ModuleData> {
             return;
         }
         
-        if (current != null) {
-            if (current.isEnd()) {
-                current.cleanup();
-                current = null;
+        if (currentAction != null) {
+            if (currentAction.isEnd()) {
+                currentAction.cleanup();
+                currentAction = null;
             } else {
-                current.update(tpf);
+                currentAction.update(tpf);
             }
         }
     }
 
     @Override
     public void cleanup() {
-        if (current != null) {
-            current.cleanup();
-            current = null;
+        if (currentAction != null) {
+            currentAction.cleanup();
+            currentAction = null;
         }
         defRunAction = null;
         defFightAction = null;
@@ -98,18 +96,18 @@ public class ActionModule extends AbstractModule<ModuleData> {
      * @param action 当为null时，将打断当前行为。
      */
     public void startAction(Action action) {
-        if (current == action) {
+        if (currentAction == action) {
             return;
         }
         
-        if (current != null) {
-            current.cleanup();
+        if (currentAction != null) {
+            currentAction.cleanup();
         }
         
-        current = action;
-        if (current != null) {
-            current.setActor(entity);
-            current.initialize();
+        currentAction = action;
+        if (currentAction != null) {
+            currentAction.setActor(entity);
+            currentAction.initialize();
         }
     }
     
@@ -118,7 +116,7 @@ public class ActionModule extends AbstractModule<ModuleData> {
      * @return 
      */
     public Action getAction() {
-        return current;
+        return currentAction;
     }
 
     public RunAction getDefRunAction() {

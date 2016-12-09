@@ -5,7 +5,7 @@
  */
 package name.huliqing.luoying.object.item;
 
-import name.huliqing.luoying.log.StateCode;
+import name.huliqing.luoying.message.StateCode;
 import name.huliqing.luoying.data.ItemData;
 import name.huliqing.luoying.data.SkillData;
 import name.huliqing.luoying.object.Loader;
@@ -31,7 +31,7 @@ public class BookItem extends AbstractItem {
     @Override
     public int checkStateCode(Entity actor) {
         if (actor.getData().getObjectData(skill) != null) {
-            return StateCode.ITEM_SKILL_EXISTS;
+            return StateCode.DATA_USE_FAILURE_SKILL_EXISTS;
         }
         return super.checkStateCode(actor); 
     }

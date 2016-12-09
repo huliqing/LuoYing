@@ -9,28 +9,28 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.ActionData;
+import name.huliqing.luoying.data.SkillData;
+import name.huliqing.luoying.data.SkinData;
 import name.huliqing.luoying.layer.network.ActorNetwork;
 import name.huliqing.luoying.layer.network.SkillNetwork;
 import name.huliqing.luoying.layer.network.SkinNetwork;
 import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.layer.service.SkillService;
-import name.huliqing.luoying.log.StateCode;
+import name.huliqing.luoying.message.StateCode;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.module.SkillListener;
+import name.huliqing.luoying.object.entity.EntityDataListener;
 import name.huliqing.luoying.object.module.SkillModule;
-import name.huliqing.luoying.object.module.SkinListener;
 import name.huliqing.luoying.object.module.SkinModule;
 import name.huliqing.luoying.object.skill.HitSkill;
 import name.huliqing.luoying.object.skill.Skill;
-import name.huliqing.luoying.object.skin.Skin;
-import name.huliqing.luoying.object.skin.Weapon;
 import name.huliqing.luoying.utils.MathUtils;
+import name.huliqing.luoying.xml.ObjectData;
 
 /**
  * 动态的角色战斗行为，该战斗行为下角色能够移动，转向跟随等。
  * @author huliqing
  */
-public class DynamicFightAction extends PathFollowAction implements FightAction, SkillListener, SkinListener {
+public class DynamicFightAction extends PathFollowAction implements FightAction, EntityDataListener {
 //    private static final Logger LOG = Logger.getLogger(FightDynamicAction.class.getName());
 //    private final SkinService skinService = Factory.get(SkinService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
@@ -119,8 +119,7 @@ public class DynamicFightAction extends PathFollowAction implements FightAction,
     @Override
     public void initialize() {
         super.initialize();
-        skillModule.addSkillListener(this);
-        skinModule.addSkinListener(this);
+        actor.addEntityDataListener(this);
         
         // 如果角色切换到战斗状态，则强制取出武器
         if (!skinModule.isWeaponTakeOn()) {
@@ -143,8 +142,7 @@ public class DynamicFightAction extends PathFollowAction implements FightAction,
     
     @Override
     public void cleanup() {
-        skillModule.removeSkillListener(this);
-        skinModule.removeSkinListener(this);
+        actor.removeEntityDataListener(this);
         
         // 效果不是太好，不再使用自动收刀。
 //        if (autoTakeOffWeapon && skinService.isWeaponTakeOn(actor)) {
@@ -242,9 +240,8 @@ public class DynamicFightAction extends PathFollowAction implements FightAction,
         if (attackSkill instanceof HitSkill) {
             return ((HitSkill) attackSkill).isInHitDistance(target);
         }
-        
         // 只有非HitSkill时才使用canPlay，这个方法稍微耗性能
-        return attackSkill.checkState() == StateCode.OK;
+        return attackSkill.checkState() == StateCode.DATA_USE;
     }
     
     /**
@@ -275,35 +272,27 @@ public class DynamicFightAction extends PathFollowAction implements FightAction,
             }
         }
     }
-    
-    @Override
-    public void onSkillAdded(Entity actor, Skill skill) {
-        recacheSkill();
-    }
 
     @Override
-    public void onSkillRemoved(Entity actor, Skill skill) {
-        recacheSkill();
-    }
-    
-    @Override
-    public void onSkinAdded(Entity actor, Skin skinAdded) {}
-
-    @Override
-    public void onSkinRemoved(Entity actor, Skin skinRemoved) {}
-
-    @Override
-    public void onSkinAttached(Entity actor, Skin skin) {
-        // 当角色武器切换之后需要重新缓存技能，因为技能是有武器状态限制的。切换武器后当前的技能不一定能适应。
-        if (skin instanceof Weapon) {
+    public void onDataAdded(ObjectData data, int amount) {
+        if (data instanceof SkillData) {
             recacheSkill();
         }
     }
 
     @Override
-    public void onSkinDetached(Entity actor, Skin skin) {
-        if (skin instanceof Weapon) {
+    public void onDataRemoved(ObjectData data, int amount) {
+        if (data instanceof SkillData) {
             recacheSkill();
+        }
+    }
+
+    @Override
+    public void onDataUsed(ObjectData data) {
+         if (data instanceof SkinData) {
+            if (((SkinData)data).isWeapon()) {
+                recacheSkill();
+            }
         }
     }
     

@@ -633,11 +633,7 @@ name.huliqing.ly.object.game.ClientNetworkRpgGame -> name.huliqing.ly.g.b.a:
     name.huliqing.luoying.network.GameClient gameClient -> n
     name.huliqing.luoying.network.DefaultClientListener clientListener -> o
     name.huliqing.luoying.ui.Text pingLabel -> p
-    boolean loadingScene -> q
-    int needInitEntities -> r
-    int initEntitiesCount -> s
     name.huliqing.luoying.object.progress.Progress progress -> t
-    boolean clientStarted -> u
     void <init>() -> <init>
     void <init>(name.huliqing.luoying.network.GameClient) -> <init>
     void initialize(com.jme3.app.Application) -> initialize
@@ -648,18 +644,18 @@ name.huliqing.ly.object.game.ClientNetworkRpgGame -> name.huliqing.ly.g.b.a:
     java.util.List getClients() -> getClients
     void kickClient(int) -> kickClient
     void onPingUpdate(long) -> onPingUpdate
-    void onSceneEntityAdded(name.huliqing.luoying.object.scene.Scene,name.huliqing.luoying.object.entity.Entity) -> onSceneEntityAdded
     void startClientGame() -> a
-    java.util.logging.Logger access$100() -> b
-    int access$202(name.huliqing.ly.object.game.ClientNetworkRpgGame,int) -> a
-    name.huliqing.luoying.layer.service.PlayService access$300(name.huliqing.ly.object.game.ClientNetworkRpgGame) -> a
-    name.huliqing.ly.layer.service.GameService access$400(name.huliqing.ly.object.game.ClientNetworkRpgGame) -> b
+    name.huliqing.luoying.object.progress.Progress access$100(name.huliqing.ly.object.game.ClientNetworkRpgGame) -> a
+    name.huliqing.luoying.layer.service.PlayService access$200(name.huliqing.ly.object.game.ClientNetworkRpgGame) -> b
+    name.huliqing.ly.layer.service.GameService access$300(name.huliqing.ly.object.game.ClientNetworkRpgGame) -> c
+    java.util.logging.Logger access$400() -> b
     void <clinit>() -> <clinit>
 name.huliqing.ly.object.game.ClientNetworkRpgGame$1 -> name.huliqing.ly.g.b.b:
 name.huliqing.ly.object.game.ClientNetworkRpgGame$NetworkClientListener -> name.huliqing.ly.g.b.c:
     name.huliqing.ly.object.game.ClientNetworkRpgGame this$0 -> a
     void <init>(name.huliqing.ly.object.game.ClientNetworkRpgGame) -> <init>
-    void onGameInitialize(int) -> onGameInitialize
+    void onEntityInitializeCount(int,int) -> onEntityInitializeCount
+    void onEntityInitialized() -> onEntityInitialized
     void processGameMess(name.huliqing.luoying.network.GameClient,name.huliqing.luoying.mess.GameMess) -> processGameMess
     void onReceiveMessClients(name.huliqing.luoying.network.GameClient,name.huliqing.luoying.mess.network.ClientsMess) -> onReceiveMessClients
     void onClientDisconnected(name.huliqing.luoying.network.GameClient,com.jme3.network.ClientStateListener$DisconnectInfo) -> onClientDisconnected
@@ -2025,8 +2021,7 @@ name.huliqing.ly.state.lan.RoomStateClientImpl$RoomClientListener -> name.huliqi
     void onReceiveMessClients(name.huliqing.luoying.network.GameClient,name.huliqing.luoying.mess.network.ClientsMess) -> onReceiveMessClients
     void checkToStart(name.huliqing.luoying.network.GameClient) -> a
     void onClientDisconnected(name.huliqing.luoying.network.GameClient,com.jme3.network.ClientStateListener$DisconnectInfo) -> onClientDisconnected
-    void onGameInitialize(int) -> onGameInitialize
-    void processGameMess(name.huliqing.luoying.network.GameClient,name.huliqing.luoying.mess.GameMess) -> processGameMess
+    void onEntityInitialized() -> onEntityInitialized
     void <init>(name.huliqing.ly.state.lan.RoomStateClientImpl,name.huliqing.ly.state.lan.RoomStateClientImpl$1) -> <init>
 name.huliqing.ly.state.lan.RoomStatePanel -> name.huliqing.ly.h.a.ai:
     name.huliqing.ly.view.ClientsView clientsView -> a

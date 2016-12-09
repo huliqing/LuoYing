@@ -65,6 +65,9 @@ public class ResConstants {
     /** common.noTarget */
     public final static String COMMON_NO_TARGET = "common.noTarget";
     
+    /** common.characterPanel */
+    public final static String COMMON_ACTOR_PANEL = "common.characterPanel";
+    
     /** setting.title */
     public final static String SETTING_TITLE = "setting.title";
     /** setting.system */

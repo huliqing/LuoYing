@@ -89,8 +89,9 @@ public class DebugUtils {
 
     /**
      * Wireframe Cube
-     * @param pos
-     * @param size
+     * @param xExt
+     * @param yExt
+     * @param zExt
      * @param color
      * @return
      */

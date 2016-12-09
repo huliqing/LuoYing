@@ -9,6 +9,7 @@ import com.jme3.animation.AnimControl;
 import com.jme3.animation.Animation;
 import com.jme3.animation.LoopMode;
 import com.jme3.scene.Spatial;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -72,12 +73,10 @@ public class ChannelModule extends AbstractModule implements ChannelControl {
         super.initialize(actor);
         animControl = actor.getSpatial().getControl(AnimControl.class);
         
-        List<ObjectData> ods = actor.getData().getObjectDatas();
+        List<ChannelData> ods = actor.getData().getObjectDatas(ChannelData.class, new ArrayList<ChannelData>());
         if (ods != null && !ods.isEmpty()) {
-            for (ObjectData od : ods) {
-                if (od instanceof ChannelData) {
-                    addChannel((Channel) Loader.load(od));
-                }
+            for (ChannelData od : ods) {
+                addChannel((Channel) Loader.load(od));
             }
         }
         

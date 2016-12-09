@@ -9,12 +9,14 @@ import com.jme3.util.SafeArrayList;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.TalentData;
 import name.huliqing.luoying.data.ModuleData;
 import name.huliqing.luoying.layer.service.ElService;
+import name.huliqing.luoying.layer.service.MessageService;
+import name.huliqing.luoying.message.EntityTalentPointAddedMessage;
+import name.huliqing.luoying.message.StateCode;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.attribute.Attribute;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
@@ -28,8 +30,9 @@ import name.huliqing.luoying.object.talent.Talent;
  * @author huliqing
  */
 public class TalentModule extends AbstractModule implements DataHandler<TalentData>, ValueChangeListener{
-    private static final Logger LOG = Logger.getLogger(TalentModule.class.getName());
+//    private static final Logger LOG = Logger.getLogger(TalentModule.class.getName());
     private final ElService elService = Factory.get(ElService.class);
+    private final MessageService messageService = Factory.get(MessageService.class);
     
     // 角色等级属性的名称，用于查找角色的“等级属性”并进行绑定监听等级变化
     private String bindLevelAttribute;
@@ -45,7 +48,7 @@ public class TalentModule extends AbstractModule implements DataHandler<TalentDa
     // 天赋实例
     private final SafeArrayList<Talent> talents = new SafeArrayList<Talent>(Talent.class);
     
-    // 天赋侦听器
+    // 天赋点数侦听器
     private List<TalentListener> talentListeners;
     
     // 角色的等级属性，用于监听角色等级变化
@@ -76,23 +79,16 @@ public class TalentModule extends AbstractModule implements DataHandler<TalentDa
         super.initialize(entity); 
         
         // 绑定并监听角色等级变化
-        levelAttribute = entity.getAttributeManager().getAttribute(bindLevelAttribute);
+        levelAttribute = getAttribute(bindLevelAttribute, NumberAttribute.class);
         if (levelAttribute != null) {
             levelAttribute.addListener(this);
-        } else {
-            LOG.log(Level.WARNING, "levelAttribute not found by levelAttributeName={0}, actorId={1}"
-                    , new Object[] {bindLevelAttribute, entity.getData().getId()});
         }
         
         // 获取天赋点数容器属性
-        talentPointsAttribute = entity.getAttributeManager().getAttribute(bindTalentPointsAttribute);
-        if (talentPointsAttribute == null) {
-            LOG.log(Level.WARNING, "talentPointsAttribute not found, by talentPointsAttributeName={0}, actorId={1}"
-                    , new Object[] {bindTalentPointsAttribute, entity.getData().getId()});
-        }
+        talentPointsAttribute = getAttribute(bindTalentPointsAttribute, NumberAttribute.class);
         
         // 初始化，载入天赋
-        List<TalentData> talentDatas = entity.getData().getObjectDatas(TalentData.class, null);
+        List<TalentData> talentDatas = entity.getData().getObjectDatas(TalentData.class, new ArrayList<TalentData>());
         if (talentDatas != null) {
             for (TalentData td : talentDatas) {
                 addTalent((Talent) Loader.load(td));
@@ -110,26 +106,19 @@ public class TalentModule extends AbstractModule implements DataHandler<TalentDa
     }
 
     /**
-     * 给角色添加一个新的天赋，如果天赋已经存在(天赋ID相同),则旧的天赋将会被新的天赋覆盖掉。
+     * 如果天赋已经存在则不处理
      * @param talent 
      * @return  
      */
-    public boolean addTalent(Talent talent) {
+    private boolean addTalent(Talent talent) {
         Talent oldTalent = getTalent(talent.getData().getId());
         if (oldTalent != null) {
-            removeTalent(oldTalent);
+            return false;
         }
-        
         talents.add(talent);
         entity.getData().addObjectData(talent.getData());
         talent.setActor(entity);
         talent.initialize();
-        
-        if (talentListeners != null) {
-            for (TalentListener listener : talentListeners) {
-                listener.onTalentAdded(entity, talent);
-            }
-        }
         return true;
     }
     
@@ -166,30 +155,9 @@ public class TalentModule extends AbstractModule implements DataHandler<TalentDa
         // 告诉侦听器
         if (talentListeners != null) {
             for (TalentListener tl : talentListeners) {
-                tl.onTalentPointsChange(entity, talent, trueAdd);
+                tl.onTalentPointsChanged(entity, talent, trueAdd);
             }
         }
-    }
-    
-    /**
-     * 移除角色身上指定的天赋，如果指定的天赋不在角色身上，则什么也不做。
-     * @param talent
-     * @return 
-     */
-    public boolean removeTalent(Talent talent) {
-        if (!talents.contains(talent)) 
-            return false;
-        
-        talents.remove(talent);
-        entity.getData().removeObjectData(talent.getData());
-        talent.cleanup();
-        
-        if (talentListeners != null) {
-            for (TalentListener tl : talentListeners) {
-                tl.onTalentRemoved(entity, talent);
-            }
-        }
-        return true;
     }
     
     /**
@@ -257,12 +225,18 @@ public class TalentModule extends AbstractModule implements DataHandler<TalentDa
             return;
         }
         // 计算出可得的天赋点数并加到属性上
-        int addPoints = talentPointsLevelEl.setLevel(levelAttribute.intValue()).getValue().intValue();
-        talentPointsAttribute.add(addPoints);
+        int pointsAdded = talentPointsLevelEl.setLevel(levelAttribute.intValue()).getValue().intValue();
+        talentPointsAttribute.add(pointsAdded);
         // 记住最近一次添加点数的等级，避免重复添加，注：updateData用于把数据写回talentModule的data中去,
         // 这样角色在存档并重新读回的时候可以还原这个值。
         lastApplyTalentPointsLevel = levelAttribute.intValue();
         updateDatas();
+        
+        // 消息通知
+        if (isMessageEnabled()) {
+            String message = entity.getData().getId() + " get new talent points: " + pointsAdded;
+            messageService.addMessage(new EntityTalentPointAddedMessage(StateCode.TALENT_POINTS_ADDED, message, entity, pointsAdded));
+        }
     }
 
     @Override
@@ -274,18 +248,28 @@ public class TalentModule extends AbstractModule implements DataHandler<TalentDa
     public boolean handleDataAdd(TalentData data, int amount) {
         Talent talent = getTalent(data.getId());
         if (talent != null) {
+            addEntityDataAddMessage(StateCode.DATA_ADD_FAILURE_DATA_EXISTS, data, amount);
             return false;
         }
-        return addTalent((Talent) Loader.load(data));
+        addTalent((Talent) Loader.load(data));
+        // message
+        addEntityDataAddMessage(StateCode.DATA_ADD, data, amount);
+        return true;
     }
-
+    
     @Override
     public boolean handleDataRemove(TalentData data, int amount) {
         Talent talent = getTalent(data.getId());
-        if (talent == null || talent.getData() != data)  {
+        if (talent == null || talent.getData() != data || !talents.contains(talent))  {
+            addEntityDataRemoveMessage(StateCode.DATA_REMOVE_FAILURE_NOT_FOUND, data, amount);
             return false;
         }
-        return removeTalent(talent);
+        talents.remove(talent);
+        entity.getData().removeObjectData(talent.getData());
+        talent.cleanup();
+        // message
+        addEntityDataRemoveMessage(StateCode.DATA_REMOVE, data, amount);
+        return true;
     }
 
     @Override

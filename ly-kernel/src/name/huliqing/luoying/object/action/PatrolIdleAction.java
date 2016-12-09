@@ -12,18 +12,19 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.ActionData;
+import name.huliqing.luoying.data.SkillData;
 import name.huliqing.luoying.layer.network.SkillNetwork;
 import name.huliqing.luoying.layer.service.ActorService;
-import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.module.SkillListener;
+import name.huliqing.luoying.object.entity.EntityDataListener;
 import name.huliqing.luoying.object.module.SkillModule;
 import name.huliqing.luoying.object.skill.Skill;
+import name.huliqing.luoying.xml.ObjectData;
 
 /**
  * 简单的IDLE行为，巡逻，会在一个地点来回走动
  * @author huliqing
  */
-public class PatrolIdleAction extends AbstractAction implements IdleAction, SkillListener{
+public class PatrolIdleAction extends AbstractAction implements IdleAction, EntityDataListener {
     private final ActorService actorService = Factory.get(ActorService.class);
 //    private final SkillService skillService = Factory.get(SkillService.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
@@ -171,14 +172,12 @@ public class PatrolIdleAction extends AbstractAction implements IdleAction, Skil
         // 缓存IDLE技能并添加侦听器
         recacheIdleSkill();
         
-        skillModule.addSkillListener(this);
+        actor.addEntityDataListener(this);
     }
 
     @Override
     public void cleanup() {
-        if (skillModule != null) {
-            skillModule.removeSkillListener(this);
-        }
+        actor.removeEntityDataListener(this);
         super.cleanup(); 
     }
 
@@ -269,13 +268,22 @@ public class PatrolIdleAction extends AbstractAction implements IdleAction, Skil
     }
 
     @Override
-    public void onSkillAdded(Entity actor, Skill skill) {
-        recacheIdleSkill();
+    public void onDataAdded(ObjectData data, int amount) {
+        if (data instanceof SkillData) {
+            recacheIdleSkill();
+        }
     }
 
     @Override
-    public void onSkillRemoved(Entity actor, Skill skill) {
-        recacheIdleSkill();
+    public void onDataRemoved(ObjectData data, int amount) {
+        if (data instanceof SkillData) {
+            recacheIdleSkill();
+        }
+    }
+
+    @Override
+    public void onDataUsed(ObjectData data) {
+        // ignore
     }
 
     private void recacheIdleSkill() {

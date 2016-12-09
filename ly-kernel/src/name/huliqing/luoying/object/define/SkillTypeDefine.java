@@ -59,6 +59,24 @@ public class SkillTypeDefine extends Define {
     }
     
     /**
+     * 将技能类型转化为字符描述
+     * @param types
+     * @param store
+     * @return 
+     */
+    public List<String> getSkillTypes(long types, List<String> store) {
+        if (store == null) {
+            store = new ArrayList<String>();
+        }
+        for (SkillType st : typeList) {
+            if ((st.indexAsBinary() & types) != 0) {
+                store.add(st.name());
+            }
+        }
+        return store;
+    }
+    
+    /**
      * 转化所有skillType为一个整型，所有整型中每个二进制(1)位代表一个skillType类型, 如果skillTypes为null则返回0.
      * @param skillTypes
      * @return 

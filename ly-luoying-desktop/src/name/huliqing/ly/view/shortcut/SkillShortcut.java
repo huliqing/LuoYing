@@ -17,17 +17,12 @@ import com.jme3.scene.shape.Quad;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.data.SkillData;
-import name.huliqing.luoying.layer.network.ActorNetwork;
+import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.luoying.layer.network.SkillNetwork;
-import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.layer.service.SkillService;
-import name.huliqing.luoying.log.StateCode;
-import name.huliqing.luoying.manager.ResManager;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.skill.Skill;
 import name.huliqing.luoying.utils.MaterialUtils;
-import name.huliqing.ly.constants.ResConstants;
-import name.huliqing.ly.enums.MessageType;
 import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.ly.layer.service.GameService;
 
@@ -40,6 +35,7 @@ public class SkillShortcut extends BaseUIShortcut<SkillData> {
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
     private final GameService gameService = Factory.get(GameService.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
+    private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
     
      // 技能CD遮罩颜色
     private final ColorRGBA maskColor = new ColorRGBA(1.0f, 0, 0.5f, 0.5f);
@@ -135,7 +131,9 @@ public class SkillShortcut extends BaseUIShortcut<SkillData> {
             if (target != null) {
                 gameNetwork.setTarget(actor, target.getEntityId());
             }
-            gameNetwork.playSkill(actor, skill.getData().getId());
+            
+            // 执行技能
+            entityNetwork.useObjectData(actor, skill.getData().getUniqueId());
         }
     }
 

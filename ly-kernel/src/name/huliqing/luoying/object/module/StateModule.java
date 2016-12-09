@@ -7,10 +7,12 @@ package name.huliqing.luoying.object.module;
 
 import com.jme3.scene.control.Control;
 import com.jme3.util.SafeArrayList;
+import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.data.ResistData;
 import name.huliqing.luoying.data.StateData;
 import name.huliqing.luoying.manager.RandomManager;
+import name.huliqing.luoying.message.StateCode;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.DataHandler;
 import name.huliqing.luoying.object.entity.Entity;
@@ -45,13 +47,13 @@ public class StateModule extends AbstractModule implements DataHandler<StateData
         this.entity.getSpatial().addControl(updateControl);
         
         // 载入抵抗设置:
-        List<ResistData> rds = actor.getData().getObjectDatas(ResistData.class, null);
+        List<ResistData> rds = actor.getData().getObjectDatas(ResistData.class, new ArrayList<ResistData>());
         if (rds != null && !rds.isEmpty()) {
             setResist((Resist)Loader.load(rds.get(0)));
         }
         
         // 载入状态
-        List<StateData> stateDatas = actor.getData().getObjectDatas(StateData.class, null);
+        List<StateData> stateDatas = actor.getData().getObjectDatas(StateData.class, new ArrayList<StateData>());
         if (stateDatas != null) {
             for (StateData sd : stateDatas) {
                 addState((State)Loader.load(sd), true);
@@ -108,7 +110,7 @@ public class StateModule extends AbstractModule implements DataHandler<StateData
      * @param force
      * @return 
      */
-    public boolean addState(State state, boolean force) {
+    private boolean addState(State state, boolean force) {
         float resistValue = getResistValue(state.getData().getId());
         if (!force && resistValue >= 1.0f) {
             return false;
@@ -116,6 +118,7 @@ public class StateModule extends AbstractModule implements DataHandler<StateData
         state.setActor(entity);
         state.setResist(resistValue);
         addStateInner(state);
+        addEntityDataAddMessage(StateCode.DATA_ADD, state.getData(), 1);
         return true;
     }
     
@@ -178,6 +181,8 @@ public class StateModule extends AbstractModule implements DataHandler<StateData
                 sl.onStateRemoved(entity, state);
             }
         }
+        // 消息
+        addEntityDataRemoveMessage(StateCode.DATA_REMOVE, state.getData(), 1);
         return true;
     }
 

@@ -11,7 +11,6 @@ import name.huliqing.luoying.data.ConnData;
 import name.huliqing.luoying.data.SkillData;
 import name.huliqing.luoying.layer.network.SkillNetwork;
 import name.huliqing.luoying.layer.service.PlayService;
-import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.network.GameClient;
 import name.huliqing.luoying.network.GameServer;
 import name.huliqing.luoying.object.entity.Entity;
@@ -28,6 +27,8 @@ public final class SkillPlayMess extends GameMess {
     private long actorId;
     // 要执行的技能id
     private String skillId;
+    
+    private boolean force;
     
     public String getSkillId() {
         return skillId;
@@ -50,6 +51,14 @@ public final class SkillPlayMess extends GameMess {
     public void setActorId(long actorId) {
         this.actorId = actorId;
     }
+
+    public boolean isForce() {
+        return force;
+    }
+
+    public void setForce(boolean force) {
+        this.force = force;
+    }
     
     @Override
     public void applyOnServer(GameServer gameServer, HostedConnection source) {
@@ -63,7 +72,7 @@ public final class SkillPlayMess extends GameMess {
         // 角色必须是客户端所控制的。客户端角色不能强制执行技能，并且也不能自己指定wantNotInterruptSkills参数
         if (actor.getData().getUniqueId() == cd.getEntityId()) {
             SkillModule skillModule = actor.getModuleManager().getModule(SkillModule.class);
-            Factory.get(SkillNetwork.class).playSkill(actor, skillModule.getSkill(skillId), false);
+            Factory.get(SkillNetwork.class).playSkill(actor, skillModule.getSkill(skillId), force);
         }
     }
     
@@ -71,12 +80,13 @@ public final class SkillPlayMess extends GameMess {
     public void applyOnClient(GameClient gameClient) {
         super.applyOnClient(gameClient);
         Entity actor = Factory.get(PlayService.class).getEntity(actorId);
-        if (actor != null) {
-            // 注：技能的执行在客户端上是强制的，因为服务端已经判断为可以执行。则客户端不再需要判断任何逻辑。
-            SkillModule skillModule = actor.getModuleManager().getModule(SkillModule.class);
-            Skill skill = skillModule.getSkill(skillId);
-            skillModule.playSkill(skill, true);
+        if (actor == null) {
+            return;
         }
+//             注：技能的执行在客户端上是强制的，因为服务端已经判断为可以执行。则客户端不再需要判断任何逻辑。
+        SkillModule skillModule = actor.getModuleManager().getModule(SkillModule.class);
+        Skill skill = skillModule.getSkill(skillId);
+        skillModule.playSkill(skill, force);
     }
   
 }

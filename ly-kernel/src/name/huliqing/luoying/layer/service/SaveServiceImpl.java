@@ -21,7 +21,7 @@ import name.huliqing.luoying.utils.FileUtils;
 public class SaveServiceImpl implements SaveService {
     
     // 存档保存路径
-    private final String saveDir = System.getProperty("user.home") + File.separator + "ly3dSave";
+    private final String saveDir = System.getProperty("user.home") + File.separator + "LuoYing";
 
     @Override
     public void inject() {
@@ -42,8 +42,6 @@ public class SaveServiceImpl implements SaveService {
         }
         return file;
     }
-    
-    // -------------------------
     
     /**
      * 实现保存数据，注：key是唯一的，如果不同的数据保存到同一样key中，则数

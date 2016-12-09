@@ -10,7 +10,7 @@ import name.huliqing.luoying.object.skill.Skill;
  * 技能侦听适配器
  * @author huliqing
  */
-public class SkillListenerAdapter implements SkillPlayListener {
+public class SkillListenerAdapter implements SkillListener {
 
     @Override
     public boolean onSkillHookCheck(Skill skill) {

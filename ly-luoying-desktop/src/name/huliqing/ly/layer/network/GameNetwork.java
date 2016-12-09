@@ -9,7 +9,7 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import name.huliqing.luoying.Inject;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.skill.Skill;
+import name.huliqing.luoying.object.item.Item;
 import name.huliqing.ly.enums.MessageType;
 import name.huliqing.ly.view.talk.Talk;
 
@@ -146,10 +146,9 @@ public interface GameNetwork extends Inject {
     boolean removeObjectData(Entity entity, long objectUniqueId, int amount);
     
     /**
-     * 执行一个技能, 这个方法可以由客户端或服务端玩家直接调用，这是一个玩家用户行为，当技能不能执行时，
-     * 会在控制器输出提示信息。
+     * 设置是否打开实体的游戏消息功能
      * @param entity
-     * @param skill 
+     * @param enabled 
      */
-    void playSkill(Entity entity, String skill);
+    void setMessageEnabled(Entity entity, boolean enabled);
 }

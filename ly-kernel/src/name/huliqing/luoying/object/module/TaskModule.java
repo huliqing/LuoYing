@@ -9,6 +9,7 @@ import com.jme3.util.SafeArrayList;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.data.TaskData;
+import name.huliqing.luoying.message.StateCode;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.DataHandler;
 import name.huliqing.luoying.object.entity.Entity;
@@ -27,10 +28,10 @@ public class TaskModule extends AbstractModule implements DataHandler<TaskData> 
     public void initialize(Entity actor) {
         super.initialize(actor); 
 
-        List<TaskData> taskDatas = actor.getData().getObjectDatas(TaskData.class, null);
+        List<TaskData> taskDatas = actor.getData().getObjectDatas(TaskData.class, new ArrayList<TaskData>());
         if (taskDatas != null && !taskDatas.isEmpty()) {
             for (TaskData td : taskDatas) {
-                addTask((Task) Loader.load(td));
+                addTaskInner((Task) Loader.load(td));
             }
         }
     }
@@ -61,61 +62,6 @@ public class TaskModule extends AbstractModule implements DataHandler<TaskData> 
             }
         }
         return null;
-    }
-    
-    /**
-     * 添加任务
-     * @param task 
-     * @return  
-     */
-    private boolean addTask(Task task) {
-        if (tasks.contains(task)) {
-            return false;
-        }
-        
-        tasks.add(task);
-        entity.getData().addObjectData(task.getData());
-        
-        task.setActor(entity);
-        task.initialize();
-        
-        // 侦听器
-        if (taskListeners != null && !taskListeners.isEmpty()) {
-            for (TaskListener tl : taskListeners) {
-                tl.onTaskAdded(entity, task);
-            }
-        }
-        return true;
-    }
-    
-    /**
-     * 移除任务
-     * @param task
-     * @return 
-     */
-    private boolean removeTask(Task task) {
-        if (!tasks.contains(task)) 
-            return false;
-        
-        tasks.remove(task);
-        entity.getData().removeObjectData(task.getData());
-        task.cleanup();
-        
-        // 侦听器
-        if (taskListeners != null && !taskListeners.isEmpty()) {
-            for (TaskListener tl : taskListeners) {
-                tl.onTaskRemoved(entity, task);
-            }
-        }
-        return true;
-    }
-    
-    /**
-     * 获取角色的任务列表，如果不存在任务列表则返回null
-     * @return 
-     */
-    private List<Task> getTasks() {
-        return tasks;
     }
     
     /**
@@ -162,22 +108,45 @@ public class TaskModule extends AbstractModule implements DataHandler<TaskData> 
         return TaskData.class;
     }
 
+    /**
+     * 添加任务
+     * @param task 
+     * @return  
+     */
+    private void addTaskInner(Task task) {
+        if (tasks.contains(task)) {
+            return;
+        }
+        tasks.add(task);
+        entity.getData().addObjectData(task.getData());
+        task.setActor(entity);
+        task.initialize();
+    }
+    
     @Override
     public boolean handleDataAdd(TaskData data, int amount) {
         Task task = getTask(data.getId());
         if (task != null) {
+            addEntityDataAddMessage(StateCode.DATA_ADD_FAILURE_DATA_EXISTS, data, amount);
             return false;
         }
-        return addTask((Task) Loader.load(data));
+        addTaskInner((Task) Loader.load(data));
+        addEntityDataAddMessage(StateCode.DATA_ADD, data, amount);
+        return true;
     }
 
     @Override
     public boolean handleDataRemove(TaskData data, int amount) {
         Task task = getTask(data.getId());
         if (task == null) {
+            addEntityDataRemoveMessage(StateCode.DATA_REMOVE_FAILURE_NOT_FOUND, data, amount);
             return false;
         }
-        return removeTask(task);
+        tasks.remove(task);
+        entity.getData().removeObjectData(task.getData());
+        task.cleanup();
+        addEntityDataRemoveMessage(StateCode.DATA_REMOVE, data, amount);
+        return true;
     }
 
     @Override

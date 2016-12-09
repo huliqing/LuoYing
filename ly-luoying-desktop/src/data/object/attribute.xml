@@ -140,6 +140,9 @@
     
     <!--判断一个角色是否为玩家-->
     <attributeBoolean id="attributePlayer" name="attributePlayer" />
+    
+    <!--用于控制角色的游戏消息的开关：当角色执行技能、使用物品等操作时会向游戏消息控制台发送消息。-->
+    <attributeBoolean id="attributeMessage" name="attributeMessage" value="0" />
 
     
     <!--==========================================================================-->
@@ -156,7 +159,7 @@
     ,attributeHealthRestore,attributeManaRestore
     ,attributeAttackSpeed,attributeMagicSpeed
     ,attributeDefenceRate,attributeDuckRate,attributeGhostRate,attributeResistInterruptRate
-    ,attributeWeaponSlots,attributeLocation,attributeColor,attributeName,attributePlayer
+    ,attributeWeaponSlots,attributeLocation,attributeColor,attributeName,attributePlayer,attributeMessage
 " />
     
     <!--==========================================================================-->

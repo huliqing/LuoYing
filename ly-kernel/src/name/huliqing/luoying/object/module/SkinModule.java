@@ -16,6 +16,7 @@ import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.SkinData;
 import name.huliqing.luoying.data.ModuleData;
 import name.huliqing.luoying.layer.service.DefineService;
+import name.huliqing.luoying.message.StateCode;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.attribute.CollectionAttribute;
 import name.huliqing.luoying.object.entity.DataHandler;
@@ -74,7 +75,7 @@ public class SkinModule extends AbstractModule implements DataHandler<SkinData> 
         }
         
         // 穿上普通装备
-        List<SkinData> skinDatas =  entity.getData().getObjectDatas(SkinData.class, null);
+        List<SkinData> skinDatas =  entity.getData().getObjectDatas(SkinData.class, new ArrayList<SkinData>());
         if (skinDatas != null && !skinDatas.isEmpty()) {
             skinAll = new SafeArrayList<Skin>(Skin.class);
             for (SkinData sd : skinDatas) {
@@ -89,68 +90,37 @@ public class SkinModule extends AbstractModule implements DataHandler<SkinData> 
         attachBaseSkin();
     }
     
-    /**
-     * 添加装备到角色包裹.
-     * @param skinData
-     * @param amount 数量，必须大于0
-     * @return true如果成功添加
-     */
-    private boolean addSkin(SkinData skinData, int amount) {
-        if (amount <= 0)
-            return false;
-
-        Skin skin = getSkin(skinData);
-        if (skin != null) {
-            skin.getData().setTotal(skin.getData().getTotal() + amount);
-        } else {
-            skin = Loader.load(skinData);
-            skin.getData().setTotal(amount);
-            if (skinAll == null) {
-                skinAll = new SafeArrayList<Skin>(Skin.class);
-            }
-            skinAll.add(skin);
-            entity.getData().addObjectData(skin.getData());
-        }
-        
-        if (skinListeners != null) {
-            for (int i = 0; i < skinListeners.size(); i++) {
-                skinListeners.get(i).onSkinAdded(entity, skin);
-            }
-        }
-        return true;
-    }
-    
-    /**
-     * 从角色包裹上移除装备,
-     * @param skinData 唯一id
-     * @param amount
-     * @return  
-     * @see #getSkin(Long) 
-     */
-    private boolean removeSkin(SkinData skinData, int amount) {
-        Skin skin = getSkin(skinData);
-        if (skin == null) {
-            return false;
-        }
-        // 正在使用中的装备不能删除
-        if (skinUsed != null && skinUsed.contains(skin)) {
-            return false;
-        }
-        
-        skin.getData().setTotal(skin.getData().getTotal() - amount);
-        if (skin.getData().getTotal() <= 0) {
-            entity.getData().removeObjectData(skin.getData());
-            skinAll.remove(skin);
-        }
-        
-        if (skinListeners != null) {
-            for (int i = 0; i < skinListeners.size(); i++) {
-                skinListeners.get(i).onSkinRemoved(entity, skin);
-            }
-        }
-        
-        return true;
-    }
+//    /**
+//     * 从角色包裹上移除装备,
+//     * @param skinData 唯一id
+//     * @param amount
+//     * @return  
+//     * @see #getSkin(Long) 
+//     */
+//    private boolean removeSkin(SkinData skinData, int amount) {
+//        Skin skin = getSkin(skinData);
+//        if (skin == null) {
+//            return false;
+//        }
+//        // 正在使用中的装备不能删除
+//        if (skinUsed != null && skinUsed.contains(skin)) {
+//            return false;
+//        }
+//        
+//        skin.getData().setTotal(skin.getData().getTotal() - amount);
+//        if (skin.getData().getTotal() <= 0) {
+//            entity.getData().removeObjectData(skin.getData());
+//            skinAll.remove(skin);
+//        }
+//        
+//        if (skinListeners != null) {
+//            for (int i = 0; i < skinListeners.size(); i++) {
+//                skinListeners.get(i).onSkinRemoved(entity, skin);
+//            }
+//        }
+//        
+//        return true;
+//    }
     
     /**
      * 给角色换上装备
@@ -437,12 +407,59 @@ public class SkinModule extends AbstractModule implements DataHandler<SkinData> 
     
     @Override
     public boolean handleDataAdd(SkinData data, int amount) {
-        return addSkin(data, amount);
+         if (amount <= 0)
+            return false;
+
+        Skin skin = getSkin(data);
+        if (skin != null) {
+            skin.getData().setTotal(skin.getData().getTotal() + amount);
+        } else {
+            skin = Loader.load(data);
+            skin.getData().setTotal(amount);
+            if (skinAll == null) {
+                skinAll = new SafeArrayList<Skin>(Skin.class);
+            }
+            skinAll.add(skin);
+            entity.getData().addObjectData(skin.getData());
+        }
+        
+        if (skinListeners != null) {
+            for (int i = 0; i < skinListeners.size(); i++) {
+                skinListeners.get(i).onSkinAdded(entity, skin);
+            }
+        }
+        
+        addEntityDataAddMessage(StateCode.DATA_ADD, data, amount);
+        
+        return true;
     }
 
     @Override
     public boolean handleDataRemove(SkinData data, int amount) {
-        return removeSkin(data, amount);
+        Skin skin = getSkin(data);
+        if (skin == null) {
+            addEntityDataRemoveMessage(StateCode.DATA_REMOVE_FAILURE_NOT_FOUND, data, amount);
+            return false;
+        }
+        // 正在使用中的装备不能删除
+        if (skinUsed != null && skinUsed.contains(skin)) {
+            addEntityDataRemoveMessage(StateCode.DATA_REMOVE_FAILURE_IN_USING, data, amount);
+            return false;
+        }
+        
+        skin.getData().setTotal(skin.getData().getTotal() - amount);
+        if (skin.getData().getTotal() <= 0) {
+            entity.getData().removeObjectData(skin.getData());
+            skinAll.remove(skin);
+        }
+        
+        if (skinListeners != null) {
+            for (int i = 0; i < skinListeners.size(); i++) {
+                skinListeners.get(i).onSkinRemoved(entity, skin);
+            }
+        }
+        addEntityDataRemoveMessage(StateCode.DATA_REMOVE, data, amount);
+        return true;
     }
 
     @Override
@@ -450,6 +467,7 @@ public class SkinModule extends AbstractModule implements DataHandler<SkinData> 
         // 使用一件装备之前必须先拥有这件装备（use Entity.addObjectData()）
         Skin skin = getSkin(data);
         if (skin == null) {
+            addEntityDataUseMessage(StateCode.DATA_USE_FAILURE_NOT_FOUND, data);
             return false;
         }
         
@@ -460,6 +478,7 @@ public class SkinModule extends AbstractModule implements DataHandler<SkinData> 
             } else {
                 attachSkin(skin);
             }
+            addEntityDataUseMessage(StateCode.DATA_USE, data);
             return true;
         }
         
@@ -473,6 +492,7 @@ public class SkinModule extends AbstractModule implements DataHandler<SkinData> 
         } else {
             attachSkin(skin);
         }
+        addEntityDataUseMessage(StateCode.DATA_USE, data);
         return true;
     }
     

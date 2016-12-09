@@ -6,13 +6,12 @@ package name.huliqing.luoying.layer.service;
 
 import java.util.List;
 import name.huliqing.luoying.layer.network.SkillNetwork;
-import name.huliqing.luoying.log.StateCode;
+import name.huliqing.luoying.message.StateCode;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.module.SkillListener;
 import name.huliqing.luoying.object.module.SkillModule;
-import name.huliqing.luoying.object.module.SkillPlayListener;
 import name.huliqing.luoying.object.skill.Skill;
 import name.huliqing.luoying.object.skill.SkillType;
+import name.huliqing.luoying.object.module.SkillListener;
 
 /**
  * 执行技能，如果没有特别说明，如果返回false则说明执行失败。返回true则说明
@@ -22,14 +21,6 @@ import name.huliqing.luoying.object.skill.SkillType;
 public interface SkillService extends SkillNetwork {
     
     boolean playSkill(SkillModule skillModule, Skill skill, boolean force);
-    
-    /**
-     * 从角色身上移除一个技能
-     * @param actor
-     * @param skillId
-     * @return 
-     */
-    boolean removeSkill(Entity actor, String skillId);
     
     /**
      * 获取角色的技能，如果角色身上不存在该技能则返回null
@@ -78,32 +69,17 @@ public interface SkillService extends SkillNetwork {
     /**
      * 给角色添加一个技能侦听器
      * @param actor
-     * @param skillListener 
+     * @param listener 
      */
-    void addSkillListener(Entity actor, SkillListener skillListener);
-    
-    /**
-     * 给角色添加一个技能侦听器
-     * @param actor
-     * @param skillPlayListener 
-     */
-    void addSkillPlayListener(Entity actor, SkillPlayListener skillPlayListener);
+    void addListener(Entity actor, SkillListener listener);
     
     /**
      * 移除角色身上的技能侦听器
      * @param actor
-     * @param skillListener
+     * @param listener
      * @return 
      */
-    boolean removeSkillListener(Entity actor, SkillListener skillListener);
-    
-    /**
-     * 移除角色身上的技能侦听器
-     * @param actor
-     * @param skillPlayListener
-     * @return 
-     */
-    boolean removeSkillPlayListener(Entity actor, SkillPlayListener skillPlayListener);
+    boolean removeListener(Entity actor, SkillListener listener);
     
     /**
      * 是否可以使用指定的技能，该方法返回一个状态码。使用该状态码来判断是否可以
@@ -163,13 +139,6 @@ public interface SkillService extends SkillNetwork {
      * @param skillTypes 
      */
     void unlockSkillTypes(Entity actor, long skillTypes);
-
-    /**
-     * 获取技能类型
-     * @param skillType
-     * @return 
-     */
-    SkillType getSkillTypes(String skillType);
     
     /**
      * 将技能类型转换为使用二进制位表示的整数值，返回的数值中每个"1"位表示一个技能类型。
@@ -177,5 +146,13 @@ public interface SkillService extends SkillNetwork {
      * @return 
      */
     long convertSkillTypes(String... types);
+    
+    /**
+     * 获取技能类型的字符串形式
+     * @param types
+     * @param store 存放结果
+     * @return 
+     */
+    List<String> getSkillTypes(long types, List<String> store);
     
 }

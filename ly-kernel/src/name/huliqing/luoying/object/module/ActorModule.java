@@ -12,8 +12,6 @@ import com.jme3.math.Vector3f;
 import com.jme3.util.TempVars;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import name.huliqing.luoying.data.ModuleData;
 import name.huliqing.luoying.manager.ResManager;
 import name.huliqing.luoying.object.attribute.Attribute;
@@ -29,10 +27,9 @@ import name.huliqing.luoying.utils.FastStack;
 /**
  * 角色的基本控制器
  * @author huliqing
- * @param <T>
  */
-public class ActorModule<T extends ModuleData> extends AbstractModule<T> implements SimpleValueChangeListener<Object>, ValueChangeListener {
-    private static final Logger LOG = Logger.getLogger(ActorModule.class.getName());
+public class ActorModule extends AbstractModule implements SimpleValueChangeListener<Object>, ValueChangeListener {
+//    private static final Logger LOG = Logger.getLogger(ActorModule.class.getName());
     private final static String DATA_VIEW_DIRECTION = "viewDirection";
     private final static String DATA_WALK_DIRECTION = "walkDirection";
     
@@ -75,7 +72,7 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
     private final EntityAttributeListener actorEntityListener = new ActorEntityListener();
     
     @Override
-    public void setData(T data) {
+    public void setData(ModuleData data) {
         super.setData(data);
         this.radius = data.getAsFloat("radius", radius);
         this.height = data.getAsFloat("height", height);
@@ -101,18 +98,6 @@ public class ActorModule<T extends ModuleData> extends AbstractModule<T> impleme
             // 这发生在当角色在走路过程中存档后，再恢复时会导致角色“不走路”但却在一直移动。
 //            data.setAttribute(DATA_WALK_DIRECTION, getWalkDirection());
         }
-    }
-    
-    private <T extends Attribute> T getAttribute(String attributeName, Class<T> type) {
-        if (attributeName == null) {
-            return null;
-        }
-        T attribute = entity.getAttributeManager().getAttribute(attributeName, type);
-        if (attribute == null) {
-            LOG.log(Level.WARNING, "Attribute not found by attributeName={0}, attributeType={1}, entity={2}"
-                    , new Object[] {attributeName, type.getName(), entity.getData().getId()});
-        }
-        return attribute;
     }
     
     @Override

@@ -8,6 +8,7 @@ package name.huliqing.luoying.object.module;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.data.ItemData;
+import name.huliqing.luoying.message.StateCode;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.DataHandler;
 import name.huliqing.luoying.object.entity.Entity;
@@ -30,7 +31,7 @@ public class ItemModule extends AbstractModule implements DataHandler<ItemData> 
         super.initialize(actor);
         
          // 从角色身上取出ItemData类型数据（不取出也可以，但是把数据拿出来放在这里比较高效。）
-        List<ItemData> tempDatas = actor.getData().getObjectDatas(ItemData.class, null);
+        List<ItemData> tempDatas = actor.getData().getObjectDatas(ItemData.class, new ArrayList<ItemData>());
         if (tempDatas != null && !tempDatas.isEmpty()) {
             items = new ArrayList<ItemData>(tempDatas.size());
             for (ItemData itemData : tempDatas) {
@@ -69,6 +70,7 @@ public class ItemModule extends AbstractModule implements DataHandler<ItemData> 
         } else {
             item.setTotal(item.getTotal() + count);
         }
+        addEntityDataAddMessage(StateCode.DATA_ADD, data, count);
         return true;
     }
     
@@ -79,16 +81,21 @@ public class ItemModule extends AbstractModule implements DataHandler<ItemData> 
         
         ItemData item = find(data.getId());
         
-        if (item == null)
+        if (item == null) {
+            addEntityDataRemoveMessage(StateCode.DATA_REMOVE_FAILURE_NOT_FOUND, data, count);
             return false;
+        }
         
-        if (!item.isDeletable())
+        if (!item.isDeletable()) {
+            addEntityDataRemoveMessage(StateCode.DATA_REMOVE_FAILURE_UN_DELETABLE, data, count);
             return false;
+        }
         
         item.setTotal(item.getTotal() - count);
         if (item.getTotal() <= 0) {
             items.remove(item);
             entity.getData().getObjectDatas().remove(item);
+            addEntityDataRemoveMessage(StateCode.DATA_REMOVE, data, count);
         }
         return true;
     }
@@ -96,7 +103,16 @@ public class ItemModule extends AbstractModule implements DataHandler<ItemData> 
     @Override
     public boolean handleDataUse(ItemData data) {
         Item item = Loader.load(data);
-        item.use(entity);
+        
+        int stateCode = item.checkStateCode(entity);
+        
+        // 输出消息,不管物品使用是否成功都应该会有一个状态码
+        addEntityDataUseMessage(stateCode, data);
+        
+        if (stateCode == StateCode.DATA_USE) {
+            item.use(entity);
+        }
+        
         return true;
     }
     

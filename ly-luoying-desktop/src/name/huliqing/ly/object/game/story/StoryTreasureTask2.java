@@ -4,7 +4,6 @@
  */
 package name.huliqing.ly.object.game.story;
 
-import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.util.TempVars;
 import java.util.List;
@@ -19,6 +18,7 @@ import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.network.SkillNetwork;
 import name.huliqing.luoying.layer.network.SkinNetwork;
 import name.huliqing.luoying.layer.service.ActorService;
+import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.layer.service.LogicService;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.layer.service.SceneService;
@@ -66,6 +66,7 @@ public class StoryTreasureTask2 extends AbstractTaskStep {
     private final GameService gameService = Factory.get(GameService.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     private final SceneService sceneService = Factory.get(SceneService.class);
+    private final EntityService entityService = Factory.get(EntityService.class);
     
     // ==== 任务位置
     private final StoryTreasureGame game;
@@ -213,7 +214,7 @@ public class StoryTreasureTask2 extends AbstractTaskStep {
 
                 TempVars tv = TempVars.get();
                 tv.vect1.set(game.treasurePos);
-                Vector3f terrainHeight = playService.getTerrainHeight(game.getScene(), tv.vect1.x, tv.vect1.z);
+                Vector3f terrainHeight = sceneService.getSceneHeight(game.getScene(), tv.vect1.x, tv.vect1.z);
                 if (terrainHeight != null) {
                     tv.vect1.set(terrainHeight);
                 }
@@ -330,7 +331,7 @@ public class StoryTreasureTask2 extends AbstractTaskStep {
                             doTaskComplete();
                         } else {
                             final BackSkill backSkill = (BackSkill) skill;
-                            skillService.addSkillPlayListener(companion, new SkillListenerAdapter() {
+                            skillService.addListener(companion, new SkillListenerAdapter() {
                                 @Override
                                 public void onSkillEnd(Skill skill) {
                                     if (skill == backSkill) {
@@ -433,10 +434,7 @@ public class StoryTreasureTask2 extends AbstractTaskStep {
             sceneBuilder.setEnabled(false);
             // 同伴进入战场后宝箱不死
             if (treasure != null) {
-                StateModule sm = treasure.getModuleManager().getModule(StateModule.class);
-                if (sm != null) {
-                    sm.addState((State)Loader.load(IdConstants.STATE_SAFE), true);
-                }
+                entityService.addObjectData(treasure, Loader.loadData(IdConstants.STATE_SAFE), 1);
             }
             playNetwork.addEntity(companion);
         } 

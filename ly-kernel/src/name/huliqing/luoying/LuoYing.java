@@ -300,7 +300,6 @@ public class LuoYing {
     private static final Logger LOG = Logger.getLogger(LuoYing.class.getName());
     
     private static Application app;
-//    private static AppSettings settings; 
     private static BitmapFont font;
     
     /**
@@ -309,7 +308,6 @@ public class LuoYing {
      */
     public static void initialize(Application app) {
         LuoYing.app = app;
-//        LuoYing.settings = settings;
         
         // 注册需要序列化的数据，对于网络版进行序列化时需要用到。
         registerSerializer();

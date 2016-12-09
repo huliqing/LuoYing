@@ -21,8 +21,7 @@ import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.network.Network;
-import name.huliqing.luoying.layer.service.ConfigService;
-import name.huliqing.luoying.layer.service.LogicService;
+import name.huliqing.luoying.layer.service.SceneService;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.anim.Anim;
 import name.huliqing.luoying.object.anim.AnimationControl;
@@ -44,8 +43,7 @@ public class SummonSkill extends AbstractSkill {
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final PlayService playService = Factory.get(PlayService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
-    private final ConfigService configService = Factory.get(ConfigService.class);
-    private final LogicService logicService = Factory.get(LogicService.class);
+    private final SceneService sceneService = Factory.get(SceneService.class);
     
     // 要召唤的角色的ID
     private String summonId;
@@ -209,7 +207,7 @@ public class SummonSkill extends AbstractSkill {
                     
                     // 根据当前角色的朝向计算召唤点
                     getLocalToWorld(actor, summonOffset, summonPos);
-                    Vector3f terrainHeight = playService.getTerrainHeight(actor.getScene(), summonPos.x, summonPos.z);
+                    Vector3f terrainHeight = sceneService.getSceneHeight(actor.getScene(), summonPos.x, summonPos.z);
                     if (terrainHeight != null) {
                         summonPos.set(terrainHeight);
                     }

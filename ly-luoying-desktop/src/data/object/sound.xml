@@ -24,8 +24,8 @@
     <!--==========================================================================-->
     <!--环境-->
     <!--==========================================================================-->
-    <sound id="soundOcean" file="Sounds/environment/ocean.ogg" />
-    <sound id="soundRiver" file="Sounds/environment/river.ogg" />
+    <sound id="soundOcean" file="Sounds/environment/ocean.ogg" looping="1" />
+    <sound id="soundRiver" file="Sounds/environment/river.ogg" looping="1" />
     
     <!--==========================================================================-->
     <!--通用提示音效: 任务、物品、装备、升级、金币等提示，

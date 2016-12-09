@@ -9,7 +9,6 @@ import name.huliqing.luoying.data.ConfigData;
 import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.skill.Skill;
 
 /**
  *
@@ -157,5 +156,6 @@ public interface GameService extends GameNetwork {
      * @return 
      */
     ConfigData loadConfig();
+    
     
 }

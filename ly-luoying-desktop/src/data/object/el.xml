@@ -118,9 +118,9 @@
     <!--==========================================================================-->
     
     <!-- 默认物理伤害: 配置给攻击技能-->
-    <elSkillHitNumber id="elSkillAttack" expression="#{-(s.attributeAttack + skillHitValue  > t.attributeDefence ? s.attributeAttack + skillHitValue - t.attributeDefence : 1)}" />
+    <elSkillHitNumber id="elSkillAttack" expression="#{-(s.attributeAttack + skillHitValue  > t.attributeDefence ? s.attributeAttack + skillHitValue - t.attributeDefence : 0)}" />
     <!-- 默认魔法伤害: 配置给魔法技能-->
-    <elSkillHitNumber id="elSkillMagicAttack" expression="#{-(s.attributeMagicAttack + skillHitValue > t.attributeMagicDefence ? s.attributeMagicAttack + skillHitValue - t.attributeMagicDefence : 1)}" />
+    <elSkillHitNumber id="elSkillMagicAttack" expression="#{-(s.attributeMagicAttack + skillHitValue > t.attributeMagicDefence ? s.attributeMagicAttack + skillHitValue - t.attributeMagicDefence : 0)}" />
     <!-- 绝对攻击, 配置给攻击技能，不考虑角色攻击力及目标的防御。-->
     <elSkillHitNumber id="elSkillAbsoluteAttack" expression="#{-skillHitValue}" />
     <!-- 技能增加效果: 配置给增益技能，默认只使用技能的自身输出值.-->

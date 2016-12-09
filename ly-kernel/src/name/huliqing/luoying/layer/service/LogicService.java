@@ -15,13 +15,6 @@ import name.huliqing.luoying.object.logic.Logic;
  */
 public interface LogicService extends Inject {
     
-//    /**
-//     * 载入一个角色逻辑
-//     * @param logicId
-//     * @return 
-//     */
-//    Logic loadLogic(String logicId);
-    
     /**
      * 给角色添加一个逻辑
      * @param actor
@@ -57,40 +50,4 @@ public interface LogicService extends Inject {
      */
     void clearLogics(Entity actor);
     
-//    /**
-//     * 注：该方法会清理当前角色的逻辑，然后把角色的逻辑重置为玩家类的逻辑。
-//     * 玩家类的逻辑和普通角色的逻辑有些不同，如玩家逻辑可能没有idle行为，
-//     * 并且检测敌人的频率可能稍高，技能施
-//     * 法可能有些限制或区别.
-//     * @param actor 
-//     */
-//    void resetPlayerLogic(Entity actor);
-//    
-//    /**
-//     * 判断角色的逻辑是否打开
-//     * @param actor
-//     * @return 
-//     */
-//    boolean isAutoLogic(Entity actor);
-//    
-//    /**
-//     * 打开或关闭角色的自动逻辑
-//     * @param actor
-//     * @param enabled 
-//     */
-//    void setAutoLogic(Entity actor, boolean enabled);
-//    
-//    /**
-//     * 判断角色是否自动侦察敌人
-//     * @param actor
-//     * @return 
-//     */
-//    boolean isAutoDetect(Entity actor);
-//    
-//    /**
-//     * 设置角色是否自动侦察敌人
-//     * @param actor 
-//     * @param autoDetect
-//     */
-//    void setAutoDetect(Entity actor, boolean autoDetect);
 }

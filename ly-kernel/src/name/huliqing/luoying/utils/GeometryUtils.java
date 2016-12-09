@@ -49,7 +49,7 @@ import name.huliqing.luoying.object.entity.Entity;
  * @author huliqing
  */
 public class GeometryUtils {
-    private final static Logger logger = Logger.getLogger(GeometryUtils.class.getName());
+    private final static Logger LOG = Logger.getLogger(GeometryUtils.class.getName());
     
     /**
      * 判断child是否和parent是同一个对象，如果是同一个对象，或者是其子对象
@@ -321,7 +321,7 @@ public class GeometryUtils {
             BoundingSphere bs = (BoundingSphere) bv;
             height = bs.getRadius() * 2;
         } else {
-            logger.log(Level.WARNING, "Unsupported BoundingVolume type={0}", bv.getType());
+            LOG.log(Level.WARNING, "Unsupported BoundingVolume type={0}", bv.getType());
         }
         return height;
     }
@@ -346,7 +346,7 @@ public class GeometryUtils {
             BoundingSphere bs = (BoundingSphere) bv;
             store.set(bs.getCenter()).addLocal(0, bs.getRadius(), 0);
         } else {
-            logger.log(Level.WARNING, "Unsupported BoundingVolume type={0}", bv.getType());
+            LOG.log(Level.WARNING, "Unsupported BoundingVolume type={0}", bv.getType());
         }
         return store;
     }
@@ -419,7 +419,7 @@ public class GeometryUtils {
         AnimControl acFrom = from.getControl(AnimControl.class);
         AnimControl acTo = to.getControl(AnimControl.class);
         if (acFrom == null || acTo == null) {
-            logger.log(Level.WARNING, "from and to add need a AnimControl. from={0}, to={1}", new Object[] {from, to});
+            LOG.log(Level.WARNING, "from and to add need a AnimControl. from={0}, to={1}", new Object[] {from, to});
             return;
         }
         Collection<String> namesFrom = acFrom.getAnimationNames();

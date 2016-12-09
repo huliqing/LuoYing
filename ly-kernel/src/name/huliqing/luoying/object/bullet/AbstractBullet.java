@@ -15,6 +15,8 @@ import com.jme3.scene.Spatial.CullHint;
 import com.jme3.scene.control.AbstractControl;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import name.huliqing.luoying.data.BulletData;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.effect.Effect;
@@ -23,13 +25,14 @@ import name.huliqing.luoying.object.entity.ModelEntity;
 import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.object.shape.Shape;
 import name.huliqing.luoying.object.sound.SoundManager;
+import name.huliqing.luoying.utils.DebugDynamicUtils;
 
 /**
  * 子弹基类
  * @author huliqing
  */
 public abstract class AbstractBullet extends ModelEntity<BulletData> implements Bullet<BulletData> {
-//    private static final Logger LOG = Logger.getLogger(AbstractBullet.class.getName());
+    private static final Logger LOG = Logger.getLogger(AbstractBullet.class.getName());
     
     // 调试
     protected boolean debug;
@@ -41,7 +44,7 @@ public abstract class AbstractBullet extends ModelEntity<BulletData> implements 
     // 是否跟踪目标
     protected boolean trace;
     // 基本速度
-    protected float baseSpeed = 20;
+    protected float baseSpeed = 30;
     // 超时时间限制，单位秒
     protected float timeout = 30;
     // 子弹效果组
@@ -65,9 +68,9 @@ public abstract class AbstractBullet extends ModelEntity<BulletData> implements 
      */
     protected boolean consumed;
     
-    protected final Vector3f start = new Vector3f();
+    protected Vector3f start = new Vector3f();
     
-    protected final Vector3f end = new Vector3f();
+    protected Vector3f end = new Vector3f();
     
     /**
      * 发射子弹的目标源,可能是一个角色，也可能是其它
@@ -181,12 +184,16 @@ public abstract class AbstractBullet extends ModelEntity<BulletData> implements 
 
     @Override
     public void setStart(Vector3f startPoint) {
-        this.start.set(startPoint);
+        // 开始点可以不需要直接引用，
+//        this.start.set(startPoint);
+        this.start = startPoint;
     }
 
     @Override
     public void setEnd(Vector3f endPoint) {
-        this.end.set(endPoint);
+        // EndPoint结束点必须是直接引用的，不能this.end.set(endPoint);
+        // 这样允许子弹跟随，当外部持续更新endPoint时，子弹也可以在运行时持续更新位置来跟随目标。
+        this.end = endPoint;
     }
 
     @Override
@@ -249,6 +256,12 @@ public abstract class AbstractBullet extends ModelEntity<BulletData> implements 
         
         getCurrentEndPos();
         doUpdatePosition(tpf, trueEndPoint);
+        
+//        LOG.log(Level.INFO, "bulletId={0}, bulletUniqueId={1}, endPoint={2}", new Object[] {data.getId(), data.getUniqueId(), trueEndPoint});
+        
+        if (debug) {
+            DebugDynamicUtils.debugBounding(data.getUniqueId() + "", hitChecker);
+        }
         
         // 击中目标结束
         if (isHit(trueEndPoint)) {

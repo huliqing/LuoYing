@@ -9,8 +9,6 @@ import com.jme3.material.MatParamOverride;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector4f;
 import com.jme3.shader.VarType;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import name.huliqing.luoying.data.ModuleData;
 import name.huliqing.luoying.object.attribute.Attribute;
 import name.huliqing.luoying.object.attribute.ValueChangeListener;
@@ -23,7 +21,7 @@ import name.huliqing.luoying.object.entity.Entity;
  * @author huliqing
  */
 public class ColorModule extends AbstractModule implements ValueChangeListener{
-    private static final Logger LOG = Logger.getLogger(ColorModule.class.getName());
+//    private static final Logger LOG = Logger.getLogger(ColorModule.class.getName());
 
     // 绑定一个Vector4Attribute类型的属性，这个属性用于控制角色的颜色
     private String bindColorAttribute;
@@ -51,15 +49,10 @@ public class ColorModule extends AbstractModule implements ValueChangeListener{
     @Override
     public void initialize(Entity entity) {
         super.initialize(entity);
-        if (bindColorAttribute != null) {
-            colorAttribute = entity.getAttributeManager().getAttribute(bindColorAttribute, Vector4fAttribute.class);
-        }
+        colorAttribute = getAttribute(bindColorAttribute, Vector4fAttribute.class);
         if (colorAttribute != null) {
             colorAttribute.addListener(this);
             changeColor(colorAttribute.getValue());
-        } else {
-            LOG.log(Level.WARNING, "Could not find color attribute for entity, entityId={0}, bindColorAttribute={1}"
-                    , new Object[] {entity.getData().getId(), bindColorAttribute});
         }
     }
     @Override
@@ -88,6 +81,5 @@ public class ColorModule extends AbstractModule implements ValueChangeListener{
         entity.getSpatial().addMatParamOverride(useMaterialColorOverride);
         entity.getSpatial().addMatParamOverride(ambientOverride);
         entity.getSpatial().addMatParamOverride(diffuseOverride);
-        
     }
 }

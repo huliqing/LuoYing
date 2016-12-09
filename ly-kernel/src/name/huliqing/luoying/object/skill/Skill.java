@@ -5,6 +5,7 @@
 package name.huliqing.luoying.object.skill;
 
 import name.huliqing.luoying.data.SkillData;
+import name.huliqing.luoying.message.StateCode;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.xml.DataProcessor;
 
@@ -61,8 +62,9 @@ public interface Skill extends DataProcessor<SkillData>{
     float getTrueUseTime();
 
     /**
-     * 判断角色在当前状态下是否可以执行这个技能,该方法返回一个状态码{@link SkillConstants}，<br>
-     * 来判断当前技能是否可以执行，当前技能是否可以执行会受到技能的各种约束限制，<br>
+     * 判断角色在当前状态下是否可以执行这个技能,该方法返回一个状态码{@link StateCode}，<br>
+     * 只有当技能返回 {@link StateCode#SKILL_USE_STATE_OK}时，技能才可以执行。
+     * 如果返回其它状态码则说明技能不能执行，当前技能是否可以执行会受到技能的各种约束限制，<br>
      * 如：技能要求角色持有特定武器才可以执行或者技能处于冷却中，或者技能要求消耗一些属性值而角色当前的属性值不足等。
      * @return 
      * @see SkillConstants

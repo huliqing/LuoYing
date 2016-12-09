@@ -74,4 +74,11 @@ public interface EntityService extends EntityNetwork {
      * @return 
      */
     ObjectData getObjectDataByUniqueId(Entity entity, long uniqueId);
+    
+    /**
+     * 克隆一个实体
+     * @param entity 被克隆的实体
+     * @return 新的克隆体
+     */
+    Entity cloneEntity(Entity entity);
 }

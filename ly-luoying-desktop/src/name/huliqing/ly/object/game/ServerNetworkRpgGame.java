@@ -144,6 +144,8 @@ public abstract class ServerNetworkRpgGame extends NetworkRpgGame {
         gameService.setPlayer(actor, true);
         // 在服务端上角色的逻辑都必须是始终打开的，这个参数可能会在客户端选择角色的时候被关闭，这里必须打开。
         gameService.setAutoLogic(actor, true);
+        // 打开消息输出功能
+        gameService.setMessageEnabled(actor, true);
         
         // 添加客户端角色
         playNetwork.addEntity(actor);

@@ -13,6 +13,7 @@ import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.layer.service.LogicService;
 import name.huliqing.luoying.layer.service.PlayService;
+import name.huliqing.luoying.layer.service.SceneService;
 import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.logic.PositionLogic;
@@ -37,6 +38,7 @@ public class SurvivalLogic extends AbstractGameLogic {
     private final LogicService logicService = Factory.get(LogicService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
+    private final SceneService sceneService = Factory.get(SceneService.class);
     
     private final GameService gameService = Factory.get(GameService.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
@@ -112,7 +114,7 @@ public class SurvivalLogic extends AbstractGameLogic {
 
                 TempVars tv = TempVars.get();
                 tv.vect1.set(_game.treasurePos);
-                Vector3f terrainHeight = playService.getTerrainHeight(_game.getScene(), tv.vect1.x, tv.vect1.z);
+                Vector3f terrainHeight = sceneService.getSceneHeight(_game.getScene(), tv.vect1.x, tv.vect1.z);
                 if (terrainHeight != null) {
                     tv.vect1.set(terrainHeight);
                 }

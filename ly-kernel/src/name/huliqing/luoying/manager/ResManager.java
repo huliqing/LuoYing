@@ -120,7 +120,7 @@ public class ResManager {
      * @return 
      * @see #get(java.lang.String) 
      */
-    public static String get(String key, Object[] params) {
+    public static String get(String key, Object... params) {
         return get(key, params, getLocale());
     }
     

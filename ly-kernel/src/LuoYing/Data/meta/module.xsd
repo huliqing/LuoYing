@@ -19,6 +19,7 @@ xs:time
     <xs:element name="root">
         <xs:complexType>
             <xs:all>
+                <xs:element ref="moduleBase" />
                 <xs:element ref="moduleActor" />
                 <xs:element ref="moduleAction" />
                 <xs:element ref="moduleChannel" />
@@ -384,6 +385,17 @@ xs:time
         </xs:complexType>
     </xs:element>
     
+    <xs:element name="moduleBase">
+        <xs:annotation>
+            <xs:documentation>不要直接使用</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="moduleBase"></xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
     <xs:complexType name="moduleBase">
         <xs:complexContent>
             <xs:extension base="base">
@@ -391,6 +403,14 @@ xs:time
                     <xs:annotation>
                         <xs:documentation>
                             模块载入时的优先顺序,默认：0，值越小排越前，值越大排在越后面载入。
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="bindMessageEnabledAttribute" type="xs:integer" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            BooleanAttribute, 绑定一个boolean属性，这个属性作为控制实体的游戏消息开关, 一般应该只有玩家角色
+                            才应该打开这个功能。
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>

@@ -11,7 +11,7 @@ import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.SkillData;
 import name.huliqing.luoying.layer.service.ActorService;
-import name.huliqing.luoying.layer.service.BulletService;
+import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.bullet.Bullet;
 import name.huliqing.luoying.object.bullet.Bullet.Listener;
@@ -26,8 +26,6 @@ import name.huliqing.luoying.utils.MathUtils;
 public class ShotSkill extends HitSkill {
 
     private final ActorService actorService = Factory.get(ActorService.class);
-//    private final PlayService playService = Factory.get(PlayService.class);
-    private final BulletService bulletService = Factory.get(BulletService.class);
     
     // 靶点类型
     protected enum ShotTargetType {
@@ -191,7 +189,7 @@ public class ShotSkill extends HitSkill {
         Vector3f offset = getShotOffset();
         
         Vector3f startPoint = new Vector3f(offset);
-        Bullet bb = bulletService.loadBullet(bullet);
+        Bullet bb = Loader.load(bullet);
         bb.setStart(convertToWorldPos(startPoint));
         bb.setEnd(getShotEndPoint(mainTarget));
         bb.setSpeed(shotSpeed);

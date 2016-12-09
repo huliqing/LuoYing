@@ -58,7 +58,7 @@ public class RayDetour extends Detour {
         detour(tempDir);
         
         float lockTime = count * 0.25f + 0.25f;
-        action.lock(lockTime);
+        action.lock(lockTime); 
     }
     
     private boolean hasObstacleActor(Entity self, List<Actor> actors) {

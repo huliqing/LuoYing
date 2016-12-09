@@ -24,10 +24,18 @@ import name.huliqing.luoying.Config;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.data.EntityData;
+import name.huliqing.luoying.data.SkinData;
 import name.huliqing.luoying.layer.network.PlayNetwork;
+import name.huliqing.luoying.layer.service.MessageService;
+import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.manager.PickManager;
-import name.huliqing.luoying.log.ConsoleLogHandler;
-import name.huliqing.luoying.log.LogFactory;
+import name.huliqing.luoying.message.ConsoleMessageHandler;
+import name.huliqing.luoying.message.EntityMessage;
+import name.huliqing.luoying.message.Message;
+import name.huliqing.luoying.message.DefaultMessageHandler;
+import name.huliqing.luoying.message.EntityDataAddMessage;
+import name.huliqing.luoying.message.EntityDataUseMessage;
+import name.huliqing.luoying.message.EntitySkillUseMessage;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.entity.Entity;
@@ -54,8 +62,10 @@ import name.huliqing.ly.view.talk.TalkManager;
  *
  * @author huliqing
  */
-public abstract class SimpleRpgGame extends SimpleGame implements UIEventListener{
+public abstract class SimpleRpgGame extends SimpleGame implements UIEventListener {
     private static final Logger LOG = Logger.getLogger(SimpleRpgGame.class.getName());
+    private final MessageService messageService = Factory.get(MessageService.class);
+    private final SkillService skillService = Factory.get(SkillService.class);
     private final GameService gameService = Factory.get(GameService.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
@@ -75,9 +85,8 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
     // 最近一个选中的角色和最近一次选择的时间，主要用于处理双击选择攻击目标。
     private Actor lastPicked;
     private long lastPickTime;
-
-    public SimpleRpgGame() {
-    }
+    
+    private final RpgMessageHandler messageHandler = new RpgMessageHandler();
     
     @Override
     public void initialize(Application app) {
@@ -99,8 +108,10 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
         // 快捷方式功能初始化
         ShortcutManager.init();
         
-        // 控制台消息处理器
-        LogFactory.addHandler(new ConsoleLogHandler());
+        // 消息处理器
+        messageService.addHandler(messageHandler);
+        // 消息处理器(控制台,debug)
+        messageService.addHandler(ConsoleMessageHandler.getInstance());
         
         // UI界面：头像、队伍、工具栏、攻击按钮
         // 这个UI需要依赖场景，所以放在这里初始化
@@ -114,6 +125,8 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
         UIState.getInstance().clearUI();
         HUDManager.cleanup();
         gameService.saveConfig(LyConfig.getConfigData());
+        messageService.removeHandler(messageHandler);
+        messageService.removeHandler(ConsoleMessageHandler.getInstance());
         super.cleanup(); 
     }
     
@@ -138,11 +151,13 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
         if (player != null) {
             gameService.setEssential(player, false);
             gameService.setPlayer(player, false);
+            gameService.setMessageEnabled(player, false);
         }
         player = newPlayer;
         gameService.setEssential(player, true);
         gameService.setPlayer(player, true);
         gameService.setAutoLogic(player, true);
+        gameService.setMessageEnabled(player, true);
         ui.getTeamView().setMainActor(newPlayer);
         ChaseCameraEntity cce = getChaseCamera();
         if (cce != null) {
@@ -407,5 +422,50 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
         }
         
     }
+
+    private class RpgMessageHandler extends DefaultMessageHandler {
+
+        // wait,walk,run,jump,idle,hurt,dead,reset,defend,duck,fight,attack,trick,magic,skin
+        // 过滤掉的，不需要显示的技能消息
+        private final long filterSkillType = skillService.convertSkillTypes(
+                "wait", "walk", "run", "jump", "idle", "hurt", "dead", "reset", "defend", "duck", "attack", "skin");
+        
+        @Override
+        public void handle(Message message) {
+            // 如果不是当前玩家的消息则不显示
+            if (message instanceof EntityMessage) {
+                if (((EntityMessage) message).getEntity() != player) {
+                    return;
+                }
+            }
+            super.handle(message); 
+        }
+        
+        @Override
+        protected void handleDataUseMessage(EntityDataUseMessage message) {
+            // 过滤掉装备的使用消息
+            if (message.getObjectData() instanceof SkinData) {
+                return;
+            }
+            super.handleDataUseMessage(message); 
+        }
+        
+        @Override
+        protected void handleSkillUseMessage(EntitySkillUseMessage message) {
+            // 过滤掉一些特定的技能消息
+            if ((filterSkillType & message.getSkillData().getTypes()) != 0) {
+                return;
+            }
+            super.handleSkillUseMessage(message);
+        }
+        
+        @Override
+        public void displayMessage(Message message, String details) {
+            addMessage(details, MessageType.notice);
+        }
+        
+    }
+    
+    
     
 }

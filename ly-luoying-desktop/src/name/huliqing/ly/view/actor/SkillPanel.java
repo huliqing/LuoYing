@@ -92,7 +92,8 @@ public class SkillPanel extends ListView<Skill> implements ActorPanel {
                     if (target != null) {
                         gameNetwork.setTarget(actor, target.getEntityId());
                     }
-                    gameNetwork.playSkill(actor, row.getData().getData().getId());
+                    
+                    skillNetwork.playSkill(actor, row.getData(), false);
                     
                     // skill不会删除,所以不需要刷新
 //                    refreshPageData();

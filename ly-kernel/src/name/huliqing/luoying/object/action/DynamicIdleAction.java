@@ -9,19 +9,20 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.ActionData;
+import name.huliqing.luoying.data.SkillData;
 import name.huliqing.luoying.layer.network.SkillNetwork;
 import name.huliqing.luoying.layer.service.SkillService;
-import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.module.SkillListener;
+import name.huliqing.luoying.object.entity.EntityDataListener;
 import name.huliqing.luoying.object.module.SkillModule;
 import name.huliqing.luoying.object.skill.Skill;
+import name.huliqing.luoying.xml.ObjectData;
 
 /**
  * 适合于生物角色的空闲行为，角色每隔一段时间就会随机执行一个idle动作,在idle动作执行
  * 完毕的间隔期则执行wait循环动作。在此期间角色不会移动位置。
  * @author huliqing
  */
-public class DynamicIdleAction extends AbstractAction implements IdleAction, SkillListener{
+public class DynamicIdleAction extends AbstractAction implements IdleAction, EntityDataListener {
 //    private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
     private final SkillService skillService = Factory.get(SkillService.class);
@@ -54,7 +55,7 @@ public class DynamicIdleAction extends AbstractAction implements IdleAction, Ski
     public void initialize() {
         super.initialize();
         skillModule = actor.getModuleManager().getModule(SkillModule.class);
-        skillModule.addSkillListener(this);
+        actor.addEntityDataListener(this);
         if (waitSkill == null) {
             List<Skill> waitSkills = skillModule.getSkillWait(null);
             if (waitSkills != null && !waitSkills.isEmpty()) {
@@ -67,7 +68,7 @@ public class DynamicIdleAction extends AbstractAction implements IdleAction, Ski
 
     @Override
     public void cleanup() {
-        skillService.removeSkillListener(actor, this);
+        actor.removeEntityDataListener(this);
         super.cleanup();
     }
     
@@ -105,13 +106,22 @@ public class DynamicIdleAction extends AbstractAction implements IdleAction, Ski
     }
 
     @Override
-    public void onSkillAdded(Entity actor, Skill skill) {
-        recacheIdleSkills();
+    public void onDataAdded(ObjectData data, int amount) {
+        if (data instanceof SkillData) {
+            recacheIdleSkills();
+        }
     }
 
     @Override
-    public void onSkillRemoved(Entity actor, Skill skill) {
-        recacheIdleSkills();
+    public void onDataRemoved(ObjectData data, int amount) {
+        if (data instanceof SkillData) {
+            recacheIdleSkills();
+        }
+    }
+
+    @Override
+    public void onDataUsed(ObjectData data) {
+        // ignore
     }
 
     // 重新缓存技能

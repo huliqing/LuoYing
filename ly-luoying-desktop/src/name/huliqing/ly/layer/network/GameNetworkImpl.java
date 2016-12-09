@@ -14,22 +14,17 @@ import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.network.SkillNetwork;
 import name.huliqing.luoying.layer.service.SceneService;
 import name.huliqing.luoying.layer.service.SkillService;
-import name.huliqing.luoying.log.StateCode;
-import name.huliqing.luoying.manager.ResManager;
 import name.huliqing.ly.mess.ActionRunMess;
 import name.huliqing.luoying.mess.EntityHitAttributeMess;
 import name.huliqing.luoying.mess.EntityRemoveDataMess;
 import name.huliqing.luoying.mess.EntityUseDataByIdMess;
 import name.huliqing.luoying.network.Network;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.skill.Skill;
 import name.huliqing.ly.constants.AttrConstants;
-import name.huliqing.ly.constants.ResConstants;
 import name.huliqing.ly.enums.MessageType;
 import name.huliqing.ly.mess.ActorSpeakMess;
 import name.huliqing.ly.layer.service.GameService;
 import name.huliqing.ly.mess.MessageMess;
-import name.huliqing.ly.mess.PlaySkillMess;
 import name.huliqing.ly.view.talk.Talk;
 import name.huliqing.ly.view.talk.TalkManager;
 
@@ -238,22 +233,47 @@ public class GameNetworkImpl implements GameNetwork {
         return entityNetwork.removeObjectData(entity, objectUniqueId, amount);
     }
     
+//    @Override
+//    public void playerUseData(Entity entity, long objectUniqueId) {
+//        PlayerUseDataMess mess = new PlayerUseDataMess();
+//        mess.setEntityId(entity.getEntityId());
+//        mess.setObjectId(objectUniqueId);
+//        
+//        // On Client
+//        if (network.isClient()) {
+//            network.sendToServer(mess);
+//            return;
+//        }
+//        
+//        // On Server
+//        network.broadcast(mess);
+//        gameService.playerUseData(entity, objectUniqueId);
+//    }
+    
+//    @Override
+//    public void playerUseSkill(Entity entity, String skill) {
+//        PlayerUseSkillMess mess = new PlayerUseSkillMess();
+//        mess.setEntityId(entity.getEntityId());
+//        mess.setSkillId(skill);
+//        
+//        // on client
+//        if (network.isClient()) {
+//            network.sendToServer(mess);
+//            return;
+//        }
+//        
+//        // on server
+//        network.broadcast(mess);
+//        gameService.playerUseSkill(entity, skill);
+//    }
+
     @Override
-    public void playSkill(Entity entity, String skill) {
-        PlaySkillMess mess = new PlaySkillMess();
-        mess.setEntityId(entity.getEntityId());
-        mess.setSkillId(skill);
-        
-        // on client
-        if (network.isClient()) {
-            network.sendToServer(mess);
-            return;
-        }
-        
-        // on server
-        network.broadcast(mess);
-        gameService.playSkill(entity, skill);
+    public void setMessageEnabled(Entity entity, boolean enabled) {
+        entityNetwork.hitAttribute(entity, AttrConstants.MESSAGE, enabled, null);
     }
+
+
+    
     
     
 }

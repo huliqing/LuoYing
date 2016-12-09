@@ -7,7 +7,6 @@ package name.huliqing.luoying.layer.service;
 import java.util.UUID;
 import name.huliqing.luoying.Config;
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.object.sound.SoundManager;
 import name.huliqing.luoying.utils.MathUtils;
 
 /**
@@ -16,6 +15,7 @@ import name.huliqing.luoying.utils.MathUtils;
  */
 public class ConfigServiceImpl implements ConfigService {
     private SaveService saveService;
+    private SoundService soundService;
     
     // 用于标识游戏客户端唯一标识的ID的键。
     private final static String CLIENT_ID_KEY = "Client_ID";
@@ -26,26 +26,27 @@ public class ConfigServiceImpl implements ConfigService {
     @Override
     public void inject() {
         saveService = Factory.get(SaveService.class);
+        soundService = Factory.get(SoundService.class);
     }
     
     @Override
     public boolean isSoundEnabled() {
-        return SoundManager.getInstance().isSoundEnabled();
+        return soundService.isSoundEnabled();
     }
 
     @Override
     public void setSoundEnabled(boolean enabled) {
-        SoundManager.getInstance().setSoundEnabled(enabled);
+        soundService.setSoundEnabled(enabled);
     }
 
     @Override
     public float getSoundVolume() {
-        return SoundManager.getInstance().getVolume();
+        return soundService.getVolume();
     }
 
     @Override
     public void setSoundVolume(float volume) {
-        SoundManager.getInstance().setVolume(MathUtils.clamp(volume, 0f, 1.0f));
+        soundService.setVolume(MathUtils.clamp(volume, 0f, 1.0f));
     }
 
     @Override

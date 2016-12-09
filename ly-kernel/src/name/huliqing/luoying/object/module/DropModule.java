@@ -57,13 +57,13 @@ public class DropModule extends AbstractModule implements DataHandler<DropData> 
     }
     
     @Override
-    public void initialize(Entity actor) {
-        super.initialize(actor); 
+    public void initialize(Entity entity) {
+        super.initialize(entity); 
         if (bindDeadAttribute != null) {
-            deadAttribute = entity.getAttributeManager().getAttribute(bindDeadAttribute, BooleanAttribute.class);
+            deadAttribute = getAttribute(bindDeadAttribute, BooleanAttribute.class);
         }
         
-        List<DropData> dropDatas = actor.getData().getObjectDatas(DropData.class, null);
+        List<DropData> dropDatas = entity.getData().getObjectDatas(DropData.class, new ArrayList<DropData>());
         if (dropDatas != null) {
             for (DropData id : dropDatas) {
                 addDrop((Drop) Loader.load(id));

@@ -18,6 +18,7 @@ import name.huliqing.ly.view.talk.TalkListener;
 import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.layer.service.PlayService;  
+import name.huliqing.luoying.layer.service.SceneService;
 import name.huliqing.luoying.logic.scene.ActorMultLoadHelper;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.object.anim.Anim;
@@ -44,12 +45,11 @@ import name.huliqing.ly.layer.service.GameService;
  */
 public class StoryGuardTask1 extends AbstractTaskStep {
     private final PlayService playService = Factory.get(PlayService.class);
-//    private final StateService stateService = Factory.get(StateService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
-//    private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     private final GameService gameService = Factory.get(GameService.class);
+    private final SceneService sceneService = Factory.get(SceneService.class);
     private final StoryGuardGame _game;
 
     // 开始任务面板
@@ -375,7 +375,7 @@ public class StoryGuardTask1 extends AbstractTaskStep {
     private Vector3f getRandomPosition(Vector3f center) {
         Vector3f pos = MathUtils.getRandomPosition(center, 7, 12, null);
         
-        Vector3f terrainPos = playService.getTerrainHeight(_game.getScene(), pos.x, pos.z);
+        Vector3f terrainPos = sceneService.getSceneHeight(_game.getScene(), pos.x, pos.z);
         if (terrainPos != null) {
             pos.set(terrainPos).addLocal(0, 0.2f, 0);
         }

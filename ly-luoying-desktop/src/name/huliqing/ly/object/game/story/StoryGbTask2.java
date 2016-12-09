@@ -12,9 +12,7 @@ import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.ly.enums.MessageType;
 import name.huliqing.luoying.layer.network.PlayNetwork;
-import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.layer.service.EntityService;
-import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.layer.service.SceneService;
 import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.logic.scene.ActorBuildSimpleLogic;
@@ -39,8 +37,6 @@ import name.huliqing.ly.layer.service.GameService;
 public class StoryGbTask2 extends AbstractTaskStep{
 //    private final static Logger LOG = Logger.getLogger(StoryGbTask2.class.getName());
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
-    private final PlayService playService = Factory.get(PlayService.class);
-    private final ActorService actorService = Factory.get(ActorService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
     private final GameService gameService = Factory.get(GameService.class);
     private final SceneService sceneService = Factory.get(SceneService.class);
@@ -122,12 +118,10 @@ public class StoryGbTask2 extends AbstractTaskStep{
                     altar = actor;
                     gameService.setLevel(altar, altarLevel);
                     gameService.setGroup(altar, _game.groupEnemy);
-                    StateModule sm = altar.getModuleManager().getModule(StateModule.class);
-                    if (sm != null) {
-                        sm.addState((State) Loader.load(IdConstants.STATE_SAFE), true);
-                    }
                     gameService.setLocation(altar, _game.getEnemyPosition());
                     gameService.setOnTerrain(altar);
+                    // 保护状态
+                    entityService.addObjectData(altar, Loader.loadData(IdConstants.STATE_SAFE), 1);
                     // 意外的收获:星光传送术掉落
                     entityService.addObjectData(altar, Loader.loadData(IdConstants.DROP_BOOK_007), 1);
                 }
@@ -140,7 +134,6 @@ public class StoryGbTask2 extends AbstractTaskStep{
                     towers.add(actor);
                 }
                 playNetwork.addEntity(actor);
-//                logger.log(Level.INFO, "111ActorMultLoadHelper load ok, actor={0}", actor.getData().getDef().getId());
             }
         };
         
@@ -251,7 +244,7 @@ public class StoryGbTask2 extends AbstractTaskStep{
      */
     private Vector3f getRandomEnemyPosition() {
         Vector3f pos = MathUtils.getRandomPosition(_game.getEnemyPosition(), 4, 10, null);
-        Vector3f terrainHeight = playService.getTerrainHeight(_game.getScene(), pos.x, pos.z);
+        Vector3f terrainHeight = sceneService.getSceneHeight(_game.getScene(), pos.x, pos.z);
         if (terrainHeight != null) {
             pos.set(terrainHeight).addLocal(0, 0.2f, 0);
         }

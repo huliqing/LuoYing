@@ -20,7 +20,7 @@ import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.layer.service.ElService;
 import name.huliqing.luoying.manager.RandomManager;
-import name.huliqing.luoying.log.StateCode;
+import name.huliqing.luoying.message.StateCode;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.el.STBooleanEl;
@@ -268,16 +268,16 @@ public abstract class HitSkill extends AbstractSkill {
         
         Entity target = getTarget();
         if (target == null) {
-            return StateCode.SKILL_TARGET_NOT_FOUND;
+            return StateCode.SKILL_USE_FAILURE_TARGET_NOT_FOUND;
         }
         
         if (!isInHitDistance(target)) {
-            return StateCode.SKILL_TARGET_OUT_OF_RANGE;
+            return StateCode.SKILL_USE_FAILURE_TARGET_OUT_OF_RANGE;
         }
         
         hitCheckEl.setTarget(target.getAttributeManager());
         if (!hitCheckEl.getValue()) {
-            return StateCode.SKILL_TARGET_UNSUITABLE_BY_ELCHECK;
+            return StateCode.SKILL_USE_FAILURE_TARGET_UNSUITABLE_BY_ELCHECK;
         }
         
         return super.checkState();

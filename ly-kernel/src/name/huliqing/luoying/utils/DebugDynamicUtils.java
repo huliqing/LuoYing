@@ -57,6 +57,7 @@ public class DebugDynamicUtils {
     /**
      * 显示目标spatial的bounding
      * 暂支持：AABB,Sphere
+     * @param debugId
      * @param spatial 
      */
     public static void debugBounding(String debugId, Spatial spatial) {
@@ -71,7 +72,6 @@ public class DebugDynamicUtils {
         }
         if (geo != null) {
             geo.setLocalTranslation(bv.getCenter());
-            geo.setLocalRotation(spatial.getWorldRotation());
             addDebugObject("debugBounding_" + debugId, geo, false);
         }
     }

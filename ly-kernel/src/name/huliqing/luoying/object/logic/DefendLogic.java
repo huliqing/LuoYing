@@ -11,26 +11,28 @@ import java.util.List;
 import java.util.Set;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.LogicData;
+import name.huliqing.luoying.data.SkillData;
 import name.huliqing.luoying.layer.network.SkillNetwork;
 import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.attribute.Attribute;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.entity.EntityDataListener;
 import name.huliqing.luoying.object.module.ActorListener;
 import name.huliqing.luoying.object.module.ActorModule;
-import name.huliqing.luoying.object.module.SkillListener;
 import name.huliqing.luoying.object.module.SkillModule;
-import name.huliqing.luoying.object.module.SkillPlayListener;
 import name.huliqing.luoying.object.skill.Skill;
 import name.huliqing.luoying.object.skill.AttackSkill;
 import name.huliqing.luoying.object.skill.ShotSkill;
+import name.huliqing.luoying.xml.ObjectData;
+import name.huliqing.luoying.object.module.SkillListener;
 
 /**
  * 防守逻辑
  * @author huliqing
  */
-public class DefendLogic extends AbstractLogic implements SkillListener, SkillPlayListener, ActorListener {
+public class DefendLogic extends AbstractLogic implements EntityDataListener, SkillListener, ActorListener {
 //    private static final Logger LOG = Logger.getLogger(DefendLogic.class.getName());
     
     private final SkillService skillService = Factory.get(SkillService.class);
@@ -86,7 +88,7 @@ public class DefendLogic extends AbstractLogic implements SkillListener, SkillPl
     public void initialize() {
         super.initialize();
         actorModule.addActorListener(this);
-        skillModule.addSkillListener(this);
+        actor.addEntityDataListener(this);
         recacheSkill();
     }
     
@@ -94,12 +96,12 @@ public class DefendLogic extends AbstractLogic implements SkillListener, SkillPl
     public void cleanup() {
         // 清理当前角色的侦听器
         actorModule.removeActorListener(this);
-        skillModule.removeSkillListener(this);
+        actor.removeEntityDataListener(this);
         
         // 清理其它被当前逻辑侦听的角色
         if (listenersActors != null) {
             for (Entity other : listenersActors) {
-                skillService.removeSkillPlayListener(other, this);
+                skillService.removeListener(other, this);
             }
             listenersActors.clear();
         }
@@ -123,7 +125,7 @@ public class DefendLogic extends AbstractLogic implements SkillListener, SkillPl
         }
         
         // 当被other锁定时给other添加侦听器，以侦察other的攻击。以便进行防守和躲闪
-        skillService.addSkillPlayListener(other, this);
+        skillService.addListener(other, this);
         
         // 记录被侦听的对象，以便在当前角色销毁或退出时清理
         if (listenersActors == null) {
@@ -138,7 +140,7 @@ public class DefendLogic extends AbstractLogic implements SkillListener, SkillPl
             return;
         
         // 当other不再把source当前目标时就不再需要侦听了。
-        skillService.removeSkillPlayListener(other, this);
+        skillService.removeListener(other, this);
         
         // 清理
         if (listenersActors != null) {
@@ -176,13 +178,22 @@ public class DefendLogic extends AbstractLogic implements SkillListener, SkillPl
     }
 
     @Override
-    public void onSkillAdded(Entity actor, Skill skill) {
-        needRecacheSkill = true;
+    public void onDataAdded(ObjectData data, int amount) {
+        if (data instanceof SkillData) {
+            needRecacheSkill = true;
+        }
     }
 
     @Override
-    public void onSkillRemoved(Entity actor, Skill skill) {
-        needRecacheSkill = true;
+    public void onDataRemoved(ObjectData data, int amount) {
+        if (data instanceof SkillData) {
+            needRecacheSkill = true;
+        }
+    }
+
+    @Override
+    public void onDataUsed(ObjectData data) {
+        // ignore
     }
 
     @Override

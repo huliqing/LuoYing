@@ -8,7 +8,7 @@ import com.jme3.export.Savable;
 import name.huliqing.luoying.Inject;
 
 /**
- * 保存数据到系统
+ * 存档服务
  * @author huliqing
  */
 public interface SaveService extends Inject {
@@ -41,12 +41,18 @@ public interface SaveService extends Inject {
     boolean existsSaveKey(String key);
     
     /**
-     * 保存savable格式的数据
+     * 保存Savable格式的数据。
      * @param key
      * @param data 
      */
     void saveSavable(String key, Savable data);
     
+    /**
+     * 载入Savable格式类型的存档。
+     * @param <T>
+     * @param key
+     * @return 
+     */
     <T extends Savable> T loadSavable(String key);
     
 }

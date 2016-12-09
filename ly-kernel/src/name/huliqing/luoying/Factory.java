@@ -10,8 +10,6 @@ import name.huliqing.luoying.layer.network.ActionNetwork;
 import name.huliqing.luoying.layer.network.ActionNetworkImpl;
 import name.huliqing.luoying.layer.network.ActorNetwork;
 import name.huliqing.luoying.layer.network.ActorNetworkImpl;
-import name.huliqing.luoying.layer.network.AttributeNetwork;
-import name.huliqing.luoying.layer.network.AttributeNetworkImpl;
 import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.luoying.layer.network.EntityNetworkImpl;
 import name.huliqing.luoying.layer.network.PlayNetwork;
@@ -30,8 +28,6 @@ import name.huliqing.luoying.layer.service.ActionService;
 import name.huliqing.luoying.layer.service.ActionServiceImpl;
 import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.layer.service.ActorServiceImpl;
-import name.huliqing.luoying.layer.service.BulletService;
-import name.huliqing.luoying.layer.service.BulletServiceImpl;
 import name.huliqing.luoying.layer.service.ConfigService;
 import name.huliqing.luoying.layer.service.ConfigServiceImpl;
 import name.huliqing.luoying.layer.service.DefineService;
@@ -41,8 +37,6 @@ import name.huliqing.luoying.layer.service.ElService;
 import name.huliqing.luoying.layer.service.ElServiceImpl;
 import name.huliqing.luoying.layer.service.LogicService;
 import name.huliqing.luoying.layer.service.LogicServiceImpl;
-import name.huliqing.luoying.layer.service.MagicService;
-import name.huliqing.luoying.layer.service.MagicServiceImpl;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.layer.service.PlayServiceImpl;
 import name.huliqing.luoying.layer.service.SaveService;
@@ -62,6 +56,10 @@ import name.huliqing.luoying.layer.service.TaskServiceImpl;
 import name.huliqing.luoying.layer.service.SystemService;
 import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.layer.service.EntityServiceImpl;
+import name.huliqing.luoying.layer.service.MessageService;
+import name.huliqing.luoying.layer.service.MessageServiceImpl;
+import name.huliqing.luoying.layer.service.SoundService;
+import name.huliqing.luoying.layer.service.SoundServiceImpl;
 
 /**
  *
@@ -76,7 +74,6 @@ public class Factory {
         // network
         CLASS_MAP.put(ActionNetwork.class, ActionNetworkImpl.class);
         CLASS_MAP.put(ActorNetwork.class, ActorNetworkImpl.class);
-        CLASS_MAP.put(AttributeNetwork.class, AttributeNetworkImpl.class);
         CLASS_MAP.put(EntityNetwork.class, EntityNetworkImpl.class);
         CLASS_MAP.put(PlayNetwork.class, PlayNetworkImpl.class);
         CLASS_MAP.put(SkillNetwork.class, SkillNetworkImpl.class);
@@ -88,18 +85,18 @@ public class Factory {
         // service
         CLASS_MAP.put(ActionService.class, ActionServiceImpl.class);
         CLASS_MAP.put(ActorService.class, ActorServiceImpl.class);
-        CLASS_MAP.put(BulletService.class, BulletServiceImpl.class);
         CLASS_MAP.put(ConfigService.class, ConfigServiceImpl.class);
         CLASS_MAP.put(DefineService.class, DefineServiceImpl.class);
         CLASS_MAP.put(ElService.class, ElServiceImpl.class);
         CLASS_MAP.put(EntityService.class, EntityServiceImpl.class);
         CLASS_MAP.put(LogicService.class, LogicServiceImpl.class);
-        CLASS_MAP.put(MagicService.class, MagicServiceImpl.class);
+        CLASS_MAP.put(MessageService.class, MessageServiceImpl.class);
         CLASS_MAP.put(PlayService.class, PlayServiceImpl.class);
         CLASS_MAP.put(SaveService.class, SaveServiceImpl.class);
         CLASS_MAP.put(SceneService.class, SceneServiceImpl.class);
         CLASS_MAP.put(SkillService.class, SkillServiceImpl.class);
         CLASS_MAP.put(SkinService.class, SkinServiceImpl.class);
+        CLASS_MAP.put(SoundService.class, SoundServiceImpl.class);
         CLASS_MAP.put(StateService.class, StateServiceImpl.class);      
         CLASS_MAP.put(SystemService.class, SystemServiceImpl.class);
         CLASS_MAP.put(TalentService.class, TalentServiceImpl.class);

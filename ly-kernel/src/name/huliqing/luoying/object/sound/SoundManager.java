@@ -42,35 +42,6 @@ public class SoundManager {
         simplePlayer.playSound(soundId, position, volume);
     }
     
-    // remove20160927
-//    /**
-//     * 简单播放物体碰撞声音，非循环
-//     * @param obj1
-//     * @param obj2 
-//     * @param position 
-//     */
-//    public void playCollision(ObjectData obj1, ObjectData obj2, Vector3f position) {
-//        String soundId = collision.getCollisionSound(obj1, obj2);
-//        if (soundId != null) {
-//            playSound(soundId, position);
-//        }
-//    }
-//    
-//    /**
-//     * 简单播放物体碰撞声音，非循环
-//     * @param mat1
-//     * @param mat2
-//     * @param position 
-//     */
-//    public void playCollision(Mat mat1, Mat mat2, Vector3f position) {
-//        String soundId = collision.getCollisionSound(mat1, mat2);
-//        if (soundId != null) {
-//            playSound(soundId, position);
-//        }
-//    }
-    
-    // --------------------------------------------------------------------------------------------------------------------------------
-    
     /**
      * 添加声音到列表中并立即播放，该方法会立即播放声音。当声音不再使用时要将声音从列表中移除。
      * @param sound 
@@ -88,6 +59,7 @@ public class SoundManager {
             return;
         }
         sounds.add(sound);
+        sound.setVolume(volume);
         sound.play();
     }
     
@@ -157,6 +129,7 @@ public class SoundManager {
      */
     public void setVolume(float volume) {
         this.volume = volume;
+        updateSoundsVolume();
     }
     
     /**
@@ -187,6 +160,16 @@ public class SoundManager {
             } else {
                 it.remove();
             }
+        }
+    }
+    
+    /**
+     * 重新打开声音,所有循环类型的声音会重新开始播放，而非循环的声音会被移除出列表。
+     */
+    private void updateSoundsVolume() {
+        Iterator<Sound> it = sounds.iterator();
+        while (it.hasNext()) {
+            it.next().setVolume(volume);
         }
     }
 

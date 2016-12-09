@@ -1,8 +1,21 @@
 #use notepad++ -> 格式 -> 转为UTF-8编码格式 -> AngelCode 导出bmp font
-name.huliqing.luoying.errorItemNotEnough=物品数量不足
-name.huliqing.luoying.errorItemSkillExists=技能已经存在
-name.huliqing.luoying.errorItemCheckEl=不能使用物品(ElCheck)
 
+name.huliqing.luoying.dataAdd=获得: %s
+name.huliqing.luoying.dataAddFailure=不能获得: %s
+name.huliqing.luoying.dataRemove=移除: %s
+name.huliqing.luoying.dataRemoveFailure=不能移除: %s
+name.huliqing.luoying.dataUse=使用: %s
+name.huliqing.luoying.dataUseFailure=不能使用: %s
+
+name.huliqing.luoying.levelUp=等级提升: %s
+name.huliqing.luoying.talentPointsAdded=获得天赋点数: %s
+
+
+
+
+name.huliqing.luoying.errorItemNotEnough=Item not enough
+name.huliqing.luoying.errorItemSkillExists=Skill exists
+name.huliqing.luoying.errorItemCheckEl=Could not use item(ElCheck)
 name.huliqing.luoying.errorSkillNotFound=技能不存在或找不到指定技能
 name.huliqing.luoying.errorSkillLocked=角色的技能处于锁定状态
 name.huliqing.luoying.errorSkillCooldown=技能正处于冷却状态

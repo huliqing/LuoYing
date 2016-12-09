@@ -20,16 +20,12 @@ import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.layer.service.SaveService;
 import name.huliqing.luoying.layer.service.SceneService;
 import name.huliqing.luoying.layer.service.SkillService;
-import name.huliqing.luoying.log.StateCode;
-import name.huliqing.luoying.manager.ResManager;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.skill.Skill;
 import name.huliqing.luoying.save.SaveHelper;
 import name.huliqing.luoying.save.SaveStory;
 import name.huliqing.ly.Start;
 import name.huliqing.ly.constants.AttrConstants;
-import name.huliqing.ly.constants.ResConstants;
 import name.huliqing.ly.constants.SaveConstants;
 import name.huliqing.ly.enums.MessageType;
 import name.huliqing.ly.object.game.SimpleRpgGame;
@@ -314,57 +310,62 @@ public class GameServiceImpl implements GameService {
         return saveService.loadSavable(SaveConstants.SAVE_CONFIG_KEY);
     }
     
-    @Override
-    public void playSkill(Entity entity, String skillId) {
-        Skill skill = skillService.getSkill(entity, skillId);
-        if (!isSkillPlayable(entity, skill)) {
-            return;
-        }
-        skillService.playSkill(entity, skill, true);
-    }
+//    @Override
+//    public void playerUseSkill(Entity entity, String skillId) {
+//        Skill skill = skillService.getSkill(entity, skillId);
+//        if (!isSkillPlayable(entity, skill)) {
+//            return;
+//        }
+//        skillService.playSkill(entity, skill, true);
+//    }
 
-    private boolean isSkillPlayable(Entity entity, Skill skill) {
-        int stateCode = skillService.checkStateCode(entity, skill);
-        if (stateCode != StateCode.OK) {
-            switch (stateCode) {
-                case StateCode.SKILL_ATTRIBUTE_NOT_ENOUGH:
-                    addMessage(ResManager.get(ResConstants.SKILL_MANA_NOT_ENOUGH), MessageType.notice);
-                    break;
-                case StateCode.SKILL_COOLDOWN:
-                    addMessage(ResManager.get(ResConstants.SKILL_COOLDOWN), MessageType.notice);
-                    break;
-                case StateCode.SKILL_LOCKED:
-                    addMessage(ResManager.get(ResConstants.SKILL_LOCKED), MessageType.notice);
-                    break;
-                case StateCode.SKILL_NOT_FOUND:
-                    addMessage(ResManager.get(ResConstants.SKILL_NOT_FOUND), MessageType.notice);
-                    break;
-                case StateCode.SKILL_TARGET_NOT_FOUND:
-                    addMessage(ResManager.get(ResConstants.SKILL_TARGET_NOT_FOUND), MessageType.notice);
-                    break;
-                case StateCode.SKILL_TARGET_OUT_OF_RANGE:
-                    addMessage(ResManager.get(ResConstants.SKILL_TARGET_NOT_IN_RANGE), MessageType.notice);
-                    break;
-                case StateCode.SKILL_TARGET_UNSUITABLE_BY_ELCHECK:
-                    addMessage(ResManager.get(ResConstants.SKILL_TARGET_UNSUITABLE), MessageType.notice);
-                    break;
-                case StateCode.SKILL_WEAPON_NEED_TAKE_ON:
-                    addMessage(ResManager.get(ResConstants.SKILL_WEAPON_NEED_TAKE_ON), MessageType.notice);
-                    break;
-                case StateCode.SKILL_WEAPON_NOT_ALLOW:
-                    addMessage(ResManager.get(ResConstants.SKILL_WEAPON_NOT_ALLOW), MessageType.notice);
-                    break;
-                case StateCode.SKILL_CAN_NOT_INTERRUPT:
-                case StateCode.SKILL_DEAD:
-                case StateCode.SKILL_ELCHECK:
-                case StateCode.SKILL_HOOK:
-                case StateCode.UNDEFINE:
-                default :
-                    addMessage(ResManager.get(ResConstants.SKILL_UNDEFINE), MessageType.notice);
-            }
-            return false;
-        }
-        return true;
+//    private boolean isSkillPlayable(Entity entity, Skill skill) {
+//        int stateCode = skillService.checkStateCode(entity, skill);
+//        if (stateCode != StateCode.SKILL_USE_STATE_OK) {
+//            switch (stateCode) {
+//                case StateCode.SKILL_PLAY_FAILURE_ATTRIBUTE_NOT_ENOUGH:
+//                    addMessage(ResManager.get(ResConstants.SKILL_MANA_NOT_ENOUGH), MessageType.notice);
+//                    break;
+//                case StateCode.SKILL_PLAY_FAILURE_COOLDOWN:
+//                    addMessage(ResManager.get(ResConstants.SKILL_COOLDOWN), MessageType.notice);
+//                    break;
+//                case StateCode.SKILL_PLAY_FAILURE_LOCKED:
+//                    addMessage(ResManager.get(ResConstants.SKILL_LOCKED), MessageType.notice);
+//                    break;
+//                case StateCode.SKILL_PLAY_FAILURE_NOT_FOUND:
+//                    addMessage(ResManager.get(ResConstants.SKILL_NOT_FOUND), MessageType.notice);
+//                    break;
+//                case StateCode.SKILL_PLAY_FAILURE_TARGET_NOT_FOUND:
+//                    addMessage(ResManager.get(ResConstants.SKILL_TARGET_NOT_FOUND), MessageType.notice);
+//                    break;
+//                case StateCode.SKILL_PLAY_FAILURE_TARGET_OUT_OF_RANGE:
+//                    addMessage(ResManager.get(ResConstants.SKILL_TARGET_NOT_IN_RANGE), MessageType.notice);
+//                    break;
+//                case StateCode.SKILL_PLAY_FAILURE_TARGET_UNSUITABLE_BY_ELCHECK:
+//                    addMessage(ResManager.get(ResConstants.SKILL_TARGET_UNSUITABLE), MessageType.notice);
+//                    break;
+//                case StateCode.SKILL_PLAY_FAILURE_WEAPON_NEED_TAKE_ON:
+//                    addMessage(ResManager.get(ResConstants.SKILL_WEAPON_NEED_TAKE_ON), MessageType.notice);
+//                    break;
+//                case StateCode.SKILL_PLAY_FAILURE_WEAPON_NOT_ALLOW:
+//                    addMessage(ResManager.get(ResConstants.SKILL_WEAPON_NOT_ALLOW), MessageType.notice);
+//                    break;
+//                case StateCode.SKILL_PLAY_FAILURE_CAN_NOT_INTERRUPT:
+//                case StateCode.SKILL_PLAY_FAILURE_ACTOR_DEAD:
+//                case StateCode.SKILL_PLAY_FAILURE_ELCHECK:
+//                case StateCode.SKILL_PLAY_FAILURE_BY_HOOK:
+//                case StateCode.UNDEFINE:
+//                default :
+//                    addMessage(ResManager.get(ResConstants.SKILL_UNDEFINE), MessageType.notice);
+//            }
+//            return false;
+//        }
+//        return true;
+//    }
+
+    @Override
+    public void setMessageEnabled(Entity entity, boolean enabled) {
+        entityService.hitAttribute(entity, AttrConstants.MESSAGE, enabled, null);
     }
     
 }

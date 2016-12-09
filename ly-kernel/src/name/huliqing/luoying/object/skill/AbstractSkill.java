@@ -11,7 +11,6 @@ import com.jme3.scene.Spatial;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import name.huliqing.luoying.Config;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.data.AttributeUse;
@@ -19,7 +18,7 @@ import name.huliqing.luoying.data.MagicData;
 import name.huliqing.luoying.data.SkillData;
 import name.huliqing.luoying.layer.service.ElService;
 import name.huliqing.luoying.manager.RandomManager;
-import name.huliqing.luoying.log.StateCode;
+import name.huliqing.luoying.message.StateCode;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.actoranim.ActorAnim;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
@@ -562,31 +561,31 @@ public abstract class AbstractSkill implements Skill {
         // 武器必须取出
         if (data.getWeaponStateLimit() != null) {
             if (!skinModule.isWeaponTakeOn()) {
-                return StateCode.SKILL_WEAPON_NEED_TAKE_ON;
+                return StateCode.SKILL_USE_FAILURE_WEAPON_NEED_TAKE_ON;
             }            
         }
         
         // 冷却中
         if (isCooldown()) {
-            return StateCode.SKILL_COOLDOWN;
+            return StateCode.SKILL_USE_FAILURE_COOLDOWN;
         }
         
         // 武器状态检查,有一些技能需要拿特定的武器才能执行。
         if (!isPlayableByWeapon()) {
-            return StateCode.SKILL_WEAPON_NOT_ALLOW;
+            return StateCode.SKILL_USE_FAILURE_WEAPON_NOT_ALLOW;
         }
         
         // 技能需要消耗一定的属性值，而角色属性值不足
         if (!isPlayableByAttributeLimit()) {
-            return StateCode.SKILL_ATTRIBUTE_NOT_ENOUGH;
+            return StateCode.SKILL_USE_FAILURE_ATTRIBUTE_NOT_ENOUGH;
         }
         
         // EL检查器，例如：属性值不足等
         if (!isPlayableByElCheck()) {
-            return StateCode.SKILL_ELCHECK;
+            return StateCode.SKILL_USE_FAILURE_ELCHECK;
         }
         
-        return StateCode.OK;
+        return StateCode.SKILL_USE_OK;
     }
     
     @Override

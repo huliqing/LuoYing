@@ -6,16 +6,14 @@ package name.huliqing.luoying.layer.service;
 
 import com.jme3.math.Vector3f;
 import java.util.List;
-import name.huliqing.luoying.Config;
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.log.StateCode;
+import name.huliqing.luoying.message.StateCode;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.module.SkillListener;
 import name.huliqing.luoying.object.module.SkillModule;
-import name.huliqing.luoying.object.module.SkillPlayListener;
 import name.huliqing.luoying.object.skill.Skill;
 import name.huliqing.luoying.object.skill.SkillType;
 import name.huliqing.luoying.object.skill.Walk;
+import name.huliqing.luoying.object.module.SkillListener;
 
 /**
  *
@@ -28,18 +26,6 @@ public class SkillServiceImpl implements SkillService {
     @Override
     public void inject() {
         // ignore
-    }
-    
-    @Override
-    public boolean removeSkill(Entity actor, String skillId) {
-        SkillModule module = actor.getModuleManager().getModule(SkillModule.class);
-        if (module != null) {
-            Skill rmSkill = module.getSkill(skillId);
-            if (rmSkill != null) {
-                return module.removeSkill(rmSkill);
-            }
-        }
-        return false;
     }
     
     @Override
@@ -131,38 +117,24 @@ public class SkillServiceImpl implements SkillService {
         }
         return null;
     }
-   
+
     @Override
-    public void addSkillListener(Entity actor, SkillListener skillListener) {
+    public void addListener(Entity actor, SkillListener skillPlayListener) {
         SkillModule module = actor.getModuleManager().getModule(SkillModule.class);
         if (module != null) {
-            module.addSkillListener(skillListener);
+            module.addListener(skillPlayListener);
         }
     }
 
     @Override
-    public void addSkillPlayListener(Entity actor, SkillPlayListener skillPlayListener) {
+    public boolean removeListener(Entity actor, SkillListener skillPlayListener) {
         SkillModule module = actor.getModuleManager().getModule(SkillModule.class);
-        if (module != null) {
-            module.addSkillPlayListener(skillPlayListener);
-        }
-    }
-
-    @Override
-    public boolean removeSkillListener(Entity actor, SkillListener skillListener) {
-        SkillModule module = actor.getModuleManager().getModule(SkillModule.class);
-        return module != null && module.removeSkillListener(skillListener);
-    }
-
-    @Override
-    public boolean removeSkillPlayListener(Entity actor, SkillPlayListener skillPlayListener) {
-        SkillModule module = actor.getModuleManager().getModule(SkillModule.class);
-        return module != null && module.removeSkillPlayListener(skillPlayListener);
+        return module != null && module.removeListener(skillPlayListener);
     }
     
     @Override
     public boolean isPlayable(Entity actor, Skill skill) {
-        return checkStateCode(actor, skill) == StateCode.OK;
+        return checkStateCode(actor, skill) == StateCode.SKILL_USE_OK;
     }
     
     @Override
@@ -255,15 +227,15 @@ public class SkillServiceImpl implements SkillService {
             module.unlockSkillTypes(skillTypes);
         }
     }
-
-    @Override
-    public SkillType getSkillTypes(String skillType) {
-        return defineService.getSkillTypeDefine().getSkillType(skillType);
-    }
-
+    
     @Override
     public long convertSkillTypes(String... skillTypes) {
         return defineService.getSkillTypeDefine().convert(skillTypes);
+    }
+    
+    @Override
+    public List<String> getSkillTypes(long types, List<String> store) {
+        return defineService.getSkillTypeDefine().getSkillTypes(types, store);
     }
 
 }

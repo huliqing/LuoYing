@@ -19,7 +19,8 @@ import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.SkillData;
 import name.huliqing.luoying.data.ModuleData;
 import name.huliqing.luoying.layer.service.SkillService;
-import name.huliqing.luoying.log.StateCode;
+import name.huliqing.luoying.message.EntitySkillUseMessage;
+import name.huliqing.luoying.message.StateCode;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.attribute.Attribute;
 import name.huliqing.luoying.object.attribute.BooleanAttribute;
@@ -66,9 +67,7 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
     private final List<Skill> skills = new ArrayList<Skill>();
     // 一个map,用于优化获取查找技能的速度，skillMap中的内容与skills中的是一样的。
     private final Map<String, Skill> skillMap = new HashMap<String, Skill>();
-    // 临听角色技能的执行和结束 
     private List<SkillListener> skillListeners;
-    private List<SkillPlayListener> skillPlayListeners;
     
     // 当前正在执行的技能列表,
     // 如果runningSkills都执行完毕,则清空.但是lastSkill仍保持最近刚刚执行的技能的引用.
@@ -114,7 +113,7 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
         this.entity.getSpatial().addControl(updateControl);
         
         // 载入技能
-        List<SkillData> skillDatas = actor.getData().getObjectDatas(SkillData.class, null);
+        List<SkillData> skillDatas = actor.getData().getObjectDatas(SkillData.class, new ArrayList<SkillData>());
         if (skillDatas != null && !skillDatas.isEmpty()) {
             for (SkillData sd : skillDatas) {
                 addSkill((Skill) Loader.load(sd));
@@ -132,11 +131,9 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
         if (bindHurtAttributes != null) {
             List<NumberAttribute> temp = new ArrayList<NumberAttribute>(bindHurtAttributes.length);
             for (String attr : bindHurtAttributes) {
-                NumberAttribute hurtAttr = entity.getAttributeManager().getAttribute(attr, NumberAttribute.class);
+                NumberAttribute hurtAttr = getAttribute(attr, NumberAttribute.class);
                 if (hurtAttr != null) {
                     temp.add(hurtAttr);
-                } else {
-                    LOG.log(Level.WARNING, "HurtAttribute not found, attributeName={0}, entity={1}", new Object[] {attr, entity.getData().getId()});
                 }
             }
             hurtAttributes = temp.toArray(new NumberAttribute[0]);
@@ -156,9 +153,9 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
                     playingSkills.remove(skill);
                     skill.cleanup();
                     // 执行侦听器
-                    if (skillPlayListeners != null && !skillPlayListeners.isEmpty()) {
-                        for (int i = 0; i < skillPlayListeners.size(); i++) {
-                            skillPlayListeners.get(i).onSkillEnd(skill);
+                    if (skillListeners != null && !skillListeners.isEmpty()) {
+                        for (int i = 0; i < skillListeners.size(); i++) {
+                            skillListeners.get(i).onSkillEnd(skill);
                         }
                     }
                 } else {
@@ -247,12 +244,12 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
      */
     public int checkStateCode(Skill skill) {
         if (skill == null) {
-            return StateCode.SKILL_NOT_FOUND;
+            return StateCode.SKILL_USE_FAILURE_NOT_FOUND;
         }
         
         // 角色自己已经死亡。
         if (deadAttribute != null && deadAttribute.getValue()) {
-            return StateCode.SKILL_DEAD;
+            return StateCode.SKILL_USE_FAILURE_ACTOR_DEAD;
         }
 
         if (skill.getActor() == null) {
@@ -263,28 +260,28 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
         
         // 如果技能被锁定中，则不能执行
         if (isLockedSkillTypes(skillData.getTypes())) {
-            return StateCode.SKILL_LOCKED;
+            return StateCode.SKILL_USE_FAILURE_LOCKED;
         }
         
         // 如果新技能自身判断不能执行，例如加血技能或许就不可能给敌军执行。
         // 有很多特殊技能是不能对一些特定目标执行的，所以这里需要包含技能自身的判断
         int stateCode = skill.checkState();
-        if (stateCode != StateCode.OK) {
+        if (stateCode != StateCode.SKILL_USE_OK) {
             return stateCode;
         }
         
         // 通过钩子来判断是否可以执行, 如果有一个钩子返回不允许执行则后面不再需要判断。
-        if (skillPlayListeners != null && !skillPlayListeners.isEmpty()) {
-            for (SkillPlayListener sl : skillPlayListeners) {
+        if (skillListeners != null && !skillListeners.isEmpty()) {
+            for (SkillListener sl : skillListeners) {
                 if (!sl.onSkillHookCheck(skill)) {
-                    return StateCode.SKILL_HOOK;
+                    return StateCode.SKILL_USE_FAILURE_BY_HOOK;
                 }
             }
         }
         
         // 技能优先级较高可以直接运行
         if (skillData.getPrior() > playingPriorMax) {
-            return StateCode.OK;
+            return StateCode.SKILL_USE_OK;
         }
         
         // 判断正在执行中的所有技能，如果“正在执行”中的所有技能都可以被覆盖或打断后执行，
@@ -300,10 +297,10 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
             }
         }
         if (allCanOverlapOrInterrupt) {
-            return StateCode.OK;
+            return StateCode.SKILL_USE_OK;
         }
         
-        return StateCode.SKILL_CAN_NOT_INTERRUPT;
+        return StateCode.SKILL_USE_FAILURE_CAN_NOT_INTERRUPT;
     }
     
     /**
@@ -315,11 +312,25 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
      * @return 
      */
     public boolean playSkill(Skill newSkill, boolean force) {
-        if (force || checkStateCode(newSkill) == StateCode.OK) {
+        // 强制执行则不需要检查状态
+        if (force) {
             playSkillInner(newSkill);
             return true;
         }
-        return false;
+        
+        // 如果状态不允许
+        int stateCode = checkStateCode(newSkill);
+        if (stateCode != StateCode.SKILL_USE_OK) {
+            if (isMessageEnabled()) {
+                String message = entity.getData().getId() + " use skill " + newSkill.getData().getId();
+                addEntityMessage(new EntitySkillUseMessage(stateCode, message, entity, newSkill.getData()));
+            }
+            return false;
+        }
+        
+        // 可以执行
+        playSkillInner(newSkill);
+        return true;
     }
     
     /**
@@ -365,12 +376,6 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
             lastSkill.setActor(entity);
         }
         lastSkill.initialize();
-        
-//        if (Config.debug) {
-//            LOG.log(Level.INFO, "startNewSkill, actor={0}, newSkill={1}"
-//                    , new Object[] {lastSkill.getActor().getData().getId(), lastSkill.getData().getId()});
-//        }
-        
         // 记录当前正在运行的所有技能类型
         if (!playingSkills.contains(lastSkill)) {
             playingSkills.add(lastSkill);
@@ -382,10 +387,16 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
         }
         
         // 执行侦听器
-        if (skillPlayListeners != null && !skillPlayListeners.isEmpty()) {
-            for (int i = 0; i < skillPlayListeners.size(); i++) {
-                skillPlayListeners.get(i).onSkillStart(lastSkill);
+        if (skillListeners != null && !skillListeners.isEmpty()) {
+            for (int i = 0; i < skillListeners.size(); i++) {
+                skillListeners.get(i).onSkillStart(lastSkill);
             }
+        }
+        
+        // 消息通知
+        if (isMessageEnabled()) {
+            String message = entity.getData().getId() + " use skill " + lastSkill.getData().getId();
+            addEntityMessage(new EntitySkillUseMessage(StateCode.SKILL_USE_OK, message, entity, lastSkill.getData()));
         }
     }
     
@@ -394,21 +405,17 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
      * @param skill 
      * @return  true如果成功添加
      */
-    public boolean addSkill(Skill skill) {
-        if (skills.contains(skill))
+    private boolean addSkill(Skill skill) {
+        if (skills.contains(skill)) {
+            addEntityDataAddMessage(StateCode.DATA_ADD_FAILURE_DATA_EXISTS, skill.getData(), 1);
             return false;
+        }
         
         skill.setActor(entity);
         skills.add(skill);
         skillMap.put(skill.getData().getId(), skill);
         entity.getData().addObjectData(skill.getData());
-        
-        // 通知侦听器
-        if (skillListeners != null) {
-            for (int i = 0; i < skillListeners.size(); i++) {
-                skillListeners.get(i).onSkillAdded(entity, skill);
-            }
-        }
+        addEntityDataAddMessage(StateCode.DATA_ADD, skill.getData(), 1);
         return true;
     }
     
@@ -419,21 +426,18 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
      * @param skill
      * @return 
      */
-    public boolean removeSkill(Skill skill) {
-        if (!skills.contains(skill)) 
+    private boolean removeSkill(Skill skill) {
+        if (!skills.contains(skill)) {
+            addEntityDataRemoveMessage(StateCode.DATA_REMOVE_FAILURE_NOT_FOUND, skill.getData(), 1);
             return false;
+        }
         
         skills.remove(skill);
         skillMap.remove(skill.getData().getId());
         entity.getData().removeObjectData(skill.getData());
         skill.cleanup();
         
-        // 通知侦听器
-        if (skillListeners != null) {
-            for (int i = 0; i < skillListeners.size(); i++) {
-                skillListeners.get(i).onSkillRemoved(entity, skill);
-            }
-        }
+        addEntityDataRemoveMessage(StateCode.DATA_REMOVE, skill.getData(), 1);
         return true;
     }
     
@@ -545,10 +549,10 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
     }
     
     /**
-     * 添加技能侦听器
+     * 添加技能"执行“侦听器
      * @param skillListener 
      */
-    public void addSkillListener(SkillListener skillListener) {
+    public void addListener(SkillListener skillListener) {
         if (skillListeners == null) {
             skillListeners = new ArrayList<SkillListener>();
         }
@@ -558,38 +562,12 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
     }
     
     /**
-     * 移除技能侦听器
+     * 移除技能"执行"侦听器
      * @param skillListener
      * @return 
      */
-    public boolean removeSkillListener(SkillListener skillListener) {
+    public boolean removeListener(SkillListener skillListener) {
         return skillListeners != null && skillListeners.remove(skillListener);
-    }
-    
-    /**
-     * 添加技能"执行“侦听器
-     * @param skillPlayListener 
-     */
-    public void addSkillPlayListener(SkillPlayListener skillPlayListener) {
-        if (Config.debug) {
-            LOG.log(Level.INFO, "addSkillPlayListener, actor={0}, skillPlayListener={1}"
-                    , new Object[] {entity.getData().getId(), skillPlayListener});
-        }
-        if (skillPlayListeners == null) {
-            skillPlayListeners = new ArrayList<SkillPlayListener>();
-        }
-        if (!skillPlayListeners.contains(skillPlayListener)) {
-            skillPlayListeners.add(skillPlayListener);
-        }
-    }
-    
-    /**
-     * 移除技能"执行"侦听器
-     * @param skillPlayListener
-     * @return 
-     */
-    public boolean removeSkillPlayListener(SkillPlayListener skillPlayListener) {
-        return skillPlayListeners != null && skillPlayListeners.remove(skillPlayListener);
     }
     
     /**
@@ -706,6 +684,7 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
     public boolean handleDataRemove(SkillData data, int amount) {
         Skill skill = getSkill(data.getId());
         if (skill == null || skill.getData() != data) {
+            addEntityDataRemoveMessage(StateCode.DATA_REMOVE_FAILURE_NOT_FOUND, data, amount);
             return false;
         }
         return removeSkill(skill);

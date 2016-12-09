@@ -14,14 +14,14 @@ import name.huliqing.luoying.layer.service.DefineService;
 import name.huliqing.luoying.object.module.ActorModule;
 import name.huliqing.luoying.object.module.ChannelModule;
 import name.huliqing.luoying.object.module.SkillModule;
-import name.huliqing.luoying.object.module.SkillPlayListener;
 import name.huliqing.luoying.object.skill.Skill;
 import name.huliqing.luoying.utils.MathUtils;
+import name.huliqing.luoying.object.module.SkillListener;
 
 /**
  * @author huliqing
  */
-public class SkillLockedState extends AbstractState implements SkillPlayListener {
+public class SkillLockedState extends AbstractState implements SkillListener {
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
     private final DefineService defineService = Factory.get(DefineService.class);
     private ActorModule actorModule;
@@ -91,7 +91,7 @@ public class SkillLockedState extends AbstractState implements SkillPlayListener
             skillModule.lockSkillTypes(lockSkillTypes);
             // 对于特定的技能ID需要通过技能侦听器来监听,在状态消失时要移除侦听器
             if (lockSkillIds != null) {
-                skillModule.addSkillPlayListener(this);
+                skillModule.addListener(this);
             }
         }
         
@@ -146,7 +146,7 @@ public class SkillLockedState extends AbstractState implements SkillPlayListener
             skillModule.unlockSkillTypes(SKILL_ALL);
         } else {
             skillModule.unlockSkillTypes(lockSkillTypes);
-            skillModule.removeSkillPlayListener(this);
+            skillModule.removeListener(this);
         }
         if (lockChannels != null && channelModule != null) {
             channelModule.setChannelLock(false, lockChannels);

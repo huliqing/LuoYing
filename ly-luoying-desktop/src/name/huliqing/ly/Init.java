@@ -52,7 +52,6 @@ import name.huliqing.ly.layer.network.GameNetworkImpl;
 import name.huliqing.ly.layer.service.GameService;
 import name.huliqing.ly.layer.service.GameServiceImpl;
 import name.huliqing.ly.mess.ActionRunMess;
-import name.huliqing.ly.mess.PlaySkillMess;
 
 /**
  * @author huliqing
@@ -112,7 +111,6 @@ public class Init {
         Serializer.registerClass(ChatSendMess.class);
         Serializer.registerClass(ChatShopMess.class);
         Serializer.registerClass(MessageMess.class);
-        Serializer.registerClass(PlaySkillMess.class);
     }
     
     private static void registerService() {

@@ -6,11 +6,11 @@
 package name.huliqing.luoying.object.module;
 
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.ModuleData;
 import name.huliqing.luoying.layer.service.ElService;
+import name.huliqing.luoying.message.EntityLevelUpMessage;
+import name.huliqing.luoying.message.StateCode;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.attribute.Attribute;
 import name.huliqing.luoying.object.attribute.BooleanAttribute;
@@ -27,14 +27,13 @@ import name.huliqing.luoying.object.entity.Entity;
  * @author huliqing
  */
 public class LevelModule extends AbstractModule implements ValueChangeListener{
-
-    private static final Logger LOG = Logger.getLogger(LevelModule.class.getName());
+//    private static final Logger LOG = Logger.getLogger(LevelModule.class.getName());
     
     private final ElService elService = Factory.get(ElService.class);
-
+    
     // 角色等级公式,关联一个Level El, 这个公式用来计算角色在升级到每一个等级时需要的经验值(xp)数量。
     private LNumberEl xpLevelEl;
-
+    
     // 限制最高等级
     private int maxLevel = Integer.MAX_VALUE;
     
@@ -74,18 +73,6 @@ public class LevelModule extends AbstractModule implements ValueChangeListener{
         // xxx updateDatas.
     }
     
-    private <T extends Attribute> T getAttribute(String attributeName, Class<T> type) {
-        if (attributeName == null) {
-            return null;
-        }
-        T attribute = entity.getAttributeManager().getAttribute(attributeName, type);
-        if (attribute == null) {
-            LOG.log(Level.WARNING, "Attribute not found by attributeName={0}, attributeType={1}, entity={2}"
-                    , new Object[] {attributeName, type.getName(), entity.getData().getId()});
-        }
-        return attribute;
-    }
-    
     @Override
     public void initialize(Entity entity) {
         super.initialize(entity);
@@ -96,7 +83,7 @@ public class LevelModule extends AbstractModule implements ValueChangeListener{
         xpAttribute = getAttribute(bindXpAttribute, NumberAttribute.class);
         
         // 这个属性用于存放要到达下一个等级所需要的经验值
-        xpNextAttribute = entity.getAttributeManager().getAttribute(bindXpNextAttribute);
+        xpNextAttribute = getAttribute(bindXpNextAttribute, NumberAttribute.class);
         
         // 等级功能开关属性
         levelUpEnabledAttribute = getAttribute(bindLevelUpEnabledAttribute, BooleanAttribute.class);
@@ -193,7 +180,8 @@ public class LevelModule extends AbstractModule implements ValueChangeListener{
         if (upCount > 0) {
 
             // 1.升级等级
-            setLevel(levelAttribute.intValue() + upCount);
+            int newLevel = levelAttribute.intValue() + upCount;
+            setLevel(newLevel);
             
             // 2. 消耗xp, 升级其它属性。
             xpAttribute.setValue(xpAttribute.intValue() - needXp);
@@ -203,6 +191,11 @@ public class LevelModule extends AbstractModule implements ValueChangeListener{
                 Effect levelUpEffect = Loader.load(effect);
                 levelUpEffect.setTraceEntity(entity.getEntityId());
                 this.entity.getScene().addEntity(levelUpEffect);
+            }
+            
+            if (isMessageEnabled()) {
+                String message = entity.getData().getId() + " level up to " + newLevel;
+                addEntityMessage(new EntityLevelUpMessage(StateCode.LEVEL_UP, message, entity, newLevel));
             }
         }
     }

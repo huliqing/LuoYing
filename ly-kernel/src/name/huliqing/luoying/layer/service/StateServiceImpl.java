@@ -21,16 +21,16 @@ public class StateServiceImpl implements StateService{
     public void inject() {
     }
 
-    @Override
-    public void clearStates(Entity actor) {
-        StateModule module = actor.getModuleManager().getModule(StateModule.class);
-        if (module != null && module.getStates() != null) {
-            for (State state : module.getStates()) {
-//                module.removeState(state);
-                actor.removeObjectData(state.getData(), 1);
-            }
-        }
-    }
+//    @Override
+//    public void clearStates(Entity actor) {
+//        StateModule module = actor.getModuleManager().getModule(StateModule.class);
+//        if (module != null && module.getStates() != null) {
+//            for (State state : module.getStates()) {
+////                module.removeState(state);
+//                actor.removeObjectData(state.getData(), 1);
+//            }
+//        }
+//    }
     
     @Override
     public List<State> getStates(Entity actor) {

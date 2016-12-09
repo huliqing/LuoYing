@@ -54,4 +54,5 @@ public class AttrConstants {
     public final static String COLOR = "attributeColor";
     public final static String NAME = "attributeName";
     public final static String PLAYER = "attributePlayer";
+    public final static String MESSAGE = "attributeMessage";
 }

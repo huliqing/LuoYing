@@ -75,7 +75,7 @@
     
     <!--通用“吃补药”效果-->
     <effectGroup id="effectTonic" extends="effectBase" useTime="5" traceLocation="always" traceRotation="no" traceLocationType="origin_bound_center"
-                   sounds="soundRestore" effects="effectTonic1,effectTonic2,effectTonic3,effectRandomFire" traceLocationOffset="0,1.5,0" />
+                   sounds="soundRestore" effects="effectTonic1,effectTonic2,effectTonic3,effectRandomFire" traceLocationOffset="0,0.5,0" />
     <effectParticle id="effectTonic1" extends="effectBase" useTime="3" emitAll="1" emitter="emitterBuff1" />
     <effectParticle id="effectTonic2" extends="effectBase" useTime="3" emitAll="1" emitter="emitterBuff2" />
     <effectParticle id="effectTonic3" extends="effectBase" useTime="3" emitAll="1" emitter="emitterBuff3" />

@@ -7,6 +7,7 @@ package name.huliqing.luoying.object.module;
 
 import com.jme3.scene.control.Control;
 import com.jme3.util.SafeArrayList;
+import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.data.LogicData;
 import name.huliqing.luoying.data.ModuleData;
@@ -80,7 +81,7 @@ public class LogicModule extends AbstractModule implements DataHandler<LogicData
         enabledAttribute = entity.getAttributeManager().getAttribute(bindEnabledAttribute);
         
         // 载入逻辑
-        List<LogicData> logicDatas = entity.getData().getObjectDatas(LogicData.class, null);
+        List<LogicData> logicDatas = entity.getData().getObjectDatas(LogicData.class, new ArrayList<LogicData>());
         if (logicDatas != null) {
             for (LogicData ld : logicDatas) {
                 addLogic((Logic) Loader.load(ld));

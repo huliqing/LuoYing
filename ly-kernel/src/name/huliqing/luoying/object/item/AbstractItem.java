@@ -6,7 +6,7 @@
 package name.huliqing.luoying.object.item;
 
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.log.StateCode;
+import name.huliqing.luoying.message.StateCode;
 import name.huliqing.luoying.data.ItemData;
 import name.huliqing.luoying.layer.service.ElService;
 import name.huliqing.luoying.object.Loader;
@@ -57,14 +57,7 @@ public abstract class AbstractItem implements Item {
     }
 
     @Override
-    public final boolean use(Entity actor) {
-        if (!canUse(actor)) {
-            return false;
-        }
-        
-        // 使用物品
-        doUse(actor);
-        
+    public final void use(Entity actor) {
         // 执行特效和声效
          if (effects != null) {
             for (String eid : effects) {
@@ -78,27 +71,24 @@ public abstract class AbstractItem implements Item {
                 SoundManager.getInstance().playSound(sid, actor.getSpatial().getWorldTranslation());
             }
         }
-        return true;
-    }
-    
-    @Override
-    public boolean canUse(Entity actor) {
-        return checkStateCode(actor) == StateCode.OK;
+        
+        // 使用物品
+        doUse(actor);
     }
     
     @Override
     public int checkStateCode(Entity actor) {
         // 物品数量不够。
         if (data.getTotal() <= 0) {
-            return StateCode.ITEM_NOT_ENOUGH;
+            return StateCode.DATA_USE_FAILURE_NOT_ENOUGH;
         }
         
         checkEl.setSource(actor.getAttributeManager());
         if (!checkEl.getValue()) {
-            return StateCode.ITEM_CHECK_EL;
+            return StateCode.DATA_USE_FAILURE_CHECK_EL;
         }
         
-        return StateCode.OK;
+        return StateCode.DATA_USE;
     }
 
     /**

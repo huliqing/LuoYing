@@ -6,6 +6,10 @@ package name.huliqing.ly.view.actor;
 
 import java.util.List;
 import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.data.ItemData;
+import name.huliqing.luoying.data.SkinData;
+import name.huliqing.luoying.data.TalentData;
+import name.huliqing.luoying.data.TaskData;
 import name.huliqing.ly.constants.InterfaceConstants;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.layer.service.SkinService;
@@ -13,10 +17,8 @@ import name.huliqing.luoying.layer.service.TalentService;
 import name.huliqing.luoying.layer.service.TaskService;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.entity.EntityDataListener;
-import name.huliqing.luoying.object.module.SkinListener;
 import name.huliqing.luoying.object.module.TalentListener;
 import name.huliqing.luoying.object.module.TaskListener;
-import name.huliqing.luoying.object.skin.Skin;
 import name.huliqing.luoying.object.talent.Talent;
 import name.huliqing.luoying.object.task.Task;
 import name.huliqing.luoying.ui.UIFactory;
@@ -26,13 +28,14 @@ import name.huliqing.luoying.ui.LinearLayout;
 import name.huliqing.luoying.ui.UI;
 import name.huliqing.luoying.ui.Window;
 import name.huliqing.luoying.xml.ObjectData;
+import name.huliqing.ly.constants.ResConstants;
 import name.huliqing.ly.layer.service.GameService;
 
 /**
  * 角色主面板，这个面板包含角色所有的“属性","武器","装备","天赋"...等面板
  * @author huliqing
  */
-public class ActorMainPanel extends Window implements EntityDataListener, SkinListener, TalentListener, TaskListener {
+public class ActorMainPanel extends Window implements EntityDataListener, TalentListener, TaskListener {
     private final SkinService skinService = Factory.get(SkinService.class);
     private final TalentService talentService = Factory.get(TalentService.class);
     private final TaskService taskService = Factory.get(TaskService.class);
@@ -66,7 +69,7 @@ public class ActorMainPanel extends Window implements EntityDataListener, SkinLi
 
     public ActorMainPanel(float width, float height) {
         super(width, height);
-        setTitle(ResourceManager.get("common.characterPanel"));
+        setTitle(ResourceManager.get(ResConstants.COMMON_ACTOR_PANEL));
         setLayout(Layout.horizontal);
         
         tabPanel = new LinearLayout();
@@ -160,39 +163,37 @@ public class ActorMainPanel extends Window implements EntityDataListener, SkinLi
         }
     }
     
-    public void setActor(Entity other) {
-        if (other == null) {
+    public void setActor(Entity newActor) {
+        if (newActor == null) {
             return;
         }
         
         // 1.先清理上一个角色的侦听
-        if (this.actor != null) {
-            this.actor.removeEntityDataListener(this);
-            
-            skinService.removeSkinListener(this.actor, this);
-            talentService.removeTalentListener(this.actor, this);
-            taskService.removeTaskListener(this.actor, this);
+        if (actor != null) {
+            actor.removeEntityDataListener(this);
+            talentService.removeTalentListener(actor, this);
+            taskService.removeTaskListener(actor, this);
         }
         
         // 2.更新角色并更新面板内容
-        this.actor = other;
-        this.setTitle(ResourceManager.get("common.characterPanel") + "-" + gameService.getName(other));
-        
-        // remove20160324,不需要一打开时把所有panel都update一次，按需update就可以
-        // 3.即打开哪一个tab就更新哪一个就行，以避免panel太多，在手机上影响性能。
-//        List<UI> cuis=  bodyPanel.getViews();
-//        for (UI child : cuis) {
-//            ((ActorPanel) child).setPanelUpdate(actor);
-//        }
+        actor = newActor;
+        setTitle(ResourceManager.get(ResConstants.COMMON_ACTOR_PANEL) + "-" + gameService.getName(newActor));
         
         // 4.显示指定的tab
         showTab(index);
         
         // 5.为新的角色添加侦听器以便实时更新面板内容
-        this.actor.addEntityDataListener(this);
-        skinService.addSkinListener(this.actor, this);
-        talentService.addTalentListener(this.actor, this);
-        taskService.addTaskListener(this.actor, this);
+        actor.addEntityDataListener(this);
+        talentService.addTalentListener(actor, this);
+        taskService.addTaskListener(actor, this);
+    }
+    
+    public void cleanup() {
+        if (actor != null) {
+            actor.removeEntityDataListener(this);
+            talentService.removeTalentListener(actor, this);
+            taskService.removeTaskListener(actor, this);
+        }
     }
     
     private void showTab(int index) {
@@ -225,75 +226,59 @@ public class ActorMainPanel extends Window implements EntityDataListener, SkinLi
         }
     }
     
-    public void cleanup() {
-        if (actor != null) {
-            actor.removeEntityDataListener(this);
-            skinService.removeSkinListener(actor, this);
-            talentService.removeTalentListener(actor, this);
-            taskService.removeTaskListener(actor, this);
-        }
-    }
-
     // 物口添加或减少的时候要更新指定面板信息
     @Override
     public void onDataAdded(ObjectData data, int amount) {
-        updatePanel(this.itemPanel);
+        if (data instanceof ItemData) {
+            updatePanel(itemPanel);
+            return;
+        }
+        if (data instanceof SkinData) {
+            updatePanel(armorPanel, weaponPanel, attrPanel);
+            return;
+        }
+        if (data instanceof TaskData) {
+            updatePanel(taskPanel);
+            return;
+        }
+        if (data instanceof TalentData) {
+            updatePanel(talentPanel, attrPanel);
+        }
     }
 
     @Override
     public void onDataRemoved(ObjectData data, int amount) {
-        updatePanel(this.itemPanel);
+        if (data instanceof ItemData) {
+            updatePanel(itemPanel);
+            return;
+        }
+        if (data instanceof SkinData) {
+            updatePanel(armorPanel, weaponPanel, attrPanel);
+            return;
+        }
+        if (data instanceof TaskData) {
+            updatePanel(taskPanel);
+            return;
+        }
+        if (data instanceof TalentData) {
+            updatePanel(talentPanel, attrPanel);
+        }
     }
 
     @Override
     public void onDataUsed(ObjectData data) {
-        // ignore
+        if (data instanceof ItemData) {
+            updatePanel(itemPanel);
+            return;
+        }
+        if (data instanceof SkinData) {
+            updatePanel(armorPanel, weaponPanel, attrPanel);
+        }
     }
 
     @Override
-    public void onSkinAttached(Entity actor, Skin data) {
-        updatePanel(armorPanel, weaponPanel, attrPanel);
-    }
-
-    @Override
-    public void onSkinDetached(Entity actor, Skin data) {
-        updatePanel(armorPanel, weaponPanel, attrPanel);
-    }
-
-    @Override
-    public void onSkinAdded(Entity actor, Skin skin) {
-        updatePanel(armorPanel, weaponPanel, attrPanel);
-    }
-
-    @Override
-    public void onSkinRemoved(Entity actor, Skin skin) {
-        updatePanel(armorPanel, weaponPanel, attrPanel);
-    }
-
-    @Override
-    public void onTalentAdded(Entity actor, Talent talent) {
-        // 因为天赋影响属性，所以属性面板也需要更新
+    public void onTalentPointsChanged(Entity actor, Talent talent, int pointsAdded) {
         updatePanel(talentPanel, attrPanel);
-    }
-
-    @Override
-    public void onTalentPointsChange(Entity actor, Talent talent, int pointsAdded) {
-        updatePanel(talentPanel, attrPanel);
-    }
-
-    @Override
-    public void onTalentRemoved(Entity actor, Talent talent) {
-        updatePanel(talentPanel, attrPanel);
-    }
-
-    @Override
-    public void onTaskAdded(Entity source, Task task) {
-        updatePanel(taskPanel);
-    }
-
-    @Override
-    public void onTaskRemoved(Entity actor, Task taskRemoved) {
-        updatePanel(taskPanel);
     }
 
     @Override

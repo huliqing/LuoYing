@@ -21,6 +21,7 @@ import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.layer.service.LogicService;
 import name.huliqing.luoying.layer.service.PlayService;
+import name.huliqing.luoying.layer.service.SceneService;
 import name.huliqing.luoying.logic.scene.ActorBuildSimpleLogic;
 import name.huliqing.luoying.logic.scene.ActorBuildSimpleLogic.Callback;
 import name.huliqing.luoying.logic.scene.ActorMultLoadHelper;
@@ -48,6 +49,7 @@ public class StoryGuardTask2 extends AbstractTaskStep {
     private final ActorService actorService = Factory.get(ActorService.class);
     private final LogicService logicService = Factory.get(LogicService.class);
     private final GameService gameService = Factory.get(GameService.class);
+    private final SceneService sceneService = Factory.get(SceneService.class);
     
 //    private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
@@ -471,7 +473,7 @@ public class StoryGuardTask2 extends AbstractTaskStep {
      */
     private Vector3f getRandomPosition(Vector3f center) {
         Vector3f pos = MathUtils.getRandomPosition(center, 7, 12, null);
-        Vector3f terrainHeight = playService.getTerrainHeight(game.getScene(), pos.x, pos.z);
+        Vector3f terrainHeight = sceneService.getSceneHeight(game.getScene(), pos.x, pos.z);
         if (terrainHeight != null) {
             pos.set(terrainHeight).addLocal(0, 0.2f, 0);
         }
